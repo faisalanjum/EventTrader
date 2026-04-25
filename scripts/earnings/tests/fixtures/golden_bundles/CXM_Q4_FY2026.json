@@ -1,0 +1,4928 @@
+{
+  "schema_version": "prediction_bundle.v1",
+  "ticker": "CXM",
+  "quarter_info": {
+    "accession_8k": "0001569345-26-000011",
+    "filed_8k": "2026-03-11T07:15:04-04:00",
+    "market_session": "pre_market",
+    "period_of_report": "2026-01-31",
+    "prev_8k_ts": "2025-12-03T07:15:22-05:00",
+    "quarter_label": "Q4_FY2026",
+    "form_type_periodic": "10-K",
+    "accession_periodic": "0001569345-26-000015",
+    "fye_month": 1,
+    "quarter_identity_source": "matched_periodic_xbrl",
+    "gaps": null
+  },
+  "pit_cutoff": "2026-03-11T07:15:04-04:00",
+  "assembled_at": "2026-04-22T18:22:10.843423+00:00",
+  "builder_errors": null,
+  "8k_packet": {
+    "schema_version": "8k_packet.v1",
+    "ticker": "CXM",
+    "accession_8k": "0001569345-26-000011",
+    "filed_8k": "2026-03-11T07:15:04-04:00",
+    "form_type": "8-K",
+    "items": [
+      "Item 2.02: Results of Operations and Financial Condition",
+      "Item 8.01: Other Events",
+      "Item 9.01: Financial Statements and Exhibits"
+    ],
+    "period_of_report": "2026-03-08",
+    "market_session": "pre_market",
+    "is_amendment": false,
+    "cik": "0001569345",
+    "sector": "Technology",
+    "content_inventory": {
+      "section_names": [
+        "ResultsofOperationsandFinancialCondition",
+        "OtherEvents",
+        "FinancialStatementsandExhibits"
+      ],
+      "exhibit_numbers": [
+        "EX-99.1"
+      ],
+      "has_filing_text": false
+    },
+    "sections": [
+      {
+        "section_name": "FinancialStatementsandExhibits",
+        "content": " Item 9.01 Financial Statements and Exhibits. \n\n(d) Exhibits. \n\nExhibit No.   Description of Exhibits 99.1   \n\nPress Release dated March 11 , 202 6 . \n\n104 Cover Page Interactive Data File (embedded within the Inline XBRL document) \n\n"
+      },
+      {
+        "section_name": "OtherEvents",
+        "content": " Item 8.01 Other Events. \n\nOn March 8, 2026, the Board of Directors of the Company (the “Board”) authorized and approved a plan to repurchase up to $200 million of shares of the Company’s outstanding Class A common stock (the “Stock Repurchase Program”). The Company expects to enter into an accelerated share repurchase transaction for approximately $125 million in the near term under the Stock Repurchase Program, with the remaining authorization to be utilized at the Company’s discretion over the next year, subject to market conditions and other factors. \n\nUnder the Stock Repurchase Program, the Company intends to repurchase shares through open market purchases at prevailing market prices or in negotiated transactions off the market, including, without limitation, pursuant to 10b5-1 trading plans, accelerated share repurchase transactions, collared accelerated share repurchase transactions, volume weighted average purchase prepaid share forward transactions and similar arrangements, in accordance with applicable federal securities laws, including Rule 10b-18 of the Exchange Act. The Company intends to complete the Stock Repurchase Program by March 15, 2027, dependent on market conditions. \n\nRepurchases of the Company’s outstanding Class A common stock under the Stock Repurchase Program may be effected pursuant to a written trading plan under Rule 10b5-1 of the Exchange Act. If adopted, a trading plan that satisfies the conditions of Rule 10b5-1 would allow the Company to repurchase its shares at times when it might otherwise be prevented from doing so due to self-imposed trading blackout periods or pursuant to insider trading laws. Under any Rule 10b5-1 trading plan, the Company’s third-party broker would have authority to purchase the Company's Class A common stock in accordance with the terms of the plan, subject to SEC regulations regarding certain price, market, volume and timing constraints. \n\nAlthough the Board has authorized the Stock Repurchase Program, it does not obligate the Company to repurchase any specific dollar amount or to acquire any specific number of shares, and the Stock Repurchase Program may be modified, suspended or terminated at any time. The Company cannot predict when or if it will repurchase any shares of its outstanding Class A common stock, as its use of the Stock Repurchase Program will depend on a number of factors, including constraints specified in any Rule 10b5-1 trading plans, price, general business and market conditions, and alternative investment opportunities. Information regarding share repurchases will be available in the Company’s future periodic reports on Forms 10-Q and 10-K filed with the SEC as required by the applicable rules of the Exchange Act. \n\nThis report contains forward-looking information, as that term is defined under the Exchange Act, including information regarding purchases by the Company of its Class A common stock pursuant to any Rule 10b5-1 trading plans. By their nature, forward-looking information and statements are subject to risks, uncertainties, and contingencies, including changes in price and volume and the volatility of the Company’s Class A common stock; adverse developments affecting either or both of prices and trading of exchange-traded securities, including securities listed on the New York Stock Exchange; and unexpected or otherwise unplanned or alternative requirements with respect to the capital investments of the Company. The Company does not undertake to update any forward-looking statements or information, including those contained in this report. \n\n"
+      },
+      {
+        "section_name": "ResultsofOperationsandFinancialCondition",
+        "content": " Item 2.02 Results of Operations and Financial Condition. \n\nOn March 11, 2026, Sprinklr, Inc. (the “Company”) issued a press release announcing, among other things, its financial results for the fourth quarter and year ended January 31, 2026. A copy of the press release is furnished herewith as Exhibit 99.1 and incorporated herein by reference. \n\nThe information set forth under Item 2.02 of this Current Report, including Exhibit 99.1 attached hereto, is furnished and shall not be deemed “filed” for purposes of Section 18 of the Securities Exchange Act of 1934, as amended (the “Exchange Act”), or subject to the liabilities of that section. The information shall not be deemed incorporated by reference into any other filing with the Securities and Exchange Commission (the “SEC”) made by the Company regardless of any general incorporation language in such filing, except as shall be expressly set forth by specific reference in such filing. \n\n"
+      }
+    ],
+    "exhibits_99": [
+      {
+        "exhibit_number": "EX-99.1",
+        "content": "Sprinklr Announces Fourth Quarter and Full Year Fiscal 2026 Results •Q4 Total Revenue of $220.6 million, up 9% year-over-year •Q4 Subscription Revenue of $193.4 million, up 6% year-over-year •Q4 net cash provided by operating activities of $20.7 million and free cash flow* of $15.9 million in Q4 •RPO flat and cRPO up 1.0% year-over-year, respectively •141 $1 million customers •In March 2026, the Board of Directors authorized a new $200 million stock repurchase program. We intend to execute a $125 million Accelerated Share Repurchase imminently, which reflects the Company's balance sheet strength and free cash flow generation NEW YORK, New York--March 11, 2026--Sprinklr (NYSE: CXM), the unified customer experience management (Unified-CXM) platform for modern enterprises, today reported financial results for its fourth quarter and fiscal year ended January 31, 2026. “The fourth quarter capped a pivotal year in our transformation. We strengthened the quality of our customer engagements, advanced our innovation leadership, expanded operating margins, and delivered strong free cash flow,” said Sprinklr President and CEO, Rory Read. Read continued, “As we enter the next year of our transformation, we will maintain this focus while staying diligent given recent macro events. We are confident in our strategy, improving execution, and the progress we expect ahead. With this momentum and our strong balance sheet, our Board has authorized a $200 million stock repurchase program, underscoring our commitment to delivering long‑term stockholder value.” Fourth Quarter Fiscal 2026 Financial Highlights •Revenue: Total revenue for the fourth quarter was $220.6 million, up from $202.5 million one year ago, an increase of 9% year-over-year. Subscription revenue for the fourth quarter was $193.4 million, up from $182.1 million one year ago, an increase of 6% year-over-year. •Operating Income and Margin*: Fourth quarter GAAP operating income was $14.2 million, compared to operating income of $10.5 million one year ago. Non-GAAP operating income was $37.7 million, compared to non-GAAP operating income of $26.3 million one year ago. For the fourth quarter, GAAP operating margin was 6% and non-GAAP operating margin was 17%, compared to GAAP operating margin of 5% and non-GAAP operating margin of 13% in the fourth quarter of fiscal year 2025. •Net Income Per Share*: Fourth quarter GAAP net income per share, diluted was $0.04, compared to GAAP net income per share, diluted of $0.37 in the fourth quarter of fiscal year 2025. Non-GAAP net income per share, diluted for the fourth quarter was $0.13, compared to non-GAAP net income per share, diluted of $0.10 in the fourth quarter of fiscal year 2025. •Cash, Cash Equivalents, and Marketable Securities: Total cash, cash equivalents, and marketable securities as of January 31, 2026 was $502.5 million. Full Year Fiscal 2026 Financial Highlights •Revenue: Total revenue for fiscal year 2026 was $857.2 million, up from $796.4 million one year ago, an increase of 8% year-over-year. Subscription revenue for fiscal year 2026 was $756.3 million, up from $717.9 million one year ago, an increase of 5% year-over-year. •Operating Income and Margin*: Fiscal year 2026 operating income was $40.2 million, compared to an operating income of $24.0 million one year ago. Non-GAAP operating income for fiscal year 2026 was $146.2 million, compared to non-GAAP operating income of $89.8 million one year ago. For fiscal year 2026, GAAP operating margin was 5% and non-GAAP operating margin was 17%, compared to GAAP operating margin of 3% and non-GAAP operating margin of 11% in fiscal year 2025. •Net Income Per Share*: Fiscal year 2026 GAAP net income per share, diluted was $0.09, compared to GAAP net income per share, diluted of $0.44 in fiscal year 2025. Non-GAAP net income per share, diluted for fiscal year 2026 was $0.49, compared to non-GAAP net income per share, diluted of $0.37 in fiscal year 2025. * Free cash flow, non-GAAP operating income, non-GAAP operating margin, and non-GAAP net income per share are non-GAAP financial measures defined under “Non-GAAP Financial Measures,” and are reconciled to net cash provided by operating activities, operating income, net income, or net income per share, as applicable, the closest comparable GAAP measure, at the end of this release. Financial Outlook Sprinklr is providing the following guidance for the first fiscal quarter ending April 30, 2026: •Subscription revenue between $193 million and $194 million. •Total revenue between $215.5 million and $216.5 million. •Non-GAAP operating income between $28.5 million and $29.5 million. •Non-GAAP net income per share of approximately $0.09, assuming 245 million diluted weighted-average shares outstanding. Sprinklr is providing the following guidance for the full fiscal year ending January 31, 2027: •Subscription revenue between $778 million and $780 million. •Total revenue between $869 million and $871 million. •Non-GAAP operating income between $144 million and $146 million. •Non-GAAP net income per share between $0.47 and $0.48, assuming 244 million diluted weighted-average shares outstanding. Non-GAAP Financial Measures In addition to our results determined in accordance with U.S. GAAP, we believe that the following non-GAAP financial measures associated with our consolidated statements of operations are useful in evaluating our operating performance: •Non-GAAP gross profit and non-GAAP gross margin; •Non-GAAP operating income and non-GAAP operating margin; and •Non-GAAP net income and non-GAAP net income per share. We define these non-GAAP financial measures as the respective U.S. GAAP measures, excluding, as applicable, stock-based compensation expense and related charges, amortization of stock-based compensation expense associated with capitalized internal-use software, amortization of acquired intangible assets, release of U.S. federal and state valuation allowances, and the estimated tax effect related to the non-GAAP items, as well as other one-time charges, such as restructuring charges, costs associated with acquisitions, non-recurring litigation costs, and facility exit costs. We believe that it is useful to exclude these items in order to better understand the long-term performance of our core business and to facilitate comparison of our results to those of peer companies over multiple periods. In addition, we believe that free cash flow is also a useful non-GAAP financial measure. Free cash flow is defined as net cash provided by operating activities less cash used for purchases of property and equipment and capitalized internal-use software. We believe that free cash flow is a useful indicator of liquidity as it measures our ability to generate cash, or our need to access additional sources of cash, to fund operations and investments. We expect our free cash flow to fluctuate in future periods with changes in our operating expenses and as we continue to invest in our growth. We typically experience higher billings in the fourth quarter compared to other quarters and experience higher collections of accounts receivable in the first half of the year, which results in a decrease in accounts receivable in the first half of the year. However, non-GAAP financial measures have limitations in their usefulness to investors because they have no standardized meaning prescribed by U.S. GAAP and are not prepared under any comprehensive set of accounting rules or principles. In addition, other companies, including companies in our industry, may calculate similarly titled non-GAAP financial measures differently or may use other measures to evaluate their performance, all of which could reduce the usefulness of our non-GAAP financial measures as tools for comparison. As a result, our non-GAAP financial measures are presented for supplemental informational purposes only and should not be considered in isolation or as a substitute for our consolidated financial statements presented in accordance with U.S. GAAP. Sprinklr has not reconciled its financial outlook expectations for non-GAAP operating income or non-GAAP net income per share to their respective most directly comparable U.S. GAAP measures because of the high variability, complexity, and low visibility of the charges excluded from these non-GAAP measures, in particular, the measures and effects of stock-based compensation expense specific to equity compensation awards that are directly impacted by unpredictable fluctuations in our stock price. We expect the variability of the above charges to have a significant, and potentially unpredictable, impact on our future U.S. GAAP financial results. Accordingly, reconciliation is not available without unreasonable effort, although it is important to note that these factors could be material to Sprinklr’s results computed in accordance with U.S. GAAP. Conference Call Information Sprinklr will host a conference call today, March 11, 2026, to discuss fourth quarter and full year fiscal 2026 financial results, as well as the first quarter and full year fiscal 2027 outlook, at 8:30 a.m. Eastern Time, 5:30 a.m. Pacific Time. Investors are invited to join the webcast by visiting: https://investors.sprinklr.com/. To access the call by phone, dial 877-459-3955 (domestic) or 201-689-8588 (international). The conference ID number is 13758800. The webcast will be available live, and a replay will be available following completion of the live broadcast for approximately 90 days. About Sprinklr, Inc. Sprinklr is the definitive, AI-native platform for Unified Customer Experience Management (Unified-CXM), empowering brands to deliver extraordinary experiences at scale — across every customer touchpoint. By combining human intelligence with the enhancements and insights of artificial intelligence, Sprinklr helps brands earn trust and loyalty through personalized, seamless, and efficient customer interactions. Sprinklr’s unified platform provides powerful solutions for every customer-facing team — spanning social media management, marketing, advertising, customer feedback, and omnichannel contact center management — enabling enterprises to unify data, break down silos, and act on real-time insights. Today, 1,600+ enterprises — including Microsoft, P&G, Samsung, and 59% of the Fortune 100 — rely on Sprinklr to help them deliver consistent, trusted customer experiences worldwide. Forward-Looking Statements This press release contains express and implied “forward-looking statements” within the meaning of the Private Securities Litigation Reform Act of 1995, including statements regarding our financial outlook for the first quarter and full year fiscal 2027, our stock repurchase program and the impact of, and our ability to execute, our corporate strategies and business initiatives. In some cases, you can identify forward-looking statements by terms such as “anticipate,” “believe,” “estimate,” “expect,” “intend,” “may,” “might,” “plan,” “project,” “will,” “would,” “should,” “could,” “can,” “predict,” “potential,” “target,” “explore,” “continue,” or the negative of these terms, and similar expressions intended to identify forward-looking statements. By their nature, these statements are subject to numerous uncertainties and risks, including factors beyond our control, that could cause actual results, performance, or achievement to differ materially and adversely from those anticipated or implied in the statements, including: the risk that the potential benefits of the stock repurchase program are not realized; our rapid growth may not be indicative of our future growth; our revenue growth rate has fluctuated in prior periods; our ability to achieve or maintain profitability; we derive the substantial majority of our revenue from subscriptions to our Unified-CXM platform; our ability to manage our growth and organizational change; the market for Unified-CXM solutions is rapidly evolving; our ability to attract new customers in a manner that is cost-effective and assures customer success; our ability to attract and retain customers to use our products; our ability to drive customer subscription renewals and expand our sales to existing customers; our ability to effectively develop platform enhancements, introduce new products or keep pace with technological developments; the market in which we participate is new and rapidly evolving and our ability to compete effectively; our business and growth depend in part on the success of our strategic relationships with third parties; our ability to develop and maintain successful relationships with partners who provide access to data that enhances our Unified-CXM platform’s artificial intelligence capabilities; the majority of our customer base consists of large enterprises, and we currently generate a significant portion of our revenue from a relatively small number of enterprises; our investments in research and development; our ability to expand our sales and marketing capabilities; our sales cycle with enterprise and international clients can be long and unpredictable; certain of our results of operations and financial metrics may be difficult to predict; our ability to maintain data privacy and data security; we rely on third-party data centers and cloud computing providers; the sufficiency of our cash and cash equivalents to meet our liquidity needs; our ability to comply with modified or new laws and regulations applying to our business; our ability to successfully enter into new markets and manage our international expansion; the attraction and retention of qualified employees and key personnel; our ability to effectively manage our growth and future expenses and maintain our corporate culture; our ability to maintain, protect, and enhance our intellectual property rights; unstable economic, political and market conditions, including as a result of public health crises, fluctuations in inflation and interest rates, the imposition of tariffs in the U.S. and abroad, the recent and any future U.S. government shutdown, or geopolitical actions, such as war and terrorism or the perception that such hostilities may be imminent; and our ability to successfully defend litigation brought against us. Additional risks and uncertainties that could cause actual outcomes and results to differ materially from those contemplated by the forward-looking statements are or will be discussed in our Quarterly Report on Form 10-Q for the quarter ended October 31, 2025, filed with the SEC on December 4, 2025, under the caption “Risk Factors,” and in other filings that we make from time to time with the SEC, including our Annual Report on Form 10-K for the year ended January 31, 2026. Forward-looking statements speak only as of the date the statements are made and are based on information available to Sprinklr at the time those statements are made and/or management’s good faith belief as of that time with respect to future events. Sprinklr assumes no obligation to update forward-looking statements to reflect events or circumstances after the date they were made, except as required by law. Key Business Metrics RPO. RPO, or remaining performance obligations, represents contracted revenues that have not yet been recognized, and include deferred revenue and amounts that will be invoiced and recognized in future periods. cRPO. cRPO, or current RPO, represents contracted revenues that have not yet been recognized, and include deferred revenue and amounts that will be invoiced and recognized in the next 12 months. Investor Relations: ir@sprinklr.com Media & Press: pr@sprinklr.com Sprinklr, Inc. Consolidated Balance Sheets (in thousands) (unaudited) January 31, January 31, 2026 2025 Assets Current assets: Cash and cash equivalents $ 162,969 $ 145,270 Marketable securities 339,537 338,189 Accounts receivable, net of allowance of $7.4 million and $8.1 million, respectively 278,081 285,656 Prepaid expenses and other current assets 107,393 84,982 Total current assets 887,980 854,097 Property and equipment, net 33,454 31,591 Goodwill and other intangible assets 50,144 49,957 Operating lease right-of-use assets 43,094 44,626 Deferred tax asset, non-current 70,400 90,369 Other non-current assets 119,989 113,559 Total assets $ 1,205,061 $ 1,184,199 Liabilities and stockholders’ equity Liabilities Current liabilities: Accounts payable $ 33,781 $ 27,353 Accrued expenses and other current liabilities 91,538 79,285 Operating lease liabilities, current 8,433 7,462 Deferred revenue 420,339 403,483 Total current liabilities 554,091 517,583 Deferred revenue, non-current 12,824 6,276 Operating lease liabilities, non-current 38,299 41,243 Other liabilities, non-current 7,204 7,034 Total liabilities 612,418 572,136 Commitments and contingencies Stockholders’ equity Class A common stock 4 4 Class B common stock 3 4 Treasury stock (23,831) (23,831) Additional paid-in capital 1,376,487 1,268,920 Accumulated other comprehensive loss (5,711) (6,969) Accumulated deficit (754,309) (626,065) Total stockholders’ equity 592,643 612,063 Total liabilities and stockholders’ equity $ 1,205,061 $ 1,184,199 Sprinklr, Inc. Consolidated Statements of Operations (in thousands, except per share data) (unaudited) Three Months Ended January 31, Year Ended January 31, 2026 2025 2026 2025 Revenue: Subscription $ 193,444 $ 182,067 $ 756,339 $ 717,923 Professional services 27,148 20,472 100,861 78,471 Total revenue 220,592 202,539 857,200 796,394 Costs of revenue: Costs of subscription(1) 47,871 38,131 178,634 140,730 Costs of professional services(1) 27,895 20,685 100,783 81,026 Total costs of revenue 75,766 58,816 279,417 221,756 Gross profit 144,826 143,723 577,783 574,638 Operating expense: Research and development(1) 25,321 22,558 96,001 91,621 Sales and marketing(1) 70,974 76,245 287,639 319,615 General and administrative(1) 33,434 34,605 137,119 136,611 Restructuring(1) 926 (144) 16,785 2,821 Total operating expense 130,655 133,264 537,544 550,668 Operating income 14,171 10,459 40,239 23,970 Other income, net 6,388 4,913 26,550 24,322 Income before provision (benefit) for income taxes 20,559 15,372 66,789 48,292 Provision (benefit) for income taxes 11,605 (83,307) 43,884 (73,317) Net income $ 8,954 $ 98,679 $ 22,905 $ 121,609 Net income per share, basic $ 0.04 $ 0.39 $ 0.09 $ 0.47 Weighted average shares used in computing net income per share, basic 247,571 254,911 250,834 260,241 Net income per share, diluted $ 0.04 $ 0.37 $ 0.09 $ 0.44 Weighted average shares used in computing net income per share, diluted 252,608 266,910 257,965 274,773 (1) Includes stock-based compensation expense, net of amounts capitalized, as follows: Three Months Ended January 31, Year Ended January 31, 2026 2025 2026 2025 Costs of subscription $ 327 $ 378 $ 1,127 $ 1,323 Costs of professional services 974 306 2,936 1,387 Research and development 4,406 3,100 16,843 11,404 Sales and marketing 5,751 4,834 24,536 21,331 General and administrative 10,011 6,722 38,126 24,072 Restructuring — — 866 — Stock-based compensation expense, net of amounts capitalized $ 21,469 $ 15,340 $ 84,434 $ 59,517 Sprinklr, Inc. Consolidated Statements of Cash Flows (in thousands) (unaudited) Year ended January 31, 2026 2025 Cash flow from operating activities: Net income $ 22,905 $ 121,609 Adjustments to reconcile net income to net cash provided by operating activities: Depreciation and amortization expense 19,064 18,679 Provision for credit losses 2,271 11,560 Stock-based compensation, net of amounts capitalized 84,434 59,517 Non-cash lease expense 8,048 8,188 Deferred income taxes 20,191 (88,069) Net accretion on marketable securities (6,409) (12,544) Other non-cash items, net 30 207 Changes in operating assets and liabilities: Accounts receivable 5,710 (30,010) Prepaid expenses and other current assets (21,573) (15,503) Other non-current assets (6,408) (9,560) Accounts payable 5,907 (7,048) Operating lease liabilities (8,405) (5,570) Accrued expenses and other current liabilities 11,142 (12,487) Deferred revenue 22,712 37,473 Other liabilities (426) 1,148 Net cash provided by operating activities 159,193 77,590 Cash flow from investing activities: Purchases of marketable securities (516,840) (396,154) Proceeds from sales and maturities of marketable securities 521,922 568,713 Purchases of property and equipment (1,379) (5,802) Capitalized internal-use software (15,911) (12,631) Other investing activities (262) — Net cash (used in) provided by investing activities (12,470) 154,126 Cash flow from financing activities: Proceeds from issuance of common stock upon exercise of stock options 15,289 19,908 Proceeds from issuance of common stock upon ESPP purchase 5,127 5,807 Payments for repurchase of Class A common shares and related excise tax (152,263) (273,873) Net cash used in financing activities (131,847) (248,158) Effect of exchange rate fluctuations on cash, cash equivalents, and restricted cash 3,099 (2,454) Net change in cash, cash equivalents and restricted cash 17,975 (18,896) Cash, cash equivalents and restricted cash at beginning of period 153,533 172,429 Cash, cash equivalents and restricted cash at end of period $ 171,508 $ 153,533 Sprinklr, Inc. Reconciliation of U.S. GAAP to Non-GAAP Measures (in thousands) (unaudited) Three Months Ended January 31, Year Ended January 31, 2026 2025 2026 2025 Non-GAAP gross profit and gross margin: U.S. GAAP gross profit $ 144,826 $ 143,723 $ 577,783 $ 574,638 Stock-based compensation expense and related charges(1) 1,327 686 4,115 2,750 Amortization of stock-based compensation expense - capitalized internal-use software 628 603 2,596 2,216 Non-GAAP gross profit $ 146,781 $ 145,012 $ 584,494 $ 579,604 Gross margin 66 % 71 % 67 % 72 % Non-GAAP gross margin 67 % 72 % 68 % 73 % Non-GAAP operating income and operating margin: U.S. GAAP operating income $ 14,171 $ 10,459 $ 40,239 $ 23,970 Stock-based compensation expense and related charges(2) 21,750 15,420 84,539 60,663 Amortization of acquired intangible assets — — — 118 Amortization of stock-based compensation expense - capitalized internal-use software 628 603 2,596 2,216 Non-recurring litigation costs(3) 259 — 2,076 — Restructuring costs(4) 926 (144) 16,785 2,821 Non-GAAP operating income $ 37,734 $ 26,338 $ 146,235 $ 89,788 Operating margin 6 % 5 % 5 % 3 % Non-GAAP operating margin 17 % 13 % 17 % 11 % Free cash flow: Net cash provided by operating activities $ 20,665 $ 5,365 $ 159,193 $ 77,590 Purchases of property and equipment (540) (802) (1,379) (5,802) Capitalized internal-use software (4,195) (3,022) (15,911) (12,631) Free cash flow $ 15,930 $ 1,541 $ 141,903 $ 59,157 (1) Employer payroll tax related to stock-based compensation for the periods ended January 31, 2026 and 2025 was immaterial as it relates to the impact to gross profit. (2) Includes employer payroll tax related to stock-based compensation expense of $0.3 million and $0.1 million for the three months ended January 31, 2026 and 2025, respectively, and $1.0 million and $1.1 million for the years ended January 31, 2026 and 2025, respectively. (3) Relates to costs associated with litigation that arise outside of the ordinary course of business. (4) Includes employer payroll tax related to the February 2025 restructuring of an immaterial amount and $0.8 million for the three and twelve months ended January 31, 2026, respectively, and employer payroll tax related to the May 2024 restructuring of an immaterial amount and $0.4 million for the three and twelve months ended January 31, 2025, respectively. Three Months Ended January 31, 2026 2025 (in thousands) Per Share-Basic Per Share-Diluted (in thousands) Per Share-Basic Per Share-Diluted Non-GAAP net income and earnings per share: U.S. GAAP net income $ 8,954 $ 0.04 $ 0.04 $ 98,679 $ 0.39 $ 0.37 Stock-based compensation expense and related charges(1) 21,750 0.09 0.09 15,420 0.06 0.06 Amortization of stock-based compensation expense - capitalized internal-use software 628 — — 603 — — Income tax expense(2) (558) — — — — — Non-recurring litigation costs(3) 259 — — — — — Restructuring costs(4) 926 — — (144) — — Release of U.S. federal and state valuation allowances — — — (87,058) (0.34) (0.33) Non-GAAP net income $ 31,959 $ 0.13 $ 0.13 $ 27,500 $ 0.11 $ 0.10 Weighted-average shares outstanding 247,571 252,608 254,911 266,910 Year Ended January 31, 2026 2025 (in thousands) Per Share-Basic Per Share-Diluted (in thousands) Per Share-Basic Per Share-Diluted Non-GAAP net income and earnings per share: U.S. GAAP net income $ 22,905 $ 0.09 $ 0.09 $ 121,609 $ 0.47 $ 0.44 Stock-based compensation expense and related charges(1) 84,539 0.34 0.33 60,663 0.23 0.22 Amortization of acquired intangible assets — — — 118 — — Amortization of stock-based compensation expense - capitalized internal-use software 2,596 0.01 0.01 2,216 0.01 0.01 Income tax expense(2) (1,731) (0.01) (0.01) — — — Non-recurring litigation costs(3) 2,076 0.01 0.01 — — — Restructuring costs(4) 16,785 0.07 0.06 2,821 0.01 0.01 Release of U.S. federal and state valuation allowances — — — (87,058) (0.33) (0.31) Non-GAAP net income $ 127,170 $ 0.51 $ 0.49 $ 100,369 $ 0.39 $ 0.37 Weighted-average shares outstanding 250,834 257,965 260,241 274,773 (1) Includes employer payroll tax related to stock-based compensation of $0.3 million and $0.1 million for the three months ended January 31, 2026 and 2025, respectively, and $1.0 million and $1.1 million for the years ended January 31, 2026 and 2025, respectively. (2) Represents the Company’s current and deferred income tax expense commensurate with the non-GAAP measure of profitability using a non-GAAP tax rate of 26.4% for the year ended January 31, 2026. The Company uses an annual tax rate in its computation of the non-GAAP income tax provision and excludes the direct impact of stock-based compensation expense, employer tax costs related to stock-based compensation, intangible amortization expense, amortization of stock-based compensation expense associated with capitalized internal-use software, non-recurring litigation costs, restructuring costs and settlement of prior year tax positions. (3) Relates to costs associated with litigation that arise outside of the ordinary course of business. (4) Includes employer payroll tax related to the February 2025 restructuring of an immaterial amount and $0.8 million for the three and twelve months ended January 31, 2026, respectively, and employer payroll tax related to the May 2024 restructuring of an immaterial amount and $0.4 million for the three and twelve months ended January 31, 2025, respectively."
+      }
+    ],
+    "exhibits_other": [],
+    "filing_text": null,
+    "assembled_at": "2026-04-22T18:21:57.007513+00:00",
+    "pit_cutoff": "2026-03-11T07:15:04-04:00",
+    "source_mode": "historical",
+    "effective_cutoff_ts": null
+  },
+  "guidance_history": {
+    "schema_version": "guidance_history.v1",
+    "ticker": "CXM",
+    "pit": "2026-03-11T07:15:04-04:00",
+    "series": [],
+    "summary": {
+      "total_series": 0,
+      "total_updates_raw": 0,
+      "total_updates_collapsed": 0,
+      "earliest_date": null,
+      "latest_date": null
+    },
+    "assembled_at": "2026-04-22T18:21:48.979407+00:00",
+    "pit_cutoff": "2026-03-11T07:15:04-04:00",
+    "source_mode": "historical",
+    "effective_cutoff_ts": "2026-03-11T07:15:04-04:00"
+  },
+  "inter_quarter_context": {
+    "schema_version": "inter_quarter_context.v1",
+    "ticker": "CXM",
+    "prev_8k_ts": "2025-12-03T07:15:22-05:00",
+    "context_cutoff_ts": "2026-03-11T07:15:04-04:00",
+    "context_cutoff_reason": "pit_cutoff",
+    "prev_day": "2025-12-03",
+    "cutoff_day": "2026-03-11",
+    "industry": "SoftwareApplication",
+    "sector": "Technology",
+    "days": [
+      {
+        "date": "2025-12-03",
+        "is_trading_day": true,
+        "boundary_role": "prev_boundary",
+        "price_role": "reference_only",
+        "price": {
+          "open": 7.84,
+          "high": 8.0,
+          "low": 7.4,
+          "close": 7.77,
+          "daily_return": 3.05,
+          "volume": 7850855.0,
+          "vwap": 7.7069,
+          "transactions": 45119.0,
+          "timestamp": "2025-12-03 16:00:00-0500"
+        },
+        "spy_return": 0.35,
+        "sector_return": 0.24,
+        "industry_return": null,
+        "adj_return": 2.7,
+        "is_significant": null,
+        "is_gap_day": null,
+        "events": [
+          {
+            "event_ref": "news:bzNews_49183101",
+            "type": "news",
+            "available_precision": "timestamp",
+            "created": "2025-12-03T09:06:44-05:00",
+            "market_session": "pre_market",
+            "title": "Why Sprinklr Stock Is Trading Higher Today",
+            "channels": [
+              "Earnings",
+              "News",
+              "Guidance"
+            ],
+            "forward_returns": {
+              "hourly": {
+                "start_ts": "2025-12-03T09:06:44-05:00",
+                "end_ts": "2025-12-03T10:06:44-05:00",
+                "stock": -1.22,
+                "sector": -0.12,
+                "industry": 0.43,
+                "macro": 0.06,
+                "adj_macro": -1.28,
+                "adj_sector": -1.1,
+                "adj_industry": -1.65
+              },
+              "session": {
+                "start_ts": "2025-12-03T09:06:44-05:00",
+                "end_ts": "2025-12-03T09:35:00-05:00",
+                "stock": -1.28,
+                "sector": -0.4,
+                "industry": -0.12,
+                "macro": -0.09,
+                "adj_macro": -1.19,
+                "adj_sector": -0.88,
+                "adj_industry": -1.16
+              },
+              "daily": {
+                "start_ts": "2025-12-02T16:00:00-05:00",
+                "end_ts": "2025-12-03T16:00:00-05:00",
+                "stock": 3.18,
+                "sector": 0.26,
+                "industry": 1.42,
+                "macro": 0.37,
+                "adj_macro": 2.81,
+                "adj_sector": 2.92,
+                "adj_industry": 1.76
+              }
+            },
+            "id": "bzNews_49183101",
+            "url": "https://www.benzinga.com/markets/earnings/25/12/49183101/why-sprinklr-stock-is-trading-higher-today",
+            "authors": [
+              "Anusuya Lahiri"
+            ],
+            "tags": [
+              "why it's moving"
+            ],
+            "updated": "2025-12-03T09:06:45-05:00",
+            "returns_schedule_raw": "{\"hourly\": \"2025-12-03T10:06:44-05:00\", \"session\": \"2025-12-03T09:35:00-05:00\", \"daily\": \"2025-12-03T16:00:00-05:00\"}"
+          }
+        ]
+      },
+      {
+        "date": "2025-12-04",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 7.94,
+          "high": 8.0,
+          "low": 7.63,
+          "close": 7.9,
+          "daily_return": 1.67,
+          "volume": 3318061.0,
+          "vwap": 7.8237,
+          "transactions": 22557.0,
+          "timestamp": "2025-12-04 16:00:00-0500"
+        },
+        "spy_return": 0.07,
+        "sector_return": 0.37,
+        "industry_return": null,
+        "adj_return": 1.6,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": [
+          {
+            "event_ref": "news:bzNews_49214335",
+            "type": "news",
+            "available_precision": "timestamp",
+            "created": "2025-12-04T12:15:23-05:00",
+            "market_session": "in_market",
+            "title": "Rosenblatt Maintains Buy on Sprinklr, Maintains $12 Price Target",
+            "channels": [
+              "News",
+              "Price Target",
+              "Analyst Ratings"
+            ],
+            "forward_returns": {
+              "hourly": {
+                "start_ts": "2025-12-04T12:15:23-05:00",
+                "end_ts": "2025-12-04T13:15:23-05:00",
+                "stock": 1.04,
+                "sector": -0.11,
+                "industry": 0.21,
+                "macro": 0.02,
+                "adj_macro": 1.02,
+                "adj_sector": 1.15,
+                "adj_industry": 0.83
+              },
+              "session": {
+                "start_ts": "2025-12-04T12:15:23-05:00",
+                "end_ts": "2025-12-04T16:00:00-05:00",
+                "stock": 2.8,
+                "sector": -0.04,
+                "industry": 0.33,
+                "macro": 0.07,
+                "adj_macro": 2.73,
+                "adj_sector": 2.84,
+                "adj_industry": 2.47
+              },
+              "daily": {
+                "start_ts": "2025-12-03T16:00:00-05:00",
+                "end_ts": "2025-12-04T16:00:00-05:00",
+                "stock": 1.54,
+                "sector": 0.37,
+                "industry": 1.16,
+                "macro": 0.08,
+                "adj_macro": 1.46,
+                "adj_sector": 1.17,
+                "adj_industry": 0.38
+              }
+            },
+            "id": "bzNews_49214335",
+            "url": "https://www.benzinga.com/news/25/12/49214335/rosenblatt-maintains-buy-on-sprinklr-maintains-12-price-target",
+            "authors": [
+              "Benzinga Newsdesk"
+            ],
+            "tags": [],
+            "updated": "2025-12-04T12:15:23-05:00",
+            "returns_schedule_raw": "{\"hourly\": \"2025-12-04T13:15:23-05:00\", \"session\": \"2025-12-04T16:00:00-05:00\", \"daily\": \"2025-12-04T16:00:00-05:00\"}"
+          },
+          {
+            "event_ref": "report:0001569345-25-000059",
+            "type": "filing",
+            "available_precision": "timestamp",
+            "created": "2025-12-04T16:06:36-05:00",
+            "market_session": "post_market",
+            "form_type": "10-Q",
+            "accession": "0001569345-25-000059",
+            "period_of_report": "2025-10-31",
+            "is_amendment": false,
+            "description": "Form 10-Q - Quarterly report [Sections 13 or 15(d)]",
+            "items": [],
+            "exhibit_keys": [
+              "EX-10.1",
+              "EX-10.2"
+            ],
+            "forward_returns": {
+              "hourly": {
+                "start_ts": "2025-12-04T16:06:36-05:00",
+                "end_ts": "2025-12-04T17:06:36-05:00",
+                "stock": -0.62,
+                "sector": 0.04,
+                "industry": 0.2,
+                "macro": -0.02,
+                "adj_macro": -0.6,
+                "adj_sector": -0.66,
+                "adj_industry": -0.82
+              },
+              "session": {
+                "start_ts": "2025-12-04T16:06:36-05:00",
+                "end_ts": "2025-12-05T09:35:00-05:00",
+                "stock": -1.12,
+                "sector": 0.68,
+                "industry": 0.66,
+                "macro": 0.27,
+                "adj_macro": -1.39,
+                "adj_sector": -1.8,
+                "adj_industry": -1.78
+              },
+              "daily": {
+                "start_ts": "2025-12-04T16:00:00-05:00",
+                "end_ts": "2025-12-05T16:00:00-05:00",
+                "stock": -1.39,
+                "sector": 0.73,
+                "industry": 1.38,
+                "macro": 0.18,
+                "adj_macro": -1.57,
+                "adj_sector": -2.12,
+                "adj_industry": -2.77
+              }
+            },
+            "report_id": "0001569345-25-000059",
+            "filing_links": {
+              "primary_doc_url": "https://www.sec.gov/Archives/edgar/data/1569345/000156934525000059/cxm-20251031_htm.xml",
+              "link_to_txt": "https://www.sec.gov/Archives/edgar/data/1569345/000156934525000059/0001569345-25-000059.txt",
+              "link_to_html": "https://www.sec.gov/Archives/edgar/data/1569345/000156934525000059/0001569345-25-000059-index.htm",
+              "link_to_filing_details": "https://www.sec.gov/Archives/edgar/data/1569345/000156934525000059/cxm-20251031.htm"
+            },
+            "section_names": [
+              "ControlsandProcedures",
+              "Exhibits",
+              "FinancialStatements",
+              "LegalProceedings",
+              "ManagementDiscussionandAnalysisofFinancialConditionandResultsofOperations",
+              "OtherInformation",
+              "QuantitativeandQualitativeDisclosuresAboutMarketRisk",
+              "RiskFactors",
+              "UnregisteredSalesofEquitySecuritiesandUseofProceeds"
+            ],
+            "has_filing_text": false,
+            "xbrl_status": "COMPLETED",
+            "financial_statement_count": 4,
+            "returns_schedule_raw": "{\"hourly\": \"2025-12-04T17:06:36-05:00\", \"session\": \"2025-12-05T09:35:00-05:00\", \"daily\": \"2025-12-05T16:00:00-05:00\"}"
+          }
+        ]
+      },
+      {
+        "date": "2025-12-05",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 7.87,
+          "high": 7.885,
+          "low": 7.72,
+          "close": 7.79,
+          "daily_return": -1.39,
+          "volume": 1997473.0,
+          "vwap": 7.789,
+          "transactions": 15038.0,
+          "timestamp": "2025-12-05 16:00:00-0500"
+        },
+        "spy_return": 0.19,
+        "sector_return": 0.73,
+        "industry_return": null,
+        "adj_return": -1.58,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": []
+      },
+      {
+        "date": "2025-12-08",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 7.82,
+          "high": 7.97,
+          "low": 7.71,
+          "close": 7.74,
+          "daily_return": -0.64,
+          "volume": 2534956.0,
+          "vwap": 7.8039,
+          "transactions": 16847.0,
+          "timestamp": "2025-12-08 16:00:00-0500"
+        },
+        "spy_return": -0.3,
+        "sector_return": 0.7,
+        "industry_return": null,
+        "adj_return": -0.34,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": [
+          {
+            "event_ref": "news:bzNews_49267418",
+            "type": "news",
+            "available_precision": "timestamp",
+            "created": "2025-12-08T15:03:22-05:00",
+            "market_session": "in_market",
+            "title": "Citigroup Maintains Neutral on Sprinklr, Raises Price Target to $9",
+            "channels": [
+              "News",
+              "Price Target",
+              "Analyst Ratings"
+            ],
+            "forward_returns": {
+              "hourly": {
+                "start_ts": "2025-12-08T15:03:22-05:00",
+                "end_ts": "2025-12-08T16:03:22-05:00",
+                "stock": -0.64,
+                "sector": 0.46,
+                "industry": 0.12,
+                "macro": 0.18,
+                "adj_macro": -0.82,
+                "adj_sector": -1.1,
+                "adj_industry": -0.76
+              },
+              "session": {
+                "start_ts": "2025-12-08T15:03:22-05:00",
+                "end_ts": "2025-12-08T16:00:00-05:00",
+                "stock": -0.51,
+                "sector": 0.38,
+                "industry": 0.12,
+                "macro": 0.21,
+                "adj_macro": -0.72,
+                "adj_sector": -0.89,
+                "adj_industry": -0.63
+              },
+              "daily": {
+                "start_ts": "2025-12-05T16:00:00-05:00",
+                "end_ts": "2025-12-08T16:00:00-05:00",
+                "stock": -0.51,
+                "sector": 0.7,
+                "industry": -0.04,
+                "macro": -0.29,
+                "adj_macro": -0.22,
+                "adj_sector": -1.21,
+                "adj_industry": -0.47
+              }
+            },
+            "id": "bzNews_49267418",
+            "url": "https://www.benzinga.com/news/25/12/49267418/citigroup-maintains-neutral-on-sprinklr-raises-price-target-to-9",
+            "authors": [
+              "Benzinga Newsdesk"
+            ],
+            "tags": [],
+            "updated": "2025-12-08T15:03:22-05:00",
+            "returns_schedule_raw": "{\"hourly\": \"2025-12-08T16:03:22-05:00\", \"session\": \"2025-12-08T16:00:00-05:00\", \"daily\": \"2025-12-08T16:00:00-05:00\"}"
+          }
+        ]
+      },
+      {
+        "date": "2025-12-09",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 7.74,
+          "high": 8.075,
+          "low": 7.735,
+          "close": 8.06,
+          "daily_return": 4.13,
+          "volume": 2237806.0,
+          "vwap": 7.9776,
+          "transactions": 14935.0,
+          "timestamp": "2025-12-09 16:00:00-0500"
+        },
+        "spy_return": -0.09,
+        "sector_return": 0.26,
+        "industry_return": null,
+        "adj_return": 4.22,
+        "is_significant": true,
+        "is_gap_day": false,
+        "events": [
+          {
+            "event_ref": "report:0001193125-25-313023",
+            "type": "filing",
+            "available_precision": "timestamp",
+            "created": "2025-12-09T17:46:35-05:00",
+            "market_session": "post_market",
+            "form_type": "SCHEDULE 13D/A",
+            "accession": "0001193125-25-313023",
+            "period_of_report": null,
+            "is_amendment": true,
+            "description": "Form SCHEDULE 13D/A - General Statement of Acquisition of Beneficial Ownership: [Amend]",
+            "items": [],
+            "exhibit_keys": [
+              "EX-99.D",
+              "EX-99.E"
+            ],
+            "forward_returns": {
+              "hourly": {
+                "start_ts": "2025-12-09T17:46:35-05:00",
+                "end_ts": "2025-12-09T18:46:35-05:00",
+                "stock": -1.8,
+                "sector": 0.05,
+                "industry": 0.0,
+                "macro": 0.0,
+                "adj_macro": -1.8,
+                "adj_sector": -1.85,
+                "adj_industry": -1.8
+              },
+              "session": {
+                "start_ts": "2025-12-09T17:46:35-05:00",
+                "end_ts": "2025-12-10T09:35:00-05:00",
+                "stock": 0.37,
+                "sector": -0.44,
+                "industry": -0.5,
+                "macro": -0.11,
+                "adj_macro": 0.48,
+                "adj_sector": 0.81,
+                "adj_industry": 0.87
+              },
+              "daily": {
+                "start_ts": "2025-12-09T16:00:00-05:00",
+                "end_ts": "2025-12-10T16:00:00-05:00",
+                "stock": -0.62,
+                "sector": 0.48,
+                "industry": 0.12,
+                "macro": 0.66,
+                "adj_macro": -1.28,
+                "adj_sector": -1.1,
+                "adj_industry": -0.74
+              }
+            },
+            "report_id": "0001193125-25-313023",
+            "filing_links": {
+              "primary_doc_url": "https://www.sec.gov/Archives/edgar/data/1569345/000119312525313023/0001193125-25-313023.txt",
+              "link_to_txt": "https://www.sec.gov/Archives/edgar/data/1569345/000119312525313023/0001193125-25-313023.txt",
+              "link_to_html": "https://www.sec.gov/Archives/edgar/data/1569345/000119312525313023/0001193125-25-313023-index.htm",
+              "link_to_filing_details": "https://www.sec.gov/Archives/edgar/data/1569345/000119312525313023/xslSCHEDULE_13D_X01/primary_doc.xml"
+            },
+            "section_names": [],
+            "has_filing_text": true,
+            "xbrl_status": "SKIPPED",
+            "financial_statement_count": 0,
+            "returns_schedule_raw": "{\"hourly\": \"2025-12-09T18:46:35-05:00\", \"session\": \"2025-12-10T09:35:00-05:00\", \"daily\": \"2025-12-10T16:00:00-05:00\"}"
+          }
+        ]
+      },
+      {
+        "date": "2025-12-10",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 8.06,
+          "high": 8.205,
+          "low": 8.001,
+          "close": 8.02,
+          "daily_return": -0.5,
+          "volume": 2003001.0,
+          "vwap": 8.0979,
+          "transactions": 15141.0,
+          "timestamp": "2025-12-10 16:00:00-0500"
+        },
+        "spy_return": 0.66,
+        "sector_return": 0.48,
+        "industry_return": null,
+        "adj_return": -1.16,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": []
+      },
+      {
+        "date": "2025-12-11",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 7.98,
+          "high": 8.09,
+          "low": 7.945,
+          "close": 8.02,
+          "daily_return": 0.0,
+          "volume": 1608562.0,
+          "vwap": 8.0303,
+          "transactions": 14054.0,
+          "timestamp": "2025-12-11 16:00:00-0500"
+        },
+        "spy_return": 0.23,
+        "sector_return": -0.51,
+        "industry_return": null,
+        "adj_return": -0.23,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": []
+      },
+      {
+        "date": "2025-12-12",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 8.03,
+          "high": 8.06,
+          "low": 7.98,
+          "close": 8.03,
+          "daily_return": 0.12,
+          "volume": 1629215.0,
+          "vwap": 8.0271,
+          "transactions": 13756.0,
+          "timestamp": "2025-12-12 16:00:00-0500"
+        },
+        "spy_return": -1.08,
+        "sector_return": -2.89,
+        "industry_return": null,
+        "adj_return": 1.2,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": []
+      },
+      {
+        "date": "2025-12-15",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 8.03,
+          "high": 8.03,
+          "low": 7.69,
+          "close": 7.71,
+          "daily_return": -3.99,
+          "volume": 1456172.0,
+          "vwap": 7.78,
+          "transactions": 11876.0,
+          "timestamp": "2025-12-15 16:00:00-0500"
+        },
+        "spy_return": -0.15,
+        "sector_return": -0.97,
+        "industry_return": null,
+        "adj_return": -3.84,
+        "is_significant": true,
+        "is_gap_day": true,
+        "events": []
+      },
+      {
+        "date": "2025-12-16",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 7.68,
+          "high": 7.91,
+          "low": 7.67,
+          "close": 7.85,
+          "daily_return": 1.82,
+          "volume": 1761880.0,
+          "vwap": 7.8282,
+          "transactions": 11829.0,
+          "timestamp": "2025-12-16 16:00:00-0500"
+        },
+        "spy_return": -0.27,
+        "sector_return": 0.18,
+        "industry_return": null,
+        "adj_return": 2.09,
+        "is_significant": true,
+        "is_gap_day": true,
+        "events": []
+      },
+      {
+        "date": "2025-12-17",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 7.85,
+          "high": 7.975,
+          "low": 7.81,
+          "close": 7.86,
+          "daily_return": 0.13,
+          "volume": 1972582.0,
+          "vwap": 7.8721,
+          "transactions": 13040.0,
+          "timestamp": "2025-12-17 16:00:00-0500"
+        },
+        "spy_return": -1.1,
+        "sector_return": -2.22,
+        "industry_return": null,
+        "adj_return": 1.23,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": []
+      },
+      {
+        "date": "2025-12-18",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 7.83,
+          "high": 7.935,
+          "low": 7.81,
+          "close": 7.87,
+          "daily_return": 0.13,
+          "volume": 2348996.0,
+          "vwap": 7.8766,
+          "transactions": 11981.0,
+          "timestamp": "2025-12-18 16:00:00-0500"
+        },
+        "spy_return": 0.76,
+        "sector_return": 1.54,
+        "industry_return": null,
+        "adj_return": -0.63,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": [
+          {
+            "event_ref": "report:0001193125-25-323772",
+            "type": "filing",
+            "available_precision": "timestamp",
+            "created": "2025-12-18T08:11:53-05:00",
+            "market_session": "pre_market",
+            "form_type": "8-K",
+            "accession": "0001193125-25-323772",
+            "period_of_report": "2025-12-12",
+            "is_amendment": false,
+            "description": "Form 8-K - Current report - Item 5.02 Item 7.01 Item 9.01",
+            "items": [
+              "Item 5.02: Departure of Directors or Certain Officers; Election of Directors; Appointment of Certain Officers: Compensatory Arrangements of Certain Officers",
+              "Item 7.01: Regulation FD Disclosure",
+              "Item 9.01: Financial Statements and Exhibits"
+            ],
+            "exhibit_keys": [
+              "EX-99.1"
+            ],
+            "forward_returns": {
+              "hourly": {
+                "start_ts": "2025-12-18T08:11:53-05:00",
+                "end_ts": "2025-12-18T09:11:53-05:00",
+                "stock": 0.0,
+                "sector": 0.69,
+                "industry": 1.35,
+                "macro": 0.46,
+                "adj_macro": -0.46,
+                "adj_sector": -0.69,
+                "adj_industry": -1.35
+              },
+              "session": {
+                "start_ts": "2025-12-18T08:11:53-05:00",
+                "end_ts": "2025-12-18T09:35:00-05:00",
+                "stock": 0.89,
+                "sector": 0.78,
+                "industry": 1.26,
+                "macro": 0.53,
+                "adj_macro": 0.36,
+                "adj_sector": 0.11,
+                "adj_industry": -0.37
+              },
+              "daily": {
+                "start_ts": "2025-12-17T16:00:00-05:00",
+                "end_ts": "2025-12-18T16:00:00-05:00",
+                "stock": 0.06,
+                "sector": 1.54,
+                "industry": 1.42,
+                "macro": 0.74,
+                "adj_macro": -0.68,
+                "adj_sector": -1.48,
+                "adj_industry": -1.36
+              }
+            },
+            "report_id": "0001193125-25-323772",
+            "filing_links": {
+              "primary_doc_url": "https://www.sec.gov/Archives/edgar/data/1569345/000119312525323772/d10353d8k_htm.xml",
+              "link_to_txt": "https://www.sec.gov/Archives/edgar/data/1569345/000119312525323772/0001193125-25-323772.txt",
+              "link_to_html": "https://www.sec.gov/Archives/edgar/data/1569345/000119312525323772/0001193125-25-323772-index.htm",
+              "link_to_filing_details": "https://www.sec.gov/Archives/edgar/data/1569345/000119312525323772/d10353d8k.htm"
+            },
+            "section_names": [
+              "DepartureofDirectorsorCertainOfficers;ElectionofDirectors;AppointmentofCertainOfficers:CompensatoryArrangementsofCertainOfficers",
+              "FinancialStatementsandExhibits",
+              "RegulationFDDisclosure"
+            ],
+            "has_filing_text": false,
+            "xbrl_status": "SKIPPED",
+            "financial_statement_count": 0,
+            "returns_schedule_raw": "{\"hourly\": \"2025-12-18T09:11:53-05:00\", \"session\": \"2025-12-18T09:35:00-05:00\", \"daily\": \"2025-12-18T16:00:00-05:00\"}"
+          }
+        ]
+      },
+      {
+        "date": "2025-12-19",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 7.88,
+          "high": 7.91,
+          "low": 7.735,
+          "close": 7.84,
+          "daily_return": -0.38,
+          "volume": 3423169.0,
+          "vwap": 7.8279,
+          "transactions": 9684.0,
+          "timestamp": "2025-12-19 16:00:00-0500"
+        },
+        "spy_return": 0.61,
+        "sector_return": 2.16,
+        "industry_return": null,
+        "adj_return": -0.99,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": []
+      },
+      {
+        "date": "2025-12-22",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 7.86,
+          "high": 7.9,
+          "low": 7.77,
+          "close": 7.79,
+          "daily_return": -0.64,
+          "volume": 1053993.0,
+          "vwap": 7.8132,
+          "transactions": 7913.0,
+          "timestamp": "2025-12-22 16:00:00-0500"
+        },
+        "spy_return": 0.62,
+        "sector_return": 0.39,
+        "industry_return": null,
+        "adj_return": -1.26,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": []
+      },
+      {
+        "date": "2025-12-23",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 7.79,
+          "high": 7.79,
+          "low": 7.605,
+          "close": 7.69,
+          "daily_return": -1.28,
+          "volume": 3713164.0,
+          "vwap": 7.6866,
+          "transactions": 8588.0,
+          "timestamp": "2025-12-23 16:00:00-0500"
+        },
+        "spy_return": 0.46,
+        "sector_return": 0.54,
+        "industry_return": null,
+        "adj_return": -1.74,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": []
+      },
+      {
+        "date": "2025-12-24",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 7.69,
+          "high": 7.735,
+          "low": 7.66,
+          "close": 7.71,
+          "daily_return": 0.26,
+          "volume": 1157676.0,
+          "vwap": 7.7085,
+          "transactions": 3861.0,
+          "timestamp": "2025-12-24 16:00:00-0500"
+        },
+        "spy_return": 0.35,
+        "sector_return": 0.24,
+        "industry_return": null,
+        "adj_return": -0.09,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": []
+      },
+      {
+        "date": "2025-12-26",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 7.69,
+          "high": 7.75,
+          "low": 7.67,
+          "close": 7.72,
+          "daily_return": 0.13,
+          "volume": 718217.0,
+          "vwap": 7.716,
+          "transactions": 6986.0,
+          "timestamp": "2025-12-26 16:00:00-0500"
+        },
+        "spy_return": -0.01,
+        "sector_return": 0.16,
+        "industry_return": null,
+        "adj_return": 0.14,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": []
+      },
+      {
+        "date": "2025-12-29",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 7.7,
+          "high": 7.845,
+          "low": 7.7,
+          "close": 7.8,
+          "daily_return": 1.04,
+          "volume": 1068509.0,
+          "vwap": 7.7934,
+          "transactions": 9062.0,
+          "timestamp": "2025-12-29 16:00:00-0500"
+        },
+        "spy_return": -0.36,
+        "sector_return": -0.45,
+        "industry_return": null,
+        "adj_return": 1.4,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": []
+      },
+      {
+        "date": "2025-12-30",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 7.75,
+          "high": 7.895,
+          "low": 7.73,
+          "close": 7.83,
+          "daily_return": 0.38,
+          "volume": 1176525.0,
+          "vwap": 7.8428,
+          "transactions": 8983.0,
+          "timestamp": "2025-12-30 16:00:00-0500"
+        },
+        "spy_return": -0.12,
+        "sector_return": -0.32,
+        "industry_return": null,
+        "adj_return": 0.5,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": []
+      },
+      {
+        "date": "2025-12-31",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 7.82,
+          "high": 7.875,
+          "low": 7.77,
+          "close": 7.78,
+          "daily_return": -0.64,
+          "volume": 968444.0,
+          "vwap": 7.8152,
+          "transactions": 7678.0,
+          "timestamp": "2025-12-31 16:00:00-0500"
+        },
+        "spy_return": -0.74,
+        "sector_return": -0.99,
+        "industry_return": null,
+        "adj_return": 0.1,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": []
+      },
+      {
+        "date": "2026-01-02",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 7.82,
+          "high": 7.82,
+          "low": 7.165,
+          "close": 7.32,
+          "daily_return": -5.91,
+          "volume": 1790798.0,
+          "vwap": 7.3489,
+          "transactions": 14909.0,
+          "timestamp": "2026-01-02 16:00:00-0500"
+        },
+        "spy_return": 0.18,
+        "sector_return": 0.23,
+        "industry_return": null,
+        "adj_return": -6.09,
+        "is_significant": true,
+        "is_gap_day": true,
+        "events": []
+      },
+      {
+        "date": "2026-01-05",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 7.3,
+          "high": 7.52,
+          "low": 7.2505,
+          "close": 7.4,
+          "daily_return": 1.09,
+          "volume": 1515252.0,
+          "vwap": 7.4062,
+          "transactions": 11508.0,
+          "timestamp": "2026-01-05 16:00:00-0500"
+        },
+        "spy_return": 0.67,
+        "sector_return": 0.22,
+        "industry_return": null,
+        "adj_return": 0.42,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": []
+      },
+      {
+        "date": "2026-01-06",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 7.39,
+          "high": 7.57,
+          "low": 7.36,
+          "close": 7.56,
+          "daily_return": 2.16,
+          "volume": 1506360.0,
+          "vwap": 7.5131,
+          "transactions": 10962.0,
+          "timestamp": "2026-01-06 16:00:00-0500"
+        },
+        "spy_return": 0.59,
+        "sector_return": 1.4,
+        "industry_return": null,
+        "adj_return": 1.57,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": []
+      },
+      {
+        "date": "2026-01-07",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 7.59,
+          "high": 7.76,
+          "low": 7.495,
+          "close": 7.76,
+          "daily_return": 2.65,
+          "volume": 1077965.0,
+          "vwap": 7.6866,
+          "transactions": 8950.0,
+          "timestamp": "2026-01-07 16:00:00-0500"
+        },
+        "spy_return": -0.32,
+        "sector_return": -0.08,
+        "industry_return": null,
+        "adj_return": 2.97,
+        "is_significant": true,
+        "is_gap_day": true,
+        "events": []
+      },
+      {
+        "date": "2026-01-08",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 7.69,
+          "high": 7.725,
+          "low": 7.6001,
+          "close": 7.68,
+          "daily_return": -1.03,
+          "volume": 1890439.0,
+          "vwap": 7.6756,
+          "transactions": 13787.0,
+          "timestamp": "2026-01-08 16:00:00-0500"
+        },
+        "spy_return": -0.01,
+        "sector_return": -1.56,
+        "industry_return": null,
+        "adj_return": -1.02,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": []
+      },
+      {
+        "date": "2026-01-09",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 7.64,
+          "high": 7.71,
+          "low": 7.505,
+          "close": 7.63,
+          "daily_return": -0.65,
+          "volume": 884654.0,
+          "vwap": 7.6263,
+          "transactions": 9044.0,
+          "timestamp": "2026-01-09 16:00:00-0500"
+        },
+        "spy_return": 0.66,
+        "sector_return": 1.32,
+        "industry_return": null,
+        "adj_return": -1.31,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": []
+      },
+      {
+        "date": "2026-01-12",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 7.6,
+          "high": 7.66,
+          "low": 7.5,
+          "close": 7.6,
+          "daily_return": -0.39,
+          "volume": 1213868.0,
+          "vwap": 7.6004,
+          "transactions": 10145.0,
+          "timestamp": "2026-01-12 16:00:00-0500"
+        },
+        "spy_return": 0.16,
+        "sector_return": 0.44,
+        "industry_return": null,
+        "adj_return": -0.55,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": []
+      },
+      {
+        "date": "2026-01-13",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 7.62,
+          "high": 7.62,
+          "low": 7.22,
+          "close": 7.25,
+          "daily_return": -4.61,
+          "volume": 1304269.0,
+          "vwap": 7.2901,
+          "transactions": 10580.0,
+          "timestamp": "2026-01-13 16:00:00-0500"
+        },
+        "spy_return": -0.2,
+        "sector_return": -0.21,
+        "industry_return": null,
+        "adj_return": -4.41,
+        "is_significant": true,
+        "is_gap_day": true,
+        "events": []
+      },
+      {
+        "date": "2026-01-14",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 7.2,
+          "high": 7.25,
+          "low": 7.035,
+          "close": 7.12,
+          "daily_return": -1.79,
+          "volume": 1765066.0,
+          "vwap": 7.1318,
+          "transactions": 15111.0,
+          "timestamp": "2026-01-14 16:00:00-0500"
+        },
+        "spy_return": -0.49,
+        "sector_return": -1.22,
+        "industry_return": null,
+        "adj_return": -1.3,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": []
+      },
+      {
+        "date": "2026-01-15",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 7.12,
+          "high": 7.12,
+          "low": 6.94,
+          "close": 6.96,
+          "daily_return": -2.25,
+          "volume": 1234729.0,
+          "vwap": 6.9941,
+          "transactions": 12236.0,
+          "timestamp": "2026-01-15 16:00:00-0500"
+        },
+        "spy_return": 0.27,
+        "sector_return": 0.53,
+        "industry_return": null,
+        "adj_return": -2.52,
+        "is_significant": true,
+        "is_gap_day": true,
+        "events": []
+      },
+      {
+        "date": "2026-01-16",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 6.96,
+          "high": 6.97,
+          "low": 6.62,
+          "close": 6.62,
+          "daily_return": -4.89,
+          "volume": 2228679.0,
+          "vwap": 6.6874,
+          "transactions": 14696.0,
+          "timestamp": "2026-01-16 16:00:00-0500"
+        },
+        "spy_return": -0.08,
+        "sector_return": 0.11,
+        "industry_return": null,
+        "adj_return": -4.81,
+        "is_significant": true,
+        "is_gap_day": true,
+        "events": []
+      },
+      {
+        "date": "2026-01-20",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 6.56,
+          "high": 6.695,
+          "low": 6.55,
+          "close": 6.61,
+          "daily_return": -0.15,
+          "volume": 2203686.0,
+          "vwap": 6.6075,
+          "transactions": 16037.0,
+          "timestamp": "2026-01-20 16:00:00-0500"
+        },
+        "spy_return": -2.04,
+        "sector_return": -2.6,
+        "industry_return": null,
+        "adj_return": 1.89,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": [
+          {
+            "event_ref": "report:0001569345-26-000004",
+            "type": "filing",
+            "available_precision": "timestamp",
+            "created": "2026-01-20T08:00:41-05:00",
+            "market_session": "pre_market",
+            "form_type": "8-K",
+            "accession": "0001569345-26-000004",
+            "period_of_report": "2026-01-20",
+            "is_amendment": false,
+            "description": "Form 8-K - Current report - Item 8.01",
+            "items": [
+              "Item 8.01: Other Events"
+            ],
+            "exhibit_keys": [],
+            "forward_returns": {
+              "hourly": {
+                "start_ts": "2026-01-20T08:00:41-05:00",
+                "end_ts": "2026-01-20T09:00:41-05:00",
+                "stock": 0.0,
+                "sector": 0.13,
+                "industry": 0.22,
+                "macro": -0.19,
+                "adj_macro": 0.19,
+                "adj_sector": -0.13,
+                "adj_industry": -0.22
+              },
+              "session": {
+                "start_ts": "2026-01-20T08:00:41-05:00",
+                "end_ts": "2026-01-20T09:35:00-05:00",
+                "stock": 1.98,
+                "sector": 0.88,
+                "industry": 0.53,
+                "macro": 0.02,
+                "adj_macro": 1.96,
+                "adj_sector": 1.1,
+                "adj_industry": 1.45
+              },
+              "daily": {
+                "start_ts": "2026-01-16T16:00:00-05:00",
+                "end_ts": "2026-01-20T16:00:00-05:00",
+                "stock": -0.08,
+                "sector": -2.6,
+                "industry": -2.49,
+                "macro": -2.05,
+                "adj_macro": 1.97,
+                "adj_sector": 2.52,
+                "adj_industry": 2.41
+              }
+            },
+            "report_id": "0001569345-26-000004",
+            "filing_links": {
+              "primary_doc_url": "https://www.sec.gov/Archives/edgar/data/1569345/000156934526000004/cxm-20260120_htm.xml",
+              "link_to_txt": "https://www.sec.gov/Archives/edgar/data/1569345/000156934526000004/0001569345-26-000004.txt",
+              "link_to_html": "https://www.sec.gov/Archives/edgar/data/1569345/000156934526000004/0001569345-26-000004-index.htm",
+              "link_to_filing_details": "https://www.sec.gov/Archives/edgar/data/1569345/000156934526000004/cxm-20260120.htm"
+            },
+            "section_names": [
+              "OtherEvents"
+            ],
+            "has_filing_text": false,
+            "xbrl_status": "SKIPPED",
+            "financial_statement_count": 0,
+            "returns_schedule_raw": "{\"hourly\": \"2026-01-20T09:00:41-05:00\", \"session\": \"2026-01-20T09:35:00-05:00\", \"daily\": \"2026-01-20T16:00:00-05:00\"}"
+          }
+        ]
+      },
+      {
+        "date": "2026-01-21",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 6.6,
+          "high": 6.7,
+          "low": 6.55,
+          "close": 6.66,
+          "daily_return": 0.76,
+          "volume": 1683425.0,
+          "vwap": 6.6314,
+          "transactions": 14469.0,
+          "timestamp": "2026-01-21 16:00:00-0500"
+        },
+        "spy_return": 1.15,
+        "sector_return": 1.39,
+        "industry_return": null,
+        "adj_return": -0.39,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": []
+      },
+      {
+        "date": "2026-01-22",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 6.71,
+          "high": 6.83,
+          "low": 6.69,
+          "close": 6.8,
+          "daily_return": 2.1,
+          "volume": 1513937.0,
+          "vwap": 6.7833,
+          "transactions": 10732.0,
+          "timestamp": "2026-01-22 16:00:00-0500"
+        },
+        "spy_return": 0.52,
+        "sector_return": 0.74,
+        "industry_return": null,
+        "adj_return": 1.58,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": []
+      },
+      {
+        "date": "2026-01-23",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 6.79,
+          "high": 6.91,
+          "low": 6.685,
+          "close": 6.74,
+          "daily_return": -0.88,
+          "volume": 2650821.0,
+          "vwap": 6.7266,
+          "transactions": 16564.0,
+          "timestamp": "2026-01-23 16:00:00-0500"
+        },
+        "spy_return": 0.04,
+        "sector_return": 0.14,
+        "industry_return": null,
+        "adj_return": -0.92,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": []
+      },
+      {
+        "date": "2026-01-26",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 6.78,
+          "high": 6.88,
+          "low": 6.71,
+          "close": 6.79,
+          "daily_return": 0.74,
+          "volume": 1591317.0,
+          "vwap": 6.8057,
+          "transactions": 13205.0,
+          "timestamp": "2026-01-26 16:00:00-0500"
+        },
+        "spy_return": 0.51,
+        "sector_return": 0.68,
+        "industry_return": null,
+        "adj_return": 0.23,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": []
+      },
+      {
+        "date": "2026-01-27",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 6.8,
+          "high": 6.84,
+          "low": 6.48,
+          "close": 6.56,
+          "daily_return": -3.39,
+          "volume": 1317978.0,
+          "vwap": 6.5508,
+          "transactions": 11410.0,
+          "timestamp": "2026-01-27 16:00:00-0500"
+        },
+        "spy_return": 0.4,
+        "sector_return": 1.35,
+        "industry_return": null,
+        "adj_return": -3.79,
+        "is_significant": true,
+        "is_gap_day": true,
+        "events": []
+      },
+      {
+        "date": "2026-01-28",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 6.62,
+          "high": 6.69,
+          "low": 6.555,
+          "close": 6.57,
+          "daily_return": 0.15,
+          "volume": 1822904.0,
+          "vwap": 6.5944,
+          "transactions": 13861.0,
+          "timestamp": "2026-01-28 16:00:00-0500"
+        },
+        "spy_return": -0.01,
+        "sector_return": 0.8,
+        "industry_return": null,
+        "adj_return": 0.16,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": []
+      },
+      {
+        "date": "2026-01-29",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 6.39,
+          "high": 6.47,
+          "low": 6.21,
+          "close": 6.35,
+          "daily_return": -3.35,
+          "volume": 1638629.0,
+          "vwap": 6.3064,
+          "transactions": 14509.0,
+          "timestamp": "2026-01-29 16:00:00-0500"
+        },
+        "spy_return": -0.2,
+        "sector_return": -1.58,
+        "industry_return": null,
+        "adj_return": -3.15,
+        "is_significant": true,
+        "is_gap_day": true,
+        "events": []
+      },
+      {
+        "date": "2026-01-30",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 6.3,
+          "high": 6.46,
+          "low": 6.28,
+          "close": 6.38,
+          "daily_return": 0.47,
+          "volume": 2121508.0,
+          "vwap": 6.3748,
+          "transactions": 14342.0,
+          "timestamp": "2026-01-30 16:00:00-0500"
+        },
+        "spy_return": -0.3,
+        "sector_return": -2.04,
+        "industry_return": null,
+        "adj_return": 0.77,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": []
+      },
+      {
+        "date": "2026-02-02",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 6.39,
+          "high": 6.535,
+          "low": 6.25,
+          "close": 6.29,
+          "daily_return": -1.41,
+          "volume": 2873024.0,
+          "vwap": 6.3364,
+          "transactions": 19406.0,
+          "timestamp": "2026-02-02 16:00:00-0500"
+        },
+        "spy_return": 0.5,
+        "sector_return": 0.96,
+        "industry_return": null,
+        "adj_return": -1.91,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": []
+      },
+      {
+        "date": "2026-02-03",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 6.15,
+          "high": 6.15,
+          "low": 5.795,
+          "close": 5.94,
+          "daily_return": -5.56,
+          "volume": 3469734.0,
+          "vwap": 5.8745,
+          "transactions": 21241.0,
+          "timestamp": "2026-02-03 16:00:00-0500"
+        },
+        "spy_return": -0.85,
+        "sector_return": -2.19,
+        "industry_return": null,
+        "adj_return": -4.71,
+        "is_significant": true,
+        "is_gap_day": true,
+        "events": []
+      },
+      {
+        "date": "2026-02-04",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 5.88,
+          "high": 6.13,
+          "low": 5.82,
+          "close": 6.06,
+          "daily_return": 2.02,
+          "volume": 3770348.0,
+          "vwap": 6.004,
+          "transactions": 25688.0,
+          "timestamp": "2026-02-04 16:00:00-0500"
+        },
+        "spy_return": -0.48,
+        "sector_return": -2.79,
+        "industry_return": null,
+        "adj_return": 2.5,
+        "is_significant": true,
+        "is_gap_day": true,
+        "events": []
+      },
+      {
+        "date": "2026-02-05",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 6.11,
+          "high": 6.16,
+          "low": 5.91,
+          "close": 5.95,
+          "daily_return": -1.82,
+          "volume": 3784303.0,
+          "vwap": 5.9899,
+          "transactions": 24607.0,
+          "timestamp": "2026-02-05 16:00:00-0500"
+        },
+        "spy_return": -1.25,
+        "sector_return": -1.8,
+        "industry_return": null,
+        "adj_return": -0.57,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": []
+      },
+      {
+        "date": "2026-02-06",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 6.01,
+          "high": 6.04,
+          "low": 5.885,
+          "close": 6.0,
+          "daily_return": 0.84,
+          "volume": 3576386.0,
+          "vwap": 5.9825,
+          "transactions": 19775.0,
+          "timestamp": "2026-02-06 16:00:00-0500"
+        },
+        "spy_return": 1.92,
+        "sector_return": 4.06,
+        "industry_return": null,
+        "adj_return": -1.08,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": []
+      },
+      {
+        "date": "2026-02-09",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 6.0,
+          "high": 6.005,
+          "low": 5.795,
+          "close": 5.82,
+          "daily_return": -3.0,
+          "volume": 1879403.0,
+          "vwap": 5.8415,
+          "transactions": 13212.0,
+          "timestamp": "2026-02-09 16:00:00-0500"
+        },
+        "spy_return": 0.48,
+        "sector_return": 1.57,
+        "industry_return": null,
+        "adj_return": -3.48,
+        "is_significant": true,
+        "is_gap_day": true,
+        "events": []
+      },
+      {
+        "date": "2026-02-10",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 5.89,
+          "high": 6.035,
+          "low": 5.84,
+          "close": 5.89,
+          "daily_return": 1.2,
+          "volume": 3537232.0,
+          "vwap": 5.9192,
+          "transactions": 17118.0,
+          "timestamp": "2026-02-10 16:00:00-0500"
+        },
+        "spy_return": -0.26,
+        "sector_return": -0.56,
+        "industry_return": null,
+        "adj_return": 1.46,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": []
+      },
+      {
+        "date": "2026-02-11",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 5.9,
+          "high": 5.9,
+          "low": 5.505,
+          "close": 5.68,
+          "daily_return": -3.57,
+          "volume": 2909736.0,
+          "vwap": 5.6245,
+          "transactions": 18804.0,
+          "timestamp": "2026-02-11 16:00:00-0500"
+        },
+        "spy_return": -0.02,
+        "sector_return": 0.29,
+        "industry_return": null,
+        "adj_return": -3.55,
+        "is_significant": true,
+        "is_gap_day": true,
+        "events": []
+      },
+      {
+        "date": "2026-02-12",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 5.695,
+          "high": 5.72,
+          "low": 5.255,
+          "close": 5.39,
+          "daily_return": -5.11,
+          "volume": 4413005.0,
+          "vwap": 5.3721,
+          "transactions": 24627.0,
+          "timestamp": "2026-02-12 16:00:00-0500"
+        },
+        "spy_return": -1.54,
+        "sector_return": -2.63,
+        "industry_return": null,
+        "adj_return": -3.57,
+        "is_significant": true,
+        "is_gap_day": true,
+        "events": []
+      },
+      {
+        "date": "2026-02-13",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 5.44,
+          "high": 5.56,
+          "low": 5.35,
+          "close": 5.49,
+          "daily_return": 1.86,
+          "volume": 3446497.0,
+          "vwap": 5.4995,
+          "transactions": 24143.0,
+          "timestamp": "2026-02-13 16:00:00-0500"
+        },
+        "spy_return": 0.07,
+        "sector_return": 0.25,
+        "industry_return": null,
+        "adj_return": 1.79,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": []
+      },
+      {
+        "date": "2026-02-17",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 5.48,
+          "high": 5.575,
+          "low": 5.41,
+          "close": 5.57,
+          "daily_return": 1.46,
+          "volume": 3984973.0,
+          "vwap": 5.5416,
+          "transactions": 17228.0,
+          "timestamp": "2026-02-17 16:00:00-0500"
+        },
+        "spy_return": 0.16,
+        "sector_return": -0.06,
+        "industry_return": null,
+        "adj_return": 1.3,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": []
+      },
+      {
+        "date": "2026-02-18",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 5.58,
+          "high": 5.6,
+          "low": 5.4872,
+          "close": 5.57,
+          "daily_return": 0.0,
+          "volume": 1884903.0,
+          "vwap": 5.5586,
+          "transactions": 13947.0,
+          "timestamp": "2026-02-18 16:00:00-0500"
+        },
+        "spy_return": 0.5,
+        "sector_return": 1.03,
+        "industry_return": null,
+        "adj_return": -0.5,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": []
+      },
+      {
+        "date": "2026-02-19",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 5.58,
+          "high": 5.62,
+          "low": 5.48,
+          "close": 5.6,
+          "daily_return": 0.54,
+          "volume": 1505363.0,
+          "vwap": 5.581,
+          "transactions": 12201.0,
+          "timestamp": "2026-02-19 16:00:00-0500"
+        },
+        "spy_return": -0.26,
+        "sector_return": -0.5,
+        "industry_return": null,
+        "adj_return": 0.8,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": []
+      },
+      {
+        "date": "2026-02-20",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 5.59,
+          "high": 5.825,
+          "low": 5.56,
+          "close": 5.59,
+          "daily_return": -0.18,
+          "volume": 2220819.0,
+          "vwap": 5.6469,
+          "transactions": 15317.0,
+          "timestamp": "2026-02-20 16:00:00-0500"
+        },
+        "spy_return": 0.72,
+        "sector_return": 0.48,
+        "industry_return": null,
+        "adj_return": -0.9,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": []
+      },
+      {
+        "date": "2026-02-23",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 5.43,
+          "high": 5.485,
+          "low": 5.12,
+          "close": 5.22,
+          "daily_return": -6.62,
+          "volume": 3193079.720053,
+          "vwap": 5.2242,
+          "transactions": 17587.0,
+          "timestamp": "2026-02-23 16:00:00-0500"
+        },
+        "spy_return": -1.02,
+        "sector_return": -1.68,
+        "industry_return": null,
+        "adj_return": -5.6,
+        "is_significant": true,
+        "is_gap_day": true,
+        "events": []
+      },
+      {
+        "date": "2026-02-24",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 5.24,
+          "high": 5.42,
+          "low": 5.24,
+          "close": 5.29,
+          "daily_return": 1.34,
+          "volume": 2128793.778571,
+          "vwap": 5.2973,
+          "transactions": 16139.0,
+          "timestamp": "2026-02-24 16:00:00-0500"
+        },
+        "spy_return": 0.73,
+        "sector_return": 1.3,
+        "industry_return": null,
+        "adj_return": 0.61,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": []
+      },
+      {
+        "date": "2026-02-25",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 5.29,
+          "high": 5.45,
+          "low": 5.18,
+          "close": 5.43,
+          "daily_return": 2.65,
+          "volume": 3373204.028033,
+          "vwap": 5.391,
+          "transactions": 12829.0,
+          "timestamp": "2026-02-25 16:00:00-0500"
+        },
+        "spy_return": 0.84,
+        "sector_return": 1.92,
+        "industry_return": null,
+        "adj_return": 1.81,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": []
+      },
+      {
+        "date": "2026-02-26",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 5.48,
+          "high": 5.825,
+          "low": 5.46,
+          "close": 5.78,
+          "daily_return": 6.45,
+          "volume": 3257594.465211,
+          "vwap": 5.74,
+          "transactions": 20379.0,
+          "timestamp": "2026-02-26 16:00:00-0500"
+        },
+        "spy_return": -0.56,
+        "sector_return": -1.4,
+        "industry_return": null,
+        "adj_return": 7.01,
+        "is_significant": true,
+        "is_gap_day": true,
+        "events": []
+      },
+      {
+        "date": "2026-02-27",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 5.63,
+          "high": 5.83,
+          "low": 5.57,
+          "close": 5.82,
+          "daily_return": 0.69,
+          "volume": 2862489.576864,
+          "vwap": 5.7756,
+          "transactions": 18394.0,
+          "timestamp": "2026-02-27 16:00:00-0500"
+        },
+        "spy_return": -0.48,
+        "sector_return": -1.6,
+        "industry_return": null,
+        "adj_return": 1.17,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": []
+      },
+      {
+        "date": "2026-03-02",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 5.72,
+          "high": 5.89,
+          "low": 5.71,
+          "close": 5.77,
+          "daily_return": -0.86,
+          "volume": 2240214.36845,
+          "vwap": 5.8011,
+          "transactions": 16917.0,
+          "timestamp": "2026-03-02 16:00:00-0500"
+        },
+        "spy_return": 0.06,
+        "sector_return": 0.56,
+        "industry_return": null,
+        "adj_return": -0.92,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": []
+      },
+      {
+        "date": "2026-03-03",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 5.7,
+          "high": 6.03,
+          "low": 5.68,
+          "close": 5.94,
+          "daily_return": 2.95,
+          "volume": 2736851.112536,
+          "vwap": 5.9144,
+          "transactions": 20002.0,
+          "timestamp": "2026-03-03 16:00:00-0500"
+        },
+        "spy_return": -0.88,
+        "sector_return": -1.46,
+        "industry_return": null,
+        "adj_return": 3.83,
+        "is_significant": true,
+        "is_gap_day": true,
+        "events": []
+      },
+      {
+        "date": "2026-03-04",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 6.0,
+          "high": 6.0,
+          "low": 5.855,
+          "close": 5.94,
+          "daily_return": 0.0,
+          "volume": 1662408.932811,
+          "vwap": 5.938,
+          "transactions": 13466.0,
+          "timestamp": "2026-03-04 16:00:00-0500"
+        },
+        "spy_return": 0.71,
+        "sector_return": 1.7,
+        "industry_return": null,
+        "adj_return": -0.71,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": []
+      },
+      {
+        "date": "2026-03-05",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 5.95,
+          "high": 6.13,
+          "low": 5.925,
+          "close": 5.96,
+          "daily_return": 0.34,
+          "volume": 1786780.306895,
+          "vwap": 6.0018,
+          "transactions": 18102.0,
+          "timestamp": "2026-03-05 16:00:00-0500"
+        },
+        "spy_return": -0.56,
+        "sector_return": 0.24,
+        "industry_return": null,
+        "adj_return": 0.9,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": []
+      },
+      {
+        "date": "2026-03-06",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 5.94,
+          "high": 6.03,
+          "low": 5.85,
+          "close": 5.95,
+          "daily_return": -0.17,
+          "volume": 1728118.258177,
+          "vwap": 5.9376,
+          "transactions": 14924.0,
+          "timestamp": "2026-03-06 16:00:00-0500"
+        },
+        "spy_return": -1.31,
+        "sector_return": -2.06,
+        "industry_return": null,
+        "adj_return": 1.14,
+        "is_significant": false,
+        "is_gap_day": false,
+        "events": []
+      },
+      {
+        "date": "2026-03-09",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 5.86,
+          "high": 5.935,
+          "low": 5.78,
+          "close": 5.88,
+          "daily_return": -1.18,
+          "volume": 1799399.873986,
+          "vwap": 5.8712,
+          "transactions": 14830.0,
+          "timestamp": "2026-03-09 16:00:00-0400"
+        },
+        "spy_return": 0.88,
+        "sector_return": 1.8,
+        "industry_return": null,
+        "adj_return": -2.06,
+        "is_significant": true,
+        "is_gap_day": true,
+        "events": []
+      },
+      {
+        "date": "2026-03-10",
+        "is_trading_day": true,
+        "boundary_role": null,
+        "price_role": "ordinary",
+        "price": {
+          "open": 5.79,
+          "high": 5.815,
+          "low": 5.59,
+          "close": 5.62,
+          "daily_return": -4.42,
+          "volume": 2618751.344196,
+          "vwap": 5.6535,
+          "transactions": 17694.0,
+          "timestamp": "2026-03-10 16:00:00-0400"
+        },
+        "spy_return": -0.16,
+        "sector_return": 0.0,
+        "industry_return": null,
+        "adj_return": -4.26,
+        "is_significant": true,
+        "is_gap_day": false,
+        "events": [
+          {
+            "event_ref": "news:bzNews_51158541",
+            "type": "news",
+            "available_precision": "timestamp",
+            "created": "2026-03-10T10:02:41-04:00",
+            "market_session": "in_market",
+            "title": "A Look Ahead: Sprinklr's Earnings Forecast",
+            "channels": [
+              "Earnings"
+            ],
+            "forward_returns": {
+              "hourly": {
+                "start_ts": "2026-03-10T10:02:41-04:00",
+                "end_ts": "2026-03-10T11:02:41-04:00",
+                "stock": 0.88,
+                "sector": 1.09,
+                "industry": 0.3,
+                "macro": 0.88,
+                "adj_macro": 0.0,
+                "adj_sector": -0.21,
+                "adj_industry": 0.58
+              },
+              "session": {
+                "start_ts": "2026-03-10T10:02:41-04:00",
+                "end_ts": "2026-03-10T16:00:00-04:00",
+                "stock": -0.88,
+                "sector": 0.23,
+                "industry": -0.08,
+                "macro": 0.25,
+                "adj_macro": -1.13,
+                "adj_sector": -1.11,
+                "adj_industry": -0.8
+              },
+              "daily": {
+                "start_ts": "2026-03-09T16:00:00-04:00",
+                "end_ts": "2026-03-10T16:00:00-04:00",
+                "stock": -4.34,
+                "sector": 0.0,
+                "industry": -2.33,
+                "macro": -0.13,
+                "adj_macro": -4.21,
+                "adj_sector": -4.34,
+                "adj_industry": -2.01
+              }
+            },
+            "id": "bzNews_51158541",
+            "url": "https://www.benzinga.com/insights/earnings/26/03/51158541/a-look-ahead-sprinklrs-earnings-forecast",
+            "authors": [
+              "Benzinga Insights"
+            ],
+            "tags": [
+              "BZI-EP"
+            ],
+            "updated": "2026-03-10T10:02:42-04:00",
+            "returns_schedule_raw": "{\"hourly\": \"2026-03-10T11:02:41-04:00\", \"session\": \"2026-03-10T16:00:00-04:00\", \"daily\": \"2026-03-10T16:00:00-04:00\"}"
+          }
+        ]
+      },
+      {
+        "date": "2026-03-11",
+        "is_trading_day": true,
+        "boundary_role": "cutoff_boundary",
+        "price_role": "reference_only",
+        "price": null,
+        "spy_return": null,
+        "sector_return": null,
+        "industry_return": null,
+        "adj_return": null,
+        "is_significant": null,
+        "is_gap_day": null,
+        "events": [
+          {
+            "event_ref": "news:bzNews_51179130",
+            "type": "news",
+            "available_precision": "timestamp",
+            "created": "2026-03-11T02:47:11-04:00",
+            "market_session": "market_closed",
+            "title": "Sprinklr Gears Up For Q4 Print; Here Are The Recent Forecast Changes From Wall Street's Most Accurate Analysts",
+            "channels": [
+              "Earnings",
+              "News",
+              "Price Target",
+              "Pre-Market Outlook",
+              "Markets",
+              "Analyst Ratings",
+              "Trading Ideas"
+            ],
+            "forward_returns": {
+              "hourly": {
+                "start_ts": "2026-03-11T04:00:00-04:00",
+                "end_ts": "2026-03-11T05:00:00-04:00",
+                "stock": 0.0,
+                "sector": -0.04,
+                "industry": -0.35,
+                "macro": -0.19,
+                "adj_macro": 0.19,
+                "adj_sector": 0.04,
+                "adj_industry": 0.35
+              },
+              "session": null,
+              "daily": null
+            },
+            "id": "bzNews_51179130",
+            "url": "https://www.benzinga.com/analyst-stock-ratings/price-target/26/03/51179130/sprinklr-gears-up-for-q4-print-here-are-the-recent-forecast-changes-from-wall-streets-most-accurate-analysts-2",
+            "authors": [
+              "Avi Kapoor"
+            ],
+            "tags": [
+              "Expert Ideas",
+              "Wall Street's Most Accurate Analysts"
+            ],
+            "updated": "2026-03-11T02:47:29-04:00",
+            "returns_schedule_raw": "{\"hourly\": \"2026-03-11T05:00:00-04:00\", \"session\": \"2026-03-11T09:35:00-04:00\", \"daily\": \"2026-03-11T16:00:00-04:00\"}"
+          },
+          {
+            "event_ref": "news:bzNews_51181763",
+            "type": "news",
+            "available_precision": "timestamp",
+            "created": "2026-03-11T07:06:10-04:00",
+            "market_session": "pre_market",
+            "title": "Sprinklr Q4 Adj. EPS $0.13 Beats $0.10 Estimate, Sales $220.592M Beat $216.920M Estimate",
+            "channels": [
+              "Earnings",
+              "Earnings Beats",
+              "News"
+            ],
+            "forward_returns": {
+              "hourly": null,
+              "session": null,
+              "daily": null
+            },
+            "id": "bzNews_51181763",
+            "url": "https://www.benzinga.com/news/earnings/26/03/51181763/sprinklr-q4-adj-eps-0-13-beats-0-10-estimate-sales-220-592m-beat-216-920m-estimate",
+            "authors": [
+              "Benzinga Newsdesk"
+            ],
+            "tags": [],
+            "updated": "2026-03-11T07:06:11-04:00",
+            "returns_schedule_raw": "{\"hourly\": \"2026-03-11T08:06:10-04:00\", \"session\": \"2026-03-11T09:35:00-04:00\", \"daily\": \"2026-03-11T16:00:00-04:00\"}"
+          },
+          {
+            "event_ref": "news:bzNews_51181795",
+            "type": "news",
+            "available_precision": "timestamp",
+            "created": "2026-03-11T07:07:37-04:00",
+            "market_session": "pre_market",
+            "title": "Sprinklr Sees FY2027 Adj EPS $0.47-$0.48 vs $0.47 Est; Sees Sales $869.000M-$871.000M vs $882.913M Est",
+            "channels": [
+              "News",
+              "Guidance"
+            ],
+            "forward_returns": {
+              "hourly": null,
+              "session": null,
+              "daily": null
+            },
+            "id": "bzNews_51181795",
+            "url": "https://www.benzinga.com/news/26/03/51181795/sprinklr-sees-fy2027-adj-eps-0-47-0-48-vs-0-47-est-sees-sales-869-000m-871-000m-vs-882-913m-est",
+            "authors": [
+              "Benzinga Newsdesk"
+            ],
+            "tags": [],
+            "updated": "2026-03-11T07:07:37-04:00",
+            "returns_schedule_raw": "{\"hourly\": \"2026-03-11T08:07:37-04:00\", \"session\": \"2026-03-11T09:35:00-04:00\", \"daily\": \"2026-03-11T16:00:00-04:00\"}"
+          },
+          {
+            "event_ref": "news:bzNews_51181813",
+            "type": "news",
+            "available_precision": "timestamp",
+            "created": "2026-03-11T07:07:53-04:00",
+            "market_session": "pre_market",
+            "title": "Sprinklr Sees Q1 Adj EPS $0.09 vs $0.12 Est; Sees Sales $215.500M-$216.500M vs $214.538M Est",
+            "channels": [
+              "News",
+              "Guidance"
+            ],
+            "forward_returns": {
+              "hourly": null,
+              "session": null,
+              "daily": null
+            },
+            "id": "bzNews_51181813",
+            "url": "https://www.benzinga.com/news/26/03/51181813/sprinklr-sees-q1-adj-eps-0-09-vs-0-12-est-sees-sales-215-500m-216-500m-vs-214-538m-est",
+            "authors": [
+              "Benzinga Newsdesk"
+            ],
+            "tags": [],
+            "updated": "2026-03-11T07:07:54-04:00",
+            "returns_schedule_raw": "{\"hourly\": \"2026-03-11T08:07:53-04:00\", \"session\": \"2026-03-11T09:35:00-04:00\", \"daily\": \"2026-03-11T16:00:00-04:00\"}"
+          }
+        ]
+      }
+    ],
+    "summary": {
+      "total_day_blocks": 67,
+      "trading_days_ordinary": 65,
+      "boundary_days_rendered": 2,
+      "non_trading_event_days": 0,
+      "significant_move_days": 20,
+      "gap_days": 18,
+      "total_news": 8,
+      "total_filings": 4,
+      "total_dividends": 0,
+      "total_splits": 0
+    },
+    "assembled_at": "2026-04-22T18:22:04.606840+00:00",
+    "pit_cutoff": "2026-03-11T07:15:04-04:00",
+    "source_mode": "historical",
+    "effective_cutoff_ts": "2026-03-11T07:15:04-04:00"
+  },
+  "peer_earnings_snapshot": {
+    "schema_version": "peer_earnings_snapshot.v1",
+    "ticker": "CXM",
+    "pit_cutoff": "2026-03-11T07:15:04-04:00",
+    "window_start": "2026-01-25",
+    "industry": "SoftwareApplication",
+    "peers": [
+      {
+        "ticker": "CRM",
+        "name": "SALESFORCE INC",
+        "mkt_cap": "311,819,000,000",
+        "filed": "2026-02-25T16:03:12-05:00",
+        "accession": "0001108524-26-000056",
+        "period_of_report": "2026-02-25",
+        "market_session": "post_market",
+        "daily_stock_pct": 3.91,
+        "hourly_stock_pct": -4.09,
+        "session_stock_pct": 1.57,
+        "daily_sector_pct": -1.4,
+        "daily_macro_pct": -0.55,
+        "hourly_sector_pct": 0.51,
+        "hourly_macro_pct": 0.22,
+        "best_sector_pct": -1.4,
+        "best_macro_pct": -0.55,
+        "context_horizon": "daily",
+        "fy_end_month": "1",
+        "headlines": [
+          {
+            "news_id": "bzNews_50867468",
+            "title": "Salesforce Q4 Adj. EPS $3.81 Beats $3.04 Estimate, Sales $11.201B Beat $11.175B Estimate.",
+            "channels": [
+              "Earnings",
+              "Earnings Beats"
+            ],
+            "date": "2026-02-25T16:12:42-05:00"
+          },
+          {
+            "news_id": "bzNews_50868034",
+            "title": "Salesforce Sees Q1 GAAP EPS $1.77-$1.79 vs $1.79 Est.",
+            "channels": [
+              "Guidance"
+            ],
+            "date": "2026-02-25T16:16:33-05:00"
+          }
+        ],
+        "headline_coverage": "full"
+      },
+      {
+        "ticker": "NOW",
+        "name": "SERVICENOW INC",
+        "mkt_cap": "208,199,000,000",
+        "filed": "2026-01-28T16:11:25-05:00",
+        "accession": "0001373715-26-000005",
+        "period_of_report": "2026-01-28",
+        "market_session": "post_market",
+        "daily_stock_pct": -9.92,
+        "hourly_stock_pct": -7.79,
+        "session_stock_pct": -12.59,
+        "daily_sector_pct": -1.58,
+        "daily_macro_pct": -0.25,
+        "hourly_sector_pct": 0.4,
+        "hourly_macro_pct": 0.14,
+        "best_sector_pct": -1.58,
+        "best_macro_pct": -0.25,
+        "context_horizon": "daily",
+        "fy_end_month": "12",
+        "headlines": [
+          {
+            "news_id": "bzNews_50209106",
+            "title": "ServiceNow Q4 Adj. EPS $0.92 Beats $0.88 Estimate, Sales $3.568B Beat $3.527B Estimate",
+            "channels": [
+              "Earnings",
+              "Earnings Beats"
+            ],
+            "date": "2026-01-28T16:11:17-05:00"
+          },
+          {
+            "news_id": "bzNews_50210542",
+            "title": "ServiceNow Q4 Earnings: Revenue, EPS Beat Estimates — 'We Are Building The AI Control Tower For Business Reinvention'",
+            "channels": [
+              "Earnings",
+              "Guidance"
+            ],
+            "date": "2026-01-28T16:35:55-05:00"
+          }
+        ],
+        "headline_coverage": "full"
+      },
+      {
+        "ticker": "INTU",
+        "name": "INTUIT INC",
+        "mkt_cap": "162,030,000,000",
+        "filed": "2026-02-26T16:02:55-05:00",
+        "accession": "0000896878-26-000012",
+        "period_of_report": "2026-02-26",
+        "market_session": "post_market",
+        "daily_stock_pct": 3.8,
+        "hourly_stock_pct": -6.2,
+        "session_stock_pct": -1.2,
+        "daily_sector_pct": -1.63,
+        "daily_macro_pct": -0.47,
+        "hourly_sector_pct": -0.35,
+        "hourly_macro_pct": -0.26,
+        "best_sector_pct": -1.63,
+        "best_macro_pct": -0.47,
+        "context_horizon": "daily",
+        "fy_end_month": "7",
+        "headlines": [
+          {
+            "news_id": "bzNews_50908540",
+            "title": "Intuit Q2 Adj. EPS $4.15 Beats $3.66 Estimate, Sales $4.651B Beat $4.532B Estimate",
+            "channels": [
+              "Earnings",
+              "Earnings Beats"
+            ],
+            "date": "2026-02-26T16:00:42-05:00"
+          },
+          {
+            "news_id": "bzNews_50908631",
+            "title": "Intuit Affirms FY2026 Adj EPS Guidance of $22.98-$23.18 vs $23.20 Est; Affirms FY2026 Sales Guidance of $20.997B-$21.186B vs $21.216B Est",
+            "channels": [
+              "Guidance"
+            ],
+            "date": "2026-02-26T16:01:21-05:00"
+          }
+        ],
+        "headline_coverage": "full"
+      },
+      {
+        "ticker": "UBER",
+        "name": "UBER TECHNOLOGIES INC",
+        "mkt_cap": "157,086,000,000",
+        "filed": "2026-02-04T06:56:12-05:00",
+        "accession": "0001543151-26-000011",
+        "period_of_report": "2026-01-30",
+        "market_session": "pre_market",
+        "daily_stock_pct": -5.1,
+        "hourly_stock_pct": -0.75,
+        "session_stock_pct": 0.24,
+        "daily_sector_pct": -2.79,
+        "daily_macro_pct": -0.44,
+        "hourly_sector_pct": -0.32,
+        "hourly_macro_pct": -0.15,
+        "best_sector_pct": -2.79,
+        "best_macro_pct": -0.44,
+        "context_horizon": "daily",
+        "fy_end_month": "12",
+        "headlines": [
+          {
+            "news_id": "bzNews_50366770",
+            "title": "Uber Technologies Q4 Adj. EPS $0.71 Misses $0.80 Estimate, Sales $14.366B Beat $14.320B Estimate",
+            "channels": [
+              "Earnings",
+              "Earnings Beats",
+              "Earnings Misses"
+            ],
+            "date": "2026-02-04T06:55:55-05:00"
+          },
+          {
+            "news_id": "bzNews_50367046",
+            "title": "Uber Technologies Q1 2026 Gross Bookings Expected To Grow 17% to 21% YoY, Reaching $52B to $53.5B, With An Estimated 4% Currency Tailwind",
+            "channels": [
+              "Guidance"
+            ],
+            "date": "2026-02-04T07:00:48-05:00"
+          }
+        ],
+        "headline_coverage": "full"
+      },
+      {
+        "ticker": "SHOP",
+        "name": "SHOPIFY INC",
+        "mkt_cap": "151,705,000,000",
+        "filed": "2026-02-11T07:02:03-05:00",
+        "accession": "0001594805-26-000006",
+        "period_of_report": "2026-02-11",
+        "market_session": "pre_market",
+        "daily_stock_pct": -6.7,
+        "hourly_stock_pct": 3.49,
+        "session_stock_pct": -7.62,
+        "daily_sector_pct": 0.29,
+        "daily_macro_pct": 0.01,
+        "hourly_sector_pct": 0.01,
+        "hourly_macro_pct": 0.01,
+        "best_sector_pct": 0.29,
+        "best_macro_pct": 0.01,
+        "context_horizon": "daily",
+        "fy_end_month": "12",
+        "headlines": [
+          {
+            "news_id": "bzNews_50582724",
+            "title": "Shopify Posts Q4 Beat, Pressure On Stock Overdone: Analysts",
+            "channels": [
+              "Earnings",
+              "Earnings Beats"
+            ],
+            "date": "2026-02-12T11:11:20-05:00"
+          },
+          {
+            "news_id": "bzNews_50537020",
+            "title": "Shopify Expects Q1 Revenue To Grow At A Low-Thirties Percentage Rate Year-Over-Year",
+            "channels": [
+              "Guidance"
+            ],
+            "date": "2026-02-11T07:13:01-05:00"
+          }
+        ],
+        "headline_coverage": "full"
+      }
+    ],
+    "summary": {
+      "total_peers": 5,
+      "total_filings": 5,
+      "peer_tickers": [
+        "CRM",
+        "NOW",
+        "INTU",
+        "UBER",
+        "SHOP"
+      ]
+    },
+    "assembled_at": "2026-04-22T18:21:49.026799Z",
+    "source_mode": "historical",
+    "effective_cutoff_ts": "2026-03-11T07:15:04-04:00"
+  },
+  "macro_snapshot": {
+    "schema_version": "macro_snapshot.v2",
+    "ticker": "CXM",
+    "pit_cutoff": "2026-03-11T07:15:04-04:00",
+    "pit_date": "2026-03-11",
+    "market_session": "pre_market",
+    "source": "polygon",
+    "market_now": {
+      "spy": {
+        "level_at_pit": 678.57,
+        "open_to_pit": 0.11,
+        "last_60m": 0.23,
+        "overnight_gap": 0.09,
+        "today_return": null,
+        "yesterday": -0.16,
+        "change_5d": -0.46,
+        "change_20d": -2.42,
+        "change_ytd": -0.88,
+        "ma_50": 687.59,
+        "ma_200": 657.34,
+        "vs_50d": -1.31,
+        "vs_200d": 3.23,
+        "volume_5d_avg": 94129738,
+        "volume_20d_avg": 85453977,
+        "volume_ratio": 1.1
+      },
+      "vix_close": 24.93,
+      "vix_label": "last settled close",
+      "indicators": {
+        "Volatility (VIXY)": {
+          "level": 32.68,
+          "last_return": 4.84,
+          "return_label": "last close",
+          "change_5d": 10.67,
+          "change_ytd": 29.63
+        },
+        "Rates long (TLT)": {
+          "level": 88.28,
+          "last_return": -1.06,
+          "return_label": "last close",
+          "change_5d": -1.29,
+          "change_ytd": 1.44
+        },
+        "Rates short (SHY)": {
+          "level": 82.72,
+          "last_return": -0.06,
+          "return_label": "last close",
+          "change_5d": -0.1,
+          "change_ytd": -0.17
+        },
+        "Credit (HYG)": {
+          "level": 80.04,
+          "last_return": -0.16,
+          "return_label": "last close",
+          "change_5d": -0.1,
+          "change_ytd": -0.78
+        },
+        "Small Cap (IWM)": {
+          "level": 253.36,
+          "last_return": -0.1,
+          "return_label": "last close",
+          "change_5d": -2.27,
+          "change_ytd": 1.84
+        },
+        "Breadth (RSP)": {
+          "level": 197.22,
+          "last_return": -0.75,
+          "return_label": "last close",
+          "change_5d": -2.4,
+          "change_ytd": 2.26
+        },
+        "Oil (USO)": {
+          "level": 105.86,
+          "last_return": 1.47,
+          "return_label": "last close",
+          "change_5d": 17.36,
+          "change_ytd": 53.51
+        },
+        "Dollar (UUP)": {
+          "level": 27.45,
+          "last_return": -0.04,
+          "return_label": "last close",
+          "change_5d": -0.04,
+          "change_ytd": 1.25
+        },
+        "Gold (GLD)": {
+          "level": 477.86,
+          "last_return": 1.13,
+          "return_label": "last close",
+          "change_5d": 2.08,
+          "change_ytd": 19.98
+        }
+      },
+      "sector": {
+        "name": "Technology",
+        "etf": "XLK",
+        "last_return": 0.0,
+        "return_label": "last close",
+        "open_to_pit": null,
+        "change_5d": 1.68,
+        "vs_spy_5d": 2.14
+      }
+    },
+    "catalysts": {
+      "today": {
+        "date": "2026-03-11",
+        "headlines": [
+          {
+            "time": "05:04",
+            "title": "The Wall Street Journal Reported International Energy Agency Announced Proposed 400M Barrel Oil Reserve Release, Largest In History, To Curb Crude Prices Surging During U.S.-Israel War With Iran",
+            "bz_id": "51179956",
+            "channels": [
+              "Macro Economic Events",
+              "News",
+              "Commodities",
+              "Economics",
+              "Markets"
+            ]
+          }
+        ]
+      },
+      "yesterday": {
+        "date": "2026-03-10",
+        "headlines": [
+          {
+            "time": "09:04",
+            "title": "Trump's Hormuz Gamble Is Minting A Fortune For Black-Market Oil Shippers",
+            "bz_id": "51156042",
+            "channels": [
+              "Analyst Color",
+              "Broad U.S. Equity ETFs",
+              "Commodities",
+              "Econ #s",
+              "Top Stories",
+              "Economics",
+              "Analyst Ratings",
+              "ETFs"
+            ]
+          },
+          {
+            "time": "10:00",
+            "title": "USA Existing Home Sales (MoM) For February 1.7% Vs -5.9% Prior",
+            "bz_id": "51158386",
+            "channels": [
+              "Macro Economic Events",
+              "News",
+              "Econ #s",
+              "Economics"
+            ]
+          },
+          {
+            "time": "10:00",
+            "title": "USA Existing Home Sales For February 4.09M Vs 3.89M Est.",
+            "bz_id": "51158325",
+            "channels": [
+              "Macro Economic Events",
+              "Macro Notification",
+              "News",
+              "Econ #s",
+              "Economics",
+              "Hot",
+              "General"
+            ]
+          },
+          {
+            "time": "17:16",
+            "title": "API Weekly Crude Oil Stock 1.7M Barrel Draw Vs 1.4M Barrel Build Est.",
+            "bz_id": "51175623",
+            "channels": [
+              "Macro Economic Events",
+              "News",
+              "Econ #s",
+              "Economics"
+            ]
+          },
+          {
+            "time": "08:43",
+            "title": "Redbook Retail Sales Index Up 6.2% YoY For Week Ended 03/07/26",
+            "bz_id": "51155095",
+            "channels": [
+              "Macro Notification",
+              "News",
+              "General"
+            ]
+          }
+        ]
+      },
+      "earlier": [
+        [
+          "2026-03-09",
+          {
+            "time": "10:15",
+            "title": "The Diesel Crisis Crushing America Is A Goldmine For These 3 Refiners",
+            "bz_id": "51129410",
+            "channels": [
+              "Analyst Color",
+              "Macro Economic Events",
+              "Commodities",
+              "Econ #s",
+              "Top Stories",
+              "Economics",
+              "Exclusives",
+              "Analyst Ratings"
+            ]
+          }
+        ],
+        [
+          "2026-03-09",
+          {
+            "time": "10:58",
+            "title": "CB Employment Trends Index For February 105.37 Vs 105.18 Prior",
+            "bz_id": "51131408",
+            "channels": [
+              "Macro Economic Events",
+              "News",
+              "Econ #s",
+              "Economics"
+            ]
+          }
+        ],
+        [
+          "2026-03-09",
+          {
+            "time": "13:57",
+            "title": "Oil Shock Could Revive 1970s-Style Stagflation, Ed Yardeni Warns",
+            "bz_id": "51138368",
+            "channels": [
+              "Analyst Color",
+              "Macro Economic Events",
+              "Broad U.S. Equity ETFs",
+              "Commodities",
+              "Econ #s",
+              "Top Stories",
+              "Economics",
+              "Analyst Ratings",
+              "ETFs"
+            ]
+          }
+        ]
+      ]
+    },
+    "gaps": [],
+    "assembled_at": "2026-04-22T18:22:01.084214Z",
+    "source_mode": "historical",
+    "effective_cutoff_ts": "2026-03-11T07:15:04-04:00"
+  },
+  "consensus": {
+    "schema_version": "consensus.v1",
+    "ticker": "CXM",
+    "source_mode": "historical",
+    "filed_8k": "2026-03-11T07:15:04-04:00",
+    "market_session": "pre_market",
+    "quarterly_rows": [],
+    "forward_estimates": [],
+    "summary": {
+      "quarterly_row_count": 0,
+      "forward_quarter_count": 0,
+      "forward_year_count": 0,
+      "eps_beat_streak": 0,
+      "avg_eps_surprise_pct_last4": null,
+      "avg_revenue_surprise_pct_last4": null
+    },
+    "gaps": [
+      {
+        "type": "upstream_error",
+        "reason": "AV EARNINGS failed for CXM"
+      },
+      {
+        "type": "upstream_error",
+        "reason": "AV EARNINGS_ESTIMATES failed for CXM"
+      },
+      {
+        "type": "upstream_error",
+        "reason": "AV INCOME_STATEMENT failed for CXM"
+      },
+      {
+        "type": "pit_excluded",
+        "reason": "Forward estimates not PIT-safe in historical mode"
+      }
+    ],
+    "assembled_at": "2026-04-22T18:22:01.914478+00:00",
+    "pit_cutoff": "2026-03-11T07:15:04-04:00",
+    "effective_cutoff_ts": "2026-03-11T07:15:04-04:00"
+  },
+  "prior_financials": {
+    "schema_version": "prior_financials.v1",
+    "ticker": "CXM",
+    "period_of_report": "2026-01-31",
+    "source_mode": "historical",
+    "quarters": [
+      {
+        "period": "2025-10-31",
+        "fiscal_label": "Q3_FY2026",
+        "primary_form": "10-Q",
+        "primary_accession": "0001569345-25-000059",
+        "primary_filed": "2025-12-04T16:06:36-05:00",
+        "primary_source": "xbrl",
+        "_provenance": {
+          "revenue": {
+            "accession": "0001569345-25-000059",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "cost_of_revenue": {
+            "accession": "0001569345-25-000059",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "gross_profit": {
+            "accession": "0001569345-25-000059",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "sga": {
+            "accession": "0001569345-25-000059",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "rd_expense": {
+            "accession": "0001569345-25-000059",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "income_tax": {
+            "accession": "0001569345-25-000059",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "operating_income": {
+            "accession": "0001569345-25-000059",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "net_income": {
+            "accession": "0001569345-25-000059",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "eps_diluted": {
+            "accession": "0001569345-25-000059",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "diluted_shares": {
+            "accession": "0001569345-25-000059",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "total_assets": {
+            "accession": "0001569345-25-000059",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "cash_and_equivalents": {
+            "accession": "0001569345-25-000059",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "stockholders_equity": {
+            "accession": "0001569345-25-000059",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "operating_cash_flow": {
+            "derived": true,
+            "method": "9m_ytd_minus_h1",
+            "inputs": [
+              {
+                "accession": "0001569345-25-000059",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              },
+              {
+                "accession": "0001569345-25-000048",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "h1_ytd"
+              }
+            ]
+          },
+          "capex": {
+            "derived": true,
+            "method": "9m_ytd_minus_h1",
+            "inputs": [
+              {
+                "accession": "0001569345-25-000059",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              },
+              {
+                "accession": "0001569345-25-000048",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "h1_ytd"
+              }
+            ]
+          },
+          "buybacks": {
+            "derived": true,
+            "method": "9m_ytd_minus_h1",
+            "inputs": [
+              {
+                "accession": "0001569345-25-000059",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              },
+              {
+                "accession": "0001569345-25-000048",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "h1_ytd"
+              }
+            ]
+          }
+        },
+        "revenue": 219068000.0,
+        "cost_of_revenue": 73582000.0,
+        "gross_profit": 145486000.0,
+        "sga": 75011000.0,
+        "rd_expense": 24707000.0,
+        "depreciation_amortization": null,
+        "interest_expense": null,
+        "income_tax": 14400000.0,
+        "operating_income": 11551000.0,
+        "net_income": 2904000.0,
+        "eps_diluted": 0.01,
+        "diluted_shares": 252054000.0,
+        "total_assets": 1053889000.0,
+        "cash_and_equivalents": 189591000.0,
+        "long_term_debt": null,
+        "stockholders_equity": 558085000.0,
+        "operating_cash_flow": 19961000.0,
+        "capex": 185000.0,
+        "buybacks": 11418000.0,
+        "dividends_per_share": null,
+        "free_cash_flow": 19776000.0,
+        "gross_margin_pct": 66.4,
+        "operating_margin_pct": 5.3,
+        "net_margin_pct": 1.3,
+        "rd_pct_revenue": 11.3,
+        "effective_tax_rate": 83.2,
+        "debt_to_equity": null,
+        "derived_metrics": [
+          {
+            "metric": "operating_cash_flow",
+            "method": "9m_ytd_minus_h1",
+            "inputs": [
+              {
+                "accession": "0001569345-25-000059",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              },
+              {
+                "accession": "0001569345-25-000048",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "h1_ytd"
+              }
+            ]
+          },
+          {
+            "metric": "capex",
+            "method": "9m_ytd_minus_h1",
+            "inputs": [
+              {
+                "accession": "0001569345-25-000059",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              },
+              {
+                "accession": "0001569345-25-000048",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "h1_ytd"
+              }
+            ]
+          },
+          {
+            "metric": "buybacks",
+            "method": "9m_ytd_minus_h1",
+            "inputs": [
+              {
+                "accession": "0001569345-25-000059",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              },
+              {
+                "accession": "0001569345-25-000048",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "h1_ytd"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "period": "2025-07-31",
+        "fiscal_label": "Q2_FY2026",
+        "primary_form": "10-Q",
+        "primary_accession": "0001569345-25-000048",
+        "primary_filed": "2025-09-04T16:06:56-04:00",
+        "primary_source": "xbrl",
+        "_provenance": {
+          "revenue": {
+            "accession": "0001569345-25-000048",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "cost_of_revenue": {
+            "accession": "0001569345-25-000048",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "gross_profit": {
+            "accession": "0001569345-25-000048",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "sga": {
+            "accession": "0001569345-25-000048",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "rd_expense": {
+            "accession": "0001569345-25-000048",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "income_tax": {
+            "accession": "0001569345-25-000048",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "operating_income": {
+            "accession": "0001569345-25-000048",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "net_income": {
+            "accession": "0001569345-25-000048",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "eps_diluted": {
+            "accession": "0001569345-25-000048",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "diluted_shares": {
+            "accession": "0001569345-25-000048",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "total_assets": {
+            "accession": "0001569345-25-000048",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "cash_and_equivalents": {
+            "accession": "0001569345-25-000048",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "stockholders_equity": {
+            "accession": "0001569345-25-000048",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "operating_cash_flow": {
+            "derived": true,
+            "method": "h1_ytd_minus_q1",
+            "inputs": [
+              {
+                "accession": "0001569345-25-000048",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "h1_ytd"
+              },
+              {
+                "accession": "0001569345-25-000028",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "q1"
+              }
+            ]
+          },
+          "capex": {
+            "derived": true,
+            "method": "h1_ytd_minus_q1",
+            "inputs": [
+              {
+                "accession": "0001569345-25-000048",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "h1_ytd"
+              },
+              {
+                "accession": "0001569345-25-000028",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "q1"
+              }
+            ]
+          },
+          "buybacks": {
+            "derived": true,
+            "method": "h1_ytd_minus_q1",
+            "inputs": [
+              {
+                "accession": "0001569345-25-000048",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "h1_ytd"
+              },
+              {
+                "accession": "0001569345-25-000028",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "q1"
+              }
+            ]
+          }
+        },
+        "revenue": 212040000.0,
+        "cost_of_revenue": 67438000.0,
+        "gross_profit": 144602000.0,
+        "sga": 70583000.0,
+        "rd_expense": 23162000.0,
+        "depreciation_amortization": null,
+        "interest_expense": null,
+        "income_tax": 11100000.0,
+        "operating_income": 16272000.0,
+        "net_income": 12615000.0,
+        "eps_diluted": 0.05,
+        "diluted_shares": 263201000.0,
+        "total_assets": 1086113000.0,
+        "cash_and_equivalents": 125365000.0,
+        "long_term_debt": null,
+        "stockholders_equity": 543437000.0,
+        "operating_cash_flow": 34791000.0,
+        "capex": 365000.0,
+        "buybacks": 140845000.0,
+        "dividends_per_share": null,
+        "free_cash_flow": 34426000.0,
+        "gross_margin_pct": 68.2,
+        "operating_margin_pct": 7.7,
+        "net_margin_pct": 5.9,
+        "rd_pct_revenue": 10.9,
+        "effective_tax_rate": 46.8,
+        "debt_to_equity": null,
+        "derived_metrics": [
+          {
+            "metric": "operating_cash_flow",
+            "method": "h1_ytd_minus_q1",
+            "inputs": [
+              {
+                "accession": "0001569345-25-000048",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "h1_ytd"
+              },
+              {
+                "accession": "0001569345-25-000028",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "q1"
+              }
+            ]
+          },
+          {
+            "metric": "capex",
+            "method": "h1_ytd_minus_q1",
+            "inputs": [
+              {
+                "accession": "0001569345-25-000048",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "h1_ytd"
+              },
+              {
+                "accession": "0001569345-25-000028",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "q1"
+              }
+            ]
+          },
+          {
+            "metric": "buybacks",
+            "method": "h1_ytd_minus_q1",
+            "inputs": [
+              {
+                "accession": "0001569345-25-000048",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "h1_ytd"
+              },
+              {
+                "accession": "0001569345-25-000028",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "q1"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "period": "2025-04-30",
+        "fiscal_label": "Q1_FY2026",
+        "primary_form": "10-Q",
+        "primary_accession": "0001569345-25-000028",
+        "primary_filed": "2025-06-05T16:08:46-04:00",
+        "primary_source": "xbrl",
+        "_provenance": {},
+        "revenue": 205500000.0,
+        "cost_of_revenue": 62631000.0,
+        "gross_profit": 142869000.0,
+        "sga": 71071000.0,
+        "rd_expense": 22811000.0,
+        "depreciation_amortization": 4679000.0,
+        "interest_expense": null,
+        "income_tax": 6700000.0,
+        "operating_income": -1755000.0,
+        "net_income": -1568000.0,
+        "eps_diluted": -0.01,
+        "diluted_shares": 256647000.0,
+        "total_assets": 1189508000.0,
+        "cash_and_equivalents": 126421000.0,
+        "long_term_debt": null,
+        "stockholders_equity": 639772000.0,
+        "operating_cash_flow": 83776000.0,
+        "capex": 289000.0,
+        "buybacks": 0.0,
+        "dividends_per_share": null,
+        "free_cash_flow": 83487000.0,
+        "gross_margin_pct": 69.5,
+        "operating_margin_pct": -0.9,
+        "net_margin_pct": -0.8,
+        "rd_pct_revenue": 11.1,
+        "effective_tax_rate": 130.6,
+        "debt_to_equity": null,
+        "derived_metrics": []
+      },
+      {
+        "period": "2025-01-31",
+        "fiscal_label": "Q4_FY2025",
+        "primary_form": "10-K",
+        "primary_accession": "0001569345-25-000019",
+        "primary_filed": "2025-03-20T20:31:41-04:00",
+        "primary_source": "xbrl",
+        "_provenance": {
+          "total_assets": {
+            "accession": "0001569345-25-000019",
+            "form": "10-K",
+            "source": "xbrl"
+          },
+          "cash_and_equivalents": {
+            "accession": "0001569345-25-000019",
+            "form": "10-K",
+            "source": "xbrl"
+          },
+          "stockholders_equity": {
+            "accession": "0001569345-25-000019",
+            "form": "10-K",
+            "source": "xbrl"
+          },
+          "revenue": {
+            "derived": true,
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-25-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-24-000055",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          "cost_of_revenue": {
+            "derived": true,
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-25-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-24-000055",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          "gross_profit": {
+            "derived": true,
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-25-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-24-000055",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          "sga": {
+            "derived": true,
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-25-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-24-000055",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          "rd_expense": {
+            "derived": true,
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-25-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-24-000055",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          "depreciation_amortization": {
+            "derived": true,
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-25-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-24-000055",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          "income_tax": {
+            "derived": true,
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-25-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-24-000055",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          "operating_income": {
+            "derived": true,
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-25-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-24-000055",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          "net_income": {
+            "derived": true,
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-25-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-24-000055",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          "operating_cash_flow": {
+            "derived": true,
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-25-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-24-000055",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          "capex": {
+            "derived": true,
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-25-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-24-000055",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          "buybacks": {
+            "derived": true,
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-25-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-24-000055",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          }
+        },
+        "revenue": 202539000.0,
+        "cost_of_revenue": 58816000.0,
+        "gross_profit": 143723000.0,
+        "sga": 76101000.0,
+        "rd_expense": 22558000.0,
+        "depreciation_amortization": 4864000.0,
+        "interest_expense": null,
+        "income_tax": -83317000.0,
+        "operating_income": 10459000.0,
+        "net_income": 98679000.0,
+        "eps_diluted": null,
+        "diluted_shares": null,
+        "total_assets": 1184199000.0,
+        "cash_and_equivalents": 145270000.0,
+        "long_term_debt": null,
+        "stockholders_equity": 612063000.0,
+        "operating_cash_flow": 5365000.0,
+        "capex": 802000.0,
+        "buybacks": 0.0,
+        "dividends_per_share": null,
+        "free_cash_flow": 4563000.0,
+        "gross_margin_pct": 71.0,
+        "operating_margin_pct": 5.2,
+        "net_margin_pct": 48.7,
+        "rd_pct_revenue": 11.1,
+        "effective_tax_rate": -542.4,
+        "debt_to_equity": null,
+        "derived_metrics": [
+          {
+            "metric": "revenue",
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-25-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-24-000055",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          {
+            "metric": "cost_of_revenue",
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-25-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-24-000055",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          {
+            "metric": "gross_profit",
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-25-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-24-000055",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          {
+            "metric": "sga",
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-25-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-24-000055",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          {
+            "metric": "rd_expense",
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-25-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-24-000055",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          {
+            "metric": "depreciation_amortization",
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-25-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-24-000055",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          {
+            "metric": "income_tax",
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-25-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-24-000055",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          {
+            "metric": "operating_income",
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-25-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-24-000055",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          {
+            "metric": "net_income",
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-25-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-24-000055",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          {
+            "metric": "operating_cash_flow",
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-25-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-24-000055",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          {
+            "metric": "capex",
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-25-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-24-000055",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          {
+            "metric": "buybacks",
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-25-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-24-000055",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "period": "2024-10-31",
+        "fiscal_label": "Q3_FY2025",
+        "primary_form": "10-Q",
+        "primary_accession": "0001569345-24-000055",
+        "primary_filed": "2024-12-04T16:20:58-05:00",
+        "primary_source": "xbrl",
+        "_provenance": {
+          "revenue": {
+            "accession": "0001569345-24-000055",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "cost_of_revenue": {
+            "accession": "0001569345-24-000055",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "gross_profit": {
+            "accession": "0001569345-24-000055",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "sga": {
+            "accession": "0001569345-24-000055",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "rd_expense": {
+            "accession": "0001569345-24-000055",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "income_tax": {
+            "accession": "0001569345-24-000055",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "operating_income": {
+            "accession": "0001569345-24-000055",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "net_income": {
+            "accession": "0001569345-24-000055",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "eps_diluted": {
+            "accession": "0001569345-24-000055",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "diluted_shares": {
+            "accession": "0001569345-24-000055",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "total_assets": {
+            "accession": "0001569345-24-000055",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "cash_and_equivalents": {
+            "accession": "0001569345-24-000055",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "stockholders_equity": {
+            "accession": "0001569345-24-000055",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "operating_cash_flow": {
+            "derived": true,
+            "method": "9m_ytd_minus_h1",
+            "inputs": [
+              {
+                "accession": "0001569345-24-000055",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              },
+              {
+                "accession": "0001569345-24-000046",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "h1_ytd"
+              }
+            ]
+          },
+          "capex": {
+            "derived": true,
+            "method": "9m_ytd_minus_h1",
+            "inputs": [
+              {
+                "accession": "0001569345-24-000055",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              },
+              {
+                "accession": "0001569345-24-000046",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "h1_ytd"
+              }
+            ]
+          },
+          "buybacks": {
+            "derived": true,
+            "method": "9m_ytd_minus_h1",
+            "inputs": [
+              {
+                "accession": "0001569345-24-000055",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              },
+              {
+                "accession": "0001569345-24-000046",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "h1_ytd"
+              }
+            ]
+          }
+        },
+        "revenue": 200689000.0,
+        "cost_of_revenue": 57821000.0,
+        "gross_profit": 142868000.0,
+        "sga": 77576000.0,
+        "rd_expense": 23280000.0,
+        "depreciation_amortization": null,
+        "interest_expense": null,
+        "income_tax": 2900000.0,
+        "operating_income": 7889000.0,
+        "net_income": 10455000.0,
+        "eps_diluted": 0.04,
+        "diluted_shares": 261972000.0,
+        "total_assets": 970301000.0,
+        "cash_and_equivalents": 93239000.0,
+        "long_term_debt": null,
+        "stockholders_equity": 497024000.0,
+        "operating_cash_flow": 9191000.0,
+        "capex": 972000.0,
+        "buybacks": 0.0,
+        "dividends_per_share": null,
+        "free_cash_flow": 8219000.0,
+        "gross_margin_pct": 71.2,
+        "operating_margin_pct": 3.9,
+        "net_margin_pct": 5.2,
+        "rd_pct_revenue": 11.6,
+        "effective_tax_rate": 21.7,
+        "debt_to_equity": null,
+        "derived_metrics": [
+          {
+            "metric": "operating_cash_flow",
+            "method": "9m_ytd_minus_h1",
+            "inputs": [
+              {
+                "accession": "0001569345-24-000055",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              },
+              {
+                "accession": "0001569345-24-000046",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "h1_ytd"
+              }
+            ]
+          },
+          {
+            "metric": "capex",
+            "method": "9m_ytd_minus_h1",
+            "inputs": [
+              {
+                "accession": "0001569345-24-000055",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              },
+              {
+                "accession": "0001569345-24-000046",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "h1_ytd"
+              }
+            ]
+          },
+          {
+            "metric": "buybacks",
+            "method": "9m_ytd_minus_h1",
+            "inputs": [
+              {
+                "accession": "0001569345-24-000055",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              },
+              {
+                "accession": "0001569345-24-000046",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "h1_ytd"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "period": "2024-07-31",
+        "fiscal_label": "Q2_FY2025",
+        "primary_form": "10-Q",
+        "primary_accession": "0001569345-24-000046",
+        "primary_filed": "2024-09-04T16:21:48-04:00",
+        "primary_source": "xbrl",
+        "_provenance": {
+          "revenue": {
+            "accession": "0001569345-24-000046",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "cost_of_revenue": {
+            "accession": "0001569345-24-000046",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "gross_profit": {
+            "accession": "0001569345-24-000046",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "sga": {
+            "accession": "0001569345-24-000046",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "rd_expense": {
+            "accession": "0001569345-24-000046",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "income_tax": {
+            "accession": "0001569345-24-000046",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "operating_income": {
+            "accession": "0001569345-24-000046",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "net_income": {
+            "accession": "0001569345-24-000046",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "eps_diluted": {
+            "accession": "0001569345-24-000046",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "diluted_shares": {
+            "accession": "0001569345-24-000046",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "total_assets": {
+            "accession": "0001569345-24-000046",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "cash_and_equivalents": {
+            "accession": "0001569345-24-000046",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "stockholders_equity": {
+            "accession": "0001569345-24-000046",
+            "form": "10-Q",
+            "source": "xbrl"
+          },
+          "operating_cash_flow": {
+            "derived": true,
+            "method": "h1_ytd_minus_q1",
+            "inputs": [
+              {
+                "accession": "0001569345-24-000046",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "h1_ytd"
+              },
+              {
+                "accession": "0001569345-24-000031",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "q1"
+              }
+            ]
+          },
+          "capex": {
+            "derived": true,
+            "method": "h1_ytd_minus_q1",
+            "inputs": [
+              {
+                "accession": "0001569345-24-000046",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "h1_ytd"
+              },
+              {
+                "accession": "0001569345-24-000031",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "q1"
+              }
+            ]
+          },
+          "buybacks": {
+            "derived": true,
+            "method": "h1_ytd_minus_q1",
+            "inputs": [
+              {
+                "accession": "0001569345-24-000046",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "h1_ytd"
+              },
+              {
+                "accession": "0001569345-24-000031",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "q1"
+              }
+            ]
+          }
+        },
+        "revenue": 197208000.0,
+        "cost_of_revenue": 54316000.0,
+        "gross_profit": 142892000.0,
+        "sga": 80497000.0,
+        "rd_expense": 23622000.0,
+        "depreciation_amortization": null,
+        "interest_expense": null,
+        "income_tax": 4500000.0,
+        "operating_income": -87000.0,
+        "net_income": 1841000.0,
+        "eps_diluted": 0.01,
+        "diluted_shares": 271934000.0,
+        "total_assets": 983798000.0,
+        "cash_and_equivalents": 119119000.0,
+        "long_term_debt": null,
+        "stockholders_equity": 468967000.0,
+        "operating_cash_flow": 21322000.0,
+        "capex": 1483000.0,
+        "buybacks": 173889000.0,
+        "dividends_per_share": null,
+        "free_cash_flow": 19839000.0,
+        "gross_margin_pct": 72.5,
+        "operating_margin_pct": -0.0,
+        "net_margin_pct": 0.9,
+        "rd_pct_revenue": 12.0,
+        "effective_tax_rate": 71.0,
+        "debt_to_equity": null,
+        "derived_metrics": [
+          {
+            "metric": "operating_cash_flow",
+            "method": "h1_ytd_minus_q1",
+            "inputs": [
+              {
+                "accession": "0001569345-24-000046",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "h1_ytd"
+              },
+              {
+                "accession": "0001569345-24-000031",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "q1"
+              }
+            ]
+          },
+          {
+            "metric": "capex",
+            "method": "h1_ytd_minus_q1",
+            "inputs": [
+              {
+                "accession": "0001569345-24-000046",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "h1_ytd"
+              },
+              {
+                "accession": "0001569345-24-000031",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "q1"
+              }
+            ]
+          },
+          {
+            "metric": "buybacks",
+            "method": "h1_ytd_minus_q1",
+            "inputs": [
+              {
+                "accession": "0001569345-24-000046",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "h1_ytd"
+              },
+              {
+                "accession": "0001569345-24-000031",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "q1"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "period": "2024-04-30",
+        "fiscal_label": "Q1_FY2025",
+        "primary_form": "10-Q",
+        "primary_accession": "0001569345-24-000031",
+        "primary_filed": "2024-06-05T16:22:13-04:00",
+        "primary_source": "xbrl",
+        "_provenance": {},
+        "revenue": 195958000.0,
+        "cost_of_revenue": 51125000.0,
+        "gross_profit": 144833000.0,
+        "sga": 87484000.0,
+        "rd_expense": 22539000.0,
+        "depreciation_amortization": 4508000.0,
+        "interest_expense": null,
+        "income_tax": 2600000.0,
+        "operating_income": 5709000.0,
+        "net_income": 10634000.0,
+        "eps_diluted": 0.04,
+        "diluted_shares": 284032000.0,
+        "total_assets": 1124108000.0,
+        "cash_and_equivalents": 126815000.0,
+        "long_term_debt": null,
+        "stockholders_equity": 610931000.0,
+        "operating_cash_flow": 41712000.0,
+        "capex": 2545000.0,
+        "buybacks": 99984000.0,
+        "dividends_per_share": null,
+        "free_cash_flow": 39167000.0,
+        "gross_margin_pct": 73.9,
+        "operating_margin_pct": 2.9,
+        "net_margin_pct": 5.4,
+        "rd_pct_revenue": 11.5,
+        "effective_tax_rate": 19.6,
+        "debt_to_equity": null,
+        "derived_metrics": []
+      },
+      {
+        "period": "2024-01-31",
+        "fiscal_label": "Q4_FY2024",
+        "primary_form": "10-K",
+        "primary_accession": "0001569345-24-000019",
+        "primary_filed": "2024-03-28T21:56:53-04:00",
+        "primary_source": "xbrl",
+        "_provenance": {
+          "total_assets": {
+            "accession": "0001569345-24-000019",
+            "form": "10-K",
+            "source": "xbrl"
+          },
+          "cash_and_equivalents": {
+            "accession": "0001569345-24-000019",
+            "form": "10-K",
+            "source": "xbrl"
+          },
+          "stockholders_equity": {
+            "accession": "0001569345-24-000019",
+            "form": "10-K",
+            "source": "xbrl"
+          },
+          "revenue": {
+            "derived": true,
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-24-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-23-000072",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          "cost_of_revenue": {
+            "derived": true,
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-24-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-23-000072",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          "gross_profit": {
+            "derived": true,
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-24-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-23-000072",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          "sga": {
+            "derived": true,
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-24-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-23-000072",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          "rd_expense": {
+            "derived": true,
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-24-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-23-000072",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          "depreciation_amortization": {
+            "derived": true,
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-24-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-23-000072",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          "income_tax": {
+            "derived": true,
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-24-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-23-000072",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          "operating_income": {
+            "derived": true,
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-24-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-23-000072",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          "net_income": {
+            "derived": true,
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-24-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-23-000072",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          "operating_cash_flow": {
+            "derived": true,
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-24-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-23-000072",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          "capex": {
+            "derived": true,
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-24-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-23-000072",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          }
+        },
+        "revenue": 194207000.0,
+        "cost_of_revenue": 47549000.0,
+        "gross_profit": 146658000.0,
+        "sga": 77083000.0,
+        "rd_expense": 23062000.0,
+        "depreciation_amortization": 4183000.0,
+        "interest_expense": null,
+        "income_tax": 5619000.0,
+        "operating_income": 18460000.0,
+        "net_income": 21143000.0,
+        "eps_diluted": null,
+        "diluted_shares": null,
+        "total_assets": 1223110000.0,
+        "cash_and_equivalents": 164024000.0,
+        "long_term_debt": null,
+        "stockholders_equity": 679704000.0,
+        "operating_cash_flow": 17303000.0,
+        "capex": 2054000.0,
+        "buybacks": null,
+        "dividends_per_share": null,
+        "free_cash_flow": 15249000.0,
+        "gross_margin_pct": 75.5,
+        "operating_margin_pct": 9.5,
+        "net_margin_pct": 10.9,
+        "rd_pct_revenue": 11.9,
+        "effective_tax_rate": 21.0,
+        "debt_to_equity": null,
+        "derived_metrics": [
+          {
+            "metric": "revenue",
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-24-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-23-000072",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          {
+            "metric": "cost_of_revenue",
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-24-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-23-000072",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          {
+            "metric": "gross_profit",
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-24-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-23-000072",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          {
+            "metric": "sga",
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-24-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-23-000072",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          {
+            "metric": "rd_expense",
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-24-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-23-000072",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          {
+            "metric": "depreciation_amortization",
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-24-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-23-000072",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          {
+            "metric": "income_tax",
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-24-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-23-000072",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          {
+            "metric": "operating_income",
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-24-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-23-000072",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          {
+            "metric": "net_income",
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-24-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-23-000072",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          {
+            "metric": "operating_cash_flow",
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-24-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-23-000072",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          },
+          {
+            "metric": "capex",
+            "method": "fy_minus_9m_ytd",
+            "inputs": [
+              {
+                "accession": "0001569345-24-000019",
+                "form": "10-K",
+                "source": "xbrl",
+                "role": "annual"
+              },
+              {
+                "accession": "0001569345-23-000072",
+                "form": "10-Q",
+                "source": "xbrl",
+                "role": "9m_ytd"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "summary": {
+      "quarter_count": 8,
+      "primary_source_breakdown": {
+        "xbrl": 8,
+        "fsc": 0,
+        "yahoo": 0
+      },
+      "derived_metric_count": 35,
+      "metrics_coverage": {
+        "revenue": 8,
+        "cost_of_revenue": 8,
+        "gross_profit": 8,
+        "sga": 8,
+        "rd_expense": 8,
+        "depreciation_amortization": 4,
+        "interest_expense": 0,
+        "income_tax": 8,
+        "operating_income": 8,
+        "net_income": 8,
+        "eps_diluted": 6,
+        "diluted_shares": 6,
+        "total_assets": 8,
+        "cash_and_equivalents": 8,
+        "long_term_debt": 0,
+        "stockholders_equity": 8,
+        "operating_cash_flow": 8,
+        "capex": 8,
+        "buybacks": 7,
+        "dividends_per_share": 0
+      }
+    },
+    "gaps": [
+      {
+        "type": "missing_metric",
+        "period": "2024-01-31",
+        "metric": "buybacks",
+        "reason": "Q4 derivation failed: annual=True, 9m_ytd=False, prior_q_count=0"
+      }
+    ],
+    "segment_inventory": {
+      "revenue": {
+        "concept": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+        "axes": {
+          "srt:StatementGeographicalAxis": {
+            "kind": "geography",
+            "members": [
+              {
+                "qname": "country:US",
+                "label": "US"
+              },
+              {
+                "qname": "srt:AmericasMember",
+                "label": "Americas"
+              },
+              {
+                "qname": "us-gaap:EMEAMember",
+                "label": "EMEA"
+              },
+              {
+                "qname": "cxm:NonUSAndNonEMEAMember",
+                "label": "NonUSAndNonEMEA"
+              }
+            ]
+          },
+          "srt:ProductOrServiceAxis": {
+            "kind": "product_service",
+            "members": [
+              {
+                "qname": "us-gaap:LicenseAndServiceMember",
+                "label": "LicenseAndService"
+              },
+              {
+                "qname": "cxm:ProfessionalServicesMember",
+                "label": "ProfessionalServices"
+              }
+            ]
+          }
+        }
+      },
+      "source_quarter": "2025-10-31"
+    },
+    "revenue_splits": {
+      "quarters": [
+        {
+          "period": "2025-10-31",
+          "fiscal_label": "Q3_FY2026"
+        },
+        {
+          "period": "2025-07-31",
+          "fiscal_label": "Q2_FY2026"
+        },
+        {
+          "period": "2025-04-30",
+          "fiscal_label": "Q1_FY2026"
+        },
+        {
+          "period": "2025-01-31",
+          "fiscal_label": "Q4_FY2025"
+        }
+      ],
+      "business_segment": [],
+      "geography": [
+        {
+          "member": "srt:AmericasMember",
+          "label": "Americas",
+          "pct": [
+            59.2,
+            52.0,
+            57.2,
+            58.4
+          ]
+        },
+        {
+          "member": "us-gaap:EMEAMember",
+          "label": "EMEA",
+          "pct": [
+            33.7,
+            38.5,
+            35.1,
+            33.7
+          ]
+        },
+        {
+          "member": "cxm:NonUSAndNonEMEAMember",
+          "label": "Non US and Non EMEA",
+          "pct": [
+            7.1,
+            9.5,
+            7.7,
+            7.9
+          ]
+        }
+      ],
+      "product_service": [
+        {
+          "member": "us-gaap:LicenseAndServiceMember",
+          "label": "License and Service",
+          "pct": [
+            86.9,
+            88.9,
+            89.6,
+            89.9
+          ]
+        },
+        {
+          "member": "cxm:ProfessionalServicesMember",
+          "label": "Professional Services",
+          "pct": [
+            13.1,
+            11.1,
+            10.4,
+            10.1
+          ]
+        }
+      ]
+    },
+    "assembled_at": "2026-04-22T14:22:10.833758-04:00",
+    "pit_cutoff": "2026-03-11T07:15:04-04:00",
+    "effective_cutoff_ts": "2026-03-11T07:15:04-04:00"
+  },
+  "learning_context": {
+    "ticker_lessons": [],
+    "global_lessons": [
+      {
+        "scope": "sector",
+        "source_ticker": "AVGO",
+        "source_sector": "Technology",
+        "quarter_label": "Q4_FY2023",
+        "attributed_at": "2026-04-19T18:05:00Z",
+        "source_filed_8k": "2023-12-07T16:18:51-05:00",
+        "source_pit_cutoff": "2024-03-07T16:18:09-05:00",
+        "lesson": "In the 2023-24 semiconductor reaction regime, same-session peer returns bifurcate sharply by AI-exposure when a large-cap semi prints a beat-and-raise with explicit AI-segment acceleration: AI-infrastructure names (accelerators, HBM, AI networking) move sympathetically while WFE and analog/legacy-compute names can go flat-to-negative on the same tape. Treat 'semi sector peers' as two decoupled clusters (AI-levered vs ex-AI) when sizing read-through reactions.",
+        "target_sector": "Technology"
+      },
+      {
+        "scope": "sector",
+        "source_ticker": "AVGO",
+        "source_sector": "Technology",
+        "quarter_label": "Q3_FY2023",
+        "attributed_at": "2026-04-19T17:42:26Z",
+        "source_filed_8k": "2023-08-31T17:18:57-04:00",
+        "source_pit_cutoff": "2023-12-07T16:18:51-05:00",
+        "lesson": "In the 2023+ hyperscaler-AI-capex regime, semiconductor prints are graded on the composition of forward revenue, not the headline guide delta. When AI-exposed lines are guided strong but ex-AI semis (broadband/storage/wireless/industrial) are flat-to-negative YoY, the AI narrative is already priced and the marginal information is the ex-AI deterioration — expect multiple compression on names where AI does not yet dominate the mix.",
+        "target_sector": "Technology"
+      },
+      {
+        "scope": "macro",
+        "source_ticker": "AVGO",
+        "source_sector": "Technology",
+        "quarter_label": "Q4_FY2023",
+        "attributed_at": "2026-04-19T18:05:00Z",
+        "source_filed_8k": "2023-12-07T16:18:51-05:00",
+        "source_pit_cutoff": "2024-03-07T16:18:09-05:00",
+        "lesson": "When VIX is below 13 and SPY is within 3% of a rolling 52-week high on the session following an earnings catalyst, the tape ASYMMETRICALLY amplifies positive surprises (bullish tape compounds the fundamental signal by ~30-50bps vs a neutral tape) but does NOT compound negative surprises to the same degree — factor this tape asymmetry into magnitude ranges rather than treating low-VIX as uniformly supportive."
+      },
+      {
+        "scope": "macro",
+        "source_ticker": "AVGO",
+        "source_sector": "Technology",
+        "quarter_label": "Q3_FY2023",
+        "attributed_at": "2026-04-19T17:42:26Z",
+        "source_filed_8k": "2023-08-31T17:18:57-04:00",
+        "source_pit_cutoff": "2023-12-07T16:18:51-05:00",
+        "lesson": "When a single-stock drawdown of ≥5% occurs on a flat-to-positive sector tape with zero sell-side downgrades and broadly raised price targets (as on AVGO Sept 1, 2023), the move is positioning-driven (crowded-long unwind / profit-taking on a pre-print run-up), not a fundamental re-rating — slow or bullish sell-side reaction is NOT a leading indicator of next-session mean-reversion support and should not be used to narrow downside ranges."
+      }
+    ],
+    "ticker_ref": null,
+    "global_ref": "earnings-analysis/learnings/global.json"
+  }
+}

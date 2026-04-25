@@ -1,0 +1,433 @@
+# AVGO Q4_FY2023
+Filed: 2023-12-07T16:18:51-05:00 | Session: post_market | Period ending: 2023-10-29
+Mode: historical | PIT cutoff: 2023-12-07T16:18:51-05:00
+
+## 2. Results & Expectations
+
+### Consensus Bar
+[No current-quarter row found]
+
+### Reported Results (EX-99.1)
+
+Exhibit 99.1 Broadcom Inc. Announces Fourth Quarter and Fiscal Year 2023 Financial Results and Quarterly Dividend •Revenue of $9,295 million for the fourth quarter, up 4 percent from the prior year period •Cash from operations of $4,828 million for the fourth quarter, less capital expenditures of $105 million, resulted in $4,723 million of free cash flow, or 51 percent of revenue •Quarterly common stock dividend increased by 14 percent from the prior quarter to $5.25 •Adjusted EBITDA of $6,048 million for the fourth quarter, or 65 percent of revenue •Non-GAAP diluted EPS of $11.06 for the fourth quarter; GAAP diluted EPS of $8.25 for the fourth quarter •Fiscal 2024 annual revenue guidance of approximately $50.0 billion including contribution from VMware, an increase of 40 percent from the prior year period •Fiscal 2024 annual Adjusted EBITDA guidance of approximately 60 percent of projected revenue (1) PALO ALTO, Calif. – December 7, 2023 – Broadcom Inc. (Nasdaq: AVGO), a global technology leader that designs, develops and supplies semiconductor and infrastructure software solutions, today reported financial results for its fourth quarter and fiscal year ended October 29, 2023, provided guidance for its fiscal year 2024 and announced its quarterly dividend. “Broadcom’s fiscal year 2023 revenue grew 8% year-over-year to a record $35.8 billion, driven by investments in accelerators and network connectivity for AI by hyperscalers,” said Hock Tan, President and CEO of Broadcom Inc. “The acquisition of VMware is transformational. In fiscal year 2024 we expect semiconductor to sustain its mid to high single digit revenue growth rate, with the contribution of VMware driving consolidated revenue to $50 billion, and adjusted EBITDA to $30 billion.” “In fiscal year 2023 we achieved record adjusted EBITDA margin of 65%, generating $17.6 billion in free cash flow or 49% of revenue, demonstrating our stable and diversified business model,” said Kirsten Spears, CFO of Broadcom Inc. “With this transformational acquisition and expected increase in cash flows, we are increasing our quarterly common stock dividend by 14% to $5.25 per share for fiscal year 2024. The target fiscal 2024 annual common stock dividend of $21.00 per share is a record, and the thirteenth consecutive increase in annual dividends since we initiated dividends in fiscal 2011.” Fourth Quarter Fiscal Year 2023 Financial Highlights GAAP Non-GAAP (Dollars in millions, except per share data) Q4 23 Q4 22 Change Q4 23 Q4 22 Change Net revenue $ 9,295 $ 8,930 +4 % $ 9,295 $ 8,930 +4 % Net income $ 3,524 $ 3,359 +$165 $ 4,810 $ 4,544 +$266 Earnings per common share - diluted $ 8.25 $ 7.83 +$0.42 $ 11.06 $ 10.45 +$0.61 ________________________________ (1) The Company is not readily able to provide a reconciliation of the projected non-GAAP financial information presented to the relevant projected GAAP measure without unreasonable effort. 1 (Dollars in millions) Q4 23 Q4 22 Change Cash flow from operations $ 4,828 $ 4,583 +$245 Adjusted EBITDA $ 6,048 $ 5,722 +$326 Free cash flow $ 4,723 $ 4,461 +$262 Net revenue by segment (Dollars in millions) Q4 23 Q4 22 Change Semiconductor solutions $ 7,326 79 % $ 7,092 79 % +3 % Infrastructure software 1,969 21 1,838 21 +7 % Total net revenue $ 9,295 100 % $ 8,930 100 % The Company’s cash and cash equivalents at the end of the fiscal quarter were $14,189 million, compared to $12,055 million at the end of the prior quarter. During the fourth fiscal quarter, the Company generated $4,828 million in cash from operations and spent $105 million on capital expenditures. On September 29, 2023, the Company paid a cash dividend of $4.60 per share, totaling $1,904 million. The differences between the Company’s GAAP and non-GAAP results are described generally under “Non-GAAP Financial Measures” below, and presented in detail in the financial reconciliation tables attached to this release. Fiscal Year 2023 Financial Highlights GAAP Non-GAAP (Dollars in millions, except per share data) FY 23 FY 22 Change FY 23 FY 22 Change Net revenue $ 35,819 $ 33,203 +8 % $ 35,819 $ 33,203 +8 % Net income $ 14,082 $ 11,495 +$2,587 $ 18,378 $ 16,526 +$1,852 Earnings per common share - diluted $ 32.98 $ 26.53 +$6.45 $ 42.25 $ 37.64 +$4.61 (Dollars in millions) FY 23 FY 22 Change Cash flow from operations $ 18,085 $ 16,736 +$1,349 Adjusted EBITDA $ 23,213 $ 21,029 +$2,184 Free cash flow $ 17,633 $ 16,312 +$1,321 Net revenue by segment (Dollars in millions) FY 23 FY 22 Change Semiconductor solutions $ 28,182 79 % $ 25,818 78 % +9 % Infrastructure software 7,637 21 7,385 22 +3 % Total net revenue $ 35,819 100 % $ 33,203 100 % Fiscal Year 2024 Business Outlook Based on current business trends and conditions, the outlook for continuing operations for fiscal year 2024, ending November 3, 2024, including contributions from VMware, is expected to be as follows: •Fiscal year 2024 revenue guidance of approximately $50.0 billion; and •Fiscal year 2024 adjusted EBITDA guidance of approximately 60 percent of projected revenue. 2 The guidance provided above is only an estimate of what the Company believes is realizable as of the date of this release. The Company is not readily able to provide a reconciliation of projected Adjusted EBITDA to projected net income without unreasonable effort. Actual results will vary from the guidance and the variations may be material. The Company undertakes no intent or obligation to publicly update or revise any of these projections, whether as a result of new information, future events or otherwise, except as required by law. Quarterly Dividends The Company’s Board of Directors has approved a quarterly cash dividend of $5.25 per share. The dividend is payable on December 29, 2023 to stockholders of record at the close of business (5:00 p.m. Eastern Time) on December 20, 2023. Financial Results Conference Call Broadcom Inc. will host a conference call to review its financial results for the fourth quarter fiscal year 2023 and to discuss the business outlook, today at 2:00 p.m. Pacific Time. To Listen via Internet: The conference call can be accessed live online in the Investors section of the Broadcom website at https://investors.broadcom.com/. To Listen via Telephone: Preregistration is required by the conference call operator. Please preregister at https://register.vevent.com/register/BIacd438722e7946a58b1c10d35c792d79. Upon registering, you will be emailed a link to the dial-in number and unique PIN. Replay: An audio replay of the conference call can be accessed for one year through the Investors section of Broadcom's website at https://investors.broadcom.com/. Non-GAAP Financial Measures The non-GAAP measures should not be considered as a substitute for, or superior to, measures of financial performance prepared in accordance with GAAP. A reconciliation between GAAP and non-GAAP financial data is included in the supplemental financial data attached to this press release. Broadcom believes non-GAAP financial information provides additional insight into the Company’s on-going performance. Therefore, Broadcom provides this information to investors for a more consistent basis of comparison and to help them evaluate the results of the Company’s on-going operations and enable more meaningful period to period comparisons. In addition to GAAP reporting, Broadcom provides investors with net income, operating income, gross margin, operating expenses, cash flow and other data on a non-GAAP basis. This non-GAAP information excludes amortization of acquisition-related intangible assets, stock-based compensation expense, restructuring and other charges, acquisition-related costs, including integration costs, non-GAAP tax reconciling adjustments, and other adjustments. Management does not believe that these items are reflective of the Company’s underlying performance. Internally, these non-GAAP measures are significant measures used by management for purposes of evaluating the core operating performance of the Company, establishing internal budgets, calculating return on investment for development programs and growth initiatives, comparing performance with internal forecasts and targeted business models, strategic planning, evaluating and valuing potential acquisition candidates and how their 3 operations compare to the Company’s operations, and benchmarking performance externally against the Company’s competitors. The exclusion of these and other similar items from Broadcom’s non-GAAP financial results should not be interpreted as implying that these items are non-recurring, infrequent or unusual. Free cash flow measures have limitations as they omit certain components of the overall cash flow statement and do not represent the residual cash flow available for discretionary expenditures. Investors should not consider presentation of free cash flow measures as implying that stockholders have any right to such cash. Broadcom’s free cash flow may not be calculated in a manner comparable to similarly named measures used by other companies. About Broadcom Broadcom Inc. (NASDAQ: AVGO) is a global technology leader that designs, develops, and supplies a broad range of semiconductor, enterprise software and security solutions. Broadcom’s category-leading product portfolio serves critical markets including cloud, data center, networking, broadband, wireless, storage, industrial, and enterprise software. Our solutions include service provider and enterprise networking and storage, mobile device and broadband connectivity, mainframe, cybersecurity, and private and hybrid cloud infrastructure. Broadcom is a Delaware corporation headquartered in Palo Alto, CA. For more information, go to www.broadcom.com. Cautionary Note Regarding Forward-Looking Statements This announcement contains forward-looking statements (including within the meaning of Section 21E of the United States Securities Exchange Act of 1934, as amended, and Section 27A of the United States Securities Act of 1933, as amended) concerning Broadcom. These statements include, but are not limited to, statements that address our expected future business and financial performance, our plans and expectations with regard to our share repurchases, and other statements identified by words such as “will,” “expect,” “believe,” “anticipate,” “estimate,” “should,” “intend,” “plan,” “potential,” “predict,” “project,” “aim,” and similar words, phrases or expressions. These forward-looking statements are based on current expectations and beliefs of Broadcom’s management, as well as assumptions made by and information currently available to such management, current market trends and market conditions and involve risks and uncertainties, many of which are outside the control of Broadcom and its management, that may cause actual results to differ materially from those contained in forward-looking statements. Accordingly, you should not place undue reliance on such statements. Particular uncertainties that could materially affect future results include risks associated with: global economic conditions and concerns; government regulations and administrative proceedings, trade restrictions and trade tensions; global political and economic conditions; our acquisition of VMware, Inc., including employee retention, unexpected costs, charges or expenses, and our ability to successfully integrate VMware’s business and realize the expected benefits; any acquisitions we may make, including our acquisition of VMware, such as delays, challenges and expenses associated with receiving governmental and regulatory approvals and satisfying other closing conditions, and with integrating acquired businesses with our existing businesses and our ability to achieve the benefits, growth prospects and synergies expected by such acquisitions; dependence on and risks associated with distributors and resellers of our products; our significant indebtedness and the need to generate sufficient cash flows to service and repay such debt; dependence on senior management and our ability to attract and retain qualified personnel; our ability to protect against cyber security threats and a breach of 4 security systems; cyclicality in the semiconductor industry or in our target markets; any loss of our significant customers and fluctuations in the timing and volume of significant customer demand; our dependence on contract manufacturing and outsourced supply chain; our dependency on a limited number of suppliers; our ability to accurately estimate customers’ demand and adjust our manufacturing and supply chain accordingly; our ability to continue achieving design wins with our customers, as well as the timing of any design wins; prolonged disruptions of our or our contract manufacturers’ manufacturing facilities, warehouses or other significant operations; our ability to improve our manufacturing efficiency and quality; involvement in legal proceedings; demand for our data center virtualization products; customer and market acceptance of our products and services; compatibility of our software products with operating environments, platforms or third-party products; our ability to enter into satisfactory software license agreements; availability of third-party software used in our products; use of open source software in our products; ability of our software products to manage and secure IT infrastructures and environments; sales to government customers; our ability to manage products and services lifecycles; quarterly and annual fluctuations in operating results; our competitive performance; our ability to maintain or improve gross margin; our ability to protect our intellectual property and the unpredictability of any associated litigation expenses; any expenses or reputational damage associated with resolving customer product warranty and indemnification claims, or other undetected defects or bugs; our ability to sell to new types of customers and to keep pace with technological advances; our compliance with privacy and data security laws; the amount and frequency of our share repurchase programs; fluctuations in foreign exchange rates; our provision for income taxes and overall cash tax costs, legislation that may impact our overall cash tax costs, our ability to maintain tax concessions in certain jurisdictions and potential tax liabilities as a result of acquiring VMware; and other events and trends on a national, regional and global scale, including those of a political, economic, business, competitive and regulatory nature. We are not obligated to repurchase any specific amount of shares of common stock, and the stock repurchase programs may be suspended or terminated at any time. Our filings with the SEC, which you may obtain for free at the SEC’s website at http://www.sec.gov, discuss some of the important risk factors that may affect our business, results of operations and financial condition. Actual results may vary from the estimates provided. We undertake no intent or obligation to publicly update or revise any of the estimates and other forward-looking statements made in this announcement, whether as a result of new information, future events or otherwise, except as required by law. Contact: Ji Yoo Broadcom Inc. Investor Relations 650-427-6000 investor.relations@broadcom.com (AVGO-Q) 5 BROADCOM INC. CONDENSED CONSOLIDATED STATEMENTS OF OPERATIONS — UNAUDITED (IN MILLIONS, EXCEPT PER SHARE DATA) Fiscal Quarter Ended Fiscal Year Ended October 29, July 30, October 30, October 29, October 30, 2023 2023 2022 2023 2022 Net revenue $ 9,295 $ 8,876 $ 8,930 $ 35,819 $ 33,203 Cost of revenue: Cost of revenue 2,449 2,272 2,298 9,272 8,256 Amortization of acquisition-related intangible assets 438 439 705 1,853 2,847 Restructuring charges 1 1 1 4 5 Total cost of revenue 2,888 2,712 3,004 11,129 11,108 Gross margin 6,407 6,164 5,926 24,690 22,095 Research and development 1,388 1,358 1,197 5,253 4,919 Selling, general and administrative 418 388 370 1,592 1,382 Amortization of acquisition-related intangible assets 348 350 358 1,394 1,512 Restructuring and other charges 13 212 15 244 57 Total operating expenses 2,167 2,308 1,940 8,483 7,870 Operating income 4,240 3,856 3,986 16,207 14,225 Interest expense (405) (406) (406) (1,622) (1,737) Other income (expense), net 132 124 40 512 (54) Income before income taxes 3,967 3,574 3,620 15,097 12,434 Provision for income taxes 443 271 261 1,015 939 Net income 3,524 3,303 3,359 14,082 11,495 Dividends on preferred stock — — (48) — (272) Net income attributable to common stock $ 3,524 $ 3,303 $ 3,311 $ 14,082 $ 11,223 Net income per share attributable to common stock: Basic $ 8.53 $ 8.00 $ 8.06 $ 33.93 $ 27.44 Diluted (1) $ 8.25 $ 7.74 $ 7.83 $ 32.98 $ 26.53 Weighted-average shares used in per share calculations: Basic 413 413 411 415 409 Diluted (1) 427 427 429 427 423 Stock-based compensation expense: Cost of revenue $ 62 $ 61 $ 38 $ 210 $ 147 Research and development 448 444 260 1,513 1,048 Selling, general and administrative 128 124 89 448 338 Total stock-based compensation expense $ 638 $ 629 $ 387 $ 2,171 $ 1,533 (1) Excludes the potentially dilutive effect of Mandatory Convertible Preferred Stock as the impact was antidilutive for the fiscal year ended October 30, 2022. All outstanding shares of Mandatory Convertible Preferred Stock were converted into our common stock during the fiscal quarter ended October 30, 2022. BROADCOM INC. FINANCIAL RECONCILIATION: GAAP TO NON-GAAP — UNAUDITED (IN MILLIONS) Fiscal Quarter Ended Fiscal Year Ended October 29, July 30, October 30, October 29, October 30, 2023 2023 2022 2023 2022 Gross margin on GAAP basis $ 6,407 $ 6,164 $ 5,926 $ 24,690 $ 22,095 Amortization of acquisition-related intangible assets 438 439 705 1,853 2,847 Stock-based compensation expense 62 61 38 210 147 Restructuring charges 1 1 1 4 5 Acquisition-related costs — — 3 — 13 Gross margin on non-GAAP basis $ 6,908 $ 6,665 $ 6,673 $ 26,757 $ 25,107 Research and development on GAAP basis $ 1,388 $ 1,358 $ 1,197 $ 5,253 $ 4,919 Stock-based compensation expense 448 444 260 1,513 1,048 Acquisition-related costs — 1 — — — Research and development on non-GAAP basis $ 940 $ 913 $ 937 $ 3,740 $ 3,871 Selling, general and administrative expense on GAAP basis $ 418 $ 388 $ 370 $ 1,592 $ 1,382 Stock-based compensation expense 128 124 89 448 338 Acquisition-related costs 69 48 45 252 102 Selling, general and administrative expense on non-GAAP basis $ 221 $ 216 $ 236 $ 892 $ 942 Total operating expenses on GAAP basis $ 2,167 $ 2,308 $ 1,940 $ 8,483 $ 7,870 Amortization of acquisition-related intangible assets 348 350 358 1,394 1,512 Stock-based compensation expense 576 568 349 1,961 1,386 Restructuring and other charges 13 212 15 244 57 Acquisition-related costs 69 49 45 252 102 Total operating expenses on non-GAAP basis $ 1,161 $ 1,129 $ 1,173 $ 4,632 $ 4,813 Operating income on GAAP basis $ 4,240 $ 3,856 $ 3,986 $ 16,207 $ 14,225 Amortization of acquisition-related intangible assets 786 789 1,063 3,247 4,359 Stock-based compensation expense 638 629 387 2,171 1,533 Restructuring and other charges 14 213 16 248 62 Acquisition-related costs 69 49 48 252 115 Operating income on non-GAAP basis $ 5,747 $ 5,536 $ 5,500 $ 22,125 $ 20,294 Interest expense on GAAP basis $ (405) $ (406) $ (406) $ (1,622) $ (1,737) Loss on debt extinguishment — — — — 112 Interest expense on non-GAAP basis $ (405) $ (406) $ (406) $ (1,622) $ (1,625) Other income (expense), net on GAAP basis $ 132 $ 124 $ 40 $ 512 $ (54) (Gains) losses on investments 24 (2) 29 (11) 169 Other (1) — — (1) (5) Other income, net on non-GAAP basis $ 155 $ 122 $ 69 $ 500 $ 110 Provision for income taxes on GAAP basis $ 443 $ 271 $ 261 $ 1,015 $ 939 Non-GAAP tax reconciling adjustments 244 385 358 1,610 1,314 Provision for income taxes on non-GAAP basis $ 687 $ 656 $ 619 $ 2,625 $ 2,253 Fiscal Quarter Ended Fiscal Year Ended October 29, July 30, October 30, October 29, October 30, 2023 2023 2022 2023 2022 Net income on GAAP basis $ 3,524 $ 3,303 $ 3,359 $ 14,082 $ 11,495 Amortization of acquisition-related intangible assets 786 789 1,063 3,247 4,359 Stock-based compensation expense 638 629 387 2,171 1,533 Restructuring and other charges 14 213 16 248 62 Acquisition-related costs 69 49 48 252 115 Loss on debt extinguishment — — — — 112 (Gains) losses on investments 24 (2) 29 (11) 169 Other (1) — — (1) (5) Non-GAAP tax reconciling adjustments (244) (385) (358) (1,610) (1,314) Net income on non-GAAP basis $ 4,810 $ 4,596 $ 4,544 $ 18,378 $ 16,526 Weighted-average shares used in per share calculations - diluted on GAAP basis 427 427 429 427 423 Non-GAAP adjustment (1) 8 9 6 8 16 Weighted-average shares used in per share calculations - diluted on non-GAAP basis 435 436 435 435 439 Net income on non-GAAP basis $ 4,810 $ 4,596 $ 4,544 $ 18,378 $ 16,526 Interest expense 405 406 406 1,622 1,625 Provision for income taxes on non-GAAP basis 687 656 619 2,625 2,253 Depreciation 124 122 129 502 529 Amortization of purchased intangibles and right-of-use assets 22 21 24 86 96 Adjusted EBITDA $ 6,048 $ 5,801 $ 5,722 $ 23,213 $ 21,029 Net cash provided by operating activities $ 4,828 $ 4,719 $ 4,583 $ 18,085 $ 16,736 Purchases of property, plant and equipment (105) (122) (122) (452) (424) Free cash flow $ 4,723 $ 4,597 $ 4,461 $ 17,633 $ 16,312 Fiscal Year Ending November 3, Expected average diluted share count (2): 2024 Weighted-average shares used in per share calculation - diluted on GAAP basis 480 Non-GAAP adjustment (1) 14 Weighted-average shares used in per share calculation - diluted on non-GAAP basis 494 (1) Non-GAAP adjustment for the number of shares used in the diluted per share calculations excludes the impact of stock-based compensation expense expected to be incurred in future periods and not yet recognized in the financial statements, which would otherwise be assumed to be used to repurchase shares under the GAAP treasury stock method. In addition, the non-GAAP adjustment includes the impact of Mandatory Convertible Preferred Stock that is antidilutive on a GAAP basis for the fiscal year ended October 30, 2022. (2) Excludes the effects of potential share repurchases. BROADCOM INC. CONDENSED CONSOLIDATED BALANCE SHEETS — UNAUDITED (IN MILLIONS) October 29, October 30, 2023 2022 ASSETS Current assets: Cash and cash equivalents $ 14,189 $ 12,416 Trade accounts receivable, net 3,154 2,958 Inventory 1,898 1,925 Other current assets 1,606 1,205 Total current assets 20,847 18,504 Long-term assets: Property, plant and equipment, net 2,154 2,223 Goodwill 43,653 43,614 Intangible assets, net 3,867 7,111 Other long-term assets 2,340 1,797 Total assets $ 72,861 $ 73,249 LIABILITIES AND EQUITY Current liabilities: Accounts payable $ 1,210 $ 998 Employee compensation and benefits 935 1,202 Current portion of long-term debt 1,608 440 Other current liabilities 3,652 4,412 Total current liabilities 7,405 7,052 Long-term liabilities: Long-term debt 37,621 39,075 Other long-term liabilities 3,847 4,413 Total liabilities 48,873 50,540 Stockholders' equity: Preferred stock — — Common stock — — Additional paid-in capital 21,099 21,159 Retained earnings 2,682 1,604 Accumulated other comprehensive income (loss) 207 (54) Total stockholders' equity 23,988 22,709 Total liabilities and equity $ 72,861 $ 73,249 BROADCOM INC. CONDENSED CONSOLIDATED STATEMENTS OF CASH FLOWS — UNAUDITED (IN MILLIONS) Fiscal Quarter Ended Fiscal Year Ended October 29, July 30, October 30, October 29, October 30, 2023 2023 2022 2023 2022 Cash flows from operating activities: Net income $ 3,524 $ 3,303 $ 3,359 $ 14,082 $ 11,495 Adjustments to reconcile net income to net cash provided by operating activities: Amortization of intangible and right-of-use assets 808 810 1,087 3,333 4,455 Depreciation 124 122 129 502 529 Stock-based compensation 638 629 387 2,171 1,533 Deferred taxes and other non-cash taxes 639 (251) (89) (501) (34) Loss on debt extinguishment — — — — 100 Non-cash interest expense 34 33 32 132 129 Other 27 — 31 9 183 Changes in assets and liabilities, net of acquisitions and disposals: Trade accounts receivable, net (231) 135 (241) (187) (870) Inventory (56) 44 (87) 27 (627) Accounts payable 215 188 304 209 (79) Employee compensation and benefits 103 184 128 (279) 136 Other current assets and current liabilities (694) (339) (388) (628) 222 Other long-term assets and long-term liabilities (303) (139) (69) (785) (436) Net cash provided by operating activities 4,828 4,719 4,583 18,085 16,736 Cash flows from investing activities: Acquisitions of businesses, net of cash acquired (36) (17) (7) (53) (246) Purchases of property, plant and equipment (105) (122) (122) (452) (424) Purchases of investments (58) (91) — (346) (200) Sales of investments 154 74 — 228 200 Other (79) 12 1 (66) 3 Net cash used in investing activities (124) (144) (128) (689) (667) Cash flows from financing activities: Proceeds from long-term borrowings — — — — 1,935 Payments on debt obligations (143) — (9) (403) (2,361) Payments of dividends (1,904) (1,901) (1,782) (7,645) (7,032) Repurchases of common stock - repurchase program (123) (1,707) — (5,824) (7,000) Shares repurchased for tax withholdings on vesting of equity awards (454) (460) (274) (1,861) (1,455) Issuance of common stock 59 — 54 122 114 Other (5) (5) (5) (12) (17) Net cash used in financing activities (2,570) (4,073) (2,016) (15,623) (15,816) Net change in cash and cash equivalents 2,134 502 2,439 1,773 253 Cash and cash equivalents at beginning of period 12,055 11,553 9,977 12,416 12,163 Cash and cash equivalents at end of period $ 14,189 $ 12,055 $ 12,416 $ 14,189 $ 12,416 Supplemental disclosure of cash flow information: Cash paid for interest $ 397 $ 348 $ 397 $ 1,503 $ 1,386 Cash paid for income taxes $ 191 $ 427 $ 251 $ 1,782 $ 908
+
+## 3. Forward Guidance
+Guidance packet: 30 series | 45 updates | 2023-03-02 to 2023-09-06
+
+### Full Year Guidance
+
+#### FY2023
+| Metric | Current | Prior | Change |
+|--------|---------|-------|--------|
+| AI Revenue | ~$3.80B | — | new |
+| CapEx | "higher than fiscal year 2022" | — | new |
+| Revenue — AI Networking | ≥$800M "could grow to well over $800 million in 2023" | — | new |
+| Revenue — Compute Offload | ≥$3B "on track to exceed $3 billion" | — | new |
+
+#### FY2024
+| Metric | Current | Prior | Change |
+|--------|---------|-------|--------|
+| AI Revenue as Percent of Semiconductor Revenue | ≥25% "over 25% of semiconductor revenue" (AI revenue has been on an accelerating trajectory through end of FY23, with a similar accelerating trend expected for FY24) | ≤25% "could be over 25% of semiconductor revenue in fiscal 24" | revised |
+| Revenue — Infrastructure Software | "high single-digit year-on-year growth" (contingent on Brocade cycle recovering) | — | new |
+
+### Other Horizons
+| Metric | Horizon | Current | Prior | Change |
+|--------|---------|---------|-------|--------|
+| Gross Margin — Semiconductor Solutions | Long Term | 50bps-150bps "50 to 150 basis points of annual gross margin expansion on a long-term basis" | — | new |
+| Revenue — Infrastructure Software | Long Term | "mid-single-digit year-on-year growth rate" (core software only; excludes Brocade) | — | new |
+| Adjusted EBITDA Margin (Non-GAAP) | Q2 FY2023 | ~64.5% | — | new |
+| Diluted Share Count (Non-GAAP) | Q2 FY2023 | ~438M (excluding the potential impact of any share repurchases) | — | new |
+| Gross Margin (Non-GAAP) | Q2 FY2023 | ~150bps "up approximately 150 basis points sequentially" (sequential increase vs Q1 FY2023) | — | new |
+| Revenue | Q2 FY2023 | ~$8.70B | — | new |
+| Revenue — Broadband | Q2 FY2023 | ~10% "grow a solid 10% year on year" | — | new |
+| Revenue — Industrial | Q2 FY2023 | "down low single-digit percentage year on year" (continuing softness in China) | — | new |
+| Revenue — Infrastructure Software | Q2 FY2023 | "up low to mid-single-digit percentage year-on-year" (stable core software growth partially offset by weakness in Brocade) | — | new |
+| Revenue — Networking | Q2 FY2023 | ~20% YoY "about 20% year over year growth" | — | new |
+| Revenue — Semiconductor Solutions | Q2 FY2023 | "high single-digit percentage year-on-year growth" | — | new |
+| Revenue — Server Storage Connectivity | Q2 FY2023 | ≤20% "moderate towards 20% year-on-year growth" | — | new |
+| Revenue — Wireless | Q2 FY2023 | "down high single digit percentage year on year; down sequentially" | — | new |
+| AI Revenue | Q3 FY2023 | ≥$1B "exceed $1 billion in the quarter" | — | new |
+| Adjusted EBITDA Margin (Non-GAAP) | Q3 FY2023 | ~65% | — | new |
+| Diluted Share Count (Non-GAAP) | Q3 FY2023 | ~438M (excluding potential impact of any share repurchases in Q3) | — | new |
+| Gross Margin | Q3 FY2023 | ~-60bps "down approximately 60 basis points sequentially on product mix" (sequential change versus Q2 FY2023) | — | new |
+| Revenue | Q3 FY2023 | ~$8.85B | — | new |
+| Revenue — Broadband | Q3 FY2023 | "low single-digit percent year-on-year" | — | new |
+| Revenue — Industrial | Q3 FY2023 | "flattish year-on-year" (continuing softness in Asia offset by strength in Europe) | — | new |
+| Revenue — Infrastructure Software | Q3 FY2023 | "up low single digits percentage year on year" (core software growth continues to be offset by weakness in Brocade) | — | new |
+| Revenue — Networking | Q3 FY2023 | "around 20% year-on-year growth" | — | new |
+| Revenue — Semiconductor Solutions | Q3 FY2023 | "mid-single-digit year-on-year growth" | — | new |
+| Revenue — Server Storage Connectivity | Q3 FY2023 | "up low single digits year-on-year" (transition to next-generation mega-rate largely completed; enterprise demand moderating) | — | new |
+| Revenue — Wireless | Q3 FY2023 | "up low single digits sequentially; flattish year-on-year" (beginning of seasonal ramp of next generation phone platform) | — | new |
+| Adjusted EBITDA Margin (Non-GAAP) | Q4 FY2023 | ~65% (approximately 65 percent of projected revenue) | — | new |
+| Diluted Share Count (GAAP) | Q4 FY2023 | ~427M | — | new |
+| Diluted Share Count (Non-GAAP) | Q4 FY2023 | ~435M (Excludes impact of stock-based compensation expense expected to be incurred in future periods not yet recognized, which would otherwise be assumed to be used to repurchase shares under the GAAP treasu...) | — | new |
+| Gross Margin | Q4 FY2023 | "down 80 basis points sequentially" (driven by product mix) | — | new |
+| Revenue | Q4 FY2023 | ~$9.27B | — | new |
+| Revenue — AI | Q4 FY2023 | "approximately 50% sequential growth, almost 2x year-on-year" (driven by strength in generative AI) | — | new |
+| Revenue — Broadband | Q4 FY2023 | "decline high single digits year-on-year" | — | new |
+| Revenue — Industrial | Q4 FY2023 | "up low single-digit percentage year-on-year" (reflecting largely seasonality) | — | new |
+| Revenue — Infrastructure Software | Q4 FY2023 | "up mid-single-digit year-on-year" | — | new |
+| Revenue — Networking | Q4 FY2023 | "in excess of 20% year-on-year growth" (driven by generative AI deployments) | — | new |
+| Revenue — Semiconductor Solutions | Q4 FY2023 | "low to mid single-digit percentage year-on-year growth" (excluding generative AI, semiconductor revenue will be flat) | — | new |
+| Revenue — Server Storage Connectivity | Q4 FY2023 | "down mid-teens percent year-on-year" (difficult year-on-year compare) | — | new |
+| Revenue — Wireless | Q4 FY2023 | "grow over 20% sequentially, down low single-digit percent year-on-year" (consistent with seasonal launch) | — | new |
+
+## 4. Consensus History
+
+Data notes: AV EARNINGS failed for AVGO; AV EARNINGS_ESTIMATES failed for AVGO; AV INCOME_STATEMENT failed for AVGO; Forward estimates not PIT-safe in historical mode
+
+## 5. Prior Financial Trends
+Coverage: 3 quarters | Sources: xbrl=3
+
+### Income Statement Trend
+| Metric           | Q3_FY2023 | Q2_FY2023 | Q1_FY2023 |
+|------------------|-----------|-----------|-----------|
+| Revenue          | $8.88B    | $8.73B    | $8.91B    |
+| Cost of Revenue  | $2.71B    | $2.62B    | $2.91B    |
+| Gross Profit     | $6.16B    | $6.12B    | $6.00B    |
+| SG&A             | $388M     | $438M     | $348M     |
+| R&D              | $1.36B    | $1.31B    | $1.20B    |
+| Interest Expense | $406M     | $405M     | $406M     |
+| Income Tax       | $271M     | $235M     | $66M      |
+| Operating Income | $3.86B    | $4.01B    | $4.10B    |
+| Net Income       | $3.30B    | $3.48B    | $3.77B    |
+| EPS Diluted      | $7.74     | $8.15     | $8.80     |
+
+### Margins and Efficiency
+| Metric             | Q3_FY2023 | Q2_FY2023 | Q1_FY2023 |
+|--------------------|-----------|-----------|-----------|
+| Gross Margin %     | 69.4%     | 70.0%     | 67.3%     |
+| Operating Margin % | 43.4%     | 45.9%     | 46.0%     |
+| Net Margin %       | 37.2%     | 39.9%     | 42.3%     |
+| R&D % Revenue      | 15.3%     | 15.0%     | 13.4%     |
+| Effective Tax Rate | 7.6%      | 6.3%      | 1.7%      |
+| Diluted Shares     | 427M      | 427M      | 429M      |
+
+### Cash Flow and Capital
+| Metric              | Q3_FY2023 | Q2_FY2023 | Q1_FY2023 |
+|---------------------|-----------|-----------|-----------|
+| Operating Cash Flow | $4.72B    | $4.50B    | $4.04B    |
+| Capex               | $122M     | $122M     | $103M     |
+| Free Cash Flow      | $4.60B    | $4.38B    | $3.93B    |
+| Buybacks            | $1.71B    | $2.81B    | $1.19B    |
+
+### Balance Sheet
+| Metric             | Q3_FY2023 | Q2_FY2023 | Q1_FY2023 |
+|--------------------|-----------|-----------|-----------|
+| Cash & Equivalents | $12.05B   | $11.55B   | $12.65B   |
+| Total Assets       | $71.59B   | $71.67B   | $72.98B   |
+| Long-Term Debt     | $38.22B   | $38.19B   | $38.17B   |
+
+## 6. Inter-Quarter Events
+
+Ticker: AVGO | Sector: Technology | Industry: Semiconductors
+Window: 2023-08-31T17:18:57-04:00 → 2023-12-07T16:18:51-05:00 (pit_cutoff)
+Dates: 2023-08-31 → 2023-12-07 | PIT: 2023-12-07T16:18:51-05:00 | Mode: historical
+Schema: inter_quarter_context.v1 | Assembled: 2026-04-19T17:47:23.379081+00:00
+Summary: 67 trading days, 7 significant, 3 gap | 69 news, 4 filings, 0 dividends, 0 splits
+
+### Trading Days
+
+| Date | Trd | Bnd | Close | Ret% | SPY% | Sect% | Adj% | Sig | Gap |
+|---|---|---|---|---|---|---|---|---|---|
+| 2023-08-31 | Y | prev | 92.289 | 3.43 | -0.15 | 0.49 | 3.58 | — | — |
+| 2023-09-01 | Y | — | 87.252 | -5.46 | 0.19 | 0.31 | -5.65 | Y | N |
+| 2023-09-04 | N | — | — | — | — | — | — | — | — |
+| 2023-09-05 | Y | — | 87.217 | -0.04 | -0.43 | 0.36 | 0.39 | N | N |
+| 2023-09-06 | Y | — | 87.227 | 0.01 | -0.67 | -1.06 | 0.68 | N | N |
+| 2023-09-07 | Y | — | 85.703 | -1.75 | -0.31 | -1.45 | -1.44 | N | N |
+| 2023-09-08 | Y | — | 85.755 | 0.06 | 0.15 | 0.21 | -0.09 | N | N |
+| 2023-09-11 | Y | — | 85.914 | 0.19 | 0.66 | 0.52 | -0.47 | N | N |
+| 2023-09-12 | Y | — | 84.452 | -1.7 | -0.55 | -1.81 | -1.15 | N | N |
+| 2023-09-13 | Y | — | 85.293 | 1.0 | 0.12 | 0.25 | 0.88 | N | N |
+| 2023-09-14 | Y | — | 87.164 | 2.19 | 0.86 | 0.73 | 1.33 | N | N |
+| 2023-09-15 | Y | — | 85.168 | -2.29 | -1.55 | -1.92 | -0.74 | N | N |
+| 2023-09-18 | Y | — | 85.0 | -0.2 | 0.06 | 0.27 | -0.26 | N | N |
+| 2023-09-19 | Y | — | 84.92 | -0.09 | -0.21 | -0.05 | 0.12 | N | N |
+| 2023-09-20 | Y | — | 83.057 | -2.19 | -0.92 | -1.57 | -1.27 | N | N |
+| 2023-09-21 | Y | — | 80.836 | -2.67 | -1.65 | -1.52 | -1.02 | N | N |
+| 2023-09-22 | Y | — | 82.908 | 2.56 | -0.22 | 0.21 | 2.78 | Y | N |
+| 2023-09-25 | Y | — | 83.389 | 0.58 | 0.42 | 0.32 | 0.16 | N | N |
+| 2023-09-26 | Y | — | 81.619 | -2.12 | -1.47 | -1.8 | -0.65 | N | N |
+| 2023-09-27 | Y | — | 81.681 | 0.08 | 0.04 | 0.15 | 0.04 | N | N |
+| 2023-09-28 | Y | — | 83.2 | 1.86 | 0.58 | 0.71 | 1.28 | N | N |
+| 2023-09-29 | Y | — | 83.058 | -0.17 | -0.24 | 0.34 | 0.07 | N | N |
+| 2023-10-02 | Y | — | 83.495 | 0.53 | -0.04 | 1.07 | 0.57 | N | N |
+| 2023-10-03 | Y | — | 81.483 | -2.41 | -1.34 | -1.7 | -1.07 | N | N |
+| 2023-10-04 | Y | — | 82.381 | 1.1 | 0.73 | 1.25 | 0.37 | N | N |
+| 2023-10-05 | Y | — | 82.386 | 0.01 | -0.04 | 0.13 | 0.05 | N | N |
+| 2023-10-06 | Y | — | 84.526 | 2.6 | 1.19 | 1.87 | 1.41 | N | N |
+| 2023-10-09 | Y | — | 85.588 | 1.26 | 0.64 | 0.52 | 0.62 | N | N |
+| 2023-10-10 | Y | — | 85.841 | 0.3 | 0.52 | 0.15 | -0.22 | N | N |
+| 2023-10-11 | Y | — | 87.456 | 1.88 | 0.41 | 0.93 | 1.47 | N | N |
+| 2023-10-12 | Y | — | 90.56 | 3.55 | -0.61 | 0.09 | 4.16 | Y | Y |
+| 2023-10-13 | Y | — | 88.318 | -2.48 | -0.5 | -1.43 | -1.98 | N | N |
+| 2023-10-16 | Y | — | 90.257 | 2.2 | 1.05 | 0.96 | 1.15 | N | N |
+| 2023-10-17 | Y | — | 88.44 | -2.01 | -0.0 | -0.46 | -2.01 | Y | N |
+| 2023-10-18 | Y | — | 88.703 | 0.3 | -1.33 | -1.03 | 1.63 | N | N |
+| 2023-10-19 | Y | — | 86.783 | -2.16 | -0.88 | -0.57 | -1.28 | N | N |
+| 2023-10-20 | Y | — | 85.363 | -1.64 | -1.23 | -1.69 | -0.41 | N | N |
+| 2023-10-23 | Y | — | 86.222 | 1.01 | -0.17 | 0.12 | 1.18 | N | N |
+| 2023-10-24 | Y | — | 88.111 | 2.19 | 0.75 | 0.69 | 1.44 | N | N |
+| 2023-10-25 | Y | — | 84.963 | -3.57 | -1.44 | -1.18 | -2.13 | Y | Y |
+| 2023-10-26 | Y | — | 82.675 | -2.69 | -1.2 | -1.91 | -1.49 | N | N |
+| 2023-10-27 | Y | — | 83.836 | 1.4 | -0.45 | 0.58 | 1.85 | N | N |
+| 2023-10-30 | Y | — | 84.125 | 0.34 | 1.2 | 1.07 | -0.86 | N | N |
+| 2023-10-31 | Y | — | 84.137 | 0.01 | 0.63 | 0.71 | -0.62 | N | N |
+| 2023-11-01 | Y | — | 85.294 | 1.38 | 1.07 | 1.93 | 0.31 | N | N |
+| 2023-11-02 | Y | — | 87.13 | 2.15 | 1.92 | 1.69 | 0.23 | N | N |
+| 2023-11-03 | Y | — | 88.268 | 1.31 | 0.91 | 1.03 | 0.4 | N | N |
+| 2023-11-06 | Y | — | 88.083 | -0.21 | 0.23 | 0.66 | -0.44 | N | N |
+| 2023-11-07 | Y | — | 89.782 | 1.93 | 0.28 | 1.09 | 1.65 | N | N |
+| 2023-11-08 | Y | — | 91.113 | 1.48 | 0.07 | 0.57 | 1.41 | N | N |
+| 2023-11-09 | Y | — | 91.138 | 0.03 | -0.78 | -0.47 | 0.81 | N | N |
+| 2023-11-10 | Y | — | 95.752 | 5.06 | 1.56 | 2.61 | 3.5 | Y | Y |
+| 2023-11-13 | Y | — | 94.693 | -1.11 | -0.1 | -0.58 | -1.01 | N | N |
+| 2023-11-14 | Y | — | 97.296 | 2.75 | 1.94 | 2.0 | 0.81 | N | N |
+| 2023-11-15 | Y | — | 97.54 | 0.25 | 0.21 | 0.13 | 0.04 | N | N |
+| 2023-11-16 | Y | — | 95.955 | -1.62 | 0.12 | 0.5 | -1.74 | N | N |
+| 2023-11-17 | Y | — | 97.773 | 1.89 | 0.12 | -0.21 | 1.77 | N | N |
+| 2023-11-20 | Y | — | 99.571 | 1.84 | 0.77 | 1.45 | 1.07 | N | N |
+| 2023-11-21 | Y | — | 98.12 | -1.46 | -0.22 | -0.81 | -1.24 | N | N |
+| 2023-11-22 | Y | — | 97.2 | -0.94 | 0.39 | 0.45 | -1.33 | N | N |
+| 2023-11-24 | Y | — | 97.887 | 0.71 | 0.06 | -0.19 | 0.65 | N | N |
+| 2023-11-27 | Y | — | 95.024 | -2.92 | -0.18 | -0.01 | -2.74 | Y | N |
+| 2023-11-28 | Y | — | 94.635 | -0.41 | 0.1 | 0.19 | -0.51 | N | N |
+| 2023-11-29 | Y | — | 94.083 | -0.58 | -0.07 | 0.08 | -0.51 | N | N |
+| 2023-11-30 | Y | — | 92.573 | -1.6 | 0.39 | 0.15 | -1.99 | N | N |
+| 2023-12-01 | Y | — | 93.0 | 0.46 | 0.59 | 0.23 | -0.13 | N | N |
+| 2023-12-04 | Y | — | 92.397 | -0.65 | -0.52 | -1.22 | -0.13 | N | N |
+| 2023-12-05 | Y | — | 91.312 | -1.17 | -0.02 | 0.6 | -1.15 | N | N |
+| 2023-12-06 | Y | — | 90.364 | -1.04 | -0.4 | -0.85 | -0.64 | N | N |
+| 2023-12-07 | Y | cutoff | 92.226 | 2.06 | 0.76 | 1.21 | 1.3 | N | N |
+
+### News Events (69)
+
+Adjusted returns = stock − macro for each window (hourly / session / daily)
+
+| Ref | Date | Sess | Title | Channels | AdjH% | AdjS% | AdjD% |
+|---|---|---|---|---|---|---|---|
+| N1 | 2023-09-01 | pre_market | Keybanc Maintains Overweight on Broadcom, Raises Price Target to $1000 | News ; Price Target ; Analyst Ratings | -0.01 | 1.02 | -5.56 |
+| N2 | 2023-09-01 | pre_market | Rosenblatt Maintains Buy on Broadcom, Raises Price Target to $1000 | News ; Price Target ; Analyst Ratings | 0.23 | 0.52 | -5.56 |
+| N3 | 2023-09-01 | pre_market | BMO Capital Maintains Outperform on Broadcom, Raises Price Target to $1000 | News ; Price Target ; Analyst Ratings | -0.35 | -0.15 | -5.56 |
+| N4 | 2023-09-01 | pre_market | Benchmark Reiterates Buy on Broadcom, Maintains $950 Price Target | News ; Price Target ; Reiteration ; Analyst Ratings | -1.39 | -0.65 | -5.56 |
+| N5 | 2023-09-01 | pre_market | How To Earn $500 A Month From Broadcom Stock After Upbeat Earnings | Earnings ; Long Ideas ; News ; Dividends ; Trading Ideas | -2.03 | -1.06 | -5.56 |
+| N6 | 2023-09-01 | pre_market | Oppenheimer Maintains Outperform on Broadcom, Raises Price Target to $990 | News ; Price Target ; Analyst Ratings | -2.01 | -1.07 | -5.56 |
+| N7 | 2023-09-01 | pre_market | Wells Fargo Maintains Equal-Weight on Broadcom, Raises Price Target to $900 | News ; Price Target ; Analyst Ratings | -2.28 | -1.06 | -5.56 |
+| N8 | 2023-09-01 | in_market | Evercore ISI Group Reiterates Outperform on Broadcom, Maintains $1000 Price Target | News ; Price Target ; Reiteration ; Analyst Ratings | -0.74 | -0.63 | -5.56 |
+| N9 | 2023-09-01 | in_market | Piper Sandler Maintains Overweight on Broadcom, Raises Price Target to $975 | News ; Price Target ; Analyst Ratings | -0.05 | -0.49 | -5.56 |
+| N10 | 2023-09-04 | market_closed | Looking Into Broadcom's Recent Short Interest | Short Sellers ; Short Ideas ; Trading Ideas | -0.96 | -0.15 | 0.36 |
+| N11 | 2023-09-05 | in_market | Baird Maintains Outperform on Broadcom, Raises Price Target to $1000 | News ; Price Target ; Analyst Ratings | 0.04 | -0.3 | 0.36 |
+| N12 | 2023-09-05 | in_market | Check Out What Whales Are Doing With AVGO | Options ; Markets | 0.14 | -0.39 | 0.36 |
+| N13 | 2023-09-08 | pre_market | Truist Securities Maintains Buy on Broadcom, Raises Price Target to $995 | News ; Price Target ; Analyst Ratings | 0.36 | 0.58 | -0.07 |
+| N14 | 2023-09-11 | in_market | Check Out What Whales Are Doing With AVGO | Options ; Markets | 0.02 | 1.02 | -0.5 |
+| N15 | 2023-09-12 | in_market | This Is What Whales Are Betting On Broadcom | Options ; Markets | -0.32 | -0.57 | -1.16 |
+| N16 | 2023-09-14 | pre_market | Keybanc Reiterates Overweight on Broadcom, Maintains $1000 Price Target | News ; Price Target ; Reiteration ; Analyst Ratings | -0.07 | 0.16 | 1.25 |
+| N17 | 2023-09-14 | in_market | What 17 Analyst Ratings Have To Say About Broadcom | Analyst Ratings | 0.2 | 0.19 | 1.25 |
+| N18 | 2023-09-15 | in_market | Tuesday Is Your Last Chance To Buy Broadcom Before The Dividend Payout | Dividends | -0.3 | 0.0 | -0.72 |
+| N19 | 2023-09-18 | in_market | Here's How Much You Would Have Made Owning Broadcom Stock In The Last 10 Years | Earnings ; News ; Dividends | 0.1 | 0.03 | -0.23 |
+| N20 | 2023-09-18 | in_market | Susquehanna Reiterates Positive on Broadcom, Maintains $1010 Price Target | News ; Price Target ; Reiteration ; Analyst Ratings | 0.22 | 0.11 | -0.23 |
+| N21 | 2023-09-19 | in_market | This Is What Whales Are Betting On Broadcom | Options ; Markets | 0.52 | 0.55 | 0.05 |
+| N22 | 2023-09-20 | pre_market | How Is The Market Feeling About Broadcom? | Short Sellers ; Short Ideas ; Trading Ideas | 0.03 | -0.25 | -1.24 |
+| N23 | 2023-09-20 | in_market | Rosenblatt Reiterates Buy on Broadcom, Maintains $1000 Price Target | News ; Price Target ; Reiteration ; Analyst Ratings | 0.2 | -0.67 | -1.24 |
+| N24 | 2023-09-21 | in_market | Truist Securities Reiterates Buy on Broadcom, Maintains $995 Price Target | News ; Price Target ; Reiteration ; Analyst Ratings | 0.39 | -0.06 | -1.1 |
+| N25 | 2023-09-22 | in_market | Check Out What Whales Are Doing With AVGO | Options ; Markets | 0.67 | 2.0 | 2.92 |
+| N26 | 2023-09-22 | in_market | Truist Securities Reiterates Buy on Broadcom, Maintains $995 Price Target | News ; Price Target ; Reiteration ; Analyst Ratings | 0.34 | 1.35 | 2.92 |
+| N27 | 2023-09-26 | in_market | Check Out What Whales Are Doing With AVGO | Options ; Markets | 0.0 | -0.25 | -0.69 |
+| N28 | 2023-09-28 | in_market | $100 Invested In This Stock 10 Years Ago Would Be Worth $1,900 Today | Earnings ; News ; Dividends | 0.62 | 0.04 | 1.21 |
+| N29 | 2023-10-02 | pre_market | Broadcom Delivers 200G/lane PAM-4 DSP PHY For Next Generation Switches And AI Networks | News | 0.35 | -0.08 | 0.52 |
+| N30 | 2023-10-02 | in_market | Broadcom Unusual Options Activity | Options ; Markets | -0.1 | 0.22 | 0.52 |
+| N31 | 2023-10-06 | in_market | Looking At Broadcom's Recent Unusual Options Activity | Options ; Markets | 0.12 | 1.0 | 1.5 |
+| N32 | 2023-10-09 | in_market | P/E Ratio Insights for Broadcom | News ; Intraday Update ; Markets | 0.13 | 0.11 | 0.54 |
+| N33 | 2023-10-10 | in_market | How Is The Market Feeling About Broadcom? | Short Sellers ; Short Ideas ; Trading Ideas | 0.14 | -0.62 | -0.22 |
+| N34 | 2023-10-11 | in_market | Check Out What Whales Are Doing With AVGO | Options ; Markets | 0.49 | 1.22 | 1.51 |
+| N35 | 2023-10-16 | in_market | Comparing Broadcom With Industry Competitors In Semiconductors & Semiconductor Equipment Industry | News ; Markets ; Trading Ideas | 0.17 | 0.34 | 1.13 |
+| N36 | 2023-10-17 | in_market | This Is What Whales Are Betting On Broadcom | Options ; Markets | 0.59 | 0.81 | -1.97 |
+| N37 | 2023-10-17 | in_market | Why Broadcom (AVGO) Stock Is Diving Today | News | 0.69 | 0.53 | -1.97 |
+| N38 | 2023-10-20 | in_market | $1000 Invested In This Stock 5 Years Ago Would Be Worth $3,800 Today | News ; Trading Ideas | -1.23 | -1.27 | -0.39 |
+| N39 | 2023-10-23 | in_market | Check Out What Whales Are Doing With AVGO | Options ; Markets | 1.03 | 1.54 | 1.18 |
+| N40 | 2023-10-24 | in_market | Broadcom Unusual Options Activity | Options ; Markets | 0.52 | 1.17 | 1.47 |
+| N41 | 2023-10-26 | in_market | How Is The Market Feeling About Broadcom? | Short Sellers ; Short Ideas ; Trading Ideas | 0.31 | -0.31 | -1.53 |
+| N42 | 2023-10-30 | in_market | Performance Comparison: Broadcom And Competitors In Semiconductors & Semiconductor Equipment Industry | News ; Markets ; Trading Ideas | -0.68 | 0.15 | -0.92 |
+| N43 | 2023-10-31 | in_market | Looking At Broadcom's Recent Unusual Options Activity | Options ; Markets | 0.4 | -0.18 | -0.5 |
+| N44 | 2023-10-31 | in_market | $100 Invested In This Stock 10 Years Ago Would Be Worth $1,900 Today | News ; Trading Ideas | -0.05 | -0.04 | -0.5 |
+| N45 | 2023-11-06 | in_market | This Is What Whales Are Betting On Broadcom | Options ; Markets | -0.27 | 0.43 | -0.4 |
+| N46 | 2023-11-07 | in_market | Check Out What Whales Are Doing With AVGO | Options ; Markets | 0.21 | 0.6 | 1.63 |
+| N47 | 2023-11-13 | in_market | Broadcom's Options: A Look at What the Big Money is Thinking | Options ; Markets | -0.42 | -0.34 | -1.03 |
+| N48 | 2023-11-13 | in_market | Performance Comparison: Broadcom And Competitors In Semiconductors & Semiconductor Equipment Industry | News ; Markets ; Trading Ideas | -0.08 | 0.18 | -1.03 |
+| N49 | 2023-11-17 | in_market | Spotlight on Broadcom: Analyzing the Surge in Options Activity | Options ; Markets | 0.93 | 0.87 | 1.8 |
+| N50 | 2023-11-20 | in_market | $100 Invested In This Stock 10 Years Ago Would Be Worth $2,300 Today | News ; Trading Ideas | -0.09 | 0.03 | 1.08 |
+| N51 | 2023-11-21 | in_market | Looking At Broadcom's Recent Unusual Options Activity | Options ; Markets | -0.25 | -0.34 | -1.24 |
+| N52 | 2023-11-22 | pre_market | Broadcom Completes Acquisition Of VMware | M&A | -0.47 | -0.78 | -1.33 |
+| N53 | 2023-11-24 | pre_market | Keybanc Maintains Overweight on Broadcom, Raises Price Target to $1200 | News ; Price Target ; Analyst Ratings | 0.39 | -0.11 | 0.65 |
+| N54 | 2023-11-24 | pre_market | What 17 Analyst Ratings Have To Say About Broadcom | Analyst Ratings | 0.01 | -0.47 | 0.65 |
+| N55 | 2023-11-27 | in_market | In-Depth Analysis: Broadcom Versus Competitors In Semiconductors & Semiconductor Equipment Industry | News ; Markets ; Trading Ideas | -0.73 | -2.9 | -2.77 |
+| N56 | 2023-11-28 | pre_market | Susquehanna Maintains Positive on Broadcom, Raises Price Target to $1100 | News ; Price Target ; Analyst Ratings | -0.46 | -0.61 | -0.42 |
+| N57 | 2023-11-29 | in_market | Broadcom's Options: A Look at What the Big Money is Thinking | Options ; Markets | -0.38 | -0.97 | -0.78 |
+| N58 | 2023-11-29 | post_market | 'Leaked email: Broadcom CEO says the company is reviewing 'strategic alternatives' for two of VMware's businesses' -Business Insider | News | 0.27 | -0.39 | -1.75 |
+| N59 | 2023-11-29 | post_market | Broadcom To Review Two VMware Business Units For 'Strategic Alternatives,' According To Leaked Email | News ; Movers | -0.01 | -0.66 | -1.75 |
+| N60 | 2023-11-30 | pre_market | Broadcom Introduces Industry's First Switch With On-Chip Neural Network | News | -1.73 | -0.68 | -1.75 |
+| N61 | 2023-12-01 | in_market | Check Out What Whales Are Doing With AVGO | Options ; Markets | 0.05 | 0.06 | -0.17 |
+| N62 | 2023-12-04 | pre_market | Oppenheimer Maintains Outperform on Broadcom, Raises Price Target to $1100 | News ; Price Target ; Analyst Ratings | -0.07 | -0.37 | -0.14 |
+| N63 | 2023-12-04 | pre_market | Rosenblatt Reiterates Buy on Broadcom, Maintains $1000 Price Target | News ; Price Target ; Reiteration ; Analyst Ratings | -0.33 | -0.63 | -0.14 |
+| N64 | 2023-12-04 | pre_market | $100 Invested In Broadcom 5 Years Ago Would Be Worth This Much Today | News ; Trading Ideas | -0.14 | -0.52 | -0.14 |
+| N65 | 2023-12-05 | in_market | Check Out What Whales Are Doing With AVGO | Options ; Markets | 0.31 | 0.0 | -1.26 |
+| N66 | 2023-12-06 | pre_market | Earnings Preview: Broadcom | Earnings | -0.63 | -0.89 | -0.52 |
+| N67 | 2023-12-07 | in_market | How Is The Market Feeling About Broadcom? | Short Sellers ; Short Ideas ; Trading Ideas | 0.58 | 0.75 | 1.09 |
+| N68 | 2023-12-07 | post_market | Broadcom Q4 Adj $11.06 Beats $10.98 Estimate, Sales $9.29B Miss $9.41B Estimate | Earnings ; Earnings Beats ; Earnings Misses ; News ; Hot | — | — | — |
+| N69 | 2023-12-07 | post_market | Broadcom Sees FY24 Revenue ~$50B vs $45.76B Est., Sees Adj. EBITDA Of ~60% Of Projected Revenue | News ; Guidance ; Hot | — | — | — |
+
+### Filing Events (4)
+
+Adjusted returns = stock − macro for each window (hourly / session / daily)
+
+| Ref | Date | Sess | Form | Accession | Items | Exhibits | Period | Amend | AdjH% | AdjS% | AdjD% |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| F1 | 2023-09-06 | post_market | 10-Q | 0001730168-23-000077 | — | EX-10.2 | 2023-07-30 | N | -0.08 | -2.01 | -1.43 |
+| F2 | 2023-10-18 | post_market | 8-K | 0001140361-23-048712 | Item 8.01: Other Events || Item 9.01: Financial Statements and Exhibits | EX-99.1 | 2023-10-18 | N | -0.2 | -0.34 | -1.33 |
+| F3 | 2023-10-30 | post_market | 8-K | 0001140361-23-050217 | Item 8.01: Other Events || Item 9.01: Financial Statements and Exhibits | EX-99.1 | 2023-10-30 | N | -0.01 | -0.66 | -0.5 |
+| F4 | 2023-11-22 | pre_market | 8-K | 0001140361-23-054354 | Item 2.01: Completion of Acquisition or Disposition of Assets || Item 2.03: Creation of a Direct Financial Obligation or an Obligation under an Off-Balance Sheet Arrangement of a Registrant || Item 8.01: Other Events || Item 9.01: Financial Statements and Exhibits | EX-99.1 | 2023-11-22 | N | -1.03 | -0.68 | -1.33 |
+
+## 7. Sector Peer Earnings & Reactions
+
+Industry: Semiconductors | Window: 2023-10-23 → 2023-12-07 | Peers: 5
+
+| Ticker | Name | MktCap | Filed | Accession | Period | Sess | DayStk% | AdjH% | SessStk% | AdjD% | Horizon |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| NVDA | NVIDIA CORP | 3,179,780,000,000 | 2023-11-21 | 0001045810-23-000225 | 2023-11-21 | post_market | -2.46 | 3.02 | 3.99 | -2.84 | daily |
+| QCOM | QUALCOMM INC | 185,764,000,000 | 2023-11-01 | 0000804328-23-000054 | 2023-11-01 | post_market | 5.65 | -0.1 | 1.44 | 3.74 | daily |
+| AMD | ADVANCED MICRO DEVICES INC | 174,299,000,000 | 2023-10-31 | 0000002488-23-000192 | 2023-10-31 | post_market | 9.72 | 2.78 | 6.38 | 8.63 | daily |
+| TXN | TEXAS INSTRUMENTS INC | 164,199,000,000 | 2023-10-24 | 0000097476-23-000039 | 2023-10-24 | post_market | -3.45 | 0.01 | 1.77 | -2.11 | daily |
+| ADI | ANALOG DEVICES INC | 101,814,000,000 | 2023-11-21 | 0000006281-23-000200 | 2023-11-21 | pre_market | -1.44 | -2.08 | -1.52 | -1.22 | daily |
+
+### Peer Headlines
+
+| Peer | Time | Title | Channels |
+|---|---|---|---|
+| NVDA | 2023-11-21T16:20:39-05:00 | NVIDIA Q3 Adj $4.02 Beats $3.36 Estimate, Sales $18.12B Beat $16.12B Estimate | Earnings ; Earnings Beats |
+| NVDA | 2023-11-21T16:21:42-05:00 | NVIDIA Reports Q3 Data Center Revenue $14.51B, Up 41% QoQ, Up 279% YoY | Guidance |
+| QCOM | 2023-11-01T02:15:50-04:00 | QUALCOMM Likely To Report Lower Q4 Earnings; Here's A Look At Recent Price Target Changes By The Most Accurate Analysts | Earnings |
+| QCOM | 2023-11-01T16:05:07-04:00 | Qualcomm Sees Q1 Adj. EPS $2.25-$2.45 vs $2.10 Est.; Revenues $9.1B-$9.9B vs $8.67B Est. | Guidance |
+| AMD | 2023-11-01T06:40:30-04:00 | Why AMD Stock Is Pulling Back In Premarket Today | Earnings ; Earnings Beats |
+| AMD | 2023-10-31T16:17:54-04:00 | AMD: 'In the fourth quarter, we expect to see strong growth in Data Center and continued momentum in Client, partially offset by lower sales in the Gaming segment and additional softening of demand in the embedded markets.' | Guidance |
+| TXN | 2023-10-24T16:15:44-04:00 | Texas Instruments Q3 GAAP EPS $1.85, Sales $4.53B Miss $4.57B Estimate | Earnings ; Earnings Beats |
+| TXN | 2023-10-24T16:17:12-04:00 | Texas Instruments Sees Q4 Revenue $3.93B-$4.27B vs $4.49B Est., EPS $1.35-$1.57 | Guidance |
+| ADI | 2023-11-21T07:01:40-05:00 | Analog Devices Q4 Adj EPS $2.01 Beats $2.00 Estimate, Sales $2.72B Beat $2.70B Estimate | Earnings |
+| ADI | 2023-11-21T07:04:38-05:00 | Analog Devices Projects Q1 Revenue of $2.5B, +/- $100M Vs $2.68B Est, Adj EPS of $1.70, +/- $0.10 Vs $1.9 Est | Guidance |
+
+## 8. Macro Environment
+
+Session: post_market | Source: polygon | PIT: 2023-12-07
+SPY 458.04 | VIX 12.97 (last settled close)
+
+### SPY Trend
+
+| Level | Open→PIT | Last60m | Gap | Today | Yest | 5D | 20D | YTD | MA50 | MA200 | Vs50D | Vs200D | VolRatio |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 458.04 | 0.79 | -0.08 | -0.06 | 0.76 | -0.4 | 0.4 | 4.8 | 20.33 | 437.12 | 428.7 | 4.79 | 6.84 | 1.06 |
+
+### Sector Context
+
+| Sector | ETF | LastRet | Label | Open→PIT | 5D | VsSPY5D |
+|---|---|---|---|---|---|---|
+| Technology | XLK | 1.21 | today | — | -0.03 | -0.43 |
+
+### Cross-Asset Indicators
+
+| Indicator | Level | LastRet | Label | 5D | YTD |
+|---|---|---|---|---|---|
+| Volatility (VIXY) | 68.8 | 0.0 | today | -0.35 | -69.64 |
+| Rates long (TLT) | 95.32 | -0.57 | today | 4.11 | -6.05 |
+| Rates short (SHY) | 81.66 | 0.07 | today | 0.01 | 0.52 |
+| Credit (HYG) | 76.01 | 0.17 | today | 0.4 | 3.04 |
+| Small Cap (IWM) | 185.39 | 0.72 | today | 3.19 | 6.91 |
+| Breadth (RSP) | 150.1 | 0.53 | today | 1.21 | 6.36 |
+| Oil (USO) | 65.11 | 0.54 | today | -7.17 | -3.74 |
+| Dollar (UUP) | 29.35 | -0.54 | today | 0.2 | 4.41 |
+| Gold (GLD) | 188.15 | 0.17 | today | -0.32 | 9.99 |
+
+### Macro Catalysts
+
+| Bucket | Date | Time | Title | Channels |
+|---|---|---|---|---|
+| Today | 2023-12-07 | 07:30 | Nov Challenger Job Cuts 45.510K; Prior 36.836K | Macro Economic Events ; News ; Econ #s ; Economics |
+| Today | 2023-12-07 | 08:30 | USA Continuing Jobless Claims 1,861K Vs 1,910K Est.; 1,925K Prior | Macro Economic Events ; News ; Econ #s ; Economics |
+| Today | 2023-12-07 | 08:30 | Initial Jobless Claims 220K vs 222K Est. | Macro Economic Events ; News ; Econ #s ; Economics ; Hot |
+| Today | 2023-12-07 | 10:00 | USA Wholesale Inventories (MoM) For October -0.4% Vs -0.2% Est.; 0.2% Prior | Macro Economic Events ; News ; Econ #s ; Economics |
+| Today | 2023-12-07 | 10:01 | USA Wholesale Trade Sales (MoM) For October -1.3% Vs 2.0% Prior | Macro Economic Events ; News ; Econ #s ; Economics |
+| Yesterday | 2023-12-06 | 08:15 | ADP Nonfarm Employment Change (Nov) +103K vs 130K Est. | News ; Econ #s |
+| Yesterday | 2023-12-06 | 08:30 | USA Trade Balance For October -64.30B Vs -64.20B Est.; -61.20B Prior | Macro Economic Events ; News ; Econ #s ; Economics |
+| Yesterday | 2023-12-06 | 08:30 | Nonfarm Productivity (QoQ) (Q3) 5.2% vs 4.9% Est. | Macro Economic Events ; News ; Econ #s ; Economics |
+| Yesterday | 2023-12-06 | 08:32 | USA Imports $323.00B; $322.70B Prior | Macro Economic Events ; News ; Econ #s ; Economics |
+| Yesterday | 2023-12-06 | 08:32 | US Oct. Exports $258.80B, $261.10B Prior | Macro Economic Events ; News ; Econ #s ; Economics |
+| Earlier | 2023-12-05 | 08:55 | USA Redbook (YoY) 3.0% Vs 6.3% Prior | Macro Economic Events ; News ; Econ #s ; Economics |
+| Earlier | 2023-12-05 | 09:45 | S&P Global Services PMI For November 50.8 Vs 50.8 Est.; 50.6 Prior | Macro Economic Events ; News ; Econ #s ; Economics ; Hot |
+| Earlier | 2023-12-05 | 09:45 | S&P Global Composite PMI For November 50.7 Vs 50.7 Est.; 50.7 Prior | Macro Economic Events ; News ; Econ #s ; Economics |
+
+## 9. Reference
+
+### Filing Metadata
+Accession: 0001730168-23-000093 | Form: 8-K | Items: 2.02, 2.05, 8.01, 9.01
+Sections: 4 | Exhibits: EX-99.1
+
+### 8-K Section Text
+
+**CostsAssociatedwithExitorDisposalActivities**
+Item 2.05 Costs Associated with Exit or Disposal Activities. 
+
+In connection with the completion of the Company ’ s acquisition of VMware, Inc. (“VMware”) on November 22, 2023, the Company expects to take charges of approximately $1.3 billion through fiscal year 2025 for the implementation of cost reduction activities. The Company does not plan to further update these estimates but will provide details of VMware acquisition-related restructuring costs as part of its quarterly financial reporting. 
+
+The statements above include forward-looking statements based on current expectations and beliefs of the Company’s management and current market trends and conditions. These forward-looking statements involve risks and uncertainties that are outside the Company’s control and may cause actual results to differ materially from those contained in forward-looking statements. For information about factors that could cause actual results to differ materially from those described in the forward-looking statements, please refer to the Company’s periodic reports and other filings with the Securities and Exchange Commission, including the risk factors in the Company’s most recent Quarterly Report on Form 10-Q and Annual Report on Form 10-K.
+
+**FinancialStatementsandExhibits**
+Item 9.01 Financial Statements and Exhibits. 
+
+(d) Exhibits 
+
+Exhibit No. Description 
+
+99.1 
+
+Press release issued by Broadcom Inc. dated December 7 , 2023 . 
+
+104 Cover Page Interactive Data File (formatted as Inline XBRL).
+
+**OtherEvents**
+Item 8.01   Other Events. 
+
+On December 7, 2023 , the Company announced that the Board of Directors has declared a quarterly cash dividend on the Company’s common stock of $5.25 per share. This dividend is payable on December 29, 2023 to common stockholders of record at the close of business (5:00 p.m., Eastern Time) on December 20, 2023.
+
+**ResultsofOperationsandFinancialCondition**
+Item 2.02 Results of Operations and Financial Condition. 
+
+On December 7, 2023, Broadcom Inc. (the “Company”) issued a press release announcing its unaudited financial results for the fourth quarter and fiscal year ended October 29, 2023. 
+
+A copy of the press release is attached hereto as Exhibit 99.1 and is incorporated herein by reference. 
+
+The information in Item 2.02 of this Report and the press release attached hereto as Exhibit 99.1 are furnished and shall not be treated as filed for purposes of the Securities Exchange Act of 1934, as amended.
+
+## Prior Lessons (from learner)
+
+### Ticker Lessons (1 most recent quarters)
+
+**Q3_FY2023** — prediction correct (short), actual -5.38%, driver: ex_ai_segment_deterioration
+  - Predictor: When a stock belongs to an established same-sector sell-the-news cluster (≥3 peers within ~8 weeks post-earnings at -5 to -8% on comparable beat-with-soft-guide setups), anchor the magnitude range on the peer median/lower-quartile rather than the dollar size of the headline guide delta.
+  - Predictor: A 'headline beat + slight guide miss' is a trap when segment composition shows a long-running growth segment inflecting negative YoY for the first time — weight segment mix changes and prior-trend-breaks heavier than the aggregate guide delta when sizing downside.
+  - Predictor: Extend the expected downside range when the stock has rallied ≥8% in the 2 weeks into print AND a peer sell-the-news precedent exists — extended positioning compresses the upside and expands the tail on any blemish, so confidence in the direction should translate into a wider, lower range (not just a wider range).
+  - Data: Fetch the earnings call transcript (or a rapid Q&A readout) before predicting, not just the press release / 8-K exhibit. Management refusal-to-guide phrasing, customer-concentration admissions, and regulatory-approval deflections are the qualitative amplifiers that explain the gap between headline-driven moves and actual reactions.
+  - Data: Weight peer-cluster post-earnings returns (same industry, similar print shape, prior 6-8 weeks) as a primary magnitude anchor — bucket them into the context bundle directly alongside the guide math, not as a secondary 'pattern' note.
+  - Data: Pull segment-level YoY deltas for the guided quarter as a stand-alone structured signal. Flag any segment that (a) represents >10% of revenue AND (b) is guided negative YoY for the first time in ≥4 quarters as a high-impact inflection — this is the structural information the press release hides inside prose.
+  - Why: The press release headline (beat + slight guide miss) understated the actual information content of the event. The call exposed that ex-AI semi revenue had flatlined with broadband turning outright negative for the first time in over 2 years, and management declined to reassure on forward stabilization or VMware regulatory path. With the stock up ~11% in 2 weeks and a flat-to-positive semiconductor tape on Sept 1, positioning unwound to match the magnitude of the narrative shift, not the magnitude of the headline miss.
+
+
+### Sector Lessons (1 entries)
+
+- [sector:Technology] (AVGO) In the 2023+ hyperscaler-AI-capex regime, semiconductor prints are graded on the composition of forward revenue, not the headline guide delta. When AI-exposed lines are guided strong but ex-AI semis (broadband/storage/wireless/industrial) are flat-to-negative YoY, the AI narrative is already priced and the marginal information is the ex-AI deterioration — expect multiple compression on names where AI does not yet dominate the mix.
+
+### Macro Lessons (1 entries)
+
+- [macro] (AVGO) When a single-stock drawdown of ≥5% occurs on a flat-to-positive sector tape with zero sell-side downgrades and broadly raised price targets (as on AVGO Sept 1, 2023), the move is positioning-driven (crowded-long unwind / profit-taking on a pre-print run-up), not a fundamental re-rating — slow or bullish sell-side reaction is NOT a leading indicator of next-session mean-reversion support and should not be used to narrow downside ranges.
+
+### Cross-Ticker Lessons (1 entries)
+
+- [cross:AVGO,QCOM,AMD,TXN] (AVGO) These four large-cap semis formed a summer-2023 sell-the-news cluster (all -5 to -8% day-of-print on beats with incrementally soft guides). When predicting any of the four going forward, explicitly consult the other three's most recent prints in the same earnings cycle as a magnitude anchor — the cluster grades each name against the same AI-vs-ex-AI composition template.
