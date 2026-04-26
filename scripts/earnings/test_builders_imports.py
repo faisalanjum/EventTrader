@@ -43,7 +43,12 @@ for path in reversed(LEGACY_PATHS):
 
 # {old_module_bare: (new_module_qualified, [symbols])}
 # Populated incrementally by Stages 3, 5, 7, 9, 11, 13.
-MODULE_PAIRS: dict[str, tuple[str, list[str]]] = {}
+MODULE_PAIRS: dict[str, tuple[str, list[str]]] = {
+    "peer_earnings_snapshot": (
+        "scripts.earnings.builders.peer_earnings_snapshot",
+        ["build_peer_earnings_snapshot", "render_text", "main", "_parse_dt_for_pit"],
+    ),
+}
 
 
 def _flatten_pairs():
