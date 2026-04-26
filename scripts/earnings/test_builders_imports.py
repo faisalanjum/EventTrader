@@ -68,6 +68,19 @@ MODULE_PAIRS: dict[str, tuple[str, list[str]]] = {
          "run_warmup", "run_transcript", "run_mda", "run_8k", "main",
          "_parse_dt_for_pit", "_run_v2_regression_tests"],
     ),
+    "builder_adapters": (
+        "scripts.earnings.builders.adapters",
+        [
+            # Public adapter API (called by orchestrator + debug tools)
+            "build_8k_packet", "build_guidance_history", "build_inter_quarter_context",
+            "build_peer_earnings_snapshot", "build_macro_snapshot",
+            "build_consensus", "build_prior_financials",
+            # Private adapter helpers — re-exported via globals().update() shim.
+            # Lock in identity so future code can rely on the contract.
+            "_SuppressStdout", "_enrich_packet", "_write_enriched",
+            "_ensure_dir", "_derive_mode", "_now_iso",
+        ],
+    ),
 }
 
 
