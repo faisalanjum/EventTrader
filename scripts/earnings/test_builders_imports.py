@@ -56,6 +56,11 @@ MODULE_PAIRS: dict[str, tuple[str, list[str]]] = {
         "scripts.earnings.builders.consensus",
         ["build_consensus", "main", "_parse_iso", "_normalize_session"],
     ),
+    "build_prior_financials": (
+        "scripts.earnings.builders.prior_financials",
+        ["build_prior_financials", "classify_period", "is_target_period",
+         "dedupe_facts", "main", "_parse_value"],
+    ),
 }
 
 
@@ -159,6 +164,31 @@ def test_classifier_singleton_attribute_access_across_paths():
     assert a._classifier is b._classifier is c._classifier is cls, (
         f"shim attribute stale: a={id(a._classifier)} "
         f"b={id(b._classifier)} c={id(c._classifier)} cls={id(cls)}"
+    )
+
+
+def test_xbrl_exact_splits_lazy_import_works():
+    """REGRESSION GUARD for build_prior_financials's lazy outbound import.
+
+    `scripts/earnings/builders/prior_financials.py` line ~1593 (was line 1593 in
+    OLD) does:
+        from xbrl_exact_splits import extract_segment_splits, build_revenue_splits_section
+    inside `_build_revenue_splits_section()`. This is a LAZY import that fires
+    only when the builder is called — silent failure mode if `ensure_legacy_paths()`
+    didn't put EARNINGS_DIR on sys.path correctly.
+
+    The xbrl_exact_splits module STAYS at scripts/earnings/xbrl_exact_splits.py
+    (NOT moved into builders/). Stage 9 promotes the lazy import to a tested
+    invariant: must resolve to the EARNINGS_DIR file with the expected functions.
+    """
+    import xbrl_exact_splits
+    assert hasattr(xbrl_exact_splits, "extract_segment_splits"), \
+        "xbrl_exact_splits missing extract_segment_splits"
+    assert hasattr(xbrl_exact_splits, "build_revenue_splits_section"), \
+        "xbrl_exact_splits missing build_revenue_splits_section"
+    # Must resolve to scripts/earnings/, NOT the canonical builders/ subdir.
+    assert "scripts/earnings/xbrl_exact_splits.py" in xbrl_exact_splits.__file__, (
+        f"xbrl_exact_splits resolved to wrong location: {xbrl_exact_splits.__file__}"
     )
 
 
