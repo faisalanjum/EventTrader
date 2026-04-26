@@ -23,7 +23,6 @@ import json
 import os
 import sys
 from datetime import datetime, timezone
-from pathlib import Path
 
 # ── Path setup ──────────────────────────────────────────────────────────
 from ._paths import ensure_legacy_paths
