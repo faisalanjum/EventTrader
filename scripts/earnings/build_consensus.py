@@ -43,6 +43,36 @@ for _name in dir(_impl):
 __all__ = [_name for _name in dir(_impl) if not _name.startswith("_")]
 del _name
 
+# Step 3: SINGLETON-SHIM FIX (Stage 7.1).
+# Mutable module-level globals (e.g. lazy singletons like _classifier) are
+# captured by Step 1's eager-copy at SHIM-IMPORT time. When the canonical
+# module's `global _classifier` mutates the cell later, the shim's snapshot
+# stays stale (None). Function calls via _get_classifier() are identity-safe
+# (the function itself reads canonical's `global _classifier`), but DIRECT
+# attribute access (`build_consensus._classifier`) sees the stale snapshot.
+#
+# Fix: delete known mutable globals from the shim's __dict__, then install
+# a PEP 562 module __getattr__ that forwards to canonical for any name
+# missing from shim's __dict__. The forward fires for both `module.X` and
+# `from module import X` lookups (PEP 562). This makes mutable accesses
+# always reflect canonical's current state.
+#
+# Catalog of known mutable module-level globals in scripts.earnings.builders.consensus:
+#   - _classifier  (lazy MarketSessionClassifier singleton; mutated by _get_classifier)
+_MUTABLE_GLOBALS = ("_classifier",)
+for _g in _MUTABLE_GLOBALS:
+    if _g in globals():
+        del globals()[_g]
+del _g
+
+
+def __getattr__(name):
+    """PEP 562 module __getattr__ — forwards to canonical _impl for any name
+    not in shim's __dict__. Serves both `<shim>.X` and `from <shim> import X`.
+    Required for mutable-global forwarding (see Step 3 comment above)."""
+    return getattr(_impl, name)
+
+
 # CLI delegation — keep `python3 scripts/earnings/build_consensus.py ...` working.
 if __name__ == "__main__":
     _impl.main()

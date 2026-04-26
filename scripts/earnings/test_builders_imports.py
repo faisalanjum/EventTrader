@@ -128,3 +128,35 @@ def test_classifier_singleton_across_paths():
     # And the canonical module's _classifier global must point at the same
     # object (it's the cell that _get_classifier mutates via `global _classifier`).
     assert cls_a is c._classifier, "canonical module's _classifier mutation not visible from shim"
+
+
+def test_classifier_singleton_attribute_access_across_paths():
+    """Stage 7.1 REGRESSION GUARD for the shim mutable-snapshot bug.
+
+    test_classifier_singleton_across_paths above proves the SINGLETON returned
+    by `_get_classifier()` is identical across paths. This test goes one step
+    further and proves DIRECT ATTRIBUTE ACCESS to `_classifier` also reflects
+    canonical's current state across all paths.
+
+    The bug fixed in Stage 7.1: the shim's eager-copy of `_classifier` at
+    shim-import time captured the value `None`. After `_get_classifier()`
+    mutated canonical's `_classifier`, the shim's `_classifier` snapshot
+    stayed None — `build_consensus._classifier` and
+    `scripts.earnings.build_consensus._classifier` returned None even though
+    `scripts.earnings.builders.consensus._classifier` was the live instance.
+
+    Fix: shim's PEP 562 `__getattr__` forwards `_classifier` (and any other
+    name removed from shim globals) to canonical at access time. This test
+    asserts the contract holds — direct attribute access yields the canonical
+    singleton, not a stale snapshot.
+    """
+    import build_consensus as a
+    import scripts.earnings.build_consensus as b
+    import scripts.earnings.builders.consensus as c
+    # Force initialization through any path
+    cls = c._get_classifier()
+    # Direct attribute access must return the canonical singleton from EVERY path.
+    assert a._classifier is b._classifier is c._classifier is cls, (
+        f"shim attribute stale: a={id(a._classifier)} "
+        f"b={id(b._classifier)} c={id(c._classifier)} cls={id(cls)}"
+    )
