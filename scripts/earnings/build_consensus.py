@@ -73,6 +73,15 @@ def __getattr__(name):
     return getattr(_impl, name)
 
 
+def __dir__():
+    """PEP 562 module __dir__ — returns the union of shim's local names AND
+    canonical _impl's names. Without this, dir() introspection would not list
+    attributes served by the __getattr__ forward (e.g. deleted mutable globals
+    like _classifier), contradicting hasattr() and diverging from canonical's
+    introspection surface. Stage 7.2 fix."""
+    return sorted(set(globals()) | set(dir(_impl)))
+
+
 # CLI delegation — keep `python3 scripts/earnings/build_consensus.py ...` working.
 if __name__ == "__main__":
     _impl.main()

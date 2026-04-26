@@ -160,3 +160,34 @@ def test_classifier_singleton_attribute_access_across_paths():
         f"shim attribute stale: a={id(a._classifier)} "
         f"b={id(b._classifier)} c={id(c._classifier)} cls={id(cls)}"
     )
+
+
+def test_classifier_appears_in_dir_across_paths():
+    """Stage 7.2 REGRESSION GUARD for shim __dir__ completeness.
+
+    The Stage 7.1 fix DELETED `_classifier` from the shim's __dict__ so
+    PEP 562 `__getattr__` could forward access to canonical. That fixed
+    `hasattr()` and direct attribute access — but it also removed
+    `_classifier` from `dir(shim)` because PEP 562 `__getattr__` does NOT
+    fire on `dir()` (which lists __dict__, not attribute lookups).
+
+    Result of the gap (pre-Stage-7.2): `hasattr(build_consensus, "_classifier")`
+    returned True, but `"_classifier" in dir(build_consensus)` returned False.
+    Diverged from canonical (where both are True). Code that introspects via
+    dir() (autocomplete, IDEs, sphinx, dir-driven tests) would see a smaller
+    surface than canonical.
+
+    Fix: shim now defines PEP 562 `__dir__()` returning the union of shim's
+    own globals and `dir(_impl)`. This test asserts `_classifier in dir(mod)`
+    for all three import paths.
+    """
+    import build_consensus as a
+    import scripts.earnings.build_consensus as b
+    import scripts.earnings.builders.consensus as c
+    for mod, label in [(a, "build_consensus (bare)"),
+                       (b, "scripts.earnings.build_consensus (qualified shim)"),
+                       (c, "scripts.earnings.builders.consensus (canonical)")]:
+        assert "_classifier" in dir(mod), (
+            f"{label}: '_classifier' missing from dir() — "
+            f"shim __dir__ forward broken? dir-len={len(dir(mod))}"
+        )
