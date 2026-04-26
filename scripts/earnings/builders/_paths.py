@@ -30,6 +30,15 @@ def ensure_legacy_paths() -> None:
     This function reproduces that precedence exactly while being idempotent
     (calling it twice does not duplicate entries) and deterministic under
     pytest, direct CLI execution, python -m, and old sys.path-mutating scripts.
+
+    SHADOW FIX (utils): the precedence above puts EARNINGS_DIR ahead of REPO_ROOT.
+    `scripts/earnings/utils.py` exists as a single FILE; it would shadow the
+    `utils/` PACKAGE at REPO_ROOT and cause `from utils.market_session import ...`
+    (used by build_consensus._get_classifier and warmup_cache.build_inter_quarter_context)
+    to fail with `ModuleNotFoundError: 'utils' is not a package`. We surgically
+    pin sys.modules['utils'] to the repo-root package via importlib so the lazy
+    builder import resolves correctly regardless of sys.path order. Verified:
+    `utils` is the ONLY name conflict between EARNINGS_DIR and REPO_ROOT.
     """
     desired = (SKILL_SCRIPTS_DIR, EARNINGS_DIR, SCRIPTS_DIR, REPO_ROOT)
     for path in desired:
@@ -38,6 +47,21 @@ def ensure_legacy_paths() -> None:
             sys.path.remove(s)
     for path in reversed(desired):
         sys.path.insert(0, str(path))
+
+    # Surgical utils-shadow fix (see docstring above)
+    if "utils" not in sys.modules or not hasattr(sys.modules["utils"], "__path__"):
+        import importlib.util as _importlib_util
+        _utils_init = REPO_ROOT / "utils" / "__init__.py"
+        if _utils_init.exists():
+            _spec = _importlib_util.spec_from_file_location(
+                "utils",
+                str(_utils_init),
+                submodule_search_locations=[str(REPO_ROOT / "utils")],
+            )
+            if _spec is not None and _spec.loader is not None:
+                _mod = _importlib_util.module_from_spec(_spec)
+                sys.modules["utils"] = _mod
+                _spec.loader.exec_module(_mod)
 
 
 def skill_script(name: str) -> str:

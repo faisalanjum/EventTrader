@@ -102,37 +102,91 @@ def test_ensure_legacy_paths_precedence_order():
         sys.path[:] = saved
 
 
-def test_lazy_transitive_imports_resolve():
-    """Smoke-test that every lazy/transitive import inside builders RESOLVES
-    after ensure_legacy_paths() runs.
+def _run_in_fresh_subprocess(code: str) -> tuple[int, str, str]:
+    """Helper: run `code` in a fresh Python subprocess so sys.modules + sys.path
+    state are pristine. Returns (returncode, stdout, stderr)."""
+    import subprocess
+    res = subprocess.run(
+        [sys.executable, "-c", code],
+        capture_output=True, text=True, timeout=30,
+        # PYTHONPATH only — explicit value AFTER **environ to override.
+        env={**os.environ, "PYTHONPATH": str(_paths.REPO_ROOT)},
+    )
+    return res.returncode, res.stdout, res.stderr
 
-    These imports fire only when builder functions are CALLED (not at module
-    import time), so they would otherwise pass the test suite while silently
-    breaking the real code path. Forcing them at the path-helper layer means
-    Stage 1 fails fast if ensure_legacy_paths() is wrong.
+
+def test_utils_market_session_resolves_after_ensure_legacy_paths():
+    """REGRESSION GUARD for the utils-shadow bug.
+
+    `scripts/earnings/utils.py` is a single-file utility module that, under the
+    legacy precedence order (SKILL > EARNINGS > SCRIPTS > REPO), would shadow
+    the `utils/` PACKAGE at REPO_ROOT. Without the surgical pin in
+    `_paths.ensure_legacy_paths()`, the lazy import
+        `from utils.market_session import MarketSessionClassifier`
+    inside build_consensus._get_classifier() and warmup_cache.build_inter_quarter_context()
+    would fail at runtime with `ModuleNotFoundError: 'utils' is not a package`.
+
+    This test runs in a FRESH subprocess so sys.modules is pristine — running
+    in-process risks false-pass because earlier pytest collection imports may
+    have already cached `utils` as the package via cwd-precedence. The test
+    also runs `from utils.market_session import` IMMEDIATELY after
+    `ensure_legacy_paths()` (no other path-mutating imports between) to ensure
+    the fix works in the most adversarial ordering.
+    """
+    code = (
+        "import sys\n"
+        "from scripts.earnings.builders import _paths\n"
+        "_paths.ensure_legacy_paths()\n"
+        # IMMEDIATE — no intervening imports
+        "from utils.market_session import MarketSessionClassifier\n"
+        "import utils\n"
+        # utils MUST be the package (has __path__), NOT scripts/earnings/utils.py (a single file)
+        "assert hasattr(utils, '__path__'), f'utils not a package: {utils.__file__}'\n"
+        "assert utils.__file__.endswith('utils/__init__.py'), \\\n"
+        "    f'utils.__file__ wrong (expected utils/__init__.py, got {utils.__file__})'\n"
+        "assert 'scripts/earnings/utils.py' not in utils.__file__, \\\n"
+        "    f'utils accidentally resolved to the shadowing file: {utils.__file__}'\n"
+        "print('utils.__file__ =', utils.__file__)\n"
+        "print('OK')\n"
+    )
+    rc, stdout, stderr = _run_in_fresh_subprocess(code)
+    assert rc == 0, f"failed:\nSTDOUT={stdout}\nSTDERR={stderr}"
+    assert "OK" in stdout, f"missing OK marker:\n{stdout}"
+
+
+def test_all_lazy_transitive_imports_resolve_in_fresh_subprocess():
+    """Every lazy/transitive import inside builders MUST resolve after
+    `ensure_legacy_paths()` in a FRESH subprocess (pristine sys.modules).
+
+    The previous in-process version of this test could false-pass because
+    earlier pytest collection imports mutated sys.modules. The fresh
+    subprocess is the only way to verify behavior under the most adversarial
+    ordering — what a real builder call would face on first cold dispatch.
 
     Catalog (verified by reconnaissance):
       - fiscal_math                       (consensus, prior_financials)
       - sec_quarter_cache_loader          (consensus, prior_financials)
       - xbrl_exact_splits                 (prior_financials lazy at line 1593)
       - guidance_ids                      (warmup_cache lazy at line 135)
-      - utils.market_session              (consensus, warmup_cache)
+      - utils.market_session              (consensus, warmup_cache) — see dedicated test above
       - neograph.Neo4jConnection          (all builders that touch Neo4j)
       - av_client                         (consensus top-level bare import)
       - pit_time                          (skill-scripts dir, used by pit_fetch)
     """
-    saved = list(sys.path)
-    try:
-        _paths.ensure_legacy_paths()
-        # Each import below MUST succeed. If any fails, ensure_legacy_paths()
-        # is missing a path or precedence is wrong.
-        import fiscal_math  # noqa: F401
-        import sec_quarter_cache_loader  # noqa: F401
-        import xbrl_exact_splits  # noqa: F401
-        import guidance_ids  # noqa: F401
-        from utils.market_session import MarketSessionClassifier  # noqa: F401
-        from neograph.Neo4jConnection import get_manager  # noqa: F401
-        import av_client  # noqa: F401
-        import pit_time  # noqa: F401
-    finally:
-        sys.path[:] = saved
+    code = (
+        "from scripts.earnings.builders import _paths\n"
+        "_paths.ensure_legacy_paths()\n"
+        # All imports MUST succeed; if any fails, ensure_legacy_paths() is wrong.
+        "import fiscal_math\n"
+        "import sec_quarter_cache_loader\n"
+        "import xbrl_exact_splits\n"
+        "import guidance_ids\n"
+        "from utils.market_session import MarketSessionClassifier\n"
+        "from neograph.Neo4jConnection import get_manager\n"
+        "import av_client\n"
+        "import pit_time\n"
+        "print('ALL_RESOLVE')\n"
+    )
+    rc, stdout, stderr = _run_in_fresh_subprocess(code)
+    assert rc == 0, f"failed:\nSTDOUT={stdout}\nSTDERR={stderr}"
+    assert "ALL_RESOLVE" in stdout
