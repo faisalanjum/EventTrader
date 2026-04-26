@@ -52,6 +52,10 @@ MODULE_PAIRS: dict[str, tuple[str, list[str]]] = {
         "scripts.earnings.builders.macro_snapshot",
         ["build_macro_snapshot", "render_text", "main"],
     ),
+    "build_consensus": (
+        "scripts.earnings.builders.consensus",
+        ["build_consensus", "main", "_parse_iso", "_normalize_session"],
+    ),
 }
 
 
@@ -89,3 +93,38 @@ def test_old_qualified_equals_new_qualified(old_bare, new_qual, symbol):
     assert getattr(old_mod, symbol) is getattr(new_mod, symbol), (
         f"IDENTITY BROKEN: {old_qual}.{symbol} is not {new_qual}.{symbol}"
     )
+
+
+def test_classifier_singleton_across_paths():
+    """build_consensus._classifier must be one cell across all import paths.
+    If this fails, the module loaded twice and the lazy singleton split.
+
+    Three import paths exist for build_consensus after Stage 7:
+      1. `import build_consensus`                     (bare, via OLD-path shim)
+      2. `import scripts.earnings.build_consensus`    (qualified, via OLD-path shim)
+      3. `import scripts.earnings.builders.consensus` (canonical)
+
+    All three MUST dispatch to the canonical _get_classifier() and return the
+    SAME MarketSessionClassifier instance. The shim's globals().update() pins
+    `_get_classifier` to the canonical function object; calling it from any
+    path mutates the canonical module's `global _classifier` — a single cell.
+
+    Without this guarantee, callers via different paths could see different
+    classifier instances and inconsistent behavior. No external code imports
+    `_classifier` directly today (verified by grep), but this test locks the
+    invariant for the future.
+    """
+    import build_consensus as a
+    import scripts.earnings.build_consensus as b
+    import scripts.earnings.builders.consensus as c
+    cls_a = a._get_classifier()
+    cls_b = b._get_classifier()
+    cls_c = c._get_classifier()
+    # All three import paths must dispatch to the canonical _get_classifier
+    # AND return the same singleton object.
+    assert cls_a is cls_b is cls_c, (
+        f"singleton split: a={id(cls_a)}, b={id(cls_b)}, c={id(cls_c)}"
+    )
+    # And the canonical module's _classifier global must point at the same
+    # object (it's the cell that _get_classifier mutates via `global _classifier`).
+    assert cls_a is c._classifier, "canonical module's _classifier mutation not visible from shim"
