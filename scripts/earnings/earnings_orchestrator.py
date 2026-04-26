@@ -29,7 +29,7 @@ sys.path.insert(0, str(_PROJECT_ROOT))
 sys.path.insert(0, str(_PROJECT_ROOT / "scripts/earnings"))
 sys.path.insert(0, str(_PROJECT_ROOT / ".claude/skills/earnings-orchestrator/scripts"))
 
-from builder_adapters import (
+from scripts.earnings.builders import (
     build_8k_packet,
     build_guidance_history,
     build_inter_quarter_context,

@@ -9,10 +9,14 @@ Default = historical PIT (mirrors orchestrator --predict). --live bypasses PIT.
 """
 import sys
 from pathlib import Path
-sys.path.insert(0, str(Path(__file__).parent))
+
+# parents[2] = repo root; parents[1] = scripts/; parents[0] = scripts/earnings/
+_PROJECT_ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(_PROJECT_ROOT))                          # for `scripts.earnings.builders` qualified imports
+sys.path.insert(0, str(_PROJECT_ROOT / "scripts/earnings"))     # for bare `quarter_identity`, `earnings_orchestrator` etc.
 
 from quarter_identity import resolve_quarter_info
-from builder_adapters import (
+from scripts.earnings.builders import (
     build_consensus, build_8k_packet, build_guidance_history,
     build_prior_financials, build_inter_quarter_context,
     build_peer_earnings_snapshot, build_macro_snapshot,
