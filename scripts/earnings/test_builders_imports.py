@@ -272,3 +272,134 @@ def test_classifier_appears_in_dir_across_paths():
             f"{label}: '_classifier' missing from dir() — "
             f"shim __dir__ forward broken? dir-len={len(dir(mod))}"
         )
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Stage 15 — Permanent identity-test guard finalization
+# ─────────────────────────────────────────────────────────────────────────────
+
+
+def test_builders_package_public_surface():
+    """The scripts.earnings.builders package exposes the 7 adapter functions."""
+    import scripts.earnings.builders as pkg
+    expected = {
+        "build_8k_packet", "build_guidance_history", "build_inter_quarter_context",
+        "build_peer_earnings_snapshot", "build_macro_snapshot",
+        "build_consensus", "build_prior_financials",
+    }
+    for name in expected:
+        assert hasattr(pkg, name), f"package surface missing {name}"
+    assert set(pkg.__all__) >= expected, f"__all__ missing entries: {expected - set(pkg.__all__)}"
+
+
+def test_package_root_re_exports_identity_with_adapters_submodule():
+    """Stage 14 makes orchestrator do `from scripts.earnings.builders import (...)`,
+    which resolves through scripts.earnings.builders/__init__.py — the package
+    root. The package's __init__ does `from .adapters import (...)`, so the 7
+    adapter functions must be the SAME objects when accessed via the package
+    root vs the adapters submodule.
+
+    If __init__.py ever switches to wrap or copy the functions (e.g., via a
+    decorator or assignment from a different module), identity breaks here.
+    """
+    import scripts.earnings.builders as pkg
+    import scripts.earnings.builders.adapters as adapters_mod
+    for name in ("build_8k_packet", "build_guidance_history",
+                 "build_inter_quarter_context", "build_peer_earnings_snapshot",
+                 "build_macro_snapshot", "build_consensus",
+                 "build_prior_financials"):
+        pkg_obj = getattr(pkg, name)
+        adapter_obj = getattr(adapters_mod, name)
+        assert pkg_obj is adapter_obj, (
+            f"package root scripts.earnings.builders.{name} ({id(pkg_obj)}) "
+            f"is NOT the same object as scripts.earnings.builders.adapters.{name} "
+            f"({id(adapter_obj)}) — orchestrator's canonical import would "
+            f"diverge from direct submodule access"
+        )
+
+
+def test_module_pairs_completeness():
+    """MODULE_PAIRS must cover every public + private symbol from EXPECTED_SURFACE
+    (defined in test_builders_surface.py).
+
+    Excludes `main` (covered by CLI smoke, not identity) — the rest must all
+    have an identity row. If a future EXPECTED_SURFACE addition isn't paired
+    here, this test fires immediately.
+    """
+    from test_builders_surface import EXPECTED_SURFACE
+    covered = {
+        (mod, sym)
+        for mod, (_, syms) in MODULE_PAIRS.items()
+        for sym in syms
+    }
+    missing = []
+    for modname, spec in EXPECTED_SURFACE.items():
+        for sym in spec["public"] + spec["private_exports"]:
+            if (modname, sym) not in covered:
+                missing.append(f"{modname}.{sym}")
+    # main is checked by CLI smoke, not identity — exclude
+    missing = [m for m in missing if not m.endswith(".main")]
+    assert not missing, f"MODULE_PAIRS missing rows: {missing}"
+
+
+def test_concurrent_imports_preserve_identity():
+    """Smoke-test concurrent imports of old bare, old qualified, and new canonical
+    paths.
+
+    Python's import lock should make this safe by language guarantee, but the
+    orchestrator's ThreadPoolExecutor spawns ALL 7 builders in parallel — if
+    any builder's import has a side-effect that races with another, it would
+    surface here. Strategy: spawn N threads each importing a different module
+    name; after join, identity tests still hold.
+    """
+    import threading
+    import importlib
+
+    mods_to_import = [
+        # bare + qualified + canonical for each builder, plus adapters
+        "build_consensus", "scripts.earnings.build_consensus",
+        "scripts.earnings.builders.consensus",
+        "build_prior_financials", "scripts.earnings.build_prior_financials",
+        "scripts.earnings.builders.prior_financials",
+        "macro_snapshot", "scripts.earnings.macro_snapshot",
+        "scripts.earnings.builders.macro_snapshot",
+        "peer_earnings_snapshot", "scripts.earnings.peer_earnings_snapshot",
+        "scripts.earnings.builders.peer_earnings_snapshot",
+        "warmup_cache",
+        "scripts.earnings.builders.warmup_cache",
+        "builder_adapters", "scripts.earnings.builder_adapters",
+        "scripts.earnings.builders.adapters",
+        "scripts.earnings.builders",
+    ]
+    errors: list = []
+
+    def _worker(name: str):
+        try:
+            importlib.import_module(name)
+        except Exception as e:
+            errors.append((name, e))
+
+    threads = [threading.Thread(target=_worker, args=(name,)) for name in mods_to_import]
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join(timeout=10)
+    assert not errors, f"Concurrent imports raised: {errors}"
+
+    # After concurrent imports, identity invariant must STILL hold.
+    # Pick one representative symbol per builder + the adapter facade.
+    samples = [
+        ("build_consensus", "scripts.earnings.builders.consensus", "build_consensus"),
+        ("build_prior_financials", "scripts.earnings.builders.prior_financials", "_parse_value"),
+        ("macro_snapshot", "scripts.earnings.builders.macro_snapshot", "build_macro_snapshot"),
+        ("peer_earnings_snapshot", "scripts.earnings.builders.peer_earnings_snapshot", "_parse_dt_for_pit"),
+        ("warmup_cache", "scripts.earnings.builders.warmup_cache", "build_8k_packet"),
+        ("builder_adapters", "scripts.earnings.builders.adapters", "build_consensus"),
+    ]
+    for old_bare, new_qual, sym in samples:
+        old_obj = getattr(importlib.import_module(old_bare), sym)
+        new_obj = getattr(importlib.import_module(new_qual), sym)
+        assert old_obj is new_obj, (
+            f"IDENTITY BROKEN after concurrent imports: "
+            f"{old_bare}.{sym} != {new_qual}.{sym}"
+        )
