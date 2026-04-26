@@ -48,6 +48,10 @@ MODULE_PAIRS: dict[str, tuple[str, list[str]]] = {
         "scripts.earnings.builders.peer_earnings_snapshot",
         ["build_peer_earnings_snapshot", "render_text", "main", "_parse_dt_for_pit"],
     ),
+    "macro_snapshot": (
+        "scripts.earnings.builders.macro_snapshot",
+        ["build_macro_snapshot", "render_text", "main"],
+    ),
 }
 
 
