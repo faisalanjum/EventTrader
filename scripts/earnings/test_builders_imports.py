@@ -61,6 +61,13 @@ MODULE_PAIRS: dict[str, tuple[str, list[str]]] = {
         ["build_prior_financials", "classify_period", "is_target_period",
          "dedupe_facts", "main", "_parse_value"],
     ),
+    "warmup_cache": (
+        "scripts.earnings.builders.warmup_cache",
+        ["build_8k_packet", "build_guidance_history", "build_inter_quarter_context",
+         "render_guidance_text", "render_inter_quarter_text",
+         "run_warmup", "run_transcript", "run_mda", "run_8k", "main",
+         "_parse_dt_for_pit", "_run_v2_regression_tests"],
+    ),
 }
 
 
@@ -164,6 +171,37 @@ def test_classifier_singleton_attribute_access_across_paths():
     assert a._classifier is b._classifier is c._classifier is cls, (
         f"shim attribute stale: a={id(a._classifier)} "
         f"b={id(b._classifier)} c={id(c._classifier)} cls={id(cls)}"
+    )
+
+
+def test_parse_dt_for_pit_disambiguation():
+    """Stage 11 SHADOW GUARD for the cross-module same-name collision.
+
+    `_parse_dt_for_pit` exists in BOTH warmup_cache AND peer_earnings_snapshot
+    as DIFFERENT functions. The shim mechanism preserves identity within each
+    module's import paths, but must NOT cross-wire them.
+
+    After Stage 11, all 4 paths must satisfy:
+      - within-module: bare ≡ canonical for warmup_cache._parse_dt_for_pit
+      - within-module: bare ≡ canonical for peer_earnings_snapshot._parse_dt_for_pit
+      - cross-module distinctness: warmup_cache._parse_dt_for_pit IS NOT peer_earnings_snapshot._parse_dt_for_pit
+
+    If the shim accidentally aliased one to the other (e.g. if MODULE_PAIRS
+    used the same `new_qual` for both), this test fires.
+    """
+    import warmup_cache, peer_earnings_snapshot
+    import scripts.earnings.builders.warmup_cache as wc_new
+    import scripts.earnings.builders.peer_earnings_snapshot as pe_new
+    # Within-module identity (already covered by parametrized identity tests, but assert here too):
+    assert warmup_cache._parse_dt_for_pit is wc_new._parse_dt_for_pit, \
+        "warmup_cache shim diverged from canonical for _parse_dt_for_pit"
+    assert peer_earnings_snapshot._parse_dt_for_pit is pe_new._parse_dt_for_pit, \
+        "peer_earnings_snapshot shim diverged from canonical for _parse_dt_for_pit"
+    # Cross-module DISTINCTNESS — same name, different functions:
+    assert warmup_cache._parse_dt_for_pit is not peer_earnings_snapshot._parse_dt_for_pit, (
+        f"shadow violation: warmup_cache._parse_dt_for_pit ({id(warmup_cache._parse_dt_for_pit)}) "
+        f"IS the SAME object as peer_earnings_snapshot._parse_dt_for_pit "
+        f"({id(peer_earnings_snapshot._parse_dt_for_pit)}) — they should be DIFFERENT functions"
     )
 
 
