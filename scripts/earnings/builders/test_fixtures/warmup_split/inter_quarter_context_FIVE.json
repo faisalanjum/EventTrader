@@ -1,0 +1,3198 @@
+{
+  "context_cutoff_reason": null,
+  "context_cutoff_ts": "2025-08-27T16:14:48-04:00",
+  "cutoff_day": "2025-08-27",
+  "days": [
+    {
+      "adj_return": -0.76,
+      "boundary_role": "prev_boundary",
+      "date": "2025-06-04",
+      "events": [
+        {
+          "authors": [
+            "Avi Kapoor"
+          ],
+          "available_precision": "timestamp",
+          "channels": [
+            "Earnings",
+            "News",
+            "Price Target",
+            "Markets",
+            "Analyst Ratings",
+            "Trading Ideas"
+          ],
+          "created": "2025-06-04T16:55:24-04:00",
+          "event_ref": "news:bzNews_45781731",
+          "forward_returns": {
+            "daily": {
+              "adj_industry": 4.92,
+              "adj_macro": 6.09,
+              "adj_sector": 8.09,
+              "end_ts": "2025-06-05T16:00:00-04:00",
+              "industry": 0.71,
+              "macro": -0.46,
+              "sector": -2.46,
+              "start_ts": "2025-06-04T16:00:00-04:00",
+              "stock": 5.63
+            },
+            "hourly": {
+              "adj_industry": -0.12,
+              "adj_macro": -0.1,
+              "adj_sector": -0.12,
+              "end_ts": "2025-06-04T17:55:24-04:00",
+              "industry": 0.0,
+              "macro": -0.02,
+              "sector": 0.0,
+              "start_ts": "2025-06-04T16:55:24-04:00",
+              "stock": -0.12
+            },
+            "session": {
+              "adj_industry": 4.35,
+              "adj_macro": 4.7,
+              "adj_sector": 5.13,
+              "end_ts": "2025-06-05T09:35:00-04:00",
+              "industry": 0.48,
+              "macro": 0.13,
+              "sector": -0.3,
+              "start_ts": "2025-06-04T16:55:24-04:00",
+              "stock": 4.83
+            }
+          },
+          "id": "bzNews_45781731",
+          "market_session": "post_market",
+          "returns_schedule_raw": "{\"hourly\": \"2025-06-04T17:55:24-04:00\", \"session\": \"2025-06-05T09:35:00-04:00\", \"daily\": \"2025-06-05T16:00:00-04:00\"}",
+          "tags": [
+            "Expert Ideas",
+            "Most Accurate Analysts"
+          ],
+          "title": "Five Below Earnings Are Imminent; These Most Accurate Analysts Revise Forecasts Ahead Of Earnings Call",
+          "type": "news",
+          "updated": "2025-06-04T16:55:24-04:00",
+          "url": "https://www.benzinga.com/analyst-stock-ratings/price-target/25/06/45781731/five-below-earnings-are-imminent-these-most-accurate-analysts-revise-forecasts-ahead-of-earnings-call-2"
+        }
+      ],
+      "industry_return": null,
+      "is_gap_day": null,
+      "is_significant": null,
+      "is_trading_day": true,
+      "price": {
+        "close": 121.24,
+        "daily_return": -0.79,
+        "high": 122.5664,
+        "low": 119.06,
+        "open": 120.48,
+        "timestamp": "2025-06-04 16:00:00-0400",
+        "transactions": 68334.0,
+        "volume": 4206005.0,
+        "vwap": 121.745
+      },
+      "price_role": "reference_only",
+      "sector_return": -0.26,
+      "spy_return": -0.03
+    },
+    {
+      "adj_return": 6.07,
+      "boundary_role": null,
+      "date": "2025-06-05",
+      "events": [
+        {
+          "authors": [
+            "Benzinga Newsdesk"
+          ],
+          "available_precision": "timestamp",
+          "channels": [
+            "News",
+            "Price Target",
+            "Analyst Ratings"
+          ],
+          "created": "2025-06-05T07:26:53-04:00",
+          "event_ref": "news:bzNews_45789358",
+          "forward_returns": {
+            "daily": {
+              "adj_industry": 4.92,
+              "adj_macro": 6.09,
+              "adj_sector": 8.09,
+              "end_ts": "2025-06-05T16:00:00-04:00",
+              "industry": 0.71,
+              "macro": -0.46,
+              "sector": -2.46,
+              "start_ts": "2025-06-04T16:00:00-04:00",
+              "stock": 5.63
+            },
+            "hourly": {
+              "adj_industry": 4.55,
+              "adj_macro": 4.47,
+              "adj_sector": 4.77,
+              "end_ts": "2025-06-05T08:26:53-04:00",
+              "industry": 0.0,
+              "macro": 0.08,
+              "sector": -0.22,
+              "start_ts": "2025-06-05T07:26:53-04:00",
+              "stock": 4.55
+            },
+            "session": {
+              "adj_industry": 2.27,
+              "adj_macro": 2.66,
+              "adj_sector": 3.05,
+              "end_ts": "2025-06-05T09:35:00-04:00",
+              "industry": 0.48,
+              "macro": 0.09,
+              "sector": -0.3,
+              "start_ts": "2025-06-05T07:26:53-04:00",
+              "stock": 2.75
+            }
+          },
+          "id": "bzNews_45789358",
+          "market_session": "pre_market",
+          "returns_schedule_raw": "{\"hourly\": \"2025-06-05T08:26:53-04:00\", \"session\": \"2025-06-05T09:35:00-04:00\", \"daily\": \"2025-06-05T16:00:00-04:00\"}",
+          "tags": [],
+          "title": "Telsey Advisory Group Maintains Market Perform on Five Below, Raises Price Target to $128",
+          "type": "news",
+          "updated": "2025-06-05T07:26:53-04:00",
+          "url": "https://www.benzinga.com/news/25/06/45789358/telsey-advisory-group-maintains-market-perform-on-five-below-raises-price-target-to-128"
+        },
+        {
+          "authors": [
+            "Benzinga Newsdesk"
+          ],
+          "available_precision": "timestamp",
+          "channels": [
+            "News",
+            "Price Target",
+            "Analyst Ratings"
+          ],
+          "created": "2025-06-05T08:40:11-04:00",
+          "event_ref": "news:bzNews_45791260",
+          "forward_returns": {
+            "daily": {
+              "adj_industry": 4.92,
+              "adj_macro": 6.09,
+              "adj_sector": 8.09,
+              "end_ts": "2025-06-05T16:00:00-04:00",
+              "industry": 0.71,
+              "macro": -0.46,
+              "sector": -2.46,
+              "start_ts": "2025-06-04T16:00:00-04:00",
+              "stock": 5.63
+            },
+            "hourly": {
+              "adj_industry": 1.06,
+              "adj_macro": 1.69,
+              "adj_sector": 1.69,
+              "end_ts": "2025-06-05T09:40:11-04:00",
+              "industry": 0.47,
+              "macro": -0.16,
+              "sector": -0.16,
+              "start_ts": "2025-06-05T08:40:11-04:00",
+              "stock": 1.53
+            },
+            "session": {
+              "adj_industry": -1.24,
+              "adj_macro": -0.78,
+              "adj_sector": -0.9,
+              "end_ts": "2025-06-05T09:35:00-04:00",
+              "industry": 0.48,
+              "macro": 0.02,
+              "sector": 0.14,
+              "start_ts": "2025-06-05T08:40:11-04:00",
+              "stock": -0.76
+            }
+          },
+          "id": "bzNews_45791260",
+          "market_session": "pre_market",
+          "returns_schedule_raw": "{\"hourly\": \"2025-06-05T09:40:11-04:00\", \"session\": \"2025-06-05T09:35:00-04:00\", \"daily\": \"2025-06-05T16:00:00-04:00\"}",
+          "tags": [],
+          "title": "Wells Fargo Maintains Overweight on Five Below, Raises Price Target to $140",
+          "type": "news",
+          "updated": "2025-06-05T08:40:12-04:00",
+          "url": "https://www.benzinga.com/news/25/06/45791260/wells-fargo-maintains-overweight-on-five-below-raises-price-target-to-140"
+        },
+        {
+          "authors": [
+            "Benzinga Newsdesk"
+          ],
+          "available_precision": "timestamp",
+          "channels": [
+            "News",
+            "Price Target",
+            "Analyst Ratings"
+          ],
+          "created": "2025-06-05T09:05:51-04:00",
+          "event_ref": "news:bzNews_45792043",
+          "forward_returns": {
+            "daily": {
+              "adj_industry": 4.92,
+              "adj_macro": 6.09,
+              "adj_sector": 8.09,
+              "end_ts": "2025-06-05T16:00:00-04:00",
+              "industry": 0.71,
+              "macro": -0.46,
+              "sector": -2.46,
+              "start_ts": "2025-06-04T16:00:00-04:00",
+              "stock": 5.63
+            },
+            "hourly": {
+              "adj_industry": -0.01,
+              "adj_macro": 1.24,
+              "adj_sector": 1.46,
+              "end_ts": "2025-06-05T10:05:51-04:00",
+              "industry": 0.87,
+              "macro": -0.38,
+              "sector": -0.6,
+              "start_ts": "2025-06-05T09:05:51-04:00",
+              "stock": 0.86
+            },
+            "session": {
+              "adj_industry": -0.41,
+              "adj_macro": 0.22,
+              "adj_sector": 0.27,
+              "end_ts": "2025-06-05T09:35:00-04:00",
+              "industry": 0.48,
+              "macro": -0.15,
+              "sector": -0.2,
+              "start_ts": "2025-06-05T09:05:51-04:00",
+              "stock": 0.07
+            }
+          },
+          "id": "bzNews_45792043",
+          "market_session": "pre_market",
+          "returns_schedule_raw": "{\"hourly\": \"2025-06-05T10:05:51-04:00\", \"session\": \"2025-06-05T09:35:00-04:00\", \"daily\": \"2025-06-05T16:00:00-04:00\"}",
+          "tags": [],
+          "title": "UBS Maintains Buy on Five Below, Raises Price Target to $160",
+          "type": "news",
+          "updated": "2025-06-05T09:05:52-04:00",
+          "url": "https://www.benzinga.com/news/25/06/45792043/ubs-maintains-buy-on-five-below-raises-price-target-to-160"
+        },
+        {
+          "authors": [
+            "Benzinga Newsdesk"
+          ],
+          "available_precision": "timestamp",
+          "channels": [
+            "News",
+            "Price Target",
+            "Analyst Ratings"
+          ],
+          "created": "2025-06-05T10:32:45-04:00",
+          "event_ref": "news:bzNews_45794824",
+          "forward_returns": {
+            "daily": {
+              "adj_industry": 4.92,
+              "adj_macro": 6.09,
+              "adj_sector": 8.09,
+              "end_ts": "2025-06-05T16:00:00-04:00",
+              "industry": 0.71,
+              "macro": -0.46,
+              "sector": -2.46,
+              "start_ts": "2025-06-04T16:00:00-04:00",
+              "stock": 5.63
+            },
+            "hourly": {
+              "adj_industry": -0.69,
+              "adj_macro": -0.56,
+              "adj_sector": -0.85,
+              "end_ts": "2025-06-05T11:32:45-04:00",
+              "industry": 0.74,
+              "macro": 0.61,
+              "sector": 0.9,
+              "start_ts": "2025-06-05T10:32:45-04:00",
+              "stock": 0.05
+            },
+            "session": {
+              "adj_industry": -1.79,
+              "adj_macro": -1.19,
+              "adj_sector": 0.28,
+              "end_ts": "2025-06-05T16:00:00-04:00",
+              "industry": 0.27,
+              "macro": -0.33,
+              "sector": -1.8,
+              "start_ts": "2025-06-05T10:32:45-04:00",
+              "stock": -1.52
+            }
+          },
+          "id": "bzNews_45794824",
+          "market_session": "in_market",
+          "returns_schedule_raw": "{\"hourly\": \"2025-06-05T11:32:45-04:00\", \"session\": \"2025-06-05T16:00:00-04:00\", \"daily\": \"2025-06-05T16:00:00-04:00\"}",
+          "tags": [],
+          "title": "Citigroup Maintains Neutral on Five Below, Raises Price Target to $135",
+          "type": "news",
+          "updated": "2025-06-05T10:32:45-04:00",
+          "url": "https://www.benzinga.com/news/25/06/45794824/citigroup-maintains-neutral-on-five-below-raises-price-target-to-135"
+        },
+        {
+          "authors": [
+            "Benzinga Newsdesk"
+          ],
+          "available_precision": "timestamp",
+          "channels": [
+            "News",
+            "Price Target",
+            "Analyst Ratings"
+          ],
+          "created": "2025-06-05T10:39:29-04:00",
+          "event_ref": "news:bzNews_45795101",
+          "forward_returns": {
+            "daily": {
+              "adj_industry": 4.92,
+              "adj_macro": 6.09,
+              "adj_sector": 8.09,
+              "end_ts": "2025-06-05T16:00:00-04:00",
+              "industry": 0.71,
+              "macro": -0.46,
+              "sector": -2.46,
+              "start_ts": "2025-06-04T16:00:00-04:00",
+              "stock": 5.63
+            },
+            "hourly": {
+              "adj_industry": -0.05,
+              "adj_macro": 0.08,
+              "adj_sector": -0.19,
+              "end_ts": "2025-06-05T11:39:29-04:00",
+              "industry": 0.57,
+              "macro": 0.44,
+              "sector": 0.71,
+              "start_ts": "2025-06-05T10:39:29-04:00",
+              "stock": 0.52
+            },
+            "session": {
+              "adj_industry": -1.96,
+              "adj_macro": -1.38,
+              "adj_sector": 0.08,
+              "end_ts": "2025-06-05T16:00:00-04:00",
+              "industry": 0.12,
+              "macro": -0.46,
+              "sector": -1.92,
+              "start_ts": "2025-06-05T10:39:29-04:00",
+              "stock": -1.84
+            }
+          },
+          "id": "bzNews_45795101",
+          "market_session": "in_market",
+          "returns_schedule_raw": "{\"hourly\": \"2025-06-05T11:39:29-04:00\", \"session\": \"2025-06-05T16:00:00-04:00\", \"daily\": \"2025-06-05T16:00:00-04:00\"}",
+          "tags": [],
+          "title": "Evercore ISI Group Maintains In-Line on Five Below, Raises Price Target to $115",
+          "type": "news",
+          "updated": "2025-06-05T10:39:30-04:00",
+          "url": "https://www.benzinga.com/news/25/06/45795101/evercore-isi-group-maintains-in-line-on-five-below-raises-price-target-to-115"
+        },
+        {
+          "authors": [
+            "Benzinga Newsdesk"
+          ],
+          "available_precision": "timestamp",
+          "channels": [
+            "News",
+            "Price Target",
+            "Analyst Ratings"
+          ],
+          "created": "2025-06-05T10:47:30-04:00",
+          "event_ref": "news:bzNews_45795318",
+          "forward_returns": {
+            "daily": {
+              "adj_industry": 4.92,
+              "adj_macro": 6.09,
+              "adj_sector": 8.09,
+              "end_ts": "2025-06-05T16:00:00-04:00",
+              "industry": 0.71,
+              "macro": -0.46,
+              "sector": -2.46,
+              "start_ts": "2025-06-04T16:00:00-04:00",
+              "stock": 5.63
+            },
+            "hourly": {
+              "adj_industry": -1.13,
+              "adj_macro": -1.12,
+              "adj_sector": -1.16,
+              "end_ts": "2025-06-05T11:47:30-04:00",
+              "industry": 0.22,
+              "macro": 0.21,
+              "sector": 0.25,
+              "start_ts": "2025-06-05T10:47:30-04:00",
+              "stock": -0.91
+            },
+            "session": {
+              "adj_industry": -2.8,
+              "adj_macro": -2.31,
+              "adj_sector": -0.68,
+              "end_ts": "2025-06-05T16:00:00-04:00",
+              "industry": -0.18,
+              "macro": -0.67,
+              "sector": -2.3,
+              "start_ts": "2025-06-05T10:47:30-04:00",
+              "stock": -2.98
+            }
+          },
+          "id": "bzNews_45795318",
+          "market_session": "in_market",
+          "returns_schedule_raw": "{\"hourly\": \"2025-06-05T11:47:30-04:00\", \"session\": \"2025-06-05T16:00:00-04:00\", \"daily\": \"2025-06-05T16:00:00-04:00\"}",
+          "tags": [],
+          "title": "Truist Securities Maintains Hold on Five Below, Raises Price Target to $128",
+          "type": "news",
+          "updated": "2025-06-05T10:47:31-04:00",
+          "url": "https://www.benzinga.com/news/25/06/45795318/truist-securities-maintains-hold-on-five-below-raises-price-target-to-128"
+        },
+        {
+          "authors": [
+            "Benzinga Newsdesk"
+          ],
+          "available_precision": "timestamp",
+          "channels": [
+            "News",
+            "Price Target",
+            "Analyst Ratings"
+          ],
+          "created": "2025-06-05T12:10:47-04:00",
+          "event_ref": "news:bzNews_45798122",
+          "forward_returns": {
+            "daily": {
+              "adj_industry": 4.92,
+              "adj_macro": 6.09,
+              "adj_sector": 8.09,
+              "end_ts": "2025-06-05T16:00:00-04:00",
+              "industry": 0.71,
+              "macro": -0.46,
+              "sector": -2.46,
+              "start_ts": "2025-06-04T16:00:00-04:00",
+              "stock": 5.63
+            },
+            "hourly": {
+              "adj_industry": -1.4,
+              "adj_macro": -1.11,
+              "adj_sector": -0.74,
+              "end_ts": "2025-06-05T13:10:47-04:00",
+              "industry": -0.17,
+              "macro": -0.46,
+              "sector": -0.83,
+              "start_ts": "2025-06-05T12:10:47-04:00",
+              "stock": -1.57
+            },
+            "session": {
+              "adj_industry": -0.7,
+              "adj_macro": -0.26,
+              "adj_sector": 1.23,
+              "end_ts": "2025-06-05T16:00:00-04:00",
+              "industry": -0.45,
+              "macro": -0.89,
+              "sector": -2.38,
+              "start_ts": "2025-06-05T12:10:47-04:00",
+              "stock": -1.15
+            }
+          },
+          "id": "bzNews_45798122",
+          "market_session": "in_market",
+          "returns_schedule_raw": "{\"hourly\": \"2025-06-05T13:10:47-04:00\", \"session\": \"2025-06-05T16:00:00-04:00\", \"daily\": \"2025-06-05T16:00:00-04:00\"}",
+          "tags": [],
+          "title": "Goldman Sachs Maintains Buy on Five Below, Raises Price Target to $122",
+          "type": "news",
+          "updated": "2025-06-05T12:10:48-04:00",
+          "url": "https://www.benzinga.com/news/25/06/45798122/goldman-sachs-maintains-buy-on-five-below-raises-price-target-to-122"
+        },
+        {
+          "authors": [
+            "Benzinga Newsdesk"
+          ],
+          "available_precision": "timestamp",
+          "channels": [
+            "News",
+            "Price Target",
+            "Analyst Ratings"
+          ],
+          "created": "2025-06-05T13:05:59-04:00",
+          "event_ref": "news:bzNews_45799137",
+          "forward_returns": {
+            "daily": {
+              "adj_industry": 4.92,
+              "adj_macro": 6.09,
+              "adj_sector": 8.09,
+              "end_ts": "2025-06-05T16:00:00-04:00",
+              "industry": 0.71,
+              "macro": -0.46,
+              "sector": -2.46,
+              "start_ts": "2025-06-04T16:00:00-04:00",
+              "stock": 5.63
+            },
+            "hourly": {
+              "adj_industry": -0.16,
+              "adj_macro": -0.21,
+              "adj_sector": -0.08,
+              "end_ts": "2025-06-05T14:05:59-04:00",
+              "industry": -0.04,
+              "macro": 0.01,
+              "sector": -0.12,
+              "start_ts": "2025-06-05T13:05:59-04:00",
+              "stock": -0.2
+            },
+            "session": {
+              "adj_industry": 0.81,
+              "adj_macro": 0.93,
+              "adj_sector": 1.99,
+              "end_ts": "2025-06-05T16:00:00-04:00",
+              "industry": -0.19,
+              "macro": -0.31,
+              "sector": -1.37,
+              "start_ts": "2025-06-05T13:05:59-04:00",
+              "stock": 0.62
+            }
+          },
+          "id": "bzNews_45799137",
+          "market_session": "in_market",
+          "returns_schedule_raw": "{\"hourly\": \"2025-06-05T14:05:59-04:00\", \"session\": \"2025-06-05T16:00:00-04:00\", \"daily\": \"2025-06-05T16:00:00-04:00\"}",
+          "tags": [],
+          "title": "B of A Securities Maintains Underperform on Five Below, Raises Price Target to $93",
+          "type": "news",
+          "updated": "2025-06-05T13:06:00-04:00",
+          "url": "https://www.benzinga.com/news/25/06/45799137/b-of-a-securities-maintains-underperform-on-five-below-raises-price-target-to-93"
+        },
+        {
+          "authors": [
+            "Benzinga Newsdesk"
+          ],
+          "available_precision": "timestamp",
+          "channels": [
+            "News",
+            "Price Target",
+            "Analyst Ratings"
+          ],
+          "created": "2025-06-05T13:37:08-04:00",
+          "event_ref": "news:bzNews_45799828",
+          "forward_returns": {
+            "daily": {
+              "adj_industry": 4.92,
+              "adj_macro": 6.09,
+              "adj_sector": 8.09,
+              "end_ts": "2025-06-05T16:00:00-04:00",
+              "industry": 0.71,
+              "macro": -0.46,
+              "sector": -2.46,
+              "start_ts": "2025-06-04T16:00:00-04:00",
+              "stock": 5.63
+            },
+            "hourly": {
+              "adj_industry": 1.22,
+              "adj_macro": 0.99,
+              "adj_sector": 1.46,
+              "end_ts": "2025-06-05T14:37:08-04:00",
+              "industry": -0.36,
+              "macro": -0.13,
+              "sector": -0.6,
+              "start_ts": "2025-06-05T13:37:08-04:00",
+              "stock": 0.86
+            },
+            "session": {
+              "adj_industry": 2.46,
+              "adj_macro": 2.58,
+              "adj_sector": 3.67,
+              "end_ts": "2025-06-05T16:00:00-04:00",
+              "industry": -0.5,
+              "macro": -0.62,
+              "sector": -1.71,
+              "start_ts": "2025-06-05T13:37:08-04:00",
+              "stock": 1.96
+            }
+          },
+          "id": "bzNews_45799828",
+          "market_session": "in_market",
+          "returns_schedule_raw": "{\"hourly\": \"2025-06-05T14:37:08-04:00\", \"session\": \"2025-06-05T16:00:00-04:00\", \"daily\": \"2025-06-05T16:00:00-04:00\"}",
+          "tags": [],
+          "title": "Morgan Stanley Maintains Equal-Weight on Five Below, Raises Price Target to $135",
+          "type": "news",
+          "updated": "2025-06-05T13:37:08-04:00",
+          "url": "https://www.benzinga.com/news/25/06/45799828/morgan-stanley-maintains-equal-weight-on-five-below-raises-price-target-to-135"
+        },
+        {
+          "authors": [
+            "Benzinga Newsdesk"
+          ],
+          "available_precision": "timestamp",
+          "channels": [
+            "News",
+            "Price Target",
+            "Analyst Ratings"
+          ],
+          "created": "2025-06-05T13:49:25-04:00",
+          "event_ref": "news:bzNews_45799969",
+          "forward_returns": {
+            "daily": {
+              "adj_industry": 4.92,
+              "adj_macro": 6.09,
+              "adj_sector": 8.09,
+              "end_ts": "2025-06-05T16:00:00-04:00",
+              "industry": 0.71,
+              "macro": -0.46,
+              "sector": -2.46,
+              "start_ts": "2025-06-04T16:00:00-04:00",
+              "stock": 5.63
+            },
+            "hourly": {
+              "adj_industry": 1.27,
+              "adj_macro": 1.06,
+              "adj_sector": 1.77,
+              "end_ts": "2025-06-05T14:49:25-04:00",
+              "industry": -0.43,
+              "macro": -0.22,
+              "sector": -0.93,
+              "start_ts": "2025-06-05T13:49:25-04:00",
+              "stock": 0.84
+            },
+            "session": {
+              "adj_industry": 2.58,
+              "adj_macro": 2.71,
+              "adj_sector": 3.75,
+              "end_ts": "2025-06-05T16:00:00-04:00",
+              "industry": -0.49,
+              "macro": -0.62,
+              "sector": -1.66,
+              "start_ts": "2025-06-05T13:49:25-04:00",
+              "stock": 2.09
+            }
+          },
+          "id": "bzNews_45799969",
+          "market_session": "in_market",
+          "returns_schedule_raw": "{\"hourly\": \"2025-06-05T14:49:25-04:00\", \"session\": \"2025-06-05T16:00:00-04:00\", \"daily\": \"2025-06-05T16:00:00-04:00\"}",
+          "tags": [],
+          "title": "Mizuho Maintains Neutral on Five Below, Raises Price Target to $115",
+          "type": "news",
+          "updated": "2025-06-05T13:49:25-04:00",
+          "url": "https://www.benzinga.com/news/25/06/45799969/mizuho-maintains-neutral-on-five-below-raises-price-target-to-115"
+        },
+        {
+          "authors": [
+            "Priya Nigam"
+          ],
+          "available_precision": "timestamp",
+          "channels": [
+            "Analyst Color",
+            "Earnings Beats",
+            "Price Target",
+            "Reiteration",
+            "Analyst Ratings",
+            "Movers"
+          ],
+          "created": "2025-06-05T14:47:05-04:00",
+          "event_ref": "news:bzNews_45800961",
+          "forward_returns": {
+            "daily": {
+              "adj_industry": 4.92,
+              "adj_macro": 6.09,
+              "adj_sector": 8.09,
+              "end_ts": "2025-06-05T16:00:00-04:00",
+              "industry": 0.71,
+              "macro": -0.46,
+              "sector": -2.46,
+              "start_ts": "2025-06-04T16:00:00-04:00",
+              "stock": 5.63
+            },
+            "hourly": {
+              "adj_industry": 0.6,
+              "adj_macro": 0.73,
+              "adj_sector": 1.1,
+              "end_ts": "2025-06-05T15:47:05-04:00",
+              "industry": -0.19,
+              "macro": -0.32,
+              "sector": -0.69,
+              "start_ts": "2025-06-05T14:47:05-04:00",
+              "stock": 0.41
+            },
+            "session": {
+              "adj_industry": 1.22,
+              "adj_macro": 1.52,
+              "adj_sector": 1.95,
+              "end_ts": "2025-06-05T16:00:00-04:00",
+              "industry": -0.15,
+              "macro": -0.45,
+              "sector": -0.88,
+              "start_ts": "2025-06-05T14:47:05-04:00",
+              "stock": 1.07
+            }
+          },
+          "id": "bzNews_45800961",
+          "market_session": "in_market",
+          "returns_schedule_raw": "{\"hourly\": \"2025-06-05T15:47:05-04:00\", \"session\": \"2025-06-05T16:00:00-04:00\", \"daily\": \"2025-06-05T16:00:00-04:00\"}",
+          "tags": [
+            "Expert Ideas",
+            "Joseph Feldman",
+            "Stories That Matter",
+            "Telsey Advisory Group"
+          ],
+          "title": "Five Below Sees Strong Q1 As Analyst Flags Tariff Risk In Back Half Of 2025",
+          "type": "news",
+          "updated": "2025-06-05T14:47:05-04:00",
+          "url": "https://www.benzinga.com/analyst-stock-ratings/price-target/25/06/45800961/five-below-sees-strong-q1-as-analyst-flags-tariff-risk-in-back-half-of-2025"
+        },
+        {
+          "accession": "0001177609-25-000025",
+          "available_precision": "timestamp",
+          "created": "2025-06-05T17:31:15-04:00",
+          "description": "Form 10-Q - Quarterly report [Sections 13 or 15(d)]",
+          "event_ref": "report:0001177609-25-000025",
+          "exhibit_keys": [],
+          "filing_links": {
+            "link_to_filing_details": "https://www.sec.gov/Archives/edgar/data/1177609/000117760925000025/five-20250503.htm",
+            "link_to_html": "https://www.sec.gov/Archives/edgar/data/1177609/000117760925000025/0001177609-25-000025-index.htm",
+            "link_to_txt": "https://www.sec.gov/Archives/edgar/data/1177609/000117760925000025/0001177609-25-000025.txt",
+            "primary_doc_url": "https://www.sec.gov/Archives/edgar/data/1177609/000117760925000025/five-20250503_htm.xml"
+          },
+          "financial_statement_count": 4,
+          "form_type": "10-Q",
+          "forward_returns": {
+            "daily": {
+              "adj_industry": -1.57,
+              "adj_macro": -1.57,
+              "adj_sector": -1.82,
+              "end_ts": "2025-06-06T16:00:00-04:00",
+              "industry": 1.02,
+              "macro": 1.02,
+              "sector": 1.27,
+              "start_ts": "2025-06-05T16:00:00-04:00",
+              "stock": -0.55
+            },
+            "hourly": {
+              "adj_industry": 0.1,
+              "adj_macro": -0.17,
+              "adj_sector": -0.66,
+              "end_ts": "2025-06-05T18:31:15-04:00",
+              "industry": -0.19,
+              "macro": 0.08,
+              "sector": 0.57,
+              "start_ts": "2025-06-05T17:31:15-04:00",
+              "stock": -0.09
+            },
+            "session": {
+              "adj_industry": -2.95,
+              "adj_macro": -3.26,
+              "adj_sector": -4.17,
+              "end_ts": "2025-06-06T09:35:00-04:00",
+              "industry": 0.88,
+              "macro": 1.19,
+              "sector": 2.1,
+              "start_ts": "2025-06-05T17:31:15-04:00",
+              "stock": -2.07
+            }
+          },
+          "has_filing_text": false,
+          "is_amendment": false,
+          "items": [],
+          "market_session": "post_market",
+          "period_of_report": "2025-05-03",
+          "report_id": "0001177609-25-000025",
+          "returns_schedule_raw": "{\"hourly\": \"2025-06-05T18:31:15-04:00\", \"session\": \"2025-06-06T09:35:00-04:00\", \"daily\": \"2025-06-06T16:00:00-04:00\"}",
+          "section_names": [
+            "ControlsandProcedures",
+            "DefaultsUponSeniorSecurities",
+            "Exhibits",
+            "FinancialStatements",
+            "LegalProceedings",
+            "ManagementDiscussionandAnalysisofFinancialConditionandResultsofOperations",
+            "MineSafetyDisclosures",
+            "OtherInformation",
+            "QuantitativeandQualitativeDisclosuresAboutMarketRisk",
+            "RiskFactors",
+            "UnregisteredSalesofEquitySecuritiesandUseofProceeds"
+          ],
+          "type": "filing",
+          "xbrl_status": "COMPLETED"
+        }
+      ],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": true,
+      "is_trading_day": true,
+      "price": {
+        "close": 128.02,
+        "daily_return": 5.59,
+        "high": 137.3,
+        "low": 125.07,
+        "open": 131.9,
+        "timestamp": "2025-06-05 16:00:00-0400",
+        "transactions": 96631.0,
+        "volume": 6214928.0,
+        "vwap": 129.9665
+      },
+      "price_role": "ordinary",
+      "sector_return": -2.52,
+      "spy_return": -0.48
+    },
+    {
+      "adj_return": -1.55,
+      "boundary_role": null,
+      "date": "2025-06-06",
+      "events": [
+        {
+          "authors": [
+            "Benzinga Newsdesk"
+          ],
+          "available_precision": "timestamp",
+          "channels": [
+            "News",
+            "Price Target",
+            "Analyst Ratings"
+          ],
+          "created": "2025-06-06T12:25:53-04:00",
+          "event_ref": "news:bzNews_45819102",
+          "forward_returns": {
+            "daily": {
+              "adj_industry": -1.57,
+              "adj_macro": -1.57,
+              "adj_sector": -1.82,
+              "end_ts": "2025-06-06T16:00:00-04:00",
+              "industry": 1.02,
+              "macro": 1.02,
+              "sector": 1.27,
+              "start_ts": "2025-06-05T16:00:00-04:00",
+              "stock": -0.55
+            },
+            "hourly": {
+              "adj_industry": 0.2,
+              "adj_macro": 0.05,
+              "adj_sector": 0.07,
+              "end_ts": "2025-06-06T13:25:53-04:00",
+              "industry": -0.21,
+              "macro": -0.06,
+              "sector": -0.08,
+              "start_ts": "2025-06-06T12:25:53-04:00",
+              "stock": -0.01
+            },
+            "session": {
+              "adj_industry": 0.91,
+              "adj_macro": 1.12,
+              "adj_sector": 1.36,
+              "end_ts": "2025-06-06T16:00:00-04:00",
+              "industry": 0.29,
+              "macro": 0.08,
+              "sector": -0.16,
+              "start_ts": "2025-06-06T12:25:53-04:00",
+              "stock": 1.2
+            }
+          },
+          "id": "bzNews_45819102",
+          "market_session": "in_market",
+          "returns_schedule_raw": "{\"hourly\": \"2025-06-06T13:25:53-04:00\", \"session\": \"2025-06-06T16:00:00-04:00\", \"daily\": \"2025-06-06T16:00:00-04:00\"}",
+          "tags": [],
+          "title": "Loop Capital Maintains Hold on Five Below, Raises Price Target to $130",
+          "type": "news",
+          "updated": "2025-06-06T12:25:53-04:00",
+          "url": "https://www.benzinga.com/news/25/06/45819102/loop-capital-maintains-hold-on-five-below-raises-price-target-to-130"
+        }
+      ],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 127.35,
+        "daily_return": -0.52,
+        "high": 128.46,
+        "low": 124.39,
+        "open": 127.58,
+        "timestamp": "2025-06-06 16:00:00-0400",
+        "transactions": 35352.0,
+        "volume": 1593172.0,
+        "vwap": 126.6551
+      },
+      "price_role": "ordinary",
+      "sector_return": 1.3,
+      "spy_return": 1.03
+    },
+    {
+      "adj_return": -0.98,
+      "boundary_role": null,
+      "date": "2025-06-09",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 126.22,
+        "daily_return": -0.89,
+        "high": 129.0,
+        "low": 126.11,
+        "open": 128.96,
+        "timestamp": "2025-06-09 16:00:00-0400",
+        "transactions": 28948.0,
+        "volume": 1272373.0,
+        "vwap": 127.0878
+      },
+      "price_role": "ordinary",
+      "sector_return": 0.8,
+      "spy_return": 0.09
+    },
+    {
+      "adj_return": -2.76,
+      "boundary_role": null,
+      "date": "2025-06-10",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": true,
+      "is_significant": true,
+      "is_trading_day": true,
+      "price": {
+        "close": 123.45,
+        "daily_return": -2.19,
+        "high": 126.575,
+        "low": 122.375,
+        "open": 126.17,
+        "timestamp": "2025-06-10 16:00:00-0400",
+        "transactions": 33090.0,
+        "volume": 1628354.0,
+        "vwap": 123.5877
+      },
+      "price_role": "ordinary",
+      "sector_return": 1.2,
+      "spy_return": 0.57
+    },
+    {
+      "adj_return": 1.57,
+      "boundary_role": null,
+      "date": "2025-06-11",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 125.03,
+        "daily_return": 1.28,
+        "high": 126.165,
+        "low": 122.73,
+        "open": 124.51,
+        "timestamp": "2025-06-11 16:00:00-0400",
+        "transactions": 33410.0,
+        "volume": 1465291.0,
+        "vwap": 124.6736
+      },
+      "price_role": "ordinary",
+      "sector_return": -0.79,
+      "spy_return": -0.29
+    },
+    {
+      "adj_return": 0.36,
+      "boundary_role": null,
+      "date": "2025-06-12",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 125.98,
+        "daily_return": 0.76,
+        "high": 126.4505,
+        "low": 123.53,
+        "open": 124.29,
+        "timestamp": "2025-06-12 16:00:00-0400",
+        "transactions": 22048.0,
+        "volume": 936565.0,
+        "vwap": 125.4466
+      },
+      "price_role": "ordinary",
+      "sector_return": -0.47,
+      "spy_return": 0.4
+    },
+    {
+      "adj_return": -2.18,
+      "boundary_role": null,
+      "date": "2025-06-13",
+      "events": [
+        {
+          "accession": "0001193125-25-140782",
+          "available_precision": "timestamp",
+          "created": "2025-06-13T16:21:02-04:00",
+          "description": "Form 8-K - Current report - Item 5.07",
+          "event_ref": "report:0001193125-25-140782",
+          "exhibit_keys": [],
+          "filing_links": {
+            "link_to_filing_details": "https://www.sec.gov/Archives/edgar/data/1177609/000119312525140782/d941190d8k.htm",
+            "link_to_html": "https://www.sec.gov/Archives/edgar/data/1177609/000119312525140782/0001193125-25-140782-index.htm",
+            "link_to_txt": "https://www.sec.gov/Archives/edgar/data/1177609/000119312525140782/0001193125-25-140782.txt",
+            "primary_doc_url": "https://www.sec.gov/Archives/edgar/data/1177609/000119312525140782/d941190d8k_htm.xml"
+          },
+          "financial_statement_count": 0,
+          "form_type": "8-K",
+          "forward_returns": {
+            "daily": {
+              "adj_industry": 1.57,
+              "adj_macro": 2.84,
+              "adj_sector": 2.73,
+              "end_ts": "2025-06-16T16:00:00-04:00",
+              "industry": 2.24,
+              "macro": 0.97,
+              "sector": 1.08,
+              "start_ts": "2025-06-13T16:00:00-04:00",
+              "stock": 3.81
+            },
+            "hourly": {
+              "adj_industry": -0.03,
+              "adj_macro": 0.24,
+              "adj_sector": 0.17,
+              "end_ts": "2025-06-13T17:21:02-04:00",
+              "industry": 0.2,
+              "macro": -0.07,
+              "sector": 0.0,
+              "start_ts": "2025-06-13T16:21:02-04:00",
+              "stock": 0.17
+            },
+            "session": {
+              "adj_industry": 0.65,
+              "adj_macro": 0.93,
+              "adj_sector": 1.03,
+              "end_ts": "2025-06-16T09:35:00-04:00",
+              "industry": 0.97,
+              "macro": 0.69,
+              "sector": 0.59,
+              "start_ts": "2025-06-13T16:21:02-04:00",
+              "stock": 1.62
+            }
+          },
+          "has_filing_text": false,
+          "is_amendment": false,
+          "items": [
+            "Item 5.07: Submission of Matters to a Vote of Security Holders"
+          ],
+          "market_session": "post_market",
+          "period_of_report": "2025-06-12",
+          "report_id": "0001193125-25-140782",
+          "returns_schedule_raw": "{\"hourly\": \"2025-06-13T17:21:02-04:00\", \"session\": \"2025-06-16T09:35:00-04:00\", \"daily\": \"2025-06-16T16:00:00-04:00\"}",
+          "section_names": [
+            "SubmissionofMatterstoaVoteofSecurityHolders"
+          ],
+          "type": "filing",
+          "xbrl_status": "SKIPPED"
+        }
+      ],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": true,
+      "is_trading_day": true,
+      "price": {
+        "close": 121.825,
+        "daily_return": -3.3,
+        "high": 126.44,
+        "low": 121.12,
+        "open": 123.635,
+        "timestamp": "2025-06-13 16:00:00-0400",
+        "transactions": 29746.0,
+        "volume": 1342028.0,
+        "vwap": 122.5238
+      },
+      "price_role": "ordinary",
+      "sector_return": -0.92,
+      "spy_return": -1.12
+    },
+    {
+      "adj_return": 2.86,
+      "boundary_role": null,
+      "date": "2025-06-16",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": true,
+      "is_significant": true,
+      "is_trading_day": true,
+      "price": {
+        "close": 126.47,
+        "daily_return": 3.81,
+        "high": 126.66,
+        "low": 121.99,
+        "open": 123.6,
+        "timestamp": "2025-06-16 16:00:00-0400",
+        "transactions": 28527.0,
+        "volume": 1300260.0,
+        "vwap": 125.7716
+      },
+      "price_role": "ordinary",
+      "sector_return": 1.08,
+      "spy_return": 0.95
+    },
+    {
+      "adj_return": -1.23,
+      "boundary_role": null,
+      "date": "2025-06-17",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 123.84,
+        "daily_return": -2.08,
+        "high": 126.44,
+        "low": 123.55,
+        "open": 124.95,
+        "timestamp": "2025-06-17 16:00:00-0400",
+        "transactions": 25826.0,
+        "volume": 1199494.0,
+        "vwap": 124.378
+      },
+      "price_role": "ordinary",
+      "sector_return": -1.72,
+      "spy_return": -0.85
+    },
+    {
+      "adj_return": -0.51,
+      "boundary_role": null,
+      "date": "2025-06-18",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 123.18,
+        "daily_return": -0.53,
+        "high": 126.1,
+        "low": 122.86,
+        "open": 123.38,
+        "timestamp": "2025-06-18 16:00:00-0400",
+        "transactions": 25500.0,
+        "volume": 1077431.0,
+        "vwap": 123.9416
+      },
+      "price_role": "ordinary",
+      "sector_return": 0.05,
+      "spy_return": -0.02
+    },
+    {
+      "adj_return": 0.67,
+      "boundary_role": null,
+      "date": "2025-06-20",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 123.35,
+        "daily_return": 0.14,
+        "high": 124.57,
+        "low": 121.68,
+        "open": 123.82,
+        "timestamp": "2025-06-20 16:00:00-0400",
+        "transactions": 24422.0,
+        "volume": 1462045.0,
+        "vwap": 122.8979
+      },
+      "price_role": "ordinary",
+      "sector_return": 0.12,
+      "spy_return": -0.53
+    },
+    {
+      "adj_return": -0.13,
+      "boundary_role": null,
+      "date": "2025-06-23",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 124.41,
+        "daily_return": 0.86,
+        "high": 125.58,
+        "low": 121.11,
+        "open": 122.1,
+        "timestamp": "2025-06-23 16:00:00-0400",
+        "transactions": 31722.0,
+        "volume": 1361553.0,
+        "vwap": 123.8665
+      },
+      "price_role": "ordinary",
+      "sector_return": 1.77,
+      "spy_return": 0.99
+    },
+    {
+      "adj_return": -1.2,
+      "boundary_role": null,
+      "date": "2025-06-24",
+      "events": [
+        {
+          "authors": [
+            "Benzinga Newsdesk"
+          ],
+          "available_precision": "timestamp",
+          "channels": [
+            "News",
+            "Price Target",
+            "Analyst Ratings"
+          ],
+          "created": "2025-06-24T12:03:51-04:00",
+          "event_ref": "news:bzNews_46078059",
+          "forward_returns": {
+            "daily": {
+              "adj_industry": -0.1,
+              "adj_macro": -1.24,
+              "adj_sector": -0.65,
+              "end_ts": "2025-06-24T16:00:00-04:00",
+              "industry": 0.0,
+              "macro": 1.14,
+              "sector": 0.55,
+              "start_ts": "2025-06-23T16:00:00-04:00",
+              "stock": -0.1
+            },
+            "hourly": {
+              "adj_industry": 0.19,
+              "adj_macro": 0.26,
+              "adj_sector": 0.18,
+              "end_ts": "2025-06-24T13:03:51-04:00",
+              "industry": 0.21,
+              "macro": 0.14,
+              "sector": 0.22,
+              "start_ts": "2025-06-24T12:03:51-04:00",
+              "stock": 0.4
+            },
+            "session": {
+              "adj_industry": -0.47,
+              "adj_macro": -0.67,
+              "adj_sector": -0.47,
+              "end_ts": "2025-06-24T16:00:00-04:00",
+              "industry": -0.05,
+              "macro": 0.15,
+              "sector": -0.05,
+              "start_ts": "2025-06-24T12:03:51-04:00",
+              "stock": -0.52
+            }
+          },
+          "id": "bzNews_46078059",
+          "market_session": "in_market",
+          "returns_schedule_raw": "{\"hourly\": \"2025-06-24T13:03:51-04:00\", \"session\": \"2025-06-24T16:00:00-04:00\", \"daily\": \"2025-06-24T16:00:00-04:00\"}",
+          "tags": [],
+          "title": "Evercore ISI Group Maintains In-Line on Five Below, Raises Price Target to $120",
+          "type": "news",
+          "updated": "2025-06-24T12:03:52-04:00",
+          "url": "https://www.benzinga.com/news/25/06/46078059/evercore-isi-group-maintains-in-line-on-five-below-raises-price-target-to-120"
+        }
+      ],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 124.28,
+        "daily_return": -0.1,
+        "high": 126.45,
+        "low": 123.25,
+        "open": 125.57,
+        "timestamp": "2025-06-24 16:00:00-0400",
+        "transactions": 18834.0,
+        "volume": 721740.0,
+        "vwap": 124.7473
+      },
+      "price_role": "ordinary",
+      "sector_return": 0.56,
+      "spy_return": 1.1
+    },
+    {
+      "adj_return": 3.04,
+      "boundary_role": null,
+      "date": "2025-06-25",
+      "events": [
+        {
+          "authors": [
+            "Benzinga Newsdesk"
+          ],
+          "available_precision": "timestamp",
+          "channels": [
+            "News",
+            "Price Target",
+            "Analyst Ratings"
+          ],
+          "created": "2025-06-25T13:44:25-04:00",
+          "event_ref": "news:bzNews_46101247",
+          "forward_returns": {
+            "daily": {
+              "adj_industry": 4.03,
+              "adj_macro": 3.06,
+              "adj_sector": 4.27,
+              "end_ts": "2025-06-25T16:00:00-04:00",
+              "industry": -0.93,
+              "macro": 0.04,
+              "sector": -1.17,
+              "start_ts": "2025-06-24T16:00:00-04:00",
+              "stock": 3.1
+            },
+            "hourly": {
+              "adj_industry": 0.74,
+              "adj_macro": 0.64,
+              "adj_sector": 0.73,
+              "end_ts": "2025-06-25T14:44:25-04:00",
+              "industry": -0.07,
+              "macro": 0.03,
+              "sector": -0.06,
+              "start_ts": "2025-06-25T13:44:25-04:00",
+              "stock": 0.67
+            },
+            "session": {
+              "adj_industry": 2.34,
+              "adj_macro": 2.1,
+              "adj_sector": 2.01,
+              "end_ts": "2025-06-25T16:00:00-04:00",
+              "industry": -0.07,
+              "macro": 0.17,
+              "sector": 0.26,
+              "start_ts": "2025-06-25T13:44:25-04:00",
+              "stock": 2.27
+            }
+          },
+          "id": "bzNews_46101247",
+          "market_session": "in_market",
+          "returns_schedule_raw": "{\"hourly\": \"2025-06-25T14:44:25-04:00\", \"session\": \"2025-06-25T16:00:00-04:00\", \"daily\": \"2025-06-25T16:00:00-04:00\"}",
+          "tags": [],
+          "title": "Goldman Sachs Maintains Buy on Five Below, Raises Price Target to $135",
+          "type": "news",
+          "updated": "2025-06-25T13:44:25-04:00",
+          "url": "https://www.benzinga.com/news/25/06/46101247/goldman-sachs-maintains-buy-on-five-below-raises-price-target-to-135"
+        }
+      ],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": true,
+      "is_trading_day": true,
+      "price": {
+        "close": 128.13,
+        "daily_return": 3.1,
+        "high": 128.15,
+        "low": 124.73,
+        "open": 125.46,
+        "timestamp": "2025-06-25 16:00:00-0400",
+        "transactions": 25311.0,
+        "volume": 1235208.0,
+        "vwap": 127.012
+      },
+      "price_role": "ordinary",
+      "sector_return": -1.18,
+      "spy_return": 0.06
+    },
+    {
+      "adj_return": 0.62,
+      "boundary_role": null,
+      "date": "2025-06-26",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 129.92,
+        "daily_return": 1.4,
+        "high": 132.87,
+        "low": 128.495,
+        "open": 129.0,
+        "timestamp": "2025-06-26 16:00:00-0400",
+        "transactions": 36153.0,
+        "volume": 1409938.0,
+        "vwap": 130.907
+      },
+      "price_role": "ordinary",
+      "sector_return": 0.92,
+      "spy_return": 0.78
+    },
+    {
+      "adj_return": 0.03,
+      "boundary_role": null,
+      "date": "2025-06-27",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 130.61,
+        "daily_return": 0.53,
+        "high": 133.33,
+        "low": 129.04,
+        "open": 130.12,
+        "timestamp": "2025-06-27 16:00:00-0400",
+        "transactions": 27562.0,
+        "volume": 2179378.0,
+        "vwap": 130.9086
+      },
+      "price_role": "ordinary",
+      "sector_return": 1.67,
+      "spy_return": 0.5
+    },
+    {
+      "adj_return": -0.04,
+      "boundary_role": null,
+      "date": "2025-06-30",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 131.18,
+        "daily_return": 0.44,
+        "high": 131.955,
+        "low": 129.1,
+        "open": 131.44,
+        "timestamp": "2025-06-30 16:00:00-0400",
+        "transactions": 20114.0,
+        "volume": 743275.0,
+        "vwap": 131.2127
+      },
+      "price_role": "ordinary",
+      "sector_return": -0.58,
+      "spy_return": 0.48
+    },
+    {
+      "adj_return": 1.54,
+      "boundary_role": null,
+      "date": "2025-07-01",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 133.16,
+        "daily_return": 1.51,
+        "high": 134.32,
+        "low": 130.04,
+        "open": 130.04,
+        "timestamp": "2025-07-01 16:00:00-0400",
+        "transactions": 28556.0,
+        "volume": 1282805.0,
+        "vwap": 133.2109
+      },
+      "price_role": "ordinary",
+      "sector_return": 0.43,
+      "spy_return": -0.03
+    },
+    {
+      "adj_return": -1.78,
+      "boundary_role": null,
+      "date": "2025-07-02",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 131.39,
+        "daily_return": -1.33,
+        "high": 132.91,
+        "low": 128.53,
+        "open": 132.83,
+        "timestamp": "2025-07-02 16:00:00-0400",
+        "transactions": 36296.0,
+        "volume": 1562141.0,
+        "vwap": 130.497
+      },
+      "price_role": "ordinary",
+      "sector_return": 0.8,
+      "spy_return": 0.45
+    },
+    {
+      "adj_return": 0.09,
+      "boundary_role": null,
+      "date": "2025-07-03",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 132.54,
+        "daily_return": 0.88,
+        "high": 133.24,
+        "low": 130.4066,
+        "open": 131.65,
+        "timestamp": "2025-07-03 16:00:00-0400",
+        "transactions": 14157.0,
+        "volume": 673761.0,
+        "vwap": 132.2164
+      },
+      "price_role": "ordinary",
+      "sector_return": 0.55,
+      "spy_return": 0.79
+    },
+    {
+      "adj_return": -1.69,
+      "boundary_role": null,
+      "date": "2025-07-07",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 129.3,
+        "daily_return": -2.44,
+        "high": 132.0,
+        "low": 128.46,
+        "open": 131.65,
+        "timestamp": "2025-07-07 16:00:00-0400",
+        "transactions": 31144.0,
+        "volume": 1326564.0,
+        "vwap": 129.7683
+      },
+      "price_role": "ordinary",
+      "sector_return": -1.27,
+      "spy_return": -0.75
+    },
+    {
+      "adj_return": -0.35,
+      "boundary_role": null,
+      "date": "2025-07-08",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 128.78,
+        "daily_return": -0.4,
+        "high": 130.34,
+        "low": 126.1,
+        "open": 129.2,
+        "timestamp": "2025-07-08 16:00:00-0400",
+        "transactions": 29755.0,
+        "volume": 1317339.0,
+        "vwap": 128.4941
+      },
+      "price_role": "ordinary",
+      "sector_return": -0.34,
+      "spy_return": -0.05
+    },
+    {
+      "adj_return": -0.59,
+      "boundary_role": null,
+      "date": "2025-07-09",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 128.79,
+        "daily_return": 0.01,
+        "high": 130.51,
+        "low": 127.5767,
+        "open": 128.575,
+        "timestamp": "2025-07-09 16:00:00-0400",
+        "transactions": 25403.0,
+        "volume": 1074727.0,
+        "vwap": 129.059
+      },
+      "price_role": "ordinary",
+      "sector_return": 0.59,
+      "spy_return": 0.6
+    },
+    {
+      "adj_return": 0.8,
+      "boundary_role": null,
+      "date": "2025-07-10",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 130.18,
+        "daily_return": 1.08,
+        "high": 132.72,
+        "low": 129.245,
+        "open": 129.88,
+        "timestamp": "2025-07-10 16:00:00-0400",
+        "transactions": 23466.0,
+        "volume": 935249.0,
+        "vwap": 130.8083
+      },
+      "price_role": "ordinary",
+      "sector_return": 1.11,
+      "spy_return": 0.28
+    },
+    {
+      "adj_return": -0.2,
+      "boundary_role": null,
+      "date": "2025-07-11",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 129.46,
+        "daily_return": -0.55,
+        "high": 131.6,
+        "low": 129.09,
+        "open": 129.09,
+        "timestamp": "2025-07-11 16:00:00-0400",
+        "transactions": 18631.0,
+        "volume": 972090.0,
+        "vwap": 129.7803
+      },
+      "price_role": "ordinary",
+      "sector_return": 0.03,
+      "spy_return": -0.35
+    },
+    {
+      "adj_return": 3.56,
+      "boundary_role": null,
+      "date": "2025-07-14",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": true,
+      "is_significant": true,
+      "is_trading_day": true,
+      "price": {
+        "close": 134.31,
+        "daily_return": 3.75,
+        "high": 134.35,
+        "low": 127.87,
+        "open": 129.51,
+        "timestamp": "2025-07-14 16:00:00-0400",
+        "transactions": 25055.0,
+        "volume": 1050681.0,
+        "vwap": 132.998
+      },
+      "price_role": "ordinary",
+      "sector_return": 0.37,
+      "spy_return": 0.19
+    },
+    {
+      "adj_return": -1.22,
+      "boundary_role": null,
+      "date": "2025-07-15",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 132.09,
+        "daily_return": -1.65,
+        "high": 136.0,
+        "low": 131.79,
+        "open": 134.5,
+        "timestamp": "2025-07-15 16:00:00-0400",
+        "transactions": 29129.0,
+        "volume": 1538148.0,
+        "vwap": 133.0223
+      },
+      "price_role": "ordinary",
+      "sector_return": -1.43,
+      "spy_return": -0.43
+    },
+    {
+      "adj_return": 2.96,
+      "boundary_role": null,
+      "date": "2025-07-16",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": true,
+      "is_significant": true,
+      "is_trading_day": true,
+      "price": {
+        "close": 136.44,
+        "daily_return": 3.29,
+        "high": 136.54,
+        "low": 131.61,
+        "open": 132.99,
+        "timestamp": "2025-07-16 16:00:00-0400",
+        "transactions": 30167.0,
+        "volume": 1409738.0,
+        "vwap": 134.9294
+      },
+      "price_role": "ordinary",
+      "sector_return": 0.18,
+      "spy_return": 0.33
+    },
+    {
+      "adj_return": 1.76,
+      "boundary_role": null,
+      "date": "2025-07-17",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 139.67,
+        "daily_return": 2.37,
+        "high": 141.42,
+        "low": 136.7,
+        "open": 136.78,
+        "timestamp": "2025-07-17 16:00:00-0400",
+        "transactions": 37596.0,
+        "volume": 1865296.0,
+        "vwap": 139.7555
+      },
+      "price_role": "ordinary",
+      "sector_return": 0.34,
+      "spy_return": 0.61
+    },
+    {
+      "adj_return": 0.28,
+      "boundary_role": null,
+      "date": "2025-07-18",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 139.97,
+        "daily_return": 0.21,
+        "high": 140.46,
+        "low": 137.8,
+        "open": 140.05,
+        "timestamp": "2025-07-18 16:00:00-0400",
+        "transactions": 30858.0,
+        "volume": 1396696.0,
+        "vwap": 139.1119
+      },
+      "price_role": "ordinary",
+      "sector_return": 0.89,
+      "spy_return": -0.07
+    },
+    {
+      "adj_return": -0.23,
+      "boundary_role": null,
+      "date": "2025-07-21",
+      "events": [
+        {
+          "authors": [
+            "Benzinga Newsdesk"
+          ],
+          "available_precision": "timestamp",
+          "channels": [
+            "News",
+            "Price Target",
+            "Analyst Ratings"
+          ],
+          "created": "2025-07-21T08:44:01-04:00",
+          "event_ref": "news:bzNews_46516893",
+          "forward_returns": {
+            "daily": {
+              "adj_industry": -0.92,
+              "adj_macro": -0.2,
+              "adj_sector": -0.51,
+              "end_ts": "2025-07-21T16:00:00-04:00",
+              "industry": 0.88,
+              "macro": 0.16,
+              "sector": 0.47,
+              "start_ts": "2025-07-18T16:00:00-04:00",
+              "stock": -0.04
+            },
+            "hourly": {
+              "adj_industry": -2.98,
+              "adj_macro": -2.47,
+              "adj_sector": -2.4,
+              "end_ts": "2025-07-21T09:44:01-04:00",
+              "industry": 0.59,
+              "macro": 0.08,
+              "sector": 0.01,
+              "start_ts": "2025-07-21T08:44:01-04:00",
+              "stock": -2.39
+            },
+            "session": {
+              "adj_industry": -2.08,
+              "adj_macro": -1.6,
+              "adj_sector": -1.7,
+              "end_ts": "2025-07-21T09:35:00-04:00",
+              "industry": 0.51,
+              "macro": 0.03,
+              "sector": 0.13,
+              "start_ts": "2025-07-21T08:44:01-04:00",
+              "stock": -1.57
+            }
+          },
+          "id": "bzNews_46516893",
+          "market_session": "pre_market",
+          "returns_schedule_raw": "{\"hourly\": \"2025-07-21T09:44:01-04:00\", \"session\": \"2025-07-21T09:35:00-04:00\", \"daily\": \"2025-07-21T16:00:00-04:00\"}",
+          "tags": [],
+          "title": "JP Morgan Maintains Neutral on Five Below, Raises Price Target to $154",
+          "type": "news",
+          "updated": "2025-07-21T08:44:02-04:00",
+          "url": "https://www.benzinga.com/news/25/07/46516893/jp-morgan-maintains-neutral-on-five-below-raises-price-target-to-154"
+        }
+      ],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 139.92,
+        "daily_return": -0.04,
+        "high": 142.13,
+        "low": 137.4747,
+        "open": 140.89,
+        "timestamp": "2025-07-21 16:00:00-0400",
+        "transactions": 31092.0,
+        "volume": 1281365.0,
+        "vwap": 140.294
+      },
+      "price_role": "ordinary",
+      "sector_return": 0.47,
+      "spy_return": 0.19
+    },
+    {
+      "adj_return": -0.17,
+      "boundary_role": null,
+      "date": "2025-07-22",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 139.7,
+        "daily_return": -0.16,
+        "high": 141.17,
+        "low": 136.43,
+        "open": 139.86,
+        "timestamp": "2025-07-22 16:00:00-0400",
+        "transactions": 25408.0,
+        "volume": 1406821.0,
+        "vwap": 139.3497
+      },
+      "price_role": "ordinary",
+      "sector_return": 1.01,
+      "spy_return": 0.01
+    },
+    {
+      "adj_return": -1.09,
+      "boundary_role": null,
+      "date": "2025-07-23",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 139.37,
+        "daily_return": -0.24,
+        "high": 140.51,
+        "low": 137.085,
+        "open": 140.38,
+        "timestamp": "2025-07-23 16:00:00-0400",
+        "transactions": 23684.0,
+        "volume": 877270.0,
+        "vwap": 139.1353
+      },
+      "price_role": "ordinary",
+      "sector_return": 0.47,
+      "spy_return": 0.85
+    },
+    {
+      "adj_return": -1.7,
+      "boundary_role": null,
+      "date": "2025-07-24",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 137.04,
+        "daily_return": -1.67,
+        "high": 139.85,
+        "low": 136.5147,
+        "open": 139.39,
+        "timestamp": "2025-07-24 16:00:00-0400",
+        "transactions": 22279.0,
+        "volume": 810786.0,
+        "vwap": 137.5502
+      },
+      "price_role": "ordinary",
+      "sector_return": -1.66,
+      "spy_return": 0.03
+    },
+    {
+      "adj_return": 0.77,
+      "boundary_role": null,
+      "date": "2025-07-25",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 138.67,
+        "daily_return": 1.19,
+        "high": 140.07,
+        "low": 137.13,
+        "open": 137.62,
+        "timestamp": "2025-07-25 16:00:00-0400",
+        "transactions": 19469.0,
+        "volume": 753699.0,
+        "vwap": 138.9348
+      },
+      "price_role": "ordinary",
+      "sector_return": 0.93,
+      "spy_return": 0.42
+    },
+    {
+      "adj_return": 2.76,
+      "boundary_role": null,
+      "date": "2025-07-28",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": true,
+      "is_significant": true,
+      "is_trading_day": true,
+      "price": {
+        "close": 142.45,
+        "daily_return": 2.73,
+        "high": 142.985,
+        "low": 139.1482,
+        "open": 140.1,
+        "timestamp": "2025-07-28 16:00:00-0400",
+        "transactions": 22794.0,
+        "volume": 1127733.0,
+        "vwap": 141.6629
+      },
+      "price_role": "ordinary",
+      "sector_return": 0.58,
+      "spy_return": -0.03
+    },
+    {
+      "adj_return": -1.87,
+      "boundary_role": null,
+      "date": "2025-07-29",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 139.41,
+        "daily_return": -2.13,
+        "high": 143.88,
+        "low": 138.38,
+        "open": 142.5,
+        "timestamp": "2025-07-29 16:00:00-0400",
+        "transactions": 26425.0,
+        "volume": 1392953.0,
+        "vwap": 139.8206
+      },
+      "price_role": "ordinary",
+      "sector_return": -0.69,
+      "spy_return": -0.26
+    },
+    {
+      "adj_return": -0.24,
+      "boundary_role": null,
+      "date": "2025-07-30",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 138.9,
+        "daily_return": -0.37,
+        "high": 140.78,
+        "low": 135.56,
+        "open": 140.07,
+        "timestamp": "2025-07-30 16:00:00-0400",
+        "transactions": 21675.0,
+        "volume": 924270.0,
+        "vwap": 138.5434
+      },
+      "price_role": "ordinary",
+      "sector_return": -0.63,
+      "spy_return": -0.13
+    },
+    {
+      "adj_return": -1.33,
+      "boundary_role": null,
+      "date": "2025-07-31",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 136.52,
+        "daily_return": -1.71,
+        "high": 139.09,
+        "low": 135.24,
+        "open": 139.09,
+        "timestamp": "2025-07-31 16:00:00-0400",
+        "transactions": 23280.0,
+        "volume": 889591.0,
+        "vwap": 136.6573
+      },
+      "price_role": "ordinary",
+      "sector_return": -0.79,
+      "spy_return": -0.38
+    },
+    {
+      "adj_return": -0.82,
+      "boundary_role": null,
+      "date": "2025-08-01",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 133.16,
+        "daily_return": -2.46,
+        "high": 136.05,
+        "low": 130.0,
+        "open": 134.45,
+        "timestamp": "2025-08-01 16:00:00-0400",
+        "transactions": 30736.0,
+        "volume": 1246631.0,
+        "vwap": 132.5329
+      },
+      "price_role": "ordinary",
+      "sector_return": -2.41,
+      "spy_return": -1.64
+    },
+    {
+      "adj_return": 1.01,
+      "boundary_role": null,
+      "date": "2025-08-04",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 136.53,
+        "daily_return": 2.53,
+        "high": 136.66,
+        "low": 134.28,
+        "open": 135.5,
+        "timestamp": "2025-08-04 16:00:00-0400",
+        "transactions": 28198.0,
+        "volume": 976211.0,
+        "vwap": 135.9064
+      },
+      "price_role": "ordinary",
+      "sector_return": 1.18,
+      "spy_return": 1.52
+    },
+    {
+      "adj_return": -0.02,
+      "boundary_role": null,
+      "date": "2025-08-05",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 135.81,
+        "daily_return": -0.53,
+        "high": 139.1309,
+        "low": 135.03,
+        "open": 136.75,
+        "timestamp": "2025-08-05 16:00:00-0400",
+        "transactions": 19438.0,
+        "volume": 736044.0,
+        "vwap": 136.3624
+      },
+      "price_role": "ordinary",
+      "sector_return": 0.13,
+      "spy_return": -0.51
+    },
+    {
+      "adj_return": -0.98,
+      "boundary_role": null,
+      "date": "2025-08-06",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 135.53,
+        "daily_return": -0.21,
+        "high": 136.46,
+        "low": 134.22,
+        "open": 135.9,
+        "timestamp": "2025-08-06 16:00:00-0400",
+        "transactions": 19593.0,
+        "volume": 737910.0,
+        "vwap": 135.3836
+      },
+      "price_role": "ordinary",
+      "sector_return": 2.08,
+      "spy_return": 0.77
+    },
+    {
+      "adj_return": -2.0,
+      "boundary_role": null,
+      "date": "2025-08-07",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": true,
+      "is_significant": true,
+      "is_trading_day": true,
+      "price": {
+        "close": 132.71,
+        "daily_return": -2.08,
+        "high": 136.8024,
+        "low": 131.91,
+        "open": 135.81,
+        "timestamp": "2025-08-07 16:00:00-0400",
+        "transactions": 28975.0,
+        "volume": 1332791.0,
+        "vwap": 132.982
+      },
+      "price_role": "ordinary",
+      "sector_return": -0.03,
+      "spy_return": -0.08
+    },
+    {
+      "adj_return": -0.17,
+      "boundary_role": null,
+      "date": "2025-08-08",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 133.52,
+        "daily_return": 0.61,
+        "high": 134.62,
+        "low": 132.02,
+        "open": 133.6,
+        "timestamp": "2025-08-08 16:00:00-0400",
+        "transactions": 19275.0,
+        "volume": 721830.0,
+        "vwap": 133.4527
+      },
+      "price_role": "ordinary",
+      "sector_return": 0.17,
+      "spy_return": 0.78
+    },
+    {
+      "adj_return": -0.98,
+      "boundary_role": null,
+      "date": "2025-08-11",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 131.94,
+        "daily_return": -1.18,
+        "high": 136.255,
+        "low": 131.4,
+        "open": 134.38,
+        "timestamp": "2025-08-11 16:00:00-0400",
+        "transactions": 25798.0,
+        "volume": 987618.0,
+        "vwap": 132.9381
+      },
+      "price_role": "ordinary",
+      "sector_return": 0.26,
+      "spy_return": -0.2
+    },
+    {
+      "adj_return": 3.52,
+      "boundary_role": null,
+      "date": "2025-08-12",
+      "events": [
+        {
+          "authors": [
+            "Benzinga Newsdesk"
+          ],
+          "available_precision": "timestamp",
+          "channels": [
+            "News",
+            "Upgrades",
+            "Price Target",
+            "Analyst Ratings"
+          ],
+          "created": "2025-08-12T06:36:21-04:00",
+          "event_ref": "news:bzNews_47053899",
+          "forward_returns": {
+            "daily": {
+              "adj_industry": 1.97,
+              "adj_macro": 3.55,
+              "adj_sector": 3.55,
+              "end_ts": "2025-08-12T16:00:00-04:00",
+              "industry": 2.65,
+              "macro": 1.07,
+              "sector": 1.07,
+              "start_ts": "2025-08-11T16:00:00-04:00",
+              "stock": 4.62
+            },
+            "hourly": {
+              "adj_industry": 0.02,
+              "adj_macro": 0.05,
+              "adj_sector": 0.02,
+              "end_ts": "2025-08-12T07:36:21-04:00",
+              "industry": 0.0,
+              "macro": -0.03,
+              "sector": 0.0,
+              "start_ts": "2025-08-12T06:36:21-04:00",
+              "stock": 0.02
+            },
+            "session": {
+              "adj_industry": 0.49,
+              "adj_macro": 0.79,
+              "adj_sector": 0.65,
+              "end_ts": "2025-08-12T09:35:00-04:00",
+              "industry": 0.84,
+              "macro": 0.54,
+              "sector": 0.68,
+              "start_ts": "2025-08-12T06:36:21-04:00",
+              "stock": 1.33
+            }
+          },
+          "id": "bzNews_47053899",
+          "market_session": "pre_market",
+          "returns_schedule_raw": "{\"hourly\": \"2025-08-12T07:36:21-04:00\", \"session\": \"2025-08-12T09:35:00-04:00\", \"daily\": \"2025-08-12T16:00:00-04:00\"}",
+          "tags": [],
+          "title": "Loop Capital Upgrades Five Below to Buy, Raises Price Target to $165",
+          "type": "news",
+          "updated": "2025-08-12T06:36:22-04:00",
+          "url": "https://www.benzinga.com/news/25/08/47053899/loop-capital-upgrades-five-below-to-buy-raises-price-target-to-165"
+        },
+        {
+          "authors": [
+            "Benzinga Newsdesk"
+          ],
+          "available_precision": "timestamp",
+          "channels": [
+            "News",
+            "Price Target",
+            "Analyst Ratings"
+          ],
+          "created": "2025-08-12T08:51:41-04:00",
+          "event_ref": "news:bzNews_47057282",
+          "forward_returns": {
+            "daily": {
+              "adj_industry": 1.97,
+              "adj_macro": 3.55,
+              "adj_sector": 3.55,
+              "end_ts": "2025-08-12T16:00:00-04:00",
+              "industry": 2.65,
+              "macro": 1.07,
+              "sector": 1.07,
+              "start_ts": "2025-08-11T16:00:00-04:00",
+              "stock": 4.62
+            },
+            "hourly": {
+              "adj_industry": 2.28,
+              "adj_macro": 2.18,
+              "adj_sector": 2.57,
+              "end_ts": "2025-08-12T09:51:41-04:00",
+              "industry": -0.45,
+              "macro": -0.35,
+              "sector": -0.74,
+              "start_ts": "2025-08-12T08:51:41-04:00",
+              "stock": 1.83
+            },
+            "session": {
+              "adj_industry": 1.2,
+              "adj_macro": 0.84,
+              "adj_sector": 0.85,
+              "end_ts": "2025-08-12T09:35:00-04:00",
+              "industry": -0.38,
+              "macro": -0.02,
+              "sector": -0.03,
+              "start_ts": "2025-08-12T08:51:41-04:00",
+              "stock": 0.82
+            }
+          },
+          "id": "bzNews_47057282",
+          "market_session": "pre_market",
+          "returns_schedule_raw": "{\"hourly\": \"2025-08-12T09:51:41-04:00\", \"session\": \"2025-08-12T09:35:00-04:00\", \"daily\": \"2025-08-12T16:00:00-04:00\"}",
+          "tags": [],
+          "title": "Evercore ISI Group Maintains In-Line on Five Below, Raises Price Target to $132",
+          "type": "news",
+          "updated": "2025-08-12T08:51:41-04:00",
+          "url": "https://www.benzinga.com/news/25/08/47057282/evercore-isi-group-maintains-in-line-on-five-below-raises-price-target-to-132"
+        }
+      ],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": true,
+      "is_trading_day": true,
+      "price": {
+        "close": 137.98,
+        "daily_return": 4.58,
+        "high": 138.6,
+        "low": 133.99,
+        "open": 135.93,
+        "timestamp": "2025-08-12 16:00:00-0400",
+        "transactions": 28985.0,
+        "volume": 1196289.0,
+        "vwap": 137.5383
+      },
+      "price_role": "ordinary",
+      "sector_return": 1.06,
+      "spy_return": 1.06
+    },
+    {
+      "adj_return": -0.11,
+      "boundary_role": null,
+      "date": "2025-08-13",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 138.3,
+        "daily_return": 0.23,
+        "high": 139.73,
+        "low": 137.16,
+        "open": 138.21,
+        "timestamp": "2025-08-13 16:00:00-0400",
+        "transactions": 21434.0,
+        "volume": 991599.0,
+        "vwap": 138.2857
+      },
+      "price_role": "ordinary",
+      "sector_return": 1.37,
+      "spy_return": 0.34
+    },
+    {
+      "adj_return": -2.86,
+      "boundary_role": null,
+      "date": "2025-08-14",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": true,
+      "is_significant": true,
+      "is_trading_day": true,
+      "price": {
+        "close": 134.36,
+        "daily_return": -2.85,
+        "high": 135.185,
+        "low": 131.52,
+        "open": 134.77,
+        "timestamp": "2025-08-14 16:00:00-0400",
+        "transactions": 23471.0,
+        "volume": 1005982.0,
+        "vwap": 133.7335
+      },
+      "price_role": "ordinary",
+      "sector_return": -0.11,
+      "spy_return": 0.01
+    },
+    {
+      "adj_return": 0.73,
+      "boundary_role": null,
+      "date": "2025-08-15",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 135.03,
+        "daily_return": 0.5,
+        "high": 135.12,
+        "low": 132.0,
+        "open": 134.12,
+        "timestamp": "2025-08-15 16:00:00-0400",
+        "transactions": 19750.0,
+        "volume": 743982.0,
+        "vwap": 134.4322
+      },
+      "price_role": "ordinary",
+      "sector_return": -0.24,
+      "spy_return": -0.23
+    },
+    {
+      "adj_return": 5.09,
+      "boundary_role": null,
+      "date": "2025-08-18",
+      "events": [
+        {
+          "authors": [
+            "Benzinga Insights"
+          ],
+          "available_precision": "timestamp",
+          "channels": [
+            "Short Sellers",
+            "Short Ideas",
+            "Trading Ideas"
+          ],
+          "created": "2025-08-18T09:00:25-04:00",
+          "event_ref": "news:bzNews_47183880",
+          "forward_returns": {
+            "daily": {
+              "adj_industry": 4.2,
+              "adj_macro": 5.09,
+              "adj_sector": 4.7,
+              "end_ts": "2025-08-18T16:00:00-04:00",
+              "industry": 0.87,
+              "macro": -0.02,
+              "sector": 0.37,
+              "start_ts": "2025-08-15T16:00:00-04:00",
+              "stock": 5.07
+            },
+            "hourly": {
+              "adj_industry": 1.55,
+              "adj_macro": 2.26,
+              "adj_sector": 2.03,
+              "end_ts": "2025-08-18T10:00:25-04:00",
+              "industry": 0.68,
+              "macro": -0.03,
+              "sector": 0.2,
+              "start_ts": "2025-08-18T09:00:25-04:00",
+              "stock": 2.23
+            },
+            "session": {
+              "adj_industry": 0.81,
+              "adj_macro": 0.99,
+              "adj_sector": 0.83,
+              "end_ts": "2025-08-18T09:35:00-04:00",
+              "industry": 0.23,
+              "macro": 0.05,
+              "sector": 0.21,
+              "start_ts": "2025-08-18T09:00:25-04:00",
+              "stock": 1.04
+            }
+          },
+          "id": "bzNews_47183880",
+          "market_session": "pre_market",
+          "returns_schedule_raw": "{\"hourly\": \"2025-08-18T10:00:25-04:00\", \"session\": \"2025-08-18T09:35:00-04:00\", \"daily\": \"2025-08-18T16:00:00-04:00\"}",
+          "tags": [
+            "BZI-SHORTHIST"
+          ],
+          "title": "Looking Into Five Below's Recent Short Interest",
+          "type": "news",
+          "updated": "2025-08-18T09:00:26-04:00",
+          "url": "https://www.benzinga.com/insights/short-sellers/25/08/47183880/looking-into-five-belows-recent-short-interest"
+        }
+      ],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": true,
+      "is_trading_day": true,
+      "price": {
+        "close": 141.88,
+        "daily_return": 5.07,
+        "high": 141.925,
+        "low": 134.895,
+        "open": 135.18,
+        "timestamp": "2025-08-18 16:00:00-0400",
+        "transactions": 29976.0,
+        "volume": 1359880.0,
+        "vwap": 140.2432
+      },
+      "price_role": "ordinary",
+      "sector_return": 0.4,
+      "spy_return": -0.02
+    },
+    {
+      "adj_return": 0.26,
+      "boundary_role": null,
+      "date": "2025-08-19",
+      "events": [
+        {
+          "authors": [
+            "Benzinga Newsdesk"
+          ],
+          "available_precision": "timestamp",
+          "channels": [
+            "News",
+            "Price Target",
+            "Analyst Ratings"
+          ],
+          "created": "2025-08-19T07:44:33-04:00",
+          "event_ref": "news:bzNews_47205297",
+          "forward_returns": {
+            "daily": {
+              "adj_industry": -0.2,
+              "adj_macro": 0.27,
+              "adj_sector": -0.24,
+              "end_ts": "2025-08-19T16:00:00-04:00",
+              "industry": -0.08,
+              "macro": -0.55,
+              "sector": -0.04,
+              "start_ts": "2025-08-18T16:00:00-04:00",
+              "stock": -0.28
+            },
+            "hourly": {
+              "adj_industry": 0.13,
+              "adj_macro": -0.06,
+              "adj_sector": -0.16,
+              "end_ts": "2025-08-19T08:44:33-04:00",
+              "industry": -0.13,
+              "macro": 0.06,
+              "sector": 0.16,
+              "start_ts": "2025-08-19T07:44:33-04:00",
+              "stock": 0.0
+            },
+            "session": {
+              "adj_industry": -0.79,
+              "adj_macro": -0.23,
+              "adj_sector": -0.61,
+              "end_ts": "2025-08-19T09:35:00-04:00",
+              "industry": 0.44,
+              "macro": -0.12,
+              "sector": 0.26,
+              "start_ts": "2025-08-19T07:44:33-04:00",
+              "stock": -0.35
+            }
+          },
+          "id": "bzNews_47205297",
+          "market_session": "pre_market",
+          "returns_schedule_raw": "{\"hourly\": \"2025-08-19T08:44:33-04:00\", \"session\": \"2025-08-19T09:35:00-04:00\", \"daily\": \"2025-08-19T16:00:00-04:00\"}",
+          "tags": [],
+          "title": "Mizuho Maintains Neutral on Five Below, Raises Price Target to $132",
+          "type": "news",
+          "updated": "2025-08-19T07:44:33-04:00",
+          "url": "https://www.benzinga.com/news/25/08/47205297/mizuho-maintains-neutral-on-five-below-raises-price-target-to-132"
+        },
+        {
+          "authors": [
+            "Benzinga Insights"
+          ],
+          "available_precision": "timestamp",
+          "channels": [
+            "Analyst Ratings"
+          ],
+          "created": "2025-08-19T10:01:56-04:00",
+          "event_ref": "news:bzNews_47209320",
+          "forward_returns": {
+            "daily": {
+              "adj_industry": -0.2,
+              "adj_macro": 0.27,
+              "adj_sector": -0.24,
+              "end_ts": "2025-08-19T16:00:00-04:00",
+              "industry": -0.08,
+              "macro": -0.55,
+              "sector": -0.04,
+              "start_ts": "2025-08-18T16:00:00-04:00",
+              "stock": -0.28
+            },
+            "hourly": {
+              "adj_industry": -0.39,
+              "adj_macro": -0.62,
+              "adj_sector": -0.57,
+              "end_ts": "2025-08-19T11:01:56-04:00",
+              "industry": -0.6,
+              "macro": -0.37,
+              "sector": -0.42,
+              "start_ts": "2025-08-19T10:01:56-04:00",
+              "stock": -0.99
+            },
+            "session": {
+              "adj_industry": 0.3,
+              "adj_macro": -0.28,
+              "adj_sector": -0.08,
+              "end_ts": "2025-08-19T16:00:00-04:00",
+              "industry": -1.09,
+              "macro": -0.51,
+              "sector": -0.71,
+              "start_ts": "2025-08-19T10:01:56-04:00",
+              "stock": -0.79
+            }
+          },
+          "id": "bzNews_47209320",
+          "market_session": "in_market",
+          "returns_schedule_raw": "{\"hourly\": \"2025-08-19T11:01:56-04:00\", \"session\": \"2025-08-19T16:00:00-04:00\", \"daily\": \"2025-08-19T16:00:00-04:00\"}",
+          "tags": [
+            "BZI-AAR"
+          ],
+          "title": "Assessing Five Below: Insights From 21 Financial Analysts",
+          "type": "news",
+          "updated": "2025-08-19T10:01:57-04:00",
+          "url": "https://www.benzinga.com/insights/analyst-ratings/25/08/47209320/assessing-five-below-insights-from-21-financial-analysts"
+        },
+        {
+          "authors": [
+            "Benzinga Newsdesk"
+          ],
+          "available_precision": "timestamp",
+          "channels": [
+            "News",
+            "Price Target",
+            "Analyst Ratings"
+          ],
+          "created": "2025-08-19T11:27:23-04:00",
+          "event_ref": "news:bzNews_47213026",
+          "forward_returns": {
+            "daily": {
+              "adj_industry": -0.2,
+              "adj_macro": 0.27,
+              "adj_sector": -0.24,
+              "end_ts": "2025-08-19T16:00:00-04:00",
+              "industry": -0.08,
+              "macro": -0.55,
+              "sector": -0.04,
+              "start_ts": "2025-08-18T16:00:00-04:00",
+              "stock": -0.28
+            },
+            "hourly": {
+              "adj_industry": -0.23,
+              "adj_macro": -0.25,
+              "adj_sector": -0.36,
+              "end_ts": "2025-08-19T12:27:23-04:00",
+              "industry": -0.18,
+              "macro": -0.16,
+              "sector": -0.05,
+              "start_ts": "2025-08-19T11:27:23-04:00",
+              "stock": -0.41
+            },
+            "session": {
+              "adj_industry": 0.61,
+              "adj_macro": 0.58,
+              "adj_sector": 0.63,
+              "end_ts": "2025-08-19T16:00:00-04:00",
+              "industry": -0.31,
+              "macro": -0.28,
+              "sector": -0.33,
+              "start_ts": "2025-08-19T11:27:23-04:00",
+              "stock": 0.3
+            }
+          },
+          "id": "bzNews_47213026",
+          "market_session": "in_market",
+          "returns_schedule_raw": "{\"hourly\": \"2025-08-19T12:27:23-04:00\", \"session\": \"2025-08-19T16:00:00-04:00\", \"daily\": \"2025-08-19T16:00:00-04:00\"}",
+          "tags": [],
+          "title": "Citigroup Maintains Neutral on Five Below, Raises Price Target to $142",
+          "type": "news",
+          "updated": "2025-08-19T11:27:24-04:00",
+          "url": "https://www.benzinga.com/news/25/08/47213026/citigroup-maintains-neutral-on-five-below-raises-price-target-to-142"
+        }
+      ],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 141.48,
+        "daily_return": -0.28,
+        "high": 143.0,
+        "low": 139.745,
+        "open": 141.22,
+        "timestamp": "2025-08-19 16:00:00-0400",
+        "transactions": 27503.0,
+        "volume": 1140286.0,
+        "vwap": 141.1333
+      },
+      "price_role": "ordinary",
+      "sector_return": -0.05,
+      "spy_return": -0.54
+    },
+    {
+      "adj_return": -1.28,
+      "boundary_role": null,
+      "date": "2025-08-20",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 139.28,
+        "daily_return": -1.55,
+        "high": 141.46,
+        "low": 138.0,
+        "open": 139.98,
+        "timestamp": "2025-08-20 16:00:00-0400",
+        "transactions": 24503.0,
+        "volume": 1395591.0,
+        "vwap": 139.8365
+      },
+      "price_role": "ordinary",
+      "sector_return": -0.99,
+      "spy_return": -0.27
+    },
+    {
+      "adj_return": 2.19,
+      "boundary_role": null,
+      "date": "2025-08-21",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": true,
+      "is_significant": true,
+      "is_trading_day": true,
+      "price": {
+        "close": 141.78,
+        "daily_return": 1.79,
+        "high": 141.98,
+        "low": 136.23,
+        "open": 138.45,
+        "timestamp": "2025-08-21 16:00:00-0400",
+        "transactions": 24408.0,
+        "volume": 1166071.0,
+        "vwap": 139.8656
+      },
+      "price_role": "ordinary",
+      "sector_return": -0.59,
+      "spy_return": -0.4
+    },
+    {
+      "adj_return": -1.52,
+      "boundary_role": null,
+      "date": "2025-08-22",
+      "events": [
+        {
+          "authors": [
+            "Benzinga Newsdesk"
+          ],
+          "available_precision": "timestamp",
+          "channels": [
+            "News",
+            "Price Target",
+            "Analyst Ratings"
+          ],
+          "created": "2025-08-22T06:54:42-04:00",
+          "event_ref": "news:bzNews_47278035",
+          "forward_returns": {
+            "daily": {
+              "adj_industry": -2.46,
+              "adj_macro": -1.53,
+              "adj_sector": -3.02,
+              "end_ts": "2025-08-22T16:00:00-04:00",
+              "industry": 2.48,
+              "macro": 1.55,
+              "sector": 3.04,
+              "start_ts": "2025-08-21T16:00:00-04:00",
+              "stock": 0.02
+            },
+            "hourly": {
+              "adj_industry": -0.02,
+              "adj_macro": 0.01,
+              "adj_sector": -0.02,
+              "end_ts": "2025-08-22T07:54:42-04:00",
+              "industry": 0.0,
+              "macro": -0.03,
+              "sector": 0.0,
+              "start_ts": "2025-08-22T06:54:42-04:00",
+              "stock": -0.02
+            },
+            "session": {
+              "adj_industry": -0.13,
+              "adj_macro": 0.25,
+              "adj_sector": -0.14,
+              "end_ts": "2025-08-22T09:35:00-04:00",
+              "industry": 0.44,
+              "macro": 0.06,
+              "sector": 0.45,
+              "start_ts": "2025-08-22T06:54:42-04:00",
+              "stock": 0.31
+            }
+          },
+          "id": "bzNews_47278035",
+          "market_session": "pre_market",
+          "returns_schedule_raw": "{\"hourly\": \"2025-08-22T07:54:42-04:00\", \"session\": \"2025-08-22T09:35:00-04:00\", \"daily\": \"2025-08-22T16:00:00-04:00\"}",
+          "tags": [],
+          "title": "Telsey Advisory Group Maintains Market Perform on Five Below, Raises Price Target to $144",
+          "type": "news",
+          "updated": "2025-08-22T06:54:42-04:00",
+          "url": "https://www.benzinga.com/news/25/08/47278035/telsey-advisory-group-maintains-market-perform-on-five-below-raises-price-target-to-144"
+        },
+        {
+          "authors": [
+            "Akanksha Bakshi"
+          ],
+          "available_precision": "timestamp",
+          "channels": [
+            "Analyst Color",
+            "News",
+            "Price Target",
+            "Reiteration",
+            "Top Stories",
+            "After-Hours Center",
+            "Movers",
+            "Trading Ideas"
+          ],
+          "created": "2025-08-22T13:07:07-04:00",
+          "event_ref": "news:bzNews_47288953",
+          "forward_returns": {
+            "daily": {
+              "adj_industry": -2.46,
+              "adj_macro": -1.53,
+              "adj_sector": -3.02,
+              "end_ts": "2025-08-22T16:00:00-04:00",
+              "industry": 2.48,
+              "macro": 1.55,
+              "sector": 3.04,
+              "start_ts": "2025-08-21T16:00:00-04:00",
+              "stock": 0.02
+            },
+            "hourly": {
+              "adj_industry": 0.5,
+              "adj_macro": 0.31,
+              "adj_sector": 0.28,
+              "end_ts": "2025-08-22T14:07:07-04:00",
+              "industry": -0.18,
+              "macro": 0.01,
+              "sector": 0.04,
+              "start_ts": "2025-08-22T13:07:07-04:00",
+              "stock": 0.32
+            },
+            "session": {
+              "adj_industry": 0.86,
+              "adj_macro": 0.83,
+              "adj_sector": 0.56,
+              "end_ts": "2025-08-22T16:00:00-04:00",
+              "industry": -0.05,
+              "macro": -0.02,
+              "sector": 0.25,
+              "start_ts": "2025-08-22T13:07:07-04:00",
+              "stock": 0.81
+            }
+          },
+          "id": "bzNews_47288953",
+          "market_session": "in_market",
+          "returns_schedule_raw": "{\"hourly\": \"2025-08-22T14:07:07-04:00\", \"session\": \"2025-08-22T16:00:00-04:00\", \"daily\": \"2025-08-22T16:00:00-04:00\"}",
+          "tags": [
+            "Expert Ideas"
+          ],
+          "title": "Tariffs Still A Wildcard For Five Below As Growth Story Evolves, Says Analyst",
+          "type": "news",
+          "updated": "2025-08-22T13:07:08-04:00",
+          "url": "https://www.benzinga.com/analyst-stock-ratings/analyst-color/25/08/47288953/tariffs-still-a-wildcard-for-five-below-as-growth-story-evolves-says-analyst"
+        }
+      ],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 141.81,
+        "daily_return": 0.02,
+        "high": 144.68,
+        "low": 139.75,
+        "open": 141.69,
+        "timestamp": "2025-08-22 16:00:00-0400",
+        "transactions": 34199.0,
+        "volume": 1182020.0,
+        "vwap": 141.9038
+      },
+      "price_role": "ordinary",
+      "sector_return": 3.04,
+      "spy_return": 1.54
+    },
+    {
+      "adj_return": -0.49,
+      "boundary_role": null,
+      "date": "2025-08-25",
+      "events": [],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 140.49,
+        "daily_return": -0.93,
+        "high": 143.6594,
+        "low": 140.39,
+        "open": 141.82,
+        "timestamp": "2025-08-25 16:00:00-0400",
+        "transactions": 21965.0,
+        "volume": 928016.0,
+        "vwap": 141.1662
+      },
+      "price_role": "ordinary",
+      "sector_return": -0.2,
+      "spy_return": -0.44
+    },
+    {
+      "adj_return": 0.64,
+      "boundary_role": null,
+      "date": "2025-08-26",
+      "events": [
+        {
+          "authors": [
+            "Benzinga Newsdesk"
+          ],
+          "available_precision": "timestamp",
+          "channels": [
+            "News",
+            "Price Target",
+            "Analyst Ratings"
+          ],
+          "created": "2025-08-26T09:19:28-04:00",
+          "event_ref": "news:bzNews_47331001",
+          "forward_returns": {
+            "daily": {
+              "adj_industry": 1.2,
+              "adj_macro": 0.73,
+              "adj_sector": 0.75,
+              "end_ts": "2025-08-26T16:00:00-04:00",
+              "industry": -0.07,
+              "macro": 0.4,
+              "sector": 0.38,
+              "start_ts": "2025-08-25T16:00:00-04:00",
+              "stock": 1.13
+            },
+            "hourly": {
+              "adj_industry": 1.96,
+              "adj_macro": 1.11,
+              "adj_sector": 0.95,
+              "end_ts": "2025-08-26T10:19:28-04:00",
+              "industry": -0.74,
+              "macro": 0.11,
+              "sector": 0.27,
+              "start_ts": "2025-08-26T09:19:28-04:00",
+              "stock": 1.22
+            },
+            "session": {
+              "adj_industry": 1.7,
+              "adj_macro": 0.44,
+              "adj_sector": 0.19,
+              "end_ts": "2025-08-26T09:35:00-04:00",
+              "industry": -1.21,
+              "macro": 0.05,
+              "sector": 0.3,
+              "start_ts": "2025-08-26T09:19:28-04:00",
+              "stock": 0.49
+            }
+          },
+          "id": "bzNews_47331001",
+          "market_session": "pre_market",
+          "returns_schedule_raw": "{\"hourly\": \"2025-08-26T10:19:28-04:00\", \"session\": \"2025-08-26T09:35:00-04:00\", \"daily\": \"2025-08-26T16:00:00-04:00\"}",
+          "tags": [],
+          "title": "Evercore ISI Group Maintains In-Line on Five Below, Raises Price Target to $134",
+          "type": "news",
+          "updated": "2025-08-26T09:19:29-04:00",
+          "url": "https://www.benzinga.com/news/25/08/47331001/evercore-isi-group-maintains-in-line-on-five-below-raises-price-target-to-134"
+        },
+        {
+          "authors": [
+            "Benzinga Insights"
+          ],
+          "available_precision": "timestamp",
+          "channels": [
+            "Earnings"
+          ],
+          "created": "2025-08-26T11:04:02-04:00",
+          "event_ref": "news:bzNews_47335337",
+          "forward_returns": {
+            "daily": {
+              "adj_industry": 1.2,
+              "adj_macro": 0.73,
+              "adj_sector": 0.75,
+              "end_ts": "2025-08-26T16:00:00-04:00",
+              "industry": -0.07,
+              "macro": 0.4,
+              "sector": 0.38,
+              "start_ts": "2025-08-25T16:00:00-04:00",
+              "stock": 1.13
+            },
+            "hourly": {
+              "adj_industry": 0.37,
+              "adj_macro": 0.18,
+              "adj_sector": 0.3,
+              "end_ts": "2025-08-26T12:04:02-04:00",
+              "industry": -0.15,
+              "macro": 0.04,
+              "sector": -0.08,
+              "start_ts": "2025-08-26T11:04:02-04:00",
+              "stock": 0.22
+            },
+            "session": {
+              "adj_industry": -0.14,
+              "adj_macro": -1.02,
+              "adj_sector": -1.08,
+              "end_ts": "2025-08-26T16:00:00-04:00",
+              "industry": -0.53,
+              "macro": 0.35,
+              "sector": 0.41,
+              "start_ts": "2025-08-26T11:04:02-04:00",
+              "stock": -0.67
+            }
+          },
+          "id": "bzNews_47335337",
+          "market_session": "in_market",
+          "returns_schedule_raw": "{\"hourly\": \"2025-08-26T12:04:02-04:00\", \"session\": \"2025-08-26T16:00:00-04:00\", \"daily\": \"2025-08-26T16:00:00-04:00\"}",
+          "tags": [
+            "BZI-EP"
+          ],
+          "title": "What to Expect from Five Below's Earnings",
+          "type": "news",
+          "updated": "2025-08-26T11:04:03-04:00",
+          "url": "https://www.benzinga.com/insights/earnings/25/08/47335337/what-to-expect-from-five-belows-earnings"
+        }
+      ],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 141.98,
+        "daily_return": 1.06,
+        "high": 143.66,
+        "low": 140.29,
+        "open": 140.53,
+        "timestamp": "2025-08-26 16:00:00-0400",
+        "transactions": 26650.0,
+        "volume": 1179553.0,
+        "vwap": 142.0421
+      },
+      "price_role": "ordinary",
+      "sector_return": 0.46,
+      "spy_return": 0.42
+    },
+    {
+      "adj_return": 1.48,
+      "boundary_role": "cutoff_boundary",
+      "date": "2025-08-27",
+      "events": [
+        {
+          "authors": [
+            "Benzinga Newsdesk"
+          ],
+          "available_precision": "timestamp",
+          "channels": [
+            "Earnings",
+            "Earnings Beats",
+            "News"
+          ],
+          "created": "2025-08-27T16:03:38-04:00",
+          "event_ref": "news:bzNews_47370255",
+          "forward_returns": {
+            "daily": null,
+            "hourly": null,
+            "session": null
+          },
+          "id": "bzNews_47370255",
+          "market_session": "post_market",
+          "returns_schedule_raw": "{\"hourly\": \"2025-08-27T17:03:38-04:00\", \"session\": \"2025-08-28T09:35:00-04:00\", \"daily\": \"2025-08-28T16:00:00-04:00\"}",
+          "tags": [],
+          "title": "Five Below Q2 Adj. EPS $0.81 Beats $0.61 Estimate, Sales $1.027B Beat $992.700M Estimate",
+          "type": "news",
+          "updated": "2025-08-27T16:03:39-04:00",
+          "url": "https://www.benzinga.com/news/earnings/25/08/47370255/five-below-q2-adj-eps-0-81-beats-0-61-estimate-sales-1-027b-beat-992-700m-estimate"
+        },
+        {
+          "authors": [
+            "Benzinga Newsdesk"
+          ],
+          "available_precision": "timestamp",
+          "channels": [
+            "News",
+            "Guidance"
+          ],
+          "created": "2025-08-27T16:04:55-04:00",
+          "event_ref": "news:bzNews_47370337",
+          "forward_returns": {
+            "daily": null,
+            "hourly": null,
+            "session": null
+          },
+          "id": "bzNews_47370337",
+          "market_session": "post_market",
+          "returns_schedule_raw": "{\"hourly\": \"2025-08-27T17:04:55-04:00\", \"session\": \"2025-08-28T09:35:00-04:00\", \"daily\": \"2025-08-28T16:00:00-04:00\"}",
+          "tags": [],
+          "title": "Five Below Sees Q3 GAAP EPS $0.09-$0.21 vs $0.02 Est; Affirms Q3 Sales Guidance of $950.000M-$970.000M vs $929.908M Est",
+          "type": "news",
+          "updated": "2025-08-27T16:04:56-04:00",
+          "url": "https://www.benzinga.com/news/25/08/47370337/five-below-sees-q3-gaap-eps-0-09-0-21-vs-0-02-est-affirms-q3-sales-guidance-of-950-000m-970-000m-vs"
+        },
+        {
+          "authors": [
+            "Benzinga Newsdesk"
+          ],
+          "available_precision": "timestamp",
+          "channels": [
+            "News",
+            "Guidance"
+          ],
+          "created": "2025-08-27T16:05:13-04:00",
+          "event_ref": "news:bzNews_47370398",
+          "forward_returns": {
+            "daily": null,
+            "hourly": null,
+            "session": null
+          },
+          "id": "bzNews_47370398",
+          "market_session": "post_market",
+          "returns_schedule_raw": "{\"hourly\": \"2025-08-27T17:05:13-04:00\", \"session\": \"2025-08-28T09:35:00-04:00\", \"daily\": \"2025-08-28T16:00:00-04:00\"}",
+          "tags": [],
+          "title": "Five Below Sees Q3 Adj EPS $0.12-$0.24 vs $0.02 Est; Sees Sales $950.000M-$970.000M vs $929.908M Est",
+          "type": "news",
+          "updated": "2025-08-27T16:05:14-04:00",
+          "url": "https://www.benzinga.com/news/25/08/47370398/five-below-sees-q3-adj-eps-0-12-0-24-vs-0-02-est-sees-sales-950-000m-970-000m-vs-929-908m-est"
+        },
+        {
+          "authors": [
+            "Benzinga Newsdesk"
+          ],
+          "available_precision": "timestamp",
+          "channels": [
+            "News",
+            "Guidance"
+          ],
+          "created": "2025-08-27T16:06:07-04:00",
+          "event_ref": "news:bzNews_47370459",
+          "forward_returns": {
+            "daily": null,
+            "hourly": null,
+            "session": null
+          },
+          "id": "bzNews_47370459",
+          "market_session": "post_market",
+          "returns_schedule_raw": "{\"hourly\": \"2025-08-27T17:06:07-04:00\", \"session\": \"2025-08-28T09:35:00-04:00\", \"daily\": \"2025-08-28T16:00:00-04:00\"}",
+          "tags": [],
+          "title": "Five Below Raises FY2025 GAAP EPS Guidance from $4.04-$4.51 to $4.56-$4.96 vs $4.55 Est; Raises FY2025 Sales Guidance from $4.330B-$4.420B to $4.440B-$4.520B vs $4.445B Est",
+          "type": "news",
+          "updated": "2025-08-27T16:06:08-04:00",
+          "url": "https://www.benzinga.com/news/25/08/47370459/five-below-raises-fy2025-gaap-eps-guidance-from-4-04-4-51-to-4-56-4-96-vs-4-55-est-raises-fy2025-sal"
+        },
+        {
+          "authors": [
+            "Benzinga Newsdesk"
+          ],
+          "available_precision": "timestamp",
+          "channels": [
+            "News",
+            "Guidance"
+          ],
+          "created": "2025-08-27T16:06:34-04:00",
+          "event_ref": "news:bzNews_47370488",
+          "forward_returns": {
+            "daily": null,
+            "hourly": null,
+            "session": null
+          },
+          "id": "bzNews_47370488",
+          "market_session": "post_market",
+          "returns_schedule_raw": "{\"hourly\": \"2025-08-27T17:06:34-04:00\", \"session\": \"2025-08-28T09:35:00-04:00\", \"daily\": \"2025-08-28T16:00:00-04:00\"}",
+          "tags": [],
+          "title": "Five Below Raises FY2025 Adj EPS Guidance from $4.25-$4.72 to $4.76-$5.16 vs $4.75 Est; Raises FY2025 Sales Guidance from $4.330B-$4.420B to $4.440B-$4.520B vs $4.445B Est",
+          "type": "news",
+          "updated": "2025-08-27T16:06:34-04:00",
+          "url": "https://www.benzinga.com/news/25/08/47370488/five-below-raises-fy2025-adj-eps-guidance-from-4-25-4-72-to-4-76-5-16-vs-4-75-est-raises-fy2025-sale"
+        }
+      ],
+      "industry_return": null,
+      "is_gap_day": false,
+      "is_significant": false,
+      "is_trading_day": true,
+      "price": {
+        "close": 144.41,
+        "daily_return": 1.71,
+        "high": 146.66,
+        "low": 142.07,
+        "open": 142.14,
+        "timestamp": "2025-08-27 16:00:00-0400",
+        "transactions": 50226.0,
+        "volume": 2745845.0,
+        "vwap": 145.3414
+      },
+      "price_role": "ordinary",
+      "sector_return": 0.02,
+      "spy_return": 0.23
+    }
+  ],
+  "industry": "SpecialtyRetail",
+  "prev_8k_ts": "2025-06-04T16:23:39-04:00",
+  "prev_day": "2025-06-04",
+  "schema_version": "inter_quarter_context.v1",
+  "sector": "ConsumerCyclical",
+  "summary": {
+    "boundary_days_rendered": 2,
+    "gap_days": 8,
+    "non_trading_event_days": 0,
+    "significant_move_days": 13,
+    "total_day_blocks": 59,
+    "total_dividends": 0,
+    "total_filings": 2,
+    "total_news": 31,
+    "total_splits": 0,
+    "trading_days_ordinary": 57
+  },
+  "ticker": "FIVE"
+}
