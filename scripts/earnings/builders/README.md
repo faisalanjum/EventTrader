@@ -9,13 +9,41 @@ TDD-driven safety invariants.
 
 | File | Responsibility |
 |---|---|
-| `_paths.py` | Centralized repo-root + `sys.path` discipline (the load-bearing helper) |
+| `_paths.py` | Centralized repo-root + `sys.path` discipline (load-bearing helper) |
 | `adapters.py` | Uniform adapter wrappers around the underlying builders |
 | `consensus.py` | Consensus history (Alpha Vantage + Yahoo fallback) |
-| `prior_financials.py` | Prior financial trends + revenue splits (XBRL → FSC → Yahoo opt-in) |
-| `macro_snapshot.py` | Macro snapshot (indicators + Benzinga headlines via pit_fetch) |
+| `prior_financials.py` | Prior financial trends + revenue splits |
+| `macro_snapshot.py` | Macro snapshot (indicators + Benzinga via pit_fetch) |
 | `peer_earnings_snapshot.py` | Peer earnings snapshot (top-N same-industry peers) |
-| `warmup_cache.py` | 8-K packet + guidance history + inter-quarter context |
+| `warmup_cache.py` | **Facade + extraction CLI**: `run_warmup`, `run_transcript`, `run_mda`, `run_8k`, `main`; re-exports all 3 orchestration domain modules below |
+| `eight_k_packet.py` | `build_8k_packet` + `_fetch_8k_core` + 8-K Cypher (8k_packet.v1) |
+| `guidance_history.py` | `build_guidance_history` + `render_guidance_text` + guidance helpers + `_run_v2_regression_tests` (guidance_history.v1) |
+| `inter_quarter_context.py` | `build_inter_quarter_context` + `render_inter_quarter_text` + IQ helpers + `_parse_dt_for_pit` (inter_quarter_context.v1) |
+
+## warmup_cache facade contract
+
+`warmup_cache.py` is a hybrid module: it owns the extraction CLI
+(`run_warmup`/`run_transcript`/`run_mda`/`run_8k`/`main`) AND re-exports
+every symbol relocated to `eight_k_packet.py`, `guidance_history.py`, and
+`inter_quarter_context.py`. Re-export uses direct module-level imports:
+
+```python
+from .eight_k_packet import build_8k_packet, _fetch_8k_core, ...
+from .guidance_history import build_guidance_history, ...
+from .inter_quarter_context import build_inter_quarter_context, ...
+```
+
+**Identity contract:** every re-exported symbol MUST resolve via Python `is`
+to the SAME object as its canonical-domain counterpart. NEVER replace the
+re-export with a wrapper function — that creates a new function object and
+silently breaks every identity test (`test_builders_imports.py`,
+`test_builders_warmup_split.py`).
+
+**Why a facade?** The 3 domain modules are pure orchestration; the
+extraction CLI lives ONLY in `warmup_cache.py`. Splitting `warmup_cache.py`
+entirely would force adapters, the `.claude/skills` shim, and the existing
+test suite (which uses `from warmup_cache import build_X`) to update
+imports. The facade keeps every external consumer working unchanged.
 
 ## Shim contract
 
@@ -114,5 +142,9 @@ package under the precedence above. See `_paths.py` docstring for details.
 | `test_builders_static.py` | 29 | AST-level: shim files contain no business logic; CLI shims have `__main__`; `__all__` excludes underscore names |
 | `test_builders_*.py` (per-builder mocked) | 28 | Per-builder unit tests with mocked Neo4j / yfinance / AV |
 | `test_builders_cli_smoke.py` | 6 (2 non-live, 4 live) | warmup_cache `--test` (CLI + .sh wrapper) — non-live; build_* CLIs — live |
+| `test_builders_warmup_split.py` | ~50 | Pre-/post-split goldens (FIVE), facade-vs-canonical identity per symbol per domain, no-back-imports static check |
+| `test_builders_eight_k_packet.py` | ~11 | Mocked: ValueError on missing meta, items JSON parse, null stripping, exhibit preview diff, filing text fallback, atomic write, manager.close on success+exception |
+| `test_builders_guidance_history.py` | ~18 | Mocked: empty packet, PIT vs live query, unit remap, dup collapse (numeric + qualitative), source priority, richest selection, member union/sort, series sort, _format_value edges, render header/cutoff |
+| `test_builders_inter_quarter_context.py` | ~40 | Mocked: boundary roles, PIT-safe price gating, fallback context, synthetic days, forward-return nulling, JSON parse fallback, NaN/list normalization, event sort, sig+gap rules, summary counts, render branches, _parse_dt_for_pit format coverage |
 
-Total non-live: **165 tests** as of Stage 15.
+Total non-live: **285 tests** post-warmup_cache 3-domain split (was 165 pre-split; +120 from `test_builders_warmup_split.py` ~50, `test_builders_eight_k_packet.py` ~11, `test_builders_guidance_history.py` ~18, `test_builders_inter_quarter_context.py` ~40).
