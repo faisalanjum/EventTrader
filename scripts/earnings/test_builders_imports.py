@@ -368,6 +368,7 @@ def test_concurrent_imports_preserve_identity():
         "warmup_cache",
         "scripts.earnings.builders.warmup_cache",
         "scripts.earnings.builders.eight_k_packet",
+        "scripts.earnings.builders.guidance_history",
         "builder_adapters", "scripts.earnings.builder_adapters",
         "scripts.earnings.builders.adapters",
         "scripts.earnings.builders",
@@ -417,6 +418,22 @@ def test_eight_k_packet_canonical_facade_identity():
         f = getattr(wc, sym, None)
         c = getattr(ek, sym, None)
         assert c is not None, f"eight_k_packet missing {sym}"
+        assert f is not None, f"warmup_cache facade missing {sym}"
+        assert f is c, f"facade {sym} != canonical {sym}"
+
+
+def test_guidance_history_canonical_facade_identity():
+    """Stage 2.2 facade contract: warmup_cache re-exports preserve identity
+    with guidance_history canonical home."""
+    import scripts.earnings.builders.warmup_cache as wc
+    import scripts.earnings.builders.guidance_history as gh
+    for sym in ("build_guidance_history", "render_guidance_text", "resolve_unit_groups",
+                "_format_value", "_extract_given_day", "_normalize_qualitative",
+                "_SOURCE_PRIORITY", "QUERY_GUIDANCE_HISTORY", "QUERY_GUIDANCE_HISTORY_PIT",
+                "_run_v2_regression_tests"):
+        f = getattr(wc, sym, None)
+        c = getattr(gh, sym, None)
+        assert c is not None, f"guidance_history missing {sym}"
         assert f is not None, f"warmup_cache facade missing {sym}"
         assert f is c, f"facade {sym} != canonical {sym}"
 
