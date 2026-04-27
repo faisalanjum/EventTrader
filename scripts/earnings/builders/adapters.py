@@ -112,7 +112,7 @@ def build_8k_packet(ticker: str, quarter_info: dict,
 
     effective_cutoff_ts: always null (no temporal query).
     """
-    from scripts.earnings.builders.warmup_cache import build_8k_packet as _legacy
+    from scripts.earnings.builders.eight_k_packet import build_8k_packet as _legacy
 
     accession = quarter_info["accession_8k"]
     out = out_path or f"/tmp/earnings_8k_packet_{accession}.json"
@@ -149,7 +149,7 @@ def build_guidance_history(ticker: str, quarter_info: dict,
 
     effective_cutoff_ts: null for live, pit_cutoff for historical.
     """
-    from scripts.earnings.builders.warmup_cache import build_guidance_history as _legacy
+    from scripts.earnings.builders.guidance_history import build_guidance_history as _legacy
 
     out = out_path or f"/tmp/earnings_guidance_{ticker}.json"
     _ensure_dir(out)
@@ -180,7 +180,7 @@ def build_inter_quarter_context(ticker: str, quarter_info: dict,
 
     effective_cutoff_ts: filed_8k for live, pit_cutoff for historical.
     """
-    from scripts.earnings.builders.warmup_cache import build_inter_quarter_context as _legacy
+    from scripts.earnings.builders.inter_quarter_context import build_inter_quarter_context as _legacy
 
     prev_8k_ts = quarter_info.get("prev_8k_ts")
     if not prev_8k_ts:

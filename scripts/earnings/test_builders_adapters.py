@@ -36,10 +36,11 @@ def test_enrich_packet_live_mode():
 def test_8k_packet_catches_systemexit():
     """If legacy raises SystemExit (8-K not found), adapter must raise ValueError.
 
-    The lazy import goes to scripts.earnings.builders.warmup_cache after Stage 12
-    canonicalization. We patch that target.
+    Stage 4 canonicalized adapters.py to import from .eight_k_packet directly
+    (not via the warmup_cache facade hop). The mock target is the canonical
+    domain module — that's where the lazy import resolves.
     """
-    with patch("scripts.earnings.builders.warmup_cache.build_8k_packet",
+    with patch("scripts.earnings.builders.eight_k_packet.build_8k_packet",
                side_effect=SystemExit(1)):
         with pytest.raises(ValueError, match="8-K not found"):
             A.build_8k_packet(
