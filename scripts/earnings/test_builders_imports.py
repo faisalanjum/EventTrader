@@ -367,6 +367,7 @@ def test_concurrent_imports_preserve_identity():
         "scripts.earnings.builders.peer_earnings_snapshot",
         "warmup_cache",
         "scripts.earnings.builders.warmup_cache",
+        "scripts.earnings.builders.eight_k_packet",
         "builder_adapters", "scripts.earnings.builder_adapters",
         "scripts.earnings.builders.adapters",
         "scripts.earnings.builders",
@@ -403,3 +404,48 @@ def test_concurrent_imports_preserve_identity():
             f"IDENTITY BROKEN after concurrent imports: "
             f"{old_bare}.{sym} != {new_qual}.{sym}"
         )
+
+
+def test_eight_k_packet_canonical_facade_identity():
+    """Stage 1.2 facade contract: warmup_cache re-exports preserve identity
+    with eight_k_packet canonical home."""
+    import scripts.earnings.builders.warmup_cache as wc
+    import scripts.earnings.builders.eight_k_packet as ek
+    for sym in ("build_8k_packet", "_fetch_8k_core",
+                "QUERY_4J", "QUERY_4K", "QUERY_4G_META",
+                "QUERY_4K_OTHER_PREVIEW", "QUERY_4F"):
+        f = getattr(wc, sym, None)
+        c = getattr(ek, sym, None)
+        assert c is not None, f"eight_k_packet missing {sym}"
+        assert f is not None, f"warmup_cache facade missing {sym}"
+        assert f is c, f"facade {sym} != canonical {sym}"
+
+
+def test_run_8k_uses_canonical_fetch_8k_core():
+    """Stage 1.2 LOAD-BEARING contract: warmup_cache.run_8k() and
+    eight_k_packet.build_8k_packet() share the SAME _fetch_8k_core object.
+
+    This is sufficient as identity-only — DO NOT add a `with patch(...)` block
+    that patches `scripts.earnings.builders.eight_k_packet._fetch_8k_core` and
+    calls `wc.run_8k(...)`. That patch would NOT take effect because:
+    (a) `from .eight_k_packet import _fetch_8k_core` snapshots the binding into
+        `warmup_cache.__dict__['_fetch_8k_core']` at import time;
+    (b) `wc.run_8k` body does an unqualified `_fetch_8k_core(...)` lookup against
+        `wc.run_8k.__globals__` (which IS `warmup_cache.__dict__`);
+    (c) `mock.patch("scripts.earnings.builders.eight_k_packet._fetch_8k_core")`
+        rebinds `eight_k_packet.__dict__['_fetch_8k_core']` ONLY — it does NOT
+        reach into `warmup_cache.__dict__`.
+    The identity assertion below is sufficient and correct."""
+    import scripts.earnings.builders.warmup_cache as wc
+    import scripts.earnings.builders.eight_k_packet as ek
+    assert wc._fetch_8k_core is ek._fetch_8k_core, (
+        f"shared-ownership BROKEN: wc._fetch_8k_core (id={id(wc._fetch_8k_core)}) "
+        f"is not ek._fetch_8k_core (id={id(ek._fetch_8k_core)}) — "
+        f"warmup_cache.py must use `from .eight_k_packet import _fetch_8k_core`, "
+        f"NOT define its own def"
+    )
+    # Bonus: assert run_8k's __globals__ resolves _fetch_8k_core to the canonical
+    # object — proves the function looks up the name in the right namespace
+    assert wc.run_8k.__globals__["_fetch_8k_core"] is ek._fetch_8k_core, (
+        "run_8k.__globals__['_fetch_8k_core'] is not the canonical eight_k_packet object"
+    )
