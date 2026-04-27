@@ -1,37 +1,42 @@
 #!/usr/bin/env python3
-"""Pre-fetch extraction caches and content via direct Bolt connection.
+"""Pre-fetch extraction caches AND facade for earnings-orchestration builders.
 
-Eliminates agent transcription errors (E1) and MCP persisted-output truncation (E4)
-by running queries verbatim from a script instead of through MCP.
+This module owns:
+  - Extraction CLI modes: run_warmup, run_transcript, run_mda, run_8k
+  - Extraction Cypher: QUERY_2A, QUERY_2B, QUERY_MEMBER_MAP, QUERY_3B, QUERY_5B
+  - _build_member_map (CIK-based member lookup)
+  - main() — CLI dispatcher (8 modes)
+
+And it re-exports (for back-compat with adapters, the .claude shim, and
+existing tests) every symbol relocated to the three domain modules:
+  - scripts.earnings.builders.eight_k_packet
+  - scripts.earnings.builders.guidance_history
+  - scripts.earnings.builders.inter_quarter_context
+
+Identity contract: every re-exported symbol resolves to the SAME Python
+object (Python `is`) as its canonical-domain counterpart. Verified by
+test_builders_warmup_split.py and test_builders_imports.py. DO NOT replace
+the re-export block with wrapper functions — that would silently break
+the identity invariant.
 
 Usage:
-    warmup_cache.py TICKER                           # Runs queries 2A + 2B
-    warmup_cache.py TICKER --transcript TRANSCRIPT_ID # Runs query 3B
-    warmup_cache.py TICKER --mda ACCESSION           # Runs query 5B (MD&A content)
-    warmup_cache.py TICKER --8k ACCESSION            # Runs queries 4J + 4K (8-K content)
-    warmup_cache.py TICKER --8k-packet ACCESSION     # Builds 8k_packet.v1 (earnings orchestration)
-    warmup_cache.py TICKER --8k-packet ACCESSION --out-path /path/to/8k_packet.json
-    warmup_cache.py TICKER --inter-quarter --prev-8k ISO8601 --context-cutoff ISO8601 [--out-path PATH] [--cutoff-reason REASON]
-    warmup_cache.py TICKER --guidance-history          # Builds guidance_history.v1
-    warmup_cache.py TICKER --guidance-history --pit 2024-08-28T20:30:00Z
-    warmup_cache.py TICKER --guidance-history --pit 2024-08-28T20:30:00Z --out-path /path/to/guidance_history.json
+    warmup_cache.py TICKER                                   # 2A + 2B + MEMBER_MAP cache
+    warmup_cache.py TICKER --transcript TRANSCRIPT_ID        # transcript content (3B)
+    warmup_cache.py TICKER --mda ACCESSION                   # MD&A content (5B)
+    warmup_cache.py TICKER --8k ACCESSION                    # 8-K sections + EX-99 (run_8k)
+    warmup_cache.py TICKER --8k-packet ACCESSION             # 8k_packet.v1 (build_8k_packet)
+    warmup_cache.py TICKER --guidance-history [--pit ISO]    # guidance_history.v1
+    warmup_cache.py TICKER --inter-quarter --prev-8k ISO --context-cutoff ISO
+    warmup_cache.py --test                                   # _run_v2_regression_tests
 
-Outputs:
-    /tmp/concept_cache_{TICKER}.json                  (query 2A)
-    /tmp/member_cache_{TICKER}.json                   (query 2B)
-    /tmp/transcript_content_{TRANSCRIPT_ID}.json      (query 3B, --transcript mode)
-    /tmp/mda_content_{ACCESSION}.json                 (query 5B, --mda mode)
-    /tmp/8k_content_{ACCESSION}.json                  (queries 4J+4K, --8k mode)
-    /tmp/earnings_8k_packet_{ACCESSION}.json          (8k_packet.v1, --8k-packet mode)
-    /tmp/earnings_guidance_{TICKER}.json               (guidance_history.v1, --guidance-history mode)
+Output paths under /tmp/earnings_*/transcript_*/mda_*/8k_content_*. See
+scripts/earnings/builders/{eight_k_packet,guidance_history,inter_quarter_context}.py
+for the orchestration packet schemas.
 """
 
 import json
-import math
 import os
 import sys
-from collections import Counter, defaultdict
-from datetime import datetime, timezone
 
 from ._paths import ensure_legacy_paths
 ensure_legacy_paths()
