@@ -631,10 +631,18 @@ ls -la /home/faisal/em-warmup-cache-split/scripts/earnings/builders/warmup_cache
 
 # Capture renderer-suite test names BEFORE any change so the consolidated gate (§6.8)
 # can diff against this baseline and catch silent name drift (count-preserving renames).
+# CRITICAL: filter the "N tests collected in X.XXs" pytest summary line via `| grep "::"`
+# (only test-id lines have the `::` separator). Without the filter, wallclock timing
+# drift in the summary line would cause every §6.8 diff to spuriously fail.
+# LC_ALL=C makes sort byte-deterministic (locale-stable) — without it,
+# case-folding under en_US.UTF-8 etc. can flip _UPPERCASE vs _lowercase ordering
+# across shells, causing spurious diff failures.
 PYTHONPATH=scripts/earnings /home/faisal/EventMarketDB/venv/bin/python \
-    -m pytest scripts/earnings/test_renderer_*.py --collect-only -q | sort \
+    -m pytest scripts/earnings/test_renderer_*.py --collect-only -q \
+    | grep "::" | LC_ALL=C sort \
     > /tmp/renderer_tests_before.txt
 wc -l /tmp/renderer_tests_before.txt
+# expect: 167 (matches the test count, no summary line)
 ```
 
 The worktree does NOT carry `venv/` (gitignored). Use `PY=/home/faisal/EventMarketDB/venv/bin/python` for every Python invocation in the worktree — the interpreter resolves modules via `PYTHONPATH=...`, NOT via the venv's own site-packages, so the main-repo venv works correctly when invoked with explicit `PYTHONPATH`. Existing tests (`test_builders_warmup_cache.py:11`, `test_builders_cli_smoke.py:20`) follow the same pattern (`PY = sys.executable` — meaning they use whatever interpreter pytest was invoked with, which is the main-repo venv).
@@ -685,9 +693,16 @@ PYTHONPATH=scripts/earnings $PY -m pytest scripts/earnings/test_builders_warmup_
 # Full builders matrix excluding live (catches everything above plus per-domain mocked units)
 PYTHONPATH=scripts/earnings $PY -m pytest scripts/earnings/test_builders_*.py -q -m "not live"
 
-# Renderer suite — must be byte-identical (count AND test names) to baseline
+# Renderer suite — must be byte-identical (count AND test names) to baseline.
+# CRITICAL: filter the "N tests collected in X.XXs" pytest summary line via `| grep "::"`
+# (only test-id lines have the `::` separator). Without the filter, wallclock timing
+# drift in the summary line causes the diff to spuriously fail every cutover.
+# LC_ALL=C makes sort byte-deterministic (locale-stable) — without it,
+# case-folding under en_US.UTF-8 etc. can flip _UPPERCASE vs _lowercase ordering
+# across shells, causing spurious diff failures.
 PYTHONPATH=scripts/earnings $PY -m pytest scripts/earnings/test_renderer_*.py -q
-PYTHONPATH=scripts/earnings $PY -m pytest scripts/earnings/test_renderer_*.py --collect-only -q | sort \
+PYTHONPATH=scripts/earnings $PY -m pytest scripts/earnings/test_renderer_*.py --collect-only -q \
+    | grep "::" | LC_ALL=C sort \
     | diff /tmp/renderer_tests_before.txt - && echo "renderer test names unchanged"
 
 # CLI --test paths (every entry point that ends up calling _run_v2_regression_tests).
