@@ -2,10 +2,12 @@
 """Compatibility shim. Canonical implementation lives in scripts.earnings.builders.warmup_cache.
 
 This file ALSO serves as the script target for warmup_cache.sh — the shell
-wrapper does `exec python3 "$SCRIPT_DIR/warmup_cache.py" "$@"`, so removing
-this file would break agent calls. The shim's __main__ block REPLICATES the
-canonical module's pre-main() dispatch (--test → _run_v2_regression_tests),
-which is NOT inside main() itself.
+wrapper does `exec "$PYTHON_BIN" "$SCRIPT_DIR/warmup_cache.py" "$@"` (where
+PYTHON_BIN defaults to `$REPO_ROOT/venv/bin/python` and is overridable via
+the `PYTHON=` env var), so removing this file would break agent calls.
+The shim's __main__ block REPLICATES the canonical module's pre-main()
+dispatch (--test → _run_v2_regression_tests), which is NOT inside main()
+itself.
 
 DO NOT add logic here. All behavior lives in the canonical module.
 

@@ -20,8 +20,15 @@ export NEO4J_USERNAME="${GUIDANCE_NEO4J_USERNAME:-neo4j}"
 export NEO4J_PASSWORD="${GUIDANCE_NEO4J_PASSWORD:-${NEO4J_PASSWORD:-}}"
 export NEO4J_DATABASE="${GUIDANCE_NEO4J_DATABASE:-neo4j}"
 
-# Activate venv
-source "$REPO_ROOT/venv/bin/activate"
+# Python interpreter: default to repo venv, allow PYTHON= override.
+# No system python3 fallback — system python3 lacks the project deps
+# (neo4j package, etc.) and would ImportError at module-load.
+PYTHON_BIN="${PYTHON:-$REPO_ROOT/venv/bin/python}"
 
-# Run CLI
-exec python3 "$SCRIPT_DIR/warmup_cache.py" "$@"
+if [ ! -x "$PYTHON_BIN" ]; then
+    echo "Error: Python interpreter not found or not executable: $PYTHON_BIN" >&2
+    echo "Set PYTHON=/path/to/python, or create $REPO_ROOT/venv." >&2
+    exit 127
+fi
+
+exec "$PYTHON_BIN" "$SCRIPT_DIR/warmup_cache.py" "$@"
