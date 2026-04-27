@@ -188,33 +188,35 @@ def test_classifier_singleton_attribute_access_across_paths():
 
 
 def test_parse_dt_for_pit_disambiguation():
-    """Stage 11 SHADOW GUARD for the cross-module same-name collision.
+    """Stage 3.2-EXTENDED SHADOW GUARD.
 
-    `_parse_dt_for_pit` exists in BOTH warmup_cache AND peer_earnings_snapshot
-    as DIFFERENT functions. The shim mechanism preserves identity within each
-    module's import paths, but must NOT cross-wire them.
+    After the warmup_cache → 3-domain split, _parse_dt_for_pit's canonical
+    home is scripts.earnings.builders.inter_quarter_context. The warmup_cache
+    facade re-exports it — same object. peer_earnings_snapshot's same-named
+    function remains a DIFFERENT object.
 
-    After Stage 11, all 4 paths must satisfy:
-      - within-module: bare ≡ canonical for warmup_cache._parse_dt_for_pit
-      - within-module: bare ≡ canonical for peer_earnings_snapshot._parse_dt_for_pit
-      - cross-module distinctness: warmup_cache._parse_dt_for_pit IS NOT peer_earnings_snapshot._parse_dt_for_pit
-
-    If the shim accidentally aliased one to the other (e.g. if MODULE_PAIRS
-    used the same `new_qual` for both), this test fires.
+    Required identity invariants:
+      - within-module: warmup_cache._parse_dt_for_pit IS scripts.earnings.builders.warmup_cache._parse_dt_for_pit
+      - facade-vs-canonical: warmup_cache._parse_dt_for_pit IS inter_quarter_context._parse_dt_for_pit
+      - within-module: peer_earnings_snapshot._parse_dt_for_pit IS scripts.earnings.builders.peer_earnings_snapshot._parse_dt_for_pit
+      - cross-module distinctness: warmup IS NOT peer
     """
     import warmup_cache, peer_earnings_snapshot
     import scripts.earnings.builders.warmup_cache as wc_new
     import scripts.earnings.builders.peer_earnings_snapshot as pe_new
-    # Within-module identity (already covered by parametrized identity tests, but assert here too):
+    import scripts.earnings.builders.inter_quarter_context as iq_new
+
     assert warmup_cache._parse_dt_for_pit is wc_new._parse_dt_for_pit, \
         "warmup_cache shim diverged from canonical for _parse_dt_for_pit"
+    assert wc_new._parse_dt_for_pit is iq_new._parse_dt_for_pit, \
+        "warmup_cache facade does NOT re-export inter_quarter_context._parse_dt_for_pit"
     assert peer_earnings_snapshot._parse_dt_for_pit is pe_new._parse_dt_for_pit, \
         "peer_earnings_snapshot shim diverged from canonical for _parse_dt_for_pit"
-    # Cross-module DISTINCTNESS — same name, different functions:
     assert warmup_cache._parse_dt_for_pit is not peer_earnings_snapshot._parse_dt_for_pit, (
-        f"shadow violation: warmup_cache._parse_dt_for_pit ({id(warmup_cache._parse_dt_for_pit)}) "
-        f"IS the SAME object as peer_earnings_snapshot._parse_dt_for_pit "
-        f"({id(peer_earnings_snapshot._parse_dt_for_pit)}) — they should be DIFFERENT functions"
+        f"shadow violation: warmup_cache._parse_dt_for_pit "
+        f"({id(warmup_cache._parse_dt_for_pit)}) IS the SAME object as "
+        f"peer_earnings_snapshot._parse_dt_for_pit "
+        f"({id(peer_earnings_snapshot._parse_dt_for_pit)})"
     )
 
 
@@ -369,6 +371,7 @@ def test_concurrent_imports_preserve_identity():
         "scripts.earnings.builders.warmup_cache",
         "scripts.earnings.builders.eight_k_packet",
         "scripts.earnings.builders.guidance_history",
+        "scripts.earnings.builders.inter_quarter_context",
         "builder_adapters", "scripts.earnings.builder_adapters",
         "scripts.earnings.builders.adapters",
         "scripts.earnings.builders",
@@ -434,6 +437,29 @@ def test_guidance_history_canonical_facade_identity():
         f = getattr(wc, sym, None)
         c = getattr(gh, sym, None)
         assert c is not None, f"guidance_history missing {sym}"
+        assert f is not None, f"warmup_cache facade missing {sym}"
+        assert f is c, f"facade {sym} != canonical {sym}"
+
+
+def test_inter_quarter_context_canonical_facade_identity():
+    """Stage 3.2 facade contract: warmup_cache re-exports preserve identity
+    with inter_quarter_context canonical home."""
+    import scripts.earnings.builders.warmup_cache as wc
+    import scripts.earnings.builders.inter_quarter_context as iq
+    for sym in (
+        "build_inter_quarter_context", "render_inter_quarter_text",
+        "_parse_dt_for_pit", "_is_price_pit_safe", "_build_forward_returns",
+        "_iq_parse_json_field", "_norm_ret", "_fmt_vol", "_fmt_txn",
+        "_safe_adj", "_event_ref", "_day_from_ts",
+        "_cutoff_boundary_price_role", "_best_safe_horizon", "_report_summary",
+        "_render_window_label_news", "_render_window_label_filing",
+        "_render_horizon_line_filing", "_render_news_react_line",
+        "QUERY_IQ_PRICES", "QUERY_IQ_NEWS", "QUERY_IQ_FILINGS",
+        "QUERY_IQ_DIVIDENDS", "QUERY_IQ_SPLITS", "QUERY_IQ_COMPANY_CONTEXT",
+    ):
+        f = getattr(wc, sym, None)
+        c = getattr(iq, sym, None)
+        assert c is not None, f"inter_quarter_context missing {sym}"
         assert f is not None, f"warmup_cache facade missing {sym}"
         assert f is c, f"facade {sym} != canonical {sym}"
 
