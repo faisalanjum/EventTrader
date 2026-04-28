@@ -28,6 +28,16 @@ def _render_learning_context(learning_ctx: dict) -> tuple[str, list[str]]:
 
     parts.append("## Prior Lessons (from learner)")
 
+    # ── Allowlist block (per Q5: between heading and first lesson sub-section)
+    # Render only when non-empty (Q3). Set+order mirror the JSON
+    # `_allowed_learner_paths` exactly (cross-surface invariant).
+    allowed = learning_ctx.get("_allowed_learner_paths") or []
+    if allowed:
+        parts.append("\n### Allowed learner reports for this prediction\n")
+        for p in allowed:
+            parts.append(f"- {p}")
+        parts.append("")
+
     ticker_lessons = learning_ctx.get("ticker_lessons", [])
     global_lessons = learning_ctx.get("global_lessons", [])
 
@@ -55,6 +65,12 @@ def _render_learning_context(learning_ctx: dict) -> tuple[str, list[str]]:
             why = lesson.get("why")
             if why:
                 parts.append(f"  - Why: {why}")            # T1: NOT labeled (metadata)
+            # learner_result: per-ticker-quarter (LAST sub-bullet, before blank
+            # separator). Path is per-source-event, not per-text-bullet — one
+            # line per quarter block regardless of how many predictor_lessons.
+            lrp = lesson.get("learner_result_path")
+            if lrp:
+                parts.append(f"  - learner_result: {lrp}")
             parts.append("")
 
     # ── Global lessons — split into three sub-sections by scope (amendment
@@ -75,6 +91,9 @@ def _render_learning_context(learning_ctx: dict) -> tuple[str, list[str]]:
                 parts.append(f"- [sector:{ts}] ({src}) {lesson_text}")
                 if isinstance(lesson_text, str) and lesson_text.strip():
                     ordered.append(lesson_text)            # T1: LABELED
+                lrp = entry.get("learner_result_path")
+                if lrp:
+                    parts.append(f"  learner_result: {lrp}")
 
         if by_scope["macro"]:
             parts.append(f"\n### Macro Lessons ({len(by_scope['macro'])} entries)\n")
@@ -84,6 +103,9 @@ def _render_learning_context(learning_ctx: dict) -> tuple[str, list[str]]:
                 parts.append(f"- [macro] ({src}) {lesson_text}")
                 if isinstance(lesson_text, str) and lesson_text.strip():
                     ordered.append(lesson_text)            # T1: LABELED
+                lrp = entry.get("learner_result_path")
+                if lrp:
+                    parts.append(f"  learner_result: {lrp}")
 
         if by_scope["cross_ticker"]:
             parts.append(f"\n### Cross-Ticker Lessons ({len(by_scope['cross_ticker'])} entries)\n")
@@ -94,6 +116,9 @@ def _render_learning_context(learning_ctx: dict) -> tuple[str, list[str]]:
                 parts.append(f"- [cross:{','.join(rt)}] ({src}) {lesson_text}")
                 if isinstance(lesson_text, str) and lesson_text.strip():
                     ordered.append(lesson_text)            # T1: LABELED
+                lrp = entry.get("learner_result_path")
+                if lrp:
+                    parts.append(f"  learner_result: {lrp}")
         parts.append("")
 
     return "\n".join(parts), ordered

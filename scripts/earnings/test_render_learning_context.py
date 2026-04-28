@@ -178,5 +178,141 @@ class NormalizeLessonTextTests(unittest.TestCase):
         self.assertEqual(_normalize_lesson_text(""), "")
 
 
+class RenderLearningContextPathsTests(unittest.TestCase):
+    """R5/R5b/R6/R7/A1/A2 — learner_result path emission + allowlist block."""
+
+    _PATH_AAPL_Q1 = "earnings-analysis/Companies/AAPL/events/Q1_FY2023/learning/result.md"
+    _PATH_MSFT_Q2 = "earnings-analysis/Companies/MSFT/events/Q2_FY2024/learning/result.md"
+
+    def _ticker_lesson(self, *, with_path: bool = False, **overrides) -> dict:
+        L = {
+            "quarter_label": "Q1_FY2023",
+            "direction_correct": True,
+            "actual_daily_pct": 1.0,
+            "predicted_direction": "long",
+            "primary_driver_category": "eps_surprise",
+            "predictor_lessons": ["pl1"],
+            "data_lessons": ["dl1"],
+            "why": "why-text",
+        }
+        L.update(overrides)
+        if with_path:
+            L["learner_result_path"] = self._PATH_AAPL_Q1
+        return L
+
+    # ── R5: ticker-quarter learner_result line is emitted as last sub-bullet ──
+    def test_R5_ticker_lesson_emits_learner_result_line_when_path_present(self):
+        ctx = {
+            "ticker_lessons": [self._ticker_lesson(with_path=True)],
+            "global_lessons": [],
+        }
+        text, ordered = _render_learning_context(ctx)
+        expected_line = f"  - learner_result: {self._PATH_AAPL_Q1}"
+        self.assertIn(expected_line, text)
+        # Must be the LAST sub-bullet of the quarter block (immediately before
+        # the trailing blank-line separator). Find the line and verify it is
+        # immediately followed by a blank line (split('\n') yields '' next).
+        lines = text.split("\n")
+        idx = lines.index(expected_line)
+        self.assertEqual(lines[idx + 1], "",
+                         "learner_result line must be the last sub-bullet (followed by blank separator)")
+
+    # ── R5b: no line when ticker_lesson lacks the path ──
+    def test_R5b_ticker_lesson_no_line_when_path_absent(self):
+        ctx = {
+            "ticker_lessons": [self._ticker_lesson(with_path=False)],
+            "global_lessons": [],
+        }
+        text, ordered = _render_learning_context(ctx)
+        self.assertNotIn("learner_result:", text)
+
+    # ── R6: global-lesson continuation line under each scope bullet ──
+    def test_R6_global_lesson_emits_learner_result_line_when_path_present(self):
+        ctx = {
+            "ticker_lessons": [],
+            "global_lessons": [{
+                "scope": "sector",
+                "target_sector": "Technology",
+                "source_ticker": "MSFT",
+                "lesson": "sector lesson body",
+                "learner_result_path": self._PATH_MSFT_Q2,
+            }],
+        }
+        text, ordered = _render_learning_context(ctx)
+        # 2-space continuation (NOT a sub-bullet — no leading `- `)
+        expected_line = f"  learner_result: {self._PATH_MSFT_Q2}"
+        self.assertIn(expected_line, text)
+        # Specifically NOT the ticker-style "  - learner_result: ..." form
+        self.assertNotIn(f"  - learner_result: {self._PATH_MSFT_Q2}", text)
+
+    # ── R7: ordered-tuple element 2 (validator's source of truth) is unchanged
+    #         whether or not learner_result_path keys are present ──
+    def test_R7_ordered_tuple_unchanged_with_or_without_paths(self):
+        # Without paths
+        ctx_no = {
+            "ticker_lessons": [
+                self._ticker_lesson(predictor_lessons=["P1", "P2"]),
+            ],
+            "global_lessons": [
+                {"scope": "sector", "target_sector": "Technology",
+                 "source_ticker": "MSFT", "lesson": "sec-A"},
+                {"scope": "macro",
+                 "source_ticker": "GOOG", "lesson": "mac-A"},
+            ],
+        }
+        # With paths attached to same logical content
+        ctx_with = {
+            "ticker_lessons": [
+                self._ticker_lesson(
+                    predictor_lessons=["P1", "P2"],
+                    learner_result_path=self._PATH_AAPL_Q1,
+                ),
+            ],
+            "global_lessons": [
+                {"scope": "sector", "target_sector": "Technology",
+                 "source_ticker": "MSFT", "lesson": "sec-A",
+                 "learner_result_path": self._PATH_MSFT_Q2},
+                {"scope": "macro",
+                 "source_ticker": "GOOG", "lesson": "mac-A",
+                 "learner_result_path":
+                     "earnings-analysis/Companies/GOOG/events/Q2_FY2024/learning/result.md"},
+            ],
+        }
+        _, ordered_no = _render_learning_context(ctx_no)
+        _, ordered_with = _render_learning_context(ctx_with)
+        self.assertEqual(ordered_no, ordered_with,
+                         "Tuple element 2 (validator's source of truth) must be byte-identical regardless of path attachment")
+
+    # ── A1: allowlist block appears BEFORE the ### Ticker Lessons heading ──
+    def test_renderer_emits_allowlist_block_before_lesson_bodies(self):
+        ctx = {
+            "_allowed_learner_paths": [self._PATH_AAPL_Q1, self._PATH_MSFT_Q2],
+            "ticker_lessons": [self._ticker_lesson(with_path=True)],
+            "global_lessons": [],
+        }
+        text, _ = _render_learning_context(ctx)
+        heading = "### Allowed learner reports for this prediction"
+        ticker_heading = "### Ticker Lessons"
+        self.assertIn(heading, text)
+        self.assertIn(ticker_heading, text)
+        self.assertLess(
+            text.index(heading), text.index(ticker_heading),
+            "allowlist block must appear BEFORE ### Ticker Lessons (per Q5)",
+        )
+        # Each path appears as a `- <path>` line
+        for p in [self._PATH_AAPL_Q1, self._PATH_MSFT_Q2]:
+            self.assertIn(f"- {p}", text)
+
+    # ── A2: empty allowlist → no block emitted at all ──
+    def test_renderer_omits_allowlist_block_when_list_empty(self):
+        ctx = {
+            "_allowed_learner_paths": [],
+            "ticker_lessons": [self._ticker_lesson(with_path=False)],
+            "global_lessons": [],
+        }
+        text, _ = _render_learning_context(ctx)
+        self.assertNotIn("Allowed learner reports for this prediction", text)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

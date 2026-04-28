@@ -239,11 +239,20 @@ def build_prediction_bundle(ticker: str, quarter_info: dict,
         sector = (results.get("8k_packet") or {}).get("sector") or _lookup_company_sector(ticker)
         bundle["learning_context"] = build_learning_context(
             ticker, sector=sector, pit_cutoff=pit_cutoff,
+            current_quarter_label=quarter_info.get("quarter_label"),
         )
+    except AssertionError:
+        # Pipeline invariant violation — re-raise so it surfaces visibly. NEVER
+        # swallow into the broad-except fallback below; the invariant exists
+        # specifically to halt production on inconsistent learner_paths state.
+        raise
     except Exception as e:
         log.warning("learning_context builder failed (non-fatal): %s", e)
-        bundle["learning_context"] = {"ticker_lessons": [], "global_lessons": [],
-                                       "ticker_ref": None, "global_ref": None}
+        bundle["learning_context"] = {
+            "ticker_lessons": [], "global_lessons": [],
+            "ticker_ref": None, "global_ref": None,
+            "_allowed_learner_paths": [],   # schema consistency on fallback
+        }
 
     return bundle
 
@@ -1214,9 +1223,145 @@ def append_global_lessons(attribution_result: dict) -> Path | None:
 # ── Learning Context Builder (read-time filtering for predictor) ─────
 
 
+def _assert_learner_paths_invariant(
+    lc: dict,
+    *,
+    ticker: str | None = None,
+    current_quarter_label: str | None = None,
+) -> None:
+    """Three-clause invariant on lc (per learner_result_paths plan):
+
+      (A) Cross-surface set equality:
+          set(lc["_allowed_learner_paths"]) == {every learner_result_path
+          attached to any lesson in ticker_lessons or global_lessons}.
+      (B) No duplicates in the allowlist list:
+          len(allowlist) == len(set(allowlist)).
+      (C) When ticker AND current_quarter_label are both provided
+          (production call path): the would-be self-path
+            "earnings-analysis/Companies/{TICKER}/events/{Q}/learning/result.md"
+          is NOT present in _allowed_learner_paths.
+
+    Together A and C prove no self-path can leak: A guarantees both surfaces
+    hold the same set; C guarantees that set excludes the current quarter.
+
+    Separately callable so tests verify each clause independently. Uses
+    explicit `raise AssertionError` so `python -O` cannot strip the check.
+    The decorator calls this AFTER allowlist assembly, with full context.
+    """
+    allowed = lc.get("_allowed_learner_paths") or []
+    allowed_set = set(allowed)
+    decorated: set[str] = set()
+    for L in lc.get("ticker_lessons", []) or []:
+        if "learner_result_path" in L:
+            decorated.add(L["learner_result_path"])
+    for L in lc.get("global_lessons", []) or []:
+        if "learner_result_path" in L:
+            decorated.add(L["learner_result_path"])
+
+    # (A) cross-surface set equality
+    if allowed_set != decorated:
+        raise AssertionError(
+            "learner_paths invariant (A) violated: allowlist set != decorated set "
+            f"(allowlist={sorted(allowed_set)}, decorated={sorted(decorated)})"
+        )
+
+    # (B) no duplicates in list form
+    if len(allowed) != len(allowed_set):
+        raise AssertionError(
+            f"learner_paths invariant (B) violated: duplicate paths in allowlist "
+            f"(list={allowed})"
+        )
+
+    # (C) no self-path leak when context is known
+    if ticker is not None and current_quarter_label is not None:
+        self_path = (
+            f"earnings-analysis/Companies/{ticker.upper()}/events/"
+            f"{current_quarter_label}/learning/result.md"
+        )
+        if self_path in allowed_set:
+            raise AssertionError(
+                f"learner_paths invariant (C) violated: self-path leaked into "
+                f"_allowed_learner_paths (self_path={self_path!r})"
+            )
+
+
+def _decorate_with_learner_paths(
+    lc: dict, *, ticker: str,
+    current_quarter_label: str | None,
+    companies_dir: Path,
+) -> None:
+    """Attach `learner_result_path` per-lesson + assemble `_allowed_learner_paths`.
+
+    Mutates `lc` in-place. Two-phase:
+
+      Phase 1 — attach paths only.
+      PIT guard: skip emission whenever
+        (source_ticker, quarter_label) == (ticker, current_quarter_label).
+      Missing file: stat via `is_file()` (stricter than `exists()`); omit the
+      key entirely on miss.
+
+      Phase 2 — collect _allowed_learner_paths in render order.
+      Walk ticker_lessons (recency-desc, already sorted by build_learning_context),
+      then global_lessons in render order (sector → macro → cross_ticker).
+      First-seen dedupe.
+
+      Phase 3 — invariant check via _assert_learner_paths_invariant with full
+      context so all three clauses (A, B, C) fire.
+    """
+    # ── Phase 1: attach paths only ─────────────────────────────────────
+    def _maybe_attach(entry: dict, src_ticker: str) -> None:
+        # Idempotency belt-and-suspenders: clear any stale value before
+        # re-deciding. Defensive only — current flow calls the helper exactly
+        # once per bundle build, but a future re-run on an in-memory `lc`
+        # whose underlying file disappeared between calls would otherwise
+        # leak the stale path past the existence check.
+        entry.pop("learner_result_path", None)
+        ql = entry.get("quarter_label")
+        if not ql or not src_ticker:
+            return
+        if current_quarter_label is not None \
+           and src_ticker.upper() == ticker.upper() \
+           and ql == current_quarter_label:
+            return  # PIT guard — skip current-quarter self
+        rel = (Path("earnings-analysis/Companies") / src_ticker.upper()
+               / "events" / ql / "learning" / "result.md")
+        abs_path = companies_dir / src_ticker.upper() / "events" / ql / "learning" / "result.md"
+        if not abs_path.is_file():
+            return  # omit key
+        entry["learner_result_path"] = str(rel)
+
+    for lesson in lc.get("ticker_lessons", []):
+        _maybe_attach(lesson, ticker)  # ticker_lessons: implicit source=current ticker
+    for entry in lc.get("global_lessons", []):
+        _maybe_attach(entry, entry.get("source_ticker") or "")
+
+    # ── Phase 2: collect allowlist in render order, deduplicate ────────
+    allowed: list[str] = []
+    seen: set[str] = set()
+    for lesson in lc.get("ticker_lessons", []):
+        p = lesson.get("learner_result_path")
+        if p and p not in seen:
+            seen.add(p)
+            allowed.append(p)
+    for entry in lc.get("global_lessons", []):
+        p = entry.get("learner_result_path")
+        if p and p not in seen:
+            seen.add(p)
+            allowed.append(p)
+    lc["_allowed_learner_paths"] = allowed
+
+    # ── Phase 3: invariant check (full three-clause check, with context) ─
+    _assert_learner_paths_invariant(
+        lc, ticker=ticker, current_quarter_label=current_quarter_label,
+    )
+
+
 def build_learning_context(ticker: str, sector: str | None = None,
                            base_dir: Path | None = None,
-                           pit_cutoff: str | None = None) -> dict:
+                           pit_cutoff: str | None = None,
+                           *,
+                           current_quarter_label: str | None = None,
+                           companies_dir: Path | None = None) -> dict:
     """Build learning context for predictor consumption.
 
     Amendment 2026-04-17 (per .claude/plans/learner.md Appendix A §4.3 / §6.3):
@@ -1406,6 +1551,16 @@ def build_learning_context(ticker: str, sector: str | None = None,
             log.error("global.json malformed — no global lessons loaded for %s: %s", ticker, e)
         except OSError as e:
             log.error("global.json read failed — no global lessons loaded for %s: %s", ticker, e)
+
+    # Decorate each surviving lesson with `learner_result_path` (when the prior
+    # learner's result.md exists on disk) and assemble `_allowed_learner_paths`
+    # — the canonical PIT-safe set the predictor is permitted to Read.
+    # Two-phase + invariant; raises AssertionError on inconsistent state.
+    _decorate_with_learner_paths(
+        result, ticker=ticker,
+        current_quarter_label=current_quarter_label,
+        companies_dir=(companies_dir or COMPANIES_DIR),
+    )
 
     # Observability log — fires ALWAYS, even if global_path didn't exist.
     # Names must match §4.5 contract exactly. Six exclusion counters so any
