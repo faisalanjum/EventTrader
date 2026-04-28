@@ -2,13 +2,15 @@
 
 Design + spec: ``.claude/plans/run_ledger.md``.
 
-Two files:
-  * ``earnings-analysis/operations/run_ledger.jsonl`` — authoritative
-    append-only state. Each line is one state transition for a run.
-    Current state = last-row-wins collapse by ``run_id``.
-  * ``earnings-analysis/operations/Run Index.md`` — human-facing static
-    Markdown tables. Regenerated on every state transition so "In Flight"
-    is actually real-time.
+Two files with intentionally different default roots:
+  * ``<repo>/earnings-analysis/operations/run_ledger.jsonl`` —
+    authoritative append-only machine state. Each line is one state
+    transition for a run. Current state = last-row-wins collapse by
+    ``run_id``.
+  * ``<vault>/earnings-analysis/operations/Run Index.md`` — human-facing
+    static Markdown tables when the Obsidian vault exists locally;
+    otherwise falls back to the repo copy. Regenerated on every state
+    transition so "In Flight" is actually real-time.
 
 Concurrency: ``fcntl.flock(LOCK_EX) + flush + fsync`` on every append.
 Safe for multiple processes on a SINGLE-HOST shared filesystem (e.g., the
@@ -36,9 +38,19 @@ from typing import Any
 _HERE = Path(__file__).resolve().parent
 # scripts/earnings/run_ledger.py → repo root is parents[1]
 REPO_ROOT = _HERE.parents[1]
-OPERATIONS_DIR = REPO_ROOT / "earnings-analysis" / "operations"
-LEDGER_PATH = OPERATIONS_DIR / "run_ledger.jsonl"
-INDEX_PATH = OPERATIONS_DIR / "Run Index.md"
+_REPO_EARNINGS_ROOT = REPO_ROOT / "earnings-analysis"
+_VAULT_EARNINGS_ROOT = (
+    Path.home() / "Obsidian" / "EventTrader" / "Earnings" / "earnings-analysis"
+)
+# Authoritative machine state stays in the repo tree so every host/process has
+# one predictable source of truth. Only the human-facing markdown index prefers
+# the Obsidian vault when it exists locally.
+LEDGER_PATH = _REPO_EARNINGS_ROOT / "operations" / "run_ledger.jsonl"
+INDEX_PATH = (
+    (_VAULT_EARNINGS_ROOT if _VAULT_EARNINGS_ROOT.exists() else _REPO_EARNINGS_ROOT)
+    / "operations"
+    / "Run Index.md"
+)
 
 SCHEMA_VERSION = 1
 VALID_COMPONENTS: frozenset[str] = frozenset({"guidance", "prediction", "learning"})
@@ -468,8 +480,8 @@ def refresh_index(
     parts = [
         "# Run Index\n",
         f"_Last regenerated: {now}_\n",
-        "_Schema: run_ledger.v1. Ledger: "
-        "`earnings-analysis/operations/run_ledger.jsonl`._\n\n",
+        "_Schema: run_ledger.v1. Authoritative ledger: "
+        f"`{LEDGER_PATH}`._\n\n",
         _render_in_flight_section(running),
         _render_predictions_section(predictions),
         _render_learners_section(learners),
