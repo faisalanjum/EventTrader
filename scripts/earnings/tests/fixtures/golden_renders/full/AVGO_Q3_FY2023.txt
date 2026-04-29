@@ -279,10 +279,10 @@ Adjusted returns = stock − macro for each window (hourly / session / daily)
 
 Adjusted returns = stock − macro for each window (hourly / session / daily)
 
-| Ref | Date | Sess | Form | Accession | Items | Exhibits | Period | Amend | AdjH% | AdjS% | AdjD% |
-|---|---|---|---|---|---|---|---|---|---|---|---|
-| F1 | 2023-06-07 | post_market | 10-Q | 0001730168-23-000064 | — | EX-10.1 | 2023-04-30 | N | -0.01 | 0.09 | 0.88 |
-| F2 | 2023-08-16 | post_market | 8-K | 0001140361-23-040084 | Item 1.01: Entry into a Material Definitive Agreement || Item 2.03: Creation of a Direct Financial Obligation or an Obligation under an Off-Balance Sheet Arrangement of a Registrant || Item 8.01: Other Events || Item 9.01: Financial Statements and Exhibits | EX-10.1 | 2023-08-15 | N | 0.49 | -0.06 | 0.1 |
+| Ref | Date | Sess | Form | Accession | Items | Exhibits | Period | Amend | Content | AdjH% | AdjS% | AdjD% |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| F1 | 2023-06-07 | post_market | 10-Q | 0001730168-23-000064 | — | EX-10.1 | 2023-04-30 | N | — | -0.01 | 0.09 | 0.88 |
+| F2 | 2023-08-16 | post_market | 8-K | 0001140361-23-040084 | Item 1.01: Entry into a Material Definitive Agreement || Item 2.03: Creation of a Direct Financial Obligation or an Obligation under an Off-Balance Sheet Arrangement of a Registrant || Item 8.01: Other Events || Item 9.01: Financial Statements and Exhibits | EX-10.1 | 2023-08-15 | N | — | 0.49 | -0.06 | 0.1 |
 
 ## 7. Sector Peer Earnings & Reactions
 

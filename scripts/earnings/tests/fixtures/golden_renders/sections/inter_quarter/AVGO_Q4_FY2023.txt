@@ -161,9 +161,9 @@ Adjusted returns = stock − macro for each window (hourly / session / daily)
 
 Adjusted returns = stock − macro for each window (hourly / session / daily)
 
-| Ref | Date | Sess | Form | Accession | Items | Exhibits | Period | Amend | AdjH% | AdjS% | AdjD% |
-|---|---|---|---|---|---|---|---|---|---|---|---|
-| F1 | 2023-09-06 | post_market | 10-Q | 0001730168-23-000077 | — | EX-10.2 | 2023-07-30 | N | -0.08 | -2.01 | -1.43 |
-| F2 | 2023-10-18 | post_market | 8-K | 0001140361-23-048712 | Item 8.01: Other Events || Item 9.01: Financial Statements and Exhibits | EX-99.1 | 2023-10-18 | N | -0.2 | -0.34 | -1.33 |
-| F3 | 2023-10-30 | post_market | 8-K | 0001140361-23-050217 | Item 8.01: Other Events || Item 9.01: Financial Statements and Exhibits | EX-99.1 | 2023-10-30 | N | -0.01 | -0.66 | -0.5 |
-| F4 | 2023-11-22 | pre_market | 8-K | 0001140361-23-054354 | Item 2.01: Completion of Acquisition or Disposition of Assets || Item 2.03: Creation of a Direct Financial Obligation or an Obligation under an Off-Balance Sheet Arrangement of a Registrant || Item 8.01: Other Events || Item 9.01: Financial Statements and Exhibits | EX-99.1 | 2023-11-22 | N | -1.03 | -0.68 | -1.33 |
+| Ref | Date | Sess | Form | Accession | Items | Exhibits | Period | Amend | Content | AdjH% | AdjS% | AdjD% |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| F1 | 2023-09-06 | post_market | 10-Q | 0001730168-23-000077 | — | EX-10.2 | 2023-07-30 | N | — | -0.08 | -2.01 | -1.43 |
+| F2 | 2023-10-18 | post_market | 8-K | 0001140361-23-048712 | Item 8.01: Other Events || Item 9.01: Financial Statements and Exhibits | EX-99.1 | 2023-10-18 | N | — | -0.2 | -0.34 | -1.33 |
+| F3 | 2023-10-30 | post_market | 8-K | 0001140361-23-050217 | Item 8.01: Other Events || Item 9.01: Financial Statements and Exhibits | EX-99.1 | 2023-10-30 | N | — | -0.01 | -0.66 | -0.5 |
+| F4 | 2023-11-22 | pre_market | 8-K | 0001140361-23-054354 | Item 2.01: Completion of Acquisition or Disposition of Assets || Item 2.03: Creation of a Direct Financial Obligation or an Obligation under an Off-Balance Sheet Arrangement of a Registrant || Item 8.01: Other Events || Item 9.01: Financial Statements and Exhibits | EX-99.1 | 2023-11-22 | N | — | -1.03 | -0.68 | -1.33 |

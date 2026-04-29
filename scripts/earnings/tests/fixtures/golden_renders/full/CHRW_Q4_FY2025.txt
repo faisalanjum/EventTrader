@@ -185,10 +185,10 @@ Adjusted returns = stock − macro for each window (hourly / session / daily)
 
 Adjusted returns = stock − macro for each window (hourly / session / daily)
 
-| Ref | Date | Sess | Form | Accession | Items | Exhibits | Period | Amend | AdjH% | AdjS% | AdjD% |
-|---|---|---|---|---|---|---|---|---|---|---|---|
-| F1 | 2025-10-31 | in_market | 10-Q | 0001043277-25-000052 | — | — | 2025-09-30 | N | -0.68 | -0.7 | -0.83 |
-| F2 | 2025-11-07 | post_market | 8-K/A | 0001043277-25-000058 | Item 5.02: Departure of Directors or Certain Officers; Election of Directors; Appointment of Certain Officers: Compensatory Arrangements of Certain Officers || Item 9.01: Financial Statements and Exhibits | — | 2025-11-06 | Y | -0.06 | -0.72 | -0.04 |
+| Ref | Date | Sess | Form | Accession | Items | Exhibits | Period | Amend | Content | AdjH% | AdjS% | AdjD% |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| F1 | 2025-10-31 | in_market | 10-Q | 0001043277-25-000052 | — | — | 2025-09-30 | N | — | -0.68 | -0.7 | -0.83 |
+| F2 | 2025-11-07 | post_market | 8-K/A | 0001043277-25-000058 | Item 5.02: Departure of Directors or Certain Officers; Election of Directors; Appointment of Certain Officers: Compensatory Arrangements of Certain Officers || Item 9.01: Financial Statements and Exhibits | — | 2025-11-06 | Y | — | -0.06 | -0.72 | -0.04 |
 
 ## 7. Sector Peer Earnings & Reactions
 

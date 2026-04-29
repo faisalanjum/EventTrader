@@ -49,6 +49,13 @@ def _render_results_and_expectations(bundle: dict) -> str:
                 parts.append(f"| EPS     | {_fmt_eps(est_eps)} |")
                 parts.append(f"| Revenue | {_fmt_money(est_rev)} |")
         else:
+            # U2 deferred: do NOT fall through to consensus.forward_estimates[0]
+            # here. After U1's cutoff fix, the just-reported provider FDE is
+            # excluded from forward_estimates, so fwd[0] is the *next-next*
+            # quarter — labeling it as the current event would mislead the
+            # predictor. Forward consensus stays visible in §1.3. Revisit if/when
+            # at-release prediction (~1 min after 8-K, AV-lag transient) becomes
+            # a primary workflow that justifies target-quarter verification.
             parts.append("\n### Consensus Bar\n[No current-quarter row found]")
 
     # ── Subsection B: Reported Results (EX-99.1 only — other exhibits go to Reference) ──

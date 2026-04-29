@@ -175,12 +175,12 @@ Adjusted returns = stock − macro for each window (hourly / session / daily)
 
 Adjusted returns = stock − macro for each window (hourly / session / daily)
 
-| Ref | Date | Sess | Form | Accession | Items | Exhibits | Period | Amend | AdjH% | AdjS% | AdjD% |
-|---|---|---|---|---|---|---|---|---|---|---|---|
-| F1 | 2025-12-04 | post_market | 10-Q | 0001569345-25-000059 | — | EX-10.1 ; EX-10.2 | 2025-10-31 | N | -0.6 | -1.39 | -1.57 |
-| F2 | 2025-12-09 | post_market | SCHEDULE 13D/A | 0001193125-25-313023 | — | EX-99.D ; EX-99.E | — | Y | -1.8 | 0.48 | -1.28 |
-| F3 | 2025-12-18 | pre_market | 8-K | 0001193125-25-323772 | Item 5.02: Departure of Directors or Certain Officers; Election of Directors; Appointment of Certain Officers: Compensatory Arrangements of Certain Officers || Item 7.01: Regulation FD Disclosure || Item 9.01: Financial Statements and Exhibits | EX-99.1 | 2025-12-12 | N | -0.46 | 0.36 | -0.68 |
-| F4 | 2026-01-20 | pre_market | 8-K | 0001569345-26-000004 | Item 8.01: Other Events | — | 2026-01-20 | N | 0.19 | 1.96 | 1.97 |
+| Ref | Date | Sess | Form | Accession | Items | Exhibits | Period | Amend | Content | AdjH% | AdjS% | AdjD% |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| F1 | 2025-12-04 | post_market | 10-Q | 0001569345-25-000059 | — | EX-10.1 ; EX-10.2 | 2025-10-31 | N | — | -0.6 | -1.39 | -1.57 |
+| F2 | 2025-12-09 | post_market | SCHEDULE 13D/A | 0001193125-25-313023 | — | EX-99.D ; EX-99.E | — | Y | — | -1.8 | 0.48 | -1.28 |
+| F3 | 2025-12-18 | pre_market | 8-K | 0001193125-25-323772 | Item 5.02: Departure of Directors or Certain Officers; Election of Directors; Appointment of Certain Officers: Compensatory Arrangements of Certain Officers || Item 7.01: Regulation FD Disclosure || Item 9.01: Financial Statements and Exhibits | EX-99.1 | 2025-12-12 | N | — | -0.46 | 0.36 | -0.68 |
+| F4 | 2026-01-20 | pre_market | 8-K | 0001569345-26-000004 | Item 8.01: Other Events | — | 2026-01-20 | N | — | 0.19 | 1.96 | 1.97 |
 
 ## 7. Sector Peer Earnings & Reactions
 

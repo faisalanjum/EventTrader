@@ -172,11 +172,17 @@ def _normalize_sector(sector: str | None) -> str | None:
 
 
 def _run_builder(fn, ticker, quarter_info, pit_cutoff, out_path,
+                 builder_kwargs: dict | None = None,
                  retries: int = 2, backoff: float = 2.0):
-    """Run a single builder with retry on transient (connection) errors."""
+    """Run a single builder with retry on transient (connection) errors.
+
+    `builder_kwargs` is a dict of additional kwargs threaded through the
+    adapter (every adapter declares **kwargs; unrecognized keys are dropped).
+    """
+    builder_kwargs = builder_kwargs or {}
     for attempt in range(retries + 1):
         try:
-            return fn(ticker, quarter_info, pit_cutoff, out_path)
+            return fn(ticker, quarter_info, pit_cutoff, out_path, **builder_kwargs)
         except Exception as e:
             if attempt < retries and _is_transient(e):
                 wait = backoff * (attempt + 1)
@@ -189,8 +195,14 @@ def _run_builder(fn, ticker, quarter_info, pit_cutoff, out_path,
 
 def build_prediction_bundle(ticker: str, quarter_info: dict,
                             pit_cutoff: str | None = None,
-                            out_dir: str | None = None) -> dict:
-    """Run all 7 standardized builders in parallel, return merged bundle dict."""
+                            out_dir: str | None = None,
+                            related_filings_dir: str | None = None) -> dict:
+    """Run all 7 standardized builders in parallel, return merged bundle dict.
+
+    `related_filings_dir`: when provided, `inter_quarter_context` writes
+    per-accession sidecar markdown files for selected related 8-Ks. Pass None
+    for dry inspection (no on-disk side effects).
+    """
     validate_quarter_info(quarter_info)
 
     run_id = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -199,13 +211,21 @@ def build_prediction_bundle(ticker: str, quarter_info: dict,
     def out(name: str) -> str:
         return str(base / f"{name}.json")
 
+    # Per-builder kwargs (each adapter declares **kwargs, so unknown keys drop).
+    per_builder_kwargs: dict[str, dict] = {}
+    if related_filings_dir:
+        per_builder_kwargs["inter_quarter_context"] = {
+            "related_filings_dir": str(related_filings_dir)
+        }
+
     results = {}
     errors = {}
 
     with ThreadPoolExecutor(max_workers=len(BUNDLE_ITEM_ORDER)) as pool:
         futures = {
             pool.submit(_run_builder, BUILDERS[name], ticker, quarter_info,
-                        pit_cutoff, out(name)): name
+                        pit_cutoff, out(name),
+                        per_builder_kwargs.get(name)): name
             for name in BUNDLE_ITEM_ORDER
         }
         for future in as_completed(futures):
@@ -323,13 +343,20 @@ _IQ_ANALYST_CHANNELS = frozenset({
 
 def run_core_flow(ticker: str, quarter_info: dict,
                   pit_cutoff: str | None = None,
-                  out_dir: str | None = None) -> tuple[dict, str]:
-    """Build the bundle and render it as sectioned text."""
+                  out_dir: str | None = None,
+                  related_filings_dir: str | None = None) -> tuple[dict, str]:
+    """Build the bundle and render it as sectioned text.
+
+    `related_filings_dir`: optional. When set, `inter_quarter_context` writes
+    per-accession sidecar markdown files. Pass None for dry inspection
+    (no on-disk side effects).
+    """
     bundle = build_prediction_bundle(
         ticker=ticker,
         quarter_info=quarter_info,
         pit_cutoff=pit_cutoff,
         out_dir=out_dir,
+        related_filings_dir=related_filings_dir,
     )
     rendered = render_bundle_text(bundle)
     return bundle, rendered
@@ -2255,6 +2282,13 @@ def main():
     print(f"  pit_cutoff:  {pit_cutoff}")
     print()
 
+    # U7: compute related_filings_dir up front when we'll persist the bundle.
+    # Dry inspections (no --save / --predict) pass None — no on-disk side effects.
+    related_filings_dir: str | None = None
+    if args.save or args.predict:
+        _early_paths = get_prediction_paths(args.ticker, quarter_info, args.save_dir)
+        related_filings_dir = str(_early_paths["bundle_path"].parent / "related_filings")
+
     print(f"Building prediction bundle ({len(BUILDERS)} builders in parallel) ...", flush=True)
     t0 = datetime.now()
     bundle, rendered = run_core_flow(
@@ -2262,6 +2296,7 @@ def main():
         quarter_info=quarter_info,
         pit_cutoff=pit_cutoff,
         out_dir=args.save_dir,
+        related_filings_dir=related_filings_dir,
     )
     elapsed = (datetime.now() - t0).total_seconds()
 

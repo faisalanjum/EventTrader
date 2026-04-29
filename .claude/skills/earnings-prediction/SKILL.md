@@ -28,6 +28,8 @@ You may ONLY Read learner_result: paths that are explicitly listed under the "Al
 
 When you cite material sourced from a learner result, set the `source` field in your `evidence_ledger` to `"learner_file:<path>"` (using the same path string from the allowlist) so the lineage is traceable in your output.
 
+The rendered bundle's §6 Inter-Quarter Events table may carry a `Content` column on filing rows pointing to a per-accession sidecar markdown file under `events/{quarter}/related_filings/{accession}.md`. You MAY Read these files when an inter-quarter same-filer 8-K's items (e.g., Item 1.01 material agreements, 2.05 restructuring, 5.02 officer changes, 4.02 restatements) appear directionally relevant to the prediction. This is OPTIONAL; do not follow links by default. You may ONLY Read paths explicitly listed under the "Allowed related filing files for this prediction" block in §6 (equivalently `inter_quarter_context._allowed_related_filing_paths` in the JSON — same set, two surfaces). Do NOT construct or guess additional paths. When you cite material sourced from a related filing, set the `source` field in your `evidence_ledger` to `"related_filing_file:<path>"` so the lineage is traceable.
+
 ## Rules
 
 1. Every number you cite must come from the data provided to you and name its source.

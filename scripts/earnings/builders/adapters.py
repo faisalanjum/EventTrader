@@ -195,10 +195,20 @@ def build_inter_quarter_context(ticker: str, quarter_info: dict,
     out = out_path or f"/tmp/earnings_inter_quarter_{ticker}.json"
     _ensure_dir(out)
 
+    # U7: defensive target-accession exclusion (covers --pit > filed_8k).
+    target_accession = quarter_info.get("accession_8k")
+    exclude_accessions = {target_accession} if target_accession else None
+
+    # U7: optional related-filings sidecar dir. Plumbed by the orchestrator
+    # only when args.save / args.predict — pass None for dry inspection.
+    related_filings_dir = kwargs.get("related_filings_dir")
+
     # Legacy returns (out_path, rendered) tuple — we discard rendered
     with _SuppressStdout():
         _legacy(ticker, prev_8k_ts, context_cutoff,
-                out_path=out, context_cutoff_reason=cutoff_reason)
+                out_path=out, context_cutoff_reason=cutoff_reason,
+                exclude_accessions=exclude_accessions,
+                related_filings_dir=related_filings_dir)
 
     # Read packet from disk
     with open(out, encoding="utf-8") as f:

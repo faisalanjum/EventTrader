@@ -175,7 +175,7 @@ def _iq_filings_table(days: list) -> str:
 
     headers = [
         "Ref", "Date", "Sess", "Form", "Accession",
-        "Items", "Exhibits", "Period", "Amend",
+        "Items", "Exhibits", "Period", "Amend", "Content",
         "AdjH%", "AdjS%", "AdjD%",
     ]
     rows = []
@@ -191,6 +191,7 @@ def _iq_filings_table(days: list) -> str:
             _iq_join(ev.get("exhibit_keys")),
             _iq_val(ev.get("period_of_report")),
             _iq_bool(ev.get("is_amendment")),
+            _iq_val(ev.get("related_content_path")),
             adj_h, adj_s, adj_d,
         ])
     lines = [f"### Filing Events ({len(filings)})", "",
@@ -285,5 +286,13 @@ def _render_inter_quarter(bundle: dict) -> str:
         block = table_fn(days)
         if block:
             blocks.append(block)
+
+    # U7: surface allowlisted related-filing sidecars for the predictor.
+    allowed = packet.get("_allowed_related_filing_paths") or []
+    if allowed:
+        rf_block = ["### Allowed related filing files for this prediction", ""]
+        for p in allowed:
+            rf_block.append(f"- {p}")
+        blocks.append("\n".join(rf_block))
 
     return "\n\n".join(blocks)

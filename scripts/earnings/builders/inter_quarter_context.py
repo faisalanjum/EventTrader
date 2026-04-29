@@ -20,6 +20,7 @@ import json
 import math
 import os
 from datetime import datetime, timezone
+from pathlib import Path
 
 from ._paths import ensure_legacy_paths
 ensure_legacy_paths()
@@ -160,6 +161,122 @@ RETURN ind.name AS industry_name,
 """
 
 # --- Inter-quarter helper functions ---
+
+
+import re as _re_iqc
+
+
+# ── U7: related-filings sidecar helpers ─────────────────────────────────────
+# Parse SEC 8-K item codes from "Item N.NN[: <label>]" → "N.NN".
+
+_ITEM_CODE_RE = _re_iqc.compile(r"^\s*Item\s+(\d+\.\d+)", _re_iqc.IGNORECASE)
+
+
+def _parse_item_code(item_str):
+    """Return the numeric item code (e.g. '9.01') or None if unparseable."""
+    if not item_str or not isinstance(item_str, str):
+        return None
+    m = _ITEM_CODE_RE.match(item_str.strip())
+    return m.group(1) if m else None
+
+
+def _should_emit_sidecar(form_type, items_codes, exhibits_dict):
+    """Return True if this filing should receive a related-filing sidecar.
+
+    Rule:
+      - 8-K/A: always include (amendments often carry restated content).
+      - 8-K: include UNLESS items == {9.01} AND no exhibits (boilerplate-only).
+      - All other forms (10-Q, 10-K, Form 4, SCHEDULE 13D, etc.): skip.
+      - Missing/unparseable items on an 8-K: include (don't silently drop).
+
+    `items_codes` is a set of parsed item codes (e.g. {'2.01', '9.01'}).
+    `exhibits_dict` is the parsed exhibits map (typically {EX-99.1: url, ...}).
+    """
+    ft = (form_type or "").strip().upper()
+    if ft == "8-K/A":
+        return True
+    if ft == "8-K":
+        if items_codes == {"9.01"} and not exhibits_dict:
+            return False
+        return True
+    return False
+
+
+# Cypher: fetch sections + ALL exhibits + filing-text fallback for ONE accession.
+# Mirrors eight_k_packet's QUERY_4J/4K patterns; broadens to ALL exhibits (not
+# just EX-99) per Item 1.01 / 5.02 cases where EX-10 contracts/comp matter.
+QUERY_RF_SECTIONS = """
+MATCH (r:Report {accessionNo: $accession})-[:HAS_SECTION]->(s:ExtractedSectionContent)
+WHERE s.content IS NOT NULL AND s.content <> ''
+RETURN s.section_name AS section_name, s.content AS content
+ORDER BY s.section_name
+"""
+
+QUERY_RF_EXHIBITS = """
+MATCH (r:Report {accessionNo: $accession})-[:HAS_EXHIBIT]->(e:ExhibitContent)
+WHERE e.content IS NOT NULL AND e.content <> ''
+RETURN e.exhibit_number AS exhibit_number, e.content AS content
+ORDER BY e.exhibit_number
+"""
+
+QUERY_RF_FILING_TEXT = """
+MATCH (r:Report {accessionNo: $accession})-[:HAS_FILING_TEXT]->(f:FilingTextContent)
+RETURN f.content AS content
+"""
+
+
+def _fetch_related_filing_content(manager, accession):
+    """Fetch (sections, exhibits, filing_text) for one accession from Neo4j."""
+    sections = manager.execute_cypher_query_all(QUERY_RF_SECTIONS, {"accession": accession}) or []
+    exhibits = manager.execute_cypher_query_all(QUERY_RF_EXHIBITS, {"accession": accession}) or []
+    ft_rows = manager.execute_cypher_query_all(QUERY_RF_FILING_TEXT, {"accession": accession}) or []
+    filing_text = ft_rows[0]["content"] if ft_rows else None
+    return sections, exhibits, filing_text
+
+
+def _render_sidecar_md(meta, sections, exhibits, filing_text):
+    """Render a related filing's content as markdown.
+
+    `meta` carries accession/form_type/created/items/etc. for the filing.
+    Returns markdown string. Empty result signals 'no useful content' and the
+    caller skips writing to disk.
+    """
+    has_any = bool(sections) or bool(exhibits) or bool(filing_text)
+    if not has_any:
+        return ""
+    lines = []
+    items_str = " || ".join(meta.get("items") or []) or "—"
+    lines.append(f"# {meta.get('form_type', '?')} — {items_str}")
+    lines.append("")
+    lines.append(f"**Accession**: {meta.get('accession', '?')}")
+    lines.append(f"**Filed**: {meta.get('created', '?')} ({meta.get('market_session') or '—'})")
+    lines.append(f"**Period of Report**: {meta.get('period_of_report') or '—'}")
+    if meta.get("is_amendment"):
+        lines.append("**Amendment**: yes")
+    if sections:
+        lines.append("\n## Sections\n")
+        for s in sections:
+            lines.append(f"### {s.get('section_name', '—')}")
+            lines.append((s.get("content") or "").strip())
+            lines.append("")
+    if exhibits:
+        lines.append("\n## Exhibits\n")
+        for e in exhibits:
+            lines.append(f"### {e.get('exhibit_number', '—')}")
+            lines.append((e.get("content") or "").strip())
+            lines.append("")
+    if filing_text and not sections and not exhibits:
+        lines.append("\n## Filing Text (fallback)\n")
+        lines.append(filing_text.strip())
+    return "\n".join(lines).strip() + "\n"
+
+
+def _atomic_write_text(path, content):
+    """Atomic tmp + rename. Caller ensures parent dir exists."""
+    tmp = str(path) + ".tmp"
+    with open(tmp, "w", encoding="utf-8") as f:
+        f.write(content)
+    os.replace(tmp, str(path))
 
 
 def _iq_parse_json_field(raw, fallback=None):
@@ -586,7 +703,9 @@ def render_inter_quarter_text(packet):
 
 
 def build_inter_quarter_context(ticker, prev_8k_ts, context_cutoff_ts,
-                                out_path=None, context_cutoff_reason=None):
+                                out_path=None, context_cutoff_reason=None,
+                                exclude_accessions=None,
+                                related_filings_dir=None):
     """Build inter-quarter context timeline artifact (inter_quarter_context.v1).
 
     Returns: packet dict (inter_quarter_context.v1).
@@ -597,7 +716,15 @@ def build_inter_quarter_context(ticker, prev_8k_ts, context_cutoff_ts,
         context_cutoff_ts: Upper bound for event inclusion (exclusive)
         out_path: Output file path (default: /tmp/earnings_inter_quarter_{ticker}.json)
         context_cutoff_reason: Optional metadata label (e.g. 'historical_release_session_floor')
+        exclude_accessions: Optional set of accession numbers to drop from the
+            filings timeline (e.g. the target 8-K). Defends against
+            `--pit > filed_8k` reruns where the target would otherwise leak.
+        related_filings_dir: Optional path to write per-accession sidecar
+            markdown files for selected related 8-Ks. If None, no sidecars are
+            written and `_allowed_related_filing_paths` will be empty
+            (idempotent: dry inspection produces no on-disk side effects).
     """
+    exclude_accessions = set(exclude_accessions or ())
     from utils.market_session import MarketSessionClassifier
 
     # 1. Parse inputs
@@ -771,7 +898,14 @@ def build_inter_quarter_context(ticker, prev_8k_ts, context_cutoff_ts,
             day_map[day_key]['events'].append(ev)
 
         # 9. Merge filing events
+        # Set up sidecar directory once (only when caller opted in via
+        # related_filings_dir — dry inspections pass None to avoid side effects).
+        if related_filings_dir:
+            os.makedirs(related_filings_dir, exist_ok=True)
         for row in filing_rows:
+            # U7: defensive target-accession exclusion (covers --pit > filed_8k).
+            if row.get('accession') in exclude_accessions:
+                continue
             created = str(row['created'])
             day_key = created[:10]
             items = _iq_parse_json_field(row.get('items'), [])
@@ -814,7 +948,27 @@ def build_inter_quarter_context(ticker, prev_8k_ts, context_cutoff_ts,
                 'xbrl_status': row.get('xbrl_status'),
                 'financial_statement_count': row.get('financial_statement_count'),
                 'returns_schedule_raw': rs_raw,
+                'related_content_path': None,
             }
+            # U7: emit sidecar for selected 8-K / 8-K/A only when caller opted in.
+            if related_filings_dir:
+                items_codes = {c for c in (_parse_item_code(i) for i in items) if c}
+                if _should_emit_sidecar(row.get('form_type'), items_codes,
+                                        exhibits_parsed if isinstance(exhibits_parsed, dict) else {}):
+                    sections, exhibits, filing_text = _fetch_related_filing_content(
+                        manager, row.get('accession'))
+                    md = _render_sidecar_md(ev, sections, exhibits, filing_text)
+                    if md.strip():
+                        sidecar_path = os.path.join(related_filings_dir,
+                                                    f"{row.get('accession')}.md")
+                        try:
+                            _atomic_write_text(sidecar_path, md)
+                            if os.path.isfile(sidecar_path):
+                                # Repo-relative path for the bundle / allowlist.
+                                ev['related_content_path'] = os.path.relpath(
+                                    sidecar_path, str(Path.cwd()))
+                        except OSError:
+                            pass  # leave related_content_path = None
             if day_key not in day_map:
                 day_map[day_key] = {
                     'date': day_key, 'is_trading_day': False, 'boundary_role': None,
@@ -942,6 +1096,31 @@ def build_inter_quarter_context(ticker, prev_8k_ts, context_cutoff_ts,
             'total_splits': total_splits,
         }
 
+        # 15b. U7: build allowlist of related-filing sidecar paths.
+        # Order matches event render order; no duplicates by construction
+        # (each accession is unique). Local invariant: allowlist set equals
+        # the set of non-null related_content_path values across filing events.
+        allowed_related_paths = []
+        seen_paths = set()
+        for day in sorted_days:
+            for ev in day.get('events', []):
+                if ev.get('type') != 'filing':
+                    continue
+                p = ev.get('related_content_path')
+                if p and p not in seen_paths:
+                    allowed_related_paths.append(p)
+                    seen_paths.add(p)
+        # Local invariant (non-blocking belt-and-suspenders):
+        event_paths_set = {ev.get('related_content_path')
+                           for day in sorted_days for ev in day.get('events', [])
+                           if ev.get('type') == 'filing' and ev.get('related_content_path')}
+        if set(allowed_related_paths) != event_paths_set:
+            raise AssertionError(
+                "_allowed_related_filing_paths invariant violated: "
+                f"allowlist={set(allowed_related_paths)!r} "
+                f"event_paths={event_paths_set!r}"
+            )
+
         # 16. Assemble and write canonical JSON
         packet = {
             'schema_version': 'inter_quarter_context.v1',
@@ -955,6 +1134,7 @@ def build_inter_quarter_context(ticker, prev_8k_ts, context_cutoff_ts,
             'sector': top_sector,
             'days': sorted_days,
             'summary': summary,
+            '_allowed_related_filing_paths': allowed_related_paths,
             'assembled_at': datetime.now(timezone.utc).isoformat(),
         }
 

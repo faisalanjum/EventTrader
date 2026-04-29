@@ -26,7 +26,9 @@ def _bundle(*, current_row: dict | None = None,
             other_rows: list[dict] | None = None,
             ex991: str | None = "Press release stub",
             consensus_present: bool = True,
-            builder_errors: dict | None = None) -> dict:
+            builder_errors: dict | None = None,
+            gaps: list | None = None,
+            items: list | None = None) -> dict:
     rows = []
     if current_row is not None:
         rows.append({**current_row, "is_current_quarter": True})
@@ -39,12 +41,13 @@ def _bundle(*, current_row: dict | None = None,
             "quarterly_rows": rows,
             "forward_estimates": [],
             "summary": {},
-            "gaps": [],
+            "gaps": gaps or [],
         }
     packet = None
-    if ex991 is not None:
+    if ex991 is not None or items is not None:
         packet = {
-            "exhibits_99": [{"exhibit_number": "EX-99.1", "content": ex991}],
+            "exhibits_99": [{"exhibit_number": "EX-99.1", "content": ex991}] if ex991 else [],
+            "items": items or [],
         }
     return {
         "ticker": "AVGO",
