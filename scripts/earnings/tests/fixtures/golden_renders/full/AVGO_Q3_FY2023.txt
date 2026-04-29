@@ -6,7 +6,7 @@ Mode: historical | PIT cutoff: 2023-08-31T17:18:57-04:00
 ## 2. Results & Expectations
 
 ### Consensus Bar
-[No current-quarter row found]
+[Consensus unavailable — AV upstream failed: AV EARNINGS failed for AVGO; AV EARNINGS_ESTIMATES failed for AVGO; AV INCOME_STATEMENT failed for AVGO]
 
 ### Reported Results (EX-99.1)
 

@@ -25,7 +25,8 @@ def _render_results_and_expectations(bundle: dict) -> str:
     elif not consensus:
         parts.append("\n### Consensus Bar\n[NO DATA]")
     else:
-        rows = consensus.get("quarterly_rows", [])
+        # `or []` defensively handles both missing key AND explicit None.
+        rows = consensus.get("quarterly_rows") or []
         current = next((r for r in rows if r.get("is_current_quarter")), None)
 
         if current:
@@ -49,14 +50,29 @@ def _render_results_and_expectations(bundle: dict) -> str:
                 parts.append(f"| EPS     | {_fmt_eps(est_eps)} |")
                 parts.append(f"| Revenue | {_fmt_money(est_rev)} |")
         else:
-            # U2 deferred: do NOT fall through to consensus.forward_estimates[0]
-            # here. After U1's cutoff fix, the just-reported provider FDE is
-            # excluded from forward_estimates, so fwd[0] is the *next-next*
-            # quarter — labeling it as the current event would mislead the
-            # predictor. Forward consensus stays visible in §1.3. Revisit if/when
-            # at-release prediction (~1 min after 8-K, AV-lag transient) becomes
-            # a primary workflow that justifies target-quarter verification.
-            parts.append("\n### Consensus Bar\n[No current-quarter row found]")
+            # U3: branch the empty-Consensus-Bar message by underlying cause.
+            # Distinguishes AV upstream failure (rate-limit / endpoint error)
+            # from genuinely-empty data, from the row-present-but-no-match
+            # (ACI-class) fiscal-fallback case U1 introduced.
+            gaps = consensus.get("gaps") or []
+            upstream_errs = [g for g in gaps
+                             if isinstance(g, dict) and g.get("type") == "upstream_error"]
+            if upstream_errs and not rows:
+                reasons = "; ".join(
+                    (g.get("reason") or "AV upstream error") for g in upstream_errs
+                )
+                parts.append(f"\n### Consensus Bar\n[Consensus unavailable — AV upstream failed: {reasons}]")
+            elif not rows:
+                parts.append("\n### Consensus Bar\n[No quarterly data]")
+            else:
+                # U2 deferred: do NOT fall through to consensus.forward_estimates[0]
+                # here. After U1's cutoff fix, the just-reported provider FDE is
+                # excluded from forward_estimates, so fwd[0] is the *next-next*
+                # quarter — labeling it as the current event would mislead the
+                # predictor. Forward consensus stays visible in §1.3. Revisit if/when
+                # at-release prediction (~1 min after 8-K, AV-lag transient) becomes
+                # a primary workflow that justifies target-quarter verification.
+                parts.append("\n### Consensus Bar\n[No current-quarter row found]")
 
     # ── Subsection B: Reported Results (EX-99.1 only — other exhibits go to Reference) ──
     packet = bundle.get("8k_packet")

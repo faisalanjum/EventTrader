@@ -6,7 +6,7 @@ Mode: historical | PIT cutoff: 2026-01-28T16:16:58-05:00
 ## 2. Results & Expectations
 
 ### Consensus Bar
-[No current-quarter row found]
+[Consensus unavailable — AV upstream failed: AV EARNINGS failed for CHRW; AV EARNINGS_ESTIMATES failed for CHRW; AV INCOME_STATEMENT failed for CHRW]
 
 ### Reported Results (EX-99.1)
 

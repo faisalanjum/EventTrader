@@ -6,7 +6,7 @@ Mode: historical | PIT cutoff: 2026-03-11T07:15:04-04:00
 ## 2. Results & Expectations
 
 ### Consensus Bar
-[No current-quarter row found]
+[Consensus unavailable — AV upstream failed: AV EARNINGS failed for CXM; AV EARNINGS_ESTIMATES failed for CXM; AV INCOME_STATEMENT failed for CXM]
 
 ### Reported Results (EX-99.1)
 

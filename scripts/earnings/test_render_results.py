@@ -128,6 +128,46 @@ class ConsensusBarTests(unittest.TestCase):
         ))
         self.assertIn("[BUILDER ERROR: AV rate-limited]", text)
 
+    # ── U3: disambiguate the three empty-Consensus-Bar failure modes ──
+
+    def test_u3_upstream_error_distinct_message(self):
+        """AV upstream failure → distinct stub mentioning the failure reason."""
+        text = _render_results_and_expectations(_bundle(
+            current_row=None, other_rows=[], consensus_present=True,
+            gaps=[
+                {"type": "upstream_error", "reason": "AV EARNINGS failed for AVGO"},
+                {"type": "upstream_error", "reason": "AV EARNINGS_ESTIMATES failed for AVGO"},
+            ],
+        ))
+        self.assertIn("Consensus unavailable", text)
+        self.assertIn("AV upstream failed", text)
+        self.assertIn("AV EARNINGS failed for AVGO", text)
+        self.assertIn("AV EARNINGS_ESTIMATES failed for AVGO", text)
+        self.assertNotIn("[No current-quarter row found]", text)
+        self.assertNotIn("[No quarterly data]", text)
+
+    def test_u3_empty_rows_no_upstream_says_no_quarterly_data(self):
+        """consensus exists but rows empty AND no upstream_error → '[No quarterly data]'."""
+        text = _render_results_and_expectations(_bundle(
+            current_row=None, other_rows=[], consensus_present=True, gaps=[],
+        ))
+        self.assertIn("[No quarterly data]", text)
+        self.assertNotIn("[No current-quarter row found]", text)
+        self.assertNotIn("Consensus unavailable", text)
+
+    def test_u3_rows_present_no_match_keeps_aci_class_stub(self):
+        """rows present but none flagged is_current_quarter → genuine ACI-class
+        fallback keeps the existing '[No current-quarter row found]' message."""
+        text = _render_results_and_expectations(_bundle(
+            current_row=None,
+            other_rows=[{"fiscalDateEnding": "2023-10-31", "estimatedEPS": 1.098,
+                         "reportedEPS": 1.106, "is_current_quarter": False}],
+            consensus_present=True, gaps=[],
+        ))
+        self.assertIn("[No current-quarter row found]", text)
+        self.assertNotIn("[No quarterly data]", text)
+        self.assertNotIn("Consensus unavailable", text)
+
 
 if __name__ == "__main__":
     unittest.main()
