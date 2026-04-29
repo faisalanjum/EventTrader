@@ -9,7 +9,7 @@ exhibits). Imports `_fmt_money` from `_formatters`.
 """
 from __future__ import annotations
 
-from ._formatters import _fmt_money
+from ._formatters import _fmt_money, _fmt_pct, _fmt_eps
 
 
 def _render_results_and_expectations(bundle: dict) -> str:
@@ -31,14 +31,23 @@ def _render_results_and_expectations(bundle: dict) -> str:
         if current:
             parts.append("\n### Consensus Bar")
             parts.append("")
-            parts.append("| Metric | Estimate |")
-            parts.append("|--------|----------|")
-
-            est_eps = current.get("estimatedEPS")
-            parts.append(f"| EPS | {f'${est_eps}' if est_eps is not None else '—'} |")
-
-            est_rev = current.get("revenueEstimate")
-            parts.append(f"| Revenue | {_fmt_money(est_rev)} |")
+            est_eps  = current.get("estimatedEPS")
+            act_eps  = current.get("reportedEPS")
+            surp_eps = current.get("epsSurprisePct")
+            est_rev  = current.get("revenueEstimate")
+            act_rev  = current.get("revenueActual")
+            surp_rev = current.get("revenueSurprisePct")
+            has_actuals = (act_eps is not None) or (act_rev is not None)
+            if has_actuals:
+                parts.append("| Metric  | Estimate | Actual | Surprise |")
+                parts.append("|---------|----------|--------|----------|")
+                parts.append(f"| EPS     | {_fmt_eps(est_eps)} | {_fmt_eps(act_eps)} | {_fmt_pct(surp_eps)} |")
+                parts.append(f"| Revenue | {_fmt_money(est_rev)} | {_fmt_money(act_rev)} | {_fmt_pct(surp_rev)} |")
+            else:
+                parts.append("| Metric  | Estimate |")
+                parts.append("|---------|----------|")
+                parts.append(f"| EPS     | {_fmt_eps(est_eps)} |")
+                parts.append(f"| Revenue | {_fmt_money(est_rev)} |")
         else:
             parts.append("\n### Consensus Bar\n[No current-quarter row found]")
 

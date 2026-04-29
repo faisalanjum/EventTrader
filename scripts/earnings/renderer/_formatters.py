@@ -49,6 +49,17 @@ def _fmt_money(val) -> str:
     return _fmt_num(val, prefix="$")
 
 
+def _fmt_eps(val) -> str:
+    """Format an EPS value with 3-decimal precision (preserves $1.098 vs $1.10)."""
+    if val is None:
+        return "—"
+    v = float(val)
+    if not math.isfinite(v):
+        return "—"
+    sign = "-" if v < 0 else ""
+    return f"{sign}${abs(v):.3f}"
+
+
 def _fmt_pct(val) -> str:
     """Format a percentage for display."""
     if val is None:

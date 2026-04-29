@@ -641,14 +641,45 @@ def _merge_yahoo_estimates(eps_est, rev_est, trend_est,
 
 # ── Build logic ──────────────────────────────────────────────────────────
 
+def _provider_fde_for_period(period_of_report, fye_month, form_type_periodic):
+    """Compute AV/Yahoo-convention fiscalDateEnding (calendar month-end) from
+    the SEC 8-K's `period_of_report` via fiscal_math.
+
+    Returns ISO date string or None if any input is missing or fiscal_math fails.
+    Caller is responsible for using strict-equality fallback when None is returned.
+    """
+    if not period_of_report or not fye_month or not form_type_periodic:
+        return None
+    try:
+        from datetime import date as _date
+        from fiscal_math import period_to_fiscal, _compute_fiscal_dates
+        d = _date.fromisoformat(str(period_of_report)[:10])
+        fye = int(fye_month)
+        form = str(form_type_periodic).replace("/A", "")  # 10-K/A → 10-K
+        fy, q = period_to_fiscal(d.year, d.month, d.day, fye, form)
+        if fy is None or q is None:
+            return None
+        return _compute_fiscal_dates(fye, fy, q)[1]
+    except (ValueError, KeyError, IndexError, ImportError, TypeError):
+        return None
+
+
 def _build_quarterly_rows(earnings_data: dict | None,
                           income_data: dict | None,
                           estimates_data: dict | None,
                           period_of_report: str,
                           filed_8k_ts: datetime | None,
                           as_of_ts: datetime | None,
-                          gaps: list) -> list[dict]:
-    """Build quarterly_rows: current + prior quarters with EPS + revenue surprise."""
+                          gaps: list,
+                          target_fde: str | None = None) -> list[dict]:
+    """Build quarterly_rows: current + prior quarters with EPS + revenue surprise.
+
+    `target_fde` is the resolved match key for is_current_quarter routing
+    (computed by caller via fiscal_math). When None, falls back to strict
+    equality on `period_of_report` (existing behavior).
+    """
+    match_fde = target_fde or period_of_report
+
     if not earnings_data:
         return []
 
@@ -704,7 +735,7 @@ def _build_quarterly_rows(earnings_data: dict | None,
         if not fde or not reported_date:
             continue
 
-        is_current = (fde == period_of_report)
+        is_current = (fde == match_fde)
 
         # PIT filter (historical mode only)
         if is_historical:
@@ -800,13 +831,32 @@ def _build_quarterly_rows(earnings_data: dict | None,
         if len(rows) >= _HISTORY_QUARTERS:
             break
 
+    # Gap emission: rows existed but none matched (target_fde and/or period_of_report).
+    # Only emit when rows were actually present — the upstream `empty_data` gap covers
+    # the "AV returned no quarterly items" path so we don't double up.
+    if rows and not any(r.get("is_current_quarter") for r in rows):
+        gaps.append({
+            "type": "fiscal_match_fallback",
+            "period_of_report": period_of_report,
+            "target_fde": target_fde,
+        })
+
     return rows
 
 
 def _build_forward_estimates(estimates_data: dict | None,
                              period_of_report: str,
-                             gaps: list) -> list[dict]:
-    """Build forward_estimates from EARNINGS_ESTIMATES. Includes revision deltas."""
+                             gaps: list,
+                             cutoff_fde: str | None = None) -> list[dict]:
+    """Build forward_estimates from EARNINGS_ESTIMATES. Includes revision deltas.
+
+    `cutoff_fde` is the resolved match key (provider-convention FDE) used to
+    exclude the just-reported quarter from forward. Falls back to
+    `period_of_report` when None (existing behavior, preserves the 13-week leak
+    bug for cases where the caller doesn't opt in).
+    """
+    cutoff = cutoff_fde or period_of_report
+
     if not estimates_data:
         return []
 
@@ -822,7 +872,7 @@ def _build_forward_estimates(estimates_data: dict | None,
             continue
         fde = raw.get("date", raw.get("fiscalDateEnding", ""))
         horizon = str(raw.get("horizon", "")).lower()
-        if not fde or fde <= period_of_report:
+        if not fde or fde <= cutoff:
             continue
 
         eps_avg = _safe_float(raw.get("eps_estimate_average"))
@@ -1004,15 +1054,33 @@ def build_consensus(
                 # Live: newest row
                 period_of_report = sorted_qe[0].get("fiscalDateEnding", "")
 
+    # Resolve match key for is_current_quarter routing AND forward cutoff.
+    # Fiscal-math computes the AV/Yahoo-convention provider FDE from SEC fiscal
+    # identity (period_of_report + fye_month + form_type_periodic). Pre-scan AV
+    # rows to confirm the computed FDE actually exists in the row set; otherwise
+    # fall back to strict equality on period_of_report (preserves today's
+    # behavior for ACI/ESTC-class edge cases).
+    _pfde = _provider_fde_for_period(
+        period_of_report,
+        quarter_info.get("fye_month"),
+        quarter_info.get("form_type_periodic"),
+    )
+    _row_fdes = {q.get("fiscalDateEnding") for q in (earnings_data or {}).get("quarterlyEarnings", [])}
+    target_fde = _pfde if (_pfde and _pfde in _row_fdes) else period_of_report
+
     # Build quarterly rows
     quarterly_rows = _build_quarterly_rows(
         earnings_data, income_data, estimates_data,
         period_of_report, filed_8k_ts, as_of_dt, gaps,
+        target_fde=target_fde,
     )
 
     # Build forward estimates (live only)
     if mode == "live":
-        forward_estimates = _build_forward_estimates(estimates_data, period_of_report, gaps)
+        forward_estimates = _build_forward_estimates(
+            estimates_data, period_of_report, gaps,
+            cutoff_fde=target_fde,
+        )
     else:
         forward_estimates = []
         gaps.append({"type": "pit_excluded",

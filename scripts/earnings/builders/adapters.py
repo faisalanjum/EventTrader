@@ -291,9 +291,11 @@ def build_consensus(ticker: str, quarter_info: dict,
 
     # Legacy uses as_of_ts, not pit_cutoff
     qi_for_legacy = {
-        "period_of_report": quarter_info.get("period_of_report", ""),
-        "filed_8k": quarter_info.get("filed_8k", ""),
-        "market_session": quarter_info.get("market_session", ""),
+        "period_of_report":   quarter_info.get("period_of_report", ""),
+        "filed_8k":           quarter_info.get("filed_8k", ""),
+        "market_session":     quarter_info.get("market_session", ""),
+        "fye_month":          quarter_info.get("fye_month"),
+        "form_type_periodic": quarter_info.get("form_type_periodic"),
     }
 
     out = out_path or f"/tmp/consensus_{ticker}.json"

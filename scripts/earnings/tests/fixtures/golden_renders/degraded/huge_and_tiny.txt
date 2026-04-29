@@ -7,10 +7,10 @@ Mode: historical | PIT cutoff: 2026-01-01T16:00:00-05:00
 
 ### Consensus Bar
 
-| Metric | Estimate |
-|--------|----------|
-| EPS | $1000000000000000.0 |
-| Revenue | $0 |
+| Metric  | Estimate | Actual | Surprise |
+|---------|----------|--------|----------|
+| EPS     | $1000000000000000.000 | $0.000 | 0.0% |
+| Revenue | $0 | $1 | -1.0% |
 
 ### Reported Results
 [NO DATA]
