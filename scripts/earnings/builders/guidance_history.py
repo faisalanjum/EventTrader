@@ -104,6 +104,34 @@ def _normalize_qualitative(q):
     return ' '.join(words)
 
 
+def _canonical_numeric_signature(u):
+    """U54: canonical form for collapse equality on numeric guidance updates.
+
+    Cross-source extraction artifacts of the SAME point estimate compare equal
+    (e.g. 8-K writes "approximately $8B" → mid=8 only; transcript extractor
+    auto-fills low=mid=high=8 for the same point statement). Genuine ranges
+    keep their exact tuple so they never collapse with point-only forms.
+
+    Returns:
+      ('point', value)            for point-equivalent forms
+      ('range', low, mid, high)   for genuine ranges and any pathological case
+    """
+    low, mid, high = u.get('low'), u.get('mid'), u.get('high')
+
+    # Form 1: midpoint-only point ("we expect ~$8B")
+    if mid is not None and low is None and high is None:
+        return ('point', mid)
+
+    # Form 2: degenerate range with optional matching midpoint
+    # (transcript-extractor artifact: "$8" → low=8, mid=8, high=8)
+    if low is not None and high is not None and low == high:
+        if mid is None or mid == low:
+            return ('point', low)
+
+    # Genuine range or pathological mismatch: keep exact tuple.
+    return ('range', low, mid, high)
+
+
 def resolve_unit_groups(rows):
     """For each base series (5D key without unit), if exactly one non-unknown
     canonical_unit exists, remap all 'unknown' entries to that unit.
@@ -336,20 +364,29 @@ def build_guidance_history(ticker, pit=None, out_path=None):
 
             metric_label = updates[0]['metric']
 
-            # Collapse same-day cross-source duplicates
+            # Collapse same-day cross-source duplicates.
+            # U54: target identity matches the renderer's group key
+            # (period_start, period_end, fy, fq) — see renderer/guidance.py:163.
+            # Numeric values use a canonical signature so extraction-artifact
+            # variants of the same point estimate (mid-only vs low=mid=high)
+            # collapse, while genuine ranges keep their exact tuple.
             collapse_groups = defaultdict(list)
             for u in updates:
                 given_day = _extract_given_day(u.get('given_date'))
                 fy = u.get('fiscal_year')
                 fq = u.get('fiscal_quarter')
+                period_start = u.get('period_start')
+                period_end = u.get('period_end')
                 low, mid, high = u.get('low'), u.get('mid'), u.get('high')
                 is_numeric = (low is not None or mid is not None or high is not None)
 
                 if is_numeric:
-                    ckey = (fy, fq, given_day, low, mid, high)
+                    ckey = (period_start, period_end, fy, fq, given_day,
+                            _canonical_numeric_signature(u))
                 else:
                     norm_q = _normalize_qualitative(u.get('qualitative'))
-                    ckey = ('qual', fy, fq, given_day, norm_q)
+                    ckey = ('qual', period_start, period_end, fy, fq,
+                            given_day, norm_q)
                 collapse_groups[ckey].append(u)
 
             collapsed_updates = []

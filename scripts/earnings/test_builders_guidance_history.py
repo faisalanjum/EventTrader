@@ -310,3 +310,117 @@ def test_inline_regression_tests_pass_in_new_module():
     when invoked from the new guidance_history module — proves _format_value
     and resolve_unit_groups references resolve in the new namespace per §10.4."""
     assert gh._run_v2_regression_tests() is True
+
+
+# ── U54: same-day cross-source canonical-signature collapse ────────────
+
+def test_u54_canonical_signature_helper_point_forms():
+    """Helper: midpoint-only and degenerate-range collapse to ('point', value)."""
+    # Form 1: midpoint only
+    assert gh._canonical_numeric_signature(
+        {'low': None, 'mid': 8, 'high': None}) == ('point', 8)
+    # Form 2: low=mid=high (transcript-extractor artifact for point)
+    assert gh._canonical_numeric_signature(
+        {'low': 8, 'mid': 8, 'high': 8}) == ('point', 8)
+    # Form 3: low=high, no mid
+    assert gh._canonical_numeric_signature(
+        {'low': 8, 'mid': None, 'high': 8}) == ('point', 8)
+
+
+def test_u54_canonical_signature_helper_range_forms():
+    """Helper: genuine range and pathological forms keep exact tuple."""
+    # Genuine range
+    assert gh._canonical_numeric_signature(
+        {'low': 7, 'mid': 8, 'high': 9}) == ('range', 7, 8, 9)
+    # Pathological: mid disagrees with degenerate range
+    assert gh._canonical_numeric_signature(
+        {'low': 8, 'mid': 10, 'high': 8}) == ('range', 8, 10, 8)
+    # Lower-bound only
+    assert gh._canonical_numeric_signature(
+        {'low': 8, 'mid': None, 'high': None}) == ('range', 8, None, None)
+
+
+def test_u54_burl_canonical_collapse_midpoint_plus_degenerate(tmp_path):
+    """BURL canonical bug: 8-K mid=8 + transcript low=mid=high=8 same day → 1 update."""
+    rows = [
+        _row(source_type='8k', given_date='2025-11-25T10:00:00-05:00',
+             low=None, mid=8, high=None),
+        _row(source_type='transcript', given_date='2025-11-25T11:00:00-05:00',
+             low=8, mid=8, high=8),
+    ]
+    mgr = _mock_manager({"LIVE": rows})
+    with patch("scripts.earnings.builders.guidance_history.get_manager", return_value=mgr):
+        out = str(tmp_path / "g.json")
+        packet = gh.build_guidance_history("FAKE", pit=None, out_path=out)
+    assert packet["summary"]["total_updates_raw"] == 2
+    assert packet["summary"]["total_updates_collapsed"] == 1
+    upd = packet["series"][0]["updates"][0]
+    assert sorted(upd["sources"]) == ['8k', 'transcript']
+
+
+def test_u54_point_and_true_range_stay_separate(tmp_path):
+    """Point mid=8 + true range low=7,mid=8,high=9 same day → 2 updates.
+    Regression against over-broad consistency clustering — preserves uncertainty info."""
+    rows = [
+        _row(source_type='8k', given_date='2025-11-25T10:00:00-05:00',
+             low=None, mid=8, high=None),
+        _row(source_type='transcript', given_date='2025-11-25T11:00:00-05:00',
+             low=7, mid=8, high=9),
+    ]
+    mgr = _mock_manager({"LIVE": rows})
+    with patch("scripts.earnings.builders.guidance_history.get_manager", return_value=mgr):
+        out = str(tmp_path / "g.json")
+        packet = gh.build_guidance_history("FAKE", pit=None, out_path=out)
+    assert packet["summary"]["total_updates_collapsed"] == 2
+
+
+def test_u54_genuine_same_day_revision_stays_separate(tmp_path):
+    """Same-day mid=8 + mid=10 (legit revision, different point estimates) → 2 updates."""
+    rows = [
+        _row(source_type='8k', given_date='2025-11-25T10:00:00-05:00',
+             low=None, mid=8, high=None),
+        _row(source_type='8k', given_date='2025-11-25T15:00:00-05:00',
+             low=None, mid=10, high=None),
+    ]
+    mgr = _mock_manager({"LIVE": rows})
+    with patch("scripts.earnings.builders.guidance_history.get_manager", return_value=mgr):
+        out = str(tmp_path / "g.json")
+        packet = gh.build_guidance_history("FAKE", pit=None, out_path=out)
+    assert packet["summary"]["total_updates_collapsed"] == 2
+
+
+def test_u54_different_day_same_canonical_stays_separate(tmp_path):
+    """Same canonical (mid=8) on two distinct days → 2 updates (different given_day)."""
+    rows = [
+        _row(source_type='8k', given_date='2025-11-25T10:00:00-05:00',
+             low=None, mid=8, high=None),
+        _row(source_type='8k', given_date='2025-12-01T10:00:00-05:00',
+             low=None, mid=8, high=None),
+    ]
+    mgr = _mock_manager({"LIVE": rows})
+    with patch("scripts.earnings.builders.guidance_history.get_manager", return_value=mgr):
+        out = str(tmp_path / "g.json")
+        packet = gh.build_guidance_history("FAKE", pit=None, out_path=out)
+    assert packet["summary"]["total_updates_collapsed"] == 2
+
+
+def test_u54_different_target_period_dates_stay_separate(tmp_path):
+    """Same fy/fq/given_day/canonical but different period_start/period_end → 2 updates.
+    Aligns with renderer's (period_start, period_end, fy, fq) target identity."""
+    rows = [
+        # Update A: targets quarter ending 2025-09-30
+        _row(source_type='8k', given_date='2025-11-25T10:00:00-05:00',
+             low=None, mid=8, high=None,
+             fiscal_year=None, fiscal_quarter=None,
+             period_start='2025-07-01', period_end='2025-09-30'),
+        # Update B: targets quarter ending 2025-12-31 (different target period)
+        _row(source_type='8k', given_date='2025-11-25T10:00:00-05:00',
+             low=None, mid=8, high=None,
+             fiscal_year=None, fiscal_quarter=None,
+             period_start='2025-10-01', period_end='2025-12-31'),
+    ]
+    mgr = _mock_manager({"LIVE": rows})
+    with patch("scripts.earnings.builders.guidance_history.get_manager", return_value=mgr):
+        out = str(tmp_path / "g.json")
+        packet = gh.build_guidance_history("FAKE", pit=None, out_path=out)
+    assert packet["summary"]["total_updates_collapsed"] == 2
