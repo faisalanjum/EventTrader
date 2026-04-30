@@ -60,6 +60,21 @@ def _fmt_eps(val) -> str:
     return f"{sign}${abs(v):.3f}"
 
 
+def _fmt_eps_delta(val) -> str:
+    """Format a signed EPS delta with 3-decimal precision: +$0.054, -$0.065,
+    $0.000 (no sign for zero), — when None/non-finite."""
+    if val is None:
+        return "—"
+    v = float(val)
+    if not math.isfinite(v):
+        return "—"
+    if v > 0:
+        return f"+${v:.3f}"
+    if v < 0:
+        return f"-${abs(v):.3f}"
+    return f"${v:.3f}"
+
+
 def _fmt_pct(val) -> str:
     """Format a percentage for display."""
     if val is None:

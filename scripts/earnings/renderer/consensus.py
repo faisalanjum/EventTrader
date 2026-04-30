@@ -7,7 +7,7 @@ All formatter imports come from `_formatters` (single canonical source).
 """
 from __future__ import annotations
 
-from ._formatters import _md_table, _fmt_money, _fmt_pct, _fmt_financial_cell
+from ._formatters import _md_table, _fmt_money, _fmt_pct, _fmt_financial_cell, _fmt_eps, _fmt_eps_delta
 
 
 def _render_consensus_history(bundle: dict) -> str:
@@ -61,18 +61,32 @@ def _render_consensus_history(bundle: dict) -> str:
         parts.append(_md_table(headers, tbl_rows))
 
     # ── Forward Estimates (live mode only) ──
+    # U8: keys aligned to builder schema (epsEstimateAverage, epsRevisionXdAgo,
+    # epsRevisionDeltaXd, revenueEstimateAverage, ...). 60d column added; deltas
+    # surfaced as primary signal; both EPS and Rev analyst counts shown.
     if forward:
         parts.append("\n### Forward Estimates (revision momentum)")
-        parts.append("| Period | EPS Current | 7d ago | 30d ago | 90d ago | Rev Current |")
-        parts.append("|--------|-------------|--------|---------|---------|-------------|")
+        parts.append("| Period | EPS Cur | 7d | 30d | 60d | 90d | Δ30d | Δ90d | Revenue Est | EPS Analysts | Rev Analysts |")
+        parts.append("|--------|---------|------|------|------|------|------|------|-------------|--------------|--------------|")
         for f_row in forward:
-            period = f_row.get("period", "?")
-            eps_cur = f"${f_row['eps_estimate_current']}" if f_row.get("eps_estimate_current") is not None else "—"
-            eps_7d = f"${f_row['eps_estimate_7d_ago']}" if f_row.get("eps_estimate_7d_ago") is not None else "—"
-            eps_30d = f"${f_row['eps_estimate_30d_ago']}" if f_row.get("eps_estimate_30d_ago") is not None else "—"
-            eps_90d = f"${f_row['eps_estimate_90d_ago']}" if f_row.get("eps_estimate_90d_ago") is not None else "—"
-            rev_cur = _fmt_money(f_row.get("revenue_estimate_current")) if f_row.get("revenue_estimate_current") is not None else "—"
-            parts.append(f"| {period} | {eps_cur} | {eps_7d} | {eps_30d} | {eps_90d} | {rev_cur} |")
+            fde = f_row.get("fiscalDateEnding") or "?"
+            horizon = (f_row.get("horizon") or "").lower()
+            tag = "FY" if "year" in horizon else ("Q" if "quarter" in horizon else "")
+            period = f"{fde} ({tag})" if tag else fde
+            eps_cur = _fmt_eps(f_row.get("epsEstimateAverage"))
+            eps_7d  = _fmt_eps(f_row.get("epsRevision7dAgo"))
+            eps_30d = _fmt_eps(f_row.get("epsRevision30dAgo"))
+            eps_60d = _fmt_eps(f_row.get("epsRevision60dAgo"))
+            eps_90d = _fmt_eps(f_row.get("epsRevision90dAgo"))
+            d30 = _fmt_eps_delta(f_row.get("epsRevisionDelta30d"))
+            d90 = _fmt_eps_delta(f_row.get("epsRevisionDelta90d"))
+            rev_est = _fmt_money(f_row.get("revenueEstimateAverage"))
+            # Analyst counts: explicit None check so 0 is preserved (defensive).
+            eps_n_raw = f_row.get("epsAnalystCount")
+            eps_n = eps_n_raw if eps_n_raw is not None else "—"
+            rev_n_raw = f_row.get("revenueAnalystCount")
+            rev_n = rev_n_raw if rev_n_raw is not None else "—"
+            parts.append(f"| {period} | {eps_cur} | {eps_7d} | {eps_30d} | {eps_60d} | {eps_90d} | {d30} | {d90} | {rev_est} | {eps_n} | {rev_n} |")
 
     # ── Gaps ──
     if gaps:
