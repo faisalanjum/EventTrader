@@ -19,7 +19,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(PROJECT_ROOT))
 sys.path.insert(0, str(PROJECT_ROOT / "scripts/earnings"))
 
-from earnings_orchestrator import _render_results_and_expectations
+from earnings_orchestrator import _render_results_and_expectations, _render_reference
 
 
 def _bundle(*, current_row: dict | None = None,
@@ -167,6 +167,127 @@ class ConsensusBarTests(unittest.TestCase):
         self.assertIn("[No current-quarter row found]", text)
         self.assertNotIn("[No quarterly data]", text)
         self.assertNotIn("Consensus unavailable", text)
+
+    # ── U6: "Other items in this 8-K" line in §1.1 ────────────────────
+
+    def test_u6_avgo_style_non_routine_items_render(self):
+        """AVGO Q4 FY2023 carries Item 2.02 + 2.05 + 8.01 + 9.01.
+        Renderer should surface 2.05 and 8.01 in §1.1 between Consensus Bar
+        and Reported Results, with the verbatim labels after the colon."""
+        text = _render_results_and_expectations(_bundle(
+            current_row={"estimatedEPS": 1.098, "reportedEPS": 1.106,
+                         "epsSurprisePct": 0.7286},
+            items=[
+                "Item 2.02: Results of Operations and Financial Condition",
+                "Item 2.05: Cost Associated with Exit or Disposal Activities",
+                "Item 8.01: Other Events",
+                "Item 9.01: Financial Statements and Exhibits",
+            ],
+        ))
+        self.assertIn("Other items in this 8-K:", text)
+        self.assertIn("Item 2.05 (Cost Associated with Exit or Disposal Activities)", text)
+        self.assertIn("Item 8.01 (Other Events)", text)
+        # Routine items (2.02 + 9.01) must NOT appear in the Other-items line.
+        otheritems_idx = text.index("Other items in this 8-K:")
+        line_end = text.index("\n", otheritems_idx) if "\n" in text[otheritems_idx:] else len(text)
+        line = text[otheritems_idx:line_end]
+        self.assertNotIn("Item 2.02", line)
+        self.assertNotIn("Item 9.01", line)
+        # Line must sit BEFORE Reported Results.
+        self.assertLess(text.index("Other items in this 8-K:"),
+                        text.index("### Reported Results"))
+
+    def test_u6_clean_filing_omits_line_entirely(self):
+        """Item 2.02 + 9.01 only (clean earnings) → no Other-items line."""
+        text = _render_results_and_expectations(_bundle(
+            current_row={"estimatedEPS": 1.098, "reportedEPS": 1.106},
+            items=[
+                "Item 2.02: Results of Operations and Financial Condition",
+                "Item 9.01: Financial Statements and Exhibits",
+            ],
+        ))
+        self.assertNotIn("Other items in this 8-K", text)
+
+    def test_u6_missing_items_omits_line(self):
+        """packet without items key → line absent, no crash."""
+        text = _render_results_and_expectations(_bundle(
+            current_row={"estimatedEPS": 1.098, "reportedEPS": 1.106},
+            items=None,
+        ))
+        self.assertNotIn("Other items in this 8-K", text)
+
+    def test_u6_item_without_colon_renders_bare(self):
+        """Item with no descriptive label after colon renders as just 'Item N.NN'."""
+        text = _render_results_and_expectations(_bundle(
+            current_row={"estimatedEPS": 1.098, "reportedEPS": 1.106},
+            items=["Item 2.02", "Item 5.02"],
+        ))
+        self.assertIn("Other items in this 8-K:", text)
+        self.assertIn("Item 5.02", text)
+
+
+# ── U36: Filing Metadata extra fields in §1.8 ──────────────────────────
+
+def _ref_bundle(*, cik=None, is_amendment=False, accession_periodic=None,
+                form_type_periodic=None, items=None):
+    return {
+        "ticker": "AVGO",
+        "quarter_info": {
+            "accession_8k": "0001730168-23-000093",
+            "filed_8k": "2023-12-07T16:18:51-05:00",
+            "period_of_report": "2023-10-29",
+            "accession_periodic": accession_periodic,
+            "form_type_periodic": form_type_periodic,
+        },
+        "8k_packet": {
+            "accession_8k": "0001730168-23-000093",
+            "form_type": "8-K",
+            "items": items or ["Item 2.02: Results of Operations and Financial Condition"],
+            "cik": cik,
+            "is_amendment": is_amendment,
+            "content_inventory": {"section_names": ["Stub"], "exhibit_numbers": ["EX-99.1"]},
+            "exhibits_99": [{"exhibit_number": "EX-99.1", "content": "stub"}],
+            "exhibits_other": [],
+            "sections": [],
+            "filing_text": None,
+        },
+        "builder_errors": {},
+    }
+
+
+class ReferenceMetadataTests(unittest.TestCase):
+    def test_u36_avgo_full_metadata_renders(self):
+        """All four U36 fields surface in Filing Metadata block."""
+        text = _render_reference(_ref_bundle(
+            cik="0001730168",
+            is_amendment=False,
+            accession_periodic="0001730168-23-000096",
+            form_type_periodic="10-K",
+        ))
+        self.assertIn("CIK: 0001730168", text)
+        self.assertIn("Periodic: 0001730168-23-000096 (10-K)", text)
+        self.assertIn("Amendment: no", text)
+
+    def test_u36_amendment_yes_renders(self):
+        """is_amendment=True → 'Amendment: yes'."""
+        text = _render_reference(_ref_bundle(
+            cik="0001730168", is_amendment=True,
+            accession_periodic="0001730168-23-000096",
+            form_type_periodic="10-K/A",
+        ))
+        self.assertIn("Amendment: yes", text)
+        self.assertIn("Periodic: 0001730168-23-000096 (10-K/A)", text)
+
+    def test_u36_missing_fields_render_dash(self):
+        """Missing optional fields render '—' instead of crashing or showing 'None'."""
+        text = _render_reference(_ref_bundle(
+            cik=None, is_amendment=False,
+            accession_periodic=None, form_type_periodic=None,
+        ))
+        self.assertIn("CIK: —", text)
+        self.assertIn("Periodic: —", text)
+        # is_amendment=False is still rendered as 'no' (not '—')
+        self.assertIn("Amendment: no", text)
 
 
 if __name__ == "__main__":

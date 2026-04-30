@@ -2,6 +2,7 @@
 
 ### Filing Metadata
 Accession: 0001569345-26-000011 | Form: 8-K | Items: 2.02, 8.01, 9.01
+CIK: 0001569345 | Periodic: 0001569345-26-000015 (10-K) | Amendment: no
 Sections: 3 | Exhibits: EX-99.1
 
 ### 8-K Section Text

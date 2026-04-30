@@ -74,8 +74,30 @@ def _render_results_and_expectations(bundle: dict) -> str:
                 # a primary workflow that justifies target-quarter verification.
                 parts.append("\n### Consensus Bar\n[No current-quarter row found]")
 
-    # ── Subsection B: Reported Results (EX-99.1 only — other exhibits go to Reference) ──
+    # ── U6: Other items in this 8-K (non-routine items inside the target filing) ──
+    # Surfaces items beyond the routine earnings pair {2.02, 9.01} so the
+    # predictor sees bundled disclosures (restructuring, dividends, etc.)
+    # without parsing the EX-99.1 prose. Distinct from U7, which lists OTHER
+    # 8-Ks filed in the inter-quarter window — U6 is about the target 8-K's
+    # OWN items list.
     packet = bundle.get("8k_packet")
+    if packet:
+        items = packet.get("items") or []
+        routine = {"Item 2.02", "Item 9.01"}
+        labels: list[str] = []
+        for item in items:
+            head = item.split(":", 1)[0].strip()
+            if head in routine:
+                continue
+            if ":" in item:
+                num, desc = item.split(":", 1)
+                labels.append(f"{num.strip()} ({desc.strip()})")
+            else:
+                labels.append(item.strip())
+        if labels:
+            parts.append(f"\nOther items in this 8-K: {', '.join(labels)}")
+
+    # ── Subsection B: Reported Results (EX-99.1 only — other exhibits go to Reference) ──
 
     if "8k_packet" in errors:
         parts.append(f"\n### Reported Results\n[BUILDER ERROR: {errors['8k_packet']}]")
@@ -112,8 +134,24 @@ def _render_reference(bundle: dict) -> str:
     accession = packet.get("accession_8k", "—")
     form = packet.get("form_type", "—")
     inv = packet.get("content_inventory", {})
+    # U36: surface CIK + matched periodic filing + amendment flag.
+    # Source fields: 8k_packet.cik, 8k_packet.is_amendment,
+    # quarter_info.accession_periodic, quarter_info.form_type_periodic.
+    cik = packet.get("cik") or "—"
+    qi = bundle.get("quarter_info") or {}
+    acc_periodic = qi.get("accession_periodic")
+    form_periodic = qi.get("form_type_periodic")
+    if acc_periodic and form_periodic:
+        periodic_str = f"{acc_periodic} ({form_periodic})"
+    elif acc_periodic:
+        periodic_str = acc_periodic
+    else:
+        periodic_str = "—"
+    is_amendment = packet.get("is_amendment")
+    amendment_str = "yes" if is_amendment else "no"
     parts.append(f"\n### Filing Metadata")
     parts.append(f"Accession: {accession} | Form: {form} | Items: {items_short}")
+    parts.append(f"CIK: {cik} | Periodic: {periodic_str} | Amendment: {amendment_str}")
     parts.append(f"Sections: {len(inv.get('section_names', []))} | Exhibits: {', '.join(inv.get('exhibit_numbers', [])) or '—'}")
 
     # Other EX-99.x exhibits (not EX-99.1)
