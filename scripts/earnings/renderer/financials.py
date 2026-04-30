@@ -88,6 +88,42 @@ def _render_revenue_splits(pf: dict) -> list[str]:
     return parts
 
 
+def _render_derivation_notes(quarters: list) -> list[str]:
+    """U12: per-quarter "Derivation notes" block surfacing derived_metrics
+    method + input accessions so the predictor can distinguish exact-extract
+    from arithmetic-derived numbers.
+
+    Source of truth: `quarters[].derived_metrics` (NOT `_provenance` —
+    `_provenance` carries entries for direct extracts too, which would
+    produce noisy non-derivation notes).
+
+    Quarters with no derivations are omitted; if no quarter has derivations,
+    the entire section is omitted.
+    """
+    blocks = []
+    for q in quarters:
+        derived = q.get("derived_metrics") or []
+        if not derived:
+            continue
+        block_lines = [f"\n**{q.get('fiscal_label', '?')}**:"]
+        for d in derived:
+            metric = d.get("metric", "?")
+            method = d.get("method", "?")
+            inputs = d.get("inputs") or []
+            input_strs = []
+            for inp in inputs:
+                role = inp.get("role", "?")
+                acc = inp.get("accession") or "?"
+                form = inp.get("form") or "?"
+                input_strs.append(f"{role} from {acc} ({form})")
+            inputs_part = ", ".join(input_strs) if input_strs else "(no inputs)"
+            block_lines.append(f"- {metric}: derived via {method}, inputs: {inputs_part}")
+        blocks.append("\n".join(block_lines))
+    if not blocks:
+        return []
+    return ["\n### Derivation notes"] + blocks
+
+
 def _render_prior_financials(bundle: dict) -> str:
     """Section 5: Prior Financial Trends — multi-quarter trend tables."""
     errors = bundle.get("builder_errors") or {}
@@ -139,6 +175,7 @@ def _render_prior_financials(bundle: dict) -> str:
         parts.append(_md_table(["Metric"] + q_labels, tbl_rows))
 
     parts.extend(_render_revenue_splits(pf))
+    parts.extend(_render_derivation_notes(quarters))
 
     if gaps:
         parts.append(f"\nData notes: {len(gaps)} gaps in packet")

@@ -49,4 +49,47 @@ Coverage: 8 quarters | Sources: xbrl=8
 | Transportation Customers Freight | 91.5%     | 90.6%     | 92.0%     | 92.5%     |
 | Sourcing                         | 8.5%      | 9.4%      | 8.0%      | 7.5%      |
 
+### Derivation notes
+
+**Q3_FY2025**:
+- operating_cash_flow: derived via 9m_ytd_minus_h1, inputs: 9m_ytd from 0001043277-25-000052 (10-Q), h1_ytd from 0001043277-25-000037 (10-Q)
+- capex: derived via 9m_ytd_minus_h1, inputs: 9m_ytd from 0001043277-25-000052 (10-Q), h1_ytd from 0001043277-25-000037 (10-Q)
+- buybacks: derived via 9m_ytd_minus_h1, inputs: 9m_ytd from 0001043277-25-000052 (10-Q), h1_ytd from 0001043277-25-000037 (10-Q)
+
+**Q2_FY2025**:
+- operating_cash_flow: derived via h1_ytd_minus_q1, inputs: h1_ytd from 0001043277-25-000037 (10-Q), q1 from 0001043277-25-000022 (10-Q)
+- capex: derived via h1_ytd_minus_q1, inputs: h1_ytd from 0001043277-25-000037 (10-Q), q1 from 0001043277-25-000022 (10-Q)
+- buybacks: derived via h1_ytd_minus_q1, inputs: h1_ytd from 0001043277-25-000037 (10-Q), q1 from 0001043277-25-000022 (10-Q)
+
+**Q4_FY2024**:
+- revenue: derived via fy_minus_9m_ytd, inputs: annual from 0001043277-25-000012 (10-K), 9m_ytd from 0001043277-24-000051 (10-Q)
+- depreciation_amortization: derived via fy_minus_9m_ytd, inputs: annual from 0001043277-25-000012 (10-K), 9m_ytd from 0001043277-24-000051 (10-Q)
+- income_tax: derived via fy_minus_9m_ytd, inputs: annual from 0001043277-25-000012 (10-K), 9m_ytd from 0001043277-24-000051 (10-Q)
+- operating_income: derived via fy_minus_9m_ytd, inputs: annual from 0001043277-25-000012 (10-K), 9m_ytd from 0001043277-24-000051 (10-Q)
+- net_income: derived via fy_minus_9m_ytd, inputs: annual from 0001043277-25-000012 (10-K), 9m_ytd from 0001043277-24-000051 (10-Q)
+- operating_cash_flow: derived via fy_minus_9m_ytd, inputs: annual from 0001043277-25-000012 (10-K), 9m_ytd from 0001043277-24-000051 (10-Q)
+- capex: derived via fy_minus_9m_ytd, inputs: annual from 0001043277-25-000012 (10-K), 9m_ytd from 0001043277-24-000051 (10-Q)
+- buybacks: derived via fy_minus_9m_ytd, inputs: annual from 0001043277-25-000012 (10-K), 9m_ytd from 0001043277-24-000051 (10-Q)
+- dividends_per_share: derived via fy_minus_q1q2q3, inputs: annual from 0001043277-25-000012 (10-K), q3 from 0001043277-24-000051 (10-Q), q2 from 0001043277-24-000042 (10-Q), q1 from 0001043277-24-000026 (10-Q)
+
+**Q3_FY2024**:
+- operating_cash_flow: derived via 9m_ytd_minus_h1, inputs: 9m_ytd from 0001043277-24-000051 (10-Q), h1_ytd from 0001043277-24-000042 (10-Q)
+- capex: derived via 9m_ytd_minus_h1, inputs: 9m_ytd from 0001043277-24-000051 (10-Q), h1_ytd from 0001043277-24-000042 (10-Q)
+- buybacks: derived via 9m_ytd_minus_h1, inputs: 9m_ytd from 0001043277-24-000051 (10-Q), h1_ytd from 0001043277-24-000042 (10-Q)
+
+**Q2_FY2024**:
+- operating_cash_flow: derived via h1_ytd_minus_q1, inputs: h1_ytd from 0001043277-24-000042 (10-Q), q1 from 0001043277-24-000026 (10-Q)
+- capex: derived via h1_ytd_minus_q1, inputs: h1_ytd from 0001043277-24-000042 (10-Q), q1 from 0001043277-24-000026 (10-Q)
+- buybacks: derived via h1_ytd_minus_q1, inputs: h1_ytd from 0001043277-24-000042 (10-Q), q1 from 0001043277-24-000026 (10-Q)
+
+**Q4_FY2023**:
+- revenue: derived via fy_minus_9m_ytd, inputs: annual from 0001043277-24-000011 (10-K), 9m_ytd from 0001043277-23-000036 (10-Q)
+- depreciation_amortization: derived via fy_minus_9m_ytd, inputs: annual from 0001043277-24-000011 (10-K), 9m_ytd from 0001043277-23-000036 (10-Q)
+- income_tax: derived via fy_minus_9m_ytd, inputs: annual from 0001043277-24-000011 (10-K), 9m_ytd from 0001043277-23-000036 (10-Q)
+- operating_income: derived via fy_minus_9m_ytd, inputs: annual from 0001043277-24-000011 (10-K), 9m_ytd from 0001043277-23-000036 (10-Q)
+- net_income: derived via fy_minus_9m_ytd, inputs: annual from 0001043277-24-000011 (10-K), 9m_ytd from 0001043277-23-000036 (10-Q)
+- operating_cash_flow: derived via fy_minus_9m_ytd, inputs: annual from 0001043277-24-000011 (10-K), 9m_ytd from 0001043277-23-000036 (10-Q)
+- capex: derived via fy_minus_9m_ytd, inputs: annual from 0001043277-24-000011 (10-K), 9m_ytd from 0001043277-23-000036 (10-Q)
+- buybacks: derived via fy_minus_9m_ytd, inputs: annual from 0001043277-24-000011 (10-K), 9m_ytd from 0001043277-23-000036 (10-Q)
+
 Data notes: 1 gaps in packet

@@ -74,6 +74,55 @@ Coverage: 8 quarters | Sources: xbrl=8
 | License and Service   | 86.9%     | 88.9%     | 89.6%     | 89.9%     |
 | Professional Services | 13.1%     | 11.1%     | 10.4%     | 10.1%     |
 
+### Derivation notes
+
+**Q3_FY2026**:
+- operating_cash_flow: derived via 9m_ytd_minus_h1, inputs: 9m_ytd from 0001569345-25-000059 (10-Q), h1_ytd from 0001569345-25-000048 (10-Q)
+- capex: derived via 9m_ytd_minus_h1, inputs: 9m_ytd from 0001569345-25-000059 (10-Q), h1_ytd from 0001569345-25-000048 (10-Q)
+- buybacks: derived via 9m_ytd_minus_h1, inputs: 9m_ytd from 0001569345-25-000059 (10-Q), h1_ytd from 0001569345-25-000048 (10-Q)
+
+**Q2_FY2026**:
+- operating_cash_flow: derived via h1_ytd_minus_q1, inputs: h1_ytd from 0001569345-25-000048 (10-Q), q1 from 0001569345-25-000028 (10-Q)
+- capex: derived via h1_ytd_minus_q1, inputs: h1_ytd from 0001569345-25-000048 (10-Q), q1 from 0001569345-25-000028 (10-Q)
+- buybacks: derived via h1_ytd_minus_q1, inputs: h1_ytd from 0001569345-25-000048 (10-Q), q1 from 0001569345-25-000028 (10-Q)
+
+**Q4_FY2025**:
+- revenue: derived via fy_minus_9m_ytd, inputs: annual from 0001569345-25-000019 (10-K), 9m_ytd from 0001569345-24-000055 (10-Q)
+- cost_of_revenue: derived via fy_minus_9m_ytd, inputs: annual from 0001569345-25-000019 (10-K), 9m_ytd from 0001569345-24-000055 (10-Q)
+- gross_profit: derived via fy_minus_9m_ytd, inputs: annual from 0001569345-25-000019 (10-K), 9m_ytd from 0001569345-24-000055 (10-Q)
+- sga: derived via fy_minus_9m_ytd, inputs: annual from 0001569345-25-000019 (10-K), 9m_ytd from 0001569345-24-000055 (10-Q)
+- rd_expense: derived via fy_minus_9m_ytd, inputs: annual from 0001569345-25-000019 (10-K), 9m_ytd from 0001569345-24-000055 (10-Q)
+- depreciation_amortization: derived via fy_minus_9m_ytd, inputs: annual from 0001569345-25-000019 (10-K), 9m_ytd from 0001569345-24-000055 (10-Q)
+- income_tax: derived via fy_minus_9m_ytd, inputs: annual from 0001569345-25-000019 (10-K), 9m_ytd from 0001569345-24-000055 (10-Q)
+- operating_income: derived via fy_minus_9m_ytd, inputs: annual from 0001569345-25-000019 (10-K), 9m_ytd from 0001569345-24-000055 (10-Q)
+- net_income: derived via fy_minus_9m_ytd, inputs: annual from 0001569345-25-000019 (10-K), 9m_ytd from 0001569345-24-000055 (10-Q)
+- operating_cash_flow: derived via fy_minus_9m_ytd, inputs: annual from 0001569345-25-000019 (10-K), 9m_ytd from 0001569345-24-000055 (10-Q)
+- capex: derived via fy_minus_9m_ytd, inputs: annual from 0001569345-25-000019 (10-K), 9m_ytd from 0001569345-24-000055 (10-Q)
+- buybacks: derived via fy_minus_9m_ytd, inputs: annual from 0001569345-25-000019 (10-K), 9m_ytd from 0001569345-24-000055 (10-Q)
+
+**Q3_FY2025**:
+- operating_cash_flow: derived via 9m_ytd_minus_h1, inputs: 9m_ytd from 0001569345-24-000055 (10-Q), h1_ytd from 0001569345-24-000046 (10-Q)
+- capex: derived via 9m_ytd_minus_h1, inputs: 9m_ytd from 0001569345-24-000055 (10-Q), h1_ytd from 0001569345-24-000046 (10-Q)
+- buybacks: derived via 9m_ytd_minus_h1, inputs: 9m_ytd from 0001569345-24-000055 (10-Q), h1_ytd from 0001569345-24-000046 (10-Q)
+
+**Q2_FY2025**:
+- operating_cash_flow: derived via h1_ytd_minus_q1, inputs: h1_ytd from 0001569345-24-000046 (10-Q), q1 from 0001569345-24-000031 (10-Q)
+- capex: derived via h1_ytd_minus_q1, inputs: h1_ytd from 0001569345-24-000046 (10-Q), q1 from 0001569345-24-000031 (10-Q)
+- buybacks: derived via h1_ytd_minus_q1, inputs: h1_ytd from 0001569345-24-000046 (10-Q), q1 from 0001569345-24-000031 (10-Q)
+
+**Q4_FY2024**:
+- revenue: derived via fy_minus_9m_ytd, inputs: annual from 0001569345-24-000019 (10-K), 9m_ytd from 0001569345-23-000072 (10-Q)
+- cost_of_revenue: derived via fy_minus_9m_ytd, inputs: annual from 0001569345-24-000019 (10-K), 9m_ytd from 0001569345-23-000072 (10-Q)
+- gross_profit: derived via fy_minus_9m_ytd, inputs: annual from 0001569345-24-000019 (10-K), 9m_ytd from 0001569345-23-000072 (10-Q)
+- sga: derived via fy_minus_9m_ytd, inputs: annual from 0001569345-24-000019 (10-K), 9m_ytd from 0001569345-23-000072 (10-Q)
+- rd_expense: derived via fy_minus_9m_ytd, inputs: annual from 0001569345-24-000019 (10-K), 9m_ytd from 0001569345-23-000072 (10-Q)
+- depreciation_amortization: derived via fy_minus_9m_ytd, inputs: annual from 0001569345-24-000019 (10-K), 9m_ytd from 0001569345-23-000072 (10-Q)
+- income_tax: derived via fy_minus_9m_ytd, inputs: annual from 0001569345-24-000019 (10-K), 9m_ytd from 0001569345-23-000072 (10-Q)
+- operating_income: derived via fy_minus_9m_ytd, inputs: annual from 0001569345-24-000019 (10-K), 9m_ytd from 0001569345-23-000072 (10-Q)
+- net_income: derived via fy_minus_9m_ytd, inputs: annual from 0001569345-24-000019 (10-K), 9m_ytd from 0001569345-23-000072 (10-Q)
+- operating_cash_flow: derived via fy_minus_9m_ytd, inputs: annual from 0001569345-24-000019 (10-K), 9m_ytd from 0001569345-23-000072 (10-Q)
+- capex: derived via fy_minus_9m_ytd, inputs: annual from 0001569345-24-000019 (10-K), 9m_ytd from 0001569345-23-000072 (10-Q)
+
 Data notes: 1 gaps in packet
 
 ## 6. Inter-Quarter Events

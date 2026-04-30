@@ -119,6 +119,16 @@ Coverage: 3 quarters | Sources: xbrl=3
 | Total Assets       | $71.59B   | $71.67B   | $72.98B   |
 | Long-Term Debt     | $38.22B   | $38.19B   | $38.17B   |
 
+### Derivation notes
+
+**Q3_FY2023**:
+- operating_cash_flow: derived via 9m_ytd_minus_h1, inputs: 9m_ytd from 0001730168-23-000077 (10-Q), h1_ytd from 0001730168-23-000064 (10-Q)
+- capex: derived via 9m_ytd_minus_h1, inputs: 9m_ytd from 0001730168-23-000077 (10-Q), h1_ytd from 0001730168-23-000064 (10-Q)
+
+**Q2_FY2023**:
+- operating_cash_flow: derived via h1_ytd_minus_q1, inputs: h1_ytd from 0001730168-23-000064 (10-Q), q1 from 0001730168-23-000008 (10-Q)
+- capex: derived via h1_ytd_minus_q1, inputs: h1_ytd from 0001730168-23-000064 (10-Q), q1 from 0001730168-23-000008 (10-Q)
+
 ## 6. Inter-Quarter Events
 
 Ticker: AVGO | Sector: Technology | Industry: Semiconductors
