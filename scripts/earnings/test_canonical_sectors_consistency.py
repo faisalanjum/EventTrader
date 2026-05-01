@@ -20,7 +20,9 @@ sys.path.insert(0, str(_REPO_ROOT))                      # for config.*
 sys.path.insert(0, str(_REPO_ROOT / "scripts" / "earnings"))  # for utils.*
 
 from config.canonical_sectors import CANONICAL_SECTORS
-from utils import neo4j_session
+from scripts.earnings.utils import load_env, neo4j_session
+
+load_env()
 
 
 class CanonicalSectorConsistency(unittest.TestCase):

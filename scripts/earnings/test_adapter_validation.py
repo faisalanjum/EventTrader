@@ -595,6 +595,20 @@ def test_edge_cases(R: Results, allow_av: bool = False):
         R.record("D", "build_macro_snapshot", "live_session_test", False, str(e)[:200], "FIVE")
 
 
+# Script-style validation harness: these functions are invoked by main(), not
+# collected as pytest tests with fixture-injected arguments.
+test_contract.__test__ = False
+test_content_equivalence.__test__ = False
+test_consensus_av.__test__ = False
+test_edge_cases.__test__ = False
+
+
+def test_script_harness_entrypoint_only():
+    import pytest
+
+    pytest.skip("script-style harness; run python3 scripts/earnings/test_adapter_validation.py")
+
+
 # ═══════════════════════════════════════════════════════════════════════
 # MAIN
 # ═══════════════════════════════════════════════════════════════════════

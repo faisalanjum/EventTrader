@@ -45,7 +45,13 @@ import time
 from datetime import datetime, timedelta, date as date_cls, timezone
 from pathlib import Path
 
-from ._paths import ensure_legacy_paths, ENV_PATH, skill_script
+try:
+    from ._paths import ensure_legacy_paths, ENV_PATH, skill_script
+except ImportError:  # direct file execution: python scripts/earnings/builders/macro_snapshot.py ...
+    _REPO_ROOT = Path(__file__).resolve().parents[3]
+    if str(_REPO_ROOT) not in sys.path:
+        sys.path.insert(0, str(_REPO_ROOT))
+    from scripts.earnings.builders._paths import ensure_legacy_paths, ENV_PATH, skill_script
 ensure_legacy_paths()
 try:
     from neograph.Neo4jConnection import get_manager

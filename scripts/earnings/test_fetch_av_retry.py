@@ -132,6 +132,16 @@ def test(name, fetch_fn, responses, expect_result_type, expect_calls):
     return ok_result and ok_calls
 
 
+# Script-style helper invoked below; it has data arguments, not pytest fixtures.
+test.__test__ = False
+
+
+def test_script_harness_entrypoint_only():
+    import pytest
+
+    pytest.skip("script-style harness; run python3 scripts/earnings/test_fetch_av_retry.py")
+
+
 if __name__ == "__main__":
     print("=" * 72)
     print("TEST: _fetch_av retry logic — continue scoping bug")
