@@ -1,7 +1,7 @@
 # CXM Q4_FY2026
 Filed: 2026-03-11T07:15:04-04:00 | Session: pre_market | Period ending: 2026-01-31
 Accession: 0001569345-26-000011 | Prior 8-K: 2025-12-03T07:15:22-05:00 (98 days ago)
-Mode: historical | PIT cutoff: 2026-03-11T07:15:04-04:00
+Mode: historical | PIT cutoff: 2026-03-11T07:15:04-04:00 | Assembled: 2026-04-22T18:22:10Z
 
 ## Evidence Source IDs (copy verbatim into evidence_ledger[].source_id)
 - SRC:CXM:Q4_FY2026:0001569345-26-000011#header

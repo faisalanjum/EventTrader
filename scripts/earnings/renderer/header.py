@@ -4,7 +4,7 @@ Extracted from earnings_orchestrator.py (commit 9/20). Pure: no external
 dependencies, no I/O.
 """
 from __future__ import annotations
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 def _calendar_days_between(later_iso: str, earlier_iso: str) -> int | None:
@@ -16,6 +16,32 @@ def _calendar_days_between(later_iso: str, earlier_iso: str) -> int | None:
         return (later.date() - earlier.date()).days
     except (TypeError, ValueError):
         return None
+
+
+def _format_assembled_at(ts) -> str | None:
+    """Normalize a UTC-aware ISO timestamp to seconds + 'Z'. None on missing/malformed.
+
+    U61: surfaces bundle.assembled_at in §1.0 as a freshness signal (live mode)
+    and provenance anchor (learner). Defensive against:
+    - missing / None / non-string / empty (returns None → segment omitted)
+    - unparseable strings (returns None)
+    - naive datetimes (REJECTED — returns None. Naive input would force us
+      to invent timezone provenance; orchestrator always emits tz-aware UTC,
+      so naive = malformed by contract.)
+    - 'Z' suffix variants (handled via .replace("Z", "+00:00") shim so the
+      same helper works whether upstream emits +00:00 or Z form)
+    - non-UTC offsets (converted to UTC before formatting)
+    """
+    if not isinstance(ts, str) or not ts:
+        return None
+    try:
+        dt = datetime.fromisoformat(ts.replace("Z", "+00:00"))
+    except (ValueError, TypeError):
+        return None
+    if dt.tzinfo is None or dt.utcoffset() is None:
+        return None
+    dt = dt.astimezone(timezone.utc)
+    return dt.strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 def _render_header(bundle: dict) -> str:
@@ -48,8 +74,14 @@ def _render_header(bundle: dict) -> str:
     if provenance:
         lines.append(" | ".join(provenance))
 
+    # U61: append optional Assembled segment to the Mode line. Uniform
+    # mode_parts construction collapses the prior if/else and lets the
+    # defensive helper decide whether to surface the bundle's assembled_at.
+    mode_parts = [f"Mode: {mode}"]
     if pit:
-        lines.append(f"Mode: {mode} | PIT cutoff: {pit}")
-    else:
-        lines.append(f"Mode: {mode}")
+        mode_parts.append(f"PIT cutoff: {pit}")
+    asm = _format_assembled_at(bundle.get("assembled_at"))
+    if asm:
+        mode_parts.append(f"Assembled: {asm}")
+    lines.append(" | ".join(mode_parts))
     return "\n".join(lines)
