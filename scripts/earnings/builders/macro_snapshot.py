@@ -401,9 +401,9 @@ def build_macro_snapshot(ticker: str, pit_cutoff: str, market_session: str | Non
     use_yahoo = source == 'yahoo'
     api_key = '' if use_yahoo else _load_polygon_key()
 
-    # For live yahoo mode, treat today's partial bar as settled so current
-    # prices flow into all computations. Keep real market_session for display.
-    effective_session = 'post_market' if use_yahoo else market_session
+    # Use the actual session for all sources. Yahoo live daily bars may include
+    # an in-progress current-day row; only post_market can treat it as settled.
+    effective_session = market_session
 
     # ── 1. SPY minute bars for MARKET NOW ──
     spy_minute = []

@@ -1,6 +1,8 @@
 """Tests for scripts.earnings.builders.adapters."""
 from __future__ import annotations
 from unittest.mock import patch, MagicMock
+import os
+import tempfile
 import pytest
 
 from scripts.earnings.builders import adapters as A
@@ -63,3 +65,39 @@ def test_seven_adapter_functions_present():
                  "build_consensus", "build_prior_financials"):
         assert hasattr(A, name), f"adapters module missing {name}"
         assert callable(getattr(A, name)), f"{name} not callable"
+
+
+def test_macro_adapter_defaults_polygon_for_historical_and_yahoo_for_live():
+    """U33 guard: historical macro builds must not enter Yahoo live semantics by default."""
+    calls = []
+
+    def fake_legacy(ticker, pit_cutoff, market_session, out_path=None, source=None, **kwargs):
+        calls.append({
+            "ticker": ticker,
+            "pit_cutoff": pit_cutoff,
+            "market_session": market_session,
+            "source": source,
+        })
+        return {
+            "schema_version": "macro_snapshot.v2",
+            "ticker": ticker,
+            "market_now": {},
+            "catalysts": {},
+            "gaps": [],
+        }
+
+    qi = {"market_session": "pre_market"}
+    with patch("scripts.earnings.builders.macro_snapshot.build_macro_snapshot", side_effect=fake_legacy):
+        fd, out = tempfile.mkstemp(suffix=".json")
+        os.close(fd)
+        try:
+            A.build_macro_snapshot("CRM", qi, pit_cutoff="2026-05-01T06:52:00-04:00", out_path=out)
+            A.build_macro_snapshot("CRM", qi, pit_cutoff=None, out_path=out)
+        finally:
+            if os.path.exists(out):
+                os.unlink(out)
+
+    assert calls[0]["source"] == "polygon"
+    assert calls[0]["market_session"] == "pre_market"
+    assert calls[1]["source"] == "yahoo"
+    assert calls[1]["market_session"] is None

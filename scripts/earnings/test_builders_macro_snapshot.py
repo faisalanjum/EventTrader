@@ -9,6 +9,60 @@ from scripts.earnings.builders import macro_snapshot as ms
 pytestmark = pytest.mark.builders
 
 
+def _sample_daily_bars():
+    return [
+        {"date": "2026-04-29", "open": 98.0, "high": 101.0, "low": 97.0,
+         "close": 100.0, "volume": 1_000_000},
+        {"date": "2026-04-30", "open": 100.0, "high": 102.0, "low": 99.0,
+         "close": 101.0, "volume": 1_000_000},
+        {"date": "2026-05-01", "open": 101.0, "high": 112.0, "low": 100.0,
+         "close": 110.0, "volume": 1_000_000},
+    ]
+
+
+def _sample_minute_bars():
+    return [
+        {"ts_ms": 1777629600000, "ts_iso": "2026-05-01T14:00:00Z",
+         "open": 101.0, "high": 102.0, "low": 100.5, "close": 102.0, "volume": 100_000},
+        {"ts_ms": 1777631400000, "ts_iso": "2026-05-01T14:30:00Z",
+         "open": 102.0, "high": 103.0, "low": 101.5, "close": 103.0, "volume": 100_000},
+    ]
+
+
+def _build_yahoo_packet_for_session(market_session: str, pit_cutoff: str) -> dict:
+    fake_yf_ticker = MagicMock()
+    fake_yf_ticker.fast_info.last_price = 20.0
+    fake_yf_ticker.history.return_value = MagicMock(empty=True)
+
+    mock_manager = MagicMock()
+    mock_manager.execute_cypher_query_all.side_effect = [
+        [{"sector": "Technology", "sector_etf": "XLK"}],
+        [
+            {"date": "2026-04-29", "ret": 0.2},
+            {"date": "2026-04-30", "ret": 0.4},
+            {"date": "2026-05-01", "ret": 9.9},
+        ],
+    ]
+
+    with patch.object(ms, "_yahoo_daily", return_value=_sample_daily_bars()), \
+         patch.object(ms, "_yahoo_minute", return_value=_sample_minute_bars()), \
+         patch.object(ms, "get_manager", return_value=mock_manager), \
+         patch("subprocess.run", return_value=MagicMock(returncode=0, stdout='{"data": []}', stderr="")), \
+         patch("yfinance.Ticker", return_value=fake_yf_ticker):
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
+            out = f.name
+        try:
+            return ms.build_macro_snapshot(
+                ticker="CRM",
+                pit_cutoff=pit_cutoff,
+                market_session=market_session,
+                source="yahoo",
+                out_path=out,
+            )
+        finally:
+            os.unlink(out)
+
+
 def test_yahoo_source_uses_yahoo_helpers():
     """Mock _yahoo_daily/_yahoo_minute (return list[dict] of bars, not scalars)
     AND yfinance.Ticker (used directly inside _compute_spy_now around line 445)
@@ -45,7 +99,7 @@ def test_yahoo_source_uses_yahoo_helpers():
     with patch.object(ms, "_yahoo_daily", return_value=daily_bars) as yd, \
          patch.object(ms, "_yahoo_minute", return_value=minute_bars) as ym, \
          patch.object(ms, "get_manager", return_value=mock_manager), \
-         patch("subprocess.run", return_value=MagicMock(returncode=0, stdout="[]", stderr="")), \
+         patch("subprocess.run", return_value=MagicMock(returncode=0, stdout='{"data": []}', stderr="")), \
          patch("yfinance.Ticker", return_value=fake_yf_ticker):
         with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             out = f.name
@@ -62,6 +116,47 @@ def test_yahoo_source_uses_yahoo_helpers():
             assert yd.called or ym.called
         finally:
             os.unlink(out)
+
+
+@pytest.mark.parametrize("market_session,pit_cutoff", [
+    ("pre_market", "2026-05-01T06:52:00-04:00"),
+    ("in_market", "2026-05-01T10:31:00-04:00"),
+])
+def test_yahoo_pre_and_in_market_do_not_treat_current_daily_bar_as_settled(market_session, pit_cutoff):
+    packet = _build_yahoo_packet_for_session(market_session, pit_cutoff)
+
+    spy = packet["market_now"]["spy"]
+    assert packet["market_session"] == market_session
+    assert spy["today_return"] is None
+    assert spy["yesterday"] == 1.0
+
+    indicator = packet["market_now"]["indicators"]["Volatility (VIXY)"]
+    assert indicator["return_label"] == "last close"
+    assert indicator["last_return"] == 1.0
+
+    sector = packet["market_now"]["sector"]
+    assert sector["return_label"] == "last close"
+    assert sector["last_return"] == 0.4
+
+
+def test_yahoo_post_market_still_treats_current_daily_bar_as_settled():
+    packet = _build_yahoo_packet_for_session(
+        "post_market",
+        "2026-05-01T16:30:00-04:00",
+    )
+
+    spy = packet["market_now"]["spy"]
+    assert packet["market_session"] == "post_market"
+    assert spy["today_return"] == 8.91
+    assert spy["yesterday"] == 1.0
+
+    indicator = packet["market_now"]["indicators"]["Volatility (VIXY)"]
+    assert indicator["return_label"] == "today"
+    assert indicator["last_return"] == 8.91
+
+    sector = packet["market_now"]["sector"]
+    assert sector["return_label"] == "today"
+    assert sector["last_return"] == 9.9
 
 
 def test_render_text_accepts_packet():
