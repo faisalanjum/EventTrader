@@ -334,8 +334,8 @@ class FixtureAnchorsCoverageTests(unittest.TestCase):
         """Static guard: the predict-block exception handler MUST move
         result.json out of the canonical path before re-raising. Otherwise
         a rejected prediction stays on disk and a later learner-only run
-        consumes it (run_learner_for_quarter only checks existence, not
-        validity)."""
+        consumes it (the learner's prediction_result_path check is
+        existence-only, not content-validation)."""
         src_path = PROJECT_ROOT / "scripts/earnings/earnings_orchestrator.py"
         src = src_path.read_text(encoding="utf-8")
         # Locate the predict-failure handler and confirm quarantine logic exists.
@@ -351,6 +351,23 @@ class FixtureAnchorsCoverageTests(unittest.TestCase):
             src,
             "predict-failure handler does not rename result.json on quarantine"
         )
+
+    def test_quarantine_is_gated_on_validation_success(self):
+        """The quarantine MUST only fire on pre-validation failures. If
+        a post-validation step (e.g. run_ledger _close_run write I/O) raises,
+        the prediction is valid and result.json must be left untouched.
+        Static guard: the except handler must check `prediction_validated`
+        before quarantining."""
+        src_path = PROJECT_ROOT / "scripts/earnings/earnings_orchestrator.py"
+        src = src_path.read_text(encoding="utf-8")
+        # The flag must be initialized False, set True after validate, and
+        # the quarantine block must be wrapped in `if not prediction_validated`.
+        self.assertIn("prediction_validated = False", src,
+                      "quarantine flag not initialized")
+        self.assertIn("prediction_validated = True", src,
+                      "quarantine flag not set after validate_prediction_result")
+        self.assertIn("if not prediction_validated:", src,
+                      "quarantine block must be gated on prediction_validated")
 
     def test_catalog_size_reflects_real_density(self):
         # AVGO Q4: 73 events + 30 guidance + macro headlines + financials + peers + lessons

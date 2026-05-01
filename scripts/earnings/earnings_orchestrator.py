@@ -2548,6 +2548,7 @@ def main():
             accession_8k=quarter_info.get("accession_8k"),
             artifact_dir=str(paths["result_path"].parent),
         )
+        prediction_validated = False
         try:
             print("Running predictor via SDK ...", flush=True)
             t1 = datetime.now()
@@ -2585,6 +2586,7 @@ def main():
                 expected_lesson_texts=_expected_lessons,
                 expected_source_ids=bundle["evidence_source_catalog"],
             )
+            prediction_validated = True   # U67: gate quarantine on validation success
 
             print(f"Prediction written in {pred_elapsed:.1f}s: {paths['result_path']}")
             print(
@@ -2609,20 +2611,23 @@ def main():
             # U67 quarantine: rejected predictions must not be consumable by a
             # later learner-only run on the same quarter. finalize_prediction_result
             # writes result.json BEFORE validate_prediction_result raises, so on
-            # validation failure the file is on disk with rejected content.
-            # Move it aside so existence checks (run_learner_for_quarter:918) don't
-            # silently consume it. Rename failures fall back to unlink (best-effort).
-            try:
-                if paths["result_path"].exists():
-                    rejected = paths["result_path"].with_suffix(".json.rejected")
-                    try:
-                        if rejected.exists():
-                            rejected.unlink()
-                        paths["result_path"].rename(rejected)
-                    except OSError:
-                        paths["result_path"].unlink(missing_ok=True)
-            except Exception:
-                pass    # never let quarantine-cleanup mask the original failure
+            # validation failure the file is on disk with rejected content. Move it
+            # aside so the learner's existence-only check on prediction_result_path
+            # cannot silently consume it. Gate on prediction_validated so a post-
+            # validation failure (e.g. run_ledger close failure) does NOT quarantine
+            # a valid result.json. Rename failures fall back to unlink (best-effort).
+            if not prediction_validated:
+                try:
+                    if paths["result_path"].exists():
+                        rejected = paths["result_path"].with_suffix(".json.rejected")
+                        try:
+                            if rejected.exists():
+                                rejected.unlink()
+                            paths["result_path"].rename(rejected)
+                        except OSError:
+                            paths["result_path"].unlink(missing_ok=True)
+                except Exception:
+                    pass    # never let quarantine-cleanup mask the original failure
             _close_run(_pred_run_id, "failed", error=str(_e)[:500])
             raise
 
