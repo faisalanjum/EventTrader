@@ -145,6 +145,8 @@ def _render_reference(bundle: dict) -> str:
         periodic_str = f"{acc_periodic} ({form_periodic})"
     elif acc_periodic:
         periodic_str = acc_periodic
+    elif form_periodic:
+        periodic_str = f"— ({form_periodic} expected)"
     else:
         periodic_str = "—"
     is_amendment = packet.get("is_amendment")

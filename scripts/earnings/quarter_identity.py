@@ -49,8 +49,13 @@ OPTIONAL CALL (r, c) {
   OPTIONAL MATCH (q)-[:HAS_XBRL]->(:XBRLNode)<-[:REPORTS]-(fp:Fact {qname: 'dei:DocumentFiscalPeriodFocus'})
   WITH q, collect(DISTINCT fp.value) AS xbrl_periods
   OPTIONAL MATCH (q)-[:HAS_XBRL]->(:XBRLNode)<-[:REPORTS]-(fy:Fact {qname: 'dei:DocumentFiscalYearFocus'})
-  WITH q, xbrl_periods, collect(DISTINCT fy.value) AS xbrl_years
-  RETURN q.accessionNo AS accession_periodic,
+  WITH q, r, xbrl_periods, collect(DISTINCT fy.value) AS xbrl_years
+  RETURN q.accessionNo AS matched_accession_periodic,
+         // Mask only the periodic accession for PIT safety; keep matched period/form so quarter identity and consensus remain stable.
+         CASE
+           WHEN q.created IS NOT NULL AND datetime(q.created) <= datetime(r.created)
+           THEN q.accessionNo
+         END AS accession_periodic,
          q.periodOfReport AS period_of_report,
          q.formType AS form_type_periodic,
          CASE WHEN size(xbrl_periods) = 1 THEN head(xbrl_periods) END AS xbrl_period,
@@ -75,7 +80,7 @@ OPTIONAL CALL (r, c) {
 
 RETURN r.created AS filed_8k,
        r.market_session AS market_session,
-       period_of_report, form_type_periodic, accession_periodic,
+       period_of_report, form_type_periodic, accession_periodic, matched_accession_periodic,
        xbrl_period, xbrl_year,
        fye_month,
        prev_8k_ts
@@ -181,8 +186,9 @@ def resolve_quarter_info(ticker: str, accession_8k: str, *,
     market_session = row["market_session"] or "post_market"
     prev_8k_ts = _to_str(row["prev_8k_ts"])
     period_of_report_raw = row["period_of_report"]
-    form_type_periodic = row["form_type_periodic"]
-    accession_periodic = row["accession_periodic"] or ""
+    matched_form_type_periodic = row["form_type_periodic"]
+    matched_accession_periodic = row["matched_accession_periodic"] or ""
+    visible_accession_periodic = row["accession_periodic"] or ""   # PIT-gated by Cypher
     xbrl_period = row["xbrl_period"]
     xbrl_year = row["xbrl_year"]
 
@@ -204,23 +210,28 @@ def resolve_quarter_info(ticker: str, accession_8k: str, *,
             matched_is_valid = True
         else:
             gaps.append({"type": "stale_matched_periodic",
-                         "reason": f"Matched periodic {accession_periodic} is {gap_days}d stale "
+                         "reason": f"Matched periodic {matched_accession_periodic} is {gap_days}d stale "
                                    f"(period={period_of_report_matched}, filed_8k={filed_8k[:10]})"})
 
-    # ─�� Resolve period_of_report + quarter_label ──
+    # ── Resolve period_of_report + quarter_label ──
+    # Final returned values — initialized so stale/rejected matched rows can never leak.
     period_of_report = None
     quarter_label = None
+    form_type_periodic = None
+    accession_periodic = ""
     source = "none"
 
     if matched_is_valid:
         # Primary path: matched periodic filing (historical / backfill)
         period_of_report = period_of_report_matched
+        form_type_periodic = matched_form_type_periodic
+        accession_periodic = visible_accession_periodic   # Cypher-gated; "" if periodic was filed after PIT
         source = "matched_periodic"
 
         if fye_month is not None:
             fy, q = _resolve_fiscal_label(
                 period_of_report, form_type_periodic, fye_month,
-                accession_periodic, xbrl_year, xbrl_period,
+                matched_accession_periodic, xbrl_year, xbrl_period,   # raw for denylist
             )
             quarter_label = f"{q}_FY{fy}"
             # Track whether XBRL was actually used (not just present)
@@ -233,7 +244,7 @@ def resolve_quarter_info(ticker: str, accession_8k: str, *,
                 (form_type_periodic or "10-Q").replace("/A", ""),
             )
             used_xbrl = (xbrl_fiscal is not None
-                         and accession_periodic not in XBRL_DENY_PERIODIC_ACCESSIONS
+                         and matched_accession_periodic not in XBRL_DENY_PERIODIC_ACCESSIONS
                          and should_use_xbrl_fiscal(fallback, xbrl_fiscal))
             source = "matched_periodic_xbrl" if used_xbrl else "matched_periodic_fiscal_math"
         else:
@@ -246,6 +257,7 @@ def resolve_quarter_info(ticker: str, accession_8k: str, *,
         if result:
             period_of_report, fy, q = result
             quarter_label = f"{q}_FY{fy}"
+            form_type_periodic = "10-K" if q == "Q4" else "10-Q"
             source = "fiscal_math"
         else:
             gaps.append({"type": "fiscal_math_failed",

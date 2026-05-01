@@ -308,7 +308,7 @@ SPY 695.61 | VIX 16.35 (last settled close)
 
 ### Filing Metadata
 Accession: 0001043277-26-000005 | Form: 8-K | Items: 2.02, 9.01
-CIK: 0001043277 | Periodic: 0001043277-26-000009 (10-K) | Amendment: no
+CIK: 0001043277 | Periodic: — (10-K expected) | Amendment: no
 Sections: 2 | Exhibits: EX-99.1, EX-99.2
 
 ### EX-99.2

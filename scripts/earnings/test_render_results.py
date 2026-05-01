@@ -289,6 +289,23 @@ class ReferenceMetadataTests(unittest.TestCase):
         # is_amendment=False is still rendered as 'no' (not '—')
         self.assertIn("Amendment: no", text)
 
+    def test_u64_form_only_renders_expected_marker(self):
+        """U64: when accession is masked but form_type is known, surface
+        the form so the predictor sees `Periodic: — (10-K expected)`."""
+        text = _render_reference(_ref_bundle(
+            cik="0001730168", is_amendment=False,
+            accession_periodic=None, form_type_periodic="10-K",
+        ))
+        self.assertIn("Periodic: — (10-K expected)", text)
+
+    def test_u64_form_only_empty_string_accession(self):
+        """Empty-string accession behaves the same as None for the gate."""
+        text = _render_reference(_ref_bundle(
+            cik="0001730168", is_amendment=False,
+            accession_periodic="", form_type_periodic="10-Q",
+        ))
+        self.assertIn("Periodic: — (10-Q expected)", text)
+
 
 if __name__ == "__main__":
     unittest.main()

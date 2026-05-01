@@ -372,7 +372,7 @@ SPY 450.5 | VIX 13.88 (last settled close)
 
 ### Filing Metadata
 Accession: 0001730168-23-000074 | Form: 8-K | Items: 2.02, 8.01, 9.01
-CIK: 0001730168 | Periodic: 0001730168-23-000077 (10-Q) | Amendment: no
+CIK: 0001730168 | Periodic: — (10-Q expected) | Amendment: no
 Sections: 3 | Exhibits: EX-99.1
 
 ### 8-K Section Text
