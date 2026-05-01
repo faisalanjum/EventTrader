@@ -113,8 +113,11 @@ def run_baseline(accession: str, label: str, quarter_info: dict) -> None:
     # T1: load stripped bundle to derive expected lesson list (=[] for A/B)
     bundle = json.loads(stripped_bundle.read_text(encoding="utf-8"))
     _, _expected_lessons = _render_learning_context((bundle or {}).get("learning_context") or {})
+    # U67 legacy/offline — A/B harness intentionally skips evidence_source_catalog
+    # enforcement (predictions here can predate the catalog and are dev-only).
     validate_prediction_result(json.loads(test_result_path.read_text()), TICKER, label,
-                               expected_lesson_texts=_expected_lessons)
+                               expected_lesson_texts=_expected_lessons,
+                               expected_source_ids=None)
 
 
 def compare(label: str) -> dict:

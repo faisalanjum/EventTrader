@@ -243,5 +243,133 @@ class AggregatorTests(unittest.TestCase):
         self.assertIn("SRC:X:Q1_FY2024:0000111-24-000001#quarter_info", catalog)
 
 
+# ── Fixture-based aggregator coverage (regression guard for the schema-path
+#    correctness issue ChatGPT caught: the first-shipped aggregator walked
+#    inter_quarter_context.news_events / macro_snapshot.macro_catalysts /
+#    guidance_history.quarterly — none of which exist in real bundles). ──
+
+class FixtureAnchorsCoverageTests(unittest.TestCase):
+    """Real-bundle anchors must include news, filing, macro, and guidance refs.
+
+    AVGO Q4 FY2023 fixture contains 73 inter-quarter events (69 news + 4
+    filings), 30 guidance series entries, and macro catalysts buckets. If
+    the aggregator regresses to non-existent paths, none of these will land
+    in the catalog and U67 protection becomes a no-op for the most-cited
+    bundle sections.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        import json
+        cls.bundle = json.loads(
+            (PROJECT_ROOT / "scripts/earnings/tests/fixtures/golden_bundles/AVGO_Q4_FY2023.json").read_text()
+        )
+        cls.catalog = build_evidence_source_catalog(cls.bundle)
+
+    def test_catalog_contains_news_event_anchor(self):
+        # Real AVGO Q4 fixture has news events; at least one must be in the catalog.
+        news_anchors = [s for s in self.catalog if "#S6.event.news:" in s]
+        self.assertGreater(
+            len(news_anchors), 0,
+            "no news anchors in catalog — aggregator missed inter_quarter_context.days[].events"
+        )
+
+    def test_catalog_contains_filing_event_anchor(self):
+        filing_anchors = [s for s in self.catalog if "#S6.event.report:" in s]
+        self.assertGreater(
+            len(filing_anchors), 0,
+            "no filing anchors — aggregator missed filing events under days[].events"
+        )
+
+    def test_catalog_contains_rendered_news_alias_N1(self):
+        """The renderer (inter_quarter.py:147-150) labels news as N1, N2, ...
+        in chronological render order. The catalog MUST emit matching
+        #S6.news.N{i} aliases so a predictor that copies "N1" from the rendered
+        text finds a match. Without this, the predictor's natural citation
+        style ("News N1") fails validation."""
+        n1 = next((s for s in self.catalog if s.endswith("#S6.news.N1")), None)
+        self.assertIsNotNone(n1, "expected #S6.news.N1 alias in catalog")
+        # Should also contain higher-indexed news refs (real fixture has 69)
+        n_count = sum(1 for s in self.catalog if "#S6.news.N" in s)
+        self.assertGreaterEqual(n_count, 5, f"only {n_count} N{{i}} aliases; expected dozens")
+
+    def test_catalog_contains_rendered_filing_alias_F1(self):
+        """The renderer (inter_quarter.py:182-185) labels filings as F1, F2, ...
+        Catalog MUST emit matching #S6.filing.F{i} aliases."""
+        f1 = next((s for s in self.catalog if s.endswith("#S6.filing.F1")), None)
+        self.assertIsNotNone(f1, "expected #S6.filing.F1 alias in catalog")
+
+    def test_catalog_contains_macro_earlier_bz_ids(self):
+        """macro_snapshot.catalysts.earlier has shape [[date_str, headline_dict],...]
+        — a list of pairs, NOT a list of headline dicts. The aggregator's
+        _headline_list must extract item[1] from each pair to surface bz_ids;
+        otherwise the renderer shows the headline but the catalog has no
+        matching anchor and a predictor citing it fails validation.
+
+        AVGO Q4 fixture has 3 known earlier bz_ids: 36090717, 36093426, 36093424."""
+        for expected_bz in ("36090717", "36093426", "36093424"):
+            anchor = f"#S8.macro.bz:{expected_bz}"
+            found = any(anchor in s for s in self.catalog)
+            self.assertTrue(
+                found,
+                f"earlier macro bz_id {expected_bz} missing from catalog — "
+                f"_headline_list likely doesn't unpack [date, headline_dict] pairs"
+            )
+
+    def test_catalog_contains_guidance_series_anchor(self):
+        guidance_anchors = [s for s in self.catalog if "#S3.guidance[" in s]
+        self.assertGreater(
+            len(guidance_anchors), 0,
+            "no guidance anchors — aggregator missed guidance_history.series[]"
+        )
+
+    def test_catalog_contains_macro_anchor(self):
+        macro_anchors = [s for s in self.catalog if "#S8.macro" in s]
+        self.assertGreater(
+            len(macro_anchors), 1,  # >1 — must include actual catalysts, not just the section catch-all
+            "no per-headline macro anchors — aggregator missed macro_snapshot.catalysts"
+        )
+
+    def test_predict_failure_handler_quarantines_result_json(self):
+        """Static guard: the predict-block exception handler MUST move
+        result.json out of the canonical path before re-raising. Otherwise
+        a rejected prediction stays on disk and a later learner-only run
+        consumes it (run_learner_for_quarter only checks existence, not
+        validity)."""
+        src_path = PROJECT_ROOT / "scripts/earnings/earnings_orchestrator.py"
+        src = src_path.read_text(encoding="utf-8")
+        # Locate the predict-failure handler and confirm quarantine logic exists.
+        # Look for the rejected-suffix rename pattern inside the except clause.
+        self.assertIn(
+            'paths["result_path"].with_suffix(".json.rejected")',
+            src,
+            "predict-failure handler is missing the U67 quarantine step "
+            "— rejected result.json would persist for learner consumption"
+        )
+        self.assertIn(
+            'paths["result_path"].rename(rejected)',
+            src,
+            "predict-failure handler does not rename result.json on quarantine"
+        )
+
+    def test_catalog_size_reflects_real_density(self):
+        # AVGO Q4: 73 events + 30 guidance + macro headlines + financials + peers + lessons
+        # baseline ≈ 100+ anchors. If we still land at ~27, the schema-path bug regressed.
+        self.assertGreater(
+            len(self.catalog), 60,
+            f"catalog has only {len(self.catalog)} anchors; expected 100+ for AVGO Q4 — "
+            f"aggregator likely walking wrong paths"
+        )
+
+    def test_catalog_preserves_render_order_not_alphabetical(self):
+        # If sorted, S10.lesson.L1 comes BEFORE S2.exhibit alphabetically.
+        # Render order: header → S1 → S2 → ... → S10. Header should come first.
+        self.assertTrue(
+            self.catalog[0].endswith("#header"),
+            f"first catalog entry is {self.catalog[0]!r}; expected header. "
+            f"Likely sorted() snuck back in."
+        )
+
+
 if __name__ == "__main__":
     unittest.main()

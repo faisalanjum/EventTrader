@@ -84,8 +84,11 @@ def main():
     # T1: load bundle to derive expected lesson list for positional validation
     bundle = json.loads(paths["bundle_path"].read_text(encoding="utf-8"))
     _, _expected_lessons = _render_learning_context((bundle or {}).get("learning_context") or {})
+    # U67 legacy/offline — replays existing bundles which may predate the
+    # evidence_source_catalog field; enforcement intentionally skipped.
     validate_prediction_result(prediction, TICKER, quarter_info["quarter_label"],
-                               expected_lesson_texts=_expected_lessons)
+                               expected_lesson_texts=_expected_lessons,
+                               expected_source_ids=None)
     log.info("Prediction: %s | confidence=%s (%s) | magnitude=%s",
              prediction["direction"], prediction["confidence_score"],
              prediction["confidence_bucket"], prediction["magnitude_bucket"])

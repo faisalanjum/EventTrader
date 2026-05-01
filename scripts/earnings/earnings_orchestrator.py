@@ -441,7 +441,8 @@ def build_evidence_source_catalog(bundle: dict[str, Any]) -> list[str]:
     bundle's prefix. The location suffix names the specific fact — sections,
     exhibits, consensus rows, peers, news refs, lessons, etc.
 
-    Returned list is sorted + deduplicated. Validator uses set-membership.
+    Returned list preserves render order with first-seen dedupe. Validator
+    uses set-membership.
     """
     qi = bundle.get("quarter_info") or {}
     ticker = (qi.get("ticker") or bundle.get("ticker") or "?").upper()
@@ -491,11 +492,14 @@ def build_evidence_source_catalog(bundle: dict[str, Any]) -> list[str]:
     for i, _ in enumerate(cs.get("forward_estimates") or []):
         catalog.append(f"{prefix}#S1.consensus.forward[{i}]")
 
-    # Guidance history entries (any horizon-shaped subkey)
+    # Guidance history entries (real schema: guidance_history.series[i])
     gh = bundle.get("guidance_history") or {}
-    for kind in ("quarterly", "annual", "other"):
-        for i, _ in enumerate(gh.get(kind) or []):
-            catalog.append(f"{prefix}#S3.guidance.{kind}[{i}]")
+    for i, entry in enumerate(gh.get("series") or []):
+        metric_id = entry.get("metric_id")
+        if metric_id:
+            catalog.append(f"{prefix}#S3.guidance[{i}]:{metric_id}")
+        else:
+            catalog.append(f"{prefix}#S3.guidance[{i}]")
 
     # Prior financials per-quarter
     pf = bundle.get("prior_financials") or {}
@@ -504,16 +508,32 @@ def build_evidence_source_catalog(bundle: dict[str, Any]) -> list[str]:
         if period:
             catalog.append(f"{prefix}#S5.financials.{period}")
 
-    # Inter-quarter news + filing events
+    # Inter-quarter events (real schema: inter_quarter_context.days[].events[]).
+    # The RENDERED bundle (inter_quarter.py:147,182) labels news as N1..Nk and
+    # filings as F1..Fk in chronological render order. The catalog therefore
+    # emits BOTH the rendered alias (#S6.news.N{i} / #S6.filing.F{i}) so the
+    # predictor can copy what it sees, AND the raw event_ref (which carries
+    # `news:` / `report:` prefix) for traceability.
     iq = bundle.get("inter_quarter_context") or {}
-    for ev in iq.get("news_events") or []:
-        ref = ev.get("ref") or ev.get("id") or ev.get("news_id")
-        if ref:
-            catalog.append(f"{prefix}#S6.news.{ref}")
-    for ev in iq.get("filing_events") or []:
-        acc = ev.get("accession") or ev.get("accession_8k")
-        if acc:
-            catalog.append(f"{prefix}#S6.filing.{acc}")
+    news_idx = 0
+    filing_idx = 0
+    for day in iq.get("days") or []:
+        for ev in day.get("events") or []:
+            ev_type = ev.get("type")
+            if ev_type == "news":
+                news_idx += 1
+                catalog.append(f"{prefix}#S6.news.N{news_idx}")
+            elif ev_type == "filing":
+                filing_idx += 1
+                catalog.append(f"{prefix}#S6.filing.F{filing_idx}")
+            ref = ev.get("event_ref")
+            if ref:
+                catalog.append(f"{prefix}#S6.event.{ref}")
+            else:
+                # Fallback for events missing event_ref but carrying id/accession.
+                ev_id = ev.get("id") or ev.get("accession")
+                if ev_id:
+                    catalog.append(f"{prefix}#S6.event.{ev_id}")
 
     # Peers
     pe = bundle.get("peer_earnings_snapshot") or {}
@@ -522,11 +542,30 @@ def build_evidence_source_catalog(bundle: dict[str, Any]) -> list[str]:
         if pt:
             catalog.append(f"{prefix}#S7.peer.{str(pt).upper()}")
 
-    # Macro catalysts (today/yesterday/earlier buckets)
+    # Macro catalysts (real schema: macro_snapshot.catalysts).
+    # Bucket shapes (verified against AVGO Q4 fixture):
+    #   today / yesterday → {date, headlines: [headline_dict, ...]}
+    #   earlier           → [[date_str, headline_dict], [date_str, headline_dict], ...]
+    # Renderer (renderer/macro.py:126) iterates each pair to expose the bz_id;
+    # the catalog must mirror that to keep U67 set-membership exhaustive.
     ms = bundle.get("macro_snapshot") or {}
-    mc = ms.get("macro_catalysts") or {}
+    mc = ms.get("catalysts") or {}
+    def _headline_list(bucket_val):
+        if isinstance(bucket_val, list):
+            out: list[dict] = []
+            for item in bucket_val:
+                if isinstance(item, dict):
+                    out.append(item)
+                elif isinstance(item, list) and len(item) >= 2 and isinstance(item[1], dict):
+                    out.append(item[1])    # [date_str, headline_dict] pair
+            return out
+        if isinstance(bucket_val, dict):
+            return bucket_val.get("headlines") or []
+        return []
     for bucket in ("today", "yesterday", "earlier"):
-        for i, cat in enumerate(mc.get(bucket) or []):
+        for i, cat in enumerate(_headline_list(mc.get(bucket))):
+            if not isinstance(cat, dict):
+                continue
             bz = cat.get("bz_id")
             if bz:
                 catalog.append(f"{prefix}#S8.macro.bz:{bz}")
@@ -540,7 +579,16 @@ def build_evidence_source_catalog(bundle: dict[str, Any]) -> list[str]:
     for i, _ in enumerate(lc.get("global_lessons") or []):
         catalog.append(f"{prefix}#S10.global_lesson.G{i+1}")
 
-    return sorted(set(catalog))
+    # Preserve render order (not sorted). Dedupe first-seen-wins so
+    # repeats from cross-walks don't duplicate but the catalog still
+    # mirrors the order in which the predictor encounters anchors.
+    seen: set[str] = set()
+    out: list[str] = []
+    for sid in catalog:
+        if sid not in seen:
+            seen.add(sid)
+            out.append(sid)
+    return out
 
 
 def validate_prediction_result(payload: dict[str, Any],
@@ -746,6 +794,8 @@ def validate_prediction_result(payload: dict[str, Any],
                 "evidence_ledger must be non-empty in production validation "
                 "(zero entries bypasses U67 source_id grounding)"
             )
+        # Fail closed: one missing/foreign source_id makes the whole prediction
+        # untrusted because partial bundle contamination is still contamination.
         for i, entry in enumerate(ledger):
             if not isinstance(entry, dict):
                 raise ValueError(f"evidence_ledger[{i}] must be an object")
@@ -2526,12 +2576,14 @@ def main():
             _, _expected_lessons = _render_learning_context(
                 (bundle or {}).get("learning_context") or {}
             )
+            # U67: strict subscript — never silently disable the source_id
+            # check by .get() returning None when the catalog is missing.
             validate_prediction_result(
                 prediction,
                 expected_ticker=args.ticker,
                 expected_quarter=quarter_info["quarter_label"],
                 expected_lesson_texts=_expected_lessons,
-                expected_source_ids=(bundle or {}).get("evidence_source_catalog"),
+                expected_source_ids=bundle["evidence_source_catalog"],
             )
 
             print(f"Prediction written in {pred_elapsed:.1f}s: {paths['result_path']}")
@@ -2554,6 +2606,23 @@ def main():
                 },
             )
         except Exception as _e:
+            # U67 quarantine: rejected predictions must not be consumable by a
+            # later learner-only run on the same quarter. finalize_prediction_result
+            # writes result.json BEFORE validate_prediction_result raises, so on
+            # validation failure the file is on disk with rejected content.
+            # Move it aside so existence checks (run_learner_for_quarter:918) don't
+            # silently consume it. Rename failures fall back to unlink (best-effort).
+            try:
+                if paths["result_path"].exists():
+                    rejected = paths["result_path"].with_suffix(".json.rejected")
+                    try:
+                        if rejected.exists():
+                            rejected.unlink()
+                        paths["result_path"].rename(rejected)
+                    except OSError:
+                        paths["result_path"].unlink(missing_ok=True)
+            except Exception:
+                pass    # never let quarantine-cleanup mask the original failure
             _close_run(_pred_run_id, "failed", error=str(_e)[:500])
             raise
 

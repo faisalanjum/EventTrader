@@ -76,8 +76,11 @@ def finalize_and_learn(accession, quarter_label):
     # T1: load bundle to derive expected lesson list for positional validation
     bundle = json.loads(paths["bundle_path"].read_text(encoding="utf-8"))
     _, _expected_lessons = _render_learning_context((bundle or {}).get("learning_context") or {})
+    # U67 legacy/offline — calibration harness intentionally skips
+    # evidence_source_catalog enforcement (multi-quarter replays use existing bundles).
     validate_prediction_result(prediction, TICKER, quarter_label,
-                               expected_lesson_texts=_expected_lessons)
+                               expected_lesson_texts=_expected_lessons,
+                               expected_source_ids=None)
     log.info("[%s] Prediction: %s | %s | %s",
              quarter_label, prediction["direction"],
              prediction["confidence_bucket"], prediction["magnitude_bucket"])
