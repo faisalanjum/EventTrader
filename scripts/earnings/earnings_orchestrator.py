@@ -274,6 +274,11 @@ def build_prediction_bundle(ticker: str, quarter_info: dict,
             "_allowed_learner_paths": [],   # schema consistency on fallback
         }
 
+    # U67: attach the event-scoped source-ID catalog used by the predictor
+    # for evidence_ledger[i].source_id citations and by the validator for
+    # exact set-membership grounding.
+    bundle["evidence_source_catalog"] = build_evidence_source_catalog(bundle)
+
     return bundle
 
 
@@ -421,11 +426,129 @@ def get_prediction_paths(ticker: str, quarter_info: dict,
     }
 
 
+# ── U67: evidence_source_catalog (event-scoped per-fact citation IDs) ──
+
+def build_evidence_source_catalog(bundle: dict[str, Any]) -> list[str]:
+    """Generate the bundle's event-scoped source-ID catalog (U67 / Tier M+/C).
+
+    Each ID has the shape:
+
+        SRC:<TICKER>:<QUARTER_LABEL>:<ACCESSION_8K>#<location>
+
+    The event prefix (ticker + quarter + accession) makes the IDs unique to
+    *this* in-memory bundle. A wrong-bundle contamination (U65 race class)
+    cannot produce a matching ID because the predictor would copy the OTHER
+    bundle's prefix. The location suffix names the specific fact — sections,
+    exhibits, consensus rows, peers, news refs, lessons, etc.
+
+    Returned list is sorted + deduplicated. Validator uses set-membership.
+    """
+    qi = bundle.get("quarter_info") or {}
+    ticker = (qi.get("ticker") or bundle.get("ticker") or "?").upper()
+    quarter = qi.get("quarter_label") or "?"
+    accession = qi.get("accession_8k") or "?"
+    prefix = f"SRC:{ticker}:{quarter}:{accession}"
+
+    catalog: list[str] = [
+        f"{prefix}#header",
+        f"{prefix}#quarter_info",
+    ]
+
+    # Section-level catch-alls (so predictor can cite "the §1.3 consensus" overall).
+    section_keys = {
+        "consensus":              "S1.consensus",
+        "8k_packet":              "S2.8k_packet",
+        "guidance_history":       "S3.guidance",
+        "prior_financials":       "S5.prior_financials",
+        "inter_quarter_context":  "S6.inter_quarter",
+        "peer_earnings_snapshot": "S7.peers",
+        "macro_snapshot":         "S8.macro",
+        "learning_context":       "S10.lessons",
+    }
+    for k, loc in section_keys.items():
+        if bundle.get(k):
+            catalog.append(f"{prefix}#{loc}")
+
+    # 8-K exhibits + named sections
+    pkt = bundle.get("8k_packet") or {}
+    for ex in pkt.get("exhibits_99") or []:
+        ex_num = ex.get("exhibit_number")
+        if ex_num:
+            catalog.append(f"{prefix}#S2.exhibit.{str(ex_num).replace(' ', '_')}")
+    for ex in pkt.get("exhibits_other") or []:
+        ex_num = ex.get("exhibit_number")
+        if ex_num:
+            catalog.append(f"{prefix}#S2.exhibit.{str(ex_num).replace(' ', '_')}")
+    for sec in pkt.get("sections") or []:
+        nm = sec.get("section_name")
+        if nm:
+            catalog.append(f"{prefix}#S2.section.{nm}")
+
+    # Consensus quarterly rows + forward estimates
+    cs = bundle.get("consensus") or {}
+    for i, _ in enumerate(cs.get("quarterly_rows") or []):
+        catalog.append(f"{prefix}#S1.consensus.row[{i}]")
+    for i, _ in enumerate(cs.get("forward_estimates") or []):
+        catalog.append(f"{prefix}#S1.consensus.forward[{i}]")
+
+    # Guidance history entries (any horizon-shaped subkey)
+    gh = bundle.get("guidance_history") or {}
+    for kind in ("quarterly", "annual", "other"):
+        for i, _ in enumerate(gh.get(kind) or []):
+            catalog.append(f"{prefix}#S3.guidance.{kind}[{i}]")
+
+    # Prior financials per-quarter
+    pf = bundle.get("prior_financials") or {}
+    for q in pf.get("quarters") or []:
+        period = q.get("period_of_report") or q.get("period")
+        if period:
+            catalog.append(f"{prefix}#S5.financials.{period}")
+
+    # Inter-quarter news + filing events
+    iq = bundle.get("inter_quarter_context") or {}
+    for ev in iq.get("news_events") or []:
+        ref = ev.get("ref") or ev.get("id") or ev.get("news_id")
+        if ref:
+            catalog.append(f"{prefix}#S6.news.{ref}")
+    for ev in iq.get("filing_events") or []:
+        acc = ev.get("accession") or ev.get("accession_8k")
+        if acc:
+            catalog.append(f"{prefix}#S6.filing.{acc}")
+
+    # Peers
+    pe = bundle.get("peer_earnings_snapshot") or {}
+    for peer in pe.get("peers") or []:
+        pt = peer.get("ticker")
+        if pt:
+            catalog.append(f"{prefix}#S7.peer.{str(pt).upper()}")
+
+    # Macro catalysts (today/yesterday/earlier buckets)
+    ms = bundle.get("macro_snapshot") or {}
+    mc = ms.get("macro_catalysts") or {}
+    for bucket in ("today", "yesterday", "earlier"):
+        for i, cat in enumerate(mc.get(bucket) or []):
+            bz = cat.get("bz_id")
+            if bz:
+                catalog.append(f"{prefix}#S8.macro.bz:{bz}")
+            else:
+                catalog.append(f"{prefix}#S8.macro.{bucket}[{i}]")
+
+    # Lesson markers
+    lc = bundle.get("learning_context") or {}
+    for i, _ in enumerate(lc.get("ticker_lessons") or []):
+        catalog.append(f"{prefix}#S10.lesson.L{i+1}")
+    for i, _ in enumerate(lc.get("global_lessons") or []):
+        catalog.append(f"{prefix}#S10.global_lesson.G{i+1}")
+
+    return sorted(set(catalog))
+
+
 def validate_prediction_result(payload: dict[str, Any],
                                expected_ticker: str,
                                expected_quarter: str,
                                *,
-                               expected_lesson_texts: list[str] | None = None) -> None:
+                               expected_lesson_texts: list[str] | None = None,
+                               expected_source_ids: list[str] | set[str] | None = None) -> None:
     """Validator for prediction_result.v1 including T1 labeled-lesson-consumption contract.
 
     T1 (added 2026-04-19 per .claude/plans/learner.md Appendix B):
@@ -604,6 +727,40 @@ def validate_prediction_result(payload: dict[str, Any],
                 f"analysis contains verbatim lesson_labels[{i}].lesson_text "
                 f"(label={entry['label']!r}); paraphrase or omit — may not quote"
             )
+
+    # ══════════════════════════════════════════════════════════════════
+    # U67 — evidence_ledger.source_id grounding (Tier M+/C)
+    # Each entry's source_id MUST be present in the bundle's
+    # evidence_source_catalog, generated from the in-memory bundle.
+    # This deterministically catches U65-class bundle-swap contamination:
+    # a wrong bundle's source_ids carry a different event prefix and
+    # therefore can never appear in the expected catalog.
+    # Only enforced when caller passes expected_source_ids (production
+    # path); offline/legacy callers default to None and skip the check.
+    # ══════════════════════════════════════════════════════════════════
+    if expected_source_ids is not None:
+        anchor_set = set(expected_source_ids)
+        ledger = payload["evidence_ledger"]
+        if not ledger:
+            raise ValueError(
+                "evidence_ledger must be non-empty in production validation "
+                "(zero entries bypasses U67 source_id grounding)"
+            )
+        for i, entry in enumerate(ledger):
+            if not isinstance(entry, dict):
+                raise ValueError(f"evidence_ledger[{i}] must be an object")
+            sid = entry.get("source_id")
+            if not sid or not isinstance(sid, str):
+                raise ValueError(
+                    f"evidence_ledger[{i}].source_id is required (non-empty string); "
+                    f"copy verbatim from the bundle's Evidence Source IDs catalog"
+                )
+            if sid not in anchor_set:
+                raise ValueError(
+                    f"evidence_ledger[{i}].source_id={sid!r} is not in the bundle's "
+                    f"evidence_source_catalog — possible bundle contamination or "
+                    f"fabricated citation"
+                )
 
 
 # ── Attribution / Learner Helpers ────────────────────────────────────
@@ -2374,6 +2531,7 @@ def main():
                 expected_ticker=args.ticker,
                 expected_quarter=quarter_info["quarter_label"],
                 expected_lesson_texts=_expected_lessons,
+                expected_source_ids=(bundle or {}).get("evidence_source_catalog"),
             )
 
             print(f"Prediction written in {pred_elapsed:.1f}s: {paths['result_path']}")

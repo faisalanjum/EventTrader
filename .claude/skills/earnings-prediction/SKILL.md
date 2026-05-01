@@ -131,7 +131,7 @@ Write `RESULT_PATH` as a single JSON object with these fields:
     {"gap": "describe what is missing or incomplete"}
   ],
   "evidence_ledger": [
-    {"metric": "metric name", "value": "exact value", "source": "bundle section / field"}
+    {"metric": "metric name", "value": "exact value", "source": "bundle section / field", "source_id": "SRC:TICKER:QUARTER:ACCESSION#location"}
   ],
   "analysis": "The main tension, which side wins, and why."
 }
@@ -156,7 +156,7 @@ Write `RESULT_PATH` as a single JSON object with these fields:
 
 **`data_gaps`** — 0+ items. Each has `gap` (what is missing and what information would resolve it). Optional but encouraged.
 
-**`evidence_ledger`** — every key number used in your reasoning, with `metric`, `value`, and `source`. Required.
+**`evidence_ledger`** — every key number used in your reasoning, with `metric`, `value`, `source`, and `source_id`. Required, must be non-empty in production validation. The `source_id` must be copied **verbatim** from the rendered bundle's "Evidence Source IDs" catalog (block immediately after the §1.0 header) — equivalently from `bundle.evidence_source_catalog` in the JSON. Each ID has the form `SRC:<TICKER>:<QUARTER>:<ACCESSION>#<location>`. Do NOT invent, paraphrase, or strip the `SRC:` prefix; do NOT cite generic anchors like `§2` or `N1` alone. If no catalog ID applies to a fact you want to cite, omit the entry. The validator rejects any entry whose `source_id` is not present in the bundle's catalog.
 
 **`analysis`** — short synthesis: the main tension, which side wins, and why. Required. Must not verbatim-quote the `lesson_text` of any non-confirmed label for lessons ≥30 chars (validator substring check).
 

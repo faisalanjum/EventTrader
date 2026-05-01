@@ -24,6 +24,16 @@ def render_bundle_text(bundle: dict) -> str:
     # 1. Header
     sections.append(_render_header(bundle))
 
+    # 1b. U67 — Evidence Source IDs catalog. Predictor MUST copy one of
+    # these IDs verbatim into every `evidence_ledger[i].source_id`. The
+    # validator uses set-membership against the same in-memory catalog.
+    catalog = bundle.get("evidence_source_catalog") or []
+    if catalog:
+        block = ["## Evidence Source IDs (copy verbatim into evidence_ledger[].source_id)"]
+        for sid in catalog:
+            block.append(f"- {sid}")
+        sections.append("\n".join(block))
+
     # 2. Results & Expectations (consensus bar + EX-99.1)
     sections.append(_render_results_and_expectations(bundle))
 
