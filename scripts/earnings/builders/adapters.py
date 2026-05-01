@@ -277,8 +277,14 @@ def build_macro_snapshot(ticker: str, quarter_info: dict,
     out = out_path or f"/tmp/macro_snapshot_{ticker}.json"
     _ensure_dir(out)
 
+    # U34: pop live_mode (defensive — caller may route via **kwargs); default
+    # to (pit_cutoff is None) so adapter live mode → live VIX, historical → settled.
+    # Same pattern as `source = kwargs.pop("source", default)` at line 273.
+    live_mode = kwargs.pop("live_mode", pit_cutoff is None)
+
     with _SuppressStdout():
-        packet = _legacy(ticker, effective, market_session, out_path=out, source=source, **kwargs)
+        packet = _legacy(ticker, effective, market_session, out_path=out, source=source,
+                         live_mode=live_mode, **kwargs)
 
     _enrich_packet(packet, pit_cutoff, effective_cutoff_ts=effective)
     _write_enriched(packet, out)

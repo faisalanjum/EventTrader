@@ -2,6 +2,7 @@
 
 Session: post_market | Source: polygon | PIT: 2023-12-07
 SPY 458.04 | VIX 12.97 (last settled close)
+Bars: SPY minute≤PIT−60s, SPY daily settled through 2023-12-07
 
 ### SPY Trend
 

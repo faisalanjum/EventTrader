@@ -101,3 +101,66 @@ def test_macro_adapter_defaults_polygon_for_historical_and_yahoo_for_live():
     assert calls[0]["market_session"] == "pre_market"
     assert calls[1]["source"] == "yahoo"
     assert calls[1]["market_session"] is None
+
+
+# ─── U34 adapter live_mode propagation ────────────────────────────────
+
+
+def _capture_macro_legacy_call():
+    """Returns (calls list, fake legacy callable). Patch the legacy import path."""
+    calls = []
+
+    def fake_legacy(ticker, pit_cutoff, market_session, out_path=None, source=None,
+                    live_mode=None, **kwargs):
+        calls.append({
+            "ticker": ticker,
+            "pit_cutoff": pit_cutoff,
+            "market_session": market_session,
+            "source": source,
+            "live_mode": live_mode,
+        })
+        return {
+            "schema_version": "macro_snapshot.v2",
+            "ticker": ticker,
+            "market_now": {},
+            "catalysts": {},
+            "gaps": [],
+        }
+    return calls, fake_legacy
+
+
+def test_macro_adapter_passes_live_mode_true_when_pit_cutoff_none():
+    """U34 — adapter live mode must propagate live_mode=True to legacy builder."""
+    calls, fake_legacy = _capture_macro_legacy_call()
+    qi = {"market_session": "post_market"}
+    with patch("scripts.earnings.builders.macro_snapshot.build_macro_snapshot",
+               side_effect=fake_legacy):
+        fd, out = tempfile.mkstemp(suffix=".json")
+        os.close(fd)
+        try:
+            A.build_macro_snapshot("CRM", qi, pit_cutoff=None, out_path=out)
+        finally:
+            if os.path.exists(out):
+                os.unlink(out)
+
+    assert calls[0]["live_mode"] is True
+    assert calls[0]["source"] == "yahoo"
+
+
+def test_macro_adapter_passes_live_mode_false_when_pit_cutoff_set():
+    """U34 — adapter historical mode must propagate live_mode=False."""
+    calls, fake_legacy = _capture_macro_legacy_call()
+    qi = {"market_session": "post_market"}
+    with patch("scripts.earnings.builders.macro_snapshot.build_macro_snapshot",
+               side_effect=fake_legacy):
+        fd, out = tempfile.mkstemp(suffix=".json")
+        os.close(fd)
+        try:
+            A.build_macro_snapshot("CRM", qi, pit_cutoff="2024-09-15T16:00:00-04:00",
+                                    out_path=out)
+        finally:
+            if os.path.exists(out):
+                os.unlink(out)
+
+    assert calls[0]["live_mode"] is False
+    assert calls[0]["source"] == "polygon"

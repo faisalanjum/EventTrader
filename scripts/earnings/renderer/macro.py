@@ -34,6 +34,9 @@ def _render_macro(bundle: dict) -> str:
         f"PIT: {packet.get('pit_date', '—')}",
         f"SPY {_iq_val(spy.get('level_at_pit'))} | "
         f"VIX {_iq_val(market.get('vix_close'))} ({market.get('vix_label', '—')})",
+        # U35: SPY-specific provenance — last_settled_date is sourced from
+        # _compute_spy_now and reflects SPY's bar coverage only.
+        f"Bars: SPY minute≤PIT−60s, SPY daily settled through {spy.get('last_settled_date') or '—'}",
     ]
 
     # ── SPY Trend ──

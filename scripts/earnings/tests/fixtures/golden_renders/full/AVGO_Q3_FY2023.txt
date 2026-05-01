@@ -549,6 +549,7 @@ Headlines:
 
 Session: post_market | Source: polygon | PIT: 2023-08-31
 SPY 450.5 | VIX 13.88 (last settled close)
+Bars: SPY minute≤PIT−60s, SPY daily settled through 2023-08-31
 
 ### SPY Trend
 

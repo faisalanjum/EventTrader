@@ -376,6 +376,7 @@ Headlines:
 
 Session: post_market | Source: polygon | PIT: 2026-01-28
 SPY 695.61 | VIX 16.35 (last settled close)
+Bars: SPY minute≤PIT−60s, SPY daily settled through 2026-01-28
 
 ### SPY Trend
 

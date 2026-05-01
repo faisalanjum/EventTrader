@@ -7192,7 +7192,8 @@
         "vs_200d": 8.61,
         "volume_5d_avg": 76427377,
         "volume_20d_avg": 76987117,
-        "volume_ratio": 0.99
+        "volume_ratio": 0.99,
+        "last_settled_date": "2023-08-31"
       },
       "vix_close": 13.88,
       "vix_label": "last settled close",

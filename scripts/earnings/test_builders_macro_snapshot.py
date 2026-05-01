@@ -176,3 +176,228 @@ def test_pit_fetch_resolves_correctly():
     """Verify PIT_FETCH path is computed via _paths.skill_script and exists."""
     assert os.path.exists(ms.PIT_FETCH)
     assert ms.PIT_FETCH.endswith("pit_fetch.py")
+
+
+# ─── U34/U35 tests ────────────────────────────────────────────────────
+
+
+def _build_packet(*, market_session, pit_cutoff, source="yahoo", live_mode=None):
+    """Same mock topology as _build_yahoo_packet_for_session, but exposes
+    `source` and `live_mode` for the U34 matrix."""
+    fake_yf_ticker = MagicMock()
+    fake_yf_ticker.fast_info.last_price = 17.5  # live VIX value
+    # Historical VIX path: yfinance.history returns a non-empty frame so
+    # vix_level resolves via the settled-close branch.
+    import pandas as pd
+    hist_df = pd.DataFrame(
+        {"Close": [16.2, 16.4]},
+        index=pd.to_datetime(["2026-04-29", "2026-04-30"]),
+    )
+    fake_yf_ticker.history.return_value = hist_df
+
+    mock_manager = MagicMock()
+    mock_manager.execute_cypher_query_all.side_effect = [
+        [{"sector": "Technology", "sector_etf": "XLK"}],
+        [
+            {"date": "2026-04-29", "ret": 0.2},
+            {"date": "2026-04-30", "ret": 0.4},
+            {"date": "2026-05-01", "ret": 9.9},
+        ],
+    ]
+
+    with patch.object(ms, "_yahoo_daily", return_value=_sample_daily_bars()), \
+         patch.object(ms, "_yahoo_minute", return_value=_sample_minute_bars()), \
+         patch.object(ms, "_polygon_daily", return_value=_sample_daily_bars()), \
+         patch.object(ms, "_polygon_minute", return_value=_sample_minute_bars()), \
+         patch.object(ms, "_load_polygon_key", return_value="fake-key"), \
+         patch.object(ms, "get_manager", return_value=mock_manager), \
+         patch("subprocess.run", return_value=MagicMock(returncode=0, stdout='{"data": []}', stderr="")), \
+         patch("yfinance.Ticker", return_value=fake_yf_ticker):
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
+            out = f.name
+        try:
+            return ms.build_macro_snapshot(
+                ticker="CRM",
+                pit_cutoff=pit_cutoff,
+                market_session=market_session,
+                source=source,
+                live_mode=live_mode,
+                out_path=out,
+            )
+        finally:
+            os.unlink(out)
+
+
+# U34 — explicit live_mode matrix
+
+
+def test_vix_label_live_when_live_mode_true_yahoo():
+    pkt = _build_packet(market_session="post_market",
+                        pit_cutoff="2026-05-01T16:30:00-04:00",
+                        source="yahoo", live_mode=True)
+    assert pkt["market_now"]["vix_label"] == "live"
+    assert pkt["market_now"]["vix_close"] == 17.5  # live VIX value
+
+
+def test_vix_label_settled_when_live_mode_false_yahoo_override():
+    """U34 release-blocker: yahoo + historical pit + live_mode=False → settled VIX."""
+    pkt = _build_packet(market_session="post_market",
+                        pit_cutoff="2024-09-15T16:00:00-04:00",
+                        source="yahoo", live_mode=False)
+    assert pkt["market_now"]["vix_label"] == "last settled close"
+    # Should NOT be 17.5 (live); should come from yfinance.history mock
+    assert pkt["market_now"]["vix_close"] != 17.5
+
+
+def test_vix_label_settled_when_live_mode_false_polygon():
+    """Regression — historical polygon path must remain on settled VIX."""
+    pkt = _build_packet(market_session="post_market",
+                        pit_cutoff="2024-09-15T16:00:00-04:00",
+                        source="polygon", live_mode=False)
+    assert pkt["market_now"]["vix_label"] == "last settled close"
+
+
+# U34 — backward-compat inference (live_mode=None)
+
+
+def test_vix_label_infers_live_mode_for_legacy_yahoo_without_session():
+    """Legacy direct-caller pattern: yahoo + no market_session + live_mode=None
+    → infer live → live VIX. Preserves test_builder_validation.py:712."""
+    pkt = _build_packet(market_session=None,
+                        pit_cutoff="2026-05-01T16:30:00-04:00",
+                        source="yahoo", live_mode=None)
+    assert pkt["market_now"]["vix_label"] == "live"
+
+
+def test_vix_label_infers_historical_for_legacy_yahoo_with_explicit_session():
+    """Defensive: yahoo + explicit session + live_mode=None → infer historical
+    → settled VIX. caller_supplied_session=True triggers the fallback."""
+    pkt = _build_packet(market_session="post_market",
+                        pit_cutoff="2024-09-15T16:00:00-04:00",
+                        source="yahoo", live_mode=None)
+    assert pkt["market_now"]["vix_label"] == "last settled close"
+
+
+def test_vix_label_explicit_live_mode_false_overrides_inference():
+    """Explicit caller value always wins over inference."""
+    # source=yahoo, no session — would normally infer live=True
+    # but live_mode=False explicitly should force historical branch
+    pkt = _build_packet(market_session=None,
+                        pit_cutoff="2024-09-15T16:00:00-04:00",
+                        source="yahoo", live_mode=False)
+    assert pkt["market_now"]["vix_label"] == "last settled close"
+
+
+# U35 — last_settled_date
+
+
+def test_last_settled_date_yesterday_for_pre_market():
+    """pre_market PIT → settled_daily excludes today → last_settled_date = yesterday."""
+    pkt = _build_packet(market_session="pre_market",
+                        pit_cutoff="2026-05-01T06:52:00-04:00",
+                        source="polygon", live_mode=False)
+    assert pkt["market_now"]["spy"]["last_settled_date"] == "2026-04-30"
+
+
+def test_last_settled_date_yesterday_for_in_market():
+    """in_market PIT → settled_daily excludes today → last_settled_date = yesterday."""
+    pkt = _build_packet(market_session="in_market",
+                        pit_cutoff="2026-05-01T10:31:00-04:00",
+                        source="polygon", live_mode=False)
+    assert pkt["market_now"]["spy"]["last_settled_date"] == "2026-04-30"
+
+
+def test_last_settled_date_today_for_post_market():
+    """post_market PIT → settled_daily includes today → last_settled_date = today."""
+    pkt = _build_packet(market_session="post_market",
+                        pit_cutoff="2026-05-01T16:30:00-04:00",
+                        source="polygon", live_mode=False)
+    assert pkt["market_now"]["spy"]["last_settled_date"] == "2026-05-01"
+
+
+def test_last_settled_date_none_when_no_daily_bars():
+    """No daily bars → last_settled_date is None (defensive)."""
+    fake_yf_ticker = MagicMock()
+    fake_yf_ticker.fast_info.last_price = 17.5
+    fake_yf_ticker.history.return_value = MagicMock(empty=True)
+
+    mock_manager = MagicMock()
+    mock_manager.execute_cypher_query_all.return_value = []
+
+    with patch.object(ms, "_yahoo_daily", return_value=[]), \
+         patch.object(ms, "_yahoo_minute", return_value=[]), \
+         patch.object(ms, "_polygon_daily", return_value=[]), \
+         patch.object(ms, "_polygon_minute", return_value=[]), \
+         patch.object(ms, "_load_polygon_key", return_value="fake-key"), \
+         patch.object(ms, "get_manager", return_value=mock_manager), \
+         patch("subprocess.run", return_value=MagicMock(returncode=0, stdout='{"data": []}', stderr="")), \
+         patch("yfinance.Ticker", return_value=fake_yf_ticker):
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
+            out = f.name
+        try:
+            pkt = ms.build_macro_snapshot(
+                ticker="CRM",
+                pit_cutoff="2026-05-01T16:30:00-04:00",
+                market_session="post_market",
+                source="polygon", live_mode=False,
+                out_path=out,
+            )
+            assert pkt["market_now"]["spy"]["last_settled_date"] is None
+        finally:
+            os.unlink(out)
+
+
+# CLI live_mode propagation — invoked via subprocess
+
+
+def test_cli_pit_now_routes_to_live_mode_true():
+    """CLI `--pit now` must propagate live_mode=True to builder."""
+    import subprocess
+    import sys as _sys
+    captured = {}
+
+    # We capture by patching the canonical builder. The CLI calls into the
+    # same module-level function we can monkey-patch.
+    real_build = ms.build_macro_snapshot
+
+    def spy_build(ticker, pit_cutoff, market_session=None, out_path=None,
+                  source='polygon', live_mode=None, **kw):
+        captured["live_mode"] = live_mode
+        captured["source"] = source
+        return {"schema_version": "macro_snapshot.v2", "ticker": ticker,
+                "market_now": {}, "catalysts": {}, "gaps": []}
+
+    with patch.object(ms, "build_macro_snapshot", side_effect=spy_build), \
+         patch.object(_sys, "argv", ["macro_snapshot.py", "AAPL", "--pit", "now",
+                                     "--source", "yahoo", "--out-path", "/tmp/x.json"]):
+        try:
+            ms.main()
+        except SystemExit:
+            pass
+
+    assert captured.get("live_mode") is True
+    assert captured.get("source") == "yahoo"
+
+
+def test_cli_explicit_pit_routes_to_live_mode_false():
+    """CLI `--pit <ISO>` must propagate live_mode=False (defensive case)."""
+    import sys as _sys
+    captured = {}
+
+    def spy_build(ticker, pit_cutoff, market_session=None, out_path=None,
+                  source='polygon', live_mode=None, **kw):
+        captured["live_mode"] = live_mode
+        return {"schema_version": "macro_snapshot.v2", "ticker": ticker,
+                "market_now": {}, "catalysts": {}, "gaps": []}
+
+    with patch.object(ms, "build_macro_snapshot", side_effect=spy_build), \
+         patch.object(_sys, "argv", ["macro_snapshot.py", "AAPL", "--pit",
+                                     "2024-09-15T16:00:00-04:00",
+                                     "--source", "yahoo",
+                                     "--out-path", "/tmp/x.json"]):
+        try:
+            ms.main()
+        except SystemExit:
+            pass
+
+    assert captured.get("live_mode") is False

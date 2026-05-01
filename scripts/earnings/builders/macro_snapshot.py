@@ -309,6 +309,10 @@ def _compute_spy_now(minute_bars: list[dict], daily_bars: list[dict],
         'volume_5d_avg': vol_5d,
         'volume_20d_avg': vol_20d,
         'volume_ratio': round(vol_5d / vol_20d, 2) if vol_5d and vol_20d and vol_20d > 0 else None,
+        # U35: SPY's last settled daily-bar date — provenance metadata for §1.7
+        # header annotation. post_market → pit_date; pre/in_market → previous
+        # trading day. None when no daily bars (defensive).
+        'last_settled_date': settled_daily[-1]['date'] if settled_daily else None,
     }
 
 
@@ -383,9 +387,21 @@ def _infer_market_session(pit_cutoff: str) -> str:
 
 
 def build_macro_snapshot(ticker: str, pit_cutoff: str, market_session: str | None = None,
-                          out_path: str | None = None, source: str = 'polygon') -> dict:
+                          out_path: str | None = None, source: str = 'polygon',
+                          live_mode: bool | None = None) -> dict:
+    # U34: capture caller-supplied session BEFORE _infer_market_session overwrites
+    # market_session=None. Inference rule below uses this signal.
+    caller_supplied_session = market_session is not None
     if not market_session:
         market_session = _infer_market_session(pit_cutoff)
+
+    # U34: backward-compat inference for legacy direct callers that did not pass
+    # `live_mode` explicitly. Adapter and CLI always pass live_mode; only legacy
+    # direct callers like test_builder_validation.py:712 leave it None. The rule
+    # "yahoo + no caller-supplied session → live" matches the historical
+    # convention these callers relied on.
+    if live_mode is None:
+        live_mode = (source == "yahoo" and not caller_supplied_session)
 
     pit_date = pit_cutoff[:10]
 
@@ -444,8 +460,10 @@ def build_macro_snapshot(ticker: str, pit_cutoff: str, market_session: str | Non
     vix_label = 'last settled close'
     try:
         import yfinance as yf
-        if use_yahoo:
-            # Live mode: current VIX level
+        if live_mode:
+            # U34: live mode — current VIX level. Was previously keyed on `use_yahoo`,
+            # which leaked the live-current value (and `vix_label='live'` stamp) when a
+            # caller manually overrode source='yahoo' with a real historical pit_cutoff.
             vix_level = round(float(yf.Ticker('^VIX').fast_info.last_price), 2)
             vix_label = 'live'
         else:
@@ -484,8 +502,9 @@ def build_macro_snapshot(ticker: str, pit_cutoff: str, market_session: str | Non
                 ORDER BY d.date
             ''', {'sector': sector_name, 'from': (pit_d - timedelta(days=10)).isoformat(), 'pit_date': pit_date})
 
-            # PIT-safe: for in/pre_market, exclude today's unsettled bar
-            # (live yahoo mode uses effective_session=post_market to include today)
+            # PIT-safe: for in/pre_market, exclude today's unsettled bar.
+            # Yahoo can include an in-progress current-day row, so only the
+            # actual post_market session is allowed to treat today as settled.
             if sec_rows:
                 if effective_session != 'post_market':
                     settled_sec = [r for r in sec_rows if r['date'] < pit_date]
@@ -845,6 +864,11 @@ def main():
         print('Error: --pit required', file=sys.stderr)
         sys.exit(1)
 
+    # U34: capture the ORIGINAL --pit value before conversion so the live signal
+    # is not lost. `--pit now` is the CLI's idiomatic live-mode invocation.
+    original_pit = pit
+    live_mode = (original_pit == 'now')
+
     # --pit now: resolve to current timestamp in US/Eastern (market TZ),
     # not host-local TZ — avoids wrong trading date on UTC servers.
     if pit == 'now':
@@ -856,7 +880,8 @@ def main():
     if not source:
         source = 'polygon'
 
-    packet = build_macro_snapshot(ticker, pit, session, out_path, source)
+    packet = build_macro_snapshot(ticker, pit, session, out_path, source,
+                                   live_mode=live_mode)
     print(render_text(packet))
 
 
