@@ -11,7 +11,7 @@
 
 ## Status Dashboard
 
-**15 shipped commits** (all verifier-signed-off; 14 main + 1 followup):
+**16 shipped commits** (all verifier-signed-off; 15 main + 1 followup):
 
 | Commit | Section | Scope |
 |---|---|---|
@@ -28,8 +28,10 @@
 | `9f6749b` + `20d9ea2` + `ddf0df7` | cross | U67 event-scoped source_id grounding (Tier M+/C). Catalog walks real bundle structures (days[].events, catalysts pairs, series); rendered N{i}/F{i} aliases; macro `earlier` shape; `_close_run` gate on `prediction_validated`; legacy/offline markers in 5 external scripts |
 | `5f4864f` | §1.10 cross | **U45+U66+U46+U48+U53 bundled**: ## Lessons To Label / ## Context-Only split + flat L1..Ln + verbatim-from-rendered SKILL.md (5 edits) + shared `iter_labeled_lessons` generator (drift-impossible by construction) + bundle.py empty-case fix caught by CRM smoke |
 | `624317c` | §1.10 followup | **U45+U66 followup**: purged stale SKILL.md ref at line 112 (## Output section example block — separate from Phase 0 example caught in `5f4864f`); regen 13 degraded goldens after bundle.py empty-case behavior change; updated stale comments in `_degraded_fixtures.py`. Caught by ChatGPT post-commit review. |
+| `822d178` | §1.6 cross | **U22+U22a+U23+U24+U26 bundled**: peer Option D renderer rewrite + builder backfill. Cypher OPTIONAL CALL with `pit_visible` boolean factoring (PIT-symmetric accession_periodic + form_type_periodic gates); 4 new builder helpers (`_parse_pit_safe`, `_extract_bz_id`, `_adj`, `_max_or_none`); per-horizon + whole-schedule fail-CLOSED PIT-nulling with `summary.gaps` emission; math-max `best_*_pct` from ADJ values (U23); FY-mismatch tag re-surfaced (U26); defensive `_signed_pct`/`_sub` renderer formatters. 97 new tests (46 builder + 48 renderer + 3 catalog). 4 fixture goldens surgically regen'd (peer-section-only diffs). |
+| `aafc4af` | §1.0 | **U61 surface `assembled_at`**: §1.0 Mode line gains `\| Assembled: <UTC ISO seconds>Z`. Defensive `_format_assembled_at` helper parses ISO via `datetime.fromisoformat` (with `Z`-suffix shim), normalizes non-UTC offsets to UTC via `astimezone`, drops microseconds. Rejects naive datetimes (no fabricated timezone provenance). Returns None on missing/None/non-string/empty/unparseable → segment omitted. 16 new tests. 25 mechanical golden regens (4 section/header + 4 full + 4 sha256 + 13 degraded). Zero bundle JSON changes. |
 
-**Open queue (principled order)**: **U22+U22a (HIGH, large; principled-prereq U64 already shipped)** → U33 (small) → MEDIUM/LOW follow-ons (U4/U10/U13/U14/U17-U21/U30/U32/U55/U57/U61/U18/U19/U20). All P0s + U45 closed.
+**Open queue (principled order)**: **U33 (small)** → MEDIUM/LOW follow-ons (U4/U10/U13/U14/U17-U21/U30/U32/U55/U57/U18/U19/U20) → §1.5/§1.7/§1.12 walks. All P0s + U45 + U22/U22a/U23/U24/U26 + U61 closed (shipped 2026-05-01).
 
 **Hybrid contract**: predictor receives both `RENDERED_BUNDLE_PATH` + `BUNDLE_PATH`; rendered = primary reasoning surface, JSON = verification-only.
 
@@ -62,7 +64,7 @@
 - **Test layout is intentionally dual**: active tests live as `scripts/earnings/test_*.py`; fixtures/golden capture helpers live under `scripts/earnings/tests/`. Do not reorganize test paths during correctness work.
 - **SKILL.md stale-pointer guard**: positive instructions to read lessons from `bundle.learning_context` or `predictor_lessons[i]` are forbidden; negative warnings ("do NOT pull") and `_allowed_learner_paths` equivalence are allowed.
 - **U33 historical-safety depends on adapter source selection**: before simplifying macro source-selection code, verify the historical `pit_cutoff` path still forces Polygon and does not enter Yahoo's live `post_market` branch.
-- **U61/R1 is still open**, not forgotten: surface `assembled_at` in §1.0 or fold it into the §1.12 provenance pass after U22/U22a + U33.
+- **U61/R1 ✅ shipped 2026-05-01** (`aafc4af`): `assembled_at` surfaced in §1.0 line 4 as `| Assembled: <UTC ISO>Z`. §1.12 PIT provenance pass remains open for cross-section first-line annotations.
 
 ## Decisions (locked)
 
@@ -505,7 +507,7 @@ Audit walks in display order: §1.0 → §1.1 → §1.2 → §1.3 → §1.4 → 
 - [x] Diff review: every renderer change is additive at JSON-schema level — `evidence_source_catalog` (U67) and `## Lessons To Label`/`## Context-Only` (U45) added; no fields removed. `period_of_report` byte-identical for all 4 historical fixtures (U64 reject-criterion held).
 - [x] R3 decision recorded in this plan (Decision #13 → RESOLVED `5f4864f`).
 - [ ] §3 orchestrator prompt — implicitly covered (no separate prompt template; SKILL.md is the source of truth and was updated).
-- [ ] U22+U22a (peer Option D + builder backfill) — outstanding HIGH item.
+- [x] U22+U22a (peer Option D + builder backfill) — ✅ shipped 2026-05-01 (`822d178`).
 - [ ] U33 (Yahoo session leak) — outstanding small item.
 - [x] U61/R1 (`assembled_at` in §1.0 header) — ✅ shipped 2026-05-01. Implemented directly in header.py (not folded into §1.12).
 - [ ] §1.5/§1.7/§1.12 walks — outstanding (mid-audit).
