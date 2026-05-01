@@ -58,10 +58,12 @@ def render_bundle_text(bundle: dict) -> str:
     # 9. Reference — other exhibits, 8-K sections, lower-signal content
     sections.append(_render_reference(bundle))
 
-    # 10. Prior Lessons (from learner — if available)
-    learning_ctx = bundle.get("learning_context")
-    if learning_ctx and (learning_ctx.get("ticker_lessons") or learning_ctx.get("global_lessons")):
-        _text, _ = _render_learning_context(learning_ctx)
-        sections.append(_text)
+    # 10. Prior Lessons (from learner). Always render — _render_learning_context
+    # handles empty/None internally and emits a "No prior lessons available"
+    # marker so the predictor sees the section was explicitly checked.
+    # Pre-U45+U66 the outer guard skipped this entirely in the empty case,
+    # which left the predictor with no signal (caught by CRM Q3 smoke).
+    _text, _ = _render_learning_context(bundle.get("learning_context") or {})
+    sections.append(_text)
 
     return "\n\n".join(sections)

@@ -20,7 +20,7 @@ Your primary obligation is to inspect everything in the bundle, reason hard, str
 
 ## Input
 
-Read `RENDERED_BUNDLE_PATH` for reasoning. Use `BUNDLE_PATH` when you need exact JSON field values (e.g., verbatim lesson strings for Phase 0). Write your result to `RESULT_PATH`.
+Read `RENDERED_BUNDLE_PATH` for reasoning. Use `BUNDLE_PATH` when you need exact JSON field values (e.g., exact decimal precision for consensus or guidance numbers when the rendered version is rounded). Write your result to `RESULT_PATH`.
 
 The rendered bundle's lessons section may carry an inline `learner_result: <path>` line under individual prior-quarter lessons, pointing to the previous learner's full `result.md` for that event. You MAY Read these files when the lesson body alone isn't enough to decide a label or ground a driver — for the prior learner's primary-driver call, what worked / what failed, and full evidence ledger. This is OPTIONAL; do not follow links by default.
 
@@ -38,22 +38,15 @@ The rendered bundle's §6 Inter-Quarter Events table may carry a `Content` colum
 
 ## Phase 0 — Label Prior Lessons (MANDATORY before any reasoning)
 
-**Source of truth**: read `bundle.learning_context` from the JSON at `BUNDLE_PATH`. This is a dict with two keys:
-- `ticker_lessons: list[dict]` — each has `predictor_lessons: list[str]`, `data_lessons`, `why`, `quarter_label`, etc.
-- `global_lessons: list[dict]` — each has `scope` (one of `sector`/`macro`/`cross_ticker`), `lesson: str`, etc.
+**Source of truth**: the rendered bundle's `## Lessons To Label (verbatim, in order)` section. Each lesson is one block, prefixed by an `L#` marker on its own line. Some markers carry a scope tag (e.g. `L4. [sector: Technology]`, `L5. [macro]`, `L6. [cross: AVGO,QCOM,AMD,TXN]`). The lesson body is the line(s) following the marker, before the next L# marker or section break.
 
-**What to label**:
-- ✅ Every string in `ticker_lessons[i].predictor_lessons[j]` (walk `i` in array order, then `j` in array order)
-- ✅ Every `global_lessons[i].lesson` where `scope == "sector"` (in array order)
-- ✅ Every `global_lessons[i].lesson` where `scope == "macro"` (in array order)
-- ✅ Every `global_lessons[i].lesson` where `scope == "cross_ticker"` (in array order)
+**What to do**: emit ONE `lesson_labels[]` entry per L# marker, in marker order. Set `lesson_text` to a verbatim copy of the body — no `L#` prefix, no scope tag, no leading/trailing whitespace beyond what the source has.
 
-**What NOT to label** (these exist in the bundle/render but are NOT in your label list):
-- ❌ `ticker_lessons[i].data_lessons[]` — fetch/weight heuristics, not directional templates
-- ❌ `ticker_lessons[i].why` — metadata
-- ❌ Quarter-header metadata (`direction_correct`, `actual_daily_pct`, `primary_driver_category`)
+**Count invariant**: `len(lesson_labels)` MUST equal the number of L# markers. Do NOT fabricate lessons. Do NOT pull lessons from `bundle.learning_context` JSON. Do NOT paraphrase or pattern-extend from prior knowledge.
 
-**Emission order MUST match the traversal above** — the validator compares positionally against an orchestrator-computed expected list. Misordering fails validation.
+**Empty case**: if `## Lessons To Label` is absent or has zero L# markers, emit `"lesson_labels": []` and ensure every `cites_lesson_indices` is `[]`. Do not omit the field.
+
+**Background context** (NOT labeled): the `## Context-Only` section carries quarter-header metadata, the prior learner's `predicted_confidence`, `primary_driver`, `what_worked`, `what_failed`, plus `Data:`, `Why:`, and `learner_result:` lines. Use these for context only — do NOT add them to `lesson_labels`.
 
 **For each labeled lesson, answer one question**:
 
@@ -61,7 +54,7 @@ The rendered bundle's §6 Inter-Quarter Events table may carry a `Content` colum
 
 Emit a label entry with exactly three fields:
 
-- `lesson_text` — the verbatim lesson string, copied from `predictor_lessons[j]` or `global_lessons[i].lesson` with NO paraphrasing
+- `lesson_text` — the verbatim lesson body (clean — no `L#` prefix or scope tag)
 - `label` — strictly one of `"confirmed"` / `"contradicted"` / `"irrelevant"` (lowercase only)
   - `confirmed`: the current bundle independently shows the lesson's mechanism is present
   - `contradicted`: the current bundle shows evidence of the *opposite*
@@ -72,8 +65,6 @@ Emit a label entry with exactly three fields:
 
 **Citation rule (STRUCTURAL — validator-enforced)**: every `key_drivers[i]` MUST include `cites_lesson_indices: list[int]` (may be empty `[]`). Each integer references a position in your `lesson_labels[]` array. You may cite a lesson ONLY if its `label == "confirmed"`. The validator rejects citation of `contradicted` or `irrelevant` labels.
 
-**Empty case**: if `bundle.learning_context.ticker_lessons` and `bundle.learning_context.global_lessons` are both empty, emit `"lesson_labels": []` and ensure every `cites_lesson_indices` is `[]`. Do not omit the field.
-
 **`analysis` field constraint**: your `analysis` free-text must not contain the verbatim normalized `lesson_text` of any lesson whose label is `contradicted` or `irrelevant` (for lesson_texts ≥30 chars). You may paraphrase or omit — not quote. The validator performs a substring check.
 
 **Example** (shape only — do NOT copy phrasings; label based on YOUR current bundle):
@@ -81,12 +72,12 @@ Emit a label entry with exactly three fields:
 ```json
 "lesson_labels": [
   {
-    "lesson_text": "<first labeled lesson from learning_context, verbatim>",
+    "lesson_text": "<verbatim body from L1 in ## Lessons To Label>",
     "label": "irrelevant",
     "bundle_evidence": "no relevant evidence"
   },
   {
-    "lesson_text": "<second labeled lesson, verbatim>",
+    "lesson_text": "<verbatim body from L2 in ## Lessons To Label>",
     "label": "confirmed",
     "bundle_evidence": "<1-sentence citation from THIS quarter's bundle>"
   }
@@ -152,7 +143,7 @@ Write `RESULT_PATH` as a single JSON object with these fields:
 
 **`key_drivers`** — 1-3 items. Each has `driver` (short name), `direction` (`long`/`short`), `evidence` (sourced from bundle), and **`cites_lesson_indices: list[int]`** (required, may be `[]`). Each integer in `cites_lesson_indices` is a position in `lesson_labels[]`; the cited position MUST have `label == "confirmed"` (validator rejects otherwise). A driver with `cites_lesson_indices: []` is purely bundle-derived.
 
-**`lesson_labels`** — required, array (may be `[]` only when `bundle.learning_context.ticker_lessons` and `global_lessons` are both empty). One entry per lesson rendered in `bundle.learning_context` per §Phase 0. Schema: `{lesson_text, label, bundle_evidence}`. Only lessons with `label == "confirmed"` may be cited via `cites_lesson_indices`.
+**`lesson_labels`** — required, array (may be `[]` only when `## Lessons To Label` is absent or has zero L# markers). One entry per L# marker in the rendered `## Lessons To Label` section, in marker order. Schema: `{lesson_text, label, bundle_evidence}`. Only lessons with `label == "confirmed"` may be cited via `cites_lesson_indices`.
 
 **`data_gaps`** — 0+ items. Each has `gap` (what is missing and what information would resolve it). Optional but encouraged.
 

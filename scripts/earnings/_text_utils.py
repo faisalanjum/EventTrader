@@ -7,6 +7,8 @@ depending on the other.
 """
 from __future__ import annotations
 
+from typing import Iterator
+
 
 def _normalize_lesson_text(s: str) -> str:
     """Whitespace-collapse + strip + case-fold for stable comparison.
@@ -22,3 +24,35 @@ def _normalize_lesson_text(s: str) -> str:
     .lower(). See .claude/plans/learner.md Appendix B §5.3.
     """
     return " ".join((s or "").strip().split()).lower()
+
+
+def iter_labeled_lessons(learning_ctx: dict) -> Iterator[tuple[int, str, dict, str]]:
+    """Yield (n, scope, entry, body) for each labeled lesson in canonical
+    render order — single source of truth for the L# numbering used by
+    BOTH renderer/lessons.py (rendered ## Lessons To Label) AND
+    earnings_orchestrator.build_evidence_source_catalog (#S10.lesson.L#).
+
+    Walk order (must not change without updating both call sites):
+      1. ticker_lessons[i] in array order, walking predictor_lessons[j]
+         in array order. scope = "ticker".
+      2. global_lessons grouped by scope, in fixed order:
+         "sector" → "macro" → "cross_ticker".
+
+    Skips empty / non-string lesson bodies — only `n += 1` when a real
+    body is yielded.
+    """
+    n = 0
+    for tl in learning_ctx.get("ticker_lessons") or []:
+        for pl in tl.get("predictor_lessons") or []:
+            if isinstance(pl, str) and pl.strip():
+                n += 1
+                yield (n, "ticker", tl, pl)
+    by_scope: dict[str, list[dict]] = {"sector": [], "macro": [], "cross_ticker": []}
+    for entry in learning_ctx.get("global_lessons") or []:
+        by_scope.setdefault(entry.get("scope"), []).append(entry)
+    for scope in ("sector", "macro", "cross_ticker"):
+        for entry in by_scope.get(scope, []):
+            body = entry.get("lesson", "")
+            if isinstance(body, str) and body.strip():
+                n += 1
+                yield (n, scope, entry, body)

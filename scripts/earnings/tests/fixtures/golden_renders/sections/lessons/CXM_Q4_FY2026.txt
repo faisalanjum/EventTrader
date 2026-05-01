@@ -1,11 +1,23 @@
 ## Prior Lessons (from learner)
 
-### Sector Lessons (2 entries)
+## Lessons To Label (verbatim, in order)
 
-- [sector:Technology] (AVGO) In the 2023-24 semiconductor reaction regime, same-session peer returns bifurcate sharply by AI-exposure when a large-cap semi prints a beat-and-raise with explicit AI-segment acceleration: AI-infrastructure names (accelerators, HBM, AI networking) move sympathetically while WFE and analog/legacy-compute names can go flat-to-negative on the same tape. Treat 'semi sector peers' as two decoupled clusters (AI-levered vs ex-AI) when sizing read-through reactions.
-- [sector:Technology] (AVGO) In the 2023+ hyperscaler-AI-capex regime, semiconductor prints are graded on the composition of forward revenue, not the headline guide delta. When AI-exposed lines are guided strong but ex-AI semis (broadband/storage/wireless/industrial) are flat-to-negative YoY, the AI narrative is already priced and the marginal information is the ex-AI deterioration — expect multiple compression on names where AI does not yet dominate the mix.
+L1. [sector: Technology]
+In the 2023-24 semiconductor reaction regime, same-session peer returns bifurcate sharply by AI-exposure when a large-cap semi prints a beat-and-raise with explicit AI-segment acceleration: AI-infrastructure names (accelerators, HBM, AI networking) move sympathetically while WFE and analog/legacy-compute names can go flat-to-negative on the same tape. Treat 'semi sector peers' as two decoupled clusters (AI-levered vs ex-AI) when sizing read-through reactions.
 
-### Macro Lessons (2 entries)
+L2. [sector: Technology]
+In the 2023+ hyperscaler-AI-capex regime, semiconductor prints are graded on the composition of forward revenue, not the headline guide delta. When AI-exposed lines are guided strong but ex-AI semis (broadband/storage/wireless/industrial) are flat-to-negative YoY, the AI narrative is already priced and the marginal information is the ex-AI deterioration — expect multiple compression on names where AI does not yet dominate the mix.
 
-- [macro] (AVGO) When VIX is below 13 and SPY is within 3% of a rolling 52-week high on the session following an earnings catalyst, the tape ASYMMETRICALLY amplifies positive surprises (bullish tape compounds the fundamental signal by ~30-50bps vs a neutral tape) but does NOT compound negative surprises to the same degree — factor this tape asymmetry into magnitude ranges rather than treating low-VIX as uniformly supportive.
-- [macro] (AVGO) When a single-stock drawdown of ≥5% occurs on a flat-to-positive sector tape with zero sell-side downgrades and broadly raised price targets (as on AVGO Sept 1, 2023), the move is positioning-driven (crowded-long unwind / profit-taking on a pre-print run-up), not a fundamental re-rating — slow or bullish sell-side reaction is NOT a leading indicator of next-session mean-reversion support and should not be used to narrow downside ranges.
+L3. [macro]
+When VIX is below 13 and SPY is within 3% of a rolling 52-week high on the session following an earnings catalyst, the tape ASYMMETRICALLY amplifies positive surprises (bullish tape compounds the fundamental signal by ~30-50bps vs a neutral tape) but does NOT compound negative surprises to the same degree — factor this tape asymmetry into magnitude ranges rather than treating low-VIX as uniformly supportive.
+
+L4. [macro]
+When a single-stock drawdown of ≥5% occurs on a flat-to-positive sector tape with zero sell-side downgrades and broadly raised price targets (as on AVGO Sept 1, 2023), the move is positioning-driven (crowded-long unwind / profit-taking on a pre-print run-up), not a fundamental re-rating — slow or bullish sell-side reaction is NOT a leading indicator of next-session mean-reversion support and should not be used to narrow downside ranges.
+
+## Context-Only (not labeled)
+
+### Global lesson source events
+- L1 sector — source: AVGO Q4_FY2023
+- L2 sector — source: AVGO Q3_FY2023
+- L3 macro — source: AVGO Q4_FY2023
+- L4 macro — source: AVGO Q3_FY2023

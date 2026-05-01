@@ -572,12 +572,13 @@ def build_evidence_source_catalog(bundle: dict[str, Any]) -> list[str]:
             else:
                 catalog.append(f"{prefix}#S8.macro.{bucket}[{i}]")
 
-    # Lesson markers
+    # Lesson markers (U45+U66): flat L1..Ln matching renderer's
+    # ## Lessons To Label section. Both walks share iter_labeled_lessons
+    # in _text_utils so numbering can never drift.
+    from scripts.earnings._text_utils import iter_labeled_lessons
     lc = bundle.get("learning_context") or {}
-    for i, _ in enumerate(lc.get("ticker_lessons") or []):
-        catalog.append(f"{prefix}#S10.lesson.L{i+1}")
-    for i, _ in enumerate(lc.get("global_lessons") or []):
-        catalog.append(f"{prefix}#S10.global_lesson.G{i+1}")
+    for n, _scope, _entry, _body in iter_labeled_lessons(lc):
+        catalog.append(f"{prefix}#S10.lesson.L{n}")
 
     # Preserve render order (not sorted). Dedupe first-seen-wins so
     # repeats from cross-walks don't duplicate but the catalog still

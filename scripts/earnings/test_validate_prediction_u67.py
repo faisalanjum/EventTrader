@@ -369,6 +369,20 @@ class FixtureAnchorsCoverageTests(unittest.TestCase):
         self.assertIn("if not prediction_validated:", src,
                       "quarantine block must be gated on prediction_validated")
 
+    def test_catalog_lesson_anchors_match_render_order_count(self):
+        """U45+U66 / U67 cross-consistency: the catalog's #S10.lesson.L# count
+        MUST equal the render order count from _render_learning_context.
+        Both call sites use iter_labeled_lessons; this test guards against
+        drift if either is refactored independently."""
+        from earnings_orchestrator import _render_learning_context
+        _, ordered = _render_learning_context(self.bundle.get("learning_context") or {})
+        catalog_l_count = sum(1 for s in self.catalog if "#S10.lesson.L" in s)
+        self.assertEqual(
+            catalog_l_count, len(ordered),
+            f"catalog has {catalog_l_count} S10.lesson anchors, "
+            f"renderer ordered has {len(ordered)} items — must match"
+        )
+
     def test_catalog_size_reflects_real_density(self):
         # AVGO Q4: 73 events + 30 guidance + macro headlines + financials + peers + lessons
         # baseline ≈ 100+ anchors. If we still land at ~27, the schema-path bug regressed.
