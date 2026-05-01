@@ -39,10 +39,30 @@ WHERE r.created > $window_start
   AND r.created < $pit_cutoff
   AND r.items CONTAINS 'Item 2.02'
 
+// U22a: per-peer most-recent periodic (10-Q/10-K) with U64 gate-only PIT masking.
+// Placed BEFORE OPTIONAL MATCH (n:News) so it runs once per (peer, r), not once
+// per news row. Dual gate (q.created <= r.created AND q.created <= $pit_cutoff)
+// hides accession+form_type symmetrically when post-PIT to prevent leak.
+OPTIONAL CALL (r, peer) {
+  MATCH (q:Report)-[:PRIMARY_FILER]->(peer)
+  WHERE q.formType IN ['10-Q', '10-K']
+    AND q.periodOfReport IS NOT NULL
+    AND date(q.periodOfReport) < date(datetime(r.created))
+  WITH q, r ORDER BY q.periodOfReport DESC LIMIT 1
+  WITH q,
+       (q.created IS NOT NULL
+        AND datetime(q.created) <= datetime(r.created)
+        AND datetime(q.created) <= datetime($pit_cutoff)) AS pit_visible
+  RETURN
+    CASE WHEN pit_visible THEN q.accessionNo END AS accession_periodic,
+    CASE WHEN pit_visible THEN q.formType END AS form_type_periodic
+}
+
 OPTIONAL MATCH (n:News)-[:INFLUENCES]->(peer)
 WHERE datetime(n.created) >= datetime(r.created) - duration('PT18H')
   AND toString(n.created) < $pit_cutoff
 WITH target, ind, peer, r, pf, n,
+     accession_periodic, form_type_periodic,
      CASE WHEN n IS NOT NULL THEN apoc.convert.fromJsonList(n.channels) ELSE [] END AS chList
 WHERE n IS NULL OR ANY(ch IN chList WHERE ch IN ['Earnings Beats', 'Earnings Misses', 'Earnings', 'Guidance'])
 
@@ -56,6 +76,10 @@ WITH ind.name AS industry,
      pf.session_stock AS session_stock,
      pf.daily_sector AS daily_sector, pf.daily_macro AS daily_macro,
      pf.hourly_sector AS hourly_sector, pf.hourly_macro AS hourly_macro,
+     pf.session_sector AS session_sector,
+     pf.session_macro AS session_macro,
+     r.isAmendment AS is_amendment,
+     accession_periodic, form_type_periodic,
      collect(DISTINCT {
        date: toString(n.created),
        title: n.title,
@@ -68,6 +92,9 @@ RETURN industry, ticker, name, mkt_cap, filed, session, accession, period_of_rep
        returns_schedule, fy_end_month,
        daily_stock, hourly_stock, session_stock,
        daily_sector, daily_macro, hourly_sector, hourly_macro,
+       session_sector, session_macro,
+       is_amendment,
+       accession_periodic, form_type_periodic,
        raw_headlines
 """
 
@@ -111,6 +138,61 @@ def _parse_dt_for_pit(ts_str):
     if s.endswith('Z'):
         s = s[:-1] + '+00:00'
     return datetime.fromisoformat(s)
+
+
+def _parse_pit_safe(ts_str):
+    """Defensive PIT parser — returns None on missing/malformed input.
+
+    Used by per-horizon fail-CLOSED PIT-nulling (U22a): a malformed
+    horizon-end string (e.g., "TBD" or "") must NOT crash the builder;
+    treat as missing → that horizon's cells get nulled.
+    """
+    if not ts_str:
+        return None
+    try:
+        return _parse_dt_for_pit(ts_str)
+    except (ValueError, TypeError):
+        return None
+
+
+def _extract_bz_id(news_id):
+    """Parse Benzinga numeric id from `bzNews_<digits>` prefix.
+
+    Returns None for unrecognized format. 100% of News.id values in
+    production match `bzNews_<digits>` (verified 2026-05-01 probe);
+    defensive only for upstream drift.
+    """
+    if not isinstance(news_id, str) or not news_id.startswith('bzNews_'):
+        return None
+    suffix = news_id[len('bzNews_'):]
+    return suffix if suffix.isdigit() else None
+
+
+def _adj(stk, idx):
+    """Stock-minus-benchmark adjusted return.
+
+    Builder uses this to compute best_*_pct from ADJ values (U23). Bundle
+    JSON stores RAW returns (pf.daily_macro = SPY's day return, NOT pre-
+    adjusted — verified 2026-05-01 probe); the renderer subtracts at render
+    time for the displayed Sector-adj/Macro-adj cells.
+    """
+    if stk is None or idx is None:
+        return None
+    try:
+        return float(stk) - float(idx)
+    except (TypeError, ValueError):
+        return None
+
+
+def _max_or_none(*vals):
+    """Math max across non-None values; None when all are None.
+
+    U23 invariant: never returns 0-artifact. If all inputs are None we
+    return None (signals "no data") rather than 0 (which would falsely
+    suggest a flat-zero best horizon).
+    """
+    nn = [v for v in vals if v is not None]
+    return max(nn) if nn else None
 
 
 def _pick_best_headlines(raw_headlines: list[dict]) -> list[dict]:
@@ -219,8 +301,12 @@ def build_peer_earnings_snapshot(ticker: str, pit_cutoff: str,
                         reverse=True)[:top_n]
 
         peers = []
+        summary_gaps = []  # U22a: peers excluded by fail-CLOSED returns_schedule
         for row in ranked:
             headlines, coverage = _pick_best_headlines(row.get('raw_headlines', []))
+            # U22a: surface clean bz_id per headline (parsed from bzNews_<digits>)
+            for h in headlines:
+                h['bz_id'] = _extract_bz_id(h.get('news_id'))
 
             # PIT-safe return nulling using exact returns_schedule timestamps.
             # Same approach as _build_forward_returns() in warmup_cache.py:
@@ -232,24 +318,62 @@ def build_peer_earnings_snapshot(ticker: str, pit_cutoff: str,
             daily_macro = row.get('daily_macro')
             hourly_sector = row.get('hourly_sector')
             hourly_macro = row.get('hourly_macro')
+            session_sector = row.get('session_sector')
+            session_macro = row.get('session_macro')
+            is_amendment = row.get('is_amendment')
+            accession_periodic = row.get('accession_periodic')
+            form_type_periodic = row.get('form_type_periodic')
 
             rs = _parse_returns_schedule(row.get('returns_schedule'))
             if rs:
+                # U22a per-horizon fail-CLOSED: missing/malformed horizon end
+                # OR end past PIT → null that horizon's three cells.
                 pit_dt = _parse_dt_for_pit(pit_cutoff)
-                if rs.get('daily') and _parse_dt_for_pit(rs['daily']) > pit_dt:
+                daily_end = _parse_pit_safe(rs.get('daily'))
+                if daily_end is None or daily_end > pit_dt:
                     daily = None
                     daily_sector = None
                     daily_macro = None
-                if rs.get('session') and _parse_dt_for_pit(rs['session']) > pit_dt:
+                session_end = _parse_pit_safe(rs.get('session'))
+                if session_end is None or session_end > pit_dt:
                     session_ret = None
-                if rs.get('hourly') and _parse_dt_for_pit(rs['hourly']) > pit_dt:
+                    session_sector = None
+                    session_macro = None
+                hourly_end = _parse_pit_safe(rs.get('hourly'))
+                if hourly_end is None or hourly_end > pit_dt:
                     hourly = None
                     hourly_sector = None
                     hourly_macro = None
+            else:
+                # U22a whole-schedule fail-CLOSED: missing/malformed → null all
+                # 9 cells, keep peer in list with summary.gaps entry for visibility.
+                daily = session_ret = hourly = None
+                daily_sector = daily_macro = None
+                session_sector = session_macro = None
+                hourly_sector = hourly_macro = None
+                summary_gaps.append({
+                    'type': 'missing_returns_schedule',
+                    'peer_ticker': row['ticker'],
+                    'peer_accession': row.get('accession'),
+                })
 
-            # Best available horizon for context (daily > hourly)
-            best_sector = daily_sector if daily_sector is not None else hourly_sector
-            best_macro = daily_macro if daily_macro is not None else hourly_macro
+            # U23: best_*_pct = math max across non-null ADJ horizons (stock-minus-
+            # benchmark). Bundle stores RAW pf.* values; renderer subtracts at render
+            # time for displayed Sector-adj/Macro-adj cells. Builder pre-computes
+            # best_* HERE for predictor convenience (also consumed by CLI render_text).
+            d_sec_adj = _adj(daily, daily_sector)
+            s_sec_adj = _adj(session_ret, session_sector)
+            h_sec_adj = _adj(hourly, hourly_sector)
+            d_mac_adj = _adj(daily, daily_macro)
+            s_mac_adj = _adj(session_ret, session_macro)
+            h_mac_adj = _adj(hourly, hourly_macro)
+            best_sector = _max_or_none(d_sec_adj, s_sec_adj, h_sec_adj)
+            best_macro = _max_or_none(d_mac_adj, s_mac_adj, h_mac_adj)
+
+            # Pass-8 minimization: keep context_horizon at original prefer-daily-fallback
+            # semantic. Decoupled from best_*_pct (which now uses math-max ADJ);
+            # context_horizon flags "did we have daily-window data" — independent meaning.
+            # Renderer doesn't read this; CLI render_text continues to use it.
             context_horizon = 'daily' if daily_sector is not None else ('hourly' if hourly_sector is not None else None)
 
             peers.append({
@@ -267,10 +391,15 @@ def build_peer_earnings_snapshot(ticker: str, pit_cutoff: str,
                 'daily_macro_pct': daily_macro,
                 'hourly_sector_pct': hourly_sector,
                 'hourly_macro_pct': hourly_macro,
+                'session_sector_pct': session_sector,
+                'session_macro_pct': session_macro,
                 'best_sector_pct': best_sector,
                 'best_macro_pct': best_macro,
                 'context_horizon': context_horizon,
                 'fy_end_month': row.get('fy_end_month'),
+                'is_amendment': is_amendment,
+                'accession_periodic': accession_periodic,
+                'form_type_periodic': form_type_periodic,
                 'headlines': headlines,
                 'headline_coverage': coverage,
             })
@@ -280,6 +409,14 @@ def build_peer_earnings_snapshot(ticker: str, pit_cutoff: str,
 
         unique_peer_tickers = list(dict.fromkeys(p['ticker'] for p in peers))
 
+        summary_dict = {
+            'total_peers': len(unique_peer_tickers),
+            'total_filings': len(peers),
+            'peer_tickers': unique_peer_tickers,
+        }
+        if summary_gaps:
+            summary_dict['gaps'] = summary_gaps
+
         packet = {
             'schema_version': 'peer_earnings_snapshot.v1',
             'ticker': ticker,
@@ -287,11 +424,7 @@ def build_peer_earnings_snapshot(ticker: str, pit_cutoff: str,
             'window_start': window_start,
             'industry': industry,
             'peers': peers,
-            'summary': {
-                'total_peers': len(unique_peer_tickers),
-                'total_filings': len(peers),
-                'peer_tickers': unique_peer_tickers,
-            },
+            'summary': summary_dict,
             'assembled_at': datetime.utcnow().isoformat() + 'Z'
         }
 

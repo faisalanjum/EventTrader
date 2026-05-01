@@ -2,25 +2,47 @@
 
 Industry: SoftwareApplication | Window: 2026-01-25 → 2026-03-11 | Peers: 5
 
-| Ticker | Name | MktCap | Filed | Accession | Period | Sess | DayStk% | AdjH% | SessStk% | AdjD% | Horizon |
-|---|---|---|---|---|---|---|---|---|---|---|---|
-| CRM | SALESFORCE INC | 311,819,000,000 | 2026-02-25 | 0001108524-26-000056 | 2026-02-25 | post_market | 3.91 | -4.31 | 1.57 | 4.46 | daily |
-| NOW | SERVICENOW INC | 208,199,000,000 | 2026-01-28 | 0001373715-26-000005 | 2026-01-28 | post_market | -9.92 | -7.93 | -12.59 | -9.67 | daily |
-| INTU | INTUIT INC | 162,030,000,000 | 2026-02-26 | 0000896878-26-000012 | 2026-02-26 | post_market | 3.8 | -5.94 | -1.2 | 4.27 | daily |
-| UBER | UBER TECHNOLOGIES INC | 157,086,000,000 | 2026-02-04 | 0001543151-26-000011 | 2026-01-30 | pre_market | -5.1 | -0.6 | 0.24 | -4.66 | daily |
-| SHOP | SHOPIFY INC | 151,705,000,000 | 2026-02-11 | 0001594805-26-000006 | 2026-02-11 | pre_market | -6.7 | 3.48 | -7.62 | -6.71 | daily |
+### CRM — filed 2026-02-25 (post_market), accession 0001108524-26-000056
 
-### Peer Headlines
+Stock move:    Day +3.91%   Sess +1.57%   Hour -4.09%
+Sector-adj:    Day +5.31%   Sess +2.05%   Hour -4.60%   Best +5.31%
+Macro-adj:     Day +4.46%   Sess +1.68%   Hour -4.31%   Best +4.46%
+Headlines:
+- [bz:50867468] 2026-02-25 Salesforce Q4 Adj. EPS $3.81 Beats $3.04 Estimate, Sales $11.201B Beat $11.175B Estimate.
+- [bz:50868034] 2026-02-25 Salesforce Sees Q1 GAAP EPS $1.77-$1.79 vs $1.79 Est.
 
-| Peer | Time | Title | Channels |
-|---|---|---|---|
-| CRM | 2026-02-25T16:12:42-05:00 | Salesforce Q4 Adj. EPS $3.81 Beats $3.04 Estimate, Sales $11.201B Beat $11.175B Estimate. | Earnings ; Earnings Beats |
-| CRM | 2026-02-25T16:16:33-05:00 | Salesforce Sees Q1 GAAP EPS $1.77-$1.79 vs $1.79 Est. | Guidance |
-| NOW | 2026-01-28T16:11:17-05:00 | ServiceNow Q4 Adj. EPS $0.92 Beats $0.88 Estimate, Sales $3.568B Beat $3.527B Estimate | Earnings ; Earnings Beats |
-| NOW | 2026-01-28T16:35:55-05:00 | ServiceNow Q4 Earnings: Revenue, EPS Beat Estimates — 'We Are Building The AI Control Tower For Business Reinvention' | Earnings ; Guidance |
-| INTU | 2026-02-26T16:00:42-05:00 | Intuit Q2 Adj. EPS $4.15 Beats $3.66 Estimate, Sales $4.651B Beat $4.532B Estimate | Earnings ; Earnings Beats |
-| INTU | 2026-02-26T16:01:21-05:00 | Intuit Affirms FY2026 Adj EPS Guidance of $22.98-$23.18 vs $23.20 Est; Affirms FY2026 Sales Guidance of $20.997B-$21.186B vs $21.216B Est | Guidance |
-| UBER | 2026-02-04T06:55:55-05:00 | Uber Technologies Q4 Adj. EPS $0.71 Misses $0.80 Estimate, Sales $14.366B Beat $14.320B Estimate | Earnings ; Earnings Beats ; Earnings Misses |
-| UBER | 2026-02-04T07:00:48-05:00 | Uber Technologies Q1 2026 Gross Bookings Expected To Grow 17% to 21% YoY, Reaching $52B to $53.5B, With An Estimated 4% Currency Tailwind | Guidance |
-| SHOP | 2026-02-12T11:11:20-05:00 | Shopify Posts Q4 Beat, Pressure On Stock Overdone: Analysts | Earnings ; Earnings Beats |
-| SHOP | 2026-02-11T07:13:01-05:00 | Shopify Expects Q1 Revenue To Grow At A Low-Thirties Percentage Rate Year-Over-Year | Guidance |
+### NOW — filed 2026-01-28 (post_market), accession 0001373715-26-000005 (FY ends Dec)
+
+Stock move:    Day -9.92%   Sess -12.59%   Hour -7.79%
+Sector-adj:    Day -8.34%   Sess -11.72%   Hour -8.19%   Best -8.19%
+Macro-adj:     Day -9.67%   Sess -12.66%   Hour -7.93%   Best -7.93%
+Headlines:
+- [bz:50209106] 2026-01-28 ServiceNow Q4 Adj. EPS $0.92 Beats $0.88 Estimate, Sales $3.568B Beat $3.527B Estimate
+- [bz:50210542] 2026-01-28 ServiceNow Q4 Earnings: Revenue, EPS Beat Estimates — 'We Are Building The AI Control Tower For Business Reinvention'
+
+### INTU — filed 2026-02-26 (post_market), accession 0000896878-26-000012 (FY ends Jul)
+
+Stock move:    Day +3.80%   Sess -1.20%   Hour -6.20%
+Sector-adj:    Day +5.43%   Sess +0.32%   Hour -5.85%   Best +5.43%
+Macro-adj:     Day +4.27%   Sess -0.41%   Hour -5.94%   Best +4.27%
+Headlines:
+- [bz:50908540] 2026-02-26 Intuit Q2 Adj. EPS $4.15 Beats $3.66 Estimate, Sales $4.651B Beat $4.532B Estimate
+- [bz:50908631] 2026-02-26 Intuit Affirms FY2026 Adj EPS Guidance of $22.98-$23.18 vs $23.20 Est; Affirms FY2026 Sales Guidance of $20.997B-$21.186B vs $21.216B Est
+
+### UBER — filed 2026-02-04 (pre_market), accession 0001543151-26-000011 (FY ends Dec)
+
+Stock move:    Day -5.10%   Sess +0.24%   Hour -0.75%
+Sector-adj:    Day -2.31%   Sess +1.70%   Hour -0.43%   Best +1.70%
+Macro-adj:     Day -4.66%   Sess +0.55%   Hour -0.60%   Best +0.55%
+Headlines:
+- [bz:50366770] 2026-02-04 Uber Technologies Q4 Adj. EPS $0.71 Misses $0.80 Estimate, Sales $14.366B Beat $14.320B Estimate
+- [bz:50367046] 2026-02-04 Uber Technologies Q1 2026 Gross Bookings Expected To Grow 17% to 21% YoY, Reaching $52B to $53.5B, With An Estimated 4% Currency Tailwind
+
+### SHOP — filed 2026-02-11 (pre_market), accession 0001594805-26-000006 (FY ends Dec)
+
+Stock move:    Day -6.70%   Sess -7.62%   Hour +3.49%
+Sector-adj:    Day -6.99%   Sess -8.57%   Hour +3.48%   Best +3.48%
+Macro-adj:     Day -6.71%   Sess -8.08%   Hour +3.48%   Best +3.48%
+Headlines:
+- [bz:50582724] 2026-02-12 Shopify Posts Q4 Beat, Pressure On Stock Overdone: Analysts
+- [bz:50537020] 2026-02-11 Shopify Expects Q1 Revenue To Grow At A Low-Thirties Percentage Rate Year-Over-Year

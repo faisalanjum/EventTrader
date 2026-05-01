@@ -500,28 +500,50 @@ Adjusted returns = stock − macro for each window (hourly / session / daily)
 
 Industry: Semiconductors | Window: 2023-07-17 → 2023-08-31 | Peers: 5
 
-| Ticker | Name | MktCap | Filed | Accession | Period | Sess | DayStk% | AdjH% | SessStk% | AdjD% | Horizon |
-|---|---|---|---|---|---|---|---|---|---|---|---|
-| NVDA | NVIDIA CORP | 3,179,780,000,000 | 2023-08-23 | 0001045810-23-000171 | 2023-08-23 | post_market | 0.08 | 2.53 | -0.48 | 1.39 | daily |
-| QCOM | QUALCOMM INC | 185,764,000,000 | 2023-08-02 | 0000804328-23-000042 | 2023-08-02 | post_market | -8.18 | -2.73 | -7.4 | -7.87 | daily |
-| AMD | ADVANCED MICRO DEVICES INC | 174,299,000,000 | 2023-08-01 | 0000002488-23-000135 | 2023-08-01 | post_market | -7.05 | -1.44 | -5.27 | -5.68 | daily |
-| TXN | TEXAS INSTRUMENTS INC | 164,199,000,000 | 2023-07-25 | 0000097476-23-000033 | 2023-07-25 | post_market | -5.4 | -3.91 | -4.8 | -5.43 | daily |
-| ADI | ANALOG DEVICES INC | 101,814,000,000 | 2023-08-23 | 0000006281-23-000177 | 2023-08-23 | pre_market | 0.45 | -3.99 | -0.05 | -0.62 | daily |
+### NVDA — filed 2023-08-23 (post_market), accession 0001045810-23-000171 (FY ends Jan)
 
-### Peer Headlines
+Stock move:    Day +0.08%   Sess -0.48%   Hour +2.91%
+Sector-adj:    Day +2.39%   Sess -0.47%   Hour +2.10%   Best +2.39%
+Macro-adj:     Day +1.39%   Sess -0.49%   Hour +2.53%   Best +2.53%
+Headlines:
+- [bz:34017757] 2023-08-24 Munster Says Nvidia's Q2 Triumph Outshines Apple's Glory Days, Q3 Guidance 'Lights-Out-Good'
+- [bz:34012887] 2023-08-23 Jensen Huang, Founder And CEO Of Nvidia Says "A New Computing Era Has Begun. Companies Worldwide Are Transitioning From General-Purpose To Accelerated Computing And Generative AI"
 
-| Peer | Time | Title | Channels |
-|---|---|---|---|
-| NVDA | 2023-08-24T03:02:02-04:00 | Munster Says Nvidia's Q2 Triumph Outshines Apple's Glory Days, Q3 Guidance 'Lights-Out-Good' | Earnings ; Earnings Beats |
-| NVDA | 2023-08-23T16:21:41-04:00 | Jensen Huang, Founder And CEO Of Nvidia Says "A New Computing Era Has Begun. Companies Worldwide Are Transitioning From General-Purpose To Accelerated Computing And Generative AI" | Guidance |
-| QCOM | 2023-08-02T16:01:13-04:00 | Qualcomm Q3 EPS $1.87 Beats $1.81 Estimate | Earnings |
-| QCOM | 2023-08-02T16:02:30-04:00 | Qualcomm Sees Q4 Adj. EPS $1.80-$2.00 vs $1.91 Est., Revenues $8.1B-$8.9B vs $8.7B Est. | Guidance |
-| AMD | 2023-08-01T16:16:03-04:00 | Advanced Micro Devices Q2 EPS $0.58 Beats $0.57 Estimate, Sales $5.36B Beat $5.32B Estimate | Earnings |
-| AMD | 2023-08-01T16:16:20-04:00 | AMD Sees Q3 2023 Revenue ~$5.7B +/- $300M Vs $5.82B Est | Guidance |
-| TXN | 2023-07-25T16:02:13-04:00 | Texas Instruments Q2 EPS $1.87 vs $2.45 Prior Year, Sales $4.53B Beat $4.37B Estimate | Earnings |
-| TXN | 2023-07-25T16:04:41-04:00 | Texas Instruments Expects Q3 Revenue Of $4.36B-$4.74B (Consensus $4.6B), EPS Of $1.68-$1.92 (Consensus $1.91) | Guidance |
-| ADI | 2023-08-23T07:01:00-04:00 | Analog Devices Q3 Adj EPS $2.49 Misses $2.52 Estimate, Sales $3.08B Miss $3.10B Estimate | Earnings |
-| ADI | 2023-08-23T07:06:28-04:00 | Analog Devices Expects Q4 Revenue of $2.70B, +/- $100M Vs $3B Est, Adj EPS $2.00, +/-$0.10 Vs $2.39 Est | Guidance |
+### QCOM — filed 2023-08-02 (post_market), accession 0000804328-23-000042 (FY ends Sep)
+
+Stock move:    Day -8.18%   Sess -7.40%   Hour -2.79%
+Sector-adj:    Day -7.77%   Sess -6.71%   Hour -2.60%   Best -2.60%
+Macro-adj:     Day -7.87%   Sess -6.86%   Hour -2.73%   Best -2.73%
+Headlines:
+- [bz:33530895] 2023-08-02 Qualcomm Q3 EPS $1.87 Beats $1.81 Estimate
+- [bz:33530956] 2023-08-02 Qualcomm Sees Q4 Adj. EPS $1.80-$2.00 vs $1.91 Est., Revenues $8.1B-$8.9B vs $8.7B Est.
+
+### AMD — filed 2023-08-01 (post_market), accession 0000002488-23-000135 (FY ends Dec)
+
+Stock move:    Day -7.05%   Sess -5.27%   Hour -1.67%
+Sector-adj:    Day -4.58%   Sess -3.97%   Hour -1.64%   Best -1.64%
+Macro-adj:     Day -5.68%   Sess -4.44%   Hour -1.44%   Best -1.44%
+Headlines:
+- [bz:33504547] 2023-08-01 Advanced Micro Devices Q2 EPS $0.58 Beats $0.57 Estimate, Sales $5.36B Beat $5.32B Estimate
+- [bz:33504559] 2023-08-01 AMD Sees Q3 2023 Revenue ~$5.7B +/- $300M Vs $5.82B Est
+
+### TXN — filed 2023-07-25 (post_market), accession 0000097476-23-000033 (FY ends Dec)
+
+Stock move:    Day -5.40%   Sess -4.80%   Hour -3.76%
+Sector-adj:    Day -4.06%   Sess -3.45%   Hour -3.60%   Best -3.45%
+Macro-adj:     Day -5.43%   Sess -4.55%   Hour -3.91%   Best -3.91%
+Headlines:
+- [bz:33377642] 2023-07-25 Texas Instruments Q2 EPS $1.87 vs $2.45 Prior Year, Sales $4.53B Beat $4.37B Estimate
+- [bz:33377702] 2023-07-25 Texas Instruments Expects Q3 Revenue Of $4.36B-$4.74B (Consensus $4.6B), EPS Of $1.68-$1.92 (Consensus $1.91)
+
+### ADI — filed 2023-08-23 (pre_market), accession 0000006281-23-000177 (FY ends Nov)
+
+Stock move:    Day +0.45%   Sess -0.05%   Hour -4.07%
+Sector-adj:    Day -1.39%   Sess +0.12%   Hour -3.58%   Best +0.12%
+Macro-adj:     Day -0.62%   Sess -0.10%   Hour -3.99%   Best -0.10%
+Headlines:
+- [bz:34000535] 2023-08-23 Analog Devices Q3 Adj EPS $2.49 Misses $2.52 Estimate, Sales $3.08B Miss $3.10B Estimate
+- [bz:34000670] 2023-08-23 Analog Devices Expects Q4 Revenue of $2.70B, +/- $100M Vs $3B Est, Adj EPS $2.00, +/-$0.10 Vs $2.39 Est
 
 ## 8. Macro Environment
 

@@ -10,6 +10,7 @@ Run:
 """
 from __future__ import annotations
 
+import json
 import sys
 import unittest
 from pathlib import Path
@@ -399,6 +400,53 @@ class FixtureAnchorsCoverageTests(unittest.TestCase):
             self.catalog[0].endswith("#header"),
             f"first catalog entry is {self.catalog[0]!r}; expected header. "
             f"Likely sorted() snuck back in."
+        )
+
+
+class U22PeerCatalogRegression(unittest.TestCase):
+    """U22+U22a regression: ensure peer anchors stay stable post-renderer-rewrite.
+
+    The aggregator at earnings_orchestrator.py:538-543 emits one
+    `#S7.peer.<TICKER>` anchor per peer. U22's renderer rewrite + U22a's
+    schema additions must NOT alter catalog generation — only the rendered
+    text shape changes.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        bundle_path = Path(__file__).parent / "tests/fixtures/golden_bundles/AVGO_Q4_FY2023.json"
+        with open(bundle_path) as f:
+            cls.bundle = json.load(f)
+        cls.catalog = build_evidence_source_catalog(cls.bundle)
+        cls.peer_anchors = [a for a in cls.catalog if "#S7.peer." in a]
+        cls.peers = (cls.bundle.get("peer_earnings_snapshot") or {}).get("peers") or []
+
+    def test_catalog_emits_one_anchor_per_peer_after_option_d_rewrite(self):
+        """Anchor count = peer count. AVGO Q4 has 5 peers."""
+        self.assertEqual(
+            len(self.peer_anchors), len(self.peers),
+            f"expected {len(self.peers)} peer anchors, got {len(self.peer_anchors)}"
+        )
+
+    def test_catalog_preserves_peer_iteration_order(self):
+        """Catalog peer-anchor order matches builder peer-list order (mkt_cap desc).
+
+        Renderer iterates same list order; alignment ensures predictor citations
+        remain set-membership valid even if the predictor copies an anchor by
+        relative position.
+        """
+        catalog_tickers = [a.split("#S7.peer.")[1] for a in self.peer_anchors]
+        builder_tickers = [(p.get("ticker") or "").upper() for p in self.peers]
+        self.assertEqual(catalog_tickers, builder_tickers,
+                         "catalog peer-anchor order must match builder peer-list order")
+
+    def test_catalog_has_no_per_headline_anchors_per_user_decision(self):
+        """User decision (2026-05-01): keep #S7.peer.<TICKER> catch-all only;
+        do NOT add finer #S7.peer.<TICKER>.headline.bz:<id> anchors yet."""
+        per_headline_anchors = [a for a in self.catalog if ".headline.bz:" in a]
+        self.assertEqual(
+            len(per_headline_anchors), 0,
+            f"expected zero per-headline anchors; got {len(per_headline_anchors)}"
         )
 
 

@@ -525,28 +525,50 @@ Adjusted returns = stock − macro for each window (hourly / session / daily)
 
 Industry: Semiconductors | Window: 2023-10-23 → 2023-12-07 | Peers: 5
 
-| Ticker | Name | MktCap | Filed | Accession | Period | Sess | DayStk% | AdjH% | SessStk% | AdjD% | Horizon |
-|---|---|---|---|---|---|---|---|---|---|---|---|
-| NVDA | NVIDIA CORP | 3,179,780,000,000 | 2023-11-21 | 0001045810-23-000225 | 2023-11-21 | post_market | -2.46 | 3.02 | 3.99 | -2.84 | daily |
-| QCOM | QUALCOMM INC | 185,764,000,000 | 2023-11-01 | 0000804328-23-000054 | 2023-11-01 | post_market | 5.65 | -0.1 | 1.44 | 3.74 | daily |
-| AMD | ADVANCED MICRO DEVICES INC | 174,299,000,000 | 2023-10-31 | 0000002488-23-000192 | 2023-10-31 | post_market | 9.72 | 2.78 | 6.38 | 8.63 | daily |
-| TXN | TEXAS INSTRUMENTS INC | 164,199,000,000 | 2023-10-24 | 0000097476-23-000039 | 2023-10-24 | post_market | -3.45 | 0.01 | 1.77 | -2.11 | daily |
-| ADI | ANALOG DEVICES INC | 101,814,000,000 | 2023-11-21 | 0000006281-23-000200 | 2023-11-21 | pre_market | -1.44 | -2.08 | -1.52 | -1.22 | daily |
+### NVDA — filed 2023-11-21 (post_market), accession 0001045810-23-000225 (FY ends Jan)
 
-### Peer Headlines
+Stock move:    Day -2.46%   Sess +3.99%   Hour +3.18%
+Sector-adj:    Day -2.91%   Sess +2.31%   Hour +2.70%   Best +2.70%
+Macro-adj:     Day -2.84%   Sess +3.25%   Hour +3.02%   Best +3.25%
+Headlines:
+- [bz:35906540] 2023-11-21 NVIDIA Q3 Adj $4.02 Beats $3.36 Estimate, Sales $18.12B Beat $16.12B Estimate
+- [bz:35906555] 2023-11-21 NVIDIA Reports Q3 Data Center Revenue $14.51B, Up 41% QoQ, Up 279% YoY
 
-| Peer | Time | Title | Channels |
-|---|---|---|---|
-| NVDA | 2023-11-21T16:20:39-05:00 | NVIDIA Q3 Adj $4.02 Beats $3.36 Estimate, Sales $18.12B Beat $16.12B Estimate | Earnings ; Earnings Beats |
-| NVDA | 2023-11-21T16:21:42-05:00 | NVIDIA Reports Q3 Data Center Revenue $14.51B, Up 41% QoQ, Up 279% YoY | Guidance |
-| QCOM | 2023-11-01T02:15:50-04:00 | QUALCOMM Likely To Report Lower Q4 Earnings; Here's A Look At Recent Price Target Changes By The Most Accurate Analysts | Earnings |
-| QCOM | 2023-11-01T16:05:07-04:00 | Qualcomm Sees Q1 Adj. EPS $2.25-$2.45 vs $2.10 Est.; Revenues $9.1B-$9.9B vs $8.67B Est. | Guidance |
-| AMD | 2023-11-01T06:40:30-04:00 | Why AMD Stock Is Pulling Back In Premarket Today | Earnings ; Earnings Beats |
-| AMD | 2023-10-31T16:17:54-04:00 | AMD: 'In the fourth quarter, we expect to see strong growth in Data Center and continued momentum in Client, partially offset by lower sales in the Gaming segment and additional softening of demand in the embedded markets.' | Guidance |
-| TXN | 2023-10-24T16:15:44-04:00 | Texas Instruments Q3 GAAP EPS $1.85, Sales $4.53B Miss $4.57B Estimate | Earnings ; Earnings Beats |
-| TXN | 2023-10-24T16:17:12-04:00 | Texas Instruments Sees Q4 Revenue $3.93B-$4.27B vs $4.49B Est., EPS $1.35-$1.57 | Guidance |
-| ADI | 2023-11-21T07:01:40-05:00 | Analog Devices Q4 Adj EPS $2.01 Beats $2.00 Estimate, Sales $2.72B Beat $2.70B Estimate | Earnings |
-| ADI | 2023-11-21T07:04:38-05:00 | Analog Devices Projects Q1 Revenue of $2.5B, +/- $100M Vs $2.68B Est, Adj EPS of $1.70, +/- $0.10 Vs $1.9 Est | Guidance |
+### QCOM — filed 2023-11-01 (post_market), accession 0000804328-23-000054 (FY ends Sep)
+
+Stock move:    Day +5.65%   Sess +1.44%   Hour +0.00%
+Sector-adj:    Day +3.95%   Sess +0.47%   Hour -0.06%   Best +3.95%
+Macro-adj:     Day +3.74%   Sess +0.23%   Hour -0.10%   Best +3.74%
+Headlines:
+- [bz:35529949] 2023-11-01 QUALCOMM Likely To Report Lower Q4 Earnings; Here's A Look At Recent Price Target Changes By The Most Accurate Analysts
+- [bz:35548407] 2023-11-01 Qualcomm Sees Q1 Adj. EPS $2.25-$2.45 vs $2.10 Est.; Revenues $9.1B-$9.9B vs $8.67B Est.
+
+### AMD — filed 2023-10-31 (post_market), accession 0000002488-23-000192 (FY ends Dec)
+
+Stock move:    Day +9.72%   Sess +6.38%   Hour +2.83%
+Sector-adj:    Day +7.81%   Sess +5.57%   Hour +2.89%   Best +7.81%
+Macro-adj:     Day +8.63%   Sess +6.02%   Hour +2.78%   Best +8.63%
+Headlines:
+- [bz:35532326] 2023-11-01 Why AMD Stock Is Pulling Back In Premarket Today
+- [bz:35524798] 2023-10-31 AMD: 'In the fourth quarter, we expect to see strong growth in Data Center and continued momentum in Client, partially offset by lower sales in the Gaming segment and additional softening of demand in the embedded markets.'
+
+### TXN — filed 2023-10-24 (post_market), accession 0000097476-23-000039 (FY ends Dec)
+
+Stock move:    Day -3.45%   Sess +1.77%   Hour -0.02%
+Sector-adj:    Day -2.27%   Sess +2.05%   Hour -0.41%   Best +2.05%
+Macro-adj:     Day -2.11%   Sess +2.32%   Hour +0.01%   Best +2.32%
+Headlines:
+- [bz:35403771] 2023-10-24 Texas Instruments Q3 GAAP EPS $1.85, Sales $4.53B Miss $4.57B Estimate
+- [bz:35403820] 2023-10-24 Texas Instruments Sees Q4 Revenue $3.93B-$4.27B vs $4.49B Est., EPS $1.35-$1.57
+
+### ADI — filed 2023-11-21 (pre_market), accession 0000006281-23-000200 (FY ends Nov)
+
+Stock move:    Day -1.44%   Sess -1.52%   Hour -2.15%
+Sector-adj:    Day -0.60%   Sess -1.30%   Hour -2.01%   Best -0.60%
+Macro-adj:     Day -1.22%   Sess -1.38%   Hour -2.08%   Best -1.22%
+Headlines:
+- [bz:35891163] 2023-11-21 Analog Devices Q4 Adj EPS $2.01 Beats $2.00 Estimate, Sales $2.72B Beat $2.70B Estimate
+- [bz:35891280] 2023-11-21 Analog Devices Projects Q1 Revenue of $2.5B, +/- $100M Vs $2.68B Est, Adj EPS of $1.70, +/- $0.10 Vs $1.9 Est
 
 ## 8. Macro Environment
 
