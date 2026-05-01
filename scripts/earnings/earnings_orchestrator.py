@@ -390,9 +390,15 @@ def get_quarter_dir(ticker: str, quarter_info: dict, save_dir: str | None = None
     Added 2026-04-17 per obsidian_thinking.md: context_bundle.{json,txt} are
     PROMOTED from events/{Q}/prediction/ up to events/{Q}/ (quarter root) so
     they are shared by predictor + learner + future readers.
+
+    U65 (2026-04-30): when ``save_dir`` is supplied, the quarter root IS
+    ``save_dir`` itself. Pre-U65 returned ``Path(save_dir).parent``, which
+    aliased to the shared parent (e.g. ``/tmp``) for any caller passing
+    ``--save-dir /tmp/smoke_<TICKER>`` and caused parallel runs to race
+    on ``/tmp/context_bundle.json``.
     """
     if save_dir:
-        return Path(save_dir).parent
+        return Path(save_dir)
     quarter_dir = quarter_info.get("quarter_label") or quarter_info["accession_8k"]
     return Path("earnings-analysis/Companies") / ticker.upper() / "events" / quarter_dir
 
