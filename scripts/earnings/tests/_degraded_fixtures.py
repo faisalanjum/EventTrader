@@ -25,7 +25,10 @@ def _minimal_bundle() -> dict:
     """Bare-minimum bundle that the renderer can process without crashing.
 
     All builder slots are None; renderer's [NO DATA] paths handle this.
-    learning_context is an empty skeleton; renderer omits §10.
+    learning_context is an empty skeleton; renderer emits §10 outer
+    "## Prior Lessons (from learner)" header + "No prior lessons available"
+    message (post bundle.py empty-case fix in 5f4864f), with no inner
+    `## Lessons To Label` section.
     """
     return {
         "schema_version": "prediction_bundle.v1",
@@ -103,7 +106,9 @@ def _no_ex991() -> dict:
 
 
 def _no_lessons() -> dict:
-    # §10 Prior Lessons is omitted because learning_context is empty
+    # §10 Prior Lessons renders the outer header + "No prior lessons available"
+    # message (since 5f4864f). The inner ## Lessons To Label section is absent,
+    # which is the cue the predictor uses to emit lesson_labels: [].
     return _minimal_bundle()   # already empty learning_context
 
 

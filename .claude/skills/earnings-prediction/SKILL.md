@@ -109,7 +109,7 @@ Write `RESULT_PATH` as a single JSON object with these fields:
   "expected_move_range_pct": [1.0, 3.0],
   "lesson_labels": [
     {
-      "lesson_text": "verbatim copy of a lesson from learning_context",
+      "lesson_text": "verbatim body from an L# block in ## Lessons To Label",
       "label": "irrelevant",
       "bundle_evidence": "no relevant evidence"
     }

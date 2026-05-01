@@ -53,3 +53,7 @@ Adjusted returns = stock − macro for each window (hourly / session / daily)
 ## 9. Reference
 
 [NO 8-K DATA]
+
+## Prior Lessons (from learner)
+
+No prior lessons available (first prediction for this ticker).

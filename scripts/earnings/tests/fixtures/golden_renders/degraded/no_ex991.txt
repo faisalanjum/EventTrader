@@ -38,3 +38,7 @@ Mode: historical | PIT cutoff: 2026-01-01T16:00:00-05:00
 Accession: 0000000000-00-000000 | Form: 8-K | Items: Item 2.02
 CIK: — | Periodic: — | Amendment: no
 Sections: 0 | Exhibits: —
+
+## Prior Lessons (from learner)
+
+No prior lessons available (first prediction for this ticker).
