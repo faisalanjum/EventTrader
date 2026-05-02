@@ -443,6 +443,22 @@ def _guidance_body(payload: dict[str, Any]) -> str:
 
 # ── Public render functions ──────────────────────────────────────────────
 
+def _audit_link(result_json_path: Path) -> str:
+    """Return cross-link block to raw section_audit.json if it exists alongside.
+
+    Empty string when no audit (pre-feature predictions, render-failure cases).
+    Audit JSON only — full audit.md sidecar rendering is deferred.
+    """
+    audit_json = result_json_path.with_name("section_audit.json")
+    if audit_json.exists():
+        return (
+            "\n\n## Section Audit\n\n"
+            "→ [section_audit.json](section_audit.json) — facts-only scratchpad: "
+            "per-section bullish/bearish signals, missing data, source IDs.\n"
+        )
+    return ""
+
+
 def render_prediction(json_path: Path, md_path: Path) -> None:
     """Render a prediction result.json to its result.md sidecar."""
     payload = _read_json(json_path)
@@ -457,7 +473,7 @@ def render_prediction(json_path: Path, md_path: Path) -> None:
         quarter=str(payload.get("quarter_label", "")),
         extras=extras,
     )
-    body = _prediction_body(payload, is_experiment=False)
+    body = _prediction_body(payload, is_experiment=False) + _audit_link(json_path)
     _write_md(md_path, fm + _READONLY_MARKER + "\n\n" + body + "\n")
 
 
@@ -504,7 +520,7 @@ def render_baseline_experiment(json_path: Path, md_path: Path) -> None:
         extras=extras,
         experiment_name="prediction_no_lessons",
     )
-    body = _prediction_body(payload, is_experiment=True)
+    body = _prediction_body(payload, is_experiment=True) + _audit_link(json_path)
     _write_md(md_path, fm + _READONLY_MARKER + "\n\n" + body + "\n")
 
 

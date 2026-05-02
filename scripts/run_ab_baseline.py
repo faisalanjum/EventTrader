@@ -100,16 +100,25 @@ def main():
         strip_learning_context(source_bundle, stripped_bundle, stripped_rendered)
         log.info("  Stripped bundle written: %s", stripped_bundle)
 
-        # Run predictor on stripped bundle (reuse existing if present — resume support)
+        # Run predictor on stripped bundle (reuse existing if present — resume support).
+        # Paired-existence predicate: resume only fires when BOTH result.json AND
+        # section_audit.json are present, so post-feature artifacts always come paired.
+        # Pre-feature baselines (result.json without audit) get re-predicted once to
+        # bring the corpus into a clean state.
         test_result_path = baseline_dir / "result.json"
+        section_audit_path = baseline_dir / "section_audit.json"
         baseline_session_id = None
-        if test_result_path.exists():
+        if test_result_path.exists() and section_audit_path.exists():
             log.info("  Reusing existing NO_LESSONS prediction (resume): %s", test_result_path)
         else:
+            if test_result_path.exists():
+                test_result_path.unlink()
+            if section_audit_path.exists():
+                section_audit_path.unlink()
             t0 = datetime.now()
             try:
                 _pred_result, baseline_session_id = run_predictor_via_sdk(
-                    stripped_bundle, stripped_rendered, test_result_path
+                    stripped_bundle, stripped_rendered, section_audit_path, test_result_path
                 )
             except Exception as e:
                 log.error("  Predictor SDK call failed: %s", e)

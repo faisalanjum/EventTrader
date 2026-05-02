@@ -20,7 +20,7 @@ Your primary obligation is to inspect everything in the bundle, reason hard, str
 
 ## Input
 
-Read `RENDERED_BUNDLE_PATH` for reasoning. Use `BUNDLE_PATH` when you need exact JSON field values (e.g., exact decimal precision for consensus or guidance numbers when the rendered version is rounded). Write your result to `RESULT_PATH`.
+Read `RENDERED_BUNDLE_PATH` for reasoning. Use `BUNDLE_PATH` when you need exact JSON field values (e.g., exact decimal precision for consensus or guidance numbers when the rendered version is rounded). Write your section audit to `SECTION_AUDIT_PATH` first, then write your result to `RESULT_PATH`.
 
 The rendered bundle's lessons section may carry an inline `learner_result: <path>` line under individual prior-quarter lessons, pointing to the previous learner's full `result.md` for that event. You MAY Read these files when the lesson body alone isn't enough to decide a label or ground a driver — for the prior learner's primary-driver call, what worked / what failed, and full evidence ledger. This is OPTIONAL; do not follow links by default.
 
@@ -86,6 +86,54 @@ Emit a label entry with exactly three fields:
   {"driver": "<bundle-derived driver>", "direction": "short", "evidence": "<bundle citation>", "cites_lesson_indices": []},
   {"driver": "<driver supported by lesson>", "direction": "short", "evidence": "<bundle citation>", "cites_lesson_indices": [1]}
 ]
+```
+
+## Phase 0.5 — Facts-Only Section Audit
+
+Before making the final directional call, write `SECTION_AUDIT_PATH` as JSON.
+
+**Order:** Phase 0 (lesson labels) → Phase 0.5 (this audit) → Phases 1–4 (key numbers, tensions, stress-test, call). Writing `SECTION_AUDIT_PATH` does not replace Phases 1–4.
+
+**The audit is fact-gathering only. It does NOT replace Phase 3 stress-testing.** Phase 3 must still independently build the strongest long case and the strongest short case against the full bundle, not just tally the audit's `bullish_signals` vs. `bearish_signals`.
+
+**Coverage:** Include one entry for every numbered rendered bundle section §2 through §9 when present. (The unnumbered `## Evidence Source IDs` catalog that appears immediately after the header is not audited.) If a section has no material content for this prediction, still include the entry with empty content arrays and a short `not_material_reason` string. Silent omission is not allowed.
+
+For each entry include:
+- `section`
+- `key_facts`
+- `bullish_signals`
+- `bearish_signals`
+- `missing_or_unclear`
+- `source_ids`
+- `not_material_reason` — required ONLY when the section has no material content (i.e., `key_facts`, `bullish_signals`, `bearish_signals`, AND `missing_or_unclear` are ALL empty arrays); omit this field otherwise. (`source_ids` is excluded from this test — a section may have catalog IDs available but nothing material to say about them.)
+
+Do NOT include `direction`, `confidence_score`, `expected_move_range_pct`, `final_call`, or any final prediction in `SECTION_AUDIT_PATH`.
+
+After writing `SECTION_AUDIT_PATH`, complete Phases 1–4 against the full bundle and write `RESULT_PATH`.
+
+**Suggested audit shape:**
+
+```json
+{
+  "sections": [
+    {
+      "section": "Results & Expectations",
+      "key_facts": [],
+      "bullish_signals": [],
+      "bearish_signals": [],
+      "missing_or_unclear": [],
+      "source_ids": []
+    },
+    {
+      "section": "Forward Guidance",
+      "key_facts": [],
+      "bullish_signals": [],
+      "bearish_signals": [],
+      "missing_or_unclear": [],
+      "source_ids": []
+    }
+  ]
+}
 ```
 
 ## Reasoning

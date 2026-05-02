@@ -462,3 +462,56 @@ def test_learning_render_global_observations_with_routing():
         assert "Global Observations (1)" in md
         assert "target_sector=Technology" in md
         assert "Quantified thematic tailwinds" in md
+
+
+# ── Audit cross-link tests (Step 8 verification) ────────────────────────
+
+def test_render_prediction_links_audit_when_audit_json_exists(tmp_path):
+    from result_md_renderer import render_prediction
+    json_path = tmp_path / "result.json"
+    json_path.write_text(json.dumps(_prediction_payload()))
+    (tmp_path / "section_audit.json").write_text("{}")
+    md_path = tmp_path / "result.md"
+    render_prediction(json_path, md_path)
+    md = md_path.read_text()
+    assert "[section_audit.json](section_audit.json)" in md
+    assert "## Section Audit" in md
+
+
+def test_render_prediction_no_link_when_no_audit(tmp_path):
+    from result_md_renderer import render_prediction
+    json_path = tmp_path / "result.json"
+    json_path.write_text(json.dumps(_prediction_payload()))
+    md_path = tmp_path / "result.md"
+    render_prediction(json_path, md_path)
+    assert "section_audit" not in md_path.read_text()
+
+
+def test_render_baseline_experiment_links_audit_when_present(tmp_path):
+    from result_md_renderer import render_baseline_experiment
+    json_path = tmp_path / "result.json"
+    json_path.write_text(json.dumps(_prediction_payload()))
+    (tmp_path / "section_audit.json").write_text("{}")
+    md_path = tmp_path / "result.md"
+    render_baseline_experiment(json_path, md_path)
+    assert "[section_audit.json](section_audit.json)" in md_path.read_text()
+
+
+def test_render_learning_never_links_audit(tmp_path):
+    from result_md_renderer import render_learning
+    json_path = tmp_path / "result.json"
+    json_path.write_text(json.dumps(_learning_payload()))
+    (tmp_path / "section_audit.json").write_text("{}")  # even if present
+    md_path = tmp_path / "result.md"
+    render_learning(json_path, md_path)
+    assert "section_audit" not in md_path.read_text()
+
+
+def test_render_guidance_never_links_audit(tmp_path):
+    from result_md_renderer import render_guidance
+    json_path = tmp_path / "result.json"
+    json_path.write_text(json.dumps({"ticker": "AVGO", "quarter_label": "Q1_FY2023"}))
+    (tmp_path / "section_audit.json").write_text("{}")
+    md_path = tmp_path / "result.md"
+    render_guidance(json_path, md_path)
+    assert "section_audit" not in md_path.read_text()

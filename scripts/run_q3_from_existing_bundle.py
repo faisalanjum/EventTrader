@@ -64,10 +64,18 @@ def main():
     if paths["result_path"].exists():
         log.info("Deleting stale prediction/result.json")
         paths["result_path"].unlink()
+    if paths["section_audit_path"].exists():
+        log.info("Deleting stale prediction/section_audit.json")
+        paths["section_audit_path"].unlink()
 
     log.info("Running predictor via SDK on existing bundle ...")
     t0 = datetime.now()
-    run_predictor_via_sdk(paths["bundle_path"], paths["rendered_path"], paths["result_path"])
+    run_predictor_via_sdk(
+        paths["bundle_path"],
+        paths["rendered_path"],
+        paths["section_audit_path"],
+        paths["result_path"],
+    )
     log.info("Predictor done in %.1fs", (datetime.now() - t0).total_seconds())
 
     if not paths["result_path"].exists():

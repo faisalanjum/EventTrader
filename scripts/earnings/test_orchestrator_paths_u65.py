@@ -88,6 +88,20 @@ class GetPredictionPathsBundleScopingTests(unittest.TestCase):
             Path("earnings-analysis/Companies/AVGO/events/Q4_FY2023/context_bundle.json"),
         )
 
+    def test_section_audit_path_under_save_dir(self):
+        paths = get_prediction_paths("AVGO", _QI, save_dir="/tmp/smoke_AVGO")
+        self.assertEqual(
+            paths["section_audit_path"],
+            Path("/tmp/smoke_AVGO/section_audit.json"),
+        )
+
+    def test_section_audit_path_default_canonical_layout(self):
+        paths = get_prediction_paths("AVGO", _QI, save_dir=None)
+        self.assertEqual(
+            paths["section_audit_path"],
+            Path("earnings-analysis/Companies/AVGO/events/Q4_FY2023/prediction/section_audit.json"),
+        )
+
 
 class ParallelSaveDirsAreUniqueTests(unittest.TestCase):
     """Two parallel runs with distinct save_dirs must produce DISTINCT bundle

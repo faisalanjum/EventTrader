@@ -94,11 +94,14 @@ def run_baseline(accession: str, label: str, quarter_info: dict) -> None:
     # Context bundle is at QUARTER ROOT per obsidian_thinking.md (2026-04-17).
     strip_learning_context(ev_dir / "context_bundle.json", stripped_bundle, stripped_rendered)
     test_result_path = baseline_dir / "result.json"
+    section_audit_path = baseline_dir / "section_audit.json"
     if test_result_path.exists():
         test_result_path.unlink()
+    if section_audit_path.exists():
+        section_audit_path.unlink()
     t0 = datetime.now()
     _pred_result, baseline_session_id = run_predictor_via_sdk(
-        stripped_bundle, stripped_rendered, test_result_path
+        stripped_bundle, stripped_rendered, section_audit_path, test_result_path
     )
     dt = (datetime.now() - t0).total_seconds()
     log.info("[%s] Baseline predictor done in %.1fs", label, dt)

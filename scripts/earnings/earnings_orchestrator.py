@@ -423,6 +423,7 @@ def get_prediction_paths(ticker: str, quarter_info: dict,
         "bundle_path": q_dir / "context_bundle.json",
         "rendered_path": q_dir / "context_bundle_rendered.txt",
         "result_path": base_dir / "result.json",
+        "section_audit_path": base_dir / "section_audit.json",
     }
 
 
@@ -2328,8 +2329,25 @@ def _render_and_harvest_best_effort(
         )
 
 
+def _build_predictor_prompt(bundle_path: Path,
+                            rendered_path: Path,
+                            section_audit_path: Path,
+                            result_path: Path) -> str:
+    """Pure helper — assemble the predictor SDK prompt. Extracted for unit-testing
+    prompt content without mocking the SDK."""
+    return (
+        "Run /earnings-prediction with these exact paths:\n"
+        f"BUNDLE_PATH={bundle_path}\n"
+        f"RENDERED_BUNDLE_PATH={rendered_path}\n"
+        f"SECTION_AUDIT_PATH={section_audit_path}\n"
+        f"RESULT_PATH={result_path}\n"
+        "Read the bundle, write SECTION_AUDIT_PATH as facts-only JSON, then write RESULT_PATH as JSON, and stop."
+    )
+
+
 async def _run_predictor_via_sdk(bundle_path: Path,
                                  rendered_path: Path,
+                                 section_audit_path: Path,
                                  result_path: Path) -> tuple[str | None, str | None]:
     """Invoke the predictor skill once via Claude Agent SDK.
 
@@ -2340,13 +2358,7 @@ async def _run_predictor_via_sdk(bundle_path: Path,
     cli_path, creds_path = _assert_claude_code_oauth_ready()
     log.info("Predictor SDK auth mode: Claude Code OAuth via %s (creds %s)", cli_path, creds_path)
 
-    prompt = (
-        "Run /earnings-prediction with these exact paths:\n"
-        f"BUNDLE_PATH={bundle_path}\n"
-        f"RENDERED_BUNDLE_PATH={rendered_path}\n"
-        f"RESULT_PATH={result_path}\n"
-        "Read the bundle, write RESULT_PATH as JSON, and stop."
-    )
+    prompt = _build_predictor_prompt(bundle_path, rendered_path, section_audit_path, result_path)
 
     # Drain stderr via callback — without this, a chatty subprocess stderr
     # pipe fills and the child dies with "Command failed with exit code 1".
@@ -2379,17 +2391,29 @@ async def _run_predictor_via_sdk(bundle_path: Path,
 
 def run_predictor_via_sdk(bundle_path: Path,
                           rendered_path: Path,
+                          section_audit_path: Path,
                           result_path: Path) -> tuple[str | None, str | None]:
     """Sync wrapper for the one-turn predictor SDK call.
 
     Returns ``(final_result, session_id)`` tuple.
     """
     try:
-        return asyncio.run(_run_predictor_via_sdk(bundle_path, rendered_path, result_path))
+        result = asyncio.run(_run_predictor_via_sdk(
+            bundle_path, rendered_path, section_audit_path, result_path
+        ))
     except ImportError as e:
         raise RuntimeError(
             "claude_agent_sdk is not available; cannot run --predict"
         ) from e
+
+    # Central existence check — every caller that invokes the SDK is protected here.
+    # Result first (canonical output → more informative error if both missing), then audit.
+    if not result_path.exists():
+        raise RuntimeError(f"Predictor finished without writing {result_path}")
+    if not section_audit_path.exists():
+        raise RuntimeError(f"Predictor finished without writing {section_audit_path}")
+
+    return result
 
 
 # ── CLI ──────────────────────────────────────────────────────────────
@@ -2541,6 +2565,8 @@ def main():
     if args.predict:
         if paths["result_path"].exists():
             paths["result_path"].unlink()
+        if paths["section_audit_path"].exists():
+            paths["section_audit_path"].unlink()
 
         _pred_run_id = _open_run(
             "prediction",
@@ -2554,12 +2580,13 @@ def main():
             print("Running predictor via SDK ...", flush=True)
             t1 = datetime.now()
             _pred_result, predictor_session_id = run_predictor_via_sdk(
-                paths["bundle_path"], paths["rendered_path"], paths["result_path"]
+                paths["bundle_path"],
+                paths["rendered_path"],
+                paths["section_audit_path"],
+                paths["result_path"],
             )
             pred_elapsed = (datetime.now() - t1).total_seconds()
-
-            if not paths["result_path"].exists():
-                raise RuntimeError("Predictor finished without writing prediction/result.json")
+            # Existence checks now live inside run_predictor_via_sdk (central).
 
             # Canonicalize: LLM wrote 7 analytic fields; Python adds 8 metadata/derived + sdk_session_id.
             # Side-effects (best-effort): result.md sidecar + thinking.md harvest.
