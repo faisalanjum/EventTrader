@@ -84,14 +84,14 @@ Adjusted returns = stock − macro for each window (hourly / session / daily)
 
 | Ref | Date | Sess | Title | Channels | AdjH% | AdjS% | AdjD% |
 |---|---|---|---|---|---|---|---|
-| N1 | 2025-12-03 | pre_market | Why Sprinklr Stock Is Trading Higher Today | Earnings ; News ; Guidance | -1.28 | -1.19 | 2.81 |
-| N2 | 2025-12-04 | in_market | Rosenblatt Maintains Buy on Sprinklr, Maintains $12 Price Target | News ; Price Target ; Analyst Ratings | 1.02 | 2.73 | 1.46 |
-| N3 | 2025-12-08 | in_market | Citigroup Maintains Neutral on Sprinklr, Raises Price Target to $9 | News ; Price Target ; Analyst Ratings | -0.82 | -0.72 | -0.22 |
-| N4 | 2026-03-10 | in_market | A Look Ahead: Sprinklr's Earnings Forecast | Earnings | 0.0 | -1.13 | -4.21 |
-| N5 | 2026-03-11 | market_closed | Sprinklr Gears Up For Q4 Print; Here Are The Recent Forecast Changes From Wall Street's Most Accurate Analysts | Earnings ; News ; Price Target ; Pre-Market Outlook ; Markets ; Analyst Ratings ; Trading Ideas | 0.19 | — | — |
-| N6 | 2026-03-11 | pre_market | Sprinklr Q4 Adj. EPS $0.13 Beats $0.10 Estimate, Sales $220.592M Beat $216.920M Estimate | Earnings ; Earnings Beats ; News | — | — | — |
-| N7 | 2026-03-11 | pre_market | Sprinklr Sees FY2027 Adj EPS $0.47-$0.48 vs $0.47 Est; Sees Sales $869.000M-$871.000M vs $882.913M Est | News ; Guidance | — | — | — |
-| N8 | 2026-03-11 | pre_market | Sprinklr Sees Q1 Adj EPS $0.09 vs $0.12 Est; Sees Sales $215.500M-$216.500M vs $214.538M Est | News ; Guidance | — | — | — |
+| N1 [bz:49183101] | 2025-12-03 | pre_market | Why Sprinklr Stock Is Trading Higher Today | Earnings ; News ; Guidance | -1.28 | -1.19 | 2.81 |
+| N2 [bz:49214335] | 2025-12-04 | in_market | Rosenblatt Maintains Buy on Sprinklr, Maintains $12 Price Target | News ; Price Target ; Analyst Ratings | 1.02 | 2.73 | 1.46 |
+| N3 [bz:49267418] | 2025-12-08 | in_market | Citigroup Maintains Neutral on Sprinklr, Raises Price Target to $9 | News ; Price Target ; Analyst Ratings | -0.82 | -0.72 | -0.22 |
+| N4 [bz:51158541] | 2026-03-10 | in_market | A Look Ahead: Sprinklr's Earnings Forecast | Earnings | 0.0 | -1.13 | -4.21 |
+| N5 [bz:51179130] | 2026-03-11 | market_closed | Sprinklr Gears Up For Q4 Print; Here Are The Recent Forecast Changes From Wall Street's Most Accurate Analysts | Earnings ; News ; Price Target ; Pre-Market Outlook ; Markets ; Analyst Ratings ; Trading Ideas | 0.19 | — | — |
+| N6 [bz:51181763] | 2026-03-11 | pre_market | Sprinklr Q4 Adj. EPS $0.13 Beats $0.10 Estimate, Sales $220.592M Beat $216.920M Estimate | Earnings ; Earnings Beats ; News | — | — | — |
+| N7 [bz:51181795] | 2026-03-11 | pre_market | Sprinklr Sees FY2027 Adj EPS $0.47-$0.48 vs $0.47 Est; Sees Sales $869.000M-$871.000M vs $882.913M Est | News ; Guidance | — | — | — |
+| N8 [bz:51181813] | 2026-03-11 | pre_market | Sprinklr Sees Q1 Adj EPS $0.09 vs $0.12 Est; Sees Sales $215.500M-$216.500M vs $214.538M Est | News ; Guidance | — | — | — |
 
 ### Filing Events (4)
 

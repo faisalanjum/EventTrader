@@ -87,75 +87,75 @@ Adjusted returns = stock − macro for each window (hourly / session / daily)
 
 | Ref | Date | Sess | Title | Channels | AdjH% | AdjS% | AdjD% |
 |---|---|---|---|---|---|---|---|
-| N1 | 2023-09-01 | pre_market | Keybanc Maintains Overweight on Broadcom, Raises Price Target to $1000 | News ; Price Target ; Analyst Ratings | -0.01 | 1.02 | -5.56 |
-| N2 | 2023-09-01 | pre_market | Rosenblatt Maintains Buy on Broadcom, Raises Price Target to $1000 | News ; Price Target ; Analyst Ratings | 0.23 | 0.52 | -5.56 |
-| N3 | 2023-09-01 | pre_market | BMO Capital Maintains Outperform on Broadcom, Raises Price Target to $1000 | News ; Price Target ; Analyst Ratings | -0.35 | -0.15 | -5.56 |
-| N4 | 2023-09-01 | pre_market | Benchmark Reiterates Buy on Broadcom, Maintains $950 Price Target | News ; Price Target ; Reiteration ; Analyst Ratings | -1.39 | -0.65 | -5.56 |
-| N5 | 2023-09-01 | pre_market | How To Earn $500 A Month From Broadcom Stock After Upbeat Earnings | Earnings ; Long Ideas ; News ; Dividends ; Trading Ideas | -2.03 | -1.06 | -5.56 |
-| N6 | 2023-09-01 | pre_market | Oppenheimer Maintains Outperform on Broadcom, Raises Price Target to $990 | News ; Price Target ; Analyst Ratings | -2.01 | -1.07 | -5.56 |
-| N7 | 2023-09-01 | pre_market | Wells Fargo Maintains Equal-Weight on Broadcom, Raises Price Target to $900 | News ; Price Target ; Analyst Ratings | -2.28 | -1.06 | -5.56 |
-| N8 | 2023-09-01 | in_market | Evercore ISI Group Reiterates Outperform on Broadcom, Maintains $1000 Price Target | News ; Price Target ; Reiteration ; Analyst Ratings | -0.74 | -0.63 | -5.56 |
-| N9 | 2023-09-01 | in_market | Piper Sandler Maintains Overweight on Broadcom, Raises Price Target to $975 | News ; Price Target ; Analyst Ratings | -0.05 | -0.49 | -5.56 |
-| N10 | 2023-09-04 | market_closed | Looking Into Broadcom's Recent Short Interest | Short Sellers ; Short Ideas ; Trading Ideas | -0.96 | -0.15 | 0.36 |
-| N11 | 2023-09-05 | in_market | Baird Maintains Outperform on Broadcom, Raises Price Target to $1000 | News ; Price Target ; Analyst Ratings | 0.04 | -0.3 | 0.36 |
-| N12 | 2023-09-05 | in_market | Check Out What Whales Are Doing With AVGO | Options ; Markets | 0.14 | -0.39 | 0.36 |
-| N13 | 2023-09-08 | pre_market | Truist Securities Maintains Buy on Broadcom, Raises Price Target to $995 | News ; Price Target ; Analyst Ratings | 0.36 | 0.58 | -0.07 |
-| N14 | 2023-09-11 | in_market | Check Out What Whales Are Doing With AVGO | Options ; Markets | 0.02 | 1.02 | -0.5 |
-| N15 | 2023-09-12 | in_market | This Is What Whales Are Betting On Broadcom | Options ; Markets | -0.32 | -0.57 | -1.16 |
-| N16 | 2023-09-14 | pre_market | Keybanc Reiterates Overweight on Broadcom, Maintains $1000 Price Target | News ; Price Target ; Reiteration ; Analyst Ratings | -0.07 | 0.16 | 1.25 |
-| N17 | 2023-09-14 | in_market | What 17 Analyst Ratings Have To Say About Broadcom | Analyst Ratings | 0.2 | 0.19 | 1.25 |
-| N18 | 2023-09-15 | in_market | Tuesday Is Your Last Chance To Buy Broadcom Before The Dividend Payout | Dividends | -0.3 | 0.0 | -0.72 |
-| N19 | 2023-09-18 | in_market | Here's How Much You Would Have Made Owning Broadcom Stock In The Last 10 Years | Earnings ; News ; Dividends | 0.1 | 0.03 | -0.23 |
-| N20 | 2023-09-18 | in_market | Susquehanna Reiterates Positive on Broadcom, Maintains $1010 Price Target | News ; Price Target ; Reiteration ; Analyst Ratings | 0.22 | 0.11 | -0.23 |
-| N21 | 2023-09-19 | in_market | This Is What Whales Are Betting On Broadcom | Options ; Markets | 0.52 | 0.55 | 0.05 |
-| N22 | 2023-09-20 | pre_market | How Is The Market Feeling About Broadcom? | Short Sellers ; Short Ideas ; Trading Ideas | 0.03 | -0.25 | -1.24 |
-| N23 | 2023-09-20 | in_market | Rosenblatt Reiterates Buy on Broadcom, Maintains $1000 Price Target | News ; Price Target ; Reiteration ; Analyst Ratings | 0.2 | -0.67 | -1.24 |
-| N24 | 2023-09-21 | in_market | Truist Securities Reiterates Buy on Broadcom, Maintains $995 Price Target | News ; Price Target ; Reiteration ; Analyst Ratings | 0.39 | -0.06 | -1.1 |
-| N25 | 2023-09-22 | in_market | Check Out What Whales Are Doing With AVGO | Options ; Markets | 0.67 | 2.0 | 2.92 |
-| N26 | 2023-09-22 | in_market | Truist Securities Reiterates Buy on Broadcom, Maintains $995 Price Target | News ; Price Target ; Reiteration ; Analyst Ratings | 0.34 | 1.35 | 2.92 |
-| N27 | 2023-09-26 | in_market | Check Out What Whales Are Doing With AVGO | Options ; Markets | 0.0 | -0.25 | -0.69 |
-| N28 | 2023-09-28 | in_market | $100 Invested In This Stock 10 Years Ago Would Be Worth $1,900 Today | Earnings ; News ; Dividends | 0.62 | 0.04 | 1.21 |
-| N29 | 2023-10-02 | pre_market | Broadcom Delivers 200G/lane PAM-4 DSP PHY For Next Generation Switches And AI Networks | News | 0.35 | -0.08 | 0.52 |
-| N30 | 2023-10-02 | in_market | Broadcom Unusual Options Activity | Options ; Markets | -0.1 | 0.22 | 0.52 |
-| N31 | 2023-10-06 | in_market | Looking At Broadcom's Recent Unusual Options Activity | Options ; Markets | 0.12 | 1.0 | 1.5 |
-| N32 | 2023-10-09 | in_market | P/E Ratio Insights for Broadcom | News ; Intraday Update ; Markets | 0.13 | 0.11 | 0.54 |
-| N33 | 2023-10-10 | in_market | How Is The Market Feeling About Broadcom? | Short Sellers ; Short Ideas ; Trading Ideas | 0.14 | -0.62 | -0.22 |
-| N34 | 2023-10-11 | in_market | Check Out What Whales Are Doing With AVGO | Options ; Markets | 0.49 | 1.22 | 1.51 |
-| N35 | 2023-10-16 | in_market | Comparing Broadcom With Industry Competitors In Semiconductors & Semiconductor Equipment Industry | News ; Markets ; Trading Ideas | 0.17 | 0.34 | 1.13 |
-| N36 | 2023-10-17 | in_market | This Is What Whales Are Betting On Broadcom | Options ; Markets | 0.59 | 0.81 | -1.97 |
-| N37 | 2023-10-17 | in_market | Why Broadcom (AVGO) Stock Is Diving Today | News | 0.69 | 0.53 | -1.97 |
-| N38 | 2023-10-20 | in_market | $1000 Invested In This Stock 5 Years Ago Would Be Worth $3,800 Today | News ; Trading Ideas | -1.23 | -1.27 | -0.39 |
-| N39 | 2023-10-23 | in_market | Check Out What Whales Are Doing With AVGO | Options ; Markets | 1.03 | 1.54 | 1.18 |
-| N40 | 2023-10-24 | in_market | Broadcom Unusual Options Activity | Options ; Markets | 0.52 | 1.17 | 1.47 |
-| N41 | 2023-10-26 | in_market | How Is The Market Feeling About Broadcom? | Short Sellers ; Short Ideas ; Trading Ideas | 0.31 | -0.31 | -1.53 |
-| N42 | 2023-10-30 | in_market | Performance Comparison: Broadcom And Competitors In Semiconductors & Semiconductor Equipment Industry | News ; Markets ; Trading Ideas | -0.68 | 0.15 | -0.92 |
-| N43 | 2023-10-31 | in_market | Looking At Broadcom's Recent Unusual Options Activity | Options ; Markets | 0.4 | -0.18 | -0.5 |
-| N44 | 2023-10-31 | in_market | $100 Invested In This Stock 10 Years Ago Would Be Worth $1,900 Today | News ; Trading Ideas | -0.05 | -0.04 | -0.5 |
-| N45 | 2023-11-06 | in_market | This Is What Whales Are Betting On Broadcom | Options ; Markets | -0.27 | 0.43 | -0.4 |
-| N46 | 2023-11-07 | in_market | Check Out What Whales Are Doing With AVGO | Options ; Markets | 0.21 | 0.6 | 1.63 |
-| N47 | 2023-11-13 | in_market | Broadcom's Options: A Look at What the Big Money is Thinking | Options ; Markets | -0.42 | -0.34 | -1.03 |
-| N48 | 2023-11-13 | in_market | Performance Comparison: Broadcom And Competitors In Semiconductors & Semiconductor Equipment Industry | News ; Markets ; Trading Ideas | -0.08 | 0.18 | -1.03 |
-| N49 | 2023-11-17 | in_market | Spotlight on Broadcom: Analyzing the Surge in Options Activity | Options ; Markets | 0.93 | 0.87 | 1.8 |
-| N50 | 2023-11-20 | in_market | $100 Invested In This Stock 10 Years Ago Would Be Worth $2,300 Today | News ; Trading Ideas | -0.09 | 0.03 | 1.08 |
-| N51 | 2023-11-21 | in_market | Looking At Broadcom's Recent Unusual Options Activity | Options ; Markets | -0.25 | -0.34 | -1.24 |
-| N52 | 2023-11-22 | pre_market | Broadcom Completes Acquisition Of VMware | M&A | -0.47 | -0.78 | -1.33 |
-| N53 | 2023-11-24 | pre_market | Keybanc Maintains Overweight on Broadcom, Raises Price Target to $1200 | News ; Price Target ; Analyst Ratings | 0.39 | -0.11 | 0.65 |
-| N54 | 2023-11-24 | pre_market | What 17 Analyst Ratings Have To Say About Broadcom | Analyst Ratings | 0.01 | -0.47 | 0.65 |
-| N55 | 2023-11-27 | in_market | In-Depth Analysis: Broadcom Versus Competitors In Semiconductors & Semiconductor Equipment Industry | News ; Markets ; Trading Ideas | -0.73 | -2.9 | -2.77 |
-| N56 | 2023-11-28 | pre_market | Susquehanna Maintains Positive on Broadcom, Raises Price Target to $1100 | News ; Price Target ; Analyst Ratings | -0.46 | -0.61 | -0.42 |
-| N57 | 2023-11-29 | in_market | Broadcom's Options: A Look at What the Big Money is Thinking | Options ; Markets | -0.38 | -0.97 | -0.78 |
-| N58 | 2023-11-29 | post_market | 'Leaked email: Broadcom CEO says the company is reviewing 'strategic alternatives' for two of VMware's businesses' -Business Insider | News | 0.27 | -0.39 | -1.75 |
-| N59 | 2023-11-29 | post_market | Broadcom To Review Two VMware Business Units For 'Strategic Alternatives,' According To Leaked Email | News ; Movers | -0.01 | -0.66 | -1.75 |
-| N60 | 2023-11-30 | pre_market | Broadcom Introduces Industry's First Switch With On-Chip Neural Network | News | -1.73 | -0.68 | -1.75 |
-| N61 | 2023-12-01 | in_market | Check Out What Whales Are Doing With AVGO | Options ; Markets | 0.05 | 0.06 | -0.17 |
-| N62 | 2023-12-04 | pre_market | Oppenheimer Maintains Outperform on Broadcom, Raises Price Target to $1100 | News ; Price Target ; Analyst Ratings | -0.07 | -0.37 | -0.14 |
-| N63 | 2023-12-04 | pre_market | Rosenblatt Reiterates Buy on Broadcom, Maintains $1000 Price Target | News ; Price Target ; Reiteration ; Analyst Ratings | -0.33 | -0.63 | -0.14 |
-| N64 | 2023-12-04 | pre_market | $100 Invested In Broadcom 5 Years Ago Would Be Worth This Much Today | News ; Trading Ideas | -0.14 | -0.52 | -0.14 |
-| N65 | 2023-12-05 | in_market | Check Out What Whales Are Doing With AVGO | Options ; Markets | 0.31 | 0.0 | -1.26 |
-| N66 | 2023-12-06 | pre_market | Earnings Preview: Broadcom | Earnings | -0.63 | -0.89 | -0.52 |
-| N67 | 2023-12-07 | in_market | How Is The Market Feeling About Broadcom? | Short Sellers ; Short Ideas ; Trading Ideas | 0.58 | 0.75 | 1.09 |
-| N68 | 2023-12-07 | post_market | Broadcom Q4 Adj $11.06 Beats $10.98 Estimate, Sales $9.29B Miss $9.41B Estimate | Earnings ; Earnings Beats ; Earnings Misses ; News ; Hot | — | — | — |
-| N69 | 2023-12-07 | post_market | Broadcom Sees FY24 Revenue ~$50B vs $45.76B Est., Sees Adj. EBITDA Of ~60% Of Projected Revenue | News ; Guidance ; Hot | — | — | — |
+| N1 [bz:34165510] | 2023-09-01 | pre_market | Keybanc Maintains Overweight on Broadcom, Raises Price Target to $1000 | News ; Price Target ; Analyst Ratings | -0.01 | 1.02 | -5.56 |
+| N2 [bz:34168206] | 2023-09-01 | pre_market | Rosenblatt Maintains Buy on Broadcom, Raises Price Target to $1000 | News ; Price Target ; Analyst Ratings | 0.23 | 0.52 | -5.56 |
+| N3 [bz:34170057] | 2023-09-01 | pre_market | BMO Capital Maintains Outperform on Broadcom, Raises Price Target to $1000 | News ; Price Target ; Analyst Ratings | -0.35 | -0.15 | -5.56 |
+| N4 [bz:34170668] | 2023-09-01 | pre_market | Benchmark Reiterates Buy on Broadcom, Maintains $950 Price Target | News ; Price Target ; Reiteration ; Analyst Ratings | -1.39 | -0.65 | -5.56 |
+| N5 [bz:34167904] | 2023-09-01 | pre_market | How To Earn $500 A Month From Broadcom Stock After Upbeat Earnings | Earnings ; Long Ideas ; News ; Dividends ; Trading Ideas | -2.03 | -1.06 | -5.56 |
+| N6 [bz:34170750] | 2023-09-01 | pre_market | Oppenheimer Maintains Outperform on Broadcom, Raises Price Target to $990 | News ; Price Target ; Analyst Ratings | -2.01 | -1.07 | -5.56 |
+| N7 [bz:34171779] | 2023-09-01 | pre_market | Wells Fargo Maintains Equal-Weight on Broadcom, Raises Price Target to $900 | News ; Price Target ; Analyst Ratings | -2.28 | -1.06 | -5.56 |
+| N8 [bz:34173831] | 2023-09-01 | in_market | Evercore ISI Group Reiterates Outperform on Broadcom, Maintains $1000 Price Target | News ; Price Target ; Reiteration ; Analyst Ratings | -0.74 | -0.63 | -5.56 |
+| N9 [bz:34180324] | 2023-09-01 | in_market | Piper Sandler Maintains Overweight on Broadcom, Raises Price Target to $975 | News ; Price Target ; Analyst Ratings | -0.05 | -0.49 | -5.56 |
+| N10 [bz:34212622] | 2023-09-04 | market_closed | Looking Into Broadcom's Recent Short Interest | Short Sellers ; Short Ideas ; Trading Ideas | -0.96 | -0.15 | 0.36 |
+| N11 [bz:34245043] | 2023-09-05 | in_market | Baird Maintains Outperform on Broadcom, Raises Price Target to $1000 | News ; Price Target ; Analyst Ratings | 0.04 | -0.3 | 0.36 |
+| N12 [bz:34247033] | 2023-09-05 | in_market | Check Out What Whales Are Doing With AVGO | Options ; Markets | 0.14 | -0.39 | 0.36 |
+| N13 [bz:34360280] | 2023-09-08 | pre_market | Truist Securities Maintains Buy on Broadcom, Raises Price Target to $995 | News ; Price Target ; Analyst Ratings | 0.36 | 0.58 | -0.07 |
+| N14 [bz:34448383] | 2023-09-11 | in_market | Check Out What Whales Are Doing With AVGO | Options ; Markets | 0.02 | 1.02 | -0.5 |
+| N15 [bz:34496054] | 2023-09-12 | in_market | This Is What Whales Are Betting On Broadcom | Options ; Markets | -0.32 | -0.57 | -1.16 |
+| N16 [bz:34569255] | 2023-09-14 | pre_market | Keybanc Reiterates Overweight on Broadcom, Maintains $1000 Price Target | News ; Price Target ; Reiteration ; Analyst Ratings | -0.07 | 0.16 | 1.25 |
+| N17 [bz:34591803] | 2023-09-14 | in_market | What 17 Analyst Ratings Have To Say About Broadcom | Analyst Ratings | 0.2 | 0.19 | 1.25 |
+| N18 [bz:34618375] | 2023-09-15 | in_market | Tuesday Is Your Last Chance To Buy Broadcom Before The Dividend Payout | Dividends | -0.3 | 0.0 | -0.72 |
+| N19 [bz:34697108] | 2023-09-18 | in_market | Here's How Much You Would Have Made Owning Broadcom Stock In The Last 10 Years | Earnings ; News ; Dividends | 0.1 | 0.03 | -0.23 |
+| N20 [bz:34697591] | 2023-09-18 | in_market | Susquehanna Reiterates Positive on Broadcom, Maintains $1010 Price Target | News ; Price Target ; Reiteration ; Analyst Ratings | 0.22 | 0.11 | -0.23 |
+| N21 [bz:34732961] | 2023-09-19 | in_market | This Is What Whales Are Betting On Broadcom | Options ; Markets | 0.52 | 0.55 | 0.05 |
+| N22 [bz:34760687] | 2023-09-20 | pre_market | How Is The Market Feeling About Broadcom? | Short Sellers ; Short Ideas ; Trading Ideas | 0.03 | -0.25 | -1.24 |
+| N23 [bz:34766663] | 2023-09-20 | in_market | Rosenblatt Reiterates Buy on Broadcom, Maintains $1000 Price Target | News ; Price Target ; Reiteration ; Analyst Ratings | 0.2 | -0.67 | -1.24 |
+| N24 [bz:34800420] | 2023-09-21 | in_market | Truist Securities Reiterates Buy on Broadcom, Maintains $995 Price Target | News ; Price Target ; Reiteration ; Analyst Ratings | 0.39 | -0.06 | -1.1 |
+| N25 [bz:34824482] | 2023-09-22 | in_market | Check Out What Whales Are Doing With AVGO | Options ; Markets | 0.67 | 2.0 | 2.92 |
+| N26 [bz:34826154] | 2023-09-22 | in_market | Truist Securities Reiterates Buy on Broadcom, Maintains $995 Price Target | News ; Price Target ; Reiteration ; Analyst Ratings | 0.34 | 1.35 | 2.92 |
+| N27 [bz:34915143] | 2023-09-26 | in_market | Check Out What Whales Are Doing With AVGO | Options ; Markets | 0.0 | -0.25 | -0.69 |
+| N28 [bz:34979244] | 2023-09-28 | in_market | $100 Invested In This Stock 10 Years Ago Would Be Worth $1,900 Today | Earnings ; News ; Dividends | 0.62 | 0.04 | 1.21 |
+| N29 [bz:35031185] | 2023-10-02 | pre_market | Broadcom Delivers 200G/lane PAM-4 DSP PHY For Next Generation Switches And AI Networks | News | 0.35 | -0.08 | 0.52 |
+| N30 [bz:35033960] | 2023-10-02 | in_market | Broadcom Unusual Options Activity | Options ; Markets | -0.1 | 0.22 | 0.52 |
+| N31 [bz:35127418] | 2023-10-06 | in_market | Looking At Broadcom's Recent Unusual Options Activity | Options ; Markets | 0.12 | 1.0 | 1.5 |
+| N32 [bz:35150736] | 2023-10-09 | in_market | P/E Ratio Insights for Broadcom | News ; Intraday Update ; Markets | 0.13 | 0.11 | 0.54 |
+| N33 [bz:35164087] | 2023-10-10 | in_market | How Is The Market Feeling About Broadcom? | Short Sellers ; Short Ideas ; Trading Ideas | 0.14 | -0.62 | -0.22 |
+| N34 [bz:35198162] | 2023-10-11 | in_market | Check Out What Whales Are Doing With AVGO | Options ; Markets | 0.49 | 1.22 | 1.51 |
+| N35 [bz:35270973] | 2023-10-16 | in_market | Comparing Broadcom With Industry Competitors In Semiconductors & Semiconductor Equipment Industry | News ; Markets ; Trading Ideas | 0.17 | 0.34 | 1.13 |
+| N36 [bz:35288487] | 2023-10-17 | in_market | This Is What Whales Are Betting On Broadcom | Options ; Markets | 0.59 | 0.81 | -1.97 |
+| N37 [bz:35291126] | 2023-10-17 | in_market | Why Broadcom (AVGO) Stock Is Diving Today | News | 0.69 | 0.53 | -1.97 |
+| N38 [bz:35351244] | 2023-10-20 | in_market | $1000 Invested In This Stock 5 Years Ago Would Be Worth $3,800 Today | News ; Trading Ideas | -1.23 | -1.27 | -0.39 |
+| N39 [bz:35374214] | 2023-10-23 | in_market | Check Out What Whales Are Doing With AVGO | Options ; Markets | 1.03 | 1.54 | 1.18 |
+| N40 [bz:35395461] | 2023-10-24 | in_market | Broadcom Unusual Options Activity | Options ; Markets | 0.52 | 1.17 | 1.47 |
+| N41 [bz:35448511] | 2023-10-26 | in_market | How Is The Market Feeling About Broadcom? | Short Sellers ; Short Ideas ; Trading Ideas | 0.31 | -0.31 | -1.53 |
+| N42 [bz:35494527] | 2023-10-30 | in_market | Performance Comparison: Broadcom And Competitors In Semiconductors & Semiconductor Equipment Industry | News ; Markets ; Trading Ideas | -0.68 | 0.15 | -0.92 |
+| N43 [bz:35515268] | 2023-10-31 | in_market | Looking At Broadcom's Recent Unusual Options Activity | Options ; Markets | 0.4 | -0.18 | -0.5 |
+| N44 [bz:35523606] | 2023-10-31 | in_market | $100 Invested In This Stock 10 Years Ago Would Be Worth $1,900 Today | News ; Trading Ideas | -0.05 | -0.04 | -0.5 |
+| N45 [bz:35623940] | 2023-11-06 | in_market | This Is What Whales Are Betting On Broadcom | Options ; Markets | -0.27 | 0.43 | -0.4 |
+| N46 [bz:35649130] | 2023-11-07 | in_market | Check Out What Whales Are Doing With AVGO | Options ; Markets | 0.21 | 0.6 | 1.63 |
+| N47 [bz:35751035] | 2023-11-13 | in_market | Broadcom's Options: A Look at What the Big Money is Thinking | Options ; Markets | -0.42 | -0.34 | -1.03 |
+| N48 [bz:35754351] | 2023-11-13 | in_market | Performance Comparison: Broadcom And Competitors In Semiconductors & Semiconductor Equipment Industry | News ; Markets ; Trading Ideas | -0.08 | 0.18 | -1.03 |
+| N49 [bz:35850793] | 2023-11-17 | in_market | Spotlight on Broadcom: Analyzing the Surge in Options Activity | Options ; Markets | 0.93 | 0.87 | 1.8 |
+| N50 [bz:35879577] | 2023-11-20 | in_market | $100 Invested In This Stock 10 Years Ago Would Be Worth $2,300 Today | News ; Trading Ideas | -0.09 | 0.03 | 1.08 |
+| N51 [bz:35904507] | 2023-11-21 | in_market | Looking At Broadcom's Recent Unusual Options Activity | Options ; Markets | -0.25 | -0.34 | -1.24 |
+| N52 [bz:35915572] | 2023-11-22 | pre_market | Broadcom Completes Acquisition Of VMware | M&A | -0.47 | -0.78 | -1.33 |
+| N53 [bz:35936683] | 2023-11-24 | pre_market | Keybanc Maintains Overweight on Broadcom, Raises Price Target to $1200 | News ; Price Target ; Analyst Ratings | 0.39 | -0.11 | 0.65 |
+| N54 [bz:35937801] | 2023-11-24 | pre_market | What 17 Analyst Ratings Have To Say About Broadcom | Analyst Ratings | 0.01 | -0.47 | 0.65 |
+| N55 [bz:35962195] | 2023-11-27 | in_market | In-Depth Analysis: Broadcom Versus Competitors In Semiconductors & Semiconductor Equipment Industry | News ; Markets ; Trading Ideas | -0.73 | -2.9 | -2.77 |
+| N56 [bz:35977993] | 2023-11-28 | pre_market | Susquehanna Maintains Positive on Broadcom, Raises Price Target to $1100 | News ; Price Target ; Analyst Ratings | -0.46 | -0.61 | -0.42 |
+| N57 [bz:36002600] | 2023-11-29 | in_market | Broadcom's Options: A Look at What the Big Money is Thinking | Options ; Markets | -0.38 | -0.97 | -0.78 |
+| N58 [bz:36012228] | 2023-11-29 | post_market | 'Leaked email: Broadcom CEO says the company is reviewing 'strategic alternatives' for two of VMware's businesses' -Business Insider | News | 0.27 | -0.39 | -1.75 |
+| N59 [bz:36013674] | 2023-11-29 | post_market | Broadcom To Review Two VMware Business Units For 'Strategic Alternatives,' According To Leaked Email | News ; Movers | -0.01 | -0.66 | -1.75 |
+| N60 [bz:36023309] | 2023-11-30 | pre_market | Broadcom Introduces Industry's First Switch With On-Chip Neural Network | News | -1.73 | -0.68 | -1.75 |
+| N61 [bz:36051815] | 2023-12-01 | in_market | Check Out What Whales Are Doing With AVGO | Options ; Markets | 0.05 | 0.06 | -0.17 |
+| N62 [bz:36067703] | 2023-12-04 | pre_market | Oppenheimer Maintains Outperform on Broadcom, Raises Price Target to $1100 | News ; Price Target ; Analyst Ratings | -0.07 | -0.37 | -0.14 |
+| N63 [bz:36067847] | 2023-12-04 | pre_market | Rosenblatt Reiterates Buy on Broadcom, Maintains $1000 Price Target | News ; Price Target ; Reiteration ; Analyst Ratings | -0.33 | -0.63 | -0.14 |
+| N64 [bz:36068925] | 2023-12-04 | pre_market | $100 Invested In Broadcom 5 Years Ago Would Be Worth This Much Today | News ; Trading Ideas | -0.14 | -0.52 | -0.14 |
+| N65 [bz:36097317] | 2023-12-05 | in_market | Check Out What Whales Are Doing With AVGO | Options ; Markets | 0.31 | 0.0 | -1.26 |
+| N66 [bz:36112450] | 2023-12-06 | pre_market | Earnings Preview: Broadcom | Earnings | -0.63 | -0.89 | -0.52 |
+| N67 [bz:36138260] | 2023-12-07 | in_market | How Is The Market Feeling About Broadcom? | Short Sellers ; Short Ideas ; Trading Ideas | 0.58 | 0.75 | 1.09 |
+| N68 [bz:36143267] | 2023-12-07 | post_market | Broadcom Q4 Adj $11.06 Beats $10.98 Estimate, Sales $9.29B Miss $9.41B Estimate | Earnings ; Earnings Beats ; Earnings Misses ; News ; Hot | — | — | — |
+| N69 [bz:36143343] | 2023-12-07 | post_market | Broadcom Sees FY24 Revenue ~$50B vs $45.76B Est., Sees Adj. EBITDA Of ~60% Of Projected Revenue | News ; Guidance ; Hot | — | — | — |
 
 ### Filing Events (4)
 

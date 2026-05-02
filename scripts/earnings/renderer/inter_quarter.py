@@ -146,8 +146,13 @@ def _iq_news_table(days: list) -> str:
     rows = []
     for i, (date, ev) in enumerate(news, 1):
         adj_h, adj_s, adj_d = _iq_adj_returns(ev)
+        # U17: surface clean Benzinga id alongside synthetic N{i} when builder supplies bz_id;
+        # falls back to bare N{i} for events without bz_id (None/missing). Render-additive only —
+        # catalog still emits #S6.news.N{i} aliases (no #S6.news.bz: forms; see U17 plan).
+        bz = ev.get("bz_id")
+        ref_cell = f"N{i} [bz:{bz}]" if bz else f"N{i}"
         rows.append([
-            f"N{i}",
+            ref_cell,
             date,
             _iq_val(ev.get("market_session")),
             _iq_cell((ev.get("title") or "").replace("\n", " ").strip()) or "—",

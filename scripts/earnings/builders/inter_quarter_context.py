@@ -330,6 +330,23 @@ def _event_ref(event_type, native_id):
     return f'{event_type}:{native_id}'
 
 
+def _extract_bz_id(news_id):
+    """Parse Benzinga numeric id from 'bzNews_<digits>' prefix.
+
+    Returns None for unrecognized format. 100% of News.id values in
+    production match 'bzNews_<digits>' (verified 2026-05-01 probe);
+    defensive only for upstream drift.
+
+    NOTE: identical to peer_earnings_snapshot._extract_bz_id; intentionally
+    duplicated to avoid cross-module underscore-private imports between
+    sibling builders. Refactor to a shared helper if a 3rd consumer appears.
+    """
+    if not isinstance(news_id, str) or not news_id.startswith('bzNews_'):
+        return None
+    suffix = news_id[len('bzNews_'):]
+    return suffix if suffix.isdigit() else None
+
+
 def _day_from_ts(ts):
     return str(ts)[:10] if ts else None
 
@@ -882,6 +899,7 @@ def build_inter_quarter_context(ticker, prev_8k_ts, context_cutoff_ts,
                 'forward_returns': fr,
                 # JSON-only fields
                 'id': row.get('news_id'),
+                'bz_id': _extract_bz_id(row.get('news_id')),  # U17: surface clean Benzinga id for cross-section render parity (§1.5/§1.6/§1.7)
                 'url': row.get('url'),
                 'authors': authors,
                 'tags': tags,

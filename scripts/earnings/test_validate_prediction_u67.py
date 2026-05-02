@@ -324,6 +324,25 @@ class FixtureAnchorsCoverageTests(unittest.TestCase):
             "no guidance anchors — aggregator missed guidance_history.series[]"
         )
 
+    def test_u17_no_news_bz_alias_in_catalog(self):
+        """U17 invariant: §1.5 IQ news catalog stays canonical N{i}-only.
+
+        Adding `[bz:NNN]` to the rendered Ref column under U17 must NOT
+        introduce `#S6.news.bz:` aliases. The §1.7 macro section uses
+        `#S8.macro.bz:NNN` as its primary alias, but §1.5 deliberately keeps
+        `#S6.news.N{i}` as the canonical form (per SKILL.md:150 "do not
+        cite generic anchors like §2 or N1 alone" — predictor cites the
+        full SRC:...#S6.news.N{i} form).
+
+        If a future change adds bz: to §1.5 catalog, this test fails and
+        forces a deliberate decision rather than silent drift.
+        """
+        bz_aliases = [s for s in self.catalog if "#S6.news.bz:" in s]
+        self.assertEqual(
+            bz_aliases, [],
+            f"unexpected #S6.news.bz: aliases (would dilute canonical N{{i}} citation): {bz_aliases[:5]}"
+        )
+
     def test_catalog_contains_macro_anchor(self):
         macro_anchors = [s for s in self.catalog if "#S8.macro" in s]
         self.assertGreater(

@@ -297,33 +297,33 @@ Adjusted returns = stock − macro for each window (hourly / session / daily)
 
 | Ref | Date | Sess | Title | Channels | AdjH% | AdjS% | AdjD% |
 |---|---|---|---|---|---|---|---|
-| N1 | 2025-10-30 | pre_market | Truist Securities Maintains Buy on C.H. Robinson Worldwide, Raises Price Target to $165 | News ; Price Target ; Analyst Ratings | 4.35 | 4.9 | 20.74 |
-| N2 | 2025-10-30 | in_market | Raymond James Maintains Outperform on C.H. Robinson Worldwide, Raises Price Target to $161 | News ; Price Target ; Analyst Ratings | -0.9 | 0.3 | 20.74 |
-| N3 | 2025-10-30 | in_market | Wells Fargo Maintains Overweight on C.H. Robinson Worldwide, Raises Price Target to $170 | News ; Price Target ; Analyst Ratings | 0.18 | 0.94 | 20.74 |
-| N4 | 2025-10-30 | in_market | Goldman Sachs Maintains Neutral on C.H. Robinson Worldwide, Raises Price Target to $131 | News ; Price Target ; Analyst Ratings | 0.3 | 0.38 | 20.74 |
-| N5 | 2025-10-30 | in_market | Evercore ISI Group Maintains Outperform on C.H. Robinson Worldwide, Raises Price Target to $175 | News ; Price Target ; Analyst Ratings | -0.61 | -0.22 | 20.74 |
-| N6 | 2025-10-30 | in_market | Morgan Stanley Maintains Underweight on C.H. Robinson Worldwide, Raises Price Target to $77 | News ; Price Target ; Analyst Ratings | 0.32 | 0.69 | 20.74 |
-| N7 | 2025-10-30 | in_market | UBS Maintains Buy on C.H. Robinson Worldwide, Raises Price Target to $177 | News ; Price Target ; Analyst Ratings | -0.07 | 0.21 | 20.74 |
-| N8 | 2025-10-30 | in_market | TD Cowen Maintains Hold on C.H. Robinson Worldwide, Raises Price Target to $138 | News ; Price Target ; Analyst Ratings | -0.37 | 0.22 | 20.74 |
-| N9 | 2025-10-30 | post_market | JP Morgan Maintains Overweight on C.H. Robinson Worldwide, Raises Price Target to $166 | News ; Price Target ; Analyst Ratings | 0.0 | 0.39 | -0.83 |
-| N10 | 2025-10-31 | in_market | Barclays Maintains Equal-Weight on C.H. Robinson Worldwide, Raises Price Target to $145 | News ; Price Target ; Analyst Ratings | 0.6 | 0.19 | -0.83 |
-| N11 | 2025-11-06 | post_market | C.H. Robinson Increases Dividend From $0.62 To $0.63/Share | News ; Dividends | 0.03 | 1.02 | 0.72 |
-| N12 | 2025-12-08 | in_market | Morgan Stanley Maintains Underweight on C.H. Robinson Worldwide, Raises Price Target to $85 | News ; Price Target ; Analyst Ratings | -0.44 | -0.96 | -2.13 |
-| N13 | 2025-12-16 | pre_market | Barclays Upgrades C.H. Robinson Worldwide to Overweight, Raises Price Target to $200 | News ; Upgrades ; Price Target ; Analyst Ratings | 0.29 | 0.07 | 1.19 |
-| N14 | 2025-12-16 | in_market | Stifel Maintains Buy on C.H. Robinson Worldwide, Raises Price Target to $184 | News ; Price Target ; Analyst Ratings | -0.24 | 0.35 | 1.19 |
-| N15 | 2025-12-24 | in_market | B of A Securities Maintains Buy on C.H. Robinson Worldwide, Raises Price Target to $182 | News ; Price Target ; Analyst Ratings | 0.27 | -0.3 | -0.13 |
-| N16 | 2026-01-06 | in_market | Wells Fargo Maintains Overweight on C.H. Robinson Worldwide, Raises Price Target to $185 | News ; Price Target ; Analyst Ratings | -0.18 | 0.19 | -0.32 |
-| N17 | 2026-01-08 | pre_market | Susquehanna Maintains Positive on C.H. Robinson Worldwide, Raises Price Target to $210 | News ; Price Target ; Analyst Ratings | 0.45 | 0.24 | -0.42 |
-| N18 | 2026-01-08 | in_market | Citigroup Maintains Neutral on C.H. Robinson Worldwide, Raises Price Target to $177 | News ; Price Target ; Analyst Ratings | -0.26 | -0.23 | -0.42 |
-| N19 | 2026-01-09 | in_market | Bernstein Maintains Market Perform on C.H. Robinson Worldwide, Raises Price Target to $153 | News ; Price Target ; Analyst Ratings | 0.11 | 1.41 | 2.2 |
-| N20 | 2026-01-09 | in_market | TD Cowen Maintains Hold on C.H. Robinson Worldwide, Raises Price Target to $165 | News ; Price Target ; Analyst Ratings | 1.09 | 1.35 | 2.2 |
-| N21 | 2026-01-12 | in_market | JP Morgan Maintains Overweight on C.H. Robinson Worldwide, Raises Price Target to $178 | News ; Price Target ; Analyst Ratings | -0.49 | -0.01 | 0.88 |
-| N22 | 2026-01-13 | in_market | Evercore ISI Group Maintains Outperform on C.H. Robinson Worldwide, Raises Price Target to $196 | News ; Price Target ; Analyst Ratings | 1.51 | 1.04 | 0.71 |
-| N23 | 2026-01-13 | post_market | Deep Dive Into C.H. Robinson Worldwide Stock: Analyst Perspectives (21 Ratings) | Analyst Ratings | -0.01 | 0.16 | -0.15 |
-| N24 | 2026-01-15 | pre_market | Truist Securities Maintains Buy on C.H. Robinson Worldwide, Raises Price Target to $190 | News ; Price Target ; Analyst Ratings | 0.13 | 0.05 | 1.45 |
-| N25 | 2026-01-23 | in_market | UBS Maintains Buy on C.H. Robinson Worldwide, Raises Price Target to $224 | News ; Price Target ; Analyst Ratings | 0.42 | 0.28 | -0.73 |
-| N26 | 2026-01-26 | pre_market | CH Robinson Uses AI To Cut Missed Truck Pickups And Speed Up Freight | News | -0.07 | -0.48 | 0.3 |
-| N27 | 2026-01-27 | in_market | Exploring C.H. Robinson Worldwide's Earnings Expectations | Earnings | 0.41 | 1.07 | 0.89 |
+| N1 [bz:48525036] | 2025-10-30 | pre_market | Truist Securities Maintains Buy on C.H. Robinson Worldwide, Raises Price Target to $165 | News ; Price Target ; Analyst Ratings | 4.35 | 4.9 | 20.74 |
+| N2 [bz:48530641] | 2025-10-30 | in_market | Raymond James Maintains Outperform on C.H. Robinson Worldwide, Raises Price Target to $161 | News ; Price Target ; Analyst Ratings | -0.9 | 0.3 | 20.74 |
+| N3 [bz:48531220] | 2025-10-30 | in_market | Wells Fargo Maintains Overweight on C.H. Robinson Worldwide, Raises Price Target to $170 | News ; Price Target ; Analyst Ratings | 0.18 | 0.94 | 20.74 |
+| N4 [bz:48532690] | 2025-10-30 | in_market | Goldman Sachs Maintains Neutral on C.H. Robinson Worldwide, Raises Price Target to $131 | News ; Price Target ; Analyst Ratings | 0.3 | 0.38 | 20.74 |
+| N5 [bz:48535195] | 2025-10-30 | in_market | Evercore ISI Group Maintains Outperform on C.H. Robinson Worldwide, Raises Price Target to $175 | News ; Price Target ; Analyst Ratings | -0.61 | -0.22 | 20.74 |
+| N6 [bz:48538658] | 2025-10-30 | in_market | Morgan Stanley Maintains Underweight on C.H. Robinson Worldwide, Raises Price Target to $77 | News ; Price Target ; Analyst Ratings | 0.32 | 0.69 | 20.74 |
+| N7 [bz:48540990] | 2025-10-30 | in_market | UBS Maintains Buy on C.H. Robinson Worldwide, Raises Price Target to $177 | News ; Price Target ; Analyst Ratings | -0.07 | 0.21 | 20.74 |
+| N8 [bz:48542488] | 2025-10-30 | in_market | TD Cowen Maintains Hold on C.H. Robinson Worldwide, Raises Price Target to $138 | News ; Price Target ; Analyst Ratings | -0.37 | 0.22 | 20.74 |
+| N9 [bz:48545579] | 2025-10-30 | post_market | JP Morgan Maintains Overweight on C.H. Robinson Worldwide, Raises Price Target to $166 | News ; Price Target ; Analyst Ratings | 0.0 | 0.39 | -0.83 |
+| N10 [bz:48563743] | 2025-10-31 | in_market | Barclays Maintains Equal-Weight on C.H. Robinson Worldwide, Raises Price Target to $145 | News ; Price Target ; Analyst Ratings | 0.6 | 0.19 | -0.83 |
+| N11 [bz:48705820] | 2025-11-06 | post_market | C.H. Robinson Increases Dividend From $0.62 To $0.63/Share | News ; Dividends | 0.03 | 1.02 | 0.72 |
+| N12 [bz:49262686] | 2025-12-08 | in_market | Morgan Stanley Maintains Underweight on C.H. Robinson Worldwide, Raises Price Target to $85 | News ; Price Target ; Analyst Ratings | -0.44 | -0.96 | -2.13 |
+| N13 [bz:49418627] | 2025-12-16 | pre_market | Barclays Upgrades C.H. Robinson Worldwide to Overweight, Raises Price Target to $200 | News ; Upgrades ; Price Target ; Analyst Ratings | 0.29 | 0.07 | 1.19 |
+| N14 [bz:49427246] | 2025-12-16 | in_market | Stifel Maintains Buy on C.H. Robinson Worldwide, Raises Price Target to $184 | News ; Price Target ; Analyst Ratings | -0.24 | 0.35 | 1.19 |
+| N15 [bz:49582302] | 2025-12-24 | in_market | B of A Securities Maintains Buy on C.H. Robinson Worldwide, Raises Price Target to $182 | News ; Price Target ; Analyst Ratings | 0.27 | -0.3 | -0.13 |
+| N16 [bz:49725832] | 2026-01-06 | in_market | Wells Fargo Maintains Overweight on C.H. Robinson Worldwide, Raises Price Target to $185 | News ; Price Target ; Analyst Ratings | -0.18 | 0.19 | -0.32 |
+| N17 [bz:49782877] | 2026-01-08 | pre_market | Susquehanna Maintains Positive on C.H. Robinson Worldwide, Raises Price Target to $210 | News ; Price Target ; Analyst Ratings | 0.45 | 0.24 | -0.42 |
+| N18 [bz:49797885] | 2026-01-08 | in_market | Citigroup Maintains Neutral on C.H. Robinson Worldwide, Raises Price Target to $177 | News ; Price Target ; Analyst Ratings | -0.26 | -0.23 | -0.42 |
+| N19 [bz:49821892] | 2026-01-09 | in_market | Bernstein Maintains Market Perform on C.H. Robinson Worldwide, Raises Price Target to $153 | News ; Price Target ; Analyst Ratings | 0.11 | 1.41 | 2.2 |
+| N20 [bz:49823573] | 2026-01-09 | in_market | TD Cowen Maintains Hold on C.H. Robinson Worldwide, Raises Price Target to $165 | News ; Price Target ; Analyst Ratings | 1.09 | 1.35 | 2.2 |
+| N21 [bz:49853344] | 2026-01-12 | in_market | JP Morgan Maintains Overweight on C.H. Robinson Worldwide, Raises Price Target to $178 | News ; Price Target ; Analyst Ratings | -0.49 | -0.01 | 0.88 |
+| N22 [bz:49875087] | 2026-01-13 | in_market | Evercore ISI Group Maintains Outperform on C.H. Robinson Worldwide, Raises Price Target to $196 | News ; Price Target ; Analyst Ratings | 1.51 | 1.04 | 0.71 |
+| N23 [bz:49893814] | 2026-01-13 | post_market | Deep Dive Into C.H. Robinson Worldwide Stock: Analyst Perspectives (21 Ratings) | Analyst Ratings | -0.01 | 0.16 | -0.15 |
+| N24 [bz:49933210] | 2026-01-15 | pre_market | Truist Securities Maintains Buy on C.H. Robinson Worldwide, Raises Price Target to $190 | News ; Price Target ; Analyst Ratings | 0.13 | 0.05 | 1.45 |
+| N25 [bz:50108873] | 2026-01-23 | in_market | UBS Maintains Buy on C.H. Robinson Worldwide, Raises Price Target to $224 | News ; Price Target ; Analyst Ratings | 0.42 | 0.28 | -0.73 |
+| N26 [bz:50120531] | 2026-01-26 | pre_market | CH Robinson Uses AI To Cut Missed Truck Pickups And Speed Up Freight | News | -0.07 | -0.48 | 0.3 |
+| N27 [bz:50161984] | 2026-01-27 | in_market | Exploring C.H. Robinson Worldwide's Earnings Expectations | Earnings | 0.41 | 1.07 | 0.89 |
 
 ### Filing Events (2)
 

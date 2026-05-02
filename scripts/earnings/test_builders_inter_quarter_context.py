@@ -599,3 +599,128 @@ def test_render_split_event_branch():
     text = iq.render_inter_quarter_text(_minimal_packet(days, splits=1, td_ord=1))
     assert 'split:s1' in text
     assert 'Split effective: 2:1' in text
+
+
+# ─── U17 — _extract_bz_id helper + bz_id field on news events ────────────
+
+
+def test_extract_bz_id_parses_canonical_format():
+    """U17: production format 'bzNews_<digits>' → bare digit string."""
+    assert iq._extract_bz_id('bzNews_34165510') == '34165510'
+    assert iq._extract_bz_id('bzNews_1') == '1'
+
+
+def test_extract_bz_id_returns_none_for_non_bzNews_or_malformed():
+    """U17: defensive cases — non-bzNews prefix, empty suffix, non-digit suffix, None, non-string."""
+    assert iq._extract_bz_id(None) is None
+    assert iq._extract_bz_id('') is None
+    assert iq._extract_bz_id('n1') is None                  # test-fixture style id
+    assert iq._extract_bz_id('reuters_xyz') is None         # foreign provider
+    assert iq._extract_bz_id('bzNews_') is None             # empty suffix
+    assert iq._extract_bz_id('bzNews_abc') is None          # non-digit suffix
+    assert iq._extract_bz_id('bzNews_1a2b') is None         # mixed
+    assert iq._extract_bz_id(12345) is None                 # non-string
+
+
+def _u17_news_row(news_id):
+    """Minimal NEWS row matching QUERY_IQ_NEWS shape — all returns null."""
+    return {"created": "2024-07-01T10:00:00-04:00", "market_session": "in_market",
+            "news_id": news_id, "title": "T", "channels": "[]", "authors": "[]",
+            "tags": "[]", "url": None, "updated": None, "returns_schedule": None,
+            "hourly_stock": None, "session_stock": None, "daily_stock": None,
+            "hourly_sector": None, "session_sector": None, "daily_sector": None,
+            "hourly_industry": None, "session_industry": None, "daily_industry": None,
+            "hourly_macro": None, "session_macro": None, "daily_macro": None}
+
+
+def test_news_event_carries_bz_id_for_canonical_news_id(tmp_path):
+    """U17: builder emits bz_id field when news_id matches 'bzNews_<digits>'."""
+    mgr = _mock_manager({"NEWS": [_u17_news_row("bzNews_34165510")]})
+    with patch("scripts.earnings.builders.inter_quarter_context.get_manager", return_value=mgr):
+        with patch("utils.market_session.MarketSessionClassifier", return_value=_mock_session_helper()):
+            packet = iq.build_inter_quarter_context(
+                "FAKE", "2024-06-30T16:00:00-04:00", "2024-07-30T16:00:00-04:00",
+                out_path=str(tmp_path / "iq.json"),
+            )
+    news_events = [e for d in packet["days"] for e in d["events"] if e["type"] == "news"]
+    assert len(news_events) == 1
+    assert news_events[0]["bz_id"] == "34165510"
+    assert news_events[0]["id"] == "bzNews_34165510"        # raw id preserved
+
+
+def test_news_event_bz_id_is_none_for_non_canonical_news_id(tmp_path):
+    """U17: builder emits bz_id=None for non-canonical news_id (forward-compat)."""
+    mgr = _mock_manager({"NEWS": [_u17_news_row("n1")]})
+    with patch("scripts.earnings.builders.inter_quarter_context.get_manager", return_value=mgr):
+        with patch("utils.market_session.MarketSessionClassifier", return_value=_mock_session_helper()):
+            packet = iq.build_inter_quarter_context(
+                "FAKE", "2024-06-30T16:00:00-04:00", "2024-07-30T16:00:00-04:00",
+                out_path=str(tmp_path / "iq.json"),
+            )
+    news_events = [e for d in packet["days"] for e in d["events"] if e["type"] == "news"]
+    assert len(news_events) == 1
+    assert news_events[0]["bz_id"] is None
+    assert news_events[0]["id"] == "n1"
+
+
+# ─── U17 — renderer: News Events Ref cell shows [bz:NNN] when bz_id present ──
+
+
+def _u17_news_ev(news_id, bz_id, title="T"):
+    """Minimal news event dict for renderer tests (mirrors builder output schema)."""
+    return {
+        "event_ref": f"news:{news_id}", "type": "news",
+        "available_precision": "timestamp",
+        "created": "2024-07-01T10:00:00-04:00", "market_session": "in_market",
+        "title": title, "channels": [],
+        "forward_returns": {"horizons": []},
+        "id": news_id, "bz_id": bz_id,
+    }
+
+
+def test_render_news_table_ref_includes_bz_when_present():
+    """U17: rendered Ref cell appends [bz:<digits>] when bz_id is non-None.
+
+    Tests the markdown _iq_news_table renderer (renderer/inter_quarter.py),
+    not the legacy plain-text render_inter_quarter_text in this builder file.
+    """
+    from scripts.earnings.renderer.inter_quarter import _iq_news_table
+    ev = _u17_news_ev("bzNews_34165510", "34165510", title="AVGO Hits 52-Week High")
+    days = [{"date": "2024-07-01", "events": [ev]}]
+    md = _iq_news_table(days)
+    assert "N1 [bz:34165510]" in md
+    assert "N1[bz:" not in md                                # canonical spacing
+
+
+def test_render_news_table_ref_falls_back_to_bare_when_bz_absent():
+    """U17: rendered Ref cell is bare 'N1' when bz_id is None — no '[bz:None]' artifact."""
+    from scripts.earnings.renderer.inter_quarter import _iq_news_table
+    ev = _u17_news_ev("n1", None, title="Generic Headline")
+    days = [{"date": "2024-07-01", "events": [ev]}]
+    md = _iq_news_table(days)
+    assert "[bz:None]" not in md
+    assert "[bz:" not in md                                  # no bz tag at all
+    assert "| N1 |" in md                                    # bare table cell
+
+
+def test_render_news_table_mixed_present_and_absent_bz():
+    """U17: events with and without bz_id render in same table; render-order numbering preserved."""
+    from scripts.earnings.renderer.inter_quarter import _iq_news_table
+    ev1 = _u17_news_ev("bzNews_111", "111", title="With BZ")
+    ev2 = _u17_news_ev("alt_222", None, title="Without BZ")
+    days = [{"date": "2024-07-01", "events": [ev1, ev2]}]
+    md = _iq_news_table(days)
+    assert "N1 [bz:111]" in md
+    assert "| N2 |" in md                                    # bare for ev2
+    assert md.index("N1 [bz:111]") < md.index("| N2 |")      # render order preserved
+
+
+def test_render_news_table_ref_numbering_unaffected_by_bz_absence():
+    """U17 invariant: render-order N{i} numbering unchanged when no events have bz_id."""
+    from scripts.earnings.renderer.inter_quarter import _iq_news_table
+    ev1 = _u17_news_ev("a1", None, title="A")
+    ev2 = _u17_news_ev("a2", None, title="B")
+    days = [{"date": "2024-07-01", "events": [ev1, ev2]}]
+    md = _iq_news_table(days)
+    assert "| N1 |" in md
+    assert "| N2 |" in md
