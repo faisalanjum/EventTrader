@@ -26,9 +26,9 @@ The rendered bundle's lessons section may carry an inline `learner_result: <path
 
 You may ONLY Read learner_result: paths that are explicitly listed under the "Allowed learner reports for this prediction" block in the rendered bundle (equivalently `learning_context._allowed_learner_paths` in the JSON — same set, two surfaces). Do NOT construct, guess, or pattern-extend additional paths from the format. The allowlist is the canonical PIT-safe set the orchestrator emitted for this prediction; any path not on it must not be Read, even if the directory layout would suggest one exists.
 
-When you cite material sourced from a learner result, set the `source` field in your `evidence_ledger` to `"learner_file:<path>"` (using the same path string from the allowlist) so the lineage is traceable in your output.
+When a learner result informs a claim, set `source_id` to the catalog anchor that brought the sidecar into scope — typically `SRC:<TICKER>:<QUARTER>:<ACCESSION>#S10.lesson.L<n>`, where `L<n>` matches the lesson's marker in `## Lessons To Label`. You MAY additionally set the free-text `source` field to `"learner result: <path>"` for human-readable traceability (this flows through to the result.md Evidence Ledger table). The validator grounds on `source_id` only; `source` is descriptive and not validated.
 
-The rendered bundle's §6 Inter-Quarter Events table may carry a `Content` column on filing rows pointing to a per-accession sidecar markdown file under `events/{quarter}/related_filings/{accession}.md`. You MAY Read these files when an inter-quarter same-filer 8-K's items (e.g., Item 1.01 material agreements, 2.05 restructuring, 5.02 officer changes, 4.02 restatements) appear directionally relevant to the prediction. This is OPTIONAL; do not follow links by default. You may ONLY Read paths explicitly listed under the "Allowed related filing files for this prediction" block in §6 (equivalently `inter_quarter_context._allowed_related_filing_paths` in the JSON — same set, two surfaces). Do NOT construct or guess additional paths. When you cite material sourced from a related filing, set the `source` field in your `evidence_ledger` to `"related_filing_file:<path>"` so the lineage is traceable.
+The rendered bundle's §6 Inter-Quarter Events table may carry a `Content` column on filing rows pointing to a per-accession sidecar markdown file under `events/{quarter}/related_filings/{accession}.md`. You MAY Read these files when an inter-quarter same-filer 8-K's items (e.g., Item 1.01 material agreements, 2.05 restructuring, 5.02 officer changes, 4.02 restatements) appear directionally relevant to the prediction. This is OPTIONAL; do not follow links by default. You may ONLY Read paths explicitly listed under the "Allowed related filing files for this prediction" block in §6 (equivalently `inter_quarter_context._allowed_related_filing_paths` in the JSON — same set, two surfaces). Do NOT construct or guess additional paths. When a related filing sidecar informs a claim, set `source_id` to the §6 catalog anchor for that filing — either `SRC:<TICKER>:<QUARTER>:<ACCESSION>#S6.filing.F<n>` (the rendered F# alias from the §6 table, easiest to copy from what you see) or `SRC:<TICKER>:<QUARTER>:<ACCESSION>#S6.event.report:<accession>` (the raw event form, also in the catalog). You MAY additionally set the free-text `source` field to `"related filing: <path>"` for human-readable traceability. The validator grounds on `source_id` only.
 
 ## Rules
 
@@ -40,7 +40,20 @@ The rendered bundle's §6 Inter-Quarter Events table may carry a `Content` colum
 
 **Source of truth**: the rendered bundle's `## Lessons To Label (verbatim, in order)` section. Each lesson is one block, prefixed by an `L#` marker on its own line. Some markers carry a scope tag (e.g. `L4. [sector: Technology]`, `L5. [macro]`, `L6. [cross: AVGO,QCOM,AMD,TXN]`). The lesson body is the line(s) following the marker, before the next L# marker or section break.
 
-**What to do**: emit ONE `lesson_labels[]` entry per L# marker, in marker order. Set `lesson_text` to a verbatim copy of the body — no `L#` prefix, no scope tag, no leading/trailing whitespace beyond what the source has.
+**What to do**: emit ONE `lesson_labels[]` entry per L# marker, in marker order. Set `lesson_text` to a verbatim copy of the body — no `L#` prefix, no scope tag, no leading/trailing whitespace beyond what the source has. Preserve all punctuation, markdown, and inner whitespace as-is — do not "clean up" the body.
+
+**Worked example — extracting `lesson_text` from a tagged marker**:
+
+If the rendered bundle contains:
+```
+L4. [sector: Technology]
+In the 2023+ hyperscaler-AI-capex regime, semiconductor prints are graded on the composition of forward revenue, not the headline guide delta.
+```
+the correct entry is:
+```json
+{"lesson_text": "In the 2023+ hyperscaler-AI-capex regime, semiconductor prints are graded on the composition of forward revenue, not the headline guide delta.", "label": "...", "bundle_evidence": "..."}
+```
+The marker line (`L4. [sector: Technology]`) and the scope tag are excluded. The body's punctuation is preserved.
 
 **Count invariant**: `len(lesson_labels)` MUST equal the number of L# markers. Do NOT fabricate lessons. Do NOT pull lessons from `bundle.learning_context` JSON. Do NOT paraphrase or pattern-extend from prior knowledge.
 
