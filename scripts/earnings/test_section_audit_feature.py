@@ -246,77 +246,83 @@ SKILL_MD = REPO_ROOT / ".claude" / "skills" / "earnings-prediction" / "SKILL.md"
 
 
 class SkillMdContentSanityTests(unittest.TestCase):
-    """Verify Step 9's edits landed correctly: heading level, location,
-    SECTION_AUDIT_PATH in Input, all required fields, forbidden keys."""
+    """Verify the section-audit block is present in the SKILL.md, lists
+    every required field, forbids directional keys in the audit, and
+    appears in the right place within the new 7-section layout (Step 2
+    restructure renamed `## Phase 0.5` → `### 3.2 Section Audit` under
+    `## 3. Workflow`; behavior unchanged)."""
 
     def setUp(self):
         self.text = SKILL_MD.read_text(encoding="utf-8")
         self.lines = self.text.splitlines()
 
-    def test_phase_0_5_heading_at_h2_level(self):
-        # Must use ## (not ####) per plan
-        self.assertIn("## Phase 0.5 — Facts-Only Section Audit", self.text)
-        self.assertNotIn("#### Phase 0.5", self.text)
+    def test_section_audit_heading_present(self):
+        # Section 3.2 lives under "## 3. Workflow" at H3 level.
+        self.assertIn("### 3.2 Section Audit", self.text)
 
-    def test_phase_0_5_appears_between_phase_0_and_reasoning(self):
-        # File-order check: Phase 0 → Phase 0.5 → Reasoning
+    def test_section_audit_appears_after_3_1_before_3_3(self):
+        # File-order check inside §3 Workflow: 3.1 → 3.2 → 3.3 → §4
         def _find(prefix):
             for i, line in enumerate(self.lines):
                 if line.startswith(prefix):
                     return i
             return -1
-        p0 = _find("## Phase 0 — Label Prior Lessons")
-        p05 = _find("## Phase 0.5 — Facts-Only Section Audit")
-        reasoning = _find("## Reasoning")
-        self.assertNotEqual(p0, -1, "Phase 0 heading missing")
-        self.assertNotEqual(p05, -1, "Phase 0.5 heading missing")
-        self.assertNotEqual(reasoning, -1, "Reasoning heading missing")
-        self.assertLess(p0, p05, "Phase 0.5 must appear after Phase 0")
-        self.assertLess(p05, reasoning, "Phase 0.5 must appear before Reasoning")
+        s31 = _find("### 3.1 Read the rendered bundle")
+        s32 = _find("### 3.2 Section Audit")
+        s33 = _find("### 3.3 Lesson Labeling")
+        s4 = _find("## 4. Decision Framework")
+        self.assertNotEqual(s31, -1, "§3.1 heading missing")
+        self.assertNotEqual(s32, -1, "§3.2 Section Audit heading missing")
+        self.assertNotEqual(s33, -1, "§3.3 Lesson Labeling heading missing")
+        self.assertNotEqual(s4, -1, "§4 Decision Framework heading missing")
+        self.assertLess(s31, s32, "§3.2 must appear after §3.1")
+        self.assertLess(s32, s33, "§3.2 must appear before §3.3")
+        self.assertLess(s33, s4, "§3.3 must appear before §4")
 
-    def test_input_section_mentions_section_audit_path(self):
-        # Find the ## Input block and assert SECTION_AUDIT_PATH appears within it.
-        in_input = False
-        input_block = []
+    def test_inputs_section_mentions_section_audit_path(self):
+        # Find the ## 2. Inputs block and assert SECTION_AUDIT_PATH appears within it.
+        in_inputs = False
+        inputs_block = []
         for line in self.lines:
-            if line.startswith("## Input"):
-                in_input = True
+            if line.startswith("## 2. Inputs"):
+                in_inputs = True
                 continue
-            if in_input and line.startswith("## "):
+            if in_inputs and line.startswith("## "):
                 break
-            if in_input:
-                input_block.append(line)
-        block_text = "\n".join(input_block)
+            if in_inputs:
+                inputs_block.append(line)
+        block_text = "\n".join(inputs_block)
         self.assertIn("SECTION_AUDIT_PATH", block_text,
-            "## Input section must mention SECTION_AUDIT_PATH")
+            "## 2. Inputs section must mention SECTION_AUDIT_PATH")
 
-    def _phase_0_5_block(self) -> str:
-        """Extract just the Phase 0.5 block for scoped substring assertions."""
+    def _section_audit_block(self) -> str:
+        """Extract just the §3.2 Section Audit block for scoped assertions.
+        The block ends at the next H3 (###) or H2 (##) heading."""
         in_block = False
         out = []
         for line in self.lines:
-            if line.startswith("## Phase 0.5 "):
+            if line.startswith("### 3.2 Section Audit"):
                 in_block = True
                 continue
-            if in_block and line.startswith("## "):
+            if in_block and (line.startswith("### ") or line.startswith("## ")):
                 break
             if in_block:
                 out.append(line)
         return "\n".join(out)
 
-    def test_phase_0_5_lists_all_seven_field_names(self):
-        block = self._phase_0_5_block()
+    def test_section_audit_lists_all_seven_field_names(self):
+        block = self._section_audit_block()
         for field in ("section", "key_facts", "bullish_signals", "bearish_signals",
                       "missing_or_unclear", "source_ids", "not_material_reason"):
-            self.assertIn(f"`{field}`", block, f"Phase 0.5 missing field `{field}`")
+            self.assertIn(f"`{field}`", block, f"§3.2 missing field `{field}`")
 
-    def test_phase_0_5_forbids_directional_keys(self):
-        block = self._phase_0_5_block()
+    def test_section_audit_forbids_directional_keys(self):
+        block = self._section_audit_block()
         # Must explicitly forbid these in the audit
         for forbidden in ("direction", "confidence_score",
                           "expected_move_range_pct", "final_call"):
             self.assertIn(forbidden, block,
-                f"Phase 0.5 must mention forbidden key `{forbidden}`")
+                f"§3.2 must mention forbidden key `{forbidden}`")
         # Sanity: the prohibition phrasing must appear
         self.assertIn("Do NOT include", block)
 
