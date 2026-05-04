@@ -119,7 +119,16 @@ def validate_attribution_result(payload: dict[str, Any],
     Round 6 fresh-start: v3-only. Anything else is rejected with a clear
     message. The PreToolUse hook calls this same function — the wrapper is
     the only schema-version gate.
+
+    Totality (commit 1.5 follow-up): the validator's contract is "return
+    list of errors, never raise" so the orchestrator's H2 informed-retry
+    loop always gets a structured error list. JSON-valid but non-object
+    payloads (``[]``, ``"bad"``, ``null``, numbers, bools) would otherwise
+    crash on ``payload.get(...)``. Guard at top so the wrapper is total
+    over any json.loads() output.
     """
+    if not isinstance(payload, dict):
+        return ["learning/result.json must be a JSON object"]
     sv = payload.get("schema_version")
     if sv != "attribution_result.v3":
         return [

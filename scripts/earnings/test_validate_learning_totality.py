@@ -270,6 +270,35 @@ class ValidatorTotalityTests(unittest.TestCase):
         errs = _validate_must_return(p, "feedback=['list']")
         self.assertTrue(any("feedback" in e and "object" in e for e in errs), errs)
 
+    # ── Top-level non-object payloads (commit 1.5 follow-up) ──
+    # ``json.loads`` returns Python's mapping for any JSON-valid input.
+    # The wrapper must accept ANY of these without raising — non-object
+    # payloads simply produce a single typed error.
+    def test_payload_is_list_returns_error(self):
+        errs = _validate_must_return([], "payload=[]")
+        self.assertEqual(len(errs), 1)
+        self.assertIn("must be a JSON object", errs[0])
+
+    def test_payload_is_string_returns_error(self):
+        errs = _validate_must_return("bad", "payload='bad'")
+        self.assertEqual(len(errs), 1)
+        self.assertIn("must be a JSON object", errs[0])
+
+    def test_payload_is_none_returns_error(self):
+        errs = _validate_must_return(None, "payload=None")
+        self.assertEqual(len(errs), 1)
+        self.assertIn("must be a JSON object", errs[0])
+
+    def test_payload_is_number_returns_error(self):
+        errs = _validate_must_return(42, "payload=42")
+        self.assertEqual(len(errs), 1)
+        self.assertIn("must be a JSON object", errs[0])
+
+    def test_payload_is_bool_returns_error(self):
+        errs = _validate_must_return(True, "payload=True")
+        self.assertEqual(len(errs), 1)
+        self.assertIn("must be a JSON object", errs[0])
+
     # ── Bonus: full malformed payload kitchen sink — validator must not crash ──
     def test_kitchen_sink_malformed_payload(self):
         p = _base_payload()
