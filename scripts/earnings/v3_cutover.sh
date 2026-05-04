@@ -6,16 +6,32 @@
 # `kubectl scale -n processing deployment/extraction-worker --replicas=0`
 # or whatever stops live learner runs).
 #
+# Symlink note (commit 4.4 patch): ``earnings-analysis/Companies`` is a
+# symlink to a sibling Obsidian-vault directory in production. Plain
+# ``find earnings-analysis/Companies …`` does NOT traverse a symlink at
+# the start path. All find invocations under Companies/ use ``find -H``
+# (follows ONLY the command-line symlink — narrower than ``-L`` which
+# would chase any nested symlink inside the tree; correct safety
+# posture for a destructive delete script). Without ``-H`` the script
+# silently misses every stale learning artifact under Companies/,
+# defeating the entire fresh-start cutover. Pre-fix evidence: cutover
+# #1 on a real production tree reported "deleted: 0 result.json files"
+# while a stale attribution_result.v2 file remained at
+# Companies/AVGO/events/Q4_FY2023/learning/result.json — the v3
+# validator rejected it on the next learner run, exposing the bug.
+#
 # What it does:
 #   1. Backs up existing learnings/ + every Companies/*/events/*/learning/
 #      result.{json,md} into earnings-analysis/.pre-v3-cutover-backup/.
 #      Backups stay for ~1 quarter (deletable once the v3 loop has
 #      proven itself in production).
 #   2. Wipes the learnings library (ticker/*.json + global.json + .lock).
-#   3. Wipes every events/*/learning/result.{json,md} so the next learner
-#      run for that quarter regenerates as v3 (the orchestrator's recovery
-#      path triggers on the existing result.json — wiping forces a fresh
-#      learner invocation).
+#   3. Wipes every events/*/learning/{result.json, result.md, thinking.md,
+#      subagents/} so the next learner run for that quarter regenerates
+#      as v3 (the orchestrator's recovery path triggers on the existing
+#      result.json — wiping forces a fresh learner invocation; the
+#      thinking.md + subagents/ wipe ensures no v2-era reasoning bleeds
+#      into the next run's audit trail).
 #   4. Initializes an empty v3 global.json (validator-compatible).
 #
 # What it does NOT do:
@@ -65,19 +81,43 @@ else
   echo "    skip: ${EARNINGS_ROOT}/learnings/ does not exist (fresh tree)"
 fi
 
-if [[ -d "${EARNINGS_ROOT}/Companies" ]]; then
-  result_count=$(find "${EARNINGS_ROOT}/Companies" \
+if [[ -d "${EARNINGS_ROOT}/Companies" || -L "${EARNINGS_ROOT}/Companies" ]]; then
+  # ``-H`` follows ONLY the Companies/ symlink at the start path
+  # (narrower than ``-L``). See header note — without ``-H`` the script
+  # silently misses every stale learning artifact.
+  #
+  # Backup gate counts ALL artifact types we delete in Step 3 (commit 4.4
+  # refinement). If only result.md were present (e.g., a partial wipe
+  # left an Obsidian sidecar behind), we'd still want to back it up
+  # before Step 3 nukes it.
+  result_count=$(find -H "${EARNINGS_ROOT}/Companies" \
                   -path "*/events/*/learning/result.json" 2>/dev/null | wc -l)
-  if [[ "${result_count}" -gt 0 ]]; then
-    find "${EARNINGS_ROOT}/Companies" \
+  result_md_count=$(find -H "${EARNINGS_ROOT}/Companies" \
+                  -path "*/events/*/learning/result.md" 2>/dev/null | wc -l)
+  thinking_count=$(find -H "${EARNINGS_ROOT}/Companies" \
+                  -path "*/events/*/learning/thinking.md" 2>/dev/null | wc -l)
+  subagents_count=$(find -H "${EARNINGS_ROOT}/Companies" \
+                  -path "*/events/*/learning/subagents" -type d 2>/dev/null | wc -l)
+  if [[ "${result_count}" -gt 0 || "${result_md_count}" -gt 0 \
+        || "${thinking_count}" -gt 0 || "${subagents_count}" -gt 0 ]]; then
+    find -H "${EARNINGS_ROOT}/Companies" \
          -path "*/events/*/learning/result.json" \
          -exec cp --parents {} "${BACKUP_ROOT}/" \; 2>/dev/null || true
-    find "${EARNINGS_ROOT}/Companies" \
+    find -H "${EARNINGS_ROOT}/Companies" \
          -path "*/events/*/learning/result.md" \
          -exec cp --parents {} "${BACKUP_ROOT}/" \; 2>/dev/null || true
-    echo "    backed up: ${result_count} learning/result.json + .md sidecars"
+    find -H "${EARNINGS_ROOT}/Companies" \
+         -path "*/events/*/learning/thinking.md" \
+         -exec cp --parents {} "${BACKUP_ROOT}/" \; 2>/dev/null || true
+    # Subagent transcripts: backed up as a flat archive of file paths
+    # (cp --parents preserves the relative tree under BACKUP_ROOT).
+    find -H "${EARNINGS_ROOT}/Companies" \
+         -path "*/events/*/learning/subagents/*" \
+         -type f \
+         -exec cp --parents {} "${BACKUP_ROOT}/" \; 2>/dev/null || true
+    echo "    backed up: ${result_count} result.json, ${result_md_count} result.md, ${thinking_count} thinking.md, ${subagents_count} subagents/ trees"
   else
-    echo "    skip: no events/*/learning/result.json files found"
+    echo "    skip: no events/*/learning/ artifacts found (fresh tree)"
   fi
 fi
 
@@ -89,14 +129,24 @@ rm -f "${EARNINGS_ROOT}/learnings/global.json"
 rm -f "${EARNINGS_ROOT}/learnings/global.lock"
 echo "    wiped: ticker/*.json, global.json, global.lock"
 
-# ── Step 3: Wipe pre-v3 attribution result files ─────────────────────────
+# ── Step 3: Wipe pre-v3 attribution artifacts ────────────────────────────
+# Symlink-aware — see header note. Wipes the full learning artifact set:
+# result.json (the schema gate), result.md (Obsidian sidecar), thinking.md
+# (learner's chain-of-thought), and subagents/ (data-fetch transcripts).
 echo ""
-echo "==> Step 3/4: wiping pre-v3 events/*/learning/result.{json,md}"
-deleted=$(find "${EARNINGS_ROOT}/Companies" \
+echo "==> Step 3/4: wiping pre-v3 events/*/learning/{result.{json,md}, thinking.md, subagents/}"
+del_result_json=$(find -H "${EARNINGS_ROOT}/Companies" \
               -path "*/events/*/learning/result.json" -delete -print 2>/dev/null | wc -l)
-find "${EARNINGS_ROOT}/Companies" \
-     -path "*/events/*/learning/result.md" -delete 2>/dev/null || true
-echo "    deleted: ${deleted} result.json files (and their .md sidecars)"
+del_result_md=$(find -H "${EARNINGS_ROOT}/Companies" \
+              -path "*/events/*/learning/result.md" -delete -print 2>/dev/null | wc -l)
+del_thinking=$(find -H "${EARNINGS_ROOT}/Companies" \
+              -path "*/events/*/learning/thinking.md" -delete -print 2>/dev/null | wc -l)
+# subagents/ directory wipe — recurse files first, then the directory.
+del_subagents=$(find -H "${EARNINGS_ROOT}/Companies" \
+              -path "*/events/*/learning/subagents/*" -delete -print 2>/dev/null | wc -l)
+find -H "${EARNINGS_ROOT}/Companies" \
+     -path "*/events/*/learning/subagents" -type d -empty -delete 2>/dev/null || true
+echo "    deleted: ${del_result_json} result.json, ${del_result_md} result.md, ${del_thinking} thinking.md, ${del_subagents} subagent transcripts"
 
 # ── Step 4: Initialize empty v3 library ──────────────────────────────────
 echo ""
