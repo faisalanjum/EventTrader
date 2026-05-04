@@ -33,14 +33,33 @@ sys.path.insert(0, str(_REPO_ROOT / "scripts" / "earnings"))
 import earnings_orchestrator as orch
 
 
+def _default_v3_lesson(body: str = "fixture lesson") -> dict:
+    """Minimal v3-shape predictor_lessons entry — needed so build_learning_context's
+    commit-2.1 empty-row drop doesn't filter the test fixture rows."""
+    from earnings_orchestrator import compute_lesson_id
+    return {
+        "lesson_id":     compute_lesson_id(body, "ticker", "X"),
+        "lesson":        body,
+        "mechanism":     "m", "applies_when": "a", "invalid_if": "i",
+        "evidence_refs": ["E1"],
+        "scope":         "ticker", "routing_key": "X",
+        "audit_history": [], "parent_id": None,
+    }
+
+
 def _write_ticker_json(learnings_dir: Path, ticker: str, lessons: list[dict]) -> Path:
     ticker_dir = learnings_dir / "ticker"
     ticker_dir.mkdir(parents=True, exist_ok=True)
+    normalized = []
+    for row in lessons:
+        if not row.get("predictor_lessons"):
+            row = {**row, "predictor_lessons": [_default_v3_lesson()]}
+        normalized.append(row)
     payload = {
         "schema_version": "ticker_lessons.v2",
         "ticker": ticker.upper(),
         "updated_at": None,
-        "lessons": lessons,
+        "lessons": normalized,
     }
     p = ticker_dir / f"{ticker.upper()}.json"
     p.write_text(json.dumps(payload, indent=2), encoding="utf-8")

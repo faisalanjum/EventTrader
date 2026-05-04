@@ -192,5 +192,123 @@ class ApplyRenderViewTests(unittest.TestCase):
         self.assertEqual(view["_render_audit_counts"], {"helped": 2, "outweighed": 1})
 
 
+# ── Commit 2.1 — retired-only rows dropped before ticker cap ──
+# build_learning_context cap is on rows (8 newest). Without the post-
+# _apply_render_view "drop empty predictor_lessons" filter, 8 retired-only
+# rows could fill the cap and crowd out a 9th row whose lessons are still
+# active — a violation of "retired lessons must never consume cap slots"
+# (user clarification #2). Reproducer + regression test.
+
+
+class RetiredOnlyRowDoesNotConsumeCapTests(unittest.TestCase):
+    """Pin user-#2 invariant for the ticker-row cap (commit 2.1 fix)."""
+
+    def setUp(self):
+        import tempfile
+        self._tmp = tempfile.TemporaryDirectory()
+        self.tmp = Path(self._tmp.name)
+        self.companies_dir = self.tmp / "Companies"
+        self.companies_dir.mkdir()
+        self.learnings_dir = self.tmp / "learnings"
+        self.learnings_dir.mkdir()
+
+    def tearDown(self):
+        self._tmp.cleanup()
+
+    def _lesson(self, body, audit_actions=()):
+        from earnings_orchestrator import compute_lesson_id
+        return {
+            "lesson_id":     compute_lesson_id(body, "ticker", "AVGO"),
+            "lesson":        body, "mechanism": "m", "applies_when": "a",
+            "invalid_if":    "i", "evidence_refs": ["E1"],
+            "scope": "ticker", "routing_key": "AVGO",
+            "audit_history": [
+                {"action": a, "review": "misled",
+                 "audit_pit_cutoff": None,
+                 "auditor_ticker": "X", "auditor_quarter_label": f"Q{i}"}
+                for i, a in enumerate(audit_actions)
+            ],
+            "parent_id": None,
+        }
+
+    def _write_ticker(self, lessons):
+        import json as _json
+        ticker_dir = self.learnings_dir / "ticker"
+        ticker_dir.mkdir(parents=True, exist_ok=True)
+        (ticker_dir / "AVGO.json").write_text(_json.dumps({
+            "schema_version": "ticker_lessons.v2", "ticker": "AVGO",
+            "updated_at": None, "lessons": lessons,
+        }), encoding="utf-8")
+
+    def test_eight_retired_rows_do_not_crowd_out_active_row(self):
+        # 8 newest rows have only-retired lessons; 9th (oldest) row has
+        # an active lesson. After commit 2.1, the active row must survive
+        # the cap — even though it's the oldest by attributed_at.
+        import earnings_orchestrator as orch
+        rows = []
+        for i in range(8):
+            rows.append({
+                "quarter_label":  f"Q{i:02d}_FY2024",
+                "attributed_at":  f"2024-{i+1:02d}-01T00:00:00+00:00",
+                "predictor_lessons": [self._lesson(f"r{i}", audit_actions=("retire",))],
+            })
+        rows.append({
+            "quarter_label":  "Q99_FY2023",
+            "attributed_at":  "2023-12-01T00:00:00+00:00",
+            "predictor_lessons": [self._lesson("active body")],
+        })
+        self._write_ticker(rows)
+        result = orch.build_learning_context(
+            "AVGO", base_dir=self.learnings_dir,
+            companies_dir=self.companies_dir,
+        )
+        visible_quarters = [r["quarter_label"] for r in result["ticker_lessons"]]
+        self.assertIn("Q99_FY2023", visible_quarters,
+                      "active row was crowded out by retired-only rows")
+
+    def test_originally_empty_rows_also_dropped(self):
+        # A row with no predictor_lessons (e.g., learner emitted 0 new
+        # lessons) is also dropped before the cap. Its Context-Only
+        # block utility is secondary; freeing the slot for lesson-bearing
+        # quarters takes priority.
+        import earnings_orchestrator as orch
+        self._write_ticker([
+            {"quarter_label":  "Q1_FY2024",
+             "attributed_at":  "2024-01-01T00:00:00+00:00",
+             "predictor_lessons": []},
+            {"quarter_label":  "Q2_FY2024",
+             "attributed_at":  "2024-04-01T00:00:00+00:00",
+             "predictor_lessons": [self._lesson("active body")]},
+        ])
+        result = orch.build_learning_context(
+            "AVGO", base_dir=self.learnings_dir,
+            companies_dir=self.companies_dir,
+        )
+        visible = [r["quarter_label"] for r in result["ticker_lessons"]]
+        self.assertEqual(visible, ["Q2_FY2024"])
+
+    def test_partially_retired_row_survives(self):
+        # A row with mixed retired + active lessons survives the cap
+        # (predictor_lessons is non-empty after _apply_render_view).
+        import earnings_orchestrator as orch
+        self._write_ticker([{
+            "quarter_label":  "Q1_FY2024",
+            "attributed_at":  "2024-01-01T00:00:00+00:00",
+            "predictor_lessons": [
+                self._lesson("retired_one", audit_actions=("retire",)),
+                self._lesson("active_one"),
+            ],
+        }])
+        result = orch.build_learning_context(
+            "AVGO", base_dir=self.learnings_dir,
+            companies_dir=self.companies_dir,
+        )
+        self.assertEqual(len(result["ticker_lessons"]), 1)
+        # Only the active lesson should remain
+        surviving = result["ticker_lessons"][0]["predictor_lessons"]
+        self.assertEqual(len(surviving), 1)
+        self.assertEqual(surviving[0]["lesson"], "active_one")
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

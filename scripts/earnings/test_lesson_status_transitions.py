@@ -150,5 +150,91 @@ class ComputeStatusTests(unittest.TestCase):
         self.assertEqual(compute_status(_lesson(audits)), "retired")
 
 
+# ── Commit 2.1 — compute_status totality ──
+# compute_status is on the bundle-assembly hot path. A corrupt
+# audit_history in any library file would otherwise crash every
+# prediction's bundle build. Same totality contract as commit 1.5/1.6
+# applied to the validator: published functions return a value,
+# never raise on malformed input.
+
+
+class ComputeStatusTotalityTests(unittest.TestCase):
+    """Each malformed input must produce a value (not raise)."""
+
+    def _check(self, lesson, expected="active"):
+        try:
+            actual = compute_status(lesson)
+        except Exception as e:
+            self.fail(f"compute_status raised {type(e).__name__}: {e!r} — "
+                      f"contract violation; must return a string")
+        self.assertEqual(actual, expected,
+                          f"unexpected status for input {lesson!r}")
+
+    def test_lesson_is_none(self):
+        self._check(None)
+
+    def test_lesson_is_string(self):
+        self._check("legacy v1 lesson body")
+
+    def test_lesson_is_list(self):
+        self._check(["not", "a", "dict"])
+
+    def test_audit_history_is_string(self):
+        self._check({"audit_history": "bad"})
+
+    def test_audit_history_is_dict(self):
+        self._check({"audit_history": {"a": "b"}})
+
+    def test_audit_history_is_int(self):
+        self._check({"audit_history": 42})
+
+    def test_audit_history_contains_none(self):
+        self._check({"audit_history": [None]})
+
+    def test_audit_history_contains_string(self):
+        self._check({"audit_history": ["bad"]})
+
+    def test_review_unhashable_list_excluded_from_counter(self):
+        # An unhashable review value would crash Counter; the guard skips
+        # it. With only one (skipped) audit, status is "active".
+        self._check({"audit_history": [{"review": [], "action": "keep"}]})
+
+    def test_review_unhashable_dict_excluded_from_counter(self):
+        self._check({"audit_history": [{"review": {}, "action": "keep"}]})
+
+    def test_action_unhashable_does_not_trigger_retire(self):
+        # action="retire" check uses tuple membership (== compare), not
+        # hash — unhashable action just compares unequal and is ignored.
+        self._check({"audit_history": [{"review": "helped", "action": []}]})
+
+    def test_partial_corruption_still_processes_valid_entries(self):
+        # 1 valid misled + 1 corrupt entry → only valid one counts.
+        # Threshold for retire is 3 misled, so result is "active".
+        self._check({"audit_history": [
+            {"review": "misled", "action": "keep"},
+            None,  # corrupt — skipped
+            {"review": [], "action": "keep"},  # corrupt review — review skipped
+        ]})
+
+    def test_three_misled_with_corrupt_entries_still_retires(self):
+        # 3 valid misled + interleaved corrupt entries → still hits retire
+        # threshold over the last-5 window.
+        self._check({"audit_history": [
+            {"review": "misled", "action": "keep"},
+            None,
+            {"review": "misled", "action": "keep"},
+            "garbage",
+            {"review": "misled", "action": "keep"},
+        ]}, expected="retired")
+
+    def test_explicit_retire_among_corrupt_is_terminal(self):
+        # action="retire" survives; corrupt entries are skipped.
+        self._check({"audit_history": [
+            None,
+            {"action": "retire"},
+            "garbage",
+        ]}, expected="retired")
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

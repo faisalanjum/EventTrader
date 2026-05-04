@@ -449,6 +449,101 @@ class AggregatorTests(unittest.TestCase):
             data["lessons"][0]["predictor_lessons"][0]["audit_history"], [],
         )
 
+    # ── Commit 2.1 — refinement re-run idempotent ──────────────────────
+
+    def test_refine_rerun_does_not_duplicate_replacement_ticker(self):
+        # Aggregator re-runs (recovery path or H2 retry) must NOT insert
+        # the replacement lesson twice. Pre-fix, parent's audit upsert was
+        # idempotent but replacement append was unconditional.
+        body = "parent body to refine"
+        lesson = _v3_lesson_dict(body)
+        _write_ticker_lib(self.learnings_dir, "AVGO", [("Q1_FY2024", [lesson])])
+        # Pre-create auditor's quarter row.
+        existing = json.loads(self._ticker_path("AVGO").read_text())
+        existing["lessons"].append({
+            "quarter_label": "Q2_FY2024",
+            "attributed_at": "2024-05-01T00:00:00+00:00",
+            "source_filed_8k": "2024-04-01T00:00:00+00:00",
+            "source_pit_cutoff": "2024-04-01T00:00:00+00:00",
+            "predictor_lessons": [],
+        })
+        self._ticker_path("AVGO").write_text(json.dumps(existing, indent=2))
+
+        learning = _learning_payload_for_quarter(
+            "AVGO", "Q2_FY2024",
+            [_audit_for_lesson_0(body, review="misled", action="refine",
+                                   replacement_lesson=_replacement("refined body new"))],
+        )
+        bundle = _bundle_with_ticker_lesson("Q1_FY2024", lesson)
+        prediction = _prediction_with_one_label("confirmed", cites_indices=[0])
+
+        for _ in range(3):
+            aggregate_lesson_audits(
+                learning_payload=learning, prediction_payload=prediction,
+                bundle=bundle, auditor_ticker="AVGO",
+                auditor_quarter_label="Q2_FY2024",
+                audit_pit_cutoff="2024-04-01T00:00:00+00:00",
+                learnings_dir=self.learnings_dir,
+            )
+        data = json.loads(self._ticker_path("AVGO").read_text())
+        auditor_row = [r for r in data["lessons"] if r["quarter_label"] == "Q2_FY2024"][0]
+        self.assertEqual(
+            len(auditor_row["predictor_lessons"]), 1,
+            "replacement was duplicated — re-runs must be idempotent",
+        )
+        # And parent's audit_history is also still 1 (upsert by auditor key)
+        parent = data["lessons"][0]["predictor_lessons"][0]
+        self.assertEqual(len(parent["audit_history"]), 1)
+
+    def test_refine_rerun_does_not_duplicate_replacement_global(self):
+        # Same idempotency invariant for global-scope refine path.
+        # E31 atomicity already binds parent-audit + new-entry under one
+        # flock; commit 2.1 ensures the new-entry insert is also idempotent.
+        body = "macro body to refine"
+        macro_id = compute_lesson_id(body, "macro", None)
+        global_entry = {
+            "lesson_id":   macro_id, "lesson": body,
+            "mechanism": "m", "applies_when": "a", "invalid_if": "i",
+            "evidence_refs": ["E1"],
+            "scope":        "macro", "routing_key": None,
+            "source_ticker": "MSFT", "source_sector": "Technology",
+            "quarter_label": "Q1_FY2024",
+            "attributed_at": "2024-01-01T00:00:00+00:00",
+            "source_filed_8k": "2024-01-01T00:00:00+00:00",
+            "source_pit_cutoff": "2024-01-01T00:00:00+00:00",
+            "audit_history":  [], "parent_id": None,
+        }
+        _write_global_lib(self.learnings_dir, [global_entry])
+        bundle = {"learning_context": {"ticker_lessons": [],
+                                          "global_lessons": [global_entry]}}
+        learning = _learning_payload_for_quarter(
+            "AAPL", "Q2_FY2024",
+            [_audit_for_lesson_0(body, review="misled", action="refine",
+                                   replacement_lesson=_replacement("refined macro"))],
+        )
+        prediction = {"lesson_labels": [{"label": "confirmed"}],
+                      "key_drivers": [{"cites_lesson_indices": [0]}]}
+
+        for _ in range(3):
+            aggregate_lesson_audits(
+                learning_payload=learning, prediction_payload=prediction,
+                bundle=bundle, auditor_ticker="AAPL",
+                auditor_quarter_label="Q2_FY2024",
+                audit_pit_cutoff="2024-04-01T00:00:00+00:00",
+                learnings_dir=self.learnings_dir,
+            )
+        data = json.loads((self.learnings_dir / "global.json").read_text())
+        # Parent's audit appears exactly once (upsert)
+        parent = [e for e in data["entries"] if e["lesson_id"] == macro_id][0]
+        self.assertEqual(len(parent["audit_history"]), 1)
+        # Replacement appears exactly once across re-runs
+        refined_id = compute_lesson_id("refined macro", "macro", None)
+        refined_entries = [e for e in data["entries"] if e["lesson_id"] == refined_id]
+        self.assertEqual(
+            len(refined_entries), 1,
+            "global-scope replacement was duplicated — re-runs must be idempotent",
+        )
+
     # ── Global-scope audit append ──────────────────────────────────────
 
     def test_global_audit_append(self):

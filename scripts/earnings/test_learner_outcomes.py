@@ -89,15 +89,17 @@ def test_all_constants_are_lowercase_snake_case_strings():
 
 # ── Return-site count parity ─────────────────────────────────────────────
 
-def test_run_learner_for_quarter_has_fifteen_return_statements():
-    """Grep the function source — must find exactly 15 ``return`` statements.
+def test_run_learner_for_quarter_has_sixteen_return_statements():
+    """Grep the function source — must find exactly 16 ``return`` statements.
 
     Note: the count is NOT 1:1 with LearnerOutcome.ALL anymore.
     LearnerLoopRevamp.md commit 2 (D18 + D19) added three new branches in
     the recovery path (sibling-file existence, cross-file validation,
     aggregator wrap), all of which surface ``FAILED_RECOVERY_APPEND``
     when they fail. Plus one new branch in the success path for D18
-    aggregator failure → ``FAILED_AGGREGATOR``.
+    aggregator failure → ``FAILED_AGGREGATOR``. Commit 2.1 added one more
+    recovery-path branch (sibling-totality check) also tagged
+    ``FAILED_RECOVERY_APPEND`` → 16 returns total.
 
     The lower-level test ``test_every_return_returns_a_two_tuple_with_a_known_outcome``
     is now the authoritative invariant — every return must tag a known
@@ -109,9 +111,9 @@ def test_run_learner_for_quarter_has_fifteen_return_statements():
     src = inspect.getsource(rlfq)
     tree = ast.parse(src)
     returns = [n for n in ast.walk(tree) if isinstance(n, ast.Return)]
-    assert len(returns) == 15, (
+    assert len(returns) == 16, (
         f"run_learner_for_quarter has {len(returns)} return statements; "
-        f"expected 15. If you added a new branch, ensure it tags a known "
+        f"expected 16. If you added a new branch, ensure it tags a known "
         f"LearnerOutcome (the AST tagging test will catch a bare or "
         f"unknown-constant return) and update this count."
     )

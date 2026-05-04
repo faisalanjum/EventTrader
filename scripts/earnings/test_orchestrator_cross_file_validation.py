@@ -236,5 +236,155 @@ class CrossFileValidationTests(unittest.TestCase):
             )
 
 
+# ── Commit 2.1 — _full_validate_for_orchestrator sibling totality ──
+# A JSON-valid but non-object sibling file (prediction/result.json or
+# context_bundle.json being ``[]``, ``"bad"``, ``null``, etc.) used to
+# crash _validate_audit_against_prediction's ``.get(...)`` calls. Same
+# totality principle as commit 1.5 (validator) — surface a typed
+# error so the H2 retry loop can feed it back to the LLM.
+
+
+import json as _json
+import tempfile
+
+from earnings_orchestrator import _full_validate_for_orchestrator
+
+
+def _valid_v3_payload():
+    return {
+        "schema_version": "attribution_result.v3",
+        "ticker": "AAPL", "quarter_label": "Q1_FY2025",
+        "filed_8k": "2025-05-01T16:30:00-04:00",
+        "accession_8k": "0000123456-25-000001",
+        "attributed_at": "2026-01-01T00:00:00+00:00",
+        "model_version": "claude-opus-4-7",
+        "pit_mode": "historical",
+        "pit_cutoff": "2025-07-31T16:00:00-04:00",
+        "pit_boundary_source": "next_quarter",
+        "actual_return": {"daily_stock_pct": -5.0, "market_session": "after_hours"},
+        "evidence_ledger": [
+            {"id": "E1", "claim": "d", "value": "x", "source": "t", "date": "2025-05-01"}
+        ],
+        "primary_driver": {"summary": "d", "category": "g", "evidence_refs": ["E1"]},
+        "contributing_factors": [],
+        "feedback": {
+            "prediction_comparison": {
+                "predicted_direction": "long", "predicted_confidence_score": 50,
+                "predicted_move_range_pct": [1.0, 3.0], "predicted_key_drivers": ["d"],
+                "actual_direction": "short", "direction_correct": False,
+                "magnitude_error_pct": 6.0, "comment": "d",
+            },
+            "what_worked": [], "what_failed": [], "why": "d",
+            "predictor_lessons": [], "data_lessons": [],
+        },
+        "global_observations": [], "missing_inputs": [],
+        "data_sources_used": ["t"],
+        "context_bundle_ref": "context_bundle.json",
+        "prediction_result_ref": "prediction/result.json",
+    }
+
+
+class FullValidateSiblingTotalityTests(unittest.TestCase):
+    """Pin sibling totality (commit 2.1 fix). Each malformed sibling file
+    must produce a typed [cross-file] error and never raise."""
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.tmp = Path(self._tmp.name)
+        self.pred = self.tmp / "prediction.json"
+        self.bundle = self.tmp / "bundle.json"
+
+    def tearDown(self):
+        self._tmp.cleanup()
+
+    def _validate(self):
+        try:
+            return _full_validate_for_orchestrator(
+                _valid_v3_payload(), "AAPL", "Q1_FY2025", self.pred, self.bundle,
+            )
+        except Exception as e:
+            raise AssertionError(
+                f"_full_validate_for_orchestrator raised {type(e).__name__}: "
+                f"{e!r} — totality contract requires errors as a list"
+            ) from None
+
+    # ── prediction sibling not a JSON object ──
+
+    def test_prediction_is_list_returns_error(self):
+        self.pred.write_text("[]")
+        self.bundle.write_text(_json.dumps({"learning_context": {
+            "ticker_lessons": [], "global_lessons": []}}))
+        errors, pp, bb = self._validate()
+        self.assertIsNone(pp); self.assertIsNone(bb)
+        self.assertTrue(any("prediction/result.json must be a JSON object" in e
+                              for e in errors), errors)
+        self.assertTrue(all(e.startswith("[cross-file]") for e in errors), errors)
+
+    def test_prediction_is_string_returns_error(self):
+        self.pred.write_text('"bad"')
+        self.bundle.write_text(_json.dumps({"learning_context": {
+            "ticker_lessons": [], "global_lessons": []}}))
+        errors, pp, bb = self._validate()
+        self.assertTrue(any("prediction/result.json" in e for e in errors), errors)
+
+    def test_prediction_is_null_returns_error(self):
+        self.pred.write_text("null")
+        self.bundle.write_text(_json.dumps({"learning_context": {
+            "ticker_lessons": [], "global_lessons": []}}))
+        errors, pp, bb = self._validate()
+        self.assertTrue(any("prediction/result.json" in e for e in errors), errors)
+
+    # ── bundle sibling not a JSON object ──
+
+    def test_bundle_is_list_returns_error(self):
+        self.pred.write_text(_json.dumps({"lesson_labels": [], "key_drivers": []}))
+        self.bundle.write_text("[]")
+        errors, pp, bb = self._validate()
+        self.assertTrue(any("context_bundle.json must be a JSON object" in e
+                              for e in errors), errors)
+
+    def test_both_siblings_non_object_returns_two_errors(self):
+        self.pred.write_text("[]")
+        self.bundle.write_text('"bad"')
+        errors, pp, bb = self._validate()
+        # Both sibling messages should be present
+        self.assertTrue(any("prediction/result.json" in e for e in errors))
+        self.assertTrue(any("context_bundle.json" in e for e in errors))
+
+    # ── learning_context within a dict bundle ──
+
+    def test_bundle_learning_context_not_dict_returns_error(self):
+        self.pred.write_text(_json.dumps({"lesson_labels": [], "key_drivers": []}))
+        # Bundle is a dict, but learning_context is a list — would crash
+        # iter_labeled_lessons('list').get(...).
+        self.bundle.write_text(_json.dumps({"learning_context": []}))
+        errors, pp, bb = self._validate()
+        self.assertTrue(any(
+            "context_bundle.learning_context must be a JSON object" in e
+            for e in errors
+        ), errors)
+
+    def test_bundle_missing_learning_context_returns_error(self):
+        # Missing learning_context (key absent → bundle.get() returns None
+        # which is not a dict).
+        self.pred.write_text(_json.dumps({"lesson_labels": [], "key_drivers": []}))
+        self.bundle.write_text(_json.dumps({"some_other_key": "x"}))
+        errors, pp, bb = self._validate()
+        self.assertTrue(any("learning_context" in e for e in errors), errors)
+
+    # ── Positive control — both siblings valid → cross-file runs ──
+
+    def test_valid_dict_siblings_returns_no_type_errors(self):
+        self.pred.write_text(_json.dumps({"lesson_labels": [], "key_drivers": []}))
+        self.bundle.write_text(_json.dumps({"learning_context": {
+            "ticker_lessons": [], "global_lessons": []}}))
+        errors, pp, bb = self._validate()
+        # No type-related errors; pp and bb are loaded.
+        self.assertNotIn(pp, (None,))
+        self.assertNotIn(bb, (None,))
+        # Cross-file runs (no audits, no labels — passes vacuously).
+        self.assertEqual(errors, [])
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

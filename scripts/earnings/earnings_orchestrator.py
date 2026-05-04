@@ -1181,6 +1181,21 @@ def run_learner_for_quarter(
                         return None, LearnerOutcome.FAILED_RECOVERY_APPEND
                     prediction_payload = json.loads(pred_path.read_text(encoding="utf-8"))
                     bundle = json.loads(bundle_path.read_text(encoding="utf-8"))
+                    # Commit 2.1 — sibling totality (mirrors
+                    # _full_validate_for_orchestrator). Non-object sibling
+                    # files would crash _validate_audit_against_prediction.
+                    if (not isinstance(prediction_payload, dict)
+                            or not isinstance(bundle, dict)
+                            or not isinstance(bundle.get("learning_context"), dict)):
+                        log.error(
+                            "recovery aggregator: sibling file(s) not JSON object "
+                            "for %s %s (pred=%s bundle=%s lc=%s)",
+                            ticker, quarter_info.get("quarter_label"),
+                            type(prediction_payload).__name__,
+                            type(bundle).__name__,
+                            type(bundle.get("learning_context") if isinstance(bundle, dict) else None).__name__,
+                        )
+                        return None, LearnerOutcome.FAILED_RECOVERY_APPEND
                     cross_errors = _validate_audit_against_prediction(
                         existing, prediction_payload, bundle,
                     )
@@ -1829,16 +1844,44 @@ def compute_status(lesson: dict) -> str:
       (d) recent_window misled or missed count >= watch threshold
 
     No side effects. No file I/O. Plan §7.3.
+
+    Totality (commit 2.1 — same playbook as commit 1.5/1.6 validator):
+    compute_status is on the bundle-assembly hot path (called per-lesson
+    by ``_apply_render_view`` inside ``build_learning_context``). A single
+    corrupt audit_history entry in any library file would otherwise crash
+    every prediction's bundle build for that ticker. Defensive guards:
+
+      * Non-dict ``lesson`` → return "active" (no audit history can be read).
+      * Non-list ``audit_history`` (str / dict / int / None) → coerce to [].
+      * Non-dict audit entries → skipped before any ``.get()`` call.
+      * Non-string ``action`` → can't equal "retire"/"refine"; ignored.
+      * Non-string ``review`` → excluded from Counter (unhashable would crash).
+
+    All guards skip silently rather than raise — the validator is the
+    authoritative shape gate at write time; downstream readers stay total.
     """
     from collections import Counter
-    audits = lesson.get("audit_history", []) or []
+    if not isinstance(lesson, dict):
+        return "active"
+    raw = lesson.get("audit_history") or []
+    if not isinstance(raw, list):
+        raw = []
+    audits = [a for a in raw if isinstance(a, dict)]
 
-    # Explicit retire/refine actions are terminal once visible in PIT
-    if any(a.get("action") in ("retire", "refine") for a in audits):
-        return "retired"
+    # Explicit retire/refine actions are terminal once visible in PIT.
+    # Membership uses == (tuple), not hash, so unhashable action values
+    # don't crash — they just compare unequal and are ignored.
+    for a in audits:
+        action = a.get("action")
+        if isinstance(action, str) and action in ("retire", "refine"):
+            return "retired"
 
     recent = audits[-LESSON_AUDIT_WINDOW:]
-    counts = Counter(a.get("review") for a in recent)
+    # Counter requires hashable keys; only count string review values.
+    counts = Counter(
+        a["review"] for a in recent
+        if isinstance(a.get("review"), str)
+    )
 
     if counts["misled"] >= LESSON_RETIRE_MISLED_THRESHOLD:
         return "retired"
@@ -1895,16 +1938,27 @@ def _apply_render_view(lesson: dict, pit_cutoff: str | None) -> dict | None:
     if not isinstance(lesson, dict):
         return lesson  # v1 string fallback — unchanged
     from collections import Counter
+    # Totality (commit 2.1): mirror compute_status's defensive coercion
+    # so a corrupt audit_history doesn't crash the bundle build. _passes_audit_pit
+    # also requires a dict input — non-dict entries are filtered before
+    # the pit check.
+    raw = lesson.get("audit_history") or []
+    if not isinstance(raw, list):
+        raw = []
     pit_audits = [
-        a for a in (lesson.get("audit_history") or [])
-        if _passes_audit_pit(a, pit_cutoff)
+        a for a in raw
+        if isinstance(a, dict) and _passes_audit_pit(a, pit_cutoff)
     ]
     view = {**lesson, "audit_history": pit_audits}
     status = compute_status(view)
     if status == "retired":
         return None
     view["_render_status"] = status
-    view["_render_audit_counts"] = dict(Counter(a.get("review") for a in pit_audits))
+    # Counter requires hashable keys — only count string review values.
+    view["_render_audit_counts"] = dict(Counter(
+        a["review"] for a in pit_audits
+        if isinstance(a.get("review"), str)
+    ))
     return view
 
 
@@ -2107,6 +2161,12 @@ def build_learning_context(ticker: str, sector: str | None = None,
                     if view is not None:
                         surviving.append(view)
                 q_row["predictor_lessons"] = surviving
+            # Commit 2.1: drop rows whose predictor_lessons became empty
+            # (or were originally empty). Otherwise 8 retired-only rows
+            # could fill the cap and crowd out a 9th row with active
+            # lessons — violating "retired lessons must never consume
+            # cap slots" (user clarification #2).
+            filtered = [r for r in filtered if r.get("predictor_lessons")]
             result["ticker_lessons"] = filtered[:8]
         except json.JSONDecodeError as e:
             log.error("ticker.json malformed — no ticker lessons loaded for %s: %s", ticker, e)
@@ -2416,13 +2476,22 @@ def _apply_audit_and_append_global_atomic(global_path: Path,
                     f"_apply_audit_and_append_global_atomic: parent_lesson_id "
                     f"{parent_lesson_id!r} not found in {global_path}"
                 )
-            # 1) append audit on parent
+            # 1) append audit on parent (upsert by auditor key — idempotent)
             target["audit_history"] = _upsert_audit_in_history(
                 target.get("audit_history") or [], audit_entry,
             )
-            # 2) append new replacement entry (lesson_id collision pre-checked
-            #    upstream by D22 in _register_replacement)
-            data.setdefault("entries", []).append(new_entry)
+            # 2) append new replacement entry. Commit 2.1 idempotency:
+            # skip the insert if the same lesson_id is already present
+            # (D22 assert_no_id_collision in _register_replacement has
+            # already verified content matches; another insert would
+            # duplicate the entry on aggregator re-runs).
+            data.setdefault("entries", [])
+            new_id = new_entry.get("lesson_id")
+            if not new_id or not any(
+                isinstance(e, dict) and e.get("lesson_id") == new_id
+                for e in data["entries"]
+            ):
+                data["entries"].append(new_entry)
             _atomic_write_json(global_path, data)
         finally:
             fcntl.flock(lock_fd, fcntl.LOCK_UN)
@@ -2439,6 +2508,12 @@ def _append_lesson_row_to_ticker_quarter(ticker_path: Path,
     ``quarter_skeleton`` is provided, the row is created from the skeleton
     first (plan §7.2.1 implementation rule — empty-`predictor_lessons` +
     ticker-scope refine).
+
+    Idempotent (commit 2.1): if a lesson with the same ``lesson_id`` is
+    already present in the target row's ``predictor_lessons``, the append
+    is skipped — the upstream ``assert_no_id_collision`` (D22) has already
+    verified content matches; another append would create a duplicate
+    row under the same id on aggregator re-runs.
 
     Raises ``FileNotFoundError`` if ticker.json is missing,
     ``json.JSONDecodeError`` if malformed, ``LookupError`` if the target
@@ -2464,7 +2539,17 @@ def _append_lesson_row_to_ticker_quarter(ticker_path: Path,
         # learning_payload outer fields.
         target_row = quarter_skeleton
         data.setdefault("lessons", []).append(target_row)
-    target_row.setdefault("predictor_lessons", []).append(new_row)
+    target_row.setdefault("predictor_lessons", [])
+    # Idempotent guard — avoid duplicate-on-rerun. D22 assert_no_id_collision
+    # has already verified content matches if the id exists; we just skip
+    # the redundant append.
+    new_id = new_row.get("lesson_id")
+    if new_id and any(
+        isinstance(pl, dict) and pl.get("lesson_id") == new_id
+        for pl in target_row["predictor_lessons"]
+    ):
+        return
+    target_row["predictor_lessons"].append(new_row)
     _atomic_write_json(ticker_path, data)
 
 
@@ -2880,6 +2965,22 @@ def _full_validate_for_orchestrator(
         bb = json.loads(context_bundle_path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as e:
         return [f"[cross-file] failed to load sibling files: {e}"], None, None
+    # Commit 2.1 — sibling totality. ``_validate_audit_against_prediction``
+    # calls ``.get`` on both pp and bb plus on bb["learning_context"]; any
+    # JSON-valid but non-object value would crash. Surface a typed error
+    # instead so the H2 retry loop can feed it back to the LLM.
+    type_errors: list[str] = []
+    if not isinstance(pp, dict):
+        type_errors.append("[cross-file] prediction/result.json must be a JSON object")
+    if not isinstance(bb, dict):
+        type_errors.append("[cross-file] context_bundle.json must be a JSON object")
+    if type_errors:
+        return type_errors, None, None
+    if not isinstance(bb.get("learning_context"), dict):
+        return (
+            ["[cross-file] context_bundle.learning_context must be a JSON object"],
+            None, None,
+        )
     cross_errs = _validate_audit_against_prediction(payload, pp, bb)
     return cross_errs, pp, bb
 

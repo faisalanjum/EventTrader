@@ -62,15 +62,42 @@ def _make_learning_md(companies_dir: Path, ticker: str, quarter: str) -> Path:
     return p
 
 
+def _minimal_v3_lesson(body: str = "fixture lesson") -> dict:
+    """Minimal v3-shape predictor_lessons entry. Tests that don't care
+    about lesson content but still need a row to survive
+    build_learning_context's "drop empty predictor_lessons rows" filter
+    (commit 2.1) inherit this default via _write_ticker_json."""
+    from earnings_orchestrator import compute_lesson_id
+    return {
+        "lesson_id":     compute_lesson_id(body, "ticker", "X"),
+        "lesson":        body,
+        "mechanism":     "m", "applies_when": "a", "invalid_if": "i",
+        "evidence_refs": ["E1"],
+        "scope":         "ticker", "routing_key": "X",
+        "audit_history": [], "parent_id": None,
+    }
+
+
 def _write_ticker_json(learnings_dir: Path, ticker: str, lessons: list[dict]) -> Path:
-    """Write learnings/ticker/{TICKER}.json with the provided lessons list."""
+    """Write learnings/ticker/{TICKER}.json with the provided lessons list.
+
+    Commit 2.1 compatibility: rows without an explicit ``predictor_lessons``
+    field get a one-lesson default so they survive the empty-row drop in
+    build_learning_context. Tests that pre-date the drop policy stay green
+    without per-test edits; tests that explicitly assert on lesson content
+    keep providing their own predictor_lessons."""
     ticker_dir = learnings_dir / "ticker"
     ticker_dir.mkdir(parents=True, exist_ok=True)
+    normalized = []
+    for row in lessons:
+        if "predictor_lessons" not in row:
+            row = {**row, "predictor_lessons": [_minimal_v3_lesson()]}
+        normalized.append(row)
     payload = {
-        "schema_version": "ticker_lessons.v1",
+        "schema_version": "ticker_lessons.v2",
         "ticker": ticker.upper(),
         "updated_at": None,
-        "lessons": lessons,
+        "lessons": normalized,
     }
     p = ticker_dir / f"{ticker.upper()}.json"
     p.write_text(json.dumps(payload, indent=2), encoding="utf-8")
