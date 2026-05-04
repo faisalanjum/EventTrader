@@ -245,10 +245,10 @@ class V3LessonRenderingTests(unittest.TestCase):
 
     # ── Mixed v1/v3 transitional rendering ──
 
-    def test_v1_string_lesson_renders_without_decoration(self):
-        # v1 string-form predictor_lessons (transitional, removed in
-        # commit 4 cutover) must continue to render bare so existing
-        # renderer goldens stay byte-stable.
+    def test_v1_string_lesson_skipped_post_cutover(self):
+        # Round-6 fresh-start cutover (commit 4) removed the v1 string
+        # fallback in iter_labeled_lessons. Bare strings in predictor_lessons
+        # are no longer walked; the renderer never sees them.
         text, ordered = self._render({
             "ticker_lessons": [{
                 "quarter_label": "Q1_FY2024",
@@ -256,10 +256,9 @@ class V3LessonRenderingTests(unittest.TestCase):
             }],
             "global_lessons": [],
         })
-        self.assertIn("L1.\nlegacy v1 string body", text)
-        self.assertNotIn("Lesson: legacy v1 string body", text)
-        self.assertNotIn("[status:", text)
-        self.assertEqual(ordered, ["legacy v1 string body"])
+        # No L# marker, no body in rendered text or ordered list.
+        self.assertNotIn("legacy v1 string body", text)
+        self.assertEqual(ordered, [])
 
     def test_v1_dict_global_entry_renders_bare(self):
         # Pre-commit-2 dict-form global entries (lesson + scope but no

@@ -101,6 +101,12 @@ In the 2023+ hyperscaler-AI-capex regime, semiconductor prints are graded on the
 - `contradicted` — bundle shows evidence of the opposite.
 - `irrelevant` — mechanism is absent from the bundle.
 
+**Mechanism gate (v3, mandatory).** A lesson's `Mechanism:` line (rendered under the body for v3 lessons) must independently apply to THIS quarter's bundle for `label = "confirmed"`. Generic, abstract, or thematically plausible mechanisms not bundle-confirmable from current evidence → label `irrelevant`. The bundle's `Applies when:` line states the preconditions; the bundle's `Invalid if:` line states the conditions that nullify. Use both to decide whether THIS bundle satisfies the mechanism.
+
+**Track record signal (v3).** Each rendered lesson may show a `[reviews: <Nh> helped, <Nm> misled, ...]` summary tag and a `[status: active|watch]` tag on its marker line. A `[status: watch]` lesson requires sharper bundle evidence than `active` — the prior learner audits flagged it as recently misleading. A streak of `misled` audits is a prior against citation; require especially strong mechanism alignment in this bundle to overcome it. A `[CAUTION — recently misled; ...]` line on a watch lesson is a render-time warning, not a label; reviews are guidance, not verdict.
+
+**`lesson_text` discipline (v3 / D20).** When copying a lesson body into `lesson_labels[i].lesson_text`, copy ONLY the line that follows `Lesson:` — NOT the marker (`L4. [sector: Technology] [status: active] ...`), NOT the `[CAUTION ...]` line, NOT the `Mechanism: / Applies when: / Invalid if:` lines, NOT the `[reviews: ...]` tag. The validator's positional equality check (T1) compares against the body only; including any decoration breaks the check.
+
 **`bundle_evidence` rules.** For `irrelevant` you may use the literal sentinel `"no relevant evidence"` or a specific note. For `confirmed`/`contradicted` it MUST be specific evidence (section/field name + value or quote). The sentinel is rejected by the validator for those two labels.
 
 **Citation rule (validator-enforced).** Every `key_drivers[i]` must include `cites_lesson_indices: list[int]` (may be `[]`). Each integer points to a position in `lesson_labels[]`; you may cite a lesson ONLY if its `label == "confirmed"`. The validator rejects citation of `contradicted` or `irrelevant` labels.

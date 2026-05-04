@@ -95,8 +95,8 @@ class RenderLearningContextTests(unittest.TestCase):
                     "predicted_direction": "long",
                     "primary_driver_category": "eps_surprise",
                     "predictor_lessons": [
-                        "Lesson P1 should be labeled",
-                        "Lesson P2 also labeled",
+                        {"lesson": "Lesson P1 should be labeled"},
+                        {"lesson": "Lesson P2 also labeled"},
                     ],
                     "data_lessons": ["Data fetch heuristic D1 NOT labeled"],
                     "why": "This is metadata why — NOT labeled",
@@ -168,7 +168,7 @@ class RenderLearningContextTests(unittest.TestCase):
                     "actual_daily_pct": -3.1,
                     "predicted_direction": "long",
                     "primary_driver_category": "guidance_change",
-                    "predictor_lessons": ["T1-Q1-pl1", "T1-Q1-pl2"],
+                    "predictor_lessons": [{"lesson": "T1-Q1-pl1"}, {"lesson": "T1-Q1-pl2"}],
                     "data_lessons": ["IGNORE-data"],
                 },
                 {
@@ -177,7 +177,7 @@ class RenderLearningContextTests(unittest.TestCase):
                     "actual_daily_pct": 1.2,
                     "predicted_direction": "short",
                     "primary_driver_category": "eps_surprise",
-                    "predictor_lessons": ["T2-Q2-pl1"],
+                    "predictor_lessons": [{"lesson": "T2-Q2-pl1"}],
                 },
             ],
             "global_lessons": [
@@ -230,7 +230,7 @@ class RenderLearningContextPathsTests(unittest.TestCase):
             "actual_daily_pct": 1.0,
             "predicted_direction": "long",
             "primary_driver_category": "eps_surprise",
-            "predictor_lessons": ["pl1"],
+            "predictor_lessons": [{"lesson": "pl1"}],
             "data_lessons": ["dl1"],
             "why": "why-text",
         }
@@ -288,7 +288,7 @@ class RenderLearningContextPathsTests(unittest.TestCase):
     def test_R7_ordered_tuple_unchanged_with_or_without_paths(self):
         """Validator's source of truth must be byte-identical regardless of path attachment."""
         ctx_no = {
-            "ticker_lessons": [self._ticker_lesson(predictor_lessons=["P1", "P2"])],
+            "ticker_lessons": [self._ticker_lesson(predictor_lessons=[{"lesson": "P1"}, {"lesson": "P2"}])],
             "global_lessons": [
                 {"scope": "sector", "target_sector": "Technology",
                  "source_ticker": "MSFT", "lesson": "sec-A"},
@@ -297,7 +297,7 @@ class RenderLearningContextPathsTests(unittest.TestCase):
         }
         ctx_with = {
             "ticker_lessons": [self._ticker_lesson(
-                predictor_lessons=["P1", "P2"],
+                predictor_lessons=[{"lesson": "P1"}, {"lesson": "P2"}],
                 learner_result_path=self._PATH_AAPL_Q1,
             )],
             "global_lessons": [
@@ -362,7 +362,7 @@ class U45_NewFormatTests(unittest.TestCase):
                 "primary_driver_summary": "Strong AI tailwind",
                 "what_worked": ["Identified AI demand", "Used peer cluster"],
                 "what_failed": ["Missed transcript signal"],
-                "predictor_lessons": ["TICKER-PL1", "TICKER-PL2"],
+                "predictor_lessons": [{"lesson": "TICKER-PL1"}, {"lesson": "TICKER-PL2"}],
                 "data_lessons": ["DATA-D1"],
                 "why": "WHY-text-paragraph",
             }],

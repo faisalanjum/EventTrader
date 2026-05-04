@@ -70,26 +70,32 @@ class IterLabeledLessonsTests(unittest.TestCase):
         out = [body for _, _, _, body in iter_labeled_lessons(ctx)]
         self.assertEqual(out, ["a", "b", "c"])
 
-    # ── v1 string fallback (transitional, removed commit 3) ────────────
+    # ── v1 string fallback REMOVED in commit 4 (round-6 fresh-start) ──
 
-    def test_v1_string_fallback_walks(self):
+    def test_v1_string_predictor_lessons_skipped(self):
+        # Round-6 fresh-start cutover: bare strings in predictor_lessons
+        # are no longer walked. Validator + append_ticker_lesson enforce
+        # dict shape on writes; iter_labeled_lessons defends against
+        # leftover non-dict entries by skipping them silently.
         ctx = {
             "ticker_lessons": [{"predictor_lessons": ["legacy string"]}],
             "global_lessons": [],
         }
-        out = [body for _, _, _, body in iter_labeled_lessons(ctx)]
-        self.assertEqual(out, ["legacy string"])
+        out = list(iter_labeled_lessons(ctx))
+        self.assertEqual(out, [], "v1 string fallback must be removed")
 
-    def test_mixed_v3_dict_and_v1_string_walk(self):
+    def test_mixed_v3_dict_and_v1_string_skips_string(self):
+        # v3 dict entries continue to walk; bare strings are silently dropped.
         ctx = {
             "ticker_lessons": [{"predictor_lessons": [
                 _v3_dict("v3 dict"),
                 "legacy string",
+                _v3_dict("another v3"),
             ]}],
             "global_lessons": [],
         }
         out = [body for _, _, _, body in iter_labeled_lessons(ctx)]
-        self.assertEqual(out, ["v3 dict", "legacy string"])
+        self.assertEqual(out, ["v3 dict", "another v3"])
 
     # ── Skip retired (LearnerLoopRevamp v2 addition) ────────────────────
 
