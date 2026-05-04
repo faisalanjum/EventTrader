@@ -96,7 +96,7 @@ Every lesson you emit (in `predictor_lessons` or `global_observations`) is a str
 - **`predictor_lessons` (ticker scope)** — the mechanism is rooted in THIS company; the lesson would NOT transfer unchanged to peers.
 - **`global_observations` with `scope: "sector"`** — peers in the same sector would plausibly react similarly to similar inputs. `target_sector` MUST be one of the 11 canonical labels listed below.
 - **`global_observations` with `scope: "macro"`** — broad-market regime directly explains the reaction. Applies across all sectors.
-- **`global_observations` with `scope: "cross_ticker"`** — explicit named-company transmission link (shared customer, shared supply, shared regulatory framework). NOT a sector-wide lesson; specific to the named set.
+- **`global_observations` with `scope: "cross_ticker"`** — the lesson applies to a specific named set of tickers connected by a transmission link grounded in THIS quarter's evidence. NOT a sector-wide lesson; the lesson should NOT generalize beyond the named set — if it would, choose `scope: "sector"` instead.
 
 **Default to narrower if you can defend it.** Over-broadening routes the lesson to MANY future predictions and can MISLEAD peer-ticker calls. Under-routing only hurts coverage. The asymmetry favors narrower-when-uncertain.
 
@@ -230,7 +230,7 @@ Utilities
   "scope": "cross_ticker",
   "related_tickers": ["<TICKER_A>", "<TICKER_B>"],
   "lesson":        "<1-2 sentences; the lesson should NOT apply to unrelated tickers — if it does, choose scope=sector instead>",
-  "mechanism":     "<the SHARED transmission link: shared customer, shared supply, shared regulatory framework>",
+  "mechanism":     "<the transmission link grounded in THIS quarter's evidence that connects the named tickers>",
   "applies_when":  "<bundle preconditions specific to those named tickers>",
   "invalid_if":    "<conditions that break the transmission link>",
   "evidence_refs": ["E2"]
