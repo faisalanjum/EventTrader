@@ -89,12 +89,12 @@ Each entry has exactly these fields:
 - `label` — exactly one of `"confirmed"` / `"contradicted"` / `"irrelevant"` (lowercase only).
 - `bundle_evidence` — a non-empty 1-sentence justification.
 
-**Worked example — extracting `lesson_text` from a tagged marker** (illustrative only; do not reuse the body's phrasing — your `lesson_text` must match the verbatim body of a lesson that actually appears in YOUR rendered bundle):
+**Worked example — extracting `lesson_text` from a tagged marker** (format only; do not reuse this body — your `lesson_text` must match the verbatim body of a lesson that actually appears in YOUR rendered bundle):
 ```
 L4. [sector: Technology]
-When forward guidance is reset on segment-mix grounds — not headline magnitude — weight the segment composition more heavily than the aggregate guide delta.
+This is the exact lesson body that appeared in the rendered bundle.
 ```
-→ `{"lesson_text": "When forward guidance is reset on segment-mix grounds — not headline magnitude — weight the segment composition more heavily than the aggregate guide delta.", "label": "...", "bundle_evidence": "..."}`. The marker line and scope tag are excluded; the body's punctuation, hyphens, and inner whitespace are preserved verbatim.
+→ `{"lesson_text": "This is the exact lesson body that appeared in the rendered bundle.", "label": "...", "bundle_evidence": "..."}`. The marker line and scope tag are excluded; the body's punctuation, hyphens, and inner whitespace are preserved verbatim.
 
 **Choosing the label** — for each lesson answer one question: *Does the current bundle independently show evidence that this lesson's mechanism applies?*
 - `confirmed` — bundle independently shows the mechanism is present.
