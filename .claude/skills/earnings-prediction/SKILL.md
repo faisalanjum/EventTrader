@@ -40,45 +40,39 @@ Start by reading `RENDERED_BUNDLE_PATH` end to end before writing anything.
 
 ### 3.2 Section Audit
 
-Before making the final directional call, write `SECTION_AUDIT_PATH` as JSON.
+Before making the final call, write `SECTION_AUDIT_PATH` as a JSON inventory of facts from the bundle. The audit is fact-gathering only — it does not replace §4 stress-testing; §4 must still independently build the long and short cases against the full bundle.
 
-**The audit is fact-gathering only. It does NOT replace Phase 3 stress-testing.** Phase 3 (in §4) must still independently build the strongest long case and the strongest short case against the full bundle, not just tally the audit's `bullish_signals` vs. `bearish_signals`.
+Cover every numbered rendered section §2 through §9 that is present. The unnumbered `## Evidence Source IDs` catalog is not audited. Silent omission is not allowed — even sections with no material content get an entry.
 
-**Coverage:** Include one entry for every numbered rendered bundle section §2 through §9 when present. (The unnumbered `## Evidence Source IDs` catalog that appears immediately after the header is not audited.) If a section has no material content for this prediction, still include the entry with empty content arrays and a short `not_material_reason` string. Silent omission is not allowed.
-
-For each entry include:
-- `section`
-- `key_facts`
-- `bullish_signals`
-- `bearish_signals`
-- `missing_or_unclear`
-- `source_ids`
-- `not_material_reason` — required ONLY when the section has no material content (i.e., `key_facts`, `bullish_signals`, `bearish_signals`, AND `missing_or_unclear` are ALL empty arrays); omit this field otherwise. (`source_ids` is excluded from this test — a section may have catalog IDs available but nothing material to say about them.)
+Each entry has these fields:
+- `section`, `key_facts`, `bullish_signals`, `bearish_signals`, `missing_or_unclear`, `source_ids`
+- `not_material_reason` — required only if `key_facts`, `bullish_signals`, `bearish_signals`, AND `missing_or_unclear` are all empty; omit otherwise. (`source_ids` doesn't count — a section can have catalog IDs but no material claims.)
 
 Do NOT include `direction`, `confidence_score`, `expected_move_range_pct`, `final_call`, or any final prediction in `SECTION_AUDIT_PATH`.
 
-After writing `SECTION_AUDIT_PATH`, complete §4 (Phases 1–4) against the full bundle and write `RESULT_PATH`.
+After the audit, complete §4 against the full bundle and write `RESULT_PATH`.
 
-**Suggested audit shape:**
+Audit shape (one material section + one not-material section):
 
 ```json
 {
   "sections": [
     {
       "section": "Results & Expectations",
-      "key_facts": [],
-      "bullish_signals": [],
+      "key_facts": ["Revenue beat consensus by 2.1%"],
+      "bullish_signals": ["Revenue beat"],
       "bearish_signals": [],
       "missing_or_unclear": [],
-      "source_ids": []
+      "source_ids": ["SRC:<TICKER>:<QUARTER>:<ACCESSION>#S2.exhibit.EX-99.1"]
     },
     {
-      "section": "Forward Guidance",
+      "section": "Reference",
       "key_facts": [],
       "bullish_signals": [],
       "bearish_signals": [],
       "missing_or_unclear": [],
-      "source_ids": []
+      "source_ids": [],
+      "not_material_reason": "No material prediction signal in this section."
     }
   ]
 }
@@ -86,66 +80,48 @@ After writing `SECTION_AUDIT_PATH`, complete §4 (Phases 1–4) against the full
 
 ### 3.3 Lesson Labeling
 
-**Source of truth**: the rendered bundle's `## Lessons To Label (verbatim, in order)` section. Each lesson is one block, prefixed by an `L#` marker on its own line. Some markers carry a scope tag (e.g. `L4. [sector: Technology]`, `L5. [macro]`, `L6. [cross: AVGO,QCOM,AMD,TXN]`). The lesson body is the line(s) following the marker, before the next L# marker or section break.
+**Source.** The rendered bundle's `## Lessons To Label (verbatim, in order)` section. Each lesson is one block, prefixed by an `L#` marker on its own line, possibly with a scope tag (e.g. `L4. [sector: Technology]`, `L5. [macro]`, `L6. [cross: AVGO,QCOM,AMD,TXN]`). The body is the line(s) after the marker, before the next L# marker or section break.
 
-**What to do**: emit ONE `lesson_labels[]` entry per L# marker, in marker order. Set `lesson_text` to a verbatim copy of the body — no `L#` prefix, no scope tag, no leading/trailing whitespace beyond what the source has. Preserve all punctuation, markdown, and inner whitespace as-is — do not "clean up" the body.
+**Output one `lesson_labels[]` entry per L# marker, in marker order.** `len(lesson_labels)` MUST equal the marker count.
 
-**Worked example — extracting `lesson_text` from a tagged marker**:
+Each entry has exactly these fields:
+- `lesson_text` — verbatim body. No L# prefix, no scope tag, no extra leading/trailing whitespace; preserve punctuation, markdown, and inner whitespace.
+- `label` — exactly one of `"confirmed"` / `"contradicted"` / `"irrelevant"` (lowercase only).
+- `bundle_evidence` — a non-empty 1-sentence justification.
 
-If the rendered bundle contains:
+**Worked example — extracting `lesson_text` from a tagged marker:**
 ```
 L4. [sector: Technology]
 In the 2023+ hyperscaler-AI-capex regime, semiconductor prints are graded on the composition of forward revenue, not the headline guide delta.
 ```
-the correct entry is:
-```json
-{"lesson_text": "In the 2023+ hyperscaler-AI-capex regime, semiconductor prints are graded on the composition of forward revenue, not the headline guide delta.", "label": "...", "bundle_evidence": "..."}
-```
-The marker line (`L4. [sector: Technology]`) and the scope tag are excluded. The body's punctuation is preserved.
+→ `{"lesson_text": "In the 2023+ hyperscaler-AI-capex regime, semiconductor prints are graded on the composition of forward revenue, not the headline guide delta.", "label": "...", "bundle_evidence": "..."}`. The marker line and scope tag are excluded; the body's punctuation is preserved.
 
-**Count invariant**: `len(lesson_labels)` MUST equal the number of L# markers. Do NOT fabricate lessons. Do NOT pull lessons from `bundle.learning_context` JSON. Do NOT paraphrase or pattern-extend from prior knowledge.
+**Choosing the label** — for each lesson answer one question: *Does the current bundle independently show evidence that this lesson's mechanism applies?*
+- `confirmed` — bundle independently shows the mechanism is present.
+- `contradicted` — bundle shows evidence of the opposite.
+- `irrelevant` — mechanism is absent from the bundle.
 
-**Empty case**: if `## Lessons To Label` is absent or has zero L# markers, emit `"lesson_labels": []` and ensure every `cites_lesson_indices` is `[]`. Do not omit the field.
+**`bundle_evidence` rules.** For `irrelevant` you may use the literal sentinel `"no relevant evidence"` or a specific note. For `confirmed`/`contradicted` it MUST be specific evidence (section/field name + value or quote). The sentinel is rejected by the validator for those two labels.
 
-**Background context** (NOT labeled): the `## Context-Only` section carries quarter-header metadata, the prior learner's `predicted_confidence`, `primary_driver`, `what_worked`, `what_failed`, plus `Data:`, `Why:`, and `learner_result:` lines. Use these for context only — do NOT add them to `lesson_labels`.
+**Citation rule (validator-enforced).** Every `key_drivers[i]` must include `cites_lesson_indices: list[int]` (may be `[]`). Each integer points to a position in `lesson_labels[]`; you may cite a lesson ONLY if its `label == "confirmed"`. The validator rejects citation of `contradicted` or `irrelevant` labels.
 
-**For each labeled lesson, answer one question**:
+**`analysis` substring rule (validator-enforced).** Your `analysis` free-text must not contain the verbatim **normalized** `lesson_text` of any lesson labeled `contradicted` or `irrelevant` (for lesson_texts ≥30 chars). Normalized = whitespace-collapsed + lowercased; the validator compares normalized strings, so case or whitespace tweaks won't help. Paraphrase or omit — never quote.
 
-> Does the CURRENT bundle independently show evidence that this lesson's specific mechanism applies?
+**Empty case.** If `## Lessons To Label` is absent or has zero L# markers, emit `"lesson_labels": []` and ensure every `cites_lesson_indices` is `[]`. Do not omit the field.
 
-Emit a label entry with exactly three fields:
+**Context-Only block.** The `## Context-Only` section (prior learner's predicted_confidence, primary_driver, what_worked, what_failed, plus `Data:` / `Why:` / `learner_result:` lines) is rich context. Use it freely to inform your reasoning, but do NOT add it to `lesson_labels`.
 
-- `lesson_text` — the verbatim lesson body (clean — no `L#` prefix or scope tag)
-- `label` — strictly one of `"confirmed"` / `"contradicted"` / `"irrelevant"` (lowercase only)
-  - `confirmed`: the current bundle independently shows the lesson's mechanism is present
-  - `contradicted`: the current bundle shows evidence of the *opposite*
-  - `irrelevant`: the lesson's mechanism is absent from the current bundle
-- `bundle_evidence` — a 1-sentence citation from the current bundle justifying the label
-  - For `irrelevant`: you MAY use the literal string `"no relevant evidence"` or a specific explanation
-  - For `confirmed` and `contradicted`: MUST be specific evidence (section/field name + value or quote). The string `"no relevant evidence"` is rejected by the validator for these labels.
+**Do not.** Fabricate lessons. Pull lessons from `bundle.learning_context` JSON. Paraphrase or pattern-extend from prior knowledge.
 
-**Citation rule (STRUCTURAL — validator-enforced)**: every `key_drivers[i]` MUST include `cites_lesson_indices: list[int]` (may be empty `[]`). Each integer references a position in your `lesson_labels[]` array. You may cite a lesson ONLY if its `label == "confirmed"`. The validator rejects citation of `contradicted` or `irrelevant` labels.
-
-**`analysis` field constraint**: your `analysis` free-text must not contain the verbatim normalized `lesson_text` of any lesson whose label is `contradicted` or `irrelevant` (for lesson_texts ≥30 chars). You may paraphrase or omit — not quote. The validator performs a substring check.
-
-**Example** (shape only — do NOT copy phrasings; label based on YOUR current bundle):
-
+**Example shape** (do not copy phrasings; label based on YOUR current bundle):
 ```json
 "lesson_labels": [
-  {
-    "lesson_text": "<verbatim body from L1 in ## Lessons To Label>",
-    "label": "irrelevant",
-    "bundle_evidence": "no relevant evidence"
-  },
-  {
-    "lesson_text": "<verbatim body from L2 in ## Lessons To Label>",
-    "label": "confirmed",
-    "bundle_evidence": "<1-sentence citation from THIS quarter's bundle>"
-  }
+  {"lesson_text": "<verbatim body from L1>", "label": "irrelevant", "bundle_evidence": "no relevant evidence"},
+  {"lesson_text": "<verbatim body from L2>", "label": "confirmed",  "bundle_evidence": "<1-sentence citation from THIS quarter's bundle>"}
 ],
 "key_drivers": [
-  {"driver": "<bundle-derived driver>", "direction": "short", "evidence": "<bundle citation>", "cites_lesson_indices": []},
-  {"driver": "<driver supported by lesson>", "direction": "short", "evidence": "<bundle citation>", "cites_lesson_indices": [1]}
+  {"driver": "<bundle-derived driver>",         "direction": "short", "evidence": "<bundle citation>", "cites_lesson_indices": []},
+  {"driver": "<driver supported by lesson L2>", "direction": "short", "evidence": "<bundle citation>", "cites_lesson_indices": [1]}
 ]
 ```
 
