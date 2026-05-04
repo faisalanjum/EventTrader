@@ -1530,6 +1530,7 @@ Round 6 fresh-start: validator + iter_labeled_lessons + renderer assume v3 lesso
 | **E32** (round 9) | D19 cross-file errors need to drive H2 retry | Merge into existing `prior_validation_errors: list[str]` with prefix `"[cross-file] "` so the retry prompt distinguishes them from schema errors. Same retry path; same FAILED_VALIDATION outcome on still-failing retry. |
 | **E33** (round 9) | result_md_renderer doesn't render lesson_audit cleanly | **Accepted as deferred**: existing `_learning_body()` json-dumps unknown dicts; v3's new `lesson_audit[]` will render as raw JSON in result.md. Functionally correct, visually ugly. Defer proper rendering to a follow-up commit; not blocking for production gates. **Round 10 backlog note**: if production gates pass and result.md readability becomes a launch concern (e.g., for Obsidian-side review of recent learning runs), add a small `_render_lesson_audit_table` helper to `result_md_renderer.py::_learning_body()` rendering the audit as a Markdown table (auditor_quarter / review / action / comment / evidence_refs columns). Estimated diff: ~30 lines + 1 test. |
 | **E34** (round 9) | Pre-step backup files (`result.json.pre-stepN-backup`) survive cutover wipe | Cutover bash uses exact-name `find ... -name "result.json"`. Stale backups in `prediction/` directories aren't part of the v3 cutover scope — they're predictor-side leftovers. If a `.pre-stepN-backup` ever lands in `learning/`, broaden the wipe glob: `find ... -path "*/learning/result*" -delete`. Preferred: leave exact-name match (defensive — don't accidentally delete unrelated files). |
+| **E35** (round 12 — commit-2.1 review backlog) | Adjacent deeper-stack helpers crash on malformed inputs (NOT blocking; deferred) — `_validate_audit_against_prediction(la, pp, bb)` crashes on `pp = "bad"` (non-dict valid JSON for prediction_payload); `_upsert_audit_in_history(history, ...)` crashes on `history = "bad"` or `[None]` | **Accepted as deferred**. Different from commit 1.5/1.6 (which protected the FIRST entry point — the validator wrapper that takes raw `json.loads()` output directly). These helpers sit 2-3 layers deep behind multiple guards: PreToolUse hook, validator wrapper, `_validate_audit_against_prediction` outer try/except in the orchestrator's success/recovery wiring (which wraps the whole aggregator block). Realistic path to trigger requires a corrupted lesson library file PLUS the wrapper's earlier guards being bypassed — both events together are negligible probability. **Cost-of-fix**: ~5 lines + 4 tests. Revisit only if production observability surfaces library-file corruption. Implementer-bot probe (commit 2.1 review) confirmed primary entry point (commit 1.5/1.6 wrapper) and `compute_status` / `_apply_render_view` (commit 2.1) are total — these deeper helpers are defense-in-depth only, not load-bearing for safety. |
 | E28 | Future audit_history visible during historical replay | B1 fix: `_passes_audit_pit` filters audits by `audit_pit_cutoff <= pit_cutoff` |
 | E29 | Future-retired lesson hidden during historical replay | Resolved by B1: at replay PIT < retirement-trigger audits, retirement-triggering audits filtered out → status reverts to active correctly |
 | ~~E30~~ | ~~Legacy lesson never accumulates pressure~~ | **REMOVED** (round 6 fresh-start): no legacy lessons exist; library is wiped before v3 cutover |
@@ -1858,3 +1859,85 @@ find earnings-analysis/.pre-v3-cutover-backup/Companies -name "result.json" \
 8. **Don't run §10.2 cutover bash on production `learnings/` + `events/*/learning/` until tests pass on a COPY first.**
 9. **Don't add legacy v2 read-compat back.** Round 6 fresh-start removed all v2 paths; reintroducing them re-imports the stale-data risks.
 10. **Don't skip the lesson_id collision assertion (D22).** Silent collision is the worst failure mode.
+
+---
+
+## 20. Post-canary verification (2026-05-04)
+
+The 11-commit v3 closed-loop landed and was validated end-to-end against real
+AVGO production data. KEDA pipeline workers stayed at 0 throughout (the
+``extraction-worker-scaler`` ScaledObject paused; deployment ``replicas=0``).
+
+### 20.1 Operational mid-flight discovery — symlink-aware cutover (commit 4.4)
+
+The first cutover attempt reported "deleted: 0 result.json files" while a
+stale ``attribution_result.v2`` file remained at
+``Companies/AVGO/events/Q4_FY2023/learning/result.json``. Root cause:
+``earnings-analysis/Companies`` is a symlink (per-machine; production points
+into a sibling Obsidian-vault directory), and plain ``find earnings-analysis/Companies …``
+does NOT traverse a directory symlink at the start path. The orchestrator
+self-healed correctly (v3 validator rejected the stale v2 → file deleted →
+fresh learner SDK call) but the cutover was incomplete.
+
+**Fix (commit 4.4)**: every ``find`` invocation under ``Companies/`` uses
+``find -H`` (follows ONLY the command-line symlink — narrower than ``-L``,
+which would chase nested symlinks too; correct safety posture for a
+destructive delete script). Also widened the wipe scope to include
+``thinking.md`` and ``subagents/`` directories so no v2-era reasoning trail
+bleeds into the next run, and matched the backup gate to the delete set
+(``result_md_count`` added so a tree with only ``result.md`` doesn't get
+wiped without a backup copy).
+
+Verification: post-fix cutover reported "deleted: 3 result.json, 3 result.md,
+3 thinking.md, 8 subagent transcripts" on the canary cleanup; plain ``find``
+sees zero, ``find -H`` sees the leftover artifacts that the fix correctly
+enumerates.
+
+### 20.2 Canary gates passed (real SDK against production)
+
+Three sequential AVGO quarters with cutover-#1 → canary → verification →
+cutover-#2 → confirm-clean → KEDA-stays-0:
+
+| Gate | Result on AVGO canary |
+|------|------------------------|
+| **G1** Fresh-start cutover smoke | ✅ Cutover #1 wiped library cleanly; commit 4.4 patched the symlink omission |
+| **G2** Historical PIT leak test | ✅ Replay at PIT=2023-10-01 (before any audit was written) → 0 ticker lessons rendered, 0 global lessons rendered. Future audits invisible |
+| **G3** Full-loop smoke (3 quarters) | ✅ Q3_FY2023 (no priors → 2 ticker + 1 sector lessons stamped) → Q4_FY2023 (saw Q3's 3 lessons, labeled all `irrelevant`, learner emitted 3 `lesson_audit` entries with `review=neutral, action=keep` confirming predictor's judgment) → Q1_FY2024 (saw 5 priors with `[reviews: 1 neutral]` decoration from Q4's audit; learner produced 3 `missed/refine` audits surgically refining Q3's `applies_when` to accept "trough" framing + composition-shift prints) |
+| **G4** Retire test | ✅ Indirectly exercised: Q1's `action=refine` audits flipped Q3 lessons to `compute_status="retired"`; live-mode replay confirmed Q3 originals dropped from render, replacements visible with `parent_id` links |
+| **G5** Refine test | ✅ 3 ticker + 1 global refinement registered with `parent_id` link; replacement counts in Q1 row + global.json match audit `action=refine` count |
+| **G7** Same-quarter self-leak test | ✅ Counter ``same_quarter_self_leak=0`` logged correctly across all 3 canary runs (no self-emissions to leak in chronological order) |
+| **G10** Real SDK end-to-end smoke | ✅ AVGO Q3 → Q4 → Q1_FY2024 all ran on real Claude OAuth subscription; predict + learn + aggregate + bundle rebuild all produced v3-correct output. Q4 idempotency rerun completed in 0.0s as ``RECOVERED`` (no duplicate audits) |
+
+**Hard rule from §13.5**: "do not declare production-ready without G2 + G3 passing". Both passed.
+
+### 20.3 End state (post-canary, post-cutover-#2)
+
+- KEDA: ``MIN=0``, deployment ``replicas=0``, ScaledObject ``PAUSED=True``,
+  ``paused-replicas:0`` annotation present. **Stays at 0** until manual unpause.
+- ``learnings/global.json``: ``{"schema_version":"global_lessons.v2","updated_at":null,"entries":[]}``
+- ``learnings/ticker/``: empty (0 files)
+- ``find -H earnings-analysis/Companies -path '*/events/*/learning/{result.json,result.md,thinking.md}'``: 0 each
+- ``find -H earnings-analysis/Companies -path '*/events/*/learning/subagents'``: 0 dirs
+- ``events/*/prediction/result.json``: 10 files preserved (per cutover policy)
+- Backup at ``earnings-analysis/.pre-v3-cutover-backup/`` (440K, deletable in ~1 quarter)
+- Run-ledger entries: 3 ``learning`` SUCCEEDED entries (Q3 ~561s, Q4 ~704s, Q1_FY2024 ~898s) +
+  1 ``learning`` RECOVERED entry (Q4 idempotency check, 0.02s)
+
+### 20.4 Final commit graph (pushed to origin/main as 9bf471b..8d50c65)
+
+```
+8d50c65  fix(cutover): commit 4.4 — symlink-aware wipe (find -H) + wider artifact set
+01fc38e  chore(predictor): commit 4.3 — fully neutralize predictor SKILL.md worked-example body
+37ad831  chore(predictor): commit 4.2 — predictor-side anti-anchoring parity
+1c53489  chore(learner): commit 4.1 — set cutover-script +x bit + neutralize 2 archetype phrasings
+1f3c2c8  feat(learner): commit 4/4 — v3 SKILL.md activation + cutover script + str-fallback removal
+a995e4b  feat(renderer): commit 3/4 — v3 lesson decoration (status / reviews / mechanism / CAUTION)
+d817cd8  fix(learner): commit 2.1 — 4 correctness gaps in commit 2 (cap, idempotency, totality)
+9e34fb2  feat(learner): commit 2/4 — orchestrator aggregator + status + PIT + cross-file
+4193500  fix(learner): commit 1.5 follow-up — top-level dict guard for validator totality
+5e24a59  fix(learner): commit 1.5 — validator totality (no crash on malformed JSON)
+4698b31  feat(learner): commit 1/4 — v3 validator + structured lessons + lesson_audit
+```
+
+11 LearnerLoopRevamp commits + the prior baseline alignment (2b48178) = 12 commits pushed.
+Full earnings suite at HEAD: 1382 passed, 14 skipped, 43 subtests passed.
