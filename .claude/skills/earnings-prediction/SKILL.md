@@ -200,10 +200,19 @@ After writing `RESULT_PATH`, stop.
 
 ## 6. Compliance
 
-These validator-enforced rules are defined above:
-- `source_id` — see §5 `evidence_ledger` (catalog membership).
-- `lesson_labels` — see §3.3 Lesson Labeling (positional equality, label enum, citation rule, sentinel discipline).
-- `analysis` — see §3.3 and §5 `analysis` (substring check on non-confirmed lessons).
+Use this as a final checklist for easy-to-miss validation rules before finalizing `RESULT_PATH`. These checks do not replace the rules above.
+
+- **`evidence_ledger` and `source_id`** (§5). In production, `evidence_ledger` must be non-empty. Every entry's `source_id` must be copied exactly from the bundle's Evidence Source IDs catalog. Do not invent IDs, shorten IDs, cite generic anchors, or put sidecar paths in `source_id`.
+
+- **`lesson_labels` shape and order** (§3.3). Emit one label per rendered `L#` marker, in marker order. Each entry needs `lesson_text`, `label`, and `bundle_evidence`. `lesson_text` must match the rendered lesson body after normalization.
+
+- **Label enum** (§3.3 + §5). `label` must be exactly `"confirmed"`, `"contradicted"`, or `"irrelevant"` (lowercase only).
+
+- **`bundle_evidence` sentinel** (§3.3). `"no relevant evidence"` is allowed only for `irrelevant`. `confirmed` and `contradicted` need specific current-bundle evidence.
+
+- **`cites_lesson_indices`** (§3.3 + §5). Every `key_drivers[i]` must include `cites_lesson_indices`, even when empty. Only cite confirmed lessons. Indices must point to existing `lesson_labels`.
+
+- **`analysis` quote rule** (§3.3 + §5). Do not copy the exact normalized `lesson_text` of contradicted or irrelevant lessons when the lesson text is 30+ characters. Paraphrase or omit instead.
 
 ## 7. Hard Rules
 
