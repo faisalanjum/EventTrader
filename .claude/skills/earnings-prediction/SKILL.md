@@ -151,13 +151,21 @@ Emit a label entry with exactly three fields:
 
 ## 4. Decision Framework
 
-**Phase 1: Key numbers.** Extract the key actuals, expectations, guidance changes, and surprises. Flag any results driven by one-time items rather than durable operating performance.
+**Phase 1: Key numbers.** Extract the key actuals, expectations, guidance changes, and surprises. Compute surprise as `((actual - expected) / |expected|) * 100` so percentages are consistent when expectations are positive or negative. If `expected` is zero or near zero, do not force a percentage; report the absolute delta and say the percent surprise is not meaningful. When extracting metrics, assess quality, not just size: organic vs M&A- or FX-driven revenue; EPS beat from operations vs tax, restructuring, or one-time items; margin change from mix, pricing, or cost cuts. The same headline number can mean different things depending on quality.
 
-**Phase 2: Tensions and drivers.** Compare signals across all provided data and identify the main conflict. Decide what was already expected or priced in, then rank the top drivers by importance.
+**Phase 2: Cross-reference and rank drivers.** Before forming a directional view, work through these five questions against the bundle:
 
-**Phase 3: Stress-test both sides.** Before committing, make one explicit pass for the strongest long case and one for the strongest short case against the full bundle. If neither side survives that test, choose `no_call`.
+1. **What's new?** What changed in this bundle vs what the market already knew from prior quarters, guidance, consensus, inter-quarter events, and peers?
+2. **What's already priced in?** What outcome did pre-print stock action and analyst revisions show the market expected?
+3. **What's material for this company?** Which facts move present or future revenue, margins, cash flow, EPS, or valuation, weighted by what this company's market specifically grades on?
+4. **What's the strongest counter-case?** What evidence supports the opposite direction, and how heavy is it?
+5. **What are the top drivers?** Rank the most decision-relevant drivers, each tied to specific bundle evidence; later output only the top 1-3.
 
-**Phase 4: Call.** Choose `long`, `short`, or `no_call`. Assign confidence and expected move range, and note any data gaps.
+Use market reactions as clues about expectations and the bar, not as proof of the next move. Do not commit to a direction until all five are answered.
+
+**Phase 3: Stress-test both sides.** Before committing, make one explicit pass for the strongest long case and one for the strongest short case against the full bundle. If neither side survives the test, choose `no_call`. If both sides survive, the call goes to the side with materially heavier evidence. If they are roughly balanced after honest weighting, choose `no_call` or make only a low-confidence directional call.
+
+**Phase 4: Call.** Choose `long`, `short`, or `no_call`. Assign confidence and expected move range, and note any data gaps. If a section shows `[BUILDER ERROR: ...]`, `[... unavailable ...]`, `[NO DATA]`, or `[No EX-99.1 found]`, treat it as a data gap and list the affected section in `data_gaps`.
 
 ## 5. Output
 
@@ -194,21 +202,21 @@ Write `RESULT_PATH` as a single JSON object with these fields:
 **`direction`** — `long` / `short` / `no_call`. Required.
 
 **`confidence_score`** — integer 0-100. Required.
-- 70-100: clear directional edge supported by multiple converging signals.
-- 40-69: mixed but usable directional edge.
-- 1-39: weak or conflicting evidence.
+- 70-100: clear directional edge — either multiple converging signals or one signal strong enough that no plausible counter survives.
+- 40-69: real directional signal but with notable counter, ambiguity, or partial data.
+- 0-39: weak signal, significant missing data, or balanced conflicting evidence.
 - Do not lower `confidence_score` automatically because some data is missing. Lower it when the missing data could materially change the direction or weaken the core thesis.
 - If both consensus and guidance are missing, confidence_score must be 30 or lower.
 
-**`expected_move_range_pct`** — `[low, high]` as positive percentages. Required. Your best estimate of the move magnitude implied by your call. Always positive — `direction` already carries the sign.
+**`expected_move_range_pct`** — `[low, high]` as positive percentages. Required. Your best estimate of the move magnitude implied by your call. Always positive — `direction` already carries the sign. Anchor the range in the best available bundle evidence, such as prior ticker reactions, similar peer reactions, recent stock behavior, or macro/sector conditions. If no good magnitude anchor exists, say so in `data_gaps` and use a wider range. Range width should reflect uncertainty about magnitude, not uncertainty about direction. On `no_call`, report the range you would expect the stock to trade in either direction.
 
-**`key_drivers`** — 1-3 items. Each has `driver` (short name), `direction` (`long`/`short`), `evidence` (sourced from bundle), and **`cites_lesson_indices: list[int]`** (required, may be `[]`). Each integer in `cites_lesson_indices` is a position in `lesson_labels[]`; the cited position MUST have `label == "confirmed"` (validator rejects otherwise). A driver with `cites_lesson_indices: []` is purely bundle-derived.
+**`key_drivers`** — 1-3 items when a directional call is supported. Each has `driver` (short name), `direction` (`long` or `short` only), `evidence` (sourced from bundle), and **`cites_lesson_indices: list[int]`** (required, may be `[]`). Drivers represent directional forces; do not use `no_call` as a driver direction. If the final call is `no_call`, list only real long/short forces that survived review. If no directional force is strong enough to list, use `key_drivers: []` and explain the issue in `analysis` and `data_gaps`. Each integer in `cites_lesson_indices` is a position in `lesson_labels[]`; the cited position MUST have `label == "confirmed"` (validator rejects otherwise). A driver with `cites_lesson_indices: []` is purely bundle-derived.
 
 **`lesson_labels`** — required, array (may be `[]` only when `## Lessons To Label` is absent or has zero L# markers). One entry per L# marker in the rendered `## Lessons To Label` section, in marker order. Schema: `{lesson_text, label, bundle_evidence}`. Only lessons with `label == "confirmed"` may be cited via `cites_lesson_indices`.
 
 **`data_gaps`** — 0+ items. Each has `gap` (what is missing and what information would resolve it). Optional but encouraged.
 
-**`evidence_ledger`** — every key number used in your reasoning, with `metric`, `value`, `source`, and `source_id`. Required, must be non-empty in production validation. The `source_id` must be copied **verbatim** from the rendered bundle's "Evidence Source IDs" catalog (block immediately after the §1.0 header) — equivalently from `bundle.evidence_source_catalog` in the JSON. Each ID has the form `SRC:<TICKER>:<QUARTER>:<ACCESSION>#<location>`. Do NOT invent, paraphrase, or strip the `SRC:` prefix; do NOT cite generic anchors like `§2` or `N1` alone. If no catalog ID applies to a fact you want to cite, omit the entry. The validator rejects any entry whose `source_id` is not present in the bundle's catalog.
+**`evidence_ledger`** — every important claim that supports your call, with `metric`, `value`, `source`, and `source_id`. Required, must be non-empty in production validation. Numbers: put the number in `value` with its `source_id`. Judgments (e.g., "management tone deteriorated", "guidance was conservative", "peer read-through was negative"): use `metric` as a short label and put a short quote or specific bundle pointer in `value`, with its `source_id`. Usually 6-15 entries is enough; fewer is fine for thin or `no_call` bundles, and more is fine only when the call truly depends on them. Combine near-duplicates; skip minor claims that do not drive the call. The `source_id` must be copied **verbatim** from the rendered bundle's "Evidence Source IDs" catalog (block immediately after the §1.0 header) — equivalently from `bundle.evidence_source_catalog` in the JSON. Each ID has the form `SRC:<TICKER>:<QUARTER>:<ACCESSION>#<location>`. Do NOT invent, paraphrase, or strip the `SRC:` prefix; do NOT cite generic anchors like `§2` or `N1` alone. If no catalog ID applies to a fact you want to cite, omit the entry. The validator rejects any entry whose `source_id` is not present in the bundle's catalog.
 
 **`analysis`** — short synthesis: the main tension, which side wins, and why. Required. Must not verbatim-quote the `lesson_text` of any non-confirmed label for lessons ≥30 chars (validator substring check).
 
@@ -227,3 +235,6 @@ These validator-enforced rules are defined above:
 2. If the evidence does not support a directional call, choose `no_call` instead of forcing `long` or `short`.
 3. Review every section of the bundle before deciding `long`, `short`, or `no_call`.
 4. If both consensus AND guidance are missing, `confidence_score` must be 30 or lower.
+5. Market moves in the bundle are context, not proof. Inter-quarter moves show positioning and what may already be priced in; peer reactions are analogs; macro/sector moves show backdrop. Do not treat any of them as proof of this stock's next-session direction, and never use target-company trading or news after the bundle cutoff.
+6. Prior lessons inform interpretation; they never replace this quarter's evidence. A lesson can explain why a fact matters, but it cannot be the fact. Every `key_drivers[i].evidence` must be grounded in non-lesson bundle evidence; a driver whose evidence is only a lesson is not valid.
+7. Write only to `SECTION_AUDIT_PATH` and `RESULT_PATH`. Do not create scratchpad files, notes, or any other output.
