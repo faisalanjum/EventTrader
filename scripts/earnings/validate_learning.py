@@ -150,10 +150,18 @@ def _validate_common_core(payload: dict[str, Any],
         errors.append(f"quarter_label mismatch: {payload['quarter_label']} != {expected_quarter}")
 
     # ── PIT fields ──
-    if payload["pit_mode"] not in _VALID_PIT_MODES:
-        errors.append(f"invalid pit_mode: {payload['pit_mode']}")
-    if payload["pit_boundary_source"] not in _VALID_PIT_BOUNDARY_SOURCES:
-        errors.append(f"invalid pit_boundary_source: {payload['pit_boundary_source']}")
+    # Totality: enum membership (`x in SET`) raises TypeError when x is
+    # unhashable (list/dict). Guard with isinstance(str) so a malformed
+    # learner output produces a validation error rather than a crash, so
+    # the orchestrator's H2 informed-retry loop can feed errors back to the
+    # LLM rather than crashing the run. Same pattern applied to every
+    # enum-membership check in this module (see commit 1.5).
+    pit_mode_val = payload["pit_mode"]
+    if not isinstance(pit_mode_val, str) or pit_mode_val not in _VALID_PIT_MODES:
+        errors.append(f"invalid pit_mode: {pit_mode_val!r}")
+    pbs_val = payload["pit_boundary_source"]
+    if not isinstance(pbs_val, str) or pbs_val not in _VALID_PIT_BOUNDARY_SOURCES:
+        errors.append(f"invalid pit_boundary_source: {pbs_val!r}")
     # PIT consistency: historical requires non-null cutoff, live requires null
     pit_mode = payload["pit_mode"]
     pit_cutoff = payload["pit_cutoff"]
@@ -190,19 +198,31 @@ def _validate_common_core(payload: dict[str, Any],
                 if required_key not in entry:
                     errors.append(f"evidence_ledger[{i}] missing '{required_key}'")
 
-    # Build ledger_ids once for downstream ref checks.
+    # Build ledger_ids once for downstream ref checks. ``isinstance(e["id"], str)``
+    # is required for hashability — a non-string id would crash the set
+    # comprehension. Non-string ids are caught later as ledger malformation;
+    # for now we just exclude them from the resolvable-id set.
     ledger_ids: set[str] = {
-        e["id"] for e in (ledger if isinstance(ledger, list) else [])
-        if isinstance(e, dict) and "id" in e
+        e.get("id") for e in (ledger if isinstance(ledger, list) else [])
+        if isinstance(e, dict) and isinstance(e.get("id"), str)
     }
 
     # ── Evidence refs resolution helper ──
+    # Totality: ``ref in ledger_ids`` raises TypeError when ref is unhashable
+    # (e.g., dict, list). Guard with isinstance(str) so a malformed
+    # evidence_refs entry produces a validation error rather than a crash.
     def _check_refs(obj: dict, label: str) -> None:
         refs = obj.get("evidence_refs", [])
         if not isinstance(refs, list):
             errors.append(f"{label}.evidence_refs must be a list")
             return
         for ref in refs:
+            if not isinstance(ref, str):
+                errors.append(
+                    f"{label}.evidence_refs: item must be a string, "
+                    f"got {type(ref).__name__}"
+                )
+                continue
             if ref not in ledger_ids:
                 errors.append(f"{label}.evidence_refs: '{ref}' not found in evidence_ledger")
 
@@ -260,10 +280,12 @@ def _validate_common_core(payload: dict[str, Any],
             pc_missing = [k for k in _PREDICTION_COMPARISON_REQUIRED if k not in pc]
             if pc_missing:
                 errors.append(f"prediction_comparison missing fields: {', '.join(pc_missing)}")
-            if pc.get("predicted_direction") not in _VALID_DIRECTIONS:
-                errors.append(f"prediction_comparison.predicted_direction invalid: {pc.get('predicted_direction')}")
-            if pc.get("actual_direction") not in _VALID_ACTUAL_DIRECTIONS:
-                errors.append(f"prediction_comparison.actual_direction invalid: {pc.get('actual_direction')}")
+            pd_val = pc.get("predicted_direction")
+            if not isinstance(pd_val, str) or pd_val not in _VALID_DIRECTIONS:
+                errors.append(f"prediction_comparison.predicted_direction invalid: {pd_val!r}")
+            ad_val = pc.get("actual_direction")
+            if not isinstance(ad_val, str) or ad_val not in _VALID_ACTUAL_DIRECTIONS:
+                errors.append(f"prediction_comparison.actual_direction invalid: {ad_val!r}")
             if not isinstance(pc.get("direction_correct"), bool):
                 errors.append("prediction_comparison.direction_correct must be a boolean")
             mep = pc.get("magnitude_error_pct")
@@ -308,8 +330,8 @@ def _validate_common_core(payload: dict[str, Any],
                 if key not in obs:
                     errors.append(f"global_observations[{i}] missing '{key}'")
             scope = obs.get("scope")
-            if scope not in _VALID_SCOPES:
-                errors.append(f"global_observations[{i}].scope invalid: {scope}")
+            if not isinstance(scope, str) or scope not in _VALID_SCOPES:
+                errors.append(f"global_observations[{i}].scope invalid: {scope!r}")
 
             rt = obs.get("related_tickers")
             ts = obs.get("target_sector")
@@ -351,8 +373,13 @@ def _validate_common_core(payload: dict[str, Any],
                             f"invalid tickers (must be uppercase alphabetic, "
                             f"1-5 chars): {bad}"
                         )
-                    # Validator-authoritative dedupe (writer does NOT dedupe):
-                    if len(set(rt)) != len(rt):
+                    # Validator-authoritative dedupe (writer does NOT dedupe).
+                    # Totality: ``set(rt)`` would crash if rt contained an
+                    # unhashable element (e.g., a nested list). The bad-element
+                    # check above already flags non-string entries; dedupe only
+                    # cares about the string-typed subset.
+                    str_tickers = [t for t in rt if isinstance(t, str)]
+                    if len(set(str_tickers)) != len(str_tickers):
                         errors.append(
                             f"global_observations[{i}].related_tickers contains "
                             f"duplicates"
@@ -432,22 +459,33 @@ def _validate_v3(payload: dict[str, Any],
     reaches us here (we'd already have an error list to return)."""
     errors = _validate_common_core(payload, expected_ticker, expected_quarter)
 
-    # Build ledger_ids for v3-side ref checks. Match common-core's logic so
-    # both layers see the same id set.
-    ledger = payload.get("evidence_ledger") or []
+    # Build ledger_ids for v3-side ref checks. Mirror common-core hardening:
+    # ledger must be a list (defensive — non-list would crash iteration);
+    # only string ids enter the set (set() requires hashable elements, and
+    # a non-string id is itself a malformation flagged elsewhere).
+    ledger_raw = payload.get("evidence_ledger")
+    ledger = ledger_raw if isinstance(ledger_raw, list) else []
     ledger_ids: set[str] = {
-        e["id"] for e in ledger
-        if isinstance(e, dict) and "id" in e
+        e.get("id") for e in ledger
+        if isinstance(e, dict) and isinstance(e.get("id"), str)
     }
 
     def _refs_nonempty_resolve(refs: object, label: str) -> None:
         """Validate evidence_refs is non-empty and all IDs resolve.
         Per N3 (predictor_lessons / global_observations) and #3
-        (lesson_audit, replacement_lesson)."""
+        (lesson_audit, replacement_lesson). Totality: a non-string ref
+        produces a typed error rather than crashing the set membership
+        check (unhashable types raise TypeError on ``ref in set``)."""
         if not isinstance(refs, list) or not refs:
             errors.append(f"{label}.evidence_refs must be a non-empty list")
             return
         for ref in refs:
+            if not isinstance(ref, str):
+                errors.append(
+                    f"{label}.evidence_refs: item must be a string, "
+                    f"got {type(ref).__name__}"
+                )
+                continue
             if ref not in ledger_ids:
                 errors.append(f"{label}.evidence_refs: '{ref}' not found in evidence_ledger")
 
@@ -465,7 +503,12 @@ def _validate_v3(payload: dict[str, Any],
                 )
 
     # ── Structured predictor_lessons (v3 — D17 + N3) ──
-    fb = payload.get("feedback") or {}
+    # Totality: ``payload.get("feedback") or {}`` returns "bad" when feedback
+    # is the truthy non-dict string "bad", and ``"bad".get(...)`` crashes.
+    # Common-core already errored on the non-dict feedback; here we just
+    # skip v3-feedback checks rather than re-error or crash.
+    fb_raw = payload.get("feedback")
+    fb = fb_raw if isinstance(fb_raw, dict) else {}
     pl = fb.get("predictor_lessons") or []
     if isinstance(pl, list):
         for i, lesson in enumerate(pl):
@@ -513,23 +556,32 @@ def _validate_v3(payload: dict[str, Any],
                 errors.append(f"{label}.lesson_index must be an int")
             if "lesson_text" in audit and not isinstance(audit["lesson_text"], str):
                 errors.append(f"{label}.lesson_text must be a string")
-            if "predictor_label" in audit and audit["predictor_label"] not in _LESSON_LABEL_VALUES:
-                errors.append(
-                    f"{label}.predictor_label must be one of {sorted(_LESSON_LABEL_VALUES)} "
-                    f"(got {audit['predictor_label']!r})"
-                )
+            # Enum membership checks — guard isinstance(str) BEFORE ``x in SET``
+            # so malformed values (list, dict, None, etc.) produce a typed
+            # error rather than a TypeError("unhashable type") crash.
+            if "predictor_label" in audit:
+                pl_val = audit["predictor_label"]
+                if not isinstance(pl_val, str) or pl_val not in _LESSON_LABEL_VALUES:
+                    errors.append(
+                        f"{label}.predictor_label must be one of "
+                        f"{sorted(_LESSON_LABEL_VALUES)} (got {pl_val!r})"
+                    )
             if "was_cited" in audit and not isinstance(audit["was_cited"], bool):
                 errors.append(f"{label}.was_cited must be a bool")
-            if "review" in audit and audit["review"] not in _REVIEW_VALUES:
-                errors.append(
-                    f"{label}.review must be one of {sorted(_REVIEW_VALUES)} "
-                    f"(got {audit['review']!r})"
-                )
-            if "action" in audit and audit["action"] not in _ACTION_VALUES:
-                errors.append(
-                    f"{label}.action must be one of {sorted(_ACTION_VALUES)} "
-                    f"(got {audit['action']!r})"
-                )
+            if "review" in audit:
+                rv_val = audit["review"]
+                if not isinstance(rv_val, str) or rv_val not in _REVIEW_VALUES:
+                    errors.append(
+                        f"{label}.review must be one of "
+                        f"{sorted(_REVIEW_VALUES)} (got {rv_val!r})"
+                    )
+            if "action" in audit:
+                ac_val = audit["action"]
+                if not isinstance(ac_val, str) or ac_val not in _ACTION_VALUES:
+                    errors.append(
+                        f"{label}.action must be one of "
+                        f"{sorted(_ACTION_VALUES)} (got {ac_val!r})"
+                    )
             if "comment" in audit and not isinstance(audit["comment"], str):
                 errors.append(f"{label}.comment must be a string")
 
