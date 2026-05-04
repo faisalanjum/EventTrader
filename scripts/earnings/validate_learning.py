@@ -1,11 +1,38 @@
-"""Standalone attribution_result.v2 validator — zero external dependencies.
+"""Standalone attribution_result.v3 validator — zero external dependencies.
+
+Round 6 fresh-start cutover (2026-05-04, .claude/plans/LearnerLoopRevamp.md):
+v3-only. Pre-cutover v2 files are wiped; this validator REJECTS any
+schema_version other than ``attribution_result.v3``.
 
 This is the SINGLE CANONICAL validator. Both the orchestrator Python and the
-PreToolUse hook import from here. Only stdlib imports — no Neo4j, no builders,
-no SDK. This ensures the hook never fails-open due to missing dependencies.
+PreToolUse hook import from here. Only stdlib imports (plus a single
+``config.canonical_sectors`` lookup) — no Neo4j, no builders, no SDK. This
+ensures the hook never fails-open due to missing dependencies.
 
-Schema invariants enforced on ``global_observations[]`` (amendment 2026-04-17,
-per .claude/plans/learner.md Appendix A):
+Layering:
+  - ``validate_attribution_result`` — thin wrapper; dispatches by
+    schema_version. v3-only after round 6.
+  - ``_validate_common_core`` — rules independent of schema version
+    (top-level required fields, ticker/quarter match, evidence_ledger,
+    primary_driver, contributing_factors, prediction_comparison,
+    array caps, global_observations scope-routing invariants, missing_inputs,
+    data_sources_used, ref-field equality).
+  - ``_validate_v3`` — v3-specific additions (LearnerLoopRevamp.md §8.3 +
+    user clarification #3): structured ``predictor_lessons`` /
+    ``global_observations`` (lesson + mechanism + applies_when + invalid_if
+    each ≥30 chars, ``evidence_refs`` non-empty + IDs resolve in
+    ``evidence_ledger``); ``lesson_audit[]`` shape (full enum coverage,
+    ``evidence_refs`` non-empty + IDs resolve, ``replacement_lesson`` on
+    ``action="refine"``).
+
+Hook contract for ``lesson_audit``: structurally optional — if present, must
+have valid shape; if absent, validator passes through. The orchestrator's
+cross-file check (D19, see ``_validate_audit_against_prediction``) is the
+authoritative coverage gate (it has access to the prediction file; this
+hook does not).
+
+Schema invariants enforced on ``global_observations[]`` (carried over from
+v2 amendment 2026-04-17, per .claude/plans/learner.md Appendix A):
 
   - ``scope_key`` is REMOVED — rejected across ALL scopes.
   - ``scope="cross_ticker"`` REQUIRES non-empty ``related_tickers`` (uppercase
@@ -76,15 +103,38 @@ _VALID_DIRECTIONS = {"long", "short", "no_call"}
 _VALID_ACTUAL_DIRECTIONS = {"long", "short", "flat"}
 _VALID_SCOPES = {"sector", "macro", "cross_ticker"}
 
+# v3-only enums and field-length floor (LearnerLoopRevamp.md §5.3 / §5.4 / §8.3)
+_REVIEW_VALUES = {"helped", "misled", "outweighed", "missed", "neutral", "unclear"}
+_ACTION_VALUES = {"keep", "refine", "retire"}
+_LESSON_LABEL_VALUES = {"confirmed", "contradicted", "irrelevant"}
+_MIN_LESSON_FIELD_CHARS = 30
+_LESSON_STRUCT_FIELDS = ("lesson", "mechanism", "applies_when", "invalid_if")
+
 
 def validate_attribution_result(payload: dict[str, Any],
                                 expected_ticker: str,
                                 expected_quarter: str) -> list[str]:
-    """Validate learning/result.json (renamed from attribution/ per obsidian_thinking.md) against the attribution_result.v2 contract.
+    """Validate learning/result.json against attribution_result.v3.
 
-    Returns a list of error strings. Empty list = valid.
-    This is the SINGLE CANONICAL validator — the PreToolUse hook calls it too.
+    Round 6 fresh-start: v3-only. Anything else is rejected with a clear
+    message. The PreToolUse hook calls this same function — the wrapper is
+    the only schema-version gate.
     """
+    sv = payload.get("schema_version")
+    if sv != "attribution_result.v3":
+        return [
+            f"unsupported schema_version: {sv!r} — only attribution_result.v3 "
+            f"is accepted (round 6 fresh-start cutover removed v2 read-compat)"
+        ]
+    return _validate_v3(payload, expected_ticker, expected_quarter)
+
+
+def _validate_common_core(payload: dict[str, Any],
+                          expected_ticker: str,
+                          expected_quarter: str) -> list[str]:
+    """Schema-version-independent rules. Owned by both v3 and any future
+    schema layers. Mirrors the v2 body MINUS the schema_version equality
+    check (which the wrapper owns)."""
     errors: list[str] = []
 
     # ── Required top-level fields ──
@@ -92,10 +142,6 @@ def validate_attribution_result(payload: dict[str, Any],
     if missing:
         errors.append(f"missing required fields: {', '.join(missing)}")
         return errors  # bail early, remaining checks would fail
-
-    # ── Schema version ──
-    if payload["schema_version"] != "attribution_result.v2":
-        errors.append(f"unexpected schema_version: {payload['schema_version']}")
 
     # ── Ticker / quarter match ──
     if str(payload["ticker"]).upper() != expected_ticker.upper():
@@ -135,9 +181,7 @@ def validate_attribution_result(payload: dict[str, Any],
     ledger = payload["evidence_ledger"]
     if not isinstance(ledger, list) or len(ledger) == 0:
         errors.append("evidence_ledger must be a non-empty array")
-        ledger_ids: set[str] = set()
     else:
-        ledger_ids = set()
         for i, entry in enumerate(ledger):
             if not isinstance(entry, dict):
                 errors.append(f"evidence_ledger[{i}] is not an object")
@@ -145,8 +189,12 @@ def validate_attribution_result(payload: dict[str, Any],
             for required_key in ("id", "claim", "value", "source", "date"):
                 if required_key not in entry:
                     errors.append(f"evidence_ledger[{i}] missing '{required_key}'")
-            if "id" in entry:
-                ledger_ids.add(entry["id"])
+
+    # Build ledger_ids once for downstream ref checks.
+    ledger_ids: set[str] = {
+        e["id"] for e in (ledger if isinstance(ledger, list) else [])
+        if isinstance(e, dict) and "id" in e
+    }
 
     # ── Evidence refs resolution helper ──
     def _check_refs(obj: dict, label: str) -> None:
@@ -193,7 +241,7 @@ def validate_attribution_result(payload: dict[str, Any],
         if fb_missing:
             errors.append(f"feedback missing fields: {', '.join(fb_missing)}")
 
-        # Array caps
+        # Array caps (lists only — element-shape checks live in _validate_v3)
         for field, cap in _FEEDBACK_CAPS.items():
             if field in fb:
                 val = fb[field]
@@ -240,10 +288,11 @@ def validate_attribution_result(payload: dict[str, Any],
         if why is not None and not isinstance(why, str):
             errors.append("feedback.why must be a string")
 
-    # ── Global observations ──
-    # Schema-v2 amendment (2026-04-17): scope_key REMOVED (rejected on every
+    # ── Global observations: scope routing invariants ──
+    # Schema v2 amendment (2026-04-17): scope_key REMOVED (rejected on every
     # scope). Structured routing fields: related_tickers (cross_ticker) and
-    # target_sector (sector). See module docstring for full invariants.
+    # target_sector (sector). v3 adds mechanism/applies_when/invalid_if/
+    # evidence_refs on top — those checks live in _validate_v3.
     go = payload["global_observations"]
     if not isinstance(go, list):
         errors.append("global_observations must be an array")
@@ -367,5 +416,140 @@ def validate_attribution_result(payload: dict[str, Any],
         errors.append(f"context_bundle_ref must be 'context_bundle.json', got: {payload.get('context_bundle_ref')}")
     if payload.get("prediction_result_ref") != "prediction/result.json":
         errors.append(f"prediction_result_ref must be 'prediction/result.json', got: {payload.get('prediction_result_ref')}")
+
+    return errors
+
+
+def _validate_v3(payload: dict[str, Any],
+                 expected_ticker: str,
+                 expected_quarter: str) -> list[str]:
+    """v3 additions: structured predictor_lessons / global_observations
+    (LearnerLoopRevamp.md §8.3 + N3); lesson_audit shape (D8 + B3 + #3).
+
+    Layered on top of ``_validate_common_core`` — common-core failures
+    surface first, then v3-specific checks. The common-core fast-bail on
+    missing top-level fields means an empty ``ledger_ids`` set never
+    reaches us here (we'd already have an error list to return)."""
+    errors = _validate_common_core(payload, expected_ticker, expected_quarter)
+
+    # Build ledger_ids for v3-side ref checks. Match common-core's logic so
+    # both layers see the same id set.
+    ledger = payload.get("evidence_ledger") or []
+    ledger_ids: set[str] = {
+        e["id"] for e in ledger
+        if isinstance(e, dict) and "id" in e
+    }
+
+    def _refs_nonempty_resolve(refs: object, label: str) -> None:
+        """Validate evidence_refs is non-empty and all IDs resolve.
+        Per N3 (predictor_lessons / global_observations) and #3
+        (lesson_audit, replacement_lesson)."""
+        if not isinstance(refs, list) or not refs:
+            errors.append(f"{label}.evidence_refs must be a non-empty list")
+            return
+        for ref in refs:
+            if ref not in ledger_ids:
+                errors.append(f"{label}.evidence_refs: '{ref}' not found in evidence_ledger")
+
+    def _check_lesson_struct(d: object, label: str) -> None:
+        """Each of lesson/mechanism/applies_when/invalid_if must be a string
+        with ≥30 non-whitespace chars."""
+        if not isinstance(d, dict):
+            errors.append(f"{label} must be an object")
+            return
+        for field in _LESSON_STRUCT_FIELDS:
+            v = d.get(field)
+            if not isinstance(v, str) or len(v.strip()) < _MIN_LESSON_FIELD_CHARS:
+                errors.append(
+                    f"{label}.{field} must be a non-empty string ≥{_MIN_LESSON_FIELD_CHARS} chars"
+                )
+
+    # ── Structured predictor_lessons (v3 — D17 + N3) ──
+    fb = payload.get("feedback") or {}
+    pl = fb.get("predictor_lessons") or []
+    if isinstance(pl, list):
+        for i, lesson in enumerate(pl):
+            label = f"feedback.predictor_lessons[{i}]"
+            if not isinstance(lesson, dict):
+                errors.append(f"{label} must be an object in v3 (was list[str] in v2)")
+                continue
+            _check_lesson_struct(lesson, label)
+            _refs_nonempty_resolve(lesson.get("evidence_refs"), label)
+
+    # ── Structured global_observations (v3 — N3) ──
+    go = payload.get("global_observations") or []
+    if isinstance(go, list):
+        for i, obs in enumerate(go):
+            label = f"global_observations[{i}]"
+            if not isinstance(obs, dict):
+                # already flagged in common-core
+                continue
+            _check_lesson_struct(obs, label)
+            _refs_nonempty_resolve(obs.get("evidence_refs"), label)
+
+    # ── lesson_audit (v3 — D8 full coverage; structurally optional at hook
+    # level per §8.2; D19 enforces count alignment in the orchestrator) ──
+    audits = payload.get("lesson_audit", [])
+    if not isinstance(audits, list):
+        errors.append("lesson_audit must be a list")
+    else:
+        for i, audit in enumerate(audits):
+            label = f"lesson_audit[{i}]"
+            if not isinstance(audit, dict):
+                errors.append(f"{label} must be an object")
+                continue
+
+            # Required fields — presence
+            required = (
+                "lesson_index", "lesson_text", "predictor_label",
+                "was_cited", "review", "action", "comment", "evidence_refs",
+            )
+            for field in required:
+                if field not in audit:
+                    errors.append(f"{label} missing required field: {field}")
+
+            # Type / enum checks (only when the field is present)
+            if "lesson_index" in audit and not isinstance(audit["lesson_index"], int):
+                errors.append(f"{label}.lesson_index must be an int")
+            if "lesson_text" in audit and not isinstance(audit["lesson_text"], str):
+                errors.append(f"{label}.lesson_text must be a string")
+            if "predictor_label" in audit and audit["predictor_label"] not in _LESSON_LABEL_VALUES:
+                errors.append(
+                    f"{label}.predictor_label must be one of {sorted(_LESSON_LABEL_VALUES)} "
+                    f"(got {audit['predictor_label']!r})"
+                )
+            if "was_cited" in audit and not isinstance(audit["was_cited"], bool):
+                errors.append(f"{label}.was_cited must be a bool")
+            if "review" in audit and audit["review"] not in _REVIEW_VALUES:
+                errors.append(
+                    f"{label}.review must be one of {sorted(_REVIEW_VALUES)} "
+                    f"(got {audit['review']!r})"
+                )
+            if "action" in audit and audit["action"] not in _ACTION_VALUES:
+                errors.append(
+                    f"{label}.action must be one of {sorted(_ACTION_VALUES)} "
+                    f"(got {audit['action']!r})"
+                )
+            if "comment" in audit and not isinstance(audit["comment"], str):
+                errors.append(f"{label}.comment must be a string")
+
+            # evidence_refs: non-empty + IDs resolve (B3 + user clarification #3)
+            if "evidence_refs" in audit:
+                _refs_nonempty_resolve(audit["evidence_refs"], label)
+
+            # action="refine" requires a structurally-valid replacement_lesson
+            if audit.get("action") == "refine":
+                rl_label = f"{label}.replacement_lesson"
+                rl = audit.get("replacement_lesson")
+                if rl is None:
+                    errors.append(
+                        f"{label}: action='refine' requires replacement_lesson "
+                        f"with lesson + mechanism + applies_when + invalid_if + evidence_refs"
+                    )
+                elif not isinstance(rl, dict):
+                    errors.append(f"{rl_label} must be an object")
+                else:
+                    _check_lesson_struct(rl, rl_label)
+                    _refs_nonempty_resolve(rl.get("evidence_refs"), rl_label)
 
     return errors
