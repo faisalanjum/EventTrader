@@ -62,7 +62,7 @@ def _skeleton(global_observations=None):
         "global_observations": global_observations if global_observations is not None else [],
         "missing_inputs": [],
         "data_sources_used": ["test"],
-        "context_bundle_ref": "prediction/context_bundle.json",
+        "context_bundle_ref": "context_bundle.json",
         "prediction_result_ref": "prediction/result.json",
     }
 
@@ -264,6 +264,25 @@ class ValidatorTests(unittest.TestCase):
         self.assertTrue(
             any("target_sector must not be present" in e and "cross_ticker" in e for e in errors),
             errors,
+        )
+
+    # ── Ref-field regression (2026-05-04) ──
+    # context_bundle.json was promoted from prediction/ → quarter root in the
+    # 2026-04-17 obsidian_thinking migration. The validator's expected literal
+    # was missed by the path-literal sweep, silently corrupting metadata via
+    # the informed-retry feedback loop. Pins the post-fix contract.
+    def test_context_bundle_ref_new_canonical_value_accepted(self):
+        payload = _skeleton([])
+        payload["context_bundle_ref"] = "context_bundle.json"
+        self.assertEqual(_validate(payload), [])
+
+    def test_context_bundle_ref_old_pre_migration_value_rejected(self):
+        payload = _skeleton([])
+        payload["context_bundle_ref"] = "prediction/context_bundle.json"
+        errors = _validate(payload)
+        self.assertTrue(
+            any("context_bundle_ref" in e for e in errors),
+            f"stale pre-migration value must be rejected, got: {errors}",
         )
 
     # ── Bonus: string-instead-of-list emits "did you mean" hint ──

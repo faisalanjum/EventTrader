@@ -363,8 +363,8 @@ def validate_attribution_result(payload: dict[str, Any],
         errors.append("data_sources_used must be an array")
 
     # ── Ref fields (must be canonical relative strings) ──
-    if payload.get("context_bundle_ref") != "prediction/context_bundle.json":
-        errors.append(f"context_bundle_ref must be 'prediction/context_bundle.json', got: {payload.get('context_bundle_ref')}")
+    if payload.get("context_bundle_ref") != "context_bundle.json":
+        errors.append(f"context_bundle_ref must be 'context_bundle.json', got: {payload.get('context_bundle_ref')}")
     if payload.get("prediction_result_ref") != "prediction/result.json":
         errors.append(f"prediction_result_ref must be 'prediction/result.json', got: {payload.get('prediction_result_ref')}")
 

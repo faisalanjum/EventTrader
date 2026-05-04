@@ -794,7 +794,7 @@ This keeps the learning loop compact, replayable, and token-efficient while pres
     ]
   },
 
-  "context_bundle_ref": "prediction/context_bundle.json",
+  "context_bundle_ref": "context_bundle.json",
   "prediction_result_ref": "prediction/result.json"
 }
 ```
@@ -813,7 +813,7 @@ This keeps the learning loop compact, replayable, and token-efficient while pres
 | `surprise_analysis` | Yes | `eps_surprise_pct`, `revenue_surprise_pct`, `guidance_surprise_pct` — all nullable (null if data unavailable, not fabricated) |
 | `analysis_summary` | Yes | 1-3 paragraphs. Full reasoning narrative. Preserves nuance beyond headline fields. |
 | `missing_inputs` | Yes | Array of strings. What data was unavailable at attribution time. Can be `[]`. |
-| `context_bundle_ref` | Yes | Relative path to prediction's context_bundle.json (audit trail) |
+| `context_bundle_ref` | Yes | Relative path to context_bundle.json at quarter root (audit trail) |
 | `prediction_result_ref` | Yes | Relative path to prediction/result.json (what's being compared) |
 
 **Feedback block fields and caps (per quarter):**
