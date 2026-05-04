@@ -1941,3 +1941,49 @@ d817cd8  fix(learner): commit 2.1 — 4 correctness gaps in commit 2 (cap, idemp
 
 11 LearnerLoopRevamp commits + the prior baseline alignment (2b48178) = 12 commits pushed.
 Full earnings suite at HEAD: 1382 passed, 14 skipped, 43 subtests passed.
+
+---
+
+## 21. Future tuning candidate — per-scope status policy (deferred)
+
+**Status as shipped**: single global policy in §14 — `window=5, retire=3 misled, watch=2 misled, watch=2 missed`. All scopes (ticker / sector / macro / cross_ticker) share one set of thresholds.
+
+**Candidate refinement** (NOT required pre-live; tune after real audit volume accumulates):
+
+| Scope          | window | retire (misled) | watch (misled) | rationale |
+|----------------|--------|-----------------|----------------|-----------|
+| ticker         | 5      | 3               | 2              | unchanged — most populated; current default is well-fit |
+| sector         | 8      | 4               | 2              | sector-wide mechanisms evolve more slowly; need more samples before pulling the retire trigger |
+| cross_ticker   | 8      | 4               | 2              | named-ticker transmission links: same patience as sector |
+| macro          | 10     | 5               | 2              | regime mechanisms are slowest-moving; longest window before retire |
+
+**Also**: drop the `missed → watch` trigger. `missed` (predictor labeled `irrelevant` but lesson actually applied) means the predictor underused the lesson, not that the lesson is bad. Keep `missed` informative for predictor calibration / refinement but don't penalize the lesson's status. This aligns with the existing D6 invariant ("`outweighed` never penalizes" — same reasoning applies to `missed`).
+
+### 21.1 How to apply this change later
+
+Strictly internal-to-`compute_status` refactor. **Schema, storage, validator, aggregator, renderer, prompts all unchanged.**
+
+1. **`scripts/earnings/earnings_orchestrator.py`** (~25 LOC):
+   - Add a `_STATUS_POLICY_BY_SCOPE: dict[str, dict]` constant near the existing `LESSON_AUDIT_WINDOW` block.
+   - Add a tiny `_status_policy_for_scope(scope: str) -> dict` helper that defaults to ticker policy on unknown/missing scope (defensive — preserves current behavior for malformed lessons).
+   - Inside `compute_status(lesson)`: read `lesson.get("scope")`, look up the policy, use its `window` / `retire_misled` / `watch_misled` instead of the module constants. Drop the `missed` branch from the watch trigger.
+   - Keep the existing `LESSON_AUDIT_WINDOW` etc. constants as the ticker default for backward compat (or inline them; either works).
+
+2. **`scripts/earnings/test_lesson_status_transitions.py`** (~60 LOC):
+   - Flip `test_two_missed_in_last_five_watch` → assert `active` (the new semantics — missed no longer triggers watch).
+   - Add per-scope tests using `subTest`: sector window=8 / retire=4, cross_ticker window=8 / retire=4, macro window=10 / retire=5.
+   - Confirm ticker default unchanged (existing tests should stay green).
+
+3. **Run full earnings suite**: `venv/bin/python -m pytest scripts/earnings/ -q --no-header`. Expect zero regressions; the function is pure, library is empty post-cutover, KEDA paused.
+
+### 21.2 Effort + risk
+
+- **LOC**: ~25 production + ~60 tests = ~85 total (most is test coverage)
+- **Wall-clock**: ~80 minutes including suite + commit
+- **Regression risk**: very low. `compute_status` is a pure function with one caller (`_apply_render_view`). The change is strictly **more lenient** for non-ticker scopes (longer windows, higher retire bars) and removes one watch trigger — so existing audits never auto-retire faster than today. Ticker behavior is unchanged. KEDA is paused; library is empty post-cutover #2; no production traffic to perturb.
+
+### 21.3 When to actually do this
+
+- After 3+ months of live-mode audit volume accumulates and you see whether the global policy is too aggressive on broader-scope lessons (sector/macro retiring before they've been fairly tested across enough quarters).
+- OR if a single-scope lesson trips you in production by retiring on what looks like noise — that's the empirical signal that says "yes, this scope needs more patience."
+- Not before: the canary used 3 quarters; not enough audit volume to know whether per-scope tuning would have changed any verdicts. The shipped global policy is the conservative-and-simple default.
