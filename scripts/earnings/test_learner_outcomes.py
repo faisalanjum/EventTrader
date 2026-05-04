@@ -1,9 +1,12 @@
 """Contract tests for ``earnings_orchestrator.LearnerOutcome``.
 
 Pins:
-  * exactly 12 outcome strings (matches the 12 return sites in
-    ``run_learner_for_quarter`` — adding a return without tagging here will
-    trip this test, surfacing the omission before it ships)
+  * exactly 13 outcome strings (LearnerLoopRevamp.md commit 2 added
+    ``FAILED_AGGREGATOR`` for D18 success-path audit-aggregator failures)
+  * exactly 15 return statements in ``run_learner_for_quarter`` (some
+    outcomes — notably ``FAILED_RECOVERY_APPEND`` — appear at multiple
+    sites because the recovery path now performs sibling-load + cross-file
+    validation + aggregation, each with its own failure return)
   * the three category sets (SUCCESS, SKIPPED, FAILED) are pairwise
     disjoint and together equal ALL — caller mapping logic depends on this
 
@@ -29,9 +32,10 @@ from earnings_orchestrator import (  # noqa: E402
 
 # ── Taxonomy invariants ──────────────────────────────────────────────────
 
-def test_all_has_exactly_twelve_members():
-    """12 return sites → 12 outcome strings. Pins the 1:1 mapping."""
-    assert len(LearnerOutcome.ALL) == 12
+def test_all_has_exactly_thirteen_members():
+    """13 outcomes total. LearnerLoopRevamp.md commit 2 added
+    FAILED_AGGREGATOR for D18 success-path aggregator IO failures."""
+    assert len(LearnerOutcome.ALL) == 13
 
 
 def test_success_skipped_failed_are_pairwise_disjoint():
@@ -60,7 +64,7 @@ def test_skipped_contains_exactly_the_two_hard_gates():
     })
 
 
-def test_failed_contains_exactly_the_eight_pipeline_errors():
+def test_failed_contains_exactly_the_nine_pipeline_errors():
     assert LearnerOutcome.FAILED == frozenset({
         LearnerOutcome.FAILED_NO_RESULT,
         LearnerOutcome.FAILED_INVALID_JSON,
@@ -70,6 +74,7 @@ def test_failed_contains_exactly_the_eight_pipeline_errors():
         LearnerOutcome.FAILED_RECOVERY_APPEND,
         LearnerOutcome.FAILED_TICKER_APPEND,
         LearnerOutcome.FAILED_GLOBAL_APPEND,
+        LearnerOutcome.FAILED_AGGREGATOR,
     })
 
 
@@ -84,12 +89,19 @@ def test_all_constants_are_lowercase_snake_case_strings():
 
 # ── Return-site count parity ─────────────────────────────────────────────
 
-def test_run_learner_for_quarter_has_twelve_return_statements():
-    """Grep the function source — must find exactly 12 ``return`` statements.
+def test_run_learner_for_quarter_has_fifteen_return_statements():
+    """Grep the function source — must find exactly 15 ``return`` statements.
 
-    Why: the taxonomy size is derived from the function's return-site count.
-    If someone adds a new return branch they must also add a new outcome
-    constant. This test fails loudly when the two drift apart.
+    Note: the count is NOT 1:1 with LearnerOutcome.ALL anymore.
+    LearnerLoopRevamp.md commit 2 (D18 + D19) added three new branches in
+    the recovery path (sibling-file existence, cross-file validation,
+    aggregator wrap), all of which surface ``FAILED_RECOVERY_APPEND``
+    when they fail. Plus one new branch in the success path for D18
+    aggregator failure → ``FAILED_AGGREGATOR``.
+
+    The lower-level test ``test_every_return_returns_a_two_tuple_with_a_known_outcome``
+    is now the authoritative invariant — every return must tag a known
+    outcome, even if multiple returns share the same outcome.
     """
     import ast
     import inspect
@@ -97,11 +109,11 @@ def test_run_learner_for_quarter_has_twelve_return_statements():
     src = inspect.getsource(rlfq)
     tree = ast.parse(src)
     returns = [n for n in ast.walk(tree) if isinstance(n, ast.Return)]
-    assert len(returns) == 12, (
+    assert len(returns) == 15, (
         f"run_learner_for_quarter has {len(returns)} return statements; "
-        f"expected 12 (one per LearnerOutcome). If you added a new branch, "
-        f"add a matching LearnerOutcome constant and update this count + "
-        f"LearnerOutcome.ALL."
+        f"expected 15. If you added a new branch, ensure it tags a known "
+        f"LearnerOutcome (the AST tagging test will catch a bare or "
+        f"unknown-constant return) and update this count."
     )
 
 

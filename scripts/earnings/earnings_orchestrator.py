@@ -1027,6 +1027,10 @@ class LearnerOutcome:
     FAILED_RECOVERY_APPEND    = "failed_recovery_append"
     FAILED_TICKER_APPEND      = "failed_ticker_append"
     FAILED_GLOBAL_APPEND      = "failed_global_append"
+    # LearnerLoopRevamp.md commit 2 — success-path audit aggregator (D18)
+    # surfaces a distinct outcome from the appends. Aggregator IO failures
+    # (library file missing/corrupt) are operational bugs, not validation.
+    FAILED_AGGREGATOR         = "failed_aggregator"
 
     SUCCESS = frozenset({SUCCEEDED, RECOVERED})
     SKIPPED = frozenset({SKIPPED_NO_PREDICTION, SKIPPED_NO_DAILY_STOCK})
@@ -1035,8 +1039,9 @@ class LearnerOutcome:
         FAILED_NO_RESULT_RETRY, FAILED_INVALID_JSON_RETRY,
         FAILED_VALIDATION, FAILED_RECOVERY_APPEND,
         FAILED_TICKER_APPEND, FAILED_GLOBAL_APPEND,
+        FAILED_AGGREGATOR,
     })
-    ALL = SUCCESS | SKIPPED | FAILED  # 12 members
+    ALL = SUCCESS | SKIPPED | FAILED  # 13 members
 
 
 class LearnerSkipped(RuntimeError):
@@ -1156,10 +1161,44 @@ def run_learner_for_quarter(
                            ticker, quarter_info.get("quarter_label"), "; ".join(errors[:3]))
                 attr_paths["result_path"].unlink(missing_ok=True)
             else:
-                # Valid result exists — ensure derived writes are complete
+                # Valid result exists — ensure derived writes + audit aggregation
+                # are complete. D18: aggregator runs in BOTH success AND recovery
+                # paths so a recovered run leaves audit_history up-to-date for
+                # the next quarter's bundle. D19: cross-file validation against
+                # the prediction file is required before aggregation.
                 try:
                     append_ticker_lesson(ticker, existing)
                     append_global_lessons(existing)
+                    pred_path = attr_paths["prediction_result_path"]
+                    bundle_path = attr_paths["context_bundle_path"]
+                    if not pred_path.is_file() or not bundle_path.is_file():
+                        log.error(
+                            "recovery aggregator: missing sibling file(s) for %s %s "
+                            "(pred=%s bundle=%s)",
+                            ticker, quarter_info.get("quarter_label"),
+                            pred_path.is_file(), bundle_path.is_file(),
+                        )
+                        return None, LearnerOutcome.FAILED_RECOVERY_APPEND
+                    prediction_payload = json.loads(pred_path.read_text(encoding="utf-8"))
+                    bundle = json.loads(bundle_path.read_text(encoding="utf-8"))
+                    cross_errors = _validate_audit_against_prediction(
+                        existing, prediction_payload, bundle,
+                    )
+                    if cross_errors:
+                        log.error(
+                            "recovery aggregator: cross-file validation failed for %s %s: %s",
+                            ticker, quarter_info.get("quarter_label"),
+                            "; ".join(cross_errors[:3]),
+                        )
+                        return None, LearnerOutcome.FAILED_RECOVERY_APPEND
+                    aggregate_lesson_audits(
+                        learning_payload=existing,
+                        prediction_payload=prediction_payload,
+                        bundle=bundle,
+                        auditor_ticker=ticker,
+                        auditor_quarter_label=quarter_info.get("quarter_label", ""),
+                        audit_pit_cutoff=existing.get("pit_cutoff"),
+                    )
                     log.info("Derived-write recovery complete for %s %s", ticker, quarter_info.get("quarter_label"))
                 except Exception as e:
                     log.error("Derived-write recovery failed for %s %s: %s", ticker, quarter_info.get("quarter_label"), e)
@@ -1214,15 +1253,25 @@ def run_learner_for_quarter(
                    ticker, quarter_info.get("quarter_label"), e)
         return None, LearnerOutcome.FAILED_INVALID_JSON
 
-    errors = validate_attribution_result(
-        payload, ticker, quarter_info.get("quarter_label", "")
+    # ── Schema + cross-file validation (D19) ──
+    # Combined gate: schema first (cheap, payload-internal), then cross-file
+    # against prediction.lesson_labels + bundle.learning_context. Cross-file
+    # errors are merged into the same H2 retry payload as schema errors,
+    # prefixed with "[cross-file]" so the LLM can distinguish them (E32).
+    # ``prediction_payload`` and ``bundle`` are loaded once here and reused
+    # by the aggregator after appends.
+    errors, prediction_payload, bundle = _full_validate_for_orchestrator(
+        payload, ticker, quarter_info.get("quarter_label", ""),
+        attr_paths["prediction_result_path"], attr_paths["context_bundle_path"],
     )
     if errors:
         log.error("Learner failed %s %s: validation errors: %s",
                    ticker, quarter_info.get("quarter_label"), "; ".join(errors[:3]))
         # Retry once: delete bad file, re-invoke WITH validation errors fed
         # back into the prompt (H2 informed retry, amendment 2026-04-17 per
-        # .claude/plans/learner.md Appendix A §6.6).
+        # .claude/plans/learner.md Appendix A §6.6). E32: cross-file errors
+        # join the same prior_validation_errors list so the LLM sees them
+        # alongside schema errors with the [cross-file] prefix.
         result_path.unlink(missing_ok=True)
         log.info(
             "Retrying learner for %s %s (1 retry, feeding %d validation errors back)",
@@ -1251,8 +1300,9 @@ def run_learner_for_quarter(
             log.error("Learner retry failed %s %s: result.json still invalid JSON",
                        ticker, quarter_info.get("quarter_label"))
             return None, LearnerOutcome.FAILED_INVALID_JSON_RETRY
-        errors = validate_attribution_result(
-            payload, ticker, quarter_info.get("quarter_label", "")
+        errors, prediction_payload, bundle = _full_validate_for_orchestrator(
+            payload, ticker, quarter_info.get("quarter_label", ""),
+            attr_paths["prediction_result_path"], attr_paths["context_bundle_path"],
         )
         if errors:
             log.error("Learner retry failed %s %s: still invalid after retry: %s",
@@ -1285,6 +1335,25 @@ def run_learner_for_quarter(
                    ticker, quarter_info.get("quarter_label"), e)
         return None, LearnerOutcome.FAILED_GLOBAL_APPEND
 
+    # ── D18 audit aggregator (success path) ──
+    # Apply the learner's lesson_audit[] to library audit_history. The
+    # aggregator handles per-audit failures internally (log + skip per
+    # user clarification #1); a broader IO failure (library file
+    # missing/corrupt) propagates and maps to FAILED_AGGREGATOR.
+    try:
+        aggregate_lesson_audits(
+            learning_payload=payload,
+            prediction_payload=prediction_payload,
+            bundle=bundle,
+            auditor_ticker=ticker,
+            auditor_quarter_label=quarter_info.get("quarter_label", ""),
+            audit_pit_cutoff=pit_cutoff,
+        )
+    except Exception as e:
+        log.error("Audit aggregator failed for %s %s: %s",
+                   ticker, quarter_info.get("quarter_label"), e)
+        return None, LearnerOutcome.FAILED_AGGREGATOR
+
     log.info("Learner complete for %s %s", ticker, quarter_info.get("quarter_label"))
     return payload, LearnerOutcome.SUCCEEDED
 
@@ -1314,8 +1383,41 @@ def _atomic_write_json(path: Path, data: Any) -> None:
         raise
 
 
+def _stamp_ticker_lesson_row(ticker: str, lesson_dict: dict) -> dict:
+    """Stamp identity + content + state for a v3 predictor_lesson dict to be
+    persisted inside a ticker.json quarter row. Plan §6.3 (storage v2).
+
+    Returns the row in canonical key order. Idempotent: same content →
+    same lesson_id (computed from normalized body + scope + routing_key).
+    """
+    lesson_text = lesson_dict.get("lesson") or ""
+    routing_key = ticker.upper()
+    lesson_id = compute_lesson_id(lesson_text, "ticker", routing_key)
+    return {
+        "lesson_id":     lesson_id,
+        "lesson":        lesson_text,
+        "mechanism":     lesson_dict.get("mechanism"),
+        "applies_when":  lesson_dict.get("applies_when"),
+        "invalid_if":    lesson_dict.get("invalid_if"),
+        "evidence_refs": lesson_dict.get("evidence_refs") or [],
+        "scope":         "ticker",
+        "routing_key":   routing_key,
+        "audit_history": [],
+        "parent_id":     None,
+    }
+
+
 def append_ticker_lesson(ticker: str, attribution_result: dict) -> Path:
     """Extract feedback from attribution result and append to ticker lessons file.
+
+    LearnerLoopRevamp.md round-6 fresh-start (2026-05-04): storage bumped
+    to ``ticker_lessons.v2``; predictor_lessons inside the quarter row are
+    stamped structured dicts (lesson_id + content + audit_history + parent_id)
+    per plan §5.2 / §6.3. Outer quarter row provenance (quarter_label,
+    attributed_at, source_filed_8k, source_pit_cutoff, etc.) unchanged.
+
+    D22 collision check fires per stamped lesson — silent same-id-different-
+    content corruption raises ``DuplicateLessonIdError``.
 
     Atomic write. No locking needed (single-ticker sequential processing).
     Returns the path written.
@@ -1323,25 +1425,36 @@ def append_ticker_lesson(ticker: str, attribution_result: dict) -> Path:
     paths = get_learnings_paths(ticker)
     path = paths["ticker_lessons_path"]
 
-    # Read existing or create skeleton
+    # Read existing or create skeleton (v2 storage post-cutover)
     if path.exists():
         data = json.loads(path.read_text(encoding="utf-8"))
     else:
         data = {
-            "schema_version": "ticker_lessons.v1",
+            "schema_version": "ticker_lessons.v2",
             "ticker": ticker.upper(),
             "updated_at": None,
             "lessons": [],
         }
 
-    # Extract compact lesson entry from attribution result
+    # Stamp v3 lesson dicts → v3 storage rows. v2 string fallback removed
+    # at write-time (round-6 fresh-start cutover wipes v1/v2 storage; the
+    # validator already rejects non-dict v3 predictor_lessons).
     fb = attribution_result.get("feedback", {})
     pc = fb.get("prediction_comparison", {})
+    raw_predictor_lessons = fb.get("predictor_lessons", []) or []
+    stamped_predictor_lessons: list[dict] = []
+    for pl in raw_predictor_lessons:
+        if not isinstance(pl, dict):
+            continue  # validator should have rejected; defensive skip
+        row = _stamp_ticker_lesson_row(ticker, pl)
+        # D22: loud halt on collision (same id, different content).
+        assert_no_id_collision(path, "ticker", row["lesson_id"], row)
+        stamped_predictor_lessons.append(row)
+
     entry = {
         "quarter_label": attribution_result.get("quarter_label"),
         "attributed_at": attribution_result.get("attributed_at"),
         # T1.5b: stamp source event's PIT metadata for read-side filtering.
-        # Copied verbatim from attribution_result.v2 top-level fields.
         "source_filed_8k": attribution_result.get("filed_8k"),
         "source_pit_cutoff": attribution_result.get("pit_cutoff"),
         "direction_correct": pc.get("direction_correct"),
@@ -1352,7 +1465,7 @@ def append_ticker_lesson(ticker: str, attribution_result: dict) -> Path:
         "primary_driver_category": (attribution_result.get("primary_driver") or {}).get("category"),
         "what_worked": fb.get("what_worked", []),
         "what_failed": fb.get("what_failed", []),
-        "predictor_lessons": fb.get("predictor_lessons", []),
+        "predictor_lessons": stamped_predictor_lessons,
         "data_lessons": fb.get("data_lessons", []),
         "why": fb.get("why"),
     }
@@ -1363,6 +1476,8 @@ def append_ticker_lesson(ticker: str, attribution_result: dict) -> Path:
     target_ql = entry["quarter_label"]
     data["lessons"] = [l for l in data["lessons"] if l.get("quarter_label") != target_ql]
     data["lessons"].append(entry)
+    # Bump schema_version on existing files written under v1 (round-6 cutover).
+    data["schema_version"] = "ticker_lessons.v2"
     data["updated_at"] = attribution_result.get("attributed_at")
     _atomic_write_json(path, data)
     return path
@@ -1411,18 +1526,49 @@ def append_global_lessons(attribution_result: dict) -> Path | None:
     src_filed_8k = attribution_result.get("filed_8k")
     src_pit_cutoff = attribution_result.get("pit_cutoff")
 
-    enriched = []
+    # Stamp identity + content + state for each observation (v3 storage v2).
+    # Plan §6.3 — global entries carry FLAT provenance + structured content.
+    # The lesson_id is computed from (normalized body + scope + routing_key)
+    # and is stable across re-runs (idempotent).
+    enriched: list[dict] = []
     for obs in observations:
+        scope = obs.get("scope")
+        # routing_key derives from the OBSERVATION's structured routing
+        # field, not the source ticker. cross_ticker → sorted-uppercase
+        # tuple of related_tickers; sector → canonical target_sector;
+        # macro → None. _routing_key_from_source matches this contract.
+        try:
+            routing_key = _routing_key_from_source(scope or "", obs)
+        except ValueError:
+            # Validator should have rejected unknown scopes / missing routing
+            # fields before we get here. Defensive: skip rather than raise so
+            # one bad observation doesn't reject all of them.
+            log.error("append_global_lessons: unroutable observation scope=%r", scope)
+            continue
+        lesson_text = obs.get("lesson") or ""
+        lesson_id = compute_lesson_id(lesson_text, scope or "", routing_key)
         entry = {
-            "scope":            obs.get("scope"),
-            "source_ticker":    src_ticker,
-            "source_sector":    _lookup_company_sector(src_ticker),  # audit-only, NOT routing
-            "quarter_label":    src_quarter,
-            "attributed_at":    attribution_result.get("attributed_at"),
-            "source_filed_8k":  src_filed_8k,
+            "lesson_id":         lesson_id,
+            "lesson":            lesson_text,
+            "mechanism":         obs.get("mechanism"),
+            "applies_when":      obs.get("applies_when"),
+            "invalid_if":        obs.get("invalid_if"),
+            "evidence_refs":     obs.get("evidence_refs") or [],
+            "scope":             scope,
+            "routing_key":       list(routing_key) if isinstance(routing_key, tuple) else routing_key,
+            # Flat provenance (matches existing read-side at orchestrator:1733+)
+            "source_ticker":     src_ticker,
+            "source_sector":     _lookup_company_sector(src_ticker),  # audit-only
+            "quarter_label":     src_quarter,
+            "attributed_at":     attribution_result.get("attributed_at"),
+            "source_filed_8k":   src_filed_8k,
             "source_pit_cutoff": src_pit_cutoff,
-            "lesson":           obs.get("lesson"),
+            # State
+            "audit_history":     [],
+            "parent_id":         None,
         }
+        # Scope-conditional routing field at top level (kept for read-side
+        # compatibility with existing scope-routing logic).
         if "related_tickers" in obs:
             entry["related_tickers"] = obs["related_tickers"]
         if "target_sector" in obs:
@@ -1431,6 +1577,11 @@ def append_global_lessons(attribution_result: dict) -> Path | None:
 
     path = LEARNINGS_DIR / "global.json"
     path.parent.mkdir(parents=True, exist_ok=True)
+
+    # D22 collision check (read-only scan, outside the flock — D22 raises
+    # before we acquire the lock if a collision exists).
+    for entry in enriched:
+        assert_no_id_collision(path, entry["scope"] or "", entry["lesson_id"], entry)
 
     # Locked read-modify-write for concurrency safety.
     # Upsert step — always runs, even when enriched == [] (purges stale entries).
@@ -1442,18 +1593,22 @@ def append_global_lessons(attribution_result: dict) -> Path | None:
                 data = json.loads(path.read_text(encoding="utf-8"))
             else:
                 data = {
-                    "schema_version": "global_lessons.v1",
+                    "schema_version": "global_lessons.v2",
                     "updated_at": None,
                     "entries": [],
                 }
             # Remove any prior entries for this (source_ticker, quarter_label)
-            # before extending — deterministic upsert-by-source-key.
+            # before extending — deterministic upsert-by-source-key. Carries
+            # over from v1 storage; lesson_id is a finer key but the per-event
+            # purge keeps the same on-disk semantics during cutover.
             key = (src_ticker, src_quarter)
             data["entries"] = [
                 e for e in data["entries"]
                 if (e.get("source_ticker"), e.get("quarter_label")) != key
             ]
             data["entries"].extend(enriched)
+            # Bump schema_version on files originally written under v1 storage.
+            data["schema_version"] = "global_lessons.v2"
             data["updated_at"] = attribution_result.get("attributed_at")
             _atomic_write_json(path, data)
         finally:
@@ -1525,6 +1680,232 @@ def _assert_learner_paths_invariant(
                 f"learner_paths invariant (C) violated: self-path leaked into "
                 f"_allowed_learner_paths (self_path={self_path!r})"
             )
+
+
+# ════════════════════════════════════════════════════════════════════════
+# v3 Audit Aggregator + Lesson Identity + Status + PIT (LearnerLoopRevamp)
+# ════════════════════════════════════════════════════════════════════════
+#
+# Pure-function helpers used by build_learning_context (render-time view) and
+# aggregate_lesson_audits (post-event mutation). No file I/O in this section
+# except `assert_no_id_collision`, which is a read-only scan with a defensive
+# raise. State-mutating helpers live AFTER build_learning_context (so they
+# can use _passes_pit / iter_labeled_lessons via local imports).
+#
+# Plan refs: §7.1 (lesson identity, D10 + D22), §7.3 (status, D6 + D17),
+# §7.5 (PIT + same-quarter guard).
+
+
+class DuplicateLessonIdError(Exception):
+    """Raised when D22 collision check finds the same lesson_id with
+    differing content. Loud halt — investigate before retry."""
+
+
+# Tunable status thresholds — see plan §14. Adjustable post-launch.
+LESSON_AUDIT_WINDOW = 5
+LESSON_RETIRE_MISLED_THRESHOLD = 3
+LESSON_WATCH_MISLED_THRESHOLD = 2
+LESSON_WATCH_MISSED_THRESHOLD = 2
+
+
+def _routing_key_from_source(scope: str, source_entry: dict,
+                              *, ticker_hint: str | None = None):
+    """Derive routing_key from a global.json entry OR a ticker.json
+    quarter-row context. Plan §7.1.
+
+    routing_key shape per scope:
+      - ticker:       "AVGO" (caller MUST pass ticker_hint — quarter rows
+                      don't carry per-row source_ticker; the ticker.json
+                      filename IS the routing key)
+      - sector:       canonical sector string ("Technology")
+      - macro:        None
+      - cross_ticker: tuple of sorted UPPERCASE tickers
+    """
+    if scope == "ticker":
+        if not ticker_hint:
+            raise ValueError("ticker_hint required for scope='ticker'")
+        return ticker_hint.upper()
+    if scope == "sector":
+        return source_entry.get("target_sector")
+    if scope == "macro":
+        return None
+    if scope == "cross_ticker":
+        rt = source_entry.get("related_tickers") or []
+        return tuple(sorted(str(t).upper() for t in rt))
+    raise ValueError(f"unknown scope: {scope}")
+
+
+def compute_lesson_id(lesson_text: str, scope: str, routing_key) -> str:
+    """Stable lesson id derived from normalized content + scope + routing.
+
+    Properties (plan §7.1):
+      - Same body + scope + routing → same id (idempotent under re-runs)
+      - Refinement (different text) → different id (chain via parent_id)
+      - Cross-scope same-text → different id (scope is in the hash)
+      - 10-char hex → ~16^10 ≈ 1.1×10^12 keyspace; collision probability
+        ~10^-4 at 10^4 lessons (D22 catches via assert_no_id_collision).
+    """
+    import hashlib
+    normalized_text = " ".join((lesson_text or "").strip().split()).lower()
+    if isinstance(routing_key, (list, tuple)):
+        routing_repr = ",".join(sorted(str(t).upper() for t in routing_key))
+    elif routing_key is None:
+        routing_repr = ""
+    else:
+        routing_repr = str(routing_key)
+    payload = f"{normalized_text}|{scope}|{routing_repr}".encode("utf-8")
+    digest = hashlib.sha256(payload).hexdigest()[:10]
+    return f"lsn_{digest}"
+
+
+def _content_matches(existing: dict, new_content: dict) -> bool:
+    """True iff (lesson body, mechanism, applies_when, invalid_if, scope,
+    routing_key) all match after normalization. Used by assert_no_id_collision
+    to allow idempotent re-emission while flagging genuine collisions
+    (different content under same id). evidence_refs is provenance, not
+    content — intentionally excluded."""
+    if _normalize_lesson_text(existing.get("lesson", "")) != \
+       _normalize_lesson_text(new_content.get("lesson", "")):
+        return False
+    for field in ("mechanism", "applies_when", "invalid_if"):
+        if (existing.get(field) or "") != (new_content.get(field) or ""):
+            return False
+    if existing.get("scope") != new_content.get("scope"):
+        return False
+    # Normalize routing_key: list/tuple → sorted tuple of uppercase strings.
+    def _norm_rk(rk):
+        if isinstance(rk, (list, tuple)):
+            return tuple(sorted(str(t).upper() for t in rk))
+        return rk
+    return _norm_rk(existing.get("routing_key")) == _norm_rk(new_content.get("routing_key"))
+
+
+def assert_no_id_collision(library_path: Path, scope: str, lesson_id: str,
+                            new_content: dict) -> None:
+    """D22: scan target library for lesson_id; raise on content mismatch.
+
+    For each existing lesson with matching ``lesson_id``:
+      - identical content (per ``_content_matches``) → no-op (legitimate
+        idempotent re-emission, e.g., aggregator re-run on the same audit)
+      - different content → raise ``DuplicateLessonIdError``
+
+    Cheap defensive check (linear scan over O(N) lessons). Loud failure
+    beats silent collision. No-op when library file does not yet exist.
+    """
+    if not library_path.exists():
+        return
+    try:
+        data = json.loads(library_path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return  # malformed — D22 not applicable until file is fixed
+    candidates: list[dict] = []
+    if scope == "ticker":
+        for q_row in data.get("lessons", []) or []:
+            for pl in q_row.get("predictor_lessons", []) or []:
+                if isinstance(pl, dict) and pl.get("lesson_id") == lesson_id:
+                    candidates.append(pl)
+    else:
+        for entry in data.get("entries", []) or []:
+            if isinstance(entry, dict) and entry.get("lesson_id") == lesson_id:
+                candidates.append(entry)
+    for existing in candidates:
+        if not _content_matches(existing, new_content):
+            raise DuplicateLessonIdError(
+                f"lesson_id {lesson_id!r} collision in {library_path}: "
+                f"existing content differs from new_content. "
+                f"Existing.lesson={existing.get('lesson')!r}; "
+                f"new.lesson={new_content.get('lesson')!r}"
+            )
+
+
+def compute_status(lesson: dict) -> str:
+    """Pure function over lesson dict. Caller must pre-filter audit_history
+    by ``audit_pit_cutoff <= predictor.pit_cutoff`` before calling (B1).
+
+    Determinism — status depends only on:
+      (a) presence of action="retire" in PIT-visible audits, OR
+      (b) action="refine" presence (treated as retire for the parent), OR
+      (c) recent_window misled count >= retire threshold, OR
+      (d) recent_window misled or missed count >= watch threshold
+
+    No side effects. No file I/O. Plan §7.3.
+    """
+    from collections import Counter
+    audits = lesson.get("audit_history", []) or []
+
+    # Explicit retire/refine actions are terminal once visible in PIT
+    if any(a.get("action") in ("retire", "refine") for a in audits):
+        return "retired"
+
+    recent = audits[-LESSON_AUDIT_WINDOW:]
+    counts = Counter(a.get("review") for a in recent)
+
+    if counts["misled"] >= LESSON_RETIRE_MISLED_THRESHOLD:
+        return "retired"
+
+    if counts["misled"] >= LESSON_WATCH_MISLED_THRESHOLD or \
+       counts["missed"] >= LESSON_WATCH_MISSED_THRESHOLD:
+        return "watch"
+
+    return "active"
+
+
+def _passes_audit_pit(audit_entry: dict, pit_cutoff: str | None) -> bool:
+    """Per-audit PIT filter — mirror of build_learning_context._passes_pit
+    but over ``audit_pit_cutoff`` instead of ``source_pit_cutoff``. Plan
+    §7.5.2 (B1).
+
+    Live mode (pit_cutoff is None) → always True.
+    Historical mode → audit_pit_cutoff must exist AND be tz-aware AND
+    chronologically <= pit_cutoff. Defensive exclude on parse error /
+    naive-datetime / missing field.
+    """
+    if pit_cutoff is None:
+        return True
+    apc_raw = audit_entry.get("audit_pit_cutoff")
+    if apc_raw is None:
+        return False
+    try:
+        apc_dt = datetime.fromisoformat(str(apc_raw).replace("Z", "+00:00"))
+        cut_dt = datetime.fromisoformat(str(pit_cutoff).replace("Z", "+00:00"))
+    except (ValueError, AttributeError, TypeError):
+        return False
+    if apc_dt.tzinfo is None or cut_dt.tzinfo is None:
+        return False
+    return apc_dt <= cut_dt
+
+
+def _apply_render_view(lesson: dict, pit_cutoff: str | None) -> dict | None:
+    """Build a transient render-view of a v3 lesson dict with PIT-filtered
+    audit_history, computed status, and audit-review counts. Plan §7.5.2.
+
+    Returns ``None`` when the computed status is ``retired`` so the caller
+    can drop the lesson before caps + render. Otherwise returns a shallow
+    copy of the lesson with three transient fields:
+
+      - ``audit_history`` (PIT-filtered subset)
+      - ``_render_status``       ("active" | "watch")
+      - ``_render_audit_counts`` (Counter dict of review → count)
+
+    String-bodied lessons (legacy v1 storage) pass through unchanged with
+    ``_render_status = "active"`` — they have no audit_history to filter.
+    The aggregator never writes audits to v1 strings (lesson_id is
+    derivable only from v3 dicts).
+    """
+    if not isinstance(lesson, dict):
+        return lesson  # v1 string fallback — unchanged
+    from collections import Counter
+    pit_audits = [
+        a for a in (lesson.get("audit_history") or [])
+        if _passes_audit_pit(a, pit_cutoff)
+    ]
+    view = {**lesson, "audit_history": pit_audits}
+    status = compute_status(view)
+    if status == "retired":
+        return None
+    view["_render_status"] = status
+    view["_render_audit_counts"] = dict(Counter(a.get("review") for a in pit_audits))
+    return view
 
 
 def _decorate_with_learner_paths(
@@ -1676,6 +2057,9 @@ def build_learning_context(ticker: str, sector: str | None = None,
 
     ticker_post_cutoff = 0
     global_post_cutoff = 0
+    # Combined counter — incremented from both ticker_lessons and
+    # global_lessons paths. Plan §7.5.1 (D13).
+    same_quarter_self_leak = 0
 
     # ── Ticker lessons: most recent 8 ──
     if ticker_path.exists():
@@ -1692,13 +2076,37 @@ def build_learning_context(ticker: str, sector: str | None = None,
                 if ql not in seen_quarters:
                     seen_quarters.add(ql)
                     deduped.append(lesson)
-            # T1.5b: apply PIT filter; count exclusions.
+            # T1.5b: lesson PIT filter (source_pit_cutoff <= predictor.pit_cutoff)
             filtered: list[dict] = []
             for lesson in deduped:
                 if _passes_pit(lesson):
                     filtered.append(lesson)
                 else:
                     ticker_post_cutoff += 1
+            # D13: same-quarter self-leak guard — exclude THIS quarter's
+            # ticker rows from THIS quarter's bundle, both historical and
+            # live. Compares (ticker, quarter_label) — not timestamps —
+            # so a re-run in live mode doesn't see its own prior emission.
+            if current_quarter_label:
+                guarded: list[dict] = []
+                for lesson in filtered:
+                    if lesson.get("quarter_label") == current_quarter_label:
+                        same_quarter_self_leak += 1
+                        continue
+                    guarded.append(lesson)
+                filtered = guarded
+            # B1 + user clarification #2: per-lesson audit_history PIT
+            # filter + compute_status + drop retired BEFORE the row cap.
+            # _apply_render_view returns None for retired entries; surviving
+            # views carry transient _render_status / _render_audit_counts.
+            for q_row in filtered:
+                pls = q_row.get("predictor_lessons") or []
+                surviving: list = []
+                for pl in pls:
+                    view = _apply_render_view(pl, pit_cutoff)
+                    if view is not None:
+                        surviving.append(view)
+                q_row["predictor_lessons"] = surviving
             result["ticker_lessons"] = filtered[:8]
         except json.JSONDecodeError as e:
             log.error("ticker.json malformed — no ticker lessons loaded for %s: %s", ticker, e)
@@ -1733,6 +2141,23 @@ def build_learning_context(ticker: str, sector: str | None = None,
                 if not _passes_pit(e):
                     global_post_cutoff += 1
                     continue
+
+                # D13: same-quarter self-leak — exclude THIS quarter's own
+                # global emissions from THIS quarter's bundle.
+                if current_quarter_label and ticker:
+                    if (e.get("source_ticker") == ticker
+                            and e.get("quarter_label") == current_quarter_label):
+                        same_quarter_self_leak += 1
+                        continue
+
+                # B1 + user clarification #2: PIT-filter audit_history,
+                # compute_status, drop retired BEFORE scope routing/caps.
+                # Retired lessons must never consume cap slots (otherwise
+                # dead lessons quietly crowd out good live lessons).
+                view = _apply_render_view(e, pit_cutoff)
+                if view is None:
+                    continue
+                e = view  # rebind so scope routing reads the rendered view
 
                 scope = e.get("scope")
 
@@ -1809,13 +2234,14 @@ def build_learning_context(ticker: str, sector: str | None = None,
     # future silent-drop regression appears immediately as an anomalous count.
     # T1.5b adds two more: ticker_post_cutoff, global_post_cutoff.
     log.info(
-        "learning_context %s(sector=%s, pit=%s): "
+        "learning_context %s(sector=%s, pit=%s, current_q=%s): "
         "included[sector=%d macro=%d cross=%d] "
         "excluded[sector_mismatch=%d current_sector_unknown=%d "
         "cross_ticker_not_listed=%d cross_ticker_missing_related=%d "
         "unknown_scope=%d legacy_schema=%d "
-        "ticker_post_cutoff=%d global_post_cutoff=%d]",
-        ticker, sector, pit_cutoff,
+        "ticker_post_cutoff=%d global_post_cutoff=%d "
+        "same_quarter_self_leak=%d]",
+        ticker, sector, pit_cutoff, current_quarter_label,
         len(sector_entries), len(macro_entries), len(cross_entries),
         excluded["sector_mismatch"],
         excluded["current_sector_unknown"],
@@ -1825,11 +2251,637 @@ def build_learning_context(ticker: str, sector: str | None = None,
         excluded["legacy_schema"],
         ticker_post_cutoff,
         global_post_cutoff,
+        same_quarter_self_leak,
     )
 
     return result
 
 
+# ════════════════════════════════════════════════════════════════════════
+# v3 Audit Aggregator — state mutation (post-event)
+# ════════════════════════════════════════════════════════════════════════
+#
+# Plan refs: §7.2 (aggregator), §7.2.1 (helper contracts), §7.6 (cross-file
+# validation D19), §7.5 (PIT). The aggregator is the only state-mutating
+# component for audit_history; runs in BOTH success and recovery paths
+# (D18). Helpers raise loudly; the aggregator catches per-audit failures
+# and skips rather than failing the whole batch.
+
+
+def _stamp_quarter_row_skeleton(ticker: str, learning_payload: dict) -> dict:
+    """Build a fresh ticker.json quarter-row skeleton from learning_payload.
+    Used by ``_append_lesson_row_to_ticker_quarter`` when the auditor's row
+    does not yet exist (§7.2.1 implementation rule — empty-`predictor_lessons`
+    + ticker-scope refine). Mirrors the outer-field stamping in
+    ``append_ticker_lesson`` exactly.
+    """
+    fb = learning_payload.get("feedback", {}) or {}
+    pc = (fb.get("prediction_comparison") or {}) if isinstance(fb, dict) else {}
+    return {
+        "quarter_label":              learning_payload.get("quarter_label"),
+        "attributed_at":              learning_payload.get("attributed_at"),
+        "source_filed_8k":            learning_payload.get("filed_8k"),
+        "source_pit_cutoff":          learning_payload.get("pit_cutoff"),
+        "direction_correct":          pc.get("direction_correct") if isinstance(pc, dict) else None,
+        "actual_daily_pct":           (learning_payload.get("actual_return") or {}).get("daily_stock_pct"),
+        "predicted_direction":        pc.get("predicted_direction") if isinstance(pc, dict) else None,
+        "predicted_confidence_score": pc.get("predicted_confidence_score") if isinstance(pc, dict) else None,
+        "primary_driver_summary":     (learning_payload.get("primary_driver") or {}).get("summary"),
+        "primary_driver_category":    (learning_payload.get("primary_driver") or {}).get("category"),
+        "what_worked":                fb.get("what_worked", []) if isinstance(fb, dict) else [],
+        "what_failed":                fb.get("what_failed", []) if isinstance(fb, dict) else [],
+        "predictor_lessons":          [],
+        "data_lessons":               fb.get("data_lessons", []) if isinstance(fb, dict) else [],
+        "why":                        fb.get("why") if isinstance(fb, dict) else None,
+    }
+
+
+def _upsert_audit_in_history(audit_history: list, audit_entry: dict) -> list:
+    """Replace existing entry with matching (auditor_ticker, auditor_quarter_label),
+    else append. Returns the modified history list (mutated in place).
+
+    Plan §7.2.1 — the upsert key for re-runs (e.g., recovery path or H2
+    retry that re-emits audits) is (auditor_ticker, auditor_quarter_label).
+    Same auditor re-emitting on the same quarter REPLACES rather than
+    duplicates."""
+    key = (audit_entry.get("auditor_ticker"),
+           audit_entry.get("auditor_quarter_label"))
+    new_history = [
+        a for a in (audit_history or [])
+        if (a.get("auditor_ticker"), a.get("auditor_quarter_label")) != key
+    ]
+    new_history.append(audit_entry)
+    return new_history
+
+
+def _apply_audit_ticker(ticker_path: Path, source_quarter_label: str,
+                         lesson_id: str, audit_entry: dict) -> None:
+    """Append/upsert an audit entry on the matched lesson's audit_history
+    inside the SOURCE quarter row (= the row the lesson was created in).
+
+    Lookup tuple: (source_quarter_label, lesson_id) — D22 guarantees
+    lesson_id is unique within a quarter row, so this is exact-match.
+
+    Raises if ticker.json missing/corrupt OR source quarter row missing
+    OR lesson_id not found in that row's predictor_lessons. Aggregator
+    converts these to log-and-skip per audit (plan §7.2 + user clarification
+    #1: helpers raise loudly; aggregator handles per-audit failure).
+    """
+    if not ticker_path.exists():
+        raise FileNotFoundError(f"_apply_audit_ticker: {ticker_path} missing")
+    data = json.loads(ticker_path.read_text(encoding="utf-8"))
+    target_row = None
+    for row in data.get("lessons", []) or []:
+        if row.get("quarter_label") == source_quarter_label:
+            target_row = row
+            break
+    if target_row is None:
+        raise LookupError(
+            f"_apply_audit_ticker: source quarter row {source_quarter_label!r} "
+            f"not found in {ticker_path}"
+        )
+    target_lesson = None
+    for pl in target_row.get("predictor_lessons", []) or []:
+        if isinstance(pl, dict) and pl.get("lesson_id") == lesson_id:
+            target_lesson = pl
+            break
+    if target_lesson is None:
+        raise LookupError(
+            f"_apply_audit_ticker: lesson_id {lesson_id!r} not found in "
+            f"quarter row {source_quarter_label!r}"
+        )
+    target_lesson["audit_history"] = _upsert_audit_in_history(
+        target_lesson.get("audit_history") or [], audit_entry,
+    )
+    _atomic_write_json(ticker_path, data)
+
+
+def _apply_audit_global(global_path: Path, lesson_id: str,
+                         audit_entry: dict) -> None:
+    """Append/upsert an audit entry on the matched global lesson's
+    audit_history. Single flock acquisition. Used for non-refine global
+    audits; refine path goes through ``_apply_audit_and_append_global_atomic``
+    so audit-append + new-entry-insert happen under one lock (E31).
+    """
+    if not global_path.exists():
+        raise FileNotFoundError(f"_apply_audit_global: {global_path} missing")
+    lock_path = global_path.with_suffix(".lock")
+    with open(lock_path, "w") as lock_fd:
+        fcntl.flock(lock_fd, fcntl.LOCK_EX)
+        try:
+            data = json.loads(global_path.read_text(encoding="utf-8"))
+            target = None
+            for entry in data.get("entries", []) or []:
+                if isinstance(entry, dict) and entry.get("lesson_id") == lesson_id:
+                    target = entry
+                    break
+            if target is None:
+                raise LookupError(
+                    f"_apply_audit_global: lesson_id {lesson_id!r} not found "
+                    f"in {global_path}"
+                )
+            target["audit_history"] = _upsert_audit_in_history(
+                target.get("audit_history") or [], audit_entry,
+            )
+            _atomic_write_json(global_path, data)
+        finally:
+            fcntl.flock(lock_fd, fcntl.LOCK_UN)
+
+
+def _apply_audit_and_append_global_atomic(global_path: Path,
+                                           parent_lesson_id: str,
+                                           audit_entry: dict,
+                                           new_entry: dict) -> None:
+    """Atomic global+refine path (E31): append audit_entry to parent's
+    audit_history AND insert new_entry into entries[], all under a single
+    flock acquisition. Without this atomicity, a reader between the two
+    writes would see audit-without-replacement.
+    """
+    if not global_path.exists():
+        raise FileNotFoundError(
+            f"_apply_audit_and_append_global_atomic: {global_path} missing"
+        )
+    lock_path = global_path.with_suffix(".lock")
+    with open(lock_path, "w") as lock_fd:
+        fcntl.flock(lock_fd, fcntl.LOCK_EX)
+        try:
+            data = json.loads(global_path.read_text(encoding="utf-8"))
+            target = None
+            for entry in data.get("entries", []) or []:
+                if isinstance(entry, dict) and entry.get("lesson_id") == parent_lesson_id:
+                    target = entry
+                    break
+            if target is None:
+                raise LookupError(
+                    f"_apply_audit_and_append_global_atomic: parent_lesson_id "
+                    f"{parent_lesson_id!r} not found in {global_path}"
+                )
+            # 1) append audit on parent
+            target["audit_history"] = _upsert_audit_in_history(
+                target.get("audit_history") or [], audit_entry,
+            )
+            # 2) append new replacement entry (lesson_id collision pre-checked
+            #    upstream by D22 in _register_replacement)
+            data.setdefault("entries", []).append(new_entry)
+            _atomic_write_json(global_path, data)
+        finally:
+            fcntl.flock(lock_fd, fcntl.LOCK_UN)
+
+
+def _append_lesson_row_to_ticker_quarter(ticker_path: Path,
+                                          quarter_label: str,
+                                          new_row: dict,
+                                          *,
+                                          quarter_skeleton: dict | None = None
+                                          ) -> None:
+    """Append a v3 lesson dict to a ticker.json quarter row's
+    ``predictor_lessons``. If the quarter row does not exist and
+    ``quarter_skeleton`` is provided, the row is created from the skeleton
+    first (plan §7.2.1 implementation rule — empty-`predictor_lessons` +
+    ticker-scope refine).
+
+    Raises ``FileNotFoundError`` if ticker.json is missing,
+    ``json.JSONDecodeError`` if malformed, ``LookupError`` if the target
+    quarter row doesn't exist AND no skeleton was provided.
+    """
+    if not ticker_path.exists():
+        raise FileNotFoundError(
+            f"_append_lesson_row_to_ticker_quarter: {ticker_path} missing"
+        )
+    data = json.loads(ticker_path.read_text(encoding="utf-8"))
+    target_row = None
+    for row in data.get("lessons", []) or []:
+        if row.get("quarter_label") == quarter_label:
+            target_row = row
+            break
+    if target_row is None:
+        if quarter_skeleton is None:
+            raise LookupError(
+                f"_append_lesson_row_to_ticker_quarter: quarter row "
+                f"{quarter_label!r} not found and no quarter_skeleton provided"
+            )
+        # §7.2.1 implementation rule — stamp a fresh quarter row from
+        # learning_payload outer fields.
+        target_row = quarter_skeleton
+        data.setdefault("lessons", []).append(target_row)
+    target_row.setdefault("predictor_lessons", []).append(new_row)
+    _atomic_write_json(ticker_path, data)
+
+
+def _register_replacement(
+    learnings_dir: Path,
+    *,
+    parent_lesson_id: str,
+    parent_scope: str,
+    parent_source_entry: dict,
+    replacement: dict,
+    auditor_ticker: str,
+    auditor_quarter_label: str,
+    audit_pit_cutoff: str | None,
+    learning_payload: dict,
+    audit_entry: dict | None,
+) -> str:
+    """Register a refined replacement lesson + (for global scope) atomically
+    append the parent's refine-audit entry. Plan §7.2.
+
+    Constraints:
+      - Refinement INHERITS scope + routing from the parent. To change
+        scope, the learner must retire the parent and emit a separate
+        new lesson at the new scope normally.
+      - Ticker-scope: routing_key = auditor_ticker (file-system construction;
+        ticker-scope lessons live in learnings/ticker/{auditor_ticker}.json).
+      - Atomicity (E31): for global scope, audit-append + new-entry-insert
+        share one flock via ``_apply_audit_and_append_global_atomic``. The
+        aggregator MUST pass ``audit_entry`` for global scope. For ticker
+        scope, audit_entry is None (audit already applied upstream by
+        ``_apply_audit_ticker``).
+    """
+    if parent_scope == "ticker":
+        routing_key = auditor_ticker.upper()
+    else:
+        routing_key = _routing_key_from_source(parent_scope, parent_source_entry)
+
+    new_id = compute_lesson_id(replacement.get("lesson") or "",
+                                parent_scope, routing_key)
+
+    if parent_scope == "ticker":
+        new_row = {
+            "lesson_id":     new_id,
+            "lesson":        replacement.get("lesson") or "",
+            "mechanism":     replacement.get("mechanism"),
+            "applies_when":  replacement.get("applies_when"),
+            "invalid_if":    replacement.get("invalid_if"),
+            "evidence_refs": replacement.get("evidence_refs") or [],
+            "scope":         "ticker",
+            "routing_key":   routing_key,
+            "audit_history": [],
+            "parent_id":     parent_lesson_id,
+        }
+        target_path = learnings_dir / "ticker" / f"{routing_key}.json"
+        assert_no_id_collision(target_path, parent_scope, new_id, new_row)
+        assert audit_entry is None, (
+            "_register_replacement: ticker-scope must have audit applied "
+            "upstream (audit_entry must be None)"
+        )
+        _append_lesson_row_to_ticker_quarter(
+            target_path, auditor_quarter_label, new_row,
+            quarter_skeleton=_stamp_quarter_row_skeleton(auditor_ticker, learning_payload),
+        )
+    else:
+        new_row = {
+            "lesson_id":     new_id,
+            "lesson":        replacement.get("lesson") or "",
+            "mechanism":     replacement.get("mechanism"),
+            "applies_when":  replacement.get("applies_when"),
+            "invalid_if":    replacement.get("invalid_if"),
+            "evidence_refs": replacement.get("evidence_refs") or [],
+            "scope":         parent_scope,
+            "routing_key":   list(routing_key) if isinstance(routing_key, tuple) else routing_key,
+            "source_ticker":      auditor_ticker.upper(),
+            "source_sector":      _lookup_company_sector(auditor_ticker),
+            "quarter_label":      auditor_quarter_label,
+            "attributed_at":      learning_payload.get("attributed_at"),
+            "source_filed_8k":    learning_payload.get("filed_8k"),
+            "source_pit_cutoff":  audit_pit_cutoff,
+            "audit_history":      [],
+            "parent_id":          parent_lesson_id,
+        }
+        # Carry scope-conditional routing field at top level (existing
+        # build_learning_context routing logic reads it from there).
+        if parent_scope == "sector" and "target_sector" in (parent_source_entry or {}):
+            new_row["target_sector"] = parent_source_entry["target_sector"]
+        if parent_scope == "cross_ticker" and "related_tickers" in (parent_source_entry or {}):
+            new_row["related_tickers"] = parent_source_entry["related_tickers"]
+        target_path = learnings_dir / "global.json"
+        assert_no_id_collision(target_path, parent_scope, new_id, new_row)
+        assert audit_entry is not None, (
+            "_register_replacement: global-scope requires audit_entry "
+            "(E31 atomicity — audit + insert under one flock)"
+        )
+        _apply_audit_and_append_global_atomic(
+            target_path, parent_lesson_id, audit_entry, new_row,
+        )
+
+    return new_id
+
+
+def aggregate_lesson_audits(
+    *,
+    learning_payload: dict,
+    prediction_payload: dict,
+    bundle: dict,
+    auditor_ticker: str,
+    auditor_quarter_label: str,
+    audit_pit_cutoff: str | None,
+    learnings_dir: Path | None = None,
+) -> None:
+    """Apply the learner's lesson_audit[] to library audit_history. Plan §7.2.
+
+    Steps per audit entry:
+      1. Resolve (scope, source_entry, body) via iter_labeled_lessons over
+         the bundle's learning_context (canonical render order).
+      2. Compute lesson_id from (body, scope, routing_key).
+      3. Build the audit_entry payload with provenance + verdict fields.
+      4. Same-hash-refinement guard (user clarification #4): if action ==
+         "refine" and replacement hashes to parent's lesson_id, downgrade
+         to action="keep" + log warning. Prevents accidental retire of
+         parent via cosmetic-edit refinements.
+      5. Apply the audit (ticker via _apply_audit_ticker; global via
+         _apply_audit_global OR _apply_audit_and_append_global_atomic for
+         refine).
+      6. Handle action="refine" via _register_replacement.
+
+    Per-audit failure handling (user clarification #1):
+      - Out-of-range lesson_index → log warning, skip (D19 cross-file check
+        should have rejected this upstream; defensive only).
+      - lesson_text drift from bundle body → log warning, prefer index match.
+      - missing replacement_lesson on action="refine" → log error, skip refine.
+      - lesson_id not found in library → log error (helpers raise; aggregator
+        catches per-audit and skips that audit).
+      - Library file missing/corrupt → exception propagates (broader IO
+        failure is the orchestrator's responsibility to map to FAILED_*).
+
+    Idempotency: re-running with the same (auditor_ticker,
+    auditor_quarter_label) UPSERTS each audit entry by that key (replaces,
+    no duplicates). Refinement re-runs hit the D22 idempotency check —
+    same replacement → same lesson_id → no-op.
+    """
+    audits = learning_payload.get("lesson_audit") or []
+    if not audits:
+        return  # first-prediction or no labels — nothing to apply
+
+    learnings_dir = learnings_dir or LEARNINGS_DIR
+    learning_ctx = bundle.get("learning_context") or {}
+
+    # Local import — iter_labeled_lessons is defined in _text_utils; avoid
+    # forward reference at module-import time.
+    from scripts.earnings._text_utils import iter_labeled_lessons
+
+    indexed = list(iter_labeled_lessons(learning_ctx))
+    labels = prediction_payload.get("lesson_labels") or []
+
+    cited: set[int] = set()
+    for kd in (prediction_payload.get("key_drivers") or []):
+        for idx in (kd.get("cites_lesson_indices") or []):
+            if isinstance(idx, int):
+                cited.add(idx)
+
+    for audit in audits:
+        if not isinstance(audit, dict):
+            log.warning("aggregator: non-dict audit entry; skipping")
+            continue
+        idx = audit.get("lesson_index")
+        if not isinstance(idx, int) or not (0 <= idx < len(indexed)) \
+           or not (0 <= idx < len(labels)):
+            log.warning(
+                "aggregator: lesson_index=%r out of range "
+                "(indexed=%d, labels=%d); skipping",
+                idx, len(indexed), len(labels),
+            )
+            continue
+        n, scope, source_entry, body = indexed[idx]
+
+        # D15 defense-in-depth: lesson_text drift between learner-emitted
+        # text and bundle body. Continue with index match (D19 should have
+        # already rejected at orchestrator level).
+        audit_text_norm = _normalize_lesson_text(audit.get("lesson_text") or "")
+        body_norm = _normalize_lesson_text(body or "")
+        if audit_text_norm != body_norm:
+            log.warning(
+                "aggregator: lesson_text drift at index=%d; using index match",
+                idx,
+            )
+
+        # Compute routing_key for the parent lesson.
+        try:
+            if scope == "ticker":
+                routing_key = _routing_key_from_source(
+                    scope, source_entry, ticker_hint=auditor_ticker,
+                )
+            else:
+                routing_key = _routing_key_from_source(scope, source_entry)
+        except ValueError as e:
+            log.error("aggregator: cannot derive routing_key: %s; skipping audit %d", e, idx)
+            continue
+        lesson_id = compute_lesson_id(body, scope, routing_key)
+
+        # Build the audit entry payload.
+        audit_entry = {
+            "auditor_ticker":           auditor_ticker.upper(),
+            "auditor_quarter_label":    auditor_quarter_label,
+            "audited_at":               learning_payload.get("attributed_at"),
+            "audit_pit_cutoff":         audit_pit_cutoff,
+            "predictor_label_at_audit": (labels[idx] or {}).get("label"),
+            "was_cited":                (idx in cited),
+            "review":                   audit.get("review"),
+            "action":                   audit.get("action"),
+            "comment":                  audit.get("comment"),
+            "evidence_refs":            audit.get("evidence_refs") or [],
+        }
+
+        # User clarification #4 — same-hash refinement → keep, no retire.
+        action = audit.get("action")
+        replacement = audit.get("replacement_lesson")
+        is_refine = (action == "refine"
+                     and isinstance(replacement, dict))
+        if is_refine:
+            replacement_id = compute_lesson_id(
+                replacement.get("lesson") or "", scope, routing_key,
+            )
+            if replacement_id == lesson_id:
+                log.warning(
+                    "aggregator: refinement at index=%d hashes to parent "
+                    "lesson_id %s — downgrading action to 'keep' (no-op refine)",
+                    idx, lesson_id,
+                )
+                audit_entry["action"] = "keep"
+                is_refine = False
+        elif action == "refine":
+            # action=refine without a valid replacement_lesson — D19 should
+            # reject this upstream. Defensive: log + treat as keep.
+            log.error(
+                "aggregator: action='refine' at index=%d missing valid "
+                "replacement_lesson; treating as 'keep'", idx,
+            )
+            audit_entry["action"] = "keep"
+
+        # Apply the audit (per-audit try/except so one failure doesn't
+        # cancel the rest of the batch — user clarification #1).
+        try:
+            if scope == "ticker":
+                ticker_path = learnings_dir / "ticker" / f"{auditor_ticker.upper()}.json"
+                source_quarter_label = source_entry.get("quarter_label")
+                if not source_quarter_label:
+                    log.error(
+                        "aggregator: ticker-scope source row missing "
+                        "quarter_label at index=%d; skipping", idx,
+                    )
+                    continue
+                _apply_audit_ticker(
+                    ticker_path, source_quarter_label, lesson_id, audit_entry,
+                )
+                if is_refine:
+                    _register_replacement(
+                        learnings_dir,
+                        parent_lesson_id=lesson_id,
+                        parent_scope=scope,
+                        parent_source_entry=source_entry,
+                        replacement=replacement,
+                        auditor_ticker=auditor_ticker,
+                        auditor_quarter_label=auditor_quarter_label,
+                        audit_pit_cutoff=audit_pit_cutoff,
+                        learning_payload=learning_payload,
+                        audit_entry=None,  # already applied above
+                    )
+            else:
+                global_path = learnings_dir / "global.json"
+                if is_refine:
+                    _register_replacement(
+                        learnings_dir,
+                        parent_lesson_id=lesson_id,
+                        parent_scope=scope,
+                        parent_source_entry=source_entry,
+                        replacement=replacement,
+                        auditor_ticker=auditor_ticker,
+                        auditor_quarter_label=auditor_quarter_label,
+                        audit_pit_cutoff=audit_pit_cutoff,
+                        learning_payload=learning_payload,
+                        audit_entry=audit_entry,  # E31 atomicity
+                    )
+                else:
+                    _apply_audit_global(global_path, lesson_id, audit_entry)
+        except (FileNotFoundError, json.JSONDecodeError, OSError) as e:
+            # Library file IO failure — not a per-audit problem; let it
+            # propagate so the orchestrator marks the run FAILED_*.
+            raise
+        except (LookupError, ValueError, AssertionError, DuplicateLessonIdError) as e:
+            # Per-audit failure — log + skip (user clarification #1).
+            log.error(
+                "aggregator: audit %d (lesson_id=%s) failed: %s — skipping",
+                idx, lesson_id, e,
+            )
+            continue
+
+
+# ── Cross-file validation (D19) ─────────────────────────────────────────
+
+
+def _validate_audit_against_prediction(
+    learning_payload: dict,
+    prediction_payload: dict,
+    bundle: dict,
+) -> list[str]:
+    """D19 cross-file gate. The hook validator is path-blind (stdlib-only,
+    no prediction-file access) and treats lesson_audit as structurally
+    optional. The orchestrator-level gate enforces full coverage:
+
+      * len(lesson_audit) == len(prediction.lesson_labels)
+      * len(bundle.learning_context lessons) == len(lesson_labels)
+        (defensive — T1 already asserts this; D19 stays self-contained)
+      * each audit's lesson_index == its position
+      * predictor_label matches prediction.lesson_labels[i].label
+      * was_cited matches whether i appears in any cites_lesson_indices
+      * lesson_text matches bundle body at lesson_index (whitespace-norm)
+
+    Returns a list of error strings; empty = pass. Failures feed the H2
+    informed-retry loop via prior_validation_errors with [cross-file] prefix
+    (E32). Plan §7.6.
+    """
+    errors: list[str] = []
+    audits = learning_payload.get("lesson_audit", []) or []
+    labels = prediction_payload.get("lesson_labels", []) or []
+
+    if not isinstance(audits, list):
+        errors.append("[cross-file] lesson_audit must be a list")
+        return errors
+    if len(audits) != len(labels):
+        errors.append(
+            f"[cross-file] lesson_audit count {len(audits)} != "
+            f"lesson_labels count {len(labels)}"
+        )
+        return errors
+
+    from scripts.earnings._text_utils import iter_labeled_lessons
+    indexed = list(iter_labeled_lessons(bundle.get("learning_context") or {}))
+
+    if len(indexed) != len(labels):
+        errors.append(
+            f"[cross-file] bundle.learning_context lesson count {len(indexed)} "
+            f"!= lesson_labels count {len(labels)}"
+        )
+        return errors
+
+    cited: set[int] = set()
+    for kd in (prediction_payload.get("key_drivers") or []):
+        for idx in (kd.get("cites_lesson_indices") or []):
+            if isinstance(idx, int):
+                cited.add(idx)
+
+    for i, audit in enumerate(audits):
+        if not isinstance(audit, dict):
+            errors.append(f"[cross-file] lesson_audit[{i}] must be an object")
+            continue
+        if audit.get("lesson_index") != i:
+            errors.append(
+                f"[cross-file] lesson_audit[{i}].lesson_index = "
+                f"{audit.get('lesson_index')!r} (expected {i})"
+            )
+        expected_label = (labels[i] or {}).get("label") if isinstance(labels[i], dict) else None
+        if audit.get("predictor_label") != expected_label:
+            errors.append(
+                f"[cross-file] lesson_audit[{i}].predictor_label "
+                f"{audit.get('predictor_label')!r} != prediction label "
+                f"{expected_label!r}"
+            )
+        expected_cited = (i in cited)
+        if audit.get("was_cited") != expected_cited:
+            errors.append(
+                f"[cross-file] lesson_audit[{i}].was_cited = "
+                f"{audit.get('was_cited')!r} (expected {expected_cited})"
+            )
+        if i < len(indexed):
+            _, _, _, body = indexed[i]
+            if _normalize_lesson_text(audit.get("lesson_text") or "") \
+               != _normalize_lesson_text(body or ""):
+                errors.append(
+                    f"[cross-file] lesson_audit[{i}].lesson_text drift "
+                    f"from bundle body"
+                )
+
+    return errors
+
+
+def _full_validate_for_orchestrator(
+    payload: dict,
+    ticker: str,
+    quarter_label: str,
+    prediction_result_path: Path,
+    context_bundle_path: Path,
+) -> tuple[list[str], dict | None, dict | None]:
+    """Schema + cross-file validation as a single gate. Plan §7.6 (D19) +
+    §8.2. Returns ``(errors, prediction_payload, bundle)``:
+
+      * ``errors`` is a flat list — schema errors first, cross-file
+        errors second (prefixed with ``[cross-file]``). Empty on success.
+      * ``prediction_payload`` and ``bundle`` are loaded ONLY when schema
+        passes (cross-file is irrelevant on a malformed payload). They
+        are reused by the aggregator after the appends; loading once here
+        avoids re-reading the files.
+
+    Module-level (not a closure inside ``run_learner_for_quarter``) so the
+    test_learner_outcomes.py AST walk does not pick up the helper's
+    internal returns as if they were outcome-tagged learner returns.
+    """
+    schema_errs = validate_attribution_result(payload, ticker, quarter_label)
+    if schema_errs:
+        return schema_errs, None, None
+    try:
+        pp = json.loads(prediction_result_path.read_text(encoding="utf-8"))
+        bb = json.loads(context_bundle_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as e:
+        return [f"[cross-file] failed to load sibling files: {e}"], None, None
+    cross_errs = _validate_audit_against_prediction(payload, pp, bb)
+    return cross_errs, pp, bb
 
 
 # ── Learner SDK Invocation ───────────────────────────────────────────

@@ -143,6 +143,10 @@ class BuildLearningContextPathsTests(unittest.TestCase):
 
     # #3
     def test_pit_guard_omits_current_quarter_for_ticker(self):
+        # LearnerLoopRevamp.md D13 (2026-05-04): same-quarter self-leak is a
+        # FULL exclusion, not just learner_result_path omission. The prior
+        # path-only guard in _decorate_with_learner_paths becomes a defensive
+        # no-op because build_learning_context drops the entry first.
         _write_ticker_json(self.learnings_dir, "AAPL", [{
             "quarter_label": "Q4_FY2023",
             "attributed_at": "2024-01-01T00:00:00+00:00",
@@ -153,7 +157,8 @@ class BuildLearningContextPathsTests(unittest.TestCase):
             companies_dir=self.companies_dir,
             current_quarter_label="Q4_FY2023",
         )
-        self.assertNotIn("learner_result_path", result["ticker_lessons"][0])
+        self.assertEqual(result["ticker_lessons"], [],
+                         "D13: current-quarter ticker row must be fully excluded")
 
     # #4
     def test_global_lesson_path_uses_source_ticker(self):
@@ -176,6 +181,8 @@ class BuildLearningContextPathsTests(unittest.TestCase):
 
     # #5
     def test_global_lesson_pit_guard_skips_when_source_ticker_quarter_match_current(self):
+        # LearnerLoopRevamp.md D13: same-quarter (source_ticker, quarter_label)
+        # entry is fully excluded from the bundle.
         _write_global_json(self.learnings_dir, [{
             "scope": "macro",
             "source_ticker": "AAPL",
@@ -189,7 +196,8 @@ class BuildLearningContextPathsTests(unittest.TestCase):
             companies_dir=self.companies_dir,
             current_quarter_label="Q4_FY2023",
         )
-        self.assertNotIn("learner_result_path", result["global_lessons"][0])
+        self.assertEqual(result["global_lessons"], [],
+                         "D13: same-(source_ticker, quarter) global entry must be fully excluded")
 
     # #6
     def test_path_is_repo_relative_string(self):
