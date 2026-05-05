@@ -45,10 +45,10 @@ EXIT CODES:
 
 USAGE:
   cd /home/faisal/EventMarketDB
-  # Iteration mode (fast — used during /goal Ralph loops):
+  # Default (FULL — bulletproof, the source of truth for "verifier passed"):
   venv/bin/python earnings-analysis/canary/quarter_resolver/verify_shadow_validator.py
-  # Final sign-off mode (bulletproof — REQUIRED before Goal 2 is declared done):
-  venv/bin/python earnings-analysis/canary/quarter_resolver/verify_shadow_validator.py --full
+  # Iteration shortcut (FAST stratified — opt-in, only for /goal Ralph loops):
+  venv/bin/python earnings-analysis/canary/quarter_resolver/verify_shadow_validator.py --fast
 
 CHECKS PERFORMED (in order; first failure exits 1):
   S1.  Verifier file is git-clean (catches Codex-tampering)
@@ -60,15 +60,14 @@ CHECKS PERFORMED (in order; first failure exits 1):
   S6.  Universe coverage: shadow_audit covers ALL 10,831 corpus rows
        (9,909 GT + 922 NR), no overlap, no missing
   S6b. Independent production-resolver re-derivation. TWO MODES:
-       - DEFAULT (stratified, fast): 100% of NR rows where
-         reason=='not_same_event_periodic' (FCX harm class) + deterministic
-         stride samples of GT and other-NR. Used during /goal Ralph loops
-         for speed. Evadable for non-FCX rows by an adversarial agent that
-         reads this verifier — acceptable for iteration, NOT for final
-         sign-off.
-       - --full (bulletproof, REQUIRED for final Goal 2 sign-off): runs
-         resolve_quarter_info() against ALL 10,831 corpus rows. Removes the
-         residual evasion concern.
+       - DEFAULT (FULL — bulletproof, the source of truth): runs
+         resolve_quarter_info() against ALL 10,831 corpus rows. This is
+         the canonical meaning of "verifier passed". No ambiguity.
+       - --fast (stratified, opt-in iteration shortcut): 100% of NR rows
+         where reason=='not_same_event_periodic' (FCX harm class) +
+         deterministic stride samples of GT and other-NR. Used during
+         /goal Ralph loops to iterate quickly while Codex is still
+         debugging. NEVER counts as Goal 2 sign-off.
        Both modes call resolve_quarter_info() and assert production_fy/q/
        source in shadow_audit.csv match what the resolver actually returns.
   S7.  Per-row invariants on shadow_audit (verdict enums + INDEPENDENT
@@ -573,10 +572,11 @@ def check_production_sample_rederivation(
         sample_accns = list(dict.fromkeys(nr_fcx + gt_pick + nr_other_pick))
 
         info(
-            f"S6b stratified production re-derivation: {len(nr_fcx)} FCX-shape NR + "
+            f"S6b FAST stratified production re-derivation: {len(nr_fcx)} FCX-shape NR + "
             f"{len(gt_pick)} GT (stride/{S6B_GT_SAMPLE_N}) + {len(nr_other_pick)} "
             f"other-NR (stride/{S6B_OTHER_NR_SAMPLE_N}) = {len(sample_accns)} unique rows. "
-            f"For final sign-off, re-run with --full to verify all 10,831 rows."
+            f"This is the iteration shortcut — re-run WITHOUT --fast for the canonical "
+            f"all-10,831-row sign-off."
         )
 
     mismatches: list[str] = []
@@ -941,18 +941,21 @@ def main() -> None:
         description="Goal 2 shadow-validator verifier (hand-written; do not modify)."
     )
     parser.add_argument(
-        "--full",
+        "--fast",
         action="store_true",
         help=(
-            "S6b: re-derive production resolver output for ALL 10,831 corpus rows "
-            "(bulletproof; required for final Goal 2 sign-off). Default is "
-            "deterministic stratified sampling (FCX-shape exhaustive + GT/other-NR "
-            "stride samples) — fast for /goal iteration but evadable for non-FCX rows."
+            "S6b: opt into stratified sampling (FCX-shape exhaustive + GT/other-NR "
+            "stride samples) instead of the FULL 10,831-row default. Used during "
+            "/goal Ralph loops to iterate quickly. NEVER counts as Goal 2 sign-off "
+            "— a passing --fast run still requires a passing default (full) run "
+            "to be considered complete."
         ),
     )
     args = parser.parse_args()
+    full_mode = not args.fast  # default: full re-derivation
 
-    mode_label = "FULL re-derivation" if args.full else "stratified (iteration mode)"
+    mode_label = "FAST stratified (opt-in iteration shortcut)" if args.fast else \
+                 "FULL re-derivation (default — source of truth)"
     print(f"=== Goal 2 verifier (hand-written, do not modify) — S6b: {mode_label} ===")
     print(f"Shadow audit:        {SHADOW_AUDIT_PATH}")
     print(f"Candidate algorithms:{CANDIDATE_ALGORITHMS_PATH}")
@@ -965,7 +968,7 @@ def main() -> None:
     check_shadow_no_duplicates(shadow_rows)                               # S5
     check_universe_coverage(shadow_rows, gt_rows, nr_rows)                # S6
     check_production_sample_rederivation(                                 # S6b
-        shadow_rows, gt_rows, nr_rows, full=args.full
+        shadow_rows, gt_rows, nr_rows, full=full_mode
     )
     check_shadow_per_row(shadow_rows, gt_rows, nr_rows)                   # S7
     candidates = import_candidates()                                      # S8
@@ -976,11 +979,13 @@ def main() -> None:
 
     print()
     info("=" * 60)
-    if args.full:
-        info("ALL CHECKS PASSED — Goal 2 shadow validator verified (FULL mode)")
+    if args.fast:
+        info("ALL CHECKS PASSED — Goal 2 shadow validator verified (FAST mode)")
+        info("WARNING: --fast is iteration-only. Re-run WITHOUT --fast to count")
+        info("         as Goal 2 sign-off (full 10,831-row re-derivation).")
     else:
-        info("ALL CHECKS PASSED — Goal 2 shadow validator verified (stratified mode)")
-        info("REMINDER: re-run with --full before final Goal 2 sign-off.")
+        info("ALL CHECKS PASSED — Goal 2 shadow validator verified (FULL mode)")
+        info("This is the canonical sign-off. Goal 2 is done.")
     info("=" * 60)
     sys.exit(0)
 
