@@ -175,6 +175,13 @@ Audit approach:
 
 Goal 1 should remain deterministic corpus construction. The audit packets are Goal 1.5: they validate the corpus standard without turning the LLM into a slow manual reviewer for all 5,000+ rows.
 
+Fallback if later goals shake confidence:
+
+- If Goal 2/3/4 exposes surprising disagreement patterns that the deterministic verifiers cannot explain, or if the full Goal 2 verifier fails in a way that points back to corpus quality rather than resolver logic, do NOT keep tuning formulas blindly.
+- Instead, expand Goal 1.5 into a larger manual SEC EDGAR audit using subagents: target ~2,000 stratified reports, weighted toward the failing buckets/patterns rather than uniform random sampling.
+- The expanded audit should keep the same verdict discipline (`ok` / `wrong` / `unclear`), short SEC evidence quotes, exact accession/document URLs, and a hard stop on any `wrong` until root cause is understood.
+- This is a fallback only, not the default path. Current 200-packet audit remains sufficient unless later full-corpus work reveals new doubt.
+
 ## Proposed /goal Breakdown
 
 ### Goal 1 - Ground Truth Discovery Only
@@ -452,13 +459,15 @@ Each Goal in the breakdown above gets its own prompt filled in from this templat
 - [x] Goal 1.5 prompt finalized (`.claude/plans/goal_1_5_prompt.md`)
 - [x] Goal 1.5 verifier hand-written (`earnings-analysis/canary/quarter_resolver/verify_audit_packets.py`)
 - [x] Verifier(s) committed to git (REQUIRED before /goal — verifier C1 will refuse to run otherwise)
-- [ ] Goal 1 executed via /goal (Codex)
-- [ ] Goal 1 verifier exits 0 (independent re-run by human)
-- [ ] Goal 1.5 executed via /goal (Codex prepares packets)
-- [ ] Goal 1.5 verifier exits 0 (packet structural check)
-- [ ] Goal 1.5 human audit complete (~150-200 packets reviewed; 0 `wrong` verdicts)
-- [ ] Goal 2 prompt finalized
-- [ ] Goal 2 executed
+- [x] Goal 1 executed via /goal (Codex) — commit fc83a1c (9909 GT + 922 NR / 10831)
+- [x] Goal 1 verifier exits 0 (independent re-run by human) — commit 59fb681 patched C9 accession_8k false-positive
+- [x] Goal 1.5 executed via /goal (Codex prepares packets) — commit f2a0eb6 (200 stratified packets)
+- [x] Goal 1.5 verifier exits 0 (packet structural check)
+- [x] Goal 1.5 human audit complete — commit 04789af (199/200 ok, 0 wrong, 1 unclear; <5% threshold met)
+- [x] Goal 2 prompt finalized (`.claude/plans/goal_2_prompt.md`)
+- [x] Goal 2 verifier hand-written (`earnings-analysis/canary/quarter_resolver/verify_shadow_validator.py`) — commits b909a3f / 0813df2 / 72a7668 / dea1ef5; default mode = FULL 10,831-row re-derivation, --fast = stratified iteration shortcut (FCX-shape exhaustive + GT/other-NR stride)
+- [ ] Goal 2 executed via /goal (Codex) — IN PROGRESS as of 2026-05-05
+- [ ] Goal 2 verifier exits 0 in default (full) mode — final acceptance gate
 - [ ] Goal 3 prompt finalized
 - [ ] Goal 3 executed
 - [ ] Goal 4 (implementation) prompt finalized — only after 1-3 reviewed
@@ -474,4 +483,12 @@ Each Goal in the breakdown above gets its own prompt filled in from this templat
 - 2026-05-05 14:23 — file created (0 bytes)
 - 2026-05-05 ~14:25 — populated with ChatGPT-style structure (Why / Ground Truth Hierarchy / Goal breakdown / Working Hypothesis / Open Questions)
 - 2026-05-05 14:30+ — Claude appended /goal research synthesis, verification-script independence principle, "100% precision" answer, risks log, open decisions, prompt template, master status tracker. Reconciled Tier 1 (string parsing) with user's earlier veto.
-- 2026-05-05 — Next step: settle decisions D1-D8 (Appendix E), then hand-write Goal 1 verifier, then write Goal 1 prompt from template.
+- 2026-05-05 — Decisions D1-D8 LOCKED. Goal 1 verifier hand-written + committed. Goal 1 fired via /goal; Codex hit C9 false-positive on accession_8k (Codex correctly flagged WITHOUT modifying verifier — verifier-clean confirmed). Claude patched verifier (commit 59fb681), Codex resumed, Goal 1 passed verifier (commit fc83a1c).
+- 2026-05-05 — Goal 1.5 prompt + verifier hand-written + committed. Goal 1.5 packets built via /goal (commit f2a0eb6). 6 parallel Claude subagents audited 200 SEC EDGAR packets; final verdict 199 ok / 0 wrong / 1 unclear (RH 4.02 restatement, sampling-eligibility edge). Goal 1.5 PASS, evidence committed (04789af).
+- 2026-05-05 — Goal 2 prompt + verifier hand-written through 5 rounds of ChatGPT critique (each independently re-evaluated by Claude per feedback rule):
+    R6: 5 critical defects fixed — S6b dead code, undefined candidate verdict helpers, recommended-name not validated, 30-row random sample → stratified, S10 vs S10b clarification.
+    R7: NR fail-closed scoring fixed — was always returning AUTO_ON_UNCERTAIN_ROW because qv==NO_RESOLUTION is dead on NR (qv always N_A); now keys on blank prod_fy AND blank prod_q.
+    R8: prompt aligned with verifier (NR fail-closed wording, sanitized-context-only, "or has gaps" removed since CSV has no gaps column).
+    Final design decision: invert default — bare verifier = FULL 10,831-row re-derivation (canonical sign-off); `--fast` = stratified opt-in for Codex iteration only. Removes "verifier passed" ambiguity. Commits b909a3f → 0813df2 → 72a7668 → dea1ef5.
+- 2026-05-05 — Goal 2 fired via /goal. Codex iterating on builder + deliverables. Builder script (`build_goal2_outputs.py`) being polished in-loop for progress observability — within Codex's allowed scratch zone, not modifying verifier or production code.
+- Next step: wait for Codex to declare Goal 2 done; user runs bare verifier (full mode, ~5-30 min Neo4j); on exit 0, commit deliverables + report results back to Claude for Goal 3 design.
