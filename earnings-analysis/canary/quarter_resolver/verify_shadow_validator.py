@@ -45,7 +45,10 @@ EXIT CODES:
 
 USAGE:
   cd /home/faisal/EventMarketDB
+  # Iteration mode (fast — used during /goal Ralph loops):
   venv/bin/python earnings-analysis/canary/quarter_resolver/verify_shadow_validator.py
+  # Final sign-off mode (bulletproof — REQUIRED before Goal 2 is declared done):
+  venv/bin/python earnings-analysis/canary/quarter_resolver/verify_shadow_validator.py --full
 
 CHECKS PERFORMED (in order; first failure exits 1):
   S1.  Verifier file is git-clean (catches Codex-tampering)
@@ -56,12 +59,18 @@ CHECKS PERFORMED (in order; first failure exits 1):
   S5.  No duplicate accession_8k inside shadow_audit.csv (per row)
   S6.  Universe coverage: shadow_audit covers ALL 10,831 corpus rows
        (9,909 GT + 922 NR), no overlap, no missing
-  S6b. Independent production-resolver re-derivation: STRATIFIED DETERMINISTIC
-       sample — 100% of NR rows where reason=='not_same_event_periodic' (FCX
-       harm class), plus deterministic stride samples of GT (S6B_GT_SAMPLE_N)
-       and other-reason NR (S6B_OTHER_NR_SAMPLE_N). Calls resolve_quarter_info()
-       and asserts production_fy/q/source in shadow_audit.csv match what the
-       resolver actually returns. Catches Codex faking the production baseline.
+  S6b. Independent production-resolver re-derivation. TWO MODES:
+       - DEFAULT (stratified, fast): 100% of NR rows where
+         reason=='not_same_event_periodic' (FCX harm class) + deterministic
+         stride samples of GT and other-NR. Used during /goal Ralph loops
+         for speed. Evadable for non-FCX rows by an adversarial agent that
+         reads this verifier — acceptable for iteration, NOT for final
+         sign-off.
+       - --full (bulletproof, REQUIRED for final Goal 2 sign-off): runs
+         resolve_quarter_info() against ALL 10,831 corpus rows. Removes the
+         residual evasion concern.
+       Both modes call resolve_quarter_info() and assert production_fy/q/
+       source in shadow_audit.csv match what the resolver actually returns.
   S7.  Per-row invariants on shadow_audit (verdict enums + INDEPENDENT
        re-derivation of production_quarter_verdict & production_safety_verdict
        from rules; CSV claims must match computed verdicts).
@@ -96,6 +105,7 @@ get_fye_month) but applies them independently of build_corpus.py and
 candidate_algorithms.py.
 """
 from __future__ import annotations
+import argparse
 import csv
 import importlib.util
 import os
@@ -504,19 +514,27 @@ def check_shadow_per_row(shadow_rows: list[dict], gt_rows: list[dict], nr_rows: 
     info(f"S7 shadow_audit per-row + verdict-correctness: {len(shadow_rows)} rows, 0 violations ✓")
 
 
-# ── S6b: independent production-resolver stratified re-derivation ────
+# ── S6b: independent production-resolver re-derivation ──────────────
 def check_production_sample_rederivation(
-    shadow_rows: list[dict], gt_rows: list[dict], nr_rows: list[dict]
+    shadow_rows: list[dict], gt_rows: list[dict], nr_rows: list[dict],
+    *, full: bool = False,
 ) -> None:
-    """Deterministic stratified independent re-derivation of production resolver:
+    """Independent re-derivation of production resolver. Two modes:
+
+    Default (stratified): fast, used during /goal iteration.
       - 100% of NR rows where reason == 'not_same_event_periodic' (FCX-shape)
       - deterministic stride sample of GT rows (S6B_GT_SAMPLE_N)
       - deterministic stride sample of other-reason NR rows (S6B_OTHER_NR_SAMPLE_N)
 
-    The FCX-shape stratum is exhaustive: this is the harm class we MUST prove the
-    production CSV did not fake. Stride samples (sorted by accession_8k → take
-    every k-th) are deterministic and cannot be predicted in advance, so Codex
-    cannot selectively populate them.
+    --full: bulletproof, REQUIRED for final Goal 2 sign-off.
+      - Runs resolve_quarter_info() against ALL 10,831 corpus rows.
+      - Removes the residual evasion concern (Codex could read this verifier
+        and selectively populate only the stratified sample positions).
+      - Slower (Neo4j roundtrips × 10,831).
+
+    The FCX-shape stratum is always exhaustive in stratified mode: this is the
+    harm class we MUST prove the production CSV did not fake. The --full mode
+    makes the proof complete across all rows.
     """
     try:
         from quarter_identity import resolve_quarter_info
@@ -524,33 +542,42 @@ def check_production_sample_rederivation(
         fail(f"S6b cannot import resolve_quarter_info: {e}", code=2)
 
     shadow_by_accn = {r["accession_8k"]: r for r in shadow_rows}
-    nr_fcx = sorted(
-        r["accession_8k"] for r in nr_rows
-        if r.get("reason") == "not_same_event_periodic"
-    )
-    nr_other_sorted = sorted(
-        r["accession_8k"] for r in nr_rows
-        if r.get("reason") != "not_same_event_periodic"
-    )
-    gt_sorted = sorted(r["accession_8k"] for r in gt_rows)
 
-    def _stride(seq: list[str], k: int) -> list[str]:
-        if not seq or k <= 0:
-            return []
-        if len(seq) <= k:
-            return list(seq)
-        step = len(seq) / k
-        return [seq[int(i * step)] for i in range(k)]
+    if full:
+        sample_accns = sorted(shadow_by_accn.keys())
+        info(
+            f"S6b FULL production re-derivation: ALL {len(sample_accns)} corpus rows. "
+            f"This is the bulletproof gate; expect Neo4j roundtrip × N runtime."
+        )
+    else:
+        nr_fcx = sorted(
+            r["accession_8k"] for r in nr_rows
+            if r.get("reason") == "not_same_event_periodic"
+        )
+        nr_other_sorted = sorted(
+            r["accession_8k"] for r in nr_rows
+            if r.get("reason") != "not_same_event_periodic"
+        )
+        gt_sorted = sorted(r["accession_8k"] for r in gt_rows)
 
-    gt_pick = _stride(gt_sorted, S6B_GT_SAMPLE_N)
-    nr_other_pick = _stride(nr_other_sorted, S6B_OTHER_NR_SAMPLE_N)
-    sample_accns = list(dict.fromkeys(nr_fcx + gt_pick + nr_other_pick))
+        def _stride(seq: list[str], k: int) -> list[str]:
+            if not seq or k <= 0:
+                return []
+            if len(seq) <= k:
+                return list(seq)
+            step = len(seq) / k
+            return [seq[int(i * step)] for i in range(k)]
 
-    info(
-        f"S6b stratified production re-derivation: {len(nr_fcx)} FCX-shape NR + "
-        f"{len(gt_pick)} GT (stride/{S6B_GT_SAMPLE_N}) + {len(nr_other_pick)} "
-        f"other-NR (stride/{S6B_OTHER_NR_SAMPLE_N}) = {len(sample_accns)} unique rows"
-    )
+        gt_pick = _stride(gt_sorted, S6B_GT_SAMPLE_N)
+        nr_other_pick = _stride(nr_other_sorted, S6B_OTHER_NR_SAMPLE_N)
+        sample_accns = list(dict.fromkeys(nr_fcx + gt_pick + nr_other_pick))
+
+        info(
+            f"S6b stratified production re-derivation: {len(nr_fcx)} FCX-shape NR + "
+            f"{len(gt_pick)} GT (stride/{S6B_GT_SAMPLE_N}) + {len(nr_other_pick)} "
+            f"other-NR (stride/{S6B_OTHER_NR_SAMPLE_N}) = {len(sample_accns)} unique rows. "
+            f"For final sign-off, re-run with --full to verify all 10,831 rows."
+        )
 
     mismatches: list[str] = []
     n_called = 0
@@ -595,18 +622,19 @@ def check_production_sample_rederivation(
                 f"S6b {accn} production_source: csv={csv_source!r} actual={expected_source!r}"
             )
 
+    mode_label = "FULL" if full else "stratified"
     if mismatches:
         for m in mismatches[:25]:
             print(f"  {m}")
         if len(mismatches) > 25:
             print(f"  ... and {len(mismatches) - 25} more")
         fail(
-            f"S6b production-resolver re-derivation: {len(mismatches)} mismatches "
-            f"across {len(sample_accns)} stratified rows ({n_called} resolver calls). "
+            f"S6b {mode_label} production-resolver re-derivation: {len(mismatches)} "
+            f"mismatches across {len(sample_accns)} rows ({n_called} resolver calls). "
             f"Codex's shadow_audit.csv production columns do not match what "
             f"resolve_quarter_info() actually returns."
         )
-    info(f"S6b production-resolver re-derivation: {n_called} resolver calls match ✓")
+    info(f"S6b {mode_label} production-resolver re-derivation: {n_called} resolver calls match ✓")
 
 
 # ── S8: candidate_algorithms.py imports + has >=2 candidates ────────
@@ -909,7 +937,23 @@ def check_report() -> None:
 
 # ── Main ──────────────────────────────────────────────────────────────
 def main() -> None:
-    print("=== Goal 2 verifier (hand-written, do not modify) ===")
+    parser = argparse.ArgumentParser(
+        description="Goal 2 shadow-validator verifier (hand-written; do not modify)."
+    )
+    parser.add_argument(
+        "--full",
+        action="store_true",
+        help=(
+            "S6b: re-derive production resolver output for ALL 10,831 corpus rows "
+            "(bulletproof; required for final Goal 2 sign-off). Default is "
+            "deterministic stratified sampling (FCX-shape exhaustive + GT/other-NR "
+            "stride samples) — fast for /goal iteration but evadable for non-FCX rows."
+        ),
+    )
+    args = parser.parse_args()
+
+    mode_label = "FULL re-derivation" if args.full else "stratified (iteration mode)"
+    print(f"=== Goal 2 verifier (hand-written, do not modify) — S6b: {mode_label} ===")
     print(f"Shadow audit:        {SHADOW_AUDIT_PATH}")
     print(f"Candidate algorithms:{CANDIDATE_ALGORITHMS_PATH}")
     print(f"Candidate audit:     {CANDIDATE_AUDIT_PATH}")
@@ -920,7 +964,9 @@ def main() -> None:
     shadow_rows, candidate_rows, gt_rows, nr_rows = check_files_exist()   # S2, S3, S4
     check_shadow_no_duplicates(shadow_rows)                               # S5
     check_universe_coverage(shadow_rows, gt_rows, nr_rows)                # S6
-    check_production_sample_rederivation(shadow_rows, gt_rows, nr_rows)   # S6b
+    check_production_sample_rederivation(                                 # S6b
+        shadow_rows, gt_rows, nr_rows, full=args.full
+    )
     check_shadow_per_row(shadow_rows, gt_rows, nr_rows)                   # S7
     candidates = import_candidates()                                      # S8
     check_candidate_rederivation(candidates, candidate_rows, shadow_rows, gt_rows, nr_rows)  # S9
@@ -930,7 +976,11 @@ def main() -> None:
 
     print()
     info("=" * 60)
-    info("ALL CHECKS PASSED — Goal 2 shadow validator verified")
+    if args.full:
+        info("ALL CHECKS PASSED — Goal 2 shadow validator verified (FULL mode)")
+    else:
+        info("ALL CHECKS PASSED — Goal 2 shadow validator verified (stratified mode)")
+        info("REMINDER: re-run with --full before final Goal 2 sign-off.")
     info("=" * 60)
     sys.exit(0)
 

@@ -219,7 +219,20 @@ Concise (700-1500 words) with:
 
 ## DONE WHEN (the verifier decides — not you)
 
-`venv/bin/python earnings-analysis/canary/quarter_resolver/verify_shadow_validator.py` exits 0.
+The verifier has TWO modes; Goal 2 is done only when BOTH pass:
+
+```bash
+# 1. Iteration mode (fast — used during /goal Ralph loops):
+venv/bin/python earnings-analysis/canary/quarter_resolver/verify_shadow_validator.py
+
+# 2. Final sign-off mode (bulletproof — required to declare Goal 2 done):
+venv/bin/python earnings-analysis/canary/quarter_resolver/verify_shadow_validator.py --full
+```
+
+Both must exit 0.
+
+- The default mode (stratified S6b) is FAST: iterates quickly during Codex's /goal loop. It exhaustively verifies the 495 FCX-shape rows but only stride-samples the rest. It's evadable for non-FCX rows by an adversarial agent reading this verifier.
+- The `--full` mode runs `resolve_quarter_info()` against ALL 10,831 corpus rows. Slow but bulletproof. **The user (not Codex) will run `--full` once before signing off.**
 
 The verifier checks (S1-S11 + S6b + S10b):
 
@@ -232,14 +245,15 @@ S4.   candidate_audit.csv schema EXACTLY matches REQUIRED_COLUMNS_CANDIDATE
       (ORDERED — column order enforced)
 S5.   No duplicate accession_8k in shadow_audit.csv
 S6.   shadow_audit covers all 10,831 corpus rows (no overlap, no missing)
-S6b.  STRATIFIED DETERMINISTIC production-resolver re-derivation:
-      - 100% of NR rows where reason == "not_same_event_periodic"
-        (the 495 FCX-shape rows are checked exhaustively)
-      - deterministic stride sample of GT (~100 rows)
-      - deterministic stride sample of other-reason NR (~100 rows)
-      The verifier itself calls resolve_quarter_info() and asserts
-      shadow_audit.csv production_fy/q/source match. Catches faked
-      production output.
+S6b.  Independent production-resolver re-derivation (two modes):
+      - default (stratified, fast — for /goal iteration):
+        100% of FCX-shape NR (495 rows) + GT stride + other-NR stride
+      - --full (bulletproof, REQUIRED for final sign-off):
+        ALL 10,831 corpus rows
+      Both modes call resolve_quarter_info() and assert shadow_audit.csv
+      production_fy/q/source match. Catches faked production output.
+      Codex is expected to pass the default mode; the user will run
+      --full as the final acceptance gate.
 S7.   Per-row invariants on shadow_audit: enum membership AND independent
       re-derivation of production_quarter_verdict & production_safety_verdict.
       The verifier computes what the verdicts SHOULD be from rules; CSV
