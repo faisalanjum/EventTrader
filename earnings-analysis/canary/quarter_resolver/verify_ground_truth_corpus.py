@@ -468,6 +468,7 @@ def _expected_row_fields(ctx: dict) -> dict[str, str]:
             fallback = None
 
     return {
+        "accession_8k": str(ctx.get("accession_8k") or ""),
         "ticker": str(ctx.get("ticker") or ""),
         "filed_8k": str(ctx.get("filed_8k") or ""),
         "period_of_report": str(ctx.get("period_of_report") or "")[:10] if ctx.get("period_of_report") else "",
@@ -586,6 +587,7 @@ def check_universe_and_full_rederivation(
     for r in results:
         accn = r["accession_8k"]
         universe_ctx[accn] = {
+            "accession_8k": accn,
             "ticker": r["ticker"],
             "filed_8k": _to_str(r["filed_8k"]),
             "matched_accession_periodic": r["matched_accession_periodic"],
