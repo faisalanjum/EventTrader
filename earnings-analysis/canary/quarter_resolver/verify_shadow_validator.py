@@ -520,20 +520,23 @@ def check_production_sample_rederivation(
 ) -> None:
     """Independent re-derivation of production resolver. Two modes:
 
-    Default (stratified): fast, used during /goal iteration.
+    full=True (DEFAULT — bulletproof, the source of truth):
+      - Runs resolve_quarter_info() against ALL 10,831 corpus rows.
+      - "Verifier passed" without qualification ALWAYS means this mode.
+      - Slower (Neo4j roundtrip × 10,831).
+      - Selected by the bare command (no flags).
+
+    full=False (--fast opt-in — stratified iteration shortcut):
       - 100% of NR rows where reason == 'not_same_event_periodic' (FCX-shape)
       - deterministic stride sample of GT rows (S6B_GT_SAMPLE_N)
       - deterministic stride sample of other-reason NR rows (S6B_OTHER_NR_SAMPLE_N)
+      - Used during Codex's /goal Ralph loop for speed.
+      - Does NOT count as Goal 2 sign-off; the operator must run the bare
+        command (full mode) before declaring Goal 2 done.
 
-    --full: bulletproof, REQUIRED for final Goal 2 sign-off.
-      - Runs resolve_quarter_info() against ALL 10,831 corpus rows.
-      - Removes the residual evasion concern (Codex could read this verifier
-        and selectively populate only the stratified sample positions).
-      - Slower (Neo4j roundtrips × 10,831).
-
-    The FCX-shape stratum is always exhaustive in stratified mode: this is the
-    harm class we MUST prove the production CSV did not fake. The --full mode
-    makes the proof complete across all rows.
+    The FCX-shape stratum is always exhaustive in --fast mode: this is the
+    harm class we MUST prove the production CSV did not fake. The default
+    (full) mode makes the proof complete across all rows.
     """
     try:
         from quarter_identity import resolve_quarter_info
