@@ -293,14 +293,29 @@ Goal 3 verifier soft-reports (informational, not pass/fail):
 
 The 99.9% target is **NOT verifier-hard-locked**. Goal 3's job is to PROVE whether that target is achievable. If the best candidate empirically achieves <99.9%, Goal 3's REPORT must classify the residuals and explain what additional signal would be needed (escalation to expanded audit, write-guard policy adjustments, etc.).
 
+**Goal 3 result (2026-05-06)**:
+
+- Verifier-passed artifacts: `live_candidates.py`, `live_mode_audit.csv`, `LIVE_MODE_REPORT.md`.
+- Required candidates benchmarked: `prior_periodic_projection`, `lag_window`, `hybrid_agreement`.
+- Recommended candidate: `prior_periodic_projection`.
+- Full scored corpus: 10,831 rows = 9,909 GT + 922 NR.
+- Full scored corpus result for `prior_periodic_projection`: 9,860 / 10,831 AUTO_OK = **91.03%** would-fire, **0 WRONG_AUTO_WROTE**.
+- Warm-start historical PIT subset (exclude `no_prior` DB-history cold starts): 9,860 / 9,993 AUTO_OK = **98.67%**, **0 wrong-writes**. Scaled to ~10,000 reports: ~9,867 fire, ~133 defer, ~0 wrong.
+- GT-only warm-start subset: 9,022 / 9,113 AUTO_OK with correct fiscal label = **99.00%**, **0 wrong-writes**.
+- Latest-per-ticker live-like subset: 765 / 781 AUTO_OK = **97.95%**, **0 WRONG_AUTO_WROTE**. Scaled to ~10,000 reports: ~9,795 fire, ~205 defer, ~0 wrong.
+- Latest-per-ticker residuals: 16 non-fires = 14 odd 52/53-week / odd fiscal-calendar prior-period shapes + 2 long-gap/stale-prior cases.
+- Interpretation: the 91% full-corpus number is pessimistic for actual operations because 838 failures are early DB-history cold starts (mostly 2023). For warm-start historical replay and actual live today, the practical baseline is roughly **98-99% auto-fire with zero wrong-writes** before special handling.
+- Achievability: current simple candidate does **not** prove 99.9%. The likely path to 99%+ is targeted 52/53-week / odd fiscal-calendar handling plus existing long-gap / denylist fail-closed guards. Do not revisit EX-99.1 / LLM extraction unless these deterministic residual fixes fail.
+
 **Goal 3 non-goals**:
 - No production code changes (resolver fix lives in Goal 4)
 - No EX-99.1 string parsing (D8 veto)
 - No assumption that 8-K periodOfReport carries fiscal quarter end (probe-disproven 2026-05-05)
 
 **Goal 3 follow-on path**:
-- If empirical max would_fire ≥ 99.9% with zero wrong-auto-writes → Goal 4 implements it
-- If empirical max would_fire < 99.9% → user + Claude decide acceptable threshold, OR escalate to expanded Goal 1.5 audit per existing fallback in this plan
+- Minimum viable Goal 4: implement `prior_periodic_projection` + destructive-write guard. Expected practical coverage: ~98-99% auto-fire, 0 wrong-writes, with remaining rows deferred.
+- Recommended Goal 4 scope: include a focused 52/53-week / odd fiscal-calendar enhancement if a quick verifier/probe proves it raises coverage without introducing wrong-writes.
+- Do NOT add EX-99.1 / LLM parsing in Goal 4; that remains out of scope unless deterministic residual handling fails.
 
 ### Goal 4 - Implementation
 
@@ -312,18 +327,21 @@ Completion criteria:
 - Shadow corpus validator clean or every mismatch manually classified.
 - Orchestrator refuses destructive writes for unproven identity.
 - FCX Q1 FY2026 resolves or fails closed, but never writes into Q4.
+- Warm-start historical PIT and latest-per-ticker live-like metrics are reported after the implementation.
+- `prior_periodic_projection` is the primary live-mode resolver tier; `NEEDS_REVIEW` / `FAIL_CLOSED` / `NO_RESOLUTION` must block destructive writes.
+- 52/53-week / odd fiscal-calendar residual handling is either implemented and verifier-proven, or explicitly deferred with expected coverage impact.
 - Full relevant earnings test suite passes.
 
 ## Current Working Hypothesis
 
-The likely final answer is a hybrid:
+The likely final answer is a guarded prior-periodic projection resolver:
 
-1. If the 8-K/exhibit itself clearly names the reported period, use that.
-2. Else if a same-quarter periodic XBRL filing exists, use XBRL fiscal identity.
-3. Else if sequence plus fiscal math is internally consistent and not suspicious, allow a guarded live fallback.
-4. Else return `NEEDS_REVIEW` and block destructive writes.
+1. For live / PIT replay, use the most recent PIT-available prior 10-Q/10-K for the same company, derive its fiscal identity, and advance one quarter.
+2. Apply deterministic guards: no prior periodic, stale/long gap, denylisted prior accession, odd 52/53-week / fiscal-calendar shape unless specifically handled.
+3. Permit destructive writes only when `safety_action == AUTO_OK`.
+4. Return `NEEDS_REVIEW`, `FAIL_CLOSED`, or `NO_RESOLUTION` for unproven identity; these must not create or overwrite event directories or prediction artifacts.
 
-This is more honest than claiming 100% automatic resolution from fiscal math alone.
+Historical retrospective mode may still use same-event periodic evidence when it exists, but live-mode and PIT replay must not rely on the future same-quarter 10-Q/10-K.
 
 ## Open Questions For Goal 1
 
@@ -513,14 +531,27 @@ Each Goal in the breakdown above gets its own prompt filled in from this templat
 - [x] Goal 2 verifier exits 0 in default (full) mode — Codex's run + Claude's independent --fast re-confirmation both pass
 - [x] Goal 2 trustworthiness audit (14 checks) passed — no production-code modifications, corpus byte-identical to fc83a1c, all 3 verifiers git-clean, every report number re-derived from CSVs
 - [x] Goal 3 reframed (2026-05-05) — north star locked at ≥99.9% live-fire rate; empirical 8-K periodOfReport probe confirmed Tier B (8-K periodOfReport → fiscal_math) is dead because periodOfReport=filing date, not fiscal quarter end
-- [ ] Goal 3 prompt finalized (`.claude/plans/goal_3_prompt.md`)
-- [ ] Goal 3 verifier hand-written (`earnings-analysis/canary/quarter_resolver/verify_live_mode_resolver.py`)
-- [ ] Goal 3 prompt + verifier reviewed by user, committed to git
-- [ ] Goal 3 executed via /goal
-- [ ] Goal 4 (implementation) prompt finalized — only after 1-3 reviewed
-- [ ] Goal 4 executed
-- [ ] FCX-style smoke test repeated under new resolver
-- [ ] FCX canary outputs (Q3+Q4) re-validated under new resolver
+- [x] Goal 3 prompt finalized (`.claude/plans/goal_3_prompt.md`) — committed 0ae4d0e
+- [x] Goal 3 verifier hand-written (`earnings-analysis/canary/quarter_resolver/verify_live_mode_resolver.py`) — committed 0ae4d0e
+- [x] Goal 3 prompt + verifier reviewed by user, committed to git
+- [x] Goal 3 executed via /goal — verifier exited 0; artifacts: `live_candidates.py`, `live_mode_audit.csv`, `LIVE_MODE_REPORT.md`
+- [x] Goal 3 trustworthiness audit — CSV metrics independently re-derived; protected verifier/corpus files clean; production code not modified by Goal 3
+- [x] Goal 3 follow-up empirical analysis (2026-05-06) — warm-start hypothesis CONFIRMED:
+      - Full-corpus fire rate **91.03%** is inflated by **838 cold-start rows** (834 are 2023 — DB history starts there; 3 in 2024, 1 in 2025, 0 in 2026)
+      - **Warm-start fire rate: 98.67%** (9,860 / 9,993 rows where prior periodic existed at PIT)
+      - **Latest-per-ticker fire rate: 97.95%** (765 / 781 unique tickers' most-recent 8-Ks)
+      - Year-cohort warm-start rates: 2023=98.94%, 2024=98.79%, 2025=98.50%, 2026=98.16% — stable
+      - Production today **verified-wrong rate: 4.54%** (492/10,831 WRONG_AUTO_WROTE); another 3.97% AUTO_ON_UNCERTAIN_ROW (uncertain class, not measurably wrong)
+      - Warm-start residuals (133 rows): 115 × 52/53-week + 9 × long-gap + 9 × denylisted-prior
+      - Latest-per-ticker residuals (16 rows): 14 × 52/53-week + 2 × long-gap (DLR, PHM)
+      - Recommended Goal 4 Scope 2 = `prior_periodic_projection` + 52/53-week handling + long-gap/denylist guard + orchestrator write-guard. Projected ~99.8% live-fire rate (UNPROVEN until Goal 4 verifier confirms; per ChatGPT correction, do not claim 99.9% as fact yet)
+      - D8 (EX-99.1 parsing) NOT revisited — not needed if Scope 2 hits projected rate
+- [x] Goal 4 (implementation) prompt + verifier finalized — committed fb03a9e (Rule F substitution into Goal 3 byte-faithful port; 7 rounds of ChatGPT critique applied: scope clarification, full-corpus G7, write-guard pytest enforcement, ban ticker tables, _effective_fye preservation, etc.)
+- [x] Goal 4 executed via Codex /goal — production code committed e43cfc8 (~52 min wall time; modified scripts/earnings/quarter_identity.py + earnings_orchestrator.py + test_quarter_identity.py only)
+- [x] Goal 4 verifier exits 0 in canonical FULL mode — G5 (115 → 94/0/21), G6 (FCX → Q1_FY2026 / AUTO_OK / prior_periodic_projection_q4_to_q1), G7 (9,116 OK / 0 WRONG / 827 FC on 9,943 oracle rows), G7b (9,860/9,860 firing rows preserved), G8/G9 pytest passes
+- [x] Goal 4 trustworthiness audit (8 checks) — production scope clean, _STALE_MATCH_DAYS=150 removed, all 14 expected source strings present, _effective_fye_month preserved, no ticker tables, write-guard wired into orchestrator main flow, FCX direct test confirms Q1_FY2026 / AUTO_OK
+- [x] FCX end-to-end smoke test under new resolver — 2026-05-06: pipeline writes Q1_FY2026/context_bundle.json (correct directory); Q4_FY2025/ NOT touched (the bug-corrupted directory from before Goal 4 remains as evidence of what the bug DID; can be cleaned separately)
+- [x] FCX canary re-validation (all 14 historical events) — 2026-05-06: 10/14 match prior labels; 1 fail-closed (Q4_FY2022 cold-start, oldest event); 3 "mismatches" all CORRECTIONS of OLD buggy labels in event.json (Q4_FY2023→Q4_FY2024, two unlabeled bug-victim events now resolve correctly). Zero regressions.
 - [ ] Production deploy + post-deploy monitor
 
 ---
@@ -538,4 +569,17 @@ Each Goal in the breakdown above gets its own prompt filled in from this templat
     R8: prompt aligned with verifier (NR fail-closed wording, sanitized-context-only, "or has gaps" removed since CSV has no gaps column).
     Final design decision: invert default — bare verifier = FULL 10,831-row re-derivation (canonical sign-off); `--fast` = stratified opt-in for Codex iteration only. Removes "verifier passed" ambiguity. Commits b909a3f → 0813df2 → 72a7668 → dea1ef5.
 - 2026-05-05 — Goal 2 fired via /goal. Codex iterating on builder + deliverables. Builder script (`build_goal2_outputs.py`) being polished in-loop for progress observability — within Codex's allowed scratch zone, not modifying verifier or production code.
-- Next step: wait for Codex to declare Goal 2 done; user runs bare verifier (full mode, ~5-30 min Neo4j); on exit 0, commit deliverables + report results back to Claude for Goal 3 design.
+- 2026-05-06 — Goal 3 completed via /goal. `prior_periodic_projection` selected as best current candidate: full corpus 91.03% AUTO_OK / 0 WRONG_AUTO_WROTE; warm-start historical PIT 98.67% AUTO_OK / 0 wrong-writes; latest-per-ticker live-like 97.95% AUTO_OK / 0 wrong-writes. Residuals are concentrated: latest-per-ticker has 14 odd 52/53-week / odd fiscal-calendar failures and 2 long-gap failures. Conclusion: prior-periodic projection is the new core algorithm, but 99.9% is not proven yet; next step is Goal 4 design with write-guard and a focused 52/53-week residual probe/enhancement.
+- 2026-05-06 — Goal 4 prompt + verifier hand-written through 7 rounds of ChatGPT critique (each independently re-evaluated by Claude per feedback rule):
+    R1: long-gap threshold 200d → 150d (reverted silent change to match Goal 3 candidate line 185)
+    R2: full-corpus G7 hard-lock added (was sample-only)
+    R3: G9 actually runs `pytest -k write_guard` (was string-lint only)
+    R4: G2 banned ticker-allowlist/denylist patterns (structural-only)
+    R5: G2 requires ALL Rule F + Goal 3 sources, not just ≥4
+    R6: pseudocode rewritten — Rule F replaces ONLY odd_52_53 branch; Goal 3 logic byte-preserved including _effective_fye_month + _effective_fye_from_prior_10k augmentation
+    R7: G7b 9,860 firing rows preservation hard-lock (catches silent coverage shrink); FCX G6 expects calendar-shaped source `prior_periodic_projection_q4_to_q1` (not Rule F)
+    Empirical Rule F probe (2026-05-06) on 115 odd_52_53 + 34 SEC-audited NR rows: 94 OK / 0 WRONG / 21 FAIL_CLOSED.
+- 2026-05-06 — 52/53 candidate-rule matrix probe: tested rules A-E; only Rule F (D + FY-disagreement guard) gave 0 WRONG. SEC-audit found PEP/LEVI same-event pattern (10-Q filed minutes before 8-K → use prior label directly, no advance) + KR/NTAP/SYNA naming-convention class (XBRL FY ≠ math FY → fail closed). Empirical taxonomy: ~25 verified-safe 52/53 tickers + AAP/PSTG GT-mismatch denylist + ACI/LEVI/PEP/PLAY NR-only.
+- 2026-05-06 — Goal 4 fired via Codex /goal. Codex ported Goal 3 _prior_periodic_projection byte-faithfully into scripts/earnings/quarter_identity.py with Rule F substitution; added orchestrator destructive-write guard; 12 pytest cases pass; canonical full verifier exited 0 (after temporary stash of unrelated dirty paths compare_section.py + snapshot_xbrl_in_flight.py). Production commit e43cfc8.
+- 2026-05-06 — FCX end-to-end smoke + canary re-validation passed under new resolver. The FCX bug is fixed: 0000831259-26-000021 returns Q1_FY2026 / AUTO_OK / prior_periodic_projection_q4_to_q1.
+- Next step: production deploy of new resolver to running services (k8s pods, MCP servers, etc.) — separate operational phase.
