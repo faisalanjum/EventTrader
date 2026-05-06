@@ -18,11 +18,14 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import sys
 from collections import defaultdict
 from datetime import date, timedelta
 from pathlib import Path
+
+import pytest
 
 _PROJECT_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(_PROJECT_ROOT))
@@ -40,6 +43,230 @@ from get_quarterly_filings import (
     should_use_xbrl_fiscal,
     XBRL_DENY_PERIODIC_ACCESSIONS,
 )
+import quarter_identity
+from earnings_orchestrator import enforce_quarter_identity_write_guard
+
+
+class _FakeResult:
+    def __init__(self, rows):
+        self._rows = rows
+
+    def single(self):
+        return self._rows[0] if self._rows else None
+
+    def __iter__(self):
+        return iter(self._rows)
+
+
+class _FakeSession:
+    def __init__(self, metadata_by_accession, priors_by_accession):
+        self.metadata_by_accession = metadata_by_accession
+        self.priors_by_accession = priors_by_accession
+
+    def run(self, query, **params):
+        if "prev_8k_ts" in query:
+            row = self.metadata_by_accession.get(params["accession"])
+            return _FakeResult([row] if row else [])
+        rows = self.priors_by_accession.get(params["accession_8k"], [])
+        return _FakeResult(rows)
+
+
+def _fake_resolve(monkeypatch, *, ticker, accession, filed, fye_month, priors):
+    quarter_identity._PRIOR_CACHE.clear()
+    quarter_identity._FYE_CACHE.clear()
+    monkeypatch.setattr(
+        quarter_identity,
+        "get_fye_month",
+        lambda _ticker, gaps=None: fye_month,
+    )
+    session = _FakeSession(
+        {
+            accession: {
+                "accession_8k": accession,
+                "filed_8k": filed,
+                "market_session": "post_market",
+                "fye_month": fye_month,
+                "prev_8k_ts": "2025-01-01T16:00:00-05:00",
+            }
+        },
+        {accession: priors},
+    )
+    return quarter_identity.resolve_quarter_info(ticker, accession, session=session)
+
+
+def _prior(accession, created, period, form, xbrl_year=None, xbrl_period=None):
+    return {
+        "accession": accession,
+        "created": created,
+        "period": period,
+        "form": form,
+        "xbrl_year": xbrl_year,
+        "xbrl_period": xbrl_period,
+    }
+
+
+def test_rule_f_fcx_calendar_q4_to_q1(monkeypatch):
+    qi = _fake_resolve(
+        monkeypatch,
+        ticker="FCX",
+        accession="0000831259-26-000021",
+        filed="2026-04-23T16:10:00-05:00",
+        fye_month=12,
+        priors=[
+            _prior("0000831259-26-000010", "2026-02-14T08:00:00-05:00", "2025-12-31", "10-K"),
+        ],
+    )
+    assert qi["quarter_label"] == "Q1_FY2026"
+    assert qi["safety_action"] == "AUTO_OK"
+    assert qi["quarter_identity_source"] == "prior_periodic_projection_q4_to_q1"
+
+
+@pytest.mark.parametrize(
+    "ticker,accession,filed,period,xbrl_year,xbrl_period,expected",
+    [
+        ("PEP", "0000077476-26-000019", "2026-04-24T08:30:00-05:00", "2026-03-21", 2026, "Q1", "Q1_FY2026"),
+        ("LEVI", "0000094845-24-000059", "2024-10-03T08:30:00-05:00", "2024-08-25", 2024, "Q3", "Q3_FY2024"),
+    ],
+)
+def test_rule_f_direct_recent_prior(monkeypatch, ticker, accession, filed, period, xbrl_year, xbrl_period, expected):
+    qi = _fake_resolve(
+        monkeypatch,
+        ticker=ticker,
+        accession=accession,
+        filed=filed,
+        fye_month=12,
+        priors=[
+            _prior("prior-recent", filed.replace("08:30:00", "08:00:00"), period, "10-Q", xbrl_year, xbrl_period),
+        ],
+    )
+    assert qi["quarter_label"] == expected
+    assert qi["safety_action"] == "AUTO_OK"
+    assert qi["quarter_identity_source"] == "rule_f_direct_recent_prior"
+
+
+@pytest.mark.parametrize(
+    "ticker,accession,expected",
+    [
+        ("AAP", "0001158449-24-000236", "Q3_FY2024"),
+        ("PSTG", "0001628280-23-040217", "Q3_FY2024"),
+    ],
+)
+def test_rule_f_advances_xbrl_for_non_recent_odd_prior(monkeypatch, ticker, accession, expected):
+    qi = _fake_resolve(
+        monkeypatch,
+        ticker=ticker,
+        accession=accession,
+        filed="2024-11-20T16:10:00-05:00",
+        fye_month=12,
+        priors=[
+            _prior("prior-odd", "2024-08-01T06:00:00-05:00", "2024-06-15", "10-Q", 2024, "Q2"),
+        ],
+    )
+    assert qi["quarter_label"] == expected
+    assert qi["safety_action"] == "AUTO_OK"
+    assert qi["quarter_identity_source"] == "rule_f_advance_xbrl"
+
+
+@pytest.mark.parametrize(
+    "ticker,accession",
+    [
+        ("KR", "0001104659-25-019465"),
+        ("NTAP", "0001193125-25-297164"),
+    ],
+)
+def test_rule_f_fail_closed_on_fy_disagreement(monkeypatch, ticker, accession):
+    qi = _fake_resolve(
+        monkeypatch,
+        ticker=ticker,
+        accession=accession,
+        filed="2025-06-01T16:10:00-05:00",
+        fye_month=12,
+        priors=[
+            _prior("prior-odd", "2025-02-01T06:00:00-05:00", "2024-06-15", "10-Q", 2025, "Q2"),
+        ],
+    )
+    assert qi["quarter_label"] is None
+    assert qi["safety_action"] == "FAIL_CLOSED"
+    assert qi["quarter_identity_source"] == "rule_f_fail_closed_fy_disagreement"
+
+
+def test_prior_periodic_projection_long_gap_fail_closed(monkeypatch):
+    qi = _fake_resolve(
+        monkeypatch,
+        ticker="SYN",
+        accession="synthetic-long-gap",
+        filed="2026-07-15T16:10:00-05:00",
+        fye_month=12,
+        priors=[
+            _prior("prior-calendar", "2026-01-01T06:00:00-05:00", "2025-12-31", "10-K"),
+        ],
+    )
+    assert qi["safety_action"] == "FAIL_CLOSED"
+    assert qi["quarter_identity_source"] == "prior_periodic_projection_long_gap_fail_closed"
+
+
+def test_prior_periodic_projection_denylist_fail_closed(monkeypatch):
+    denied = next(iter(XBRL_DENY_PERIODIC_ACCESSIONS))
+    qi = _fake_resolve(
+        monkeypatch,
+        ticker="SYN",
+        accession="synthetic-deny",
+        filed="2026-03-01T16:10:00-05:00",
+        fye_month=12,
+        priors=[
+            _prior(denied, "2026-02-01T06:00:00-05:00", "2025-12-31", "10-K"),
+        ],
+    )
+    assert qi["safety_action"] == "FAIL_CLOSED"
+    assert qi["quarter_identity_source"] == "prior_periodic_projection_denylisted_prior_fail_closed"
+
+
+def test_prior_periodic_projection_cold_start_fail_closed(monkeypatch):
+    qi = _fake_resolve(
+        monkeypatch,
+        ticker="SYN",
+        accession="synthetic-cold-start",
+        filed="2026-03-01T16:10:00-05:00",
+        fye_month=12,
+        priors=[],
+    )
+    assert qi["safety_action"] == "FAIL_CLOSED"
+    assert qi["quarter_identity_source"] == "prior_periodic_projection_no_prior"
+
+
+def test_write_guard_refuses_fail_closed_and_writes_quarantine(tmp_path):
+    save_dir = tmp_path / "event_dir"
+    quarter_info = {
+        "accession_8k": "0000831259-26-000021",
+        "safety_action": "FAIL_CLOSED",
+        "quarter_identity_source": "prior_periodic_projection_long_gap_fail_closed",
+    }
+
+    with pytest.raises(RuntimeError, match="write guard refused"):
+        enforce_quarter_identity_write_guard("FCX", quarter_info, str(save_dir))
+
+    assert not save_dir.exists()
+    quarantine = (
+        tmp_path
+        / "_quarter_identity_quarantine"
+        / "event_dir"
+        / "0000831259-26-000021.json"
+    )
+    payload = json.loads(quarantine.read_text(encoding="utf-8"))
+    assert payload["ticker"] == "FCX"
+    assert payload["accession_8k"] == "0000831259-26-000021"
+    assert payload["quarter_info"]["safety_action"] == "FAIL_CLOSED"
+
+
+def test_write_guard_allows_auto_ok_without_quarantine(tmp_path):
+    save_dir = tmp_path / "event_dir"
+    quarter_info = {
+        "accession_8k": "0000831259-26-000021",
+        "safety_action": "AUTO_OK",
+        "quarter_identity_source": "prior_periodic_projection_q4_to_q1",
+    }
+    assert enforce_quarter_identity_write_guard("FCX", quarter_info, str(save_dir)) is None
+    assert not save_dir.exists()
 
 
 # ── Cypher: one query to get everything ──────────────────────────────

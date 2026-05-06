@@ -381,6 +381,68 @@ def write_text(path: Path, content: str) -> None:
         f.write(content)
 
 
+def get_quarter_identity_quarantine_path(
+    ticker: str,
+    quarter_info: dict[str, Any],
+    save_dir: str | None = None,
+) -> Path:
+    """Return the quarantine path for non-AUTO_OK quarter identities."""
+    accession = str(quarter_info.get("accession_8k") or "unknown_accession")
+    safe_accession = "".join(ch if ch.isalnum() or ch in "-_." else "_" for ch in accession)
+    if save_dir:
+        save_path = Path(save_dir)
+        return (
+            save_path.parent
+            / "_quarter_identity_quarantine"
+            / save_path.name
+            / f"{safe_accession}.json"
+        )
+    return (
+        Path("earnings-analysis/Companies")
+        / ticker.upper()
+        / "quarter_identity_quarantine"
+        / f"{safe_accession}.json"
+    )
+
+
+def enforce_quarter_identity_write_guard(
+    ticker: str,
+    quarter_info: dict[str, Any],
+    save_dir: str | None = None,
+) -> Path | None:
+    """Refuse event-directory writes unless the resolver authorized AUTO_OK."""
+    if quarter_info.get("safety_action") == "AUTO_OK":
+        return None
+
+    accession = quarter_info.get("accession_8k")
+    source = quarter_info.get("quarter_identity_source") or "unknown_source"
+    reason = (
+        f"quarter identity safety_action={quarter_info.get('safety_action')!r}; "
+        f"source={source}"
+    )
+    quarantine_path = get_quarter_identity_quarantine_path(ticker, quarter_info, save_dir)
+    payload = {
+        "schema_version": "quarter_identity_quarantine.v1",
+        "ticker": ticker.upper(),
+        "accession_8k": accession,
+        "reason": reason,
+        "quarter_info": quarter_info,
+        "quarantined_at": datetime.now(timezone.utc).isoformat(),
+    }
+    log.error(
+        "Quarter identity write guard refused event write: ticker=%s accession=%s reason=%s quarantine=%s",
+        ticker.upper(),
+        accession,
+        reason,
+        quarantine_path,
+    )
+    write_json(quarantine_path, payload)
+    raise RuntimeError(
+        f"Quarter identity write guard refused to write event artifacts for "
+        f"{ticker.upper()} {accession}: {reason}. Quarantine: {quarantine_path}"
+    )
+
+
 def get_prediction_dir(ticker: str, quarter_info: dict, save_dir: str | None = None) -> Path:
     """Return the prediction artifact directory for this event."""
     if save_dir:
@@ -3648,6 +3710,9 @@ def main():
     else:
         print(f"Resolving quarter identity for {args.ticker} / {args.accession} ...", flush=True)
         quarter_info = resolve_quarter_info(args.ticker, args.accession)
+
+    if args.save or args.predict or args.learn:
+        enforce_quarter_identity_write_guard(args.ticker, quarter_info, args.save_dir)
 
     validate_quarter_info(quarter_info)
     print(f"  filed_8k:    {quarter_info['filed_8k']}")
