@@ -158,7 +158,7 @@ Every decision below is closed. The "why" is the rationale that will be load-bea
 | D3 | **6-value review enum**: `helped / misled / outweighed / missed / neutral / unclear` | Distinguishes "lesson misled predictor" from "predictor failed to use a good lesson." Collapsing them would unfairly retire good lessons after a predictor mistake |
 | D4 | **3-value action enum**: `keep / refine / retire` | Minimum viable for orthogonal directives — review answers "what happened," action answers "what to do" |
 | D5 | **Validator enforces field existence + min length**, NOT semantic content | Semantic regex would be brittle; prompt enforces quality; audit feedback disciplines over time |
-| D6 | **Conservative status thresholds**: 3+ misled in last 5 → retired; 2+ misled OR 2+ missed in last 5 → watch; outweighed never penalizes | Outweighed means "lesson was sound, other forces won." Penalizing it damages good lessons |
+| D6 | **Conservative status thresholds**: 3+ misled in last 5 → retired; 2+ misled in last 5 → watch; outweighed never penalizes; **`missed` never penalizes** (applied 2026-05-06 per §21 partial) | Outweighed = "lesson was sound, other forces won." `missed` = predictor underused a lesson, not that lesson was wrong. Penalizing either damages good lessons |
 | ~~D7~~ | ~~Legacy lessons render with mechanism=null placeholder~~ | **WITHDRAWN** (round 6 fresh-start cutover): no legacy lessons exist; library is wiped before v3 cutover |
 | D8 | **`lesson_audit[]` is uncapped — full coverage required (one entry per `lesson_labels[i]`)** | Capping audits forces incomplete coverage = lost signal. New-lesson caps stay 3/3/3 |
 | D9 | **`data_lessons` stay as `list[str]`** | Data lessons are "what to fetch/weight," not market hypotheses; structure is overkill |
@@ -335,7 +335,7 @@ There are TWO row shapes — ticker-scope lessons live INSIDE quarter rows and i
 | `helped` | Predictor used the lesson AND outcome aligned | Reinforces (counter +1) |
 | `misled` | Predictor used the lesson AND outcome wrong because lesson's reasoning was bad | Drives toward `watch` / `retired` |
 | `outweighed` | Predictor used the lesson; mechanism was real; other forces dominated | Neutral — lesson logic was sound, no penalty (D6) |
-| `missed` | Predictor labeled `irrelevant` / didn't cite, but hindsight shows lesson was applicable | Drives toward `watch` (lesson trigger may be too narrow); does NOT retire (predictor's labeling failure, not lesson failure) |
+| `missed` | Predictor labeled `irrelevant` / didn't cite, but hindsight shows lesson was applicable | **No status pressure** (applied 2026-05-06 per §21 partial — predictor underuse, not lesson weakness; informational signal for prompt calibration only) |
 | `neutral` | Predictor's label was correct (e.g., `irrelevant` and lesson really didn't apply); no impact on call | No status pressure |
 | `unclear` | Hindsight cannot isolate the effect | No status pressure |
 
@@ -940,7 +940,8 @@ def compute_status(lesson: dict) -> str:
       (a) presence of action="retire" in audits, OR
       (b) action="refine" presence (treated as retire for the parent), OR
       (c) recent_window misled count >= retire threshold, OR
-      (d) recent_window misled/missed count >= watch threshold
+      (d) recent_window misled count >= watch threshold
+          (`missed` never penalizes — applied 2026-05-06 per §21 partial)
     
     Round 6 fresh-start: legacy mechanism=null branch removed. All v3 lessons
     have non-null mechanism by validator construction. No legacy code path.
@@ -1608,7 +1609,8 @@ After all 4 commits land, run these gates against real data before declaring the
 LESSON_AUDIT_WINDOW = 5             # recent audits considered for status
 LESSON_RETIRE_MISLED_THRESHOLD = 3  # misled count → retired
 LESSON_WATCH_MISLED_THRESHOLD = 2   # misled count → watch
-LESSON_WATCH_MISSED_THRESHOLD = 2   # missed count → watch
+# LESSON_WATCH_MISSED_THRESHOLD removed 2026-05-06 — `missed` no longer
+# affects status (plan §21 partial; see decision log).
 # (no audit_history cap — N1)
 ```
 
@@ -1669,6 +1671,7 @@ Adjustable post-launch based on observed behavior.
 | **2026-05-04 (round 10 — final stale-line patch)** | **§8.2 wording corrected**: removed "legacy v2 (read-only)" — round 6 is v3-only fresh-start; common rules apply only to v3 path. **E33 renderer deferral expanded** with explicit follow-up estimate (~30 lines for `_render_lesson_audit_table` helper) for post-launch readability if needed. (ChatGPT's #1 about "concrete examples in §19.2" was a false positive — already says "rubric-only / NO concrete examples" at line 1714.) | ChatGPT round 10 doc-polish | Final stale-text sweep |
 | **2026-05-04 (round 11 — atomicity + docstring fix)** | **(1) E31 atomicity wired into pseudocode**: aggregator routes global+refine through `_register_replacement` with `audit_entry` parameter; new helper `_apply_audit_and_append_global_atomic` (added to §7.2.1) does both writes under single flock acquisition. Aggregator skips separate `_apply_audit_global` call when refining global lesson. **(2) `_register_replacement` docstring fixed**: removed stale TickerScopeRefinementError / hard-error wording — auditor_ticker is authoritative for ticker-scope (round 8/9 design); no runtime invariant check | ChatGPT round 11 | Two real internal contradictions found: pseudocode showed two separate global writes (violating E31's single-flock invariant), and docstring still claimed a hard-error that the code intentionally removed |
 | **2026-05-04 (round 6)** | **Drop backward compatibility — fresh-start cutover** | User green-light + ChatGPT corroboration | Existing data thin (2 ticker quarters + 6 global entries); not worth migration complexity. Cutover wipes library + v2 attribution result files; v3 starts on empty libraries. Removes: D7, D12, D21, B2 fix legacy branch, v2 validator dispatch, migration script, legacy str-fallback, predictor "Legacy lessons" rule, renderer "(not recorded)" path, G1 migration smoke (replaced with fresh-start smoke), G6 legacy lesson test |
+| **2026-05-06** | **§21 partial — drop `missed → watch` trigger** (applied). `compute_status` no longer reads `counts["missed"]`; `LESSON_WATCH_MISSED_THRESHOLD` removed. **Companion**: cap-binding telemetry (`cap_eligible[...]`, `cap_rendered[...]`, `cap_dropped[...]` counters appended to `build_learning_context`'s observability log line) added to inform future ranking / per-scope-threshold decisions empirically. Per-scope thresholds remain deferred. | This commit; user + ChatGPT converged | Predictor underuse (`missed`) should not penalize lesson quality; need empirical data before deciding §21 vs ranking |
 
 ---
 
@@ -1948,6 +1951,8 @@ Full earnings suite at HEAD: 1382 passed, 14 skipped, 43 subtests passed.
 
 **Status as shipped**: single global policy in §14 — `window=5, retire=3 misled, watch=2 misled, watch=2 missed`. All scopes (ticker / sector / macro / cross_ticker) share one set of thresholds.
 
+**Risk being tracked**: the global policy may be too impatient for slower sector/macro mechanisms, and `missed → watch` can penalize a useful lesson for predictor underuse rather than lesson weakness.
+
 **Candidate refinement** (NOT required pre-live; tune after real audit volume accumulates):
 
 | Scope          | window | retire (misled) | watch (misled) | rationale |
@@ -1958,6 +1963,8 @@ Full earnings suite at HEAD: 1382 passed, 14 skipped, 43 subtests passed.
 | macro          | 10     | 5               | 2              | regime mechanisms are slowest-moving; longest window before retire |
 
 **Also**: drop the `missed → watch` trigger. `missed` (predictor labeled `irrelevant` but lesson actually applied) means the predictor underused the lesson, not that the lesson is bad. Keep `missed` informative for predictor calibration / refinement but don't penalize the lesson's status. This aligns with the existing D6 invariant ("`outweighed` never penalizes" — same reasoning applies to `missed`).
+
+**Partial-applied 2026-05-06**: `LESSON_WATCH_MISSED_THRESHOLD` removed; `compute_status` no longer reads `counts["missed"]`; `test_two_missed_does_not_trigger_watch` asserts `active`. Companion change: cap-binding observability (`cap_eligible[...]`, `cap_rendered[...]`, `cap_dropped[...]` counters appended to `build_learning_context`'s log line) added to inform future ranking / per-scope-threshold decisions empirically. **Per-scope thresholds in the table above remain deferred** until audit volume justifies the parameter choices.
 
 ### 21.1 How to apply this change later
 

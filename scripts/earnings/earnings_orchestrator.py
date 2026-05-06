@@ -1782,7 +1782,9 @@ class DuplicateLessonIdError(Exception):
 LESSON_AUDIT_WINDOW = 5
 LESSON_RETIRE_MISLED_THRESHOLD = 3
 LESSON_WATCH_MISLED_THRESHOLD = 2
-LESSON_WATCH_MISSED_THRESHOLD = 2
+# `LESSON_WATCH_MISSED_THRESHOLD` removed 2026-05-06 — `missed` no longer
+# affects status (plan §21 partial-applied). `missed` = predictor underused
+# a lesson, not that the lesson is wrong; penalizing it damages good lessons.
 
 
 def _routing_key_from_source(scope: str, source_entry: dict,
@@ -1903,7 +1905,9 @@ def compute_status(lesson: dict) -> str:
       (a) presence of action="retire" in PIT-visible audits, OR
       (b) action="refine" presence (treated as retire for the parent), OR
       (c) recent_window misled count >= retire threshold, OR
-      (d) recent_window misled or missed count >= watch threshold
+      (d) recent_window misled count >= watch threshold
+          (`missed` never penalizes — predictor underuse is not lesson
+          weakness; applied 2026-05-06 per plan §21 partial)
 
     No side effects. No file I/O. Plan §7.3.
 
@@ -1948,8 +1952,7 @@ def compute_status(lesson: dict) -> str:
     if counts["misled"] >= LESSON_RETIRE_MISLED_THRESHOLD:
         return "retired"
 
-    if counts["misled"] >= LESSON_WATCH_MISLED_THRESHOLD or \
-       counts["missed"] >= LESSON_WATCH_MISSED_THRESHOLD:
+    if counts["misled"] >= LESSON_WATCH_MISLED_THRESHOLD:
         return "watch"
 
     return "active"
@@ -2177,6 +2180,25 @@ def build_learning_context(ticker: str, sector: str | None = None,
     # global_lessons paths. Plan §7.5.1 (D13).
     same_quarter_self_leak = 0
 
+    # Cap-binding telemetry (added 2026-05-06) — counters stay at 0 when
+    # library files don't exist (fresh ticker / post-cutover empty library).
+    # Logged at the end of build_learning_context to surface when caps actually
+    # drop eligible lessons. When `cap_dropped` is consistently 0, ranking has
+    # no current benefit; when it climbs, plan §21 / ranking refinement is
+    # empirically motivated.
+    ticker_rows_eligible = 0
+    ticker_lessons_eligible = 0
+    ticker_rows_rendered = 0
+    ticker_lessons_rendered = 0
+    ticker_rows_dropped = 0
+    ticker_lessons_dropped = 0
+    sector_eligible = 0
+    sector_dropped = 0
+    macro_eligible = 0
+    macro_dropped = 0
+    cross_eligible = 0
+    cross_dropped = 0
+
     # ── Ticker lessons: most recent 8 ──
     if ticker_path.exists():
         try:
@@ -2229,7 +2251,18 @@ def build_learning_context(ticker: str, sector: str | None = None,
             # lessons — violating "retired lessons must never consume
             # cap slots" (user clarification #2).
             filtered = [r for r in filtered if r.get("predictor_lessons")]
+            # Cap-binding telemetry (post-eligible, pre-cap)
+            ticker_rows_eligible = len(filtered)
+            ticker_lessons_eligible = sum(
+                len(r.get("predictor_lessons", [])) for r in filtered
+            )
             result["ticker_lessons"] = filtered[:8]
+            ticker_rows_rendered = len(result["ticker_lessons"])
+            ticker_lessons_rendered = sum(
+                len(r.get("predictor_lessons", [])) for r in result["ticker_lessons"]
+            )
+            ticker_rows_dropped = max(0, ticker_rows_eligible - ticker_rows_rendered)
+            ticker_lessons_dropped = ticker_lessons_eligible - ticker_lessons_rendered
         except json.JSONDecodeError as e:
             log.error("ticker.json malformed — no ticker lessons loaded for %s: %s", ticker, e)
         except OSError as e:
@@ -2331,9 +2364,19 @@ def build_learning_context(ticker: str, sector: str | None = None,
                         out.append(e)
                 return out
 
-            sector_entries = _dedupe(sector_entries)[:4]
-            macro_entries = _dedupe(macro_entries)[:4]
-            cross_entries = _dedupe(cross_entries)[:2]
+            # Cap-binding telemetry — dedupe first, count, then cap
+            _sector_dd = _dedupe(sector_entries)
+            _macro_dd = _dedupe(macro_entries)
+            _cross_dd = _dedupe(cross_entries)
+            sector_eligible = len(_sector_dd)
+            macro_eligible = len(_macro_dd)
+            cross_eligible = len(_cross_dd)
+            sector_entries = _sector_dd[:4]
+            macro_entries = _macro_dd[:4]
+            cross_entries = _cross_dd[:2]
+            sector_dropped = max(0, sector_eligible - len(sector_entries))
+            macro_dropped = max(0, macro_eligible - len(macro_entries))
+            cross_dropped = max(0, cross_eligible - len(cross_entries))
 
             result["global_lessons"] = sector_entries + macro_entries + cross_entries
         except json.JSONDecodeError as e:
@@ -2362,7 +2405,10 @@ def build_learning_context(ticker: str, sector: str | None = None,
         "cross_ticker_not_listed=%d cross_ticker_missing_related=%d "
         "unknown_scope=%d legacy_schema=%d "
         "ticker_post_cutoff=%d global_post_cutoff=%d "
-        "same_quarter_self_leak=%d]",
+        "same_quarter_self_leak=%d] "
+        "cap_eligible[ticker_rows=%d ticker_lessons=%d sector=%d macro=%d cross=%d] "
+        "cap_rendered[ticker_rows=%d ticker_lessons=%d sector=%d macro=%d cross=%d] "
+        "cap_dropped[ticker_rows=%d ticker_lessons=%d sector=%d macro=%d cross=%d]",
         ticker, sector, pit_cutoff, current_quarter_label,
         len(sector_entries), len(macro_entries), len(cross_entries),
         excluded["sector_mismatch"],
@@ -2374,6 +2420,12 @@ def build_learning_context(ticker: str, sector: str | None = None,
         ticker_post_cutoff,
         global_post_cutoff,
         same_quarter_self_leak,
+        ticker_rows_eligible, ticker_lessons_eligible,
+        sector_eligible, macro_eligible, cross_eligible,
+        ticker_rows_rendered, ticker_lessons_rendered,
+        len(sector_entries), len(macro_entries), len(cross_entries),
+        ticker_rows_dropped, ticker_lessons_dropped,
+        sector_dropped, macro_dropped, cross_dropped,
     )
 
     return result

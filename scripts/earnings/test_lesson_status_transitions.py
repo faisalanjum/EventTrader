@@ -8,7 +8,9 @@ for pre-filtering audit_history to PIT-visible audits before calling):
   (b) action="refine" anywhere in audits → retired (parent retired by
       refinement; replacement is a new lesson with parent_id link)
   (c) misled count in last 5 ≥ 3 → retired
-  (d) misled count in last 5 ≥ 2 OR missed count in last 5 ≥ 2 → watch
+  (d) misled count in last 5 ≥ 2 → watch
+      (`missed` never penalizes — predictor underuse, not lesson weakness;
+       applied 2026-05-06 per plan §21 partial)
   (e) otherwise → active
 
 D6 invariant: outweighed never penalizes. A lesson with all-outweighed
@@ -85,19 +87,22 @@ class ComputeStatusTests(unittest.TestCase):
                   + [_audit(review="helped")] * 5)
         self.assertEqual(compute_status(_lesson(audits)), "active")
 
-    # ── Threshold (d) — 2 misled or 2 missed → watch ──
+    # ── Threshold (d) — 2 misled → watch (`missed` never penalizes; §21) ──
     def test_two_misled_in_last_five_watch(self):
         audits = [_audit(review="misled"), _audit(review="misled"),
                   _audit(review="helped")]
         self.assertEqual(compute_status(_lesson(audits)), "watch")
 
-    def test_two_missed_in_last_five_watch(self):
+    def test_two_missed_does_not_trigger_watch(self):
+        """`missed` = predictor labeled `irrelevant` when lesson actually
+        applied = predictor underuse, NOT lesson weakness. Plan §21 partial
+        applied 2026-05-06 — `missed` no longer pushes status to `watch`."""
         audits = [_audit(review="missed"), _audit(review="missed"),
                   _audit(review="neutral")]
-        self.assertEqual(compute_status(_lesson(audits)), "watch")
+        self.assertEqual(compute_status(_lesson(audits)), "active")
 
     def test_one_misled_one_missed_no_watch(self):
-        # Threshold is 2 of EITHER review type — 1+1 doesn't trigger.
+        # Only `misled` counts toward watch (post §21 partial). 1 misled doesn't trip.
         audits = [_audit(review="misled"), _audit(review="missed")]
         self.assertEqual(compute_status(_lesson(audits)), "active")
 
