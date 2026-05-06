@@ -243,21 +243,64 @@ Completion criteria:
 - It uses historical XBRL only when the matched periodic is same-quarter.
 - It does not allow "old resolver agrees" as proof.
 
-### Goal 3 - Minimal Production Fix Design
+### Goal 3 - Live-mode resolver discovery (REVISED 2026-05-05)
 
-No implementation until user approves the design.
+**North star (locked)**: ≥99.9% of live earnings 8-Ks must fire predictions correctly. Goal 3 is investigative — discover whether that target is empirically achievable with live-available signals only, and benchmark candidates that maximize fire-rate while keeping wrong-auto-writes at 0.
 
-Purpose:
+**Why Goal 3 was reframed**: Goal 2 produced `periodic_fiscal_math` which is safe (zero WRONG_AUTO_WROTE on FCX-shape, 100% GT-AGREE retrospectively) but RELIES on the matched periodic's `period_of_report`. At PIT for live 8-Ks, that field is empty (the same-quarter 10-Q hasn't filed yet). Shipping `periodic_fiscal_math` as the production fix would block ~85-90% of live earnings predictions. Empirical probe (2026-05-05) confirmed 8-K's own `periodOfReport` is the SEC Date of Report (= filing date), NOT the fiscal quarter end:
 
-- Decide the smallest code change that is both correct and safe.
+```
+Total earnings 8-Ks:                    10,995
+periodOfReport populated:               10,995 (100%)
+periodOfReport == filing date:          10,012 (91.1%)
+periodOfReport within 1-5 days of filing: 716 (6.5%)
+```
 
-Expected shape:
+So Tier B (8-K's own periodOfReport → fiscal_math) is dead. Goal 3 must benchmark alternatives.
 
-- Resolver logic that distinguishes same-quarter matched periodic from previous-quarter periodic.
-- Same-event or sequence fallback for live mode if evidence is strong.
-- `needs_review`/low-confidence source when evidence is not strong.
-- Orchestrator write guard before unlinking or overwriting artifacts.
-- Tests for FCX, normal historical rows, latest-live rows, and known edge cases.
+**Goal 3 method**: empirical, not declarative. Same investigative pattern as Goal 1.
+
+PIT-safe candidate algorithms to benchmark (verifier-mandated, exact names):
+- **A. `prior_periodic_projection`**: query Neo4j for the most recent prior 10-Q/10-K (created < filed_8k) → its `period_of_report` IS a fiscal quarter end (unlike 8-K periodOfReport) → compute `period_to_fiscal(...)` → advance one quarter (with FY rollover at Q4→Q1) → expected (fy, q). FAIL_CLOSED on cold start, gap >200 days, or denylisted prior accession.
+- **B. `lag_window`**: filing_date + fye_month → most-recent-quarter-end + reporting-lag-window check (5-90 days). No prior-periodic dependency — serves as cold-start fallback.
+- **C. `hybrid_agreement`**: A and B must agree → AUTO_OK; cold-start (B-only) → NEEDS_REVIEW; disagree → FAIL_CLOSED. Likely the recommended winner.
+- All three are MANDATORY. Codex may propose additional candidates beyond these.
+
+PIT-safety enforcement: candidate input is sanitized — must NOT see corpus oracle fields (`fy_xbrl`, `q_xbrl`, `fy_math`, `q_math`, `agreement`, `reason`) NOR matched-periodic fields (`period_of_report`, `matched_accession_periodic`, `periodic_created`, `form_type_periodic`). Allowed fields: `accession_8k`, `ticker`, `filed_8k`, `fye_month`. Candidate may query Neo4j BUT only with PIT-bound clauses (`created <= filed_8k`).
+
+Goal 3 deliverables:
+- `live_candidates.py` — executable Python with the **three mandatory candidates** named `candidate_live_prior_periodic_projection`, `candidate_live_lag_window`, `candidate_live_hybrid_agreement`. Codex may add additional `candidate_live_<other_name>` functions, but the three named ones are required.
+- `live_mode_audit.csv` — full corpus × N_candidates audit with would_fire/correct/wrong-write rates
+- `LIVE_MODE_REPORT.md` — per-candidate breakdown by FYE bucket / 52-53-week / Q4 / non-Dec-FYE; recommended candidate + reasoning
+- `verify_live_mode_resolver.py` — hand-written verifier (immutable during /goal)
+
+Goal 3 verifier hard-locks (the only ones):
+- L1 git-clean
+- L2-L4 deliverables exist + schemas match + the three mandatory candidates ({prior_periodic_projection, lag_window, hybrid_agreement}) importable
+- L5 AST PIT-safety: candidates do NOT reference forbidden fields
+- L6 universe coverage
+- L7 independent re-derivation against PIT-masked context
+- **L8 zero WRONG_AUTO_WROTE across all candidates (THE ONLY safety threshold)**
+- L10 recommended candidate exists + has rows
+- L11 report content sanity
+
+Goal 3 verifier soft-reports (informational, not pass/fail):
+- would_fire rate per candidate
+- correct rate per candidate
+- fail_closed rate per candidate
+- per-FYE-bucket breakdown
+- residual classification
+
+The 99.9% target is **NOT verifier-hard-locked**. Goal 3's job is to PROVE whether that target is achievable. If the best candidate empirically achieves <99.9%, Goal 3's REPORT must classify the residuals and explain what additional signal would be needed (escalation to expanded audit, write-guard policy adjustments, etc.).
+
+**Goal 3 non-goals**:
+- No production code changes (resolver fix lives in Goal 4)
+- No EX-99.1 string parsing (D8 veto)
+- No assumption that 8-K periodOfReport carries fiscal quarter end (probe-disproven 2026-05-05)
+
+**Goal 3 follow-on path**:
+- If empirical max would_fire ≥ 99.9% with zero wrong-auto-writes → Goal 4 implements it
+- If empirical max would_fire < 99.9% → user + Claude decide acceptable threshold, OR escalate to expanded Goal 1.5 audit per existing fallback in this plan
 
 ### Goal 4 - Implementation
 
@@ -466,10 +509,14 @@ Each Goal in the breakdown above gets its own prompt filled in from this templat
 - [x] Goal 1.5 human audit complete — commit 04789af (199/200 ok, 0 wrong, 1 unclear; <5% threshold met)
 - [x] Goal 2 prompt finalized (`.claude/plans/goal_2_prompt.md`)
 - [x] Goal 2 verifier hand-written (`earnings-analysis/canary/quarter_resolver/verify_shadow_validator.py`) — commits b909a3f / 0813df2 / 72a7668 / dea1ef5; default mode = FULL 10,831-row re-derivation, --fast = stratified iteration shortcut (FCX-shape exhaustive + GT/other-NR stride)
-- [ ] Goal 2 executed via /goal (Codex) — IN PROGRESS as of 2026-05-05
-- [ ] Goal 2 verifier exits 0 in default (full) mode — final acceptance gate
-- [ ] Goal 3 prompt finalized
-- [ ] Goal 3 executed
+- [x] Goal 2 executed via /goal (Codex) — completed 2026-05-05; deliverables ready for commit
+- [x] Goal 2 verifier exits 0 in default (full) mode — Codex's run + Claude's independent --fast re-confirmation both pass
+- [x] Goal 2 trustworthiness audit (14 checks) passed — no production-code modifications, corpus byte-identical to fc83a1c, all 3 verifiers git-clean, every report number re-derived from CSVs
+- [x] Goal 3 reframed (2026-05-05) — north star locked at ≥99.9% live-fire rate; empirical 8-K periodOfReport probe confirmed Tier B (8-K periodOfReport → fiscal_math) is dead because periodOfReport=filing date, not fiscal quarter end
+- [ ] Goal 3 prompt finalized (`.claude/plans/goal_3_prompt.md`)
+- [ ] Goal 3 verifier hand-written (`earnings-analysis/canary/quarter_resolver/verify_live_mode_resolver.py`)
+- [ ] Goal 3 prompt + verifier reviewed by user, committed to git
+- [ ] Goal 3 executed via /goal
 - [ ] Goal 4 (implementation) prompt finalized — only after 1-3 reviewed
 - [ ] Goal 4 executed
 - [ ] FCX-style smoke test repeated under new resolver
