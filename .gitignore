@@ -114,3 +114,7 @@ k8s-disaster-recovery/
 # Learner runtime artifacts (fcntl.flock lockfile + operator backup copies per learner-edits.md §8.3/R12)
 earnings-analysis/learnings/*.lock
 earnings-analysis/learnings.backup.*
+
+# Fiscal.ai generated scrape outputs and browser probe artifacts
+data/fiscal_ai_segments/
+scripts/fiscal_ai_scraper/
