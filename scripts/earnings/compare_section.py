@@ -15,6 +15,33 @@ predictor actually saw for this event.
 
 Pipe big sections to a pager:
     venv/bin/python scripts/earnings/compare_section.py AVGO 0001730168-23-000093 iq | less
+
+─────────────────────────────────────────────────────────────────────────────
+Related: save the full RENDERED_BUNDLE_PATH for a new accession (no SDK call)
+─────────────────────────────────────────────────────────────────────────────
+
+To inspect the exact text the predictor would read for a new accession, run
+the orchestrator with --save (omit --predict so no SDK call fires):
+
+    cd /home/faisal/EventMarketDB
+    python scripts/earnings/earnings_orchestrator.py TICKER ACCESSION --save
+
+Default output (per get_prediction_paths() in earnings_orchestrator.py):
+    earnings-analysis/Companies/{TICKER}/events/{Q_label}/prediction/
+      ├── context_bundle.json          # raw bundle JSON
+      └── context_bundle_rendered.txt  # what the predictor reads
+
+Mode flags (mutually exclusive):
+    --pit 2025-02-26T17:00:00-05:00    historical PIT-safe
+    --live                              live mode (no PIT gate)
+    (omit both with --save only)        defaults to live
+
+Custom location:
+    --save-dir /tmp/myrun               redirect both files there
+
+Example (historical PIT for AVGO Q4 FY2023, filed 2023-12-07 post-market):
+    python scripts/earnings/earnings_orchestrator.py AVGO 0001730168-23-000093 \
+        --save --pit 2023-12-07T16:30:00-05:00
 """
 import sys, json
 from pathlib import Path
