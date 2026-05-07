@@ -305,7 +305,7 @@ def gate_g5_banned_patterns(failures: list[str]) -> None:
         print("G5 OK: no banned patterns detected")
 
 
-def _resolve_per_row(rows: list[dict], session) -> list[dict]:
+def _resolve_per_row(rows: list[dict]) -> list[dict]:
     """Run production resolver for each (ticker, accession_8k) and return outputs."""
     sys.path.insert(0, str(PROJECT_ROOT / "scripts/earnings"))
     if "quarter_identity" in sys.modules:
@@ -313,13 +313,28 @@ def _resolve_per_row(rows: list[dict], session) -> list[dict]:
     from quarter_identity import resolve_quarter_info
     out = []
     for r in rows:
-        result = resolve_quarter_info(r["ticker"], r["accession_8k"], neo4j_session=session)
+        try:
+            result = resolve_quarter_info(r["ticker"], r["accession_8k"])
+        except Exception as e:
+            out.append({
+                "ticker": r["ticker"],
+                "accession_8k": r["accession_8k"],
+                "outcome": "ERROR",
+                "fy": "",
+                "q": "",
+                "source": f"resolver_error: {e}",
+            })
+            continue
+        label = result.get("quarter_label") or ""
+        fy = q = ""
+        if label and "_FY" in label:
+            q, fy = label.split("_FY", 1)
         out.append({
             "ticker": r["ticker"],
             "accession_8k": r["accession_8k"],
-            "outcome": result.get("safety_action"),
-            "fy": (result.get("quarter_label") or "").split("_FY")[-1] if result.get("quarter_label") else "",
-            "q": (result.get("quarter_label") or "").split("_FY")[0] if result.get("quarter_label") else "",
+            "outcome": result.get("safety_action") or "",
+            "fy": fy,
+            "q": q,
             "source": result.get("quarter_identity_source") or "",
         })
     return out
@@ -339,12 +354,7 @@ def gate_g6_per_row_baseline_match(failures: list[str], fast: bool = False) -> N
         rows = rows[:200]
 
     try:
-        sys.path.insert(0, str(PROJECT_ROOT / "scripts/earnings"))
-        if "quarter_identity" in sys.modules:
-            del sys.modules["quarter_identity"]
-        from quarter_identity import _build_neo4j_session
-        with _build_neo4j_session() as session:
-            actuals = _resolve_per_row(rows, session)
+        actuals = _resolve_per_row(rows)
     except Exception as e:
         failures.append(f"G6 FAIL: resolver error: {e}")
         return
@@ -374,9 +384,8 @@ def gate_g7_fcx_regression(failures: list[str]) -> None:
     sys.path.insert(0, str(PROJECT_ROOT / "scripts/earnings"))
     if "quarter_identity" in sys.modules:
         del sys.modules["quarter_identity"]
-    from quarter_identity import resolve_quarter_info, _build_neo4j_session
-    with _build_neo4j_session() as session:
-        result = resolve_quarter_info("FCX", FCX_ACCESSION_8K, neo4j_session=session)
+    from quarter_identity import resolve_quarter_info
+    result = resolve_quarter_info("FCX", FCX_ACCESSION_8K)
     label = result.get("quarter_label") or ""
     src = result.get("quarter_identity_source") or ""
     safe = result.get("safety_action") or ""
