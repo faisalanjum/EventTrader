@@ -1,0 +1,208 @@
+{
+  "agent": "agent2_unsafe9",
+  "tickers_audited": ["BOX", "GIII", "NTAP", "WDAY", "WMS"],
+  "verdict": "STRUCTURAL_DISCRIMINATOR_FOUND",
+  "summary": "For 4 of 5 tickers (BOX, NTAP, WDAY, WMS) the convention flip IS detectable from prior-10-Q XBRL history (cal_year(period_end) - DocumentFiscalYearFocus != 0 across history -> 'year_of_start XBRL' signal, agent5 H2). For GIII the divergence is genuinely irreducible at the XBRL layer: GIII's XBRL always reports year_of_start (delta=0 cal_year-vs-XBRL_FY) while EX-99.1 always says year_of_end -- structurally identical to SAFE issuers like ACI from XBRL alone.",
+  "per_ticker": {
+    "BOX": {
+      "rows_checked": [
+        {
+          "accession_8k": "0000950170-24-100997",
+          "filed_8k": "2024-08-27",
+          "ex99_quote": "\"Second Quarter Fiscal 2026 Financial Results\" (note: 8-K dated 2024-08-27 EX-99.1 is for FY2025 Q2 — actual ex99 quote per master_truth.csv: 'Fiscal Second Quarter 2025')",
+          "ex99_quote_verified": "Fiscal Second Quarter 2025",
+          "ex99_quote_source": "/home/faisal/EventMarketDB/earnings-analysis/canary/quarter_resolver/audit_evidence/sec_34_edge_ticker_audit_2026-05-07/raw_sec/0000950170-24-100997/box-ex99_1.htm",
+          "companion_xbrl_fy_q": "FY=2024 Q=Q2",
+          "companion_xbrl_dei_quote": "dei:DocumentFiscalYearFocus=2024, dei:DocumentFiscalPeriodFocus=Q2 (companion 10-Q period_of_report=2024-07-31, accession=0000950170-24-102328)",
+          "advance_one_quarter_from_prior_10Q": "prior 10-Q (2024-04-30) had FY=2024 Q1 -> q1_to_q2 advance gives FY=2024 Q2",
+          "sec_truth_label": "FY=2025 Q=Q2",
+          "g2_would_say": "FY=2024 Q=Q2",
+          "g2_correct": false,
+          "year_diff": 1,
+          "evidence_path": "/home/faisal/EventMarketDB/earnings-analysis/canary/quarter_resolver/audit_evidence/sec_34_edge_ticker_audit_2026-05-07/raw_sec/0000950170-24-102328/box-20240731.htm"
+        },
+        {
+          "accession_8k": "0000950170-25-111447",
+          "filed_8k": "2025-08-26",
+          "ex99_quote": "Second Quarter Fiscal 2026 Financial Results",
+          "ex99_quote_source": "/home/faisal/EventMarketDB/earnings-analysis/canary/quarter_resolver/audit_evidence/sec_34_edge_ticker_audit_2026-05-07/raw_sec/0000950170-25-111447/box-ex99_1.htm",
+          "companion_xbrl_fy_q": "FY=2025 Q=Q2",
+          "companion_xbrl_dei_quote": "dei:DocumentFiscalYearFocus=2025, dei:DocumentFiscalPeriodFocus=Q2 (companion 10-Q period_of_report=2025-07-31, accession=0000950170-25-111701, file box-20250731.htm)",
+          "advance_one_quarter_from_prior_10Q": "prior 10-Q (2025-04-30) had FY=2025 Q1 -> q1_to_q2 advance gives FY=2025 Q2",
+          "sec_truth_label": "FY=2026 Q=Q2",
+          "g2_would_say": "FY=2025 Q=Q2",
+          "g2_correct": false,
+          "year_diff": 1,
+          "evidence_path": "/home/faisal/EventMarketDB/earnings-analysis/canary/quarter_resolver/audit_evidence/sec_34_edge_ticker_audit_2026-05-07/raw_sec/0000950170-25-111701/box-20250731.htm"
+        }
+      ],
+      "ticker_verdict": "DETECTABLE_BY_H2_(XBRL_year_of_start_signal)",
+      "reasoning": "BOX's XBRL convention FLIPPED at fiscal Q1 2025 (period 2024-04-30): prior to the flip, dei:DocumentFiscalYearFocus matched the year-of-end of the fiscal year (e.g., 10-K period 2023-01-31 -> FY=2023; 10-Q 2023-04-30 -> FY=2024). After the flip, FY stops incrementing at the 10-K -> first 10-Q transition (10-K period 2024-01-31 -> FY=2024; 10-Q period 2024-04-30 -> FY=2024). EX-99.1 stayed at year-of-end ('Fiscal Q1 2025'). The structural signature: prior 10-Q delta = cal_year(period_end) - DocumentFiscalYearFocus is mixed across history ({-1: 3, 0: 6} per agent5 H2). Detectable. CurrentFiscalYearEndDate is consistently --01-31 (calendar-month, not 52/53-week)."
+    },
+    "GIII": {
+      "rows_checked": [
+        {
+          "accession_8k": "0001558370-23-010823",
+          "filed_8k": "2023-06-06",
+          "ex99_quote": "FIRST QUARTER FISCAL 2024 RESULTS",
+          "ex99_quote_source": "/home/faisal/EventMarketDB/earnings-analysis/canary/quarter_resolver/audit_evidence/sec_34_edge_ticker_audit_2026-05-07/raw_sec/0001558370-23-010823/giii-20230606xex99d1.htm",
+          "companion_xbrl_fy_q": "FY=2023 Q=Q1",
+          "companion_xbrl_dei_quote": "dei:DocumentFiscalYearFocus=2023, dei:DocumentFiscalPeriodFocus=Q1 (companion 10-Q period_of_report=2023-04-30, accession=0001558370-23-010832, file giii-20230430x10q.htm)",
+          "advance_one_quarter_from_prior_10Q": "prior 10-K (2023-01-31) had FY=2023 FY -> q4_to_q1 advance gives FY=2023 Q1 (matches companion XBRL)",
+          "sec_truth_label": "FY=2024 Q=Q1",
+          "g2_would_say": "FY=2023 Q=Q1",
+          "g2_correct": false,
+          "year_diff": 1,
+          "evidence_path": "/home/faisal/EventMarketDB/earnings-analysis/canary/quarter_resolver/audit_evidence/sec_34_edge_ticker_audit_2026-05-07/raw_sec/0001558370-23-010832/giii-20230430x10q.htm"
+        },
+        {
+          "accession_8k": "0001558370-23-015527",
+          "filed_8k": "2023-09-07",
+          "ex99_quote": "SECOND QUARTER FISCAL 2024",
+          "ex99_quote_source": "/home/faisal/EventMarketDB/earnings-analysis/canary/quarter_resolver/audit_evidence/sec_34_edge_ticker_audit_2026-05-07/raw_sec/0001558370-23-015527/giii-20230907xex99d1.htm",
+          "companion_xbrl_fy_q": "FY=2023 Q=Q2",
+          "companion_xbrl_dei_quote": "Companion 10-Q period_of_report=2023-07-31, accession=0001558370-23-015551, XBRL FY=2023 Q=Q2 per master_truth.csv",
+          "advance_one_quarter_from_prior_10Q": "prior 10-Q (2023-04-30) had FY=2023 Q1 -> q1_to_q2 advance gives FY=2023 Q2",
+          "sec_truth_label": "FY=2024 Q=Q2",
+          "g2_would_say": "FY=2023 Q=Q2",
+          "g2_correct": false,
+          "year_diff": 1,
+          "evidence_path": "audit_evidence/sec_34_edge_ticker_audit_2026-05-07/periodic_calendar_profile.csv (line: GIII,0001558370-23-015527,2024,Q2,10-Q,2023-07-31,2023,Q2)"
+        }
+      ],
+      "ticker_verdict": "IRREDUCIBLE_CONVENTION_MISMATCH",
+      "reasoning": "GIII is the genuinely irreducible case. dei:DocumentFiscalYearFocus is ALWAYS aligned with cal_year of period_of_report (delta=0 across all 9 prior 10-Q rows per agent5 H2 -- 'all_zero_n=9'), so XBRL says 'year_of_start' consistently. EX-99.1 ALWAYS says year_of_end ('FIRST QUARTER FISCAL 2024' for fiscal year ending Jan 31, 2024). The disagreement lives ENTIRELY in EX-99.1 prose: GIII's XBRL DEI is structurally identical to SAFE issuer ACI's (both delta=0) while their EX-99.1 conventions diverge. No XBRL-visible signal separates GIII from ACI."
+    },
+    "NTAP": {
+      "rows_checked": [
+        {
+          "accession_8k": "0001193125-25-297164",
+          "filed_8k": "2025-11-25",
+          "ex99_quote": "Second Quarter of Fiscal Year 2026 Results",
+          "ex99_quote_source": "/home/faisal/EventMarketDB/earnings-analysis/canary/quarter_resolver/audit_evidence/sec_34_edge_ticker_audit_2026-05-07/raw_sec/0001193125-25-297164/ntap-ex99_1.htm",
+          "companion_xbrl_fy_q": "FY=2025 Q=Q2",
+          "companion_xbrl_dei_quote": "dei:DocumentFiscalYearFocus=2025 (verified text 'Times New Roman ...>2025</span>'), dei:DocumentFiscalPeriodFocus=Q2 (companion 10-Q period_of_report=2025-10-24, accession=0001193125-25-297237, file ntap-20251024.htm)",
+          "advance_one_quarter_from_prior_10Q": "prior 10-Q (2025-07-25) had FY=2025 Q1 -> q1_to_q2 advance gives FY=2025 Q2",
+          "sec_truth_label": "FY=2026 Q=Q2",
+          "g2_would_say": "FY=2025 Q=Q2",
+          "g2_correct": false,
+          "year_diff": 1,
+          "evidence_path": "/home/faisal/EventMarketDB/earnings-analysis/canary/quarter_resolver/audit_evidence/sec_34_edge_ticker_audit_2026-05-07/raw_sec/0001193125-25-297237/ntap-20251024.htm"
+        },
+        {
+          "accession_8k": "0001193125-26-076545",
+          "filed_8k": "2026-02-26",
+          "ex99_quote": "Third Quarter of Fiscal Year 2026 Results",
+          "ex99_quote_source": "/home/faisal/EventMarketDB/earnings-analysis/canary/quarter_resolver/audit_evidence/sec_34_edge_ticker_audit_2026-05-07/raw_sec/0001193125-26-076545/ntap-ex99_1.htm",
+          "companion_xbrl_fy_q": "FY=2025 Q=Q3 (per periodic_calendar_profile.csv)",
+          "companion_xbrl_dei_quote": "Companion 10-Q period_of_report=2026-01-23, accession=0001193125-26-076622, XBRL FY=2025 Q=Q3 per master_truth.csv companion_xbrl_fy=2025/companion_xbrl_q=Q3",
+          "advance_one_quarter_from_prior_10Q": "prior 10-Q (2025-10-24) had FY=2025 Q2 -> q2_to_q3 advance gives FY=2025 Q3",
+          "sec_truth_label": "FY=2026 Q=Q3",
+          "g2_would_say": "FY=2025 Q=Q3",
+          "g2_correct": false,
+          "year_diff": 1,
+          "evidence_path": "audit_evidence/sec_34_edge_ticker_audit_2026-05-07/periodic_calendar_profile.csv"
+        }
+      ],
+      "ticker_verdict": "DETECTABLE_BY_H2_(XBRL_year_of_start_signal)",
+      "reasoning": "NTAP's XBRL flipped at fiscal Q1 ending July 2025 (period 2025-07-25 -> FY=2025 instead of expected FY=2026 under year_of_end). Earlier years used year_of_end (10-K period 2023-04-28 -> FY=2023; 10-Q 2023-07-28 -> FY=2024 -- incremented). Then 10-K period 2025-04-25 -> FY=2025; 10-Q period 2025-07-25 -> FY=2025 (NOT incremented). EX-99.1 stayed at year_of_end ('Second Quarter of Fiscal Year 2026'). agent5 H2 score: '10Q deltas mixed: {0: 5, -1: 4}' -- detectable as UNSAFE_PRED. NTAP is also a 52/53-week filer (FYE varies Apr 24-28), so '52/53-week' is NOT the discriminator -- the delta-vs-cal-year signal is."
+    },
+    "WDAY": {
+      "rows_checked": [
+        {
+          "accession_8k": "0001327811-25-000181",
+          "filed_8k": "2025-08-21",
+          "ex99_quote": "Workday Announces Fiscal 2026 Second Quarter Financial Results (per master_truth.csv)",
+          "ex99_quote_source": "/home/faisal/EventMarketDB/earnings-analysis/canary/quarter_resolver/audit_evidence/sec_34_edge_ticker_audit_2026-05-07/raw_sec/0001327811-25-000181/ (8-K dir, EX-99.1 file)",
+          "companion_xbrl_fy_q": "FY=2025 Q=Q2 (per master_truth.csv)",
+          "companion_xbrl_dei_quote": "Companion 10-Q period_of_report=2025-07-31, accession=0001327811-25-000184. XBRL FY=2025 (year_of_start of fiscal year ending Jan 31, 2026) per master_truth.csv companion_xbrl_fy=2025",
+          "advance_one_quarter_from_prior_10Q": "prior 10-Q (2025-04-30) had FY=2025 Q1 -> q1_to_q2 advance gives FY=2025 Q2",
+          "sec_truth_label": "FY=2026 Q=Q2",
+          "g2_would_say": "FY=2025 Q=Q2",
+          "g2_correct": false,
+          "year_diff": 1,
+          "evidence_path": "audit_evidence/sec_34_edge_ticker_audit_2026-05-07/periodic_calendar_profile.csv"
+        },
+        {
+          "accession_8k": "0001327811-25-000196",
+          "filed_8k": "2025-11-25",
+          "ex99_quote": "Workday Fiscal 2026 Third Quarter Financial Results (per master_truth.csv evidence_quote)",
+          "ex99_quote_source": "/home/faisal/EventMarketDB/earnings-analysis/canary/quarter_resolver/audit_evidence/sec_34_edge_ticker_audit_2026-05-07/raw_sec/0001327811-25-000196/wday-10312025x991.htm",
+          "companion_xbrl_fy_q": "FY=2025 Q=Q3 (per master_truth.csv)",
+          "companion_xbrl_dei_quote": "Companion 10-Q period_of_report=2025-10-31, accession=0001327811-25-000198. XBRL FY=2025 Q=Q3 (year_of_start)",
+          "advance_one_quarter_from_prior_10Q": "prior 10-Q (2025-07-31) had FY=2025 Q2 -> q2_to_q3 advance gives FY=2025 Q3",
+          "sec_truth_label": "FY=2026 Q=Q3",
+          "g2_would_say": "FY=2025 Q=Q3",
+          "g2_correct": false,
+          "year_diff": 1,
+          "evidence_path": "audit_evidence/sec_34_edge_ticker_audit_2026-05-07/periodic_calendar_profile.csv"
+        }
+      ],
+      "ticker_verdict": "DETECTABLE_BY_H2_(XBRL_year_of_start_signal)",
+      "reasoning": "WDAY's XBRL flipped at fiscal Q1 ending Apr 2024. Pre-flip: 10-K 2023-01-31 -> FY=2023; 10-Q 2023-04-30 -> FY=2024 (incremented). Post-flip: 10-K 2024-01-31 -> FY=2024; 10-Q 2024-04-30 -> FY=2025; but then on 10-K 2025-01-31 -> FY=2025; 10-Q 2025-04-30 -> FY=2025 (NOT incremented anymore). EX-99.1 stays at year_of_end ('Fiscal 2026 Q2/Q3'). agent5 H2 score: '10Q deltas mixed {-1: 7, 0: 4}' -> UNSAFE_PRED. CurrentFiscalYearEndDate=1/31 throughout (calendar-month). Detectable."
+    },
+    "WMS": {
+      "rows_checked": [
+        {
+          "accession_8k": "0001604028-24-000041",
+          "filed_8k": "2024-11-08",
+          "ex99_quote": "SECOND QUARTER FISCAL 2025",
+          "ex99_quote_source": "/home/faisal/EventMarketDB/earnings-analysis/canary/quarter_resolver/audit_evidence/sec_34_edge_ticker_audit_2026-05-07/raw_sec/0001604028-24-000041/wms-11082024x8kex991.htm",
+          "companion_xbrl_fy_q": "FY=2025 Q=Q2 (companion 10-Q itself agrees with EX-99.1)",
+          "companion_xbrl_dei_quote": "dei:DocumentFiscalYearFocus=2025, dei:DocumentFiscalPeriodFocus=Q2 (companion 10-Q period_of_report=2024-09-30, accession=0001604028-24-000044, file wms-20240930.htm)",
+          "advance_one_quarter_from_prior_10Q": "prior 10-Q period_of_report=2024-06-30, prior_xbrl_fy=2024, prior_xbrl_q=Q1 -> q1_to_q2 advance gives FY=2024 Q2 (NOTE: WMS XBRL flipped between Q1 and Q2 of FY2025 -- prior 10-Q used year_of_start=2024, companion 10-Q uses year_of_end=2025)",
+          "sec_truth_label": "FY=2025 Q=Q2",
+          "g2_would_say": "FY=2024 Q=Q2",
+          "g2_correct": false,
+          "year_diff": 1,
+          "evidence_path": "/home/faisal/EventMarketDB/earnings-analysis/canary/quarter_resolver/audit_evidence/sec_34_edge_ticker_audit_2026-05-07/raw_sec/0001604028-24-000032/wms-20240630.htm"
+        },
+        {
+          "accession_8k": "0001604028-23-000047",
+          "filed_8k": "2023-11-02",
+          "ex99_quote": "SECOND QUARTER FISCAL 2024",
+          "ex99_quote_source": "/home/faisal/EventMarketDB/earnings-analysis/canary/quarter_resolver/audit_evidence/sec_34_edge_ticker_audit_2026-05-07/raw_sec/0001604028-23-000047/wms-11022023x8kex991.htm",
+          "companion_xbrl_fy_q": "FY=2023 Q=Q3 (mislabeled by issuer's XBRL filer)",
+          "companion_xbrl_dei_quote": "Companion 10-Q period_of_report=2023-09-30, accession=0001604028-23-000050, master_truth.csv shows companion_xbrl_fy=2023 companion_xbrl_q=Q3 (Q label is wrong; calendar shape is Q2)",
+          "advance_one_quarter_from_prior_10Q": "prior 10-Q period_of_report=2023-06-30 had FY=2023 Q3 (also mislabeled) -> q3_to_q4 advance gives FY=2023 Q4. d_outcome=FAIL_CLOSED via rule_g_fail_closed_fy_disagreement_calendar; G2 simulation reports WRONG (2023 Q4)",
+          "sec_truth_label": "FY=2024 Q=Q2",
+          "g2_would_say": "FY=2023 Q=Q4 (per audit recovered_by_any_goal6f_cand: G2_CALENDAR_ONLY -> WRONG (2023 Q4))",
+          "g2_correct": false,
+          "year_diff": 1,
+          "evidence_path": "audit_evidence/sec_34_edge_ticker_audit_2026-05-07/raw_sec/0001604028-23-000050/ (companion 10-Q for 2023-09-30)"
+        }
+      ],
+      "ticker_verdict": "DETECTABLE_BY_H2_(XBRL_year_of_start_signal)",
+      "reasoning": "WMS XBRL is most chaotic: it flips year_of_start <-> year_of_end multiple times AND uses wrong DocumentFiscalPeriodFocus quarter labels (e.g., reports Q3 for what's calendar-Q2 of the fiscal year). agent5 H2 score: '10Q deltas mixed {-1: 3, 0: 4}' -> UNSAFE_PRED. CurrentFiscalYearEndDate=--03-31 always (calendar-month, not 52/53-week). Detectable as UNSAFE by H2."
+    }
+  },
+  "structural_discriminator_search": {
+    "tested_signals": [
+      "DEI:EntityCommonStockSharesOutstanding presence (not tested, no signal hypothesis)",
+      "fiscal_year_end_month (tested by agent5 H1 -- REJECTED: LOW/RH SAFE with fye=1; CNM/PVH/PLCE/DKS UNSAFE with fye=2)",
+      "52_53_week_marker via CurrentFiscalYearEndDate variability (tested by agent5 H3 -- REJECTED: NTAP UNSAFE 52/53wk; ROST SAFE month-end)",
+      "filing cadence pattern (tested by agent5 H5 -- UNTESTABLE without granular cadence data)",
+      "prior earnings 8-K timing (subsumed by H5)",
+      "XBRL prior 10-Q delta = cal_year(period_of_report) - DocumentFiscalYearFocus across history (agent5 H2 -- PROMISING_PARTIAL: zero false positives across 18 SAFE tickers, catches BOX/NTAP/NTNX/WDAY/WMS, MISSES GIII)",
+      "Multi-prior stable offset using sec_truth_FY (agent5 H4 -- not PIT-allowed; demonstrates separation but unshippable)",
+      "EX-99.1 announcement convention vs XBRL DEI divergence (agent5 H6 -- REJECTED: information lives in EX-99.1 prose only, not in XBRL DEI surfaces)",
+      "Stale XBRL FY |delta|>=2 (agent5 H7 -- partial value, catches CNM only)"
+    ],
+    "found_discriminator": true,
+    "found_discriminator_caveat_partial": true,
+    "details": "agent5's H2 (rule: trust XBRL advance only if for ALL prior 10-Qs of this ticker, cal_year(prior_period_of_report) == prior_xbrl_DocumentFiscalYearFocus across history; else fail-closed) is a CLEAN SAFE-side gate (18/18 SAFE tickers correctly classified, 0 false positives) and catches 4 of the 5 unsafe tickers in this audit (BOX, NTAP, WDAY, WMS) -- their XBRL filers either flipped convention or have inconsistent year_of_start/year_of_end across history, making the delta non-zero somewhere. GIII is the GENUINELY irreducible case: its XBRL is consistently year_of_start (delta=0 across all 9 prior 10-Q rows -- 'all_zero_n=9' per agent5), structurally identical to SAFE issuer ACI's XBRL (also all_zero_n=10). The convention divergence (XBRL year_of_start vs EX-99.1 year_of_end) is visible only in EX-99.1 prose; from XBRL DEI alone GIII and ACI are indistinguishable. Result: 4 of 5 unsafe tickers are NOT strictly irreducible (a deployable gate exists); GIII alone is genuinely irreducible without parsing EX-99.1 text or maintaining a per-ticker convention table."
+  },
+  "caveats": [
+    "BOX 8-K 2024-08-27 EX-99.1 quote: I directly extracted 'Second Quarter 2025' (with 'Fiscal' prefix elsewhere in the document) via grep. master_truth.csv records the full literal as 'Fiscal Second Quarter 2025'; my row text references the longer phrase via the master record.",
+    "BOX 8-K 2025-08-26 EX-99.1: 'Second Quarter Fiscal 2026 Financial Results' was extracted directly from raw_sec/0000950170-25-111447/box-ex99_1.htm with grep.",
+    "BOX 10-Q 2024-07-31: dei:DocumentFiscalYearFocus=2024 confirmed by direct grep of raw HTML (raw_sec/0000950170-24-102328/box-20240731.htm) producing 'font-family:Times New Roman;min-width:fit-content;\">2024'.",
+    "BOX 10-Q 2025-07-31: dei:DocumentFiscalYearFocus=2025 confirmed by direct grep of raw HTML (raw_sec/0000950170-25-111701/box-20250731.htm).",
+    "GIII 10-Q 2023-04-30: dei:DocumentFiscalYearFocus=2023 and dei:DocumentFiscalPeriodFocus=Q1 confirmed by direct grep of raw HTML (raw_sec/0001558370-23-010832/giii-20230430x10q.htm).",
+    "NTAP 10-Q 2025-10-24: DocumentFiscalYearFocus=2025 confirmed by direct grep of raw HTML (raw_sec/0001193125-25-297237/ntap-20251024.htm).",
+    "NTAP 10-Q 2026-01-23 (Q3 row): companion XBRL FY/Q taken from periodic_calendar_profile.csv master record, not re-verified from raw HTML, because the row was non-FAIL_CLOSED in earlier columns and the structural pattern is established.",
+    "WMS 10-Q 2024-06-30 (FY=2024 Q1) and 2024-09-30 (FY=2025 Q2): both directly verified via grep of raw HTML showing dei:DocumentFiscalYearFocus values 2024 and 2025 respectively -- demonstrating the intra-fiscal-year XBRL convention flip.",
+    "WMS 10-Q 2023-09-30 has companion_xbrl_q='Q3' (issuer-mislabeled -- calendar shape is Q2 of fiscal year ending March 2024). This is independent of the year_of_start/year_of_end issue.",
+    "agent5_discriminator.json (already in subagent_findings/) had performed the comprehensive discriminator search -- I cross-checked its H1-H7 results and confirm them by spot-checking individual ticker XBRL DEI values. Where I rely on agent5's machine-aggregated counts (10Q delta histograms) rather than re-running the aggregation, I cite agent5_discriminator.json explicitly in the ticker reasoning.",
+    "Mechanism summary: 'XBRL is year_of_start, EX-99.1 is year_of_end' is the consistent post-flip pattern for BOX (FY2025+), NTAP (FY2026+), WDAY (FY2025+), and WMS (mixed). For GIII it holds throughout history. Within the BOX/NTAP/WDAY group, the flip is a CHANGE in XBRL filer behavior; within GIII the convention has been static."
+  ]
+}

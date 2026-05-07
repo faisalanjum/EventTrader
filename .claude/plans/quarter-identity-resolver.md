@@ -1,6 +1,58 @@
 # Quarter Identity Resolver - Ground Truth And /goal Plan
 
-Last updated: 2026-05-05
+Last updated: 2026-05-07
+
+## Current State Snapshot (2026-05-07)
+
+Production status:
+
+- Goal 6c shipped Candidate D into `scripts/earnings/quarter_identity.py` and was pushed (`a61636a`, followed by wording/doc cleanup `2f61810`).
+- Goal 6e guidance fallback hardening shipped and was pushed (`be4c2cc`): the rare 10-Q/10-K guidance source-quarter fallback now prefers own-filing XBRL only when denylist/proximity guards pass, then falls back to math.
+- Goal 6f research prompt/verifier were committed and pushed (`74dfe6d`); dirty production paths were stashed as `pre-goal6f-pending`; Goal 6f may be running now.
+
+Candidate D measured behavior (Goal 6a, then implemented by Goal 6c):
+
+| Subset | Correct-fire | Wrong-fire | Fail-closed |
+|---|---:|---:|---:|
+| Full historical scoreable (10,674) | 9,491 (88.9%) | 24 (0.22%) | 1,159 (10.9%) |
+| Warm-start historical (9,878) | 9,491 (96.08%) | 24 (0.24%) | 363 (3.67%) |
+| Cold-start (796) | 0 | 0 | 796 (100%) |
+| Latest-per-ticker live proxy (781) | 747 (95.65%) | 3 (0.38%) | 31 (3.97%) |
+
+Operational meaning:
+
+- Cold-start / fail-closed rows do not auto-write event bundles. The orchestrator write guard refuses destructive writes unless `safety_action == "AUTO_OK"`.
+- Prediction/learner/live earnings runs through `earnings_orchestrator.py` are protected by that guard.
+- Guidance extraction is separate. Only guidance **source-quarter harvesting** for 8-Ks uses `resolve_quarter_info()` automatically; guidance target-period construction does not.
+
+What triggered Goals 6a→6f (the Goal 5 hole):
+
+- Goal 4's "0 WRONG / 9,116 AUTO_OK / 9,943 oracle" was on its measured oracle scope. It did NOT score the 838 NR rows where Goal 4 still fired AUTO_OK.
+- Goal 5 SEC-audited those 838 NR-AUTO_OK rows: `144 correct / 587 wrong / 107 unclear`.
+- Goal 5 surfaced 7 candidate algorithms (A-G + variants); only Candidate D respected the structural-only locks. Codex tried Candidate E (industry classifier) and it was rejected.
+- Goal 5 itself shipped no production code — only artifacts. It was the input to Goal 6a measurement → Goal 6c production.
+
+Rejected path:
+
+- A 34-edge-ticker SEC audit (408 historical 8-Ks) tested future Rule G2: "trust XBRL FY/Q on FY-disagreement and advance."
+- Result: `DECISION_FLAG_RULE_G2 = promising_but_not_shippable`.
+- Tier A+B rows: D = `95 correct / 12 wrong / 293 fail-closed`; G2-calendar-only = `316 correct / 49 wrong / 35 fail-closed`; G2-all = `334 correct / 51 wrong / 15 fail-closed`.
+- G2 saves many fail-closures but creates 37-39 new wrong AUTO_OK rows. Do not ship blind XBRL-trust.
+- Failure clusters include GIII, BOX, WDAY, WMS, NTAP, NTNX, DKS, ANF, where issuer iXBRL FY naming and public EX-99.1 FY naming diverge.
+
+The architectural finding (named, so future-you doesn't rediscover it):
+
+- **iXBRL year-of-start vs EX-99.1 year-of-end divergence**. iXBRL `DocumentFiscalYearFocus` for an FYE-January issuer reports `FY=2024` for a 10-K covering Feb 2024 – Jan 2025; the same issuer's EX-99.1 press release calls the same period `FY 2025`.
+- Both labels are "correct" for their audience. They disagree on the wire.
+- Any production rule that trusts XBRL `FY` will systematically wrong-write the year for ~10% of off-calendar issuers. D's `rule_f_fail_closed_fy_disagreement` (Goal 4) and the calendar-branch `rule_g_fail_closed_*_calendar` guards (Goal 6c) intentionally fail-closed on this class.
+- Under the locked constraints (no ticker/industry/SIC tables, no EX-99.1 parsing, no external HTTP, no ML/LLM, no time thresholds beyond 24h/150d), this divergence is the **irreducible structural class**. ~4.4% of the universe (34/781 latest-per-ticker proxy) is unresolvable under those locks and must remain fail-closed.
+- This is the load-bearing reason `KEEP_D` is a valid Goal 6f outcome.
+
+Goal 6f research purpose:
+
+- Diagnose D/G2 failures first (`GOAL6F_FAILURE_MODEL.md`), then test at least four structural candidate directions: multi-prior XBRL consistency, period-end/calendar-shape signatures, current 8-K own XBRL facts, and advance-result agreement.
+- Constraints remain locked: no ticker/issuer/industry tables, no EX-99 runtime parsing, no external HTTP/API, no ML/LLM, no arbitrary new thresholds, PIT-safe structural metadata only.
+- **Result (2026-05-07)**: `DECISION_FLAG_GOAL6F_RECOMMENDATION = KEEP_D`, empirically confirmed. Verifier passed; 4 new structural candidates tested + rejected; commit `0552fd9` registered the immutable audit-evidence inputs. The "~70% likely KEEP_D" prior is now fact: under current locks + current data pipeline, D is the structural ceiling. Sharper failure-class name from the failure model: "structural ambiguity after FY disagreement" — same prior structural shape produces both safe and unsafe rows; no allowed signal uniquely discriminates. The iXBRL/EX-99 divergence is the consequence; this is the mechanism.
 
 ## Why This Exists
 
@@ -135,6 +187,12 @@ And the orchestrator should have a write guard:
 > Do not delete or overwrite an existing event directory unless quarter identity is proven or the user passes an explicit override.
 
 This is the key safety fix. Even a mostly-correct resolver should not be allowed to silently destroy artifacts when the identity is ambiguous.
+
+Implemented state after Goals 4/6c:
+
+- `resolve_quarter_info(ticker, accession_8k)` returns a dict. Trust `quarter_label` only when `safety_action == "AUTO_OK"`.
+- The orchestrator write guard blocks destructive event-directory writes on `FAIL_CLOSED`.
+- Do not bypass the resolver with a plain fiscal-math formula for earnings 8-Ks.
 
 ## Confidence Standard
 
@@ -332,7 +390,9 @@ Completion criteria:
 - 52/53-week / odd fiscal-calendar residual handling is either implemented and verifier-proven, or explicitly deferred with expected coverage impact.
 - Full relevant earnings test suite passes.
 
-## Current Working Hypothesis
+## Working Hypothesis (historical, pre-implementation)
+
+> **Status**: This was the working hypothesis at the start of the project (2026-05-05). It is preserved here as historical context. The shipped resolver is described in the Snapshot section at the top of this file plus the Status tracker. Do not treat this as forward-looking — Goals 4 and 6c implemented and refined this hypothesis.
 
 The likely final answer is a guarded prior-periodic projection resolver:
 
@@ -343,7 +403,9 @@ The likely final answer is a guarded prior-periodic projection resolver:
 
 Historical retrospective mode may still use same-event periodic evidence when it exists, but live-mode and PIT replay must not rely on the future same-quarter 10-Q/10-K.
 
-## Open Questions For Goal 1
+## Open Questions For Goal 1 (historical — Goal 1 closed at commit `fc83a1c`)
+
+> **Status**: These were the open questions when Goal 1 was scoped. Goals 1 and 1.5 closed all of them; preserved here as historical context. Tier 1 (EX-99.1 string parsing) is locked OFF (D8); Tier 2/3/4 are reflected in the shipped resolver.
 
 - Do our stored 8-K/exhibit payloads consistently contain enough text/table structure to identify "quarter ended" dates?
 - What is the true coverage of same-event evidence across the 10,995 earnings 8-Ks?
@@ -428,7 +490,7 @@ If we cannot write a verifier in <30 minutes, the Goal is too vague. Sharpen the
 
 **A**: It can't, in absolute terms. But it CAN achieve "rock-solid for our purposes" via:
 
-1. **Multi-source agreement**: only rows where Tier 2 (XBRL fiscal focus) AND Tier 4 (fiscal_math from period_of_report) agree make the cut. Probability of two independent sources making the SAME error on the same row is very low for normal filers (~0.2%).
+1. **Multi-source agreement**: only rows where Tier 2 (XBRL fiscal focus) AND Tier 4 (fiscal_math from period_of_report) agree make the cut. Probability of two independent sources making the SAME error on the same row is very low for normal filers (~0.2%). **Caveat (added 2026-05-07)**: this independence assumption holds for the Goal 1 GT corpus on calendar-year filers, but does NOT generalize to "trust XBRL when XBRL disagrees with math" on residual rows. The 34-edge-ticker SEC audit established that for off-calendar issuers (FYE January / February / August / etc.), iXBRL `DocumentFiscalYearFocus` uses year-of-start convention while EX-99.1 press releases use year-of-end — the two are *systematically biased* relative to each other, not independent errors. Two-source XBRL+math agreement remains a strong filter for the GT corpus; XBRL-trust on disagreement (proposed Rule G2) is empirically unsafe and was rejected. See the Snapshot section "The architectural finding" at the top of this file.
 2. **Conservative exclusions**: rows where they disagree → `NEEDS_REVIEW` bucket, not ground truth. Never silently dropped.
 3. **Existing safeguards reused**: `should_use_xbrl_fiscal` proximity guard + `XBRL_DENY_PERIODIC_ACCESSIONS` denylist filter known-bad XBRL.
 4. **Determinism**: re-running the construction script produces identical output (verifier confirms).
@@ -552,7 +614,14 @@ Each Goal in the breakdown above gets its own prompt filled in from this templat
 - [x] Goal 4 trustworthiness audit (8 checks) — production scope clean, _STALE_MATCH_DAYS=150 removed, all 14 expected source strings present, _effective_fye_month preserved, no ticker tables, write-guard wired into orchestrator main flow, FCX direct test confirms Q1_FY2026 / AUTO_OK
 - [x] FCX end-to-end smoke test under new resolver — 2026-05-06: pipeline writes Q1_FY2026/context_bundle.json (correct directory); Q4_FY2025/ NOT touched (the bug-corrupted directory from before Goal 4 remains as evidence of what the bug DID; can be cleaned separately)
 - [x] FCX canary re-validation (all 14 historical events) — 2026-05-06: 10/14 match prior labels; 1 fail-closed (Q4_FY2022 cold-start, oldest event); 3 "mismatches" all CORRECTIONS of OLD buggy labels in event.json (Q4_FY2023→Q4_FY2024, two unlabeled bug-victim events now resolve correctly). Zero regressions.
+- [x] Goal 6a measurement-only benchmark — Candidate D meets ship bar: warm-start 96.08% correct / 0.24% wrong / 3.67% fail-closed; latest-per-ticker 95.65% correct / 0.38% wrong / 3.97% fail-closed; `DECISION_FLAG_SHIP_D_DIRECTLY = yes`.
+- [x] Goal 6c production implementation — Candidate D ported to `quarter_identity.py`, verifier passed, committed/pushed (`a61636a`; wording cleanup `2f61810`). Production scope: `quarter_identity.py` + tests only; fiscal_math/guidance/orchestrator locked.
+- [x] Goal 6e guidance fallback hardening — `harvest_guidance_sessions.py` 10-Q/10-K NULL fiscal-label fallback now uses own-filing XBRL with denylist/proximity/triple-check before math fallback; tests 61/61 passed; committed/pushed (`be4c2cc`).
+- [x] 34-edge-ticker SEC audit complete — 408 rows / 34 tickers; Tier A+B coverage 400/408; Rule G2 rejected as not shippable because it creates 37-39 new wrong AUTO_OK rows.
+- [x] Goal 6f prompt + verifier committed/pushed (`74dfe6d`) — research-only structural discovery beyond D; requires failure model first; no production changes.
+- [x] Goal 6f execution / review (2026-05-07) — verifier exited 0; commit `0552fd9` registered 5 immutable audit-evidence inputs. `DECISION_FLAG_GOAL6F_RECOMMENDATION = KEEP_D`. All 4 new structural candidates rejected: `MULTI_PRIOR_STABLE_OFFSET` (+17 new wrongs / 158 recoveries), `PERIOD_END_SHAPE_GATE` (+39 new wrongs), `CURRENT_8K_OWN_XBRL` (no-op — feature pipeline lacks current-8K DEI facts), `ADVANCE_RESULT_AGREEMENT` (no-op — zero edge convergences). G2 baselines also re-rejected (+37 / +39 new wrongs). D is the empirical structural ceiling under current locks + current data pipeline.
 - [ ] Production deploy + post-deploy monitor
+- [ ] Pop `pre-goal6f-pending` stash (`stash@{0}`)
 
 ---
 
@@ -582,4 +651,8 @@ Each Goal in the breakdown above gets its own prompt filled in from this templat
 - 2026-05-06 — 52/53 candidate-rule matrix probe: tested rules A-E; only Rule F (D + FY-disagreement guard) gave 0 WRONG. SEC-audit found PEP/LEVI same-event pattern (10-Q filed minutes before 8-K → use prior label directly, no advance) + KR/NTAP/SYNA naming-convention class (XBRL FY ≠ math FY → fail closed). Empirical taxonomy: ~25 verified-safe 52/53 tickers + AAP/PSTG GT-mismatch denylist + ACI/LEVI/PEP/PLAY NR-only.
 - 2026-05-06 — Goal 4 fired via Codex /goal. Codex ported Goal 3 _prior_periodic_projection byte-faithfully into scripts/earnings/quarter_identity.py with Rule F substitution; added orchestrator destructive-write guard; 12 pytest cases pass; canonical full verifier exited 0 (after temporary stash of unrelated dirty paths compare_section.py + snapshot_xbrl_in_flight.py). Production commit e43cfc8.
 - 2026-05-06 — FCX end-to-end smoke + canary re-validation passed under new resolver. The FCX bug is fixed: 0000831259-26-000021 returns Q1_FY2026 / AUTO_OK / prior_periodic_projection_q4_to_q1.
-- Next step: production deploy of new resolver to running services (k8s pods, MCP servers, etc.) — separate operational phase.
+- 2026-05-07 — Goal 6a measured Candidate D: warm-start 96.08% correct / 0.24% wrong / 3.67% fail-closed; latest-per-ticker 95.65% correct / 0.38% wrong / 3.97% fail-closed. Goal 6c shipped D to production (`a61636a`, cleanup `2f61810`).
+- 2026-05-07 — Goal 6e shipped guidance 10-Q/10-K rare fallback hardening (`be4c2cc`): own-filing XBRL can override math only with denylist + proximity + triple-check guard. This does not merge guidance target-period extraction with earnings 8-K resolver.
+- 2026-05-07 — 34-edge-ticker SEC audit completed: G2 XBRL-trust variants are promising but not shippable due to 37-39 new wrong AUTO_OK rows on Tier A+B evidence. Goal 6f prompt/verifier committed/pushed (`74dfe6d`) to force failure-model-first structural research. `KEEP_D` is an acceptable verified outcome.
+- 2026-05-07 — Goal 6f Codex run completed in 1668s; verifier exited 0; commit `0552fd9` registered 5 immutable audit-evidence files (`DECISION_FLAG.md`, `advance_xbrl_simulation.csv`, `adversarial_review.json`, `master_truth.csv`, `validation_report.md`). 7 candidates tested (D + 2 G2 + 4 new structural); all 4 new candidates rejected. `DECISION_FLAG_GOAL6F_RECOMMENDATION = KEEP_D`. Closest near-miss `MULTI_PRIOR_STABLE_OFFSET` recovered 158 fail-closed Tier A/B rows but added 17 new wrongs — fails the zero-new-wrong policy. PHR/PINC/PRU latest-per-ticker wrong-fires (3 rows) classified as irreducible without current-event text or current-8K DEI facts.
+- Next step: production deploy of Goal 6c+6e to k8s services; pop `pre-goal6f-pending` stash; doc updates landed at this commit cycle.
