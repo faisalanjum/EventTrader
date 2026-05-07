@@ -330,6 +330,27 @@ def _ensure_prior_xbrl(prior: dict, *, neo4j_session) -> dict:
     return enriched
 
 
+def _within_existing_short_gap(*, filed: datetime, prior_created: datetime) -> bool:
+    seconds_between = (filed - prior_created).total_seconds()
+    if 0 <= seconds_between < 24 * 3600:
+        return True
+    gap_days = (filed.date() - prior_created.date()).days
+    return 0 <= gap_days <= 150
+
+
+def _same_filing_cycle_indicator(
+    *,
+    prev_8k_ts: str,
+    prior_created: datetime,
+    filed: datetime,
+) -> bool:
+    prev = _parse_datetime(prev_8k_ts)
+    if prev is None:
+        return False
+    seconds_between = (filed - prior_created).total_seconds()
+    return prev < prior_created <= filed and 0 <= seconds_between < 24 * 3600
+
+
 def _effective_fye_month(priors: list[dict], default_fye: int) -> int:
     for prior in priors:
         if prior.get("form") != "10-K":
@@ -451,8 +472,14 @@ def resolve_quarter_via_prior_periodic(row_context: dict, *, neo4j_session) -> d
     if gap_days > 150:
         return _result(None, None, "prior_periodic_projection_long_gap_fail_closed", "FAIL_CLOSED")
 
+    top = _ensure_prior_xbrl(top, neo4j_session=neo4j_session)
+    seconds_between = (filed - prior_created).total_seconds()
+    is_recent = 0 <= seconds_between < 24 * 3600
+    xbrl_parsed = parse_xbrl_fiscal_identity(
+        top.get("xbrl_year"), top.get("xbrl_period")
+    )
     try:
-        prior_fy, prior_q = period_to_fiscal(
+        math_parsed_prior = period_to_fiscal(
             period.year,
             period.month,
             period.day,
@@ -460,8 +487,77 @@ def resolve_quarter_via_prior_periodic(row_context: dict, *, neo4j_session) -> d
             form,
         )
     except Exception:
+        math_parsed_prior = None
+
+    if is_recent:
+        if xbrl_parsed is None or math_parsed_prior is None:
+            return _result(
+                None,
+                None,
+                "rule_g_strict_fail_closed_recent_disagreement_calendar",
+                "FAIL_CLOSED",
+            )
+        if (
+            str(xbrl_parsed[0]) != str(math_parsed_prior[0])
+            or str(xbrl_parsed[1]) != str(math_parsed_prior[1])
+        ):
+            return _result(
+                None,
+                None,
+                "rule_g_strict_fail_closed_recent_disagreement_calendar",
+                "FAIL_CLOSED",
+            )
+        return _attach_resolution_context(
+            _result(
+                xbrl_parsed[0],
+                xbrl_parsed[1],
+                "rule_g_strict_direct_recent_prior_calendar",
+                "AUTO_OK",
+            ),
+            period_of_report=period.isoformat(),
+            form_type_periodic=form,
+            accession_periodic=top.get("accession") or "",
+        )
+
+    if (
+        xbrl_parsed is not None
+        and math_parsed_prior is not None
+        and str(xbrl_parsed[0]) != str(math_parsed_prior[0])
+    ):
+        return _result(
+            None,
+            None,
+            "rule_g_fail_closed_fy_disagreement_calendar",
+            "FAIL_CLOSED",
+        )
+
+    prev_8k_ts = _clean(row_context.get("prev_8k_ts"))
+    if not prev_8k_ts and _within_existing_short_gap(
+        filed=filed, prior_created=prior_created
+    ):
+        return _result(
+            None,
+            None,
+            "rule_g_fail_closed_no_prev_short_gap_calendar",
+            "FAIL_CLOSED",
+        )
+
+    if _same_filing_cycle_indicator(
+        prev_8k_ts=prev_8k_ts,
+        prior_created=prior_created,
+        filed=filed,
+    ) and _within_existing_short_gap(filed=filed, prior_created=prior_created):
+        return _result(
+            None,
+            None,
+            "rule_g_fail_closed_same_filing_short_gap_calendar",
+            "FAIL_CLOSED",
+        )
+
+    if math_parsed_prior is None:
         return _result(None, None, "prior_periodic_projection_fiscal_math_error", "NO_RESOLUTION")
 
+    prior_fy, prior_q = math_parsed_prior
     advanced = _advance_quarter(int(prior_fy), str(prior_q))
     if advanced is None:
         return _result(None, None, "prior_periodic_projection_bad_prior_quarter", "NO_RESOLUTION")
@@ -514,13 +610,15 @@ def _quarter_info_from_context_row(ticker: str, accession_8k: str, row, session)
     filed_8k = _to_str(_record_get(row, "filed_8k"))
     market_session = _record_get(row, "market_session") or "post_market"
     prev_8k_ts = _to_str(_record_get(row, "prev_8k_ts"))
-    fye_month = _resolve_fye_month(ticker, _record_get(row, "fye_month"), gaps)
+    raw_fye_month = _record_get(row, "fye_month")
+    fye_month = _resolve_fye_month(ticker, raw_fye_month, gaps)
 
     row_context = {
         "accession_8k": accession_8k,
         "ticker": ticker,
         "filed_8k": filed_8k,
-        "fye_month": fye_month,
+        "fye_month": raw_fye_month if raw_fye_month is not None else fye_month,
+        "prev_8k_ts": prev_8k_ts,
     }
     prefetched_priors = _record_get(row, "priors", None)
     if prefetched_priors is not None:

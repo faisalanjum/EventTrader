@@ -59,21 +59,38 @@ class _FakeResult:
 
 
 class _FakeSession:
-    def __init__(self, metadata_by_accession, priors_by_accession):
+    def __init__(self, metadata_by_accession, priors_by_accession, xbrl_by_accession=None):
         self.metadata_by_accession = metadata_by_accession
         self.priors_by_accession = priors_by_accession
+        self.xbrl_by_accession = dict(xbrl_by_accession or {})
 
     def run(self, query, **params):
         if "prev_8k_ts" in query:
             row = self.metadata_by_accession.get(params["accession"])
             return _FakeResult([row] if row else [])
+        if "$accession" in query and "accession_8k" not in params:
+            row = self.xbrl_by_accession.get(params["accession"])
+            return _FakeResult([row] if row else [])
         rows = self.priors_by_accession.get(params["accession_8k"], [])
         return _FakeResult(rows)
 
 
-def _fake_resolve(monkeypatch, *, ticker, accession, filed, fye_month, priors):
+def _fake_resolve(
+    monkeypatch,
+    *,
+    ticker,
+    accession,
+    filed,
+    fye_month,
+    priors,
+    prev_8k_ts="2025-01-01T16:00:00-05:00",
+    xbrl_by_accession=None,
+):
     quarter_identity._PRIOR_CACHE.clear()
     quarter_identity._FYE_CACHE.clear()
+    quarter_identity._XBRL_CACHE.clear()
+    quarter_identity._CONTEXT_CACHE.clear()
+    quarter_identity._TICKER_CONTEXT_PRELOADED.clear()
     monkeypatch.setattr(
         quarter_identity,
         "get_fye_month",
@@ -86,10 +103,11 @@ def _fake_resolve(monkeypatch, *, ticker, accession, filed, fye_month, priors):
                 "filed_8k": filed,
                 "market_session": "post_market",
                 "fye_month": fye_month,
-                "prev_8k_ts": "2025-01-01T16:00:00-05:00",
+                "prev_8k_ts": prev_8k_ts,
             }
         },
         {accession: priors},
+        xbrl_by_accession=xbrl_by_accession,
     )
     return quarter_identity.resolve_quarter_info(ticker, accession, session=session)
 
@@ -232,6 +250,191 @@ def test_prior_periodic_projection_cold_start_fail_closed(monkeypatch):
     )
     assert qi["safety_action"] == "FAIL_CLOSED"
     assert qi["quarter_identity_source"] == "prior_periodic_projection_no_prior"
+
+
+def test_rule_g_strict_direct_recent_prior_calendar(monkeypatch):
+    qi = _fake_resolve(
+        monkeypatch,
+        ticker="SYN",
+        accession="synthetic-calendar-recent",
+        filed="2026-04-23T08:09:07-04:00",
+        fye_month=12,
+        priors=[
+            _prior(
+                "prior-calendar-recent",
+                "2026-04-23T08:00:00-04:00",
+                "2026-03-31",
+                "10-Q",
+                2026,
+                "Q1",
+            ),
+        ],
+    )
+    assert qi["quarter_label"] == "Q1_FY2026"
+    assert qi["safety_action"] == "AUTO_OK"
+    assert qi["quarter_identity_source"] == "rule_g_strict_direct_recent_prior_calendar"
+    assert qi["accession_periodic"] == "prior-calendar-recent"
+
+
+def test_rule_g_strict_recent_disagreement_calendar_fail_closed(monkeypatch):
+    qi = _fake_resolve(
+        monkeypatch,
+        ticker="SYN",
+        accession="synthetic-calendar-recent-disagreement",
+        filed="2026-04-23T08:09:07-04:00",
+        fye_month=12,
+        priors=[
+            _prior(
+                "prior-calendar-recent-bad-xbrl",
+                "2026-04-23T08:00:00-04:00",
+                "2026-03-31",
+                "10-Q",
+                2025,
+                "Q1",
+            ),
+        ],
+    )
+    assert qi["quarter_label"] is None
+    assert qi["safety_action"] == "FAIL_CLOSED"
+    assert (
+        qi["quarter_identity_source"]
+        == "rule_g_strict_fail_closed_recent_disagreement_calendar"
+    )
+
+
+def test_rule_g_non_recent_fy_disagreement_calendar_fail_closed(monkeypatch):
+    qi = _fake_resolve(
+        monkeypatch,
+        ticker="ANF",
+        accession="synthetic-anf-like-fy-disagreement",
+        filed="2024-06-01T16:10:00-04:00",
+        fye_month=1,
+        priors=[
+            _prior(
+                "prior-anf-like-annual",
+                "2024-03-15T06:00:00-04:00",
+                "2024-02-03",
+                "10-K",
+                2023,
+                "FY",
+            ),
+        ],
+    )
+    assert qi["quarter_label"] is None
+    assert qi["safety_action"] == "FAIL_CLOSED"
+    assert qi["quarter_identity_source"] == "rule_g_fail_closed_fy_disagreement_calendar"
+
+
+def test_rule_g_no_prev_8k_short_gap_calendar_fail_closed(monkeypatch):
+    qi = _fake_resolve(
+        monkeypatch,
+        ticker="SYN",
+        accession="synthetic-no-prev-short-gap",
+        filed="2026-04-23T16:10:00-04:00",
+        fye_month=12,
+        prev_8k_ts=None,
+        priors=[
+            _prior(
+                "prior-calendar-no-prev",
+                "2026-02-14T08:00:00-05:00",
+                "2025-12-31",
+                "10-K",
+                2025,
+                "FY",
+            ),
+        ],
+    )
+    assert qi["quarter_label"] is None
+    assert qi["safety_action"] == "FAIL_CLOSED"
+    assert qi["quarter_identity_source"] == "rule_g_fail_closed_no_prev_short_gap_calendar"
+
+
+def test_rule_g_same_filing_cycle_short_gap_calendar_branch(monkeypatch):
+    monkeypatch.setattr(
+        quarter_identity,
+        "_same_filing_cycle_indicator",
+        lambda **_kwargs: True,
+    )
+    qi = _fake_resolve(
+        monkeypatch,
+        ticker="SYN",
+        accession="synthetic-same-filing-short-gap",
+        filed="2026-04-23T16:10:00-04:00",
+        fye_month=12,
+        prev_8k_ts="2026-01-10T16:00:00-05:00",
+        priors=[
+            _prior(
+                "prior-calendar-same-cycle",
+                "2026-02-14T08:00:00-05:00",
+                "2025-12-31",
+                "10-K",
+                2025,
+                "FY",
+            ),
+        ],
+    )
+    assert qi["quarter_label"] is None
+    assert qi["safety_action"] == "FAIL_CLOSED"
+    assert (
+        qi["quarter_identity_source"]
+        == "rule_g_fail_closed_same_filing_short_gap_calendar"
+    )
+
+
+def test_rule_g_same_filing_cycle_indicator_uses_recent_prior_ordering():
+    filed = quarter_identity._parse_datetime("2026-04-23T08:09:07-04:00")
+    prior_created = quarter_identity._parse_datetime("2026-04-23T08:00:00-04:00")
+    assert quarter_identity._same_filing_cycle_indicator(
+        prev_8k_ts="2026-04-22T16:00:00-04:00",
+        prior_created=prior_created,
+        filed=filed,
+    )
+
+
+def test_rule_g_cleaned_nr_adm_representative_matches_measurement(monkeypatch):
+    qi = _fake_resolve(
+        monkeypatch,
+        ticker="ADM",
+        accession="0000007084-24-000010",
+        filed="2024-01-25T08:09:07-05:00",
+        fye_month=12,
+        priors=[
+            _prior(
+                "adm-prior-2023-q4",
+                "2024-01-25T08:00:00-05:00",
+                "2023-12-31",
+                "10-K",
+                2023,
+                "FY",
+            ),
+        ],
+    )
+    assert qi["quarter_label"] == "Q4_FY2023"
+    assert qi["safety_action"] == "AUTO_OK"
+    assert qi["quarter_identity_source"] == "rule_g_strict_direct_recent_prior_calendar"
+
+
+def test_rule_g_cleaned_nr_ok_has_representative_preserved(monkeypatch):
+    qi = _fake_resolve(
+        monkeypatch,
+        ticker="HAS",
+        accession="0000046080-26-000016",
+        filed="2026-04-24T08:30:00-04:00",
+        fye_month=12,
+        priors=[
+            _prior(
+                "has-prior-2025-q4",
+                "2026-02-20T08:00:00-05:00",
+                "2025-12-31",
+                "10-K",
+                2025,
+                "FY",
+            ),
+        ],
+    )
+    assert qi["quarter_label"] == "Q1_FY2026"
+    assert qi["safety_action"] == "AUTO_OK"
+    assert qi["quarter_identity_source"] == "prior_periodic_projection_q4_to_q1"
 
 
 def test_write_guard_refuses_fail_closed_and_writes_quarantine(tmp_path):
