@@ -325,6 +325,162 @@ def test_rule_g_non_recent_fy_disagreement_calendar_fail_closed(monkeypatch):
     assert qi["quarter_identity_source"] == "rule_g_fail_closed_fy_disagreement_calendar"
 
 
+# ── Goal 6g — TRUST_XBRL_ADVANCE audited-issuer override ──────────────
+
+
+def test_trust_xbrl_advance_bucket_structure_invariant():
+    """The audited-issuer bucket must be a frozenset of exactly the 18 expected
+    tickers. Constraint: rule applies uniformly to ALL periods of every listed
+    ticker (no per-period dimension)."""
+    expected = frozenset({
+        "ACI", "ASO", "BJ", "BURL", "CHWY", "DLTR", "FIVE", "GME",
+        "KSS", "LOW", "LULU", "OXM", "ROST", "ULTA",
+        "KR", "OLLI", "PLAY", "RH",
+    })
+    assert quarter_identity.TRUST_XBRL_ADVANCE == expected
+    assert isinstance(quarter_identity.TRUST_XBRL_ADVANCE, frozenset)
+    assert all(isinstance(t, str) for t in quarter_identity.TRUST_XBRL_ADVANCE)
+    # Sanity: GIII deliberately NOT in the bucket (irreducible per autopsy).
+    assert "GIII" not in quarter_identity.TRUST_XBRL_ADVANCE
+
+
+def test_rule_h_trusted_issuer_advances_calendar_fy_disagreement(monkeypatch):
+    """For a bucket ticker (ACI), when the calendar-FY-disagreement gate fires,
+    the override advances prior XBRL FY/Q by one quarter and returns AUTO_OK
+    with source rule_h_trusted_issuer_xbrl_advance.
+
+    Mirrors test_rule_g_non_recent_fy_disagreement_calendar_fail_closed shape:
+    same prior structure, same disagreement, but ticker is in the bucket."""
+    qi = _fake_resolve(
+        monkeypatch,
+        ticker="ACI",
+        accession="synthetic-aci-fy-disagreement",
+        filed="2024-06-01T16:10:00-04:00",
+        fye_month=2,
+        priors=[
+            _prior(
+                "prior-aci-q3-10q",
+                "2024-01-15T06:00:00-05:00",
+                "2023-12-02",
+                "10-Q",
+                2023,
+                "Q3",
+            ),
+        ],
+    )
+    # ACI is in TRUST_XBRL_ADVANCE → advance XBRL (2023, Q3) → (2023, Q4)
+    assert qi["safety_action"] == "AUTO_OK"
+    assert qi["quarter_label"] == "Q4_FY2023"
+    assert qi["quarter_identity_source"] == "rule_h_trusted_issuer_xbrl_advance"
+
+
+def test_rule_h_trusted_issuer_advances_q4_to_q1_with_fy_rollover(monkeypatch):
+    """Q4 → Q1 advance bumps the FY by one (year-of-end convention assumed by
+    the bucket members)."""
+    qi = _fake_resolve(
+        monkeypatch,
+        ticker="ULTA",
+        accession="synthetic-ulta-q4-to-q1",
+        filed="2024-05-30T16:10:00-04:00",
+        fye_month=2,
+        priors=[
+            _prior(
+                "prior-ulta-10k",
+                "2024-03-25T06:00:00-04:00",
+                "2024-02-03",
+                "10-K",
+                2023,
+                "FY",
+            ),
+        ],
+    )
+    # XBRL: FY=2023, period=FY → parsed as (2023, Q4). Advance → (2024, Q1).
+    assert qi["safety_action"] == "AUTO_OK"
+    assert qi["quarter_label"] == "Q1_FY2024"
+    assert qi["quarter_identity_source"] == "rule_h_trusted_issuer_xbrl_advance"
+
+
+def test_rule_h_giii_NOT_in_bucket_keeps_fail_closing(monkeypatch):
+    """GIII has the same structural shape as ACI but is intentionally excluded
+    from TRUST_XBRL_ADVANCE (irreducible per per-ticker autopsy). The override
+    must NOT fire for GIII — it stays fail-closed."""
+    qi = _fake_resolve(
+        monkeypatch,
+        ticker="GIII",
+        accession="synthetic-giii-fy-disagreement",
+        filed="2024-06-01T16:10:00-04:00",
+        fye_month=1,
+        priors=[
+            _prior(
+                "prior-giii-q3-10q",
+                "2024-01-15T06:00:00-05:00",
+                "2023-10-31",
+                "10-Q",
+                2023,
+                "Q3",
+            ),
+        ],
+    )
+    assert qi["quarter_label"] is None
+    assert qi["safety_action"] == "FAIL_CLOSED"
+    assert qi["quarter_identity_source"] == "rule_g_fail_closed_fy_disagreement_calendar"
+
+
+def test_rule_h_non_bucket_ticker_keeps_existing_fail_close_behavior(monkeypatch):
+    """For a ticker NOT in the bucket (e.g., a synthetic test ticker),
+    behavior is identical to pre-Goal 6g: fail-closed with the original
+    source string. This is the regression guard for the 763 non-bucket tickers
+    in the universe — none of them must be affected by Goal 6g."""
+    qi = _fake_resolve(
+        monkeypatch,
+        ticker="SYN",  # not in bucket
+        accession="synthetic-non-bucket-fy-disagreement",
+        filed="2024-06-01T16:10:00-04:00",
+        fye_month=1,
+        priors=[
+            _prior(
+                "prior-syn-q3-10q",
+                "2024-01-15T06:00:00-05:00",
+                "2023-10-31",
+                "10-Q",
+                2023,
+                "Q3",
+            ),
+        ],
+    )
+    assert qi["quarter_label"] is None
+    assert qi["safety_action"] == "FAIL_CLOSED"
+    assert qi["quarter_identity_source"] == "rule_g_fail_closed_fy_disagreement_calendar"
+
+
+def test_rule_h_does_NOT_fire_when_no_disagreement(monkeypatch):
+    """Bucket ticker with XBRL+math AGREEING — override must NOT fire (D's
+    normal advance path runs instead). This protects against the override
+    firing in cases D already handles correctly."""
+    qi = _fake_resolve(
+        monkeypatch,
+        ticker="ACI",
+        accession="synthetic-aci-no-disagreement",
+        filed="2024-06-01T16:10:00-04:00",
+        fye_month=12,  # December FYE → calendar math matches XBRL FY
+        priors=[
+            _prior(
+                "prior-aci-q1-10q",
+                "2024-04-15T06:00:00-04:00",
+                "2024-03-31",
+                "10-Q",
+                2024,
+                "Q1",
+            ),
+        ],
+    )
+    assert qi["safety_action"] == "AUTO_OK"
+    # Source should be the existing prior_periodic_projection_q1_to_q2 (or similar),
+    # NOT rule_h_trusted_issuer_xbrl_advance.
+    assert qi["quarter_identity_source"] != "rule_h_trusted_issuer_xbrl_advance"
+    assert "prior_periodic_projection" in qi["quarter_identity_source"]
+
+
 def test_rule_g_no_prev_8k_short_gap_calendar_fail_closed(monkeypatch):
     qi = _fake_resolve(
         monkeypatch,

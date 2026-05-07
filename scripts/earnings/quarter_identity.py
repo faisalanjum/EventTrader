@@ -29,6 +29,22 @@ from get_quarterly_filings import (
 
 _VALID_QUARTERS = {"Q1", "Q2", "Q3", "Q4"}
 _DENY_PRIOR_ACCESSIONS = XBRL_DENY_PERIODIC_ACCESSIONS
+
+# Goal 6g audited-issuer bucket. Tickers in this set have been individually
+# verified against SEC EX-99.1 + companion XBRL: their XBRL FY label always
+# aligns with the EX-99.1 announcement label, so when D's calendar-FY-
+# disagreement gate fires (math says one FY year, XBRL says another), trusting
+# the XBRL FY/Q and advancing one quarter is empirically safe across ALL
+# their historical periods. Constraint: this set has no per-period dimension —
+# the rule applies uniformly to every filing of every listed ticker, which is
+# the structural guarantee against per-(ticker, period) exception sprawl.
+# See earnings-analysis/canary/quarter_resolver/audit_evidence/per_ticker_autopsy_2026-05-07/
+# for the per-ticker fact sheets and SEC-evidence-quoted subagent verdicts.
+TRUST_XBRL_ADVANCE = frozenset({
+    "ACI", "ASO", "BJ", "BURL", "CHWY", "DLTR", "FIVE", "GME",
+    "KSS", "LOW", "LULU", "OXM", "ROST", "ULTA",
+    "KR", "OLLI", "PLAY", "RH",
+})
 _PRIOR_CACHE: dict[tuple[str, str], list[dict]] = {}
 _FYE_CACHE: dict[str, int] = {}
 _XBRL_CACHE: dict[str, tuple[object, object]] = {}
@@ -526,6 +542,22 @@ def resolve_quarter_via_prior_periodic(row_context: dict, *, neo4j_session) -> d
         and math_parsed_prior is not None
         and str(xbrl_parsed[0]) != str(math_parsed_prior[0])
     ):
+        # Goal 6g audited-issuer override: for tickers in TRUST_XBRL_ADVANCE,
+        # advance prior XBRL FY/Q by one quarter instead of failing closed.
+        # Rule applies uniformly to ALL periods of the listed tickers.
+        ticker_str = (row_context.get("ticker") or "").upper()
+        if ticker_str in TRUST_XBRL_ADVANCE:
+            try:
+                advanced = _advance_quarter(int(xbrl_parsed[0]), str(xbrl_parsed[1]))
+            except (TypeError, ValueError):
+                advanced = None
+            if advanced is not None:
+                fy, q = advanced
+                return _attach_resolution_context(
+                    _result(fy, q, "rule_h_trusted_issuer_xbrl_advance", "AUTO_OK"),
+                    period_of_report=_resolved_period_end(fy, q, effective_fye),
+                    form_type_periodic=_form_for_quarter(q),
+                )
         return _result(
             None,
             None,
