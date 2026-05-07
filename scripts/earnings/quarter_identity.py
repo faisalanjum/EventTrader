@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Quarter identity resolver -- single canonical source of truth.
 
-Goal 4 production resolver:
+Goal 6c production resolver:
   - Uses the PIT-visible prior periodic projection proven in Goal 3.
   - Replaces only the odd 52/53-week fail-closed branch with Rule F.
+  - Adds Candidate D's calendar-branch safety guards.
   - Returns the existing quarter_info shape, plus safety_action.
 """
 from __future__ import annotations
@@ -391,10 +392,11 @@ def _attach_resolution_context(
 
 
 def resolve_quarter_via_prior_periodic(row_context: dict, *, neo4j_session) -> dict:
-    """Goal 4 production resolver.
+    """Goal 6c production resolver.
 
-    Mirrors Goal 3 _prior_periodic_projection structure; only the odd
-    52/53-week branch is replaced by Rule F.
+    Mirrors Goal 3 _prior_periodic_projection structure, preserves Rule F for
+    odd 52/53-week priors, and adds Candidate D guards for calendar-shaped
+    priors.
     """
     fye_month = _parse_fye(row_context.get("fye_month"))
     if fye_month is None:
