@@ -460,14 +460,19 @@ def test_derive_quarter_mgr_none_returns_none():
 # ── Finding 1 (ChatGPT 2026-04-17): 10-Q/10-K period_to_fiscal fallback ──
 
 def test_derive_quarter_10q_falls_back_to_period_to_fiscal_when_fq_null(monkeypatch):
-    """If Report.fiscal_quarter is NULL, derive via periodOfReport + FYE month + period_to_fiscal."""
+    """If Report.fiscal_quarter is NULL, derive via periodOfReport + FYE month + period_to_fiscal.
+    XBRL fields absent → existing math fallback path is unchanged."""
     from harvest_guidance_sessions import derive_quarter_label_for_guidance
 
     mgr = MagicMock()
-    # First call: direct fq/fy query → NULL. Fallback reads por + ft + fye_m.
+    # First call: direct fq/fy query → NULL. Fallback reads por + ft + fye_m
+    # AND XBRL FY/Q + accession aliases (Goal 6e); XBRL absent → math wins.
     mgr.execute_cypher_query_all.side_effect = [
         [{"fq": None, "fy": None}],                           # direct call
-        [{"por": "2024-07-31", "ft": "10-Q", "fye_m": 1}],    # fallback lookup
+        [{"por": "2024-07-31", "ft": "10-Q", "fye_m": 1,
+          "accession": "test-acc", "report_id": "test-acc",
+          "accession_no": "test-acc",
+          "xbrl_period": None, "xbrl_year": None}],            # fallback lookup
     ]
     # Patch period_to_fiscal to avoid needing the real fiscal_math module
     fake_mod = type(sys)("fiscal_math")
@@ -482,7 +487,10 @@ def test_derive_quarter_10k_falls_back_to_period_to_fiscal_when_fq_null(monkeypa
     mgr = MagicMock()
     mgr.execute_cypher_query_all.side_effect = [
         [{"fq": None, "fy": None}],
-        [{"por": "2024-01-31", "ft": "10-K", "fye_m": 1}],
+        [{"por": "2024-01-31", "ft": "10-K", "fye_m": 1,
+          "accession": "test-acc", "report_id": "test-acc",
+          "accession_no": "test-acc",
+          "xbrl_period": None, "xbrl_year": None}],
     ]
     fake_mod = type(sys)("fiscal_math")
     fake_mod.period_to_fiscal = lambda y, m, d, fye, ft: (2023, "Q4")
@@ -497,7 +505,10 @@ def test_derive_quarter_10q_fallback_returns_none_when_por_missing():
     mgr = MagicMock()
     mgr.execute_cypher_query_all.side_effect = [
         [{"fq": None, "fy": None}],
-        [{"por": None, "ft": "10-Q", "fye_m": 1}],
+        [{"por": None, "ft": "10-Q", "fye_m": 1,
+          "accession": "test-acc", "report_id": "test-acc",
+          "accession_no": "test-acc",
+          "xbrl_period": None, "xbrl_year": None}],
     ]
     assert derive_quarter_label_for_guidance(mgr, "10q", "acc") is None
 
@@ -508,9 +519,164 @@ def test_derive_quarter_10q_fallback_returns_none_when_fye_missing():
     mgr = MagicMock()
     mgr.execute_cypher_query_all.side_effect = [
         [{"fq": None, "fy": None}],
-        [{"por": "2024-07-31", "ft": "10-Q", "fye_m": None}],
+        [{"por": "2024-07-31", "ft": "10-Q", "fye_m": None,
+          "accession": "test-acc", "report_id": "test-acc",
+          "accession_no": "test-acc",
+          "xbrl_period": None, "xbrl_year": None}],
     ]
     assert derive_quarter_label_for_guidance(mgr, "10q", "acc") is None
+
+
+# ── Goal 6e: 10-Q/10-K NULL-XBRL fallback hardening ───────────────────────
+# Validates that the fallback prefers issuer XBRL self-declaration when
+# plausible (passes denylist + proximity guard), else uses period_to_fiscal
+# math. Mirrors Goal 4's pattern in quarter_identity.resolve_quarter_via_prior_periodic.
+
+def _make_fallback_mgr(side_effect_rows):
+    mgr = MagicMock()
+    mgr.execute_cypher_query_all.side_effect = side_effect_rows
+    return mgr
+
+
+def _patch_fake_fiscal_math(monkeypatch, return_value):
+    fake_mod = type(sys)("fiscal_math")
+    fake_mod.period_to_fiscal = lambda y, m, d, fye, ft: return_value
+    monkeypatch.setitem(sys.modules, "fiscal_math", fake_mod)
+
+
+def _patch_fake_xbrl_helpers(monkeypatch, denylist=None):
+    """Patch get_quarterly_filings with predictable parse + proximity helpers."""
+    fake_mod = type(sys)("get_quarterly_filings")
+    fake_mod.XBRL_DENY_PERIODIC_ACCESSIONS = denylist or set()
+    fake_mod.parse_xbrl_fiscal_identity = (
+        lambda y, p: None if (y is None or p is None) else
+        (None if str(p).upper() not in {"Q1", "Q2", "Q3", "Q4", "FY"} else
+         (int(y), "Q4" if str(p).upper() == "FY" else str(p).upper()))
+    )
+    def _proximity(fb, xb):
+        if xb is None: return False
+        q_num = {"Q1": 1, "Q2": 2, "Q3": 3, "Q4": 4}
+        ydiff = xb[0] - fb[0]
+        qdiff = q_num[xb[1]] - q_num[fb[1]]
+        return abs(ydiff) <= 1 and abs(qdiff) <= 1
+    fake_mod.should_use_xbrl_fiscal = _proximity
+    monkeypatch.setitem(sys.modules, "get_quarterly_filings", fake_mod)
+
+
+def test_xbrl_first_used_when_facts_present_and_plausible(monkeypatch):
+    """Off-calendar Jan-FYE filer: XBRL says (2023, Q4), math says (2024, Q4).
+    Proximity guard accepts (year diff ≤1) → return XBRL truth."""
+    from harvest_guidance_sessions import derive_quarter_label_for_guidance
+    mgr = _make_fallback_mgr([
+        [{"fq": None, "fy": None}],
+        [{"por": "2024-02-03", "ft": "10-K", "fye_m": 1,
+          "accession": "0001018840-24-000012",
+          "report_id": "0001018840-24-000012",
+          "accession_no": "0001018840-24-000012",
+          "xbrl_period": "FY", "xbrl_year": "2023"}],
+    ])
+    _patch_fake_fiscal_math(monkeypatch, return_value=(2024, "Q4"))
+    _patch_fake_xbrl_helpers(monkeypatch)
+    assert derive_quarter_label_for_guidance(mgr, "10k", "acc") == "Q4_FY2023"
+
+
+def test_xbrl_first_falls_back_when_facts_absent(monkeypatch):
+    """XBRL fields NULL → identical to today's math fallback."""
+    from harvest_guidance_sessions import derive_quarter_label_for_guidance
+    mgr = _make_fallback_mgr([
+        [{"fq": None, "fy": None}],
+        [{"por": "2024-07-31", "ft": "10-Q", "fye_m": 1,
+          "accession": "test-acc", "report_id": "test-acc",
+          "accession_no": "test-acc",
+          "xbrl_period": None, "xbrl_year": None}],
+    ])
+    _patch_fake_fiscal_math(monkeypatch, return_value=(2024, "Q2"))
+    _patch_fake_xbrl_helpers(monkeypatch)
+    assert derive_quarter_label_for_guidance(mgr, "10q", "acc") == "Q2_FY2024"
+
+
+def test_xbrl_first_falls_back_when_primary_accession_denylisted(monkeypatch):
+    """Primary accession in denylist → ignore XBRL, use math fallback.
+
+    XBRL ≠ math (XBRL=Q1_FY2023, math=Q1_FY2024) AND within proximity guard.
+    If denylist check were broken, XBRL would win and return Q1_FY2023.
+    Denylist check working → math wins → Q1_FY2024.
+    """
+    from harvest_guidance_sessions import derive_quarter_label_for_guidance
+    mgr = _make_fallback_mgr([
+        [{"fq": None, "fy": None}],
+        [{"por": "2024-04-30", "ft": "10-Q", "fye_m": 1,
+          "accession": "0000874761-23-000039",   # AES-class denylisted
+          "report_id": "0000874761-23-000039",
+          "accession_no": "0000874761-23-000039",
+          "xbrl_period": "Q1", "xbrl_year": "2023"}],   # plausible-but-different
+    ])
+    _patch_fake_fiscal_math(monkeypatch, return_value=(2024, "Q1"))
+    _patch_fake_xbrl_helpers(
+        monkeypatch, denylist={"0000874761-23-000039"}
+    )
+    # XBRL Q1_FY2023 is plausible (year_diff=-1, quarter_diff=0 within ±1)
+    # but denylist forces math fallback → Q1_FY2024
+    assert derive_quarter_label_for_guidance(mgr, "10q", "acc") == "Q1_FY2024"
+
+
+def test_xbrl_first_falls_back_when_xbrl_too_far_from_math(monkeypatch):
+    """XBRL year diff > 1 from math → proximity guard rejects → math wins."""
+    from harvest_guidance_sessions import derive_quarter_label_for_guidance
+    mgr = _make_fallback_mgr([
+        [{"fq": None, "fy": None}],
+        [{"por": "2024-04-30", "ft": "10-Q", "fye_m": 12,
+          "accession": "test-acc", "report_id": "test-acc",
+          "accession_no": "test-acc",
+          "xbrl_period": "Q1", "xbrl_year": "2020"}],   # 4 years off
+    ])
+    _patch_fake_fiscal_math(monkeypatch, return_value=(2024, "Q2"))
+    _patch_fake_xbrl_helpers(monkeypatch)
+    # XBRL says Q1 FY2020 (way off); proximity guard rejects → math wins
+    assert derive_quarter_label_for_guidance(mgr, "10q", "acc") == "Q2_FY2024"
+
+
+def test_xbrl_first_falls_back_when_xbrl_period_invalid(monkeypatch):
+    """XBRL period_focus is non-{FY,Q1-Q4} → parse returns None → math wins."""
+    from harvest_guidance_sessions import derive_quarter_label_for_guidance
+    mgr = _make_fallback_mgr([
+        [{"fq": None, "fy": None}],
+        [{"por": "2024-04-30", "ft": "10-Q", "fye_m": 12,
+          "accession": "test-acc", "report_id": "test-acc",
+          "accession_no": "test-acc",
+          "xbrl_period": "ANN", "xbrl_year": "2024"}],   # invalid period
+    ])
+    _patch_fake_fiscal_math(monkeypatch, return_value=(2024, "Q2"))
+    _patch_fake_xbrl_helpers(monkeypatch)
+    assert derive_quarter_label_for_guidance(mgr, "10q", "acc") == "Q2_FY2024"
+
+
+def test_xbrl_first_falls_back_when_accession_no_denylisted_with_junk_id(monkeypatch):
+    """Triple-check defense: r.id = non-accession junk, r.accessionNo = denylisted.
+
+    XBRL ≠ math (XBRL=Q1_FY2023, math=Q1_FY2024) AND within proximity guard.
+    coalesce(r.id, r.accessionNo) returns the junk id (which is NOT in denylist),
+    but the separate accession_no field catches the denylist match.
+    If triple-check were broken (only checked coalesce), XBRL would win → Q1_FY2023.
+    Triple-check working → math wins → Q1_FY2024.
+    """
+    from harvest_guidance_sessions import derive_quarter_label_for_guidance
+    mgr = _make_fallback_mgr([
+        [{"fq": None, "fy": None}],
+        [{"por": "2024-04-30", "ft": "10-Q", "fye_m": 1,
+          "accession": "uuid-not-accession-format",   # coalesce result
+          "report_id": "uuid-not-accession-format",   # raw r.id (junk, NOT in denylist)
+          "accession_no": "0000874761-23-000039",     # raw r.accessionNo (denylisted)
+          "xbrl_period": "Q1", "xbrl_year": "2023"}],   # plausible-but-different
+    ])
+    _patch_fake_fiscal_math(monkeypatch, return_value=(2024, "Q1"))
+    _patch_fake_xbrl_helpers(
+        monkeypatch, denylist={"0000874761-23-000039"}
+    )
+    # XBRL Q1_FY2023 is plausible (year_diff=-1 within ±1) AND would normally
+    # win — but triple-check catches the denylist on accession_no even when
+    # coalesce returned non-accession junk → math wins → Q1_FY2024
+    assert derive_quarter_label_for_guidance(mgr, "10q", "acc") == "Q1_FY2024"
 
 
 # ── Finding 2 (ChatGPT): watch mode mgr self-healing ──────────────────────

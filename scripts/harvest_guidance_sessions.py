@@ -307,6 +307,13 @@ def derive_quarter_label_for_guidance(
 
     Returns None (harvest skipped gracefully) on any failure — mgr=None,
     missing source, unrecognized asset, Neo4j exception, or malformed fields.
+
+    Maintenance note: the 8-K path uses ``resolve_quarter_info``; the 10-Q/10-K
+    fallback below labels the periodic filing itself and is intentionally
+    separate. If this fallback shares low-level XBRL helpers with
+    ``quarter_identity``, helper changes benefit both paths, but future changes
+    to ``resolve_quarter_info`` do not automatically affect 10-Q/10-K fallback
+    behavior.
     """
     if mgr is None:
         log.info("Quarter derivation skipped: Neo4j manager is None")
@@ -362,15 +369,43 @@ def derive_quarter_label_for_guidance(
 def _derive_via_period_to_fiscal(mgr, source_id: str) -> str | None:
     """Fallback for 10-Q/10-K when Report.fiscal_quarter/fiscal_year are NULL.
 
-    Queries periodOfReport + formType + Company.fiscal_year_end_month, then
-    calls the shared ``period_to_fiscal`` helper from fiscal_math.py. Returns
-    ``"Q{n}_FY{YYYY}"`` or ``None`` if any piece is missing.
+    Computes the math fallback via ``period_to_fiscal`` from fiscal_math.py,
+    then OPTIONALLY overrides with the filing's own XBRL DocumentFiscal* facts
+    when XBRL is plausible — defined as: accession (or its id/accessionNo
+    aliases) NOT in ``XBRL_DENY_PERIODIC_ACCESSIONS`` AND XBRL value within
+    ±1 year/quarter of math via ``should_use_xbrl_fiscal``. This mirrors the
+    Goal 4 safety pattern used by
+    ``quarter_identity.resolve_quarter_via_prior_periodic`` so future
+    improvements to those shared helpers benefit both consumers.
+
+    This is not an earnings 8-K resolver call. Do not swap in
+    ``resolve_quarter_info`` here; any 10-Q/10-K hardening must be implemented
+    explicitly in this fallback or in shared periodic-filing helpers.
+
+    Returns ``"Q{n}_FY{YYYY}"`` or ``None`` if any piece is missing.
     """
     try:
+        # Single extended Cypher: existing fields + XBRL FY/Q (size==1 guard
+        # prevents picking up values from comparative-period contexts) +
+        # report_id/accession_no for triple-check denylist defense.
         rows = mgr.execute_cypher_query_all(
             "MATCH (r:Report {id: $sid})-[:PRIMARY_FILER]->(c:Company) "
-            "RETURN r.periodOfReport AS por, r.formType AS ft, "
-            "       c.fiscal_year_end_month AS fye_m",
+            "OPTIONAL MATCH (r)-[:HAS_XBRL]->(:XBRLNode)<-[:REPORTS]-"
+            "  (fp:Fact {qname: 'dei:DocumentFiscalPeriodFocus'}) "
+            "WITH r, c, collect(DISTINCT fp.value) AS xbrl_periods "
+            "OPTIONAL MATCH (r)-[:HAS_XBRL]->(:XBRLNode)<-[:REPORTS]-"
+            "  (fy:Fact {qname: 'dei:DocumentFiscalYearFocus'}) "
+            "WITH r, c, xbrl_periods, collect(DISTINCT fy.value) AS xbrl_years "
+            "RETURN coalesce(r.id, r.accessionNo) AS accession, "
+            "       r.id AS report_id, "
+            "       r.accessionNo AS accession_no, "
+            "       r.periodOfReport AS por, "
+            "       r.formType AS ft, "
+            "       c.fiscal_year_end_month AS fye_m, "
+            "       CASE WHEN size(xbrl_periods) = 1 "
+            "            THEN head(xbrl_periods) END AS xbrl_period, "
+            "       CASE WHEN size(xbrl_years) = 1 "
+            "            THEN head(xbrl_years) END AS xbrl_year",
             {"sid": source_id},
         )
         if not rows:
@@ -383,8 +418,39 @@ def _derive_via_period_to_fiscal(mgr, source_id: str) -> str | None:
         from datetime import date
         d = date.fromisoformat(str(por)[:10])
         from fiscal_math import period_to_fiscal  # lazy import
-        fy, q_label = period_to_fiscal(d.year, d.month, d.day, int(fye_m), ft)
-        return f"{q_label}_FY{fy}"
+        math_fy, math_q = period_to_fiscal(
+            d.year, d.month, d.day, int(fye_m), ft
+        )
+
+        # XBRL override with denylist (triple-check) + proximity guard.
+        # Wrapped in inner try/except so any failure falls through to the
+        # existing math fallback.
+        try:
+            from get_quarterly_filings import (  # lazy import
+                parse_xbrl_fiscal_identity,
+                should_use_xbrl_fiscal,
+                XBRL_DENY_PERIODIC_ACCESSIONS,
+            )
+            candidates = (
+                rows[0].get("accession") or "",
+                rows[0].get("report_id") or "",
+                rows[0].get("accession_no") or "",
+            )
+            denylisted = any(
+                c and c in XBRL_DENY_PERIODIC_ACCESSIONS for c in candidates
+            )
+            if not denylisted:
+                xbrl = parse_xbrl_fiscal_identity(
+                    rows[0].get("xbrl_year"), rows[0].get("xbrl_period")
+                )
+                if should_use_xbrl_fiscal((math_fy, math_q), xbrl):
+                    return f"{xbrl[1]}_FY{xbrl[0]}"
+        except Exception as e:
+            log.debug(
+                "XBRL guard failed for %s, using math: %s", source_id, e
+            )
+
+        return f"{math_q}_FY{math_fy}"
     except Exception as e:
         log.debug("period_to_fiscal fallback failed for %s: %s", source_id, e)
         return None
