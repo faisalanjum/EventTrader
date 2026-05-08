@@ -301,6 +301,39 @@ def should_use_xbrl_fiscal(fallback_fiscal, xbrl_fiscal) -> bool:
     quarter_diff = q_num[xbrl_quarter] - q_num[fallback_quarter]
     return abs(year_diff) <= 1 and abs(quarter_diff) <= 1
 
+
+def choose_periodic_fiscal_identity(
+    *,
+    fallback_fiscal,
+    xbrl_year_focus,
+    xbrl_period_focus,
+    accession_candidates=(),
+):
+    """
+    Choose the fiscal identity for a 10-Q/10-K from math fallback + own XBRL.
+
+    This is the shared periodic-filing safety gate used by guidance harvesting
+    and prior-financial builders. Earnings 8-K identity still belongs in
+    quarter_identity.resolve_quarter_info(); this helper is only for a periodic
+    filing's own fiscal labels.
+
+    Returns:
+        (fiscal_year: int, fiscal_quarter: str) or None.
+    """
+    candidates = tuple(str(c).strip() for c in (accession_candidates or ()) if c)
+    if any(c in XBRL_DENY_PERIODIC_ACCESSIONS for c in candidates):
+        return fallback_fiscal
+
+    xbrl_fiscal = parse_xbrl_fiscal_identity(xbrl_year_focus, xbrl_period_focus)
+    if fallback_fiscal is not None:
+        if should_use_xbrl_fiscal(fallback_fiscal, xbrl_fiscal):
+            return xbrl_fiscal
+        return fallback_fiscal
+
+    # Last-resort path for callers that cannot compute a fallback, e.g. missing
+    # Company FYE. Still denylist-gated above and parse-validated here.
+    return xbrl_fiscal
+
 # Matched 10-Q/10-K filings whose XBRL fiscal identity is known-bad and
 # still leaks through should_use_xbrl_fiscal().  Keyed by periodic filing
 # accession (accession_10q), never by ticker.
@@ -417,14 +450,13 @@ def get_earnings_with_10q(ticker: str, dedupe: bool = True) -> str:
 
             form_type = r["form_type"] or "10-Q"
             fallback_fiscal = period_to_fiscal(period_year, period_month, period_day, derived_fye, form_type)
-            xbrl_fiscal = parse_xbrl_fiscal_identity(r["xbrl_year_focus"], r["xbrl_period_focus"])
             periodic_accession = (r["accession_10q"] or "").strip()
-            if periodic_accession in XBRL_DENY_PERIODIC_ACCESSIONS:
-                fiscal_year, fiscal_quarter = fallback_fiscal
-            elif should_use_xbrl_fiscal(fallback_fiscal, xbrl_fiscal):
-                fiscal_year, fiscal_quarter = xbrl_fiscal
-            else:
-                fiscal_year, fiscal_quarter = fallback_fiscal
+            fiscal_year, fiscal_quarter = choose_periodic_fiscal_identity(
+                fallback_fiscal=fallback_fiscal,
+                xbrl_year_focus=r["xbrl_year_focus"],
+                xbrl_period_focus=r["xbrl_period_focus"],
+                accession_candidates=(periodic_accession,),
+            )
             fiscal_year = str(fiscal_year)
 
             accession_10q = r["accession_10q"] or "N/A"

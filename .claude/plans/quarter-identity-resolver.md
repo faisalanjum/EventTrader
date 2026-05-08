@@ -10,6 +10,7 @@ Production status:
 - Goal 6e guidance fallback hardening shipped and was pushed (`be4c2cc`): the rare 10-Q/10-K guidance source-quarter fallback now prefers own-filing XBRL only when denylist/proximity guards pass, then falls back to math.
 - Goal 6f research completed with `KEEP_D`; no lock-respecting structural candidate beat D without adding wrong AUTO_OK rows.
 - Goal 6g shipped and was pushed (`237f53c`): a narrow audited 18-issuer `TRUST_XBRL_ADVANCE` bucket recovers known-safe calendar-FY-disagreement fail-closures without adding wrong AUTO_OK rows.
+- Post-6g centralization pass completed: runtime 8-K consumers now route through `quarter_identity.resolve_quarter_info()`, and periodic 10-Q/10-K fallback consumers route through `get_quarterly_filings.choose_periodic_fiscal_identity()`.
 - The final durable truth file is `data/quarter_identity_ground_truth.csv`. Old canary/verifier/audit scaffolding can be deleted after this context is consolidated.
 
 Final Goal 6g measured behavior:
@@ -64,6 +65,8 @@ Final production files to keep:
 - `scripts/earnings/test_quarter_identity.py` and `scripts/earnings/test_quarter_identity_u64.py` — resolver/write-guard regression tests.
 - `.claude/skills/earnings-orchestrator/scripts/get_quarterly_filings.py` — shared XBRL parsing/proximity/denylist helpers.
 - `scripts/harvest_guidance_sessions.py` and `scripts/test_harvest_guidance_sessions.py` — guidance periodic fallback hardening.
+- `scripts/earnings/get_earnings.py` — legacy 8-K listing now uses the canonical 8-K resolver, not coarse calendar math.
+- `scripts/earnings/builders/prior_financials.py` — prior-financial fiscal labels now use the shared periodic-filing chooser instead of local fallback copies.
 - `data/quarter_identity_ground_truth.csv` — durable ground-truth corpus kept after canary cleanup.
 
 ## Why This Exists
@@ -205,6 +208,159 @@ Implemented state after Goals 4/6c:
 - `resolve_quarter_info(ticker, accession_8k)` returns a dict. Trust `quarter_label` only when `safety_action == "AUTO_OK"`.
 - The orchestrator write guard blocks destructive event-directory writes on `FAIL_CLOSED`.
 - Do not bypass the resolver with a plain fiscal-math formula for earnings 8-Ks.
+
+## Consumer Map And Centralization Status
+
+This section consolidates the repo-wide consumer audit. It answers: which code
+paths resolve earnings 8-K quarter identity, periodic 10-Q/10-K fiscal
+identity, or fiscal calendar dates, and will future canonical helper changes
+flow into them?
+
+Canonical modules:
+
+- `scripts/earnings/quarter_identity.py`
+  - Canonical earnings 8-K quarter identity resolver.
+  - Public API: `resolve_quarter_info(ticker, accession_8k, *, session=None)`.
+  - Use only for earnings 8-Ks.
+- `.claude/skills/earnings-orchestrator/scripts/get_quarterly_filings.py`
+  - Shared periodic-filing helpers:
+    - `parse_xbrl_fiscal_identity`
+    - `should_use_xbrl_fiscal`
+    - `choose_periodic_fiscal_identity`
+    - `XBRL_DENY_PERIODIC_ACCESSIONS`
+    - `fiscal_to_dates`
+- `.claude/skills/earnings-orchestrator/scripts/fiscal_math.py`
+  - Pure fiscal math:
+    - `period_to_fiscal`
+    - `_compute_fiscal_dates`
+
+Important architecture distinction:
+
+- `resolve_quarter_info()` answers: "which fiscal quarter is this earnings
+  8-K announcing?"
+- Periodic 10-Q/10-K filings usually carry their own fiscal labels. They use
+  direct `Report.fiscal_quarter/fiscal_year`, then shared periodic XBRL helpers
+  if those fields are missing.
+- Guidance target-period construction is not source-quarter resolution. It
+  builds calendar `GuidancePeriod` dates from already extracted
+  `fiscal_year/fiscal_quarter` fields.
+- Transcript fiscal labels come from the transcript event provider
+  (`event.year`, `event.quarter`). The inline transcript helper derives only
+  secondary `calendar_year/calendar_quarter` display fields from those fiscal
+  labels.
+
+### Canonical 8-K Quarter Identity Consumers
+
+These call `quarter_identity.resolve_quarter_info()` and therefore benefit from
+future changes to `quarter_identity.py`:
+
+- `scripts/earnings/earnings_orchestrator.py`
+  - Resolves `quarter_info` for prediction/learner/orchestrator flow.
+  - Destructive-write guard blocks writes unless `safety_action == "AUTO_OK"`.
+- `scripts/earnings/compare_section.py`
+  - Resolves quarter identity for section comparison tooling.
+- `scripts/earnings/render_section.py`
+  - Resolves quarter identity for section rendering tooling.
+- `scripts/harvest_guidance_sessions.py`
+  - For `asset == "8k"`, lazy-imports and calls `resolve_quarter_info()`.
+- `scripts/earnings/get_earnings.py`
+  - Fiscal labels for earnings 8-K listings now come from
+    `resolve_quarter_info()`, not old `calculate_fiscal_period()` calendar
+    math.
+
+Tests:
+
+- `scripts/earnings/test_quarter_identity.py`
+- `scripts/earnings/test_quarter_identity_u64.py`
+- `scripts/test_harvest_guidance_sessions.py`
+- `scripts/earnings/test_get_earnings_centralized.py`
+
+### Canonical Periodic 10-Q/10-K Fiscal Identity Consumers
+
+These use `get_quarterly_filings.choose_periodic_fiscal_identity()` and
+therefore benefit from future changes to the shared periodic XBRL safety gate:
+
+- `.claude/skills/earnings-orchestrator/scripts/get_quarterly_filings.py`
+  - Defines `choose_periodic_fiscal_identity()`.
+  - `get_earnings_with_10q()` uses it for matched 10-Q/10-K labels.
+- `scripts/harvest_guidance_sessions.py`
+  - For `asset in ("10q", "10k")`: first reads
+    `Report.fiscal_quarter/fiscal_year`; if missing,
+    `_derive_via_period_to_fiscal()` computes math fallback and calls
+    `choose_periodic_fiscal_identity()`.
+  - Do not replace this with `resolve_quarter_info()`. This path labels the
+    periodic filing itself, not an earnings 8-K.
+- `scripts/earnings/builders/prior_financials.py`
+  - `_get_fiscal_labels()` imports `choose_periodic_fiscal_identity()`
+    directly.
+  - Local fallback copies of `parse_xbrl_fiscal_identity()` and
+    `should_use_xbrl_fiscal()` were removed.
+- `.claude/skills/earnings-orchestrator/scripts/event_json_manifest.py`
+  - Calls `get_earnings_with_10q()`, so it picks up the helper through that
+    function.
+
+Tests:
+
+- `scripts/earnings/test_quarter_identity.py`
+  - Direct helper tests for safe XBRL use, denylist fallback, and invalid XBRL
+    fallback.
+- `scripts/test_harvest_guidance_sessions.py`
+  - Guidance 10-Q/10-K fallback behavior.
+- `scripts/earnings/test_builders_prior_financials.py`
+  - Prior-financial helper routing, denylist, no-FYE XBRL fallback, and math
+    fallback.
+
+### Canonical Fiscal Date / Target-Period Consumers
+
+These do not resolve source quarter identity. They convert known fiscal labels
+to dates or compute fiscal labels for periodic periods:
+
+- `scripts/earnings/builders/consensus.py`
+  - Uses `period_to_fiscal()` and `_compute_fiscal_dates()`.
+- `.claude/skills/earnings-orchestrator/scripts/guidance_ids.py`
+  - Uses `_compute_fiscal_dates()` for `GuidancePeriod` IDs/dates.
+- `.claude/skills/earnings-orchestrator/scripts/guidance_write_cli.py`
+  - Uses Redis SEC quarter cache first, then `build_guidance_period_id()`.
+- `scripts/sec_quarter_cache_loader.py`
+  - Builds Redis SEC quarter cache from SEC company concept data.
+
+These should not call `resolve_quarter_info()`.
+
+### Remaining Inline / Non-Canonical Math
+
+These are still present after centralization. They do not undermine the
+earnings/report quarter resolver, but they should stay documented:
+
+- `transcripts/EarningsCallTranscripts.py`
+  - `calendar_to_fiscal()` is dead code; no production callers found.
+  - `fiscal_to_calendar()` is live, but inverse/display-only:
+    `fiscal_year/fiscal_quarter` come from the transcript provider, and this
+    helper derives secondary `calendar_year/calendar_quarter` fields.
+  - Do not replace it with `resolve_quarter_info()`. If centralizing it later,
+    first add a canonical inverse helper such as
+    `fiscal_to_calendar(fy, fq, fye_month)` to `fiscal_math.py`, then prove
+    byte-equivalence with tests.
+- `scripts/earnings/utils.py`
+  - `calculate_fiscal_period()` has zero non-self Python callers after
+    `get_earnings.py` moved to `resolve_quarter_info()`.
+  - `calendar_to_fiscal()` is only used by that orphan helper.
+  - Treat both as dead compatibility code; do not add new callers.
+- `drivers/8K_XBRL_Linking/FinalScripts/xbrl_catalog.py`
+  - Driver/exploration utility with inline fiscal calendar display math.
+  - Called by its own `test_pipeline.py`; not an orchestrated production
+    earnings/guidance write path.
+  - If this driver is ever promoted to a write path, refactor its
+    calendar-to-fiscal math to `period_to_fiscal()` and add a canonical inverse
+    helper for its fiscal-to-calendar display mapping.
+
+Validation from the centralization pass:
+
+- `calculate_fiscal_period()` has no remaining production callers.
+- Removed local fallback helpers no longer appear:
+  `_parse_xbrl_fiscal_identity_fallback`,
+  `_should_use_xbrl_fiscal_fallback`.
+- Full local earnings suite passed after the pass:
+  `1419 passed, 14 skipped, 43 subtests passed`.
 
 ## Consolidated Preservation Contract
 

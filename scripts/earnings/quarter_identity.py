@@ -79,7 +79,9 @@ Goal 6c (commit a61636a): Candidate D's 5 calendar-branch guards
           rule_g_fail_closed_same_filing_short_gap_calendar).
 Goal 6e (commit be4c2cc): guidance 10-Q/10-K NULL-fiscal-label fallback
          hardened in scripts/harvest_guidance_sessions.py with denylist +
-         proximity + triple-check guards. Separate file; do NOT swap
+         proximity + triple-check guards. It now routes through
+         get_quarterly_filings.choose_periodic_fiscal_identity(), the shared
+         periodic-filing chooser. Separate file; do NOT swap
          resolve_quarter_info() into that fallback.
 Goal 6g (commit 237f53c): 18-ticker TRUST_XBRL_ADVANCE override on the
          calendar-FY-disagreement gate. +1.84pp warm-start correct, 0 new

@@ -370,13 +370,11 @@ def _derive_via_period_to_fiscal(mgr, source_id: str) -> str | None:
     """Fallback for 10-Q/10-K when Report.fiscal_quarter/fiscal_year are NULL.
 
     Computes the math fallback via ``period_to_fiscal`` from fiscal_math.py,
-    then OPTIONALLY overrides with the filing's own XBRL DocumentFiscal* facts
-    when XBRL is plausible — defined as: accession (or its id/accessionNo
-    aliases) NOT in ``XBRL_DENY_PERIODIC_ACCESSIONS`` AND XBRL value within
-    ±1 year/quarter of math via ``should_use_xbrl_fiscal``. This mirrors the
-    Goal 4 safety pattern used by
-    ``quarter_identity.resolve_quarter_via_prior_periodic`` so future
-    improvements to those shared helpers benefit both consumers.
+    then routes math + own-filing XBRL DocumentFiscal* facts through
+    ``get_quarterly_filings.choose_periodic_fiscal_identity``. That shared
+    helper owns the denylist/proximity/parse safety gate so future periodic
+    XBRL hardening benefits this fallback and prior-financial labeling
+    together.
 
     This is not an earnings 8-K resolver call. Do not swap in
     ``resolve_quarter_info`` here; any 10-Q/10-K hardening must be implemented
@@ -427,24 +425,21 @@ def _derive_via_period_to_fiscal(mgr, source_id: str) -> str | None:
         # existing math fallback.
         try:
             from get_quarterly_filings import (  # lazy import
-                parse_xbrl_fiscal_identity,
-                should_use_xbrl_fiscal,
-                XBRL_DENY_PERIODIC_ACCESSIONS,
+                choose_periodic_fiscal_identity,
             )
             candidates = (
                 rows[0].get("accession") or "",
                 rows[0].get("report_id") or "",
                 rows[0].get("accession_no") or "",
             )
-            denylisted = any(
-                c and c in XBRL_DENY_PERIODIC_ACCESSIONS for c in candidates
+            chosen = choose_periodic_fiscal_identity(
+                fallback_fiscal=(math_fy, math_q),
+                xbrl_year_focus=rows[0].get("xbrl_year"),
+                xbrl_period_focus=rows[0].get("xbrl_period"),
+                accession_candidates=candidates,
             )
-            if not denylisted:
-                xbrl = parse_xbrl_fiscal_identity(
-                    rows[0].get("xbrl_year"), rows[0].get("xbrl_period")
-                )
-                if should_use_xbrl_fiscal((math_fy, math_q), xbrl):
-                    return f"{xbrl[1]}_FY{xbrl[0]}"
+            if chosen and chosen != (math_fy, math_q):
+                return f"{chosen[1]}_FY{chosen[0]}"
         except Exception as e:
             log.debug(
                 "XBRL guard failed for %s, using math: %s", source_id, e

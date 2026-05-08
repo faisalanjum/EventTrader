@@ -9,6 +9,16 @@ from scripts.earnings.builders import prior_financials as bpf
 pytestmark = pytest.mark.builders
 
 
+class _FiscalRowsManager:
+    def __init__(self, rows):
+        self.rows = rows
+        self.calls = []
+
+    def execute_cypher_query_all(self, query, params):
+        self.calls.append((query, params))
+        return self.rows
+
+
 def test_classify_period_quarter():
     # ~92 days (60-120 range) → "quarterly"
     res = bpf.classify_period("2024-07-01", "2024-09-30")
@@ -71,3 +81,70 @@ def test_get_manager_is_locally_imported_inside_build_function():
     # Function-internal: import statement must be present in build_prior_financials's source
     src = inspect.getsource(bpf.build_prior_financials)
     assert "from neograph.Neo4jConnection import get_manager" in src
+
+
+def test_get_fiscal_labels_uses_shared_periodic_xbrl_when_safe():
+    manager = _FiscalRowsManager([
+        {
+            "period": "2024-02-03",
+            "form": "10-K",
+            "accession": "SAFE-10K",
+            "fiscal_period": "FY",
+            "fiscal_year": "2023",
+        }
+    ])
+
+    labels = bpf._get_fiscal_labels(
+        manager, "KSS", ["2024-02-03"], as_of=None, fye_month=1
+    )
+
+    assert labels == {"2024-02-03": "Q4_FY2023"}
+
+
+def test_get_fiscal_labels_respects_shared_periodic_denylist():
+    from get_quarterly_filings import XBRL_DENY_PERIODIC_ACCESSIONS
+
+    denylisted_accession = next(iter(XBRL_DENY_PERIODIC_ACCESSIONS))
+    manager = _FiscalRowsManager([
+        {
+            "period": "2024-06-30",
+            "form": "10-Q",
+            "accession": denylisted_accession,
+            "fiscal_period": "Q2",
+            "fiscal_year": "2023",
+        }
+    ])
+
+    labels = bpf._get_fiscal_labels(
+        manager, "DENY", ["2024-06-30"], as_of=None, fye_month=12
+    )
+
+    assert labels == {"2024-06-30": "Q2_FY2024"}
+
+
+def test_get_fiscal_labels_uses_valid_xbrl_when_no_fye_fallback_exists():
+    manager = _FiscalRowsManager([
+        {
+            "period": "2024-09-30",
+            "form": "10-Q",
+            "accession": "SAFE-10Q",
+            "fiscal_period": "Q3",
+            "fiscal_year": "2024",
+        }
+    ])
+
+    labels = bpf._get_fiscal_labels(
+        manager, "NOFYE", ["2024-09-30"], as_of=None, fye_month=None
+    )
+
+    assert labels == {"2024-09-30": "Q3_FY2024"}
+
+
+def test_get_fiscal_labels_keeps_math_fallback_when_no_dei_rows():
+    manager = _FiscalRowsManager([])
+
+    labels = bpf._get_fiscal_labels(
+        manager, "MATH", ["2024-09-30"], as_of=None, fye_month=12
+    )
+
+    assert labels == {"2024-09-30": "Q3_FY2024"}

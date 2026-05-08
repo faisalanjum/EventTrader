@@ -955,25 +955,13 @@ def _get_fiscal_labels(manager, ticker: str, periods: list[str], as_of: str | No
 
     Logic from get_quarterly_filings.py:
     1. Compute fallback via period_to_fiscal(period, fye_month, form_type)
-    2. Parse XBRL DEI identity via parse_xbrl_fiscal_identity()
-    3. Check XBRL_DENY_PERIODIC_ACCESSIONS denylist
-    4. Use should_use_xbrl_fiscal() proximity guard to choose XBRL vs fallback
-    5. Dedup by fiscal_key (keep newest period per key)
+    2. Route fallback + XBRL DEI identity through choose_periodic_fiscal_identity()
+       (parse validation, accession denylist, and proximity guard live there)
+    3. Dedup by fiscal_key (keep newest period per key)
 
     Returns: {period_str: "Q1_FY2026"}
     """
-    # Import the exact functions from the guidance extractor
-    try:
-        from get_quarterly_filings import (
-            parse_xbrl_fiscal_identity,
-            should_use_xbrl_fiscal,
-            XBRL_DENY_PERIODIC_ACCESSIONS,
-        )
-    except ImportError:
-        # Fallback: define locally if import fails (shouldn't happen — same sys.path)
-        parse_xbrl_fiscal_identity = _parse_xbrl_fiscal_identity_fallback
-        should_use_xbrl_fiscal = _should_use_xbrl_fiscal_fallback
-        XBRL_DENY_PERIODIC_ACCESSIONS = set()
+    from get_quarterly_filings import choose_periodic_fiscal_identity
 
     try:
         from fiscal_math import period_to_fiscal
@@ -1005,20 +993,14 @@ def _get_fiscal_labels(manager, ticker: str, periods: list[str], as_of: str | No
             fy, q = period_to_fiscal(d.year, d.month, d.day, fye_month, base_form)
             fallback_fiscal = (fy, q)
 
-        # Step 2: Parse XBRL DEI identity
-        xbrl_fiscal = parse_xbrl_fiscal_identity(
-            rec.get("fiscal_year"), rec.get("fiscal_period"))
-
-        # Step 3: Choose — exact logic from get_quarterly_filings.py
-        # Guard: fallback_fiscal can be None when fye_month is unavailable
-        if accession in XBRL_DENY_PERIODIC_ACCESSIONS:
-            chosen = fallback_fiscal
-        elif fallback_fiscal is not None and should_use_xbrl_fiscal(fallback_fiscal, xbrl_fiscal):
-            chosen = xbrl_fiscal
-        elif fallback_fiscal is None and xbrl_fiscal is not None:
-            chosen = xbrl_fiscal  # No fallback available, trust XBRL
-        else:
-            chosen = fallback_fiscal
+        # Step 2/3: choose via the central periodic-filing helper.
+        # Guard: fallback_fiscal can be None when fye_month is unavailable.
+        chosen = choose_periodic_fiscal_identity(
+            fallback_fiscal=fallback_fiscal,
+            xbrl_year_focus=rec.get("fiscal_year"),
+            xbrl_period_focus=rec.get("fiscal_period"),
+            accession_candidates=(accession,),
+        )
 
         if chosen:
             fiscal_year, fiscal_quarter = chosen
@@ -1051,37 +1033,6 @@ def _get_fiscal_labels(manager, ticker: str, periods: list[str], as_of: str | No
     # Rebuild labels with only deduplicated entries
     deduped_labels = {period: labels[period] for period in fiscal_key_to_period.values()}
     return deduped_labels
-
-
-def _parse_xbrl_fiscal_identity_fallback(xbrl_year_focus, xbrl_period_focus):
-    """Local fallback — identical to get_quarterly_filings.parse_xbrl_fiscal_identity."""
-    if xbrl_year_focus is None or xbrl_period_focus is None:
-        return None
-    year_str = str(xbrl_year_focus).strip()
-    if not year_str.isdigit():
-        return None
-    period = str(xbrl_period_focus).strip().upper()
-    if period == "FY":
-        quarter = "Q4"
-    elif period in {"Q1", "Q2", "Q3", "Q4"}:
-        quarter = period
-    else:
-        return None
-    return int(year_str), quarter
-
-
-def _should_use_xbrl_fiscal_fallback(fallback_fiscal, xbrl_fiscal) -> bool:
-    """Local fallback — identical to get_quarterly_filings.should_use_xbrl_fiscal."""
-    if xbrl_fiscal is None:
-        return False
-    if fallback_fiscal is None:
-        return False
-    q_num = {"Q1": 1, "Q2": 2, "Q3": 3, "Q4": 4}
-    fallback_year, fallback_quarter = fallback_fiscal
-    xbrl_year, xbrl_quarter = xbrl_fiscal
-    year_diff = xbrl_year - fallback_year
-    quarter_diff = q_num[xbrl_quarter] - q_num[fallback_quarter]
-    return abs(year_diff) <= 1 and abs(quarter_diff) <= 1
 
 
 # ── Segment Inventory ────────────────────────────────────────────────────

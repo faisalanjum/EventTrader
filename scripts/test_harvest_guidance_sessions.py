@@ -560,6 +560,18 @@ def _patch_fake_xbrl_helpers(monkeypatch, denylist=None):
         qdiff = q_num[xb[1]] - q_num[fb[1]]
         return abs(ydiff) <= 1 and abs(qdiff) <= 1
     fake_mod.should_use_xbrl_fiscal = _proximity
+    def _choose(*, fallback_fiscal, xbrl_year_focus, xbrl_period_focus,
+                accession_candidates=()):
+        if any(c in fake_mod.XBRL_DENY_PERIODIC_ACCESSIONS
+               for c in (accession_candidates or ()) if c):
+            return fallback_fiscal
+        xbrl = fake_mod.parse_xbrl_fiscal_identity(
+            xbrl_year_focus, xbrl_period_focus
+        )
+        if fallback_fiscal is not None:
+            return xbrl if _proximity(fallback_fiscal, xbrl) else fallback_fiscal
+        return xbrl
+    fake_mod.choose_periodic_fiscal_identity = _choose
     monkeypatch.setitem(sys.modules, "get_quarterly_filings", fake_mod)
 
 

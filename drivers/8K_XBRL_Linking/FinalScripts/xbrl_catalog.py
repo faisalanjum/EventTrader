@@ -654,6 +654,25 @@ class XBRLCatalog:
         # ══════════════════════════════════════════════════════════════════════
         # FISCAL CALENDAR - Critical for period matching
         # Uses proven fiscal_to_calendar logic from EarningsCallTranscripts.py
+        #
+        # CENTRALIZATION NOTE (audited 2026-05-07):
+        # This block contains TWO inline fiscal-math implementations that are
+        # NOT routed through the canonical helpers. They live here because
+        # this is a driver utility (called only by drivers/8K_XBRL_Linking/
+        # FinalScripts/test_pipeline.py for catalog/CLI display) and does not
+        # write into any production data path. If this driver is ever
+        # promoted to a write-path, refactor as follows:
+        #   1. Replace `current_fy = recent_year + 1 if period_month > fy_month`
+        #      below with:
+        #          from fiscal_math import period_to_fiscal
+        #          fy, _ = period_to_fiscal(recent_year, period_month, 1,
+        #                                    fy_month, "10-K")
+        #          current_fy = fy
+        #   2. Replace the inline `fiscal_to_calendar` lambda with a canonical
+        #      inverse helper (none exists in fiscal_math.py today; would need
+        #      to be added there as fiscal_to_calendar(fy, fq, fye_month) →
+        #      (cal_year, end_month)).
+        # Background: scripts/earnings/quarter_identity.py module docstring.
         # ══════════════════════════════════════════════════════════════════════
         if self.fiscal_year_end_month and self.fiscal_year_end_day:
             from calendar import month_name
@@ -667,13 +686,15 @@ class XBRLCatalog:
             fy_day = self.fiscal_year_end_day
             L.append(f"Fiscal Year End: {month_name[fy_month]} {fy_day}")
 
-            # Proven fiscal_to_calendar logic (from EarningsCallTranscripts.py)
+            # Inverse helper (fiscal → calendar). No canonical equivalent in
+            # fiscal_math.py today — see CENTRALIZATION NOTE above.
             def fiscal_to_calendar(fiscal_year, fiscal_quarter, fiscal_month_end):
                 month = (fiscal_month_end - 3 * (4 - fiscal_quarter)) % 12 or 12
                 cal_year = fiscal_year - 1 if month > fiscal_month_end else fiscal_year
                 return cal_year, month
 
-            # Get current FY from most recent filing
+            # Inline calendar→fiscal math (driver-only). Could be refactored to
+            # `from fiscal_math import period_to_fiscal` — see CENTRALIZATION NOTE.
             if self.filings:
                 most_recent = max(self.filings, key=lambda f: f.period_of_report or "")
                 recent_year = int(most_recent.period_of_report[:4]) if most_recent.period_of_report else 2025

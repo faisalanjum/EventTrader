@@ -737,18 +737,48 @@ class EarningsCallProcessor:
             self.logger.error(f"Error in form_qa_pairs: {e}", exc_info=True)
             result["qa_pairs"] = []
 
-    # Final Functions for Mapping Calendar to Fiscal and vice versa
+    # ── Calendar↔Fiscal mapping helpers ─────────────────────────────────
+    # Centralization status (audited 2026-05-07):
+    #
+    # `calendar_to_fiscal` is DEAD CODE — no production callers (verified
+    # via repo-wide grep). DO NOT add new callers. If you need calendar→
+    # fiscal math, use the canonical helper:
+    #     from .claude/skills/earnings-orchestrator/scripts/fiscal_math
+    #         import period_to_fiscal
+    #
+    # `fiscal_to_calendar` is the INVERSE direction (fiscal label →
+    # calendar year/month). It IS actively used (lines 448 + 499) to
+    # populate the SECONDARY display fields `result["calendar_year"]` and
+    # `result["calendar_quarter"]` on Transcript dicts — those fields are
+    # display-only and do NOT feed the load-bearing `fiscal_year` /
+    # `fiscal_quarter` labels (those come directly from upstream
+    # provider's `event.year` / `event.quarter`, lines 282-283).
+    #
+    # No canonical inverse helper currently exists in
+    # .claude/skills/earnings-orchestrator/scripts/fiscal_math.py
+    # (it has period_to_fiscal for cal→fiscal and _compute_fiscal_dates
+    # for fiscal→ISO date strings, but not fiscal→cal_year/cal_quarter).
+    # If a canonical `fiscal_to_calendar` is added there in the future,
+    # refactor `fiscal_to_calendar` below to delegate so improvements
+    # auto-propagate. Until then, keep the inline math here.
+    #
+    # Background and locked decisions: module docstring of
+    # scripts/earnings/quarter_identity.py.
+    # ────────────────────────────────────────────────────────────────────
     def calendar_to_fiscal(self, cal_year, cal_quarter, fiscal_month_end):
+        # DEPRECATED — see banner above. No production callers.
         month = [3, 6, 9, 12][cal_quarter - 1]
         fiscal_year = cal_year + 1 if month > fiscal_month_end else cal_year
         fiscal_q = ((month - fiscal_month_end - 1) % 12) // 3 + 1
         return fiscal_year, fiscal_q
 
     def fiscal_to_calendar(self, fiscal_year, fiscal_quarter_int, fiscal_month_end):
+        # INVERSE direction; feeds display-only calendar_year/calendar_quarter.
+        # No canonical equivalent exists in fiscal_math.py — see banner above.
         # Handle None values to prevent subtraction errors
         if fiscal_year is None or fiscal_quarter_int is None:
             return None, None
-            
+
         month = (fiscal_month_end - 3 * (4 - fiscal_quarter_int)) % 12 or 12
         cal_year = fiscal_year - 1 if month > fiscal_month_end else fiscal_year
         cal_q = (month - 1) // 3 + 1

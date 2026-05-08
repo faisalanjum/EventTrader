@@ -62,10 +62,36 @@ def vol_status(days) -> str:
     """Volatility status based on day count."""
     return "OK" if days and days >= 60 else ("INSUFFICIENT" if days else "NO_DATA")
 
+# ── DEPRECATED: dead code as of 2026-05-07 ───────────────────────────────
+# These two helpers are not called by any production code path. The earnings
+# 8-K consumer (scripts/earnings/get_earnings.py) was migrated to
+# `quarter_identity.resolve_quarter_info()` in commit `e2d574c`/ChatGPT
+# centralization PR, and no other production caller exists (verified by
+# grep across the entire repository).
+#
+# Canonical replacements for any future use:
+#   • calendar period → fiscal year/quarter:
+#       from fiscal_math import period_to_fiscal
+#       fy, q = period_to_fiscal(year, month, day, fye_month, form_type)
+#   • 8-K earnings 8-K → fiscal quarter label (with safety guards):
+#       from quarter_identity import resolve_quarter_info
+#       qi = resolve_quarter_info(ticker, accession_8k)
+#       # use qi['quarter_label'] only when qi['safety_action']=='AUTO_OK'
+#
+# DO NOT add new callers to either function below. Either delete them or
+# refactor each to delegate to `period_to_fiscal` from fiscal_math.py so
+# future improvements (52/53-week refinements, day-≤5 heuristic adjustments)
+# auto-propagate. Background/locked-decisions: module docstring of
+# scripts/earnings/quarter_identity.py.
+# ─────────────────────────────────────────────────────────────────────────
+
+
 def calendar_to_fiscal(cal_year: int, cal_quarter: int, fiscal_month_end: int) -> tuple:
     """
     EXACT algorithm from EarningsCallTranscripts.py (lines 683-687).
     Converts calendar year/quarter to fiscal year/quarter.
+
+    DEPRECATED — see banner above. Use `fiscal_math.period_to_fiscal` instead.
     """
     month = [3, 6, 9, 12][cal_quarter - 1]
     fiscal_year = cal_year + 1 if month > fiscal_month_end else cal_year
@@ -76,6 +102,9 @@ def calendar_to_fiscal(cal_year: int, cal_quarter: int, fiscal_month_end: int) -
 def calculate_fiscal_period(period_date: str, fye_month: int, fye_day: int = 1, reported: bool = True) -> tuple:
     """
     Calculate fiscal year and quarter for a given date.
+
+    DEPRECATED — see banner above. Use `fiscal_math.period_to_fiscal` instead;
+    or for 8-K earnings labels use `quarter_identity.resolve_quarter_info`.
 
     Uses EXACT algorithm from EarningsCallTranscripts.py calendar_to_fiscal().
 

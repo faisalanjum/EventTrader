@@ -39,8 +39,8 @@ load_dotenv(str(_PROJECT_ROOT / ".env"), override=True)
 
 from fiscal_math import period_to_fiscal
 from get_quarterly_filings import (
+    choose_periodic_fiscal_identity,
     parse_xbrl_fiscal_identity,
-    should_use_xbrl_fiscal,
     XBRL_DENY_PERIODIC_ACCESSIONS,
 )
 import quarter_identity
@@ -237,6 +237,37 @@ def test_prior_periodic_projection_denylist_fail_closed(monkeypatch):
     )
     assert qi["safety_action"] == "FAIL_CLOSED"
     assert qi["quarter_identity_source"] == "prior_periodic_projection_denylisted_prior_fail_closed"
+
+
+def test_choose_periodic_fiscal_identity_uses_safe_xbrl():
+    chosen = choose_periodic_fiscal_identity(
+        fallback_fiscal=(2024, "Q4"),
+        xbrl_year_focus="2023",
+        xbrl_period_focus="FY",
+        accession_candidates=("not-denied",),
+    )
+    assert chosen == (2023, "Q4")
+
+
+def test_choose_periodic_fiscal_identity_respects_denylist():
+    denied = next(iter(XBRL_DENY_PERIODIC_ACCESSIONS))
+    chosen = choose_periodic_fiscal_identity(
+        fallback_fiscal=(2024, "Q1"),
+        xbrl_year_focus="2023",
+        xbrl_period_focus="Q1",
+        accession_candidates=("uuid-not-accession", denied),
+    )
+    assert chosen == (2024, "Q1")
+
+
+def test_choose_periodic_fiscal_identity_falls_back_on_invalid_xbrl():
+    chosen = choose_periodic_fiscal_identity(
+        fallback_fiscal=(2024, "Q2"),
+        xbrl_year_focus="2024",
+        xbrl_period_focus="ANN",
+        accession_candidates=("not-denied",),
+    )
+    assert chosen == (2024, "Q2")
 
 
 def test_prior_periodic_projection_cold_start_fail_closed(monkeypatch):
@@ -723,8 +754,7 @@ def resolve_from_matched(period_of_report_str: str, form_type: str,
 
     Same cascade as build_prior_financials._get_fiscal_labels():
     1. Compute fallback via period_to_fiscal()
-    2. Parse XBRL fiscal identity
-    3. Apply denylist + proximity guard
+    2. Route fallback + XBRL through choose_periodic_fiscal_identity()
     """
     try:
         d = date.fromisoformat(str(period_of_report_str)[:10])
@@ -736,16 +766,13 @@ def resolve_from_matched(period_of_report_str: str, form_type: str,
     # Step 1: fallback from period_to_fiscal
     fallback_fiscal = period_to_fiscal(d.year, d.month, d.day, fye_month, base_form)
 
-    # Step 2: XBRL fiscal identity
-    xbrl_fiscal = parse_xbrl_fiscal_identity(xbrl_year_raw, xbrl_period_raw)
-
-    # Step 3: choose — exact logic from get_quarterly_filings.py
-    if accession_periodic and accession_periodic in XBRL_DENY_PERIODIC_ACCESSIONS:
-        return fallback_fiscal
-    elif should_use_xbrl_fiscal(fallback_fiscal, xbrl_fiscal):
-        return xbrl_fiscal
-    else:
-        return fallback_fiscal
+    # Step 2: choose — exact logic from get_quarterly_filings.py
+    return choose_periodic_fiscal_identity(
+        fallback_fiscal=fallback_fiscal,
+        xbrl_year_focus=xbrl_year_raw,
+        xbrl_period_focus=xbrl_period_raw,
+        accession_candidates=(accession_periodic,),
+    )
 
 
 # ── Main validation ──────────────────────────────────────────────────

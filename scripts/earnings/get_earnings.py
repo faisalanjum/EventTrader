@@ -6,15 +6,17 @@ Usage: python scripts/earnings/get_earnings.py TICKER [--all]
 By default, returns only the actual earnings release per quarter (last 8-K 2.02 per fiscal quarter).
 Use --all to return all 8-K 2.02 filings including preliminary updates.
 
-DEPRECATED FISCAL CALCULATION: This script uses calculate_fiscal_period() from utils.py
-which has known issues with 52-week fiscal calendars. For accurate fiscal year/quarter
-calculation validated against SEC EDGAR, use get_quarterly_filings.py instead.
+Fiscal labels come from quarter_identity.resolve_quarter_info(), the canonical
+earnings 8-K resolver used by the orchestrator.
 """
 import sys
 from pathlib import Path
-sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+_PROJECT_ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(_PROJECT_ROOT))
+sys.path.insert(0, str(_PROJECT_ROOT / "scripts/earnings"))
 
-from scripts.earnings.utils import load_env, neo4j_session, error, fmt, vol_status, parse_exception, calculate_fiscal_period
+from quarter_identity import resolve_quarter_info
+from scripts.earnings.utils import load_env, neo4j_session, error, fmt, vol_status, parse_exception
 load_env()
 
 # Companies where FIRST filing per quarter is the actual earnings (not LAST)
@@ -89,23 +91,26 @@ def get_earnings(ticker: str, dedupe: bool = True) -> str:
     # Process all results first
     processed = []
     for r in results:
-        period = r["period"] or "N/A"
+        accession = r["accession"] or "N/A"
         fye_month = r["fye_month"]
-        fye_day = r["fye_day"]
-
-        # Calculate fiscal year and quarter
-        if period != "N/A" and fye_month and fye_day:
-            fy, fq = calculate_fiscal_period(period, fye_month, fye_day)
-            fiscal_year = str(fy)
-            fiscal_quarter = fq
-        else:
-            fiscal_year = "N/A"
-            fiscal_quarter = "N/A"
+        fiscal_key = f"UNRESOLVED_{accession}"
+        fiscal_year = "N/A"
+        fiscal_quarter = "N/A"
+        if accession != "N/A":
+            try:
+                qi = resolve_quarter_info(ticker, accession)
+            except Exception:
+                qi = {}
+            qlabel = qi.get("quarter_label") if qi.get("safety_action") == "AUTO_OK" else None
+            if qlabel:
+                fiscal_quarter, fiscal_year_raw = qlabel.split("_FY", 1)
+                fiscal_year = fiscal_year_raw
+                fiscal_key = qlabel
 
         processed.append({
-            "fiscal_key": f"{fiscal_year}_{fiscal_quarter}",
+            "fiscal_key": fiscal_key,
             "row": "|".join([
-                r["accession"] or "N/A",
+                accession,
                 r["date"].isoformat() if hasattr(r["date"], "isoformat") else str(r["date"]),
                 fiscal_year,
                 fiscal_quarter,
