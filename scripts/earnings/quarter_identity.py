@@ -1,11 +1,168 @@
 #!/usr/bin/env python3
-"""Quarter identity resolver -- single canonical source of truth.
+"""Quarter identity resolver — single canonical source of truth.
 
-Goal 6c production resolver:
-  - Uses the PIT-visible prior periodic projection proven in Goal 3.
-  - Replaces only the odd 52/53-week fail-closed branch with Rule F.
-  - Adds Candidate D's calendar-branch safety guards.
-  - Returns the existing quarter_info shape, plus safety_action.
+This module answers ONE question: given an earnings 8-K accession, what fiscal
+quarter is it announcing? The output (quarter_label, safety_action) drives the
+orchestrator's destructive-write guard — wrong answers corrupt event
+directories / predictions / learner artifacts, so the resolver MUST fail
+closed when it cannot prove identity.
+
+══════════════════════════════════════════════════════════════════════════════
+WHY THIS EXISTS — the FCX bug
+══════════════════════════════════════════════════════════════════════════════
+Pre-2026-05 the resolver used a `_STALE_MATCH_DAYS=150` cascade that
+silently accepted the previous quarter's 10-K as authoritative for a live
+8-K before the same-quarter 10-Q/10-K existed. FCX Q1 FY2026 accession
+0000831259-26-000021 was mislabeled as Q4_FY2025, causing the orchestrator
+to write Q1 data into the Q4 event directory and overwrite/delete the real
+Q4 prediction. Goals 4 / 6c / 6g rebuilt this resolver around PIT-visible
+prior-periodic projection with structural safety guards, replacing stale-
+match cascading entirely.
+
+══════════════════════════════════════════════════════════════════════════════
+DESIGN PHILOSOPHY (load-bearing — read before refactoring)
+══════════════════════════════════════════════════════════════════════════════
+1. PIT-safe. Every Cypher path is bounded by `created <= filed_8k`. A live
+   8-K MUST NOT see a future-filed 10-Q/10-K.
+2. Fail-closed > wrong-fire. A wrong AUTO_OK corrupts downstream event
+   directories. A FAIL_CLOSED is recoverable (manual override, soft-tier
+   future). Zero new wrong AUTO_OK is a hard invariant on every change.
+3. Structural rules only. No EX-99.1 text parsing in production
+   (LOCKED 2026-05-05, decision D8). No external HTTP / SEC EDGAR live
+   lookups. No ML/LLM. No industry/sector/SIC/GICS/NAICS/CIK dispatch.
+4. One named ticker container allowed: `TRUST_XBRL_ADVANCE` (Goal 6g).
+   Ticker-level rules MUST apply uniformly to all periods of a ticker —
+   no per-(ticker, period) data structures. This is the architectural
+   guarantee against exception sprawl.
+5. Accession-level overrides allowed via `XBRL_DENY_PERIODIC_ACCESSIONS`
+   in get_quarterly_filings.py (specific filings with bad XBRL).
+
+══════════════════════════════════════════════════════════════════════════════
+ARCHITECTURE — layered rules (see resolve_quarter_via_prior_periodic)
+══════════════════════════════════════════════════════════════════════════════
+For each earnings 8-K, find the most recent PIT-visible prior 10-Q/10-K and:
+1. Cold-start guards: no prior → `prior_periodic_projection_no_prior`
+   FAIL_CLOSED. Long-gap (>150d) → `prior_periodic_projection_long_gap_*`
+   FAIL_CLOSED. Denylisted prior accession → fail-closed.
+2. Branch on prior period-end shape:
+   • Calendar-shaped (regular month-end / Saturday) → calendar branch.
+   • Odd 52/53-week shape → Rule F branch.
+3. Calendar branch (Goal 6c Rule G family + Goal 6g override):
+   • <24h since prior filed → use prior label directly (rule_g_strict_*).
+   • XBRL FY ≠ math FY → fail-closed (rule_g_fail_closed_fy_disagreement_calendar)
+     UNLESS ticker ∈ TRUST_XBRL_ADVANCE → advance prior XBRL one quarter
+     (rule_h_trusted_issuer_xbrl_advance, Goal 6g).
+   • Other calendar guards: no-prev-short-gap, same-filing-cycle.
+   • Default: math-derived projection (prior_periodic_projection_qN_to_qM).
+4. Rule F branch (Goal 4): same shape but for non-calendar periods.
+   • <24h → rule_f_direct_recent_prior.
+   • FY disagree → rule_f_fail_closed_fy_disagreement.
+   • Else → rule_f_advance_xbrl.
+
+The orchestrator's destructive-write guard refuses to write event-directory
+files unless safety_action == "AUTO_OK". FAIL_CLOSED + NO_RESOLUTION block
+all destructive writes (see scripts/earnings/earnings_orchestrator.py
+`enforce_quarter_identity_write_guard`).
+
+══════════════════════════════════════════════════════════════════════════════
+SHIPPED SCOPE
+══════════════════════════════════════════════════════════════════════════════
+Goal 4  (commit e43cfc8): structural rebuild — PIT prior periodic projection,
+         Rule F (5 sources), `_STALE_MATCH_DAYS=150` removed, orchestrator
+         destructive-write guard wired in.
+Goal 6c (commit a61636a): Candidate D's 5 calendar-branch guards
+         (rule_g_strict_direct_recent_prior_calendar +
+          rule_g_strict_fail_closed_recent_disagreement_calendar +
+          rule_g_fail_closed_fy_disagreement_calendar +
+          rule_g_fail_closed_no_prev_short_gap_calendar +
+          rule_g_fail_closed_same_filing_short_gap_calendar).
+Goal 6e (commit be4c2cc): guidance 10-Q/10-K NULL-fiscal-label fallback
+         hardened in scripts/harvest_guidance_sessions.py with denylist +
+         proximity + triple-check guards. Separate file; do NOT swap
+         resolve_quarter_info() into that fallback.
+Goal 6g (commit 237f53c): 18-ticker TRUST_XBRL_ADVANCE override on the
+         calendar-FY-disagreement gate. +1.84pp warm-start correct, 0 new
+         wrongs. See per-ticker autopsy at
+         earnings-analysis/canary/quarter_resolver/audit_evidence/per_ticker_autopsy_2026-05-07/
+         (auxiliary docs may be deleted; this docstring + code are the
+         load-bearing record).
+
+══════════════════════════════════════════════════════════════════════════════
+ACCURACY BENCHMARKS (as of Goal 6g)
+══════════════════════════════════════════════════════════════════════════════
+On the 10,674-row scoreable historical corpus:
+  Subset                  | correct  | wrong   | fail-closed
+  Full historical (10674) |  90.62%  |  0.22%  |  9.15%
+  Warm-start (9878)       |  97.92%  |  0.24%  |  1.83%
+  Latest-per-ticker (781) |  97.82%  |  0.38%  |  1.79%
+
+The 0.24% warm-start wrong-fire rate is the structural ceiling under
+current locks. Forward expectation: ~0.24% of live earnings 8-Ks will
+wrong-write (~7-8/year on a 781-ticker × ~4 events/year universe).
+
+══════════════════════════════════════════════════════════════════════════════
+KNOWN UNFIXED CLASSES (not yet shipped, documented for future work)
+══════════════════════════════════════════════════════════════════════════════
+1. PHR/PINC/PRU class (3 latest-per-ticker wrong-fires): transcript-only
+   supplements / 10-Q-before-8-K inversions / voluntary recasts. Unifying
+   structural signal: prior periodic snapshot already covers the SAME or
+   LATER period the new 8-K is announcing → advancing is wrong. Future
+   Goal 6h would test a structural rule for this; not implemented because
+   blast radius is universe-wide and needs empirical verification.
+2. GIII-class issuer-convention divergence (XBRL year-of-start vs EX-99.1
+   year-of-end). Structurally indistinguishable from SAFE issuers without
+   EX-99.1 parsing. Approximately 4.4% of universe (34/781 tickers) is
+   structurally fail-closed under current locks; GIII alone in this class
+   is genuinely irreducible. Empirically validated 2026-05-07 against
+   408 rows × 34 edge tickers + Goal 6f's 4-candidate research probe
+   (KEEP_D verdict). DO NOT add issuer FY-convention tables — they don't
+   generalize and the 34-ticker audit + Goal 6f rejected this branch.
+3. CNM stale-XBRL on prior 10-K (single accession). Fix is to add the bad
+   10-K accession to XBRL_DENY_PERIODIC_ACCESSIONS in get_quarterly_filings.py
+   AND add CNM to TRUST_XBRL_ADVANCE (denylist alone is insufficient —
+   would just cascade-fail to next prior).
+4. ANF/DKS/PVH/PLCE bucket expansion (8 audit-truth-label-error rows).
+   ChatGPT-verified candidates for TRUST_XBRL_ADVANCE expansion to 22
+   AFTER independent re-audit of each disputed Tier-B truth row.
+
+══════════════════════════════════════════════════════════════════════════════
+LOCKED DECISIONS — do not relitigate without re-running the audit/research
+══════════════════════════════════════════════════════════════════════════════
+- No ticker allowlists/denylists/FY tables EXCEPT `TRUST_XBRL_ADVANCE`.
+- No industry/sector/SIC/GICS/NAICS/CIK dispatch (Goal 5 Candidate E rejected).
+- No EX-99.1 / press-release text parsing in production (D8 lock 2026-05-05).
+- No external HTTP / SEC EDGAR live lookups in production.
+- No ML/LLM classifiers in production resolver.
+- 24h direct-recent threshold + 150d long-gap threshold are calibrated.
+  DO NOT confuse the new long-gap with the old `_STALE_MATCH_DAYS=150`
+  (different concept, opposite policy: old was permissive cascade,
+  new is conservative fail-close).
+- Goal 6g's `TRUST_XBRL_ADVANCE` is a frozenset[str] — no period dimension
+  by construction. Any per-(ticker, period) data structure violates the
+  uniform-application invariant.
+
+══════════════════════════════════════════════════════════════════════════════
+RECOMMENDED OPERATIONAL MONITORING
+══════════════════════════════════════════════════════════════════════════════
+Wrong-fire monitor: passive cron job that compares this resolver's AUTO_OK
+output against the eventual companion 10-Q/10-K's XBRL FY/Q (when it lands).
+Any disagreement → alert. This catches:
+  - new GIII-class issuers entering the universe
+  - existing TRUST_XBRL_ADVANCE issuers changing their FY naming convention
+  - new PHR/PINC/PRU-class structural patterns
+Add the alerted accession to XBRL_DENY_PERIODIC_ACCESSIONS or remove
+the issuer from TRUST_XBRL_ADVANCE per the failure type. This is the
+safety net that bounds the 0.24% wrong-fire rate in practice.
+
+══════════════════════════════════════════════════════════════════════════════
+INVOCATION
+══════════════════════════════════════════════════════════════════════════════
+Public API: `resolve_quarter_info(ticker, accession_8k, *, session=None)`.
+Returns dict with keys: quarter_label (e.g. "Q1_FY2026" or None on fail),
+quarter_identity_source (rule name), safety_action ("AUTO_OK" | "FAIL_CLOSED"),
+plus diagnostic fields. Callers MUST gate destructive writes on
+safety_action == "AUTO_OK". The orchestrator does this in
+`enforce_quarter_identity_write_guard`.
 """
 from __future__ import annotations
 
@@ -30,16 +187,33 @@ from get_quarterly_filings import (
 _VALID_QUARTERS = {"Q1", "Q2", "Q3", "Q4"}
 _DENY_PRIOR_ACCESSIONS = XBRL_DENY_PERIODIC_ACCESSIONS
 
-# Goal 6g audited-issuer bucket. Tickers in this set have been individually
-# verified against SEC EX-99.1 + companion XBRL: their XBRL FY label always
-# aligns with the EX-99.1 announcement label, so when D's calendar-FY-
-# disagreement gate fires (math says one FY year, XBRL says another), trusting
-# the XBRL FY/Q and advancing one quarter is empirically safe across ALL
-# their historical periods. Constraint: this set has no per-period dimension —
-# the rule applies uniformly to every filing of every listed ticker, which is
-# the structural guarantee against per-(ticker, period) exception sprawl.
-# See earnings-analysis/canary/quarter_resolver/audit_evidence/per_ticker_autopsy_2026-05-07/
-# for the per-ticker fact sheets and SEC-evidence-quoted subagent verdicts.
+# Goal 6g audited-issuer bucket — see module docstring §"Shipped scope".
+#
+# WHAT: 18 tickers whose XBRL FY/Q labeling aligns with their EX-99.1
+# announcement convention (year-of-end retailers). For these issuers, when
+# the calendar-FY-disagreement gate fires (math FY ≠ XBRL FY because
+# period_to_fiscal()'s calendar logic uses year-of-start while XBRL uses
+# year-of-end), trusting XBRL+advance gives the correct EX-99.1 label.
+#
+# EVIDENCE (validated 2026-05-07): per-ticker SEC EDGAR re-inspection by
+# 5 parallel subagents, plus deterministic per-row recovery counts on
+# 10,674-row corpus. All 18 tickers showed 0 collateral wrongs across
+# their entire historical FC slice. Adding new tickers requires the same
+# evidence standard: every D-FC row of the candidate ticker recovers
+# correctly via prior-XBRL advance, with zero new wrong AUTO_OK.
+#
+# WHY NOT MORE TICKERS: the 5 mixed-convention issuers (BOX/NTAP/NTNX/
+# WDAY/WMS) showed XBRL year-of-start internally → advance would give
+# wrong year. GIII is structurally indistinguishable from ACI but uses
+# year-of-end EX-99.1 — only EX-99.1 parsing could fix; D8 vetoed.
+# ANF/DKS/PVH/PLCE are Phase 1.5 candidates pending audit-truth re-verify.
+# CNM needs accession denylist + bucket addition together.
+#
+# CONSTRAINT: frozenset[str] with no period dimension — the rule applies
+# uniformly to every past and future filing of every listed ticker. This
+# is the architectural guarantee against per-(ticker, period) exceptions.
+# Verifier (verify_goal_6g_implementation.py G4) refuses to run if the
+# data structure is anything other than a frozenset of bare ticker strings.
 TRUST_XBRL_ADVANCE = frozenset({
     "ACI", "ASO", "BJ", "BURL", "CHWY", "DLTR", "FIVE", "GME",
     "KSS", "LOW", "LULU", "OXM", "ROST", "ULTA",
