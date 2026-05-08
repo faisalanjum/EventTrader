@@ -10,7 +10,8 @@ closed when it cannot prove identity.
 ══════════════════════════════════════════════════════════════════════════════
 WHY THIS EXISTS — the FCX bug
 ══════════════════════════════════════════════════════════════════════════════
-Pre-2026-05 the resolver used a `_STALE_MATCH_DAYS=150` cascade that
+Pre-2026-05 the resolver used a stale-match cascade (the old
+`_STALE_MATCH_DAYS` constant set to 150 days) that
 silently accepted the previous quarter's 10-K as authoritative for a live
 8-K before the same-quarter 10-Q/10-K existed. FCX Q1 FY2026 accession
 0000831259-26-000021 was mislabeled as Q4_FY2025, causing the orchestrator
@@ -68,7 +69,7 @@ all destructive writes (see scripts/earnings/earnings_orchestrator.py
 SHIPPED SCOPE
 ══════════════════════════════════════════════════════════════════════════════
 Goal 4  (commit e43cfc8): structural rebuild — PIT prior periodic projection,
-         Rule F (5 sources), `_STALE_MATCH_DAYS=150` removed, orchestrator
+         Rule F (5 sources), old stale-match constant removed, orchestrator
          destructive-write guard wired in.
 Goal 6c (commit a61636a): Candidate D's 5 calendar-branch guards
          (rule_g_strict_direct_recent_prior_calendar +
@@ -82,10 +83,11 @@ Goal 6e (commit be4c2cc): guidance 10-Q/10-K NULL-fiscal-label fallback
          resolve_quarter_info() into that fallback.
 Goal 6g (commit 237f53c): 18-ticker TRUST_XBRL_ADVANCE override on the
          calendar-FY-disagreement gate. +1.84pp warm-start correct, 0 new
-         wrongs. See per-ticker autopsy at
-         earnings-analysis/canary/quarter_resolver/audit_evidence/per_ticker_autopsy_2026-05-07/
-         (auxiliary docs may be deleted; this docstring + code are the
-         load-bearing record).
+         wrongs. The per-ticker autopsy + 5-subagent SEC EDGAR
+         re-inspection that produced this bucket lives in git history
+         (see commit dd709da and `.claude/plans/quarter-identity-resolver.md`
+         for the consolidated narrative). This docstring + the bucket
+         comment below are the load-bearing in-code record.
 
 ══════════════════════════════════════════════════════════════════════════════
 ACCURACY BENCHMARKS (as of Goal 6g)
@@ -134,7 +136,7 @@ LOCKED DECISIONS — do not relitigate without re-running the audit/research
 - No external HTTP / SEC EDGAR live lookups in production.
 - No ML/LLM classifiers in production resolver.
 - 24h direct-recent threshold + 150d long-gap threshold are calibrated.
-  DO NOT confuse the new long-gap with the old `_STALE_MATCH_DAYS=150`
+  DO NOT confuse the new long-gap with the old stale-match constant
   (different concept, opposite policy: old was permissive cascade,
   new is conservative fail-close).
 - Goal 6g's `TRUST_XBRL_ADVANCE` is a frozenset[str] — no period dimension

@@ -1,4 +1,4 @@
-# Quarter Identity Resolver - Ground Truth And /goal Plan
+# Quarter Identity Resolver - Final Context
 
 Last updated: 2026-05-07
 
@@ -8,16 +8,18 @@ Production status:
 
 - Goal 6c shipped Candidate D into `scripts/earnings/quarter_identity.py` and was pushed (`a61636a`, followed by wording/doc cleanup `2f61810`).
 - Goal 6e guidance fallback hardening shipped and was pushed (`be4c2cc`): the rare 10-Q/10-K guidance source-quarter fallback now prefers own-filing XBRL only when denylist/proximity guards pass, then falls back to math.
-- Goal 6f research prompt/verifier were committed and pushed (`74dfe6d`); dirty production paths were stashed as `pre-goal6f-pending`; Goal 6f may be running now.
+- Goal 6f research completed with `KEEP_D`; no lock-respecting structural candidate beat D without adding wrong AUTO_OK rows.
+- Goal 6g shipped and was pushed (`237f53c`): a narrow audited 18-issuer `TRUST_XBRL_ADVANCE` bucket recovers known-safe calendar-FY-disagreement fail-closures without adding wrong AUTO_OK rows.
+- The final durable truth file is `data/quarter_identity_ground_truth.csv`. Old canary/verifier/audit scaffolding can be deleted after this context is consolidated.
 
-Candidate D measured behavior (Goal 6a, then implemented by Goal 6c):
+Final Goal 6g measured behavior:
 
 | Subset | Correct-fire | Wrong-fire | Fail-closed |
 |---|---:|---:|---:|
-| Full historical scoreable (10,674) | 9,491 (88.9%) | 24 (0.22%) | 1,159 (10.9%) |
-| Warm-start historical (9,878) | 9,491 (96.08%) | 24 (0.24%) | 363 (3.67%) |
+| Full historical scoreable (10,674) | 9,673 | 24 | 977 |
+| Warm-start historical (9,878) | 9,673 (97.92%) | 24 (0.24%) | 181 (1.83%) |
 | Cold-start (796) | 0 | 0 | 796 (100%) |
-| Latest-per-ticker live proxy (781) | 747 (95.65%) | 3 (0.38%) | 31 (3.97%) |
+| Latest-per-ticker live proxy (781) | 764 (97.82%) | 3 (0.38%) | 14 (1.79%) |
 
 Operational meaning:
 
@@ -45,14 +47,24 @@ The architectural finding (named, so future-you doesn't rediscover it):
 - **iXBRL year-of-start vs EX-99.1 year-of-end divergence**. iXBRL `DocumentFiscalYearFocus` for an FYE-January issuer reports `FY=2024` for a 10-K covering Feb 2024 – Jan 2025; the same issuer's EX-99.1 press release calls the same period `FY 2025`.
 - Both labels are "correct" for their audience. They disagree on the wire.
 - Any production rule that trusts XBRL `FY` will systematically wrong-write the year for ~10% of off-calendar issuers. D's `rule_f_fail_closed_fy_disagreement` (Goal 4) and the calendar-branch `rule_g_fail_closed_*_calendar` guards (Goal 6c) intentionally fail-closed on this class.
-- Under the locked constraints (no ticker/industry/SIC tables, no EX-99.1 parsing, no external HTTP, no ML/LLM, no time thresholds beyond 24h/150d), this divergence is the **irreducible structural class**. ~4.4% of the universe (34/781 latest-per-ticker proxy) is unresolvable under those locks and must remain fail-closed.
-- This is the load-bearing reason `KEEP_D` is a valid Goal 6f outcome.
+- Under the old strict structural locks (no issuer bucket at all), this divergence was the **irreducible structural class**. ~4.4% of the universe (34/781 latest-per-ticker proxy) was unresolvable and had to remain fail-closed.
+- This was the load-bearing reason `KEEP_D` was the correct Goal 6f outcome.
+- Goal 6g made one deliberate exception: an audited 18-issuer uniform bucket where the same XBRL-advance rule held across each issuer's history. That reduced latest-per-ticker fail-closed rows from 31 to 14 without changing the wrong-fire count.
 
-Goal 6f research purpose:
+Goal 6f research result:
 
-- Diagnose D/G2 failures first (`GOAL6F_FAILURE_MODEL.md`), then test at least four structural candidate directions: multi-prior XBRL consistency, period-end/calendar-shape signatures, current 8-K own XBRL facts, and advance-result agreement.
-- Constraints remain locked: no ticker/issuer/industry tables, no EX-99 runtime parsing, no external HTTP/API, no ML/LLM, no arbitrary new thresholds, PIT-safe structural metadata only.
-- **Result (2026-05-07)**: `DECISION_FLAG_GOAL6F_RECOMMENDATION = KEEP_D`, empirically confirmed. Verifier passed; 4 new structural candidates tested + rejected; commit `0552fd9` registered the immutable audit-evidence inputs. The "~70% likely KEEP_D" prior is now fact: under current locks + current data pipeline, D is the structural ceiling. Sharper failure-class name from the failure model: "structural ambiguity after FY disagreement" — same prior structural shape produces both safe and unsafe rows; no allowed signal uniquely discriminates. The iXBRL/EX-99 divergence is the consequence; this is the mechanism.
+- Goal 6f diagnosed D/G2 failures first, then tested multi-prior XBRL consistency, period-end/calendar-shape signatures, current 8-K own XBRL facts, and advance-result agreement.
+- **Result (2026-05-07)**: `DECISION_FLAG_GOAL6F_RECOMMENDATION = KEEP_D`. Verifier passed; 4 new structural candidates tested + rejected; commit `0552fd9` registered the immutable audit-evidence inputs.
+- The failure-class name from the failure model: "structural ambiguity after FY disagreement" — the same prior structural shape produces both safe and unsafe rows; no allowed signal uniquely discriminates under the old no-issuer-bucket lock.
+- Goal 6g intentionally relaxed that lock once, for exactly 18 audited issuers whose rule held across their time series. Do not expand this bucket without a new audit/verifier.
+
+Final production files to keep:
+
+- `scripts/earnings/quarter_identity.py` — final resolver and Goal 6g audited bucket.
+- `scripts/earnings/test_quarter_identity.py` and `scripts/earnings/test_quarter_identity_u64.py` — resolver/write-guard regression tests.
+- `.claude/skills/earnings-orchestrator/scripts/get_quarterly_filings.py` — shared XBRL parsing/proximity/denylist helpers.
+- `scripts/harvest_guidance_sessions.py` and `scripts/test_harvest_guidance_sessions.py` — guidance periodic fallback hardening.
+- `data/quarter_identity_ground_truth.csv` — durable ground-truth corpus kept after canary cleanup.
 
 ## Why This Exists
 
@@ -193,6 +205,81 @@ Implemented state after Goals 4/6c:
 - `resolve_quarter_info(ticker, accession_8k)` returns a dict. Trust `quarter_label` only when `safety_action == "AUTO_OK"`.
 - The orchestrator write guard blocks destructive event-directory writes on `FAIL_CLOSED`.
 - Do not bypass the resolver with a plain fiscal-math formula for earnings 8-Ks.
+
+## Consolidated Preservation Contract
+
+This section replaces the old standalone `refactor-safety-contract.md` and
+`restore-context.md` files. Keep it short, but treat it as load-bearing before
+editing earnings/refactor/guidance code.
+
+### Quarter Identity And Guidance
+
+- `resolve_quarter_info(ticker, accession_8k)` is the earnings 8-K resolver. It is PIT-safe and may query prior 10-Q/10-K metadata; it is not pure fiscal math.
+- Callers must trust `quarter_label` only when `safety_action == "AUTO_OK"`.
+- Cold-start and unsafe cases must fail closed. Wrong-write prevention is more important than 100% firing.
+- FCX `0000831259-26-000021` must remain `Q1_FY2026 / AUTO_OK / prior_periodic_projection_q4_to_q1`.
+- Rule F odd 52/53-week regression must remain `94 OK / 0 WRONG / 21 FAIL_CLOSED`.
+- Goal 6g's `TRUST_XBRL_ADVANCE` is the only approved issuer bucket. It is a uniform issuer-level rule for 18 audited issuers, not a per-period exception table. Do not expand it without fresh SEC-backed evidence and tests.
+- Do not add industry/sector/SIC/GICS/NAICS dispatch, EX-99.1 runtime parsing, external HTTP/API calls, ML/LLM classifiers, or arbitrary new thresholds.
+- Guidance has two fiscal-identity concepts: source-quarter labeling and extracted guidance target periods. Do not merge them.
+- Guidance 8-K source-quarter harvesting uses `resolve_quarter_info()` and picks up future 8-K resolver improvements.
+- Guidance 10-Q/10-K fallback is separate: use stored `Report.fiscal_quarter/fiscal_year`, then own-filing XBRL with denylist/proximity guards, then math fallback. Do not swap the 8-K resolver into this periodic fallback.
+- Changes to `parse_xbrl_fiscal_identity`, `should_use_xbrl_fiscal`, or `XBRL_DENY_PERIODIC_ACCESSIONS` can affect both the resolver and guidance periodic fallback. Changes to `resolve_quarter_info()` affect 8-K consumers only.
+
+### Bundle, Evidence, And Lessons
+
+- Rendered text remains the predictor's primary reasoning surface. JSON remains verification/structure, not the primary predictor surface.
+- `context_bundle.json` schema is append-only for this audit surface. Do not rename or remove existing fields casually.
+- `--save-dir` must stay run-scoped. Do not restore shared `/tmp/context_bundle.json` or `Path(save_dir).parent` behavior.
+- `evidence_source_catalog` IDs are event-scoped: `SRC:<ticker>:<quarter_label>:<accession_8k>#<location>`.
+- Production validation must enforce expected source-id membership and reject empty evidence ledgers.
+- Keep rendered `N{i}` and `F{i}` aliases and raw `event_ref` anchors; the predictor sees the rendered aliases, and raw anchors preserve traceability.
+- `prediction_validated` must gate result quarantine. Do not let a later ledger/cleanup exception quarantine a validated result.
+- `iter_labeled_lessons()` in `_text_utils.py` is the shared source of truth for renderer `L#` ordering and catalog lesson anchors.
+- Do not dedupe duplicate lesson bodies across scopes. Positional labels are intentional.
+- Empty learning context still renders the outer prior-lessons section and "No prior lessons available..." message.
+- Golden render fixtures are not bloat. Full/section/degraded goldens and targeted tests catch different regressions.
+
+### Required Local Checks
+
+For ordinary earnings refactors:
+
+```bash
+venv/bin/python -m pytest scripts/earnings -q
+venv/bin/python -m scripts.earnings.tests._capture_golden full
+venv/bin/python -m scripts.earnings.tests._capture_golden sections
+venv/bin/python -m scripts.earnings.tests._capture_golden degraded
+git diff -- scripts/earnings/tests/fixtures/golden_renders scripts/earnings/tests/fixtures/golden_bundles
+```
+
+For quarter-identity changes, also run the focused resolver tests:
+
+```bash
+venv/bin/python -m pytest scripts/earnings/test_quarter_identity.py scripts/earnings/test_quarter_identity_u64.py -q
+```
+
+After cleanup removes the old canary verifiers, this file, the resolver tests,
+and `data/quarter_identity_ground_truth.csv` are the durable references.
+
+### New Session Bootstrap
+
+If a future session needs quarter-resolver context, read only these first:
+
+1. This file.
+2. `scripts/earnings/quarter_identity.py`.
+3. `scripts/earnings/test_quarter_identity.py`.
+4. `scripts/earnings/test_quarter_identity_u64.py`.
+5. `.claude/skills/earnings-orchestrator/scripts/get_quarterly_filings.py`.
+6. `scripts/harvest_guidance_sessions.py` and `scripts/test_harvest_guidance_sessions.py` if guidance is involved.
+7. `data/quarter_identity_ground_truth.csv` only with `head`, `rg`, or small scripts; do not read the whole CSV into chat.
+
+Dirty-worktree rule: this repo often has unrelated modified/deleted/untracked
+files. Do not revert, stash, delete, or commit them unless the user explicitly
+asks. Scope commits by explicit path.
+
+User preference: concise answers by default; independently verify Claude/Codex
+claims before signing off; prioritize zero wrong-writes over maximum firing
+rate; no `Co-Authored-By` trailer in commits.
 
 ## Confidence Standard
 
@@ -619,9 +706,10 @@ Each Goal in the breakdown above gets its own prompt filled in from this templat
 - [x] Goal 6e guidance fallback hardening — `harvest_guidance_sessions.py` 10-Q/10-K NULL fiscal-label fallback now uses own-filing XBRL with denylist/proximity/triple-check before math fallback; tests 61/61 passed; committed/pushed (`be4c2cc`).
 - [x] 34-edge-ticker SEC audit complete — 408 rows / 34 tickers; Tier A+B coverage 400/408; Rule G2 rejected as not shippable because it creates 37-39 new wrong AUTO_OK rows.
 - [x] Goal 6f prompt + verifier committed/pushed (`74dfe6d`) — research-only structural discovery beyond D; requires failure model first; no production changes.
-- [x] Goal 6f execution / review (2026-05-07) — verifier exited 0; commit `0552fd9` registered 5 immutable audit-evidence inputs. `DECISION_FLAG_GOAL6F_RECOMMENDATION = KEEP_D`. All 4 new structural candidates rejected: `MULTI_PRIOR_STABLE_OFFSET` (+17 new wrongs / 158 recoveries), `PERIOD_END_SHAPE_GATE` (+39 new wrongs), `CURRENT_8K_OWN_XBRL` (no-op — feature pipeline lacks current-8K DEI facts), `ADVANCE_RESULT_AGREEMENT` (no-op — zero edge convergences). G2 baselines also re-rejected (+37 / +39 new wrongs). D is the empirical structural ceiling under current locks + current data pipeline.
-- [ ] Production deploy + post-deploy monitor
-- [ ] Pop `pre-goal6f-pending` stash (`stash@{0}`)
+- [x] Goal 6f execution / review (2026-05-07) — verifier exited 0; commit `0552fd9` registered 5 immutable audit-evidence inputs. `DECISION_FLAG_GOAL6F_RECOMMENDATION = KEEP_D`. All 4 new structural candidates rejected: `MULTI_PRIOR_STABLE_OFFSET` (+17 new wrongs / 158 recoveries), `PERIOD_END_SHAPE_GATE` (+39 new wrongs), `CURRENT_8K_OWN_XBRL` (no-op — feature pipeline lacks current-8K DEI facts), `ADVANCE_RESULT_AGREEMENT` (no-op — zero edge convergences). G2 baselines also re-rejected (+37 / +39 new wrongs). D was the empirical ceiling under the old no-issuer-bucket lock.
+- [x] Goal 6g final production override — committed/pushed `237f53c`; 18 audited issuers in `TRUST_XBRL_ADVANCE`; 182 rows flip `FAIL_CLOSED -> AUTO_OK_CORRECT`; zero new wrongs; final warm-start `97.92% correct / 0.24% wrong / 1.83% fail-closed`; latest-per-ticker `97.82% correct / 0.38% wrong / 1.79% fail-closed`.
+- [x] Durable truth corpus preserved in `data/quarter_identity_ground_truth.csv` — canary artifacts can be removed after this doc consolidation.
+- [ ] Production deploy + post-deploy monitor for Goal 6c + 6e + 6g.
 
 ---
 
@@ -655,4 +743,6 @@ Each Goal in the breakdown above gets its own prompt filled in from this templat
 - 2026-05-07 — Goal 6e shipped guidance 10-Q/10-K rare fallback hardening (`be4c2cc`): own-filing XBRL can override math only with denylist + proximity + triple-check guard. This does not merge guidance target-period extraction with earnings 8-K resolver.
 - 2026-05-07 — 34-edge-ticker SEC audit completed: G2 XBRL-trust variants are promising but not shippable due to 37-39 new wrong AUTO_OK rows on Tier A+B evidence. Goal 6f prompt/verifier committed/pushed (`74dfe6d`) to force failure-model-first structural research. `KEEP_D` is an acceptable verified outcome.
 - 2026-05-07 — Goal 6f Codex run completed in 1668s; verifier exited 0; commit `0552fd9` registered 5 immutable audit-evidence files (`DECISION_FLAG.md`, `advance_xbrl_simulation.csv`, `adversarial_review.json`, `master_truth.csv`, `validation_report.md`). 7 candidates tested (D + 2 G2 + 4 new structural); all 4 new candidates rejected. `DECISION_FLAG_GOAL6F_RECOMMENDATION = KEEP_D`. Closest near-miss `MULTI_PRIOR_STABLE_OFFSET` recovered 158 fail-closed Tier A/B rows but added 17 new wrongs — fails the zero-new-wrong policy. PHR/PINC/PRU latest-per-ticker wrong-fires (3 rows) classified as irreducible without current-event text or current-8K DEI facts.
-- Next step: production deploy of Goal 6c+6e to k8s services; pop `pre-goal6f-pending` stash; doc updates landed at this commit cycle.
+- 2026-05-07 — Goal 6g shipped final audited-issuer override (`237f53c`, pushed): 18 issuers in `TRUST_XBRL_ADVANCE`, uniform issuer-level rule only, 182 rows recovered from fail-closed to correct AUTO_OK, zero new wrongs. Final metrics from `goal6g_baseline.csv`: warm-start 9,673/24/181 = 97.92% correct / 0.24% wrong / 1.83% fail-closed; latest-per-ticker 764/3/14 = 97.82% correct / 0.38% wrong / 1.79% fail-closed.
+- 2026-05-07 — Cleanup decision: preserve `data/quarter_identity_ground_truth.csv` as the durable corpus, keep production resolver/tests/shared helpers, and remove old canary/verifier/goal-prompt scaffolding. This file now absorbs the non-duplicate context from `restore-context.md` and `refactor-safety-contract.md`.
+- Next step: production deploy of Goal 6c+6e+6g to k8s services; cleanup old canary/prompt docs after this consolidated context is committed.
