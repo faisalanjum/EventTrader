@@ -1,5 +1,8 @@
 # IBKR MCP — Operational Reference
 
+> **Functional reference** (tool capabilities, scanner codes, recipes, known bugs):
+> see [`capabilities.md`](capabilities.md). This file is the K8s/runbook side.
+
 ## What's Running
 
 4 pods in `mcp-services` namespace on `minisforum`:
@@ -28,10 +31,10 @@ Permissions pre-allowed in `.claude/settings.json`: `mcp__ibkr-live`, `mcp__ibkr
 
 ## Current State
 
-- **Live**: READ_ONLY_API=no. Account summary, positions, historical bars, scanner all work. **Prices return null** — IB API market data subscription not enabled (TWS-only subscription). Enable in IB Account Management for real-time.
+- **Live**: READ_ONLY_API=no. Account summary, positions, historical bars, scanner all work. **Prices return null** — no paid market data subscription on the account. To enable streaming `get_price`/`get_tickers`, subscribe to 3 L1 feeds at **USD $4.50/mo total** (NASDAQ Network C/UTP + NYSE Network A/CTA + Network B). All standalone, no $10 bundle prerequisite. Skip OPRA unless predictor adds IV consumption (it doesn't as of 2026-05-12 — grep `.claude/skills/earnings-*` for `implied|straddle|opra` before adding). Skip all bundles, indices, L2, futures feeds. Full rationale + rejection list: `~/.claude/projects/-home-faisal-EventMarketDB/memory/project_ibkr_market_data.md`. Historical bars work free regardless.
 - **Paper**: Full access. Prices, positions, account ($1.1M CAD paper balance), historical, scanner all work. Trading enabled.
 - **Market data types**: Live = type 1 (real-time) / type 2 (frozen post-market). Paper = type 3 (delayed). This is hardcoded in `app/services/history.py` and `app/services/market_data.py`.
-- **Custom code** in `ibkr-mcp-server/` (local fork of omdv, also at `/home/faisal/ibkr-mcp-server/`):
+- **Custom code** in `EventMarketDB/ibkr-mcp-server/` (local fork of omdv, committed as a subdirectory of EventMarketDB git):
   - `get_account_summary` — balances, margins, PnL
   - `get_positions` null crash fix
   - Order management: market, limit, stop, bracket, trailing stop, bracket+trailing, advanced (any IB type via conId or symbol), modify, cancel, open orders
@@ -79,10 +82,15 @@ kubectl set env deployment/ibkr-ib-gateway -n mcp-services READ_ONLY_API=yes
 ## Rebuild MCP Server After Code Changes
 
 ```bash
-cd /home/faisal/ibkr-mcp-server
-docker build -t ghcr.io/omdv/ibkr-mcp-server:latest .
-docker save ghcr.io/omdv/ibkr-mcp-server:latest | sudo ctr -n k8s.io images import -
-kubectl rollout restart deployment ibkr ibkr-paper -n mcp-services
+# IMPORTANT: build from the EventMarketDB-tracked subdirectory, NOT a standalone clone.
+# The standalone clone at ~/ibkr-mcp-server was historically a decoy with only upstream
+# code (no smart-fix-1 modifications). It was removed 2026-05-12 to prevent confusion.
+cd /home/faisal/EventMarketDB/ibkr-mcp-server
+docker build -t ibkr-mcp-server:<new-tag> .
+docker save ibkr-mcp-server:<new-tag> | sudo ctr -n k8s.io images import -
+kubectl set image deployment/ibkr -n mcp-services ibkr-mcp-server=ibkr-mcp-server:<new-tag>
+kubectl set image deployment/ibkr-paper -n mcp-services ibkr-mcp-server=ibkr-mcp-server:<new-tag>
+# Then exit + restart Claude Code session to refresh MCP handles.
 ```
 
 ## Add New MCP Tools
@@ -92,6 +100,45 @@ kubectl rollout restart deployment ibkr ibkr-paper -n mcp-services
 3. `app/services/interfaces.py` — add to `IBInterface` MRO
 4. `app/api/ibkr/__init__.py` — add `from .xxx import *`
 5. Rebuild + deploy (see above)
+
+## Rollback Image Pin (extended-hours patch, 2026-05-12)
+
+| Image | Tag | Docker SHA256 (image ID) | Containerd OCI digest |
+|---|---|---|---|
+| **Previous (rollback target)** | `smart-fix-1` | `1a12619e0cafc39755c435da8de21f1a213b4496f55e214ffadda6dfce022390` | `d72b7f9691ceb5e34fe6ed6c3a5f1eb95ffb23947e2b60f449bfbcd32a81d7e2` |
+| **Current (extended-hours)** | `ext-hours-v3` | `13b4eae9b862d1ef94eaa7e9296604dfdbeacbae787bf01d45fd17947bb70393` | `f6b60314c7bb4b3f4335bd7319d34a10059eb7d25623baddd2125b5e968f64fa` |
+
+> **Note**: `ext-hours-v1` was abandoned — it was built from the wrong source tree (a standalone clone that didn't have the smart-fix-1 modifications committed). `ext-hours-v3` is built from `EventMarketDB/ibkr-mcp-server/` which is the true source of truth. See git history of EventMarketDB for the 8 production commits leading up to smart-fix-1.
+
+**Rollback commands** (~30 seconds for both deployments):
+
+```bash
+# Live MCP rollback
+kubectl set image deployment/ibkr -n mcp-services \
+  ibkr-mcp-server=ibkr-mcp-server:smart-fix-1
+
+# Paper MCP rollback
+kubectl set image deployment/ibkr-paper -n mcp-services \
+  ibkr-mcp-server=ibkr-mcp-server:smart-fix-1
+
+# Verify
+kubectl -n mcp-services rollout status deployment/ibkr
+kubectl -n mcp-services rollout status deployment/ibkr-paper
+
+# After rollback: exit + restart Claude Code session to refresh MCP handles.
+```
+
+**What changed in ext-hours-v3** (in case rollback needed for forensics):
+- `app/services/client.py::_is_market_open()` — widened window from RTH-only (09:30-16:00 ET) to 04:00-20:00 ET on NYSE session days
+- `app/services/history.py::_to_float()` — now also nulls IB's -1 sentinel (was only nulling NaN)
+- `app/services/history.py::get_current_price()` — falls through to historical-bar path when real-time ticker has all-null `last`/`close`
+- `app/services/market_data.py` — 2 spots: added `and v != -1` to ticker field cleaning
+- **`app/models/history.py::PriceSnapshot`** — 2 NEW REQUIRED FIELDS:
+  - `is_realtime: bool` — True iff IB served live market-data mode (type 1) with data; bots check this before trusting bid/ask/last as current
+  - `market_data_type: int` — IB's raw classification (1=Live, 2=Frozen, 3=Delayed, 4=Delayed-Frozen)
+- `app/services/history.py` — both `PriceSnapshot` constructors now set the two new fields (live path: `is_realtime=(ticker.marketDataType == 1)`, historical fallback: `is_realtime=False, market_data_type=2`)
+- `uv.lock` — exchange-calendars 4.10.1 → 4.13.2; added pytest as dev dep
+- Tests: `tests/test_market_open.py` (14 cases) + `tests/test_to_float.py` (7 cases) + `tests/test_realtime_flag.py` (7 cases) — 28 total, all pass
 
 ## Connection Reset & Recovery
 
