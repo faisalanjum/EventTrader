@@ -2,6 +2,7 @@
 
 import asyncio
 import datetime as dt
+from zoneinfo import ZoneInfo
 
 import exchange_calendars as ecals
 from ib_async import IB, util
@@ -172,9 +173,20 @@ class IBClient:
         return self._contract_cache[key]
 
     def _is_market_open(self) -> bool:
-        """Return True if the NYSE is currently in a trading minute (UTC)."""
+        """Return True during the US equity real-time streaming window.
+
+        Window: 04:00 - 20:00 ET on NYSE session days. Covers premarket,
+        regular session, and after-hours. Outside this window (overnight,
+        weekends, full holidays) returns False so callers fall back to the
+        historical-bar path.
+
+        Used to select live (type 1) vs. frozen (type 2 / historical) market data.
+        """
         nyse = ecals.get_calendar("NYSE")
-        return nyse.is_trading_minute(dt.datetime.now(dt.UTC))
+        now_et = dt.datetime.now(dt.UTC).astimezone(ZoneInfo("America/New_York"))
+        if not nyse.is_session(now_et.date()):
+            return False
+        return dt.time(4, 0) <= now_et.time() < dt.time(20, 0)
 
     async def shutdown(self) -> None:
         """Graceful shutdown — stop heartbeat and disconnect."""

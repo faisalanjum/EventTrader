@@ -30,9 +30,9 @@ class MarketDataClient(IBClient):
         contractId=row["contractId"],
         symbol=row["symbol"],
         secType=row["secType"],
-        last=row["last"] if pd.notna(row["last"]) else None,
-        bid=row["bid"] if pd.notna(row["bid"]) else None,
-        ask=row["ask"] if pd.notna(row["ask"]) else None,
+        last=row["last"] if pd.notna(row["last"]) and row["last"] != -1 else None,
+        bid=row["bid"] if pd.notna(row["bid"]) and row["bid"] != -1 else None,
+        ask=row["ask"] if pd.notna(row["ask"]) and row["ask"] != -1 else None,
         greeks=row["greeks"],
       )
       ticker_list.append(ticker_data)
@@ -184,9 +184,9 @@ class MarketDataClient(IBClient):
           contractId=row["contractId"],
           symbol=row["symbol"],
           secType=row["secType"],
-          last=row["last"] if pd.notna(row["last"]) else None,
-          bid=row["bid"] if pd.notna(row["bid"]) else None,
-          ask=row["ask"] if pd.notna(row["ask"]) else None,
+          last=row["last"] if pd.notna(row["last"]) and row["last"] != -1 else None,
+          bid=row["bid"] if pd.notna(row["bid"]) and row["bid"] != -1 else None,
+          ask=row["ask"] if pd.notna(row["ask"]) and row["ask"] != -1 else None,
           greeks=row["greeks"],
         )
         for _, row in filtered_data.iterrows()

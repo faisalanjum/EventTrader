@@ -35,7 +35,13 @@ mcpServer:
   replicaCount: 1
   image:
     repository: ibkr-mcp-server
-    tag: "phase2"
+    # 2026-05-12: ext-hours-v2 = smart-fix-1 baseline (heartbeat + /livez/readyz +
+    # SMART:<primary>) + 4-edit extended-hours patch (04:00-20:00 ET window for
+    # premarket/AH + -1 sentinel handling). Built from EventMarketDB/ibkr-mcp-server/.
+    # Prior production tag: smart-fix-1. Rollback via:
+    #   kubectl set image deployment/ibkr -n mcp-services \
+    #     ibkr-mcp-server=ibkr-mcp-server:smart-fix-1
+    tag: "ext-hours-v3"
     pullPolicy: IfNotPresent
   service:
     type: NodePort

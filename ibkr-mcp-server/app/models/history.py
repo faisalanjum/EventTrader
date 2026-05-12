@@ -13,6 +13,23 @@ class PriceSnapshot(BaseModel):
   ask: float | None = Field(None, description="Ask price (null for indices)")
   close: float | None = Field(None, description="Previous session close")
   timestamp: str = Field(..., description="Snapshot time (UTC ISO-8601)")
+  is_realtime: bool = Field(
+    ...,
+    description=(
+      "True iff IB served this in live market-data mode (type 1) with an active "
+      "subscription. False for: indices without CBOE sub, paper account without "
+      "live entitlement, delayed/frozen feed, historical-bar fallback. Bots: trust "
+      "last/bid/ask as the current market only when is_realtime=True."
+    ),
+  )
+  market_data_type: int = Field(
+    ...,
+    description=(
+      "IB's market-data-type classification: 1=Live (real-time), 2=Frozen (last "
+      "RTH close), 3=Delayed (15-min lagged), 4=Delayed-Frozen. Use for "
+      "fine-grained data-quality decisions."
+    ),
+  )
 
 
 class HistoricalBar(BaseModel):

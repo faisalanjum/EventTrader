@@ -38,7 +38,11 @@ spec:
         command: ["sh", "-c", "until nc -z -w 5 ibkr-paper-gateway 4004; do echo 'Waiting for IB Gateway paper API...'; sleep 5; done; echo 'IB Gateway paper API ready.'"]
       containers:
       - name: ibkr-mcp-server
-        image: ibkr-mcp-server:phase2
+        # 2026-05-12: ext-hours-v2 = smart-fix-1 + 4-edit extended-hours patch.
+        # Built from EventMarketDB/ibkr-mcp-server/. Rollback:
+        #   kubectl set image deployment/ibkr-paper -n mcp-services
+        #     ibkr-mcp-server=ibkr-mcp-server:smart-fix-1
+        image: ibkr-mcp-server:ext-hours-v3
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8000

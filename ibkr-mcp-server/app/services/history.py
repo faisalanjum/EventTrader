@@ -36,8 +36,15 @@ _WHAT_TO_SHOW: dict[str, str] = {
 
 
 def _to_float(v: float) -> float | None:
-  """Return v as float, or None if it is NaN (IB sentinel for missing data)."""
-  return None if math.isnan(v) else v
+  """Return v as float, or None for NaN or IB's -1 sentinel.
+
+  IB returns NaN when a tick was never sent. IB returns -1 for bid/ask
+  when the market is currently closed for that venue (documented in
+  the TWS API: "If a market is currently closed and real time data is
+  requested, -1 values will commonly be returned for the bid and ask
+  prices"). Both indicate missing data and must propagate as None.
+  """
+  return None if (v is None or math.isnan(v) or v == -1) else v
 
 
 def _bar_date(bar: BarData) -> dt.date:
@@ -93,15 +100,24 @@ class HistoryClient(IBClient):
       self.ib.reqMarketDataType(1)
       [ticker] = await self.ib.reqTickersAsync(contract)
       logger.debug("reqTickersAsync (live) took {:.2f}s", time.monotonic() - t0)
-      return PriceSnapshot(
-        symbol=contract.localSymbol or symbol,
-        sec_type=sec_type,
-        last=_to_float(ticker.last),
-        bid=_to_float(ticker.bid),
-        ask=_to_float(ticker.ask),
-        close=_to_float(ticker.close),
-        timestamp=dt.datetime.now(dt.UTC).isoformat(),
-      )
+      last = _to_float(ticker.last)
+      close = _to_float(ticker.close)
+      # Return real-time snapshot only if IB delivered something useful.
+      # Outside RTH, indices + illiquid names may have all-null ticker fields
+      # (bid/ask = -1, last/close = NaN). Fall through to the historical-bar
+      # fallback below to preserve the prior "return yesterday's close" behavior.
+      if last is not None or close is not None:
+        return PriceSnapshot(
+          symbol=contract.localSymbol or symbol,
+          sec_type=sec_type,
+          last=last,
+          bid=_to_float(ticker.bid),
+          ask=_to_float(ticker.ask),
+          close=close,
+          timestamp=dt.datetime.now(dt.UTC).isoformat(),
+          is_realtime=(ticker.marketDataType == 1),
+          market_data_type=ticker.marketDataType,
+        )
     # Closed path: reqTickersAsync for indices waits ~11s for bid/ask that never
     # arrive. Use the last daily bar instead — IB returns it immediately.
     what_to_show = _WHAT_TO_SHOW.get(sec_type.upper(), "TRADES")
@@ -128,6 +144,8 @@ class HistoryClient(IBClient):
       ask=None,
       close=close,
       timestamp=dt.datetime.now(dt.UTC).isoformat(),
+      is_realtime=False,
+      market_data_type=2,
     )
 
   async def get_historical_bars(
