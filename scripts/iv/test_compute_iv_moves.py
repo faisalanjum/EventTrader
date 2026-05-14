@@ -34,6 +34,9 @@ from compute_iv_moves import (  # noqa: E402
     compute_iv_disagreement_pp,
     derive_quote_freshness,
     derive_iv_quality,
+    derive_event_ts,
+    derive_earnings_timing,
+    derive_earnings_context_flags,
 )
 
 
@@ -821,3 +824,169 @@ class TestMultiplierGuardStrict:
         mc, mp = 100, 10
         result_multiplier = mc if (mc is not None and mp is not None and mc == mp) else None
         assert result_multiplier is None
+
+
+# ===========================================================================
+# Phase 4 — earnings dual-expiry: event_ts, timing, context flags
+# ===========================================================================
+
+class TestEventTSDerivation:
+    """C — precedence: sec_filing > user_supplied > yahoo_conventional > unknown."""
+
+    def test_user_supplied_beats_yahoo(self):
+        earnings = {"date": "2026-07-30", "time": "AMC", "source": "yahoo"}
+        ts, src = derive_event_ts(earnings, MARKET_CONVENTIONS,
+                                  user_supplied_ts="2026-07-30T20:00:00+00:00")
+        assert src == "user_supplied"
+        assert ts == "2026-07-30T20:00:00+00:00"
+
+    def test_yahoo_amc_converts_to_conventional_utc(self):
+        earnings = {"date": "2026-07-30", "time": "AMC", "source": "yahoo"}
+        ts, src = derive_event_ts(earnings, MARKET_CONVENTIONS)
+        assert src == "yahoo_conventional"
+        # 16:30 ET = 20:30 UTC (during EDT in July) or 21:30 UTC (during EST in winter)
+        # July is EDT → 16:30 ET = 20:30 UTC
+        assert ts.startswith("2026-07-30T20:30:00")
+
+    def test_bmo_yields_07_30_et(self):
+        earnings = {"date": "2026-07-30", "time": "BMO", "source": "yahoo"}
+        ts, src = derive_event_ts(earnings, MARKET_CONVENTIONS)
+        # 07:30 ET = 11:30 UTC (EDT) or 12:30 UTC (EST)
+        assert src == "yahoo_conventional"
+        assert ts.startswith("2026-07-30T11:30:00")
+
+    def test_dmh_yields_12_00_et(self):
+        earnings = {"date": "2026-07-30", "time": "DMH", "source": "yahoo"}
+        ts, src = derive_event_ts(earnings, MARKET_CONVENTIONS)
+        assert src == "yahoo_conventional"
+        assert ts.startswith("2026-07-30T16:00:00")  # 12:00 ET = 16:00 UTC (EDT)
+
+    def test_no_earnings_yields_unknown(self):
+        ts, src = derive_event_ts(None, MARKET_CONVENTIONS)
+        assert ts is None and src == "unknown"
+
+    def test_missing_date_yields_unknown(self):
+        ts, src = derive_event_ts({"time": "AMC"}, MARKET_CONVENTIONS)
+        assert ts is None and src == "unknown"
+
+
+class TestEarningsTimingDerivation:
+    """C — in_window (date-level), in_contract_life (timestamp), qs_rel_to_event."""
+
+    def test_amc_on_expiry_day_window_true_contract_life_false(self):
+        # event_ts 2026-05-14 16:30 ET = 2026-05-14T20:30Z
+        # expiry 20260514, options close 16:00 ET → close_ts 20:00Z
+        # → in_contract_life = (20:30 <= 20:00) FALSE
+        # → in_window = TRUE (same date)
+        run_iso = "2026-05-14T12:00:00+00:00"
+        qs_iso  = "2026-05-14T13:00:00+00:00"
+        ev_iso  = "2026-05-14T20:30:00+00:00"
+        t = derive_earnings_timing(ev_iso, run_iso, "20260514", qs_iso, "16:00")
+        assert t["in_window"] is True
+        assert t["in_contract_life"] is False
+        assert t["quote_snapshot_relative_to_event"] == "pre_event"
+
+    def test_bmo_on_expiry_day_both_true(self):
+        # BMO: event 07:30 ET = 11:30 UTC; expiry close 16:00 ET = 20:00 UTC
+        # → in_contract_life = (11:30 <= 20:00) TRUE
+        run_iso = "2026-05-13T20:00:00+00:00"
+        qs_iso  = "2026-05-13T20:00:00+00:00"
+        ev_iso  = "2026-05-14T11:30:00+00:00"
+        t = derive_earnings_timing(ev_iso, run_iso, "20260514", qs_iso, "16:00")
+        assert t["in_window"] is True
+        assert t["in_contract_life"] is True
+
+    def test_pre_event_qs_when_quote_before_event(self):
+        ev_iso = "2026-07-30T20:30:00+00:00"
+        qs_iso = "2026-05-14T15:00:00+00:00"  # well before
+        t = derive_earnings_timing(ev_iso, "2026-05-14T12:00:00+00:00",
+                                    "20260821", qs_iso, "16:00")
+        assert t["quote_snapshot_relative_to_event"] == "pre_event"
+
+    def test_post_event_qs_when_quote_after_event(self):
+        ev_iso = "2026-05-14T20:30:00+00:00"
+        qs_iso = "2026-05-14T20:35:00+00:00"  # 5 min after AMC
+        t = derive_earnings_timing(ev_iso, "2026-05-14T20:35:00+00:00",
+                                    "20260821", qs_iso, "16:00")
+        assert t["quote_snapshot_relative_to_event"] == "post_event"
+
+    def test_earnings_past_run_as_of_not_in_window(self):
+        # earnings yesterday, run today → in_window=False
+        ev_iso  = "2026-05-13T20:30:00+00:00"
+        run_iso = "2026-05-14T12:00:00+00:00"
+        t = derive_earnings_timing(ev_iso, run_iso, "20260821",
+                                    "2026-05-14T12:00:00+00:00", "16:00")
+        assert t["in_window"] is False
+
+    def test_unknown_qs_when_no_snapshot(self):
+        ev_iso = "2026-07-30T20:30:00+00:00"
+        t = derive_earnings_timing(ev_iso, "2026-05-14T12:00:00+00:00",
+                                    "20260821", None, "16:00")
+        assert t["quote_snapshot_relative_to_event"] == "unknown"
+
+
+class TestEarningsContextFlags:
+    """E — context_flags derivation; pre_event ALONE is NOT premium."""
+
+    def _row(self, **kw):
+        r = IVRow(ticker="X", expiry="20260821")
+        for k, v in kw.items():
+            setattr(r, k, v)
+        return r
+
+    def test_pre_event_with_in_contract_life_emits_includes_premium(self):
+        r = self._row(earnings_in_contract_life=True,
+                      quote_snapshot_relative_to_event="pre_event")
+        flags = derive_earnings_context_flags(r)
+        assert "includes_earnings_premium" in flags
+
+    def test_pre_event_WITHOUT_in_contract_life_NO_premium(self):
+        # CRITICAL: pre_event ALONE != premium (AMC-on-expiry-day case)
+        r = self._row(earnings_in_window=True,
+                      earnings_in_contract_life=False,
+                      quote_snapshot_relative_to_event="pre_event")
+        flags = derive_earnings_context_flags(r)
+        assert "includes_earnings_premium" not in flags
+        assert "expiry_before_known_earnings" in flags
+
+    def test_post_event_emits_post_event_snapshot(self):
+        r = self._row(quote_snapshot_relative_to_event="post_event")
+        flags = derive_earnings_context_flags(r)
+        assert "post_event_snapshot" in flags
+        # post_event MUST NOT also imply includes_earnings_premium
+        assert "includes_earnings_premium" not in flags
+
+    def test_amc_on_expiry_day_specific_flag(self):
+        # Event_ts on the expiry date AND time=AMC AND in_contract_life=False
+        r = self._row(expiry="20260514",
+                      earnings_next_time="AMC",
+                      earnings_event_ts="2026-05-14T20:30:00+00:00",
+                      earnings_in_window=True,
+                      earnings_in_contract_life=False,
+                      quote_snapshot_relative_to_event="pre_event")
+        flags = derive_earnings_context_flags(r)
+        assert "amc_expiry_day" in flags
+        assert "expiry_before_known_earnings" in flags
+        assert "includes_earnings_premium" not in flags
+
+    def test_no_earnings_no_flags(self):
+        r = self._row()  # earnings_in_window=False, qs_rel=not_applicable defaults
+        flags = derive_earnings_context_flags(r)
+        assert flags == []
+
+
+class TestPhase4IVRowFields:
+    def test_defaults(self):
+        r = IVRow(ticker="AAPL")
+        assert r.quote_snapshot_as_of is None
+        assert r.quote_snapshot_source == "unknown"
+        assert r.earnings_next_date is None
+        assert r.earnings_next_time == "unknown"
+        assert r.earnings_next_time_source == "unknown"
+        assert r.earnings_event_ts is None
+        assert r.earnings_event_ts_source == "unknown"
+        assert r.earnings_in_window is False
+        assert r.earnings_in_contract_life is False
+        assert r.quote_snapshot_relative_to_event == "not_applicable"
+        assert r.earnings_calendar_source == "yahoo"
+        assert r.earnings_calendar_pit_safe is False

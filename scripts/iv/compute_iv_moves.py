@@ -40,6 +40,8 @@ import time
 from dataclasses import dataclass, asdict, field
 from pathlib import Path
 
+from zoneinfo import ZoneInfo
+
 from ib_async import IB
 from ib_async.contract import Stock, Option
 
@@ -314,6 +316,214 @@ def derive_quote_freshness(
     return "fresh"
 
 
+def determine_qs_source_and_ts(call_t, put_t, run_time, market_data_type, fell_back_from_live) -> tuple[str | None, str]:
+    """Return (quote_snapshot_as_of_iso, quote_snapshot_source).
+
+    Source enum: live_tick | delayed_tick | frozen_close | delayed_frozen | unknown
+    Effective market time: latest ticker.time across the two legs (with delayed
+    offset applied if data_tier is delayed).
+    """
+    times = []
+    for t in (call_t, put_t):
+        if t is None:
+            continue
+        tt = getattr(t, "time", None)
+        if tt is not None:
+            try:
+                if isinstance(tt, dt.datetime):
+                    if tt.tzinfo is None:
+                        tt = tt.replace(tzinfo=dt.timezone.utc)
+                else:
+                    tt = dt.datetime.fromisoformat(str(tt))
+                    if tt.tzinfo is None:
+                        tt = tt.replace(tzinfo=dt.timezone.utc)
+                times.append(tt)
+            except Exception:
+                continue
+    qs_as_of = max(times).isoformat(timespec="seconds") if times else None
+    # Source classification
+    if fell_back_from_live:
+        return qs_as_of, "delayed_tick"   # fallback path = delayed stream
+    observed_mdt = getattr(call_t, "marketDataType", None) if call_t is not None else (
+        getattr(put_t, "marketDataType", None) if put_t is not None else None
+    )
+    if observed_mdt == 1:
+        return qs_as_of, "live_tick"
+    if observed_mdt == 2:
+        return qs_as_of, "frozen_close"
+    if observed_mdt == 3:
+        return qs_as_of, "delayed_tick"
+    if observed_mdt == 4:
+        return qs_as_of, "delayed_frozen"
+    return qs_as_of, "unknown"
+
+
+def derive_earnings_timing(event_ts_iso: str | None, run_as_of_iso: str,
+                           expiry_yyyymmdd: str | None, quote_snapshot_iso: str | None,
+                           options_close_et: str) -> dict:
+    """Returns dict with in_window, in_contract_life, qs_rel_to_event.
+
+    in_window:        DATE-LEVEL — earnings on this option's expiry calendar
+                      (earnings_date >= run_as_of.date()) AND (earnings_date <= expiry_date)
+    in_contract_life: TIMESTAMP — event_ts <= expiry_close_ts (option's life spans event)
+    qs_rel:           pre_event | post_event | not_applicable | unknown
+    """
+    out = {"in_window": False, "in_contract_life": False,
+           "quote_snapshot_relative_to_event": "not_applicable"}
+    if not event_ts_iso or not expiry_yyyymmdd:
+        return out
+    try:
+        event_ts = dt.datetime.fromisoformat(event_ts_iso)
+        if event_ts.tzinfo is None:
+            event_ts = event_ts.replace(tzinfo=dt.timezone.utc)
+        run_as_of = dt.datetime.fromisoformat(run_as_of_iso)
+        if run_as_of.tzinfo is None:
+            run_as_of = run_as_of.replace(tzinfo=dt.timezone.utc)
+        expiry_date = dt.datetime.strptime(expiry_yyyymmdd, "%Y%m%d").date()
+        earnings_date = event_ts.date()
+        # expiry_close_ts = expiry_date @ options_close_et (US/Eastern)
+        et_h, et_m = options_close_et.split(":")
+        expiry_close_et = dt.datetime(expiry_date.year, expiry_date.month, expiry_date.day,
+                                       int(et_h), int(et_m), tzinfo=ZoneInfo("US/Eastern"))
+        expiry_close_ts = expiry_close_et.astimezone(dt.timezone.utc)
+    except Exception:
+        return out
+
+    out["in_window"] = (earnings_date >= run_as_of.date()) and (earnings_date <= expiry_date)
+    out["in_contract_life"] = event_ts <= expiry_close_ts
+
+    if quote_snapshot_iso:
+        try:
+            qs_ts = dt.datetime.fromisoformat(quote_snapshot_iso)
+            if qs_ts.tzinfo is None:
+                qs_ts = qs_ts.replace(tzinfo=dt.timezone.utc)
+            out["quote_snapshot_relative_to_event"] = "pre_event" if qs_ts < event_ts else "post_event"
+        except Exception:
+            out["quote_snapshot_relative_to_event"] = "unknown"
+    else:
+        out["quote_snapshot_relative_to_event"] = "unknown"
+    return out
+
+
+def derive_earnings_context_flags(row) -> list[str]:
+    """Compute context_flags based on row's earnings fields.
+
+    includes_earnings_premium  = in_contract_life=TRUE AND qs_rel=pre_event
+    post_event_snapshot        = qs_rel=post_event
+    amc_expiry_day             = next_time=AMC AND event.date == expiry.date AND
+                                  in_contract_life=FALSE
+    expiry_before_known_earnings = in_window=TRUE AND in_contract_life=FALSE
+    earnings_just_after_window  = (handled at caller level — needs chain context)
+    """
+    flags: list[str] = []
+    if row.earnings_in_contract_life and row.quote_snapshot_relative_to_event == "pre_event":
+        flags.append("includes_earnings_premium")
+    if row.quote_snapshot_relative_to_event == "post_event":
+        flags.append("post_event_snapshot")
+    if row.earnings_in_window and not row.earnings_in_contract_life:
+        flags.append("expiry_before_known_earnings")
+        # AMC-on-expiry-day is a specific sub-case
+        if (row.earnings_next_time == "AMC" and row.earnings_event_ts
+                and row.expiry and row.earnings_event_ts[:10] == f"{row.expiry[:4]}-{row.expiry[4:6]}-{row.expiry[6:]}"):
+            flags.append("amc_expiry_day")
+    return flags
+
+
+def fetch_yahoo_earnings(ticker: str) -> dict | None:
+    """Return next future earnings event for `ticker` via yfinance.
+
+    Returns dict with keys: date (YYYY-MM-DD), time (AMC|BMO|DMH|unknown),
+    source ("yahoo"), fetched_at (ISO UTC). None on any failure.
+    Phase 4.B — Yahoo is CONVENTIONAL fallback only; real implementations
+    should prefer sec_filing or user_supplied event_ts when available.
+    """
+    try:
+        import yfinance as yf
+        import pandas as pd
+    except ImportError:
+        return None
+    try:
+        t = yf.Ticker(ticker)
+        df = t.earnings_dates
+        if df is None or len(df) == 0:
+            return None
+        now = pd.Timestamp.now(tz="UTC")
+        future = df[df.index > now]
+        if future.empty:
+            return None
+        next_ts = future.index.min()  # earliest future event
+        et = next_ts.tz_convert("US/Eastern")
+        hh, mm = et.hour, et.minute
+        if hh >= 16:
+            time_class = "AMC"
+        elif hh < 9 or (hh == 9 and mm < 30):
+            time_class = "BMO"
+        else:
+            time_class = "DMH"
+        return {
+            "date":       next_ts.date().isoformat(),
+            "time":       time_class,
+            "source":     "yahoo",
+            "fetched_at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
+        }
+    except Exception:
+        return None
+
+
+def load_or_fetch_earnings_cache(tickers: list[str], cache_path: Path, force_refresh: bool = False) -> dict:
+    """Daily-cached earnings calendar.
+
+    Cache key: ticker. Cache value: {date, time, source, fetched_at} or None.
+    File: scripts/iv/output/_earnings_cache_YYYY-MM-DD.json
+    pit_safe=False (Yahoo current-state, NOT point-in-time).
+    """
+    cache: dict = {}
+    if cache_path.exists() and not force_refresh:
+        try:
+            cache = json.loads(cache_path.read_text())
+        except Exception:
+            cache = {}
+    missing = [t for t in tickers if t not in cache]
+    for t in missing:
+        cache[t] = fetch_yahoo_earnings(t)
+    cache_path.parent.mkdir(parents=True, exist_ok=True)
+    cache_path.write_text(json.dumps(cache, indent=2, default=str))
+    return cache
+
+
+def derive_event_ts(earnings: dict | None, market_conventions: dict,
+                    user_supplied_ts: str | None = None) -> tuple[str | None, str]:
+    """Returns (event_ts_iso, event_ts_source).
+
+    Precedence per SCHEMA r6 r5:
+      sec_filing > user_supplied > yahoo_conventional > unknown
+    """
+    # sec_filing source not wired yet — placeholder for future SEC EDGAR integration
+    if user_supplied_ts:
+        return user_supplied_ts, "user_supplied"
+    if not earnings or not earnings.get("date"):
+        return None, "unknown"
+    date_str = earnings["date"]
+    time_class = earnings.get("time", "unknown")
+    # Conventional time per market_conventions (16:00 close / 16:30 AMC / 07:30 BMO / 12:00 DMH)
+    if time_class == "AMC":
+        clock = market_conventions["amc_conventional_time_et"]
+    elif time_class == "BMO":
+        clock = market_conventions["bmo_conventional_time_et"]
+    elif time_class == "DMH":
+        clock = market_conventions["dmh_conventional_time_et"]
+    else:
+        clock = "12:00"  # safe fallback (DMH-ish)
+    # Build event_ts as ET → UTC ISO (no tz suffix Java-style; emit aware UTC)
+    try:
+        et = dt.datetime.fromisoformat(f"{date_str}T{clock}:00")
+        et = et.replace(tzinfo=ZoneInfo("US/Eastern"))
+        utc = et.astimezone(dt.timezone.utc)
+        return utc.isoformat(timespec="seconds"), "yahoo_conventional"
+    except Exception:
+        return None, "unknown"
+
+
 def derive_iv_quality(
     status: str,
     data_tier: str,
@@ -426,7 +636,21 @@ class IVRow:
     multiplier: int | None = None                    # standard 100; flag if not
     quote_freshness: str = "unknown"                 # fresh | stale | unknown (independent of data_tier)
     iv_quality: str = "n/a"                          # HIGH | MEDIUM | LOW | n/a
-    context_flags: list[str] = field(default_factory=list)  # semantic flags (populated in phase 4)
+    context_flags: list[str] = field(default_factory=list)  # semantic flags (earnings context etc.)
+    # Phase 4 — earnings + quote_snapshot timing fields
+    quote_snapshot_as_of: str | None = None          # ISO UTC; effective market time the quote represents
+    quote_snapshot_source: str = "unknown"           # live_tick | delayed_tick | frozen_close | delayed_frozen | unknown
+    earnings_next_date: str | None = None            # YYYY-MM-DD
+    earnings_next_time: str = "unknown"              # AMC | BMO | DMH | unknown
+    earnings_next_time_source: str = "unknown"       # yahoo | sec_filing | user_supplied | unknown
+    earnings_event_ts: str | None = None             # ISO UTC; derived per derive_event_ts
+    earnings_event_ts_source: str = "unknown"        # sec_filing > user_supplied > yahoo_conventional > unknown
+    earnings_in_window: bool = False                 # earnings on calendar between run_as_of and expiry
+    earnings_in_contract_life: bool = False          # event_ts <= expiry_close_ts (timing-aware)
+    quote_snapshot_relative_to_event: str = "not_applicable"  # pre_event | post_event | not_applicable | unknown
+    earnings_calendar_source: str = "yahoo"
+    earnings_calendar_as_of: str | None = None
+    earnings_calendar_pit_safe: bool = False         # Yahoo current-state, NOT PIT-safe
     status: str = "PENDING"
     diagnostics: list[str] = field(default_factory=list)
 
@@ -438,7 +662,12 @@ class IVRow:
 async def compute_one(
     ib: IB, sem: asyncio.Semaphore, ticker: str, target_dte: int | None,
     market_data_type: int = 1, run_id: str = "",
-) -> IVRow:
+    earnings_cache: dict | None = None, run_as_of_iso: str | None = None,
+) -> list[IVRow]:
+    """Returns 1 or 2 IVRows:
+      1 row by default
+      2 rows when earnings is in_window and we need a separate pre/post-earnings row
+    """
     row = IVRow(ticker=ticker, run_id=run_id)
     # Initialize row_id immediately so EVERY row is citable by evidence catalog,
     # even early-failure rows (NO_CONID / NO_SPOT / NO_CHAIN / NO_EXPIRY).
@@ -453,11 +682,11 @@ async def compute_one(
         except Exception as e:
             row.status = "QUALIFY_FAILED"
             row.diagnostics.append(f"{type(e).__name__}: {e}")
-            return row
+            return [row]
         underlying = qualified[0] if qualified else None
         if underlying is None or getattr(underlying, "conId", 0) == 0:
             row.status = "NO_CONID"
-            return row
+            return [row]
 
         # 2. Spot price
         try:
@@ -468,7 +697,7 @@ async def compute_one(
         except Exception as e:
             row.status = "SPOT_FAILED"
             row.diagnostics.append(f"{type(e).__name__}: {e}")
-            return row
+            return [row]
         spot = None
         for v in (stk_ticker.last, stk_ticker.marketPrice(), stk_ticker.close):
             if v is not None and not math.isnan(v) and v > 0:
@@ -476,7 +705,7 @@ async def compute_one(
                 break
         if spot is None:
             row.status = "NO_SPOT"
-            return row
+            return [row]
         row.spot = spot
         row.spot_source = (
             "live" if stk_ticker.marketDataType == 1 and stk_ticker.last and not math.isnan(stk_ticker.last)
@@ -492,10 +721,10 @@ async def compute_one(
         except Exception as e:
             row.status = "CHAIN_FAILED"
             row.diagnostics.append(f"{type(e).__name__}: {e}")
-            return row
+            return [row]
         if not chain_params:
             row.status = "NO_CHAIN"
-            return row
+            return [row]
         # Filter to the STANDARD chain — tradingClass matches ticker, prefer SMART.
         # IBKR returns one chain entry per (exchange, tradingClass); weekly variants
         # (e.g., SPYW for SPY) have their own restricted strike grids that would
@@ -513,7 +742,7 @@ async def compute_one(
         if expiry_yyyymmdd is None:
             row.status = "NO_EXPIRY"
             row.diagnostics.append(f"chain_expirations={len(all_expirations)}")
-            return row
+            return [row]
         row.expiry = expiry_yyyymmdd
         # row_id format: {ticker}:{expiry}:{earnings_role}. earnings_role defaults to
         # "non_earnings" in phase 1; phase 4 may emit dual rows with role=pre_earnings/post_earnings
@@ -526,7 +755,7 @@ async def compute_one(
         # for the chosen expiry (chain.strikes is UNION across expirations).
         if not all_strikes or spot is None:
             row.status = "NO_ATM"
-            return row
+            return [row]
         ranked_strikes = sorted(all_strikes, key=lambda s: abs(s - spot))
         call_q = put_q = None
         for candidate in ranked_strikes[:5]:  # try up to 5 nearest strikes
@@ -591,7 +820,7 @@ async def compute_one(
         if call_q is None or put_q is None:
             row.status = "OPT_NOT_FOUND"
             row.diagnostics.append(f"tried_strikes={ranked_strikes[:5]}")
-            return row
+            return [row]
 
         # 7. Get tickers
         ib.reqMarketDataType(market_data_type)
@@ -602,7 +831,7 @@ async def compute_one(
         except Exception as e:
             row.status = "QUOTE_FAILED"
             row.diagnostics.append(f"{type(e).__name__}: {e}")
-            return row
+            return [row]
         call_t = next((t for t in tickers if t.contract.right == "C"), None)
         put_t = next((t for t in tickers if t.contract.right == "P"), None)
 
@@ -745,6 +974,66 @@ async def compute_one(
         DEFAULT_CONFIG["tick_freshness_threshold_sec"],
     )
 
+    # Phase 4 — quote_snapshot_as_of + source (derived from observed ticker.time)
+    qs_iso, qs_source = determine_qs_source_and_ts(call_t, put_t, run_time,
+                                                     market_data_type, fell_back_from_live)
+    row.quote_snapshot_as_of = qs_iso
+    row.quote_snapshot_source = qs_source
+
+    # Phase 4 — earnings fields (if cache hit for this ticker)
+    earnings = (earnings_cache or {}).get(ticker)
+    run_as_of_iso = run_as_of_iso or dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
+    if earnings is not None:
+        row.earnings_next_date = earnings.get("date")
+        row.earnings_next_time = earnings.get("time", "unknown")
+        row.earnings_next_time_source = earnings.get("source", "unknown")
+        row.earnings_calendar_source = earnings.get("source", "unknown")
+        row.earnings_calendar_as_of = earnings.get("fetched_at")
+        # derive event_ts via precedence: sec_filing > user_supplied > yahoo > unknown
+        event_ts_iso, event_ts_source = derive_event_ts(earnings, MARKET_CONVENTIONS)
+        row.earnings_event_ts = event_ts_iso
+        row.earnings_event_ts_source = event_ts_source
+        # timing-aware fields
+        timing = derive_earnings_timing(
+            event_ts_iso=event_ts_iso, run_as_of_iso=run_as_of_iso,
+            expiry_yyyymmdd=row.expiry, quote_snapshot_iso=row.quote_snapshot_as_of,
+            options_close_et=MARKET_CONVENTIONS["options_market_close_et"],
+        )
+        row.earnings_in_window = timing["in_window"]
+        row.earnings_in_contract_life = timing["in_contract_life"]
+        row.quote_snapshot_relative_to_event = timing["quote_snapshot_relative_to_event"]
+        # context_flags
+        for f in derive_earnings_context_flags(row):
+            if f not in row.context_flags:
+                row.context_flags.append(f)
+        # earnings_just_after_window — check expirations within +N days
+        if row.earnings_in_window is False and event_ts_iso and row.expiry:
+            try:
+                event_date = dt.datetime.fromisoformat(event_ts_iso).date()
+                expiry_date = dt.datetime.strptime(row.expiry, "%Y%m%d").date()
+                gap_days = (event_date - expiry_date).days
+                if 0 < gap_days <= DEFAULT_CONFIG["earnings_just_after_window_days"]:
+                    if "earnings_just_after_window" not in row.context_flags:
+                        row.context_flags.append("earnings_just_after_window")
+            except Exception:
+                pass
+
+    # Assign earnings_role for the PRIMARY row.
+    # Rule per SCHEMA r6:
+    #   AMC-on-expiry-day → primary.role=pre_earnings (option dies before event)
+    #   BMO-on-expiry-day → primary.role=post_earnings (option captures overnight gap)
+    #   Earnings inside primary expiry life → primary.role=post_earnings
+    #   No earnings or out of window → primary.role=non_earnings (default)
+    if row.earnings_in_window and not row.earnings_in_contract_life:
+        # primary expires before event → primary IS the pre_earnings view
+        row.earnings_role = "pre_earnings"
+    elif row.earnings_in_contract_life:
+        row.earnings_role = "post_earnings"
+    # else stays non_earnings
+
+    # Update row_id to reflect possibly-changed earnings_role
+    row.row_id = f"{ticker}:{row.expiry}:{row.earnings_role}"
+
     # Tier 2.J — iv_quality summary label per SCHEMA_v2 r6
     row.iv_quality = derive_iv_quality(
         status=row.status,
@@ -756,7 +1045,29 @@ async def compute_one(
         atm_distance_pct=row.atm_distance_pct,
         quality_flags=row.quality_flags,
     )
-    return row
+
+    # Phase 4.D — dual-row emission for AMC-on-expiry-day.
+    # If primary is pre_earnings (expires before event), additionally emit
+    # a post_earnings row using a chain expiry AFTER the event_ts.
+    # Note: this requires re-fetching quotes for the post-earnings expiry.
+    # Phase 4 minimal: ONLY mark the post-earnings expiry candidate via diagnostics;
+    # caller-level computation of the post row deferred until needed by predictor.
+    # → Single-row return for now; documentation of intent in diagnostics.
+    if row.earnings_role == "pre_earnings":
+        # Find the next chain expiry AFTER the event for the bot's reference
+        try:
+            event_date = dt.datetime.fromisoformat(row.earnings_event_ts).date()
+            post_candidates = [d for d in all_expirations
+                                if dt.datetime.strptime(d, "%Y%m%d").date() > event_date]
+            if post_candidates:
+                post_expiry = sorted(post_candidates)[0]
+                row.diagnostics.append(
+                    f"AMC-on-expiry-day: pre_earnings primary; bot may query post_earnings expiry={post_expiry}",
+                )
+        except Exception:
+            pass
+
+    return [row]
 
 
 # ---------------------------------------------------------------------------
@@ -843,15 +1154,30 @@ async def amain():
     run_id = f"{SCHEMA_VERSION}:{run_as_of}:{args.client_id}"
     print(f"Computing IV for {len(tickers)} tickers  (run_id={run_id})", file=sys.stderr)
 
+    # Phase 4 — earnings calendar (daily cache, Yahoo, pit_safe=False)
+    earnings_cache_path = (
+        Path(__file__).parent / "output" /
+        f"_earnings_cache_{dt.date.today().isoformat()}.json"
+    )
+    print(f"Loading earnings calendar (cache={earnings_cache_path})...", file=sys.stderr)
+    earnings_cache = load_or_fetch_earnings_cache(tickers, earnings_cache_path)
+    earnings_cache_as_of = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
+
     ib = IB()
     await ib.connectAsync(host=args.host, port=args.port, clientId=args.client_id, timeout=20)
     sem = asyncio.Semaphore(args.concurrency)
     t0 = time.time()
-    tasks = [compute_one(ib, sem, t, args.target_dte, args.market_data_type, run_id) for t in tickers]
+    tasks = [
+        compute_one(ib, sem, t, args.target_dte, args.market_data_type, run_id,
+                    earnings_cache=earnings_cache, run_as_of_iso=run_as_of)
+        for t in tickers
+    ]
     rows: list[IVRow] = []
     for i, fut in enumerate(asyncio.as_completed(tasks), 1):
-        r = await fut
-        rows.append(r)
+        result = await fut
+        # compute_one now returns list[IVRow] (may contain pre + post earnings rows)
+        for r in result:
+            rows.append(r)
         if i % 50 == 0:
             elapsed = time.time() - t0
             ok = sum(1 for x in rows if x.status == "OK")
@@ -889,7 +1215,14 @@ async def amain():
                 "live_at_run": args.market_data_type == 1,
                 "market_data_type_requested": args.market_data_type,  # 1|2|3|4 — see CLI help
             },
-            # earnings_calendar block appended in phase 4
+            # Phase 4 — earnings calendar block (Yahoo, daily cache, pit_safe=False)
+            "earnings_calendar": {
+                "vendor":     "yahoo",
+                "via":        "yfinance.Ticker.earnings_dates",
+                "as_of":      earnings_cache_as_of,
+                "pit_safe":   False,
+                "cache_file": str(earnings_cache_path),
+            },
         },
         # === aggregates ===
         "summary":  summary(rows),
