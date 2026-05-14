@@ -25,6 +25,13 @@ class MarketDataClient(IBClient):
     result["bid"] = result["bid"].astype(float)
     result["ask"] = result["ask"].astype(float)
     result["greeks"] = result.apply(self._greek_extraction, axis=1)
+    # marketDataType: 1=Live 2=Frozen 3=Delayed 4=Delayed-Frozen (per-ticker IB classification)
+    if "marketDataType" in result.columns:
+      result["marketDataType"] = result["marketDataType"].apply(
+        lambda v: int(v) if pd.notna(v) else None,
+      )
+    else:
+      result["marketDataType"] = None
 
     # Convert DataFrame to list of Pydantic models
     ticker_list = []
@@ -37,6 +44,7 @@ class MarketDataClient(IBClient):
         bid=row["bid"] if pd.notna(row["bid"]) and row["bid"] != -1 else None,
         ask=row["ask"] if pd.notna(row["ask"]) and row["ask"] != -1 else None,
         greeks=row["greeks"],
+        marketDataType=row["marketDataType"],
       )
       ticker_list.append(ticker_data)
 
@@ -194,6 +202,7 @@ class MarketDataClient(IBClient):
           bid=row["bid"] if pd.notna(row["bid"]) and row["bid"] != -1 else None,
           ask=row["ask"] if pd.notna(row["ask"]) and row["ask"] != -1 else None,
           greeks=row["greeks"],
+          marketDataType=row.get("marketDataType") if pd.notna(row.get("marketDataType")) else None,
         )
         for _, row in filtered_data.iterrows()
       ]

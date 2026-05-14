@@ -23,3 +23,12 @@ class TickerData(BaseModel):
   bid: float | None = Field(None, description="Bid price")
   ask: float | None = Field(None, description="Ask price")
   greeks: GreeksData | None = Field(None, description="Greeks data for options")
+  marketDataType: int | None = Field(
+    None,
+    description=(
+      "IB market-data classification for this ticker: 1=Live, 2=Frozen, "
+      "3=Delayed, 4=Delayed-Frozen. None if not reported. Mirrors the "
+      "PriceSnapshot.market_data_type contract from Phase 1 so callers "
+      "can tell live OPRA greeks (1) from delayed-frozen + model greeks (2/4)."
+    ),
+  )
