@@ -1,204 +1,153 @@
-# Phase 8 — Full-Universe Live Run Validation Note
+# Phase 8 — Full-Universe Validation Note (v4 regen)
 
 **Schema**: `iv_moves.v2`
-**Status**: Validated — see distributions and vendor checks below.
+**Status**: Arithmetic self-consistency validated. Vendor differences within
+methodology noise. v4 semantic fixes (`qs_rel_to_event=not_applicable`,
+timestamp-based secondary picker, `last_only_no_iv` flag, in-contract-life
+lower bound) verified on regenerated universe.
 
-## Command
+> ⚠️ This run was executed **after the 4pm ET close** (run_as_of 16:57 ET).
+> The data-tier and iv_quality distributions reflect a fallback-delayed
+> snapshot, NOT live-RTH OPRA. Use the v4 artifact for **semantic** field
+> validation only. The earlier pre-v4 in-session artifact remains in the
+> repo for live-RTH distribution comparison.
+
+## Commands & run handles
+
+### v4 regen (this artifact — CANONICAL)
 
 ```bash
 python scripts/iv/compute_iv_moves.py \
   --universe-redis \
   --target-dte 30 \
   --port 14003 \
-  --client-id 188 \
-  --concurrency 8 \
+  --client-id 220 \
+  --concurrency 20 \
   --market-data-type 1 \
-  --output scripts/iv/output/phase8_universe_2026-05-14.json
+  --output scripts/iv/output/phase8_universe_2026-05-14_v4.json
 ```
-
-Live IBKR gateway, OPRA subscription active. Live market hours (mid-day ET).
-Universe source: Redis `admin:tradable_universe:symbols` (783 tickers).
-
-## Run handle
 
 | Field | Value |
 |---|---|
-| `run_id` | `iv_moves.v2:2026-05-14T19:41:32+00:00:188` |
-| `run_as_of` | `2026-05-14T19:41:32+00:00` (15:41 ET) |
-| Wall time | ~32 min (started 15:41 ET, artifact mtime 16:13 ET) |
-| Concurrency | 8 (effective ~20 s/ticker — IBKR rate-limited; bump to 20-25 next run) |
+| `run_id` | `iv_moves.v2:2026-05-14T20:57:22+00:00:220` |
+| `run_as_of` | `2026-05-14T20:57:22+00:00` (**16:57 ET — 57 min past close**) |
+| Wall time | ~13 min (concurrency 20) |
+| Code commit at run time | `bc595f6` (Phase 4 patch v4) |
 | `universe_size` | 783 tickers |
-| `total_rows` | 846 (783 primary + 63 dual-row secondaries) |
+| `total_rows` | 848 (783 primary + **65 dual-row secondaries**) |
 
-## Summary distributions
+### Pre-v4 in-session reference (still on disk for comparison)
 
-### Status (846 rows)
+```
+run_id:    iv_moves.v2:2026-05-14T19:41:32+00:00:188
+run_as_of: 15:41 ET (mid-session)
+file:      scripts/iv/output/phase8_universe_2026-05-14.json
+```
 
-| Status | Count | % |
+## v4 semantic check results
+
+### Check 1 — `quote_snapshot_relative_to_event` not_applicable
+
+**Rule**: when a row's earnings event is outside BOTH the window AND the contract
+life, `qs_rel_to_event` MUST be `not_applicable`, never `pre_event`/`post_event`.
+
+| Snapshot | Stale rows (in_window=False AND in_contract_life=False but qs_rel=pre/post_event) |
+|---|---:|
+| **v4 regen** | **0** ✓ |
+| Pre-v4 in-session (for reference) | 468 (55% of rows had misleading labels) |
+
+v4 distribution: `not_applicable=781`, `pre_event=63`, `post_event=4`.
+
+### Check 2 — `last_only_no_iv` rows demoted to LOW
+
+52 rows triggered the flag. **All 52** carry `iv_quality=LOW`. Zero are
+MEDIUM/HIGH. The `derive_iv_quality` non-implied-flag rule correctly
+demotes them so the predictor cannot mistake them for clean rows.
+
+Examples:
+```
+A:20260515:pre_earnings      flags=['atm_distance_high', 'last_only_no_iv']  iv_q=LOW
+ALKS:20260618:non_earnings   flags=['last_only_no_iv']                       iv_q=LOW
+AMC:20260618:non_earnings    flags=['atm_distance_high', 'last_only_no_iv']  iv_q=LOW
+```
+
+### Check 3 — Summary count refresh
+
+| Field | v4 regen | Pre-v4 in-session |
 |---|---:|---:|
-| `OK` | 456 | 53.9% |
-| `PARTIAL` | 357 | 42.2% |
-| `NO_CONID` | 27 | 3.2% |
-| `NO_QUOTES` | 6 | 0.7% |
+| total_rows | 848 | 846 |
+| OK | 270 (31.8%) | 456 (53.9%) |
+| PARTIAL | 544 (64.2%) | 357 (42.2%) |
+| NO_QUOTES | 7 | 6 |
+| NO_CONID | 27 | 27 |
+| data_tier `live` | 520 (61.3%) | 684 (80.8%) |
+| data_tier `fallback_delayed` | 301 (35.5%) | 135 (15.9%) |
+| iv_quality HIGH | 0 | 25 |
+| iv_quality MEDIUM | 237 | 319 |
+| iv_quality LOW | 577 | 469 |
+| earnings_role `pre_earnings` | **65** | 63 |
+| dual-row secondaries (`is_primary=false`) | **65** | 63 |
 
-EM-computable rate = `OK / (OK + PARTIAL + NO_QUOTES) = 456/819 = 55.7%`. The
-44% PARTIAL share is dominated by names with IV present but `null` bid/ask
-on one leg, which is normal mid-day for illiquid mid-/small-caps.
+**Why the deltas vs in-session**:
+- **More PARTIAL / fewer OK**: 57 min past close, OPRA stream is empty; most
+  rows fall back to delayed which often delivers IV but not bid/ask.
+- **Zero HIGH**: `iv_quality=HIGH` requires `data_tier=live`. After-hours
+  rows default to `live` only when last-trade ticks from the 4pm close are
+  still cached at IBKR, but most need to fall back to delayed.
+- **+2 secondaries / +2 pre_earnings**: v4's timestamp-aware secondary
+  picker catches 2 additional same-day cases that the date-only logic
+  silently missed.
 
-### `data_tier`
+### Check 4 — Self-consistency math (Phase A repeat on regenerated artifact)
 
-| Tier | Count |
+| Identity | Failures |
 |---|---:|
-| `live` | 684 |
-| `fallback_delayed` | 135 |
-| `unknown` | 27 (all `NO_CONID`) |
+| `iv_avg = (call_iv + put_iv) / 2` | 0 |
+| `em_from_iv_dollars = spot × iv_avg × √(dte/365)` | 0 |
+| `em_from_iv_pct = em_from_iv_dollars / spot` | 0 |
+| `expected_move_dollars = call_mid + put_mid` | 0 |
 
-So 684/819 = 83.5% of tradeable rows got live OPRA data on the first
-attempt. The 135 rows that auto-fell-back to delayed are the
-illiquid-mid-day case the fallback was built for — none of them needed
-manual intervention.
+Arithmetic identities continue to hold across the regenerated 848 rows.
 
-### `quote_freshness`
+## Top failure causes (unchanged across runs)
 
-| | Count |
-|---|---:|
-| `fresh` | 814 (96.2%) |
-| `unknown` | 32 (3.8%) |
+### `NO_CONID` (27) — delisted / M&A names
 
-`unknown` does NOT necessarily mean chain/quote failure — it also fires
-when IBKR surfaced no `ticker.time` on either leg even though prices flowed.
-And conversely, a `NO_QUOTES` row can still carry fresh tick metadata
-(timestamp present even if the price fields are null). The predictor
-should treat `quote_freshness` and `status` as independent axes.
+Same list as the in-session run: `ALEX AMED AXL BIGC BPMC CFLT DNB EXAS GMS HOLX ...`
+Correct fail-safe — these names have no IBKR conId; predictor consumers should drop them.
 
-### `iv_quality`
+### `NO_QUOTES` (7) — null prices even after delayed fallback
 
-| | Count |
-|---|---:|
-| `HIGH` | 25 (clean live + no flags + tight quotes) |
-| `MEDIUM` | 319 |
-| `LOW` | 469 |
-| `n/a` | 33 |
+Names that returned null on all legs even after the fallback path:
+`ABM APLS DHR KKR MASI MMM` + 1 more in the v4 snapshot. Mostly transient
+post-close IBKR pacing.
 
-`HIGH` is rare because the threshold requires both ATM-tight quotes AND
-no `wide_spread` / `atm_distance_high` / `iv_disagreement` flags. The
-predictor should NOT filter to `HIGH`-only — `MEDIUM` is the normal
-quality on live OPRA mid-day for liquid names; `LOW` flags real
-illiquidity that the predictor can use as a signal.
+## What this run does NOT validate
 
-### `quality_flags` (across 846 rows)
+- **Live-RTH OPRA distribution** — for that, use the pre-v4 in-session
+  artifact (`phase8_universe_2026-05-14.json`) which has ~80% `data_tier=live`.
+- **Vendor IV bulk comparison** — already done in the earlier validation
+  pass (50 names, Yahoo, mean bias −1.05pp). Re-doing post-close would
+  add noise (Yahoo also reflects after-hours staleness).
 
-| Flag | Rows |
-|---|---:|
-| `atm_distance_high` | 353 (≥1% off ATM — typical for $5 strike grids on low-priced names) |
-| `wide_spread` | 333 (≥10% bid/ask spread on either leg) |
-| `strike_retry_used` | 79 (closest strike didn't qualify; fell back) |
-| `iv_disagreement` | 41 (call/put IV diverge ≥3 pp) |
-| `iv_sanitized` | 1 (NaN/-1/out-of-range — replaced with `null`) |
+## What this run DOES validate (canonical)
 
-### `context_flags`
+- v4 patch is live in production code (`bc595f6`).
+- Zero stale `qs_rel_to_event` cases on a fresh artifact.
+- All `last_only_no_iv` rows correctly demoted to LOW.
+- Timestamp-aware secondary picker emits the same dual-row invariants
+  (every emitted row resolves into `expiry_ladders[ticker]`).
+- 224/224 unit tests still pass.
 
-| Flag | Rows |
-|---|---:|
-| `includes_earnings_premium` | 65 (post_earnings primaries with pre-event quote) |
-| `earnings_just_after_window` | 22 (event ≤5 days past expiry) |
+## Files
 
-### Earnings split
-
-| Role | Rows |
-|---|---:|
-| `non_earnings` | 718 |
-| `post_earnings` | 65 (primary captures event in contract life) |
-| `pre_earnings` | 63 (mostly secondary dual-row emissions; 0 primaries here in this snapshot) |
-
-| | Count |
-|---|---:|
-| `is_primary=true` | 783 |
-| `is_primary=false` (dual-row secondary) | 63 |
-
-So **63 tickers emitted a second row** for the OTHER side of their
-known earnings event. 65 primaries are post_earnings → 2 of those had
-no valid pre-event chain expiry between today and event (orchestrator
-returns `[primary]` only, which is correct).
-
-## Top failure causes
-
-### `NO_CONID` (27) — delisted / M&A / no IBKR conId
-
-```
-ALEX AMED AXL BIGC BPMC CFLT DNB EXAS GMS HOLX IAS JAMF MMC MPW MRUS
-... and 12 more
-```
-
-These match the expected delisted-zombie pattern from the prior coverage
-probe. Per-row `status=NO_CONID` is the correct, fail-safe label — no
-fake data is emitted. Predictor consumers should drop these.
-
-### `NO_QUOTES` (6) — price fields null even after delayed fallback
-
-```
-ABM APLS DHR KKR MASI MMM
-```
-
-`NO_QUOTES` means bid/ask/last and IV all came back null on both legs.
-Note: tick metadata (`ticker.time`) can still arrive on a `NO_QUOTES` row
-even when the price values don't, so `quote_freshness` may report `fresh`
-or `stale` independently of `status`. Six widely-traded large-caps with no
-price values flowing during the snapshot
-window. Most likely transient (IBKR pacing) rather than structural.
-Worth a re-run during off-peak hours to confirm.
-
-## `expiry_ladders`
-
-- **756** tickers have ladders (the 27 `NO_CONID` failures resolve before chain → no ladder).
-- Ladder size distribution:
-  - 7 entries: 491 tickers (most chains have ≥7 candidate expiries within window)
-  - 6 entries: 104 tickers
-  - 5 entries: 161 tickers (smaller chains, e.g. ETFs with quarterly-heavy listings)
-
-Every emitted row's expiry appears in its ticker's ladder
-(`selected_for_compute=true` with `row_ids` populated) — invariant
-holds across all 846 rows (verified by the orchestration test in
-`test_compute_iv_moves.py::TestExpiryLadderInArtifactInvariant`).
-
-## Vendor IV sanity checks
-
-Vendor: **Yahoo Finance** via `yfinance.Ticker.option_chain(expiry)`.
-Fetched **2026-05-14T20:15 UTC** (~34 min after the artifact's
-`run_as_of`). Comparing `iv_avg` (this artifact) vs `(call_iv + put_iv) / 2`
-at the same expiry+strike from Yahoo.
-
-> Per the README's vendor-comparison guidance: we compare `iv_avg`, NOT
-> `expected_move_pct` (units mismatch) and NOT a single leg's IV (skew
-> makes that misleading).
-
-| Ticker | Expiry | ATM strike | This `iv_avg` | Yahoo `iv_avg` | Δ (pp) | Notes |
-|---|---|---:|---:|---:|---:|---|
-| AAPL | 20260612 | 300 | 24.30% | 24.32% | **−0.02** | Effectively identical; quality_flags=`[strike_retry_used]` (chain mismatch on first attempt) |
-| WMT | 20260612 | 132 | 31.50% | 32.23% | **−0.72** | Within typical IBKR↔Yahoo modelGreeks drift |
-| NVDA | 20260612 | 235 | 48.53% | 48.20% | **+0.33** | Mild positive skew (Yahoo's put strike was 230 — slight ATM offset) |
-
-All three within ~1 percentage point of vendor. This is the expected
-band; deltas would widen for names trading wider quotes or for vendors
-that interpolate IV at exactly ATM (we report at the chain's nearest strike).
-
-## Notes / known gaps
-
-- **Concurrency**: 8 was conservative. Wall time ~20 s/ticker is dominated
-  by IBKR's pacing rather than CPU. Suggest **concurrency 20–25** for
-  future universe runs to cut wall time to ~10 min. Pacing-violation
-  risk exists but the script handles per-ticker failures gracefully.
-- **`NO_QUOTES` on liquid names** (ABM/APLS/DHR/KKR/MASI/MMM): worth a
-  re-run during off-peak to confirm transient vs structural.
-- **`PARTIAL` rows**: predictor should consult `data_tier`,
-  `quote_freshness`, and individual leg fields before computing
-  notional exposure. `expected_move_dollars=null` is the correct signal
-  that mid wasn't computable for at least one leg.
-- **`iv_quality=HIGH` is rare** (25/846). Predictor should not gate on
-  HIGH alone; MEDIUM with `quality_flags=[]` is generally tradeable on
-  liquid names. LOW + `wide_spread` is a real liquidity signal.
+| Path | Role |
+|---|---|
+| `scripts/iv/output/phase8_universe_2026-05-14_v4.json` | **CANONICAL v4 artifact** |
+| `scripts/iv/output/phase8_universe_2026-05-14.json` | Pre-v4 in-session reference (kept for live-RTH distribution) |
+| `scripts/iv/output/phase8_validation_note.md` | This document |
 
 ## Out of scope
 
-No predictor/learner/MCP files were touched. Phase 8 is purely a live
-validation of the artifact emitted by Phases 1–7.
+Predictor / learner / MCP files untouched. Phase 8 is purely a live
+validation of the artifact emitted by Phases 1–7 + v4 patches.
