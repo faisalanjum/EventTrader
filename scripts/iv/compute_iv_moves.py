@@ -562,15 +562,30 @@ async def compute_one(
                             f"(closest strike not valid for {expiry_yyyymmdd})",
                         )
                     # Tier 2.I — multiplier guard. Standard equity options = 100.
-                    # Adjusted contracts (post-split/spinoff) may differ.
-                    try:
-                        mult_raw = getattr(call_q, "multiplier", "") or "100"
-                        row.multiplier = int(float(mult_raw))
-                    except (ValueError, TypeError):
-                        row.multiplier = None
-                    if row.multiplier is not None and row.multiplier != 100:
+                    # Patch: do NOT default missing/unparseable to 100. Verify EXPLICITLY
+                    # against both legs; ambiguity surfaces as multiplier=None + flag.
+                    def _parse_mult(c) -> int | None:
+                        raw = getattr(c, "multiplier", "")
+                        if raw is None or raw == "":
+                            return None
+                        try:
+                            return int(float(str(raw)))
+                        except (ValueError, TypeError):
+                            return None
+                    mc = _parse_mult(call_q)
+                    mp = _parse_mult(put_q)
+                    if mc is not None and mp is not None and mc == mp:
+                        row.multiplier = mc
+                    else:
+                        row.multiplier = None  # ambiguous or mismatch — do NOT assume 100
+                    if row.multiplier != 100:
                         if "multiplier_nonstandard" not in row.quality_flags:
                             row.quality_flags.append("multiplier_nonstandard")
+                        if row.multiplier is None:
+                            row.diagnostics.append(
+                                f"multiplier ambiguous: call='{getattr(call_q, 'multiplier', '')}' "
+                                f"put='{getattr(put_q, 'multiplier', '')}' — flagged, NOT defaulted to 100",
+                            )
                     break
                 call_q = put_q = None  # both rights required
         if call_q is None or put_q is None:
@@ -764,9 +779,24 @@ def stdout_table(rows: list[IVRow]) -> None:
 
 
 def summary(rows: list[IVRow]) -> dict:
-    s = {"total": len(rows)}
+    """Aggregate counts per SCHEMA_v2 summary block. Lets the bot sanity-check
+    a run without scanning every row."""
+    s: dict = {
+        "total_rows":         len(rows),
+        "by_status":          {},
+        "by_data_tier":       {},
+        "by_quote_freshness": {},
+        "by_iv_quality":      {},
+        "by_earnings_role":   {},
+        "by_is_primary":      {"true": 0, "false": 0},
+    }
     for r in rows:
-        s[r.status.lower()] = s.get(r.status.lower(), 0) + 1
+        s["by_status"][r.status] = s["by_status"].get(r.status, 0) + 1
+        s["by_data_tier"][r.data_tier] = s["by_data_tier"].get(r.data_tier, 0) + 1
+        s["by_quote_freshness"][r.quote_freshness] = s["by_quote_freshness"].get(r.quote_freshness, 0) + 1
+        s["by_iv_quality"][r.iv_quality] = s["by_iv_quality"].get(r.iv_quality, 0) + 1
+        s["by_earnings_role"][r.earnings_role] = s["by_earnings_role"].get(r.earnings_role, 0) + 1
+        s["by_is_primary"]["true" if r.is_primary else "false"] += 1
     return s
 
 
