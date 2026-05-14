@@ -340,22 +340,37 @@ def determine_qs_source_and_ts(call_t, put_t, run_time, market_data_type, fell_b
                 times.append(tt)
             except Exception:
                 continue
-    qs_as_of = max(times).isoformat(timespec="seconds") if times else None
+    raw_max_time = max(times) if times else None
+    qs_as_of_raw = raw_max_time.isoformat(timespec="seconds") if raw_max_time else None
+
+    # Patch fix-4: for delayed paths, subtract 15-min lag to reflect EFFECTIVE
+    # market time the quote represents (not the receive time).
+    # IBKR convention: ticker.time on a delayed feed is the wall-clock receive
+    # time. The market data this represents is from ~15 minutes earlier.
+    # If IBKR ever surfaces an explicit effective timestamp, prefer that.
+    DELAYED_LAG_MIN = 15
+    def _delayed_effective(iso_dt: dt.datetime | None) -> str | None:
+        if iso_dt is None:
+            return None
+        return (iso_dt - dt.timedelta(minutes=DELAYED_LAG_MIN)).isoformat(timespec="seconds")
+
     # Source classification
     if fell_back_from_live:
-        return qs_as_of, "delayed_tick"   # fallback path = delayed stream
+        return _delayed_effective(raw_max_time), "delayed_tick"   # fallback path = delayed stream
     observed_mdt = getattr(call_t, "marketDataType", None) if call_t is not None else (
         getattr(put_t, "marketDataType", None) if put_t is not None else None
     )
     if observed_mdt == 1:
-        return qs_as_of, "live_tick"
+        return qs_as_of_raw, "live_tick"
     if observed_mdt == 2:
-        return qs_as_of, "frozen_close"
+        # frozen_close: ticker.time is the last live tick before freeze; use as-is
+        return qs_as_of_raw, "frozen_close"
     if observed_mdt == 3:
-        return qs_as_of, "delayed_tick"
+        return _delayed_effective(raw_max_time), "delayed_tick"
     if observed_mdt == 4:
-        return qs_as_of, "delayed_frozen"
-    return qs_as_of, "unknown"
+        # delayed_frozen: subtract lag, frozen at that effective time
+        return _delayed_effective(raw_max_time), "delayed_frozen"
+    return qs_as_of_raw, "unknown"
 
 
 def derive_earnings_timing(event_ts_iso: str | None, run_as_of_iso: str,
@@ -389,7 +404,11 @@ def derive_earnings_timing(event_ts_iso: str | None, run_as_of_iso: str,
     except Exception:
         return out
 
-    out["in_window"] = (earnings_date >= run_as_of.date()) and (earnings_date <= expiry_date)
+    # Patch fix-3: use ET date for "today" comparison since earnings_date comes from yfinance
+    # in ET context. UTC date drifts: 8pm ET on Thu = midnight UTC = Fri date in UTC →
+    # earnings_date (Thu ET) >= run_as_of.date()=Fri (UTC) would be FALSE (wrong).
+    run_as_of_et_date = run_as_of.astimezone(ZoneInfo("US/Eastern")).date()
+    out["in_window"] = (earnings_date >= run_as_of_et_date) and (earnings_date <= expiry_date)
     out["in_contract_life"] = event_ts <= expiry_close_ts
 
     if quote_snapshot_iso:
@@ -656,106 +675,107 @@ class IVRow:
 
 
 # ---------------------------------------------------------------------------
+# Phase 4 patch helpers: dual-row expiry finders
+# ---------------------------------------------------------------------------
+
+def find_first_expiry_after(expirations: set[str], event_date: dt.date) -> str | None:
+    """First chain expiry strictly after event_date. None if none exists."""
+    cand: list[tuple[str, dt.date]] = []
+    for s in expirations:
+        try:
+            d = dt.datetime.strptime(s, "%Y%m%d").date()
+            if d > event_date:
+                cand.append((s, d))
+        except ValueError:
+            continue
+    return min(cand, key=lambda x: x[1])[0] if cand else None
+
+
+def find_last_expiry_before(expirations: set[str], event_date: dt.date,
+                            today: dt.date | None = None) -> str | None:
+    """Last chain expiry strictly before event_date AND strictly after today.
+    (Don't return an already-expired contract.)"""
+    today = today or dt.date.today()
+    cand: list[tuple[str, dt.date]] = []
+    for s in expirations:
+        try:
+            d = dt.datetime.strptime(s, "%Y%m%d").date()
+            if today < d < event_date:
+                cand.append((s, d))
+        except ValueError:
+            continue
+    return max(cand, key=lambda x: x[1])[0] if cand else None
+
+
+def pick_secondary_expiry(primary: "IVRow", all_expirations: set[str],
+                          today: dt.date | None = None) -> str | None:
+    """Decide which complementary chain expiry (if any) the dual-row emission
+    needs, based on the PRIMARY row's earnings situation.
+
+    Returns None when the primary doesn't warrant a second row, e.g.:
+      • no earnings in window
+      • event_ts not derivable
+      • earnings_role is non_earnings
+
+    Pure function — extracted for testability.
+    """
+    if not (primary.earnings_in_window and primary.earnings_event_ts):
+        return None
+    try:
+        event_date = dt.date.fromisoformat(primary.earnings_event_ts[:10])
+    except Exception:
+        return None
+    if primary.earnings_role == "pre_earnings":
+        # primary expires BEFORE event → need a post-event expiry
+        return find_first_expiry_after(all_expirations, event_date)
+    if primary.earnings_role == "post_earnings":
+        # primary captures event → need a pre-event expiry (and not already-expired)
+        return find_last_expiry_before(
+            all_expirations, event_date, today=today or dt.date.today(),
+        )
+    return None
+
+
+# ---------------------------------------------------------------------------
 # Per-ticker workflow
 # ---------------------------------------------------------------------------
 
-async def compute_one(
-    ib: IB, sem: asyncio.Semaphore, ticker: str, target_dte: int | None,
-    market_data_type: int = 1, run_id: str = "",
-    earnings_cache: dict | None = None, run_as_of_iso: str | None = None,
-) -> list[IVRow]:
-    """Returns 1 or 2 IVRows:
-      1 row by default
-      2 rows when earnings is in_window and we need a separate pre/post-earnings row
+async def _compute_row_for_expiry(
+    ib: IB, sem: asyncio.Semaphore, ticker: str, run_id: str,
+    run_as_of_iso: str,
+    underlying, spot: float, spot_source: str,
+    all_strikes: list[float], all_expirations: set[str],
+    params, market_data_type: int,
+    expiry_yyyymmdd: str,
+    earnings: dict | None, user_supplied_ts: str | None,
+    is_primary: bool = True,
+) -> IVRow:
+    """Compute ONE IVRow for (ticker, expiry_yyyymmdd).
+
+    Ticker-level context (qualified underlying, spot, chain) is pre-resolved by
+    the orchestrator. Called once for primary expiry, and once more for a
+    secondary expiry when earnings creates a pre/post split.
     """
     row = IVRow(ticker=ticker, run_id=run_id)
-    # Initialize row_id immediately so EVERY row is citable by evidence catalog,
-    # even early-failure rows (NO_CONID / NO_SPOT / NO_CHAIN / NO_EXPIRY).
-    # Overwritten below once an expiry is picked.
-    row.row_id = f"{ticker}:no_expiry:{row.earnings_role}"
+    row.spot = spot
+    row.spot_source = spot_source
+    row.expiry = expiry_yyyymmdd
+    row.is_primary = is_primary
+    # row_id reset once earnings_role is finalized below
+    row.row_id = f"{ticker}:{expiry_yyyymmdd}:{row.earnings_role}"
+    expiry_date = dt.datetime.strptime(expiry_yyyymmdd, "%Y%m%d").date()
+    row.dte = (expiry_date - dt.date.today()).days
+
+    call_t = None
+    put_t = None
+    fell_back_from_live = False
+
     async with sem:
-        # 1. Qualify underlying
-        try:
-            qualified = await asyncio.wait_for(
-                ib.qualifyContractsAsync(Stock(ticker, "SMART", "USD")), timeout=8,
-            )
-        except Exception as e:
-            row.status = "QUALIFY_FAILED"
-            row.diagnostics.append(f"{type(e).__name__}: {e}")
-            return [row]
-        underlying = qualified[0] if qualified else None
-        if underlying is None or getattr(underlying, "conId", 0) == 0:
-            row.status = "NO_CONID"
-            return [row]
-
-        # 2. Spot price
-        try:
-            ib.reqMarketDataType(market_data_type)
-            [stk_ticker] = await asyncio.wait_for(
-                ib.reqTickersAsync(underlying), timeout=20,
-            )
-        except Exception as e:
-            row.status = "SPOT_FAILED"
-            row.diagnostics.append(f"{type(e).__name__}: {e}")
-            return [row]
-        spot = None
-        for v in (stk_ticker.last, stk_ticker.marketPrice(), stk_ticker.close):
-            if v is not None and not math.isnan(v) and v > 0:
-                spot = float(v)
-                break
-        if spot is None:
-            row.status = "NO_SPOT"
-            return [row]
-        row.spot = spot
-        row.spot_source = (
-            "live" if stk_ticker.marketDataType == 1 and stk_ticker.last and not math.isnan(stk_ticker.last)
-            else f"mdt={stk_ticker.marketDataType}"
-        )
-
-        # 3. Chain
-        try:
-            chain_params = await asyncio.wait_for(
-                ib.reqSecDefOptParamsAsync(underlying.symbol, "", underlying.secType, underlying.conId),
-                timeout=10,
-            )
-        except Exception as e:
-            row.status = "CHAIN_FAILED"
-            row.diagnostics.append(f"{type(e).__name__}: {e}")
-            return [row]
-        if not chain_params:
-            row.status = "NO_CHAIN"
-            return [row]
-        # Filter to the STANDARD chain — tradingClass matches ticker, prefer SMART.
-        # IBKR returns one chain entry per (exchange, tradingClass); weekly variants
-        # (e.g., SPYW for SPY) have their own restricted strike grids that would
-        # cause "closest strike" mis-picks like ATM=639 for spot=745.
-        std_chains = [p for p in chain_params if p.tradingClass == ticker]
-        if not std_chains:
-            std_chains = chain_params  # fallback if no exact tradingClass match
-        smart = next((p for p in std_chains if p.exchange == "SMART"), None)
-        params = smart or std_chains[0]
-        all_expirations = set(params.expirations or [])
-        all_strikes = sorted(set(params.strikes or []))
-
-        # 4. Pick expiry
-        expiry_yyyymmdd = pick_expiry(all_expirations, target_dte)
-        if expiry_yyyymmdd is None:
-            row.status = "NO_EXPIRY"
-            row.diagnostics.append(f"chain_expirations={len(all_expirations)}")
-            return [row]
-        row.expiry = expiry_yyyymmdd
-        # row_id format: {ticker}:{expiry}:{earnings_role}. earnings_role defaults to
-        # "non_earnings" in phase 1; phase 4 may emit dual rows with role=pre_earnings/post_earnings
-        # in which case row_id is regenerated at row-emission time.
-        row.row_id = f"{ticker}:{expiry_yyyymmdd}:{row.earnings_role}"
-        expiry_date = dt.datetime.strptime(expiry_yyyymmdd, "%Y%m%d").date()
-        row.dte = (expiry_date - dt.date.today()).days
-
         # 5. ATM strike — try closest, fall back to next-nearest if not valid
         # for the chosen expiry (chain.strikes is UNION across expirations).
         if not all_strikes or spot is None:
             row.status = "NO_ATM"
-            return [row]
+            return row
         ranked_strikes = sorted(all_strikes, key=lambda s: abs(s - spot))
         call_q = put_q = None
         for candidate in ranked_strikes[:5]:  # try up to 5 nearest strikes
@@ -773,7 +793,6 @@ async def compute_one(
             qualified_opts = [c for c in qualified_opts if c and getattr(c, "conId", 0)]
             if len(qualified_opts) >= 2:
                 row.atm_strike = candidate
-                # Tier 2.G — surface atm_distance_pct so bot sees how far off-ATM we picked
                 row.atm_distance_pct = compute_atm_distance_pct(candidate, spot)
                 if (row.atm_distance_pct is not None
                         and row.atm_distance_pct >= DEFAULT_CONFIG["atm_distance_warn_pct"]):
@@ -783,16 +802,12 @@ async def compute_one(
                 put_q = next((c for c in qualified_opts if c.right == "P"), None)
                 if call_q and put_q:
                     if candidate != ranked_strikes[0]:
-                        # Tier 2 transparency — flag when we fell back
                         if "strike_retry_used" not in row.quality_flags:
                             row.quality_flags.append("strike_retry_used")
                         row.diagnostics.append(
                             f"fell-back from {ranked_strikes[0]} → {candidate} "
                             f"(closest strike not valid for {expiry_yyyymmdd})",
                         )
-                    # Tier 2.I — multiplier guard. Standard equity options = 100.
-                    # Patch: do NOT default missing/unparseable to 100. Verify EXPLICITLY
-                    # against both legs; ambiguity surfaces as multiplier=None + flag.
                     def _parse_mult(c) -> int | None:
                         raw = getattr(c, "multiplier", "")
                         if raw is None or raw == "":
@@ -816,11 +831,11 @@ async def compute_one(
                                 f"put='{getattr(put_q, 'multiplier', '')}' — flagged, NOT defaulted to 100",
                             )
                     break
-                call_q = put_q = None  # both rights required
+                call_q = put_q = None
         if call_q is None or put_q is None:
             row.status = "OPT_NOT_FOUND"
             row.diagnostics.append(f"tried_strikes={ranked_strikes[:5]}")
-            return [row]
+            return row
 
         # 7. Get tickers
         ib.reqMarketDataType(market_data_type)
@@ -831,14 +846,11 @@ async def compute_one(
         except Exception as e:
             row.status = "QUOTE_FAILED"
             row.diagnostics.append(f"{type(e).__name__}: {e}")
-            return [row]
+            return row
         call_t = next((t for t in tickers if t.contract.right == "C"), None)
         put_t = next((t for t in tickers if t.contract.right == "P"), None)
 
-        # 7b. Tier 1.E — auto-fallback to type=3 (delayed) when type=1 returns all-null
-        # during options RTH. This handles the "OPRA entitlement lapsed" case so the bot
-        # gets the best available data tier without manual intervention.
-        fell_back_from_live = False
+        # 7b. live→delayed auto-fallback
         def _legs_all_null(c_t, p_t) -> bool:
             def _ok(v):
                 if v is None: return False
@@ -864,12 +876,11 @@ async def compute_one(
             except Exception as e:
                 row.diagnostics.append(f"fallback-quote-fetch failed: {type(e).__name__}: {e}")
 
-    # Outside the semaphore — pure compute
+    # Outside semaphore — pure compute
     run_time = dt.datetime.now(dt.timezone.utc)
     def _f(x):
         return None if (x is None or (isinstance(x, float) and math.isnan(x)) or x == -1) else float(x)
 
-    # Capture per-leg ticker.time → tick_age (Tier 1.B)
     if call_t is not None:
         row.call_bid = _f(call_t.bid)
         row.call_ask = _f(call_t.ask)
@@ -881,7 +892,6 @@ async def compute_one(
             row.call_bid, row.call_ask, c_last, ca,
             DEFAULT_CONFIG["tick_freshness_threshold_sec"],
         )
-        # Tier 1.A — sanitize IV
         raw_call_iv = call_t.modelGreeks.impliedVol if call_t.modelGreeks else None
         row.call_iv, call_iv_sanitized = sanitize_iv(
             raw_call_iv, DEFAULT_CONFIG["iv_min_valid"], DEFAULT_CONFIG["iv_max_valid"],
@@ -910,27 +920,19 @@ async def compute_one(
                 row.quality_flags.append("iv_sanitized")
         row.spread_put_bps = spread_bps(row.put_bid, row.put_ask, row.put_mid)
 
-    # Tier 1.B — emit stale_last_rejected flag if any leg fell back to a stale last (mid=None despite last>0)
     if (row.call_mid_source == "last_stale_rejected" or row.put_mid_source == "last_stale_rejected"):
         if "stale_last_rejected" not in row.quality_flags:
             row.quality_flags.append("stale_last_rejected")
 
-    # Tier 1.F — derive data_tier per row using observed marketDataType + populated check.
-    # Use call_t's marketDataType (both legs were requested in same call, same tier).
     observed_mdt = getattr(call_t, "marketDataType", None) if call_t is not None else (
         getattr(put_t, "marketDataType", None) if put_t is not None else None
     )
-    # representative populated check — pass a positive proxy for last if EITHER leg's
-    # mid was derived from a fresh last (mid_source == "last_fresh"). Without this proxy,
-    # rows with no bid/ask but a fresh last would be tagged data_tier=unknown despite
-    # having real live data — bug caught in phase 2 review.
     any_bid = row.call_bid or row.put_bid
     any_ask = row.call_ask or row.put_ask
     any_last_fresh = 1.0 if (row.call_mid_source == "last_fresh"
                              or row.put_mid_source == "last_fresh") else None
     row.data_tier = derive_data_tier(observed_mdt, any_bid, any_ask, any_last_fresh, fell_back_from_live)
 
-    # Compute EM
     if row.call_mid is not None and row.put_mid is not None and row.spot is not None:
         row.expected_move_dollars = row.call_mid + row.put_mid
         row.expected_move_pct = row.expected_move_dollars / row.spot
@@ -941,8 +943,6 @@ async def compute_one(
         if row.em_from_iv_dollars is not None and row.spot:
             row.em_from_iv_pct = row.em_from_iv_dollars / row.spot
 
-    # Tier 1.C — status logic. OK only if EM computable AND we have actual data.
-    # mdt=1 + everything null = NOT OK (default-value, not real live).
     if row.expected_move_dollars is not None:
         row.status = "OK"
     elif (row.call_bid is None and row.put_bid is None
@@ -953,47 +953,40 @@ async def compute_one(
     else:
         row.status = "PARTIAL"
 
-    # Tier 2.H — iv_disagreement_pp + threshold flag
     row.iv_disagreement_pp = compute_iv_disagreement_pp(row.call_iv, row.put_iv)
     if (row.iv_disagreement_pp is not None
             and row.iv_disagreement_pp >= DEFAULT_CONFIG["iv_disagreement_warn_pp"]):
         if "iv_disagreement" not in row.quality_flags:
             row.quality_flags.append("iv_disagreement")
 
-    # Tier 2 — wide_spread threshold (any leg spread > warn_bps)
     for leg_spread in (row.spread_call_bps, row.spread_put_bps):
         if leg_spread is not None and leg_spread > DEFAULT_CONFIG["spread_warn_bps"]:
             if "wide_spread" not in row.quality_flags:
                 row.quality_flags.append("wide_spread")
             break
 
-    # Tier 2 — quote_freshness derivation (independent of data_tier)
     row.quote_freshness = derive_quote_freshness(
         row.call_tick_age_seconds, row.call_tick_age_known,
         row.put_tick_age_seconds, row.put_tick_age_known,
         DEFAULT_CONFIG["tick_freshness_threshold_sec"],
     )
 
-    # Phase 4 — quote_snapshot_as_of + source (derived from observed ticker.time)
     qs_iso, qs_source = determine_qs_source_and_ts(call_t, put_t, run_time,
                                                      market_data_type, fell_back_from_live)
     row.quote_snapshot_as_of = qs_iso
     row.quote_snapshot_source = qs_source
 
-    # Phase 4 — earnings fields (if cache hit for this ticker)
-    earnings = (earnings_cache or {}).get(ticker)
-    run_as_of_iso = run_as_of_iso or dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
     if earnings is not None:
         row.earnings_next_date = earnings.get("date")
         row.earnings_next_time = earnings.get("time", "unknown")
         row.earnings_next_time_source = earnings.get("source", "unknown")
         row.earnings_calendar_source = earnings.get("source", "unknown")
         row.earnings_calendar_as_of = earnings.get("fetched_at")
-        # derive event_ts via precedence: sec_filing > user_supplied > yahoo > unknown
-        event_ts_iso, event_ts_source = derive_event_ts(earnings, MARKET_CONVENTIONS)
+        event_ts_iso, event_ts_source = derive_event_ts(
+            earnings, MARKET_CONVENTIONS, user_supplied_ts=user_supplied_ts,
+        )
         row.earnings_event_ts = event_ts_iso
         row.earnings_event_ts_source = event_ts_source
-        # timing-aware fields
         timing = derive_earnings_timing(
             event_ts_iso=event_ts_iso, run_as_of_iso=run_as_of_iso,
             expiry_yyyymmdd=row.expiry, quote_snapshot_iso=row.quote_snapshot_as_of,
@@ -1002,39 +995,32 @@ async def compute_one(
         row.earnings_in_window = timing["in_window"]
         row.earnings_in_contract_life = timing["in_contract_life"]
         row.quote_snapshot_relative_to_event = timing["quote_snapshot_relative_to_event"]
-        # context_flags
         for f in derive_earnings_context_flags(row):
             if f not in row.context_flags:
                 row.context_flags.append(f)
-        # earnings_just_after_window — check expirations within +N days
         if row.earnings_in_window is False and event_ts_iso and row.expiry:
             try:
-                event_date = dt.datetime.fromisoformat(event_ts_iso).date()
-                expiry_date = dt.datetime.strptime(row.expiry, "%Y%m%d").date()
-                gap_days = (event_date - expiry_date).days
+                event_date_ = dt.datetime.fromisoformat(event_ts_iso).date()
+                expiry_date_ = dt.datetime.strptime(row.expiry, "%Y%m%d").date()
+                gap_days = (event_date_ - expiry_date_).days
                 if 0 < gap_days <= DEFAULT_CONFIG["earnings_just_after_window_days"]:
                     if "earnings_just_after_window" not in row.context_flags:
                         row.context_flags.append("earnings_just_after_window")
             except Exception:
                 pass
 
-    # Assign earnings_role for the PRIMARY row.
-    # Rule per SCHEMA r6:
-    #   AMC-on-expiry-day → primary.role=pre_earnings (option dies before event)
-    #   BMO-on-expiry-day → primary.role=post_earnings (option captures overnight gap)
-    #   Earnings inside primary expiry life → primary.role=post_earnings
-    #   No earnings or out of window → primary.role=non_earnings (default)
+    # Assign earnings_role per SCHEMA r6:
+    #   in_window but NOT in_contract_life → pre_earnings (expires before event)
+    #   in_contract_life → post_earnings (expires after event)
+    #   else → non_earnings (default)
     if row.earnings_in_window and not row.earnings_in_contract_life:
-        # primary expires before event → primary IS the pre_earnings view
         row.earnings_role = "pre_earnings"
     elif row.earnings_in_contract_life:
         row.earnings_role = "post_earnings"
-    # else stays non_earnings
 
-    # Update row_id to reflect possibly-changed earnings_role
+    # Update row_id to reflect finalized earnings_role
     row.row_id = f"{ticker}:{row.expiry}:{row.earnings_role}"
 
-    # Tier 2.J — iv_quality summary label per SCHEMA_v2 r6
     row.iv_quality = derive_iv_quality(
         status=row.status,
         data_tier=row.data_tier,
@@ -1046,28 +1032,146 @@ async def compute_one(
         quality_flags=row.quality_flags,
     )
 
-    # Phase 4.D — dual-row emission for AMC-on-expiry-day.
-    # If primary is pre_earnings (expires before event), additionally emit
-    # a post_earnings row using a chain expiry AFTER the event_ts.
-    # Note: this requires re-fetching quotes for the post-earnings expiry.
-    # Phase 4 minimal: ONLY mark the post-earnings expiry candidate via diagnostics;
-    # caller-level computation of the post row deferred until needed by predictor.
-    # → Single-row return for now; documentation of intent in diagnostics.
-    if row.earnings_role == "pre_earnings":
-        # Find the next chain expiry AFTER the event for the bot's reference
-        try:
-            event_date = dt.datetime.fromisoformat(row.earnings_event_ts).date()
-            post_candidates = [d for d in all_expirations
-                                if dt.datetime.strptime(d, "%Y%m%d").date() > event_date]
-            if post_candidates:
-                post_expiry = sorted(post_candidates)[0]
-                row.diagnostics.append(
-                    f"AMC-on-expiry-day: pre_earnings primary; bot may query post_earnings expiry={post_expiry}",
-                )
-        except Exception:
-            pass
+    return row
 
-    return [row]
+
+async def compute_one(
+    ib: IB, sem: asyncio.Semaphore, ticker: str, target_dte: int | None,
+    market_data_type: int = 1, run_id: str = "",
+    earnings_cache: dict | None = None, run_as_of_iso: str | None = None,
+    user_earnings_overrides: dict | None = None,
+) -> list[IVRow]:
+    """Orchestrator. Returns 1 or 2 IVRows:
+      • 1 row by default
+      • 2 rows when earnings creates a pre/post split that warrants dual-row emission:
+        - primary.role == pre_earnings → emit a secondary post_earnings row
+          using the FIRST chain expiry strictly AFTER event_ts.
+        - primary.role == post_earnings → emit a secondary pre_earnings row
+          using the LAST chain expiry strictly BEFORE event_ts (and after today).
+    """
+    run_as_of_iso = run_as_of_iso or dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
+    init_row = IVRow(ticker=ticker, run_id=run_id)
+    init_row.row_id = f"{ticker}:no_expiry:{init_row.earnings_role}"
+
+    async with sem:
+        # 1. Qualify underlying
+        try:
+            qualified = await asyncio.wait_for(
+                ib.qualifyContractsAsync(Stock(ticker, "SMART", "USD")), timeout=8,
+            )
+        except Exception as e:
+            init_row.status = "QUALIFY_FAILED"
+            init_row.diagnostics.append(f"{type(e).__name__}: {e}")
+            return [init_row]
+        underlying = qualified[0] if qualified else None
+        if underlying is None or getattr(underlying, "conId", 0) == 0:
+            init_row.status = "NO_CONID"
+            return [init_row]
+
+        # 2. Spot
+        try:
+            ib.reqMarketDataType(market_data_type)
+            [stk_ticker] = await asyncio.wait_for(
+                ib.reqTickersAsync(underlying), timeout=20,
+            )
+        except Exception as e:
+            init_row.status = "SPOT_FAILED"
+            init_row.diagnostics.append(f"{type(e).__name__}: {e}")
+            return [init_row]
+        spot = None
+        for v in (stk_ticker.last, stk_ticker.marketPrice(), stk_ticker.close):
+            if v is not None and not math.isnan(v) and v > 0:
+                spot = float(v)
+                break
+        if spot is None:
+            init_row.status = "NO_SPOT"
+            return [init_row]
+        spot_source = (
+            "live" if stk_ticker.marketDataType == 1 and stk_ticker.last and not math.isnan(stk_ticker.last)
+            else f"mdt={stk_ticker.marketDataType}"
+        )
+
+        # 3. Chain
+        try:
+            chain_params = await asyncio.wait_for(
+                ib.reqSecDefOptParamsAsync(underlying.symbol, "", underlying.secType, underlying.conId),
+                timeout=10,
+            )
+        except Exception as e:
+            init_row.status = "CHAIN_FAILED"
+            init_row.diagnostics.append(f"{type(e).__name__}: {e}")
+            return [init_row]
+        if not chain_params:
+            init_row.status = "NO_CHAIN"
+            return [init_row]
+        # STANDARD chain only — tradingClass matches ticker, prefer SMART. Avoids
+        # weekly variants (e.g., SPYW for SPY) that have their own restricted strike grids.
+        std_chains = [p for p in chain_params if p.tradingClass == ticker]
+        if not std_chains:
+            std_chains = chain_params
+        smart = next((p for p in std_chains if p.exchange == "SMART"), None)
+        params = smart or std_chains[0]
+        all_expirations = set(params.expirations or [])
+        all_strikes = sorted(set(params.strikes or []))
+
+        # 4. Primary expiry
+        primary_expiry = pick_expiry(all_expirations, target_dte)
+        if primary_expiry is None:
+            init_row.status = "NO_EXPIRY"
+            init_row.diagnostics.append(f"chain_expirations={len(all_expirations)}")
+            return [init_row]
+
+    # Ticker-level context resolved. Compute primary row.
+    earnings = (earnings_cache or {}).get(ticker)
+    user_ts = (user_earnings_overrides or {}).get(ticker)
+
+    primary = await _compute_row_for_expiry(
+        ib=ib, sem=sem, ticker=ticker, run_id=run_id, run_as_of_iso=run_as_of_iso,
+        underlying=underlying, spot=spot, spot_source=spot_source,
+        all_strikes=all_strikes, all_expirations=all_expirations,
+        params=params, market_data_type=market_data_type,
+        expiry_yyyymmdd=primary_expiry,
+        earnings=earnings, user_supplied_ts=user_ts,
+        is_primary=True,
+    )
+
+    # Phase 4 — dual-row emission decision. Pick complementary expiry on the
+    # OTHER side of the event so the bot sees both a pre- and post-earnings view.
+    secondary_expiry = pick_secondary_expiry(primary, all_expirations)
+
+    if secondary_expiry and secondary_expiry != primary.expiry:
+        secondary = await _compute_row_for_expiry(
+            ib=ib, sem=sem, ticker=ticker, run_id=run_id, run_as_of_iso=run_as_of_iso,
+            underlying=underlying, spot=spot, spot_source=spot_source,
+            all_strikes=all_strikes, all_expirations=all_expirations,
+            params=params, market_data_type=market_data_type,
+            expiry_yyyymmdd=secondary_expiry,
+            earnings=earnings, user_supplied_ts=user_ts,
+            is_primary=False,
+        )
+        # Override secondary's earnings_role: orchestrator picked this expiry
+        # DELIBERATELY on the OTHER side of the event from primary, so the role
+        # is the complement of primary's. (Helper-derived role may differ when
+        # event is past secondary's expiry → in_window=False → "non_earnings",
+        # which is misleading in a dual-row context.)
+        forced_role: str | None = None
+        if primary.earnings_role == "pre_earnings":
+            forced_role = "post_earnings"
+        elif primary.earnings_role == "post_earnings":
+            forced_role = "pre_earnings"
+        if forced_role and secondary.earnings_role != forced_role:
+            secondary.diagnostics.append(
+                f"role overridden by orchestrator: helper={secondary.earnings_role} → "
+                f"{forced_role} (dual-row complement of primary)",
+            )
+            secondary.earnings_role = forced_role
+            secondary.row_id = f"{secondary.ticker}:{secondary.expiry}:{secondary.earnings_role}"
+        primary.diagnostics.append(
+            f"dual-row: secondary expiry={secondary_expiry} role={secondary.earnings_role}",
+        )
+        return [primary, secondary]
+
+    return [primary]
 
 
 # ---------------------------------------------------------------------------
@@ -1145,6 +1249,10 @@ async def amain():
     ap.add_argument("--concurrency", type=int, default=4)
     ap.add_argument("--output", default=None,
                     help="JSON output path. Default: scripts/iv/output/iv_YYYY-MM-DD.json")
+    ap.add_argument("--user-earnings-ts", default=None,
+                    help="Optional JSON mapping {ticker: ISO timestamp}. Overrides Yahoo "
+                         "(event_ts_source=user_supplied). Use when caller has authoritative "
+                         "event timing (e.g., from SEC 8-K filing).")
     args = ap.parse_args()
 
     tickers = load_tickers(args)
@@ -1161,7 +1269,23 @@ async def amain():
     )
     print(f"Loading earnings calendar (cache={earnings_cache_path})...", file=sys.stderr)
     earnings_cache = load_or_fetch_earnings_cache(tickers, earnings_cache_path)
-    earnings_cache_as_of = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
+    # Patch fix-5: as_of reflects the CACHE FILE mtime (when the cache was last
+    # written), NOT now(). Per-ticker fetched_at (inside the cache) carries
+    # per-ticker freshness. Top-level reports the cache-as-a-whole freshness.
+    if earnings_cache_path.exists():
+        cache_mtime = dt.datetime.fromtimestamp(earnings_cache_path.stat().st_mtime, dt.timezone.utc)
+        earnings_cache_as_of = cache_mtime.isoformat(timespec="seconds")
+    else:
+        earnings_cache_as_of = None
+    # Patch fix-5b: optional user-supplied earnings timestamps override.
+    # JSON file mapping {"TICKER": "ISO_UTC_TIMESTAMP"}. Used when sec_filing source
+    # (8-K accepted timestamp) isn't wired but the caller has authoritative timing.
+    user_earnings_overrides: dict = {}
+    if getattr(args, "user_earnings_ts", None):
+        try:
+            user_earnings_overrides = json.loads(Path(args.user_earnings_ts).read_text())
+        except Exception as e:
+            print(f"WARN: --user-earnings-ts could not be loaded: {e}", file=sys.stderr)
 
     ib = IB()
     await ib.connectAsync(host=args.host, port=args.port, clientId=args.client_id, timeout=20)
@@ -1169,7 +1293,8 @@ async def amain():
     t0 = time.time()
     tasks = [
         compute_one(ib, sem, t, args.target_dte, args.market_data_type, run_id,
-                    earnings_cache=earnings_cache, run_as_of_iso=run_as_of)
+                    earnings_cache=earnings_cache, run_as_of_iso=run_as_of,
+                    user_earnings_overrides=user_earnings_overrides)
         for t in tickers
     ]
     rows: list[IVRow] = []
