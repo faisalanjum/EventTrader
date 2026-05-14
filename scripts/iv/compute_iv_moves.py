@@ -481,10 +481,18 @@ def derive_earnings_context_flags(row) -> list[str]:
         flags.append("post_event_snapshot")
     if row.earnings_in_window and not row.earnings_in_contract_life:
         flags.append("expiry_before_known_earnings")
-        # AMC-on-expiry-day is a specific sub-case
-        if (row.earnings_next_time == "AMC" and row.earnings_event_ts
-                and row.expiry and row.earnings_event_ts[:10] == f"{row.expiry[:4]}-{row.expiry[4:6]}-{row.expiry[6:]}"):
-            flags.append("amc_expiry_day")
+        # AMC-on-expiry-day is a specific sub-case.
+        # fix-C: compare ET trading dates, not [:10] slice of UTC ISO.
+        # 8:30pm ET AMC event Jul 31 = 00:30 UTC Aug 1 → slice would say "2026-08-01"
+        # and miss an expiry "20260731" that the event actually retires.
+        if (row.earnings_next_time == "AMC" and row.earnings_event_ts and row.expiry):
+            event_et_date = _et_date_from_iso(row.earnings_event_ts)
+            try:
+                expiry_date = dt.datetime.strptime(row.expiry, "%Y%m%d").date()
+            except ValueError:
+                expiry_date = None
+            if event_et_date is not None and expiry_date is not None and event_et_date == expiry_date:
+                flags.append("amc_expiry_day")
     return flags
 
 
@@ -520,13 +528,36 @@ def fetch_yahoo_earnings(ticker: str) -> dict | None:
         else:
             time_class = "DMH"
         return {
-            "date":       next_ts.date().isoformat(),
+            # fix-B: date is the ET trading day, NOT next_ts.date() which leaks
+            # the source tz (often UTC) and drifts when event is after ~8pm ET.
+            "date":       et.date().isoformat(),
             "time":       time_class,
             "source":     "yahoo",
             "fetched_at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
         }
     except Exception:
         return None
+
+
+def earnings_cache_as_of_bounds(cache: dict) -> tuple[str | None, str | None]:
+    """Compute (oldest_fetched_at, newest_fetched_at) across cache entries.
+
+    Why: the artifact's earnings_calendar.as_of is the CONSERVATIVE top-level
+    timestamp — the OLDEST fetched_at — because a snapshot of mixed-age data
+    is only as fresh as its stalest entry. newest_fetched_at is exposed
+    alongside so the predictor can see the freshness range.
+
+    Per-row earnings_calendar_as_of (= entry's own fetched_at) remains the
+    authoritative timestamp for that ticker's earnings data.
+
+    Returns (None, None) when no entry has fetched_at."""
+    ats = [
+        e.get("fetched_at") for e in cache.values()
+        if isinstance(e, dict) and e.get("fetched_at")
+    ]
+    if not ats:
+        return (None, None)
+    return (min(ats), max(ats))
 
 
 def load_or_fetch_earnings_cache(tickers: list[str], cache_path: Path, force_refresh: bool = False) -> dict:
@@ -1174,8 +1205,13 @@ async def compute_one(
         all_expirations = set(params.expirations or [])
         all_strikes = sorted(set(params.strikes or []))
 
-        # 4. Primary expiry
-        primary_expiry = pick_expiry(all_expirations, target_dte)
+        # 4. Primary expiry — today=ET trading date so post-market UTC rollover
+        # doesn't skip valid next-day expiries (run at 11pm ET = 03:00 UTC next
+        # day; without ET clamping, pick_expiry treats the next ET trading day
+        # as already-expired).
+        primary_expiry = pick_expiry(
+            all_expirations, target_dte, today=_run_as_of_et_date(run_as_of_iso),
+        )
         if primary_expiry is None:
             init_row.status = "NO_EXPIRY"
             init_row.diagnostics.append(f"chain_expirations={len(all_expirations)}")
@@ -1332,22 +1368,17 @@ async def amain():
     )
     print(f"Loading earnings calendar (cache={earnings_cache_path})...", file=sys.stderr)
     earnings_cache = load_or_fetch_earnings_cache(tickers, earnings_cache_path)
-    # fix-2: derive artifact-level earnings_calendar.as_of from the LATEST
-    # per-ticker fetched_at across loaded entries. This is honest even when
-    # the cache file's mtime drifts (rewrites happen only when content changes
-    # — but a stale "no rewrite" run still needs an as_of from real data).
-    fetched_ats = [
-        e.get("fetched_at") for e in earnings_cache.values()
-        if isinstance(e, dict) and e.get("fetched_at")
-    ]
-    earnings_cache_as_of_from_content: str | None = max(fetched_ats) if fetched_ats else None
+    # fix-D: artifact-level as_of = OLDEST fetched_at (conservative top-level
+    # under mixed-age cache entries). newest_fetched_at is exposed alongside
+    # so the predictor can see the freshness range. Per-row earnings_calendar_as_of
+    # (= the ticker's own fetched_at) remains the authoritative per-ticker value.
+    earnings_cache_oldest, earnings_cache_newest = earnings_cache_as_of_bounds(earnings_cache)
     # Patch fix-5: as_of reflects the CACHE FILE mtime (when the cache was last
     # written), NOT now(). Per-ticker fetched_at (inside the cache) carries
     # per-ticker freshness. Top-level reports the cache-as-a-whole freshness.
-    # fix-2: prefer content-derived as_of (max per-ticker fetched_at). File mtime
-    # is fallback ONLY when the cache has no usable entries — and even then we
-    # avoid mtime if it would be misleadingly close to now.
-    earnings_cache_as_of = earnings_cache_as_of_from_content
+    # fix-D: prefer content-derived bounds. File mtime is fallback ONLY when
+    # no entry has fetched_at (e.g., empty cache or all entries are None).
+    earnings_cache_as_of = earnings_cache_oldest
     if earnings_cache_as_of is None and earnings_cache_path.exists():
         cache_mtime = dt.datetime.fromtimestamp(earnings_cache_path.stat().st_mtime, dt.timezone.utc)
         earnings_cache_as_of = cache_mtime.isoformat(timespec="seconds")
@@ -1416,11 +1447,15 @@ async def amain():
             },
             # Phase 4 — earnings calendar block (Yahoo, daily cache, pit_safe=False)
             "earnings_calendar": {
-                "vendor":     "yahoo",
-                "via":        "yfinance.Ticker.earnings_dates",
-                "as_of":      earnings_cache_as_of,
-                "pit_safe":   False,
-                "cache_file": str(earnings_cache_path),
+                "vendor":             "yahoo",
+                "via":                "yfinance.Ticker.earnings_dates",
+                # as_of = OLDEST per-ticker fetched_at (conservative — snapshot is
+                # only as fresh as its stalest entry). newest_fetched_at exposed
+                # alongside so the predictor sees the freshness range.
+                "as_of":              earnings_cache_as_of,
+                "newest_fetched_at":  earnings_cache_newest,
+                "pit_safe":           False,
+                "cache_file":         str(earnings_cache_path),
             },
         },
         # === aggregates ===

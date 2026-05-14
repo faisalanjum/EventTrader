@@ -43,6 +43,8 @@ from compute_iv_moves import (  # noqa: E402
     pick_secondary_expiry,
     determine_qs_source_and_ts,
     load_or_fetch_earnings_cache,
+    earnings_cache_as_of_bounds,
+    fetch_yahoo_earnings,
     _et_date_from_iso,
     _run_as_of_et_date,
 )
@@ -1602,3 +1604,197 @@ class TestDteUsesRunAsOfEtDate:
         assert run_et_date == dt.date(2026, 5, 14)
         # DTE = 4
         assert (expiry_date - run_et_date).days == 4
+
+
+# ---------------------------------------------------------------------------
+# Phase 4 patch v3 — additional honesty fixes (pick_expiry, Yahoo date,
+# amc_expiry_day, cache as_of bounds)
+# ---------------------------------------------------------------------------
+
+class TestPickExpiryPostMarketUtcRollover:
+    """fix-A: orchestrator passes today=_run_as_of_et_date(run_as_of_iso) so a
+    post-market run (e.g., 11pm ET = 03:00 UTC next day) doesn't accidentally
+    filter out the next-day expiry as already-expired."""
+
+    EXPIRIES = {"20260515", "20260516", "20260522", "20260529"}
+
+    def test_et_today_keeps_next_day_expiry(self):
+        # 11pm ET on May 14 — ET trading date is still May 14, so May 15 expiry
+        # is a candidate (next-day).
+        result = pick_expiry(
+            self.EXPIRIES, target_dte=1, today=dt.date(2026, 5, 14),
+        )
+        # 20260515 is closest to today+1
+        assert result == "20260515"
+
+    def test_utc_rolled_today_skips_next_day_expiry_bug_repro(self):
+        # If we wrongly used dt.date.today() = May 15 UTC for a run that's actually
+        # 11pm ET May 14, pick_expiry would filter out the 20260515 expiry as
+        # already-expired (d <= today). This test pins that filtering behavior so
+        # the orchestrator MUST pass today=_run_as_of_et_date(...) instead.
+        result_with_utc_rolled = pick_expiry(
+            self.EXPIRIES, target_dte=1, today=dt.date(2026, 5, 15),
+        )
+        # With today=May 15, the 20260515 expiry has d==today → filtered out.
+        # Next candidate is 20260516.
+        assert result_with_utc_rolled == "20260516"
+        # Contrast: with ET-correct today, we get the real next-day expiry.
+        result_with_et = pick_expiry(
+            self.EXPIRIES, target_dte=1, today=dt.date(2026, 5, 14),
+        )
+        assert result_with_et == "20260515"
+        # If these are equal we lose the safety net of ET-clamping — this
+        # assertion guards the orchestrator's invariant.
+        assert result_with_utc_rolled != result_with_et
+
+
+class TestFetchYahooEarningsDateInEt:
+    """fix-B: fetch_yahoo_earnings's `date` field is the ET trading day, not
+    next_ts.date() which leaks the source tz (often UTC).
+    Done via mocked yfinance so the test is hermetic."""
+
+    def test_late_evening_et_event_returns_et_date(self, monkeypatch):
+        """11pm ET Jul 31 event = 03:00 UTC Aug 1. Naive .date() on the UTC
+        Timestamp would give '2026-08-01' (wrong); ET conversion gives Jul 31."""
+        import sys as _sys
+        # Build a minimal pandas Timestamp-like stub via importing real pandas
+        # if available, else skip. The function pulls in yfinance + pandas at
+        # call-time; we monkeypatch both.
+        pd = pytest.importorskip("pandas")
+        # event timestamp: 23:00 ET Jul 31 2026 = 03:00 UTC Aug 1 2026
+        next_ts = pd.Timestamp("2026-08-01T03:00:00", tz="UTC")
+        future_index = pd.DatetimeIndex([next_ts])
+
+        class FakeTicker:
+            def __init__(self, sym):
+                pass
+            @property
+            def earnings_dates(self):
+                # Build a DataFrame with the future event as the index.
+                return pd.DataFrame(index=future_index, data={"_": [0]})
+
+        fake_yf = type(_sys)("yfinance")
+        fake_yf.Ticker = FakeTicker
+        monkeypatch.setitem(_sys.modules, "yfinance", fake_yf)
+
+        # pandas's Timestamp.now must also be predictable — patch to be < next_ts
+        original_now = pd.Timestamp.now
+        monkeypatch.setattr(pd.Timestamp, "now",
+                            lambda tz=None: pd.Timestamp("2026-05-14T00:00:00", tz="UTC"))
+        try:
+            result = fetch_yahoo_earnings("FAKE")
+        finally:
+            monkeypatch.setattr(pd.Timestamp, "now", original_now)
+
+        assert result is not None
+        # ET-correct: date should be 2026-07-31 (ET trading day), NOT 2026-08-01 (UTC).
+        assert result["date"] == "2026-07-31", (
+            f"Yahoo date leaked UTC tz: got {result['date']!r}, expected '2026-07-31'"
+        )
+        # 23:00 ET → hh>=16 → AMC
+        assert result["time"] == "AMC"
+
+
+class TestAmcExpiryDayUsesEt:
+    """fix-C: derive_earnings_context_flags's amc_expiry_day check uses ET
+    date comparison, not [:10] slice of earnings_event_ts (which leaks UTC)."""
+
+    def _row(self, **kw):
+        r = IVRow(ticker="AAPL")
+        for k, v in kw.items():
+            setattr(r, k, v)
+        return r
+
+    def test_amc_event_after_8pm_et_matches_et_expiry(self):
+        # AMC event Jul 31 at 8:30pm ET = 00:30 UTC Aug 1.
+        # ISO slice would say "2026-08-01" → != expiry "20260731" → flag missed.
+        # ET-correct says Jul 31 == Jul 31 → amc_expiry_day fires.
+        row = self._row(
+            earnings_next_time="AMC",
+            earnings_event_ts="2026-08-01T00:30:00+00:00",  # 8:30pm ET Jul 31
+            expiry="20260731",
+            earnings_in_window=True,
+            earnings_in_contract_life=False,
+            quote_snapshot_relative_to_event="pre_event",
+        )
+        flags = derive_earnings_context_flags(row)
+        assert "amc_expiry_day" in flags
+
+    def test_amc_event_after_8pm_et_with_aug_1_expiry_does_not_match(self):
+        # Same event 8:30pm ET Jul 31, but expiry is Aug 1 (next-day weekly).
+        # ET-correct: Jul 31 != Aug 1 → amc_expiry_day NOT set.
+        # UTC-leak would erroneously match (slice says 2026-08-01 == 20260801).
+        row = self._row(
+            earnings_next_time="AMC",
+            earnings_event_ts="2026-08-01T00:30:00+00:00",
+            expiry="20260801",
+            earnings_in_window=True,
+            earnings_in_contract_life=True,  # event during option life
+            quote_snapshot_relative_to_event="pre_event",
+        )
+        flags = derive_earnings_context_flags(row)
+        # Should NOT include amc_expiry_day (expiry is the day AFTER the ET event)
+        assert "amc_expiry_day" not in flags
+
+    def test_amc_event_during_et_business_hours_matches(self):
+        # 4:30pm ET Jul 31 = 20:30 UTC Jul 31 — same day in both zones.
+        # Sanity check that ET-aware fix didn't regress the simple case.
+        row = self._row(
+            earnings_next_time="AMC",
+            earnings_event_ts="2026-07-31T20:30:00+00:00",
+            expiry="20260731",
+            earnings_in_window=True,
+            earnings_in_contract_life=False,
+            quote_snapshot_relative_to_event="pre_event",
+        )
+        flags = derive_earnings_context_flags(row)
+        assert "amc_expiry_day" in flags
+
+
+class TestEarningsCacheAsOfBounds:
+    """fix-D: earnings_cache_as_of_bounds returns (oldest, newest) fetched_at.
+    as_of in the artifact uses OLDEST (conservative top-level)."""
+
+    def test_empty_cache(self):
+        assert earnings_cache_as_of_bounds({}) == (None, None)
+
+    def test_no_fetched_at_in_entries(self):
+        cache = {"AAPL": {"date": "2026-07-31", "time": "AMC"}}
+        assert earnings_cache_as_of_bounds(cache) == (None, None)
+
+    def test_none_entries_skipped(self):
+        cache = {
+            "AAPL": None,
+            "MSFT": {
+                "date": "2026-07-30", "time": "AMC",
+                "fetched_at": "2026-05-10T12:00:00+00:00",
+            },
+        }
+        oldest, newest = earnings_cache_as_of_bounds(cache)
+        assert oldest == "2026-05-10T12:00:00+00:00"
+        assert newest == "2026-05-10T12:00:00+00:00"
+
+    def test_mixed_ages_returns_min_and_max(self):
+        cache = {
+            "AAPL": {"fetched_at": "2026-05-10T12:00:00+00:00"},
+            "MSFT": {"fetched_at": "2026-05-14T18:00:00+00:00"},
+            "NVDA": {"fetched_at": "2026-05-12T09:00:00+00:00"},
+        }
+        oldest, newest = earnings_cache_as_of_bounds(cache)
+        assert oldest == "2026-05-10T12:00:00+00:00"
+        assert newest == "2026-05-14T18:00:00+00:00"
+
+    def test_top_level_as_of_is_oldest_not_newest(self):
+        """The whole policy: artifact-level as_of MUST be oldest. Otherwise a
+        cache with 1 fresh + 99 stale entries would claim freshness it doesn't
+        have."""
+        cache = {
+            "FRESH": {"fetched_at": "2026-05-14T18:00:00+00:00"},
+            "STALE_1": {"fetched_at": "2026-05-09T08:00:00+00:00"},
+            "STALE_2": {"fetched_at": "2026-05-10T08:00:00+00:00"},
+        }
+        oldest, newest = earnings_cache_as_of_bounds(cache)
+        # The conservative top-level claim is "no fresher than 2026-05-09"
+        assert oldest == "2026-05-09T08:00:00+00:00"
+        # Range is exposed via newest_fetched_at
+        assert newest == "2026-05-14T18:00:00+00:00"
