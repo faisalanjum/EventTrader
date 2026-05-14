@@ -138,6 +138,26 @@ pytest scripts/iv/test_compute_iv_moves.py -v
 | Strike retry | Try 5 nearest strikes on qualification failure | Handles weekly/$2.50 vs monthly/$5 grid mismatch |
 | Trading class | Filter chain to `tradingClass == ticker` | Avoid picking SPYW weekly strikes when we want SPY monthlies |
 
+## Pre-OPRA empirical validation (50-ticker sample, 2026-05-14 08:54 ET)
+
+Ran `compute_iv_moves.py --tickers-file first50.txt --market-data-type 3 --target-dte 30`:
+
+```
+Summary: {"total": 50, "partial": 32, "no_quotes": 17, "no_conid": 1}
+
+IV distribution (% annualized, n=35 populated):
+  min:  20.9%   p10:  23.9%   p25:  33.8%
+  p50:  47.3%   p75:  61.9%   p90:  82.7%   max:  97.4%
+```
+
+Interpretation:
+- **70% (35/50) returned IV via free delayed-frozen path** — pipeline math validated end-to-end.
+- **34% (17/50) returned NO_QUOTES** — IBKR didn't deliver delayed data for those names in that 3-min window. Expected to flip to OK with OPRA active.
+- **2% (1/50)** = ALEX, the delisted/M&A zombie (consistent with prior universe probe).
+- IV distribution is sensible: REITs ~20%, large-cap insurers ~25-35%, semis ~50-70%, meme-y small-caps 80%+.
+
+**Strike-retry triggered correctly** on JPM ($2.50 weekly grid → $5 monthly grid fallback).
+
 ## Day-1 OPRA activation
 
 The moment you buy OPRA ($1.50/mo, IBKR Portal → Market Data Subscriptions):

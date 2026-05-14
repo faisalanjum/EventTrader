@@ -336,10 +336,12 @@ async def compute_one(
         if row.em_from_iv_dollars is not None and row.spot:
             row.em_from_iv_pct = row.em_from_iv_dollars / row.spot
 
-    # Status
+    # Status — OK iff both EM methods computable; NO_QUOTES iff truly nothing flowed
+    # (all bids AND all IVs null on BOTH legs); else PARTIAL (some side has data).
     if row.expected_move_dollars is not None:
         row.status = "OK"
-    elif row.call_bid is None and row.put_bid is None and row.call_iv is None:
+    elif (row.call_bid is None and row.put_bid is None
+          and row.call_iv is None and row.put_iv is None):
         row.status = "NO_QUOTES"
         row.diagnostics.append("no live OPRA — buy $1.50/mo to populate")
     else:
