@@ -8,24 +8,27 @@ SANITY-CHECK METHOD — IV from modelGreeks scaled to expiry:
     expected_move_from_iv = spot * iv_avg * sqrt(dte / 365)
     (1-sigma move under the lognormal-vol assumption)
 
-The two methods should agree within ~10% in normal markets. Divergence signals
-either earnings premium, dividend, or illiquid quotes.
+The two methods should agree within ~30% in normal markets per Brenner-Subrahmanyam
+(straddle ≈ sqrt(2/π) * 1-sigma move). Divergence signals earnings premium,
+dividend timing, or illiquid quotes.
 
 DESIGN DECISIONS LOCKED IN 2026-05-14:
   expiry      : --target-dte=N (configurable); default = next monthly (3rd Friday)
-  earnings    : if earnings between today and expiry → emit BOTH expiries (pre + post)
+  earnings    : if earnings between today and expiry → orchestrator may emit a
+                second row for the OTHER side of the event (see dual-row rule in README)
   liquidity   : NO spread filter; compute spread_bps; caller decides
-  output      : JSON file + stdout table
+  output      : JSON file (schema iv_moves.v2) + stdout table
 
-PRE-OPRA   : status will mostly be NO_QUOTES (call/put bid/ask all null).
-             Pipeline still validated end-to-end: chain, strike picker, math.
-POST-OPRA  : ~100% OK expected (verified: 756/756 of tradeable universe has listed options).
+Status semantics: status=OK means EM was computable, NOT that quotes are tradeable.
+The predictor must inspect data_tier / quote_freshness / iv_quality / quality_flags
+to decide whether the row is actionable. See scripts/iv/README.md for the schema.
 
 Run:
     python scripts/iv/compute_iv_moves.py \
         [--tickers AAPL,JPM,XLK | --tickers-file path | --universe-redis] \
         [--target-dte 30] \
-        [--earnings-check] \
+        [--market-data-type 1|2|3|4] \
+        [--user-earnings-ts path.json] \
         [--output scripts/iv/output/iv_$(date +%Y-%m-%d).json]
 """
 from __future__ import annotations

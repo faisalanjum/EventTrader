@@ -132,7 +132,7 @@ creates a meaningful pre/post-event split (see [Earnings timing](#earnings-timin
 |---|---|---|
 | `spot`, `spot_source` | float, str | Underlying price; `live` or `mdt=N` |
 | `call_bid` / `call_ask` / `call_mid` | float | Call leg quotes. `call_mid` derived per `call_mid_source` rules |
-| `call_mid_source` | str | `bid_ask` \| `last_fresh` \| `last_stale_rejected` \| `none` |
+| `call_mid_source` | str | `bid_ask_mid` \| `last_fresh` \| `last_stale_rejected` \| `none` |
 | `put_bid` / `put_ask` / `put_mid` / `put_mid_source` | (same) | Put leg quotes |
 | `call_iv`, `put_iv` | float | Per-leg model IV (annualized, decimal — e.g. 0.247 = 24.7%). May be sanitized; see flags |
 | `call_tick_age_seconds`, `call_tick_age_known` | float, bool | Age of latest tick. `*_known=False` when IBKR didn't surface `ticker.time` |
@@ -263,7 +263,7 @@ listening to."
 
 | Flag | Means |
 |---|---|
-| `iv_sanitized` | Per-leg IV value was outside `[iv_min_valid, iv_max_valid]` and clamped |
+| `iv_sanitized` | Per-leg IV was None / NaN / -1 / outside `[iv_min_valid, iv_max_valid]` and replaced with `null`. The leg's `*_iv` field is `null`; the value was NOT clamped to the range |
 | `stale_last_rejected` | A leg fell back to `last` price but `last` was too old; mid set to None |
 | `strike_retry_used` | Closest strike to spot didn't qualify; fell back to a farther strike |
 | `multiplier_nonstandard` | Multiplier ≠ 100, or ambiguous across legs |
