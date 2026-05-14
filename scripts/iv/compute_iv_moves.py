@@ -128,11 +128,22 @@ def pick_expiry(available_yyyymmdd: set[str], target_dte: int | None,
 
     if target_dte is None:
         monthly = next_monthly_expiry(today)
-        # Find the chain expiry that matches monthly (or first monthly-like after monthly)
-        for s, d in sorted(candidates, key=lambda x: x[1]):
-            if d == monthly:
+        # Holiday-aware (Tier 1.D): if the nominal 3rd Friday is a market holiday
+        # (e.g., 2026-06-19 Juneteenth, or Good Friday), the actual options expiry
+        # rolls — typically to the preceding Thursday. We search the chain for the
+        # ACTUAL monthly within a small window around the computed 3rd Friday.
+        # Order of preference inside the window: exact match → prior Thursday →
+        # next available Friday (e.g., 4th-Friday roll if exchange chose that).
+        HOLIDAY_SEARCH_DAYS = 3
+        window_lo = monthly - dt.timedelta(days=HOLIDAY_SEARCH_DAYS)
+        window_hi = monthly + dt.timedelta(days=HOLIDAY_SEARCH_DAYS)
+        in_window = [(s, d) for s, d in candidates if window_lo <= d <= window_hi]
+        if in_window:
+            # Prefer exact match, then closest to nominal
+            for s, d in sorted(in_window, key=lambda x: (abs((x[1] - monthly).days), x[1])):
                 return s
-        # Fallback: nearest expiry >= monthly
+        # No expiry within the ±3 day window — fall through to "next available
+        # expiry >= nominal" (original behavior preserved)
         candidates_geq = [(s, d) for s, d in candidates if d >= monthly]
         if candidates_geq:
             return min(candidates_geq, key=lambda x: x[1])[0]
@@ -177,6 +188,97 @@ def em_from_iv(spot: float, iv: float, dte: int) -> float | None:
 
 
 # ---------------------------------------------------------------------------
+# Tier 1 phase 2 helpers (IV sanitize, mid+source, tick_age, data_tier)
+# ---------------------------------------------------------------------------
+
+def sanitize_iv(raw_iv, min_valid: float = 0.01, max_valid: float = 5.0) -> tuple[float | None, bool]:
+    """Sanitize an IV value. Returns (clean_iv, was_sanitized).
+
+    Tier 1.A fix: ib_async modelGreeks.impliedVol can be NaN, -1, or
+    out-of-range. Bare `if iv:` lets NaN through (NaN is truthy as a
+    non-zero float). This guard rejects garbage and signals via flag.
+    """
+    if raw_iv is None:
+        return None, False
+    try:
+        v = float(raw_iv)
+    except (TypeError, ValueError):
+        return None, True
+    if math.isnan(v) or v < min_valid or v > max_valid or v == -1:
+        return None, True
+    return v, False
+
+
+def compute_mid_and_source(
+    bid: float | None, ask: float | None, last: float | None,
+    tick_age_seconds: float | None, freshness_threshold_sec: float = 300.0,
+) -> tuple[float | None, str]:
+    """Return (mid, mid_source).
+
+    Tier 1.B: never trust stale `last` as a mid. Sources, ordered preference:
+      bid_ask_mid          — both bid and ask positive: (bid+ask)/2
+      last_fresh           — bid/ask absent but last is positive AND tick within threshold
+      last_stale_rejected  — last is positive but tick is stale OR unknown: mid=None
+      none                 — no usable data at all
+    """
+    if bid is not None and ask is not None and bid > 0 and ask > 0:
+        return (bid + ask) / 2.0, "bid_ask_mid"
+    if last is not None and last > 0:
+        if tick_age_seconds is not None and tick_age_seconds < freshness_threshold_sec:
+            return last, "last_fresh"
+        # last is stale or unknown — DO NOT trust it as mid
+        return None, "last_stale_rejected"
+    return None, "none"
+
+
+def derive_data_tier(
+    market_data_type: int | None,
+    bid: float | None, ask: float | None, last: float | None,
+    fell_back_from_live: bool,
+) -> str:
+    """Per SCHEMA_v2.md derivation rules.
+
+    Note: `live` REQUIRES populated bid/ask/last (mdt=1 alone is not proof of
+    live data — ib_async defaults to 1 with no actual ticks). Fallback path is
+    a distinct tier from native delayed.
+    """
+    if fell_back_from_live:
+        return "fallback_delayed"
+    if market_data_type == 1:
+        # live ONLY when at least one populated quote exists
+        if (bid and bid > 0) or (ask and ask > 0) or (last and last > 0):
+            return "live"
+        # mdt=1 + nulls = default-value, not real live data
+        return "unknown"
+    if market_data_type == 2:
+        return "frozen"
+    if market_data_type == 3:
+        return "delayed"
+    if market_data_type == 4:
+        return "delayed_frozen"
+    return "unknown"
+
+
+def get_tick_age_seconds(ticker_time, run_time) -> tuple[float | None, bool]:
+    """Return (tick_age_seconds, tick_age_known).
+    ticker.time is None when IBKR didn't surface a timestamp.
+    """
+    if ticker_time is None:
+        return None, False
+    try:
+        if isinstance(ticker_time, dt.datetime):
+            tt = ticker_time
+        else:
+            tt = dt.datetime.fromisoformat(str(ticker_time))
+        if tt.tzinfo is None:
+            tt = tt.replace(tzinfo=dt.timezone.utc)
+        age = (run_time - tt).total_seconds()
+        return max(0.0, age), True
+    except Exception:
+        return None, False
+
+
+# ---------------------------------------------------------------------------
 # Result schema
 # ---------------------------------------------------------------------------
 
@@ -199,10 +301,17 @@ class IVRow:
     call_ask: float | None = None
     call_mid: float | None = None
     call_iv: float | None = None
+    # Tier 1.B per-leg quote-quality metadata
+    call_mid_source: str = "none"               # bid_ask_mid | last_fresh | last_stale_rejected | none
+    call_tick_age_seconds: float | None = None
+    call_tick_age_known: bool = False
     put_bid: float | None = None
     put_ask: float | None = None
     put_mid: float | None = None
     put_iv: float | None = None
+    put_mid_source: str = "none"
+    put_tick_age_seconds: float | None = None
+    put_tick_age_known: bool = False
     expected_move_dollars: float | None = None
     expected_move_pct: float | None = None
     iv_avg: float | None = None
@@ -210,6 +319,9 @@ class IVRow:
     em_from_iv_pct: float | None = None
     spread_call_bps: float | None = None
     spread_put_bps: float | None = None
+    # Tier 1.F + flag aggregator
+    data_tier: str = "unknown"                       # live | delayed | frozen | delayed_frozen | fallback_delayed | unknown
+    quality_flags: list[str] = field(default_factory=list)
     status: str = "PENDING"
     diagnostics: list[str] = field(default_factory=list)
 
@@ -342,7 +454,8 @@ async def compute_one(
             row.diagnostics.append(f"tried_strikes={ranked_strikes[:5]}")
             return row
 
-        # 7. Get tickers (live or delayed-frozen depending on entitlement)
+        # 7. Get tickers
+        ib.reqMarketDataType(market_data_type)
         try:
             tickers = await asyncio.wait_for(
                 ib.reqTickersAsync(call_q, put_q), timeout=20,
@@ -354,24 +467,96 @@ async def compute_one(
         call_t = next((t for t in tickers if t.contract.right == "C"), None)
         put_t = next((t for t in tickers if t.contract.right == "P"), None)
 
+        # 7b. Tier 1.E — auto-fallback to type=3 (delayed) when type=1 returns all-null
+        # during options RTH. This handles the "OPRA entitlement lapsed" case so the bot
+        # gets the best available data tier without manual intervention.
+        fell_back_from_live = False
+        def _legs_all_null(c_t, p_t) -> bool:
+            def _ok(v):
+                if v is None: return False
+                try: return not math.isnan(float(v)) and float(v) > 0
+                except Exception: return False
+            for t in (c_t, p_t):
+                if t is None:
+                    continue
+                if _ok(t.bid) or _ok(t.ask) or _ok(t.last):
+                    return False
+            return True
+        if (market_data_type == 1 and DEFAULT_CONFIG["live_to_delayed_fallback_enabled"]
+                and _legs_all_null(call_t, put_t)):
+            ib.reqMarketDataType(3)
+            try:
+                tickers = await asyncio.wait_for(
+                    ib.reqTickersAsync(call_q, put_q), timeout=20,
+                )
+                call_t = next((t for t in tickers if t.contract.right == "C"), None)
+                put_t = next((t for t in tickers if t.contract.right == "P"), None)
+                fell_back_from_live = True
+                row.diagnostics.append("type=1 returned all-null; auto-fell-back to type=3 delayed")
+            except Exception as e:
+                row.diagnostics.append(f"fallback-quote-fetch failed: {type(e).__name__}: {e}")
+
     # Outside the semaphore — pure compute
+    run_time = dt.datetime.now(dt.timezone.utc)
     def _f(x):
         return None if (x is None or (isinstance(x, float) and math.isnan(x)) or x == -1) else float(x)
 
+    # Capture per-leg ticker.time → tick_age (Tier 1.B)
     if call_t is not None:
         row.call_bid = _f(call_t.bid)
         row.call_ask = _f(call_t.ask)
-        row.call_mid = safe_mid(row.call_bid, row.call_ask, _f(call_t.last))
-        if call_t.modelGreeks and call_t.modelGreeks.impliedVol:
-            row.call_iv = float(call_t.modelGreeks.impliedVol)
+        c_last = _f(call_t.last)
+        ca, ca_known = get_tick_age_seconds(getattr(call_t, "time", None), run_time)
+        row.call_tick_age_seconds = ca
+        row.call_tick_age_known = ca_known
+        row.call_mid, row.call_mid_source = compute_mid_and_source(
+            row.call_bid, row.call_ask, c_last, ca,
+            DEFAULT_CONFIG["tick_freshness_threshold_sec"],
+        )
+        # Tier 1.A — sanitize IV
+        raw_call_iv = call_t.modelGreeks.impliedVol if call_t.modelGreeks else None
+        row.call_iv, call_iv_sanitized = sanitize_iv(
+            raw_call_iv, DEFAULT_CONFIG["iv_min_valid"], DEFAULT_CONFIG["iv_max_valid"],
+        )
+        if call_iv_sanitized:
+            if "iv_sanitized" not in row.quality_flags:
+                row.quality_flags.append("iv_sanitized")
         row.spread_call_bps = spread_bps(row.call_bid, row.call_ask, row.call_mid)
     if put_t is not None:
         row.put_bid = _f(put_t.bid)
         row.put_ask = _f(put_t.ask)
-        row.put_mid = safe_mid(row.put_bid, row.put_ask, _f(put_t.last))
-        if put_t.modelGreeks and put_t.modelGreeks.impliedVol:
-            row.put_iv = float(put_t.modelGreeks.impliedVol)
+        p_last = _f(put_t.last)
+        pa, pa_known = get_tick_age_seconds(getattr(put_t, "time", None), run_time)
+        row.put_tick_age_seconds = pa
+        row.put_tick_age_known = pa_known
+        row.put_mid, row.put_mid_source = compute_mid_and_source(
+            row.put_bid, row.put_ask, p_last, pa,
+            DEFAULT_CONFIG["tick_freshness_threshold_sec"],
+        )
+        raw_put_iv = put_t.modelGreeks.impliedVol if put_t.modelGreeks else None
+        row.put_iv, put_iv_sanitized = sanitize_iv(
+            raw_put_iv, DEFAULT_CONFIG["iv_min_valid"], DEFAULT_CONFIG["iv_max_valid"],
+        )
+        if put_iv_sanitized:
+            if "iv_sanitized" not in row.quality_flags:
+                row.quality_flags.append("iv_sanitized")
         row.spread_put_bps = spread_bps(row.put_bid, row.put_ask, row.put_mid)
+
+    # Tier 1.B — emit stale_last_rejected flag if any leg fell back to a stale last (mid=None despite last>0)
+    if (row.call_mid_source == "last_stale_rejected" or row.put_mid_source == "last_stale_rejected"):
+        if "stale_last_rejected" not in row.quality_flags:
+            row.quality_flags.append("stale_last_rejected")
+
+    # Tier 1.F — derive data_tier per row using observed marketDataType + populated check.
+    # Use call_t's marketDataType (both legs were requested in same call, same tier).
+    observed_mdt = getattr(call_t, "marketDataType", None) if call_t is not None else (
+        getattr(put_t, "marketDataType", None) if put_t is not None else None
+    )
+    # representative populated check
+    any_bid = row.call_bid or row.put_bid
+    any_ask = row.call_ask or row.put_ask
+    any_last_fresh = None  # we already classified per leg via compute_mid_and_source
+    row.data_tier = derive_data_tier(observed_mdt, any_bid, any_ask, any_last_fresh, fell_back_from_live)
 
     # Compute EM
     if row.call_mid is not None and row.put_mid is not None and row.spot is not None:
@@ -384,14 +569,15 @@ async def compute_one(
         if row.em_from_iv_dollars is not None and row.spot:
             row.em_from_iv_pct = row.em_from_iv_dollars / row.spot
 
-    # Status — OK iff both EM methods computable; NO_QUOTES iff truly nothing flowed
-    # (all bids AND all IVs null on BOTH legs); else PARTIAL (some side has data).
+    # Tier 1.C — status logic. OK only if EM computable AND we have actual data.
+    # mdt=1 + everything null = NOT OK (default-value, not real live).
     if row.expected_move_dollars is not None:
         row.status = "OK"
     elif (row.call_bid is None and row.put_bid is None
-          and row.call_iv is None and row.put_iv is None):
+          and row.call_iv is None and row.put_iv is None
+          and row.call_mid is None and row.put_mid is None):
         row.status = "NO_QUOTES"
-        row.diagnostics.append("no live OPRA — buy $1.50/mo to populate")
+        row.diagnostics.append("no usable quotes flowed (all legs null after fallback)")
     else:
         row.status = "PARTIAL"
     return row

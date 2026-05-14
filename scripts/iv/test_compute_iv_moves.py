@@ -26,6 +26,10 @@ from compute_iv_moves import (  # noqa: E402
     MARKET_CONVENTIONS,
     DEFAULT_CONFIG,
     IVRow,
+    sanitize_iv,
+    compute_mid_and_source,
+    derive_data_tier,
+    get_tick_age_seconds,
 )
 
 
@@ -393,3 +397,194 @@ class TestDataSourcesLiveAtRun:
         # reqSecDefOptParams returns the chain catalog regardless of entitlement.
         # Phase 1 leaves this hardcoded True; if IBKR ever gates it, revisit.
         assert True  # documents the assumption
+
+
+# ===========================================================================
+# Tier 1 phase 2 — core safety: IV sanitize, mid_source, stale, holiday, fallback, data_tier
+# ===========================================================================
+
+class TestSanitizeIV:
+    """Tier 1.A — reject NaN/-1/out-of-range IV values."""
+
+    def test_normal_iv_passes(self):
+        v, sanitized = sanitize_iv(0.30)
+        assert v == 0.30 and sanitized is False
+
+    def test_nan_rejected(self):
+        v, sanitized = sanitize_iv(float("nan"))
+        assert v is None and sanitized is True
+
+    def test_minus_one_rejected(self):
+        v, sanitized = sanitize_iv(-1)
+        assert v is None and sanitized is True
+
+    def test_zero_below_min_rejected(self):
+        # IV 0 is meaningless; min_valid = 0.01 by default
+        v, sanitized = sanitize_iv(0.005)
+        assert v is None and sanitized is True
+
+    def test_huge_above_max_rejected(self):
+        # IV > 500% is almost certainly model artifact
+        v, sanitized = sanitize_iv(7.0)
+        assert v is None and sanitized is True
+
+    def test_none_passes_through(self):
+        # Already-None input is not "sanitized" — there was no garbage to reject
+        v, sanitized = sanitize_iv(None)
+        assert v is None and sanitized is False
+
+    def test_string_garbage_rejected(self):
+        v, sanitized = sanitize_iv("not-a-number")
+        assert v is None and sanitized is True
+
+    def test_boundary_low(self):
+        # exactly at min_valid passes
+        v, sanitized = sanitize_iv(0.01)
+        assert v == 0.01 and sanitized is False
+
+    def test_boundary_high(self):
+        # exactly at max_valid passes
+        v, sanitized = sanitize_iv(5.0)
+        assert v == 5.0 and sanitized is False
+
+
+class TestComputeMidAndSource:
+    """Tier 1.B — stale `last` must NEVER become a trusted mid.
+    Sources: bid_ask_mid | last_fresh | last_stale_rejected | none."""
+
+    def test_bid_ask_mid_when_both_positive(self):
+        mid, src = compute_mid_and_source(4.95, 5.05, 4.99, tick_age_seconds=2.0)
+        assert mid == 5.0 and src == "bid_ask_mid"
+
+    def test_last_fresh_when_bid_ask_missing(self):
+        # bid/ask null, last positive, fresh tick → use last
+        mid, src = compute_mid_and_source(None, None, 4.99, tick_age_seconds=10.0)
+        assert mid == 4.99 and src == "last_fresh"
+
+    def test_last_stale_rejected_when_tick_old(self):
+        # bid/ask null, last positive but tick > threshold (300s) → reject
+        mid, src = compute_mid_and_source(None, None, 4.99, tick_age_seconds=600.0)
+        assert mid is None and src == "last_stale_rejected"
+
+    def test_last_stale_rejected_when_age_unknown(self):
+        # bid/ask null, last positive, but no age info → conservative reject
+        mid, src = compute_mid_and_source(None, None, 4.99, tick_age_seconds=None)
+        assert mid is None and src == "last_stale_rejected"
+
+    def test_none_when_nothing_usable(self):
+        mid, src = compute_mid_and_source(None, None, None, tick_age_seconds=None)
+        assert mid is None and src == "none"
+
+    def test_zero_bid_falls_to_last_fresh(self):
+        # Zero bid is "no quote" not "$0 bid" — fall back to last
+        mid, src = compute_mid_and_source(0.0, 5.05, 5.00, tick_age_seconds=2.0)
+        assert mid == 5.00 and src == "last_fresh"
+
+
+class TestDeriveDataTier:
+    """Tier 1.F — derive data_tier from observed marketDataType + populated check."""
+
+    def test_live_requires_populated_quote(self):
+        # mdt=1 + populated bid → live
+        assert derive_data_tier(1, 4.95, 5.05, 4.99, False) == "live"
+
+    def test_mdt_1_with_all_null_is_unknown_not_live(self):
+        # Critical: mdt=1 default-value with no actual data ≠ live
+        assert derive_data_tier(1, None, None, None, False) == "unknown"
+
+    def test_mdt_2_is_frozen(self):
+        assert derive_data_tier(2, 4.95, 5.05, 4.99, False) == "frozen"
+
+    def test_mdt_3_is_delayed(self):
+        assert derive_data_tier(3, 4.95, 5.05, 4.99, False) == "delayed"
+
+    def test_mdt_4_is_delayed_frozen(self):
+        assert derive_data_tier(4, 4.95, 5.05, 4.99, False) == "delayed_frozen"
+
+    def test_fallback_overrides_mdt(self):
+        # If we fell back from live, that's the canonical tier — even if mdt now says 3
+        assert derive_data_tier(3, 4.95, 5.05, 4.99, True) == "fallback_delayed"
+
+    def test_unknown_when_mdt_none(self):
+        assert derive_data_tier(None, 4.95, 5.05, 4.99, False) == "unknown"
+
+
+class TestHolidayExpiryPicker:
+    """Tier 1.D — handle Juneteenth, Good Friday: actual expiry rolls to
+    preceding Thursday. Picker searches chain within ±3 days of nominal 3rd Fri."""
+
+    def test_juneteenth_2026_rolls_to_thursday(self):
+        # today=2026-06-01 → next_monthly = 2026-06-19 (Juneteenth)
+        # Chain has 20260618 (rolled Thursday) NOT 20260619 → picker must find Thursday.
+        chain = {"20260618", "20260626", "20260717"}  # rolled-monthly + weekly + July monthly
+        today = dt.date(2026, 6, 1)
+        picked = pick_expiry(chain, target_dte=None, today=today)
+        assert picked == "20260618", f"holiday-adjusted monthly should be 06-18, got {picked}"
+
+    def test_normal_monthly_unchanged(self):
+        # today=2026-06-20 (after June monthly) → next_monthly = 2026-07-17 (NOT a holiday)
+        chain = {"20260710", "20260717", "20260724", "20260821"}
+        today = dt.date(2026, 6, 20)
+        picked = pick_expiry(chain, target_dte=None, today=today)
+        assert picked == "20260717"
+
+    def test_window_misses_returns_next_geq(self):
+        # today=2026-06-20 → nominal monthly = 2026-07-17, no entry within ±3 days
+        # → fallback: nearest >= 07-17 = 07-24
+        chain = {"20260710", "20260724"}
+        today = dt.date(2026, 6, 20)
+        picked = pick_expiry(chain, target_dte=None, today=today)
+        assert picked == "20260724"
+
+    def test_target_dte_unaffected_by_holiday_logic(self):
+        # target-dte path is independent of holiday logic
+        chain = {"20260612", "20260618", "20260626"}
+        today = dt.date(2026, 5, 14)
+        # target 30 days = 2026-06-13 → closest is 20260612 (1 day off) vs 20260618 (5 off)
+        assert pick_expiry(chain, target_dte=30, today=today) == "20260612"
+
+
+class TestGetTickAge:
+    """Tier 1.B — derive tick age from ticker.time with proper None handling."""
+
+    def test_known_age(self):
+        run = dt.datetime(2026, 5, 14, 12, 0, 0, tzinfo=dt.timezone.utc)
+        tick = dt.datetime(2026, 5, 14, 11, 59, 30, tzinfo=dt.timezone.utc)
+        age, known = get_tick_age_seconds(tick, run)
+        assert age == 30.0 and known is True
+
+    def test_unknown_when_none(self):
+        run = dt.datetime(2026, 5, 14, 12, 0, 0, tzinfo=dt.timezone.utc)
+        age, known = get_tick_age_seconds(None, run)
+        assert age is None and known is False
+
+    def test_no_negative_age(self):
+        # Tick in the future (clock skew) → clamp to 0, still known
+        run = dt.datetime(2026, 5, 14, 12, 0, 0, tzinfo=dt.timezone.utc)
+        tick = dt.datetime(2026, 5, 14, 12, 0, 5, tzinfo=dt.timezone.utc)
+        age, known = get_tick_age_seconds(tick, run)
+        assert age == 0.0 and known is True
+
+
+class TestPhase2IVRowFields:
+    """IVRow has new Tier 1 fields with correct defaults."""
+
+    def test_data_tier_default_unknown(self):
+        r = IVRow(ticker="AAPL")
+        assert r.data_tier == "unknown"
+
+    def test_quality_flags_empty_default(self):
+        r = IVRow(ticker="AAPL")
+        assert r.quality_flags == []
+
+    def test_mid_source_default_none(self):
+        r = IVRow(ticker="AAPL")
+        assert r.call_mid_source == "none"
+        assert r.put_mid_source == "none"
+
+    def test_tick_age_unknown_default(self):
+        r = IVRow(ticker="AAPL")
+        assert r.call_tick_age_seconds is None
+        assert r.call_tick_age_known is False
+        assert r.put_tick_age_seconds is None
+        assert r.put_tick_age_known is False
