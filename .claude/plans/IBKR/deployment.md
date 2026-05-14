@@ -101,25 +101,26 @@ kubectl set image deployment/ibkr-paper -n mcp-services ibkr-mcp-server=ibkr-mcp
 4. `app/api/ibkr/__init__.py` — add `from .xxx import *`
 5. Rebuild + deploy (see above)
 
-## Rollback Image Pin (extended-hours patch, 2026-05-12)
+## Rollback Image Pin (per-contract tradingHours, 2026-05-14)
 
 | Image | Tag | Docker SHA256 (image ID) | Containerd OCI digest |
 |---|---|---|---|
-| **Previous (rollback target)** | `smart-fix-1` | `1a12619e0cafc39755c435da8de21f1a213b4496f55e214ffadda6dfce022390` | `d72b7f9691ceb5e34fe6ed6c3a5f1eb95ffb23947e2b60f449bfbcd32a81d7e2` |
-| **Current (extended-hours)** | `ext-hours-v3` | `13b4eae9b862d1ef94eaa7e9296604dfdbeacbae787bf01d45fd17947bb70393` | `f6b60314c7bb4b3f4335bd7319d34a10059eb7d25623baddd2125b5e968f64fa` |
+| **Two-back** | `smart-fix-1` | `1a12619e0cafc39755c435da8de21f1a213b4496f55e214ffadda6dfce022390` | `d72b7f9691ceb5e34fe6ed6c3a5f1eb95ffb23947e2b60f449bfbcd32a81d7e2` |
+| **Previous (rollback target)** | `ext-hours-v3` | `13b4eae9b862d1ef94eaa7e9296604dfdbeacbae787bf01d45fd17947bb70393` | `f6b60314c7bb4b3f4335bd7319d34a10059eb7d25623baddd2125b5e968f64fa` |
+| **Current (per-contract hours)** | `ext-hours-v4` | `84dee3a5604823c3a05e078b1e601d885acaff5c677ccbda49a9af778cd444e3` | `7ab9e097d11d8291486a381dead00787b70942875766e0afca89e2814688ae90` |
 
-> **Note**: `ext-hours-v1` was abandoned — it was built from the wrong source tree (a standalone clone that didn't have the smart-fix-1 modifications committed). `ext-hours-v3` is built from `EventMarketDB/ibkr-mcp-server/` which is the true source of truth. See git history of EventMarketDB for the 8 production commits leading up to smart-fix-1.
+> **Note**: `ext-hours-v1` was abandoned — it was built from the wrong source tree (a standalone clone that didn't have the smart-fix-1 modifications committed). `ext-hours-v3` was the first image built from `EventMarketDB/ibkr-mcp-server/` (true source of truth). `ext-hours-v4` adds per-contract `tradingHours` lookup on top of v3.
 
 **Rollback commands** (~30 seconds for both deployments):
 
 ```bash
-# Live MCP rollback
+# Live MCP rollback to v3 (one step back, recommended)
 kubectl set image deployment/ibkr -n mcp-services \
-  ibkr-mcp-server=ibkr-mcp-server:smart-fix-1
+  ibkr-mcp-server=ibkr-mcp-server:ext-hours-v3
 
-# Paper MCP rollback
+# Paper MCP rollback to v3
 kubectl set image deployment/ibkr-paper -n mcp-services \
-  ibkr-mcp-server=ibkr-mcp-server:smart-fix-1
+  ibkr-mcp-server=ibkr-mcp-server:ext-hours-v3
 
 # Verify
 kubectl -n mcp-services rollout status deployment/ibkr
@@ -128,7 +129,17 @@ kubectl -n mcp-services rollout status deployment/ibkr-paper
 # After rollback: exit + restart Claude Code session to refresh MCP handles.
 ```
 
-**What changed in ext-hours-v3** (in case rollback needed for forensics):
+**What changed in ext-hours-v4** (in case rollback needed for forensics):
+- **NEW** `app/services/trading_hours.py` — pure parser + 6h conId cache + `is_contract_open(ib, contract)` (asset-class-agnostic)
+- `app/services/history.py::get_current_price()` — swapped `self._is_market_open()` → `await is_contract_open(self.ib, contract)`
+- `app/services/market_data.py::get_tickers()` — swapped `self._is_market_open()` → `any(await asyncio.gather(*[is_contract_open(self.ib, c) for c in qualified_contracts]))`
+- `app/services/client.py::_is_market_open()` — **UNCHANGED, KEPT AS LEGACY FALLBACK**
+- All Phase 1 (is_realtime, market_data_type, -1 sentinel handling) **UNCHANGED**
+- All smart-fix-1 (/livez, /readyz, heartbeat, reconnect-backoff) **UNCHANGED**
+- Tests: `tests/test_trading_hours.py` (33 cases) — 61/61 total pass
+- Live validation 2026-05-14 06:55 ET: AAPL/JPM/XLK premarket return is_realtime=true type=1; SPX/VIX correctly fall back is_realtime=false type=2
+
+**What changed in ext-hours-v3** (in case full rollback to smart-fix-1 needed for forensics):
 - `app/services/client.py::_is_market_open()` — widened window from RTH-only (09:30-16:00 ET) to 04:00-20:00 ET on NYSE session days
 - `app/services/history.py::_to_float()` — now also nulls IB's -1 sentinel (was only nulling NaN)
 - `app/services/history.py::get_current_price()` — falls through to historical-bar path when real-time ticker has all-null `last`/`close`
