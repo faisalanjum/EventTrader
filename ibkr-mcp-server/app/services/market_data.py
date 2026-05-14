@@ -1,10 +1,13 @@
 """Market data operations."""
 
+import asyncio
+
 import pandas as pd
 from ib_async import util
 from ib_async.contract import Contract
 
 from .client import IBClient
+from .trading_hours import is_contract_open
 from app.core.setup_logging import logger
 from app.models import TickerData, GreeksData
 
@@ -74,11 +77,14 @@ class MarketDataClient(IBClient):
       contracts = [Contract(conId=contract_id) for contract_id in contract_ids]
       qualified_contracts = await self.ib.qualifyContractsAsync(*contracts)
 
-      if self._is_market_open():
-        logger.debug("Market is open, requesting live market data")
+      opens = await asyncio.gather(
+        *(is_contract_open(self.ib, c) for c in qualified_contracts),
+      )
+      if any(opens):
+        logger.debug("At least one contract is open, requesting live market data")
         self.ib.reqMarketDataType(1)
       else:
-        logger.debug("Market is closed, requesting delayed-frozen market data")
+        logger.debug("All contracts closed, requesting delayed-frozen market data")
         self.ib.reqMarketDataType(4)
       tickers = await self.ib.reqTickersAsync(*qualified_contracts)
 

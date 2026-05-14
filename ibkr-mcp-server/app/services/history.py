@@ -7,6 +7,7 @@ import time
 from ib_async.objects import BarData
 
 from .client import IBClient
+from .trading_hours import is_contract_open
 from app.core.setup_logging import logger
 from app.models.history import HistoricalBar, PriceSnapshot
 
@@ -95,7 +96,7 @@ class HistoryClient(IBClient):
     logger.debug("qualify_contract took {:.2f}s", time.monotonic() - t0)
 
     t0 = time.monotonic()
-    if self._is_market_open():
+    if await is_contract_open(self.ib, contract):
       # Live path: reqTickersAsync returns real-time last/bid/ask.
       self.ib.reqMarketDataType(1)
       [ticker] = await self.ib.reqTickersAsync(contract)
