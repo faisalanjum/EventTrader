@@ -1,4 +1,4 @@
-# IV Moves Output Schema — `iv_moves.v2` (revision 7)
+# IV Moves Output Schema — `iv_moves.v2` (revision 8)
 
 **Version**: `iv_moves.v2`
 **Status**: PROPOSED — awaiting user sign-off before implementation
@@ -9,13 +9,13 @@
 - r4 — fixed 6 issues (AMC formula, BMO wording, freshness=unknown, dead enums, Example 5 date, Example 3 reasoning)
 - r5 — CRITICAL: separates run time from quote-snapshot time; adds quote_snapshot_as_of, event_ts, quote_snapshot_relative_to_event
 - r6 — fixed 7 review issues (CRITICAL: pre_event ≠ premium; added qs_rel unknown enum, post_event_snapshot flag, event_ts_source precedence)
-- r7 — tiny cleanup only (no schema changes):
-       - title revision number now matches changelog (was r3, now r7)
-       - generic row-shape run_id timestamp aligned with run_as_of (20:35Z)
-       - expiry_ladder.as_of renamed to .run_as_of for consistency
-       - Example 4 timestamps now internally consistent: run_as_of=5/15 20:35Z,
-         quote_snapshot=5/15 20:00Z, event_ts=5/15 20:30Z, expiry=20260515
-       - Example 4 leg tick_age_seconds now ~2100 (frozen close 35 min old) — was 2.1/1.5 (contradicted stale)
+- r7 — tiny cleanup (revision-number title, run_id alignment, expiry_ladder run_as_of rename, Example 4 timestamps + tick_age consistency)
+- r8 — one final example contradiction in the generic per-row shape:
+       earnings.earnings_in_contract_life was FALSE but expiry 5/22 > event 5/15 →
+       contract life DOES span the event → should be TRUE (consistent with the
+       includes_earnings_premium flag that was already present)
+       Also reinforced: ALL doc timestamps are FIXTURES; runtime derives them
+       dynamically per the implementation order locked below.
 
 ## Design principles
 
@@ -235,7 +235,7 @@ Each input ticker gets ONE entry in `expiry_ladder` listing the ≤N expiries we
                                                      //   unknown            : no source available; event_ts set to null
                                                      // Script picks the BEST available source. If sec_filing available, never downgrade.
     "in_window":            true,                  // see derivation rules; date-level "earnings on calendar?"
-    "earnings_in_contract_life": false,            // timing-level: contract life spans event?
+    "earnings_in_contract_life": true,             // expiry 5/22 > event 5/15 → option's life spans event → TRUE
     "quote_snapshot_relative_to_event": "pre_event",  // pre_event | post_event | not_applicable | unknown
                                                       // pre_event       : quote_snapshot_as_of < event_ts (quote sampled BEFORE event)
                                                       // post_event      : quote_snapshot_as_of >= event_ts (quote sampled AT-OR-AFTER event)
