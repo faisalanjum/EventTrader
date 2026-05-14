@@ -45,6 +45,8 @@ from compute_iv_moves import (  # noqa: E402
     load_or_fetch_earnings_cache,
     earnings_cache_as_of_bounds,
     fetch_yahoo_earnings,
+    classify_expiry,
+    compute_expiry_ladder,
     _et_date_from_iso,
     _run_as_of_et_date,
 )
@@ -1215,14 +1217,20 @@ class TestDualRowOrchestration:
         ib, call_log = self._make_orchestrator_stubs(monkeypatch, primary_attrs)
         sem = asyncio.Semaphore(1)
 
-        rows = asyncio.run(
+        result = asyncio.run(
             compute_one(ib, sem, "AAPL", target_dte=30, run_id="test"),
         )
+        rows = result.rows
         assert len(rows) == 1
         assert rows[0].is_primary is True
         # only one call to helper
         assert len(call_log) == 1
         assert call_log[0]["is_primary"] is True
+        # Phase 5: ladder is present and includes the emitted expiry
+        assert isinstance(result.expiry_ladder, list)
+        emitted_expiries = {r.expiry for r in rows}
+        ladder_expiries = {e["expiry"] for e in result.expiry_ladder}
+        assert emitted_expiries.issubset(ladder_expiries)
 
     def test_dual_row_pre_earnings_primary(self, monkeypatch):
         """AMC-on-expiry-day: primary=pre_earnings → secondary=post_earnings."""
@@ -1238,9 +1246,10 @@ class TestDualRowOrchestration:
         ib, call_log = self._make_orchestrator_stubs(monkeypatch, primary_attrs)
         sem = asyncio.Semaphore(1)
 
-        rows = asyncio.run(
+        result = asyncio.run(
             compute_one(ib, sem, "AAPL", target_dte=78, run_id="test"),
         )
+        rows = result.rows
         assert len(rows) == 2
         primary, secondary = rows
         assert primary.is_primary is True
@@ -1251,6 +1260,13 @@ class TestDualRowOrchestration:
         assert call_log[1]["expiry"] == "20260807"
         # primary has diagnostic noting the secondary
         assert any("dual-row" in d for d in primary.diagnostics)
+        # Phase 5: both emitted expiries must appear in the ladder, with their row_ids
+        ladder_by_exp = {e["expiry"]: e for e in result.expiry_ladder}
+        for row in rows:
+            assert row.expiry in ladder_by_exp
+            entry = ladder_by_exp[row.expiry]
+            assert entry["selected_for_compute"] is True
+            assert row.row_id in entry["row_ids"]
 
     def test_dual_row_post_earnings_primary(self, monkeypatch):
         """Monthly captures event → primary=post_earnings, secondary=pre_earnings."""
@@ -1265,9 +1281,10 @@ class TestDualRowOrchestration:
         ib, call_log = self._make_orchestrator_stubs(monkeypatch, primary_attrs)
         sem = asyncio.Semaphore(1)
 
-        rows = asyncio.run(
+        result = asyncio.run(
             compute_one(ib, sem, "AAPL", target_dte=99, run_id="test"),
         )
+        rows = result.rows
         # secondary is "last expiry before event AND after today" — depends on today's date
         # Without freezing today, just verify orchestration semantics:
         # either 1 (no candidate before event) or 2 (candidate found) rows.
@@ -1289,9 +1306,10 @@ class TestDualRowOrchestration:
         ib, call_log = self._make_orchestrator_stubs(monkeypatch, primary_attrs)
         sem = asyncio.Semaphore(1)
 
-        rows = asyncio.run(
+        result = asyncio.run(
             compute_one(ib, sem, "AAPL", target_dte=78, run_id="test"),
         )
+        rows = result.rows
         assert len(rows) == 1
         assert len(call_log) == 1
 
@@ -1798,3 +1816,298 @@ class TestEarningsCacheAsOfBounds:
         assert oldest == "2026-05-09T08:00:00+00:00"
         # Range is exposed via newest_fetched_at
         assert newest == "2026-05-14T18:00:00+00:00"
+
+
+# ---------------------------------------------------------------------------
+# Phase 5 — expiry_ladder
+# ---------------------------------------------------------------------------
+
+class TestClassifyExpiry:
+    """classify_expiry: monthly / weekly / unknown."""
+
+    def test_monthly_third_friday(self):
+        # Jul 17 2026 is the 3rd Friday → monthly
+        assert classify_expiry("20260717") == "monthly"
+
+    def test_weekly_other_friday(self):
+        # Jul 24 2026 is a Friday but not 3rd Friday → weekly
+        assert classify_expiry("20260724") == "weekly"
+
+    def test_weekly_first_friday(self):
+        # Jul 3 2026 is a Friday → weekly
+        assert classify_expiry("20260703") == "weekly"
+
+    def test_unknown_wednesday(self):
+        # Quarterly end Wed: 2026-06-30 (Tue actually; pick a Wed)
+        # Wed Jun 17 2026 — not a Friday
+        assert classify_expiry("20260617") == "unknown"
+
+    def test_malformed_returns_unknown(self):
+        assert classify_expiry("BAD") == "unknown"
+        assert classify_expiry("") == "unknown"
+
+
+class TestComputeExpiryLadder:
+    """compute_expiry_ladder builds a ≤max_entries per-ticker view."""
+
+    # A representative chain: 7 expiries from 1 week to ~3 months out.
+    EXPIRIES = {
+        "20260515",  # weekly (Fri)
+        "20260522",  # weekly (Fri)
+        "20260529",  # weekly (Fri)
+        "20260619",  # monthly (3rd Fri Jun)
+        "20260717",  # monthly (3rd Fri Jul)
+        "20260821",  # monthly (3rd Fri Aug)
+        "20260918",  # monthly (3rd Fri Sep)
+        "20261016",  # monthly (3rd Fri Oct)
+    }
+    TODAY = dt.date(2026, 5, 14)
+    OPTIONS_CLOSE_ET = "16:00"
+
+    def _row(self, ticker, expiry, row_id, **kw):
+        r = IVRow(ticker=ticker, run_id="test")
+        r.expiry = expiry
+        r.row_id = row_id
+        for k, v in kw.items():
+            setattr(r, k, v)
+        return r
+
+    def test_empty_chain_yields_empty_ladder(self):
+        ladder = compute_expiry_ladder(
+            all_expirations=set(),
+            today_et=self.TODAY,
+            emitted_rows=[],
+            earnings=None,
+            user_supplied_ts=None,
+            options_close_et=self.OPTIONS_CLOSE_ET,
+            max_entries=7,
+        )
+        assert ladder == []
+
+    def test_caps_at_max_entries_sorted_asc(self):
+        ladder = compute_expiry_ladder(
+            all_expirations=self.EXPIRIES,
+            today_et=self.TODAY,
+            emitted_rows=[],
+            earnings=None,
+            user_supplied_ts=None,
+            options_close_et=self.OPTIONS_CLOSE_ET,
+            max_entries=7,
+        )
+        # 8 candidate expiries → cap at 7
+        assert len(ladder) == 7
+        # Sorted ascending by date
+        dates = [e["expiry"] for e in ladder]
+        assert dates == sorted(dates)
+        # The closest 7 must be the first 7 (no emitted forcing in play)
+        assert dates == ["20260515", "20260522", "20260529",
+                         "20260619", "20260717", "20260821", "20260918"]
+
+    def test_dte_uses_today_et(self):
+        ladder = compute_expiry_ladder(
+            all_expirations={"20260515", "20260522"},
+            today_et=self.TODAY,
+            emitted_rows=[],
+            earnings=None,
+            user_supplied_ts=None,
+            options_close_et=self.OPTIONS_CLOSE_ET,
+            max_entries=7,
+        )
+        by_exp = {e["expiry"]: e for e in ladder}
+        assert by_exp["20260515"]["dte"] == 1
+        assert by_exp["20260522"]["dte"] == 8
+
+    def test_class_field(self):
+        ladder = compute_expiry_ladder(
+            all_expirations={"20260522", "20260717"},
+            today_et=self.TODAY,
+            emitted_rows=[],
+            earnings=None,
+            user_supplied_ts=None,
+            options_close_et=self.OPTIONS_CLOSE_ET,
+            max_entries=7,
+        )
+        by_exp = {e["expiry"]: e for e in ladder}
+        assert by_exp["20260717"]["class"] == "monthly"
+        assert by_exp["20260522"]["class"] == "weekly"
+
+    def test_excludes_already_expired(self):
+        ladder = compute_expiry_ladder(
+            all_expirations={"20260508", "20260515"},  # 08 before today=14
+            today_et=self.TODAY,
+            emitted_rows=[],
+            earnings=None,
+            user_supplied_ts=None,
+            options_close_et=self.OPTIONS_CLOSE_ET,
+            max_entries=7,
+        )
+        expiries = {e["expiry"] for e in ladder}
+        assert "20260508" not in expiries
+        assert "20260515" in expiries
+
+    def test_emitted_expiry_force_included_even_if_farthest(self):
+        # Emitted row uses 20261016 — the farthest expiry, would normally
+        # be cut by max_entries=2 limit.
+        emitted = [self._row("AAPL", "20261016", "AAPL:20261016:non_earnings")]
+        ladder = compute_expiry_ladder(
+            all_expirations=self.EXPIRIES,
+            today_et=self.TODAY,
+            emitted_rows=emitted,
+            earnings=None,
+            user_supplied_ts=None,
+            options_close_et=self.OPTIONS_CLOSE_ET,
+            max_entries=2,
+        )
+        # cap=2: must include the emitted (20261016) PLUS one nearest (20260515).
+        assert len(ladder) == 2
+        expiries = {e["expiry"] for e in ladder}
+        assert "20261016" in expiries
+        # Sorted ascending
+        assert ladder[0]["expiry"] < ladder[1]["expiry"]
+        # The emitted entry is selected_for_compute=True with row_ids
+        by_exp = {e["expiry"]: e for e in ladder}
+        assert by_exp["20261016"]["selected_for_compute"] is True
+        assert by_exp["20261016"]["row_ids"] == ["AAPL:20261016:non_earnings"]
+
+    def test_non_emitted_entries_marked_unselected(self):
+        emitted = [self._row("AAPL", "20260515", "AAPL:20260515:non_earnings")]
+        ladder = compute_expiry_ladder(
+            all_expirations=self.EXPIRIES,
+            today_et=self.TODAY,
+            emitted_rows=emitted,
+            earnings=None,
+            user_supplied_ts=None,
+            options_close_et=self.OPTIONS_CLOSE_ET,
+            max_entries=7,
+        )
+        by_exp = {e["expiry"]: e for e in ladder}
+        assert by_exp["20260515"]["selected_for_compute"] is True
+        # Other entries should be unselected
+        for s in ("20260522", "20260619", "20260717"):
+            if s in by_exp:
+                assert by_exp[s]["selected_for_compute"] is False
+                assert by_exp[s]["row_ids"] == []
+
+    def test_dual_row_both_appear_with_distinct_row_ids(self):
+        # Primary captures post-earnings; secondary is pre-earnings expiry.
+        emitted = [
+            self._row("NVDA", "20260619", "NVDA:20260619:post_earnings"),
+            self._row("NVDA", "20260515", "NVDA:20260515:pre_earnings"),
+        ]
+        ladder = compute_expiry_ladder(
+            all_expirations=self.EXPIRIES,
+            today_et=self.TODAY,
+            emitted_rows=emitted,
+            earnings=None,
+            user_supplied_ts=None,
+            options_close_et=self.OPTIONS_CLOSE_ET,
+            max_entries=7,
+        )
+        by_exp = {e["expiry"]: e for e in ladder}
+        assert by_exp["20260619"]["row_ids"] == ["NVDA:20260619:post_earnings"]
+        assert by_exp["20260515"]["row_ids"] == ["NVDA:20260515:pre_earnings"]
+        assert by_exp["20260619"]["selected_for_compute"] is True
+        assert by_exp["20260515"]["selected_for_compute"] is True
+
+    def test_covers_earnings_and_in_contract_life_when_event_known(self):
+        # Event on 2026-06-15 (Mon), AMC convention → 4:30pm ET. The Jun 19
+        # monthly (Fri) COVERS the event (event_date <= expiry_date) AND its
+        # contract life spans the event (event_ts <= expiry_close_ts).
+        # The May 22 weekly does NOT cover earnings.
+        earnings = {
+            "date": "2026-06-15",
+            "time": "AMC",
+            "source": "yahoo",
+            "fetched_at": "2026-05-14T12:00:00+00:00",
+        }
+        ladder = compute_expiry_ladder(
+            all_expirations={"20260522", "20260619"},
+            today_et=self.TODAY,
+            emitted_rows=[],
+            earnings=earnings,
+            user_supplied_ts=None,
+            options_close_et=self.OPTIONS_CLOSE_ET,
+            max_entries=7,
+        )
+        by_exp = {e["expiry"]: e for e in ladder}
+        assert by_exp["20260619"]["covers_earnings"] is True
+        assert by_exp["20260619"]["earnings_in_contract_life"] is True
+        assert by_exp["20260522"]["covers_earnings"] is False
+        assert by_exp["20260522"]["earnings_in_contract_life"] is False
+
+    def test_covers_earnings_false_when_no_earnings(self):
+        ladder = compute_expiry_ladder(
+            all_expirations={"20260619"},
+            today_et=self.TODAY,
+            emitted_rows=[],
+            earnings=None,
+            user_supplied_ts=None,
+            options_close_et=self.OPTIONS_CLOSE_ET,
+            max_entries=7,
+        )
+        assert ladder[0]["covers_earnings"] is False
+        assert ladder[0]["earnings_in_contract_life"] is False
+
+    def test_amc_on_expiry_day_covers_date_but_not_contract_life(self):
+        # AMC event on 2026-06-19 (3rd Fri = expiry day). event_ts = 4:30pm ET.
+        # expiry_close = 4:00pm ET. covers_earnings=True (same date) but
+        # earnings_in_contract_life=False (event 30 min AFTER expiry close).
+        earnings = {
+            "date": "2026-06-19",
+            "time": "AMC",
+            "source": "yahoo",
+            "fetched_at": "2026-05-14T12:00:00+00:00",
+        }
+        ladder = compute_expiry_ladder(
+            all_expirations={"20260619"},
+            today_et=self.TODAY,
+            emitted_rows=[],
+            earnings=earnings,
+            user_supplied_ts=None,
+            options_close_et=self.OPTIONS_CLOSE_ET,
+            max_entries=7,
+        )
+        entry = ladder[0]
+        assert entry["covers_earnings"] is True   # date-level
+        assert entry["earnings_in_contract_life"] is False  # ts-level — event > close
+
+
+class TestExpiryLadderInArtifactInvariant:
+    """Cross-cutting invariant: for every emitted row, the row's expiry
+    appears in the corresponding ticker's ladder, and the ladder entry
+    references the row's row_id. Verified via the dual-row stub from
+    TestDualRowOrchestration patterns."""
+
+    def test_row_id_resolves_against_ladder(self):
+        # Pure call to compute_expiry_ladder mirrors the orchestrator's
+        # post-emission usage.
+        emitted = [
+            IVRow(ticker="AAPL", run_id="test"),
+            IVRow(ticker="AAPL", run_id="test"),
+        ]
+        emitted[0].expiry = "20260717"
+        emitted[0].row_id = "AAPL:20260717:post_earnings"
+        emitted[0].is_primary = True
+        emitted[1].expiry = "20260515"
+        emitted[1].row_id = "AAPL:20260515:pre_earnings"
+        emitted[1].is_primary = False
+
+        ladder = compute_expiry_ladder(
+            all_expirations={"20260515", "20260522", "20260619", "20260717"},
+            today_et=dt.date(2026, 5, 14),
+            emitted_rows=emitted,
+            earnings=None,
+            user_supplied_ts=None,
+            options_close_et="16:00",
+            max_entries=7,
+        )
+        # Build the row_id → ladder reverse index the predictor would build.
+        row_id_to_entry = {}
+        for entry in ladder:
+            for rid in entry["row_ids"]:
+                row_id_to_entry[rid] = entry
+        for row in emitted:
+            assert row.row_id in row_id_to_entry, (
+                f"Emitted row_id {row.row_id} has no ladder entry — "
+                f"predictor invariant violated"
+            )

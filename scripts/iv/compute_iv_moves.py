@@ -39,6 +39,7 @@ import sys
 import time
 from dataclasses import dataclass, asdict, field
 from pathlib import Path
+from typing import NamedTuple
 
 from zoneinfo import ZoneInfo
 
@@ -789,6 +790,137 @@ def find_last_expiry_before(expirations: set[str], event_date: dt.date,
     return max(cand, key=lambda x: x[1])[0] if cand else None
 
 
+def classify_expiry(expiry_yyyymmdd: str) -> str:
+    """Best-effort monthly/weekly classification.
+
+    - "monthly":  date == third_friday(year, month)         (standard US monthly)
+    - "weekly":   date is a Friday but not the monthly      (PM-settled weekly)
+    - "unknown":  anything else (holiday-shifted, quarterly Wed expiries, etc.)
+    Pure function — extracted for testability."""
+    try:
+        d = dt.datetime.strptime(expiry_yyyymmdd, "%Y%m%d").date()
+    except ValueError:
+        return "unknown"
+    try:
+        tf = third_friday(d.year, d.month)
+    except Exception:
+        return "unknown"
+    if d == tf:
+        return "monthly"
+    if d.weekday() == 4:  # Friday
+        return "weekly"
+    return "unknown"
+
+
+def compute_expiry_ladder(
+    all_expirations: set[str],
+    today_et: dt.date,
+    emitted_rows: list["IVRow"],
+    earnings: dict | None,
+    user_supplied_ts: str | None,
+    options_close_et: str,
+    max_entries: int,
+) -> list[dict]:
+    """Predictor-visible ladder of candidate expiries for one ticker.
+
+    Returns at most `max_entries` dicts, sorted ascending by date. Always
+    includes the expiries that were `selected_for_compute` (primary + any
+    secondary) — even if they would fall outside the first max_entries
+    candidates by date proximity. This guarantees the predictor can resolve
+    every emitted row_id against the ladder.
+
+    Each entry shape:
+      {
+        expiry:                    "YYYYMMDD",
+        dte:                       int,              # from today_et
+        class:                     "monthly" | "weekly" | "unknown",
+        covers_earnings:           bool,             # event_date <= expiry_date (date-level)
+        earnings_in_contract_life: bool,             # event_ts <= expiry_close_ts (ts-level)
+        selected_for_compute:      bool,
+        row_ids:                   list[str],        # rows that reference this expiry
+      }
+
+    NOTE: Pure function — no IBKR calls. All earnings/dates derived from inputs.
+    """
+    parsed: list[tuple[str, dt.date]] = []
+    for s in all_expirations:
+        try:
+            d = dt.datetime.strptime(s, "%Y%m%d").date()
+            if d >= today_et:
+                parsed.append((s, d))
+        except ValueError:
+            continue
+    parsed.sort(key=lambda x: x[1])
+
+    emitted_expiries = {r.expiry for r in emitted_rows if r.expiry}
+
+    # First, take every emitted expiry (they're guaranteed inclusion).
+    selected: list[tuple[str, dt.date]] = []
+    seen: set[str] = set()
+    for s, d in parsed:
+        if s in emitted_expiries:
+            selected.append((s, d))
+            seen.add(s)
+    # Then fill remaining slots with nearest-by-date expiries.
+    for s, d in parsed:
+        if len(selected) >= max_entries:
+            break
+        if s in seen:
+            continue
+        selected.append((s, d))
+        seen.add(s)
+    selected.sort(key=lambda x: x[1])
+
+    # Resolve event timestamp once. event_date is ET (per fix-4 convention).
+    event_ts_iso, _ = derive_event_ts(
+        earnings, MARKET_CONVENTIONS, user_supplied_ts=user_supplied_ts,
+    )
+    event_date = _et_date_from_iso(event_ts_iso)
+    event_ts: dt.datetime | None = None
+    if event_ts_iso:
+        try:
+            event_ts = dt.datetime.fromisoformat(event_ts_iso)
+            if event_ts.tzinfo is None:
+                event_ts = event_ts.replace(tzinfo=dt.timezone.utc)
+        except Exception:
+            event_ts = None
+
+    try:
+        et_h_str, et_m_str = options_close_et.split(":")
+        et_h, et_m = int(et_h_str), int(et_m_str)
+    except (ValueError, AttributeError):
+        et_h, et_m = 16, 0  # fallback to standard close
+
+    rows_by_expiry: dict[str, list[str]] = {}
+    for r in emitted_rows:
+        if r.expiry:
+            rows_by_expiry.setdefault(r.expiry, []).append(r.row_id)
+
+    ladder: list[dict] = []
+    for s, d in selected:
+        cls = classify_expiry(s)
+        covers = (event_date is not None) and (event_date <= d)
+        if event_ts is not None:
+            expiry_close_et = dt.datetime(
+                d.year, d.month, d.day, et_h, et_m, tzinfo=ZoneInfo("US/Eastern"),
+            )
+            expiry_close_ts = expiry_close_et.astimezone(dt.timezone.utc)
+            in_life = event_ts <= expiry_close_ts
+        else:
+            in_life = False
+        rids = rows_by_expiry.get(s, [])
+        ladder.append({
+            "expiry":                    s,
+            "dte":                       (d - today_et).days,
+            "class":                     cls,
+            "covers_earnings":           covers,
+            "earnings_in_contract_life": in_life,
+            "selected_for_compute":      bool(rids),
+            "row_ids":                   list(rids),
+        })
+    return ladder
+
+
 def pick_secondary_expiry(primary: "IVRow", all_expirations: set[str],
                           today: dt.date | None = None) -> str | None:
     """Decide which complementary chain expiry (if any) the dual-row emission
@@ -1126,19 +1258,36 @@ async def _compute_row_for_expiry(
     return row
 
 
+class TickerResult(NamedTuple):
+    """One ticker's output from compute_one.
+
+    rows:          1 or 2 IVRow (per dual-row rules).
+    expiry_ladder: predictor-visible candidate expiries (≤ max_entries),
+                   guaranteed to include every emitted row's expiry.
+    """
+    ticker: str
+    rows: list[IVRow]
+    expiry_ladder: list[dict]
+
+
 async def compute_one(
     ib: IB, sem: asyncio.Semaphore, ticker: str, target_dte: int | None,
     market_data_type: int = 1, run_id: str = "",
     earnings_cache: dict | None = None, run_as_of_iso: str | None = None,
     user_earnings_overrides: dict | None = None,
-) -> list[IVRow]:
-    """Orchestrator. Returns 1 or 2 IVRows:
+) -> TickerResult:
+    """Orchestrator. Returns TickerResult with rows + expiry_ladder.
+
+    rows is 1 or 2 IVRow:
       • 1 row by default
       • 2 rows when earnings creates a pre/post split that warrants dual-row emission:
         - primary.role == pre_earnings → emit a secondary post_earnings row
           using the FIRST chain expiry strictly AFTER event_ts.
         - primary.role == post_earnings → emit a secondary pre_earnings row
           using the LAST chain expiry strictly BEFORE event_ts (and after today).
+
+    expiry_ladder is the Phase 5 predictor-visible candidate set (≤ max_entries).
+    Empty list when ticker-level resolution failed before a chain was retrieved.
     """
     run_as_of_iso = run_as_of_iso or dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
     init_row = IVRow(ticker=ticker, run_id=run_id)
@@ -1153,11 +1302,11 @@ async def compute_one(
         except Exception as e:
             init_row.status = "QUALIFY_FAILED"
             init_row.diagnostics.append(f"{type(e).__name__}: {e}")
-            return [init_row]
+            return TickerResult(ticker=ticker, rows=[init_row], expiry_ladder=[])
         underlying = qualified[0] if qualified else None
         if underlying is None or getattr(underlying, "conId", 0) == 0:
             init_row.status = "NO_CONID"
-            return [init_row]
+            return TickerResult(ticker=ticker, rows=[init_row], expiry_ladder=[])
 
         # 2. Spot
         try:
@@ -1168,7 +1317,7 @@ async def compute_one(
         except Exception as e:
             init_row.status = "SPOT_FAILED"
             init_row.diagnostics.append(f"{type(e).__name__}: {e}")
-            return [init_row]
+            return TickerResult(ticker=ticker, rows=[init_row], expiry_ladder=[])
         spot = None
         for v in (stk_ticker.last, stk_ticker.marketPrice(), stk_ticker.close):
             if v is not None and not math.isnan(v) and v > 0:
@@ -1176,7 +1325,7 @@ async def compute_one(
                 break
         if spot is None:
             init_row.status = "NO_SPOT"
-            return [init_row]
+            return TickerResult(ticker=ticker, rows=[init_row], expiry_ladder=[])
         spot_source = (
             "live" if stk_ticker.marketDataType == 1 and stk_ticker.last and not math.isnan(stk_ticker.last)
             else f"mdt={stk_ticker.marketDataType}"
@@ -1191,10 +1340,10 @@ async def compute_one(
         except Exception as e:
             init_row.status = "CHAIN_FAILED"
             init_row.diagnostics.append(f"{type(e).__name__}: {e}")
-            return [init_row]
+            return TickerResult(ticker=ticker, rows=[init_row], expiry_ladder=[])
         if not chain_params:
             init_row.status = "NO_CHAIN"
-            return [init_row]
+            return TickerResult(ticker=ticker, rows=[init_row], expiry_ladder=[])
         # STANDARD chain only — tradingClass matches ticker, prefer SMART. Avoids
         # weekly variants (e.g., SPYW for SPY) that have their own restricted strike grids.
         std_chains = [p for p in chain_params if p.tradingClass == ticker]
@@ -1215,7 +1364,7 @@ async def compute_one(
         if primary_expiry is None:
             init_row.status = "NO_EXPIRY"
             init_row.diagnostics.append(f"chain_expirations={len(all_expirations)}")
-            return [init_row]
+            return TickerResult(ticker=ticker, rows=[init_row], expiry_ladder=[])
 
     # Ticker-level context resolved. Compute primary row.
     earnings = (earnings_cache or {}).get(ticker)
@@ -1268,9 +1417,29 @@ async def compute_one(
         primary.diagnostics.append(
             f"dual-row: secondary expiry={secondary_expiry} role={secondary.earnings_role}",
         )
-        return [primary, secondary]
+        emitted = [primary, secondary]
+        ladder = compute_expiry_ladder(
+            all_expirations=all_expirations,
+            today_et=_run_as_of_et_date(run_as_of_iso),
+            emitted_rows=emitted,
+            earnings=earnings,
+            user_supplied_ts=user_ts,
+            options_close_et=MARKET_CONVENTIONS["options_market_close_et"],
+            max_entries=DEFAULT_CONFIG["expiry_ladder_max_entries"],
+        )
+        return TickerResult(ticker=ticker, rows=emitted, expiry_ladder=ladder)
 
-    return [primary]
+    emitted = [primary]
+    ladder = compute_expiry_ladder(
+        all_expirations=all_expirations,
+        today_et=_run_as_of_et_date(run_as_of_iso),
+        emitted_rows=emitted,
+        earnings=earnings,
+        user_supplied_ts=user_ts,
+        options_close_et=MARKET_CONVENTIONS["options_market_close_et"],
+        max_entries=DEFAULT_CONFIG["expiry_ladder_max_entries"],
+    )
+    return TickerResult(ticker=ticker, rows=emitted, expiry_ladder=ladder)
 
 
 # ---------------------------------------------------------------------------
@@ -1403,11 +1572,16 @@ async def amain():
         for t in tickers
     ]
     rows: list[IVRow] = []
+    expiry_ladders: dict[str, list[dict]] = {}
     for i, fut in enumerate(asyncio.as_completed(tasks), 1):
         result = await fut
-        # compute_one now returns list[IVRow] (may contain pre + post earnings rows)
-        for r in result:
+        # compute_one returns TickerResult(ticker, rows, expiry_ladder).
+        for r in result.rows:
             rows.append(r)
+        # Phase 5: per-ticker ladder of candidate expiries (≤7). Empty when
+        # ticker resolution failed before chain retrieval.
+        if result.expiry_ladder:
+            expiry_ladders[result.ticker] = result.expiry_ladder
         if i % 50 == 0:
             elapsed = time.time() - t0
             ok = sum(1 for x in rows if x.status == "OK")
@@ -1462,6 +1636,12 @@ async def amain():
         "summary":  summary(rows),
         # === per-ticker rows ===
         "results":  [asdict(r) for r in rows],
+        # === Phase 5: per-ticker expiry ladder ===
+        # For each ticker that resolved a chain, ≤max_entries candidate expiries
+        # the predictor can see (sorted by date asc). Every emitted row's expiry
+        # is guaranteed to appear in its ticker's ladder; row_ids cross-reference
+        # ladder entries → results rows.
+        "expiry_ladders": expiry_ladders,
     }
     out_path.write_text(json.dumps(payload, indent=2, default=str))
     print(f"\nWrote {out_path}", file=sys.stderr)
