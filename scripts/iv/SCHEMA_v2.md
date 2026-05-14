@@ -5,7 +5,14 @@
 **Revision history**:
 - r1 — STALE/data_tier contradiction; missing expiry_ladder; missing row_id; earnings date-window only
 - r2 — fixed 12 issues from review
-- r3 — fixes 9 more issues: envelope omission, Juneteenth wrong-date examples, run_id misleading wording, fallback double-count, Example 3 flag/reject contradictions, "zeroed out" → "set to null", in_window same-day-AMC edge case, explicit pre/post earnings selection rules, removed per-row pit_unsafe noise
+- r3 — fixed 9 more issues: envelope omission, Juneteenth dates, run_id wording, fallback double-count, Example 3 contradictions, "zeroed out" → "set to null", in_window phrasing, explicit pre/post selection rules, removed per-row pit_unsafe noise
+- r4 — fixes 6 final issues:
+       - in_window formula bug (16:30 <= 16:00 fails for AMC-expiry-day): SPLIT into date-window vs timestamp
+       - BMO contract-life wording cleaned (drop confused 09:30 reference)
+       - iv_quality issue_count now counts quote_freshness ≠ fresh (catches unknown)
+       - removed dead enum mentions (live_entitlement_failed, mid_rejected_extreme_spread, earnings_calendar_pit_unsafe)
+       - Example 5 expiry_ladder: 20260619 → 20260618
+       - Example 3 LOW reasoning comment: 2 issues → 3 issues with proper enumeration
 
 ## Design principles
 
@@ -187,13 +194,12 @@ Each input ticker gets ONE entry in `expiry_ladder` listing the ≤N expiries we
   // === TWO separate flag lists ===
   "quality_flags": [                    // ONLY data/quote integrity issues
     /* "wide_spread" | "iv_disagreement" | "atm_distance_high" | "iv_sanitized"
-       | "strike_retry_used" | "multiplier_nonstandard" | "stale_last_rejected"
-       | "live_entitlement_failed" | "mid_rejected_extreme_spread" */
+       | "strike_retry_used" | "multiplier_nonstandard" | "stale_last_rejected" */
   ],
   "context_flags": [                    // semantic context (not defects)
     "includes_earnings_premium"
     /* | "expiry_before_known_earnings" | "amc_expiry_day"
-       | "earnings_just_after_window" | "earnings_calendar_pit_unsafe" */
+       | "earnings_just_after_window" */
   ],
 
   "status":         "OK",               // OK | PARTIAL | NO_QUOTES | NO_CHAIN | NO_EXPIRY
@@ -241,7 +247,7 @@ unknown — any leg:   tick_age_known=false
 ```
 Compute issue_count = number of TRUE conditions among the following INDEPENDENT checks:
   (1) data_tier ≠ live                                      (data tier is NOT live)
-  (2) quote_freshness = stale                                 (any leg tick > threshold)
+  (2) quote_freshness ≠ fresh                                 (stale OR unknown both count as issue)
   (3) any leg mid_source ≠ bid_ask_mid                        (fell back to last)
   (4) iv_disagreement_pp ≥ config.iv_disagreement_warn_pp
   (5) atm_distance_pct ≥ config.atm_distance_warn_pct
@@ -261,29 +267,60 @@ n/a     — status NOT IN (OK, PARTIAL)
 ### Earnings field derivation rules (timing-aware)
 
 ```
-earnings.in_window:
-  Defined relative to event TIMESTAMP, not just date.
-  Let event_ts = earnings_date concatenated with conventional time:
+Let event_ts = earnings_date concatenated with conventional time:
     - AMC: earnings_date @ 16:30 ET (after-market-close window)
     - BMO: earnings_date @ 07:30 ET (before-market-open window)
     - DMH: earnings_date @ 12:00 ET (during-market-hours, rare)
-    - unknown time: earnings_date @ 12:00 ET, BUT flag with context
+    - unknown time: earnings_date @ 12:00 ET, AND set next_time_known=false (flag through diagnostics)
 
-  in_window = (event_ts >  as_of)  AND  (event_ts <= expiry_close_ts)
-  → captures same-day AMC earnings (event_ts > as_of even though dates match)
+Let expiry_close_ts = expiry_date @ 16:00 ET.
+Let as_of = the run timestamp (top-level).
 
-earnings.earnings_in_contract_life:
-  earnings_in_contract_life = (event_ts <= expiry_close_ts)
-  AND (event_ts > option_open_ts_of_this_contract_life)
+────────────────────────────────────────────────────────────────────────
+earnings.in_window  (DATE-LEVEL — "is this earnings in our calendar window?")
+
+  in_window = (event_ts > as_of) AND (earnings_date <= expiry_date)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                                       DATE comparison, NOT timestamp
+
+  → catches AMC on expiry day correctly:
+       AMC event_ts (16:30) > as_of (say 12:00) ✓
+       earnings_date (today) <= expiry_date (today) ✓
+       → in_window = TRUE
+
+────────────────────────────────────────────────────────────────────────
+earnings.earnings_in_contract_life  (TIMESTAMP — "does the option's LIFE span the event?")
+
+  earnings_in_contract_life = (event_ts > as_of) AND (event_ts <= expiry_close_ts)
+                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                                                      TIMESTAMP comparison
 
   Specifically for expiry-day earnings:
-    - AMC on expiry day: event_ts (16:30) > expiry_close_ts (16:00) → in_window=true but in_contract_life=FALSE
-    - BMO on expiry day: event_ts (07:30) < option_open_ts of expiry day (09:30) →
-                          but since contract was alive yesterday's close, earnings IS in life of yesterday's row;
-                          for today's row, in_contract_life=TRUE (the overnight move is captured at open)
-    - DMH on expiry day: in_contract_life=TRUE
+    - AMC on expiry day:
+        event_ts (16:30) <= expiry_close_ts (16:00) → FALSE
+        → in_contract_life = FALSE
+        → option expires BEFORE the announcement; earnings is NOT in the option's life
+    - BMO on expiry day:
+        event_ts (07:30) <= expiry_close_ts (16:00) → TRUE
+        → in_contract_life = TRUE
+        → option was alive overnight; captures the BMO event at next open
+    - DMH on expiry day:
+        event_ts (12:00) <= expiry_close_ts (16:00) → TRUE
+        → in_contract_life = TRUE
+    - earnings BEFORE expiry day (any time):
+        event_ts <= expiry_close_ts → TRUE (event_ts is on an earlier date, well before close)
+        → in_contract_life = TRUE
 
-  This is what makes AMC-on-expiry-day a pre_earnings row and BMO-on-expiry-day a post_earnings row.
+────────────────────────────────────────────────────────────────────────
+SUMMARY OF AMC vs BMO ON EXPIRY DAY:
+
+                          in_window      in_contract_life      Bot interpretation
+                          ───────────    ────────────────      ──────────────────
+  AMC on expiry day        TRUE          FALSE                 calendar says earnings is in window,
+                                                               but the option dies before it →
+                                                               IV does NOT include earnings move
+  BMO on expiry day        TRUE          TRUE                  option's overnight gap captures
+                                                               the BMO move → IV includes it
 ```
 
 ### Pre/post earnings expiry selection rules
@@ -464,9 +501,13 @@ Illiquid small-cap; bid/ask wide, last trade hours old. Distinct from "delayed".
 
   "data_tier":       "live",                 // we DID get live entitlement, just bad quote conditions
   "quote_freshness": "stale",                // call leg tick_age > 300s threshold
-  "iv_quality":      "LOW",                  // 2 issues: stale + wide_spread
+  "iv_quality":      "LOW",                  // 3 issues per derivation rule:
+                                              //   (2) quote_freshness=stale → 1
+                                              //   (3) call leg mid_source ≠ bid_ask_mid (last_stale_rejected) → 1
+                                              //   (6) wide_spread quality_flag (not implied by 1-5) → 1
+                                              //   → issue_count=3 → LOW
 
-  "quality_flags": ["stale_last_rejected", "wide_spread"],   // iv_disagreement_pp 0.68 is BELOW 3.0 threshold → not flagged
+  "quality_flags": ["stale_last_rejected", "wide_spread"],   // iv_disagreement_pp 0.68 < 3.0 threshold → NOT flagged
   "context_flags": [],
   "status": "PARTIAL",
 
@@ -557,8 +598,9 @@ Bot reads: `context_flags includes amc_expiry_day` → KNOWS this row excludes e
       "selected_for_compute": true,
       "row_ids": ["NVDA:20260522:post_earnings"] },
 
-    { "expiry": "20260619", "dte": 36, "dte_fractional": 35.7, "type": "monthly",
-      "distance_from_target_dte_days": 6,
+    { "expiry": "20260618",                                       // Juneteenth-adjusted: nominal 06-19 holiday → actual 06-18
+      "dte": 35, "dte_fractional": 34.7, "type": "monthly",
+      "distance_from_target_dte_days": 5,
       "covers_earnings_event": true, "is_amc_earnings_day": false,
       "selected_for_compute": false,
       "row_ids": [] },
