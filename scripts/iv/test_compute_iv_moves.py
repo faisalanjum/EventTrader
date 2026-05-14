@@ -508,6 +508,14 @@ class TestDeriveDataTier:
     def test_unknown_when_mdt_none(self):
         assert derive_data_tier(None, 4.95, 5.05, 4.99, False) == "unknown"
 
+    def test_live_via_fresh_last_only(self):
+        # Regression: phase 2 originally tagged this case as unknown because
+        # compute_one passed any_last_fresh=None. The bot was MISLABELLING
+        # rows with no bid/ask but a fresh last trade as unknown when they
+        # should be live. Fixed by passing a positive proxy for last.
+        # bid=None, ask=None, last_proxy=1.0 (positive) — fresh-last live data
+        assert derive_data_tier(1, None, None, 1.0, False) == "live"
+
 
 class TestHolidayExpiryPicker:
     """Tier 1.D — handle Juneteenth, Good Friday: actual expiry rolls to

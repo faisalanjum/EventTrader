@@ -552,10 +552,14 @@ async def compute_one(
     observed_mdt = getattr(call_t, "marketDataType", None) if call_t is not None else (
         getattr(put_t, "marketDataType", None) if put_t is not None else None
     )
-    # representative populated check
+    # representative populated check — pass a positive proxy for last if EITHER leg's
+    # mid was derived from a fresh last (mid_source == "last_fresh"). Without this proxy,
+    # rows with no bid/ask but a fresh last would be tagged data_tier=unknown despite
+    # having real live data — bug caught in phase 2 review.
     any_bid = row.call_bid or row.put_bid
     any_ask = row.call_ask or row.put_ask
-    any_last_fresh = None  # we already classified per leg via compute_mid_and_source
+    any_last_fresh = 1.0 if (row.call_mid_source == "last_fresh"
+                             or row.put_mid_source == "last_fresh") else None
     row.data_tier = derive_data_tier(observed_mdt, any_bid, any_ask, any_last_fresh, fell_back_from_live)
 
     # Compute EM
