@@ -46,7 +46,7 @@ Verified live 2026-05-12 against `ibkr-live` MCP, account U5113348, NetLiq 728.7
 | Scanner (619 scan codes) | ✅ | Server-side, no extra sub needed |
 | Options chain enumeration (contract IDs) | ✅ | Returns conIDs by expiry/strike/right |
 | **Options market data / greeks** | ❌ | No OPRA — bid/ask/greeks return `null` |
-| **Index spot** (SPX, VIX) | ⚠️ **STALE** | ⚠️ **NOT REAL-TIME** — returns the **previous-session close** as `last` AND `close` (tell-tale: `last == close`); `bid`/`ask` are `null`. **Do NOT treat as a live index level.** Re-verified 2026-05-12: SPX returned `last=close=7342.18` while live SPY moved -0.4% intraday. Bots: check the new `is_realtime` field on `PriceSnapshot` (added ext-hours-v3) — `false` = snapshot/not-current. To get **real-time** indices, subscribe to **CBOE Streaming Market Indexes ($3.50/mo)** — see §5. |
+| **Index spot** (SPX, VIX) | ⚠️ **DELAYED SNAPSHOT** | ⚠️ **NOT REAL-TIME** — returns a **delayed snapshot that refreshes during session**, NOT a stale previous-session close. `last == close` populates with the same delayed value; `bid`/`ask` are `null`. Verified across 2 sessions: SPX 7342.18 → 7457.21 (+1.6%, tracks SPY×10 ratio); intra-second probe also captured sub-tick moves (7457.85 → 7457.61). **Tell-tale**: `is_realtime: false, market_data_type: 2`. Usable for "rough where SPX is now"; NOT usable for tick-level trading decisions. Subscribe to **CBOE Streaming Market Indexes ($3.50/mo)** for real-time bid/ask — see §5. |
 | **Index historical bars** (SPX, VIX daily + intraday) | ✅ **FREE** | Verified 2026-05-12 via `/ibkr/historical?symbol=SPX&sec_type=IND&exchange=CBOE&freq=1d` → 6 daily bars returned cleanly. 1-min intraday also works (650 bars over 2 days verified). `volume` is `null` (indices have no volume). **CBOE sub NOT needed for historical analysis** — only for the live spot value. |
 | **Canadian stock quotes** (TSE/TSX) | ❌ | No TSX sub — contract resolves, data `null` |
 | **Futures contract lookup with expiry** | ⚠️ | MCP server snake_case bug, see §6 |
@@ -69,7 +69,7 @@ The scanner has **619 scan codes × 152 locations × 1,279 filters**. Most are n
 | `STK.NYSE` | NYSE-listed only |
 | `STK.ARCA` | NYSE Arca (most ETFs live here) |
 | `ETF.EQ.US.MAJOR` | Major equity ETFs (combine with `instrument=STK`) |
-| `STK.NA.TSE` | Toronto Stock Exchange (no quotes, but scanner runs) |
+| `STK.NA.TSE` | Toronto Stock Exchange — scanner endpoint accepts the code but **returns 0 results without paid TSX subscription** (verified 2026-05-13). Contract lookup still works for individual TSX-listed symbols. |
 
 ### 3.2 The 20 scan codes you'll actually use
 
@@ -276,7 +276,9 @@ Historical bars: free regardless. Scanner: server-side, free regardless of feed.
 |-----|---------|------------------|
 | **Futures lookup with expiry** | `get_contract_details(SEC_TYPE=FUT, options={"lastTradeDateOrContractMonth": "..."})` → `Contract.__init__() got an unexpected keyword argument 'last_trade_date_or_contract_month'` | MCP server is sending snake_case to `ib_async`, which expects camelCase. One-line fix in MCP server request handler. |
 | **ETF instrument code rejected** | `instrument_code="ETF.EQ.US"` → `Invalid instrument code` | Use `instrument_code="STK"` with `location_code="ETF.EQ.US.MAJOR"` instead. |
-| **Index get_price returns null** | SPX/VIX `last/bid/ask = null`, no error | Subscription gap (no CBOE feed). Buy index sub OR use SPY/VXX ETF proxy. |
+| **Index get_price returns delayed snapshot (not live, not stale)** | SPX/VIX: `last == close` populate with a delayed value that refreshes during session; `bid`/`ask` always `null`; flagged via `is_realtime: false, market_data_type: 2`. Value tracks the live index (verified 7342.18→7457.21 across two sessions). | Treat as approximate index level, not a tick-precise quote. Use `SPY × 10` as a live S&P proxy if you need tick precision. Subscribe to **CBOE Streaming Market Indexes ($3.50/mo)** for real-time bid/ask. |
+| **Forex (and 24/5 assets) frozen outside NYSE hours** | `EUR.USD`, `USD.JPY`, etc. return `bid/ask: null, is_realtime: false, market_data_type: 2` outside NYSE 04:00–20:00 ET, despite forex trading 24/5 on IDEALPRO (free auto-subscribed). Verified side-by-side: during NYSE window = live bid/ask + `is_realtime: true`; outside = frozen. | **Phase 1 scope limitation, not a bug.** MCP server's `_is_market_open()` gates all asset classes by NYSE calendar. Fix planned in **Phase 2 via `contract.tradingHours` patch** (see `project_ibkr_market_data.md` "Phase 2 unlock" section). Workaround today: use `get_historical_bars` for forex during off-NYSE hours — historical works 24/7. |
+| **Imbalance scans starve under liquidity filter** | `TOP_STOCK_BUY_IMBALANCE_ADV_RATIO` / `TOP_STOCK_SELL_IMBALANCE_ADV_RATIO` with `priceAbove=10,avgVolumeAbove=500000` filter return 0–1 results during regular session (verified 2026-05-13: BUY=1, SELL=0). Same scans WITHOUT the liquidity filter return 2–5 results. | Imbalances live in microcap/illiquid names where the auction is most lopsided. Run these scans **without** `avgVolumeAbove` to get meaningful results. |
 | **Option market data returns null** | Specific option conID via `get_tickers` → all fields null | OPRA not subscribed. |
 | **WSH scanner has no dates** | Returns ticker list only | Cross-reference Yahoo MCP / Neo4j for date+time. |
 | **`get_open_orders` is clientId=1 only** | Won't see orders placed by other clientIds | Documented. Order tools use clientId=1 by default. |
