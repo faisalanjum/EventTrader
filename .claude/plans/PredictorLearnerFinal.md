@@ -559,3 +559,87 @@ The decision questionnaire phase is **complete**. Next phase: implementation pla
 - Same JSON envelope contract as existing DataSubAgents.
 - Triggered on-demand by predictor (live) or learner (any mode) when sector/macro context is needed beyond the bundle's macro_snapshot.
 **Status:** Captured here so it's not lost. Not part of the predictor/learner restructuring scope.
+
+---
+
+## Next Step — Implementation Blueprint Pass (no code yet)
+
+**Decided 2026-05-12 after independent Claude + ChatGPT review.**
+
+### Why this step (not more design questions, not coding yet)
+
+The design is locked. The 42 decisions + 10 FIX-* + 7 CLEANUP-* entries above cover every architectural choice. More design questions would create churn without adding clarity.
+
+But handing this doc directly to a coding bot is risky. The current code has many lesson-related tendrils. The failure mode now is not wrong philosophy; it is **missed callsites, schema drift, broken tests, or half-removed lesson logic.**
+
+**The bridge between locked decisions and clean code is one rigorous implementation blueprint.**
+
+### The next-step instruction (verbatim — to be sent to a fresh Claude session)
+
+> Now do an implementation blueprint pass, not coding.
+>
+> Read `PredictorLearnerFinal.md` and the current codebase. Produce a **file-by-file implementation contract** for the final simplified predictor/learner architecture.
+>
+> For each file/function/test, classify as **KEEP / DELETE / REWRITE / ADD**, with the exact reason and target behavior.
+>
+> Include exact:
+> - `prediction_result.v1` and `learner_result.v1` JSON schemas (field-by-field with types + required/optional).
+> - `prior_reports_context` shape on the bundle.
+> - Validator rules (anti-lazy `≥2 grounded source IDs` + `no_call` two-path contract).
+> - Live timeout fallback behavior (90s soft / 120s ship / 300s hard-kill flow per M4 + CLEANUP-7).
+> - K8s worker / orchestrator boundary per EarningsTrigger.md (separate `earnings-trigger`, `earnings-worker`, `earnings:pipeline` queue; worker invokes `earnings_orchestrator.py` as subprocess; PIT/quarter logic stays in orchestrator).
+> - Test + golden updates (per-file delete/rewrite/keep list across all ~26 lesson-touching tests and ~22 lesson-touching goldens).
+>
+> End with:
+> 1. **Remaining ambiguities**, if any.
+> 2. **Safest implementation order** (stage-by-stage, with validation gate between stages).
+> 3. **Acceptance tests** proving the rewrite is complete.
+> 4. **Grep checks** proving lesson machinery is gone.
+>
+> Do not write code yet.
+
+### Deliverable structure (what the blueprint should contain)
+
+| Section | Purpose |
+|---|---|
+| **Schemas (exact)** | `prediction_result.v1` + `learner_result.v1` + `prior_reports_context` — field-by-field with types, required/optional, examples |
+| **SKILL.md drafts (full text)** | Complete rewritten text for `earnings-prediction/SKILL.md` and `earnings-learner/SKILL.md` |
+| **Validator code spec** | Rule-by-rule logic for the rewritten validator (anti-lazy, no_call two-path, evidence catalog grounding, live runtime IDs) |
+| **Orchestrator surgery** | Function-by-function table: delete / rewrite / keep; with line refs to current `earnings_orchestrator.py` |
+| **Renderer rewrite** | New Section 10 "Prior Reports" bulleted layout (per O2) + how `prior_reports_context` flows through |
+| **K8s pipeline (YAMLs)** | `earnings-trigger` + `earnings-worker` manifests + Redis `earnings:pipeline` queue + KEDA scaler |
+| **Discovery code** | Filesystem glob + error paths + `complete.json` sentinel contract |
+| **Tests** | Per-file table across ~26 lesson-touching test files: delete / rewrite (with new behavior) / keep |
+| **Goldens** | Per-file table across ~22 lesson-touching goldens: regenerate (when) / keep |
+| **Wipe + Obsidian preservation** | Exact `rm` + `mkdir` commands; what's wiped, what's preserved, when this runs |
+| **E2E smoke** | Concrete validation: replay FCX Q1 2026 through the new pipeline + verify all gates pass |
+
+### Each stage in the blueprint has
+
+- **INPUTS** — current files affected
+- **OUTPUTS** — new/changed files
+- **VALIDATION GATE** — the test or grep that proves the stage is done
+- **ROLLBACK** — what to revert if the gate fails
+
+### Iteration pattern
+
+1. I (or a fresh Claude session) draft the blueprint as `ImplementationPlan.md`.
+2. You + ChatGPT review the BLUEPRINT (not more Q&A).
+3. Iterate on the blueprint until both reviewers accept.
+4. Coding bot then executes the blueprint stage-by-stage (each stage = one PR).
+
+### Explicit non-goals for this step
+
+- ❌ More design questions (decisions are locked).
+- ❌ Coding (premature without the blueprint).
+- ❌ Re-evaluating any of the 42 + FIX + CLEANUP decisions (unless the blueprint pass surfaces a genuine implementation impossibility).
+
+### Acceptance criteria for the blueprint itself
+
+A senior engineer reading the blueprint cold should be able to:
+1. Open any file mentioned and know exactly what to delete / rewrite / keep.
+2. Find the exact target JSON schema for every artifact.
+3. See the stage order + validation gates so they can stop at any gate if something breaks.
+4. Run the grep checks at the end to prove no lesson code survived.
+
+Without all four, the blueprint is not done.
