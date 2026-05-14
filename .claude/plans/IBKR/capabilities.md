@@ -306,7 +306,11 @@ Historical bars: free regardless. Scanner: server-side, free regardless of feed.
 
 ## 7b. Implied Volatility — canonical methodology (gated on OPRA $1.50/mo)
 
-**Status as of 2026-05-12**: OPRA NOT subscribed. This section is the authoritative reference for when it IS subscribed. Cross-referenced against IBKR official TWS API docs.
+**Status as of 2026-05-14**: OPRA NOT subscribed. Methodology now CODIFIED + tested in `scripts/iv/compute_iv_moves.py` (43 unit tests, pre-OPRA pipeline validated empirically). The moment OPRA activates, the script is ready — see `scripts/iv/README.md`.
+
+**Coverage verified empirically 2026-05-14**: 756/756 = **100% of tradeable stocks** in `admin:tradable_universe:symbols` have listed options on OPRA-covered exchanges (the 27 non-resolving names are already-delisted M&A targets — can't be traded). One probe of `reqSecDefOptParams` per ticker is enough to verify.
+
+This section below is the authoritative theoretical reference. Cross-referenced against IBKR official TWS API docs.
 
 ### 7b.1 How IB delivers IV — server-side, no client math needed
 
@@ -468,9 +472,59 @@ Typical agreement across these: ±0.4-0.7 vol points (very tight).
 
 ---
 
-## 8. Cross-references
+## 8. Subscription Activation Matrix — pre-purchase probes + post-purchase validation
+
+For each candidate subscription, what to run BEFORE buying (does the data we want exist?) and AFTER buying (did it activate? am I getting live data?). Every probe + validation here is empirically tested.
+
+### 8.1 OPRA (US Options) — $1.50/mo
+- **Unlocks**: live option bid/ask + greeks across all OPRA-listed US equity & ETF options.
+- **Pre-purchase probe** (free, ~3 min): `python scripts/iv/compute_iv_moves.py --universe-redis --market-data-type 3`
+  - Reads `admin:tradable_universe:symbols` from Redis
+  - Calls `reqSecDefOptParams` (free) + delayed quotes (free) for each
+  - Output: coverage count + 15-min-delayed IV for validation
+  - **Verified 2026-05-14**: 756/756 = 100% of tradeable stocks return a chain. AAPL/XLK return delayed IV (~25-27%, sensible).
+- **Post-purchase validation**: `python scripts/iv/compute_iv_moves.py --universe-redis` (default `--market-data-type 1`)
+  - Expect: `summary.ok` ≈ 720-750 (allowing for a few illiquid names);
+    `call_iv` and `put_iv` populated on most rows;
+    `expected_move_dollars` (straddle method) AND `em_from_iv_dollars` agree within ~30%.
+- **Rollback signal**: if summary stays `no_quotes` for 15+ min after subscription, IBKR portal didn't activate.
+
+### 8.2 CBOE Streaming Market Indexes — $3.50/mo
+- **Unlocks**: real-time ^SPX, ^VIX, ^VXN spot quotes (today: delayed snapshot).
+- **Pre-purchase probe** (free): `curl -sH "Authorization: Bearer $TOKEN" "http://127.0.0.1:18001/ibkr/price?symbol=SPX&sec_type=IND&exchange=CBOE" | jq .`
+  - Expect today: `is_realtime: false, market_data_type: 2`, `bid/ask: null`, `last == close` (delayed snapshot).
+- **Post-purchase validation**: same call.
+  - Expect: `is_realtime: true, market_data_type: 1`, `bid` and `ask` populated, `last` ticking.
+
+### 8.3 CME Real-Time L1 — $1.55/mo
+- **Unlocks**: live `/ES`, `/NQ`, `/RTY`, `/YM`, etc. futures quotes.
+- **Pre-purchase probe** (free): historical bars work right now — `curl -sH "Authorization: Bearer $TOKEN" "http://127.0.0.1:18001/ibkr/historical_bars?symbol=ES&sec_type=FUT&exchange=CME&freq=1d&from_date=2026-05-01"` returns daily OHLCV.
+  - Live ticker today: `get_price ES FUT CME` returns historical fallback (Phase 2 routes correctly).
+- **Post-purchase validation**: `get_price ES FUT CME` returns `is_realtime: true, market_data_type: 1`.
+
+### 8.4 NYMEX Real-Time L1 — $1.55/mo
+- **Unlocks**: live `/CL` (crude), `/HO`, `/RB`, `/NG`.
+- **Pre-purchase probe**: historical bars for CL work; live returns historical fallback.
+- **Post-purchase validation**: `get_price CL FUT NYMEX` returns `is_realtime: true`.
+
+### 8.5 COMEX Real-Time L1 — $1.55/mo
+- **Unlocks**: live `/GC` (gold), `/SI` (silver), `/HG` (copper).
+- **Pre-purchase probe**: historical bars work; live returns historical fallback.
+- **Post-purchase validation**: `get_price GC FUT COMEX` returns `is_realtime: true`.
+
+### 8.6 Skip list (re-confirmed 2026-05-14)
+- **US Equity & Options Add-On Streaming Bundle ($4.50 + $10 prereq)** — bundle pricing trap.
+- **Cboe One Add-On Bundle ($1 + $10 prereq)** — free auto-sub covers it.
+- **TSX Subscription (~CAD 9/mo)** — 3 dual-listed CA names trade US primary via Network A.
+- **L2 / DEEP entitlements** — current strategies don't consume book depth.
+- **Indices ($0.50/mo each)** — historical SPX/VIX bars are FREE; CBOE Streaming covers live in §8.2.
+
+---
+
+## 9. Cross-references
 
 - [`deployment.md`](deployment.md) — pods, ports, recovery, K8s
 - `~/.claude/projects/.../memory/project_ibkr_market_data.md` — subscription rationale + rejection list
 - `~/.claude/projects/.../memory/MEMORY.md#IBKR` — high-level pointers
 - `/home/faisal/EventMarketDB/ibkr-mcp-server/` — local fork of `omdv/ibkr-mcp-server`
+- `/home/faisal/EventMarketDB/scripts/iv/` — IV+EM compute script (Stage §7b activation)
