@@ -219,14 +219,23 @@ get_historical_bars(
 
 ## 5. Subscription Gates — What buys what
 
-### Currently active (verified 2026-05-12)
+### Currently active (verified 2026-05-14)
 
 | Feed | Cost/mo USD | Unlocks |
 |------|--------:|---------|
 | **NASDAQ (Network C/UTP)(NP,L1)** | $1.50 | Live bid/ask for NASDAQ-listed stocks (AAPL, MSFT, NVDA…) |
 | **NYSE (Network A/CTA)(NP,L1)** | $1.50 | Live bid/ask for NYSE-listed stocks (JPM, V, WMT…) |
 | **Network B (NP,L1)** | $1.50 | Live bid/ask for NYSE Arca/AMEX/BATS/IEX (SPY, ETFs, CBOE) |
-| | **$4.50** | **TOTAL — covers 100% of Neo4j ticker universe** |
+| **OPRA (US Options Exchanges)(NP,L1)** | $1.50 | Live bid/ask + greeks for ALL US-listed options. Verified live 2026-05-14 09:50 ET — AAPL $295C: bid 3.80 / ask 4.00 / delta 0.669 / IV 33.6% / `marketDataType=1`. **Waived if monthly options commissions ≥ $20**. |
+| | **$6.00** | **TOTAL — 100% Neo4j universe + 100% IV coverage** |
+
+### Free L2 add-ons activated 2026-05-14 (no cost, pure upside)
+
+| Feed | Cost | What it adds beyond L1 |
+|------|--------:|---------|
+| **IEX Depth of Book (NP,L2)** | $0 (waived) | Order-book depth on IEX. Useful for any future flow-imbalance / institutional-vs-retail research. |
+| **ICE Futures US — Gold and Silver (L2)** | $0 (waived) | Depth on ZG/YG (gold), ZI/YI (silver) — these are ICE-traded, NOT the more-liquid COMEX /GC /SI. Free, future-ready. |
+| **ICE Futures US — Digital Asset Futures (L2)** | $0 (waived) | Depth on ICE-listed Bitcoin futures. NOT the same as PAXOS crypto spot. Free, future-ready. |
 
 **Universe coverage breakdown** (re-verified against Neo4j 2026-05-14):
 
@@ -244,13 +253,14 @@ Free auto-subscribed (per-contract `tradingHours` gate LIVE in `ext-hours-v4`, 2
 
 | Feed | Cost | Unlocks |
 |------|--------:|---------|
-| IDEALPRO FX | $0 | Real-time bid/ask 24/5 — EUR/USD, USD/JPY, GBP/USD, … |
-| IDEAL FX | $0 | Additional FX routing |
+| IDEALPRO FX | $0 | Real-time bid/ask 24/5 — EUR/USD, USD/JPY, GBP/USD, … **institutional-grade**, min order USD 25k |
+| IDEAL FX *(odd-lot variant — NOT subscribed)* | $0 | Sub-$25k retail order quotes; spreads SLIGHTLY wider than IDEALPRO. Skip — IDEALPRO covers what we need. |
 | PAXOS Cryptocurrency | $0 | BTC, ETH, LTC top-of-book |
 | US + EU Bond Quotes (L1+L2) | $0 | CUSIP-level bond quotes |
 | Korean Exchange (NP,L1) | $0 | Korean equity quotes (low priority) |
 | Alternative European Equities (L1) | $0 | European alt-venue equities |
 | US Mutual Funds (NP,L1) | $0 | Mutual fund NAVs |
+| **IBKR-PRO BBO** (auto) | $0 | BBO across BATS/BYX/EDGX/EDGEA/IEX. Partial overlap with Network B; serves as redundancy. |
 
 ### Future subscription candidates (NOT active — decide individually)
 
@@ -259,7 +269,7 @@ User asked these be flagged so future bots / planning sessions know what's avail
 | Subscription | Cost/mo USD | When to add | Agent value |
 |---|--------:|---|---|
 | **CBOE Streaming Market Indexes (NP)** | **$3.50** | When agents need real-time **^VIX, ^SPX, ^VXN** for regime detection. Currently `macro_snapshot.py` pulls these via yfinance (delayed/EOD). **STRONG candidate.** Note: this sub is for the LIVE spot value only — historical SPX/VIX bars are ALREADY FREE via `get_historical_bars` (verified 2026-05-12; daily AND 1-min intraday both work without any sub). So if your only need is historical backtest/PIT analysis, do NOT buy this. | **High** — fear index + spot S&P real-time = critical for any quant strategy |
-| **OPRA (US Options Exchanges)(NP,L1)** | **$1.50** | When predictor/learner consumes options data (ATM straddle, IV, Greeks, implied-move). Verified 2026-05-12 by grep: zero refs in production code. **DO NOT subscribe speculatively.** Re-grep `.claude/skills/earnings-*` before adding. Fee waived if ≥USD 20/mo options commissions. **Why OPRA is the architecturally correct choice for universe IV coverage**: CBOE Streaming Market Indexes ($3.50) only publishes ~25 named single-stock IV indexes (VXAPL/VXAMZN/VXGS/...) — a marketing product, NOT scalable. OPRA delivers raw option quotes for ALL US optionable names (~10,000), letting us compute IV for ALL 790 Neo4j tickers + any future ticker via the existing pattern `get_filtered_options_tickers(symbol, delta≈0.50)` → `implied_move = (atm_call.mid + atm_put.mid) / stock_price`. CBOE Indexes ($3.50) is ORTHOGONAL — gives VIX/SPX macro level, NOT per-stock IV. To cover the universe: OPRA $1.50, not CBOE $3.50. Both, if you want macro VIX too. | **HIGH** when wired — universal IV |
+| ~~OPRA (US Options Exchanges)~~ | ~~$1.50~~ | **ACTIVATED 2026-05-14** — see "Currently active" table above. |
 | **CME Real-Time (NP,L1)** | $1.55 | When agents need /ES premarket S&P futures direction or cross-asset signals. Fee waived at ≥USD 20/mo futures commissions. | Medium — premarket regime signal |
 | **NYMEX Real-Time (NP,L1)** | $1.55 | When agents need /CL crude oil for energy sector / XLE context. Waived at ≥USD 20 futures commissions. | Low-medium — energy-specific |
 | **COMEX Real-Time (NP,L1)** | $1.55 | When agents need /GC gold for safe-haven / inflation signal. Waived at ≥USD 20 futures commissions. | Low-medium — macro safe-haven |
@@ -280,6 +290,23 @@ Historical bars: free regardless. Scanner: server-side, free regardless of feed.
 
 **Full rationale + waiver math + funding-gate notes**: see [`project_ibkr_market_data.md`](../../../.claude/projects/-home-faisal-EventMarketDB/memory/project_ibkr_market_data.md) in memory.
 
+### 5b. Already have, NOT currently consumed (audit, for future-bot awareness)
+
+These auto-subscribed / free feeds are LIVE but nothing in production pulls from them. Listed so future bots considering new features know what's already free.
+
+| Feed | Cost | Status | Could be useful for |
+|------|------:|--------|---------------------|
+| **IDEALPRO FX** | $0 | LIVE, unused | USD-strength macro signal; predictor never reads forex (grep verified) |
+| **PAXOS Cryptocurrency** | $0 | LIVE, unused | BTC correlation as risk regime |
+| **US + EU Bond Quotes (L1+L2)** | $0 | LIVE, unused | CUSIP-level bond quotes — predictor uses bond ETFs (TLT/SHY/IEF) via Network C instead |
+| **IBKR-PRO BBO** | $0 | LIVE, unused | Partial overlap with Network B; quality redundancy signal |
+| **Korea Exchange / Alt European Equities / US Mutual Funds** | $0 | LIVE, unused | n/a — none of these tickers in our universe |
+| **IEX Depth of Book (L2)** | $0 | LIVE 2026-05-14, unused | Order-book depth on IEX — future flow research |
+| **ICE Futures Gold/Silver (L2)** | $0 | LIVE 2026-05-14, unused | Depth on ZG/YG/ZI/YI (ICE-only, NOT /GC COMEX) |
+| **ICE Futures Digital Asset (L2)** | $0 | LIVE 2026-05-14, unused | ICE-listed BTC futures depth (not same as PAXOS spot) |
+
+No action needed — listed for audit. To consume any of these, point a new feature at the appropriate `get_price` / `get_tickers` / `get_options_chain` MCP path.
+
 ---
 
 ## 6. Known Bugs / Limitations
@@ -292,7 +319,7 @@ Historical bars: free regardless. Scanner: server-side, free regardless of feed.
 | **Forex / 24-5 assets — gate was NYSE-only pre-Phase-2** | Pre-`ext-hours-v3`: `EUR.USD` etc. returned `bid/ask: null, is_realtime: false, market_data_type: 2` outside NYSE 04:00–20:00 ET despite forex trading 24/5. | **Phase 2 SHIPPED (`ext-hours-v4`, 2026-05-14)**: per-contract `is_contract_open()` replaces the NYSE-wide gate; each asset class now uses its own `contract.tradingHours`. Pre-deploy parser empirically validated 25/25 across STK/CASH/FUT/IND. **Post-deploy live re-verification of forex behavior OUTSIDE NYSE hours has NOT been performed** — fall back to `get_historical_bars` if you observe stale data. |
 | **`Ticker.marketDataType` defaults to 1 when no tick received** | ib_async sets the field to `1` (Live) on init and only changes it when IBKR sends a marketDataType tick. A response with `mdt=1` AND `bid/ask/last` all `null` means **no data flowed at all**, NOT "OPRA-live". Empirically observed 2026-05-14 07:30 ET: AAPL option (no OPRA sub) returned `mdt=1` with everything null; AAPL stock (with sub) returned `mdt=1` with populated bid/ask = genuinely live. | Always check `mdt=1 AND (bid OR last is populated)` before treating data as live. Field exposed on both `PriceSnapshot` (Phase 1) and `TickerData` (`ext-hours-v5`, 2026-05-14). |
 | **Imbalance scans starve under liquidity filter** | `TOP_STOCK_BUY_IMBALANCE_ADV_RATIO` / `TOP_STOCK_SELL_IMBALANCE_ADV_RATIO` with `priceAbove=10,avgVolumeAbove=500000` filter return 0–1 results during regular session (verified 2026-05-13: BUY=1, SELL=0). Same scans WITHOUT the liquidity filter return 2–5 results. | Imbalances live in microcap/illiquid names where the auction is most lopsided. Run these scans **without** `avgVolumeAbove` to get meaningful results. |
-| **Option market data returns null** | Specific option conID via `get_tickers` → all fields null | OPRA not subscribed. |
+| ~~Option market data returns null~~ | ~~OPRA not subscribed~~ | **RESOLVED 2026-05-14**: OPRA subscribed. AAPL $295C verified live: bid 3.80 / ask 4.00 / delta 0.669 / IV 33.6%. |
 | **WSH scanner has no dates** | Returns ticker list only | Cross-reference Yahoo MCP / Neo4j for date+time. |
 | **`get_open_orders` is clientId=1 only** | Won't see orders placed by other clientIds | Documented. Order tools use clientId=1 by default. |
 
