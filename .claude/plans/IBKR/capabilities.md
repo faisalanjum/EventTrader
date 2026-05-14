@@ -228,7 +228,19 @@ get_historical_bars(
 | **Network B (NP,L1)** | $1.50 | Live bid/ask for NYSE Arca/AMEX/BATS/IEX (SPY, ETFs, CBOE) |
 | | **$4.50** | **TOTAL — covers 100% of Neo4j ticker universe** |
 
-Free auto-subscribed (usable in Phase 2 / Option B `contract.tradingHours` patch):
+**Universe coverage breakdown** (re-verified against Neo4j 2026-05-14):
+
+| Exchange (Neo4j `Company.exchange`) | Stocks | % | Covered by |
+|------------------------------------|------:|--:|------------|
+| `NYS` (NYSE)                        |   457 | 57.4% | Network A |
+| `NAS` (NASDAQ)                      |   335 | 42.1% | Network C |
+| `TSE` (CP, PD, QSR — dual-listed)   |     3 |  0.4% | Network A (US-side) |
+| `BATS` (CBOE Inc itself)            |     1 |  0.1% | Network B |
+| **TOTAL**                           | **796** | **100%** | All 3 feeds |
+
+→ **TSX subscription explicitly NOT needed**: the 3 Canadian dual-listed names (CP, PD, QSR) trade their primary US liquidity via NYSE — Network A covers them. Saves ~CAD 9/mo.
+
+Free auto-subscribed (per-contract `tradingHours` gate LIVE in `ext-hours-v4`, 2026-05-14):
 
 | Feed | Cost | Unlocks |
 |------|--------:|---------|
@@ -277,7 +289,8 @@ Historical bars: free regardless. Scanner: server-side, free regardless of feed.
 | **Futures lookup with expiry** | `get_contract_details(SEC_TYPE=FUT, options={"lastTradeDateOrContractMonth": "..."})` → `Contract.__init__() got an unexpected keyword argument 'last_trade_date_or_contract_month'` | MCP server is sending snake_case to `ib_async`, which expects camelCase. One-line fix in MCP server request handler. |
 | **ETF instrument code rejected** | `instrument_code="ETF.EQ.US"` → `Invalid instrument code` | Use `instrument_code="STK"` with `location_code="ETF.EQ.US.MAJOR"` instead. |
 | **Index get_price returns delayed snapshot (not live, not stale)** | SPX/VIX: `last == close` populate with a delayed value that refreshes during session; `bid`/`ask` always `null`; flagged via `is_realtime: false, market_data_type: 2`. Value tracks the live index (verified 7342.18→7457.21 across two sessions). | Treat as approximate index level, not a tick-precise quote. Use `SPY × 10` as a live S&P proxy if you need tick precision. Subscribe to **CBOE Streaming Market Indexes ($3.50/mo)** for real-time bid/ask. |
-| **Forex (and 24/5 assets) frozen outside NYSE hours** | `EUR.USD`, `USD.JPY`, etc. return `bid/ask: null, is_realtime: false, market_data_type: 2` outside NYSE 04:00–20:00 ET, despite forex trading 24/5 on IDEALPRO (free auto-subscribed). Verified side-by-side: during NYSE window = live bid/ask + `is_realtime: true`; outside = frozen. | **Phase 1 scope limitation, not a bug.** MCP server's `_is_market_open()` gates all asset classes by NYSE calendar. Fix planned in **Phase 2 via `contract.tradingHours` patch** (see `project_ibkr_market_data.md` "Phase 2 unlock" section). Workaround today: use `get_historical_bars` for forex during off-NYSE hours — historical works 24/7. |
+| **Forex / 24-5 assets — gate was NYSE-only pre-Phase-2** | Pre-`ext-hours-v3`: `EUR.USD` etc. returned `bid/ask: null, is_realtime: false, market_data_type: 2` outside NYSE 04:00–20:00 ET despite forex trading 24/5. | **Phase 2 SHIPPED (`ext-hours-v4`, 2026-05-14)**: per-contract `is_contract_open()` replaces the NYSE-wide gate; each asset class now uses its own `contract.tradingHours`. Pre-deploy parser empirically validated 25/25 across STK/CASH/FUT/IND. **Post-deploy live re-verification of forex behavior OUTSIDE NYSE hours has NOT been performed** — fall back to `get_historical_bars` if you observe stale data. |
+| **`Ticker.marketDataType` defaults to 1 when no tick received** | ib_async sets the field to `1` (Live) on init and only changes it when IBKR sends a marketDataType tick. A response with `mdt=1` AND `bid/ask/last` all `null` means **no data flowed at all**, NOT "OPRA-live". Empirically observed 2026-05-14 07:30 ET: AAPL option (no OPRA sub) returned `mdt=1` with everything null; AAPL stock (with sub) returned `mdt=1` with populated bid/ask = genuinely live. | Always check `mdt=1 AND (bid OR last is populated)` before treating data as live. Field exposed on both `PriceSnapshot` (Phase 1) and `TickerData` (`ext-hours-v5`, 2026-05-14). |
 | **Imbalance scans starve under liquidity filter** | `TOP_STOCK_BUY_IMBALANCE_ADV_RATIO` / `TOP_STOCK_SELL_IMBALANCE_ADV_RATIO` with `priceAbove=10,avgVolumeAbove=500000` filter return 0–1 results during regular session (verified 2026-05-13: BUY=1, SELL=0). Same scans WITHOUT the liquidity filter return 2–5 results. | Imbalances live in microcap/illiquid names where the auction is most lopsided. Run these scans **without** `avgVolumeAbove` to get meaningful results. |
 | **Option market data returns null** | Specific option conID via `get_tickers` → all fields null | OPRA not subscribed. |
 | **WSH scanner has no dates** | Returns ticker list only | Cross-reference Yahoo MCP / Neo4j for date+time. |
