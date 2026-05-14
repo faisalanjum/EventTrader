@@ -223,6 +223,10 @@ async def compute_one(
     market_data_type: int = 1, run_id: str = "",
 ) -> IVRow:
     row = IVRow(ticker=ticker, run_id=run_id)
+    # Initialize row_id immediately so EVERY row is citable by evidence catalog,
+    # even early-failure rows (NO_CONID / NO_SPOT / NO_CHAIN / NO_EXPIRY).
+    # Overwritten below once an expiry is picked.
+    row.row_id = f"{ticker}:no_expiry:{row.earnings_role}"
     async with sem:
         # 1. Qualify underlying
         try:
@@ -498,8 +502,16 @@ async def amain():
         "config":                     DEFAULT_CONFIG,
         # === provenance ===
         "data_sources": {
+            # options_chain catalog (reqSecDefOptParams) always returns live catalog — no entitlement gate.
             "options_chain": {"vendor": "IBKR", "via": "reqSecDefOptParams", "live_at_run": True},
-            "quotes":        {"vendor": "IBKR", "via": "reqTickersAsync",    "live_at_run": True},
+            # quotes path actual tier depends on what the user requested.
+            # Phase 2 will refine using observed per-row data_tier; for phase 1 we reflect intent.
+            "quotes": {
+                "vendor":      "IBKR",
+                "via":         "reqTickersAsync",
+                "live_at_run": args.market_data_type == 1,
+                "market_data_type_requested": args.market_data_type,  # 1|2|3|4 — see CLI help
+            },
             # earnings_calendar block appended in phase 4
         },
         # === aggregates ===

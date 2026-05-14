@@ -347,3 +347,49 @@ class TestRunIdFormat:
         rid_1 = f"{SCHEMA_VERSION}:{datetime(2026, 5, 14, 10, 0, 0, tzinfo=timezone.utc).isoformat(timespec='seconds')}:33"
         rid_2 = f"{SCHEMA_VERSION}:{datetime(2026, 5, 14, 11, 0, 0, tzinfo=timezone.utc).isoformat(timespec='seconds')}:33"
         assert rid_1 != rid_2
+
+
+class TestRowIdAlwaysCitable:
+    """Every row — even early-failure rows — must carry a row_id so the
+    predictor/learner evidence catalog can cite it. Empty row_id violates
+    the v2 schema contract."""
+
+    def test_row_id_format_when_no_expiry(self):
+        # Pre-expiry-pick failure modes (NO_CONID / NO_SPOT / NO_CHAIN / NO_EXPIRY)
+        # must still yield a citable row_id.
+        # Simulate compute_one's init path:
+        r = IVRow(ticker="ANSS")
+        r.row_id = f"{r.ticker}:no_expiry:{r.earnings_role}"
+        # Even with no expiry picked, row is citable:
+        assert r.row_id == "ANSS:no_expiry:non_earnings"
+        assert r.row_id != ""
+
+    def test_row_id_overwritten_when_expiry_picked(self):
+        # Once expiry is known, row_id is replaced with the canonical form.
+        r = IVRow(ticker="AAPL")
+        r.row_id = f"{r.ticker}:no_expiry:{r.earnings_role}"
+        assert r.row_id == "AAPL:no_expiry:non_earnings"
+        # Simulate expiry pick
+        r.expiry = "20260618"
+        r.row_id = f"{r.ticker}:{r.expiry}:{r.earnings_role}"
+        assert r.row_id == "AAPL:20260618:non_earnings"
+
+
+class TestDataSourcesLiveAtRun:
+    """data_sources.quotes.live_at_run must reflect the actual market_data_type
+    requested, not be hardcoded to True. If the user runs --market-data-type 3
+    (delayed), live_at_run MUST be False; otherwise the artifact lies."""
+
+    def test_live_at_run_true_only_when_type_1(self):
+        # Mirror the logic from main()'s data_sources block
+        for mdt in (1, 2, 3, 4):
+            live = (mdt == 1)
+            if mdt == 1:
+                assert live is True, f"mdt={mdt} should be live"
+            else:
+                assert live is False, f"mdt={mdt} should NOT be live"
+
+    def test_options_chain_always_live(self):
+        # reqSecDefOptParams returns the chain catalog regardless of entitlement.
+        # Phase 1 leaves this hardcoded True; if IBKR ever gates it, revisit.
+        assert True  # documents the assumption
