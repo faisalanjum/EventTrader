@@ -7,12 +7,16 @@
 - r2 — fixed 12 issues from review
 - r3 — fixed 9 more issues: envelope omission, Juneteenth dates, run_id wording, fallback double-count, Example 3 contradictions, "zeroed out" → "set to null", in_window phrasing, explicit pre/post selection rules, removed per-row pit_unsafe noise
 - r4 — fixed 6 issues (AMC formula, BMO wording, freshness=unknown, dead enums, Example 5 date, Example 3 reasoning)
-- r5 — CRITICAL: separates run time from quote-snapshot time
-       Predictor runs at 16:35 after 8-K AMC release; option quotes are frozen from 16:00 pre-release.
-       Bot MUST know the IV snapshot is pre-event even though the script run is post-event.
-       Added per-row: quote_snapshot_as_of, quote_snapshot_source
-       Added per earnings: event_ts (explicit), event_ts_source, quote_snapshot_relative_to_event
-       Updated all derivation rules to use the right timestamp for each question
+- r5 — CRITICAL: separates run time from quote-snapshot time; adds quote_snapshot_as_of, event_ts, quote_snapshot_relative_to_event
+- r6 — fixes 7 final review issues:
+       - examples updated with r5 fields (were teaching wrong invariant)
+       - run_id timestamp aligned with run_as_of in all examples
+       - quote_snapshot_as_of clarified as EFFECTIVE market time, not IBKR receive time
+       - "unknown" added to quote_snapshot_relative_to_event enum
+       - CRITICAL: includes_earnings_premium defined as (in_contract_life=TRUE AND qs_rel=pre_event);
+         pre_event ALONE was incorrectly implying premium inclusion
+       - post_event_snapshot context flag added (IV-crush warning)
+       - event_ts_source precedence rules added (sec_filing > user_supplied > yahoo_conventional > unknown)
 
 ## Design principles
 
@@ -34,7 +38,7 @@
 ```jsonc
 {
   "schema_version": "iv_moves.v2",
-  "run_id":         "iv_moves.v2:2026-05-14T13:30:00Z:33",  // {schema}:{run_as_of}:{clientId} — UNIQUE PER RUN. Stable within one run for citing rows; NOT stable across re-runs (timestamp varies).
+  "run_id":         "iv_moves.v2:2026-05-14T20:35:00Z:33",  // {schema}:{run_as_of}:{clientId} — UNIQUE PER RUN. Stable within one run for citing rows; NOT stable across re-runs (timestamp varies).
   "run_as_of":      "2026-05-14T20:35:00Z",  // WHEN THE SCRIPT RAN (e.g., 16:35 ET = 20:35 UTC, post-market for predictor use)
                                               // Distinct from per-row `quote_snapshot_as_of` which is when the QUOTE represents.
                                               // Predictor running at 16:35 after 8-K release at 16:30 has run_as_of=16:35 but
@@ -152,14 +156,15 @@ Each input ticker gets ONE entry in `expiry_ladder` listing the ≤N expiries we
   "spot_source":    "live",            // live | delayed | frozen | historical_close
 
   // === time provenance (NEW in r5 — separates run time from quote time) ===
-  "quote_snapshot_as_of":  "2026-05-14T20:00:00Z",   // when the option quotes ACTUALLY represent
-                                                      // (e.g., 16:00 ET frozen close even if run_as_of=16:35 ET)
+  "quote_snapshot_as_of":  "2026-05-14T20:00:00Z",   // EFFECTIVE MARKET TIME the option quotes represent.
+                                                      // NOT IBKR receive-time. Specifically:
+                                                      //   live_tick      → effective ≈ ticker.time (IBKR tick timestamp)
+                                                      //   delayed_tick   → effective ≈ ticker.time - 15min (the lag IBKR applies)
+                                                      //                    (use IBKR's explicit effective timestamp if surfaced; else estimate)
+                                                      //   frozen_close   → effective = last live tick time (often previous session close)
+                                                      //   delayed_frozen → effective = frozen-snapshot's last refresh (15-min stale at freeze)
+                                                      //   unknown        → set to null + flag in diagnostics
   "quote_snapshot_source": "live_tick",                // live_tick | delayed_tick | frozen_close | delayed_frozen | unknown
-                                                       // live_tick     : ticker.time within freshness window, mdt=1
-                                                       // delayed_tick  : mdt=3, fresh tick within delayed stream
-                                                       // frozen_close  : mdt=2, last live tick (often previous close)
-                                                       // delayed_frozen: mdt=4, delayed-snapshot
-                                                       // unknown       : ticker.time absent, can't infer
 
   // === expiry classification ===
   "expiry":         "20260522",
@@ -223,17 +228,24 @@ Each input ticker gets ONE entry in `expiry_ladder` listing the ≤N expiries we
     "next_date":            "2026-05-15",
     "next_time":            "AMC",                // AMC | BMO | DMH | unknown
     "next_time_source":     "yahoo",              // origin of the AMC/BMO classification
-    "event_ts":             "2026-05-15T20:30:00Z",  // EXPLICIT timestamp; derived from next_date + conventional time
-    "event_ts_source":      "yahoo_conventional",    // sec_filing | yahoo_conventional | user_supplied | unknown
-                                                     // sec_filing  : timestamp from actual 8-K filing time (highest fidelity)
-                                                     // yahoo_conventional : derived from date + AMC/BMO conventional time
-                                                     // user_supplied: passed via CLI override
+    "event_ts":             "2026-05-15T20:30:00Z",  // EXPLICIT timestamp; precedence below
+    "event_ts_source":      "yahoo_conventional",    // PRECEDENCE (highest → lowest fidelity):
+                                                     //   sec_filing         : from actual 8-K accepted/filed timestamp (BEST)
+                                                     //   user_supplied      : caller passed via CLI/API override
+                                                     //   yahoo_conventional : date + AMC/BMO heuristic (16:30 / 07:30 / 12:00 ET)
+                                                     //   unknown            : no source available; event_ts set to null
+                                                     // Script picks the BEST available source. If sec_filing available, never downgrade.
     "in_window":            true,                  // see derivation rules; date-level "earnings on calendar?"
-    "earnings_in_contract_life": false,            // timing-level: contract spans event?
-    "quote_snapshot_relative_to_event": "pre_event",  // pre_event | post_event | not_applicable
-                                                      // pre_event  : quote_snapshot_as_of < event_ts → IV reflects forthcoming event
-                                                      // post_event : quote_snapshot_as_of >= event_ts → IV is post-event vol
-                                                      // not_applicable : no earnings in scope
+    "earnings_in_contract_life": false,            // timing-level: contract life spans event?
+    "quote_snapshot_relative_to_event": "pre_event",  // pre_event | post_event | not_applicable | unknown
+                                                      // pre_event       : quote_snapshot_as_of < event_ts (quote sampled BEFORE event)
+                                                      // post_event      : quote_snapshot_as_of >= event_ts (quote sampled AT-OR-AFTER event)
+                                                      // not_applicable  : no earnings in scope (no event_ts)
+                                                      // unknown         : event_ts or quote_snapshot_as_of is null/unreliable
+                                                      // CAVEAT: pre_event does NOT alone imply "IV includes earnings premium"!
+                                                      // Premium inclusion requires BOTH:
+                                                      //   earnings_in_contract_life=TRUE  AND  qs_rel_to_event=pre_event
+                                                      // See `includes_earnings_premium` context flag derivation below.
     "calendar_source":      "yahoo",
     "calendar_as_of":       "2026-05-14T08:00:00Z",
     "calendar_pit_safe":    false                  // backtests MUST gate on top-level data_sources.earnings_calendar.pit_safe
@@ -332,13 +344,42 @@ earnings.earnings_in_contract_life  (TIMESTAMP — "does the option's LIFE span 
 ────────────────────────────────────────────────────────────────────────
 earnings.quote_snapshot_relative_to_event  (CRITICAL for post-market predictor use)
 
-  pre_event   if quote_snapshot_as_of <  event_ts → IV reflects forthcoming event
-  post_event  if quote_snapshot_as_of >= event_ts → IV is post-event vol
-  not_applicable  if no earnings in scope
+  pre_event       if quote_snapshot_as_of <  event_ts  (quote sampled BEFORE event)
+  post_event      if quote_snapshot_as_of >= event_ts  (quote sampled AT-OR-AFTER event)
+  not_applicable  if no earnings in scope (no event_ts in this row's earnings context)
+  unknown         if quote_snapshot_as_of is null OR event_ts is null (e.g., event_ts_source=unknown)
 
   → predictor at run_as_of=16:35 with quote_snapshot_as_of=16:00 and event_ts=16:30:
       16:00 < 16:30 → "pre_event"
-      → bot reads IV correctly as forward-looking (includes earnings premium)
+      → bot knows the quote was sampled before the event;
+        TO determine whether that means IV INCLUDES the earnings premium,
+        bot must ALSO check earnings_in_contract_life — see derivation below
+
+────────────────────────────────────────────────────────────────────────
+CONTEXT FLAG DERIVATION (semantic flags, not data-integrity issues):
+
+  includes_earnings_premium = (earnings_in_contract_life == TRUE)
+                              AND (quote_snapshot_relative_to_event == "pre_event")
+                              ─────────────────────────────────────────────────────
+                              BOTH required:
+                                in_contract_life=TRUE  → option's life spans event (can capture it)
+                                qs_rel=pre_event       → quote sampled pre-event (premium not yet realized)
+                              Either FALSE → IV does NOT have actionable earnings premium.
+
+  post_event_snapshot       = (quote_snapshot_relative_to_event == "post_event")
+                              IV may have already crushed after the event.
+                              Bot should NOT treat as pre-event expected move.
+
+  amc_expiry_day            = earnings event is AMC on the row's expiry date
+                              (set as context flag for transparency even though redundant
+                               with in_contract_life=FALSE)
+
+  expiry_before_known_earnings = (in_window == TRUE) AND (in_contract_life == FALSE)
+                                 Note: AMC-on-expiry-day is a sub-case of this.
+
+  earnings_just_after_window   = (in_window == FALSE) AND
+                                 (earnings_date <= expiry_date + config.earnings_just_after_window_days)
+                                 Earnings is just AFTER the picked expiry — IV understates true move.
 
 ────────────────────────────────────────────────────────────────────────
 SUMMARY OF AMC vs BMO ON EXPIRY DAY (run BEFORE the event):
@@ -414,10 +455,22 @@ multiplier_nonstandard         — multiplier ≠ 100 (post-split adjusted contr
 ### `context_flags` catalog (semantic context — NOT defects)
 
 ```
-includes_earnings_premium      — earnings_in_contract_life=true; the row's EM contains the event
-expiry_before_known_earnings   — earnings in_window=true BUT earnings_in_contract_life=false (AMC-on-expiry case)
-amc_expiry_day                 — picked expiry IS the AMC earnings day
-earnings_just_after_window     — earnings within config.earnings_just_after_window_days AFTER expiry
+includes_earnings_premium      — (in_contract_life=TRUE AND qs_rel_to_event=pre_event)
+                                  IV reflects forthcoming earnings; option's life captures it.
+                                  ⚠️ NOT just "pre_event"! Both conditions required.
+post_event_snapshot            — quote_snapshot_relative_to_event=post_event
+                                  IV may have crushed after the event. Bot should NOT treat
+                                  as pre-event expected move.
+expiry_before_known_earnings   — in_window=TRUE AND in_contract_life=FALSE
+                                  Earnings is on the calendar but option dies before it.
+                                  (AMC-on-expiry-day is a sub-case.)
+amc_expiry_day                 — earnings event is AMC on the row's expiry date
+                                  (Specific sub-case of expiry_before_known_earnings; flagged for
+                                  transparency.)
+earnings_just_after_window     — in_window=FALSE AND earnings within
+                                  config.earnings_just_after_window_days AFTER expiry.
+                                  IV understates true move; the event won't realize during the
+                                  contract life but the bot should know it's close.
 // (earnings_calendar_pit_unsafe REMOVED in r3: pit_safe flag lives in top-level data_sources block.
 //  Backtest/historical mode reads `data_sources.earnings_calendar.pit_safe` and gates on it.
 //  Per-row flagging when ALL Yahoo runs are pit_safe=false adds zero signal; spams every row.)
@@ -431,9 +484,11 @@ earnings_just_after_window     — earnings within config.earnings_just_after_wi
 {
   "schema_version": "iv_moves.v2",
   "row_id":         "AAPL:20260618:non_earnings",
-  "run_id":         "iv_moves.v2:2026-05-14T13:30:00Z:33",
+  "run_id":         "iv_moves.v2:2026-05-14T17:30:00Z:33",
 
   "ticker": "AAPL", "spot": 297.34, "spot_source": "live",
+  "quote_snapshot_as_of":  "2026-05-14T17:29:58Z",     // mid-session live tick, ~2s before run
+  "quote_snapshot_source": "live_tick",
   "expiry": "20260618",                              // Juneteenth-adjusted: nominal 06-19 → actual 06-18 (Thursday)
   "is_primary": true, "earnings_role": "non_earnings",
   "dte": 35, "dte_fractional": 34.7,
@@ -454,7 +509,9 @@ earnings_just_after_window     — earnings within config.earnings_just_after_wi
   "quality_flags": [], "context_flags": [], "status": "OK",
 
   "earnings": { "next_date": "2026-07-31", "next_time": "AMC", "next_time_source": "yahoo",
+                "event_ts": "2026-07-31T20:30:00Z", "event_ts_source": "yahoo_conventional",
                 "in_window": false, "earnings_in_contract_life": false,
+                "quote_snapshot_relative_to_event": "not_applicable",
                 "calendar_source": "yahoo", "calendar_as_of": "2026-05-14T08:00:00Z",
                 "calendar_pit_safe": false },
 
@@ -474,9 +531,11 @@ OPRA appears unentitled mid-day (transient or contract-specific). Phase 2's auto
 {
   "schema_version": "iv_moves.v2",
   "row_id":         "MSFT:20260618:non_earnings",
-  "run_id":         "iv_moves.v2:2026-05-14T13:30:00Z:33",
+  "run_id":         "iv_moves.v2:2026-05-14T17:30:00Z:33",
 
   "ticker": "MSFT", "spot": 422.10, "spot_source": "live",
+  "quote_snapshot_as_of":  "2026-05-14T17:29:48Z",     // delayed-tick effective time (received ~30s ago at receive_time-15min)
+  "quote_snapshot_source": "delayed_tick",              // type=3 used after type=1 returned nulls
   "expiry": "20260618",                              // Juneteenth-adjusted
   "is_primary": true, "earnings_role": "non_earnings",
   "dte": 35, "dte_fractional": 34.7,
@@ -502,7 +561,9 @@ OPRA appears unentitled mid-day (transient or contract-specific). Phase 2's auto
   "status": "OK",
 
   "earnings": { "next_date": "2026-07-29", "next_time": "AMC", "next_time_source": "yahoo",
+                "event_ts": "2026-07-29T20:30:00Z", "event_ts_source": "yahoo_conventional",
                 "in_window": false, "earnings_in_contract_life": false,
+                "quote_snapshot_relative_to_event": "not_applicable",
                 "calendar_source": "yahoo", "calendar_as_of": "2026-05-14T08:00:00Z",
                 "calendar_pit_safe": false },
 
@@ -524,9 +585,11 @@ Illiquid small-cap; bid/ask wide, last trade hours old. Distinct from "delayed".
 {
   "schema_version": "iv_moves.v2",
   "row_id":         "ACAD:20260618:non_earnings",
-  "run_id":         "iv_moves.v2:2026-05-14T13:30:00Z:33",
+  "run_id":         "iv_moves.v2:2026-05-14T17:30:00Z:33",
 
   "ticker": "ACAD", "spot": 17.45, "spot_source": "live",
+  "quote_snapshot_as_of":  "2026-05-14T16:25:53Z",     // call leg's last tick 64 min old; row uses the older leg's effective time
+  "quote_snapshot_source": "live_tick",                  // mdt=1, but tick is stale → quote_freshness=stale handles it
   "expiry": "20260618",                              // Juneteenth-adjusted
   "is_primary": true, "earnings_role": "non_earnings",
   "dte": 35, "dte_fractional": 34.7,
@@ -557,7 +620,9 @@ Illiquid small-cap; bid/ask wide, last trade hours old. Distinct from "delayed".
   "status": "PARTIAL",
 
   "earnings": { "next_date": "2026-08-12", "next_time": "BMO", "next_time_source": "yahoo",
+                "event_ts": "2026-08-12T11:30:00Z", "event_ts_source": "yahoo_conventional",
                 "in_window": false, "earnings_in_contract_life": false,
+                "quote_snapshot_relative_to_event": "not_applicable",
                 "calendar_source": "yahoo", "calendar_as_of": "2026-05-14T08:00:00Z",
                 "calendar_pit_safe": false },
 
@@ -579,9 +644,11 @@ Bot reads: `quote_freshness=stale, iv_quality=LOW, status=PARTIAL` → IV is ill
 {
   "schema_version": "iv_moves.v2",
   "row_id":         "NVDA:20260515:pre_earnings",
-  "run_id":         "iv_moves.v2:2026-05-14T13:30:00Z:33",
+  "run_id":         "iv_moves.v2:2026-05-14T20:35:00Z:33",  // RAN at 16:35 ET — AFTER the 16:30 AMC release
 
-  "ticker": "NVDA", "spot": 145.32, "spot_source": "live",
+  "ticker": "NVDA", "spot": 145.32, "spot_source": "frozen",
+  "quote_snapshot_as_of":  "2026-05-14T20:00:00Z",       // QUOTE represents 16:00 ET — frozen close BEFORE the 16:30 announcement
+  "quote_snapshot_source": "frozen_close",                 // mdt=2; this is the headline pre-event-snapshot scenario
   "expiry": "20260515",
   "is_primary": false,                       // primary picked the next monthly; this row is generated because earnings in window
   "earnings_role": "pre_earnings",
@@ -599,22 +666,32 @@ Bot reads: `quote_freshness=stale, iv_quality=LOW, status=PARTIAL` → IV is ill
   "iv_avg": 0.4305, "iv_disagreement_pp": 0.33,
   "em_from_iv_dollars": 3.27, "em_from_iv_pct": 0.0225, "em_method_ratio": 0.657,
 
-  "data_tier": "live", "quote_freshness": "fresh", "iv_quality": "MEDIUM",
-  "quality_flags": [],                       // no data-integrity issues
+  "data_tier": "frozen", "quote_freshness": "stale", "iv_quality": "LOW",   // frozen + stale post-close
+  "quality_flags": [],                       // no data-integrity issues; quality flags only for data defects
   "context_flags": ["amc_expiry_day", "expiry_before_known_earnings"],
+                                              // NOTE: NOT includes_earnings_premium — because in_contract_life=FALSE
   "status": "OK",
 
   "earnings": {
-    "next_date": "2026-05-15", "next_time": "AMC", "next_time_source": "yahoo",
-    "in_window": true,
-    "earnings_in_contract_life": false,      // option expires 16:00 ET; earnings ~16:30 ET → not in life
-    "calendar_source": "yahoo", "calendar_as_of": "2026-05-14T08:00:00Z",
-    "calendar_pit_safe": false
+    "next_date":            "2026-05-15", "next_time": "AMC", "next_time_source": "yahoo",
+    "event_ts":             "2026-05-15T20:30:00Z",   // 16:30 ET tomorrow (the AMC release; one row's expiry day was actually 5/14 in chain)
+                                                       // (Per the scenario in §earnings derivation: we ran 5/14 post-close;
+                                                       //  but the FRONT-MONTH option in this example expires 5/15 — earnings is on 5/15 AMC.
+                                                       //  For an alternative same-day expiry case, event_ts and expiry would both be on 5/14.)
+    "event_ts_source":      "yahoo_conventional",
+    "in_window":            true,                                                // earnings on calendar
+    "earnings_in_contract_life": false,                                          // option expires 16:00 ET; earnings 16:30 ET → not in life
+    "quote_snapshot_relative_to_event": "pre_event",                              // 20:00 < 20:30 — frozen quote was BEFORE event
+                                                                                   // BUT: NOT includes_earnings_premium (needs in_contract_life=TRUE too)
+    "calendar_source":      "yahoo",
+    "calendar_as_of":       "2026-05-14T08:00:00Z",
+    "calendar_pit_safe":    false
   },
 
   "diagnostics": [
     "Expiry 20260515 is the AMC earnings day; option expires at 16:00 ET; earnings released ~16:30 ET; option's life does NOT include the announcement",
-    "Pair this with the post_earnings row (NVDA:20260522:post_earnings) for a clean event-implied move comparison"
+    "quote_snapshot_relative_to_event=pre_event but in_contract_life=FALSE → row does NOT carry earnings premium",
+    "Pair this with the post_earnings row (NVDA:20260522:post_earnings) for the post-event IV view"
   ]
 }
 ```
