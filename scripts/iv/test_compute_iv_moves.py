@@ -30,6 +30,10 @@ from compute_iv_moves import (  # noqa: E402
     compute_mid_and_source,
     derive_data_tier,
     get_tick_age_seconds,
+    compute_atm_distance_pct,
+    compute_iv_disagreement_pp,
+    derive_quote_freshness,
+    derive_iv_quality,
 )
 
 
@@ -596,3 +600,129 @@ class TestPhase2IVRowFields:
         assert r.call_tick_age_known is False
         assert r.put_tick_age_seconds is None
         assert r.put_tick_age_known is False
+
+
+# ===========================================================================
+# Tier 2 phase 3 — transparency: atm_distance, iv_disagreement, multiplier, iv_quality
+# ===========================================================================
+
+class TestATMDistance:
+    """G — atm_distance_pct so bot can filter off-ATM picks."""
+    def test_exact_atm(self):
+        assert compute_atm_distance_pct(300.0, 300.0) == 0.0
+
+    def test_50c_off_atm_300(self):
+        # strike 300, spot 297.5 → 2.5/297.5 * 100 ≈ 0.840
+        v = compute_atm_distance_pct(300.0, 297.5)
+        assert abs(v - 0.8403361344537815) < 1e-6
+
+    def test_3pct_off(self):
+        # strike 309, spot 300 → 9/300 * 100 = 3.0
+        assert compute_atm_distance_pct(309.0, 300.0) == 3.0
+
+    def test_none_inputs(self):
+        assert compute_atm_distance_pct(None, 300.0) is None
+        assert compute_atm_distance_pct(300.0, None) is None
+        assert compute_atm_distance_pct(300.0, 0.0) is None  # spot zero rejected
+
+
+class TestIVDisagreement:
+    """H — iv_disagreement_pp catches skewed markets."""
+    def test_aligned_zero_pp(self):
+        assert compute_iv_disagreement_pp(0.30, 0.30) == 0.0
+
+    def test_3pt_spread(self):
+        # 30% call vs 27% put → 3.0 pp
+        assert abs(compute_iv_disagreement_pp(0.30, 0.27) - 3.0) < 1e-9
+
+    def test_takes_abs(self):
+        # |0.27 - 0.30| = 0.03 = 3 pp
+        assert abs(compute_iv_disagreement_pp(0.27, 0.30) - 3.0) < 1e-9
+
+    def test_none_inputs(self):
+        assert compute_iv_disagreement_pp(None, 0.30) is None
+        assert compute_iv_disagreement_pp(0.30, None) is None
+
+
+class TestQuoteFreshness:
+    """Independent of data_tier. delayed ≠ stale."""
+    def test_both_fresh(self):
+        assert derive_quote_freshness(10.0, True, 5.0, True, 300.0) == "fresh"
+
+    def test_one_stale(self):
+        assert derive_quote_freshness(400.0, True, 5.0, True, 300.0) == "stale"
+
+    def test_one_unknown(self):
+        assert derive_quote_freshness(None, False, 5.0, True, 300.0) == "unknown"
+
+    def test_both_at_threshold_boundary_stale(self):
+        # exactly at threshold → stale (>=)
+        assert derive_quote_freshness(300.0, True, 5.0, True, 300.0) == "stale"
+
+
+class TestIVQuality:
+    """J — HIGH/MEDIUM/LOW/n/a derivation per SCHEMA r6."""
+
+    def _clean_args(self):
+        return dict(
+            status="OK", data_tier="live", quote_freshness="fresh",
+            call_mid_source="bid_ask_mid", put_mid_source="bid_ask_mid",
+            iv_disagreement_pp=1.0, atm_distance_pct=0.2,
+            quality_flags=[],
+        )
+
+    def test_clean_live_is_high(self):
+        assert derive_iv_quality(**self._clean_args()) == "HIGH"
+
+    def test_one_issue_is_medium(self):
+        a = self._clean_args(); a["quote_freshness"] = "stale"
+        assert derive_iv_quality(**a) == "MEDIUM"
+
+    def test_two_issues_is_low(self):
+        a = self._clean_args(); a["quote_freshness"] = "stale"; a["data_tier"] = "delayed"
+        assert derive_iv_quality(**a) == "LOW"
+
+    def test_frozen_caps_at_low_regardless(self):
+        a = self._clean_args(); a["data_tier"] = "frozen"  # still has clean mid_source etc
+        assert derive_iv_quality(**a) == "LOW"
+
+    def test_delayed_frozen_caps_at_low(self):
+        a = self._clean_args(); a["data_tier"] = "delayed_frozen"
+        assert derive_iv_quality(**a) == "LOW"
+
+    def test_na_when_status_no_conid(self):
+        a = self._clean_args(); a["status"] = "NO_CONID"
+        assert derive_iv_quality(**a) == "n/a"
+
+    def test_iv_disagreement_counted_once(self):
+        # Both rule (4) AND a duplicate flag "iv_disagreement" → still 1 issue (flag is implied)
+        a = self._clean_args()
+        a["iv_disagreement_pp"] = 5.0  # above 3.0 threshold
+        a["quality_flags"] = ["iv_disagreement"]  # implied flag, not separate
+        assert derive_iv_quality(**a) == "MEDIUM"  # exactly 1 issue
+
+    def test_iv_sanitized_counts_as_non_implied_issue(self):
+        # iv_sanitized is NOT implied by 1-5, counts as separate issue (rule 6)
+        a = self._clean_args()
+        a["quality_flags"] = ["iv_sanitized"]
+        assert derive_iv_quality(**a) == "MEDIUM"
+
+    def test_partial_status_can_still_have_quality(self):
+        a = self._clean_args(); a["status"] = "PARTIAL"
+        # PARTIAL with no other issues → MEDIUM not HIGH (PARTIAL is not OK)
+        # Wait: rule says iv_quality is derived from data_tier/freshness etc., not status.
+        # status=PARTIAL only sets n/a if NOT in {OK, PARTIAL}. PARTIAL still gets derived.
+        # With clean args otherwise, issues=0 AND data_tier=live → HIGH
+        assert derive_iv_quality(**a) == "HIGH"
+
+
+class TestPhase3IVRowFields:
+    """IVRow has new Tier 2 fields with correct defaults."""
+    def test_defaults(self):
+        r = IVRow(ticker="AAPL")
+        assert r.atm_distance_pct is None
+        assert r.iv_disagreement_pp is None
+        assert r.multiplier is None
+        assert r.quote_freshness == "unknown"
+        assert r.iv_quality == "n/a"
+        assert r.context_flags == []

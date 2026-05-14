@@ -279,6 +279,104 @@ def get_tick_age_seconds(ticker_time, run_time) -> tuple[float | None, bool]:
 
 
 # ---------------------------------------------------------------------------
+# Tier 2 phase 3 helpers (transparency)
+# ---------------------------------------------------------------------------
+
+def compute_atm_distance_pct(strike: float | None, spot: float | None) -> float | None:
+    """|strike - spot| / spot * 100. Bot can filter on this directly."""
+    if strike is None or spot is None or spot <= 0:
+        return None
+    return abs(strike - spot) / spot * 100.0
+
+
+def compute_iv_disagreement_pp(call_iv: float | None, put_iv: float | None) -> float | None:
+    """|call_iv - put_iv| in percentage points (0.30 vs 0.27 = 3.0 pp)."""
+    if call_iv is None or put_iv is None:
+        return None
+    return abs(call_iv - put_iv) * 100.0
+
+
+def derive_quote_freshness(
+    call_age: float | None, call_known: bool,
+    put_age: float | None, put_known: bool,
+    threshold: float,
+) -> str:
+    """fresh | stale | unknown — independent of data_tier (delayed ≠ stale).
+
+    fresh   = BOTH legs have known age AND tick_age < threshold
+    stale   = either leg has known age >= threshold
+    unknown = any leg's age is not known
+    """
+    if not call_known or not put_known:
+        return "unknown"
+    if (call_age is not None and call_age >= threshold) or (put_age is not None and put_age >= threshold):
+        return "stale"
+    return "fresh"
+
+
+def derive_iv_quality(
+    status: str,
+    data_tier: str,
+    quote_freshness: str,
+    call_mid_source: str,
+    put_mid_source: str,
+    iv_disagreement_pp: float | None,
+    atm_distance_pct: float | None,
+    quality_flags: list[str],
+    config: dict | None = None,
+) -> str:
+    """HIGH | MEDIUM | LOW | n/a per SCHEMA_v2 r6 derivation rules.
+
+    issue_count = count of TRUE conditions among:
+      (1) data_tier != live
+      (2) quote_freshness != fresh
+      (3) any leg mid_source != bid_ask_mid
+      (4) iv_disagreement_pp >= threshold
+      (5) atm_distance_pct >= threshold
+      (6) any quality_flag not implied by 1-5 (e.g., multiplier_nonstandard,
+          strike_retry_used, iv_sanitized, wide_spread)
+
+    HIGH    issue_count == 0 AND data_tier == live (must be clean AND live)
+    MEDIUM  issue_count == 1
+    LOW     issue_count >= 2  OR  data_tier in (frozen, delayed_frozen)
+    n/a     status not in (OK, PARTIAL)
+    """
+    if status not in ("OK", "PARTIAL"):
+        return "n/a"
+    cfg = config or DEFAULT_CONFIG
+    issues = 0
+    # (1) data_tier
+    if data_tier != "live":
+        issues += 1
+    # (2) freshness
+    if quote_freshness != "fresh":
+        issues += 1
+    # (3) mid source not bid_ask_mid
+    if call_mid_source != "bid_ask_mid" or put_mid_source != "bid_ask_mid":
+        issues += 1
+    # (4) iv disagreement
+    if iv_disagreement_pp is not None and iv_disagreement_pp >= cfg["iv_disagreement_warn_pp"]:
+        issues += 1
+    # (5) atm distance
+    if atm_distance_pct is not None and atm_distance_pct >= cfg["atm_distance_warn_pct"]:
+        issues += 1
+    # (6) any quality flag NOT implied by 1-5
+    implied = {"iv_disagreement", "atm_distance_high", "stale_last_rejected"}
+    non_implied = [f for f in quality_flags if f not in implied]
+    if non_implied:
+        issues += 1
+
+    # Static-snapshot tiers (frozen, delayed_frozen) cap at LOW regardless
+    if data_tier in ("frozen", "delayed_frozen"):
+        return "LOW"
+    if issues == 0 and data_tier == "live":
+        return "HIGH"
+    if issues == 1:
+        return "MEDIUM"
+    return "LOW"
+
+
+# ---------------------------------------------------------------------------
 # Result schema
 # ---------------------------------------------------------------------------
 
@@ -322,6 +420,13 @@ class IVRow:
     # Tier 1.F + flag aggregator
     data_tier: str = "unknown"                       # live | delayed | frozen | delayed_frozen | fallback_delayed | unknown
     quality_flags: list[str] = field(default_factory=list)
+    # Tier 2 phase 3 transparency fields
+    atm_distance_pct: float | None = None            # |strike-spot| / spot * 100
+    iv_disagreement_pp: float | None = None          # |call_iv - put_iv| in pp
+    multiplier: int | None = None                    # standard 100; flag if not
+    quote_freshness: str = "unknown"                 # fresh | stale | unknown (independent of data_tier)
+    iv_quality: str = "n/a"                          # HIGH | MEDIUM | LOW | n/a
+    context_flags: list[str] = field(default_factory=list)  # semantic flags (populated in phase 4)
     status: str = "PENDING"
     diagnostics: list[str] = field(default_factory=list)
 
@@ -439,14 +544,33 @@ async def compute_one(
             qualified_opts = [c for c in qualified_opts if c and getattr(c, "conId", 0)]
             if len(qualified_opts) >= 2:
                 row.atm_strike = candidate
+                # Tier 2.G — surface atm_distance_pct so bot sees how far off-ATM we picked
+                row.atm_distance_pct = compute_atm_distance_pct(candidate, spot)
+                if (row.atm_distance_pct is not None
+                        and row.atm_distance_pct >= DEFAULT_CONFIG["atm_distance_warn_pct"]):
+                    if "atm_distance_high" not in row.quality_flags:
+                        row.quality_flags.append("atm_distance_high")
                 call_q = next((c for c in qualified_opts if c.right == "C"), None)
                 put_q = next((c for c in qualified_opts if c.right == "P"), None)
                 if call_q and put_q:
                     if candidate != ranked_strikes[0]:
+                        # Tier 2 transparency — flag when we fell back
+                        if "strike_retry_used" not in row.quality_flags:
+                            row.quality_flags.append("strike_retry_used")
                         row.diagnostics.append(
                             f"fell-back from {ranked_strikes[0]} → {candidate} "
                             f"(closest strike not valid for {expiry_yyyymmdd})",
                         )
+                    # Tier 2.I — multiplier guard. Standard equity options = 100.
+                    # Adjusted contracts (post-split/spinoff) may differ.
+                    try:
+                        mult_raw = getattr(call_q, "multiplier", "") or "100"
+                        row.multiplier = int(float(mult_raw))
+                    except (ValueError, TypeError):
+                        row.multiplier = None
+                    if row.multiplier is not None and row.multiplier != 100:
+                        if "multiplier_nonstandard" not in row.quality_flags:
+                            row.quality_flags.append("multiplier_nonstandard")
                     break
                 call_q = put_q = None  # both rights required
         if call_q is None or put_q is None:
@@ -584,6 +708,39 @@ async def compute_one(
         row.diagnostics.append("no usable quotes flowed (all legs null after fallback)")
     else:
         row.status = "PARTIAL"
+
+    # Tier 2.H — iv_disagreement_pp + threshold flag
+    row.iv_disagreement_pp = compute_iv_disagreement_pp(row.call_iv, row.put_iv)
+    if (row.iv_disagreement_pp is not None
+            and row.iv_disagreement_pp >= DEFAULT_CONFIG["iv_disagreement_warn_pp"]):
+        if "iv_disagreement" not in row.quality_flags:
+            row.quality_flags.append("iv_disagreement")
+
+    # Tier 2 — wide_spread threshold (any leg spread > warn_bps)
+    for leg_spread in (row.spread_call_bps, row.spread_put_bps):
+        if leg_spread is not None and leg_spread > DEFAULT_CONFIG["spread_warn_bps"]:
+            if "wide_spread" not in row.quality_flags:
+                row.quality_flags.append("wide_spread")
+            break
+
+    # Tier 2 — quote_freshness derivation (independent of data_tier)
+    row.quote_freshness = derive_quote_freshness(
+        row.call_tick_age_seconds, row.call_tick_age_known,
+        row.put_tick_age_seconds, row.put_tick_age_known,
+        DEFAULT_CONFIG["tick_freshness_threshold_sec"],
+    )
+
+    # Tier 2.J — iv_quality summary label per SCHEMA_v2 r6
+    row.iv_quality = derive_iv_quality(
+        status=row.status,
+        data_tier=row.data_tier,
+        quote_freshness=row.quote_freshness,
+        call_mid_source=row.call_mid_source,
+        put_mid_source=row.put_mid_source,
+        iv_disagreement_pp=row.iv_disagreement_pp,
+        atm_distance_pct=row.atm_distance_pct,
+        quality_flags=row.quality_flags,
+    )
     return row
 
 
