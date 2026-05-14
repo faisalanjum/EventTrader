@@ -1,8 +1,11 @@
-# IV Moves Output Schema — `iv_moves.v2` (revision 2)
+# IV Moves Output Schema — `iv_moves.v2` (revision 3)
 
 **Version**: `iv_moves.v2`
 **Status**: PROPOSED — awaiting user sign-off before implementation
-**Revision history**: r1 had STALE/data_tier contradiction + missing expiry_ladder + missing row_id + earnings date-window (not timing-aware). r2 fixes all 12 issues raised in review.
+**Revision history**:
+- r1 — STALE/data_tier contradiction; missing expiry_ladder; missing row_id; earnings date-window only
+- r2 — fixed 12 issues from review
+- r3 — fixes 9 more issues: envelope omission, Juneteenth wrong-date examples, run_id misleading wording, fallback double-count, Example 3 flag/reject contradictions, "zeroed out" → "set to null", in_window same-day-AMC edge case, explicit pre/post earnings selection rules, removed per-row pit_unsafe noise
 
 ## Design principles
 
@@ -24,7 +27,7 @@
 ```jsonc
 {
   "schema_version": "iv_moves.v2",
-  "run_id":         "iv_moves.v2:2026-05-14T13:30:00Z:33",  // {schema}:{as_of}:{clientId} stable across re-runs of same input
+  "run_id":         "iv_moves.v2:2026-05-14T13:30:00Z:33",  // {schema}:{as_of}:{clientId} — UNIQUE PER RUN. Stable within one run for citing rows; NOT stable across re-runs (timestamp varies).
   "as_of":          "2026-05-14T13:30:00Z",
   "method":         "atm_straddle",
   "target_dte":     30,
@@ -33,14 +36,13 @@
 
   "config": {
     // every threshold a quality rule references must be here, tunable + auditable
-    "tick_freshness_threshold_sec":   300,    // last/quote older than this → stale
-    "spread_warn_bps":               1000,    // spread > 10% of mid → quality flag
-    "spread_reject_bps":              5000,   // spread > 50% → reject mid (use last_stale path)
-    "atm_distance_warn_pct":          1.0,    // strike > X% from spot → flag
-    "iv_disagreement_warn_pp":        3.0,    // |call_iv - put_iv| > X pp → flag
-    "iv_min_valid":                   0.01,   // IV < 1% rejected as garbage
-    "iv_max_valid":                   5.0,    // IV > 500% rejected as garbage
-    "earnings_just_after_window_days": 5,     // earnings within X days AFTER picked expiry → flag
+    "tick_freshness_threshold_sec":   300,    // tick_age >= this → leg quote_freshness=stale
+    "spread_warn_bps":               1000,    // any leg spread > 10% of mid → quality_flag wide_spread (NEVER rejects mid; preserves raw data)
+    "atm_distance_warn_pct":          1.0,    // strike > X% from spot → flag atm_distance_high
+    "iv_disagreement_warn_pp":        3.0,    // |call_iv - put_iv| > X pp → flag iv_disagreement
+    "iv_min_valid":                   0.01,   // IV < 1% → set to null + flag iv_sanitized
+    "iv_max_valid":                   5.0,    // IV > 500% → set to null + flag iv_sanitized
+    "earnings_just_after_window_days": 5,     // earnings within X days AFTER picked expiry → context_flag
     "live_to_delayed_fallback_enabled": true,
     "expiry_ladder_max_entries":       7      // cap per-ticker ladder size
   },
@@ -61,7 +63,9 @@
     "by_is_primary":      {"true": 783, "false": 67}
   },
 
-  "results": [ /* see row examples below */ ]
+  "expiry_ladder": [ /* one entry per ticker; see ladder shape below */ ],
+
+  "results":       [ /* one or more rows per ticker; see row shape below */ ]
 }
 ```
 
@@ -100,11 +104,11 @@ Each input ticker gets ONE entry in `expiry_ladder` listing the ≤N expiries we
       "row_ids":  ["NVDA:20260522:post_earnings"]
     },
     {
-      "expiry":             "20260619",      // standard monthly 3rd-Fri (Juneteenth check passed: 06-18 is the real one if 06-19 holiday)
-      "dte":                36,
-      "dte_fractional":     35.7,
+      "expiry":             "20260618",      // Holiday-aware: nominal 3rd-Friday 2026-06-19 is Juneteenth (market closed) → actual monthly expiry rolls to Thursday 2026-06-18
+      "dte":                35,
+      "dte_fractional":     34.7,
       "type":               "monthly",
-      "distance_from_target_dte_days":  6,
+      "distance_from_target_dte_days":  5,
       "covers_earnings_event": true,
       "is_amc_earnings_day":   false,
       "selected_for_compute":  false,         // not picked; shown for bot's alternative-paths reasoning
@@ -235,32 +239,94 @@ unknown — any leg:   tick_age_known=false
 ### `iv_quality` derivation rules
 
 ```
-HIGH    — both legs mid_source=bid_ask_mid
-          AND quote_freshness=fresh
-          AND iv_disagreement_pp < config.iv_disagreement_warn_pp
-          AND atm_distance_pct < config.atm_distance_warn_pct
-          AND quality_flags is empty
-          AND data_tier=live
-MEDIUM  — exactly ONE of (mid_source≠bid_ask_mid for a leg, iv_disagreement≥thresh,
-          atm_distance≥thresh, single non-context quality_flag, data_tier=delayed or
-          fallback_delayed but quote_freshness=fresh)
-LOW     — TWO OR MORE quality issues
-          OR data_tier IN (frozen, delayed_frozen) regardless of fresh
+Compute issue_count = number of TRUE conditions among the following INDEPENDENT checks:
+  (1) data_tier ≠ live                                      (data tier is NOT live)
+  (2) quote_freshness = stale                                 (any leg tick > threshold)
+  (3) any leg mid_source ≠ bid_ask_mid                        (fell back to last)
+  (4) iv_disagreement_pp ≥ config.iv_disagreement_warn_pp
+  (5) atm_distance_pct ≥ config.atm_distance_warn_pct
+  (6) any quality_flag present that's NOT already implied by (1)-(5)
+      [e.g. multiplier_nonstandard, strike_retry_used, iv_sanitized]
+
+  NOTE: data_tier=fallback_delayed counts as ONE issue (data_tier≠live).
+        The fallback action does NOT also get its own quality_flag; that would double-count.
+
+HIGH    — issue_count == 0 AND data_tier == live (must be live AND clean)
+MEDIUM  — issue_count == 1
+LOW     — issue_count >= 2
+          OR data_tier IN (frozen, delayed_frozen) — these are static/snapshot data; cap at LOW
 n/a     — status NOT IN (OK, PARTIAL)
+```
+
+### Earnings field derivation rules (timing-aware)
+
+```
+earnings.in_window:
+  Defined relative to event TIMESTAMP, not just date.
+  Let event_ts = earnings_date concatenated with conventional time:
+    - AMC: earnings_date @ 16:30 ET (after-market-close window)
+    - BMO: earnings_date @ 07:30 ET (before-market-open window)
+    - DMH: earnings_date @ 12:00 ET (during-market-hours, rare)
+    - unknown time: earnings_date @ 12:00 ET, BUT flag with context
+
+  in_window = (event_ts >  as_of)  AND  (event_ts <= expiry_close_ts)
+  → captures same-day AMC earnings (event_ts > as_of even though dates match)
+
+earnings.earnings_in_contract_life:
+  earnings_in_contract_life = (event_ts <= expiry_close_ts)
+  AND (event_ts > option_open_ts_of_this_contract_life)
+
+  Specifically for expiry-day earnings:
+    - AMC on expiry day: event_ts (16:30) > expiry_close_ts (16:00) → in_window=true but in_contract_life=FALSE
+    - BMO on expiry day: event_ts (07:30) < option_open_ts of expiry day (09:30) →
+                          but since contract was alive yesterday's close, earnings IS in life of yesterday's row;
+                          for today's row, in_contract_life=TRUE (the overnight move is captured at open)
+    - DMH on expiry day: in_contract_life=TRUE
+
+  This is what makes AMC-on-expiry-day a pre_earnings row and BMO-on-expiry-day a post_earnings row.
+```
+
+### Pre/post earnings expiry selection rules
+
+When `earnings.in_window` is true for a ticker's primary expiry, the script may emit additional rows:
+
+```
+PRE-EARNINGS ROW (emitted when an earnings event is in_window for the primary expiry AND
+                  the primary expiry already has earnings_in_contract_life=true,
+                  meaning the primary captures the event but we ALSO want a clean
+                  pre-event reference):
+
+  pre_earnings_expiry = LAST chain expiry such that earnings_in_contract_life=false
+                        AND expiry_close_ts <= event_ts
+
+  (If no such expiry exists earlier than primary, pre_earnings row is omitted.
+   If primary IS already pre-event, the primary itself gets role=pre_earnings
+   and no separate row is needed.)
+
+POST-EARNINGS ROW (emitted when primary expiry has earnings_in_contract_life=false,
+                   so primary excludes the event and we need a post-event view):
+
+  post_earnings_expiry = FIRST chain expiry such that earnings_in_contract_life=true
+                         AND its expiry_close_ts > event_ts
+
+ROLE TAGGING:
+  - AMC on expiry day:  primary row gets role=pre_earnings, separate post_earnings row added
+  - BMO on expiry day:  primary row gets role=post_earnings (it captures the BMO overnight gap)
+  - earnings BEFORE primary expiry (any time): primary gets role=post_earnings, pre_earnings row added
+  - earnings AFTER primary expiry but within +5 days: primary gets context_flag earnings_just_after_window
+                                                       no extra rows
 ```
 
 ### `quality_flags` catalog (data-integrity defects only)
 
 ```
-wide_spread                    — any leg spread_bps > config.spread_warn_bps
-mid_rejected_extreme_spread    — any leg spread_bps > config.spread_reject_bps; mid set null
-stale_last_rejected            — fell back to last but tick_age > freshness threshold
+wide_spread                    — any leg spread_bps > config.spread_warn_bps. Mid is NEVER nulled for wide spread; raw preserved. Bot decides.
+stale_last_rejected            — fell back to last but tick_age > freshness threshold; this leg's mid set to null
 iv_disagreement                — |call_iv - put_iv| > config.iv_disagreement_warn_pp
 atm_distance_high              — atm_distance_pct > config.atm_distance_warn_pct
 strike_retry_used              — first-nearest strike didn't qualify; picked a back-up
-iv_sanitized                   — call_iv or put_iv was NaN/-1/out-of-range and zeroed out
+iv_sanitized                   — call_iv or put_iv was NaN/-1/out-of-range; that leg's iv field SET TO null (not zero — explicit absence)
 multiplier_nonstandard         — multiplier ≠ 100 (post-split adjusted contract)
-live_entitlement_failed        — type=1 returned all-null during options RTH; fell back to type=3
 ```
 
 ### `context_flags` catalog (semantic context — NOT defects)
@@ -270,7 +336,9 @@ includes_earnings_premium      — earnings_in_contract_life=true; the row's EM 
 expiry_before_known_earnings   — earnings in_window=true BUT earnings_in_contract_life=false (AMC-on-expiry case)
 amc_expiry_day                 — picked expiry IS the AMC earnings day
 earnings_just_after_window     — earnings within config.earnings_just_after_window_days AFTER expiry
-earnings_calendar_pit_unsafe   — calendar_pit_safe=false; historical/backtest mode must reject if PIT required
+// (earnings_calendar_pit_unsafe REMOVED in r3: pit_safe flag lives in top-level data_sources block.
+//  Backtest/historical mode reads `data_sources.earnings_calendar.pit_safe` and gates on it.
+//  Per-row flagging when ALL Yahoo runs are pit_safe=false adds zero signal; spams every row.)
 ```
 
 ---
@@ -280,12 +348,13 @@ earnings_calendar_pit_unsafe   — calendar_pit_safe=false; historical/backtest 
 ```jsonc
 {
   "schema_version": "iv_moves.v2",
-  "row_id":         "AAPL:20260619:non_earnings",
+  "row_id":         "AAPL:20260618:non_earnings",
   "run_id":         "iv_moves.v2:2026-05-14T13:30:00Z:33",
 
   "ticker": "AAPL", "spot": 297.34, "spot_source": "live",
-  "expiry": "20260619", "is_primary": true, "earnings_role": "non_earnings",
-  "dte": 36, "dte_fractional": 35.7,
+  "expiry": "20260618",                              // Juneteenth-adjusted: nominal 06-19 → actual 06-18 (Thursday)
+  "is_primary": true, "earnings_role": "non_earnings",
+  "dte": 35, "dte_fractional": 34.7,
   "atm_strike": 297.0, "atm_distance_pct": 0.114, "multiplier": 100,
 
   "call": { "conid": 838693204, "bid": 8.40, "ask": 8.55, "last": 8.47,
@@ -322,12 +391,13 @@ OPRA appears unentitled mid-day (transient or contract-specific). Phase 2's auto
 ```jsonc
 {
   "schema_version": "iv_moves.v2",
-  "row_id":         "MSFT:20260619:non_earnings",
+  "row_id":         "MSFT:20260618:non_earnings",
   "run_id":         "iv_moves.v2:2026-05-14T13:30:00Z:33",
 
   "ticker": "MSFT", "spot": 422.10, "spot_source": "live",
-  "expiry": "20260619", "is_primary": true, "earnings_role": "non_earnings",
-  "dte": 36, "dte_fractional": 35.7,
+  "expiry": "20260618",                              // Juneteenth-adjusted
+  "is_primary": true, "earnings_role": "non_earnings",
+  "dte": 35, "dte_fractional": 34.7,
   "atm_strike": 422.5, "atm_distance_pct": 0.095, "multiplier": 100,
 
   "call": { "conid": 444111, "bid": 9.80, "ask": 9.95, "last": 9.87,
@@ -343,9 +413,9 @@ OPRA appears unentitled mid-day (transient or contract-specific). Phase 2's auto
 
   "data_tier":       "fallback_delayed",   // type=1 returned nulls; retried with type=3 successfully
   "quote_freshness": "fresh",               // BOTH legs tick within 300s threshold → fresh despite delayed
-  "iv_quality":      "MEDIUM",              // exactly one issue: data_tier ≠ live but freshness OK
+  "iv_quality":      "MEDIUM",              // exactly one issue: data_tier ≠ live (no double-count — see derivation rules)
 
-  "quality_flags": ["live_entitlement_failed"],
+  "quality_flags": [],                      // data_tier captures the fallback; no separate flag (would double-count)
   "context_flags": [],
   "status": "OK",
 
@@ -371,12 +441,13 @@ Illiquid small-cap; bid/ask wide, last trade hours old. Distinct from "delayed".
 ```jsonc
 {
   "schema_version": "iv_moves.v2",
-  "row_id":         "ACAD:20260619:non_earnings",
+  "row_id":         "ACAD:20260618:non_earnings",
   "run_id":         "iv_moves.v2:2026-05-14T13:30:00Z:33",
 
   "ticker": "ACAD", "spot": 17.45, "spot_source": "live",
-  "expiry": "20260619", "is_primary": true, "earnings_role": "non_earnings",
-  "dte": 36, "dte_fractional": 35.7,
+  "expiry": "20260618",                              // Juneteenth-adjusted
+  "is_primary": true, "earnings_role": "non_earnings",
+  "dte": 35, "dte_fractional": 34.7,
   "atm_strike": 17.50, "atm_distance_pct": 0.287, "multiplier": 100,
 
   "call": { "conid": 666111, "bid": null, "ask": null, "last": 1.20,
@@ -393,9 +464,9 @@ Illiquid small-cap; bid/ask wide, last trade hours old. Distinct from "delayed".
 
   "data_tier":       "live",                 // we DID get live entitlement, just bad quote conditions
   "quote_freshness": "stale",                // call leg tick_age > 300s threshold
-  "iv_quality":      "LOW",                  // 3 issues: stale, wide_spread on put, iv_disagreement
+  "iv_quality":      "LOW",                  // 2 issues: stale + wide_spread
 
-  "quality_flags": ["stale_last_rejected", "wide_spread", "iv_disagreement"],
+  "quality_flags": ["stale_last_rejected", "wide_spread"],   // iv_disagreement_pp 0.68 is BELOW 3.0 threshold → not flagged
   "context_flags": [],
   "status": "PARTIAL",
 
