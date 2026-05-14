@@ -63,7 +63,13 @@ manual intervention.
 | | Count |
 |---|---:|
 | `fresh` | 814 (96.2%) |
-| `unknown` | 32 (3.8% — all chain/quote failures) |
+| `unknown` | 32 (3.8%) |
+
+`unknown` does NOT necessarily mean chain/quote failure — it also fires
+when IBKR surfaced no `ticker.time` on either leg even though prices flowed.
+And conversely, a `NO_QUOTES` row can still carry fresh tick metadata
+(timestamp present even if the price fields are null). The predictor
+should treat `quote_freshness` and `status` as independent axes.
 
 ### `iv_quality`
 
@@ -128,13 +134,17 @@ These match the expected delisted-zombie pattern from the prior coverage
 probe. Per-row `status=NO_CONID` is the correct, fail-safe label — no
 fake data is emitted. Predictor consumers should drop these.
 
-### `NO_QUOTES` (6) — quotes returned null even after delayed fallback
+### `NO_QUOTES` (6) — price fields null even after delayed fallback
 
 ```
 ABM APLS DHR KKR MASI MMM
 ```
 
-Six widely-traded large-caps with no quotes flowing during the snapshot
+`NO_QUOTES` means bid/ask/last and IV all came back null on both legs.
+Note: tick metadata (`ticker.time`) can still arrive on a `NO_QUOTES` row
+even when the price values don't, so `quote_freshness` may report `fresh`
+or `stale` independently of `status`. Six widely-traded large-caps with no
+price values flowing during the snapshot
 window. Most likely transient (IBKR pacing) rather than structural.
 Worth a re-run during off-peak hours to confirm.
 

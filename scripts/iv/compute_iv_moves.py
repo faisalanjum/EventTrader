@@ -438,6 +438,9 @@ def derive_earnings_timing(event_ts_iso: str | None, run_as_of_iso: str,
         event_ts = dt.datetime.fromisoformat(event_ts_iso)
         if event_ts.tzinfo is None:
             event_ts = event_ts.replace(tzinfo=dt.timezone.utc)
+        run_as_of = dt.datetime.fromisoformat(run_as_of_iso)
+        if run_as_of.tzinfo is None:
+            run_as_of = run_as_of.replace(tzinfo=dt.timezone.utc)
         expiry_date = dt.datetime.strptime(expiry_yyyymmdd, "%Y%m%d").date()
         # fix-4: earnings_date is the event's ET trading day, NOT event_ts.date()
         # which leaks UTC (e.g., 8pm ET = midnight UTC = next-day UTC date).
@@ -453,9 +456,21 @@ def derive_earnings_timing(event_ts_iso: str | None, run_as_of_iso: str,
         return out
 
     out["in_window"] = (earnings_date >= run_as_of_et_date) and (earnings_date <= expiry_date)
-    out["in_contract_life"] = event_ts <= expiry_close_ts
+    # Patch v4: in_contract_life requires the event to fall between RUN TIME
+    # (lower bound — the option didn't exist before the predictor saw it) AND
+    # the expiry close (upper bound). Previously the lower bound was missing,
+    # so a past event always claimed in_contract_life=True which is nonsense.
+    out["in_contract_life"] = run_as_of <= event_ts <= expiry_close_ts
 
-    if quote_snapshot_iso:
+    # Patch v4 fix-1: quote_snapshot_relative_to_event is only MEANINGFUL when
+    # the event is relevant to this row's option life. If the event is outside
+    # both the window AND the contract life (i.e., far enough in the past or
+    # future that the option doesn't see it), the pre/post-event distinction
+    # carries no information for the predictor — emit "not_applicable" instead
+    # of a misleading pre_event/post_event label.
+    if not (out["in_window"] or out["in_contract_life"]):
+        out["quote_snapshot_relative_to_event"] = "not_applicable"
+    elif quote_snapshot_iso:
         try:
             qs_ts = dt.datetime.fromisoformat(quote_snapshot_iso)
             if qs_ts.tzinfo is None:
@@ -773,6 +788,61 @@ def find_first_expiry_after(expirations: set[str], event_date: dt.date) -> str |
     return min(cand, key=lambda x: x[1])[0] if cand else None
 
 
+def find_first_expiry_close_after_ts(
+    expirations: set[str], event_ts: dt.datetime, options_close_et: str,
+) -> str | None:
+    """First chain expiry whose CLOSE TIMESTAMP (date @ options_close_et) is
+    strictly AFTER event_ts. Used for the dual-row pre→post complement.
+
+    fix-2 (Phase 4 patch v4): date-only comparison breaks for same-day AMC/BMO/
+    DMH cases — e.g. event 4:30pm ET on the same date as an expiry that closes
+    at 4pm ET. The expiry's close timestamp is BEFORE the event, so it must NOT
+    be the post-event secondary. Timestamp comparison handles this cleanly.
+    """
+    cand: list[tuple[str, dt.date]] = []
+    et_h, et_m = options_close_et.split(":")
+    et_h_i, et_m_i = int(et_h), int(et_m)
+    for s in expirations:
+        try:
+            d = dt.datetime.strptime(s, "%Y%m%d").date()
+        except ValueError:
+            continue
+        close_et = dt.datetime(d.year, d.month, d.day, et_h_i, et_m_i,
+                                tzinfo=ZoneInfo("US/Eastern"))
+        close_utc = close_et.astimezone(dt.timezone.utc)
+        if close_utc > event_ts:
+            cand.append((s, d))
+    return min(cand, key=lambda x: x[1])[0] if cand else None
+
+
+def find_last_expiry_close_before_ts(
+    expirations: set[str], event_ts: dt.datetime, today_et: dt.date,
+    options_close_et: str,
+) -> str | None:
+    """Last chain expiry whose CLOSE TIMESTAMP is strictly BEFORE event_ts AND
+    whose expiry date is strictly after today_et (don't return an already-
+    expired contract). Used for the dual-row post→pre complement.
+
+    fix-2 (Phase 4 patch v4): same rationale as find_first_expiry_close_after_ts.
+    """
+    cand: list[tuple[str, dt.date]] = []
+    et_h, et_m = options_close_et.split(":")
+    et_h_i, et_m_i = int(et_h), int(et_m)
+    for s in expirations:
+        try:
+            d = dt.datetime.strptime(s, "%Y%m%d").date()
+        except ValueError:
+            continue
+        if d <= today_et:
+            continue
+        close_et = dt.datetime(d.year, d.month, d.day, et_h_i, et_m_i,
+                                tzinfo=ZoneInfo("US/Eastern"))
+        close_utc = close_et.astimezone(dt.timezone.utc)
+        if close_utc < event_ts:
+            cand.append((s, d))
+    return max(cand, key=lambda x: x[1])[0] if cand else None
+
+
 def find_last_expiry_before(expirations: set[str], event_date: dt.date,
                             today: dt.date | None = None) -> str | None:
     """Last chain expiry strictly before event_date AND strictly after today
@@ -780,7 +850,10 @@ def find_last_expiry_before(expirations: set[str], event_date: dt.date,
 
     `today` MUST be an ET trading date when called by the orchestrator. The
     today=dt.date.today() default exists only for ad-hoc/test callers; the
-    orchestrator always passes _run_as_of_et_date(run_as_of_iso) explicitly."""
+    orchestrator always passes _run_as_of_et_date(run_as_of_iso) explicitly.
+
+    DEPRECATED for orchestrator use — kept for backward-compat with tests and
+    ad-hoc callers. Production path uses find_last_expiry_close_before_ts."""
     today = today or dt.date.today()
     cand: list[tuple[str, dt.date]] = []
     for s in expirations:
@@ -937,22 +1010,32 @@ def pick_secondary_expiry(primary: "IVRow", all_expirations: set[str],
       • event_ts not derivable
       • earnings_role is non_earnings
 
+    fix-2 (Phase 4 patch v4): selection is TIMESTAMP-based (expiry close ts vs
+    event ts), not date-only. This correctly handles same-day AMC/BMO/DMH
+    cases — e.g. an AMC event at 4:30pm ET on the same date as an expiry that
+    closes at 4:00pm ET would (incorrectly under date-only logic) be treated
+    as "same day → no candidate." With timestamp logic, the expiry's close
+    is BEFORE the event, so the post-event secondary is the NEXT expiry.
+
     Pure function — extracted for testability.
     """
     if not (primary.earnings_in_window and primary.earnings_event_ts):
         return None
-    # fix-4: event-day is the event's ET trading date, NOT event_ts_iso[:10]
-    # (which leaks UTC date when event_ts is in UTC and event is after ~8pm ET).
-    event_date = _et_date_from_iso(primary.earnings_event_ts)
-    if event_date is None:
+    try:
+        event_ts = dt.datetime.fromisoformat(primary.earnings_event_ts)
+        if event_ts.tzinfo is None:
+            event_ts = event_ts.replace(tzinfo=dt.timezone.utc)
+    except Exception:
         return None
+    options_close_et = MARKET_CONVENTIONS["options_market_close_et"]
     if primary.earnings_role == "pre_earnings":
-        # primary expires BEFORE event → need a post-event expiry
-        return find_first_expiry_after(all_expirations, event_date)
+        return find_first_expiry_close_after_ts(
+            all_expirations, event_ts, options_close_et,
+        )
     if primary.earnings_role == "post_earnings":
-        # primary captures event → need a pre-event expiry (and not already-expired)
-        return find_last_expiry_before(
-            all_expirations, event_date, today=today or dt.date.today(),
+        today_et = today or dt.date.today()
+        return find_last_expiry_close_before_ts(
+            all_expirations, event_ts, today_et, options_close_et,
         )
     return None
 
@@ -1188,6 +1271,16 @@ async def _compute_row_for_expiry(
             if "wide_spread" not in row.quality_flags:
                 row.quality_flags.append("wide_spread")
             break
+
+    # Patch v4 fix-4: flag last_fresh-only rows with no two-sided market and no
+    # Greeks. The straddle ($) is computable from last_fresh prints, but there's
+    # no bid/ask to anchor mid AND no IV to cross-validate. The predictor MUST
+    # NOT treat this as a clean MEDIUM row — IV-based reasoning is impossible
+    # and the EM derived from last-only prints is only as fresh as the last tick.
+    if (row.call_mid_source == "last_fresh" and row.put_mid_source == "last_fresh"
+            and row.call_iv is None and row.put_iv is None):
+        if "last_only_no_iv" not in row.quality_flags:
+            row.quality_flags.append("last_only_no_iv")
 
     row.quote_freshness = derive_quote_freshness(
         row.call_tick_age_seconds, row.call_tick_age_known,

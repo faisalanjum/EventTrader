@@ -146,8 +146,8 @@ creates a meaningful pre/post-event split (see [Earnings timing](#earnings-timin
 | `expected_move_dollars` | float | `call_mid + put_mid` |
 | `expected_move_pct` | float | `expected_move_dollars / spot` |
 | `iv_avg` | float | `(call_iv + put_iv) / 2`, annualized decimal |
-| `em_from_iv_dollars` | float | `spot × iv_avg × sqrt(dte / 365)` (1-σ via Brenner-Subrahmanyam) |
-| `em_from_iv_pct` | float | `em_from_iv_dollars / spot` |
+| `em_from_iv_dollars` | float | `spot × iv_avg × sqrt(dte / 365)` — the raw 1-σ move (in $) implied by IV |
+| `em_from_iv_pct` | float | `em_from_iv_dollars / spot` = `iv_avg × sqrt(dte / 365)` — the raw 1-σ move as a fraction of spot |
 | `iv_disagreement_pp` | float | `\|call_iv − put_iv\|` in percentage points (e.g. 30% vs 27% = 3.0 pp) |
 
 ### Quality axes (the four orthogonal labels)
@@ -411,17 +411,22 @@ Do **NOT** compare:
   disparity is normal market structure (skew, dividend timing, hard-to-borrow).
   Vendors typically publish a single ATM IV that approximates the mean.
 
-A useful sanity ratio is the **Brenner-Subrahmanyam** relation:
+A useful sanity ratio is the **Brenner-Subrahmanyam** relation. The ATM
+straddle price approximates `sqrt(2/π)` times a 1-σ move:
 
 ```
-expected_move_pct ≈ sqrt(2/π) × iv_avg × sqrt(dte/365)
-                  = 0.7979 × iv_avg × sqrt(dte/365)
+em_from_iv_pct        =  iv_avg × sqrt(dte/365)        # raw 1-σ move (fraction of spot)
+expected_move_pct     ≈  sqrt(2/π) × em_from_iv_pct
+                      ≈  0.7979   × em_from_iv_pct
+
+⇒ expected_move_pct / em_from_iv_pct  ≈  0.7979
 ```
 
-The `em_from_iv_pct` field encodes the right-hand side. If
-`expected_move_pct` and `em_from_iv_pct` differ by more than ~30%,
-check for `includes_earnings_premium` or `wide_spread` flags before
-assuming a bug.
+So the sanity check is the **ratio** of `expected_move_pct` to
+`em_from_iv_pct` (not their equality). In normal markets at a tight ATM
+strike, that ratio sits within roughly 0.6–1.0. Values outside that band
+usually trace to `includes_earnings_premium`, `wide_spread`, or
+`atm_distance_high` — check those flags before suspecting a bug.
 
 ## Known limitations
 

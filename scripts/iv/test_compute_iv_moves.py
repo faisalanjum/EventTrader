@@ -47,6 +47,8 @@ from compute_iv_moves import (  # noqa: E402
     fetch_yahoo_earnings,
     classify_expiry,
     compute_expiry_ladder,
+    find_first_expiry_close_after_ts,
+    find_last_expiry_close_before_ts,
     _et_date_from_iso,
     _run_as_of_et_date,
 )
@@ -2111,3 +2113,208 @@ class TestExpiryLadderInArtifactInvariant:
                 f"Emitted row_id {row.row_id} has no ladder entry — "
                 f"predictor invariant violated"
             )
+
+
+# ---------------------------------------------------------------------------
+# Phase 4 patch v4 — qs_rel not_applicable, timestamp-based secondary,
+# last_only_no_iv flag
+# ---------------------------------------------------------------------------
+
+class TestQsRelNotApplicableOutsideWindow:
+    """fix-1: quote_snapshot_relative_to_event MUST be 'not_applicable' when
+    the event isn't relevant to this row's option life (in_window=False AND
+    in_contract_life=False). The pre/post distinction carries no info there
+    and was previously polluted with pre_event/post_event labels."""
+
+    def test_event_far_future_outside_window(self):
+        # Event 6 months away, expiry in 30 days. Event date > expiry date AND
+        # event_ts > expiry_close_ts → both False → not_applicable.
+        timing = derive_earnings_timing(
+            event_ts_iso="2026-11-15T20:30:00+00:00",
+            run_as_of_iso="2026-05-14T18:00:00+00:00",
+            expiry_yyyymmdd="20260612",
+            quote_snapshot_iso="2026-05-14T17:00:00+00:00",
+            options_close_et="16:00",
+        )
+        assert timing["in_window"] is False
+        assert timing["in_contract_life"] is False
+        assert timing["quote_snapshot_relative_to_event"] == "not_applicable"
+
+    def test_event_in_past_outside_window(self):
+        # Event was a month ago, run today. expiry future.
+        timing = derive_earnings_timing(
+            event_ts_iso="2026-04-15T20:30:00+00:00",
+            run_as_of_iso="2026-05-14T18:00:00+00:00",
+            expiry_yyyymmdd="20260612",
+            quote_snapshot_iso="2026-05-14T17:00:00+00:00",
+            options_close_et="16:00",
+        )
+        assert timing["in_window"] is False
+        assert timing["in_contract_life"] is False
+        assert timing["quote_snapshot_relative_to_event"] == "not_applicable"
+
+    def test_event_in_window_still_emits_pre_post(self):
+        # Sanity: when event IS in window, pre_event/post_event still emitted.
+        timing = derive_earnings_timing(
+            event_ts_iso="2026-06-05T20:30:00+00:00",
+            run_as_of_iso="2026-05-14T18:00:00+00:00",
+            expiry_yyyymmdd="20260612",
+            quote_snapshot_iso="2026-05-14T17:00:00+00:00",  # before event
+            options_close_et="16:00",
+        )
+        assert timing["in_window"] is True
+        assert timing["in_contract_life"] is True
+        assert timing["quote_snapshot_relative_to_event"] == "pre_event"
+
+
+class TestFindFirstExpiryCloseAfterTs:
+    """fix-2: timestamp-based variant. AMC-on-expiry-day must skip the same-
+    date expiry (closes at 4pm) when the event is at 4:30pm same day."""
+
+    EXPIRIES = {"20260731", "20260801", "20260807"}
+    OPTIONS_CLOSE = "16:00"
+
+    def test_amc_event_skips_same_date_expiry(self):
+        # 4:30pm ET Jul 31 (AMC) = 20:30 UTC. Expiry 20260731 closes 4pm ET
+        # = 20:00 UTC. close < event → NOT a post-event candidate. Next: 20260801.
+        event_ts = dt.datetime(2026, 7, 31, 20, 30, tzinfo=dt.timezone.utc)
+        result = find_first_expiry_close_after_ts(self.EXPIRIES, event_ts, self.OPTIONS_CLOSE)
+        assert result == "20260801", (
+            f"AMC event 4:30pm should skip same-day 4pm expiry; got {result}"
+        )
+
+    def test_bmo_next_day_event_skips_same_week_expiry(self):
+        # BMO 7:30am ET Aug 1 = 11:30 UTC Aug 1. Friday 20260731 closes 4pm ET
+        # = 20:00 UTC Jul 31. 20:00 UTC Jul 31 < 11:30 UTC Aug 1 → 20260731
+        # is NOT after event. First-after = 20260801 (closes 4pm Aug 1 > 11:30am Aug 1).
+        event_ts = dt.datetime(2026, 8, 1, 11, 30, tzinfo=dt.timezone.utc)
+        result = find_first_expiry_close_after_ts(self.EXPIRIES, event_ts, self.OPTIONS_CLOSE)
+        assert result == "20260801"
+
+    def test_dmh_event_returns_same_day_expiry_if_close_is_after(self):
+        # DMH 12pm ET = 16:00 UTC. Expiry 20260731 closes 4pm ET = 20:00 UTC.
+        # 20:00 > 16:00 → 20260731 IS post-event. ✓
+        event_ts = dt.datetime(2026, 7, 31, 16, 0, tzinfo=dt.timezone.utc)
+        result = find_first_expiry_close_after_ts(self.EXPIRIES, event_ts, self.OPTIONS_CLOSE)
+        assert result == "20260731"
+
+
+class TestFindLastExpiryCloseBeforeTs:
+    """fix-2: timestamp-based pre-event picker for the post→pre dual-row complement."""
+
+    EXPIRIES = {"20260724", "20260731", "20260801"}
+    OPTIONS_CLOSE = "16:00"
+
+    def test_bmo_event_skips_same_day_expiry_as_pre(self):
+        # BMO 7:30am ET Jul 31 = 11:30 UTC. Expiry 20260731 closes 4pm ET
+        # = 20:00 UTC > event 11:30 UTC → NOT a pre-event candidate.
+        # 20260724 closes 4pm ET = 20:00 UTC Jul 24 < event → IS pre-event. ✓
+        event_ts = dt.datetime(2026, 7, 31, 11, 30, tzinfo=dt.timezone.utc)
+        today_et = dt.date(2026, 7, 14)
+        result = find_last_expiry_close_before_ts(
+            self.EXPIRIES, event_ts, today_et, self.OPTIONS_CLOSE,
+        )
+        assert result == "20260724"
+
+    def test_amc_same_day_event_keeps_same_day_expiry(self):
+        # AMC 4:30pm ET Jul 31 = 20:30 UTC. Expiry 20260731 closes 4pm ET
+        # = 20:00 UTC < event → IS pre-event. ✓
+        event_ts = dt.datetime(2026, 7, 31, 20, 30, tzinfo=dt.timezone.utc)
+        today_et = dt.date(2026, 7, 14)
+        result = find_last_expiry_close_before_ts(
+            self.EXPIRIES, event_ts, today_et, self.OPTIONS_CLOSE,
+        )
+        assert result == "20260731"
+
+    def test_excludes_today_or_earlier(self):
+        # today=Jul 25. Expiry 20260724 already past. 20260731 closes after event
+        # 7:30am Aug 1. 20260801 closes 4pm Aug 1 > 7:30am Aug 1 → NOT pre.
+        event_ts = dt.datetime(2026, 8, 1, 11, 30, tzinfo=dt.timezone.utc)
+        today_et = dt.date(2026, 7, 25)
+        # Only 20260731 closes 4pm ET Jul 31 = 20:00 UTC < 11:30 UTC Aug 1 → pre.
+        result = find_last_expiry_close_before_ts(
+            self.EXPIRIES, event_ts, today_et, self.OPTIONS_CLOSE,
+        )
+        assert result == "20260731"
+
+
+class TestPickSecondaryExpiryTimestampAware:
+    """fix-2 end-to-end: pick_secondary_expiry uses timestamp logic for same-
+    day AMC/BMO/DMH cases."""
+
+    EXPIRIES = {"20260724", "20260731", "20260801", "20260807"}
+
+    def _row(self, **kw):
+        r = IVRow(ticker="AAPL")
+        for k, v in kw.items():
+            setattr(r, k, v)
+        return r
+
+    def test_amc_on_expiry_day_pre_earnings_picks_next_day(self):
+        # Primary 20260731 is pre_earnings (closes 4pm ET, event 4:30pm ET).
+        # Secondary should be FIRST EXPIRY whose CLOSE is AFTER event ts.
+        # 20260801 closes 4pm ET Aug 1 (next day) > event 4:30pm Jul 31 → ✓
+        primary = self._row(
+            earnings_in_window=True,
+            earnings_event_ts="2026-07-31T20:30:00+00:00",  # 4:30pm ET Jul 31
+            earnings_role="pre_earnings",
+            expiry="20260731",
+        )
+        result = pick_secondary_expiry(primary, self.EXPIRIES)
+        assert result == "20260801"
+
+    def test_bmo_same_day_post_earnings_picks_prior_expiry(self):
+        # Primary 20260731 captures BMO 7:30am Jul 31 event → post_earnings.
+        # Secondary should be LAST EXPIRY whose CLOSE is BEFORE event.
+        # 20260724 closes 4pm ET Jul 24 < event 11:30 UTC Jul 31 → ✓
+        primary = self._row(
+            earnings_in_window=True,
+            earnings_event_ts="2026-07-31T11:30:00+00:00",  # 7:30am ET Jul 31
+            earnings_role="post_earnings",
+            expiry="20260731",
+        )
+        result = pick_secondary_expiry(
+            primary, self.EXPIRIES, today=dt.date(2026, 7, 14),
+        )
+        assert result == "20260724"
+
+
+class TestLastOnlyNoIvFlag:
+    """fix-4: rows where both mids come ONLY from last_fresh AND no IV is
+    present must carry the 'last_only_no_iv' flag, so the predictor doesn't
+    mistake them for clean MEDIUM rows. iv_quality should drop accordingly."""
+
+    def test_flag_combines_with_iv_quality_demotion(self):
+        # Simulate the flag's effect on iv_quality via derive_iv_quality.
+        # last_fresh on both legs + no IV → mid_source!=bid_ask_mid contributes
+        # 1 issue; the new flag is "non-implied" → +1 more issue. Total ≥ 2 → LOW.
+        from compute_iv_moves import derive_iv_quality
+        q = derive_iv_quality(
+            status="OK",
+            data_tier="live",
+            quote_freshness="fresh",
+            call_mid_source="last_fresh",
+            put_mid_source="last_fresh",
+            iv_disagreement_pp=None,
+            atm_distance_pct=0.5,  # tight ATM, no atm_distance_high
+            quality_flags=["last_only_no_iv"],
+        )
+        # mid_source != bid_ask_mid (+1), non-implied flag last_only_no_iv (+1) = 2 → LOW
+        assert q == "LOW", (
+            f"last_only_no_iv flag should demote iv_quality to LOW; got {q}"
+        )
+
+    def test_flag_not_in_implied_set(self):
+        # last_only_no_iv must NOT be treated as "implied by 1-5" by
+        # derive_iv_quality — otherwise it wouldn't count as an extra issue.
+        # Indirect check: a bid_ask_mid row with this flag (impossible in
+        # practice but tests the rule independently) still gets ≥1 issue.
+        from compute_iv_moves import derive_iv_quality
+        q = derive_iv_quality(
+            status="OK", data_tier="live", quote_freshness="fresh",
+            call_mid_source="bid_ask_mid", put_mid_source="bid_ask_mid",
+            iv_disagreement_pp=None, atm_distance_pct=0.5,
+            quality_flags=["last_only_no_iv"],
+        )
+        # No mid_source issue, but the flag itself is non-implied → +1 → MEDIUM
+        assert q == "MEDIUM"
