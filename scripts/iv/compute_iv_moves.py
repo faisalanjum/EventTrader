@@ -45,6 +45,39 @@ from ib_async.contract import Stock, Option
 
 
 # ---------------------------------------------------------------------------
+# SCHEMA v2 — versioning, constants, and runtime config
+# ---------------------------------------------------------------------------
+# Schema reference: scripts/iv/SCHEMA_v2.md (revision 8)
+# Phase 1 scope: schema-versioning shim only (envelope + run_id/row_id).
+# Tier 1/2/earnings fields land in subsequent phases.
+
+SCHEMA_VERSION = "iv_moves.v2"
+
+# US market structural constants (real-world facts, surfaced in artifact for audit).
+# These are NOT fixtures — they are exchange conventions; CME/CBOE/OPRA close at 16:00 ET.
+MARKET_CONVENTIONS = {
+    "options_market_close_et":  "16:00",   # standard US options market close
+    "amc_conventional_time_et": "16:30",   # after-market-close release convention
+    "bmo_conventional_time_et": "07:30",   # before-market-open release convention
+    "dmh_conventional_time_et": "12:00",   # during-market-hours (rare)
+    "iv_annualization_days":    365,       # calendar-day basis for IV → expected move
+}
+
+# Quality / threshold defaults (tunable via future CLI flags).
+DEFAULT_CONFIG = {
+    "tick_freshness_threshold_sec":    300,
+    "spread_warn_bps":                1000,
+    "atm_distance_warn_pct":           1.0,
+    "iv_disagreement_warn_pp":         3.0,
+    "iv_min_valid":                    0.01,
+    "iv_max_valid":                    5.0,
+    "earnings_just_after_window_days":   5,
+    "live_to_delayed_fallback_enabled": True,
+    "expiry_ladder_max_entries":         7,
+}
+
+
+# ---------------------------------------------------------------------------
 # Calendar helpers
 # ---------------------------------------------------------------------------
 
@@ -149,7 +182,14 @@ def em_from_iv(spot: float, iv: float, dte: int) -> float | None:
 
 @dataclass
 class IVRow:
-    ticker: str
+    # === schema identifiers (v2 phase 1) ===
+    schema_version: str = SCHEMA_VERSION
+    row_id: str = ""               # populated post-expiry-pick: "{ticker}:{expiry}:{earnings_role}"
+    run_id: str = ""               # populated by main() — same value across all rows in a run
+    earnings_role: str = "non_earnings"  # phase 4 may overwrite to pre_earnings | post_earnings
+    is_primary: bool = True              # phase 4 may set False for added pre/post rows
+    # === identity ===
+    ticker: str = ""
     spot: float | None = None
     spot_source: str = ""
     expiry: str = ""
@@ -180,9 +220,9 @@ class IVRow:
 
 async def compute_one(
     ib: IB, sem: asyncio.Semaphore, ticker: str, target_dte: int | None,
-    market_data_type: int = 1,
+    market_data_type: int = 1, run_id: str = "",
 ) -> IVRow:
-    row = IVRow(ticker=ticker)
+    row = IVRow(ticker=ticker, run_id=run_id)
     async with sem:
         # 1. Qualify underlying
         try:
@@ -254,6 +294,10 @@ async def compute_one(
             row.diagnostics.append(f"chain_expirations={len(all_expirations)}")
             return row
         row.expiry = expiry_yyyymmdd
+        # row_id format: {ticker}:{expiry}:{earnings_role}. earnings_role defaults to
+        # "non_earnings" in phase 1; phase 4 may emit dual rows with role=pre_earnings/post_earnings
+        # in which case row_id is regenerated at row-emission time.
+        row.row_id = f"{ticker}:{expiry_yyyymmdd}:{row.earnings_role}"
         expiry_date = dt.datetime.strptime(expiry_yyyymmdd, "%Y%m%d").date()
         row.dte = (expiry_date - dt.date.today()).days
 
@@ -412,13 +456,17 @@ async def amain():
     args = ap.parse_args()
 
     tickers = load_tickers(args)
-    print(f"Computing IV for {len(tickers)} tickers ...", file=sys.stderr)
+
+    # Schema v2 phase 1: runtime-derived identifiers (never hardcoded)
+    run_as_of = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
+    run_id = f"{SCHEMA_VERSION}:{run_as_of}:{args.client_id}"
+    print(f"Computing IV for {len(tickers)} tickers  (run_id={run_id})", file=sys.stderr)
 
     ib = IB()
     await ib.connectAsync(host=args.host, port=args.port, clientId=args.client_id, timeout=20)
     sem = asyncio.Semaphore(args.concurrency)
     t0 = time.time()
-    tasks = [compute_one(ib, sem, t, args.target_dte, args.market_data_type) for t in tickers]
+    tasks = [compute_one(ib, sem, t, args.target_dte, args.market_data_type, run_id) for t in tickers]
     rows: list[IVRow] = []
     for i, fut in enumerate(asyncio.as_completed(tasks), 1):
         r = await fut
@@ -436,13 +484,28 @@ async def amain():
     )
     out_path.parent.mkdir(parents=True, exist_ok=True)
     payload = {
-        "as_of": dt.datetime.now(dt.timezone.utc).isoformat(),
-        "method": "atm_straddle",
-        "target_dte": args.target_dte,
-        "market_data_type": args.market_data_type,
-        "universe_size": len(tickers),
-        "summary": summary(rows),
-        "results": [asdict(r) for r in rows],
+        # === schema identifiers (v2 phase 1) ===
+        "schema_version":             SCHEMA_VERSION,
+        "run_id":                     run_id,
+        "run_as_of":                  run_as_of,
+        # === run params ===
+        "method":                     "atm_straddle",
+        "target_dte":                 args.target_dte,
+        "market_data_type_requested": args.market_data_type,
+        "universe_size":              len(tickers),
+        # === constants + thresholds (surfaced for audit per user guardrail; NOT runtime data) ===
+        "market_conventions":         MARKET_CONVENTIONS,
+        "config":                     DEFAULT_CONFIG,
+        # === provenance ===
+        "data_sources": {
+            "options_chain": {"vendor": "IBKR", "via": "reqSecDefOptParams", "live_at_run": True},
+            "quotes":        {"vendor": "IBKR", "via": "reqTickersAsync",    "live_at_run": True},
+            # earnings_calendar block appended in phase 4
+        },
+        # === aggregates ===
+        "summary":  summary(rows),
+        # === per-ticker rows ===
+        "results":  [asdict(r) for r in rows],
     }
     out_path.write_text(json.dumps(payload, indent=2, default=str))
     print(f"\nWrote {out_path}", file=sys.stderr)

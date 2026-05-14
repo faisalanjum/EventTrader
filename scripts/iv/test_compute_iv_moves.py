@@ -22,6 +22,10 @@ from compute_iv_moves import (  # noqa: E402
     safe_mid,
     spread_bps,
     em_from_iv,
+    SCHEMA_VERSION,
+    MARKET_CONVENTIONS,
+    DEFAULT_CONFIG,
+    IVRow,
 )
 
 
@@ -250,3 +254,96 @@ class TestCrossValidation:
         ratio = em_straddle / em_iv
         # Expected ratio ≈ sqrt(2/π) ≈ 0.7979
         assert 0.79 < ratio < 0.80
+
+
+# ---------------------------------------------------------------------------
+# Schema v2 phase 1 — versioning, identifiers, envelope constants
+# ---------------------------------------------------------------------------
+
+class TestSchemaV2Constants:
+    """Schema version + market conventions + default config — must be stable.
+    Per the SCHEMA_v2.md contract, these are surfaced in every artifact."""
+
+    def test_schema_version_pinned(self):
+        assert SCHEMA_VERSION == "iv_moves.v2"
+
+    def test_market_conventions_has_required_keys(self):
+        for k in ("options_market_close_et", "amc_conventional_time_et",
+                  "bmo_conventional_time_et", "dmh_conventional_time_et",
+                  "iv_annualization_days"):
+            assert k in MARKET_CONVENTIONS, f"missing {k}"
+
+    def test_market_conventions_amc_after_close(self):
+        # AMC release convention MUST be after options market close
+        # (otherwise the "expires-before-event" logic is wrong)
+        assert MARKET_CONVENTIONS["amc_conventional_time_et"] > MARKET_CONVENTIONS["options_market_close_et"]
+
+    def test_market_conventions_bmo_before_open(self):
+        # BMO release MUST be before 09:30 ET (market open)
+        assert MARKET_CONVENTIONS["bmo_conventional_time_et"] < "09:30"
+
+    def test_iv_annualization_calendar_days(self):
+        # IV scaling uses calendar days (365), not trading days (252)
+        assert MARKET_CONVENTIONS["iv_annualization_days"] == 365
+
+    def test_default_config_has_required_thresholds(self):
+        for k in ("tick_freshness_threshold_sec", "spread_warn_bps",
+                  "atm_distance_warn_pct", "iv_disagreement_warn_pp",
+                  "iv_min_valid", "iv_max_valid",
+                  "earnings_just_after_window_days",
+                  "live_to_delayed_fallback_enabled",
+                  "expiry_ladder_max_entries"):
+            assert k in DEFAULT_CONFIG, f"missing {k}"
+
+
+class TestIVRowSchemaV2:
+    """IVRow defaults match v2 schema phase 1."""
+
+    def test_default_schema_version(self):
+        r = IVRow(ticker="AAPL")
+        assert r.schema_version == "iv_moves.v2"
+
+    def test_default_earnings_role(self):
+        # phase 4 will overwrite; phase 1 default is non_earnings
+        r = IVRow(ticker="AAPL")
+        assert r.earnings_role == "non_earnings"
+
+    def test_default_is_primary(self):
+        r = IVRow(ticker="AAPL")
+        assert r.is_primary is True
+
+    def test_default_row_id_empty(self):
+        # row_id is set later by compute_one once expiry is picked
+        r = IVRow(ticker="AAPL")
+        assert r.row_id == ""
+
+    def test_row_id_format_after_pick(self):
+        # Format: {ticker}:{expiry}:{earnings_role}
+        # This is the contract for evidence-catalog citation
+        r = IVRow(ticker="AAPL")
+        r.row_id = f"{r.ticker}:20260618:{r.earnings_role}"
+        assert r.row_id == "AAPL:20260618:non_earnings"
+
+
+class TestRunIdFormat:
+    """run_id format: {schema_version}:{run_as_of}:{client_id}"""
+
+    def test_run_id_components(self):
+        # Construct exactly as main() does
+        from datetime import datetime, timezone
+        run_as_of = datetime(2026, 5, 14, 20, 35, 0, tzinfo=timezone.utc).isoformat(timespec="seconds")
+        client_id = 33
+        run_id = f"{SCHEMA_VERSION}:{run_as_of}:{client_id}"
+        # Must start with schema_version
+        assert run_id.startswith("iv_moves.v2:")
+        # Must end with client_id
+        assert run_id.endswith(":33")
+        # Must contain the timestamp
+        assert "2026-05-14T20:35:00+00:00" in run_id
+
+    def test_run_id_changes_per_run(self):
+        # Two runs at different times produce different run_ids
+        from datetime import datetime, timezone
+        rid_1 = f"{SCHEMA_VERSION}:{datetime(2026, 5, 14, 10, 0, 0, tzinfo=timezone.utc).isoformat(timespec='seconds')}:33"
+        rid_2 = f"{SCHEMA_VERSION}:{datetime(2026, 5, 14, 11, 0, 0, tzinfo=timezone.utc).isoformat(timespec='seconds')}:33"
+        assert rid_1 != rid_2
