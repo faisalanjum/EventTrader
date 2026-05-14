@@ -1,4 +1,4 @@
-# IV Moves Output Schema — `iv_moves.v2` (revision 3)
+# IV Moves Output Schema — `iv_moves.v2` (revision 7)
 
 **Version**: `iv_moves.v2`
 **Status**: PROPOSED — awaiting user sign-off before implementation
@@ -8,15 +8,14 @@
 - r3 — fixed 9 more issues: envelope omission, Juneteenth dates, run_id wording, fallback double-count, Example 3 contradictions, "zeroed out" → "set to null", in_window phrasing, explicit pre/post selection rules, removed per-row pit_unsafe noise
 - r4 — fixed 6 issues (AMC formula, BMO wording, freshness=unknown, dead enums, Example 5 date, Example 3 reasoning)
 - r5 — CRITICAL: separates run time from quote-snapshot time; adds quote_snapshot_as_of, event_ts, quote_snapshot_relative_to_event
-- r6 — fixes 7 final review issues:
-       - examples updated with r5 fields (were teaching wrong invariant)
-       - run_id timestamp aligned with run_as_of in all examples
-       - quote_snapshot_as_of clarified as EFFECTIVE market time, not IBKR receive time
-       - "unknown" added to quote_snapshot_relative_to_event enum
-       - CRITICAL: includes_earnings_premium defined as (in_contract_life=TRUE AND qs_rel=pre_event);
-         pre_event ALONE was incorrectly implying premium inclusion
-       - post_event_snapshot context flag added (IV-crush warning)
-       - event_ts_source precedence rules added (sec_filing > user_supplied > yahoo_conventional > unknown)
+- r6 — fixed 7 review issues (CRITICAL: pre_event ≠ premium; added qs_rel unknown enum, post_event_snapshot flag, event_ts_source precedence)
+- r7 — tiny cleanup only (no schema changes):
+       - title revision number now matches changelog (was r3, now r7)
+       - generic row-shape run_id timestamp aligned with run_as_of (20:35Z)
+       - expiry_ladder.as_of renamed to .run_as_of for consistency
+       - Example 4 timestamps now internally consistent: run_as_of=5/15 20:35Z,
+         quote_snapshot=5/15 20:00Z, event_ts=5/15 20:30Z, expiry=20260515
+       - Example 4 leg tick_age_seconds now ~2100 (frozen close 35 min old) — was 2.1/1.5 (contradicted stale)
 
 ## Design principles
 
@@ -93,7 +92,7 @@ Each input ticker gets ONE entry in `expiry_ladder` listing the ≤N expiries we
 {
   "ticker": "NVDA",
   "spot":   145.32,
-  "as_of":  "2026-05-14T13:30:00Z",
+  "run_as_of":  "2026-05-14T20:35:00Z",
   "candidate_expiries": [
     {
       "expiry":             "20260515",      // YYYYMMDD
@@ -148,7 +147,7 @@ Each input ticker gets ONE entry in `expiry_ladder` listing the ≤N expiries we
 {
   "schema_version": "iv_moves.v2",
   "row_id":         "NVDA:20260522:post_earnings",  // {ticker}:{expiry}:{earnings_role}; stable for evidence cite
-  "run_id":         "iv_moves.v2:2026-05-14T13:30:00Z:33",
+  "run_id":         "iv_moves.v2:2026-05-14T20:35:00Z:33",  // matches top-level run_as_of invariant
 
   // === identity ===
   "ticker":         "NVDA",
@@ -644,23 +643,24 @@ Bot reads: `quote_freshness=stale, iv_quality=LOW, status=PARTIAL` → IV is ill
 {
   "schema_version": "iv_moves.v2",
   "row_id":         "NVDA:20260515:pre_earnings",
-  "run_id":         "iv_moves.v2:2026-05-14T20:35:00Z:33",  // RAN at 16:35 ET — AFTER the 16:30 AMC release
+  "run_id":         "iv_moves.v2:2026-05-15T20:35:00Z:33",  // RAN at 16:35 ET on 5/15 — AFTER the 16:30 AMC release SAME DAY
 
   "ticker": "NVDA", "spot": 145.32, "spot_source": "frozen",
-  "quote_snapshot_as_of":  "2026-05-14T20:00:00Z",       // QUOTE represents 16:00 ET — frozen close BEFORE the 16:30 announcement
+  "quote_snapshot_as_of":  "2026-05-15T20:00:00Z",       // QUOTE represents 16:00 ET 5/15 — frozen close BEFORE the 16:30 announcement
   "quote_snapshot_source": "frozen_close",                 // mdt=2; this is the headline pre-event-snapshot scenario
-  "expiry": "20260515",
+  "expiry": "20260515",                                    // SAME DAY (option expired at 16:00 ET)
   "is_primary": false,                       // primary picked the next monthly; this row is generated because earnings in window
   "earnings_role": "pre_earnings",
-  "dte": 1, "dte_fractional": 0.92,
+  "dte": 0, "dte_fractional": 0.0,                       // expiry is today (now post-expiry)
   "atm_strike": 145.0, "atm_distance_pct": 0.22, "multiplier": 100,
 
   "call": { "conid": 234567, "bid": 1.20, "ask": 1.25, "last": 1.22,
             "mid": 1.225, "mid_source": "bid_ask_mid", "iv": 0.4321,
-            "spread_bps": 408.2, "tick_age_seconds": 2.1, "tick_age_known": true },
+            "spread_bps": 408.2, "tick_age_seconds": 2105, "tick_age_known": true },
   "put":  { "conid": 234568, "bid": 0.90, "ask": 0.95, "last": 0.92,
             "mid": 0.925, "mid_source": "bid_ask_mid", "iv": 0.4288,
-            "spread_bps": 540.5, "tick_age_seconds": 1.5, "tick_age_known": true },
+            "spread_bps": 540.5, "tick_age_seconds": 2098, "tick_age_known": true },
+  // tick_age_seconds ~2100 = 35 min: quote frozen from 16:00 ET, run at 16:35 ET
 
   "expected_move_dollars": 2.15, "expected_move_pct": 0.0148,
   "iv_avg": 0.4305, "iv_disagreement_pp": 0.33,
@@ -674,17 +674,14 @@ Bot reads: `quote_freshness=stale, iv_quality=LOW, status=PARTIAL` → IV is ill
 
   "earnings": {
     "next_date":            "2026-05-15", "next_time": "AMC", "next_time_source": "yahoo",
-    "event_ts":             "2026-05-15T20:30:00Z",   // 16:30 ET tomorrow (the AMC release; one row's expiry day was actually 5/14 in chain)
-                                                       // (Per the scenario in §earnings derivation: we ran 5/14 post-close;
-                                                       //  but the FRONT-MONTH option in this example expires 5/15 — earnings is on 5/15 AMC.
-                                                       //  For an alternative same-day expiry case, event_ts and expiry would both be on 5/14.)
+    "event_ts":             "2026-05-15T20:30:00Z",   // 16:30 ET 5/15 = the AMC release SAME DAY as expiry
     "event_ts_source":      "yahoo_conventional",
     "in_window":            true,                                                // earnings on calendar
-    "earnings_in_contract_life": false,                                          // option expires 16:00 ET; earnings 16:30 ET → not in life
-    "quote_snapshot_relative_to_event": "pre_event",                              // 20:00 < 20:30 — frozen quote was BEFORE event
+    "earnings_in_contract_life": false,                                          // option expires 16:00 ET 5/15; earnings 16:30 ET 5/15 → not in life
+    "quote_snapshot_relative_to_event": "pre_event",                              // qs 20:00 < event 20:30 — frozen quote was BEFORE event
                                                                                    // BUT: NOT includes_earnings_premium (needs in_contract_life=TRUE too)
     "calendar_source":      "yahoo",
-    "calendar_as_of":       "2026-05-14T08:00:00Z",
+    "calendar_as_of":       "2026-05-15T08:00:00Z",
     "calendar_pit_safe":    false
   },
 
@@ -706,7 +703,7 @@ Bot reads: `context_flags includes amc_expiry_day` → KNOWS this row excludes e
 {
   "ticker": "NVDA",
   "spot":   145.32,
-  "as_of":  "2026-05-14T13:30:00Z",
+  "run_as_of":  "2026-05-14T20:35:00Z",
   "candidate_expiries": [
     { "expiry": "20260515", "dte": 1, "dte_fractional": 0.92, "type": "weekly",
       "distance_from_target_dte_days": 29,
