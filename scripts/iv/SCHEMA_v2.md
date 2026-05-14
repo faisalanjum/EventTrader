@@ -6,13 +6,13 @@
 - r1 — STALE/data_tier contradiction; missing expiry_ladder; missing row_id; earnings date-window only
 - r2 — fixed 12 issues from review
 - r3 — fixed 9 more issues: envelope omission, Juneteenth dates, run_id wording, fallback double-count, Example 3 contradictions, "zeroed out" → "set to null", in_window phrasing, explicit pre/post selection rules, removed per-row pit_unsafe noise
-- r4 — fixes 6 final issues:
-       - in_window formula bug (16:30 <= 16:00 fails for AMC-expiry-day): SPLIT into date-window vs timestamp
-       - BMO contract-life wording cleaned (drop confused 09:30 reference)
-       - iv_quality issue_count now counts quote_freshness ≠ fresh (catches unknown)
-       - removed dead enum mentions (live_entitlement_failed, mid_rejected_extreme_spread, earnings_calendar_pit_unsafe)
-       - Example 5 expiry_ladder: 20260619 → 20260618
-       - Example 3 LOW reasoning comment: 2 issues → 3 issues with proper enumeration
+- r4 — fixed 6 issues (AMC formula, BMO wording, freshness=unknown, dead enums, Example 5 date, Example 3 reasoning)
+- r5 — CRITICAL: separates run time from quote-snapshot time
+       Predictor runs at 16:35 after 8-K AMC release; option quotes are frozen from 16:00 pre-release.
+       Bot MUST know the IV snapshot is pre-event even though the script run is post-event.
+       Added per-row: quote_snapshot_as_of, quote_snapshot_source
+       Added per earnings: event_ts (explicit), event_ts_source, quote_snapshot_relative_to_event
+       Updated all derivation rules to use the right timestamp for each question
 
 ## Design principles
 
@@ -34,8 +34,11 @@
 ```jsonc
 {
   "schema_version": "iv_moves.v2",
-  "run_id":         "iv_moves.v2:2026-05-14T13:30:00Z:33",  // {schema}:{as_of}:{clientId} — UNIQUE PER RUN. Stable within one run for citing rows; NOT stable across re-runs (timestamp varies).
-  "as_of":          "2026-05-14T13:30:00Z",
+  "run_id":         "iv_moves.v2:2026-05-14T13:30:00Z:33",  // {schema}:{run_as_of}:{clientId} — UNIQUE PER RUN. Stable within one run for citing rows; NOT stable across re-runs (timestamp varies).
+  "run_as_of":      "2026-05-14T20:35:00Z",  // WHEN THE SCRIPT RAN (e.g., 16:35 ET = 20:35 UTC, post-market for predictor use)
+                                              // Distinct from per-row `quote_snapshot_as_of` which is when the QUOTE represents.
+                                              // Predictor running at 16:35 after 8-K release at 16:30 has run_as_of=16:35 but
+                                              // quote_snapshot_as_of may be 16:00 (frozen pre-release).
   "method":         "atm_straddle",
   "target_dte":     30,
   "market_data_type_requested": 1,
@@ -148,6 +151,16 @@ Each input ticker gets ONE entry in `expiry_ladder` listing the ≤N expiries we
   "spot":           145.32,
   "spot_source":    "live",            // live | delayed | frozen | historical_close
 
+  // === time provenance (NEW in r5 — separates run time from quote time) ===
+  "quote_snapshot_as_of":  "2026-05-14T20:00:00Z",   // when the option quotes ACTUALLY represent
+                                                      // (e.g., 16:00 ET frozen close even if run_as_of=16:35 ET)
+  "quote_snapshot_source": "live_tick",                // live_tick | delayed_tick | frozen_close | delayed_frozen | unknown
+                                                       // live_tick     : ticker.time within freshness window, mdt=1
+                                                       // delayed_tick  : mdt=3, fresh tick within delayed stream
+                                                       // frozen_close  : mdt=2, last live tick (often previous close)
+                                                       // delayed_frozen: mdt=4, delayed-snapshot
+                                                       // unknown       : ticker.time absent, can't infer
+
   // === expiry classification ===
   "expiry":         "20260522",
   "is_primary":     true,              // was this the user's target-DTE pick?
@@ -207,14 +220,23 @@ Each input ticker gets ONE entry in `expiry_ladder` listing the ≤N expiries we
 
   // === earnings context ===
   "earnings": {
-    "next_date":          "2026-05-15",
-    "next_time":          "AMC",        // AMC | BMO | DMH (during market hours) | unknown
-    "next_time_source":   "yahoo",      // marks where the AMC/BMO came from
-    "in_window":          true,         // earnings_date in (today, this_row.expiry]
-    "earnings_in_contract_life": true,  // timing-aware: AMC-on-expiry-day = false, BMO-on-expiry-day = true
-    "calendar_source":    "yahoo",
-    "calendar_as_of":     "2026-05-14T08:00:00Z",
-    "calendar_pit_safe":  false         // backtests MUST gate on this
+    "next_date":            "2026-05-15",
+    "next_time":            "AMC",                // AMC | BMO | DMH | unknown
+    "next_time_source":     "yahoo",              // origin of the AMC/BMO classification
+    "event_ts":             "2026-05-15T20:30:00Z",  // EXPLICIT timestamp; derived from next_date + conventional time
+    "event_ts_source":      "yahoo_conventional",    // sec_filing | yahoo_conventional | user_supplied | unknown
+                                                     // sec_filing  : timestamp from actual 8-K filing time (highest fidelity)
+                                                     // yahoo_conventional : derived from date + AMC/BMO conventional time
+                                                     // user_supplied: passed via CLI override
+    "in_window":            true,                  // see derivation rules; date-level "earnings on calendar?"
+    "earnings_in_contract_life": false,            // timing-level: contract spans event?
+    "quote_snapshot_relative_to_event": "pre_event",  // pre_event | post_event | not_applicable
+                                                      // pre_event  : quote_snapshot_as_of < event_ts → IV reflects forthcoming event
+                                                      // post_event : quote_snapshot_as_of >= event_ts → IV is post-event vol
+                                                      // not_applicable : no earnings in scope
+    "calendar_source":      "yahoo",
+    "calendar_as_of":       "2026-05-14T08:00:00Z",
+    "calendar_pit_safe":    false                  // backtests MUST gate on top-level data_sources.earnings_calendar.pit_safe
   },
 
   "diagnostics": []                     // human-readable; empty when clean. NO interpretation of em_method_ratio.
@@ -264,63 +286,86 @@ LOW     — issue_count >= 2
 n/a     — status NOT IN (OK, PARTIAL)
 ```
 
-### Earnings field derivation rules (timing-aware)
+### Earnings field derivation rules (TIME PROVENANCE explicit in r5)
 
 ```
-Let event_ts = earnings_date concatenated with conventional time:
-    - AMC: earnings_date @ 16:30 ET (after-market-close window)
-    - BMO: earnings_date @ 07:30 ET (before-market-open window)
-    - DMH: earnings_date @ 12:00 ET (during-market-hours, rare)
-    - unknown time: earnings_date @ 12:00 ET, AND set next_time_known=false (flag through diagnostics)
+THREE TIMESTAMPS in play — distinguish them carefully:
+
+  run_as_of              = when the SCRIPT RAN          (top-level)
+  quote_snapshot_as_of   = when the QUOTE REPRESENTS    (per row; from ticker.time or freeze)
+  event_ts               = when EARNINGS RELEASES       (per row; from sec_filing or yahoo conventional)
+
+Common predictor scenario:
+  run_as_of            = 2026-05-14T20:35:00Z  (16:35 ET, script kicked off after 8-K)
+  quote_snapshot_as_of = 2026-05-14T20:00:00Z  (16:00 ET, options closed pre-release)
+  event_ts             = 2026-05-14T20:30:00Z  (16:30 ET, 8-K announcement)
+  → run is post-event; SNAPSHOT IS PRE-EVENT (IV reflects forthcoming earnings)
+
 
 Let expiry_close_ts = expiry_date @ 16:00 ET.
-Let as_of = the run timestamp (top-level).
 
 ────────────────────────────────────────────────────────────────────────
-earnings.in_window  (DATE-LEVEL — "is this earnings in our calendar window?")
+earnings.in_window  (DATE-LEVEL — "is earnings on this option's expiry calendar?")
 
-  in_window = (event_ts > as_of) AND (earnings_date <= expiry_date)
-                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-                                       DATE comparison, NOT timestamp
+  in_window = (earnings_date >= run_as_of.date()) AND (earnings_date <= expiry_date)
 
-  → catches AMC on expiry day correctly:
-       AMC event_ts (16:30) > as_of (say 12:00) ✓
-       earnings_date (today) <= expiry_date (today) ✓
+  → uses RUN time, not snapshot. Bot wants to know "is there an earnings event the
+    option could care about, scheduled today or later through expiry?"
+
+  → catches AMC on expiry day:
+       run_as_of.date() = today, earnings_date = today, expiry_date = today
        → in_window = TRUE
 
 ────────────────────────────────────────────────────────────────────────
 earnings.earnings_in_contract_life  (TIMESTAMP — "does the option's LIFE span the event?")
 
-  earnings_in_contract_life = (event_ts > as_of) AND (event_ts <= expiry_close_ts)
-                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-                                                      TIMESTAMP comparison
+  earnings_in_contract_life = (event_ts <= expiry_close_ts)
 
   Specifically for expiry-day earnings:
-    - AMC on expiry day:
-        event_ts (16:30) <= expiry_close_ts (16:00) → FALSE
-        → in_contract_life = FALSE
-        → option expires BEFORE the announcement; earnings is NOT in the option's life
-    - BMO on expiry day:
-        event_ts (07:30) <= expiry_close_ts (16:00) → TRUE
-        → in_contract_life = TRUE
-        → option was alive overnight; captures the BMO event at next open
-    - DMH on expiry day:
-        event_ts (12:00) <= expiry_close_ts (16:00) → TRUE
-        → in_contract_life = TRUE
-    - earnings BEFORE expiry day (any time):
-        event_ts <= expiry_close_ts → TRUE (event_ts is on an earlier date, well before close)
-        → in_contract_life = TRUE
+    - AMC on expiry day:  event_ts (16:30) <= expiry_close_ts (16:00) → FALSE
+                          (option dies before announcement)
+    - BMO on expiry day:  event_ts (07:30) <= expiry_close_ts (16:00) → TRUE
+                          (option alive overnight; captures BMO gap at next open)
+    - DMH on expiry day:  event_ts (12:00) <= expiry_close_ts (16:00) → TRUE
+    - earnings BEFORE expiry: always TRUE
 
 ────────────────────────────────────────────────────────────────────────
-SUMMARY OF AMC vs BMO ON EXPIRY DAY:
+earnings.quote_snapshot_relative_to_event  (CRITICAL for post-market predictor use)
 
-                          in_window      in_contract_life      Bot interpretation
-                          ───────────    ────────────────      ──────────────────
-  AMC on expiry day        TRUE          FALSE                 calendar says earnings is in window,
-                                                               but the option dies before it →
-                                                               IV does NOT include earnings move
-  BMO on expiry day        TRUE          TRUE                  option's overnight gap captures
-                                                               the BMO move → IV includes it
+  pre_event   if quote_snapshot_as_of <  event_ts → IV reflects forthcoming event
+  post_event  if quote_snapshot_as_of >= event_ts → IV is post-event vol
+  not_applicable  if no earnings in scope
+
+  → predictor at run_as_of=16:35 with quote_snapshot_as_of=16:00 and event_ts=16:30:
+      16:00 < 16:30 → "pre_event"
+      → bot reads IV correctly as forward-looking (includes earnings premium)
+
+────────────────────────────────────────────────────────────────────────
+SUMMARY OF AMC vs BMO ON EXPIRY DAY (run BEFORE the event):
+
+                       in_window  in_contract_life  qs_rel_to_event  Bot interpretation
+                       ─────────  ────────────────  ───────────────  ──────────────────
+  AMC on expiry day    TRUE       FALSE             pre_event        Earnings is on the calendar
+                                                                     but option dies before it →
+                                                                     this row's IV does NOT include
+                                                                     earnings move; pair with
+                                                                     post_earnings row
+  BMO on expiry day    TRUE       TRUE              pre_event        Option captures the BMO gap
+                                                                     overnight → IV includes it
+
+POST-RUN SCENARIO (run AFTER an AMC event, snapshot still pre-event from frozen close):
+  run_as_of            = 16:35 ET   (after announcement)
+  quote_snapshot_as_of = 16:00 ET   (frozen close, pre-announcement)
+  event_ts             = 16:30 ET
+
+  in_window: today >= today AND today <= expiry → TRUE
+  in_contract_life: 16:30 <= 16:00 → FALSE
+  qs_rel_to_event: 16:00 < 16:30 → "pre_event"
+  → Bot reads: "Earnings is on calendar (in_window), but the option dies before announcement
+                (in_contract_life=false), and my IV snapshot was taken pre-announcement
+                (qs_rel_to_event=pre_event). So this row's IV reflects the pre-release uncertainty
+                but won't include the actual announcement move. Pair with the post_earnings row
+                for the post-event IV."
 ```
 
 ### Pre/post earnings expiry selection rules
