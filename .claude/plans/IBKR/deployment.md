@@ -101,13 +101,21 @@ kubectl set image deployment/ibkr-paper -n mcp-services ibkr-mcp-server=ibkr-mcp
 4. `app/api/ibkr/__init__.py` — add `from .xxx import *`
 5. Rebuild + deploy (see above)
 
-## Rollback Image Pin (per-contract tradingHours, 2026-05-14)
+## Rollback Image Pin (TickerData.marketDataType, 2026-05-14)
 
 | Image | Tag | Docker SHA256 (image ID) | Containerd OCI digest |
 |---|---|---|---|
-| **Two-back** | `smart-fix-1` | `1a12619e0cafc39755c435da8de21f1a213b4496f55e214ffadda6dfce022390` | `d72b7f9691ceb5e34fe6ed6c3a5f1eb95ffb23947e2b60f449bfbcd32a81d7e2` |
-| **Previous (rollback target)** | `ext-hours-v3` | `13b4eae9b862d1ef94eaa7e9296604dfdbeacbae787bf01d45fd17947bb70393` | `f6b60314c7bb4b3f4335bd7319d34a10059eb7d25623baddd2125b5e968f64fa` |
-| **Current (per-contract hours)** | `ext-hours-v4` | `84dee3a5604823c3a05e078b1e601d885acaff5c677ccbda49a9af778cd444e3` | `7ab9e097d11d8291486a381dead00787b70942875766e0afca89e2814688ae90` |
+| **Three-back** | `smart-fix-1` | `1a12619e0cafc39755c435da8de21f1a213b4496f55e214ffadda6dfce022390` | `d72b7f9691ceb5e34fe6ed6c3a5f1eb95ffb23947e2b60f449bfbcd32a81d7e2` |
+| **Two-back** | `ext-hours-v3` | `13b4eae9b862d1ef94eaa7e9296604dfdbeacbae787bf01d45fd17947bb70393` | `f6b60314c7bb4b3f4335bd7319d34a10059eb7d25623baddd2125b5e968f64fa` |
+| **Previous (rollback target)** | `ext-hours-v4` | `84dee3a5604823c3a05e078b1e601d885acaff5c677ccbda49a9af778cd444e3` | `7ab9e097d11d8291486a381dead00787b70942875766e0afca89e2814688ae90` |
+| **Current (TickerData.marketDataType)** | `ext-hours-v5` | `569732db137d324df3ccc458e3226577c4cdc4d3a40aa750dcfa623e5d6db116` | `64638ce4b2e705a46fafd552bd73d3b23a5ee119a193702bac891846062554c9` |
+
+**What changed in ext-hours-v5** (in case rollback needed for forensics):
+- `app/models/ticker.py::TickerData` — added optional `marketDataType: int | None` field (mirrors Phase 1 PriceSnapshot.market_data_type contract)
+- `app/services/market_data.py::_process_tickers()` — extracts `marketDataType` from each ib_async Ticker, sets it on TickerData; safely handles missing column or NaN
+- `app/services/market_data.py::get_and_filter_options()` — carries the field through TickerData reconstruction (line 196-207)
+- Tests: `tests/test_ticker_market_data_type.py` (8 cases) — 70/70 total pass
+- **Important caveat**: ib_async defaults `marketDataType` to 1 when IBKR sends no marketDataType tick. So `mdt=1` alone is NOT proof of live data — callers must also check that bid/ask or last is populated. Confirmed empirically 2026-05-14 07:30 ET: AAPL stock returned mdt=1 with populated bid/ask (genuine live), but AAPL option returned mdt=1 with all-null fields (default value, no data flowed).
 
 > **Note**: `ext-hours-v1` was abandoned — it was built from the wrong source tree (a standalone clone that didn't have the smart-fix-1 modifications committed). `ext-hours-v3` was the first image built from `EventMarketDB/ibkr-mcp-server/` (true source of truth). `ext-hours-v4` adds per-contract `tradingHours` lookup on top of v3.
 
