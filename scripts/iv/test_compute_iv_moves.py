@@ -7,6 +7,7 @@ to be trustworthy.
 from __future__ import annotations
 
 import datetime as dt
+import json
 import math
 import sys
 from pathlib import Path
@@ -40,6 +41,10 @@ from compute_iv_moves import (  # noqa: E402
     find_first_expiry_after,
     find_last_expiry_before,
     pick_secondary_expiry,
+    determine_qs_source_and_ts,
+    load_or_fetch_earnings_cache,
+    _et_date_from_iso,
+    _run_as_of_et_date,
 )
 
 
@@ -1287,3 +1292,313 @@ class TestDualRowOrchestration:
         )
         assert len(rows) == 1
         assert len(call_log) == 1
+
+
+# ---------------------------------------------------------------------------
+# Phase 4 patch v2 — timestamp/provenance honesty
+# ---------------------------------------------------------------------------
+
+class TestEtDateFromIso:
+    """fix-4: date-level logic must convert event_ts to ET, not slice the ISO
+    string and not call .date() on a UTC-replaced datetime."""
+
+    def test_utc_event_during_et_business_hours(self):
+        # 4:30pm ET = 20:30 UTC, same calendar day in both zones
+        assert _et_date_from_iso("2026-07-31T20:30:00+00:00") == dt.date(2026, 7, 31)
+
+    def test_utc_event_after_et_8pm_crosses_utc_midnight(self):
+        # 9:30pm ET on Jul 31 = 01:30 UTC on Aug 1. The CRITICAL case:
+        # naive UTC slicing would yield 2026-08-01, but ET trading day is Jul 31.
+        # Verify the helper returns ET date.
+        assert _et_date_from_iso("2026-08-01T01:30:00+00:00") == dt.date(2026, 7, 31)
+
+    def test_explicit_et_offset_preserved(self):
+        # ISO already in ET offset → date is ET-native
+        assert _et_date_from_iso("2026-07-31T16:30:00-04:00") == dt.date(2026, 7, 31)
+
+    def test_naive_iso_treated_as_utc(self):
+        # No tz → helper treats as UTC. 20:30 UTC = 16:30 ET (DST) on same day.
+        assert _et_date_from_iso("2026-07-31T20:30:00") == dt.date(2026, 7, 31)
+
+    def test_none_returns_none(self):
+        assert _et_date_from_iso(None) is None
+        assert _et_date_from_iso("") is None
+
+    def test_garbage_returns_none(self):
+        assert _et_date_from_iso("not-a-timestamp") is None
+
+
+class TestRunAsOfEtDate:
+    """fix-3: DTE and secondary-expiry pickers must use the run's ET trading
+    date, never dt.date.today() (which is UTC in a UTC server)."""
+
+    def test_late_evening_et_returns_same_day(self):
+        # 11pm ET on May 14 = 03:00 UTC on May 15. UTC date would be May 15;
+        # ET trading date must still be May 14.
+        assert _run_as_of_et_date("2026-05-15T03:00:00+00:00") == dt.date(2026, 5, 14)
+
+    def test_morning_et_returns_same_day(self):
+        assert _run_as_of_et_date("2026-05-14T13:00:00+00:00") == dt.date(2026, 5, 14)
+
+    def test_none_falls_back_to_now_et(self):
+        # When no run_as_of_iso, helper must NOT raise — falls back to now-in-ET.
+        # We just verify the type is dt.date.
+        result = _run_as_of_et_date(None)
+        assert isinstance(result, dt.date)
+
+    def test_garbage_falls_back_to_now_et(self):
+        result = _run_as_of_et_date("not-a-timestamp")
+        assert isinstance(result, dt.date)
+
+
+class TestDelayedTickLagInConfig:
+    """fix-5: the 15-minute delayed-feed assumption must be a configurable
+    value in DEFAULT_CONFIG so it appears in the artifact's config block
+    and the predictor can verify the assumption."""
+
+    def test_default_config_has_delayed_tick_lag_min(self):
+        assert "delayed_tick_lag_min" in DEFAULT_CONFIG
+        assert DEFAULT_CONFIG["delayed_tick_lag_min"] == 15
+
+    def test_value_is_int_minutes(self):
+        v = DEFAULT_CONFIG["delayed_tick_lag_min"]
+        assert isinstance(v, int)
+        assert 1 <= v <= 60  # sanity range for any vendor's delayed lag
+
+
+class TestQuoteSnapshotNoTickGuard:
+    """fix-1: when no ticker.time flows from either leg, quote_snapshot_source
+    must be 'no_tick' (not 'live_tick' / 'delayed_tick'). Otherwise the
+    predictor sees source=delayed_tick + as_of=null and assumes a tick existed
+    at some unknown time."""
+
+    class _FakeTicker:
+        def __init__(self, time=None, marketDataType=None):
+            self.time = time
+            self.marketDataType = marketDataType
+
+    def test_both_legs_none(self):
+        run_time = dt.datetime(2026, 5, 14, 18, 0, tzinfo=dt.timezone.utc)
+        iso, src = determine_qs_source_and_ts(
+            None, None, run_time, market_data_type=1, fell_back_from_live=False,
+        )
+        assert iso is None
+        assert src == "no_tick"
+
+    def test_neither_leg_has_time(self):
+        run_time = dt.datetime(2026, 5, 14, 18, 0, tzinfo=dt.timezone.utc)
+        ct = self._FakeTicker(time=None, marketDataType=1)
+        pt = self._FakeTicker(time=None, marketDataType=1)
+        iso, src = determine_qs_source_and_ts(
+            ct, pt, run_time, market_data_type=1, fell_back_from_live=False,
+        )
+        assert iso is None
+        assert src == "no_tick"
+
+    def test_no_tick_even_when_mdt_says_delayed(self):
+        # mdt=3 + fell_back_from_live=True but no tick → still no_tick.
+        run_time = dt.datetime(2026, 5, 14, 18, 0, tzinfo=dt.timezone.utc)
+        ct = self._FakeTicker(time=None, marketDataType=3)
+        iso, src = determine_qs_source_and_ts(
+            ct, None, run_time, market_data_type=3, fell_back_from_live=True,
+        )
+        assert iso is None
+        assert src == "no_tick"
+
+    def test_live_tick_when_time_present_and_mdt_1(self):
+        run_time = dt.datetime(2026, 5, 14, 18, 0, tzinfo=dt.timezone.utc)
+        tick_t = dt.datetime(2026, 5, 14, 17, 59, 30, tzinfo=dt.timezone.utc)
+        ct = self._FakeTicker(time=tick_t, marketDataType=1)
+        iso, src = determine_qs_source_and_ts(
+            ct, None, run_time, market_data_type=1, fell_back_from_live=False,
+        )
+        assert src == "live_tick"
+        assert iso == "2026-05-14T17:59:30+00:00"
+
+    def test_delayed_tick_subtracts_configured_lag(self):
+        # mdt=3 + tick at 17:59:30 → as_of should be lag-min earlier.
+        run_time = dt.datetime(2026, 5, 14, 18, 0, tzinfo=dt.timezone.utc)
+        tick_t = dt.datetime(2026, 5, 14, 17, 59, 30, tzinfo=dt.timezone.utc)
+        ct = self._FakeTicker(time=tick_t, marketDataType=3)
+        iso, src = determine_qs_source_and_ts(
+            ct, None, run_time, market_data_type=3, fell_back_from_live=False,
+        )
+        assert src == "delayed_tick"
+        lag = DEFAULT_CONFIG["delayed_tick_lag_min"]
+        expected_effective = (tick_t - dt.timedelta(minutes=lag)).isoformat(timespec="seconds")
+        assert iso == expected_effective
+
+
+class TestEarningsTimingUsesEtDate:
+    """fix-4: derive_earnings_timing's in_window comparison must use ET date
+    for the event, not event_ts.date() on a UTC-replaced datetime."""
+
+    def test_event_after_8pm_et_does_not_drift_to_next_utc_day(self):
+        # AMC event Thu Jul 30 at 8:30pm ET = 00:30 UTC Fri Jul 31.
+        # Run at 1pm ET Thu Jul 30. Expiry Fri Jul 31 (next-day weekly).
+        # in_window: earnings_date_ET=Thu Jul 30 should be >= run_ET=Thu Jul 30
+        # AND <= expiry=Fri Jul 31 → True.
+        # If event_ts.date() leaked UTC, earnings_date=Fri Jul 31, but expiry
+        # is also Fri Jul 31 → still in_window. So we need a sharper test:
+        # 11pm ET event = 03:00 UTC next day. Expiry on the SAME ET date as event.
+        # If UTC leak, earnings_date is next day → > expiry → in_window=False (wrong).
+        timing = derive_earnings_timing(
+            event_ts_iso="2026-08-01T03:00:00+00:00",   # = 11pm ET Jul 31
+            run_as_of_iso="2026-07-31T17:00:00+00:00",  # = 1pm ET Jul 31
+            expiry_yyyymmdd="20260731",
+            quote_snapshot_iso=None,
+            options_close_et="16:00",
+        )
+        # ET-correct: earnings ET date = Jul 31, expiry = Jul 31, in_window=True
+        assert timing["in_window"] is True
+        # in_contract_life: 11pm ET event > 4pm ET expiry close → False
+        assert timing["in_contract_life"] is False
+
+    def test_bmo_on_next_trading_day(self):
+        # BMO Fri Aug 1 at 7:30am ET = 11:30 UTC. Run Thu evening 5pm ET.
+        # Expiry Fri Aug 1 (same day as event). in_window=True, in_contract_life=True.
+        timing = derive_earnings_timing(
+            event_ts_iso="2026-08-01T11:30:00+00:00",
+            run_as_of_iso="2026-07-31T21:00:00+00:00",
+            expiry_yyyymmdd="20260801",
+            quote_snapshot_iso=None,
+            options_close_et="16:00",
+        )
+        assert timing["in_window"] is True
+        assert timing["in_contract_life"] is True
+
+
+class TestPickSecondaryExpiryEtAware:
+    """fix-4: pick_secondary_expiry's event date extraction must convert to ET,
+    not slice the first 10 chars of the ISO (which leaks UTC date)."""
+
+    EXPIRIES = {"20260717", "20260724", "20260731", "20260807", "20260821"}
+
+    def _row(self, **kw):
+        r = IVRow(ticker="AAPL")
+        for k, v in kw.items():
+            setattr(r, k, v)
+        return r
+
+    def test_late_evening_et_event_does_not_drift_to_next_utc_day(self):
+        # Event 11pm ET Jul 31 = 03:00 UTC Aug 1.
+        # UTC slice would extract '2026-08-01' → first expiry after = 20260807.
+        # ET-correct extraction yields Jul 31 → first expiry after = 20260807.
+        # Both happen to be 20260807 here; sharpen with a closer-in expiry.
+        # Use a chain that has Aug 1 expiry: expiry 20260801 is AFTER Jul 31 ET
+        # but NOT after Aug 1 UTC.
+        expiries = self.EXPIRIES | {"20260801"}
+        primary = self._row(
+            earnings_in_window=True,
+            earnings_event_ts="2026-08-01T03:00:00+00:00",  # 11pm ET Jul 31
+            earnings_role="pre_earnings",
+            expiry="20260731",
+        )
+        result = pick_secondary_expiry(primary, expiries)
+        # ET-correct: event ET date = Jul 31 → first expiry after = 20260801 ✓
+        # UTC-leak (BUG): event UTC date = Aug 1 → first expiry after = 20260807 ✗
+        assert result == "20260801", (
+            f"Expected 20260801 (ET-aware) but got {result} — event_ts is leaking UTC date"
+        )
+
+
+class TestEarningsCacheWriteOnlyIfChanged:
+    """fix-2: load_or_fetch_earnings_cache must NOT rewrite the cache file when
+    no fetches were needed. Otherwise the file's mtime becomes 'now' on every
+    run and anything keying off mtime sees a fake fresh-fetch time."""
+
+    def test_no_rewrite_when_all_tickers_in_cache(self, tmp_path, monkeypatch):
+        import compute_iv_moves as m
+
+        # Avoid Yahoo network call by stubbing fetch_yahoo_earnings.
+        monkeypatch.setattr(m, "fetch_yahoo_earnings", lambda t: None)
+
+        cache_path = tmp_path / "_earnings_cache.json"
+        prebuilt = {
+            "AAPL": {
+                "date": "2026-07-31", "time": "AMC", "source": "yahoo",
+                "fetched_at": "2026-05-10T12:00:00+00:00",
+            },
+            "MSFT": {
+                "date": "2026-07-30", "time": "AMC", "source": "yahoo",
+                "fetched_at": "2026-05-11T12:00:00+00:00",
+            },
+        }
+        cache_path.write_text(json.dumps(prebuilt, indent=2))
+        # Capture mtime BEFORE the call. Make it old so we can detect a rewrite.
+        import os
+        old_mtime = cache_path.stat().st_mtime
+        os.utime(cache_path, (old_mtime - 86400, old_mtime - 86400))
+        expected_mtime = cache_path.stat().st_mtime
+
+        result = load_or_fetch_earnings_cache(
+            ["AAPL", "MSFT"], cache_path, force_refresh=False,
+        )
+        assert "AAPL" in result and "MSFT" in result
+        # mtime MUST be unchanged because no new tickers needed fetching.
+        assert cache_path.stat().st_mtime == expected_mtime, (
+            "cache file was rewritten even though no fetches occurred — "
+            "this corrupts earnings_calendar.as_of for the artifact"
+        )
+
+    def test_rewrites_when_new_ticker_needed(self, tmp_path, monkeypatch):
+        import compute_iv_moves as m
+        monkeypatch.setattr(m, "fetch_yahoo_earnings", lambda t: {
+            "date": "2026-08-15", "time": "BMO", "source": "yahoo",
+            "fetched_at": "2026-05-14T18:00:00+00:00",
+        })
+
+        cache_path = tmp_path / "_earnings_cache.json"
+        prebuilt = {
+            "AAPL": {
+                "date": "2026-07-31", "time": "AMC", "source": "yahoo",
+                "fetched_at": "2026-05-10T12:00:00+00:00",
+            },
+        }
+        cache_path.write_text(json.dumps(prebuilt, indent=2))
+        import os
+        old_mtime = cache_path.stat().st_mtime - 86400
+        os.utime(cache_path, (old_mtime, old_mtime))
+
+        result = load_or_fetch_earnings_cache(
+            ["AAPL", "NVDA"], cache_path, force_refresh=False,
+        )
+        assert "NVDA" in result
+        # Rewrite expected — NVDA was fetched.
+        assert cache_path.stat().st_mtime > old_mtime
+
+    def test_force_refresh_always_rewrites(self, tmp_path, monkeypatch):
+        import compute_iv_moves as m
+        monkeypatch.setattr(m, "fetch_yahoo_earnings", lambda t: None)
+
+        cache_path = tmp_path / "_earnings_cache.json"
+        cache_path.write_text("{}")
+        import os
+        old_mtime = cache_path.stat().st_mtime - 86400
+        os.utime(cache_path, (old_mtime, old_mtime))
+
+        load_or_fetch_earnings_cache(
+            ["AAPL"], cache_path, force_refresh=True,
+        )
+        # force_refresh=True doesn't currently refetch known-good entries —
+        # but the file IS rewritten unconditionally.
+        # NOTE: with current impl, force_refresh only triggers the write,
+        # not a refetch. That's a separate concern; this test pins behavior.
+        assert cache_path.stat().st_mtime > old_mtime
+
+
+class TestDteUsesRunAsOfEtDate:
+    """fix-3: DTE must be computed from run_as_of's ET trading date, not from
+    dt.date.today() (which yields UTC date on a UTC server)."""
+
+    def test_dte_matches_et_calendar(self):
+        # Run at 11pm ET on May 14 (= 03:00 UTC May 15). Expiry May 18.
+        # ET-correct DTE = 18 - 14 = 4.
+        # If using UTC dt.date.today() → today might be May 15 → DTE = 3 (wrong).
+        run_as_of_iso = "2026-05-15T03:00:00+00:00"
+        run_et_date = _run_as_of_et_date(run_as_of_iso)
+        expiry_date = dt.datetime.strptime("20260518", "%Y%m%d").date()
+        # ET trading date should be May 14, not May 15 (UTC)
+        assert run_et_date == dt.date(2026, 5, 14)
+        # DTE = 4
+        assert (expiry_date - run_et_date).days == 4

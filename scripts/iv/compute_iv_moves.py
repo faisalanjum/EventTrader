@@ -76,7 +76,44 @@ DEFAULT_CONFIG = {
     "earnings_just_after_window_days":   5,
     "live_to_delayed_fallback_enabled": True,
     "expiry_ladder_max_entries":         7,
+    # IBKR delayed feed (mdt=3/4): ticker.time is the wall-clock RECEIVE time;
+    # the market data it represents is from ~this many minutes earlier. Surfaced
+    # in the artifact's config block so the predictor can verify/override.
+    "delayed_tick_lag_min":             15,
 }
+
+
+# ---------------------------------------------------------------------------
+# Timestamp helpers — ALWAYS prefer these over event_ts.date() / string slicing
+# for date-level logic. Trading dates are ET, not UTC.
+# ---------------------------------------------------------------------------
+
+def _et_date_from_iso(ts_iso: str | None) -> dt.date | None:
+    """Convert any ISO-8601 timestamp to its US/Eastern calendar date.
+    Returns None if input is None/empty/unparseable.
+
+    NEVER substitute event_ts.date() or ts_iso[:10] — those leak the source
+    timezone (typically UTC) which drifts the trading date when the event is
+    after ~8pm ET / before ~midnight ET."""
+    if not ts_iso:
+        return None
+    try:
+        ts = dt.datetime.fromisoformat(ts_iso)
+    except Exception:
+        return None
+    if ts.tzinfo is None:
+        ts = ts.replace(tzinfo=dt.timezone.utc)
+    return ts.astimezone(ZoneInfo("US/Eastern")).date()
+
+
+def _run_as_of_et_date(run_as_of_iso: str | None) -> dt.date:
+    """run_as_of expressed as an ET trading date. Falls back to now-in-ET
+    when run_as_of_iso is missing/unparseable so callers never see None."""
+    if run_as_of_iso:
+        d = _et_date_from_iso(run_as_of_iso)
+        if d is not None:
+            return d
+    return dt.datetime.now(dt.timezone.utc).astimezone(ZoneInfo("US/Eastern")).date()
 
 
 # ---------------------------------------------------------------------------
@@ -319,9 +356,11 @@ def derive_quote_freshness(
 def determine_qs_source_and_ts(call_t, put_t, run_time, market_data_type, fell_back_from_live) -> tuple[str | None, str]:
     """Return (quote_snapshot_as_of_iso, quote_snapshot_source).
 
-    Source enum: live_tick | delayed_tick | frozen_close | delayed_frozen | unknown
+    Source enum: live_tick | delayed_tick | frozen_close | delayed_frozen
+                 | no_tick   (no ticker.time available — quote_snapshot_as_of is None)
+                 | unknown   (mdt outside 1..4 and a tick existed)
     Effective market time: latest ticker.time across the two legs (with delayed
-    offset applied if data_tier is delayed).
+    lag applied if the path is delayed, per DEFAULT_CONFIG['delayed_tick_lag_min']).
     """
     times = []
     for t in (call_t, put_t):
@@ -341,22 +380,24 @@ def determine_qs_source_and_ts(call_t, put_t, run_time, market_data_type, fell_b
             except Exception:
                 continue
     raw_max_time = max(times) if times else None
-    qs_as_of_raw = raw_max_time.isoformat(timespec="seconds") if raw_max_time else None
 
-    # Patch fix-4: for delayed paths, subtract 15-min lag to reflect EFFECTIVE
-    # market time the quote represents (not the receive time).
-    # IBKR convention: ticker.time on a delayed feed is the wall-clock receive
-    # time. The market data this represents is from ~15 minutes earlier.
-    # If IBKR ever surfaces an explicit effective timestamp, prefer that.
-    DELAYED_LAG_MIN = 15
-    def _delayed_effective(iso_dt: dt.datetime | None) -> str | None:
-        if iso_dt is None:
-            return None
-        return (iso_dt - dt.timedelta(minutes=DELAYED_LAG_MIN)).isoformat(timespec="seconds")
+    # fix-1: if no tick time flowed, source MUST be "no_tick". The previous
+    # behavior returned ("delayed_tick", None) or ("live_tick", None) which
+    # misled the predictor into believing a tick existed at some unknown time.
+    if raw_max_time is None:
+        return None, "no_tick"
 
-    # Source classification
+    qs_as_of_raw = raw_max_time.isoformat(timespec="seconds")
+    delayed_lag_min = DEFAULT_CONFIG.get("delayed_tick_lag_min", 15)
+
+    def _delayed_effective(iso_dt: dt.datetime) -> str:
+        # IBKR delayed feed: ticker.time = wall-clock RECEIVE time. Subtract
+        # configured lag so quote_snapshot_as_of is the EFFECTIVE market time
+        # the quote represents (not the receive time).
+        return (iso_dt - dt.timedelta(minutes=delayed_lag_min)).isoformat(timespec="seconds")
+
     if fell_back_from_live:
-        return _delayed_effective(raw_max_time), "delayed_tick"   # fallback path = delayed stream
+        return _delayed_effective(raw_max_time), "delayed_tick"
     observed_mdt = getattr(call_t, "marketDataType", None) if call_t is not None else (
         getattr(put_t, "marketDataType", None) if put_t is not None else None
     )
@@ -378,8 +419,10 @@ def derive_earnings_timing(event_ts_iso: str | None, run_as_of_iso: str,
                            options_close_et: str) -> dict:
     """Returns dict with in_window, in_contract_life, qs_rel_to_event.
 
-    in_window:        DATE-LEVEL — earnings on this option's expiry calendar
-                      (earnings_date >= run_as_of.date()) AND (earnings_date <= expiry_date)
+    All DATE-LEVEL comparisons here use ET trading dates — see _et_date_from_iso.
+
+    in_window:        DATE-LEVEL — earnings between today (ET) and expiry (ET-calendar)
+                      (earnings_date >= run_as_of.date_ET) AND (earnings_date <= expiry_date)
     in_contract_life: TIMESTAMP — event_ts <= expiry_close_ts (option's life spans event)
     qs_rel:           pre_event | post_event | not_applicable | unknown
     """
@@ -391,11 +434,12 @@ def derive_earnings_timing(event_ts_iso: str | None, run_as_of_iso: str,
         event_ts = dt.datetime.fromisoformat(event_ts_iso)
         if event_ts.tzinfo is None:
             event_ts = event_ts.replace(tzinfo=dt.timezone.utc)
-        run_as_of = dt.datetime.fromisoformat(run_as_of_iso)
-        if run_as_of.tzinfo is None:
-            run_as_of = run_as_of.replace(tzinfo=dt.timezone.utc)
         expiry_date = dt.datetime.strptime(expiry_yyyymmdd, "%Y%m%d").date()
-        earnings_date = event_ts.date()
+        # fix-4: earnings_date is the event's ET trading day, NOT event_ts.date()
+        # which leaks UTC (e.g., 8pm ET = midnight UTC = next-day UTC date).
+        earnings_date = event_ts.astimezone(ZoneInfo("US/Eastern")).date()
+        # fix-3: run-as-of compared on ET trading date, not UTC.
+        run_as_of_et_date = _run_as_of_et_date(run_as_of_iso)
         # expiry_close_ts = expiry_date @ options_close_et (US/Eastern)
         et_h, et_m = options_close_et.split(":")
         expiry_close_et = dt.datetime(expiry_date.year, expiry_date.month, expiry_date.day,
@@ -404,10 +448,6 @@ def derive_earnings_timing(event_ts_iso: str | None, run_as_of_iso: str,
     except Exception:
         return out
 
-    # Patch fix-3: use ET date for "today" comparison since earnings_date comes from yfinance
-    # in ET context. UTC date drifts: 8pm ET on Thu = midnight UTC = Fri date in UTC →
-    # earnings_date (Thu ET) >= run_as_of.date()=Fri (UTC) would be FALSE (wrong).
-    run_as_of_et_date = run_as_of.astimezone(ZoneInfo("US/Eastern")).date()
     out["in_window"] = (earnings_date >= run_as_of_et_date) and (earnings_date <= expiry_date)
     out["in_contract_life"] = event_ts <= expiry_close_ts
 
@@ -495,6 +535,12 @@ def load_or_fetch_earnings_cache(tickers: list[str], cache_path: Path, force_ref
     Cache key: ticker. Cache value: {date, time, source, fetched_at} or None.
     File: scripts/iv/output/_earnings_cache_YYYY-MM-DD.json
     pit_safe=False (Yahoo current-state, NOT point-in-time).
+
+    fix-2 (Phase 4 patch v2): the file is rewritten ONLY when we fetched at
+    least one new ticker (or when force_refresh is set). This preserves the
+    file's mtime when a re-run hits the cache cleanly, so anything keying off
+    mtime sees the actual last-refresh time — not "now". Per-ticker
+    fetched_at carries the truthful per-row timestamp regardless.
     """
     cache: dict = {}
     if cache_path.exists() and not force_refresh:
@@ -505,8 +551,9 @@ def load_or_fetch_earnings_cache(tickers: list[str], cache_path: Path, force_ref
     missing = [t for t in tickers if t not in cache]
     for t in missing:
         cache[t] = fetch_yahoo_earnings(t)
-    cache_path.parent.mkdir(parents=True, exist_ok=True)
-    cache_path.write_text(json.dumps(cache, indent=2, default=str))
+    if missing or force_refresh:
+        cache_path.parent.mkdir(parents=True, exist_ok=True)
+        cache_path.write_text(json.dumps(cache, indent=2, default=str))
     return cache
 
 
@@ -693,8 +740,12 @@ def find_first_expiry_after(expirations: set[str], event_date: dt.date) -> str |
 
 def find_last_expiry_before(expirations: set[str], event_date: dt.date,
                             today: dt.date | None = None) -> str | None:
-    """Last chain expiry strictly before event_date AND strictly after today.
-    (Don't return an already-expired contract.)"""
+    """Last chain expiry strictly before event_date AND strictly after today
+    (don't return an already-expired contract).
+
+    `today` MUST be an ET trading date when called by the orchestrator. The
+    today=dt.date.today() default exists only for ad-hoc/test callers; the
+    orchestrator always passes _run_as_of_et_date(run_as_of_iso) explicitly."""
     today = today or dt.date.today()
     cand: list[tuple[str, dt.date]] = []
     for s in expirations:
@@ -712,6 +763,9 @@ def pick_secondary_expiry(primary: "IVRow", all_expirations: set[str],
     """Decide which complementary chain expiry (if any) the dual-row emission
     needs, based on the PRIMARY row's earnings situation.
 
+    `today` MUST be an ET trading date (orchestrator passes one); the fallback
+    is for ad-hoc/test callers only.
+
     Returns None when the primary doesn't warrant a second row, e.g.:
       • no earnings in window
       • event_ts not derivable
@@ -721,9 +775,10 @@ def pick_secondary_expiry(primary: "IVRow", all_expirations: set[str],
     """
     if not (primary.earnings_in_window and primary.earnings_event_ts):
         return None
-    try:
-        event_date = dt.date.fromisoformat(primary.earnings_event_ts[:10])
-    except Exception:
+    # fix-4: event-day is the event's ET trading date, NOT event_ts_iso[:10]
+    # (which leaks UTC date when event_ts is in UTC and event is after ~8pm ET).
+    event_date = _et_date_from_iso(primary.earnings_event_ts)
+    if event_date is None:
         return None
     if primary.earnings_role == "pre_earnings":
         # primary expires BEFORE event → need a post-event expiry
@@ -764,7 +819,10 @@ async def _compute_row_for_expiry(
     # row_id reset once earnings_role is finalized below
     row.row_id = f"{ticker}:{expiry_yyyymmdd}:{row.earnings_role}"
     expiry_date = dt.datetime.strptime(expiry_yyyymmdd, "%Y%m%d").date()
-    row.dte = (expiry_date - dt.date.today()).days
+    # fix-3: DTE measured from the run's ET trading date, not UTC.
+    # Running at 9pm ET = 2am UTC next day → dt.date.today() would be tomorrow
+    # → DTE understated by 1 for every expiry. Use run_as_of's ET date.
+    row.dte = (expiry_date - _run_as_of_et_date(run_as_of_iso)).days
 
     call_t = None
     put_t = None
@@ -999,15 +1057,17 @@ async def _compute_row_for_expiry(
             if f not in row.context_flags:
                 row.context_flags.append(f)
         if row.earnings_in_window is False and event_ts_iso and row.expiry:
-            try:
-                event_date_ = dt.datetime.fromisoformat(event_ts_iso).date()
-                expiry_date_ = dt.datetime.strptime(row.expiry, "%Y%m%d").date()
-                gap_days = (event_date_ - expiry_date_).days
-                if 0 < gap_days <= DEFAULT_CONFIG["earnings_just_after_window_days"]:
-                    if "earnings_just_after_window" not in row.context_flags:
-                        row.context_flags.append("earnings_just_after_window")
-            except Exception:
-                pass
+            # fix-4: event_date here is ET trading date, NOT event_ts.date()
+            event_date_ = _et_date_from_iso(event_ts_iso)
+            if event_date_ is not None:
+                try:
+                    expiry_date_ = dt.datetime.strptime(row.expiry, "%Y%m%d").date()
+                    gap_days = (event_date_ - expiry_date_).days
+                    if 0 < gap_days <= DEFAULT_CONFIG["earnings_just_after_window_days"]:
+                        if "earnings_just_after_window" not in row.context_flags:
+                            row.context_flags.append("earnings_just_after_window")
+                except Exception:
+                    pass
 
     # Assign earnings_role per SCHEMA r6:
     #   in_window but NOT in_contract_life → pre_earnings (expires before event)
@@ -1137,7 +1197,10 @@ async def compute_one(
 
     # Phase 4 — dual-row emission decision. Pick complementary expiry on the
     # OTHER side of the event so the bot sees both a pre- and post-earnings view.
-    secondary_expiry = pick_secondary_expiry(primary, all_expirations)
+    # fix-3: today=run_as_of's ET trading date, not UTC.
+    secondary_expiry = pick_secondary_expiry(
+        primary, all_expirations, today=_run_as_of_et_date(run_as_of_iso),
+    )
 
     if secondary_expiry and secondary_expiry != primary.expiry:
         secondary = await _compute_row_for_expiry(
@@ -1269,14 +1332,25 @@ async def amain():
     )
     print(f"Loading earnings calendar (cache={earnings_cache_path})...", file=sys.stderr)
     earnings_cache = load_or_fetch_earnings_cache(tickers, earnings_cache_path)
+    # fix-2: derive artifact-level earnings_calendar.as_of from the LATEST
+    # per-ticker fetched_at across loaded entries. This is honest even when
+    # the cache file's mtime drifts (rewrites happen only when content changes
+    # — but a stale "no rewrite" run still needs an as_of from real data).
+    fetched_ats = [
+        e.get("fetched_at") for e in earnings_cache.values()
+        if isinstance(e, dict) and e.get("fetched_at")
+    ]
+    earnings_cache_as_of_from_content: str | None = max(fetched_ats) if fetched_ats else None
     # Patch fix-5: as_of reflects the CACHE FILE mtime (when the cache was last
     # written), NOT now(). Per-ticker fetched_at (inside the cache) carries
     # per-ticker freshness. Top-level reports the cache-as-a-whole freshness.
-    if earnings_cache_path.exists():
+    # fix-2: prefer content-derived as_of (max per-ticker fetched_at). File mtime
+    # is fallback ONLY when the cache has no usable entries — and even then we
+    # avoid mtime if it would be misleadingly close to now.
+    earnings_cache_as_of = earnings_cache_as_of_from_content
+    if earnings_cache_as_of is None and earnings_cache_path.exists():
         cache_mtime = dt.datetime.fromtimestamp(earnings_cache_path.stat().st_mtime, dt.timezone.utc)
         earnings_cache_as_of = cache_mtime.isoformat(timespec="seconds")
-    else:
-        earnings_cache_as_of = None
     # Patch fix-5b: optional user-supplied earnings timestamps override.
     # JSON file mapping {"TICKER": "ISO_UTC_TIMESTAMP"}. Used when sec_filing source
     # (8-K accepted timestamp) isn't wired but the caller has authoritative timing.

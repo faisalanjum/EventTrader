@@ -1,0 +1,195 @@
+{
+  "schema_version": "iv_moves.v2",
+  "run_id": "iv_moves.v2:2026-05-14T18:50:37+00:00:201",
+  "run_as_of": "2026-05-14T18:50:37+00:00",
+  "method": "atm_straddle",
+  "target_dte": 78,
+  "market_data_type_requested": 3,
+  "universe_size": 1,
+  "market_conventions": {
+    "options_market_close_et": "16:00",
+    "amc_conventional_time_et": "16:30",
+    "bmo_conventional_time_et": "07:30",
+    "dmh_conventional_time_et": "12:00",
+    "iv_annualization_days": 365
+  },
+  "config": {
+    "tick_freshness_threshold_sec": 300,
+    "spread_warn_bps": 1000,
+    "atm_distance_warn_pct": 1.0,
+    "iv_disagreement_warn_pp": 3.0,
+    "iv_min_valid": 0.01,
+    "iv_max_valid": 5.0,
+    "earnings_just_after_window_days": 5,
+    "live_to_delayed_fallback_enabled": true,
+    "expiry_ladder_max_entries": 7,
+    "delayed_tick_lag_min": 15
+  },
+  "data_sources": {
+    "options_chain": {
+      "vendor": "IBKR",
+      "via": "reqSecDefOptParams",
+      "live_at_run": true
+    },
+    "quotes": {
+      "vendor": "IBKR",
+      "via": "reqTickersAsync",
+      "live_at_run": false,
+      "market_data_type_requested": 3
+    },
+    "earnings_calendar": {
+      "vendor": "yahoo",
+      "via": "yfinance.Ticker.earnings_dates",
+      "as_of": "2026-05-14T18:36:07+00:00",
+      "pit_safe": false,
+      "cache_file": "/home/faisal/EventMarketDB/scripts/iv/output/_earnings_cache_2026-05-14.json"
+    }
+  },
+  "summary": {
+    "total_rows": 2,
+    "by_status": {
+      "NO_QUOTES": 2
+    },
+    "by_data_tier": {
+      "unknown": 2
+    },
+    "by_quote_freshness": {
+      "unknown": 2
+    },
+    "by_iv_quality": {
+      "n/a": 2
+    },
+    "by_earnings_role": {
+      "post_earnings": 1,
+      "pre_earnings": 1
+    },
+    "by_is_primary": {
+      "true": 1,
+      "false": 1
+    }
+  },
+  "results": [
+    {
+      "schema_version": "iv_moves.v2",
+      "row_id": "NVDA:20260717:post_earnings",
+      "run_id": "iv_moves.v2:2026-05-14T18:50:37+00:00:201",
+      "earnings_role": "post_earnings",
+      "is_primary": true,
+      "ticker": "NVDA",
+      "spot": 235.36,
+      "spot_source": "mdt=3",
+      "expiry": "20260717",
+      "dte": 64,
+      "atm_strike": 235.0,
+      "call_bid": null,
+      "call_ask": null,
+      "call_mid": null,
+      "call_iv": null,
+      "call_mid_source": "none",
+      "call_tick_age_seconds": null,
+      "call_tick_age_known": false,
+      "put_bid": null,
+      "put_ask": null,
+      "put_mid": null,
+      "put_iv": null,
+      "put_mid_source": "none",
+      "put_tick_age_seconds": null,
+      "put_tick_age_known": false,
+      "expected_move_dollars": null,
+      "expected_move_pct": null,
+      "iv_avg": null,
+      "em_from_iv_dollars": null,
+      "em_from_iv_pct": null,
+      "spread_call_bps": null,
+      "spread_put_bps": null,
+      "data_tier": "unknown",
+      "quality_flags": [],
+      "atm_distance_pct": 0.15295717199184808,
+      "iv_disagreement_pp": null,
+      "multiplier": 100,
+      "quote_freshness": "unknown",
+      "iv_quality": "n/a",
+      "context_flags": [],
+      "quote_snapshot_as_of": null,
+      "quote_snapshot_source": "no_tick",
+      "earnings_next_date": "2026-05-20",
+      "earnings_next_time": "AMC",
+      "earnings_next_time_source": "yahoo",
+      "earnings_event_ts": "2026-05-20T20:30:00+00:00",
+      "earnings_event_ts_source": "yahoo_conventional",
+      "earnings_in_window": true,
+      "earnings_in_contract_life": true,
+      "quote_snapshot_relative_to_event": "unknown",
+      "earnings_calendar_source": "yahoo",
+      "earnings_calendar_as_of": "2026-05-14T18:36:07+00:00",
+      "earnings_calendar_pit_safe": false,
+      "status": "NO_QUOTES",
+      "diagnostics": [
+        "no usable quotes flowed (all legs null after fallback)",
+        "dual-row: secondary expiry=20260518 role=pre_earnings"
+      ]
+    },
+    {
+      "schema_version": "iv_moves.v2",
+      "row_id": "NVDA:20260518:pre_earnings",
+      "run_id": "iv_moves.v2:2026-05-14T18:50:37+00:00:201",
+      "earnings_role": "pre_earnings",
+      "is_primary": false,
+      "ticker": "NVDA",
+      "spot": 235.36,
+      "spot_source": "mdt=3",
+      "expiry": "20260518",
+      "dte": 4,
+      "atm_strike": 235.0,
+      "call_bid": null,
+      "call_ask": null,
+      "call_mid": null,
+      "call_iv": null,
+      "call_mid_source": "none",
+      "call_tick_age_seconds": null,
+      "call_tick_age_known": false,
+      "put_bid": null,
+      "put_ask": null,
+      "put_mid": null,
+      "put_iv": null,
+      "put_mid_source": "none",
+      "put_tick_age_seconds": null,
+      "put_tick_age_known": false,
+      "expected_move_dollars": null,
+      "expected_move_pct": null,
+      "iv_avg": null,
+      "em_from_iv_dollars": null,
+      "em_from_iv_pct": null,
+      "spread_call_bps": null,
+      "spread_put_bps": null,
+      "data_tier": "unknown",
+      "quality_flags": [],
+      "atm_distance_pct": 0.15295717199184808,
+      "iv_disagreement_pp": null,
+      "multiplier": 100,
+      "quote_freshness": "unknown",
+      "iv_quality": "n/a",
+      "context_flags": [
+        "earnings_just_after_window"
+      ],
+      "quote_snapshot_as_of": null,
+      "quote_snapshot_source": "no_tick",
+      "earnings_next_date": "2026-05-20",
+      "earnings_next_time": "AMC",
+      "earnings_next_time_source": "yahoo",
+      "earnings_event_ts": "2026-05-20T20:30:00+00:00",
+      "earnings_event_ts_source": "yahoo_conventional",
+      "earnings_in_window": false,
+      "earnings_in_contract_life": false,
+      "quote_snapshot_relative_to_event": "unknown",
+      "earnings_calendar_source": "yahoo",
+      "earnings_calendar_as_of": "2026-05-14T18:36:07+00:00",
+      "earnings_calendar_pit_safe": false,
+      "status": "NO_QUOTES",
+      "diagnostics": [
+        "no usable quotes flowed (all legs null after fallback)",
+        "role overridden by orchestrator: helper=non_earnings \u2192 pre_earnings (dual-row complement of primary)"
+      ]
+    }
+  ]
+}
