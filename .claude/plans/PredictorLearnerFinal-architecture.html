@@ -1,0 +1,603 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Predictor / Learner — Target Architecture</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #111827;
+    --muted: #6b7280;
+    --line: #e5e7eb;
+    --soft: #f8fafc;
+    --soft2: #f1f5f9;
+    --blue: #2563eb;
+    --green: #059669;
+    --red: #dc2626;
+    --amber: #d97706;
+    --gray: #6b7280;
+    --indigo: #4338ca;
+    --pink: #db2777;
+    --code: #0f172a;
+    --code-fg: #e2e8f0;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--fg); }
+  body {
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 22px;
+    line-height: 1.55;
+  }
+  header {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255,255,255,0.96);
+    border-bottom: 1px solid var(--line);
+    padding: 14px 28px;
+    display: flex; align-items: center; gap: 18px;
+    backdrop-filter: blur(8px);
+  }
+  header .title { font-weight: 700; font-size: 22px; letter-spacing: -0.01em; }
+  header .step-readout { color: var(--muted); font-size: 18px; margin-left: auto; font-variant-numeric: tabular-nums; }
+
+  .progress {
+    display: flex; gap: 4px; padding: 12px 28px 14px; border-bottom: 1px solid var(--line); background: var(--soft);
+  }
+  .progress .pip {
+    flex: 1; height: 6px; background: #d1d5db; border-radius: 999px; cursor: pointer; transition: background 0.15s;
+  }
+  .progress .pip.done { background: #93c5fd; }
+  .progress .pip.active { background: var(--blue); }
+
+  main { max-width: 1080px; margin: 0 auto; padding: 56px 32px 200px; }
+
+  .step { display: none; }
+  .step.active { display: block; animation: fadeIn 0.25s ease-out; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  h1 { font-size: 56px; font-weight: 800; letter-spacing: -0.025em; line-height: 1.05; margin: 0 0 12px; }
+  h2 { font-size: 36px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; margin: 36px 0 12px; }
+  h3 { font-size: 26px; font-weight: 700; margin: 28px 0 10px; }
+  p, li { font-size: 22px; line-height: 1.55; }
+  .lead { font-size: 26px; color: #374151; margin: 0 0 28px; }
+  .step-tag { display: inline-block; font-size: 16px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--blue); font-weight: 700; margin-bottom: 10px; }
+
+  .panel { background: var(--soft); border: 1px solid var(--line); border-radius: 18px; padding: 28px 32px; margin: 24px 0; }
+  .panel.tight { padding: 18px 22px; }
+  .panel.code { background: var(--code); color: var(--code-fg); }
+  .panel.code pre { margin: 0; font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace; font-size: 16px; line-height: 1.6; white-space: pre-wrap; }
+  .panel.code .cmt { color: #64748b; }
+  .panel.code .key { color: #7dd3fc; }
+  .panel.code .str { color: #86efac; }
+
+  .pill {
+    display: inline-block; padding: 4px 12px; border-radius: 999px; background: #eff6ff; color: var(--blue);
+    font-size: 16px; font-weight: 600; letter-spacing: 0.01em; margin-right: 6px;
+  }
+  .pill.green { background: #d1fae5; color: var(--green); }
+  .pill.amber { background: #fef3c7; color: var(--amber); }
+  .pill.red { background: #fee2e2; color: var(--red); }
+  .pill.gray { background: #f1f5f9; color: var(--gray); }
+  .pill.indigo { background: #e0e7ff; color: var(--indigo); }
+  .pill.pink { background: #fce7f3; color: var(--pink); }
+
+  .kv { display: grid; grid-template-columns: 260px 1fr; gap: 12px 24px; align-items: start; }
+  .kv .k { font-weight: 700; color: var(--fg); }
+  .kv .v { color: #374151; }
+
+  details { margin-top: 18px; border: 1px solid var(--line); border-radius: 14px; padding: 14px 18px; background: white; }
+  details[open] { background: var(--soft); }
+  summary { cursor: pointer; font-weight: 700; color: var(--blue); font-size: 20px; }
+  summary::marker { color: var(--blue); }
+
+  .nav {
+    position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
+    background: white; border: 1px solid var(--line); border-radius: 999px;
+    padding: 10px 14px; display: flex; gap: 8px; box-shadow: 0 10px 30px rgba(15,23,42,0.10);
+    z-index: 40;
+  }
+  .nav button {
+    font: inherit; font-size: 18px; background: transparent; color: var(--fg); border: 0;
+    padding: 8px 18px; border-radius: 999px; cursor: pointer; font-weight: 600;
+  }
+  .nav button.primary { background: var(--blue); color: white; }
+  .nav button:disabled { opacity: 0.35; cursor: not-allowed; }
+  .nav button:not(:disabled):hover { background: var(--soft2); }
+  .nav button.primary:not(:disabled):hover { background: #1d4ed8; }
+  .nav .spacer { width: 12px; }
+
+  svg { display: block; max-width: 100%; height: auto; }
+  .svg-wrap { background: white; border: 1px solid var(--line); border-radius: 18px; padding: 18px; margin: 22px 0; }
+  .svg-wrap.tall { padding: 28px; }
+
+  .phases { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 28px 0; }
+  .phase { border: 1px solid var(--line); background: white; border-radius: 16px; padding: 20px; }
+  .phase .num { color: var(--blue); font-weight: 800; font-size: 18px; }
+  .phase .name { font-weight: 800; font-size: 24px; margin: 4px 0 6px; }
+  .phase .desc { color: #4b5563; font-size: 19px; line-height: 1.45; }
+
+  .pipe { display: grid; gap: 10px; margin: 22px 0; }
+  .pipe .row {
+    display: grid; grid-template-columns: 60px 1fr; gap: 16px;
+    background: white; border: 1px solid var(--line); border-radius: 14px; padding: 16px 20px;
+  }
+  .pipe .num {
+    width: 40px; height: 40px; border-radius: 10px; background: var(--blue); color: white;
+    font-weight: 800; font-size: 20px; display: grid; place-items: center;
+  }
+  .pipe .num.indigo { background: var(--indigo); }
+  .pipe .num.green { background: var(--green); }
+  .pipe .body strong { font-size: 22px; display: block; margin-bottom: 2px; }
+  .pipe .body span { color: #4b5563; font-size: 19px; }
+
+  table.matrix { border-collapse: collapse; width: 100%; background: white; }
+  table.matrix th, table.matrix td { border: 1px solid var(--line); padding: 10px 14px; text-align: left; font-size: 19px; vertical-align: top; }
+  table.matrix th { background: var(--soft); font-weight: 700; }
+  table.matrix code { background: var(--soft2); padding: 2px 6px; border-radius: 5px; font-size: 17px; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  @media (max-width: 800px) { .grid-2, .phases { grid-template-columns: 1fr; } }
+  .muted { color: var(--muted); }
+  .small { font-size: 18px; }
+  .mono { font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace; }
+  ul { padding-left: 22px; }
+  ul.tight li { margin: 3px 0; font-size: 21px; }
+
+  .callout {
+    background: #eff6ff; border: 1px solid #bfdbfe; border-left: 4px solid var(--blue); border-radius: 10px;
+    padding: 16px 22px; margin: 18px 0; font-size: 22px; font-weight: 600; color: #1e3a8a; line-height: 1.4;
+  }
+
+  .twocol { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 22px 0; }
+  .twocol .col { background: white; border: 1px solid var(--line); border-radius: 14px; padding: 18px 22px; }
+  .twocol .col h4 { margin: 0 0 10px; font-size: 16px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--blue); }
+  .twocol .col li, .twocol .col p { font-size: 19px; line-height: 1.5; margin: 4px 0; }
+  @media (max-width: 800px) { .twocol { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="title">Predictor / Learner — Target Architecture
+    <span style="font-weight:400; color:var(--muted); font-size:18px; margin-left:10px;">· the end-state, as it runs</span>
+  </div>
+  <div class="step-readout"><span id="stepIdx">1</span> of <span id="stepTotal">15</span></div>
+</header>
+<div class="progress" id="progress"></div>
+
+<main>
+
+  <!-- ===== STEP 1 — THE LOOP ===== -->
+  <section class="step active" data-step="1">
+    <div class="step-tag">Step 1 · Orientation</div>
+    <h1>A self-improving loop, in free-form text</h1>
+    <p class="lead">Every earnings event runs four phases. What carries forward between events is past learner reports written in plain prose, each with a one-line takeaway and a link.</p>
+
+    <div class="phases">
+      <div class="phase"><div class="num">A</div><div class="name">Build</div><div class="desc">Builders fetch data; the orchestrator stitches a context bundle and attaches <span class="mono">prior_reports_context</span>.</div></div>
+      <div class="phase"><div class="num">B</div><div class="name">Predict</div><div class="desc">One Claude skill reads the bundle, always opens the most-recent 4 own-ticker reports plus any others it judges relevant, emits a directional call.</div></div>
+      <div class="phase"><div class="num">C</div><div class="name">Outcome</div><div class="desc">After the event horizon the realized return becomes knowable.</div></div>
+      <div class="phase"><div class="num">D</div><div class="name">Learn</div><div class="desc">A learner explains why the stock moved versus the prediction and writes a free-form causal report.</div></div>
+    </div>
+
+    <div class="callout">Operating principle: free-form prose, well-organized, read on demand. The workflow steps in each skill keep the predictor and learner focused.</div>
+  </section>
+
+  <!-- ===== STEP 2 — MEMORY MODEL ===== -->
+  <section class="step" data-step="2">
+    <div class="step-tag">Step 2 · The memory model</div>
+    <h1>Memory is past reports the predictor can read</h1>
+    <p class="lead">Each completed event leaves a learner report. The next predictor sees a short summary line per report and may open the full prose on demand.</p>
+
+    <div class="panel">
+      <div class="kv">
+        <div class="k">Unit of memory</div><div class="v">A learner report — free-form causal prose, one per event</div>
+        <div class="k">What the predictor sees first</div><div class="v">A summary line: Date · Ticker · Quarter · predicted vs actual · one-sentence <span class="mono">key_takeaway</span> · Link</div>
+        <div class="k">How depth is reached</div><div class="v">The most-recent 4 own-ticker reports are always opened in full; the rest are opened only when the summary signals relevance (Step 5)</div>
+        <div class="k">Source of truth</div><div class="v">Files on disk — no index, no database, no state to keep in sync</div>
+      </div>
+    </div>
+    <div class="callout">Two consumers, two surfaces. The <strong>orchestrator (machine)</strong> reads <span class="mono">result.json</span> and never parses markdown — that is the canonical structured artifact. The <strong>predictor (LLM)</strong> reasons off the <strong>rendered</strong> bundle, and when it opens a prior report it opens that report's rendered <span class="mono">result.md</span>. JSON = canonical / numeric-exactness; rendered = the reasoning surface.</div>
+  </section>
+
+  <!-- ===== STEP 3 — THE BUNDLE ===== -->
+  <section class="step" data-step="3">
+    <div class="step-tag">Step 3 · The context bundle</div>
+    <h1>7 parallel builders, plus an 8th field</h1>
+    <p class="lead">Seven builders run concurrently against Neo4j/APIs. <span class="mono">prior_reports_context</span> is the logical 8th bundle field — not a parallel builder, a light local-file read added after the builders finish. Every fact is point-in-time bounded.</p>
+
+    <div class="pipe">
+      <div class="row"><div class="num">1</div><div class="body"><strong>8k_packet</strong><span>The 8-K being predicted and its reported results.</span></div></div>
+      <div class="row"><div class="num">2</div><div class="body"><strong>guidance_history</strong><span>Forward guidance the company has given over time.</span></div></div>
+      <div class="row"><div class="num">3</div><div class="body"><strong>consensus</strong><span>The analyst bar the print is measured against.</span></div></div>
+      <div class="row"><div class="num">4</div><div class="body"><strong>prior_financials</strong><span>Trailing fundamentals.</span></div></div>
+      <div class="row"><div class="num">5</div><div class="body"><strong>inter_quarter_context</strong><span>The path between prints.</span></div></div>
+      <div class="row"><div class="num">6</div><div class="body"><strong>peer_earnings_snapshot</strong><span>Same-industry peers — Neo4j industry, market-cap ranked.</span></div></div>
+      <div class="row"><div class="num">7</div><div class="body"><strong>macro_snapshot</strong><span>The macro regime at the cutoff.</span></div></div>
+      <div class="row"><div class="num indigo">8</div><div class="body"><strong>prior_reports_context <span class="small muted">· logical field</span></strong><span>Selected past learner-report summaries + links (next step).</span></div></div>
+    </div>
+  </section>
+
+  <!-- ===== STEP 4 — prior_reports_context ===== -->
+  <section class="step" data-step="4">
+    <div class="step-tag">Step 4 · The prior-reports surface</div>
+    <h1>prior_reports_context — 12 visible reports</h1>
+    <p class="lead">Built by walking every event's <span class="mono">learning/result.json</span> on disk at bundle-build time; anything missing or invalid is logged and skipped.</p>
+
+    <div class="kv panel">
+      <div class="k">Visibility cap</div><div class="v">12 total — up to <strong>8 own-ticker</strong> + up to <strong>4 industry-peer</strong></div>
+      <div class="k">Per-report row</div><div class="v">Date · Ticker · Quarter · predicted vs actual · <span class="mono">key_takeaway</span> · Link</div>
+      <div class="k">Peers</div><div class="v">Same Neo4j industry, market-cap ranked, point-in-time safe — deterministic, not model-chosen</div>
+      <div class="k">Visibility predicate</div><div class="v"><span class="mono">learner.pit_cutoff &le; predictor.pit_cutoff</span></div>
+      <div class="k">Self-leak guard</div><div class="v">The current event never sees its own learner output</div>
+      <div class="k">Ordering</div><div class="v">Own-ticker first, then industry peers; recency within each group</div>
+    </div>
+  </section>
+
+  <!-- ===== STEP 5 — READING DISCIPLINE ===== -->
+  <section class="step" data-step="5">
+    <div class="step-tag">Step 5 · Attention budget</div>
+    <h1>Tiered reading — price today's surprise</h1>
+    <p class="lead">All 12 reports are visible as summary lines. Which ones get fully opened follows a fixed tier rule that protects attention quality.</p>
+
+    <table class="matrix">
+      <tr><th>Group</th><th>Rule</th></tr>
+      <tr><td>Most-recent 4 own-ticker</td><td><strong>Forced open</strong> — highest signal-by-recency for this stock</td></tr>
+      <tr><td>Older own-ticker (5–8)</td><td>Summary-first; opened only if the takeaway suggests relevance</td></tr>
+      <tr><td>Industry peers (4 visible)</td><td>Up to <strong>3</strong> opened based on summary relevance</td></tr>
+      <tr><td>Every opened report</td><td>Listed in <span class="mono">opened_prior_reports[]</span> in the prediction JSON</td></tr>
+    </table>
+    <div class="callout">Recent own-ticker is the core signal. Older own-ticker is available but stale-risk. Peers matter most during the current earnings season.</div>
+  </section>
+
+  <!-- ===== STEP 6 — PREDICTOR ===== -->
+  <section class="step" data-step="6">
+    <div class="step-tag">Step 6 · The predictor</div>
+    <h1>One skill, two modes</h1>
+    <p class="lead">The same skill produces the call in both modes. The mode travels in a single field, <span class="mono">pit_mode</span>, stamped into the bundle and echoed in the output.</p>
+
+    <div class="grid-2">
+      <div class="panel tight">
+        <h3 style="margin-top:0;">historical</h3>
+        <p class="small" style="margin:6px 0 0;">Point-in-time safe. Seeds the corpus and measures effectiveness on already-released prints. Soft time budget.</p>
+      </div>
+      <div class="panel tight">
+        <h3 style="margin-top:0;">live</h3>
+        <p class="small" style="margin:6px 0 0;">Real-time. Speed matters — earliest orders get the better bargain. Tiered SLA enforced.</p>
+      </div>
+    </div>
+    <p>The predictor's job: price the surprise correctly and on time. It <strong>first names the few metrics this name's market actually grades on</strong> (take-rate / SSS / NRR / copper-realized / backlog …) and judges the print through those, not a generic rev/EPS/margin lens — rejecting any signal (own-metric or peer read) that doesn't map to that mechanism. Two-pass: it always fully opens the most-recent 4 own-ticker reports, then selects additional older own-ticker / peer reports under the Step 5 caps. It cites grounded evidence, **states the one thing that would make this call wrong** (its falsifier), and may answer <span class="mono">no_call</span> as a first-class outcome.</p>
+  </section>
+
+  <!-- ===== STEP 7 — TOOL GATING ===== -->
+  <section class="step" data-step="7">
+    <div class="step-tag">Step 7 · Tool gating</div>
+    <h1>The orchestrator gates tools per mode</h1>
+    <p class="lead">One skill file. At each SDK invocation the orchestrator passes a mode-specific <span class="mono">allowed_tools=[...]</span>.</p>
+
+    <div class="twocol">
+      <div class="col">
+        <h4>historical</h4>
+        <ul class="tight">
+          <li>Read</li>
+          <li>Bash</li>
+          <li>DataSubAgents (Task) — point-in-time safe</li>
+        </ul>
+      </div>
+      <div class="col">
+        <h4>live</h4>
+        <ul class="tight">
+          <li>DataSubAgents</li>
+          <li>WebFetch</li>
+          <li>Neo4j read</li>
+          <li>IBKR</li>
+        </ul>
+      </div>
+    </div>
+    <p class="small muted">Dedicated sector / macro fetcher sub-agents are a <strong>deferred follow-up</strong> (not a blocker for restructuring) — built later on the DataSubAgents pattern: live = IBKR, historical = Polygon (+ possibly Yahoo / other free sources).</p>
+  </section>
+
+  <!-- ===== STEP 8 — LIVE SLA ===== -->
+  <section class="step" data-step="8">
+    <div class="step-tag">Step 8 · Live timing</div>
+    <h1>Tiered SLA — live mode</h1>
+    <p class="lead">Median live runtime targets ~90–120s. 300s is the exceptional safety bound. Historical mode runs on a softer budget.</p>
+
+    <div class="svg-wrap tall">
+      <svg viewBox="0 0 980 210" width="100%">
+        <defs>
+          <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/>
+          </marker>
+        </defs>
+        <line x1="60" y1="110" x2="920" y2="110" stroke="#cbd5e1" stroke-width="2" marker-end="url(#arr)"/>
+        <g font-family="ui-sans-serif">
+          <g><circle cx="230" cy="110" r="26" fill="#fef3c7" stroke="#d97706" stroke-width="2"/><text x="230" y="116" text-anchor="middle" font-weight="700" fill="#92400e" font-size="16">90s</text></g>
+          <g><circle cx="500" cy="110" r="26" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><text x="500" y="116" text-anchor="middle" font-weight="700" fill="#1d4ed8" font-size="16">120s</text></g>
+          <g><circle cx="800" cy="110" r="26" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/><text x="800" y="116" text-anchor="middle" font-weight="700" fill="#b91c1c" font-size="15">300s</text></g>
+        </g>
+        <g font-family="ui-sans-serif" font-size="15" fill="#475569" text-anchor="middle">
+          <text x="230" y="56" font-weight="700">SOFT WARN</text>
+          <text x="230" y="170">"approaching target" injected</text>
+          <text x="500" y="56" font-weight="700">SHIP THE CALL</text>
+          <text x="500" y="170">ship best-available unless</text>
+          <text x="500" y="188">resolving material uncertainty</text>
+          <text x="800" y="56" font-weight="700" fill="#b91c1c">HARD KILL</text>
+          <text x="800" y="170" fill="#b91c1c">force-terminate → fallback</text>
+        </g>
+      </svg>
+    </div>
+
+    <details>
+      <summary>300s hard-kill fallback flow</summary>
+      <ol style="margin:10px 0 0;">
+        <li>A valid <span class="mono">prediction/result.json</span> exists and passes the validator → keep it; stamp <span class="mono">timeout_after_valid_write=true</span>.</li>
+        <li>Missing or invalid → orchestrator writes a complete valid live <span class="mono">no_call</span> record: <span class="mono">direction:"no_call"</span>, <span class="mono">confidence_score:0</span>, <span class="mono">expected_move_range_pct:[0,0]</span>, <span class="mono">pit_mode:"live"</span>, <span class="mono">data_gaps:["live_timeout"]</span>, <span class="mono">opened_prior_reports:[…logged before kill]</span>, <span class="mono">analysis:"hard timeout…"</span> — plus <span class="mono">timeout=true</span> run metadata.</li>
+        <li>Run closes as <span class="mono">completed-timeout</span> (not ordinary success). The learner still fires on the normal next-event trigger.</li>
+      </ol>
+    </details>
+  </section>
+
+  <!-- ===== STEP 9 — VALIDATOR ===== -->
+  <section class="step" data-step="9">
+    <div class="step-tag">Step 9 · The validator</div>
+    <h1>Shape, plus two content rules</h1>
+    <p class="lead">The validator checks schema, metadata, range, and evidence. Two semantic rules are hard-blocks — output that violates them never lands on disk.</p>
+
+    <table class="matrix">
+      <tr><th>Rule</th><th>Contract</th></tr>
+      <tr><td><strong>Anti-lazy</strong></td><td><span class="mono">direction in {long, short}</span> requires <strong>&ge;2 grounded source IDs</strong> across key drivers, with <strong>&ge;1 from the current bundle</strong>. Applies to every directional call, at any confidence.</td></tr>
+      <tr><td><strong>no_call</strong> (two paths)</td><td><em>Balanced:</em> &ge;2 key_drivers with both a long and a short driver, each with evidence. <em>Or missing-data:</em> &ge;1 <span class="mono">data_gaps[]</span> item plus analysis explaining the gap; drivers may be empty, opposing drivers must not be invented.</td></tr>
+      <tr><td>Evidence catalog</td><td>Strict. Every cited fact resolves to a known <span class="mono">SRC:</span> ID. Live mode also accepts runtime <span class="mono">SRC:LIVE:WEB:*</span> / <span class="mono">SRC:LIVE:IBKR:*</span> IDs.</td></tr>
+    </table>
+    <div class="callout">The missing-data <span class="mono">no_call</span> path lets the predictor say "not enough" honestly instead of fabricating opposing drivers.</div>
+  </section>
+
+  <!-- ===== STEP 10 — PREDICTION SCHEMA ===== -->
+  <section class="step" data-step="10">
+    <div class="step-tag">Step 10 · Artifact</div>
+    <h1>prediction_result.v1</h1>
+    <p class="lead">The structured output of every prediction.</p>
+
+    <div class="panel code">
+<pre>{
+  <span class="key">"schema_version"</span>: <span class="str">"prediction_result.v1"</span>,
+  <span class="key">"metadata"</span>: { ticker, quarter_label, predicted_at,
+                model/prompt version, sdk_session_id },
+  <span class="key">"pit_mode"</span>: <span class="str">"historical" | "live"</span>,
+  <span class="key">"direction"</span>: <span class="str">"long" | "short" | "no_call"</span>,
+  <span class="key">"confidence_score"</span>: 0-100,
+  <span class="key">"confidence_bucket"</span>: <span class="str">"…"</span>,
+  <span class="key">"expected_move_range_pct"</span>: [low, high],
+  <span class="key">"magnitude_bucket"</span>: <span class="str">"…"</span>,
+  <span class="key">"key_drivers"</span>: [ { <span class="key">"driver"</span>: <span class="str">"…"</span>, <span class="key">"evidence"</span>: [<span class="str">"SRC:…"</span>] } ],
+  <span class="key">"data_gaps"</span>: [ <span class="str">"…"</span> ],
+  <span class="key">"opened_prior_reports"</span>: [ <span class="str">"…"</span> ],
+  <span class="key">"analysis"</span>: <span class="str">"…"</span>
+}</pre>
+    </div>
+    <p class="small muted">Illustrative. The plan locks only the <em>deltas</em> (drop lesson fields; keep magnitude/confidence buckets; add <span class="mono">opened_prior_reports</span> + <span class="mono">pit_mode</span>) and preserves metadata / range / evidence-source validation. The exact full field list + types + required/optional status is a locked pre-implementation prerequisite.</p>
+  </section>
+
+  <!-- ===== STEP 11 — LEARNER ===== -->
+  <section class="step" data-step="11">
+    <div class="step-tag">Step 11 · The learner</div>
+    <h1>Causal attribution</h1>
+    <p class="lead">Once the outcome is known, the learner explains whether the prediction was off, why, and which drivers produced the realized move.</p>
+
+    <ul class="tight">
+      <li><strong>Whole-move attribution:</strong> account for the <em>entire</em> realized move — classify it durable-fundamental vs one-time/cosmetic vs positioning, name offsetting forces (not just the biggest driver), and <strong>explicitly flag any unexplained residual</strong>. The residual becomes the next checklist question.</li>
+      <li><strong>Tests the predictor's falsifier:</strong> checks whether the one thing the predictor said would break the call actually fired — turning post-mortems into objective hypothesis-checks.</li>
+      <li><strong>Mines its information edge:</strong> the analyst Q&A / dodged answers in the transcript (which the predictor never sees) are distilled into checklist questions — re-expressed so they're answerable from the <em>next</em> predictor's bundle (the predictor-observability fence).</li>
+      <li><strong>Data gaps it reports</strong> are limited to data it could access that the predictor did not use — a concrete pointer, not speculation.</li>
+      <li><strong>Just-in-time (live):</strong> the learner runs immediately before the next prediction for that ticker, whenever the prior outcome has become knowable.</li>
+      <li><strong>Context-aware:</strong> it may pull sector / macro context so its causal account is complete for the next predictor.</li>
+    </ul>
+  </section>
+
+  <!-- ===== STEP 12 — LEARNER SCHEMA ===== -->
+  <section class="step" data-step="12">
+    <div class="step-tag">Step 12 · Artifact</div>
+    <h1>learner_result.v1</h1>
+    <p class="lead">The structured output of every learner run — the machine truth used to render the report the next predictor reads.</p>
+
+    <div class="panel code">
+<pre>{
+  <span class="key">"schema_version"</span>: <span class="str">"learner_result.v1"</span>,
+  <span class="key">"pit_mode"</span>: <span class="str">"historical" | "live"</span>,
+  <span class="key">"actual_return_pct"</span>: …,
+  <span class="key">"primary_driver"</span>: <span class="str">"…"</span>,
+  <span class="key">"contributing_factors"</span>: [ <span class="str">"…"</span> ],
+  <span class="key">"feedback"</span>: { <span class="key">"prediction_vs_actual"</span>: <span class="str">"…"</span>, <span class="key">"why"</span>: <span class="str">"…"</span>,
+                <span class="key">"what_worked"</span>: <span class="str">"…"</span>, <span class="key">"what_failed"</span>: <span class="str">"…"</span> },
+  <span class="key">"key_takeaway"</span>: <span class="str">"one sentence"</span>,
+  <span class="key">"future_checklist"</span>: [ <span class="str">"…"</span> ],
+  <span class="key">"missing_inputs"</span>: [ <span class="str">"…"</span> ],
+  <span class="key">"evidence_ledger"</span>: [ <span class="str">"…"</span> ]
+}</pre>
+    </div>
+    <p class="small muted">Illustrative. The plan keeps the existing rich causal surface (primary/contributing drivers, prediction-vs-actual, missing inputs, data sources, refs, evidence ledger), drops <span class="mono">lesson_audit</span> / <span class="mono">global_observations</span> / <span class="mono">tags</span>, and adds <span class="mono">key_takeaway</span> + <span class="mono">future_checklist</span>. "Actual returns" may span multiple windows; exact field list + types is a locked pre-implementation prerequisite.</p>
+  </section>
+
+  <!-- ===== STEP 13 — STANDING CHECKLIST ===== -->
+  <section class="step" data-step="13">
+    <div class="step-tag">Step 13 · The feedback loop</div>
+    <h1>The standing checklist — learner⇄predictor loop</h1>
+    <p class="lead">One rolling own-ticker checklist of <em>questions to inspect</em>, living only inside the latest learner result. It is the only memory beyond prior reports, and it rewrites itself every cycle.</p>
+
+    <div class="pipe">
+      <div class="row"><div class="num">1</div><div class="body"><strong>LEARNER (after outcome)</strong><span>Reviews the recent PIT-visible own-ticker <em>full reports</em> (already surfaced by the prior-report plumbing; window N parked) + this prediction + outcome → <strong>consolidates</strong> one new <span class="mono">future_checklist</span>: keep durable recurring conditionals even when dormant; otherwise drop freely (refuted/generic/stale/redundant/one-off/weaker); sharpen; add.</span></div></div>
+      <div class="row"><div class="num indigo">2</div><div class="body"><strong>ORCHESTRATOR (dumb pipe)</strong><span>Carries the latest allowed own-ticker list into the next bundle. No new store. No source link — the source report is already force-opened in prior_reports_context.</span></div></div>
+      <div class="row"><div class="num">3</div><div class="body"><strong>PREDICTOR (pre-outcome)</strong><span>Engages relevant items in its <span class="mono">analysis</span> prose; dismisses the rest in one line. Never used as evidence.</span></div></div>
+      <div class="row"><div class="num green">4</div><div class="body"><strong>Outcome known → loop</strong><span>The next learner rewrites the list again. The correction lives in the learner's reasoning — nothing else is stored.</span></div></div>
+    </div>
+
+    <table class="matrix">
+      <tr><th>Rule</th><th>Why</th></tr>
+      <tr><td><strong>Questions, not answers</strong></td><td>A persisted answer rots into a wrong rule; a question only directs attention.</td></tr>
+      <tr><td><strong>Own-ticker only</strong></td><td>Learner reviews recent PIT-visible own-ticker full reports — surfaced by the existing prior-report plumbing, <strong>no new discovery path</strong>. Peer learning stays in <span class="mono">prior_reports_context</span> — never merged.</td></tr>
+      <tr><td><strong>Never evidence</strong></td><td>Checklist text is never a source ID. Directional calls still need ≥2 grounded IDs, ≥1 from the current bundle (V2).</td></tr>
+      <tr><td><strong>Anti-generic by disqualifier</strong></td><td>The learner prompt bans lines true for any company/quarter — <em>not</em> by good/bad examples (LLMs over-anchor; this is a rewrite loop).</td></tr>
+      <tr><td><strong>Prediction-time actionable</strong></td><td>Learner <em>thinks</em> with hindsight (it saw this quarter's transcript + outcome); predictor sees only the 8-K + bundle. So every line must be answerable from the 8-K/bundle alone. Insight from <em>prior</em> transcripts → translate into the available 8-K proxy, outcome-neutral wording. No 8-K proxy → omit or a company-history-grounded blind-spot caution; never a blanket "no transcript ⇒ less confident".</td></tr>
+      <tr><td><strong>Shape gate only</strong></td><td>List of short single-sentence strings. No semantic validator, no IDs, no labels, no <span class="mono">checklist_review[]</span>.</td></tr>
+    </table>
+
+    <p class="small muted">Cross-report review is <strong>ephemeral</strong> — questions only, tentative when history is thin, grounded in named past reports in the learner's reasoning, <strong>prediction-time actionable</strong> (the learner may think with hindsight but may only ask about what the predictor can observe at 8-K time), <strong>no stored company profile</strong>. Only <span class="mono">future_checklist</span> persists.</p>
+
+    <div class="callout">Not an alpha source — a cheap, asymmetric, compounding error-suppressor. Realized value is gated by the learner distillation prompt, not the architecture.</div>
+    <p class="small muted">⏸ PARKED: any cap on item count, a minimum-evidence floor, and the review-window size N. No number is decided — a bot must not hard-code one.</p>
+  </section>
+
+  <!-- ===== STEP 14 — EVALUATION ===== -->
+  <section class="step" data-step="14">
+    <div class="step-tag">Step 14 · How it's judged</div>
+    <h1>A deterministic eval — scripts compute <em>whether</em>, the LLM only <em>why</em></h1>
+    <p class="lead">The loop is only trustworthy if its scoring is. Every number is authored by code, never by an LLM grading its own homework.</p>
+
+    <div class="pipe">
+      <div class="row"><div class="num">1</div><div class="body"><strong>Scripts author all numbers</strong><span>direction-correct, signed-midpoint MSE, Brier/calibration, tie-outs — computed deterministically from the prediction + actual return. The learner authors prose-only (<em>why</em>); it never emits a metric it could be graded on.</span></div></div>
+      <div class="row"><div class="num">2</div><div class="body"><strong>Frozen replay set</strong><span>Representative historical events + the edge cases (no-history, no-peer, missing-data, contradictory drivers, live-timeout), predeclared and frozen so neither a bot nor a human can cherry-pick easy wins.</span></div></div>
+      <div class="row"><div class="num">3</div><div class="body"><strong>Systematic-bias report</strong><span>Aggregate mean <em>signed</em> error + hit-rate by predicted direction + calibration-by-confidence-bucket — surfaces chronic long/short tilt or over/under-confidence the per-ticker loop structurally can't see.</span></div></div>
+      <div class="row"><div class="num green">4</div><div class="body"><strong>Fail semantics</strong><span>Hard-exit only on objective integrity failure (malformed/missing/impossible math). A single wrong prediction is <em>signal, not failure</em>; CI fails only if a predeclared replay-suite threshold is breached.</span></div></div>
+    </div>
+
+    <div class="callout">This is a script/build, not prompt text — it never touches the predictor/learner prompts. It creates a trustworthy, un-gameable eval where today there is none.</div>
+  </section>
+
+  <!-- ===== STEP 15 — JSON CANONICAL ===== -->
+  <section class="step" data-step="15">
+    <div class="step-tag">Step 15 · Canonical vs rendered</div>
+    <h1>JSON is canonical; rendered text is what the predictor reads</h1>
+    <p class="lead">The learner writes JSON. A renderer produces the markdown. The orchestrator scans the JSON (machine, never the markdown) for the next predictor's summary line — while the predictor reasons off the rendered bundle and opens prior reports as rendered <span class="mono">result.md</span>.</p>
+
+    <div class="svg-wrap">
+      <svg viewBox="0 0 920 170" width="100%">
+        <defs>
+          <marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/>
+          </marker>
+        </defs>
+        <g font-family="ui-sans-serif" font-size="16">
+          <rect x="40" y="55" width="220" height="60" rx="12" fill="#dbeafe" stroke="#2563eb"/>
+          <text x="150" y="82" text-anchor="middle" font-weight="700" fill="#1d4ed8">learner</text>
+          <text x="150" y="103" text-anchor="middle" fill="#1d4ed8" font-size="14">writes JSON</text>
+
+          <rect x="360" y="55" width="240" height="60" rx="12" fill="#ecfdf5" stroke="#059669"/>
+          <text x="480" y="80" text-anchor="middle" font-weight="700" fill="#065f46">learning/result.json</text>
+          <text x="480" y="101" text-anchor="middle" fill="#065f46" font-size="14">canonical truth</text>
+
+          <rect x="690" y="20" width="200" height="48" rx="12" fill="#f8fafc" stroke="#94a3b8"/>
+          <text x="790" y="40" text-anchor="middle" font-weight="700" fill="#475569" font-size="14">result.md</text>
+          <text x="790" y="58" text-anchor="middle" fill="#64748b" font-size="13">rendered view</text>
+
+          <rect x="690" y="100" width="200" height="48" rx="12" fill="#eff6ff" stroke="#2563eb"/>
+          <text x="790" y="120" text-anchor="middle" font-weight="700" fill="#1d4ed8" font-size="14">orchestrator</text>
+          <text x="790" y="138" text-anchor="middle" fill="#1d4ed8" font-size="13">parses JSON only</text>
+
+          <line x1="262" y1="85" x2="356" y2="85" stroke="#94a3b8" stroke-width="2" marker-end="url(#a2)"/>
+          <line x1="602" y1="78" x2="686" y2="50" stroke="#94a3b8" stroke-width="2" marker-end="url(#a2)"/>
+          <line x1="602" y1="95" x2="686" y2="120" stroke="#94a3b8" stroke-width="2" marker-end="url(#a2)"/>
+        </g>
+      </svg>
+    </div>
+    <p class="small muted">Section 10 of the rendered bundle is a bulleted "Prior Reports" list — one multi-line bullet per report: Ticker · Quarter · Date / predicted vs actual / key_takeaway in quotes / Link. The predictor reads this rendered section for reasoning; the JSON sidecar is only the canonical/exactness layer the orchestrator parses. The Link a predictor follows resolves to the prior report's rendered <span class="mono">result.md</span>, never its JSON.</p>
+  </section>
+
+  <!-- ===== STEP 16 — K8S PIPELINE ===== -->
+  <section class="step" data-step="16">
+    <div class="step-tag">Step 16 · Execution</div>
+    <h1>The K8s pipeline</h1>
+    <p class="lead">Both predictor and learner run through one production pattern: trigger daemon → Redis queue → KEDA worker → orchestrator subprocess → SDK.</p>
+
+    <div class="pipe">
+      <div class="row"><div class="num">1</div><div class="body"><strong>earnings-trigger daemon</strong><span>Dedicated, always-on; enqueues jobs. Historical backfill starts at the warm-start anchor: earliest 8-K with usable PIT-visible prior 10-Q/10-K. Pre-anchor quarters do not block; no anchor means <span class="mono">SKIP no_warm_start_anchor</span>, not failure.</span></div></div>
+      <div class="row"><div class="num">2</div><div class="body"><strong>Redis queue <span class="mono">earnings:pipeline</span></strong><span>Dedicated queue with per-job leases for retry safety.</span></div></div>
+      <div class="row"><div class="num">3</div><div class="body"><strong>earnings-worker (KEDA)</strong><span>Thin shell — delivers the job to the orchestrator.</span></div></div>
+      <div class="row"><div class="num indigo">4</div><div class="body"><strong>subprocess: earnings_orchestrator.py</strong><span>Owns PIT, quarter identity, bundle assembly, learner recovery, and the SDK call with mode-specific allowed_tools.</span></div></div>
+      <div class="row"><div class="num green">5</div><div class="body"><strong>complete.json sentinels</strong><span>Explicit for both prediction and learner. <span class="mono">result.json</span> alone is not safe completion truth under retries/re-entry — the <span class="mono">complete.json</span> sentinel is. The Redis lease (row 2) is a separate concern: retry safety, not completion truth.</span></div></div>
+    </div>
+  </section>
+
+  <!-- ===== STEP 17 — RECAP ===== -->
+  <section class="step" data-step="17">
+    <div class="step-tag">Step 17 · The whole picture</div>
+    <h1>One screen, end to end</h1>
+    <p class="lead">The architecture in a single trace.</p>
+
+    <div class="panel">
+      <p style="margin:0; font-size:21px; line-height:1.7;">
+        <span class="pill">trigger</span> enqueues →
+        <span class="pill">earnings:pipeline</span> →
+        <span class="pill">worker</span> spawns →
+        <span class="pill indigo">orchestrator</span> builds the bundle with
+        <span class="pill green">prior_reports_context</span> (12 visible, glob-discovered, PIT-safe, warm-start bounded) →
+        <span class="pill">predictor</span> (mode-gated tools, tiered reading, live SLA) emits
+        <span class="pill">prediction_result.v1</span> through a
+        <span class="pill red">hard-block validator</span> (anti-lazy + no_call two-path + strict catalog) →
+        the outcome becomes knowable →
+        <span class="pill amber">learner</span> writes
+        <span class="pill green">learner_result.v1</span> (causal report + key_takeaway + future_checklist) →
+        that JSON is the next predictor's memory, and its rolling
+        <span class="pill green">standing checklist</span> of questions is carried forward into the next prediction.
+      </p>
+    </div>
+
+    <div class="callout">Free-form prose, well-organized, read on demand — a maximally minimal self-improving loop, scored on direction accuracy, signed-midpoint MSE, and Brier calibration.</div>
+  </section>
+
+</main>
+
+<div class="nav">
+  <button id="prev">← Prev</button>
+  <span class="spacer"></span>
+  <button id="next" class="primary">Next →</button>
+</div>
+
+<script>
+const TOTAL_STEPS = 17;
+let currentStep = 1;
+
+const stepIdxEl = document.getElementById('stepIdx');
+const stepTotalEl = document.getElementById('stepTotal');
+const progressEl = document.getElementById('progress');
+const prevBtn = document.getElementById('prev');
+const nextBtn = document.getElementById('next');
+
+stepTotalEl.textContent = TOTAL_STEPS;
+for (let i = 1; i <= TOTAL_STEPS; i++) {
+  const pip = document.createElement('div');
+  pip.className = 'pip' + (i === 1 ? ' active' : '');
+  pip.dataset.step = i;
+  pip.title = 'Step ' + i;
+  pip.addEventListener('click', () => gotoStep(i));
+  progressEl.appendChild(pip);
+}
+
+function gotoStep(n) {
+  if (n < 1 || n > TOTAL_STEPS) return;
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  const target = document.querySelector(`.step[data-step="${n}"]`);
+  if (!target) return;
+  target.classList.add('active');
+  currentStep = n;
+  stepIdxEl.textContent = n;
+  document.querySelectorAll('.progress .pip').forEach((p, idx) => {
+    const i = idx + 1;
+    p.classList.toggle('active', i === n);
+    p.classList.toggle('done', i < n);
+  });
+  prevBtn.disabled = (n === 1);
+  nextBtn.textContent = (n === TOTAL_STEPS) ? 'Done' : 'Next →';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+prevBtn.addEventListener('click', () => gotoStep(currentStep - 1));
+nextBtn.addEventListener('click', () => gotoStep(currentStep + 1));
+prevBtn.disabled = true;
+
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
+  if (e.key === 'ArrowRight' || e.key === 'PageDown') gotoStep(currentStep + 1);
+  if (e.key === 'ArrowLeft'  || e.key === 'PageUp')   gotoStep(currentStep - 1);
+});
+</script>
+</body>
+</html>
