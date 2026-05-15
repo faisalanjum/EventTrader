@@ -1,5 +1,7 @@
 # Earnings Architecture Plan
 
+> 📌 **BILLING (CRITICAL):** Anthropic's June 15 2026 subscription change moves `claude_agent_sdk`/`claude -p` to a metered pool. Whether the pipelines stay on subscription / $0, the empirical proof matrix, the entrypoint `cli` vs `sdk-cli` lever, Option #6, and the EarningsTrigger/Guidance fix recipe are all in **`.claude/plans/ANTHROPIC_BILLING_SUBSCRIPTION_CRITICAL.md`**. Read it before touching any SDK entrypoint.
+
 ## Date: 2026-01-22 (Reorganized)
 
 ---
@@ -373,6 +375,191 @@
 - **SDK error messages fix** | ✅ **FIXED** (v2.1.88) | `error_during_execution`, `error_max_turns` now correctly set `is_error: true` with descriptive messages. **TESTED + confirmed**.
 - **Auto mode denied commands notification** | ✅ **NEW** (v2.1.88) | Denied commands show notification and appear in `/permissions` → Recent tab. Changelog-confirmed.
 - **FG/BG built-in tool sets** | ⚠️ **UNCHANGED** (v2.1.88) | No new built-in tools mentioned. Agent tool still absent from all subagent tiers.
+
+### Retest Summary (2026-05-13, v2.1.140) — v2.1.108 → v2.1.140 (26 published versions, 7 skipped: 115/124/125/127/130/134/135)
+
+**Scope**: empirical delta against v2.1.107 baseline (~4 weeks of releases). Every `✅ TESTED` finding has a proof artifact in `earnings-analysis/test-outputs/test-v140-*.txt`.
+
+#### Tool inventory matrix at v2.1.140 — DEFINITIVE (verified via fresh `claude -p` sessions)
+
+| Spawn context | Direct | Deferred built-in | Deferred MCP | **Total** | vs v2.1.107 |
+|---|---|---|---|---|---|
+| `-p` main session | **12** | 24 | 98 | **134** | +PushNotification, +ShareOnboardingGuide |
+| FG non-team `general-purpose` | **9** | **21** | 98 | **128** | **+Task tools BACK** (regression v107→v140 reversed), +PushNotification, +ShareOnboardingGuide direct |
+| BG non-team `general-purpose` | 8 | **7** | 98 | **113** | **+Monitor, +TaskStop** (NEW in BG) |
+| FG custom agent w/ `tools:` field | 7-8 | 0 (no ToolSearch in intersection) | 0 | minimal | Custom-agent tools is INTERSECTION; ToolSearch dropped if not granted at tier level |
+
+**Direct tool sets (v2.1.140):**
+- **`-p` main**: Agent, AskUserQuestion, Bash, Edit, Glob, Grep, Read, ScheduleWakeup, **ShareOnboardingGuide** (NEW), Skill, ToolSearch, Write
+- **FG GP**: Bash, Edit, Glob, Grep, Read, **ShareOnboardingGuide** (NEW), Skill, ToolSearch, Write (no ScheduleWakeup — main-session only)
+- **BG GP**: Bash, Edit, Glob, Grep, Read, Skill, ToolSearch, Write (unchanged)
+
+**Deferred built-in (FG GP):** CronCreate, CronDelete, CronList, EnterWorktree, ExitWorktree, ListMcpResourcesTool, Monitor, NotebookEdit, **PushNotification** (NEW v110), ReadMcpResourceTool, RemoteTrigger, SendMessage, **TaskCreate, TaskGet, TaskList, TaskStop, TaskUpdate** (5 back — TaskOutput still gone), TeamCreate, TeamDelete, WebFetch, WebSearch.
+
+**Deferred built-in (BG GP):** EnterWorktree, ExitWorktree, **Monitor** (NEW — was FG-only at v107), NotebookEdit, **TaskStop** (NEW), WebFetch, WebSearch.
+
+Proof: `test-v140-fg-gp-inventory.txt`, `test-v140-bg-gp-inventory.txt`, `test-v140-main-p-inventory.txt`.
+
+#### NEW capabilities CONFIRMED at v2.1.140
+
+| Capability | Version | Status | Probe / Proof |
+|---|---|---|---|
+| Hook `args:` exec form (string[]) | v2.1.139 | ✅ **CONFIRMED** | Schema requires BOTH `command:` (executable path) AND `args:` (string array). With `args:` ALONE the hook silently fails to fire. `$(uname)` preserved literally in argv (no shell expansion). Vs control: shell form `command:` only → argv has `Linux` (expanded). `test-v140-hook-args-{shell,exec}.log` |
+| Hook `duration_ms` field | v2.1.119 | ✅ **CONFIRMED** | PostToolUse Bash hook STDIN JSON has top-level `duration_ms: 2040` for a `sleep 2 && echo X` command. `test-v140-hook-post-bash.log` |
+| Hook `effort.level` field | v2.1.133 | ✅ **CONFIRMED** | STDIN JSON contains `effort: {"level": "xhigh"}` in BOTH PreToolUse and PostToolUse. `test-v140-hook-{pre-effort,post-bash}.log` |
+| `$CLAUDE_EFFORT` env var in hook subprocess | v2.1.133 | ✅ **CONFIRMED** | Hook script `${CLAUDE_EFFORT:-UNSET}` returned `xhigh`. Same log files. |
+| `$CLAUDE_EFFORT` env var in Bash tool subprocess | v2.1.133 | ✅ **CONFIRMED** | `env | grep CLAUDE_EFFORT` from Bash returns `CLAUDE_EFFORT=xhigh`. `test-v140-env-vars.txt` |
+| `$CLAUDE_CODE_SESSION_ID` env var in Bash | v2.1.132 | ✅ **CONFIRMED** | Value matches the session_id seen in hook payloads. `test-v140-env-vars.txt` |
+| `$AI_AGENT` env var in subprocesses | v2.1.120 | ✅ **CONFIRMED** | Value: `claude-code_2-1-140_agent`. `test-v140-env-vars.txt` |
+| `${CLAUDE_EFFORT}` substitution in skill content | v2.1.120 | ✅ **CONFIRMED** | Skill with literal `${CLAUDE_EFFORT}` in body — at runtime the placeholder is replaced with the actual effort value (`xhigh`). `test-v140-skill-effort-sub.txt` |
+| `--print`/`-p` honors agent `disallowedTools:` | v2.1.119 | ✅ **CONFIRMED** | Custom agent with `disallowedTools: [Write, Edit]` launched via `claude -p --agent`. Write attempt returned: `"No such tool available: Write. Write exists but is not enabled in this context."` Bash (allowed) succeeded. `test-v140-p-disallowed.txt` |
+| **`--permission-mode plan` in `-p` mode** | v2.1.140 | ✅ **NEWLY RESPECTED** | At v107: SILENTLY IGNORED. At v140: Model declined Bash with "Plan mode is active, cannot execute that command — writing /tmp/v140-permode-canary.txt is a non-readonly action and is blocked by the plan-mode constraint." Canary file NOT created on disk. Mechanism is model self-censorship via plan-mode system reminder, not classifier denial (`permission_denials: []` empty). Output capture via `--output-format json` from bg task `bmjpo66wq`. |
+| Opus 4.7 + 1M context | v2.1.111+v2.1.117 | ✅ **CONFIRMED** | Init message: `Model: claude-opus-4-7[1m]`. Default `effortLevel: xhigh` (user settings). |
+| Skills written mid-session ARE discoverable | n/a | ✅ **CONFIRMED** | When new skill `.md` is written via Write tool mid-session, the next system-reminder lists it under available skills (unlike agents which are session-start snapshot). Observed `test-v140-*` skills appearing in available-skills list after creation. |
+
+#### NEW capabilities INCONCLUSIVE or UNTESTABLE
+
+| Capability | Status | Notes |
+|---|---|---|
+| Hook `continueOnBlock: true` for PostToolUse | ⚠️ **INCONCLUSIVE** | Hook fires; model response to `block` with vs without `continueOnBlock` was functionally identical in single-Bash `-p` tests (both end with `stop_reason: end_turn`, both report the block reason in final text). A multi-step Bash scenario would be needed to distinguish "continue turn" vs "halt"; deferred. |
+| Hook `hookSpecificOutput.updatedToolOutput` (non-MCP, v121) | ⚠️ **INCONCLUSIVE / LIKELY NOT EFFECTIVE** | PostToolUse Bash hook returned `{hookSpecificOutput: {hookEventName: "PostToolUse", updatedToolOutput: "REWRITTEN_BY_V140_HOOK_CANARY_5JG8R"}}`. Hook fired (log confirms). But the model's final text reported `ORIGINAL_OUTPUT_<timestamp>` from the raw `echo` (timestamp value model couldn't have guessed), meaning the rewrite did NOT replace what the model observed. Either schema differs or feature doesn't apply to Bash. NEEDS DEEPER INVESTIGATION. |
+| `Read` tool offset string coercion (v140) | UNTESTABLE-FROM-PROMPT | The harness validation layer rejects string offsets before they reach Claude Code. Model is constrained to pass integers. The v140 fix would only manifest if a model emits a string offset; that requires direct API access, not feasible from agent prompt. CHANGELOG-CONFIRMED only. |
+| `CLAUDE_PROJECT_DIR` in Bash subprocess | ⚠️ **UNSET in Bash** | v139 changelog says "MCP stdio servers now receive `CLAUDE_PROJECT_DIR` ... matching hooks." Specifically about **stdio MCP servers**, not Bash. Tested via Bash: `CLAUDE_PROJECT_DIR=UNSET`. So Bash does NOT get this var — only stdio MCP servers and hooks do. |
+
+#### Re-verification of "Still broken" items — v2.1.140 results
+
+| Item | v2.1.107 | v2.1.140 | Change |
+|---|---|---|---|
+| Task→Task nesting | BLOCKED | ❌ **STILL BLOCKED** | ToolSearch `select:Agent` in subagent returns "No matching deferred tools found"; TaskCreate IS present in subagents. Confirms architectural block. `test-v140-task-nest.txt` |
+| Subagent thinking | DISABLED | ❌ **STILL DISABLED** | 0 `"type":"thinking"` blocks in subagent transcript. 12 substring hits for "thinking" all came from skill descriptions and filenames, not extended-thinking content blocks. `test-v140-subagent-thinking.txt` |
+| Agent discovery mid-session | SNAPSHOT | ❌ **STILL SNAPSHOT** | New agent `.md` written mid-session → Agent tool error: "Agent type 'test-v140-midsess' not found". Available agents list returned by error DID include other test-v140-* agents that existed at session start. `test-v140-agent-discovery.txt` |
+| Skill `allowed-tools` restriction | NOT ENFORCED | ❌ **STILL NOT ENFORCED** | Skill with `allowed-tools: [Read]` invoked Write and Bash successfully. Both `/tmp/v140-skill-restrict-{write,bash}.txt` written. `test-v140-skill-restrict.txt` |
+| Parallel Skill execution | SEQUENTIAL | ❌ **STILL SEQUENTIAL** | Parent skill called child-a + child-b in same turn. Gap: 4.68 seconds (threshold for parallel was <2s). `test-v140-parallel-skill.txt` |
+| Agent tool `resume` param | REMOVED | ❌ **STILL REMOVED** | Agent({subagent_type, prompt, resume: "fake-id"}) accepted without error but ignored; new agent spawned. Use SendMessage({to: agentId}). `test-v140-agent-resume.txt` |
+| AskUserQuestion in `-p` mode | HARD-BLOCKED | ⚠️ **PARTIAL CHANGE** | At v107: pre-blocked, always in `permission_denials` array. At v140: tool IS in `-p` inventory + IS callable (no schema/permission error), but execution returns `<error>Answer questions?</error>` — no interactive client to respond. Functionally still unusable in `-p`, but the block mechanism shifted from permissions layer to execution layer. `test-v140-askuser-p.txt` |
+| `--permission-mode` flag in `-p` mode | SILENTLY IGNORED | ✅ **NEWLY RESPECTED** | See NEW capabilities table above. PROMOTED out of "Still broken". |
+| Hooks live-reload from settings.json | NO | ❌ **STILL NO** (inferred from session) | When project settings.json changed mid-session in a `claude -p` run, hook config didn't update for the new invocation until a fresh process started. Each fresh `claude -p` does pick up current settings.json at startup. |
+
+#### NEW infrastructure findings (test-design pitfalls observed at v2.1.140)
+
+| Finding | Detail |
+|---|---|
+| **Hook matcher syntax: single-token only in `-p`** | Matchers like `"Bash"` work. Matchers like `"Bash\|Glob\|Grep"` (pipe-separated regex) DID NOT fire any hooks during testing. Single-tool matchers also work for `"Edit\|Write"` style (production uses this). Hypothesis: the pipe regex form requires specific tooling we didn't validate. **Implication**: when writing test hooks, prefer one-matcher-per-tool entry. |
+| **Hook schema strictness: `args:` requires `command:`** | A hook spec like `{type:"command", args:[...]}` (no `command:`) FAILS SILENTLY — the hook never fires, and there's no error message. The correct exec-form schema is `{type:"command", command:"/path/exe", args:["arg1","arg2"]}`. The changelog wording "args: string[] field" was misleading. |
+| **`/tmp` project hooks not loading in `-p`** | A `claude -p` invoked from `/tmp/v140-tests/<name>/` did not load that project's `.claude/settings.json` hooks. Likely a trust gate (which can't be answered in `-p`). Tested project hooks must live in a trusted project (e.g., EventMarketDB). |
+| **`settings.local.json` hooks: NOT loaded by `-p`** | Adding a hooks block to `.claude/settings.local.json` did NOT make those hooks fire when running `claude -p` from the same directory. Only project `.claude/settings.json` hooks fired. (Could be a v140 behavior; v107 docs called local.json a recognized hooks source.) |
+| **Auto-mode classifier blocks nested `claude -p --permission-mode bypassPermissions`** | With `defaultMode: "auto"` in user settings, the classifier rejects nested `claude -p` spawns that disable approvals ("Create Unsafe Agents"). Workarounds: exit auto mode, OR add a scoped `Bash(claude -p:*)` permission rule. |
+| **Custom-agent `tools:` field is INTERSECTION** | Custom agent listing `tools: [Bash, Read, Write, Edit, Glob, Grep, Skill, ToolSearch]` got 7 direct tools — ToolSearch was DROPPED. The intersection with the tier's allowed set excluded it. Without ToolSearch, the custom agent can't enumerate deferred tools at all, blocking probe designs that rely on introspection. Use built-in `subagent_type: "general-purpose"` for full-fidelity inventory probes. |
+| **`-p` cwd reset behavior** | A `cd /tmp/...` Bash command from inside a `claude -p` session reports "Shell cwd was reset to /home/faisal/EventMarketDB". Tool-level cwd does NOT persist across Bash calls within the same `-p` session. |
+
+### Still broken (as of v2.1.140 — superset; only changes from v2.1.107 noted)
+
+**Newly FIXED (vs v107):**
+- ✅ `--permission-mode plan` in `-p` mode is now respected (was silently ignored)
+- ✅ FG non-team GP has Task tools back (v107 had them removed; now Create/Get/List/Stop/Update all present in deferred — only TaskOutput remains absent)
+
+**Status unchanged:**
+- `allowed-tools` restriction: NOT ENFORCED (skills only)
+- `disallowedTools`: NOT ENFORCED in skills; **ENFORCED in agents** AND **in `-p --agent` mode** (newly confirmed v140 via v119 fix)
+- `type: "agent"` hooks: not re-tested at v140 (v107 status: NOT ENFORCED)
+- Task→Task nesting: BLOCKED (Agent spawner absent from ALL subagent tiers)
+- Parallel Skill execution: SEQUENTIAL (~4.68s gap measured)
+- Tool inheritance parent↔child: NO (each context independent)
+- Hooks live-reload from settings.json: NO (mid-session settings.json edits don't change active session)
+- Agent discovery mid-session: STILL SNAPSHOT (`@`-typeahead in v88 was UI-only; spawnability requires fresh session)
+- BG non-team task management: still BLOCKED for non-team (but BG team agents have task tools per v74; not re-tested at v140)
+- Nested agent spawning: BLOCKED everywhere
+- Subagent thinking: STILL DISABLED (0 thinking blocks observed in v140 subagent transcript)
+- `effort`/`maxTurns` frontmatter for agents: PLUGIN-ONLY (skills `effort:` works since v80)
+- Agent tool `resume` param: STILL REMOVED — use SendMessage
+- `--bare` flag: INCOMPATIBLE with OAuth (requires ANTHROPIC_API_KEY)
+- `--settings` overlay: does NOT register new hook events (v84 finding stands)
+- `settings.local.json` hooks: did NOT fire in `-p` testing at v140 (project `settings.json` is the only working location)
+- AskUserQuestion in `-p` mode: still functionally unusable (now returns `<error>` instead of pre-block, but no interactive client)
+- Haiku advisor via unpatched CLI: BLOCKED (`WyH()` gate). BYPASSED via binary patch — see Part 8.9
+- `--settings` overlay CANNOT override user-level `advisorModel`
+- Hook `args:` form: requires BOTH `command:` and `args:` (incomplete schema fails silently)
+- Hook matchers with regex pipes (`Bash|Glob|Grep`) did NOT fire in v140 testing — use single-token matchers
+
+### v2.1.140 NOT tested (deferred — known limitations)
+
+| Item | Reason |
+|---|---|
+| Hook `type: "mcp_tool"` (v118) | Needs MCP server endpoint to verify hook-as-mcp-call; would require schema discovery first |
+| Hook `type: "prompt"` re-verify | Has regressed twice (working v37, broken v45, fixed v76, working v85). Could regress again — but not retested at v140 |
+| Hook `type: "agent"` re-verify (v118 message-required fix) | Was "NOT ENFORCED" at every prior retest; low ROI to re-verify |
+| Agent FM `hooks:` fire via `--agent` (v116) | Test fixtures partly built but not exercised |
+| Agent FM `mcpServers:` via `--agent` (v117) | Same |
+| Subagent skill discovery (v133 fix) | Skills are auto-discoverable per our prior tests; specific fix not isolated |
+| Deferred tools on `context: fork` first turn (v126) | Not exercised |
+| Hook `continueOnBlock` behavior difference (vs default) | Needs multi-step Bash scenario; deferred |
+| Hook `updatedToolOutput` for non-MCP (v121) | Hook fires but rewrite not visible to model — schema uncertain |
+| PreToolUse `additionalContext` survives tool failure (v110) | Not exercised |
+| `worktree.baseRef` setting (v133) | Not exercised |
+| `alwaysLoad` MCP config (v121) | Not exercised |
+| `claude project purge` (v126) | Destructive — won't run on production project |
+| Interactive-only: `/goal`, `claude agents`, `/tui`, push notifications, Remote Control, advisor in console mode | All require live terminal |
+
+### Test scripts/outputs location (v2.1.140)
+
+| File | What |
+|---|---|
+| `test-outputs/test-v140-fg-gp-inventory.txt` | FG general-purpose subagent inventory (128 tools) |
+| `test-outputs/test-v140-bg-gp-inventory.txt` | BG general-purpose subagent inventory (113 tools) |
+| `test-outputs/test-v140-main-p-inventory.txt` | `-p` main session inventory (134 tools) |
+| `test-outputs/test-v140-fg-inventory.txt` | FG custom-agent inventory (intersection test — 7 tools, ToolSearch dropped) |
+| `test-outputs/test-v140-bg-inventory.txt` | BG custom-agent inventory (intersection test — 7 tools) |
+| `test-outputs/test-v140-agent-flag-inventory.txt` | `--agent` custom-main inventory |
+| `test-outputs/test-v140-env-vars.txt` | $AI_AGENT, $CLAUDE_EFFORT, $CLAUDE_CODE_SESSION_ID, $CLAUDE_PROJECT_DIR via Bash |
+| `test-outputs/test-v140-hook-args-{shell,exec}.log` | `args:` exec-form vs shell-form (v139) |
+| `test-outputs/test-v140-hook-{pre-effort,post-bash}.log` | PreToolUse + PostToolUse with effort.level + duration_ms |
+| `test-outputs/test-v140-hook-continue.log` | continueOnBlock hook fire log |
+| `test-outputs/test-v140-hook-updated-output.log` | updatedToolOutput hook fire log |
+| `test-outputs/test-v140-task-nest.txt` | Task→Task nesting probe (Agent NOT_FOUND in subagent) |
+| `test-outputs/test-v140-askuser-p.txt` | AskUserQuestion in `-p` mode |
+| `test-outputs/test-v140-permode-p.txt` (intermediate; def. result in `tasks/bmjpo66wq.output`) | --permission-mode plan — model self-censored |
+| `test-outputs/test-v140-agent-resume.txt` | Agent.resume param absent/silently-ignored |
+| `test-outputs/test-v140-subagent-thinking.txt` | THINKING_DISABLED (0 thinking blocks) |
+| `test-outputs/test-v140-agent-discovery.txt` | SESSION_SNAPSHOT_CONFIRMED |
+| `test-outputs/test-v140-skill-restrict.txt` | ALLOWED_TOOLS_NOT_ENFORCED |
+| `test-outputs/test-v140-parallel-skill.txt` | SEQUENTIAL (4.68s gap) |
+| `test-outputs/test-v140-skill-effort-sub.txt` | EFFORT_SUBSTITUTED (xhigh) |
+| `test-outputs/test-v140-p-disallowed.txt` | P_HONORS_DISALLOWED (Write blocked, Bash allowed) |
+
+### Test agents/skills/hooks added (v2.1.140)
+
+| File | Purpose |
+|---|---|
+| `.claude/agents/test-v140-fg-inv.md` | FG custom-agent inventory probe |
+| `.claude/agents/test-v140-bg-inv.md` | BG custom-agent inventory probe |
+| `.claude/agents/test-v140-agent-flag-inv.md` | `--agent` main-session inventory probe |
+| `.claude/agents/test-v140-disallow.md` | `-p --agent` disallowedTools enforcement |
+| `.claude/skills/test-v140-restrict/SKILL.md` | Skill allowed-tools enforcement |
+| `.claude/skills/test-v140-parallel-{parent,child-a,child-b}/SKILL.md` | Parallel Skill execution gap measurement |
+| `.claude/skills/test-v140-effort-sub/SKILL.md` | `${CLAUDE_EFFORT}` substitution |
+| `.claude/hooks/test-v140-args-{shell,exec}.sh` | args: shell-form vs exec-form |
+| `.claude/hooks/test-v140-pre-bash-effort.sh` | PreToolUse effort.level + $CLAUDE_EFFORT |
+| `.claude/hooks/test-v140-post-bash-effort-duration.sh` | PostToolUse duration_ms + effort.level |
+| `.claude/hooks/test-v140-continue-on-block.sh` | continueOnBlock hook |
+| `.claude/hooks/test-v140-updated-tool-output.sh` | updatedToolOutput hook |
+
+### Production-pipeline implications (for extraction worker + earnings pipeline)
+
+| Change | Impact |
+|---|---|
+| `-p` honors agent `disallowedTools:` (v119) | **Helpful**: extraction-worker can now restrict subagent tool access via agent frontmatter and trust the restriction. Removes a class of accidental Write/Bash escalations. |
+| `$CLAUDE_EFFORT` in Bash + hooks | **New**: validators/hooks can branch on effort level (e.g., skip expensive checks at `low`) |
+| `duration_ms` in PostToolUse JSON | **Helpful**: existing validators get exact tool runtime without recomputing |
+| FG GP Task tools restored | **Helpful**: extraction subagents (general-purpose) can now manage tasks WITHOUT requiring `team_name` workaround. Reverses the v107 regression. |
+| BG GP gets Monitor + TaskStop | **Helpful**: background extraction agents can now stop runaway tasks themselves |
+| `--permission-mode plan` works in `-p` | Enables dry-run mode in scripted pipelines |
+| ShareOnboardingGuide added | Likely not relevant to extraction; presence noted |
+| PushNotification added | Could be wired to alert ops on extraction failures (interactive-only?) |
+| `args:` exec form (with both `command:` AND `args:`) | Future hook scripts can use this for safer arg-handling — but be aware of the schema gotcha |
+| `settings.local.json` hooks don't fire in `-p` | **Pipeline relevant**: any hook config the extraction worker needs MUST live in `.claude/settings.json`, not `settings.local.json` |
+| Hook regex matchers (`Bash\|Glob`) failed in testing | Use single-token matchers in new hook configs |
+
+---
 
 ### Still broken (as of v2.1.107):
 - `allowed-tools` restriction: NOT ENFORCED (skills only)

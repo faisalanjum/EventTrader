@@ -1,3 +1,5 @@
+> 📌 **Billing/no-charge note (2026-05-15):** the SDK reality this plan builds on is now governed by Anthropic's June 15 2026 subscription change. Before relying on `claude_agent_sdk` for guidance/prediction/learning, see **`.claude/plans/ANTHROPIC_BILLING_SUBSCRIPTION_CRITICAL.md`** (empirical no-charge proof, entrypoint lever, Option #6, EarningsTrigger/Guidance fix recipe).
+
 ## TODO — Fresh Guidance + Prediction + Learning Cleanup (2026-04-19)
 
 Goal: make `thinking.md` the canonical reviewer artifact for fresh **guidance**, **prediction**, and **learning** runs with maximum clarity, zero ambiguity, minimal code, and high reliability. Favor surfacing existing transcript data over inventing new reconstruction logic.
@@ -2033,3 +2035,695 @@ session_pattern: EMBED-visible | EMBED-redacted | FORK
 **All changes are additive and live in new files only.** Disabling the
 harvester (systemctl disable + remove cron) leaves the guidance extraction
 pipeline in its exact current state.
+
+# Appendix D — Run Ledger (formerly `run_ledger.md`)
+
+Production-ready lifecycle index for pipeline runs.
+
+**Status**: LOCKED — reviewed, validated, all blockers addressed. Ready to implement in one atomic commit.
+
+**Date**: 2026-04-19
+
+**Scope**: Guidance extraction + prediction + learner. Three pipelines, one ledger, one human-facing index note.
+
+---
+
+## 1. Problem Statement
+
+The repo has three production pipelines that produce derived artifacts under
+`earnings-analysis/`:
+
+| Component | Runtime | Writes |
+|---|---|---|
+| **guidance** | `scripts/extraction_worker.py` (K8s, 1→7 pods) | Guidance nodes in Neo4j + hook notes in `pipeline/extractions/guidance/*.md` + harvester thinking shards |
+| **prediction** | `scripts/earnings/earnings_orchestrator.py --predict` | `events/{Q}/prediction/{result.json, result.md, thinking.md}` + subagents/ |
+| **learning** | `scripts/earnings/earnings_orchestrator.py --learn` | `events/{Q}/learning/{result.json, result.md, thinking.md}` + subagents/ |
+
+**Gaps the completed-artifact surfaces do NOT cover**:
+
+1. **No real-time lifecycle state.** `result.md` and `thinking.md` only exist AFTER success. There's no way to see queued/running/failed jobs from the vault.
+2. **No cross-pipeline browsable index.** Reviewers have to walk the file tree to enumerate recent runs across all three types.
+3. **Legacy CSV trackers** (`earnings-analysis/predictions.csv`, `prediction_processed.csv`) are ad-hoc, prediction-only, and don't scale to a 796-ticker universe.
+
+The old `pipeline/extractions/Extraction Runs.md` was a Dataview index note (renders from per-extraction-note frontmatter). It worked for extractions but was never extended to prediction/learner and didn't cover in-flight state.
+
+---
+
+## 2. Design Principles
+
+1. **Separation of concerns**: machine-readable state (JSONL ledger) vs human-readable view (Markdown index). Ledger is authoritative; index is a rendering.
+2. **Append-only** machine store. Each state transition = one new line. Current state = last-row-wins collapse by `run_id`. No in-place mutations.
+3. **Wrap real execution boundaries**, not post-hoc finalizers. `open_run` fires BEFORE the SDK call; `close_run` fires on terminal state. A running job is observable as `status="running"` from the moment it starts.
+4. **Crash-safe**: tolerate malformed JSONL lines (skip silently); atomic writes (tmp + rename) for the index note.
+5. **Plugin-independent**: no Dataview dependency. Index is Python-generated static Markdown tables.
+6. **Minimal code, frozen schema v1**. No per-run Markdown mirror notes. No artifact frontmatter changes.
+
+---
+
+## 3. Architecture — Three Layers
+
+### Layer 1 — Authoritative Ledger
+
+```
+earnings-analysis/operations/run_ledger.jsonl
+```
+
+Append-only JSONL. Each line = one state transition.
+
+**Size budget**: ~7,500 runs/year at production scale × ~500 bytes/row × 5 years ≈ **18 MB**.
+Single file for v1. Document rotation trigger: rotate to `run_ledger_YYYY.jsonl`
+when file exceeds 50 MB.
+
+### Layer 2 — Human-Facing Index Note
+
+```
+earnings-analysis/operations/Run Index.md
+```
+
+Single Markdown file. Python-generated static tables. Four sections:
+
+```markdown
+# Run Index
+_Last regenerated: <ISO timestamp>_
+
+## In Flight (status == running)
+| run_id | component | ticker | quarter | started_at |
+| ... | ... | ... | ... | ... |
+
+## Recent Predictions (last 50 by started_at DESC)
+| date | ticker | quarter | direction | conf | magnitude | expected | status | run_id |
+| ... |
+
+## Recent Learners (last 50)
+| date | ticker | quarter | direction_correct | actual_return | magnitude_error | primary_driver | status | run_id |
+| ... |
+
+## Recent Extractions (last 50)
+| date | ticker | asset | source_id | items_extracted | items_written | enrichment | status | run_id |
+| ... |
+```
+
+Regenerated on BOTH `open_run` and `close_run` — otherwise In Flight is always empty.
+
+Atomic write via `write tmp + os.replace` — crash during regeneration never leaves a half-written index.
+
+### Layer 3 — (Not Needed in v1)
+
+No per-run Markdown mirror notes. No artifact frontmatter changes.
+Artifacts already carry `sdk_session_id` which provides a cross-lookup key.
+
+---
+
+## 4. Ledger Schema (frozen v1)
+
+Every row is a complete state snapshot for one `(run_id, transition)`. Reader
+collapses by `run_id`, last-row-wins.
+
+```json
+{
+  "schema_version": 1,
+  "run_id": "uuid4-string",
+  "component": "guidance | prediction | learning",
+  "status": "running | succeeded | failed | skipped | rate_limited",
+  "ticker": "BURL",
+  "quarter_label": "Q3_FY2025",
+  "accession_8k": "0001193125-25-294501",
+  "source_id": null,
+  "source_asset": null,
+  "experiment_name": null,
+  "sdk_session_id": null,
+  "started_at": "2026-04-19T12:34:56Z",
+  "finished_at": null,
+  "elapsed_seconds": null,
+  "artifact_dir": null,
+  "result_path": null,
+  "thinking_path": null,
+  "error": null,
+  "summary": {}
+}
+```
+
+### Per-component `summary` payloads
+
+**prediction**:
+```json
+{
+  "direction": "long|short|no_call",
+  "confidence_score": 68,
+  "confidence_bucket": "low|moderate|high|extreme",
+  "magnitude_bucket": "small|medium|large",
+  "expected_move_range_pct": [3.0, 6.5]
+}
+```
+
+**learning**:
+```json
+{
+  "direction_correct": false,
+  "actual_daily_stock_pct": -12.16,
+  "magnitude_error_pct": 15.16,
+  "primary_driver_category": "peer_comp_gap_share_loss"
+}
+```
+
+**guidance**:
+```json
+{
+  "items_extracted": 14,
+  "items_written": 14,
+  "enrichment_status": "enriched",
+  "items_enriched": 3,
+  "items_new_secondary": 2
+}
+```
+
+The `items_written` sidecar is written by `.claude/skills/earnings-orchestrator/scripts/guidance_write_cli.py` as a list of per-item audit entries; `len(list)` is authoritative for the Neo4j write count. `extraction_worker.process_one` unlinks any prior sidecar at entry (stale-guard) so a read here always reflects the current attempt.
+
+The `enrichment_status` enum is derived purely from the combined result file counts (no external state):
+- `"no_primary"` — `primary_items == 0` (nothing to enrich)
+- `"no_enrichment"` — `primary_items > 0` but `enriched_items + new_secondary_items == 0`
+- `"enriched"` — at least one enriched or new secondary item
+- `null` — all counts absent (unknown; don't fabricate)
+
+### Status values (all five explicit)
+
+| Status | Meaning | Terminal? |
+|---|---|---|
+| `running` | `open_run` fired; SDK call in progress | No |
+| `succeeded` | Run produced expected artifacts | Yes |
+| `failed` | Run raised an exception or produced no result | Yes |
+| `skipped` | Run deliberately not executed (e.g., preconditions unmet) | Yes |
+| `rate_limited` | SDK hit API rate limit; payload was requeued for future attempt. **A new run_id is issued on retry.** | Yes (this attempt) |
+
+Each attempt = new `run_id`. Retries don't reuse the previous run_id — audit trail stays clean.
+
+---
+
+## 5. Concurrency + Safety
+
+### Writes
+
+```python
+def append(path, row):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    line = json.dumps(row, ensure_ascii=False) + "\n"
+    with open(path, "a") as f:
+        fcntl.flock(f, fcntl.LOCK_EX)
+        try:
+            f.write(line)
+            f.flush()
+            os.fsync(f.fileno())
+        finally:
+            fcntl.flock(f, fcntl.LOCK_UN)
+```
+
+**Safe for**: multiple processes on the same host accessing the same file
+(e.g., K8s extraction-worker 1→7 pods via hostPath mount to a single node).
+
+**NOT safe for**: NFS, distributed filesystems with weak locking, or
+cross-host access. Document this explicitly in the module docstring.
+
+**Rationale**: POSIX does NOT guarantee atomic appends for regular files
+regardless of write size. PIPE_BUF (4096) only applies to pipes/FIFOs.
+`fcntl.flock` + `fsync` provides correct coordination on a single-host
+shared filesystem.
+
+### Reads
+
+```python
+def read_all(path):
+    if not path.exists():
+        return []
+    rows = []
+    with open(path) as f:
+        for line in f:
+            try:
+                rows.append(json.loads(line))
+            except json.JSONDecodeError:
+                continue
+    return rows
+```
+
+Tolerating malformed lines preserves readability across crash windows.
+
+### Index atomic write
+
+```python
+def _write_atomic(path, content):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_suffix(path.suffix + f".tmp.{os.getpid()}")
+    tmp.write_text(content, encoding="utf-8")
+    os.replace(tmp, path)
+```
+
+---
+
+## 6. Public API
+
+Module: `scripts/earnings/run_ledger.py`
+
+```python
+def open_run(
+    component: str,
+    *,
+    ticker: str,
+    quarter_label: str | None = None,
+    accession_8k: str | None = None,
+    source_id: str | None = None,
+    source_asset: str | None = None,
+    experiment_name: str | None = None,
+    artifact_dir: str | None = None,
+) -> str:
+    """Append a `running` row. Returns new run_id (uuid4)."""
+
+
+def close_run(
+    run_id: str,
+    status: str,
+    *,
+    sdk_session_id: str | None = None,
+    result_path: str | None = None,
+    thinking_path: str | None = None,
+    error: str | None = None,
+    summary: dict | None = None,
+) -> None:
+    """Append a terminal row for an existing run_id. Also refreshes Run Index.md."""
+
+
+def current_state(
+    *,
+    component: str | None = None,
+    status: str | None = None,
+    limit: int | None = None,
+) -> list[dict]:
+    """Collapse ledger by run_id (last-row-wins); apply filters; return list."""
+
+
+def refresh_index(
+    ledger_path: Path | None = None,
+    index_path: Path | None = None,
+) -> None:
+    """Read ledger, build Run Index.md content, atomic-write to index_path."""
+```
+
+Each `open_run` and `close_run` call triggers `refresh_index` synchronously.
+This guarantees real-time visibility — the moment a run starts, it appears
+in the In Flight section.
+
+---
+
+## 7. Call-Site Wiring (exact execution boundaries)
+
+**Design rule (critical)**: wrap the OUTERMOST meaningful function boundary,
+NOT individual SDK `query()` calls. One ledger run = one logical pipeline
+attempt. Internal retries, derived-write recovery, validation, and
+side-effect writes (result.md, lesson appends) must all resolve BEFORE the
+terminal close_run fires. Otherwise the ledger can record a false success
+when a post-SDK step raises.
+
+### Prediction — wraps SDK + finalize + validate in one try block
+
+Location: `earnings_orchestrator.py` inside `if args.predict:` block (line 3181).
+Wraps everything from the `query()` loop through `validate_prediction_result()`.
+
+```python
+run_id = run_ledger.open_run(
+    "prediction",
+    ticker=args.ticker, quarter_label=ql, accession_8k=acc,
+    artifact_dir=str(paths["result_path"].parent),
+)
+try:
+    async for msg in query(prompt=prompt, options=options):
+        ...
+
+    if not paths["result_path"].exists():
+        raise RuntimeError("Predictor finished without writing result.json")
+
+    finalize_prediction_result(...)
+
+    with open(paths["result_path"], encoding="utf-8") as f:
+        prediction = json.load(f)
+
+    validate_prediction_result(
+        prediction,
+        expected_ticker=args.ticker,
+        expected_quarter=quarter_info["quarter_label"],
+    )
+
+    run_ledger.close_run(
+        run_id, "succeeded",
+        sdk_session_id=predictor_session_id,
+        result_path=str(paths["result_path"]),
+        thinking_path=str(paths["result_path"].parent / "thinking.md"),
+        summary={
+            "direction": prediction["direction"],
+            "confidence_score": prediction["confidence_score"],
+            "confidence_bucket": prediction["confidence_bucket"],
+            "magnitude_bucket": prediction["magnitude_bucket"],
+            "expected_move_range_pct": prediction["expected_move_range_pct"],
+        },
+    )
+except Exception as e:
+    run_ledger.close_run(run_id, "failed", error=str(e)[:500])
+    raise
+```
+
+### Learner — wraps the WHOLE `run_learner_for_quarter()` function
+
+Location: `earnings_orchestrator.py` inside `if args.learn:` block, around the
+`run_learner_for_quarter(...)` call. This is the natural unit of "one learner
+run" — the function handles SDK invocation, derived-write recovery (no SDK
+call at all if `learning/result.json` already exists), validation retry
+(up to 2 SDK calls), and lesson appends to `learnings/ticker/*.json` +
+`learnings/global.json`. All of that is ONE ledger run.
+
+**Contract change (2026-04-19)**: `run_learner_for_quarter` returns
+`tuple[dict | None, str]` where the second element is a
+:class:`LearnerOutcome` string constant. This lets the caller distinguish
+*skipped* (environmental — event not ready to learn from) from *failed*
+(pipeline-level error) from *succeeded/recovered*. Before this change the
+caller recorded every `None` return as `"failed"`, which polluted the audit
+trail with phantom failures for quarters that had no prediction yet or no
+published stock-price — neither is a defect.
+
+```python
+class LearnerOutcome:
+    SUCCEEDED                 = "succeeded"
+    RECOVERED                 = "recovered"
+    SKIPPED_NO_PREDICTION     = "skipped_no_prediction"
+    SKIPPED_NO_DAILY_STOCK    = "skipped_no_daily_stock"
+    FAILED_NO_RESULT          = "failed_no_result"
+    FAILED_INVALID_JSON       = "failed_invalid_json"
+    FAILED_NO_RESULT_RETRY    = "failed_no_result_retry"
+    FAILED_INVALID_JSON_RETRY = "failed_invalid_json_retry"
+    FAILED_VALIDATION         = "failed_validation"
+    FAILED_RECOVERY_APPEND    = "failed_recovery_append"
+    FAILED_TICKER_APPEND      = "failed_ticker_append"
+    FAILED_GLOBAL_APPEND      = "failed_global_append"
+
+    SUCCESS = frozenset({SUCCEEDED, RECOVERED})
+    SKIPPED = frozenset({SKIPPED_NO_PREDICTION, SKIPPED_NO_DAILY_STOCK})
+    FAILED  = frozenset({FAILED_NO_RESULT, FAILED_INVALID_JSON,
+                         FAILED_NO_RESULT_RETRY, FAILED_INVALID_JSON_RETRY,
+                         FAILED_VALIDATION, FAILED_RECOVERY_APPEND,
+                         FAILED_TICKER_APPEND, FAILED_GLOBAL_APPEND})
+    ALL = SUCCESS | SKIPPED | FAILED
+```
+
+All 12 return sites in `run_learner_for_quarter` are tagged 1:1 with a
+constant; `test_learner_outcomes.py` asserts `len(ALL) == 12`, the three
+category sets are pairwise disjoint, and their union is `ALL` — so adding a
+new return branch without categorizing it fails the test suite loudly.
+
+```python
+run_id = run_ledger.open_run(
+    "learning",
+    ticker=args.ticker, quarter_label=target_ql, accession_8k=target_acc,
+    artifact_dir=str(COMPANIES_DIR / args.ticker.upper() / "events"
+                     / target_ql / "learning"),
+)
+try:
+    attribution, outcome = run_learner_for_quarter(
+        ticker=args.ticker,
+        quarter_info=quarter_info,
+        events=events,
+        current_index=current_index,
+        pit_mode="historical",
+        live_state_path=live_state_path,
+    )
+    if outcome in LearnerOutcome.SUCCESS:
+        pd = attribution.get("primary_driver", {}) or {}
+        fb = attribution.get("feedback", {}) or {}
+        pc = fb.get("prediction_comparison", {}) or {}
+        ar = attribution.get("actual_return", {}) or {}
+        run_ledger.close_run(
+            run_id, "succeeded",
+            sdk_session_id=attribution.get("sdk_session_id"),
+            result_path=str(learning_dir / "result.json"),
+            thinking_path=str(learning_dir / "thinking.md"),
+            summary={
+                "direction_correct":       pc.get("direction_correct"),
+                "magnitude_error_pct":     pc.get("magnitude_error_pct"),
+                "primary_driver_category": pd.get("category"),
+                "actual_daily_stock_pct":  ar.get("daily_stock_pct"),
+            },
+        )
+    elif outcome in LearnerOutcome.SKIPPED:
+        run_ledger.close_run(run_id, "skipped", error=outcome)
+    else:
+        run_ledger.close_run(run_id, "failed", error=outcome)
+except Exception as e:
+    run_ledger.close_run(run_id, "failed", error=str(e)[:500])
+    raise
+```
+
+The summary fields exactly match the four keys read by
+`run_ledger.py::_render_learners_section` (`direction_correct`,
+`magnitude_error_pct`, `primary_driver_category`, `actual_daily_stock_pct`).
+Test `test_run_ledger.py::test_16_learner_summary_has_exactly_the_four_renderer_keys`
+pins this contract.
+
+**Caller migration**: 4 other callers of `run_learner_for_quarter(...)` must
+be updated to unpack `(result, outcome)`:
+
+- `scripts/run_phase4_big.py`
+- `scripts/run_calibration_sequential.py`
+- `scripts/run_q3_from_existing_bundle.py`
+- `scripts/calibrate_learner.py`
+
+Minimal adaptation: if `outcome in LearnerOutcome.SKIPPED`, raise
+`LearnerSkipped`; if `outcome in LearnerOutcome.FAILED`, raise `LearnerFailed`;
+otherwise proceed with the returned dict.
+
+### Guidance — wraps the whole extraction attempt in `process_one()`
+
+Location: `scripts/extraction_worker.py::process_one`. One ledger run = one
+payload attempt from queue pop through terminal disposition.
+
+Design mapping:
+
+- **open_run** immediately after payload parse, BEFORE `/extract`
+- **succeeded** only after combined result file exists and has been parsed
+- **failed** on exception or malformed/absent result file
+- **rate_limited** on the existing requeue branch
+- **skipped** remains available but is not expected in current extraction flow
+
+```python
+run_id = run_ledger.open_run(
+    "guidance",
+    ticker=ticker,
+    quarter_label=quarter_label,
+    accession_8k=source_id if source_asset == "8k" else None,
+    source_id=source_id,
+    source_asset=source_asset,
+)
+
+try:
+    ... run /extract ...
+
+    if rate_limited:
+        run_ledger.close_run(run_id, "rate_limited", error="rate_limit")
+        requeue(...)
+        return
+
+    if not result_path.exists():
+        raise RuntimeError("extract completed without result file")
+
+    with open(result_path, encoding="utf-8") as f:
+        combined = json.load(f)
+
+    summary = _build_guidance_summary(combined, source_id)
+    run_ledger.close_run(
+        run_id, "succeeded",
+        result_path=str(result_path),
+        summary=summary,
+    )
+except Exception as e:
+    run_ledger.close_run(run_id, "failed", error=str(e)[:500])
+    raise
+```
+
+The summary builder reads:
+- `primary_items` from combined result JSON
+- `enriched_items` / `new_secondary_items` from combined result JSON
+- `items_written` from `/tmp/gu_written_{source_id}.json` if present
+
+This helper must be defensive:
+- missing or invalid sidecar → `items_written = None`
+- missing count keys → omit / `None`
+- never raise from summary extraction
+
+### Critical stale-sidecar guard (guidance)
+
+At the TOP of `process_one`, before any extraction starts:
+
+```python
+written_sidecar = Path(f"/tmp/gu_written_{source_id}.json")
+written_sidecar.unlink(missing_ok=True)
+```
+
+Without this, a failed/retried extraction could accidentally reuse a stale
+prior attempt's write-audit file and over-report `items_written`.
+
+This guard was accepted as required during review.
+
+---
+
+## 8. Run Index Rendering Rules
+
+### Sort order
+
+- **In Flight**: `started_at DESC`
+- **Recent Predictions**: `started_at DESC`, limit 50, exclude `status == running`
+- **Recent Learners**: same
+- **Recent Extractions**: same
+
+### Column specifications
+
+**In Flight** — compact, no per-component columns
+| run_id | component | ticker | quarter | started_at | elapsed |
+
+**Predictions**
+| date | ticker | quarter | direction | conf | magnitude | expected | status | run_id |
+
+**Learners**
+| date | ticker | quarter | direction_correct | actual_return | magnitude_error | primary_driver | status | run_id |
+
+**Extractions**
+| date | ticker | asset | source_id | items_extracted | items_written | enrichment | status | run_id |
+
+### Format conventions
+
+- `date`: YYYY-MM-DD (extracted from started_at)
+- `run_id`: first 8 chars (full id in ledger)
+- `expected`: `"{low}–{high}%"` string
+- `status`: emoji-decorated (✅ succeeded / ❌ failed / 🔄 running / ⏸ rate_limited / ⏭ skipped)
+- Empty cells rendered as `—` (em-dash)
+
+---
+
+## 9. Corrections Accepted from Review
+
+All four blocker issues from the first-round review:
+
+1. ✅ **Dataview-JSONL mismatch fixed** — Python generates static Markdown tables; no Dataview dependency.
+2. ✅ **Execution boundary is correct** — `open_run` wraps the SDK `query()` call, not `finalize_*_result()`.
+3. ✅ **POSIX safety is correctly stated** — `fcntl.flock(LOCK_EX) + flush + fsync` on a single-host shared FS. No PIPE_BUF claim.
+4. ✅ **Single path, `component` in schema, internally consistent.**
+
+Plus three trims from the second-round review:
+
+1. ✅ **Real-time requires refresh on open AND close.** Index is regenerated on every state transition — not just terminal.
+2. ✅ **`rate_limited` status is explicit** — mapped from extraction_worker's requeue branch; audit trail shows every attempt distinctly.
+3. ✅ **`run_id` NOT added to artifact frontmatter in v1.** Ledger carries `result_path`/`thinking_path`; artifacts carry `sdk_session_id`. Cross-reference is already possible.
+
+---
+
+## 10. Scope / File-Level Impact
+
+| File | Action | Lines |
+|---|---|---|
+| `scripts/earnings/run_ledger.py` | **NEW** — append + read + collapse + refresh_index (In Flight is a DISJOINT view; per-component tables filter `status != "running"`) with atomic write | ~500 |
+| `scripts/earnings/test_run_ledger.py` | **NEW** — 23 tests covering primitives, state collapse, API, renderer contracts, drift guards | ~450 |
+| `scripts/earnings/test_learner_outcomes.py` | **NEW** — 10 tests pinning the 12-member outcome taxonomy + AST-level invariant that every return site is 1:1 tagged | ~140 |
+| `scripts/earnings/earnings_orchestrator.py` | wrap prediction SDK + finalize + validate; wrap the WHOLE `run_learner_for_quarter()` (not just its SDK call) with `LearnerOutcome` → ledger status mapping | +~80 |
+| `scripts/extraction_worker.py::process_one` | stale-sidecar guard at entry; per-exit-path close; defensive `_build_guidance_summary` | +~150 |
+| `scripts/run_phase4_big.py` / `run_calibration_sequential.py` / `run_q3_from_existing_bundle.py` / `calibrate_learner.py` | unpack `(result, outcome)`; raise `LearnerSkipped`/`LearnerFailed`; outer callers log skip-vs-fail correctly | +~10 each |
+| `earnings-analysis/operations/` | **NEW DIR**. `Run Index.md` seeded as an empty 4-section stub. `run_ledger.jsonl` is lazy-created on the first `_append_row` call — empty files are noise and the primitive already calls `mkdir(parents=True, exist_ok=True)`. | — |
+
+**Net**: ~1,400 lines of new code/tests + ~40 lines modifications + 1 new vault seed file.
+
+No frontmatter schema changes. No new runtime dependencies. No touching
+existing CSVs (deprecate after 90 days of ledger being live).
+
+---
+
+## 11. Tests
+
+Total shipped: **33 tests** across two files (23 in `test_run_ledger.py` +
+10 in `test_learner_outcomes.py`). The 15 below are the original design
+targets; additional tests beyond the first 15 are regression guards for
+issues found during the audit rounds — renderer-contract drift, enum
+drift, and the "running row leaks into per-component table" bug.
+
+**Primitives**
+1. `append` writes a valid JSON line ending with `\n`
+2. Reader skips malformed JSON lines silently (simulated torn writes)
+3. Concurrent writers (20-thread pool) produce zero corrupted lines
+4. Missing ledger file → `current_state()` returns `[]` (no error)
+
+**State collapse**
+5. Single run_id with running + succeeded → collapsed state = succeeded
+6. Single run_id with running only → collapsed state = running (crash-recovery)
+7. Multiple interleaved run_ids collapse correctly by run_id
+8. `current_state(component="prediction")` filters correctly
+9. `current_state(status="running")` filters correctly
+
+**API behaviour**
+10. `open_run` returns a new run_id each call (uuid4 format)
+11. `close_run` appends row with matching run_id and terminal status
+12. `close_run(run_id, "rate_limited")` accepted as a valid terminal status
+13. `refresh_index` writes file with 4 section headers + current timestamp
+14. `refresh_index` uses atomic tmp+rename (no `.tmp.*` artifacts left)
+
+**End-to-end**
+15. `open_run` → `refresh_index` → Run Index.md "In Flight" section shows the running row; then `close_run` → `refresh_index` → same run now appears in the per-component section, no longer In Flight
+
+---
+
+## 12. Implementation Order (TDD)
+
+1. Write plan file (this document) ✓
+2. Create `earnings-analysis/operations/` dir + seed `Run Index.md` only.
+   `run_ledger.jsonl` is intentionally lazy-created on first `_append_row`;
+   the primitive already calls `path.parent.mkdir(parents=True, exist_ok=True)`.
+3. Create `scripts/earnings/run_ledger.py` with full API but `pass`-body stubs
+4. Write `scripts/earnings/test_run_ledger.py` with all 15 tests (they fail)
+5. Implement `append`, `read_all`, `current_state` → primitive tests green
+6. Implement `open_run`, `close_run` → API tests green
+7. Implement `refresh_index` → rendering test green
+8. Full suite green
+9. Wire prediction call site in `earnings_orchestrator.py`
+10. Wire learner call site in `earnings_orchestrator.py`
+11. Wire guidance call site in `scripts/extraction_worker.py` (include rate_limited branch)
+12. Seed `Run Index.md` with header + empty sections (auto-regenerates on first run)
+13. Re-run full regression suite across all obsidian-capture + earnings tests — must stay at current pass count + 15 new
+14. Commit + push
+
+---
+
+## 13. What Is NOT In v1
+
+- ❌ Per-run Markdown mirror notes under `operations/runs/{run_id}.md`
+- ❌ Dataview query blocks in Run Index.md (uses static tables instead)
+- ❌ `run_id` in `result.md` / `thinking.md` frontmatter
+- ❌ Year-rotation of the ledger file (single file for v1; rotate when > 50 MB)
+- ❌ ULID run_ids (uuid4 is fine; ULID is a nice-to-have)
+- ❌ Any changes to legacy `predictions.csv` / `prediction_processed.csv` (deprecate later)
+- ❌ Debounced index refresh (synchronous after each transition is fine at v1 scale)
+- ❌ Cross-host coordination (hostPath mount + single-host guarantee is sufficient for current deployment)
+- ❌ Elasticsearch / Loki / external log aggregator integration (the JSONL IS the log; ship logs to any aggregator via filebeat later if desired)
+
+---
+
+## 14. Rollback Plan
+
+Revert commit. The ledger file and index note are append-only/regenerable — deleting them is harmless. Orchestrator + extraction_worker lose the wrapping calls and return to their prior behaviour. Zero schema impact anywhere else in the repo.
+
+---
+
+## 15. Future Work (Explicitly Out of Scope)
+
+- Year rotation when ledger > 50 MB
+- CLI tool: `python -m run_ledger status` to print current state without opening Obsidian
+- Alerting on `rate_limited` storms or consecutive `failed` runs
+- Deprecation of `predictions.csv` / `prediction_processed.csv` (after 90 days of ledger being live)
+- Per-run Markdown mirror notes if Obsidian browsing UX demands them
+- Dataview query block embedded in Run Index.md as optional bonus view (renders only with plugin)
+- ULID run_ids for chronological sorting by id
+
+---
+
+## Final Verdict
+
+Architecture is tight. All review-round blockers and trims addressed. Ready to ship.

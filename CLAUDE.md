@@ -2,6 +2,8 @@
 
 ## Anthropic API Key Handling (CRITICAL — read before editing SDK/LLM code)
 
+> 📌 **Billing survival guide (June 15 2026 subscription change, no-charge proof, EarningsTrigger/Guidance fix recipe, Option #6):** see **`.claude/plans/ANTHROPIC_BILLING_SUBSCRIPTION_CRITICAL.md`** — canonical, empirically tested. Read it before changing any `claude_agent_sdk` / `claude -p` entrypoint.
+
 **The `ANTHROPIC_API_KEY` is NOT in `.env` by design.** It was removed on 2026-04-16 after a root-cause analysis showed it was being silently injected into every `claude -p` subprocess spawned by `claude_agent_sdk`, causing ~$22/day of API charges that should have been covered by the user's Claude Code Max subscription.
 
 ### Where the key lives now

@@ -1,5 +1,7 @@
 # Earnings Automation Plan — Prediction + Learner
 
+> 📌 **BILLING PREREQUISITE (read first):** before this pipeline runs post-June-15 2026, apply the no-charge guard + decide Option 1/2/3 per **`.claude/plans/ANTHROPIC_BILLING_SUBSCRIPTION_CRITICAL.md`**. Predictor/learner SDK callsites are already guarded; **the Guidance worker (`scripts/extraction_worker.py`) is NOT** — fix recipe is in that doc. Burn-rate ≈ $14.70/predictor run → metered pool is volume-inadequate.
+
 **Status**: design locked; implementation-ready (rev. 2026-04-19, post-verification pass)
 **Goal**: production-grade automatic pipeline for `prediction` and `learner`, following the guidance extractor's outer pattern where useful, while preserving the earnings system's existing semantics for quarter identity, PIT, filesystem artifacts, and lesson recovery.
 
@@ -489,29 +491,73 @@ Most important anti-regression rule in the entire design:
 
 > The daemon decides **when** to run. The orchestrator decides **what quarter this is** and **what PIT means**.
 
+Corollary for the quarter-identity warm-start work: historical backfill start-quarter selection belongs in the daemon/walker path, not in `scripts/earnings/earnings_orchestrator.py`. The orchestrator may expose or reuse a quarter-identity helper, but it should still process only the single accession it was asked to run.
+
 ### 3.6 Historical Flow
 
 For a historical ticker:
 
 1. Read / refresh `event.json`
 2. Walk quarters in chronological order
-3. Find the **first incomplete quarter**
-4. For that quarter:
+3. Determine the ticker's **warm-start anchor** (new requirement, 2026-05-06; see "Warm-start anchor" below).
+4. Ignore quarters earlier than the warm-start anchor for automation gating. They are pre-history for the learner loop, not missing chain work.
+5. Find the **first incomplete quarter at or after the warm-start anchor**
+6. For that quarter:
    - if prediction not complete:
      - if same-quarter guidance gate is unmet: do **not** enqueue prediction, do **not** enqueue guidance, log `WAIT_GUIDANCE`, stop the walker on this quarter
      - else enqueue historical prediction
    - else if learning not complete: enqueue historical learning
    - else continue
-5. Never enqueue more than one next-step job per ticker at a time
+7. Never enqueue more than one next-step job per ticker at a time
 
 This gives strict sequential enforcement without a heavy state machine.
 
+#### Warm-start anchor (locked requirement)
+
+The quarter-identity investigation in `.claude/plans/quarter-identity-resolver.md` found that the live/PIT-safe resolver's core signal is `prior_periodic_projection`: use the most recent PIT-visible prior 10-Q/10-K, derive its fiscal identity, then advance one quarter. Therefore historical PIT replay must not start at a ticker's first visible 8-K if no prior periodic is available in the graph at that 8-K's PIT timestamp. Those early rows are DB-history cold starts and would create artificial learner holes.
+
+**Safety vs. cleanliness (important context, 2026-05-07)**: warm-start is already enforced safely at runtime by `earnings_orchestrator.py` because it calls `resolve_quarter_info(...)` for the single accession it is asked to process. If the accession is a cold start, the resolver returns `FAIL_CLOSED` (for example `prior_periodic_projection_no_prior`), the Goal 4 write guard refuses to write an event bundle, and prediction/learner stages do not run. Therefore an imperfect future trigger cannot corrupt production just by enqueueing a pre-anchor report. The warm-start anchor in this plan is still required for **clean scheduling**: the daemon/walker should avoid enqueueing reports that the orchestrator will inevitably quarantine, reducing noise, wasted work, and confusing "missing prior quarter" chains.
+
+**Definition**: for a ticker, the warm-start anchor is the earliest earnings 8-K in `event.json` whose `filed_8k` timestamp has at least one usable prior periodic filing for the same company:
+
+```cypher
+MATCH (this:Report {accessionNo: $accession_8k})-[:PRIMARY_FILER]->(c:Company)
+MATCH (prior:Report)-[:PRIMARY_FILER]->(c)
+WHERE prior.formType IN ['10-Q', '10-K']
+  AND prior.periodOfReport IS NOT NULL
+  AND prior.periodOfReport <> ''
+  AND datetime(prior.created) < datetime(this.created)
+RETURN prior.accessionNo AS accession_periodic,
+       prior.created AS periodic_created,
+       prior.periodOfReport AS period_of_report,
+       prior.formType AS form_type_periodic
+ORDER BY datetime(prior.created) DESC
+LIMIT 1
+```
+
+Implementation notes:
+
+- The daemon/walker owns warm-start selection because it decides **which** quarter to enqueue. The orchestrator still owns quarter identity and PIT for the single accession it is asked to run.
+- The helper that evaluates "usable prior periodic" may live in `scripts/earnings/quarter_identity.py` or a small shared helper if that avoids duplicating the resolver's criteria, but it is called by the daemon/walker.
+- "Usable" must stay aligned with the final resolver from `.claude/plans/quarter-identity-resolver.md`: prior 10-Q/10-K exists at PIT, has `periodOfReport`, is not stale beyond the resolver's long-gap guard, and is not rejected by any denylist / fiscal-calendar guard that the final resolver treats as fail-closed.
+- If no warm-start anchor exists, print/list `SKIP no_warm_start_anchor` for that ticker and enqueue nothing in historical backfill. This is not a failure; it means the ticker does not yet have enough prior periodic history for PIT-compliant learner-loop seeding.
+- Quarters before the anchor are not "incomplete" for automation. Do not create `failed.json`, do not enqueue backfill jobs, and do not require their prediction/learning sentinels before processing the anchor quarter.
+- If a future implementation bot is unsure whether a prior periodic is "usable", it must verify against `.claude/plans/quarter-identity-resolver.md` and the final Goal 4 resolver tests, not invent a second rule.
+
+Future-bot handoff / verification checklist:
+
+1. Before coding, read `.claude/plans/quarter-identity-resolver.md` and inspect the final Goal 4 resolver implementation/tests in `scripts/earnings/quarter_identity.py`.
+2. Confirm the final resolver's fail-closed guards (`long_gap`, denylisted periodic accessions, fiscal-calendar / 52-53-week exceptions, or any later guard) and mirror those guards in the daemon's "usable prior periodic" check.
+3. Prefer a shared helper for "find PIT-visible usable prior periodic" so daemon scheduling and quarter identity cannot drift. If a shared helper would couple modules awkwardly, duplicate only behind focused tests that prove parity with the resolver.
+4. Verify with fixtures or deterministic test rows covering: no prior periodic → `SKIP no_warm_start_anchor`; first usable prior periodic → anchor quarter can enqueue; pre-anchor rows missing sentinels do not block; later at/after-anchor rows still require prior prediction + learning sentinels.
+5. If the final Goal 4 resolver changes after this plan, update this warm-start section and G15 tests in the same commit.
+
 Mechanical rule for "prior-chain vacuous" (O11):
 
-- Prior-chain checks are evaluated against quarters **earlier than the target quarter in `event.json`**.
+- Prior-chain checks are evaluated against quarters **earlier than the target quarter but at/after the warm-start anchor in `event.json`**.
 - If `event.json` is missing, refresh it first.
-- If the refreshed manifest contains no earlier quarters than the target quarter, G-5/G-6 are vacuously satisfied.
-- If the refreshed manifest contains earlier quarters, they count even if they have never been processed before.
+- If the refreshed manifest contains no earlier eligible quarters than the target quarter (because the target is the warm-start anchor, or because all earlier rows are pre-anchor), G-5/G-6 are vacuously satisfied.
+- If the refreshed manifest contains earlier eligible quarters at/after the warm-start anchor, they count even if they have never been processed before.
 - Do **not** use "event.json absent" by itself as proof that a ticker has no prior history.
 
 `event.json` refresh policy (locked, lazy semantic):
@@ -710,16 +756,17 @@ For prediction of `Q(n)`, gates apply as follows. Historical and live modes shar
 | G-2 | 8-K `formType='8-K'` AND `items CONTAINS 'Item 2.02'` | **REQUIRED** | **REQUIRED** |
 | G-3 | Quarter identity resolvable (`quarter_label`, `period_of_report`) | **REQUIRED** | **REQUIRED** |
 | G-4 | Current-quarter `guidance_status='completed'` | **REQUIRED** | SKIPPED (§8) |
-| G-5 | All prior `Q(1..n-1)` predictions have `prediction/complete.json` | **REQUIRED** | **REQUIRED** |
-| G-6 | All prior `Q(1..n-1)` learnings have `learning/complete.json` | **REQUIRED** | **REQUIRED** |
+| G-5 | All prior eligible quarters at/after warm-start anchor have `prediction/complete.json` | **REQUIRED** | **REQUIRED** |
+| G-6 | All prior eligible quarters at/after warm-start anchor have `learning/complete.json` | **REQUIRED** | **REQUIRED** |
 | G-7 | Company sector present in Neo4j | **SOFT** (warn; degrade gracefully) | **SOFT** |
 | G-8 | Company CIK present in Neo4j | **SOFT** | **SOFT** |
 
 **Critical clarifications**:
 
 1. **Prior-chain gates (G-5, G-6) apply to BOTH modes.** The user-approved asymmetry is limited to G-4 (same-quarter guidance). Any ticker with an incomplete prior quarter blocks both historical and live predictions until catch-up runs.
-2. For **brand-new live tickers** with zero prior Neo4j history, prior-chain gates are vacuously satisfied (no prior rows). First-cycle empty-lessons prediction is supported — that is what O11 means.
-3. For the **learner**, gates are separate and simpler:
+2. For historical backfill/catch-up, "prior quarter" means a prior quarter **at or after the warm-start anchor**. Pre-anchor quarters are intentionally outside the learner-loop seed path and must not block the anchor quarter.
+3. For **brand-new live tickers** with zero prior Neo4j history, prior-chain gates are vacuously satisfied (no prior rows). First-cycle empty-lessons prediction is supported — that is what O11 means.
+4. For the **learner**, gates are separate and simpler:
    - Current-quarter prediction complete (`prediction/complete.json` exists)
    - `daily_stock IS NOT NULL` on the 8-K's `PRIMARY_FILER` relationship
    - No prior-chain gate on the learner itself; only the predictor-side gate for the NEXT cycle enforces the chain.
@@ -760,7 +807,7 @@ For prediction of `Q(n)`, gates apply as follows. Historical and live modes shar
 | O8 | Retry model follows proven guidance-worker methodology with tighter cap (`MAX_RETRIES=2`) | **Locked** |
 | O9 | `ACTIVE_WINDOW_DAYS` stays single, not split | **Locked** |
 | O10 | `trigger_origin` is observational only in v1 | **Locked** |
-| O11 | Brand-new live tickers do not force historical backfill before first live prediction; prior-chain vacuity is determined mechanically from earlier quarters in refreshed `event.json` | **Locked** |
+| O11 | Brand-new live tickers do not force historical backfill before first live prediction; historical backfill starts at the ticker's warm-start anchor, and prior-chain vacuity is determined mechanically from earlier eligible quarters at/after that anchor in refreshed `event.json` | **Locked** |
 | O12 | `prediction/complete.json` sentinel required — symmetric with learner; protects against stale `result.json` after finalize/validate exceptions | **Locked** |
 | O13 | `{component}/failed.json` sentinel is canonical halt marker; daemon three-state eligibility check (complete / halted / eligible) | **Locked** |
 | O14 | `HISTORICAL_BACKFILL_ENABLED` gates universe-walk ONLY; catch-up sweep is always on | **Locked** |
@@ -968,6 +1015,9 @@ Add at least one focused test module for the daemon gating logic. Location: `scr
 
 - malformed `trade_ready:entries` row is skipped
 - historical quarter blocked on missing same-quarter guidance logs `WAIT_GUIDANCE`
+- historical backfill computes warm-start anchor from PIT-visible prior 10-Q/10-K and does not enqueue pre-anchor quarters
+- anchor quarter has vacuous prior-chain gates even when earlier pre-anchor quarters lack prediction/learning sentinels
+- if no warm-start anchor exists, ticker is skipped with `SKIP no_warm_start_anchor` and no failure sentinel is written
 - deferred learner (fired from a quarter originally predicted live) produces the same payload as any historical learner: `mode="historical"`, no special `trigger_origin`
 - lease-active candidate is not enqueued twice
 - graduation refresh triggers only when `daily_stock` becomes non-null for the live accession
@@ -984,7 +1034,7 @@ Implementation order (dependencies first; each step independently deployable):
 | 2 | CREATE | `scripts/shared/budget_gate.py` (factor from `extraction_worker.is_over_usage_threshold`) | ~120 | 1 |
 | 3 | MODIFY | `scripts/extraction_worker.py` (import shared module; drop local duplicate) | −40 / +5 | 2 |
 | 4 | MODIFY | `scripts/earnings/earnings_orchestrator.py` — add MCP override to `_run_learner_via_sdk` + `_run_predictor_via_sdk` (G7); add `prediction/complete.json` write (G4b); add `learning/complete.json` write in both SUCCEEDED + RECOVERED paths (G4); add optional `--mode {historical,live}` CLI arg and thread it into the two `_open_run(...)` call sites for run-ledger/observability only | ~85 | — |
-| 5 | CREATE | `scripts/earnings_trigger_daemon.py` (new daemon, mirrors `guidance_trigger_daemon.py` + earnings-specific gates/walker) | ~400 | 2, 4 |
+| 5 | CREATE | `scripts/earnings_trigger_daemon.py` (new daemon, mirrors `guidance_trigger_daemon.py` + earnings-specific gates/walker, including warm-start anchor selection before historical backfill enqueues) | ~430 | 2, 4 |
 | 6 | CREATE | `scripts/earnings_worker.py` (new worker: subprocess dispatcher + lease + DLQ + sentinel writes G5/G10) | ~450 | 2, 4 |
 | 7 | DELETE | `scripts/earnings_trigger.py` (legacy naive listener; no shared code with new daemon) | −139 | 5, 6 |
 | 8 | MODIFY | `scripts/earnings/run_ledger.py` — add nullable `mode` field to `open_run(...)` rows and copy it through `close_run(...)` rows; update renderer functions `_render_in_flight_section`, `_render_predictions_section`, and `_render_learners_section` to include the column. `guidance` may leave mode null; `prediction`/`learning` set it from the orchestrator's `--mode` arg. No jsonl backfill migration required; absent field reads as null for existing rows. | +45 | — |
