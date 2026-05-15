@@ -4,7 +4,7 @@ Plan is to completely revert to the simplest possible versions of Prediction & L
 
 Overarching principle is to rely on free form text and let the entire process of learning and prediction be completely informal but well organized so predictor can access them on demand.
 
-> **Supersession note (2026-05-12).** The Refinements sections below supersede the earlier rough wording in this doc. Where the top-of-doc text says "absolutely nothing on provenance," "yaml frontmatter," "no restriction on # of links," or similar — read the numbered refinements as authoritative.
+> **Supersession note (2026-05-12).** The Refinements sections below supersede the earlier rough wording in this doc. Where the top-of-doc text says "absolutely nothing on provenance," "yaml frontmatter," "no restriction on # of links," asks TBD/maybe questions, or similar — read the numbered refinements as authoritative.
 
 ---
 
@@ -24,7 +24,7 @@ Overarching principle is to rely on free form text and let the entire process of
 
 5. Finally in addition to providing links to previous quarter learner reports (I think earnings_orchestrator.py already puts it in the context bundle), we can also put links for other companies in the same sector and over the last few months. Note the dates and sector and company names are already claculated by the earnings_orchestrator.py and put in context bundle so incremental work is relatively simple.
 
-6. TBD: Not sure if its worth asking predictor to output exact predicted return so in historical backtesting (& may be for learner's ease) we can compare mean squared effor between predicted and actual. But again the overarching principle is do not include if it doesn;t materially increase our primary goal of making correct & timely predictions.
+6. ~~TBD~~ **RESOLVED** (see EV1 / S1): predictor emits `expected_move_range_pct`; backtest scoring uses **signed-midpoint MSE** + Brier, computed by the deterministic EV1 scorer (not the predictor). Original rough wording superseded: *was — unsure whether to ask the predictor for an exact predicted return for MSE; principle = don't include if it doesn't materially help correct & timely predictions.*
 
 7. We also need to understand if there are some better thoughts inside the latest created plan (.claude/plans/LearnerLoopPlans/LearnerLoopPlan_LessonIntelligence_Minimal.md) (which by the way no longer applies wholistically) but it may be worth seeing if it has some good considerations - this is just one of them so ensure you look at if there is any other good considerations we could borro but ensure its applicable and even then the most we would borrow is a most simplistic version of it. One example (again your task is to look for all possible ones) is that the tug between confidence and prediction and how Brier score was used but not sure if its at all applicable so check?
 
@@ -92,7 +92,7 @@ Each item tagged [ALREADY] = already in code, [PARTIAL] = partially in code, [NE
 
 15. **[ALREADY] Preserve existing JSON-canonical, .md-rendered pattern.** Already in code: learner writes `learning/result.json`; `scripts/earnings/result_md_renderer.py` produces `learning/result.md` from it. Keep this pattern in the new design — Python/orchestrator parses JSON directly and never parses `.md` for state, while the predictor reads the rendered bundle first and opens allowlisted `learning/result.md` reports for full prose. ChatGPT framed this as a borrowed idea but it's the current pattern; just don't accidentally regress to markdown-with-embedded-JSON.
 
-16. **[ALREADY] Richer learner JSON schema.** Current learner schema is already RICHER than ChatGPT proposed: `primary_driver`, `contributing_factors`, `feedback{what_worked, what_failed}`, `global_observations`, `missing_inputs`, `evidence_ledger`, `lesson_audit`. Keep this surface; just drop `lesson_audit` (lessons gone) and consider adding `future_checklist[]` for the next predictor (see #20 for naming).
+16. **[ALREADY] Richer learner JSON schema.** Current learner schema is already RICHER than ChatGPT proposed: `primary_driver`, `contributing_factors`, `feedback{what_worked, what_failed}`, `global_observations`, `missing_inputs`, `evidence_ledger`, `lesson_audit`. Keep the causal-report core; drop lesson/global-observation machinery per the locked target; add `future_checklist[]` for the next predictor (see #20 for naming).
 
 17. **[NEW] Tiered SLA for LIVE mode only (per FIX-10).** Live SLA: 90s soft warn (warning injected) / 120s operating target (predictor MUST ship best-available call unless actively resolving material uncertainty) / 300s hard kill (orchestrator force-terminates; writes timeout no_call fallback). Historical mode keeps soft cap with no hard kill.
 
@@ -821,8 +821,9 @@ FCX Q1/Q3 path · a ticker with no own history · a ticker with peers · a no-pe
 ## Standing Checklist — Learner⇄Predictor Feedback Loop (2026-05-15)
 
 > Status: converged 2026-05-15. AUGMENTS the locked target state — modifies none of the
-> 42 decisions / FIX / CLEANUP. One sub-decision PARKED (see below). Single target state,
-> no v0/v1 staging. Never call this a "lesson" — the word drags lifecycle gravity back.
+> 42 decisions / FIX / CLEANUP. One sub-decision PARKED (see below). Single target state;
+> no staged target architecture. Never call this a "lesson" — the word drags lifecycle
+> gravity back.
 
 ### Why it exists
 Managed lessons were rejected as unwieldy. The free-form prior-reports design has one
@@ -1093,13 +1094,13 @@ thresholds. Everything from the sweep either folds into the 5 or is dropped.
 
 ---
 
-## Execution-billing Option #6 — Scripted Interactive REPL (subscription path)
+## Scripted Interactive REPL — Subscription Path (Reference Only)
 
-> Scope note: this documents **only Option #6**. Full options matrix, empirical proof,
-> billing mechanics, and the apply-this-fix recipe are canonical in
+> Scope note: this documents **only the scripted-interactive REPL transport**. Full
+> options matrix, empirical proof, billing mechanics, and the apply-this-fix recipe are canonical in
 > **`.claude/plans/ANTHROPIC_BILLING_SUBSCRIPTION_CRITICAL.md`** — read that before any
 > SDK/entrypoint change. (Effective 2026-06-15, programmatic `claude_agent_sdk` /
-> `claude -p` left the general subscription; this option is the only proven way to keep
+> `claude -p` left the general subscription; this transport is the only proven way to keep
 > the automated earnings/guidance work billing as **subscription**.)
 
 **What it is.** Run the predictor/learner/guidance work as skills/slash-commands inside
@@ -1114,17 +1115,65 @@ a **real interactive Claude REPL** — launched programmatically via `pty.fork()
 no human present still tags `cli` (empirically proven, test #11) → automated **and**
 subscription-billed.
 
-**Caveats (empirically observed).** TUI keystroke automation is fragile
-(BypassPermissions dialog, render collapse, `EAGAIN`, nested-TUI). **Anthropic is
-actively building detection for automated interactive use; the documented consequence
-if detected is suspension/ban of the *entire Claude subscription* — all Claude access
-(this pipeline + Claude Code), not just earnings/guidance.** Mitigation shape if ever
-built: the **sentinel-file PTY driver** (poll for `result.json`, never screen-scrape)
-— see the PRELIMINARY section of the canonical doc.
+**Mechanism status (empirically proven 2026-05-15 — 17/17, zero failures).** The
+fragile keystroke/screen-scrape approach was abandoned; the reliable primitive is a
+**small launch+poll+kill loop** — `pty.fork()` → `claude` (no `-p`, under a PTY,
+prompt as a positional arg, `--dangerously-skip-permissions`, SessionStart hook for
+entrypoint+session_id) → poll a sentinel, SIGKILL. Proven repeatable (8/8), concurrent
+(4/4 isolated), capture-compatible, every run `entrypoint=cli` = subscription. The
+earlier "fragile / most-code / least-durable transport" estimate is **superseded**.
 
-**Verdict. Reference-only — NOT the path.** The documented default is **Option 1**
-(SDK + key-strip + fail-closed + overage `org_level_disabled`; volume handled by
-batching, or Codex/ChatGPT for heavy batches). Option #6 is the **most code, least
-durable** option and adds Claude-subscription-suspension risk; build only on an
-explicit, owner-approved decision. Full scope + effort + Open-decisions:
-`.claude/plans/ANTHROPIC_BILLING_SUBSCRIPTION_CRITICAL.md` (PRELIMINARY section).
+**The one residual reason it stays reference-only (vendor, not engineering).** Anthropic
+is actively building detection for automated-interactive use; the documented
+consequence if detected is **suspension/ban of the *entire Claude subscription*** — all
+Claude access (this pipeline + Claude Code), not just earnings/guidance. "17/17 proven"
+bounds the *mechanism*, **not** that vendor step-function risk.
+
+**Verdict. Reference-only — NOT the path, solely because of the subscription-ban risk
+above** (the engineering objection no longer applies). Documented default remains
+**Option 1** (SDK + key-strip + fail-closed + overage `org_level_disabled`; volume via
+batching, or Codex/ChatGPT for heavy batches). Build this transport only on an explicit,
+owner-approved acceptance of the vendor-ban risk. Full proof + primitive code +
+Open-decisions: `.claude/plans/ANTHROPIC_BILLING_SUBSCRIPTION_CRITICAL.md`.
+
+---
+
+## Next Steps — Make It Executable
+
+> The architecture is **decided**. These 5 turn "decided" into "a bot can build it
+> without rework." Do **A → E in order**. **A and C are BLOCKERS** (nothing downstream
+> is correct or runnable until they're done). Everything else here either folds into
+> these or is already locked above.
+
+**A. Lock the contracts** *(BLOCKER — nothing downstream is right until done)*
+- Resolve `attribution_result` v2(renderer) vs v3(validator) → `learner_result.v1`: state which strings rename, which stay.
+- Write `prediction_result.v1` exact fields (name · type · required?).
+- Write `learner_result.v1` exact fields.
+- Write `prior_reports_context` exact shape.
+- Decide the 3 parked knobs: checklist item cap · review-window N · min-evidence floor.
+
+**B. Write the Stage-0 Blueprint** *(the executable bridge; depends on A)*
+- Every touched file → KEEP / DELETE / REWRITE / ADD.
+- Anchors (function/grep pattern), never line numbers.
+- Each gate = a runnable command/script, not prose.
+- List every test/golden allowed to change.
+- Include the skill-rewrite spec: predictor §3.3 + learner Phase-4 lessons→checklist; analytical spine untouched; no hardcoded examples.
+- Confirm Bot-Safe controls already complete (1 stage/PR · writer≠reviewer · grep gate) — they are; just verify.
+
+**C. Decide billing + harden guidance** *(BLOCKER for the heavy stages)*
+- Pick the billing path from `ANTHROPIC_BILLING_SUBSCRIPTION_CRITICAL.md` (SDK fail-closed / Codex / hybrid).
+- Make the guidance-worker V1 key-strip + V2 OAuth fail-closed **mandatory** (mirror the orchestrator).
+- Define what EarningsTrigger does when the pool pauses (backpressure, not corruption).
+- Guidance-completion = hard prerequisite for prediction; worker retries must not corrupt the run-ledger.
+
+**D. Spec the EV1 oracle** *(principle #1 — order-of-magnitude)*
+- Pick the fixed replay ticker set (representative + edge cases), frozen.
+- Freeze current builder outputs + rendered bundles = the byte-identical baseline.
+- Freeze a few old prediction/learner artifacts for characterization.
+- Scorer = script: direction-correct · signed-midpoint MSE · Brier · mean signed error → JSON + exit code.
+
+**E. Cleanliness / consistency sweep** *(cheap; last)*
+- Grep-zero: `lesson_labels`, `cites_lesson_indices`, `lesson_audit`, `predictor_lessons`, `data_lessons`, `global_observations`, `learning_context` (+ `attribution_result` once A locks it).
+- Any surviving term must be intentional historical prose only.
+- No staged-target wording anywhere — target state is single & final.
+- Delete early rough wording that a later FIX/CLEANUP superseded.

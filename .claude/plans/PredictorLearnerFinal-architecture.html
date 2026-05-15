@@ -544,6 +544,23 @@
     <div class="callout">Free-form prose, well-organized, read on demand — a maximally minimal self-improving loop, scored on direction accuracy, signed-midpoint MSE, and Brier calibration.</div>
   </section>
 
+  <!-- ===== STEP 18 — NEXT STEPS ===== -->
+  <section class="step" data-step="18">
+    <div class="step-tag">Step 18 · Make it executable</div>
+    <h1>Next steps — turn "decided" into "buildable"</h1>
+    <p class="lead">The architecture above is decided. This coda is the path to build it without rework — not architecture, the bridge to it. Do <strong>A → E in order; A and C are blockers.</strong></p>
+
+    <div class="pipe">
+      <div class="row"><div class="num">A</div><div class="body"><strong>Lock the contracts — BLOCKER</strong><span>Resolve the <span class="mono">attribution_result</span> v2/v3 → <span class="mono">learner_result.v1</span> rename · write exact fields for prediction_result.v1, learner_result.v1, prior_reports_context · decide the 3 parked knobs (item cap · window N · min-evidence).</span></div></div>
+      <div class="row"><div class="num">B</div><div class="body"><strong>Write the Stage-0 Blueprint</strong><span>Every file KEEP/DELETE/REWRITE/ADD · anchors not line numbers · each gate a runnable script · list every test/golden allowed to change · include the skill-rewrite spec (spine untouched).</span></div></div>
+      <div class="row"><div class="num">C</div><div class="body"><strong>Billing + guidance guard — BLOCKER</strong><span>Pick the billing option · make guidance-worker V1 key-strip + V2 fail-closed mandatory · define pool-pause backpressure (no corruption) · guidance-complete = prediction prerequisite.</span></div></div>
+      <div class="row"><div class="num green">D</div><div class="body"><strong>Spec the EV1 oracle</strong><span>Frozen representative+edge replay set · freeze builder outputs/bundles + old artifacts as the byte-identical baseline · scorer script → direction / signed-mid MSE / Brier / signed error → JSON + exit code.</span></div></div>
+      <div class="row"><div class="num green">E</div><div class="body"><strong>Cleanliness sweep</strong><span>Grep-zero the lesson tokens (+ <span class="mono">attribution_result</span> once A locks it) · no "v0/v1 staging" wording · delete superseded rough wording · target state single & final.</span></div></div>
+    </div>
+
+    <div class="callout">A &amp; C gate everything: nothing downstream is correct (A) or runnable at volume (C) until they're done. B depends on A; D and E follow B.</div>
+  </section>
+
 </main>
 
 <div class="nav">
@@ -553,7 +570,7 @@
 </div>
 
 <script>
-const TOTAL_STEPS = 17;
+const TOTAL_STEPS = 18;
 let currentStep = 1;
 
 const stepIdxEl = document.getElementById('stepIdx');
