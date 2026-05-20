@@ -1,0 +1,1351 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Predictor / Learner — Implementation Plan</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #0f172a;
+    --muted: #64748b;
+    --line: #e2e8f0;
+    --soft: #f8fafc;
+    --soft2: #f1f5f9;
+    --accent: #4f46e5;
+    --accent-soft: #eef2ff;
+    --green: #059669;
+    --green-soft: #d1fae5;
+    --amber: #d97706;
+    --amber-soft: #fef3c7;
+    --red: #dc2626;
+    --red-soft: #fee2e2;
+    --code: #1e293b;
+    --code-fg: #e2e8f0;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg); color: var(--fg);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    font-size: 24px; line-height: 1.55;
+  }
+
+  header {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255,255,255,0.97);
+    border-bottom: 2px solid var(--line);
+    padding: 18px 36px;
+    display: flex; align-items: center; gap: 20px;
+    backdrop-filter: blur(8px);
+  }
+  header .brand {
+    font-weight: 800; font-size: 22px; letter-spacing: -0.01em; color: var(--accent);
+  }
+  header .title-text {
+    font-weight: 600; font-size: 20px; color: var(--fg);
+  }
+  header .counter {
+    margin-left: auto; font-variant-numeric: tabular-nums; color: var(--muted); font-size: 20px;
+  }
+
+  .progress {
+    display: flex; gap: 4px;
+    padding: 12px 36px 14px;
+    background: var(--soft);
+    border-bottom: 1px solid var(--line);
+  }
+  .progress .pip {
+    flex: 1; height: 7px; border: 0; border-radius: 999px;
+    background: #d1d5db; cursor: pointer; padding: 0;
+    transition: background 0.15s, transform 0.15s;
+  }
+  .progress .pip.done { background: #a5b4fc; }
+  .progress .pip.active { background: var(--accent); transform: scaleY(1.45); }
+  .progress .pip:hover { background: #818cf8; }
+
+  main { max-width: 1120px; margin: 0 auto; padding: 64px 40px 220px; }
+
+  .step { display: none; }
+  .step.active { display: block; animation: fadeIn 0.3s ease-out; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  .tag {
+    display: inline-block;
+    font-size: 14px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--accent); font-weight: 800;
+    background: var(--accent-soft); padding: 6px 14px; border-radius: 999px;
+    margin-bottom: 18px;
+  }
+  .tag.green { color: var(--green); background: var(--green-soft); }
+  .tag.amber { color: var(--amber); background: var(--amber-soft); }
+  .tag.red { color: var(--red); background: var(--red-soft); }
+
+  h1 {
+    font-size: 60px; font-weight: 800;
+    letter-spacing: -0.03em; line-height: 1.05;
+    margin: 0 0 18px;
+  }
+  h2 { font-size: 36px; font-weight: 700; margin: 40px 0 14px; letter-spacing: -0.02em; }
+  h3 { font-size: 26px; font-weight: 700; margin: 28px 0 10px; color: #1e293b; }
+
+  .lead {
+    font-size: 28px; line-height: 1.45;
+    color: #334155; margin: 0 0 32px;
+    font-weight: 400;
+  }
+
+  p, li { font-size: 22px; line-height: 1.6; color: #1e293b; }
+  ul { padding-left: 28px; margin: 16px 0; }
+  ul li { margin: 8px 0; }
+  ul li strong { color: var(--fg); font-weight: 700; }
+
+  .panel {
+    background: var(--soft); border: 1px solid var(--line);
+    border-radius: 18px; padding: 28px 32px; margin: 22px 0;
+  }
+  .panel.accent { background: var(--accent-soft); border-color: #c7d2fe; }
+  .panel.green { background: var(--green-soft); border-color: #6ee7b7; }
+  .panel.amber { background: var(--amber-soft); border-color: #fcd34d; }
+  .panel.danger { background: var(--red-soft); border-color: #fca5a5; }
+  .panel h3:first-child { margin-top: 0; }
+
+  code {
+    background: var(--soft2); padding: 2px 8px; border-radius: 6px;
+    font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+    font-size: 0.86em; color: #1e293b;
+  }
+
+  pre {
+    background: var(--code); color: var(--code-fg);
+    padding: 22px 26px; border-radius: 14px;
+    overflow-x: auto;
+    font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+    font-size: 17px; line-height: 1.55;
+  }
+
+  details {
+    margin-top: 22px; border: 1.5px solid var(--line); border-radius: 14px;
+    padding: 18px 24px; background: white; transition: background 0.15s;
+  }
+  details[open] { background: var(--soft); border-color: #c7d2fe; }
+  summary {
+    cursor: pointer; font-weight: 700; color: var(--accent); font-size: 20px;
+    padding: 4px 0;
+  }
+  summary::marker { color: var(--accent); }
+  details > *:not(summary) { font-size: 20px; }
+
+  .twocol { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 24px 0; }
+  .twocol .col { background: var(--soft); border: 1px solid var(--line); border-radius: 16px; padding: 24px 28px; }
+  .twocol .col h3 { margin-top: 0; font-size: 22px; }
+  @media (max-width: 880px) { .twocol { grid-template-columns: 1fr; } }
+
+  .flowline {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr auto 1fr;
+    gap: 12px;
+    align-items: center;
+    margin: 30px 0;
+  }
+  .flowline .node {
+    background: white;
+    border: 1.5px solid var(--line);
+    border-radius: 16px;
+    padding: 18px 18px;
+    min-height: 112px;
+  }
+  .flowline .node strong { display: block; font-size: 20px; line-height: 1.2; margin-bottom: 8px; color: var(--fg); }
+  .flowline .node span { display: block; color: var(--muted); font-size: 16px; line-height: 1.35; }
+  .flowline .arrow { color: var(--accent); font-size: 26px; font-weight: 800; }
+  @media (max-width: 980px) {
+    .flowline { grid-template-columns: 1fr; }
+    .flowline .arrow { transform: rotate(90deg); justify-self: center; }
+  }
+
+  .kv { display: grid; grid-template-columns: 280px 1fr; gap: 14px 28px; align-items: start; margin: 18px 0; }
+  .kv .k { font-weight: 700; color: var(--fg); font-size: 20px; }
+  .kv .v { color: #1e293b; font-size: 20px; }
+
+  .pill {
+    display: inline-block; padding: 4px 14px; border-radius: 999px;
+    background: var(--accent-soft); color: var(--accent);
+    font-size: 16px; font-weight: 700; margin-right: 8px; margin-bottom: 6px;
+  }
+  .pill.green { background: var(--green-soft); color: var(--green); }
+  .pill.amber { background: var(--amber-soft); color: var(--amber); }
+  .pill.red { background: var(--red-soft); color: var(--red); }
+  .pill.gray { background: var(--soft2); color: var(--muted); }
+
+  .nav {
+    position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%);
+    background: white; border: 1.5px solid var(--line); border-radius: 999px;
+    padding: 10px 16px; display: flex; gap: 10px; align-items: center;
+    box-shadow: 0 14px 36px rgba(15,23,42,0.14);
+    z-index: 60;
+  }
+  .nav button {
+    font: inherit; font-size: 18px; font-weight: 700;
+    background: transparent; color: var(--fg); border: 0;
+    padding: 8px 18px; border-radius: 999px; cursor: pointer;
+  }
+  .nav button:hover { background: var(--accent-soft); color: var(--accent); }
+  .nav button:disabled { color: #cbd5e1; cursor: not-allowed; }
+  .nav button:disabled:hover { background: transparent; }
+  .nav .sep { width: 1px; height: 22px; background: var(--line); }
+  .nav .pos {
+    font-size: 18px; color: var(--muted); font-variant-numeric: tabular-nums;
+    min-width: 70px; text-align: center;
+  }
+
+  .toc-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px; margin: 28px 0;
+  }
+  .toc-grid .item {
+    padding: 16px 20px; background: var(--soft); border: 1px solid var(--line);
+    border-radius: 14px; cursor: pointer; transition: all 0.15s;
+    font-size: 18px;
+  }
+  .toc-grid .item:hover { background: var(--accent-soft); border-color: #c7d2fe; transform: translateY(-2px); }
+  .toc-grid .item .num { color: var(--accent); font-weight: 700; margin-right: 8px; }
+
+  .small { font-size: 18px; color: var(--muted); }
+
+  .ascii {
+    background: var(--code); color: var(--code-fg);
+    padding: 22px 26px; border-radius: 14px;
+    font-family: ui-monospace, monospace; font-size: 16px; line-height: 1.5;
+    white-space: pre; overflow-x: auto;
+  }
+
+  .src {
+    display: inline-block; margin-left: 14px;
+    font-size: 14px; font-weight: 700;
+    color: var(--muted); background: var(--soft2);
+    padding: 4px 12px; border-radius: 999px;
+    letter-spacing: 0.04em;
+    vertical-align: middle;
+  }
+  .badge {
+    display: inline-block; margin-left: 8px;
+    font-size: 12px; font-weight: 800;
+    padding: 2px 8px; border-radius: 6px;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    vertical-align: middle;
+  }
+  .badge-new      { color: var(--accent); background: var(--accent-soft); }
+  .badge-rewrite  { color: var(--amber);  background: var(--amber-soft); }
+  .badge-keep     { color: var(--green);  background: var(--green-soft); }
+  .badge-delete   { color: var(--red);    background: var(--red-soft); }
+
+  .legend {
+    display: flex; flex-wrap: wrap; gap: 14px;
+    padding: 14px 18px; background: var(--soft); border: 1px solid var(--line);
+    border-radius: 12px; margin: 18px 0; font-size: 16px;
+  }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">PLAN</div>
+  <div class="title-text">Predictor / Learner — Implementation</div>
+  <div class="counter" id="counter">1 / 22</div>
+</header>
+
+<div class="progress" id="progress" aria-label="Slide progress"></div>
+
+<main>
+
+<!-- ===== 1. TITLE ===== -->
+<section class="step active" data-step="1">
+  <span class="tag">Plan · v1</span>
+  <h1>From lesson-era code to the locked design.</h1>
+  <p class="lead">22 slides. Every high-and-medium-importance decision from Final.md, organized as an implementation sequence. White background, large type, click-to-expand details.</p>
+
+  <div class="panel accent">
+    <h3>How to read this</h3>
+    <ul>
+      <li><strong>Top-level bullets</strong> are the load-bearing rules an implementer must follow.</li>
+      <li><strong>Click any <code>Details</code> block</strong> for code anchors, edge cases, and cross-references.</li>
+      <li>Each slide title carries a <code>Final.md §X</code> chip — that's the source of truth.</li>
+      <li>File paths carry status badges showing what to do with them.</li>
+    </ul>
+  </div>
+
+  <div class="legend" aria-label="Status badge legend">
+    <span><span class="badge badge-new">New</span> create new file/module</span>
+    <span><span class="badge badge-rewrite">Rewrite</span> existing file, semantic change</span>
+    <span><span class="badge badge-keep">Keep</span> preserve as-is</span>
+    <span><span class="badge badge-delete">Delete</span> remove at cutover or earlier</span>
+  </div>
+
+  <div class="toc-grid" aria-label="Plan map">
+    <div class="item" data-goto="2"><span class="num">02</span>Current → target</div>
+    <div class="item" data-goto="3"><span class="num">03</span>Build order</div>
+    <div class="item" data-goto="4"><span class="num">04</span>PIT fence</div>
+    <div class="item" data-goto="5"><span class="num">05</span>TMUX transport</div>
+    <div class="item" data-goto="6"><span class="num">06</span>SKILL rewrite</div>
+    <div class="item" data-goto="7"><span class="num">07</span>Prediction schema</div>
+    <div class="item" data-goto="8"><span class="num">08</span>Learner schema</div>
+    <div class="item" data-goto="9"><span class="num">09</span>Prior reports</div>
+    <div class="item" data-goto="10"><span class="num">10</span>Section audit</div>
+    <div class="item" data-goto="11"><span class="num">11</span>Standing checklist</div>
+    <div class="item" data-goto="12"><span class="num">12</span>Attribution</div>
+    <div class="item" data-goto="13"><span class="num">13</span>Evidence grounding</div>
+    <div class="item" data-goto="14"><span class="num">14</span>Boundaries + agents</div>
+    <div class="item" data-goto="15"><span class="num">15</span>Peer window</div>
+    <div class="item" data-goto="16"><span class="num">16</span>EV1 scorer</div>
+    <div class="item" data-goto="17"><span class="num">17</span>Lesson teardown</div>
+    <div class="item" data-goto="18"><span class="num">18</span>Artifacts</div>
+    <div class="item" data-goto="19"><span class="num">19</span>Execution</div>
+    <div class="item" data-goto="20"><span class="num">20</span>Cutover wipe</div>
+    <div class="item" data-goto="21"><span class="num">21</span>Rate-limit gate</div>
+    <div class="item" data-goto="22"><span class="num">22</span>Final safety</div>
+  </div>
+
+  <details>
+    <summary>What's in scope</summary>
+    <ul>
+      <li>Predictor + learner schemas, SKILL.md rewrites, transport flip (SDK / <code>claude -p</code> → interactive TMUX <code>claude</code>), PIT fence hook, EV1 scorer, prior-reports container, standing checklist, rate-limit gate, execution architecture, cutover wipe.</li>
+      <li>NOT in scope: sector/macro DataSubAgents (deferred), Obsidian restructure (post-stabilization), live `SRC:LIVE:*` runtime catalog (deferred).</li>
+    </ul>
+  </details>
+</section>
+
+<!-- ===== 2. CURRENT vs TARGET ===== -->
+<section class="step" data-step="2">
+  <span class="tag amber">Where we are</span>
+  <h1>Current → Target, at a glance. <span class="src">Final.md §0</span></h1>
+  <p class="lead">The repository today still runs the lesson-era pipeline. The target collapses lessons into one rolling checklist + causal attribution, swaps the wire layer, and adds an EV1 scorer.</p>
+
+  <div class="flowline" aria-label="Target learning loop">
+    <div class="node"><strong>Earnings event</strong><span>Item 2.02 8-K, mode = historical or live</span></div>
+    <div class="arrow">→</div>
+    <div class="node"><strong>Bundle</strong><span>7 builders + sequential prior_reports_context</span></div>
+    <div class="arrow">→</div>
+    <div class="node"><strong>Predictor</strong><span>prediction_result.v1 + section audit</span></div>
+    <div class="arrow">→</div>
+    <div class="node"><strong>Learner</strong><span>learner_result.v1 + future_checklist[]</span></div>
+    <div class="arrow">→</div>
+    <div class="node"><strong>EV1 + next run</strong><span>scoring/result.json feeds prior-report rows</span></div>
+  </div>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>Today</h3>
+      <ul>
+        <li>Learner schema = <code>attribution_result.v3</code> (predictor_lessons, lesson_audit, global_observations)</li>
+        <li>Predictor SDK / <code>claude -p</code> transport via <code>claude_agent_sdk.query()</code></li>
+        <li>Existing PIT validation = <code>pit_gate.py</code> PostToolUse for DataSubAgent outputs; no historical predictor runner fence yet</li>
+        <li>SKILL frontmatter <code>allowed-tools</code> (toothless)</li>
+        <li>No EV1 scorer / aggregate</li>
+        <li>Per-worker rate-limit gates (extraction_worker only)</li>
+      </ul>
+    </div>
+    <div class="col">
+      <h3>Target</h3>
+      <ul>
+        <li>Learner = <code>learner_result.v1</code> + causal attribution + rolling <code>future_checklist[]</code></li>
+        <li>Interactive TMUX subscription transport: launch <code>claude</code>, send prompt text, never <code>claude -p</code></li>
+        <li>PreToolUse hook + env marker + path-scoped Write/Edit allowlist</li>
+        <li>SKILL frontmatter trimmed; live embed strips YAML</li>
+        <li>EV1 scorer module + per-event score + rolling aggregate</li>
+        <li>One shared rate-limit gate; dedicated subscription + auto-failover</li>
+      </ul>
+    </div>
+  </div>
+
+  <details>
+    <summary>Why this matters for the build</summary>
+    <p>The transport flip touches every Claude entrypoint (predictor / learner / guidance worker). The schema migration breaks the validator + renderer + builder layer. The new PIT fence replaces a class of frontmatter restrictions that never enforced. Each subsystem can be staged independently — but they share migration safety gates.</p>
+  </details>
+</section>
+
+<!-- ===== 3. ORDER ===== -->
+<section class="step" data-step="3">
+  <span class="tag">Sequence</span>
+  <h1>Build order: foundations → execution → cutover. <span class="src">Phases</span></h1>
+  <p class="lead">Three phases. Inside each phase, subsystems can run in parallel, but the phases themselves must serialize.</p>
+
+  <div class="panel">
+    <h3>Phase 1 — Foundations (§§1-21)</h3>
+    <p>Predictor + learner + orchestrator wiring. Includes PIT fence, transport flip, schema migration, SKILL rewrites, EV1 scorer, prior-reports container, lesson teardown, renderer rewrite. Must be wired and tested before Phase 2.</p>
+  </div>
+
+  <div class="panel">
+    <h3>Phase 2 — Execution Architecture (§22)</h3>
+    <p>Trigger daemon → Redis → worker → orchestrator. <strong>Operationally deferred</strong> — do NOT start the daemon/worker until §§1-21 are wired and tested.</p>
+  </div>
+
+  <div class="panel">
+    <h3>Phase 3 — Cutover (§23)</h3>
+    <p>One-time destructive wipe of lesson-era artifacts. Irreversible. Last step.</p>
+  </div>
+
+  <details>
+    <summary>Cross-cutting concerns (run alongside Phase 1)</summary>
+    <ul>
+      <li><strong>§5.1 Rate-limit gate</strong> — centralized; required before any TMUX worker goes live</li>
+      <li><strong>§17 Migration safety gates</strong> — byte-identical oracle + scoped grep zero-matches; apply to every subsystem change</li>
+    </ul>
+  </details>
+</section>
+
+<!-- ===== 4. PIT FENCE ===== -->
+<section class="step" data-step="4">
+  <span class="tag red">G1 · Show-stopper</span>
+  <h1>PIT fence — hook-enforced, env-marker-scoped. <span class="src">Final.md §1.1.2</span></h1>
+  <p class="lead">Historical predictor runs in a forked Claude session that must be blind to anything beyond <code>pit_cutoff</code>. The fence is a project-level <strong>PreToolUse hook</strong>, gated by an environment marker the orchestrator sets only on the historical fork.</p>
+
+  <div class="panel">
+    <h3>Mechanism</h3>
+    <ul>
+      <li>Hook config in <code>.claude/settings.json</code> PreToolUse block</li>
+      <li>Hook script: <code>.claude/hooks/earnings_pit_fence.py</code></li>
+      <li>Env marker: <code>EARNINGS_PIT_FENCE=1</code> (set only for historical fork, cleared on exit)</li>
+      <li>Marker present → hook DENIES listed tools; absent → pass through</li>
+      <li>Concurrency-safe per-process env scoping (proven empirically)</li>
+    </ul>
+  </div>
+
+  <div class="panel danger">
+    <h3>Denied in marked sessions</h3>
+    <ul>
+      <li><code>Bash</code>, <code>WebFetch</code>, <code>WebSearch</code></li>
+      <li>All <code>mcp__*</code> tools — class matcher <code>mcp__.*</code> + hook-side <code>startswith("mcp__")</code> (covers Neo4j, IBKR, any future MCP without enumeration)</li>
+      <li><code>Write</code>/<code>Edit</code> unless <code>tool_input.file_path</code> ends in EXACTLY one of:
+        <ul>
+          <li><code>prediction/section_audit.json</code></li>
+          <li><code>prediction/result.json</code></li>
+          <li><code>prediction/reasoning.md</code></li>
+          <li><code>prediction/complete.json</code></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <div class="panel green">
+    <h3>Allowed</h3>
+    <p><code>Read</code>, <code>Glob</code>, and the path-scoped Write/Edit set above.</p>
+  </div>
+
+  <details>
+    <summary>Empirical proof + coexistence with pit_gate.py</summary>
+    <ul>
+      <li><strong>Validation:</strong> <code>.claude/plans/Infrastructure.md</code> — "Project PreToolUse hook fires INSIDE <code>context: fork</code> skills" (PROVEN 2026-05-19, v2.1.144). Concurrent marked/unmarked sessions, zero cross-contamination. Sessions X=<code>0be4272b</code>, Y=<code>d2f75903</code>.</li>
+      <li><strong>Class matcher:</strong> proven across <code>mcp__neo4j-cypher__*</code> + <code>mcp__yahoo-finance__*</code> in one session (<code>39140e04</code>) — IBKR and any future MCP auto-covered.</li>
+      <li><strong>Keep <code>pit_gate.py</code>:</strong> existing PostToolUse hook validates DataSubAgent tool outputs for PIT contamination (separate concern, separate event). The new PreToolUse hook does NOT replace it.</li>
+      <li>Path-scoped allowlist denies any <code>learning/*</code>, <code>context_bundle*</code>, prior-reports paths, <code>result.md</code>, and any other Write target. Hook-enforced, not prompt-only.</li>
+    </ul>
+  </details>
+</section>
+
+<!-- ===== 5. TRANSPORT FLIP ===== -->
+<section class="step" data-step="5">
+  <span class="tag red">G2 · Show-stopper</span>
+  <h1>SDK / <code>-p</code> → interactive TMUX. Same prompt, real subscription path. <span class="src">Final.md §1 / §3 / §4 / §5</span></h1>
+  <p class="lead">Predictor, learner, and guidance extraction all move to <strong>real interactive Claude in TMUX</strong>: launch <code>claude</code>, send prompt text, never use API, SDK, <code>claude -p</code>, or <code>--print</code>.</p>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>Profile A — Interactive batch</h3>
+      <p>TMUX launches <code>claude</code> with no <code>-p</code>, then sends <code>Run /earnings-prediction with these paths: ...</code> into the session.</p>
+      <p>Slash-command in the prompt invokes the forked skill — <strong>do NOT inline SKILL.md</strong> for historical prediction. Prompt shape stays; entrypoint changes.</p>
+    </div>
+    <div class="col">
+      <h3>Profile B — Interactive + nudge</h3>
+      <p>Same interactive TMUX launch (<code>claude</code>, no <code>-p</code>) plus transcript/idle detection and queued nudges.</p>
+      <p>Live predictor top-level embed: load SKILL body with YAML frontmatter stripped (mirror <code>_load_learner_skill_content()</code>).</p>
+      <p>Append live wrapper instructions / tools / SLA.</p>
+    </div>
+  </div>
+
+  <div class="panel green">
+    <h3>Learner + guidance transport</h3>
+    <p>Learner and guidance use Profile A unless nudges are explicitly needed. Learner remains a top-level embedded prompt; guidance extraction refactors the worker's single Claude invocation path from SDK / <code>claude -p</code> to interactive TMUX for every extraction job type the worker handles.</p>
+  </div>
+
+  <div class="panel amber">
+    <h3>Live wrapper essentials <span class="src">§1.2.1 / §1.2.3</span></h3>
+    <ul>
+      <li>Live predictor embeds the SKILL body, then appends wrapper instructions, allowed research guidance, and SLA controls</li>
+      <li>Live wrapper minimum: <code>PIT_MODE=live</code>, report-release timestamp, SLA/env values, live allowed research set (§2.1), no runner-enforced tool allowlist, required output paths, fail-closed <code>result.json</code> rule</li>
+      <li>Env controls: <code>LIVE_PREDICTOR_SLA_SECONDS</code> (300), <code>LIVE_PREDICTOR_NUDGE_INTERVAL_SECONDS</code> (60), <code>LIVE_PREDICTOR_GRACE_SECONDS</code> (30), <code>LIVE_PREDICTOR_SLA_MODE=hard|soft</code> (hard)</li>
+      <li>Env home: set on launching process; orchestrator reads via <code>os.environ</code>; k8s manifests mirror extraction-worker env pattern</li>
+      <li>Clock sources: <code>time_since_report_release</code> uses release timestamp from trigger metadata (Redis if present, else Neo4j); <code>elapsed_since_start_s</code> uses predictor TMUX session spawn time</li>
+      <li>Nudge format: <code>LIVE_TIME_UPDATE: time_since_report_release=&lt;…&gt;; price_change_since_report_release=&lt;…&gt;; elapsed_since_start_s=&lt;…&gt;; sla_seconds=&lt;…&gt;</code> — sent by <code>tmux send-keys</code> text + Enter only; never Esc/Ctrl-C</li>
+      <li>At <code>elapsed_since_start_s &gt;= sla_seconds</code>, queued updates tell live predictor to stop expanding research and write best available prediction</li>
+      <li>Hard mode: missing/invalid <code>result.json</code> after SLA+grace = kill session, fail closed (no prediction, no learner input, no prior-report row); reasoning.md is non-blocking, result.json required</li>
+      <li>No timeout <code>no_call</code> fallback; timeouts are operational health only</li>
+    </ul>
+  </div>
+
+  <div class="panel">
+    <h3>Historical mode + common-to-both rules <span class="src">§1.1.3 / §1.3.2 / §1.3.3</span></h3>
+    <ul>
+      <li><strong>Historical soft SLA (§1.1.3):</strong> log elapsed only; no hard-kill; elapsed time is never fed to the learner</li>
+      <li><strong>Urgency inputs to both modes (§1.3.2):</strong> pass <code>time_since_report_release</code> and <code>price_change_since_report_release</code>. Historical uses PIT-safe values at launch; live receives queued <code>LIVE_TIME_UPDATE</code> nudges</li>
+      <li><strong>Reasoning sidecar (§1.3.3):</strong> add <code>REASONING_PATH=&lt;component&gt;/reasoning.md</code> for historical prediction, live prediction, and learner. Audit-only: never canonical, never parsed for scoring/learning. Missing <code>reasoning.md</code> does NOT fail the run; <code>result.json</code> remains required</li>
+      <li>Predictor writes Phase 1-4 working analysis to REASONING_PATH BEFORE RESULT_PATH (key numbers/surprise math, what's-new/priced-in/material/counter-case, bull vs bear, final rationale, with bundle evidence)</li>
+      <li>Learner writes causal-attribution analysis to REASONING_PATH BEFORE RESULT_PATH (what moved stock, evidence chain, drivers, reconcile vs prediction incl. §15 falsifier check, attribution gaps, key_takeaway + checklist rationale, with ledger refs)</li>
+      <li>Skill rule edits: predictor checklist rule 8 may write SECTION_AUDIT_PATH + REASONING_PATH + RESULT_PATH; learner must relax both single-file guards (Critical Rule 6 + step "ONLY file" rule) to allow REASONING_PATH + RESULT_PATH</li>
+      <li>Keep <code>thinking.md</code> / sub-agents unchanged; ignore <code>thinking.md</code> as reasoning</li>
+    </ul>
+  </div>
+
+  <div class="panel">
+    <h3>Cross-cutting transport rules</h3>
+    <ul>
+      <li>Preserve user-authorized launch, no-API env scrub, pinned session id, transcript path derivation, transcript capture, timeout/kill, text+Enter-only nudges</li>
+      <li><strong>Forbidden target paths:</strong> direct Anthropic API, <code>claude_agent_sdk.query</code>, <code>claude -p</code>, and <code>--print</code></li>
+      <li>Large outputs: capture stdout/transcript to files; never use tmux pane scrollback as canonical output</li>
+      <li>Verify large bundles, 8-K packets, learner evidence are not truncated before E2E — silent truncation = corrupted artifact</li>
+    </ul>
+  </div>
+
+  <details>
+    <summary>Implementation anchor + contract</summary>
+    <ul>
+      <li><strong>Contract:</strong> <code>.claude/plans/tmux-transport-handoff.md</code> — implement §6 build scope; cite §7 evidence, do not rerun experiments</li>
+      <li><strong>Today's SDK call:</strong> <code>_run_predictor_via_sdk</code> uses <code>claude_agent_sdk.query(prompt="Run /earnings-prediction with these paths…")</code>; target Profile A sends that same prompt text into an interactive TMUX <code>claude</code> session</li>
+      <li><strong>No-API guard:</strong> strip API auth for every launched Claude process; OAuth profile homes supply subscription credentials</li>
+    </ul>
+  </details>
+</section>
+
+<!-- ===== 6. SKILL FILES ===== -->
+<section class="step" data-step="6">
+  <span class="tag red">G3 · Show-stopper</span>
+  <h1>SKILL.md rewrite is strictly subtractive. <span class="src">Final.md §2 / §17</span></h1>
+  <p class="lead">Remove only lesson machinery. Preserve every non-lesson instruction verbatim. The current SKILL.md files are the <strong>authoritative preserve-set</strong>; external blueprints are stale.</p>
+
+  <div class="panel accent">
+    <h3>Frontmatter discipline (predictor)</h3>
+    <ul>
+      <li><strong>DELETE</strong> only the static <code>allowed-tools</code> block (proven toothless for restriction)</li>
+      <li><strong>KEEP</strong> fork-relevant frontmatter: <code>context: fork</code> and <code>permissionMode: dontAsk</code> are load-bearing for historical slash-skill invocation</li>
+    </ul>
+  </div>
+
+  <div class="panel">
+    <h3>Live embed</h3>
+    <p>Load SKILL body with YAML frontmatter <strong>stripped</strong> — mirror the existing learner pattern in <code>earnings_orchestrator.py::_load_learner_skill_content()</code>, which already strips frontmatter at load time.</p>
+  </div>
+
+  <div class="panel danger">
+    <h3>Anti-patterns the rewrite must NOT introduce</h3>
+    <ul>
+      <li>New "Principles" blocks, schemas, taxonomies, telemetry, benchmark tables, hardcoded examples</li>
+      <li>EV1 deterministic scoring in SKILL prompts (it lives in code, §18)</li>
+      <li>Lesson-shaped structure in §3.3 / Phase 4 replacements: per-item labels, IDs, audit, scope routing, lifecycle state</li>
+    </ul>
+  </div>
+
+  <details>
+    <summary>Tool gating clause</summary>
+    <p>Single source of truth: <strong>historical</strong> = §1.1.2 PreToolUse hook (runner-enforced); <strong>live</strong> = prompt-level guidance per §1.2.2.1 + time-SLA per §1.2.1 (no runner-enforced allowlist for live).</p>
+  </details>
+</section>
+
+<!-- ===== 7. PREDICTION SCHEMA ===== -->
+<section class="step" data-step="7">
+  <span class="tag">Schema</span>
+  <h1><code>prediction_result.v1</code> — what the LLM authors. <span class="src">Final.md §7</span></h1>
+  <p class="lead">Canonical artifact: <code>prediction/result.json</code>. Schema: <code>prediction_result.v1</code>. Drop <code>lesson_labels</code>, <code>cites_lesson_indices</code>, and the entire lesson-label plumbing.</p>
+
+  <div class="panel">
+    <h3>LLM-authored fields</h3>
+    <ul>
+      <li><code>direction</code>: enum <code>long | short | no_call</code></li>
+      <li><code>confidence_score</code></li>
+      <li><code>expected_move_range_pct [low, high]</code> (unsigned magnitudes; sign from direction)</li>
+      <li><code>key_drivers[]</code>: <code>{driver, direction: long|short, evidence:[SRC ids]}</code></li>
+      <li><code>data_gaps[]</code>, <code>evidence_ledger[]</code>, <code>analysis</code></li>
+      <li><code>falsifier</code> — single primary observable thesis-breaker; required for directional, null for no_call</li>
+      <li><code>opened_prior_reports[]</code>: <code>list[str]</code> of <code>report_id</code> values matching §6 <code>prior_report_row.report_id</code></li>
+    </ul>
+  </div>
+
+  <div class="panel accent">
+    <h3>Shape locks</h3>
+    <ul>
+      <li><code>evidence_ledger[]</code> shape: <code>{metric, value, source, source_id}</code> (same shape reused by learner per §8)</li>
+      <li><code>no_call</code> has two valid paths: <strong>Balanced</strong> = ≥1 grounded long + ≥1 grounded short driver; <strong>Missing-data</strong> = data_gaps[] non-empty + analysis explains</li>
+      <li>Invalid directional calls fail validation/retry — validator must NOT silently convert to no_call</li>
+    </ul>
+  </div>
+
+  <details>
+    <summary>Orchestrator-stamped fields + scoring relationship</summary>
+    <ul>
+      <li><strong>Orchestrator-stamped:</strong> schema_version, ticker, quarter_label, predicted_at, model_version, prompt_version, sdk_session_id (nullable), pit_mode, prediction_delay_sec (live-only), confidence_bucket, magnitude_bucket</li>
+      <li><strong>No LLM point estimate:</strong> scorer derives midpoint from <code>expected_move_range_pct</code></li>
+      <li><code>analysis</code> = concise canonical thesis: bull case, bear case, final rationale</li>
+    </ul>
+  </details>
+</section>
+
+<!-- ===== 8. LEARNER SCHEMA ===== -->
+<section class="step" data-step="8">
+  <span class="tag">Schema</span>
+  <h1><code>learner_result.v1</code> — causal attribution, not lessons. <span class="src">Final.md §8</span></h1>
+  <p class="lead">Canonical artifact: <code>learning/result.json</code>. The learner writes causal attribution, not managed lesson-lifecycle state.</p>
+
+  <div class="panel">
+    <h3>LLM-authored fields</h3>
+    <ul>
+      <li><code>evidence_ledger[]</code>, <code>primary_driver</code>, <code>contributing_factors[]</code></li>
+      <li><code>feedback{prediction_vs_actual, why, what_worked, what_failed}</code></li>
+      <li><code>key_takeaway</code> — exactly one descriptive sentence for prior-report rows</li>
+      <li><code>future_checklist[]</code> — prediction-time-checkable questions only</li>
+      <li><code>missing_inputs[]</code>, <code>data_sources_used[]</code></li>
+    </ul>
+  </div>
+
+  <div class="panel accent">
+    <h3>Shape rules</h3>
+    <ul>
+      <li><code>primary_driver</code>: <code>{driver, evidence:[evidence_ledger.source_id]}</code></li>
+      <li><code>contributing_factors[]</code>: <code>{factor, evidence:[evidence_ledger.source_id]}</code></li>
+      <li><code>feedback.what_worked[]</code> / <code>what_failed[]</code>: plain strings (cap ≤2 / ≤3)</li>
+      <li><code>feedback.prediction_vs_actual</code> + <code>feedback.why</code>: plain LLM-authored prose strings; no scorer-owned numbers</li>
+      <li><code>future_checklist[]</code>: list of plain strings; no fixed numeric cap</li>
+      <li><strong>Internal grounding:</strong> every primary_driver / contributing_factors evidence ref must resolve in learner's own <code>evidence_ledger[]</code> — no source → no claim</li>
+    </ul>
+  </div>
+
+  <div class="panel green">
+    <h3>Scorer-owned (NOT learner-authored)</h3>
+    <p>Graded numbers such as <code>direction_correct</code>, <code>magnitude_error</code>, <code>MSE</code>, <code>Brier</code>; plus derived fields such as <code>actual_direction</code> (per §18).</p>
+  </div>
+
+  <details>
+    <summary>Orchestrator-stamped + recovery</summary>
+    <ul>
+      <li><strong>Orchestrator-stamped:</strong> schema_version, ticker, quarter_label, filed_8k, accession_8k, attributed_at, model_version, sdk_session_id (nullable), pit_mode, pit_cutoff, pit_boundary_source, pit_boundary_event, actual_return_pct, context_bundle_ref, prediction_result_ref</li>
+      <li><strong>Recovery:</strong> existing valid target-schema <code>learning/result.json</code> is sufficient (post-cutover ongoing ops; §23 wipe is one-time)</li>
+    </ul>
+  </details>
+</section>
+
+<!-- ===== 9. PRIOR REPORTS CONTAINER ===== -->
+<section class="step" data-step="9">
+  <span class="tag red">G4 · Show-stopper</span>
+  <h1><code>prior_reports_context</code> — the bundle envelope. <span class="src">Final.md §6 / §11</span></h1>
+  <p class="lead">JSON envelope built by the orchestrator at bundle-assembly time and rendered into the predictor bundle per §11. Field names below are the contract — implementer must match exactly.</p>
+
+  <pre><span style="color:#94a3b8;">// container</span>
+prior_reports_context = {
+  "generated_at":                 "&lt;ISO8601&gt;",
+  "pit_cutoff":                   "&lt;ISO8601&gt;",
+  "target_ticker":                "&lt;str&gt;",
+  "target_quarter_label":         "&lt;str&gt;",
+  "forced_open_ids":              ["&lt;report_id&gt;", ...],
+  "_allowed_prior_report_paths":  ["&lt;learning/result.md path&gt;", ...],
+  "future_checklist":             ["&lt;question string&gt;", ...],
+  "own_reports":                  [&lt;prior_report_row&gt;, ...],
+  "peer_reports":                 [&lt;prior_report_row&gt;, ...]
+}
+
+<span style="color:#94a3b8;">// per-row</span>
+prior_report_row = {
+  "report_id":                  "&lt;str&gt;",
+  "ticker":                     "&lt;str&gt;",
+  "quarter_label":              "&lt;str&gt;",
+  "report_date":                "&lt;ISO8601&gt;",   <span style="color:#94a3b8;">// = filed_8k from §8</span>
+  "predicted_direction":        "&lt;enum per §7&gt;",
+  "expected_move_range_pct":    [low, high],
+  "actual_direction":           "&lt;enum&gt;",
+  "actual_return_pct":          &lt;signed float&gt;,
+  "direction_correct":          &lt;bool | null&gt;,   <span style="color:#94a3b8;">// null when no_call</span>
+  "key_takeaway":               "&lt;str, quoted from learner result&gt;",
+  "result_json_path":           "&lt;learning/result.json path&gt;",
+  "result_md_path":             "&lt;learning/result.md path&gt;"
+}</pre>
+
+  <div class="panel">
+    <h3>Visibility + ordering</h3>
+    <ul>
+      <li><strong>Visible:</strong> up to 12 own-ticker + up to 4 peer learner reports</li>
+      <li><strong>Forced opens:</strong> latest 4 own + ≤2 most-recent own misses (independent set; doesn't reorder <code>own_reports[]</code>)</li>
+      <li><strong>Ordering:</strong> <code>own_reports[]</code> recency-desc; <code>peer_reports[]</code> mkt_cap-desc; forced misses may appear anywhere in recency-desc list</li>
+      <li><strong>Peer universe:</strong> same Neo4j Industry via <code>BELONGS_TO</code>, mkt_cap-ranked; never LLM-selected, never widened to sector (except §21 D4 ≤2-company fallback approved only for §20)</li>
+      <li><strong>Optional opens after forced:</strong> older own + up to 3 peer reports by predictor's own judgment of summary-row relevance</li>
+      <li><strong>PIT selection:</strong> include only when <code>learner_result.pit_cutoff &lt;= predictor.pit_cutoff</code>; always exclude the current event's own learner report</li>
+    </ul>
+  </div>
+
+  <div class="panel accent">
+    <h3>Per-row bullet rendering (§6) — Section 10 in the bundle</h3>
+    <p>Render Section 10 as a bulleted list per report, NOT a table. Each report bullet shows:</p>
+    <ul>
+      <li>Ticker + Quarter + Date</li>
+      <li><code>predicted_direction</code> vs <code>actual_direction</code> + <code>direction_correct</code>/miss + <code>actual_return_pct</code></li>
+      <li>Quoted <code>key_takeaway</code> from learner result</li>
+      <li>Link to allowlisted <code>learning/result.md</code></li>
+    </ul>
+    <p>Do NOT render tags, lesson labels, or audit history. Machine source is <code>learning/result.json</code>; <code>result.md</code> is read-only prose for the predictor — if missing, regenerate from JSON, never parse markdown as source truth.</p>
+  </div>
+
+  <div class="panel amber">
+    <h3>Miss definition (excludes no_call)</h3>
+    <p><strong>Miss</strong> = directional call (long or short) with <code>direction_correct == false</code>. <strong><code>no_call</code> is NOT a miss</strong>. Miss-priority forced opens are own-ticker only — peer reports never enter the miss-priority set.</p>
+  </div>
+
+  <details>
+    <summary>Validator + allowlist contract</summary>
+    <ul>
+      <li>Validator enforces: every <code>opened_prior_reports[i]</code> ID maps to a row whose <code>result_md_path</code> is in <code>_allowed_prior_report_paths</code>; every <code>forced_open_ids[i]</code> in bundle MUST appear in <code>opened_prior_reports[]</code></li>
+      <li>Peer opens ≤3, no duplicates, no current-event self-leak</li>
+      <li><code>_allowed_prior_report_paths</code> is per §17 rename from <code>_allowed_learner_paths</code></li>
+    </ul>
+  </details>
+</section>
+
+<!-- ===== 10. SECTION AUDIT ===== -->
+<section class="step" data-step="10">
+  <span class="tag red">G6 · Show-stopper</span>
+  <h1>Section audit + predictor methodology. <span class="src">Final.md §16</span></h1>
+  <p class="lead">Bundle exposes a top-level allowlist of section names that ARE auditable. SKILL audits exactly that set — never hardcoded section numbers.</p>
+
+  <div class="panel accent">
+    <h3>Section audit scope (G6)</h3>
+    <ul>
+      <li>Bundle exposes top-level <code>section_audit_scope[]</code> containing current-event factual section names</li>
+      <li>SKILL audits exactly that set, NOT hard-coded section numbers</li>
+      <li>Excludes <code>prior_reports_context</code> / checklist memory and any future memory-class section</li>
+      <li>Orchestrator/builder populates at bundle-assembly time</li>
+    </ul>
+  </div>
+
+  <div class="panel">
+    <h3>Predictor analytical spine (§16)</h3>
+    <ol>
+      <li>Read the full bundle</li>
+      <li>Write section audit scoped per <code>section_audit_scope[]</code></li>
+      <li>Open/read §6 prior reports per forced/optional rules; engage relevant §12 checklist questions; record <code>opened_prior_reports[]</code></li>
+      <li>Extract key numbers + surprise quality</li>
+      <li>Answer existing Phase-2 questions (preserved verbatim from current SKILL)</li>
+      <li>Stress-test long vs short</li>
+      <li>Make the call (or no_call)</li>
+    </ol>
+  </div>
+
+  <div class="panel accent">
+    <h3>Market-grading lens (bounded loop)</h3>
+    <ul>
+      <li>Form a candidate lens → test against allowed bundle/live signals, prior own reports, peer reactions, analyst/management emphasis, price setup, surprise math</li>
+      <li>Revise until the lens stops changing materially, or live SLA forces a call</li>
+      <li>Then rank signals against the lens</li>
+      <li>Derive the lens per print; NEVER hardcode metric maps or examples</li>
+    </ul>
+  </div>
+
+  <div class="panel">
+    <h3>Stress-test elements</h3>
+    <p>What's new · what's priced in · what's material · strongest counter-case · top drivers.</p>
+    <p>If evidence is thin, conflicting, or missing → lower confidence, widen range, use <code>data_gaps</code>, or choose <code>no_call</code>. Never invent a sector metric.</p>
+  </div>
+
+  <div class="panel green">
+    <h3>Mode + source discipline</h3>
+    <ul>
+      <li><strong>Historical:</strong> must NOT use post-cutoff transcript/Q&amp;A or other hindsight evidence</li>
+      <li><strong>Live:</strong> may use live evidence within §1.2 / §2.1 urgency rules</li>
+      <li>Current-bundle peer reactions MAY inform the lens; prior learner reports provide context within §6/§9 only and NEVER replace current-event evidence</li>
+      <li>Output only through §7 schema + §1.3.3 reasoning sidecar — no new predictor fields or semantic validators</li>
+    </ul>
+  </div>
+
+  <details>
+    <summary>Why the data-driven section audit matters</summary>
+    <p>The renderer's section numbering changes when sections are added/removed/reordered. Hardcoding "audit §2-§9" in the SKILL prompt would silently break the moment the bundle structure shifts. The allowlist approach is rename-resilient: when a new factual section is added to the bundle, the orchestrator includes its name in <code>section_audit_scope[]</code>; the SKILL automatically picks it up. Memory-class sections (Prior Reports, Standing Checklist) are absent from the list by design.</p>
+  </details>
+</section>
+
+<!-- ===== 11. STANDING CHECKLIST ===== -->
+<section class="step" data-step="11">
+  <span class="tag">Methodology</span>
+  <h1>Standing checklist — one rolling list, rewritten whole. <span class="src">Final.md §12</span></h1>
+  <p class="lead">The learner's <code>future_checklist[]</code> is the one rolling own-ticker checklist; it lives only inside the latest eligible own learner result. The orchestrator surfaces it forward into the next predictor's bundle.</p>
+
+  <div class="panel">
+    <h3>Loop contract</h3>
+    <ul>
+      <li>Stored only inside the latest eligible own learner result — orchestrator surfaces it forward</li>
+      <li>Learner rewrites <code>future_checklist[]</code> WHOLE each cycle, consolidating from the same PIT-visible own-ticker prior-report window §6/§11 already surfaces</li>
+      <li>Predictor engages relevant items inside <code>analysis</code> prose; dismisses irrelevant items in one line</li>
+      <li>No separate store, IDs, lineage, source links, scores, labels, keep/drop state, <code>checklist_review[]</code></li>
+      <li>No peer/industry merging, no stored cross-report synthesis, no per-company "what works" profile</li>
+    </ul>
+  </div>
+
+  <div class="panel accent">
+    <h3>Anti-forgetting + length policy</h3>
+    <ul>
+      <li><strong>Anti-forgetting:</strong> keep durable recurring-conditional questions even when the condition is absent this quarter; remove only items that are generic, stale, redundant, or one-off — NOT items whose recurring condition was simply absent this cycle</li>
+      <li><strong>Length policy:</strong> no fixed numeric cap; interrogative questions only (not directives or answers); ticker-specific; concise; prediction-time-checkable from the predictor's allowed bundle</li>
+      <li><strong>Never substitutes</strong> for §10's current-event/current-bundle evidence requirement — checklist items focus attention only</li>
+    </ul>
+  </div>
+
+  <details>
+    <summary>D8 output rule + learner edge-mining funnel</summary>
+    <ul>
+      <li><strong>D8 output rule:</strong> a surviving edge enters <code>future_checklist[]</code> only as a prediction-time-checkable question answerable from the next predictor's allowed bundle. Post-event-only insight with no predictor-visible proxy is omitted, or kept as a non-evidence company-history caution — never as evidence.</li>
+      <li><strong>Edge-mining funnel:</strong> (1) isolate from §15 the part the predictor got wrong; (2) knowable-test (was a signal derivable from info the predictor was allowed to use?); (3) attack the survivor (would it have changed/strengthened the call? repeatable? answerable next time?)</li>
+    </ul>
+  </details>
+</section>
+
+<!-- ===== 12. WHOLE-MOVE ATTRIBUTION ===== -->
+<section class="step" data-step="12">
+  <span class="tag">Methodology</span>
+  <h1>Whole-move attribution — explain the move, not just the earnings story. <span class="src">Final.md §15</span></h1>
+  <p class="lead">The learner must explain the entire stock move. Cause families are prompt lenses only — never schema enums or fields.</p>
+
+  <div class="panel">
+    <h3>Cause lenses (prompt-only)</h3>
+    <p>Fundamentals · guidance · one-time/cosmetic · positioning/expectations · macro/sector · peer read-through · analyst/news · flow/technical · unexplained residual.</p>
+  </div>
+
+  <div class="panel accent">
+    <h3>Attribution loop (bounded)</h3>
+    <ul>
+      <li>Hypothesize drivers → test whether they explain the move's sign and magnitude</li>
+      <li>Return to evidence for contributors/offsets when a gap remains</li>
+      <li>Stop when the explanation stops changing materially</li>
+      <li>Only the genuine sourced remainder becomes <code>unexplained residual</code> (in <code>feedback.why</code>)</li>
+      <li>Never invent a cause or residual percentage</li>
+      <li><strong>Residual → future_checklist</strong> only when the next predictor's bundle will contain data that can detect the same cause (§12 D8); otherwise leave as residual</li>
+    </ul>
+  </div>
+
+  <div class="panel green">
+    <h3>Falsifier check</h3>
+    <p>Explicitly verify whether the prediction's stated <code>falsifier</code> (§7) was triggered by the realized move. Record the answer in <code>feedback.what_failed[]</code> (fired) or <code>feedback.why</code> (did not fire or not applicable). No new schema field.</p>
+  </div>
+
+  <details>
+    <summary>Workflow ordering (§12)</summary>
+    <p>Read prediction, bundle, prior reports + carried standing checklist, and actual return; scan the bundle to fix the observability boundary (what the predictor could see); fetch post-event evidence; explain the whole stock move (§15); compare prediction thesis and falsifier vs actual outcome; write attribution, key_takeaway, and rewrite the rolling <code>future_checklist</code>.</p>
+  </details>
+</section>
+
+<!-- ===== 13. EVIDENCE GROUNDING ===== -->
+<section class="step" data-step="13">
+  <span class="tag">Rule</span>
+  <h1>Evidence grounding — anchor every call. <span class="src">Final.md §10 / §9</span></h1>
+  <p class="lead">Directional calls require at least one supporting current-event / current-bundle evidence ID. Prior reports, checklist items, falsifier, and data_gaps never count.</p>
+
+  <div class="panel">
+    <h3>Historical mode</h3>
+    <ul>
+      <li>Every <code>evidence_ledger[].source_id</code> must resolve in the PIT-safe bundle catalog</li>
+      <li>Every <code>key_drivers[].evidence[]</code> ID must resolve in the same catalog</li>
+      <li>Key driver prose stays free-form — no semantic validator</li>
+      <li>No numeric evidence floor beyond the current-event anchor</li>
+    </ul>
+  </div>
+
+  <div class="panel amber">
+    <h3>Live mode (currently weaker)</h3>
+    <p>Defer <code>SRC:LIVE:*</code> runtime catalog. Until built, live-only facts in <code>evidence_ledger[]</code> or <code>key_drivers[].evidence[]</code> may carry provider/source detail but do not get strict runtime-ID validation. Per §21 D13, design a minimal grounding mechanism without restricting what live can fetch.</p>
+  </div>
+
+  <details>
+    <summary>Future numeric floor + learner asymmetry</summary>
+    <ul>
+      <li>If a numeric floor is later added: count unit = distinct resolving SRC IDs across supporting key_drivers</li>
+      <li><strong>Learner grounding is INTERNAL:</strong> every primary_driver/contributing_factors evidence ref must resolve in the learner's own <code>evidence_ledger[]</code> (which may include post-event sources). §10's bundle-catalog grounding is predictor-only.</li>
+    </ul>
+  </details>
+</section>
+
+<!-- ===== 14. FIELD BOUNDARIES + PARALLELISM ===== -->
+<section class="step" data-step="14">
+  <span class="tag">Boundaries</span>
+  <h1>Gap / failure fields are disjoint. Sub-agents fan out. <span class="src">Final.md §13 / §14</span></h1>
+  <p class="lead">Three semantically distinct fields hold the three failure-modes; never copy across them. Live tools may run in parallel under TMUX with no batching trick required.</p>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>Predictor <code>data_gaps[]</code></h3>
+      <p>Material pre-outcome inputs unavailable to predictor. Shape <code>[{gap}]</code>. Required only for missing-data no_call. Never evidence.</p>
+    </div>
+    <div class="col">
+      <h3>Learner <code>missing_inputs[]</code></h3>
+      <p>Post-outcome evidence unavailable to learner. Shape <code>[{input}]</code>. NOT copied from predictor data_gaps. Never evidence.</p>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Learner <code>feedback.what_failed[]</code></h3>
+    <p>Available-to-predictor information that predictor ignored, misread, or under/over-weighted. Cap ≤3. Evidence-grounded via learner ledger refs.</p>
+    <p class="small"><strong>These three fields are disjoint.</strong></p>
+  </div>
+
+  <div class="panel accent">
+    <h3>DataSubAgent / Parallelism (§13)</h3>
+    <ul>
+      <li>DataSubAgents require top-level embed/TMUX context — forked predictor skill cannot use them</li>
+      <li>Spawn independent, self-contained tasks without waiting; one spawn per turn (~1s apart) is expected — still runs concurrently</li>
+      <li>Single-message batching is NOT the lever and is not achievable by instruction</li>
+      <li>Live allowed research set: existing DataSubAgent families + live direct tools when needed (WebFetch/WebSearch, Neo4j read, IBKR market data)</li>
+      <li>Live tools are read/query/fetch only; never mutate Neo4j, orders, or disk outside explicit output paths</li>
+      <li>No numeric live tool-call cap; the live SLA is the hard governor</li>
+      <li>Live mode: include a startup smoke check before DataSubAgent-dependent runs (per tmux-transport-handoff.md)</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===== 15. PEER-EARNINGS WINDOW ===== -->
+<section class="step" data-step="15">
+  <span class="tag">Builder</span>
+  <h1>Peer-earnings window — use <code>prev_8k_ts</code>. <span class="src">Final.md §20</span></h1>
+  <p class="lead">For the peer earnings snapshot, use this ticker's previous Item 2.02 8-K timestamp as the window start, ending at predictor <code>pit_cutoff</code>.</p>
+
+  <div class="panel">
+    <h3>Implementation target</h3>
+    <ul>
+      <li>In <code>scripts/earnings/builders/adapters.py::build_peer_earnings_snapshot</code>: pass <code>window_start=quarter_info.get("prev_8k_ts")</code> into <code>scripts/earnings/builders/peer_earnings_snapshot.py</code></li>
+      <li>If <code>prev_8k_ts</code> is missing, keep the existing 45d fallback</li>
+      <li>Adapter passes <code>prev_8k_ts</code> (or None) verbatim; builder owns the 45d default</li>
+      <li>Keep existing query: same-industry peer universe, mkt-cap ranking, self-exclusion, Item 2.02 filter, <code>&lt; pit_cutoff</code> PIT gate</li>
+    </ul>
+  </div>
+
+  <div class="panel amber">
+    <h3>D4 — peer-starved exception (§21)</h3>
+    <p>When the same-industry peer universe has ≤2 companies, <strong>§20 peer-earnings snapshot</strong> uses a deterministic PIT-safe size-band/sector fallback (USER-APPROVED). Bounded ≤2 exception only. <strong>NOT applied to §6 peer learner reports</strong> (which follow §6's "show fewer" rule). Primary path stays same-industry, mkt-cap-ranked. Never LLM-selected.</p>
+  </div>
+</section>
+
+<!-- ===== 16. EV1 SCORER ===== -->
+<section class="step" data-step="16">
+  <span class="tag red">G5 · Show-stopper</span>
+  <h1>EV1 scorer — deterministic code, never LLM. <span class="src">Final.md §18</span></h1>
+  <p class="lead">New module that grades each prediction post-outcome. Deterministic, idempotent, overwrite-safe.</p>
+
+  <div class="panel">
+    <h3>Module + trigger</h3>
+    <ul>
+      <li><strong>Location:</strong> <code>scripts/earnings/scoring/ev1.py</code> (new)</li>
+      <li><strong>Trigger:</strong> just after <code>learning/complete.json</code> is written for that event (analogous to learner's just-in-time trigger per §22)</li>
+      <li><strong>Inputs:</strong> <code>prediction/result.json</code> + <code>learning/result.json::actual_return_pct</code> + scorer version/config</li>
+      <li><strong>Idempotency:</strong> byte-identical output for same inputs. If <code>actual_return_pct</code> is later corrected upstream (data revision), scorer recomputes — overwrites are safe.</li>
+    </ul>
+  </div>
+
+  <div class="panel accent">
+    <h3>Artifacts</h3>
+    <ul>
+      <li><strong>Per-event:</strong> <code>earnings-analysis/Companies/&lt;T&gt;/events/&lt;Q&gt;/scoring/result.json</code></li>
+      <li><strong>Rolling aggregate:</strong> <code>earnings-analysis/scoring/ev1_aggregate.json</code> — recomputed deterministically from per-event scores</li>
+      <li>Writes are atomic and overwrite-safe; outputs are code-owned, never LLM-authored</li>
+    </ul>
+  </div>
+
+  <div class="panel">
+    <h3>Math</h3>
+    <ul>
+      <li><strong>Direction score:</strong> compute <code>direction_correct</code> from predicted direction vs signed actual return</li>
+      <li><strong><code>actual_direction</code></strong> derived: <code>long</code> if return &gt;0, <code>short</code> if &lt;0, <code>flat</code> if =0</li>
+      <li><strong><code>direction_correct</code> is null</strong> when <code>direction == no_call</code>; otherwise <code>(direction == actual_direction)</code></li>
+      <li><strong>Magnitude:</strong> signed predicted midpoint = sign(direction) × midpoint(<code>expected_move_range_pct</code>); compare to signed actual return for signed error + MSE</li>
+      <li><strong>Calibration:</strong> Brier from raw <code>confidence_score</code> vs <code>direction_correct</code></li>
+    </ul>
+  </div>
+
+  <details>
+    <summary>Aggregates + replay set</summary>
+    <ul>
+      <li>Aggregates: hit rate by direction, mean signed error/bias, MSE, Brier, calibration by bucket, ticker, quarter, replay suite</li>
+      <li><strong>Buckets are grouping/display only</strong> — all math uses raw values, never bucket labels</li>
+      <li><code>no_call</code> tracked separately from directional calls — operational timeouts excluded from accuracy/calibration/MSE/Brier</li>
+      <li>Use a frozen representative + edge replay set; do not re-pick after seeing results</li>
+      <li>Trade P&amp;L / executioner outcomes are downstream analytics only — never flow back into predictor-readable context</li>
+    </ul>
+  </details>
+</section>
+
+<!-- ===== 17. LESSON TEARDOWN ===== -->
+<section class="step" data-step="17">
+  <span class="tag amber">Teardown</span>
+  <h1>Lesson-era surfaces — grep and remove. <span class="src">Final.md §17</span></h1>
+  <p class="lead">The §17 teardown list is not exhaustive. Implementation must grep <code>scripts/earnings</code> + relevant skills for all lesson-era symbols and remove or rewrite to the §6/§8/§11/§12 targets.</p>
+
+  <div class="panel danger">
+    <h3>Grep search terms (in scope: <code>scripts/earnings</code> + skills)</h3>
+    <p><code>lesson</code> · <code>lessons</code> · <code>learnings</code> · <code>lesson_audit</code> · <code>predictor_lessons</code> · <code>data_lessons</code> · <code>global_observations</code> · <code>#S10.lesson</code> · <code>_allowed_learner_paths</code> · <code>learner_result:</code></p>
+    <p>Do not preserve hidden lesson lifecycle surfaces.</p>
+  </div>
+
+  <div class="panel">
+    <h3>Lesson-era code anchors to rewrite or remove <span class="badge badge-rewrite">Rewrite</span></h3>
+    <ul>
+      <li><code>earnings_orchestrator.py</code> — <code>_decorate_with_learner_paths</code>, <code>build_learning_context</code>, <code>append_ticker_lesson</code>, <code>append_global_lessons</code>, <code>aggregate_lesson_audits</code>, <code>_validate_audit_against_prediction</code></li>
+      <li><code>scripts/earnings/validate_learning.py</code> — rewrite from lesson lifecycle schema to <code>learner_result.v1</code></li>
+      <li><code>scripts/earnings/renderer/bundle.py</code> + <code>scripts/earnings/renderer/lessons.py</code> — replace lesson Section 10 with prior learner reports</li>
+      <li><code>scripts/earnings/result_md_renderer.py</code> — rewrite per §19 heading order</li>
+    </ul>
+  </div>
+
+  <div class="panel">
+    <h3>Orchestrator core anchors (preserve names, change behavior) <span class="badge badge-rewrite">Rewrite</span></h3>
+    <p>Inside <code>scripts/earnings/earnings_orchestrator.py</code>:</p>
+    <ul>
+      <li><code>build_prediction_bundle</code>, <code>run_core_flow</code>, <code>get_prediction_paths</code>, <code>build_evidence_source_catalog</code>, <code>validate_prediction_result</code>, <code>finalize_prediction_result</code></li>
+      <li><code>_resolve_pit_mode</code>, <code>_build_predictor_prompt</code>, <code>_build_learner_prompt</code></li>
+      <li><code>_run_predictor_via_sdk</code>, <code>run_predictor_via_sdk</code>, <code>_run_learner_via_sdk</code></li>
+      <li>Predictor skill path const <code>_PREDICTOR_SKILL_PATH</code></li>
+    </ul>
+  </div>
+
+  <div class="panel">
+    <h3>Guidance extraction anchors (transport-only, §4) <span class="badge badge-rewrite">Rewrite</span></h3>
+    <ul>
+      <li><code>scripts/extraction_worker.py</code> — SDK entrypoint (SDK→TMUX change point); refactor for ALL extraction job types the worker handles, not guidance-only</li>
+      <li><code>scripts/guidance_trigger_daemon.py</code> — trigger; <code>scripts/harvest_guidance_sessions.py</code> — harvest</li>
+      <li><code>.claude/skills/guidance-inventory</code> — extraction contract (preserve)</li>
+    </ul>
+  </div>
+
+  <div class="panel">
+    <h3>New files <span class="badge badge-new">New</span></h3>
+    <ul>
+      <li><code>.claude/hooks/earnings_pit_fence.py</code> — historical predictor PreToolUse hook (§1.1.2)</li>
+      <li><code>scripts/earnings/scoring/ev1.py</code> — EV1 scorer module (§18)</li>
+      <li><code>scripts/claude_rate_gate.py</code> — shared usage gate (§5.1)</li>
+    </ul>
+  </div>
+
+  <div class="panel green">
+    <h3>Preserve as-is <span class="badge badge-keep">Keep</span></h3>
+    <ul>
+      <li><code>.claude/hooks/pit_gate.py</code> — DataSubAgent PostToolUse output PIT validator; separate concern from §1.1.2 PreToolUse runner fence</li>
+      <li>Context builders under <code>scripts/earnings/builders/</code> — keep layer; add prior_reports_context sequentially after the 7 parallel builders (§11)</li>
+      <li>TMUX transport: implementation anchors live in <code>.claude/plans/tmux-transport-handoff.md</code> — do not duplicate</li>
+    </ul>
+  </div>
+
+  <div class="panel accent">
+    <h3>Renames (per §11)</h3>
+    <ul>
+      <li><code>#S10.lesson.L&lt;n&gt;</code> → <code>#S10.report.R&lt;n&gt;</code> (locator IDs; not directional evidence)</li>
+      <li><code>_allowed_learner_paths</code> → <code>_allowed_prior_report_paths</code></li>
+      <li>Rendered <code>learner_result:</code> labels become prior-report links</li>
+      <li>Discovery source for prior reports: filesystem glob <code>earnings-analysis/Companies/*/events/*/learning/result.json</code> — NOT <code>run_ledger</code> (operational bookkeeping, not artifact source truth)</li>
+    </ul>
+  </div>
+
+  <details>
+    <summary>Migration safety gates</summary>
+    <ol>
+      <li><strong>Byte-identical pre/post snapshot</strong> of builder + renderer outputs — sections marked unchanged in this design must produce identical bytes</li>
+      <li><strong>Scoped grep</strong> for lesson-era surfaces (search terms above) — must return ZERO matches within <code>scripts/earnings</code> + skills</li>
+      <li><strong>Stop-on-red.</strong> Never weaken assertions to make tests pass.</li>
+    </ol>
+  </details>
+</section>
+
+<!-- ===== 18. RENDERER + ARTIFACTS ===== -->
+<section class="step" data-step="18">
+  <span class="tag">Renderer</span>
+  <h1>Result markdown — locked heading order. <span class="src">Final.md §19</span></h1>
+  <p class="lead">JSON is canonical and machine-readable; <code>result.md</code> is renderer output from <code>result.json</code>. Code never parses markdown for machine state.</p>
+
+  <div class="panel">
+    <h3>Learner <code>result.md</code> heading order (all 8 always present)</h3>
+    <ol>
+      <li><code>## Header</code></li>
+      <li><code>## Actual Returns</code></li>
+      <li><code>## Primary Driver</code></li>
+      <li><code>## Contributing Factors</code></li>
+      <li><code>## Feedback</code> &nbsp;<span class="small">(renders <code>missing_inputs[]</code> here)</span></li>
+      <li><code>## Key Takeaway</code></li>
+      <li><code>## Future Checklist</code></li>
+      <li><code>## Evidence Ledger</code> &nbsp;<span class="small">(renders <code>data_sources_used[]</code> here)</span></li>
+    </ol>
+    <p>Learner <code>result.md</code> has no Section Audit.</p>
+  </div>
+
+  <div class="panel accent">
+    <h3>Artifact contract (§19)</h3>
+    <ul>
+      <li><strong>Per event root:</strong> <code>context_bundle.json</code> + <code>context_bundle_rendered.txt</code></li>
+      <li><strong>Prediction:</strong> <code>prediction/result.json</code>, <code>result.md</code>, <code>section_audit.json</code>, optional <code>reasoning.md</code></li>
+      <li><strong>Learner:</strong> <code>learning/result.json</code>, <code>result.md</code>, optional <code>reasoning.md</code></li>
+      <li><strong>Scoring (NEW):</strong> per-event <code>scoring/result.json</code> + rolling <code>earnings-analysis/scoring/ev1_aggregate.json</code></li>
+      <li>If <code>result.md</code> is missing, regenerate from <code>result.json</code>. Never parse markdown as source truth.</li>
+      <li><code>reasoning.md</code> is audit-only, never canonical, never parsed for scoring/learning, and missing reasoning does not fail the run</li>
+    </ul>
+  </div>
+
+  <details>
+    <summary>Lesson stores + obsolete dirs</summary>
+    <ul>
+      <li><strong>Delete/stop writing:</strong> <code>earnings-analysis/learnings/ticker/*.json</code>, <code>earnings-analysis/learnings/global.json</code>, global locks, ticker/global lesson appends, lesson audit aggregation</li>
+      <li><code>experiments/</code> (baseline <code>prediction_no_lessons</code>) is obsolete — stop writing; never read for machine state</li>
+    </ul>
+  </details>
+</section>
+
+<!-- ===== 19. §22 EXECUTION ARCHITECTURE ===== -->
+<section class="step" data-step="19">
+  <span class="tag amber">Phase 2 · Deferred</span>
+  <h1>Execution architecture — trigger → Redis → worker. <span class="src">Final.md §22</span></h1>
+  <p class="lead">Conceptually locked but operationally deferred. <strong>Sequence: §§1-21 first, then this §22.</strong> Do NOT start the daemon/worker until §§1-21 are wired and tested.</p>
+
+  <div class="panel">
+    <h3>Topology</h3>
+    <ul>
+      <li>Separate <code>earnings-trigger</code> daemon (long-running) → Redis <code>earnings:pipeline</code> list (with leases) → thin <code>earnings-worker</code> that BRPOPs and invokes <code>earnings_orchestrator.py</code> per job</li>
+      <li>Worker owns nothing semantic; orchestrator owns bundle/prediction/learner dispatch via TMUX transport (§5)</li>
+      <li>Reference: <code>.claude/plans/EarningsTrigger.md</code> — adapted to TMUX transport + new <code>prior_reports_context</code> / <code>learner_result.v1</code> artifacts; scrub lesson-era vocabulary</li>
+    </ul>
+  </div>
+
+  <div class="panel accent">
+    <h3>Completion truth</h3>
+    <ul>
+      <li>A component is complete only when BOTH <code>result.json</code> validates AND <code>complete.json</code> sentinel exists</li>
+      <li><code>result.json</code> alone is not completion truth under retries; sentinel alone is not completion truth because it would mask a missing/corrupt <code>result.json</code></li>
+      <li>Sentinel scope = prediction + learning ONLY; guidance completion truth lives in Neo4j <code>guidance_status='completed'</code></li>
+    </ul>
+  </div>
+
+  <div class="panel">
+    <h3>Triggers + gates</h3>
+    <ul>
+      <li><strong>Mode-asymmetric guidance gate:</strong> historical prediction is hard-gated on same-quarter Neo4j <code>guidance_status='completed'</code>; live not gated → missing guidance surfaces as <code>data_gaps[]</code>. Brand-new live tickers are not forced through silent historical backfill.</li>
+      <li><strong>Warm-start anchor:</strong> earliest earnings 8-K whose <code>filed_8k</code> timestamp has at least one usable PIT-visible prior 10-Q or 10-K. If none, trigger emits <code>SKIP no_warm_start_anchor</code> and does not enqueue.</li>
+      <li><strong>Learner trigger:</strong> just-in-time before the next prediction for that ticker; NO scheduled cron. If a new prediction is about to start AND no learner ran since the prior outcome became knowable, the trigger fires the learner first.</li>
+      <li><strong>EV1 scorer trigger:</strong> fires just after <code>learning/complete.json</code> is written.</li>
+    </ul>
+  </div>
+
+  <details>
+    <summary>Retry/recovery invariants</summary>
+    <p>Worker retries must not corrupt Neo4j <code>guidance_status</code>, the run-ledger, or <code>prediction/learning</code> sentinels. Sentinel writes are atomic and idempotent.</p>
+  </details>
+</section>
+
+<!-- ===== 20. §23 CUTOVER WIPE ===== -->
+<section class="step" data-step="20">
+  <span class="tag red">Phase 3 · Destructive</span>
+  <h1>Cutover wipe — one-time, irreversible. <span class="src">Final.md §23</span></h1>
+  <p class="lead">The last migration step. Tar everything first, verify KEEP-list assertions, then wipe.</p>
+
+  <div class="panel danger">
+    <h3>WIPE</h3>
+    <ul>
+      <li><strong>Per-event artifacts</strong> (inside each <code>events/&lt;Q&gt;/</code> dir): <code>context_bundle.json</code>, <code>context_bundle_rendered.txt</code>, <code>related_filings/</code>, <code>prediction/</code>, <code>learning/</code></li>
+      <li><strong>Legacy lesson stores:</strong> <code>earnings-analysis/learnings/ticker/*.json</code>, <code>earnings-analysis/learnings/global.json</code>, <code>earnings-analysis/learnings/global.lock</code></li>
+      <li><strong>Granularity:</strong> file-level inside each per-event directory; do NOT delete the per-event directory shells themselves (preserved per KEEP list)</li>
+    </ul>
+  </div>
+
+  <div class="panel green">
+    <h3>KEEP</h3>
+    <ul>
+      <li><code>earnings-analysis/predictions.csv</code></li>
+      <li><code>earnings-analysis/prediction_processed.csv</code></li>
+      <li><code>earnings-analysis/thinking/</code></li>
+      <li>Obsidian skeleton</li>
+      <li><code>earnings-analysis/Companies/&lt;T&gt;/events/&lt;Q&gt;/</code> directory skeletons</li>
+    </ul>
+  </div>
+
+  <div class="panel">
+    <h3>Safety gate</h3>
+    <p>Tar-insurance before any WIPE. Preservation assertions on the KEEP list are the gate; failure of any assertion aborts the wipe.</p>
+  </div>
+
+  <details>
+    <summary>Post-stabilization cleanup (deferred)</summary>
+    <p>After predictor/learner/orchestrator are coded and tested, and before EarningsTrigger production activation, revisit the §23 KEEP list plus Obsidian vault layout. These paths are not permanent architecture.</p>
+  </details>
+</section>
+
+<!-- ===== 21. §5.1 RATE LIMIT GATE ===== -->
+<section class="step" data-step="21">
+  <span class="tag">Cross-cutting</span>
+  <h1>Rate-limit gate — centralized + auto-failover. <span class="src">Final.md §5.1</span></h1>
+  <p class="lead">One shared usage-gate module for every Claude-consuming process. Dedicated subscription with full capacity by default; tiered fallback only when the dedicated subscription is exhausted.</p>
+
+  <div class="panel">
+    <h3>Centralize</h3>
+    <ul>
+      <li>ONE shared module (e.g., <code>scripts/claude_rate_gate.py</code>) used by guidance extraction, predictor, learner, earnings-worker, future workers</li>
+      <li>Trigger daemons enqueue only; the process about to start a Claude session (worker OR orchestrator) must call the shared gate</li>
+    </ul>
+  </div>
+
+  <div class="panel accent">
+    <h3>Subscription policy</h3>
+    <ul>
+      <li>Dedicated Claude subscription allocated to the project's automated jobs, separate from personal/interactive Claude use</li>
+      <li>Default for the dedicated subscription = FULL capacity (no daily reserve / no days-until-reset throttling)</li>
+    </ul>
+  </div>
+
+  <div class="panel amber">
+    <h3>Failover policy</h3>
+    <ul>
+      <li>If the dedicated subscription is exhausted, the shared gate <strong>automatically switches to another configured Claude subscription/account</strong> (no manual intervention)</li>
+      <li>On fallback, apply reserve/tier throttling to protect fallback capacity</li>
+    </ul>
+  </div>
+
+  <div class="panel green">
+    <h3>Account profiles</h3>
+    <ul>
+      <li>Each configured Claude subscription/account is an isolated Claude home containing its own <code>.claude/.credentials.json</code></li>
+      <li>The shared gate checks profile-scoped usage cache and launches both <code>claude_usage_fetch.py</code> and TMUX Claude sessions with <code>HOME=&lt;profile_home&gt;</code></li>
+      <li>Never mutate or symlink global <code>~/.claude/.credentials.json</code> at runtime; switching is per-process env only</li>
+    </ul>
+  </div>
+
+  <div class="panel">
+    <h3>Priority under constraint (tier order, highest → lowest)</h3>
+    <ol>
+      <li>Live prediction / current-event blockers</li>
+      <li>Just-in-time learner blocking the next prediction</li>
+      <li>Historical prediction/learning catch-up</li>
+      <li>Bulk guidance/backfill/future agents</li>
+    </ol>
+    <p class="small">Lower tiers pause first.</p>
+  </div>
+
+  <details>
+    <summary>Gate mechanics</summary>
+    <ul>
+      <li>Shared gate owns: usage cache refresh, pre-flight wait/sleep, in-flight rate-limit detection</li>
+      <li>Jobs paused or requeued for rate limits do NOT count as failures and do NOT burn retry budget</li>
+      <li>Implementation: refactor <code>scripts/extraction_worker.py</code> to use the shared module; new predictor/learner/earnings workers MUST import it (no duplication)</li>
+      <li>Under the dedicated subscription, set <code>DAILY_INTERACTIVE_PCT=0</code> and <code>DAILY_INTERACTIVE_PCT_SONNET=0</code></li>
+    </ul>
+  </details>
+</section>
+
+<!-- ===== 22. DEFERRED + FINAL SAFETY ===== -->
+<section class="step" data-step="22">
+  <span class="tag green">Last slide</span>
+  <h1>Deferred items + final safety gates. <span class="src">Final.md §21 / §17</span></h1>
+  <p class="lead">What's intentionally out of scope, and the two gates that protect every change you make.</p>
+
+  <div class="panel">
+    <h3>Deferred items (§21)</h3>
+    <ul>
+      <li><strong>D13 — live evidence grounding:</strong> <code>SRC:LIVE:*</code> runtime catalog deferred. Until built, live grounding is weaker per §10. Provenance only; never an access gate.</li>
+      <li><strong>D4 — peer-starved industries:</strong> ≤2-company size-band/sector fallback for §20 only; not for §6 peer learner reports.</li>
+      <li><strong>D21 — skill eval:</strong> run the official Anthropic skill-plugin eval on predictor + learner skills before production.</li>
+      <li><strong>Post-stabilization cleanup:</strong> after §§1-21 are tested and before §22 production activation, revisit the §23 KEEP list + Obsidian vault layout.</li>
+      <li><strong>Sector/macro DataSubAgents:</strong> future tracked task — live IBKR / historical Polygon(+Yahoo), PIT-safe per DataSubAgents.md, on-demand by predictor(live)/learner(any).</li>
+    </ul>
+  </div>
+
+  <div class="panel danger">
+    <h3>Migration safety gates (§17) — every subsystem change</h3>
+    <ol>
+      <li><strong>Byte-identical pre/post snapshot</strong> of builder + renderer outputs — sections marked unchanged in this design must produce identical bytes</li>
+      <li><strong>Scoped grep</strong> for lesson-era surfaces (search terms in §17) — must return ZERO matches within <code>scripts/earnings</code> + skills</li>
+      <li><strong>Stop-on-red. Never weaken assertions to make tests pass.</strong></li>
+    </ol>
+  </div>
+
+  <div class="panel green">
+    <h3>You're ready when</h3>
+    <ul>
+      <li>§§1-21 wired + tests green (byte-identical oracle + zero grep matches)</li>
+      <li>§5.1 rate-limit gate centralized + dedicated subscription active</li>
+      <li>EV1 scorer producing per-event + aggregate artifacts</li>
+      <li>Then §22 (trigger/daemon/worker), then §23 (cutover wipe). In that order.</li>
+    </ul>
+  </div>
+
+  <details>
+    <summary>Where to find the source of truth</summary>
+    <p>Final.md is the locked design. This plan is the build map. FinalDoubts.md is the resolved-doubts log. EarningsTrigger.md is the §22 implementation source. tmux-transport-handoff.md is the §5 transport contract. ANTHROPIC_BILLING_SUBSCRIPTION_CRITICAL.md is the subscription/no-API rationale. Infrastructure.md L170 is the PreToolUse hook empirical validation reference.</p>
+  </details>
+</section>
+
+</main>
+
+<nav class="nav">
+  <button id="prev" type="button">◀ Prev</button>
+  <div class="pos" id="pos">1 / 22</div>
+  <button id="next" type="button">Next ▶</button>
+</nav>
+
+<script>
+(function() {
+  const steps = Array.from(document.querySelectorAll('.step'));
+  const total = steps.length;
+  const counter = document.getElementById('counter');
+  const pos = document.getElementById('pos');
+  const prev = document.getElementById('prev');
+  const next = document.getElementById('next');
+  const progress = document.getElementById('progress');
+  let cur = 1;
+
+  const pips = steps.map((_, i) => {
+    const pip = document.createElement('button');
+    pip.type = 'button';
+    pip.className = 'pip';
+    pip.title = 'Go to slide ' + (i + 1);
+    pip.addEventListener('click', () => { cur = i + 1; render(); });
+    progress.appendChild(pip);
+    return pip;
+  });
+
+  function render() {
+    steps.forEach((s, i) => s.classList.toggle('active', i + 1 === cur));
+    pips.forEach((p, i) => {
+      p.classList.toggle('done', i + 1 < cur);
+      p.classList.toggle('active', i + 1 === cur);
+    });
+    counter.textContent = cur + ' / ' + total;
+    pos.textContent = cur + ' / ' + total;
+    prev.disabled = (cur === 1);
+    next.disabled = (cur === total);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function go(delta) {
+    const n = cur + delta;
+    if (n < 1 || n > total) return;
+    cur = n;
+    render();
+  }
+
+  prev.addEventListener('click', () => go(-1));
+  next.addEventListener('click', () => go(1));
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); go(1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(-1); }
+    else if (e.key === 'Home') { e.preventDefault(); cur = 1; render(); }
+    else if (e.key === 'End') { e.preventDefault(); cur = total; render(); }
+  });
+
+  document.querySelectorAll('[data-goto]').forEach((el) => {
+    el.addEventListener('click', () => {
+      const n = Number(el.getAttribute('data-goto'));
+      if (Number.isInteger(n) && n >= 1 && n <= total) {
+        cur = n;
+        render();
+      }
+    });
+  });
+
+  render();
+})();
+</script>
+
+</body>
+</html>
