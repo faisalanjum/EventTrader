@@ -66,7 +66,7 @@
 
   main { max-width: 1120px; margin: 0 auto; padding: 64px 40px 220px; }
 
-  .step { display: none; }
+  .step { display: none; padding-bottom: 80px; }
   .step.active { display: block; animation: fadeIn 0.3s ease-out; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -178,24 +178,30 @@
   .pill.gray { background: var(--soft2); color: var(--muted); }
 
   .nav {
-    position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%);
-    background: white; border: 1.5px solid var(--line); border-radius: 999px;
-    padding: 10px 16px; display: flex; gap: 10px; align-items: center;
-    box-shadow: 0 14px 36px rgba(15,23,42,0.14);
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    background: rgba(255,255,255,0.78);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    border: 1px solid rgba(226,232,240,0.9);
+    border-radius: 999px;
+    padding: 6px 10px; display: flex; gap: 6px; align-items: center;
+    box-shadow: 0 6px 22px rgba(15,23,42,0.08);
     z-index: 60;
+    transition: opacity 0.2s, transform 0.2s;
   }
+  .nav:hover { background: rgba(255,255,255,0.96); }
   .nav button {
-    font: inherit; font-size: 18px; font-weight: 700;
+    font: inherit; font-size: 15px; font-weight: 700;
     background: transparent; color: var(--fg); border: 0;
-    padding: 8px 18px; border-radius: 999px; cursor: pointer;
+    padding: 6px 14px; border-radius: 999px; cursor: pointer;
   }
   .nav button:hover { background: var(--accent-soft); color: var(--accent); }
   .nav button:disabled { color: #cbd5e1; cursor: not-allowed; }
   .nav button:disabled:hover { background: transparent; }
-  .nav .sep { width: 1px; height: 22px; background: var(--line); }
+  .nav .sep { width: 1px; height: 18px; background: var(--line); }
   .nav .pos {
-    font-size: 18px; color: var(--muted); font-variant-numeric: tabular-nums;
-    min-width: 70px; text-align: center;
+    font-size: 15px; color: var(--muted); font-variant-numeric: tabular-nums;
+    min-width: 54px; text-align: center;
   }
 
   .toc-grid {
@@ -261,18 +267,19 @@
 
 <!-- ===== 1. TITLE ===== -->
 <section class="step active" data-step="1">
-  <span class="tag">Plan · v1</span>
+  <span class="tag">Plan · v2</span>
   <h1>From lesson-era code to the locked design.</h1>
-  <p class="lead">22 slides. Every high-and-medium-importance decision from Final.md, organized as an implementation sequence. White background, large type, click-to-expand details.</p>
+  <p class="lead">22 slides. Every high- and medium-importance decision from Final.md, organized as an implementation sequence. ASCII diagrams for the critical flows, progressive disclosure for the depth.</p>
 
   <div class="panel accent">
     <h3>How to read this</h3>
-    <ul>
-      <li><strong>Top-level bullets</strong> are the load-bearing rules an implementer must follow.</li>
-      <li><strong>Click any <code>Details</code> block</strong> for code anchors, edge cases, and cross-references.</li>
-      <li>Each slide title carries a <code>Final.md §X</code> chip — that's the source of truth.</li>
-      <li>File paths carry status badges showing what to do with them.</li>
-    </ul>
+    <ol>
+      <li><strong>Scan</strong>: each slide opens with 2-4 panels — the load-bearing rules.</li>
+      <li><strong>Trace flows</strong> via the ASCII diagrams (slides 4, 5, 12, 16, 19).</li>
+      <li><strong>Open <code>Details</code> blocks</strong> for code anchors, edge cases, and full spec.</li>
+      <li>Each slide carries a <code>Final.md §X</code> chip — the source of truth for that subsystem.</li>
+      <li>File paths carry status badges: what to <em>do</em> with each file.</li>
+    </ol>
   </div>
 
   <div class="legend" aria-label="Status badge legend">
@@ -400,6 +407,38 @@
   <h1>PIT fence — hook-enforced, env-marker-scoped. <span class="src">Final.md §1.1.2</span></h1>
   <p class="lead">Historical predictor runs in a forked Claude session that must be blind to anything beyond <code>pit_cutoff</code>. The fence is a project-level <strong>PreToolUse hook</strong>, gated by an environment marker the orchestrator sets only on the historical fork.</p>
 
+  <pre>                  Orchestrator decides session type
+                            │
+            ┌───────────────┴────────────────┐
+            ▼                                ▼
+   Historical fork                    Live / learner /
+   sets EARNINGS_PIT_FENCE=1          other sessions
+   on the child process               (marker UNSET)
+            │                                │
+            └────────────┬───────────────────┘
+                         ▼
+            Every tool call → PreToolUse hook fires
+                         │
+                  marker present?
+                         │
+           ┌─────────────┴──────────────┐
+          YES                           NO
+           │                            │
+           ▼                            ▼
+   Check tool + file_path        pass-through
+           │                       (no-op)
+   ┌───────┴────────────┐
+   ▼                    ▼
+ ALLOW                DENY
+ Read · Glob          Bash · WebFetch · WebSearch
+ Write/Edit to        all mcp__* (class matcher)
+ 4 paths only:        Write/Edit to anything else
+  prediction/         (learning/* · context_bundle*
+   section_audit.json  prior-reports paths · *.md)
+   result.json
+   reasoning.md
+   complete.json</pre>
+
   <div class="panel">
     <h3>Mechanism</h3>
     <ul>
@@ -469,42 +508,56 @@
   </div>
 
   <div class="panel amber">
-    <h3>Live wrapper essentials <span class="src">§1.2.1 / §1.2.3</span></h3>
-    <ul>
-      <li>Live predictor embeds the SKILL body, then appends wrapper instructions, allowed research guidance, and SLA controls</li>
-      <li>Live wrapper minimum: <code>PIT_MODE=live</code>, report-release timestamp, SLA/env values, live allowed research set (§2.1), no runner-enforced tool allowlist, required output paths, fail-closed <code>result.json</code> rule</li>
-      <li>Env controls: <code>LIVE_PREDICTOR_SLA_SECONDS</code> (300), <code>LIVE_PREDICTOR_NUDGE_INTERVAL_SECONDS</code> (60), <code>LIVE_PREDICTOR_GRACE_SECONDS</code> (30), <code>LIVE_PREDICTOR_SLA_MODE=hard|soft</code> (hard)</li>
-      <li>Env home: set on launching process; orchestrator reads via <code>os.environ</code>; k8s manifests mirror extraction-worker env pattern</li>
-      <li>Clock sources: <code>time_since_report_release</code> uses release timestamp from trigger metadata (Redis if present, else Neo4j); <code>elapsed_since_start_s</code> uses predictor TMUX session spawn time</li>
-      <li>Nudge format: <code>LIVE_TIME_UPDATE: time_since_report_release=&lt;…&gt;; price_change_since_report_release=&lt;…&gt;; elapsed_since_start_s=&lt;…&gt;; sla_seconds=&lt;…&gt;</code> — sent by <code>tmux send-keys</code> text + Enter only; never Esc/Ctrl-C</li>
-      <li>At <code>elapsed_since_start_s &gt;= sla_seconds</code>, queued updates tell live predictor to stop expanding research and write best available prediction</li>
-      <li>Hard mode: missing/invalid <code>result.json</code> after SLA+grace = kill session, fail closed (no prediction, no learner input, no prior-report row); reasoning.md is non-blocking, result.json required</li>
-      <li>No timeout <code>no_call</code> fallback; timeouts are operational health only</li>
-    </ul>
-  </div>
-
-  <div class="panel">
-    <h3>Historical mode + common-to-both rules <span class="src">§1.1.3 / §1.3.2 / §1.3.3</span></h3>
-    <ul>
-      <li><strong>Historical soft SLA (§1.1.3):</strong> log elapsed only; no hard-kill; elapsed time is never fed to the learner</li>
-      <li><strong>Urgency inputs to both modes (§1.3.2):</strong> pass <code>time_since_report_release</code> and <code>price_change_since_report_release</code>. Historical uses PIT-safe values at launch; live receives queued <code>LIVE_TIME_UPDATE</code> nudges</li>
-      <li><strong>Reasoning sidecar (§1.3.3):</strong> add <code>REASONING_PATH=&lt;component&gt;/reasoning.md</code> for historical prediction, live prediction, and learner. Audit-only: never canonical, never parsed for scoring/learning. Missing <code>reasoning.md</code> does NOT fail the run; <code>result.json</code> remains required</li>
-      <li>Predictor writes Phase 1-4 working analysis to REASONING_PATH BEFORE RESULT_PATH (key numbers/surprise math, what's-new/priced-in/material/counter-case, bull vs bear, final rationale, with bundle evidence)</li>
-      <li>Learner writes causal-attribution analysis to REASONING_PATH BEFORE RESULT_PATH (what moved stock, evidence chain, drivers, reconcile vs prediction incl. §15 falsifier check, attribution gaps, key_takeaway + checklist rationale, with ledger refs)</li>
-      <li>Skill rule edits: predictor checklist rule 8 may write SECTION_AUDIT_PATH + REASONING_PATH + RESULT_PATH; learner must relax both single-file guards (Critical Rule 6 + step "ONLY file" rule) to allow REASONING_PATH + RESULT_PATH</li>
-      <li>Keep <code>thinking.md</code> / sub-agents unchanged; ignore <code>thinking.md</code> as reasoning</li>
-    </ul>
+    <h3>Live SLA timeline (defaults) <span class="src">§1.2.1</span></h3>
+    <pre>  T=0s            T=60s         T=120s ... 240s         T=300s          T=330s
+  ┌─────────────┐ ┌──NUDGE──┐  ┌──NUDGE──┐               ┌─SLA REACHED─┐ ┌──GRACE──┐
+  │ TMUX launch │ │  every  │  │  every  │  ... continues │ stop further │ │   end    │
+  │  + prompt   │ │   60s   │  │   60s   │                │  research    │ │          │
+  └─────────────┘ └─────────┘  └─────────┘                └──────────────┘ └──────────┘
+                       │              │                          │                │
+                       └─ LIVE_TIME_UPDATE: time_since_report_release,             │
+                          price_change_since_report_release, elapsed_s, sla_s     │
+                                                                                  ▼
+                                                            HARD mode: kill TMUX, fail closed
+                                                            SOFT mode: log only, no kill</pre>
+    <p class="small">Nudges sent by <code>tmux send-keys '...' Enter</code>; never Esc/Ctrl-C. Fail-closed = no prediction, no learner input, no prior-report row.</p>
   </div>
 
   <div class="panel">
     <h3>Cross-cutting transport rules</h3>
     <ul>
       <li>Preserve user-authorized launch, no-API env scrub, pinned session id, transcript path derivation, transcript capture, timeout/kill, text+Enter-only nudges</li>
-      <li><strong>Forbidden target paths:</strong> direct Anthropic API, <code>claude_agent_sdk.query</code>, <code>claude -p</code>, and <code>--print</code></li>
-      <li>Large outputs: capture stdout/transcript to files; never use tmux pane scrollback as canonical output</li>
-      <li>Verify large bundles, 8-K packets, learner evidence are not truncated before E2E — silent truncation = corrupted artifact</li>
+      <li><strong>Forbidden:</strong> direct Anthropic API · <code>claude_agent_sdk.query</code> · <code>claude -p</code> · <code>--print</code></li>
+      <li>Large outputs: capture stdout/transcript to files; verify no truncation before E2E</li>
     </ul>
   </div>
+
+  <details>
+    <summary>Live wrapper full spec (§1.2.1 / §1.2.3)</summary>
+    <ul>
+      <li>Live predictor embeds the SKILL body, then appends wrapper instructions, allowed research guidance, and SLA controls</li>
+      <li><strong>Live wrapper minimum:</strong> <code>PIT_MODE=live</code>, report-release timestamp, SLA/env values, live allowed research set (§2.1), no runner-enforced tool allowlist, required output paths, fail-closed <code>result.json</code> rule</li>
+      <li><strong>Env controls:</strong> <code>LIVE_PREDICTOR_SLA_SECONDS</code> (300), <code>LIVE_PREDICTOR_NUDGE_INTERVAL_SECONDS</code> (60), <code>LIVE_PREDICTOR_GRACE_SECONDS</code> (30), <code>LIVE_PREDICTOR_SLA_MODE=hard|soft</code> (hard)</li>
+      <li><strong>Env home:</strong> set on launching process; orchestrator reads via <code>os.environ</code>; k8s manifests mirror extraction-worker env pattern</li>
+      <li><strong>Clock sources:</strong> <code>time_since_report_release</code> uses release timestamp from trigger metadata (Redis if present, else Neo4j); <code>elapsed_since_start_s</code> uses predictor TMUX session spawn time</li>
+      <li><strong>At SLA:</strong> queued updates tell live predictor to stop expanding research and write best available prediction</li>
+      <li><strong>Hard mode:</strong> missing/invalid <code>result.json</code> after SLA+grace = kill session, fail closed; reasoning.md is non-blocking, result.json required</li>
+      <li>No timeout <code>no_call</code> fallback; timeouts are operational health only</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary>Historical + common-to-both rules (§1.1.3 / §1.3.2 / §1.3.3)</summary>
+    <ul>
+      <li><strong>Historical soft SLA (§1.1.3):</strong> log elapsed only; no hard-kill; elapsed time is never fed to the learner</li>
+      <li><strong>Urgency inputs to both modes (§1.3.2):</strong> pass <code>time_since_report_release</code> and <code>price_change_since_report_release</code>. Historical uses PIT-safe values at launch; live receives queued <code>LIVE_TIME_UPDATE</code> nudges</li>
+      <li><strong>Reasoning sidecar (§1.3.3):</strong> <code>REASONING_PATH=&lt;component&gt;/reasoning.md</code> for historical prediction, live prediction, learner. Audit-only; never canonical; never parsed. Missing <code>reasoning.md</code> does NOT fail the run; <code>result.json</code> remains required</li>
+      <li>Predictor writes Phase 1-4 working analysis to REASONING_PATH BEFORE RESULT_PATH</li>
+      <li>Learner writes causal-attribution analysis to REASONING_PATH BEFORE RESULT_PATH (incl. §15 falsifier check, key_takeaway + checklist rationale, with ledger refs)</li>
+      <li>Skill rule edits: predictor checklist rule 8 may write SECTION_AUDIT_PATH + REASONING_PATH + RESULT_PATH; learner must relax both single-file guards to allow REASONING_PATH + RESULT_PATH</li>
+      <li>Keep <code>thinking.md</code> / sub-agents unchanged; ignore <code>thinking.md</code> as reasoning</li>
+    </ul>
+  </details>
 
   <details>
     <summary>Implementation anchor + contract</summary>
@@ -734,31 +787,31 @@ prior_report_row = {
     </ol>
   </div>
 
-  <div class="panel accent">
-    <h3>Market-grading lens (bounded loop)</h3>
+  <details>
+    <summary>Market-grading lens (bounded loop)</summary>
     <ul>
       <li>Form a candidate lens → test against allowed bundle/live signals, prior own reports, peer reactions, analyst/management emphasis, price setup, surprise math</li>
       <li>Revise until the lens stops changing materially, or live SLA forces a call</li>
       <li>Then rank signals against the lens</li>
       <li>Derive the lens per print; NEVER hardcode metric maps or examples</li>
     </ul>
-  </div>
+  </details>
 
-  <div class="panel">
-    <h3>Stress-test elements</h3>
+  <details>
+    <summary>Stress-test elements + thin-evidence rule</summary>
     <p>What's new · what's priced in · what's material · strongest counter-case · top drivers.</p>
     <p>If evidence is thin, conflicting, or missing → lower confidence, widen range, use <code>data_gaps</code>, or choose <code>no_call</code>. Never invent a sector metric.</p>
-  </div>
+  </details>
 
-  <div class="panel green">
-    <h3>Mode + source discipline</h3>
+  <details>
+    <summary>Mode + source discipline</summary>
     <ul>
       <li><strong>Historical:</strong> must NOT use post-cutoff transcript/Q&amp;A or other hindsight evidence</li>
       <li><strong>Live:</strong> may use live evidence within §1.2 / §2.1 urgency rules</li>
       <li>Current-bundle peer reactions MAY inform the lens; prior learner reports provide context within §6/§9 only and NEVER replace current-event evidence</li>
       <li>Output only through §7 schema + §1.3.3 reasoning sidecar — no new predictor fields or semantic validators</li>
     </ul>
-  </div>
+  </details>
 
   <details>
     <summary>Why the data-driven section audit matters</summary>
@@ -806,6 +859,34 @@ prior_report_row = {
   <span class="tag">Methodology</span>
   <h1>Whole-move attribution — explain the move, not just the earnings story. <span class="src">Final.md §15</span></h1>
   <p class="lead">The learner must explain the entire stock move. Cause families are prompt lenses only — never schema enums or fields.</p>
+
+  <pre>            Whole stock move (e.g., −8.2%)
+                       │
+                       ▼
+       ┌─────────────────────────────────┐
+       │ Hypothesize drivers             │
+       │ (using cause lenses below)      │
+       └──────────────┬──────────────────┘
+                       │
+                       ▼
+       ┌─────────────────────────────────┐
+       │ Test: does it explain sign      │
+       │ AND magnitude of the move?      │
+       └──┬──────────────────────────┬───┘
+          │ No / gap remains         │ Yes / no material change
+          │                          │
+          ▼                          ▼
+     Return to evidence       STOP (bounded loop)
+     for contributors                │
+     and offsets                     ▼
+          │                  ┌───────────────────────┐
+          └──────────────────│ Output                │
+                             │  primary_driver       │
+                             │  contributing_factors[]│
+                             │  unexplained residual │
+                             │  (genuine sourced     │
+                             │   remainder ONLY)     │
+                             └───────────────────────┘</pre>
 
   <div class="panel">
     <h3>Cause lenses (prompt-only)</h3>
@@ -930,6 +1011,42 @@ prior_report_row = {
   <h1>EV1 scorer — deterministic code, never LLM. <span class="src">Final.md §18</span></h1>
   <p class="lead">New module that grades each prediction post-outcome. Deterministic, idempotent, overwrite-safe.</p>
 
+  <pre>   ┌─ prediction/result.json ─────────┐
+   │  direction · confidence_score    │
+   │  expected_move_range_pct[low,hi] │──┐
+   └──────────────────────────────────┘  │
+                                          │
+   ┌─ learning/result.json ───────────┐  │
+   │  actual_return_pct               │──┤
+   │  (orchestrator-stamped)          │  │
+   └──────────────────────────────────┘  │
+                                          │
+        learning/complete.json ◄── trigger fires here
+                                          │
+                                          ▼
+                  ┌───────────────────────────────┐
+                  │  EV1 scorer (pure function)   │
+                  │  scripts/earnings/scoring/    │
+                  │  ev1.py                       │
+                  │                               │
+                  │  Inputs:                      │
+                  │   prediction.result.json      │
+                  │   + actual_return_pct         │
+                  │   + scorer version/config     │
+                  │                               │
+                  │  Deterministic, idempotent,   │
+                  │  byte-identical for same in   │
+                  └─────────────┬─────────────────┘
+                                │
+              ┌─────────────────┴──────────────────┐
+              ▼                                    ▼
+       Per-event score                  Rolling aggregate
+       earnings-analysis/Companies/     earnings-analysis/
+       &lt;T&gt;/events/&lt;Q&gt;/scoring/          scoring/
+       result.json                      ev1_aggregate.json
+                                        (recomputed from
+                                         all per-event files)</pre>
+
   <div class="panel">
     <h3>Module + trigger</h3>
     <ul>
@@ -995,26 +1112,6 @@ prior_report_row = {
   </div>
 
   <div class="panel">
-    <h3>Orchestrator core anchors (preserve names, change behavior) <span class="badge badge-rewrite">Rewrite</span></h3>
-    <p>Inside <code>scripts/earnings/earnings_orchestrator.py</code>:</p>
-    <ul>
-      <li><code>build_prediction_bundle</code>, <code>run_core_flow</code>, <code>get_prediction_paths</code>, <code>build_evidence_source_catalog</code>, <code>validate_prediction_result</code>, <code>finalize_prediction_result</code></li>
-      <li><code>_resolve_pit_mode</code>, <code>_build_predictor_prompt</code>, <code>_build_learner_prompt</code></li>
-      <li><code>_run_predictor_via_sdk</code>, <code>run_predictor_via_sdk</code>, <code>_run_learner_via_sdk</code></li>
-      <li>Predictor skill path const <code>_PREDICTOR_SKILL_PATH</code></li>
-    </ul>
-  </div>
-
-  <div class="panel">
-    <h3>Guidance extraction anchors (transport-only, §4) <span class="badge badge-rewrite">Rewrite</span></h3>
-    <ul>
-      <li><code>scripts/extraction_worker.py</code> — SDK entrypoint (SDK→TMUX change point); refactor for ALL extraction job types the worker handles, not guidance-only</li>
-      <li><code>scripts/guidance_trigger_daemon.py</code> — trigger; <code>scripts/harvest_guidance_sessions.py</code> — harvest</li>
-      <li><code>.claude/skills/guidance-inventory</code> — extraction contract (preserve)</li>
-    </ul>
-  </div>
-
-  <div class="panel">
     <h3>New files <span class="badge badge-new">New</span></h3>
     <ul>
       <li><code>.claude/hooks/earnings_pit_fence.py</code> — historical predictor PreToolUse hook (§1.1.2)</li>
@@ -1026,21 +1123,41 @@ prior_report_row = {
   <div class="panel green">
     <h3>Preserve as-is <span class="badge badge-keep">Keep</span></h3>
     <ul>
-      <li><code>.claude/hooks/pit_gate.py</code> — DataSubAgent PostToolUse output PIT validator; separate concern from §1.1.2 PreToolUse runner fence</li>
+      <li><code>.claude/hooks/pit_gate.py</code> — DataSubAgent PostToolUse output PIT validator; separate from §1.1.2 PreToolUse runner fence</li>
       <li>Context builders under <code>scripts/earnings/builders/</code> — keep layer; add prior_reports_context sequentially after the 7 parallel builders (§11)</li>
-      <li>TMUX transport: implementation anchors live in <code>.claude/plans/tmux-transport-handoff.md</code> — do not duplicate</li>
+      <li>TMUX transport anchors live in <code>.claude/plans/tmux-transport-handoff.md</code> — do not duplicate</li>
     </ul>
   </div>
 
-  <div class="panel accent">
-    <h3>Renames (per §11)</h3>
+  <details>
+    <summary>Orchestrator core anchors — preserve names, change behavior <span class="badge badge-rewrite">Rewrite</span></summary>
+    <p>Inside <code>scripts/earnings/earnings_orchestrator.py</code>:</p>
+    <ul>
+      <li><code>build_prediction_bundle</code>, <code>run_core_flow</code>, <code>get_prediction_paths</code>, <code>build_evidence_source_catalog</code>, <code>validate_prediction_result</code>, <code>finalize_prediction_result</code></li>
+      <li><code>_resolve_pit_mode</code>, <code>_build_predictor_prompt</code>, <code>_build_learner_prompt</code></li>
+      <li><code>_run_predictor_via_sdk</code>, <code>run_predictor_via_sdk</code>, <code>_run_learner_via_sdk</code></li>
+      <li>Predictor skill path const <code>_PREDICTOR_SKILL_PATH</code></li>
+    </ul>
+  </details>
+
+  <details>
+    <summary>Guidance extraction anchors — transport-only (§4) <span class="badge badge-rewrite">Rewrite</span></summary>
+    <ul>
+      <li><code>scripts/extraction_worker.py</code> — current SDK / <code>claude -p</code> entrypoint; replace with interactive TMUX for ALL extraction job types, not guidance-only</li>
+      <li><code>scripts/guidance_trigger_daemon.py</code> — trigger; <code>scripts/harvest_guidance_sessions.py</code> — harvest</li>
+      <li><code>.claude/skills/guidance-inventory</code> — extraction contract (preserve)</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary>Renames (per §11)</summary>
     <ul>
       <li><code>#S10.lesson.L&lt;n&gt;</code> → <code>#S10.report.R&lt;n&gt;</code> (locator IDs; not directional evidence)</li>
       <li><code>_allowed_learner_paths</code> → <code>_allowed_prior_report_paths</code></li>
       <li>Rendered <code>learner_result:</code> labels become prior-report links</li>
-      <li>Discovery source for prior reports: filesystem glob <code>earnings-analysis/Companies/*/events/*/learning/result.json</code> — NOT <code>run_ledger</code> (operational bookkeeping, not artifact source truth)</li>
+      <li>Discovery source for prior reports: filesystem glob <code>earnings-analysis/Companies/*/events/*/learning/result.json</code> — NOT <code>run_ledger</code></li>
     </ul>
-  </div>
+  </details>
 
   <details>
     <summary>Migration safety gates</summary>
@@ -1099,6 +1216,42 @@ prior_report_row = {
   <span class="tag amber">Phase 2 · Deferred</span>
   <h1>Execution architecture — trigger → Redis → worker. <span class="src">Final.md §22</span></h1>
   <p class="lead">Conceptually locked but operationally deferred. <strong>Sequence: §§1-21 first, then this §22.</strong> Do NOT start the daemon/worker until §§1-21 are wired and tested.</p>
+
+  <pre>   ┌─ earnings-trigger daemon (long-running) ─┐
+   │  Discovers events                         │
+   │  Hard-gates historical on guidance done   │
+   │  Enforces warm-start anchor               │
+   │  Just-in-time learner trigger             │
+   └──────────────────┬────────────────────────┘
+                      │  LPUSH job
+                      ▼
+   ┌──────────────────────────────────────────┐
+   │  Redis: earnings:pipeline  (FIFO + leases) │
+   └──────────────────┬────────────────────────┘
+                      │  BRPOP
+                      ▼
+   ┌─ earnings-worker (thin) ─────────────────┐
+   │  Owns no semantic logic                  │
+   │  Invokes orchestrator per job            │
+   └──────────────────┬───────────────────────┘
+                      │
+                      ▼
+   ┌─ earnings_orchestrator.py ───────────────┐
+   │  Builds bundle (7 parallel + prior)      │
+   │  Dispatches:                             │
+   └──┬───────────────────────┬───────────────┘
+      │                       │
+      ▼                       ▼
+  TMUX Profile A          TMUX Profile B
+  historical predictor    live predictor
+  learner                 (with nudges)
+  guidance extraction
+      │                       │
+      └───────┬───────────────┘
+              ▼
+   Sentinel writes (atomic, idempotent):
+   prediction/complete.json
+   learning/complete.json   ── triggers EV1 scorer</pre>
 
   <div class="panel">
     <h3>Topology</h3>
