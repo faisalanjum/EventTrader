@@ -262,15 +262,19 @@ class SynonymFoldEngine:
         if just_eligible and cand.status == STATUS_CANDIDATE:
             cand.status = STATUS_ELIGIBLE   # cleared N=2 (pre-judge)
 
-        # 4. PROMOTION ATTEMPT — fire ONLY when THIS candidate JUST crossed N=2
-        #    (avoids re-judging on every later event), and the group is not already
-        #    TERMINALLY resolved. A FROZEN (defer) group RE-JUDGES when a NEW
-        #    candidate becomes eligible ("defer -> re-judge when more evidence
-        #    arrives", §13); a PROMOTED / NO_GLOBAL_RULE group is terminal (the
-        #    deferred §8 reconciliation job handles late equivalences, out of scope).
+        # 4. PROMOTION ATTEMPT — fire ONLY when THIS candidate JUST crossed N=2. A
+        #    DIFFERENT to_token reaching N=2 is the trigger; MORE evidence piling onto
+        #    an already-promoted incumbent does NOT re-fire (it is no longer "just"
+        #    eligible), so re-open is rival-driven, not event-driven.
+        #    RE-OPEN (CombinedPlan §385 / confirmed 2026-05-29 — fix the temporal
+        #    first-wins hole): a NEW rival that INDEPENDENTLY clears N=2 RE-OPENS an
+        #    already-PROMOTED group -> the judge re-decides [incumbent, rival] so
+        #    arrival order never sticks (default defer un-promotes the incumbent).
+        #    Only a NO_GLOBAL_RULE group stays terminal (a separate, lower-stakes
+        #    question, intentionally left as-is).
         judged = False
-        if just_eligible and self._resolution_of(kind, from_token) not in (
-                RESOLUTION_PROMOTED, RESOLUTION_NO_GLOBAL_RULE):
+        if just_eligible and self._resolution_of(
+                kind, from_token) != RESOLUTION_NO_GLOBAL_RULE:
             judged = self._attempt_promotion(kind, from_token)
 
         return ObserveResult(
@@ -340,6 +344,16 @@ class SynonymFoldEngine:
           * "defer" -> promote NONE; keep the group FROZEN (a later observation
             that changes eligibility re-triggers the attempt / re-judge).
         """
+        # RE-OPEN: a contested judge call re-decides the WHOLE group. Any candidate
+        # currently PROMOTED (an incumbent that won a prior — possibly arrival-order
+        # — decision) is demoted back to ELIGIBLE FIRST, so the verdict alone decides
+        # and a temporal first-win never sticks. A non-promote verdict (defer /
+        # no_global_rule) therefore leaves the fold EMPTY (promoted_synonyms() == {}),
+        # not merely frozen. (One PROMOTED to_token per key.)
+        for c in self._candidates(kind, from_token):
+            if c.status == STATUS_PROMOTED:
+                c.status = STATUS_ELIGIBLE
+
         decision = verdict.get("decision")
         eligible_to_tokens = {c["to_token"] for c in packet["candidates"]}
 

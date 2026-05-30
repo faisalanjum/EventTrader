@@ -585,3 +585,83 @@ def test_wiring_promote_rebuild_fold_production_path() -> None:
 
     # Static seed synonyms still work after the merge (no regression on §F.2).
     assert vocab2.synonym_map["topline"] == "revenue"
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# I.11  LATE-RIVAL / INCUMBENT — temporal first-wins must NOT stick
+#       (CombinedPlan §385, confirmed 2026-05-29): a rival that INDEPENDENTLY
+#       clears N=2 against an ALREADY-PROMOTED incumbent RE-OPENS the group.
+# ─────────────────────────────────────────────────────────────────────────────
+
+def test_late_rival_reopens_promoted_incumbent_and_unpromotes() -> None:
+    """THE incumbent sequence: demand E1, E2 -> demand promotes ALONE (sole, no
+    competitor yet). THEN consumption E3, E4 -> consumption INDEPENDENTLY reaches
+    N=2 -> RE-OPEN: judge_fn called with [demand, consumption]; default defer ->
+    demand is UN-PROMOTED, group FROZEN. EXPECTED (the fix): the fold is truly EMPTY
+    (promoted_synonyms() == {} — demand GONE, not merely frozen), and the latest
+    judge packet lists BOTH incumbent + rival. Proves arrival order does NOT decide
+    the winner."""
+    eng = SynonymFoldEngine()       # no judge_fn -> default defer stub
+
+    # demand promotes ALONE at N=2 (no rival yet).
+    eng.observe("uptake", "demand", event_key="E1", evidence_text="uptake rose")
+    eng.observe("uptake", "demand", event_key="E2", evidence_text="uptake climbed")
+    assert eng.promoted_synonyms() == {"uptake": "demand"}     # incumbent promoted
+    assert eng.judge_packets() == []                           # sole -> no judge
+
+    # late RIVAL independently clears N=2 -> RE-OPEN -> judge([demand, consumption]).
+    eng.observe("uptake", "consumption", event_key="E3",
+                evidence_text="uptake of capacity rose")
+    eng.observe("uptake", "consumption", event_key="E4",
+                evidence_text="uptake of capacity expanded")   # consumption -> N=2 (re-open)
+
+    packet = eng.judge_packets()[-1]
+    assert {c["to_token"] for c in packet["candidates"]} == {"demand", "consumption"}
+    # THE FIX (nudge #1): default defer UN-PROMOTES the incumbent -> the fold is
+    # EMPTY (not just frozen). Assert promoted_synonyms() == {} ("no promoted synonym").
+    assert eng.promoted_synonyms() == {}
+    assert eng.is_frozen("synonym", "uptake") is True
+    assert eng.status_of("synonym", "uptake", "demand") != STATUS_PROMOTED
+
+
+def test_more_evidence_on_incumbent_does_not_reopen() -> None:
+    """Nudge #2: re-open ONLY on a DIFFERENT candidate crossing N=2. MORE evidence
+    piling onto the ALREADY-PROMOTED incumbent must NOT re-open the group or re-call
+    the judge. EXPECTED: demand promotes at N=2; a 3rd demand event leaves it
+    promoted, count 3, judge never called."""
+    eng = SynonymFoldEngine()
+    eng.observe("uptake", "demand", event_key="E1", evidence_text="uptake rose")
+    eng.observe("uptake", "demand", event_key="E2", evidence_text="uptake climbed")
+    assert eng.promoted_synonyms() == {"uptake": "demand"}
+
+    eng.observe("uptake", "demand", event_key="E3",
+                evidence_text="uptake rose yet again")          # MORE evidence on incumbent
+    assert eng.promoted_synonyms() == {"uptake": "demand"}     # still promoted
+    assert eng.judge_packets() == []                           # NOT re-opened
+    assert eng.observation_count("synonym", "uptake", "demand") == 3
+
+
+def test_reopen_can_switch_winner() -> None:
+    """Optional: re-open can CHANGE the winner, not just freeze. demand promotes
+    alone; rival consumption clears N=2 -> RE-OPEN -> judge returns
+    promote(consumption) -> promoted_synonyms() == {uptake: consumption} (winner
+    SWITCHED; ONE per key; incumbent demand demoted). The judge fires ONLY on the
+    re-open (the sole promotion took no judge)."""
+    judge = _fixed_verdict_judge({"decision": "promote", "to_token": "consumption",
+                                  "reason": "rival is the better global synonym"})
+    eng = SynonymFoldEngine(judge_fn=judge)
+
+    eng.observe("uptake", "demand", event_key="E1", evidence_text="uptake rose")
+    eng.observe("uptake", "demand", event_key="E2", evidence_text="uptake climbed")
+    assert eng.promoted_synonyms() == {"uptake": "demand"}     # incumbent
+    assert eng.judge_packets() == []                           # sole -> no judge yet
+
+    eng.observe("uptake", "consumption", event_key="E3",
+                evidence_text="uptake of capacity rose")
+    eng.observe("uptake", "consumption", event_key="E4",
+                evidence_text="uptake of capacity expanded")   # rival N=2 -> re-open
+
+    assert eng.promoted_synonyms() == {"uptake": "consumption"}   # winner SWITCHED
+    assert eng.status_of("synonym", "uptake", "consumption") == STATUS_PROMOTED
+    assert eng.status_of("synonym", "uptake", "demand") != STATUS_PROMOTED
+    assert eng.resolution_of("synonym", "uptake") == RESOLUTION_PROMOTED
