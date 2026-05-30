@@ -1,5 +1,7 @@
 # Driver Naming — Combined Final Plan
 
+> ⚠️ **NAMING CORE UNDER REDESIGN (2026-05-30):** the closed-vocabulary/`canonicalize` approach in this plan was empirically measured **rejecting 82% of even *correct* driver names** → it is being re-designed from first principles. **Canonical handoff + full empirical record: [`UnifiedRedesignBrief.md`](./UnifiedRedesignBrief.md)** — read it before building on this plan's naming core.
+
 > **Status**: Final consolidated plan, ready for voting review.
 > **Sources synthesized**: 5 independent LLM audits (Bot1, Bot2, Bot3, ClaudeBot1, ClaudeBot2) + my own ConceptualRequirements walk + Final.md cross-reference.
 > **Goal**: ≥95% driver naming accuracy, 100% ConceptualRequirements accounted for (covered or explicitly deferred with rationale), minimum incremental work on top of the locked ontology + guidance pipeline templates.
@@ -7,6 +9,8 @@
 > **⚖️ LLM-vs-CODE BOUNDARY (owner principle, 2026-05-29 — revisit later):** LLM = semantic judgment (meaning/novelty/ambiguity); code = mechanical consistency (exact-match/format/deterministic fold). 3 watch-spots, each with a revisit-trigger: new-word slot placement · synonym discovery · banned-word completeness. **Full version + triggers:** `DriverOntology_Implementation.md` (top) · `Harness/Harness_BuilderPrompt.md` · `Harness/TESTER_HANDOFF.md` · memory `feedback_llm_vs_code_boundary.md`.
 >
 > **Governing rule (canonical):** Producer LLM handles semantics first. Isolated judge handles borderline/global/irreversible cases. Code persists, gates, and replays decisions deterministically. Gate strength scales with blast radius × irreversibility.
+>
+> **OPEN DECISION — driver state handling (2026-05-30):** `driver_state` / `STATES_VOCAB` normalization is NOT fully locked. The current bounded state enum is useful for comparability, but production may need a separate `raw_state` vs canonical `driver_state` policy so novel wording (e.g., elevated / unfavorable / pressured) does not falsely reject a valid driver. Lock this before ingestion/live scoring.
 
 ---
 
@@ -321,7 +325,7 @@ Each item below has been independently verified against the three hard condition
 
 **[E21] Final.md schema reconciliation**
 - Location: `Neo4jXBRLDesign.md` "Final.md Changes Required" section
-- Text (AMENDED by E30): "Confirm Final.md §8 `learner_result.v1 primary_driver / contributing_factors[i]` migrate from the current LIVE `{summary, category, evidence_refs}` shape (per `validate_learning.py` v3 — the live `category` free-form snake_case label, e.g. `guidance_change`, is the field that becomes the canonical `driver_name`; this is the real baseline, NOT the older `{driver/factor, evidence}`) to `{driver_name, driver_state, direction, evidence_refs}`. **§7 `prediction_result.v1 key_drivers[i]` STAYS as `{driver, direction, evidence}` free-form (no canonical-form migration)** per E30 — predictor is consumer-only, does NOT emit canonical drivers. Spell out learner field-by-field migration so no version drift."
+- Text (AMENDED by E30): "Confirm Final.md §8 `learner_result.v1 primary_driver / contributing_factors[i]` migrate from the current LIVE `{summary, category, evidence_refs}` shape (per `validate_learning.py` v3 — the live `category` free-form snake_case label, e.g. `guidance_change`, is the field that becomes the canonical `driver_name`; this is the real baseline, NOT the older `{driver/factor, evidence}`) to `{driver_name, driver_state, direction, evidence_refs}` PLUS an OPTIONAL per-tag `context_note` (<=2 sentences, free-form, event-specific 'why this driver applies HERE', e.g. "capex rising to support AI capacity, may pressure near-term FCF"). INVARIANT: `context_note` is stored on `:DriverChange` (per-mention) — NEVER on the global `:Driver`, NEVER an input to `canonicalize()` / identity / the global `definition`; explanatory metadata only (evidence/source_catalog stay authoritative). It is UNSCORED in the Pass-4 eval and may later feed audit / embeddings / reconciliation / human reports; the dedup-surface embedding stays on STABLE identity fields (name+definition+aliases), not per-event notes. **§7 `prediction_result.v1 key_drivers[i]` STAYS as `{driver, direction, evidence}` free-form (no canonical-form migration)** per E30 — predictor is consumer-only, does NOT emit canonical drivers. Spell out learner field-by-field migration so no version drift."
 - Source: ClaudeBot2 #2
 - Why: Schema host divergence guaranteed bugs without explicit migration spec.
 
