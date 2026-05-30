@@ -1,0 +1,2 @@
+# Persistent judge verdict cache (real-run artifact, never commit)
+.judge_cache/
