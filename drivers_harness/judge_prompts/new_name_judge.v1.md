@@ -3,7 +3,14 @@
 **Status: SPEC only.** The call-site is `driver_write_cli` shortcut
 registration (CombinedPlan §E27 / §383) — NOT built in the harness yet. This
 file LOCKS the prompt + schema so that when the call-site is built
-(integration phase) the real call path already exists. Same contract as
+(integration phase) the real call path already exists.
+
+**This judge is layer 3 of the LAYERED admission** (CombinedPlan §5.7
+`[INGESTION-DESIGN]`, locked 2026-05-30): code gates → embedding dedup-surface
+→ **recurrence (≥2 distinct events)** → THIS cached judge (positive admits
+double-confirmed) → correction loop (`reject`/`defer` revisitable, merges
+un-mergeable, periodic reconciliation). It resolves only the open-world
+semantic residual; it is never the first gate. Same contract as
 `INTEGRATION_CONTRACT.md` (Structured Outputs, post-validate, defer-on-failure,
 cache, tiered model).
 
