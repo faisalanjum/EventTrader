@@ -1,0 +1,98 @@
+[
+  {
+    "name": "iphone_china_sales",
+    "aliases": ["china_iphone_sales"],
+    "allowed_states": ["accelerated", "decelerated", "stable", "declined"],
+    "segment": "iPhone China",
+    "definition": "Unit sales of iPhone in the China market.",
+    "base_label": "Sales"
+  },
+  {
+    "name": "oil_price",
+    "aliases": [],
+    "allowed_states": ["accelerated", "decelerated", "stable", "declined"],
+    "segment": "Total",
+    "definition": "The benchmark market price of crude oil.",
+    "is_shortcut": true
+  },
+  {
+    "name": "gross_margin",
+    "aliases": [],
+    "allowed_states": ["expanded", "contracted", "exhausted", "built"],
+    "segment": "Total",
+    "definition": "Revenue less cost of goods sold, as a share of revenue.",
+    "base_label": "GrossMargin"
+  },
+  {
+    "name": "fda_approval",
+    "aliases": [],
+    "allowed_states": ["approved", "denied", "lapsed", "imposed"],
+    "segment": "Total",
+    "definition": "A regulatory approval decision by the federal drug agency.",
+    "is_shortcut": true
+  },
+  {
+    "name": "revenue",
+    "aliases": [],
+    "allowed_states": ["beat", "missed", "raised", "lowered"],
+    "segment": "Total",
+    "definition": "Total top-line sales recognized in the period.",
+    "base_label": "Revenue"
+  },
+  {
+    "name": "sales",
+    "aliases": [],
+    "allowed_states": ["accelerated", "decelerated", "stable", "declined"],
+    "segment": "Total",
+    "definition": "Units or value of product sold in the period.",
+    "base_label": "Sales"
+  },
+  {
+    "name": "eps",
+    "aliases": [],
+    "allowed_states": ["beat", "missed", "raised", "lowered"],
+    "segment": "Total",
+    "definition": "Earnings per share for the reporting period.",
+    "base_label": "EPS"
+  },
+  {
+    "name": "fed_rate",
+    "aliases": [],
+    "allowed_states": ["raised", "lowered", "reaffirmed", "withdrawn"],
+    "segment": "Total",
+    "definition": "The Federal Reserve policy interest rate.",
+    "is_shortcut": true
+  },
+  {
+    "name": "yield_curve",
+    "aliases": [],
+    "allowed_states": ["steepened", "flattened", "inverted", "normalized"],
+    "segment": "Total",
+    "definition": "The term structure of government bond yields.",
+    "is_shortcut": true
+  },
+  {
+    "name": "cloud_revenue",
+    "aliases": [],
+    "allowed_states": ["accelerated", "decelerated", "stable", "declined"],
+    "segment": "Total",
+    "definition": "Revenue recognized from cloud-computing services.",
+    "base_label": "Revenue"
+  },
+  {
+    "name": "gpu_hyperscaler_bookings",
+    "aliases": ["hyperscaler_gpu_bookings"],
+    "allowed_states": ["accelerated", "decelerated", "stable", "declined"],
+    "segment": "GPU Hyperscaler",
+    "definition": "Order bookings for GPUs placed by hyperscaler customers.",
+    "base_label": "Sales"
+  },
+  {
+    "name": "datacenter_demand",
+    "aliases": [],
+    "allowed_states": ["accelerated", "decelerated", "stable", "declined"],
+    "segment": "Datacenter",
+    "definition": "Customer demand for datacenter products and capacity.",
+    "base_label": "Sales"
+  }
+]
