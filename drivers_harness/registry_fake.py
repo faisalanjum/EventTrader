@@ -75,6 +75,27 @@ class Registry:
                 return d
         return None
 
+    def add_alias(self, name: str, alias: str) -> bool:
+        """ADDITIVE (Pass-3, Harness_BuilderPrompt.md §15.0) — record ``alias`` on
+        the driver named ``name`` so the NEXT emission of that folded raw form hits
+        the B4 exact-alias fast-path (in prod = the Neo4j alias-array MERGE). Returns
+        True iff the alias was newly added (idempotent: a duplicate alias is a no-op
+        returning False; an unknown ``name`` is a no-op returning False).
+
+        BEHAVIOR-PRESERVING: this is a NEW method — it touches no existing method
+        and does not change ``add_driver`` / ``lookup_*`` / ``sorted_token_match``
+        semantics. It only appends to the target row's ``aliases`` list (the same
+        list ``lookup_by_alias`` already reads), keeping the registry coherent for
+        the accumulation replay's auto-alias fast-path guarantee (§15A)."""
+        driver = self._by_name.get(name)
+        if driver is None:
+            return False
+        aliases = driver.setdefault("aliases", [])
+        if alias in aliases:
+            return False
+        aliases.append(alias)
+        return True
+
     def add_driver(self, row: dict) -> dict:
         """Register a new driver row (in prod = the Neo4j MERGE). Returns the
         stored dict. Last-write-wins on duplicate name (the test harness never

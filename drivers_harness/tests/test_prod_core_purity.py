@@ -58,7 +58,16 @@ PROD_CORE_MODULES = [
 # (build_vocab_snapshot(promoted_synonyms=...)), the prod seam where Neo4j rows
 # arrive — vocab_seed fills it from the engine ONLY in tests, never by importing
 # the engine. So synonym_fold is added to the forbidden-import set.
-SCAFFOLD_MODULE_NAMES = ["registry_fake", "run_sequence", "synonym_fold"]
+#
+# Pass-3 (2026-05-29): apply_decision is the fake-writer APPLY step (§15.0) — a
+# TEST-SCAFFOLD stand-in for the production Neo4j MERGE (§9 line 503: "apply_decision
+# + the cohort replay" stays in the harness, NEVER imported by prod-core; §10 maps
+# it to "the orchestrator + the real writer", NOT copied). It imports prod-core
+# (driver_ids / vocab_seed) but NO prod-core module may import IT. Added to the
+# forbidden-import set so the §9 partition keeps policing the new scaffold module.
+SCAFFOLD_MODULE_NAMES = [
+    "registry_fake", "run_sequence", "synonym_fold", "apply_decision",
+]
 
 # RESERVED Pass-4 files whose ABSENCE is required THROUGH Pass 2 — section 3
 # lines 120-121 (llm_emit.py), lines 130-131 (tests/test_llm_layer2.py), line 134
@@ -202,4 +211,22 @@ def test_pass2_synonym_fold_now_present() -> None:
         assert os.path.isfile(path), (
             f"Pass-2 deliverable {built_relpath} missing at {path} — §11B "
             f"requires synonym_fold.py + tests/test_synonym_fold.py be built."
+        )
+
+
+def test_pass3_apply_decision_and_replay_present() -> None:
+    """Pass-3 deliverable (Harness_BuilderPrompt.md §15.0 / §15A / §15C): the
+    fake-writer apply step apply_decision.py + the accumulation-replay tests +
+    the false-reject regression tests are NOW BUILT. EXPECTED: all three exist.
+    apply_decision is policed as a TEST-SCAFFOLD module by the import check above
+    (it must never be imported by prod-core, §9 line 503)."""
+    for built_relpath in (
+        "apply_decision.py",
+        os.path.join("tests", "test_accumulation_replay.py"),
+        os.path.join("tests", "test_false_reject.py"),
+    ):
+        path = os.path.join(HARNESS_ROOT, built_relpath)
+        assert os.path.isfile(path), (
+            f"Pass-3 deliverable {built_relpath} missing at {path} — §15.0/§15A/"
+            f"§15C require apply_decision + the replay + false-reject tests be built."
         )
