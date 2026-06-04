@@ -1,89 +1,72 @@
 export const meta = {
-  name: 'driver-menu-pilot-restaurants',
-  description: 'Blind per-company driver-name menu build (SEED sources = filings + transcripts + fiscal.ai KPIs; NO news; ALL events with >2% daily_stock, no cap), then a convergence/dedup pass. Read-only on Neo4j; writes one review file; no graph writes. News/macro drivers accrete LIVE in production, not in the seed.',
+  name: 'driver-menu-build',
+  description: 'Driver-catalog SEED build. Step A: fetch_company_sources.py pulls ALL non-news sources (8-K/10-K/10-Q + transcripts + fiscal KPIs) WITH real text (MD&A, Risk Factors, EX-99.1 press releases, prepared remarks + Q&A), targeted + truncated, tagged (high_signal, is_earnings); NO >2% filter. Step B: 1 blind subagent per company coins candidate driver_names from that real content per DriverOntology. Step C: convergence/dedup pass writes the seed review file. Read-only Neo4j; no graph writes.',
   phases: [
-    { title: 'Probe', detail: 'detect the events+returns query + fiscal.ai KPI query (once)' },
-    { title: 'Menus', detail: '14 companies named in parallel, fully blind' },
-    { title: 'Converge', detail: 'dedup + cross-company sharing + pass-checks; write review file' },
+    { title: 'Fetch',    detail: 'fetch_company_sources.py → _sources_<ticker>.json (real text, tagged)' },
+    { title: 'Menus',    detail: 'one blind subagent per company coins names from real content' },
+    { title: 'Converge', detail: 'dedup + cross-company sharing + pass-checks; write seed file' },
   ],
 }
 
-const PROBE_SCHEMA = { type:'object', additionalProperties:false,
-  required:['events_cypher','fiscalai_query','return_field','sample_ticker','sample_count','notes'],
-  properties:{
-    events_cypher:{type:'string', description:'a PARAMETERIZED read Cypher (param $ticker) returning that company’s 8-K/10-K/10-Q/Transcript events (NO news) with abs(daily_stock) >= 2.0 (percent points): source_type, date, text snippet (<=600 chars), daily_stock. ALL qualifying rows (NO limit), order by abs(daily_stock) desc.'},
-    fiscalai_query:{type:'string', description:'the exact sqlite3/python query to list a ticker’s operational KPI names from data/fiscal_ai_segments/fiscal_segments.sqlite (section=Key Performance Indicators)'},
-    return_field:{type:'string', description:'which property/relationship holds the daily stock return + the market-relative one'},
-    sample_ticker:{type:'string'}, sample_count:{type:'string', description:'#events the query returned for the sample ticker'},
-    notes:{type:'array', items:{type:'string'}},
-  } }
+const DIR = '/home/faisal/EventMarketDB/.claude/plans/Drivers'
+const PY  = '/home/faisal/EventMarketDB/venv/bin/python3'
+const TICKERS = ['SBUX','MCD','CMG','YUM','DRI','TXRH','SHAK','WING','CAKE','EAT','PZZA','CBRL','BLMN','QSR']
 
 const MENU_SCHEMA = { type:'object', additionalProperties:false,
   required:['ticker','candidate_count','candidates','skipped_count','notes'],
   properties:{
-    ticker:{type:'string'},
-    candidate_count:{type:'integer'},
+    ticker:{type:'string'}, candidate_count:{type:'integer'},
     candidates:{type:'array', items:{type:'object', additionalProperties:false,
       required:['driver_name','evidence_quote','source_type','date','xbrl_or_null'],
-      properties:{ driver_name:{type:'string'}, evidence_quote:{type:'string'}, source_type:{type:'string', description:'8-k / 10-k / 10-q / transcript / fiscal.ai-kpi'}, date:{type:'string'}, xbrl_or_null:{type:'string', description:'XBRL concept/member if an obvious anchor, else "null"'} }}},
-    skipped_count:{type:'integer', description:'# events skipped as too vague to name'},
-    notes:{type:'array', items:{type:'string'}},
-  } }
+      properties:{ driver_name:{type:'string'}, evidence_quote:{type:'string', description:'actual words from the source content that justify it'}, source_type:{type:'string', description:'8-k / 10-k / 10-q / transcript / fiscal.ai-kpi'}, date:{type:'string'}, xbrl_or_null:{type:'string'} }}},
+    skipped_count:{type:'integer'}, notes:{type:'array', items:{type:'string'}} } }
 
 const CONV_SCHEMA = { type:'object', additionalProperties:false,
   required:['file_written','total_candidates','total_distinct_names','shared_names','exact_dup_pairs','pass_violations','convergence_summary'],
   properties:{
-    file_written:{type:'string'},
-    total_candidates:{type:'integer'}, total_distinct_names:{type:'integer'},
-    shared_names:{type:'array', items:{type:'object', additionalProperties:false, required:['driver_name','companies'], properties:{ driver_name:{type:'string'}, companies:{type:'array', items:{type:'string'}} }}, description:'names independently coined by >=2 companies (the convergence signal)'},
-    exact_dup_pairs:{type:'array', items:{type:'object', additionalProperties:false, required:['a','b','why'], properties:{ a:{type:'string'}, b:{type:'string'}, why:{type:'string'} }}, description:'different strings, same meaning -> SAME_AS review'},
+    file_written:{type:'string'}, total_candidates:{type:'integer'}, total_distinct_names:{type:'integer'},
+    shared_names:{type:'array', items:{type:'object', additionalProperties:false, required:['driver_name','companies'], properties:{ driver_name:{type:'string'}, companies:{type:'array', items:{type:'string'}} }}},
+    exact_dup_pairs:{type:'array', items:{type:'object', additionalProperties:false, required:['a','b','why'], properties:{ a:{type:'string'}, b:{type:'string'}, why:{type:'string'} }}},
     pass_violations:{type:'array', items:{type:'object', additionalProperties:false, required:['driver_name','company','rule'], properties:{ driver_name:{type:'string'}, company:{type:'string'}, rule:{type:'string'} }}},
-    convergence_summary:{type:'string'},
-  } }
+    convergence_summary:{type:'string'} } }
 
-const RULES = `NAMING RULES (authority = .claude/plans/Drivers/DriverOntology.md — READ it; summary for speed):
+const RULES = `NAMING RULES (authority = ${DIR}/DriverOntology.md — READ it; summary for speed):
 - driver_name = the reusable CAUSE as a specific lower_snake_case noun. As specific as the evidence allows; NEVER a broad/category word alone (no bare demand/macro/sector/sentiment).
-- Order: concrete thing or actor -> needed detail -> metric/mechanism. e.g. restaurant_traffic, same_store_sales, cmg_digital_sales, oil_price.
+- Order: concrete thing or actor -> needed detail -> metric/mechanism. e.g. restaurant_traffic, same_store_sales, oil_price.
 - EARNINGS convention: {metric}_surprise (reported vs consensus) or {metric}_guidance (forward outlook): eps_surprise, revenue_surprise, revenue_guidance, gross_margin_guidance. beat/miss/raised/lowered are NOT in the name.
-- BANNED inside the name: state/verbs (beat, cut, declined), direction/impact (long/short, bullish), dates/quarters/years, numbers/magnitudes/units (bps, percent, usd), ANY company ticker or legal name (the company itself OR a peer), person names, source/provider labels, XBRL prefixes, metaphors/sentiment, bare category words, stopwords. (Products/brands/segments ARE allowed even if one company has them.)
+- BANNED inside the name: state/verbs (beat, cut, declined, transition, opening, growth), direction/impact (long/short), dates/quarters/years, numbers/magnitudes/units (bps, percent, usd), ANY company ticker or legal name (own OR peer), person names, source/provider labels, XBRL prefixes, metaphors/sentiment, bare category words, stopwords. (Products/brands/segments ARE allowed: a brand metric like taco_bell_same_store_sales is its OWN driver, separate from same_store_sales.)
 - Keep standard phrases whole: gross_margin, free_cash_flow, same_store_sales, net_interest_margin.
 - Vague text -> SKIP (don't invent).
-- fiscal.ai KPI labels are RAW SUGGESTIONS ONLY: rewrite each into a standard driver_name (e.g. "Comparable Store Sales Growth" -> same_store_sales); never use the raw label.`
+- fiscal.ai KPI labels are RAW SUGGESTIONS ONLY: rewrite each into a standard driver_name; never use the raw label.`
 
-phase('Probe')
-const probe = await agent(`Repo root /home/faisal/EventMarketDB. Read-only DB probe (no writes).
-Load the Neo4j tool via ToolSearch ("select:mcp__neo4j-cypher__read_neo4j_cypher"; also get_neo4j_schema if useful).
-GOAL: produce TWO reusable queries the per-company agents will run:
-1) events_cypher (param $ticker): for that company, return its 8-K / 10-K / 10-Q / Transcript events — **EXCLUDE News** — whose ABSOLUTE daily_stock return is >= 2.0. (Returns are PERCENT POINTS, not decimals, stored on the event→Company edge: (Transcript)-[:INFLUENCES]->(Company) and (Report)-[:PRIMARY_FILER]->(Company); Report.formType gives '8-K'/'10-K'/'10-Q'; r.daily_stock = raw daily return.) Return: source_type, date, a text snippet (<=600 chars), and r.daily_stock. **NO limit — return ALL qualifying events.** Order by abs(r.daily_stock) desc. TEST on $ticker='SBUX' and report the row count + 2 sample rows. (News is intentionally excluded — news/macro drivers accrete LIVE in production, not in the seed.)
-2) fiscalai_query: the exact command (python3 + sqlite3 on data/fiscal_ai_segments/fiscal_segments.sqlite) to list a ticker's operational KPI metric_names (section='Key Performance Indicators'). Test on SBUX.
-Return the working queries verbatim so they can be reused. If returns can't be filtered cleanly, report exactly what return fields DO exist so we can adapt.`, {schema:PROBE_SCHEMA, label:'probe', phase:'Probe'})
+phase('Fetch')
+const fetched = await agent(`Run this EXACT command with Bash (it pulls all non-news sources WITH real text for the 14 Restaurants companies and writes _sources_<ticker>.json):
+${PY} ${DIR}/workflows/fetch_company_sources.py ${TICKERS.join(' ')}
+Then report the per-ticker summary lines it printed (event counts + chars + empty count) and confirm every ticker wrote a file with empty=0. If any ticker errored or has empty>5, say so explicitly.`, {label:'fetch-sources', phase:'Fetch'})
 
 phase('Menus')
-const TICKERS = ['SBUX','MCD','CMG','YUM','DRI','TXRH','SHAK','WING','CAKE','EAT','PZZA','CBRL','BLMN','QSR']
-const pj = JSON.stringify({events_cypher:probe?.events_cypher||'', fiscalai_query:probe?.fiscalai_query||''})
-const menus = (await parallel(TICKERS.map(t => () => agent(`Repo root /home/faisal/EventMarketDB. You build the candidate driver-name menu for ONE company only: ${t}. You are BLIND — you see only ${t}, no other company's names, no shared catalog. Coin names from scratch per the rules.
+const menus = (await parallel(TICKERS.map(t => () => agent(`Repo root /home/faisal/EventMarketDB. You build the candidate driver-name menu for ONE company only: ${t}. You are BLIND — you see only ${t}, no other company's names, no shared catalog.
 
 ${RULES}
 
-DATA (run these; load Neo4j tool via ToolSearch "select:mcp__neo4j-cypher__read_neo4j_cypher"; use Bash for sqlite):
-- Events: run this Cypher with $ticker='${t}':  ${'```'}${(probe&&probe.events_cypher)||''}${'```'}
-- fiscal.ai KPIs: ${'```'}${(probe&&probe.fiscalai_query)||''}${'```'} (replace the ticker with ${t})
-PROBE CONTEXT: ${pj}
+LOAD THIS COMPANY'S REAL SOURCE TEXT: run Bash \`cat ${DIR}/_sources_${t}.json\` to load the full file (it is LARGE — use cat or python via Bash; do NOT use the Read tool, it truncates). The JSON has:
+- fiscal_kpis: [raw KPI names]  → rewrite each into a standard driver_name.
+- events: [{source_type, date, daily_stock, high_signal, is_earnings, content}] → content is the REAL document text (MD&A, Risk Factors, EX-99.1 press releases, prepared remarks, Q&A).
 
-TASK: From (a) the company's fiscal.ai KPI names [rewrite each to a standard driver_name] and (b) the text of its >2%-move events, coin a list of SPECIFIC candidate driver_names per the rules. You are NOT judging whether each was the true driver — just plausible, source-grounded candidate names. Skip vague items. For each candidate return: driver_name, a short evidence_quote (the words that justify it), source_type, date, and an XBRL concept/member only if obvious (else "null"). Dedup within ${t} only. Return the MENU_SCHEMA object.`, {schema:MENU_SCHEMA, label:`menu:${t}`, phase:'Menus'}))) ).filter(Boolean)
+TASK: from the fiscal KPIs AND the real text of the events, coin a list of SPECIFIC candidate driver_names per the rules. Not judging the true driver — just plausible, source-grounded candidate names from real material. MINE THE PROSE for narrative drivers too (input/commodity costs, tariffs, labor/wages, traffic vs pricing, demand, FX, specific products/segments), not just headline metrics. Skip vague items. For each candidate return: driver_name, a short evidence_quote (actual words from the content), source_type, date, xbrl_or_null ("null" if none obvious). Dedup within ${t} only. Return the MENU_SCHEMA object.`, {schema:MENU_SCHEMA, label:`menu:${t}`, phase:'Menus'}))) ).filter(Boolean)
 
 phase('Converge')
 const menusJson = JSON.stringify(menus)
-const conv = await agent(`Repo root /home/faisal/EventMarketDB. You receive ${menus.length} per-company driver-name menus (Restaurants industry), each coined BLIND (no company saw another's names). 
+const conv = await agent(`Repo root /home/faisal/EventMarketDB. You receive ${menus.length} per-company driver-name menus (Restaurants), each coined BLIND from that company's real source text.
 
-MENUS (json): ${menusJson.slice(0, 60000)}
+MENUS (json): ${menusJson.slice(0, 90000)}
 
 DO:
-1) Write the full data to /home/faisal/EventMarketDB/.claude/plans/Drivers/_menu_restaurants_seed.json (a JSON with: per-company menus, plus the analysis below). Use the Write tool.
-2) SHARED NAMES: list every driver_name independently coined by >=2 different companies (this is the blind-convergence signal — e.g. did multiple chains all land on same_store_sales / restaurant_traffic?). Include the company list per name.
-3) EXACT-MEANING DUPLICATES: different strings that mean the SAME thing (e.g. guest_count vs customer_transactions, same_store_sales vs comparable_sales) -> for SAME_AS review. Only EXACT same meaning, not merely related.
-4) PASS-CHECK VIOLATIONS: any driver_name that breaks a rule — broad/category word, a company ticker/legal name (own or peer), or state/impact/date/magnitude baked in.
-5) Stats: total candidates, total distinct names, and a 2-3 sentence convergence_summary answering: did blind producers converge (lots of shared names) or fragment (mostly singletons)? 
-Return the CONV_SCHEMA object (compact — do NOT echo all raw candidates back, they're in the file).`, {schema:CONV_SCHEMA, label:'converge', phase:'Converge'})
+1) Write the full data to ${DIR}/_menu_restaurants_seed.json (per-company menus + the analysis below). Use the Write tool.
+2) SHARED NAMES: every driver_name independently coined by >=2 companies (the blind-convergence signal). Include the company list per name.
+3) EXACT-MEANING DUPLICATES: different strings, SAME meaning AND scope (e.g. average_ticket vs average_check) -> SAME_AS review. A brand/segment metric (taco_bell_same_store_sales) is NOT a duplicate of the company-wide form (same_store_sales) — keep separate.
+4) PASS-CHECK VIOLATIONS: any name breaking a rule — broad/category word, a company ticker/legal name (own or peer), or state/impact/date/magnitude baked in.
+5) Stats: total candidates, total distinct names, and a 2-3 sentence convergence_summary (did blind producers converge, and did the richer text surface narrative drivers beyond the headline metrics?).
+Return the CONV_SCHEMA object (compact; do NOT echo raw candidates, they're in the file).`, {schema:CONV_SCHEMA, label:'converge', phase:'Converge'})
 
-return { probe:{return_field:probe?.return_field, sample_count:probe?.sample_count, notes:probe?.notes}, menu_counts: menus.map(m=>({t:m.ticker, n:m.candidate_count, skipped:m.skipped_count})), converge: conv }
+return { fetch_summary: (fetched||'').slice(0,1500), menu_counts: menus.map(m=>({t:m.ticker, n:m.candidate_count, skipped:m.skipped_count})), converge: conv }

@@ -58,18 +58,23 @@ For the full spec, read the two canonical files first:
   edge — `(News|Transcript)-[:INFLUENCES]->(Company)` and `(Report)-[:PRIMARY_FILER]->(Company)`; fields
   `daily_stock` (raw) and `daily_macro` (market-relative). Threshold 2% = **2.0**, not 0.02. fiscal.ai KPIs:
   `data/fiscal_ai_segments/fiscal_segments.sqlite`, `section='Key Performance Indicators'` (no sqlite3 CLI → use python3).
-- **`_menu_<industry>.json`** — per-industry review output (read-only; nothing is written to Neo4j during calibration).
-- *(Reconcile script added once Step 2 runs.)*
+- **`workflows/reconcile.js`** — Step-2 reconcile = dedup (canonical + reversible SAME_AS, **brand ≠ generic**) + the G2 gate, batch. Re-run on any `_menu_<industry>_seed.json`.
+- **`workflows/gate.js`** — **G2** standalone (independent admission gate: reuse / admit / rewrite / scope-route / skip). Reusable in LIVE production per new name + inside reconcile. `args = {names, catalog}`.
+- **`workflows/catalog_first.js`** — **G1** standalone (catalog-first reuse: nearest names → reuse / create / skip). Reusable in production + the honesty gate. `args = {events, catalog}`. *(Retrieval = LLM-over-catalog now; embedding-nearest-K = TODO at scale.)*
+- **`_menu_<industry>_seed.json`** = raw blind menu · **`_menu_<industry>_catalog.json`** = clean reconciled catalog. (Read-only; nothing written to Neo4j during calibration.)
 
 ---
 
 ## Status (2026-06-04)
 
-- **DONE — Restaurants pilot** (14 cos, blind). Strong convergence: `eps_surprise` 14/14, `revenue_surprise` 14/14,
-  `same_store_sales` 13/14; **traffic stayed separate from pricing** (v2's killer did not recur). Surfaced 13
-  exact-meaning dup pairs + 12 scope flags. Output: `_menu_restaurants.json` (92 distinct names from 177 candidates).
-- **NEXT — Step 2 reconcile** on those 92 → clean Restaurants catalog (canonical + proposed SAME_AS + scope-routes +
-  skips), review-file only. Then the honesty gate. Then a 2nd industry. Then scale.
+- **DONE — Restaurants seed → reconciled catalog.** Blind seed (filings+transcripts+KPIs, **NO news**): **84 distinct
+  names from 149 candidates**; convergence held (`eps_surprise` 14/14, `revenue_surprise` 13/14, `same_store_sales`
+  10/14), news scope-junk gone. **Step-2 reconcile → 59 final drivers** (24 core · 13 segment · 22 brand) · 13 SAME_AS
+  · 13 rewrites · 1 skip · 0 scope-routes. Outputs: `_menu_restaurants_seed.json` (raw) + `_menu_restaurants_catalog.json`
+  (clean). *(Earlier news-included pilot `_menu_restaurants.json`, 92 names, proved removing news cleans the seed.)*
+- **NEXT — honesty gate (Step 3):** freeze the 59-driver catalog → feed **fresh** restaurant events → producer must
+  reuse / create / skip (uses `catalog_first.js` = G1, then `gate.js` = G2); **independent** grade vs a **pre-written**
+  key; **grade once**. Then a 2nd industry. Then scale.
 
 ## Cost guard
 Workflow subagents run **in-session (subscription)**. Embeddings = OpenAI (cheap, separate key). **Never** use

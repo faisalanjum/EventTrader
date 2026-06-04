@@ -58,7 +58,7 @@ A Driver name is a specific, reusable cause, written as a noun. It is never a ca
 
 **R8. Keep names short.** A few words. If it takes many words to be specific, it's probably two drivers — split them (R2).
 
-**R9. Granularity.** Include only the parts the evidence directly attributes to the cause. Add product, geography, customer, segment, commodity, policy, or market detail only when the source names that detail as part of the cause; don't add details the evidence doesn't name. Company-specific product, brand, segment, or exposure names are allowed when they are the real cause; any company's ticker or legal name (affected or peer) is not.
+**R9. Granularity.** Include only the parts the evidence directly attributes to the cause. Add product, geography, customer, segment, commodity, policy, or market detail only when the source names that detail as part of the cause; don't add details the evidence doesn't name. Company-specific product, brand, segment, or exposure names are allowed when they are the real cause; any company's ticker or legal name (affected or peer) is not. A brand/segment metric (e.g. `taco_bell_same_store_sales`) and its company-wide form (`same_store_sales`) are SEPARATE drivers — never SAME_AS them; name whichever level the evidence attributes the cause to.
 
 **R10. New driver gate.** A new driver may be proposed only when ALL hold:
 - No visible Driver catalog name clearly names the same reusable cause.

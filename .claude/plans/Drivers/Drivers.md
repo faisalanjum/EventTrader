@@ -26,7 +26,7 @@
  
  2. Catalog-first (G1 — before CREATE). Show the producer the nearest existing names — exact + same-company + same-industry + embedding-similar — and REUSE if EXACT same meaning; only coin a new name (same format) if none fits. Embeddings suggest; they never decide equality. (Blind/parallel build is for the calibration TEST only; production is catalog-first.)
  
- 3. Independent admission gate (G2 — before a new name enters the ONE shared catalog). A DIFFERENT model (not the producer that coined it) rules each new name: reuse / admit / rewrite (broad→specific) / scope-route / skip. Fail-closed: exact-same meaning only · choose a canonical + propose reversible SAME_AS links (never delete, merge, or overwrite) · err specific. Scope-route = e.g. analyst_rating / analyst_price_target / short_interest → possible news/trading drivers, NOT Phase-1 fundamental drivers.
+ 3. Independent admission gate (G2 — before a new name enters the ONE shared catalog). A DIFFERENT model (not the producer that coined it) rules each new name: reuse / admit / rewrite (broad→specific) / scope-route / skip. Fail-closed: exact-same meaning only · choose a canonical + propose reversible SAME_AS links (never delete, merge, or overwrite) · err specific. Scope-route = e.g. analyst_rating / analyst_price_target / short_interest → possible news/trading drivers, NOT Phase-1 fundamental drivers. (G2 also runs in LIVE production for every new name, not just the seed build; most live events REUSE via G1 so it fires rarely — exact runtime mechanic sync/async = TBD.)
 
  4. After any batch menu build, run a reconcile pass: surface exact-meaning duplicates, choose a canonical name, and propose reversible SAME_AS links; do not merge or delete nodes.
 
