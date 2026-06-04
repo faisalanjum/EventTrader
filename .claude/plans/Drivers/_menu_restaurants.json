@@ -1,0 +1,339 @@
+{
+  "industry": "Restaurants",
+  "mode": "BLIND per-company driver-name coining (no company saw another's names)",
+  "generated_date": "2026-06-04",
+  "company_menus": [
+    {
+      "ticker": "SBUX",
+      "candidate_count": 15,
+      "skipped_count": 2,
+      "candidates": [
+        {"driver_name": "ceo_transition", "evidence_quote": "Elliott Investment Management Expresses Confidence In Starbucks Following Brian Niccol's Appointment As CEO, Views It As A Transformational Step Forward", "source_type": "news", "date": "2024-08-13", "xbrl_or_null": "null"},
+        {"driver_name": "activist_investor", "evidence_quote": "Nelson Peltz's Trian Happy With Today's Outcome And Sold Their Starbucks Stake; Trian Had Built Substantial Stake In Starbucks Over Past Few Months", "source_type": "news", "date": "2024-08-13", "xbrl_or_null": "null"},
+        {"driver_name": "analyst_rating", "evidence_quote": "TD Cowen Upgrades Starbucks to Buy, Raises Price Target to $105 ... upgrades Starbucks from Hold to Buy", "source_type": "news", "date": "2024-08-13", "xbrl_or_null": "null"},
+        {"driver_name": "eps_surprise", "evidence_quote": "Starbucks Q2 2024 Adj EPS $0.68 Misses $0.79 Estimate ... missed the analyst consensus estimate of $0.79", "source_type": "news", "date": "2024-04-30", "xbrl_or_null": "us-gaap:EarningsPerShareDiluted"},
+        {"driver_name": "revenue_surprise", "evidence_quote": "second-quarter revenue of $8.6 billion, which missed the consensus estimate of $9.129 billion", "source_type": "news", "date": "2024-04-30", "xbrl_or_null": "us-gaap:Revenues"},
+        {"driver_name": "same_store_sales", "evidence_quote": "Starbucks Q2 Global Comparable Store Sales Declined 4%", "source_type": "news", "date": "2024-04-30", "xbrl_or_null": "null"},
+        {"driver_name": "operating_margin", "evidence_quote": "Non-GAAP Operating Margin Contracted 150 bps", "source_type": "news", "date": "2024-04-30", "xbrl_or_null": "us-gaap:OperatingIncomeLoss"},
+        {"driver_name": "store_traffic", "evidence_quote": "Deteriorating Economic Outlook Has Weighed On Customer Traffic And Impact Felt Broadly Across The Industry", "source_type": "news", "date": "2024-04-30", "xbrl_or_null": "null"},
+        {"driver_name": "average_ticket", "evidence_quote": "Company Average Ticket Growth (fiscal.ai KPI)", "source_type": "fiscal.ai-kpi", "date": "2026-06-04", "xbrl_or_null": "null"},
+        {"driver_name": "china_sales", "evidence_quote": "Starbucks Exec Says In China Co Still Sees Effects Of A Slower-Than-expected Recovery", "source_type": "news", "date": "2024-04-30", "xbrl_or_null": "null"},
+        {"driver_name": "loyalty_membership", "evidence_quote": "Analysts cut price targets due to sales decline in US and China. Members decline for first time.", "source_type": "news", "date": "2024-05-01", "xbrl_or_null": "null"},
+        {"driver_name": "consumer_spending", "evidence_quote": "Co Continues To Feel Impact Of A More Cautious Consumer In The United States, Particularly With More Occasional Customers", "source_type": "news", "date": "2024-04-30", "xbrl_or_null": "null"},
+        {"driver_name": "pricing", "evidence_quote": "inflation has turned premium coffee into a luxury that many consumers can no longer afford ... Rising Prices...Forcing Their Customers To Cut Back", "source_type": "news", "date": "2024-05-01", "xbrl_or_null": "null"},
+        {"driver_name": "store_count", "evidence_quote": "Total Company-Operated Stores; US Company-Operated Stores; China Company-Operated Stores; Total Licensed Stores (fiscal.ai KPIs)", "source_type": "fiscal.ai-kpi", "date": "2026-06-04", "xbrl_or_null": "null"},
+        {"driver_name": "beverage_innovation", "evidence_quote": "Lavender Is The New Queen Bee ... Drops Hints Of Future 'Texture-Based Innovations' ... resonated with Gen Z and Millennial customers, providing a much-needed boost", "source_type": "news", "date": "2024-05-01", "xbrl_or_null": "null"}
+      ]
+    },
+    {
+      "ticker": "MCD",
+      "candidate_count": 14,
+      "skipped_count": 5,
+      "candidates": [
+        {"driver_name": "food_safety", "evidence_quote": "CDC Identifies E. Coli Outbreak Linked To Quarter Pounders ... McDonald's Temporarily Removes Suspect Ingredients", "source_type": "news", "date": "2024-10-22", "xbrl_or_null": "null"},
+        {"driver_name": "same_store_sales", "evidence_quote": "McDonald's Q4 Global Comparable Sales +0.4%; US -1.4%, Systemwide Sales +2%", "source_type": "news", "date": "2025-02-10", "xbrl_or_null": "null"},
+        {"driver_name": "systemwide_sales", "evidence_quote": "Systemwide Sales +2% ... Systemwide Sales Growth", "source_type": "news", "date": "2025-02-10", "xbrl_or_null": "null"},
+        {"driver_name": "eps_surprise", "evidence_quote": "McDonald's Q4 2024 Adj. EPS $2.83, Inline ... met the analyst consensus estimate", "source_type": "news", "date": "2025-02-10", "xbrl_or_null": "null"},
+        {"driver_name": "revenue_surprise", "evidence_quote": "Sales $6.388B Miss $6.442B Estimate", "source_type": "news", "date": "2025-02-10", "xbrl_or_null": "us-gaap:Revenues"},
+        {"driver_name": "revenue_guidance", "evidence_quote": "Annual Outlook Excludes Any Impact From Potential New U.S. Tariffs ... Sees Q1 Sales In Its International Business Slightly Lower Than Q4", "source_type": "news", "date": "2025-02-10", "xbrl_or_null": "null"},
+        {"driver_name": "china_sales", "evidence_quote": "Seeing Encouraging Signs Of Stabilization In China ... a 'Sluggish Start' In China This Year", "source_type": "news", "date": "2025-02-10", "xbrl_or_null": "null"},
+        {"driver_name": "menu_innovation", "evidence_quote": "There Is Incredible Energy For The Return Of Snack Wraps In The U.S.", "source_type": "news", "date": "2025-02-10", "xbrl_or_null": "null"},
+        {"driver_name": "tariff_policy", "evidence_quote": "Annual Outlook Excludes Any Impact From Potential New U.S. Tariffs", "source_type": "news", "date": "2025-02-10", "xbrl_or_null": "null"},
+        {"driver_name": "geopolitical_conflict", "evidence_quote": "Continue To Deal With Impacts Of War In Middle East", "source_type": "news", "date": "2024-03-13", "xbrl_or_null": "null"},
+        {"driver_name": "russia_exit", "evidence_quote": "McDonald's Corp announced Monday its intention to sell its Russian restaurants", "source_type": "news", "date": "2022-05-17", "xbrl_or_null": "null"},
+        {"driver_name": "management_change", "evidence_quote": "Form 8-K - Current report - Item 5.02", "source_type": "8-k", "date": "2024-03-13", "xbrl_or_null": "null"},
+        {"driver_name": "franchised_restaurant_count", "evidence_quote": "Franchised Restaurants", "source_type": "fiscal.ai-kpi", "date": "2025-02-10", "xbrl_or_null": "null"},
+        {"driver_name": "restaurant_count", "evidence_quote": "Total Systemwide Restaurants ... Company-Operated Restaurants", "source_type": "fiscal.ai-kpi", "date": "2025-02-10", "xbrl_or_null": "null"}
+      ]
+    },
+    {
+      "ticker": "CMG",
+      "candidate_count": 11,
+      "skipped_count": 3,
+      "candidates": [
+        {"driver_name": "same_store_sales", "evidence_quote": "Comparable Restaurant Sales Increase", "source_type": "fiscal.ai-kpi", "date": "null", "xbrl_or_null": "null"},
+        {"driver_name": "restaurant_traffic", "evidence_quote": "Traffic Reversal Presents Confounding Problem", "source_type": "news", "date": "2025-10-30", "xbrl_or_null": "null"},
+        {"driver_name": "average_check", "evidence_quote": "Average Check Increase", "source_type": "fiscal.ai-kpi", "date": "null", "xbrl_or_null": "null"},
+        {"driver_name": "menu_pricing", "evidence_quote": "Menu Price Increase", "source_type": "fiscal.ai-kpi", "date": "null", "xbrl_or_null": "null"},
+        {"driver_name": "new_restaurant_openings", "evidence_quote": "Expects 315 To 345 New Company-Owned Restaurant Openings ... For 2026, Anticipating 350-370 New Restaurant Openings", "source_type": "news", "date": "2025-10-29", "xbrl_or_null": "null"},
+        {"driver_name": "average_restaurant_sales", "evidence_quote": "Average Restaurant Sales", "source_type": "fiscal.ai-kpi", "date": "null", "xbrl_or_null": "null"},
+        {"driver_name": "revenue_surprise", "evidence_quote": "Sales $3.003B Miss $3.026B Estimate", "source_type": "news", "date": "2025-10-29", "xbrl_or_null": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax"},
+        {"driver_name": "eps_surprise", "evidence_quote": "Q3 Adj. EPS $0.29, Inline ... met the analyst consensus estimate", "source_type": "news", "date": "2025-10-29", "xbrl_or_null": "us-gaap:EarningsPerShareDiluted"},
+        {"driver_name": "same_store_sales_guidance", "evidence_quote": "forecasted low single-digit declines in comparable restaurant sales for 2025", "source_type": "news", "date": "2025-10-30", "xbrl_or_null": "null"},
+        {"driver_name": "food_costs", "evidence_quote": "Price Increases Offset Elevated Costs Across The Board, Most Notably In Avocado, Packaging, Dairy, Beef And Chicken", "source_type": "news", "date": "2022-07-26", "xbrl_or_null": "us-gaap:FoodAndBeverageCostOfSales"},
+        {"driver_name": "short_interest", "evidence_quote": "short percent of float has risen 4.63% ... 1.13 million shares sold short, which is 4.07% of all regular shares", "source_type": "news", "date": "2022-07-27", "xbrl_or_null": "null"}
+      ]
+    },
+    {
+      "ticker": "YUM",
+      "candidate_count": 14,
+      "skipped_count": 5,
+      "candidates": [
+        {"driver_name": "same_store_sales", "evidence_quote": "KFC Division Same-Store Sales Growth / Taco Bell Division Same-Store Sales Growth / Pizza Hut Division Same-Store Sales Growth (fiscal.ai KPI) and 'Solid Same-Store Sales Growth'", "source_type": "fiscal.ai-kpi", "date": "2021-07-29", "xbrl_or_null": "null"},
+        {"driver_name": "restaurant_unit_count", "evidence_quote": "Habit Burger / KFC / Taco Bell / Pizza Hut Division Total Unit Count (fiscal.ai KPI); 'opened 871 new restaurants globally'; '2% Underlying Net Restaurant Growth Beat'", "source_type": "fiscal.ai-kpi", "date": "2025-08-05", "xbrl_or_null": "null"},
+        {"driver_name": "eps_surprise", "evidence_quote": "Yum Brands Q4 2024 Adj. EPS $1.61 Beats $1.60 Estimate; Q2 Adj. EPS $1.44 Misses $1.46 Estimate", "source_type": "news", "date": "2025-02-06", "xbrl_or_null": "null"},
+        {"driver_name": "revenue_surprise", "evidence_quote": "Yum Brands Q3 ... Sales $1.979B Beat $1.970B Estimate; Q2 Sales $1.933B Miss $1.939B Estimate", "source_type": "news", "date": "2025-11-04", "xbrl_or_null": "null"},
+        {"driver_name": "system_sales_guidance", "evidence_quote": "the company targeting 5% unit growth and 7% system sales growth long-term", "source_type": "news", "date": "2025-02-06", "xbrl_or_null": "null"},
+        {"driver_name": "unit_growth_guidance", "evidence_quote": "the company targeting 5% unit growth ... long-term; 'Raising LT Growth Guidance'", "source_type": "news", "date": "2025-02-06", "xbrl_or_null": "null"},
+        {"driver_name": "taco_bell_sales", "evidence_quote": "Fueled By Taco Bell and KFC Growth Engines; 'Taco Bell, KFC Power Yum Brands Growth ... Taco Bell expansion'", "source_type": "news", "date": "2025-02-06", "xbrl_or_null": "null"},
+        {"driver_name": "kfc_sales", "evidence_quote": "Fueled By Taco Bell and KFC Growth Engines; '2% Underlying Net Restaurant Growth Beat Driven By KFC International'", "source_type": "news", "date": "2025-02-06", "xbrl_or_null": "null"},
+        {"driver_name": "digital_sales", "evidence_quote": "strong digital sales; 'record digital sales mix'", "source_type": "news", "date": "2025-11-04", "xbrl_or_null": "null"},
+        {"driver_name": "pizza_hut_divestiture", "evidence_quote": "Yum! Brands Initiates Formal Review Of Strategic Options For Pizza Hut Brand", "source_type": "news", "date": "2025-11-04", "xbrl_or_null": "null"},
+        {"driver_name": "dividend_policy", "evidence_quote": "Board Of Directors Approved A 6% Increase In The Company's Quarterly Dividend From $0.67 To $0.71 Per Share", "source_type": "news", "date": "2025-02-06", "xbrl_or_null": "null"},
+        {"driver_name": "commodity_cost_inflation", "evidence_quote": "Expect Inflation Pressures Across Several Building Products That Were Sourced From Mexico And Canada", "source_type": "news", "date": "2025-08-05", "xbrl_or_null": "null"},
+        {"driver_name": "operating_margin", "evidence_quote": "even as earnings and margins fell short of expectations; 'margins fell short'", "source_type": "news", "date": "2025-08-05", "xbrl_or_null": "us-gaap:OperatingIncomeLoss"},
+        {"driver_name": "pizza_hut_sales", "evidence_quote": "Sees Healthier Pizza Hut Brand Vs. Pre-Covid; 'Pizza Hut Division Same-Store Sales Growth'", "source_type": "news", "date": "2021-07-29", "xbrl_or_null": "null"}
+      ]
+    },
+    {
+      "ticker": "DRI",
+      "candidate_count": 11,
+      "skipped_count": 3,
+      "candidates": [
+        {"driver_name": "eps_surprise", "evidence_quote": "Q2 2025 Adj EPS $2.03 Beats $2.02 Estimate", "source_type": "news", "date": "2024-12-19", "xbrl_or_null": "EarningsPerShareDiluted"},
+        {"driver_name": "revenue_surprise", "evidence_quote": "Sales $2.89B Miss $2.90B Estimate", "source_type": "news", "date": "2024-12-19", "xbrl_or_null": "Revenues"},
+        {"driver_name": "revenue_guidance", "evidence_quote": "Expects 2025 Sales Of Approximately $12.1B Vs. Consensus Of $12.084B", "source_type": "news", "date": "2024-12-19", "xbrl_or_null": "null"},
+        {"driver_name": "eps_guidance", "evidence_quote": "Affirms FY2026 Adj EPS Guidance of $10.50-$10.70 vs $10.68 Est", "source_type": "news", "date": "2025-09-18", "xbrl_or_null": "null"},
+        {"driver_name": "same_store_sales", "evidence_quote": "Reported Q2 2025 Same-Restaurant Sales Of 2.4%", "source_type": "news", "date": "2024-12-19", "xbrl_or_null": "null"},
+        {"driver_name": "olive_garden_same_store_sales", "evidence_quote": "Olive Garden 2.0 %", "source_type": "news", "date": "2024-12-19", "xbrl_or_null": "null"},
+        {"driver_name": "longhorn_same_store_sales", "evidence_quote": "LongHorn Steakhouse 7.5 %", "source_type": "news", "date": "2024-12-19", "xbrl_or_null": "null"},
+        {"driver_name": "share_buyback", "evidence_quote": "Darden Restaurants Announces $500M Buyback", "source_type": "news", "date": "2021-03-25", "xbrl_or_null": "PaymentsForRepurchaseOfCommonStock"},
+        {"driver_name": "restaurant_acquisition", "evidence_quote": "now includes Chuy's operating results ... excludes approximately $47 million, pre-tax, of expected transaction and", "source_type": "news", "date": "2024-12-19", "xbrl_or_null": "null"},
+        {"driver_name": "restaurant_count", "evidence_quote": "The increase stems from the addition of 79 Ruth's Chris Steak House restaurants and 53 new locations", "source_type": "news", "date": "2024-03-21", "xbrl_or_null": "null"},
+        {"driver_name": "average_unit_volume", "evidence_quote": "fiscal.ai KPI: Olive Garden / LongHorn Steakhouse Average Annual Sales per Restaurant", "source_type": "fiscal.ai-kpi", "date": "2026-06-04", "xbrl_or_null": "null"}
+      ]
+    },
+    {
+      "ticker": "TXRH",
+      "candidate_count": 13,
+      "skipped_count": 3,
+      "candidates": [
+        {"driver_name": "same_store_sales", "evidence_quote": "Comparable Restaurant Sales", "source_type": "fiscal.ai-kpi", "date": "null", "xbrl_or_null": "null"},
+        {"driver_name": "average_unit_volume", "evidence_quote": "Texas Roadhouse - Avg Unit Volume", "source_type": "fiscal.ai-kpi", "date": "null", "xbrl_or_null": "null"},
+        {"driver_name": "store_weeks", "evidence_quote": "Company - Total Store Weeks", "source_type": "fiscal.ai-kpi", "date": "null", "xbrl_or_null": "null"},
+        {"driver_name": "restaurant_count", "evidence_quote": "Total Restaurant Count", "source_type": "fiscal.ai-kpi", "date": "null", "xbrl_or_null": "null"},
+        {"driver_name": "restaurant_traffic", "evidence_quote": "Company - Guest Traffic Count Increase", "source_type": "fiscal.ai-kpi", "date": "null", "xbrl_or_null": "null"},
+        {"driver_name": "average_check", "evidence_quote": "Company - Per Person Avg Check Increase", "source_type": "fiscal.ai-kpi", "date": "null", "xbrl_or_null": "null"},
+        {"driver_name": "eps_surprise", "evidence_quote": "reported quarterly earnings of $1.08 per share which beat the analyst consensus estimate of $1.06", "source_type": "news", "date": "2024-02-15", "xbrl_or_null": "us-gaap:EarningsPerShareDiluted"},
+        {"driver_name": "revenue_surprise", "evidence_quote": "Sales $1.512B Beat $1.500B Estimate", "source_type": "news", "date": "2025-08-07", "xbrl_or_null": "us-gaap:Revenues"},
+        {"driver_name": "menu_pricing", "evidence_quote": "Texas Roadhouse Plans To Implement Menu Price Increase Of ~2.2% In Late March", "source_type": "news", "date": "2024-02-15", "xbrl_or_null": "null"},
+        {"driver_name": "capex_guidance", "evidence_quote": "Texas Roadhouse Reiterates FY24 Total Capital Expenditures $340M-$350M", "source_type": "news", "date": "2024-02-15", "xbrl_or_null": "null"},
+        {"driver_name": "commodity_cost_inflation", "evidence_quote": "Texas Roadhouse Sees 2021 Commodity Cost Inflation Of ~7%", "source_type": "news", "date": "2021-07-29", "xbrl_or_null": "null"},
+        {"driver_name": "labor_cost_inflation", "evidence_quote": "Food Inflation Ticking Higher With Inflation Impacting Labor & Other Opex Lines", "source_type": "news", "date": "2021-07-30", "xbrl_or_null": "null"},
+        {"driver_name": "analyst_rating", "evidence_quote": "Wedbush Maintains Outperform on Texas Roadhouse, Raises Price Target to $160", "source_type": "news", "date": "2024-02-16", "xbrl_or_null": "null"}
+      ]
+    },
+    {
+      "ticker": "SHAK",
+      "candidate_count": 12,
+      "skipped_count": 7,
+      "candidates": [
+        {"driver_name": "same_store_sales", "evidence_quote": "Total Same-Shack Sales", "source_type": "fiscal.ai-kpi", "date": "null", "xbrl_or_null": "null"},
+        {"driver_name": "restaurant_traffic", "evidence_quote": "Total Traffic Increase", "source_type": "fiscal.ai-kpi", "date": "null", "xbrl_or_null": "null"},
+        {"driver_name": "menu_pricing", "evidence_quote": "Total Price/Mix Increase", "source_type": "fiscal.ai-kpi", "date": "null", "xbrl_or_null": "null"},
+        {"driver_name": "average_unit_volume", "evidence_quote": "Average Weekly Sales", "source_type": "fiscal.ai-kpi", "date": "null", "xbrl_or_null": "null"},
+        {"driver_name": "unit_growth", "evidence_quote": "New Domestic Company-Operated Shacks Opened; New Licensed Shacks Opened; System-Wide Shack Count", "source_type": "fiscal.ai-kpi", "date": "null", "xbrl_or_null": "null"},
+        {"driver_name": "system_wide_sales", "evidence_quote": "Shake Shack Q4 System-wide Sales $442.1M, +21.4% Y/Y", "source_type": "news", "date": "2024-02-15", "xbrl_or_null": "null"},
+        {"driver_name": "restaurant_level_margin", "evidence_quote": "Shack-Level Operating Profit", "source_type": "fiscal.ai-kpi", "date": "null", "xbrl_or_null": "null"},
+        {"driver_name": "revenue_surprise", "evidence_quote": "Sales $286.24M Beat $280.34M Estimate", "source_type": "news", "date": "2024-02-15", "xbrl_or_null": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax"},
+        {"driver_name": "eps_surprise", "evidence_quote": "Shake Shack Q4 Adj. EPS $0.02 Beats $0.01 Estimate", "source_type": "news", "date": "2024-02-15", "xbrl_or_null": "us-gaap:EarningsPerShareDiluted"},
+        {"driver_name": "revenue_guidance", "evidence_quote": "Shake Shack FY24 Outlook: Revenue $1.21B-$1.25B Vs. $1.25B Estimate", "source_type": "news", "date": "2024-02-15", "xbrl_or_null": "null"},
+        {"driver_name": "restaurant_level_margin_guidance", "evidence_quote": "Shake Shack Level Operating Margin 20%-21%", "source_type": "news", "date": "2024-02-15", "xbrl_or_null": "null"},
+        {"driver_name": "operating_margin", "evidence_quote": "Q2 results show strong profit margins ... and a significant EBITDA surge", "source_type": "news", "date": "2024-08-01", "xbrl_or_null": "us-gaap:OperatingIncomeLoss"}
+      ]
+    },
+    {
+      "ticker": "WING",
+      "candidate_count": 12,
+      "skipped_count": 3,
+      "candidates": [
+        {"driver_name": "same_store_sales", "evidence_quote": "domestic same-store sales up 10%", "source_type": "news", "date": "2025-02-19", "xbrl_or_null": "null"},
+        {"driver_name": "same_store_sales_guidance", "evidence_quote": "Reiterates ~1% Domestic Same Store Sales Growth Guidance", "source_type": "news", "date": "2025-07-30", "xbrl_or_null": "null"},
+        {"driver_name": "restaurant_average_unit_volume", "evidence_quote": "Domestic Average Unit Volume", "source_type": "fiscal.ai-kpi", "date": "2026-06-04", "xbrl_or_null": "null"},
+        {"driver_name": "restaurant_unit_count", "evidence_quote": "Total System-Wide Restaurants; Total Domestic Restaurants; Domestic Franchised Restaurants", "source_type": "fiscal.ai-kpi", "date": "2026-06-04", "xbrl_or_null": "null"},
+        {"driver_name": "unit_growth_guidance", "evidence_quote": "Raises 2025 Global Unit Growth Outlook To 17-18% From 16-17%", "source_type": "news", "date": "2025-07-30", "xbrl_or_null": "null"},
+        {"driver_name": "system_wide_sales", "evidence_quote": "System-wide sales rose 27.6%", "source_type": "news", "date": "2025-02-19", "xbrl_or_null": "null"},
+        {"driver_name": "digital_sales", "evidence_quote": "Digital sales account for 72.2% of total system-wide sales", "source_type": "news", "date": "2025-07-30", "xbrl_or_null": "null"},
+        {"driver_name": "eps_surprise", "evidence_quote": "Q2 Adj. EPS $1.00 Beats $0.86 Estimate", "source_type": "news", "date": "2025-07-30", "xbrl_or_null": "us-gaap:EarningsPerShareDiluted"},
+        {"driver_name": "revenue_surprise", "evidence_quote": "Sales $174.33M Beat $172.77M Estimate", "source_type": "news", "date": "2025-07-30", "xbrl_or_null": "us-gaap:Revenues"},
+        {"driver_name": "eps_guidance", "evidence_quote": "Wingstop Sees FY22 EPS $1.55-$1.57 Vs $1.53 Est", "source_type": "news", "date": "2022-07-28", "xbrl_or_null": "null"},
+        {"driver_name": "chicken_wing_cost", "evidence_quote": "EPS Misses As Chicken Wing Costs Bite ... amid rising costs", "source_type": "news", "date": "2024-10-30", "xbrl_or_null": "null"},
+        {"driver_name": "analyst_rating", "evidence_quote": "TD Securities Reiterates Buy on Wingstop, Maintains $265 Price Target", "source_type": "news", "date": "2025-04-30", "xbrl_or_null": "null"}
+      ]
+    },
+    {
+      "ticker": "CAKE",
+      "candidate_count": 8,
+      "skipped_count": 22,
+      "candidates": [
+        {"driver_name": "same_store_sales", "evidence_quote": "The Cheesecake Factory Restaurants Comparable Restaurant Sales; North Italia Comparable Restaurant Sales", "source_type": "fiscal.ai-kpi", "date": "null", "xbrl_or_null": "null"},
+        {"driver_name": "restaurant_unit_count", "evidence_quote": "Total Company-Owned Restaurants; The Cheesecake Factory Restaurants Company-Owned Restaurants; North Italia Company-Owned Restaurants", "source_type": "fiscal.ai-kpi", "date": "null", "xbrl_or_null": "null"},
+        {"driver_name": "international_licensed_units", "evidence_quote": "Number of International-Licensed Restaurants", "source_type": "fiscal.ai-kpi", "date": "null", "xbrl_or_null": "null"},
+        {"driver_name": "eps_surprise", "evidence_quote": "Cheesecake Factory Q3 2024 Adj EPS $0.58 Beats $0.49 Estimate", "source_type": "news", "date": "2024-10-29", "xbrl_or_null": "us-gaap:EarningsPerShareDiluted"},
+        {"driver_name": "revenue_surprise", "evidence_quote": "Sales $769.00M Beat $742.58M Estimate", "source_type": "news", "date": "2021-07-27", "xbrl_or_null": "us-gaap:Revenues"},
+        {"driver_name": "gross_margin_guidance", "evidence_quote": "Firm Expects Margin Guidance To Build Above 2019 Levels Despite Near-Term Cost Pressures", "source_type": "news", "date": "2021-07-28", "xbrl_or_null": "null"},
+        {"driver_name": "equity_offering", "evidence_quote": "Announces Proposed Offerings of $300M Of Convertible Senior Notes and $175M Of Common Stock", "source_type": "news", "date": "2021-06-10", "xbrl_or_null": "null"},
+        {"driver_name": "convertible_notes_issuance", "evidence_quote": "$300M Of Convertible Senior Notes; The Elimination Of Convertible Preferred Stock", "source_type": "news", "date": "2021-06-10", "xbrl_or_null": "null"}
+      ]
+    },
+    {
+      "ticker": "EAT",
+      "candidate_count": 13,
+      "skipped_count": 3,
+      "candidates": [
+        {"driver_name": "same_store_sales", "evidence_quote": "System-Wide - Comparable Restaurant Sales; Total Company-Owned - Comparable Restaurant Sales; comparable restaurant sales rose", "source_type": "fiscal.ai-kpi", "date": "2024-08-14", "xbrl_or_null": "null"},
+        {"driver_name": "chilis_comparable_sales", "evidence_quote": "Chili's Company-Owned - Comparable Restaurant Sales; Q2 earnings beat estimates, fueled by strong Chili's sales growth; Chili's leading at 3.5%", "source_type": "fiscal.ai-kpi", "date": "2025-01-29", "xbrl_or_null": "null"},
+        {"driver_name": "maggianos_comparable_sales", "evidence_quote": "Maggiano's Company-Owned - Comparable Restaurant Sales", "source_type": "fiscal.ai-kpi", "date": "2025-01-29", "xbrl_or_null": "null"},
+        {"driver_name": "franchise_comparable_sales", "evidence_quote": "International Franchise - Comparable Restaurant Sales; Total Franchise - Comparable Restaurant Sales; United States Franchise - Comparable Restaurant Sales", "source_type": "fiscal.ai-kpi", "date": "2025-01-29", "xbrl_or_null": "null"},
+        {"driver_name": "restaurant_count", "evidence_quote": "Total Number of System-Wide Restaurants; Number of Company-Owned Restaurants; Number of Chili's Restaurants - Domestic", "source_type": "fiscal.ai-kpi", "date": "2025-01-29", "xbrl_or_null": "null"},
+        {"driver_name": "franchise_unit_count", "evidence_quote": "Number of Franchised Restaurants", "source_type": "fiscal.ai-kpi", "date": "2025-01-29", "xbrl_or_null": "null"},
+        {"driver_name": "restaurant_traffic", "evidence_quote": "Q2 earnings beat estimates, fueled by strong Chili's sales growth, increased traffic, and higher operating margins; Chili's Traffic Boom Powers Brinker's FY25 Revenue Outlook", "source_type": "news", "date": "2025-01-29", "xbrl_or_null": "null"},
+        {"driver_name": "eps_surprise", "evidence_quote": "Q2 2025 Adj. EPS $2.80 Beats $1.79 Estimate; Q3 Adj. EPS $0.92 Misses $1.03 Estimate", "source_type": "news", "date": "2025-01-29", "xbrl_or_null": "null"},
+        {"driver_name": "revenue_surprise", "evidence_quote": "Sales $1.358B Beat $1.240B Estimate; Sales $960.60M Miss $982.25M Estimate", "source_type": "news", "date": "2025-01-29", "xbrl_or_null": "null"},
+        {"driver_name": "eps_guidance", "evidence_quote": "Raises FY2025 Adj EPS Guidance from $7.50-$8.00 to $8.50-$8.75 vs $8.48 Est; Projects Adjusted EPS Of $4.35-$4.75 Vs. $4.78 Estimate", "source_type": "news", "date": "2025-04-29", "xbrl_or_null": "null"},
+        {"driver_name": "revenue_guidance", "evidence_quote": "Sees FY25 Revenues Of $5.15B-$5.25B Vs. $4.90B Estimate; Raises FY2025 Sales Guidance from $5.15B-$5.25B to $5.33B-$5.35B", "source_type": "news", "date": "2025-01-29", "xbrl_or_null": "null"},
+        {"driver_name": "operating_margin", "evidence_quote": "higher operating margins; Brinker Stock Plunges On Q1 Earnings Miss, Margin Pressure; an 8.8% rise in operating income", "source_type": "news", "date": "2021-10-20", "xbrl_or_null": "null"},
+        {"driver_name": "analyst_rating", "evidence_quote": "KeyBanc Upgrades Brinker International to Overweight; Citigroup Maintains Neutral on Brinker International, Lowers Price Target to $27", "source_type": "news", "date": "2021-01-28", "xbrl_or_null": "null"}
+      ]
+    },
+    {
+      "ticker": "PZZA",
+      "candidate_count": 12,
+      "skipped_count": 4,
+      "candidates": [
+        {"driver_name": "same_store_sales", "evidence_quote": "Total Comparable Sales Growth; Domestic Company-Owned Restaurants Comparable Sales Growth; North America Restaurants Comparable Sales Growth (also event: \"Comps Up 13.5% In North America, 21.4% Internationally\")", "source_type": "fiscal.ai-kpi", "date": "2026-06-04", "xbrl_or_null": "null"},
+        {"driver_name": "system_wide_sales", "evidence_quote": "Total Global System-Wide Restaurant Sales Growth; North America Restaurants System-Wide Sales Growth; International Restaurants System-Wide Sales Growth", "source_type": "fiscal.ai-kpi", "date": "2026-06-04", "xbrl_or_null": "null"},
+        {"driver_name": "restaurant_count", "evidence_quote": "System-Wide Restaurants; Domestic Company Owned Restaurants; Franchised North America Restaurants; International Franchised Restaurants", "source_type": "fiscal.ai-kpi", "date": "2026-06-04", "xbrl_or_null": "null"},
+        {"driver_name": "takeover_interest", "evidence_quote": "Papa John's Stock Heats Up On Takeover Bid Reports ... a Qatari-backed investment fund has made a bid to take the struggling pizza chain private", "source_type": "news", "date": "2026-03-11", "xbrl_or_null": "null"},
+        {"driver_name": "eps_surprise", "evidence_quote": "Q1 Adj. EPS $0.36 Beats $0.35 Estimate ... beat the analyst consensus estimate of $0.35 by 2.86 percent", "source_type": "news", "date": "2025-05-08", "xbrl_or_null": "us-gaap:EarningsPerShareDiluted"},
+        {"driver_name": "revenue_surprise", "evidence_quote": "Sales $518.31M Beat $513.55M Estimate (also: \"Sales $498.179M Miss $515.002M Estimate\")", "source_type": "news", "date": "2025-05-08", "xbrl_or_null": "us-gaap:Revenues"},
+        {"driver_name": "system_wide_sales_guidance", "evidence_quote": "FY25 Outlook Reaffirmed: System-Wide Sales Up 2%-5% (also: \"Guides 2026 Global System-Wide Restaurant Sales Flat To Down Low Single-Digits\")", "source_type": "news", "date": "2025-05-08", "xbrl_or_null": "null"},
+        {"driver_name": "adjusted_ebitda_guidance", "evidence_quote": "Adjusted EBITDA $200M-$220M (also: \"Sees Adjusted EBITDA Of $200M To $210M\")", "source_type": "news", "date": "2025-05-08", "xbrl_or_null": "null"},
+        {"driver_name": "restaurant_openings_guidance", "evidence_quote": "North America Gross Restaurant Openings 85-115, International 180-200", "source_type": "news", "date": "2025-05-08", "xbrl_or_null": "null"},
+        {"driver_name": "share_buyback", "evidence_quote": "Papa John's Announces $425M Buyback", "source_type": "news", "date": "2021-11-04", "xbrl_or_null": "us-gaap:PaymentsForRepurchaseOfCommonStock"},
+        {"driver_name": "tariff_policy", "evidence_quote": "Notes Limited Tariff Impact But Flags Consumer Spending Uncertainty", "source_type": "news", "date": "2025-05-08", "xbrl_or_null": "null"},
+        {"driver_name": "consumer_spending", "evidence_quote": "Tight Wallets, Heavy Promotions Pressure Papa John's Results ... weaker domestic demand and increased promotions (also: \"Flags Consumer Spending Uncertainty\")", "source_type": "news", "date": "2026-02-26", "xbrl_or_null": "null"}
+      ]
+    },
+    {
+      "ticker": "CBRL",
+      "candidate_count": 15,
+      "skipped_count": 2,
+      "candidates": [
+        {"driver_name": "analyst_rating", "evidence_quote": "CL King analyst Andrew Wolf downgrades Cracker Barrel Old from Buy to Neutral", "source_type": "news", "date": "2024-05-17", "xbrl_or_null": "null"},
+        {"driver_name": "analyst_price_target", "evidence_quote": "Citigroup analyst Jon Tower maintains ... and lowers the price target from $61 to $48", "source_type": "news", "date": "2024-05-17", "xbrl_or_null": "null"},
+        {"driver_name": "share_repurchase", "evidence_quote": "Cracker Barrel Maintains Its Current Share Repurchase Authorization That Has $138M Of Remaining Availability", "source_type": "news", "date": "2024-05-16", "xbrl_or_null": "null"},
+        {"driver_name": "dividend_policy", "evidence_quote": "Cracker Barrel Reduces Quarterly Dividend To $0.25 Per Share, Down From Estimated $1.30 Per Share", "source_type": "news", "date": "2024-05-16", "xbrl_or_null": "us-gaap:CommonStockDividendsPerShareDeclared"},
+        {"driver_name": "restaurant_traffic", "evidence_quote": "Financial Results To Be Below Its Previous Expectations, Primarily Due To Weaker Than Anticipated Traffic", "source_type": "news", "date": "2024-05-16", "xbrl_or_null": "null"},
+        {"driver_name": "ebitda_guidance", "evidence_quote": "Anticipates FY25 Adjusted EBITDA To Be Relatively In Line With, Or Slightly Lower Y/Y", "source_type": "news", "date": "2024-05-16", "xbrl_or_null": "null"},
+        {"driver_name": "eps_surprise", "evidence_quote": "Q1 EPS $0.99 Misses $1.22 Estimate", "source_type": "news", "date": "2022-12-02", "xbrl_or_null": "us-gaap:EarningsPerShareDiluted"},
+        {"driver_name": "revenue_surprise", "evidence_quote": "Sales $839.50M Beat $835.72M Estimate", "source_type": "news", "date": "2022-12-02", "xbrl_or_null": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax"},
+        {"driver_name": "consumer_spending", "evidence_quote": "Warning On Near-Term Consumer Environment", "source_type": "news", "date": "2022-12-02", "xbrl_or_null": "null"},
+        {"driver_name": "same_store_sales", "evidence_quote": "Cracker Barrel Q1 Comparable Store Restaurant Sales Decrease 0.5%", "source_type": "news", "date": "2023-11-30", "xbrl_or_null": "null"},
+        {"driver_name": "comparable_retail_sales", "evidence_quote": "Comparable Store Retail Sales Fell 8.1%", "source_type": "news", "date": "2023-11-30", "xbrl_or_null": "null"},
+        {"driver_name": "revenue_guidance", "evidence_quote": "Cracker Barrel Expects FY24 Total Revenue Of $3.4B-$3.5B", "source_type": "news", "date": "2023-11-30", "xbrl_or_null": "null"},
+        {"driver_name": "convertible_notes_offering", "evidence_quote": "Cracker Barrel Announces Proposed $275 Million Private Offering Of Convertible Senior Notes Due 2030", "source_type": "news", "date": "2025-06-09", "xbrl_or_null": "null"},
+        {"driver_name": "executive_transition", "evidence_quote": "Form 8-K - Current report - Item 5.02", "source_type": "8-k", "date": "2025-02-28", "xbrl_or_null": "null"},
+        {"driver_name": "cost_inflation", "evidence_quote": "Dodges FY22 Earnings Outlook Citing Inflation", "source_type": "news", "date": "2021-11-23", "xbrl_or_null": "null"}
+      ]
+    },
+    {
+      "ticker": "BLMN",
+      "candidate_count": 11,
+      "skipped_count": 2,
+      "candidates": [
+        {"driver_name": "same_store_sales", "evidence_quote": "US Restaurants Comparable Sales Growth; U.S. comparable restaurant sales fell 1.1%, with Outback Steakhouse seeing a 1.8% drop", "source_type": "fiscal.ai-kpi", "date": "2025-02-26", "xbrl_or_null": "null"},
+        {"driver_name": "restaurant_traffic", "evidence_quote": "US Restaurants Traffic Growth", "source_type": "fiscal.ai-kpi", "date": "null", "xbrl_or_null": "null"},
+        {"driver_name": "average_check", "evidence_quote": "US Restaurants Average Check Per Person Growth", "source_type": "fiscal.ai-kpi", "date": "null", "xbrl_or_null": "null"},
+        {"driver_name": "restaurant_count", "evidence_quote": "Company-Owned System-Wide Restaurants; Franchised System-Wide Restaurants; Total Number of System-Wide Restaurants", "source_type": "fiscal.ai-kpi", "date": "null", "xbrl_or_null": "null"},
+        {"driver_name": "eps_surprise", "evidence_quote": "Bloomin Brands Q2 Adj. EPS $0.33 Beats $0.27 Estimate", "source_type": "news", "date": "2025-08-06", "xbrl_or_null": "null"},
+        {"driver_name": "revenue_surprise", "evidence_quote": "Sales $972.00M Miss $1.08B Estimate", "source_type": "news", "date": "2025-02-26", "xbrl_or_null": "null"},
+        {"driver_name": "eps_guidance", "evidence_quote": "Bloomin Brands Lowers FY2025 Adj EPS Guidance from $1.20-$1.40 to $1.00-$1.10 vs $1.21 Est", "source_type": "news", "date": "2025-08-06", "xbrl_or_null": "null"},
+        {"driver_name": "same_store_sales_guidance", "evidence_quote": "Projects U.S. Comparable Restaurant Sales To Fall In The Range Of (2)%-(1)%", "source_type": "news", "date": "2024-11-08", "xbrl_or_null": "null"},
+        {"driver_name": "restaurant_margin", "evidence_quote": "Bloomin' Brands Restaurant Margin Squeeze & Guidance Cut Lowers Stock By 22%", "source_type": "news", "date": "2025-08-06", "xbrl_or_null": "null"},
+        {"driver_name": "food_cost_inflation", "evidence_quote": "beats Q2 EPS estimates but suffers margin squeeze from inflation and guidance cuts", "source_type": "news", "date": "2025-08-06", "xbrl_or_null": "null"},
+        {"driver_name": "refranchising", "evidence_quote": "Announces Strategic Re-franchise Of Brazil Operations: Inks Pact With Vinci Partners To Sell 67% Of Brazil Operations", "source_type": "news", "date": "2024-11-08", "xbrl_or_null": "null"}
+      ]
+    },
+    {
+      "ticker": "QSR",
+      "candidate_count": 16,
+      "skipped_count": 5,
+      "candidates": [
+        {"driver_name": "burger_king_same_store_sales", "evidence_quote": "Burger King Comparable Sales", "source_type": "fiscal.ai-kpi", "date": "null", "xbrl_or_null": "null"},
+        {"driver_name": "tim_hortons_same_store_sales", "evidence_quote": "Tim Hortons Comparable Sales", "source_type": "fiscal.ai-kpi", "date": "null", "xbrl_or_null": "null"},
+        {"driver_name": "popeyes_same_store_sales", "evidence_quote": "Popeyes Comparable Sales", "source_type": "fiscal.ai-kpi", "date": "null", "xbrl_or_null": "null"},
+        {"driver_name": "firehouse_subs_same_store_sales", "evidence_quote": "Firehouse Subs Comparable Sales", "source_type": "fiscal.ai-kpi", "date": "null", "xbrl_or_null": "null"},
+        {"driver_name": "international_same_store_sales", "evidence_quote": "International Comparable Sales", "source_type": "fiscal.ai-kpi", "date": "null", "xbrl_or_null": "null"},
+        {"driver_name": "burger_king_restaurant_count", "evidence_quote": "Burger King Restaurant Count", "source_type": "fiscal.ai-kpi", "date": "null", "xbrl_or_null": "null"},
+        {"driver_name": "tim_hortons_restaurant_count", "evidence_quote": "Tim Hortons Restaurant Count", "source_type": "fiscal.ai-kpi", "date": "null", "xbrl_or_null": "null"},
+        {"driver_name": "popeyes_restaurant_count", "evidence_quote": "Popeyes Restaurant Count", "source_type": "fiscal.ai-kpi", "date": "null", "xbrl_or_null": "null"},
+        {"driver_name": "firehouse_subs_restaurant_count", "evidence_quote": "Firehouse Subs Restaurant Count", "source_type": "fiscal.ai-kpi", "date": "null", "xbrl_or_null": "null"},
+        {"driver_name": "international_restaurant_count", "evidence_quote": "International Restaurant Count", "source_type": "fiscal.ai-kpi", "date": "null", "xbrl_or_null": "null"},
+        {"driver_name": "eps_surprise", "evidence_quote": "reported quarterly earnings of $0.82 per share which beat the analyst consensus estimate of $0.73", "source_type": "news", "date": "2022-08-04", "xbrl_or_null": "null"},
+        {"driver_name": "revenue_surprise", "evidence_quote": "Sales $1.64B Beat $1.56B Estimate", "source_type": "news", "date": "2022-08-04", "xbrl_or_null": "null"},
+        {"driver_name": "system_wide_sales", "evidence_quote": "Global System-wide Sales Grow Nearly 10% For The Fourth Quarter And Over 12% For 2023", "source_type": "news", "date": "2024-02-13", "xbrl_or_null": "null"},
+        {"driver_name": "digital_sales", "evidence_quote": "Digital Sales Grow Over 20% Y/Y To $14B In 2023, Representing Over A Third Of System-wide Sales", "source_type": "news", "date": "2024-02-13", "xbrl_or_null": "null"},
+        {"driver_name": "operating_income", "evidence_quote": "Tops Estimates, Raises Dividend, But Shares Fall On Lower Operating Income", "source_type": "news", "date": "2026-02-12", "xbrl_or_null": "OperatingIncomeLoss"},
+        {"driver_name": "franchisee_profitability", "evidence_quote": "2023 Home Market Franchisee Profitability Increases 30% Y/Y, On Average", "source_type": "news", "date": "2024-02-13", "xbrl_or_null": "null"}
+      ]
+    }
+  ],
+  "analysis": {
+    "totals": {
+      "company_count": 14,
+      "total_candidates": 177,
+      "total_distinct_names": 92,
+      "shared_name_count": 23,
+      "singleton_name_count": 69
+    },
+    "shared_names": [
+      {"driver_name": "eps_surprise", "company_count": 14, "companies": ["BLMN","CAKE","CBRL","CMG","DRI","EAT","MCD","PZZA","QSR","SBUX","SHAK","TXRH","WING","YUM"]},
+      {"driver_name": "revenue_surprise", "company_count": 14, "companies": ["BLMN","CAKE","CBRL","CMG","DRI","EAT","MCD","PZZA","QSR","SBUX","SHAK","TXRH","WING","YUM"]},
+      {"driver_name": "same_store_sales", "company_count": 13, "companies": ["BLMN","CAKE","CBRL","CMG","DRI","EAT","MCD","PZZA","SBUX","SHAK","TXRH","WING","YUM"]},
+      {"driver_name": "restaurant_count", "company_count": 6, "companies": ["BLMN","DRI","EAT","MCD","PZZA","TXRH"]},
+      {"driver_name": "restaurant_traffic", "company_count": 6, "companies": ["BLMN","CBRL","CMG","EAT","SHAK","TXRH"]},
+      {"driver_name": "analyst_rating", "company_count": 5, "companies": ["CBRL","EAT","SBUX","TXRH","WING"]},
+      {"driver_name": "revenue_guidance", "company_count": 5, "companies": ["CBRL","DRI","EAT","MCD","SHAK"]},
+      {"driver_name": "eps_guidance", "company_count": 4, "companies": ["BLMN","DRI","EAT","WING"]},
+      {"driver_name": "operating_margin", "company_count": 4, "companies": ["EAT","SBUX","SHAK","YUM"]},
+      {"driver_name": "system_wide_sales", "company_count": 4, "companies": ["PZZA","QSR","SHAK","WING"]},
+      {"driver_name": "average_check", "company_count": 3, "companies": ["BLMN","CMG","TXRH"]},
+      {"driver_name": "average_unit_volume", "company_count": 3, "companies": ["DRI","SHAK","TXRH"]},
+      {"driver_name": "consumer_spending", "company_count": 3, "companies": ["CBRL","PZZA","SBUX"]},
+      {"driver_name": "digital_sales", "company_count": 3, "companies": ["QSR","WING","YUM"]},
+      {"driver_name": "menu_pricing", "company_count": 3, "companies": ["CMG","SHAK","TXRH"]},
+      {"driver_name": "restaurant_unit_count", "company_count": 3, "companies": ["CAKE","WING","YUM"]},
+      {"driver_name": "same_store_sales_guidance", "company_count": 3, "companies": ["BLMN","CMG","WING"]},
+      {"driver_name": "china_sales", "company_count": 2, "companies": ["MCD","SBUX"]},
+      {"driver_name": "commodity_cost_inflation", "company_count": 2, "companies": ["TXRH","YUM"]},
+      {"driver_name": "dividend_policy", "company_count": 2, "companies": ["CBRL","YUM"]},
+      {"driver_name": "share_buyback", "company_count": 2, "companies": ["DRI","PZZA"]},
+      {"driver_name": "tariff_policy", "company_count": 2, "companies": ["MCD","PZZA"]},
+      {"driver_name": "unit_growth_guidance", "company_count": 2, "companies": ["WING","YUM"]}
+    ],
+    "exact_meaning_duplicate_pairs": [
+      {"a": "restaurant_traffic", "b": "store_traffic", "why": "Both = number of customer visits/guests per period. SBUX 'store_traffic' vs the 6-company 'restaurant_traffic' are identical metrics; 'store' vs 'restaurant' is the same store unit."},
+      {"a": "average_check", "b": "average_ticket", "why": "Both = average spend per customer/transaction. SBUX coined 'average_ticket'; 3 others coined 'average_check'. Same metric, different word for the same per-customer-spend variable."},
+      {"a": "restaurant_count", "b": "store_count", "why": "Both = total number of units/locations. SBUX 'store_count' = the same footprint count as 'restaurant_count' (6 companies). 'store' vs 'restaurant' is the same unit."},
+      {"a": "restaurant_count", "b": "restaurant_unit_count", "why": "Identical concept: count of restaurant units/locations. 'unit' is just an explicit synonym for the store already counted; same footprint variable."},
+      {"a": "average_unit_volume", "b": "restaurant_average_unit_volume", "why": "Identical metric: average annual sales per restaurant. WING merely prefixed 'restaurant_'; the AUV concept is the same."},
+      {"a": "average_unit_volume", "b": "average_restaurant_sales", "why": "Both = average sales per restaurant unit (AUV). CMG's 'average_restaurant_sales' is the literal definition of average_unit_volume."},
+      {"a": "system_wide_sales", "b": "systemwide_sales", "why": "Pure spelling variant (underscore vs none) of the same metric: total sales across company-owned plus franchised units."},
+      {"a": "menu_pricing", "b": "pricing", "why": "Both = menu price increases / pricing actions as a sales-driver. SBUX 'pricing' is the same lever as 'menu_pricing' (3 companies); 'pricing' is just the unprefixed form."},
+      {"a": "share_buyback", "b": "share_repurchase", "why": "Identical corporate action: company buying back its own stock. 'buyback' and 'repurchase' are exact synonyms."},
+      {"a": "management_change", "b": "executive_transition", "why": "Both = departure/appointment of senior officers (both grounded in 8-K Item 5.02). Same causal event under two strings."},
+      {"a": "convertible_notes_issuance", "b": "convertible_notes_offering", "why": "Identical capital-structure event: issuing/offering convertible senior notes. 'issuance' and 'offering' are the same act here."},
+      {"a": "restaurant_margin", "b": "restaurant_level_margin", "why": "Both = restaurant-/store-level operating margin (profit at the unit before corporate overhead). Same metric; SHAK adds 'level'."},
+      {"a": "food_cost_inflation", "b": "commodity_cost_inflation", "why": "Both = inflation in food/commodity input costs. BLMN 'food_cost_inflation' and the commodity-input inflation of TXRH/YUM name the same input-cost-inflation cause (chicken/beef/avocado are commodities = food costs)."}
+    ],
+    "near_duplicate_not_merged_notes": [
+      "ceo_transition vs management_change/executive_transition: ceo_transition is NARROWER (CEO specifically) — kept as related-but-not-exact, candidate for a hierarchy not a SAME_AS.",
+      "Brand-scoped comps (chilis_comparable_sales, maggianos_comparable_sales, franchise_comparable_sales, olive_garden_/longhorn_same_store_sales, taco_bell_/kfc_/pizza_hut_/burger_king_/tim_hortons_/popeyes_/firehouse_subs_/international_same_store_sales) are SUBSETS of same_store_sales, not exact dupes of the rolled-up phrase.",
+      "Per-brand restaurant counts (burger_king_/tim_hortons_/popeyes_/firehouse_subs_/international_restaurant_count, franchised_restaurant_count, franchise_unit_count, international_licensed_units) are scoped subsets of restaurant_count/restaurant_unit_count, not exact dupes.",
+      "food_costs (CMG) vs food_cost_inflation/commodity_cost_inflation: food_costs is the cost LEVEL; the others name the INFLATION (rate of change). Related, borderline — listed as near-dupe, not exact.",
+      "cost_inflation (CBRL) is a BROADER bare-category version of food_cost_inflation/labor_cost_inflation/commodity_cost_inflation — flagged as a pass violation (too broad), not a clean exact dupe.",
+      "comparable_retail_sales (CBRL) is a distinct segment metric (retail merchandise comps), NOT the same as same_store_sales (restaurant comps) — correctly kept separate."
+    ]
+  }
+}
