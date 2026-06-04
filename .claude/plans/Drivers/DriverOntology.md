@@ -2,96 +2,78 @@
 
 ## §1. Purpose
 
-This file defines what a valid driver name is — the meaning of the naming contract, not its execution. Any LLM that follows this file produces, given the same evidence + the same registry catalog + the same runtime vocab/thresholds, one of: the same reuse of an existing driver name, the same new driver proposal, or the same deterministic rejection. Determinism scope (LEXICAL, not semantic): this reproducibility covers spelling/order variants + the known synonym/plural/acronym maps; it does NOT by itself converge different WORD-CHOICES for the same concept (e.g. iphone_china_sales vs iphone_china_demand) -- that semantic convergence is the learned synonym map (Pass-2) + the isolated judge = EVENTUAL consistency, not a first-emission guarantee. Producers whose source labels do not follow this ontology (e.g., fiscal.ai KPI ingest) are exempt from the naming contract for raw ingest; their entries may be carried alongside but are not subject to this ontology until canonicalized through a conforming proposal.
+How an LLM producer reuses or creates Driver names. Two jobs, same rules:
+1. Build the initial source-grounded PotentialDriver menu for a company.
+2. On a fresh event, choose REUSE an existing Driver / CREATE a new one / SKIP if vague.
 
-This file defines meaning, not execution. At runtime the LLM also receives: the live registry catalog (existing names, aliases, segments, allowed_states, definitions), the current vocab (token categories and entries), and the current numerical thresholds. Their contents are not in this file. This file alone is not a runnable spec.
+A Driver name is a specific, reusable cause, written as a noun. It is never a category, state, stock impact, date, source, company name, or quote wording — those live in other fields (§3).
 
 ## §2. Glossary
 
-- **driver**: a reusable causal variable that moves a stock price.
+- **driver**: a reusable causal variable that can affect a stock price.
 - **driver_name**: the lowercase identifier of one driver. Contains only ASCII letters, digits, and underscores; starts with a letter; does not end with an underscore; contains no consecutive underscores; has at least two characters.
-- **alias**: an exact spelling or order variant of one driver's name; never a different concept.
-- **registry**: the live set of drivers visible at the run's PIT cutoff.
-- **driver_state**: a verb describing what happened to the variable in this evidence.
-- **direction**: the stock impact for the affected company; `long` or `short`.
-- **evidence**: source-grounded references (quotes, IDs, dates, magnitudes, provider names) supporting an emission.
-- **segment**: the dimension this driver represents; `"Total"` unless the name itself encodes a sub-dimension.
-- **base_label**: an optional canonical financial-metric label.
-- **allowed_states**: the closed list of verbs valid for this driver, drawn from a single state class.
-- **definition**: one sentence describing the variable named by `driver_name`.
-- **canonical form**: the unique form of a name where tokens are in the fixed slot order; no stopwords remain; each token is the canonical token per the runtime synonym/plural/acronym maps; and compound metrics appear as a single metric slot.
+- **one name per driver**: a Driver stores exactly one `driver_name`. Raw/source wording lives on the DriverUpdate quote/evidence; spelling / plural / acronym / word-order variants resolve to one canonical form; exact duplicate meanings found later are joined by a reversible SAME_AS link.
+- **Driver catalog**: the Driver names visible for this event. Do not use names created after the event date.
+- **driver_state**: what happened to the driver in this event.
+- **stock_impact**: the effect on the affected company's stock; `long` or `short`.
+- **evidence**: quote / source / raw wording that supports the DriverUpdate.
+- **canonical form**: the one chosen spelling and word-order for a name; if a catalog name already means the same cause, reuse it.
 
 ## §3. Field Placement
 
-| Field | Content |
-|---|---|
-| `driver_name` | The reusable causal noun variable only. |
-| `driver_state` | A single verb from the runtime state vocab, drawn from this driver's `allowed_states`. |
-| `direction` | `long` or `short`. |
-| `evidence` | Source-grounded refs: quotes, IDs, dates, magnitudes, provider names, raw wording. |
-| `aliases` | Exact spelling/order variants of the same driver. |
-| `label` | Display text whose concept tokens equal the `driver_name` tokens as a set. |
-| `segment` | `"Total"` if `driver_name` has no sub-dimension; otherwise the sub-dimension the name encodes. |
-| `base_label` | Null or a canonical financial-metric label from runtime banks. |
-| `definition` | One sentence describing the variable; not a tautology of name tokens. |
-| `allowed_states` | A subset of one state class; size bounded per runtime threshold. |
+`driver_name` = the reusable cause only — no state, stock impact, magnitude, source, date, or raw quote wording. Those go in `driver_state` / `stock_impact` / `evidence` (defined in §2).
 
 ## §4. Naming Rules
 
-**R1. Reuse first.** Before proposing a new driver, verify the candidate does not already exist in the registry — neither as an exact `driver_name` nor as an alias, including under canonical form. If a registry driver matches under canonical form, reuse that driver's exact name.
+**Core rule.** Name as specific as the evidence allows; never coin a broad or category name. Breadth is not chosen by the LLM — it emerges only when the same exact Driver name is reused across events or companies. Before creating a new name, first try to reuse an existing catalog name at the same useful level of detail.
 
-**R2. Name only the causal variable.** `driver_name` carries only the reusable causal noun the evidence is about. What happened to it is `driver_state`. The stock impact is `direction`. Identity, period, magnitude, source, provider, and quote wording belong in `evidence`. If the evidence contains two or more independent causal variables, emit a separate driver tag per variable; never bundle them into one name.
+**R1. Reuse first.** Before proposing a new Driver, check the visible Driver catalog. If an existing Driver clearly names the same reusable cause, reuse its exact `driver_name` — do not create a new name for spelling, plural, acronym, or word-order variants (those are the same canonical form). If none clearly fits, propose a specific, source-grounded new Driver; if the source is vague, skip.
 
-**R3. Slot order is fixed.** When a name has multiple tokens, they appear in this order: theme, object, customer, geography, institution, metric. Each token belongs to exactly one slot per runtime vocab. Unused slots are absent. The same set of tokens in any other order is not a different name; it is the same name (the canonical form). If the runtime vocab ever classifies a token to more than one slot, the earlier slot in this order wins. A single-token name is valid only when the token is itself a standalone shortcut (R5); otherwise the name requires at least one discriminator slot. At most one token per slot. A name with two tokens that classify to the same slot is rejected.
+**R2. Name only the causal variable.** `driver_name` carries only the reusable causal noun the evidence is about. What happened to it is `driver_state`. The effect on the stock is `stock_impact`. The affected company is linked from DriverUpdate. The actual stock return lives on the linked event, not on Driver or DriverUpdate. Identity, period, magnitude, source, provider, company, and quote wording belong outside `driver_name`. If the evidence contains two or more independent causal variables, emit a separate driver tag per variable; never bundle them into one name.
 
-**R4. Closed vocabulary.** Every token in a `driver_name` is either in the runtime vocab or in an existing registry name/alias. A previously unseen token may appear only inside a new driver proposal that satisfies R11.
+**R3. Word order.** When coining a new name, order the parts: concrete thing or actor → needed detail → metric or mechanism. ("Thing or actor" = a product, commodity, customer group, or policy body like the Fed / OPEC.) Examples: `iphone_china_sales`, `hyperscaler_capex`, `oil_price`, `fed_rate`, `restaurant_traffic`.
 
-**R5. Standalone shortcut.** Some standard names appear as full canonical entries in the runtime shortcuts vocab. When your assembled name exactly equals such an entry, that entry is the canonical form and slot order does not further apply. R5 covers macro, regulatory, corporate-action, and event shortcuts (e.g., `yield_curve`, `fda_approval`, `share_buyback`, `opec_supply`, `chip_shortage`) — renamed from the prior "Macro shortcut" wording per E23 / OQ3 because R5 is multi-domain, not macro-only. **Note on examples:** the names listed here are illustrative; not all are necessarily seeded in the §F.1 `SHORTCUTS_VOCAB` bootstrap list. Pattern B (E27) allows new shortcut Drivers to be added at runtime via `propose_new_drivers[]` with `is_shortcut=true` (subject to the v7-2 ≥2-token gate + R11 evidence gate + banned-content gate). Per E27 Pattern B (DriverImprovements v10 fold), shortcut Drivers are registered directly as `:Driver{name, is_shortcut:true}` rows with the `is_shortcut: bool DEFAULT false` schema property (per v8-1) — no parallel store. The runtime shortcuts vocab is populated from the SHORTCUTS_VOCAB markdown seed (mechanism file §F.1) PLUS the live Driver registry filtered by `is_shortcut=true` at writer bootstrap.
+**R4. Word choice.** If no Driver catalog name fits, use the most standard words available: familiar market/policy names and standard financial phrases first (R5/R6); otherwise use the source's own words for the specific thing and metric. Do not invent a synonym, headline phrase, vague phrase, or broad category.
 
-**R6. Compound metrics count as one slot.** Specific multi-token financial concepts (listed in the runtime compound-metrics bank) occupy a single metric slot even though they contain underscores.
+**R5. Familiar names win.** For well-known market / policy drivers, use the familiar form, not an invented one: `fed_rate`, `yield_curve`, `oil_price`, `tariff_policy`, `fda_approval`.
 
-**R7. Banned content categories.** None of the following appears inside `driver_name`. The specific tokens in each category are in the runtime vocab.
-- State verbs and verb-derived word forms (progressive `-ing` or past-tense `-ed` endings) — belong in `driver_state`. Exception: a small allowlist of legitimate accounting/financial qualifiers (e.g., `consolidated`, `diluted`, `weighted`) is defined in the runtime vocab.
-- Direction or polarity words — belong in `direction`.
+**R6. Keep standard financial phrases whole.** A standard concept stays together as one name; don't split or reorder it: `gross_margin`, `free_cash_flow`, `net_interest_margin`, `same_store_sales`.
+
+**Earnings convention.** For earnings results, name the metric plus its mechanism — `{metric}_surprise` (reported vs consensus) or `{metric}_guidance` (forward outlook): e.g. `eps_surprise`, `revenue_surprise`, `revenue_guidance`, `gross_margin_guidance`. Beat / miss / raised / lowered → `driver_state`, never the name.
+
+**R7. Banned content.** None of the following appears inside `driver_name`. These banned meanings are rejected even if the source uses them.
+- State words that describe what happened — belong in `driver_state`, not in `driver_name`. Stable nouns or standard metric phrases are allowed even if they end in `-ing` or `-ed`, such as `pricing`, `bookings`, `leasing`, `operating_margin`, `consolidated_revenue`, or `diluted_eps`.
+- Direction or polarity words — belong in `stock_impact`.
 - Motion or change nouns describing what happened to the variable — belong in `driver_state`, not in name.
-- Tickers, legal entity names, person names.
+- Any company's ticker or legal name (affected or peer), and person names. Institutions, regulators, and policy bodies are allowed when they are the cause: `fed_rate`, `opec_supply`, `fda_approval`.
 - Period tokens (quarters, years, fiscal markers).
-- Numeric or qualitative thresholds, magnitudes, or size descriptors.
+- Numeric or qualitative thresholds, magnitudes, size descriptors, or bare unit tokens (`bps`, `percent`, `usd`).
 - Source-type labels (filing forms, document kinds).
 - Provider or vendor labels.
 - Accounting-tag prefixes (XBRL namespaces).
 - Metaphors, sentiment adjectives, effect-on-stock words.
-- Bare category labels standalone.
+- A bare category word by itself, such as `macro`, `sector`, `demand`, or `sentiment`.
 - Vague descriptors too broad to name a causal variable.
-- Stopwords.
+- Glue words such as `the`, `of`, `in`, `and`, `to`, or `for`.
 
-**R8. Length is bounded.** Effective slot count is bounded by the runtime threshold; exceeding it is a deterministic rejection. Compound metrics count as one slot toward the bound.
+**R8. Keep names short.** A few words. If it takes many words to be specific, it's probably two drivers — split them (R2).
 
-**R9. Granularity.** Include in the name only the slots that the evidence directly attributes as part of the cause. Removing any included slot must change the causal variable named. Add a sub-dimension slot (geography, customer, object, theme) only when the evidence directly attributes the cause to that sub-dimension. Do not add sub-dimensions the evidence does not name.
+**R9. Granularity.** Include only the parts the evidence directly attributes to the cause. Add product, geography, customer, segment, commodity, policy, or market detail only when the source names that detail as part of the cause; don't add details the evidence doesn't name. Company-specific product, brand, segment, or exposure names are allowed when they are the real cause; any company's ticker or legal name (affected or peer) is not.
 
-**R10. Companion field rules.**
-- `aliases` never bridge two different drivers; each alias is an exact variant of the same concept.
-- `label` tokens equal `driver_name` tokens as a set.
-- `segment` is `"Total"` unless `driver_name` encodes a sub-dimension; if it does, `segment` is that sub-dimension's canonical label.
-- `allowed_states` is drawn from one state class.
-- `definition` is exactly one sentence describing the variable; not a token-by-token restatement of the name.
-- `base_label` is null or a canonical financial-metric label from the runtime banks.
-
-**R11. New driver gate.** A new driver may be proposed only when ALL hold:
-- No registry name or alias matches the candidate under canonical form.
+**R10. New driver gate.** A new driver may be proposed only when ALL hold:
+- No visible Driver catalog name clearly names the same reusable cause.
 - The candidate satisfies every rule above.
-- Every token in the name is either in runtime vocab/registry/aliases, or it is a new token whose slot is unambiguously determined by its position among known tokens; the new token is not in any banned category, does not equal any existing name/alias/vocab entry, and appears (or its synonym/plural/acronym pre-image appears) in the supporting evidence.
-- The same emission attaches this driver to at least one causal claim with non-empty evidence.
+- Each important noun in the name comes from the source material or an existing catalog Driver.
+- The same LLM output attaches this driver to at least one causal claim with non-empty evidence.
 - The driver must not be tied to a single specific event, date, filing, company-quarter, headline, or source row; one-off concepts are rejected.
-- If applying R1–R10 produces more than one unresolved candidate name, do not propose a new driver; reject as ambiguous.
-- All companion fields satisfy R10.
+- If applying R1–R9 produces more than one unresolved candidate name, do not propose a new driver; reject as ambiguous.
 
 ## §5. Examples (illustrative only)
 
 **State and magnitude do not enter the name.**
 Evidence: "OPEC announced a 1-million-barrel-per-day supply cut."
-Outcome: `driver_name = opec_supply` (standalone shortcut from runtime vocab — R5 covers macro/regulatory/corporate-action/event shortcuts); `driver_state = cut`; the magnitude stays in evidence; `direction` is company-specific and is not illustrated here. Demonstrates R2, R5, R7.
+Outcome: `driver_name = opec_supply`; `driver_state = cut`; the magnitude stays outside the name; `stock_impact` is company-specific and is not illustrated here. Demonstrates R2, R5, R7.
 
-**Word-order variant reuses the registry name.**
+**Word-order variant reuses the catalog name.**
 Evidence: "Apple's iPhone sales in mainland China decelerated."
-Registry contains `iphone_china_sales`. The candidate `china_iphone_sales` is in the same canonical form as the registry name and reuses it. "Apple" does not enter the name. "Decelerated" is the state. Demonstrates R1, R3, R7.
+The catalog contains `iphone_china_sales`. The candidate `china_iphone_sales` is in the same canonical form as the catalog name and reuses it. "Apple" does not enter the name. "Decelerated" is the state. Demonstrates R1, R3, R7.
