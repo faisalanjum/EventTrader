@@ -49,6 +49,15 @@ For the full spec, read the two canonical files first:
 - **Transport = full inline, no slice.** Workflow JS has **no filesystem**, so dedup/gate reach the writer via the prompt
   as schema-validated objects (no char cap; per-industry fits the model context — split the reconcile by batch only if an
   industry is ever too large).
+- **Independent merge-skeptic (the `Refute` stage) = adversarial verification of the two FUSE decisions.** The gate is an
+  independent check on the ADMIT arm, but the MERGE arm had none: `SAME_AS` (dedup proposes) and a meaning-changing
+  `rewrite` (gate proposes) could silently fuse two different drivers, and the structural validator can't see meaning.
+  So reconcile adds a skeptic **after dedup+gate, before the writer** that tries to REFUTE each SAME_AS link and each
+  rewrite from the evidence (the 3-check); **default = keep separate**. JS then **mechanically filters** the rejected
+  ones out of the writer's input — note it can't *truly* enforce (no fs → the writer writes the file), so the writer is
+  told to copy the approved lists EXACTLY and the validator backstops structure. **Refuted SAME_AS → drop link** (both
+  names stay separate); **refuted rewrite → parked in `unresolved_rewrites`** (not applied, not lost) — a **5th tracked
+  outcome bucket** the validator counts. Scope = **SAME_AS + rewrite ONLY** (admit already has the gate; skip/drop can't fuse).
 
 ---
 
@@ -67,6 +76,9 @@ For the full spec, read the two canonical files first:
    For any proposed SAME_AS, reuse, or rewrite, first verify all three are true: same object or metric; same scope;
    same mechanism. If any one is false or unclear, do not SAME_AS, reuse, or rewrite. Keep the names separate, admit
    separately, or skip. A rewrite may only change wording; it must not change the underlying driver.
+   Then an **independent merge-skeptic** (`Refute`) tries to break each SAME_AS + rewrite from the evidence; refuted links
+   drop (keep separate), refuted rewrites park in `unresolved_rewrites`. A deterministic validator hard-fails any
+   structural break before the file ships.
 3. **Honesty gate** — freeze the catalog → feed **fresh** events using only names/data visible on or before the event date → producer must reuse / create / skip; an
    **independent** grader scores against a **pre-written** key; **grade once** (see `Drivers.md` § Honesty gate).
 4. **Human review → next industry.** Scale to ~1000 by repeating 1–3. Any rule change must be a **general principle**,
@@ -85,8 +97,8 @@ No route/news lane and no fundamental/news split — a valid reusable driver is 
   edge — `(News|Transcript)-[:INFLUENCES]->(Company)` and `(Report)-[:PRIMARY_FILER]->(Company)`; fields
   `daily_stock` (raw) and `daily_macro` (market-relative). Threshold 2% = **2.0**, not 0.02. fiscal.ai KPIs:
   `data/fiscal_ai_segments/fiscal_segments.sqlite`, `section='Key Performance Indicators'` (no sqlite3 CLI → use python3).
-- **`workflows/reconcile.js`** — Step-2 reconcile = dedup (canonical + reversible SAME_AS, **brand ≠ generic**) + the G2 gate (admit/rewrite/skip) + the Validate phase. Re-run on any `_menu_<industry>_seed.json`.
-- **`workflows/validate_catalog.py`** — deterministic post-reconcile **validator** (zero judgment, HARD-FAIL): forbidden buckets (route key / `kind`) · name-in-two-buckets · dropped seed names · dangling refs · accounting · provenance. Runs as `reconcile.js`'s final Validate phase; also runnable standalone `validate_catalog.py <seed> <catalog>`.
+- **`workflows/reconcile.js`** — Step-2 reconcile = dedup (canonical + reversible SAME_AS, **brand ≠ generic**) ‖ the G2 gate (admit/rewrite/skip) → a **`Refute` merge-skeptic** (refutes each SAME_AS + rewrite from evidence; refuted SAME_AS dropped, refuted rewrite → `unresolved_rewrites`; JS filters rejects out of the writer's input) → writer → the Validate phase. Re-run on any `_menu_<industry>_seed.json`.
+- **`workflows/validate_catalog.py`** — deterministic post-reconcile **validator** (zero judgment, HARD-FAIL): forbidden buckets (route key / `kind`) · name-in-two-buckets · dropped seed names · dangling refs · accounting · provenance. **5 outcome buckets:** final · skips · rewrite.from · same_as.variant · `unresolved_rewrites` (the parked refuted rewrites — counted, NOT ref-checked). Runs as `reconcile.js`'s final Validate phase; also runnable standalone `validate_catalog.py <seed> <catalog>`.
 - **`workflows/gate.js`** — **G2** standalone (independent admission gate: reuse / admit / rewrite / skip). Reusable in LIVE production per new name + inside reconcile. `args = {candidates:[{driver_name,quote,source,date,company}], catalog}` — judges from each candidate's evidence, not the bare name.
 - **`workflows/catalog_first.js`** — **G1** standalone (catalog-first reuse: nearest visible names → reuse / create / skip). Reusable in production + the honesty gate. `args = {events, catalog}` where `catalog` is the already-retrieved visible names for that event.
 - **`_menu_<industry>_seed.json`** = raw blind menu · **`_menu_<industry>_catalog.json`** = clean reconciled catalog. (Read-only; nothing written to Neo4j during calibration.) Each seed candidate carries its proof: `{driver_name, quote, source, date}`; company = the menu it sits under (the hard event-link is the production `DriverUpdate→event` schema, not the seed).
@@ -101,9 +113,11 @@ No route/news lane and no fundamental/news split — a valid reusable driver is 
   Restaurants result reflects the EXACT process we scale to every industry. **No partial re-run while still changing the method.**
 - **Pipeline shape (locked so far):** seed = **ALL non-news sources** (real text; `>2%` = flag) → `menu_build.js`
   (content-aware; prior run gave a ~250-name menu, convergence held, narrative drivers surfaced — to be regenerated).
-  Reconcile = dedup (reuse arm) ‖ **G2 `reuse/admit/rewrite/skip`** (enum-locked; **no route, no kind, no fundamental/news
-  split**; both reviewers judge from **evidence**; **no slice**) → writer → `validate_catalog.py` HARD-FAILS any
-  structural break (route key / kind / dropped names / dangling refs / disjoint / accounting).
+  Reconcile = dedup (reuse arm) ‖ **G2 `admit/rewrite/skip`** (enum-locked; **no route, no kind, no fundamental/news
+  split**; both reviewers judge from **evidence**; **no slice**) → **`Refute` merge-skeptic** (breaks bad SAME_AS +
+  meaning-changing rewrites; refuted SAME_AS dropped, refuted rewrite → `unresolved_rewrites`) → writer →
+  `validate_catalog.py` HARD-FAILS any structural break (route key / kind / dropped names / dangling refs / disjoint /
+  accounting; 5th bucket = `unresolved_rewrites`). **Refute stage built + dry-run-proven 2026-06-06; not yet pipeline-run.**
 - **THEN — honesty gate (Step 3):** freeze the clean catalog → **fresh** events → reuse / create / skip (G1 =
   `catalog_first.js`, G2 = `gate.js`); **independent** grade vs a **pre-written** key; **grade once**. Then a 2nd industry. Then scale.
 

@@ -1,7 +1,7 @@
 export const meta = {
   name: 'driver-reconcile-restaurants',
   description: 'Step 2 reconcile over the Restaurants seed menu: (Dedup) canonical + reversible SAME_AS for exact-same-meaning only = the REUSE arm; (Gate) independent admit/rewrite/skip per DriverOntology (one test: valid reusable driver?). Review-file only; no graph writes; no merges/deletes.',
-  phases: [ { title: 'Review', detail: 'dedup proposer + independent gate, in parallel' }, { title: 'Write', detail: 'merge into the clean catalog review file' }, { title: 'Validate', detail: 'deterministic structure check (zero judgment); HARD-FAIL if broken' } ],
+  phases: [ { title: 'Review', detail: 'dedup proposer + independent gate, in parallel' }, { title: 'Refute', detail: 'independent skeptic breaks bad SAME_AS + meaning-changing rewrites; JS filters them out' }, { title: 'Write', detail: 'assemble the clean catalog from the skeptic-filtered lists' }, { title: 'Validate', detail: 'deterministic structure check (zero judgment); HARD-FAIL if broken' } ],
 }
 
 const DIR  = '/home/faisal/EventMarketDB/.claude/plans/Drivers'
@@ -28,8 +28,12 @@ const GATE_SCHEMA = { type:'object', additionalProperties:false, required:['verd
   verdicts:{type:'array', items:{type:'object', additionalProperties:false, required:['driver_name','verdict','reason'], properties:{ driver_name:{type:'string'}, verdict:{type:'string', enum:['admit','rewrite','skip'], description:'admit | rewrite | skip'}, rewrite_to:{type:'string', description:'target name if verdict=rewrite, else ""'}, reason:{type:'string'} }}},
   counts:{type:'object', additionalProperties:true, description:'admit/rewrite/skip totals'} } }
 
-const WRITE_SCHEMA = { type:'object', additionalProperties:false, required:['file_written','final_catalog_count','same_as_count','rewrite_count','skip_count','summary'], properties:{
-  file_written:{type:'string'}, final_catalog_count:{type:'integer'}, same_as_count:{type:'integer'}, rewrite_count:{type:'integer'}, skip_count:{type:'integer'}, summary:{type:'string'} } }
+const REFUTE_SCHEMA = { type:'object', additionalProperties:false, required:['same_as_verdicts','rewrite_verdicts'], properties:{
+  same_as_verdicts:{type:'array', items:{type:'object', additionalProperties:false, required:['canonical','variant','survives','why'], properties:{ canonical:{type:'string'}, variant:{type:'string'}, survives:{type:'boolean', description:'TRUE only if you CANNOT refute they are the EXACT same object AND scope AND mechanism; any doubt = FALSE'}, why:{type:'string'} }}},
+  rewrite_verdicts:{type:'array', items:{type:'object', additionalProperties:false, required:['driver_name','rewrite_to','survives','why'], properties:{ driver_name:{type:'string'}, rewrite_to:{type:'string'}, survives:{type:'boolean', description:'TRUE only if the rewrite is provably WORDING-ONLY (identical meaning); any change of object/scope/mechanism = FALSE'}, why:{type:'string'} }}} } }
+
+const WRITE_SCHEMA = { type:'object', additionalProperties:false, required:['file_written','final_catalog_count','same_as_count','rewrite_count','skip_count','unresolved_rewrite_count','summary'], properties:{
+  file_written:{type:'string'}, final_catalog_count:{type:'integer'}, same_as_count:{type:'integer'}, rewrite_count:{type:'integer'}, skip_count:{type:'integer'}, unresolved_rewrite_count:{type:'integer'}, summary:{type:'string'} } }
 
 phase('Review')
 const [dedup, gate] = await parallel([
@@ -51,12 +55,40 @@ ${EVIDENCE_RULE}
 Do NOT classify "fundamental vs news/trading" — that is a producer concern, not a catalog one; if it is a valid reusable driver, admit it. KEEP brand/segment-specific names. Return GATE_SCHEMA.`, {schema:GATE_SCHEMA, label:'gate', phase:'Review'}),
 ])
 
+phase('Refute')
+const refute = await agent(`You are an INDEPENDENT skeptic. Your ONLY job: BREAK fusions — decisions that fold two DIFFERENT drivers into one. Read ${SEED} for each name's evidence (menus[].candidates[] = {driver_name, quote, source, date}, across the company menus). For BOTH lists, default survives=FALSE; mark TRUE only if you genuinely cannot refute it.
+
+1) PROPOSED SAME_AS LINKS (canonical <= variant): ${JSON.stringify(dedup.same_as_links)}
+   survives=TRUE only if, reading BOTH names' evidence quotes, they are the EXACT same object AND scope AND mechanism (the 3-check). Different brand/segment vs company-wide, different metric/geography/mechanism, or mixed evidence -> FALSE.
+
+2) PROPOSED REWRITES (driver_name -> rewrite_to): ${JSON.stringify((gate.verdicts||[]).filter(v => v.verdict==='rewrite').map(v => ({driver_name:v.driver_name, rewrite_to:v.rewrite_to})))}
+   survives=TRUE only if the rewrite is provably WORDING-ONLY: rewrite_to means the IDENTICAL driver the evidence describes (a pure spelling / standard-phrase / word-order fix). Any change of object/scope/mechanism -> FALSE.
+
+Return REFUTE_SCHEMA: one verdict for EVERY link and EVERY rewrite, each with a one-line why.`, {schema:REFUTE_SCHEMA, label:'refute', phase:'Refute'})
+
+// JS mechanically FILTERS rejected decisions out of the writer's INPUT (the skeptic made the judgment; this only applies its booleans). Missing verdict -> not survives -> never fuse (fail-close).
+const norm = s => (s||'').trim().toLowerCase()
+const linkOk = new Map((refute.same_as_verdicts||[]).map(v => [`${norm(v.canonical)}|${norm(v.variant)}`, v.survives === true]))
+const rwOk   = new Map((refute.rewrite_verdicts||[]).map(v => [`${norm(v.driver_name)}|${norm(v.rewrite_to)}`, v.survives === true]))
+const survivingLinks  = (dedup.same_as_links||[]).filter(l => linkOk.get(`${norm(l.canonical)}|${norm(l.variant)}`) === true).map(l => ({canonical:l.canonical, variant:l.variant}))
+const gateRewrites    = (gate.verdicts||[]).filter(v => v.verdict==='rewrite')
+const appliedRewrites = gateRewrites.filter(v => rwOk.get(`${norm(v.driver_name)}|${norm(v.rewrite_to)}`) === true).map(v => ({from:v.driver_name, to:v.rewrite_to}))
+const parkedRewrites  = gateRewrites.filter(v => rwOk.get(`${norm(v.driver_name)}|${norm(v.rewrite_to)}`) !== true).map(v => { const s=(refute.rewrite_verdicts||[]).find(x => norm(x.driver_name)===norm(v.driver_name) && norm(x.rewrite_to)===norm(v.rewrite_to)); return {driver_name:v.driver_name, proposed_to:v.rewrite_to, why:(s&&s.why)||'unverified by skeptic'} })
+
 phase('Write')
-const out = await agent(`Read ${SEED}. Merge the two independent reviews below into the final clean Restaurants catalog and WRITE it (Write tool) to /home/faisal/EventMarketDB/.claude/plans/Drivers/_menu_restaurants_catalog.json.
-SAME_AS proposals: ${JSON.stringify(dedup)}
-Gate verdicts: ${JSON.stringify(gate)}
-Catalog file shape = { industry:'Restaurants', final_drivers:[{driver_name, n_companies}], same_as:[{canonical,variant}], rewrites:[{from,to}], skips:[{driver_name,why}], counts:{...} }.
-final_drivers = admitted names + rewrite TARGETS (dedup variants and skips removed). NO kind field, NO route/scope bucket. Return WRITE_SCHEMA (compact; do not echo the whole catalog).`, {schema:WRITE_SCHEMA, label:'write', phase:'Write'})
+const out = await agent(`Read ${SEED}. Assemble the final clean Restaurants catalog from the SKEPTIC-FILTERED lists below and WRITE it (Write tool) to /home/faisal/EventMarketDB/.claude/plans/Drivers/_menu_restaurants_catalog.json.
+GATE verdicts (use for admit/skip ONLY; for rewrites use the two lists below, NOT these): ${JSON.stringify(gate.verdicts)}
+APPROVED same_as (skeptic-filtered — copy EXACTLY, add none, drop none): ${JSON.stringify(survivingLinks)}
+APPROVED rewrites (skeptic-filtered — copy EXACTLY, add none, drop none): ${JSON.stringify(appliedRewrites)}
+PARKED rewrites (refuted — copy VERBATIM into unresolved_rewrites; do NOT apply, do NOT put in final or skips): ${JSON.stringify(parkedRewrites)}
+Catalog file shape = { industry:'Restaurants', final_drivers:[{driver_name, n_companies}], same_as:[{canonical,variant}], rewrites:[{from,to}], skips:[{driver_name,why}], unresolved_rewrites:[{driver_name, proposed_to, why}], counts:{...} }.
+RULES (exactly):
+- same_as MUST equal the APPROVED same_as list exactly (no additions, no removals).
+- rewrites MUST equal the APPROVED rewrites list exactly (no additions, no removals).
+- unresolved_rewrites MUST equal the PARKED rewrites list verbatim.
+- final_drivers = gate-admitted names + approved rewrite TARGETS; REMOVE same_as variants, skips, and parked-rewrite names. A name whose only proposed link was dropped resolves by its OWN gate verdict (admit -> final, skip -> skips).
+- NO kind field, NO route/scope bucket.
+Return WRITE_SCHEMA (compact; do not echo the whole catalog).`, {schema:WRITE_SCHEMA, label:'write', phase:'Write'})
 
 phase('Validate')
 const validation = await agent(`Run this EXACT Bash command and report its full stdout AND its exit code:
