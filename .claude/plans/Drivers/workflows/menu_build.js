@@ -59,14 +59,18 @@ phase('Converge')
 const menusJson = JSON.stringify(menus)
 const conv = await agent(`Repo root /home/faisal/EventMarketDB. You receive ${menus.length} per-company driver-name menus (Restaurants), each coined BLIND from that company's real source text.
 
-MENUS (json): ${menusJson.slice(0, 90000)}
+MENUS (json): ${menusJson}
 
 DO:
-1) Write the full data to ${DIR}/_menu_restaurants_seed.json (per-company menus + the analysis below). Use the Write tool.
+1) Write the full data to ${DIR}/_menu_restaurants_seed.json using the Write tool, with this EXACT structure — PRESERVE each candidate's evidence; do NOT collapse to bare name strings:
+	   { industry:'Restaurants', company_count, total_candidates, total_distinct_names,
+	     menus:[ { ticker, candidates:[ { driver_name, quote, source, date } ] } ],
+	     analysis:{ shared_names, exact_dup_pairs, pass_violations, convergence_summary } }
+	   where for each candidate: quote = its evidence_quote, source = its source_type, date = its date (from the input menus); company = the menu's ticker it sits under (do NOT add a per-candidate company field). Do NOT add tags (high_signal/is_earnings live on the event, not here).
 2) SHARED NAMES: every driver_name independently coined by >=2 companies (the blind-convergence signal). Include the company list per name.
 3) EXACT-MEANING DUPLICATES: different strings, SAME meaning AND scope (e.g. average_ticket vs average_check) -> SAME_AS review. A brand/segment metric (taco_bell_same_store_sales) is NOT a duplicate of the company-wide form (same_store_sales) — keep separate.
 4) PASS-CHECK VIOLATIONS: any name breaking a rule — broad/category word, a company ticker/legal name (own or peer), or state/impact/date/magnitude baked in.
 5) Stats: total candidates, total distinct names, and a 2-3 sentence convergence_summary (did blind producers converge, and did the richer text surface narrative drivers beyond the headline metrics?).
 Return the CONV_SCHEMA object (compact; do NOT echo raw candidates, they're in the file).`, {schema:CONV_SCHEMA, label:'converge', phase:'Converge'})
 
-return { fetch_summary: (fetched||'').slice(0,1500), menu_counts: menus.map(m=>({t:m.ticker, n:m.candidate_count, skipped:m.skipped_count})), converge: conv }
+return { fetch_summary: fetched||'', menu_counts: menus.map(m=>({t:m.ticker, n:m.candidate_count, skipped:m.skipped_count})), converge: conv }

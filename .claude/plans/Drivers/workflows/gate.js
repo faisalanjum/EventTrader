@@ -1,40 +1,40 @@
 export const meta = {
   name: 'driver-gate-g2',
-  description: 'G2 — INDEPENDENT admission gate (reusable). Rules each candidate driver_name: reuse / admit / rewrite / scope-route / skip, per DriverOntology, fail-closed (never delete/merge; err specific). Reusable in BATCH reconcile AND LIVE production (per new name). Pass names+catalog via args; defaults to the Restaurants seed. IMPROVE: swap in a different model for true independence; add async/provisional-admit for live latency.',
+  description: 'G2 — INDEPENDENT admission gate (reusable). One test per candidate driver_name: is it a VALID, REUSABLE driver? Verdict = reuse / admit / rewrite / skip, per DriverOntology, fail-closed (never delete/merge; err specific). No route bucket; no fundamental/news split (a producer concern, not a catalog one). Reusable in BATCH reconcile AND LIVE production (per new name, against the live catalog). Pass evidence-bearing candidates + catalog via args; defaults to the Restaurants seed.',
   phases: [ { title: 'Gate' } ],
 }
 
-const ONT = '/home/faisal/EventMarketDB/.claude/plans/Drivers/DriverOntology.md'
-// args = { names: [..candidate driver_names..], catalog: [..already-admitted names, for the reuse check..] }
-const names   = (args && args.names) || null
+const ONT  = '/home/faisal/EventMarketDB/.claude/plans/Drivers/DriverOntology.md'
+const SEED = '/home/faisal/EventMarketDB/.claude/plans/Drivers/_menu_restaurants_seed.json'
+// args = { candidates: [{driver_name, quote, source, date, company}], catalog: [..already-admitted names, for the reuse check..] }
+const cands   = (args && args.candidates) || null
 const catalog = (args && args.catalog) || []
 
 const GATE_SCHEMA = { type:'object', additionalProperties:false, required:['verdicts','counts'], properties:{
   verdicts:{type:'array', items:{type:'object', additionalProperties:false, required:['driver_name','verdict','reason'], properties:{
     driver_name:{type:'string'},
-    verdict:{type:'string', description:'reuse | admit | rewrite | scope_route | skip'},
+    verdict:{type:'string', enum:['reuse','admit','rewrite','skip'], description:'reuse | admit | rewrite | skip'},
     reuse_name:{type:'string', description:'existing catalog name to reuse, if verdict=reuse, else ""'},
-    rewrite_to:{type:'string', description:'fixed name if verdict=rewrite, else ""'},
-    lane:{type:'string', description:'target lane if verdict=scope_route (e.g. news/trading), else ""'},
+    rewrite_to:{type:'string', description:'fixed name if verdict=rewrite (WORDING-ONLY), else ""'},
     reason:{type:'string'} }}},
   counts:{type:'object', additionalProperties:true} } }
 
 phase('Gate')
-const namesClause = names
-  ? `Judge exactly these candidate names: ${JSON.stringify(names)}.`
-  : `No names passed via args — read /home/faisal/EventMarketDB/.claude/plans/Drivers/_menu_restaurants_seed.json and collect the distinct menus[].candidates[].driver_name.`
+const candsClause = cands
+  ? `Judge exactly these candidates — EACH carries its evidence; judge from the evidence (quote/source/date/company), NOT the bare name: ${JSON.stringify(cands)}.`
+  : `No candidates passed via args — read ${SEED} and collect the distinct menus[].candidates[].driver_name WITH each name's evidence records (quote / source / date, across the company menus).`
 const catClause = catalog.length
   ? `EXISTING CATALOG (verdict=reuse if a candidate is the EXACT same cause as one of these): ${JSON.stringify(catalog)}.`
   : `(No prior catalog supplied — verdict=reuse only if two candidates are exact-same.)`
 
 const res = await agent(`You are an INDEPENDENT admission gate — judge each candidate driver_name FRESH and skeptically; do NOT assume whoever coined it was right. Read ${ONT} (the rules).
-${namesClause}
+${candsClause}
 ${catClause}
-For EACH name give ONE verdict per DriverOntology:
-- reuse = EXACT same cause AND scope as an existing catalog name (name it in reuse_name). Brand/segment ≠ company-wide form — do NOT call that reuse.
-- admit = clean, reusable, new cause; follows every rule.
-- rewrite = fixable rule-break; give rewrite_to (e.g. ceo_transition→management_change; restaurant_openings/unit_growth→net_new_units; debt_refinancing→debt_financing).
-- scope_route = market reaction / flow / macro, not a Phase-1 fundamental; give the lane (e.g. news/trading).
-- skip = one-off tied to a single event/quarter (R10), vague, or not a reusable driver.
-Fail-closed: never delete or merge; keep brand/segment-specific names (R9 allows them); err specific. Return GATE_SCHEMA.`, {schema:GATE_SCHEMA, label:'g2-gate', phase:'Gate'})
+THE ONE TEST: is this a VALID, REUSABLE, consistently-nameable Driver? Judge from the EVIDENCE (each name's quote/source/date), not the bare name string. For EACH name give ONE verdict:
+- reuse = EXACT same cause AND scope as an existing catalog name (put it in reuse_name). A brand/segment metric is NOT the same as its company-wide form — do NOT call that reuse.
+- admit = a valid reusable cause that follows every rule. (Brand/segment-specific names ARE valid drivers — admit them.)
+- rewrite = right driver, fixable WORDING-ONLY rule-break; give rewrite_to (must NOT change the meaning).
+- skip = vague, rule-breaking, or tied to ONE specific event/date/quarter/headline (NOT a reusable class). Reusability is about the CLASS not the count: a reusable event class (e.g. government_shutdown, food_safety_incident, goodwill_impairment) is ADMITTED even if seen once; only a name bound to a single instance is skipped.
+For any reuse or rewrite, first verify same object + same scope + same mechanism; if any is false or unclear, do NOT reuse/rewrite — keep separate / admit separately / skip. If a name's evidence is missing, vague, or MIXED (different meanings across companies), do not admit/reuse blindly — prefer keep-separate/skip; rewrite only if it is a pure wording fix.
+Do NOT classify "fundamental vs news/trading" — that is a producer concern, not a catalog one; a valid reusable driver is admitted. Fail-closed: never delete or merge; err specific. Return GATE_SCHEMA.`, {schema:GATE_SCHEMA, label:'g2-gate', phase:'Gate'})
 return res

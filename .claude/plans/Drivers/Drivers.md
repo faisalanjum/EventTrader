@@ -22,11 +22,11 @@
 
  <Driver creation process>: Make exact Driver names specific, reusable, and consistent according to @DriverOntology.md rules
  
- 1. At the onset, use claude workflow to create a source-grounded <PotentialDriver> menu for each company separately (spawn a subagent per company or even multiple subagents) keeping @DriverOntology.md rules. In this run, the LLM is not analyzing price impact. It is creating specific candidate Driver names from real source material. Include all sources including news, reports, transcripts etc if possible. A Driver is used only when an llm_producer creates a <DriverUpdate> and says that Driver is the true driver for that specific event.
+ 1. At the onset, use claude workflow to create a source-grounded <PotentialDriver> menu for each company separately (spawn a subagent per company or even multiple subagents) keeping @DriverOntology.md rules. In this run, the LLM is not analyzing price impact. It is creating specific candidate Driver names from real source material. Seed sources are company-reported metrics, filings, and transcripts; no news. A Driver is used only when an llm_producer creates a <DriverUpdate> and says that Driver is the true driver for that specific event.
  
  2. Catalog-first (G1 — before CREATE). Show the producer the nearest existing names — exact + same-company + same-industry + embedding-similar — and REUSE if EXACT same meaning; only coin a new name (same format) if none fits. Embeddings suggest; they never decide equality. (Blind/parallel build is for the calibration TEST only; production is catalog-first.)
  
- 3. Independent admission gate (G2 — before a new name enters the ONE shared catalog). A DIFFERENT model (not the producer that coined it) rules each new name: reuse / admit / rewrite (broad→specific) / scope-route / skip. Fail-closed: exact-same meaning only · choose a canonical + propose reversible SAME_AS links (never delete, merge, or overwrite) · err specific. Scope-route = e.g. analyst_rating / analyst_price_target / short_interest → possible news/trading drivers, NOT Phase-1 fundamental drivers. (G2 also runs in LIVE production for every new name, not just the seed build; most live events REUSE via G1 so it fires rarely — exact runtime mechanic sync/async = TBD.)
+ 3. Independent admission gate (G2 — before a new name enters the ONE shared catalog). A DIFFERENT model (not the producer that coined it) rules each new name: reuse / admit / rewrite (wording only) / skip. Fail-closed: exact-same meaning only · choose a canonical + propose reversible SAME_AS links (never delete, merge, or overwrite) · err specific. For any proposed SAME_AS, reuse, or rewrite, first verify all three are true: same object or metric; same scope; same mechanism. If any one is false or unclear, do not SAME_AS, reuse, or rewrite. Keep the names separate, admit separately, or skip. A rewrite may only change wording; it must not change the underlying driver. Judge from each name's evidence, not the bare string. Do NOT classify "fundamental vs news/trading" — that is a producer concern, not a catalog one; a valid reusable driver is admitted (news/macro drivers are coined LIVE by the news producer). (G2 also runs in LIVE production for every new name, not just the seed build; most live events REUSE via G1 so it fires rarely — exact runtime mechanic sync/async = TBD.)
 
  4. After any batch menu build, run a reconcile pass: surface exact-meaning duplicates, choose a canonical name, and propose reversible SAME_AS links; do not merge or delete nodes.
 
@@ -34,7 +34,7 @@ PotentialDriver menu = allowed candidates
 Driver = only created/used when tied to a real DriverUpdate
 
 3. <DriverUpdate>: properties:
-   a. driver_state: what happened to the driver itself (e.g. traffic_declined, guidance_raised, oil_price_increased)
+   a. driver_state: what happened to the driver itself
    b. stock_impact: effect on this company's stock (long / short)
    c. magnitude (note: different from the actual stock move)
    d. llm_producer: earnings-learner or news-driver
@@ -62,7 +62,7 @@ Plus 2 more easy safety habits:
 
       a. start by looking at company-reported operating and financial metrics. Fiscal.ai is one current source for finding those metrics. Fiscal.ai KPI names are only raw suggestions; every candidate must be rewritten into @DriverOntology.md standard `driver_name` before entering the PotentialDriver menu.
 
-      b. Source = **filings (8-K/10-K/10-Q) + transcripts only — NO news**, keeping every event with **>2% daily_stock** (no cap). High-signal source material only; it doesn't prove the item was the true driver. (News/macro drivers accrete LIVE in production via reuse-or-create + G2 — they are NOT part of the seed build; there is no separate news build.)
+	      b. Source = **ALL non-news company sources** (every 8-K/10-K/10-Q + transcript + fiscal.ai KPIs). **`>2% daily_stock` is only a high-signal FLAG on events, NOT a filter** — nothing is excluded for moving less. (News/macro drivers accrete LIVE in production via reuse-or-create + G2 — they are NOT part of the seed build; there is no separate news build.)
 
       c. now using nomenclature rules from @DriverOntology.md rules, spawn multiple subagents using say a claude workflow setup to create a list of specific source-grounded driver names - note we are NOT ascertaining if this was a true driver for a specific event or not. We are only creating plausible candidate names from real source material.
 

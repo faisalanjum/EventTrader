@@ -24,28 +24,55 @@ For the full spec, read the two canonical files first:
   **exact same meaning**. *Aggressive merging = the v2 collapse. A tighter rulebook = v1 overfit/over-reject.* Stay here.
 - **Cross-company peer grouping = retrieval** (same-industry + embeddings) at read time, **not** a coined generic name.
   That coined-generic was the exact thing that failed; the name stays specific.
+- **Hard-bad names at scale = G2's job, not code.** Peer company names + banned words are caught by the independent
+  gate (R7), which runs on every new name (production too). Do **not** add deterministic name-matching code to block
+  them — tickers/brands are common words (`WING`, `SHAK`, `YUM`, "shake") so it would false-positive and drop legit
+  drivers (more harm than good). If the gate ever misses, reinforce the gate *prompt*, never brittle matching code.
+- **Catalog is producer-agnostic → NO route bucket, NO fundamental/news split, NO `kind` tag.** A driver's only
+  requirement is: a real, **reusable**, consistently-named cause (so DriverUpdates accumulate under one name — the whole
+  payoff: learn → predict). "Fundamental vs news/trading" is *which producer* uses it (it lives on
+  `DriverUpdate.llm_producer`), not a catalog property. So **G2 = reuse / admit / rewrite / skip**: a valid reusable
+  driver is admitted (news/trading-style names too — the news producer reuses them later, or coins them live). We deleted
+  `scope_route`/lanes because defining "news/trading" needs an open-ended list = the overfit trap; we dropped `kind`
+  because brand-ness is already in the name and it was a writer mislabel surface.
+- **Rewrite = wording only; skip by CLASS not count.** A rewrite fixes wording, never meaning. Skip only if vague /
+  rule-breaking / bound to ONE specific event-date — a reusable event *class* (government_shutdown, food_safety_incident,
+  goodwill_impairment) is admitted even if it appears once.
+- **3-check for any reuse / SAME_AS / rewrite:** same object · same scope · same mechanism — if any is false/unclear,
+  keep separate. **Both reviewers (dedup + gate) judge from each name's evidence** (quote/source/date), not the bare
+  string; mixed evidence → prefer keep-separate.
+- **Judgment → LLM; structure → code (never the reverse).** ALL judgment (dedup, gate, writer-merge incl. conflict
+  resolution) stays in LLMs. The ONLY deterministic code is `validate_catalog.py` — it **decides nothing about any
+  driver**; it just HARD-FAILS the run on self-contradiction / dropped names / dangling refs / forbidden buckets (route
+  key, `kind`). "Catch, don't pray." We rejected a Python *merger* (the writer has real conflict-resolution judgment) and
+  deterministic name/word matching (false-positives on brand-word tickers, per the bullet above).
+- **Transport = full inline, no slice.** Workflow JS has **no filesystem**, so dedup/gate reach the writer via the prompt
+  as schema-validated objects (no char cap; per-industry fits the model context — split the reconcile by batch only if an
+  industry is ever too large).
 
 ---
 
 ## The repeatable procedure (per industry, then scale)
 
 1. **Build menu (blind, parallel)** — 1 subagent per company: pull its fiscal.ai KPIs (rewrite each to a standard
-   `driver_name` — raw labels are suggestions only) + its **>2%-move events**, then coin candidate names per
+   `driver_name` — raw labels are suggestions only) + **all its non-news filings/transcripts** (real text), then coin candidate names per
    `DriverOntology.md`. Output: `driver_name` + evidence quote + source type + company + date + optional
    XBRL concept/member link + optional Guidance/GuidanceUpdate link.
    *Blind/parallel is for the TEST only (measures raw convergence). Production is catalog-first (G1).*
-   **Seed sources = filings + transcripts + fiscal.ai KPIs only — NO news**, all events with >2% daily_stock (no cap).
+   **Seed sources = ALL non-news company sources** (filings + transcripts + fiscal.ai KPIs). **`>2% daily_stock` is only a high-signal flag, not a filter** — nothing excluded for moving less.
    News/macro drivers accrete **LIVE in production** (reuse-or-create + G2); there is **no separate news build**.
 2. **Reconcile (G1 + G2)** — embeddings surface possible matches only; for exact-same-meaning, an independent
-   gate **chooses a canonical + proposes reversible SAME_AS** (never merge/delete); an **independent** model rules each name → **reuse / admit / rewrite(broad→specific)
-   / scope-route / skip**. Output: a review file.
+   gate **chooses a canonical + proposes reversible SAME_AS** (never merge/delete); an **independent** model rules each name → **reuse / admit / rewrite (wording only)
+   / skip**. Output: a review file.
+   For any proposed SAME_AS, reuse, or rewrite, first verify all three are true: same object or metric; same scope;
+   same mechanism. If any one is false or unclear, do not SAME_AS, reuse, or rewrite. Keep the names separate, admit
+   separately, or skip. A rewrite may only change wording; it must not change the underlying driver.
 3. **Honesty gate** — freeze the catalog → feed **fresh** events using only names/data visible on or before the event date → producer must reuse / create / skip; an
    **independent** grader scores against a **pre-written** key; **grade once** (see `Drivers.md` § Honesty gate).
 4. **Human review → next industry.** Scale to ~1000 by repeating 1–3. Any rule change must be a **general principle**,
    never sector-specific examples (examples overfit — that's how v1 died).
 
-`scope-route` = e.g. `analyst_rating` / `analyst_price_target` / `short_interest` → possible **news/trading** drivers,
-**not** Phase-1 fundamentals (route, don't ban).
+No route/news lane and no fundamental/news split — a valid reusable driver is **admitted**; news/macro drivers are coined **LIVE** by the news producer (not in the seed). Both reviewers judge from each name's **evidence** (quote/source/date), not the bare string.
 
 ---
 
@@ -58,23 +85,27 @@ For the full spec, read the two canonical files first:
   edge — `(News|Transcript)-[:INFLUENCES]->(Company)` and `(Report)-[:PRIMARY_FILER]->(Company)`; fields
   `daily_stock` (raw) and `daily_macro` (market-relative). Threshold 2% = **2.0**, not 0.02. fiscal.ai KPIs:
   `data/fiscal_ai_segments/fiscal_segments.sqlite`, `section='Key Performance Indicators'` (no sqlite3 CLI → use python3).
-- **`workflows/reconcile.js`** — Step-2 reconcile = dedup (canonical + reversible SAME_AS, **brand ≠ generic**) + the G2 gate, batch. Re-run on any `_menu_<industry>_seed.json`.
-- **`workflows/gate.js`** — **G2** standalone (independent admission gate: reuse / admit / rewrite / scope-route / skip). Reusable in LIVE production per new name + inside reconcile. `args = {names, catalog}`.
-- **`workflows/catalog_first.js`** — **G1** standalone (catalog-first reuse: nearest names → reuse / create / skip). Reusable in production + the honesty gate. `args = {events, catalog}`. *(Retrieval = LLM-over-catalog now; embedding-nearest-K = TODO at scale.)*
-- **`_menu_<industry>_seed.json`** = raw blind menu · **`_menu_<industry>_catalog.json`** = clean reconciled catalog. (Read-only; nothing written to Neo4j during calibration.)
+- **`workflows/reconcile.js`** — Step-2 reconcile = dedup (canonical + reversible SAME_AS, **brand ≠ generic**) + the G2 gate (admit/rewrite/skip) + the Validate phase. Re-run on any `_menu_<industry>_seed.json`.
+- **`workflows/validate_catalog.py`** — deterministic post-reconcile **validator** (zero judgment, HARD-FAIL): forbidden buckets (route key / `kind`) · name-in-two-buckets · dropped seed names · dangling refs · accounting · provenance. Runs as `reconcile.js`'s final Validate phase; also runnable standalone `validate_catalog.py <seed> <catalog>`.
+- **`workflows/gate.js`** — **G2** standalone (independent admission gate: reuse / admit / rewrite / skip). Reusable in LIVE production per new name + inside reconcile. `args = {candidates:[{driver_name,quote,source,date,company}], catalog}` — judges from each candidate's evidence, not the bare name.
+- **`workflows/catalog_first.js`** — **G1** standalone (catalog-first reuse: nearest visible names → reuse / create / skip). Reusable in production + the honesty gate. `args = {events, catalog}` where `catalog` is the already-retrieved visible names for that event.
+- **`_menu_<industry>_seed.json`** = raw blind menu · **`_menu_<industry>_catalog.json`** = clean reconciled catalog. (Read-only; nothing written to Neo4j during calibration.) Each seed candidate carries its proof: `{driver_name, quote, source, date}`; company = the menu it sits under (the hard event-link is the production `DriverUpdate→event` schema, not the seed).
 
 ---
 
-## Status (2026-06-04)
+## Status (2026-06-05)
 
-- **DONE — Restaurants seed → reconciled catalog.** Blind seed (filings+transcripts+KPIs, **NO news**): **84 distinct
-  names from 149 candidates**; convergence held (`eps_surprise` 14/14, `revenue_surprise` 13/14, `same_store_sales`
-  10/14), news scope-junk gone. **Step-2 reconcile → 59 final drivers** (24 core · 13 segment · 22 brand) · 13 SAME_AS
-  · 13 rewrites · 1 skip · 0 scope-routes. Outputs: `_menu_restaurants_seed.json` (raw) + `_menu_restaurants_catalog.json`
-  (clean). *(Earlier news-included pilot `_menu_restaurants.json`, 92 names, proved removing news cleans the seed.)*
-- **NEXT — honesty gate (Step 3):** freeze the 59-driver catalog → feed **fresh** restaurant events → producer must
-  reuse / create / skip (uses `catalog_first.js` = G1, then `gate.js` = G2); **independent** grade vs a **pre-written**
-  key; **grade once**. Then a 2nd industry. Then scale.
+- **Method locked for clean-slate rerun → all Restaurants outputs DELETED.** Removed
+  `_menu_restaurants_seed.json`, `_menu_restaurants_catalog.json`, and all `_sources_*.json` — outputs built mid-change
+  would mislead. **Run from scratch** (`menu_build.js` → `reconcile.js`) so the FIRST
+  Restaurants result reflects the EXACT process we scale to every industry. **No partial re-run while still changing the method.**
+- **Pipeline shape (locked so far):** seed = **ALL non-news sources** (real text; `>2%` = flag) → `menu_build.js`
+  (content-aware; prior run gave a ~250-name menu, convergence held, narrative drivers surfaced — to be regenerated).
+  Reconcile = dedup (reuse arm) ‖ **G2 `reuse/admit/rewrite/skip`** (enum-locked; **no route, no kind, no fundamental/news
+  split**; both reviewers judge from **evidence**; **no slice**) → writer → `validate_catalog.py` HARD-FAILS any
+  structural break (route key / kind / dropped names / dangling refs / disjoint / accounting).
+- **THEN — honesty gate (Step 3):** freeze the clean catalog → **fresh** events → reuse / create / skip (G1 =
+  `catalog_first.js`, G2 = `gate.js`); **independent** grade vs a **pre-written** key; **grade once**. Then a 2nd industry. Then scale.
 
 ## Cost guard
 Workflow subagents run **in-session (subscription)**. Embeddings = OpenAI (cheap, separate key). **Never** use

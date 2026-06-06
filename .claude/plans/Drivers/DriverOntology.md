@@ -65,7 +65,7 @@ A Driver name is a specific, reusable cause, written as a noun. It is never a ca
 - The candidate satisfies every rule above.
 - Each important noun in the name comes from the source material or an existing catalog Driver.
 - The same LLM output attaches this driver to at least one causal claim with non-empty evidence.
-- The driver must not be tied to a single specific event, date, filing, company-quarter, headline, or source row; one-off concepts are rejected.
+- The driver must not be tied to a single specific instance (one event / date / filing / company-quarter / headline / source row). A reusable **class** is allowed even if it appears only once (e.g. `government_shutdown`, `goodwill_impairment`); only a name **bound to a single instance** (e.g. `q1_2026_shutdown_effect`) is rejected.
 - If applying R1–R9 produces more than one unresolved candidate name, do not propose a new driver; reject as ambiguous.
 
 ## §5. Examples (illustrative only)

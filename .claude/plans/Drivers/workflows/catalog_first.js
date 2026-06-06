@@ -1,11 +1,11 @@
 export const meta = {
   name: 'driver-catalog-first-g1',
-  description: 'G1 — CATALOG-FIRST reuse (reusable). For each new event, show the producer the nearest existing catalog names and REUSE if EXACT same meaning, else CREATE a new candidate (which then goes through the G2 gate) or SKIP. This is the PRODUCTION mechanism and the core of the honesty gate. Pass events+catalog via args. IMPROVE: retrieval here is LLM-over-catalog (fine at small scale); at 1000-company scale swap in embedding-nearest-K retrieval; enforce PIT (only catalog dated on/before the event).',
+  description: 'G1 — CATALOG-FIRST reuse (reusable). For each new event, show the producer the nearest visible catalog names and REUSE if EXACT same meaning, else CREATE a new candidate (which then goes through the G2 gate) or SKIP. This is the PRODUCTION mechanism and the core of the honesty gate. Pass events + the already-retrieved visible catalog names via args.',
   phases: [ { title: 'CatalogFirst' } ],
 }
 
 const ONT = '/home/faisal/EventMarketDB/.claude/plans/Drivers/DriverOntology.md'
-// args = { events: [ { ticker, date, text } ], catalog: [ ..existing driver_names visible at/before the event.. ] }
+// args = { events: [ { ticker, date, text } ], catalog: [ ..nearest existing driver_names visible at/before the event.. ] }
 const events  = (args && args.events)  || []
 const catalog = (args && args.catalog) || []
 
@@ -27,7 +27,7 @@ phase('CatalogFirst')
 const out = (await parallel(events.map(ev => () => agent(`Read ${ONT} (the rules). You are a producer applying CATALOG-FIRST reuse (G1) — reuse before you create.
 EVENT  (${ev.ticker} ${ev.date}):
 ${ev.text}
-CURRENT CATALOG (reuse before creating; only names visible on or before this event date): ${JSON.stringify(catalog)}
+VISIBLE CATALOG NAMES (already retrieved for this event; reuse before creating; only names visible on or before this event date): ${JSON.stringify(catalog)}
 For each real causal driver the evidence attributes the move to:
 - if an EXACT same-meaning name already exists in the catalog → action=reuse (put it in reuse_name). A brand/segment metric is NOT the same as its company-wide form.
 - else propose a specific new name per DriverOntology → action=create (new_name); it will then pass through the G2 gate.
