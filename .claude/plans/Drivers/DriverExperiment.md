@@ -105,7 +105,7 @@ No route/news lane and no fundamental/news split — a valid reusable driver is 
 
 ---
 
-## Status (2026-06-05)
+## Status (2026-06-06)
 
 - **Method locked for clean-slate rerun → all Restaurants outputs DELETED.** Removed
   `_menu_restaurants_seed.json`, `_menu_restaurants_catalog.json`, and all `_sources_*.json` — outputs built mid-change

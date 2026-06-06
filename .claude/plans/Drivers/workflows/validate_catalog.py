@@ -41,7 +41,7 @@ def main():
             n = c.get("driver_name") if isinstance(c, dict) else c
             if n: seed_names.add(norm(n))
 
-    # ---- catalog buckets (exactly four) ----
+    # ---- catalog buckets (exactly five) ----
     fd_items = cat.get("final_drivers") or []
     final  = set(field(fd_items, "driver_name"))
     skips  = set(field(cat.get("skips"), "driver_name"))
