@@ -65,8 +65,9 @@ For the full spec, read the two canonical files first:
 
 1. **Build menu (blind, parallel)** — 1 subagent per company: pull its fiscal.ai KPIs (rewrite each to a standard
    `driver_name` — raw labels are suggestions only) + **all its non-news filings/transcripts** (real text), then coin candidate names per
-   `DriverOntology.md`. Output: `driver_name` + evidence quote + source type + company + date + optional
-   XBRL concept/member link + optional Guidance/GuidanceUpdate link.
+   `DriverOntology.md`. Output per candidate: `driver_name` + `evidence_quote` + `source_type` + `source_id` (the event
+   it was quoted from, or `fiscal_ai:<ticker>:<metric>`) + `date`. Converge then groups these (deterministic JS) into
+   per-driver records `{driver_name, canonical_name, companies, evidence_refs, optional_links}`.
    *Blind/parallel is for the TEST only (measures raw convergence). Production is catalog-first (G1).*
    **Seed sources = ALL non-news company sources** (filings + transcripts + fiscal.ai KPIs). **`>2% daily_stock` is only a high-signal flag, not a filter** — nothing excluded for moving less.
    News/macro drivers accrete **LIVE in production** (reuse-or-create + G2); there is **no separate news build**.
@@ -90,18 +91,18 @@ No route/news lane and no fundamental/news split — a valid reusable driver is 
 
 ## Reusable artifacts (so a repeat = zero rework)
 
-- **`workflows/menu_build.js`** — the blind per-company menu builder (Step 1). To repeat on another industry: edit the
-  `TICKERS` list (or swap the company query) and re-run via the **Workflow** tool. *(Probe inside it auto-detects the
-  returns query.)*
+- **`workflows/menu_build.js`** — the blind per-company menu builder (Step 1): bots coin candidates (each with a
+  `source_id`), then **deterministic JS grouping** writes the seed as per-driver records. To repeat on another industry:
+  edit the `TICKERS` list and re-run via the **Workflow** tool.
 - **Data facts the builder relies on (verified):** returns live as **percent-point** properties on the event→Company
   edge — `(News|Transcript)-[:INFLUENCES]->(Company)` and `(Report)-[:PRIMARY_FILER]->(Company)`; fields
   `daily_stock` (raw) and `daily_macro` (market-relative). Threshold 2% = **2.0**, not 0.02. fiscal.ai KPIs:
   `data/fiscal_ai_segments/fiscal_segments.sqlite`, `section='Key Performance Indicators'` (no sqlite3 CLI → use python3).
-- **`workflows/reconcile.js`** — Step-2 reconcile = dedup (canonical + reversible SAME_AS, **brand ≠ generic**) ‖ the G2 gate (admit/rewrite/skip) → a **`Refute` merge-skeptic** (refutes each SAME_AS + rewrite from evidence; refuted SAME_AS dropped, refuted rewrite → `unresolved_rewrites`; JS filters rejects out of the writer's input) → writer → the Validate phase. Re-run on any `_menu_<industry>_seed.json`.
-- **`workflows/validate_catalog.py`** — deterministic post-reconcile **validator** (zero judgment, HARD-FAIL): forbidden buckets (route key / `kind`) · name-in-two-buckets · dropped seed names · dangling refs · accounting · provenance. **5 outcome buckets:** final · skips · rewrite.from · same_as.variant · `unresolved_rewrites` (the parked refuted rewrites — counted, NOT ref-checked). Runs as `reconcile.js`'s final Validate phase; also runnable standalone `validate_catalog.py <seed> <catalog>`.
-- **`workflows/gate.js`** — **G2** standalone (independent admission gate: reuse / admit / rewrite / skip). Reusable in LIVE production per new name + inside reconcile. `args = {candidates:[{driver_name,quote,source,date,company}], catalog}` — judges from each candidate's evidence, not the bare name.
+- **`workflows/reconcile.js`** — Step-2 reconcile = dedup (canonical + reversible SAME_AS, **brand ≠ generic**) ‖ the G2 gate (admit/rewrite/skip) → a **`Refute` merge-skeptic** (refutes each SAME_AS + rewrite from evidence; refuted SAME_AS dropped, refuted rewrite → `unresolved_rewrites`; JS filters rejects out of the writer's input) → writer (assembles per-driver records: sets canonical_name + skips/unresolved side-lists) → the Validate phase. Re-run on any `_menu_<industry>_seed.json`.
+- **`workflows/validate_catalog.py`** — deterministic post-reconcile **validator** (zero judgment, HARD-FAIL) on the per-driver record shape: uniqueness (one record per driver_name) · `companies == distinct(evidence_refs.company)` · every `canonical_name` resolves to a SELF-canonical record (coined target, no chains) · completeness (every seed name once across catalog/skips/unresolved) · provenance (no invented names) · evidence-drift (catalog evidence_refs == seed) · forbidden route/`kind`. Runs as `reconcile.js`'s final Validate phase; also `validate_catalog.py <seed> <catalog>`.
+- **`workflows/gate.js`** — **G2** standalone (independent admission gate: reuse / admit / rewrite / skip). Reusable in LIVE production per new name + inside reconcile. `args = {candidates:[{driver_name, evidence_refs:[{company,source_type,source_id,date,quote}]}], catalog}` — judges from each candidate's evidence, not the bare name.
 - **`workflows/catalog_first.js`** — **G1** standalone (catalog-first reuse: nearest visible names → reuse / create / skip). Reusable in production + the honesty gate. `args = {events, catalog}` where `catalog` is the already-retrieved visible names for that event.
-- **`_menu_<industry>_seed.json`** = raw blind menu · **`_menu_<industry>_catalog.json`** = clean reconciled catalog. (Read-only; nothing written to Neo4j during calibration.) Each seed candidate carries its proof: `{driver_name, quote, source, date}`; company = the menu it sits under (the hard event-link is the production `DriverUpdate→event` schema, not the seed).
+- **`_menu_<industry>_seed.json`** = `{ catalog:[per-driver records], analysis }` (raw, all self-canonical) · **`_menu_<industry>_catalog.json`** = `{ catalog:[records w/ canonical_name], skips[], unresolved_rewrites[], counts }` (reconciled). (Read-only; nothing written to Neo4j during calibration.) Each record = `{driver_name, canonical_name, companies, evidence_refs:[{company, source_type, source_id, date, quote}], optional_links}`; `source_id` = the Neo4j event id (or `fiscal_ai:<ticker>:<metric>`) so date/company/return derive from it. Production `Driver` node stays small (name + edges); evidence lives on `DriverUpdate→event`.
 
 ---
 
@@ -115,9 +116,10 @@ No route/news lane and no fundamental/news split — a valid reusable driver is 
   (content-aware; prior run gave a ~250-name menu, convergence held, narrative drivers surfaced — to be regenerated).
   Reconcile = dedup (reuse arm) ‖ **G2 `admit/rewrite/skip`** (enum-locked; **no route, no kind, no fundamental/news
   split**; both reviewers judge from **evidence**; **no slice**) → **`Refute` merge-skeptic** (breaks bad SAME_AS +
-  meaning-changing rewrites; refuted SAME_AS dropped, refuted rewrite → `unresolved_rewrites`) → writer →
-  `validate_catalog.py` HARD-FAILS any structural break (route key / kind / dropped names / dangling refs / disjoint /
-  accounting; 5th bucket = `unresolved_rewrites`). **Refute stage built + dry-run-proven 2026-06-06; not yet pipeline-run.**
+  meaning-changing rewrites; refuted SAME_AS dropped, refuted rewrite → `unresolved_rewrites`) → writer (assembles
+  per-driver records: sets canonical_name + skips/unresolved side-lists) → `validate_catalog.py` HARD-FAILS any
+  structural break (uniqueness · companies==distinct(refs) · ref-fields · canonical→self-canonical · completeness ·
+  provenance · evidence-drift vs seed · side-list fields · forbidden route/kind). **Record-shape build done + dry-run-proven 2026-06-06; not yet pipeline-run.**
 - **THEN — honesty gate (Step 3):** freeze the clean catalog → **fresh** events → reuse / create / skip (G1 =
   `catalog_first.js`, G2 = `gate.js`); **independent** grade vs a **pre-written** key; **grade once**. Then a 2nd industry. Then scale.
 

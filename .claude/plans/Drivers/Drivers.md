@@ -66,12 +66,12 @@ Plus 2 more easy safety habits:
 
       c. now using nomenclature rules from @DriverOntology.md rules, spawn multiple subagents using say a claude workflow setup to create a list of specific source-grounded driver names - note we are NOT ascertaining if this was a true driver for a specific event or not. We are only creating plausible candidate names from real source material.
 
-      d. First menu output format is locked:
-         - driver_name
-         - evidence quote / source / date
-         - source company
-         - optional XBRL concept/member link when a real anchor exists
-         - optional Guidance/GuidanceUpdate link when a real anchor exists
+      d. Catalog record format is locked (ONE record per distinct driver_name):
+         - driver_name · canonical_name (= itself until a reconcile roll-up)
+         - companies (distinct, derived from evidence_refs)
+         - evidence_refs: [ { company, source_type, source_id, date, quote } ]
+             source_id = the Neo4j event id (or "fiscal_ai:<ticker>:<metric>" for a KPI) → date/company/return derive from it
+         - optional_links: { xbrl_concept, xbrl_member, guidance_ref }  (optional, when a real anchor exists)
 
       e. IMPORTANT: Understand exactly how Guidance Extraction pipeline works out how to link each Guidance or GuidanceUpdate to associated XBRL Concepts and XBRL Members/Dimensions and use the same methodology to link above curated list of Driver names to it when available. XBRL/member/guidance links are optional when obvious and never forced.
 

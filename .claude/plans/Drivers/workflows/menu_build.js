@@ -1,10 +1,10 @@
 export const meta = {
   name: 'driver-menu-build',
-  description: 'Driver-catalog SEED build. Step A: fetch_company_sources.py pulls ALL non-news sources (8-K/10-K/10-Q + transcripts + fiscal KPIs) WITH real text (MD&A, Risk Factors, EX-99.1 press releases, prepared remarks + Q&A), targeted + truncated, tagged (high_signal, is_earnings); NO >2% filter. Step B: 1 blind subagent per company coins candidate driver_names from that real content per DriverOntology. Step C: convergence/dedup pass writes the seed review file. Read-only Neo4j; no graph writes.',
+  description: 'Driver-catalog SEED build. Step A: fetch_company_sources.py pulls ALL non-news sources (8-K/10-K/10-Q + transcripts + fiscal KPIs) WITH real text (MD&A, Risk Factors, EX-99.1 press releases, prepared remarks + Q&A), targeted + truncated, tagged (high_signal, is_earnings); NO >2% filter. Step B: 1 blind subagent per company coins candidate driver_names from that real content per DriverOntology, each with its source_id. Step C: deterministic JS grouping into per-driver records writes the seed review file. Read-only Neo4j; no graph writes.',
   phases: [
-    { title: 'Fetch',    detail: 'fetch_company_sources.py → _sources_<ticker>.json (real text, tagged)' },
-    { title: 'Menus',    detail: 'one blind subagent per company coins names from real content' },
-    { title: 'Converge', detail: 'dedup + cross-company sharing + pass-checks; write seed file' },
+    { title: 'Fetch',    detail: 'fetch_company_sources.py → _sources_<ticker>.json (real text + source_id, tagged)' },
+    { title: 'Menus',    detail: 'one blind subagent per company coins names + source_id from real content' },
+    { title: 'Converge', detail: 'JS groups candidates → per-driver records (driver_name, canonical_name, companies, evidence_refs); write seed' },
   ],
 }
 
@@ -17,18 +17,13 @@ const MENU_SCHEMA = { type:'object', additionalProperties:false,
   properties:{
     ticker:{type:'string'}, candidate_count:{type:'integer'},
     candidates:{type:'array', items:{type:'object', additionalProperties:false,
-      required:['driver_name','evidence_quote','source_type','date','xbrl_or_null'],
-      properties:{ driver_name:{type:'string'}, evidence_quote:{type:'string', description:'actual words from the source content that justify it'}, source_type:{type:'string', description:'8-k / 10-k / 10-q / transcript / fiscal.ai-kpi'}, date:{type:'string'}, xbrl_or_null:{type:'string'} }}},
+      required:['driver_name','evidence_quote','source_type','source_id','date','xbrl_or_null'],
+      properties:{ driver_name:{type:'string'}, evidence_quote:{type:'string', description:'actual words from the source content (or the raw KPI label) that justify it'}, source_type:{type:'string', description:'8-K / 10-K / 10-Q / transcript / fiscal.ai-kpi'}, source_id:{type:'string', description:'the events[].source_id of the event you quoted; for a KPI use "fiscal_ai:<ticker>:<metric>"'}, date:{type:'string', description:'event date YYYY-MM-DD; "" for a KPI'}, xbrl_or_null:{type:'string'} }}},
     skipped_count:{type:'integer'}, notes:{type:'array', items:{type:'string'}} } }
 
 const CONV_SCHEMA = { type:'object', additionalProperties:false,
-  required:['file_written','total_candidates','total_distinct_names','shared_names','exact_dup_pairs','pass_violations','convergence_summary'],
-  properties:{
-    file_written:{type:'string'}, total_candidates:{type:'integer'}, total_distinct_names:{type:'integer'},
-    shared_names:{type:'array', items:{type:'object', additionalProperties:false, required:['driver_name','companies'], properties:{ driver_name:{type:'string'}, companies:{type:'array', items:{type:'string'}} }}},
-    exact_dup_pairs:{type:'array', items:{type:'object', additionalProperties:false, required:['a','b','why'], properties:{ a:{type:'string'}, b:{type:'string'}, why:{type:'string'} }}},
-    pass_violations:{type:'array', items:{type:'object', additionalProperties:false, required:['driver_name','company','rule'], properties:{ driver_name:{type:'string'}, company:{type:'string'}, rule:{type:'string'} }}},
-    convergence_summary:{type:'string'} } }
+  required:['file_written','total_candidates','total_distinct_drivers'],
+  properties:{ file_written:{type:'string'}, total_candidates:{type:'integer'}, total_distinct_drivers:{type:'integer'} } }
 
 const RULES = `NAMING RULES (authority = ${DIR}/DriverOntology.md — READ it; summary for speed):
 - driver_name = the reusable CAUSE as a specific lower_snake_case noun. As specific as the evidence allows; NEVER a broad/category word alone (no bare demand/macro/sector/sentiment).
@@ -37,7 +32,7 @@ const RULES = `NAMING RULES (authority = ${DIR}/DriverOntology.md — READ it; s
 - BANNED inside the name: state/verbs (beat, cut, declined, transition, opening, growth), direction/impact (long/short), dates/quarters/years, numbers/magnitudes/units (bps, percent, usd), ANY company ticker or legal name (own OR peer), person names, source/provider labels, XBRL prefixes, metaphors/sentiment, bare category words, stopwords. (Products/brands/segments ARE allowed: a brand metric like taco_bell_same_store_sales is its OWN driver, separate from same_store_sales.)
 - Keep standard phrases whole: gross_margin, free_cash_flow, same_store_sales, net_interest_margin.
 - Vague text -> SKIP (don't invent).
-- fiscal.ai KPI labels are RAW SUGGESTIONS ONLY: rewrite each into a standard driver_name; never use the raw label.`
+- fiscal.ai KPI labels are RAW SUGGESTIONS ONLY: rewrite each into a standard driver_name; never use the raw label as the NAME.`
 
 phase('Fetch')
 const fetched = await agent(`Run this EXACT command with Bash (it pulls all non-news sources WITH real text for the 14 Restaurants companies and writes _sources_<ticker>.json):
@@ -51,26 +46,32 @@ ${RULES}
 
 LOAD THIS COMPANY'S REAL SOURCE TEXT: run Bash \`cat ${DIR}/_sources_${t}.json\` to load the full file (it is LARGE — use cat or python via Bash; do NOT use the Read tool, it truncates). The JSON has:
 - fiscal_kpis: [raw KPI names]  → rewrite each into a standard driver_name.
-- events: [{source_type, date, daily_stock, high_signal, is_earnings, content}] → content is the REAL document text (MD&A, Risk Factors, EX-99.1 press releases, prepared remarks, Q&A).
+- events: [{source_id, source_type, date, daily_stock, high_signal, is_earnings, content}] → content is the REAL document text (MD&A, Risk Factors, EX-99.1 press releases, prepared remarks, Q&A). source_id = the stable id of that event.
 
-TASK: REVIEW EVERY event in the list IN ORDER before finalizing (do not skim or stop early; later events count too), and from the fiscal KPIs plus any event text with source-grounded evidence, coin SPECIFIC candidate driver_names per the rules. Not judging the true driver — just plausible, source-grounded candidate names from real material. MINE THE PROSE for narrative drivers too (input/commodity costs, tariffs, labor/wages, traffic vs pricing, demand, FX, specific products/segments), not just headline metrics. Skip vague items. For each candidate return: driver_name, a short evidence_quote (actual words from the content), source_type, date, xbrl_or_null ("null" if none obvious). Dedup within ${t} only. Return the MENU_SCHEMA object.`, {schema:MENU_SCHEMA, label:`menu:${t}`, phase:'Menus'}))) ).filter(Boolean)
+TASK: REVIEW EVERY event in the list IN ORDER before finalizing (do not skim or stop early; later events count too), and from the fiscal KPIs plus any event text with source-grounded evidence, coin SPECIFIC candidate driver_names per the rules. Not judging the true driver — just plausible, source-grounded candidate names from real material. MINE THE PROSE for narrative drivers too (input/commodity costs, tariffs, labor/wages, traffic vs pricing, demand, FX, specific products/segments), not just headline metrics. Skip vague items.
+For each candidate return: driver_name, evidence_quote, source_type, source_id, date, xbrl_or_null ("null" if none obvious). EVIDENCE is EITHER (a) a real quote from an event's content → source_id = that event's source_id, source_type + date = that event's; OR (b) a fiscal.ai KPI you rewrote → source_type = "fiscal.ai-kpi", source_id = "fiscal_ai:${t}:<metric>", date = "", evidence_quote = the raw KPI label.
+Dedup within ${t} only. Return the MENU_SCHEMA object.`, {schema:MENU_SCHEMA, label:`menu:${t}`, phase:'Menus'}))) ).filter(Boolean)
 
 phase('Converge')
-const menusJson = JSON.stringify(menus)
-const conv = await agent(`Repo root /home/faisal/EventMarketDB. You receive ${menus.length} per-company driver-name menus (Restaurants), each coined BLIND from that company's real source text.
+// Deterministic grouping (structure -> code): ONE record per DISTINCT driver_name, every candidate's evidence preserved.
+const byName = {}
+for (const m of menus) for (const c of (m.candidates || [])) {
+  const k = (c.driver_name || '').trim()
+  if (!k) continue
+  if (!byName[k]) byName[k] = { driver_name:k, canonical_name:k, _companies:new Set(), evidence_refs:[], optional_links:{ xbrl_concept:null, xbrl_member:null, guidance_ref:null } }
+  byName[k]._companies.add(m.ticker)
+  byName[k].evidence_refs.push({ company:m.ticker, source_type:c.source_type, source_id:c.source_id, date:c.date, quote:c.evidence_quote })
+  const xb = (c.xbrl_or_null || '').trim()
+  if (xb && xb.toLowerCase() !== 'null' && !byName[k].optional_links.xbrl_concept) byName[k].optional_links.xbrl_concept = xb
+}
+const catalog = Object.values(byName).map(r => ({ driver_name:r.driver_name, canonical_name:r.canonical_name, companies:[...r._companies], evidence_refs:r.evidence_refs, optional_links:r.optional_links }))
+const shared_drivers = catalog.filter(r => r.companies.length >= 2).map(r => ({ driver_name:r.driver_name, companies:r.companies }))
+const total_candidates = catalog.reduce((s,r) => s + r.evidence_refs.length, 0)
+const seed = { industry:'Restaurants', catalog, analysis:{ shared_drivers, total_distinct_drivers:catalog.length, total_candidates } }
 
-MENUS (json): ${menusJson}
+const conv = await agent(`Write this EXACT JSON verbatim (do NOT alter, summarize, reorder, or reformat the data — write it byte-for-byte) to ${DIR}/_menu_restaurants_seed.json using the Write tool. Then return CONV_SCHEMA with file_written + the counts (total_distinct_drivers=${catalog.length}, total_candidates=${total_candidates}).
 
-DO:
-1) Write the full data to ${DIR}/_menu_restaurants_seed.json using the Write tool, with this EXACT structure — PRESERVE each candidate's evidence; do NOT collapse to bare name strings:
-	   { industry:'Restaurants', company_count, total_candidates, total_distinct_names,
-	     menus:[ { ticker, candidates:[ { driver_name, quote, source, date } ] } ],
-	     analysis:{ shared_names, exact_dup_pairs, pass_violations, convergence_summary } }
-	   where for each candidate: quote = its evidence_quote, source = its source_type, date = its date (from the input menus); company = the menu's ticker it sits under (do NOT add a per-candidate company field). Do NOT add tags (high_signal/is_earnings live on the event, not here).
-2) SHARED NAMES: every driver_name independently coined by >=2 companies (the blind-convergence signal). Include the company list per name.
-3) EXACT-MEANING DUPLICATES: different strings, SAME meaning AND scope (e.g. average_ticket vs average_check) -> SAME_AS review. A brand/segment metric (taco_bell_same_store_sales) is NOT a duplicate of the company-wide form (same_store_sales) — keep separate.
-4) PASS-CHECK VIOLATIONS: any name breaking a rule — broad/category word, a company ticker/legal name (own or peer), or state/impact/date/magnitude baked in.
-5) Stats: total candidates, total distinct names, and a 2-3 sentence convergence_summary (did blind producers converge, and did the richer text surface narrative drivers beyond the headline metrics?).
-Return the CONV_SCHEMA object (compact; do NOT echo raw candidates, they're in the file).`, {schema:CONV_SCHEMA, label:'converge', phase:'Converge'})
+SEED JSON:
+${JSON.stringify(seed)}`, {schema:CONV_SCHEMA, label:'write-seed', phase:'Converge'})
 
-return { fetch_summary: fetched||'', menu_counts: menus.map(m=>({t:m.ticker, n:m.candidate_count, skipped:m.skipped_count})), converge: conv }
+return { fetch_summary: (fetched||'').slice(0,1500), menu_counts: menus.map(m=>({t:m.ticker, n:m.candidate_count, skipped:m.skipped_count})), distinct_drivers: catalog.length, total_candidates, converge: conv }

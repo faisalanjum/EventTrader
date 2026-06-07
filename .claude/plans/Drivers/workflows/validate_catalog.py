@@ -1,15 +1,23 @@
 #!/usr/bin/env python3
 """
-Deterministic catalog validator — the G2/reconcile safety net.
+Deterministic catalog validator — the reconcile safety net (PER-DRIVER RECORD shape).
 
-STRUCTURE ONLY, ZERO JUDGMENT: it never reads what a driver MEANS. It only checks the
-LLM writer's output for self-contradiction / dropped names / dangling refs / forbidden buckets,
-and HARD-FAILS (exit 1) on any violation so a broken catalog can never ship silently.
+STRUCTURE ONLY, ZERO JUDGMENT. The catalog is per-driver records:
+  catalog:[ {driver_name, canonical_name, companies, evidence_refs:[{company,source_type,source_id,date,quote}], optional_links} ]
+  + skips:[{driver_name,why}]  + unresolved_rewrites:[{driver_name,proposed_to,why}]
+It HARD-FAILS (exit 1) on any structural break so a broken catalog can never ship silently.
 
-Catalog buckets are EXACTLY: final_drivers · skips · rewrites · same_as · unresolved_rewrites.
-There is NO route/scope bucket and NO `kind` field — their presence is a hard fail (regression guard).
-
-No name matching · no banned-word · no format regex · no semantic call. Only JSON fields, sets, refs.
+Checks (no name-matching / no semantics — only fields, sets, refs):
+  FORBIDDEN     no route bucket, no `kind` field
+  UNIQUENESS    one record per driver_name
+  COMPANIES     companies == distinct(evidence_refs.company) ; evidence_refs non-empty
+  REF-FIELDS    each evidence_ref has company/source_type/source_id/quote (+ date, unless source_type==fiscal.ai-kpi)
+  CANONICAL     every canonical_name resolves to a SELF-canonical catalog record (coined target, no chains)
+  COMPLETE      every seed driver_name appears EXACTLY once across catalog / skips / unresolved_rewrites
+  PROVENANCE    no non-seed name in catalog / skips / unresolved (roll-up & rewrite targets are coined)
+  EVIDENCE      each catalog record's evidence_refs match the seed record EXACTLY (company/source_type/source_id/date/quote — no drift)
+  SIDE-FIELDS   skips[] entries have driver_name+why ; unresolved_rewrites[] entries have driver_name+proposed_to+why
+  SEED          the seed file itself is well-formed (no malformed entries · no duplicate driver_name)
 
 Usage:  validate_catalog.py <seed.json> <catalog.json>
 """
@@ -19,14 +27,14 @@ DEF_SEED = "/home/faisal/EventMarketDB/.claude/plans/Drivers/_menu_restaurants_s
 DEF_CAT  = "/home/faisal/EventMarketDB/.claude/plans/Drivers/_menu_restaurants_catalog.json"
 
 def norm(s): return (s or "").strip().lower()
-
-def field(items, *keys):
-    out = []
-    for it in items or []:
-        if isinstance(it, str): out.append(norm(it))
-        elif isinstance(it, dict):
-            for k in keys:
-                if it.get(k): out.append(norm(it[k])); break
+def records(obj): return [r for r in (obj.get("catalog") or []) if isinstance(r, dict)]
+def name_list(items, key="driver_name"): return [norm(x.get(key)) for x in (items or []) if isinstance(x, dict) and x.get(key)]
+def ev_companies(rec): return set(norm(e.get("company")) for e in (rec.get("evidence_refs") or []) if isinstance(e, dict) and e.get("company"))
+def ev_full(rec):
+    out = set()
+    for e in (rec.get("evidence_refs") or []):
+        if isinstance(e, dict):
+            out.add((norm(e.get("company")), norm(e.get("source_type")), norm(e.get("source_id")), norm(e.get("date")), (e.get("quote") or "").strip()))
     return out
 
 def main():
@@ -34,64 +42,91 @@ def main():
     cat_p  = sys.argv[2] if len(sys.argv) > 2 else DEF_CAT
     seed = json.load(open(seed_p)); cat = json.load(open(cat_p))
 
-    # ---- seed distinct names ----
-    seed_names = set()
-    for m in seed.get("menus", []):
-        for c in m.get("candidates", []):
-            n = c.get("driver_name") if isinstance(c, dict) else c
-            if n: seed_names.add(norm(n))
+    seed_recs   = records(seed)
+    seed_names  = set(norm(r.get("driver_name")) for r in seed_recs if r.get("driver_name"))
+    seed_by_name = {norm(r.get("driver_name")): r for r in seed_recs if r.get("driver_name")}
 
-    # ---- catalog buckets (exactly five) ----
-    fd_items = cat.get("final_drivers") or []
-    final  = set(field(fd_items, "driver_name"))
-    skips  = set(field(cat.get("skips"), "driver_name"))
-    rew    = [r for r in (cat.get("rewrites") or []) if isinstance(r, dict)]
-    rew_from = set(norm(r.get("from")) for r in rew if r.get("from"))
-    rew_to   = set(norm(r.get("to"))   for r in rew if r.get("to"))
-    sa     = [s for s in (cat.get("same_as") or []) if isinstance(s, dict)]
-    sa_var = set(norm(s.get("variant"))   for s in sa if s.get("variant"))
-    sa_can = set(norm(s.get("canonical")) for s in sa if s.get("canonical"))
-    unr    = set(field(cat.get("unresolved_rewrites"), "driver_name"))   # 5th bucket: refuted rewrites, parked (NOT applied)
+    cat_recs       = records(cat)
+    cat_names_list = [norm(r.get("driver_name")) for r in cat_recs if r.get("driver_name")]
+    cat_names      = set(cat_names_list)
+    skips          = name_list(cat.get("skips"))
+    unres          = name_list(cat.get("unresolved_rewrites"))
+    self_canon     = set(norm(r.get("driver_name")) for r in cat_recs
+                         if r.get("driver_name") and norm(r.get("canonical_name")) == norm(r.get("driver_name")))
 
     fails = []
 
-    # 0. FORBIDDEN — the route concept and `kind` field no longer exist; their reappearance is a regression
+    # SEED-WELLFORMED — the seed is the source of truth; validate the seed file itself, not just the catalog
+    seed_raw = seed.get("catalog") or []
+    seed_bad = [f"index {i}" for i, r in enumerate(seed_raw) if not (isinstance(r, dict) and norm(r.get("driver_name")))]
+    if seed_bad: fails.append(("SEED MALFORMED: seed entry is non-dict or missing driver_name", seed_bad))
+    _seed_nl = [norm(r.get("driver_name")) for r in seed_recs if r.get("driver_name")]
+    seed_dups = sorted({n for n in _seed_nl if _seed_nl.count(n) > 1})
+    if seed_dups: fails.append(("SEED UNIQUENESS: duplicate driver_name in seed", seed_dups))
+
+    # MALFORMED — every catalog entry must be a dict with a non-empty driver_name (no silent drops)
+    malformed = [f"index {i}" for i, r in enumerate(cat.get("catalog") or []) if not (isinstance(r, dict) and norm(r.get("driver_name")))]
+    if malformed: fails.append(("MALFORMED: catalog entry is non-dict or missing driver_name", malformed))
+
+    # FORBIDDEN — route concept + kind never exist (regression guard)
     for k in ("route_to_other_lane", "scope_routes", "scope_route"):
-        if k in cat: fails.append((f"FORBIDDEN: catalog has a '{k}' bucket (route concept removed)", [k]))
-    kinded = sorted(norm(x.get("driver_name")) for x in fd_items if isinstance(x, dict) and "kind" in x)
-    if kinded: fails.append(("FORBIDDEN: final_drivers carry a 'kind' field (dropped)", kinded))
+        if k in cat: fails.append((f"FORBIDDEN: catalog has a '{k}' bucket", [k]))
+    kinded = sorted(norm(r.get("driver_name")) for r in cat_recs if "kind" in r)
+    if kinded: fails.append(("FORBIDDEN: catalog records carry a 'kind' field", kinded))
 
-    # 1. DISJOINT — a name may have only ONE outcome
-    outcome = {"final": final, "skips": skips, "rewrite.from": rew_from, "same_as.variant": sa_var, "unresolved_rewrites": unr}
-    overlap = {n: [b for b, s in outcome.items() if n in s] for n in set().union(*outcome.values())}
-    overlap = {n: w for n, w in overlap.items() if len(w) > 1}
-    if overlap: fails.append(("DISJOINT (name in >1 bucket)", overlap))
+    # UNIQUENESS — one record per driver_name
+    dups = sorted({n for n in cat_names_list if cat_names_list.count(n) > 1})
+    if dups: fails.append(("UNIQUENESS: duplicate driver_name in catalog", dups))
 
-    # 2. COMPLETE — every seed name accounted for; no invented outcome-source names
-    accounted = final | skips | rew_from | sa_var | unr
-    dropped  = sorted(seed_names - accounted)
-    invented = sorted((skips | rew_from | sa_var | unr) - seed_names)   # final may hold coined rewrite-targets; the source buckets must be seed names
-    if dropped:  fails.append(("COMPLETE: seed names dropped", dropped))
-    if invented: fails.append(("COMPLETE: non-seed names in outcome buckets", invented))
+    # COMPANIES == distinct(evidence_refs.company) + evidence non-empty
+    bad_comp, empty_ev = [], []
+    for r in cat_recs:
+        nm = norm(r.get("driver_name"))
+        comp = [norm(c) for c in (r.get("companies") or [])]
+        if len(comp) != len(set(comp)) or set(comp) != ev_companies(r): bad_comp.append(nm)
+        if not (r.get("evidence_refs") or []): empty_ev.append(nm)
+    if bad_comp:  fails.append(("COMPANIES != distinct(evidence_refs.company)", sorted(bad_comp)))
+    if empty_ev:  fails.append(("EMPTY evidence_refs (every kept driver must carry its evidence)", sorted(empty_ev)))
 
-    # 3. REFERENCES — rewrite.to & same_as.canonical must resolve to a final driver
-    bad_to  = sorted(rew_to - final)
-    bad_can = sorted(sa_can - final)
-    if bad_to:  fails.append(("REFERENCES: rewrite.to not in final_drivers", bad_to))
-    if bad_can: fails.append(("REFERENCES: same_as.canonical not in final_drivers", bad_can))
+    # REF-FIELDS — each evidence_ref well-formed: company/source_type/source_id/quote required; date required unless KPI
+    bad_refs = []
+    for r in cat_recs:
+        nm = norm(r.get("driver_name"))
+        for e in (r.get("evidence_refs") or []):
+            if not isinstance(e, dict): bad_refs.append(f"{nm}: non-dict ref"); continue
+            miss = [k for k in ("company","source_type","source_id","quote") if not str(e.get(k) or "").strip()]
+            if norm(e.get("source_type")) != "fiscal.ai-kpi" and not str(e.get("date") or "").strip(): miss.append("date")
+            if miss: bad_refs.append(f"{nm}: {'+'.join(miss)}")
+    if bad_refs: fails.append(("REF-FIELDS: evidence_ref missing required field(s)", sorted(set(bad_refs))))
 
-    # 4. ACCOUNTING — key-independent: every seed name lands in exactly one bucket (declared counts NOT trusted)
-    admitted_seed = final & seed_names
-    bucket_sum = len(admitted_seed) + len(rew_from) + len(skips) + len(sa_var) + len(unr)
-    if bucket_sum != len(seed_names):
-        fails.append(("ACCOUNTING: admitted+rewrite.from+skip+same_as.variant+unresolved != seed distinct",
-                      {"seed": len(seed_names), "admitted": len(admitted_seed), "rewrite.from": len(rew_from),
-                       "skip": len(skips), "same_as.variant": len(sa_var), "unresolved": len(unr), "sum": bucket_sum}))
+    # CANONICAL — resolves to a self-canonical catalog record (coined target, no chains)
+    bad_canon = sorted({(norm(r.get("canonical_name")) or "(empty)") for r in cat_recs
+                        if norm(r.get("canonical_name")) not in self_canon})
+    if bad_canon: fails.append(("CANONICAL_NAME does not resolve to a self-canonical record", bad_canon))
 
-    # 5. PROVENANCE — every final driver must be a seed name or a rewrite target (no invented finals)
-    extra_final = sorted(final - (seed_names | rew_to))
-    if extra_final:
-        fails.append(("PROVENANCE: final driver not from seed and not a rewrite.to", extra_final))
+    # COMPLETE — every seed name EXACTLY once across catalog / skips / unresolved
+    all_out = cat_names_list + skips + unres
+    dropped = sorted(seed_names - set(all_out))
+    multi   = sorted({n for n in all_out if all_out.count(n) > 1})
+    if dropped: fails.append(("COMPLETE: seed names dropped (not in catalog/skips/unresolved)", dropped))
+    if multi:   fails.append(("COMPLETE: name in >1 of catalog/skips/unresolved", multi))
+
+    # PROVENANCE — nothing invented (targets are coined → every output name is a seed name)
+    invented = sorted((cat_names | set(skips) | set(unres)) - seed_names)
+    if invented: fails.append(("PROVENANCE: non-seed name in catalog/skips/unresolved", invented))
+
+    # EVIDENCE drift — catalog record evidence must equal the seed record's (verbatim copy)
+    bad_ev = []
+    for r in cat_recs:
+        nm = norm(r.get("driver_name")); s = seed_by_name.get(nm)
+        if s and ev_full(r) != ev_full(s): bad_ev.append(nm)
+    if bad_ev: fails.append(("EVIDENCE drift: catalog evidence_refs != seed (full ref: company/source_type/source_id/date/quote)", sorted(bad_ev)))
+
+    # SIDE-FIELDS — skips[] and unresolved_rewrites[] entries must carry their required fields
+    bad_skip = [str(x) for x in (cat.get("skips") or []) if not (isinstance(x, dict) and str(x.get("driver_name") or "").strip() and str(x.get("why") or "").strip())]
+    bad_unr  = [str(x) for x in (cat.get("unresolved_rewrites") or []) if not (isinstance(x, dict) and str(x.get("driver_name") or "").strip() and str(x.get("proposed_to") or "").strip() and str(x.get("why") or "").strip())]
+    if bad_skip: fails.append(("SIDE-FIELDS: skips[] entry missing driver_name/why", bad_skip[:50]))
+    if bad_unr:  fails.append(("SIDE-FIELDS: unresolved_rewrites[] entry missing driver_name/proposed_to/why", bad_unr[:50]))
 
     if fails:
         print("VALIDATION FAILED")
@@ -100,8 +135,9 @@ def main():
             print(f"  ✗ {tag}  ({n}): {json.dumps(info)[:600]}")
         sys.exit(1)
 
-    print(f"VALIDATION PASSED  seed={len(seed_names)} | final={len(final)} skip={len(skips)} "
-          f"rewrite={len(rew_from)} same_as={len(sa_var)} unresolved={len(unr)}")
+    print(f"VALIDATION PASSED  seed={len(seed_names)} | catalog={len(cat_names)} "
+          f"(self-canonical={len(self_canon)}, rolled-up={len(cat_names)-len(self_canon)}) "
+          f"skip={len(skips)} unresolved={len(unres)}")
 
 if __name__ == "__main__":
     main()

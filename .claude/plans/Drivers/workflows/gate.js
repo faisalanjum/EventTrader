@@ -6,7 +6,7 @@ export const meta = {
 
 const ONT  = '/home/faisal/EventMarketDB/.claude/plans/Drivers/DriverOntology.md'
 const SEED = '/home/faisal/EventMarketDB/.claude/plans/Drivers/_menu_restaurants_seed.json'
-// args = { candidates: [{driver_name, quote, source, date, company}], catalog: [..already-admitted names, for the reuse check..] }
+// args = { candidates: [{driver_name, evidence_refs:[{company,source_type,source_id,date,quote}]}], catalog: [..already-admitted names, for the reuse check..] }
 const cands   = (args && args.candidates) || null
 const catalog = (args && args.catalog) || []
 
@@ -21,8 +21,8 @@ const GATE_SCHEMA = { type:'object', additionalProperties:false, required:['verd
 
 phase('Gate')
 const candsClause = cands
-  ? `Judge exactly these candidates — EACH carries its evidence; judge from the evidence (quote/source/date/company), NOT the bare name: ${JSON.stringify(cands)}.`
-  : `No candidates passed via args — read ${SEED} and collect the distinct menus[].candidates[].driver_name WITH each name's evidence records (quote / source / date, across the company menus).`
+  ? `Judge exactly these candidates — EACH carries its evidence_refs[{company,source_type,source_id,date,quote}]; judge from the evidence, NOT the bare name: ${JSON.stringify(cands)}.`
+  : `No candidates passed via args — read ${SEED} (it has catalog:[{driver_name, evidence_refs:[{company,source_type,source_id,date,quote}], companies}]); judge each catalog[] driver_name from its evidence_refs.`
 const catClause = catalog.length
   ? `EXISTING CATALOG (verdict=reuse if a candidate is the EXACT same cause as one of these): ${JSON.stringify(catalog)}.`
   : `(No prior catalog supplied — verdict=reuse only if two candidates are exact-same.)`
@@ -30,7 +30,7 @@ const catClause = catalog.length
 const res = await agent(`You are an INDEPENDENT admission gate — judge each candidate driver_name FRESH and skeptically; do NOT assume whoever coined it was right. Read ${ONT} (the rules).
 ${candsClause}
 ${catClause}
-THE ONE TEST: is this a VALID, REUSABLE, consistently-nameable Driver? Judge from the EVIDENCE (each name's quote/source/date), not the bare name string. For EACH name give ONE verdict:
+THE ONE TEST: is this a VALID, REUSABLE, consistently-nameable Driver? Judge from the EVIDENCE (each name's evidence_refs), not the bare name string. For EACH name give ONE verdict:
 - reuse = EXACT same cause AND scope as an existing catalog name (put it in reuse_name). A brand/segment metric is NOT the same as its company-wide form — do NOT call that reuse.
 - admit = a valid reusable cause that follows every rule. (Brand/segment-specific names ARE valid drivers — admit them.)
 - rewrite = right driver, fixable WORDING-ONLY rule-break; give rewrite_to (must NOT change the meaning).

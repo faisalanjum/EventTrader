@@ -48,7 +48,8 @@ OPTIONAL MATCH (rep)-[:HAS_SECTION]->(s:ExtractedSectionContent)
 WITH rep, r, collect(DISTINCT {name:s.section_name, content:substring(s.content,0,$cap_sec)}) AS secs
 OPTIONAL MATCH (rep)-[:HAS_EXHIBIT]->(ex:ExhibitContent) WHERE ex.exhibit_number='EX-99.1'
 WITH rep, r, secs, substring(head(collect(ex.content)),0,$cap_ex) AS ex991
-RETURN coalesce(rep.formType,'report') AS form_type,
+RETURN rep.id AS source_id,
+       coalesce(rep.formType,'report') AS form_type,
        substring(coalesce(rep.created,''),0,10) AS date,
        toString(coalesce(rep.items,'')) AS items,
        coalesce(rep.description,'') AS description,
@@ -64,7 +65,8 @@ WITH t, r, substring(head(collect(pr.content)),0,$cap_prep) AS prepared
 OPTIONAL MATCH (t)-[:HAS_QA_EXCHANGE]->(qa:QAExchange)
 WITH t, r, prepared, qa ORDER BY qa.sequence
 WITH t, r, prepared, collect(substring(toString(qa.exchanges),0,$cap_qa))[..$qa_max] AS qa_list
-RETURN substring(coalesce(t.created,t.conference_datetime,''),0,10) AS date,
+RETURN t.id AS source_id,
+       substring(coalesce(t.created,t.conference_datetime,''),0,10) AS date,
        toString(t.fiscal_year) AS fy, toString(t.calendar_quarter) AS q,
        r.daily_stock AS daily_stock, prepared, qa_list
 ORDER BY date DESC
@@ -113,6 +115,7 @@ def fetch(tk, session):
         d = rec.data()
         content = build_report_content(d)
         events.append({
+            "source_id": d["source_id"],
             "source_type": d["form_type"], "date": d["date"],
             "daily_stock": d["daily_stock"], "high_signal": hi(d["daily_stock"]),
             "is_earnings": is_earnings_8k(d["form_type"], d["items"]),
@@ -122,6 +125,7 @@ def fetch(tk, session):
         d = rec.data()
         content = build_trans_content(d)
         events.append({
+            "source_id": d["source_id"],
             "source_type": "transcript", "date": d["date"],
             "daily_stock": d["daily_stock"], "high_signal": hi(d["daily_stock"]),
             "is_earnings": False, "fy": d["fy"], "q": d["q"],
