@@ -2,6 +2,9 @@
 .env
 *.egg-info/
 
+# Driver-catalog runs: ignore the big regenerable source dumps; commit the small proof + outputs
+.claude/plans/Drivers/runs/*/sources/
+
 # Python cache
 __pycache__/
 *.py[cod]
@@ -114,7 +117,12 @@ k8s-disaster-recovery/
 # Learner runtime artifacts (fcntl.flock lockfile + operator backup copies per learner-edits.md §8.3/R12)
 earnings-analysis/learnings/*.lock
 earnings-analysis/learnings.backup.*
+tests/browser_use_poc/.env
+tests/browser_use_poc/.venv/
+tests/browser_use_poc/artifacts/
 
-# Fiscal.ai generated scrape outputs and browser probe artifacts
+# fiscal.ai scraper — isolated env, captures, session state, scraped CSVs
 data/fiscal_ai_segments/
 scripts/fiscal_ai_scraper/
+scripts/fiscal_ai_scraper/.venv/
+scripts/fiscal_ai_scraper/output/

@@ -1,14 +1,16 @@
 export const meta = {
   name: 'driver-reconcile',
-  description: 'Step 2 reconcile over a per-industry seed catalog (args.slug; defaults to restaurants; per-driver records with evidence_refs): (Dedup) canonical + reversible SAME_AS for exact-same-meaning only = the REUSE arm; (Gate) independent admit/rewrite/skip per DriverOntology; (Refute) skeptic breaks bad SAME_AS + meaning-changing rewrites; (Write) assemble per-driver records with canonical_name + side-lists. Review-file only; no graph writes; no merges/deletes. Roll-up/rewrite targets must be COINED names.',
+  description: 'Step 2 reconcile over a per-industry seed catalog (args.run_id = the exact menu_build run; reads runs/<run_id>/seed.json, writes catalog.json + validation.txt there; per-driver records with evidence_refs): (Dedup) canonical + reversible SAME_AS for exact-same-meaning only = the REUSE arm; (Gate) independent admit/rewrite/skip per DriverOntology; (Refute) skeptic breaks bad SAME_AS + meaning-changing rewrites; (Write) assemble per-driver records with canonical_name + side-lists. Review-file only; no graph writes; no merges/deletes. Roll-up/rewrite targets must be COINED names.',
   phases: [ { title: 'Review', detail: 'dedup proposer + independent gate, in parallel' }, { title: 'Refute', detail: 'independent skeptic breaks bad SAME_AS + meaning-changing rewrites; JS filters them out' }, { title: 'Write', detail: 'assemble per-driver records (set canonical_name) + skips/unresolved side-lists' }, { title: 'Validate', detail: 'deterministic structure check (zero judgment); HARD-FAIL if broken' } ],
 }
 
-const DIR  = '/home/faisal/EventMarketDB/.claude/plans/Drivers'
-const PY   = '/home/faisal/EventMarketDB/venv/bin/python3'
-const SLUG = (args && args.slug) || 'restaurants'
-const CAT  = `${DIR}/_menu_${SLUG}_catalog.json`
-const SEED = `${DIR}/_menu_${SLUG}_seed.json`
+const DIR    = '/home/faisal/EventMarketDB/.claude/plans/Drivers'
+const PY     = '/home/faisal/EventMarketDB/venv/bin/python3'
+const RUN_ID = (args && args.run_id) || ''
+if (!RUN_ID) throw new Error('reconcile.js requires args.run_id (e.g. "2026-06-07_143205_restaurants" from menu_build). Refusing to guess "latest".')
+const RUN_DIR = `${DIR}/runs/${RUN_ID}`
+const SEED = `${RUN_DIR}/seed.json`
+const CAT  = `${RUN_DIR}/catalog.json`
 const ONT  = `${DIR}/DriverOntology.md`
 const EXACT_MEANING_RULE = `For any proposed SAME_AS, reuse, or rewrite, first verify all three are true:
 1. same object or metric
@@ -97,8 +99,8 @@ Every canonical_name MUST be the driver_name of some catalog record whose canoni
 Return WRITE_SCHEMA (compact; do not echo the catalog).`, {schema:WRITE_SCHEMA, label:'write', phase:'Write'})
 
 phase('Validate')
-const validation = await agent(`Run this EXACT Bash command and report its full stdout AND its exit code:
-${PY} ${DIR}/workflows/validate_catalog.py ${SEED} ${CAT}
-This is a deterministic structure check (no judgment). If it exits NON-ZERO, begin your reply with "VALIDATION FAILED" and paste the exact failing checks + names. If it exits 0, begin with "VALIDATION PASSED". Do not fix anything; just report.`, {label:'validate', phase:'Validate'})
+const validation = await agent(`Run this EXACT Bash command (it writes the validator output to validation.txt in the run dir AND reports the validator's real exit code):
+${PY} ${DIR}/workflows/validate_catalog.py ${SEED} ${CAT} | tee ${RUN_DIR}/validation.txt ; echo "exit=\${PIPESTATUS[0]}"
+This is a deterministic structure check (no judgment). If exit is NON-ZERO, begin your reply with "VALIDATION FAILED" and paste the exact failing checks + names. If exit is 0, begin with "VALIDATION PASSED". Do not fix anything; just report.`, {label:'validate', phase:'Validate'})
 
 return { catalog: out, validation }

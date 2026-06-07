@@ -16,8 +16,9 @@ NO >2% filter — every non-news event is included; >2% is only a flag.
 Read-only on Neo4j. Writes .claude/plans/Drivers/_sources_<ticker>.json.
 Reusable: `python3 fetch_company_sources.py <TICKER> [TICKER2 ...]`
 """
-import os, sys, json, sqlite3
+import os, sys, json, sqlite3, hashlib, argparse
 from pathlib import Path
+from datetime import datetime, timezone
 
 ROOT = Path("/home/faisal/EventMarketDB")
 from dotenv import load_dotenv
@@ -146,24 +147,40 @@ def fetch(tk, session):
 
 def main():
     if not PW:
-        print("ERROR: NEO4J_PASSWORD not set (.env)"); sys.exit(1)
-    tickers = sys.argv[1:]
+        print("ERROR: NEO4J_PASSWORD not set (.env)", file=sys.stderr); sys.exit(1)
+    ap = argparse.ArgumentParser(description="Fetch all non-news company sources into a run dir.")
+    ap.add_argument("tickers", nargs="*", help="ticker symbols")
+    ap.add_argument("--run-dir", help="run folder: sources -> <run-dir>/sources/<TICKER>.json, hashes -> <run-dir>/sources_manifest.json")
+    a = ap.parse_args()
+    tickers = a.tickers
     if not tickers:
-        print("ERROR: no tickers given. Usage: fetch_company_sources.py TICKER [TICKER ...]", file=sys.stderr); sys.exit(1)
-    OUT_DIR.mkdir(parents=True, exist_ok=True)
+        print("ERROR: no tickers given. Usage: fetch_company_sources.py TICKER [TICKER ...] [--run-dir DIR]", file=sys.stderr); sys.exit(1)
+    run_dir = Path(a.run_dir) if a.run_dir else None
+    src_dir = (run_dir / "sources") if run_dir else OUT_DIR
+    src_dir.mkdir(parents=True, exist_ok=True)
+    fetched_at = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    manifest = []
     driver = GraphDatabase.driver(URI, auth=(USER, PW))
     try:
         with driver.session() as s:
             for tk in tickers:
                 data = fetch(tk, s)
-                out = OUT_DIR / f"_sources_{tk}.json"
-                out.write_text(json.dumps(data, indent=1))
+                fname = f"{tk}.json" if run_dir else f"_sources_{tk}.json"
+                out = src_dir / fname
+                blob = json.dumps(data, indent=1)
+                out.write_text(blob)
+                digest = hashlib.sha256(blob.encode("utf-8")).hexdigest()
+                manifest.append({"ticker": tk, "file": fname, "sha256": digest,
+                                 "source_id_count": data["counts"]["events"], "bytes": len(blob.encode("utf-8"))})
                 c = data["counts"]
                 print(f"{tk}: {c['events']} events {c['by_type']} | kpis={c['fiscal_kpis']} "
                       f"| hi={c['high_signal']} earn8k={c['earnings_8k']} | "
-                      f"{data['total_content_chars']:,} chars | empty={data['empty_content_events']} -> {out.name}")
+                      f"{data['total_content_chars']:,} chars | empty={data['empty_content_events']} | sha={digest[:12]} -> {out.name}")
     finally:
         driver.close()
+    if run_dir:
+        (run_dir / "sources_manifest.json").write_text(json.dumps({"fetched_at": fetched_at, "sources": manifest}, indent=1))
+        print(f"sources_manifest.json written ({len(manifest)} tickers, fetched_at={fetched_at})")
 
 if __name__ == "__main__":
     main()
