@@ -13,8 +13,9 @@ Each event is TARGETED to driver-rich sections and TRUNCATED so prompts stay san
 Tags per event: high_signal (|daily_stock| >= 2.0), is_earnings (8-K + Item 2.02), source_type, date.
 NO >2% filter — every non-news event is included; >2% is only a flag.
 
-Read-only on Neo4j. Writes .claude/plans/Drivers/_sources_<ticker>.json.
-Reusable: `python3 fetch_company_sources.py <TICKER> [TICKER2 ...]`
+Read-only on Neo4j. With --run-dir DIR: writes DIR/sources/<TICKER>.json + DIR/sources_manifest.json
+(sha256/source_id_count/bytes per file). Without it (legacy): .claude/plans/Drivers/_sources_<ticker>.json.
+Reusable: `python3 fetch_company_sources.py <TICKER> [TICKER2 ...] [--run-dir DIR]`
 """
 import os, sys, json, sqlite3, hashlib, argparse
 from pathlib import Path
