@@ -147,7 +147,9 @@ def fetch(tk, session):
 def main():
     if not PW:
         print("ERROR: NEO4J_PASSWORD not set (.env)"); sys.exit(1)
-    tickers = sys.argv[1:] or ["SBUX"]
+    tickers = sys.argv[1:]
+    if not tickers:
+        print("ERROR: no tickers given. Usage: fetch_company_sources.py TICKER [TICKER ...]", file=sys.stderr); sys.exit(1)
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     driver = GraphDatabase.driver(URI, auth=(USER, PW))
     try:
