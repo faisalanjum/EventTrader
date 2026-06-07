@@ -44,6 +44,7 @@ const scope = await agent(`Run this EXACT command with Bash and return its JSON 
 ${PY} ${DIR}/workflows/resolve_driver_scope.py --industry ${JSON.stringify(industry)}
 It prints { scope_name, slug, tickers, n_tickers }. If it exits NON-ZERO, report the exact error and do NOT invent tickers (return an empty tickers array).`, {schema:SCOPE_SCHEMA, label:'resolve', phase:'Resolve'})
 const SLUG = scope.slug, TICKERS = scope.tickers || [], INDUSTRY = scope.scope_name || industry
+if (!TICKERS.length) throw new Error(`resolve_driver_scope.py returned 0 tickers for industry "${industry}" — stopping (prevents fetch_company_sources.py defaulting to SBUX).`)
 
 phase('Fetch')
 const fetched = await agent(`Run this EXACT command with Bash (it pulls all non-news sources WITH real text for the ${TICKERS.length} ${INDUSTRY} companies and writes _sources_<ticker>.json):

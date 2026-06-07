@@ -1,5 +1,5 @@
 export const meta = {
-  name: 'driver-reconcile-restaurants',
+  name: 'driver-reconcile',
   description: 'Step 2 reconcile over a per-industry seed catalog (args.slug; defaults to restaurants; per-driver records with evidence_refs): (Dedup) canonical + reversible SAME_AS for exact-same-meaning only = the REUSE arm; (Gate) independent admit/rewrite/skip per DriverOntology; (Refute) skeptic breaks bad SAME_AS + meaning-changing rewrites; (Write) assemble per-driver records with canonical_name + side-lists. Review-file only; no graph writes; no merges/deletes. Roll-up/rewrite targets must be COINED names.',
   phases: [ { title: 'Review', detail: 'dedup proposer + independent gate, in parallel' }, { title: 'Refute', detail: 'independent skeptic breaks bad SAME_AS + meaning-changing rewrites; JS filters them out' }, { title: 'Write', detail: 'assemble per-driver records (set canonical_name) + skips/unresolved side-lists' }, { title: 'Validate', detail: 'deterministic structure check (zero judgment); HARD-FAIL if broken' } ],
 }
