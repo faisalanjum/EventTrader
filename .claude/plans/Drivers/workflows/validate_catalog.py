@@ -11,7 +11,7 @@ Catalog also has skips:[{driver_name,why}] + unresolved_rewrites:[{driver_name,p
 Per-record integrity (run on BOTH seed + catalog via struct_errs):
   evidence_refs non-empty · companies == distinct(evidence_refs.company) with NO duplicates ·
   each ref has company/source_type/source_id/quote (+ date unless source_type==fiscal.ai-kpi).
-SEED-only: 'catalog' is a list · entries well-formed · unique driver_name · every record self-canonical.
+SEED-only: 'catalog' is a NON-EMPTY list · entries well-formed · unique driver_name · every record self-canonical.
 CATALOG-only: malformed · forbidden(route/kind) · uniqueness · canonical->self-canonical (coined, no chains) ·
   completeness (every seed name once across catalog/skips/unresolved) · provenance (no invented names) ·
   evidence-drift (catalog ref == seed ref, incl. quote) · side-list fields.
@@ -72,6 +72,8 @@ def main():
     # ---- SEED self-validation (source of truth must be clean, independent of what reconcile keeps/skips) ----
     if not isinstance(seed.get("catalog"), list):
         fails.append(("SEED MALFORMED: missing 'catalog' list", ["seed.catalog"]))
+    elif not seed.get("catalog"):
+        fails.append(("SEED EMPTY: catalog has no driver records (silent no-op run?)", ["seed.catalog"]))
     seed_bad = [f"index {i}" for i, r in enumerate(seed.get("catalog") or []) if not (isinstance(r, dict) and norm(r.get("driver_name")))]
     if seed_bad: fails.append(("SEED MALFORMED: entry non-dict or missing driver_name", seed_bad))
     _snl = [norm(r.get("driver_name")) for r in seed_recs if r.get("driver_name")]
