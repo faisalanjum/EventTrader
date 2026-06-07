@@ -1,16 +1,19 @@
 export const meta = {
   name: 'driver-menu-build',
-  description: 'Driver-catalog SEED build. Step A: fetch_company_sources.py pulls ALL non-news sources (8-K/10-K/10-Q + transcripts + fiscal KPIs) WITH real text (MD&A, Risk Factors, EX-99.1 press releases, prepared remarks + Q&A), targeted + truncated, tagged (high_signal, is_earnings); NO >2% filter. Step B: 1 blind subagent per company coins candidate driver_names from that real content per DriverOntology, each with its source_id. Step C: deterministic JS grouping into per-driver records writes the seed review file. Read-only Neo4j; no graph writes.',
+  description: 'Driver-catalog SEED build for ANY industry. Step 0: resolve_driver_scope.py turns args.industry into the ticker list (default Restaurants). Step A: fetch_company_sources.py pulls ALL non-news sources (8-K/10-K/10-Q + transcripts + fiscal KPIs) WITH real text + each event source_id; NO >2% filter. Step B: 1 blind subagent per company coins candidate driver_names (each with source_id) from real content per DriverOntology. Step C: deterministic JS grouping into per-driver records writes _menu_<slug>_seed.json. Read-only Neo4j; no graph writes. Pass args = { industry: "<name>" }.',
   phases: [
+    { title: 'Resolve',  detail: 'resolve_driver_scope.py: args.industry → tickers (default Restaurants)' },
     { title: 'Fetch',    detail: 'fetch_company_sources.py → _sources_<ticker>.json (real text + source_id, tagged)' },
     { title: 'Menus',    detail: 'one blind subagent per company coins names + source_id from real content' },
-    { title: 'Converge', detail: 'JS groups candidates → per-driver records (driver_name, canonical_name, companies, evidence_refs); write seed' },
+    { title: 'Converge', detail: 'JS groups candidates → per-driver records; write _menu_<slug>_seed.json' },
   ],
 }
 
 const DIR = '/home/faisal/EventMarketDB/.claude/plans/Drivers'
 const PY  = '/home/faisal/EventMarketDB/venv/bin/python3'
-const TICKERS = ['SBUX','MCD','CMG','YUM','DRI','TXRH','SHAK','WING','CAKE','EAT','PZZA','CBRL','BLMN','QSR']
+
+const SCOPE_SCHEMA = { type:'object', additionalProperties:true, required:['slug','tickers'], properties:{
+  scope_name:{type:'string'}, slug:{type:'string'}, tickers:{type:'array', items:{type:'string'}}, n_tickers:{type:'integer'} } }
 
 const MENU_SCHEMA = { type:'object', additionalProperties:false,
   required:['ticker','candidate_count','candidates','skipped_count','notes'],
@@ -34,8 +37,16 @@ const RULES = `NAMING RULES (authority = ${DIR}/DriverOntology.md — READ it; s
 - Vague text -> SKIP (don't invent).
 - fiscal.ai KPI labels are RAW SUGGESTIONS ONLY: rewrite each into a standard driver_name; never use the raw label as the NAME.`
 
+const industry = (args && args.industry) || 'Restaurants'
+
+phase('Resolve')
+const scope = await agent(`Run this EXACT command with Bash and return its JSON output (parse stdout into the schema):
+${PY} ${DIR}/workflows/resolve_driver_scope.py --industry ${JSON.stringify(industry)}
+It prints { scope_name, slug, tickers, n_tickers }. If it exits NON-ZERO, report the exact error and do NOT invent tickers (return an empty tickers array).`, {schema:SCOPE_SCHEMA, label:'resolve', phase:'Resolve'})
+const SLUG = scope.slug, TICKERS = scope.tickers || [], INDUSTRY = scope.scope_name || industry
+
 phase('Fetch')
-const fetched = await agent(`Run this EXACT command with Bash (it pulls all non-news sources WITH real text for the 14 Restaurants companies and writes _sources_<ticker>.json):
+const fetched = await agent(`Run this EXACT command with Bash (it pulls all non-news sources WITH real text for the ${TICKERS.length} ${INDUSTRY} companies and writes _sources_<ticker>.json):
 ${PY} ${DIR}/workflows/fetch_company_sources.py ${TICKERS.join(' ')}
 Then report the per-ticker summary lines it printed (event counts + chars + empty count) and confirm every ticker wrote a file with empty=0. If any ticker errored or has empty>5, say so explicitly.`, {label:'fetch-sources', phase:'Fetch'})
 
@@ -67,11 +78,11 @@ for (const m of menus) for (const c of (m.candidates || [])) {
 const catalog = Object.values(byName).map(r => ({ driver_name:r.driver_name, canonical_name:r.canonical_name, companies:[...r._companies], evidence_refs:r.evidence_refs, optional_links:r.optional_links }))
 const shared_drivers = catalog.filter(r => r.companies.length >= 2).map(r => ({ driver_name:r.driver_name, companies:r.companies }))
 const total_candidates = catalog.reduce((s,r) => s + r.evidence_refs.length, 0)
-const seed = { industry:'Restaurants', catalog, analysis:{ shared_drivers, total_distinct_drivers:catalog.length, total_candidates } }
+const seed = { industry:INDUSTRY, catalog, analysis:{ shared_drivers, total_distinct_drivers:catalog.length, total_candidates } }
 
-const conv = await agent(`Write this EXACT JSON verbatim (do NOT alter, summarize, reorder, or reformat the data — write it byte-for-byte) to ${DIR}/_menu_restaurants_seed.json using the Write tool. Then return CONV_SCHEMA with file_written + the counts (total_distinct_drivers=${catalog.length}, total_candidates=${total_candidates}).
+const conv = await agent(`Write this EXACT JSON verbatim (do NOT alter, summarize, reorder, or reformat the data — write it byte-for-byte) to ${DIR}/_menu_${SLUG}_seed.json using the Write tool. Then return CONV_SCHEMA with file_written + the counts (total_distinct_drivers=${catalog.length}, total_candidates=${total_candidates}).
 
 SEED JSON:
 ${JSON.stringify(seed)}`, {schema:CONV_SCHEMA, label:'write-seed', phase:'Converge'})
 
-return { fetch_summary: (fetched||'').slice(0,1500), menu_counts: menus.map(m=>({t:m.ticker, n:m.candidate_count, skipped:m.skipped_count})), distinct_drivers: catalog.length, total_candidates, converge: conv }
+return { industry:INDUSTRY, slug:SLUG, n_tickers:TICKERS.length, fetch_summary: (fetched||'').slice(0,1500), menu_counts: menus.map(m=>({t:m.ticker, n:m.candidate_count, skipped:m.skipped_count})), distinct_drivers: catalog.length, total_candidates, converge: conv }

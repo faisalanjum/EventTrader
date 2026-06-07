@@ -11,7 +11,8 @@ Read only these files first:
 ├── DriverOntology.md        # naming rules for Driver names
 ├── workflows/
 │   ├── fetch_company_sources.py # pulls ALL non-news sources WITH real text (MD&A/Risk/EX-99.1/transcript Q&A), tagged; NO >2% filter
-│   ├── menu_build.js        # SEED build: fetch → blind per-company naming → converge (edit TICKERS, rerun by industry)
+│   ├── resolve_driver_scope.py # Neo4j: --industry X → tickers · --sector Y → industries · --list (feeds menu_build)
+│   ├── menu_build.js        # SEED build (args.industry → resolver auto-pulls tickers): fetch → blind naming → converge
 │   ├── catalog_first.js     # G1: catalog-first reuse (reuse/create/skip)
 │   ├── gate.js              # G2: independent admission gate (reuse/admit/rewrite/skip)
 │   ├── reconcile.js         # Step-2: dedup ‖ G2 (admit/rewrite/skip) → Refute skeptic (breaks bad SAME_AS/rewrites) → writes catalog
@@ -23,5 +24,5 @@ Everything else in this folder is historical draft, evidence, or prior experimen
 
 Current next step: the method is locked for a clean-slate run; **all old Restaurants outputs are DELETED**. Run **from scratch** — `menu_build.js` (→ `_menu_restaurants_seed.json`) then `reconcile.js` (→ `_menu_restaurants_catalog.json`; the Validate phase must pass). Do not write to Neo4j during calibration.
 
-Everything's now locked for repeat: edit TICKERS in menu_build.js → re-run for any industry; docs + README point a
+Everything's now locked for repeat: run `menu_build.js` with `args={industry:'<name>'}` (resolver auto-pulls tickers) → `reconcile.js` with `args={slug:'<slug>'}` → re-run for any industry; docs + README point a
   fresh bot to the right place.

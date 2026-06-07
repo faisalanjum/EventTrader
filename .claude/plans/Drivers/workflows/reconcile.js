@@ -1,14 +1,15 @@
 export const meta = {
   name: 'driver-reconcile-restaurants',
-  description: 'Step 2 reconcile over the Restaurants seed catalog (per-driver records with evidence_refs): (Dedup) canonical + reversible SAME_AS for exact-same-meaning only = the REUSE arm; (Gate) independent admit/rewrite/skip per DriverOntology; (Refute) skeptic breaks bad SAME_AS + meaning-changing rewrites; (Write) assemble per-driver records with canonical_name + side-lists. Review-file only; no graph writes; no merges/deletes. Roll-up/rewrite targets must be COINED names.',
+  description: 'Step 2 reconcile over a per-industry seed catalog (args.slug; defaults to restaurants; per-driver records with evidence_refs): (Dedup) canonical + reversible SAME_AS for exact-same-meaning only = the REUSE arm; (Gate) independent admit/rewrite/skip per DriverOntology; (Refute) skeptic breaks bad SAME_AS + meaning-changing rewrites; (Write) assemble per-driver records with canonical_name + side-lists. Review-file only; no graph writes; no merges/deletes. Roll-up/rewrite targets must be COINED names.',
   phases: [ { title: 'Review', detail: 'dedup proposer + independent gate, in parallel' }, { title: 'Refute', detail: 'independent skeptic breaks bad SAME_AS + meaning-changing rewrites; JS filters them out' }, { title: 'Write', detail: 'assemble per-driver records (set canonical_name) + skips/unresolved side-lists' }, { title: 'Validate', detail: 'deterministic structure check (zero judgment); HARD-FAIL if broken' } ],
 }
 
 const DIR  = '/home/faisal/EventMarketDB/.claude/plans/Drivers'
 const PY   = '/home/faisal/EventMarketDB/venv/bin/python3'
-const CAT  = '/home/faisal/EventMarketDB/.claude/plans/Drivers/_menu_restaurants_catalog.json'
-const SEED = '/home/faisal/EventMarketDB/.claude/plans/Drivers/_menu_restaurants_seed.json'
-const ONT  = '/home/faisal/EventMarketDB/.claude/plans/Drivers/DriverOntology.md'
+const SLUG = (args && args.slug) || 'restaurants'
+const CAT  = `${DIR}/_menu_${SLUG}_catalog.json`
+const SEED = `${DIR}/_menu_${SLUG}_seed.json`
+const ONT  = `${DIR}/DriverOntology.md`
 const EXACT_MEANING_RULE = `For any proposed SAME_AS, reuse, or rewrite, first verify all three are true:
 1. same object or metric
 2. same scope
@@ -91,7 +92,7 @@ For EACH seed record (driver_name X) apply this EXACT precedence (FIRST match wi
 5. otherwise (admit; or a same_as/rewrite whose target was skipped or parked) -> catalog record; canonical_name = X (itself).
 
 For EVERY catalog record: COPY driver_name, companies, evidence_refs, optional_links VERBATIM from the seed record — change ONLY canonical_name. Never invent, drop, reorder, or edit an evidence_ref.
-File shape = { industry:'Restaurants', catalog:[ {driver_name, canonical_name, companies, evidence_refs, optional_links} ], skips:[{driver_name, why}], unresolved_rewrites:[{driver_name, proposed_to, why}], counts:{keep, same_as, rewrite, skip, unresolved} }.
+File shape = { industry:(copy from the seed's "industry" value), catalog:[ {driver_name, canonical_name, companies, evidence_refs, optional_links} ], skips:[{driver_name, why}], unresolved_rewrites:[{driver_name, proposed_to, why}], counts:{keep, same_as, rewrite, skip, unresolved} }.
 Every canonical_name MUST be the driver_name of some catalog record whose canonical_name == itself (targets are coined names). NO kind field, NO route/scope bucket.
 Return WRITE_SCHEMA (compact; do not echo the catalog).`, {schema:WRITE_SCHEMA, label:'write', phase:'Write'})
 

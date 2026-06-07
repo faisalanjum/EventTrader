@@ -91,9 +91,8 @@ No route/news lane and no fundamental/news split — a valid reusable driver is 
 
 ## Reusable artifacts (so a repeat = zero rework)
 
-- **`workflows/menu_build.js`** — the blind per-company menu builder (Step 1): bots coin candidates (each with a
-  `source_id`), then **deterministic JS grouping** writes the seed as per-driver records. To repeat on another industry:
-  edit the `TICKERS` list and re-run via the **Workflow** tool.
+- **`workflows/resolve_driver_scope.py`** — Neo4j scope resolver: `--industry "X"` → its tickers · `--sector "Y"` → its industries · `--list`. Hard-errors on 0 results, warns on 1 ticker. Feeds menu_build's Resolve phase.
+- **`workflows/menu_build.js`** — the blind per-company menu builder (Step 1): a **Resolve** phase runs `resolve_driver_scope.py --industry <args.industry>` → tickers (default Restaurants); bots coin candidates (each with a `source_id`); **deterministic JS grouping** writes `_menu_<slug>_seed.json` as per-driver records. Run via **Workflow** with `args={industry:'<name>'}` — no more editing a TICKERS list.
 - **Data facts the builder relies on (verified):** returns live as **percent-point** properties on the event→Company
   edge — `(News|Transcript)-[:INFLUENCES]->(Company)` and `(Report)-[:PRIMARY_FILER]->(Company)`; fields
   `daily_stock` (raw) and `daily_macro` (market-relative). Threshold 2% = **2.0**, not 0.02. fiscal.ai KPIs:
