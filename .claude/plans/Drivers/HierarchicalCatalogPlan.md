@@ -73,7 +73,7 @@ Same `reconcile`, but the **input is built by a new deterministic combine step**
 2. **Same-name review (AI) — D5:** for each queued collision, judge from the evidence → **SAME** (a union proposal — an independent **Refute** must then fail to break it, else it falls to UNCLEAR; fail-close) · **DIFFERENT** (propose more-specific source-grounded names + the evidence assignment map) · **UNCLEAR** (mark park). Writes final post-Refute verdicts to `same_name_review.json` = reviews + split-map + assignments (§11.6).
 3. **Combine part B — assemble the parent `seed.json` (deterministic, code):** apply the review — SAME → one Refute-confirmed unioned record (5-tuple-union evidence, recompute `companies`); DIFFERENT → split names as separate records using the assignment map (they must still clear G2/Refute in step 5); UNCLEAR → `unresolved_same_name[]`. Merge `optional_links` per key (**identical → keep; conflict → null + note**, never silently pick — §11.7). Flatten chains to a STAR; sort catalog by name + evidence by the 5-tuple. Write the seed in **leaf shape + `same_as_variants`** (§11.5).
 4. **Fold validator (deterministic) — D8:** confirm nothing was dropped or lost (a–d; accounting set §11.2). HARD-FAIL otherwise.
-5. **Reconcile (same pipeline) — D6:** dedup proposes new cross-child SAME_AS for **different** names that mean the same → G2 → Refute → writer → `catalog.json` + `approved.json` (+ `same_as_variants` updated). *(DIFFERENT-split names are gate/Refute-validated here before entering the catalog.)*
+5. **Reconcile (same pipeline) — D6:** dedup proposes new cross-child SAME_AS for **different** names that mean the same → G2 → Refute → deterministic JS assembly writes `catalog.json` + `approved.json` (+ `same_as_variants` updated). *(DIFFERENT-split names are gate/Refute-validated here before entering the catalog.)*
 6. **Validate** — `validate_catalog.py` incl. D1 fusion check + the `same_as_variants` check + the D5 provenance / `unresolved_same_name` accounting (§11.3).
 
 → Output: a **Sector catalog** (then a **Global catalog** by repeating with sectors as the children).
@@ -104,7 +104,7 @@ Same `reconcile`, but the **input is built by a new deterministic combine step**
 
 ### 3e. `same_as_variants` field
 - On every self-canonical record: `same_as_variants: [names]` = all variant names linked to it, accumulated across levels.
-- Written by: leaf reconcile writer (from `approved.json`); `fold_catalogs` (carry-forward + merge); higher reconcile (new links). Kept honest by the fold validator (d).
+- Written by: deterministic JS catalog assembly in reconcile (from `approved.json`); `fold_catalogs` (carry-forward + merge); higher reconcile (new links). Kept honest by the fold validator (d).
 - **Provenance** (which child/industry each record came from) is **derivable** from `evidence_refs[].company` → its industry/sector — no separate field needed unless we choose to materialize it.
 
 ---
@@ -119,12 +119,12 @@ Same `reconcile`, but the **input is built by a new deterministic combine step**
 **CHANGED files**
 - `workflows/fetch_company_sources.py` — (D7/§8) **remove the per-sub-unit/count caps; emit FULL structured content** (the `qa_exchanges[]` / `sections[]` lists it already builds); **sort Q&A by `toInteger(qa.sequence)`** (numeric, not string); add a last-resort `clipped` field.
 - `workflows/menu_build.js` — (E1) **lower-case** the Converge grouping key; (E2) write `seed.json` **with code, not an LLM agent**; (D7) add a **Chunk phase** + **one blind bot per chunk file**.
-- `workflows/reconcile.js` — write `approved.json`; writer populates `same_as_variants`. Consumes parent seeds unchanged (same shape).
+- `workflows/reconcile.js` — write `approved.json`; deterministic JS assembles `catalog.json` and populates `same_as_variants`. Consumes parent seeds unchanged (same shape).
 - `workflows/validate_catalog.py` — add `approved.json` 3rd arg + D1 fusion check; add D8 fold-mode checks (CLI §11.9); add `same_as_variants` consistency check; **+ D5-split-name provenance + `unresolved_same_name[]` accounting (§11.3)**.
 - **Record shape** — add `same_as_variants: []` (see §9).
 
 **UNCHANGED / reused as-is**
-- `resolve_driver_scope.py` (already has `--list`), `gate.js`, `Refute` logic, the dedup/gate/Refute/writer prompts — reused at every level.
+- `resolve_driver_scope.py` (already has `--list`), `gate.js`, Refute logic, and the dedup/gate prompts — reused at every level. The old LLM writer prompt is replaced by deterministic JS assembly (§11.19).
 
 ---
 
@@ -147,7 +147,7 @@ Same `reconcile`, but the **input is built by a new deterministic combine step**
 1. `reconcile.js` writes `approved.json`.
 2. `validate_catalog.py`: `approved.json` arg + D1 fusion check.
 3. `menu_build.js`: lower-case Converge key (E1) + deterministic `seed.json` write (E2).
-4. `reconcile.js` writer populates `same_as_variants`; validator checks it.
+4. `reconcile.js` deterministic JS assembly populates `same_as_variants`; validator checks it.
 5. **Re-run the leaf on the calibration industry; confirm GREEN.**
 
 **Phase 0.5 — Chunking (foundational — the whole catalog depends on the leaf seeing full text):**
