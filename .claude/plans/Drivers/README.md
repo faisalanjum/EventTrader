@@ -2,18 +2,21 @@
 
 Current Driver work is about building **one shared Driver catalog** that all producers reuse.
 
+**🎯 Read first — the purpose:** the **`Primary priorities`** section at the top of **`DriverExperiment.md`** defines what the catalog is FOR (traceable + tradeable inventory · minimal but same-name-when-same-meaning · propose-first live reuse). Everything else serves it.
+
 Read only these files first:
 
 ```text
 .claude/plans/Drivers/
 ├── DriverExperiment.md      # WHY (all decisions + reasoning) + procedure + status — READ FIRST after compaction
-├── Drivers.md               # design + G1 catalog-first + G2 independent gate
+├── Drivers.md               # design + G1 propose-first + G2 independent gate
 ├── DriverOntology.md        # naming rules for Driver names
+├── HierarchicalCatalogPlan.md # LOCKED + owner-confirmed plan: harden the leaf (D1 fusion check + no-text-loss chunking) then fold Industry→Sector→Global; build order + exact specs (read before building the scale-up)
 ├── workflows/
 │   ├── fetch_company_sources.py # pulls ALL non-news sources WITH real text (MD&A/Risk/EX-99.1/transcript Q&A), tagged; NO >2% filter
 │   ├── resolve_driver_scope.py # Neo4j: --industry X → tickers · --sector Y → industries · --list (feeds menu_build)
 │   ├── menu_build.js        # SEED build (args.industry → resolver auto-pulls tickers): fetch → blind naming → converge
-│   ├── catalog_first.js     # G1: catalog-first reuse (reuse/create/skip)
+│   ├── catalog_first.js     # G1: propose-first reuse (propose own name → compare catalog → reuse/create/skip)
 │   ├── gate.js              # G2: independent admission gate (reuse/admit/rewrite/skip)
 │   ├── reconcile.js         # Step-2: dedup ‖ G2 (admit/rewrite/skip) → Refute skeptic (breaks bad SAME_AS/rewrites) → writes catalog
 │   └── validate_catalog.py  # deterministic post-reconcile validator (HARD-FAIL; zero judgment)

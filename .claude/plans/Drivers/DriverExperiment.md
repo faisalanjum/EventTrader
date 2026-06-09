@@ -9,6 +9,21 @@ For the full spec, read the two canonical files first:
 
 ---
 
+## Primary priorities — what the Driver catalog is FOR (read before "Why these decisions")
+
+Incremental addendum. This ADDS only the purpose + the live reuse order; the existing experiment-tested design below stays fully in force (specific evidence-grounded names · exact-meaning reuse only · G1/G2 gates · reversible SAME_AS, never a destructive merge · Refute skeptic). The three below are one chain: the live reuse order (#3) builds the minimal, same-name-when-same-meaning catalog (#2) that gives the traceable, tradeable inventory (#1).
+
+1. **PURPOSE.** A global inventory of Drivers, each specific enough to (a) trace its evolution over time, and (b) drive automated workflows that detect a change in it and trigger buy/sell signals.
+
+2. **MINIMAL, BUT SAME-NAME-WHEN-SAME-MEANING.** Keep the final set as small as possible *while keeping #1* — no explosion of drivers, no bloat, easy to manage. Use the exact same driver name whenever two drivers mean exactly the same thing anywhere in the catalog. If exact duplicates slip through, link them with reversible SAME_AS (never a destructive merge). Trading/read-through code must follow SAME_AS links. This is what lets cross-company read-throughs be detected automatically and feed systematic trading decisions. Minimal never overrides #1.
+
+3. **PRIMARY — LIVE REUSE ORDER** (in production, once the catalog is built). For each event the producer must:
+   a. **FIRST** form its own exact driver suggestion from the evidence — before seeing the catalog (so it isn't nudged into reusing a near-but-not-exact name);
+   b. **THEN** be shown the catalog drivers most related to that suggestion, sorted by company → industry → sector → semantic meaning;
+   c. reuse an existing driver only if it means exactly the same; otherwise keep its new candidate (which still passes the existing G2 gate).
+
+---
+
 ## Why these decisions (don't re-litigate)
 
 - **v1 and v2 both died the same way:** the producer made an **unanchored semantic judgment** and either
@@ -18,7 +33,7 @@ For the full spec, read the two canonical files first:
   2. *"Is this a real, specific-enough driver?"* (→ scope drift / over-broad names)
 - **So the method is:**
   - **Open vocabulary** — a closed vocab scored **82%-reject**; do **not** bring it back. Names come from the source.
-  - **Anchor the producer with the catalog (G1)** — reuse before create; this is what makes two LLMs converge.
+  - **Propose-first reuse (G1)** — the producer coins its own exact name from the evidence first, THEN compares against the retrieved related catalog and reuses on exact-meaning only. The compare-and-reuse step (plus the reconcile/SAME_AS net) is what makes two LLMs converge — not anchoring them on the catalog up front, which invites lazy over-reuse.
   - **An independent gate (G2)** before any new name enters the one shared catalog.
 - **Fail-close invariant (the safety rail):** err **specific**; **link (SAME_AS), never merge/overwrite**; merge only on
   **exact same meaning**. *Aggressive merging = the v2 collapse. A tighter rulebook = v1 overfit/over-reject.* Stay here.
@@ -47,7 +62,7 @@ For the full spec, read the two canonical files first:
   key, `kind`). "Catch, don't pray." We rejected a Python *merger* (the writer has real conflict-resolution judgment) and
   deterministic name/word matching (false-positives on brand-word tickers, per the bullet above).
 - **Transport = full inline, no slice.** Workflow JS has **no filesystem**, so dedup/gate reach the writer via the prompt
-  as schema-validated objects (no char cap; per-industry fits the model context — split the reconcile by batch only if an
+  as schema-validated objects (per-industry usually fits one model context; at scale sub-split by record/char caps (`SEED_MAX_RECORDS`/`SEED_MAX_CHARS`, `HierarchicalCatalogPlan.md` §11.11) — split the reconcile by batch only if an
   industry is ever too large).
 - **Independent merge-skeptic (the `Refute` stage) = adversarial verification of the two FUSE decisions.** The gate is an
   independent check on the ADMIT arm, but the MERGE arm had none: `SAME_AS` (dedup proposes) and a meaning-changing
@@ -68,7 +83,7 @@ For the full spec, read the two canonical files first:
    `DriverOntology.md`. Output per candidate: `driver_name` + `evidence_quote` + `source_type` + `source_id` (the event
    it was quoted from, or `fiscal_ai:<ticker>:<metric>`) + `date`. Converge then groups these (deterministic JS) into
    per-driver records `{driver_name, canonical_name, companies, evidence_refs, optional_links}`.
-   *Blind/parallel is for the TEST only (measures raw convergence). Production is catalog-first (G1).*
+   *Blind/parallel is for the TEST only (measures raw convergence). Production is propose-first (G1): coin own name → compare retrieved related catalog → reuse-if-exact.*
    **Seed sources = ALL non-news company sources** (filings + transcripts + fiscal.ai KPIs). **`>2% daily_stock` is only a high-signal flag, not a filter** — nothing excluded for moving less.
    News/macro drivers accrete **LIVE in production** (reuse-or-create + G2); there is **no separate news build**.
 2. **Reconcile (G1 + G2)** — embeddings surface possible matches only; for exact-same-meaning, an independent
@@ -82,7 +97,7 @@ For the full spec, read the two canonical files first:
    structural break before the file ships.
 3. **Honesty gate** — freeze the catalog → feed **fresh** events using only names/data visible on or before the event date → producer must reuse / create / skip; an
    **independent** grader scores against a **pre-written** key; **grade once** (see `Drivers.md` § Honesty gate).
-4. **Human review → next industry.** Scale to ~1000 by repeating 1–3. Any rule change must be a **general principle**,
+4. **Human review of the FIRST industries (calibration), then hands-off scale.** Validate the method on the early industries; at ~1000 scale it is the automated honesty gate + validators — **no per-industry human in the steady state** (the production loop is hands-off; see `HierarchicalCatalogPlan.md`). Repeat 1–3 per industry. Any rule change must be a **general principle**,
    never sector-specific examples (examples overfit — that's how v1 died).
 
 No route/news lane and no fundamental/news split — a valid reusable driver is **admitted**; news/macro drivers are coined **LIVE** by the news producer (not in the seed). Both reviewers judge from each name's **evidence** (quote/source/date), not the bare string.
@@ -100,7 +115,7 @@ No route/news lane and no fundamental/news split — a valid reusable driver is 
 - **`workflows/reconcile.js`** — Step-2 reconcile = dedup (canonical + reversible SAME_AS, **brand ≠ generic**) ‖ the G2 gate (admit/rewrite/skip) → a **`Refute` merge-skeptic** (refutes each SAME_AS + rewrite from evidence; refuted SAME_AS dropped, refuted rewrite → `unresolved_rewrites`; JS filters rejects out of the writer's input) → writer (assembles per-driver records: sets canonical_name + skips/unresolved side-lists) → the Validate phase (writes `validation.txt`). Run via **Workflow** with `args={run_id:'<run_id>'}` (the exact menu_build run, never "latest"); reads `runs/<run_id>/seed.json`, writes `catalog.json` there.
 - **`workflows/validate_catalog.py`** — deterministic post-reconcile **validator** (zero judgment, HARD-FAIL) on the per-driver record shape, applied to **BOTH the seed and the catalog**. Per-record integrity (both): evidence_refs non-empty · `companies == distinct(evidence_refs.company)` with no dups · each ref has company/source_type/source_id/quote (+ date unless KPI). Seed-only: `catalog` is a NON-EMPTY list · entries well-formed · unique driver_name · every record self-canonical. Catalog-only: uniqueness · `canonical_name` → a SELF-canonical record (coined, no chains) · completeness (every seed name once across catalog/skips/unresolved) · provenance (no invented names) · evidence-drift (catalog ref == seed ref, incl. quote) · side-list fields · forbidden route/`kind`. Runs as `reconcile.js`'s final Validate phase; also `validate_catalog.py <seed> <catalog>`.
 - **`workflows/gate.js`** — **G2** standalone (independent admission gate: reuse / admit / rewrite / skip). Reusable in LIVE production per new name + inside reconcile. `args = {candidates:[{driver_name, evidence_refs:[{company,source_type,source_id,date,quote}]}], catalog}` — judges from each candidate's evidence, not the bare name.
-- **`workflows/catalog_first.js`** — **G1** standalone (catalog-first reuse: nearest visible names → reuse / create / skip). Reusable in production + the honesty gate. `args = {events, catalog}` where `catalog` is the already-retrieved visible names for that event.
+- **`workflows/catalog_first.js`** — **G1** standalone (propose-first reuse: PROPOSE own exact name blind → COMPARE retrieved related names → reuse-if-exact / create / skip). Reusable in production + the honesty gate. `args = {events, catalog}` where `catalog` is the already-retrieved related visible names for that event (sorted company → industry → sector → semantic).
 - **`runs/<run_id>/`** (one per industry; run_id = `<UTC-timestamp>_<slug>`): `seed.json` = `{ catalog:[per-driver records], analysis }` (raw, all self-canonical) · `catalog.json` = `{ catalog:[records w/ canonical_name], skips[], unresolved_rewrites[], counts }` (reconciled) · `manifest.json` (args·git commit·tickers·seed counts) · `scope.json` (resolver output) · `sources_manifest.json` (sha256 + count + bytes per source file) · `validation.txt` (validator output) · `sources/<TICKER>.json` (raw dumps, **git-ignored**). All committed except `sources/`. (Read-only Neo4j during calibration.) Each record = `{driver_name, canonical_name, companies, evidence_refs:[{company, source_type, source_id, date, quote}], optional_links}`; `source_id` = the Neo4j event id (or `fiscal_ai:<ticker>:<metric>`) so date/company/return derive from it. Production `Driver` node stays small (name + edges); evidence lives on `DriverUpdate→event`.
 
 ---

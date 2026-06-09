@@ -1,3 +1,19 @@
+// ============================================================================
+// ⚠️  RAISE TO USER BEFORE USING OR WIRING THIS FILE — design is still changing.
+//
+//  NOT USED IN STEP 1 (building the Driver catalog menu). Step 1 =
+//    menu_build.js (blind per-company naming) + reconcile.js (dedup ‖ G2 →
+//    Refute → writer → validate). This G1 module is for PRODUCTION live-reuse
+//    and the honesty gate — both come later.
+//
+//  REBUILD PENDING: the docs (DriverExperiment.md "Primary priorities" North
+//    Star · Drivers.md §2 · DriverOntology R1) now specify PROPOSE-FIRST reuse
+//    — the producer coins its own exact name BLIND, THEN is shown the retrieved
+//    related drivers and reuses only on EXACT meaning. The code BELOW still
+//    implements the OLD catalog-first flow (catalog shown up front). The user is
+//    still deciding HOW related drivers are shown/sorted for reuse, so DO NOT
+//    rebuild or wire this yet — confirm the final reuse-display rules first.
+// ============================================================================
 export const meta = {
   name: 'driver-catalog-first-g1',
   description: 'G1 — CATALOG-FIRST reuse (reusable). For each new event, show the producer the nearest visible catalog names and REUSE if EXACT same meaning, else CREATE a new candidate (which then goes through the G2 gate) or SKIP. This is the PRODUCTION mechanism and the core of the honesty gate. Pass events + the already-retrieved visible catalog names via args.',
