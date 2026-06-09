@@ -15,7 +15,7 @@ Incremental addendum. This ADDS only the purpose + the live reuse order; the exi
 
 1. **PURPOSE.** A global inventory of Drivers, each specific enough to (a) trace its evolution over time, and (b) drive automated workflows that detect a change in it and trigger buy/sell signals.
 
-2. **MINIMAL, BUT SAME-NAME-WHEN-SAME-MEANING.** Keep the final set as small as possible *while keeping #1* — no explosion of drivers, no bloat, easy to manage. Use the exact same driver name whenever two drivers mean exactly the same thing anywhere in the catalog. If exact duplicates slip through, link them with reversible SAME_AS (never a destructive merge). Trading/read-through code must follow SAME_AS links. This is what lets cross-company read-throughs be detected automatically and feed systematic trading decisions. Minimal never overrides #1.
+2. **MINIMAL, BUT SAME-NAME-WHEN-SAME-MEANING.** Keep the final set as small as possible *while keeping #1* — no explosion of drivers, no bloat, easy to manage. Use the exact same driver name whenever two drivers mean exactly the same thing anywhere in the catalog. If exact duplicates slip through, link them with reversible SAME_AS (never a destructive merge). Trading/read-through code must follow SAME_AS links. This is what lets cross-company read-throughs be detected automatically and feed systematic trading decisions. Minimal never overrides #1. **The inverse guarantee — ONE NAME = ONE MEANING:** a single driver_name must never span two different real-world causes at any level; mixed-meaning same-name collisions are reviewed (kept as one ONLY if Refute-confirmed SAME; else split or parked) — never silently unioned (`HierarchicalCatalogPlan.md` D5, incl. the flag-triggered leaf path). **Late-found duplicates:** a future repair path (suggest-only surfacing → the same Refute gate → reversible SAME_AS) links duplicates discovered after the build — out-of-scope for the build, REQUIRED before steady-state production trust.
 
 3. **PRIMARY — LIVE REUSE ORDER** (in production, once the catalog is built). For each event the producer must:
    a. **FIRST** form its own exact driver suggestion from the evidence — before seeing the catalog (so it isn't nudged into reusing a near-but-not-exact name);
@@ -61,6 +61,10 @@ Incremental addendum. This ADDS only the purpose + the live reuse order; the exi
   driver**; it just HARD-FAILS the run on self-contradiction / dropped names / dangling refs / forbidden buckets (route
   key, `kind`). "Catch, don't pray." We rejected a Python *merger* (the writer has real conflict-resolution judgment) and
   deterministic name/word matching (false-positives on brand-word tickers, per the bullet above).
+  **(PARTIALLY SUPERSEDED 2026-06-09 — the WRITER only, per `HierarchicalCatalogPlan.md` §11.19:** catalog ASSEMBLY is now
+  deterministic JS applying the skeptic-approved maps by fixed precedence + a sha256 write-equality check; ALL meaning
+  judgment — dedup, gate, Refute, same-name review — stays LLM. The rejected "Python merger" was about conflict-resolution
+  *judgment*, which now lives in the fold's deterministic identical-or-null `optional_links` merge — code never guesses meaning.)
 - **Transport = full inline, no slice.** Workflow JS has **no filesystem**, so dedup/gate reach the writer via the prompt
   as schema-validated objects (per-industry usually fits one model context; at scale sub-split by record/char caps (`SEED_MAX_RECORDS`/`SEED_MAX_CHARS`, `HierarchicalCatalogPlan.md` §11.11) — split the reconcile by batch only if an
   industry is ever too large).
@@ -70,9 +74,10 @@ Incremental addendum. This ADDS only the purpose + the live reuse order; the exi
   So reconcile adds a skeptic **after dedup+gate, before the writer** that tries to REFUTE each SAME_AS link and each
   rewrite from the evidence (the 3-check); **default = keep separate**. JS then **mechanically filters** the rejected
   ones out of the writer's input — note it can't *truly* enforce (no fs → the writer writes the file), so the writer is
-  told to copy the approved lists EXACTLY and the validator backstops structure. **Refuted SAME_AS → drop link** (both
+  told to copy the approved lists EXACTLY and the validator backstops structure (CLOSED once `HierarchicalCatalogPlan.md`
+  Phase 0 lands: §11.19 deterministic writer + sha256 write-equality check). **Refuted SAME_AS → drop link** (both
   names stay separate); **refuted rewrite → parked in `unresolved_rewrites`** (not applied, not lost) — a **5th tracked
-  outcome bucket** the validator counts. Scope = **SAME_AS + rewrite ONLY** (admit already has the gate; skip/drop can't fuse).
+  outcome bucket** the validator counts. Scope = **SAME_AS + rewrite + the D5 same-name SAME union** (a third fusion arm — `HierarchicalCatalogPlan.md` D5/§11.18; admit already has the gate; skip/drop can't fuse).
 
 ---
 
@@ -97,6 +102,7 @@ Incremental addendum. This ADDS only the purpose + the live reuse order; the exi
    structural break before the file ships.
 3. **Honesty gate** — freeze the catalog → feed **fresh** events using only names/data visible on or before the event date → producer must reuse / create / skip; an
    **independent** grader scores against a **pre-written** key; **grade once** (see `Drivers.md` § Honesty gate).
+   **Visibility rule:** a driver's `visible_from` = its earliest non-empty evidence date; a KPI-only record (no dated evidence) is EXCLUDED from PIT-filtered catalogs until it gains dated evidence (fail-close).
 4. **Human review of the FIRST industries (calibration), then hands-off scale.** Validate the method on the early industries; at ~1000 scale it is the automated honesty gate + validators — **no per-industry human in the steady state** (the production loop is hands-off; see `HierarchicalCatalogPlan.md`). Repeat 1–3 per industry. Any rule change must be a **general principle**,
    never sector-specific examples (examples overfit — that's how v1 died).
 
@@ -125,7 +131,7 @@ No route/news lane and no fundamental/news split — a valid reusable driver is 
 - **Method locked for clean-slate rerun → all Restaurants outputs DELETED.** Removed
   the old flat `_menu_restaurants_*.json` / `_sources_*.json` — outputs built mid-change
   would mislead; new outputs land in `runs/<run_id>/`. **Run from scratch** (`menu_build.js` args={industry:'Restaurants'} → `reconcile.js` args={run_id}) so the FIRST
-  Restaurants result reflects the EXACT process we scale to every industry. **No partial re-run while still changing the method.**
+  Restaurants result reflects the EXACT process we scale to every industry. **No partial re-run while still changing the method.** **PRECONDITION (2026-06-09): build `HierarchicalCatalogPlan.md` Phase 0 + 0.5 FIRST — never run the seed build on the un-hardened pipeline (see README).**
 - **Pipeline shape (locked so far):** seed = **ALL non-news sources** (real text; `>2%` = flag) → `menu_build.js`
   (content-aware; prior run gave a ~250-name menu, convergence held, narrative drivers surfaced — to be regenerated).
   Reconcile = dedup (reuse arm) ‖ **G2 `admit/rewrite/skip`** (enum-locked; **no route, no kind, no fundamental/news

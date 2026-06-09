@@ -27,7 +27,7 @@ Read only these files first:
 
 Everything else in this folder is historical draft, evidence, or prior experiment material unless one of the files above explicitly points to it.
 
-Current next step: the method is locked for a clean-slate run. Run **from scratch** — `menu_build.js` with `args={industry:'Restaurants'}` (resolves tickers + stamps a run_id → writes `runs/<run_id>/seed.json`), then `reconcile.js` with `args={run_id:'<that run_id>'}` (→ `runs/<run_id>/catalog.json`; the Validate phase must pass). Do not write to Neo4j during calibration.
+Current next step: **build `HierarchicalCatalogPlan.md` Phase 0 + Phase 0.5 FIRST** (`approved.json` + D1 fusion check + deterministic writer, then full-text chunking) — only THEN the clean-slate run: `menu_build.js` with `args={industry:'Restaurants'}` (resolves tickers + stamps a run_id → writes `runs/<run_id>/seed.json`), then `reconcile.js` with `args={run_id:'<that run_id>'}` (→ `runs/<run_id>/catalog.json`; the Validate phase must pass). Do NOT run the seed build on the old un-hardened pipeline. Do not write to Neo4j during calibration.
 
-Everything's now locked for repeat: run `menu_build.js` with `args={industry:'<name>'}` (resolver auto-pulls tickers + stamps a run_id) → `reconcile.js` with `args={run_id:'<run_id>'}` → re-run for any industry; docs + README point a
+After Phase 0/0.5 hardening lands, the repeat run is locked: run `menu_build.js` with `args={industry:'<name>'}` (resolver auto-pulls tickers + stamps a run_id) → `reconcile.js` with `args={run_id:'<run_id>'}` → re-run for any industry; docs + README point a
   fresh bot to the right place.
