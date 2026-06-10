@@ -39,7 +39,7 @@ if (A.list === true) {
   const LIST_SCHEMA = { type:'object', additionalProperties:false, required:['ok','report'], properties:{ ok:{type:'boolean'}, report:{type:'string'} } }
   const out = await agent(`READ-ONLY Neo4j tree audit (never a production gate; prints for visibility only). Run with Bash:
 ${LIST_PYTHON}
-If the printed errors list is NON-EMPTY, this is a STRICT-TREE failure — say so loudly. Return ok = (errors empty) and report = the counts + errors + the sector list with industry counts.`, {schema:LIST_SCHEMA, label:'tree-list', phase:'Tree'})
+If the printed errors list is NON-EMPTY, this is a STRICT-TREE failure — say so loudly. Return ok = (errors empty) and report = the counts + errors + the sector list with industry counts.`, {schema:LIST_SCHEMA, model:'opus', label:'tree-list', phase:'Tree'})
   if (!out.ok) throw new Error(`STRICT-TREE FAIL (multi-parent/orphan): ${out.report}`)
   log('Tree audit (read-only; not a gate): ' + out.report.slice(0, 600))
   return { mode: 'list', report: out.report }
@@ -58,7 +58,7 @@ async function runFold(scopeName, scopeLevel, children, utc) {
   const recRes = await workflow({ scriptPath: `${DIR}/workflows/reconcile.js` }, { run_id: parent })
   const fv = await agent(`Run this EXACT Bash command (the D8 fold-level structure gate; writes fold_validation.txt and reports the REAL exit code):
 ${PY} ${DIR}/workflows/validate_catalog.py ${DIR}/runs/${parent}/seed.json ${DIR}/runs/${parent}/catalog.json ${DIR}/runs/${parent}/approved.json --fold ${children.map(c => `${DIR}/runs/${c}/catalog.json`).join(' ')} --review ${DIR}/runs/${parent}/same_name_review.json --sidecars ${DIR}/runs/${parent}/fold_sidecars.json | tee ${DIR}/runs/${parent}/fold_validation.txt ; echo "exit=\${PIPESTATUS[0]}"
-Return passed = (exit==0) and output = the validator's verbatim output (trimmed to the failing checks if it failed). Do not fix anything. (validator rev3 — deep-variant legit set)`, {schema:FV_SCHEMA, label:`fold-validate:${slug}`, phase:ph})
+Return passed = (exit==0) and output = the validator's verbatim output (trimmed to the failing checks if it failed). Do not fix anything. (validator rev3 — deep-variant legit set)`, {schema:FV_SCHEMA, model:'opus', label:`fold-validate:${slug}`, phase:ph})
   if (!fv.passed) throw new Error(`FOLD VALIDATION FAILED for ${parent}: ${fv.output.slice(0, 800)}`)
   return { parent, fold: foldRes, reconcile: recRes }
 }
@@ -74,9 +74,11 @@ if (A.fold) {
   if (!F.scope_name || !['sector', 'global'].includes(F.scope_level) || CHILDREN.length < 2)
     throw new Error('fold mode requires { fold: { scope_name, scope_level: sector|global, children: [>=2 EXPLICIT run_ids] } }')
   const stamp = await agent(`Run with Bash, in order:
+0) BILLING GUARD (subscription-only hard condition): test -z "$ANTHROPIC_API_KEY" || { echo "BILLING-GUARD FAIL: ANTHROPIC_API_KEY present in env — refusing to run (subscription-only policy, CLAUDE.md)"; exit 9; }
+   If it prints BILLING-GUARD FAIL, STOP: return checks_ok=false and that exact line as notes.
 1) date -u +%Y-%m-%d_%H%M%S
 2) Confirm every child has catalog.json AND approved.json: ls ${CHILDREN.map(c => `${DIR}/runs/${c}/catalog.json ${DIR}/runs/${c}/approved.json`).join(' ')}
-Return utc_stamp = the date output, checks_ok = true only if EVERY file exists (ls exit 0), notes = any missing paths verbatim.`, {schema:STAMP_SCHEMA, label:'stamp+check', phase:'Stamp'})
+Return utc_stamp = the date output, checks_ok = true only if EVERY file exists (ls exit 0), notes = any missing paths verbatim.`, {schema:STAMP_SCHEMA, model:'opus', label:'stamp+check', phase:'Stamp'})
   if (!stamp.checks_ok) throw new Error(`child run dirs incomplete: ${stamp.notes}`)
   phase('Folds')
   const res = await runFold(F.scope_name, F.scope_level, CHILDREN, stamp.utc_stamp)
@@ -92,9 +94,11 @@ const REQUIRE_COMPLETE = W.require_complete === true
 
 const leafIds = Object.values(LEAF_RUNS)
 const stamp = await agent(`Run with Bash, in order:
+0) BILLING GUARD (subscription-only hard condition): test -z "$ANTHROPIC_API_KEY" || { echo "BILLING-GUARD FAIL: ANTHROPIC_API_KEY present in env — refusing to run (subscription-only policy, CLAUDE.md)"; exit 9; }
+   If it prints BILLING-GUARD FAIL, STOP: return checks_ok=false and that exact line as notes.
 1) date -u +%Y-%m-%d_%H%M%S
 2) Confirm every leaf run has catalog.json AND approved.json: ls ${leafIds.map(c => `${DIR}/runs/${c}/catalog.json ${DIR}/runs/${c}/approved.json`).join(' ')}
-Return utc_stamp = the date output, checks_ok = true only if EVERY file exists (ls exit 0), notes = any missing paths verbatim.`, {schema:STAMP_SCHEMA, label:'stamp+check', phase:'Stamp'})
+Return utc_stamp = the date output, checks_ok = true only if EVERY file exists (ls exit 0), notes = any missing paths verbatim.`, {schema:STAMP_SCHEMA, model:'opus', label:'stamp+check', phase:'Stamp'})
 if (!stamp.checks_ok) throw new Error(`leaf run dirs incomplete (need catalog.json + approved.json): ${stamp.notes}`)
 const UTC = stamp.utc_stamp
 
@@ -105,7 +109,7 @@ if (!TAXONOMY) {
     ok:{type:'boolean'}, taxonomy:{type:'object', additionalProperties:true, description:'sector -> [industry names] from the printed JSON'}, notes:{type:'string'} } }
   const disc = await agent(`READ-ONLY Neo4j taxonomy discovery (join query; exact raw strings; strict-tree fail-loud). Run with Bash:
 ${LIST_PYTHON}
-Return ok = (errors list empty), taxonomy = the printed taxonomy object VERBATIM, notes = the errors if any.`, {schema:TREE_SCHEMA, label:'discover-tree', phase:'Tree'})
+Return ok = (errors list empty), taxonomy = the printed taxonomy object VERBATIM, notes = the errors if any.`, {schema:TREE_SCHEMA, model:'opus', label:'discover-tree', phase:'Tree'})
   if (!disc.ok) throw new Error(`STRICT-TREE FAIL: ${disc.notes}`)
   TAXONOMY = disc.taxonomy
 }
@@ -156,7 +160,7 @@ const meas = await agent(`Two steps with Bash (OUTPUT-only measurement; nothing 
 1) ${PY} -c "import json;d=json.load(open('${DIR}/runs/${globalParent}/catalog.json'));recs=d.get('catalog') or [];names=[r['driver_name'] for r in recs];import itertools;tok=lambda n:set(n.split('_'));pairs=[(a,b) for a,b in itertools.combinations(sorted(names),2) if len(tok(a)&tok(b))>=2 and a!=b][:10];print(json.dumps({'records':len(recs),'sample_pairs':pairs}))"
 2) For the printed sample_pairs (possible missed duplicates — token overlap is only a SUGGESTION), judge each pair ONCE: same exact driver (object+scope+mechanism) or different? Count how many look like REAL missed duplicates.
 3) Use the Write tool to save {"records": N, "sample_pairs": [...], "judged_missed_duplicates": M, "notes": "..."} to ${DIR}/runs/${globalParent}/walk_measure.json
-Return ok=true and summary = one line with records + sampled + judged-missed counts.`, {schema:MEASURE_SCHEMA, label:'measure', phase:'Measure'})
+Return ok=true and summary = one line with records + sampled + judged-missed counts.`, {schema:MEASURE_SCHEMA, model:'opus', label:'measure', phase:'Measure'})
 log(`measure: ${meas.summary}`)
 
 return { mode: 'walk', utc: UTC, global_run_id: globalParent, report }

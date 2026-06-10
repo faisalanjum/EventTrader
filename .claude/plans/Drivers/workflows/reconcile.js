@@ -46,8 +46,10 @@ const ASSEMBLE_SCHEMA = { type:'object', additionalProperties:false, required:['
 phase('Guard')
 // §11.11 SEED_MAX guard — deterministic, BEFORE any AI call (fail-close; sub-split required if it trips).
 const GUARD_SCHEMA = { type:'object', additionalProperties:false, required:['records','chars','ok'], properties:{ records:{type:'integer'}, chars:{type:'integer'}, ok:{type:'boolean'} } }
-const guard = await agent(`Run this EXACT command with Bash and return the printed JSON fields verbatim:
-${PY} -c "import json;d=json.load(open('${SEED}'));c=d.get('catalog') or [];s=len(json.dumps(c,separators=(',',':'),ensure_ascii=False));print(json.dumps({'records':len(c),'chars':s,'ok':len(c)<=400 and s<=300000}))"`, {schema:GUARD_SCHEMA, label:'seed-max-guard', phase:'Guard'})
+const guard = await agent(`Run these with Bash, in order. Step 0 — BILLING GUARD (subscription-only hard condition): test -z "$ANTHROPIC_API_KEY" || { echo "BILLING-GUARD FAIL: ANTHROPIC_API_KEY present in env — refusing to run (subscription-only policy, CLAUDE.md)"; exit 9; }
+If step 0 prints BILLING-GUARD FAIL, STOP and return records=-1, chars=-1, ok=false. Otherwise run this EXACT command and return the printed JSON fields verbatim:
+${PY} -c "import json;d=json.load(open('${SEED}'));c=d.get('catalog') or [];s=len(json.dumps(c,separators=(',',':'),ensure_ascii=False));print(json.dumps({'records':len(c),'chars':s,'ok':len(c)<=400 and s<=300000}))"`, {schema:GUARD_SCHEMA, model:'opus', label:'seed-max-guard', phase:'Guard'})
+if (!guard || guard.records < 0) throw new Error('BILLING-GUARD: ANTHROPIC_API_KEY present in env (or guard agent died) — refusing to run; subscription-only policy (CLAUDE.md).')
 let BATCH_FILES = [SEED]
 if (!guard.ok) {
   // §11.11 sub-split: name-sorted contiguous review batches (records are already sorted by driver_name).
@@ -73,7 +75,7 @@ for i,b in enumerate(batches,1):
     files.append(p)
 print(json.dumps({'files':files,'sizes':[len(b) for b in batches]}))
 EOF
-Return ok=true + files (exact list from the printed JSON), notes = the sizes. Non-zero exit: ok=false, files=[], notes = the exact error.`, {schema:SLICE_SCHEMA, label:'slice', phase:'Guard'})
+Return ok=true + files (exact list from the printed JSON), notes = the sizes. Non-zero exit: ok=false, files=[], notes = the exact error.`, {schema:SLICE_SCHEMA, model:'opus', label:'slice', phase:'Guard'})
   if (!slice.ok || !slice.files.length) throw new Error(`seed slicing failed: ${slice.notes}`)
   BATCH_FILES = slice.files
   log(`SEED over §11.11 caps (records=${guard.records}, chars=${guard.chars}) → ${BATCH_FILES.length} name-sorted review batches; cross-batch SAME_AS = accepted residual`)
@@ -94,7 +96,7 @@ TASK = propose final reversible SAME_AS links over them. STRICT rules:
 - NEVER link names with different scopes, brands, segments, geographies, objects, metrics, or mechanisms. List those under rejected_pairs with why.
 - FLAG-TRIGGERED D5 (rare): if ONE record's OWN evidence quotes show TWO+ DIFFERENT real-world meanings (a same-name union of different causes across companies), add it to mixed_flags [{driver_name, why, n_companies}] — a separate review will split or park it. Flag ONLY genuinely mixed-meaning unions; same-meaning convergence across companies is GOOD and never flagged. mixed_flags=[] if none.
 - For each link pick the CANONICAL (shortest standard form, R6 — and it MUST be one of the COINED driver_names in the catalog, never an invented name) + the variant. Reversible only; never delete or merge nodes.
-Return DEDUP_SCHEMA.`, {schema:DEDUP_SCHEMA, label:`dedup${tag}`, phase:'Review'}),
+Return DEDUP_SCHEMA.`, {schema:DEDUP_SCHEMA, model:'opus', label:`dedup${tag}`, phase:'Review'}),
     () => agent(`You are an INDEPENDENT admission gate — judge each name FRESH and skeptically; do NOT assume the producer that coined it was right. Read ${ONT} and the catalog[] records in ${bf} (each = {driver_name, companies, evidence_refs}).${batchNote}
 THE ONE TEST: is this a VALID, REUSABLE, consistently-nameable Driver? Give EACH driver_name ONE verdict:
 - admit = a valid reusable cause that follows every rule. (Brand/segment-specific names ARE valid drivers — admit them.)
@@ -104,7 +106,7 @@ THE ONE TEST: is this a VALID, REUSABLE, consistently-nameable Driver? Give EACH
 ${EXACT_MEANING_RULE}
 ${evidenceRule(bf)}
 Do NOT classify "fundamental vs news/trading" — that is a producer concern, not a catalog one; if it is a valid reusable driver, admit it. KEEP brand/segment-specific names.
-FLAG-TRIGGERED D5 (rare): if a record's OWN evidence shows TWO+ DIFFERENT real-world meanings under one name (a mixed same-name union), give it verdict=admit AND add it to mixed_flags [{driver_name, why, n_companies}] — a separate review will split or park it; do NOT skip it merely for being mixed. mixed_flags=[] if none. Return GATE_SCHEMA.`, {schema:GATE_SCHEMA, label:`gate${tag}`, phase:'Review'}),
+FLAG-TRIGGERED D5 (rare): if a record's OWN evidence shows TWO+ DIFFERENT real-world meanings under one name (a mixed same-name union), give it verdict=admit AND add it to mixed_flags [{driver_name, why, n_companies}] — a separate review will split or park it; do NOT skip it merely for being mixed. mixed_flags=[] if none. Return GATE_SCHEMA.`, {schema:GATE_SCHEMA, model:'opus', label:`gate${tag}`, phase:'Review'}),
   ])
   if (!dedup || !gate) throw new Error(`Review batch ${bi + 1}/${BATCH_FILES.length}: ${!dedup ? 'dedup' : ''}${!dedup && !gate ? '+' : ''}${!gate ? 'gate' : ''} agent died (likely session limit / API error) — fail-close, no partial review.`)
 
@@ -116,7 +118,7 @@ FLAG-TRIGGERED D5 (rare): if a record's OWN evidence shows TWO+ DIFFERENT real-w
 2) PROPOSED REWRITES (driver_name -> rewrite_to): ${JSON.stringify((gate.verdicts||[]).filter(v => v.verdict==='rewrite').map(v => ({driver_name:v.driver_name, rewrite_to:v.rewrite_to})))}
    survives=TRUE only if the rewrite is provably WORDING-ONLY: rewrite_to means the IDENTICAL driver the evidence describes (a pure spelling / standard-phrase / word-order fix). Any change of object/scope/mechanism -> FALSE.
 
-Return REFUTE_SCHEMA: one verdict for EVERY link and EVERY rewrite, each with a one-line why.`, {schema:REFUTE_SCHEMA, label:`refute${tag}`, phase:'Refute'})
+Return REFUTE_SCHEMA: one verdict for EVERY link and EVERY rewrite, each with a one-line why.`, {schema:REFUTE_SCHEMA, model:'opus', label:`refute${tag}`, phase:'Refute'})
 
   // JS mechanically FILTERS rejected decisions (per batch). Missing verdict -> not survives -> never fuse (fail-close).
   const linkOk = new Map((refute.same_as_verdicts||[]).map(v => [`${norm(v.canonical)}|${norm(v.variant)}`, v.survives === true]))
@@ -161,7 +163,7 @@ ONE verdict:
 - SAME = all quotes name the EXACT same reusable cause (the flag was a false alarm). An independent skeptic will still try to break this.
 - DIFFERENT = a true homonym: coin MORE-SPECIFIC lower_snake_case names ONLY from words in the evidence (per DriverOntology; no tickers/company names), one per distinct meaning. HARD CONSTRAINT: every new name must be genuinely NEW — check it against the view's existing_seed_names list; if your natural choice already exists there, add a distinguishing evidence word to make it more specific (a near-duplicate is fine — dedup links exact duplicates later; a COLLISION hard-fails). Then PARTITION BY INDEX: every ref in the view carries an 'idx' (r1, r2, ...). An assignment row = {company, to, ref_idx: ["r1", "r4", ...]} — the listed refs go to that name. You may OMIT ref_idx on AT MOST ONE row per company: that row takes ALL remaining refs of that company (the remainder). Rules: every ref ends up with exactly one name (code enforces it); every 'to' name must receive at least one ref; two no-ref_idx rows for the same company is an ERROR. Just read each quote, decide which meaning it shows, and copy its idx.
 - UNCLEAR = too thin/mixed to decide → park (fail-close).
-Return LEAF_REVIEW_SCHEMA (collision_name = "${norm(f.driver_name)}").`, {schema:LEAF_REVIEW_SCHEMA, label:`d5:${norm(f.driver_name)}`, phase:'SameName'}))) ).filter(Boolean)
+Return LEAF_REVIEW_SCHEMA (collision_name = "${norm(f.driver_name)}").`, {schema:LEAF_REVIEW_SCHEMA, model:'opus', label:`d5:${norm(f.driver_name)}`, phase:'SameName'}))) ).filter(Boolean)
   if (rawReviews.length !== flagged.length) throw new Error(`leaf D5 review lost ${flagged.length - rawReviews.length} verdict(s) — fail-close.`)
   for (const v of rawReviews) {
     const nm = norm(v.collision_name)
@@ -170,19 +172,19 @@ Return LEAF_REVIEW_SCHEMA (collision_name = "${norm(f.driver_name)}").`, {schema
 LOAD THE EVIDENCE: run Bash:
 ${pyRec(nm)}
 ${EXACT_MEANING_RULE}
-survives=TRUE only if you genuinely cannot refute exact same object AND scope AND mechanism across ALL quotes. Return LEAF_REFUTE_SCHEMA.`, {schema:LEAF_REFUTE_SCHEMA, label:`d5-refute:${nm}`, phase:'SameName'})
+survives=TRUE only if you genuinely cannot refute exact same object AND scope AND mechanism across ALL quotes. Return LEAF_REFUTE_SCHEMA.`, {schema:LEAF_REFUTE_SCHEMA, model:'opus', label:`d5-refute:${nm}`, phase:'SameName'})
       let ok = r1 && r1.survives === true
       if (ok && ((flagsByName[nm] || {}).n_companies || 0) >= 8) {   // §11.18 high-blast at leaf
         const r2 = await agent(`SECOND independent skeptic (HIGH-BLAST union: many companies). Same union "${nm}". Judge EACH lens with a quote: same OBJECT? same SCOPE? same MECHANISM? survives = all three pass.
 LOAD: run Bash:
 ${pyRec(nm)}
-Return JSON per schema.`, {schema:{ type:'object', additionalProperties:false, required:['object','scope','mechanism','survives'], properties:{ object:{type:'object', additionalProperties:false, required:['pass','quote'], properties:{pass:{type:'boolean'}, quote:{type:'string'}}}, scope:{type:'object', additionalProperties:false, required:['pass','quote'], properties:{pass:{type:'boolean'}, quote:{type:'string'}}}, mechanism:{type:'object', additionalProperties:false, required:['pass','quote'], properties:{pass:{type:'boolean'}, quote:{type:'string'}}}, survives:{type:'boolean'} }}, label:`d5-refute2:${nm}`, phase:'SameName'})
+Return JSON per schema.`, {schema:{ type:'object', additionalProperties:false, required:['object','scope','mechanism','survives'], properties:{ object:{type:'object', additionalProperties:false, required:['pass','quote'], properties:{pass:{type:'boolean'}, quote:{type:'string'}}}, scope:{type:'object', additionalProperties:false, required:['pass','quote'], properties:{pass:{type:'boolean'}, quote:{type:'string'}}}, mechanism:{type:'object', additionalProperties:false, required:['pass','quote'], properties:{pass:{type:'boolean'}, quote:{type:'string'}}}, survives:{type:'boolean'} }}, model:'opus', label:`d5-refute2:${nm}`, phase:'SameName'})
         ok = !!(r2 && r2.survives === true && r2.object && r2.object.pass === true && r2.scope && r2.scope.pass === true && r2.mechanism && r2.mechanism.pass === true)
       }
       leafReviews.push(ok ? { collision_name: nm, verdict: 'SAME', why: v.why, refute_survived: true }
                           : { collision_name: nm, verdict: 'UNCLEAR', why: `SAME refuted by skeptic (fail-close): ${v.why}` })
     } else if (v.verdict === 'DIFFERENT') {
-      const mg = await agent(`Mini-G2 on ${v.new_names.length} proposed split names (from the homonym split of "${nm}"): ${JSON.stringify(v.new_names)}. Read ${ONT}. all_admit=TRUE only if EVERY name is a valid, reusable, rule-following lower_snake driver name (no tickers, no states, not vague). Return MINIGATE_SCHEMA.`, {schema:MINIGATE_SCHEMA, label:`d5-gate:${nm}`, phase:'SameName'})
+      const mg = await agent(`Mini-G2 on ${v.new_names.length} proposed split names (from the homonym split of "${nm}"): ${JSON.stringify(v.new_names)}. Read ${ONT}. all_admit=TRUE only if EVERY name is a valid, reusable, rule-following lower_snake driver name (no tickers, no states, not vague). Return MINIGATE_SCHEMA.`, {schema:MINIGATE_SCHEMA, model:'opus', label:`d5-gate:${nm}`, phase:'SameName'})
       if (mg && mg.all_admit === true) {
         leafReviews.push({ collision_name: nm, verdict: 'DIFFERENT', new_names: v.new_names, why: v.why })
         leafSplitMap.push({ from: nm, to: v.new_names, assignments: v.assignments.map(a => { const row = { company: a.company, to: a.to }; if (Array.isArray(a.ref_idx) && a.ref_idx.length) row.ref_idx = a.ref_idx; return row }) })
@@ -214,14 +216,14 @@ const out = await agent(`Steps (assembler rev2 — STAR-flattened canonicals), E
 ${JSON.stringify(decisions)}
 ${reviewStep}2) Run with Bash: ${PY} ${DIR}/workflows/assemble_catalog.py ${RUN_DIR}${flagged.length ? ` --review ${RUN_DIR}/same_name_review.json` : ''}
    (deterministic code: reads seed.json + decisions.json from DISK, applies the 5-way precedence, writes catalog.json + approved.json, prints an "ASSEMBLED ..." line with the catalog sha256 + counts)
-Return ok=true and sha_line = the exact printed ASSEMBLED line. If the script exits NON-ZERO: ok=false, sha_line = the exact error output. Do NOT edit or compose any catalog content yourself.`, {schema:ASSEMBLE_SCHEMA, label:'assemble', phase:'Assemble'})
+Return ok=true and sha_line = the exact printed ASSEMBLED line. If the script exits NON-ZERO: ok=false, sha_line = the exact error output. Do NOT edit or compose any catalog content yourself.`, {schema:ASSEMBLE_SCHEMA, model:'opus', label:'assemble', phase:'Assemble'})
 if (!out) throw new Error('Assemble agent died (likely session limit / API error) — fail-close.')
 if (!out.ok) throw new Error(`assemble_catalog.py failed: ${out.sha_line}`)
 
 phase('Validate')
 const validation = await agent(`Run this EXACT Bash command (validator rev2 — transitive D1; it writes the validator output to validation.txt in the run dir AND reports the validator's real exit code; the 3rd arg enables the D1 fusion-approval + same_as_variants checks):
 ${PY} ${DIR}/workflows/validate_catalog.py ${SEED} ${CAT} ${RUN_DIR}/approved.json${flagged.length ? ` --review ${RUN_DIR}/same_name_review.json` : ''} | tee ${RUN_DIR}/validation.txt ; echo "exit=\${PIPESTATUS[0]}"
-This is a deterministic structure check (no judgment). If exit is NON-ZERO, begin your reply with "VALIDATION FAILED" and paste the exact failing checks + names. If exit is 0, begin with "VALIDATION PASSED". Do not fix anything; just report.`, {label:'validate', phase:'Validate'})
+This is a deterministic structure check (no judgment). If exit is NON-ZERO, begin your reply with "VALIDATION FAILED" and paste the exact failing checks + names. If exit is 0, begin with "VALIDATION PASSED". Do not fix anything; just report.`, {model:'opus', label:'validate', phase:'Validate'})
 if (!validation) throw new Error('Validate agent died (likely session limit / API error) — fail-close.')
 
 return { assembled: out.sha_line, counts: { same_as: survivingLinks.length, rewrites_applied: appliedRewrites.length, rewrites_parked: parkedRewrites.length, d5_flags: flagged.length, d5_verdicts: leafReviews.map(r => r.verdict) }, validation }

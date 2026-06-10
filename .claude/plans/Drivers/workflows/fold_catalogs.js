@@ -56,9 +56,9 @@ const PARTB_SCHEMA = { type:'object', additionalProperties:false, required:['ok'
 const pyView = (name, view) => `${PY} -c "import json;d=json.load(open('${PDIR}/fold_queue_views.json'));items=d['items'] if isinstance(d,dict) and 'items' in d else d;it=next(i for i in items if i['name']==${JSON.stringify(JSON.stringify(name)).slice(1,-1)});print(json.dumps({'name':it['name'],'sides':[{'side_key':s['side_key'],'refs':s['${view}'],'total_refs':s.get('total_refs')} for s in it['sides']]}))"`
 
 phase('PartA')
-const partA = await agent(`Run this EXACT command with Bash (deterministic combine — collapses each child's SAME_AS clusters, groups across children, queues identical-name collisions; HARD-FAILS on SEED_MAX):
-${PY} ${DIR}/workflows/fold_catalogs.py part-a ${PDIR} --scope-name ${JSON.stringify(SCOPE_NAME)} --scope-level ${SCOPE_LEVEL} --children ${CDIRS.join(' ')}
-Return ok=true + passthrough/collisions/collision_names/collision_meta from the printed one-line JSON summary (collision_meta = the name -> {n_companies, n_children} object), notes="". If it exits NON-ZERO: ok=false, zeros/empties, notes = the exact error output.`, {schema:PARTA_SCHEMA, label:'part-a', phase:'PartA'})
+const partA = await agent(`Run this EXACT command with Bash (step 0 = the BILLING GUARD, a subscription-only hard condition; then the deterministic combine — collapses each child's SAME_AS clusters, groups across children, queues identical-name collisions; HARD-FAILS on SEED_MAX):
+test -z "$ANTHROPIC_API_KEY" || { echo "BILLING-GUARD FAIL: ANTHROPIC_API_KEY present in env — refusing to run (subscription-only policy, CLAUDE.md)"; exit 9; } && ${PY} ${DIR}/workflows/fold_catalogs.py part-a ${PDIR} --scope-name ${JSON.stringify(SCOPE_NAME)} --scope-level ${SCOPE_LEVEL} --children ${CDIRS.join(' ')}
+Return ok=true + passthrough/collisions/collision_names/collision_meta from the printed one-line JSON summary (collision_meta = the name -> {n_companies, n_children} object), notes="". If it exits NON-ZERO: ok=false, zeros/empties, notes = the exact error output.`, {schema:PARTA_SCHEMA, model:'opus', label:'part-a', phase:'PartA'})
 if (!partA.ok) throw new Error(`fold part-a failed: ${partA.notes}`)
 
 let reviews = [], splitMap = []
@@ -66,7 +66,7 @@ if (partA.collisions > 0) {
   phase('Draw')
   const draw = await agent(`Run this EXACT command with Bash (deterministic §12.8 evidence views for the same-name review):
 ${PY} ${DIR}/workflows/fold_catalogs.py draw ${PDIR}
-Return ok=true + items from its printed summary, notes="". Non-zero exit: ok=false, items=0, notes = exact error.`, {schema:DRAW_SCHEMA, label:'draw', phase:'Draw'})
+Return ok=true + items from its printed summary, notes="". Non-zero exit: ok=false, items=0, notes = exact error.`, {schema:DRAW_SCHEMA, model:'opus', label:'draw', phase:'Draw'})
   if (!draw.ok) throw new Error(`fold draw failed: ${draw.notes}`)
 
   phase('Review')
@@ -79,7 +79,7 @@ ONE verdict:
 - SAME = every occurrence names the EXACT same reusable cause (object + scope + mechanism all match). (An independent skeptic will still try to break this.)
 - DIFFERENT = a true homonym: the occurrences name different causes. Then coin MORE-SPECIFIC lower_snake_case names drawn ONLY from words in the evidence (per DriverOntology — no invented nouns, no company tickers), one per distinct meaning, and assign EVERY child occurrence (by child_run_id, exactly once) to one new name.
 - UNCLEAR = evidence is too thin/mixed to decide → park (fail-close; never guess).
-Return REVIEW_SCHEMA (collision_name="${nm}").`, {schema:REVIEW_SCHEMA, label:`review:${nm}`, phase:'Review'}))) ).filter(Boolean)
+Return REVIEW_SCHEMA (collision_name="${nm}").`, {schema:REVIEW_SCHEMA, model:'opus', label:`review:${nm}`, phase:'Review'}))) ).filter(Boolean)
   if (verdicts.length !== partA.collision_names.length) throw new Error(`same-name review lost ${partA.collision_names.length - verdicts.length} verdict(s) — fail-close.`)
 
   phase('Refute')
@@ -90,7 +90,7 @@ Return REVIEW_SCHEMA (collision_name="${nm}").`, {schema:REVIEW_SCHEMA, label:`r
 LOAD THE EVIDENCE VIEW: run Bash:
 ${pyView(v.collision_name, 'view1')}
 ${EXACT_MEANING_RULE}
-survives=TRUE only if, reading the quotes across ALL sides, you genuinely cannot refute that they are the EXACT same object AND scope AND mechanism. Different brand/segment vs company-wide, different metric/geography/mechanism, or mixed evidence -> FALSE. Return REFUTE1_SCHEMA.`, {schema:REFUTE1_SCHEMA, label:`refute:${v.collision_name}`, phase:'Refute'}).then(r => ({name:v.collision_name, r}))))
+survives=TRUE only if, reading the quotes across ALL sides, you genuinely cannot refute that they are the EXACT same object AND scope AND mechanism. Different brand/segment vs company-wide, different metric/geography/mechanism, or mixed evidence -> FALSE. Return REFUTE1_SCHEMA.`, {schema:REFUTE1_SCHEMA, model:'opus', label:`refute:${v.collision_name}`, phase:'Refute'}).then(r => ({name:v.collision_name, r}))))
     for (const x of (r1s.filter(Boolean))) if (!(x.r && x.r.survives === true)) refuted.add(x.name)
     // §11.18 high-blast: >=8 companies OR (global fold AND >=2 children) -> 2nd perspective-forced Refute, AND-vote, view2
     const highBlast = sameOnes.filter(v => !refuted.has(v.collision_name)).filter(v => { const m = partA.collision_meta[v.collision_name] || {}; return (m.n_companies || 0) >= 8 || (SCOPE_LEVEL === 'global' && (m.n_children || 0) >= 2) })
@@ -101,7 +101,7 @@ ${pyView(v.collision_name, 'view2')}
 (If view2 refs are empty for a side, that side had <21 refs — judge from what is shown plus the side metadata.)
 You MUST separately judge each of the three lenses, each backed by a QUOTE from the view:
 - object: do ALL sides name the same object/metric?  - scope: the same scope (brand/segment vs company-wide, geography)?  - mechanism: the same causal mechanism?
-survives MUST equal object.pass AND scope.pass AND mechanism.pass. Any FALSE or missing -> the union dies (fail-close). Return REFUTE2_SCHEMA.`, {schema:REFUTE2_SCHEMA, label:`refute2:${v.collision_name}`, phase:'Refute'}).then(r => ({name:v.collision_name, r}))))
+survives MUST equal object.pass AND scope.pass AND mechanism.pass. Any FALSE or missing -> the union dies (fail-close). Return REFUTE2_SCHEMA.`, {schema:REFUTE2_SCHEMA, model:'opus', label:`refute2:${v.collision_name}`, phase:'Refute'}).then(r => ({name:v.collision_name, r}))))
       for (const x of (r2s.filter(Boolean))) { const ok = x.r && x.r.survives === true && x.r.object && x.r.object.pass === true && x.r.scope && x.r.scope.pass === true && x.r.mechanism && x.r.mechanism.pass === true; if (!ok) refuted.add(x.name) }
       const r2names = new Set(r2s.filter(Boolean).map(x => x.name)); for (const v of highBlast) if (!r2names.has(v.collision_name)) refuted.add(v.collision_name)  // missing verdict = refuted
     }
@@ -126,7 +126,7 @@ const partB = await agent(`Two steps, EXACT, in order:
 ${JSON.stringify(reviewFile)}
 2) Run with Bash: ${PY} ${DIR}/workflows/fold_catalogs.py part-b ${PDIR} --review ${PDIR}/same_name_review.json
    (deterministic code: applies the review, writes the parent seed.json + fold_sidecars.json, prints a one-line JSON summary)
-Return ok=true + sha_line = the exact printed summary line. Non-zero exit: ok=false, sha_line = the exact error. Do NOT compose any seed content yourself.`, {schema:PARTB_SCHEMA, label:'part-b', phase:'PartB'})
+Return ok=true + sha_line = the exact printed summary line. Non-zero exit: ok=false, sha_line = the exact error. Do NOT compose any seed content yourself.`, {schema:PARTB_SCHEMA, model:'opus', label:'part-b', phase:'PartB'})
 if (!partB.ok) throw new Error(`fold part-b failed: ${partB.sha_line}`)
 
 return { parent_run_id: PARENT, scope_name: SCOPE_NAME, scope_level: SCOPE_LEVEL, children: CHILDREN,
