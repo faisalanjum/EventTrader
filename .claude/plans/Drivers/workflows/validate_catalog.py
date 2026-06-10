@@ -243,6 +243,34 @@ def main():
         if bad_var:
             fails.append(("SAME_AS_VARIANTS: mirror != names actually folded onto the record", sorted(bad_var)))
 
+        # ---- 12th pass rev2 HIGH-BLAST backstop (pure code; the workflow's trigger relay is only an
+        # optimization): recompute every approved fusion's company count FROM THE SEED; any fusion
+        # spanning >= 8 companies MUST carry a SURVIVING second-skeptic verdict in
+        # approved.high_blast_refute2 — else the catalog cannot ship.
+        HIGH_BLAST = 8
+        def _coset(n):
+            return set(((seed_by_name.get(n) or {}).get("companies")) or [])
+        hb_ok = {frozenset((norm(e.get("a")), norm(e.get("b"))))
+                 for e in (appr.get("high_blast_refute2") or []) if e.get("survives") is True}
+        bad_hb = sorted(f"{a} -> {b} (n={len(_coset(a) | _coset(b))})" for a, b in ok_links
+                        if len(_coset(a) | _coset(b)) >= HIGH_BLAST
+                        and frozenset((a, b)) not in hb_ok)
+        if bad_hb:
+            fails.append(("HIGH-BLAST fusion (>=8 companies) lacks a surviving second-skeptic verdict "
+                          "in approved.high_blast_refute2", bad_hb))
+
+    # 12th pass rev2 (owner): a KEPT high-blast same-name union (D5 verdict SAME on a record whose
+    # seed companies >= 8) must carry high_blast_refute2_survived=true in the review file.
+    if review is not None:
+        bad_d5hb = sorted(
+            f"{norm(v.get('collision_name'))} (n={len(((seed_by_name.get(norm(v.get('collision_name'))) or {}).get('companies')) or [])})"
+            for v in (review.get("reviews") or [])
+            if v.get("verdict") == "SAME"
+            and len(((seed_by_name.get(norm(v.get("collision_name"))) or {}).get("companies")) or []) >= 8
+            and v.get("high_blast_refute2_survived") is not True)
+        if bad_d5hb:
+            fails.append(("HIGH-BLAST D5 SAME union (>=8 companies) lacks high_blast_refute2_survived in the review file", bad_d5hb))
+
     bad_skip = [str(x) for x in (cat.get("skips") or []) if not (isinstance(x, dict) and str(x.get("driver_name") or "").strip() and str(x.get("why") or "").strip())]
     bad_unr  = [str(x) for x in (cat.get("unresolved_rewrites") or []) if not (isinstance(x, dict) and str(x.get("driver_name") or "").strip() and str(x.get("proposed_to") or "").strip() and str(x.get("why") or "").strip())]
     if bad_skip: fails.append(("SIDE-FIELDS: skips[] entry missing driver_name/why", bad_skip[:50]))

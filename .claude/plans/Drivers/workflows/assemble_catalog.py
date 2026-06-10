@@ -371,7 +371,10 @@ def assemble(seed, dec, review=None):
         out["unresolved_same_name"] = parks
     out["counts"] = counts
     approved = {"same_as": [{"variant": l.get("variant"), "canonical": l.get("canonical")} for l in same_as],
-                "rewrites": [{"from": l.get("from"), "to": l.get("to")} for l in rewrites]}
+                "rewrites": [{"from": l.get("from"), "to": l.get("to")} for l in rewrites],
+                # 12th pass rev2: the high-blast second-skeptic PROOF rides decisions.json and is
+                # code-copied here so the validator can enforce it from disk (pure code, no relay).
+                "high_blast_refute2": list((dec or {}).get("high_blast_refute2") or [])}
     return out, approved
 
 

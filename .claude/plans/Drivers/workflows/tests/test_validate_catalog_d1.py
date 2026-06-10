@@ -135,3 +135,52 @@ def test_d1_accepts_transitive_chain_flattened_canonicals(tmp_path):
     (tmp_path / "catalog.json").write_text(serialize(cat))
     out = run_validator(tmp_path)
     assert out.returncode == 1 and "D1" in out.stdout
+
+
+def mrec_multi(name, companies):
+    refs = [{"company": c, "source_type": "transcript", "source_id": f"ev_{name}_{c}",
+             "date": "2026-01-01", "quote": f"quote about {name} at {c}"} for c in companies]
+    return {"driver_name": name, "canonical_name": name, "companies": sorted(companies),
+            "evidence_refs": refs,
+            "optional_links": {"xbrl_concept": None, "xbrl_member": None, "guidance_ref": None}}
+
+
+def test_high_blast_fusion_requires_recorded_second_skeptic(tmp_path):
+    # 12th pass rev2: code-computed backstop — an approved fusion spanning >= 8 companies MUST carry
+    # a surviving high_blast_refute2 verdict in approved.json, else VALIDATION FAILED (the trigger
+    # relay inside the workflow is an optimization; THIS is the deterministic enforcement).
+    from assemble_catalog import assemble as _asm
+    big = [f"C{i}" for i in range(8)]
+    seed = {"industry": "TestInd",
+            "catalog": [mrec_multi("same_store_sales", big), mrec_multi("comparable_sales", ["C0"])],
+            "analysis": {}}
+    dec = {"gate_verdicts": [], "approved_same_as": [{"variant": "comparable_sales", "canonical": "same_store_sales"}],
+           "approved_rewrites": [], "parked_rewrites": []}
+    cat, approved = _asm(seed, dec)
+    (tmp_path / "seed.json").write_text(serialize(seed))
+    (tmp_path / "catalog.json").write_text(serialize(cat))
+    (tmp_path / "approved.json").write_text(serialize(approved))
+    out = run_validator(tmp_path)                                   # no recorded 2nd skeptic -> FAIL
+    assert out.returncode == 1 and "HIGH-BLAST" in out.stdout
+    approved["high_blast_refute2"] = [{"kind": "link", "a": "same_store_sales", "b": "comparable_sales",
+                                       "n": 8, "survives": True}]
+    (tmp_path / "approved.json").write_text(serialize(approved))
+    out = run_validator(tmp_path)                                   # recorded + survived -> PASS
+    assert out.returncode == 0, out.stdout + out.stderr
+    approved["high_blast_refute2"][0]["survives"] = False           # recorded but refuted -> FAIL
+    (tmp_path / "approved.json").write_text(serialize(approved))
+    assert run_validator(tmp_path).returncode == 1
+
+
+def test_small_fusion_needs_no_second_skeptic(tmp_path):
+    from assemble_catalog import assemble as _asm
+    seed = {"industry": "TestInd", "catalog": [mrec_multi("guest_count", ["AAA", "BBB"]),
+                                               mrec_multi("customer_transactions", ["AAA"])], "analysis": {}}
+    dec = {"gate_verdicts": [], "approved_same_as": [{"variant": "customer_transactions", "canonical": "guest_count"}],
+           "approved_rewrites": [], "parked_rewrites": []}
+    cat, approved = _asm(seed, dec)
+    (tmp_path / "seed.json").write_text(serialize(seed))
+    (tmp_path / "catalog.json").write_text(serialize(cat))
+    (tmp_path / "approved.json").write_text(serialize(approved))
+    out = run_validator(tmp_path)
+    assert out.returncode == 0, out.stdout + out.stderr             # 2 companies: no backstop demand

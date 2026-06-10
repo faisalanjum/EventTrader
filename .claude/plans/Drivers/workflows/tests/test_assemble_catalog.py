@@ -64,7 +64,7 @@ def test_all_admit_self_canonical():
     assert all(r["same_as_variants"] == [] for r in cat["catalog"])
     assert cat["skips"] == [] and cat["unresolved_rewrites"] == []
     assert cat["counts"] == {"keep": 2, "same_as": 0, "rewrite": 0, "skip": 0, "unresolved": 0}
-    assert approved == {"same_as": [], "rewrites": []}
+    assert approved == {"same_as": [], "rewrites": [], "high_blast_refute2": []}
 
 
 def test_same_as_folds_and_mirrors_variant():
@@ -174,7 +174,7 @@ def test_cli_deterministic_bytes(tmp_path):
     assert shas[0] == shas[1]
     approved = json.loads((run / "approved.json").read_text())
     assert approved == {"same_as": [{"variant": "customer_transactions", "canonical": "guest_count"}],
-                        "rewrites": []}
+                        "rewrites": [], "high_blast_refute2": []}
 
 
 def test_carried_variants_preserved_and_merged():

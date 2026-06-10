@@ -42,6 +42,7 @@ WHERE rep.formType IS NOT NULL
   AND (rep.formType STARTS WITH '8-K' OR rep.formType STARTS WITH '10-K' OR rep.formType STARTS WITH '10-Q')
 OPTIONAL MATCH (rep)-[:HAS_SECTION]->(s:ExtractedSectionContent)
   WHERE s.section_name CONTAINS 'DiscussionandAnalysis' OR s.section_name='RiskFactors' OR s.section_name='Business'
+WITH rep, r, s ORDER BY s.section_name
 WITH rep, r, collect(DISTINCT {name:s.section_name, content:s.content}) AS secs
 OPTIONAL MATCH (rep)-[:HAS_EXHIBIT]->(ex:ExhibitContent) WHERE ex.exhibit_number='EX-99.1'
 WITH rep, r, secs, head(collect(ex.content)) AS ex991

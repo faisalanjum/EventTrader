@@ -111,7 +111,9 @@ survives MUST equal object.pass AND scope.pass AND mechanism.pass. Any FALSE or 
   reviews = verdicts.map(v => {
     if (v.verdict === 'SAME') {
       if (refuted.has(v.collision_name)) return { collision_name: v.collision_name, verdict: 'UNCLEAR', why: `SAME union refuted by skeptic (fail-close): ${v.why}` }
-      return { collision_name: v.collision_name, verdict: 'SAME', why: v.why, refute_survived: true }
+      const m = partA.collision_meta[v.collision_name] || {}
+      const hb = (m.n_companies || 0) >= 8 || (SCOPE_LEVEL === 'global' && (m.n_children || 0) >= 2)
+      return { collision_name: v.collision_name, verdict: 'SAME', why: v.why, refute_survived: true, ...(hb ? { high_blast_refute2_survived: true } : {}) }
     }
     if (v.verdict === 'DIFFERENT') return { collision_name: v.collision_name, verdict: 'DIFFERENT', new_names: v.new_names, why: v.why }
     return { collision_name: v.collision_name, verdict: 'UNCLEAR', why: v.why }

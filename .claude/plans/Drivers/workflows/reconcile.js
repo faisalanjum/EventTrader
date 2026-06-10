@@ -83,7 +83,7 @@ Return ok=true + files (exact list from the printed JSON), notes = the sizes. No
 
 phase('Review')
 const norm = s => (s||'').trim().toLowerCase()
-const survivingLinks = [], appliedRewrites = [], parkedRewrites = [], allGateVerdicts = [], allMixedFlags = []
+const survivingLinks = [], appliedRewrites = [], parkedRewrites = [], allGateVerdicts = [], allMixedFlags = [], hbRefute2 = []
 for (let bi = 0; bi < BATCH_FILES.length; bi++) {
   const bf = BATCH_FILES[bi]
   const tag = BATCH_FILES.length > 1 ? ` [batch ${bi + 1}/${BATCH_FILES.length}]` : ''
@@ -120,13 +120,68 @@ FLAG-TRIGGERED D5 (rare): if a record's OWN evidence shows TWO+ DIFFERENT real-w
 
 Return REFUTE_SCHEMA: one verdict for EVERY link and EVERY rewrite, each with a one-line why.`, {schema:REFUTE_SCHEMA, model:'opus', label:`refute${tag}`, phase:'Refute'})
 
+  if (!refute) throw new Error(`Review batch ${bi + 1}/${BATCH_FILES.length}: refute agent died (likely session limit / API error) — fail-close, no unrefuted fusions.`)
   // JS mechanically FILTERS rejected decisions (per batch). Missing verdict -> not survives -> never fuse (fail-close).
   const linkOk = new Map((refute.same_as_verdicts||[]).map(v => [`${norm(v.canonical)}|${norm(v.variant)}`, v.survives === true]))
   const rwOk   = new Map((refute.rewrite_verdicts||[]).map(v => [`${norm(v.driver_name)}|${norm(v.rewrite_to)}`, v.survives === true]))
-  survivingLinks.push(...(dedup.same_as_links||[]).filter(l => linkOk.get(`${norm(l.canonical)}|${norm(l.variant)}`) === true).map(l => ({canonical:l.canonical, variant:l.variant})))
+  let batchLinks = (dedup.same_as_links||[]).filter(l => linkOk.get(`${norm(l.canonical)}|${norm(l.variant)}`) === true).map(l => ({canonical:l.canonical, variant:l.variant}))
   const gateRewrites = (gate.verdicts||[]).filter(v => v.verdict==='rewrite')
-  appliedRewrites.push(...gateRewrites.filter(v => rwOk.get(`${norm(v.driver_name)}|${norm(v.rewrite_to)}`) === true).map(v => ({from:v.driver_name, to:v.rewrite_to})))
-  parkedRewrites.push(...gateRewrites.filter(v => rwOk.get(`${norm(v.driver_name)}|${norm(v.rewrite_to)}`) !== true).map(v => { const s=(refute.rewrite_verdicts||[]).find(x => norm(x.driver_name)===norm(v.driver_name) && norm(x.rewrite_to)===norm(v.rewrite_to)); return {driver_name:v.driver_name, proposed_to:v.rewrite_to, why:(s&&s.why)||'unverified by skeptic'} }))
+  let batchApplied = gateRewrites.filter(v => rwOk.get(`${norm(v.driver_name)}|${norm(v.rewrite_to)}`) === true).map(v => ({from:v.driver_name, to:v.rewrite_to}))
+  const batchParked = gateRewrites.filter(v => rwOk.get(`${norm(v.driver_name)}|${norm(v.rewrite_to)}`) !== true).map(v => { const s=(refute.rewrite_verdicts||[]).find(x => norm(x.driver_name)===norm(v.driver_name) && norm(x.rewrite_to)===norm(v.rewrite_to)); return {driver_name:v.driver_name, proposed_to:v.rewrite_to, why:(s&&s.why)||'unverified by skeptic'} })
+
+  // §11.18 HIGH-BLAST second skeptic (12th pass rev2, owner-approved): EVERY surviving fusion touching
+  // >= 8 distinct companies — ordinary SAME_AS and rewrites, not just same-name unions — gets a SECOND,
+  // independent, perspective-forced Refute (object/scope/mechanism each evidence-quoted), AND-voted with
+  // the first. Blast counts are computed by CODE from the batch file (a mechanical count must never be
+  // AI-copied — an under-copied count would silently skip the skeptic); the relay agent only echoes the
+  // printed JSON, and the relay is tamper-evident (checksum + completeness, mismatch = HARD-FAIL).
+  // Refuted/unavailable -> link dropped (kept separate) / rewrite parked. 1-company runs: no-op.
+  const HB = 8
+  let hbItems = []
+  const fusionPairs = [...batchLinks.map(l => ({kind:'link', a:l.canonical, b:l.variant, item:l})),
+                       ...batchApplied.map(r => ({kind:'rewrite', a:r.from, b:r.to, item:r}))]
+  if (fusionPairs.length) {
+    const COUNT_SCHEMA = {type:'object', additionalProperties:false, required:['counts','total'], properties:{ counts:{type:'array', items:{type:'object', additionalProperties:false, required:['a','b','n'], properties:{a:{type:'string'}, b:{type:'string'}, n:{type:'integer'}}}}, total:{type:'integer'} }}
+    const pairsJson = JSON.stringify(fusionPairs.map(p => ({a:p.a, b:p.b})))
+    const cnt = await agent(`Run this EXACT script with Bash and return the printed JSON VERBATIM per the schema (counts[], total). Do not compute anything yourself.
+${PY} - <<'PYEOF'
+import json
+d=json.load(open('${bf}'))
+by={(r.get('driver_name') or '').strip().lower(): set(r.get('companies') or []) for r in d['catalog']}
+pairs=json.loads(${JSON.stringify(pairsJson)})
+out=[{'a':p['a'],'b':p['b'],'n':len(by.get((p['a'] or '').strip().lower(),set())|by.get((p['b'] or '').strip().lower(),set()))} for p in pairs]
+print(json.dumps({'counts':out,'total':sum(x['n'] for x in out)}))
+PYEOF`, {schema:COUNT_SCHEMA, model:'opus', label:`blast-count${tag}`, phase:'Refute'})
+    if (!cnt) throw new Error(`blast-count agent died (batch ${bi + 1}) — fail-close, cannot verify fusion blast radii.`)
+    if (cnt.counts.length !== fusionPairs.length || cnt.total !== cnt.counts.reduce((s, x) => s + x.n, 0))
+      throw new Error(`blast-count relay integrity check failed (batch ${bi + 1}: got ${cnt.counts.length}/${fusionPairs.length} pairs, checksum ${cnt.counts.reduce((s, x) => s + x.n, 0)} vs ${cnt.total}) — fail-close.`)
+    const nOf = new Map(cnt.counts.map(x => [`${norm(x.a)}|${norm(x.b)}`, x.n]))
+    for (const p of fusionPairs) {
+      const n = nOf.get(`${norm(p.a)}|${norm(p.b)}`)
+      if (typeof n !== 'number') throw new Error(`blast-count missing pair ${p.a}|${p.b} (batch ${bi + 1}) — fail-close.`)
+      p.n = n
+    }
+    hbItems = fusionPairs.filter(p => p.n >= HB)
+  }
+  if (hbItems.length) {
+    const DIM = {type:'object', additionalProperties:false, required:['pass','quote'], properties:{pass:{type:'boolean'}, quote:{type:'string', description:'verbatim supporting quote pair (one per record) if pass=true, else why it fails'}}}
+    const HB_SCHEMA = {type:'object', additionalProperties:false, required:['object','scope','mechanism','survives'], properties:{object:DIM, scope:DIM, mechanism:DIM, survives:{type:'boolean'}}}
+    log(`[batch ${bi + 1}] high-blast 2nd skeptic on ${hbItems.length} fusion(s) (>= ${HB} companies)`)
+    const verdicts = await parallel(hbItems.map(it => () => agent(`You are the SECOND, INDEPENDENT merge skeptic — a high-blast review: this fusion spans ${it.n} companies, so a wrong merge becomes a wrong cross-company trading read-through. In ${bf}, find the catalog[] records named "${it.a}" and "${it.b}". Judge the proposed ${it.kind === 'link' ? `SAME_AS (${it.b} folds into ${it.a})` : `rewrite (${it.a} -> ${it.b})`} DIMENSION BY DIMENSION from the two records' evidence quotes: for EACH of object / scope / mechanism, pass=true ONLY if you can cite verbatim quotes from BOTH records showing they are identical on that dimension; anything you cannot evidence -> pass=false. survives=true ONLY if all three dimensions pass. Default = false (keep separate). Do not defer to any earlier reviewer.`, {schema:HB_SCHEMA, model:'opus', label:`refute2${tag}:${it.b}`, phase:'Refute'}).then(v => ({it, v})).catch(() => ({it, v:null}))))
+    const judged = new Map(verdicts.filter(Boolean).map(r => [r.it, r.v]))
+    for (const it of hbItems) {
+      const v = judged.get(it)
+      const ok = v && v.survives === true && v.object && v.object.pass && v.scope && v.scope.pass && v.mechanism && v.mechanism.pass
+      hbRefute2.push({ kind: it.kind, a: it.a, b: it.b, n: it.n, survives: !!ok })   // PROOF -> decisions.json -> approved.json -> validator backstop
+      if (!ok) {
+        if (it.kind === 'link') batchLinks = batchLinks.filter(l => l !== it.item)
+        else { batchApplied = batchApplied.filter(x => x !== it.item); batchParked.push({driver_name:it.a, proposed_to:it.b, why: v ? 'refuted by high-blast second skeptic' : 'high-blast second skeptic unavailable — fail-close'}) }
+      }
+    }
+  }
+  survivingLinks.push(...batchLinks.map(l => ({canonical:l.canonical, variant:l.variant})))
+  appliedRewrites.push(...batchApplied.map(r => ({from:r.from, to:r.to})))
+  parkedRewrites.push(...batchParked)
   allGateVerdicts.push(...(gate.verdicts||[]))
   allMixedFlags.push(...(dedup.mixed_flags||[]), ...(gate.mixed_flags||[]))
 }
@@ -138,8 +193,25 @@ for (const f of allMixedFlags) {
 }
 const flagged = Object.values(flagsByName)
 let leafReviews = [], leafSplitMap = []
+let d5N = new Map()   // flagged name -> TRUE company count, computed by CODE (12th pass rev2)
 if (flagged.length) {
   phase('SameName')
+  // The high-blast trigger count is mechanical — CODE computes it from the seed; the agent only relays
+  // the printed JSON (tamper-evident: completeness + checksum, mismatch = HARD-FAIL). Never AI-copied.
+  const D5COUNT_SCHEMA = { type:'object', additionalProperties:false, required:['counts','total'], properties:{ counts:{type:'array', items:{type:'object', additionalProperties:false, required:['name','n'], properties:{name:{type:'string'}, n:{type:'integer'}}}}, total:{type:'integer'} }}
+  const d5cnt = await agent(`Run this EXACT script with Bash and return the printed JSON VERBATIM per the schema (counts[], total). Do not compute anything yourself.
+${PY} - <<'PYEOF'
+import json
+d=json.load(open('${SEED}'))
+by={(r.get('driver_name') or '').strip().lower(): set(r.get('companies') or []) for r in d['catalog']}
+names=json.loads(${JSON.stringify(JSON.stringify(flagged.map(f => norm(f.driver_name))))})
+out=[{'name':n,'n':len(by.get(n,set()))} for n in names]
+print(json.dumps({'counts':out,'total':sum(x['n'] for x in out)}))
+PYEOF`, {schema:D5COUNT_SCHEMA, model:'opus', label:'d5-blast-count', phase:'SameName'})
+  if (!d5cnt) throw new Error('d5 blast-count agent died — fail-close.')
+  if (d5cnt.counts.length !== flagged.length || d5cnt.total !== d5cnt.counts.reduce((s, x) => s + x.n, 0))
+    throw new Error(`d5 blast-count relay integrity check failed (${d5cnt.counts.length}/${flagged.length} names, checksum) — fail-close.`)
+  d5N = new Map(d5cnt.counts.map(x => [norm(x.name), x.n]))
   const LEAF_REVIEW_SCHEMA = { type:'object', additionalProperties:false, required:['collision_name','verdict','new_names','assignments','why'], properties:{
     collision_name:{type:'string'}, verdict:{type:'string', enum:['SAME','DIFFERENT','UNCLEAR']},
     new_names:{type:'array', items:{type:'string'}},
@@ -174,14 +246,15 @@ ${pyRec(nm)}
 ${EXACT_MEANING_RULE}
 survives=TRUE only if you genuinely cannot refute exact same object AND scope AND mechanism across ALL quotes. Return LEAF_REFUTE_SCHEMA.`, {schema:LEAF_REFUTE_SCHEMA, model:'opus', label:`d5-refute:${nm}`, phase:'SameName'})
       let ok = r1 && r1.survives === true
-      if (ok && ((flagsByName[nm] || {}).n_companies || 0) >= 8) {   // §11.18 high-blast at leaf
+      const hbD5 = (d5N.has(nm) ? d5N.get(nm) : Infinity) >= 8
+      if (ok && hbD5) {   // §11.18 high-blast at leaf — CODE-computed count; unknown name -> MORE scrutiny, never less
         const r2 = await agent(`SECOND independent skeptic (HIGH-BLAST union: many companies). Same union "${nm}". Judge EACH lens with a quote: same OBJECT? same SCOPE? same MECHANISM? survives = all three pass.
 LOAD: run Bash:
 ${pyRec(nm)}
 Return JSON per schema.`, {schema:{ type:'object', additionalProperties:false, required:['object','scope','mechanism','survives'], properties:{ object:{type:'object', additionalProperties:false, required:['pass','quote'], properties:{pass:{type:'boolean'}, quote:{type:'string'}}}, scope:{type:'object', additionalProperties:false, required:['pass','quote'], properties:{pass:{type:'boolean'}, quote:{type:'string'}}}, mechanism:{type:'object', additionalProperties:false, required:['pass','quote'], properties:{pass:{type:'boolean'}, quote:{type:'string'}}}, survives:{type:'boolean'} }}, model:'opus', label:`d5-refute2:${nm}`, phase:'SameName'})
         ok = !!(r2 && r2.survives === true && r2.object && r2.object.pass === true && r2.scope && r2.scope.pass === true && r2.mechanism && r2.mechanism.pass === true)
       }
-      leafReviews.push(ok ? { collision_name: nm, verdict: 'SAME', why: v.why, refute_survived: true }
+      leafReviews.push(ok ? { collision_name: nm, verdict: 'SAME', why: v.why, refute_survived: true, ...(hbD5 ? { high_blast_refute2_survived: true } : {}) }
                           : { collision_name: nm, verdict: 'UNCLEAR', why: `SAME refuted by skeptic (fail-close): ${v.why}` })
     } else if (v.verdict === 'DIFFERENT') {
       const mg = await agent(`Mini-G2 on ${v.new_names.length} proposed split names (from the homonym split of "${nm}"): ${JSON.stringify(v.new_names)}. Read ${ONT}. all_admit=TRUE only if EVERY name is a valid, reusable, rule-following lower_snake driver name (no tickers, no states, not vague). Return MINIGATE_SCHEMA.`, {schema:MINIGATE_SCHEMA, model:'opus', label:`d5-gate:${nm}`, phase:'SameName'})
@@ -207,6 +280,7 @@ const decisions = {
   approved_same_as: survivingLinks.filter(l => !touches(l.variant, l.canonical)).map(l => ({ variant: l.variant, canonical: l.canonical })),
   approved_rewrites: appliedRewrites.filter(r => !touches(r.from, r.to)).map(r => ({ from: r.from, to: r.to })),
   parked_rewrites: parkedRewrites.filter(p => !touches(p.driver_name, p.proposed_to)),
+  high_blast_refute2: hbRefute2.filter(x => !touches(x.a, x.b)),
 }
 const reviewStep = flagged.length ? `1b) Use the Write tool to save this EXACT JSON (byte-for-byte) to ${RUN_DIR}/same_name_review.json:
 ${JSON.stringify({ reviews: leafReviews, split_map: leafSplitMap })}
