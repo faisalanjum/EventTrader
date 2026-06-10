@@ -5,10 +5,10 @@ export const meta = {
 }
 
 const ONT  = '/home/faisal/EventMarketDB/.claude/plans/Drivers/DriverOntology.md'
-const SEED = '/home/faisal/EventMarketDB/.claude/plans/Drivers/_menu_restaurants_seed.json'
 // args = { candidates: [{driver_name, evidence_refs:[{company,source_type,source_id,date,quote}]}], catalog: [..already-admitted names, for the reuse check..] }
 const cands   = (args && args.candidates) || null
 const catalog = (args && args.catalog) || []
+if (!cands || !cands.length) throw new Error('gate.js requires args.candidates (the stale _menu_restaurants_seed.json default was removed — the file no longer exists).')
 
 const GATE_SCHEMA = { type:'object', additionalProperties:false, required:['verdicts','counts'], properties:{
   verdicts:{type:'array', items:{type:'object', additionalProperties:false, required:['driver_name','verdict','reason'], properties:{
@@ -20,9 +20,7 @@ const GATE_SCHEMA = { type:'object', additionalProperties:false, required:['verd
   counts:{type:'object', additionalProperties:true} } }
 
 phase('Gate')
-const candsClause = cands
-  ? `Judge exactly these candidates — EACH carries its evidence_refs[{company,source_type,source_id,date,quote}]; judge from the evidence, NOT the bare name: ${JSON.stringify(cands)}.`
-  : `No candidates passed via args — read ${SEED} (it has catalog:[{driver_name, evidence_refs:[{company,source_type,source_id,date,quote}], companies}]); judge each catalog[] driver_name from its evidence_refs.`
+const candsClause = `Judge exactly these candidates — EACH carries its evidence_refs[{company,source_type,source_id,date,quote}]; judge from the evidence, NOT the bare name: ${JSON.stringify(cands)}.`
 const catClause = catalog.length
   ? `EXISTING CATALOG (verdict=reuse if a candidate is the EXACT same cause as one of these): ${JSON.stringify(catalog)}.`
   : `(No prior catalog supplied — verdict=reuse only if two candidates are exact-same.)`

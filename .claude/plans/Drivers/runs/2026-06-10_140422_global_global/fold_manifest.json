@@ -1,0 +1,22 @@
+{
+ "scope_name": "GLOBAL",
+ "scope_level": "global",
+ "children": [
+  {
+   "child_run_id": "2026-06-10_140422_sector_sectora",
+   "scope_name": null,
+   "kept_count": 4,
+   "skips_count": 2,
+   "unresolved_rewrites_count": 0,
+   "unresolved_same_name_count": 0
+  },
+  {
+   "child_run_id": "2026-06-10_140422_sector_sectorb",
+   "scope_name": null,
+   "kept_count": 5,
+   "skips_count": 2,
+   "unresolved_rewrites_count": 0,
+   "unresolved_same_name_count": 0
+  }
+ ]
+}

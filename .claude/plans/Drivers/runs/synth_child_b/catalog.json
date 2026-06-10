@@ -1,0 +1,110 @@
+{
+ "industry": "SynthLogistics",
+ "catalog": [
+  {
+   "driver_name": "beta_unique",
+   "canonical_name": "beta_unique",
+   "companies": [
+    "BBB"
+   ],
+   "evidence_refs": [
+    {
+     "company": "BBB",
+     "source_type": "transcript",
+     "source_id": "evB1",
+     "date": "2026-01-15",
+     "quote": "beta segment pricing power held"
+    }
+   ],
+   "same_as_variants": [],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "delivery_mix",
+   "canonical_name": "delivery_mix",
+   "companies": [
+    "BBB",
+    "CCC"
+   ],
+   "evidence_refs": [
+    {
+     "company": "BBB",
+     "source_type": "transcript",
+     "source_id": "evB2",
+     "date": "2026-01-15",
+     "quote": "parcel delivery volumes shifted between ground and air; our delivery mix moved toward ground freight"
+    },
+    {
+     "company": "CCC",
+     "source_type": "transcript",
+     "source_id": "evB3",
+     "date": "2026-01-15",
+     "quote": "courier delivery mix shifted toward next-day parcel services"
+    }
+   ],
+   "same_as_variants": [],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "oil_price",
+   "canonical_name": "oil_price",
+   "companies": [
+    "BBB"
+   ],
+   "evidence_refs": [
+    {
+     "company": "BBB",
+     "source_type": "transcript",
+     "source_id": "evB4",
+     "date": "2026-01-15",
+     "quote": "crude oil price increases pushed jet fuel and diesel costs higher"
+    }
+   ],
+   "same_as_variants": [],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "traffic",
+   "canonical_name": "traffic",
+   "companies": [
+    "BBB"
+   ],
+   "evidence_refs": [
+    {
+     "company": "BBB",
+     "source_type": "transcript",
+     "source_id": "evB5",
+     "date": "2026-01-15",
+     "quote": "traffic trends were mixed"
+    }
+   ],
+   "same_as_variants": [],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  }
+ ],
+ "skips": [],
+ "unresolved_rewrites": [],
+ "counts": {
+  "keep": 4,
+  "same_as": 0,
+  "rewrite": 0,
+  "skip": 0,
+  "unresolved": 0
+ }
+}

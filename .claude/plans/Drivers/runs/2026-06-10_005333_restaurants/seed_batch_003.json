@@ -1,0 +1,1224 @@
+{
+ "industry": "Restaurants",
+ "catalog": [
+  {
+   "driver_name": "third_party_delivery_fees",
+   "canonical_name": "third_party_delivery_fees",
+   "companies": [
+    "CAKE"
+   ],
+   "evidence_refs": [
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-26-018643",
+     "date": "2026-02-23",
+     "quote": "a change in customers’ willingness to pay fees associated with third-party delivery could negatively impact our comparable restaurant sales performance"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001410578-25-000195",
+     "date": "2025-02-24",
+     "quote": "a change in customers’ willingness to pay fees associated with third-party delivery could negatively impact our comparable restaurant sales performance"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-24-027565",
+     "date": "2024-02-26",
+     "quote": "a change in customers’ willingness to pay fees associated with third-party delivery could negatively impact our comparable restaurant sales performance"
+    }
+   ],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "third_party_vendor_failure",
+   "canonical_name": "third_party_vendor_failure",
+   "companies": [
+    "CAKE"
+   ],
+   "evidence_refs": [
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-26-018643",
+     "date": "2026-02-23",
+     "quote": "If any of our third-party vendors experiences a failure that affects a significant aspect of our business, we may experience data loss, increased costs, operational disruption or other harm"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001410578-25-000195",
+     "date": "2025-02-24",
+     "quote": "If any of our third-party vendors experiences a failure that affects a significant aspect of our business, we may experience data loss, increased costs, operational disruption or other harm"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001410578-24-001742",
+     "date": "2024-11-04",
+     "quote": "If any of our third-party vendors experiences a failure that affects a significant aspect of our business, we may experience data loss, increased costs, operational disruption or other harm, any of which could materially adversely affect our financial performance."
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001410578-24-001151",
+     "date": "2024-08-05",
+     "quote": "If any of our third-party vendors experiences a failure that affects a significant aspect of our business, we may experience data loss, increased costs, operational disruption or other harm, any of which could materially adversely affect our financial performance."
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-24-027565",
+     "date": "2024-02-26",
+     "quote": "If any of our third-party vendors experiences a failure that affects a significant aspect of our business, we may experience data loss, increased costs, operational disruption or other harm"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-23-026072",
+     "date": "2023-02-27",
+     "quote": "The failure of third-party vendors to provide adequate services, including, as result of any Security Incident, could significantly harm our operations and reputation"
+    }
+   ],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "third_party_vendor_outage",
+   "canonical_name": "third_party_vendor_outage",
+   "companies": [
+    "CAKE"
+   ],
+   "evidence_refs": [
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001410578-25-000195",
+     "date": "2025-02-24",
+     "quote": "The failure of third-party vendors to provide adequate services"
+    }
+   ],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "tip_credit_wage",
+   "canonical_name": "tip_credit_wage",
+   "companies": [
+    "CAKE"
+   ],
+   "evidence_refs": [
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-26-018643",
+     "date": "2026-02-23",
+     "quote": "Significant increases in minimum wage rates, including any increase in or elimination of the tip credit wage rate in certain states"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001410578-25-000195",
+     "date": "2025-02-24",
+     "quote": "Certain state and localities have significantly increased their minimum wage and/or tip credit wage (or have eliminated the tip credit wage), and require significantly more mandated benefits"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-24-027565",
+     "date": "2024-02-26",
+     "quote": "Significant increases in minimum wage rates, including any increase in or elimination of the tip credit wage rate in certain states"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-23-026072",
+     "date": "2023-02-27",
+     "quote": "In addition to increasing the overall wages paid to our minimum wage and tip credit wage earners, these increases create pressure to increase wages and other benefits paid to other staff members"
+    }
+   ],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "to_go_packaging_costs",
+   "canonical_name": "to_go_packaging_costs",
+   "companies": [
+    "CAKE"
+   ],
+   "evidence_refs": [
+    {
+     "company": "CAKE",
+     "source_type": "transcript",
+     "source_id": "CAKE_2024-05-08T17.00",
+     "date": "2024-05-08",
+     "quote": "I think you mentioned utilities, and I think you mentioned to-go item packaging"
+    }
+   ],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "total_revenue",
+   "canonical_name": "total_revenue",
+   "companies": [
+    "CAKE"
+   ],
+   "evidence_refs": [
+    {
+     "company": "CAKE",
+     "source_type": "8-K",
+     "source_id": "0001104659-23-113409",
+     "date": "2023-11-01",
+     "quote": "Total revenues were $830.2 million in the third quarter of fiscal 2023 compared to $784.0 million in the third quarter of fiscal 2022."
+    }
+   ],
+   "optional_links": {
+    "xbrl_concept": "us-gaap:Revenues",
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "total_shareholder_return_guidance",
+   "canonical_name": "total_shareholder_return_guidance",
+   "companies": [
+    "CAKE"
+   ],
+   "evidence_refs": [
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-24-027565",
+     "date": "2024-02-26",
+     "quote": "will support our long-term financial objective of 13% to 14% total return to shareholders, on average"
+    }
+   ],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "trade_policy",
+   "canonical_name": "trade_policy",
+   "companies": [
+    "CAKE"
+   ],
+   "evidence_refs": [
+    {
+     "company": "CAKE",
+     "source_type": "transcript",
+     "source_id": "CAKE_2025-10-28T17.00",
+     "date": "2025-10-28",
+     "quote": "assuming the shutdown ends and we get some trade deals"
+    }
+   ],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "transportation_delay",
+   "canonical_name": "transportation_delay",
+   "companies": [
+    "CAKE"
+   ],
+   "evidence_refs": [
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-23-026072",
+     "date": "2023-02-27",
+     "quote": "During fiscal 2021, we began to experience certain supply shortages and transportation delays largely attributable to impacts of the COVID-19 pandemic."
+    }
+   ],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "uncertain_tax_position_reserve",
+   "canonical_name": "uncertain_tax_position_reserve",
+   "companies": [
+    "CAKE"
+   ],
+   "evidence_refs": [
+    {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001104659-25-105631",
+     "date": "2025-11-03",
+     "quote": "a change to our reserve for uncertain tax positions (2.7%)"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001410578-24-000636",
+     "date": "2024-05-08",
+     "quote": "The decrease was primarily due to a change to our reserve for uncertain tax positions (1.8%)"
+    }
+   ],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "uncertain_tax_positions",
+   "canonical_name": "uncertain_tax_positions",
+   "companies": [
+    "CAKE"
+   ],
+   "evidence_refs": [
+    {
+     "company": "CAKE",
+     "source_type": "8-K",
+     "source_id": "0001104659-26-017090",
+     "date": "2026-02-18",
+     "quote": "Represents a reserve for uncertain tax position related to tenant improvements allowances and Section 199 deductions."
+    },
+    {
+     "company": "CAKE",
+     "source_type": "8-K",
+     "source_id": "0001104659-25-103205",
+     "date": "2025-10-28",
+     "quote": "Represents an update to the reserve for an uncertain tax position related to tenant improvement allowances."
+    }
+   ],
+   "optional_links": {
+    "xbrl_concept": "us-gaap:UnrecognizedTaxBenefits",
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "unemployment_rate",
+   "canonical_name": "unemployment_rate",
+   "companies": [
+    "CAKE"
+   ],
+   "evidence_refs": [
+    {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001104659-25-105631",
+     "date": "2025-11-03",
+     "quote": "changes in unemployment rates"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "8-K",
+     "source_id": "0001104659-25-015185",
+     "date": "2025-02-19",
+     "quote": "changes in unemployment rates"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "8-K",
+     "source_id": "0001104659-24-084383",
+     "date": "2024-07-31",
+     "quote": "changes in unemployment rates; increases in minimum wages and benefit costs"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "8-K",
+     "source_id": "0001104659-24-058691",
+     "date": "2024-05-08",
+     "quote": "changes in unemployment rates"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001410578-24-000636",
+     "date": "2024-05-08",
+     "quote": "changes in unemployment rates"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-24-027565",
+     "date": "2024-02-26",
+     "quote": "Low unemployment coupled with increases in minimum wages (including increased minimum wages in industries with which we compete for talent)"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "8-K",
+     "source_id": "0001104659-24-026056",
+     "date": "2024-02-21",
+     "quote": "changes in unemployment rates"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "8-K",
+     "source_id": "0001104659-23-113409",
+     "date": "2023-11-01",
+     "quote": "changes in unemployment rates"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001104659-23-088397",
+     "date": "2023-08-07",
+     "quote": "changes in unemployment rates"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "8-K",
+     "source_id": "0001104659-23-086819",
+     "date": "2023-08-02",
+     "quote": "changes in unemployment rates"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "8-K",
+     "source_id": "0001104659-23-058468",
+     "date": "2023-05-10",
+     "quote": "changes in unemployment rates"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-23-026072",
+     "date": "2023-02-27",
+     "quote": "Low unemployment coupled with increases in minimum wages and minimum tip credit wages, extensions of personal and other leave policies, other governmental regulations affecting labor costs"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "8-K",
+     "source_id": "0001104659-23-024317",
+     "date": "2023-02-22",
+     "quote": "changes in unemployment rates"
+    }
+   ],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "unit_development",
+   "canonical_name": "unit_development",
+   "companies": [
+    "CAKE"
+   ],
+   "evidence_refs": [
+    {
+     "company": "CAKE",
+     "source_type": "transcript",
+     "source_id": "CAKE_2025-10-28T17.00",
+     "date": "2025-10-28",
+     "quote": "we plan to further accelerate development with as many as 26 new restaurant openings across our portfolio of concepts"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "transcript",
+     "source_id": "CAKE_2025-04-30T17.00",
+     "date": "2025-04-30",
+     "quote": "certainly we continue to target that 25 openings this year. We'll target for the first half, 16. So I think that that's a really good cadence for us. And so we're ahead of schedule."
+    },
+    {
+     "company": "CAKE",
+     "source_type": "transcript",
+     "source_id": "CAKE_2025-02-19T17.00",
+     "date": "2025-02-19",
+     "quote": "we now expect to open as many as 25 new restaurants in 2025"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "transcript",
+     "source_id": "CAKE_2023-05-10T17.00",
+     "date": "2023-05-10",
+     "quote": "we continue to anticipate approximately $165 million to $175 million in CapEx to support this year's and some of next year's unit development"
+    }
+   ],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "unit_development_guidance",
+   "canonical_name": "unit_development_guidance",
+   "companies": [
+    "CAKE"
+   ],
+   "evidence_refs": [
+    {
+     "company": "CAKE",
+     "source_type": "8-K",
+     "source_id": "0001104659-26-017090",
+     "date": "2026-02-18",
+     "quote": "The Company now expects to open as many as 26 new restaurants in fiscal 2026, including as many as six The Cheesecake Factory restaurants, six to seven North Italia locations, six to seven Flower Child locations and as many as eight FRC restaurants."
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001410578-25-001073",
+     "date": "2025-05-05",
+     "quote": "We expect to open as many as 25 new restaurants in fiscal 2025 across our portfolio of concepts."
+    },
+    {
+     "company": "CAKE",
+     "source_type": "8-K",
+     "source_id": "0001104659-25-015185",
+     "date": "2025-02-19",
+     "quote": "The Company now expects to open as many as 25 new restaurants in fiscal 2025, including as many as three to four The Cheesecake Factory restaurants, six to seven North Italia locations, six to seven Flower Child locations, and as many as eight to nine FRC restaurants."
+    }
+   ],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "urban_restaurant_traffic",
+   "canonical_name": "urban_restaurant_traffic",
+   "companies": [
+    "CAKE"
+   ],
+   "evidence_refs": [
+    {
+     "company": "CAKE",
+     "source_type": "transcript",
+     "source_id": "CAKE_2023-05-10T17.00",
+     "date": "2023-05-10",
+     "quote": "the very urban locations, are probably the areas with the most opportunity still"
+    }
+   ],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "us_dollar_exchange_rate",
+   "canonical_name": "us_dollar_exchange_rate",
+   "companies": [
+    "CAKE"
+   ],
+   "evidence_refs": [
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-26-018643",
+     "date": "2026-02-23",
+     "quote": "the value of the U.S. dollar relative to other currencies, international trade disputes, tariffs, geopolitical unrest and varying global demand"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001410578-25-000195",
+     "date": "2025-02-24",
+     "quote": "Goods we purchase on the international market may be subject to even greater fluctuations in cost and availability, which could result from a variety of factors, including the value of the U.S. dollar relative to other currencies"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-24-027565",
+     "date": "2024-02-26",
+     "quote": "the value of the U.S. dollar relative to other currencies, international trade disputes, tariffs, geopolitical unrest and varying global demand"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-23-026072",
+     "date": "2023-02-27",
+     "quote": "including the value of the U.S. dollar relative to other currencies, international trade disputes, tariffs, geopolitical unrest and varying global demand"
+    }
+   ],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "utilities_costs",
+   "canonical_name": "utilities_costs",
+   "companies": [
+    "CAKE"
+   ],
+   "evidence_refs": [
+    {
+     "company": "CAKE",
+     "source_type": "transcript",
+     "source_id": "CAKE_2025-02-19T17.00",
+     "date": "2025-02-19",
+     "quote": "The cost of utilities has gone up a little bit faster possibly"
+    }
+   ],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "utility_costs",
+   "canonical_name": "utility_costs",
+   "companies": [
+    "CAKE"
+   ],
+   "evidence_refs": [
+    {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001410578-24-000636",
+     "date": "2024-05-08",
+     "quote": "primarily driven by a shift in sales mix (0.3%) and lower utilities (0.1%)"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001104659-23-114808",
+     "date": "2023-11-06",
+     "quote": "lower utility costs due to higher rates in 2022 (0.2%)"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "transcript",
+     "source_id": "CAKE_2024-05-08T17.00",
+     "date": "2024-05-08",
+     "quote": "Other operating expenses decreased 40 basis points, primarily driven by reduced costs in areas such as utilities and to-go related expenses."
+    },
+    {
+     "company": "CAKE",
+     "source_type": "transcript",
+     "source_id": "CAKE_2024-05-08T17.00",
+     "date": "2024-05-08",
+     "quote": "the utility costs can vary outside of the control of the company so that's not necessarily a permanent structure"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "transcript",
+     "source_id": "CAKE_2023-11-01T17.00",
+     "date": "2023-11-01",
+     "quote": "North Italia margins were impacted by seasonally lower sales and higher utility costs, which were exacerbated by record high temperatures in the southwest"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "transcript",
+     "source_id": "CAKE_2023-05-10T17.00",
+     "date": "2023-05-10",
+     "quote": "The first one is utilities. So I know that we saw the nat gas market capitulate here, but the way that it rolls through all of the bills and the electric system, et cetera, does take a couple of months."
+    },
+    {
+     "company": "CAKE",
+     "source_type": "transcript",
+     "source_id": "CAKE_2023-02-22T17.00",
+     "date": "2023-02-22",
+     "quote": "One, utilities continue to be significant pressure points, and a lot of the natural gas, again, the timing of the way that rolls through and it hits the energy still ended up above where we had anticipated."
+    }
+   ],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "wage_and_hour_litigation",
+   "canonical_name": "wage_and_hour_litigation",
+   "companies": [
+    "CAKE"
+   ],
+   "evidence_refs": [
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-26-018643",
+     "date": "2026-02-23",
+     "quote": "we are currently a defendant in a number of cases asserting class or collective action claims under federal and state wage and hour laws"
+    }
+   ],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "wage_hour_litigation",
+   "canonical_name": "wage_hour_litigation",
+   "companies": [
+    "CAKE"
+   ],
+   "evidence_refs": [
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-24-027565",
+     "date": "2024-02-26",
+     "quote": "In recent years, we have experienced an increase in wage and hour litigation"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-23-026072",
+     "date": "2023-02-27",
+     "quote": "In recent years, we have experienced an increase in wage and hour litigation, particularly in California."
+    }
+   ],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "wage_inflation",
+   "canonical_name": "wage_inflation",
+   "companies": [
+    "CAKE"
+   ],
+   "evidence_refs": [
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-26-018643",
+     "date": "2026-02-23",
+     "quote": "could lead to further wage inflation, product and services cost inflation, disruptions in the supply chain, staffing challenges, shifts in consumer behavior, and delays in new restaurant openings"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-26-018643",
+     "date": "2026-02-23",
+     "quote": "causing supply chain challenges and significantly increased commodity and wage inflation"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-26-018643",
+     "date": "2026-02-23",
+     "quote": "This decrease was primarily due to menu price increases in excess of wage rate inflation and improved staffing levels (0.5%)"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-26-018643",
+     "date": "2026-02-23",
+     "quote": "historical financial performance, wage, product and services inflation, competitive environment, macroeconomic and industry conditions"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001104659-25-105631",
+     "date": "2025-11-03",
+     "quote": "This decrease was primarily due to menu price increases in excess of wage rate inflation and improved staffing levels and productivity (0.3%)."
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001410578-25-000195",
+     "date": "2025-02-24",
+     "quote": "The impact of ongoing geopolitical and macroeconomic events could lead to further wage inflation, product and services cost inflation, disruptions in the supply chain"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001410578-25-000195",
+     "date": "2025-02-24",
+     "quote": "our operating results were impacted by geopolitical and macroeconomic events, causing supply chain challenges and significantly increased commodity and wage inflation. Our commodity and wage inflationary environment began returning to more historical levels in fiscal 2024."
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001410578-25-000195",
+     "date": "2025-02-24",
+     "quote": "This decrease was primarily due to menu price increases in excess of wage rate inflation (0.6%)"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001410578-24-001742",
+     "date": "2024-11-04",
+     "quote": "menu price increases in excess of wage rate inflation and improved productivity (1.0%)"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001410578-24-001151",
+     "date": "2024-08-05",
+     "quote": "This decrease is primarily driven by menu price increases in excess of wage rate inflation and improved productivity (0.4%)"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001410578-24-000636",
+     "date": "2024-05-08",
+     "quote": "offset by menu price increases in excess of wage rate inflation (0.3%)"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-24-027565",
+     "date": "2024-02-26",
+     "quote": "could lead to further shifts in consumer behavior, wage inflation, staffing challenges, product and services cost inflation"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-24-027565",
+     "date": "2024-02-26",
+     "quote": "our operating results were impacted by geopolitical and macroeconomic events, causing supply chain challenges and significantly increased commodity and wage inflation"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001104659-23-114808",
+     "date": "2023-11-06",
+     "quote": "menu price increases in excess of wage rate inflation and improved restaurant staffing levels (1.2%)"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001104659-23-088397",
+     "date": "2023-08-07",
+     "quote": "menu pricing leverage in excess of wage rate inflation (1.3%)"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-23-026072",
+     "date": "2023-02-27",
+     "quote": "contributed to significantly increased commodity and wage inflation and other increased costs"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-23-026072",
+     "date": "2023-02-27",
+     "quote": "This increase was primarily due to wage rate inflation in excess of menu price increases (0.8%)"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-23-026072",
+     "date": "2023-02-27",
+     "quote": "assumptions related to the COVID-19 pandemic, wage, product and services inflation, competitive environment, macroeconomic and industry conditions"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "transcript",
+     "source_id": "CAKE_2025-10-28T17.00",
+     "date": "2025-10-28",
+     "quote": "It's allowed us to keep our wage inflation in line with expectations"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "transcript",
+     "source_id": "CAKE_2025-02-19T17.00",
+     "date": "2025-02-19",
+     "quote": "Labor, as a percent of sales, decreased 100 basis points, primarily supported by menu pricing leverage relative to wage inflation and labor productivity improvements"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "transcript",
+     "source_id": "CAKE_2024-07-31T17.00",
+     "date": "2024-07-31",
+     "quote": "And wage inflation has kind of dipped in about 4-ish percent, continues to improve."
+    },
+    {
+     "company": "CAKE",
+     "source_type": "transcript",
+     "source_id": "CAKE_2023-11-01T17.00",
+     "date": "2023-11-01",
+     "quote": "These improvements have supported the continued moderation in wage inflation, which is now trending below pre-pandemic levels."
+    },
+    {
+     "company": "CAKE",
+     "source_type": "transcript",
+     "source_id": "CAKE_2023-11-01T17.00",
+     "date": "2023-11-01",
+     "quote": "The inflation for wages are going to be low to mid single digits, and the inflation for commodities are low single digits, right?"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "transcript",
+     "source_id": "CAKE_2023-08-02T17.00",
+     "date": "2023-08-02",
+     "quote": "we're seeing also wage inflation rates that are below pre-pandemic levels"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "transcript",
+     "source_id": "CAKE_2023-08-02T17.00",
+     "date": "2023-08-02",
+     "quote": "just from a pure inflationary environment, we're saying wage inflation is mid-single digits"
+    }
+   ],
+   "optional_links": {
+    "xbrl_concept": "us-gaap:LaborAndRelatedExpense",
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "wage_rate_inflation",
+   "canonical_name": "wage_rate_inflation",
+   "companies": [
+    "CAKE"
+   ],
+   "evidence_refs": [
+    {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001410578-25-001564",
+     "date": "2025-08-04",
+     "quote": "primarily due to menu price increases in excess of wage rate inflation"
+    }
+   ],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "wage_rates",
+   "canonical_name": "wage_rates",
+   "companies": [
+    "CAKE"
+   ],
+   "evidence_refs": [
+    {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001410578-25-001073",
+     "date": "2025-05-05",
+     "quote": "primarily due to menu price increases in excess of wage rate inflation"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001104659-23-058507",
+     "date": "2023-05-10",
+     "quote": "This decrease was primarily due to menu pricing leverage in excess of wage rate inflation (1.0%)"
+    }
+   ],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "weather",
+   "canonical_name": "weather",
+   "companies": [
+    "CAKE"
+   ],
+   "evidence_refs": [
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-24-027565",
+     "date": "2024-02-26",
+     "quote": "the timing of holidays, inclement weather"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "transcript",
+     "source_id": "CAKE_2026-02-18T17.00",
+     "date": "2026-02-18",
+     "quote": "Yeah, I think we've seen pretty stable performance across the portfolio. Again, X the weather, which everybody is seeing at different times at different places."
+    },
+    {
+     "company": "CAKE",
+     "source_type": "transcript",
+     "source_id": "CAKE_2025-07-29T17.00",
+     "date": "2025-07-29",
+     "quote": "certainly we do watch the weather. And, you know, you could have some pockets where it can impact it for a period of time, a week here or there"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "transcript",
+     "source_id": "CAKE_2025-04-30T17.00",
+     "date": "2025-04-30",
+     "quote": "that was affected by the LA fires and the weather impact was a little greater, just given our concentration in Texas"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "transcript",
+     "source_id": "CAKE_2025-02-19T17.00",
+     "date": "2025-02-19",
+     "quote": "I mean, the weather impacts have been very, very clear to us."
+    },
+    {
+     "company": "CAKE",
+     "source_type": "transcript",
+     "source_id": "CAKE_2023-02-22T17.00",
+     "date": "2023-02-22",
+     "quote": "number one, there was some weather impact. I know that other concepts have talked about that. It was probably about a half a percent, about 40 to 50 basis points."
+    },
+    {
+     "company": "CAKE",
+     "source_type": "transcript",
+     "source_id": "CAKE_2023-02-22T17.00",
+     "date": "2023-02-22",
+     "quote": "i think there was a little bit of talk in in january about some positive weather"
+    }
+   ],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "weather_conditions",
+   "canonical_name": "weather_conditions",
+   "companies": [
+    "CAKE"
+   ],
+   "evidence_refs": [
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-26-018643",
+     "date": "2026-02-23",
+     "quote": "Adverse weather conditions, natural disasters and public health emergencies could unfavorably impact our restaurant sales"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001410578-25-000195",
+     "date": "2025-02-24",
+     "quote": "Adverse weather conditions and natural disasters may further exacerbate a number of these factors."
+    },
+    {
+     "company": "CAKE",
+     "source_type": "8-K",
+     "source_id": "0001104659-24-084383",
+     "date": "2024-07-31",
+     "quote": "adverse weather conditions in regions in which the Company’s restaurants are located"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "8-K",
+     "source_id": "0001104659-24-058691",
+     "date": "2024-05-08",
+     "quote": "adverse weather conditions in regions in which the Company’s restaurants are located"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-24-027565",
+     "date": "2024-02-26",
+     "quote": "Adverse weather conditions, natural disasters and public health emergencies can impact customer traffic, make it more difficult to fully staff our restaurants"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "8-K",
+     "source_id": "0001104659-23-113409",
+     "date": "2023-11-01",
+     "quote": "adverse weather conditions in regions in which the Company’s restaurants are located"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001104659-23-088397",
+     "date": "2023-08-07",
+     "quote": "adverse weather conditions in regions in which our restaurants are located"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-23-026072",
+     "date": "2023-02-27",
+     "quote": "Adverse weather conditions, natural disasters and public health emergencies can impact customer traffic"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "8-K",
+     "source_id": "0001104659-23-024317",
+     "date": "2023-02-22",
+     "quote": "adverse weather conditions in regions in which the Company’s restaurants are located"
+    }
+   ],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "weather_disruption",
+   "canonical_name": "weather_disruption",
+   "companies": [
+    "CAKE"
+   ],
+   "evidence_refs": [
+    {
+     "company": "CAKE",
+     "source_type": "8-K",
+     "source_id": "0001104659-26-017090",
+     "date": "2026-02-18",
+     "quote": "Despite a more challenging operating environment across the restaurant industry, including weather-related impacts, revenue for the quarter finished within our expected range."
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001410578-25-000195",
+     "date": "2025-02-24",
+     "quote": "Adverse weather conditions and natural disasters may further exacerbate a number of these factors."
+    }
+   ],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "wildfire",
+   "canonical_name": "wildfire",
+   "companies": [
+    "CAKE"
+   ],
+   "evidence_refs": [
+    {
+     "company": "CAKE",
+     "source_type": "transcript",
+     "source_id": "CAKE_2025-04-30T17.00",
+     "date": "2025-04-30",
+     "quote": "Just note, as Matt mentioned earlier, that was affected by the LA fires"
+    }
+   ],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "wildfires",
+   "canonical_name": "wildfires",
+   "companies": [
+    "CAKE"
+   ],
+   "evidence_refs": [
+    {
+     "company": "CAKE",
+     "source_type": "transcript",
+     "source_id": "CAKE_2026-02-18T17.00",
+     "date": "2026-02-18",
+     "quote": "as well as the lingering impact of the Los Angeles fires"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "transcript",
+     "source_id": "CAKE_2025-04-30T17.00",
+     "date": "2025-04-30",
+     "quote": "with the impact of the Los Angeles fires weighing more heavily on performance due to the concept's smaller comp base"
+    }
+   ],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "winter_weather",
+   "canonical_name": "winter_weather",
+   "companies": [
+    "CAKE"
+   ],
+   "evidence_refs": [
+    {
+     "company": "CAKE",
+     "source_type": "transcript",
+     "source_id": "CAKE_2024-05-08T17.00",
+     "date": "2024-05-08",
+     "quote": "I think we would have been in positive traffic territory if it weren't for the weather in January"
+    }
+   ],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "workers_compensation_insurance_costs",
+   "canonical_name": "workers_compensation_insurance_costs",
+   "companies": [
+    "CAKE"
+   ],
+   "evidence_refs": [
+    {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001104659-23-114808",
+     "date": "2023-11-06",
+     "quote": "increased workers’ compensation insurance costs due to higher claim activity (0.2%)"
+    },
+    {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001104659-23-088397",
+     "date": "2023-08-07",
+     "quote": "lower workers compensation insurance costs due to higher claim activity in the second quarter of fiscal 2022 (0.2%)"
+    }
+   ],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "workforce_unionization",
+   "canonical_name": "workforce_unionization",
+   "companies": [
+    "CAKE"
+   ],
+   "evidence_refs": [
+    {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001410578-25-000195",
+     "date": "2025-02-24",
+     "quote": "Our staff members and others may attempt to unionize our workforce, establish boycotts or picket lines or interrupt our supply chains"
+    }
+   ],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  }
+ ],
+ "analysis": {}
+}

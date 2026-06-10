@@ -9,7 +9,11 @@ For ONE ticker, fetch ALL non-news company sources WITH their real text:
   - 10-K / 10-Q   -> MD&A + Risk Factors + Business sections (skip the 139k financial-statement tables)
   - fiscal.ai KPIs
 
-Each event is TARGETED to driver-rich sections and TRUNCATED so prompts stay sane.
+PHASE 0.5 (HierarchicalCatalogPlan §8/D7): ALL caps REMOVED — events are emitted as FULL
+STRUCTURED sub-units (sections[] / ex991 / prepared / qa_exchanges[]), uncapped and unjoined;
+`chunk_company_sources.py` is the derived layer that joins + splits them into bounded bot inputs
+(never dropping a byte). Q&A is sorted NUMERICALLY by toInteger(qa.sequence) — the property is
+stored as a STRING, so the old `ORDER BY qa.sequence` scrambled exchange order alphabetically.
 Tags per event: high_signal (|daily_stock| >= 2.0), is_earnings (8-K + Item 2.02), source_type, date.
 NO >2% filter — every non-news event is included; >2% is only a flag.
 
@@ -32,24 +36,15 @@ PW   = os.getenv("NEO4J_PASSWORD")
 FISCAL_DB = str(ROOT / "data/fiscal_ai_segments/fiscal_segments.sqlite")
 OUT_DIR = ROOT / ".claude/plans/Drivers"
 
-# per-event content caps (chars)
-CAP_EVENT_REPORT = 12000
-CAP_EVENT_TRANS  = 10000
-CAP_SECTION      = 6000   # per 10-K/10-Q section
-CAP_EX991        = 6000
-CAP_PREPARED     = 4000
-CAP_QA_EACH      = 900
-QA_MAX           = 8
-
 REPORTS_Q = """
 MATCH (rep:Report)-[r:PRIMARY_FILER]->(c:Company {ticker:$tk})
 WHERE rep.formType IS NOT NULL
   AND (rep.formType STARTS WITH '8-K' OR rep.formType STARTS WITH '10-K' OR rep.formType STARTS WITH '10-Q')
 OPTIONAL MATCH (rep)-[:HAS_SECTION]->(s:ExtractedSectionContent)
   WHERE s.section_name CONTAINS 'DiscussionandAnalysis' OR s.section_name='RiskFactors' OR s.section_name='Business'
-WITH rep, r, collect(DISTINCT {name:s.section_name, content:substring(s.content,0,$cap_sec)}) AS secs
+WITH rep, r, collect(DISTINCT {name:s.section_name, content:s.content}) AS secs
 OPTIONAL MATCH (rep)-[:HAS_EXHIBIT]->(ex:ExhibitContent) WHERE ex.exhibit_number='EX-99.1'
-WITH rep, r, secs, substring(head(collect(ex.content)),0,$cap_ex) AS ex991
+WITH rep, r, secs, head(collect(ex.content)) AS ex991
 RETURN rep.id AS source_id,
        coalesce(rep.formType,'report') AS form_type,
        substring(coalesce(rep.created,''),0,10) AS date,
@@ -63,10 +58,10 @@ ORDER BY date DESC
 TRANS_Q = """
 MATCH (t:Transcript)-[r:INFLUENCES]->(c:Company {ticker:$tk})
 OPTIONAL MATCH (t)-[:HAS_PREPARED_REMARKS]->(pr:PreparedRemark)
-WITH t, r, substring(head(collect(pr.content)),0,$cap_prep) AS prepared
+WITH t, r, head(collect(pr.content)) AS prepared
 OPTIONAL MATCH (t)-[:HAS_QA_EXCHANGE]->(qa:QAExchange)
-WITH t, r, prepared, qa ORDER BY qa.sequence
-WITH t, r, prepared, collect(substring(toString(qa.exchanges),0,$cap_qa))[..$qa_max] AS qa_list
+WITH t, r, prepared, qa ORDER BY toInteger(qa.sequence)
+WITH t, r, prepared, collect(toString(qa.exchanges)) AS qa_list
 RETURN t.id AS source_id,
        substring(coalesce(t.created,t.conference_datetime,''),0,10) AS date,
        toString(t.fiscal_year) AS fy, toString(t.calendar_quarter) AS q,
@@ -81,24 +76,8 @@ def hi(ds):
 def is_earnings_8k(form_type, items):
     return form_type.startswith("8-K") and "2.02" in (items or "")
 
-def build_report_content(rec):
-    ft, items, desc = rec["form_type"], rec["items"], rec["description"]
-    secs = [s for s in (rec["secs"] or []) if s and s.get("content")]
-    ex991 = rec.get("ex991") or ""
-    parts = [f"FORM: {ft}", f"ITEMS: {items}"]
-    if desc: parts.append(f"DESC: {desc}")
-    if is_earnings_8k(ft, items) and ex991:
-        parts.append("PRESS RELEASE (EX-99.1):\n" + ex991)
-    for s in secs:                       # MD&A / RiskFactors / Business (10-K/10-Q)
-        parts.append(f"[{s['name']}]\n{s['content']}")
-    return "\n\n".join(parts)[:CAP_EVENT_REPORT]
-
-def build_trans_content(rec):
-    parts = []
-    if rec.get("prepared"): parts.append("PREPARED REMARKS:\n" + rec["prepared"])
-    qa = [q for q in (rec.get("qa_list") or []) if q]
-    if qa: parts.append("Q&A:\n" + "\n---\n".join(qa))
-    return "\n\n".join(parts)[:CAP_EVENT_TRANS]
+# (build_report_content / build_trans_content REMOVED — fetch no longer caps or joins;
+#  chunk_company_sources.py builds event_text from these structured sub-units, §12.2)
 
 def fiscal_kpis(tk):
     if not Path(FISCAL_DB).exists(): return []
@@ -113,25 +92,30 @@ def fiscal_kpis(tk):
 
 def fetch(tk, session):
     events = []
-    for rec in session.run(REPORTS_Q, tk=tk, cap_sec=CAP_SECTION, cap_ex=CAP_EX991):
+    for rec in session.run(REPORTS_Q, tk=tk):
         d = rec.data()
-        content = build_report_content(d)
+        secs = [s for s in (d["secs"] or []) if s and s.get("content")]
+        ex991 = d.get("ex991")
+        clen = sum(len(s["content"]) for s in secs) + len(ex991 or "") + len(d["description"] or "")
         events.append({
             "source_id": d["source_id"],
             "source_type": d["form_type"], "date": d["date"],
             "daily_stock": d["daily_stock"], "high_signal": hi(d["daily_stock"]),
             "is_earnings": is_earnings_8k(d["form_type"], d["items"]),
-            "items": d["items"], "content": content, "content_len": len(content),
+            "items": d["items"], "description": d["description"],
+            "sections": secs, "ex991": ex991, "content_len": clen,
         })
-    for rec in session.run(TRANS_Q, tk=tk, cap_prep=CAP_PREPARED, cap_qa=CAP_QA_EACH, qa_max=QA_MAX):
+    for rec in session.run(TRANS_Q, tk=tk):
         d = rec.data()
-        content = build_trans_content(d)
+        qa = [q for q in (d.get("qa_list") or []) if q]
+        prepared = d.get("prepared")
+        clen = len(prepared or "") + sum(len(q) for q in qa)
         events.append({
             "source_id": d["source_id"],
             "source_type": "transcript", "date": d["date"],
             "daily_stock": d["daily_stock"], "high_signal": hi(d["daily_stock"]),
             "is_earnings": False, "fy": d["fy"], "q": d["q"],
-            "content": content, "content_len": len(content),
+            "prepared": prepared, "qa_exchanges": qa, "content_len": clen,
         })
     kpis = fiscal_kpis(tk)
     by_type = {}

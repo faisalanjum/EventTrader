@@ -1,0 +1,67 @@
+{
+ "queue": [
+  {
+   "name": "oil_price",
+   "occurrences": [
+    {
+     "child_run_id": "2026-06-10_140422_sector_sectora",
+     "record": {
+      "driver_name": "oil_price",
+      "canonical_name": "oil_price",
+      "companies": [
+       "AAA",
+       "BBB"
+      ],
+      "evidence_refs": [
+       {
+        "company": "AAA",
+        "source_type": "transcript",
+        "source_id": "evA4",
+        "date": "2026-01-15",
+        "quote": "higher crude oil prices raised our distribution fuel costs"
+       },
+       {
+        "company": "BBB",
+        "source_type": "transcript",
+        "source_id": "evB4",
+        "date": "2026-01-15",
+        "quote": "crude oil price increases pushed jet fuel and diesel costs higher"
+       }
+      ],
+      "same_as_variants": [],
+      "optional_links": {
+       "xbrl_concept": null,
+       "xbrl_member": null,
+       "guidance_ref": null
+      }
+     }
+    },
+    {
+     "child_run_id": "2026-06-10_140422_sector_sectorb",
+     "record": {
+      "driver_name": "oil_price",
+      "canonical_name": "oil_price",
+      "companies": [
+       "DDD"
+      ],
+      "evidence_refs": [
+       {
+        "company": "DDD",
+        "source_type": "transcript",
+        "source_id": "evC3",
+        "date": "2026-02-10",
+        "quote": "rising crude oil prices lifted our freight and shipping costs"
+       }
+      ],
+      "same_as_variants": [],
+      "optional_links": {
+       "xbrl_concept": null,
+       "xbrl_member": null,
+       "guidance_ref": null
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

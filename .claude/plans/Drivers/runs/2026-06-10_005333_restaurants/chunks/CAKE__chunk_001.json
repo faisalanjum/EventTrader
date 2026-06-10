@@ -1,0 +1,24 @@
+{
+ "ticker": "CAKE",
+ "chunk_id": "CAKE__chunk_001",
+ "events": [
+  {
+   "source_id": "0001104659-26-037831",
+   "source_type": "8-K",
+   "date": "2026-03-31",
+   "part_index": 1,
+   "part_count": 1,
+   "content": "FORM: 8-K\n\nITEMS: [\"Item 1.01: Entry into a Material Definitive Agreement\", \"Item 2.03: Creation of a Direct Financial Obligation or an Obligation under an Off-Balance Sheet Arrangement of a Registrant\"]\n\nDESC: Form 8-K - Current report - Item 1.01 Item 2.03"
+  }
+ ],
+ "fiscal_kpis": [
+  "North Italia Company-Owned Restaurants",
+  "North Italia Comparable Restaurant Sales",
+  "Number of International-Licensed Restaurants",
+  "Other Fox Restaurant Concepts (FRC) Company-Owned Restaurants",
+  "Other Segment Company-Owned Restaurants",
+  "The Cheesecake Factory Restaurants Company-Owned Restaurants",
+  "The Cheesecake Factory Restaurants Comparable Restaurant Sales",
+  "Total Company-Owned Restaurants"
+ ]
+}

@@ -1,0 +1,114 @@
+{
+ "records": [
+  {
+   "driver_name": "delta_unique",
+   "canonical_name": "delta_unique",
+   "companies": [
+    "EEE"
+   ],
+   "evidence_refs": [
+    {
+     "company": "EEE",
+     "source_type": "transcript",
+     "source_id": "evD1",
+     "date": "2026-02-10",
+     "quote": "delta marketplace take rate held steady"
+    }
+   ],
+   "same_as_variants": [],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "foot_traffic",
+   "canonical_name": "foot_traffic",
+   "companies": [
+    "DDD"
+   ],
+   "evidence_refs": [
+    {
+     "company": "DDD",
+     "source_type": "transcript",
+     "source_id": "evC1",
+     "date": "2026-02-10",
+     "quote": "store foot traffic improved as mall visits recovered"
+    }
+   ],
+   "same_as_variants": [],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "fulfillment_cost",
+   "canonical_name": "fulfillment_cost",
+   "companies": [
+    "EEE"
+   ],
+   "evidence_refs": [
+    {
+     "company": "EEE",
+     "source_type": "transcript",
+     "source_id": "evD2",
+     "date": "2026-02-10",
+     "quote": "per-order fulfillment costs fell on warehouse automation"
+    }
+   ],
+   "same_as_variants": [],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "gamma_unique",
+   "canonical_name": "gamma_unique",
+   "companies": [
+    "DDD"
+   ],
+   "evidence_refs": [
+    {
+     "company": "DDD",
+     "source_type": "transcript",
+     "source_id": "evC2",
+     "date": "2026-02-10",
+     "quote": "gamma loyalty program enrollment expanded"
+    }
+   ],
+   "same_as_variants": [],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "oil_price",
+   "canonical_name": "oil_price",
+   "companies": [
+    "DDD"
+   ],
+   "evidence_refs": [
+    {
+     "company": "DDD",
+     "source_type": "transcript",
+     "source_id": "evC3",
+     "date": "2026-02-10",
+     "quote": "rising crude oil prices lifted our freight and shipping costs"
+    }
+   ],
+   "same_as_variants": [],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  }
+ ]
+}

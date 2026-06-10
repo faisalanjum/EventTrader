@@ -1,0 +1,35 @@
+{
+ "unresolved_same_name": [
+  {
+   "name": "traffic",
+   "occurrences": [
+    {
+     "child_run_id": "synth_child_a",
+     "evidence_refs": [
+      {
+       "company": "AAA",
+       "source_type": "transcript",
+       "source_id": "evA6",
+       "date": "2026-01-15",
+       "quote": "traffic was a factor this period"
+      }
+     ]
+    },
+    {
+     "child_run_id": "synth_child_b",
+     "evidence_refs": [
+      {
+       "company": "BBB",
+       "source_type": "transcript",
+       "source_id": "evB5",
+       "date": "2026-01-15",
+       "quote": "traffic trends were mixed"
+      }
+     ]
+    }
+   ],
+   "why": "Each side has exactly one ref, and both quotes are semantically empty: child_a (AAA) \"traffic was a factor this period\" and child_b (BBB) \"traffic trends were mixed\". Neither identifies the object (store/foot/web/network traffic), scope, or mechanism, so none of the three union checks (same object/metric, same scope, same mechanism) can be verified — SAME cannot be asserted. DIFFERENT also fails: there is no evidence of two distinct meanings, and the quotes contain no specific nouns from which more-specific names could be coined without inventing words (banned by DriverOntology R4/R10). Fail-close: park as UNCLEAR."
+  }
+ ],
+ "optional_links_conflicts": []
+}

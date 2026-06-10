@@ -1,0 +1,9 @@
+{
+ "same_as": [
+  {
+   "variant": "comparable_sales",
+   "canonical": "same_store_sales"
+  }
+ ],
+ "rewrites": []
+}

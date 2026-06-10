@@ -1,0 +1,37 @@
+{
+ "items": [
+  {
+   "name": "wage_inflation",
+   "sides": [
+    {
+     "side_key": "synth_child_c",
+     "view1": [
+      {
+       "company": "DDD",
+       "source_type": "transcript",
+       "source_id": "evC4",
+       "date": "2026-02-10",
+       "quote": "hourly store wages rose with minimum wage increases"
+      }
+     ],
+     "view2": [],
+     "total_refs": 1
+    },
+    {
+     "side_key": "synth_child_d",
+     "view1": [
+      {
+       "company": "EEE",
+       "source_type": "transcript",
+       "source_id": "evD3",
+       "date": "2026-02-10",
+       "quote": "warehouse hourly wages climbed amid tight labor markets"
+      }
+     ],
+     "view2": [],
+     "total_refs": 1
+    }
+   ]
+  }
+ ]
+}

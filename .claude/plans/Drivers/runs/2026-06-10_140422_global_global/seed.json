@@ -1,0 +1,182 @@
+{
+ "scope_name": "GLOBAL",
+ "scope_level": "global",
+ "run_id": "2026-06-10_140422_global_global",
+ "catalog": [
+  {
+   "driver_name": "foot_traffic",
+   "canonical_name": "foot_traffic",
+   "companies": [
+    "DDD"
+   ],
+   "evidence_refs": [
+    {
+     "company": "DDD",
+     "source_type": "transcript",
+     "source_id": "evC1",
+     "date": "2026-02-10",
+     "quote": "store foot traffic improved as mall visits recovered"
+    }
+   ],
+   "same_as_variants": [],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "fulfillment_cost",
+   "canonical_name": "fulfillment_cost",
+   "companies": [
+    "EEE"
+   ],
+   "evidence_refs": [
+    {
+     "company": "EEE",
+     "source_type": "transcript",
+     "source_id": "evD2",
+     "date": "2026-02-10",
+     "quote": "per-order fulfillment costs fell on warehouse automation"
+    }
+   ],
+   "same_as_variants": [],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "parcel_delivery_mix",
+   "canonical_name": "parcel_delivery_mix",
+   "companies": [
+    "BBB",
+    "CCC"
+   ],
+   "evidence_refs": [
+    {
+     "company": "BBB",
+     "source_type": "transcript",
+     "source_id": "evB2",
+     "date": "2026-01-15",
+     "quote": "parcel delivery volumes shifted between ground and air; our delivery mix moved toward ground freight"
+    },
+    {
+     "company": "CCC",
+     "source_type": "transcript",
+     "source_id": "evB3",
+     "date": "2026-01-15",
+     "quote": "courier delivery mix shifted toward next-day parcel services"
+    }
+   ],
+   "same_as_variants": [],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "restaurant_delivery_channel_mix",
+   "canonical_name": "restaurant_delivery_channel_mix",
+   "companies": [
+    "AAA"
+   ],
+   "evidence_refs": [
+    {
+     "company": "AAA",
+     "source_type": "transcript",
+     "source_id": "evA3",
+     "date": "2026-01-15",
+     "quote": "delivery as a share of restaurant orders grew; the delivery channel mix shifted from dine-in"
+    }
+   ],
+   "same_as_variants": [],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "same_store_sales",
+   "canonical_name": "same_store_sales",
+   "companies": [
+    "AAA"
+   ],
+   "evidence_refs": [
+    {
+     "company": "AAA",
+     "source_type": "transcript",
+     "source_id": "evA2",
+     "date": "2026-01-15",
+     "quote": "comparable sales rose 3% on traffic"
+    },
+    {
+     "company": "AAA",
+     "source_type": "transcript",
+     "source_id": "evA5",
+     "date": "2026-01-15",
+     "quote": "same store sales grew 3.1% in the quarter"
+    }
+   ],
+   "same_as_variants": [
+    "comparable_sales"
+   ],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "store_hourly_wages",
+   "canonical_name": "store_hourly_wages",
+   "companies": [
+    "DDD"
+   ],
+   "evidence_refs": [
+    {
+     "company": "DDD",
+     "source_type": "transcript",
+     "source_id": "evC4",
+     "date": "2026-02-10",
+     "quote": "hourly store wages rose with minimum wage increases"
+    }
+   ],
+   "same_as_variants": [],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "warehouse_hourly_wages",
+   "canonical_name": "warehouse_hourly_wages",
+   "companies": [
+    "EEE"
+   ],
+   "evidence_refs": [
+    {
+     "company": "EEE",
+     "source_type": "transcript",
+     "source_id": "evD3",
+     "date": "2026-02-10",
+     "quote": "warehouse hourly wages climbed amid tight labor markets"
+    }
+   ],
+   "same_as_variants": [],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  }
+ ],
+ "analysis": {
+  "total_distinct_drivers": 7,
+  "from_children": 2
+ }
+}

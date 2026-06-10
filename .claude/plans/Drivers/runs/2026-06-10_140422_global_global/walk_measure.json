@@ -1,0 +1,9 @@
+{
+  "records": 7,
+  "sample_pairs": [
+    ["parcel_delivery_mix", "restaurant_delivery_channel_mix"],
+    ["store_hourly_wages", "warehouse_hourly_wages"]
+  ],
+  "judged_missed_duplicates": 0,
+  "notes": "Pair 1 (parcel_delivery_mix vs restaurant_delivery_channel_mix): different — logistics ground/air parcel shipment mode mix (BBB,CCC) vs restaurant dine-in-to-delivery order channel shift (AAA); shared 'delivery'/'mix' tokens are coincidental. Pair 2 (store_hourly_wages vs warehouse_hourly_wages): different — same wage-inflation mechanism family but distinct object/scope: retail store labor on minimum-wage increases (DDD) vs warehouse fulfillment labor on tight labor markets (EEE). Neither pair is a real missed duplicate."
+}

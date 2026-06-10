@@ -1,0 +1,133 @@
+{
+ "industry": null,
+ "catalog": [
+  {
+   "driver_name": "foot_traffic",
+   "canonical_name": "foot_traffic",
+   "companies": [
+    "DDD"
+   ],
+   "evidence_refs": [
+    {
+     "company": "DDD",
+     "source_type": "transcript",
+     "source_id": "evC1",
+     "date": "2026-02-10",
+     "quote": "store foot traffic improved as mall visits recovered"
+    }
+   ],
+   "same_as_variants": [],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "fulfillment_cost",
+   "canonical_name": "fulfillment_cost",
+   "companies": [
+    "EEE"
+   ],
+   "evidence_refs": [
+    {
+     "company": "EEE",
+     "source_type": "transcript",
+     "source_id": "evD2",
+     "date": "2026-02-10",
+     "quote": "per-order fulfillment costs fell on warehouse automation"
+    }
+   ],
+   "same_as_variants": [],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "oil_price",
+   "canonical_name": "oil_price",
+   "companies": [
+    "DDD"
+   ],
+   "evidence_refs": [
+    {
+     "company": "DDD",
+     "source_type": "transcript",
+     "source_id": "evC3",
+     "date": "2026-02-10",
+     "quote": "rising crude oil prices lifted our freight and shipping costs"
+    }
+   ],
+   "same_as_variants": [],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "store_hourly_wages",
+   "canonical_name": "store_hourly_wages",
+   "companies": [
+    "DDD"
+   ],
+   "evidence_refs": [
+    {
+     "company": "DDD",
+     "source_type": "transcript",
+     "source_id": "evC4",
+     "date": "2026-02-10",
+     "quote": "hourly store wages rose with minimum wage increases"
+    }
+   ],
+   "same_as_variants": [],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "warehouse_hourly_wages",
+   "canonical_name": "warehouse_hourly_wages",
+   "companies": [
+    "EEE"
+   ],
+   "evidence_refs": [
+    {
+     "company": "EEE",
+     "source_type": "transcript",
+     "source_id": "evD3",
+     "date": "2026-02-10",
+     "quote": "warehouse hourly wages climbed amid tight labor markets"
+    }
+   ],
+   "same_as_variants": [],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  }
+ ],
+ "skips": [
+  {
+   "driver_name": "delta_unique",
+   "why": "Evidence quote ('delta marketplace take rate held steady') names a real cause — the delta marketplace take rate — but the coined name does not. 'unique' is a vague descriptor banned by R7, names no causal variable, and is absent from the source (fails R10's source-noun rule). No coined clean form (e.g. a take-rate name) exists in the catalog to rewrite to, and inventing one is forbidden, so skip."
+  },
+  {
+   "driver_name": "gamma_unique",
+   "why": "Evidence ('gamma loyalty program enrollment expanded') names a valid brand-specific cause — gamma loyalty program enrollment — but the coined name 'gamma_unique' does not name it. 'unique' is a vague non-causal descriptor (R7) not found in the source (R10). No coined clean form (e.g. an enrollment name) exists in the catalog to rewrite to, so skip rather than invent a name."
+  }
+ ],
+ "unresolved_rewrites": [],
+ "counts": {
+  "keep": 5,
+  "same_as": 0,
+  "rewrite": 0,
+  "skip": 2,
+  "unresolved": 0
+ }
+}

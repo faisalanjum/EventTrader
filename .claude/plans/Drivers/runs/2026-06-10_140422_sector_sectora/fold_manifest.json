@@ -1,0 +1,22 @@
+{
+ "scope_name": "SectorA",
+ "scope_level": "sector",
+ "children": [
+  {
+   "child_run_id": "synth_child_a",
+   "scope_name": "SynthRestaurants",
+   "kept_count": 5,
+   "skips_count": 0,
+   "unresolved_rewrites_count": 0,
+   "unresolved_same_name_count": 0
+  },
+  {
+   "child_run_id": "synth_child_b",
+   "scope_name": "SynthLogistics",
+   "kept_count": 4,
+   "skips_count": 0,
+   "unresolved_rewrites_count": 0,
+   "unresolved_same_name_count": 0
+  }
+ ]
+}

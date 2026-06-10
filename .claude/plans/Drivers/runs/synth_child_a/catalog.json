@@ -1,0 +1,148 @@
+{
+ "industry": "SynthRestaurants",
+ "catalog": [
+  {
+   "driver_name": "alpha_unique",
+   "canonical_name": "alpha_unique",
+   "companies": [
+    "AAA"
+   ],
+   "evidence_refs": [
+    {
+     "company": "AAA",
+     "source_type": "transcript",
+     "source_id": "evA1",
+     "date": "2026-01-15",
+     "quote": "alpha widget adoption drove the quarter"
+    }
+   ],
+   "same_as_variants": [],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "comparable_sales",
+   "canonical_name": "same_store_sales",
+   "companies": [
+    "AAA"
+   ],
+   "evidence_refs": [
+    {
+     "company": "AAA",
+     "source_type": "transcript",
+     "source_id": "evA2",
+     "date": "2026-01-15",
+     "quote": "comparable sales rose 3% on traffic"
+    }
+   ],
+   "same_as_variants": [],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "delivery_mix",
+   "canonical_name": "delivery_mix",
+   "companies": [
+    "AAA"
+   ],
+   "evidence_refs": [
+    {
+     "company": "AAA",
+     "source_type": "transcript",
+     "source_id": "evA3",
+     "date": "2026-01-15",
+     "quote": "delivery as a share of restaurant orders grew; the delivery channel mix shifted from dine-in"
+    }
+   ],
+   "same_as_variants": [],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "oil_price",
+   "canonical_name": "oil_price",
+   "companies": [
+    "AAA"
+   ],
+   "evidence_refs": [
+    {
+     "company": "AAA",
+     "source_type": "transcript",
+     "source_id": "evA4",
+     "date": "2026-01-15",
+     "quote": "higher crude oil prices raised our distribution fuel costs"
+    }
+   ],
+   "same_as_variants": [],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "same_store_sales",
+   "canonical_name": "same_store_sales",
+   "companies": [
+    "AAA"
+   ],
+   "evidence_refs": [
+    {
+     "company": "AAA",
+     "source_type": "transcript",
+     "source_id": "evA5",
+     "date": "2026-01-15",
+     "quote": "same store sales grew 3.1% in the quarter"
+    }
+   ],
+   "same_as_variants": [
+    "comparable_sales"
+   ],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "traffic",
+   "canonical_name": "traffic",
+   "companies": [
+    "AAA"
+   ],
+   "evidence_refs": [
+    {
+     "company": "AAA",
+     "source_type": "transcript",
+     "source_id": "evA6",
+     "date": "2026-01-15",
+     "quote": "traffic was a factor this period"
+    }
+   ],
+   "same_as_variants": [],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  }
+ ],
+ "skips": [],
+ "unresolved_rewrites": [],
+ "counts": {
+  "keep": 4,
+  "same_as": 1,
+  "rewrite": 0,
+  "skip": 0,
+  "unresolved": 0
+ }
+}

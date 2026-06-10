@@ -1,0 +1,1382 @@
+{
+ "same_as": [
+  {
+   "variant": "beef_costs",
+   "canonical": "beef_cost"
+  },
+  {
+   "variant": "beef_price",
+   "canonical": "beef_cost"
+  },
+  {
+   "variant": "ground_beef_price",
+   "canonical": "ground_beef_cost"
+  },
+  {
+   "variant": "chicken_costs",
+   "canonical": "chicken_price"
+  },
+  {
+   "variant": "dairy_costs",
+   "canonical": "dairy_cost"
+  },
+  {
+   "variant": "dairy_price",
+   "canonical": "dairy_cost"
+  },
+  {
+   "variant": "dairy_prices",
+   "canonical": "dairy_cost"
+  },
+  {
+   "variant": "egg_prices",
+   "canonical": "egg_price"
+  },
+  {
+   "variant": "capital_expenditure",
+   "canonical": "capex"
+  },
+  {
+   "variant": "capital_expenditure_guidance",
+   "canonical": "capex_guidance"
+  },
+  {
+   "variant": "commodity_costs",
+   "canonical": "commodity_cost"
+  },
+  {
+   "variant": "commodity_prices",
+   "canonical": "commodity_cost"
+  },
+  {
+   "variant": "commodity_inflation",
+   "canonical": "commodity_cost"
+  },
+  {
+   "variant": "commodity_cost_inflation",
+   "canonical": "commodity_cost"
+  },
+  {
+   "variant": "dividend_payment",
+   "canonical": "dividend"
+  },
+  {
+   "variant": "dividend_payments",
+   "canonical": "dividend"
+  },
+  {
+   "variant": "dividend_payout",
+   "canonical": "dividend"
+  },
+  {
+   "variant": "cash_dividend",
+   "canonical": "dividend"
+  },
+  {
+   "variant": "common_stock_dividend",
+   "canonical": "dividend"
+  },
+  {
+   "variant": "common_stock_dividends",
+   "canonical": "dividend"
+  },
+  {
+   "variant": "construction_costs",
+   "canonical": "construction_cost"
+  },
+  {
+   "variant": "covid19_pandemic",
+   "canonical": "covid_pandemic"
+  },
+  {
+   "variant": "covid_dining_restrictions",
+   "canonical": "covid_restrictions"
+  },
+  {
+   "variant": "credit_facility_covenant",
+   "canonical": "debt_covenants"
+  },
+  {
+   "variant": "credit_facility_covenants",
+   "canonical": "debt_covenants"
+  },
+  {
+   "variant": "debt_covenant_compliance",
+   "canonical": "debt_covenants"
+  },
+  {
+   "variant": "cybersecurity_incident",
+   "canonical": "cybersecurity_breach"
+  },
+  {
+   "variant": "foreign_exchange_rates",
+   "canonical": "foreign_exchange_rate"
+  },
+  {
+   "variant": "general_administrative_expenses",
+   "canonical": "general_administrative_expense"
+  },
+  {
+   "variant": "general_and_administrative_expense",
+   "canonical": "general_administrative_expense"
+  },
+  {
+   "variant": "general_and_administrative_expenses",
+   "canonical": "general_administrative_expense"
+  },
+  {
+   "variant": "gift_card_inventory_write_down",
+   "canonical": "gift_card_inventory_writedown"
+  },
+  {
+   "variant": "group_medical_expenses",
+   "canonical": "group_medical_costs"
+  },
+  {
+   "variant": "group_medical_insurance_costs",
+   "canonical": "group_medical_costs"
+  },
+  {
+   "variant": "health_insurance_cost",
+   "canonical": "group_medical_costs"
+  },
+  {
+   "variant": "healthcare_costs",
+   "canonical": "healthcare_cost"
+  },
+  {
+   "variant": "health_care_costs",
+   "canonical": "healthcare_cost"
+  },
+  {
+   "variant": "esg_ratings",
+   "canonical": "esg_rating"
+  },
+  {
+   "variant": "environmental_social_ratings",
+   "canonical": "esg_rating"
+  },
+  {
+   "variant": "food_and_beverage_cost",
+   "canonical": "food_beverage_costs"
+  },
+  {
+   "variant": "food_and_beverage_costs",
+   "canonical": "food_beverage_costs"
+  },
+  {
+   "variant": "cost_of_sales",
+   "canonical": "food_beverage_costs"
+  },
+  {
+   "variant": "cost_of_goods_sold",
+   "canonical": "food_beverage_costs"
+  },
+  {
+   "variant": "interest_rates",
+   "canonical": "interest_rate"
+  },
+  {
+   "variant": "internal_control_material_weakness",
+   "canonical": "internal_control_weakness"
+  },
+  {
+   "variant": "labor_costs",
+   "canonical": "labor_cost"
+  },
+  {
+   "variant": "labor_expenses",
+   "canonical": "labor_cost"
+  },
+  {
+   "variant": "labor_cost_inflation",
+   "canonical": "labor_cost"
+  },
+  {
+   "variant": "labor_inflation",
+   "canonical": "labor_cost"
+  },
+  {
+   "variant": "fox_restaurant_concepts_sales",
+   "canonical": "frc_sales"
+  },
+  {
+   "variant": "fox_restaurant_concepts_restaurant_count",
+   "canonical": "fox_restaurant_concepts_unit_count"
+  },
+  {
+   "variant": "beverage_alcohol_sales",
+   "canonical": "alcohol_sales"
+  },
+  {
+   "variant": "bakery_external_sales",
+   "canonical": "external_bakery_sales"
+  },
+  {
+   "variant": "bakery_third_party_sales",
+   "canonical": "external_bakery_sales"
+  },
+  {
+   "variant": "average_sales_per_restaurant",
+   "canonical": "average_unit_volume"
+  },
+  {
+   "variant": "acquisition_related_costs",
+   "canonical": "acquisition_expenses"
+  },
+  {
+   "variant": "acquisition_related_expenses",
+   "canonical": "acquisition_expenses"
+  },
+  {
+   "variant": "frc_acquisition_costs",
+   "canonical": "acquisition_expenses"
+  },
+  {
+   "variant": "california_minimum_wage_mandate",
+   "canonical": "california_fast_act"
+  },
+  {
+   "variant": "california_wage_legislation",
+   "canonical": "california_fast_act"
+  },
+  {
+   "variant": "immigration_employment_regulation",
+   "canonical": "immigration_regulation"
+  },
+  {
+   "variant": "flower_child_unit_development",
+   "canonical": "flower_child_unit_count"
+  },
+  {
+   "variant": "flower_child_restaurant_margin",
+   "canonical": "flower_child_margin"
+  },
+  {
+   "variant": "international_licensee_royalties",
+   "canonical": "international_royalty_revenue"
+  },
+  {
+   "variant": "international_licensing_royalties",
+   "canonical": "international_royalty_revenue"
+  },
+  {
+   "variant": "international_restaurant_licensing",
+   "canonical": "international_licensing"
+  },
+  {
+   "variant": "employment_tax_credits",
+   "canonical": "employment_credits"
+  },
+  {
+   "variant": "holiday_calendar_shift",
+   "canonical": "holiday_timing"
+  },
+  {
+   "variant": "inclement_weather",
+   "canonical": "adverse_weather"
+  },
+  {
+   "variant": "employee_attrition",
+   "canonical": "employee_retention"
+  },
+  {
+   "variant": "key_executive_retention",
+   "canonical": "executive_succession"
+  },
+  {
+   "variant": "debt_extinguishment_loss",
+   "canonical": "debt_extinguishment"
+  },
+  {
+   "variant": "debt_repayment",
+   "canonical": "credit_facility_borrowings"
+  },
+  {
+   "variant": "convertible_note_arbitrage",
+   "canonical": "convertible_note_hedging"
+  },
+  {
+   "variant": "common_stock_issuance",
+   "canonical": "equity_issuance"
+  },
+  {
+   "variant": "food_contamination",
+   "canonical": "food_borne_illness"
+  },
+  {
+   "variant": "food_safety_incident",
+   "canonical": "food_borne_illness"
+  },
+  {
+   "variant": "delivery_sales",
+   "canonical": "delivery_sales_mix"
+  },
+  {
+   "variant": "guest_value_perception",
+   "canonical": "guest_value_scores"
+  },
+  {
+   "variant": "cheesecake_rewards_program",
+   "canonical": "guest_rewards_program"
+  },
+  {
+   "variant": "consumer_demand",
+   "canonical": "dining_demand"
+  },
+  {
+   "variant": "consumer_dining_demand",
+   "canonical": "dining_demand"
+  },
+  {
+   "variant": "casual_dining_industry_traffic",
+   "canonical": "casual_dining_traffic"
+  },
+  {
+   "variant": "casual_dining_discounting",
+   "canonical": "competitor_discounting"
+  },
+  {
+   "variant": "alcoholic_beverage_regulation",
+   "canonical": "alcoholic_beverage_licensing"
+  },
+  {
+   "variant": "construction_permitting",
+   "canonical": "government_permitting"
+  },
+  {
+   "variant": "income_tax_provision",
+   "canonical": "effective_tax_rate"
+  },
+  {
+   "variant": "dessert_sales_mix",
+   "canonical": "dessert_sales"
+  },
+  {
+   "variant": "incentive_compensation_expense",
+   "canonical": "incentive_compensation"
+  },
+  {
+   "variant": "lease_terminations",
+   "canonical": "lease_termination"
+  },
+  {
+   "variant": "lease_termination_costs",
+   "canonical": "lease_termination"
+  },
+  {
+   "variant": "legal_expenses",
+   "canonical": "legal_fees"
+  },
+  {
+   "variant": "medical_insurance_expense",
+   "canonical": "medical_insurance_costs"
+  },
+  {
+   "variant": "minimum_wage_rate",
+   "canonical": "minimum_wage"
+  },
+  {
+   "variant": "natural_disasters",
+   "canonical": "natural_disaster"
+  },
+  {
+   "variant": "net_margin_guidance",
+   "canonical": "net_income_margin_guidance"
+  },
+  {
+   "variant": "nutritional_disclosure_regulation",
+   "canonical": "nutrition_labeling_regulation"
+  },
+  {
+   "variant": "occupancy_costs",
+   "canonical": "occupancy_cost"
+  },
+  {
+   "variant": "occupancy_expense",
+   "canonical": "occupancy_cost"
+  },
+  {
+   "variant": "occupancy_expenses",
+   "canonical": "occupancy_cost"
+  },
+  {
+   "variant": "on_premise_incident_rates",
+   "canonical": "on_premise_incident_rate"
+  },
+  {
+   "variant": "payment_card_security_compliance",
+   "canonical": "pci_dss_compliance"
+  },
+  {
+   "variant": "poultry_costs",
+   "canonical": "poultry_price"
+  },
+  {
+   "variant": "repair_and_maintenance_costs",
+   "canonical": "repair_maintenance_costs"
+  },
+  {
+   "variant": "self_insurance_costs",
+   "canonical": "self_insurance_cost"
+  },
+  {
+   "variant": "permit_approval_delays",
+   "canonical": "restaurant_permitting"
+  },
+  {
+   "variant": "permit_approvals",
+   "canonical": "restaurant_permitting"
+  },
+  {
+   "variant": "permit_lead_times",
+   "canonical": "restaurant_permitting"
+  },
+  {
+   "variant": "permitting_lead_times",
+   "canonical": "restaurant_permitting"
+  },
+  {
+   "variant": "municipal_permitting",
+   "canonical": "restaurant_permitting"
+  },
+  {
+   "variant": "restaurant_permit_approvals",
+   "canonical": "restaurant_permitting"
+  },
+  {
+   "variant": "restaurant_construction_permitting",
+   "canonical": "restaurant_permitting"
+  },
+  {
+   "variant": "pre_opening_costs",
+   "canonical": "preopening_costs"
+  },
+  {
+   "variant": "pre_opening_expenses",
+   "canonical": "preopening_costs"
+  },
+  {
+   "variant": "preopening_expenses",
+   "canonical": "preopening_costs"
+  },
+  {
+   "variant": "restaurant_closures",
+   "canonical": "restaurant_closure"
+  },
+  {
+   "variant": "restaurant_construction_costs",
+   "canonical": "restaurant_construction_cost"
+  },
+  {
+   "variant": "new_restaurant_construction_costs",
+   "canonical": "restaurant_construction_cost"
+  },
+  {
+   "variant": "new_restaurant_development",
+   "canonical": "new_unit_development"
+  },
+  {
+   "variant": "restaurant_development",
+   "canonical": "new_unit_development"
+  },
+  {
+   "variant": "restaurant_unit_development",
+   "canonical": "new_unit_development"
+  },
+  {
+   "variant": "new_restaurant_openings",
+   "canonical": "restaurant_development_guidance"
+  },
+  {
+   "variant": "new_restaurant_returns",
+   "canonical": "new_unit_returns"
+  },
+  {
+   "variant": "new_restaurant_sales",
+   "canonical": "new_unit_sales"
+  },
+  {
+   "variant": "new_restaurant_sales_transfer",
+   "canonical": "new_unit_sales_transfer"
+  },
+  {
+   "variant": "new_unit_cannibalization",
+   "canonical": "new_unit_sales_transfer"
+  },
+  {
+   "variant": "restaurant_level_profit_margin",
+   "canonical": "restaurant_level_margin"
+  },
+  {
+   "variant": "restaurant_margin",
+   "canonical": "restaurant_level_margin"
+  },
+  {
+   "variant": "restaurant_staffing_levels",
+   "canonical": "restaurant_staffing"
+  },
+  {
+   "variant": "staffing_levels",
+   "canonical": "restaurant_staffing"
+  },
+  {
+   "variant": "restaurant_management_staffing",
+   "canonical": "restaurant_manager_staffing"
+  },
+  {
+   "variant": "restaurant_staff_absenteeism",
+   "canonical": "staff_absenteeism"
+  },
+  {
+   "variant": "staff_attrition",
+   "canonical": "staff_retention"
+  },
+  {
+   "variant": "table_throughput",
+   "canonical": "restaurant_throughput"
+  },
+  {
+   "variant": "revolving_credit_facility_availability",
+   "canonical": "revolving_credit_availability"
+  },
+  {
+   "variant": "revolving_credit_facility",
+   "canonical": "revolving_credit_availability"
+  },
+  {
+   "variant": "revolving_credit_borrowings",
+   "canonical": "revolving_credit_availability"
+  },
+  {
+   "variant": "share_repurchases",
+   "canonical": "share_repurchase"
+  },
+  {
+   "variant": "share_issuance_dilution",
+   "canonical": "share_issuance"
+  },
+  {
+   "variant": "supply_chain_disruptions",
+   "canonical": "supply_chain_disruption"
+  },
+  {
+   "variant": "seasonality",
+   "canonical": "sales_seasonality"
+  },
+  {
+   "variant": "marketing_spend",
+   "canonical": "marketing_costs"
+  },
+  {
+   "variant": "rewards_program_marketing_costs",
+   "canonical": "rewards_program_costs"
+  },
+  {
+   "variant": "new_menu_items",
+   "canonical": "menu_innovation"
+  },
+  {
+   "variant": "sales_mix",
+   "canonical": "menu_mix"
+  },
+  {
+   "variant": "loyalty_program",
+   "canonical": "rewards_program"
+  },
+  {
+   "variant": "loyalty_program_enrollment",
+   "canonical": "rewards_program_enrollment"
+  },
+  {
+   "variant": "loyalty_program_membership",
+   "canonical": "rewards_program_enrollment"
+  },
+  {
+   "variant": "rewards_program_membership",
+   "canonical": "rewards_program_enrollment"
+  },
+  {
+   "variant": "rewards_member_acquisition",
+   "canonical": "rewards_program_enrollment"
+  },
+  {
+   "variant": "personalized_rewards_offers",
+   "canonical": "loyalty_program_offers"
+  },
+  {
+   "variant": "north_italia_unit_volumes",
+   "canonical": "north_italia_average_unit_volume"
+  },
+  {
+   "variant": "north_italia_comparable_sales",
+   "canonical": "north_italia_same_store_sales"
+  },
+  {
+   "variant": "north_italia_unit_count",
+   "canonical": "north_italia_unit_development"
+  },
+  {
+   "variant": "north_italia_restaurant_traffic",
+   "canonical": "north_italia_traffic"
+  },
+  {
+   "variant": "north_italia_four_wall_margin",
+   "canonical": "north_italia_restaurant_level_margin"
+  },
+  {
+   "variant": "north_italia_restaurant_margin",
+   "canonical": "north_italia_restaurant_level_margin"
+  },
+  {
+   "variant": "north_italia_margin",
+   "canonical": "north_italia_restaurant_level_margin"
+  },
+  {
+   "variant": "landlord_premises_delivery",
+   "canonical": "landlord_readiness"
+  },
+  {
+   "variant": "restaurant_asset_impairment",
+   "canonical": "long_lived_asset_impairment"
+  },
+  {
+   "variant": "restaurant_impairment_charge",
+   "canonical": "long_lived_asset_impairment"
+  },
+  {
+   "variant": "restaurant_lease_renewal_cost",
+   "canonical": "restaurant_lease_renewal"
+  },
+  {
+   "variant": "restaurant_lease_cost",
+   "canonical": "restaurant_lease_renewal"
+  },
+  {
+   "variant": "restaurant_lease_costs",
+   "canonical": "restaurant_lease_renewal"
+  },
+  {
+   "variant": "off_premise_sales_mix",
+   "canonical": "off_premise_sales"
+  },
+  {
+   "variant": "off_premise_channel_mix",
+   "canonical": "off_premise_sales"
+  },
+  {
+   "variant": "third_party_delivery_agreement",
+   "canonical": "third_party_delivery"
+  },
+  {
+   "variant": "sustainable_product_cost",
+   "canonical": "sustainable_product_supply"
+  },
+  {
+   "variant": "restaurant_industry_sales",
+   "canonical": "restaurant_industry_demand"
+  },
+  {
+   "variant": "profit_margin_surprise",
+   "canonical": "net_income_margin_surprise"
+  },
+  {
+   "variant": "third_party_vendor_outage",
+   "canonical": "third_party_vendor_failure"
+  },
+  {
+   "variant": "uncertain_tax_position_reserve",
+   "canonical": "uncertain_tax_positions"
+  },
+  {
+   "variant": "utilities_costs",
+   "canonical": "utility_costs"
+  },
+  {
+   "variant": "wage_and_hour_litigation",
+   "canonical": "wage_hour_litigation"
+  },
+  {
+   "variant": "wage_rate_inflation",
+   "canonical": "wage_inflation"
+  },
+  {
+   "variant": "wage_rates",
+   "canonical": "wage_inflation"
+  },
+  {
+   "variant": "weather_conditions",
+   "canonical": "weather"
+  },
+  {
+   "variant": "weather_disruption",
+   "canonical": "weather"
+  },
+  {
+   "variant": "wildfires",
+   "canonical": "wildfire"
+  }
+ ],
+ "rewrites": [
+  {
+   "from": "acquisition_expenses",
+   "to": "acquisition_related_expenses"
+  },
+  {
+   "from": "acquisition_related_costs",
+   "to": "acquisition_related_expenses"
+  },
+  {
+   "from": "adverse_weather",
+   "to": "inclement_weather"
+  },
+  {
+   "from": "alcohol_mix",
+   "to": "alcohol_sales_mix"
+  },
+  {
+   "from": "alcohol_sales",
+   "to": "alcoholic_beverage_sales"
+  },
+  {
+   "from": "alcoholic_beverage_licensing",
+   "to": "alcoholic_beverage_regulation"
+  },
+  {
+   "from": "average_sales_per_operating_week",
+   "to": "average_weekly_sales"
+  },
+  {
+   "from": "average_sales_per_restaurant",
+   "to": "average_unit_volume"
+  },
+  {
+   "from": "bakery_external_sales",
+   "to": "external_bakery_sales"
+  },
+  {
+   "from": "bakery_third_party_sales",
+   "to": "external_bakery_sales"
+  },
+  {
+   "from": "beef_cost",
+   "to": "beef_price"
+  },
+  {
+   "from": "beef_costs",
+   "to": "beef_price"
+  },
+  {
+   "from": "beverage_alcohol_sales",
+   "to": "alcoholic_beverage_sales"
+  },
+  {
+   "from": "california_minimum_wage_mandate",
+   "to": "california_fast_act"
+  },
+  {
+   "from": "california_wage_legislation",
+   "to": "california_fast_act"
+  },
+  {
+   "from": "capex_guidance",
+   "to": "capital_expenditure_guidance"
+  },
+  {
+   "from": "cash_dividend",
+   "to": "dividend"
+  },
+  {
+   "from": "casual_dining_discounting",
+   "to": "competitor_discounting"
+  },
+  {
+   "from": "casual_dining_traffic",
+   "to": "casual_dining_industry_traffic"
+  },
+  {
+   "from": "chicken_costs",
+   "to": "chicken_price"
+  },
+  {
+   "from": "commodity_cost",
+   "to": "commodity_costs"
+  },
+  {
+   "from": "commodity_cost_inflation",
+   "to": "commodity_inflation"
+  },
+  {
+   "from": "commodity_prices",
+   "to": "commodity_costs"
+  },
+  {
+   "from": "common_stock_dividend",
+   "to": "dividend"
+  },
+  {
+   "from": "common_stock_dividends",
+   "to": "dividend"
+  },
+  {
+   "from": "common_stock_issuance",
+   "to": "equity_issuance"
+  },
+  {
+   "from": "construction_cost",
+   "to": "construction_costs"
+  },
+  {
+   "from": "consumer_demand",
+   "to": "consumer_dining_demand"
+  },
+  {
+   "from": "convertible_debt_issuance",
+   "to": "convertible_notes_issuance"
+  },
+  {
+   "from": "cost_of_goods_sold",
+   "to": "food_and_beverage_costs"
+  },
+  {
+   "from": "cost_of_sales",
+   "to": "food_and_beverage_costs"
+  },
+  {
+   "from": "covid19_pandemic",
+   "to": "covid_pandemic"
+  },
+  {
+   "from": "covid_dining_restrictions",
+   "to": "covid_restrictions"
+  },
+  {
+   "from": "credit_facility_covenant",
+   "to": "debt_covenants"
+  },
+  {
+   "from": "credit_facility_covenants",
+   "to": "debt_covenants"
+  },
+  {
+   "from": "cybersecurity_breach",
+   "to": "cybersecurity_incident"
+  },
+  {
+   "from": "dairy_cost",
+   "to": "dairy_price"
+  },
+  {
+   "from": "dairy_costs",
+   "to": "dairy_price"
+  },
+  {
+   "from": "dairy_prices",
+   "to": "dairy_price"
+  },
+  {
+   "from": "debt_covenant_compliance",
+   "to": "debt_covenants"
+  },
+  {
+   "from": "debt_extinguishment_loss",
+   "to": "debt_extinguishment"
+  },
+  {
+   "from": "debt_repayment",
+   "to": "credit_facility_borrowings"
+  },
+  {
+   "from": "delivery_sales",
+   "to": "delivery_sales_mix"
+  },
+  {
+   "from": "dining_demand",
+   "to": "consumer_dining_demand"
+  },
+  {
+   "from": "dividend_payment",
+   "to": "dividend"
+  },
+  {
+   "from": "dividend_payments",
+   "to": "dividend"
+  },
+  {
+   "from": "dividend_payout",
+   "to": "dividend"
+  },
+  {
+   "from": "egg_prices",
+   "to": "egg_price"
+  },
+  {
+   "from": "employee_attrition",
+   "to": "employee_retention"
+  },
+  {
+   "from": "employment_credits",
+   "to": "employment_tax_credits"
+  },
+  {
+   "from": "environmental_social_ratings",
+   "to": "esg_ratings"
+  },
+  {
+   "from": "esg_rating",
+   "to": "esg_ratings"
+  },
+  {
+   "from": "flower_child_margin",
+   "to": "flower_child_restaurant_margin"
+  },
+  {
+   "from": "food_and_beverage_cost",
+   "to": "food_and_beverage_costs"
+  },
+  {
+   "from": "food_beverage_costs",
+   "to": "food_and_beverage_costs"
+  },
+  {
+   "from": "foreign_exchange_rate",
+   "to": "foreign_exchange_rates"
+  },
+  {
+   "from": "fox_restaurant_concepts_restaurant_count",
+   "to": "fox_restaurant_concepts_unit_count"
+  },
+  {
+   "from": "frc_acquisition_costs",
+   "to": "acquisition_related_expenses"
+  },
+  {
+   "from": "frc_sales",
+   "to": "fox_restaurant_concepts_sales"
+  },
+  {
+   "from": "general_administrative_expense",
+   "to": "general_and_administrative_expenses"
+  },
+  {
+   "from": "general_administrative_expenses",
+   "to": "general_and_administrative_expenses"
+  },
+  {
+   "from": "general_and_administrative_expense",
+   "to": "general_and_administrative_expenses"
+  },
+  {
+   "from": "gift_card_inventory_writedown",
+   "to": "gift_card_inventory_write_down"
+  },
+  {
+   "from": "government_permitting",
+   "to": "construction_permitting"
+  },
+  {
+   "from": "ground_beef_cost",
+   "to": "ground_beef_price"
+  },
+  {
+   "from": "group_medical_expenses",
+   "to": "group_medical_costs"
+  },
+  {
+   "from": "group_medical_insurance_costs",
+   "to": "group_medical_costs"
+  },
+  {
+   "from": "guest_incident_rate",
+   "to": "attachment_rate"
+  },
+  {
+   "from": "guest_rewards_program",
+   "to": "cheesecake_rewards_program"
+  },
+  {
+   "from": "guest_value_scores",
+   "to": "guest_value_perception"
+  },
+  {
+   "from": "health_care_costs",
+   "to": "healthcare_costs"
+  },
+  {
+   "from": "health_insurance_cost",
+   "to": "group_medical_costs"
+  },
+  {
+   "from": "healthcare_cost",
+   "to": "healthcare_costs"
+  },
+  {
+   "from": "holiday_calendar_shift",
+   "to": "holiday_timing"
+  },
+  {
+   "from": "incentive_compensation_expense",
+   "to": "incentive_compensation"
+  },
+  {
+   "from": "interest_rate",
+   "to": "interest_rates"
+  },
+  {
+   "from": "internal_control_weakness",
+   "to": "internal_control_material_weakness"
+  },
+  {
+   "from": "international_licensee_royalties",
+   "to": "international_licensing_royalties"
+  },
+  {
+   "from": "international_restaurant_licensing",
+   "to": "international_licensing"
+  },
+  {
+   "from": "international_royalty_revenue",
+   "to": "international_licensing_royalties"
+  },
+  {
+   "from": "labor_cost",
+   "to": "labor_costs"
+  },
+  {
+   "from": "labor_cost_inflation",
+   "to": "labor_inflation"
+  },
+  {
+   "from": "labor_expenses",
+   "to": "labor_costs"
+  },
+  {
+   "from": "landlord_readiness",
+   "to": "landlord_premises_delivery"
+  },
+  {
+   "from": "lease_termination",
+   "to": "lease_termination_costs"
+  },
+  {
+   "from": "lease_terminations",
+   "to": "lease_termination_costs"
+  },
+  {
+   "from": "legal_expenses",
+   "to": "legal_fees"
+  },
+  {
+   "from": "marketing_costs",
+   "to": "marketing_spend"
+  },
+  {
+   "from": "medical_insurance_expense",
+   "to": "medical_insurance_costs"
+  },
+  {
+   "from": "minimum_wage_rate",
+   "to": "minimum_wage"
+  },
+  {
+   "from": "municipal_permitting",
+   "to": "restaurant_permitting"
+  },
+  {
+   "from": "natural_disasters",
+   "to": "natural_disaster"
+  },
+  {
+   "from": "net_margin_guidance",
+   "to": "net_income_margin_guidance"
+  },
+  {
+   "from": "new_menu_items",
+   "to": "menu_innovation"
+  },
+  {
+   "from": "new_restaurant_construction_costs",
+   "to": "restaurant_construction_costs"
+  },
+  {
+   "from": "new_restaurant_development",
+   "to": "new_unit_development"
+  },
+  {
+   "from": "new_unit_cannibalization",
+   "to": "new_restaurant_sales_transfer"
+  },
+  {
+   "from": "new_unit_returns",
+   "to": "new_restaurant_returns"
+  },
+  {
+   "from": "new_unit_sales",
+   "to": "new_restaurant_sales"
+  },
+  {
+   "from": "new_unit_sales_transfer",
+   "to": "new_restaurant_sales_transfer"
+  },
+  {
+   "from": "north_italia_comparable_sales",
+   "to": "north_italia_same_store_sales"
+  },
+  {
+   "from": "north_italia_four_wall_margin",
+   "to": "north_italia_restaurant_level_margin"
+  },
+  {
+   "from": "north_italia_margin",
+   "to": "north_italia_restaurant_level_margin"
+  },
+  {
+   "from": "north_italia_restaurant_margin",
+   "to": "north_italia_restaurant_level_margin"
+  },
+  {
+   "from": "north_italia_restaurant_traffic",
+   "to": "north_italia_traffic"
+  },
+  {
+   "from": "north_italia_unit_volumes",
+   "to": "north_italia_average_unit_volume"
+  },
+  {
+   "from": "nutritional_disclosure_regulation",
+   "to": "nutrition_labeling_regulation"
+  },
+  {
+   "from": "occupancy_cost",
+   "to": "occupancy_costs"
+  },
+  {
+   "from": "occupancy_expense",
+   "to": "occupancy_costs"
+  },
+  {
+   "from": "occupancy_expenses",
+   "to": "occupancy_costs"
+  },
+  {
+   "from": "off_premise_channel_mix",
+   "to": "off_premise_sales_mix"
+  },
+  {
+   "from": "off_premise_sales",
+   "to": "off_premise_sales_mix"
+  },
+  {
+   "from": "on_premise_incident_rates",
+   "to": "on_premise_incident_rate"
+  },
+  {
+   "from": "payment_card_security_compliance",
+   "to": "pci_dss_compliance"
+  },
+  {
+   "from": "permit_approval_delays",
+   "to": "restaurant_permitting"
+  },
+  {
+   "from": "permit_approvals",
+   "to": "restaurant_permitting"
+  },
+  {
+   "from": "permitting_lead_times",
+   "to": "permit_lead_times"
+  },
+  {
+   "from": "personalized_rewards_offers",
+   "to": "loyalty_program_offers"
+  },
+  {
+   "from": "poultry_costs",
+   "to": "poultry_price"
+  },
+  {
+   "from": "pre_opening_costs",
+   "to": "preopening_costs"
+  },
+  {
+   "from": "pre_opening_expenses",
+   "to": "preopening_costs"
+  },
+  {
+   "from": "preopening_expenses",
+   "to": "preopening_costs"
+  },
+  {
+   "from": "repair_and_maintenance_costs",
+   "to": "repair_maintenance_costs"
+  },
+  {
+   "from": "restaurant_asset_impairment",
+   "to": "long_lived_asset_impairment"
+  },
+  {
+   "from": "restaurant_closure",
+   "to": "restaurant_closures"
+  },
+  {
+   "from": "restaurant_construction_cost",
+   "to": "restaurant_construction_costs"
+  },
+  {
+   "from": "restaurant_construction_permitting",
+   "to": "restaurant_permitting"
+  },
+  {
+   "from": "restaurant_development",
+   "to": "new_unit_development"
+  },
+  {
+   "from": "restaurant_impairment_charge",
+   "to": "long_lived_asset_impairment"
+  },
+  {
+   "from": "restaurant_lease_cost",
+   "to": "restaurant_lease_costs"
+  },
+  {
+   "from": "restaurant_lease_renewal_cost",
+   "to": "restaurant_lease_renewal"
+  },
+  {
+   "from": "restaurant_level_profit_margin",
+   "to": "restaurant_level_margin"
+  },
+  {
+   "from": "restaurant_management_staffing",
+   "to": "restaurant_manager_staffing"
+  },
+  {
+   "from": "restaurant_margin",
+   "to": "restaurant_level_margin"
+  },
+  {
+   "from": "restaurant_permit_approvals",
+   "to": "restaurant_permitting"
+  },
+  {
+   "from": "restaurant_staffing_levels",
+   "to": "restaurant_staffing"
+  },
+  {
+   "from": "restaurant_unit_development",
+   "to": "new_unit_development"
+  },
+  {
+   "from": "revolving_credit_availability",
+   "to": "revolving_credit_facility_availability"
+  },
+  {
+   "from": "revolving_credit_facility",
+   "to": "revolving_credit_facility_availability"
+  },
+  {
+   "from": "rewards_member_acquisition",
+   "to": "loyalty_program_enrollment"
+  },
+  {
+   "from": "rewards_program",
+   "to": "loyalty_program"
+  },
+  {
+   "from": "rewards_program_enrollment",
+   "to": "loyalty_program_enrollment"
+  },
+  {
+   "from": "rewards_program_marketing_costs",
+   "to": "rewards_program_costs"
+  },
+  {
+   "from": "rewards_program_membership",
+   "to": "loyalty_program_membership"
+  },
+  {
+   "from": "sales_mix",
+   "to": "menu_mix"
+  },
+  {
+   "from": "seasonality",
+   "to": "sales_seasonality"
+  },
+  {
+   "from": "self_insurance_cost",
+   "to": "self_insurance_costs"
+  },
+  {
+   "from": "share_issuance_dilution",
+   "to": "share_issuance"
+  },
+  {
+   "from": "share_repurchase",
+   "to": "share_repurchases"
+  },
+  {
+   "from": "staff_absenteeism",
+   "to": "restaurant_staff_absenteeism"
+  },
+  {
+   "from": "staffing_availability",
+   "to": "restaurant_staffing"
+  },
+  {
+   "from": "staffing_levels",
+   "to": "restaurant_staffing"
+  },
+  {
+   "from": "state_wage_mandates",
+   "to": "minimum_wage"
+  },
+  {
+   "from": "supply_chain",
+   "to": "supply_chain_disruption"
+  },
+  {
+   "from": "supply_chain_disruptions",
+   "to": "supply_chain_disruption"
+  },
+  {
+   "from": "table_throughput",
+   "to": "restaurant_throughput"
+  },
+  {
+   "from": "third_party_vendor_outage",
+   "to": "third_party_vendor_failure"
+  },
+  {
+   "from": "uncertain_tax_position_reserve",
+   "to": "uncertain_tax_positions"
+  },
+  {
+   "from": "utilities_costs",
+   "to": "utility_costs"
+  },
+  {
+   "from": "wage_and_hour_litigation",
+   "to": "wage_hour_litigation"
+  },
+  {
+   "from": "wage_rate_inflation",
+   "to": "wage_inflation"
+  },
+  {
+   "from": "wage_rates",
+   "to": "wage_inflation"
+  },
+  {
+   "from": "weather_conditions",
+   "to": "weather"
+  },
+  {
+   "from": "weather_disruption",
+   "to": "weather"
+  },
+  {
+   "from": "wildfires",
+   "to": "wildfire"
+  }
+ ]
+}

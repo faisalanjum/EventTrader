@@ -1,0 +1,110 @@
+{
+ "items": [
+  {
+   "name": "delivery_mix",
+   "sides": [
+    {
+     "side_key": "synth_child_a",
+     "view1": [
+      {
+       "company": "AAA",
+       "source_type": "transcript",
+       "source_id": "evA3",
+       "date": "2026-01-15",
+       "quote": "delivery as a share of restaurant orders grew; the delivery channel mix shifted from dine-in"
+      }
+     ],
+     "view2": [],
+     "total_refs": 1
+    },
+    {
+     "side_key": "synth_child_b",
+     "view1": [
+      {
+       "company": "BBB",
+       "source_type": "transcript",
+       "source_id": "evB2",
+       "date": "2026-01-15",
+       "quote": "parcel delivery volumes shifted between ground and air; our delivery mix moved toward ground freight"
+      },
+      {
+       "company": "CCC",
+       "source_type": "transcript",
+       "source_id": "evB3",
+       "date": "2026-01-15",
+       "quote": "courier delivery mix shifted toward next-day parcel services"
+      }
+     ],
+     "view2": [],
+     "total_refs": 2
+    }
+   ]
+  },
+  {
+   "name": "oil_price",
+   "sides": [
+    {
+     "side_key": "synth_child_a",
+     "view1": [
+      {
+       "company": "AAA",
+       "source_type": "transcript",
+       "source_id": "evA4",
+       "date": "2026-01-15",
+       "quote": "higher crude oil prices raised our distribution fuel costs"
+      }
+     ],
+     "view2": [],
+     "total_refs": 1
+    },
+    {
+     "side_key": "synth_child_b",
+     "view1": [
+      {
+       "company": "BBB",
+       "source_type": "transcript",
+       "source_id": "evB4",
+       "date": "2026-01-15",
+       "quote": "crude oil price increases pushed jet fuel and diesel costs higher"
+      }
+     ],
+     "view2": [],
+     "total_refs": 1
+    }
+   ]
+  },
+  {
+   "name": "traffic",
+   "sides": [
+    {
+     "side_key": "synth_child_a",
+     "view1": [
+      {
+       "company": "AAA",
+       "source_type": "transcript",
+       "source_id": "evA6",
+       "date": "2026-01-15",
+       "quote": "traffic was a factor this period"
+      }
+     ],
+     "view2": [],
+     "total_refs": 1
+    },
+    {
+     "side_key": "synth_child_b",
+     "view1": [
+      {
+       "company": "BBB",
+       "source_type": "transcript",
+       "source_id": "evB5",
+       "date": "2026-01-15",
+       "quote": "traffic trends were mixed"
+      }
+     ],
+     "view2": [],
+     "total_refs": 1
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,35 @@
+{
+ "unresolved_same_name": [
+  {
+   "name": "traffic",
+   "occurrences": [
+    {
+     "child_run_id": "synth_child_a",
+     "evidence_refs": [
+      {
+       "company": "AAA",
+       "source_type": "transcript",
+       "source_id": "evA6",
+       "date": "2026-01-15",
+       "quote": "traffic was a factor this period"
+      }
+     ]
+    },
+    {
+     "child_run_id": "synth_child_b",
+     "evidence_refs": [
+      {
+       "company": "BBB",
+       "source_type": "transcript",
+       "source_id": "evB5",
+       "date": "2026-01-15",
+       "quote": "traffic trends were mixed"
+      }
+     ]
+    }
+   ],
+   "why": "Evidence is too thin to decide: each child has exactly 1 ref, and both quotes (\"traffic was a factor this period\" — AAA transcript evA6; \"traffic trends were mixed\" — BBB transcript evB5) never identify the object (store foot traffic vs web/site traffic vs network traffic), scope, or mechanism. The 3-check (same object/metric, same scope, same mechanism) is unverifiable on all three points, so SAME cannot be asserted. DIFFERENT also cannot be executed honestly: the quotes contain no qualifying nouns to build more-specific names from (only state words like \"factor\"/\"mixed\"/\"trends\", banned by DriverOntology R7), and there is no positive evidence the two usages diverge. Fail-close: park for more evidence."
+  }
+ ],
+ "optional_links_conflicts": []
+}

@@ -1,0 +1,102 @@
+{
+ "industry": "SynthRetail",
+ "catalog": [
+  {
+   "driver_name": "foot_traffic",
+   "canonical_name": "foot_traffic",
+   "companies": [
+    "DDD"
+   ],
+   "evidence_refs": [
+    {
+     "company": "DDD",
+     "source_type": "transcript",
+     "source_id": "evC1",
+     "date": "2026-02-10",
+     "quote": "store foot traffic improved as mall visits recovered"
+    }
+   ],
+   "same_as_variants": [],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "gamma_unique",
+   "canonical_name": "gamma_unique",
+   "companies": [
+    "DDD"
+   ],
+   "evidence_refs": [
+    {
+     "company": "DDD",
+     "source_type": "transcript",
+     "source_id": "evC2",
+     "date": "2026-02-10",
+     "quote": "gamma loyalty program enrollment expanded"
+    }
+   ],
+   "same_as_variants": [],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "oil_price",
+   "canonical_name": "oil_price",
+   "companies": [
+    "DDD"
+   ],
+   "evidence_refs": [
+    {
+     "company": "DDD",
+     "source_type": "transcript",
+     "source_id": "evC3",
+     "date": "2026-02-10",
+     "quote": "rising crude oil prices lifted our freight and shipping costs"
+    }
+   ],
+   "same_as_variants": [],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "wage_inflation",
+   "canonical_name": "wage_inflation",
+   "companies": [
+    "DDD"
+   ],
+   "evidence_refs": [
+    {
+     "company": "DDD",
+     "source_type": "transcript",
+     "source_id": "evC4",
+     "date": "2026-02-10",
+     "quote": "hourly store wages rose with minimum wage increases"
+    }
+   ],
+   "same_as_variants": [],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  }
+ ],
+ "skips": [],
+ "unresolved_rewrites": [],
+ "counts": {
+  "keep": 4,
+  "same_as": 0,
+  "rewrite": 0,
+  "skip": 0,
+  "unresolved": 0
+ }
+}

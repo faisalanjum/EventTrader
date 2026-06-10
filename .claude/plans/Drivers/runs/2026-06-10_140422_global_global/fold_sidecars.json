@@ -1,0 +1,42 @@
+{
+ "unresolved_same_name": [
+  {
+   "name": "oil_price",
+   "occurrences": [
+    {
+     "child_run_id": "2026-06-10_140422_sector_sectora",
+     "evidence_refs": [
+      {
+       "company": "AAA",
+       "source_type": "transcript",
+       "source_id": "evA4",
+       "date": "2026-01-15",
+       "quote": "higher crude oil prices raised our distribution fuel costs"
+      },
+      {
+       "company": "BBB",
+       "source_type": "transcript",
+       "source_id": "evB4",
+       "date": "2026-01-15",
+       "quote": "crude oil price increases pushed jet fuel and diesel costs higher"
+      }
+     ]
+    },
+    {
+     "child_run_id": "2026-06-10_140422_sector_sectorb",
+     "evidence_refs": [
+      {
+       "company": "DDD",
+       "source_type": "transcript",
+       "source_id": "evC3",
+       "date": "2026-02-10",
+       "quote": "rising crude oil prices lifted our freight and shipping costs"
+      }
+     ]
+    }
+   ],
+   "why": "SAME union refuted by skeptic (fail-close): All three refs (AAA evA4, BBB evB4, DDD evC3) name the same reusable cause: the market crude oil price rising as a fuel-cost input. Object/metric identical (crude oil price), scope identical (global commodity price, no narrowing), mechanism identical (higher oil price -> higher fuel/freight costs; the specific cost line affected is downstream evidence, not the driver). Matches DriverOntology R5's canonical familiar name oil_price."
+  }
+ ],
+ "optional_links_conflicts": []
+}

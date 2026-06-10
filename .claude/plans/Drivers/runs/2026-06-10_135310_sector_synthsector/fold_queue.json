@@ -1,0 +1,177 @@
+{
+ "queue": [
+  {
+   "name": "delivery_mix",
+   "occurrences": [
+    {
+     "child_run_id": "synth_child_a",
+     "record": {
+      "driver_name": "delivery_mix",
+      "canonical_name": "delivery_mix",
+      "companies": [
+       "AAA"
+      ],
+      "evidence_refs": [
+       {
+        "company": "AAA",
+        "source_type": "transcript",
+        "source_id": "evA3",
+        "date": "2026-01-15",
+        "quote": "delivery as a share of restaurant orders grew; the delivery channel mix shifted from dine-in"
+       }
+      ],
+      "same_as_variants": [],
+      "optional_links": {
+       "xbrl_concept": null,
+       "xbrl_member": null,
+       "guidance_ref": null
+      }
+     }
+    },
+    {
+     "child_run_id": "synth_child_b",
+     "record": {
+      "driver_name": "delivery_mix",
+      "canonical_name": "delivery_mix",
+      "companies": [
+       "BBB",
+       "CCC"
+      ],
+      "evidence_refs": [
+       {
+        "company": "BBB",
+        "source_type": "transcript",
+        "source_id": "evB2",
+        "date": "2026-01-15",
+        "quote": "parcel delivery volumes shifted between ground and air; our delivery mix moved toward ground freight"
+       },
+       {
+        "company": "CCC",
+        "source_type": "transcript",
+        "source_id": "evB3",
+        "date": "2026-01-15",
+        "quote": "courier delivery mix shifted toward next-day parcel services"
+       }
+      ],
+      "same_as_variants": [],
+      "optional_links": {
+       "xbrl_concept": null,
+       "xbrl_member": null,
+       "guidance_ref": null
+      }
+     }
+    }
+   ]
+  },
+  {
+   "name": "oil_price",
+   "occurrences": [
+    {
+     "child_run_id": "synth_child_a",
+     "record": {
+      "driver_name": "oil_price",
+      "canonical_name": "oil_price",
+      "companies": [
+       "AAA"
+      ],
+      "evidence_refs": [
+       {
+        "company": "AAA",
+        "source_type": "transcript",
+        "source_id": "evA4",
+        "date": "2026-01-15",
+        "quote": "higher crude oil prices raised our distribution fuel costs"
+       }
+      ],
+      "same_as_variants": [],
+      "optional_links": {
+       "xbrl_concept": null,
+       "xbrl_member": null,
+       "guidance_ref": null
+      }
+     }
+    },
+    {
+     "child_run_id": "synth_child_b",
+     "record": {
+      "driver_name": "oil_price",
+      "canonical_name": "oil_price",
+      "companies": [
+       "BBB"
+      ],
+      "evidence_refs": [
+       {
+        "company": "BBB",
+        "source_type": "transcript",
+        "source_id": "evB4",
+        "date": "2026-01-15",
+        "quote": "crude oil price increases pushed jet fuel and diesel costs higher"
+       }
+      ],
+      "same_as_variants": [],
+      "optional_links": {
+       "xbrl_concept": null,
+       "xbrl_member": null,
+       "guidance_ref": null
+      }
+     }
+    }
+   ]
+  },
+  {
+   "name": "traffic",
+   "occurrences": [
+    {
+     "child_run_id": "synth_child_a",
+     "record": {
+      "driver_name": "traffic",
+      "canonical_name": "traffic",
+      "companies": [
+       "AAA"
+      ],
+      "evidence_refs": [
+       {
+        "company": "AAA",
+        "source_type": "transcript",
+        "source_id": "evA6",
+        "date": "2026-01-15",
+        "quote": "traffic was a factor this period"
+       }
+      ],
+      "same_as_variants": [],
+      "optional_links": {
+       "xbrl_concept": null,
+       "xbrl_member": null,
+       "guidance_ref": null
+      }
+     }
+    },
+    {
+     "child_run_id": "synth_child_b",
+     "record": {
+      "driver_name": "traffic",
+      "canonical_name": "traffic",
+      "companies": [
+       "BBB"
+      ],
+      "evidence_refs": [
+       {
+        "company": "BBB",
+        "source_type": "transcript",
+        "source_id": "evB5",
+        "date": "2026-01-15",
+        "quote": "traffic trends were mixed"
+       }
+      ],
+      "same_as_variants": [],
+      "optional_links": {
+       "xbrl_concept": null,
+       "xbrl_member": null,
+       "guidance_ref": null
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,80 @@
+{
+ "industry": "SynthEcommerce",
+ "catalog": [
+  {
+   "driver_name": "delta_unique",
+   "canonical_name": "delta_unique",
+   "companies": [
+    "EEE"
+   ],
+   "evidence_refs": [
+    {
+     "company": "EEE",
+     "source_type": "transcript",
+     "source_id": "evD1",
+     "date": "2026-02-10",
+     "quote": "delta marketplace take rate held steady"
+    }
+   ],
+   "same_as_variants": [],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "fulfillment_cost",
+   "canonical_name": "fulfillment_cost",
+   "companies": [
+    "EEE"
+   ],
+   "evidence_refs": [
+    {
+     "company": "EEE",
+     "source_type": "transcript",
+     "source_id": "evD2",
+     "date": "2026-02-10",
+     "quote": "per-order fulfillment costs fell on warehouse automation"
+    }
+   ],
+   "same_as_variants": [],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "wage_inflation",
+   "canonical_name": "wage_inflation",
+   "companies": [
+    "EEE"
+   ],
+   "evidence_refs": [
+    {
+     "company": "EEE",
+     "source_type": "transcript",
+     "source_id": "evD3",
+     "date": "2026-02-10",
+     "quote": "warehouse hourly wages climbed amid tight labor markets"
+    }
+   ],
+   "same_as_variants": [],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  }
+ ],
+ "skips": [],
+ "unresolved_rewrites": [],
+ "counts": {
+  "keep": 3,
+  "same_as": 0,
+  "rewrite": 0,
+  "skip": 0,
+  "unresolved": 0
+ }
+}

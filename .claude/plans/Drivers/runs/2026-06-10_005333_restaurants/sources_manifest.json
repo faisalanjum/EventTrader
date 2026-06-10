@@ -1,0 +1,12 @@
+{
+ "fetched_at": "2026-06-10T00:53:52+00:00",
+ "sources": [
+  {
+   "ticker": "CAKE",
+   "file": "CAKE.json",
+   "sha256": "feca710b32a7629bad06038494ffc00e21fca3a96d2b47b5aeb78a438c387825",
+   "source_id_count": 47,
+   "bytes": 2326078
+  }
+ ]
+}

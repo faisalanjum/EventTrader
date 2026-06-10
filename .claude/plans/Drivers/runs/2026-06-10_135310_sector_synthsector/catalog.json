@@ -1,0 +1,136 @@
+{
+ "industry": null,
+ "catalog": [
+  {
+   "driver_name": "oil_price",
+   "canonical_name": "oil_price",
+   "companies": [
+    "AAA",
+    "BBB"
+   ],
+   "evidence_refs": [
+    {
+     "company": "AAA",
+     "source_type": "transcript",
+     "source_id": "evA4",
+     "date": "2026-01-15",
+     "quote": "higher crude oil prices raised our distribution fuel costs"
+    },
+    {
+     "company": "BBB",
+     "source_type": "transcript",
+     "source_id": "evB4",
+     "date": "2026-01-15",
+     "quote": "crude oil price increases pushed jet fuel and diesel costs higher"
+    }
+   ],
+   "same_as_variants": [],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "parcel_delivery_mix",
+   "canonical_name": "parcel_delivery_mix",
+   "companies": [
+    "BBB",
+    "CCC"
+   ],
+   "evidence_refs": [
+    {
+     "company": "BBB",
+     "source_type": "transcript",
+     "source_id": "evB2",
+     "date": "2026-01-15",
+     "quote": "parcel delivery volumes shifted between ground and air; our delivery mix moved toward ground freight"
+    },
+    {
+     "company": "CCC",
+     "source_type": "transcript",
+     "source_id": "evB3",
+     "date": "2026-01-15",
+     "quote": "courier delivery mix shifted toward next-day parcel services"
+    }
+   ],
+   "same_as_variants": [],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "restaurant_delivery_channel_mix",
+   "canonical_name": "restaurant_delivery_channel_mix",
+   "companies": [
+    "AAA"
+   ],
+   "evidence_refs": [
+    {
+     "company": "AAA",
+     "source_type": "transcript",
+     "source_id": "evA3",
+     "date": "2026-01-15",
+     "quote": "delivery as a share of restaurant orders grew; the delivery channel mix shifted from dine-in"
+    }
+   ],
+   "same_as_variants": [],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  },
+  {
+   "driver_name": "same_store_sales",
+   "canonical_name": "same_store_sales",
+   "companies": [
+    "AAA"
+   ],
+   "evidence_refs": [
+    {
+     "company": "AAA",
+     "source_type": "transcript",
+     "source_id": "evA2",
+     "date": "2026-01-15",
+     "quote": "comparable sales rose 3% on traffic"
+    },
+    {
+     "company": "AAA",
+     "source_type": "transcript",
+     "source_id": "evA5",
+     "date": "2026-01-15",
+     "quote": "same store sales grew 3.1% in the quarter"
+    }
+   ],
+   "same_as_variants": [
+    "comparable_sales"
+   ],
+   "optional_links": {
+    "xbrl_concept": null,
+    "xbrl_member": null,
+    "guidance_ref": null
+   }
+  }
+ ],
+ "skips": [
+  {
+   "driver_name": "alpha_unique",
+   "why": "Evidence ('alpha widget adoption drove the quarter') names a real cause — widget adoption — but the name does not carry that causal noun. 'unique' is a vague descriptor banned by R7 and fails R10 (not from source or catalog). No coined clean form (e.g. an adoption-metric name) exists in this catalog to rewrite to, and inventing one is forbidden, so skip."
+  },
+  {
+   "driver_name": "beta_unique",
+   "why": "Evidence ('beta segment pricing power held') names a real cause — segment pricing power — but 'beta_unique' does not name it. 'unique' is a vague filler word not present in the source (R7 vague descriptor, R10 noun-not-from-source). No coined pricing-power name exists in the catalog to rewrite to, so skip rather than admit a rule-breaking name."
+  }
+ ],
+ "unresolved_rewrites": [],
+ "counts": {
+  "keep": 4,
+  "same_as": 0,
+  "rewrite": 0,
+  "skip": 2,
+  "unresolved": 0
+ }
+}
