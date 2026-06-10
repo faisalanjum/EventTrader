@@ -17,10 +17,13 @@ const PARENT = A.parent_run_id || ''
 const SCOPE_NAME = A.scope_name || ''
 const SCOPE_LEVEL = A.scope_level || ''
 const CHILDREN = Array.isArray(A.children) ? A.children : []
+const MAX_RECORDS = Number.isInteger(A.max_records) ? A.max_records : null
+const MAX_CHARS = Number.isInteger(A.max_chars) ? A.max_chars : null
 if (!PARENT || !SCOPE_NAME || !['sector', 'global'].includes(SCOPE_LEVEL) || CHILDREN.length < 2)
   throw new Error('fold_catalogs.js requires args = { parent_run_id, scope_name, scope_level: sector|global, children: [>=2 child run_ids] }')
 const PDIR = `${DIR}/runs/${PARENT}`
 const CDIRS = CHILDREN.map(c => `${DIR}/runs/${c}`)
+const CAP_ARGS = `${MAX_RECORDS === null ? '' : ` --max-records ${MAX_RECORDS}`}${MAX_CHARS === null ? '' : ` --max-chars ${MAX_CHARS}`}`
 
 const EXACT_MEANING_RULE = `For any proposed union (treating two same-named drivers as ONE), verify all three are true:
 1. same object or metric   2. same scope   3. same mechanism
@@ -30,6 +33,9 @@ const PARTA_SCHEMA = { type:'object', additionalProperties:false, required:['ok'
   ok:{type:'boolean'}, passthrough:{type:'integer'}, collisions:{type:'integer'},
   collision_names:{type:'array', items:{type:'string'}},
   collision_meta:{type:'object', additionalProperties:true, description:'name -> {n_companies, n_children} from the part-a summary'},
+  // §13.2/§13.6: part-a no longer hard-fails on SEED_MAX — it WARNs + reports the cost estimate.
+  oversize:{type:'boolean', description:'true if combined output exceeds SEED_MAX (records>400 or chars>300000)'},
+  est_review_batches:{type:'integer', description:'ceil(records/400) — the COST signal; the owner schedules that many review windows'},
   notes:{type:'string'} } }
 
 const DRAW_SCHEMA = { type:'object', additionalProperties:false, required:['ok','items','notes'], properties:{
@@ -56,10 +62,14 @@ const PARTB_SCHEMA = { type:'object', additionalProperties:false, required:['ok'
 const pyView = (name, view) => `${PY} -c "import json;d=json.load(open('${PDIR}/fold_queue_views.json'));items=d['items'] if isinstance(d,dict) and 'items' in d else d;it=next(i for i in items if i['name']==${JSON.stringify(JSON.stringify(name)).slice(1,-1)});print(json.dumps({'name':it['name'],'sides':[{'side_key':s['side_key'],'refs':s['${view}'],'total_refs':s.get('total_refs')} for s in it['sides']]}))"`
 
 phase('PartA')
-const partA = await agent(`Run this EXACT command with Bash (step 0 = the BILLING GUARD, a subscription-only hard condition; then the deterministic combine — collapses each child's SAME_AS clusters, groups across children, queues identical-name collisions; HARD-FAILS on SEED_MAX):
-test -z "$ANTHROPIC_API_KEY" || { echo "BILLING-GUARD FAIL: ANTHROPIC_API_KEY present in env — refusing to run (subscription-only policy, CLAUDE.md)"; exit 9; } && ${PY} ${DIR}/workflows/fold_catalogs.py part-a ${PDIR} --scope-name ${JSON.stringify(SCOPE_NAME)} --scope-level ${SCOPE_LEVEL} --children ${CDIRS.join(' ')}
-Return ok=true + passthrough/collisions/collision_names/collision_meta from the printed one-line JSON summary (collision_meta = the name -> {n_companies, n_children} object), notes="". If it exits NON-ZERO: ok=false, zeros/empties, notes = the exact error output.`, {schema:PARTA_SCHEMA, model:'opus', label:'part-a', phase:'PartA'})
+const partA = await agent(`Run this EXACT command with Bash (step 0 = the BILLING GUARD, a subscription-only hard condition; then the deterministic combine — collapses each child's SAME_AS clusters, groups across children, queues identical-name collisions; WARNS on SEED_MAX because reconcile slices AI review):
+test -z "$ANTHROPIC_API_KEY" || { echo "BILLING-GUARD FAIL: ANTHROPIC_API_KEY present in env — refusing to run (subscription-only policy, CLAUDE.md)"; exit 9; } && ${PY} ${DIR}/workflows/fold_catalogs.py part-a ${PDIR} --scope-name ${JSON.stringify(SCOPE_NAME)} --scope-level ${SCOPE_LEVEL} --children ${CDIRS.join(' ')}${CAP_ARGS}
+Return ok=true + passthrough/collisions/collision_names/collision_meta from the printed one-line JSON summary (collision_meta = the name -> {n_companies, n_children} object), AND oversize + est_review_batches if the summary carries them, notes="". If it exits NON-ZERO: ok=false, zeros/empties, notes = the exact error output.`, {schema:PARTA_SCHEMA, model:'opus', label:'part-a', phase:'PartA'})
 if (!partA.ok) throw new Error(`fold part-a failed: ${partA.notes}`)
+// §13.2/§13.6: part-a is pure-python with no practical cap — oversize is a COST signal, not a fail.
+// LOUD log so the owner can schedule est_review_batches review windows; the reconcile slicer enforces
+// the actual bound downstream (slice_seed.py).
+if (partA.oversize === true) log(`LOUD: fold part-a output is OVER SEED_MAX (not a fail) — est_review_batches=${partA.est_review_batches}; owner should schedule that many reconcile review windows (the proven slicer enforces the bound).`)
 
 let reviews = [], splitMap = []
 if (partA.collisions > 0) {
@@ -126,7 +136,7 @@ const reviewFile = { reviews, split_map: splitMap }
 const partB = await agent(`Two steps, EXACT, in order:
 1) Use the Write tool to save this EXACT JSON (byte-for-byte) to ${PDIR}/same_name_review.json:
 ${JSON.stringify(reviewFile)}
-2) Run with Bash: ${PY} ${DIR}/workflows/fold_catalogs.py part-b ${PDIR} --review ${PDIR}/same_name_review.json
+2) Run with Bash: ${PY} ${DIR}/workflows/fold_catalogs.py part-b ${PDIR} --review ${PDIR}/same_name_review.json${CAP_ARGS}
    (deterministic code: applies the review, writes the parent seed.json + fold_sidecars.json, prints a one-line JSON summary)
 Return ok=true + sha_line = the exact printed summary line. Non-zero exit: ok=false, sha_line = the exact error. Do NOT compose any seed content yourself.`, {schema:PARTB_SCHEMA, model:'opus', label:'part-b', phase:'PartB'})
 if (!partB.ok) throw new Error(`fold part-b failed: ${partB.sha_line}`)

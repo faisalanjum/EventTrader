@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
 Deterministic fold combine (HierarchicalCatalogPlan §11.7) + the §12.8 evidence draw
-+ the §11.11 SEED_MAX guard. ZERO AI, ZERO merge judgment — union, count, set-compare,
-HARD-FAIL only. The same-name review (AI, §11.6) runs BETWEEN part-a and part-b in the
+and loud §11.11 size reporting. ZERO AI, ZERO merge judgment — union, count, set-compare.
+The same-name review (AI, §11.6) runs BETWEEN part-a and part-b in the
 workflow; this CLI trusts (and structurally checks) its artifact.
 
 part-a  <parent_run_dir> --scope-name X --scope-level sector|global --children <dir> ...
@@ -17,8 +17,9 @@ part-a  <parent_run_dir> --scope-name X --scope-level sector|global --children <
     fold_manifest.json {scope_name, scope_level, children:[counts]}.
     The one-line summary also carries collision_names (sorted queue names) + collision_meta
     {name: {n_companies (distinct across ALL occurrences), n_children (occurrence count)}}.
-    §11.11 GUARD fires BEFORE writing: records > SEED_MAX_RECORDS (400) or serialized
-    chars > SEED_MAX_CHARS (300,000) -> guard line + exit 1.
+    If the combined output is over SEED_MAX, part-a WARNs and reports the estimated
+    reconcile review-batch count; it does NOT hard-fail because reconcile.js always slices
+    AI review through slice_seed.py.
 
 draw    <parent_run_dir> [--cap N]
     §12.8 evidence views for each queued collision: sides = occurrences (side_key =
@@ -36,12 +37,13 @@ part-b  <parent_run_dir> --review same_name_review.json
     merge per key: identical non-null -> keep; conflict -> null + a conflicts row
     (never silently pick; children visited in sorted child_run_id order). All records
     self-canonical (STAR); catalog sorted by driver_name, evidence by the 5-tuple.
-    Writes seed.json (scope_name/scope_level shape, §11.8) + fold_sidecars.json.
-    The same SEED_MAX guard runs on the final seed before writing.
+    Writes seed.json (scope_name/scope_level shape, §11.8) + fold_sidecars.json. If the
+    final seed is over SEED_MAX, part-b WARNs; reconcile.js slices the AI review safely.
 """
 import argparse
 import hashlib
 import json
+import math
 import sys
 from pathlib import Path
 
@@ -76,14 +78,8 @@ def companies_of(refs):
     return sorted(out)
 
 
-def guard_seed_max(records, max_records=None, max_chars=None):
-    """§11.11 deterministic over-size HARD-FAIL — runs BEFORE any write / AI call."""
-    max_records = SEED_MAX_RECORDS if max_records is None else max_records
-    max_chars = SEED_MAX_CHARS if max_chars is None else max_chars
-    chars = len(json.dumps(records, ensure_ascii=False, separators=(",", ":")))
-    if len(records) > max_records or chars > max_chars:
-        raise SystemExit(f"SEED_MAX GUARD: records={len(records)}>{max_records} "
-                         f"or chars={chars}>{max_chars} — sub-split required")
+def seed_size(records):
+    return len(json.dumps(records, ensure_ascii=False, separators=(",", ":")))
 
 
 def merge_optional_links(link_dicts):
@@ -198,7 +194,19 @@ def part_a(parent_run_dir, scope_name, scope_level, children, max_records=None, 
                 {"child_run_id": cid, "record": r} for cid, r in occ]})
 
     all_records = passthrough + [o["record"] for q in queue for o in q["occurrences"]]
-    guard_seed_max(all_records, max_records, max_chars)   # §11.11 — BEFORE any write
+    # §13.2/§13.6: the SEED_MAX bound enforcement moved to the PROVEN reconcile slicer (slice_seed.py).
+    # part-a is pure python with no practical limit, so it no longer HARD-FAILS — it WARNs and reports
+    # est_review_batches, the COST signal the orchestrator logs (so the owner can schedule review
+    # windows). The estimate divides by the real slicer cap SEED_MAX_RECORDS (400), not any override.
+    eff_records = SEED_MAX_RECORDS if max_records is None else max_records
+    eff_chars = SEED_MAX_CHARS if max_chars is None else max_chars
+    chars = seed_size(all_records)
+    oversize = len(all_records) > eff_records or chars > eff_chars
+    est_review_batches = max(1, math.ceil(len(all_records) / SEED_MAX_RECORDS))
+    if oversize:
+        print(f"WARN: part-a combined output over SEED_MAX (records={len(all_records)}>{eff_records} "
+              f"or chars={chars}>{eff_chars}) — NOT a fail; the proven reconcile slicer enforces the "
+              f"bound. est_review_batches={est_review_batches} (the cost signal).", file=sys.stderr)
 
     (parent / "fold_queue.json").write_text(serialize({"queue": queue}))
     (parent / "fold_passthrough.json").write_text(serialize({"records": passthrough}))
@@ -210,7 +218,8 @@ def part_a(parent_run_dir, scope_name, scope_level, children, max_records=None, 
                         "n_children": len(q["occurrences"])} for q in queue}
     return {"passthrough": len(passthrough), "collisions": len(queue), "children": len(dirs),
             "collision_names": collision_names,
-            "collision_meta": {n: meta[n] for n in collision_names}}
+            "collision_meta": {n: meta[n] for n in collision_names},
+            "oversize": oversize, "est_review_batches": est_review_batches}
 
 
 # ---------------------------------------------------------------- draw (§12.8)
@@ -439,7 +448,15 @@ def part_b(parent_run_dir, review, max_records=None, max_chars=None):
     for r in records:
         r["evidence_refs"] = sorted(r["evidence_refs"], key=key5)
 
-    guard_seed_max(records, max_records, max_chars)       # §11.11 — same guard, final seed
+    eff_records = SEED_MAX_RECORDS if max_records is None else max_records
+    eff_chars = SEED_MAX_CHARS if max_chars is None else max_chars
+    chars = seed_size(records)
+    oversize = len(records) > eff_records or chars > eff_chars
+    est_review_batches = max(1, math.ceil(len(records) / SEED_MAX_RECORDS))
+    if oversize:
+        print(f"WARN: part-b final seed over SEED_MAX (records={len(records)}>{eff_records} "
+              f"or chars={chars}>{eff_chars}) — NOT a fail; reconcile slices AI review. "
+              f"est_review_batches={est_review_batches}.", file=sys.stderr)
 
     seed = {"scope_name": manifest.get("scope_name"), "scope_level": manifest.get("scope_level"),
             "run_id": parent.name, "catalog": records,
@@ -450,7 +467,8 @@ def part_b(parent_run_dir, review, max_records=None, max_chars=None):
     (parent / "fold_sidecars.json").write_text(serialize(
         {"unresolved_same_name": parks, "optional_links_conflicts": conflicts}))
     return {"records": len(records), "parks": len(parks), "conflicts": len(conflicts),
-            "seed_sha256": hashlib.sha256(blob.encode("utf-8")).hexdigest()}
+            "seed_sha256": hashlib.sha256(blob.encode("utf-8")).hexdigest(),
+            "oversize": oversize, "est_review_batches": est_review_batches}
 
 
 # ---------------------------------------------------------------- CLI (thin)

@@ -50,36 +50,18 @@ const guard = await agent(`Run these with Bash, in order. Step 0 — BILLING GUA
 If step 0 prints BILLING-GUARD FAIL, STOP and return records=-1, chars=-1, ok=false. Otherwise run this EXACT command and return the printed JSON fields verbatim:
 ${PY} -c "import json;d=json.load(open('${SEED}'));c=d.get('catalog') or [];s=len(json.dumps(c,separators=(',',':'),ensure_ascii=False));print(json.dumps({'records':len(c),'chars':s,'ok':len(c)<=400 and s<=300000}))"`, {schema:GUARD_SCHEMA, model:'opus', label:'seed-max-guard', phase:'Guard'})
 if (!guard || guard.records < 0) throw new Error('BILLING-GUARD: ANTHROPIC_API_KEY present in env (or guard agent died) — refusing to run; subscription-only policy (CLAUDE.md).')
-let BATCH_FILES = [SEED]
-if (!guard.ok) {
-  // §11.11 sub-split: name-sorted contiguous review batches (records are already sorted by driver_name).
-  // Cross-batch SAME_AS misses = the ACCEPTED residual (under-merge, safe direction; late-duplicate repair
-  // is the catch-up). Assembly + validation still run over the WHOLE seed (code has no size limit).
-  const SLICE_SCHEMA = { type:'object', additionalProperties:false, required:['ok','files','notes'], properties:{ ok:{type:'boolean'}, files:{type:'array', items:{type:'string'}}, notes:{type:'string'} } }
-  const slice = await agent(`Run this EXACT script with Bash (deterministic slicing of the seed into review batches under the §11.11 caps):
-${PY} - <<'EOF'
-import json
-d=json.load(open('${SEED}'))
-recs=d.get('catalog') or []
-batches,cur,chars=[],[],0
-for r in recs:
-    s=len(json.dumps(r,separators=(',',':'),ensure_ascii=False))
-    if cur and (len(cur)>=400 or chars+s>300000):
-        batches.append(cur); cur,chars=[],0
-    cur.append(r); chars+=s
-if cur: batches.append(cur)
-files=[]
-for i,b in enumerate(batches,1):
-    p='${RUN_DIR}/seed_batch_%03d.json'%i
-    open(p,'w').write(json.dumps({'industry':d.get('industry'),'catalog':b,'analysis':{}},indent=1,ensure_ascii=False)+'\\n')
-    files.append(p)
-print(json.dumps({'files':files,'sizes':[len(b) for b in batches]}))
-EOF
-Return ok=true + files (exact list from the printed JSON), notes = the sizes. Non-zero exit: ok=false, files=[], notes = the exact error.`, {schema:SLICE_SCHEMA, model:'opus', label:'slice', phase:'Guard'})
-  if (!slice.ok || !slice.files.length) throw new Error(`seed slicing failed: ${slice.notes}`)
-  BATCH_FILES = slice.files
-  log(`SEED over §11.11 caps (records=${guard.records}, chars=${guard.chars}) → ${BATCH_FILES.length} name-sorted review batches; cross-batch SAME_AS = accepted residual`)
-}
+// §11.11 sub-split — ALWAYS slice (12th pass rev3, owner-confirmed condition): review prompts must only
+// ever read CODE-capped batch files; no guard-relay value may route the full oversized seed into an AI
+// prompt. slice_seed.py decides 1-vs-N deterministically (under-cap seed = one batch). Cross-batch
+// SAME_AS misses = the ACCEPTED residual (under-merge, safe direction; the §13.2 repair pass is the
+// catch-up). Assembly + validation still run over the WHOLE seed (code has no size limit).
+const SLICE_SCHEMA = { type:'object', additionalProperties:false, required:['ok','files','notes'], properties:{ ok:{type:'boolean'}, files:{type:'array', items:{type:'string'}}, notes:{type:'string'} } }
+const slice = await agent(`Run this EXACT command with Bash (deterministic slicing of the seed into review batches under the §11.11 caps — the proven slicer, now a tested CLI):
+${PY} ${DIR}/workflows/slice_seed.py ${RUN_DIR}
+Return ok=true + files (exact list from the printed JSON), notes = the printed notes. Non-zero exit: ok=false, files=[], notes = the exact error.`, {schema:SLICE_SCHEMA, model:'opus', label:'slice', phase:'Guard'})
+if (!slice || !slice.ok || !slice.files.length) throw new Error(`seed slicing failed: ${slice && slice.notes}`)
+const BATCH_FILES = slice.files
+if (!guard.ok) log(`SEED over §11.11 caps (records=${guard.records}, chars=${guard.chars}) → ${BATCH_FILES.length} name-sorted review batches; cross-batch SAME_AS = accepted residual`)
 
 phase('Review')
 const norm = s => (s||'').trim().toLowerCase()
@@ -222,11 +204,11 @@ PYEOF`, {schema:D5COUNT_SCHEMA, model:'opus', label:'d5-blast-count', phase:'Sam
   const pyRec = (nm) => `${PY} -c "import json;d=json.load(open('${SEED}'));r=next(x for x in d['catalog'] if (x.get('driver_name') or '').strip().lower()=='${nm}')
 k=lambda e:((e.get('company') or '').strip().lower(),(e.get('source_type') or '').strip().lower(),(e.get('source_id') or '').strip().lower(),(e.get('date') or '').strip().lower(),(e.get('quote') or '').strip())
 allr=sorted(r['evidence_refs'],key=k)
-view=[dict(e, idx='r%d'%(i+1)) for i,e in enumerate(allr)]
+view=[dict(e, idx='r%d'%(i+1)) for i,e in enumerate(allr)][:200]
 gs={}
 for e in view: gs.setdefault((e.get('company') or '').strip(),[]).append(e)
 names=sorted((x.get('driver_name') or '').strip().lower() for x in d['catalog'])
-print(json.dumps({'name':r['driver_name'],'existing_seed_names':names,'sides':[{'company':c,'refs':v} for c,v in sorted(gs.items(), key=lambda kv:(len(kv[1]),kv[0]))]}))"`
+print(json.dumps({'name':r['driver_name'],'total_refs':len(allr),'truncated':len(allr)>200,'existing_seed_names':names,'sides':[{'company':c,'refs':v} for c,v in sorted(gs.items(), key=lambda kv:(len(kv[1]),kv[0]))]}))"`
   const rawReviews = (await parallel(flagged.map(f => () => agent(`SAME-NAME REVIEW (leaf, flag-triggered — HierarchicalCatalogPlan D5). The single record "${norm(f.driver_name)}" was FLAGGED as possibly mixing different meanings under one name (reviewer note: ${f.why}).
 Read ${ONT}. LOAD THE EVIDENCE (grouped per company, smallest side first): run Bash:
 ${pyRec(norm(f.driver_name))}
@@ -235,6 +217,7 @@ ONE verdict:
 - SAME = all quotes name the EXACT same reusable cause (the flag was a false alarm). An independent skeptic will still try to break this.
 - DIFFERENT = a true homonym: coin MORE-SPECIFIC lower_snake_case names ONLY from words in the evidence (per DriverOntology; no tickers/company names), one per distinct meaning. HARD CONSTRAINT: every new name must be genuinely NEW — check it against the view's existing_seed_names list; if your natural choice already exists there, add a distinguishing evidence word to make it more specific (a near-duplicate is fine — dedup links exact duplicates later; a COLLISION hard-fails). Then PARTITION BY INDEX: every ref in the view carries an 'idx' (r1, r2, ...). An assignment row = {company, to, ref_idx: ["r1", "r4", ...]} — the listed refs go to that name. You may OMIT ref_idx on AT MOST ONE row per company: that row takes ALL remaining refs of that company (the remainder). Rules: every ref ends up with exactly one name (code enforces it); every 'to' name must receive at least one ref; two no-ref_idx rows for the same company is an ERROR. Just read each quote, decide which meaning it shows, and copy its idx.
 - UNCLEAR = too thin/mixed to decide → park (fail-close).
+TRUNCATION RULE (12th pass rev3): if the view shows truncated:true you are seeing only 200 of total_refs — a complete split partition is impossible from a partial view, so DIFFERENT is FORBIDDEN: return SAME (skeptics still check it) or UNCLEAR (park) only.
 Return LEAF_REVIEW_SCHEMA (collision_name = "${norm(f.driver_name)}").`, {schema:LEAF_REVIEW_SCHEMA, model:'opus', label:`d5:${norm(f.driver_name)}`, phase:'SameName'}))) ).filter(Boolean)
   if (rawReviews.length !== flagged.length) throw new Error(`leaf D5 review lost ${flagged.length - rawReviews.length} verdict(s) — fail-close.`)
   for (const v of rawReviews) {

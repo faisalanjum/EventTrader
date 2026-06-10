@@ -1,13 +1,13 @@
 """TDD for fold_catalogs.py — the deterministic fold combine (HierarchicalCatalogPlan §11.7)
-+ the §12.8 evidence draw + the §11.11 SEED_MAX guard. ZERO AI, ZERO judgment.
++ the §12.8 evidence draw + §11.11 loud size reporting. ZERO AI, ZERO judgment.
 
 part-a: per-child cluster collapse (canonical fixpoint, 5-tuple evidence union, variant
         carry-forward, drop-but-count side-lists) -> cross-child passthrough vs the
-        same-name-review queue (never pre-merge). SEED_MAX guard BEFORE writing.
+        same-name-review queue (never pre-merge). SEED_MAX warns; reconcile slices AI review.
 draw:   §12.8 deterministic per-side evidence views (smallest side first, company
         round-robin, source-type spread, empty-date-first, per-side cap, disjoint view2).
 part-b: apply the review file — SAME (refute_survived required) / DIFFERENT (complete
-        evidence partition) / UNCLEAR (terminal park) — star + sorted parent seed.
+        evidence partition) / UNCLEAR (terminal park) — star + sorted parent seed; oversize warns.
 """
 import json
 import subprocess
@@ -95,7 +95,8 @@ def test_part_a_collapse_resolves_chains_unions_evidence_variants(tmp_path):
     p = parent(tmp_path)
     s = part_a(p, "TestSector", "sector", [c1])
     assert s == {"passthrough": 1, "collisions": 0, "children": 1,
-                 "collision_names": [], "collision_meta": {}}
+                 "collision_names": [], "collision_meta": {},
+                 "oversize": False, "est_review_batches": 1}
     recs = load(p, "fold_passthrough.json")["records"]
     assert len(recs) == 1
     r = recs[0]
@@ -152,7 +153,8 @@ def test_part_a_cli_passthrough_vs_collision_queue(tmp_path):
     assert json.loads(out.stdout.strip().splitlines()[-1]) == {
         "passthrough": 2, "collisions": 1, "children": 2,
         "collision_names": ["oil_price"],
-        "collision_meta": {"oil_price": {"n_companies": 2, "n_children": 2}}}
+        "collision_meta": {"oil_price": {"n_companies": 2, "n_children": 2}},
+        "oversize": False, "est_review_batches": 1}
     q = load(p, "fold_queue.json")["queue"]
     assert [i["name"] for i in q] == ["oil_price"]
     assert [o["child_run_id"] for o in q[0]["occurrences"]] == ["c1", "c2"]  # NOT pre-merged
@@ -175,35 +177,56 @@ def test_part_a_collision_meta_distinct_companies_across_occurrences(tmp_path):
         "wage_rate": {"n_companies": 2, "n_children": 2}}          # {AAA} ∪ {CCC}
 
 
-def test_part_a_guard_fires_on_401_records_before_writing(tmp_path):
+def test_part_a_oversize_warns_not_fails_and_writes(tmp_path):
+    # §13.2/§13.6: part-a no longer HARD-FAILS on SEED_MAX — the bound enforcement moved to the
+    # proven reconcile slicer. part-a is pure python with no practical limit; it WARNs + records
+    # the COST estimate (est_review_batches) and STILL writes its outputs.
     child(tmp_path, "c1", [rec(f"d_{i:03d}", refs=[ref(sid=f"e{i}")]) for i in range(401)])
     p = parent(tmp_path)
     out = cli("part-a", p, "--scope-name", "S", "--scope-level", "sector",
               "--children", tmp_path / "c1")
-    assert out.returncode == 1
-    assert f"SEED_MAX GUARD: records=401>{SEED_MAX_RECORDS}" in (out.stdout + out.stderr)
-    assert not (p / "fold_queue.json").exists()       # guard fires BEFORE writing
-    assert not (p / "fold_passthrough.json").exists()
-    assert not (p / "fold_manifest.json").exists()
+    assert out.returncode == 0, out.stderr
+    assert "WARN" in out.stderr and "401" in out.stderr           # loud WARN to stderr
+    summary = json.loads(out.stdout.strip().splitlines()[-1])
+    assert summary["oversize"] is True
+    assert summary["est_review_batches"] == 2                     # ceil(401/400)
+    assert (p / "fold_queue.json").exists()                       # outputs ARE written
+    assert (p / "fold_passthrough.json").exists()
+    assert (p / "fold_manifest.json").exists()
 
 
-def test_part_a_guard_fires_on_oversize_chars(tmp_path):
+def test_part_a_oversize_chars_warns_not_fails(tmp_path):
     c1 = child(tmp_path, "c1", [rec("big_one", refs=[ref(sid="e1", quote="x" * 300_001)])])
-    with pytest.raises(SystemExit, match="SEED_MAX GUARD: records=1"):
-        part_a(parent(tmp_path), "S", "sector", [c1])
+    s = part_a(parent(tmp_path), "S", "sector", [c1])
+    assert s["oversize"] is True
+    assert s["est_review_batches"] == 1                           # 1 record -> ceil(1/400)=1
 
 
-def test_part_a_guard_overrides_recorded_in_summary(tmp_path):
+def test_part_a_under_caps_reports_not_oversize(tmp_path):
+    assert SEED_MAX_RECORDS == 400        # the cap the est_review_batches estimate divides by
+    child(tmp_path, "c1", [rec("a_one"), rec("b_two")])
+    s = part_a(parent(tmp_path), "S", "sector", [tmp_path / "c1"])
+    assert s["oversize"] is False and s["est_review_batches"] == 1
+
+
+def test_part_a_warn_fires_on_record_override(tmp_path):
+    # WARN fires on a fabricated over-cap input under a tight --max-records override too.
     child(tmp_path, "c1", [rec("a_one"), rec("b_two")])
     p = parent(tmp_path)
     out = cli("part-a", p, "--scope-name", "S", "--scope-level", "sector",
               "--children", tmp_path / "c1", "--max-records", "1")
-    assert out.returncode == 1 and "SEED_MAX GUARD: records=2>1" in (out.stdout + out.stderr)
+    assert out.returncode == 0, out.stderr                        # WARN, not fail
+    assert "WARN" in out.stderr
+    summary = json.loads(out.stdout.strip().splitlines()[-1])
+    assert summary["oversize"] is True                            # 2 records > max_records 1
+    assert summary["est_review_batches"] == 1                     # ceil(2/400) — the REAL slicer cap
+    assert summary["max_records"] == 1
     out = cli("part-a", p, "--scope-name", "S", "--scope-level", "sector",
               "--children", tmp_path / "c1", "--max-records", "50", "--max-chars", "9000")
     assert out.returncode == 0, out.stderr
     summary = json.loads(out.stdout.strip().splitlines()[-1])
     assert summary["max_records"] == 50 and summary["max_chars"] == 9000
+    assert summary["oversize"] is False
 
 
 # ---------------------------------------------------------------- draw (§12.8)
@@ -448,14 +471,16 @@ def test_part_b_one_non_null_value_kept(tmp_path):
     assert load(p, "fold_sidecars.json")["optional_links_conflicts"] == []
 
 
-def test_part_b_cli_guard_and_summary(tmp_path):
+def test_part_b_cli_warn_and_summary(tmp_path):
     p = fold_collision(tmp_path, [rec("a_one"), rec("b_two")], [rec("c_three", refs=[ref(company="B", sid="e9")])])
     rv = tmp_path / "review.json"
     rv.write_text(json.dumps({"reviews": [], "split_map": []}))
     out = cli("part-b", p, "--review", rv, "--max-records", "1")
-    assert out.returncode == 1
-    assert "SEED_MAX GUARD: records=3>1" in (out.stdout + out.stderr)
-    assert not (p / "seed.json").exists()
+    assert out.returncode == 0, out.stderr
+    assert "WARN" in out.stderr and "records=3>1" in out.stderr
+    assert (p / "seed.json").exists()
+    summary = json.loads(out.stdout.strip().splitlines()[-1])
+    assert summary["oversize"] is True and summary["max_records"] == 1
     out = cli("part-b", p, "--review", rv)
     assert out.returncode == 0, out.stderr
     summary = json.loads(out.stdout.strip().splitlines()[-1])
