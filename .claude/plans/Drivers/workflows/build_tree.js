@@ -1,6 +1,6 @@
 export const meta = {
   name: 'driver-build-tree',
-  description: 'Tree orchestrator (HierarchicalCatalogPlan §4/§6/§11.20). THREE modes via args: (1) { list: true } = READ-ONLY tree audit (join query; strict-tree fail-loud; audit/calibration only — never a production gate, does NOT fold). (2) { fold: { scope_name, scope_level: sector|global, children: [EXPLICIT run_ids] } } = Phase-1 single fold -> reconcile -> repair duplicates -> D8 validate, fail-closed. (3) { walk: { leaf_runs: {"<industry>": "<run_id>"}, taxonomy?: {"<sector>": ["<industry>", ...]}, require_complete?: bool } } = Phase-2 WALK-AND-FOLD: folds each sector from its industry leaf runs, then the global from the sector outputs; taxonomy omitted -> discovered from Neo4j (join query, exact raw strings); require_complete=true -> a tree industry without a leaf run HARD-FAILS (production); false (default, calibration) -> sectors with missing leaves are SKIPPED with a loud log. Over-size = fold code warns, then reconcile slices all AI review into safe batch files. No "latest", no meaning, every step fail-closed.',
+  description: 'Tree orchestrator (HierarchicalCatalogPlan §4/§6/§11.20). THREE modes via args: (1) { list: true } = READ-ONLY tree audit (join query; strict-tree fail-loud; audit/calibration only — never a production gate, does NOT fold). (2) { fold: { scope_name, scope_level: sector|global, children: [EXPLICIT run_ids] } } = Phase-1 single fold -> reconcile -> repair duplicates -> D8 validate, fail-closed. (3) { walk: { leaf_runs: {"<industry>": "<run_id>"}, taxonomy?: {"<sector>": ["<industry>", ...]}, require_complete?: bool } } = Phase-2 WALK-AND-FOLD: first runs the §13.2 duplicate-repair pass on EVERY industry leaf it will consume (owner 2026-06-11 — leaves are repaired BEFORE becoming fold inputs; optional walk.repair_args pass through to repair_duplicates.js), then folds each sector from its industry leaf runs, then the global from the sector outputs; taxonomy omitted -> discovered from Neo4j (join query, exact raw strings); require_complete=true -> a tree industry without a leaf run HARD-FAILS (production); false (default, calibration) -> sectors with missing leaves are SKIPPED with a loud log. Over-size = fold code warns, then reconcile slices all AI review into safe batch files. No "latest", no meaning, every step fail-closed.',
   phases: [
     { title: 'Stamp', detail: 'UTC stamp + input checks (fail-close)' },
     { title: 'Tree',  detail: 'taxonomy override OR read-only join-query discovery + strict-tree checks' },
@@ -126,6 +126,19 @@ const orphanLeaves = Object.keys(LEAF_RUNS).filter(ind => !known.has(ind))
 if (orphanLeaves.length) throw new Error(`leaf_runs industries not in the taxonomy: ${orphanLeaves.join(', ')} (exact raw strings required — §11.20.8)`)
 
 phase('Folds')
+// §13.2 LEAF REPAIR (owner 2026-06-11): every industry catalog gets its own duplicate-repair
+// sweep BEFORE it becomes a fold input — covers both multi-leaf sector folds AND the
+// degenerate single-leaf passthrough (which feeds GLOBAL directly). Fold-level repair inside
+// runFold is unchanged (parents still repaired post-fold). Fail-close contract identical:
+// a failed repair or its post-apply validation kills the walk. Optional A.walk.repair_args
+// (e.g. { batch_size: 10 } AFTER the C5 A/B passes) pass through; absent = today's defaults.
+const REPAIR_ARGS = (W.repair_args && typeof W.repair_args === 'object') ? W.repair_args : {}
+if ('run_id' in REPAIR_ARGS) throw new Error('walk.repair_args must not carry run_id — the walk assigns each leaf run_id itself (fail-close)')
+const usedLeaves = [...new Set(SECTORS.flatMap(s => TAXONOMY[s].filter(i => LEAF_RUNS[i]).map(i => LEAF_RUNS[i])))].sort()
+for (const lr of usedLeaves) {
+  log(`[walk] leaf repair (pre-fold §13.2): ${lr}`)
+  await workflow({ scriptPath: `${DIR}/workflows/repair_duplicates.js` }, { ...REPAIR_ARGS, run_id: lr })
+}
 const sectorOutputs = []   // run_ids feeding the global fold
 const report = { utc: UTC, sectors: [], skipped_sectors: [], global: null }
 for (const sec of SECTORS) {
