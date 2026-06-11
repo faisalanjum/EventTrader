@@ -15,6 +15,12 @@ import sys
 from pathlib import Path
 
 from assemble_catalog import assemble, h32, serialize, verify_expect
+
+# C5 §8d GO condition #2 — production canary sizing (batched lane only): ~2% of the
+# batched DIFFERENT/UNCLEAR rows, floor 5, clipped to the eligible pool. Mirrored
+# EXACTLY in repair_duplicates.js (sample key = h32(norm(a)|norm(b)), idx tie-break).
+CANARY_RATE = 0.02
+CANARY_MIN = 5
 from fold_catalogs import (RECONCILE_EVIDENCE_PER_RECORD, key5, norm, require_validated,
                            side_sequence)
 
@@ -286,6 +292,37 @@ def show_candidates(run_dir, idx_list):
                                        ensure_ascii=False))}
 
 
+def assemble_review(run_dir, pieces, expect):
+    """Chunked relay-write FINAL enforcement (incident 2026-06-11: a single-shot agent
+    Write of a full-size review truncated at the clerk's output-token limit; the hand
+    re-transcription drifted 1 byte and the --expect gate refused). The workflow has
+    clerks write the review JSON in row-boundary pieces (each post-write h32-asserted);
+    THIS pure-code step is the gate that counts: exact piece set, byte concat, full
+    h32+rv vs the workflow-computed --expect, write repair_review.json only on match."""
+    run = Path(run_dir)
+    if not isinstance(pieces, int) or pieces < 1:
+        raise SystemExit(f"REPAIR FAIL: assemble-review needs --pieces >= 1 (got {pieces!r})")
+    cdir = run / "review_chunks"
+    have = sorted(p.name for p in cdir.glob("piece_*.txt")) if cdir.exists() else []
+    want = [f"piece_{i:04d}.txt" for i in range(pieces)]
+    if have != want:
+        raise SystemExit(f"REPAIR FAIL: review piece set mismatch — have {have} want {want} "
+                         f"(missing/stale pieces; a prior run's survivors must never splice in)")
+    full = "".join((cdir / w).read_text(encoding="utf-8") for w in want)
+    try:
+        rows = json.loads(full).get("reviews")
+    except json.JSONDecodeError as e:
+        raise SystemExit(f"REPAIR FAIL: assembled review is not valid JSON ({e}) — a piece "
+                         f"was written wrong (relay-write fidelity)")
+    rv = len(rows) if isinstance(rows, list) else -1
+    verify_expect(expect, full, {"rv": rv}, "REPAIR assemble-review")
+    (run / "repair_review.json").write_text(full, encoding="utf-8")
+    for w in want:
+        (cdir / w).unlink()
+    cdir.rmdir()
+    return {"ok": True, "rv": rv, "h32": h32(full)}
+
+
 def apply(run_dir, review_path):
     run = Path(run_dir)
     seed = json.load(open(run / "seed.json"))
@@ -329,8 +366,12 @@ def apply(run_dir, review_path):
         if n >= 8 and row.get("high_blast_refute2_survived") is not True:
             raise SystemExit(f"REPAIR FAIL: high-blast SAME {a}|{b} lacks second-skeptic proof")
         if pair not in existing:
+            # post_split: repair runs on the FINAL catalog (after leaf D5 splits), so its
+            # links may legitimately reference split-coined records; assemble's coined-target
+            # anachronism guard exempts ONLY rows carrying this tag.
             dec.setdefault("approved_same_as", []).append({"variant": by[va]["driver_name"],
-                                                           "canonical": by[ca]["driver_name"]})
+                                                           "canonical": by[ca]["driver_name"],
+                                                           "post_split": True})
             existing.add(pair)
             added.append({"variant": by[va]["driver_name"], "canonical": by[ca]["driver_name"]})
         if n >= 8:
@@ -369,6 +410,33 @@ def apply(run_dir, review_path):
                                  f"per-pair confirm (confirmed:true) — a batch proposer SAME "
                                  f"may never apply unconfirmed")
 
+        # C5 §8d GO condition #2 — the production canary. Apply RE-derives the deterministic
+        # sample itself (h32 of the normalized pinned pair, idx tie-break; ~CANARY_RATE of
+        # the DIFFERENT/UNCLEAR rows that never got an isolated look, min CANARY_MIN), so a
+        # relay can never silently skip it. A sampled row without a solo canary_verdict =
+        # canary skipped; any canary_verdict SAME = the batched lane is missing merges.
+        # The canary NEVER creates links (alarm only) — abort before any write, loud.
+        eligible = [r for r in rows if r.get("verdict") in ("DIFFERENT", "UNCLEAR")
+                    and r.get("confirmed") is not True]
+        if eligible:
+            n = min(len(eligible), max(CANARY_MIN, math.ceil(CANARY_RATE * len(eligible))))
+            sampled = sorted(eligible,
+                             key=lambda r: (h32(f"{norm(cands_list[r['idx']]['a'])}|"
+                                                f"{norm(cands_list[r['idx']]['b'])}"),
+                                            r["idx"]))[:n]
+            no_solo = [r["idx"] for r in sampled
+                       if r.get("canary_verdict") not in ("SAME", "DIFFERENT", "UNCLEAR")]
+            if no_solo:
+                raise SystemExit(f"REPAIR FAIL: canary solo verdict missing/invalid for idx "
+                                 f"{no_solo} — the {n}-row production canary may never be "
+                                 f"skipped (fail-close)")
+            hits = [r["idx"] for r in sampled if r.get("canary_verdict") == "SAME"]
+            if hits:
+                raise SystemExit(f"REPAIR FAIL: CANARY HIT — solo re-judgment says SAME for "
+                                 f"batched-DIFFERENT/UNCLEAR idx {hits}; the batched lane is "
+                                 f"missing merges — investigate / re-run per-pair before any "
+                                 f"batched apply")
+
     # C5-study today-bug fix: EVERY suggested pair must carry a review verdict (any verdict).
     # Without this, an abridged relay or lost verdicts leave pairs silently unjudged —
     # under-merge that no existing check could see. Directional on purpose: review rows for
@@ -389,9 +457,12 @@ def apply(run_dir, review_path):
             key = (norm(row["a"]), norm(row["b"]))
             if key not in have:
                 dec.setdefault("high_blast_refute2", []).append(row)
-    dec_p.write_text(serialize(dec))
+    # assemble FIRST (it validates the updated decisions), persist ONLY on success —
+    # found live 2026-06-11: writing decisions.json before assemble left 24 stale rows
+    # behind when assemble raised, poisoning every re-run (mutate-before-validate).
     review_file = run / "same_name_review.json"
     out, approved = assemble(seed, dec, json.load(open(review_file)) if review_file.exists() else None)
+    dec_p.write_text(serialize(dec))
     cat_blob = serialize(out)
     (run / "catalog.json").write_text(cat_blob)
     (run / "approved.json").write_text(serialize(approved))
@@ -418,6 +489,8 @@ def main(argv=None):
     pl.add_argument("--k", type=int, default=10, help="C5: pairs per batch")
     pl.add_argument("--page-size", type=int, default=600,
                     help="C5: review PAGE size (never a cap — all pairs are planned)")
+    sm = sub.add_parser("summary")
+    sm.add_argument("run_dir")
     sh = sub.add_parser("show")
     sh.add_argument("run_dir")
     sh.add_argument("--idx", required=True, help="comma-separated candidate indices")
@@ -427,7 +500,24 @@ def main(argv=None):
     a.add_argument("--expect", default=None,
                    help="Stage-0 #5: rv=..,h32=.. computed by the workflow JS from the review "
                         "SOURCE string; binds the agent-written repair_review.json to it")
+    ar = sub.add_parser("assemble-review")
+    ar.add_argument("run_dir")
+    ar.add_argument("--pieces", type=int, required=True,
+                    help="exact number of review_chunks/piece_NNNN.txt files to glue")
+    ar.add_argument("--expect", required=True,
+                    help="rv=..,h32=.. computed by the workflow JS from the review SOURCE "
+                         "string; the assembled bytes must hit it or nothing is written")
     args = ap.parse_args(argv)
+    if args.mode == "assemble-review":
+        print(json.dumps(assemble_review(args.run_dir, args.pieces, args.expect),
+                         sort_keys=True))
+        return
+    if args.mode == "summary":
+        # decision-④ frozen fixture: slim view of the EXISTING pinned candidates file —
+        # never regenerates (the whole point is byte-frozen candidates across arms).
+        blob = json.load(open(Path(args.run_dir) / "repair_candidates.json"))
+        print(json.dumps({k: v for k, v in blob.items() if k != "candidates"}, sort_keys=True))
+        return
     if args.mode == "plan":
         print(json.dumps(plan_batches(args.run_dir, args.k, args.page_size), sort_keys=True))
         return

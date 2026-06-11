@@ -1,6 +1,6 @@
-# C5 — Batched Repair Pair-Reviews: Deep Study + Dormant Build
+# C5 — Batched Repair Pair-Reviews: Leaf GO + Fold Pending
 
-**Date:** 2026-06-11 · **Method:** 9-agent adversarial workflow `wf_7c2d3a58-7f7` (4 mappers → 3 designers → 2 skeptics, ~0.89M tokens; the real candidate set was REGENERATED from the actual CAKE catalog with the real `suggest()` code — artifact at `/tmp/m2_cake/repair_candidates.json`, reproducible any time). **Status: BUILT 2026-06-11 (owner-approved ②+③), DORMANT** — `batch_size` defaults to 1 = today's per-pair path byte-identical (prompts moved verbatim into shared templates used by both lanes); the batched PROPOSER + blind per-pair CONFIRM lane ships behind explicit `args.batch_size>1` and stays out of production until the §8 A/B passes (owner decision ④ pending). TDD: suite 218 passed + 1 opt-in skip (17 new tests). LIVE SMOKE PASSED TWICE on a synthetic 6-pair fixture through the SHIPPED workflow (run 2 = round-4 fixes: SLIM suggest relay + batched no-cap default limit=0 + clipped>0 hard-fail; final catalog byte-identical across both runs): 3 hard-disjoint batches → 1 planted true-SAME proposed → blind confirm agreed → applied → genuine validator pass; the 5 distinct pairs correctly DIFFERENT/UNCLEAR; full P2 plan-vs-review enforcement on disk. This file remains the spec of record; skeptic arbitrations and owner decisions are marked.
+**Date:** 2026-06-11 · **Method:** 9-agent adversarial workflow `wf_7c2d3a58-7f7` (4 mappers → 3 designers → 2 skeptics, ~0.89M tokens; the real candidate set was REGENERATED from the actual CAKE catalog with the real `suggest()` code — artifact at `/tmp/m2_cake/repair_candidates.json`, reproducible any time). **Status: GO for leaf/company catalogs; fold repair still pending its separate K2 gate.** `batch_size` still defaults to 1 (today's per-pair path); leaf/company runs may explicitly set `batch_size>1` after the passed §8d A/B and built canary. TDD: suite 257 passed + 1 opt-in skip. This file remains the spec of record; skeptic arbitrations and owner decisions are marked.
 
 ---
 
@@ -35,7 +35,7 @@ A repair SAME on a pair spanning <8 companies is **terminal** — no skeptic fol
 | # | Attack (proven mechanism) | Guard |
 |---|---|---|
 | K1 | **The A/B's zero-tolerance rule exempts contested pairs** — anchoring doesn't flip clear pairs, it shifts marginal ones, which are exactly the pairs the two baselines disagree on; the gate as templated records zero novelty and false-GOs | Pre-registered DIRECTIONAL criterion on the contested stratum (variant SAME-rate on baseline-disagreed pairs ≤ pooled baseline rate, one-sided binomial) + a degenerate-floor rule |
-| K2 | **Gate population ≠ production population**: production repair runs ONLY at folds (cross-industry, multi-company, embeddings-on); the leaf census licenses nothing about folds; a 10% canary has ~0.3 expected catches | A second census gate on a fold-profile fixture before any fold enable; canary demoted to monitoring |
+| K2 | **Gate population ≠ production population**: leaf/company repair and fold repair see different duplicate patterns (folds are cross-industry, multi-company, embeddings-on); the leaf census licenses nothing about folds | A second census gate on a fold-profile fixture before any fold enable; canary monitors production but does not replace that gate |
 | K3 | **Best-effort record-disjointness re-opens transitive chaining**: a record with degree > batch count forces same-record co-batching → halo SAME chains → `_star()` flattens them into one multi-record over-merge invisible to every code check | Record-disjointness HARD: overflow pairs go to the per-pair lane, never log-and-proceed; degree-vs-batch assert at composition |
 | K4 | **The statistics can't reach the budget**: a clean 1,058-judgment census bounds the flip rate at ~0.28–0.57% = 3–6× the 0.1% budget. No A/B size we can afford certifies the terminal merge direction | **P4 — the architecture decision (see §6)** |
 | K5 | Quote-echo verifies quote provenance, not reasoning provenance — an anchored judge quotes correctly from its assigned pair while judging it wrong; no code check can ever bound this class | P4 again (structural, not statistical) |
@@ -49,10 +49,21 @@ The failure catalog's own math says the A/B alone cannot certify the merge direc
 - **Every batched SAME on an n<8 pair gets ONE isolated per-pair confirmation with today's EXACT prompt before apply.** The terminal merge decision is therefore made by byte-identically the same isolated judgment as today — the catastrophic direction is protected **by construction**, not by statistics. ≥8 pairs keep the second skeptic on top (three agents).
 - Economics with P4 at SAME-rate s (measured FREE from the A/B baseline arms; smoke prior 33%, expected lower at scale): s=10% → ~6.2M/leaf (−78% vs unclipped per-pair, −41% vs today-with-hole, full coverage); s=33% → ~12.6M ≈ today's cost but with full 529 coverage AND the two-agent invariant everywhere. **Never worse than today; strictly better coverage; merge direction never weaker.**
 
-## 7. Minimal build (BUILT dormant; production enable still waits for §8 A/B)
+## 7. Minimal build (BUILT; leaf enable passed §8d, fold enable still waits for K2)
 
-`repair_duplicates.js`: dormant batched lane behind `args.batch_size>1`; default `batch_size=1` keeps today's per-pair path. Batched mode uses slim suggest relay (counts/hashes only), code-written batch files, hard name-disjoint batches, blind per-pair confirm for every batched SAME, and fail-close P2 checks before apply. `repair_duplicates.py`: `suggest(limit=0)` means no cap; `plan` pages all candidates from one pinned file; `show` loads confirm candidates by index; `apply` verifies stale-plan, missing-row, duplicate-row, transposed-name, and unconfirmed-SAME failures. Tests cover the dangerous cases; production enable still waits for the §8 A/B gate.
+`repair_duplicates.js`: batched lane behind explicit `args.batch_size>1`; default `batch_size=1` keeps today's per-pair path. Batched mode uses slim suggest relay (counts/hashes only), code-written batch files, hard name-disjoint batches, blind per-pair confirm for every batched SAME, the production canary for sampled keep-separate rows, and fail-close P2 checks before apply. `repair_duplicates.py`: `suggest(limit=0)` means no cap; `plan` pages all candidates from one pinned file; `show` loads confirm/canary candidates by index; `apply` verifies stale-plan, missing-row, duplicate-row, transposed-name, unconfirmed-SAME, and skipped/hit canary failures. Leaf/company enable passed §8d; fold enable still waits for the separate K2 fold-profile gate.
 
+## 8R. DECISION ④ RESOLVED — the TARGETED gate (owner-approved 2026-06-11)
+
+Owner statement (verbatim scope): *"Go ahead with the targeted C5-only A/B. Passing it licenses batched repair for leaf/company catalogs only. Fold repair stays off until the separate fold-profile gate passes, as already specified in C5."*
+
+Shape (replaces the 16M 4-arm design; ~10.8M):
+1. **Wrong-merge direction needs NO experiment** — merge requires batch-proposer SAME **AND** blind per-pair confirm SAME (AND-gate, code-enforced at apply): wrong-merge rate ≤ today's by construction.
+2. **Arm 1 (~3.4M):** batched run over ALL 529 real CAKE pairs on a COPY (frozen pinned candidates, token-overlap, limit 0). Every proposed SAME is per-pair-confirmed inside the lane = the merge side verified free; confirmed verdicts reusable later as the real CAKE cleanup (apply post-GO).
+3. **Arm 2 (~5.3M):** per-pair judges (today's exact prompt) on the ~100 MARGINAL batched-DIFFERENT/UNCLEAR pairs — deterministic stratum: shared-full-name adjacency, late position-in-batch, reason score — census where anchoring could hide lost merges. Natural baits included (the sampled clear/borderline duplicates live in this set).
+4. **Arm 3 (~2.1M):** noise floor — 40 marginal pairs judged per-pair twice.
+5. **Differ (pure code):** lost-merge rate (arm-2 SAME among batched-DIFFERENT) ≤ noise floor → GO; position-in-batch SAME-rate analysis = the anchoring smoking gun. Misses are the RECOVERABLE direction (unlinked pairs re-suggested every future sweep).
+6. Limitations recorded: no synthetic placement-engineered baits (real marginal census instead); statistical bound not literal certainty on the recoverable direction — the permanent 1–2% production canary remains mandatory; leaf-profile evidence only (fold gate separate, K2).
 ## 8. The A/B gate (after build; pre-registered)
 
 Fixture = the regenerated REAL 529-pair set (pure code, reproducible) + ~150 placement-engineered baits (marginal pairs deliberately placed after true-SAME streaks — the hardest composition) + ≥10 planted high-blast pairs (gate-template rule 6). Protocol: per-pair baseline ×2 (noise floor + free SAME-rate measurement) vs batched ×2; cost ≈ 2×27.8M + 2×3.4M… sampled instead: stratified ~150 pairs ≈ ~16M total. Differ: K1's directional contested-stratum criterion · position-in-batch flip analysis (the anchoring smoking gun) · transposition audit · under-merge ≤ floor · P4-confirm agreement rate. Fold enable ONLY after a fold-profile census gate. The gate must run through the SHIPPED workflow path on a frozen candidates file (a `--candidates-file` pin), not a replica harness.
@@ -67,9 +78,34 @@ Fixture = the regenerated REAL 529-pair set (pure code, reproducible) + ~150 pla
 - **Hard record-disjointness — pinned:** already K3; overflow pairs go per-pair, never co-batched.
 - **OWNER DECISION ③ RESOLVED — paging, not a terminal limit:** k=10 batches; **600 = default PAGE size, page until ALL pairs are reviewed** (no terminal clip anywhere). All pages slice ONE pinned suggest output (single candidates file; pages are deterministic index ranges) — never regenerate between pages. The slim relay is built in batched mode: pages/judges load candidates from disk by index, while the relay carries counts+hashes only.
 
-## 9. Owner decisions needed
+## 8c. Arm-1 incident + fixes (2026-06-11, live run wf_b94d7063-212 — all TDD'd, suite 252+1)
 
-(O1) **P4 yes/no** — recommended YES (the merge direction stays two-agent everywhere; the saving stays large). Without P4: a ~0.57%-bounded, statistically-uncertifiable residual on permanent links must be explicitly accepted in the ledger. (O2) Approve the today-bug fixes as an immediate Stage-0-class commit (independent of C5). (O3) RESOLVED — k=10, page size 600, page-until-done from one pinned candidates file (no terminal clip). (O4) The A/B budget (~16M) and the fold-profile second gate before fold enable.
+Arm 1 (529 real pairs, batched lane on the abscratch copy) finished ALL judging (~4.05M; 37 proposer-SAME → **24 blind-confirmed**, AND-gate killed 13) then failed at the relay-write: the single-shot Write of the 529-row review JSON **truncated at the clerk's output-token limit**; the clerk hand-retyped all 529 rows; the retype drifted **exactly 1 byte** (a dropped period in one why-note); the `--expect` h32 gate refused (fail-close held, nothing applied). Recovery + 3 permanent fixes:
+
+1. **Transcript rescue (zero LLM bytes):** `rescue_review.py` rebuilt repair_review.json purely from the harness-recorded StructuredOutput inputs in the run's agent-*.jsonl transcripts, replicating the JS assembly byte-exactly — hit the pinned `rv=529,h32=3294346535` on the first try (= proof, not trust). One-off; the documented Workflow-journal fallback pattern.
+2. **post_split tag:** repair-created SAME_AS rows carry `post_split:true`; assemble's coined-split-target anachronism guard exempts ONLY tagged rows (repair runs on the FINAL catalog; untagged gate-time references still hard-fail). Found live: 2 of the 24 links target D5-coined records (`food_beverage_cogs`, `board_share_repurchase_authorization`).
+3. **Mutate-before-validate fixed:** apply persisted decisions.json BEFORE assemble validated — the crash left 24 stale untagged rows that poisoned every re-run (restored byte-exact from the pristine source: 179+24). decisions.json now written only after assemble succeeds.
+4. **Chunked relay-write (the structural fix):** the workflow now writes the review in ROW-BOUNDARY pieces (≤100 rows, surrogate-safe, each post-write h32-asserted by code), then pure-python `assemble-review` re-verifies the FULL h32+rv against the workflow-computed `--expect` and writes the file; apply re-checks the same expect again. JS self-asserts piece construction (`joined rows == JSON.stringify`). Any full-size run breaks without this.
+
+Arm-1 state after recovery: apply 24 links OK, VALIDATION PASSED (573, rolled-up 209), selector run (492 eligible; stratum 100 = 25/25/25 signal-tails + 33 composite-fill; noise 40 even-spread rank 0→99). Arms 2+3 then ran and produced the §8d GO below.
+
+## 8d. DECISION-④ GATE RULING — GO (final, orchestrator, 2026-06-11)
+
+Arms run 2026-06-11 (~7.3M: Arm-2 4.07M ×100 stratum solo re-judges, Arm-3 3.26M ×40 noise pairs ×2); orchestrator independently recounted every number from the raw disk artifacts (ab_arm2_review.json, ab_arm3a/b.json, ab_stratum.json, ab_differ_report.json) — all matched.
+
+- **Lost merges: 0/100** on the adversarially-hardest stratum (union of per-signal top-25 extremes + composite fill). Wilson 95% upper bound 3.70%.
+- **Noise floor: 0/40×2** (judge perfectly stable; degenerate floor → rule-of-three ceiling 3.75%). Pre-registered criterion lost ≤ floor: met (0 ≤ 0); degenerate guard 3.70% ≤ 3.75%: met.
+- **Anchoring smoking gun: empty.** Late-position gradient = 0.0 with late slots deliberately oversampled (73/100; pos-9 last-slot n=24, all clean).
+
+**Ruling: GO — batched repair (k=10, paged, proposer+blind-confirm AND-gate) is licensed for LEAF/company catalogs only.** Conditions binding:
+1. **Fold repair stays per-pair** (batch_size 1) until the separate K2 fold-profile gate passes.
+2. **The 1–2% production canary — BUILT + LIVE-SMOKED same day (suite 257+1; smoke wf_c8bbffcc-de2 PASSED).** Deterministic sample (h32 of normalized pair, idx tie-break; CANARY_RATE 2%, floor CANARY_MIN 5, clipped to pool) of the batched DIFFERENT/UNCLEAR rows that never got an isolated look; each gets a solo re-judgment with the byte-identical per-pair prompt; verdicts ride the review rows as `canary_verdict`/`canary_why`. **Un-skippable:** apply RE-derives the sample itself and refuses to apply when a sampled row lacks a solo verdict; any solo SAME = CANARY HIT = abort before any write (the canary never creates links — alarm only; two-agent merge invariant untouched). Smoke verified the JS sample == apply's re-derived sample on real data ([0,2,3,7,8], 5/10 eligible, 0 hits). With this, the GO license is operational: batched repair may be enabled for leaf runs (batch_size>1 in the args).
+3. Statistical bound ≠ certainty; misses are the recoverable direction (every future sweep re-suggests unlinked pairs).
+4. "Provisional" hedge resolved to final GO: the pre-registered criterion was met on a maximally clean raw result; demanding a larger stratum post-hoc would be goalpost-moving.
+
+## 9. Owner decisions / remaining gate
+
+Resolved: P4 proposer+confirm, today-bug fixes, k=10, page size 600 with no terminal clip, targeted A/B, and the production canary. Remaining: fold repair stays per-pair until the separate K2 fold-profile gate passes.
 
 ## Provenance
 Study `wf_7c2d3a58-7f7` (9 agents, 2026-06-11). Skeptic #2 re-verified all 5 load-bearing code claims line-by-line; 2 map errors found+corrected (repair_smoke has zero high-blast pairs; "every terminal merge judgment is per-item" is false — refute1 is multi-item, the honest invariant is two-agents-per-merge). Raw output `/tmp/.../w0oiyc8qw.output` (ephemeral — THIS FILE is the durable record).

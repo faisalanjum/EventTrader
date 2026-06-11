@@ -72,13 +72,22 @@ phase('Suggest')
 // Per-pair mode keeps the full relay + content-hash verification (today's path).
 const SUGGEST_CMD = `Run with Bash:
 test -z "$ANTHROPIC_API_KEY" || { echo "BILLING-GUARD FAIL: ANTHROPIC_API_KEY present in env — refusing to run (subscription-only policy, CLAUDE.md)"; exit 9; } && ${PY} ${DIR}/workflows/repair_duplicates.py suggest ${RUN_DIR} --limit ${LIMIT}${USE_EMBEDDINGS ? ' --use-embeddings' : ''}`
-const suggested = BATCH_K > 1
+// decision-④ frozen fixture: args.frozen_candidates=true reuses the PINNED candidates file
+// byte-frozen (summary CLI, never regenerates) — batched lane only; experiment arms must
+// never let suggest re-run between arms.
+const FROZEN = A.frozen_candidates === true
+if (FROZEN && BATCH_K <= 1) throw new Error('frozen_candidates requires the batched lane (batch_size>1)')
+const suggested = (FROZEN && BATCH_K > 1)
+  ? await agent(`Run with Bash:
+${PY} ${DIR}/workflows/repair_duplicates.py summary ${RUN_DIR}
+Return the printed JSON exactly as SUGGEST_SLIM_SCHEMA.`, {schema:SUGGEST_SLIM_SCHEMA, model:'opus', label:'repair-summary-frozen', phase:'Suggest'})
+  : BATCH_K > 1
   ? await agent(`${SUGGEST_CMD} --print-summary
 Return the printed JSON exactly as SUGGEST_SLIM_SCHEMA.`, {schema:SUGGEST_SLIM_SCHEMA, model:'opus', label:'repair-suggest', phase:'Suggest'})
   : await agent(`${SUGGEST_CMD}
 Return the printed JSON exactly as SUGGEST_SCHEMA.`, {schema:SUGGEST_SCHEMA, model:'opus', label:'repair-suggest', phase:'Suggest'})
 if (!suggested) throw new Error('repair suggest agent died — fail-close.')
-if (suggested.limit_used !== LIMIT || suggested.use_embeddings !== USE_EMBEDDINGS) throw new Error(`repair-suggest ran with wrong params (limit=${suggested.limit_used} embeddings=${suggested.use_embeddings}, commanded limit=${LIMIT} embeddings=${USE_EMBEDDINGS}) — relay dropped/changed a flag; fail-close.`)
+if (!FROZEN && (suggested.limit_used !== LIMIT || suggested.use_embeddings !== USE_EMBEDDINGS)) throw new Error(`repair-suggest ran with wrong params (limit=${suggested.limit_used} embeddings=${suggested.use_embeddings}, commanded limit=${LIMIT} embeddings=${USE_EMBEDDINGS}) — relay dropped/changed a flag; fail-close.`)
 const canon = v => { if (Array.isArray(v)) return '[' + v.map(canon).join(',') + ']'
   if (v && typeof v === 'object') return '{' + Object.keys(v).sort().map(k => JSON.stringify(k) + ':' + canon(v[k])).join(',') + '}'
   return JSON.stringify(v) }
@@ -207,18 +216,87 @@ for (const r of finalRows) {
     else r.verdict = 'UNCLEAR'
   }
 }
+
+// C5 §8d GO condition #2 — the PRODUCTION CANARY: a deterministic ~2% sample (min 5,
+// clipped to pool; key = h32(norm(a)|norm(b)), idx tie-break — mirrored EXACTLY in
+// repair_duplicates.py apply, which RE-derives the sample and refuses to apply if a
+// sampled row lacks canary_verdict, so this lane can never be silently skipped) of the
+// DIFFERENT/UNCLEAR rows that never got an isolated look, solo re-judged with the
+// byte-identical per-pair prompt. Any solo SAME = the lane is missing merges -> abort
+// loud BEFORE apply. The canary NEVER creates links (alarm only, two-agent merge
+// invariant untouched).
+const CANARY_RATE = 0.02, CANARY_MIN = 5
+const elig = finalRows.filter(r => r.verdict !== 'SAME' && r.confirmed !== true)
+if (elig.length) {
+  const nCan = Math.min(elig.length, Math.max(CANARY_MIN, Math.ceil(CANARY_RATE * elig.length)))
+  const ckey = r => h32(`${norm(r.a)}|${norm(r.b)}`)
+  const canIdx = [...elig].sort((x, y) => (ckey(x) - ckey(y)) || (x.idx - y.idx)).slice(0, nCan).map(r => r.idx).sort((a, b) => a - b)
+  log(`C5 canary: ${canIdx.length}/${elig.length} batched keep-separate row(s) get a solo re-judgment (idx ${canIdx.join(',')})`)
+  const canBy = {}
+  for (let s = 0; s < canIdx.length; s += 3) {
+    const grp = canIdx.slice(s, s + 3)
+    const shown = await agent(`Run with Bash:
+${PY} ${DIR}/workflows/repair_duplicates.py show ${RUN_DIR} --idx ${grp.join(',')}
+Return the printed JSON exactly as SHOW_SCHEMA.`, {schema:SHOW_SCHEMA, model:'opus', label:`repair-canary-show:${grp.join(',')}`, phase:'Review'})
+    if (!shown) throw new Error('repair canary show clerk died — fail-close.')
+    if (h32(canon(shown.candidates)) !== shown.page_h32) throw new Error('repair canary show relay drift: candidates != code-printed page_h32 — fail-close.')
+    const gotIdx = shown.candidates.map(c => c.idx)
+    if (JSON.stringify(gotIdx) !== JSON.stringify(grp)) throw new Error(`repair canary show returned idx ${gotIdx.join(',')} for requested ${grp.join(',')} — fail-close.`)
+    for (const c of shown.candidates) canBy[c.idx] = c
+  }
+  const solos = (await parallel(canIdx.map(i => () => {
+    const { idx, ...c } = canBy[i]
+    return agent(PAIR_REVIEW_PROMPT(c), {schema:REVIEW_SCHEMA, model:'opus', label:`repair-canary:${c.a}:${c.b}`, phase:'Review'}).then(v => ({i, c, v}))
+  }))).filter(Boolean)
+  if (solos.length !== canIdx.length) throw new Error(`repair canary lost ${canIdx.length - solos.length} solo verdict(s) — fail-close.`)
+  for (const r of solos) {
+    if (norm(r.v.a) !== norm(r.c.a) || norm(r.v.b) !== norm(r.c.b))
+      throw new Error(`repair canary pair mismatch: judged "${r.v.a}|${r.v.b}" but assigned "${r.c.a}|${r.c.b}" — fail-close.`)
+  }
+  const hits = solos.filter(r => r.v.verdict === 'SAME').map(r => r.i)
+  if (hits.length) throw new Error(`repair CANARY HIT: solo re-judgment says SAME for batched-DIFFERENT/UNCLEAR idx ${hits.join(',')} — the batched lane is missing merges; fail-close (investigate / re-run per-pair).`)
+  const soloByIdx = {}
+  for (const r of solos) soloByIdx[r.i] = r.v
+  for (const r of finalRows) {
+    if (soloByIdx[r.idx]) { r.canary_verdict = soloByIdx[r.idx].verdict; r.canary_why = clean(soloByIdx[r.idx].why) }
+  }
+}
 reviewFile = { reviews: finalRows.map(r => ({ ...r, why: clean(r.why) })) }
 }
 
 phase('Apply')
 
-// Stage-0 #5: bind the agent-written review file to THIS source string (count + h32).
+// Stage-0 #5 + incident 2026-06-11: a single-shot Write of a full-size (529-row) review
+// truncated at the clerk's output-token limit; the clerk's hand re-transcription drifted
+// 1 byte and the --expect gate (rightly) refused. The review is now relay-written in
+// ROW-BOUNDARY pieces (surrogate-safe cuts, <=PIECE_ROWS rows each, every piece
+// post-write h32-asserted by code), then pure-python assemble-review re-verifies the
+// FULL h32+rv against THIS source string and writes repair_review.json; apply re-checks
+// the same expect a third time.
 const reviewJson = JSON.stringify(reviewFile)
-const applied = await agent(`Use the Write tool to save this exact JSON (byte-for-byte) to ${RUN_DIR}/repair_review.json:
-${reviewJson}
+const EXPECT = `rv=${reviewFile.reviews.length},h32=${h32(reviewJson)}`
+const rowStrs = reviewFile.reviews.map(r => JSON.stringify(r))
+const rebuilt = '{"reviews":[' + rowStrs.join(',') + ']}'
+if (rebuilt !== reviewJson) throw new Error('repair piece construction drift: joined row strings != JSON.stringify(reviewFile) — fail-close.')
+const PIECE_ROWS = 100
+const pieces = []
+for (let s = 0; s < rowStrs.length; s += PIECE_ROWS) {
+  const body = rowStrs.slice(s, s + PIECE_ROWS).join(',')
+  pieces.push((s === 0 ? '{"reviews":[' : ',') + body + (s + PIECE_ROWS >= rowStrs.length ? ']}' : ''))
+}
+const PIECE_SCHEMA = { type:'object', additionalProperties:false, required:['ok'], properties:{ ok:{type:'boolean'} } }
+const written = (await parallel(pieces.map((txt, i) => () => {
+  const f = `${RUN_DIR}/review_chunks/piece_${String(i).padStart(4, '0')}.txt`
+  return agent(`Use the Write tool to save this exact text (byte-for-byte, NO trailing newline) to ${f}:
+${txt}
 Then run with Bash:
-${PY} ${DIR}/workflows/repair_duplicates.py apply ${RUN_DIR} --review ${RUN_DIR}/repair_review.json --expect 'rv=${reviewFile.reviews.length},h32=${h32(reviewJson)}'
-Return ok=true and summary = the printed JSON. If the command exits non-zero, ok=false and summary = exact error.`, {schema:APPLY_SCHEMA, model:'opus', label:'repair-apply', phase:'Apply'})
+${PY} -c "import sys; sys.path.insert(0, '${DIR}/workflows'); from repair_duplicates import h32; s = open('${f}', encoding='utf-8').read(); assert h32(s) == ${h32(txt)}, f'piece drift: got {h32(s)}'"
+If the assert fails, re-Write the exact text and re-run the assert until it passes. Return ok=true ONLY if the assert passed.`, {schema:PIECE_SCHEMA, model:'opus', label:`repair-write:${i}`, phase:'Apply'})
+}))).filter(Boolean)
+if (written.length !== pieces.length || written.some(v => v.ok !== true)) throw new Error(`repair piece write failed: ${written.filter(v => v && v.ok === true).length}/${pieces.length} pieces verified — fail-close.`)
+const applied = await agent(`Run with Bash:
+${PY} ${DIR}/workflows/repair_duplicates.py assemble-review ${RUN_DIR} --pieces ${pieces.length} --expect '${EXPECT}' && ${PY} ${DIR}/workflows/repair_duplicates.py apply ${RUN_DIR} --review ${RUN_DIR}/repair_review.json --expect '${EXPECT}'
+Return ok=true and summary = the printed JSON of the apply command. If any command exits non-zero, ok=false and summary = exact error.`, {schema:APPLY_SCHEMA, model:'opus', label:'repair-apply', phase:'Apply'})
 if (!applied || !applied.ok) throw new Error(`repair apply failed: ${applied && applied.summary}`)
 
 phase('Validate')

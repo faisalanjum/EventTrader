@@ -315,7 +315,8 @@ def test_apply_p2_happy_path_with_confirmed_same(tmp_path):
     out = repair_apply(run, _rows(run, [
         {"idx": 0, "a": "guest_count", "b": "customer_transactions", "verdict": "SAME",
          "why": "same metric", "confirmed": True},
-        {"idx": 1, "a": "store_count", "b": "oil_price", "verdict": "DIFFERENT", "why": "no"}]))
+        {"idx": 1, "a": "store_count", "b": "oil_price", "verdict": "DIFFERENT", "why": "no",
+         "canary_verdict": "DIFFERENT", "canary_why": "solo agrees"}]))
     assert out["added"] == 1
 
 
@@ -418,3 +419,268 @@ def test_suggest_cli_print_summary_omits_candidates(tmp_path):
                                       "use_embeddings"} <= set(printed)
     disk = json.loads((run / "repair_candidates.json").read_text())
     assert len(disk["candidates"]) == 1                  # full blob pinned on disk
+
+
+def test_summary_mode_prints_slim_view_of_existing_file_without_regenerating(tmp_path):
+    # decision-④ frozen fixture: arm runs must reuse the PINNED candidates file verbatim.
+    import subprocess, sys as _sys, hashlib as _h
+    run = make_run(tmp_path, [rec("guest_count_growth"), rec("guest_transactions_growth")])
+    _pin(run, _cands([("guest_count_growth", "guest_transactions_growth")]))
+    before = _h.sha256((run / "repair_candidates.json").read_bytes()).hexdigest()
+    out = subprocess.run([_sys.executable, str(WORKFLOWS / "repair_duplicates.py"),
+                          "summary", str(run)], capture_output=True, text=True)
+    assert out.returncode == 0, out.stdout + out.stderr
+    printed = json.loads(out.stdout.strip().splitlines()[-1])
+    assert "candidates" not in printed and printed["count"] == 1
+    assert {"pairs_h32", "cands_h32", "limit_used", "use_embeddings"} <= set(printed)
+    assert _h.sha256((run / "repair_candidates.json").read_bytes()).hexdigest() == before
+
+
+def test_ab_harness_prompt_is_byte_identical_to_production():
+    # decision-④ round: the whole A/B rests on ab_pair_judge.js using EXACTLY the production
+    # per-pair prompt — lock the two template strings together so neither can drift silently.
+    a = (WORKFLOWS / "ab_pair_judge.js").read_text()
+    r = (WORKFLOWS / "repair_duplicates.js").read_text()
+    ga = a[a.index("const PAIR_REVIEW_PROMPT"):a.index("const REVIEW_SCHEMA")]
+    gr = r[r.index("const PAIR_REVIEW_PROMPT"):r.index("const REFUTE2_PROMPT")]
+    ta = ga[ga.index("You are"):ga.rindex("keep separate.")]
+    tr = gr[gr.index("You are"):gr.rindex("keep separate.")]
+    assert ta == tr
+    # and the meaning rule itself
+    ea = a[a.index("const EXACT_MEANING_RULE"):a.index("// VERBATIM")]
+    er = r[r.index("const EXACT_MEANING_RULE"):r.index("const SUGGEST_SCHEMA")]
+    ra = ea[ea.index("Approve SAME"):ea.rindex("UNCLEAR.")]
+    rr = er[er.index("Approve SAME"):er.rindex("UNCLEAR.")]
+    assert ra == rr
+
+
+# ---- post_split repair links onto D5-coined targets (found live 2026-06-11: Arm-1 apply
+# blocked on food_beverage_cogs / board_share_repurchase_authorization — repair runs on the
+# FINAL catalog, so its SAME_AS rows legitimately reference split-coined names; only
+# gate-time decisions are anachronistic there) ----
+
+def make_split_run(tmp_path):
+    run = tmp_path / "run"
+    run.mkdir()
+    records = [
+        rec("food_cost", companies=("AAA", "BBB")),
+        rec("food_beverage_costs", companies=("CCC",)),
+    ]
+    seed = {"industry": "Test", "catalog": records, "analysis": {}}
+    review = {"reviews": [{"collision_name": "food_cost", "verdict": "DIFFERENT",
+                           "why": "two different objects"}],
+              "split_map": [{"from": "food_cost",
+                             "to": ["food_beverage_cogs", "commodity_basket"],
+                             "assignments": [{"company": "AAA", "to": "food_beverage_cogs"},
+                                             {"company": "BBB", "to": "commodity_basket"}]}]}
+    dec = {"gate_verdicts": [], "approved_same_as": [], "approved_rewrites": [],
+           "parked_rewrites": []}
+    cat, approved = assemble(seed, dec, review)
+    (run / "seed.json").write_text(serialize(seed))
+    (run / "same_name_review.json").write_text(serialize(review))
+    (run / "decisions.json").write_text(serialize(dec))
+    (run / "catalog.json").write_text(serialize(cat))
+    (run / "approved.json").write_text(serialize(approved))
+    return run
+
+
+def test_repair_link_onto_coined_split_target_applies_with_post_split_tag(tmp_path):
+    run = make_split_run(tmp_path)
+    cands(run, ("food_beverage_cogs", "food_beverage_costs"))
+    review = {"reviews": [{"a": "food_beverage_cogs", "b": "food_beverage_costs",
+                           "verdict": "SAME", "why": "same exact object"}]}
+    rp = run / "repair_review.json"
+    rp.write_text(serialize(review))
+    out = apply(run, rp)
+    assert out["added"] == 1
+    dec = json.loads((run / "decisions.json").read_text())
+    assert dec["approved_same_as"] and all(
+        l.get("post_split") is True for l in dec["approved_same_as"])
+    cat = json.loads((run / "catalog.json").read_text())
+    rolled = [r for r in cat["catalog"] if r["canonical_name"] != r["driver_name"]]
+    assert len(rolled) == 1
+
+
+def test_untagged_gate_decision_referencing_coined_target_still_hard_fails(tmp_path):
+    run = make_split_run(tmp_path)
+    seed = json.loads((run / "seed.json").read_text())
+    review = json.loads((run / "same_name_review.json").read_text())
+    dec = json.loads((run / "decisions.json").read_text())
+    dec["approved_same_as"].append({"variant": "food_beverage_costs",
+                                    "canonical": "food_beverage_cogs"})   # NO post_split tag
+    with pytest.raises(SystemExit, match="coined split target"):
+        assemble(seed, dec, review)
+
+
+def test_repair_apply_on_split_run_is_idempotent_byte_identical(tmp_path):
+    run = make_split_run(tmp_path)
+    cands(run, ("food_beverage_cogs", "food_beverage_costs"))
+    review = {"reviews": [{"a": "food_beverage_cogs", "b": "food_beverage_costs",
+                           "verdict": "SAME", "why": "same exact object"}]}
+    rp = run / "repair_review.json"
+    rp.write_text(serialize(review))
+    assert apply(run, rp)["added"] == 1
+    first = (run / "catalog.json").read_bytes()
+    out2 = apply(run, rp)
+    assert out2["added"] == 0
+    assert (run / "catalog.json").read_bytes() == first
+
+
+def test_apply_does_not_persist_decisions_when_assemble_fails(tmp_path, monkeypatch):
+    import repair_duplicates as rd
+    run = make_run(tmp_path, [rec("guest_count_growth"), rec("guest_transactions_growth")])
+    cands(run, ("guest_count_growth", "guest_transactions_growth"))
+    review = {"reviews": [{"a": "guest_count_growth", "b": "guest_transactions_growth",
+                           "verdict": "SAME", "why": "same exact meaning"}]}
+    rp = run / "repair_review.json"
+    rp.write_text(serialize(review))
+    before = (run / "decisions.json").read_bytes()
+
+    def boom(*a, **k):
+        raise SystemExit("ASSEMBLE FAIL: injected")
+    monkeypatch.setattr(rd, "assemble", boom)
+    with pytest.raises(SystemExit, match="injected"):
+        rd.apply(run, rp)
+    assert (run / "decisions.json").read_bytes() == before   # mutate-before-validate is gone
+
+
+# ---- chunked relay-write of repair_review.json (incident 2026-06-11: single-shot Write of
+# the 529-row review truncated at the clerk's output limit; the hand re-transcription
+# drifted 1 byte and the expect gate refused — pieces are cut at ROW boundaries by the JS,
+# each post-write h32-asserted, and assemble-review is the python FINAL enforcement) ----
+
+from repair_duplicates import assemble_review  # noqa: E402
+from assemble_catalog import h32  # noqa: E402
+
+
+def _piece_texts(rows, k):
+    """Replicates the JS piece construction rule exactly: rowStrs joined with ',',
+    '{"reviews":[' prefix on piece 0, ']}' suffix on the last piece."""
+    rs = [json.dumps(r, ensure_ascii=False, separators=(",", ":")) for r in rows]
+    out = []
+    for s in range(0, len(rs), k):
+        body = ",".join(rs[s:s + k])
+        out.append(('{"reviews":[' if s == 0 else ',') + body + (']}' if s + k >= len(rs) else ''))
+    return out
+
+
+def _write_pieces(tmp_path, rows, k):
+    run = tmp_path / "run"
+    run.mkdir(exist_ok=True)
+    cdir = run / "review_chunks"
+    cdir.mkdir(exist_ok=True)
+    pieces = _piece_texts(rows, k)
+    for i, t in enumerate(pieces):
+        (cdir / f"piece_{i:04d}.txt").write_text(t, encoding="utf-8")
+    return run, pieces, "".join(pieces)
+
+
+def _ar_rows(n):
+    return [{"idx": i, "a": f"driver_{i}", "b": f'dr "quoted" \\ {i} 🎂',
+             "verdict": "DIFFERENT", "why": f"unicode — naïve café №{i}"} for i in range(n)]
+
+
+def test_assemble_review_multi_piece_byte_identity(tmp_path):
+    rows = _ar_rows(7)
+    run, pieces, full = _write_pieces(tmp_path, rows, 3)
+    assert len(pieces) == 3
+    assert full == json.dumps({"reviews": rows}, ensure_ascii=False, separators=(",", ":"))
+    out = assemble_review(run, 3, f"rv=7,h32={h32(full)}")
+    assert out["ok"] is True and out["rv"] == 7
+    assert (run / "repair_review.json").read_text(encoding="utf-8") == full
+    assert not (run / "review_chunks").exists()      # pieces cleaned, no stale survivors
+
+
+def test_assemble_review_rejects_drifted_piece(tmp_path):
+    rows = _ar_rows(5)
+    run, pieces, full = _write_pieces(tmp_path, rows, 2)
+    p = run / "review_chunks" / "piece_0001.txt"
+    p.write_text(p.read_text(encoding="utf-8").replace("naïve", "naive"), encoding="utf-8")
+    with pytest.raises(SystemExit, match="EXPECT MISMATCH"):
+        assemble_review(run, 3, f"rv=5,h32={h32(full)}")
+    assert not (run / "repair_review.json").exists()
+
+
+def test_assemble_review_rejects_missing_and_stale_extra_piece(tmp_path):
+    rows = _ar_rows(5)
+    run, pieces, full = _write_pieces(tmp_path, rows, 2)
+    with pytest.raises(SystemExit, match="piece"):
+        assemble_review(run, 4, f"rv=5,h32={h32(full)}")   # missing piece_0003
+    (run / "review_chunks" / "piece_0007.txt").write_text("stale", encoding="utf-8")
+    with pytest.raises(SystemExit, match="piece"):
+        assemble_review(run, 3, f"rv=5,h32={h32(full)}")   # stale extra survivor
+
+
+def test_assemble_review_rejects_rv_mismatch(tmp_path):
+    rows = _ar_rows(4)
+    run, pieces, full = _write_pieces(tmp_path, rows, 2)
+    with pytest.raises(SystemExit, match="EXPECT MISMATCH"):
+        assemble_review(run, 2, f"rv=9,h32={h32(full)}")
+    assert not (run / "repair_review.json").exists()
+
+
+# ---- §8d GO condition #2: the production canary (batched lane only). Apply RE-derives a
+# deterministic ~2% sample (h32 of normalized pair, idx tie-break; min 5, clipped to pool)
+# of the DIFFERENT/UNCLEAR rows that never got an isolated look, and refuses to apply if a
+# sampled row lacks a solo canary_verdict (canary skipped) or if any canary_verdict is
+# SAME (the lane is missing merges — abort loud, never auto-merge from the canary). ----
+
+def test_canary_happy_path_applies_with_solo_verdicts(tmp_path):
+    from repair_duplicates import apply as repair_apply
+    run = _plan_run(tmp_path)
+    out = repair_apply(run, _rows(run, [
+        {"idx": 0, "a": "guest_count", "b": "customer_transactions", "verdict": "SAME",
+         "why": "same metric", "confirmed": True},
+        {"idx": 1, "a": "store_count", "b": "oil_price", "verdict": "DIFFERENT", "why": "no",
+         "canary_verdict": "DIFFERENT", "canary_why": "solo agrees: unrelated"}]))
+    assert out["added"] == 1
+
+
+def test_canary_missing_solo_verdict_fails_closed(tmp_path):
+    from repair_duplicates import apply as repair_apply
+    run = _plan_run(tmp_path)
+    rp = _rows(run, [
+        {"idx": 0, "a": "guest_count", "b": "customer_transactions", "verdict": "SAME",
+         "why": "same metric", "confirmed": True},
+        {"idx": 1, "a": "store_count", "b": "oil_price", "verdict": "DIFFERENT", "why": "no"}])
+    with pytest.raises(SystemExit, match="canary"):
+        repair_apply(run, rp)
+
+
+def test_canary_hit_aborts_before_any_write(tmp_path):
+    from repair_duplicates import apply as repair_apply
+    run = _plan_run(tmp_path)
+    before_cat = (run / "catalog.json").read_bytes()
+    before_dec = (run / "decisions.json").read_bytes()
+    rp = _rows(run, [
+        {"idx": 0, "a": "guest_count", "b": "customer_transactions", "verdict": "SAME",
+         "why": "same metric", "confirmed": True},
+        {"idx": 1, "a": "store_count", "b": "oil_price", "verdict": "DIFFERENT", "why": "no",
+         "canary_verdict": "SAME", "canary_why": "solo disagrees"}])
+    with pytest.raises(SystemExit, match="CANARY HIT"):
+        repair_apply(run, rp)
+    assert (run / "catalog.json").read_bytes() == before_cat
+    assert (run / "decisions.json").read_bytes() == before_dec
+
+
+def test_canary_excludes_confirm_flipped_rows(tmp_path):
+    from repair_duplicates import apply as repair_apply
+    run = _plan_run(tmp_path)
+    # idx0 = confirm-flipped (DIFFERENT, confirmed:true -> already isolated; NOT canary
+    # eligible, needs no canary_verdict); idx1 = batched DIFFERENT -> sampled, has one.
+    out = repair_apply(run, _rows(run, [
+        {"idx": 0, "a": "guest_count", "b": "customer_transactions", "verdict": "DIFFERENT",
+         "why": "confirm flipped it", "confirmed": True},
+        {"idx": 1, "a": "store_count", "b": "oil_price", "verdict": "DIFFERENT", "why": "no",
+         "canary_verdict": "DIFFERENT", "canary_why": "solo agrees"}]))
+    assert out["added"] == 0
+
+
+def test_canary_not_enforced_without_plan(tmp_path):
+    from repair_duplicates import apply as repair_apply
+    run = make_run(tmp_path, [rec("guest_count_growth"), rec("guest_transactions_growth")])
+    cands(run, ("guest_count_growth", "guest_transactions_growth"))
+    out = repair_apply(run, _rows(run, [
+        {"a": "guest_count_growth", "b": "guest_transactions_growth",
+         "verdict": "DIFFERENT", "why": "per-pair lane, already isolated"}]))
+    assert out["added"] == 0

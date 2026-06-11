@@ -317,7 +317,14 @@ def assemble(seed, dec, review=None):
         if bad:
             raise SystemExit(f"ASSEMBLE REVIEW FAIL: decision references a name the review "
                              f"split/parked (flags must be resolved BEFORE other decisions): {bad}")
-        coined = sorted(referenced & (targets - seed_names))
+        # The ONLY legitimate post-split decisions are repair-created SAME_AS links
+        # (repair_duplicates.py tags them post_split:true — repair runs on the FINAL
+        # catalog, so referencing coined split targets is correct there). Any name
+        # referenced by an UNTAGGED (gate-time) decision still hard-fails.
+        gate_dec = dict(dec)
+        gate_dec["approved_same_as"] = [l for l in (dec.get("approved_same_as") or [])
+                                        if l.get("post_split") is not True]
+        coined = sorted(decision_names(gate_dec) & (targets - seed_names))
         if coined:
             raise SystemExit(f"ASSEMBLE REVIEW FAIL: decision references a coined split target "
                              f"(the gate ran before the split): {coined}")
