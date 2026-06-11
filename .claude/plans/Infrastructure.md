@@ -12,12 +12,13 @@
 
 **What this is**: Multi-layer earnings analysis system using forked skills for context isolation.
 
-**Key findings from testing (2026-01-16, retested 2026-02-05, hooks tested 2026-02-08, retested 2026-02-18 v2.1.45, retested 2026-03-06 v2.1.70, retested 2026-03-12 v2.1.74, retested 2026-03-14 v2.1.76, retested 2026-03-18 v2.1.78, retested 2026-03-19 v2.1.80, retested 2026-03-26 v2.1.84, retested 2026-03-27 v2.1.85, retested 2026-04-10 v2.1.100, retested 2026-04-14 v2.1.107):**
+**Key findings from testing (2026-01-16, retested 2026-02-05, hooks tested 2026-02-08, retested 2026-02-18 v2.1.45, retested 2026-03-06 v2.1.70, retested 2026-03-12 v2.1.74, retested 2026-03-14 v2.1.76, retested 2026-03-18 v2.1.78, retested 2026-03-19 v2.1.80, retested 2026-03-26 v2.1.84, retested 2026-03-27 v2.1.85, retested 2026-04-10 v2.1.100, retested 2026-04-14 v2.1.107, retested 2026-05-13 v2.1.140, **retested 2026-06-10 v2.1.172**):**
 
 | What | Status | Workaround |
 |------|--------|------------|
 | Skill tool in fork | ✅ WORKS | Use for all layer chaining |
 | Agent spawner in fork | ❌ BLOCKED | Use Skill tool instead. Note: TaskCreate/Get/Update/List DO work in forks (Task #139 proof) — only the agent spawner is blocked |
+| **Nested sub-agent spawning (Agent-tool tier)** | ✅ **NOW WORKS** (v2.1.172) | Was BLOCKED everywhere through v2.1.140. Agent-tool-spawned subagents now HAVE the **Agent tool** (direct) → can spawn their own sub-agents. Verified **≥10 levels deep, no refusal** (changelog says "5"). Spawner = Agent tool (TaskCreate still absent in subagents). **EXCEPTION**: dynamic-**Workflow** `agent()` agents still LACK the Agent tool (sandboxed, single-tier). See v2.1.172 retest. |
 | AskUserQuestion in fork | ❌ BLOCKED | Non-interactive; use file-based communication |
 | Thinking capture | ✅ PRIMARY + SUBAGENTS | In both primary transcript AND agent files (if Opus used) |
 | Agent file agentIds | ⚠️ MISMATCH | Transcript IDs ≠ file IDs; match by sessionId |
@@ -167,6 +168,7 @@
 | **`feedbackSurveyRate` setting** | ✅ **NEW** (v2.1.76) | Enterprise admins configure session quality survey sample rate. |
 | **Output token limits increased** | ⚠️ **CHANGED** (v2.1.77) | Opus 4.6 default max output now 64k tokens (was 32k). Upper bound for Opus/Sonnet 4.6: 128k tokens. `MAX_THINKING_TOKENS=31999` may be updatable to ~63999. |
 | **PreToolUse "allow" vs deny fix** | ✅ **FIXED** (v2.1.77) | PreToolUse hooks returning `{"decision": "allow"}` were bypassing `deny` permission rules (including enterprise managed settings). **TESTED**: deny rule now correctly wins — hook "allow" cannot override deny. |
+| **Project PreToolUse hook fires INSIDE `context: fork` skills** | ✅ **PROVEN** (2026-05-19, v2.1.144) | A project `.claude/settings.json` PreToolUse hook fires for tool calls made inside a forked skill and **enforces deny** there (skill frontmatter `allowed/disallowedTools` does NOT — separately proven toothless). Env-gated **fail-open** design works: hook reads its own invocation's `os.environ`; with marker → `permissionDecision:deny`, without → allow. **Concurrency-safe**: two simultaneous sessions sharing the one project hook, X (marker) ‖ Y (no marker) — X had Bash+WebFetch+WebSearch+`mcp__neo4j-cypher__read_neo4j_cypher` all DENIED, Y all ALLOWED, **zero cross-contamination** (per-process env scoping; X marker all-True, Y all-False). Tested under `bypassPermissions` so only the hook gated. Sub-agent-of-fork N/A (forks can't spawn). **Class matcher proven (2026-05-19)**: a SINGLE settings.json matcher `"mcp__.*"` + hook `startswith("mcp__")` deny-by-default fired & DENIED **two distinct un-enumerated MCP namespaces in one run** (`mcp__neo4j-cypher__read_neo4j_cypher` + `mcp__yahoo-finance__get_quote`, session `39140e04`) → IBKR and any future MCP server auto-covered, no per-tool enumeration. Sessions: X=`0be4272b`, Y=`d2f75903`. |
 | **`deny` MCP permission removes tools** | ✅ **FIXED** (v2.1.78) | `deny: ["mcp__servername"]` now correctly removes MCP tools from model context (was only hiding but still visible). **TESTED**: `deny: ["mcp__yahoo-finance"]` removed all 20 tools from available-deferred-tools list. |
 | **`includeGitInstructions` full suppression** | ✅ **FIXED** (v2.1.78) | Was only suppressing commit/PR sections; git status section still appeared. **TESTED**: Both env var (`CLAUDE_CODE_DISABLE_GIT_INSTRUCTIONS=true`) and setting (`includeGitInstructions: false`) now suppress ALL git sections including gitStatus. |
 | **`StopFailure` hook event** | ✅ **NEW** (v2.1.78) | 18th hook event type. Fires when turn ends due to API error (rate limit, auth failure). Cannot empirically test (requires API error). |
@@ -203,6 +205,121 @@
 | **`ANTHROPIC_DEFAULT_*_MODEL_SUPPORTS` env vars** | ✅ **NEW** (v2.1.84) | Override effort/thinking detection for 3P providers. Plus `_MODEL_NAME`/`_DESCRIPTION` for /model picker labels. **TESTED**: All 3 variants accepted without errors. |
 | **MCP tool descriptions 2KB cap** | ✅ **NEW** (v2.1.84) | Prevents OpenAPI-generated MCP servers from bloating context. Our servers unaffected (max 473 chars). |
 | **`--settings` overlay and hooks** | ⚠️ **CLARIFICATION** (v2.1.84) | **TESTED**: `--settings` does NOT register new hook events. 3 tests failed. Existing project settings hooks STILL fire when --settings used. |
+
+---
+
+### Retest Summary (2026-06-10, v2.1.172) — v2.1.141 → v2.1.172 (LATEST · 32 published versions)
+
+**Scope**: empirical delta against the v2.1.140 baseline. Tested **in-session via the Agent tool** (subscription path — NO `claude -p`/`claude_agent_sdk`, zero metered-billing risk) plus one dynamic **Workflow**. Every `✅ TESTED` item has a proof artifact in `earnings-analysis/test-outputs/test-v172-*.txt`. **Model: Opus 4.8** (`claude-opus-4-8[1m]`, default effort `xhigh`) — was Opus 4.7 at v140.
+
+#### 🟢 HEADLINE — Nested sub-agent spawning now WORKS (reverses the longest-standing "BLOCKED everywhere" finding)
+
+Changelog (v2.1.172, released today): *"Sub-agents can now spawn their own sub-agents (up to 5 levels deep)."*
+
+| Aspect | v2.1.140 | v2.1.172 | Proof |
+|---|---|---|---|
+| Agent tool inside an Agent-tool-spawned subagent | ABSENT (`ToolSearch select:Agent` → "No matching deferred tools found") | ✅ **PRESENT — now a `direct` tool** | `test-v172-agenttool-gp-inventory.txt` |
+| Subagent spawns its own sub-agent | ❌ blocked | ✅ **works** | `test-v172-nest-L1..L5.txt` |
+| Max nesting depth | n/a | ✅ **≥10 levels, ZERO refusal** (changelog says "5") | `test-v172-depth2-L1..L10.txt` + 8 distinct `agentId`s |
+| Spawner mechanism | — | **Agent tool** — NOT TaskCreate (TaskCreate still absent in subagents) | inventory + nest probes |
+
+- Proven with distinct harness-assigned `agentId`s at every level (rules out one model faking the chain) + on-disk canaries with stepped timestamps. Verified independently 3× (depth-5, depth-7, depth-10 chains).
+- **The documented "5 levels deep" is NOT a hard wall via the Agent tool** — main→L1→…→L10 ran with no refusal; we stopped only at our own safety cap. A ceiling past 10 (if any) is unknown.
+
+#### ⚠️ CRITICAL nuance — TWO spawn tiers, only ONE can nest
+
+| Spawn tier | Agent tool | Can nest? | Notes |
+|---|---|---|---|
+| **Agent-tool / Task subagent** (main → `Agent` tool) | ✅ PRESENT (direct) | ✅ **YES (≥10 deep)** | the v172 feature |
+| **Workflow-runtime `agent()`** (dynamic Workflows, v2.1.154) | ❌ ABSENT | ❌ **NO** | also lacks `Workflow` + `ScheduleWakeup` → consistent with the Workflow tool's "nesting is one level only". Workflow agents honestly self-report `agent_tool_present:false` (did not fabricate). |
+
+**Production implication**: extraction-worker / earnings-orchestrator can now build **recursive Agent-tool subagent trees** (orchestrator → per-section subagent → per-claim subagent). Dynamic-Workflow agents remain single-tier — use them for fan-out breadth, not depth.
+
+#### NEW capabilities — empirically TESTED at v2.1.172
+
+| Capability | Version | Status | Proof |
+|---|---|---|---|
+| Nested Agent-tool subagent spawning | v2.1.172 | ✅ **WORKS, ≥10 deep** | see headline |
+| Agent tool now in subagent tool set (direct) | v2.1.172 | ✅ **PRESENT** | `test-v172-agenttool-gp-inventory.txt` |
+| Read tool returns truncated **"PARTIAL view"** page instead of hard error on oversized read | v2.1.145 | ✅ **CONFIRMED (observed live)** | hit while reading the changelog dump: `"PARTIAL view — showing lines 1-495 of 647 total (27758 tokens, cap 25000)"` |
+| Dynamic Workflows + `ultracode` trigger keyword | v2.1.154 / v2.1.160 | ✅ **WORKS** | this retest's probe battery ran as a background Workflow (`/workflows`) |
+| Opus 4.8 default + 1M context | v2.1.154 | ✅ **CONFIRMED** | init model `claude-opus-4-8[1m]`, effort `xhigh` |
+
+#### ❗ CHANGELOG claims a fix, but EMPIRICALLY it did NOT hold
+
+| Item | Changelog | Empirical (v172) | Proof |
+|---|---|---|---|
+| Skill `disallowed-tools` frontmatter removes tools while active | v2.1.152: *"skills/commands can now set `disallowed-tools` to remove tools from the model while the skill is active"* | ❌ **NOT ENFORCED on the Skill-tool path** — a skill declaring `disallowed-tools:[Write,Edit]`, invoked via the Skill tool inside a subagent, had **Write AND Edit both SUCCEED** (files actually written to disk). Adversarially re-confirmed by a second agent. | `test-v172-disallow-result.txt`, `test-v172-disallow-write.txt`, `test-v172-disallow-verify.txt` |
+
+- **Consistent with the long-standing finding** that skill tool-restriction (`allowed-tools`/`disallowedTools`) is not enforced. CAVEAT: tested via Skill-tool invocation inside a subagent; the v152 enforcement might still apply to slash-commands or a forked/primary skill context (untested — fresh-session retest deferred).
+
+#### Re-verification of "Still broken" items at v2.1.172
+
+| Item | v2.1.140 | v2.1.172 | Change |
+|---|---|---|---|
+| Nested agent spawning | BLOCKED everywhere | ✅ **FIXED for Agent-tool tier** (≥10 deep); still blocked for Workflow agents | **PROMOTED** |
+| Task→Task nesting (Agent spawner present in subagent) | BLOCKED | ✅ Agent spawner now PRESENT in Agent-tool subagents (TaskCreate still absent) | **PROMOTED** |
+| Mid-session **agent** discovery | SNAPSHOT | ❌ **STILL SNAPSHOT** — `test-v172-hooked` created this session → Agent tool error `"Agent type 'test-v172-hooked' not found"`; only session-start agents are spawnable. (Skills, by contrast, ARE mid-session discoverable — confirmed again.) | unchanged |
+| Skill `allowed-tools`/`disallowed-tools` restriction | NOT ENFORCED | ❌ **STILL NOT ENFORCED** (v152 `disallowed-tools` claim did not hold on Skill-tool path) | unchanged |
+
+- **Blocked test**: the persistent agent-discovery snapshot meant `test-v172-hooked` (frontmatter Stop/SubagentStop/PostToolUse hooks) could not be spawned this session → the v2.1.145 hook STDIN fields (`background_tasks`/`session_crons`) and the v2.1.163 Stop/SubagentStop `additionalContext` keep-going are recorded as **changelog-confirmed, fresh-session retest deferred**. (Artifacts are built and ready: `.claude/agents/test-v172-hooked.md` + `.claude/hooks/test-v172-*.sh`.)
+
+#### Tool inventory at v2.1.172
+
+**Agent-tool FG general-purpose subagent** (apples-to-apples vs v140's 9 direct / 21 deferred / 98 MCP / 128 total):
+- **Direct (7)**: **Agent** (NEW), Bash, Edit, Read, Skill, ToolSearch, Write. **Glob + Grep dropped from the direct set** (still reachable; v2.1.162 restored explicit `--tools` Grep/Glob handling). `ShareOnboardingGuide` no longer present.
+- **Deferred built-in (18)**: Agent, TaskStop, Monitor, PushNotification, SendMessage, TeamCreate, TeamDelete, CronCreate, CronDelete, CronList, EnterWorktree, ExitWorktree, NotebookEdit, WebFetch, WebSearch, RemoteTrigger, ListMcpResourcesTool, ReadMcpResourceTool.
+- **ABSENT**: Workflow, ScheduleWakeup (main-session only), TaskCreate/Get/List/Update/Output (only `TaskStop` survives), AskUserQuestion, EnterPlanMode/ExitPlanMode.
+- **MCP ~147 / total ~172** — the MCP growth vs v140 is mostly **newly-connected MCP servers** (claude_ai Era Context +43, etc.), an environment change, not a CLI change.
+
+**Workflow-runtime agent** (distinct, more-restricted tier): 7 direct (Bash, Edit, Read, Skill, ToolSearch, Write, + `StructuredOutput` in schema mode), 17 deferred, ~146 MCP; **no Agent, no Workflow, no ScheduleWakeup**.
+
+Proof: `test-v172-agenttool-gp-inventory.txt`, `test-v172-fg-gp-inventory.txt`.
+
+#### Other doc-relevant changelog deltas v2.1.141 → v2.1.172 (CHANGELOG-confirmed; not separately re-tested)
+
+**Hooks**
+- v2.1.145 — Stop/SubagentStop hook STDIN now includes `background_tasks` + `session_crons`.
+- v2.1.163 — Stop/SubagentStop hooks can return `hookSpecificOutput.additionalContext` to give feedback and keep the turn going WITHOUT being flagged a hook error.
+- v2.1.163 — hook `if:"Bash(...)"` conditions now match commands inside `$()`/backticks too (refines the v2.1.85 `if:` finding; v2.1.147 fixed the same for `PowerShell(...)`).
+- v2.1.143 — stop-hook block loop now capped at 8 consecutive blocks (override: `CLAUDE_CODE_STOP_HOOK_BLOCK_CAP`).
+- v2.1.152 — NEW `MessageDisplay` hook event (transform/hide assistant text as displayed); SessionStart hooks can return `reloadSkills:true` and set `hookSpecificOutput.sessionTitle`.
+- v2.1.141 — hook JSON output `terminalSequence` field (desktop notifications/title/bell without a controlling terminal).
+
+**Skills / commands**
+- v2.1.152 — `/reload-skills` command + SessionStart `reloadSkills` install skills mid-session. (NB: **agents are still snapshot** — only skills reload.)
+- v2.1.144 — Skill tool permission-error in headless mode FIXED (was a v2.1.141 regression).
+- v2.1.145 — skill `context: fork` self-invoke infinite-loop FIXED.
+- v2.1.163 — skill `\$` escape for a literal `$` before a digit in command bodies.
+
+**Models / billing-adjacent** (cross-check `ANTHROPIC_BILLING_SUBSCRIPTION_CRITICAL.md` before any SDK-entrypoint change)
+- v2.1.154 — **Opus 4.8** (default high effort); lean system prompt is default for all but Haiku/Sonnet/Opus≤4.7; dynamic workflows introduced.
+- v2.1.170 — **Claude Fable 5** available.
+- v2.1.166 — `fallbackModel` setting (up to 3 tried in order); `MAX_THINKING_TOKENS=0` / `--thinking disabled` now disable thinking on API models that think by default.
+- v2.1.166 — cross-session `SendMessage` relays no longer carry **user authority**; receivers refuse relayed permission requests and auto mode blocks them. (Relevant to the PLF autonomous-loop relay-authority work.)
+
+**Permissions / safety**
+- v2.1.172 — `WebFetch(domain:*.example.com)` wildcards now match subdomains; mid-pattern file wildcards (`Read(secrets-*/config.json)`) no longer rejected at startup.
+- v2.1.166 — glob `"*"` in a deny-rule tool-name position denies all tools.
+- v2.1.160 — prompts before writing shell-startup (`.zshenv`/`.bash_login`) and build-config (`.npmrc`/`.bazelrc`/etc.) files that grant code execution.
+- v2.1.169 — `--safe-mode` / `CLAUDE_CODE_SAFE_MODE` disables ALL customizations (CLAUDE.md, plugins, skills, hooks, MCP) for troubleshooting; `disableBundledSkills` setting.
+
+**`-p` / SDK / headless**
+- v2.1.161 — a failed Bash command no longer cancels other calls in the same parallel batch (each returns independently). NB: hook-*blocked* parallel calls cancelling siblings is a SEPARATE issue (v140 caveat) — not addressed here.
+- v2.1.163 — `claude -p` no longer hangs after its final result when a backgrounded command never exits (~5s grace).
+- v2.1.169 — `/cd` moves the session cwd without breaking the prompt cache.
+- v2.1.162 — `--tools` explicitly listing Grep/Glob now provides the dedicated search tools (previously silently ignored).
+
+#### Test artifacts added (v2.1.172)
+- Agents: `.claude/agents/test-v172-hooked.md` (frontmatter Stop/SubagentStop/PostToolUse hooks — blocked by agent-snapshot this session).
+- Skills: `.claude/skills/test-v172-disallow/SKILL.md` (`disallowed-tools` enforcement probe).
+- Hooks: `.claude/hooks/test-v172-{subagentstop,post-tool,stop-addctx}.sh`.
+- Outputs (`earnings-analysis/test-outputs/`): `test-v172-nest-L1..L5.txt`, `test-v172-depth-L1..L7.txt`, `test-v172-depth2-L1..L10.txt`, `test-v172-disallow-{result,write,verify}.txt`, `test-v172-agenttool-gp-inventory.txt`, `test-v172-fg-gp-inventory.txt`.
+- Workflow: `…/workflows/scripts/v172-infra-probes-*.js` (run `v172-infra-probes`).
+
+> **Naming note**: the test-artifact prefix convention changed at the v140 era from the old `v1XX` form (v2.1.85→`v185`, v2.1.107→`v1107`) to the **bare patch number** (`v2.1.140`→`v140`, `v2.1.172`→`v172`). New tests use `test-v172-*`.
+
+---
 
 ### v2.1.81/v2.1.83 findings (Mar 25, 2026):
 - **`--bare` flag for scripted `-p` calls** | ✅ **NEW** (v2.1.81) | Skips hooks, LSP, plugin sync, skill walks. **TESTED**: Flag present in `--help`. **REQUIRES `ANTHROPIC_API_KEY`** — OAuth disabled. Returns "Not logged in" without API key. Incompatible with Max subscription OAuth pipeline. ~14% faster to API request (v2.1.83).
@@ -453,6 +570,8 @@ Proof: `test-v140-fg-gp-inventory.txt`, `test-v140-bg-gp-inventory.txt`, `test-v
 | **`-p` cwd reset behavior** | A `cd /tmp/...` Bash command from inside a `claude -p` session reports "Shell cwd was reset to /home/faisal/EventMarketDB". Tool-level cwd does NOT persist across Bash calls within the same `-p` session. |
 
 ### Still broken (as of v2.1.140 — superset; only changes from v2.1.107 noted)
+
+> 🔼 **v2.1.172 update**: *Nested agent spawning* and *Task→Task nesting (Agent spawner)* below are now **SUPERSEDED** — the Agent tool is present in Agent-tool-spawned subagents and nesting works **≥10 deep** (Workflow-runtime agents excepted). *Skill `allowed-tools`/`disallowed-tools`* remains **NOT enforced** (the v2.1.152 `disallowed-tools` claim did not hold on the Skill-tool path). *Mid-session agent discovery* remains **SNAPSHOT**. See the **v2.1.172 retest** section above.
 
 **Newly FIXED (vs v107):**
 - ✅ `--permission-mode plan` in `-p` mode is now respected (was silently ignored)
@@ -3683,6 +3802,26 @@ ls -la earnings-analysis/test-outputs/*.txt
 **Implications for architecture:**
 - Layer 0 (main conversation) CAN spawn parallel agents using Task tool
 - Layer 1+ (forked skills) CANNOT spawn parallel children
+
+**EMPIRICAL RETEST — top-level prompt-embed parallelism (2026-05-18, this CLI version):**
+
+Tested the exact **learner mechanism**: `claude -p "<prompt>"` (prompt embed, NO Skill tool, NO `context: fork`, OAuth subscription) launched in tmux. Prompt ordered 8 sub-agents (4× `general-purpose` running `date;sleep 25;date` + 4 real data agents: neo4j-entity/news/report/xbrl). Session `493a0a61-6251-4992-ace1-3357892d4569`.
+
+| Question | Verdict | Hard evidence (raw JSONL, not model self-report) |
+|----------|---------|--------------------------------------------------|
+| Top-level embed can run sub-agents **truly parallel**? | ✅ **PROVEN** | In-agent `date` epochs: A1[565.996→590.998] A2[567.105→592.108] A3[568.357→593.361] A4[569.603→594.606]. Latest START (A4=569.6) is **21.4s before** earliest END (A1=591.0) → all four 25s sleeps overlapped. Whole job **49s wall** vs **100s+** if serial. |
+| Did "put all 8 in ONE message" instruction work? | ❌ **IGNORED** | Model emitted **8 separate assistant messages, 1 spawn each** (~1s apart). MAX spawns in a single assistant msg = **1**. Model's own summary claimed "single message / concurrent" — **FALSE**; never trust the narrative, parse the transcript. |
+| What actually caused parallelism? | **Non-blocking + independent tasks** | Parent fired all 8 spawns back-to-back WITHOUT waiting for results (tasks were self-contained). Single-message batching is NOT required. |
+
+**Why the learner is serial in production despite this capability:** its Data SubAgent queries are *dependent* (each shaped by the prior result) and its SKILL.md says "use as many turns as needed" → it blocks on each result. Confirmed across 41 spawning learner runs: 0 ever batched >1 spawn/msg, median ~9.3s gap. Platform is parallel-capable; the learner's *prompt* serializes it.
+
+**Drop-in prompt pattern to force parallel tool calls in ANY skill (predictor, etc.):**
+```
+These N analyses are INDEPENDENT — none uses another's output.
+Spawn all N sub-agents; do NOT wait for any result before issuing the next.
+After all N are dispatched, collect their results together.
+```
+Proven lever: (1) tasks written fully independent/self-contained; (2) explicit "do not wait/block on results". Single-message batching is NOT the lever and is not achievable by instruction — the model emits one spawn per turn (~1s apart) and they still run concurrently (proven: sessions `f2df9317` overlap 23.26s, `493a0a61`). That is expected; do not engineer single-message batching. Implication: an **un-forked** predictor (prompt-embed like learner) with independent bull/bear/red-team analyst sub-agents WILL run them in parallel.
 
 **Workarounds for parallel execution:**
 1. Design orchestrator at Layer 0 (not forked) to use Task tool for parallel spawning
