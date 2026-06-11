@@ -14,7 +14,7 @@ import os
 import sys
 from pathlib import Path
 
-from assemble_catalog import assemble, serialize, verify_expect
+from assemble_catalog import assemble, h32, serialize, verify_expect
 from fold_catalogs import (RECONCILE_EVIDENCE_PER_RECORD, key5, norm, require_validated,
                            side_sequence)
 
@@ -178,17 +178,112 @@ def suggest(run_dir, min_token_overlap=2, limit=2000, extra_candidates=None,
 
     out = []
     ranked = sorted(pairs.items(), key=lambda kv: (-_reason_score(kv[1]), kv[0][0], kv[0][1]))
-    clipped = max(0, len(ranked) - limit)   # NO silent caps (13.2 graft): always reported
-    for (a, b), reason in ranked[:limit]:
+    eff_limit = len(ranked) if (limit is None or limit <= 0) else limit   # <=0 = NO CAP (C5 batched mode)
+    clipped = max(0, len(ranked) - eff_limit)   # NO silent caps (13.2 graft): always reported
+    for (a, b), reason in ranked[:eff_limit]:
         ra, rb = by[a], by[b]
         n_companies = len({norm(c) for c in (ra.get("companies") or [])}
                           | {norm(c) for c in (rb.get("companies") or [])})
         out.append({"a": ra["driver_name"], "b": rb["driver_name"],
                     "reason": reason, "n_companies": n_companies,
                     "sides": [evidence_view(ra), evidence_view(rb)]})
-    blob = {"candidates": out, "count": len(out), "clipped": clipped}
+    # stale C5 plan artifacts from a prior (possibly crashed) batched run must never
+    # survive a fresh suggest — apply's P2 would false-stop a per-pair re-run on them.
+    plan_p = run / "repair_plan.json"
+    if plan_p.exists():
+        plan_p.unlink()
+    bdir = run / "repair_batches"
+    if bdir.is_dir():
+        for f in bdir.glob("batch_*.json"):
+            f.unlink()
+    blob = {"candidates": out, "count": len(out), "clipped": clipped,
+            # round-3 review fix: echo the params ACTUALLY used — the workflow asserts they
+            # match what it commanded (a relay-dropped flag = smaller-but-honest set whose
+            # hashes pass; this makes the mode mismatch loud).
+            "limit_used": limit, "use_embeddings": bool(use_embeddings),
+            # C5-study today-bug fix: the workflow relays this whole blob through one agent
+            # reply; these code-computed hashes let the JS verify the relayed copy is the
+            # EXACT printed truth (pair list AND full content) — an abridged/mutated relay
+            # can no longer silently skip or mislead judges.
+            "pairs_h32": h32("\n".join(f"{c['a']}|{c['b']}" for c in out)),
+            "cands_h32": h32(json.dumps(out, sort_keys=True, separators=(",", ":"),
+                                        ensure_ascii=False))}
     (run / "repair_candidates.json").write_text(serialize(blob))
     return blob
+
+
+def _load_pinned_candidates(run):
+    """The ONE pinned candidates file every batched artifact derives from (§C5: no
+    regeneration between pages)."""
+    cand_p = Path(run) / "repair_candidates.json"
+    if not cand_p.exists():
+        raise SystemExit("REPAIR FAIL: repair_candidates.json missing — run suggest first")
+    blob = json.load(open(cand_p))
+    return blob.get("candidates") or [], hashlib.sha256(cand_p.read_bytes()).hexdigest()
+
+
+def plan_batches(run_dir, k=10, page_size=600):
+    """C5 batched lane (pure code, ZERO judgment): deterministically compose review batches
+    from the pinned candidates file. Order = h32-shuffle of the similarity-ranked list (the
+    ranked adjacency is the anchoring hazard); pages of `page_size` (owner: 600 is a PAGE
+    size, never a cap — every pair is planned); within a page, first-fit batches of <=k with
+    HARD record-name disjointness (a colliding pair opens a fresh batch — same-record overflow
+    is per-pair by construction, never co-batched). Writes repair_batches/batch_NNNN.json
+    (each judge Reads its own code-written file — no giant relay) + repair_plan.json bound
+    to the candidates bytes by sha256."""
+    run = Path(run_dir)
+    cands, cands_sha = _load_pinned_candidates(run)
+    if not cands:
+        raise SystemExit("REPAIR FAIL: plan requested but the pinned candidates file has 0 pairs")
+    order = sorted(range(len(cands)),
+                   key=lambda i: (h32(f"{cands[i]['a']}|{cands[i]['b']}"), i))
+    pages = [order[s:s + page_size] for s in range(0, len(order), page_size)]
+    batches, page_of = [], {}
+    for pg_no, page in enumerate(pages):
+        open_batches = []
+        for i in page:
+            page_of[str(i)] = pg_no
+            nm = {norm(cands[i]["a"]), norm(cands[i]["b"])}
+            for names, idxs in open_batches:
+                if len(idxs) < k and not (names & nm):
+                    idxs.append(i)
+                    names |= nm
+                    break
+            else:
+                open_batches.append((set(nm), [i]))
+        batches += [{"page": pg_no, "idx": idxs} for _, idxs in open_batches]
+    bdir = run / "repair_batches"
+    bdir.mkdir(exist_ok=True)
+    for old in bdir.glob("batch_*.json"):
+        old.unlink()                      # stale files from a prior plan must never survive
+    for bid, b in enumerate(batches):
+        b["id"] = bid
+        (bdir / f"batch_{bid:04d}.json").write_text(serialize(
+            {"batch_id": bid, "page": b["page"],
+             "pairs": [{**cands[i], "idx": i} for i in b["idx"]]}))
+    plan = {"k": k, "page_size": page_size, "n_candidates": len(cands),
+            "cands_sha256": cands_sha, "pages": len(pages), "page_of": page_of,
+            "batches": [{"id": b["id"], "page": b["page"], "idx": b["idx"]} for b in batches]}
+    (run / "repair_plan.json").write_text(serialize(plan))
+    return {"ok": True, "n_candidates": len(cands), "pages": len(pages),
+            "batches": len(batches),
+            "batch_counts": [len(b["idx"]) for b in batches],
+            "cands_sha256": cands_sha}
+
+
+def show_candidates(run_dir, idx_list):
+    """Code-printed candidate views for the confirm lane: the workflow verifies page_h32
+    over the relayed copy (same canonical-JSON h32 as cands_h32), then inlines each
+    candidate byte-identically into TODAY's per-pair prompt."""
+    run = Path(run_dir)
+    cands, _ = _load_pinned_candidates(run)
+    bad = [i for i in idx_list if not (0 <= i < len(cands))]
+    if bad:
+        raise SystemExit(f"REPAIR FAIL: show idx out of range: {bad[:5]} (n={len(cands)})")
+    sel = [{**cands[i], "idx": i} for i in idx_list]
+    return {"candidates": sel,
+            "page_h32": h32(json.dumps(sel, sort_keys=True, separators=(",", ":"),
+                                       ensure_ascii=False))}
 
 
 def apply(run_dir, review_path):
@@ -242,6 +337,52 @@ def apply(run_dir, review_path):
             hb.append({"kind": "link", "a": by[ca]["driver_name"], "b": by[va]["driver_name"],
                        "n": n, "survives": True})
 
+    # C5 P2 (batched lane only — repair_plan.json present): the review rows must match the
+    # code-written plan EXACTLY: every planned idx exactly once, names echo the pinned
+    # candidate at that idx (catches transposition the norm-echo alone lets through), the
+    # plan must still bind to the CURRENT candidates bytes (stale plan = mixed generations),
+    # and every SAME row must carry confirmed:true (the per-pair blind confirm ran — a
+    # batched SAME may NEVER reach apply unconfirmed).
+    plan_p = run / "repair_plan.json"
+    if plan_p.exists():
+        plan = json.load(open(plan_p))
+        cur_sha = (hashlib.sha256((run / "repair_candidates.json").read_bytes()).hexdigest()
+                   if (run / "repair_candidates.json").exists() else None)
+        if plan.get("cands_sha256") != cur_sha:
+            raise SystemExit("REPAIR FAIL: repair_plan.json is stale — candidates changed "
+                             "since planning (no regeneration between pages); re-run plan")
+        cands_list = json.load(open(run / "repair_candidates.json")).get("candidates") or []
+        planned = [i for b in (plan.get("batches") or []) for i in b.get("idx") or []]
+        rows = review.get("reviews") or []
+        got_idx = [r.get("idx") for r in rows]
+        if sorted(got_idx, key=str) != sorted(planned, key=str) or len(set(got_idx)) != len(got_idx):
+            raise SystemExit("REPAIR FAIL: review rows must cover every planned pair "
+                             "exactly once (missing/duplicate idx) — fail-close")
+        for r in rows:
+            c = cands_list[r["idx"]]
+            if norm(r.get("a")) != norm(c.get("a")) or norm(r.get("b")) != norm(c.get("b")):
+                raise SystemExit(f"REPAIR FAIL: row idx={r['idx']} names "
+                                 f"{r.get('a')}|{r.get('b')} does not match plan candidate "
+                                 f"{c.get('a')}|{c.get('b')} — transposed verdict; fail-close")
+            if r.get("verdict") == "SAME" and r.get("confirmed") is not True:
+                raise SystemExit(f"REPAIR FAIL: batched SAME idx={r['idx']} lacks the blind "
+                                 f"per-pair confirm (confirmed:true) — a batch proposer SAME "
+                                 f"may never apply unconfirmed")
+
+    # C5-study today-bug fix: EVERY suggested pair must carry a review verdict (any verdict).
+    # Without this, an abridged relay or lost verdicts leave pairs silently unjudged —
+    # under-merge that no existing check could see. Directional on purpose: review rows for
+    # pairs absent from a REGENERATED candidates file stay legal (idempotent resume after
+    # suggest re-ran post-link). Placed after the loop so nothing has been written yet.
+    if cand_pairs is not None:
+        review_pairs = {frozenset((norm(r.get("a")), norm(r.get("b"))))
+                        for r in (review.get("reviews") or [])}
+        unjudged = sorted("|".join(sorted(pr)) for pr in (cand_pairs - review_pairs))
+        if unjudged:
+            raise SystemExit(f"REPAIR FAIL: {len(unjudged)} suggested pair(s) have NO review "
+                             f"verdict (first 5: {unjudged[:5]}) — pairs silently unjudged "
+                             f"(abridged relay / lost verdicts?); re-run the review")
+
     if hb:
         have = {(norm(x.get("a")), norm(x.get("b"))) for x in dec.get("high_blast_refute2") or []}
         for row in hb:
@@ -269,6 +410,17 @@ def main(argv=None):
     s.add_argument("--use-embeddings", action="store_true")
     s.add_argument("--embedding-top-k", type=int, default=5)
     s.add_argument("--embedding-min-score", type=float, default=0.72)
+    s.add_argument("--print-summary", action="store_true",
+                   help="C5 slim relay: print counts/hashes/params only (full blob still "
+                        "written to repair_candidates.json on disk)")
+    pl = sub.add_parser("plan")
+    pl.add_argument("run_dir")
+    pl.add_argument("--k", type=int, default=10, help="C5: pairs per batch")
+    pl.add_argument("--page-size", type=int, default=600,
+                    help="C5: review PAGE size (never a cap — all pairs are planned)")
+    sh = sub.add_parser("show")
+    sh.add_argument("run_dir")
+    sh.add_argument("--idx", required=True, help="comma-separated candidate indices")
     a = sub.add_parser("apply")
     a.add_argument("run_dir")
     a.add_argument("--review", required=True)
@@ -276,12 +428,21 @@ def main(argv=None):
                    help="Stage-0 #5: rv=..,h32=.. computed by the workflow JS from the review "
                         "SOURCE string; binds the agent-written repair_review.json to it")
     args = ap.parse_args(argv)
+    if args.mode == "plan":
+        print(json.dumps(plan_batches(args.run_dir, args.k, args.page_size), sort_keys=True))
+        return
+    if args.mode == "show":
+        idxs = [int(x) for x in args.idx.split(",") if x.strip() != ""]
+        print(json.dumps(show_candidates(args.run_dir, idxs), sort_keys=True))
+        return
     if args.mode == "suggest":
         # Stage-0 #1: repair builds ON the catalog — refuse unless its last validation
         # passed and the catalog/approved bytes are unchanged since (sidecar binding).
         require_validated(args.run_dir)
         out = suggest(args.run_dir, args.min_token_overlap, args.limit, args.extra_candidates,
                       args.use_embeddings, args.embedding_top_k, args.embedding_min_score)
+        if args.print_summary:
+            out = {k: v for k, v in out.items() if k != "candidates"}
     else:
         if args.expect is not None:
             review_raw = Path(args.review).read_text()

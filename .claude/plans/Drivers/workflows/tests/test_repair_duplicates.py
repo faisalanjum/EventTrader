@@ -190,3 +190,231 @@ def test_live_embeddings_rank_semantic_pair(tmp_path):
     blob = suggest(run, use_embeddings=True)
     got = {tuple(sorted((c["a"], c["b"]))) for c in blob["candidates"]}
     assert ("customer_transactions", "guest_count") in got
+
+
+# ================================================================ C5 build: plan/show (batched lane)
+
+def _cands(names_pairs):
+    return [{"a": a, "b": b, "reason": "token_overlap:x", "n_companies": 1,
+             "sides": [{"driver_name": a, "evidence_refs": []},
+                       {"driver_name": b, "evidence_refs": []}]} for a, b in names_pairs]
+
+
+def _pin(run, cands_list):
+    import json as _json
+    from assemble_catalog import h32 as _h32
+    blob = {"candidates": cands_list, "count": len(cands_list), "clipped": 0,
+            "limit_used": 5000, "use_embeddings": False,
+            "pairs_h32": _h32("\n".join(f"{c['a']}|{c['b']}" for c in cands_list)),
+            "cands_h32": _h32(_json.dumps(cands_list, sort_keys=True, separators=(",", ":"),
+                                          ensure_ascii=False))}
+    (run / "repair_candidates.json").write_text(serialize(blob))
+    return blob
+
+
+def test_plan_is_deterministic_and_disjoint(tmp_path):
+    from repair_duplicates import plan_batches
+    run = tmp_path / "r"; run.mkdir()
+    # one high-degree name (alpha in 5 pairs) + independents
+    pairs = [("alpha", f"x{i}") for i in range(5)] + [(f"p{i}", f"q{i}") for i in range(12)]
+    _pin(run, _cands(pairs))
+    s1 = plan_batches(run, k=4, page_size=600)
+    p1 = (run / "repair_plan.json").read_bytes()
+    s2 = plan_batches(run, k=4, page_size=600)
+    assert (run / "repair_plan.json").read_bytes() == p1          # byte-deterministic
+    plan = json.loads(p1)
+    cands = json.loads((run / "repair_candidates.json").read_text())["candidates"]
+    seen = []
+    for b in plan["batches"]:
+        assert len(b["idx"]) <= 4
+        names = []
+        for i in b["idx"]:
+            names += [cands[i]["a"], cands[i]["b"]]
+        assert len(names) == len(set(names))                       # HARD disjointness in-batch
+        seen += b["idx"]
+    assert sorted(seen) == list(range(len(cands)))                 # every pair planned exactly once
+    assert s1["batches"] == len(plan["batches"]) and s2["ok"]
+
+
+def test_plan_pages_never_straddle(tmp_path):
+    from repair_duplicates import plan_batches
+    run = tmp_path / "r"; run.mkdir()
+    _pin(run, _cands([(f"a{i}", f"b{i}") for i in range(13)]))
+    plan_batches(run, k=10, page_size=5)
+    plan = json.loads((run / "repair_plan.json").read_text())
+    assert plan["pages"] == 3                                      # 5+5+3
+    from collections import defaultdict
+    per_page = defaultdict(set)
+    for b in plan["batches"]:
+        per_page[b["page"]].update(b["idx"])
+    assert sorted(len(v) for v in per_page.values()) == [3, 5, 5]
+    for b in plan["batches"]:
+        assert {plan["page_of"][str(i)] for i in b["idx"]} == {b["page"]}
+
+
+def test_plan_order_breaks_ranked_adjacency(tmp_path):
+    from repair_duplicates import plan_batches
+    run = tmp_path / "r"; run.mkdir()
+    # similarity-ranked input: adjacent pairs share tokens (the anchoring hazard)
+    _pin(run, _cands([(f"guest_count_{i}", f"guest_total_{i}") for i in range(20)]))
+    plan_batches(run, k=10, page_size=600)
+    plan = json.loads((run / "repair_plan.json").read_text())
+    flat = [i for b in plan["batches"] for i in b["idx"]]
+    assert flat != list(range(20))                                 # hash-shuffle, not ranked order
+
+
+def test_plan_writes_batch_files_and_binds_candidates_sha(tmp_path):
+    from repair_duplicates import plan_batches
+    import hashlib
+    run = tmp_path / "r"; run.mkdir()
+    _pin(run, _cands([("a1", "b1"), ("a2", "b2")]))
+    plan_batches(run, k=10, page_size=600)
+    plan = json.loads((run / "repair_plan.json").read_text())
+    assert plan["cands_sha256"] == hashlib.sha256(
+        (run / "repair_candidates.json").read_bytes()).hexdigest()
+    bf = json.loads((run / "repair_batches" / "batch_0000.json").read_text())
+    assert [p["idx"] for p in bf["pairs"]] == plan["batches"][0]["idx"]
+    assert all(set(p) >= {"idx", "a", "b", "sides"} for p in bf["pairs"])
+
+
+def test_show_prints_selected_candidates_with_binding_hash(tmp_path):
+    from repair_duplicates import show_candidates
+    from assemble_catalog import h32 as _h32
+    run = tmp_path / "r"; run.mkdir()
+    _pin(run, _cands([("a1", "b1"), ("a2", "b2"), ("a3", "b3")]))
+    out = show_candidates(run, [2, 0])
+    assert [c["idx"] for c in out["candidates"]] == [2, 0]         # requested order preserved
+    assert out["page_h32"] == _h32(json.dumps(out["candidates"], sort_keys=True,
+                                              separators=(",", ":"), ensure_ascii=False))
+    import pytest as _pt
+    with _pt.raises(SystemExit, match="out of range"):
+        show_candidates(run, [99])
+
+
+def _plan_run(tmp_path):
+    """Real run dir (assembled+validated) + pinned candidates + plan, for apply-P2 tests."""
+    from repair_duplicates import plan_batches
+    run = make_run(tmp_path, [rec("guest_count"), rec("customer_transactions"),
+                              rec("store_count"), rec("oil_price")])
+    cands_list = _cands([("guest_count", "customer_transactions"),
+                         ("store_count", "oil_price")])
+    _pin(run, cands_list)
+    plan_batches(run, k=10, page_size=600)
+    return run
+
+
+def _rows(run, rows):
+    rp = run / "repair_review.json"
+    rp.write_text(json.dumps({"reviews": rows}))
+    return rp
+
+
+def test_apply_p2_happy_path_with_confirmed_same(tmp_path):
+    from repair_duplicates import apply as repair_apply
+    run = _plan_run(tmp_path)
+    out = repair_apply(run, _rows(run, [
+        {"idx": 0, "a": "guest_count", "b": "customer_transactions", "verdict": "SAME",
+         "why": "same metric", "confirmed": True},
+        {"idx": 1, "a": "store_count", "b": "oil_price", "verdict": "DIFFERENT", "why": "no"}]))
+    assert out["added"] == 1
+
+
+def test_apply_p2_rejects_unconfirmed_batched_same(tmp_path):
+    from repair_duplicates import apply as repair_apply
+    run = _plan_run(tmp_path)
+    rp = _rows(run, [
+        {"idx": 0, "a": "guest_count", "b": "customer_transactions", "verdict": "SAME",
+         "why": "same metric"},
+        {"idx": 1, "a": "store_count", "b": "oil_price", "verdict": "DIFFERENT", "why": "no"}])
+    with pytest.raises(SystemExit, match="confirm"):
+        repair_apply(run, rp)
+
+
+def test_apply_p2_rejects_idx_name_transposition(tmp_path):
+    from repair_duplicates import apply as repair_apply
+    run = _plan_run(tmp_path)
+    rp = _rows(run, [
+        {"idx": 1, "a": "guest_count", "b": "customer_transactions", "verdict": "SAME",
+         "why": "x", "confirmed": True},
+        {"idx": 0, "a": "store_count", "b": "oil_price", "verdict": "DIFFERENT", "why": "no"}])
+    with pytest.raises(SystemExit, match="does not match plan"):
+        repair_apply(run, rp)
+
+
+def test_apply_p2_rejects_missing_idx_and_duplicate_idx(tmp_path):
+    from repair_duplicates import apply as repair_apply
+    run = _plan_run(tmp_path)
+    rp = _rows(run, [{"idx": 0, "a": "guest_count", "b": "customer_transactions",
+                      "verdict": "DIFFERENT", "why": "x"}])
+    with pytest.raises(SystemExit, match="exactly once"):
+        repair_apply(run, rp)
+    rp = _rows(run, [
+        {"idx": 0, "a": "guest_count", "b": "customer_transactions", "verdict": "DIFFERENT", "why": "x"},
+        {"idx": 0, "a": "guest_count", "b": "customer_transactions", "verdict": "DIFFERENT", "why": "x"},
+        {"idx": 1, "a": "store_count", "b": "oil_price", "verdict": "DIFFERENT", "why": "no"}])
+    with pytest.raises(SystemExit, match="exactly once"):
+        repair_apply(run, rp)
+
+
+def test_apply_p2_rejects_stale_plan_after_candidates_change(tmp_path):
+    from repair_duplicates import apply as repair_apply
+    run = _plan_run(tmp_path)
+    _pin(run, _cands([("guest_count", "customer_transactions")]))   # regenerated AFTER plan
+    rp = _rows(run, [{"idx": 0, "a": "guest_count", "b": "customer_transactions",
+                      "verdict": "DIFFERENT", "why": "x"}])
+    with pytest.raises(SystemExit, match="stale"):
+        repair_apply(run, rp)
+
+
+def test_apply_without_plan_keeps_todays_per_pair_semantics(tmp_path):
+    # kill switch: no repair_plan.json -> exactly the existing behavior (no idx/confirmed needed)
+    from repair_duplicates import apply as repair_apply
+    run = make_run(tmp_path, [rec("guest_count"), rec("customer_transactions")])
+    _pin(run, _cands([("guest_count", "customer_transactions")]))
+    out = repair_apply(run, _rows(run, [
+        {"a": "guest_count", "b": "customer_transactions", "verdict": "SAME", "why": "same"}]))
+    assert out["added"] == 1
+
+
+def test_suggest_clears_stale_plan_artifacts(tmp_path):
+    # a crashed batched run leaves repair_plan.json + batch files; the NEXT run's suggest
+    # (always the first step) must clear them so a per-pair re-run can't false-stop on P2.
+    from repair_duplicates import plan_batches, suggest
+    run = make_run(tmp_path, [rec("guest_count"), rec("customer_transactions")])
+    _pin(run, _cands([("guest_count", "customer_transactions")]))
+    plan_batches(run, k=10, page_size=600)
+    assert (run / "repair_plan.json").exists()
+    suggest(run)
+    assert not (run / "repair_plan.json").exists()
+    assert not list((run / "repair_batches").glob("batch_*.json"))
+
+
+def test_suggest_limit_zero_means_no_cap(tmp_path):
+    # C5 batched mode: limit=0 = ALL pairs (never a cap); clipped must be 0.
+    from repair_duplicates import suggest
+    run = make_run(tmp_path, [rec("guest_count_growth"), rec("guest_transactions_growth"),
+                              rec("guest_traffic_growth"), rec("store_count_growth")])
+    blob = suggest(run, limit=0)
+    assert blob["count"] == 6 and blob["clipped"] == 0 and blob["limit_used"] == 0
+
+
+def test_suggest_cli_print_summary_omits_candidates(tmp_path):
+    # C5 slim relay: --print-summary prints counts/hashes/params ONLY (tiny, relayable at any
+    # scale); the full blob still lands on disk as the pinned candidates file.
+    import subprocess, sys as _sys
+    run = make_run(tmp_path, [rec("guest_count_growth"), rec("guest_transactions_growth")])
+    import hashlib as _h
+    sc = {"exit": 0, "fold": False,
+          "catalog_sha256": _h.sha256((run / "catalog.json").read_bytes()).hexdigest(),
+          "approved_sha256": _h.sha256((run / "approved.json").read_bytes()).hexdigest()}
+    (run / "validation_exit.json").write_text(json.dumps(sc))
+    out = subprocess.run([_sys.executable, str(WORKFLOWS / "repair_duplicates.py"), "suggest",
+                          str(run), "--limit", "0", "--print-summary"],
+                         capture_output=True, text=True)
+    assert out.returncode == 0, out.stdout + out.stderr
+    printed = json.loads(out.stdout.strip().splitlines()[-1])
+    assert "candidates" not in printed
+    assert printed["count"] == 1 and {"pairs_h32", "cands_h32", "limit_used",
+                                      "use_embeddings"} <= set(printed)
+    disk = json.loads((run / "repair_candidates.json").read_text())
+    assert len(disk["candidates"]) == 1                  # full blob pinned on disk

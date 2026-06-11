@@ -698,3 +698,86 @@ def test_repair_apply_rejects_empty_expect_string(tmp_path):
     out = subprocess.run([PY, REPAIR, "apply", str(run), "--review", str(rp), "--expect", ""],
                          capture_output=True, text=True)
     assert out.returncode != 0 and "h32" in (out.stdout + out.stderr)
+
+
+# ================================================================ C5-study today-bug fixes
+# (the suggest relay carries the FULL candidates JSON; nothing bound it to the disk truth,
+#  and nothing checked that every suggested pair actually got judged.)
+
+def test_suggest_blob_binds_relay_with_hashes(tmp_path):
+    # bug 1: the printed blob must carry code-computed hashes the JS recomputes over the
+    # relayed copy — an abridged/mutated relay can then never silently skip or mislead judges.
+    from repair_duplicates import suggest
+    run = make_run(tmp_path, names=("guest_count_growth", "guest_transactions_growth"))
+    assert validate_cli(run).returncode == 0
+    blob = suggest(run)
+    assert blob["count"] == 1
+    cands = blob["candidates"]
+    assert blob["pairs_h32"] == h32("\n".join(f"{c['a']}|{c['b']}" for c in cands))
+    assert blob["cands_h32"] == h32(json.dumps(cands, sort_keys=True,
+                                               separators=(",", ":"), ensure_ascii=False))
+
+
+def test_apply_rejects_unjudged_candidates(tmp_path):
+    # bug 2: every suggested pair needs a review verdict (any verdict) — candidates with no
+    # row = silently-unjudged pairs (abridged relay / lost verdicts).
+    from repair_duplicates import apply as repair_apply
+    run = make_run(tmp_path, names=("guest_count_growth", "guest_transactions_growth",
+                                    "store_count_growth"))
+    (run / "repair_candidates.json").write_text(json.dumps(
+        {"count": 2, "clipped": 0, "candidates": [
+            {"a": "guest_count_growth", "b": "guest_transactions_growth"},
+            {"a": "guest_count_growth", "b": "store_count_growth"}]}))
+    rp = run / "repair_review.json"
+    rp.write_text(json.dumps({"reviews": [
+        {"a": "guest_count_growth", "b": "guest_transactions_growth",
+         "verdict": "DIFFERENT", "why": "x"}]}))
+    with pytest.raises(SystemExit, match="NO review verdict"):
+        repair_apply(run, rp)
+    # full coverage (any verdict counts as judged) -> applies fine
+    rp.write_text(json.dumps({"reviews": [
+        {"a": "guest_count_growth", "b": "guest_transactions_growth",
+         "verdict": "DIFFERENT", "why": "x"},
+        {"a": "guest_count_growth", "b": "store_count_growth",
+         "verdict": "UNCLEAR", "why": "y"}]}))
+    out = repair_apply(run, rp)
+    assert out["added"] == 0
+
+
+def test_canonical_json_h32_matches_node(tmp_path):
+    # cross-language proof: python json.dumps(sort_keys, compact, ensure_ascii=False) ==
+    # the JS canonicalizer in repair_duplicates.js, hashed with the shared h32.
+    cands = [{"a": "café_growth", "b": "beef_cost", "reason": "token_overlap:x",
+              "n_companies": 1,
+              "sides": [{"driver_name": "café_growth",
+                         "evidence_refs": [{"quote": 'said "up 5%"\nnext line — dash'}]}]}]
+    py_h = h32(json.dumps(cands, sort_keys=True, separators=(",", ":"), ensure_ascii=False))
+    fixture = tmp_path / "cands.json"
+    fixture.write_text(json.dumps(cands, ensure_ascii=False))
+    js = tmp_path / "t.js"
+    js.write_text(
+        "const fs = require('fs');\n"
+        "const NL = String.fromCharCode(10);\n"
+        "const h32 = s => { let h = 0; for (let i = 0; i < s.length; i++) "
+        "h = ((Math.imul(h, 31) + s.charCodeAt(i)) >>> 0); return h };\n"
+        "const canon = v => { if (Array.isArray(v)) return '[' + v.map(canon).join(',') + ']';\n"
+        "  if (v && typeof v === 'object') return '{' + Object.keys(v).sort().map(k => "
+        "JSON.stringify(k) + ':' + canon(v[k])).join(',') + '}';\n"
+        "  return JSON.stringify(v) };\n"
+        "const c = JSON.parse(fs.readFileSync(process.argv[2], 'utf8'));\n"
+        "process.stdout.write(String(h32(canon(c))));\n")
+    out = subprocess.run(["node", str(js), str(fixture)], capture_output=True, text=True)
+    assert out.returncode == 0, out.stderr
+    assert int(out.stdout) == py_h
+
+
+def test_suggest_blob_echoes_its_params(tmp_path):
+    # round-3 review: a relay dropping --use-embeddings/--limit yields a smaller-but-honest
+    # set whose hashes pass — python must echo the params it ACTUALLY ran with so the
+    # workflow can assert they match what it commanded.
+    from repair_duplicates import suggest
+    run = make_run(tmp_path, names=("guest_count_growth", "guest_transactions_growth"))
+    assert validate_cli(run).returncode == 0
+    blob = suggest(run, limit=123)
+    assert blob["limit_used"] == 123
+    assert blob["use_embeddings"] is False
