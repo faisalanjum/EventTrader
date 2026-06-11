@@ -81,9 +81,14 @@ def parse_expect(s):
 
 def verify_expect(expect_str, raw_text, got_counts, label):
     """Stage-0 #4/#5: compare the agent-WRITTEN file against the JS-computed expectation
-    (section row counts + h32 of the exact source string; a single trailing newline from
-    the Write tool is tolerated — it cannot alter JSON content). Mismatch = SystemExit."""
+    (section row counts + h32 of the exact source string; trailing newlines from the
+    Write tool are tolerated — they cannot alter JSON content). Mismatch = SystemExit.
+    An expectation without h32 (empty/partial string) is itself a fail — the check must
+    never silently self-disable."""
     e = parse_expect(expect_str)
+    if "h32" not in e:
+        raise SystemExit(f"{label} EXPECT MISMATCH: expectation lacks h32 "
+                         f"(empty/partial --expect is not allowed — fail-close): {expect_str!r}")
     got = dict(got_counts)
     got["h32"] = h32(raw_text.rstrip("\n"))
     bad = {k: {"expected": e[k], "got": got.get(k)} for k in e if got.get(k) != e[k]}
@@ -464,14 +469,16 @@ def main():
                       "ASSEMBLE same_name_review.json")
 
     # Stage-0 #3: gate coverage — every seed driver_name must carry a gate verdict, or be
-    # handled by the same-name review (split/park). An omitted review batch would otherwise
-    # default-admit its records via precedence rule 5 and still pass the validator (the
-    # verified slice-subset hole). CLI-level: the production entry point is this CLI.
+    # RESHAPED by the same-name review (DIFFERENT split / UNCLEAR park, whose gate verdicts
+    # the workflow deliberately filters out). A SAME-kept review name is NOT excused: in the
+    # real flow it keeps its gate verdict, so a missing one means a dropped gate batch —
+    # the verified slice-subset hole. CLI-level: the production entry point is this CLI.
     seed_names = {norm(r.get("driver_name")) for r in (seed.get("catalog") or [])
                   if isinstance(r, dict) and norm(r.get("driver_name"))}
     gate_names = {norm(v.get("driver_name")) for v in (dec.get("gate_verdicts") or [])}
     review_names = {norm(rv.get("collision_name"))
-                    for rv in ((review or {}).get("reviews") or [])}
+                    for rv in ((review or {}).get("reviews") or [])
+                    if rv.get("verdict") != "SAME"}
     unreviewed = sorted(seed_names - gate_names - review_names)
     if unreviewed:
         raise SystemExit(f"ASSEMBLE FAIL: {len(unreviewed)} seed record(s) have NO gate verdict "

@@ -88,7 +88,7 @@ if (!applied || !applied.ok) throw new Error(`repair apply failed: ${applied && 
 
 phase('Validate')
 const val = await agent(`Run with Bash:
-${PY} ${DIR}/workflows/validate_catalog.py ${RUN_DIR}/seed.json ${RUN_DIR}/catalog.json ${RUN_DIR}/approved.json | tee ${RUN_DIR}/repair_validation.txt ; echo "exit=\${PIPESTATUS[0]}"
+${PY} ${DIR}/workflows/validate_catalog.py ${RUN_DIR}/seed.json ${RUN_DIR}/catalog.json ${RUN_DIR}/approved.json $([ -f ${RUN_DIR}/same_name_review.json ] && echo "--review ${RUN_DIR}/same_name_review.json") | tee ${RUN_DIR}/repair_validation.txt ; echo "exit=\${PIPESTATUS[0]}"
 Return passed=(exit==0) and output=verbatim validator output.`, {schema:VAL_SCHEMA, model:'opus', label:'repair-validate', phase:'Validate'})
 if (!val || !val.passed) throw new Error(`repair validation failed: ${val && val.output}`)
 

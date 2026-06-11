@@ -138,7 +138,7 @@ def effective_tickers(scope_obj, subset_csv):
     if not base:
         raise SystemExit("FETCH FAIL: scope file has no tickers")
     if subset_csv:
-        subs = [t.strip().upper() for t in subset_csv.split(",") if t.strip()]
+        subs = list(dict.fromkeys(t.strip().upper() for t in subset_csv.split(",") if t.strip()))
         bad = sorted(set(subs) - set(base))
         if bad:
             raise SystemExit(f"FETCH FAIL: --subset tickers not in the resolved scope: {bad}")
@@ -167,6 +167,15 @@ def main():
     run_dir = Path(a.run_dir) if a.run_dir else None
     src_dir = (run_dir / "sources") if run_dir else OUT_DIR
     src_dir.mkdir(parents=True, exist_ok=True)
+    if run_dir and scope_obj is not None:
+        # Stage-0 #8 (final-gate fix: written BEFORE the fetch loop so a partial/crashed
+        # fetch leaves the marker in place and the chunker's cross-check fails closed —
+        # written after the loop, a mid-loop death looked like a legacy run and shipped
+        # a partial company set silently). The chunker hard-fails if sources/ diverges.
+        (run_dir / "scope_resolved.json").write_text(json.dumps(
+            {"scope_name": scope_obj.get("scope_name"), "slug": scope_obj.get("slug"),
+             "tickers": tickers, "subset": bool(a.subset)}, indent=1) + "\n")
+        print(f"scope_resolved.json written ({len(tickers)} tickers)")
     fetched_at = datetime.now(timezone.utc).isoformat(timespec="seconds")
     manifest = []
     driver = GraphDatabase.driver(URI, auth=(USER, PW))
@@ -190,13 +199,7 @@ def main():
     if run_dir:
         (run_dir / "sources_manifest.json").write_text(json.dumps({"fetched_at": fetched_at, "sources": manifest}, indent=1))
         print(f"sources_manifest.json written ({len(manifest)} tickers, fetched_at={fetched_at})")
-        if scope_obj is not None:
-            # Stage-0 #8: the run dir's OWN code-written ticker ground truth; the chunker
-            # hard-fails if sources/ ever diverges from it.
-            (run_dir / "scope_resolved.json").write_text(json.dumps(
-                {"scope_name": scope_obj.get("scope_name"), "slug": scope_obj.get("slug"),
-                 "tickers": tickers, "subset": bool(a.subset)}, indent=1) + "\n")
-            print(f"scope_resolved.json written ({len(tickers)} tickers)")
+
 
 if __name__ == "__main__":
     main()

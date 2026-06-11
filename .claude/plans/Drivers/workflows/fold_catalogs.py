@@ -68,14 +68,29 @@ def require_validated(child_dir):
         raise SystemExit(f"FOLD FAIL [{d.name}]: no validation_exit.json — the child was never "
                          f"validated by validate_catalog.py (or pre-dates the sidecar); "
                          f"re-run the validator on it first")
-    sc = json.load(open(sc_p))
+    try:
+        sc = json.loads(sc_p.read_text())
+        if not isinstance(sc, dict):
+            raise ValueError("not an object")
+    except (OSError, ValueError):
+        raise SystemExit(f"FOLD FAIL [{d.name}]: validation_exit.json unreadable/corrupt — "
+                         f"re-run the validator")
     if sc.get("exit") != 0:
         raise SystemExit(f"FOLD FAIL [{d.name}]: the child's last validation FAILED "
                          f"(exit={sc.get('exit')}) — a failed catalog cannot be folded")
+    # final-gate fix: a fold parent (it has fold_manifest.json) must have been LAST validated
+    # in --fold (D8) mode — otherwise a lying fold-validate relay could hide behind an earlier
+    # plain-mode exit-0 sidecar over the same bytes.
+    if (d / "fold_manifest.json").exists() and sc.get("fold") is not True:
+        raise SystemExit(f"FOLD FAIL [{d.name}]: child is a fold parent but its last validation "
+                         f"was not run in --fold (D8) mode — re-run the fold validator")
     if sc.get("catalog_sha256") != hashlib.sha256((d / "catalog.json").read_bytes()).hexdigest():
         raise SystemExit(f"FOLD FAIL [{d.name}]: catalog.json changed since its last validation "
                          f"(sha mismatch) — re-validate before folding")
     ap = d / "approved.json"
+    if "approved_sha256" in sc and not ap.exists():
+        raise SystemExit(f"FOLD FAIL [{d.name}]: approved.json deleted since its last validation "
+                         f"— re-validate")
     if ap.exists() and sc.get("approved_sha256") != hashlib.sha256(ap.read_bytes()).hexdigest():
         raise SystemExit(f"FOLD FAIL [{d.name}]: approved.json changed since its last validation "
                          f"(or it was validated WITHOUT approved.json, skipping D1) — re-validate")
@@ -529,7 +544,7 @@ def main(argv=None):
     else:
         review_raw = Path(args.review).read_text()
         review = json.loads(review_raw)
-        if args.expect:
+        if args.expect is not None:
             from assemble_catalog import verify_expect
             verify_expect(args.expect, review_raw,
                           {"rv": len(review.get("reviews") or []),

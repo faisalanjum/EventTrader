@@ -283,7 +283,7 @@ def main(argv=None):
         out = suggest(args.run_dir, args.min_token_overlap, args.limit, args.extra_candidates,
                       args.use_embeddings, args.embedding_top_k, args.embedding_min_score)
     else:
-        if args.expect:
+        if args.expect is not None:
             review_raw = Path(args.review).read_text()
             verify_expect(args.expect, review_raw,
                           {"rv": len(json.loads(review_raw).get("reviews") or [])},

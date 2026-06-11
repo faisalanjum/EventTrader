@@ -386,6 +386,7 @@ def main():
     # catalog/approved bytes are UNCHANGED since this validation (sha binding also catches
     # "validator never actually ran" and "catalog rewritten after validation").
     sidecar = {"exit": 1 if fails else 0,
+               "fold": bool(fold_ps),   # final-gate fix: a fold parent's LAST validation must be D8 (--fold) mode
                "catalog_sha256": hashlib.sha256(Path(cat_p).read_bytes()).hexdigest()}
     if appr_p is not None:
         sidecar["approved_sha256"] = hashlib.sha256(Path(appr_p).read_bytes()).hexdigest()

@@ -258,6 +258,7 @@ def test_cli_empty_gate_verdicts_nonempty_seed_fails(tmp_path):
 # ================================================================ #4 decisions write fidelity (--expect)
 
 def test_h32_matches_the_js_charcode_rolling_hash():
+    assert h32("\U0001F600") == 1772899        # astral char = surrogate PAIR (55357*31+56832), JS-identical
     assert h32("") == 0
     assert h32("a") == 97
     assert h32("ab") == 97 * 31 + 98          # 3105
@@ -607,3 +608,93 @@ def test_repair_apply_rejects_new_link_when_candidates_file_missing(tmp_path):
         {"a": "guest_count", "b": "customer_transactions", "verdict": "SAME", "why": "x"}]}))
     with pytest.raises(SystemExit, match="repair_candidates.json missing"):
         repair_apply(run, rp)
+
+
+# ================================================================ final-gate round fixes
+# (9-reviewer commit gate: SAME-excusal hole, approved-deletion bypass, mode-blind sidecar,
+#  --expect self-disable. Each was proven live by a reviewer before being fixed here.)
+
+def test_cli_same_reviewed_name_still_requires_gate_verdict(tmp_path):
+    # SAME-kept records keep their gate verdicts in the real flow (the touches filter only
+    # removes reshaped names) — so a SAME review must NOT excuse a missing gate verdict.
+    run = tmp_path / "run"
+    run.mkdir()
+    seed = {"industry": "T", "catalog": [rec("alpha_sales"), rec("mixed_name")], "analysis": {}}
+    (run / "seed.json").write_text(serialize(seed))
+    (run / "decisions.json").write_text(serialize(
+        {"gate_verdicts": admit_all(seed, but=("mixed_name",)), "approved_same_as": [],
+         "approved_rewrites": [], "parked_rewrites": []}))
+    (run / "review.json").write_text(serialize(
+        {"reviews": [{"collision_name": "mixed_name", "verdict": "SAME", "why": "one meaning",
+                      "refute_survived": True}], "split_map": []}))
+    out = subprocess.run([PY, ASSEMBLE, str(run), "--review", "review.json"],
+                         capture_output=True, text=True)
+    assert out.returncode != 0
+    assert "NO gate verdict" in (out.stdout + out.stderr) and "mixed_name" in (out.stdout + out.stderr)
+    # with the gate verdict present it ships fine
+    (run / "decisions.json").write_text(serialize(
+        {"gate_verdicts": admit_all(seed), "approved_same_as": [],
+         "approved_rewrites": [], "parked_rewrites": []}))
+    ok = subprocess.run([PY, ASSEMBLE, str(run), "--review", "review.json"],
+                        capture_output=True, text=True)
+    assert ok.returncode == 0, ok.stdout + ok.stderr
+
+
+def test_part_a_rejects_approved_deleted_after_validation(tmp_path):
+    c1 = fold_child(tmp_path, "childA")
+    (c1 / "approved.json").unlink()                  # deletion is a tamper too
+    with pytest.raises(SystemExit, match="approved.json deleted"):
+        part_a(tmp_path / "parent", "S", "sector",
+               [c1, fold_child(tmp_path, "childB", names=("wage_inflation",))])
+
+
+def test_validator_sidecar_records_fold_mode(tmp_path):
+    run = make_run(tmp_path)
+    validate_cli(run)
+    assert json.loads((run / "validation_exit.json").read_text())["fold"] is False
+
+
+def test_require_validated_demands_fold_mode_for_fold_parents(tmp_path):
+    d = tmp_path / "parent"
+    d.mkdir()
+    (d / "catalog.json").write_text(serialize({"industry": "I", "catalog": [rec("oil_price")],
+                                               "skips": [], "unresolved_rewrites": [],
+                                               "unresolved_same_name": []}))
+    (d / "fold_manifest.json").write_text(json.dumps({"children": []}))   # it IS a fold parent
+    sc = {"exit": 0, "catalog_sha256": sha(d / "catalog.json"), "fold": False}
+    (d / "validation_exit.json").write_text(json.dumps(sc))
+    with pytest.raises(SystemExit, match="fold"):
+        require_validated(d)
+    sc["fold"] = True
+    (d / "validation_exit.json").write_text(json.dumps(sc))
+    require_validated(d)                              # D8-mode validation -> accepted
+
+
+def test_require_validated_corrupt_sidecar_clean_message(tmp_path):
+    d = tmp_path / "c"
+    d.mkdir()
+    (d / "catalog.json").write_text("{}")
+    (d / "validation_exit.json").write_text("{corrupt")
+    with pytest.raises(SystemExit, match="unreadable"):
+        require_validated(d)
+
+
+def test_verify_expect_requires_h32_and_rejects_empty(tmp_path):
+    from assemble_catalog import verify_expect
+    with pytest.raises(SystemExit, match="h32"):
+        verify_expect("rv=1", '{"reviews":[1]}', {"rv": 1}, "TEST")
+    with pytest.raises(SystemExit, match="h32"):
+        verify_expect("", "whatever", {"rv": 99}, "TEST")
+
+
+def test_repair_apply_rejects_empty_expect_string(tmp_path):
+    run = make_run(tmp_path, names=("guest_count", "customer_transactions"))
+    assert validate_cli(run).returncode == 0
+    (run / "repair_candidates.json").write_text(json.dumps(
+        {"count": 1, "clipped": 0, "candidates": [{"a": "guest_count", "b": "customer_transactions"}]}))
+    rp = run / "repair_review.json"
+    rp.write_text(json.dumps({"reviews": [{"a": "guest_count", "b": "customer_transactions",
+                                           "verdict": "SAME", "why": "x"}]}))
+    out = subprocess.run([PY, REPAIR, "apply", str(run), "--review", str(rp), "--expect", ""],
+                         capture_output=True, text=True)
+    assert out.returncode != 0 and "h32" in (out.stdout + out.stderr)

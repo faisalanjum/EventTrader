@@ -277,7 +277,7 @@ const decisions = {
 const decisionsJson = JSON.stringify(decisions)
 const decExpect = `gv=${decisions.gate_verdicts.length},sa=${decisions.approved_same_as.length},rw=${decisions.approved_rewrites.length},pk=${decisions.parked_rewrites.length},hb=${decisions.high_blast_refute2.length},h32=${h32(decisionsJson)}`
 const reviewJson = flagged.length ? JSON.stringify({ reviews: leafReviews.map(r => ({ ...r, why: clean(r.why) })), split_map: leafSplitMap }) : null
-const reviewArgs = flagged.length ? ` --review ${RUN_DIR}/same_name_review.json --expect-review rv=${leafReviews.length},sm=${leafSplitMap.length},h32=${h32(reviewJson)}` : ''
+const reviewArgs = flagged.length ? ` --review ${RUN_DIR}/same_name_review.json --expect-review 'rv=${leafReviews.length},sm=${leafSplitMap.length},h32=${h32(reviewJson)}'` : ''
 const reviewStep = flagged.length ? `1b) Use the Write tool to save this EXACT JSON (byte-for-byte) to ${RUN_DIR}/same_name_review.json:
 ${reviewJson}
 ` : ''
