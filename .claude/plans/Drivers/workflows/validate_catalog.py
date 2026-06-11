@@ -43,8 +43,9 @@ Usage:  validate_catalog.py <seed.json> <catalog.json> [approved.json]
             [--fold <child_catalog.json> ...] [--review same_name_review.json]
             [--sidecars fold_sidecars.json]
 """
-import sys, json
+import hashlib, sys, json
 from collections import Counter
+from pathlib import Path
 
 def norm(s): return (s or "").strip().lower()
 def records(obj): return [r for r in (obj.get("catalog") or []) if isinstance(r, dict)]
@@ -283,6 +284,7 @@ def main():
     if fold_ps:
         union_ev, all_child_names = {}, set()   # rep name -> 5-tuple union ACROSS children
         child_variant_names = set()             # variants the children THEMSELVES carry (deeper levels)
+        rep_children = Counter()                # rep name -> how many children carry it (Stage-0 #6)
         for ci, fp in enumerate(fold_ps):
             ch = json.load(open(fp))
             crecs = [r for r in (ch.get("catalog") or []) if isinstance(r, dict) and norm(r.get("driver_name"))]
@@ -290,6 +292,7 @@ def main():
             all_child_names |= set(cby)
             child_variant_names |= {norm(v) for r in crecs
                                     for v in (r.get("same_as_variants") or []) if norm(v)}
+            child_reps = set()
             for n in sorted(cby):               # independent canonical-fixpoint resolution
                 cur, chain = n, []
                 while True:
@@ -302,6 +305,24 @@ def main():
                     cur = nxt
                 if cur is not None:
                     union_ev.setdefault(cur, set()).update(ev_full(cby[n]))
+                    child_reps.add(cur)
+            rep_children.update(child_reps)
+
+        # Stage-0 #6 (12th-pass gap): the workflow's GLOBAL-fold high-blast trigger
+        # ((scope_level global) AND (n_children >= 2)) read an AGENT-relayed collision_meta;
+        # recompute n_children here FROM THE CHILD CATALOGS so a deflated relay cannot
+        # silently skip the second skeptic on a kept global SAME union.
+        if norm(str(seed.get("scope_level") or "")) == "global" and review is not None:
+            bad_g = sorted(
+                f"{norm(v.get('collision_name'))} (children={rep_children[norm(v.get('collision_name'))]})"
+                for v in (review.get("reviews") or [])
+                if v.get("verdict") == "SAME"
+                and rep_children[norm(v.get("collision_name"))] >= 2
+                and v.get("high_blast_refute2_survived") is not True)
+            if bad_g:
+                fails.append(("HIGH-BLAST GLOBAL-fold SAME union (>=2 children, recomputed from "
+                              "child catalogs) lacks high_blast_refute2_survived in the review file",
+                              bad_g))
 
         # (a) NAMES: every child driver_name accounted EXACTLY ONCE (§11.2)
         park_names = unres_same + name_list((sidecars or {}).get("unresolved_same_name"), key="name")
@@ -353,12 +374,24 @@ def main():
         for tag, info in fails:
             n = len(info) if isinstance(info, (list, dict)) else 1
             print(f"  ✗ {tag}  ({n}): {json.dumps(info)[:600]}")
-        sys.exit(1)
+    else:
+        fold_note = f" | D8 fold: children={len(fold_ps)}" if fold_ps else ""
+        print(f"VALIDATION PASSED  seed={len(seed_names)} | catalog={len(cat_names)} "
+              f"(self-canonical={len(self_canon)}, rolled-up={len(cat_names)-len(self_canon)}) "
+              f"skip={len(skips)} unresolved={len(unres)} unresolved_same_name={len(unres_same)}{fold_note}")
 
-    fold_note = f" | D8 fold: children={len(fold_ps)}" if fold_ps else ""
-    print(f"VALIDATION PASSED  seed={len(seed_names)} | catalog={len(cat_names)} "
-          f"(self-canonical={len(self_canon)}, rolled-up={len(cat_names)-len(self_canon)}) "
-          f"skip={len(skips)} unresolved={len(unres)} unresolved_same_name={len(unres_same)}{fold_note}")
+    # Stage-0 #1: code-written, content-bound verdict sidecar. The agent relaying this
+    # validator's output is NEVER re-checked by code — this file is. Consumers (fold part-a,
+    # repair-suggest CLI, the honesty gate) hard-fail unless it exists, exit==0, AND the
+    # catalog/approved bytes are UNCHANGED since this validation (sha binding also catches
+    # "validator never actually ran" and "catalog rewritten after validation").
+    sidecar = {"exit": 1 if fails else 0,
+               "catalog_sha256": hashlib.sha256(Path(cat_p).read_bytes()).hexdigest()}
+    if appr_p is not None:
+        sidecar["approved_sha256"] = hashlib.sha256(Path(appr_p).read_bytes()).hexdigest()
+    (Path(cat_p).parent / "validation_exit.json").write_text(json.dumps(sidecar) + "\n")
+    if fails:
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()

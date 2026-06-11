@@ -133,10 +133,15 @@ survives MUST equal object.pass AND scope.pass AND mechanism.pass. Any FALSE or 
 
 phase('PartB')
 const reviewFile = { reviews, split_map: splitMap }
+// Stage-0 #5: bind the agent-written review file to THIS source string (counts + h32;
+// fold_catalogs.py part-b hard-fails on any drop/add/edit/reformat — e.g. UNCLEAR->SAME).
+const h32 = s => { let h = 0; for (let i = 0; i < s.length; i++) h = ((Math.imul(h, 31) + s.charCodeAt(i)) >>> 0); return h }
+const clean = s => (s || '').replace(/[\u0000-\u001f]/g, ' ')   // audit-text cleanup: control chars in judge NOTES -> spaces at file-build time (post-judgment; never names/verdicts)
+const reviewJson = JSON.stringify({ reviews: reviewFile.reviews.map(r => ({ ...r, why: clean(r.why) })), split_map: reviewFile.split_map })
 const partB = await agent(`Two steps, EXACT, in order:
 1) Use the Write tool to save this EXACT JSON (byte-for-byte) to ${PDIR}/same_name_review.json:
-${JSON.stringify(reviewFile)}
-2) Run with Bash: ${PY} ${DIR}/workflows/fold_catalogs.py part-b ${PDIR} --review ${PDIR}/same_name_review.json${CAP_ARGS}
+${reviewJson}
+2) Run with Bash: ${PY} ${DIR}/workflows/fold_catalogs.py part-b ${PDIR} --review ${PDIR}/same_name_review.json --expect 'rv=${reviews.length},sm=${splitMap.length},h32=${h32(reviewJson)}'${CAP_ARGS}
    (deterministic code: applies the review, writes the parent seed.json + fold_sidecars.json, prints a one-line JSON summary)
 Return ok=true + sha_line = the exact printed summary line. Non-zero exit: ok=false, sha_line = the exact error. Do NOT compose any seed content yourself.`, {schema:PARTB_SCHEMA, model:'opus', label:'part-b', phase:'PartB'})
 if (!partB.ok) throw new Error(`fold part-b failed: ${partB.sha_line}`)

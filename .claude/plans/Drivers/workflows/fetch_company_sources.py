@@ -131,16 +131,39 @@ def fetch(tk, session):
         "events": events,
     }
 
+def effective_tickers(scope_obj, subset_csv):
+    """Stage-0 #8: the ticker list comes CODE-TO-CODE from resolve_driver_scope.py --out,
+    never from an agent relay. A subset (test runs) must be ⊆ the scope or we hard-fail."""
+    base = [str(t).strip().upper() for t in (scope_obj.get("tickers") or [])]
+    if not base:
+        raise SystemExit("FETCH FAIL: scope file has no tickers")
+    if subset_csv:
+        subs = [t.strip().upper() for t in subset_csv.split(",") if t.strip()]
+        bad = sorted(set(subs) - set(base))
+        if bad:
+            raise SystemExit(f"FETCH FAIL: --subset tickers not in the resolved scope: {bad}")
+        return subs
+    return base
+
 def main():
     if not PW:
         print("ERROR: NEO4J_PASSWORD not set (.env)", file=sys.stderr); sys.exit(1)
     ap = argparse.ArgumentParser(description="Fetch all non-news company sources into a run dir.")
-    ap.add_argument("tickers", nargs="*", help="ticker symbols")
+    ap.add_argument("tickers", nargs="*", help="ticker symbols (legacy; production uses --scope)")
     ap.add_argument("--run-dir", help="run folder: sources -> <run-dir>/sources/<TICKER>.json, hashes -> <run-dir>/sources_manifest.json")
+    ap.add_argument("--scope", help="scope file written by resolve_driver_scope.py --out (code-to-code ticker list)")
+    ap.add_argument("--subset", help="comma-separated subset of the scope tickers (test runs); requires --scope")
     a = ap.parse_args()
-    tickers = a.tickers
+    tickers, scope_obj = a.tickers, None
+    if a.scope:
+        if tickers:
+            print("ERROR: pass either --scope or positional tickers, not both", file=sys.stderr); sys.exit(1)
+        scope_obj = json.load(open(a.scope))
+        tickers = effective_tickers(scope_obj, a.subset)
+    elif a.subset:
+        print("ERROR: --subset requires --scope", file=sys.stderr); sys.exit(1)
     if not tickers:
-        print("ERROR: no tickers given. Usage: fetch_company_sources.py TICKER [TICKER ...] [--run-dir DIR]", file=sys.stderr); sys.exit(1)
+        print("ERROR: no tickers given. Usage: fetch_company_sources.py TICKER [TICKER ...] [--run-dir DIR] | --scope FILE [--subset T1,T2] --run-dir DIR", file=sys.stderr); sys.exit(1)
     run_dir = Path(a.run_dir) if a.run_dir else None
     src_dir = (run_dir / "sources") if run_dir else OUT_DIR
     src_dir.mkdir(parents=True, exist_ok=True)
@@ -167,6 +190,13 @@ def main():
     if run_dir:
         (run_dir / "sources_manifest.json").write_text(json.dumps({"fetched_at": fetched_at, "sources": manifest}, indent=1))
         print(f"sources_manifest.json written ({len(manifest)} tickers, fetched_at={fetched_at})")
+        if scope_obj is not None:
+            # Stage-0 #8: the run dir's OWN code-written ticker ground truth; the chunker
+            # hard-fails if sources/ ever diverges from it.
+            (run_dir / "scope_resolved.json").write_text(json.dumps(
+                {"scope_name": scope_obj.get("scope_name"), "slug": scope_obj.get("slug"),
+                 "tickers": tickers, "subset": bool(a.subset)}, indent=1) + "\n")
+            print(f"scope_resolved.json written ({len(tickers)} tickers)")
 
 if __name__ == "__main__":
     main()

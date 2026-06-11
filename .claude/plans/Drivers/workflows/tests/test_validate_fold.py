@@ -5,6 +5,7 @@ assemble_catalog.py (empty decisions) writes the parent catalog, then the valida
 with --fold <child catalogs> [--review] [--sidecars]. Each D8 check is then proven to
 fire on a targeted corruption (zero judgment — names/sets/partitions only).
 """
+import hashlib
 import json
 import subprocess
 import sys
@@ -39,17 +40,25 @@ def child(tmp, run_id, recs):
     (d / "catalog.json").write_text(serialize(
         {"industry": f"Ind_{run_id}", "catalog": recs, "skips": [],
          "unresolved_rewrites": [], "unresolved_same_name": []}))
+    # Stage-0 #1 fixture stamp: part_a only folds exit-0-validated, byte-bound children
+    (d / "validation_exit.json").write_text(json.dumps(
+        {"exit": 0,
+         "catalog_sha256": hashlib.sha256((d / "catalog.json").read_bytes()).hexdigest()}))
     return d
 
 
 def build_fold(tmp, recs1, recs2, review):
-    """Real pipeline: part-a -> part-b -> assemble_catalog.py (empty decisions)."""
+    """Real pipeline: part-a -> part-b -> assemble_catalog.py (admit-all decisions)."""
     c1, c2 = child(tmp, "childA", recs1), child(tmp, "childB", recs2)
     p = tmp / "parent_run"
     p.mkdir(exist_ok=True)
     part_a(p, "TestSector", "sector", [c1, c2])
     part_b(p, review)
-    (p / "decisions.json").write_text(json.dumps(EMPTY_DECISIONS))
+    seed = json.loads((p / "seed.json").read_text())
+    dec = dict(EMPTY_DECISIONS)                     # Stage-0 #3: every seed name needs a verdict
+    dec["gate_verdicts"] = [{"driver_name": r["driver_name"], "verdict": "admit", "reason": "t"}
+                            for r in seed["catalog"]]
+    (p / "decisions.json").write_text(json.dumps(dec))
     out = subprocess.run([PY, str(WORKFLOWS / "assemble_catalog.py"), str(p)],
                          capture_output=True, text=True)
     assert out.returncode == 0, out.stderr

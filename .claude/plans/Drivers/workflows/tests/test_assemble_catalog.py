@@ -162,7 +162,9 @@ def test_cli_deterministic_bytes(tmp_path):
     run.mkdir()
     (run / "seed.json").write_text(serialize(seed_of("guest_count", "customer_transactions")))
     (run / "decisions.json").write_text(serialize(
-        dec(same_as=[{"variant": "customer_transactions", "canonical": "guest_count"}])))
+        dec(gate=[{"driver_name": "guest_count", "verdict": "admit", "reason": "t"},
+                  {"driver_name": "customer_transactions", "verdict": "admit", "reason": "t"}],
+            same_as=[{"variant": "customer_transactions", "canonical": "guest_count"}])))
     shas = []
     for _ in range(2):
         out = subprocess.run([PY, str(WORKFLOWS / "assemble_catalog.py"), str(run)],
@@ -354,7 +356,11 @@ def write_run(tmp_path, seed, review=None):
     run = tmp_path / "run1"
     run.mkdir()
     (run / "seed.json").write_text(serialize(seed))
-    (run / "decisions.json").write_text(serialize(dec()))
+    # Stage-0 #3: every seed name needs a gate verdict UNLESS the same-name review covers it
+    covered = {rv.get("collision_name") for rv in (review or {}).get("reviews", [])}
+    gate = [{"driver_name": r["driver_name"], "verdict": "admit", "reason": "t"}
+            for r in seed["catalog"] if r["driver_name"] not in covered]
+    (run / "decisions.json").write_text(serialize(dec(gate=gate)))
     if review is not None:
         (run / "review.json").write_text(serialize(review))
     return run

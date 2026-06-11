@@ -57,6 +57,30 @@ def norm(s):  # §12.1 shared norm(): strip + lowercase (ASCII)
     return (s or "").strip().lower()
 
 
+def require_validated(child_dir):
+    """Stage-0 #1 consumer: a child catalog may be folded ONLY if its last validator run
+    (the code-written validation_exit.json sidecar) passed AND the catalog/approved bytes
+    are unchanged since. Catches: a lying validate relay, a validator that never ran, a
+    catalog rewritten after validation, and post-validation approved.json tampering."""
+    d = Path(child_dir)
+    sc_p = d / "validation_exit.json"
+    if not sc_p.exists():
+        raise SystemExit(f"FOLD FAIL [{d.name}]: no validation_exit.json — the child was never "
+                         f"validated by validate_catalog.py (or pre-dates the sidecar); "
+                         f"re-run the validator on it first")
+    sc = json.load(open(sc_p))
+    if sc.get("exit") != 0:
+        raise SystemExit(f"FOLD FAIL [{d.name}]: the child's last validation FAILED "
+                         f"(exit={sc.get('exit')}) — a failed catalog cannot be folded")
+    if sc.get("catalog_sha256") != hashlib.sha256((d / "catalog.json").read_bytes()).hexdigest():
+        raise SystemExit(f"FOLD FAIL [{d.name}]: catalog.json changed since its last validation "
+                         f"(sha mismatch) — re-validate before folding")
+    ap = d / "approved.json"
+    if ap.exists() and sc.get("approved_sha256") != hashlib.sha256(ap.read_bytes()).hexdigest():
+        raise SystemExit(f"FOLD FAIL [{d.name}]: approved.json changed since its last validation "
+                         f"(or it was validated WITHOUT approved.json, skipping D1) — re-validate")
+
+
 def serialize(obj):
     return json.dumps(obj, indent=1, ensure_ascii=False) + "\n"
 
@@ -176,6 +200,7 @@ def part_a(parent_run_dir, scope_name, scope_level, children, max_records=None, 
 
     by_name, manifest = {}, []
     for d in dirs:
+        require_validated(d)                    # Stage-0 #1: only exit-0-validated, unchanged children fold
         cat = json.load(open(d / "catalog.json"))
         reps, counts = collapse_child(cat, child_id=d.name)
         manifest.append({"child_run_id": d.name,
@@ -489,6 +514,9 @@ def main(argv=None):
     b = sub.add_parser("part-b")
     b.add_argument("parent_run_dir")
     b.add_argument("--review", required=True)
+    b.add_argument("--expect", default=None,
+                   help="Stage-0 #5: rv=..,sm=..,h32=.. computed by the workflow JS from the "
+                        "review SOURCE string; binds the agent-written review file to it")
     b.add_argument("--max-records", type=int, default=None)
     b.add_argument("--max-chars", type=int, default=None)
     args = ap.parse_args(argv)
@@ -499,7 +527,14 @@ def main(argv=None):
     elif args.mode == "draw":
         summary = draw(args.parent_run_dir, args.cap)
     else:
-        review = json.load(open(args.review))
+        review_raw = Path(args.review).read_text()
+        review = json.loads(review_raw)
+        if args.expect:
+            from assemble_catalog import verify_expect
+            verify_expect(args.expect, review_raw,
+                          {"rv": len(review.get("reviews") or []),
+                           "sm": len(review.get("split_map") or [])},
+                          "FOLD PART-B same_name_review.json")
         summary = part_b(args.parent_run_dir, review, args.max_records, args.max_chars)
     if getattr(args, "max_records", None) is not None:
         summary["max_records"] = args.max_records

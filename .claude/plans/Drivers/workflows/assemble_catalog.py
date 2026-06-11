@@ -55,6 +55,43 @@ def norm(s):  # §12.1 — shared norm(): strip + lowercase (ASCII)
     return (s or "").strip().lower()
 
 
+def h32(text):
+    """Stage-0 write-fidelity hash: 31-polynomial rolling hash over UTF-16 code units,
+    mod 2^32 — EXACTLY reproducible in plain workflow JS as
+    `let h=0; for (let i=0;i<s.length;i++) h=((Math.imul(h,31)+s.charCodeAt(i))>>>0)`.
+    Binds an agent-written file to the JS-side source string. NOT cryptographic (32-bit):
+    it reliably catches realistic ACCIDENTAL changes (drop/add/edit/reformat); the section
+    row counts + downstream JSON parsing + the validator provide the rest of the net."""
+    h = 0
+    b = text.encode("utf-16-le")
+    for i in range(0, len(b), 2):
+        h = (h * 31 + (b[i] | (b[i + 1] << 8))) & 0xFFFFFFFF
+    return h
+
+
+def parse_expect(s):
+    """'k=1,h32=123' -> {'k': 1, 'h32': 123} (all values integers)."""
+    out = {}
+    for part in (s or "").split(","):
+        if part.strip():
+            k, v = part.split("=", 1)
+            out[k.strip()] = int(v)
+    return out
+
+
+def verify_expect(expect_str, raw_text, got_counts, label):
+    """Stage-0 #4/#5: compare the agent-WRITTEN file against the JS-computed expectation
+    (section row counts + h32 of the exact source string; a single trailing newline from
+    the Write tool is tolerated — it cannot alter JSON content). Mismatch = SystemExit."""
+    e = parse_expect(expect_str)
+    got = dict(got_counts)
+    got["h32"] = h32(raw_text.rstrip("\n"))
+    bad = {k: {"expected": e[k], "got": got.get(k)} for k in e if got.get(k) != e[k]}
+    if bad:
+        raise SystemExit(f"{label} EXPECT MISMATCH (agent-written file differs from the "
+                         f"workflow's source string — relay-write fidelity): {bad}")
+
+
 def serialize(obj):  # pinned output format: indent=1 (matches fetch), trailing newline
     return json.dumps(obj, indent=1, ensure_ascii=False) + "\n"
 
@@ -379,25 +416,68 @@ def assemble(seed, dec, review=None):
 
 
 def main():
-    args, review_p, i = [], None, 1
+    args, review_p, expect_p, expect_rv, i = [], None, None, None, 1
     while i < len(sys.argv):
         if sys.argv[i] == "--review" and i + 1 < len(sys.argv):
             review_p = sys.argv[i + 1]
+            i += 2
+        elif sys.argv[i] == "--expect" and i + 1 < len(sys.argv):
+            expect_p = sys.argv[i + 1]
+            i += 2
+        elif sys.argv[i] == "--expect-review" and i + 1 < len(sys.argv):
+            expect_rv = sys.argv[i + 1]
             i += 2
         else:
             args.append(sys.argv[i])
             i += 1
     if len(args) != 1:
-        print("Usage: assemble_catalog.py <run_dir> [--review same_name_review.json]",
+        print("Usage: assemble_catalog.py <run_dir> [--review same_name_review.json] "
+              "[--expect gv=..,sa=..,rw=..,pk=..,hb=..,h32=..] [--expect-review rv=..,sm=..,h32=..]",
               file=sys.stderr)
         sys.exit(2)
     run = Path(args[0])
     seed = json.load(open(run / "seed.json"))
-    dec = json.load(open(run / "decisions.json"))
-    review = None
+    dec_raw = (run / "decisions.json").read_text()
+    dec = json.loads(dec_raw)
+    review, review_raw = None, None
     if review_p is not None:                     # path relative to run_dir, or absolute
         rp = Path(review_p)
-        review = json.load(open(rp if rp.is_absolute() else run / rp))
+        review_raw = (rp if rp.is_absolute() else run / rp).read_text()
+        review = json.loads(review_raw)
+
+    # Stage-0 #4/#5: relay-write fidelity — the agent re-typed these files from the workflow's
+    # JS strings; the counts + h32 expectations are computed in JS from the SOURCE strings.
+    if expect_p is not None:
+        verify_expect(expect_p, dec_raw,
+                      {"gv": len(dec.get("gate_verdicts") or []),
+                       "sa": len(dec.get("approved_same_as") or []),
+                       "rw": len(dec.get("approved_rewrites") or []),
+                       "pk": len(dec.get("parked_rewrites") or []),
+                       "hb": len(dec.get("high_blast_refute2") or [])},
+                      "ASSEMBLE decisions.json")
+    if expect_rv is not None:
+        if review_raw is None:
+            raise SystemExit("ASSEMBLE FAIL: --expect-review given without --review")
+        verify_expect(expect_rv, review_raw,
+                      {"rv": len(review.get("reviews") or []),
+                       "sm": len(review.get("split_map") or [])},
+                      "ASSEMBLE same_name_review.json")
+
+    # Stage-0 #3: gate coverage — every seed driver_name must carry a gate verdict, or be
+    # handled by the same-name review (split/park). An omitted review batch would otherwise
+    # default-admit its records via precedence rule 5 and still pass the validator (the
+    # verified slice-subset hole). CLI-level: the production entry point is this CLI.
+    seed_names = {norm(r.get("driver_name")) for r in (seed.get("catalog") or [])
+                  if isinstance(r, dict) and norm(r.get("driver_name"))}
+    gate_names = {norm(v.get("driver_name")) for v in (dec.get("gate_verdicts") or [])}
+    review_names = {norm(rv.get("collision_name"))
+                    for rv in ((review or {}).get("reviews") or [])}
+    unreviewed = sorted(seed_names - gate_names - review_names)
+    if unreviewed:
+        raise SystemExit(f"ASSEMBLE FAIL: {len(unreviewed)} seed record(s) have NO gate verdict "
+                         f"and no same-name review — un-reviewed names cannot ship "
+                         f"(dropped review batch?): {unreviewed[:10]}")
+
     out, approved = assemble(seed, dec, review)
     cat_blob = serialize(out)
     (run / "catalog.json").write_text(cat_blob)

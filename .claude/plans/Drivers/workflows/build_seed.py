@@ -37,6 +37,22 @@ def build_seed(run_dir, industry, slug, run_id):
     files = sorted((run_dir / "menus").glob("*.json"))
     if not files:
         raise SystemExit(f"BUILD_SEED FAIL: no menu files in {run_dir / 'menus'}")
+    # Stage-0 #2: chunk coverage against BOTH code-written ground truths (never an agent
+    # relay): the chunks/ dir (covers KPI-only chunks, which have zero manifest rows) UNION
+    # chunks_manifest.json rows (covers a chunk file deleted after chunking). Every chunk
+    # must have been read into a menu, and no stale menus may contaminate the seed.
+    chunks_dir = run_dir / "chunks"
+    manifest_p = run_dir / "chunks_manifest.json"
+    if chunks_dir.exists() or manifest_p.exists():
+        want = {p.stem for p in chunks_dir.glob("*.json")} if chunks_dir.exists() else set()
+        if manifest_p.exists():
+            want |= {str(r.get("chunk_id")) for r in
+                     (json.loads(manifest_p.read_text()).get("rows") or []) if r.get("chunk_id")}
+        got = {p.stem for p in files}
+        if want != got:
+            raise SystemExit(f"BUILD_SEED FAIL: menus/ != chunks (dir ∪ manifest) — every chunk "
+                             f"needs exactly one menu; missing={sorted(want - got)}, "
+                             f"stale_extra={sorted(got - want)}")
     menus = [json.loads(f.read_text()) for f in files]
     menus.sort(key=lambda m: (str(m.get("ticker") or ""),))
 

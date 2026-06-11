@@ -25,6 +25,13 @@ def rec(name, companies=("AAA",), refs=None):
             "optional_links": {"xbrl_concept": None, "xbrl_member": None, "guidance_ref": None}}
 
 
+def cands(run, *pairs):
+    """Stage-0 #7 fixture: apply() only adds links present in the suggested set on disk."""
+    (run / "repair_candidates.json").write_text(json.dumps(
+        {"count": len(pairs), "clipped": 0,
+         "candidates": [{"a": a, "b": b} for a, b in pairs]}))
+
+
 def make_run(tmp_path, records):
     run = tmp_path / "run"
     run.mkdir()
@@ -74,6 +81,7 @@ def test_apply_approved_same_pair_reassembles_catalog(tmp_path):
         rec("guest_count_growth"),
         rec("guest_transactions_growth"),
     ])
+    cands(run, ("guest_count_growth", "guest_transactions_growth"))
     review = {"reviews": [{"a": "guest_count_growth", "b": "guest_transactions_growth",
                            "verdict": "SAME", "why": "same exact meaning"}]}
     rp = run / "repair_review.json"
@@ -93,6 +101,7 @@ def test_apply_high_blast_requires_second_skeptic_proof(tmp_path):
         rec("same_store_sales", companies=eight),
         rec("comparable_sales", companies=("C0",)),
     ])
+    cands(run, ("same_store_sales", "comparable_sales"))
     review = {"reviews": [{"a": "same_store_sales", "b": "comparable_sales",
                            "verdict": "SAME", "why": "same exact meaning"}]}
     rp = run / "repair_review.json"
@@ -134,6 +143,7 @@ def test_suggest_limit_clipping_is_reported_never_silent(tmp_path):
 
 def test_apply_is_idempotent_byte_identical(tmp_path):
     run = make_run(tmp_path, [rec("guest_count"), rec("customer_transactions"), rec("oil_price")])
+    cands(run, ("guest_count", "customer_transactions"))
     review = run / "repair_review.json"
     review.write_text(json.dumps({"reviews": [
         {"a": "guest_count", "b": "customer_transactions", "verdict": "SAME",
@@ -150,6 +160,7 @@ def test_apply_high_blast_with_proof_passes_full_validator(tmp_path):
     big = [f"C{i}" for i in range(8)]
     run = make_run(tmp_path, [rec("same_store_sales", companies=big),
                               rec("comparable_sales", companies=("C0",)), rec("oil_price")])
+    cands(run, ("same_store_sales", "comparable_sales"))
     review = run / "repair_review.json"
     review.write_text(json.dumps({"reviews": [
         {"a": "same_store_sales", "b": "comparable_sales", "verdict": "SAME",

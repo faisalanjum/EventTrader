@@ -51,12 +51,17 @@ const A = (typeof args === 'string') ? JSON.parse(args) : (args || {})
 const industry = A.industry || 'Restaurants'
 // TEST-ONLY subset override (recorded in manifest): args.tickers = explicit ticker list ⊆ the industry.
 const SUBSET = (Array.isArray(A.tickers) && A.tickers.length) ? A.tickers.map(t => String(t).trim().toUpperCase()) : null
+// Stage-0 #8: the ticker list travels CODE-TO-CODE via this scope file (resolver writes it,
+// fetch reads it, the chunker cross-checks it) — a relay-dropped ticker can no longer
+// silently remove a company from the seed. Path is computed HERE from the trusted args.
+const JSSLUG = industry.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '')
+const SCOPE_FILE = `${DIR}/runs/_scope_${JSSLUG}.json`
 
 phase('Resolve')
 const scope = await agent(`Run these commands with Bash, in order, and return the combined JSON (schema fields):
 0) BILLING GUARD (subscription-only hard condition): test -z "$ANTHROPIC_API_KEY" || { echo "BILLING-GUARD FAIL: ANTHROPIC_API_KEY present in env — refusing to run (subscription-only policy, CLAUDE.md)"; exit 9; }
    If it prints BILLING-GUARD FAIL, STOP: return an empty tickers array and put that exact line in scope_name.
-1) ${PY} ${DIR}/workflows/resolve_driver_scope.py --industry ${JSON.stringify(industry)}   (prints { scope_name, slug, tickers, n_tickers })
+1) ${PY} ${DIR}/workflows/resolve_driver_scope.py --industry ${JSON.stringify(industry)} --out ${SCOPE_FILE}   (prints { scope_name, slug, tickers, n_tickers } and writes the code-to-code scope file)
 2) date -u +%Y-%m-%d_%H%M%S   (the UTC run timestamp)
 Return scope_name, slug, tickers, n_tickers from (1) and utc_stamp from (2). If (1) exits NON-ZERO, report the exact error and return an empty tickers array (do NOT invent tickers).`, {schema:SCOPE_SCHEMA, model:'opus', label:'resolve', phase:'Resolve'})
 const SLUG = scope.slug, INDUSTRY = scope.scope_name || industry
@@ -71,9 +76,9 @@ const RUN_ID = `${scope.utc_stamp}_${SLUG}`
 const RUN_DIR = `${DIR}/runs/${RUN_ID}`
 
 phase('Fetch')
-const fetched = await agent(`Run this EXACT command with Bash (pulls all non-news sources WITH real text for the ${TICKERS.length} ${INDUSTRY} companies into the run dir, and writes sources_manifest.json with a sha256 per file):
-${PY} ${DIR}/workflows/fetch_company_sources.py ${TICKERS.join(' ')} --run-dir ${RUN_DIR}
-Then report the per-ticker summary lines, confirm sources_manifest.json was written, and confirm every ticker wrote a file with empty=0. If any ticker errored or has empty>5, say so explicitly.`, {model:'opus', label:'fetch-sources', phase:'Fetch'})
+const fetched = await agent(`Run this EXACT command with Bash (pulls all non-news sources WITH real text for the ${TICKERS.length} ${INDUSTRY} companies into the run dir; the ticker list is read CODE-TO-CODE from the scope file — Stage-0 #8; writes sources_manifest.json + scope_resolved.json):
+${PY} ${DIR}/workflows/fetch_company_sources.py --scope ${SCOPE_FILE}${SUBSET ? ` --subset ${SUBSET.join(',')}` : ''} --run-dir ${RUN_DIR}
+Then report the per-ticker summary lines, confirm sources_manifest.json AND scope_resolved.json were written, and confirm every ticker wrote a file with empty=0. If any ticker errored or has empty>5, say so explicitly.`, {model:'opus', label:'fetch-sources', phase:'Fetch'})
 
 phase('Chunk')
 const chunk = await agent(`Run BOTH commands with Bash, in order (deterministic chunker — splits the uncapped sources into bounded blind-bot inputs at natural boundaries; never drops a byte):

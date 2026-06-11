@@ -14,8 +14,9 @@ import os
 import sys
 from pathlib import Path
 
-from assemble_catalog import assemble, serialize
-from fold_catalogs import RECONCILE_EVIDENCE_PER_RECORD, key5, norm, side_sequence
+from assemble_catalog import assemble, serialize, verify_expect
+from fold_catalogs import (RECONCILE_EVIDENCE_PER_RECORD, key5, norm, require_validated,
+                           side_sequence)
 
 EMBED_MODEL = "text-embedding-3-large"
 
@@ -201,6 +202,14 @@ def apply(run_dir, review_path):
     added, hb = [], []
     existing = {(norm(x.get("variant")), norm(x.get("canonical")))
                 for x in (dec.get("approved_same_as") or [])}
+    # Stage-0 #7 python backstop: a NEW link may ONLY come from the code-suggested candidate
+    # set on disk — no candidates file = no new links (hard fail). Checked AFTER the
+    # already_linked no-op, so idempotent crash/resume re-runs never false-stop (suggest()
+    # excludes already-linked pairs from later candidate files).
+    cand_p = run / "repair_candidates.json"
+    cand_pairs = ({frozenset((norm(c.get("a")), norm(c.get("b"))))
+                   for c in (json.load(open(cand_p)).get("candidates") or [])}
+                  if cand_p.exists() else None)
 
     for row in review.get("reviews") or []:
         if row.get("verdict") != "SAME":
@@ -208,6 +217,13 @@ def apply(run_dir, review_path):
         a, b = norm(row.get("a")), norm(row.get("b"))
         if already_linked(cat, a, b):
             continue   # idempotent re-run (crash/resume): pair already in the same cluster -> no-op
+        if cand_pairs is None:
+            raise SystemExit(f"REPAIR FAIL: cannot add NEW link {a}|{b} — repair_candidates.json "
+                             f"missing (links may only come from the code-suggested set; "
+                             f"re-run suggest first)")
+        if frozenset((a, b)) not in cand_pairs:
+            raise SystemExit(f"REPAIR FAIL: SAME pair {a}|{b} was never suggested "
+                             f"(not in repair_candidates.json) — review/candidates mismatch")
         if a not in by or b not in by:
             raise SystemExit(f"REPAIR FAIL: SAME pair references non-kept/self-canonical name: {a}|{b}")
         ca = canonical_pick(a, b)
@@ -256,11 +272,22 @@ def main(argv=None):
     a = sub.add_parser("apply")
     a.add_argument("run_dir")
     a.add_argument("--review", required=True)
+    a.add_argument("--expect", default=None,
+                   help="Stage-0 #5: rv=..,h32=.. computed by the workflow JS from the review "
+                        "SOURCE string; binds the agent-written repair_review.json to it")
     args = ap.parse_args(argv)
     if args.mode == "suggest":
+        # Stage-0 #1: repair builds ON the catalog — refuse unless its last validation
+        # passed and the catalog/approved bytes are unchanged since (sidecar binding).
+        require_validated(args.run_dir)
         out = suggest(args.run_dir, args.min_token_overlap, args.limit, args.extra_candidates,
                       args.use_embeddings, args.embedding_top_k, args.embedding_min_score)
     else:
+        if args.expect:
+            review_raw = Path(args.review).read_text()
+            verify_expect(args.expect, review_raw,
+                          {"rv": len(json.loads(review_raw).get("reviews") or [])},
+                          "REPAIR repair_review.json")
         out = apply(args.run_dir, args.review)
     print(json.dumps(out, sort_keys=True))
 

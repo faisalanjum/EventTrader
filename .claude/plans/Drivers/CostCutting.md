@@ -1,0 +1,126 @@
+# Driver Catalog — Cost / Time / Token Cutting (Focus 2 research results)
+
+**Date:** 2026-06-10/11 · **Research:** 16-agent adversarial workflow `wf_769c97fb-77d` (8 researchers + 8 skeptics, ~1.5M tokens) · **Status: STAGE-0 HARDENING BUILT (2026-06-11, owner-approved; TDD, suite 154 passed + 1 opt-in skip). All other cost levers below remain SUGGESTIONS ONLY** — owner arbitrates every item; nothing else adopted.
+
+**Goal:** cheaper and faster with **zero loss** — not 0.1% off recall, precision, accuracy, or merge integrity.
+
+> ## THE MASTER RULE
+> **If a change alters (a) what a judgment AI sees, or (b) which model judges meaning — it is NEVER automatically safe.** It needs a measured A/B gate (modeled on the reader A/B) or it is rejected.
+> Everything else — timing, scheduling, resume, deterministic code checks, relay plumbing — can be proven safe **by construction** (no prompt byte changes) or **by byte-identical outputs**.
+
+Vocabulary (plain words):
+- **Judge** = an LLM agent making a semantic decision (dedup, gate, refute, d5, fold review, repair review).
+- **Clerk** = an LLM agent whose only job is "run this command, copy the output back" — zero judgment.
+- **Over-merge** = wrongly fusing two different drivers into one name. THE catastrophic, hard-to-reverse direction (the v2 `revenue_demand` failure). Under-merge (too many separate names) is recoverable via parks + the repair pass.
+- **Spin-up overhead** = fixed tokens every new agent pays before doing any work (system prompt + tool schemas).
+
+---
+
+## 0. Where the tokens actually go — measured from transcripts, rounded (456 real transcripts, Jun 9–10, summed by script, deduped by message id; one exception: the dedup/gate batch-read sizes are derived from batch-file bytes, chars÷4, not from transcripts)
+
+| Fact | Number |
+|---|---|
+| One full calibration cycle (CAKE leaf + synth folds + walk + repair smoke) | **~95.6M tokens** = 2.25M uncached input + 17.9M cache-write + 75.1M cache-read + 0.34M output (78.6% is cheap cache-reads) |
+| The 68 Fable chunk readers (one leaf) | **~25M** — the single biggest category; each reader runs ~10+ turns, churning ~290k cache-reads for an ~11.5k working set |
+| Dedup + Gate judges | each reads the full batch file (~92–112k tokens), ×2 independent judges ×3 batches — **and the full reconcile re-runs at every fold level** |
+| One aborted run (5-hour session-limit death, "resets 8:10pm") | **7.27M tokens for ZERO output**, then fully re-paid (wf_2511bd46 → redone as the 005333 run) |
+| Side work (plan audits, research/doc agents) sharing the same 5-hour windows | **~47% of the window spend** — this is what starved the pipeline run mid-fan-out |
+| Spin-up overhead per agent | ~10.8k (haiku) to ~21–27k (opus/fable); only a ~2.8–5.8k shared prefix is ever cache-shared across sibling agents — unreliably, 5-minute lifetime, same-model only |
+| Repair pass at the real leaf | 529 candidate pairs (pre-limit), one judge agent per pair, all n<8 companies |
+
+Billing context: pipeline runs on the **subscription** path (billing guard enforces no API key), so tokens burn **usage-limit headroom and wall-clock**, not per-token dollars. The 5-hour window deaths are the binding constraint. The only metered dollars are the OpenAI embedding lane (pennies). Verified model aliases: `fable`→claude-fable-5 ($10/$50/Mtok; its tokenizer counts ~30% MORE tokens for the same text), `opus`→claude-opus-4-8 ($5/$25), `sonnet`→claude-sonnet-4-6 (**1M context confirmed**, $3/$15), `haiku`→claude-haiku-4-5 (200K, $1/$5).
+
+---
+
+## CLASS A — touches no judge input, no judge model → PROVABLY ZERO-LOSS
+
+*(Safe by construction: not a single prompt byte changes. Adopt-grade after normal code review.)*
+
+| # | Lever | Saving | Why provably safe |
+|---|---|---|---|
+| A1 | **Window discipline**: launch the 68-reader fan-out only right after a 5-hour window reset; never share a window with research/audit agents; deterministic fail-closed preflight before `parallel()` in menu_build.js | ~7.3M per avoided abort, recurring at scale (every industry leaf is a 68-agent burst) | Changes only *when* things run |
+| A2 | **Per-chunk resume** in the menu fan-out: a CODE pre-step schema-validates existing `menus/<cid>.json` against the chunk manifest; fan out only missing/invalid chunks; recompute `expectCounts` from disk for resumed chunks | On any interruption, only the remainder is re-paid (the measured abort would have salvaged most of 68 readers) | Judges that do run get byte-identical inputs; the file-validation check must be fail-close (half-written files must fail) |
+| A3 | **Spawn cadence**: keep same-model agent bursts inside the 5-minute prompt-cache window | ~5.5k/agent, opportunistic (measured: hits ~1/3 of the time today) | Timing alters no content; cached vs uncached processing is byte-identical |
+| A4 | **Resume/cache discipline** (already practiced): unchanged (prompt,opts) workflow calls replay at 0 tokens; cache-bust markers ("rev2/rev3") only when re-execution is wanted | avoids whole-phase re-pays | Replay returns the recorded result |
+
+## CLASS B — relay/plumbing changes, judge inputs untouched → BYTE-IDENTITY GATES
+
+| # | Lever | Verdict | Conditions |
+|---|---|---|---|
+| B1 | **Cheaper models for clerks** (21 zero-judgment agents) | **UNSAFE as a bundle today** | Key discovery: *zero-judgment ≠ code-verified*. 13 of 21 clerk outputs are TRUSTED somewhere, and the 3 validate relays ARE the safety net (a false "passed=true" ships a failed catalog — validation.txt has zero code readers). Downgrade becomes provable only AFTER Stage-0 hardening (below). **Safe-today carve-out** (already code-backstopped): seed-max-guard, blast-count, d5-blast-count, tree-list — tiny savings (~1–4k each). |
+| B2 | **Merge consecutive clerk steps** (guard+slice into one agent; part-a+draw into one) | Gateable | Precondition: close the slice-coverage hole (Stage-0 #3). Gate: byte-identical artifacts on the real leaf + synth folds, plus fault-injection (forced step-1 failure must stop step 2; billing guard still runs first). **assemble+validate merge = REJECTED PERMANENTLY** — the agent that authors decisions.json must never be the one reporting validation; a self-grading writer re-opens the unapproved-fusion hole and destroys the validation.txt forensic trail. |
+| B3 | **Minimal custom agent type** for clerks (`.claude/agents/`, e.g. tools: Bash,Read[,Write]) via `agent({agentType})` | SAFE_WITH_MEASUREMENT | Verified supported in the v2.1.172 binary; composes with schema. Caveats: default workflow prompt is only ~90 words (real saving = dropped tool schemas — count 128→7-8 proven, token delta UNMEASURED); splits the cache pool (may negate saving); 2 call sites need Write (menu record, repair review-writer); agent file must carry ONLY name/description/tools (no model:/memory:/effort:); adoption invalidates resume-cache chains. 3-stage gate (static audit → mechanism probe → CAKE-leaf A/B with byte-identical artifacts). Bonus: removing Write/Edit from pure runners shrinks their blast radius — a fail-close improvement. |
+
+## CLASS C — CHANGES WHAT A JUDGE SEES → per-cut A/B gate, zero tolerance toward over-merge
+
+**Gate template (applies to every C item, run PER CUT, never bundled):**
+1. Run the CURRENT variant **twice** on frozen real fixtures (CAKE leaf 594-rec seed / synth folds / repair candidate set) → measure baseline self-disagreement (the LLM noise floor).
+2. Run the CUT variant **twice**.
+3. **HARD FAIL if the cut variant produces ANY merge-direction-positive verdict (survives=true / SAME / kept link / applied rewrite) absent from BOTH baseline runs** — zero tolerance.
+4. Under-merge novelty (new FALSE/UNCLEAR/park) must be ≤ the noise floor.
+5. Any byte-layout change additionally needs a **read-path proof**: the reading agent echoes record/event counts + a checksum over every quote it can see; code compares to disk; anything <100% = reject the format permanently.
+6. Cuts touching high-blast refute2 need ≥10 high-blast pairs in the fixture (plant synthetics) or the gate has no statistical power and the cut stays rejected.
+
+| # | Lever | Saving | Main risk to test | Priority |
+|---|---|---|---|---|
+| C1 | **Fold re-review inheritance** — today every record gets the FULL dedup+gate+refute treatment 3× (leaf, sector, global) because build_tree re-runs all of reconcile per level. Proposal: records arriving unchanged from a validated child (same name, same evidence, no collision, no new merge) skip re-GATING. **Never skip dedup** (cross-industry duplicates are its purpose). | **up to 50–70% of all fold-level spend — the biggest prize at production scale, larger than everything else combined** | Global context can legitimately flip a leaf verdict — A/B on one real sector fold, diff verdict sets; non-empty diff → reject or narrow to gate-admits only | HIGH |
+| C2 | **Reader fan-out shape**: (a) bin-pack chunks to the existing 40k budget — CAKE used 68 chunks where 56 fit (84% fill; one 936-byte chunk paid a full ~13k spin-up); (b) static-text-first prompt layout (rules/schema first, chunk-id last) + one combined cat turn so the 68 same-model readers share cache prefix | (a) ~3.5M/leaf (b) 1.5–3M/leaf | (a) event co-location changes reader input → cheap A/B (name-set diff vs baseline); (b) cache sharing measured UNRELIABLE — verify first-message cache_read>0 hit rates before counting savings; any inlined ontology must be hash-checked against DriverOntology.md (workflow JS can't read files — sync drift = integrity risk) | HIGH |
+| C3 | **Refute2 two-record view** — the high-blast 2nd skeptic currently reads the whole ~100k-token batch file to judge ONE pair; give it a code-extracted view of just the two records. **Judge stays Opus.** | ~85–105k per high-blast pair | Sibling records elsewhere in the batch are sometimes THE refutation evidence (proof a fold conflates two drivers); extraction script must hard-exit if a named record is missing (no raw string interpolation into python) | MED-HIGH |
+| C4 | **Embedding-aware batch composition pre-slice** — run the existing embedding pass (text-embedding-3-large, already built for repair) BEFORE slicing; order records by cluster so likely duplicates co-batch and dedup catches them in-batch instead of surfacing later as expensive repair judges | dozens of avoided 10–20k-token repair judges per fold; embeddings cost pennies (OpenAI lane) | Changes dedup adjacency → A/B on a known fold: compare final link sets + repair-candidate counts; check embedding determinism + OpenAI key/billing state | MED |
+| C5 | **Batched repair pair-reviews** (k≈10 pairs per agent instead of 1 each) | ~180 avoided spin-ups per leaf (overhead amortization only — payload tokens unchanged) | Anchoring streaks (suggest() ranks by similarity → homogeneous batches), verdict transposition, lost-in-middle dilution. Preconditions FIRST (one also fixes a live gap that exists today): P1 = JS asserts v.a===c.a && v.b===c.b; P2 = per-batch exact-set check. refute2 stays per-pair unconditionally. Context: per-pair isolation IS load-bearing — repair has NO Refute step between review and apply for n<8 pairs (reconcile's whole-batch dedup precedent does NOT transfer: it's followed by an independent Refute). | MED |
+| C6 | Smaller cuts, each individually gated: menu return slimmed to driver_name only · compact (non-indented) chunk files · fold pyView source_id drop · strip proposer "why" from refute embed · d5 names-free pyRec (the names ARE in the skeptic's loaded view today) · repair suggest slim + per-pair reads (also REMOVES an existing ~100K structured-output truncation risk — net integrity gain if gated) · repair why-cap (default keep — audit thinning) · ontology-read drop for readers (default KEEP — it's the naming authority and no code checks name quality) | small–medium each | per gate template | LOW-MED |
+
+**REJECTED for now — not recommended** (only the JSONL item has even a theoretical proof path; the other three have no A/B route at all):
+- **One-record-per-line (JSONL) batch format** — records run up to 12.6k chars; the Read tool truncates long lines → would **silently hide evidence mid-quote from the judges**, and the validator can't see what a judge saw. Permanent no (unless a read-path proof + A/B both pass, not recommended).
+- **Dropping `reason` fields from decisions.json** — catalog bytes provably unchanged, but it deletes the only on-disk record of why each name was admitted (audit/honesty-gate artifact). Owner-sign-off territory; recommendation: NO.
+- **fiscal_kpis reader-prompt fork** — ~5k/run saving vs a permanent two-variant template on the recall-critical producer prompt. Cost/benefit fails.
+- **assemble+validate clerk merge** — see B2.
+
+## CLASS D — CHANGES WHICH MODEL JUDGES MEANING → REJECTED
+
+| # | Proposal | Verdict | Reason |
+|---|---|---|---|
+| D1 | **Sonnet 4.6 for Refute / refute2 / d5-refute / d5-refute2** | **REJECTED** | Sonnet 4.6 *does* have a 1M context window ($3/$15 vs Opus $5/$25) — and context isn't even needed (all refuter inputs fit 200K). The killer is the **asymmetry**: "default survives=false" only protects against doubt the model *notices*. A weaker skeptic's dominant failure is **confidently not seeing** a real object/scope/mechanism difference → it outputs `survives=true` → over-merge. **No code anywhere catches a wrong survives=true** (the validator checks a verdict EXISTS, never that it's true; D1 is circular via approved.json; the repair pass recovers under-merge only). Refute is the LAST line of defense (refute1/d5-refute terminal for <8-company fusions; refute2/d5-refute2 terminal for ≥8/global). One flipped verdict on the real run (179 surviving links) ≈ 0.56% precision loss = **5× the 0.1% budget from a single event**. Refute2 events are too rare for any affordable A/B to have statistical power. Architecture note: the (Opus) proposer's "why" is embedded in the refute prompt — a weaker judge evaluating a stronger model's persuasive rationale is the inverse of the sane weak-proposer/strong-skeptic design. Subagents also run with thinking disabled (CLI hard-coded through v2.1.140 era), where capability gaps widen. Theoretical-only salvage: refute1-only behind a brutal triple gate (paired replay vs noise floor + ≥30 planted wrong fusions refuted 3/3 + end-to-end holdout; no prompt-tuning retries); recommendation: don't. |
+| D2 | Cheaper reader models (fable→opus/sonnet/haiku) | **REJECTED (already settled)** | Owner-approved measured A/B (HierarchicalCatalogPlan, Eleventh pass 10): Fable 54/28 candidates with 100% verbatim quotes vs Opus 24/21, Sonnet 31/20, Haiku rule-violating. Menu-stage recall loss is unrecoverable downstream (repair re-links existing records; it cannot resurrect evidence never read). |
+| D3 | **Nested sub-agents** | **REJECTED (exists, but no use)** | Owner probe 2026-06-10/11 (re-verified deeper this session): nesting now WORKS at v2.1.172 — the Agent tool is now a **direct** tool in Agent-tool-spawned subagents (also ToolSearch-reachable); main→L1→…→**L10** chain spawned with **zero refusal** (changelog said "5"); Task tools still absent — the spawner is the Agent tool. **But it is NOT available inside the dynamic-Workflow runtime this pipeline uses — workflow `agent()` agents have no Agent tool (verified) — so for the pipeline, nesting is not even reachable.** Verdict unchanged because existence was only failure mode #1 of 3: (i) **not approved as a cost lever — likely no saving for this pipeline, and none claimable without measurement**: child contexts are separate (full spin-up each) and child output is re-billed through every paid middle context, while workflow JS does the same routing for 0 tokens — any nested design that does save (e.g. a parent pre-extracting small views for children) is dominated by flat orchestration + code extraction (lever C3) at zero parent cost; nesting helps only when the orchestrator must be an LLM, and ours never is, by design; (ii) **integrity** — any nested use puts an LLM in charge of which children to spawn or relaying verdicts upward = the unapproved-fusion hole class closed in the 12th pass with code-computed counts + validator backstops. |
+
+---
+
+## DO-REGARDLESS: Stage-0 integrity hardening — 8 holes that existed at Opus — **ALL 8 BUILT 2026-06-11** (TDD, `tests/test_stage0_hardening.py`; + audit-text control-char cleanup; + retro-stamped all run dirs; + retroactively caught 3 un-gated names in the real CAKE run: capex/capital_expenditure/food_costs)
+
+*Found while auditing "can a lying clerk be caught": live gaps independent of any cost work, currently mitigated only by Opus reliability + prompt instructions. All fixes are small, deterministic, pure code. Also the PREREQUISITE for B1/B2 and several C items.*
+
+| # | Hole (exists now) | If the relay lies / errs | Fix (pure code) |
+|---|---|---|---|
+| 1 | The 3 **validate relays** (reconcile validate, build_tree fold-validate, repair-validate) are never code-rechecked; validation.txt is tee'd write-only, exit code never parsed by code | A false "passed=true" ships a catalog that FAILED the deterministic D1/D8/high-blast checks — voids every other backstop in the system | **BUILT:** validator writes `validation_exit.json {exit, catalog_sha256, approved_sha256}` bound to exact file bytes; the NEXT code consumer (fold part-a, repair-suggest CLI) hard-fails unless present, exit==0, bytes unchanged. **Known residual (inherent — workflow JS cannot read files, so any in-workflow re-check would itself be a relay): a lying relay at a TERMINAL step can make that run's console report look green, but the sidecar on disk carries the truth and no code path can consume the bad catalog. Closed at the ends: (a) the §13.1 consumption contract (Focus 3) MUST require sidecar exit==0 + sha match before any producer/predictor reads a catalog; (b) the honesty gate re-reads the sidecar.** |
+| 2 | **chunk**: menus are validated against the chunk agent's OWN relayed chunk_ids, not chunks_manifest.json; expectCounts is computed from the returned menus (self-consistent both sides) | Dropped chunk_ids = real source text silently never read by any reader; run passes GREEN | build_seed.py cross-checks menus/*.json against chunks_manifest.json rows (every manifest chunk has a menu) |
+| 3 | **slice**: the batch-file list is taken verbatim; an omitted batch's records get no dedup/gate verdicts → admitted self-canonical (precedence rule 5) → validator completeness PASSES | Up to a whole batch (314 records in the real run) ships unreviewed, silently | assemble/validator hard-fails unless every seed driver_name appears in decisions.gate_verdicts (or JS cross-checks Σ batch record counts == seed count) |
+| 4 | **assemble**: the agent re-types the ~123k-char decisions JSON via Write; never diffed (no sha/count); approved.json is built FROM this file and validator D1 checks against approved.json (circular) | Dropped skip verdict = self-admit; fabricated same_as + a matching high_blast_refute2 row = unapproved fusion that PASSES validation | JS passes `--expect` per-section row counts + total byte length (sha256 if available); python hard-fails on on-disk mismatch |
+| 5 | **part-b / repair-apply**: same unchecked agent-write pattern for the review files both consumers trust | UNCLEAR→SAME flips + added survived flags pass part_b AND the validator | Same `--expect` write-fidelity check as #4 |
+| 6 | **part-a global folds**: the (global && n_children≥2) second-skeptic trigger reads agent-relayed collision_meta; the validator only recomputes ≥8-COMPANY unions from seed | A deflated n_children silently skips refute2 for every <8-company global union — over-merge at the top of the tree | Validator fold mode recomputes n_children from the real child catalogs for every kept SAME in a global fold and demands the refute2 flag |
+| 7 | **repair review**: JS never asserts v.a===c.a && v.b===c.b (apply() keys links off the verdict's echoed names; the count check counts rows, not identity) | A transposed verdict links a pair that was never judged | One-line JS assert + judge instructed to copy a/b from the evidence it actually read |
+| 8 | **resolve/fetch**: on full-industry runs (no subset) nothing compares the relayed ticker list to resolve_driver_scope.py's real output; fetch success is free-text, no schema | A dropped ticker = a whole company absent from the seed, undetected | resolve_driver_scope.py writes scope_resolved.json itself; fetch+chunk read tickers from that file; chunk_company_sources.py hard-fails if sources/*.json filenames ≠ that ticker set |
+
+---
+
+## RECOMMENDED EXECUTION ORDER (owner gives the word per step; nothing started)
+
+1. **Stage-0 hardening** (integrity first; unlocks B1/B2 and several C preconditions; worth it even if we never save a token).
+2. **Class A** — window discipline + per-chunk resume + spawn cadence (free wins, zero quality surface).
+3. **C1 gate** — fold re-review inheritance (the biggest prize).
+4. **C2** — reader fan-out shape (attacks the biggest measured category).
+5. **C3** — refute2 two-record view gate.
+6. Opportunistic: C4 / C5 / C6, B2 / B3, the B1 four-clerk carve-out.
+7. **Class D stays dead.**
+
+## Open follow-ups
+- **Probe whether v2.1.172 enabled subagent thinking** (Infrastructure.md was brought current to v2.1.172 on 2026-06-10 [commit 15634d3] — but subagent **thinking** was NOT among the re-tested items, so it still reads "DISABLED" from the v140 era and this probe is still required; the nested-spawning flip shows findings there can still go stale). If thinking is now on/controllable for subagents, that is a **potential quality upside — but it changes judge behavior, so by the master rule it must pass the same A/B gate before adoption** (thinking can shift verdict distributions in either direction). Extra caution: if a CLI upgrade silently enabled it, our measured baselines have already shifted — verify the current thinking state before running any future gate. 5-minute read-only probe. Same staleness check applies to "parallelism one level deep" and "Agent resume removed".
+- Per-subagent 1M-context ([1m]) at v2.1.172: UNVERIFIED (transcripts strip the suffix) — not load-bearing for any current verdict (all judge inputs fit 200K).
+- Max-plan usage-limit weighting per model: mechanism UNVERIFIED (assumed cost-based per API price ratios).
+
+## Provenance
+- Research run: workflow `wf_769c97fb-77d`, session c69abb08 (2026-06-10/11); raw output lived at `/tmp/.../tasks/wkjwpzif0.output` (ephemeral — THIS FILE is the durable record).
+- Token measurements: 456 `agent-*.jsonl` transcripts under `~/.claude/projects/-home-faisal-EventMarketDB/*/subagents/workflows/`, summed by script, deduped by message.id; 49 zero-usage transcripts are real session-limit deaths, not missing data.
+- Every load-bearing code claim was re-verified line-by-line against `.claude/plans/Drivers/workflows/{menu_build,reconcile,fold_catalogs,build_tree,repair_duplicates}.js`, `slice_seed.py`, `fold_catalogs.py`, `assemble_catalog.py`, `validate_catalog.py`, `repair_duplicates.py` (commit 214f4bb state).
+- Model facts from the bundled claude-api reference (2026-06-04 cache) + on-disk transcript verification of alias→model resolution.
+- Memory pointer: `~/.claude/projects/-home-faisal-EventMarketDB/memory/project_drivers_cost_research.md`.

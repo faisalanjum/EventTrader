@@ -65,6 +65,12 @@ if (!guard.ok) log(`SEED over §11.11 caps (records=${guard.records}, chars=${gu
 
 phase('Review')
 const norm = s => (s||'').trim().toLowerCase()
+// Stage-0 #4/#5 write-fidelity hash (assemble_catalog.h32 reproduces this exactly):
+const h32 = s => { let h = 0; for (let i = 0; i < s.length; i++) h = ((Math.imul(h, 31) + s.charCodeAt(i)) >>> 0); return h }
+// Audit-text cleanup (owner-approved): control chars (newline/tab) in judge NOTE text become
+// spaces at FILE-BUILD time only — after all judging, never touching names/verdicts — so a
+// multi-line "why" can never make the relay-written JSON unparseable (probe-verified risk).
+const clean = s => (s || '').replace(/[\u0000-\u001f]/g, ' ')
 const survivingLinks = [], appliedRewrites = [], parkedRewrites = [], allGateVerdicts = [], allMixedFlags = [], hbRefute2 = []
 for (let bi = 0; bi < BATCH_FILES.length; bi++) {
   const bf = BATCH_FILES[bi]
@@ -259,19 +265,26 @@ phase('Assemble')
 // (assemble_catalog.py, pytest-covered). The agent below is a dumb pen for the SMALL decisions.json
 // + a Bash runner; it never composes catalog content, so it cannot fabricate a fusion.
 const decisions = {
-  gate_verdicts: allGateVerdicts.filter(v => !touches(v.driver_name, v.rewrite_to)).map(v => ({ driver_name: v.driver_name, verdict: v.verdict, rewrite_to: v.rewrite_to || '', reason: v.reason || '' })),
+  gate_verdicts: allGateVerdicts.filter(v => !touches(v.driver_name, v.rewrite_to)).map(v => ({ driver_name: v.driver_name, verdict: v.verdict, rewrite_to: v.rewrite_to || '', reason: clean(v.reason) })),
   approved_same_as: survivingLinks.filter(l => !touches(l.variant, l.canonical)).map(l => ({ variant: l.variant, canonical: l.canonical })),
   approved_rewrites: appliedRewrites.filter(r => !touches(r.from, r.to)).map(r => ({ from: r.from, to: r.to })),
-  parked_rewrites: parkedRewrites.filter(p => !touches(p.driver_name, p.proposed_to)),
+  parked_rewrites: parkedRewrites.filter(p => !touches(p.driver_name, p.proposed_to)).map(p => ({ driver_name: p.driver_name, proposed_to: p.proposed_to, why: clean(p.why) })),
   high_blast_refute2: hbRefute2.filter(x => !touches(x.a, x.b)),
 }
+// Stage-0 #4/#5: the agent re-types these JSON strings to disk; the CLI verifies the
+// on-disk files against counts + h32 computed HERE from the source strings (relay-write
+// fidelity — a dropped/added/edited row or any reformat hard-fails assemble_catalog.py).
+const decisionsJson = JSON.stringify(decisions)
+const decExpect = `gv=${decisions.gate_verdicts.length},sa=${decisions.approved_same_as.length},rw=${decisions.approved_rewrites.length},pk=${decisions.parked_rewrites.length},hb=${decisions.high_blast_refute2.length},h32=${h32(decisionsJson)}`
+const reviewJson = flagged.length ? JSON.stringify({ reviews: leafReviews.map(r => ({ ...r, why: clean(r.why) })), split_map: leafSplitMap }) : null
+const reviewArgs = flagged.length ? ` --review ${RUN_DIR}/same_name_review.json --expect-review rv=${leafReviews.length},sm=${leafSplitMap.length},h32=${h32(reviewJson)}` : ''
 const reviewStep = flagged.length ? `1b) Use the Write tool to save this EXACT JSON (byte-for-byte) to ${RUN_DIR}/same_name_review.json:
-${JSON.stringify({ reviews: leafReviews, split_map: leafSplitMap })}
+${reviewJson}
 ` : ''
-const out = await agent(`Steps (assembler rev2 — STAR-flattened canonicals), EXACT, in order:
+const out = await agent(`Steps (assembler rev3 — Stage-0 write-fidelity expects), EXACT, in order:
 1) Use the Write tool to save this EXACT JSON (byte-for-byte, do not reformat) to ${RUN_DIR}/decisions.json:
-${JSON.stringify(decisions)}
-${reviewStep}2) Run with Bash: ${PY} ${DIR}/workflows/assemble_catalog.py ${RUN_DIR}${flagged.length ? ` --review ${RUN_DIR}/same_name_review.json` : ''}
+${decisionsJson}
+${reviewStep}2) Run with Bash: ${PY} ${DIR}/workflows/assemble_catalog.py ${RUN_DIR} --expect '${decExpect}'${reviewArgs}
    (deterministic code: reads seed.json + decisions.json from DISK, applies the 5-way precedence, writes catalog.json + approved.json, prints an "ASSEMBLED ..." line with the catalog sha256 + counts)
 Return ok=true and sha_line = the exact printed ASSEMBLED line. If the script exits NON-ZERO: ok=false, sha_line = the exact error output. Do NOT edit or compose any catalog content yourself.`, {schema:ASSEMBLE_SCHEMA, model:'opus', label:'assemble', phase:'Assemble'})
 if (!out) throw new Error('Assemble agent died (likely session limit / API error) — fail-close.')

@@ -30,6 +30,8 @@ def main():
     ap.add_argument("--industry", help="industry name -> its tickers")
     ap.add_argument("--sector",   help="sector name -> its industries")
     ap.add_argument("--list", action="store_true", help="list valid sectors + industries")
+    ap.add_argument("--out", help="ALSO write the result JSON to this path (Stage-0 #8: "
+                                  "code-to-code scope file for fetch_company_sources.py --scope)")
     a = ap.parse_args()
     if not PW:
         print("ERROR: NEO4J_PASSWORD not set (.env)", file=sys.stderr); sys.exit(1)
@@ -50,8 +52,12 @@ def main():
                     print(f"ERROR: industry '{a.industry}' resolved 0 tickers (run --list for valid names)", file=sys.stderr); sys.exit(1)
                 if len(tickers) == 1:
                     print(f"WARN: industry '{a.industry}' has only 1 ticker — convergence cannot be measured", file=sys.stderr)
-                print(json.dumps({"scope_type": "industry", "scope_name": a.industry, "slug": slugify(a.industry),
-                                  "tickers": tickers, "n_tickers": len(tickers)})); return
+                payload = {"scope_type": "industry", "scope_name": a.industry, "slug": slugify(a.industry),
+                           "tickers": tickers, "n_tickers": len(tickers)}
+                print(json.dumps(payload))
+                if a.out:
+                    Path(a.out).write_text(json.dumps(payload) + "\n")
+                return
 
             if a.sector:
                 inds = [r["x"] for r in s.run(

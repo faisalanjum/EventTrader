@@ -45,12 +45,21 @@ if ((suggested.clipped | 0) > 0) log(`repair-suggest: limit dropped ${suggested.
 if (!suggested.count) return { run_id: RUN_ID, candidates: 0, approved: 0, validation: 'SKIPPED no candidates' }
 
 phase('Review')
+const norm = s => (s||'').trim().toLowerCase()
+const h32 = s => { let h = 0; for (let i = 0; i < s.length; i++) h = ((Math.imul(h, 31) + s.charCodeAt(i)) >>> 0); return h }
+const clean = s => (s || '').replace(/[\u0000-\u001f]/g, ' ')   // audit-text cleanup: control chars in judge NOTES -> spaces at file-build time (post-judgment; never names/verdicts)
 const reviews = (await parallel((suggested.candidates || []).map(c => () => agent(`You are the duplicate-repair judge. A deterministic suggester found a possible missed duplicate pair. Embeddings/token overlap only suggested it; YOU decide exact meaning from evidence.
 Candidate JSON:
 ${JSON.stringify(c)}
 ${EXACT_MEANING_RULE}
-Return REVIEW_SCHEMA. SAME means add reversible SAME_AS. DIFFERENT/UNCLEAR means keep separate.`, {schema:REVIEW_SCHEMA, model:'opus', label:`repair:${c.a}:${c.b}`, phase:'Review'}).then(v => ({candidate:c, verdict:v}))))).filter(Boolean)
+Return REVIEW_SCHEMA. Copy a and b EXACTLY as given in the candidate (the same two strings). SAME means add reversible SAME_AS. DIFFERENT/UNCLEAR means keep separate.`, {schema:REVIEW_SCHEMA, model:'opus', label:`repair:${c.a}:${c.b}`, phase:'Review'}).then(v => ({candidate:c, verdict:v}))))).filter(Boolean)
 if (reviews.length !== suggested.candidates.length) throw new Error(`repair review lost ${suggested.candidates.length - reviews.length} verdict(s) — fail-close.`)
+// Stage-0 #7: a verdict must name the pair it was ASSIGNED — a transposed verdict would
+// link two real records the judgment never covered (no other code path catches it).
+for (const row of reviews) {
+  if (norm(row.verdict.a) !== norm(row.candidate.a) || norm(row.verdict.b) !== norm(row.candidate.b))
+    throw new Error(`repair review pair mismatch: judged "${row.verdict.a}|${row.verdict.b}" but assigned "${row.candidate.a}|${row.candidate.b}" — fail-close.`)
+}
 
 for (const row of reviews) {
   const c = row.candidate
@@ -67,11 +76,13 @@ Judge each lens separately with quote support: same object, same scope, same mec
 }
 
 phase('Apply')
-const reviewFile = { reviews: reviews.map(r => r.verdict) }
-const applied = await agent(`Use the Write tool to save this exact JSON to ${RUN_DIR}/repair_review.json:
-${JSON.stringify(reviewFile)}
+const reviewFile = { reviews: reviews.map(r => ({ ...r.verdict, why: clean(r.verdict.why) })) }
+// Stage-0 #5: bind the agent-written review file to THIS source string (count + h32).
+const reviewJson = JSON.stringify(reviewFile)
+const applied = await agent(`Use the Write tool to save this exact JSON (byte-for-byte) to ${RUN_DIR}/repair_review.json:
+${reviewJson}
 Then run with Bash:
-${PY} ${DIR}/workflows/repair_duplicates.py apply ${RUN_DIR} --review ${RUN_DIR}/repair_review.json
+${PY} ${DIR}/workflows/repair_duplicates.py apply ${RUN_DIR} --review ${RUN_DIR}/repair_review.json --expect 'rv=${reviewFile.reviews.length},h32=${h32(reviewJson)}'
 Return ok=true and summary = the printed JSON. If the command exits non-zero, ok=false and summary = exact error.`, {schema:APPLY_SCHEMA, model:'opus', label:'repair-apply', phase:'Apply'})
 if (!applied || !applied.ok) throw new Error(`repair apply failed: ${applied && applied.summary}`)
 

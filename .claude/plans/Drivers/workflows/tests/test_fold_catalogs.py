@@ -9,6 +9,7 @@ draw:   §12.8 deterministic per-side evidence views (smallest side first, compa
 part-b: apply the review file — SAME (refute_survived required) / DIFFERENT (complete
         evidence partition) / UNCLEAR (terminal park) — star + sorted parent seed; oversize warns.
 """
+import hashlib
 import json
 import subprocess
 import sys
@@ -52,6 +53,10 @@ def child(tmp, run_id, recs, industry=None, skips=None, unres=None, unres_same=N
            "skips": skips or [], "unresolved_rewrites": unres or [],
            "unresolved_same_name": unres_same or []}
     (d / "catalog.json").write_text(json.dumps(cat))
+    # Stage-0 #1 fixture stamp: part_a only folds exit-0-validated, byte-bound children
+    (d / "validation_exit.json").write_text(json.dumps(
+        {"exit": 0,
+         "catalog_sha256": hashlib.sha256((d / "catalog.json").read_bytes()).hexdigest()}))
     return d
 
 

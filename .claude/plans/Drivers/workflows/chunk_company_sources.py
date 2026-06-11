@@ -120,6 +120,16 @@ def split_event(text, cuts, budget):
 
 def chunk_run(run_dir, budget=CHUNK_BUDGET_CHARS):
     run_dir = Path(run_dir)
+    # Stage-0 #8: when the fetch wrote a code-to-code scope_resolved.json, the fetched
+    # sources MUST cover exactly those tickers (a relay-dropped ticker = a whole company
+    # silently absent from the seed). Absent file = legacy/positional-ticker run, no check.
+    scope_p = run_dir / "scope_resolved.json"
+    if scope_p.exists():
+        want = {str(t).strip().upper() for t in (json.loads(scope_p.read_text()).get("tickers") or [])}
+        got = {p.stem.upper() for p in (run_dir / "sources").glob("*.json")}
+        if want != got:
+            raise SystemExit(f"CHUNK FAIL: sources/ tickers != scope_resolved.json tickers "
+                             f"(missing={sorted(want - got)}, extra={sorted(got - want)})")
     out_dir = run_dir / "chunks"
     out_dir.mkdir(exist_ok=True)
     for old in out_dir.glob("*.json"):
