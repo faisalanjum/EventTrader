@@ -460,8 +460,16 @@ def apply(run_dir, review_path):
     # assemble FIRST (it validates the updated decisions), persist ONLY on success —
     # found live 2026-06-11: writing decisions.json before assemble left 24 stale rows
     # behind when assemble raised, poisoning every re-run (mutate-before-validate).
+    # Fold-parent fix (2026-06-12): on a FOLD parent, same_name_review.json is the FOLD-SHAPED
+    # review that fold part-b already consumed to BUILD this seed (DIFFERENT names replaced by
+    # split targets, UNCLEAR names parked to fold_sidecars.json; D4 — fold verdicts are final,
+    # never re-applied). Feeding it to the leaf apply_review hard-failed ("collision_name ...
+    # is not a seed record name") on any DIFFERENT/UNCLEAR row. Leaf runs keep today's
+    # behavior byte-for-byte: their leaf-D5 review applies at every re-assembly. The file
+    # itself MUST stay on disk — the D8 fold gates still read it for split accounting.
     review_file = run / "same_name_review.json"
-    out, approved = assemble(seed, dec, json.load(open(review_file)) if review_file.exists() else None)
+    use_review = review_file.exists() and not (run / "fold_manifest.json").exists()
+    out, approved = assemble(seed, dec, json.load(open(review_file)) if use_review else None)
     dec_p.write_text(serialize(dec))
     cat_blob = serialize(out)
     (run / "catalog.json").write_text(cat_blob)

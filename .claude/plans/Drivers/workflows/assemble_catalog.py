@@ -453,6 +453,17 @@ def main():
     dec = json.loads(dec_raw)
     review, review_raw = None, None
     if review_p is not None:                     # path relative to run_dir, or absolute
+        # Fold-parent guard (2026-06-12, fail-close): a fold parent's same-name review is
+        # consumed ONLY by fold part-b (baked into the seed; D4 — never reopened). --review
+        # here means reconcile's leaf-D5 fired on a fold parent and OVERWROTE the fold-shaped
+        # file (same filename, leaf shape) — applying it would silently diverge from the
+        # part-b seed. Stop loudly; the flagged names need an owner decision.
+        if (run / "fold_manifest.json").exists():
+            raise SystemExit("ASSEMBLE FAIL: --review passed on a FOLD parent (fold_manifest.json "
+                             "present) — the fold same-name review is final and already baked into "
+                             "the seed by fold part-b (D4); a leaf-D5 review must never be applied "
+                             "here. Re-run the fold to restore same_name_review.json and surface "
+                             "the leaf-D5 flagged names to the owner.")
         rp = Path(review_p)
         review_raw = (rp if rp.is_absolute() else run / rp).read_text()
         review = json.loads(review_raw)
