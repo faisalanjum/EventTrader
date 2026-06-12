@@ -1,0 +1,261 @@
+{
+  "ticker": "CAKE",
+  "chunk_id": "CAKE__chunk_002",
+  "candidate_count": 31,
+  "candidates": [
+    {
+      "driver_name": "restaurant_count",
+      "evidence_quote": "we owned and operated 368 restaurants throughout the United States and Canada",
+      "source_type": "10-K",
+      "source_id": "0001104659-26-018643",
+      "date": "2026-02-23",
+      "xbrl_or_null": "null"
+    },
+    {
+      "driver_name": "cheesecake_factory_store_count",
+      "evidence_quote": "The Cheesecake Factory \u00ae (216 locations)",
+      "source_type": "10-K",
+      "source_id": "0001104659-26-018643",
+      "date": "2026-02-23",
+      "xbrl_or_null": "null"
+    },
+    {
+      "driver_name": "north_italia_store_count",
+      "evidence_quote": "As of February 23, 2026, we operated 48 North Italia restaurants",
+      "source_type": "10-K",
+      "source_id": "0001104659-26-018643",
+      "date": "2026-02-23",
+      "xbrl_or_null": "null"
+    },
+    {
+      "driver_name": "flower_child_store_count",
+      "evidence_quote": "As of February 23, 2026, we operated 43 Flower Child locations",
+      "source_type": "10-K",
+      "source_id": "0001104659-26-018643",
+      "date": "2026-02-23",
+      "xbrl_or_null": "null"
+    },
+    {
+      "driver_name": "international_licensed_restaurants",
+      "evidence_quote": "Internationally, 35 The Cheesecake Factory \u00ae restaurants operate under licensing agreements",
+      "source_type": "10-K",
+      "source_id": "0001104659-26-018643",
+      "date": "2026-02-23",
+      "xbrl_or_null": "null"
+    },
+    {
+      "driver_name": "same_store_sales",
+      "evidence_quote": "Average sales per location for The Cheesecake Factory restaurants open for the full year were approximately $12.4 million for fiscal 2025",
+      "source_type": "10-K",
+      "source_id": "0001104659-26-018643",
+      "date": "2026-02-23",
+      "xbrl_or_null": "null"
+    },
+    {
+      "driver_name": "sales_per_square_foot",
+      "evidence_quote": "Average sales per productive square foot (defined as all interior square footage plus seasonally adjusted exterior patio square footage) for restaurants open for the full year were approximately $1,151 for fiscal 2025",
+      "source_type": "10-K",
+      "source_id": "0001104659-26-018643",
+      "date": "2026-02-23",
+      "xbrl_or_null": "null"
+    },
+    {
+      "driver_name": "alcoholic_beverage_sales",
+      "evidence_quote": "During fiscal 2025, alcoholic beverage sales represented 11% of The Cheesecake Factory restaurant sales",
+      "source_type": "10-K",
+      "source_id": "0001104659-26-018643",
+      "date": "2026-02-23",
+      "xbrl_or_null": "null"
+    },
+    {
+      "driver_name": "off_premise_sales",
+      "evidence_quote": "sales of which comprised approximately 21% of The Cheesecake Factory restaurant sales during fiscal 2025",
+      "source_type": "10-K",
+      "source_id": "0001104659-26-018643",
+      "date": "2026-02-23",
+      "xbrl_or_null": "null"
+    },
+    {
+      "driver_name": "dessert_sales",
+      "evidence_quote": "dessert sales, representing approximately 17% of The Cheesecake Factory sales during fiscal 2025",
+      "source_type": "10-K",
+      "source_id": "0001104659-26-018643",
+      "date": "2026-02-23",
+      "xbrl_or_null": "null"
+    },
+    {
+      "driver_name": "average_check",
+      "evidence_quote": "The average check for each customer, including beverages and desserts, was approximately $31.79 during fiscal 2025",
+      "source_type": "10-K",
+      "source_id": "0001104659-26-018643",
+      "date": "2026-02-23",
+      "xbrl_or_null": "null"
+    },
+    {
+      "driver_name": "menu_price_increases",
+      "evidence_quote": "In the last three fiscal years, we implemented price increases above our historical levels, to help offset inflationary cost pressures",
+      "source_type": "10-K",
+      "source_id": "0001104659-26-018643",
+      "date": "2026-02-23",
+      "xbrl_or_null": "null"
+    },
+    {
+      "driver_name": "wage_inflation",
+      "evidence_quote": "significantly increased commodity and wage inflation. Our commodity and wage inflationary environment began returning to more historical levels in fiscal 2024",
+      "source_type": "10-K",
+      "source_id": "0001104659-26-018643",
+      "date": "2026-02-23",
+      "xbrl_or_null": "null"
+    },
+    {
+      "driver_name": "employee_retention",
+      "evidence_quote": "to The Cheesecake Factory restaurants' historically industry-leading retention rates",
+      "source_type": "10-K",
+      "source_id": "0001104659-26-018643",
+      "date": "2026-02-23",
+      "xbrl_or_null": "null"
+    },
+    {
+      "driver_name": "workforce_size",
+      "evidence_quote": "As of December 30, 2025, we employed approximately 48,400 people",
+      "source_type": "10-K",
+      "source_id": "0001104659-26-018643",
+      "date": "2026-02-23",
+      "xbrl_or_null": "null"
+    },
+    {
+      "driver_name": "internal_management_promotion_rate",
+      "evidence_quote": "our fiscal 2025 combined internal management promotion rate at The Cheesecake Factory and North Italia concepts was 47%",
+      "source_type": "10-K",
+      "source_id": "0001104659-26-018643",
+      "date": "2026-02-23",
+      "xbrl_or_null": "null"
+    },
+    {
+      "driver_name": "commodity_prices",
+      "evidence_quote": "increased commodity prices. Our commodity environment began returning to more historical levels in fiscal 2024",
+      "source_type": "10-K",
+      "source_id": "0001104659-26-018643",
+      "date": "2026-02-23",
+      "xbrl_or_null": "null"
+    },
+    {
+      "driver_name": "restaurant_construction_costs",
+      "evidence_quote": "Total construction costs to build our restaurant premises average approximately $1,100 to $1,200 per interior square foot",
+      "source_type": "10-K",
+      "source_id": "0001104659-26-018643",
+      "date": "2026-02-23",
+      "xbrl_or_null": "null"
+    },
+    {
+      "driver_name": "restaurant_preopening_costs",
+      "evidence_quote": "Restaurant-level preopening costs for a typical location in an established market average approximately $1.0 million to $1.5 million",
+      "source_type": "10-K",
+      "source_id": "0001104659-26-018643",
+      "date": "2026-02-23",
+      "xbrl_or_null": "null"
+    },
+    {
+      "driver_name": "north_italia_unit_growth",
+      "evidence_quote": "approximately 20% average annual unit growth",
+      "source_type": "10-K",
+      "source_id": "0001104659-26-018643",
+      "date": "2026-02-23",
+      "xbrl_or_null": "null"
+    },
+    {
+      "driver_name": "flower_child_unit_growth",
+      "evidence_quote": "approximately 20% average annual unit growth for this concept",
+      "source_type": "10-K",
+      "source_id": "0001104659-26-018643",
+      "date": "2026-02-23",
+      "xbrl_or_null": "null"
+    },
+    {
+      "driver_name": "north_italia_same_store_sales",
+      "evidence_quote": "Average sales per location open for the full year for North Italia restaurants were approximately $7.6 million for fiscal 2025",
+      "source_type": "10-K",
+      "source_id": "0001104659-26-018643",
+      "date": "2026-02-23",
+      "xbrl_or_null": "null"
+    },
+    {
+      "driver_name": "north_italia_alcohol_sales",
+      "evidence_quote": "which represented 23% of North Italia sales in fiscal 2025",
+      "source_type": "10-K",
+      "source_id": "0001104659-26-018643",
+      "date": "2026-02-23",
+      "xbrl_or_null": "null"
+    },
+    {
+      "driver_name": "north_italia_off_premise_sales",
+      "evidence_quote": "Sales through the off-premise channel comprised approximately 13% of North Italia restaurant sales during fiscal 2025",
+      "source_type": "10-K",
+      "source_id": "0001104659-26-018643",
+      "date": "2026-02-23",
+      "xbrl_or_null": "null"
+    },
+    {
+      "driver_name": "flower_child_same_store_sales",
+      "evidence_quote": "Average sales per location open for the full year for the Flower Child restaurants were approximately $4.7 million for fiscal 2025",
+      "source_type": "10-K",
+      "source_id": "0001104659-26-018643",
+      "date": "2026-02-23",
+      "xbrl_or_null": "null"
+    },
+    {
+      "driver_name": "flower_child_off_premise_sales",
+      "evidence_quote": "Sales through the off-premise channel comprised approximately 55% of Flower Child restaurant sales during fiscal 2025",
+      "source_type": "10-K",
+      "source_id": "0001104659-26-018643",
+      "date": "2026-02-23",
+      "xbrl_or_null": "null"
+    },
+    {
+      "driver_name": "frc_same_store_sales",
+      "evidence_quote": "Average sales per location open for the full year for the Other FRC restaurants were approximately $6.7 million for fiscal 2025",
+      "source_type": "10-K",
+      "source_id": "0001104659-26-018643",
+      "date": "2026-02-23",
+      "xbrl_or_null": "null"
+    },
+    {
+      "driver_name": "frc_unit_growth",
+      "evidence_quote": "We target approximately 10% to 15% average annual unit growth for the aggregate Other FRC portfolio",
+      "source_type": "10-K",
+      "source_id": "0001104659-26-018643",
+      "date": "2026-02-23",
+      "xbrl_or_null": "null"
+    },
+    {
+      "driver_name": "bakery_external_sales",
+      "evidence_quote": "utilize our bakery production capacity by selling cheesecakes and other baked products to external foodservice operators, retailers and distributors",
+      "source_type": "10-K",
+      "source_id": "0001104659-26-018643",
+      "date": "2026-02-23",
+      "xbrl_or_null": "null"
+    },
+    {
+      "driver_name": "bakery_geographic_footprint",
+      "evidence_quote": "We sell baked goods internationally in approximately 25 countries",
+      "source_type": "10-K",
+      "source_id": "0001104659-26-018643",
+      "date": "2026-02-23",
+      "xbrl_or_null": "null"
+    },
+    {
+      "driver_name": "new_restaurant_openings",
+      "evidence_quote": "The development and opening process usually ranges from six to eighteen months",
+      "source_type": "10-K",
+      "source_id": "0001104659-26-018643",
+      "date": "2026-02-23",
+      "xbrl_or_null": "null"
+    }
+  ],
+  "skipped_count": 5,
+  "notes": [
+    "Removed vague/prospective candidates: tariff_policy (says 'could lead to', no measured impact), customer_traffic (mentioned only in context of balancing pricing, not measured), menu_diversity (mentioned as competitive positioning, not as a measured driver), north_italia_average_check_lunch (subsumed by separate lunch/dinner check data), honeymoon_sales_effect (vague about what drives the phenomenon)",
+    "Kept company-wide and brand-specific metrics as separate drivers per R9 (e.g., same_store_sales, north_italia_same_store_sales, flower_child_same_store_sales, frc_same_store_sales)",
+    "All evidence from single 10-K event dated 2026-02-23, part 1 of 6 (Business section)"
+  ]
+}

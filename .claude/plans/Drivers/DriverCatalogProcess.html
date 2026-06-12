@@ -1,0 +1,1475 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>The Driver Catalog — How It Works</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #0f172a;
+    --muted: #64748b;
+    --line: #e2e8f0;
+    --soft: #f8fafc;
+    --soft2: #f1f5f9;
+    --accent: #4f46e5;
+    --accent-soft: #eef2ff;
+    --green: #059669;
+    --green-soft: #d1fae5;
+    --amber: #d97706;
+    --amber-soft: #fef3c7;
+    --red: #dc2626;
+    --red-soft: #fee2e2;
+    --code: #1e293b;
+    --code-fg: #e2e8f0;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg); color: var(--fg);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    font-size: 24px; line-height: 1.55;
+  }
+
+  header {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255,255,255,0.97);
+    border-bottom: 2px solid var(--line);
+    padding: 18px 36px;
+    display: flex; align-items: center; gap: 20px;
+    backdrop-filter: blur(8px);
+  }
+  header .brand { font-weight: 800; font-size: 22px; letter-spacing: -0.01em; color: var(--accent); }
+  header .title-text { font-weight: 600; font-size: 20px; color: var(--fg); }
+  header .counter { margin-left: auto; font-variant-numeric: tabular-nums; color: var(--muted); font-size: 20px; }
+
+  .progress { display: flex; gap: 3px; padding: 12px 36px 14px; background: var(--soft); border-bottom: 1px solid var(--line); }
+  .progress .pip {
+    flex: 1; height: 7px; border: 0; border-radius: 999px;
+    background: #d1d5db; cursor: pointer; padding: 0;
+    transition: background 0.15s, transform 0.15s;
+  }
+  .progress .pip.done { background: #a5b4fc; }
+  .progress .pip.active { background: var(--accent); transform: scaleY(1.45); }
+  .progress .pip:hover { background: #818cf8; }
+
+  main { max-width: 1120px; margin: 0 auto; padding: 64px 40px 220px; }
+
+  .step { display: none; padding-bottom: 80px; }
+  .step.active { display: block; animation: fadeIn 0.3s ease-out; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  .tag {
+    display: inline-block;
+    font-size: 14px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--accent); font-weight: 800;
+    background: var(--accent-soft); padding: 6px 14px; border-radius: 999px;
+    margin-bottom: 18px;
+  }
+  .tag.green { color: var(--green); background: var(--green-soft); }
+  .tag.amber { color: var(--amber); background: var(--amber-soft); }
+  .tag.red { color: var(--red); background: var(--red-soft); }
+
+  h1 { font-size: 58px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.06; margin: 0 0 18px; }
+  h2 { font-size: 36px; font-weight: 700; margin: 40px 0 14px; letter-spacing: -0.02em; }
+  h3 { font-size: 26px; font-weight: 700; margin: 28px 0 10px; color: #1e293b; }
+
+  .lead { font-size: 28px; line-height: 1.45; color: #334155; margin: 0 0 32px; font-weight: 400; }
+  .lead b { color: var(--fg); font-weight: 700; }
+
+  p, li { font-size: 22px; line-height: 1.6; color: #1e293b; }
+  ul, ol { padding-left: 28px; margin: 16px 0; }
+  ul li, ol li { margin: 8px 0; }
+  ul li strong, ol li strong { color: var(--fg); font-weight: 700; }
+
+  .panel { background: var(--soft); border: 1px solid var(--line); border-radius: 18px; padding: 28px 32px; margin: 22px 0; }
+  .panel.accent { background: var(--accent-soft); border-color: #c7d2fe; }
+  .panel.green { background: var(--green-soft); border-color: #6ee7b7; }
+  .panel.amber { background: var(--amber-soft); border-color: #fcd34d; }
+  .panel.danger { background: var(--red-soft); border-color: #fca5a5; }
+  .panel h3:first-child { margin-top: 0; }
+  .panel p:last-child, .panel ul:last-child { margin-bottom: 0; }
+
+  code {
+    background: var(--soft2); padding: 2px 8px; border-radius: 6px;
+    font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+    font-size: 0.84em; color: #1e293b;
+  }
+
+  pre {
+    background: var(--code); color: var(--code-fg);
+    padding: 22px 26px; border-radius: 14px; overflow-x: auto;
+    font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+    font-size: 17px; line-height: 1.55;
+  }
+
+  details { margin-top: 22px; border: 1.5px solid var(--line); border-radius: 14px; padding: 18px 24px; background: white; transition: background 0.15s; }
+  details[open] { background: var(--soft); border-color: #c7d2fe; }
+  summary { cursor: pointer; font-weight: 700; color: var(--accent); font-size: 20px; padding: 4px 0; }
+  summary::marker { color: var(--accent); }
+  details > *:not(summary) { font-size: 20px; }
+  details pre { font-size: 16px; }
+  details .kv .k, details .kv .v { font-size: 19px; }
+
+  .twocol { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 24px 0; }
+  .threecol { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin: 24px 0; }
+  .twocol .col, .threecol .col { background: var(--soft); border: 1px solid var(--line); border-radius: 16px; padding: 24px 28px; }
+  .twocol .col h3, .threecol .col h3 { margin-top: 0; font-size: 22px; }
+  .threecol .col h3 { font-size: 20px; }
+  @media (max-width: 880px) { .twocol, .threecol { grid-template-columns: 1fr; } }
+
+  .flowline { display: grid; grid-auto-flow: column; gap: 10px; align-items: stretch; margin: 30px 0; overflow-x: auto; }
+  .flowline .node { background: white; border: 1.5px solid var(--line); border-radius: 16px; padding: 16px 16px; min-width: 148px; }
+  .flowline .node strong { display: block; font-size: 19px; line-height: 1.2; margin-bottom: 6px; color: var(--fg); }
+  .flowline .node span { display: block; color: var(--muted); font-size: 15px; line-height: 1.3; }
+  .flowline .arrow { color: var(--accent); font-size: 26px; font-weight: 800; align-self: center; }
+
+  .kv { display: grid; grid-template-columns: 320px 1fr; gap: 14px 28px; align-items: start; margin: 18px 0; }
+  .kv .k { font-weight: 700; color: var(--fg); font-size: 20px; }
+  .kv .v { color: #1e293b; font-size: 20px; }
+  @media (max-width: 760px) { .kv { grid-template-columns: 1fr; gap: 4px 0; } .kv .v { margin-bottom: 10px; } }
+
+  .pill { display: inline-block; padding: 4px 14px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 16px; font-weight: 700; margin-right: 8px; margin-bottom: 6px; }
+  .pill.green { background: var(--green-soft); color: var(--green); }
+  .pill.amber { background: var(--amber-soft); color: var(--amber); }
+  .pill.red { background: var(--red-soft); color: var(--red); }
+  .pill.gray { background: var(--soft2); color: var(--muted); }
+
+  .nav {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    background: rgba(255,255,255,0.78);
+    backdrop-filter: blur(14px) saturate(140%); -webkit-backdrop-filter: blur(14px) saturate(140%);
+    border: 1px solid rgba(226,232,240,0.9); border-radius: 999px;
+    padding: 6px 10px; display: flex; gap: 6px; align-items: center;
+    box-shadow: 0 6px 22px rgba(15,23,42,0.08); z-index: 60;
+  }
+  .nav:hover { background: rgba(255,255,255,0.96); }
+  .nav button { font: inherit; font-size: 15px; font-weight: 700; background: transparent; color: var(--fg); border: 0; padding: 6px 14px; border-radius: 999px; cursor: pointer; }
+  .nav button:hover { background: var(--accent-soft); color: var(--accent); }
+  .nav button:disabled { color: #cbd5e1; cursor: not-allowed; }
+  .nav button:disabled:hover { background: transparent; }
+  .nav .pos { font-size: 15px; color: var(--muted); font-variant-numeric: tabular-nums; min-width: 60px; text-align: center; }
+
+  .toc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 12px; margin: 28px 0; }
+  .toc-grid .item { padding: 14px 18px; background: var(--soft); border: 1px solid var(--line); border-radius: 14px; cursor: pointer; transition: all 0.15s; font-size: 17px; }
+  .toc-grid .item:hover { background: var(--accent-soft); border-color: #c7d2fe; transform: translateY(-2px); }
+  .toc-grid .item .num { color: var(--accent); font-weight: 700; margin-right: 8px; }
+
+  .small { font-size: 18px; color: var(--muted); }
+
+  .ascii {
+    background: var(--code); color: var(--code-fg);
+    padding: 22px 26px; border-radius: 14px;
+    font-family: ui-monospace, monospace; font-size: 16px; line-height: 1.5;
+    white-space: pre; overflow-x: auto;
+  }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; padding: 14px 18px; background: var(--soft); border: 1px solid var(--line); border-radius: 12px; margin: 18px 0; font-size: 16px; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+
+  table.t { width: 100%; border-collapse: collapse; margin: 22px 0; font-size: 19px; }
+  table.t th, table.t td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  table.t th { background: var(--soft); font-weight: 700; font-size: 17px; letter-spacing: 0.02em; }
+  table.t td code { font-size: 0.82em; }
+  table.t tr:last-child td { border-bottom: 0; }
+
+  .big-num { font-size: 40px; font-weight: 800; color: var(--accent); letter-spacing: -0.02em; }
+  .note { font-size: 18px; color: var(--muted); margin-top: 10px; }
+  .srcchip { font-size: 16px; color: var(--muted); background: var(--soft2); padding: 3px 10px; border-radius: 999px; font-weight: 700; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">DRIVER CATALOG</div>
+  <div class="title-text">How the machine works — plain English</div>
+  <div class="counter" id="counter">1 / 43</div>
+</header>
+
+<div class="progress" id="progress" aria-label="Slide progress"></div>
+
+<main>
+
+<!-- ===== 1 TITLE ===== -->
+<section class="step active" data-step="1">
+  <span class="tag">Explainer · 27 slides + file appendix</span>
+  <h1>Building one shared dictionary of what moves stocks.</h1>
+  <p class="lead">This walks the <b>whole machine</b>, one idea per slide — nothing left out. Big picture first, then each step, with real examples. The <b>Appendix (slides 28–43)</b> explains every single code file, one at a time. Open the <code>Details</code> boxes when you want more depth.</p>
+
+  <div class="panel accent">
+    <h3>How to read this</h3>
+    <ol>
+      <li><strong>Use → and ←</strong> (or the buttons at the bottom) to move between slides.</li>
+      <li><strong>Each slide = one concept.</strong> The big text is the whole point; panels are the detail.</li>
+      <li><strong>Click a <code>Details</code> box</strong> for the deeper / technical version — that's where the fine print lives.</li>
+      <li><strong>Examples are real</strong> — pulled from an actual run on the Restaurants industry.</li>
+    </ol>
+  </div>
+
+  <div class="toc-grid" aria-label="Contents">
+    <div class="item" data-goto="2"><span class="num">02</span>The goal (one analogy)</div>
+    <div class="item" data-goto="3"><span class="num">03</span>Why it's built this way</div>
+    <div class="item" data-goto="4"><span class="num">04</span>The one golden rule</div>
+    <div class="item" data-goto="5"><span class="num">05</span>The big picture</div>
+    <div class="item" data-goto="6"><span class="num">06</span>What a "driver" looks like</div>
+    <div class="item" data-goto="7"><span class="num">07</span>The class vs the event</div>
+    <div class="item" data-goto="8"><span class="num">08</span>The two kinds of files</div>
+    <div class="item" data-goto="9"><span class="num">09</span>Stage 1 — the Leaf</div>
+    <div class="item" data-goto="10"><span class="num">10</span>Resolve</div>
+    <div class="item" data-goto="11"><span class="num">11</span>Fetch</div>
+    <div class="item" data-goto="12"><span class="num">12</span>Chunk</div>
+    <div class="item" data-goto="13"><span class="num">13</span>The blind bots</div>
+    <div class="item" data-goto="14"><span class="num">14</span>Converge</div>
+    <div class="item" data-goto="15"><span class="num">15</span>Stage 2 — Reconcile</div>
+    <div class="item" data-goto="16"><span class="num">16</span>Guard &amp; slice</div>
+    <div class="item" data-goto="17"><span class="num">17</span>Two judges</div>
+    <div class="item" data-goto="18"><span class="num">18</span>The skeptic</div>
+    <div class="item" data-goto="19"><span class="num">19</span>The same-name check</div>
+    <div class="item" data-goto="20"><span class="num">20</span>The writer (code)</div>
+    <div class="item" data-goto="21"><span class="num">21</span>The validator (gate)</div>
+    <div class="item" data-goto="22"><span class="num">22</span>Stage 3 — The Fold</div>
+    <div class="item" data-goto="23"><span class="num">23</span>Fold mechanics</div>
+    <div class="item" data-goto="24"><span class="num">24</span>Orchestrate, repair, resume</div>
+    <div class="item" data-goto="25"><span class="num">25</span>Models &amp; cost</div>
+    <div class="item" data-goto="26"><span class="num">26</span>Using it live (later)</div>
+    <div class="item" data-goto="27"><span class="num">27</span>Safety recap &amp; status</div>
+    <div class="item" data-goto="28" style="background:var(--accent-soft); border-color:#c7d2fe;"><span class="num">A</span>Appendix: every file, one by one</div>
+  </div>
+
+  <details>
+    <summary>Tiny glossary (6 words you'll see)</summary>
+    <div class="kv">
+      <div class="k">driver</div><div class="v">a real-world cause that moves a stock price (e.g. oil price, store traffic).</div>
+      <div class="k">catalog</div><div class="v">the final, cleaned dictionary of all drivers.</div>
+      <div class="k">seed</div><div class="v">the raw, messy first draft of the catalog before cleaning.</div>
+      <div class="k">evidence</div><div class="v">the actual quote from a filing/transcript that proves a driver exists.</div>
+      <div class="k">merge</div><div class="v">deciding two names mean the same thing and joining them under one name.</div>
+      <div class="k">fail-closed</div><div class="v">when unsure, do the safe thing (keep separate) — never guess a merge.</div>
+    </div>
+  </details>
+</section>
+
+<!-- ===== 2 GOAL ===== -->
+<section class="step" data-step="2">
+  <span class="tag">The goal</span>
+  <h1>Think of it as one master ingredient list — for the whole stock market.</h1>
+  <p class="lead">We want <b>one list of every cause that moves a stock</b>, where the same cause always has the same name. So when "beef price" jumps, we instantly know <b>every</b> company it touches → a trade signal.</p>
+
+  <div class="panel accent">
+    <h3>The restaurant analogy</h3>
+    <p>Imagine every restaurant in the country writes its own menu, separately:</p>
+    <ul>
+      <li>Restaurant A writes <code>guest count</code>. Restaurant B writes <code>customer transactions</code>.</li>
+      <li>Those are the <em>same thing</em> → they must collapse to <b>one</b> name.</li>
+      <li>But <code>delivery mix</code> at a restaurant ≠ <code>delivery mix</code> at a shipping company → must stay <b>two</b> names.</li>
+    </ul>
+    <p>The whole project is: collect every "menu," then carefully decide what is truly the same and what isn't — without ever guessing.</p>
+  </div>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>Why same-name matters</h3>
+      <p>If two companies use one shared name for a cause, software can watch that one name and detect a change across all of them at once. That's the payoff: <b>learn once, predict everywhere.</b></p>
+    </div>
+    <div class="col">
+      <h3>Why it must be tiny</h3>
+      <p>Keep the list as small as possible while still being specific. No bloat. But "small" never wins over "correct" — we never merge two different causes just to shrink the list.</p>
+    </div>
+  </div>
+
+  <details>
+    <summary>The one promise that makes it tradeable: one name = one meaning</summary>
+    <p>A single driver name must <b>never</b> stand for two different real-world causes, anywhere, at any level. If it ever does, software would read a fake connection and place a bad trade. So the entire build is bent toward protecting that one promise — and when two names truly mean the same, they're linked with a <em>reversible</em> link (never a destructive delete), so the originals can always be recovered.</p>
+  </details>
+</section>
+
+<!-- ===== 3 WHY ===== -->
+<section class="step" data-step="3">
+  <span class="tag amber">The scars</span>
+  <h1>Two earlier tries failed. Every rule here exists to avoid their deaths.</h1>
+  <p class="lead">This isn't over-engineering — it's <b>two specific funerals</b> we refuse to repeat.</p>
+
+  <table class="t">
+    <thead><tr><th>Attempt</th><th>How it died</th><th>The fix baked in now</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>v1</strong></td>
+        <td>Used a fixed, pre-written word-list. Real names didn't fit it → it <strong>rejected 82%</strong> of them.</td>
+        <td><strong>Open vocabulary</strong> — names come straight from the source text, never a fixed list.</td>
+      </tr>
+      <tr>
+        <td><strong>v2</strong></td>
+        <td>Merged too eagerly. Many different ideas <strong>collapsed into one mushy</strong> <code>revenue_demand</code>.</td>
+        <td><strong>Fail-closed merging</strong> — only merge on <em>exact</em> same meaning; a skeptic attacks every merge; when unsure, keep separate.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="panel danger">
+    <h3>The one mistake we fear most</h3>
+    <p>A <b>wrong merge</b>. If we wrongly say two companies share a driver, software reads a false connection between them and places a <b>bad trade</b>. So merging is the dangerous direction — and the entire design is built to make wrong merges hard.</p>
+  </div>
+
+  <details>
+    <summary>The two judgment moments that caused both failures</summary>
+    <ul>
+      <li><strong>"Is this already named?"</strong> → get it wrong and you fragment one idea into many names.</li>
+      <li><strong>"Is this a real, specific-enough driver?"</strong> → get it wrong and you drift into over-broad mush.</li>
+    </ul>
+    <p>Rules can <em>narrow</em> these two judgments but never remove them. So the design keeps the judgment with AI, wraps it in skeptics, and lets <em>code</em> catch every structural mistake.</p>
+  </details>
+</section>
+
+<!-- ===== 4 GOLDEN RULE ===== -->
+<section class="step" data-step="4">
+  <span class="tag">The spine</span>
+  <h1>One rule explains the entire system.</h1>
+  <p class="lead" style="font-weight:600; color:var(--fg);">AI decides <b>meaning</b>. Code does <b>structure</b>. Every merge must survive a skeptic — or it doesn't happen.</p>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>🧠 AI (the agents)</h3>
+      <p>Anything that needs <em>understanding</em>:</p>
+      <ul class="small" style="font-size:19px;">
+        <li>"Is this a real driver?"</li>
+        <li>"Do these two mean the same?"</li>
+        <li>"Try to break this merge."</li>
+      </ul>
+    </div>
+    <div class="col">
+      <h3>⚙️ Code (Python / JS)</h3>
+      <p>Anything <em>mechanical</em>:</p>
+      <ul class="small" style="font-size:19px;">
+        <li>Pull data, split text, count.</li>
+        <li><b>Write the final file.</b></li>
+        <li>Check everything &amp; hard-stop on any flaw.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="panel green">
+    <h3>Why this split is the whole trick</h3>
+    <p>Because <b>code</b> writes the catalog, an AI <b>cannot sneak in a merge</b> the skeptic never approved. The old design let an AI write the file — so it could quietly re-create the v2 mush. Now that's structurally impossible. The AI only hands code a short list of approved decisions.</p>
+  </div>
+
+  <p><span class="pill">fail-closed</span> When in doubt, don't merge. A missing or uncertain answer is treated as "no." The safe direction is always <em>keep separate</em>.</p>
+</section>
+
+<!-- ===== 5 BIG PICTURE ===== -->
+<section class="step" data-step="5">
+  <span class="tag">Big picture</span>
+  <h1>Build from the bottom up, like merging folders.</h1>
+  <p class="lead">Start at one company. Merge companies into an <b>industry</b>. Merge industries into a <b>sector</b>. Merge sectors into the <b>global</b> list. The <b>same</b> merge engine runs at every level.</p>
+
+  <div class="ascii">                         GLOBAL catalog              &lt;-- merge all SECTORS
+                              &#9650;
+              &#9484;---------------&#9532;---------------&#9488;
+           SECTOR            SECTOR            SECTOR     &lt;-- merge each sector's INDUSTRIES
+              &#9650;
+       &#9484;------&#9532;------&#9488;
+   INDUSTRY  INDUSTRY  INDUSTRY                           &lt;-- "the leaf": blind bots + reconcile
+              &#9650;
+        &#9484;-----&#9532;-----&#9488;
+      co.    co.    co.                                   &lt;-- one company's filings &amp; transcripts</div>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>New names: only at the bottom</h3>
+      <p>The <b>only</b> place names are invented is the leaf (one company at a time). Every level above just <em>consolidates</em> — it never invents new drivers (one rare exception: splitting a true homonym).</p>
+    </div>
+    <div class="col">
+      <h3>Keep each step small</h3>
+      <p>Each box must be small enough for an AI to judge carefully. If a box is too big, code <b>splits it into batches</b>. Levels are just batches of batches.</p>
+    </div>
+  </div>
+  <p class="note">Real shape of the full tree: 11 sectors → 115 industries → ~796 companies.</p>
+</section>
+
+<!-- ===== 6 DATA SHAPE ===== -->
+<section class="step" data-step="6">
+  <span class="tag">The unit</span>
+  <h1>Everything flows as one simple shape: a "record."</h1>
+  <p class="lead">One record = one driver, plus the real quotes that prove it. This is the only shape in the whole system.</p>
+
+  <pre>{
+  "driver_name":     "same_store_sales",     <span style="color:#94a3b8">// the cause, as a plain lowercase noun</span>
+  "canonical_name":  "same_store_sales",     <span style="color:#94a3b8">// itself, OR the name it merged into</span>
+  "companies":       ["CAKE"],               <span style="color:#94a3b8">// who has this driver</span>
+  "evidence_refs": [                          <span style="color:#94a3b8">// WHY it exists — real quotes</span>
+    { "company":"CAKE", "source_type":"10-K",
+      "source_id":"0001104659-26-018643", "date":"2026-02-23",
+      "quote":"...comparable restaurant sales trends." }
+  ],
+  "same_as_variants": [],                     <span style="color:#94a3b8">// other names that mean the same thing</span>
+  "optional_links":   { "xbrl_concept": null }
+}</pre>
+
+  <div class="panel">
+    <h3>The atom: the 5-tuple</h3>
+    <p>Each piece of evidence is identified by five fields together: <code>company</code> + <code>source_type</code> + <code>source_id</code> + <code>date</code> + <code>quote</code>. Code dedups, sorts, splits, and verifies <b>everything</b> by this 5-tuple. If you remember one thing, remember this is the unit of truth.</p>
+  </div>
+  <p class="note">Notice what's <em>not</em> in the name: no direction, no number, no date. The next slide explains where those live.</p>
+</section>
+
+<!-- ===== 7 CLASS VS EVENT ===== -->
+<section class="step" data-step="7">
+  <span class="tag">A key distinction</span>
+  <h1>The driver is a <em>label</em>. What happened is a separate <em>event</em>.</h1>
+  <p class="lead">Think of a driver like a <b>blank thermometer</b> ("oil price"). Each reading on a given day is a separate thing (a <b>DriverUpdate</b>). The name stays clean; everything that "happened" lives on the event.</p>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>Driver — the label (the class)</h3>
+      <ul class="small" style="font-size:19px;">
+        <li><code>driver_name</code> — just the cause</li>
+        <li>optional links (accounting, related names)</li>
+      </ul>
+      <p class="small">Stays tiny and reusable forever.</p>
+    </div>
+    <div class="col">
+      <h3>DriverUpdate — one event (the instance)</h3>
+      <ul class="small" style="font-size:19px;">
+        <li><code>driver_state</code> — rose / cut / beat</li>
+        <li><code>stock_impact</code> — long / short</li>
+        <li><code>magnitude</code> &amp; <code>confidence</code> (0–100)</li>
+        <li><code>llm_producer</code> — which AI made it</li>
+        <li><code>quote</code> + link to the event</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="panel green">
+    <h3>Why split them?</h3>
+    <p>Because one clean name then collects <b>many updates over time</b> — that history is exactly what lets the system learn and predict. (The actual stock return lives on the linked event, not on the driver.)</p>
+  </div>
+  <p class="note">This is why the naming rules ban states, directions, and numbers from the name — they belong on the update, not the label.</p>
+</section>
+
+<!-- ===== 8 FILES ===== -->
+<section class="step" data-step="8">
+  <span class="tag">The toolbox</span>
+  <h1>Two kinds of files — and the split is the design.</h1>
+  <p class="lead">Don't memorize file names. Just know there are <b>AI orchestrators</b> (ask the AI for meaning) and <b>code tools</b> (do the bookkeeping and refuse to ship anything broken).</p>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>🧠 AI orchestrators <span class="pill gray">.js</span></h3>
+      <ul class="small" style="font-size:18px;">
+        <li><code>menu_build.js</code> — runs the leaf</li>
+        <li><code>reconcile.js</code> — the merge engine</li>
+        <li><code>fold_catalogs.js</code> — merges levels up</li>
+        <li><code>build_tree.js</code> — the master conductor</li>
+        <li><code>repair_duplicates.js</code> — catches missed merges</li>
+        <li><code>gate.js</code> / <code>catalog_first.js</code> — for live use later</li>
+      </ul>
+    </div>
+    <div class="col">
+      <h3>⚙️ Code tools <span class="pill gray">.py</span></h3>
+      <ul class="small" style="font-size:18px;">
+        <li><code>resolve_driver_scope.py</code> — list tickers</li>
+        <li><code>fetch_company_sources.py</code> — pull text</li>
+        <li><code>chunk_company_sources.py</code> — split text</li>
+        <li><code>build_seed.py</code> — group into the seed</li>
+        <li><code>slice_seed.py</code> — batch a big seed</li>
+        <li><code>assemble_catalog.py</code> — <b>write</b> the catalog</li>
+        <li><code>validate_catalog.py</code> — the hard gate</li>
+        <li><code>fold_catalogs.py</code> — deterministic merge math</li>
+      </ul>
+    </div>
+  </div>
+  <p class="note">Rule of thumb: a <code>.js</code> file <em>asks the AI</em>; a <code>.py</code> file <em>does the math and checks it</em>. The AI files have no filesystem of their own — they hand small lists to the code files.</p>
+</section>
+
+<!-- ===== 9 STAGE 1 ===== -->
+<section class="step" data-step="9">
+  <span class="tag green">Stage 1 · the Leaf</span>
+  <h1>Turn one industry into a raw catalog, in 6 steps.</h1>
+  <p class="lead">Run <code>menu_build.js</code> with <code>{ industry: "Restaurants" }</code>. It does this, in order:</p>
+
+  <div class="flowline" aria-label="Leaf phases">
+    <div class="node"><strong>Resolve</strong><span>find the tickers</span></div>
+    <div class="arrow">&#8594;</div>
+    <div class="node"><strong>Fetch</strong><span>pull all the text</span></div>
+    <div class="arrow">&#8594;</div>
+    <div class="node"><strong>Chunk</strong><span>split into readable pieces</span></div>
+    <div class="arrow">&#8594;</div>
+    <div class="node"><strong>Menus</strong><span>blind AI bots name drivers</span></div>
+    <div class="arrow">&#8594;</div>
+    <div class="node"><strong>Converge</strong><span>group into the seed</span></div>
+    <div class="arrow">&#8594;</div>
+    <div class="node"><strong>Record</strong><span>save proof</span></div>
+  </div>
+
+  <div class="panel accent">
+    <p style="margin:0;">The next 5 slides walk these one at a time. Output of the whole stage = <code>seed.json</code>: a raw, still-messy first draft of the catalog. Cleaning it up is Stage 2.</p>
+  </div>
+
+  <details>
+    <summary>What "save proof" (Record) means</summary>
+    <p>The last step writes a <code>manifest.json</code> — the exact git code version, the ticker list, the seed's fingerprint, and counts. So months later you can prove exactly what code and data produced this catalog. Everything is reproducible.</p>
+  </details>
+</section>
+
+<!-- ===== 10 RESOLVE ===== -->
+<section class="step" data-step="10">
+  <span class="tag">Step 1 · Resolve</span>
+  <h1>"Which companies are in this industry?"</h1>
+  <p class="lead">Ask the database (Neo4j) for the ticker list. <span class="srcchip"><code>resolve_driver_scope.py</code></span></p>
+
+  <div class="ascii">--industry "Restaurants"   &#8594;   ["BLMN","CAKE","CMG","DRI","EAT","MCD","SBUX","TXRH","WING","YUM", ...]
+                                  (14 restaurant tickers)</div>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>Guards</h3>
+      <p>0 tickers found → <b>hard stop</b> (you typo'd the name).<br>Only 1 ticker → warn (can't measure agreement with one).</p>
+    </div>
+    <div class="col">
+      <h3>Code-to-code</h3>
+      <p>The ticker list is written to a file the next tool reads directly — so an AI relay can never silently drop a company from the run.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 11 FETCH ===== -->
+<section class="step" data-step="11">
+  <span class="tag">Step 2 · Fetch</span>
+  <h1>Pull every company's real words — and clip nothing.</h1>
+  <p class="lead">For each ticker, grab all the non-news sources <b>with full text</b>. <span class="srcchip"><code>fetch_company_sources.py</code></span></p>
+
+  <div class="panel">
+    <h3>What gets pulled</h3>
+    <p>Earnings call transcripts (prepared remarks + every Q&amp;A) · 8-K press releases · 10-K / 10-Q business, risk, and management-discussion sections · the company's reported KPI names.</p>
+  </div>
+
+  <div class="panel amber">
+    <h3>The big change: stop dropping text</h3>
+    <p>The old version had size caps that quietly clipped <b>~62% of the text</b> (and <b>100% of transcripts</b>). That's a huge recall loss. Now it pulls everything. One real company (CAKE) = <span class="big-num">2.24M</span> characters of source text.</p>
+  </div>
+  <p class="note">"News" is deliberately <em>not</em> in this seed — news drivers get added live later (slide 26). The seed is built only from what the company itself reports.</p>
+</section>
+
+<!-- ===== 12 CHUNK ===== -->
+<section class="step" data-step="12">
+  <span class="tag">Step 3 · Chunk</span>
+  <h1>An AI can't read 2 million characters. So split — never clip.</h1>
+  <p class="lead">Cut the text into <b>~40,000-character pieces</b>, always at a clean seam. <span class="srcchip"><code>chunk_company_sources.py</code></span></p>
+
+  <div class="panel">
+    <h3>The fallback ladder (it always finds a cut point)</h3>
+    <div class="ascii">(a) pack whole small events together
+(b) too big?  &#8594; split at natural seams (a section, or one Q&amp;A exchange)
+(c) still big? &#8594; split by paragraph
+(d) still big? &#8594; split by sentence
+(e) still big? &#8594; split by raw character count   &#8592; always works</div>
+  </div>
+
+  <div class="panel green">
+    <h3>The promise: not one byte lost or changed</h3>
+    <p>Glue the pieces back together and you get the <b>original text, exactly</b> — checked by a hash. The chunker only <em>slices</em>; it never rewrites. So splitting big filings costs us nothing.</p>
+  </div>
+</section>
+
+<!-- ===== 13 BOTS ===== -->
+<section class="step" data-step="13">
+  <span class="tag">Step 4 · Menus</span>
+  <h1>One blind AI bot per piece — the only place names are born.</h1>
+  <p class="lead">Each bot sees <b>only its one chunk</b> — no other company, no shared list. It reads the real text and coins specific driver names.</p>
+
+  <div class="panel accent">
+    <h3>Real example (a CAKE bot)</h3>
+    <div class="ascii">raw KPI label:  "North Italia Comparable Restaurant Sales"
+                          |  bot applies the naming rules
+                          v
+driver_name:    north_italia_same_store_sales
+evidence_quote: "North Italia Comparable Restaurant Sales"
+source_type:    fiscal.ai-kpi</div>
+  </div>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>Naming rules (plain)</h3>
+      <ul class="small" style="font-size:18px;">
+        <li>Name the <b>cause only</b>, as a noun: <code>oil_price</code>, <code>restaurant_traffic</code>.</li>
+        <li>NO ticker, date, number, or up/down word in the name.</li>
+        <li>Vague text → skip (never invent).</li>
+      </ul>
+    </div>
+    <div class="col">
+      <h3>Why "blind"?</h3>
+      <p>If a bot saw the shared list first, it would lazily reuse a near-match. Blind naming + careful merging later is what makes two independent bots actually <em>agree</em> — instead of being nudged into fake agreement.</p>
+    </div>
+  </div>
+
+  <details>
+    <summary>The full naming rulebook (the fine print)</summary>
+    <ul>
+      <li><strong>Banned inside a name:</strong> state words (beat, cut, rose), direction (long/short), dates/quarters, numbers/units (bps, %, usd), any company ticker or person's name, source labels, accounting prefixes, metaphors, and bare category words (<code>demand</code>, <code>macro</code>, <code>sentiment</code> alone).</li>
+      <li><strong>Earnings convention:</strong> name the metric + its mechanism — <code>eps_surprise</code> (reported vs expected) or <code>revenue_guidance</code> (forward outlook). "beat / raised" is a <em>state</em>, not part of the name.</li>
+      <li><strong>Brand ≠ company-wide:</strong> <code>taco_bell_same_store_sales</code> is its OWN driver, separate from <code>same_store_sales</code>. They are never merged.</li>
+      <li><strong>Reusable class, even if seen once:</strong> <code>government_shutdown</code> is fine. A name glued to one single event (<code>q1_2026_shutdown_effect</code>) is rejected.</li>
+      <li><strong>Two causes in one quote?</strong> Emit two driver names, never one bundle.</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary>Anti-cheat: the bot writes its menu to a file too</summary>
+    <p>Each bot both <em>returns</em> its menu and <em>writes</em> it to disk. A later count cross-check fails the run if the two disagree — so a bot can't quietly return something different from what it saved.</p>
+  </details>
+</section>
+
+<!-- ===== 14 CONVERGE ===== -->
+<section class="step" data-step="14">
+  <span class="tag">Step 5 · Converge</span>
+  <h1>Code groups all the menus into one raw seed.</h1>
+  <p class="lead">No AI here. Just bookkeeping: group identical names, merge their evidence. <span class="srcchip"><code>build_seed.py</code></span></p>
+
+  <div class="flowline" aria-label="Converge counts">
+    <div class="node"><strong>2,246</strong><span>raw candidate names from all bots</span></div>
+    <div class="arrow">&#8594;</div>
+    <div class="node"><strong>group + dedup</strong><span>by lowercased name &amp; by the 5-tuple</span></div>
+    <div class="arrow">&#8594;</div>
+    <div class="node"><strong>594</strong><span>distinct drivers in the seed</span></div>
+  </div>
+
+  <p>That <code>seed.json</code> — 594 driver records, each backed by real quotes — is the raw draft. It still has duplicates and junk. <b>Stage 2 cleans it.</b></p>
+  <p class="note">"Group by lowercased name" is the only thing that merges here — exact spelling matches only. Anything subtler (synonyms) is left for the careful judges in Stage 2.</p>
+</section>
+
+<!-- ===== 15 STAGE 2 ===== -->
+<section class="step" data-step="15">
+  <span class="tag green">Stage 2 · Reconcile</span>
+  <h1>The merge engine: clean the seed into a real catalog.</h1>
+  <p class="lead">Run <code>reconcile.js</code>. This is the heart of the system — and it runs at <b>every level</b> later, too.</p>
+
+  <div class="flowline" aria-label="Reconcile phases">
+    <div class="node"><strong>Guard + Slice</strong><span>safety check, batch if big</span></div>
+    <div class="arrow">&#8594;</div>
+    <div class="node"><strong>Two judges</strong><span>dedup &amp; gate, in parallel</span></div>
+    <div class="arrow">&#8594;</div>
+    <div class="node"><strong>Skeptic</strong><span>break every merge</span></div>
+    <div class="arrow">&#8594;</div>
+    <div class="node"><strong>Assemble</strong><span>code writes the file</span></div>
+    <div class="arrow">&#8594;</div>
+    <div class="node"><strong>Validate</strong><span>hard gate</span></div>
+  </div>
+  <p class="note">Next 6 slides walk these. Output = <code>catalog.json</code>: the clean, proven list.</p>
+</section>
+
+<!-- ===== 16 GUARD ===== -->
+<section class="step" data-step="16">
+  <span class="tag">Step 1 · Guard &amp; slice</span>
+  <h1>Don't get billed wrong, and don't overload the AI.</h1>
+
+  <div class="panel danger">
+    <h3>Billing guard (step 0 of every workflow)</h3>
+    <p>Check: is an API key sitting in the environment? If yes → <b>refuse to run.</b> Everything must go through the subscription, never the metered pay-per-call API. (A hard rule from your setup.)</p>
+  </div>
+
+  <div class="panel">
+    <h3>Slice into batches <span class="srcchip"><code>slice_seed.py</code></span></h3>
+    <p>594 records is over the safe limit (400 records / 300k chars). So code cuts it into <b>name-sorted batches</b> so each AI judge reasons over a small, careful pile.</p>
+    <p class="note">Trade-off: two synonyms with no shared words might land in different batches and miss each other. That's an <em>under</em>-merge (the safe direction) — and the repair pass (slide 24) catches it later.</p>
+  </div>
+</section>
+
+<!-- ===== 17 TWO JUDGES ===== -->
+<section class="step" data-step="17">
+  <span class="tag">Step 2 · Two judges</span>
+  <h1>Two independent AI agents, working in parallel.</h1>
+
+  <div class="ascii">                &#9484;-- DEDUP  &#8594; "which names mean EXACTLY the same? &#8594; propose merge links"
+   seed batch --&#9508;
+                &#9492;-- GATE   &#8594; "is each name a valid, reusable driver? &#8594; admit / rewrite / skip"</div>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>Dedup — the matcher</h3>
+      <p>Proposes "these two are the same" links and picks one survivor name. Different brand, scope, or metric → rejected, kept separate.</p>
+    </div>
+    <div class="col">
+      <h3>Gate — the bouncer</h3>
+      <p>An <em>independent</em> judge (doesn't trust the bot that coined it):</p>
+      <ul class="small" style="font-size:18px;">
+        <li><b>admit</b> — valid driver</li>
+        <li><b>rewrite</b> — fix wording only</li>
+        <li><b>skip</b> — vague or one-off</li>
+      </ul>
+    </div>
+  </div>
+  <p>Both judge from the <b>evidence quotes</b>, not the bare name string.</p>
+
+  <details>
+    <summary>The "3-check" every merge must pass</summary>
+    <p>To call two names the same, all three must be true: <strong>same object</strong> (the thing) · <strong>same scope</strong> (brand vs company-wide, geography) · <strong>same mechanism</strong> (how it acts). If any one is false or unclear → keep separate. A "rewrite" may only fix wording — never change the meaning.</p>
+  </details>
+</section>
+
+<!-- ===== 18 SKEPTIC ===== -->
+<section class="step" data-step="18">
+  <span class="tag red">Step 3 · The skeptic</span>
+  <h1>A third agent whose only job is to break the merges.</h1>
+  <p class="lead">This is what stops the v2 collapse. For every proposed merge, the default answer is <b>NO</b>. It flips to YES only if the skeptic <em>cannot</em> refute that they're the exact same <b>object + scope + mechanism</b>.</p>
+
+  <div class="panel">
+    <h3>Then code — not AI — filters</h3>
+    <p>Refuted links are dropped. Refuted rewrites are parked. A <b>missing</b> answer counts as refused. Fail-closed, always.</p>
+  </div>
+
+  <div class="panel amber">
+    <h3>High-blast: a second skeptic for big merges</h3>
+    <p>A wrong merge across 2 companies is small; across <b>hundreds</b> it's a disaster (exactly how v2 died). So any surviving merge touching <b>≥ 8 companies</b> gets a <b>second, independent</b> skeptic that must separately pass object · scope · mechanism, each backed by a quote. Either one says no → the merge dies.</p>
+  </div>
+
+  <details>
+    <summary>Why the company count is computed by code</summary>
+    <p>The "how many companies?" number is computed by a tiny script and only <em>relayed</em> by the AI, with a checksum. A deflated count could skip the second skeptic — so the validator later <b>recomputes it from scratch</b> and fails the run if a ≥8-company merge is missing its second-skeptic proof.</p>
+  </details>
+</section>
+
+<!-- ===== 19 D5 ===== -->
+<section class="step" data-step="19">
+  <span class="tag">Step 4 · Same-name check</span>
+  <h1>One name, two meanings? Catch the rare "homonym."</h1>
+  <p class="lead">If a single name's <b>own</b> evidence shows two different real-world meanings across companies, it goes to a tiny review. Usually this fires <b>zero</b> times — but it's the safety hatch.</p>
+
+  <div class="threecol">
+    <div class="col">
+      <h3>SAME</h3>
+      <p>False alarm — one real cause. Keep it (skeptic-confirmed).</p>
+    </div>
+    <div class="col">
+      <h3>DIFFERENT</h3>
+      <p>True homonym. Split into more-specific names, drawn only from the evidence.</p>
+    </div>
+    <div class="col">
+      <h3>UNCLEAR</h3>
+      <p>Too thin to tell. <b>Park</b> it — leave it out of the clean list (fail-closed).</p>
+    </div>
+  </div>
+  <p class="note">You'll see all three of these verdicts on real data in slide 22 — they're the same verdicts the higher merge levels use.</p>
+</section>
+
+<!-- ===== 20 ASSEMBLE ===== -->
+<section class="step" data-step="20">
+  <span class="tag green">Step 5 · Assemble</span>
+  <h1>Code writes the catalog — closing the biggest hole.</h1>
+  <p class="lead">The AI agents only produced <b>short decision lists</b>. Now pure code applies a fixed 5-way rule to each seed record. <span class="srcchip"><code>assemble_catalog.py</code></span></p>
+
+  <div class="ascii">For each driver in the seed, code asks in order:
+  1. gate said skip?       &#8594; put on the skips[] list
+  2. approved merge?       &#8594; canonical_name = the survivor
+  3. approved rewrite?     &#8594; canonical_name = the fixed name
+  4. parked rewrite?       &#8594; unresolved[] list
+  5. otherwise             &#8594; admit as-is</div>
+
+  <div class="panel green">
+    <h3>Why this is the key safety move</h3>
+    <p>Because <b>code</b> writes the file from an approved list, the AI <b>cannot invent a merge</b> the skeptic never approved. The v2 mush is now structurally impossible — not just discouraged.</p>
+  </div>
+
+  <div class="panel">
+    <h3>Real result: 594 → a clean catalog</h3>
+    <p><span class="pill green">keep 388</span><span class="pill">merged 175</span><span class="pill amber">rewrite 10</span><span class="pill gray">skip 7</span><span class="pill gray">parked 16</span></p>
+    <div class="ascii">acquisition_related_costs    &#9508;
+acquisition_related_expenses &#9532;--&#8594;  acquisition_expenses    (3 names &#8594; 1, read in one hop)
+frc_acquisition_costs        &#9496;</div>
+  </div>
+</section>
+
+<!-- ===== 21 VALIDATE ===== -->
+<section class="step" data-step="21">
+  <span class="tag red">Step 6 · Validate</span>
+  <h1>The hard gate: re-check structure, hard-stop on any flaw.</h1>
+  <p class="lead">Zero judgment — just structure. If anything is off, the run <b>fails</b> (the catalog can never ship broken). <span class="srcchip"><code>validate_catalog.py</code></span></p>
+
+  <div class="panel">
+    <h3>What it checks</h3>
+    <ul>
+      <li><strong>Every merge is approved</strong> (the "D1" check): a merged name must trace back through the approved-link list. Code can't justify it → fail.</li>
+      <li><strong>Nothing lost or duplicated</strong> — every seed name is accounted for exactly once.</li>
+      <li><strong>No invented names; evidence matches the seed exactly</strong> (down to the quote).</li>
+      <li><strong>Re-computes the ≥8-company list itself</strong> and demands the second-skeptic proof.</li>
+    </ul>
+  </div>
+
+  <div class="panel accent">
+    <h3>The receipt</h3>
+    <p>It writes <code>validation_exit.json</code> — a signed note saying "passed, and here is the catalog's fingerprint." Later steps refuse to use a catalog unless this receipt says <b>passed</b> and the file hasn't changed since. This catches "the check never ran" and "someone edited it afterward."</p>
+  </div>
+</section>
+
+<!-- ===== 22 FOLD EXAMPLE ===== -->
+<section class="step" data-step="22">
+  <span class="tag green">Stage 3 · The Fold</span>
+  <h1>Merging upward — shown on real data.</h1>
+  <p class="lead">To build a sector, merge its industry catalogs. Same engine, bigger units. Here's an actual test fold of 4 child catalogs — watch <b>one word get three different fates.</b></p>
+
+  <div class="panel">
+    <h3>The children (4 industry catalogs)</h3>
+    <div class="ascii">child_a:  alpha_unique, comparable_sales, delivery_mix, oil_price, same_store_sales, traffic
+child_b:  beta_unique, delivery_mix, oil_price, traffic
+child_c:  foot_traffic, gamma_unique, oil_price, wage_inflation
+child_d:  delta_unique, fulfillment_cost, wage_inflation</div>
+  </div>
+
+  <div class="threecol">
+    <div class="col">
+      <h3 style="color:var(--green)">oil_price → SAME</h3>
+      <p class="small" style="font-size:17px;">Both quote "crude oil price." The different downstream costs (truck fuel vs jet fuel) are company-specific, not different drivers. → <b>one merged record</b>.</p>
+    </div>
+    <div class="col">
+      <h3 style="color:var(--amber)">delivery_mix → DIFFERENT</h3>
+      <p class="small" style="font-size:17px;">Child A = restaurant order channels. Child B = parcel shipping modes. True homonym → <b>split</b> into <code>restaurant_delivery_channel_mix</code> + <code>parcel_delivery_mix</code>.</p>
+    </div>
+    <div class="col">
+      <h3 style="color:var(--muted)">traffic → UNCLEAR</h3>
+      <p class="small" style="font-size:17px;">Both quotes are empty ("traffic was a factor"). Can't tell → <b>park</b> it, leave it out of the clean catalog. Fail-closed.</p>
+    </div>
+  </div>
+  <p class="note">Same spelling, three fates, each decided from evidence and defaulting to "keep separate" when unsure. That's the whole philosophy in one picture.</p>
+</section>
+
+<!-- ===== 23 FOLD MECHANICS ===== -->
+<section class="step" data-step="23">
+  <span class="tag">Stage 3 · mechanics</span>
+  <h1>How the fold actually runs.</h1>
+  <p class="lead">A deterministic <b>combine</b> step sits in front of the same reconcile engine. <span class="srcchip"><code>fold_catalogs.js / .py</code></span></p>
+
+  <div class="flowline" aria-label="Fold phases">
+    <div class="node"><strong>Part A</strong><span>combine + queue name-collisions</span></div>
+    <div class="arrow">&#8594;</div>
+    <div class="node"><strong>Draw</strong><span>fair evidence view per collision</span></div>
+    <div class="arrow">&#8594;</div>
+    <div class="node"><strong>Review</strong><span>SAME / DIFFERENT / UNCLEAR</span></div>
+    <div class="arrow">&#8594;</div>
+    <div class="node"><strong>Refute</strong><span>skeptic breaks each SAME</span></div>
+    <div class="arrow">&#8594;</div>
+    <div class="node"><strong>Part B</strong><span>code writes the parent seed</span></div>
+  </div>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>Part A: pass-through vs collision</h3>
+      <p>A name in only <b>one</b> child passes straight through. A name in <b>2+</b> children is <em>not</em> merged — it's queued for the review above (identical spelling ≠ identical meaning).</p>
+    </div>
+    <div class="col">
+      <h3>Draw: surface the disagreement</h3>
+      <p>Shows the skeptic a fair sample of quotes — <b>smallest side first</b>, rarest companies first. At scale, a bad merge usually slips through only because the one contradicting quote was never shown. This forces it into view.</p>
+    </div>
+  </div>
+
+  <details>
+    <summary>What carries forward, and the bookkeeping that keeps it honest</summary>
+    <ul>
+      <li>Merge links from lower levels are <b>kept</b> and never reopened; new cross-child merges are added through the same skeptic. <b>Why that's not a contradiction:</b> the skeptic is a one-time gate at a merge's <em>birth</em>, not a recall — a merge is judged once when first proposed, then carries forward un-re-judged. Each level only judges the brand-new pairings that two catalogs sitting side by side make newly possible.</li>
+      <li>A merged name's old record stays recoverable in the committed child file — merges are <b>reversible</b>, never a destructive delete.</li>
+      <li>The fold writes a <code>fold_manifest.json</code> recording, per child, how many records were kept vs dropped — so nothing vanishes silently.</li>
+      <li>The fold's <code>validate</code> adds checks (called "D8") that parent evidence = the <b>exact union</b> of child evidence, and that a split perfectly partitions the original quotes.</li>
+    </ul>
+  </details>
+</section>
+
+<!-- ===== 24 ORCHESTRATE ===== -->
+<section class="step" data-step="24">
+  <span class="tag">The conductor &amp; helpers</span>
+  <h1>One conductor, plus two cost-savers.</h1>
+
+  <div class="panel">
+    <h3>build_tree.js — the conductor, with 3 modes</h3>
+    <div class="kv">
+      <div class="k"><code>{ list: true }</code></div><div class="v">Read-only: print the Sector → Industry → Ticker tree; fail loud if any company has two parents. Never merges.</div>
+      <div class="k"><code>{ fold: {...} }</code></div><div class="v">Merge specific children once → reconcile → repair → validate.</div>
+      <div class="k"><code>{ walk: {...} }</code></div><div class="v">The full climb: fold every sector, then global. Every step fail-closed — one failure kills the whole run.</div>
+    </div>
+  </div>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>Repair pass <span class="srcchip"><code>repair_duplicates</code></span></h3>
+      <p>Catches merges the batching missed. Code <em>suggests</em> look-alike pairs (shared rare words, or cheap embeddings — suggest only); AI judges; code applies. It only <b>adds</b> links, never breaks one.</p>
+    </div>
+    <div class="col">
+      <h3>Resume <span class="srcchip"><code>resume_menus</code></span></h3>
+      <p>A real run = ~950 AI bots and can hit the 5-hour subscription window. If it dies, relaunch with <code>resume_run_id</code> → it re-runs <b>only the missing bots</b>. Finished work is never paid for twice.</p>
+    </div>
+  </div>
+  <p class="note">"Embeddings" = a cheap math trick that scores how similar two names <em>feel</em>. Here it only <b>suggests</b> pairs to look at — it never decides a merge. The AI + skeptic always decide meaning.</p>
+</section>
+
+<!-- ===== 25 MODELS & COST ===== -->
+<section class="step" data-step="25">
+  <span class="tag amber">Money &amp; speed</span>
+  <h1>Pick the right AI for each job — recall vs cost.</h1>
+  <p class="lead">Different AI models behave very differently. Picking the wrong one quietly loses drivers <em>or</em> wastes money. So each job gets a specific model.</p>
+
+  <div class="panel">
+    <h3>Measured fact: reading is model-dependent</h3>
+    <p>On the same chunk of text, the models found wildly different numbers of candidate drivers:</p>
+    <div class="ascii">Fable 5  &#8594; 54 candidates   &#9664; best recall (we use this for the readers)
+Sonnet   &#8594; 31 candidates
+Opus     &#8594; 24 candidates
+Haiku    &#8594; noisy + breaks naming rules</div>
+    <p>A driver missed at the reading stage is <b>gone forever</b> — nothing downstream can recover it.</p>
+  </div>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>🔎 Reader bots → Fable</h3>
+      <p>Their job is to <em>not miss anything</em>. Recall is everything, so they use the highest-recall model.</p>
+    </div>
+    <div class="col">
+      <h3>⚖️ All judges → Opus</h3>
+      <p>Dedup, gate, skeptic, folds, validators — the careful decisions use Opus (exactly what passed the gates, at lower cost).</p>
+    </div>
+  </div>
+  <p class="note">Plus: the billing guard (subscription-only) runs on every workflow, and big bot bursts get a fresh time window so they don't run dry — with resume as the safety net if one dies.</p>
+</section>
+
+<!-- ===== 26 LIVE ===== -->
+<section class="step" data-step="26">
+  <span class="tag">Later · using it live</span>
+  <h1>Building the catalog is once. Using it is forever.</h1>
+  <p class="lead">Once the catalog exists, every new event (an earnings report, a news item) runs a quick reuse flow. This part is <b>still being designed</b> — but here's the shape.</p>
+
+  <div class="flowline" aria-label="Live reuse">
+    <div class="node"><strong>G1 · propose-first</strong><span>coin your own name BLIND from the evidence</span></div>
+    <div class="arrow">&#8594;</div>
+    <div class="node"><strong>see related names</strong><span>reuse ONLY on exact match</span></div>
+    <div class="arrow">&#8594;</div>
+    <div class="node"><strong>G2 · gate</strong><span>a brand-new name still passes the admission gate</span></div>
+  </div>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>Why propose-first?</h3>
+      <p>If you saw the catalog first, you'd lazily grab a near-match. So you name it blind, <em>then</em> look — and only reuse if it's truly the same. Same anti-laziness trick as the blind leaf bots.</p>
+    </div>
+    <div class="col">
+      <h3>The honesty gate — the real test</h3>
+      <p>Freeze the catalog. Feed it <b>fresh</b> events, showing only info from on/before that date (no peeking at the future). It must reuse / create / skip. An independent grader scores it against a <b>pre-written</b> answer key — <b>graded once</b>, no retuning to pass.</p>
+    </div>
+  </div>
+  <p class="note">The catalog itself is "producer-agnostic": it carries no "news vs fundamental" tag. That's a job for whoever uses it, not a property of the driver. News drivers are coined live, here — never in the seed.</p>
+</section>
+
+<!-- ===== 27 RECAP ===== -->
+<section class="step" data-step="27">
+  <span class="tag green">Recap &amp; status</span>
+  <h1>Why you can trust it — and where it stands.</h1>
+  <p class="lead">Five patterns repeat in every file. They are the spine.</p>
+
+  <table class="t">
+    <thead><tr><th>Pattern</th><th>What it means</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Judgment → AI, structure → code</strong></td><td>AI never writes the file; code never guesses meaning.</td></tr>
+      <tr><td><strong>Fail-closed</strong></td><td>Unsure → keep separate. Missing answer → no.</td></tr>
+      <tr><td><strong>Skeptic on every merge</strong></td><td>Each merge is attacked; ≥8 companies gets a second skeptic.</td></tr>
+      <tr><td><strong>Relay fidelity</strong></td><td>When an AI re-types a file, code hash-checks the bytes match.</td></tr>
+      <tr><td><strong>Signed receipts</strong></td><td>A catalog is usable only if its validation passed and bytes are unchanged.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="twocol">
+    <div class="col">
+      <h3 style="color:var(--green)">✅ Built &amp; green</h3>
+      <p class="small" style="font-size:18px;">Leaf, Fold, walk-and-fold, batching, repair pass, model pins, resume. <b>202+ tests pass.</b> All on cheap synthetic / 1-ticker gates.</p>
+    </div>
+    <div class="col">
+      <h3 style="color:var(--amber)">⏳ What's left</h3>
+      <p class="small" style="font-size:18px;">The full <b>real</b> Restaurants run across sessions → a 2nd industry → the first real fold → the honesty/fitness gate → production decision. Plus live-use wiring (slide 26).</p>
+    </div>
+  </div>
+
+  <div class="panel accent">
+    <p style="margin:0;">That's the entire machine, end to end. Want a deeper dive on any one slide — e.g. trace a single CAKE driver from raw text to the catalog, or the exact validator checks line by line? Just ask.</p>
+  </div>
+</section>
+
+<!-- ===================== APPENDIX: EVERY FILE ===================== -->
+
+<!-- ===== 28 APPENDIX INDEX ===== -->
+<section class="step" data-step="28">
+  <span class="tag">Appendix · the files</span>
+  <h1>Every file, one at a time — super simple.</h1>
+  <p class="lead">Same shape every slide: <b>what goes in → what comes out → the steps → why it matters.</b> We go bottom-up — the <b>worker tools</b> first (each does one concrete job), then the <b>conductors</b> that string them together.</p>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>⚙️ Worker tools <span class="pill gray">.py</span></h3>
+      <div class="toc-grid" style="grid-template-columns:1fr; gap:8px; margin:14px 0 0;">
+        <div class="item" data-goto="29"><span class="num">29</span><code>resolve_driver_scope.py</code> — list companies</div>
+        <div class="item" data-goto="30"><span class="num">30</span><code>fetch_company_sources.py</code> — pull text</div>
+        <div class="item" data-goto="31"><span class="num">31</span><code>chunk_company_sources.py</code> — split text</div>
+        <div class="item" data-goto="32"><span class="num">32</span><code>build_seed.py</code> — group into the seed</div>
+        <div class="item" data-goto="33"><span class="num">33</span><code>slice_seed.py</code> — batch a big seed</div>
+        <div class="item" data-goto="34"><span class="num">34</span><code>assemble_catalog.py</code> — write the catalog</div>
+        <div class="item" data-goto="35"><span class="num">35</span><code>validate_catalog.py</code> — the hard gate</div>
+        <div class="item" data-goto="36"><span class="num">36</span><code>fold_catalogs.py</code> — the merge math</div>
+      </div>
+    </div>
+    <div class="col">
+      <h3>🧠 Conductors <span class="pill gray">.js</span></h3>
+      <div class="toc-grid" style="grid-template-columns:1fr; gap:8px; margin:14px 0 0;">
+        <div class="item" data-goto="37"><span class="num">37</span><code>menu_build.js</code> — runs the leaf</div>
+        <div class="item" data-goto="38"><span class="num">38</span><code>reconcile.js</code> — the merge engine</div>
+        <div class="item" data-goto="39"><span class="num">39</span><code>fold_catalogs.js</code> — merges levels up</div>
+        <div class="item" data-goto="40"><span class="num">40</span><code>build_tree.js</code> — the master conductor</div>
+        <div class="item" data-goto="41"><span class="num">41</span><code>repair_duplicates.js</code> — catch missed merges</div>
+        <div class="item" data-goto="42"><span class="num">42</span><code>gate.js</code> — the admission gate (live)</div>
+        <div class="item" data-goto="43"><span class="num">43</span><code>catalog_first.js</code> — reuse-first (live)</div>
+      </div>
+    </div>
+  </div>
+  <p class="note">Remember the rule of thumb: a <code>.py</code> tool does one job and checks itself; a <code>.js</code> conductor asks the AI and calls the tools.</p>
+</section>
+
+<!-- ===== 29 resolve_driver_scope.py ===== -->
+<section class="step" data-step="29">
+  <span class="tag">⚙️ Tool 1 of 8</span>
+  <h1 style="font-size:42px;"><code style="background:var(--accent-soft); color:var(--accent);">resolve_driver_scope.py</code></h1>
+  <p class="lead"><b>List the companies.</b> Given an industry name, it asks the database which tickers belong to it.</p>
+
+  <div class="kv">
+    <div class="k">Takes in</div><div class="v"><code>--industry "Restaurants"</code> (or <code>--sector</code>, or <code>--list</code> to see valid names)</div>
+    <div class="k">Gives back</div><div class="v">a list of tickers, and writes them to a small scope file</div>
+  </div>
+
+  <div class="panel">
+    <h3>Step by step</h3>
+    <ol>
+      <li>Connect to the company database (read-only — it never changes anything).</li>
+      <li>Ask: "which companies have industry = Restaurants?"</li>
+      <li>Return the distinct tickers, sorted: <code>BLMN, CAKE, CMG, DRI …</code></li>
+      <li>Write that exact list to a file the next tool reads directly.</li>
+    </ol>
+  </div>
+
+  <div class="panel amber">
+    <h3>Its two guards</h3>
+    <p><b>0 companies found</b> → stop the run (you typed the name wrong). <b>Only 1 company</b> → warn (you can't measure agreement with one). Writing the list to a file means an AI can never quietly drop a company.</p>
+  </div>
+</section>
+
+<!-- ===== 30 fetch_company_sources.py ===== -->
+<section class="step" data-step="30">
+  <span class="tag">⚙️ Tool 2 of 8</span>
+  <h1 style="font-size:42px;"><code style="background:var(--accent-soft); color:var(--accent);">fetch_company_sources.py</code></h1>
+  <p class="lead"><b>Pull the text.</b> For each company, download all of its real words from filings and earnings calls.</p>
+
+  <div class="kv">
+    <div class="k">Takes in</div><div class="v">the ticker list + a run folder</div>
+    <div class="k">Gives back</div><div class="v"><code>sources/&lt;TICKER&gt;.json</code> (full text) + a list of fingerprints</div>
+  </div>
+
+  <div class="panel">
+    <h3>Step by step</h3>
+    <ol>
+      <li>For each company, query the database for its 10-K / 10-Q / 8-K filings, earnings-call transcripts (prepared remarks + every Q&amp;A), and its reported KPI names.</li>
+      <li>Keep the <b>full</b> text — the old version's size caps clipped ~62% of it.</li>
+      <li>Tag each item with its date, type, and whether the stock moved hard that day.</li>
+      <li>Save each company's bundle, plus a fingerprint (sha256) to prove it wasn't tampered with.</li>
+    </ol>
+  </div>
+
+  <div class="panel green">
+    <h3>Why it matters</h3>
+    <p>This is the raw material for the whole catalog. <b>Read-only, nothing dropped.</b> A driver missed here can never be recovered, so it errs on the side of grabbing everything.</p>
+  </div>
+  <details>
+    <summary>One small bug it fixes</summary>
+    <p>Q&amp;A exchanges are numbered <code>"0","1",…,"10"</code> as text. Sorting text puts <code>"10"</code> right after <code>"1"</code> → scrambled order. This tool sorts them as real numbers, so the conversation reads in the right order.</p>
+  </details>
+</section>
+
+<!-- ===== 31 chunk_company_sources.py ===== -->
+<section class="step" data-step="31">
+  <span class="tag">⚙️ Tool 3 of 8</span>
+  <h1 style="font-size:42px;"><code style="background:var(--accent-soft); color:var(--accent);">chunk_company_sources.py</code></h1>
+  <p class="lead"><b>Split the text.</b> One company can be 2 million characters — too big for an AI. So cut it into ~40,000-char pieces, always at a clean seam.</p>
+
+  <div class="kv">
+    <div class="k">Takes in</div><div class="v"><code>sources/&lt;TICKER&gt;.json</code></div>
+    <div class="k">Gives back</div><div class="v"><code>chunks/&lt;TICKER&gt;__chunk_NNN.json</code> — one bot's reading load each</div>
+  </div>
+
+  <div class="panel">
+    <h3>Step by step</h3>
+    <ol>
+      <li>Build each event's full text.</li>
+      <li>Small enough? Keep it whole. Pack several small events into one chunk.</li>
+      <li>Too big? Walk the ladder until it fits: natural seam → paragraph → sentence → raw characters (this last one always works).</li>
+      <li>Run <code>--verify</code>: glue the pieces back and confirm they equal the original, <b>byte for byte</b>.</li>
+    </ol>
+  </div>
+
+  <div class="panel green">
+    <h3>Why it matters</h3>
+    <p>It lets a bot read everything <b>without losing or changing a single byte</b>. It only slices; it never rewrites. So even a giant 10-K costs us no text.</p>
+  </div>
+</section>
+
+<!-- ===== 32 build_seed.py ===== -->
+<section class="step" data-step="32">
+  <span class="tag">⚙️ Tool 4 of 8</span>
+  <h1 style="font-size:42px;"><code style="background:var(--accent-soft); color:var(--accent);">build_seed.py</code></h1>
+  <p class="lead"><b>Group into the seed.</b> After the blind bots name drivers, this code gathers all their menus into one raw draft — no AI, just bookkeeping.</p>
+
+  <div class="kv">
+    <div class="k">Takes in</div><div class="v"><code>menus/*.json</code> (one file per bot)</div>
+    <div class="k">Gives back</div><div class="v"><code>seed.json</code> — the deduped driver records</div>
+  </div>
+
+  <div class="panel">
+    <h3>Step by step</h3>
+    <ol>
+      <li>Read every bot's menu file.</li>
+      <li>Group candidates by their lowercased name (exact matches only).</li>
+      <li>Merge their evidence quotes; drop exact-duplicate quotes; list the distinct companies.</li>
+      <li>Cross-check: do the counts match what the bots reported? If not → <b>fail</b>.</li>
+      <li>Check every chunk produced a menu — no chunk silently skipped.</li>
+    </ol>
+  </div>
+
+  <div class="panel accent">
+    <h3>Real example</h3>
+    <div class="ascii">2,246 raw candidate names  &#8594;  594 distinct drivers</div>
+  </div>
+  <p class="note">It only merges <em>exact spelling</em> matches here. Real synonyms (<code>guest_count</code> vs <code>customer_transactions</code>) are left for the careful judges in Stage 2.</p>
+</section>
+
+<!-- ===== 33 slice_seed.py ===== -->
+<section class="step" data-step="33">
+  <span class="tag">⚙️ Tool 5 of 8</span>
+  <h1 style="font-size:42px;"><code style="background:var(--accent-soft); color:var(--accent);">slice_seed.py</code></h1>
+  <p class="lead"><b>Batch a big seed.</b> 594 drivers is too many for one AI to weigh carefully. So cut the seed into smaller piles.</p>
+
+  <div class="kv">
+    <div class="k">Takes in</div><div class="v"><code>seed.json</code></div>
+    <div class="k">Gives back</div><div class="v"><code>seed_batch_001.json, _002, …</code></div>
+  </div>
+
+  <div class="panel">
+    <h3>Step by step</h3>
+    <ol>
+      <li>Walk the records in name order (they're already sorted alphabetically).</li>
+      <li>Start a new batch when the current one hits <b>400 records</b> or <b>300,000 characters</b>.</li>
+      <li>A single record that's bigger than the limit goes alone — a record is never split in half.</li>
+    </ol>
+  </div>
+
+  <div class="panel amber">
+    <h3>Why it matters (and the small cost)</h3>
+    <p>Each AI judge then only ever sees a small, careful pile. The trade-off: two synonyms with no shared words can land in different batches and miss each other — an <b>under</b>-merge (the safe direction). The repair tool (slide 41) sweeps those up later. If the seed is already small, it just makes one batch.</p>
+  </div>
+</section>
+
+<!-- ===== 34 assemble_catalog.py ===== -->
+<section class="step" data-step="34">
+  <span class="tag">⚙️ Tool 6 of 8</span>
+  <h1 style="font-size:42px;"><code style="background:var(--accent-soft); color:var(--accent);">assemble_catalog.py</code></h1>
+  <p class="lead"><b>Write the catalog.</b> This is "the writer." The AI only produced short decision lists; this code turns them into the actual file.</p>
+
+  <div class="kv">
+    <div class="k">Takes in</div><div class="v"><code>seed.json</code> + <code>decisions.json</code> (the AI's approved lists)</div>
+    <div class="k">Gives back</div><div class="v"><code>catalog.json</code> + <code>approved.json</code></div>
+  </div>
+
+  <div class="panel">
+    <h3>Step by step — the fixed 5-way rule, per driver</h3>
+    <div class="ascii">1. gate said skip?     &#8594; skips list
+2. approved merge?     &#8594; point it at the survivor name
+3. approved rewrite?   &#8594; point it at the fixed name
+4. parked rewrite?     &#8594; unresolved list
+5. otherwise           &#8594; keep as its own driver</div>
+    <p>Then it fills each survivor's <code>same_as_variants</code> (so trading reads the whole group in one hop).</p>
+  </div>
+
+  <div class="panel green">
+    <h3>Why it matters most</h3>
+    <p>Because <b>code</b> writes the file from an approved list, the AI <b>cannot invent a merge</b> the skeptic never approved. This is what makes the old v2 mush structurally impossible. It also hash-checks that the bytes the AI typed match what the workflow intended.</p>
+  </div>
+</section>
+
+<!-- ===== 35 validate_catalog.py ===== -->
+<section class="step" data-step="35">
+  <span class="tag red">⚙️ Tool 7 of 8</span>
+  <h1 style="font-size:42px;"><code style="background:var(--red-soft); color:var(--red);">validate_catalog.py</code></h1>
+  <p class="lead"><b>The hard gate.</b> The last check. It re-inspects the structure and <b>stops the run</b> if anything is wrong. Zero judgment — pure checks.</p>
+
+  <div class="kv">
+    <div class="k">Takes in</div><div class="v"><code>seed.json</code>, <code>catalog.json</code>, <code>approved.json</code></div>
+    <div class="k">Gives back</div><div class="v">PASS / FAIL + a signed receipt (<code>validation_exit.json</code>)</div>
+  </div>
+
+  <div class="panel">
+    <h3>What it checks</h3>
+    <ul>
+      <li>Every merge traces back to an approved link (it can't justify one → fail).</li>
+      <li>Nothing lost or duplicated — every seed name accounted for exactly once.</li>
+      <li>No invented names; the catalog's quotes match the seed's quotes exactly.</li>
+      <li>It <b>recomputes</b> the "≥8 companies" list itself and demands the second-skeptic proof exists.</li>
+    </ul>
+  </div>
+
+  <div class="panel accent">
+    <h3>The receipt</h3>
+    <p>It writes a signed note: "passed, and here's the catalog's fingerprint." Later steps refuse to use any catalog unless its receipt says passed <b>and</b> the file hasn't changed since. This catches "the check never actually ran" and "someone edited it afterward."</p>
+  </div>
+</section>
+
+<!-- ===== 36 fold_catalogs.py ===== -->
+<section class="step" data-step="36">
+  <span class="tag">⚙️ Tool 8 of 8</span>
+  <h1 style="font-size:42px;"><code style="background:var(--accent-soft); color:var(--accent);">fold_catalogs.py</code></h1>
+  <p class="lead"><b>The merge math.</b> The no-AI engine behind merging levels up. It has three small commands.</p>
+
+  <div class="panel">
+    <h3>Its three jobs</h3>
+    <div class="kv">
+      <div class="k">part-a</div><div class="v">tidy each child catalog, then group names across children. A name in 1 child → keep. A name in 2+ children → <b>queue it for the AI</b> (same spelling ≠ same meaning).</div>
+      <div class="k">draw</div><div class="v">build a fair sample of quotes for each queued name — smallest side first — so the AI sees the disagreement.</div>
+      <div class="k">part-b</div><div class="v">apply the AI's verdicts: SAME → merge, DIFFERENT → split, UNCLEAR → park. Write the parent seed.</div>
+    </div>
+  </div>
+
+  <div class="panel green">
+    <h3>Why it matters</h3>
+    <p>It does the heavy, error-prone bookkeeping (union evidence, partition splits, sort, count) so the AI only makes the <em>meaning</em> calls. It refuses to fold a child whose validation receipt isn't passing-and-unchanged, and records every kept/dropped count so nothing vanishes silently.</p>
+  </div>
+</section>
+
+<!-- ===== 37 menu_build.js ===== -->
+<section class="step" data-step="37">
+  <span class="tag green">🧠 Conductor 1 of 7</span>
+  <h1 style="font-size:42px;"><code style="background:var(--green-soft); color:var(--green);">menu_build.js</code></h1>
+  <p class="lead"><b>Runs the leaf.</b> The conductor for Stage 1: turn one industry into a raw seed. It calls the worker tools in order and runs the blind bots.</p>
+
+  <div class="ascii">resolve  &#8594;  fetch  &#8594;  chunk  &#8594;  [blind bots name drivers]  &#8594;  build_seed  &#8594;  record</div>
+
+  <div class="panel">
+    <h3>Step by step</h3>
+    <ol>
+      <li>Billing guard: refuse to run if a pay-per-call API key is present.</li>
+      <li>Call <code>resolve</code> → tickers, <code>fetch</code> → text, <code>chunk</code> → pieces.</li>
+      <li>Spawn <b>one blind AI bot per chunk</b> to coin candidate driver names (this is the only AI work it does directly).</li>
+      <li>Call <code>build_seed</code> (code) to group them, then save a manifest of proof.</li>
+    </ol>
+  </div>
+
+  <div class="panel accent">
+    <h3>Run it like this</h3>
+    <p><code>menu_build.js</code> with <code>{ industry: "Restaurants" }</code>. If a long run dies, restart with <code>resume_run_id</code> → it re-runs only the missing bots, never re-pays for finished ones.</p>
+  </div>
+</section>
+
+<!-- ===== 38 reconcile.js ===== -->
+<section class="step" data-step="38">
+  <span class="tag green">🧠 Conductor 2 of 7</span>
+  <h1 style="font-size:42px;"><code style="background:var(--green-soft); color:var(--green);">reconcile.js</code></h1>
+  <p class="lead"><b>The merge engine.</b> The conductor for Stage 2: clean a messy seed into a real catalog. The same engine runs at <b>every</b> level later.</p>
+
+  <div class="ascii">guard+slice  &#8594;  (dedup + gate, in parallel)  &#8594;  skeptic  &#8594;  assemble  &#8594;  validate</div>
+
+  <div class="panel">
+    <h3>Step by step</h3>
+    <ol>
+      <li>Guard (billing) + slice the seed into safe batches.</li>
+      <li>Per batch: run two judges in parallel — <b>dedup</b> (find same-meaning pairs) and <b>gate</b> (admit / rewrite / skip).</li>
+      <li><b>Skeptic</b> tries to break every proposed merge; a second skeptic checks merges touching ≥8 companies.</li>
+      <li>Hand the short approved lists to <code>assemble_catalog.py</code> (code writes the file).</li>
+      <li>Run <code>validate_catalog.py</code> — fail the run if anything is off.</li>
+    </ol>
+  </div>
+
+  <div class="panel green">
+    <h3>Why it matters</h3>
+    <p>This is the brain that decides what merges — but it never writes the file itself. It only produces a list of approved decisions for the code to apply. That separation is the whole safety story.</p>
+  </div>
+</section>
+
+<!-- ===== 39 fold_catalogs.js ===== -->
+<section class="step" data-step="39">
+  <span class="tag green">🧠 Conductor 3 of 7</span>
+  <h1 style="font-size:42px;"><code style="background:var(--green-soft); color:var(--green);">fold_catalogs.js</code></h1>
+  <p class="lead"><b>Merges levels up.</b> The conductor that wraps the merge-math tool with the AI's same-name review — to fold several child catalogs into one parent.</p>
+
+  <div class="ascii">part-a (code)  &#8594;  draw (code)  &#8594;  review (AI)  &#8594;  refute (AI)  &#8594;  part-b (code)</div>
+
+  <div class="panel">
+    <h3>Step by step</h3>
+    <ol>
+      <li>Run <code>part-a</code> + <code>draw</code> (code): find the names that appear in 2+ children and build their evidence views.</li>
+      <li>For each clash, one AI <b>reviewer</b> says SAME / DIFFERENT / UNCLEAR.</li>
+      <li>A <b>skeptic</b> attacks every SAME; big ones get a second skeptic.</li>
+      <li>Run <code>part-b</code> (code): apply the verdicts and write the parent seed.</li>
+    </ol>
+  </div>
+
+  <div class="panel accent">
+    <h3>The output</h3>
+    <p>A parent <code>seed.json</code> — which then goes through the exact same <code>reconcile.js</code> engine, one level up. That's how the tree climbs.</p>
+  </div>
+</section>
+
+<!-- ===== 40 build_tree.js ===== -->
+<section class="step" data-step="40">
+  <span class="tag green">🧠 Conductor 4 of 7</span>
+  <h1 style="font-size:42px;"><code style="background:var(--green-soft); color:var(--green);">build_tree.js</code></h1>
+  <p class="lead"><b>The master conductor.</b> Ties everything together and climbs the whole tree: company → industry → sector → global.</p>
+
+  <div class="panel">
+    <h3>Its three modes</h3>
+    <div class="kv">
+      <div class="k"><code>{ list: true }</code></div><div class="v">Read-only: print the Sector → Industry → Ticker tree and fail loudly if any company has two parents. Never merges.</div>
+      <div class="k"><code>{ fold: {…} }</code></div><div class="v">Do one merge: fold these children → reconcile → repair → validate.</div>
+      <div class="k"><code>{ walk: {…} }</code></div><div class="v">The full climb: fold every sector, then the global. Every step fail-closed.</div>
+    </div>
+  </div>
+
+  <div class="panel green">
+    <h3>The one rule it enforces</h3>
+    <p>For each level it runs fold → reconcile → repair → validate, and <b>one failure anywhere kills the whole run.</b> No level can be skipped, no "latest" guessing — you pass exact run IDs.</p>
+  </div>
+</section>
+
+<!-- ===== 41 repair_duplicates.js ===== -->
+<section class="step" data-step="41">
+  <span class="tag green">🧠 Conductor 5 of 7</span>
+  <h1 style="font-size:42px;"><code style="background:var(--green-soft); color:var(--green);">repair_duplicates.js</code></h1>
+  <p class="lead"><b>Catches missed merges.</b> A second sweep for duplicates the batching split apart. Runs after each level.</p>
+
+  <div class="ascii">suggest (code)  &#8594;  review (AI)  &#8594;  apply (code)  &#8594;  validate</div>
+
+  <div class="panel">
+    <h3>Step by step</h3>
+    <ol>
+      <li><b>Suggest</b> (code): find look-alike pairs by shared rare words, or by cheap similarity scores (embeddings). Suggestions only.</li>
+      <li><b>Review</b> (AI): judge each pair SAME / DIFFERENT — same skeptic discipline as everywhere else.</li>
+      <li><b>Apply</b> (code): add the approved links through the same writer, then validate.</li>
+    </ol>
+  </div>
+
+  <div class="panel green">
+    <h3>Why it's safe</h3>
+    <p>It only ever <b>adds</b> a link between two kept drivers — it never breaks an existing link and never touches the parked items. So it can only ever tidy up, never damage.</p>
+  </div>
+  <p class="note">"Embeddings" = a cheap math score of how similar two names feel. Here it only points the AI at pairs to look at; it never decides a merge.</p>
+</section>
+
+<!-- ===== 42 gate.js ===== -->
+<section class="step" data-step="42">
+  <span class="tag amber">🧠 Conductor 6 of 7 · live use</span>
+  <h1 style="font-size:42px;"><code style="background:var(--amber-soft); color:var(--amber);">gate.js</code></h1>
+  <p class="lead"><b>The admission gate (called "G2").</b> The single bouncer for any new name — used both inside reconcile and, later, live.</p>
+
+  <div class="kv">
+    <div class="k">Takes in</div><div class="v">candidate names (with their evidence) + the existing catalog</div>
+    <div class="k">Gives back</div><div class="v">one verdict per name: reuse / admit / rewrite / skip</div>
+  </div>
+
+  <div class="panel">
+    <h3>The one test it applies</h3>
+    <p>"Is this a valid, reusable driver?" — judged from the <b>evidence</b>, not the bare name.</p>
+    <ul class="small" style="font-size:19px;">
+      <li><b>reuse</b> — it's the exact same cause as one already in the catalog</li>
+      <li><b>admit</b> — a new valid driver</li>
+      <li><b>rewrite</b> — right driver, just fix the wording</li>
+      <li><b>skip</b> — vague, or tied to one single event</li>
+    </ul>
+  </div>
+  <p class="note">It's deliberately "producer-agnostic" — it never tags a driver as "news vs fundamental." That's a job for whoever uses the catalog, not a property of the driver.</p>
+</section>
+
+<!-- ===== 43 catalog_first.js ===== -->
+<section class="step" data-step="43">
+  <span class="tag amber">🧠 Conductor 7 of 7 · live use</span>
+  <h1 style="font-size:42px;"><code style="background:var(--amber-soft); color:var(--amber);">catalog_first.js</code></h1>
+  <p class="lead"><b>Reuse-first (called "G1").</b> The live mechanism for handling a brand-new event: name it yourself first, <em>then</em> reuse only if it's truly the same.</p>
+
+  <div class="ascii">coin your OWN name (blind)  &#8594;  see the related catalog names  &#8594;  reuse if EXACT, else create / skip</div>
+
+  <div class="panel">
+    <h3>Why "name it yourself first"?</h3>
+    <p>If you saw the catalog up front, you'd lazily grab a near-match and slowly blur the meanings. Naming blind, then comparing, keeps everyone honest — the same anti-laziness trick as the blind leaf bots.</p>
+  </div>
+
+  <div class="panel danger">
+    <h3>Status: not wired yet</h3>
+    <p>This file still holds an <b>older</b> version of the flow (it shows the catalog up front). The new "name-it-first" rules — and exactly how related names are shown — are <b>still being decided</b>. The file header literally says: raise to the user before using. So it's the one piece here that is design-in-progress, not built.</p>
+  </div>
+</section>
+
+</main>
+
+<nav class="nav">
+  <button id="prev" type="button">&#9664; Prev</button>
+  <div class="pos" id="pos">1 / 43</div>
+  <button id="next" type="button">Next &#9654;</button>
+</nav>
+
+<script>
+(function() {
+  const steps = Array.from(document.querySelectorAll('.step'));
+  const total = steps.length;
+  const counter = document.getElementById('counter');
+  const pos = document.getElementById('pos');
+  const prev = document.getElementById('prev');
+  const next = document.getElementById('next');
+  const progress = document.getElementById('progress');
+  let cur = 1;
+
+  const pips = steps.map((_, i) => {
+    const pip = document.createElement('button');
+    pip.type = 'button';
+    pip.className = 'pip';
+    pip.title = 'Go to slide ' + (i + 1);
+    pip.addEventListener('click', () => { cur = i + 1; render(); });
+    progress.appendChild(pip);
+    return pip;
+  });
+
+  function render() {
+    steps.forEach((s, i) => s.classList.toggle('active', i + 1 === cur));
+    pips.forEach((p, i) => {
+      p.classList.toggle('done', i + 1 < cur);
+      p.classList.toggle('active', i + 1 === cur);
+    });
+    counter.textContent = cur + ' / ' + total;
+    pos.textContent = cur + ' / ' + total;
+    prev.disabled = (cur === 1);
+    next.disabled = (cur === total);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function go(delta) {
+    const n = cur + delta;
+    if (n < 1 || n > total) return;
+    cur = n;
+    render();
+  }
+
+  prev.addEventListener('click', () => go(-1));
+  next.addEventListener('click', () => go(1));
+
+  document.addEventListener('keydown', (e) => {
+    if (e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); go(1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(-1); }
+    else if (e.key === 'Home') { e.preventDefault(); cur = 1; render(); }
+    else if (e.key === 'End') { e.preventDefault(); cur = total; render(); }
+  });
+
+  document.querySelectorAll('[data-goto]').forEach((el) => {
+    el.addEventListener('click', () => {
+      const n = Number(el.getAttribute('data-goto'));
+      if (Number.isInteger(n) && n >= 1 && n <= total) { cur = n; render(); }
+    });
+  });
+
+  render();
+})();
+</script>
+
+</body>
+</html>
