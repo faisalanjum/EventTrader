@@ -879,7 +879,7 @@ child_d:  delta_unique, fulfillment_cost, wage_inflation</div>
     <h3>build_tree.js — the conductor, with 3 modes</h3>
     <div class="kv">
       <div class="k"><code>{ list: true }</code></div><div class="v">Read-only: print the Sector → Industry → Ticker tree; fail loud if any company has two parents. Never merges.</div>
-      <div class="k"><code>{ fold: {...} }</code></div><div class="v">Merge specific children once → reconcile → repair → validate.</div>
+      <div class="k"><code>{ fold: {...} }</code></div><div class="v">Merge specific children once → reconcile → fold-check → repair → fold-check.</div>
       <div class="k"><code>{ walk: {...} }</code></div><div class="v">The full climb: fold every sector, then global. Every step fail-closed — one failure kills the whole run.</div>
     </div>
   </div>
@@ -1322,14 +1322,14 @@ Haiku    &#8594; noisy + breaks naming rules</div>
     <h3>Its three modes</h3>
     <div class="kv">
       <div class="k"><code>{ list: true }</code></div><div class="v">Read-only: print the Sector → Industry → Ticker tree and fail loudly if any company has two parents. Never merges.</div>
-      <div class="k"><code>{ fold: {…} }</code></div><div class="v">Do one merge: fold these children → reconcile → repair → validate.</div>
+      <div class="k"><code>{ fold: {…} }</code></div><div class="v">Do one merge: fold these children → reconcile → fold-check → repair → fold-check.</div>
       <div class="k"><code>{ walk: {…} }</code></div><div class="v">The full climb: fold every sector, then the global. Every step fail-closed.</div>
     </div>
   </div>
 
   <div class="panel green">
     <h3>The one rule it enforces</h3>
-    <p>For each level it runs fold → reconcile → repair → validate, and <b>one failure anywhere kills the whole run.</b> No level can be skipped, no "latest" guessing — you pass exact run IDs.</p>
+    <p>For each level it runs fold → reconcile → fold-check → repair → fold-check, and <b>one failure anywhere kills the whole run.</b> No level can be skipped, no "latest" guessing — you pass exact run IDs.</p>
   </div>
 </section>
 

@@ -1,10 +1,10 @@
 export const meta = {
   name: 'driver-build-tree',
-  description: 'Tree orchestrator (HierarchicalCatalogPlan §4/§6/§11.20). THREE modes via args: (1) { list: true } = READ-ONLY tree audit (join query; strict-tree fail-loud; audit/calibration only — never a production gate, does NOT fold). (2) { fold: { scope_name, scope_level: sector|global, children: [EXPLICIT run_ids] } } = Phase-1 single fold -> reconcile -> repair duplicates -> D8 validate, fail-closed. (3) { walk: { leaf_runs: {"<industry>": "<run_id>"}, taxonomy?: {"<sector>": ["<industry>", ...]}, require_complete?: bool } } = Phase-2 WALK-AND-FOLD: first runs the §13.2 duplicate-repair pass on EVERY industry leaf it will consume (owner 2026-06-11 — leaves are repaired BEFORE becoming fold inputs; optional walk.repair_args pass through to repair_duplicates.js), then folds each sector from its industry leaf runs, then the global from the sector outputs; taxonomy omitted -> discovered from Neo4j (join query, exact raw strings); require_complete=true -> a tree industry without a leaf run HARD-FAILS (production); false (default, calibration) -> sectors with missing leaves are SKIPPED with a loud log. Over-size = fold code warns, then reconcile slices all AI review into safe batch files. No "latest", no meaning, every step fail-closed.',
+  description: 'Tree orchestrator (HierarchicalCatalogPlan §4/§6/§11.20). THREE modes via args: (1) { list: true } = READ-ONLY tree audit (join query; strict-tree fail-loud; audit/calibration only — never a production gate, does NOT fold). (2) { fold: { scope_name, scope_level: sector|global, children: [EXPLICIT run_ids] } } = Phase-1 single fold -> reconcile -> D8 validate (pre-repair receipt) -> repair duplicates -> D8 validate, fail-closed. (3) { walk: { leaf_runs: {"<industry>": "<run_id>"}, taxonomy?: {"<sector>": ["<industry>", ...]}, require_complete?: bool } } = Phase-2 WALK-AND-FOLD: first runs the §13.2 duplicate-repair pass on EVERY industry leaf it will consume (owner 2026-06-11 — leaves are repaired BEFORE becoming fold inputs; optional walk.repair_args pass through to repair_duplicates.js), then folds each sector from its industry leaf runs, then the global from the sector outputs; taxonomy omitted -> discovered from Neo4j (join query, exact raw strings); require_complete=true -> a tree industry without a leaf run HARD-FAILS (production); false (default, calibration) -> sectors with missing leaves are SKIPPED with a loud log. Over-size = fold code warns, then reconcile slices all AI review into safe batch files. No "latest", no meaning, every step fail-closed.',
   phases: [
     { title: 'Stamp', detail: 'UTC stamp + input checks (fail-close)' },
     { title: 'Tree',  detail: 'taxonomy override OR read-only join-query discovery + strict-tree checks' },
-    { title: 'Folds', detail: 'per-level: fold_catalogs.js -> reconcile.js -> repair_duplicates.js -> validate --fold (each gate hard-fails the run)' },
+    { title: 'Folds', detail: 'per-level: fold_catalogs.js -> reconcile.js -> validate --fold (pre-repair receipt) -> repair_duplicates.js -> validate --fold (each gate hard-fails the run)' },
     { title: 'Measure', detail: 'OUTPUT-only run report (context sizes, collisions, verdicts) — batching never reads it' },
   ],
 }
@@ -45,7 +45,7 @@ If the printed errors list is NON-EMPTY, this is a STRICT-TREE failure — say s
   return { mode: 'list', report: out.report }
 }
 
-// ---------- shared fold step: fold_catalogs.js -> reconcile.js -> repair_duplicates.js -> validate --fold ----------
+// ---------- shared fold step: fold_catalogs.js -> reconcile.js -> validate --fold -> repair_duplicates.js -> validate --fold ----------
 const FV_SCHEMA = { type:'object', additionalProperties:false, required:['passed','output'], properties:{ passed:{type:'boolean'}, output:{type:'string'} } }
 async function runFold(scopeName, scopeLevel, children, utc) {
   if (children.length === 1) {
@@ -60,6 +60,17 @@ async function runFold(scopeName, scopeLevel, children, utc) {
     { parent_run_id: parent, scope_name: scopeName, scope_level: scopeLevel, children })
   log(`[${scopeLevel}:${scopeName}] fold: passthrough=${foldRes.passthrough} collisions=${foldRes.collisions} verdicts=${JSON.stringify(foldRes.verdict_counts)}`)
   const recRes = await workflow({ scriptPath: `${DIR}/workflows/reconcile.js` }, { run_id: parent })
+  // D8 PRE-REPAIR GATE (ordering fix 2026-06-12): repair-suggest's require_validated()
+  // demands a fold:true sidecar on any dir holding fold_manifest.json (fold_catalogs.py
+  // final-gate fix), but reconcile's Validate step is plain-mode (sidecar fold:false) —
+  // without this gate every fold parent fails-close at the repair step below. Repair then
+  // rewrites catalog/approved and re-validates plain-mode, so the post-repair D8 at the
+  // end is STILL required: it re-binds fold:true to the final bytes. Same command as the
+  // final gate; only the tee target + label differ (fold_validation.txt stays the post-repair truth).
+  const fvPre = await agent(`Run this EXACT Bash command (the D8 fold-level structure gate, PRE-REPAIR pass; writes fold_validation_prerepair.txt and reports the REAL exit code):
+${PY} ${DIR}/workflows/validate_catalog.py ${DIR}/runs/${parent}/seed.json ${DIR}/runs/${parent}/catalog.json ${DIR}/runs/${parent}/approved.json --fold ${children.map(c => `${DIR}/runs/${c}/catalog.json`).join(' ')} --review ${DIR}/runs/${parent}/same_name_review.json --sidecars ${DIR}/runs/${parent}/fold_sidecars.json | tee ${DIR}/runs/${parent}/fold_validation_prerepair.txt ; echo "exit=\${PIPESTATUS[0]}"
+Return passed = (exit==0) and output = the validator's verbatim output (trimmed to the failing checks if it failed). Do not fix anything. (validator rev3 — deep-variant legit set)`, {schema:FV_SCHEMA, model:'opus', label:`fold-validate-pre:${slug}`, phase:ph})
+  if (!fvPre.passed) throw new Error(`PRE-REPAIR FOLD VALIDATION FAILED for ${parent}: ${fvPre.output.slice(0, 800)}`)
   const repairRes = await workflow({ scriptPath: `${DIR}/workflows/repair_duplicates.js` }, { run_id: parent })
   const fv = await agent(`Run this EXACT Bash command (the D8 fold-level structure gate; writes fold_validation.txt and reports the REAL exit code):
 ${PY} ${DIR}/workflows/validate_catalog.py ${DIR}/runs/${parent}/seed.json ${DIR}/runs/${parent}/catalog.json ${DIR}/runs/${parent}/approved.json --fold ${children.map(c => `${DIR}/runs/${c}/catalog.json`).join(' ')} --review ${DIR}/runs/${parent}/same_name_review.json --sidecars ${DIR}/runs/${parent}/fold_sidecars.json | tee ${DIR}/runs/${parent}/fold_validation.txt ; echo "exit=\${PIPESTATUS[0]}"
@@ -129,7 +140,7 @@ phase('Folds')
 // §13.2 LEAF REPAIR (owner 2026-06-11): every industry catalog gets its own duplicate-repair
 // sweep BEFORE it becomes a fold input — covers both multi-leaf sector folds AND the
 // degenerate single-leaf passthrough (which feeds GLOBAL directly). Fold-level repair inside
-// runFold is unchanged (parents still repaired post-fold). Fail-close contract identical:
+// runFold still repairs parents post-fold. Fail-close contract identical:
 // a failed repair or its post-apply validation kills the walk. Optional A.walk.repair_args
 // (e.g. { batch_size: 10 } AFTER the C5 A/B passes) pass through; absent = today's defaults.
 const REPAIR_ARGS = (W.repair_args && typeof W.repair_args === 'object') ? W.repair_args : {}

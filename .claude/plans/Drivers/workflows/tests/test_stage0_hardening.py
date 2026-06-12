@@ -670,6 +670,17 @@ def test_require_validated_demands_fold_mode_for_fold_parents(tmp_path):
     require_validated(d)                              # D8-mode validation -> accepted
 
 
+def test_build_tree_fold_order_validates_fold_before_and_after_repair():
+    src = (WORKFLOWS / "build_tree.js").read_text()
+    rec = src.index("const recRes = await workflow({ scriptPath: `${DIR}/workflows/reconcile.js` }")
+    pre = src.index("fold_validation_prerepair.txt")
+    repair = src.index("const repairRes = await workflow({ scriptPath: `${DIR}/workflows/repair_duplicates.js` }")
+    final = src.index("const fv = await agent", repair)
+    assert rec < pre < repair < final
+    assert src.count("validate_catalog.py ${DIR}/runs/${parent}/seed.json") == 2
+    assert src.count("--fold ${children.map") == 2
+
+
 def test_require_validated_corrupt_sidecar_clean_message(tmp_path):
     d = tmp_path / "c"
     d.mkdir()

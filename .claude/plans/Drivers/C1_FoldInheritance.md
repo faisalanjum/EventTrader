@@ -34,7 +34,7 @@ Measured anatomy of one parent reconcile pass (real CAKE shape, 594 records, 3 b
 
 ## 3. How the fold actually works (verified facts the rule rests on)
 
-1. `runFold` per level: `fold_catalogs.js` (part-a → D5 same-name review → part-b) → `reconcile.js` (FULL) → `repair_duplicates.js` → `validate --fold` (D8). Identical at sector and global.
+1. `runFold` per level: `fold_catalogs.js` (part-a → D5 same-name review → part-b) → `reconcile.js` (FULL) → `validate --fold` (pre-repair receipt) → `repair_duplicates.js` → `validate --fold` (D8 final). Identical at sector and global.
 2. part-a: every cross-child name with **exactly 1 owner = passthrough** (record carried as `dict(r)` of the child's collapsed rep); **≥2 owners = queue** → D5 review (SAME union / DIFFERENT split / UNCLEAR park).
 3. `collapse_child` resolves each child's SAME_AS clusters into self-canonical reps (absorbing variant evidence) BEFORE classification — so "unchanged" must be defined against the checker's own recomputed rep, not raw child bytes (46% of real records differ from raw bytes on ref order alone; 185/573 are cluster reps).
 4. Dedup, gate, refute, blast-count, refute2 ALL read the SAME batch file (`${bf}`) — so C1 requires a second, gate-only file set; the dedup set must stay byte-identical.

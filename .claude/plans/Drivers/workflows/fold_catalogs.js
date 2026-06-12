@@ -1,6 +1,6 @@
 export const meta = {
   name: 'driver-fold',
-  description: 'Fold N child Driver catalogs into a parent SEED (HierarchicalCatalogPlan §2b/D5): deterministic combine (fold_catalogs.py part-a) → same-name review queue → AI review (SAME/DIFFERENT/UNCLEAR, evidence views via the §12.8 draw) → Refute on every SAME union (+ §11.18 perspective-forced 2nd Refute on high-blast fusions, AND-vote) → same_name_review.json → deterministic part-b writes the parent seed + fold_sidecars.json. Args = { parent_run_id, scope_name, scope_level: "sector"|"global", children: [child run_ids under runs/] }. The parent reconcile + fold validation run AFTERWARDS (build_tree.js).',
+  description: 'Fold N child Driver catalogs into a parent SEED (HierarchicalCatalogPlan §2b/D5): deterministic combine (fold_catalogs.py part-a) → same-name review queue → AI review (SAME/DIFFERENT/UNCLEAR, evidence views via the §12.8 draw) → Refute on every SAME union (+ §11.18 perspective-forced 2nd Refute on high-blast fusions, AND-vote) → same_name_review.json → deterministic part-b writes the parent seed + fold_sidecars.json. Args = { parent_run_id, scope_name, scope_level: "sector"|"global", children: [child run_ids under runs/] }. Parent reconcile + pre/post-repair fold validation run in build_tree.js.',
   phases: [
     { title: 'PartA',  detail: 'deterministic collapse + cross-child grouping + collision queue + SEED_MAX guard (code)' },
     { title: 'Draw',   detail: '§12.8 deterministic evidence views for every collision (code)' },
