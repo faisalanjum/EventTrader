@@ -370,6 +370,9 @@ Live coverage: `xbrl_qname` on 49% of updates, `concept_family` on 61%, the rest
    _normalize_qualitative + the collapse loop VERBATIM, with key = U54's tuple PLUS
    {company, basis_norm, segment_slug, canonical_unit, time_type}. NEVER fold xbrl_qname or anchor-id into the key
    (that re-splits genuine same-series updates). Keep U54's source priority (8k>transcript>10q>10k>news).
+   Query shape: follow `SAME_AS` to the Driver head, union all mapped Guidance anchors, filter updates by company,
+   partition by scope/basis/segment/unit/time type, `ORDER BY gu.given_date`, then feed rows through U54.
+   U54 de-dupes both cross-anchor twins and same-anchor multi-source duplicates.
 7. BORN-LINKED pointer (OPTIONAL): g.canonical_driver on the Guidance ANCHOR (class-level; never the GuidanceUpdate;
    never the label/label_slug). Make it a PURE DERIVATION of the edge (the unique canonical Driver whose
    MAPS_TO_GUIDANCE set contains this anchor), written by the same validator — ONE source of truth, never written
