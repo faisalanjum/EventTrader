@@ -1,6 +1,6 @@
 # DriverUpdate — Node Spec
 
-**Status (2026-06-14): core node/edge STRUCTURE locked (Design C). The `Driver` class fields are FINALIZED; the `DriverUpdate` + `EXPLAINED_BY` property names/meanings are still open (*working placeholders* — see §2 + Deferred). Nothing built — 0 `Driver` / `DriverUpdate` nodes in Neo4j.** This file records ONLY what is fully decided. (Owner-approved to write this one file; no other files touched.) **Update 2026-06-15 — the DriverUpdate CREATION CONTRACT is now locked: see §0 (catalog build = the complete Driver class [name + `fact_type` + optional links] in ONE run · producers create every DriverUpdate · no build-time seeder).**
+**Status (2026-06-14): core node/edge STRUCTURE locked (Design C). The `Driver` class fields are FINALIZED; the `DriverUpdate` + `EXPLAINED_BY` property names/meanings are still open (*working placeholders* — see §2 + Deferred). Nothing built — 0 `Driver` / `DriverUpdate` nodes in Neo4j.** This file records what is fully decided, plus clearly-labeled **Deferred** and **SUGGESTION-ONLY** sections (the latter explicitly NOT decided). (Owner-approved to write this one file; no other files touched.) **Update 2026-06-15 — the DriverUpdate CREATION CONTRACT is now locked: see §0 (catalog build = the complete Driver class [name + `fact_type` + optional links] in ONE run · producers create every DriverUpdate · no build-time seeder).**
 
 ---
 
@@ -67,7 +67,7 @@ This mirrors the **Guidance** pattern (class node + per-event instances, code-bu
 
 | Piece | What it is | Built by |
 |---|---|---|
-| `Driver` (node, class) | the reusable named cause; name + `fact_type` + `aliases` + optional XBRL/guidance link **on the class** | catalog pipeline |
+| `Driver` (node, class) | the reusable named cause; name + `fact_type` + reversible `SAME_AS` edges (exact-duplicate names; both nodes survive) + optional XBRL/guidance link **on the class** | catalog pipeline |
 | `DriverUpdate` (node, instance) | one per-event **fact** about a driver (state/change/surprise/guidance/action + size + quote — never a mere mention) | **a producer ONLY** — live or backfill; never the catalog build (§0) |
 | `EXPLAINED_BY` (edge `Event → DriverUpdate` = the verdict) | the causal verdict, in the edge's properties | a producer, only when a stock move is judged |
 | `Event`, `Company` (existing nodes) | the source + the company; the **return** lives on the `Event → Company` edge | the existing pipeline |
@@ -81,12 +81,12 @@ This mirrors the **Guidance** pattern (class node + per-event instances, code-bu
 | field | what it means | keep |
 |---|---|---|
 | `id` | code-built stable key (e.g. `driver:same_store_sales`) | ✅ |
-| `name` | the canonical lower_snake driver name | ✅ |
-| `aliases` | the **SAME_AS** variant names — reversible, both survive; one-hop read-through. **NOTE: our formal SAME_AS set, NOT Guidance's loose "aliases."** | ✅ |
+| `name` | the lower_snake `driver_name` of THIS node — a `SAME_AS` head IS the canonical name; a `SAME_AS` variant node keeps its own name | ✅ |
 | `created` | when the driver first appeared | ✅ |
 | `definition` | a plain one-line meaning of the driver — **optional / nullable** | ⚪ |
 | `fact_type` | the driver's permanent KIND — one of `metric` / `guidance` / `surprise` / `action_event` (routes the DriverUpdate `state`; enum + definitions LOCKED 2026-06-15 — see the fact_type lock section) | ✅ |
 
+**`SAME_AS` lives as an EDGE between `Driver` nodes (NOT a property — see §3):** exact-duplicate driver names stay as SEPARATE `:Driver` nodes (each keeps its OWN evidence via its own `DriverUpdate`s) joined by a reversible `(:Driver)-[:SAME_AS]->(:Driver)`. **No `aliases` property** (a flat array couldn't hold each variant's evidence).
 **Excluded:** no `evhash16` on the class (it is never re-extracted → nothing to change-detect; Guidance's anchor has none either).
 **Optional links (edges, an OPTIONAL best-effort FINAL step of the catalog-creation run — non-blocking; self-heal on re-run):** `Driver-[:MAPS_TO_CONCEPT]->Concept` · `-[:MAPS_TO_MEMBER]->Member` · `-[:MAPS_TO_GUIDANCE]->Guidance`.
 
@@ -94,8 +94,8 @@ This mirrors the **Guidance** pattern (class node + per-event instances, code-bu
 
 | field (placeholder name) | what's decided | structural role decided? |
 |---|---|---|
-| `driver_state` | the driver's event-level **state/outcome** for this fact (not only a direction); lives here, **never in the name** | ✅ vocabulary LOCKED (see §2-state); field NAME still a placeholder |
-| `magnitude_value` + `magnitude_unit` | the **driver's own** number/size for this fact (NOT the stock effect); **nullable** | ⏳ precise definition deferred |
+| `driver_state` (placeholder name; = the locked `state` field) | the driver's event-level **state/outcome** for this fact (not only a direction); lives here, **never in the name** | ✅ vocabulary LOCKED (see the *fact_type + state-words* section, item 2); field NAME still a placeholder |
+| number fields `level_*` / `change_*` / `comparison_*` | the **driver's own** number/size for this fact (NOT the stock effect) — explicit LEVEL / CHANGE / COMPARISON, **all nullable** (defined in the *fact_type + state-words* section, item 3) | ⏳ field SET defined there; exact NAMES + store-vs-derive still open |
 | `quote` | verbatim source text; stored ONLY when the source gives a real state/value/change (never a bare mention) | ✅ |
 | `source_type` · `date` · `created` | provenance · statement-time · write/merge-time | ✅ |
 | `fact_scope` | which *version* of this driver-fact inside the event (period / segment / geography / store-type, or a normalized-quote hash) — part of the key; **identity-only, never in `Driver.name`** | ✅ |
@@ -118,12 +118,14 @@ This mirrors the **Guidance** pattern (class node + per-event instances, code-bu
 | edge | from → to | meaning | when |
 |---|---|---|---|
 | `OF_DRIVER` | `DriverUpdate` → `Driver` | this fact is an instance of this driver | always (exactly 1) |
+| `SAME_AS` | `Driver` (variant) → `Driver` (head) | the two names are the SAME reusable cause; reversible, both nodes survive | when reconcile/repair confirms EXACT-same meaning (0..1 out per node) |
 | `FROM_SOURCE` | `DriverUpdate` → `Event` | this fact came from this event (evidence) | always — every `DriverUpdate` is event-sourced |
 | `EXPLAINED_BY` {verdict} | `Event` → `DriverUpdate` | this event's move is explained by this fact | 0, or 1 per producer |
 | `INFLUENCES` / `PRIMARY_FILER` {returns} | `Event` → `Company` | the realized stock move (existing edge) | existing |
 
+- **`SAME_AS` is reversible and STAR-shaped** — a variant points to its canonical head only (**no chains**, never re-points the head, **never a destructive node merge**); the head is self-canonical (no outgoing `SAME_AS`). Read-through / trading **follows `SAME_AS`** to the head and unions the star's evidence + `DriverUpdate`s. Mirrors the catalog's `canonical_name` pointer + the root's `same_as_variants[]`, so each variant keeps its OWN evidence (never flattened into one node).
 - **`FROM_SOURCE` and `EXPLAINED_BY` are SEPARATE edges** (a fact can be *reported* in an event without *explaining* its move) — never collapse the verdict onto the provenance edge.
-- **No `BASED_ON`.** Trends are **queried** (each fact's `driver_state` gives the state/outcome and `magnitude`/numbers the value), never stored as links.
+- **No `BASED_ON`.** Trends are **queried** (each fact's `driver_state` gives the state/outcome and its number fields — level/change/comparison — the value), never stored as links.
 - **The same event-level fact reported in different events** = **separate `DriverUpdate`s** (keyed by event); collapsed in **read-time views**, never in storage.
 - **Multiple producers** (if the one-producer-per-event invariant ever breaks) → **parallel `EXPLAINED_BY` edges keyed by producer** — supported here (the DB already runs relationship-uniqueness constraints with composite keys).
 - **Scoring** a verdict is local to the event: at the `Event`, its `EXPLAINED_BY` verdicts and its `INFLUENCES`/`PRIMARY_FILER` return both hang off the same node — compare directly.
@@ -150,7 +152,7 @@ Every `DriverUpdate` is **persisted, including a driver's first appearance** —
 
 ## 7. How the catalog build feeds this
 
-The catalog build **only creates/reuses `Driver` names** (the class) — it **never mints a `DriverUpdate`** (the locked contract, §0). Its `evidence_refs` (driver · company · event · date · quote — KPI-only evidence has no real `Event`/date and never feeds a `DriverUpdate`, §0 point 4) are **mentions** that justify and let producers reuse a name; they are **not** event-level facts and carry no `driver_state` / `magnitude`. The **producers** (earnings-learner / news-driver) are the sole creators of `DriverUpdate`s — judging the real event-level fact + its state/size, and (when attributed) the `EXPLAINED_BY` verdict — in both **live** processing and a **historical backfill** over the same source events. To populate history early, run the producer as a **backfill** (§0 point 7); do **not** add a build-time detector (§0 point 5).
+The catalog build **only creates/reuses `Driver` names** (the class) — it **never mints a `DriverUpdate`** (the locked contract, §0). Its `evidence_refs` (driver · company · event · date · quote — KPI-only evidence has no real `Event`/date and never feeds a `DriverUpdate`, §0 point 4) are **mentions** that justify and let producers reuse a name; they are **not** event-level facts and carry no `driver_state` / number fields. The **producers** (earnings-learner / news-driver) are the sole creators of `DriverUpdate`s — judging the real event-level fact + its state/size, and (when attributed) the `EXPLAINED_BY` verdict — in both **live** processing and a **historical backfill** over the same source events. To populate history early, run the producer as a **backfill** (§0 point 7); do **not** add a build-time detector (§0 point 5).
 
 ## 8. Full shape (annotated — *all field names are placeholders*)
 
@@ -158,7 +160,8 @@ The catalog build **only creates/reuses `Driver` names** (the class) — it **ne
                 ┌──────────────────────────────────────────────┐
                 │ ( :Driver )   — reusable cause (the "class")    │
                 │    id  "driver:<slug>" · name "same_store_sales"│
-                │    aliases [ … ]                       │
+                │    fact_type  permanent KIND (4 values, §2)     │
+                │    ─[:SAME_AS]→ head (edge, §3)        │
                 │    (+ optional XBRL/guidance link ON THE CLASS) │
                 └────────────────────▲──────────────────────────┘
                                      │  :OF_DRIVER  (always · 1)
@@ -167,8 +170,8 @@ The catalog build **only creates/reuses `Driver` names** (the class) — it **ne
    │    id  code-built: event + driver + fact_scope   (NO producer)        │
    │    evhash16  value-hash of the fact payload                           │
    │    driver_state     state/outcome     (NEVER in the name)             │
-   │    magnitude_value  driver's OWN number/size        (nullable)        │
-   │    magnitude_unit                                   (nullable)        │
+   │    level_* / change_* / comparison_*  driver's OWN numbers (nullable) │
+   │    fact_scope  which version of the fact in this event (key part)     │
    │    quote · source_type · date · created                              │
    │    ⚠ ALL field names = working placeholders (name + meaning TBD)      │
    └────┬─────────────────────────────────────────────────────▲──────────┘
@@ -280,15 +283,15 @@ So catalog creation outputs the **complete Driver CLASS** (name + `fact_type` + 
 **Still OPEN — only the number layer + a few field details** (also in Deferred):
 1. **COMPARISON fields** — *store* the prior baseline on each update (leaning; verifiable + self-contained) vs *derive* it from the prior update (leaner).
 2. **Number field names** — `level_value` / `change_value` / … kept as written (leaning) vs shorter.
-3. Exact **DriverUpdate field NAMES** (`driver_state` / `magnitude_*` are still placeholders), `weightage` scale, `confidence` scale, and `id` key formats.
+3. Exact **DriverUpdate field NAMES** (`driver_state` and the `level_*`/`change_*`/`comparison_*` number fields are still placeholder names), `weightage` scale, `confidence` scale, and `id` key formats.
 
 ---
 
 ## Deferred — NOT decided yet (listed only so they aren't built prematurely or forgotten)
 
-1. **Number layer + exact field NAMES (the next pass):** the `state` *vocabulary* is LOCKED, but the DriverUpdate *field names* (`driver_state` / `magnitude_*`) are still placeholders, and these remain to finalize: `magnitude` precise definition **and** the type-gating-vs-XBRL rule (**store the number for now**; switch to null-and-link only once an XBRL linking pass + a link-checking validator exist, or the value is lost) · `weightage` scale/normalization · `confidence` scale + how it differs from `weightage`.
+1. **Number layer + exact field NAMES (the next pass):** the `state` *vocabulary* is LOCKED, but the DriverUpdate *field names* (`driver_state` and the `level_*`/`change_*`/`comparison_*` number fields) are still placeholders, and these remain to finalize: the COMPARISON store-vs-derive choice **and** the type-gating-vs-XBRL rule (**store the number for now**; switch to null-and-link only once an XBRL linking pass + a link-checking validator exist, or the value is lost) · `weightage` scale/normalization · `confidence` scale + how it differs from `weightage`.
 2. **Exact `id` key strings** — the principle is locked (§4: fact = event + driver + `fact_scope`; verdict = + producer); the literal format is a build detail.
-3. **TODO:** wire **the producer** to extract `state` (vocabulary LOCKED — ready) + `magnitude` (waits on #1) when it makes a `DriverUpdate` (never the catalog build, §0).
+3. **TODO:** wire **the producer** to extract `state` (vocabulary LOCKED — ready) + the number fields (level/change/comparison; waits on #1) when it makes a `DriverUpdate` (never the catalog build, §0).
 
 *Naming note: the verdict is the `EXPLAINED_BY` edge (`Event → DriverUpdate`) — "attribution," the term chosen over "impact"; in this design there is no separate verdict node.*
 
@@ -296,7 +299,7 @@ So catalog creation outputs the **complete Driver CLASS** (name + `fact_type` + 
 
 ## STILL OPEN — TO BE DECIDED / FLESHED OUT LATER · SUGGESTION ONLY — Link `fact_type:guidance` Drivers → existing `Guidance` nodes
 
-> **Status: STILL OPEN — TO BE DECIDED / FLESHED OUT LATER. SUGGESTION ONLY — nothing in this ENTIRE section (EVERY subsection below: the contract, resolver, redesign verdict, downside check, owner decisions) is decided, locked, or built.** ONE option for how a `fact_type:guidance` Driver could attach to the existing production Guidance graph (**548 `Guidance` + 8,432 `GuidanceUpdate`** nodes). Read-only investigation 2026-06-15 (mapping subagents + live Neo4j). **Nothing built; the Guidance pipeline is NOT changed by this; the locked fact_types + state lists above are NOT touched.**
+> **Status: STILL OPEN — TO BE DECIDED / FLESHED OUT LATER. SUGGESTION ONLY — nothing in this ENTIRE section (EVERY subsection below: the contract, resolver, redesign verdict, downside check, owner decisions) is decided, locked, or built.** ONE option for how a `fact_type:guidance` Driver could attach to the existing production Guidance graph (**548 `Guidance` + 8,432 `GuidanceUpdate`** nodes). Read-only investigation 2026-06-15 (mapping subagents + live Neo4j). **Nothing built; the Guidance pipeline is NOT changed by this; the locked fact_types + state lists above are NOT touched.** **Resolver design FINALIZED to a NO-list, fully-automatic form + MEASURED 2026-06-15 (see "Measured validation"); still SUGGESTION-ONLY — nothing built.**
 
 ### Why this is even possible
 A `Guidance` node IS conceptually a `fact_type:guidance` Driver — a thin, **cross-company, value-free metric tag** (`{id:"guidance:revenue", label, aliases:[40+ phrasings], created_date}`), shared by all companies, identified ONLY by `label_slug = slug(label)`. The per-event values/company/period/concept live on `GuidanceUpdate` (edges: `UPDATES→Guidance`, `FOR_COMPANY`, `FROM_SOURCE`, `HAS_PERIOD`, `MAPS_TO_CONCEPT` 0..1, `MAPS_TO_MEMBER` 0..N). **The guidance pipeline never enforced dedup** (reuse is a prompt-hint, query 7A) → it fragmented into 548 leaky synonyms. **Our Driver catalog is the canonicalization layer it lacks** (Driver↔Guidance-anchor = class↔class; DriverUpdate↔GuidanceUpdate = instance↔instance).
@@ -314,46 +317,90 @@ BUT three deterministic traps (no clean 100% key exists):
 ```
 Live coverage: `xbrl_qname` on 49% of updates, `concept_family` on 61%, the rest slug-only. Match test of our 40 restaurant guidance drivers: **24/40 (60%) link via slug+aliases alone**; concept + base-metric strip reaches ~85%.
 
+### Verified live (2026-06-15, direct Neo4j queries + Python — empirical backbone)
+- **Shape solid:** 548 `Guidance` / 8,432 `GuidanceUpdate`; **every** update has exactly one `UPDATES`/`FOR_COMPANY`/`HAS_PERIOD`/`FROM_SOURCE` edge + a `given_date` (100%). Anchor props = `{id,label,aliases,created_date}` only — **no `label_slug`**; `id == "guidance:"+slug(label)` for **all 548** → the slug join is a perfect anchor↔updates key, so the (driver+company)→timeseries query is a clean 2-hop MATCH.
+- **Why auto-alias is unsafe:** **227** alias→*different-existing-anchor* collisions; **84** pass a global-uniqueness guard yet still mislink (e.g. `guidance:revenue` lists alias `"custodial revenue"` while `guidance:custodial_revenue` is its own anchor); **161** victim anchors; **216** anchors involved overall.
+- **Why auto-qname is unsafe:** one shared qname spans many anchors — `EarningsPerShareDiluted`→**11**, `RevenueFromContract…`→**9** (incl. `subscription_revenue`, `ai_revenue` — *not* synonyms of revenue).
+- **Why SET-REPLACE is needed:** the additive-stale-edge pattern already exists in concept links (2 updates with >1 distinct concept qname; 7 edge-without-property; the writer has zero DELETE) — re-resolution must replace, not append.
+- **Not built yet:** 0 `Driver` / 0 `DriverUpdate` / 0 `MAPS_TO_GUIDANCE` (the Driver side is unbuilt by design — this contract is the build recipe, not a description of something live).
+
 ### The honest answer on "100% reliable + minimal"
-**No fully-deterministic 100% shortcut exists** — synonym-collapse is irreducibly part-deterministic, part-judgment (same reason the guidance pipeline's own deterministic reuse leaked).
+**No fully-deterministic 100% shortcut exists** (synonym-collapse is part-judgment), but the no-list design gets close — see **Measured validation** below: **~98–100% precision** (0 wrong links in the objective test) at **~85–96% coverage**. The irreducible gap is metrics with **no Guidance anchor at all** (`four_wall_margin`, `store_week`) → correctly left unlinked.
 
-| meaning of "reliable" | achievable? | cost |
-|---|---|---|
-| **No wrong links** (fail-closed) | **Yes, deterministically — ~75–80%** coverage (all high-value metrics: revenue·eps·capex·tax·op-income) | **zero** guidance change, zero judgment |
-| **Ideally-ALL coverage** | needs a G2/Refute dedup judgment for the fuzzy residual (comp-sales, GAAP/non-GAAP) → ~**95%** | a **CONTINUOUS resolver** (re-runs as the guidance set grows — NOT a one-time pass; the 548 are a live, expanding subset), reusing our existing G2/Refute |
-| true 100% | **impossible** — ~5% (`four_wall_margin`, `store_week`) have **no Guidance node**; correctly left unlinked | — |
+### The minimal contract — no-list design, MEASURED 2026-06-15 (still SUGGESTION-ONLY)
+```
+1. LINK = Driver -[:MAPS_TO_GUIDANCE]-> Guidance   (class↔anchor, MATCH-only, ONE-TO-MANY)
+     - one-to-many because guidance fragmented: revenue_guidance unions guidance:revenue AND guidance:net_sales
+     - a scalar guidance_ref would drop synonym anchors → lose updates → use the EDGE SET
+2. RESOLVER (fail-closed; NO hardcoded list — fully automatic, generalizes to any future anchor):
+     a. EXACT SLUG (deterministic spine) — link iff Guidance.id == "guidance:" + slug(strip "_guidance" from driver_name).
+        Holds for all 548 anchors. Anchor has NO label_slug property → read the slug from g.id; call guidance_ids.slug()
+        VERBATIM (never re-implement). Zero wrong links, zero maintenance.
+     b. EVIDENCE JUDGE (ONE generic LLM, fail-closed) — retrieve candidate anchors (name-similar + co-filed + same-XBRL),
+        the judge PROPOSES which are the SAME metric, then an adversarial Refute drops any that don't clearly survive.
+        It reasons ONLY from each anchor's REAL DATA — its unit + a few sample VALUES (co-filing & XBRL as hints only),
+        NEVER from the name. GENERIC principles, NO examples, NO list:
+          • same THING in the same FORM; a $/count QUANTITY ≠ a %/x RATE or RATIO (an anchor labeled "...sales" that
+            HOLDS +2-3% IS a growth % — judge by the values, not the label);
+          • GAAP ≠ adjusted/non-GAAP/core; a sub-scope/segment ≠ the whole; net ≠ gross; diluted ≠ basic.
+        Default keep-UNLINKED on any doubt. AUTOMATED — humans only in first-industry calibration, hands-off at scale.
+     c. else: leave UNLINKED + record conflict.   (MATCH-not-MERGE → a bad ref makes NO edge, never a new node.)
+   ⛔ NO curated/synonym list, NO hardcoded examples, NO auto alias-match, NO auto qname-match — each is either a
+      maintenance burden or proven UNSAFE on live data (227 alias→other-anchor collisions, 84 defeating a uniqueness
+      guard; one qname spans 9–11 anchors incl. GAAP+non-GAAP). The judge reproduces every true synonym
+      (revenue↔net_sales, capex↔capital_expenditures) FROM DATA, so a list is redundant — and a curated entry had
+      caused a false positive (unit_development→new_store_openings). Fully automatic: the judge reads whatever live
+      anchors exist → it generalizes to every present + future metric with nothing to maintain.
+3. SET-REPLACE every (continuous) re-run: DELETE MAPS_TO_GUIDANCE edges no longer in the resolver output, then write
+   the current set. (Additive MERGE alone leaves stale edges — the same pattern already exists in concept links.)
+4. VALIDATORS (guidance-link-specific; zero-judgment HARD-FAIL):
+     - target Guidance anchor EXISTS (MATCH-only; never created)
+     - live MAPS_TO_GUIDANCE edge-set == current resolver output (the set-replace proof)
+     - NO relabeling: the pass never changes any Guidance.label / label_slug
+     - REVERSE UNIQUENESS: resolve every incoming source Driver through SAME_AS to its head → each anchor has
+       ≤1 distinct canonical head (else HARD-FAIL → leave unlinked, record conflict). No physical reverse edge needed.
+     (NOTE: "company actually reports it" + "edge==xbrl_qname" are XBRL CONCEPT-link validators — they belong to the
+      SEPARATE MAPS_TO_CONCEPT work, NOT to this guidance link.)
+5. INSTANCE link (DriverUpdate ↔ GuidanceUpdate) = producer/backfill work, NOT a Driver-class link.
+     (Producer note: guidance `introduced` = first/new for (company, metric, period, basis, segment), NOT "first time
+      the Driver ever existed"; raised/lowered/reaffirmed judged from the quote + prior Guidance value-history.)
+6. TIMESERIES UNION DEDUP (a Driver unions synonym anchors → one series): REUSE guidance's U54 read-time collapse —
+   do NOT hand-roll a key. Partition the unioned rows into series buckets WITHOUT metric_id (so revenue+net_sales
+   twins meet), and adapt resolve_unit_groups the same way; then reuse _canonical_numeric_signature /
+   _normalize_qualitative + the collapse loop VERBATIM, with key = U54's tuple PLUS
+   {company, basis_norm, segment_slug, canonical_unit, time_type}. NEVER fold xbrl_qname or anchor-id into the key
+   (that re-splits genuine same-series updates). Keep U54's source priority (8k>transcript>10q>10k>news).
+7. BORN-LINKED pointer (OPTIONAL): g.canonical_driver on the Guidance ANCHOR (class-level; never the GuidanceUpdate;
+   never the label/label_slug). Make it a PURE DERIVATION of the edge (the unique canonical Driver whose
+   MAPS_TO_GUIDANCE set contains this anchor), written by the same validator — ONE source of truth, never written
+   independently. The relabel ban stays (changing label_slug breaks all guidance machinery — see Downside check).
 
-### The proposed minimal contract (the suggestion)
+SAFETY NOTE: a MISSED link is a safe GAP (under-merge) — fixable by a later re-resolution or fresh rebuild; it is NOT
+silently-wrong data, and it is NOT "recovered by U54" (U54 only de-dupes anchors ALREADY linked; it cannot see an
+anchor that was never linked). An OVER-merge (a WRONG link) is the dangerous, hard-to-undo case — which is exactly why
+alias/qname are demoted to evidence and the resolver stays fail-closed.
 ```
-1. Link = Driver -[:MAPS_TO_GUIDANCE]-> Guidance   (class↔anchor, MATCH-only, ONE-TO-MANY)
-     - one-to-many because of fragmentation: capex_guidance → guidance:capex AND guidance:capital_expenditures
-     - a scalar guidance_ref would drop the synonym anchors → lose updates → use the EDGE SET
-2. Resolver order (fail-closed — PRECISE key first; the fuzzy key only EXPANDS, never decides):
-     a. exact slug match (strip _guidance; guidance's EXACT slug(): sga→sg_a, d&a→d_a) → the PRIMARY anchor.
-        Precise by construction: the slug carries the modifier, so adjusted_eps→guidance:adjusted_eps, NEVER guidance:eps.
-     b. approved override map (curated, for known wording gaps: unit_development→guidance:new_store_openings)
-     c. exact-qname EXPANSION (NOT a primary decision): only AFTER a modifier guard, ADD synonym anchors that
-        share the exact qname AND the same adjusted/non_gaap/diluted modifier (capex → also guidance:capital_expenditures).
-        Used only to EXPAND the link set — never to decide a link from scratch (qname over-merges GAAP/non-GAAP).
-     d. unique alias (exactly one target)
-     e. [ideally-all only] G2/Refute judgment (the existing dedup) for the fuzzy residual
-     f. else: leave unlinked, record conflict   (NEVER create a Guidance node — MATCH only)
-3. Instance link (DriverUpdate ↔ GuidanceUpdate) = producer/backfill work, NOT a Driver-class link
-     (only the producer knows event/source/period/basis/segment)
-4. State clarification: guidance `introduced` = first/new for (company, metric, period, basis, segment),
-     NOT "first time the Driver ever existed". raised/lowered/reaffirmed are judged by the producer from
-     the quote + the prior Guidance value-history (the Guidance graph stores values, not the raised/lowered enum).
-5. Guidance pipeline: UNCHANGED.  OPTIONAL future ("born-linked" — zero IMPACT on guidance's machinery, see "Downside check"):
-     the guidance writer stamps a SEPARATE pointer `g.canonical_driver = "driver:…"` **on the `Guidance` ANCHOR (the
-     class — NOT on `GuidanceUpdate`/the per-event instance)**, computed by the same resolver against our vocab. The
-     mapping is identical for every one of an anchor's updates, so it is a CLASS↔CLASS fact (matching the
-     `Driver -[:MAPS_TO_GUIDANCE]-> Guidance` edge in §1; only the *concept* qname is per-`gu`, the *canonical driver* is not).
-     It does NOT touch the guidance `label`/`label_slug`, so XBRL resolution, segments, idempotency (the slug-keyed MERGE),
-     and grouping are ALL untouched.
-     ⛔ Do NOT instead make guidance ADOPT our names INTO the `label` (a "relabel") — that changes the slug and
-     breaks the slug-keyed machinery (see Downside check). The separate pointer gives "born-linked" with **no impact on
-     guidance's machinery; the only residual risk is a WRONG match, held to zero by keeping the resolver FAIL-CLOSED**.
-```
+
+### Measured validation (2026-06-15 — offline harness, NO production change)
+Ran the EXACT resolver above (slug + evidence-judge + Refute, **no list**) as the PREDICTION over **37 guidance-suffixed driver names** (from saved restaurant runs) × the **548 live anchors**, graded against TWO independent golds:
+
+| gold | precision | recall | meaning |
+|---|---|---|---|
+| **Objective-only** (data rules · ZERO LLM) | **100%** — 0 wrong / 87 hard pairs | n/a | the algorithm **never** linked an objectively-different anchor (wrong unit-class, or GAAP-vs-adjusted) |
+| **Independent 3-lens panel** (+ objective overrides) | 91% raw → **~98%** after removing visible panel errors | 77% raw → **~85%** | the panel itself wrongly dropped some drivers' OWN exact-name anchors → *it*, not the algorithm, caused most "misses" |
+
+> **What the two precision numbers mean (do not over-read the 100%):** the **100%** covers only *blatant* wrong links — a $-metric tied to a %-metric, or GAAP tied to adjusted — of which there were **zero**. It does **NOT** prove the *subtle scope* calls (e.g. `cost_inflation` = all costs vs the narrower `input_cost_inflation` = inputs only). Counting those too, **overall precision ≈ 98%** — one known slip (`cost_inflation`→`input_cost_inflation`, a sub-scope over-reach). So: **flawless on obvious errors, ~98% once fine-grained scope is included.**
+
+- **The earlier precision leak is FIXED:** giving the judge each anchor's **unit + sample values** makes it correctly union the whole comparable-/same-store-sales family (it sees they all hold +2–3% → one metric) — the case that capped a prior run at 86%. **Evidence beat labels, with no list.**
+- **One-to-many works** (13 drivers union true synonyms, e.g. `capex`→{capex, capital_expenditures}); **many-to-one (8)** is ONLY the un-deduped driver NAMES (4 spellings of capex) → fixed upstream by the catalog's SAME_AS collapse, not by the link.
+- **Every recall miss is a SAFE under-link** — a minor true synonym (`eps`↛`reported_eps`) or a fail-closed scope call (`domestic_same_store_sales` left unlinked) → an empty/short series, never wrong data.
+
+**Limitations / NOT tested (read before trusting the numbers):**
+- Drivers are **restaurant-derived only** (37 names) vs all-industry anchors — indicative, not universal.
+- The panel gold is **partly LLM** and made ~6 visible errors; the **objective-only gold (no LLM) is the trustworthy floor — 0 wrong links in 87 hard cases**. No human-labeled gold exists, so the ~85% recall is measured against an imperfect gold.
+- The judge ran on a **retrieved candidate pool** (made generous, but recall is capped by retrieval).
+- **Class-level link only.** NOT tested: instance-level `DriverUpdate↔GuidanceUpdate`, the live-producer path, SAME_AS driver-name dedup (assumed upstream), and continuous-resolver behavior as the 548-anchor set grows.
+- **Nothing is built** (0 `Driver` / 0 `MAPS_TO_GUIDANCE`) — this is a recipe + offline harness, not a production result.
 
 ### What this does NOT change
 - The 4 `fact_type`s and all 4 `state` lists stay exactly as locked above.
@@ -361,7 +408,7 @@ Live coverage: `xbrl_qname` on 49% of updates, `concept_family` on 61%, the rest
 - The `_guidance` name suffix stays (it disambiguates the guidance Driver from the `metric` Driver under dual-framing); only the *resolver* strips it.
 
 ### Guidance-redesign verdict — NOT worth it (canonicalize on OUR side)
-Do **NOT** re-architect the Guidance extraction pipeline. Its fragmentation is **per-company-consistent** (each company's guidance is stable; reuse 7A holds) and only hurts **cross-company aggregation** — which is exactly **our** Driver-catalog's job, not the guidance system's. For its own purposes (per-company tracking, the period-grouped renderer, per-company prediction) it is **good-enough**; a rebuild is high-cost / high-risk for low gain and would **duplicate** the canonicalization our catalog already provides. Division of labor: **Guidance extracts (per-company values/periods/XBRL) · our catalog canonicalizes (cross-company) · the resolver bridges them.** Because the Guidance set is a **live, growing subset**, the link must be a **continuous read-only resolver** (never a one-time dedup). The only worthwhile future integration (small, not a redesign): the guidance writer stamps a **separate `g.canonical_driver` pointer on the `Guidance` ANCHOR** (class-level, computed against our canonical vocab) so new nodes are **born-linked** — **WITHOUT changing the guidance `label`** (contract §5; zero impact on guidance's labels/slugs/XBRL/segments/IDs/grouping by construction, as long as the resolver stays fail-closed — see below).
+Do **NOT** re-architect the Guidance extraction pipeline. Its fragmentation is **per-company-consistent** (each company's guidance is stable; reuse 7A holds) and only hurts **cross-company aggregation** — which is exactly **our** Driver-catalog's job, not the guidance system's. For its own purposes (per-company tracking, the period-grouped renderer, per-company prediction) it is **good-enough**; a rebuild is high-cost / high-risk for low gain and would **duplicate** the canonicalization our catalog already provides. Division of labor: **Guidance extracts (per-company values/periods/XBRL) · our catalog canonicalizes (cross-company) · the resolver bridges them.** Because the Guidance set is a **live, growing subset**, the link must be a **continuous read-only resolver** (never a one-time dedup). The only worthwhile future integration (small, not a redesign): the guidance writer stamps a **separate `g.canonical_driver` pointer on the `Guidance` ANCHOR** (class-level, computed against our canonical vocab) so new nodes are **born-linked** — **WITHOUT changing the guidance `label`** (contract item 7; zero impact on guidance's labels/slugs/XBRL/segments/IDs/grouping by construction, as long as the resolver stays fail-closed — see below).
 
 ### Downside check on the "born-linked" integration (adversarially verified 2026-06-15, executed vs live code)
 Checked 6 ways it could harm guidance EXTRACTION (12-agent workflow). **Every downside traces to ONE root: if guidance ADOPTS our driver name INTO its `label`, the `slug` changes — and `label_slug` drives everything** (the XBRL concept resolver `CONCEPT_CANDIDATES.get(label_slug)`; segment placement; the MERGE idempotency key `gu:source:label_slug:period:basis:segment`; renderer/U54 grouping).
@@ -375,12 +422,13 @@ Checked 6 ways it could harm guidance EXTRACTION (12-agent workflow). **Every do
 | **Nomenclature** | `_guidance` suffix + R9 brand violate guidance's label contract | **HIGH** | no |
 | Downstream | grouping/U54 ripple if the slug changes (evhash16 excludes label → safe) | medium | no |
 
-**Every downside is AVOIDABLE; none is unavoidable** — and **all vanish** in the **separate-pointer** form (contract §5): a write-time **`g.canonical_driver` on the `Guidance` ANCHOR (class-level — NOT on `GuidanceUpdate`/the instance)** that never changes the `label`/`slug` → all six machinery dimensions = **zero impact by construction**. (The only residual risk is a *wrong* `canonical_driver` match — held to zero by keeping the resolver **FAIL-CLOSED**: unsure → leave unlinked. So "zero impact on guidance's labels/slugs/XBRL/segments/IDs/grouping", not "zero risk of a wrong link".) The pointer form does NOT dedup guidance's *internal* labels (`revenue` vs `net_sales` stay separate anchors), but that fragmentation never hurt guidance's own purposes and both anchors point to our one canonical driver. The **relabel** form is NOT worth it — it needs ≥3 guardrails (strip `_guidance` · split brand/segment back out · keep reuse a PREFERENCE not a filter · company-own-history wins for slug stability) for dedup guidance doesn't need.
+**Every downside is AVOIDABLE; none is unavoidable** — and **all vanish** in the **separate-pointer** form (contract item 7): a write-time **`g.canonical_driver` on the `Guidance` ANCHOR (class-level — NOT on `GuidanceUpdate`/the instance)** that never changes the `label`/`slug` → all six machinery dimensions = **zero impact by construction**. (The only residual risk is a *wrong* `canonical_driver` match — held to zero by keeping the resolver **FAIL-CLOSED**: unsure → leave unlinked. So "zero impact on guidance's labels/slugs/XBRL/segments/IDs/grouping", not "zero risk of a wrong link".) The pointer form does NOT dedup guidance's *internal* labels (`revenue` vs `net_sales` stay separate anchors), but that fragmentation never hurt guidance's own purposes and both anchors point to our one canonical driver. The **relabel** form is NOT worth it — it needs ≥3 guardrails (strip `_guidance` · split brand/segment back out · keep reuse a PREFERENCE not a filter · company-own-history wins for slug stability) for dedup guidance doesn't need.
 
 ### Open owner decisions (before anything is built)
-1. Take the **read-only ~80% deterministic** resolver (truly minimal, captures all high-value metrics), or add the **continuous G2/Refute dedup step** to reach ~95% (ideally-all)?
+*(The contract above bakes in — and MEASURES (see Measured validation) — a NO-list design: slug + evidence-judge only · set-replace · reverse-uniqueness post-SAME_AS · U54-reuse dedup. Genuinely-open owner calls:)*
+1. Confirm the **no-list** design — slug + the evidence-grounded judge replaces the curated map (measured ~98–100% precision, fully automatic, generalizes). The only alternative is **slug-ONLY** (zero-LLM, deterministic, but ~60% coverage — loses every synonym link). Recommended: keep the judge.
 2. Confirm the link is a **one-to-many `MAPS_TO_GUIDANCE` edge** (not a scalar `guidance_ref`).
 3. Confirm **instance-level** `DriverUpdate ↔ GuidanceUpdate` linking is deferred to the producer/backfill (not a class link).
 4. Adopt the optional `canonical_driver` back-pointer on `Guidance` (self-heals + fixes fragmentation), or stay strictly read-only?
 
-*Provenance: investigation 2026-06-15 — `GuidanceExtractionImplemented.md` + `concept_resolver.py`/`guidance_ids.py`/`guidance_writer.py`/`warmup_cache.py` mapped by 3 subagents; the 548-anchor inventory, the exact-qname collapse/over-merge traps, and the 24/40 match all recomputed from live Neo4j. Independently cross-checked a ChatGPT proposal: agreed on the class↔anchor / MATCH-only / fail-closed / `introduced`-scoping points; corrected its scalar `guidance_ref` to one-to-many and its ~80% ceiling (ideally-all needs the judgment). Second cross-check (2026-06-15, resolver order): adopted ChatGPT's correction — **exact SLUG first** (precise: the slug carries the modifier), and **exact-qname demoted to a guarded synonym-EXPANSION step** (leading with qname over-merges GAAP/non-GAAP, e.g. eps↔adjusted_eps share `EarningsPerShareDiluted`). Continuous-resolver + redesign-verdict added (owner note: the 548 anchors are a live, growing subset).*
+*Provenance: investigation 2026-06-15 — `GuidanceExtractionImplemented.md` + `concept_resolver.py`/`guidance_ids.py`/`guidance_writer.py`/`warmup_cache.py` mapped by 3 subagents; the 548-anchor inventory, the exact-qname collapse/over-merge traps, and the 24/40 match all recomputed from live Neo4j. Independently cross-checked a ChatGPT proposal: agreed on the class↔anchor / MATCH-only / fail-closed / `introduced`-scoping points; corrected its scalar `guidance_ref` to one-to-many and its ~80% ceiling (ideally-all needs the judgment). Second cross-check (2026-06-15, resolver order): adopted ChatGPT's correction — **exact SLUG first** (precise: the slug carries the modifier), and **exact-qname demoted to a guarded synonym-EXPANSION step** (leading with qname over-merges GAAP/non-GAAP, e.g. eps↔adjusted_eps share `EarningsPerShareDiluted`). Continuous-resolver + redesign-verdict added (owner note: the 548 anchors are a live, growing subset). Third pass (2026-06-15): ALL data claims re-verified by DIRECT live Neo4j queries + Python (548/8,432; 100% edge + given_date coverage; slug==id for all 548; alias collisions 227/84/161/216; qname 11/9; stale concept edges 2+7; 0 Driver/MAPS_TO_GUIDANCE built). A further ChatGPT cross-check CONVERGED and is adopted — drop auto alias+qname (evidence-only) · set-replace · reverse-uniqueness post-SAME_AS · REUSE U54 for union dedup (partition without metric_id; +basis/segment/unit/time_type; never fold qname/anchor-id). It also corrected TWO of my own earlier overstatements: (i) U54 does NOT "recover" a missed link — a miss is a safe gap, not silently-wrong data; (ii) "company-reports-it" and "edge==xbrl_qname" are XBRL CONCEPT-link validators, not guidance-link validators. Fourth pass (2026-06-15): DROPPED the curated map for a NO-list, evidence-grounded judge (reasons from each anchor's unit + sample values, never names) — fully automatic + generalizes; MEASURED on 37 restaurant guidance drivers × 548 anchors → ~98–100% precision (0 wrong links across 87 objective pairs), ~85% recall (every miss a safe under-link); the prior comp-sales precision leak is fixed by evidence. See "Measured validation".*
