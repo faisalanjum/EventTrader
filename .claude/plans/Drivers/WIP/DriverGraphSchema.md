@@ -384,6 +384,25 @@ anchor that was never linked). An OVER-merge (a WRONG link) is the dangerous, ha
 alias/qname are demoted to evidence and the resolver stays fail-closed.
 ```
 
+### The link in plain terms — a bridge + a derived pointer
+The Driver↔Guidance link has **two halves**:
+- **Bridge** = the forward edge above: `Driver -[:MAPS_TO_GUIDANCE]-> Guidance anchor(s)` (one-to-many; built by the evidence-judge, then **maintained on every re-run via set-replace** — contract item 3; a Driver is only re-judged when a *new* anchor could match it, so ongoing cost ≈ 0). → travel *Driver → its full guidance timeseries*.
+- **Derived pointer** = one property on each Guidance anchor — `canonical_driver = "driver:<slug>"` — the **same link written backwards** (anchor → its Driver). → travel *Guidance anchor → its Driver* instantly, and let a guidance-ONLY tool find the canonical Driver **without** touching the Driver graph.
+
+```
+:Driver "capex"  ═══[:MAPS_TO_GUIDANCE]═══►  :Guidance guidance:capex      ← BRIDGE  (judge-built, forward)
+                 ◄── guidance:capex.canonical_driver = "driver:capex" ──    ← POINTER (auto-copied, backward)
+```
+
+**"DERIVED" is the whole point:** code COPIES the pointer from the bridge (it is just the reverse of the edge set) and **never decides it separately** → it must **not be allowed to disagree**: the validator **deletes + re-derives it from the edge every run** (the 4 steps below), so it stays a faithful mirror = **one source of truth, no separate judgment.** It NEVER touches `label`/`label_slug`, so it breaks none of guidance's machinery. Build it ONLY after the bridge exists, written by the same validator (contract item 7); do **not** write it as independent guidance-side logic (that would be a second source of truth).
+
+| to answer… | use… |
+|---|---|
+| Driver → its guidance timeseries (THE GOAL) | the **bridge** edge — *required + sufficient* |
+| Guidance anchor → its Driver | the **bridge edge traversed backwards** `(:Guidance)<-[:MAPS_TO_GUIDANCE]-(:Driver)` — free in Neo4j; the pointer only makes it O(1) / usable by a tool that won't traverse |
+
+**Edge required + sufficient; pointer OPTIONAL.** The bridge alone already answers the goal AND the reverse lookup (the edge traverses both ways). So `canonical_driver` is a pure convenience denormalization — add it ONLY if a guidance-side tool needs fast / edge-free reverse lookup. **If added, it MUST be DERIVED with set-replace discipline every run:** (1) build/replace the `MAPS_TO_GUIDANCE` edges → (2) delete stale pointers → (3) rewrite `canonical_driver` from the edges → (4) validate the pointer EXACTLY matches the edge set. Never write it as independent guidance-side logic (second source of truth). **Minimal-safest version = edge only.** Either way, guidance extraction stays untouched.
+
 ### Measured validation (2026-06-15 — offline harness, NO production change)
 Ran the EXACT resolver above (slug + evidence-judge + Refute, **no list**) as the PREDICTION over **37 guidance-suffixed driver names** (from saved restaurant runs) × the **548 live anchors**, graded against TWO independent golds:
 
