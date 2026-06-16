@@ -1,6 +1,6 @@
 # DriverUpdate — Node Spec
 
-**Status (2026-06-14): core node/edge STRUCTURE locked (Design C). The `Driver` class fields are FINALIZED; the `DriverUpdate` + `EXPLAINED_BY` property names/meanings are still open (*working placeholders* — see §2 + Deferred). Nothing built — 0 `Driver` / `DriverUpdate` nodes in Neo4j.** This file records what is fully decided, plus clearly-labeled **Deferred** and **SUGGESTION-ONLY** sections (the latter explicitly NOT decided). (Owner-approved to write this one file; no other files touched.) **Update 2026-06-15 — the DriverUpdate CREATION CONTRACT is now locked: see §0 (catalog build = the complete Driver class [name + `fact_type` + optional links] in ONE run · producers create every DriverUpdate · no build-time seeder).**
+**Status (2026-06-14): core node/edge STRUCTURE locked (Design C). The `Driver` class fields are FINALIZED; the `DriverUpdate` `driver_state` field is FINALIZED (name + vocabulary, 2026-06-16); the number/comparison layer (`level_*`/`change_*`/`comparison_*` — names + shape + store-when-stated) is AGREED (2026-06-16); only the `EXPLAINED_BY` verdict property names + the `weightage`/`confidence` scales remain open (*working placeholders* — see §2 + Deferred). Nothing built — 0 `Driver` / `DriverUpdate` nodes in Neo4j.** This file records what is fully decided, plus clearly-labeled **Deferred** and **SUGGESTION-ONLY** sections (the latter explicitly NOT decided). (Owner-approved to write this one file; no other files touched.) **Update 2026-06-15 — the DriverUpdate CREATION CONTRACT is now locked: see §0 (catalog build = the complete Driver class [name + `fact_type` + optional links] in ONE run · producers create every DriverUpdate · no build-time seeder).**
 
 ---
 
@@ -74,7 +74,7 @@ This mirrors the **Guidance** pattern (class node + per-event instances, code-bu
 
 ## 2. Fields
 
-> ⚠️ **Property-meanings pass IN PROGRESS.** The **`Driver`** fields in the table below are **finalized** (incl. `fact_type`, whose 4-value enum + definitions were LOCKED 2026-06-15 — see the fact_type lock section). **`DriverUpdate`** and **`EXPLAINED_BY`** field names are still **working placeholders** until approved.
+> ⚠️ **Property-meanings pass IN PROGRESS.** The **`Driver`** fields in the table below are **finalized** (incl. `fact_type`, whose 4-value enum + definitions were LOCKED 2026-06-15 — see the fact_type lock section). The **`DriverUpdate`** `driver_state` field + the number/comparison layer (names + shape + store-when-stated) are **agreed** (2026-06-16); only the **`EXPLAINED_BY`** verdict field names + the `weightage`/`confidence` scales remain **working placeholders** until approved.
 
 **`Driver`** (the class — FINALIZED)
 
@@ -84,7 +84,7 @@ This mirrors the **Guidance** pattern (class node + per-event instances, code-bu
 | `name` | the lower_snake `driver_name` of THIS node — a `SAME_AS` head IS the canonical name; a `SAME_AS` variant node keeps its own name | ✅ |
 | `created` | when the driver first appeared | ✅ |
 | `definition` | a plain one-line meaning of the driver — **optional / nullable** | ⚪ |
-| `fact_type` | the driver's permanent KIND — one of `metric` / `guidance` / `surprise` / `action_event` (routes the DriverUpdate `state`; enum + definitions LOCKED 2026-06-15 — see the fact_type lock section) | ✅ |
+| `fact_type` | the driver's permanent KIND — one of `metric` / `guidance` / `surprise` / `action_event` (routes the DriverUpdate `driver_state`; enum + definitions LOCKED 2026-06-15 — see the fact_type lock section) | ✅ |
 
 **`SAME_AS` lives as an EDGE between `Driver` nodes (NOT a property — see §3):** exact-duplicate driver names stay as SEPARATE `:Driver` nodes (each keeps its OWN evidence via its own `DriverUpdate`s) joined by a reversible `(:Driver)-[:SAME_AS]->(:Driver)`. **No `aliases` property** (a flat array couldn't hold each variant's evidence).
 **Excluded:** no `evhash16` on the class (it is never re-extracted → nothing to change-detect; Guidance's anchor has none either).
@@ -92,10 +92,10 @@ This mirrors the **Guidance** pattern (class node + per-event instances, code-bu
 
 **`DriverUpdate`** (the fact)
 
-| field (placeholder name) | what's decided | structural role decided? |
+| field | what's decided | structural role decided? |
 |---|---|---|
-| `driver_state` (placeholder name; = the locked `state` field) | the driver's event-level **state/outcome** for this fact (not only a direction); lives here, **never in the name** | ✅ vocabulary LOCKED (see the *fact_type + state-words* section, item 2); field NAME still a placeholder |
-| number fields `level_*` / `change_*` / `comparison_*` | the **driver's own** number/size for this fact (NOT the stock effect) — explicit LEVEL / CHANGE / COMPARISON, **all nullable** (defined in the *fact_type + state-words* section, item 3) | ⏳ field SET defined there; exact NAMES + store-vs-derive still open |
+| `driver_state` | the driver's event-level **state/outcome** for this fact (not only a direction); lives here, **never in the name** | ✅ name FINAL + vocabulary LOCKED (see the *fact_type + state-words* section, item 2) |
+| number + comparison fields — `level_low` · `level_high` · `level_bound` · `level_unit` · `change_value` · `change_unit` · `comparison_low` · `comparison_high` · `comparison_baseline` | the **driver's own** number/size + the stated prior baseline for this fact (NOT the stock effect) — **all nullable** (full spec in the *fact_type + state-words* section, item 3) | ✅ names + shape + store-when-stated AGREED 2026-06-16 |
 | `quote` | verbatim source text; stored ONLY when the source gives a real state/value/change (never a bare mention) | ✅ |
 | `source_type` · `date` · `created` | provenance · statement-time · write/merge-time | ✅ |
 | `fact_scope` | which *version* of this driver-fact inside the event (period / segment / geography / store-type, or a normalized-quote hash) — part of the key; **identity-only, never in `Driver.name`** | ✅ |
@@ -154,7 +154,7 @@ Every `DriverUpdate` is **persisted, including a driver's first appearance** —
 
 The catalog build **only creates/reuses `Driver` names** (the class) — it **never mints a `DriverUpdate`** (the locked contract, §0). Its `evidence_refs` (driver · company · event · date · quote — KPI-only evidence has no real `Event`/date and never feeds a `DriverUpdate`, §0 point 4) are **mentions** that justify and let producers reuse a name; they are **not** event-level facts and carry no `driver_state` / number fields. The **producers** (earnings-learner / news-driver) are the sole creators of `DriverUpdate`s — judging the real event-level fact + its state/size, and (when attributed) the `EXPLAINED_BY` verdict — in both **live** processing and a **historical backfill** over the same source events. To populate history early, run the producer as a **backfill** (§0 point 7); do **not** add a build-time detector (§0 point 5).
 
-## 8. Full shape (annotated — *all field names are placeholders*)
+## 8. Full shape (annotated — *`driver_state` + the number/comparison field names are final/agreed; only the `EXPLAINED_BY` verdict field names are placeholders*)
 
 ```
                 ┌──────────────────────────────────────────────┐
@@ -173,7 +173,7 @@ The catalog build **only creates/reuses `Driver` names** (the class) — it **ne
    │    level_* / change_* / comparison_*  driver's OWN numbers (nullable) │
    │    fact_scope  which version of the fact in this event (key part)     │
    │    quote · source_type · date · created                              │
-   │    ⚠ ALL field names = working placeholders (name + meaning TBD)      │
+   │    ⚠ driver_state + number/comparison NAMES = FINAL · only verdict NAMES = placeholder │
    └────┬─────────────────────────────────────────────────────▲──────────┘
         │ :FROM_SOURCE  (always — "fact came from event")       │
         │                                  :EXPLAINED_BY  ──────┘  (event → fact; 0, or 1 per producer)
@@ -191,9 +191,9 @@ The catalog build **only creates/reuses `Driver` names** (the class) — it **ne
 
 ---
 
-## fact_type + state-words — LOCKED 2026-06-15  ·  number fields (DriverUpdate) — still OPEN
+## fact_type + state-words — LOCKED 2026-06-15  ·  number layer (DriverUpdate) — names/shape AGREED 2026-06-16
 
-> Output of the property-meanings pass, grounded in a census of EVERY real Fable driver record (CAKE 594 + 14-ticker 673 + raw menus). **The `fact_type` block AND the per-update `state` lists below are LOCKED (2026-06-15; fact_type validated on 1,282 driver names, states on 3,825 evidence quotes); only the number fields (level/change/comparison) remain open.** **Core principle:** the state words are *helper buckets* for grouping/querying; the verbatim **`quote` is the truth** — so the enum can stay small and the quote carries precision.
+> Output of the property-meanings pass, grounded in a census of EVERY real Fable driver record (CAKE 594 + 14-ticker 673 + raw menus). **The `fact_type` block AND the per-update `state` lists below are LOCKED (2026-06-15; fact_type validated on 1,282 driver names, states on 3,825 evidence quotes); the number layer (level/change/comparison) is now AGREED 2026-06-16 (item 3).** **Core principle:** the state words are *helper buckets* for grouping/querying; the verbatim **`quote` is the truth** — so the enum can stay small and the quote carries precision.
 
 **Why a routed enum (not one flat list):** the real data breaks a single up/down list — ~1 in 6 facts have no up/down (risk talk, plain snapshots, "stabilized", guidance ranges). So state is **routed by the driver's kind**, and a producer-side **GATE** (per §0: does this event carry a real fact about the driver — state, change, surprise, guidance, or action? a bare mention → write NO DriverUpdate) removes the no-fact pile.
 
@@ -218,14 +218,14 @@ The catalog build **only creates/reuses `Driver` names** (the class) — it **ne
 A Driver is **born complete** in one catalog-creation run — identical for the **initial batch build, an incremental refresh run, AND a live producer minting a new Driver on the fly** (which is exactly *why* it is one run, not a deferred pass: live producers have no separate downstream pass):
 > 1. **Name** — the blind reader extracts candidate names (recall-critical; **names only**).
 > 2. **… reconcile / assemble** — the catalog of finalized names is built.
-> 3. **`fact_type` — MANDATORY final step** — a cheap per-Driver judgment over each finalized name + its evidence assigns one of the 4 kinds. **NOT the blind reader** (a separate classifier at the end; no source re-read).
+> 3. **`fact_type` — MANDATORY final step** — a per-Driver judgment over each finalized name + evidence, assigned by a **STRONG model (Opus)**, not the blind reader or a weak/cheap model (locked 2026-06-16). Validation: Opus was stable and correct on **28/28 keyed cases plus all reads-both-ways program cases**; the weak model wobbled. Cost stays trivial because this runs **once per `Driver`, not per event**. Keep the 4 definitions as written; **add no extra rules/clauses/examples** — a tested clause overfit by fixing two cases and breaking one. Separate classifier; no source re-read.
 > 4. **XBRL/guidance links — OPTIONAL, best-effort final step** — attached only on a confident resolver match; failures **never block** the catalog and **self-heal on re-run**.
 
-So catalog creation outputs the **complete Driver CLASS** (name + `fact_type` + optional links) in ONE run — still **NO `DriverUpdate`s** (those are the producer's job: live + backfill, §0). `fact_type` is set ONCE per `Driver` and is permanent; the *changing* `state` lives on the `DriverUpdate`; never put state/direction in `Driver.name` (R7).
+So catalog creation outputs the **complete Driver CLASS** (name + `fact_type` + optional links) in ONE run — still **NO `DriverUpdate`s** (those are the producer's job: live + backfill, §0). `fact_type` is set ONCE per `Driver` and is permanent; the *changing* `driver_state` lives on the `DriverUpdate`; never put state/direction in `Driver.name` (R7).
 
-> ✅ The 4 `fact_type`s **AND** the per-update `state`-word lists (§2 below) are now LOCKED (2026-06-15; fact_type validated on 1,282 driver names, states on 3,825 evidence quotes). Only the **number fields** (level/change/comparison) remain open.
+> ✅ The 4 `fact_type`s **AND** the per-update `state`-word lists (§2 below) are now LOCKED (2026-06-15; fact_type validated on 1,282 driver names, states on 3,825 evidence quotes). The **number layer** (level/change/comparison) is now AGREED 2026-06-16 (item 3).
 
-**2. `state` — on `DriverUpdate` — LOCKED 2026-06-15** (validated on 3,825 real evidence quotes; set by the PRODUCER when it makes a DriverUpdate, never during catalog creation). Chosen from the driver's `fact_type` lane; `unknown` is the rare last resort; the raw `quote` is always the truth.
+**2. `driver_state` — on `DriverUpdate` — name FINAL + vocabulary LOCKED 2026-06-15** (validated on 3,825 real evidence quotes; set by the PRODUCER when it makes a DriverUpdate, never during catalog creation). Chosen from the driver's `fact_type` lane; `unknown` is the rare last resort; the raw `quote` is always the truth.
 
 | `fact_type` | `state` — pick one |
 |---|---|
@@ -252,46 +252,76 @@ So catalog creation outputs the **complete Driver CLASS** (name + `fact_type` + 
 
 *(`narrowed` is NOT a state — it is derived from the comparison fields below. The metric word is `persists`, NOT `continued` — `continued` collides with "continued to grow/decline" and would steal directional cases from `increased`/`decreased`.)*
 
-**3. Numbers — explicit fields (NOT a vague magnitude); ALL nullable, a fact fills only what applies:**
-- **LEVEL** (the resulting/stated value): `level_value` · `level_value_high` (range high) · `level_unit`
-- **CHANGE** (the move/delta): `change_value` (signed) · `change_unit`
-- **COMPARISON** (the prior baseline it is measured against): `comparison_value` · `comparison_value_high` · `comparison_basis` *(e.g. `previous_guidance` · `prior_period` · `consensus` · `prior_year`)*
-- `*_unit` ∈ `pct · bps · usd · usd_per_share · count · ratio`
-- **all-null = qualitative-only** (the `quote` is the truth; never fabricate a number).
+**3. Number + comparison fields — AGREED 2026-06-16 (producer-filled; ALL nullable — a fact fills only what applies; all fields null = qualitative-only: the `quote` is the truth, NEVER fabricate a number). Exact meaning of every field:**
 
-**Exact field meanings (unambiguous):**
-
-| field | what it means | example |
+| field | what it holds (exact) | values |
 |---|---|---|
-| `level_value` | the driver's **resulting / stated value** after the change — a point-in-time level (the LOW end if it is a range) | margin → `17.6` |
-| `level_value_high` | the HIGH end when the level is a **range** (e.g. a guidance band); `null` otherwise | guidance band → `100` |
-| `level_unit` | the unit of `level_value` / `level_value_high` | `pct` |
-| `change_value` | the **size of the move itself** (the delta), **signed** (`+` up / `−` down) — NOT the resulting level | "+60 bps" → `+60` |
-| `change_unit` | the unit of `change_value` — **may differ from `level_unit`** (the change is in bps while the level is in %) | `bps` |
-| `comparison_value` | the **prior / baseline value** the change is measured against (LOW end if a range) | prior guidance → `70` |
-| `comparison_value_high` | the HIGH end of the comparison baseline when it is a **range**; `null` otherwise | prior band → `110` |
-| `comparison_basis` | **what** the baseline is: `previous_guidance` / `prior_period` / `consensus` / `prior_year` | `previous_guidance` |
+| `level_low` | the resulting/stated value · the LOW end if a range · the value if a floor (`≥`) | number · `null` |
+| `level_high` | the HIGH end if a range · the value if a ceiling (`≤`) | number · `null` |
+| `level_bound` | flags an OPEN-ENDED bound (absent ⇒ the level is a point or a closed range) | `floor` · `ceiling` · `null` |
+| `level_unit` | the unit of `level_low` / `level_high` | unit enum ↓ |
+| `change_value` | the SIGNED size of the move itself (the delta) — NOT the resulting level (`"+60 bps"` → `+60`) | signed number · `null` |
+| `change_unit` | the unit of `change_value` — MAY differ from `level_unit` (delta in bps while level is %) | unit enum ↓ |
+| `comparison_low` | the prior/baseline value AS STATED in the source · the LOW end if the baseline is a range | number · `null` |
+| `comparison_high` | the HIGH end if the stated baseline is a range (`null` ⇒ the baseline is a single point) | number · `null` |
+| `comparison_baseline` | WHICH baseline the comparison is against | `consensus` · `prior_year` · `sequential_period` · `previous_guidance` · `null` |
 
-> **The three in one line:** `change` = *how much it moved* · `level` = *where it ended up* · `comparison` = *what it moved from*. A fact carries any combination — a delta with no level, a level with no delta, or both (the margin example carries both).
+**unit enum** — `level_unit` AND `change_unit` both draw from this ONE list (reused verbatim from the live Guidance `canonical_unit`, so the catalog's Guidance link + dedup line up with no translation table):
 
-> Example — guidance `$85–100M` vs prior `$70–110M`: `state=reaffirmed`; `level_value=85, level_value_high=100, level_unit=usd`; `comparison_value=70, comparison_value_high=110, comparison_basis=previous_guidance`. → "narrowed" (new band 15 < prior 40) is **computable**, not stored.
+| value | means |
+|---|---|
+| `m_usd` | US dollars in MILLIONS (`6135` = $6,135M) |
+| `usd` | US dollars, absolute (`1.20` = $1.20) |
+| `percent` | a percentage LEVEL or share (a `17.6`% margin) |
+| `percent_yoy` | a year-over-year percent CHANGE (sales `+3`% YoY) |
+| `percent_points` | a move in percentage POINTS (margin `+0.6` pts) |
+| `basis_points` | a move in basis points (`+60` bps) |
+| `count` | a number of things (units, members, stores) |
+| `x` | a ratio / multiple (`2.5`x leverage) |
+| `unknown` | unit not determinable |
 
-**4. Who fills it:** the catalog **reader writes none of this** (it saves `driver_name` + `quote` only). The **producer** fills `state` + the numbers (it has prior-period memory), AFTER the GATE.
+**Level SHAPE — read directly from the slots (no extra field needed):**
+- **point** → `level_low` set · `level_high` `null` · `level_bound` `null`   *(the value is `level_low`)*
+- **range** → `level_low` < `level_high` · `level_bound` `null`
+- **floor (`≥`)** → `level_low` set · `level_high` `null` · `level_bound` = `floor`
+- **ceiling (`≤`)** → `level_high` set · `level_low` `null` · `level_bound` = `ceiling`
+- **no number** → all four `null`   *(qualitative-only; the `quote` carries the fact)*
+
+**Hard rules (code-enforced at write time — the producer PROPOSES, code DECIDES; reject on violation):**
+1. `level_bound` = `floor` ⇒ `level_high` MUST be `null`  ·  `level_bound` = `ceiling` ⇒ `level_low` MUST be `null`.
+2. **Sign** — if `change_value` is present AND `driver_state` is DIRECTIONAL (`increased`/`decreased`/`raised`/`lowered`/`beat`/`missed`), its sign MUST match: `+` for increased/raised/beat, `−` for decreased/lowered/missed. Non-directional states impose NO sign rule.
+3. **Store-when-stated** — `comparison_low`/`comparison_high` hold the baseline ONLY when the source states it (a frozen fact of THIS event); NEVER a value derived from another node. A stated baseline that fits no enum value ⇒ `comparison_baseline` = `null` WITH the number still stored (the `quote` names it).
+4. **Per-unit metrics** (per-share, per-week, per-sq-ft) — the denominator lives in the **driver NAME** (`eps`, `sales_per_square_foot`); the unit stays the base (`usd`/`m_usd`/`count`). There is NO per-X unit.
+5. **`comparison_baseline` — ONE primary per fact:** if a fact cites multiple baselines, store only the **primary** (the source's headline; tiebreak `prior_year` > `sequential_period`). The rest stay in the `quote` — **preserved there, but NOT separately queryable** unless per-comparison records are added later. Set `comparison_baseline` = `null` when the comparison is NOT a temporal prior baseline: `vs peers` / `vs 2019` / any anchor-year (a different axis → quote-only), or a streak (`"third consecutive quarter"` → not a baseline). `"exceeded expectations"` is **fact_type-aware**: a `surprise` fact → `consensus` (a surprise is measured vs the market's expectation); a `metric`/`guidance` fact's `"exceeded our guidance/expectations"` → `previous_guidance` (else `null`). Rule of thumb: `consensus` when the baseline is analyst/Street/market; `previous_guidance` only when it clearly refers to company guidance.
+6. **`change_value` — store-when-stated:** fill it ONLY when the source states a move (a delta) itself. If a level **and** a comparison baseline are both present in the same unit but no move is stated, leave `change_value` = `null`: for a **point/closed-range** level the delta is derivable (storing it = a drift-prone third copy); for a **floor/ceiling** level, do NOT compute a delta at all (you can't subtract an open bound). A **ranged move** (e.g. a guided "+50–100 bps") has **no second slot** — set `change_value` = `null` and keep the range in the `quote`; never store a single endpoint (there is no `change_high`).
+7. **Rate-vs-level routing (don't let a change-verb mis-slot a %):** a change-flavored unit (`percent_yoy` / `percent_points` / `basis_points`) goes in **`change_value`** when the driver has its OWN absolute level (`revenue` → `level_low` = $, the move → `change_value`); it goes in **`level_low`** when the driver **is itself a rate/growth metric** whose value *is* that rate (`same_store_sales` "rose 3%" → `level_low` = `3`, unit `percent_yoy` — NOT `change_value`).
+
+**Worked examples (the disambiguators):**
+- *"Margin rose 60 bps to 17.6% from 17.0% a year ago."* → `driver_state`=`increased` · `level_low`=`17.6` · `level_unit`=`percent` · `change_value`=`+60` · `change_unit`=`basis_points` · `comparison_low`=`17.0` · `comparison_baseline`=`prior_year`.
+- *"Raised FY guidance to $90–100M from $85–95M."* → `driver_state`=`raised` · `level_low`=`90` · `level_high`=`100` · `level_unit`=`m_usd` · `comparison_low`=`85` · `comparison_high`=`95` · `comparison_baseline`=`previous_guidance`.  *(a prior **band** baseline; "narrowed" stays a read-time derivation, never a state — see the `state` note above.)*
+- *"Dividend suspended."* → `driver_state`=`suspended` · all number + comparison fields `null` · the `quote` is the fact.
+- *"EPS of $1.30 beat the $1.20 consensus."* → `driver_state`=`beat` · `level_low`=`1.30` · `level_unit`=`usd` · `change_value`=`+0.10` · `change_unit`=`usd` · `comparison_low`=`1.20` · `comparison_baseline`=`consensus`.  *(a surprise's `change_value` = actual − expectation, vs the consensus baseline.)*
+
+**Deliberately NOT fields (do not re-add):** `mid` (derive from low/high) · `usd_per_share` (per-share is in the name) · `unit_raw` (raw wording is in the `quote`) · `accounting_basis`/GAAP-vs-adjusted (lives in the driver name, e.g. `adjusted_eps` ≠ `eps` — kept by ontology R9) · a free-text `qualitative` (the `quote` + `driver_state` carry number-less facts).
+
+**4. Who fills it:** the catalog **reader writes none of this** (it saves `driver_name` + `quote` only). The **producer** fills `driver_state` + the numbers (it has prior-period memory), AFTER the GATE.
+
+**5. Lane check (deterministic · hard-fail · zero LLM):** when a producer writes a `DriverUpdate`, code asserts **(a)** `driver_state` is one of the four `fact_type` lanes defined above, AND **(b)** `level_unit`/`change_unit` ∈ the unit enum and `comparison_baseline` ∈ its enum. Any off-lane / off-menu value — or a Driver with no `fact_type` yet — is **rejected (no write)**, same hard-fail discipline as the structural catalog validators (an off-menu unit would silently break the Guidance-vocab join). The producer *proposes* the state; code *decides* legality. *(Neo4j can't enum-check one property against another, so this is an app-side check at write time — one lane map + one assert, no new DB feature.)*
 
 **LOCKED here (2026-06-15):** the 4 `fact_type`s + all four `state` lists above (fact_type validated on 1,282 names, states on 3,825 quotes). *(Why distinct lane words and not a universal `up/down/flat`: each is a tradeable query signal — "all `withdrawn` guidance" = bearish — so the lanes are deliberately NOT collapsed.)*
 
-**Still OPEN — only the number layer + a few field details** (also in Deferred):
-1. **COMPARISON fields** — *store* the prior baseline on each update (leaning; verifiable + self-contained) vs *derive* it from the prior update (leaner).
-2. **Number field names** — `level_value` / `change_value` / … kept as written (leaning) vs shorter.
-3. Exact **DriverUpdate field NAMES** (`driver_state` and the `level_*`/`change_*`/`comparison_*` number fields are still placeholder names), `weightage` scale, `confidence` scale, and `id` key formats.
+**Still OPEN — a few scales/keys only** (the number layer — names + shape + comparison store-vs-derive — is now AGREED 2026-06-16 in item 3 above; minor owner refinements may still follow):
+1. `weightage` scale/normalization · `confidence` scale + how it differs from `weightage` (these are `EXPLAINED_BY` **verdict-edge** fields, not the fact's number layer).
+2. The type-gating-vs-XBRL rule for the number fields (**store the number for now**; switch to null-and-link only once an XBRL linking pass + a link-checking validator exist, or the value is lost).
+3. Exact `id` key strings (principle locked in §4; the literal format is a build detail).
 
 ---
 
 ## Deferred — NOT decided yet (listed only so they aren't built prematurely or forgotten)
 
-1. **Number layer + exact field NAMES (the next pass):** the `state` *vocabulary* is LOCKED, but the DriverUpdate *field names* (`driver_state` and the `level_*`/`change_*`/`comparison_*` number fields) are still placeholders, and these remain to finalize: the COMPARISON store-vs-derive choice **and** the type-gating-vs-XBRL rule (**store the number for now**; switch to null-and-link only once an XBRL linking pass + a link-checking validator exist, or the value is lost) · `weightage` scale/normalization · `confidence` scale + how it differs from `weightage`.
+1. **Number layer — names + shape + comparison store-vs-derive AGREED 2026-06-16** (full spec in the fact_type+state section, item 3): `level_low`/`level_high`/`level_bound`/`level_unit` · `change_value`/`change_unit` · `comparison_low`/`comparison_high`/`comparison_baseline` · store-when-stated. Remaining: the type-gating-vs-XBRL rule (**store the number for now**; switch to null-and-link only once an XBRL linking pass + a link-checking validator exist, or the value is lost) · `weightage` scale/normalization · `confidence` scale (the last two are `EXPLAINED_BY` verdict-edge fields). *(Minor owner tweaks may still follow.)*
 2. **Exact `id` key strings** — the principle is locked (§4: fact = event + driver + `fact_scope`; verdict = + producer); the literal format is a build detail.
-3. **TODO:** wire **the producer** to extract `state` (vocabulary LOCKED — ready) + the number fields (level/change/comparison; waits on #1) when it makes a `DriverUpdate` (never the catalog build, §0).
+3. **TODO:** wire **the producer** to extract `driver_state` (vocabulary LOCKED — ready) + the number fields (level/change/comparison; waits on #1) when it makes a `DriverUpdate` (never the catalog build, §0).
 
 *Naming note: the verdict is the `EXPLAINED_BY` edge (`Event → DriverUpdate`) — "attribution," the term chosen over "impact"; in this design there is no separate verdict node.*
 
