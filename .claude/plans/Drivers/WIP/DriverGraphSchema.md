@@ -106,8 +106,8 @@ This mirrors the **Guidance** pattern (class node + per-event instances, code-bu
 | field | what it means | values |
 |---|---|---|
 | `stock_impact` | the driver's **DIRECTION** of push on this event's move (can oppose the net move) | `long` · `short` |
-| `weightage` | the driver's **standalone FORCE / importance** in the move — an *independent* estimate, **NOT a share** (never summed, never forced to its max; a move may be partly unexplained) | coarse `0–1` ladder `{0.1·0.25·0.5·0.75·1.0}` · **nullable** |
-| `confidence` | how **sure** the producer is the attribution is **true** (orthogonal to `weightage`) | `0–100` |
+| `weightage` | the driver's **standalone FORCE / importance** in the move — an *independent* estimate, **NOT a share** (never summed, never forced to its max; a move may be partly unexplained) | `0–1` in **deciles** `{0.1, 0.2, … 1.0}` · **nullable** |
+| `confidence` | how **sure** the producer is the attribution is **true** (orthogonal to `weightage`) | `0–100` in **deciles** `{0, 10, … 100}` |
 | `produced_mode` | judged in **real time** (PIT-clean) vs a later **re-run** (possible hindsight) | `live` · `backfill` |
 | `llm_producer` | who judged | `earnings-learner` · `news-driver` |
 | `id` · `created` · `evhash16` | code-built key (**producer IS in the key**, see §4) · write-time · value-hash of (`stock_impact`,`weightage`,`confidence`) — stable under sibling edits | code-built |
@@ -120,7 +120,7 @@ This mirrors the **Guidance** pattern (class node + per-event instances, code-bu
 - **PIT:** the *realized* share / actual return is **never stored** on the verdict and **never shown to the predictor** — computed at read time from the `Event → Company` return.
 - **Grading is aggregate:** reality gives **one net return** → grade a verdict set on net sign/magnitude + relative ranking, never a per-driver "true share."
 - **`produced_mode` — live wins:** a `backfill` verdict NEVER overwrites an existing `live` verdict at the same key (live is PIT-clean; backfill ran after the move was known); a `live` write may replace a `backfill` one. `produced_mode` is provenance → **excluded from `evhash16`** (a live↔backfill swap is not a judgment change).
-- **Validator (deterministic · hard-fail):** every edge has `stock_impact` ∈ {long, short}, `confidence` ∈ 0–100, and `weightage` ∈ a **coarse ladder** `{0.1, 0.25, 0.5, 0.75, 1.0}` (no false-precision floats — keeps `evhash16` stable across re-runs) or `null`; **no sum constraint.**
+- **Validator (deterministic · hard-fail):** every edge has `stock_impact` ∈ {long, short}, `confidence` ∈ `{0, 10, … 100}`, and `weightage` ∈ `{0.1, 0.2, … 1.0}` or `null` — **both deciles** (a 10-step ladder: no false-precision floats, keeps `evhash16` stable across re-runs); **no sum constraint.**
 
 ## 3. Edges (decided)
 
@@ -320,7 +320,7 @@ So catalog creation outputs the **complete Driver CLASS** (name + `fact_type` + 
 **LOCKED here (2026-06-15):** the 4 `fact_type`s + all four `state` lists above (fact_type validated on 1,282 names, states on 3,825 quotes). *(Why distinct lane words and not a universal `up/down/flat`: each is a tradeable query signal — "all `withdrawn` guidance" = bearish — so the lanes are deliberately NOT collapsed.)*
 
 **Still OPEN — a few scales/keys only** (the number layer — names + shape + comparison store-vs-derive — is now AGREED 2026-06-16 in item 3 above; minor owner refinements may still follow):
-1. *(resolved 2026-06-16: the `EXPLAINED_BY` verdict layer — `weightage` 0–1 independent + nullable, `confidence` 0–100, `produced_mode`, derive-share-at-read-time — is now AGREED; see the EXPLAINED_BY rules in §2.)*
+1. *(resolved 2026-06-16: the `EXPLAINED_BY` verdict layer — `weightage` 0–1 deciles (independent, nullable), `confidence` 0–100 deciles, `produced_mode`, derive-share-at-read-time — is now AGREED; see the EXPLAINED_BY rules in §2.)*
 2. The type-gating-vs-XBRL rule for the number fields (**store the number for now**; switch to null-and-link only once an XBRL linking pass + a link-checking validator exist, or the value is lost).
 3. Exact `id` key strings (principle locked in §4; the literal format is a build detail).
 
