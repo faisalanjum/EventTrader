@@ -1,6 +1,6 @@
 # DriverUpdate — Node Spec
 
-**Status (2026-06-14): core node/edge STRUCTURE locked (Design C). The `Driver` class fields are FINALIZED; the `DriverUpdate` `driver_state` field is FINALIZED (name + vocabulary, 2026-06-16); the number/comparison layer (`level_*`/`change_*`/`comparison_*` — names + shape + store-when-stated) is AGREED (2026-06-16); only the `EXPLAINED_BY` verdict property names + the `weightage`/`confidence` scales remain open (*working placeholders* — see §2 + Deferred). Nothing built — 0 `Driver` / `DriverUpdate` nodes in Neo4j.** This file records what is fully decided, plus clearly-labeled **Deferred** and **SUGGESTION-ONLY** sections (the latter explicitly NOT decided). (Owner-approved to write this one file; no other files touched.) **Update 2026-06-15 — the DriverUpdate CREATION CONTRACT is now locked: see §0 (catalog build = the complete Driver class [name + `fact_type` + optional links] in ONE run · producers create every DriverUpdate · no build-time seeder).**
+**Status (2026-06-14): core node/edge STRUCTURE locked (Design C). The `Driver` class fields are FINALIZED; the `DriverUpdate` `driver_state` field is FINALIZED (name + vocabulary, 2026-06-16); the number/comparison layer (`level_*`/`change_*`/`comparison_*` — names + shape + store-when-stated) is AGREED (2026-06-16); the `EXPLAINED_BY` verdict layer is also AGREED (2026-06-16). (Field/property layers are settled; the **Deferred** + **SUGGESTION-ONLY** items below — structural/identity questions, optional links, the guidance section — remain open.) Nothing built — 0 `Driver` / `DriverUpdate` nodes in Neo4j.** This file records what is fully decided, plus clearly-labeled **Deferred** and **SUGGESTION-ONLY** sections (the latter explicitly NOT decided). (Owner-approved to write this one file; no other files touched.) **Update 2026-06-15 — the DriverUpdate CREATION CONTRACT is now locked: see §0 (catalog build = the complete Driver class [name + `fact_type` + optional links] in ONE run · producers create every DriverUpdate · no build-time seeder).**
 
 ---
 
@@ -74,7 +74,7 @@ This mirrors the **Guidance** pattern (class node + per-event instances, code-bu
 
 ## 2. Fields
 
-> ⚠️ **Property-meanings pass IN PROGRESS.** The **`Driver`** fields in the table below are **finalized** (incl. `fact_type`, whose 4-value enum + definitions were LOCKED 2026-06-15 — see the fact_type lock section). The **`DriverUpdate`** `driver_state` field + the number/comparison layer (names + shape + store-when-stated) are **agreed** (2026-06-16); only the **`EXPLAINED_BY`** verdict field names + the `weightage`/`confidence` scales remain **working placeholders** until approved.
+> ⚠️ **Property-meanings pass IN PROGRESS.** The **`Driver`** fields in the table below are **finalized** (incl. `fact_type`, whose 4-value enum + definitions were LOCKED 2026-06-15 — see the fact_type lock section). The **`DriverUpdate`** `driver_state` field + the number/comparison layer **and** the **`EXPLAINED_BY`** verdict layer are all **agreed** (2026-06-16).
 
 **`Driver`** (the class — FINALIZED)
 
@@ -101,17 +101,26 @@ This mirrors the **Guidance** pattern (class node + per-event instances, code-bu
 | `fact_scope` | which *version* of this driver-fact inside the event (period / segment / geography / store-type, or a normalized-quote hash) — part of the key; **identity-only, never in `Driver.name`** | ✅ |
 | `id` · `evhash16` | code-built key + value-hash (see §4); **no producer in the key** | ✅ |
 
-**`EXPLAINED_BY`** (the verdict — properties on the `Event → DriverUpdate` edge)
+**`EXPLAINED_BY`** (the verdict — properties on the `Event → DriverUpdate` edge; verdict names + scales **FINAL 2026-06-16**)
 
-| field (placeholder name) | what's decided | structural role decided? |
+| field | what it means | values |
 |---|---|---|
-| `stock_impact` | `long` / `short` — this driver's **own** push on the event's move (can oppose the net move) | ✅ |
-| `weightage` | the **model's estimate** of this driver's share of *this event's* move — **never** the realized share | ⏳ scale/normalization deferred |
-| `confidence` | how sure the producer is the claim is true | ⏳ exact scale deferred |
-| `llm_producer` | who judged (earnings-learner / news-driver) | ✅ |
-| `id` · `created` · `evhash16` | code-built key + write-time + value-hash (see §4); **producer IS in the key** | ✅ |
+| `stock_impact` | the driver's **DIRECTION** of push on this event's move (can oppose the net move) | `long` · `short` |
+| `weightage` | the driver's **standalone FORCE / importance** in the move — an *independent* estimate, **NOT a share** (never summed, never forced to its max; a move may be partly unexplained) | coarse `0–1` ladder `{0.1·0.25·0.5·0.75·1.0}` · **nullable** |
+| `confidence` | how **sure** the producer is the attribution is **true** (orthogonal to `weightage`) | `0–100` |
+| `produced_mode` | judged in **real time** (PIT-clean) vs a later **re-run** (possible hindsight) | `live` · `backfill` |
+| `llm_producer` | who judged | `earnings-learner` · `news-driver` |
+| `id` · `created` · `evhash16` | code-built key (**producer IS in the key**, see §4) · write-time · value-hash of (`stock_impact`,`weightage`,`confidence`) — stable under sibling edits | code-built |
 
-**PIT rule (decided):** the *realized* share / actual return is **never stored** on the verdict and **never shown to the predictor** — it is computed at read time from the `Event → Company` return.
+**Verdict rules + read-time views (decided 2026-06-16):**
+- **Three orthogonal axes** — `stock_impact` = direction · `weightage` = magnitude · `confidence` = certainty; none derivable from another.
+- **`weightage` is independent — NO cross-edge sum constraint.** Adding or re-judging one driver **never rewrites a sibling's** `weightage` (clean per-edge MERGE; `evhash16` flips only on a real change to *that* edge).
+- **`weightage` nullable (abstain):** sure of *direction* but can't *size* it → `weightage` = `null`. **Never auto-set a sole driver to its max** — a move can be partly unexplained (market / sector / noise).
+- **Read-time only (never stored):** `share_i = weightage_i / Σ weightage_j` within one `(event, producer)`; `signed_force = weightage × stock_impact`.
+- **PIT:** the *realized* share / actual return is **never stored** on the verdict and **never shown to the predictor** — computed at read time from the `Event → Company` return.
+- **Grading is aggregate:** reality gives **one net return** → grade a verdict set on net sign/magnitude + relative ranking, never a per-driver "true share."
+- **`produced_mode` — live wins:** a `backfill` verdict NEVER overwrites an existing `live` verdict at the same key (live is PIT-clean; backfill ran after the move was known); a `live` write may replace a `backfill` one. `produced_mode` is provenance → **excluded from `evhash16`** (a live↔backfill swap is not a judgment change).
+- **Validator (deterministic · hard-fail):** every edge has `stock_impact` ∈ {long, short}, `confidence` ∈ 0–100, and `weightage` ∈ a **coarse ladder** `{0.1, 0.25, 0.5, 0.75, 1.0}` (no false-precision floats — keeps `evhash16` stable across re-runs) or `null`; **no sum constraint.**
 
 ## 3. Edges (decided)
 
@@ -154,7 +163,7 @@ Every `DriverUpdate` is **persisted, including a driver's first appearance** —
 
 The catalog build **only creates/reuses `Driver` names** (the class) — it **never mints a `DriverUpdate`** (the locked contract, §0). Its `evidence_refs` (driver · company · event · date · quote — KPI-only evidence has no real `Event`/date and never feeds a `DriverUpdate`, §0 point 4) are **mentions** that justify and let producers reuse a name; they are **not** event-level facts and carry no `driver_state` / number fields. The **producers** (earnings-learner / news-driver) are the sole creators of `DriverUpdate`s — judging the real event-level fact + its state/size, and (when attributed) the `EXPLAINED_BY` verdict — in both **live** processing and a **historical backfill** over the same source events. To populate history early, run the producer as a **backfill** (§0 point 7); do **not** add a build-time detector (§0 point 5).
 
-## 8. Full shape (annotated — *`driver_state` + the number/comparison field names are final/agreed; only the `EXPLAINED_BY` verdict field names are placeholders*)
+## 8. Full shape (annotated — *all `Driver`, `DriverUpdate`, and `EXPLAINED_BY` field names are final/agreed (2026-06-16)*)
 
 ```
                 ┌──────────────────────────────────────────────┐
@@ -173,7 +182,7 @@ The catalog build **only creates/reuses `Driver` names** (the class) — it **ne
    │    level_* / change_* / comparison_*  driver's OWN numbers (nullable) │
    │    fact_scope  which version of the fact in this event (key part)     │
    │    quote · source_type · date · created                              │
-   │    ⚠ driver_state + number/comparison NAMES = FINAL · only verdict NAMES = placeholder │
+   │    ⚠ ALL field NAMES FINAL — driver_state · number/comparison · verdict (2026-06-16) │
    └────┬─────────────────────────────────────────────────────▲──────────┘
         │ :FROM_SOURCE  (always — "fact came from event")       │
         │                                  :EXPLAINED_BY  ──────┘  (event → fact; 0, or 1 per producer)
@@ -311,7 +320,7 @@ So catalog creation outputs the **complete Driver CLASS** (name + `fact_type` + 
 **LOCKED here (2026-06-15):** the 4 `fact_type`s + all four `state` lists above (fact_type validated on 1,282 names, states on 3,825 quotes). *(Why distinct lane words and not a universal `up/down/flat`: each is a tradeable query signal — "all `withdrawn` guidance" = bearish — so the lanes are deliberately NOT collapsed.)*
 
 **Still OPEN — a few scales/keys only** (the number layer — names + shape + comparison store-vs-derive — is now AGREED 2026-06-16 in item 3 above; minor owner refinements may still follow):
-1. `weightage` scale/normalization · `confidence` scale + how it differs from `weightage` (these are `EXPLAINED_BY` **verdict-edge** fields, not the fact's number layer).
+1. *(resolved 2026-06-16: the `EXPLAINED_BY` verdict layer — `weightage` 0–1 independent + nullable, `confidence` 0–100, `produced_mode`, derive-share-at-read-time — is now AGREED; see the EXPLAINED_BY rules in §2.)*
 2. The type-gating-vs-XBRL rule for the number fields (**store the number for now**; switch to null-and-link only once an XBRL linking pass + a link-checking validator exist, or the value is lost).
 3. Exact `id` key strings (principle locked in §4; the literal format is a build detail).
 
@@ -319,7 +328,7 @@ So catalog creation outputs the **complete Driver CLASS** (name + `fact_type` + 
 
 ## Deferred — NOT decided yet (listed only so they aren't built prematurely or forgotten)
 
-1. **Number layer — names + shape + comparison store-vs-derive AGREED 2026-06-16** (full spec in the fact_type+state section, item 3): `level_low`/`level_high`/`level_bound`/`level_unit` · `change_value`/`change_unit` · `comparison_low`/`comparison_high`/`comparison_baseline` · store-when-stated. Remaining: the type-gating-vs-XBRL rule (**store the number for now**; switch to null-and-link only once an XBRL linking pass + a link-checking validator exist, or the value is lost) · `weightage` scale/normalization · `confidence` scale (the last two are `EXPLAINED_BY` verdict-edge fields). *(Minor owner tweaks may still follow.)*
+1. **Number layer — names + shape + comparison store-vs-derive AGREED 2026-06-16** (full spec in the fact_type+state section, item 3): `level_low`/`level_high`/`level_bound`/`level_unit` · `change_value`/`change_unit` · `comparison_low`/`comparison_high`/`comparison_baseline` · store-when-stated. Remaining: the type-gating-vs-XBRL rule (**store the number for now**; switch to null-and-link only once an XBRL linking pass + a link-checking validator exist, or the value is lost). The `EXPLAINED_BY` verdict layer (incl. `weightage`/`confidence`/`produced_mode`) is now AGREED 2026-06-16. *(Minor owner tweaks may still follow.)*
 2. **Exact `id` key strings** — the principle is locked (§4: fact = event + driver + `fact_scope`; verdict = + producer); the literal format is a build detail.
 3. **TODO:** wire **the producer** to extract `driver_state` (vocabulary LOCKED — ready) + the number fields (level/change/comparison; waits on #1) when it makes a `DriverUpdate` (never the catalog build, §0).
 
