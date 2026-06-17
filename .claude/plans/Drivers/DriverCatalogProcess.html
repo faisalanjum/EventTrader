@@ -176,6 +176,46 @@
   .big-num { font-size: 40px; font-weight: 800; color: var(--accent); letter-spacing: -0.02em; }
   .note { font-size: 18px; color: var(--muted); margin-top: 10px; }
   .srcchip { font-size: 16px; color: var(--muted); background: var(--soft2); padding: 3px 10px; border-radius: 999px; font-weight: 700; }
+
+  /* ===== PRINT / PDF — show ALL slides, expand ALL details, fit the page (screen view unaffected) ===== */
+  @media print {
+    @page { size: letter portrait; margin: 11mm 12mm 12mm; }
+    html, body { font-size: 13px !important; background: #fff !important; }
+    header, .progress, #progress, .nav { display: none !important; }
+    main { max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
+    /* every slide visible; each starts a new page */
+    .step { display: block !important; break-before: page; page-break-before: always; padding: 0 0 4mm !important; animation: none !important; opacity: 1 !important; transform: none !important; }
+    .step:first-of-type { break-before: avoid; page-break-before: avoid; }
+    h1, h2, h3 { break-after: avoid; page-break-after: avoid; }
+    /* keep atomic blocks from splitting across pages */
+    .panel, .twocol, .threecol, .kv, table, .legend, pre, .ascii, details, .toc-grid, .col, .node { break-inside: avoid; page-break-inside: avoid; }
+    /* scale type to paper */
+    h1 { font-size: 24px !important; line-height: 1.08 !important; margin: 0 0 8px !important; }
+    h2 { font-size: 17px !important; margin: 14px 0 6px !important; }
+    h3 { font-size: 14.5px !important; margin: 10px 0 5px !important; }
+    .lead { font-size: 14px !important; line-height: 1.35 !important; margin: 0 0 10px !important; }
+    p, li, .kv .k, .kv .v, .small, .note, td, th, summary, details p, details li, .col p, .col li { font-size: 11.5px !important; line-height: 1.4 !important; }
+    .tag, .pill, .badge, .srcchip { font-size: 9.5px !important; }
+    .panel { padding: 14px 16px !important; margin: 12px 0 !important; }
+    /* diagrams never wrap — shrink to fit the widest (111 chars) */
+    .ascii { font-size: 9px !important; line-height: 1.3 !important; white-space: pre !important; overflow: visible !important; padding: 10px 12px !important; }
+    /* code/JSON may wrap so long lines never clip */
+    pre { font-size: 10px !important; line-height: 1.35 !important; white-space: pre-wrap !important; word-break: break-word; overflow: visible !important; padding: 10px 12px !important; }
+    /* grids fit a narrow page */
+    .twocol, .threecol { grid-template-columns: 1fr 1fr !important; gap: 12px !important; }
+    .step.active .toc-grid { grid-template-columns: 1fr 1fr 1fr !important; gap: 8px !important; }
+    .kv { grid-template-columns: 160px 1fr !important; gap: 6px 16px !important; }
+    /* flowline: a fixed horizontal row would overflow — let it shrink/wrap */
+    .flowline { display: flex !important; flex-wrap: wrap !important; gap: 6px !important; overflow: visible !important; align-items: stretch !important; }
+    .flowline .node { min-width: 0 !important; flex: 1 1 120px !important; padding: 8px 10px !important; }
+    .flowline .node strong { font-size: 11px !important; }
+    .flowline .node span { font-size: 8.5px !important; }
+    .flowline .arrow { font-size: 15px !important; align-self: center !important; }
+    details { background: var(--soft) !important; border-color: #c7d2fe !important; }
+    a { color: inherit !important; text-decoration: none !important; }
+    /* keep all the background colours when printing */
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  }
 </style>
 </head>
 <body>
@@ -183,7 +223,7 @@
 <header>
   <div class="brand">DRIVER CATALOG</div>
   <div class="title-text">How the machine works — plain English</div>
-  <div class="counter" id="counter">1 / 43</div>
+  <div class="counter" id="counter">1 / 57</div>
 </header>
 
 <div class="progress" id="progress" aria-label="Slide progress"></div>
@@ -192,9 +232,9 @@
 
 <!-- ===== 1 TITLE ===== -->
 <section class="step active" data-step="1">
-  <span class="tag">Explainer · 27 slides + file appendix</span>
+  <span class="tag">Explainer · 57 slides (41 + a file appendix)</span>
   <h1>Building one shared dictionary of what moves stocks.</h1>
-  <p class="lead">This walks the <b>whole machine</b>, one idea per slide — nothing left out. Big picture first, then each step, with real examples. The <b>Appendix (slides 28–43)</b> explains every single code file, one at a time. Open the <code>Details</code> boxes when you want more depth.</p>
+  <p class="lead">This walks the <b>whole machine</b>, one idea per slide — nothing left out. First <b>the data model</b> (what we're building), then <b>how we build it</b>, then <b>how it gets used live</b>. The <b>Appendix (slides 42–57)</b> explains every code file, one at a time. Open the <code>Details</code> boxes for the deeper version.</p>
 
   <div class="panel accent">
     <h3>How to read this</h3>
@@ -210,41 +250,62 @@
     <div class="item" data-goto="2"><span class="num">02</span>The goal (one analogy)</div>
     <div class="item" data-goto="3"><span class="num">03</span>Why it's built this way</div>
     <div class="item" data-goto="4"><span class="num">04</span>The one golden rule</div>
-    <div class="item" data-goto="5"><span class="num">05</span>The big picture</div>
-    <div class="item" data-goto="6"><span class="num">06</span>What a "driver" looks like</div>
-    <div class="item" data-goto="7"><span class="num">07</span>The class vs the event</div>
-    <div class="item" data-goto="8"><span class="num">08</span>The two kinds of files</div>
-    <div class="item" data-goto="9"><span class="num">09</span>Stage 1 — the Leaf</div>
-    <div class="item" data-goto="10"><span class="num">10</span>Resolve</div>
-    <div class="item" data-goto="11"><span class="num">11</span>Fetch</div>
-    <div class="item" data-goto="12"><span class="num">12</span>Chunk</div>
-    <div class="item" data-goto="13"><span class="num">13</span>The blind bots</div>
-    <div class="item" data-goto="14"><span class="num">14</span>Converge</div>
-    <div class="item" data-goto="15"><span class="num">15</span>Stage 2 — Reconcile</div>
-    <div class="item" data-goto="16"><span class="num">16</span>Guard &amp; slice</div>
-    <div class="item" data-goto="17"><span class="num">17</span>Two judges</div>
-    <div class="item" data-goto="18"><span class="num">18</span>The skeptic</div>
-    <div class="item" data-goto="19"><span class="num">19</span>The same-name check</div>
-    <div class="item" data-goto="20"><span class="num">20</span>The writer (code)</div>
-    <div class="item" data-goto="21"><span class="num">21</span>The validator (gate)</div>
-    <div class="item" data-goto="22"><span class="num">22</span>Stage 3 — The Fold</div>
-    <div class="item" data-goto="23"><span class="num">23</span>Fold mechanics</div>
-    <div class="item" data-goto="24"><span class="num">24</span>Orchestrate, repair, resume</div>
-    <div class="item" data-goto="25"><span class="num">25</span>Models &amp; cost</div>
-    <div class="item" data-goto="26"><span class="num">26</span>Using it live (later)</div>
-    <div class="item" data-goto="27"><span class="num">27</span>Safety recap &amp; status</div>
-    <div class="item" data-goto="28" style="background:var(--accent-soft); border-color:#c7d2fe;"><span class="num">A</span>Appendix: every file, one by one</div>
+    <div class="item" data-goto="5"><span class="num">05</span>The 3 layers (the model)</div>
+    <div class="item" data-goto="6"><span class="num">06</span>The graph shape (the edges)</div>
+    <div class="item" data-goto="7"><span class="num">07</span>Who creates what</div>
+    <div class="item" data-goto="8"><span class="num">08</span>The Driver node (the label)</div>
+    <div class="item" data-goto="9"><span class="num">09</span>fact_type — the 4 kinds</div>
+    <div class="item" data-goto="10"><span class="num">10</span>The big picture (the tree)</div>
+    <div class="item" data-goto="11"><span class="num">11</span>The record (build output)</div>
+    <div class="item" data-goto="12"><span class="num">12</span>The two kinds of files</div>
+    <div class="item" data-goto="13"><span class="num">13</span>Stage 1 — the Leaf</div>
+    <div class="item" data-goto="14"><span class="num">14</span>Resolve</div>
+    <div class="item" data-goto="15"><span class="num">15</span>Fetch</div>
+    <div class="item" data-goto="16"><span class="num">16</span>Chunk</div>
+    <div class="item" data-goto="17"><span class="num">17</span>The blind bots</div>
+    <div class="item" data-goto="18"><span class="num">18</span>Converge</div>
+    <div class="item" data-goto="19"><span class="num">19</span>Stage 2 — Reconcile</div>
+    <div class="item" data-goto="20"><span class="num">20</span>Guard &amp; slice</div>
+    <div class="item" data-goto="21"><span class="num">21</span>Two judges</div>
+    <div class="item" data-goto="22"><span class="num">22</span>The skeptic</div>
+    <div class="item" data-goto="23"><span class="num">23</span>The same-name check</div>
+    <div class="item" data-goto="24"><span class="num">24</span>The writer (code)</div>
+    <div class="item" data-goto="25"><span class="num">25</span>The validator (gate)</div>
+    <div class="item" data-goto="26"><span class="num">26</span>Final steps: fact_type + links</div>
+    <div class="item" data-goto="27"><span class="num">27</span>Stage 3 — The Fold</div>
+    <div class="item" data-goto="28"><span class="num">28</span>Fold mechanics</div>
+    <div class="item" data-goto="29"><span class="num">29</span>Orchestrate, repair, resume</div>
+    <div class="item" data-goto="30"><span class="num">30</span>Models &amp; cost</div>
+    <div class="item" data-goto="31"><span class="num">31</span>The DriverUpdate (the fact)</div>
+    <div class="item" data-goto="32"><span class="num">32</span>driver_state — the 4 lanes</div>
+    <div class="item" data-goto="33"><span class="num">33</span>The number layer</div>
+    <div class="item" data-goto="34"><span class="num">34</span>Number rules + examples</div>
+    <div class="item" data-goto="35"><span class="num">35</span>The verdict (EXPLAINED_BY)</div>
+    <div class="item" data-goto="36"><span class="num">36</span>Identity &amp; change-tracking</div>
+    <div class="item" data-goto="37"><span class="num">37</span>Invariants &amp; persistence</div>
+    <div class="item" data-goto="38"><span class="num">38</span>Using it live (later)</div>
+    <div class="item" data-goto="39"><span class="num">39</span>The guidance bridge (idea)</div>
+    <div class="item" data-goto="40"><span class="num">40</span>Where each part stands</div>
+    <div class="item" data-goto="41"><span class="num">41</span>Safety recap &amp; status</div>
+    <div class="item" data-goto="42" style="background:var(--accent-soft); border-color:#c7d2fe;"><span class="num">A</span>Appendix: every file, one by one</div>
   </div>
 
   <details>
-    <summary>Tiny glossary (6 words you'll see)</summary>
+    <summary>Tiny glossary (the words you'll see — skim now, refer back later)</summary>
     <div class="kv">
-      <div class="k">driver</div><div class="v">a real-world cause that moves a stock price (e.g. oil price, store traffic).</div>
-      <div class="k">catalog</div><div class="v">the final, cleaned dictionary of all drivers.</div>
-      <div class="k">seed</div><div class="v">the raw, messy first draft of the catalog before cleaning.</div>
-      <div class="k">evidence</div><div class="v">the actual quote from a filing/transcript that proves a driver exists.</div>
-      <div class="k">merge</div><div class="v">deciding two names mean the same thing and joining them under one name.</div>
+      <div class="k">driver</div><div class="v">a real-world cause that moves a stock (oil price, store traffic). The reusable <b>label</b> — a "class".</div>
+      <div class="k">DriverUpdate</div><div class="v">one real <b>fact</b> about a driver on one event ("same-store sales rose 3%"). The <b>instance</b>.</div>
+      <div class="k">verdict</div><div class="v">a producer's judgement that a fact <em>caused</em> a stock move. Lives on a link (<code>EXPLAINED_BY</code>), not a box.</div>
+      <div class="k">fact_type</div><div class="v">a driver's permanent KIND: <code>metric</code> / <code>guidance</code> / <code>surprise</code> / <code>action_event</code>.</div>
+      <div class="k">driver_state</div><div class="v">what happened this event (rose, beat, suspended…) — picked from a fixed list per fact_type.</div>
+      <div class="k">producer</div><div class="v">the AI that reads a real event and writes the facts: <code>earnings-learner</code> or <code>news-driver</code>.</div>
+      <div class="k">catalog</div><div class="v">the final, cleaned dictionary of all driver <b>labels</b> (the classes).</div>
+      <div class="k">seed</div><div class="v">the raw, messy first draft of the catalog, before cleaning.</div>
+      <div class="k">mention vs fact</div><div class="v">a <b>mention</b> is a quote that proves a NAME is worth having; a <b>fact</b> is a real event-level thing a producer judged. A mention never makes a DriverUpdate.</div>
+      <div class="k">SAME_AS</div><div class="v">a reversible link saying two driver names are the same cause (both survive, never deleted).</div>
       <div class="k">fail-closed</div><div class="v">when unsure, do the safe thing (keep separate) — never guess a merge.</div>
+      <div class="k">PIT</div><div class="v">"point-in-time": never show the AI a name, number, or outcome from the future.</div>
+      <div class="k">KPI / fiscal.ai</div><div class="v">a metric the company itself reports (e.g. "same-store sales"), pulled from the <b>fiscal.ai</b> data feed. It can justify a NAME, but it's not a real event — so it never makes a fact.</div>
     </div>
   </details>
 </section>
@@ -355,8 +416,229 @@
   <p><span class="pill">fail-closed</span> When in doubt, don't merge. A missing or uncertain answer is treated as "no." The safe direction is always <em>keep separate</em>.</p>
 </section>
 
-<!-- ===== 5 BIG PICTURE ===== -->
+<!-- ===== 5 THREE LAYERS ===== -->
 <section class="step" data-step="5">
+  <span class="tag">The model · part 1 of 5</span>
+  <h1>Three things, not one: a <em>label</em>, a <em>fact</em>, and a <em>verdict</em>.</h1>
+  <p class="lead">Before any code, picture the end result. The whole system stores exactly <b>three</b> kinds of thing. Get these three and everything else clicks.</p>
+
+  <div class="threecol">
+    <div class="col">
+      <h3>1 · Driver <span class="pill gray">node</span></h3>
+      <p class="small" style="font-size:18px;">The reusable <b>label</b> (a "class"). Just a clean name + its permanent kind. <code>same_store_sales</code>. Built <b>once</b>.</p>
+    </div>
+    <div class="col">
+      <h3>2 · DriverUpdate <span class="pill gray">node</span></h3>
+      <p class="small" style="font-size:18px;">One <b>fact</b> on one event (an "instance"): <em>"this driver did X on this day."</em> Many pile up under one label over time.</p>
+    </div>
+    <div class="col">
+      <h3>3 · Verdict <span class="pill gray">edge</span></h3>
+      <p class="small" style="font-size:18px;">A judgement that the fact <b>caused</b> the stock move. It is <b>not a box</b> — it's a labelled <em>link</em> (<code>EXPLAINED_BY</code>). A fact can exist with no verdict.</p>
+    </div>
+  </div>
+
+  <div class="ascii">            ( Driver )              the LABEL (class)   e.g. same_store_sales
+                &#94;
+                |  OF_DRIVER   (every fact belongs to exactly 1 driver)
+         ( DriverUpdate )            one FACT on one event   "rose 3% in Q1"
+            |          &#94;
+   FROM_SOURCE         |  EXPLAINED_BY  { the VERDICT }   &#8592; only if it moved the stock
+            v          |
+            ( Event )--+               a real 8-K / transcript / news item
+                |
+                |  INFLUENCES / PRIMARY_FILER  { the real stock move }
+                v
+            ( Company )                reached ONLY through the event</div>
+
+  <div class="panel accent">
+    <h3>The one analogy</h3>
+    <p>A <b>Driver</b> is a blank <em>thermometer</em> (<code>oil_price</code>). A <b>DriverUpdate</b> is one <em>reading</em> taken at a real event ("oil rose to $80"). The <b>verdict</b> is a separate note clipped onto the event: <em>"and that reading is why the stock fell."</em> Three separate things — never mashed into one.</p>
+  </div>
+
+  <details>
+    <summary>Why is the verdict an <em>edge</em> and not its own box?</summary>
+    <p>Because a verdict only means something <b>against the real return</b> — and the return lives on the <code>Event → Company</code> link. A company has hundreds of thousands of returns, so it can't say <em>which</em> move a verdict is about; the <b>event</b> can. So the verdict hangs off the event, one hop from its grade. (It also means a market-wide driver like <code>oil_price</code> needs no special case — no company is stored on the driver layer at all.)</p>
+  </details>
+</section>
+
+<!-- ===== 6 GRAPH SHAPE / EDGES ===== -->
+<section class="step" data-step="6">
+  <span class="tag">The model · part 2 of 5</span>
+  <h1>Five links wire it together — and two of them point opposite ways.</h1>
+  <p class="lead">Every connection in the graph is one of just five links. The trick to remember: a fact and its event are joined by <b>two</b> separate one-way links, never one.</p>
+
+  <table class="t">
+    <thead><tr><th>Link</th><th>From &#8594; To</th><th>Means</th><th>When</th></tr></thead>
+    <tbody>
+      <tr><td><code>OF_DRIVER</code></td><td>DriverUpdate &#8594; Driver</td><td>this fact is an instance of this driver</td><td>always (exactly 1)</td></tr>
+      <tr><td><code>FROM_SOURCE</code></td><td>DriverUpdate &#8594; Event</td><td>this fact came from this event (its evidence)</td><td>always</td></tr>
+      <tr><td><code>EXPLAINED_BY</code></td><td>Event &#8594; DriverUpdate</td><td>this event's move is explained by this fact <span class="pill gray">the verdict</span></td><td>0, or 1 per producer</td></tr>
+      <tr><td><code>SAME_AS</code></td><td>Driver &#8594; Driver</td><td>two names are the same cause (reversible)</td><td>only on exact-same meaning</td></tr>
+      <tr><td><code>INFLUENCES</code> / <code>PRIMARY_FILER</code></td><td>Event &#8594; Company</td><td>the real stock move <span class="pill gray">already exists</span></td><td>existing pipeline</td></tr>
+    </tbody>
+  </table>
+
+  <div class="panel amber">
+    <h3>The key subtlety: two opposite links between a fact and its event</h3>
+    <p><code>FROM_SOURCE</code> points <b>down</b> (fact &#8594; event): "I came from here." <code>EXPLAINED_BY</code> points <b>up</b> (event &#8594; fact): "you explain my move." They are <b>separate</b> because a fact can be <em>reported</em> in an event without <em>explaining</em> its move. Never collapse them into one link.</p>
+  </div>
+
+  <details>
+    <summary>Three more rules baked into the shape</summary>
+    <ul>
+      <li><strong>No <code>company</code> on the driver layer.</strong> The company is reached only via <code>Event → Company</code> (verified: every event has exactly one company). A market-wide driver takes the exact same shape.</li>
+      <li><strong>No <code>BASED_ON</code> link.</strong> Trends are <em>queried</em> (each fact's state + numbers carry the value), never stored as links between facts.</li>
+      <li><strong>Same fact in two different events = two DriverUpdates</strong> (keyed by event). They're only combined in a read-time <em>view</em>, never merged in storage.</li>
+      <li><strong>If two producers ever judge one event</strong> → two parallel <code>EXPLAINED_BY</code> links, one per producer (they can't collide).</li>
+    </ul>
+  </details>
+  <p class="note">This mirrors the production <b>Guidance</b> graph (a class node + per-event instances), already live at <b>548 Guidance + 8,432 GuidanceUpdate</b> nodes — so the shape is battle-tested.</p>
+</section>
+
+<!-- ===== 7 WHO CREATES WHAT ===== -->
+<section class="step" data-step="7">
+  <span class="tag green">The model · part 3 of 5 · the contract (LOCKED)</span>
+  <h1>The build makes <em>labels</em>. A producer makes <em>facts</em>. Nothing else.</h1>
+  <p class="lead">This is the single most important rule of the whole design. Two jobs, two owners — and they never trade places.</p>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>🏭 Catalog build → the CLASS</h3>
+      <p class="small" style="font-size:18px;">In <b>one run</b>: read non-news sources + the company's own reported metrics (<b>KPIs</b>) → coin/reuse driver <b>names</b> → as final steps stamp each driver's <code>fact_type</code> + optional links.</p>
+      <p class="small" style="font-size:18px;"><b>It never creates a DriverUpdate.</b></p>
+    </div>
+    <div class="col">
+      <h3>🤖 Producer → the FACTS</h3>
+      <p class="small" style="font-size:18px;">An AI reading a <b>real event</b> (<code>earnings-learner</code> or <code>news-driver</code>) decides the event-level fact and writes the <b>DriverUpdate</b> (+ the verdict, if it moved the stock).</p>
+      <p class="small" style="font-size:18px;"><b>Producers are the ONLY makers of DriverUpdates</b> — live or backfill.</p>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Mention vs fact — the line that splits the two jobs</h3>
+    <div class="ascii">build sees:   "...comparable restaurant sales trends..."   &#8594; a MENTION  &#8594; justifies a NAME
+producer sees: "comp sales ROSE 3% in Q1 vs +1% guided"      &#8594; a FACT     &#8594; writes a DriverUpdate</div>
+    <p class="small">A bare mention never becomes a DriverUpdate. The producer's <b>gate</b> drops it. (Generic risk boilerplate — "litigation could harm us" — is a mention, so it's dropped too.)</p>
+  </div>
+
+  <div class="panel danger">
+    <h3>Three things that are deliberately forbidden</h3>
+    <ul class="small" style="font-size:18px;">
+      <li><b>No build-time "seeder."</b> A second thing that invents facts would be a rival source of truth (it lacks the producer's prior-period memory + consensus) → silent errors. Forbidden.</li>
+      <li><b>KPI-only evidence makes a NAME only</b> — never a DriverUpdate (a KPI has no real event, date, or move).</li>
+      <li><b>No "needs &gt;2 events" rule.</b> A single event is a valid fact (a CEO resignation, an FDA approval, a guidance cut). "Seen often" is a read-time view, never a write gate.</li>
+    </ul>
+  </div>
+
+  <div class="panel green">
+    <h3>Want early history? Run the producer over the past (a "backfill")</h3>
+    <p>That's the <b>only</b> correct way to "seed" — same producer, same judgement, one source of truth, zero duplicate logic. A backfilled fact is just flagged <code>produced_mode = backfill</code> so we know it could have used hindsight.</p>
+  </div>
+
+  <details>
+    <summary>The 8 locked points + the tensions we already settled (so they're never reopened)</summary>
+    <ul>
+      <li><b>1.</b> Build creates the Driver CLASS (name + fact_type + optional links) in one run, never a DriverUpdate.</li>
+      <li><b>2.</b> A DriverUpdate = a real event-level FACT (state / change / surprise / guidance / action) — not a mention. <em>(Supersedes the older "= a change" wording: an action like a CEO exit has no X→Y change but is still a fact.)</em></li>
+      <li><b>3.</b> Producers are the only creators of DriverUpdates (live + backfill).</li>
+      <li><b>4.</b> KPI-only evidence → a name only.</li>
+      <li><b>5.</b> No separate build-time seeder / change-detector (it would be a rival source of truth).</li>
+      <li><b>6.</b> No "&gt;2 events" write rule — a single event can be a fact; recurrence is read-time only.</li>
+      <li><b>7.</b> Early history = run the producer as a backfill.</li>
+      <li><b>8.</b> The verdict (<code>EXPLAINED_BY</code>) is separate: a fact may exist with no verdict.</li>
+    </ul>
+    <p class="small"><b>Tensions logged &amp; closed:</b> "the build already sees the quote → seed a fact for free" → No (a mention isn't a fact-judgement). "Only seed drivers seen &gt;2 times" → dropped. This section is the authority: if any older wording conflicts, this wins.</p>
+  </details>
+</section>
+
+<!-- ===== 8 DRIVER NODE ===== -->
+<section class="step" data-step="8">
+  <span class="tag">The model · part 4 of 5</span>
+  <h1>The Driver: a tiny, permanent label.</h1>
+  <p class="lead">The class node stays <b>small forever</b> — just enough to name the cause and route everything else. Five fields, two kinds of link.</p>
+
+  <div class="kv">
+    <div class="k"><code>id</code></div><div class="v">code-built stable key, e.g. <code>driver:same_store_sales</code> (code builds it, the AI never does).</div>
+    <div class="k"><code>name</code></div><div class="v">the lower_snake cause, e.g. <code>same_store_sales</code>. A <code>SAME_AS</code> head <em>is</em> the canonical name.</div>
+    <div class="k"><code>created</code></div><div class="v">when the driver first appeared.</div>
+    <div class="k"><code>definition</code></div><div class="v">a plain one-line meaning. <span class="pill gray">optional</span></div>
+    <div class="k"><code>fact_type</code></div><div class="v">the driver's permanent KIND — one of 4 (next slide). Routes everything downstream.</div>
+  </div>
+
+  <div class="panel">
+    <h3><code>SAME_AS</code> is a <em>link</em>, not an alias list</h3>
+    <p>When two names mean the exact same cause, they stay as <b>two separate nodes</b> joined by a reversible <code>SAME_AS</code> link (a "star": each variant points to one head; the head itself has <b>no</b> link out — it is its own canonical; no chains; the head never moves; nothing is ever deleted).</p>
+    <div class="ascii">  customer_transactions ──SAME_AS──&#8594; guest_count   (the head)
+         comp_sales       ──SAME_AS──&#8594; same_store_sales</div>
+    <p class="small"><b>Why not a flat <code>aliases</code> array?</b> Because each variant keeps its <em>own</em> evidence and its own facts. An array would flatten that away. Trading code just follows <code>SAME_AS</code> to the head and unions the whole star (every variant's evidence + DriverUpdates).</p>
+  </div>
+
+  <div class="panel accent">
+    <h3>Optional links — the driver's "wiring to the books" <span class="pill gray">best-effort</span></h3>
+    <p>Three optional <b>links</b> on the class (never per-fact): <code>MAPS_TO_CONCEPT</code> → an XBRL accounting concept · <code>MAPS_TO_MEMBER</code> → a segment/brand · <code>MAPS_TO_GUIDANCE</code> → a company-guidance metric. They're attached only on a confident match, <b>never block</b> the catalog, and self-heal on re-run.</p>
+  </div>
+
+  <details>
+    <summary>Fine print: what's deliberately NOT on the class</summary>
+    <ul>
+      <li><strong>No <code>evhash16</code> (value-hash) on the class</strong> — a label is never re-extracted, so there's nothing to change-detect. (The fact and verdict carry one; the label doesn't.)</li>
+      <li><strong><code>MAPS_TO_GUIDANCE</code> is one-to-many</strong> — one driver can union several fragmented guidance synonyms (e.g. <code>revenue_guidance</code> → both <code>guidance:revenue</code> and <code>guidance:net_sales</code>). More on this in slide 39.</li>
+      <li><strong>Links are MATCH-only</strong> (a bad guess makes no link, never a new node) and use <em>set-replace</em> on re-run (stale links are deleted, not left behind).</li>
+      <li><strong>The state, numbers, quote, and scope live on the DriverUpdate</strong> (the instance), never on the class. <span style="color:var(--muted)">("scope" = which version of the fact — a period/segment; defined on slide 36.)</span></li>
+    </ul>
+  </details>
+</section>
+
+<!-- ===== 9 FACT_TYPE ===== -->
+<section class="step" data-step="9">
+  <span class="tag green">The model · part 5 of 5 · LOCKED 2026-06-15</span>
+  <h1>Every driver has exactly ONE permanent kind.</h1>
+  <p class="lead"><code>fact_type</code> is the driver's KIND, set once at build time. It does one powerful job: it <b>routes</b> which "what happened" words are even legal for that driver (slide 32).</p>
+
+  <table class="t">
+    <thead><tr><th>fact_type</th><th>the driver is about…</th><th>examples</th></tr></thead>
+    <tbody>
+      <tr><td><code>metric</code></td><td>any <b>standing variable you can re-read over time</b> — a number, cost, rate, ratio, count, <em>or</em> a qualitative condition (weather, sentiment, policy in force)</td><td><code>same_store_sales</code> · <code>commodity_cost</code> · <code>consumer_sentiment</code> · <code>tariff_policy</code></td></tr>
+      <tr><td><code>guidance</code></td><td>the company's own <b>forward outlook</b> / target / forecast</td><td><code>eps_guidance</code> · <code>revenue_guidance</code></td></tr>
+      <tr><td><code>surprise</code></td><td>an <b>actual result vs an expectation</b> (consensus or the company's own prior guide) — <em>not</em> vs last period</td><td><code>eps_surprise</code> · <code>revenue_surprise</code></td></tr>
+      <tr><td><code>action_event</code></td><td>a <b>discrete thing that happened</b> — a decision, deal, incident, approval, one-off charge</td><td><code>dividend</code> · <code>restaurant_closure</code> · <code>ceo_succession</code></td></tr>
+    </tbody>
+  </table>
+
+  <div class="panel">
+    <h3>The one test that splits <code>metric</code> from <code>action_event</code></h3>
+    <p>Between two events, is there a <b>standing level you could re-read</b> ("what is it now vs before?")?</p>
+    <div class="ascii">YES &#8594; metric        ("what is the cost now?")     e.g. commodity_cost
+NO  &#8594; action_event ("did it happen / get undone?") e.g. asset_impairment</div>
+    <p class="small">A <code>_surprise</code> or <code>_guidance</code> framing overrides this to those kinds.</p>
+  </div>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>Dual framing is allowed</h3>
+      <p class="small" style="font-size:18px;">The same topic can be two drivers of different kind, decided by the <em>name</em>: <code>dividend</code> (action_event) vs <code>dividend_per_share</code> (metric).</p>
+    </div>
+    <div class="col">
+      <h3>Who sets it &amp; when</h3>
+      <p class="small" style="font-size:18px;">A <b>strong model (Opus)</b>, as a final build step, <b>once per driver</b> (never per event). Cheap, because it runs once. The blind reader never sets it.</p>
+    </div>
+  </div>
+
+  <details>
+    <summary>Why a routed kind, and why we won't add more rules</summary>
+    <ul>
+      <li><strong>Why not one flat up/down list?</strong> ~1 in 6 real facts have no up/down (risk talk, plain snapshots, "stabilized", guidance ranges). Routing by kind handles them cleanly.</li>
+      <li><strong>Why distinct kinds matter for trading:</strong> each is its own query signal — "show me all <code>withdrawn</code> guidance" = bearish — so we deliberately do <em>not</em> collapse them.</li>
+      <li><strong>Validated on all 1,282 real driver names</strong> — 0 fit none; every "merge to 3" or "add a 5th" attempt failed for a concrete reason.</li>
+      <li><strong>Names that read both ways → default to the standing bucket:</strong> <code>litigation</code>, <code>convertible_notes</code>, <code>dividend_policy</code>, <code>restructuring_costs</code> → <code>metric</code>; <code>corporate_restructuring</code>, <code>asset_impairment</code> → <code>action_event</code>.</li>
+      <li><strong>Keep the 4 definitions exactly as written — add no extra clauses or examples.</strong> A tested extra clause overfit (fixed two cases, broke one). Opus was stable on 28/28 keyed cases; a cheap model wobbled.</li>
+      <li><strong>It's a precondition:</strong> a driver with no <code>fact_type</code> yet → any DriverUpdate write is rejected.</li>
+    </ul>
+  </details>
+</section>
+
+<!-- ===== 5 BIG PICTURE ===== -->
+<section class="step" data-step="10">
   <span class="tag">Big picture</span>
   <h1>Build from the bottom up, like merging folders.</h1>
   <p class="lead">Start at one company. Merge companies into an <b>industry</b>. Merge industries into a <b>sector</b>. Merge sectors into the <b>global</b> list. The <b>same</b> merge engine runs at every level.</p>
@@ -386,7 +668,7 @@
 </section>
 
 <!-- ===== 6 DATA SHAPE ===== -->
-<section class="step" data-step="6">
+<section class="step" data-step="11">
   <span class="tag">The unit</span>
   <h1>Everything flows as one simple shape: a "record."</h1>
   <p class="lead">One record = one driver, plus the real quotes that prove it. This is the only shape in the whole system.</p>
@@ -401,52 +683,18 @@
       "quote":"...comparable restaurant sales trends." }
   ],
   "same_as_variants": [],                     <span style="color:#94a3b8">// other names that mean the same thing</span>
-  "optional_links":   { "xbrl_concept": null }
+  "optional_links":   { "xbrl_concept": null, "xbrl_member": null, "guidance_ref": null }  <span style="color:#94a3b8">// the 3 links from slide 8, flattened into the record</span>
 }</pre>
 
   <div class="panel">
-    <h3>The atom: the 5-tuple</h3>
-    <p>Each piece of evidence is identified by five fields together: <code>company</code> + <code>source_type</code> + <code>source_id</code> + <code>date</code> + <code>quote</code>. Code dedups, sorts, splits, and verifies <b>everything</b> by this 5-tuple. If you remember one thing, remember this is the unit of truth.</p>
+    <h3>The atom: 5 fields that ID one quote</h3>
+    <p>Each piece of evidence is identified by five fields together: <code>company</code> + <code>source_type</code> + <code>source_id</code> + <code>date</code> + <code>quote</code>. Code dedups, sorts, splits, and verifies <b>everything</b> by these five fields. If you remember one thing, remember this is the unit of truth.</p>
   </div>
-  <p class="note">Notice what's <em>not</em> in the name: no direction, no number, no date. The next slide explains where those live.</p>
-</section>
-
-<!-- ===== 7 CLASS VS EVENT ===== -->
-<section class="step" data-step="7">
-  <span class="tag">A key distinction</span>
-  <h1>The driver is a <em>label</em>. What happened is a separate <em>event</em>.</h1>
-  <p class="lead">Think of a driver like a <b>blank thermometer</b> ("oil price"). Each reading on a given day is a separate thing (a <b>DriverUpdate</b>). The name stays clean; everything that "happened" lives on the event.</p>
-
-  <div class="twocol">
-    <div class="col">
-      <h3>Driver — the label (the class)</h3>
-      <ul class="small" style="font-size:19px;">
-        <li><code>driver_name</code> — just the cause</li>
-        <li>optional links (accounting, related names)</li>
-      </ul>
-      <p class="small">Stays tiny and reusable forever.</p>
-    </div>
-    <div class="col">
-      <h3>DriverUpdate — one event (the instance)</h3>
-      <ul class="small" style="font-size:19px;">
-        <li><code>driver_state</code> — rose / cut / beat</li>
-        <li><code>stock_impact</code> — long / short</li>
-        <li><code>magnitude</code> &amp; <code>confidence</code> (0–100)</li>
-        <li><code>llm_producer</code> — which AI made it</li>
-        <li><code>quote</code> + link to the event</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="panel green">
-    <h3>Why split them?</h3>
-    <p>Because one clean name then collects <b>many updates over time</b> — that history is exactly what lets the system learn and predict. (The actual stock return lives on the linked event, not on the driver.)</p>
-  </div>
-  <p class="note">This is why the naming rules ban states, directions, and numbers from the name — they belong on the update, not the label.</p>
+  <p class="note">This is the <b>build artifact</b> — the catalog file. In the live graph it becomes the <b>Driver node</b> (slide 8): <code>same_as_variants</code> turn into <code>SAME_AS</code> links, and <code>canonical_name</code> just marks the link's head. Notice what's <em>not</em> in the name — no direction, number, or date; those live on the <b>DriverUpdate</b> (slide 31).</p>
 </section>
 
 <!-- ===== 8 FILES ===== -->
-<section class="step" data-step="8">
+<section class="step" data-step="12">
   <span class="tag">The toolbox</span>
   <h1>Two kinds of files — and the split is the design.</h1>
   <p class="lead">Don't memorize file names. Just know there are <b>AI orchestrators</b> (ask the AI for meaning) and <b>code tools</b> (do the bookkeeping and refuse to ship anything broken).</p>
@@ -481,7 +729,7 @@
 </section>
 
 <!-- ===== 9 STAGE 1 ===== -->
-<section class="step" data-step="9">
+<section class="step" data-step="13">
   <span class="tag green">Stage 1 · the Leaf</span>
   <h1>Turn one industry into a raw catalog, in 6 steps.</h1>
   <p class="lead">Run <code>menu_build.js</code> with <code>{ industry: "Restaurants" }</code>. It does this, in order:</p>
@@ -511,7 +759,7 @@
 </section>
 
 <!-- ===== 10 RESOLVE ===== -->
-<section class="step" data-step="10">
+<section class="step" data-step="14">
   <span class="tag">Step 1 · Resolve</span>
   <h1>"Which companies are in this industry?"</h1>
   <p class="lead">Ask the database (Neo4j) for the ticker list. <span class="srcchip"><code>resolve_driver_scope.py</code></span></p>
@@ -532,7 +780,7 @@
 </section>
 
 <!-- ===== 11 FETCH ===== -->
-<section class="step" data-step="11">
+<section class="step" data-step="15">
   <span class="tag">Step 2 · Fetch</span>
   <h1>Pull every company's real words — and clip nothing.</h1>
   <p class="lead">For each ticker, grab all the non-news sources <b>with full text</b>. <span class="srcchip"><code>fetch_company_sources.py</code></span></p>
@@ -546,11 +794,11 @@
     <h3>The big change: stop dropping text</h3>
     <p>The old version had size caps that quietly clipped <b>~62% of the text</b> (and <b>100% of transcripts</b>). That's a huge recall loss. Now it pulls everything. One real company (CAKE) = <span class="big-num">2.24M</span> characters of source text.</p>
   </div>
-  <p class="note">"News" is deliberately <em>not</em> in this seed — news drivers get added live later (slide 26). The seed is built only from what the company itself reports.</p>
+  <p class="note">"News" is deliberately <em>not</em> in this seed — news drivers get added live later (slide 38). The seed is built only from what the company itself reports.</p>
 </section>
 
 <!-- ===== 12 CHUNK ===== -->
-<section class="step" data-step="12">
+<section class="step" data-step="16">
   <span class="tag">Step 3 · Chunk</span>
   <h1>An AI can't read 2 million characters. So split — never clip.</h1>
   <p class="lead">Cut the text into <b>~40,000-character pieces</b>, always at a clean seam. <span class="srcchip"><code>chunk_company_sources.py</code></span></p>
@@ -571,7 +819,7 @@
 </section>
 
 <!-- ===== 13 BOTS ===== -->
-<section class="step" data-step="13">
+<section class="step" data-step="17">
   <span class="tag">Step 4 · Menus</span>
   <h1>One blind AI bot per piece — the only place names are born.</h1>
   <p class="lead">Each bot sees <b>only its one chunk</b> — no other company, no shared list. It reads the real text and coins specific driver names.</p>
@@ -619,7 +867,7 @@ source_type:    fiscal.ai-kpi</div>
 </section>
 
 <!-- ===== 14 CONVERGE ===== -->
-<section class="step" data-step="14">
+<section class="step" data-step="18">
   <span class="tag">Step 5 · Converge</span>
   <h1>Code groups all the menus into one raw seed.</h1>
   <p class="lead">No AI here. Just bookkeeping: group identical names, merge their evidence. <span class="srcchip"><code>build_seed.py</code></span></p>
@@ -627,7 +875,7 @@ source_type:    fiscal.ai-kpi</div>
   <div class="flowline" aria-label="Converge counts">
     <div class="node"><strong>2,246</strong><span>raw candidate names from all bots</span></div>
     <div class="arrow">&#8594;</div>
-    <div class="node"><strong>group + dedup</strong><span>by lowercased name &amp; by the 5-tuple</span></div>
+    <div class="node"><strong>group + dedup</strong><span>by lowercased name &amp; by the 5 fields</span></div>
     <div class="arrow">&#8594;</div>
     <div class="node"><strong>594</strong><span>distinct drivers in the seed</span></div>
   </div>
@@ -637,7 +885,7 @@ source_type:    fiscal.ai-kpi</div>
 </section>
 
 <!-- ===== 15 STAGE 2 ===== -->
-<section class="step" data-step="15">
+<section class="step" data-step="19">
   <span class="tag green">Stage 2 · Reconcile</span>
   <h1>The merge engine: clean the seed into a real catalog.</h1>
   <p class="lead">Run <code>reconcile.js</code>. This is the heart of the system — and it runs at <b>every level</b> later, too.</p>
@@ -649,6 +897,8 @@ source_type:    fiscal.ai-kpi</div>
     <div class="arrow">&#8594;</div>
     <div class="node"><strong>Skeptic</strong><span>break every merge</span></div>
     <div class="arrow">&#8594;</div>
+    <div class="node"><strong>Same-name</strong><span>catch homonyms</span></div>
+    <div class="arrow">&#8594;</div>
     <div class="node"><strong>Assemble</strong><span>code writes the file</span></div>
     <div class="arrow">&#8594;</div>
     <div class="node"><strong>Validate</strong><span>hard gate</span></div>
@@ -657,7 +907,7 @@ source_type:    fiscal.ai-kpi</div>
 </section>
 
 <!-- ===== 16 GUARD ===== -->
-<section class="step" data-step="16">
+<section class="step" data-step="20">
   <span class="tag">Step 1 · Guard &amp; slice</span>
   <h1>Don't get billed wrong, and don't overload the AI.</h1>
 
@@ -669,12 +919,12 @@ source_type:    fiscal.ai-kpi</div>
   <div class="panel">
     <h3>Slice into batches <span class="srcchip"><code>slice_seed.py</code></span></h3>
     <p>594 records is over the safe limit (400 records / 300k chars). So code cuts it into <b>name-sorted batches</b> so each AI judge reasons over a small, careful pile.</p>
-    <p class="note">Trade-off: two synonyms with no shared words might land in different batches and miss each other. That's an <em>under</em>-merge (the safe direction) — and the repair pass (slide 24) catches it later.</p>
+    <p class="note">Trade-off: two synonyms with no shared words might land in different batches and miss each other. That's an <em>under</em>-merge (the safe direction) — and the repair pass (slide 29) catches it later.</p>
   </div>
 </section>
 
 <!-- ===== 17 TWO JUDGES ===== -->
-<section class="step" data-step="17">
+<section class="step" data-step="21">
   <span class="tag">Step 2 · Two judges</span>
   <h1>Two independent AI agents, working in parallel.</h1>
 
@@ -706,7 +956,7 @@ source_type:    fiscal.ai-kpi</div>
 </section>
 
 <!-- ===== 18 SKEPTIC ===== -->
-<section class="step" data-step="18">
+<section class="step" data-step="22">
   <span class="tag red">Step 3 · The skeptic</span>
   <h1>A third agent whose only job is to break the merges.</h1>
   <p class="lead">This is what stops the v2 collapse. For every proposed merge, the default answer is <b>NO</b>. It flips to YES only if the skeptic <em>cannot</em> refute that they're the exact same <b>object + scope + mechanism</b>.</p>
@@ -728,7 +978,7 @@ source_type:    fiscal.ai-kpi</div>
 </section>
 
 <!-- ===== 19 D5 ===== -->
-<section class="step" data-step="19">
+<section class="step" data-step="23">
   <span class="tag">Step 4 · Same-name check</span>
   <h1>One name, two meanings? Catch the rare "homonym."</h1>
   <p class="lead">If a single name's <b>own</b> evidence shows two different real-world meanings across companies, it goes to a tiny review. Usually this fires <b>zero</b> times — but it's the safety hatch.</p>
@@ -747,11 +997,11 @@ source_type:    fiscal.ai-kpi</div>
       <p>Too thin to tell. <b>Park</b> it — leave it out of the clean list (fail-closed).</p>
     </div>
   </div>
-  <p class="note">You'll see all three of these verdicts on real data in slide 22 — they're the same verdicts the higher merge levels use.</p>
+  <p class="note">You'll see all three of these verdicts on real data in slide 27 — they're the same verdicts the higher merge levels use.</p>
 </section>
 
 <!-- ===== 20 ASSEMBLE ===== -->
-<section class="step" data-step="20">
+<section class="step" data-step="24">
   <span class="tag green">Step 5 · Assemble</span>
   <h1>Code writes the catalog — closing the biggest hole.</h1>
   <p class="lead">The AI agents only produced <b>short decision lists</b>. Now pure code applies a fixed 5-way rule to each seed record. <span class="srcchip"><code>assemble_catalog.py</code></span></p>
@@ -769,8 +1019,9 @@ source_type:    fiscal.ai-kpi</div>
   </div>
 
   <div class="panel">
-    <h3>Real result: 594 → a clean catalog</h3>
-    <p><span class="pill green">keep 388</span><span class="pill">merged 175</span><span class="pill amber">rewrite 10</span><span class="pill gray">skip 7</span><span class="pill gray">parked 16</span></p>
+    <h3>Real result: 594 seed names → a 573-record catalog</h3>
+    <p>The 573 records = <b>388 canonical survivors</b> + <b>185 variants</b> linked back by <code>SAME_AS</code>. Plus <b>7 skipped</b> and <b>16 parked</b>, kept on side-lists (out of the clean catalog).</p>
+    <p class="small">The run's raw decision tallies — <span class="pill green">keep 388</span><span class="pill">same_as 175</span><span class="pill amber">rewrite 10</span><span class="pill gray">skip 7</span><span class="pill gray">parked 16</span> — <b>overlap</b> (a rewrite can also be a SAME_AS, and the same-name check on slide 23 splits a few homonyms), so they don't add up to a flat 594. The validator (slide 25) still proves every seed name is accounted for exactly once.</p>
     <div class="ascii">acquisition_related_costs    &#9508;
 acquisition_related_expenses &#9532;--&#8594;  acquisition_expenses    (3 names &#8594; 1, read in one hop)
 frc_acquisition_costs        &#9496;</div>
@@ -778,7 +1029,7 @@ frc_acquisition_costs        &#9496;</div>
 </section>
 
 <!-- ===== 21 VALIDATE ===== -->
-<section class="step" data-step="21">
+<section class="step" data-step="25">
   <span class="tag red">Step 6 · Validate</span>
   <h1>The hard gate: re-check structure, hard-stop on any flaw.</h1>
   <p class="lead">Zero judgment — just structure. If anything is off, the run <b>fails</b> (the catalog can never ship broken). <span class="srcchip"><code>validate_catalog.py</code></span></p>
@@ -799,8 +1050,51 @@ frc_acquisition_costs        &#9496;</div>
   </div>
 </section>
 
+<!-- ===== 26 FINAL STEPS: FACT_TYPE + LINKS ===== -->
+<section class="step" data-step="26">
+  <span class="tag green">Stage 2 · the closing steps</span>
+  <h1>Two last steps make each driver "born complete."</h1>
+  <p class="lead">The names are now clean. Before a driver counts as finished, the build adds <b>its kind</b> and <b>its wiring</b> — in the <em>same</em> run. Still <b>no facts</b> are created here.</p>
+
+  <div class="flowline" aria-label="Born-complete steps">
+    <div class="node"><strong>1 · Names</strong><span>blind readers coin them (recall-first)</span></div>
+    <div class="arrow">&#8594;</div>
+    <div class="node"><strong>2 · Clean</strong><span>reconcile + validate (just shown)</span></div>
+    <div class="arrow">&#8594;</div>
+    <div class="node"><strong>3 · fact_type</strong><span>Opus stamps the KIND, once per driver</span></div>
+    <div class="arrow">&#8594;</div>
+    <div class="node"><strong>4 · Links</strong><span>attach XBRL / guidance, best-effort</span></div>
+  </div>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>Step 3 · <code>fact_type</code> (mandatory)</h3>
+      <p class="small" style="font-size:18px;">A <b>strong model (Opus)</b> reads each finalized name + its evidence and assigns one of the 4 kinds (slide 9). <b>Once per driver, not per event</b> → cost is trivial. A separate classifier; no re-reading the source.</p>
+    </div>
+    <div class="col">
+      <h3>Step 4 · optional links (best-effort)</h3>
+      <p class="small" style="font-size:18px;">Attach <code>MAPS_TO_CONCEPT</code> / <code>MAPS_TO_MEMBER</code> / <code>MAPS_TO_GUIDANCE</code> only on a confident match. A miss <b>never blocks</b> the catalog and <b>self-heals</b> on the next run.</p>
+    </div>
+  </div>
+
+  <div class="panel green">
+    <h3>Why one run, not a later pass</h3>
+    <p>Because the <b>same</b> recipe runs when a <em>live producer</em> coins a brand-new driver on the fly — and a live producer has no "later pass." So a driver is always <b>born complete</b>: name + <code>fact_type</code> + links, whether it's the first big build, an incremental refresh, or one new name mid-stream.</p>
+  </div>
+
+  <div class="panel amber">
+    <h3>Still zero DriverUpdates</h3>
+    <p>This finishes the <b>label</b>. The <b>facts</b> (DriverUpdates) and <b>verdicts</b> are made later, only by a producer reading a real event — that's the producer's job (slides 31–37).</p>
+  </div>
+
+  <details>
+    <summary>Why Opus for the kind, and why the rules stay frozen</summary>
+    <p>Opus was stable and correct on <b>28/28</b> keyed cases plus all the "reads-both-ways" cases; a cheap model wobbled (locked 2026-06-16). Keep the 4 definitions <b>exactly as written</b> — a tested extra clause overfit (fixed two cases, broke one). In an incremental refresh, a driver's <code>fact_type</code> is <b>frozen like its name</b> — old drivers keep theirs; only brand-new drivers get a fresh one.</p>
+  </details>
+</section>
+
 <!-- ===== 22 FOLD EXAMPLE ===== -->
-<section class="step" data-step="22">
+<section class="step" data-step="27">
   <span class="tag green">Stage 3 · The Fold</span>
   <h1>Merging upward — shown on real data.</h1>
   <p class="lead">To build a sector, merge its industry catalogs. Same engine, bigger units. Here's an actual test fold of 4 child catalogs — watch <b>one word get three different fates.</b></p>
@@ -831,7 +1125,7 @@ child_d:  delta_unique, fulfillment_cost, wage_inflation</div>
 </section>
 
 <!-- ===== 23 FOLD MECHANICS ===== -->
-<section class="step" data-step="23">
+<section class="step" data-step="28">
   <span class="tag">Stage 3 · mechanics</span>
   <h1>How the fold actually runs.</h1>
   <p class="lead">A deterministic <b>combine</b> step sits in front of the same reconcile engine. <span class="srcchip"><code>fold_catalogs.js / .py</code></span></p>
@@ -871,7 +1165,7 @@ child_d:  delta_unique, fulfillment_cost, wage_inflation</div>
 </section>
 
 <!-- ===== 24 ORCHESTRATE ===== -->
-<section class="step" data-step="24">
+<section class="step" data-step="29">
   <span class="tag">The conductor &amp; helpers</span>
   <h1>One conductor, plus two cost-savers.</h1>
 
@@ -898,7 +1192,7 @@ child_d:  delta_unique, fulfillment_cost, wage_inflation</div>
 </section>
 
 <!-- ===== 25 MODELS & COST ===== -->
-<section class="step" data-step="25">
+<section class="step" data-step="30">
   <span class="tag amber">Money &amp; speed</span>
   <h1>Pick the right AI for each job — recall vs cost.</h1>
   <p class="lead">Different AI models behave very differently. Picking the wrong one quietly loses drivers <em>or</em> wastes money. So each job gets a specific model.</p>
@@ -920,17 +1214,344 @@ Haiku    &#8594; noisy + breaks naming rules</div>
     </div>
     <div class="col">
       <h3>⚖️ All judges → Opus</h3>
-      <p>Dedup, gate, skeptic, folds, validators — the careful decisions use Opus (exactly what passed the gates, at lower cost).</p>
+      <p>Dedup, gate, skeptic, folds, validators — the careful decisions use Opus: the model the design was validated on, and cheaper than the high-recall reader.</p>
     </div>
   </div>
   <p class="note">Plus: the billing guard (subscription-only) runs on every workflow, and big bot bursts get a fresh time window so they don't run dry — with resume as the safety net if one dies.</p>
 </section>
 
+<!-- ===== 31 DRIVERUPDATE (THE FACT) ===== -->
+<section class="step" data-step="31">
+  <span class="tag">The live graph · 1 of 7</span>
+  <h1>The DriverUpdate: one real fact, written by a producer.</h1>
+  <p class="lead">Everything so far built the <b>labels</b>. Now the <b>producer</b> reads a real event and, when it finds a genuine fact, writes one DriverUpdate — the instance that hangs off a label.</p>
+
+  <pre>{
+  "id":          "du:CAKE_2026-02-23:same_store_sales:period=fy",  <span style="color:#94a3b8">// code-built key</span>
+  "driver_state":"increased",            <span style="color:#94a3b8">// what happened (from the driver's lane — slide 32)</span>
+  "level_low":   3, "level_unit":"percent_yoy",    <span style="color:#94a3b8">// the size (slide 33)</span>
+  "comparison_low": 1, "comparison_baseline":"prior_year",
+  "quote":       "comparable sales increased 3% vs 1% a year ago",
+  "source_type": "8-K", "date":"2026-02-23",   <span style="color:#94a3b8">// where + when it was said</span>
+  "fact_scope":  "period=fy",            <span style="color:#94a3b8">// which version of the fact (slide 36)</span>
+  "evhash16":    "a1b2c3d4e5f60718"      <span style="color:#94a3b8">// value-fingerprint (slide 36)</span>
+}
+<span style="color:#94a3b8">// links: ─OF_DRIVER→ (Driver same_store_sales) · ─FROM_SOURCE→ (Event 8-K)</span></pre>
+
+  <div class="panel danger">
+    <h3>The GATE: a mention is not a fact</h3>
+    <p>Before writing anything, the producer asks: <em>does this event carry a real state / change / surprise / guidance / action about the driver?</em> If it's just a passing mention → <b>write nothing</b>. ("Weather may affect results" is boilerplate → dropped.)</p>
+  </div>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>Who fills it</h3>
+      <p class="small" style="font-size:18px;">The catalog reader writes <b>none</b> of this (it only saved a name + a quote). The <b>producer</b> fills <code>driver_state</code> + the numbers, because only it has prior-period memory and the real event.</p>
+    </div>
+    <div class="col">
+      <h3>A single event is enough</h3>
+      <p class="small" style="font-size:18px;">One event can be a whole fact (a CEO exit, an FDA nod). Every fact is kept — even a driver's very first, even a one-off. "Seen often" is a read-time view, never a write rule.</p>
+    </div>
+  </div>
+
+  <details>
+    <summary>The smaller nuances on the fact node</summary>
+    <ul>
+      <li><strong><code>quote</code></strong> is stored only when the source gives a real state/value/change — and the verbatim quote is always the <b>final truth</b>; the state + numbers are just queryable helpers.</li>
+      <li><strong>Source &amp; timing:</strong> <code>source_type</code> (where it came from — e.g. "8-K"), <code>date</code> (when it was said), <code>created</code> (when we wrote it). <span style="color:var(--muted)">(only the last two are timestamps.)</span></li>
+      <li><strong>Two links are always present:</strong> exactly one <code>OF_DRIVER</code> (to its label) and one <code>FROM_SOURCE</code> (to its event).</li>
+      <li><strong>The same fact reported in two events</strong> = two DriverUpdates (one per event); they're only merged in a read-time view.</li>
+    </ul>
+  </details>
+</section>
+
+<!-- ===== 32 DRIVER_STATE LANES ===== -->
+<section class="step" data-step="32">
+  <span class="tag green">The live graph · 2 of 7 · LOCKED 2026-06-15</span>
+  <h1>"What happened?" — pick ONE word from the driver's lane.</h1>
+  <p class="lead"><code>driver_state</code> isn't free text. The driver's <code>fact_type</code> opens <b>one lane</b>, and the producer picks a single word from it. Off-lane words are rejected by code.</p>
+
+  <table class="t">
+    <thead><tr><th>fact_type lane</th><th>allowed <code>driver_state</code> words</th></tr></thead>
+    <tbody>
+      <tr><td><code>metric</code></td><td><code>increased</code> · <code>decreased</code> · <code>unchanged</code> · <code>mixed</code> · <code>reported</code> · <code>persists</code> · <code>unknown</code></td></tr>
+      <tr><td><code>guidance</code></td><td><code>introduced</code> · <code>raised</code> · <code>lowered</code> · <code>reaffirmed</code> · <code>withdrawn</code> · <code>unknown</code></td></tr>
+      <tr><td><code>surprise</code></td><td><code>beat</code> · <code>in_line</code> · <code>missed</code> · <code>unknown</code></td></tr>
+      <tr><td><code>action_event</code></td><td><code>at_risk</code> · <code>announced</code> · <code>occurred</code> · <code>continued</code> · <code>resolved</code> · <code>canceled</code> · <code>suspended</code> · <code>rumored</code> · <code>failed</code> · <code>unknown</code></td></tr>
+    </tbody>
+  </table>
+
+  <div class="panel">
+    <h3>The <code>metric</code> ladder — pick the FIRST that matches</h3>
+    <div class="ascii">1. direction stated (rose / fell, more / less)      &#8594; increased / decreased
+2. same driver up in parts AND down in others       &#8594; mixed
+3. explicit flat / steady / same-as-before           &#8594; unchanged
+4. ongoing condition, no up or down ("still elevated")&#8594; persists
+5. a bare value, no comparison                        &#8594; reported  (a prior value present &#8594; increased/decreased)
+6. a real fact but no readable state                  &#8594; unknown</div>
+    <p class="small"><b>Ignore good/bad</b> — that's the verdict, not the state. "Adverse weather worsened" &#8594; <code>increased</code> (more of it), even though it's bad.</p>
+  </div>
+
+  <div class="panel">
+    <h3>The <code>action_event</code> ladder — an ordered procedure, not keyword-matching</h3>
+    <p class="small"><b>This ladder is the runtime producer prompt — copy only this.</b> It is domain-neutral on purpose; the "Locked &amp; measured" / validation notes are documentation and must never be pasted into the prompt (that would re-introduce domain anchoring).</p>
+    <div class="ascii">Scope:  only a discrete corporate ACTION (a guidance/outlook or recurring-metric fact &#8594; another lane)
+Step 0: classify the LATEST stage of one action (a rejection then a continuing pursuit = still OPEN, not failed;
+        "explore options later" does NOT make a just-cancelled plan continued); two actions &#8594; take the primary; never encode good/bad
+Step 1: FINALITY GATE &#8212; TERMINAL (executed, or over &amp; needs a NEW attempt) vs NOT-TERMINAL (planned / rumor / live threat / resumable pause / ongoing)
+
+TERMINAL &#8594;     failed    blocked/rejected by an outside party, or an external condition/test unmet (incl. declining an offer never committed to)
+              canceled  the company ended its OWN committed action by free choice (decided now even if effective later)
+              resolved  a two-sided dispute settled (counts even if payment remains)
+              occurred  completed as intended
+
+NOT-TERMINAL &#8594; rumored   a third-party-reported possible action/transaction the company has NOT confirmed (an inbound unsolicited offer stays rumored; a denial keeps it rumored)
+              at_risk   a specific source-flagged adverse event only threatened / probable, not yet executed (NOT the company's own plan, NOT generic boilerplate)
+              suspended paused &#8212; the SAME attempt can resume
+              announced the company stated its OWN action before completion (an expansion of its own prior action counts)
+              continued a prior action still ongoing, no new stage</div>
+    <p class="small">Conventions: shelve/postpone &#8594; <code>suspended</code>, scrap/abandon/withdraw &#8594; <code>canceled</code> · a threat ("sues to", "likely to", "pledges to") &#8594; <code>at_risk</code>, only once executed &#8594; <code>failed</code> · <code>announced</code> needs the company's OWN action — an outside party's unconfirmed action &#8594; <code>rumored</code> · <code>resolved</code> only for ending a dispute.</p>
+  </div>
+
+  <div class="twocol">
+    <div class="col">
+      <h3><code>at_risk</code> — strict, or it floods</h3>
+      <p class="small" style="font-size:18px;">Only a <b>specific, current, source-flagged</b> adverse event that hasn't happened and isn't the company's own plan. A planned closure is <code>announced</code>, not <code>at_risk</code>. Generic risk boilerplate → the gate drops it. (<code>rumored</code> = an unconfirmed possible <em>action</em>; <code>at_risk</code> = a source-flagged adverse <em>threat</em>.)</p>
+    </div>
+    <div class="col">
+      <h3>Outlook verbs route to guidance</h3>
+      <p class="small" style="font-size:18px;">"expect / anticipate / target / plan to ___" → a <code>guidance</code> state (raised / lowered / reaffirmed), never a metric state. <code>surprise</code> is measured vs an <em>expectation</em> (consensus or own prior guide), never vs last period.</p>
+    </div>
+  </div>
+
+  <details>
+    <summary>Two word-choices that prevent collisions, + how it's enforced</summary>
+    <ul>
+      <li><strong><code>mixed</code></strong> is ONE driver moving both ways. Two <em>different</em> drivers moving opposite ways are not "mixed" — they're split into two drivers, each with its own state.</li>
+      <li><strong><code>narrowed</code> is not a state</strong> — it's derived from the comparison numbers at read time. And the metric word is <code>persists</code>, not <code>continued</code> (which would steal "continued to grow" from <code>increased</code>).</li>
+      <li><strong>Lane check (code, hard-fail, zero AI):</strong> at write time code asserts the state is in the driver's lane (and the units + <code>comparison_baseline</code> are on-menu). The producer <em>proposes</em>; code <em>decides</em>. Off-lane → rejected, no write. (Done in app code because Neo4j can't check one field against another.)</li>
+      <li><strong>Locked &amp; measured:</strong> the 4 lanes were validated on <b>3,825</b> real evidence quotes. <code>rumored</code> + <code>failed</code> were added to the <code>action_event</code> lane and validated 2026-06-17 (a weak-model classification-floor test + an Opus held-out pass on real news); the ladder is principle-based, with no domain or example anchors, so it generalizes.</li>
+    </ul>
+  </details>
+</section>
+
+<!-- ===== 33 NUMBER LAYER ===== -->
+<section class="step" data-step="33">
+  <span class="tag">The live graph · 3 of 7 · AGREED 2026-06-16</span>
+  <h1>The size of the move — in 9 fill-only-what-applies slots.</h1>
+  <p class="lead">A word like "increased" loses the size. So the producer also fills numbers — but <b>every slot is optional</b>. All empty = a qualitative fact where the quote is the truth. <b>Never invent a number.</b></p>
+
+  <div class="panel accent">
+    <h3>One filled example first — so the slots aren't abstract</h3>
+    <div class="ascii">"Margin rose 60 bps to 17.6%"
+   &#8594;  level_low = 17.6   level_unit = percent      (the resulting level)
+   &#8594;  change_value = +60  change_unit = basis_points (the move itself)</div>
+  </div>
+
+  <div class="kv">
+    <div class="k">the level (3 + unit)</div><div class="v"><code>level_low</code> · <code>level_high</code> · <code>level_bound</code> (<code>floor</code>/<code>ceiling</code>) · <code>level_unit</code> — the resulting value, or a range, or an open bound.</div>
+    <div class="k">the move (2)</div><div class="v"><code>change_value</code> (the <b>signed delta</b> itself, e.g. <code>+60</code>) · <code>change_unit</code> (may differ from the level's unit).</div>
+    <div class="k">the baseline (3)</div><div class="v"><code>comparison_low</code> · <code>comparison_high</code> · <code>comparison_baseline</code> — one of <code>consensus</code> / <code>prior_year</code> / <code>sequential_period</code> / <code>previous_guidance</code> (or <code>null</code>). <span style="color:var(--muted)"><code>comparison_high</code> is set only if the prior is itself a range; <code>null</code> = a single-point baseline.</span></div>
+  </div>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>The unit menu (one shared list)</h3>
+      <table class="t" style="margin:6px 0;">
+        <tbody>
+          <tr><td><code>m_usd</code></td><td>$ millions (6135 = $6,135M)</td></tr>
+          <tr><td><code>usd</code></td><td>$ absolute (1.20)</td></tr>
+          <tr><td><code>percent</code></td><td>a % level (17.6% margin)</td></tr>
+          <tr><td><code>percent_yoy</code></td><td>a year-over-year % change</td></tr>
+          <tr><td><code>percent_points</code></td><td>a move in % points (+0.6 pts)</td></tr>
+          <tr><td><code>basis_points</code></td><td>a move in bps (+60)</td></tr>
+          <tr><td><code>count</code></td><td>a number of things (stores)</td></tr>
+          <tr><td><code>x</code></td><td>a ratio / multiple (2.5x)</td></tr>
+          <tr><td><code>unknown</code></td><td>unit not determinable</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col">
+      <h3>The "shape" is read from the slots</h3>
+      <div class="ascii">point    level_low set, rest null     AUV = $12.2M
+range    level_low + level_high      $90M ... $100M
+floor    level_low + bound=floor     "at least $5.00"
+ceiling  level_high + bound=ceiling  "up to 2.0x"
+none     all four null               "dividend suspended"</div>
+      <p class="small">No extra "shape" field — the filled slots tell you which it is.</p>
+    </div>
+  </div>
+
+  <div class="panel green">
+    <h3>Why this exact unit list?</h3>
+    <p>It's copied <b>verbatim</b> from the live Guidance system's units — so a driver's numbers line up with its guidance link (slide 39) with <b>no translation table</b>.</p>
+  </div>
+
+  <details>
+    <summary>Fields we deliberately did NOT add (to stay minimal)</summary>
+    <ul>
+      <li><strong>No <code>mid</code></strong> — derive it from low/high.</li>
+      <li><strong>No <code>usd_per_share</code></strong> — "per share" lives in the driver name (<code>eps</code>), so the unit stays <code>usd</code>.</li>
+      <li><strong>No <code>unit_raw</code></strong> — the raw wording is already in the <code>quote</code>.</li>
+      <li><strong>No GAAP-vs-adjusted field</strong> — that lives in the name (<code>adjusted_eps</code> ≠ <code>eps</code>).</li>
+      <li><strong>No free-text <code>qualitative</code></strong> and <strong>no <code>change_high</code></strong> — the quote carries number-less or ranged-move facts.</li>
+    </ul>
+  </details>
+</section>
+
+<!-- ===== 34 NUMBER RULES + EXAMPLES ===== -->
+<section class="step" data-step="34">
+  <span class="tag">The live graph · 4 of 7</span>
+  <h1>Seven rules keep the numbers honest — four examples show them.</h1>
+  <p class="lead">Code enforces these at write time: the producer <b>proposes</b> the numbers, code <b>decides</b> if they're legal and rejects anything off.</p>
+
+  <div class="panel">
+    <h3>The 7 hard rules (plain)</h3>
+    <ol class="small" style="font-size:18px;">
+      <li><b>Open bounds null the other end.</b> <code>floor</code> → no <code>level_high</code>; <code>ceiling</code> → no <code>level_low</code>.</li>
+      <li><b>A stated delta's sign must match the state.</b> + for increased/raised/beat; − for decreased/lowered/missed. <span style="color:var(--muted)">(states with no direction — <code>reported</code>, <code>persists</code>, <code>unchanged</code> — impose no sign rule.)</span></li>
+      <li><b>Store a baseline only if the source says it</b> (a frozen fact of this event) — never compute it from another node. <span style="color:var(--muted)">Set it <code>null</code> for "vs peers", a fixed anchor year, or a streak ("third straight quarter"); if a stated baseline fits no menu value, keep the number but set the baseline <code>null</code>.</span></li>
+      <li><b>Per-share / per-week lives in the NAME</b> (<code>eps</code>, <code>sales_per_square_foot</code>); the unit stays the base (<code>usd</code> / <code>count</code>).</li>
+      <li><b>One primary baseline only.</b> If a fact cites several, keep the headline one (tiebreak: <code>prior_year</code> &gt; <code>sequential_period</code>); the rest stay in the quote. <span style="color:var(--muted)">"Exceeded expectations" reads by kind — a <code>surprise</code> → <code>consensus</code>; a metric/guidance "beat our guide" → <code>previous_guidance</code>.</span></li>
+      <li><b>Store <code>change_value</code> only if the source states the move.</b> If it's derivable from level + baseline, leave it null (no drifting third copy); a <em>ranged</em> move stays in the quote (there is no <code>change_high</code>).</li>
+      <li><b>Rate-vs-level routing.</b> A % that <em>is</em> the metric goes in the <b>level</b>; a % move on a $-metric goes in <b>change</b>.</li>
+    </ol>
+  </div>
+
+  <div class="panel accent">
+    <h3>Four worked examples</h3>
+    <div class="ascii">A "Margin rose 60 bps to 17.6% from 17.0% a year ago"
+   state=increased · level_low=17.6 percent · change_value=+60 basis_points
+   comparison_low=17.0 · comparison_baseline=prior_year
+
+B "Raised FY guidance to $90-100M from $85-95M"
+   state=raised · level_low=90 level_high=100 m_usd
+   comparison_low=85 comparison_high=95 · comparison_baseline=previous_guidance
+
+C "Dividend suspended"
+   state=suspended · ALL number + comparison slots null · the quote is the fact
+
+D "EPS of $1.30 beat the $1.20 consensus"
+   state=beat · level_low=1.30 usd · change_value=+0.10 usd
+   comparison_low=1.20 · comparison_baseline=consensus</div>
+    <p class="small">A <code>surprise</code>'s <code>change_value</code> = actual − expectation (example D: 1.30 − 1.20 = +0.10).</p>
+  </div>
+
+  <p class="note">Rule 7 in action: <code>same_store_sales</code> "rose 3%" → <code>level_low=3, percent_yoy</code> (the 3% <em>is</em> the metric). But <code>revenue</code> "rose 3% to $6.1B" → <code>level_low=6100 m_usd</code>, <code>change_value=+3 percent_yoy</code> (the metric is dollars; the % is the move).</p>
+</section>
+
+<!-- ===== 35 THE VERDICT (EXPLAINED_BY) ===== -->
+<section class="step" data-step="35">
+  <span class="tag">The live graph · 5 of 7 · AGREED 2026-06-16</span>
+  <h1>The verdict: did this fact actually move the stock?</h1>
+  <p class="lead">A fact can exist with no verdict. But when the producer judges that a fact <b>drove</b> the move, it clips a verdict onto the <code>Event → DriverUpdate</code> link (<code>EXPLAINED_BY</code>).</p>
+
+  <pre>(Event 8-K) ─[:EXPLAINED_BY]─► (DriverUpdate: same_store_sales increased 3%)
+    {
+      stock_impact:  "long",            <span style="color:#94a3b8">// direction it pushed (can oppose the net move)</span>
+      weightage:     0.4,               <span style="color:#94a3b8">// standalone force 0.1..1.0 — or null to abstain</span>
+      confidence:    80,                <span style="color:#94a3b8">// how sure it's TRUE, 0..100</span>
+      produced_mode: "live",            <span style="color:#94a3b8">// judged in real time — point-in-time, no future info</span>
+      llm_producer:  "earnings-learner"
+    }</pre>
+
+  <div class="panel">
+    <h3>Three independent dials — none derivable from another</h3>
+    <div class="kv">
+      <div class="k"><code>stock_impact</code> = direction</div><div class="v"><code>long</code> or <code>short</code>. Which way this fact pushed — it can push opposite to where the stock actually went.</div>
+      <div class="k"><code>weightage</code> = force</div><div class="v">how strong this one driver was, <code>0.1…1.0</code>. A <b>standalone</b> estimate — <b>not</b> a share of the move.</div>
+      <div class="k"><code>confidence</code> = certainty</div><div class="v">how sure the producer is the attribution is <b>true</b>, <code>0…100</code>. Separate from force.</div>
+    </div>
+  </div>
+
+  <div class="panel amber">
+    <h3>Why <code>weightage</code> is independent (this is the subtle part)</h3>
+    <p>Forces are <b>never summed to 1</b> and adding a new driver <b>never rewrites</b> another's weightage. A move can be <b>partly unexplained</b> (market / sector / noise) — so a sole driver is <b>never</b> auto-set to max. Unsure of the size? Set <code>weightage = null</code> (abstain) — keep the direction.</p>
+    <p class="small">Shares are computed only when you read: <code>share = weightage ÷ (sum of weightages on that event)</code>; <code>signed_force = weightage × direction</code>. Neither is ever stored.</p>
+  </div>
+
+  <div class="panel danger">
+    <h3>Point-in-time, and graded fairly</h3>
+    <p>The <b>real</b> share / actual return is <b>never stored</b> on the verdict and <b>never shown to the predictor</b>. Reality gives one net return, so a verdict <em>set</em> is graded on net sign/size + ranking — never a per-driver "true share." A <code>live</code> verdict (judged before the move) always beats a <code>backfill</code> one at the same key.</p>
+  </div>
+
+  <details>
+    <summary>The verdict's identity &amp; validator</summary>
+    <ul>
+      <li><strong>Key = event + driver + fact_scope + producer.</strong> (<code>fact_scope</code> = which fact within the event; slide 36.) The <em>producer is in the key</em>, so two producers can disagree without colliding. No company (it's reached via the event).</li>
+      <li><strong><code>evhash16</code> = a hash of exactly (<code>stock_impact</code>, <code>weightage</code>, <code>confidence</code>).</strong> <code>produced_mode</code> is excluded — a live↔backfill swap isn't a judgement change. So the hash flips only on a real change to <em>this</em> edge.</li>
+      <li><strong>Validator (hard-fail):</strong> <code>stock_impact ∈ {long, short}</code>; <code>confidence ∈ {0,10,…100}</code>; <code>weightage ∈ {0.1,…1.0}</code> or <code>null</code>. Both sit on a 10-step ladder — no false-precision decimals, so the hash stays stable across re-runs.</li>
+      <li><strong>The name:</strong> we call it the <em>attribution</em> (chosen over "impact"); there is no separate verdict box — it's purely the edge.</li>
+    </ul>
+  </details>
+</section>
+
+<!-- ===== 36 IDENTITY & CHANGE-TRACKING ===== -->
+<section class="step" data-step="36">
+  <span class="tag">The live graph · 6 of 7</span>
+  <h1>Code builds every key. Re-runs overwrite — never duplicate.</h1>
+  <p class="lead">How does the graph avoid piling up duplicates when a producer runs twice? Every node gets a <b>code-built key</b> with a uniqueness rule, so a re-run <b>updates in place</b> (a "MERGE"), never forks.</p>
+
+  <div class="kv">
+    <div class="k">Fact key</div><div class="v"><code>event + driver + fact_scope</code> &nbsp;— <b>no producer</b>, so two readers of the same fact land on <b>one</b> node.</div>
+    <div class="k">Verdict key</div><div class="v"><code>event + driver + fact_scope + producer</code> &nbsp;— producer added, so two producers can disagree without colliding.</div>
+  </div>
+
+  <div class="panel">
+    <h3><code>fact_scope</code> = "which version of this fact, inside this event"</h3>
+    <p>One event can state the same driver twice. <code>fact_scope</code> keeps them apart in the key — but it <b>never</b> enters the driver name.</p>
+    <div class="ascii">May 10-Q, driver = same_store_sales, ONE event, TWO facts:
+   "Q1 comp sales +3%"          &#8594; fact_scope = "period=Q1"
+   "April month-to-date -1%"    &#8594; fact_scope = "period=april_mtd"
+   &#8594; two DriverUpdates, not one lost. Still ONE driver: same_store_sales.</div>
+    <p class="small"><b>How it's chosen:</b> (1) a structured scope if the source gives one — period / segment / geography; (2) a hash of the normalized quote only when there's no clean scope. Structured first, because it correctly <b>merges</b> a restatement of the same fact (press release + MD&amp;A both "Q1 +3%" → one fact); a raw quote-hash would wrongly split them.</p>
+  </div>
+
+  <div class="panel green">
+    <h3>The value-fingerprint (<code>evhash16</code>)</h3>
+    <p>A small hash of the node's <b>values</b> — a property, <b>never part of the key</b>. It flags when something <b>actually changed</b> versus a no-op re-run. The fact hashes its payload; the verdict hashes its three dials. (The label has none — it's never re-extracted.)</p>
+  </div>
+
+  <p class="note">This whole recipe — class node + per-event instances, code-built keys, merge-in-place, value-hash — is exactly how the live <b>Guidance</b> graph already works (548 + 8,432 nodes). We're copying a proven pattern.</p>
+</section>
+
+<!-- ===== 37 INVARIANTS & PERSISTENCE ===== -->
+<section class="step" data-step="37">
+  <span class="tag">The live graph · 7 of 7</span>
+  <h1>The few quiet facts the whole design leans on.</h1>
+  <p class="lead">These are the load-bearing assumptions — each one verified, each one the reason a shortcut elsewhere is safe.</p>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>Invariants (verified)</h3>
+      <ul class="small" style="font-size:18px;">
+        <li><b>One company per event</b> — checked live: News 348,669 · Reports 42,243 · Transcripts 9,608, all exactly 1. So an event names its (company, move); the company never sits on the driver layer.</li>
+        <li><b>One producer per event</b> — earnings → <code>earnings-learner</code>, news → <code>news-driver</code>. (If ever broken → parallel verdict links, one per producer.)</li>
+        <li><b>The real stock move stays on the existing <code>Event → Company</code> link</b> — never on a driver node.</li>
+        <li><b>XBRL / guidance links sit on the class</b>, not per fact.</li>
+      </ul>
+    </div>
+    <div class="col">
+      <h3>Persistence</h3>
+      <ul class="small" style="font-size:18px;">
+        <li><b>Every DriverUpdate is kept</b> — including a driver's very first, and one-offs.</li>
+        <li><b>"Only show drivers seen N+ times" is a read-time filter</b>, never a write-time drop. Nothing is ever lost; re-runs stay deterministic.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="panel accent">
+    <h3>One line to remember</h3>
+    <p>The driver layer stores <b>causes and facts</b>; the <b>company and its return</b> are always one hop away through the event. That single choice removes the company from every key and needs no special case for market-wide drivers.</p>
+  </div>
+  <p class="note">Reminder: none of this graph is built yet — 0 Driver / 0 DriverUpdate nodes exist. What's locked vs still open is covered in slide 40.</p>
+</section>
+
 <!-- ===== 26 LIVE ===== -->
-<section class="step" data-step="26">
+<section class="step" data-step="38">
   <span class="tag">Later · using it live</span>
   <h1>Building the catalog is once. Using it is forever.</h1>
-  <p class="lead">Once the catalog exists, every new event (an earnings report, a news item) runs a quick reuse flow. This part is <b>still being designed</b> — but here's the shape.</p>
+  <p class="lead">Once the catalog exists, every new event runs through a <b>producer</b> (slides 31–37). First it settles the <b>name</b> — reuse an existing driver or coin a new one — then it writes the <b>fact</b> (+ verdict). This slide is the name half; it's <b>still being wired</b>.</p>
 
   <div class="flowline" aria-label="Live reuse">
     <div class="node"><strong>G1 · propose-first</strong><span>coin your own name BLIND from the evidence</span></div>
@@ -950,46 +1571,133 @@ Haiku    &#8594; noisy + breaks naming rules</div>
       <p>Freeze the catalog. Feed it <b>fresh</b> events, showing only info from on/before that date (no peeking at the future). It must reuse / create / skip. An independent grader scores it against a <b>pre-written</b> answer key — <b>graded once</b>, no retuning to pass.</p>
     </div>
   </div>
-  <p class="note">The catalog itself is "producer-agnostic": it carries no "news vs fundamental" tag. That's a job for whoever uses it, not a property of the driver. News drivers are coined live, here — never in the seed.</p>
+  <div class="panel accent">
+    <h3>What the producer does, end to end</h3>
+    <div class="ascii">name it (G1)  &#8594;  reuse OR coin  &#8594;  if new: stamp fact_type on the fly (slide 26)
+              &#8594;  is there a real fact? (the gate)  &#8594;  write the DriverUpdate (slide 31)
+              &#8594;  did it move the stock?  &#8594;  write the verdict (slide 35)</div>
+  </div>
+  <p class="note">The catalog itself is "producer-agnostic": it carries no "news vs fundamental" tag — that's the producer's concern (it lives on <code>llm_producer</code>), not a property of the driver. News drivers are coined live, here — never in the seed.</p>
+</section>
+
+<!-- ===== 39 GUIDANCE BRIDGE (SUGGESTION ONLY) ===== -->
+<section class="step" data-step="39">
+  <span class="tag red">Idea only · NOT decided · NOT built</span>
+  <h1>A possible bonus: wire <code>guidance</code> drivers to the live Guidance graph.</h1>
+  <p class="lead">There's already a production graph of company guidance (<b>548 Guidance + 8,432 GuidanceUpdate</b> nodes). A <code>fact_type:guidance</code> driver could point at it — getting a ready-made time-series for free.</p>
+
+  <div class="panel danger">
+    <h3>Read this first</h3>
+    <p>This entire slide is a <b>suggestion</b> — nothing here is decided, locked, or built (0 links exist). The locked core (slides 5–37) is <b>not</b> touched, and the Guidance pipeline is <b>not</b> changed. It's a read-only idea for later.</p>
+  </div>
+
+  <div class="panel">
+    <h3>The idea in one picture</h3>
+    <div class="ascii">(Driver revenue_guidance) ══[:MAPS_TO_GUIDANCE]══&#8594; (Guidance guidance:revenue)
+                          ╚════════ also unions ════&#8594; (Guidance guidance:net_sales)</div>
+    <p class="small">One driver can point at <b>several</b> guidance synonyms (the guidance graph fragmented into leaky synonyms; our catalog is the clean layer it lacks). The link is <b>MATCH-only</b> — a bad guess makes no link, never a new node.</p>
+  </div>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>How it would match (no hand-list)</h3>
+      <p class="small" style="font-size:18px;">(a) <b>exact slug</b> (deterministic), then (b) an <b>evidence judge</b> that reasons from each anchor's <em>unit + sample values</em>, never its name, with a Refute step — <b>fail-closed</b> on any doubt. No curated synonym list (proven unsafe on live data).</p>
+    </div>
+    <div class="col">
+      <h3>Measured, honestly</h3>
+      <p class="small" style="font-size:18px;">Offline test: <b>~98–100% precision</b> (0 wrong links on 87 hard pairs), <b>~85% coverage</b>. There is <b>no</b> fully-deterministic 100% shortcut — synonym-matching is part-judgement.</p>
+    </div>
+  </div>
+
+  <div class="panel amber">
+    <h3>The safety asymmetry (why fail-closed)</h3>
+    <p>A <b>missed</b> link is a safe gap (just a short series; fixable later). A <b>wrong</b> link is the dangerous, hard-to-undo case. So the resolver always errs toward leaving things unlinked.</p>
+  </div>
+
+  <details>
+    <summary>The fuller idea (resolver, set-replace, born-linked pointer, open decisions)</summary>
+    <ul>
+      <li><strong>Why it's even possible:</strong> a Guidance node is itself a thin, cross-company, value-free metric tag (a class) — so Driver↔Guidance-anchor is class↔class, and our catalog supplies the canonicalization guidance never enforced.</li>
+      <li><strong>Why no auto alias / auto XBRL-code match:</strong> both are unsafe on live data (227 alias→wrong-anchor collisions; one XBRL code spans 9–11 anchors incl. GAAP + non-GAAP). The evidence-judge reproduces every true synonym from data, so a list is redundant.</li>
+      <li><strong>Set-replace every run:</strong> delete links no longer matched, then write the current set (additive-only would leave stale links).</li>
+      <li><strong>Optional back-pointer:</strong> a derived <code>canonical_driver</code> on the Guidance anchor (class-level, never relabels guidance) so a guidance-only tool can find the driver fast. The edge alone is required + sufficient; the pointer is pure convenience and must be re-derived from the edge each run.</li>
+      <li><strong>Instance-level link</strong> (DriverUpdate ↔ GuidanceUpdate) is producer/backfill work, deferred.</li>
+      <li><strong>4 open owner decisions</strong> remain (keep the judge vs slug-only; one-to-many edge; defer instance link; adopt the back-pointer or stay strictly read-only).</li>
+    </ul>
+  </details>
+</section>
+
+<!-- ===== 40 MATURITY ===== -->
+<section class="step" data-step="40">
+  <span class="tag amber">Status · what's settled vs open</span>
+  <h1>Where each part stands — and what "nothing built" means.</h1>
+  <p class="lead">The design has tiers. Some parts are <b>locked</b> (validated, don't reopen), some <b>agreed</b> (settled, minor tweaks possible), some <b>open</b>. Knowing which is which keeps us from building too early.</p>
+
+  <table class="t">
+    <thead><tr><th>Tier</th><th>What's in it</th><th>Means</th></tr></thead>
+    <tbody>
+      <tr><td><span class="pill green">LOCKED</span></td><td>node/edge structure ("Design C") · Driver fields · the 4 <code>fact_type</code> kinds · the 4 <code>driver_state</code> lanes <span class="small">(2026-06-15)</span></td><td>validated; do not reopen</td></tr>
+      <tr><td><span class="pill">AGREED</span></td><td>the number/comparison layer · the <code>EXPLAINED_BY</code> verdict layer (weightage / confidence / produced_mode) <span class="small">(2026-06-16)</span></td><td>settled; minor owner tweaks possible</td></tr>
+      <tr><td><span class="pill amber">DEFERRED</span></td><td>exact <code>id</code> key strings · the "store-number-vs-link-to-XBRL" rule (<b>store the number for now</b>) · wiring the producer to fill state + numbers</td><td>decided later, on purpose</td></tr>
+      <tr><td><span class="pill red">SUGGESTION</span></td><td>the whole guidance bridge (slide 39) · instance-level guidance link</td><td>an idea; nothing decided</td></tr>
+    </tbody>
+  </table>
+
+  <div class="panel danger">
+    <h3>The big one: nothing is built yet</h3>
+    <p><span class="big-num">0</span> Driver nodes and <span class="big-num">0</span> DriverUpdate nodes exist in the database. Everything in the model + live-graph slides (5–9 and 31–37) is a <b>design + recipe</b>, not a live system. (The <em>catalog-build code</em> from slides 10–30 is built and tested — but it only makes the labels, not the graph.)</p>
+  </div>
+
+  <div class="panel green">
+    <h3>Why "locked" is trustworthy</h3>
+    <p>The kinds were validated on <b>1,282</b> real driver names (0 fit none); the state words on <b>3,825</b> real quotes; the kind-classifier (Opus) was right on <b>28/28</b> keyed cases. And the whole shape mirrors the <b>live</b> Guidance graph (548 + 8,432 nodes) — a proven precedent.</p>
+  </div>
 </section>
 
 <!-- ===== 27 RECAP ===== -->
-<section class="step" data-step="27">
+<section class="step" data-step="41">
   <span class="tag green">Recap &amp; status</span>
   <h1>Why you can trust it — and where it stands.</h1>
-  <p class="lead">Five patterns repeat in every file. They are the spine.</p>
+  <p class="lead">A handful of patterns repeat everywhere — they are the spine of both the build <em>and</em> the graph.</p>
 
   <table class="t">
     <thead><tr><th>Pattern</th><th>What it means</th></tr></thead>
     <tbody>
-      <tr><td><strong>Judgment → AI, structure → code</strong></td><td>AI never writes the file; code never guesses meaning.</td></tr>
-      <tr><td><strong>Fail-closed</strong></td><td>Unsure → keep separate. Missing answer → no.</td></tr>
-      <tr><td><strong>Skeptic on every merge</strong></td><td>Each merge is attacked; ≥8 companies gets a second skeptic.</td></tr>
-      <tr><td><strong>Relay fidelity</strong></td><td>When an AI re-types a file, code hash-checks the bytes match.</td></tr>
-      <tr><td><strong>Signed receipts</strong></td><td>A catalog is usable only if its validation passed and bytes are unchanged.</td></tr>
+      <tr><td><strong>Three layers, never one</strong></td><td>a <b>label</b> (Driver) · a <b>fact</b> (DriverUpdate) · a <b>verdict</b> (an edge). Kept separate on purpose.</td></tr>
+      <tr><td><strong>Judgment → AI, structure → code</strong></td><td>AI never writes the file or builds a key; code never guesses meaning.</td></tr>
+      <tr><td><strong>Build = labels · producer = facts</strong></td><td>the catalog makes names + kinds; only a producer (reading a real event) makes facts + verdicts.</td></tr>
+      <tr><td><strong>Code builds keys; re-runs merge in place</strong></td><td>no duplicates, deterministic re-runs; a value-hash flags real change.</td></tr>
+      <tr><td><strong>Fail-closed</strong></td><td>unsure → keep separate / leave unlinked. Missing answer → no.</td></tr>
+      <tr><td><strong>Skeptic on every merge</strong></td><td>each merge is attacked; ≥8 companies gets a second skeptic.</td></tr>
+      <tr><td><strong>Point-in-time</strong></td><td>never show the AI a name, number, or outcome from the future.</td></tr>
+      <tr><td><strong>Signed receipts</strong></td><td>a catalog is usable only if its validation passed and the bytes are unchanged.</td></tr>
     </tbody>
   </table>
 
-  <div class="twocol">
+  <div class="threecol">
     <div class="col">
-      <h3 style="color:var(--green)">✅ Built &amp; green</h3>
-      <p class="small" style="font-size:18px;">Leaf, Fold, walk-and-fold, batching, repair pass, model pins, resume. <b>202+ tests pass.</b> All on cheap synthetic / 1-ticker gates.</p>
+      <h3 style="color:var(--green)">✅ Built &amp; tested</h3>
+      <p class="small" style="font-size:17px;">The <b>label factory</b> (the build code, slides 10–30): leaf, fold, walk, batching, repair, resume. <b>257+ tests pass</b> on synthetic / 1-ticker gates. It makes the <em>names</em> only.</p>
     </div>
     <div class="col">
-      <h3 style="color:var(--amber)">⏳ What's left</h3>
-      <p class="small" style="font-size:18px;">The full <b>real</b> Restaurants run across sessions → a 2nd industry → the first real fold → the honesty/fitness gate → production decision. Plus live-use wiring (slide 26).</p>
+      <h3 style="color:var(--accent)">📐 Designed, not built</h3>
+      <p class="small" style="font-size:17px;">The <b>live graph</b> (slides 5–9 + 31–37): Driver / DriverUpdate / verdict, <code>fact_type</code>, states, numbers, identity. <b>0 nodes exist</b> — recipe, not running.</p>
+    </div>
+    <div class="col">
+      <h3 style="color:var(--amber)">⏳ Next</h3>
+      <p class="small" style="font-size:17px;">Real Restaurants run → 2nd industry → first real fold → honesty gate. Then <b>wire the producer</b> (slides 31–37). Guidance bridge (slide 39) is optional.</p>
     </div>
   </div>
 
   <div class="panel accent">
-    <p style="margin:0;">That's the entire machine, end to end. Want a deeper dive on any one slide — e.g. trace a single CAKE driver from raw text to the catalog, or the exact validator checks line by line? Just ask.</p>
+    <p style="margin:0;">That's the whole picture — the data model, the build, and the live use. Want a deeper dive on any one slide — e.g. trace a single CAKE driver from raw text all the way to a graded verdict? Just ask.</p>
   </div>
 </section>
 
 <!-- ===================== APPENDIX: EVERY FILE ===================== -->
 
 <!-- ===== 28 APPENDIX INDEX ===== -->
-<section class="step" data-step="28">
+<section class="step" data-step="42">
   <span class="tag">Appendix · the files</span>
   <h1>Every file, one at a time — super simple.</h1>
   <p class="lead">Same shape every slide: <b>what goes in → what comes out → the steps → why it matters.</b> We go bottom-up — the <b>worker tools</b> first (each does one concrete job), then the <b>conductors</b> that string them together.</p>
@@ -998,26 +1706,26 @@ Haiku    &#8594; noisy + breaks naming rules</div>
     <div class="col">
       <h3>⚙️ Worker tools <span class="pill gray">.py</span></h3>
       <div class="toc-grid" style="grid-template-columns:1fr; gap:8px; margin:14px 0 0;">
-        <div class="item" data-goto="29"><span class="num">29</span><code>resolve_driver_scope.py</code> — list companies</div>
-        <div class="item" data-goto="30"><span class="num">30</span><code>fetch_company_sources.py</code> — pull text</div>
-        <div class="item" data-goto="31"><span class="num">31</span><code>chunk_company_sources.py</code> — split text</div>
-        <div class="item" data-goto="32"><span class="num">32</span><code>build_seed.py</code> — group into the seed</div>
-        <div class="item" data-goto="33"><span class="num">33</span><code>slice_seed.py</code> — batch a big seed</div>
-        <div class="item" data-goto="34"><span class="num">34</span><code>assemble_catalog.py</code> — write the catalog</div>
-        <div class="item" data-goto="35"><span class="num">35</span><code>validate_catalog.py</code> — the hard gate</div>
-        <div class="item" data-goto="36"><span class="num">36</span><code>fold_catalogs.py</code> — the merge math</div>
+        <div class="item" data-goto="43"><span class="num">43</span><code>resolve_driver_scope.py</code> — list companies</div>
+        <div class="item" data-goto="44"><span class="num">44</span><code>fetch_company_sources.py</code> — pull text</div>
+        <div class="item" data-goto="45"><span class="num">45</span><code>chunk_company_sources.py</code> — split text</div>
+        <div class="item" data-goto="46"><span class="num">46</span><code>build_seed.py</code> — group into the seed</div>
+        <div class="item" data-goto="47"><span class="num">47</span><code>slice_seed.py</code> — batch a big seed</div>
+        <div class="item" data-goto="48"><span class="num">48</span><code>assemble_catalog.py</code> — write the catalog</div>
+        <div class="item" data-goto="49"><span class="num">49</span><code>validate_catalog.py</code> — the hard gate</div>
+        <div class="item" data-goto="50"><span class="num">50</span><code>fold_catalogs.py</code> — the merge math</div>
       </div>
     </div>
     <div class="col">
       <h3>🧠 Conductors <span class="pill gray">.js</span></h3>
       <div class="toc-grid" style="grid-template-columns:1fr; gap:8px; margin:14px 0 0;">
-        <div class="item" data-goto="37"><span class="num">37</span><code>menu_build.js</code> — runs the leaf</div>
-        <div class="item" data-goto="38"><span class="num">38</span><code>reconcile.js</code> — the merge engine</div>
-        <div class="item" data-goto="39"><span class="num">39</span><code>fold_catalogs.js</code> — merges levels up</div>
-        <div class="item" data-goto="40"><span class="num">40</span><code>build_tree.js</code> — the master conductor</div>
-        <div class="item" data-goto="41"><span class="num">41</span><code>repair_duplicates.js</code> — catch missed merges</div>
-        <div class="item" data-goto="42"><span class="num">42</span><code>gate.js</code> — the admission gate (live)</div>
-        <div class="item" data-goto="43"><span class="num">43</span><code>catalog_first.js</code> — reuse-first (live)</div>
+        <div class="item" data-goto="51"><span class="num">51</span><code>menu_build.js</code> — runs the leaf</div>
+        <div class="item" data-goto="52"><span class="num">52</span><code>reconcile.js</code> — the merge engine</div>
+        <div class="item" data-goto="53"><span class="num">53</span><code>fold_catalogs.js</code> — merges levels up</div>
+        <div class="item" data-goto="54"><span class="num">54</span><code>build_tree.js</code> — the master conductor</div>
+        <div class="item" data-goto="55"><span class="num">55</span><code>repair_duplicates.js</code> — catch missed merges</div>
+        <div class="item" data-goto="56"><span class="num">56</span><code>gate.js</code> — the admission gate (live)</div>
+        <div class="item" data-goto="57"><span class="num">57</span><code>catalog_first.js</code> — reuse-first (live)</div>
       </div>
     </div>
   </div>
@@ -1025,7 +1733,7 @@ Haiku    &#8594; noisy + breaks naming rules</div>
 </section>
 
 <!-- ===== 29 resolve_driver_scope.py ===== -->
-<section class="step" data-step="29">
+<section class="step" data-step="43">
   <span class="tag">⚙️ Tool 1 of 8</span>
   <h1 style="font-size:42px;"><code style="background:var(--accent-soft); color:var(--accent);">resolve_driver_scope.py</code></h1>
   <p class="lead"><b>List the companies.</b> Given an industry name, it asks the database which tickers belong to it.</p>
@@ -1052,7 +1760,7 @@ Haiku    &#8594; noisy + breaks naming rules</div>
 </section>
 
 <!-- ===== 30 fetch_company_sources.py ===== -->
-<section class="step" data-step="30">
+<section class="step" data-step="44">
   <span class="tag">⚙️ Tool 2 of 8</span>
   <h1 style="font-size:42px;"><code style="background:var(--accent-soft); color:var(--accent);">fetch_company_sources.py</code></h1>
   <p class="lead"><b>Pull the text.</b> For each company, download all of its real words from filings and earnings calls.</p>
@@ -1083,7 +1791,7 @@ Haiku    &#8594; noisy + breaks naming rules</div>
 </section>
 
 <!-- ===== 31 chunk_company_sources.py ===== -->
-<section class="step" data-step="31">
+<section class="step" data-step="45">
   <span class="tag">⚙️ Tool 3 of 8</span>
   <h1 style="font-size:42px;"><code style="background:var(--accent-soft); color:var(--accent);">chunk_company_sources.py</code></h1>
   <p class="lead"><b>Split the text.</b> One company can be 2 million characters — too big for an AI. So cut it into ~40,000-char pieces, always at a clean seam.</p>
@@ -1110,7 +1818,7 @@ Haiku    &#8594; noisy + breaks naming rules</div>
 </section>
 
 <!-- ===== 32 build_seed.py ===== -->
-<section class="step" data-step="32">
+<section class="step" data-step="46">
   <span class="tag">⚙️ Tool 4 of 8</span>
   <h1 style="font-size:42px;"><code style="background:var(--accent-soft); color:var(--accent);">build_seed.py</code></h1>
   <p class="lead"><b>Group into the seed.</b> After the blind bots name drivers, this code gathers all their menus into one raw draft — no AI, just bookkeeping.</p>
@@ -1139,7 +1847,7 @@ Haiku    &#8594; noisy + breaks naming rules</div>
 </section>
 
 <!-- ===== 33 slice_seed.py ===== -->
-<section class="step" data-step="33">
+<section class="step" data-step="47">
   <span class="tag">⚙️ Tool 5 of 8</span>
   <h1 style="font-size:42px;"><code style="background:var(--accent-soft); color:var(--accent);">slice_seed.py</code></h1>
   <p class="lead"><b>Batch a big seed.</b> 594 drivers is too many for one AI to weigh carefully. So cut the seed into smaller piles.</p>
@@ -1160,12 +1868,12 @@ Haiku    &#8594; noisy + breaks naming rules</div>
 
   <div class="panel amber">
     <h3>Why it matters (and the small cost)</h3>
-    <p>Each AI judge then only ever sees a small, careful pile. The trade-off: two synonyms with no shared words can land in different batches and miss each other — an <b>under</b>-merge (the safe direction). The repair tool (slide 41) sweeps those up later. If the seed is already small, it just makes one batch.</p>
+    <p>Each AI judge then only ever sees a small, careful pile. The trade-off: two synonyms with no shared words can land in different batches and miss each other — an <b>under</b>-merge (the safe direction). The repair tool (slide 55) sweeps those up later. If the seed is already small, it just makes one batch.</p>
   </div>
 </section>
 
 <!-- ===== 34 assemble_catalog.py ===== -->
-<section class="step" data-step="34">
+<section class="step" data-step="48">
   <span class="tag">⚙️ Tool 6 of 8</span>
   <h1 style="font-size:42px;"><code style="background:var(--accent-soft); color:var(--accent);">assemble_catalog.py</code></h1>
   <p class="lead"><b>Write the catalog.</b> This is "the writer." The AI only produced short decision lists; this code turns them into the actual file.</p>
@@ -1192,7 +1900,7 @@ Haiku    &#8594; noisy + breaks naming rules</div>
 </section>
 
 <!-- ===== 35 validate_catalog.py ===== -->
-<section class="step" data-step="35">
+<section class="step" data-step="49">
   <span class="tag red">⚙️ Tool 7 of 8</span>
   <h1 style="font-size:42px;"><code style="background:var(--red-soft); color:var(--red);">validate_catalog.py</code></h1>
   <p class="lead"><b>The hard gate.</b> The last check. It re-inspects the structure and <b>stops the run</b> if anything is wrong. Zero judgment — pure checks.</p>
@@ -1219,7 +1927,7 @@ Haiku    &#8594; noisy + breaks naming rules</div>
 </section>
 
 <!-- ===== 36 fold_catalogs.py ===== -->
-<section class="step" data-step="36">
+<section class="step" data-step="50">
   <span class="tag">⚙️ Tool 8 of 8</span>
   <h1 style="font-size:42px;"><code style="background:var(--accent-soft); color:var(--accent);">fold_catalogs.py</code></h1>
   <p class="lead"><b>The merge math.</b> The no-AI engine behind merging levels up. It has three small commands.</p>
@@ -1240,7 +1948,7 @@ Haiku    &#8594; noisy + breaks naming rules</div>
 </section>
 
 <!-- ===== 37 menu_build.js ===== -->
-<section class="step" data-step="37">
+<section class="step" data-step="51">
   <span class="tag green">🧠 Conductor 1 of 7</span>
   <h1 style="font-size:42px;"><code style="background:var(--green-soft); color:var(--green);">menu_build.js</code></h1>
   <p class="lead"><b>Runs the leaf.</b> The conductor for Stage 1: turn one industry into a raw seed. It calls the worker tools in order and runs the blind bots.</p>
@@ -1264,7 +1972,7 @@ Haiku    &#8594; noisy + breaks naming rules</div>
 </section>
 
 <!-- ===== 38 reconcile.js ===== -->
-<section class="step" data-step="38">
+<section class="step" data-step="52">
   <span class="tag green">🧠 Conductor 2 of 7</span>
   <h1 style="font-size:42px;"><code style="background:var(--green-soft); color:var(--green);">reconcile.js</code></h1>
   <p class="lead"><b>The merge engine.</b> The conductor for Stage 2: clean a messy seed into a real catalog. The same engine runs at <b>every</b> level later.</p>
@@ -1289,7 +1997,7 @@ Haiku    &#8594; noisy + breaks naming rules</div>
 </section>
 
 <!-- ===== 39 fold_catalogs.js ===== -->
-<section class="step" data-step="39">
+<section class="step" data-step="53">
   <span class="tag green">🧠 Conductor 3 of 7</span>
   <h1 style="font-size:42px;"><code style="background:var(--green-soft); color:var(--green);">fold_catalogs.js</code></h1>
   <p class="lead"><b>Merges levels up.</b> The conductor that wraps the merge-math tool with the AI's same-name review — to fold several child catalogs into one parent.</p>
@@ -1313,7 +2021,7 @@ Haiku    &#8594; noisy + breaks naming rules</div>
 </section>
 
 <!-- ===== 40 build_tree.js ===== -->
-<section class="step" data-step="40">
+<section class="step" data-step="54">
   <span class="tag green">🧠 Conductor 4 of 7</span>
   <h1 style="font-size:42px;"><code style="background:var(--green-soft); color:var(--green);">build_tree.js</code></h1>
   <p class="lead"><b>The master conductor.</b> Ties everything together and climbs the whole tree: company → industry → sector → global.</p>
@@ -1334,7 +2042,7 @@ Haiku    &#8594; noisy + breaks naming rules</div>
 </section>
 
 <!-- ===== 41 repair_duplicates.js ===== -->
-<section class="step" data-step="41">
+<section class="step" data-step="55">
   <span class="tag green">🧠 Conductor 5 of 7</span>
   <h1 style="font-size:42px;"><code style="background:var(--green-soft); color:var(--green);">repair_duplicates.js</code></h1>
   <p class="lead"><b>Catches missed merges.</b> A second sweep for duplicates the batching split apart. Runs after each level.</p>
@@ -1358,7 +2066,7 @@ Haiku    &#8594; noisy + breaks naming rules</div>
 </section>
 
 <!-- ===== 42 gate.js ===== -->
-<section class="step" data-step="42">
+<section class="step" data-step="56">
   <span class="tag amber">🧠 Conductor 6 of 7 · live use</span>
   <h1 style="font-size:42px;"><code style="background:var(--amber-soft); color:var(--amber);">gate.js</code></h1>
   <p class="lead"><b>The admission gate (called "G2").</b> The single bouncer for any new name — used both inside reconcile and, later, live.</p>
@@ -1382,7 +2090,7 @@ Haiku    &#8594; noisy + breaks naming rules</div>
 </section>
 
 <!-- ===== 43 catalog_first.js ===== -->
-<section class="step" data-step="43">
+<section class="step" data-step="57">
   <span class="tag amber">🧠 Conductor 7 of 7 · live use</span>
   <h1 style="font-size:42px;"><code style="background:var(--amber-soft); color:var(--amber);">catalog_first.js</code></h1>
   <p class="lead"><b>Reuse-first (called "G1").</b> The live mechanism for handling a brand-new event: name it yourself first, <em>then</em> reuse only if it's truly the same.</p>
@@ -1404,7 +2112,7 @@ Haiku    &#8594; noisy + breaks naming rules</div>
 
 <nav class="nav">
   <button id="prev" type="button">&#9664; Prev</button>
-  <div class="pos" id="pos">1 / 43</div>
+  <div class="pos" id="pos">1 / 57</div>
   <button id="next" type="button">Next &#9654;</button>
 </nav>
 
@@ -1468,6 +2176,19 @@ Haiku    &#8594; noisy + breaks naming rules</div>
   });
 
   render();
+
+  // Print/PDF: expand every <details> so nothing is hidden on paper; restore afterwards.
+  window.addEventListener('beforeprint', function () {
+    document.querySelectorAll('details').forEach(function (d) {
+      d.dataset.printPrev = d.open ? '1' : '0';
+      d.open = true;
+    });
+  });
+  window.addEventListener('afterprint', function () {
+    document.querySelectorAll('details').forEach(function (d) {
+      if (d.dataset.printPrev === '0') d.open = false;
+    });
+  });
 })();
 </script>
 
