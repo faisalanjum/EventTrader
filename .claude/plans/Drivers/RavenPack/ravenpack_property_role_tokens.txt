@@ -1,0 +1,29 @@
+# RavenPack PROPERTY / entity-role axis tokens (orthogonal to the leaf taxonomy — NOT leaf categories)
+# Source: CloudQuant "Mariner Backtesting - RavenPack Data Field Formats" (knowledge.cloudquant.com/783),
+#         recovered free via Wayback: https://web.archive.org/web/20250419181135id_/https://knowledge.cloudquant.com/783
+# Verified 2026-06-17. These are PROPERTY values (the role an entity plays in a matched event), an axis that
+# sits BESIDE topic,group,type,sub_type,category — keep them OUT of the native leaf CSVs.
+# Useful for the Driver design as a ready entity-role / driver_state vocabulary.
+#
+# --- entity-role / property tokens ---
+acquiree
+acquirer
+defendant
+plaintiff
+rater
+owner
+held
+target
+provider
+recipient
+investor
+organizer
+participant
+summoned
+favored
+disfavored
+#
+# --- EARNINGS_TYPE-style property values seen on the same page ---
+diluted-adjusted
+diluted-reported
+entity-specific
