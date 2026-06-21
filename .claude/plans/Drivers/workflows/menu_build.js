@@ -40,7 +40,7 @@ const REC_SCHEMA = { type:'object', additionalProperties:false, required:['files
 const RULES = `NAMING RULES (authority = ${DIR}/DriverOntology.md — READ it; summary for speed):
 - driver_name = the reusable CAUSE as a specific lower_snake_case noun. As specific as the evidence allows; NEVER a broad/category word alone (no bare demand/macro/sector/sentiment).
 - Order: concrete thing or actor -> needed detail -> metric/mechanism. e.g. restaurant_traffic, same_store_sales, oil_price.
-- EARNINGS convention: {metric}_surprise (reported vs consensus) or {metric}_guidance (forward outlook): eps_surprise, revenue_surprise, revenue_guidance, gross_margin_guidance. beat/miss/raised/lowered are NOT in the name.
+- EARNINGS / metric-family convention: {metric}_surprise (reported vs consensus) or {metric}_guidance (forward outlook): eps_surprise, revenue_surprise, revenue_guidance, gross_margin_guidance. The base {metric} is a separate metric Driver; target graph links the sibling with BASE_METRIC, never SAME_AS. beat/miss/raised/lowered are NOT in the name.
 - BANNED inside the name: state/verbs (beat, cut, declined, transition, opening, growth), direction/impact (long/short), dates/quarters/years, numbers/magnitudes/units (bps, percent, usd), ANY company ticker or legal name (own OR peer), person names, source/provider labels, XBRL prefixes, metaphors/sentiment, bare category words, stopwords. (Products/brands/segments ARE allowed: a brand metric like taco_bell_same_store_sales is its OWN driver, separate from same_store_sales.)
 - Keep standard phrases whole: gross_margin, free_cash_flow, same_store_sales, net_interest_margin.
 - Vague text -> SKIP (don't invent).

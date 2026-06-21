@@ -1,5 +1,7 @@
 # Hierarchical Driver-Catalog Build — Locked Plan
 
+> ⚠️ **CREATION RULES CHANGED — this plan + its prompts built the OLD restaurants catalog (Fable reader, driver NAMES only). How we create drivers changed since: `fact_type` is now a mandatory final step of catalog creation, and all source-stated per-X + accounting-basis qualifiers belong in `driver_name`. New source of truth → `WIP/DriverGraphSchema.md` (+ `Consolidation/UnitExtraction.md` for units/per-X); folder map → `INDEX.md`. The catalog built from this plan must be re-created / upgraded to match. (2026-06-20)**
+
 **Status:** decisions LOCKED + **owner-confirmed** (2026-06-09); final audit + 11 review passes applied (§10–§12 — the 11th = BUILD-TIME corrections; all phases BUILT, 202 pytest passed + 1 opt-in live-embedding smoke (RUN_LIVE_EMBEDDINGS=1) as of 2026-06-11, incl. Stage-0 relay hardening + A2 per-chunk resume + final-gate fixes — see CostCutting.md — counts inside §10 pass-logs are historical) → internally consistent + fully defined; **build-time contracts pinned in §12**. Chunking is foundational → built in **Phase 0.5** (§6).
 **Scope:** how we build ONE global Driver catalog by consolidating bottom-up — Company → Industry → Sector → Global — reusing the same `reconcile` pipeline at every level.
 **No code is written from this plan until the owner approves.** This file is the spec.

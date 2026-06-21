@@ -39,7 +39,7 @@ A Driver name is a specific, reusable cause, written as a noun. It is never a ca
 
 **R6. Keep standard financial phrases whole.** A standard concept stays together as one name; don't split or reorder it: `gross_margin`, `free_cash_flow`, `net_interest_margin`, `same_store_sales`.
 
-**Earnings convention.** For earnings results, name the metric plus its mechanism — `{metric}_surprise` (reported vs consensus) or `{metric}_guidance` (forward outlook): e.g. `eps_surprise`, `revenue_surprise`, `revenue_guidance`, `gross_margin_guidance`. Beat / miss / raised / lowered → `driver_state`, never the name.
+**Earnings / metric-family convention.** For earnings results, name the metric plus its mechanism — `{metric}_surprise` (reported vs consensus) or `{metric}_guidance` (forward outlook): e.g. `eps_surprise`, `revenue_surprise`, `revenue_guidance`, `gross_margin_guidance`. The base `{metric}` is a separate metric Driver and must exist or be created in the same catalog run; target graph links the sibling with `BASE_METRIC`, never `SAME_AS`. Full rule: `Consolidation/README.md`. Beat / miss / raised / lowered → `driver_state`, never the name.
 
 **R7. Banned content.** None of the following appears inside `driver_name`. These banned meanings are rejected even if the source uses them.
 - State words that describe what happened — belong in `driver_state`, not in `driver_name`. Stable nouns or standard metric phrases are allowed even if they end in `-ing` or `-ed`, such as `pricing`, `bookings`, `leasing`, `operating_margin`, `consolidated_revenue`, or `diluted_eps`.
@@ -58,7 +58,7 @@ A Driver name is a specific, reusable cause, written as a noun. It is never a ca
 
 **R8. Keep names short.** A few words. If it takes many words to be specific, it's probably two drivers — split them (R2).
 
-**R9. Granularity.** Include only the parts the evidence directly attributes to the cause. Add product, geography, customer, segment, commodity, policy, or market detail only when the source names that detail as part of the cause; don't add details the evidence doesn't name. Company-specific product, brand, segment, or exposure names are allowed when they are the real cause; any company's ticker or legal name (affected or peer) is not. A brand/segment metric (e.g. `taco_bell_same_store_sales`) and its company-wide form (`same_store_sales`) are SEPARATE drivers — never SAME_AS them; name whichever level the evidence attributes the cause to.
+**R9. Granularity.** Include only the parts the evidence directly attributes to the cause. Add product, geography, customer, segment, commodity, policy, or market detail only when the source names that detail as part of the cause; don't add details the evidence doesn't name. Company-specific product, brand, segment, or exposure names are allowed when they are the real cause; any company's ticker or legal name (affected or peer) is not. A brand/segment metric (e.g. `taco_bell_same_store_sales`) and its company-wide form (`same_store_sales`) are SEPARATE drivers — never SAME_AS them; name whichever level the evidence attributes the cause to. Likewise a **measurement-basis** qualifier the source uses — `adjusted` / `non_gaap` / `core` / `constant_currency` (and `diluted` vs `basic`) — is meaning-distinguishing and MUST be kept in the name: `adjusted_eps` ≠ `eps` are SEPARATE drivers, never SAME_AS'd.
 
 **R10. New driver gate.** A new driver may be proposed only when ALL hold:
 - No visible Driver catalog name clearly names the same reusable cause.
