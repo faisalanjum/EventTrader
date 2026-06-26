@@ -1,152 +1,366 @@
-## Guidance Period
+# DriverPeriod Consolidation
 
-## Current conclusion
+> **STATUS (2026-06-26) — DESIGN LOCKED · BUILD/VERIFY PENDING.** The decisions in this doc are final; the implementation is not. Open gates before production:
+> - ⬜ extract `driver_period_resolver.py` (the cascade still lives in the Guidance write CLI)
+> - ⬜ pass the 21 "Required Tests Before Wiring" (§Required Tests Before Wiring)
+> - ⬜ prove the YTD/TTM math (Dec-FYE **and** non-Dec-FYE examples) before coding — pseudocode is unverified
+> - ⬜ **decide the transition strategy** — regenerate guidance as DriverUpdate facts **vs** dual-label existing period nodes (the one genuinely open *decision*; §Cypher Shape)
+> - ⬜ write-once-date hardening (parity tests + constraints; `ON CREATE SET` won't self-correct wrong dates — Guard 5)
+> - ⬜ ship the `HAS_XBRL` race guard as a producer eligibility check (§Exactness Notes)
+>
+> These are build/verify gates, not redesigns — everything below is the locked target design.
 
-Use `GuidancePeriod` as a **guidance-specific required structure**, not as a mandatory structure for every `DriverUpdate`.
+## Final Decision
+
+Replace the Driver-side concept of `GuidancePeriod` with a generic `DriverPeriod`.
 
 Plain shape:
 
 ```text
-Driver = reusable cause/class
-DriverUpdate = event-level fact
-GuidancePeriod = target calendar window for guidance facts
+Driver        = reusable cause/class, e.g. revenue, revenue_guidance
+DriverUpdate  = one event-level fact about a Driver
+DriverPeriod  = resolved calendar date window, e.g. gp_2025-01-01_2025-03-31
+
+DriverUpdate -[:HAS_PERIOD]-> DriverPeriod
 ```
 
-## Decision
+The period mechanism comes from Guidance. The name changes because the node is no longer guidance-only.
 
-- `Driver` nodes get **no period**.
-- `DriverUpdate` with `fact_type = guidance` should have exactly one `HAS_PERIOD -> GuidancePeriod` link.
-- This applies to **all** guidance DriverUpdates, whether `company_confirmed = true` or `company_confirmed = false`.
-- `DriverUpdate` with `fact_type = metric` or `surprise` should not be forced to use `GuidancePeriod` now. Add it later only if the fact truly needs a fiscal/calendar target period.
-- `DriverUpdate` with `fact_type = action_event` should not use `GuidancePeriod`.
-- `fact_scope` still exists for all fact types. It separates multiple versions of the same driver fact inside one event, for example `Q1` vs `April`.
+## Why This Changed
 
-## What GuidancePeriod means
+The older decision was: use `GuidancePeriod` only for `fact_type = guidance`.
 
-`GuidancePeriod` is the calendar window the guided value is about.
+That is now stale.
+
+Reason: raw period text like `Q1` is not reliable enough.
+
+```text
+Company with Dec fiscal year: Q1 FY2025 = 2025-01-01 to 2025-03-31
+Company with Sep fiscal year: Q1 FY2025 = 2024-10-01 to 2024-12-31
+```
+
+So a plain `period=Q1` string cannot safely compare facts across companies or even across fiscal calendars. Guidance already solved this by turning fiscal fields into a real calendar window. DriverUpdate should reuse that same solved mechanism.
+
+## What DriverPeriod Means
+
+`DriverPeriod` means only this:
+
+```text
+the calendar date window this DriverUpdate is about
+```
 
 Examples:
 
 ```text
-FY2026 revenue guidance  -> GuidancePeriod = FY2026 calendar/fiscal window
-Q2 margin guidance      -> GuidancePeriod = Q2 window
-long-term target        -> GuidancePeriod = gp_LT sentinel
+FY2025 revenue guidance         -> DriverPeriod = FY2025 resolved date window
+Q1 revenue was $5B              -> DriverPeriod = Q1 resolved date window
+Q1 revenue beat consensus       -> DriverPeriod = Q1 resolved date window
+CEO resigned                    -> no DriverPeriod
+long-term margin target         -> DriverPeriod = gp_LT
+going-forward guidance          -> DriverPeriod = gp_UNDEF
 ```
 
-It is **not**:
+It is not:
 
 - the event date
 - the filing date
-- a generic time label for every driver fact
+- the announcement date
+- the source date
+- a free-text label like `Q1`
+- the thing that says forecast vs actual
 - a replacement for `fact_scope`
 
-## Why guidance needs it
+Forecast vs actual comes from the `Driver.fact_type`, not from the period node.
 
-Current Guidance production depends on this structure:
+## Node Name
 
-- Every `GuidanceUpdate` has exactly one `HAS_PERIOD` edge.
-- `period_u_id` is part of the `GuidanceUpdate` identity.
-- History queries read `GuidancePeriod.start_date` and `GuidancePeriod.end_date`.
-- The CLI computes the final `gp_...` ID from LLM period fields plus deterministic code.
+Use `DriverPeriod`, not `Period`.
 
-So for `fact_type = guidance`, reusing `GuidancePeriod` preserves current production behavior.
+Reason: the graph already has an XBRL `Period` label for XBRL facts/contexts. Reusing `Period` would mix two concepts that are used by different pipelines.
 
-## Why not make it universal
+Use `DriverPeriod`, not `GuidancePeriod`.
 
-For non-guidance facts, forcing `GuidancePeriod` creates fake structure:
+Reason: the target Driver design attaches the same resolved-period structure to period-bearing `metric`, `guidance`, `surprise`, and rare period-bearing `action_event` facts.
 
-- `action_event` often has no target period.
-- many `metric` facts are just event facts, not forward-looking target windows.
-- the guidance period resolver can fail closed when fiscal-year-end data is missing.
-- adding period everywhere increases prompt and writer complexity without clear value.
-
-Bottom line: use a fact-type profile.
+Keep the existing `gp_` ID prefix.
 
 ```text
-guidance      -> GuidancePeriod required
-metric        -> optional later, only for true fiscal/calendar facts
-surprise      -> optional later, only for true fiscal/calendar facts
-action_event  -> off
+Node label: DriverPeriod
+ID value:   gp_2025-01-01_2025-03-31
 ```
 
-`company_confirmed` is separate. It tells who confirmed the guidance; it does not change whether the guidance fact needs a period.
+Do not rename IDs to `dp_...`. The `gp_` prefix is what the proven Guidance period code already returns, and keeping it avoids translation/migration work.
 
-## Driver integration shape
+## Graph Shape
 
-For `fact_type = guidance`:
-
-- producer emits guidance period fields, such as `fiscal_year`, `fiscal_quarter`, `half`, `month`, `long_range_*`, `sentinel_class`, `time_type`
-- code computes `period_u_id`, `gp_start_date`, `gp_end_date`, and `period_scope`
-- writer links `DriverUpdate -[:HAS_PERIOD]-> GuidancePeriod`
-- code may use the period when composing `fact_scope`, but the period node stores the real dates
-
-For other fact types:
-
-- keep using `fact_scope` for same-event distinctions
-- do not create a `GuidancePeriod` unless a later measured need proves it
-
-## Must preserve from Guidance
-
-- calendar-based `gp_YYYY-MM-DD_YYYY-MM-DD` IDs
-- sentinel nodes: `gp_ST`, `gp_MT`, `gp_LT`, `gp_UNDEF`
-- the existing period routing order
-- SEC-cache / existing-period / prediction / fiscal-year-end fallback behavior
-- the `HAS_XBRL` race guard before running 10-Q/10-K guidance extraction, so period dates do not split
-
-## Later checks before build
-
-- confirm Driver producer has company fiscal-year-end available before calling the resolver
-- run guidance sample-equivalence: same source should produce the same period IDs as current Guidance extraction
-- ensure `GuidancePeriod` is invoked only behind a `fact_type = guidance` gate at first
-- decide later whether any `metric` or `surprise` producer has enough period-heavy use cases to opt in
-
-## Simplest modular reuse plan
-
-Yes, there is a simple modular path. Do **not** have DriverUpdate import `guidance_write_cli._ensure_period()` directly.
-
-Why not:
-
-- `_ensure_period()` is the right logic, but it currently lives inside the full Guidance write CLI.
-- importing the CLI also pulls in guidance writer, concept resolution, member resolution, hard-coded paths, and write-mode concerns.
-- DriverUpdate only needs period resolution, not the whole Guidance write stack.
-
-Best shape:
+Use one edge type:
 
 ```text
-new shared module:
-  guidance_period_resolver.py
+(:DriverUpdate)-[:HAS_PERIOD]->(:DriverPeriod)
+```
 
-Guidance write CLI:
-  imports guidance_period_resolver.ensure_guidance_period()
+Do not create separate edge names like `TARGETS_PERIOD`, `REPORTS_PERIOD`, or `OCCURS_DURING`.
+
+Why: the same edge is enough. The meaning comes from the Driver's `fact_type`:
+
+```text
+guidance  + HAS_PERIOD -> future target window
+metric    + HAS_PERIOD -> reported/covered window
+surprise  + HAS_PERIOD -> actual-vs-expectation window
+action_event + HAS_PERIOD -> rare stated action window/duration
+```
+
+## By Fact Type
+
+| `fact_type` | DriverPeriod rule | Example |
+|---|---|---|
+| `guidance` | required | `FY2025 revenue guidance` |
+| `metric` | used when the fact has a stated, source-implied, or code-derivable reported period | `Q1 revenue was $5B` |
+| `surprise` | used when the fact has a stated, source-implied, or code-derivable reported period | `Q1 EPS beat consensus` |
+| `action_event` | rare/optional; only when the action itself has a real stated window/duration | `three-year restructuring plan` |
+
+Important:
+
+- Do not force a period onto every fact.
+- If the fact has a real period window, resolve it.
+- If the fact has no real period window, do not attach `HAS_PERIOD`.
+- For `fact_type = guidance`, both `company_confirmed = true` and `company_confirmed = false` still require a period. Confirmation says who confirmed the guidance; it does not change the period rule.
+
+## Implied Reported Periods
+
+For `metric` and `surprise`, the period may be implied by the source event even when the sentence does not restate it.
+
+Example:
+
+```text
+Q1 10-Q / Q1 earnings release says: "revenue grew 12%"
+```
+
+The sentence does not say `Q1`, but the event/report is Q1. Resolve to the event's Q1 `DriverPeriod`, not `gp_UNDEF` and not no-period.
+
+Rule:
+
+```text
+metric/surprise + omitted period + one clear event/report period
+-> derive DriverPeriod from event/report metadata
+```
+
+Use this only when the period is deterministic from the source event, such as:
+
+- filing/report period
+- earnings release period
+- transcript event period
+- XBRL/report context already tied to the quoted fact
+
+Do not guess from vague wording. If the source/event does not give one clear period, do not invent one.
+
+```text
+clear Q1 report context      -> use Q1 DriverPeriod
+clear FY report context      -> use FY DriverPeriod
+ambiguous market/news item   -> no DriverPeriod unless dates/window are stated
+```
+
+Source-type caution:
+
+```text
+10-Q / 10-K reported metrics -> wait for / prefer XBRL or SEC exact dates when available.
+8-K / transcript / news      -> do NOT require XBRL; use Guidance-style period fields only when the source or event gives a clear fiscal/calendar anchor.
+```
+
+For 8-Ks specifically: if the source says `Q3 revenue`, `FY2025 guidance`, or gives exact dates, resolve a `DriverPeriod`. If it only says `revenue improved`, do not invent a period.
+
+## Exact-Date Windows For YTD / TTM / Cumulative Facts
+
+Do not collapse YTD/TTM/cumulative facts into only the discrete quarter.
+
+This must be added to the shared Guidance period mechanism, not implemented as a separate Driver-only period system.
+
+If the source or code gives exact start and end dates, store the exact window:
+
+```text
+Q3 revenue                       -> gp_2025-07-01_2025-09-30
+nine months ended Sep 30, 2025   -> gp_2025-01-01_2025-09-30
+TTM ended Sep 30, 2025           -> gp_<exact_12mo_start>_2025-09-30
+```
+
+Minimal builder extension:
+
+```text
+period_start_date + period_end_date -> gp_<start>_<end>
+```
+
+This is an exact-date path, not a new period ontology. It is needed because Guidance's existing period fields cover quarter / half / annual / month / long-range / sentinels, but not every reported metric shape such as nine-month YTD or TTM.
+
+Priority:
+
+```text
+exact source/XBRL start_date + end_date first
+else FYE-aware computed dates
+else no period
+```
+
+Why: some companies use 52/53-week calendars, so month-boundary fiscal math can be slightly wrong. When the filing/XBRL gives exact dates, those exact dates win.
+
+Rules:
+
+- Use exact dates only when source-stated or deterministically available from report/XBRL metadata.
+- Code validates ISO dates and `start_date <= end_date`.
+- Code builds `period_u_id`; the LLM never writes it directly.
+- If dates are not exact, do not guess. Keep the detail in `quote` and use `quote_hash` if identity must split.
+- For this exact-date path, `period_scope = exact_range` and `time_type = duration`, unless start and end are the same day, in which case `time_type = instant`.
+
+## Periodless Actions
+
+Do not use `gp_UNDEF` for periodless actions.
+
+```text
+CEO resigned              -> no HAS_PERIOD
+buyback authorized today  -> no HAS_PERIOD unless a real program window is stated
+store closed permanently  -> no HAS_PERIOD unless the source gives a real period/window
+```
+
+Why: `gp_UNDEF` means "there is a period-like horizon, but it is undefined." A CEO resignation has no period-like horizon. Giving all such actions `gp_UNDEF` would create fake structure.
+
+Periodless action identity is handled by:
+
+```text
+event + driver + fact_scope
+```
+
+If two actions under the same Driver appear in one event and need separation, the slice part of `fact_scope` must separate them, using a clean slice when available or `quote_hash=<hash>` as fallback.
+
+## Sentinels
+
+Keep Guidance sentinels exactly:
+
+| sentinel | meaning | Use |
+|---|---|---|
+| `gp_ST` | short-term horizon | period-like, no exact dates |
+| `gp_MT` | medium-term horizon | period-like, no exact dates |
+| `gp_LT` | long-term horizon | period-like, no exact dates |
+| `gp_UNDEF` | period-like horizon exists but is undefined | e.g. "going forward" guidance |
+
+Do not use sentinels for facts with no time-window concept at all.
+
+```text
+"long-term target"    -> gp_LT
+"going forward"       -> gp_UNDEF
+"CEO resigned"        -> no DriverPeriod
+```
+
+## Reusing Guidance Mechanism
+
+Yes, DriverUpdate can reuse the Guidance period mechanism.
+
+Reuse exactly:
+
+- `build_guidance_period_id()`
+- `gp_YYYY-MM-DD_YYYY-MM-DD` ID shape
+- `gp_ST`, `gp_MT`, `gp_LT`, `gp_UNDEF`
+- fiscal-year-end math
+- `calendar_override`
+- `time_type`
+- instant-period collapse
+- existing-period lookup
+- SEC cache lookup
+- previous-quarter prediction
+- SEC-corrected fiscal-year-end lookup
+- fail-closed behavior when required fiscal-year-end data is missing
+
+Add these minimal extensions to the shared Guidance period mechanism:
+
+- direct exact-date input: `period_start_date + period_end_date -> gp_<start>_<end>`
+- `period_scope = ytd`
+- `period_scope = ttm`
+
+Implementation note: add this in the future shared `driver_period_resolver` wrapper, not inside pure `build_guidance_period_id()`. Expected incremental code is small: exact-date branch + YTD fallback + optional TTM fallback + one helper/label update, roughly 15-20 lines total.
+
+Implementation sketch for the next bot:
+
+```text
+Known-safe:
+1. If exact start_date + end_date are present, build:
+   u_id = gp_<start_date>_<end_date>
+   start_date = exact start_date
+   end_date = exact end_date
+
+2. Otherwise call existing Guidance period code for quarter / half / annual / month / long-range / sentinels.
+
+Needs verification with tests before coding:
+3. YTD fallback: compute FY-start through stated period end.
+4. TTM fallback: compute trailing 12-month window through stated period end.
+```
+
+Do not copy untested pseudocode directly. The next bot must prove YTD/TTM with Dec-FYE and non-Dec-FYE examples before wiring.
+
+Do not let the LLM compute final period IDs. The LLM only emits period fields. Code computes the final `period_u_id`.
+
+## What Can Be Used As-Is
+
+### Pure Builder: yes, as-is
+
+`build_guidance_period_id()` can be used as-is.
+
+Verified behavior:
+
+```text
+build_guidance_period_id(fye_month=12, fiscal_year=2025, fiscal_quarter=1)
+-> gp_2025-01-01_2025-03-31
+
+build_guidance_period_id(fye_month=9, fiscal_year=2025, fiscal_quarter=1)
+-> gp_2024-10-01_2024-12-31
+
+build_guidance_period_id(fye_month=12, sentinel_class="long_term")
+-> gp_LT
+```
+
+It is pure period math. It does not need Neo4j or Redis.
+
+### Full Cascade: reuse behavior, but extract into a shared module
+
+The full Guidance period path is correct, but it currently lives inside the Guidance write CLI.
+
+Final shape:
+
+```text
+shared module:
+  driver_period_resolver.py
+
+Guidance writer:
+  calls driver_period_resolver.ensure_driver_period(...)
 
 DriverUpdate writer:
-  imports guidance_period_resolver.ensure_guidance_period()
-  calls it ONLY when fact_type = guidance
+  calls driver_period_resolver.ensure_driver_period(...)
 ```
 
-This mirrors the unit resolver decision: one small shared module, both systems call it, no duplicated logic.
-
-## What moves into the shared module
-
-Move the current period-only logic out of `guidance_write_cli.py` into `guidance_period_resolver.py`:
+Move/reuse these period-only pieces from Guidance:
 
 - `_ensure_period()`
 - `_lookup_existing_period()`
 - `_lookup_sec_cache()`
 - `_predict_from_prev_quarter()`
 - `_get_sec_corrected_fye()`
-- lazy Redis / Neo4j connection helpers used only for period resolution
-- call to `build_guidance_period_id()` from `guidance_ids.py`
+- Redis/Neo4j helpers needed only for period resolution
+- call into `build_guidance_period_id()`
 
-Keep `build_guidance_period_id()` itself where it is. It is already the pure deterministic period builder.
+The behavior should remain the same. The graph label and call gates change.
 
-Public API should stay boring and small:
+## Public API Shape
+
+Use one boring function:
 
 ```python
-ensure_guidance_period(item: dict, *, fye_month: int | None, ticker: str | None = None) -> dict
+ensure_driver_period(
+    item: dict,
+    *,
+    fact_type: str,
+    fye_month: int | None,
+    ticker: str | None = None,
+    calendar_override: bool = False,
+) -> dict | None
 ```
 
-It should mutate/populate the same fields current Guidance uses:
+Return/populate:
 
 ```text
 period_u_id
@@ -156,134 +370,305 @@ gp_start_date
 gp_end_date
 ```
 
-## DriverUpdate call site
+Return `None` only when the fact truly has no period window.
 
-Inside the future DriverUpdate writer:
+Do not silently default missing fiscal-year-end to December.
 
-```python
-if fact_type == "guidance":
-    ensure_guidance_period(item, fye_month=company_fye_month, ticker=ticker)
-    # then MERGE DriverUpdate and HAS_PERIOD
-else:
-    # do not call period resolver
+## Producer Input Contract
+
+The producer may emit period fields such as:
+
+```text
+period_start_date
+period_end_date
+fiscal_year
+fiscal_quarter
+half
+month
+long_range_start_year
+long_range_end_year
+calendar_override
+sentinel_class
+time_type
 ```
 
-Graph write shape for guidance DriverUpdates:
+Rules:
+
+- Emit only the fields needed for the period stated in the source.
+- Prefer exact source/XBRL `period_start_date` + `period_end_date` over computed fiscal math whenever exact dates are available.
+- Routing is first-match-wins:
+  1. exact `period_start_date` + `period_end_date`
+  2. `sentinel_class`
+  3. `long_range_end_year`
+  4. `month`
+  5. `half`
+  6. `fiscal_quarter`
+  7. `fiscal_year`
+  8. fallthrough `gp_UNDEF`
+- Do not emit conflicting period fields.
+- Do not write `period_u_id` directly unless it came from code.
+- For omitted metric/surprise periods, code may derive period fields from event/report metadata before calling the resolver.
+
+## DriverUpdate Identity
+
+`DriverPeriod` is an edge for traversal and date queries.
+
+The period must also be reflected in `fact_scope`, because `fact_scope` is part of the `DriverUpdate` identity key.
+
+When a period exists:
+
+```text
+fact_scope includes: period=<period_u_id>
+```
+
+Examples:
+
+```text
+Q1 revenue fact
+fact_scope = period=gp_2025-01-01_2025-03-31
+
+Q1 franchise same-store-sales fact
+fact_scope = period=gp_2025-01-01_2025-03-31|slice=channel:franchised
+
+periodless CEO resignation
+fact_scope = default or quote_hash=<hash>, no HAS_PERIOD
+```
+
+Never use raw `Q1`, `FY2025`, or `April` as the final identity token. Resolve to `gp_...` first.
+
+The edge and `fact_scope` must be composed from the same `period_u_id`.
+
+Validator:
+
+```text
+if DriverUpdate has HAS_PERIOD -> DriverPeriod(id=X)
+then fact_scope must contain period=X
+
+if fact_scope contains period=X
+then DriverUpdate must have HAS_PERIOD -> DriverPeriod(id=X)
+```
+
+No hand-built duplicate period strings.
+
+## Properties
+
+`DriverPeriod` stores dates only:
+
+```text
+id
+u_id
+start_date
+end_date
+```
+
+Keep these on `DriverUpdate`, not on `DriverPeriod`:
+
+```text
+fiscal_year
+fiscal_quarter
+period_scope
+time_type
+```
+
+Why: the same calendar window can be described differently by different companies or sources. The node is the shared date window; the update keeps the source-specific fiscal framing.
+
+These `DriverUpdate` fields are provenance / source framing only. The authoritative grouping key is the resolved `period_u_id` plus the `DriverPeriod` dates. Never recompute grouping from raw `fiscal_year` or `fiscal_quarter` after write.
+
+## Cypher Shape
 
 ```cypher
-MERGE (gp:GuidancePeriod {id: $period_u_id})
-  ON CREATE SET gp.u_id = $period_u_id,
-                gp.start_date = $gp_start_date,
-                gp.end_date = $gp_end_date
+MERGE (dp:DriverPeriod {id: $period_u_id})
+  ON CREATE SET dp.u_id = $period_u_id,
+                dp.start_date = $gp_start_date,
+                dp.end_date = $gp_end_date
 
-MERGE (du)-[:HAS_PERIOD]->(gp)
+MERGE (du)-[:HAS_PERIOD]->(dp)
 ```
 
-Also create only the period constraint/sentinels needed by Driver:
+Constraint:
 
 ```cypher
-CREATE CONSTRAINT guidance_period_id_unique IF NOT EXISTS
-FOR (gp:GuidancePeriod) REQUIRE gp.id IS UNIQUE
-
-MERGE (gp:GuidancePeriod {id: 'gp_ST'})    SET gp.u_id='gp_ST',    gp.start_date=null, gp.end_date=null
-MERGE (gp:GuidancePeriod {id: 'gp_MT'})    SET gp.u_id='gp_MT',    gp.start_date=null, gp.end_date=null
-MERGE (gp:GuidancePeriod {id: 'gp_LT'})    SET gp.u_id='gp_LT',    gp.start_date=null, gp.end_date=null
-MERGE (gp:GuidancePeriod {id: 'gp_UNDEF'}) SET gp.u_id='gp_UNDEF', gp.start_date=null, gp.end_date=null
+CREATE CONSTRAINT driver_period_id_unique IF NOT EXISTS
+FOR (dp:DriverPeriod) REQUIRE dp.id IS UNIQUE
 ```
 
-## Exactness checks before wiring
+Sentinels:
 
-Before DriverUpdate uses it:
+```cypher
+MERGE (dp:DriverPeriod {id: 'gp_ST'})
+  SET dp.u_id='gp_ST', dp.start_date=null, dp.end_date=null
 
-1. move the logic without behavior changes
-2. make `guidance_write_cli.py` call the shared function
-3. run parity tests: old `_ensure_period()` output vs new `ensure_guidance_period()` output
-4. test these cases at minimum:
-   - quarter
-   - annual
-   - half
-   - month
-   - long range
-   - short/medium/long/undefined sentinel
-   - instant item
-   - missing fiscal-year-end raises
-   - existing `period_u_id` is preserved
-5. run a sample-equivalence check against current Guidance extraction before retiring old Guidance nodes
+MERGE (dp:DriverPeriod {id: 'gp_MT'})
+  SET dp.u_id='gp_MT', dp.start_date=null, dp.end_date=null
 
-## Nuances to preserve
+MERGE (dp:DriverPeriod {id: 'gp_LT'})
+  SET dp.u_id='gp_LT', dp.start_date=null, dp.end_date=null
 
-- The LLM does **not** compute final period IDs. It only emits period fields like `fiscal_year`, `fiscal_quarter`, `half`, `month`, `long_range_*`, `calendar_override`, `sentinel_class`, and `time_type`.
-- Code computes the final `gp_...` ID.
-- `fye_month` is required when dates must be computed.
-- The resolver fails closed if needed fiscal-year-end data is missing.
-- `company_confirmed` does not affect period resolution.
-- `GuidancePeriod` is still used only for `fact_type = guidance` at first.
-- If old `GuidanceUpdate` nodes are later retired, the "reuse existing period" lookup must be reviewed so it can also see the new guidance `DriverUpdate` path, not only old `GuidanceUpdate` nodes.
+MERGE (dp:DriverPeriod {id: 'gp_UNDEF'})
+  SET dp.u_id='gp_UNDEF', dp.start_date=null, dp.end_date=null
+```
 
-## Modular import — verified (2026-06-20)
+During transition from old Guidance nodes, either regenerate guidance as DriverUpdate facts or dual-label existing guidance period nodes. Do not create duplicate `gp_...` windows with different labels in the final target.
 
-**Proven in isolation** (system python, NO Neo4j/Redis loaded): `build_guidance_period_id(fye_month=12, fiscal_year=2025, fiscal_quarter=3)` → `gp_2025-07-01_2025-09-30`; `sentinel_class='long_term'` → `gp_LT`; omit `fye_month` → hard error. The period **math** is pure stdlib (+ the `fiscal_math` sibling) and imports exactly like `unit_resolver.py`.
+If the existing lookup still searches `GuidancePeriod`, update it to search `DriverPeriod` in the final path. During transition only, it may search both labels so old guidance periods and new driver periods do not fork.
 
-### Two layers — pick the split on purpose
-The design above (`guidance_period_resolver.py`) is the **full** version. It is **NOT** as light as `unit_resolver`, because the cascade it moves carries infra:
+## Read-Time Guardrails
 
-| | **(A) pure math only** | **(B) full cascade** *(the design above)* |
-|---|---|---|
-| Wraps | `build_guidance_period_id` | + `_lookup_existing_period` (Neo4j) · `_lookup_sec_cache` · `_predict_from_prev_quarter` · `_get_sec_corrected_fye` (Redis) |
-| Needs infra | **none** | **Neo4j + Redis** |
-| Dates | clean month-boundaries (can be ~1 month off for 52/53-week filers, e.g. Apple/retail) | **SEC-exact** |
-| Touches production | no (sandbox/test) | yes (moves code out of `guidance_write_cli.py`) |
-| = unit work | Steps 1-3 (prove the core) | Steps 5-7 (wire to production) |
+### Guard 1: never group by period alone
 
-**A = optional sandbox proof · B = the required final path.** The pure core is **already proven** to import + compute correctly (see the import proof above), so (A) — a full reusable wrapper + tests — is only worth building if you want a proof artifact right now. **(B) is the real target** (production guidance needs the Redis/Neo4j cascade for exact dates); build it **only when wiring DriverUpdate guidance to production** — not during this design phase.
+`DriverPeriod` does not say forecast vs actual.
 
-### Verified footguns (new — add to the lists above)
-- **Never silent-default FYE to December.** Keep the hard raise. Two OTHER code paths (`get_derived_fye`, the earnings builder) DO default to 12 — copying them hides a wrong-period bug.
-- **`HAS_XBRL` guard = PLANNED, not shipped** (described in `GuidanceTrigger.md:9`, absent from `guidance_trigger_daemon.py`); it's a producer-eligibility gate, NOT the resolver's job → in "Must preserve" above, **ADD** it, don't "preserve" it.
-- **`period_u_id` feeds the `guidance_update_id` hash** → changing a period changes the fact's identity (matters for regenerate-equivalence).
-- **Periods are write-once** (`ON CREATE SET`) — a node first written with wrong dates won't self-correct on re-run.
-- **SEC date/FYE Redis keys are loaded by `sec_quarter_cache_loader.py`, not `warmup_cache`** — running warmup does NOT prime them.
-- **Routing is first-match-wins** (sentinel > long_range_end_year > month > half > fiscal_quarter > fiscal_year) — emit ONLY the fields for the stated period.
-- **`time_type=instant`** also fires from a `driver_name` in 6 balance-sheet labels (`cash_and_equivalents, total_debt, long_term_debt, shares_outstanding, book_value, net_debt`); it collapses dates to `gp_{end}_{end}`. Pass `driver_name` through so this matches production.
+This is safe:
 
----
+```text
+revenue_guidance + gp_2025...  -> forecast bucket
+revenue          + gp_2025...  -> actual bucket
+revenue_surprise + gp_2025...  -> surprise bucket
+```
 
-## Findings & cross-check (2026-06-20) — 5-lens analysis + ChatGPT
+This is unsafe:
 
-**This CONFIRMS the decision above.** A 5-angle analysis (semantic fit · read-time queries · structural uniformity · producer complexity · redundancy-vs-`fact_scope`) all independently converged on the same answer, and ChatGPT agreed. Recorded so the reasoning isn't lost.
+```text
+all facts with gp_2025... -> one numeric series
+```
 
-### Final simple answer (ChatGPT, agreed)
-- `GuidancePeriod` = **required for guidance only**, regardless of `company_confirmed`.
-- `metric` / `surprise` = **optional later, only with extra care** (see the ⚠️ caveat below).
-- `action_event` = **never**.
-- `fact_scope` still separates `Q1` vs `April` inside one event.
+Any read path using `DriverPeriod` must keep enough identity:
 
-### The precise wording (ChatGPT correction — adopted)
-An earlier framing said a metric's period ≈ "the event date." That is **wrong**: the event date is *statement-time* (a May 10-Q is dated May), while the period the metric covers is *Q1* (earlier). Correct version:
-- **metric / surprise:** period-like wording stays in **`fact_scope` for now**, NOT a `GuidancePeriod` node.
-- **guidance:** the future target window gets a `GuidancePeriod` node.
-- **action_event:** never.
-- *Refinement (independent):* `fact_scope` only **structures** the period when the source states it cleanly (`"Q1"`); otherwise it falls to `hash(quote)` and the period sits only in the text. So a metric/surprise **reporting** period is **not first-class queryable today** — which is exactly why it stays "optional later, with care," not solved now.
+```text
+Driver / fact_type / BASE_METRIC family / company / unit / time_type
+```
 
-### ⚠️ Direction-collision — the one new, load-bearing caveat
-If we ever let `metric`/`surprise` use period nodes, **do NOT blindly share the same `GuidancePeriod` node**:
-- A **guided** FY2025 window and a **reported/actual** FY2025 window are the **identical `gp_` id** — same calendar window, opposite meaning (a *forecast* vs a *result*).
-- The live Guidance history key is `(metric_id, basis_norm, segment_slug, period_scope, resolved_unit, time_type)`. It has **no forecast-vs-actual direction field**. A future unified query must not let forecast rows and actual rows collapse into one bucket just because the calendar window matches.
-- **Fix:** use a SEPARATE reporting-period entity (or add a direction discriminator) — never reuse the guidance node blind. And the opt-in must only take a *stated* window, never freshly **derive** one, or it re-opens the period-race duplicate bug.
+Do not strip `_guidance` or `_surprise` and then merge those rows into the base metric numeric series.
 
-### Bottom line — why a shared period node exists at all
-It earns its keep ONLY where **many separate facts converge on ONE window** — true for guidance, nowhere else:
-- cross-company **"FY2025 guidance consensus"** (many firms → one future window)
-- one company's **FY2025 guidance evolving across Q1→Q2→Q3 calls** (re-guidance → revision history collects on one shared anchor)
+### Guard 2: no fake period for no-time facts
 
-Backward facts (`metric`/`surprise`) state their period once and do not need the guidance revision anchor. For now, the event + `fact_scope` capture enough for storage; first-class reporting-period queries are deferred. `action_event` has no fiscal window at all.
+No real period window means no `HAS_PERIOD`.
 
-### You already decided this (precedent — verified)
-`GuidanceDriverConsolidation.md` already locks the same shape: **§6.1** per-fact_type "profile" (ON only where the fact has a period) · **§5.5** "Periods = guidance-scoped win… never force a period (a CEO resignation has no quarter)" · **Bucket 4** wires period behind a `fact_type=='guidance'` gate · the period resolver **fails closed / RAISES** without a fiscal-year-end — so the gate prevents a *crash* on action_event, not just a mis-tag.
+Use `gp_UNDEF` only for period-like wording that is undefined.
 
-### Period-specific open points to confirm
-- Document the metric/surprise opt-in as DEFERRED-but-OFF now, or leave it out entirely until a fiscal producer asks?
-- If the opt-in ever turns on: a SEPARATE reporting-period entity, or the shared node + a direction marker?
-- Confirm `HAS_PERIOD` is strictly **per-DriverUpdate** (one event → many updates → each with its own period or none), mirroring guidance's 1:1 fan-out.
+### Guard 3: market-wide facts use calendar mode
 
-*(The broader 29-question guidance-migration checklist — IDs, XBRL, company_confirmed, amendments, dedup, node-label L1/L2/L3, regenerate-not-migrate — lives with the consolidation plan; ask if you want it dropped here too.)*
+Some Drivers do not belong to a company fiscal calendar:
+
+```text
+oil_price
+fed_funds_rate
+commodity_price
+minimum_wage
+```
+
+For those, use calendar mode / `calendar_override = true`. Do not require company fiscal-year-end.
+
+This already exists in Guidance period code: `calendar_override = true` forces FYE month to December.
+
+`time_type` also already exists:
+
+```text
+duration -> full window, e.g. gp_2025-01-01_2025-12-31
+instant  -> one-day window at period end, e.g. gp_2025-12-31_2025-12-31
+```
+
+### Guard 4: fail closed
+
+If a period-bearing company fact needs fiscal-year-end data and it is missing, raise an error. Do not guess December.
+
+### Guard 5: write-once date caution
+
+Guidance currently writes period dates with `ON CREATE SET`. A period node first created with wrong dates will not self-correct on rerun. Keep parity tests and constraints before production wiring.
+
+### Guard 6: instant and duration are different windows
+
+An instant period and a duration period are intentionally different nodes:
+
+```text
+duration FY2025 -> gp_2025-01-01_2025-12-31
+instant FY2025  -> gp_2025-12-31_2025-12-31
+```
+
+This is correct. Do not merge them.
+
+## Exactness Notes From Current Guidance
+
+These are real Guidance behaviors to preserve:
+
+- `GuidanceUpdate` currently has exactly one `HAS_PERIOD -> GuidancePeriod`.
+- `period_u_id` is part of Guidance identity.
+- Guidance history reads `GuidancePeriod.start_date` and `GuidancePeriod.end_date`.
+- Current Guidance writer creates `GuidancePeriod` by `MERGE` on `period_u_id`.
+- `build_guidance_period_id()` returns `{u_id, start_date, end_date, period_scope, time_type}`.
+- Existing Guidance fields do not cover every metric period shape; add the exact-date path plus `ytd`/`ttm` period scopes to the shared Guidance period mechanism.
+- Known instant labels include:
+  - `cash_and_equivalents`
+  - `total_debt`
+  - `long_term_debt`
+  - `shares_outstanding`
+  - `book_value`
+  - `net_debt`
+- `time_type = instant` collapses start/end to the end date.
+- `calendar_override = true` forces calendar periods instead of company fiscal periods.
+- Missing required FYE should raise.
+- SEC date/FYE Redis keys are loaded by `sec_quarter_cache_loader.py`, not by generic warmup.
+- `HAS_XBRL` race guard is planned in Guidance docs but not shipped in the daemon; add it as a producer eligibility guard, not inside the period resolver.
+
+## Required Tests Before Wiring
+
+These must pass before DriverUpdate uses the shared resolver:
+
+1. old Guidance `_ensure_period()` output equals new `ensure_driver_period()` output for the same guidance item
+2. quarter period
+3. annual period
+4. half-year period
+5. month period
+6. long-range period
+7. `gp_ST`, `gp_MT`, `gp_LT`, `gp_UNDEF`
+8. `time_type = instant`
+9. known instant label, such as `cash_and_equivalents`
+10. `calendar_override = true`
+11. missing required FYE raises, no December default
+12. existing `period_u_id` is preserved
+13. `metric`, `guidance`, and `surprise` facts with the same `gp_...` stay in separate read buckets
+14. periodless `action_event` gets no `HAS_PERIOD`
+15. `fact_scope` includes `period=<period_u_id>` whenever a period exists
+16. omitted metric/surprise period derives from event/report period when exactly one clear period exists
+17. YTD / cumulative exact-date window creates `gp_<start>_<end>`, not just the discrete quarter
+18. TTM exact-date window creates `gp_<start>_<end>`
+19. `HAS_PERIOD` target id equals the `period=` token inside `fact_scope`
+20. exact source/XBRL dates win over computed month-boundary dates
+21. `period_scope = ytd` and `period_scope = ttm` are accepted
+
+## Examples
+
+| Source text | `fact_type` | Driver | Period result |
+|---|---|---|---|
+| `We expect FY2025 revenue of $6B` | `guidance` | `revenue_guidance` | `HAS_PERIOD -> DriverPeriod(gp_FY2025 dates)` |
+| `Q1 revenue was $5B` | `metric` | `revenue` | `HAS_PERIOD -> DriverPeriod(Q1 dates)` |
+| `10-Q says "revenue grew 12%"` | `metric` | `revenue` | derive Q1/FY period from report metadata if exactly clear |
+| `nine months ended Sep 30 revenue` | `metric` | `revenue` | exact-date DriverPeriod, e.g. `gp_2025-01-01_2025-09-30` |
+| `TTM revenue ended Sep 30` | `metric` | `revenue` | exact-date DriverPeriod for the 12-month window |
+| `Q1 revenue beat consensus` | `surprise` | `revenue_surprise` | `HAS_PERIOD -> DriverPeriod(Q1 dates)` |
+| `CEO resigned` | `action_event` | `ceo_succession` | no `HAS_PERIOD` |
+| `three-year restructuring plan` | `action_event` | `corporate_restructuring` | `HAS_PERIOD` only if dates/window can be resolved |
+| `long-term margin target` | `guidance` | `margin_guidance` | `HAS_PERIOD -> DriverPeriod(gp_LT)` |
+| `going forward, margins should improve` | `guidance` | `margin_guidance` | `HAS_PERIOD -> DriverPeriod(gp_UNDEF)` |
+| `oil prices rose 8%` | `metric` | `oil_price` | no fiscal period unless a real calendar window is stated |
+| `oil averaged $80/barrel in Q1` | `metric` | `oil_price_per_barrel` | calendar-mode Q1 DriverPeriod |
+
+## Final Rule For A New Bot
+
+If a `DriverUpdate` is about a real stated or code-derivable time window, resolve that window with the Guidance period mechanism and link:
+
+```text
+DriverUpdate -[:HAS_PERIOD]-> DriverPeriod
+```
+
+Also include the resolved `period_u_id` in `fact_scope`.
+
+If a metric/surprise period is omitted but the event/report has exactly one clear reporting period, derive that period from the event/report metadata.
+
+If the fact is YTD, TTM, or another cumulative exact window, use exact start/end dates and build `gp_<start>_<end>`. Do not collapse it to the discrete quarter.
+
+This exact-date + `ytd`/`ttm` support belongs inside the shared Guidance period mechanism so Guidance and DriverUpdate do not fork.
+
+If the fact has no real time window, do not attach a period.
+
+Use `DriverPeriod` as the target label. Reuse Guidance period math and lookup behavior. Do not reuse the old guidance-only gate.
