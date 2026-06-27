@@ -52,6 +52,7 @@ Each driver's **state word** comes from a flavor-specific list (you can't put "b
   ```
   *Edge:* miss a synonym → a **missing** comparison (safe), never a **wrong** merged number (dangerous).
 - **`fact_type` stays** even though the name says `_guidance`. The suffix is just readable text (bare `revenue` has none); `fact_type` is the clean machine-label that picks the state list + whether to attach a guidance period.
+- **Only the base `metric` is XBRL-concept-matched.** `_guidance`/`_surprise` **inherit** the XBRL concept from their `BASE_METRIC` target — they are never concept-matched directly (XBRL tags the underlying metric, not a forecast or a surprise; feeding `revenue_guidance` to the matcher correctly finds nothing and abstains).
 
 ## How we pick the flavor (the tricky calls)
 - **Persistence test:** *"Is there a standing number I could re-read next quarter?"* **Yes → metric · No → action_event.** (`_surprise`/`_guidance` override.)
