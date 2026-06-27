@@ -11,7 +11,7 @@ metrics with a well-characterized (and safe) residual.** Stability: see §Stabil
 | **PRECISION** (cardinal) | **0 confirmed-wrong links** across 274 companies; every out-of-GT link adjudicated correct/defensible by us-gaap definition | ✅ holds — 100% |
 | **ABSTENTION** | **0 / 10,960** conceptless-driver leaks (ratio, action_event, macro, non-GAAP, KPI) | ✅ holds — 100% |
 | **RECALL** | core metric **93.6%** (effective higher; residual is mostly defensible abstention on ambiguous aggregates) | ✅ strong, safe residual |
-| **STABILITY** | _PENDING (runs 2–3)_ | — |
+| **STABILITY** | **98.0% identical across 3 independent runs** (flip 2.04%, 270 companies, 11,070 cells); **0 flips introduce a wrong concept** — all are link↔abstain on borderline cells or synonym↔synonym | ✅ holds |
 | **Coverage** | 274 / 795 companies (session-limited; owner scoped assessment to these), all 11 sectors, 31 guidance + 243 non-guidance | ◑ representative, not the full 795 |
 | **All 4 fact_types** | metric ✅, guidance/surprise (abstain → BASE_METRIC) ✅, action_event (abstain) ✅ | ✅ all exercised |
 

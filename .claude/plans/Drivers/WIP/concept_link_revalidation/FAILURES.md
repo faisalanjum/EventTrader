@@ -68,4 +68,18 @@ before calling `link()`.
 ratio, event/action, macro, non-GAAP, and KPI drivers all abstained 100% (including the non-guarded
 `return_on_equity`, `market_share`, `foot_traffic`… which rely on the LLM, not the guard).
 
-## 6. Instability: _(filled after stability runs 2–3)_
+## 6. Instability (3 independent runs, 270 companies, 11,070 non-guarded cells)
+
+**98.0% of cells are identical across all 3 runs** (flip rate 2.04%, 226 unstable). Breakdown:
+- **172 link↔abstain** — the matcher toggles a borderline link on/off across runs. Concentrated on
+  ambiguous aggregates (`total_debt`, `operating_expenses`) and a few `net_sales`/`interest_expense`.
+  Safe: toggling to abstain never creates a wrong link.
+- **54 link↔link** — picks a different concept across runs, but **0 cross-family** (verified): every
+  alternation is between synonyms in the SAME metric family (`Revenues`↔`RevenueFromContractWithCustomer`,
+  `ShareBasedCompensation`↔`AllocatedShareBasedCompensationExpense`,
+  `RestructuringCharges`↔`RestructuringCosts`, `InterestExpense`↔`InterestExpenseNonoperating`).
+
+**No flip introduces a wrong concept.** Mitigation if exact-tag stability matters: canonicalize a
+metric's family to the highest-`usage` member deterministically (REVALIDATION/§8.7), or the optional
+2–3× stability gate. (An earlier 2-run figure of 0.66% was diluted by un-run companies; 2.04% is the
+clean per-company 3-run number.)

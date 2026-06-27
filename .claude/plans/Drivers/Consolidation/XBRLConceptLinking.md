@@ -4,7 +4,7 @@
 the DriverUpdate → XBRL Concept linker for production. Read top to bottom; nothing else required.
 
 > **⚠️ CORRECTIONS PENDING (2026-06-27 — from a cross-check of this doc vs the code + the run-of-record `VERDICT.md`). Resolve before treating this as "locked":**
-> 1. **Stability is preliminary.** §9 shows flip-rate ≈0.66%, but that is the **2-run** figure; `concept_link_revalidation/VERDICT.md` still says STABILITY = **PENDING (runs 2–3)**. Treat 0.66% as provisional; finalize with the 3-run number.
+> 1. ~~Stability is preliminary.~~ **RESOLVED 2026-06-27:** 3-run stability = **98.0% identical** (flip 2.04%, 270 companies, 11,070 cells; 0 flips introduce a wrong concept). The earlier 0.66% was a 2-run figure diluted by un-run companies. §9 + `VERDICT.md` updated.
 > 2. **The menu query (§4) is NOT point-in-time** — this contradicts `Naming_Slices_XBRL.md` §7. `QUERY_2A` uses the *latest* 10-K with no `r.created <= $event_date` cutoff → lookahead on historical DriverUpdates. Add the event-date cutoff before production.
 > 3. **Borderline scope-mismatches are KEPT, not abstained** (`sg_a→GeneralAndAdministrativeExpense` ×4, `total_debt→NotesPayable` ×1) — counted "defensible," so "0 wrong" includes them. Owner decision: keep, or abstain (cleaner). The §8.10 stability gate is optional and won't auto-abstain them.
 > 4. **Coverage = 274 / 795** (representative: 11 sectors, 31 guidance + 243 non-guidance) — NOT the full universe; stability is on this cohort only.
@@ -271,12 +271,17 @@ opts = ClaudeAgentOptions(cli_path="/home/faisal/.local/bin/claude")  # OAuth su
    **canonicalize deterministically to the highest-`usage` family member** so the choice is stable
    (this also removes most run-to-run flips, see §10). Treat such synonyms as equivalent in any audit.
 8. **non-GAAP / adjusted abstain** (G2). The base metric carries the concept via `BASE_METRIC` (§6).
-9. **Ambiguous aggregates** (`total_debt`, `operating_expenses`) are abstained often (correct: a
-   `LongTermDebt`-only company is not "total debt"). **Recommendation:** split these in the driver
-   vocabulary (`long_term_debt` vs `total_debt`; name the specific expense line) to lift recall.
+9. **Ambiguous aggregates** (`total_debt`, `operating_expenses`) are abstained often, and that is
+   correct (a `LongTermDebt`-only company is not "total debt"; when a company *does* report a combined
+   concept it already links). The abstain is safe — a missing enrichment link is harmless — so the
+   **default is to do nothing**. The only fix, *if* you want the link, is a **naming choice in the
+   catalog, not algorithm code**: have the producer coin the specific reported line instead of a vague
+   aggregate (`long_term_debt → LongTermDebt`; the actual expense line, e.g. `sg_a`/`cost_of_revenue`).
+   No `link()` change, no curated list, no synonym map.
 10. **Optional stability gate** (cheap insurance): run `link()` 2–3× and abstain if the runs
-    disagree. Flips are ~0.66% and occur only on borderline cells (synonyms / ambiguous aggregates),
-    so this never costs a correct stable link — it only converts borderline wobble into a safe abstain.
+    disagree. Flips are ~2% (98% identical across 3 runs) and occur only on borderline cells
+    (synonyms / ambiguous aggregates), so this never costs a correct stable link — it only converts
+    borderline wobble into a safe abstain.
 11. **No change to `concept_linker.py` is warranted** by either validation. The reference
     implementation below is production-ready as-is.
 
@@ -301,7 +306,7 @@ deterministically):
 | **Abstention** | **100%** (0 / 10,960 conceptless: ratio, action_event, macro, non-GAAP, KPI) |
 | **Recall** (metric) | **93.6%** (residual ≈58% defensible abstention on ambiguous aggregates) |
 | **Stratum** | guidance: 100% precision / 71% recall · **non-guidance: 100% precision / 70% recall** (the prior proof skipped non-guidance — it behaves identically) |
-| **Stability** | flip rate **≈0.66%**; flips are only between equally-valid concepts or borderline abstains — **no flip introduces a wrong link** |
+| **Stability** | **98.0% identical across 3 independent runs** (flip 2.04%, 270 companies, 11,070 cells); flips are only link↔abstain on borderline cells or synonym↔synonym — **0 flips introduce a wrong concept** |
 
 Both validations are reproducible from the harnesses in those folders (data is read-only Neo4j;
 ground truth is built with zero human labels).
@@ -316,8 +321,9 @@ ground truth is built with zero human labels).
   nearest-line approximations on a few companies — defensible, not wrong; flag if SG&A-vs-G&A
   precision matters.
 - **Stability flips** concentrate on `net_sales`/`stock_based_compensation`/`restructuring_charges`
-  (synonyms) and `total_debt`/`operating_expenses` (ambiguous). Mitigate with §8.7 (canonicalize by
-  usage) and §8.9 (vocabulary split), or the §8.10 stability gate.
+  (synonyms) and `total_debt`/`operating_expenses` (ambiguous). The ambiguous-aggregate abstain is
+  safe to leave as-is (§8.9); if a link is wanted, name the driver specifically (catalog, not code).
+  For synonym wobble, §8.7 (canonicalize by usage) or the §8.10 stability gate.
 - **Monitoring:** the link is enrichment, so the production guardrail is simple — periodically sample
   emitted links and check the picked concept's `balance`/`period_type` against the metric's expected
   signature (credit/duration for revenue, etc.); a contradiction is the cheapest non-LLM wrong-link

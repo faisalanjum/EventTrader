@@ -83,7 +83,11 @@ skipped behaves identically to guidance.
 ² the 27 "leaks" are the same adjudicated-correct out-of-GT links, not real leaks.
 ³ the matcher abstains on suffixed slugs (safe); production inherits via BASE_METRIC (FAILURES.md §4).
 
-**Stability (runs 2–3):** _PENDING._
+**Stability (3 independent runs, 270 companies in all 3, 11,070 non-guarded cells):** **98.0%
+identical** (flip rate 2.04%, 226 cells). Flips = 172 link↔abstain (borderline) + 54 link↔link
+(synonyms, e.g. Revenues↔RevenueFromContractWithCustomer); **0 flips introduce a wrong concept**
+(checked: no link↔link crosses into a different metric's canonical family). NB: an earlier 2-run
+figure of 0.66% was diluted by un-run companies — 2.04% is the clean per-company number.
 
 ## Why this is stronger than the prior proof
 
