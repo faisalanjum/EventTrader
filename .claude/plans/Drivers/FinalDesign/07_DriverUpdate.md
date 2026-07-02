@@ -100,7 +100,7 @@
   - `level_unit` = unit of level_* (the 9-enum)
   - `change_value` = the SIGNED delta itself (NOT the level) — "+60 bps" → +60
   - `change_unit` = unit of change_value (may differ from level_unit)
-  - `comparison_low` / `comparison_high` = the stated prior/baseline value (high only if the baseline is a range)
+  - `comparison_low` / `comparison_high` = the stated prior/baseline shape using the same grammar as level values: a single baseline fills BOTH fields; a range fills low/high; low-only/high-only mean stated floor/ceiling
   - `comparison_baseline` = which baseline (DU-15)
 - **Why:** One nullable number layer holds any fact's numbers without fabricating.
 - **Source:** DriverGraphSchema.md number layer (AGREED 2026-06-16)

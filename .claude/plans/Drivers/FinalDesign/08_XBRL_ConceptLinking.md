@@ -70,7 +70,7 @@
 
 #### XC-09 — The company menu (point-in-time)  `[LOCKED]`
 - **Plain:** The menu = the consolidated numeric concepts the company actually reports; for a historical fact, only concepts available at the event date.
-- **Rule:** menu = consolidated (no-segment) numeric concepts the company reports (`QUERY_2A`: latest 10-K + subsequent 10-K/10-Q, `is_numeric='1'`, empty `member_u_ids`). Carries {qname, label, period_type, balance, usage}; pass the WHOLE menu (don't pre-filter); ~150–530 concepts, LLM sees ~40 after guards. REQUIRED PIT cutoff for historical DriverUpdates: `r.created ≤ event_time` (latest 10-K ≤ T); live can use the latest 10-K. (Same cutoff as the slice menu, **FS-14** — both are PIT, resolved 2026-07-02.)
+- **Rule:** menu = consolidated (no-segment) numeric concepts the company reports (`QUERY_2A`: latest 10-K + subsequent 10-K/10-Q, `is_numeric='1'`, empty `member_u_ids`). Carries {qname, label, period_type, balance, usage}; pass the WHOLE menu (don't pre-filter); ~150–530 concepts, LLM sees ~40 after guards. REQUIRED PIT cutoff for historical DriverUpdates: `r.created ≤ event_time` (latest 10-K ≤ T), where `r.created` means the source's public/accepted filing time, not when our system wrote the node; live can use the latest 10-K. (Same cutoff as the slice menu, **FS-14** — both are PIT, resolved 2026-07-02.)
 - **Why:** The answer is almost always a concept the company itself reports, so the menu IS the candidate set; PIT prevents look-ahead.
 - **Source:** XBRLConceptLinking.md §4 · cross-ref FS-14
 

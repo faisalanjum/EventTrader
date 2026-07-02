@@ -788,9 +788,9 @@ segment:taco_bell;geography:china
 
 Locked:
 
-- `Total` is a real row only when the source explicitly says total, consolidated,
-  or company-wide.
-- Silence is not `Total`.
+- Serialized `total` is a real row only when the source explicitly says total,
+  consolidated, or company-wide. Display may show "Total".
+- Silence is not `total`.
 - If no clean part exists, use `quote_hash` only when needed to avoid merging
   different same-event facts.
 
@@ -1004,7 +1004,10 @@ Locked:
 - If the fact has no numeric value, all numeric fields stay null.
 - For guidance-only numberless stated values, use `value_text`.
 - For metric, surprise, and action_event numberless facts, `value_text` is
-  forbidden; quote and state carry the fact.
+  forbidden; quote and state carry the fact. Rendering uses the 09 §6.4
+  final fallback: if no numeric/comparison/`value_text` value exists, show a
+  truncated verbatim quote so numberless facts are not rendered as bare state
+  words.
 - The quote remains the source of truth.
 - `level_low` holds the low end of a range, the value of a floor, or the point
   value when paired with the same `level_high`.
@@ -1851,7 +1854,7 @@ Build gates:
 - Store type maps to channel.
 - Brand is not a kind.
 - Multi-part slices are sorted and complete.
-- `Total` appears only on explicit total/company-wide source.
+- Serialized `total` appears only on explicit total/company-wide source.
 - Unknown XBRL axis becomes provisional.
 - Code never near-match snaps slice values.
 - Elimination hard-exclude uses exact qnames only.
@@ -1972,4 +1975,4 @@ Replaced:
 - Fuzzy code merges.
 - Axis-name-only slice classification.
 - Regex elimination filtering.
-- `Total` as default for missing slice.
+- `total` as default for missing slice.

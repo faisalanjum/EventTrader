@@ -127,7 +127,7 @@ This file starts with the **naming rules** (NAME-01 … NAME-19). Later slices �
 #### NAME-16 — The full "banned inside a name" list  `[LOCKED]`
 - **Plain:** 13 things that must never appear inside a name (with a few carve-outs).
 - **Rule:** None appear in a name (rejected even if the source uses them):
-  1. state words → driver_state *[OK: stable nouns/metric phrases ending -ing/-ed: `pricing`, `bookings`, `operating_margin`, `diluted_eps`]*
+  1. state words → driver_state *[OK: stable nouns/metric phrases ending -ing/-ed: `pricing`, `bookings`, `operating_margin`]*
   2. direction/polarity → verdict
   3. motion/change nouns → driver_state
   4. any ticker/legal/person name *[OK: institutions/regulators as a cause: `fed_rate`, `opec_supply`, `fda_approval`]*

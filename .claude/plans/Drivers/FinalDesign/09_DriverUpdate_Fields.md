@@ -76,7 +76,7 @@
 | `xbrl_qname` + `MAPS_TO_CONCEPT` | WS | FORBID (inherit) | FORBID (inherit) | FORBID |
 | any computed/fabricated number | **FORBID — all lanes** | | | |
 
-*(Revisit triggers, not owner decisions: `value_text` → metric on the first census of real metric facts showing material numberless-with-anchor rates; `conditions` → action_event on the first census of real action facts showing material stated-caveat rates. Each flip = one dict entry.)*
+*(Revisit triggers, not owner decisions: `value_text` → metric ONLY if the first census of real metric facts shows (a) material numberless-reading rates AND (b) actual persists→persists reading reversals the state stream missed — the one case §6.4's quote-render fallback cannot surface to the scanner; any such flip must be **extractive-only** (copy the stated reading verbatim — "soft", "elevated" — never paraphrase) or it destabilizes §6.9's collapse comparator: paraphrased direction words ("weakened" vs "softened") make cross-source restatements of one fact look like different facts. Considered + rejected 2026-07-02: metric direction words duplicate `driver_state` ("demand improved" adds nothing to `increased`), and the real gap — numberless metric facts rendering as a bare state word — is closed by §6.4's quote fallback at zero field cost. `conditions` → action_event on the first census of real action facts showing material stated-caveat rates. Each flip = one dict entry.)*
 
 ## §5 Old guidance fields → new home (33 → 23)
 
@@ -89,7 +89,7 @@
 | `qualitative` | → `value_text` | guidance-only; the render + series-comparator evidence is what reverses DU-18's line (§8.1). Accepted loss: qualitative color alongside numbers (~11% of old rows) stays in `quote` only |
 | `conditions` | keep | guidance-only |
 | `basis_norm`/`basis_raw` | → `fact_scope.measurement` | format-normalized tokens, stored EXACT (FS-25: never merge by meaning at write); explicit "GAAP" → `{gaap}`; silence → empty (never assume GAAP); GAAP/non-GAAP/CC render tag + any alias grouping = **read-time views only**. Honest change: "adjusted" vs "non-GAAP" restatements can split a series (locked err-specific; recoverable via the read-time alias view) |
-| `segment`/`segment_slug` | → slice in `fact_scope` | silence ≠ Total; explicit total/consolidated only |
+| `segment`/`segment_slug` | → slice in `fact_scope` | silence → no slice; explicit total/consolidated → serialized `total` (display "Total") |
 | `label`/`label_slug` | retire | `Driver.name` via `OF_DRIVER`; citation IDs switch to `Driver.name` (§6.6) |
 | `section`/`source_key`/`source_refs` | retire | zero production readers (verified); traceability = `FROM_SOURCE→Event` + `quote`; additive later if ever wanted (GPT's keep-them rejected on this evidence) |
 | `unit_raw`/`resolved_*` | retire | transient resolver I/O; sticky-fallback lane replaced by mandatory hints |
@@ -105,7 +105,7 @@
 1. **Series-key unit slot** — `level_unit`, else the change-unit's family (bps/percent_points → percent-family; m_usd delta → m_usd); numberless facts join the series matching the other key parts. The `unknown`-absorption half ports `resolve_unit_groups`; the family map is **NEW code — build + unit-test it** (it is not a port). Cross-family stays separate by design ("grew 12%" does not join the $-series; the driver timeline query doesn't key on unit).
 2. **Within-event fusion** — same driver + same scope in one event = ONE DriverUpdate; the producer combines level + change + comparison rather than emitting rival candidates (the id forces one node; fusion prevents silent overwrites). Beat/miss-vs-expectation content routes per the §4 matrix (`_surprise`).
 3. **Slices beat `mixed`** — nameable parts decompose per slice with clean directions; `mixed` only for un-sliceable splits; a consolidated fact only when itself stated.
-4. **Rendering coalesce** — level shape → else signed change → else comparison → else `value_text` (guidance). Without it, delta-only facts render valueless.
+4. **Rendering coalesce** — level shape → else signed change → else comparison → else `value_text` (guidance) → **else the truncated verbatim `quote` (final fallback, all lanes)**. Without the chain, delta-only facts render valueless; without the quote fallback, a numberless metric fact ("demand remains soft" → `persists`) renders as a bare state word with its polarity invisible. The quote fallback deliberately updates the "quote is rendered to no one" premise — that described the OLD renderer; here quote is the last-resort rendered value, which costs no field, carries no paraphrase risk, and never feeds the collapse comparator (that stays `value_text`-only).
 5. **Predictor citation IDs** — `Driver.name` (+ `fact_scope` suffix when needed) replaces the retired `metric_id`.
 6. **Policy-vs-reading routing** — a routine declaration of a standing per-X policy level → the metric driver (`dividend_per_share`); a discrete corporate decision about the policy (initiate / increase-as-decision / suspend / change) → the action_event driver (`dividend`). General principle, dividends as the instance (no domain list — examples overfit).
 7. **Rate-vs-level sharpening** — a delta-flavored unit (bps/percent_points) with a directional state and no "to X%" → `change_value`, never `level_low` (sharpens DU-16 rule 7).
