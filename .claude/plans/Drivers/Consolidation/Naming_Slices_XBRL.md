@@ -178,6 +178,10 @@ This is also how a later official name reconciles to an earlier coined one: the 
 • Attaches to the FACT (DriverUpdate), NOT the cause (Driver).  ← FIX schema:91 (it's on the class today).
 • Free when the producer picks an XBRL menu row; the resolver only handles off-menu cases.
 ```
+> **Concept-side algorithm (the off-menu resolver):** fully specced + census-validated in
+> [`XBRLConceptLinking.md`](XBRLConceptLinking.md) — guard → company menu → LLM pick → adversarial
+> verify → deterministic backstop; Haiku + backstop + abstain-fix. This §9 governs the member/slice
+> side; the concept side lives there. (Its §4 menu adopts this file's §7 point-in-time cutoff.)
 
 ## 10. The ELIMINATION / CORPORATE guard (member level)
 

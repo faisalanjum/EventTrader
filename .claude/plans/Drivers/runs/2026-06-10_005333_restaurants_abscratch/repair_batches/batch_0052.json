@@ -1,0 +1,551 @@
+{
+ "batch_id": 52,
+ "page": 0,
+ "pairs": [
+  {
+   "a": "north_italia_menu_pricing",
+   "b": "north_italia_traffic",
+   "reason": "token_overlap:italia,north",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "north_italia_menu_pricing",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "we have another price increase in October, right at the end of October, for North Italia"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "And just North Italia, was your comment that the pricing you just took, you think that, were you behind on pricing there?"
+      }
+     ]
+    },
+    {
+     "driver_name": "north_italia_traffic",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "north_italia_restaurant_traffic"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "The north Italia mix was negative 2%. It's actually a slight improvement from where it was last year. Price is between 4.5% and 5%. Traffic was negative 4%."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "So traffic was negative 6%, prices about 4%, and the mix was negative 2% for the quarter."
+      }
+     ]
+    }
+   ],
+   "idx": 450
+  },
+  {
+   "a": "new_restaurant_food_cost_efficiency",
+   "b": "north_italia_food_cost",
+   "reason": "token_overlap:cost,food",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "new_restaurant_food_cost_efficiency",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "our new restaurants have typically required a period of time after reaching normal traffic levels to achieve their targeted restaurant-level margins due to actual-to-theoretical food cost inefficiencies and labor productivity inefficiencies"
+      }
+     ]
+    },
+    {
+     "driver_name": "north_italia_food_cost",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "so that's an area that cheesecake factory best practices and systems have been deployed over time to North Italia, and we see a really good opportunity to lower food costs over time"
+      }
+     ]
+    }
+   ],
+   "idx": 387
+  },
+  {
+   "a": "flower_child_integration",
+   "b": "flower_child_margin",
+   "reason": "token_overlap:child,flower",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "flower_child_integration",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "at Flower Child, we continue down the integration path this year"
+      }
+     ]
+    },
+    {
+     "driver_name": "flower_child_margin",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "flower_child_restaurant_margin"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "we are on track to get to the margin target that we need to be at to make it a growth vehicle, which is in that mid-teens level. So we feel really good overall about the trajectory of Flower Child."
+      }
+     ]
+    }
+   ],
+   "idx": 234
+  },
+  {
+   "a": "north_italia_average_unit_volume",
+   "b": "north_italia_restaurant_count",
+   "reason": "token_overlap:italia,north",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "north_italia_average_unit_volume",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "north_italia_unit_volumes"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "Average sales per mature location, defined as open prior to 2020 and adjusted to exclude impaired locations, for North Italia restaurants were approximately $8.0 million for fiscal 2022"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "North Italia first quarter comparable sales increased 3% from the prior year, resulting in annualized AUVs of $7.7 million."
+      }
+     ]
+    },
+    {
+     "driver_name": "north_italia_restaurant_count",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "fiscal.ai-kpi",
+       "source_id": "fiscal_ai:CAKE:north_italia_company_owned_restaurants",
+       "date": "",
+       "quote": "North Italia Company-Owned Restaurants"
+      }
+     ]
+    }
+   ],
+   "idx": 420
+  },
+  {
+   "a": "acquisition_integration",
+   "b": "bakery_vertical_integration",
+   "reason": "token_overlap:integration",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "acquisition_integration",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "complexities associated with combining independent companies with separate businesses, customers, employees, cultures and systems"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "complexities associated with combining independent companies with separate businesses, customers, employees, cultures and systems"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "complexities associated with combining independent companies with separate businesses, customers, employees, cultures and systems"
+      }
+     ]
+    },
+    {
+     "driver_name": "bakery_vertical_integration",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "keep in mind, too, that we benefit from the vertical integration of the Cheesecake Factory bakeries"
+      }
+     ]
+    }
+   ],
+   "idx": 6
+  },
+  {
+   "a": "on_premise_incident_rate",
+   "b": "on_premise_traffic",
+   "reason": "token_overlap:on,premise",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "on_premise_incident_rate",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "on_premise_incident_rates"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-02-21T17.00",
+       "date": "2024-02-21",
+       "quote": "Q4 on-premise incident rates remained above 2019 levels and by the same amount as in the third quarter"
+      }
+     ]
+    },
+    {
+     "driver_name": "on_premise_traffic",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "We've sort of been in that 85% to 87% level of on-premise traffic for a while."
+      }
+     ]
+    }
+   ],
+   "idx": 469
+  },
+  {
+   "a": "delivery_menu_pricing",
+   "b": "pricing_power",
+   "reason": "token_overlap:pricing",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "delivery_menu_pricing",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "We'd like to not have to take any more price than we take today, which is only about 2% to 3% versus the in-restaurant menu."
+      }
+     ]
+    },
+    {
+     "driver_name": "pricing_power",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-02-21T17.00",
+       "date": "2024-02-21",
+       "quote": "we feel like we have sufficient pricing power in California, if need be"
+      }
+     ]
+    }
+   ],
+   "idx": 177
+  },
+  {
+   "a": "asset_impairment",
+   "b": "lease_impairment",
+   "reason": "token_overlap:impairment",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "asset_impairment",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "we recorded impairment of assets and lease terminations expense of $31.4 million primarily related to the impairment of long-lived assets"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-088397",
+       "date": "2023-08-07",
+       "quote": "Impairment of assets and lease termination (income)/expenses"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-058468",
+       "date": "2023-05-10",
+       "quote": "pre-tax charges of impairment of assets and lease termination expense"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "And in the fourth quarter, we reported a pre-tax charge of $41.5 million related to asset impairments and FRC acquisition-related items."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "we reported a pre-tax charge of $3.4 million related to impairment of assets and lease termination expense and FRC acquisition related items"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "During fiscal 2025, we recorded $23.0 million of expense primarily related to the impairment of long-lived assets"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "we recorded impairment of assets and lease termination expenses of $29.5 million primarily related to the impairment of long-lived assets"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "we recorded impairment of assets and lease terminations expense of $13.6 million primarily related to impairment of long-lived assets"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "Impairment of assets and lease termination expenses"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001151",
+       "date": "2024-08-05",
+       "quote": "we recorded impairment of assets and lease terminations expense of $1.9 million primarily related to impairment of assets for one The Cheesecake Factory location"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001073",
+       "date": "2025-05-05",
+       "quote": "we recorded impairment of assets and lease terminations expense of $2.1 million primarily related to impairment of assets for one The Cheesecake Factory location"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001564",
+       "date": "2025-08-04",
+       "quote": "primarily related to impairment of assets for one The Cheesecake Factory location"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-086819",
+       "date": "2023-08-02",
+       "quote": "The Company recorded a pre-tax net expense of $0.6 million related to Fox Restaurant Concepts (“FRC”) acquisition-related expenses and impairment of assets and lease termination income"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-113409",
+       "date": "2023-11-01",
+       "quote": "Impairment of assets and lease termination expenses 48 0.0 % - 0.0 % 1,637 0.1 %"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-026056",
+       "date": "2024-02-21",
+       "quote": "The Company recorded a pre-tax net expense of $35.6 million related to impairment of assets and lease termination expenses"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-058691",
+       "date": "2024-05-08",
+       "quote": "Impairment of assets and lease termination expenses 2,083 0.2 % 2,242 0.3 %"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-084383",
+       "date": "2024-07-31",
+       "quote": "The Company recorded a pre-tax net expense of $1.0 million related to Fox Restaurant Concepts (“FRC”) acquisition-related expenses and impairment of assets and lease termination income."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-112254",
+       "date": "2024-10-29",
+       "quote": "The Company recorded pre-tax net income of $2.5 million related to impairment of assets and lease termination income and Fox Restaurant Concepts (“FRC”) acquisition-related expenses."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-042573",
+       "date": "2025-04-30",
+       "quote": "impairment of assets and lease termination expenses"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-071758",
+       "date": "2025-07-29",
+       "quote": "impairment of assets and lease termination expenses"
+      }
+     ]
+    },
+    {
+     "driver_name": "lease_impairment",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "it's it's predominantly uh lease impairment and essentially you know we we hit the the the covet pandemic and there were um several urban locations that while we continue to operate and are recovering haven't fully recovered"
+      }
+     ]
+    }
+   ],
+   "idx": 31
+  },
+  {
+   "a": "north_italia_menu_mix",
+   "b": "north_italia_segment_margin",
+   "reason": "token_overlap:italia,north",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "north_italia_menu_mix",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "The north Italia mix was negative 2%. It's actually a slight improvement from where it was last year."
+      }
+     ]
+    },
+    {
+     "driver_name": "north_italia_segment_margin",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "And then the North Italia segment margins, did you say what the mature units were within that?"
+      }
+     ]
+    }
+   ],
+   "idx": 444
+  }
+ ]
+}

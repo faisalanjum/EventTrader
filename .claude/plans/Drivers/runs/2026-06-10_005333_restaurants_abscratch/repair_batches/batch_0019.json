@@ -1,0 +1,739 @@
+{
+ "batch_id": 19,
+ "page": 0,
+ "pairs": [
+  {
+   "a": "construction_cost",
+   "b": "construction_labor_availability",
+   "reason": "token_overlap:construction",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "construction_cost",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "construction_costs"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "the availability and/or cost of raw materials and labor used in construction"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "we're not really anticipating any significant tariff impacts to construction costs, which have, by the way, come back really nicely in line with our long-term expectations following the COVID inflation"
+      }
+     ]
+    },
+    {
+     "driver_name": "construction_labor_availability",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "the availability of qualified tradespeople in the local market"
+      }
+     ]
+    }
+   ],
+   "idx": 112
+  },
+  {
+   "a": "north_italia_same_store_sales",
+   "b": "north_italia_traffic",
+   "reason": "token_overlap:italia,north",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "north_italia_same_store_sales",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "north_italia_comparable_sales"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "North Italia comparable sales increased approximately 8% from fiscal 2022"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-058507",
+       "date": "2023-05-10",
+       "quote": "North Italia comparable sales increased approximately 9% from the first quarter of fiscal 2022"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-024317",
+       "date": "2023-02-22",
+       "quote": "North Italia operating information: Comparable restaurant sales vs. prior year 9 %"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "fiscal.ai-kpi",
+       "source_id": "fiscal_ai:CAKE:north_italia_comparable_restaurant_sales",
+       "date": "",
+       "quote": "North Italia Comparable Restaurant Sales"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "North Italia's fourth quarter comparable sales increased an exceptional 26% over 2019 on a 14-week versus 14-week basis."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-058468",
+       "date": "2023-05-10",
+       "quote": "North Italia operating information: Comparable restaurant sales vs. prior year 9 %"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "North Italia comparable sales decreased approximately 2% from fiscal 2024."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "North Italia comparable sales increased approximately 2% from fiscal 2023."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-088397",
+       "date": "2023-08-07",
+       "quote": "North Italia comparable sales increased approximately 8% from the second quarter of fiscal 2022"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "North Italia comparable sales increased approximately 8% from the third quarter of fiscal 2022"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-25-105631",
+       "date": "2025-11-03",
+       "quote": "North Italia comparable sales decreased approximately 3% from the third quarter of fiscal 2024."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-000636",
+       "date": "2024-05-08",
+       "quote": "North Italia comparable sales increased approximately 3% from the first quarter of fiscal 2023."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001151",
+       "date": "2024-08-05",
+       "quote": "North Italia comparable sales increased approximately 2% from the second quarter of fiscal 2023."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001742",
+       "date": "2024-11-04",
+       "quote": "North Italia comparable sales increased approximately 2% from the third quarter of fiscal 2023"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001073",
+       "date": "2025-05-05",
+       "quote": "North Italia comparable sales decreased approximately 1% from the first quarter of fiscal 2024."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001564",
+       "date": "2025-08-04",
+       "quote": "North Italia comparable sales decreased approximately 1% from the second quarter of fiscal 2024"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-086819",
+       "date": "2023-08-02",
+       "quote": "North Italia operating information: Comparable restaurant sales vs. prior year 8 %"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-113409",
+       "date": "2023-11-01",
+       "quote": "North Italia operating information: Comparable restaurant sales vs. prior year 8 %"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-026056",
+       "date": "2024-02-21",
+       "quote": "North Italia operating information: Comparable restaurant sales vs. prior year 7 %"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-058691",
+       "date": "2024-05-08",
+       "quote": "North Italia operating information: Comparable restaurant sales vs. prior year 3 %"
+      }
+     ]
+    },
+    {
+     "driver_name": "north_italia_traffic",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "north_italia_restaurant_traffic"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "The north Italia mix was negative 2%. It's actually a slight improvement from where it was last year. Price is between 4.5% and 5%. Traffic was negative 4%."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "So traffic was negative 6%, prices about 4%, and the mix was negative 2% for the quarter."
+      }
+     ]
+    }
+   ],
+   "idx": 462
+  },
+  {
+   "a": "new_restaurant_unit_volumes",
+   "b": "new_unit_sales",
+   "reason": "token_overlap:new,unit",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "new_restaurant_unit_volumes",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "they're practically at the same unit volumes as the rest of the North system, and their margins are great"
+      }
+     ]
+    },
+    {
+     "driver_name": "new_unit_sales",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "new_restaurant_sales"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "We've seen great sales performance out of the new locations that we've opened"
+      }
+     ]
+    }
+   ],
+   "idx": 396
+  },
+  {
+   "a": "marketing_campaigns",
+   "b": "marketing_publicity",
+   "reason": "token_overlap:marketing",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "marketing_campaigns",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "Increased awareness through our social media channels and all of our marketing campaigns, along with our strategy to have the bites and bowls on the separate menu card, has paid off really well"
+      }
+     ]
+    },
+    {
+     "driver_name": "marketing_publicity",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "our marketing strategy to tie our creative marketing campaigns to on-brand events to generate publicity and increase consumer engagement"
+      }
+     ]
+    }
+   ],
+   "idx": 361
+  },
+  {
+   "a": "flower_child_average_unit_volume",
+   "b": "flower_child_off_premise_mix",
+   "reason": "token_overlap:child,flower",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "flower_child_average_unit_volume",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "Q1 AUVs, the run rate of those are $4.4 million average unit volume"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "I wanted to dig in a little more on the flower child. What would be the potential average volumes for a fully mature box"
+      }
+     ]
+    },
+    {
+     "driver_name": "flower_child_off_premise_mix",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "at Flower Child, you're talking about a 55% off-premise mix"
+      }
+     ]
+    }
+   ],
+   "idx": 221
+  },
+  {
+   "a": "consumer_trade_down",
+   "b": "trade_policy",
+   "reason": "token_overlap:trade",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "consumer_trade_down",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "really not seeing any observable trade-down behavior, you know, from any cohort of guests"
+      }
+     ]
+    },
+    {
+     "driver_name": "trade_policy",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "assuming the shutdown ends and we get some trade deals"
+      }
+     ]
+    }
+   ],
+   "idx": 136
+  },
+  {
+   "a": "lease_termination",
+   "b": "operating_lease_liabilities",
+   "reason": "token_overlap:lease",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "lease_termination",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "lease_termination_costs",
+      "lease_terminations"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001151",
+       "date": "2024-08-05",
+       "quote": "lease termination costs for one The Cheesecake Factory and one Flower Child location"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "we recorded pre-tax net income of $2.5 million primarily related to lease terminations"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001742",
+       "date": "2024-11-04",
+       "quote": "we recorded impairment of assets and lease terminations income of $3.5 million primarily related to lease termination income"
+      }
+     ]
+    },
+    {
+     "driver_name": "operating_lease_liabilities",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "Includes $845.1 million related to options to extend lease terms that are reasonably certain of being exercised"
+      }
+     ]
+    }
+   ],
+   "idx": 342
+  },
+  {
+   "a": "flower_child_acquisition",
+   "b": "flower_child_same_store_sales",
+   "reason": "token_overlap:child,flower",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "flower_child_acquisition",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "We are on track with Flower Child, bringing it fully under our umbrella for this year."
+      }
+     ]
+    },
+    {
+     "driver_name": "flower_child_same_store_sales",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Flower Child comparable sales increased approximately 6% from fiscal 2023."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001073",
+       "date": "2025-05-05",
+       "quote": "Flower Child comparable sales increased approximately 5% from the first quarter of fiscal 2024."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "Q1 comparable sales for Flower Child were the highest of any of our core concepts, and sales demand and the newer locations continue to trend well"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "the Fire Child comps continue to be the strongest in our system, running mid-single digits"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "Flower Child comparable sales increased approximately 5% from fiscal 2024."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-25-105631",
+       "date": "2025-11-03",
+       "quote": "Flower Child comparable sales increased approximately 7% from the third quarter of fiscal 2024."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001564",
+       "date": "2025-08-04",
+       "quote": "Flower Child comparable sales increased approximately 4% from the second quarter of fiscal 2024"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "Flower Child's comparable sales increased by 11%, significantly outpacing the Black Box Fast Casual Dining Index"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "Flower Child continues on a strong upward trajectory. with comparable sales increasing by 5%, significantly outperforming the Black Box Fast Casual Dining Index"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-07-29T17.00",
+       "date": "2025-07-29",
+       "quote": "Flower Child continues on a strong upward trajectory, with second quarter comparable sales increasing 4%, significantly outperforming the black box fast casual dining index"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "third quarter comparable sales increasing 7%, significantly outpacing the fast casual segment"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "Flower Child continued to perform exceptionally well and meaningfully outpaced the Fast Casual segment. Fourth quarter comparable sales increased 4%, for a two-year comp sales increase of 15%."
+      }
+     ]
+    }
+   ],
+   "idx": 216
+  },
+  {
+   "a": "flower_child_rewards_program",
+   "b": "flower_child_sales",
+   "reason": "token_overlap:child,flower",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "flower_child_rewards_program",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-07-29T17.00",
+       "date": "2025-07-29",
+       "quote": "flower child is much more of a traditional rewards program it's an app based program that has points"
+      }
+     ]
+    },
+    {
+     "driver_name": "flower_child_sales",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "Flower Child sales increased 11.0% to $127.5 million for fiscal 2023, compared to $114.8 million for fiscal 2022"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-000636",
+       "date": "2024-05-08",
+       "quote": "Flower Child sales increased 10.2% to $34.5 million for the first quarter of fiscal 2024"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "looking at Flower Child, as David Gordon mentioned, the sales continue to improve. quarter over quarter"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "Flower Child sales totaled $32.2 million, up 11% from the prior year, and sales per operating week were $80,000."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001742",
+       "date": "2024-11-04",
+       "quote": "Flower Child sales increased 13.7% to $36.6 million for the third quarter of fiscal 2024"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-02-21T17.00",
+       "date": "2024-02-21",
+       "quote": "Flower Child sales totaled $30.4 million, and sales per operating week were $75,500"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "Flower Child sales totaled $35.7 million, up 7% from the prior year, and sales per operating week were $85,900"
+      }
+     ]
+    }
+   ],
+   "idx": 253
+  },
+  {
+   "a": "covid_pandemic",
+   "b": "covid_restrictions",
+   "reason": "token_overlap:covid",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "covid_pandemic",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "covid19_pandemic"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "The COVID-19 pandemic significantly disrupted our business and its ongoing effects and other geopolitical and macroeconomic events are having and may continue to have an adverse impact on our operating environment."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-088397",
+       "date": "2023-08-07",
+       "quote": "the suspension that began in fiscal 2020 due to the impact of COVID-19 on our business"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "the COVID-19 pandemic continued to affect our business during periods of accelerated case counts"
+      }
+     ]
+    },
+    {
+     "driver_name": "covid_restrictions",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "covid_dining_restrictions"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "We have experienced significant disruptions to our business as federal, state and local restrictions have fluctuated over time to mitigate the spread of the COVID-19 virus"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-058468",
+       "date": "2023-05-10",
+       "quote": "the COVID-19 pandemic and related containment measures, including the potential for quarantines or restriction on in-person dining"
+      }
+     ]
+    }
+   ],
+   "idx": 147
+  }
+ ]
+}

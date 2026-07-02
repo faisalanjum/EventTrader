@@ -1,0 +1,764 @@
+{
+ "batch_id": 6,
+ "page": 0,
+ "pairs": [
+  {
+   "a": "cash_on_cash_returns",
+   "b": "new_unit_returns",
+   "reason": "token_overlap:returns",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "cash_on_cash_returns",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "we're sitting right between the 20% and 25% cash on cash we've been targeting and feel great about the ability to continue to open at that level"
+      }
+     ]
+    },
+    {
+     "driver_name": "new_unit_returns",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "new_restaurant_returns"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "we wouldn't be moving forward with the 20 to 22 locations if we didn't feel we'd be hitting the returns"
+      }
+     ]
+    }
+   ],
+   "idx": 78
+  },
+  {
+   "a": "third_party_bakery_sales",
+   "b": "third_party_vendor_failure",
+   "reason": "token_overlap:party,third",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "third_party_bakery_sales",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Our bakery division operates two facilities that produce quality cheesecakes and other baked products for our restaurants, international licensees and third-party bakery customers."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "produce quality cheesecakes and other baked products for our restaurants, international licensees and third-party bakery customers"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "Our bakery division operates two facilities that produce quality cheesecakes and other baked products for our restaurants, international licensees and third-party bakery customers."
+      }
+     ]
+    },
+    {
+     "driver_name": "third_party_vendor_failure",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "third_party_vendor_outage"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "The failure of third-party vendors to provide adequate services, including, as result of any Security Incident, could significantly harm our operations and reputation"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001151",
+       "date": "2024-08-05",
+       "quote": "If any of our third-party vendors experiences a failure that affects a significant aspect of our business, we may experience data loss, increased costs, operational disruption or other harm, any of which could materially adversely affect our financial performance."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "If any of our third-party vendors experiences a failure that affects a significant aspect of our business, we may experience data loss, increased costs, operational disruption or other harm"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "If any of our third-party vendors experiences a failure that affects a significant aspect of our business, we may experience data loss, increased costs, operational disruption or other harm"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "If any of our third-party vendors experiences a failure that affects a significant aspect of our business, we may experience data loss, increased costs, operational disruption or other harm"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001742",
+       "date": "2024-11-04",
+       "quote": "If any of our third-party vendors experiences a failure that affects a significant aspect of our business, we may experience data loss, increased costs, operational disruption or other harm, any of which could materially adversely affect our financial performance."
+      }
+     ]
+    }
+   ],
+   "idx": 517
+  },
+  {
+   "a": "convertible_notes_issuance",
+   "b": "share_issuance",
+   "reason": "token_overlap:issuance",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "convertible_notes_issuance",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "convertible_debt_issuance"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001073",
+       "date": "2025-05-05",
+       "quote": "we issued $575.0 million in aggregate principal amount of convertible senior notes"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-042573",
+       "date": "2025-04-30",
+       "quote": "On February 28, 2025, the Company issued $575 million of 2.00% convertible senior notes due 2030."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "we strengthened our liquidity position and balance sheet through the issuance of $575 million of 2% convertible notes due 2030"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001564",
+       "date": "2025-08-04",
+       "quote": "On February 28, 2025, we issued $575.0 million in aggregate principal amount of convertible senior notes (“2030 Notes”), which will mature on March 15, 2030"
+      }
+     ]
+    },
+    {
+     "driver_name": "share_issuance",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "share_issuance_dilution"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001073",
+       "date": "2025-05-05",
+       "quote": "The issuance or sale of shares of our common stock, or rights to acquire shares of our common stock, could depress the trading price of our common stock"
+      }
+     ]
+    }
+   ],
+   "idx": 143
+  },
+  {
+   "a": "supply_chain_disruption",
+   "b": "supply_chain_scale",
+   "reason": "token_overlap:chain,supply",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "supply_chain_disruption",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "supply_chain",
+      "supply_chain_disruptions"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "we also began to experience certain supply shortages and transportation delays largely attributable to impacts of the COVID-19 pandemic"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-058507",
+       "date": "2023-05-10",
+       "quote": "We have also encountered delays in opening new restaurants due to supply chain challenges and delays in permitting, construction, landlord readiness, and equipment availability."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-024317",
+       "date": "2023-02-22",
+       "quote": "supply chain disruptions"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "while we continue to experience some delays in opening due to supply chain challenges and permit approval delays beyond our control"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "we began to experience certain supply shortages and transportation delays largely attributable to impacts of the COVID-19 pandemic. These shortages continued in fiscal 2022 and were exacerbated by geopolitical unrest."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "The impact of ongoing geopolitical and macroeconomic events, including evolving government policies and global trade and tariff dynamics, could lead to further wage inflation, product and services cost inflation, disruptions in the supply chain"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "delays in opening new restaurants due to delays in permitting and landlord readiness, as well as supply chain challenges"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "disruptions in the supply chain and delay in new restaurant openings"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "our operating results were impacted by geopolitical and macroeconomic events, causing supply chain challenges"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "we began to experience certain supply shortages and transportation delays largely attributable to impacts of the COVID-19 pandemic. These shortages continued in fiscal 2022 and were exacerbated by geopolitical unrest"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "could lead to further wage inflation, product and services cost inflation, disruptions in the supply chain, staffing challenges"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "could lead to further wage inflation, product and services cost inflation, disruptions in the supply chain, staffing challenges, shifts in consumer behavior, and delays in new restaurant openings"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "The impact of ongoing geopolitical and macroeconomic events could lead to further wage inflation, product and services cost inflation, disruptions in the supply chain, staffing challenges, shifts in consumer behavior, and delays in new restaurant openings."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "could lead to further wage inflation, product and services cost inflation, disruptions in the supply chain, staffing challenges"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "disruptions in the supply chain, staffing challenges, shifts in consumer behavior, and delays in new restaurant openings"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "we were impacted by geopolitical and macroeconomic events, causing supply chain challenges and significantly increased commodity prices"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-088397",
+       "date": "2023-08-07",
+       "quote": "We have also encountered delays in opening new restaurants due to supply chain challenges and delays in permitting, construction, landlord readiness, and equipment availability"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "causing supply chain challenges and significantly increased commodity and wage inflation"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-25-105631",
+       "date": "2025-11-03",
+       "quote": "The impact of ongoing geopolitical and macroeconomic events could lead to further wage inflation, product and services cost inflation, disruptions in the supply chain, staffing challenges, shifts in consumer behavior, and delays in new restaurant openings."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-000636",
+       "date": "2024-05-08",
+       "quote": "causing supply chain challenges and significantly increased commodity and wage inflation"
+      }
+     ]
+    },
+    {
+     "driver_name": "supply_chain_scale",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "we continue to leverage our scalable supply chain and look for opportunities to to purchase products that perhaps are in our broader basket that we can also use in North Italia"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "I think supply chain is another one that we continue to benefit on the increasing scale of our company"
+      }
+     ]
+    }
+   ],
+   "idx": 510
+  },
+  {
+   "a": "north_italia_average_check",
+   "b": "north_italia_development",
+   "reason": "token_overlap:italia,north",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "north_italia_average_check",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "The average check for each customer, including beverages and desserts, for fiscal 2024 averaged approximately $34.60 for lunch and approximately $44.40 for dinner."
+      }
+     ]
+    },
+    {
+     "driver_name": "north_italia_development",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "Our failure to effectively develop, grow and operate North Italia and our other branded concepts could materially adversely affect our financial performance."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Our failure to effectively develop, grow and operate North Italia, Flower Child and our other branded concepts could materially adversely affect our financial performance."
+      }
+     ]
+    }
+   ],
+   "idx": 407
+  },
+  {
+   "a": "lease_impairment",
+   "b": "operating_lease_liabilities",
+   "reason": "token_overlap:lease",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "lease_impairment",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "it's it's predominantly uh lease impairment and essentially you know we we hit the the the covet pandemic and there were um several urban locations that while we continue to operate and are recovering haven't fully recovered"
+      }
+     ]
+    },
+    {
+     "driver_name": "operating_lease_liabilities",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "Includes $845.1 million related to options to extend lease terms that are reasonably certain of being exercised"
+      }
+     ]
+    }
+   ],
+   "idx": 339
+  },
+  {
+   "a": "acquisition_contingent_consideration",
+   "b": "acquisition_integration",
+   "reason": "token_overlap:acquisition",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "acquisition_contingent_consideration",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "During fiscal 2022, the fair value of the contingent consideration and compensation liability increased by $4.7 million to $28.6 million due to an $8.3 million increase in the fair value primarily stemming from a change in the volatility factors"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-088397",
+       "date": "2023-08-07",
+       "quote": "Acquisition-related contingent consideration, compensation and amortization expenses"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-026056",
+       "date": "2024-02-21",
+       "quote": "Represents changes in the fair value of the deferred consideration and contingent consideration and compensation liabilities related to the North Italia and FRC acquisition"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "the fair value of the contingent consideration and compensation liability increased by $4.7 million due to a $8.3 million increase in the fair value primarily stemming from a change in the volatility factors"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "In fiscal 2025, we recorded a $10.5 million increase in the fair value of the contingent consideration and compensation liability primarily stemming from updating the probability of achievement due to passage of time as well as recent performance"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "We recorded $11.7 million and $13.4 million of expense during fiscal 2023 and 2022, respectively, of acquisition-related contingent consideration, compensation and amortization."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "the fair value of the contingent consideration and compensation liability decreased by $5.3 million to $20.2 million"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-088397",
+       "date": "2023-08-07",
+       "quote": "we made payments of $13.0 million and $7.2 million, respectively, for contingent consideration and compensation related to the FRC acquisition"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "Acquisition-related contingent consideration, compensation and amortization expenses"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-000636",
+       "date": "2024-05-08",
+       "quote": "Acquisition-related contingent consideration, compensation and amortization expenses"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001742",
+       "date": "2024-11-04",
+       "quote": "a payment of deferred consideration and compensation related to the FRC acquisition in excess of acquisition-date fair value"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-015185",
+       "date": "2025-02-19",
+       "quote": "Represents changes in the fair value of the deferred consideration and contingent consideration and compensation liabilities related to the North Italia and FRC acquisition, as well as amortization of acquired definite-lived licensing agreements."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-071758",
+       "date": "2025-07-29",
+       "quote": "Represents changes in the fair value of the deferred consideration and contingent consideration and compensation liabilities related to the North Italia and FRC acquisition"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-26-017090",
+       "date": "2026-02-18",
+       "quote": "Represents changes in the fair value of the deferred consideration and contingent consideration and compensation liabilities related to the North Italia and FRC acquisition"
+      }
+     ]
+    },
+    {
+     "driver_name": "acquisition_integration",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "complexities associated with combining independent companies with separate businesses, customers, employees, cultures and systems"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "complexities associated with combining independent companies with separate businesses, customers, employees, cultures and systems"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "complexities associated with combining independent companies with separate businesses, customers, employees, cultures and systems"
+      }
+     ]
+    }
+   ],
+   "idx": 1
+  },
+  {
+   "a": "restaurant_lease_renewal",
+   "b": "restaurant_lease_terms",
+   "reason": "token_overlap:lease,restaurant",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "restaurant_lease_renewal",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "restaurant_lease_cost",
+      "restaurant_lease_costs",
+      "restaurant_lease_renewal_cost"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "We may incur additional costs if we are unable to renew our restaurant leases on similar terms and conditions, or at all, or to relocate our restaurants in certain trade areas"
+      }
+     ]
+    },
+    {
+     "driver_name": "restaurant_lease_terms",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "generally the leasing environment is similar to what we may have expected historically, though, in terms of terms"
+      }
+     ]
+    }
+   ],
+   "idx": 483
+  },
+  {
+   "a": "adverse_weather",
+   "b": "winter_weather",
+   "reason": "token_overlap:weather",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "adverse_weather",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "inclement_weather"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Adverse weather conditions, natural disasters and public health emergencies can impact customer traffic, make it more difficult to fully staff our restaurants"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "Adverse weather conditions and natural disasters may further exacerbate a number of these factors."
+      }
+     ]
+    },
+    {
+     "driver_name": "winter_weather",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "I think we would have been in positive traffic territory if it weren't for the weather in January"
+      }
+     ]
+    }
+   ],
+   "idx": 15
+  },
+  {
+   "a": "gift_card_inventory_writedown",
+   "b": "gift_card_redemptions",
+   "reason": "token_overlap:card,gift",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "gift_card_inventory_writedown",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "gift_card_inventory_write_down"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-26-017090",
+       "date": "2026-02-18",
+       "quote": "partially offset by a non-recurring $7.9 million write-down of gift card inventory"
+      }
+     ]
+    },
+    {
+     "driver_name": "gift_card_redemptions",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "higher gift card redemptions and lower accrued incentive compensation"
+      }
+     ]
+    }
+   ],
+   "idx": 286
+  }
+ ]
+}

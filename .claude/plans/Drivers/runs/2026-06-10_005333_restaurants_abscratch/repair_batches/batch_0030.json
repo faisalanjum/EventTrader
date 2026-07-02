@@ -1,0 +1,983 @@
+{
+ "batch_id": 30,
+ "page": 0,
+ "pairs": [
+  {
+   "a": "new_restaurant_unit_volumes",
+   "b": "new_unit_development",
+   "reason": "token_overlap:new,unit",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "new_restaurant_unit_volumes",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "they're practically at the same unit volumes as the rest of the North system, and their margins are great"
+      }
+     ]
+    },
+    {
+     "driver_name": "new_unit_development",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "new_restaurant_development",
+      "restaurant_development",
+      "restaurant_unit_development"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-058507",
+       "date": "2023-05-10",
+       "quote": "Our overall revenue growth is primarily driven by revenues from new restaurant openings and increases in comparable restaurant sales."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-058468",
+       "date": "2023-05-10",
+       "quote": "The Company continues to expect to open as many as 20 to 22 new restaurants in fiscal 2023"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "we plan to open as many as 20 to 22 new restaurants this year across our portfolio of concepts, with approximately 80% of openings occurring in the second half of the year"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "So we were targeting the 20 to 22 new openings"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-26-017090",
+       "date": "2026-02-18",
+       "quote": "During the fourth quarter, we opened seven new restaurants and delivered approximately 7% unit growth for the year."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "We expect to open as many as 16 new restaurants in fiscal 2023 across our portfolio of concepts."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-000636",
+       "date": "2024-05-08",
+       "quote": "We plan to open as many as 22 new restaurants in fiscal 2024, including three to four The Cheesecake Factory restaurants"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001151",
+       "date": "2024-08-05",
+       "quote": "We plan to open as many as 22 new restaurants in fiscal 2024"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001742",
+       "date": "2024-11-04",
+       "quote": "primarily due to additional revenue related to new restaurant openings and an increase in comparable restaurant sales"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001073",
+       "date": "2025-05-05",
+       "quote": "We opened eight restaurants in the first quarter of fiscal 2025 comprised of three North Italia, three Flower Child and two Other FRC locations"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001564",
+       "date": "2025-08-04",
+       "quote": "the timing of our new unit development and related permitting"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-058691",
+       "date": "2024-05-08",
+       "quote": "The Company continues to expect to open as many as 22 new restaurants in fiscal 2024"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-042573",
+       "date": "2025-04-30",
+       "quote": "The Company continues to expect to open as many as 25 new restaurants in fiscal 2025"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "CapEx totaled approximately $25 million during the second quarter for new unit development and maintenance"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "Wanted to talk about unit growth and if you could provide some more feedback on how to look at store closures to net against the new unit openings for the 7% growth rate you mentioned for 2024 and then the 16 new units for 2023."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "we now expect to open as many as 16 new restaurants in 2023 and four to six new restaurants in the first quarter of 2024"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-02-21T17.00",
+       "date": "2024-02-21",
+       "quote": "we're planning to open as many as 22 new restaurants in 2024, including as many as three to four cheesecake factories"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "With the five restaurant openings in the first quarter, we remain on track to open as many as 22 new restaurants in 2024"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "we still plan to open as many as 22 new restaurants this year across our portfolio of concepts, with four to five openings in the third quarter"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "So we would have the 25 new, and we'd have one closure around the middle of the year for Cheesecake."
+      }
+     ]
+    }
+   ],
+   "idx": 394
+  },
+  {
+   "a": "guest_satisfaction",
+   "b": "guest_value_scores",
+   "reason": "token_overlap:guest",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "guest_satisfaction",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-112254",
+       "date": "2024-10-29",
+       "quote": "significant improvements in labor productivity, hourly staff and manager retention, and guest satisfaction scores"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "So now it's about providing absolute guest satisfaction and making sure that it's worth it."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "second quarter guest satisfaction scores at the Cheesecake Factory improving both sequentially and year over year"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-26-017090",
+       "date": "2026-02-18",
+       "quote": "delivering year-over-year improvements in labor productivity, wage management, hourly staff and manager retention, and guest satisfaction"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-071758",
+       "date": "2025-07-29",
+       "quote": "guest satisfaction scores"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "record high guest satisfaction scores across all dine-in and to-go metrics"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "Our members continue to show very high guest satisfaction scores, sort of over-indexing on our NPS scores that are already at an all-time high"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "You did mention the CSAT scores are record high"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "first quarter guest satisfaction scores improved both sequentially and year over year"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-07-29T17.00",
+       "date": "2025-07-29",
+       "quote": "our success in staffing continues to be a key driver behind the improvement in guest satisfaction scores"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "our teams drove meaningful performance improvements this quarter, including continued gains in overall guest satisfaction"
+      }
+     ]
+    },
+    {
+     "driver_name": "guest_value_scores",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "guest_value_perception"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "I'd say that our value scores are pretty stable"
+      }
+     ]
+    }
+   ],
+   "idx": 300
+  },
+  {
+   "a": "legal_fees",
+   "b": "legal_immigration",
+   "reason": "token_overlap:legal",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "legal_fees",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "legal_expenses"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-000636",
+       "date": "2024-05-08",
+       "quote": "increased labor expense (0.4%) and higher legal fees (0.1%)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "G&A, as a percentage of sales, increased 20 basis points, mostly driven by higher legal fees."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001151",
+       "date": "2024-08-05",
+       "quote": "This variance was primarily due to lower legal fees (0.2%)."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001742",
+       "date": "2024-11-04",
+       "quote": "partially offset by higher legal fees (0.2%)"
+      }
+     ]
+    },
+    {
+     "driver_name": "legal_immigration",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "reduced levels of legal immigration and a diminishing pool of potential staff members, which has been exacerbated by potential staff members choosing to exit the workforce"
+      }
+     ]
+    }
+   ],
+   "idx": 345
+  },
+  {
+   "a": "alcohol_attach_rate",
+   "b": "alcohol_sales_mix",
+   "reason": "token_overlap:alcohol",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "alcohol_attach_rate",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "both the alcohol and sort of broader attach, you know, it's a little bit more lapping the exuberance from prior years"
+      }
+     ]
+    },
+    {
+     "driver_name": "alcohol_sales_mix",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "alcohol_mix"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "Any feedback on any change in alcohol mix that you would want to call out"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "I think some of it is mixed on alcohol, right, which is not necessarily related to the guest traffic side of things."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "The mix was a little bit of a heavier impact for North. It has been kind of for the past two to three quarters. And really, again, that's in the alcohol category."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "I think we've seen a little bit of alcohol trade down, which has resulted in that"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "we saw a little bit of alcohol component. I think that's been pretty common in the industry"
+      }
+     ]
+    }
+   ],
+   "idx": 16
+  },
+  {
+   "a": "north_italia_development",
+   "b": "north_italia_food_cost",
+   "reason": "token_overlap:italia,north",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "north_italia_development",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "Our failure to effectively develop, grow and operate North Italia and our other branded concepts could materially adversely affect our financial performance."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Our failure to effectively develop, grow and operate North Italia, Flower Child and our other branded concepts could materially adversely affect our financial performance."
+      }
+     ]
+    },
+    {
+     "driver_name": "north_italia_food_cost",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "so that's an area that cheesecake factory best practices and systems have been deployed over time to North Italia, and we see a really good opportunity to lower food costs over time"
+      }
+     ]
+    }
+   ],
+   "idx": 425
+  },
+  {
+   "a": "flower_child_off_premise_mix",
+   "b": "flower_child_same_store_sales",
+   "reason": "token_overlap:child,flower",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "flower_child_off_premise_mix",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "at Flower Child, you're talking about a 55% off-premise mix"
+      }
+     ]
+    },
+    {
+     "driver_name": "flower_child_same_store_sales",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Flower Child comparable sales increased approximately 6% from fiscal 2023."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001073",
+       "date": "2025-05-05",
+       "quote": "Flower Child comparable sales increased approximately 5% from the first quarter of fiscal 2024."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "Q1 comparable sales for Flower Child were the highest of any of our core concepts, and sales demand and the newer locations continue to trend well"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "the Fire Child comps continue to be the strongest in our system, running mid-single digits"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "Flower Child comparable sales increased approximately 5% from fiscal 2024."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-25-105631",
+       "date": "2025-11-03",
+       "quote": "Flower Child comparable sales increased approximately 7% from the third quarter of fiscal 2024."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001564",
+       "date": "2025-08-04",
+       "quote": "Flower Child comparable sales increased approximately 4% from the second quarter of fiscal 2024"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "Flower Child's comparable sales increased by 11%, significantly outpacing the Black Box Fast Casual Dining Index"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "Flower Child continues on a strong upward trajectory. with comparable sales increasing by 5%, significantly outperforming the Black Box Fast Casual Dining Index"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-07-29T17.00",
+       "date": "2025-07-29",
+       "quote": "Flower Child continues on a strong upward trajectory, with second quarter comparable sales increasing 4%, significantly outperforming the black box fast casual dining index"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "third quarter comparable sales increasing 7%, significantly outpacing the fast casual segment"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "Flower Child continued to perform exceptionally well and meaningfully outpaced the Fast Casual segment. Fourth quarter comparable sales increased 4%, for a two-year comp sales increase of 15%."
+      }
+     ]
+    }
+   ],
+   "idx": 248
+  },
+  {
+   "a": "acquisition_expenses",
+   "b": "acquisition_integration",
+   "reason": "token_overlap:acquisition",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "acquisition_expenses",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "acquisition_related_costs",
+      "acquisition_related_expenses",
+      "frc_acquisition_costs"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "primarily related to FRC acquisition-related expenses"
+      }
+     ]
+    },
+    {
+     "driver_name": "acquisition_integration",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "complexities associated with combining independent companies with separate businesses, customers, employees, cultures and systems"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "complexities associated with combining independent companies with separate businesses, customers, employees, cultures and systems"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "complexities associated with combining independent companies with separate businesses, customers, employees, cultures and systems"
+      }
+     ]
+    }
+   ],
+   "idx": 3
+  },
+  {
+   "a": "same_store_sales",
+   "b": "same_store_sales_guidance",
+   "reason": "token_overlap:sales,same,store",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "same_store_sales",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "Factors such as comparable restaurant sales that are below our target"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-058507",
+       "date": "2023-05-10",
+       "quote": "Revenues increased 9.1% to $866.1 million for the fiscal quarter ended April 4, 2023 compared to $793.7 million for the comparable prior year period, primarily due to an increase in comparable restaurant sales"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-024317",
+       "date": "2023-02-22",
+       "quote": "Comparable restaurant sales at The Cheesecake Factory restaurants increased 4.0% year-over-year in the fourth quarter of fiscal 2022"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "fiscal.ai-kpi",
+       "source_id": "fiscal_ai:CAKE:the_cheesecake_factory_restaurants_comparable_restaurant_sales",
+       "date": "",
+       "quote": "The Cheesecake Factory Restaurants Comparable Restaurant Sales"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "Fourth quarter comparable sales at the Cheesecake Factory restaurants increased 4% versus the prior year and 11.4% versus 2019, both on a 14-week versus 14-week basis."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "Just on comp, obviously really strong trans quarter to date."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "Fluctuations in both average sales per location and average sales per productive square foot for fiscal 2025 generally tracked with comparable restaurant sales trends."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "Fluctuations in both average sales per location and average sales per productive square foot generally track with comparable restaurant sales trends"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "Our inability to grow comparable restaurant sales could materially adversely affect our financial performance."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "Fluctuations in both average sales per location and average sales per productive square foot generally track with comparable restaurant sales trends"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "Our inability to grow comparable restaurant sales could materially adversely affect our financial performance."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "due to an increase in comparable restaurant sales, as well as additional revenue related to new restaurant openings"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "Our revenue growth is primarily driven by new restaurant openings and increases in comparable restaurant sales."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Fluctuations in both average sales per location and average sales per productive square foot for fiscal 2024 generally tracked with comparable restaurant sales trends."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Our inability to grow comparable restaurant sales could materially adversely affect our financial performance."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "comparable restaurant sales that are below our target, slowing growth of our concepts domestically"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "primarily due to additional revenue related to new restaurant openings and an increase in comparable restaurant sales"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-088397",
+       "date": "2023-08-07",
+       "quote": "primarily due to an increase in comparable restaurant sales, as well as additional revenue related to new restaurant openings"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "primarily due to an increase in comparable restaurant sales, as well as additional revenue related to new restaurant openings"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-25-105631",
+       "date": "2025-11-03",
+       "quote": "primarily due to additional revenue related to new restaurant openings and an increase in comparable restaurant sales"
+      }
+     ]
+    },
+    {
+     "driver_name": "same_store_sales_guidance",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "Our comp assumptions remain consistent as our performance last year, a continuation of that"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "To confirm, do you expect to be in that 1% to 2% range on comp in the first quarter?"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "I think you referenced that Q2 2025 same-shore sales were roughly plus 1%. Were you saying that plus 1% is the implied 2026 same-shore sales number?"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "obviously we finished near the high end, but it wasn't at the high end of our guide"
+      }
+     ]
+    }
+   ],
+   "idx": 493
+  },
+  {
+   "a": "depreciation_expense",
+   "b": "interest_expense",
+   "reason": "token_overlap:expense",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "depreciation_expense",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "depreciation would probably be pretty similar year over year"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "Depreciation is estimated to be approximately $26 million"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "Depreciation is expected to be about $115 million for the year."
+      }
+     ]
+    },
+    {
+     "driver_name": "interest_expense",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "This decrease was primarily due to higher interest expense in the prior year ($3.5 million), mainly related to our interest rate swap"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-088397",
+       "date": "2023-08-07",
+       "quote": "This increase was primarily due to higher interest on our Revolver Facility ($1.6 million)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-042573",
+       "date": "2025-04-30",
+       "quote": "Interest expense, net(1) (2,328 ) (0.3 )%"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "This increase was primarily due to higher interest on our Revolver Facility ($1.0 million)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "This increase was primarily due to higher interest on our Revolver Facility ($3.5 million), partially offset by higher interest income due to higher cash balances in interest bearing accounts ($1.1 million)."
+      }
+     ]
+    }
+   ],
+   "idx": 179
+  },
+  {
+   "a": "high_income_consumer_spending",
+   "b": "income_cohort_spending",
+   "reason": "token_overlap:income,spending",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "high_income_consumer_spending",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "top end of consumers really does feel pressure. We're likely to actually benefit some from that because they typically move down off of the steakhouses and the expensive independents"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "Whereas our cohort, the income, it depends on the slowdown, but incomes aren't slowing down. income of 100 plus K, those jobs are going away. There's not mass layoffs."
+      }
+     ]
+    },
+    {
+     "driver_name": "income_cohort_spending",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "we do see on an annualized basis that our relative cohort distribution and spending patterns are pretty stable"
+      }
+     ]
+    }
+   ],
+   "idx": 303
+  }
+ ]
+}

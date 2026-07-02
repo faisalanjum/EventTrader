@@ -1,0 +1,727 @@
+{
+ "batch_id": 18,
+ "page": 0,
+ "pairs": [
+  {
+   "a": "north_italia_same_store_sales",
+   "b": "north_italia_segment_margin",
+   "reason": "token_overlap:italia,north",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "north_italia_same_store_sales",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "north_italia_comparable_sales"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "North Italia comparable sales increased approximately 8% from fiscal 2022"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-058507",
+       "date": "2023-05-10",
+       "quote": "North Italia comparable sales increased approximately 9% from the first quarter of fiscal 2022"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-024317",
+       "date": "2023-02-22",
+       "quote": "North Italia operating information: Comparable restaurant sales vs. prior year 9 %"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "fiscal.ai-kpi",
+       "source_id": "fiscal_ai:CAKE:north_italia_comparable_restaurant_sales",
+       "date": "",
+       "quote": "North Italia Comparable Restaurant Sales"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "North Italia's fourth quarter comparable sales increased an exceptional 26% over 2019 on a 14-week versus 14-week basis."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-058468",
+       "date": "2023-05-10",
+       "quote": "North Italia operating information: Comparable restaurant sales vs. prior year 9 %"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "North Italia comparable sales decreased approximately 2% from fiscal 2024."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "North Italia comparable sales increased approximately 2% from fiscal 2023."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-088397",
+       "date": "2023-08-07",
+       "quote": "North Italia comparable sales increased approximately 8% from the second quarter of fiscal 2022"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "North Italia comparable sales increased approximately 8% from the third quarter of fiscal 2022"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-25-105631",
+       "date": "2025-11-03",
+       "quote": "North Italia comparable sales decreased approximately 3% from the third quarter of fiscal 2024."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-000636",
+       "date": "2024-05-08",
+       "quote": "North Italia comparable sales increased approximately 3% from the first quarter of fiscal 2023."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001151",
+       "date": "2024-08-05",
+       "quote": "North Italia comparable sales increased approximately 2% from the second quarter of fiscal 2023."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001742",
+       "date": "2024-11-04",
+       "quote": "North Italia comparable sales increased approximately 2% from the third quarter of fiscal 2023"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001073",
+       "date": "2025-05-05",
+       "quote": "North Italia comparable sales decreased approximately 1% from the first quarter of fiscal 2024."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001564",
+       "date": "2025-08-04",
+       "quote": "North Italia comparable sales decreased approximately 1% from the second quarter of fiscal 2024"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-086819",
+       "date": "2023-08-02",
+       "quote": "North Italia operating information: Comparable restaurant sales vs. prior year 8 %"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-113409",
+       "date": "2023-11-01",
+       "quote": "North Italia operating information: Comparable restaurant sales vs. prior year 8 %"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-026056",
+       "date": "2024-02-21",
+       "quote": "North Italia operating information: Comparable restaurant sales vs. prior year 7 %"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-058691",
+       "date": "2024-05-08",
+       "quote": "North Italia operating information: Comparable restaurant sales vs. prior year 3 %"
+      }
+     ]
+    },
+    {
+     "driver_name": "north_italia_segment_margin",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "And then the North Italia segment margins, did you say what the mature units were within that?"
+      }
+     ]
+    }
+   ],
+   "idx": 461
+  },
+  {
+   "a": "north_italia_average_check",
+   "b": "north_italia_average_unit_volume",
+   "reason": "token_overlap:average,italia,north",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "north_italia_average_check",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "The average check for each customer, including beverages and desserts, for fiscal 2024 averaged approximately $34.60 for lunch and approximately $44.40 for dinner."
+      }
+     ]
+    },
+    {
+     "driver_name": "north_italia_average_unit_volume",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "north_italia_unit_volumes"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "Average sales per mature location, defined as open prior to 2020 and adjusted to exclude impaired locations, for North Italia restaurants were approximately $8.0 million for fiscal 2022"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "North Italia first quarter comparable sales increased 3% from the prior year, resulting in annualized AUVs of $7.7 million."
+      }
+     ]
+    }
+   ],
+   "idx": 406
+  },
+  {
+   "a": "new_restaurant_food_cost_efficiency",
+   "b": "new_restaurant_unit_volumes",
+   "reason": "token_overlap:new,restaurant",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "new_restaurant_food_cost_efficiency",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "our new restaurants have typically required a period of time after reaching normal traffic levels to achieve their targeted restaurant-level margins due to actual-to-theoretical food cost inefficiencies and labor productivity inefficiencies"
+      }
+     ]
+    },
+    {
+     "driver_name": "new_restaurant_unit_volumes",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "they're practically at the same unit volumes as the rest of the North system, and their margins are great"
+      }
+     ]
+    }
+   ],
+   "idx": 386
+  },
+  {
+   "a": "daypart_marketing",
+   "b": "lunch_daypart_sales",
+   "reason": "token_overlap:daypart",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "daypart_marketing",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-07-29T17.00",
+       "date": "2025-07-29",
+       "quote": "having the data really makes it more impactful for us to be able to do the right type of targeted messaging to drive specific day part"
+      }
+     ]
+    },
+    {
+     "driver_name": "lunch_daypart_sales",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "working a little bit on that lunch day part because that was where we felt a little bit of the pressure over the past few quarters"
+      }
+     ]
+    }
+   ],
+   "idx": 166
+  },
+  {
+   "a": "construction_labor_availability",
+   "b": "restaurant_site_availability",
+   "reason": "token_overlap:availability",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "construction_labor_availability",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "the availability of qualified tradespeople in the local market"
+      }
+     ]
+    },
+    {
+     "driver_name": "restaurant_site_availability",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "Our ability to grow our business depends on the availability and selection of high-quality sites that meet our criteria."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "Our ability to grow our business depends on the availability and selection of high-quality sites that meet our criteria"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "Our ability to grow our business depends on the availability and selection of high-quality sites that meet our criteria"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Our ability to grow our business depends on the availability and selection of high-quality sites that meet our criteria"
+      }
+     ]
+    }
+   ],
+   "idx": 119
+  },
+  {
+   "a": "flower_child_margin",
+   "b": "flower_child_rewards_program",
+   "reason": "token_overlap:child,flower",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "flower_child_margin",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "flower_child_restaurant_margin"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "we are on track to get to the margin target that we need to be at to make it a growth vehicle, which is in that mid-teens level. So we feel really good overall about the trajectory of Flower Child."
+      }
+     ]
+    },
+    {
+     "driver_name": "flower_child_rewards_program",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-07-29T17.00",
+       "date": "2025-07-29",
+       "quote": "flower child is much more of a traditional rewards program it's an app based program that has points"
+      }
+     ]
+    }
+   ],
+   "idx": 242
+  },
+  {
+   "a": "medical_insurance_costs",
+   "b": "workers_compensation_insurance_costs",
+   "reason": "token_overlap:costs,insurance",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "medical_insurance_costs",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "medical_insurance_expense"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "Labor decreased 130 basis points, predominantly driven by pricing leverage and slightly lower medical insurance expenses."
+      }
+     ]
+    },
+    {
+     "driver_name": "workers_compensation_insurance_costs",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-088397",
+       "date": "2023-08-07",
+       "quote": "lower workers compensation insurance costs due to higher claim activity in the second quarter of fiscal 2022 (0.2%)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "increased workers’ compensation insurance costs due to higher claim activity (0.2%)"
+      }
+     ]
+    }
+   ],
+   "idx": 368
+  },
+  {
+   "a": "north_italia_menu_mix",
+   "b": "north_italia_traffic",
+   "reason": "token_overlap:italia,north",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "north_italia_menu_mix",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "The north Italia mix was negative 2%. It's actually a slight improvement from where it was last year."
+      }
+     ]
+    },
+    {
+     "driver_name": "north_italia_traffic",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "north_italia_restaurant_traffic"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "The north Italia mix was negative 2%. It's actually a slight improvement from where it was last year. Price is between 4.5% and 5%. Traffic was negative 4%."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "So traffic was negative 6%, prices about 4%, and the mix was negative 2% for the quarter."
+      }
+     ]
+    }
+   ],
+   "idx": 445
+  },
+  {
+   "a": "acquisition_contingent_consideration",
+   "b": "flower_child_acquisition",
+   "reason": "token_overlap:acquisition",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "acquisition_contingent_consideration",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "During fiscal 2022, the fair value of the contingent consideration and compensation liability increased by $4.7 million to $28.6 million due to an $8.3 million increase in the fair value primarily stemming from a change in the volatility factors"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-088397",
+       "date": "2023-08-07",
+       "quote": "Acquisition-related contingent consideration, compensation and amortization expenses"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-026056",
+       "date": "2024-02-21",
+       "quote": "Represents changes in the fair value of the deferred consideration and contingent consideration and compensation liabilities related to the North Italia and FRC acquisition"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "the fair value of the contingent consideration and compensation liability increased by $4.7 million due to a $8.3 million increase in the fair value primarily stemming from a change in the volatility factors"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "In fiscal 2025, we recorded a $10.5 million increase in the fair value of the contingent consideration and compensation liability primarily stemming from updating the probability of achievement due to passage of time as well as recent performance"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "We recorded $11.7 million and $13.4 million of expense during fiscal 2023 and 2022, respectively, of acquisition-related contingent consideration, compensation and amortization."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "the fair value of the contingent consideration and compensation liability decreased by $5.3 million to $20.2 million"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-088397",
+       "date": "2023-08-07",
+       "quote": "we made payments of $13.0 million and $7.2 million, respectively, for contingent consideration and compensation related to the FRC acquisition"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "Acquisition-related contingent consideration, compensation and amortization expenses"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-000636",
+       "date": "2024-05-08",
+       "quote": "Acquisition-related contingent consideration, compensation and amortization expenses"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001742",
+       "date": "2024-11-04",
+       "quote": "a payment of deferred consideration and compensation related to the FRC acquisition in excess of acquisition-date fair value"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-015185",
+       "date": "2025-02-19",
+       "quote": "Represents changes in the fair value of the deferred consideration and contingent consideration and compensation liabilities related to the North Italia and FRC acquisition, as well as amortization of acquired definite-lived licensing agreements."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-071758",
+       "date": "2025-07-29",
+       "quote": "Represents changes in the fair value of the deferred consideration and contingent consideration and compensation liabilities related to the North Italia and FRC acquisition"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-26-017090",
+       "date": "2026-02-18",
+       "quote": "Represents changes in the fair value of the deferred consideration and contingent consideration and compensation liabilities related to the North Italia and FRC acquisition"
+      }
+     ]
+    },
+    {
+     "driver_name": "flower_child_acquisition",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "We are on track with Flower Child, bringing it fully under our umbrella for this year."
+      }
+     ]
+    }
+   ],
+   "idx": 2
+  },
+  {
+   "a": "civil_unrest",
+   "b": "geopolitical_unrest",
+   "reason": "token_overlap:unrest",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "civil_unrest",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "including civil unrest, customer intimidation, active shooter situations and terrorist activities, may result in damage and restricted access to our restaurants"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "Any act of violence at or threatened against our restaurants or the centers in which they are located, including civil unrest, customer intimidation, active shooter situations and terrorist activities, may result in damage and restricted access to our restaurants and/or restaurant closures"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "including civil unrest, customer intimidation, active shooter situations and terrorist activities, may result in damage and restricted access to our restaurants"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Any act of violence at or threatened against our restaurants or the centers in which they are located, including civil unrest, customer intimidation, active shooter situations and terrorist activities, may result in damage and restricted access to our restaurants"
+      }
+     ]
+    },
+    {
+     "driver_name": "geopolitical_unrest",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "These shortages continued in fiscal 2022 and were exacerbated by geopolitical unrest"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "These shortages continued in fiscal 2022 and were exacerbated by geopolitical unrest."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "the value of the U.S. dollar relative to other currencies, international trade disputes, tariffs, geopolitical unrest and varying global demand"
+      }
+     ]
+    }
+   ],
+   "idx": 96
+  }
+ ]
+}

@@ -1,0 +1,87 @@
+# 00 · Coverage (the zero-loss map)
+
+**What this is:** proof that **every source doc is accounted for** — either covered by a written section, pending a not-yet-written section, or explicitly excluded. Nothing is silently dropped.
+
+Legend: ✅ covered · 🟡 partial · ⏳ pending (section not written yet) · ⛔ excluded / superseded (→ where it lives).
+
+---
+
+## 1. Sections written (the live plan)
+| File | Content | Blocks | Status |
+|---|---|---|---|
+| `01_Overview.md` | mission · the one law · history · index-card model | ~15 | ✅ (still to add: 3-tracks map · authority map · dashboard) |
+| `02_DriverCatalog.md` | naming rules NAME-01…19 | 19 | ✅ naming · ⏳ build pipeline + model choice |
+| `03_Slices_FactScope.md` | slices + fact_scope FS-01…25 | 25 | ✅ |
+| `04_Units.md` | units UNIT-01…14 | 14 | ✅ |
+| `05_Periods.md` | DriverPeriod PER-01…20 | 20 | ✅ |
+| `06_MetricFamily.md` | BASE_METRIC family MF-01…12 | 12 | ✅ |
+| `07_DriverUpdate.md` | fact_type · states · numbers · verdict DU-01…24 | 24 | ✅ (number layer → superseded by 09) |
+| `08_XBRL_ConceptLinking.md` | concept-linking XC-01…18 | 18 | ✅ |
+| `09_DriverUpdate_Fields.md` | the 23-field spec (owner-adjudicated) | 23 fields | ✅ (pending §8 ack) |
+| `95_Supersession.md` | 20 reversals + stale-trap docs | — | ✅ |
+| `90_OpenItems.md` | all open threads (A–E) | — | ✅ |
+| `00_Coverage.md` | this file | — | ✅ |
+
+**≈ 170 locked decision-blocks** across the record model. (A full decision-ID-level checklist grows here as the pipeline/Guidance sections land.)
+
+## 2. Source doc → where it's covered
+### Consolidation/ (the authoritative set)
+| Source | Covered by | Status |
+|---|---|---|
+| `Naming_Slices_XBRL.md` | 02 (naming) + 03 (slices/fact_scope) + FS-25 (measurement) | ✅ |
+| `XBRL_SliceAxis_Catalog.md` | 03 (FS-06/13 axis data) | ✅ |
+| `UnitExtraction.md` | 04 (units) + NAME-13 (per-X) | ✅ |
+| `GuidancePeriod.md` | 05 (Periods) | ✅ |
+| `MetricGuidanceFamily.md` | 06 (MetricFamily) | ✅ |
+| `XBRLConceptLinking.md` | 08 (concept-linking) | ✅ |
+| `README.md` | 01 + 06 + 90 (it's the resolution tracker) | ✅ |
+| `FactScope_IdentityDecision_PENDING.md` | resolved into Naming_Slices (file deleted) | ⛔ → 90.E |
+
+### WIP/ + origin
+| Source | Covered by | Status |
+|---|---|---|
+| `WIP/DriverGraphSchema.md` | 07 (DriverUpdate) + 09 (fields) | ✅ |
+| `DriverOntology.md` | 02 (naming R-rules) | ✅ |
+| `Drivers.md` | 01 + 02 (origin; drift → 95) | ✅ / ⛔ stale bits in 95 |
+| `INDEX.md` | 01 + 95 (the map + supersession) | ✅ |
+| `DriverExperiment.md` | 01 (the WHY) | ✅ |
+| `WIP/GuidanceDriverConsolidation.md` | MF-11 (company_confirmed) + ⏳ Guidance section | 🟡 |
+| `HierarchicalCatalogPlan.md` | ⏳ build-pipeline section (Track A) | ⏳ |
+| `WIP/IncrementalRefresh_FinalDesign.md` | ⏳ incremental-refresh section | ⏳ |
+| `WIP/Fable-to-Opus_Reader_FinalPlan.md` | ⏳ model-choice (in pipeline) | ⏳ |
+| `CostCutting.md` · `C1_FoldInheritance.md` · `C5_BatchedRepair.md` | ⏳ pipeline / cost | ⏳ |
+| `WIP/XBRL_Guidance_Borrow.md` | superseded on key-grammar → 95; concept side → 08 | ⛔ / ✅ |
+| `WIP/THROWAWAY_lane_prompt_optimization.md` | throwaway; the principle → DU-11 | ✅ (throwaway) |
+| `DriverContext.md` | full-depth handoff snapshot; superseded by the plan | ⛔ historical |
+| `DriverCatalogProcess.html` | naming → 02; pipeline → ⏳ | 🟡 |
+
+### Evidence (probes — cited, not re-locked)
+| Source | Cited in |
+|---|---|
+| `WIP/unit_probe/` (FINDINGS/RESULTS) | UNIT-13 |
+| `WIP/naming_probe/` | NAME-04 evidence |
+| `WIP/concept_link_revalidation/` + `plans/Drivers/WIP/concept_link_probe/` | XC-13/14 |
+| `WIP/cards/` | derived state-card aid; no separate design authority |
+
+## 2b. Code / data / meta files (accounted for)
+| File / folder | What it is | Status |
+|---|---|---|
+| `Drivers/README.md` | old start-here index | ⛔ STALE → `INDEX.md` |
+| `evolution.md` | folder history / generations map | 📜 history only (no design rules); itself now stale post-rename |
+| `DriverCatalogProcess.pdf` | same content as `DriverCatalogProcess.html` | ✅ = the .html (naming → 02, pipeline → pending) |
+| `workflows/` | the built catalog pipeline (code + 257 tests) | ⏳ CODE — design → the pending build-pipeline section |
+| `runs/` | restaurant test-industry runs (names-only catalog, to re-create) | ⏳ generated DATA |
+| `__pycache__/` · `*.pyc` | generated caches | ⛔ ignore (generated) |
+| `FinalDesign/99_Codex_Decision_Audit.md` | Codex's parallel-review audit | ✅ review artifact |
+
+## 3. Explicitly EXCLUDED (a decision, not an omission)
+- `RavenPack/` — competitive-reference taxonomy; **not the naming vocabulary** (only `rumored`/`failed` states were borrowed). Lives in `RavenPack/`, out of the plan by design.
+- `archive/` — the entire v1 design (closed-vocab, `canonicalize()`, aliases, slot-vocab). Fully superseded; the reversals are logged in `95_Supersession`.
+- The old Codex parallel folder (now removed) — its review value is preserved in `99_Codex_Decision_Audit.md`; its source-ledger role is this `00_Coverage` map.
+
+## 4. Zero-loss statement
+- Every Consolidation doc → ✅ covered.
+- Every origin/WIP doc → ✅ covered, ⏳ pending a named section, or ⛔ excluded-with-a-home.
+- No source is unaccounted for.
+
+**Still to migrate (design not yet written):** the DriverCatalog **build pipeline** (from `HierarchicalCatalogPlan` + `DriverCatalogProcess.html` + cost docs), **Guidance integration** (from `GuidanceDriverConsolidation`), and **incremental refresh** (from `IncrementalRefresh_FinalDesign`). These are the ⏳ rows above — tracked, not lost.

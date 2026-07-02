@@ -1,0 +1,154 @@
+# 09 · DriverUpdate Fields — FINAL (adjudicated merge · minimalism pass v2)
+
+> **STATUS (2026-07-02): FINAL DRAFT — pending ONE owner item (§8).** This spec is the adjudicated merge of Fable 5, GPT 5.5, and Opus 4.8, followed by an owner-directed **minimalism pass** (same functionality, maximal cuts). Fable 5, GPT 5.5, and Opus 4.8 were all folded into the adjudicated merge; no source-position archive is kept (their surviving contributions are recorded in §9). Every disputed point and every cut was independently verified against the guidance writer/ids/CLI code, the live Neo4j census (8,432 GuidanceUpdates · 31 companies · 2023–2026), the consumer read-path code, and the locked docs. Model-merge: adopted 8 / rejected 4 / record-corrected 3. Minimalism pass: 4 cuts adopted, 2 proposed cuts rejected with proof (§9). **Resolves `07_DriverUpdate.md` DU-13…DU-18** (DU-15/17 confirmed; DU-13/14/16 amended by the shape-grammar cut; DU-18 amended — see §8).
+
+## §1 The mental model + verdict
+
+> **One stated fact = one node.** Which cause (`driver`) · stated where (`event`) · which version (`fact_scope`) · what happened (`driver_state`) · the stated numbers or words (level / change / comparison / `value_text` — **only what the source says, never computed**) · the proof (`quote`). Everything else is an edge or derived at read time.
+
+1. **Standardization:** ONE physical node shape for all 4 fact_types + a per-lane `REQUIRED` / `ALLOWED-when-stated` / `FORBIDDEN` validator matrix (extends the locked DU-12 lane-check). All three models converged on this independently.
+2. **Comparison + change fields stay:** guidance could skip comparisons only because its prior lives in our graph (avg 15.4 updates/anchor); **consensus does not** — a surprise without its stored expectation is unquantifiable forever — and a delta-only fact ("rose 60 bps", no level) keeps its only number in `change_value`.
+3. **Two fields return with evidence:** `value_text` (old `qualitative`; 19.2% of real facts are numberless and it is what the predictor renders) and `conditions` (52.3% fill, rendered) — both **guidance-only**, hard-guarded.
+4. **23 fields** (5 code + 18 producer); everything derivable, edge-borne, transient, or dormant is retired or parked (old pipeline 33 → 23; the XBRL-link extras live in the dormant §10 rider until Codex §4.8 is decided).
+5. Point-in-time discipline kept: one update = one source-time statement; trajectory = produce-time `driver_state` (history-read) + read-time series math. The macro/news question is an attribution-edge design (§3.17b), **not** a field problem.
+
+## §2 Standardization ruling
+
+| Option | Why it loses |
+|---|---|
+| Same fields, all legal everywhere | Census proves LLM drift-fill (11 off-enum `derivation` values in 8,432 rows). `company_confirmed` on a metric or `consensus` on a guidance fact would write cleanly and silently corrupt. |
+| Four per-lane schemas | 4× extraction/validator/comparison surface; family joins (guidance↔actual↔surprise) become schema translation; one driver's timeline stops being a single query; every lane change is a migration. Absent properties cost nothing in Neo4j — per-lane shapes buy nothing. |
+| **One shape + lane matrix (CHOSEN)** | One writer, one id path, one renderer, one query surface; the matrix is one dict inside the already-locked lane check. Cost: nullable-heavy nodes + one table to keep correct. |
+
+## §3 The field spec — 23 fields
+
+### Code-written (5) — zero hallucination surface
+
+| Field | Rule |
+|---|---|
+| `id` | `event + driver + fact_scope` (the old guidance slot-id restructured); the MERGE-in-place key |
+| `fact_scope` | FS-02 named slots `period=…\|slice=kind:value;…\|measurement=…`, `quote_hash` fallback; slice **and** measurement values are **FORMAT-normalized only** (case/whitespace/punctuation) at identity time; per-company alias files unify drift ("First Aid" × 5 variants in the census) at **READ time** + member matching — **never inside the id**: identity is immutable, so alias-file growth must not change ids (write-time aliasing would give the same fact different ids over time) |
+| `created` | write time (ON CREATE only) — the non-backfillable "when the system knew" forensic anchor |
+| `date` | statement time, **full ISO timestamp** (intraday PIT cutoffs), writer-authoritative from the source node (= old `given_date` incl. its transcript-conference_datetime derivation) |
+| `source_type` | `8k\|transcript\|10q\|10k\|news` — denormalized on purpose: it is the collapse-priority key over a 73%-restatement corpus |
+
+*(Cut in the minimalism pass: `DriverUpdate.evhash16` — a stored cache of fully derivable data with no reader; no-op re-run detection = direct field comparison in the writer. This cut applies only to the fact node; it does **not** decide or remove any `EXPLAINED_BY.evhash16` on the verdict edge. `origin` — moved to the dormant §10 rider.)*
+
+### Value shapes — self-describing, no shape field
+
+> **point** = `level_low == level_high` (BOTH set — a point fills both bands) · **range** = `level_low < level_high` · **floor** ("at least X") = `level_low` only · **ceiling** ("up to X") = `level_high` only · **numberless** = all null. A shape is **closed** when both bands are present (point / closed range); deltas and widths derive ONLY from closed shapes. `comparison_low/high` use the SAME grammar — a single-value baseline sets BOTH (the $1.20 consensus = 1.20/1.20), and floor/ceiling baselines ("previously guided at least $85M") become expressible. **Hard writer rule: never write a point as low-only; low-only always means floor, and high-only always means ceiling.** **Structural safety net — transient hints:** the producer emits `level_shape_hint ∈ {point, range, floor, ceiling, none}` for level numbers and `comparison_shape_hint ∈ {point, range, floor, ceiling, none}` when comparison numbers are present; the writer derives each shape from the slots, hard-fails on mismatch, and discards the hints (never stored) — the same propose-then-verify pattern as `unit_kind_hint`/`money_mode_hint`. This catches the forgotten-high slip (a point degrading to a floor) AND the mirror slip the old `bound` field never caught (a floor degrading to a point when `bound` was forgotten); the only uncatchable error is a genuine semantic misread, which no field design catches. This is the old pipeline's production-proven encoding (points stored low=high for 3 years; the live renderer already decodes low-only→≥, high-only→≤, low==high→point; malformed partial fills were 6 rows in 8,432 under a three-slot regime — and detectable only via the redundant `derivation` field, whose role the transient hints now play without storage). Amends DU-13/14/16 + Codex §3.14 + schema:287-331 (§8).
+
+### Producer-written (18) — every one validator-gated
+
+| Group | Fields | Key rules |
+|---|---|---|
+| State | `driver_state` | locked lane vocab, unchanged. Narrowed range → **midpoint rule** (mid up = raised · down = lowered · equal = reaffirmed; validator enforces when both shapes are closed). `narrowed` itself = read-time derived flag (§6.8), never stored |
+| Evidence | `quote` | required, all lanes, unconditional |
+| Level | `level_low` / `level_high` / `level_unit` | shapes per the grammar above (**a point fills BOTH bands** — producer-prompt rule + the ≥ render makes a forgotten high visible; low-only is a floor, high-only is a ceiling); old mid-only "approximately $X" → point; values stored **post-canonicalize scaling** (cents-on-aggregate / glued-$B mis-scale = write-time hard-fails — old Guard F's formal home); `level_unit` **required when ANY of level_*/comparison_* is non-null** and governs comparison values (no `comparison_unit`) |
+| Change | `change_value` / `change_unit` | **strictly stated-only, all lanes** (DriverGraphSchema:331's computed "+0.10" example must be amended — beat size derives at read as `level_low − comparison_low`, defined only for closed point comparisons); delta-only facts keep their only number here; units may differ from level |
+| Comparison | `comparison_low` / `comparison_high` / `comparison_baseline` | stated-only, never derived from another node; same shape grammar as level (single value = BOTH set); baseline enum `{consensus, prior_year, sequential_period, previous_guidance, null}` (DU-15 — no `internal_target`: own-target phrasing → `previous_guidance` else null); baseline MAY be set with null numbers ("ahead of expectations"); **metric lane FORBIDs `consensus`** — that fact IS a surprise → route to the `_surprise` driver |
+| Text | `value_text` | **GUIDANCE-ONLY**; the stated value in words ("low-to-mid single digits"); ≤200 chars, normalized; **value-aware lint** (rejects numeric values — "$5M", "12%", "160 bps" — allows anchors like "Q2", "2019 levels"); legal ONLY when every number field is null. Revisit trigger: first census of real metric facts |
+| Caveat | `conditions` | **GUIDANCE-ONLY** (52.3% real fill; rendered to predictor); producer must also keep the clause inside the `quote`. Extension to action_event = a revisit trigger (see §4 note), not an owner decision |
+| Flag | `company_confirmed` | **guidance-only boolean `true/false`** (matches Consolidation README, GuidancePeriod, and 99_Codex_Decision_Audit.md §3.18; enum wording is unnecessary); non-identity; all current-pipeline output = `true`; future allowed third-party/rumored guidance-like claims = `false` |
+| XBRL | `xbrl_qname` | **metric-only, ON THE FACT** + `MAPS_TO_CONCEPT` edge on the fact (a Driver class is global; concepts are company-specific — a class link would over-merge); guidance/surprise inherit via `BASE_METRIC` at read; **any non-GAAP measurement label ⇒ no inheritance** (the concept-linker G2 guard EXTENDED: measurement set = primary key, name-prefix regex kept only as the legacy-name fallback — old catalog names like `adjusted_eps` still exist until regeneration) |
+| Framing | `fiscal_year` / `fiscal_quarter` / `period_scope` / `time_type` | kept on the node (locked §3.8/PER-13 — the same calendar window reads differently per company); `period_scope` final enum = `{quarter, annual, half, monthly, ytd, ttm, exact_range, short_term, medium_term, long_term, undefined}` — **`long_range` retired at store time → `exact_range`** (dated multi-year windows keep their real `gp_<start>_<end>`; the `*_term`/`undefined` values pair with the 4 dateless sentinels — a validator-checkable invariant) |
+
+### Edges
+
+- `OF_DRIVER` (req, exactly 1) · `FROM_SOURCE` (req on the normal Event path) · `HAS_PERIOD` (guidance REQ; others when a real window exists) · `MAPS_TO_CONCEPT` (on the fact, metric only) · `MAPS_TO_MEMBER` (on the fact, any lane, enrichment) · incoming `EXPLAINED_BY` (the verdict — from `Event` or `DailyCompanyMoveEvent`).
+- `FOR_COMPANY` is **dropped from `DriverUpdate` only** (company via `Event → Company`). **`DailyCompanyMoveEvent -[:FOR_COMPANY]-> Company` is LOCKED**, and the macro/news **core shape is LOCKED** (`DailyCompanyMoveEvent {id=dcm:<cik>:<trade_date>} -[:FOR_COMPANY]->Company -[:ON_DATE]->Date`; verdict via incoming `EXPLAINED_BY`; realized return read from `Date-[:HAS_PRICE]->Company`; the News article stays `FROM_SOURCE`). **Still open — only** the significance **threshold** + **pure-macro source** handling (a `subject_company` / 0..N `FROM_SOURCE` variant if ever needed). None of this affects these 23 fields.
+
+## §4 Per-lane validator matrix
+
+`REQ` = must be present · `WS` = only when the source states it · `FORBID` = hard-fail.
+
+| Field / edge | metric | guidance | surprise | action_event |
+|---|---|---|---|---|
+| `id` `fact_scope` `created` `date` `source_type` `driver_state` `quote` `OF_DRIVER` `FROM_SOURCE` | REQ | REQ | REQ | REQ |
+| `HAS_PERIOD` | when real | **REQ** | when real | when real (rare) |
+| `level_*` | WS | WS | WS (the actual) | WS (deal/buyback size) |
+| `change_value/unit` | WS stated-only | WS stated-only (= the guide's own revision size) | WS stated-only | WS stated-only |
+| `comparison_low/high` | WS | WS (prior band) | WS (the expectation) | WS |
+| `comparison_baseline` | WS ∈ {prior_year, sequential_period, previous_guidance} — **`consensus` FORBID** (→ `_surprise`) | WS | WS (default `consensus`) | WS |
+| `value_text` | FORBID | WS (numberless-only) | FORBID | FORBID |
+| `conditions` | FORBID | WS | FORBID | FORBID |
+| `company_confirmed` | FORBID | WS | FORBID | FORBID |
+| `xbrl_qname` + `MAPS_TO_CONCEPT` | WS | FORBID (inherit) | FORBID (inherit) | FORBID |
+| any computed/fabricated number | **FORBID — all lanes** | | | |
+
+*(Revisit triggers, not owner decisions: `value_text` → metric on the first census of real metric facts showing material numberless-with-anchor rates; `conditions` → action_event on the first census of real action facts showing material stated-caveat rates. Each flip = one dict entry.)*
+
+## §5 Old guidance fields → new home (33 → 23)
+
+| Old field | Verdict | Where it went / loss proof |
+|---|---|---|
+| `given_date` | → `date` | full timestamp semantics kept |
+| `low`/`high`/`canonical_unit` | → `level_low/high/unit` | mid-only rows ("approximately $X", 5.7%) → point |
+| `mid` | retire | derived; never independent except mid-only (covered above) |
+| `derivation` | retire | floor/ceiling → low-only/high-only shape; point/range → slot shape (point = both bands); implied/comparative → `value_text` + nulls; `calculated` (16/8,432 rows) violates store-when-stated — the stated inputs are their own facts |
+| `qualitative` | → `value_text` | guidance-only; the render + series-comparator evidence is what reverses DU-18's line (§8.1). Accepted loss: qualitative color alongside numbers (~11% of old rows) stays in `quote` only |
+| `conditions` | keep | guidance-only |
+| `basis_norm`/`basis_raw` | → `fact_scope.measurement` | format-normalized tokens, stored EXACT (FS-25: never merge by meaning at write); explicit "GAAP" → `{gaap}`; silence → empty (never assume GAAP); GAAP/non-GAAP/CC render tag + any alias grouping = **read-time views only**. Honest change: "adjusted" vs "non-GAAP" restatements can split a series (locked err-specific; recoverable via the read-time alias view) |
+| `segment`/`segment_slug` | → slice in `fact_scope` | silence ≠ Total; explicit total/consolidated only |
+| `label`/`label_slug` | retire | `Driver.name` via `OF_DRIVER`; citation IDs switch to `Driver.name` (§6.6) |
+| `section`/`source_key`/`source_refs` | retire | zero production readers (verified); traceability = `FROM_SOURCE→Event` + `quote`; additive later if ever wanted (GPT's keep-them rejected on this evidence) |
+| `unit_raw`/`resolved_*` | retire | transient resolver I/O; sticky-fallback lane replaced by mandatory hints |
+| `xbrl_qname` (guidance) | retire on guidance | inherit via `BASE_METRIC`; stays on metric facts |
+| `concept_family_qname` | retire | write-only-read-never (verified); `BASE_METRIC` replaces |
+| `evhash16` | retire on `DriverUpdate` only | derivable cache (every input is a stored property); no reader — read-time collapse builds its own signature; write-time no-op detection = direct field comparison. This does not decide `EXPLAINED_BY.evhash16`. Amends the §3.2 fact "value-hash property" line (§8) |
+| `FOR_COMPANY` edge | drop | via `Event → Company` |
+
+## §6 Glue rules (9)
+
+> **Definition — closed shape:** both bands present (a point or a closed range). Deltas, widths, and midpoints derive ONLY from closed shapes (absorbs DU-16 rule 6's floor/ceiling clause).
+
+1. **Series-key unit slot** — `level_unit`, else the change-unit's family (bps/percent_points → percent-family; m_usd delta → m_usd); numberless facts join the series matching the other key parts. The `unknown`-absorption half ports `resolve_unit_groups`; the family map is **NEW code — build + unit-test it** (it is not a port). Cross-family stays separate by design ("grew 12%" does not join the $-series; the driver timeline query doesn't key on unit).
+2. **Within-event fusion** — same driver + same scope in one event = ONE DriverUpdate; the producer combines level + change + comparison rather than emitting rival candidates (the id forces one node; fusion prevents silent overwrites). Beat/miss-vs-expectation content routes per the §4 matrix (`_surprise`).
+3. **Slices beat `mixed`** — nameable parts decompose per slice with clean directions; `mixed` only for un-sliceable splits; a consolidated fact only when itself stated.
+4. **Rendering coalesce** — level shape → else signed change → else comparison → else `value_text` (guidance). Without it, delta-only facts render valueless.
+5. **Predictor citation IDs** — `Driver.name` (+ `fact_scope` suffix when needed) replaces the retired `metric_id`.
+6. **Policy-vs-reading routing** — a routine declaration of a standing per-X policy level → the metric driver (`dividend_per_share`); a discrete corporate decision about the policy (initiate / increase-as-decision / suspend / change) → the action_event driver (`dividend`). General principle, dividends as the instance (no domain list — examples overfit).
+7. **Rate-vs-level sharpening** — a delta-flavored unit (bps/percent_points) with a directional state and no "to X%" → `change_value`, never `level_low` (sharpens DU-16 rule 7).
+8. **Derived `narrowed` flag** — read-time `width_now < width_prev` over consecutive closed shapes; never a stored state.
+9. **Restatement read rule** — within `(company, driver, fact_type, slice, period, measurement, unit)`: same-day collapse by source rank `8k > transcript > 10q > 10k > news` (numeric signature from `level_*`; qualitative comparator = normalized `value_text`); across days the latest event-date wins as the current view; priors kept as PIT history. *(Conscious acceptance: a same-day 8-K + 10-Q pair keeps the market-moving 8-K value; the exact 10-Q figure supersedes only if filed later.)*
+
+*(Cut: the former XBRL-coexistence rule — its supersede half is rule 9; its `empty≡gaap` half lives in the §10 rider.)*
+
+## §7 Read contract · producer contract
+
+**No-op re-runs:** the writer MERGEs on `id` and detects real changes by direct field comparison against the existing node (no stored hash — `DriverUpdate.evhash16` retired as a derivable cache). This is only about the fact node; verdict-edge hashing remains a separate `EXPLAINED_BY` decision.
+
+**Read contract:** series key = locked Codex §6 grouping (company · driver · fact_type · slice · period · measurement · unit-per-§6.1 · time_type + BASE_METRIC family for cross-flavor reads); rendering decodes the shape from `(level_low, level_high)` (low-only→≥ · high-only→≤ · low==high→point · low<high→range — the live guidance renderer's exact logic); the old 6D guidance key survives dimension-for-dimension (metric_id→Driver.name · basis_norm→measurement · segment_slug→slice · period_scope · resolved_unit→§6.1 unit · time_type).
+
+**Producer contract:** chronological per-company processing (states depend on history reads); same-day tie rank = source rank; **a point fills BOTH bands** (`level_low = level_high`); **low-only means floor, high-only means ceiling**; **`level_shape_hint` accompanies level numbers and `comparison_shape_hint` accompanies comparison numbers** (writer cross-checks vs slots, hard-fails mismatch, discards — see §3 Value shapes); %-only guides stay on `<metric>_guidance` with `level_unit=percent_yoy` (explicit DU-16-rule-7 extension: on guidance facts `change_value` is reserved for the guide's own revision size); blanket withdrawals fan out per open guide in the stated scope (history-derived — the one place the model writes beyond the literal quote; owner sign-off noted); money facts must carry `money_mode_hint`; numeric facts must carry non-empty `unit_raw` to the resolver.
+
+## §8 The ONE owner item + doc amendments
+
+**Owner ack requested — the lock amendments this spec makes (one yes/no covers all):**
+- **DU-18** (no free-text qualitative) → amended by `value_text` (guidance-only, numberless-only, value-aware lint). The lock's premise — "the quote carries it" — is false in the running system: quote is rendered to no consumer, while `qualitative` is.
+- **DU-13/14/16 + Codex §3.14 + DriverGraphSchema:287-331** (shape table + comparison grammar) → amended by the self-describing shape grammar (point = BOTH bands; comparison single-value = BOTH; closed-shape delta rule). Must be flipped in ONE pass across those lines — a partial flip silently turns points into floors.
+- **§3.2 fact `evhash16` value-hash line** → amended by the `DriverUpdate.evhash16` retirement (derivable, reader-free). This does not amend any verdict-edge `EXPLAINED_BY.evhash16` rule.
+
+**Doc amendments this spec triggers:** 08_XBRL_ConceptLinking.md XC-05: the G2 non-GAAP guard must key on the **measurement set** (primary), keeping its name-prefix regexes only as the legacy-name fallback — post-flip, `eps` + measurement={adjusted} never trips a name guard · DriverGraphSchema:331 "+0.10" example → `change_value=null` (derive at read, closed point comparisons only) · FinalDesign/06_MetricFamily MF-11 enum wording → boolean `true/false` to match Consolidation README, GuidancePeriod, and 99_Codex_Decision_Audit.md §3.18 · Codex §9 L1/L2/L3 row = stale (PER-19 decided regenerate+retire; label of regenerated facts defaults L2 at end state) · DriverGraphSchema §4 bare fact_scope serialization superseded by FS-02 named slots · 07_DriverUpdate.md banner: DU-15/17 confirmed; DU-13/14/16 amended (shape grammar) + the §3/§4 sharpenings (metric-consensus FORBID · level_unit-required-when-any-number) · DU-18 amended per above.
+
+## §9 Adjudication record (who pushed what, what survived)
+
+**Adopted (8):** `long_range`→`exact_range` (Opus — but for invariant cleanliness, NOT their "drops 205 windows" claim: windows live on DriverPeriod and were never at risk) · `value_text` guidance-only (Opus; evidence-scoped) · value-aware lint (Opus; clarification of intent) · `company_confirmed` boolean `true/false` (Consolidation README + GuidancePeriod + 99_Codex_Decision_Audit.md §3.18; enum wording rejected as unnecessary) · `empty≡gaap` scoped to `xbrl_link` (Opus; FS-25) · metric-consensus FORBID (Opus; enforces locked DU-15) · series-key family map = new code + tests (Opus; "ported" was overstated) · Opus glue additions 8–10.
+
+**Rejected (4, all GPT):** keep `section`/`source_key`/`source_refs` (zero readers verified; old pipeline *wrote* them heavily, nothing *read* them; additive later) · `conditions` all-lanes (no evidence outside guidance; action_event later demoted to a revisit trigger — see minimalism pass) · defer `origin` entirely (rejected at the time for spec coherence; the minimalism pass below consciously reversed this once the XBRL glue rule was also cut) · `internal_target` baseline value (enum creep; DU-15 covers).
+
+**Record corrections (3):** Opus's "silently dropping 205 real windows" is factually wrong (see above) · Opus's "CORRECTED: xbrl_qname on the fact" corrected a stale draft — the Fable final spec already had it on the fact (the edges wording is now explicit) · Opus's `subject_company` + 0..N `FROM_SOURCE` belong to the open §3.17b macro decision, not this field spec.
+
+**Minimalism pass (2026-07-02, owner directive: same functionality, maximal cuts — adversarially verified):**
+- **Adopted (4 cuts):** `level_bound` (self-describing shapes, production-proven encoding; carries the comparison-grammar amendment the verifier caught — single-value baselines set BOTH fields) · `origin` + `[XBRL]` quote exception + `empty≡gaap` → the dormant §10 rider (this consciously reverses this file's earlier "reject GPT's defer-origin" ruling — the spec-coherence objection dissolved once the XBRL glue rule was also cut, and the migration argument was already conceded as overstated) · `DriverUpdate.evhash16` (derivable cache, zero readers — the same law that retired `mid`; verdict-edge `EXPLAINED_BY.evhash16` is not part of this cut) · the XBRL-coexistence glue rule (halves fold into rule 9 + the rider). Owner queue 3 → 1 (conditions-on-action_event demoted to a revisit trigger; origin timing moved into the rider).
+- **Rejected (2 proposed cuts, with proof):** cutting the `xbrl_qname` property in favor of the edge alone (locked §5.14 dual-store; the string is the cross-taxonomy fallback and the CLI concept-repair path reads it) · collapsing the `period_scope` horizon values (the live series key groups on `period_scope` — merging would interleave a 20% long-term target with a 15% near-term guide and emit false change-flags).
+- **Conscious acceptances:** same-day 8-K value outranks the same-day 10-Q exact value (next-day 10-Q still supersedes) · ~~a producer forgetting `level_high` on a point encodes a floor~~ — **closed post-review** by transient `level_shape_hint` / `comparison_shape_hint` (GPT's write-time-check proposal, adopted 2026-07-02 over Opus's keep-`bound`: the hints protect BOTH slip directions — the old `bound` field was itself silently vulnerable to a forgotten `bound` turning a floor into a point — at zero stored fields, mirroring the existing unit-hint machinery).
+
+## §10 Dormant rider — activates ONLY with the Codex §4.8 decision (XBRL-link write path)
+
+If the owner approves creating 10-K/10-Q metric facts by XBRL-linking instead of LLM re-extraction, add — nothing before then:
+1. `origin` = `llm \| xbrl_link` (code-written, fail-closed; null = llm — retroactively correct, migration-free).
+2. `xbrl_link` facts: `quote` = deterministic code-generated `[XBRL] <qname> <period> = <scaled value>` render; empty measurement; `driver_state = reported`; exact-window DriverPeriods from XBRL context dates; member → slice via the frozen axis table.
+3. `empty≡{gaap}` read-bucket, applied ONLY where one side is `origin=xbrl_link` (XBRL is definitionally as-reported); producer-empty vs producer-`{gaap}` stay distinct (FS-25).
+4. An `xbrl_link` writer is itself a full §0 producer (validators, gate, matrix).
+5. Decide the same-day collapse rank slot for `xbrl_link` facts (the `8k > transcript > …` rank has no entry today).

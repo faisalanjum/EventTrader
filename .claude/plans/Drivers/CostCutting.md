@@ -79,6 +79,10 @@ Billing context: pipeline runs on the **subscription** path (billing guard enfor
 - **fiscal_kpis reader-prompt fork** — ~5k/run saving vs a permanent two-variant template on the recall-critical producer prompt. Cost/benefit fails.
 - **assemble+validate clerk merge** — see B2.
 
+## REMAINDER-READER SELECTION (post-Fable, NO deadline — added 2026-06-11)
+
+Fable covers only the top-priority ~25–50 companies before access ends (~2026-06-21); the other ~740 MUST use a non-Fable reader. This is NOT lever D2 (replacing Fable while available — still REJECTED); it is a forced choice for the remainder, decided LATER by a measured A/B with zero time pressure (Opus/Sonnet don't expire). Method = the existing D2 comparison recipe (same chunks, same prompt; candidate count + verbatim-quote fidelity + recall vs the Fable baseline name-set); **every Fable-completed company is a free ground-truth fixture**. Candidate configs: (a) Opus 4.8 single pass (measured 24 vs Fable 54), (b) Sonnet ×2 independent passes + deterministic union (owner idea — union may recover recall cheaply; agreement on names w/o vocab measured 72%), (c) Fable at reduced effort IF per-agent effort proves wireable in workflows (capability unverified — check Infrastructure.md/test before counting on it), (d) any mix per priority tier. Decision owner: orchestrator A/B after the front-load.
+
 ## CLASS D — CHANGES WHICH MODEL JUDGES MEANING → REJECTED
 
 | # | Proposal | Verdict | Reason |

@@ -1,0 +1,706 @@
+{
+ "arm": "per_pair",
+ "run_id": "2026-06-10_005333_restaurants_abscratch",
+ "reviews": [
+  {
+   "idx": 34,
+   "a": "average_check",
+   "b": "north_italia_average_check",
+   "verdict": "DIFFERENT",
+   "why": "Same metric (average check = avg spend per customer) and same mechanism (menu pricing + mix), but the SCOPE differs. \"average_check\" is the consolidated/company-wide Cheesecake Factory brand average check (e.g. ~$29.40, $30.54, $31.05, $31.79 fiscal-wide figures, plus all the comp-sales % growth disclosures). \"north_italia_average_check\" is scoped specifically to the North Italia brand and is even split by daypart (~$34.60 lunch, ~$44.40 dinner for fiscal 2024) — a different reporting entity and a different dollar level. CAKE operates multiple concepts (The Cheesecake Factory, North Italia, Flower Child / Other FRC), and segment/brand-level average check is a distinct driver from the flagship/consolidated average check. Merging them would collapse a brand-specific sub-metric into the company-wide one, losing the per-concept distinction. Scope test fails, so keep separate."
+  },
+  {
+   "idx": 38,
+   "a": "average_weekly_sales",
+   "b": "flower_child_average_weekly_sales",
+   "verdict": "DIFFERENT",
+   "why": "Same metric type (average weekly sales per restaurant) and same calculation mechanism, but DIFFERENT scope. A's evidence is The Cheesecake Factory flagship brand (~$239,679 per operating week); B's evidence is the Flower Child brand specifically (~$85,200/week). These are two different restaurant concepts under the same parent (CAKE) with very different per-unit economics. The brand-specific driver is intentionally scoped to Flower Child, so it is not the same object as the company/flagship weekly-sales metric. Scope condition is false -> DIFFERENT; keep separate."
+  },
+  {
+   "idx": 86,
+   "a": "casual_dining_industry_sales",
+   "b": "casual_dining_market_share",
+   "verdict": "DIFFERENT",
+   "why": "Different object/metric and mechanism. A = absolute industry-wide sales level (exogenous category demand: \"broader casual dining sales trends\", \"black box casual dining index declining 410 bps\"). B = CAKE's relative market share within that industry (\"capture market share... outperformance versus the broader casual dining industry\"). Object: total industry sales vs one company's relative slice. Mechanism: category demand lifting all players vs zero-sum competitive share shift — they can move oppositely (industry falls while CAKE gains share). Shared tokens are just industry context, not the same metric."
+  },
+  {
+   "idx": 216,
+   "a": "flower_child_acquisition",
+   "b": "flower_child_same_store_sales",
+   "verdict": "DIFFERENT",
+   "why": "Only the brand name \"Flower Child\" is shared; the deterministic suggester flagged this on token overlap (child, flower) alone. All three SAME checks fail. (1) Object/metric differs: A is the acquisition/integration event (\"bringing it fully under our umbrella\" — a corporate ownership action), while B is the comparable-sales metric (\"Flower Child comparable sales increased approximately X%\" — an operating performance number). (2) Scope differs: A is the one-time M&A/ownership deal; B is recurring quarter-over-quarter store-level sales performance across many filings/calls. (3) Mechanism differs: A's mechanism is M&A (adding a brand to the portfolio); B's mechanism is organic demand at existing Flower Child locations driving comp-sales growth. A shared brand name does not merge an ownership-event driver with an operating same-store-sales driver. Keep separate."
+  },
+  {
+   "idx": 218,
+   "a": "flower_child_average_unit_volume",
+   "b": "flower_child_average_weekly_sales",
+   "verdict": "DIFFERENT",
+   "why": "Same brand (Flower Child) but two different metrics with different time scopes and units. (a) average unit volume = AUV, the annual revenue run-rate per restaurant (\"$4.4 million average unit volume\", \"average volumes for a fully mature box\"). (b) average weekly sales = the per-week sales figure (\"average weekly sales were $85,200\"). AUV is an annual-scale metric; weekly sales is a weekly-scale metric. Test 1 (same object): fails — annual run-rate volume vs weekly sales. Test 2 (same scope): fails — annual vs weekly time window. Although weekly sales roughly rolls up to AUV (~$85k/wk x 52 ~ $4.4M/yr), they are distinct reported metrics with different units and periodicity, not the same driver. Keep separate."
+  },
+  {
+   "idx": 220,
+   "a": "flower_child_average_unit_volume",
+   "b": "flower_child_margin",
+   "verdict": "DIFFERENT",
+   "why": "Both drivers concern the same Flower Child restaurant brand at CAKE, but they measure two different objects/metrics. (1) Object differs: \"average unit volume\" (AUV) measures sales revenue per restaurant box (evidence: \"$4.4 million average unit volume\", \"potential average volumes for a fully mature box\"), while \"margin\" measures profitability percentage (evidence: \"margin target... mid-teens level\"). AUV is a top-line volume metric; margin is a bottom-line profitability ratio. (2) Mechanism differs: AUV is driven by per-store sales throughput; margin is driven by cost structure relative to sales. These are not the same object or metric, so SAME is rejected on criteria 1 and 3. Token overlap on \"flower\"/\"child\" only reflects the shared brand, not a shared metric. Note: flower_child_margin already has same_as_variant \"flower_child_restaurant_margin\" (consistent margin family), distinct from the AUV family. Keep separate."
+  },
+  {
+   "idx": 226,
+   "a": "flower_child_average_unit_volume",
+   "b": "north_italia_average_unit_volume",
+   "verdict": "DIFFERENT",
+   "why": "Same metric type (average unit volume / AUV) and same parent company (CAKE), but the SCOPE differs: these measure two distinct restaurant brands. Side A's evidence is about Flower Child (\"flower child... potential average volumes for a fully mature box,\" ~$4.4M AUV). Side B's evidence is about North Italia (\"North Italia restaurants were approximately $8.0 million,\" \"North Italia... annualized AUVs of $7.7 million\"). The token overlap (average/unit/volume) only reflects a shared metric name, not a shared object — Flower Child AUV and North Italia AUV are separate business drivers with materially different values ($4.4M vs $7.7-8.0M). Test fails on criterion 2 (same scope): different underlying brand/object. Keep separate."
+  },
+  {
+   "idx": 227,
+   "a": "flower_child_average_weekly_sales",
+   "b": "flower_child_integration",
+   "verdict": "DIFFERENT",
+   "why": "Token overlap on \"flower\"/\"child\" only flags that both concern the same brand (Flower Child, a CAKE restaurant concept) — not the same driver. The three tests all fail: (1) Different object/metric: A = \"average weekly sales\" (a dollar-volume sales metric, $85,200, +6% YoY), B = \"integration\" (the operational/strategic effort of integrating the acquired brand). A sales number and an integration program are not the same object. (2) Different scope: A is a per-unit revenue performance measure; B is a corporate integration initiative. (3) Different mechanism: A reflects consumer demand/store productivity; B reflects acquisition assimilation work (systems, ops, teams). They share only the brand name, not the metric, scope, or mechanism. Keep separate — no SAME_AS."
+  },
+  {
+   "idx": 228,
+   "a": "flower_child_average_weekly_sales",
+   "b": "flower_child_margin",
+   "verdict": "DIFFERENT",
+   "why": "Same brand (Flower Child, CAKE) but different metric and mechanism. (a) average weekly sales is a top-line revenue/volume measure in dollars (\"$85,200, up more than 6%\"). (b) margin is a profitability ratio (\"margin target...mid-teens level\"). Test 1 (same object/metric) FAILS: sales volume vs profit margin. Test 3 (same mechanism) FAILS: revenue throughput vs cost-to-revenue efficiency. Only scope (the Flower Child brand) matches. The token overlap on \"child\"/\"flower\" reflects the shared brand name, not a shared metric — a brand-collision false positive. Keep separate."
+  },
+  {
+   "idx": 232,
+   "a": "flower_child_average_weekly_sales",
+   "b": "flower_child_same_store_sales",
+   "verdict": "DIFFERENT",
+   "why": "Different metric object, fails check #1 (same object/metric). Side A = \"average weekly sales\" (AWS): a dollar volume per restaurant per week — evidence quote: \"Flower Child average weekly sales were $85,200, up more than 6%.\" This is an absolute productivity figure (dollars per unit time). Side B = \"comparable/same-store sales\" (comps): a growth percentage measuring sales change at restaurants open long enough to compare year-over-year — every B quote reads \"comparable sales increased approximately X%.\" AWS measures dollar throughput of the average unit; comps measure period-over-period percentage growth on a stable store base. They are distinct restaurant KPIs that move independently (a chain can grow comps while AWS shifts differently due to unit mix/new openings). Token overlap (flower, child, sales) is superficial; the underlying measured object differs. Keep separate."
+  },
+  {
+   "idx": 233,
+   "a": "flower_child_average_weekly_sales",
+   "b": "flower_child_unit_count",
+   "verdict": "DIFFERENT",
+   "why": "Same brand (Flower Child, a CAKE concept) but different metrics. A = average weekly sales = dollars of revenue per restaurant per week (\"$85,200, up more than 6%\"). B = unit count = number of locations operated (\"38 Flower Child locations... ~20% annual unit growth\"). Object differs (money/sales intensity vs store count), scope differs (per-unit sales rate vs total footprint), mechanism differs (sales productivity vs store expansion). The token overlap is only the brand name, which does not imply the same metric. All three SAME conditions fail, so keep separate."
+  },
+  {
+   "idx": 236,
+   "a": "flower_child_integration",
+   "b": "flower_child_rewards_program",
+   "verdict": "DIFFERENT",
+   "why": "Both mention the Flower Child brand, but they track different objects/mechanisms. \"flower_child_integration\" (2023 quote) is about the operational integration path of the Flower Child acquisition/business. \"flower_child_rewards_program\" (2025 quote) is about an app-based customer loyalty/points rewards program. Same brand, but different metric, different scope, and different mechanism. Token overlap on \"flower\"/\"child\" only reflects the shared brand name, not a shared driver. Fails criteria 1 and 3, so keep separate."
+  },
+  {
+   "idx": 237,
+   "a": "flower_child_integration",
+   "b": "flower_child_sales",
+   "verdict": "DIFFERENT",
+   "why": "Both mention the \"Flower Child\" brand at CAKE, but they track different objects with different mechanisms. (1) Object/metric differs: \"flower_child_integration\" is about the operational integration/onboarding of the Flower Child acquisition (\"we continue down the integration path\"), while \"flower_child_sales\" is a revenue figure (e.g., \"sales increased 11.0% to $127.5 million\"). (2) Mechanism differs: integration = absorbing/incorporating an acquired business into operations; sales = top-line revenue generation from the brand. Integration progress and sales dollars are not the same driver. Token overlap on \"flower\"/\"child\" only reflects the shared brand name, not a shared metric or mechanism. Since object and mechanism both fail, keep separate."
+  },
+  {
+   "idx": 239,
+   "a": "flower_child_integration",
+   "b": "flower_child_unit_count",
+   "verdict": "DIFFERENT",
+   "why": "Same brand (Flower Child), but the two drivers track different objects/mechanisms. (1) Object/metric differs: \"flower_child_integration\" is about the integration/onboarding process of the acquired Flower Child concept (\"we continue down the integration path\"); \"flower_child_unit_count\" is about the count and growth of physical store locations (\"operate 38 Flower Child locations... 20% average annual unit growth\"). Integration progress and store-count growth are distinct metrics. (2) Mechanism differs: integration = merging an acquired business into the company's operations; unit count = opening new restaurant locations. (3) The token overlap that triggered this candidate is only the shared brand name \"flower_child,\" not a shared metric. Fails criteria 1 and 3, so keep separate."
+  },
+  {
+   "idx": 243,
+   "a": "flower_child_margin",
+   "b": "flower_child_sales",
+   "verdict": "DIFFERENT",
+   "why": "Same business unit (Flower Child restaurant brand at CAKE), but the METRIC differs, so they are not the same driver.  - A = flower_child_margin: tracks the PROFIT MARGIN trajectory. Evidence: \"margin target... mid-teens level... make it a growth vehicle.\" This is a profitability/margin object. - B = flower_child_sales: tracks SALES/REVENUE dollars and growth. All 7 evidence quotes are revenue figures: \"sales increased 11.0% to $127.5 million,\" \"sales totaled $32.2 million,\" \"sales per operating week were $80,000.\"  Test 1 (same object/metric): FALSE. Margin (profitability ratio) is a different metric than sales (top-line revenue). A company can grow sales while margin lags, or improve margin while sales are flat. They are distinct, separately-tracked financials.  Tests 2 and 3 (scope, mechanism): scope overlaps (both = Flower Child unit), but mechanism differs — margin moves on cost/efficiency/pricing; sales move on volume/traffic/new-unit growth.  The token overlap (\"flower,\" \"child\") only reflects the shared brand, not a shared metric. Keep separate."
+  },
+  {
+   "idx": 246,
+   "a": "flower_child_off_premise_mix",
+   "b": "flower_child_rewards_program",
+   "verdict": "DIFFERENT",
+   "why": "Token overlap is just the shared brand name \"Flower Child\" (a CAKE restaurant concept), not a shared driver. The two refer to different objects/metrics. (a) \"off-premise mix\" = the share of sales that are takeout/delivery vs dine-in (55% off-premise). (b) \"rewards program\" = an app-based loyalty/points program. Fails all three tests: different object/metric (sales channel mix vs loyalty program), different scope, different mechanism (where food is consumed vs customer retention via points). Keep separate."
+  },
+  {
+   "idx": 248,
+   "a": "flower_child_off_premise_mix",
+   "b": "flower_child_same_store_sales",
+   "verdict": "DIFFERENT",
+   "why": "Token overlap on \"flower\"/\"child\" only means both are about the Flower Child brand — it does not mean the same driver. Test fails on object/metric and mechanism:  1. OBJECT/METRIC — DIFFERENT.    - A (off_premise_mix): the share of sales done off-premise (takeout/delivery), e.g. \"you're talking about a 55% off-premise mix.\" This is a channel-mix percentage.    - B (same_store_sales): comparable-store sales growth, e.g. \"Flower Child comparable sales increased approximately 6%.\" This is a year-over-year same-store revenue growth rate.    These are two distinct metrics. A 55% off-premise share and a 6% comp-sales increase measure completely different things.  2. SCOPE — both are the Flower Child concept (same brand, same company CAKE), so scope alone overlaps. But shared scope is not enough.  3. MECHANISM — DIFFERENT.    - A is driven by how customers order (dine-in vs takeout/delivery channel behavior).    - B is driven by traffic + check growth at existing stores vs prior year (demand strength / comp performance).    Off-premise mix can shift without comp sales changing, and comp sales can rise or fall regardless of the off-premise share.  The only evidence the two share is the same transcript date (2024-05-08), but the quotes pulled from it describe different things (one about off-premise %, one about comp-sales strength). Same source, different drivers.  Because object/metric and mechanism both fail, this is NOT a missed duplicate. Keep them separate — do NOT add a reversible SAME_AS link."
+  },
+  {
+   "idx": 253,
+   "a": "flower_child_rewards_program",
+   "b": "flower_child_sales",
+   "verdict": "DIFFERENT",
+   "why": "Token overlap flagged the shared brand name \"Flower Child,\" but the two drivers are different objects. A (flower_child_rewards_program) is a customer loyalty initiative: \"flower child is much more of a traditional rewards program it's an app based program that has points.\" B (flower_child_sales) is the brand's total revenue: \"Flower Child sales increased 11.0% to $127.5 million.\" Fails all three tests: (1) different object/metric — a loyalty program vs. total dollar sales; (2) different scope — one feature/initiative vs. whole-brand top-line revenue; (3) different mechanism — customer-loyalty driver vs. revenue performance. The rewards program is at most a sub-component that could influence sales, not the same thing. Keep separate."
+  },
+  {
+   "idx": 254,
+   "a": "flower_child_rewards_program",
+   "b": "flower_child_same_store_sales",
+   "verdict": "DIFFERENT",
+   "why": "Token overlap on \"flower\"/\"child\" only reflects the shared brand (Flower Child, a CAKE concept), not a shared driver. The two fail all three tests. Object/metric: A is a customer loyalty/rewards program (\"app based program that has points\"); B is a sales-performance metric (comparable / same-store sales growth, e.g. \"comparable sales increased approximately 6%\"). Different objects entirely. Scope: A is a marketing program offering; B is a financial KPI tracking period-over-period sales at existing stores. Mechanism: A drives engagement/retention via points/app; B measures revenue performance of the concept's locations. Per the brand=own-driver rule, sharing the \"Flower Child\" brand does not make two distinct attributes the same driver. Keep separate."
+  },
+  {
+   "idx": 257,
+   "a": "flower_child_rewards_program",
+   "b": "rewards_program_contribution",
+   "verdict": "DIFFERENT",
+   "why": "Token overlap on \"rewards\"/\"program\" only — the evidence shows two different objects. (A) flower_child_rewards_program is the specific app-based, points-based loyalty program for ONE brand, Flower Child (\"flower child is much more of a traditional rewards program it's an app based program that has points\"). It is a description of a brand's loyalty product. (B) rewards_program_contribution is an analyst question about the financial CONTRIBUTION of loyalty — \"about 100 basis points from a contribution perspective... from loyalty\" — i.e., the margin/financial impact metric of the rewards program, not a specific brand's app. Fails all three SAME tests: (1) different object/metric — a loyalty product vs. a basis-point contribution figure; (2) different scope — one brand (Flower Child) vs. company-wide loyalty contribution; (3) different mechanism — describing how a program works vs. quantifying its financial impact. Keep separate."
+  },
+  {
+   "idx": 259,
+   "a": "flower_child_sales",
+   "b": "flower_child_same_store_sales",
+   "verdict": "DIFFERENT",
+   "why": "These are two distinct metrics for the same brand (Flower Child), failing the \"same object/metric\" test.  SCOPE DIFFERS — the key distinction: - \"flower_child_sales\" = TOTAL sales (all locations). Evidence: \"Flower Child sales increased 11.0% to $127.5 million for fiscal 2023\" — absolute dollar figures across the entire concept, including new units. - \"flower_child_same_store_sales\" = COMPARABLE sales (a same-store, like-for-like base only). Evidence: \"Flower Child comparable sales increased approximately 6%\" — restricted to the comparable-store base, excluding new locations.  MECHANISM/OBJECT DIFFERS: - Total sales grows from BOTH new unit openings AND existing-store growth (e.g., +11.0% total). - Comparable sales isolates ONLY existing-store growth, removing the new-unit effect (e.g., +6% comp for the same period). These move differently and answer different questions.  This is the classic total-revenue vs. same-store-sales distinction in restaurant/retail reporting. They are deliberately separate line items in CAKE's own filings: the 10-Ks report \"Flower Child sales\" (total dollars) AND \"Flower Child comparable sales\" (comp %) as different figures for the same period. Merging them would conflate a top-line revenue total with a unit-economics comp metric.  Verdict DIFFERENT — keep separate. Rule 1 (same metric) FALSE and Rule 2 (same scope) FALSE."
+  },
+  {
+   "idx": 263,
+   "a": "flower_child_same_store_sales",
+   "b": "north_italia_same_store_sales",
+   "verdict": "DIFFERENT",
+   "why": "These measure same-store (comparable) sales for two DIFFERENT restaurant brands that CAKE (Cheesecake Factory) owns: Flower Child vs North Italia. The token overlap that flagged them (sales, same, store) is only the shared metric TYPE (\"comparable sales\"), not the object. Test 1 (same object) fails: every Flower Child quote says \"Flower Child\" and every North Italia quote says \"North Italia\" — the evidence never mixes them. They are distinct segments with diverging numbers (e.g. fiscal 2024 10-K dated 2026-02-23: Flower Child +5% vs North Italia -2%; 2025-05-05 10-Q: Flower Child +5% vs North Italia -1%). Same metric type and same parent company, but different brand/scope. Keep separate."
+  },
+  {
+   "idx": 264,
+   "a": "flower_child_same_store_sales",
+   "b": "same_store_sales",
+   "verdict": "DIFFERENT",
+   "why": "Same metric type (comparable/same-store sales) and same mechanism (existing-store sales growth), but SCOPE differs. \"flower_child_same_store_sales\" is scoped to ONE concept/brand: Flower Child (every quote says \"Flower Child comparable sales\"). \"same_store_sales\" is the company-wide / Cheesecake Factory-concept comparable restaurant sales (quotes say \"Comparable restaurant sales at The Cheesecake Factory restaurants,\" \"an increase in comparable restaurant sales\" driving total revenue, plus the fiscal.ai KPI \"The Cheesecake Factory Restaurants Comparable Restaurant Sales\"). CAKE reports Flower Child comps separately from its core/Cheesecake Factory comps (Flower Child even outpaces the rest of the system). Merging them would collapse a single-brand driver into the consolidated/core comp metric — different scope means a real over-merge. The token overlap (same/store/sales) is the suggester's hint only; meaning shows distinct objects. Keep separate."
+  },
+  {
+   "idx": 324,
+   "a": "international_same_store_sales",
+   "b": "north_italia_same_store_sales",
+   "verdict": "DIFFERENT",
+   "why": "These fail the same-scope test. (A) \"international_same_store_sales\" tracks comparable sales across The Cheesecake Factory's overseas/international locations worldwide (\"all those different geographies... everywhere around the world\"). (B) \"north_italia_same_store_sales\" tracks comparable restaurant sales for one specific U.S. brand, North Italia, an Italian-concept restaurant chain CAKE owns domestically. Same object type (same-store/comparable sales metric) and same mechanism (year-over-year comp sales), but scope differs: international geographic footprint vs. a single named domestic brand. North Italia is a domestic concept, not an international segment. A company can have flat international comps while North Italia declines (the 2025 evidence shows North Italia comps going negative). Merging would wrongly collapse a brand-level driver into a geographic one. Keep separate."
+  },
+  {
+   "idx": 326,
+   "a": "international_same_store_sales",
+   "b": "same_store_sales_guidance",
+   "verdict": "DIFFERENT",
+   "why": "Token overlap (sales/same/store) suggested this, but evidence shows two of the three SAME tests fail. SCOPE differs: A is explicitly international (\"all those different geographies,\" \"everywhere around the world,\" comps positive across geographies), while B is company-wide consolidated comp (the headline 1%-2% range, implied 2026 number, Q2 2025 ~+1% total-company figures) — not international-only. MECHANISM differs: A is realized/actual same-store performance in international markets (an outcome), while B is forward-looking guidance/forecast of comp (\"comp assumptions,\" \"expect to be in that 1% to 2% range,\" \"implied 2026 same-store sales number,\" \"high end of our guide\") — an expectations/guidance driver, not a performance one. Same broad metric family (comps) but different scope and different mechanism, so keep separate."
+  },
+  {
+   "idx": 369,
+   "a": "menu_mix",
+   "b": "north_italia_menu_mix",
+   "verdict": "DIFFERENT",
+   "why": "Same metric (menu mix % effect on average check) and same mechanism (customers shifting what they order), but SCOPE differs. menu_mix is CAKE's consolidated/company-wide menu mix used to explain total average-check variation across all filings (\"a 1.9% negative change from menu mix\", \"Average check variations are driven by... changes in menu mix\"). north_italia_menu_mix is scoped to ONE brand/concept — North Italia (\"The north Italia mix was negative 2%\") — which is a sub-segment of CAKE's portfolio, tracked and reported separately on earnings calls. The brand-level number can and does move independently of the total-company figure, so they are distinct drivers. Scope test fails (whole company vs single brand) -> keep separate to avoid collapsing a brand-specific sub-driver into the company-wide driver."
+  },
+  {
+   "idx": 383,
+   "a": "new_restaurant_capex",
+   "b": "new_restaurant_margin",
+   "verdict": "DIFFERENT",
+   "why": "Token overlap on \"new\" and \"restaurant\" only — the underlying meaning is opposite. Test fails on all three checks:  1. Object/metric — DIFFERENT. `new_restaurant_capex` = capital expenditures (dollars SPENT building new locations: \"$76.1M and $61.6M for the first nine months\"). `new_restaurant_margin` = profitability of new restaurants once open (\"bring the early stages of the restaurants up faster... mature margin\"). One is cash invested to build; the other is profit margin earned after opening.  2. Scope — DIFFERENT. Capex covers locations still \"under development\" (pre-opening construction spend). Margin covers restaurants already operating and ramping toward maturity (post-opening performance).  3. Mechanism — DIFFERENT. Capex moves with the pace/cost of building stores (investment cash outflow). Margin moves with how fast a newly opened store reaches mature unit economics (operating profitability). No shared driver.  Same company (CAKE) and same general topic (new restaurants), but spend-to-build vs profit-after-open are distinct, even opposing, financial concepts. Keep separate."
+  },
+  {
+   "idx": 388,
+   "a": "new_restaurant_food_cost_efficiency",
+   "b": "restaurant_construction_cost",
+   "verdict": "DIFFERENT",
+   "why": "Different object, mechanism, and cost type — they only share the tokens \"cost\" and \"restaurant\". Side A (new_restaurant_food_cost_efficiency) is about OPERATING costs at new units: food cost and labor productivity inefficiencies that hurt restaurant-level margins until a new store ramps to normal traffic (\"actual-to-theoretical food cost inefficiencies and labor productivity inefficiencies\"). Side B (restaurant_construction_cost) is about CAPITAL/BUILD-OUT costs to physically construct a restaurant — construction labor unionization, raw materials, and ~$1,100–$1,200 per square foot to build the premises. Object differs (food/labor margin efficiency vs. construction build-out spend). Mechanism differs (ramp-up operational margin drag vs. capex to open a unit). Even the shared \"new restaurants\" scope describes different things: A = post-opening operating margins, B = pre-opening physical construction. All three SAME tests fail, so keep them separate."
+  },
+  {
+   "idx": 409,
+   "a": "north_italia_average_check",
+   "b": "north_italia_menu_mix",
+   "verdict": "DIFFERENT",
+   "why": "Same brand scope (North Italia) but different metric and mechanism. A = \"average check\" = total dollars spent per customer visit ($34.60 lunch / $44.40 dinner), an absolute dollar-per-ticket level. B = \"menu mix\" (\"the mix was negative 2%\") = the percentage contribution to same-store sales from customers shifting toward higher- or lower-priced items, one component of comp-sales growth. Test 1 (same object/metric) and Test 3 (same mechanism) both fail; only the shared brand name overlaps. Keep separate."
+  },
+  {
+   "idx": 411,
+   "a": "north_italia_average_check",
+   "b": "north_italia_restaurant_count",
+   "verdict": "DIFFERENT",
+   "why": "Same brand (North Italia / CAKE) but two unrelated metrics: A measures average check (dollars spent per customer per visit, ~$34.60 lunch / $44.40 dinner); B measures restaurant count (number of company-owned locations). Fails object/metric (spend-per-customer vs store count) and mechanism (menu pricing/mix vs openings/closings). Token overlap is only the shared brand name, not a shared measure. Keep separate."
+  },
+  {
+   "idx": 412,
+   "a": "north_italia_average_check",
+   "b": "north_italia_restaurant_level_margin",
+   "verdict": "DIFFERENT",
+   "why": "Same brand (North Italia) but two different financial objects. (1) Object/metric: A = average check (dollar revenue per customer per visit, ~$34.60 lunch / $44.40 dinner); B = restaurant-level (four-wall) margin (a profitability percentage, 13.3%-15%). Revenue-per-ticket is not the same metric as a profit margin. (2) Scope: A measures per-customer spend across visits; B measures location-level operating profitability. (3) Mechanism: A is driven by menu mix, pricing, and party spend; B is driven by margin = revenue minus restaurant operating costs (labor, food, occupancy). All three checks fail, so keep them separate."
+  },
+  {
+   "idx": 413,
+   "a": "north_italia_average_check",
+   "b": "north_italia_same_store_sales",
+   "verdict": "DIFFERENT",
+   "why": "These are two distinct metrics for the same brand (North Italia), not the same metric. (1) Same object/metric? NO. \"Average check\" measures the dollar amount one customer spends per visit (evidence: \"average check... averaged approximately $34.60 for lunch and $44.40 for dinner\"). \"Same-store / comparable sales\" measures the percent change in total revenue at established restaurants vs a prior period (evidence: \"comparable sales increased approximately 8% from fiscal 2022\"). Different objects: a per-customer dollar level vs a year-over-year revenue growth rate. (2) Same mechanism? NO. Average check moves with menu pricing and items per order; comparable sales moves with traffic plus check, measured as a YoY delta. A store can have a rising average check while comparable sales fall (or vice versa). They are related inputs but not the same measurement. The token overlap (\"north\", \"italia\") only reflects the shared brand, not a shared metric. Keep separate."
+  },
+  {
+   "idx": 415,
+   "a": "north_italia_average_check",
+   "b": "north_italia_traffic",
+   "verdict": "DIFFERENT",
+   "why": "These are two distinct restaurant metrics that share the brand name \"North Italia\" but measure different things. (1) Object/metric: FAILS. \"average_check\" = dollar amount spent per customer per visit ($34.60 lunch, $44.40 dinner per the 10-K). \"traffic\" = number of guests/visit count (transcripts cite \"traffic was negative 4%\", \"negative 6%\"). Different objects entirely. (2) Scope: both are North Italia brand, but the transcripts explicitly separate the components — price, traffic, and mix are reported as distinct line items (\"Price is between 4.5% and 5%. Traffic was negative 4%\"). Average check is the price/spend dimension; traffic is the volume dimension. (3) Mechanism: FAILS. Average check moves with menu pricing and mix (what each guest spends); traffic moves with guest count (how many guests come in). In restaurant unit economics these are deliberately decomposed because sales = traffic x average check — they are multiplicative inputs, not the same driver. The transcript even names them side by side as separate components. Approving SAME would re-merge two orthogonal demand inputs, exactly the kind of over-merge to avoid. Note: \"north_italia_traffic\" correctly already carries same_as_variant \"north_italia_restaurant_traffic\" (a true synonym), which confirms the traffic node's identity is volume — not check size. Verdict: keep separate."
+  },
+  {
+   "idx": 421,
+   "a": "north_italia_average_unit_volume",
+   "b": "north_italia_restaurant_level_margin",
+   "verdict": "DIFFERENT",
+   "why": "These are two distinct financial metrics for the same brand (North Italia), not the same metric. Driver A = Average Unit Volume (AUV): a SALES/REVENUE measure stated in dollars per location (e.g. \"$8.0 million\", \"annualized AUVs of $7.7 million\"). Driver B = restaurant-level / four-wall MARGIN: a PROFITABILITY ratio stated as a percentage (e.g. \"13.3%\", \"restaurant-level margin... was 15%\"). Test 1 (same object/metric): FALSE — revenue-per-store vs profit-margin-percent are different objects with different units (dollars vs %). Test 3 (same mechanism): FALSE — AUV is driven by traffic/check/store volume; margin is driven by cost structure relative to sales (food/labor/menu pricing). The token overlap (\"north\", \"italia\") only reflects the shared brand, not the metric. Keep separate."
+  },
+  {
+   "idx": 433,
+   "a": "north_italia_food_cost",
+   "b": "north_italia_menu_mix",
+   "verdict": "DIFFERENT",
+   "why": "Only the brand (North Italia) is shared — that's why token overlap flagged it. The metrics differ: A = \"food costs\" (an expense / cost-of-ingredients line, mechanism = deploying best practices to LOWER input cost). B = \"north Italia mix was negative 2%\" (a sales-mix / comparable-sales composition metric on the revenue side). Test 1 (same object/metric) fails: cost line vs sales-mix percentage. Test 3 (same mechanism) fails: cost reduction vs revenue-mix shift. Same brand scope is not enough; these are distinct drivers. Keep separate."
+  },
+  {
+   "idx": 437,
+   "a": "north_italia_food_cost",
+   "b": "north_italia_same_store_sales",
+   "verdict": "DIFFERENT",
+   "why": "Token overlap (italia, north) only flagged these because both concern the North Italia brand — but they measure entirely different things. Side A (north_italia_food_cost) is about lowering FOOD COSTS over time via deployed best practices — an expense/margin metric (cost of goods). Side B (north_italia_same_store_sales) is comparable/same-store SALES growth — a revenue/demand metric, evidenced by ~20 quotes all reporting comparable sales percentage changes. Test 1 (same object/metric): FALSE — food cost (an input expense) vs comparable sales (a revenue/demand output) are distinct objects. Test 3 (same mechanism): FALSE — cost reduction via operational best practices vs sales growth via customer demand. Only the scope (North Italia brand) overlaps. Two of three checks fail, so keep them separate."
+  },
+  {
+   "idx": 439,
+   "a": "north_italia_food_cost",
+   "b": "north_italia_traffic",
+   "verdict": "DIFFERENT",
+   "why": "Same restaurant brand (North Italia, a CAKE concept), but different metric, scope, and mechanism. (A) food_cost = cost-of-goods / margin metric; evidence is about deploying best practices to \"lower food costs over time\" (input cost side). (B) traffic = guest count / footfall demand metric; evidence quotes \"Traffic was negative 4%/-6%\" (top-line demand side). Object differs (cost % vs guest count), and mechanism differs (supply-chain/operational cost control vs consumer demand). Token overlap on \"italia/north\" only reflects the shared brand, not the same driver. Fails criteria 1 and 3 → keep separate. Note: the variant \"north_italia_restaurant_traffic\" on side B is a true synonym of traffic, but that belongs to B, not to A."
+  },
+  {
+   "idx": 440,
+   "a": "north_italia_menu_mix",
+   "b": "north_italia_menu_pricing",
+   "verdict": "DIFFERENT",
+   "why": "Same company (CAKE) and same brand (North Italia), but these measure two different things. (A) menu_mix evidence: \"The north Italia mix was negative 2%\" — this is mix, the shift in what guests order (cheaper vs pricier items), measured as a negative percentage. (B) menu_pricing evidence: \"we have another price increase in October... for North Italia\" and \"the pricing you just took, were you behind on pricing\" — this is menu price increases the company sets. Fails check 1 (different metric: mix shift vs price increase) and check 3 (different mechanism: guest ordering behavior vs management raising prices). Mix and pricing are standard, distinct components of restaurant same-store-sales (pricing + mix + traffic). Keep separate."
+  },
+  {
+   "idx": 442,
+   "a": "north_italia_menu_mix",
+   "b": "north_italia_restaurant_level_margin",
+   "verdict": "DIFFERENT",
+   "why": "These are two distinct metrics for North Italia, sharing only the brand name (token overlap \"north, italia\" is why they were flagged). Fails all three SAME tests. (1) Same object/metric: NO. \"A\" tracks menu mix — the sales-mix shift, quoted at \"negative 2%.\" \"B\" tracks restaurant-level (four-wall) margin — a profitability percentage, quoted at 13.3% and 15%. Mix shift and margin are different objects. (2) Same scope: partly overlaps (both North Italia brand) but the metric scope differs — A is a top-line sales composition metric, B is a unit-economics profit metric. (3) Same mechanism: NO. Menu mix reflects what customers order (product mix shifting sales up/down). Restaurant-level margin reflects cost structure and pricing flowing to four-wall profit. Note B's own same_as_variants (four_wall_margin, restaurant_margin) are all margin synonyms — none mention mix, confirming the margin lane is separate from the mix lane. Keep separate; do not add SAME_AS."
+  },
+  {
+   "idx": 444,
+   "a": "north_italia_menu_mix",
+   "b": "north_italia_segment_margin",
+   "verdict": "DIFFERENT",
+   "why": "Same brand (North Italia, a CAKE restaurant concept) but DIFFERENT metric and mechanism. (a) \"north_italia_menu_mix\" measures menu mix shift — quote: \"The north Italia mix was negative 2%\" — this is a sales/menu-mix metric tracking how product mix affects sales, expressed as a percentage change in mix. (b) \"north_italia_segment_margin\" measures segment profitability — quote: \"the North Italia segment margins, did you say what the mature units were\" — this is a margin/profitability metric. Test 1 (same object/metric): FALSE — menu mix is a sales-composition metric; segment margin is a profitability metric. Test 3 (same mechanism): FALSE — mix shift vs. operating margin are different causal mechanisms. The shared tokens \"north\" and \"italia\" only reflect the same brand, not the same driver. Brand match alone does not make these the same metric. Keep separate."
+  },
+  {
+   "idx": 445,
+   "a": "north_italia_menu_mix",
+   "b": "north_italia_traffic",
+   "verdict": "DIFFERENT",
+   "why": "These are two distinct restaurant sales metrics for the same brand (North Italia, CAKE). The evidence quotes explicitly separate them: \"mix was negative 2%... Traffic was negative 4%\" and \"traffic was negative 6%, prices about 4%, and the mix was negative 2%.\" Test 1 (same object/metric) FAILS: menu_mix measures the shift in sales toward higher/lower-priced items (product/check-mix effect), while traffic measures customer/guest counts (volume of visits). They are reported as separate line items alongside price, and they move independently (mix steady at -2% across quarters while traffic swung -4% to -6%). Test 3 (same mechanism) also FAILS: mix is driven by what guests order, traffic by how many guests come in. Same scope (North Italia brand) but different object and different mechanism, so the pair is DIFFERENT. Keep separate; do not add SAME_AS."
+  },
+  {
+   "idx": 446,
+   "a": "north_italia_menu_pricing",
+   "b": "north_italia_restaurant_count",
+   "verdict": "DIFFERENT",
+   "why": "Token overlap on \"north\"+\"italia\" only flags the same brand (North Italia), not the same metric. The two fail all three SAME tests:  1. Object/metric — DIFFERENT. A measures menu price increases (\"another price increase in October,\" \"the pricing you just took\"). B measures store footprint (\"North Italia Company-Owned Restaurants\" = a count of locations). Price ≠ unit count.  2. Scope — DIFFERENT. A is about pricing actions on the menu. B is the number of company-owned restaurant units.  3. Mechanism — DIFFERENT. A moves via menu price changes (pricing lever). B moves via opening/closing locations (unit growth lever).  Same brand, two unrelated drivers. Keep separate."
+  },
+  {
+   "idx": 448,
+   "a": "north_italia_menu_pricing",
+   "b": "north_italia_same_store_sales",
+   "verdict": "DIFFERENT",
+   "why": "Token overlap (italia, north) is just the brand name, not the metric. The two drivers measure different objects/metrics with different mechanisms:  Side A (north_italia_menu_pricing): The OBJECT is the PRICE the company SETS. Evidence is about taking a \"price increase in October\" and being \"behind on pricing\" — i.e., the company's own pricing actions/decisions (a lever the company pulls).  Side B (north_italia_same_store_sales): The OBJECT is comparable/same-store SALES — a demand/performance OUTCOME (\"comparable sales increased approximately 8% from fiscal 2022\"). This measures how much customers spent vs. prior year, an output.  Test results: 1. Same object/metric? NO. Menu pricing = price level the company sets. Same-store sales = realized comparable revenue growth. These are different metrics. 2. Same scope? Both are North Italia brand-level, so scope matches. 3. Same mechanism? NO. Pricing is a company-controlled input/lever; same-store sales is a market outcome driven by traffic + pricing + mix. Pricing is one of several inputs INTO same-store sales, not the same thing.  Because object/metric and mechanism differ, these are distinct drivers. Keep separate."
+  },
+  {
+   "idx": 454,
+   "a": "north_italia_restaurant_count",
+   "b": "north_italia_segment_margin",
+   "verdict": "DIFFERENT",
+   "why": "Only the brand name \"North Italia\" is shared — that is the token overlap (italia, north) the suggester flagged, not a real match. Test 1 (same object/metric) FAILS: \"a\" is a COUNT of company-owned restaurant locations (a unit count), while \"b\" is a segment profit MARGIN (a profitability percentage) — different objects entirely. Test 3 (same mechanism) FAILS: counting open units vs. computing profitability of a business segment are different mechanisms. Test 2 (scope = North Italia brand) is the only one that holds. Since tests 1 and 3 are false, verdict is DIFFERENT — keep them separate, no SAME_AS."
+  },
+  {
+   "idx": 457,
+   "a": "north_italia_restaurant_level_margin",
+   "b": "north_italia_segment_margin",
+   "verdict": "DIFFERENT",
+   "why": "Two different North Italia margin metrics, not the same thing. (1) Different object/metric: side A is \"restaurant-level\"/\"four-wall\" margin (revenue minus store-level operating costs), confirmed by its quotes (\"Forewall margin... 13.3%\", \"restaurant-level margin... 15%\") and its variants (four_wall, restaurant). Side B is \"segment margin\" — a reporting-segment profitability figure that layers in more costs. In restaurant reporting these are recognized as distinct metrics. (2) Different scope: side A is explicitly the \"adjusted mature North Italia locations\" (a subset), while side B's quote is \"the North Italia segment margins\" with the analyst asking about \"the mature units within that\" — treating mature units as a slice INSIDE the broader segment. So segment (whole) vs mature locations (subset). (3) Different mechanism for the same reason — four-wall/store-level economics vs segment-level economics include different cost layers. The match was suggested only by token overlap (italia, margin, north); the underlying metric and scope differ. Fails object and scope tests, so keep separate."
+  },
+  {
+   "idx": 458,
+   "a": "north_italia_restaurant_level_margin",
+   "b": "north_italia_traffic",
+   "verdict": "DIFFERENT",
+   "why": "Token overlap on \"north\"/\"italia\" only flags the same brand (North Italia), not the same metric. The two drivers measure different objects: (A) restaurant-level / four-wall margin — a profitability percentage (13.3%, 15%) driven by menu price and cost structure; (B) traffic — a guest-count volume measure (negative 4%, negative 6%) shown alongside price and mix. Fails test 1 (different object/metric: margin % vs traffic count) and test 3 (different mechanism: cost-and-price profitability vs customer-volume change). Same brand and company, but margin and traffic are distinct operating metrics. Keep separate."
+  },
+  {
+   "idx": 463,
+   "a": "north_italia_same_store_sales",
+   "b": "same_store_sales",
+   "verdict": "DIFFERENT",
+   "why": "Same mechanism and metric type (comparable/same-store restaurant sales), but DIFFERENT scope. Side A is exclusively North Italia comparable sales — every one of its ~20 evidence quotes is scoped to the North Italia brand (e.g. \"North Italia comparable sales increased approximately 8% from fiscal 2022\"). Side B is The Cheesecake Factory restaurants / company-wide comparable restaurant sales — its quotes are scoped to \"The Cheesecake Factory restaurants\" or the consolidated company (e.g. \"Comparable restaurant sales at The Cheesecake Factory restaurants increased 4.0%\"; revenue-driver language; fiscal.ai KPI = \"The Cheesecake Factory Restaurants Comparable Restaurant Sales\"). North Italia is one separately-reported brand within CAKE's portfolio; its same-store-sales is a distinct, separately-disclosed object from the Cheesecake-Factory/company-level same-store-sales. Scope test fails (brand-specific vs company/Cheesecake-Factory-specific), so keep separate. Token overlap (sales/same/store) is the only similarity. Note: A's same_as_variant \"north_italia_comparable_sales\" is correctly a same-brand variant, reinforcing that A is the North Italia roll-up, not the general metric."
+  },
+  {
+   "idx": 465,
+   "a": "north_italia_segment_margin",
+   "b": "north_italia_traffic",
+   "verdict": "DIFFERENT",
+   "why": "Only the brand \"North Italia\" is shared; the metrics differ. A = segment profit margin (a profitability metric: how much money the segment keeps), evidenced by \"the North Italia segment margins.\" B = guest traffic (a demand/volume metric: how many customers visit), evidenced by \"Traffic was negative 4%/negative 6%.\" Fails test 1 (different object/metric: margin vs traffic count) and test 3 (different mechanism: cost/revenue profitability vs customer foot traffic). Margin and traffic can move in opposite directions, so they are independent drivers. The token overlap (italia, north) only reflects the common brand name, not the same metric. Keep separate."
+  },
+  {
+   "idx": 509,
+   "a": "supply_chain_disruption",
+   "b": "supply_chain_integration",
+   "verdict": "DIFFERENT",
+   "why": "Token overlap only (\"supply\", \"chain\") — opposite meanings on all three tests. supply_chain_disruption = NEGATIVE risk: shortages, transportation delays, COVID/geopolitical-driven cost inflation, delayed restaurant openings (15+ evidence quotes: \"supply shortages and transportation delays,\" \"disruptions in the supply chain,\" \"supply chain challenges\"). supply_chain_integration = POSITIVE operational improvement: one transcript quote \"Made some really strong improvements there on supply chain integration.\" Object differs (external disruption event vs internal integration capability), scope differs (cost/availability headwind vs operational efficiency initiative), mechanism differs (supply breakdown raising costs/delays vs management consolidating/optimizing the supply chain). Merging would fuse a risk-driver with an improvement-driver. Keep separate."
+  },
+  {
+   "idx": 513,
+   "a": "supply_chain_integration",
+   "b": "supply_chain_scale",
+   "verdict": "DIFFERENT",
+   "why": "Both mention CAKE's \"supply chain\" (shared object, shared company-wide scope), but the mechanisms differ. (a) integration = operational improvement in connecting/streamlining supply chain operations (\"strong improvements on supply chain integration\"). (b) scale = volume/size-driven leverage and purchasing power as the company grows (\"leverage our scalable supply chain\", \"benefit on the increasing scale of our company\", cross-brand purchasing into North Italia). A firm can improve integration without growing scale, and gain scale benefits without improving integration. Mechanism test fails; the token overlap (supply, chain) is a surface match only. Keep separate."
+  },
+  {
+   "idx": 17,
+   "a": "alcohol_sales_mix",
+   "b": "bar_sales_mix",
+   "verdict": "DIFFERENT",
+   "why": "Different objects/metrics. (A) alcohol_sales_mix tracks the share of sales coming from the alcohol category (beverages), with all five quotes about \"alcohol mix,\" \"alcohol trade down,\" \"alcohol component/category.\" (B) bar_sales_mix tracks the share of sales coming from the bar as a venue/concept (\"bar incident rates,\" \"Bar mix is about 23%,\" \"important part of the concept\"). The bar is a physical sales channel that includes food and non-alcoholic items, not just alcohol; and alcohol is sold beyond the bar (dining tables). Scope differs: A = product/category mix, B = venue/channel mix. Mechanism differs: A moves with consumer alcohol spending (trade-down), B moves with bar traffic/incident rates. Token overlap (mix, sales) is superficial. Keep separate."
+  },
+  {
+   "idx": 28,
+   "a": "appetizer_attachment_rate",
+   "b": "attachment_rate",
+   "verdict": "DIFFERENT",
+   "why": "Scope differs. \"appetizer_attachment_rate\" is specifically the rate at which appetizers are added to orders (\"higher appetizer attachment rates\", \"year-over-year growth in appetizer attachment rates and improved entree ordering patterns\"). The bare \"attachment_rate\" quote (\"regarding, say, attachments rates...we're still above 2019 levels\") is generic add-on attach rate with no product narrowing — it could cover appetizers, but also desserts, beverages, alcohol, or any add-on category. Object/metric (an attach rate) overlaps, but the appetizer driver is a strict sub-scope of the general one, not the same scope. Merging would wrongly fold a product-specific driver into a broad one (over-merge risk). Note also that side b carries same_as_variants:[\"guest_incident_rate\"], suggesting its identity is already ambiguous/contested. Scope test fails → DIFFERENT. Keep separate."
+  },
+  {
+   "idx": 35,
+   "a": "average_unit_volume",
+   "b": "flower_child_average_unit_volume",
+   "verdict": "DIFFERENT",
+   "why": "Same metric TYPE (average unit volume = sales per restaurant location) but DIFFERENT SCOPE, so the 3-part test fails on scope. Side a's evidence is overwhelmingly the flagship \"Cheesecake Factory\" brand with AUVs of ~$12.0-12.8M (\"average unit volumes of over $12 million for domestic cheesecake factory restaurants\"; \"Annualized unit volumes at the Cheesecake Factory reached 12.5 million\"). Side b is explicitly the separate Flower Child concept (\"dig in a little more on the flower child... potential average volumes for a fully mature box\"; \"$4.4 million average unit volume\"). These track two distinct restaurant brands with materially different unit economics ($12M vs $4.4M). The name flower_child_average_unit_volume exists precisely to keep Flower Child's AUV separate from the flagship AUV. Token overlap (average/unit/volume) is a metric-name coincidence, not a same-object match. Merging would conflate different brands' performance (over-merge). Keep separate."
+  },
+  {
+   "idx": 36,
+   "a": "average_unit_volume",
+   "b": "north_italia_average_unit_volume",
+   "verdict": "DIFFERENT",
+   "why": "Same metric type (average unit volume = average sales per restaurant location) and same mechanism, BUT different SCOPE. Side A \"average_unit_volume\" covers The Cheesecake Factory flagship brand (AUVs ~$12.1-12.8M; evidence quotes \"Average sales per location for The Cheesecake Factory restaurants\", \"domestic cheesecake factory restaurants\", \"annualized unit volumes at the Cheesecake Factory\"). Side B \"north_italia_average_unit_volume\" is scoped specifically to the North Italia concept, a separate restaurant brand CAKE operates (AUVs ~$7.7-8.0M; evidence quotes \"for North Italia restaurants\", \"North Italia first quarter comparable sales... resulting in annualized AUVs of $7.7 million\"). The dollar figures confirm two distinct populations ($12M+ vs ~$8M). Brand-level driver scope must stay separate per the own-driver / brand-scope rule. Token overlap (average/unit/volume) is the metric-type name only; the brand qualifier \"north_italia\" changes the scope. Scope fails → DIFFERENT, keep separate."
+  },
+  {
+   "idx": 55,
+   "a": "bar_sales_mix",
+   "b": "delivery_sales_mix",
+   "verdict": "DIFFERENT",
+   "why": "Keep separate — these are sibling slices of the sales mix, not the same driver."
+  },
+  {
+   "idx": 56,
+   "a": "beef_cost",
+   "b": "ground_beef_cost",
+   "verdict": "DIFFERENT",
+   "why": "Object differs: \"beef_cost\" is the broad beef commodity category (\"higher beef costs\"), while \"ground_beef_cost\" is one specific subset — ground beef — which the company explicitly treats as a distinct, harder-to-contract item (\"ground beef, harder to get a long-term contract there\"). This is a parent/subset relationship, not the same object, so test #1 (same object/metric) fails. Mechanism (input commodity cost) is similar, but merging would erase the company's own distinction between general beef and ground beef's separate supply/contract dynamics. Keep separate."
+  },
+  {
+   "idx": 91,
+   "a": "casual_dining_market_share",
+   "b": "equity_market_volatility",
+   "verdict": "DIFFERENT",
+   "why": "These are unrelated drivers that only share the token \"market\". Object/metric: A measures the company's share of the casual dining restaurant industry (comparable sales/traffic outperformance vs peers); B describes broad stock price/volume swings in equity markets. Scope: A is restaurant-industry competitive position; B is general financial-market/stock-price behavior. Mechanism: A = capturing customers from competing restaurants; B = market-wide volatility unrelated to operating performance (a risk-factor boilerplate in 10-K filings). The evidence quotes confirm A is about \"outperformance versus the broader casual dining industry\" while B is about \"equity markets...price and volume fluctuations...unrelated to an individual company's operating performance.\" All three tests fail. Keep separate."
+  },
+  {
+   "idx": 126,
+   "a": "consumer_discretionary_spending",
+   "b": "high_income_consumer_spending",
+   "verdict": "DIFFERENT",
+   "why": "Token overlap (\"consumer\", \"spending\") suggested this pair, but the evidence shows different scope and mechanism.  SCOPE differs: - A (consumer_discretionary_spending): the WHOLE consumer base's discretionary spending — broad, economy-wide. Quotes: \"global and domestic economic conditions have on consumer discretionary spending,\" \"Any factor affecting consumer discretionary spending may influence customer traffic.\" - B (high_income_consumer_spending): specifically the HIGH-INCOME cohort (\"income of 100 plus K,\" \"top end of consumers\"). Narrow slice of the population.  MECHANISM differs: - A is a general macro headwind: weak economy → less discretionary spend → lower restaurant traffic/check. Direction = uniformly negative for CAKE. - B is a cohort-specific, even partly INVERSE mechanism: when high earners feel pressure they \"typically move down off of the steakhouses and the expensive independents\" — so CAKE may BENEFIT (\"we're likely to actually benefit some from that\"). The 2025 quote argues high-income jobs aren't disappearing, so this cohort's spend is resilient.  OBJECT/METRIC: A measures aggregate discretionary spending across all consumers; B measures the spending behavior of one income tier specifically.  A high-income-resilience driver (can be a tailwind) is not the same object as a broad discretionary-spending macro risk (a headwind). At least two of the three tests (scope, mechanism) fail. Keep separate."
+  },
+  {
+   "idx": 133,
+   "a": "consumer_spending",
+   "b": "high_income_consumer_spending",
+   "verdict": "DIFFERENT",
+   "why": "Token overlap (consumer, spending) flagged these, but the evidence shows different scope and mechanism. A = general consumer spending across the whole consumer base: boilerplate risk language (\"conditions that impact consumer confidence and spending\") plus transcript talk of the overall consumer environment easing, trade-down, and macro pressure on consumers broadly. B is narrowly the high-income/affluent segment: \"top end of consumers really does feel pressure... they typically move down off of the steakhouses and the expensive independents\" and \"income of 100 plus K... incomes aren't slowing down.\" Test: (1) same object — NO, A is all consumers vs B is the $100K+ subset (parent vs a carve-out segment); (2) same scope — NO, A is broad, B is restricted to affluent earners; (3) same mechanism — NO, B describes a segment-specific dynamic where high-end pressure can actually BENEFIT CAKE via trade-down, which can move opposite to the general consumer signal. CAKE itself treats the high-income cohort as distinct from the general consumer. Merging would collapse a meaningful distinction (over-merge). Keep separate."
+  },
+  {
+   "idx": 208,
+   "a": "fica_tip_tax_credit",
+   "b": "tip_credit_wage",
+   "verdict": "DIFFERENT",
+   "why": "Token overlap on \"credit/tip\" is misleading — these are two unrelated concepts that happen to share the word \"tip credit.\"  OBJECT/METRIC — different: - A (fica_tip_tax_credit): a TAX CREDIT. Evidence is all about the SITCA program (a federal IRS tip-reporting compliance program) and qualifying for \"tax credits.\" This is the FICA tip tax credit — money the company gets BACK from the IRS for FICA payroll taxes paid on employee tips. - B (tip_credit_wage): a WAGE RULE / labor-cost input. Evidence is all about \"minimum wage rates,\" the \"tip credit wage rate,\" and states \"eliminating the tip credit wage.\" This is the labor-law rule that lets employers pay tipped workers a lower base wage (the \"tip credit\" against minimum wage).  SCOPE — different: - A = federal IRS tax matter (income tax credit, SITCA eligibility). - B = state/local minimum-wage and labor-cost matter (\"certain states,\" \"state and localities\").  MECHANISM — different / opposite direction of impact: - A: losing the tax credit → higher taxes → hurts financial performance (tax line). - B: raising/eliminating the tip credit wage → higher wages paid to workers → wage-cost pressure (labor expense line).  The shared phrase \"tip credit\" refers to two entirely different things: a tax credit vs. a wage-offset against minimum wage. Same scope test (1), same object test (2), and same mechanism test (3) all FAIL. Keep separate."
+  },
+  {
+   "idx": 210,
+   "a": "flower_child_acquisition",
+   "b": "flower_child_average_weekly_sales",
+   "verdict": "DIFFERENT",
+   "why": "Shared tokens are only the brand name \"Flower Child,\" not a shared concept. A = a corporate M&A event (acquiring/integrating the Flower Child brand under the company umbrella). B = a brand-level operating metric (average weekly sales per store, $85,200, +6% YoY). Fails all three SAME tests: (1) different object/metric — an acquisition milestone vs a unit-economics sales figure; (2) different scope — company-level M&A vs per-store sales performance; (3) different mechanism — ownership/integration vs revenue generation per location. Keep separate."
+  },
+  {
+   "idx": 213,
+   "a": "flower_child_acquisition",
+   "b": "flower_child_off_premise_mix",
+   "verdict": "DIFFERENT",
+   "why": "Both mention the Flower Child brand (same company CAKE), so token overlap is real — but they describe two different things.  Side A \"flower_child_acquisition\": quote \"bringing it fully under our umbrella for this year\" = the M&A event of buying/fully owning the Flower Child brand. Object = ownership/acquisition. Mechanism = corporate deal.  Side B \"flower_child_off_premise_mix\": quote \"a 55% off-premise mix\" = an operating metric (share of sales that are takeout/delivery vs dine-in) at Flower Child. Object = sales-channel mix. Mechanism = consumer ordering behavior.  Test results: 1. Same object/metric? NO — acquisition event vs off-premise sales percentage. 2. Same scope? Partly (both = the Flower Child brand), but the subject differs. 3. Same mechanism? NO — corporate ownership deal vs day-to-day sales channel.  Two of three fail. Shared brand name is not enough to merge. Keep separate."
+  },
+  {
+   "idx": 215,
+   "a": "flower_child_acquisition",
+   "b": "flower_child_sales",
+   "verdict": "DIFFERENT",
+   "why": "Token overlap fired on the shared BRAND name (\"Flower Child\"), not a shared driver. The two drivers describe different things: A = a corporate acquisition/ownership event (\"bringing it fully under our umbrella\"), an M&A/consolidation transaction; B = the recurring sales/revenue metric of the Flower Child chain (\"sales increased 11.0% to $127.5M\", \"sales per operating week were $80,000\"). Test 1 (same object/metric) FAILS — a one-time ownership change is not a revenue figure. Test 3 (same mechanism) FAILS — M&A consolidation vs. organic same-brand sales growth are distinct price drivers. Keep separate."
+  },
+  {
+   "idx": 217,
+   "a": "flower_child_acquisition",
+   "b": "flower_child_unit_count",
+   "verdict": "DIFFERENT",
+   "why": "Both mention the same brand (Flower Child), but they track different objects/metrics with different mechanisms. \"a\" (flower_child_acquisition) is about the corporate M&A event of bringing Flower Child fully under CAKE's ownership (\"bringing it fully under our umbrella\") — a one-time acquisition/consolidation driver. \"b\" (flower_child_unit_count) is about the ongoing operational footprint and store-growth runway of the concept (38 locations now, ~700 potential, ~20% annual unit growth). Test 1 (same object/metric): FAIL — acquisition event vs. unit-count/store-expansion metric. Test 3 (same mechanism): FAIL — completing an ownership transaction vs. building new restaurant locations over time. Token overlap on \"flower\"/\"child\" is just the shared brand name, not a shared driver. Keep separate."
+  },
+  {
+   "idx": 225,
+   "a": "flower_child_average_unit_volume",
+   "b": "flower_child_unit_count",
+   "verdict": "DIFFERENT",
+   "why": "Token overlap (flower/child/unit) only. Different OBJECT and MECHANISM. (A) average_unit_volume = revenue per restaurant (AUV $4.4M, \"average volumes for a fully mature box\"). (B) unit_count = number of locations (38 Flower Child locations, ~700 potential, 20% annual unit growth). One measures dollars-per-store; the other counts stores. \"unit volume\" (sales/store) is a wholly different metric than \"unit count\" (store quantity), and B's own same_as_variant is flower_child_unit_development (location growth), confirming it tracks store count not sales. Fails object and mechanism tests; keep separate."
+  },
+  {
+   "idx": 231,
+   "a": "flower_child_average_weekly_sales",
+   "b": "flower_child_sales",
+   "verdict": "DIFFERENT",
+   "why": "Different metric and scope despite same brand (Flower Child). Driver a = average weekly sales, a per-operating-week dollar rate / unit-economics figure (e.g. \"$85,200, up more than 6%\"). Driver b = total brand sales aggregated over a fiscal period (e.g. \"$127.5 million for fiscal 2023\", \"$34.5 million for the first quarter\"). Test 1 (same object/metric) fails: a weekly run-rate is not the same as total period revenue. Test 2 (same scope) fails: per-week normalized rate vs full quarter/year aggregate. Although b's transcript quotes sometimes mention \"sales per operating week\" as a side stat, b's defining metric is the headline total period sales, so the two drivers track genuinely different quantities. Merging would conflate an AUV-style rate with aggregate revenue. Keep separate."
+  },
+  {
+   "idx": 235,
+   "a": "flower_child_integration",
+   "b": "flower_child_off_premise_mix",
+   "verdict": "DIFFERENT",
+   "why": "Both are about the same brand (Flower Child, a CAKE-owned restaurant), but they describe two different things — so they fail the \"same object/metric\" and \"same mechanism\" tests.  Driver A \"flower_child_integration\": the 2023-05-10 quote \"we continue down the integration path this year\" is about INTEGRATING the acquired brand into the parent company (operational/M&A absorption work). Object = the integration process. Mechanism = absorbing the acquisition.  Driver B \"flower_child_off_premise_mix\": the 2024-05-08 quote \"you're talking about a 55% off-premise mix\" is a SALES-CHANNEL METRIC — the share of sales that are takeout/delivery (off-premise) vs dine-in. Object = a sales-mix percentage. Mechanism = how customers order.  Check the three SAME tests: 1. Same object/metric? NO — \"integration progress\" vs \"off-premise sales %\". Different things. 2. Same scope? Both scoped to the Flower Child brand at CAKE — this one overlaps, but it is the only one that matches. 3. Same mechanism? NO — absorbing an acquisition vs customer ordering channel.  Two of three are false. The token overlap (\"flower\", \"child\") only reflects the shared brand name, not a shared driver. Keep them separate."
+  },
+  {
+   "idx": 238,
+   "a": "flower_child_integration",
+   "b": "flower_child_same_store_sales",
+   "verdict": "DIFFERENT",
+   "why": "Both drivers concern the same brand (Flower Child, CAKE's fast-casual concept), but they track different objects/mechanisms.  Object/metric test — FAILS: - \"flower_child_integration\" = the operational work of folding the acquired Flower Child concept into CAKE (the \"integration path\"). Evidence: \"we continue down the integration path this year.\" This is about post-acquisition operational integration (systems, operations, scaling the concept). - \"flower_child_same_store_sales\" = a comparable-sales financial metric. All 13 evidence quotes report a comp-sales percentage (e.g., \"comparable sales increased approximately 6%\"). This is a recurring revenue performance metric, not integration work.  Mechanism test — FAILS: - Integration mechanism = absorbing/operationalizing an acquired brand (a one-off-to-multi-year transition project). - Same-store-sales mechanism = period-over-period demand/traffic/pricing at existing locations (an ongoing performance KPI).  The token overlap (\"flower\", \"child\") only reflects the shared brand name, not a shared driver. A brand can have many distinct drivers (integration progress, unit growth, comp sales, margins). These are two of them. Same brand ≠ same driver.  Merging would repeat the v2 over-merge error: collapsing an operational-progress driver into a revenue-metric driver just because they share a proper noun. Keep separate."
+  },
+  {
+   "idx": 242,
+   "a": "flower_child_margin",
+   "b": "flower_child_rewards_program",
+   "verdict": "DIFFERENT",
+   "why": "Token overlap on \"flower\"/\"child\" only reflects the shared brand (Flower Child restaurant), not the same driver. The two fail all three SAME tests: (1) Object/metric differs — \"flower_child_margin\" is about profit margin hitting a mid-teens target to make the brand a growth vehicle; \"flower_child_rewards_program\" is about a customer loyalty app with points. (2) Scope differs — one is a financial profitability measure for the chain, the other is a marketing/customer-engagement feature. (3) Mechanism differs — margin expansion via unit economics/cost vs. customer retention via app-based points. Brand match is not driver match. Keep separate."
+  },
+  {
+   "idx": 245,
+   "a": "flower_child_margin",
+   "b": "flower_child_unit_count",
+   "verdict": "DIFFERENT",
+   "why": "Same brand (Flower Child), but they measure different objects via different mechanisms. (A) flower_child_margin = profitability target (\"mid-teens\" margin level to make it a growth vehicle) — a per-dollar economics metric. (B) flower_child_unit_count = number of restaurant locations (38 today, ~700 potential, ~20% annual unit growth) — a store-count/expansion metric. Object differs (profit margin vs store count), mechanism differs (operating efficiency vs new-location openings). Shared \"flower\"/\"child\" tokens are just the brand name; token overlap alone does not make them the same driver. The same_as_variants confirm distinct lanes: margin-side links to \"restaurant_margin\", count-side links to \"unit_development\". Fails criteria 1 (same object/metric) and 3 (same mechanism). Keep separate."
+  },
+  {
+   "idx": 247,
+   "a": "flower_child_off_premise_mix",
+   "b": "flower_child_sales",
+   "verdict": "DIFFERENT",
+   "why": "Same brand (Flower Child), but different metrics and mechanisms. A measures off-premise MIX — a channel ratio (\"55% off-premise mix\"), i.e. what share of sales are takeout/delivery vs dine-in. B measures total DOLLAR SALES/revenue (\"$127.5M\", \"increased 10.2% to $34.5M\", \"per operating week were $80,000\"). Object differs (a percentage channel split vs a revenue total), and mechanism differs (where customers order vs total brand demand). The two move independently — total sales can rise while off-premise mix falls. Token overlap on \"flower\"/\"child\" only reflects the shared brand, not the same driver. Test 1 (same object) and Test 3 (same mechanism) both fail → keep separate."
+  },
+  {
+   "idx": 255,
+   "a": "flower_child_rewards_program",
+   "b": "flower_child_unit_count",
+   "verdict": "DIFFERENT",
+   "why": "These share only the brand name \"Flower Child\" (a CAKE restaurant concept) — the token overlap that triggered the suggestion. They measure completely different things.  A = flower_child_rewards_program: an app-based customer loyalty/points program. Quote: \"flower child is much more of a traditional rewards program it's an app based program that has points.\"  B = flower_child_unit_count: the number of physical restaurant locations and unit-growth runway. Quote: \"Currently, we operate 38 Flower Child locations... potential for approximately 700 domestic locations... approximately 20% average annual unit growth.\"  Test against the three SAME criteria: 1. Same object/metric? NO — one is a rewards/loyalty program, the other is store count / unit expansion. 2. Same scope? NO — customer engagement vs. footprint/real-estate growth. 3. Same mechanism? NO — points-earning app vs. opening new locations.  All three fail. Brand match alone is not a duplicate; per the brand=own-driver rule the shared \"Flower Child\" name does not collapse distinct drivers. Keep them separate (no SAME_AS)."
+  },
+  {
+   "idx": 261,
+   "a": "flower_child_same_store_sales",
+   "b": "flower_child_unit_count",
+   "verdict": "DIFFERENT",
+   "why": "Only the brand name \"Flower Child\" is shared (the token overlap that triggered the suggestion). The metrics are different on all three tests. Object/metric: A is comparable/same-store sales growth (a percentage, e.g. \"comparable sales increased approximately 6%\"); B is the number of restaurant locations and unit growth (e.g. \"we operate 38 Flower Child locations... 20% average annual unit growth\"). Scope: A covers existing comparable stores' revenue; B covers the total store footprint/expansion. Mechanism: A reflects demand/pricing per existing store; B reflects physical store openings. These can move independently (units can grow while same-store sales fall). Keep separate."
+  },
+  {
+   "idx": 265,
+   "a": "flower_child_same_store_sales",
+   "b": "same_store_sales_guidance",
+   "verdict": "DIFFERENT",
+   "why": "Token overlap (sales/same/store) only. Two of the three tests fail. SCOPE: A is one specific brand only (\"Flower Child comparable sales increased approximately 6%\", \"Fire Child comps\"), a single fast-casual concept; B is the company-wide/blended comp outlook with no brand named (\"do you expect to be in that 1% to 2% range on comp\", \"implied 2026 same-shore sales number\"). MECHANISM: A is realized/historical actual results reported in 10-K/10-Q/transcripts; B is forward-looking guidance and management assumptions (\"our comp assumptions\", \"high end of our guide\", \"do you expect\"). Actuals-for-one-brand vs company-wide-forward-guidance are distinct drivers. Keep separate."
+  },
+  {
+   "idx": 266,
+   "a": "flower_child_unit_count",
+   "b": "fox_restaurant_concepts_unit_count",
+   "verdict": "DIFFERENT",
+   "why": "Same metric TYPE (restaurant unit count/growth) but DIFFERENT scope. Flower Child = one specific brand/concept (evidence: \"we operate 38 Flower Child locations... ~20% average annual unit growth for this concept\"). Fox Restaurant Concepts = the AGGREGATE \"Other FRC portfolio\" of brands (evidence: \"10% to 15% average annual unit growth for the aggregate Other FRC portfolio\"). Flower Child is a single brand within the FRC family, so one is a sub-scope and the other is the parent aggregate — different unit base, different growth target (20% vs 10-15%). Token overlap on \"count\"/\"unit\" is purely lexical. Fails Test 2 (scope) and Test 3 (mechanism). Keep separate."
+  },
+  {
+   "idx": 268,
+   "a": "flower_child_unit_count",
+   "b": "north_italia_restaurant_count",
+   "verdict": "DIFFERENT",
+   "why": "These count two different restaurant brands. Side A's evidence is about \"Flower Child locations\" (38 locations, ~700 domestic potential). Side B's evidence is about \"North Italia Company-Owned Restaurants\" — a separate concept/brand owned by the same parent (CAKE = Cheesecake Factory). Same object test FAILS: one counts Flower Child units, the other counts North Italia restaurants — distinct brands, distinct unit populations. The only thing linking them is the shared token \"count,\" which the suggester flagged on token overlap alone. Scope also differs (two different concept footprints). Keep separate — these are not the same metric."
+  },
+  {
+   "idx": 286,
+   "a": "gift_card_inventory_writedown",
+   "b": "gift_card_redemptions",
+   "verdict": "DIFFERENT",
+   "why": "Only the words \"gift\" and \"card\" overlap; the economics are opposite. (1) Different object: \"gift_card_inventory_writedown\" is the physical unsold gift-card stock (an asset) being impaired (\"$7.9 million write-down of gift card inventory\"), while \"gift_card_redemptions\" is customers spending their gift-card balances (\"higher gift card redemptions\"). (2) Different scope: a is a one-time non-recurring charge; b is an ongoing operational sales/revenue flow. (3) Different mechanism: a is an accounting write-down (a loss/cost on an asset); b is redemption activity that drives revenue recognition. All three SAME criteria fail, so keep them separate."
+  },
+  {
+   "idx": 303,
+   "a": "high_income_consumer_spending",
+   "b": "income_cohort_spending",
+   "verdict": "DIFFERENT",
+   "why": "Token overlap (income, spending) only. Evidence shows different object, scope, and mechanism. A = the HIGH-income/top-end tier specifically: top-end consumers feeling pressure and trading DOWN into CAKE off steakhouses/expensive independents, plus $100K+ earners' job/income stability. B = the relative DISTRIBUTION and stability of spending ACROSS all income cohorts (\"relative cohort distribution and spending patterns are pretty stable\"). Object differs: one named tier's spend vs. cross-cohort mix stability. Scope differs: high-income subset vs. all cohorts. Mechanism differs: trade-down benefit driven by macro pressure on top earners vs. steadiness of the overall cohort spending mix. All three SAME tests fail, so keep separate."
+  },
+  {
+   "idx": 304,
+   "a": "high_income_consumer_spending",
+   "b": "low_end_consumer_spending",
+   "verdict": "DIFFERENT",
+   "why": "These are opposite ends of the income spectrum, not the same driver. Same object (consumer spending) and same scope (CAKE's demand), but the MECHANISM is the opposite. (1) high_income: evidence is about wealthy/\"top end\" consumers with \"$100K+ incomes\" trading DOWN from steakhouses/expensive independents into CAKE — CAKE benefits when high-end consumers feel pressure. (2) low_end: evidence is about \"low-end consumers\" being cited by management — the budget-constrained segment, which pressures CAKE rather than benefiting it. They track different customer cohorts with inverse effects on the business: high-income weakness is a tailwind (trade-down), low-end weakness is a headwind. Mechanism check FAILS, so verdict is DIFFERENT. Merging would erase the directional signal (which segment is hurting and whether it helps or hurts CAKE)."
+  },
+  {
+   "idx": 322,
+   "a": "international_royalty_revenue",
+   "b": "revenue_surprise",
+   "verdict": "DIFFERENT",
+   "why": "Only the token \"revenue\" overlaps (the suggester's own weak signal: token_overlap:revenue). All three SAME tests fail. (1) Object/metric differs: \"international_royalty_revenue\" is a narrow revenue stream from international licensing + consumer packaged goods royalties; \"revenue_surprise\" is total company revenue measured against guidance (\"revenue within our guidance range\", \"exceeded the high end of the guidance\"). (2) Scope differs: a sub-segment royalty slice vs whole-company total revenues. (3) Mechanism differs: earning royalties by licensing the brand vs total revenue beating/meeting/missing the expected range. Keep separate."
+  },
+  {
+   "idx": 325,
+   "a": "international_same_store_sales",
+   "b": "same_store_sales",
+   "verdict": "DIFFERENT",
+   "why": "Token overlap (sales/same/store) flagged these, but the scope test fails. Side A's evidence is explicitly about INTERNATIONAL comp sales — \"all comp positive... in all those different geographies,\" \"the brand continues to resonate everywhere around the world.\" Side B's evidence is the company's core comparable RESTAURANT sales metric, anchored to The Cheesecake Factory restaurants and domestic concepts (\"Comparable restaurant sales at The Cheesecake Factory restaurants increased 4.0%,\" \"slowing growth of our concepts domestically,\" \"inability to grow comparable restaurant sales\"). Test 1 (metric): both are same-store/comparable sales — pass. Test 2 (scope): FAIL — international geographies/foreign markets vs. the overall (domestic-anchored) company comparable-restaurant-sales metric; the \"international_\" qualifier marks a deliberate geographic sub-scope. Test 3 (mechanism): differs — international brand resonance in foreign markets vs. core US restaurant traffic/pricing. This is a child/parent (international subset vs. overall), not the same object. Keep separate; an optional related-link is fine but NOT a SAME_AS merge."
+  },
+  {
+   "idx": 364,
+   "a": "marketing_costs",
+   "b": "social_media_marketing",
+   "verdict": "DIFFERENT",
+   "why": "Token overlap on \"marketing\" only. Fails all three tests. (1) Object/metric differs: marketing_costs is a spending/expense line item (Cheesecake Rewards launch costs, marketing spend driving operating expenses up); social_media_marketing's lone quote is about competitors' social media use and differentiating social media messaging — a competitive risk factor, not a cost. (2) Scope differs: total marketing spend vs. the narrow social-media channel. (3) Mechanism differs: marketing_costs raises expenses and pressures margins; the social_media_marketing quote is a competitive-differentiation risk (rivals improving social media makes it harder to stand out), not a cost mechanism. Keep separate."
+  },
+  {
+   "idx": 376,
+   "a": "net_income_margin_guidance",
+   "b": "net_income_margin_surprise",
+   "verdict": "DIFFERENT",
+   "why": "Same object (net income margin) and same scope (CAKE company-level fiscal/quarterly margin), but DIFFERENT mechanism. Side A is forward-looking guidance: every quote is \"we expect / we anticipate / we would anticipate net income margin of approximately X%\" — a projection the company issues. Side B is the surprise/outcome: every quote is a realized result measured against the prior guide — \"of 3.5% was at the high end of the range\", \"exceeded the high end of the guidance\", \"exceeded the 3.5% guidance we provided\". Guidance (the forecast) vs surprise (actual-vs-forecast beat/miss) are distinct driver mechanisms — one is the issued forecast, the other is the realization gap. Mechanism test fails, so they must stay separate. (Note: side A's same_as_variant net_margin_guidance and side B's profit_margin_surprise reinforce that these are the guidance vs surprise families, not the same driver.)"
+  },
+  {
+   "idx": 390,
+   "a": "new_restaurant_margin",
+   "b": "new_restaurant_unit_volumes",
+   "verdict": "DIFFERENT",
+   "why": "These measure two different objects, so they fail test 1 (same metric). \"new_restaurant_margin\" tracks the PROFIT MARGIN of new restaurants ramping toward mature margins (\"The mature margin is one thing, but if you can bring the early stages of the restaurants up faster\"). \"new_restaurant_unit_volumes\" tracks SALES VOLUME / revenue per unit (\"practically at the same unit volumes as the rest of the North system\"). Margin (profitability %) and unit volume (sales dollars per store) are distinct metrics with distinct mechanisms — the second quote even separates them explicitly (\"at the same unit volumes... AND their margins are great\"), treating volume and margin as two different things. Token overlap on \"new/restaurant\" only reflects that both concern new-store ramp-up, not the same measured quantity. Keep separate."
+  },
+  {
+   "idx": 405,
+   "a": "new_unit_sales",
+   "b": "new_unit_sales_transfer",
+   "verdict": "DIFFERENT",
+   "why": "These share tokens but mean opposite things. (1) Object/metric differs: A = sales GENERATED BY new restaurants (\"great sales performance out of the new locations\"); B = sales SHIFTED AWAY from existing restaurants by new ones (\"pressure from some sales transfer from recently opened restaurants\") — i.e., cannibalization, confirmed by B's own variant new_unit_cannibalization. (2) Scope differs: A measures the new units' own revenue; B measures the negative impact on existing/comparable-store sales. (3) Mechanism differs: A is a growth/contribution driver (positive); B is a transfer/cannibalization headwind (negative pressure). Token overlap (new, unit, sales) is the only thing in common; the economics are inverse. Keep separate."
+  },
+  {
+   "idx": 406,
+   "a": "north_italia_average_check",
+   "b": "north_italia_average_unit_volume",
+   "verdict": "DIFFERENT",
+   "why": "Different object, scope, and mechanism — only the tokens \"north/italia/average\" overlap. (1) OBJECT: A = \"average check\" = dollars one customer spends per visit (~$34.60 lunch / $44.40 dinner). B = \"average unit volume / AUV\" = total annual sales of one restaurant (~$8.0M / $7.7M). Tens of dollars vs millions of dollars = not the same metric. (2) SCOPE: A is per-customer, per-single-transaction; B is per-restaurant-location, per-full-year. (3) MECHANISM: A is driven by menu price x items per order; B is driven by check size x transaction count x seats x operating days (AUV is a function that includes average check, not equal to it). Word \"average\" modifies different nouns in each. All three tests fail → keep separate."
+  },
+  {
+   "idx": 420,
+   "a": "north_italia_average_unit_volume",
+   "b": "north_italia_restaurant_count",
+   "verdict": "DIFFERENT",
+   "why": "Token overlap is only the brand name \"North Italia\"; the metrics are fundamentally different. A = average unit volume (sales DOLLARS per restaurant: \"$8.0 million\", \"annualized AUVs of $7.7 million\"). B = restaurant COUNT (\"North Italia Company-Owned Restaurants\", fiscal.ai kpi north_italia_company_owned_restaurants). Same brand scope, but FAIL test 1 (different object: dollars-per-unit vs number-of-units) and FAIL test 3 (different mechanism: revenue intensity vs unit count). Keep separate."
+  },
+  {
+   "idx": 422,
+   "a": "north_italia_average_unit_volume",
+   "b": "north_italia_same_store_sales",
+   "verdict": "DIFFERENT",
+   "why": "These are two distinct restaurant metrics for the same brand (North Italia), but they measure different objects. Fails test #1 (same object/metric).  Side A = Average Unit Volume (AUV): a DOLLAR LEVEL metric. Evidence: \"Average sales per mature location... were approximately $8.0 million for fiscal 2022\" and \"annualized AUVs of $7.7 million.\" It answers \"how much does one restaurant sell per year?\" (a per-store revenue level, e.g. $7.7M-$8.0M).  Side B = Same-Store / Comparable Sales: a PERCENT-CHANGE metric. Evidence (20+ refs): \"comparable sales increased approximately 8% from fiscal 2022\", \"Comparable restaurant sales vs. prior year 9%\", \"comparable sales decreased approximately 2%\". It answers \"how fast are existing-store sales growing/shrinking year-over-year?\" (a growth rate, e.g. +8%, -2%).  Object/metric differs: dollar level per unit (AUV) vs. year-over-year growth rate (comp sales). These are standard, separate restaurant-industry KPIs. A company can have a high AUV ($8M) while comp sales decline (-2%) in the same period — confirming they are not the same measurement. The token overlap (\"north\", \"italia\") only reflects the shared brand, not a shared metric. Keep separate."
+  },
+  {
+   "idx": 432,
+   "a": "north_italia_development",
+   "b": "north_italia_traffic",
+   "verdict": "DIFFERENT",
+   "why": "Both mention \"North Italia\" (a CAKE restaurant brand), but they track different objects/metrics with different mechanisms. (1) Object/metric: \"development\" is about the company's ability to develop, grow, and operate the brand as a concept — a strategic/operational risk factor from 10-K filings. \"traffic\" is a specific quarterly performance metric — guest visit counts (\"traffic was negative 4%/-6%\") discussed in earnings transcripts alongside price and mix. These are not the same metric. (2) Scope: development covers the whole brand build-out/growth strategy; traffic is one narrow same-store sales component. (3) Mechanism: development risk flows from execution of expansion and concept operation; traffic flows from consumer demand showing up at existing stores. Token overlap on \"north\"/\"italia\" only reflects the shared brand name, not the same driver. The traffic side's variant \"north_italia_restaurant_traffic\" confirms it is a traffic-specific driver, distinct from development. Keep separate."
+  },
+  {
+   "idx": 435,
+   "a": "north_italia_food_cost",
+   "b": "north_italia_restaurant_count",
+   "verdict": "DIFFERENT",
+   "why": "Only the brand \"North Italia\" overlaps (why token overlap flagged it). The metrics differ on object and mechanism: A = food cost (dollars spent on ingredients, a COGS/margin metric driven by operating efficiency); B = company-owned restaurant count (number of physical locations, a unit/footprint metric driven by expansion). Same scope (North Italia brand) but Test 1 (same object/metric) and Test 3 (same mechanism) both fail. Keep separate."
+  },
+  {
+   "idx": 436,
+   "a": "north_italia_food_cost",
+   "b": "north_italia_restaurant_level_margin",
+   "verdict": "DIFFERENT",
+   "why": "Same brand (North Italia, CAKE), but different object and mechanism. (A) food cost = the cost of ingredients/food, a single input expense line the company aims to lower. (B) restaurant-level margin (a.k.a. four-wall margin) = a profitability percentage after ALL store-level costs (food, labor, occupancy), driven here by menu price increases. Food cost is just one input to margin; lowering food cost can raise margin, but they are not the same metric, scope, or mechanism. Evidence confirms: A's quote is about deploying best practices to \"lower food costs\"; B's quotes report \"restaurant-level margin... 15%\" / \"four-wall margin... 13.3%... supported by a menu price increase.\" Object fails (cost line vs margin %) and mechanism fails (cost reduction vs pricing/total-cost leverage). Keep separate."
+  },
+  {
+   "idx": 441,
+   "a": "north_italia_menu_mix",
+   "b": "north_italia_restaurant_count",
+   "verdict": "DIFFERENT",
+   "why": "Same brand (North Italia, CAKE) but different metric and mechanism. (a) \"the north Italia mix was negative 2%\" is a sales/comp mix percentage that moves with menu/pricing/traffic. (b) \"North Italia Company-Owned Restaurants\" is a count of restaurant locations that moves with unit openings/closings. Object/metric differs (percent mix vs. location count) and mechanism differs, so SAME tests 1 and 3 both fail. Token overlap on \"north\"+\"italia\" is just the shared brand name, exactly the suggester's flagged reason. Keep separate."
+  },
+  {
+   "idx": 447,
+   "a": "north_italia_menu_pricing",
+   "b": "north_italia_restaurant_level_margin",
+   "verdict": "DIFFERENT",
+   "why": "Different object/metric and different mechanism, so they fail the SAME test. Side A (north_italia_menu_pricing) is about the price increases North Italia takes on its menu — the quotes discuss timing of a price increase (\"another price increase in October\") and whether they were \"behind on pricing.\" That is a pricing-action driver (an input/lever the company pulls). Side B (north_italia_restaurant_level_margin) is about the restaurant-level / four-wall profit margin — the quotes report margin figures (\"margin... improved to 13.3%\", \"restaurant-level margin... was 15%, a 250 basis point improvement\"). That is a profitability OUTCOME metric, not a pricing action. Although a menu price increase can SUPPORT margin (side B's Feb-2023 quote even says margin was \"supported by a menu price increase\"), that is a cause-and-effect relationship between two distinct things, not the same thing. The object differs (price level vs. profit margin %), and the mechanism differs (raising menu prices vs. measuring four-wall profitability). Scope overlaps (both North Italia, CAKE), but rules 1 and 3 fail, so verdict is DIFFERENT. Note side B already carries margin-synonym variants (four_wall_margin, restaurant_margin) confirming it is the margin cluster, distinct from a pricing driver."
+  },
+  {
+   "idx": 452,
+   "a": "north_italia_restaurant_count",
+   "b": "north_italia_restaurant_level_margin",
+   "verdict": "DIFFERENT",
+   "why": "These are two different metrics that merely share the words \"north italia restaurant.\"  Side A (north_italia_restaurant_count): counts physical locations. Evidence quote: \"North Italia Company-Owned Restaurants\" — a unit count of restaurants.  Side B (north_italia_restaurant_level_margin): a profitability percentage. Evidence quotes: \"restaurant-level margin for the adjusted mature North Italia locations was 15%\" and \"Forewall margin... improved to 13.3%\" — a profit margin (% of sales).  Three-part test: 1. Same object/metric? NO — a count of stores (a number of units) vs a margin (a profitability ratio). Completely different quantities and units (stores vs %). 2. Same scope? Both about North Italia, but A is the whole company-owned restaurant base while B is specifically \"adjusted mature North Italia locations.\" Different. 3. Same mechanism? NO — counting outlets vs measuring per-restaurant profit.  Token overlap (italia, north, restaurant) is coincidental brand+segment naming. A store count and a margin are never the same driver. Keep them separate."
+  },
+  {
+   "idx": 453,
+   "a": "north_italia_restaurant_count",
+   "b": "north_italia_same_store_sales",
+   "verdict": "DIFFERENT",
+   "why": "Token overlap reflects only the shared brand name \"North Italia,\" not a shared metric. Object differs: a = count of company-owned restaurant locations (unit/store count); b = comparable/same-store sales growth (a revenue-change percentage). Mechanism differs: a = footprint/expansion (number of open restaurants); b = year-over-year demand/traffic/pricing at existing stores. These are distinct KPIs — restaurant count can rise while same-store sales fall. Fails test 1 (same object/metric) and test 3 (same mechanism). Keep separate."
+  },
+  {
+   "idx": 456,
+   "a": "north_italia_restaurant_level_margin",
+   "b": "north_italia_same_store_sales",
+   "verdict": "DIFFERENT",
+   "why": "Token overlap is only the brand name (\"North Italia\"), not the metric. The metrics are different objects: A is restaurant-level / four-wall MARGIN, a profitability ratio (evidence: \"restaurant-level margin... was 15%\", \"Four-wall margin... improved to 13.3%\"). B is same-store / COMPARABLE SALES, a revenue-growth measure (evidence: \"comparable sales increased approximately 8%\", \"Comparable restaurant sales vs. prior year 9%\"). Scope matches (both North Italia brand), but object/metric differs (profit % vs sales growth %) and mechanism differs (cost/profitability efficiency vs sales trend vs prior year). Two of the three required conditions fail, so keep them separate."
+  },
+  {
+   "idx": 459,
+   "a": "north_italia_restaurant_level_margin",
+   "b": "restaurant_level_margin",
+   "verdict": "DIFFERENT",
+   "why": "Same metric type and same mechanism, but DIFFERENT SCOPE — so the SAME test fails on rule 2 (same scope).  Metric (rule 1): both measure restaurant-level / four-wall margin (a profitability % per restaurant). PASS. Mechanism (rule 3): both driven by menu price increases, sales leverage, inflation/cost control. PASS. Scope (rule 2): FAILS. The two drivers track different brand/concept units within CAKE:  - side a \"north_italia_restaurant_level_margin\" = margin for ONLY the North Italia concept. Every quote names North Italia explicitly: \"margin for the adjusted mature North Italia locations improved to 13.3%\", \"restaurant-level margin for the adjusted mature North Italia locations was 15%\". Its variants (north_italia_four_wall_margin, north_italia_margin, north_italia_restaurant_margin) all confirm North-Italia-only scope.  - side b \"restaurant_level_margin\" = the company-wide / Cheesecake-Factory-concept margin. Quotes repeatedly tie it to \"The Cheesecake Factory concept\" (\"increase restaurant-level margins at The Cheesecake Factory concept\", \"Cheesecake Factory restaurant level margins for the quarter improved... 18.4%\") plus portfolio-level objectives in the 10-Ks (\"longer-term restaurant-level margin objectives\", \"drive incremental sales while maintaining our restaurant level margins\").  CAKE operates multiple concepts (Cheesecake Factory, North Italia, Flower Child/FRC). North Italia margins (~13-15%) and Cheesecake Factory margins (~16-18.5%) are reported as distinct figures in the same calls. Merging them would collapse a concept-specific driver into a different concept's / company-wide driver — exactly the kind of over-merge to avoid. Note side b's variants do NOT include any North-Italia name, reinforcing they were kept separate intentionally.  Verdict: keep separate (DIFFERENT). The token overlap (level, margin, restaurant) is real but the brand qualifier \"north_italia\" marks a genuinely narrower scope."
+  },
+  {
+   "idx": 464,
+   "a": "north_italia_same_store_sales",
+   "b": "same_store_sales_guidance",
+   "verdict": "DIFFERENT",
+   "why": "Token overlap (sales/same/store) only — the meaning fails all three tests.  1. SAME OBJECT? NO. A is North Italia's comparable-sales metric (one specific restaurant brand). B is company-wide same-store-sales guidance, with no scoping to North Italia at all. Different object.  2. SAME SCOPE? NO. A = single brand (North Italia) within The Cheesecake Factory portfolio. B = consolidated/company-level comp. Brand-specific vs whole-company.  3. SAME MECHANISM? NO — and this is the decisive split. A is REPORTED ACTUALS: \"comparable sales increased approximately 8% from fiscal 2022\" (10-K/10-Q/8-K backward-looking results). B is FORWARD GUIDANCE / forward expectation: \"do you expect to be in that 1% to 2% range on comp in the first quarter?\", \"implied 2026 same-shore sales number?\", \"our comp assumptions\", \"the high end of our guide.\" Actual-results metric vs guidance is a different mechanism.  Merging these would repeat the v2-style over-merge error (collapsing a specific brand metric and a generic forward-guidance driver because words overlap). Keep separate."
+  },
+  {
+   "idx": 468,
+   "a": "off_premise_promotions",
+   "b": "off_premise_sales",
+   "verdict": "DIFFERENT",
+   "why": "Token overlap on \"off,premise\" is surface-level only. The two refer to different objects/metrics with different mechanisms.  off_premise_sales = the off-premise revenue CHANNEL / sales volume itself. Evidence is overwhelmingly about the size of that channel as a metric: \"off-premise sales totaled 22% of sales\", \"Sales through the off-premise channel comprised approximately 21% of our restaurant sales\". This is an outcome metric (a revenue stream / channel mix). Its accepted variants (off_premise_channel_mix, off_premise_sales_mix) confirm the object = the channel's share of sales.  off_premise_promotions = a MARKETING ACTION/lever applied to that channel, not the channel's sales. Its single evidence quote: \"we do the marketing and that type of offer is really off-premise driven. And we do that on occasion.\" The object here is a promotional offer/marketing tactic, an INPUT that could influence sales, not the sales metric itself.  Test results: 1. Same object/metric? NO — one is the sales channel/its share (an output metric); the other is a marketing promotion (an input lever). 2. Same scope? Partially overlapping channel, but different facet (volume of channel vs. a promo tactic targeting it). 3. Same mechanism? NO — measuring channel revenue share vs. running a marketing offer are different mechanisms.  Because object and mechanism both differ, these are distinct drivers. A promotion is a cause/lever; sales-channel mix is an effect/metric. Merging would collapse a marketing-action driver into a revenue-channel metric — wrong direction. Keep separate."
+  },
+  {
+   "idx": 493,
+   "a": "same_store_sales",
+   "b": "same_store_sales_guidance",
+   "verdict": "DIFFERENT",
+   "why": "Same underlying metric (comparable/same-store restaurant sales), but scope and mechanism differ. Side A's evidence is exclusively ACTUAL/REALIZED results and risk factors: \"Revenues increased 9.1%... due to an increase in comparable restaurant sales,\" \"Comparable restaurant sales increased 4.0% year-over-year,\" plus a KPI line and \"inability to grow comparable restaurant sales could materially adversely affect.\" Side B's evidence is exclusively FORWARD-LOOKING management guidance: \"Our comp assumptions remain consistent,\" \"do you expect to be in that 1% to 2% range on comp,\" \"implied 2026 same-shore sales number,\" \"wasn't at the high end of our guide.\" So the object is shared but: (2) scope fails — backward realized performance vs forward projected expectation; (3) mechanism fails — reporting achieved sales vs management forecast/assumption. A guidance/forecast driver moves the stock differently from the actual reported result (surprise vs realization), so they must stay separate. Keep distinct."
+  }
+ ]
+}

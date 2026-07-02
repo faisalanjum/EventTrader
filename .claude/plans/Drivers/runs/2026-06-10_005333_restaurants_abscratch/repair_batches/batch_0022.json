@@ -1,0 +1,564 @@
+{
+ "batch_id": 22,
+ "page": 0,
+ "pairs": [
+  {
+   "a": "bakery_vertical_integration",
+   "b": "flower_child_integration",
+   "reason": "token_overlap:integration",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "bakery_vertical_integration",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "keep in mind, too, that we benefit from the vertical integration of the Cheesecake Factory bakeries"
+      }
+     ]
+    },
+    {
+     "driver_name": "flower_child_integration",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "at Flower Child, we continue down the integration path this year"
+      }
+     ]
+    }
+   ],
+   "idx": 53
+  },
+  {
+   "a": "food_efficiency",
+   "b": "new_restaurant_food_cost_efficiency",
+   "reason": "token_overlap:efficiency,food",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "food_efficiency",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "they drove year-over-year improvements in food efficiencies, labor productivity, overtime, and wage management"
+      }
+     ]
+    },
+    {
+     "driver_name": "new_restaurant_food_cost_efficiency",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "our new restaurants have typically required a period of time after reaching normal traffic levels to achieve their targeted restaurant-level margins due to actual-to-theoretical food cost inefficiencies and labor productivity inefficiencies"
+      }
+     ]
+    }
+   ],
+   "idx": 272
+  },
+  {
+   "a": "guest_rewards_program",
+   "b": "rewards_program_costs",
+   "reason": "token_overlap:program,rewards",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "guest_rewards_program",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "cheesecake_rewards_program"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "We also are currently testing a guest rewards program pilot for potential national rollout in 2023."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-058507",
+       "date": "2023-05-10",
+       "quote": "augmenting our marketing programs including the anticipated nationwide launch of a guest rewards program"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "offset by launch costs related to our Rewards program (0.3%)"
+      }
+     ]
+    },
+    {
+     "driver_name": "rewards_program_costs",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "rewards_program_marketing_costs"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-088397",
+       "date": "2023-08-07",
+       "quote": "partially offset by launch cost related to our Rewards program (0.2%)"
+      }
+     ]
+    }
+   ],
+   "idx": 299
+  },
+  {
+   "a": "check_mix",
+   "b": "north_italia_average_check",
+   "reason": "token_overlap:check",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "check_mix",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "these new offerings have contributed to an improvement in check mix"
+      }
+     ]
+    },
+    {
+     "driver_name": "north_italia_average_check",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "The average check for each customer, including beverages and desserts, for fiscal 2024 averaged approximately $34.60 for lunch and approximately $44.40 for dinner."
+      }
+     ]
+    }
+   ],
+   "idx": 95
+  },
+  {
+   "a": "holiday_seasonality",
+   "b": "sales_seasonality",
+   "reason": "token_overlap:seasonality",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "holiday_seasonality",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "So certainly North Italia plays well in the holiday season and special occasion and drove really strong volumes at the mature level."
+      }
+     ]
+    },
+    {
+     "driver_name": "sales_seasonality",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "seasonality"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "the framework is essentially looking at where we were in the first quarter of more particularly around historical seasonality and applying that to the second quarter and the full year"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "really May was a little bit softer, maybe a couple of percent in terms of the timing and trying to figure out that seasonality of the new normal"
+      }
+     ]
+    }
+   ],
+   "idx": 306
+  },
+  {
+   "a": "construction_delays",
+   "b": "restaurant_construction_cost",
+   "reason": "token_overlap:construction",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "construction_delays",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-086819",
+       "date": "2023-08-02",
+       "quote": "the Company continues to experience some delays in opening dates due to construction challenges and permit approval delays"
+      }
+     ]
+    },
+    {
+     "driver_name": "restaurant_construction_cost",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "new_restaurant_construction_costs",
+      "restaurant_construction_costs"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "the unionization of construction companies could cause our construction and build-out costs for new restaurants to materially increase"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "the availability and/or cost of raw materials and labor used in construction"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "Total construction costs to build our restaurant premises average approximately $1,100 to $1,200 per interior square foot."
+      }
+     ]
+    }
+   ],
+   "idx": 115
+  },
+  {
+   "a": "labor_availability",
+   "b": "revolving_credit_availability",
+   "reason": "token_overlap:availability",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "labor_availability",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "While we continue to operate in a competitive labor environment, we believe our people practices contribute significantly to our ability to attract talent"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "Certainly the labor environment is promising today. And I think our brand reputation helps quite a bit with that and our ability to attract and retain employers."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "rising cost and scarcity of labor world-wide"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "If we are unable to attract and retain qualified personnel, including due to increasingly competitive labor markets, our restaurants and bakery operations could be short staffed"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "subject to volatility due to the relative availability of labor and distribution, weather, natural disasters, inventory levels and other supply and/or demand impacting events"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "While we continue to operate in a competitive labor environment, we believe our people practices contribute significantly to our ability to attract talent"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "While we continue to operate in a competitive labor environment, we believe our people practices contribute significantly to our ability to attract talent"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "rising cost and scarcity of labor world-wide"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "We have continued terrific applicant flow across the country"
+      }
+     ]
+    },
+    {
+     "driver_name": "revolving_credit_availability",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "revolving_credit_borrowings",
+      "revolving_credit_facility",
+      "revolving_credit_facility_availability"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-042573",
+       "date": "2025-04-30",
+       "quote": "$366.5 million of availability on its revolving credit facility with no outstanding balance"
+      }
+     ]
+    }
+   ],
+   "idx": 328
+  },
+  {
+   "a": "north_italia_food_cost",
+   "b": "north_italia_traffic",
+   "reason": "token_overlap:italia,north",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "north_italia_food_cost",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "so that's an area that cheesecake factory best practices and systems have been deployed over time to North Italia, and we see a really good opportunity to lower food costs over time"
+      }
+     ]
+    },
+    {
+     "driver_name": "north_italia_traffic",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "north_italia_restaurant_traffic"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "The north Italia mix was negative 2%. It's actually a slight improvement from where it was last year. Price is between 4.5% and 5%. Traffic was negative 4%."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "So traffic was negative 6%, prices about 4%, and the mix was negative 2% for the quarter."
+      }
+     ]
+    }
+   ],
+   "idx": 439
+  },
+  {
+   "a": "acquisition_integration",
+   "b": "flower_child_acquisition",
+   "reason": "token_overlap:acquisition",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "acquisition_integration",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "complexities associated with combining independent companies with separate businesses, customers, employees, cultures and systems"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "complexities associated with combining independent companies with separate businesses, customers, employees, cultures and systems"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "complexities associated with combining independent companies with separate businesses, customers, employees, cultures and systems"
+      }
+     ]
+    },
+    {
+     "driver_name": "flower_child_acquisition",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "We are on track with Flower Child, bringing it fully under our umbrella for this year."
+      }
+     ]
+    }
+   ],
+   "idx": 7
+  },
+  {
+   "a": "international_same_store_sales",
+   "b": "same_store_sales_guidance",
+   "reason": "token_overlap:sales,same,store",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "international_same_store_sales",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "They all comp positive in the first quarter in all those different geographies. So the brand continues to resonate everywhere around the world."
+      }
+     ]
+    },
+    {
+     "driver_name": "same_store_sales_guidance",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "Our comp assumptions remain consistent as our performance last year, a continuation of that"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "To confirm, do you expect to be in that 1% to 2% range on comp in the first quarter?"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "I think you referenced that Q2 2025 same-shore sales were roughly plus 1%. Were you saying that plus 1% is the implied 2026 same-shore sales number?"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "obviously we finished near the high end, but it wasn't at the high end of our guide"
+      }
+     ]
+    }
+   ],
+   "idx": 326
+  }
+ ]
+}

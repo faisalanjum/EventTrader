@@ -41,8 +41,10 @@ const sorted = [...IDX].sort((x, y) => x - y)
 const candByIdx = {}
 for (let s = 0; s < sorted.length; s += 3) {
   const grp = sorted.slice(s, s + 3)
+  // billing guard prepended 2026-06-12 (gap: this harness spawns many opus agents but had
+  // no step-0 guard — the only entry workflow without one); judging prompt bytes untouched.
   const shown = await agent(`Run with Bash:
-${PY} ${DIR}/workflows/repair_duplicates.py show ${RUN_DIR} --idx ${grp.join(',')}
+test -z "$ANTHROPIC_API_KEY" || { echo "BILLING-GUARD FAIL: ANTHROPIC_API_KEY present in env — refusing to run (subscription-only policy, CLAUDE.md)"; exit 9; } && ${PY} ${DIR}/workflows/repair_duplicates.py show ${RUN_DIR} --idx ${grp.join(',')}
 Return the printed JSON exactly as SHOW_SCHEMA.`, {schema:SHOW_SCHEMA, model:'opus', label:`ab-show:${grp.join(',')}`, phase:'Fetch'})
   if (!shown) throw new Error('ab show clerk died — fail-close.')
   if (h32(canon(shown.candidates)) !== shown.page_h32) throw new Error('ab show relay drift — fail-close.')

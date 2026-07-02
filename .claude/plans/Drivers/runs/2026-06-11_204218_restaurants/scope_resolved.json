@@ -1,0 +1,21 @@
+{
+ "scope_name": "Restaurants",
+ "slug": "restaurants",
+ "tickers": [
+  "BLMN",
+  "CAKE",
+  "CBRL",
+  "CMG",
+  "DRI",
+  "EAT",
+  "MCD",
+  "PZZA",
+  "QSR",
+  "SBUX",
+  "SHAK",
+  "TXRH",
+  "WING",
+  "YUM"
+ ],
+ "subset": false
+}

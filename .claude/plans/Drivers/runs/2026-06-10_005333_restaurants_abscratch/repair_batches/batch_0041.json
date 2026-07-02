@@ -1,0 +1,582 @@
+{
+ "batch_id": 41,
+ "page": 0,
+ "pairs": [
+  {
+   "a": "new_restaurant_food_cost_efficiency",
+   "b": "supply_chain_efficiency",
+   "reason": "token_overlap:efficiency",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "new_restaurant_food_cost_efficiency",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "our new restaurants have typically required a period of time after reaching normal traffic levels to achieve their targeted restaurant-level margins due to actual-to-theoretical food cost inefficiencies and labor productivity inefficiencies"
+      }
+     ]
+    },
+    {
+     "driver_name": "supply_chain_efficiency",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "Flower Child's purchasing is now integrated into the broader Cheesecake supply chain operation to take advantage of our scale and purchasing capabilities"
+      }
+     ]
+    }
+   ],
+   "idx": 389
+  },
+  {
+   "a": "branded_retail_demand",
+   "b": "restaurant_industry_demand",
+   "reason": "token_overlap:demand",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "branded_retail_demand",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "So just a little bit of pressure on the, you know, branded retail. I mean, I think you've seen that from other big CPG companies"
+      }
+     ]
+    },
+    {
+     "driver_name": "restaurant_industry_demand",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "restaurant_industry_sales"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-103205",
+       "date": "2025-10-28",
+       "quote": "While the restaurant industry is navigating a softer environment, we remain confident in our ability to manage through it"
+      }
+     ]
+    }
+   ],
+   "idx": 64
+  },
+  {
+   "a": "bakery_vertical_integration",
+   "b": "supply_chain_integration",
+   "reason": "token_overlap:integration",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "bakery_vertical_integration",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "keep in mind, too, that we benefit from the vertical integration of the Cheesecake Factory bakeries"
+      }
+     ]
+    },
+    {
+     "driver_name": "supply_chain_integration",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "Made some really strong improvements there on supply chain integration as well."
+      }
+     ]
+    }
+   ],
+   "idx": 54
+  },
+  {
+   "a": "gift_card_breakage",
+   "b": "gift_card_sales",
+   "reason": "token_overlap:card,gift",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "gift_card_breakage",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "As a result, in fiscal 2025, we recognized $17.3 million of additional gift card breakage."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-26-017090",
+       "date": "2026-02-18",
+       "quote": "Fourth quarter fiscal 2025 includes $17.3 million of gift card breakage revenue as a result of a change in historical redemption patterns."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "Total revenues were $961.6 million, inclusive of $17.3 million of gift card breakage revenue as a result of a change in historical redemption patterns"
+      }
+     ]
+    },
+    {
+     "driver_name": "gift_card_sales",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "we work with several premiere third-party gift card distributors, contributing to our brand awareness and gift card sales"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "we work with several premiere third-party gift card distributors, contributing to our brand awareness and gift card sales"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "we work with several premiere third-party gift card distributors, contributing to our brand awareness and gift card sales"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "contributing to our brand awareness and gift card sales, as well as our consumer packaged goods licensees on co-branded marketing campaigns"
+      }
+     ]
+    }
+   ],
+   "idx": 285
+  },
+  {
+   "a": "north_italia_restaurant_level_margin",
+   "b": "north_italia_segment_margin",
+   "reason": "token_overlap:italia,margin,north",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "north_italia_restaurant_level_margin",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "north_italia_four_wall_margin",
+      "north_italia_margin",
+      "north_italia_restaurant_margin"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "Forewall margin for the adjusted mature North Italia locations improved to 13.3% for the fourth quarter, supported by a menu price increase implemented mid-fourth quarter."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "restaurant-level margin for the adjusted mature North Italia locations was 15%, a 250 basis point improvement from the prior year"
+      }
+     ]
+    },
+    {
+     "driver_name": "north_italia_segment_margin",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "And then the North Italia segment margins, did you say what the mature units were within that?"
+      }
+     ]
+    }
+   ],
+   "idx": 457
+  },
+  {
+   "a": "construction_cost",
+   "b": "restaurant_construction_cost",
+   "reason": "token_overlap:construction,cost",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "construction_cost",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "construction_costs"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "the availability and/or cost of raw materials and labor used in construction"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "we're not really anticipating any significant tariff impacts to construction costs, which have, by the way, come back really nicely in line with our long-term expectations following the COVID inflation"
+      }
+     ]
+    },
+    {
+     "driver_name": "restaurant_construction_cost",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "new_restaurant_construction_costs",
+      "restaurant_construction_costs"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "the unionization of construction companies could cause our construction and build-out costs for new restaurants to materially increase"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "the availability and/or cost of raw materials and labor used in construction"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "Total construction costs to build our restaurant premises average approximately $1,100 to $1,200 per interior square foot."
+      }
+     ]
+    }
+   ],
+   "idx": 113
+  },
+  {
+   "a": "covid_restrictions",
+   "b": "dining_capacity_restrictions",
+   "reason": "token_overlap:restrictions",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "covid_restrictions",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "covid_dining_restrictions"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "We have experienced significant disruptions to our business as federal, state and local restrictions have fluctuated over time to mitigate the spread of the COVID-19 virus"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-058468",
+       "date": "2023-05-10",
+       "quote": "the COVID-19 pandemic and related containment measures, including the potential for quarantines or restriction on in-person dining"
+      }
+     ]
+    },
+    {
+     "driver_name": "dining_capacity_restrictions",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-058507",
+       "date": "2023-05-10",
+       "quote": "could lead to further government mandates, including but not limited to capacity restrictions, shifts in consumer behavior, wage inflation, staffing challenges"
+      }
+     ]
+    }
+   ],
+   "idx": 150
+  },
+  {
+   "a": "casual_dining_market_share",
+   "b": "market_share",
+   "reason": "token_overlap:market,share",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "casual_dining_market_share",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-026056",
+       "date": "2024-02-21",
+       "quote": "outperformed the broader casual dining industry in the fourth quarter, demonstrating the strength and resilience of our namesake brand and our ability to capture market share"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-112254",
+       "date": "2024-10-29",
+       "quote": "We are capturing market share as evidenced by the continued strong outperformance in comparable sales and traffic at The Cheesecake Factory restaurants versus the broader casual dining industry."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-015185",
+       "date": "2025-02-19",
+       "quote": "We continued to capture market share, as demonstrated by the ongoing outperformance in comparable sales and traffic at The Cheesecake Factory restaurants versus the broader casual dining industry."
+      }
+     ]
+    },
+    {
+     "driver_name": "market_share",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "which I think allows us, again, to take market share because the operators can do such a good job"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "comparable sales and traffic meaningfully exceeding the black box casual dining index by 310 and 380 basis points respectively"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-07-29T17.00",
+       "date": "2025-07-29",
+       "quote": "we believe we can take market share and have been taking market share because of that sustained quality"
+      }
+     ]
+    }
+   ],
+   "idx": 93
+  },
+  {
+   "a": "consumer_disposable_income",
+   "b": "high_income_consumer_spending",
+   "reason": "token_overlap:consumer,income",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "consumer_disposable_income",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "changes in global economic conditions (such as currency valuation, disposable income, unemployment levels and increases in the prices of products and services and labor)"
+      }
+     ]
+    },
+    {
+     "driver_name": "high_income_consumer_spending",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "top end of consumers really does feel pressure. We're likely to actually benefit some from that because they typically move down off of the steakhouses and the expensive independents"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "Whereas our cohort, the income, it depends on the slowdown, but incomes aren't slowing down. income of 100 plus K, those jobs are going away. There's not mass layoffs."
+      }
+     ]
+    }
+   ],
+   "idx": 129
+  },
+  {
+   "a": "group_medical_costs",
+   "b": "medical_insurance_costs",
+   "reason": "token_overlap:costs,medical",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "group_medical_costs",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "group_medical_expenses",
+      "group_medical_insurance_costs",
+      "health_insurance_cost"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "partially offset by higher group medical cost due to larger claim activity (0.3%)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001742",
+       "date": "2024-11-04",
+       "quote": "partially offset by higher group medical costs due to large claim activity (0.5%)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-07-29T17.00",
+       "date": "2025-07-29",
+       "quote": "partially offset by higher group medical costs"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001073",
+       "date": "2025-05-05",
+       "quote": "higher group medical cost due to larger claim activity (0.2%)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-25-105631",
+       "date": "2025-11-03",
+       "quote": "partially offset by higher group medical costs due to larger claim activity (0.3%)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001564",
+       "date": "2025-08-04",
+       "quote": "partially offset by higher group medical costs due to larger claim activity (0.5%)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "there's about a 50 basis point impact on just a comparison of group medical"
+      }
+     ]
+    },
+    {
+     "driver_name": "medical_insurance_costs",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "medical_insurance_expense"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "Labor decreased 130 basis points, predominantly driven by pricing leverage and slightly lower medical insurance expenses."
+      }
+     ]
+    }
+   ],
+   "idx": 294
+  }
+ ]
+}

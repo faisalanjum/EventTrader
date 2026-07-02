@@ -1,0 +1,780 @@
+{
+ "batch_id": 51,
+ "page": 0,
+ "pairs": [
+  {
+   "a": "north_italia_restaurant_count",
+   "b": "north_italia_restaurant_level_margin",
+   "reason": "token_overlap:italia,north,restaurant",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "north_italia_restaurant_count",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "fiscal.ai-kpi",
+       "source_id": "fiscal_ai:CAKE:north_italia_company_owned_restaurants",
+       "date": "",
+       "quote": "North Italia Company-Owned Restaurants"
+      }
+     ]
+    },
+    {
+     "driver_name": "north_italia_restaurant_level_margin",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "north_italia_four_wall_margin",
+      "north_italia_margin",
+      "north_italia_restaurant_margin"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "Forewall margin for the adjusted mature North Italia locations improved to 13.3% for the fourth quarter, supported by a menu price increase implemented mid-fourth quarter."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "restaurant-level margin for the adjusted mature North Italia locations was 15%, a 250 basis point improvement from the prior year"
+      }
+     ]
+    }
+   ],
+   "idx": 452
+  },
+  {
+   "a": "party_size",
+   "b": "party_size_mix",
+   "reason": "token_overlap:party,size",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "party_size",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "as we continue to see normalization of our party size"
+      }
+     ]
+    },
+    {
+     "driver_name": "party_size_mix",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "a party of six or eight, the per capita spend is about 20% less than a party of two. And so that is just rebalancing"
+      }
+     ]
+    }
+   ],
+   "idx": 475
+  },
+  {
+   "a": "bakery_product_recall",
+   "b": "sustainable_product_supply",
+   "reason": "token_overlap:product",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "bakery_product_recall",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "If any of our bakery products becomes subject to a product recall or market withdrawal, whether voluntary or involuntary, our costs to conduct such recall or market withdrawal could be significant"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "If any of our bakery products becomes subject to a product recall or market withdrawal, whether voluntary or involuntary, our costs to conduct such recall or market withdrawal could be significant"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "If any of our bakery products becomes subject to a product recall or market withdrawal, whether voluntary or involuntary, our costs to conduct such recall or market withdrawal could be significant"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "If any of our bakery products becomes subject to a product recall or market withdrawal, whether voluntary or involuntary, our costs to conduct such recall or market withdrawal could be significant"
+      }
+     ]
+    },
+    {
+     "driver_name": "sustainable_product_supply",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "sustainable_product_cost"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "during fiscal 2023, we experienced supply shortages with respect to certain sustainable products, which largely resulted from challenges related to a growing framework of laws mandating the use of sustainable products"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "during fiscal 2023 and 2024, we experienced supply shortages with respect to certain sustainable products, which largely resulted from challenges related to a growing framework of laws mandating the use of sustainable products"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "There is currently a smaller market for certain sustainable products, and any condition affecting the demand for or supply of these products may cause significant cost and supply volatility"
+      }
+     ]
+    }
+   ],
+   "idx": 45
+  },
+  {
+   "a": "flower_child_same_store_sales",
+   "b": "flower_child_unit_count",
+   "reason": "token_overlap:child,flower",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "flower_child_same_store_sales",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Flower Child comparable sales increased approximately 6% from fiscal 2023."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001073",
+       "date": "2025-05-05",
+       "quote": "Flower Child comparable sales increased approximately 5% from the first quarter of fiscal 2024."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "Q1 comparable sales for Flower Child were the highest of any of our core concepts, and sales demand and the newer locations continue to trend well"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "the Fire Child comps continue to be the strongest in our system, running mid-single digits"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "Flower Child comparable sales increased approximately 5% from fiscal 2024."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-25-105631",
+       "date": "2025-11-03",
+       "quote": "Flower Child comparable sales increased approximately 7% from the third quarter of fiscal 2024."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001564",
+       "date": "2025-08-04",
+       "quote": "Flower Child comparable sales increased approximately 4% from the second quarter of fiscal 2024"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "Flower Child's comparable sales increased by 11%, significantly outpacing the Black Box Fast Casual Dining Index"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "Flower Child continues on a strong upward trajectory. with comparable sales increasing by 5%, significantly outperforming the Black Box Fast Casual Dining Index"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-07-29T17.00",
+       "date": "2025-07-29",
+       "quote": "Flower Child continues on a strong upward trajectory, with second quarter comparable sales increasing 4%, significantly outperforming the black box fast casual dining index"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "third quarter comparable sales increasing 7%, significantly outpacing the fast casual segment"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "Flower Child continued to perform exceptionally well and meaningfully outpaced the Fast Casual segment. Fourth quarter comparable sales increased 4%, for a two-year comp sales increase of 15%."
+      }
+     ]
+    },
+    {
+     "driver_name": "flower_child_unit_count",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "flower_child_unit_development"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Currently, we operate 38 Flower Child locations and believe there is potential for approximately 700 domestic locations over time, which supports our plan for approximately 20% average annual unit growth for this concept."
+      }
+     ]
+    }
+   ],
+   "idx": 261
+  },
+  {
+   "a": "dining_demand",
+   "b": "landlord_demand",
+   "reason": "token_overlap:demand",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "dining_demand",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "consumer_demand",
+      "consumer_dining_demand"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-042573",
+       "date": "2025-04-30",
+       "quote": "underscoring the consistent consumer demand for the high-quality, differentiated dining experiences we provide"
+      }
+     ]
+    },
+    {
+     "driver_name": "landlord_demand",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "the demand for those concepts from landlords remains very, very high"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "our portfolio of brands continue to attract landlords that want experiential dining in their projects"
+      }
+     ]
+    }
+   ],
+   "idx": 185
+  },
+  {
+   "a": "daypart_marketing",
+   "b": "social_media_marketing",
+   "reason": "token_overlap:marketing",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "daypart_marketing",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-07-29T17.00",
+       "date": "2025-07-29",
+       "quote": "having the data really makes it more impactful for us to be able to do the right type of targeted messaging to drive specific day part"
+      }
+     ]
+    },
+    {
+     "driver_name": "social_media_marketing",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "many of our competitors have expanded and improved their use of social media, making it more difficult for us to differentiate our social media messaging"
+      }
+     ]
+    }
+   ],
+   "idx": 170
+  },
+  {
+   "a": "restaurant_industry_traffic",
+   "b": "restaurant_traffic",
+   "reason": "token_overlap:restaurant,traffic",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "restaurant_industry_traffic",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "And I think that was reflected, really, if you look at BlackBox and NAPTRAC. I mean, we tend to outperform, but we tend to follow trends."
+      }
+     ]
+    },
+    {
+     "driver_name": "restaurant_traffic",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "Any factor affecting consumer discretionary spending may influence customer traffic in our restaurants and average check amount, thus potentially having a material impact on our financial performance."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-058507",
+       "date": "2023-05-10",
+       "quote": "increased customer traffic of 1.0%"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-026056",
+       "date": "2024-02-21",
+       "quote": "Comparable sales and traffic at The Cheesecake Factory restaurants outperformed the broader casual dining industry in the fourth quarter"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "Pricing was 8.5%. Traffic was a positive 0.3%, and the mix was a negative 4.8%."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "obviously really strong trans quarter to date. What's your sense of what's driving the underlying acceleration broadly?"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "Adverse weather conditions, natural disasters and public health emergencies can impact customer traffic"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "Any factor affecting consumer discretionary spending may influence customer traffic in our restaurants and average check amount, thus potentially having a material impact on our financial performance."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "could reduce customer traffic to our restaurants, disrupt our food supply chain or cause us to be the target of litigation"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "temporary shifts in consumer behavior, such as changes in customer traffic or the mix between on-premise and off-premise channels"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "our philosophy is to use price increases to help offset key operating cost increases in a manner that balances supporting both our margin objectives and customer traffic levels"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Changes in customer traffic and average check amount may be impacted by a variety of factors"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "grand opening publicity and other customer awareness activities that generate higher than usual customer traffic, particularly in new markets"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "our philosophy is to use price increases to help offset key operating cost increases in a manner that balances supporting both our margin objectives and customer traffic levels"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-000636",
+       "date": "2024-05-08",
+       "quote": "primarily driven by decreased customer traffic of 1.5% partially offset by an increase in average check of 0.9%"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001151",
+       "date": "2024-08-05",
+       "quote": "partially offset by decreased customer traffic of 0.2%"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001742",
+       "date": "2024-11-04",
+       "quote": "partially offset by decreased customer traffic of 0.8%"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001073",
+       "date": "2025-05-05",
+       "quote": "partially offset by decreased customer traffic of 1.2%"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-058691",
+       "date": "2024-05-08",
+       "quote": "The Cheesecake Factory restaurants comparable sales and traffic once again meaningfully outperformed the industry"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-112254",
+       "date": "2024-10-29",
+       "quote": "continued strong outperformance in comparable sales and traffic at The Cheesecake Factory restaurants versus the broader casual dining industry"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-015185",
+       "date": "2025-02-19",
+       "quote": "ongoing outperformance in comparable sales and traffic at The Cheesecake Factory restaurants versus the broader casual dining industry"
+      }
+     ]
+    }
+   ],
+   "idx": 482
+  },
+  {
+   "a": "lease_termination",
+   "b": "restaurant_lease_renewal",
+   "reason": "token_overlap:lease",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "lease_termination",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "lease_termination_costs",
+      "lease_terminations"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001151",
+       "date": "2024-08-05",
+       "quote": "lease termination costs for one The Cheesecake Factory and one Flower Child location"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "we recorded pre-tax net income of $2.5 million primarily related to lease terminations"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001742",
+       "date": "2024-11-04",
+       "quote": "we recorded impairment of assets and lease terminations income of $3.5 million primarily related to lease termination income"
+      }
+     ]
+    },
+    {
+     "driver_name": "restaurant_lease_renewal",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "restaurant_lease_cost",
+      "restaurant_lease_costs",
+      "restaurant_lease_renewal_cost"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "We may incur additional costs if we are unable to renew our restaurant leases on similar terms and conditions, or at all, or to relocate our restaurants in certain trade areas"
+      }
+     ]
+    }
+   ],
+   "idx": 343
+  },
+  {
+   "a": "loyalty_program",
+   "b": "loyalty_program_enrollment",
+   "reason": "token_overlap:loyalty,program",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "loyalty_program",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "rewards_program"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "We launched our Cheesecake Rewards ® program nationally in mid-2023 with the objective to leverage data analytics and insights to engage more effectively with our guests and drive incremental sales while maintaining our restaurant level margins"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "Then we would have unpublished offers that will be given throughout the year, and those are really designed to drive, as you mentioned, those incremental visits."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "Member acquisition continues to exceed our expectations, and guest feedback remains overwhelmingly positive"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "augmenting our marketing programs, including our Cheesecake Rewards ® program"
+      }
+     ]
+    },
+    {
+     "driver_name": "loyalty_program_enrollment",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "loyalty_program_membership",
+      "rewards_member_acquisition",
+      "rewards_program_enrollment",
+      "rewards_program_membership"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "early demand continues to exceed our internal expectations and member satisfaction scores are over-indexing"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "Our increased membership enrollment is very, very strong. People are very engaged in the program."
+      }
+     ]
+    }
+   ],
+   "idx": 353
+  },
+  {
+   "a": "long_lived_asset_impairment",
+   "b": "long_term_debt",
+   "reason": "token_overlap:long",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "long_lived_asset_impairment",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "restaurant_asset_impairment",
+      "restaurant_impairment_charge"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "During fiscal 2023, we recorded impairment of assets and lease terminations expense of $29.5 million primarily related to the impairment of long-lived assets"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "we recorded impairment of assets and lease terminations expense of $31.4 million primarily related to the impairment of long-lived assets"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "During fiscal 2025, we recorded impairment of assets and lease terminations expense of $23.0 million primarily related to the impairment of long-lived assets"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "In fiscal 2025, we recorded $23.0 million of expense primarily related to the impairment of long-lived assets for one North Italia, one Grand Lux Cafe and four Other FRC locations"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "During fiscal 2024, we recorded impairment of assets and lease terminations expense of $13.6 million primarily related to the impairment of long-lived assets"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "In fiscal 2024, we recorded impairment of assets and lease termination expenses of $13.6 million primarily related to impairment of long-lived assets for one The Cheesecake Factory (previously partially impaired) and six Other FRC locations"
+      }
+     ]
+    },
+    {
+     "driver_name": "long_term_debt",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-024317",
+       "date": "2023-02-22",
+       "quote": "Total principal amount of debt outstanding was $475 million, including $345 million in principal amount of 0.375% convertible senior notes due 2026"
+      }
+     ]
+    }
+   ],
+   "idx": 351
+  }
+ ]
+}

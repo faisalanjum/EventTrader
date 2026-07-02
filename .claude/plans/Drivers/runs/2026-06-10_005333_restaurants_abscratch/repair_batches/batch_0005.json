@@ -1,0 +1,646 @@
+{
+ "batch_id": 5,
+ "page": 0,
+ "pairs": [
+  {
+   "a": "flower_child_average_unit_volume",
+   "b": "flower_child_rewards_program",
+   "reason": "token_overlap:child,flower",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "flower_child_average_unit_volume",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "Q1 AUVs, the run rate of those are $4.4 million average unit volume"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "I wanted to dig in a little more on the flower child. What would be the potential average volumes for a fully mature box"
+      }
+     ]
+    },
+    {
+     "driver_name": "flower_child_rewards_program",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-07-29T17.00",
+       "date": "2025-07-29",
+       "quote": "flower child is much more of a traditional rewards program it's an app based program that has points"
+      }
+     ]
+    }
+   ],
+   "idx": 222
+  },
+  {
+   "a": "consolidated_revenue",
+   "b": "international_royalty_revenue",
+   "reason": "token_overlap:revenue",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "consolidated_revenue",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-058468",
+       "date": "2023-05-10",
+       "quote": "Consolidated revenue increased 9.1% over the prior year period"
+      }
+     ]
+    },
+    {
+     "driver_name": "international_royalty_revenue",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "international_licensee_royalties",
+      "international_licensing_royalties"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "leveraging our bakery operations, international and consumer packaged goods royalty revenue streams"
+      }
+     ]
+    }
+   ],
+   "idx": 107
+  },
+  {
+   "a": "commodity_cost",
+   "b": "commodity_hedging",
+   "reason": "token_overlap:commodity",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "commodity_cost",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "commodity_cost_inflation",
+      "commodity_costs",
+      "commodity_inflation",
+      "commodity_prices"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "impediments to availability of staff and supplies and increased commodity costs, sometimes for prolonged periods of time"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "our operating results were impacted by geopolitical and macroeconomic events, causing supply chain challenges and significantly increased commodity and wage inflation"
+      }
+     ]
+    },
+    {
+     "driver_name": "commodity_hedging",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "periodically evaluate hedging vehicles, such as direct financial instruments, to assist us in managing risk and variability associated with such commodities"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "periodically evaluate hedging vehicles, such as direct financial instruments, to assist us in managing risk and variability associated with such commodities. As of the end of fiscal 2023, we had no hedging contracts in place."
+      }
+     ]
+    }
+   ],
+   "idx": 98
+  },
+  {
+   "a": "capex",
+   "b": "new_restaurant_capex",
+   "reason": "token_overlap:capex",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "capex",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "capital_expenditure"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "we continue to anticipate approximately $190 million to $200 million in cash capex to support this year's and some of next year's unit development"
+      }
+     ]
+    },
+    {
+     "driver_name": "new_restaurant_capex",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "Capital expenditures for new restaurants, including locations under development, were $61.6 million and $36.9 million for the first nine months of fiscal 2023 and 2022, respectively."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001742",
+       "date": "2024-11-04",
+       "quote": "Capital expenditures for new restaurants, including locations under development, were $76.1 million and $61.6 million for the first nine months of fiscal 2024 and 2023, respectively."
+      }
+     ]
+    }
+   ],
+   "idx": 71
+  },
+  {
+   "a": "new_unit_returns",
+   "b": "new_unit_sales_transfer",
+   "reason": "token_overlap:new,unit",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "new_unit_returns",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "new_restaurant_returns"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "we wouldn't be moving forward with the 20 to 22 locations if we didn't feel we'd be hitting the returns"
+      }
+     ]
+    },
+    {
+     "driver_name": "new_unit_sales_transfer",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "new_restaurant_sales_transfer",
+      "new_unit_cannibalization"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "continued pressure from some sales transfer from recently opened restaurants"
+      }
+     ]
+    }
+   ],
+   "idx": 404
+  },
+  {
+   "a": "minimum_wage",
+   "b": "wage_hour_litigation",
+   "reason": "token_overlap:wage",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "minimum_wage",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "minimum_wage_rate",
+      "state_wage_mandates"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "We believe it is becoming increasing likely that the United States federal government will significantly increase the federal minimum wage and tip credit wage (or eliminate the tip credit wage)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-058507",
+       "date": "2023-05-10",
+       "quote": "increases in minimum wages and benefit costs"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-024317",
+       "date": "2023-02-22",
+       "quote": "increases in minimum wages and benefit costs"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "You come into the year and you've caught up from the past year, but on January 1st or whatever that time is, minimum wage sets in, and you do have some of your new contracts for commodities rolling over."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-058468",
+       "date": "2023-05-10",
+       "quote": "increases in minimum wages and benefit costs"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "Certain state and localities have significantly increased their minimum wage and/or tip credit wage (or have eliminated the tip credit wage), and require significantly more mandated benefits"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "Certain state and localities have significantly increased their minimum wage and/or tip credit wage (or have eliminated the tip credit wage), and require significantly more mandated benefits"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "including such matters as minimum wages, breaks, scheduling, exempt classifications, equal pay, overtime, tip credits"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Increases in minimum wages (including increased minimum wages in industries with which we compete for talent) and minimum tip credit wages"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "laws and regulations govern our operations as they relate to our staff members, including such matters as minimum wages, breaks, scheduling, exempt classifications, equal pay, overtime, tip credits"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-088397",
+       "date": "2023-08-07",
+       "quote": "changes in laws impacting our business, increases in minimum wages and benefit costs"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-25-105631",
+       "date": "2025-11-03",
+       "quote": "increases in minimum wages and benefit costs"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-000636",
+       "date": "2024-05-08",
+       "quote": "increases in minimum wages and benefit costs"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001151",
+       "date": "2024-08-05",
+       "quote": "increases in minimum wages and benefit costs"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001073",
+       "date": "2025-05-05",
+       "quote": "increases in minimum wages and benefit costs"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-086819",
+       "date": "2023-08-02",
+       "quote": "increases in minimum wages and benefit costs"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-113409",
+       "date": "2023-11-01",
+       "quote": "increases in minimum wages and benefit costs"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-026056",
+       "date": "2024-02-21",
+       "quote": "increases in minimum wages and benefit costs"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-058691",
+       "date": "2024-05-08",
+       "quote": "increases in minimum wages and benefit costs"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-084383",
+       "date": "2024-07-31",
+       "quote": "changes in unemployment rates; increases in minimum wages and benefit costs"
+      }
+     ]
+    },
+    {
+     "driver_name": "wage_hour_litigation",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "wage_and_hour_litigation"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "In recent years, we have experienced an increase in wage and hour litigation, particularly in California."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "In recent years, we have experienced an increase in wage and hour litigation"
+      }
+     ]
+    }
+   ],
+   "idx": 373
+  },
+  {
+   "a": "consumer_discretionary_income",
+   "b": "consumer_discretionary_spending",
+   "reason": "token_overlap:consumer,discretionary",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "consumer_discretionary_income",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "Lower discretionary income has been fewer jobs created and consumer sentiment is at a low point"
+      }
+     ]
+    },
+    {
+     "driver_name": "consumer_discretionary_spending",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "The impact global and domestic economic conditions have on consumer discretionary spending could materially adversely affect our financial performance."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "The impact global and domestic economic conditions have on consumer discretionary spending and our costs of operations could materially adversely affect our financial performance."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "The impact global and domestic economic conditions have on consumer discretionary spending and our costs of operations could materially adversely affect our financial performance."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Any factor affecting consumer discretionary spending may influence customer traffic in our restaurants and average check amount"
+      }
+     ]
+    }
+   ],
+   "idx": 122
+  },
+  {
+   "a": "gift_card_breakage",
+   "b": "gift_card_redemptions",
+   "reason": "token_overlap:card,gift",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "gift_card_breakage",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "As a result, in fiscal 2025, we recognized $17.3 million of additional gift card breakage."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-26-017090",
+       "date": "2026-02-18",
+       "quote": "Fourth quarter fiscal 2025 includes $17.3 million of gift card breakage revenue as a result of a change in historical redemption patterns."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "Total revenues were $961.6 million, inclusive of $17.3 million of gift card breakage revenue as a result of a change in historical redemption patterns"
+      }
+     ]
+    },
+    {
+     "driver_name": "gift_card_redemptions",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "higher gift card redemptions and lower accrued incentive compensation"
+      }
+     ]
+    }
+   ],
+   "idx": 284
+  },
+  {
+   "a": "sales_to_investment_ratio",
+   "b": "to_go_packaging_costs",
+   "reason": "token_overlap:to",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "sales_to_investment_ratio",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "any comments on the sales to investment ratio today and how you can improve will be helpful"
+      }
+     ]
+    },
+    {
+     "driver_name": "to_go_packaging_costs",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "I think you mentioned utilities, and I think you mentioned to-go item packaging"
+      }
+     ]
+    }
+   ],
+   "idx": 492
+  },
+  {
+   "a": "north_italia_menu_pricing",
+   "b": "north_italia_restaurant_count",
+   "reason": "token_overlap:italia,north",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "north_italia_menu_pricing",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "we have another price increase in October, right at the end of October, for North Italia"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "And just North Italia, was your comment that the pricing you just took, you think that, were you behind on pricing there?"
+      }
+     ]
+    },
+    {
+     "driver_name": "north_italia_restaurant_count",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "fiscal.ai-kpi",
+       "source_id": "fiscal_ai:CAKE:north_italia_company_owned_restaurants",
+       "date": "",
+       "quote": "North Italia Company-Owned Restaurants"
+      }
+     ]
+    }
+   ],
+   "idx": 446
+  }
+ ]
+}

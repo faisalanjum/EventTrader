@@ -1,0 +1,837 @@
+{
+ "batch_id": 39,
+ "page": 0,
+ "pairs": [
+  {
+   "a": "lease_termination",
+   "b": "restaurant_lease_terms",
+   "reason": "token_overlap:lease",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "lease_termination",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "lease_termination_costs",
+      "lease_terminations"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001151",
+       "date": "2024-08-05",
+       "quote": "lease termination costs for one The Cheesecake Factory and one Flower Child location"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "we recorded pre-tax net income of $2.5 million primarily related to lease terminations"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001742",
+       "date": "2024-11-04",
+       "quote": "we recorded impairment of assets and lease terminations income of $3.5 million primarily related to lease termination income"
+      }
+     ]
+    },
+    {
+     "driver_name": "restaurant_lease_terms",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "generally the leasing environment is similar to what we may have expected historically, though, in terms of terms"
+      }
+     ]
+    }
+   ],
+   "idx": 344
+  },
+  {
+   "a": "gift_card_redemptions",
+   "b": "gift_card_sales",
+   "reason": "token_overlap:card,gift",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "gift_card_redemptions",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "higher gift card redemptions and lower accrued incentive compensation"
+      }
+     ]
+    },
+    {
+     "driver_name": "gift_card_sales",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "we work with several premiere third-party gift card distributors, contributing to our brand awareness and gift card sales"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "we work with several premiere third-party gift card distributors, contributing to our brand awareness and gift card sales"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "we work with several premiere third-party gift card distributors, contributing to our brand awareness and gift card sales"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "contributing to our brand awareness and gift card sales, as well as our consumer packaged goods licensees on co-branded marketing campaigns"
+      }
+     ]
+    }
+   ],
+   "idx": 288
+  },
+  {
+   "a": "fox_restaurant_concepts_unit_count",
+   "b": "north_italia_restaurant_count",
+   "reason": "token_overlap:count,restaurant",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "fox_restaurant_concepts_unit_count",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "fox_restaurant_concepts_restaurant_count"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "We target approximately 10% to 15% average annual unit growth for the aggregate Other FRC portfolio"
+      }
+     ]
+    },
+    {
+     "driver_name": "north_italia_restaurant_count",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "fiscal.ai-kpi",
+       "source_id": "fiscal_ai:CAKE:north_italia_company_owned_restaurants",
+       "date": "",
+       "quote": "North Italia Company-Owned Restaurants"
+      }
+     ]
+    }
+   ],
+   "idx": 281
+  },
+  {
+   "a": "consumer_health_regulation",
+   "b": "public_health_emergency",
+   "reason": "token_overlap:health",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "consumer_health_regulation",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "some state, local and foreign governments also have enacted legislation regulating or prohibiting the sale of or mandating disclosures relating to certain types and/or levels of ingredients in food served in restaurants, such as trans fats, sodium, genetically modified organisms (GMOs) and gluten"
+      }
+     ]
+    },
+    {
+     "driver_name": "public_health_emergency",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "public health emergencies, such as the COVID-19 pandemic, have resulted in and may in the future result in restaurant closures"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "The impacts of and our failure to effectively respond to pandemics, epidemics, endemics and other public health emergencies may also significantly disrupt our business"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "pandemics, epidemics, endemics and other public health emergencies could negatively impact customer traffic to our restaurants, disrupt our food supply chain or cause us to be the target of litigation"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "public health emergencies have resulted in and may in the future result in restaurant closures, underutilization of outdoor patio dining and curtailed operations"
+      }
+     ]
+    }
+   ],
+   "idx": 131
+  },
+  {
+   "a": "bakery_production_capacity",
+   "b": "off_premise_capacity",
+   "reason": "token_overlap:capacity",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "bakery_production_capacity",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "We are evaluating beginning construction on a third bakery production facility in Charlestown, Indiana in fiscal 2025 or fiscal 2026."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "In October 2023, we announced plans for a third bakery production facility"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "last week we announced plans to develop our third bakery production facility in Charlestown, Indiana"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "our preliminary capex estimate for the initial phase of development for the third bakery facility"
+      }
+     ]
+    },
+    {
+     "driver_name": "off_premise_capacity",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "so much has moved from on-premise to off-premise that has actually expanded capacity"
+      }
+     ]
+    }
+   ],
+   "idx": 50
+  },
+  {
+   "a": "flower_child_acquisition",
+   "b": "flower_child_off_premise_mix",
+   "reason": "token_overlap:child,flower",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "flower_child_acquisition",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "We are on track with Flower Child, bringing it fully under our umbrella for this year."
+      }
+     ]
+    },
+    {
+     "driver_name": "flower_child_off_premise_mix",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "at Flower Child, you're talking about a 55% off-premise mix"
+      }
+     ]
+    }
+   ],
+   "idx": 213
+  },
+  {
+   "a": "competitor_discounting",
+   "b": "competitor_promotional_activity",
+   "reason": "token_overlap:competitor",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "competitor_discounting",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "casual_dining_discounting"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "We never get into the discounting wars, right?"
+      }
+     ]
+    },
+    {
+     "driver_name": "competitor_promotional_activity",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "This isn't the first time that we've seen our competitors. have a heightened promotion environment."
+      }
+     ]
+    }
+   ],
+   "idx": 104
+  },
+  {
+   "a": "asset_impairment",
+   "b": "long_lived_asset_impairment",
+   "reason": "token_overlap:asset,impairment",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "asset_impairment",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "we recorded impairment of assets and lease terminations expense of $31.4 million primarily related to the impairment of long-lived assets"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-088397",
+       "date": "2023-08-07",
+       "quote": "Impairment of assets and lease termination (income)/expenses"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-058468",
+       "date": "2023-05-10",
+       "quote": "pre-tax charges of impairment of assets and lease termination expense"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "And in the fourth quarter, we reported a pre-tax charge of $41.5 million related to asset impairments and FRC acquisition-related items."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "we reported a pre-tax charge of $3.4 million related to impairment of assets and lease termination expense and FRC acquisition related items"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "During fiscal 2025, we recorded $23.0 million of expense primarily related to the impairment of long-lived assets"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "we recorded impairment of assets and lease termination expenses of $29.5 million primarily related to the impairment of long-lived assets"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "we recorded impairment of assets and lease terminations expense of $13.6 million primarily related to impairment of long-lived assets"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "Impairment of assets and lease termination expenses"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001151",
+       "date": "2024-08-05",
+       "quote": "we recorded impairment of assets and lease terminations expense of $1.9 million primarily related to impairment of assets for one The Cheesecake Factory location"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001073",
+       "date": "2025-05-05",
+       "quote": "we recorded impairment of assets and lease terminations expense of $2.1 million primarily related to impairment of assets for one The Cheesecake Factory location"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001564",
+       "date": "2025-08-04",
+       "quote": "primarily related to impairment of assets for one The Cheesecake Factory location"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-086819",
+       "date": "2023-08-02",
+       "quote": "The Company recorded a pre-tax net expense of $0.6 million related to Fox Restaurant Concepts (“FRC”) acquisition-related expenses and impairment of assets and lease termination income"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-113409",
+       "date": "2023-11-01",
+       "quote": "Impairment of assets and lease termination expenses 48 0.0 % - 0.0 % 1,637 0.1 %"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-026056",
+       "date": "2024-02-21",
+       "quote": "The Company recorded a pre-tax net expense of $35.6 million related to impairment of assets and lease termination expenses"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-058691",
+       "date": "2024-05-08",
+       "quote": "Impairment of assets and lease termination expenses 2,083 0.2 % 2,242 0.3 %"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-084383",
+       "date": "2024-07-31",
+       "quote": "The Company recorded a pre-tax net expense of $1.0 million related to Fox Restaurant Concepts (“FRC”) acquisition-related expenses and impairment of assets and lease termination income."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-112254",
+       "date": "2024-10-29",
+       "quote": "The Company recorded pre-tax net income of $2.5 million related to impairment of assets and lease termination income and Fox Restaurant Concepts (“FRC”) acquisition-related expenses."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-042573",
+       "date": "2025-04-30",
+       "quote": "impairment of assets and lease termination expenses"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-071758",
+       "date": "2025-07-29",
+       "quote": "impairment of assets and lease termination expenses"
+      }
+     ]
+    },
+    {
+     "driver_name": "long_lived_asset_impairment",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "restaurant_asset_impairment",
+      "restaurant_impairment_charge"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "During fiscal 2023, we recorded impairment of assets and lease terminations expense of $29.5 million primarily related to the impairment of long-lived assets"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "we recorded impairment of assets and lease terminations expense of $31.4 million primarily related to the impairment of long-lived assets"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "During fiscal 2025, we recorded impairment of assets and lease terminations expense of $23.0 million primarily related to the impairment of long-lived assets"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "In fiscal 2025, we recorded $23.0 million of expense primarily related to the impairment of long-lived assets for one North Italia, one Grand Lux Cafe and four Other FRC locations"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "During fiscal 2024, we recorded impairment of assets and lease terminations expense of $13.6 million primarily related to the impairment of long-lived assets"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "In fiscal 2024, we recorded impairment of assets and lease termination expenses of $13.6 million primarily related to impairment of long-lived assets for one The Cheesecake Factory (previously partially impaired) and six Other FRC locations"
+      }
+     ]
+    }
+   ],
+   "idx": 32
+  },
+  {
+   "a": "tip_credit_wage",
+   "b": "wage_hour_litigation",
+   "reason": "token_overlap:wage",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "tip_credit_wage",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "In addition to increasing the overall wages paid to our minimum wage and tip credit wage earners, these increases create pressure to increase wages and other benefits paid to other staff members"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "Significant increases in minimum wage rates, including any increase in or elimination of the tip credit wage rate in certain states"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "Significant increases in minimum wage rates, including any increase in or elimination of the tip credit wage rate in certain states"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Certain state and localities have significantly increased their minimum wage and/or tip credit wage (or have eliminated the tip credit wage), and require significantly more mandated benefits"
+      }
+     ]
+    },
+    {
+     "driver_name": "wage_hour_litigation",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "wage_and_hour_litigation"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "In recent years, we have experienced an increase in wage and hour litigation, particularly in California."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "In recent years, we have experienced an increase in wage and hour litigation"
+      }
+     ]
+    }
+   ],
+   "idx": 524
+  },
+  {
+   "a": "off_premise_promotions",
+   "b": "off_premise_sales",
+   "reason": "token_overlap:off,premise",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "off_premise_promotions",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "we do the marketing and that type of offer is really off-premise driven. And we do that on occasion."
+      }
+     ]
+    },
+    {
+     "driver_name": "off_premise_sales",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "off_premise_channel_mix",
+      "off_premise_sales_mix"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "either of which result could significantly impact our off-premise sales"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001151",
+       "date": "2024-08-05",
+       "quote": "Sales through the off-premise channel comprised approximately 21% of our restaurant sales during the second quarter of fiscal 2024"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-058468",
+       "date": "2023-05-10",
+       "quote": "strong contributions from the off-premise channel"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "Cheesecake Factory off-premise sales for the second quarter totaled 22% of sales, just below first quarter levels"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-02-21T17.00",
+       "date": "2024-02-21",
+       "quote": "off-premise sales totaled 22% of sales for the fourth quarter, in line with the full year percentage of sales"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "Sales through the off-premise channel comprised approximately 21% of our restaurant sales during both fiscal 2025 and fiscal 2024."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "for off-premise consumption, sales of which comprised approximately 22% of The Cheesecake Factory restaurant sales during fiscal 2023"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "We generate a higher mix of sales from off-premise channels as consumers have demonstrated a preference for convenience and at-home dining."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "for off-premise consumption, sales of which comprised approximately 21% of The Cheesecake Factory restaurant sales during fiscal 2025"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Sales through the off-premise channel comprised approximately 21% of our restaurant sales during fiscal 2024"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "To raise awareness in the off-premise channel, we execute marketing campaigns with our third-party delivery provider and through our online ordering platform."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "for off-premise consumption, sales of which comprised approximately 21% of The Cheesecake Factory restaurant sales during fiscal 2024"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001742",
+       "date": "2024-11-04",
+       "quote": "Sales through the off-premise channel comprised approximately 21% of our restaurant sales"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001073",
+       "date": "2025-05-05",
+       "quote": "Sales through the off-premise channel comprised approximately 22% of our restaurant sales"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001564",
+       "date": "2025-08-04",
+       "quote": "Sales through the off-premise channel comprised approximately 21% of our restaurant sales during both the second quarter of fiscal 2025 and fiscal 2024"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "Cheesecake Factory off premise sales remain steady at 22% of sales for the first quarter"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "Cheesecake Factory off-premise sales remained relatively stable, 21% of sales for the second quarter"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "Cheesecake Factory off-premise sales remain stable at 21% of sales for the third quarter"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-07-29T17.00",
+       "date": "2025-07-29",
+       "quote": "Record Cheesecake Factory average weekly sales in the second quarter were supported by off-premise sales of 21%, consistent with the average of the prior four quarters."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "Total off-premise was 21% of sales, right in line with Q2 and last year"
+      }
+     ]
+    }
+   ],
+   "idx": 468
+  }
+ ]
+}

@@ -1,0 +1,685 @@
+{
+ "batch_id": 50,
+ "page": 0,
+ "pairs": [
+  {
+   "a": "flower_child_unit_count",
+   "b": "north_italia_restaurant_count",
+   "reason": "token_overlap:count",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "flower_child_unit_count",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "flower_child_unit_development"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Currently, we operate 38 Flower Child locations and believe there is potential for approximately 700 domestic locations over time, which supports our plan for approximately 20% average annual unit growth for this concept."
+      }
+     ]
+    },
+    {
+     "driver_name": "north_italia_restaurant_count",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "fiscal.ai-kpi",
+       "source_id": "fiscal_ai:CAKE:north_italia_company_owned_restaurants",
+       "date": "",
+       "quote": "North Italia Company-Owned Restaurants"
+      }
+     ]
+    }
+   ],
+   "idx": 268
+  },
+  {
+   "a": "flower_child_average_unit_volume",
+   "b": "flower_child_sales",
+   "reason": "token_overlap:child,flower",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "flower_child_average_unit_volume",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "Q1 AUVs, the run rate of those are $4.4 million average unit volume"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "I wanted to dig in a little more on the flower child. What would be the potential average volumes for a fully mature box"
+      }
+     ]
+    },
+    {
+     "driver_name": "flower_child_sales",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "Flower Child sales increased 11.0% to $127.5 million for fiscal 2023, compared to $114.8 million for fiscal 2022"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-000636",
+       "date": "2024-05-08",
+       "quote": "Flower Child sales increased 10.2% to $34.5 million for the first quarter of fiscal 2024"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "looking at Flower Child, as David Gordon mentioned, the sales continue to improve. quarter over quarter"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "Flower Child sales totaled $32.2 million, up 11% from the prior year, and sales per operating week were $80,000."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001742",
+       "date": "2024-11-04",
+       "quote": "Flower Child sales increased 13.7% to $36.6 million for the third quarter of fiscal 2024"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-02-21T17.00",
+       "date": "2024-02-21",
+       "quote": "Flower Child sales totaled $30.4 million, and sales per operating week were $75,500"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "Flower Child sales totaled $35.7 million, up 7% from the prior year, and sales per operating week were $85,900"
+      }
+     ]
+    }
+   ],
+   "idx": 223
+  },
+  {
+   "a": "north_italia_average_check",
+   "b": "north_italia_food_cost",
+   "reason": "token_overlap:italia,north",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "north_italia_average_check",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "The average check for each customer, including beverages and desserts, for fiscal 2024 averaged approximately $34.60 for lunch and approximately $44.40 for dinner."
+      }
+     ]
+    },
+    {
+     "driver_name": "north_italia_food_cost",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "so that's an area that cheesecake factory best practices and systems have been deployed over time to North Italia, and we see a really good opportunity to lower food costs over time"
+      }
+     ]
+    }
+   ],
+   "idx": 408
+  },
+  {
+   "a": "north_italia_development",
+   "b": "north_italia_menu_mix",
+   "reason": "token_overlap:italia,north",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "north_italia_development",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "Our failure to effectively develop, grow and operate North Italia and our other branded concepts could materially adversely affect our financial performance."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Our failure to effectively develop, grow and operate North Italia, Flower Child and our other branded concepts could materially adversely affect our financial performance."
+      }
+     ]
+    },
+    {
+     "driver_name": "north_italia_menu_mix",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "The north Italia mix was negative 2%. It's actually a slight improvement from where it was last year."
+      }
+     ]
+    }
+   ],
+   "idx": 426
+  },
+  {
+   "a": "interest_expense",
+   "b": "interest_rate",
+   "reason": "token_overlap:interest",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "interest_expense",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "This decrease was primarily due to higher interest expense in the prior year ($3.5 million), mainly related to our interest rate swap"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-088397",
+       "date": "2023-08-07",
+       "quote": "This increase was primarily due to higher interest on our Revolver Facility ($1.6 million)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-042573",
+       "date": "2025-04-30",
+       "quote": "Interest expense, net(1) (2,328 ) (0.3 )%"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "This increase was primarily due to higher interest on our Revolver Facility ($1.0 million)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "This increase was primarily due to higher interest on our Revolver Facility ($3.5 million), partially offset by higher interest income due to higher cash balances in interest bearing accounts ($1.1 million)."
+      }
+     ]
+    },
+    {
+     "driver_name": "interest_rate",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "interest_rates"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-25-105631",
+       "date": "2025-11-03",
+       "quote": "changes in interest rates, periods of heightened inflation and market instability"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-084383",
+       "date": "2024-07-31",
+       "quote": "economic, public health and political conditions that impact consumer confidence and spending, including increased interest rates, periods of heightened inflation and market instability, and armed conflicts"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-015185",
+       "date": "2025-02-19",
+       "quote": "interest rate fluctuations, periods of heightened inflation and market instability"
+      }
+     ]
+    }
+   ],
+   "idx": 317
+  },
+  {
+   "a": "third_party_bakery_sales",
+   "b": "third_party_delivery",
+   "reason": "token_overlap:party,third",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "third_party_bakery_sales",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Our bakery division operates two facilities that produce quality cheesecakes and other baked products for our restaurants, international licensees and third-party bakery customers."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "produce quality cheesecakes and other baked products for our restaurants, international licensees and third-party bakery customers"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "Our bakery division operates two facilities that produce quality cheesecakes and other baked products for our restaurants, international licensees and third-party bakery customers."
+      }
+     ]
+    },
+    {
+     "driver_name": "third_party_delivery",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "third_party_delivery_agreement"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "Any failure of our third-party delivery provider to represent our brands in a favorable manner could damage our reputation."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "we've been working with DoorDash to be able to integrate rewards members into the DoorDash platform, which will allow us to make offers available to DoorDash members as well"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "Any failure of our third-party delivery provider to represent our brands in a favorable manner could damage our reputation."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "partnering with a third party to provide delivery services for our restaurants"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "we execute marketing campaigns with our third-party delivery provider and through our online ordering platform"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "partnering with a third party to provide delivery services for our restaurants"
+      }
+     ]
+    }
+   ],
+   "idx": 514
+  },
+  {
+   "a": "new_restaurant_food_cost_efficiency",
+   "b": "new_restaurant_margin",
+   "reason": "token_overlap:new,restaurant",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "new_restaurant_food_cost_efficiency",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "our new restaurants have typically required a period of time after reaching normal traffic levels to achieve their targeted restaurant-level margins due to actual-to-theoretical food cost inefficiencies and labor productivity inefficiencies"
+      }
+     ]
+    },
+    {
+     "driver_name": "new_restaurant_margin",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "The second one that we're focused on is really bringing new restaurants up to speed over time a little bit more faster. The mature margin is one thing, but if you can bring the early stages of the restaurants up faster, it sets up for success in the longer term as well."
+      }
+     ]
+    }
+   ],
+   "idx": 385
+  },
+  {
+   "a": "culinary_dropout_average_weekly_sales",
+   "b": "culinary_dropout_unit_economics",
+   "reason": "token_overlap:culinary,dropout",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "culinary_dropout_average_weekly_sales",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "We now have nine locations open, averaging over $200,000 per week so far this year."
+      }
+     ]
+    },
+    {
+     "driver_name": "culinary_dropout_unit_economics",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "Given your comments on culinary dropout, I guess I'm curious if you can add a little bit more color on, you know, the components of the unit economics that are attractive enough to, you know, give you confidence to move forward with growing that brand"
+      }
+     ]
+    }
+   ],
+   "idx": 164
+  },
+  {
+   "a": "depreciation_expense",
+   "b": "general_administrative_expense",
+   "reason": "token_overlap:expense",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "depreciation_expense",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "depreciation would probably be pretty similar year over year"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "Depreciation is estimated to be approximately $26 million"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "Depreciation is expected to be about $115 million for the year."
+      }
+     ]
+    },
+    {
+     "driver_name": "general_administrative_expense",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "general_administrative_expenses",
+      "general_and_administrative_expense",
+      "general_and_administrative_expenses"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "our goal with G&A is to continue to move it equal or better as a percentage of sales every year, right, until we get to that 6% level"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "and then maybe a little, you know, 10th on G&A"
+      }
+     ]
+    }
+   ],
+   "idx": 178
+  },
+  {
+   "a": "dividend",
+   "b": "dividend_policy",
+   "reason": "token_overlap:dividend",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "dividend",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "cash_dividend",
+      "common_stock_dividend",
+      "common_stock_dividends",
+      "dividend_payment",
+      "dividend_payments",
+      "dividend_payout"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "returning capital to shareholders through our dividend and share repurchase programs"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001151",
+       "date": "2024-08-05",
+       "quote": "Future decisions to pay or to increase or decrease dividends or to repurchase shares are at the discretion of the Board"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-024317",
+       "date": "2023-02-22",
+       "quote": "its Board of Directors declared a quarterly dividend of $0.27 per share to be paid on March 21, 2023"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "returned just under $14 million to shareholders via our dividend during the quarter"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "returned just under $13.2 million to shareholders via our dividend"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "we announced an increase to our share repurchase authorization and raised our quarterly dividend for the first quarter"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-02-21T17.00",
+       "date": "2024-02-21",
+       "quote": "During the quarter, we completed approximately $9.8 million in share repurchases and returned $13.1 million to shareholders via our dividend"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "During the quarter, we completed approximately $12.5 million in share repurchases and returned $12.8 million to shareholders via our dividend."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "returned $13.9 million to shareholders via our dividend"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "returned $13.2 million to shareholders via our dividend"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-07-29T17.00",
+       "date": "2025-07-29",
+       "quote": "we completed approximately $0.1 million in share repurchases and returned $14.3 million to shareholders via our dividend"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "returned $12.6 million to shareholders via our dividends"
+      }
+     ]
+    },
+    {
+     "driver_name": "dividend_policy",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "Our failure to pay a dividend or to increase it over time may negatively impact investor confidence in us and may negatively impact our stock price."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Our failure to pay a dividend or to increase it over time may negatively impact investor confidence in us and may negatively impact our stock price."
+      }
+     ]
+    }
+   ],
+   "idx": 187
+  }
+ ]
+}

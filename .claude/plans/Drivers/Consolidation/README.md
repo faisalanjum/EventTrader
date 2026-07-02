@@ -28,6 +28,8 @@
 
     c. number of model runs per task (mostly different models?)
 
+    d. ✅ Revalidated 2026-06-30 (isolated throwaway test, 12 real documents, Sonnet 5 vs Opus 4.8) — DriverCatalog reader step: single-pass Opus 4.8 beat every multi-pass/mixed-model variant on real judged precision (more passes only added junk: a 3rd pass was 82% junk for almost no new real candidates). For naming/slice/fact_type classification (the rules in `Naming_Slices_XBRL.md`), Sonnet 5 slightly beat Opus 4.8 on the spec's own worked examples (18/19 vs 17/19). **Opus for reading documents, Sonnet 5 for classifying what was found — a real mixture-of-models pipeline, not "pick one model for everything."**
+
 
 # Final Proposals (Validated/ Not validated):
 
@@ -47,6 +49,7 @@
 # Issues:
 
 Another issue to deeply think about is this - won't there be some Driver with fact_type = guidance which may also be applicable to other fact_types - how will we handle such things? 
+> ← **Already answered by the `BASE_METRIC` family in `# Do Not Forget` (✅ LOCKED): one topic = separate Drivers per fact_type (`revenue` / `revenue_guidance` / `revenue_surprise`) linked by `BASE_METRIC`, never one Driver carrying two fact_types. Only needs owner confirm.**
 
 
 # Do Not Forget:   ✅ LOCKED rules — now also in `MetricGuidanceFamily.md` (the metric/guidance/surprise/action family + `company_confirmed`).
@@ -78,6 +81,7 @@ fact_scope
 # Issue to resolve:
 _(1) ✅ ADDRESSED → `Naming_Slices_XBRL.md` §9: the XBRL link is enrichment — ~57% missing is fine, never the ID. (2) ⬜ partly — identity/fact_scope reconciled in `Naming_Slices_XBRL.md`; full GuidanceUpdate ↔ DriverUpdate property mapping spans `DriverGraphSchema.md`. (3) ✅ RESOLVED → yes: the guidance ID recipe IS the fact_scope serializer (`Naming_Slices_XBRL.md` §1)._
  1. XBRL member and concept linking in Guidance/ GuidanceauPDATE EXTRACTION IS NOT 100% COMPLETE (REQUIRES SOME MANUAL UPDATES) so need to be thought through super throughly? (may also be related to # SUPER IMPORTANT (details to be fleshed out) below)
+    > ✅ CONCEPT side now specced + census-validated: see [`XBRLConceptLinking.md`](XBRLConceptLinking.md) (guard → menu-pick → verify → backstop; Haiku + backstop + abstain-fix). Member side unchanged.
 
  2. GuidanceUpdate has different properties than DriverUpdate - how are we going to reconcile that? 
 

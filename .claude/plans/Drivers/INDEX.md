@@ -4,7 +4,7 @@
 
 **The whole point in one line:** the **same cause always gets the same name everywhere** → scattered events become one queryable time-series per cause → learn → predict → trade.
 
-**Read in this order →** the **[Reading order](#reading-order)** box below (newest-truth first). The two live authorities = **`WIP/DriverGraphSchema.md`** (node spec) + **`Consolidation/UnitExtraction.md`** (units / per-X).
+**Read in this order →** the **[Reading order](#reading-order)** box below (newest-truth first). The live authorities = **[`WIP/DriverGraphSchema.md`](WIP/DriverGraphSchema.md)** (node spec) + **[`Consolidation/UnitExtraction.md`](Consolidation/UnitExtraction.md)** (units / per-X) + **[`Consolidation/GuidancePeriod.md`](Consolidation/GuidancePeriod.md)** (DriverPeriod / period).
 
 > This file replaces the old `README.md` (stale since Jun 11). It is a map + a rule sheet, not a spec — the canonical files above are the source of truth.
 
@@ -17,12 +17,16 @@
 1  INDEX.md  (this file)             which docs are current vs stale
 2  WIP/DriverGraphSchema.md          the node spec = SOURCE OF TRUTH (fact_type · fact_scope · EXPLAINED_BY edge · weightage · units)
 3  Consolidation/UnitExtraction.md   units + per-X-in-name (newest, Jun 20)
-4  WIP/unit_probe/FINDINGS.md        the unit verdict  (read this, NOT RESULTS.md)
-5  DriverCatalogProcess.html + WIP/cards/driver_state_cards.html   the locked driver_state lanes
-6  DriverExperiment.md               the WHY (v1 closed-vocab died · v2 over-merge died · v3 = LLM judges meaning)
-7  DriverOntology.md → Drivers.md    LAST + with caution — still carry pre-finalization drift (see Consistency)
+4  Consolidation/GuidancePeriod.md   DriverPeriod + period-in-fact_scope target design
+5  WIP/unit_probe/FINDINGS.md        the unit verdict  (read this, NOT RESULTS.md)
+6  DriverCatalogProcess.html + WIP/cards/driver_state_cards.html   the locked driver_state lanes
+7  DriverExperiment.md               the WHY (v1 closed-vocab died · v2 over-merge died · v3 = LLM judges meaning)
+8  DriverOntology.md → Drivers.md    LAST + with caution — still carry pre-finalization drift (see Consistency)
 ✗  skip unless tracing history:  README.md · DriverContext.md · WIP/XBRL_Guidance_Borrow.md · WIP/unit_probe/RESULTS.md · workflows/catalog_first.js
 ```
+
+Plain-English explainer for metric/guidance/surprise/action families: `Consolidation/MetricGuidanceFamily.md`.
+DriverPeriod / period target spec: [`Consolidation/GuidancePeriod.md`](Consolidation/GuidancePeriod.md).
 
 ---
 
@@ -53,7 +57,7 @@ History in one breath: **v1** died (closed word-list rejected 82% of even-correc
 
 ## Consistency — what's stale & how to fix it
 
-**Crux:** the folder is **~90% consistent.** The 4 newest files agree (`WIP/DriverGraphSchema.md` · `Consolidation/UnitExtraction.md` · `WIP/unit_probe/FINDINGS.md` · this `INDEX.md`). All drift = **two docs this map still calls CURRENT but that were never re-synced — `DriverOntology.md` + `Drivers.md`** — plus a few files that already self-flag as stale, plus build code that can't emit `fact_type` yet.
+**Crux:** the folder is **~90% consistent.** The newest files agree (`WIP/DriverGraphSchema.md` · `Consolidation/UnitExtraction.md` · `Consolidation/GuidancePeriod.md` · `WIP/unit_probe/FINDINGS.md` · this `INDEX.md`). All drift = **two docs this map still calls CURRENT but that were never re-synced — `DriverOntology.md` + `Drivers.md`** — plus a few files that already self-flag as stale, plus build code that can't emit `fact_type` yet.
 
 | | What's inconsistent | Where | Fix |
 |---|---|---|---|
@@ -117,6 +121,7 @@ Grouped by era. Arrows = supersession. `↻` = partial (only the noted topic is 
 | `WIP/cards/driver_state_cards.html` (+`.pdf`, `gen_driver_cards.py`) | 06-18 | WIP/CODE | Printable index cards: 4 fact_types + 27 state cards (real CAKE drivers) |
 | `Consolidation/Personal.md` | 06-18 | **WIP** | Owner's raw brainstorm bullets (mimic Guidance flow; ID recipe; model choice; open Qs) |
 | `Consolidation/UnitExtraction.md` | 06-20 | **WIP ★** | Locked per-X / unit naming rules + the V2 unit-resolver contract (set-in-stone rules; supersedes the old "stays-bare" per-X line). Probe re-run still pending |
+| `Consolidation/GuidancePeriod.md` | 06-21 | **WIP ★** | Final DriverPeriod target: period-bearing DriverUpdates use `DriverUpdate -[:HAS_PERIOD]-> DriverPeriod`; add exact-date + `ytd`/`ttm` support to the shared Guidance period mechanism |
 | `RavenPack/RavenPack_Taxonomy.md` | 06-17 | **WIP** | Source-grounded reconstruction of the ~7,400 event taxonomy (free union = 970) |
 | `RavenPack/RavenPack_Taxonomy_vs_Drivers.md` | 06-17 | STALE `↻` | Earlier taxonomy + same/different comparison. → `RavenPack_Taxonomy.md` (970-union) |
 | `RavenPack/*.py` · `RavenPack/*.csv/.txt/.pdf` | 06-17 | CODE/DATA | merge/analyze/dump scripts + the assembled taxonomy CSVs + source files |
@@ -191,7 +196,7 @@ Grouped by era. Arrows = supersession. `↻` = partial (only the noted topic is 
 - **Number layer (AGREED 06-16; all nullable; producer-fills, code-decides):** `level_low/high/bound/unit` · `change_value` (signed delta, not the level) `/unit` · `comparison_low/high/baseline`. `comparison_baseline ∈ {consensus, prior_year, sequential_period, previous_guidance, null}` (store the **primary** only). **Store-when-stated; never fabricate a number.** These hold the **driver's own** number, never the stock effect.
 - **Units = Guidance `canonical_unit` enum, VERBATIM** (`m_usd, usd, percent, percent_yoy, percent_points, basis_points, count, x, unknown`) so the Guidance link + dedup line up with no translation table. Borrow Guidance's **V2** resolver (not V1) via the shared `unit_resolver.py`: producer always sends `unit_kind_hint` (+ `money_mode_hint` when money), **code decides the final unit + scaling**, and the gate asserts the **scaled value**, not just the unit string. Call it **separately** for `level_*` and `change_*` (`margin "rose 60 bps to 17.6%"` → `level_unit=percent`, `change_unit=basis_points`). **No `comparison_unit` field** — comparison values share `level_unit`; a different-unit baseline stays in the `quote`. Reject any final unit outside the 9 (`usd_per_share`, `shares`, `dollars_per_store` = resolver/prompt failure).
   - **Physical-price per-X is NOT `unknown`** (old probe text corrected): a source-stated `$/barrel` is named `oil_price_per_barrel` and resolves to **`usd`**. The only guard = if the source states `$/X` but the name lacks `_per_X` → **naming failure, flag for rename** (do **not** add a `$/physical → unknown` guard). *(`RESULTS.md` + the 94% scoreboard are stale on this — they assumed `$/X → unknown` and are being re-run; `FINDINGS.md` + `Consolidation/UnitExtraction.md` carry the corrected rule.)*
-- **Identity = the Guidance recipe; CODE builds every key, AI never.** Fact key = `event + driver + fact_scope` (**no producer** → two readers of one fact converge to one node). `fact_scope` = code-built `{period, basis/scope}` (prefer structured; quote-hash only when no clean scope) — **identity-only, never in the name.** `evhash16` = a value-hash property (not a key). Re-runs **merge in place**.
+- **Identity = the Guidance recipe; CODE builds every key, AI never.** Fact key = `event + driver + fact_scope` (**no producer** → two readers of one fact converge to one node). `fact_scope` = code-built `{period, basis/scope}` (prefer structured; quote-hash only when no clean scope) — period details now use `DriverPeriod`, see [`Consolidation/GuidancePeriod.md`](Consolidation/GuidancePeriod.md); identity-only, never in the name. `evhash16` = a value-hash property (not a key). Re-runs **merge in place**.
 - **Edges:** `OF_DRIVER` (DriverUpdate→Driver, exactly 1). **The verdict is NOT a node** — it's the property-laden **`EXPLAINED_BY`** edge `Event→DriverUpdate`, added only when a producer blames the move on the fact. **Company is never in the driver layer** — reached via `Event→Company` (which carries the realized return); a market-wide driver (`oil_price`) takes the identical shape.
 - **EXPLAINED_BY verdict (FINAL 06-16) — 3 orthogonal axes:** `stock_impact` (long/short = direction) · `weightage` (deciles 0.1–1.0 or null = an **independent** force, never summed, never auto-set to max — a move can be partly unexplained) · `confidence` (deciles 0–100). `produced_mode`: **live wins** over backfill. The realized share is **never stored, never shown to the predictor** (PIT). Verdict key = `+producer`.
 - **Deliberately NOT fields** (don't re-add): `mid`, `usd_per_share`, `unit_raw`, `accounting_basis` (it's in the name), free-text `qualitative`.

@@ -1,0 +1,1 @@
+VALIDATION PASSED  seed=594 | catalog=573 (self-canonical=364, rolled-up=209) skip=7 unresolved=16 unresolved_same_name=1

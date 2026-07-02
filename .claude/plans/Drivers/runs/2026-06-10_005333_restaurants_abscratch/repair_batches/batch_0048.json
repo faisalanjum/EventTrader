@@ -1,0 +1,987 @@
+{
+ "batch_id": 48,
+ "page": 0,
+ "pairs": [
+  {
+   "a": "north_italia_average_unit_volume",
+   "b": "north_italia_menu_pricing",
+   "reason": "token_overlap:italia,north",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "north_italia_average_unit_volume",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "north_italia_unit_volumes"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "Average sales per mature location, defined as open prior to 2020 and adjusted to exclude impaired locations, for North Italia restaurants were approximately $8.0 million for fiscal 2022"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "North Italia first quarter comparable sales increased 3% from the prior year, resulting in annualized AUVs of $7.7 million."
+      }
+     ]
+    },
+    {
+     "driver_name": "north_italia_menu_pricing",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "we have another price increase in October, right at the end of October, for North Italia"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "And just North Italia, was your comment that the pricing you just took, you think that, were you behind on pricing there?"
+      }
+     ]
+    }
+   ],
+   "idx": 419
+  },
+  {
+   "a": "incentive_compensation",
+   "b": "workers_compensation_insurance_costs",
+   "reason": "token_overlap:compensation",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "incentive_compensation",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "incentive_compensation_expense"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-088397",
+       "date": "2023-08-07",
+       "quote": "higher net income and lower incentive compensation paid in the first six months of fiscal 2023"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "lower incentive compensation paid in the first nine months of fiscal 2023 compared to the first nine months of fiscal 2022"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001151",
+       "date": "2024-08-05",
+       "quote": "partially offset by increased restaurant-level incentive compensation expense (0.1%)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-000636",
+       "date": "2024-05-08",
+       "quote": "partially offset by increased restaurant-level incentive compensation expense (0.1%)"
+      }
+     ]
+    },
+    {
+     "driver_name": "workers_compensation_insurance_costs",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-088397",
+       "date": "2023-08-07",
+       "quote": "lower workers compensation insurance costs due to higher claim activity in the second quarter of fiscal 2022 (0.2%)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "increased workers’ compensation insurance costs due to higher claim activity (0.2%)"
+      }
+     ]
+    }
+   ],
+   "idx": 310
+  },
+  {
+   "a": "new_restaurant_capex",
+   "b": "new_restaurant_food_cost_efficiency",
+   "reason": "token_overlap:new,restaurant",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "new_restaurant_capex",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "Capital expenditures for new restaurants, including locations under development, were $61.6 million and $36.9 million for the first nine months of fiscal 2023 and 2022, respectively."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001742",
+       "date": "2024-11-04",
+       "quote": "Capital expenditures for new restaurants, including locations under development, were $76.1 million and $61.6 million for the first nine months of fiscal 2024 and 2023, respectively."
+      }
+     ]
+    },
+    {
+     "driver_name": "new_restaurant_food_cost_efficiency",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "our new restaurants have typically required a period of time after reaching normal traffic levels to achieve their targeted restaurant-level margins due to actual-to-theoretical food cost inefficiencies and labor productivity inefficiencies"
+      }
+     ]
+    }
+   ],
+   "idx": 382
+  },
+  {
+   "a": "flower_child_average_weekly_sales",
+   "b": "flower_child_off_premise_mix",
+   "reason": "token_overlap:child,flower",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "flower_child_average_weekly_sales",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "Flower Child average weekly sales were $85,200, up more than 6% from the third quarter of 2023"
+      }
+     ]
+    },
+    {
+     "driver_name": "flower_child_off_premise_mix",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "at Flower Child, you're talking about a 55% off-premise mix"
+      }
+     ]
+    }
+   ],
+   "idx": 229
+  },
+  {
+   "a": "branded_retail_demand",
+   "b": "landlord_demand",
+   "reason": "token_overlap:demand",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "branded_retail_demand",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "So just a little bit of pressure on the, you know, branded retail. I mean, I think you've seen that from other big CPG companies"
+      }
+     ]
+    },
+    {
+     "driver_name": "landlord_demand",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "the demand for those concepts from landlords remains very, very high"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "our portfolio of brands continue to attract landlords that want experiential dining in their projects"
+      }
+     ]
+    }
+   ],
+   "idx": 63
+  },
+  {
+   "a": "shipping_disruption",
+   "b": "supply_chain_disruption",
+   "reason": "token_overlap:disruption",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "shipping_disruption",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "trade restrictions, import and export embargos, governmental shutdowns and disruptions in shipping"
+      }
+     ]
+    },
+    {
+     "driver_name": "supply_chain_disruption",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "supply_chain",
+      "supply_chain_disruptions"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "we also began to experience certain supply shortages and transportation delays largely attributable to impacts of the COVID-19 pandemic"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-058507",
+       "date": "2023-05-10",
+       "quote": "We have also encountered delays in opening new restaurants due to supply chain challenges and delays in permitting, construction, landlord readiness, and equipment availability."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-024317",
+       "date": "2023-02-22",
+       "quote": "supply chain disruptions"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "while we continue to experience some delays in opening due to supply chain challenges and permit approval delays beyond our control"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "we began to experience certain supply shortages and transportation delays largely attributable to impacts of the COVID-19 pandemic. These shortages continued in fiscal 2022 and were exacerbated by geopolitical unrest."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "The impact of ongoing geopolitical and macroeconomic events, including evolving government policies and global trade and tariff dynamics, could lead to further wage inflation, product and services cost inflation, disruptions in the supply chain"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "delays in opening new restaurants due to delays in permitting and landlord readiness, as well as supply chain challenges"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "disruptions in the supply chain and delay in new restaurant openings"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "our operating results were impacted by geopolitical and macroeconomic events, causing supply chain challenges"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "we began to experience certain supply shortages and transportation delays largely attributable to impacts of the COVID-19 pandemic. These shortages continued in fiscal 2022 and were exacerbated by geopolitical unrest"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "could lead to further wage inflation, product and services cost inflation, disruptions in the supply chain, staffing challenges"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "could lead to further wage inflation, product and services cost inflation, disruptions in the supply chain, staffing challenges, shifts in consumer behavior, and delays in new restaurant openings"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "The impact of ongoing geopolitical and macroeconomic events could lead to further wage inflation, product and services cost inflation, disruptions in the supply chain, staffing challenges, shifts in consumer behavior, and delays in new restaurant openings."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "could lead to further wage inflation, product and services cost inflation, disruptions in the supply chain, staffing challenges"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "disruptions in the supply chain, staffing challenges, shifts in consumer behavior, and delays in new restaurant openings"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "we were impacted by geopolitical and macroeconomic events, causing supply chain challenges and significantly increased commodity prices"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-088397",
+       "date": "2023-08-07",
+       "quote": "We have also encountered delays in opening new restaurants due to supply chain challenges and delays in permitting, construction, landlord readiness, and equipment availability"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "causing supply chain challenges and significantly increased commodity and wage inflation"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-25-105631",
+       "date": "2025-11-03",
+       "quote": "The impact of ongoing geopolitical and macroeconomic events could lead to further wage inflation, product and services cost inflation, disruptions in the supply chain, staffing challenges, shifts in consumer behavior, and delays in new restaurant openings."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-000636",
+       "date": "2024-05-08",
+       "quote": "causing supply chain challenges and significantly increased commodity and wage inflation"
+      }
+     ]
+    }
+   ],
+   "idx": 500
+  },
+  {
+   "a": "consumer_spending",
+   "b": "low_end_consumer_spending",
+   "reason": "token_overlap:consumer,spending",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "consumer_spending",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-088397",
+       "date": "2023-08-07",
+       "quote": "economic, public health and political conditions that impact consumer confidence and spending"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-113409",
+       "date": "2023-11-01",
+       "quote": "economic, public health and political conditions that impact consumer confidence and spending"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "Can you talk about the strength of the consumer spending environment and any observations on that front would be helpful."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-000636",
+       "date": "2024-05-08",
+       "quote": "economic, public health and political conditions that impact consumer confidence and spending, including rising interest rates, periods of heightened inflation and market instability"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-26-017090",
+       "date": "2026-02-18",
+       "quote": "economic, public health and political conditions that impact consumer confidence and spending, including government shutdowns, trade policy, interest rate fluctuations, periods of heightened inflation and market instability"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-25-105631",
+       "date": "2025-11-03",
+       "quote": "conditions that impact consumer confidence and spending"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001151",
+       "date": "2024-08-05",
+       "quote": "economic, public health and political conditions that impact consumer confidence and spending"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-058691",
+       "date": "2024-05-08",
+       "quote": "economic, public health and political conditions that impact consumer confidence and spending"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-103205",
+       "date": "2025-10-28",
+       "quote": "economic, public health and political conditions that impact consumer confidence and spending"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "the environment overall feels not quite as robust as we expected. And then, you know, all of the news and all of the economists are saying expect a 1% or so impact in the back half of the year"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "there's a lot of pull forward of spending into March from consumers"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "in hindsight, maybe a half a point of that was already some easing of the consumer"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "there is still economic pressure out there for the consumer. You still might see some trade down"
+      }
+     ]
+    },
+    {
+     "driver_name": "low_end_consumer_spending",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "most management teams are citing the low-end consumers"
+      }
+     ]
+    }
+   ],
+   "idx": 135
+  },
+  {
+   "a": "commodity_hedging",
+   "b": "convertible_note_hedging",
+   "reason": "token_overlap:hedging",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "commodity_hedging",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "periodically evaluate hedging vehicles, such as direct financial instruments, to assist us in managing risk and variability associated with such commodities"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "periodically evaluate hedging vehicles, such as direct financial instruments, to assist us in managing risk and variability associated with such commodities. As of the end of fiscal 2023, we had no hedging contracts in place."
+      }
+     ]
+    },
+    {
+     "driver_name": "convertible_note_hedging",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "convertible_note_arbitrage"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "Hedging activity by investors in the Notes could depress the trading price of our common stock."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Hedging activity by investors in the Notes could depress the trading price of our common stock."
+      }
+     ]
+    }
+   ],
+   "idx": 99
+  },
+  {
+   "a": "north_italia_same_store_sales",
+   "b": "same_store_sales",
+   "reason": "token_overlap:sales,same,store",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "north_italia_same_store_sales",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "north_italia_comparable_sales"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "North Italia comparable sales increased approximately 8% from fiscal 2022"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-058507",
+       "date": "2023-05-10",
+       "quote": "North Italia comparable sales increased approximately 9% from the first quarter of fiscal 2022"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-024317",
+       "date": "2023-02-22",
+       "quote": "North Italia operating information: Comparable restaurant sales vs. prior year 9 %"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "fiscal.ai-kpi",
+       "source_id": "fiscal_ai:CAKE:north_italia_comparable_restaurant_sales",
+       "date": "",
+       "quote": "North Italia Comparable Restaurant Sales"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "North Italia's fourth quarter comparable sales increased an exceptional 26% over 2019 on a 14-week versus 14-week basis."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-058468",
+       "date": "2023-05-10",
+       "quote": "North Italia operating information: Comparable restaurant sales vs. prior year 9 %"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "North Italia comparable sales decreased approximately 2% from fiscal 2024."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "North Italia comparable sales increased approximately 2% from fiscal 2023."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-088397",
+       "date": "2023-08-07",
+       "quote": "North Italia comparable sales increased approximately 8% from the second quarter of fiscal 2022"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "North Italia comparable sales increased approximately 8% from the third quarter of fiscal 2022"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-25-105631",
+       "date": "2025-11-03",
+       "quote": "North Italia comparable sales decreased approximately 3% from the third quarter of fiscal 2024."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-000636",
+       "date": "2024-05-08",
+       "quote": "North Italia comparable sales increased approximately 3% from the first quarter of fiscal 2023."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001151",
+       "date": "2024-08-05",
+       "quote": "North Italia comparable sales increased approximately 2% from the second quarter of fiscal 2023."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001742",
+       "date": "2024-11-04",
+       "quote": "North Italia comparable sales increased approximately 2% from the third quarter of fiscal 2023"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001073",
+       "date": "2025-05-05",
+       "quote": "North Italia comparable sales decreased approximately 1% from the first quarter of fiscal 2024."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001564",
+       "date": "2025-08-04",
+       "quote": "North Italia comparable sales decreased approximately 1% from the second quarter of fiscal 2024"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-086819",
+       "date": "2023-08-02",
+       "quote": "North Italia operating information: Comparable restaurant sales vs. prior year 8 %"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-113409",
+       "date": "2023-11-01",
+       "quote": "North Italia operating information: Comparable restaurant sales vs. prior year 8 %"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-026056",
+       "date": "2024-02-21",
+       "quote": "North Italia operating information: Comparable restaurant sales vs. prior year 7 %"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-058691",
+       "date": "2024-05-08",
+       "quote": "North Italia operating information: Comparable restaurant sales vs. prior year 3 %"
+      }
+     ]
+    },
+    {
+     "driver_name": "same_store_sales",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "Factors such as comparable restaurant sales that are below our target"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-058507",
+       "date": "2023-05-10",
+       "quote": "Revenues increased 9.1% to $866.1 million for the fiscal quarter ended April 4, 2023 compared to $793.7 million for the comparable prior year period, primarily due to an increase in comparable restaurant sales"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-024317",
+       "date": "2023-02-22",
+       "quote": "Comparable restaurant sales at The Cheesecake Factory restaurants increased 4.0% year-over-year in the fourth quarter of fiscal 2022"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "fiscal.ai-kpi",
+       "source_id": "fiscal_ai:CAKE:the_cheesecake_factory_restaurants_comparable_restaurant_sales",
+       "date": "",
+       "quote": "The Cheesecake Factory Restaurants Comparable Restaurant Sales"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "Fourth quarter comparable sales at the Cheesecake Factory restaurants increased 4% versus the prior year and 11.4% versus 2019, both on a 14-week versus 14-week basis."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "Just on comp, obviously really strong trans quarter to date."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "Fluctuations in both average sales per location and average sales per productive square foot for fiscal 2025 generally tracked with comparable restaurant sales trends."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "Fluctuations in both average sales per location and average sales per productive square foot generally track with comparable restaurant sales trends"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "Our inability to grow comparable restaurant sales could materially adversely affect our financial performance."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "Fluctuations in both average sales per location and average sales per productive square foot generally track with comparable restaurant sales trends"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "Our inability to grow comparable restaurant sales could materially adversely affect our financial performance."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "due to an increase in comparable restaurant sales, as well as additional revenue related to new restaurant openings"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "Our revenue growth is primarily driven by new restaurant openings and increases in comparable restaurant sales."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Fluctuations in both average sales per location and average sales per productive square foot for fiscal 2024 generally tracked with comparable restaurant sales trends."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Our inability to grow comparable restaurant sales could materially adversely affect our financial performance."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "comparable restaurant sales that are below our target, slowing growth of our concepts domestically"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "primarily due to additional revenue related to new restaurant openings and an increase in comparable restaurant sales"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-088397",
+       "date": "2023-08-07",
+       "quote": "primarily due to an increase in comparable restaurant sales, as well as additional revenue related to new restaurant openings"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "primarily due to an increase in comparable restaurant sales, as well as additional revenue related to new restaurant openings"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-25-105631",
+       "date": "2025-11-03",
+       "quote": "primarily due to additional revenue related to new restaurant openings and an increase in comparable restaurant sales"
+      }
+     ]
+    }
+   ],
+   "idx": 463
+  },
+  {
+   "a": "supply_chain_efficiency",
+   "b": "supply_chain_scale",
+   "reason": "token_overlap:chain,supply",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "supply_chain_efficiency",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "Flower Child's purchasing is now integrated into the broader Cheesecake supply chain operation to take advantage of our scale and purchasing capabilities"
+      }
+     ]
+    },
+    {
+     "driver_name": "supply_chain_scale",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "we continue to leverage our scalable supply chain and look for opportunities to to purchase products that perhaps are in our broader basket that we can also use in North Italia"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "I think supply chain is another one that we continue to benefit on the increasing scale of our company"
+      }
+     ]
+    }
+   ],
+   "idx": 512
+  }
+ ]
+}

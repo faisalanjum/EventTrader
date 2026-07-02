@@ -1,0 +1,613 @@
+{
+ "batch_id": 37,
+ "page": 0,
+ "pairs": [
+  {
+   "a": "bakery_facility_closure",
+   "b": "credit_facility_availability",
+   "reason": "token_overlap:facility",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "bakery_facility_closure",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "A closure of or material damage to one or both of our bakery facilities could impede our ability to supply bakery products to our own and our international licensees’ restaurants as well as to other bakery customers."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "A closure of or material damage to one or both of our bakery facilities could impede our ability to supply bakery products to our own and our international licensees’ restaurants"
+      }
+     ]
+    },
+    {
+     "driver_name": "credit_facility_availability",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001742",
+       "date": "2024-11-04",
+       "quote": "As of October 1, 2024, we had net availability for borrowings of $236.5 million, based on a $130.0 million outstanding debt balance and $33.5 million in standby letters of credit under the Revolver Facility."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-25-105631",
+       "date": "2025-11-03",
+       "quote": "As of September 30, 2025, we had net availability for borrowings of $366.5 million, based on no outstanding debt balance and $33.5 million in standby letters of credit under the Revolver Facility."
+      }
+     ]
+    }
+   ],
+   "idx": 39
+  },
+  {
+   "a": "equity_issuance",
+   "b": "equity_market_volatility",
+   "reason": "token_overlap:equity",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "equity_issuance",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "common_stock_issuance"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "If we issue additional shares of our common stock or rights to acquire shares of our common stock, if any of our existing stockholders sells a substantial amount of our common stock, or if the market perceives that such issuances or sales may occur, then the trading price of our common stock may significantly decline."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "If we issue additional shares of our common stock or rights to acquire shares of our common stock, if any of our existing stockholders sells a substantial amount of our common stock, or if the market perceives that such issuances or sales may occur, then the trading price of our common stock may significantly decline."
+      }
+     ]
+    },
+    {
+     "driver_name": "equity_market_volatility",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "the equity markets have experienced price and volume fluctuations that affect the stock price of companies in ways that have been unrelated to an individual company’s operating performance"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "the equity markets have experienced price and volume fluctuations that affect the stock price of companies in ways that have been unrelated to an individual company’s operating performance"
+      }
+     ]
+    }
+   ],
+   "idx": 199
+  },
+  {
+   "a": "climate_change",
+   "b": "climate_disclosure_regulation",
+   "reason": "token_overlap:climate",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "climate_change",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "climate change and global warming may cause extended droughts and certain adverse weather conditions and natural disasters to become more frequent, more severe and less predictable over time"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "climate change and global warming may cause extended droughts and certain adverse weather conditions and natural disasters to become more frequent, more severe and less predictable over time"
+      }
+     ]
+    },
+    {
+     "driver_name": "climate_disclosure_regulation",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "we may be subject to various disclosure requirements (such as information on greenhouse gas emissions, climate risks, use of offsets, and emissions reduction claims) from the State of California"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "we may be subject to various disclosure requirements (such as information on greenhouse gas emissions, climate risks, use of offsets, and emissions reduction claims) from the State of California"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "we are subject to various disclosure requirements (such as information on greenhouse gas emissions, climate risks, use of offsets, and emissions reduction claims) from the State of California"
+      }
+     ]
+    }
+   ],
+   "idx": 97
+  },
+  {
+   "a": "natural_disaster",
+   "b": "natural_gas_price",
+   "reason": "token_overlap:natural",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "natural_disaster",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "natural_disasters"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "more severe events, such as hurricanes, earthquakes, tornadoes, blizzards, wildfires and other natural disasters"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-25-105631",
+       "date": "2025-11-03",
+       "quote": "adverse weather conditions and natural disasters in regions in which our restaurants are located"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "hurricanes, earthquakes, tornadoes, blizzards, wildfires and other natural disasters and public health emergencies, such as the COVID-19 pandemic, have resulted in and may in the future result in restaurant closures"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "Adverse weather conditions and natural disasters may further exacerbate a number of these factors."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "our corporate headquarters in Calabasas, California, an area that is prone to natural disasters such as earthquakes and wildfires"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "hurricanes, earthquakes, tornadoes, blizzards, wildfires and other natural disasters and public health emergencies have resulted in and may in the future result in restaurant closures"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Adverse weather conditions and natural disasters may further exacerbate a number of these factors."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "more severe events, such as hurricanes, earthquakes, tornadoes, blizzards, wildfires and other natural disasters and public health emergencies, such as the COVID-19 pandemic, have resulted in and may in the future result in restaurant closures"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "our corporate headquarters in Calabasas, California, an area that is prone to and has been impacted by natural disasters such as earthquakes and wildfires"
+      }
+     ]
+    },
+    {
+     "driver_name": "natural_gas_price",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "The capitulation in the natural gas market, I mean, it's trading in the low twos today. During the summer, it hit nine."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "I know that we saw the nat gas market capitulate here"
+      }
+     ]
+    }
+   ],
+   "idx": 375
+  },
+  {
+   "a": "goodwill_impairment",
+   "b": "intangible_asset_impairment",
+   "reason": "token_overlap:impairment",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "goodwill_impairment",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "Should the value of goodwill or other intangible assets become impaired, there could be a material adverse effect on our financial performance."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "We test our goodwill and other indefinite-lived intangible assets for impairment annually or on an interim basis if events or changes in circumstances between annual tests indicate a potential impairment"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "Goodwill and other indefinite-lived intangible assets are not amortized and are tested for impairment annually as of the first day of our fiscal fourth quarter"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "We test our goodwill and other indefinite-lived intangible assets for impairment annually or on an interim basis if events or changes in circumstances between annual tests indicate a potential impairment"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Goodwill and other indefinite-lived intangible assets are not amortized and are tested for impairment annually"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "We test our goodwill and other indefinite-lived intangible assets for impairment annually or on an interim basis if events or changes in circumstances between annual tests indicate a potential impairment"
+      }
+     ]
+    },
+    {
+     "driver_name": "intangible_asset_impairment",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "We recorded impairment charges related to indefinite-lived intangible assets of $180.8 million in fiscal 2020"
+      }
+     ]
+    }
+   ],
+   "idx": 289
+  },
+  {
+   "a": "north_italia_food_cost",
+   "b": "north_italia_restaurant_level_margin",
+   "reason": "token_overlap:italia,north",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "north_italia_food_cost",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "so that's an area that cheesecake factory best practices and systems have been deployed over time to North Italia, and we see a really good opportunity to lower food costs over time"
+      }
+     ]
+    },
+    {
+     "driver_name": "north_italia_restaurant_level_margin",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "north_italia_four_wall_margin",
+      "north_italia_margin",
+      "north_italia_restaurant_margin"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "Forewall margin for the adjusted mature North Italia locations improved to 13.3% for the fourth quarter, supported by a menu price increase implemented mid-fourth quarter."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "restaurant-level margin for the adjusted mature North Italia locations was 15%, a 250 basis point improvement from the prior year"
+      }
+     ]
+    }
+   ],
+   "idx": 436
+  },
+  {
+   "a": "international_royalty_revenue",
+   "b": "royalty_revenue",
+   "reason": "token_overlap:revenue,royalty",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "international_royalty_revenue",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "international_licensee_royalties",
+      "international_licensing_royalties"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "leveraging our bakery operations, international and consumer packaged goods royalty revenue streams"
+      }
+     ]
+    },
+    {
+     "driver_name": "royalty_revenue",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "leveraging our bakery operations, international and consumer packaged goods royalty revenue streams"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "leveraging our bakery operations, international and consumer packaged goods royalty revenue streams"
+      }
+     ]
+    }
+   ],
+   "idx": 323
+  },
+  {
+   "a": "flower_child_average_weekly_sales",
+   "b": "flower_child_unit_count",
+   "reason": "token_overlap:child,flower",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "flower_child_average_weekly_sales",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "Flower Child average weekly sales were $85,200, up more than 6% from the third quarter of 2023"
+      }
+     ]
+    },
+    {
+     "driver_name": "flower_child_unit_count",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "flower_child_unit_development"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Currently, we operate 38 Flower Child locations and believe there is potential for approximately 700 domestic locations over time, which supports our plan for approximately 20% average annual unit growth for this concept."
+      }
+     ]
+    }
+   ],
+   "idx": 233
+  },
+  {
+   "a": "north_italia_average_check",
+   "b": "north_italia_traffic",
+   "reason": "token_overlap:italia,north",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "north_italia_average_check",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "The average check for each customer, including beverages and desserts, for fiscal 2024 averaged approximately $34.60 for lunch and approximately $44.40 for dinner."
+      }
+     ]
+    },
+    {
+     "driver_name": "north_italia_traffic",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "north_italia_restaurant_traffic"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "The north Italia mix was negative 2%. It's actually a slight improvement from where it was last year. Price is between 4.5% and 5%. Traffic was negative 4%."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "So traffic was negative 6%, prices about 4%, and the mix was negative 2% for the quarter."
+      }
+     ]
+    }
+   ],
+   "idx": 415
+  },
+  {
+   "a": "labor_shortage",
+   "b": "supply_shortage",
+   "reason": "token_overlap:shortage",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "labor_shortage",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "we experienced labor shortfalls relative to our sales levels in certain parts of our workforce and/or geographies"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "we experienced labor shortfalls relative to our sales levels in certain parts of our workforce and/or geographies as we reopened our dining rooms"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "we have experienced and continue to experience labor shortfalls relative to our sales levels in certain parts of our workforce"
+      }
+     ]
+    },
+    {
+     "driver_name": "supply_shortage",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "During fiscal 2021, we began to experience certain supply shortages and transportation delays largely attributable to impacts of the COVID-19 pandemic."
+      }
+     ]
+    }
+   ],
+   "idx": 333
+  }
+ ]
+}

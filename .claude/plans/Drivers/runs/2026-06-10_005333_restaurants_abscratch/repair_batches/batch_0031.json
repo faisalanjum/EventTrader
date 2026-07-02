@@ -1,0 +1,713 @@
+{
+ "batch_id": 31,
+ "page": 0,
+ "pairs": [
+  {
+   "a": "share_repurchase_authorization",
+   "b": "share_repurchase_excise_tax",
+   "reason": "token_overlap:repurchase,share",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "share_repurchase_authorization",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-26-017090",
+       "date": "2026-02-18",
+       "quote": "approved an increase of 5.0 million shares to the existing repurchase program raising the total authorization to 66 million shares"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "we announced an increase to our share repurchase authorization and raised our quarterly dividend for the first quarter"
+      }
+     ]
+    },
+    {
+     "driver_name": "share_repurchase_excise_tax",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "the Inflation Reduction Act of 2022 introduced a 1% excise tax on share repurchases, which increases the costs associated with repurchasing shares of our common stock"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "the Inflation Reduction Act of 2022 introduced a 1% excise tax on share repurchases, which increases the costs associated with repurchasing shares of our common stock"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "the Inflation Reduction Act of 2022 introduced a 1% excise tax on share repurchases, which increases the costs associated with repurchasing shares of our common stock"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "the Inflation Reduction Act of 2022 introduced a 1% excise tax on share repurchases, which increases the costs associated with repurchasing shares of our common stock"
+      }
+     ]
+    }
+   ],
+   "idx": 499
+  },
+  {
+   "a": "north_italia_average_unit_volume",
+   "b": "north_italia_development",
+   "reason": "token_overlap:italia,north",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "north_italia_average_unit_volume",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "north_italia_unit_volumes"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "Average sales per mature location, defined as open prior to 2020 and adjusted to exclude impaired locations, for North Italia restaurants were approximately $8.0 million for fiscal 2022"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "North Italia first quarter comparable sales increased 3% from the prior year, resulting in annualized AUVs of $7.7 million."
+      }
+     ]
+    },
+    {
+     "driver_name": "north_italia_development",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "Our failure to effectively develop, grow and operate North Italia and our other branded concepts could materially adversely affect our financial performance."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Our failure to effectively develop, grow and operate North Italia, Flower Child and our other branded concepts could materially adversely affect our financial performance."
+      }
+     ]
+    }
+   ],
+   "idx": 416
+  },
+  {
+   "a": "loyalty_program",
+   "b": "loyalty_program_engagement",
+   "reason": "token_overlap:loyalty,program",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "loyalty_program",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "rewards_program"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "We launched our Cheesecake Rewards ® program nationally in mid-2023 with the objective to leverage data analytics and insights to engage more effectively with our guests and drive incremental sales while maintaining our restaurant level margins"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "Then we would have unpublished offers that will be given throughout the year, and those are really designed to drive, as you mentioned, those incremental visits."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "Member acquisition continues to exceed our expectations, and guest feedback remains overwhelmingly positive"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "augmenting our marketing programs, including our Cheesecake Rewards ® program"
+      }
+     ]
+    },
+    {
+     "driver_name": "loyalty_program_engagement",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "demand continues to exceed our internal expectations and we remain encouraged by the level of member activity and engagement that we are now seeing"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "we remain encouraged by the level of member activity and engagement that we are seeing"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-07-29T17.00",
+       "date": "2025-07-29",
+       "quote": "Moving to Cheesecake Rewards, the program continues to perform well, with strong member growth and high satisfaction."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "we continue to be very pleased with the performance of the Cheesecake Rewards Program. Demand continues to surpass our internal expectations"
+      }
+     ]
+    }
+   ],
+   "idx": 352
+  },
+  {
+   "a": "four_wall_margin_guidance",
+   "b": "restaurant_margin_guidance",
+   "reason": "token_overlap:guidance,margin",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "four_wall_margin_guidance",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "for next year is that we'd like to get 25 basis points of four-wall margin"
+      }
+     ]
+    },
+    {
+     "driver_name": "restaurant_margin_guidance",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "I think you said the restaurant margin should be at that 15% level for the overall corporate."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "expecting kind of 15 to 25 bps of of restaurant margin expansion is are you just building in some conservatism there now with the tariff talk"
+      }
+     ]
+    }
+   ],
+   "idx": 278
+  },
+  {
+   "a": "flower_child_margin",
+   "b": "flower_child_off_premise_mix",
+   "reason": "token_overlap:child,flower",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "flower_child_margin",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "flower_child_restaurant_margin"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "we are on track to get to the margin target that we need to be at to make it a growth vehicle, which is in that mid-teens level. So we feel really good overall about the trajectory of Flower Child."
+      }
+     ]
+    },
+    {
+     "driver_name": "flower_child_off_premise_mix",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "at Flower Child, you're talking about a 55% off-premise mix"
+      }
+     ]
+    }
+   ],
+   "idx": 241
+  },
+  {
+   "a": "restaurant_industry_demand",
+   "b": "restaurant_industry_traffic",
+   "reason": "token_overlap:industry,restaurant",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "restaurant_industry_demand",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "restaurant_industry_sales"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-103205",
+       "date": "2025-10-28",
+       "quote": "While the restaurant industry is navigating a softer environment, we remain confident in our ability to manage through it"
+      }
+     ]
+    },
+    {
+     "driver_name": "restaurant_industry_traffic",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "And I think that was reflected, really, if you look at BlackBox and NAPTRAC. I mean, we tend to outperform, but we tend to follow trends."
+      }
+     ]
+    }
+   ],
+   "idx": 481
+  },
+  {
+   "a": "revenue_guidance",
+   "b": "royalty_revenue",
+   "reason": "token_overlap:revenue",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "revenue_guidance",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "we anticipate total revenue for fiscal 2023 to be approximately $3.5 billion to $3.6 billion"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-058507",
+       "date": "2023-05-10",
+       "quote": "we anticipate total revenue for fiscal 2023 to be approximately $3.55 billion"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "we anticipate total revenues for fiscal 2023 to be between approximately $3.5 billion to $3.6 billion"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "we anticipate total revenues to be between $870 and $890 million"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "we anticipate total revenues for fiscal 2026 to be approximately $3.9 billion at the midpoint of our sensitivity modeling"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "Based on recent trends and assuming no material operating or consumer disruptions, we anticipate total revenue for fiscal 2024 to be approximately $3.6 billion."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-088397",
+       "date": "2023-08-07",
+       "quote": "we anticipate total revenue for fiscal 2023 to be approximately $3.5 billion"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "we anticipate total revenue for fiscal 2023 to be approximately $3.45 billion"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-000636",
+       "date": "2024-05-08",
+       "quote": "we anticipate total revenue for fiscal 2024 to be approximately $3.6 billion"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001151",
+       "date": "2024-08-05",
+       "quote": "we anticipate total revenue for fiscal 2024 to be approximately $3.56 billion to $3.60 billion"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001742",
+       "date": "2024-11-04",
+       "quote": "we anticipate total revenue for fiscal 2024 to be approximately $3.57 billion"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "we're not giving specific year-over-year comps. We're just providing an aggregate revenue"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "we anticipate total revenues to be between $835 and $855 million"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "we anticipate total revenues to be between $870 and $890 million"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-02-21T17.00",
+       "date": "2024-02-21",
+       "quote": "we anticipate total revenues to be between $875 and $895 million"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "we anticipate total revenues to be between $890 and $910 million"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "For Q3, we anticipate total revenues to be between $855 and $870 million, which represents year-over-year growth similar to Q2"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "For Q4, we anticipate total revenues to be between $905 and $915 million"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "And that's included in the revenue outlook."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "we anticipate total revenues for fiscal 2025 to be approximately $3.8 billion at the midpoint of our sensitivity modeling"
+      }
+     ]
+    },
+    {
+     "driver_name": "royalty_revenue",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "leveraging our bakery operations, international and consumer packaged goods royalty revenue streams"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "leveraging our bakery operations, international and consumer packaged goods royalty revenue streams"
+      }
+     ]
+    }
+   ],
+   "idx": 488
+  },
+  {
+   "a": "new_restaurant_margin",
+   "b": "new_restaurant_unit_volumes",
+   "reason": "token_overlap:new,restaurant",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "new_restaurant_margin",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "The second one that we're focused on is really bringing new restaurants up to speed over time a little bit more faster. The mature margin is one thing, but if you can bring the early stages of the restaurants up faster, it sets up for success in the longer term as well."
+      }
+     ]
+    },
+    {
+     "driver_name": "new_restaurant_unit_volumes",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "they're practically at the same unit volumes as the rest of the North system, and their margins are great"
+      }
+     ]
+    }
+   ],
+   "idx": 390
+  },
+  {
+   "a": "pandemic",
+   "b": "pandemic_dining_restrictions",
+   "reason": "token_overlap:pandemic",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "pandemic",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "The COVID-19 pandemic significantly disrupted our business and may do so in the future as variants of the underlying virus evolve."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "the COVID-19 pandemic continued to affect our business during periods of accelerated case counts in which we experienced increased restaurant staff absenteeism and temporary shifts in consumer behavior"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "three Other restaurants that are primarily located in areas which have not fully recovered from the pandemic"
+      }
+     ]
+    },
+    {
+     "driver_name": "pandemic_dining_restrictions",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-026056",
+       "date": "2024-02-21",
+       "quote": "pandemics and related containment measures, including the potential for quarantines or restriction on in-person dining"
+      }
+     ]
+    }
+   ],
+   "idx": 474
+  },
+  {
+   "a": "government_permitting",
+   "b": "government_shutdown",
+   "reason": "token_overlap:government",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "government_permitting",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "construction_permitting"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "which has become more challenging as we are experiencing longer than usual governmental delays in the licensing and permitting process"
+      }
+     ]
+    },
+    {
+     "driver_name": "government_shutdown",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "trade restrictions, import and export embargos, governmental shutdowns and disruptions in shipping"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-25-105631",
+       "date": "2025-11-03",
+       "quote": "economic, public health and political conditions that impact consumer confidence and spending, including government shutdowns"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-103205",
+       "date": "2025-10-28",
+       "quote": "including government shutdowns, trade policy, interest rate fluctuations, periods of heightened inflation and market instability"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "And I think, frankly, there's probably been an impact from the government shutdown."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "The ability for government to get back to work and trade deals to get done to give businesses and consumers more certainty"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "Again, many factors in terms of whether you want to believe it's the K economy or the government shutdown."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "you've called out some regional trends coming from the government shutdowns. Has that normalized as you exited the quarter?"
+      }
+     ]
+    }
+   ],
+   "idx": 292
+  }
+ ]
+}

@@ -1,0 +1,733 @@
+{
+ "batch_id": 14,
+ "page": 0,
+ "pairs": [
+  {
+   "a": "flower_child_average_unit_volume",
+   "b": "flower_child_unit_count",
+   "reason": "token_overlap:child,flower,unit",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "flower_child_average_unit_volume",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "Q1 AUVs, the run rate of those are $4.4 million average unit volume"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "I wanted to dig in a little more on the flower child. What would be the potential average volumes for a fully mature box"
+      }
+     ]
+    },
+    {
+     "driver_name": "flower_child_unit_count",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "flower_child_unit_development"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Currently, we operate 38 Flower Child locations and believe there is potential for approximately 700 domestic locations over time, which supports our plan for approximately 20% average annual unit growth for this concept."
+      }
+     ]
+    }
+   ],
+   "idx": 225
+  },
+  {
+   "a": "consumer_discretionary_spending",
+   "b": "low_end_consumer_spending",
+   "reason": "token_overlap:consumer,spending",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "consumer_discretionary_spending",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "The impact global and domestic economic conditions have on consumer discretionary spending could materially adversely affect our financial performance."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "The impact global and domestic economic conditions have on consumer discretionary spending and our costs of operations could materially adversely affect our financial performance."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "The impact global and domestic economic conditions have on consumer discretionary spending and our costs of operations could materially adversely affect our financial performance."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Any factor affecting consumer discretionary spending may influence customer traffic in our restaurants and average check amount"
+      }
+     ]
+    },
+    {
+     "driver_name": "low_end_consumer_spending",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "most management teams are citing the low-end consumers"
+      }
+     ]
+    }
+   ],
+   "idx": 128
+  },
+  {
+   "a": "restaurant_development_guidance",
+   "b": "restaurant_development_pipeline",
+   "reason": "token_overlap:development,restaurant",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "restaurant_development_guidance",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "new_restaurant_openings"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "We expect to open as many as 26 new restaurants in fiscal 2026 across our portfolio of concepts, with approximately one third of the openings occurring in the first half of fiscal 2026."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-086819",
+       "date": "2023-08-02",
+       "quote": "the Company now expects to open as many as 20 new restaurants in fiscal 2023, including as many as six Cheesecake Factory restaurants, five North Italia restaurants"
+      }
+     ]
+    },
+    {
+     "driver_name": "restaurant_development_pipeline",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "as far as the site potential, we feel good about the pipeline, as I said earlier, for 2024"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "I think we've built a great pipeline of openings, but we're always looking at the portfolio"
+      }
+     ]
+    }
+   ],
+   "idx": 478
+  },
+  {
+   "a": "average_unit_volume",
+   "b": "north_italia_average_unit_volume",
+   "reason": "token_overlap:average,unit,volume",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "average_unit_volume",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "average_sales_per_restaurant"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "Average sales per location for The Cheesecake Factory restaurants open for the full year were approximately $12.1 million and $11.8 million on a 53-week and 52-week basis, respectively, for fiscal 2022"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "with average unit volumes of over $12 million for domestic cheesecake factory restaurants"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "Box restaurant concepts also continued to drive strong results. with annualized AUVs of $7.9 million."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "Adjusted annualized AUVs were $12.2 million for the quarter, supported by an off-premise sales mix of 22%"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "Average sales per location for The Cheesecake Factory restaurants open for the full year were approximately $12.2 million for fiscal 2023"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "the Cheesecake Factory restaurants continue to generate industry-leading annualized unit volumes averaging 12.4 million for the quarter"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "Annualized unit volumes at the Cheesecake Factory reached 12.5 million for the quarter"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "The comparable sales growth contributed to annualized AUVs of $12.5 million"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "it takes a few years for AUVs to build up so that you can leverage your costs"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "with annualized unit volumes exceeding 12.5 million"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-07-29T17.00",
+       "date": "2025-07-29",
+       "quote": "It's AUV on an organic basis, right, from traffic and transactions"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-07-29T17.00",
+       "date": "2025-07-29",
+       "quote": "further elevating our industry-leading annualized unit volumes to nearly 12.8 million for the quarter"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "with annualized unit volumes averaging over $12 million"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "We've been super happy with the sales levels. They've been able to generate effectively the average AUVs and average margins."
+      }
+     ]
+    },
+    {
+     "driver_name": "north_italia_average_unit_volume",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "north_italia_unit_volumes"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "Average sales per mature location, defined as open prior to 2020 and adjusted to exclude impaired locations, for North Italia restaurants were approximately $8.0 million for fiscal 2022"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "North Italia first quarter comparable sales increased 3% from the prior year, resulting in annualized AUVs of $7.7 million."
+      }
+     ]
+    }
+   ],
+   "idx": 36
+  },
+  {
+   "a": "adverse_weather",
+   "b": "severe_weather",
+   "reason": "token_overlap:weather",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "adverse_weather",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "inclement_weather"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Adverse weather conditions, natural disasters and public health emergencies can impact customer traffic, make it more difficult to fully staff our restaurants"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "Adverse weather conditions and natural disasters may further exacerbate a number of these factors."
+      }
+     ]
+    },
+    {
+     "driver_name": "severe_weather",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "we're talking about unprecedented weather, the fires in Los Angeles, the holiday shifts"
+      }
+     ]
+    }
+   ],
+   "idx": 13
+  },
+  {
+   "a": "consumer_privacy_litigation",
+   "b": "data_privacy_regulation",
+   "reason": "token_overlap:privacy",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "consumer_privacy_litigation",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Numerous class-action suits under federal and state laws have been filed in recent years against companies who conduct telemarketing and/or SMS texting programs"
+      }
+     ]
+    },
+    {
+     "driver_name": "data_privacy_regulation",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "Compliance with the California Privacy Laws and other laws relating to the protection of personal information involve significant costs and could result in significant liability in the event we allow an unauthorized disclosure of personal information."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "the California Consumer Privacy Act (“CCPA”) became effective on January 1, 2020, which created individual privacy rights for California residents"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "Our collection, storage, handling, use, disclosure, processing and security of personal information is regulated by complex and continually evolving (and at times conflicting) U.S. (federal, state and local) and foreign laws, regulations, and industry standards."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Compliance with laws relating to privacy, security or the processing of personal information involve significant costs, increase our potential liability"
+      }
+     ]
+    }
+   ],
+   "idx": 132
+  },
+  {
+   "a": "alcoholic_beverage_sales",
+   "b": "food_beverage_costs",
+   "reason": "token_overlap:beverage",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "alcoholic_beverage_sales",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "alcohol_sales",
+      "beverage_alcohol_sales"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "alcoholic beverage sales represented 12% of The Cheesecake Factory restaurant sales"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "During fiscal 2023, alcoholic beverage sales represented 11% of The Cheesecake Factory restaurant sales"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "During fiscal 2025, alcoholic beverage sales represented 11% of The Cheesecake Factory restaurant sales."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "During fiscal 2024, alcoholic beverage sales represented 11% of The Cheesecake Factory restaurant sales."
+      }
+     ]
+    },
+    {
+     "driver_name": "food_beverage_costs",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "cost_of_goods_sold",
+      "cost_of_sales",
+      "food_and_beverage_cost",
+      "food_and_beverage_costs"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "food and beverage costs were 23.5% and 25.2% in the third quarters of fiscal 2023 and 2022, respectively, primarily due to menu price increases that were slightly in excess of inflation across most categories (1.5%)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-058468",
+       "date": "2023-05-10",
+       "quote": "Food and beverage costs 206,224 23.8 %"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-086819",
+       "date": "2023-08-02",
+       "quote": "Food and beverage cost 201,094 23.2 %"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001742",
+       "date": "2024-11-04",
+       "quote": "food and beverage costs were 22.6% and 23.5% in the third quarters of fiscal 2024 and 2023, respectively, primarily due to menu price increases in excess of inflation across most categories"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-084383",
+       "date": "2024-07-31",
+       "quote": "Food and beverage costs 201,694 22.3 % 201,094 23.2 %"
+      }
+     ]
+    }
+   ],
+   "idx": 25
+  },
+  {
+   "a": "california_weather",
+   "b": "weather",
+   "reason": "token_overlap:weather",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "california_weather",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "Despite the record rainfall in California, our largest market"
+      }
+     ]
+    },
+    {
+     "driver_name": "weather",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "weather_conditions",
+      "weather_disruption"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "the timing of holidays, inclement weather"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "i think there was a little bit of talk in in january about some positive weather"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "number one, there was some weather impact. I know that other concepts have talked about that. It was probably about a half a percent, about 40 to 50 basis points."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "Yeah, I think we've seen pretty stable performance across the portfolio. Again, X the weather, which everybody is seeing at different times at different places."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "I mean, the weather impacts have been very, very clear to us."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "that was affected by the LA fires and the weather impact was a little greater, just given our concentration in Texas"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-07-29T17.00",
+       "date": "2025-07-29",
+       "quote": "certainly we do watch the weather. And, you know, you could have some pockets where it can impact it for a period of time, a week here or there"
+      }
+     ]
+    }
+   ],
+   "idx": 67
+  },
+  {
+   "a": "marketing_campaigns",
+   "b": "marketing_costs",
+   "reason": "token_overlap:marketing",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "marketing_campaigns",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "Increased awareness through our social media channels and all of our marketing campaigns, along with our strategy to have the bites and bowls on the separate menu card, has paid off really well"
+      }
+     ]
+    },
+    {
+     "driver_name": "marketing_costs",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "marketing_spend"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "This variance was primarily driven by higher marketing costs, including launch costs related to our Cheesecake Rewards TM program"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "primarily driven by higher marketing costs, including the launch costs related to our Rewards program (0.3%)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "partially offset by marketing costs including the rewards program launch"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-02-21T17.00",
+       "date": "2024-02-21",
+       "quote": "Other operating expenses increased 20 basis points, driven by higher marketing costs, which includes the rewards program"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001073",
+       "date": "2025-05-05",
+       "quote": "primarily driven by higher marketing costs related to our Cheesecake Rewards ® program (0.2%)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "Other operating expenses increased 40 basis points, as expected, primarily driven by timing of marketing and rewards costs"
+      }
+     ]
+    }
+   ],
+   "idx": 360
+  },
+  {
+   "a": "flower_child_rewards_program",
+   "b": "rewards_program_contribution",
+   "reason": "token_overlap:program,rewards",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "flower_child_rewards_program",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-07-29T17.00",
+       "date": "2025-07-29",
+       "quote": "flower child is much more of a traditional rewards program it's an app based program that has points"
+      }
+     ]
+    },
+    {
+     "driver_name": "rewards_program_contribution",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "I think you guys have talked maybe about 100 basis points from a contribution perspective. Is that still the right level to be thinking about from loyalty?"
+      }
+     ]
+    }
+   ],
+   "idx": 257
+  }
+ ]
+}

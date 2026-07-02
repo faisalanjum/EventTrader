@@ -1,0 +1,167 @@
+[
+ {
+  "id": "g01",
+  "source_type": "transcript",
+  "quote": "Crude oil averaged $80 per barrel during the quarter."
+ },
+ {
+  "id": "g02",
+  "source_type": "transcript",
+  "quote": "Input oil costs were roughly $600 per tonne in the period."
+ },
+ {
+  "id": "g03",
+  "source_type": "transcript",
+  "quote": "Natural gas prices rose to $3.50 per MMBtu."
+ },
+ {
+  "id": "g04",
+  "source_type": "transcript",
+  "quote": "Copper averaged $4.20 per pound."
+ },
+ {
+  "id": "g05",
+  "source_type": "8-K",
+  "quote": "The board declared a quarterly dividend of $0.50 per share."
+ },
+ {
+  "id": "g06",
+  "source_type": "transcript",
+  "quote": "Adjusted EPS was $1.20 for the quarter."
+ },
+ {
+  "id": "g07",
+  "source_type": "transcript",
+  "quote": "FFO per share of $2.10."
+ },
+ {
+  "id": "g08",
+  "source_type": "transcript",
+  "quote": "Revenue per user reached $12.50."
+ },
+ {
+  "id": "g09",
+  "source_type": "10-K",
+  "quote": "Sales per square foot were $450."
+ },
+ {
+  "id": "g10",
+  "source_type": "8-K",
+  "quote": "Diluted EPS came in at $1.15."
+ },
+ {
+  "id": "g11",
+  "source_type": "transcript",
+  "quote": "Constant-currency revenue was $5.2 billion."
+ },
+ {
+  "id": "g12",
+  "source_type": "transcript",
+  "quote": "Brent crude averaged $82 per barrel."
+ },
+ {
+  "id": "g13",
+  "source_type": "transcript",
+  "quote": "WTI averaged $78 per barrel."
+ },
+ {
+  "id": "g14",
+  "source_type": "transcript",
+  "quote": "Oil prices rose 8% year over year."
+ },
+ {
+  "id": "g15",
+  "source_type": "8-K",
+  "quote": "Revenue was $1.5 billion."
+ },
+ {
+  "id": "g16",
+  "source_type": "transcript",
+  "quote": "Operating margin expanded 60 basis points."
+ },
+ {
+  "id": "g17",
+  "source_type": "10-Q",
+  "quote": "Store count reached 4,150."
+ },
+ {
+  "id": "g18",
+  "source_type": "transcript",
+  "quote": "First-quarter comparable sales rose 3%."
+ },
+ {
+  "id": "g19",
+  "source_type": "transcript",
+  "quote": "April comparable sales declined 1%."
+ },
+ {
+  "id": "g20",
+  "source_type": "transcript",
+  "quote": "Average check increased 3.4%."
+ },
+ {
+  "id": "g21",
+  "source_type": "transcript",
+  "quote": "Same-store sales grew 4%."
+ },
+ {
+  "id": "g22",
+  "source_type": "8-K",
+  "quote": "The company repurchased $2 billion of common stock."
+ },
+ {
+  "id": "r01",
+  "source_type": "8-K",
+  "quote": "the Company's Board of Directors has declared a quarterly dividend of $0.27 per share to be paid on August 27, 2024 to shareholders of record at the close of business on August 14, 2024"
+ },
+ {
+  "id": "r02",
+  "source_type": "10-K",
+  "quote": "Average sales per location for The Cheesecake Factory restaurants open for the full year were approximately $12.4 million for fiscal 2024."
+ },
+ {
+  "id": "r03",
+  "source_type": "10-K",
+  "quote": "North Italia average sales per restaurant operating week decreased 0.9% to $146,877 in fiscal 2025 from $148,231 in fiscal 2024."
+ },
+ {
+  "id": "r04",
+  "source_type": "transcript",
+  "quote": "Flower Child sales totaled $32.2 million, up 11% from the prior year, and sales per operating week were $80,000."
+ },
+ {
+  "id": "r05",
+  "source_type": "8-K",
+  "quote": "Net income and diluted net income per share were $52.4 million and $1.08, respectively, in the second quarter of fiscal 2024."
+ },
+ {
+  "id": "n01",
+  "source_type": "transcript",
+  "quote": "North Italia comparable sales increased approximately 8% from the third quarter of fiscal 2022."
+ },
+ {
+  "id": "n02",
+  "source_type": "transcript",
+  "quote": "partially offset by decreased customer traffic of 1.0%"
+ },
+ {
+  "id": "n03",
+  "source_type": "transcript",
+  "quote": "primarily driven by an increase in average check of 3.4%"
+ },
+ {
+  "id": "n04",
+  "source_type": "transcript",
+  "quote": "based on an increase of 9.5% in menu pricing"
+ },
+ {
+  "id": "n05",
+  "source_type": "10-Q",
+  "quote": "Sales through the off-premise channel comprised approximately 21% of our restaurant sales during the third quarter of fiscal 2023."
+ },
+ {
+  "id": "n06",
+  "source_type": "transcript",
+  "quote": "partially offset by 6.1% negative impact from menu mix"
+ }
+]

@@ -1,0 +1,24 @@
+{
+ "ticker": "YUM",
+ "chunk_id": "YUM__chunk_001",
+ "events": [
+  {
+   "source_id": "0001041061-26-000096",
+   "source_type": "8-K",
+   "date": "2026-04-01",
+   "part_index": 1,
+   "part_count": 1,
+   "content": "FORM: 8-K\n\nITEMS: [\"Item 5.02: Departure of Directors or Certain Officers; Election of Directors; Appointment of Certain Officers: Compensatory Arrangements of Certain Officers\"]\n\nDESC: Form 8-K - Current report - Item 5.02"
+  }
+ ],
+ "fiscal_kpis": [
+  "Habit Burger & Grill Division Same-Store Sales Growth",
+  "Habit Burger & Grill Division Total Unit Count",
+  "KFC Division Same-Store Sales Growth",
+  "KFC Division Total Unit Count",
+  "Pizza Hut Division Same-Store Sales Growth",
+  "Pizza Hut Division Total Unit Count",
+  "Taco Bell Division Same-Store Sales Growth",
+  "Taco Bell Division Total Unit Count"
+ ]
+}

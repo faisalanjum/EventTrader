@@ -1,0 +1,54 @@
+{
+ "ticker": "YUM",
+ "chunk_id": "YUM__chunk_012",
+ "events": [
+  {
+   "source_id": "0001041061-25-000091",
+   "source_type": "8-K",
+   "date": "2025-11-04",
+   "part_index": 2,
+   "part_count": 2,
+   "content": "(b)We recorded charges of $5 million and $37 million during the quarter and year to date ended September 30, 2025, respectively, and $12 million and $58 million during the quarter and year to date ended September 30, 2024, respectively, primarily to Corporate and unallocated General and administrative expenses related to a resource optimization program. Over the past several years, this program has allowed us to reallocate significant resources to accelerate our digital, technology and innovation capabilities to deliver a modern, world-class team member and customer experience and improve unit economics. We expanded the program in 2024 to identify further opportunities to optimize the Company’s spending and identify additional, critical areas in which to potentially reallocate resources, both with a goal to enable the acceleration of the Company’s growth rate. Costs incurred to date related to the program primarily include severance associated with positions that have been eliminated or relocated and consultant fees. Due to their scope and size, these charges have been reflected as Special Items. (c)During the quarter and year to date ended September 30, 2025, we recorded charges of approximately $3 million and $20 million, respectively, to Corporate and unallocated General and administrative expenses associated with our decision to designate two brand headquarters in the U.S., located in Plano, Texas and Irvine, California, to foster greater collaboration among brands and employees. This involved relocating the KFC U.S. corporate office to the KFC Global headquarters and requiring the majority of our U.S.-based remote employees to relocate to an appropriate headquarter office. Costs incurred to date primarily include severance for employees who have chosen not to relocate and consultant fees. Due to their scope and size, these charges have been reflected as Special Items. (d)On January 8, 2025, we terminated our franchise agreements with franchisee IS Gida A.S. (IS Gida), the owner and operator of KFC and Pizza Hut restaurants in Turkey and a subsidiary of IS Holding A.S. (IS Holding), after failure by IS Gida to meet our standards. As a result, 283 KFC restaurants and 254 Pizza Hut restaurants in Turkey were closed during the first quarter of 2025. We also re-acquired the master franchise rights in Germany for KFC and Pizza Hut from the owner of IS Holding in December 2024. We recorded charges of $1 million and $8 million during the quarter and year to date ended September 30, 2025, respectively, to Corporate and unallocated General and administrative expenses consisting primarily of costs associated with re-acquiring the master franchise rights in Germany including severance. Consistent with prior charges related to the matter, these charges have been reflected as Special Items. (e)We have begun a review of strategic options for the Pizza Hut brand. During the quarter ended September 30, 2025, we incurred approximately $4 million in third-party advising costs associated with this strategic review and wrote-off approximately $4 million of franchise incentive assets associated with rationalizing the Pizza Hut estate in preparation for a potential transaction. These charges were recorded to Corporate and unallocated General and administrative expenses and Corporate and unallocated franchise and property revenues, respectively. Given the significance of the costs expected to be incurred through the course of this strategic review, we have reflected such amounts as Special Items. 18 (f)The below table includes the detail of Special Items Tax Expense (Benefit): Quarter ended Year to date 9/30/25 9/30/24 9/30/25 9/30/24 Tax (Benefit) on Special Items Expense $ (4) $ (2) $ (18) $ (15) Tax Expense - Foreign tax reserve 3 — 105 — Tax Expense - U.S. OBBBA 76 — 76 — Tax (Benefit) - Tax audit (47) — (47) — Tax (Benefit) - Other Income tax impacts recorded as Special — — — (4) Special Items Tax Expense (Benefit) $ 28 $ (2) $ 116 $ (19) Tax Benefit on Special Items Expense was determined by assessing the tax impact of each individual component within Special Items based upon the nature of the item and jurisdictional tax law. Tax Expense - Foreign tax reserve in the quarter and year to date ended September 30, 2025, is associated with a reserve, and the related ongoing foreign exchange and inflationary adjustments, associated with a change in management's judgment around a Mexican subsidiary's ability to utilize losses to offset recapture gains triggered by a historical tax deconsolidation in Mexico. This tax expense was reflected as a Special Item due to its size and the time elapsed since the years to which the reserve relates. Tax Expense - U.S. OBBBA in the quarter and year to date ended September 30, 2025, reflects the tax expense recorded upon the July 4, 2025, enactment of H.R.1, commonly known as the One Big Beautiful Bill Act (“OBBBA”) in the United States. The tax expense was primarily associated with a change in management's judgment regarding our ability to utilize U.S. foreign tax credit related deferred tax assets that existed at the date of enactment and has been reflected as a Special Item due to the size of the non-recurring adjustment necessary upon enactment of the legislation. Tax (Benefit) - Tax audit in the quarter and year to date ended September 30, 2025, reflects the benefit associated with the reversal of a reserve due to a favorable audit resolution. Such reserve was established in prior years and was originally recorded as a Special Item. Other Income tax impacts recorded as Special in the year to date ended September 30, 2024, include benefits related to the reversal of a reserve due to the favorable resolution of a tax audit in a foreign jurisdiction. Such reserve was established in prior years related to income tax liabilities originally recorded as a Special Item as part of an intercompany restructuring of intellectual property. 19"
+  },
+  {
+   "source_id": "0001104659-25-095069",
+   "source_type": "8-K",
+   "date": "2025-09-30",
+   "part_index": 1,
+   "part_count": 1,
+   "content": "FORM: 8-K\n\nITEMS: [\"Item 1.01: Entry into a Material Definitive Agreement\", \"Item 2.03: Creation of a Direct Financial Obligation or an Obligation under an Off-Balance Sheet Arrangement of a Registrant\", \"Item 9.01: Financial Statements and Exhibits\"]\n\nDESC: Form 8-K - Current report - Item 1.01 Item 2.03 Item 9.01"
+  },
+  {
+   "source_id": "0001041061-25-000077",
+   "source_type": "8-K",
+   "date": "2025-09-09",
+   "part_index": 1,
+   "part_count": 1,
+   "content": "FORM: 8-K\n\nITEMS: [\"Item 5.02: Departure of Directors or Certain Officers; Election of Directors; Appointment of Certain Officers: Compensatory Arrangements of Certain Officers\", \"Item 9.01: Financial Statements and Exhibits\"]\n\nDESC: Form 8-K - Current report - Item 5.02 Item 9.01"
+  },
+  {
+   "source_id": "0001104659-25-088718",
+   "source_type": "8-K",
+   "date": "2025-09-09",
+   "part_index": 1,
+   "part_count": 1,
+   "content": "FORM: 8-K\n\nITEMS: [\"Item 8.01: Other Events\", \"Item 9.01: Financial Statements and Exhibits\"]\n\nDESC: Form 8-K - Current report - Item 8.01 Item 9.01"
+  },
+  {
+   "source_id": "0001104659-25-086708",
+   "source_type": "8-K",
+   "date": "2025-09-03",
+   "part_index": 1,
+   "part_count": 1,
+   "content": "FORM: 8-K\n\nITEMS: [\"Item 8.01: Other Events\", \"Item 9.01: Financial Statements and Exhibits\"]\n\nDESC: Form 8-K - Current report - Item 8.01 Item 9.01"
+  },
+  {
+   "source_id": "0001041061-25-000073",
+   "source_type": "8-K",
+   "date": "2025-08-28",
+   "part_index": 1,
+   "part_count": 1,
+   "content": "FORM: 8-K\n\nITEMS: [\"Item 5.02: Departure of Directors or Certain Officers; Election of Directors; Appointment of Certain Officers: Compensatory Arrangements of Certain Officers\", \"Item 5.03: Amendments to Articles of Incorporation or Bylaws; Change in Fiscal Year\", \"Item 9.01: Financial Statements and Exhibits\"]\n\nDESC: Form 8-K - Current report - Item 5.02 Item 5.03 Item 9.01"
+  }
+ ]
+}

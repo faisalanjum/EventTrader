@@ -1,0 +1,693 @@
+{
+ "batch_id": 24,
+ "page": 0,
+ "pairs": [
+  {
+   "a": "delivery_menu_pricing",
+   "b": "north_italia_menu_pricing",
+   "reason": "token_overlap:menu,pricing",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "delivery_menu_pricing",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "We'd like to not have to take any more price than we take today, which is only about 2% to 3% versus the in-restaurant menu."
+      }
+     ]
+    },
+    {
+     "driver_name": "north_italia_menu_pricing",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "we have another price increase in October, right at the end of October, for North Italia"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "And just North Italia, was your comment that the pricing you just took, you think that, were you behind on pricing there?"
+      }
+     ]
+    }
+   ],
+   "idx": 176
+  },
+  {
+   "a": "social_media_marketing",
+   "b": "social_media_publicity",
+   "reason": "token_overlap:media,social",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "social_media_marketing",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "many of our competitors have expanded and improved their use of social media, making it more difficult for us to differentiate our social media messaging"
+      }
+     ]
+    },
+    {
+     "driver_name": "social_media_publicity",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Any negative publicity could “go viral” causing nearly immediate and potentially significant harm to our brand and reputation"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "any failure to effectively respond to negative or potentially damaging social media, whether accurate or not, could damage our reputation"
+      }
+     ]
+    }
+   ],
+   "idx": 501
+  },
+  {
+   "a": "debt_issuance",
+   "b": "share_issuance",
+   "reason": "token_overlap:issuance",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "debt_issuance",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-26-037831",
+       "date": "2026-03-31",
+       "quote": "Item 2.03: Creation of a Direct Financial Obligation or an Obligation under an Off-Balance Sheet Arrangement of a Registrant"
+      }
+     ]
+    },
+    {
+     "driver_name": "share_issuance",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "share_issuance_dilution"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001073",
+       "date": "2025-05-05",
+       "quote": "The issuance or sale of shares of our common stock, or rights to acquire shares of our common stock, could depress the trading price of our common stock"
+      }
+     ]
+    }
+   ],
+   "idx": 172
+  },
+  {
+   "a": "consumer_dining_preferences",
+   "b": "consumer_preferences",
+   "reason": "token_overlap:consumer,preferences",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "consumer_dining_preferences",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "it is clear that consumer dining preferences continue to evolve, and these preferences may evolve more rapidly in response to any of these new requirements"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "Our failure to quickly and effectively adapt to any significant shift in consumer dining preference could cause our or our licensees’ restaurants to lose market share"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "consumer dining preferences continue to evolve, and these preferences may evolve more rapidly in response to any of these new requirements"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "consumer dining preferences continue to evolve, and these preferences may evolve more rapidly in response to any of these new requirements"
+      }
+     ]
+    },
+    {
+     "driver_name": "consumer_preferences",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "changing consumer preferences and demographics in a given area have in the past and may in the future cause us relocate or terminate a restaurant lease"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "changing consumer preferences and demographics in a given area have in the past and may in the future cause us to relocate or terminate a restaurant lease"
+      }
+     ]
+    }
+   ],
+   "idx": 121
+  },
+  {
+   "a": "bakery_sales",
+   "b": "external_bakery_sales",
+   "reason": "token_overlap:bakery,sales",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "bakery_sales",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "Our bakery division operates two facilities that produce quality cheesecakes and other baked products for our restaurants, international licensees and third-party bakery customers"
+      }
+     ]
+    },
+    {
+     "driver_name": "external_bakery_sales",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "bakery_external_sales",
+      "bakery_third_party_sales"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "And external bakery sales were $21.5 million during the fourth quarter of fiscal 2022."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "external bakery sales were $14.9 million during the first quarter of fiscal 2023"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "and external bakery sales were $17.2 million"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "external bakery sales were $15.4 million during the second quarter of fiscal 2023"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "And external bakery sales were $17.4 million during the third quarter of fiscal 2023."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-02-21T17.00",
+       "date": "2024-02-21",
+       "quote": "external bakery sales were $16.6 million during the fourth quarter of fiscal 2023"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "And external bakery sales were $14.9 million, flat from the prior year."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "And external bakery sales were $13.6 million, down 12% from the prior year"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "And external bakery sales were $14.9 million"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "And external bakery sales were $17.1 million"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "and external bakery sales were $12.7 million"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-07-29T17.00",
+       "date": "2025-07-29",
+       "quote": "And external bakery sales were $12.9 million."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "external bakery sales were $18 million, up 20% from the prior year period"
+      }
+     ]
+    }
+   ],
+   "idx": 51
+  },
+  {
+   "a": "share_repurchase",
+   "b": "share_repurchase_excise_tax",
+   "reason": "token_overlap:repurchase,share",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "share_repurchase",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "share_repurchases"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "Our objectives with regard to share repurchases have been to offset the dilution to our shares outstanding that results from equity compensation grants and to supplement our earnings per share growth"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-058468",
+       "date": "2023-05-10",
+       "quote": "The Company repurchased approximately 341,500 shares of its stock at a cost of $12.4 million in the first quarter of fiscal 2023"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "During the quarter, we completed approximately $3.9 million in share repurchases"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "returning capital to shareholders through our dividend and share repurchase programs, the latter of which offsets dilution from our equity compensation program"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-015185",
+       "date": "2025-02-19",
+       "quote": "The Company repurchased approximately 11,800 shares of its stock at a cost of $0.5 million in the fourth quarter of fiscal 2024."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "we completed approximately $1.1 million in share repurchases"
+      }
+     ]
+    },
+    {
+     "driver_name": "share_repurchase_excise_tax",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "the Inflation Reduction Act of 2022 introduced a 1% excise tax on share repurchases, which increases the costs associated with repurchasing shares of our common stock"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "the Inflation Reduction Act of 2022 introduced a 1% excise tax on share repurchases, which increases the costs associated with repurchasing shares of our common stock"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "the Inflation Reduction Act of 2022 introduced a 1% excise tax on share repurchases, which increases the costs associated with repurchasing shares of our common stock"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "the Inflation Reduction Act of 2022 introduced a 1% excise tax on share repurchases, which increases the costs associated with repurchasing shares of our common stock"
+      }
+     ]
+    }
+   ],
+   "idx": 498
+  },
+  {
+   "a": "holiday_seasonality",
+   "b": "holiday_timing",
+   "reason": "token_overlap:holiday",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "holiday_seasonality",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "So certainly North Italia plays well in the holiday season and special occasion and drove really strong volumes at the mature level."
+      }
+     ]
+    },
+    {
+     "driver_name": "holiday_timing",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "holiday_calendar_shift"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "the timing of holidays, inclement weather and the additional week in a 53-week fiscal year"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "anticipated impacts associated with holiday shifts"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "year-over-year comparisons can be significantly impacted by factors such as significant differences in year-over-year inflation, the number and timing of new restaurant openings and associated preopening costs, the timing of holidays, inclement weather"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "the timing of holidays, inclement weather and the additional week in a 53-week fiscal year"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "being able to triangulate between the weather, the fires, the holiday shifts, the retail pull forward in March, you know, that's a lot to parse out over the first four months"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-07-29T17.00",
+       "date": "2025-07-29",
+       "quote": "anticipated impacts associated with holiday shifts"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "anticipated impacts associated with holiday shifts"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "We had about 1% of weather impact in Q4 and about 50 basis points of a holiday shift impact."
+      }
+     ]
+    }
+   ],
+   "idx": 305
+  },
+  {
+   "a": "credit_facility_availability",
+   "b": "fica_tip_tax_credit",
+   "reason": "token_overlap:credit",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "credit_facility_availability",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001742",
+       "date": "2024-11-04",
+       "quote": "As of October 1, 2024, we had net availability for borrowings of $236.5 million, based on a $130.0 million outstanding debt balance and $33.5 million in standby letters of credit under the Revolver Facility."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-25-105631",
+       "date": "2025-11-03",
+       "quote": "As of September 30, 2025, we had net availability for borrowings of $366.5 million, based on no outstanding debt balance and $33.5 million in standby letters of credit under the Revolver Facility."
+      }
+     ]
+    },
+    {
+     "driver_name": "fica_tip_tax_credit",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "If we were to not qualify for the SITCA program, as currently proposed, it could cause us to lose tax credits which could materially adversely affect our financial performance."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "If we were to not qualify for the SITCA program, as currently proposed, it could cause us to lose tax credits which could materially adversely affect our financial performance."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "If we were to not qualify for the SITCA program, as currently proposed, it could cause us to lose tax credits which could materially adversely affect our financial performance."
+      }
+     ]
+    }
+   ],
+   "idx": 155
+  },
+  {
+   "a": "high_income_consumer_spending",
+   "b": "low_end_consumer_spending",
+   "reason": "token_overlap:consumer,spending",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "high_income_consumer_spending",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "top end of consumers really does feel pressure. We're likely to actually benefit some from that because they typically move down off of the steakhouses and the expensive independents"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "Whereas our cohort, the income, it depends on the slowdown, but incomes aren't slowing down. income of 100 plus K, those jobs are going away. There's not mass layoffs."
+      }
+     ]
+    },
+    {
+     "driver_name": "low_end_consumer_spending",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "most management teams are citing the low-end consumers"
+      }
+     ]
+    }
+   ],
+   "idx": 304
+  },
+  {
+   "a": "average_weekly_sales",
+   "b": "flower_child_average_weekly_sales",
+   "reason": "token_overlap:average,sales,weekly",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "average_weekly_sales",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "average_sales_per_operating_week"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-058507",
+       "date": "2023-05-10",
+       "quote": "The Cheesecake Factory average sales per restaurant operating week increased 6.3% to $239,679 in the first quarter of fiscal 2023"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "The second quarter tends to be a little bit of the peak of average weekly sales."
+      }
+     ]
+    },
+    {
+     "driver_name": "flower_child_average_weekly_sales",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "Flower Child average weekly sales were $85,200, up more than 6% from the third quarter of 2023"
+      }
+     ]
+    }
+   ],
+   "idx": 38
+  }
+ ]
+}

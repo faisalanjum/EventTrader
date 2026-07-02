@@ -1,0 +1,1152 @@
+[
+ {
+  "fact_type": "metric",
+  "driver_name": "same_store_sales",
+  "unit_raw": "%",
+  "value": "3",
+  "quote": "same-store sales rose 3%",
+  "expected_canonical_unit": "percent",
+  "trap_flag": "normal",
+  "category": "metric-rates"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "comparable_sales",
+  "unit_raw": "%",
+  "value": "5.2",
+  "quote": "comparable sales up 5.2%",
+  "expected_canonical_unit": "percent",
+  "trap_flag": "normal",
+  "category": "metric-rates"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "occupancy_rate",
+  "unit_raw": "%",
+  "value": "92",
+  "quote": "occupancy of 92%",
+  "expected_canonical_unit": "percent",
+  "trap_flag": "normal",
+  "category": "metric-rates"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "interest_rate",
+  "unit_raw": "%",
+  "value": "5.5",
+  "quote": "benchmark rate of 5.5%",
+  "expected_canonical_unit": "percent",
+  "trap_flag": "normal",
+  "category": "metric-rates"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "gross_margin",
+  "unit_raw": "%",
+  "value": "42",
+  "quote": "gross margin of 42%",
+  "expected_canonical_unit": "percent",
+  "trap_flag": "normal",
+  "category": "metric-rates"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "gross_margin",
+  "unit_raw": "bps",
+  "value": "120",
+  "quote": "gross margin expanded 120 basis points",
+  "expected_canonical_unit": "basis_points",
+  "trap_flag": "known-hard",
+  "category": "metric-rates"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "gross_margin",
+  "unit_raw": "percentage points",
+  "value": "2",
+  "quote": "gross margin up 2 percentage points",
+  "expected_canonical_unit": "percent_points",
+  "trap_flag": "known-hard",
+  "category": "metric-rates"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "same_store_sales",
+  "unit_raw": "% yoy",
+  "value": "4",
+  "quote": "comps up 4% year-over-year",
+  "expected_canonical_unit": "percent_yoy",
+  "trap_flag": "known-hard",
+  "category": "metric-rates"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "comparable_sales",
+  "unit_raw": "%",
+  "value": "4",
+  "quote": "comparable sales up 4% yoy",
+  "expected_canonical_unit": "percent_yoy",
+  "trap_flag": "inherited-bug",
+  "category": "metric-rates"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "same_store_sales",
+  "unit_raw": "",
+  "value": "3",
+  "quote": "same-store sales rose 3%",
+  "expected_canonical_unit": "percent",
+  "trap_flag": "generalization-trap",
+  "category": "metric-rates"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "commodity_cost",
+  "unit_raw": "$/barrel",
+  "value": "80",
+  "quote": "crude cost of $80 per barrel",
+  "expected_canonical_unit": "unknown",
+  "trap_flag": "inherited-bug",
+  "category": "metric-rates"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "steel_cost",
+  "unit_raw": "$/ton",
+  "value": "700",
+  "quote": "steel at $700 per ton",
+  "expected_canonical_unit": "unknown",
+  "trap_flag": "inherited-bug",
+  "category": "metric-rates"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "net_interest_margin",
+  "unit_raw": "%",
+  "value": "3.1",
+  "quote": "net interest margin of 3.1%",
+  "expected_canonical_unit": "percent",
+  "trap_flag": "normal",
+  "category": "metric-rates"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "average_daily_rate",
+  "unit_raw": "$",
+  "value": "185",
+  "quote": "ADR of $185",
+  "expected_canonical_unit": "usd",
+  "trap_flag": "inherited-bug",
+  "category": "metric-rates"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "average_selling_price",
+  "unit_raw": "$",
+  "value": "1200",
+  "quote": "ASP of $1,200",
+  "expected_canonical_unit": "usd",
+  "trap_flag": "inherited-bug",
+  "category": "metric-rates"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "subscriber_count",
+  "unit_raw": "subscribers",
+  "value": "10000000",
+  "quote": "10 million subscribers",
+  "expected_canonical_unit": "count",
+  "trap_flag": "enum-gap",
+  "category": "metric-rates"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "total_headcount",
+  "unit_raw": "employees",
+  "value": "78500",
+  "quote": "We ended the quarter with approximately 78,500 employees.",
+  "expected_canonical_unit": "count",
+  "trap_flag": "normal",
+  "category": "metric-counts"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "store_count",
+  "unit_raw": "stores",
+  "value": "4150",
+  "quote": "We operated 4,150 stores at quarter end.",
+  "expected_canonical_unit": "count",
+  "trap_flag": "normal",
+  "category": "metric-counts"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "subscriber_count",
+  "unit_raw": "million",
+  "value": "12.4",
+  "quote": "We reached 12.4 million paid subscribers this quarter.",
+  "expected_canonical_unit": "count",
+  "trap_flag": "known-hard",
+  "category": "metric-counts"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "active_users",
+  "unit_raw": "million",
+  "value": "210",
+  "quote": "Monthly active users grew to 210 million.",
+  "expected_canonical_unit": "count",
+  "trap_flag": "known-hard",
+  "category": "metric-counts"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "employee_count",
+  "unit_raw": "thousand",
+  "value": "85",
+  "quote": "Headcount stood at roughly 85 thousand.",
+  "expected_canonical_unit": "count",
+  "trap_flag": "known-hard",
+  "category": "metric-counts"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "restaurant_count",
+  "unit_raw": "restaurants",
+  "value": "1820",
+  "quote": "The system grew to 1,820 restaurants.",
+  "expected_canonical_unit": "count",
+  "trap_flag": "enum-gap",
+  "category": "metric-counts"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "restaurant_count",
+  "unit_raw": "units",
+  "value": "1820",
+  "quote": "We ended with 1,820 units across the system.",
+  "expected_canonical_unit": "count",
+  "trap_flag": "normal",
+  "category": "metric-counts"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "headcount",
+  "unit_raw": "",
+  "value": "78500",
+  "quote": "Headcount was 78,500.",
+  "expected_canonical_unit": "count",
+  "trap_flag": "inherited-bug",
+  "category": "metric-counts"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "store_count",
+  "unit_raw": "",
+  "value": "4150",
+  "quote": "Store count reached 4,150.",
+  "expected_canonical_unit": "count",
+  "trap_flag": "enum-gap",
+  "category": "metric-counts"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "net_new_stores",
+  "unit_raw": "stores",
+  "value": "120",
+  "quote": "We added 120 net new stores in the quarter.",
+  "expected_canonical_unit": "count",
+  "trap_flag": "generalization-trap",
+  "category": "metric-counts"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "subscriber_count",
+  "unit_raw": "K",
+  "value": "450",
+  "quote": "Net adds of 450K subscribers.",
+  "expected_canonical_unit": "count",
+  "trap_flag": "known-hard",
+  "category": "metric-counts"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "store_count_growth",
+  "unit_raw": "%",
+  "value": "8.5",
+  "quote": "Store count grew 8.5% year over year.",
+  "expected_canonical_unit": "percent_yoy",
+  "trap_flag": "generalization-trap",
+  "category": "metric-counts"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "shares_outstanding",
+  "unit_raw": "million",
+  "value": "640",
+  "quote": "Diluted shares outstanding were 640 million.",
+  "expected_canonical_unit": "count",
+  "trap_flag": "inherited-bug",
+  "category": "metric-counts"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "drive_thru_lane_count",
+  "unit_raw": "lanes",
+  "value": "2",
+  "quote": "Most new restaurants now feature 2 drive-thru lanes.",
+  "expected_canonical_unit": "count",
+  "trap_flag": "enum-gap",
+  "category": "metric-counts"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "loyalty_members",
+  "unit_raw": "members",
+  "value": "31.2",
+  "quote": "Loyalty program reached 31.2 million members.",
+  "expected_canonical_unit": "count",
+  "trap_flag": "enum-gap",
+  "category": "metric-counts"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "system_units",
+  "unit_raw": "x",
+  "value": "1820",
+  "quote": "Unit growth of roughly 1,820 across the system.",
+  "expected_canonical_unit": "count",
+  "trap_flag": "generalization-trap",
+  "category": "metric-counts"
+ },
+ {
+  "fact_type": "surprise",
+  "driver_name": "eps_surprise",
+  "unit_raw": "$",
+  "value": "0.05",
+  "quote": "beat by $0.05 per share",
+  "expected_canonical_unit": "usd",
+  "trap_flag": "normal",
+  "category": "surprise"
+ },
+ {
+  "fact_type": "surprise",
+  "driver_name": "eps_surprise",
+  "unit_raw": "per share",
+  "value": "0.05",
+  "quote": "EPS beat consensus by $0.05/share",
+  "expected_canonical_unit": "usd",
+  "trap_flag": "inherited-bug",
+  "category": "surprise"
+ },
+ {
+  "fact_type": "surprise",
+  "driver_name": "eps_surprise",
+  "unit_raw": "cents",
+  "value": "5",
+  "quote": "EPS came in 5 cents above estimates",
+  "expected_canonical_unit": "usd",
+  "trap_flag": "inherited-bug",
+  "category": "surprise"
+ },
+ {
+  "fact_type": "surprise",
+  "driver_name": "revenue_surprise",
+  "unit_raw": "$M",
+  "value": "50",
+  "quote": "revenue $50M above consensus",
+  "expected_canonical_unit": "m_usd",
+  "trap_flag": "inherited-bug",
+  "category": "surprise"
+ },
+ {
+  "fact_type": "surprise",
+  "driver_name": "revenue_surprise",
+  "unit_raw": "$B",
+  "value": "1.2",
+  "quote": "revenue beat by $1.2B",
+  "expected_canonical_unit": "m_usd",
+  "trap_flag": "inherited-bug",
+  "category": "surprise"
+ },
+ {
+  "fact_type": "surprise",
+  "driver_name": "revenue_surprise",
+  "unit_raw": "%",
+  "value": "3.2",
+  "quote": "revenue 3.2% above consensus",
+  "expected_canonical_unit": "percent",
+  "trap_flag": "generalization-trap",
+  "category": "surprise"
+ },
+ {
+  "fact_type": "surprise",
+  "driver_name": "margin_surprise",
+  "unit_raw": "bps",
+  "value": "120",
+  "quote": "gross margin 120 bps above expectations",
+  "expected_canonical_unit": "basis_points",
+  "trap_flag": "normal",
+  "category": "surprise"
+ },
+ {
+  "fact_type": "surprise",
+  "driver_name": "gross_margin_surprise",
+  "unit_raw": "pp",
+  "value": "1.2",
+  "quote": "margin beat by 1.2 percentage points",
+  "expected_canonical_unit": "percent_points",
+  "trap_flag": "known-hard",
+  "category": "surprise"
+ },
+ {
+  "fact_type": "surprise",
+  "driver_name": "eps_surprise_pct",
+  "unit_raw": "%",
+  "value": "8",
+  "quote": "EPS surprise of 8% vs consensus",
+  "expected_canonical_unit": "percent",
+  "trap_flag": "generalization-trap",
+  "category": "surprise"
+ },
+ {
+  "fact_type": "surprise",
+  "driver_name": "revenue_surprise",
+  "unit_raw": "€M",
+  "value": "40",
+  "quote": "revenue 40M euros above consensus",
+  "expected_canonical_unit": "unknown",
+  "trap_flag": "enum-gap",
+  "category": "surprise"
+ },
+ {
+  "fact_type": "surprise",
+  "driver_name": "same_store_sales_surprise",
+  "unit_raw": "%",
+  "value": "2.1",
+  "quote": "comp sales 210 bps / 2.1% above guidance",
+  "expected_canonical_unit": "percent",
+  "trap_flag": "known-hard",
+  "category": "surprise"
+ },
+ {
+  "fact_type": "surprise",
+  "driver_name": "eps_beat_magnitude",
+  "unit_raw": "$",
+  "value": "0.12",
+  "quote": "beat the street by 12 cents",
+  "expected_canonical_unit": "usd",
+  "trap_flag": "known-hard",
+  "category": "surprise"
+ },
+ {
+  "fact_type": "surprise",
+  "driver_name": "revenue_miss",
+  "unit_raw": "$M",
+  "value": "-30",
+  "quote": "revenue $30M below consensus",
+  "expected_canonical_unit": "m_usd",
+  "trap_flag": "inherited-bug",
+  "category": "surprise"
+ },
+ {
+  "fact_type": "surprise",
+  "driver_name": "subscriber_surprise",
+  "unit_raw": "count",
+  "value": "200000",
+  "quote": "net adds 200k above consensus",
+  "expected_canonical_unit": "count",
+  "trap_flag": "enum-gap",
+  "category": "surprise"
+ },
+ {
+  "fact_type": "surprise",
+  "driver_name": "ebitda_surprise",
+  "unit_raw": "$M",
+  "value": "75",
+  "quote": "EBITDA $75M above consensus",
+  "expected_canonical_unit": "m_usd",
+  "trap_flag": "inherited-bug",
+  "category": "surprise"
+ },
+ {
+  "fact_type": "surprise",
+  "driver_name": "eps_surprise_x",
+  "unit_raw": "x",
+  "value": "2.0",
+  "quote": "EPS came in 2x the consensus estimate",
+  "expected_canonical_unit": "x",
+  "trap_flag": "known-hard",
+  "category": "surprise"
+ },
+ {
+  "fact_type": "guidance",
+  "driver_name": "revenue_guidance",
+  "unit_raw": "$ B",
+  "value": "94-97",
+  "quote": "We expect full-year revenue of $94 to $97 billion",
+  "expected_canonical_unit": "m_usd",
+  "trap_flag": "normal",
+  "category": "guidance"
+ },
+ {
+  "fact_type": "guidance",
+  "driver_name": "revenue_guidance",
+  "unit_raw": "$B",
+  "value": "94-97",
+  "quote": "revenue guidance of $94-97B",
+  "expected_canonical_unit": "m_usd",
+  "trap_flag": "known-hard",
+  "category": "guidance"
+ },
+ {
+  "fact_type": "guidance",
+  "driver_name": "eps_guidance",
+  "unit_raw": "$",
+  "value": "1.10-1.15",
+  "quote": "adjusted EPS of $1.10 to $1.15",
+  "expected_canonical_unit": "usd",
+  "trap_flag": "normal",
+  "category": "guidance"
+ },
+ {
+  "fact_type": "guidance",
+  "driver_name": "operating_margin_guidance",
+  "unit_raw": "%",
+  "value": "45-46",
+  "quote": "operating margin of 45% to 46%",
+  "expected_canonical_unit": "percent",
+  "trap_flag": "normal",
+  "category": "guidance"
+ },
+ {
+  "fact_type": "guidance",
+  "driver_name": "capex_guidance",
+  "unit_raw": "$ B",
+  "value": "10-12",
+  "quote": "capital expenditures of $10 to $12 billion",
+  "expected_canonical_unit": "m_usd",
+  "trap_flag": "normal",
+  "category": "guidance"
+ },
+ {
+  "fact_type": "guidance",
+  "driver_name": "gross_margin_guidance",
+  "unit_raw": "%",
+  "value": "62",
+  "quote": "gross margin around 62%",
+  "expected_canonical_unit": "percent",
+  "trap_flag": "normal",
+  "category": "guidance"
+ },
+ {
+  "fact_type": "guidance",
+  "driver_name": "dividend_per_share_guidance",
+  "unit_raw": "$",
+  "value": "0.96",
+  "quote": "quarterly dividend of $0.96 per share",
+  "expected_canonical_unit": "usd",
+  "trap_flag": "normal",
+  "category": "guidance"
+ },
+ {
+  "fact_type": "guidance",
+  "driver_name": "free_cash_flow_guidance",
+  "unit_raw": "$ M",
+  "value": "1200",
+  "quote": "free cash flow of approximately $1,200 million",
+  "expected_canonical_unit": "m_usd",
+  "trap_flag": "normal",
+  "category": "guidance"
+ },
+ {
+  "fact_type": "guidance",
+  "driver_name": "revenue_growth_guidance",
+  "unit_raw": "% yoy",
+  "value": "8-10",
+  "quote": "revenue growth of 8% to 10% year over year",
+  "expected_canonical_unit": "percent_yoy",
+  "trap_flag": "normal",
+  "category": "guidance"
+ },
+ {
+  "fact_type": "guidance",
+  "driver_name": "tax_rate_guidance",
+  "unit_raw": "%",
+  "value": "21",
+  "quote": "effective tax rate of about 21%",
+  "expected_canonical_unit": "percent",
+  "trap_flag": "normal",
+  "category": "guidance"
+ },
+ {
+  "fact_type": "guidance",
+  "driver_name": "share_count_guidance",
+  "unit_raw": "M",
+  "value": "1500",
+  "quote": "diluted share count of roughly 1,500 million",
+  "expected_canonical_unit": "count",
+  "trap_flag": "enum-gap",
+  "category": "guidance"
+ },
+ {
+  "fact_type": "guidance",
+  "driver_name": "net_interest_margin_guidance",
+  "unit_raw": "bps",
+  "value": "15",
+  "quote": "NIM expansion of about 15 basis points",
+  "expected_canonical_unit": "basis_points",
+  "trap_flag": "normal",
+  "category": "guidance"
+ },
+ {
+  "fact_type": "guidance",
+  "driver_name": "ebitda_margin_guidance",
+  "unit_raw": "percentage points",
+  "value": "2",
+  "quote": "EBITDA margin up about 2 percentage points",
+  "expected_canonical_unit": "percent_points",
+  "trap_flag": "normal",
+  "category": "guidance"
+ },
+ {
+  "fact_type": "guidance",
+  "driver_name": "leverage_ratio_guidance",
+  "unit_raw": "x",
+  "value": "2.5",
+  "quote": "net leverage target of 2.5x",
+  "expected_canonical_unit": "x",
+  "trap_flag": "normal",
+  "category": "guidance"
+ },
+ {
+  "fact_type": "guidance",
+  "driver_name": "store_count_guidance",
+  "unit_raw": "stores",
+  "value": "150",
+  "quote": "plan to open about 150 new stores",
+  "expected_canonical_unit": "count",
+  "trap_flag": "generalization-trap",
+  "category": "guidance"
+ },
+ {
+  "fact_type": "guidance",
+  "driver_name": "oil_price_realization_guidance",
+  "unit_raw": "$/barrel",
+  "value": "75",
+  "quote": "realized prices of about $75 per barrel",
+  "expected_canonical_unit": "unknown",
+  "trap_flag": "inherited-bug",
+  "category": "guidance"
+ },
+ {
+  "fact_type": "action_event",
+  "driver_name": "dividend_per_share",
+  "unit_raw": "$",
+  "value": "0.50",
+  "quote": "declared a quarterly dividend of $0.50 per share",
+  "expected_canonical_unit": "usd",
+  "trap_flag": "normal",
+  "category": "action_event"
+ },
+ {
+  "fact_type": "action_event",
+  "driver_name": "special_dividend",
+  "unit_raw": "$",
+  "value": "1.00",
+  "quote": "a special dividend of $1.00 per share",
+  "expected_canonical_unit": "usd",
+  "trap_flag": "inherited-bug",
+  "category": "action_event"
+ },
+ {
+  "fact_type": "action_event",
+  "driver_name": "dividend",
+  "unit_raw": "$",
+  "value": "0.50",
+  "quote": "raised the dividend to $0.50 per share",
+  "expected_canonical_unit": "usd",
+  "trap_flag": "inherited-bug",
+  "category": "action_event"
+ },
+ {
+  "fact_type": "action_event",
+  "driver_name": "quarterly_dividend",
+  "unit_raw": "per share",
+  "value": "0.50",
+  "quote": "quarterly dividend of $0.50 per share",
+  "expected_canonical_unit": "usd",
+  "trap_flag": "enum-gap",
+  "category": "action_event"
+ },
+ {
+  "fact_type": "action_event",
+  "driver_name": "dividend_per_share",
+  "unit_raw": "cents",
+  "value": "12",
+  "quote": "dividend of 12 cents per share",
+  "expected_canonical_unit": "usd",
+  "trap_flag": "known-hard",
+  "category": "action_event"
+ },
+ {
+  "fact_type": "action_event",
+  "driver_name": "share_repurchase",
+  "unit_raw": "$B",
+  "value": "2",
+  "quote": "authorized a $2 billion share repurchase program",
+  "expected_canonical_unit": "m_usd",
+  "trap_flag": "known-hard",
+  "category": "action_event"
+ },
+ {
+  "fact_type": "action_event",
+  "driver_name": "buyback_authorization",
+  "unit_raw": "$",
+  "value": "500",
+  "quote": "board approved $500 million buyback",
+  "expected_canonical_unit": "m_usd",
+  "trap_flag": "normal",
+  "category": "action_event"
+ },
+ {
+  "fact_type": "action_event",
+  "driver_name": "stock_repurchase",
+  "unit_raw": "billion",
+  "value": "1.5",
+  "quote": "repurchase up to $1.5 billion of common stock",
+  "expected_canonical_unit": "m_usd",
+  "trap_flag": "known-hard",
+  "category": "action_event"
+ },
+ {
+  "fact_type": "action_event",
+  "driver_name": "asset_impairment",
+  "unit_raw": "$B",
+  "value": "1.2",
+  "quote": "recorded a $1.2 billion impairment charge",
+  "expected_canonical_unit": "m_usd",
+  "trap_flag": "known-hard",
+  "category": "action_event"
+ },
+ {
+  "fact_type": "action_event",
+  "driver_name": "goodwill_impairment",
+  "unit_raw": "$M",
+  "value": "340",
+  "quote": "$340 million goodwill impairment",
+  "expected_canonical_unit": "m_usd",
+  "trap_flag": "known-hard",
+  "category": "action_event"
+ },
+ {
+  "fact_type": "action_event",
+  "driver_name": "restructuring_charge",
+  "unit_raw": "$",
+  "value": "75",
+  "quote": "$75 million restructuring charge",
+  "expected_canonical_unit": "m_usd",
+  "trap_flag": "normal",
+  "category": "action_event"
+ },
+ {
+  "fact_type": "action_event",
+  "driver_name": "layoffs",
+  "unit_raw": "%",
+  "value": "5",
+  "quote": "reducing headcount by approximately 5%",
+  "expected_canonical_unit": "percent",
+  "trap_flag": "generalization-trap",
+  "category": "action_event"
+ },
+ {
+  "fact_type": "action_event",
+  "driver_name": "layoffs",
+  "unit_raw": "jobs",
+  "value": "5000",
+  "quote": "eliminating 5,000 jobs",
+  "expected_canonical_unit": "count",
+  "trap_flag": "enum-gap",
+  "category": "action_event"
+ },
+ {
+  "fact_type": "action_event",
+  "driver_name": "workforce_reduction",
+  "unit_raw": "employees",
+  "value": "5000",
+  "quote": "cutting 5,000 employees",
+  "expected_canonical_unit": "count",
+  "trap_flag": "known-hard",
+  "category": "action_event"
+ },
+ {
+  "fact_type": "action_event",
+  "driver_name": "headcount_reduction",
+  "unit_raw": "%",
+  "value": "10",
+  "quote": "10% workforce reduction",
+  "expected_canonical_unit": "percent",
+  "trap_flag": "normal",
+  "category": "action_event"
+ },
+ {
+  "fact_type": "action_event",
+  "driver_name": "debt_issuance",
+  "unit_raw": "$M",
+  "value": "500",
+  "quote": "issued $500 million of senior notes",
+  "expected_canonical_unit": "m_usd",
+  "trap_flag": "known-hard",
+  "category": "action_event"
+ },
+ {
+  "fact_type": "action_event",
+  "driver_name": "senior_notes_offering",
+  "unit_raw": "$B",
+  "value": "1",
+  "quote": "$1 billion senior notes offering",
+  "expected_canonical_unit": "m_usd",
+  "trap_flag": "known-hard",
+  "category": "action_event"
+ },
+ {
+  "fact_type": "action_event",
+  "driver_name": "dividend_yield",
+  "unit_raw": "%",
+  "value": "3.2",
+  "quote": "dividend yield of 3.2%",
+  "expected_canonical_unit": "percent",
+  "trap_flag": "generalization-trap",
+  "category": "action_event"
+ },
+ {
+  "fact_type": "guidance",
+  "driver_name": "dividend",
+  "unit_raw": "$",
+  "value": "0.50",
+  "quote": "declared a quarterly dividend of $0.50",
+  "expected_canonical_unit": "usd",
+  "trap_flag": "inherited-bug",
+  "category": "adversarial"
+ },
+ {
+  "fact_type": "guidance",
+  "driver_name": "dividend_per_share",
+  "unit_raw": "$",
+  "value": "0.50",
+  "quote": "raising the dividend per share to $0.50",
+  "expected_canonical_unit": "usd",
+  "trap_flag": "normal",
+  "category": "adversarial"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "oil_price",
+  "unit_raw": "$/barrel",
+  "value": "80",
+  "quote": "realized crude price of $80/barrel",
+  "expected_canonical_unit": "unknown",
+  "trap_flag": "enum-gap",
+  "category": "adversarial"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "oil_price",
+  "unit_raw": "$ per barrel",
+  "value": "80",
+  "quote": "WTI averaged $80 per barrel",
+  "expected_canonical_unit": "unknown",
+  "trap_flag": "inherited-bug",
+  "category": "adversarial"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "revpar",
+  "unit_raw": "$",
+  "value": "120",
+  "quote": "RevPAR rose to $120",
+  "expected_canonical_unit": "usd",
+  "trap_flag": "inherited-bug",
+  "category": "adversarial"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "revpar_per_room",
+  "unit_raw": "$/room",
+  "value": "120",
+  "quote": "revenue per available room of $/room 120",
+  "expected_canonical_unit": "usd",
+  "trap_flag": "generalization-trap",
+  "category": "adversarial"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "net_leverage",
+  "unit_raw": "x",
+  "value": "2.5",
+  "quote": "net leverage of 2.5x at quarter-end",
+  "expected_canonical_unit": "x",
+  "trap_flag": "normal",
+  "category": "adversarial"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "valuation_multiple",
+  "unit_raw": "2.5x",
+  "value": "2.5",
+  "quote": "trading at 2.5x forward sales",
+  "expected_canonical_unit": "x",
+  "trap_flag": "inherited-bug",
+  "category": "adversarial"
+ },
+ {
+  "fact_type": "surprise",
+  "driver_name": "margin_beat",
+  "unit_raw": "bps",
+  "value": "50",
+  "quote": "gross margin beat by 50 bps",
+  "expected_canonical_unit": "basis_points",
+  "trap_flag": "normal",
+  "category": "adversarial"
+ },
+ {
+  "fact_type": "guidance",
+  "driver_name": "operating_margin",
+  "unit_raw": "%",
+  "value": "18.5",
+  "quote": "expect operating margin of approximately 18.5%",
+  "expected_canonical_unit": "percent",
+  "trap_flag": "normal",
+  "category": "adversarial"
+ },
+ {
+  "fact_type": "guidance",
+  "driver_name": "margin_expansion",
+  "unit_raw": "percentage points",
+  "value": "2",
+  "quote": "guiding to roughly 2 percentage points of margin expansion",
+  "expected_canonical_unit": "percent_points",
+  "trap_flag": "known-hard",
+  "category": "adversarial"
+ },
+ {
+  "fact_type": "surprise",
+  "driver_name": "revenue_growth",
+  "unit_raw": "% yoy",
+  "value": "12",
+  "quote": "revenue grew 12% year-over-year",
+  "expected_canonical_unit": "percent_yoy",
+  "trap_flag": "known-hard",
+  "category": "adversarial"
+ },
+ {
+  "fact_type": "guidance",
+  "driver_name": "revenue",
+  "unit_raw": "€M",
+  "value": "500",
+  "quote": "full-year revenue of €500M",
+  "expected_canonical_unit": "unknown",
+  "trap_flag": "enum-gap",
+  "category": "adversarial"
+ },
+ {
+  "fact_type": "guidance",
+  "driver_name": "eps",
+  "unit_raw": "$",
+  "value": "",
+  "quote": "full-year EPS guidance of $4.50 to $5.00",
+  "expected_canonical_unit": "usd",
+  "trap_flag": "known-hard",
+  "category": "adversarial"
+ },
+ {
+  "fact_type": "guidance",
+  "driver_name": "capex",
+  "unit_raw": "$B",
+  "value": "1.2",
+  "quote": "capital expenditures of about $1.2 billion",
+  "expected_canonical_unit": "m_usd",
+  "trap_flag": "inherited-bug",
+  "category": "adversarial"
+ },
+ {
+  "fact_type": "action_event",
+  "driver_name": "buyback",
+  "unit_raw": "$B",
+  "value": "10",
+  "quote": "board authorized a $10 billion share repurchase",
+  "expected_canonical_unit": "m_usd",
+  "trap_flag": "inherited-bug",
+  "category": "adversarial"
+ },
+ {
+  "fact_type": "action_event",
+  "driver_name": "shares_repurchased",
+  "unit_raw": "shares",
+  "value": "5",
+  "quote": "repurchased 5 million shares during the quarter",
+  "expected_canonical_unit": "count",
+  "trap_flag": "known-hard",
+  "category": "adversarial"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "adjusted_eps_diluted",
+  "unit_raw": "$",
+  "value": "3.2",
+  "quote": "we expect adjusted diluted EPS of $3.20 to $3.40",
+  "expected_canonical_unit": "usd",
+  "trap_flag": "inherited-bug",
+  "category": "known-bug"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "core_eps_basic",
+  "unit_raw": "$",
+  "value": "1.05",
+  "quote": "core basic EPS guidance of $1.05",
+  "expected_canonical_unit": "usd",
+  "trap_flag": "inherited-bug",
+  "category": "known-bug"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "weighted_average_basic_shares_outstanding",
+  "unit_raw": "million",
+  "value": "300",
+  "quote": "weighted average basic shares outstanding of ~300 million",
+  "expected_canonical_unit": "count",
+  "trap_flag": "inherited-bug",
+  "category": "known-bug"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "diluted_shares_outstanding",
+  "unit_raw": "billion",
+  "value": "4.94",
+  "quote": "diluted shares outstanding of approximately 4.94 billion",
+  "expected_canonical_unit": "count",
+  "trap_flag": "inherited-bug",
+  "category": "known-bug"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "eps",
+  "unit_raw": "per share",
+  "value": "1.13",
+  "quote": "$1.13 per share",
+  "expected_canonical_unit": "usd",
+  "trap_flag": "known-hard",
+  "category": "known-bug"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "dividend_per_share",
+  "unit_raw": "cents",
+  "value": "32",
+  "quote": "quarterly dividend of 32 cents per share",
+  "expected_canonical_unit": "usd",
+  "trap_flag": "known-hard",
+  "category": "known-bug"
+ },
+ {
+  "fact_type": "guidance",
+  "driver_name": "net_leverage_ratio",
+  "unit_raw": "2.5x",
+  "value": "2.5",
+  "quote": "target net leverage of 2.5x by year end",
+  "expected_canonical_unit": "x",
+  "trap_flag": "known-hard",
+  "category": "known-bug"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "headcount",
+  "unit_raw": "",
+  "value": "5000",
+  "quote": "we plan to add 5,000 to headcount",
+  "expected_canonical_unit": "count",
+  "trap_flag": "known-hard",
+  "category": "known-bug"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "revenue",
+  "unit_raw": "€M",
+  "value": "100",
+  "quote": "revenue of €100 million",
+  "expected_canonical_unit": "unknown",
+  "trap_flag": "enum-gap",
+  "category": "known-bug"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "fuel_cost_per_barrel",
+  "unit_raw": "$/barrel",
+  "value": "85",
+  "quote": "fuel cost of about $85 per barrel",
+  "expected_canonical_unit": "unknown",
+  "trap_flag": "enum-gap",
+  "category": "known-bug"
+ },
+ {
+  "fact_type": "metric",
+  "driver_name": "average_selling_price",
+  "unit_raw": "$",
+  "value": "490",
+  "quote": "average selling price of $490",
+  "expected_canonical_unit": "usd",
+  "trap_flag": "generalization-trap",
+  "category": "known-bug"
+ },
+ {
+  "fact_type": "surprise",
+  "driver_name": "eps_surprise",
+  "unit_raw": "%",
+  "value": "8",
+  "quote": "EPS beat consensus by 8%",
+  "expected_canonical_unit": "percent",
+  "trap_flag": "normal",
+  "category": "known-bug"
+ },
+ {
+  "fact_type": "surprise",
+  "driver_name": "revenue_surprise",
+  "unit_raw": "bps",
+  "value": "50",
+  "quote": "margin came in 50 bps ahead",
+  "expected_canonical_unit": "basis_points",
+  "trap_flag": "normal",
+  "category": "known-bug"
+ },
+ {
+  "fact_type": "action_event",
+  "driver_name": "share_repurchase_authorization",
+  "unit_raw": "$B",
+  "value": "10",
+  "quote": "board authorized a $10 billion buyback",
+  "expected_canonical_unit": "m_usd",
+  "trap_flag": "generalization-trap",
+  "category": "known-bug"
+ },
+ {
+  "fact_type": "action_event",
+  "driver_name": "store_openings",
+  "unit_raw": "stores",
+  "value": "150",
+  "quote": "plan to open 150 new stores",
+  "expected_canonical_unit": "count",
+  "trap_flag": "normal",
+  "category": "known-bug"
+ },
+ {
+  "fact_type": "guidance",
+  "driver_name": "organic_revenue_growth",
+  "unit_raw": "% yoy",
+  "value": "5",
+  "quote": "organic revenue growth of 5% year-over-year",
+  "expected_canonical_unit": "percent_yoy",
+  "trap_flag": "normal",
+  "category": "known-bug"
+ }
+]

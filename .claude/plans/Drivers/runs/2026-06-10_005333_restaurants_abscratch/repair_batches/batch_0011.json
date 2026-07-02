@@ -1,0 +1,760 @@
+{
+ "batch_id": 11,
+ "page": 0,
+ "pairs": [
+  {
+   "a": "fox_restaurant_concepts_unit_count",
+   "b": "international_licensed_restaurant_count",
+   "reason": "token_overlap:count,restaurant",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "fox_restaurant_concepts_unit_count",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "fox_restaurant_concepts_restaurant_count"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "We target approximately 10% to 15% average annual unit growth for the aggregate Other FRC portfolio"
+      }
+     ]
+    },
+    {
+     "driver_name": "international_licensed_restaurant_count",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "fiscal.ai-kpi",
+       "source_id": "fiscal_ai:CAKE:number_of_international_licensed_restaurants",
+       "date": "",
+       "quote": "Number of International-Licensed Restaurants"
+      }
+     ]
+    }
+   ],
+   "idx": 279
+  },
+  {
+   "a": "labor_market",
+   "b": "market_share",
+   "reason": "token_overlap:market",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "labor_market",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "based on what we're seeing today with the underlying labor market and the commodities piece, it certainly feels like the margin profile lines up a little bit better"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "I know in 2024, the stable labor market has been a huge tailwind for you."
+      }
+     ]
+    },
+    {
+     "driver_name": "market_share",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "which I think allows us, again, to take market share because the operators can do such a good job"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "comparable sales and traffic meaningfully exceeding the black box casual dining index by 310 and 380 basis points respectively"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-07-29T17.00",
+       "date": "2025-07-29",
+       "quote": "we believe we can take market share and have been taking market share because of that sustained quality"
+      }
+     ]
+    }
+   ],
+   "idx": 331
+  },
+  {
+   "a": "leverage_ratio",
+   "b": "sales_leverage",
+   "reason": "token_overlap:leverage",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "leverage_ratio",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "our increased indebtedness and our resulting higher debt-to-equity ratio, as compared to that which has existed on a historical basis, could limit our ability to obtain additional financing in the future"
+      }
+     ]
+    },
+    {
+     "driver_name": "sales_leverage",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "and that concept sales to be able to leverage that into the same level as CAKE"
+      }
+     ]
+    }
+   ],
+   "idx": 349
+  },
+  {
+   "a": "north_italia_restaurant_count",
+   "b": "north_italia_same_store_sales",
+   "reason": "token_overlap:italia,north",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "north_italia_restaurant_count",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "fiscal.ai-kpi",
+       "source_id": "fiscal_ai:CAKE:north_italia_company_owned_restaurants",
+       "date": "",
+       "quote": "North Italia Company-Owned Restaurants"
+      }
+     ]
+    },
+    {
+     "driver_name": "north_italia_same_store_sales",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "north_italia_comparable_sales"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "North Italia comparable sales increased approximately 8% from fiscal 2022"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-058507",
+       "date": "2023-05-10",
+       "quote": "North Italia comparable sales increased approximately 9% from the first quarter of fiscal 2022"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-024317",
+       "date": "2023-02-22",
+       "quote": "North Italia operating information: Comparable restaurant sales vs. prior year 9 %"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "fiscal.ai-kpi",
+       "source_id": "fiscal_ai:CAKE:north_italia_comparable_restaurant_sales",
+       "date": "",
+       "quote": "North Italia Comparable Restaurant Sales"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "North Italia's fourth quarter comparable sales increased an exceptional 26% over 2019 on a 14-week versus 14-week basis."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-058468",
+       "date": "2023-05-10",
+       "quote": "North Italia operating information: Comparable restaurant sales vs. prior year 9 %"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "North Italia comparable sales decreased approximately 2% from fiscal 2024."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "North Italia comparable sales increased approximately 2% from fiscal 2023."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-088397",
+       "date": "2023-08-07",
+       "quote": "North Italia comparable sales increased approximately 8% from the second quarter of fiscal 2022"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "North Italia comparable sales increased approximately 8% from the third quarter of fiscal 2022"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-25-105631",
+       "date": "2025-11-03",
+       "quote": "North Italia comparable sales decreased approximately 3% from the third quarter of fiscal 2024."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-000636",
+       "date": "2024-05-08",
+       "quote": "North Italia comparable sales increased approximately 3% from the first quarter of fiscal 2023."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001151",
+       "date": "2024-08-05",
+       "quote": "North Italia comparable sales increased approximately 2% from the second quarter of fiscal 2023."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001742",
+       "date": "2024-11-04",
+       "quote": "North Italia comparable sales increased approximately 2% from the third quarter of fiscal 2023"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001073",
+       "date": "2025-05-05",
+       "quote": "North Italia comparable sales decreased approximately 1% from the first quarter of fiscal 2024."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001564",
+       "date": "2025-08-04",
+       "quote": "North Italia comparable sales decreased approximately 1% from the second quarter of fiscal 2024"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-086819",
+       "date": "2023-08-02",
+       "quote": "North Italia operating information: Comparable restaurant sales vs. prior year 8 %"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-113409",
+       "date": "2023-11-01",
+       "quote": "North Italia operating information: Comparable restaurant sales vs. prior year 8 %"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-026056",
+       "date": "2024-02-21",
+       "quote": "North Italia operating information: Comparable restaurant sales vs. prior year 7 %"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-058691",
+       "date": "2024-05-08",
+       "quote": "North Italia operating information: Comparable restaurant sales vs. prior year 3 %"
+      }
+     ]
+    }
+   ],
+   "idx": 453
+  },
+  {
+   "a": "north_italia_menu_mix",
+   "b": "north_italia_menu_pricing",
+   "reason": "token_overlap:italia,menu,north",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "north_italia_menu_mix",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "The north Italia mix was negative 2%. It's actually a slight improvement from where it was last year."
+      }
+     ]
+    },
+    {
+     "driver_name": "north_italia_menu_pricing",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "we have another price increase in October, right at the end of October, for North Italia"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "And just North Italia, was your comment that the pricing you just took, you think that, were you behind on pricing there?"
+      }
+     ]
+    }
+   ],
+   "idx": 440
+  },
+  {
+   "a": "goodwill_impairment",
+   "b": "long_lived_asset_impairment",
+   "reason": "token_overlap:impairment",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "goodwill_impairment",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "Should the value of goodwill or other intangible assets become impaired, there could be a material adverse effect on our financial performance."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "We test our goodwill and other indefinite-lived intangible assets for impairment annually or on an interim basis if events or changes in circumstances between annual tests indicate a potential impairment"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "Goodwill and other indefinite-lived intangible assets are not amortized and are tested for impairment annually as of the first day of our fiscal fourth quarter"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "We test our goodwill and other indefinite-lived intangible assets for impairment annually or on an interim basis if events or changes in circumstances between annual tests indicate a potential impairment"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Goodwill and other indefinite-lived intangible assets are not amortized and are tested for impairment annually"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "We test our goodwill and other indefinite-lived intangible assets for impairment annually or on an interim basis if events or changes in circumstances between annual tests indicate a potential impairment"
+      }
+     ]
+    },
+    {
+     "driver_name": "long_lived_asset_impairment",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "restaurant_asset_impairment",
+      "restaurant_impairment_charge"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "During fiscal 2023, we recorded impairment of assets and lease terminations expense of $29.5 million primarily related to the impairment of long-lived assets"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "we recorded impairment of assets and lease terminations expense of $31.4 million primarily related to the impairment of long-lived assets"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "During fiscal 2025, we recorded impairment of assets and lease terminations expense of $23.0 million primarily related to the impairment of long-lived assets"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "In fiscal 2025, we recorded $23.0 million of expense primarily related to the impairment of long-lived assets for one North Italia, one Grand Lux Cafe and four Other FRC locations"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "During fiscal 2024, we recorded impairment of assets and lease terminations expense of $13.6 million primarily related to the impairment of long-lived assets"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "In fiscal 2024, we recorded impairment of assets and lease termination expenses of $13.6 million primarily related to impairment of long-lived assets for one The Cheesecake Factory (previously partially impaired) and six Other FRC locations"
+      }
+     ]
+    }
+   ],
+   "idx": 291
+  },
+  {
+   "a": "third_party_delivery",
+   "b": "third_party_vendor_failure",
+   "reason": "token_overlap:party,third",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "third_party_delivery",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "third_party_delivery_agreement"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "Any failure of our third-party delivery provider to represent our brands in a favorable manner could damage our reputation."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "we've been working with DoorDash to be able to integrate rewards members into the DoorDash platform, which will allow us to make offers available to DoorDash members as well"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "Any failure of our third-party delivery provider to represent our brands in a favorable manner could damage our reputation."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "partnering with a third party to provide delivery services for our restaurants"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "we execute marketing campaigns with our third-party delivery provider and through our online ordering platform"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "partnering with a third party to provide delivery services for our restaurants"
+      }
+     ]
+    },
+    {
+     "driver_name": "third_party_vendor_failure",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "third_party_vendor_outage"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "The failure of third-party vendors to provide adequate services, including, as result of any Security Incident, could significantly harm our operations and reputation"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001151",
+       "date": "2024-08-05",
+       "quote": "If any of our third-party vendors experiences a failure that affects a significant aspect of our business, we may experience data loss, increased costs, operational disruption or other harm, any of which could materially adversely affect our financial performance."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "If any of our third-party vendors experiences a failure that affects a significant aspect of our business, we may experience data loss, increased costs, operational disruption or other harm"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "If any of our third-party vendors experiences a failure that affects a significant aspect of our business, we may experience data loss, increased costs, operational disruption or other harm"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "If any of our third-party vendors experiences a failure that affects a significant aspect of our business, we may experience data loss, increased costs, operational disruption or other harm"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001742",
+       "date": "2024-11-04",
+       "quote": "If any of our third-party vendors experiences a failure that affects a significant aspect of our business, we may experience data loss, increased costs, operational disruption or other harm, any of which could materially adversely affect our financial performance."
+      }
+     ]
+    }
+   ],
+   "idx": 520
+  },
+  {
+   "a": "new_unit_returns",
+   "b": "new_unit_sales",
+   "reason": "token_overlap:new,unit",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "new_unit_returns",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "new_restaurant_returns"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "we wouldn't be moving forward with the 20 to 22 locations if we didn't feel we'd be hitting the returns"
+      }
+     ]
+    },
+    {
+     "driver_name": "new_unit_sales",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "new_restaurant_sales"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "We've seen great sales performance out of the new locations that we've opened"
+      }
+     ]
+    }
+   ],
+   "idx": 403
+  },
+  {
+   "a": "alcoholic_beverage_licensing",
+   "b": "alcoholic_beverage_sales",
+   "reason": "token_overlap:alcoholic,beverage",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "alcoholic_beverage_licensing",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "alcoholic_beverage_regulation"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "In order to serve alcoholic beverages in our restaurants or off-premise where permitted, we must comply with alcoholic beverage control regulations which require us to apply to a state or other governmental alcoholic beverage control authority for licenses and permits."
+      }
+     ]
+    },
+    {
+     "driver_name": "alcoholic_beverage_sales",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "alcohol_sales",
+      "beverage_alcohol_sales"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "alcoholic beverage sales represented 12% of The Cheesecake Factory restaurant sales"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "During fiscal 2023, alcoholic beverage sales represented 11% of The Cheesecake Factory restaurant sales"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "During fiscal 2025, alcoholic beverage sales represented 11% of The Cheesecake Factory restaurant sales."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "During fiscal 2024, alcoholic beverage sales represented 11% of The Cheesecake Factory restaurant sales."
+      }
+     ]
+    }
+   ],
+   "idx": 19
+  },
+  {
+   "a": "competitor_discounting",
+   "b": "restaurant_discounting",
+   "reason": "token_overlap:discounting",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "competitor_discounting",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "casual_dining_discounting"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "We never get into the discounting wars, right?"
+      }
+     ]
+    },
+    {
+     "driver_name": "restaurant_discounting",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "the extent to which every restaurant is offering some sort of BOGO or discount"
+      }
+     ]
+    }
+   ],
+   "idx": 105
+  }
+ ]
+}

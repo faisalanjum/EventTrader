@@ -1,0 +1,571 @@
+{
+ "batch_id": 13,
+ "page": 0,
+ "pairs": [
+  {
+   "a": "north_italia_average_check",
+   "b": "north_italia_menu_pricing",
+   "reason": "token_overlap:italia,north",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "north_italia_average_check",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "The average check for each customer, including beverages and desserts, for fiscal 2024 averaged approximately $34.60 for lunch and approximately $44.40 for dinner."
+      }
+     ]
+    },
+    {
+     "driver_name": "north_italia_menu_pricing",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "we have another price increase in October, right at the end of October, for North Italia"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "And just North Italia, was your comment that the pricing you just took, you think that, were you behind on pricing there?"
+      }
+     ]
+    }
+   ],
+   "idx": 410
+  },
+  {
+   "a": "third_party_bakery_sales",
+   "b": "third_party_delivery_fees",
+   "reason": "token_overlap:party,third",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "third_party_bakery_sales",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Our bakery division operates two facilities that produce quality cheesecakes and other baked products for our restaurants, international licensees and third-party bakery customers."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "produce quality cheesecakes and other baked products for our restaurants, international licensees and third-party bakery customers"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "Our bakery division operates two facilities that produce quality cheesecakes and other baked products for our restaurants, international licensees and third-party bakery customers."
+      }
+     ]
+    },
+    {
+     "driver_name": "third_party_delivery_fees",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "a change in customers’ willingness to pay fees associated with third-party delivery could negatively impact our comparable restaurant sales performance"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "a change in customers’ willingness to pay fees associated with third-party delivery could negatively impact our comparable restaurant sales performance"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "a change in customers’ willingness to pay fees associated with third-party delivery could negatively impact our comparable restaurant sales performance"
+      }
+     ]
+    }
+   ],
+   "idx": 516
+  },
+  {
+   "a": "flower_child_rewards_program",
+   "b": "flower_child_unit_count",
+   "reason": "token_overlap:child,flower",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "flower_child_rewards_program",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-07-29T17.00",
+       "date": "2025-07-29",
+       "quote": "flower child is much more of a traditional rewards program it's an app based program that has points"
+      }
+     ]
+    },
+    {
+     "driver_name": "flower_child_unit_count",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "flower_child_unit_development"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Currently, we operate 38 Flower Child locations and believe there is potential for approximately 700 domestic locations over time, which supports our plan for approximately 20% average annual unit growth for this concept."
+      }
+     ]
+    }
+   ],
+   "idx": 255
+  },
+  {
+   "a": "construction_cost",
+   "b": "construction_delays",
+   "reason": "token_overlap:construction",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "construction_cost",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "construction_costs"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "the availability and/or cost of raw materials and labor used in construction"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "we're not really anticipating any significant tariff impacts to construction costs, which have, by the way, come back really nicely in line with our long-term expectations following the COVID inflation"
+      }
+     ]
+    },
+    {
+     "driver_name": "construction_delays",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-086819",
+       "date": "2023-08-02",
+       "quote": "the Company continues to experience some delays in opening dates due to construction challenges and permit approval delays"
+      }
+     ]
+    }
+   ],
+   "idx": 111
+  },
+  {
+   "a": "consumer_disposable_income",
+   "b": "real_disposable_income",
+   "reason": "token_overlap:disposable,income",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "consumer_disposable_income",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "changes in global economic conditions (such as currency valuation, disposable income, unemployment levels and increases in the prices of products and services and labor)"
+      }
+     ]
+    },
+    {
+     "driver_name": "real_disposable_income",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "in light of recent economic growth and real disposable income forecasts, which have been revised downward by approximately 1%"
+      }
+     ]
+    }
+   ],
+   "idx": 130
+  },
+  {
+   "a": "employment_credits",
+   "b": "employment_litigation",
+   "reason": "token_overlap:employment",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "employment_credits",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "employment_tax_credits"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-088397",
+       "date": "2023-08-07",
+       "quote": "a lower proportion of employment credits in relation to income before income taxes in the second quarter of fiscal 2023 (9.4%)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-25-105631",
+       "date": "2025-11-03",
+       "quote": "These factors were offset by higher employment credits in the third quarter of fiscal 2025 (3.0%)."
+      }
+     ]
+    },
+    {
+     "driver_name": "employment_litigation",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Employment-related litigation, particularly with respect to claims styled as class action lawsuits, are especially costly to defend"
+      }
+     ]
+    }
+   ],
+   "idx": 193
+  },
+  {
+   "a": "flower_child_acquisition",
+   "b": "flower_child_sales",
+   "reason": "token_overlap:child,flower",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "flower_child_acquisition",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "We are on track with Flower Child, bringing it fully under our umbrella for this year."
+      }
+     ]
+    },
+    {
+     "driver_name": "flower_child_sales",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "Flower Child sales increased 11.0% to $127.5 million for fiscal 2023, compared to $114.8 million for fiscal 2022"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-000636",
+       "date": "2024-05-08",
+       "quote": "Flower Child sales increased 10.2% to $34.5 million for the first quarter of fiscal 2024"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "looking at Flower Child, as David Gordon mentioned, the sales continue to improve. quarter over quarter"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "Flower Child sales totaled $32.2 million, up 11% from the prior year, and sales per operating week were $80,000."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001742",
+       "date": "2024-11-04",
+       "quote": "Flower Child sales increased 13.7% to $36.6 million for the third quarter of fiscal 2024"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-02-21T17.00",
+       "date": "2024-02-21",
+       "quote": "Flower Child sales totaled $30.4 million, and sales per operating week were $75,500"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "Flower Child sales totaled $35.7 million, up 7% from the prior year, and sales per operating week were $85,900"
+      }
+     ]
+    }
+   ],
+   "idx": 215
+  },
+  {
+   "a": "marketing_costs",
+   "b": "marketing_publicity",
+   "reason": "token_overlap:marketing",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "marketing_costs",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "marketing_spend"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "This variance was primarily driven by higher marketing costs, including launch costs related to our Cheesecake Rewards TM program"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "primarily driven by higher marketing costs, including the launch costs related to our Rewards program (0.3%)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "partially offset by marketing costs including the rewards program launch"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-02-21T17.00",
+       "date": "2024-02-21",
+       "quote": "Other operating expenses increased 20 basis points, driven by higher marketing costs, which includes the rewards program"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001073",
+       "date": "2025-05-05",
+       "quote": "primarily driven by higher marketing costs related to our Cheesecake Rewards ® program (0.2%)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "Other operating expenses increased 40 basis points, as expected, primarily driven by timing of marketing and rewards costs"
+      }
+     ]
+    },
+    {
+     "driver_name": "marketing_publicity",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "our marketing strategy to tie our creative marketing campaigns to on-brand events to generate publicity and increase consumer engagement"
+      }
+     ]
+    }
+   ],
+   "idx": 363
+  },
+  {
+   "a": "casual_dining_industry_sales",
+   "b": "casual_dining_market_share",
+   "reason": "token_overlap:casual,dining",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "casual_dining_industry_sales",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "we updated sales projections for some of our lesser-established concepts, which are performing more in line with broader casual dining sales trends"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "Industry sales decelerated in the fourth quarter as reflected by the black box casual dining index declining sequentially by 410 basis points from the third quarter"
+      }
+     ]
+    },
+    {
+     "driver_name": "casual_dining_market_share",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-026056",
+       "date": "2024-02-21",
+       "quote": "outperformed the broader casual dining industry in the fourth quarter, demonstrating the strength and resilience of our namesake brand and our ability to capture market share"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-112254",
+       "date": "2024-10-29",
+       "quote": "We are capturing market share as evidenced by the continued strong outperformance in comparable sales and traffic at The Cheesecake Factory restaurants versus the broader casual dining industry."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-015185",
+       "date": "2025-02-19",
+       "quote": "We continued to capture market share, as demonstrated by the ongoing outperformance in comparable sales and traffic at The Cheesecake Factory restaurants versus the broader casual dining industry."
+      }
+     ]
+    }
+   ],
+   "idx": 86
+  },
+  {
+   "a": "leverage_ratio",
+   "b": "sales_to_investment_ratio",
+   "reason": "token_overlap:ratio",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "leverage_ratio",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "our increased indebtedness and our resulting higher debt-to-equity ratio, as compared to that which has existed on a historical basis, could limit our ability to obtain additional financing in the future"
+      }
+     ]
+    },
+    {
+     "driver_name": "sales_to_investment_ratio",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "any comments on the sales to investment ratio today and how you can improve will be helpful"
+      }
+     ]
+    }
+   ],
+   "idx": 350
+  }
+ ]
+}

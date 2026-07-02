@@ -1,0 +1,107 @@
+{
+ "verdict": "GO",
+ "basis": "degenerate-floor: lost wilson_upper95 <= noise rule_of_three_upper95",
+ "gate": {
+  "lost_merge_rate": 0.0,
+  "noise_floor_rate": 0.0,
+  "lost_merge_le_noise_floor": true,
+  "one_sided_binom_p_excess": 1.0,
+  "significant_excess": false
+ },
+ "lost_merge": {
+  "n_stratum": 100,
+  "n_judged": 100,
+  "lost": 0,
+  "lost_idx": [],
+  "rate": 0.0,
+  "wilson_upper95": 0.03699480747600191
+ },
+ "noise": {
+  "n_noise": 40,
+  "n_both_judged": 40,
+  "disagree": 0,
+  "disagree_idx": [],
+  "disagreement_rate": 0.0,
+  "to_same": 0,
+  "base_notsame_trials": 80,
+  "floor_rate": 0.0,
+  "solo_same_rate": 0.0,
+  "degenerate": true,
+  "rule_of_three_upper95": 0.0375
+ },
+ "position": {
+  "buckets": {
+   "early": {
+    "n": 27,
+    "same": 0,
+    "same_rate": 0.0
+   },
+   "late": {
+    "n": 73,
+    "same": 0,
+    "same_rate": 0.0
+   }
+  },
+  "per_position": {
+   "0": {
+    "n": 3,
+    "same": 0,
+    "same_rate": 0.0
+   },
+   "1": {
+    "n": 2,
+    "same": 0,
+    "same_rate": 0.0
+   },
+   "2": {
+    "n": 2,
+    "same": 0,
+    "same_rate": 0.0
+   },
+   "3": {
+    "n": 12,
+    "same": 0,
+    "same_rate": 0.0
+   },
+   "4": {
+    "n": 8,
+    "same": 0,
+    "same_rate": 0.0
+   },
+   "5": {
+    "n": 12,
+    "same": 0,
+    "same_rate": 0.0
+   },
+   "6": {
+    "n": 11,
+    "same": 0,
+    "same_rate": 0.0
+   },
+   "7": {
+    "n": 9,
+    "same": 0,
+    "same_rate": 0.0
+   },
+   "8": {
+    "n": 17,
+    "same": 0,
+    "same_rate": 0.0
+   },
+   "9": {
+    "n": 24,
+    "same": 0,
+    "same_rate": 0.0
+   }
+  },
+  "late_minus_early_same_rate": 0.0
+ },
+ "flags": [
+  "DEGENERATE_NOISE_FLOOR — 40-pair floor too thin/zero; verdict uses rule-of-three ceiling; treat as provisional, human review advised"
+ ],
+ "limitations": [
+  "leaf/company-profile evidence only — fold repair stays off (separate K2 gate)",
+  "misses are the RECOVERABLE under-merge direction (re-suggested every future sweep)",
+  "statistical bound, not literal certainty — permanent 1-2% production canary remains mandatory"
+ ]
+}

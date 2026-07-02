@@ -1,0 +1,710 @@
+{
+ "batch_id": 45,
+ "page": 0,
+ "pairs": [
+  {
+   "a": "credit_facility_borrowings",
+   "b": "revolving_credit_availability",
+   "reason": "token_overlap:credit",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "credit_facility_borrowings",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "debt_repayment"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "we had net availability for borrowings of $238.5 million, based on a $130.0 million outstanding debt balance and $31.5 million in standby letters of credit under the Revolver Facility"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "we may again implement mitigation actions such as suspending share repurchases, not declaring future dividends, increasing borrowings under our credit facility"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "In the fourth quarter of fiscal 2024, we repaid $20.0 million on the Revolver Facility."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "we may again implement mitigation actions such as suspending share repurchases, not declaring future dividends, increasing borrowings under our credit facility or modifying our operating strategies"
+      }
+     ]
+    },
+    {
+     "driver_name": "revolving_credit_availability",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "revolving_credit_borrowings",
+      "revolving_credit_facility",
+      "revolving_credit_facility_availability"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-042573",
+       "date": "2025-04-30",
+       "quote": "$366.5 million of availability on its revolving credit facility with no outstanding balance"
+      }
+     ]
+    }
+   ],
+   "idx": 162
+  },
+  {
+   "a": "consolidated_revenue",
+   "b": "revenue_guidance",
+   "reason": "token_overlap:revenue",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "consolidated_revenue",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-058468",
+       "date": "2023-05-10",
+       "quote": "Consolidated revenue increased 9.1% over the prior year period"
+      }
+     ]
+    },
+    {
+     "driver_name": "revenue_guidance",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "we anticipate total revenue for fiscal 2023 to be approximately $3.5 billion to $3.6 billion"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-058507",
+       "date": "2023-05-10",
+       "quote": "we anticipate total revenue for fiscal 2023 to be approximately $3.55 billion"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "we anticipate total revenues for fiscal 2023 to be between approximately $3.5 billion to $3.6 billion"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "we anticipate total revenues to be between $870 and $890 million"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "we anticipate total revenues for fiscal 2026 to be approximately $3.9 billion at the midpoint of our sensitivity modeling"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "Based on recent trends and assuming no material operating or consumer disruptions, we anticipate total revenue for fiscal 2024 to be approximately $3.6 billion."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-088397",
+       "date": "2023-08-07",
+       "quote": "we anticipate total revenue for fiscal 2023 to be approximately $3.5 billion"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "we anticipate total revenue for fiscal 2023 to be approximately $3.45 billion"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-000636",
+       "date": "2024-05-08",
+       "quote": "we anticipate total revenue for fiscal 2024 to be approximately $3.6 billion"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001151",
+       "date": "2024-08-05",
+       "quote": "we anticipate total revenue for fiscal 2024 to be approximately $3.56 billion to $3.60 billion"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001742",
+       "date": "2024-11-04",
+       "quote": "we anticipate total revenue for fiscal 2024 to be approximately $3.57 billion"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "we're not giving specific year-over-year comps. We're just providing an aggregate revenue"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "we anticipate total revenues to be between $835 and $855 million"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "we anticipate total revenues to be between $870 and $890 million"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-02-21T17.00",
+       "date": "2024-02-21",
+       "quote": "we anticipate total revenues to be between $875 and $895 million"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "we anticipate total revenues to be between $890 and $910 million"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "For Q3, we anticipate total revenues to be between $855 and $870 million, which represents year-over-year growth similar to Q2"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "For Q4, we anticipate total revenues to be between $905 and $915 million"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "And that's included in the revenue outlook."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "we anticipate total revenues for fiscal 2025 to be approximately $3.8 billion at the midpoint of our sensitivity modeling"
+      }
+     ]
+    }
+   ],
+   "idx": 108
+  },
+  {
+   "a": "branded_retail_demand",
+   "b": "dining_demand",
+   "reason": "token_overlap:demand",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "branded_retail_demand",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "So just a little bit of pressure on the, you know, branded retail. I mean, I think you've seen that from other big CPG companies"
+      }
+     ]
+    },
+    {
+     "driver_name": "dining_demand",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "consumer_demand",
+      "consumer_dining_demand"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-042573",
+       "date": "2025-04-30",
+       "quote": "underscoring the consistent consumer demand for the high-quality, differentiated dining experiences we provide"
+      }
+     ]
+    }
+   ],
+   "idx": 61
+  },
+  {
+   "a": "north_italia_menu_pricing",
+   "b": "north_italia_restaurant_level_margin",
+   "reason": "token_overlap:italia,north",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "north_italia_menu_pricing",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "we have another price increase in October, right at the end of October, for North Italia"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "And just North Italia, was your comment that the pricing you just took, you think that, were you behind on pricing there?"
+      }
+     ]
+    },
+    {
+     "driver_name": "north_italia_restaurant_level_margin",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "north_italia_four_wall_margin",
+      "north_italia_margin",
+      "north_italia_restaurant_margin"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "Forewall margin for the adjusted mature North Italia locations improved to 13.3% for the fourth quarter, supported by a menu price increase implemented mid-fourth quarter."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "restaurant-level margin for the adjusted mature North Italia locations was 15%, a 250 basis point improvement from the prior year"
+      }
+     ]
+    }
+   ],
+   "idx": 447
+  },
+  {
+   "a": "cash_on_cash_returns",
+   "b": "on_premise_incident_rate",
+   "reason": "token_overlap:on",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "cash_on_cash_returns",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "we're sitting right between the 20% and 25% cash on cash we've been targeting and feel great about the ability to continue to open at that level"
+      }
+     ]
+    },
+    {
+     "driver_name": "on_premise_incident_rate",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "on_premise_incident_rates"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-02-21T17.00",
+       "date": "2024-02-21",
+       "quote": "Q4 on-premise incident rates remained above 2019 levels and by the same amount as in the third quarter"
+      }
+     ]
+    }
+   ],
+   "idx": 79
+  },
+  {
+   "a": "flower_child_off_premise_mix",
+   "b": "off_premise_capacity",
+   "reason": "token_overlap:off,premise",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "flower_child_off_premise_mix",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "at Flower Child, you're talking about a 55% off-premise mix"
+      }
+     ]
+    },
+    {
+     "driver_name": "off_premise_capacity",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "so much has moved from on-premise to off-premise that has actually expanded capacity"
+      }
+     ]
+    }
+   ],
+   "idx": 250
+  },
+  {
+   "a": "casual_dining_industry_sales",
+   "b": "casual_dining_traffic",
+   "reason": "token_overlap:casual,dining",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "casual_dining_industry_sales",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "we updated sales projections for some of our lesser-established concepts, which are performing more in line with broader casual dining sales trends"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "Industry sales decelerated in the fourth quarter as reflected by the black box casual dining index declining sequentially by 410 basis points from the third quarter"
+      }
+     ]
+    },
+    {
+     "driver_name": "casual_dining_traffic",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "casual_dining_industry_traffic"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "traffic outperformed the broader casual dining industry despite the softening sales environment"
+      }
+     ]
+    }
+   ],
+   "idx": 87
+  },
+  {
+   "a": "international_licensing",
+   "b": "licensing_royalties",
+   "reason": "token_overlap:licensing",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "international_licensing",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "international_restaurant_licensing"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "a decline in growth of our international business"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-024317",
+       "date": "2023-02-22",
+       "quote": "one Cheesecake Factory restaurant opened internationally in Mexico under a licensing agreement during the fourth quarter of fiscal 2022"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "we anticipate two to three Cheesecake Factory restaurants to open internationally under licensing agreements"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "We now expect two Cheesecake Factory restaurants to open internationally under licensing agreements in 2023."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "We also anticipate one to two Cheesecake Factory restaurants to open internationally under licensing agreements."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-084383",
+       "date": "2024-07-31",
+       "quote": "In addition, one Cheesecake Factory restaurant opened internationally under a licensing agreement in China."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "we anticipate as many as two Cheesecake Factory restaurants to open internationally under licensing agreements"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "two cheesecake restaurants opened in Mexico under a licensing agreement"
+      }
+     ]
+    },
+    {
+     "driver_name": "licensing_royalties",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "we receive initial development fees, site and design fees and ongoing royalties based on our licensees’ restaurant sales"
+      }
+     ]
+    }
+   ],
+   "idx": 320
+  },
+  {
+   "a": "flower_child_integration",
+   "b": "flower_child_sales",
+   "reason": "token_overlap:child,flower",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "flower_child_integration",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "at Flower Child, we continue down the integration path this year"
+      }
+     ]
+    },
+    {
+     "driver_name": "flower_child_sales",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "Flower Child sales increased 11.0% to $127.5 million for fiscal 2023, compared to $114.8 million for fiscal 2022"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-000636",
+       "date": "2024-05-08",
+       "quote": "Flower Child sales increased 10.2% to $34.5 million for the first quarter of fiscal 2024"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "looking at Flower Child, as David Gordon mentioned, the sales continue to improve. quarter over quarter"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "Flower Child sales totaled $32.2 million, up 11% from the prior year, and sales per operating week were $80,000."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001742",
+       "date": "2024-11-04",
+       "quote": "Flower Child sales increased 13.7% to $36.6 million for the third quarter of fiscal 2024"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-02-21T17.00",
+       "date": "2024-02-21",
+       "quote": "Flower Child sales totaled $30.4 million, and sales per operating week were $75,500"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "Flower Child sales totaled $35.7 million, up 7% from the prior year, and sales per operating week were $85,900"
+      }
+     ]
+    }
+   ],
+   "idx": 237
+  },
+  {
+   "a": "capex_guidance",
+   "b": "capex_inflation",
+   "reason": "token_overlap:capex",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "capex_guidance",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "capital_expenditure_guidance"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-02-21T17.00",
+       "date": "2024-02-21",
+       "quote": "we would anticipate approximately $180 million to $200 million in CapEx to support this year's and some of next year's unit development"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "we would anticipate approximately $180 million to $200 million in CapEx to support this year's and some of next year's unit development"
+      }
+     ]
+    },
+    {
+     "driver_name": "capex_inflation",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "We, as along with everybody else, have definitely seen CapEx inflation."
+      }
+     ]
+    }
+   ],
+   "idx": 72
+  }
+ ]
+}

@@ -1,0 +1,1107 @@
+{
+ "batch_id": 47,
+ "page": 0,
+ "pairs": [
+  {
+   "a": "new_unit_development",
+   "b": "new_unit_returns",
+   "reason": "token_overlap:new,unit",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "new_unit_development",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "new_restaurant_development",
+      "restaurant_development",
+      "restaurant_unit_development"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-058507",
+       "date": "2023-05-10",
+       "quote": "Our overall revenue growth is primarily driven by revenues from new restaurant openings and increases in comparable restaurant sales."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-058468",
+       "date": "2023-05-10",
+       "quote": "The Company continues to expect to open as many as 20 to 22 new restaurants in fiscal 2023"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "we plan to open as many as 20 to 22 new restaurants this year across our portfolio of concepts, with approximately 80% of openings occurring in the second half of the year"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "So we were targeting the 20 to 22 new openings"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-26-017090",
+       "date": "2026-02-18",
+       "quote": "During the fourth quarter, we opened seven new restaurants and delivered approximately 7% unit growth for the year."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "We expect to open as many as 16 new restaurants in fiscal 2023 across our portfolio of concepts."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-000636",
+       "date": "2024-05-08",
+       "quote": "We plan to open as many as 22 new restaurants in fiscal 2024, including three to four The Cheesecake Factory restaurants"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001151",
+       "date": "2024-08-05",
+       "quote": "We plan to open as many as 22 new restaurants in fiscal 2024"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001742",
+       "date": "2024-11-04",
+       "quote": "primarily due to additional revenue related to new restaurant openings and an increase in comparable restaurant sales"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001073",
+       "date": "2025-05-05",
+       "quote": "We opened eight restaurants in the first quarter of fiscal 2025 comprised of three North Italia, three Flower Child and two Other FRC locations"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001564",
+       "date": "2025-08-04",
+       "quote": "the timing of our new unit development and related permitting"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-058691",
+       "date": "2024-05-08",
+       "quote": "The Company continues to expect to open as many as 22 new restaurants in fiscal 2024"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-042573",
+       "date": "2025-04-30",
+       "quote": "The Company continues to expect to open as many as 25 new restaurants in fiscal 2025"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "CapEx totaled approximately $25 million during the second quarter for new unit development and maintenance"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "Wanted to talk about unit growth and if you could provide some more feedback on how to look at store closures to net against the new unit openings for the 7% growth rate you mentioned for 2024 and then the 16 new units for 2023."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "we now expect to open as many as 16 new restaurants in 2023 and four to six new restaurants in the first quarter of 2024"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-02-21T17.00",
+       "date": "2024-02-21",
+       "quote": "we're planning to open as many as 22 new restaurants in 2024, including as many as three to four cheesecake factories"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "With the five restaurant openings in the first quarter, we remain on track to open as many as 22 new restaurants in 2024"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "we still plan to open as many as 22 new restaurants this year across our portfolio of concepts, with four to five openings in the third quarter"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "So we would have the 25 new, and we'd have one closure around the middle of the year for Cheesecake."
+      }
+     ]
+    },
+    {
+     "driver_name": "new_unit_returns",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "new_restaurant_returns"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "we wouldn't be moving forward with the 20 to 22 locations if we didn't feel we'd be hitting the returns"
+      }
+     ]
+    }
+   ],
+   "idx": 398
+  },
+  {
+   "a": "employee_retention",
+   "b": "staff_retention",
+   "reason": "token_overlap:retention",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "employee_retention",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "employee_attrition"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-042573",
+       "date": "2025-04-30",
+       "quote": "year-over-year improvements in labor productivity, food efficiency, wage management and retention across both hourly staff and managers"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "Our industry-leading retention rates are now running above pre-pandemic levels."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-02-21T17.00",
+       "date": "2024-02-21",
+       "quote": "we continue to see quarter after quarter after quarter last year of improvements in that key metric, both at the hourly and at the manager levels"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "our continued best in class retention has helped us to not need as many staff members as others may have had"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "in both hourly and management retention rates, which were already industry-leading and for the quarter finished at the highest levels in the past five years"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "The retention in the restaurants at the management level and the staff level continues to be incredibly consistent over the past six quarters now."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "we saw further improvement in our already industry-leading manager and staff retention"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-07-29T17.00",
+       "date": "2025-07-29",
+       "quote": "Notably, both hourly and management retention increased year over year, driving improvements in labor productivity, food efficiencies, and wage management."
+      }
+     ]
+    },
+    {
+     "driver_name": "staff_retention",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "staff_attrition"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "our people practices contribute significantly to our ability to attract talent and to The Cheesecake Factory restaurants’ historically industry-leading retention rates"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-086819",
+       "date": "2023-08-02",
+       "quote": "year-over-year improvements in labor productivity and hourly staff and manager retention"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "During the fourth quarter, we once again drove sequential year-over-year improvements in both manager and hourly staff retention."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "another quarter of strong staff retention, with restaurant management and hourly staff attrition rates effectively returning back to our industry-leading pre-pandemic levels"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "Our recruitment, selection, training, retention and internal promotion programs are among the most comprehensive in the restaurant industry, helping us to attract and retain qualified staff members"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "The Cheesecake Factory restaurants’ historically industry-leading retention rates"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "our ability to attract talent and to The Cheesecake Factory restaurants’ historically industry-leading retention rates"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-026056",
+       "date": "2024-02-21",
+       "quote": "improvements in labor productivity, food efficiency, wage management, and hourly staff and manager retention"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-058691",
+       "date": "2024-05-08",
+       "quote": "improvements in labor productivity, food efficiency, and hourly staff and manager retention"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-084383",
+       "date": "2024-07-31",
+       "quote": "year-over-year improvements in labor productivity and hourly staff and manager retention"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-112254",
+       "date": "2024-10-29",
+       "quote": "delivering significant improvements in labor productivity, hourly staff and manager retention, and guest satisfaction scores"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-071758",
+       "date": "2025-07-29",
+       "quote": "hourly staff and manager retention"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-103205",
+       "date": "2025-10-28",
+       "quote": "delivering year-over-year improvements in labor productivity, wage management, and hourly staff and manager retention, supporting healthy margin performance"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-26-017090",
+       "date": "2026-02-18",
+       "quote": "delivering year-over-year improvements in labor productivity, wage management, hourly staff and manager retention, and guest satisfaction"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "we continued to produce year-over-year improvements in both manager and hourly staff retention"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "we're seeing best in class retention at the staff level and at the management level, which is why we're seeing increased efficiencies, lower overtime, better wage management, and higher MPS scores"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "the ability to have best in class and best ever retention rates for our staff"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "the stability of our staff retention and management retention and the restaurants has led to great execution"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "our industry-leading management and staff retention continued to improve"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "we have achieved notable year-over-year improvements in both manager and hourly staff retention"
+      }
+     ]
+    }
+   ],
+   "idx": 192
+  },
+  {
+   "a": "credit_facility_borrowings",
+   "b": "facility_costs",
+   "reason": "token_overlap:facility",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "credit_facility_borrowings",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "debt_repayment"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "we had net availability for borrowings of $238.5 million, based on a $130.0 million outstanding debt balance and $31.5 million in standby letters of credit under the Revolver Facility"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "we may again implement mitigation actions such as suspending share repurchases, not declaring future dividends, increasing borrowings under our credit facility"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "In the fourth quarter of fiscal 2024, we repaid $20.0 million on the Revolver Facility."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "we may again implement mitigation actions such as suspending share repurchases, not declaring future dividends, increasing borrowings under our credit facility or modifying our operating strategies"
+      }
+     ]
+    },
+    {
+     "driver_name": "facility_costs",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "This variance was primarily driven by higher facility-related costs (0.2%)."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001564",
+       "date": "2025-08-04",
+       "quote": "This variance was primarily driven by higher facility related costs (0.3%)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-07-29T17.00",
+       "date": "2025-07-29",
+       "quote": "Other operating expenses increased 40 basis points, primarily driven by higher facility-related costs."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "Other operating expenses increased 50 basis points, primarily driven by higher facility-related costs"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-25-105631",
+       "date": "2025-11-03",
+       "quote": "primarily driven by higher facility - related costs (0.4%)"
+      }
+     ]
+    }
+   ],
+   "idx": 160
+  },
+  {
+   "a": "flower_child_off_premise_mix",
+   "b": "off_premise_promotions",
+   "reason": "token_overlap:off,premise",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "flower_child_off_premise_mix",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "at Flower Child, you're talking about a 55% off-premise mix"
+      }
+     ]
+    },
+    {
+     "driver_name": "off_premise_promotions",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "we do the marketing and that type of offer is really off-premise driven. And we do that on occasion."
+      }
+     ]
+    }
+   ],
+   "idx": 251
+  },
+  {
+   "a": "product_recall",
+   "b": "sustainable_product_supply",
+   "reason": "token_overlap:product",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "product_recall",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "We utilize a web-based solution to efficiently contact our restaurants and monitor progress in the event of a product withdrawal or recall."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "We utilize a web-based solution to efficiently contact our restaurants and monitor progress in the event of a product withdrawal or recall."
+      }
+     ]
+    },
+    {
+     "driver_name": "sustainable_product_supply",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "sustainable_product_cost"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "during fiscal 2023, we experienced supply shortages with respect to certain sustainable products, which largely resulted from challenges related to a growing framework of laws mandating the use of sustainable products"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "during fiscal 2023 and 2024, we experienced supply shortages with respect to certain sustainable products, which largely resulted from challenges related to a growing framework of laws mandating the use of sustainable products"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "There is currently a smaller market for certain sustainable products, and any condition affecting the demand for or supply of these products may cause significant cost and supply volatility"
+      }
+     ]
+    }
+   ],
+   "idx": 477
+  },
+  {
+   "a": "minimum_wage",
+   "b": "wage_inflation",
+   "reason": "token_overlap:wage",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "minimum_wage",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "minimum_wage_rate",
+      "state_wage_mandates"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "We believe it is becoming increasing likely that the United States federal government will significantly increase the federal minimum wage and tip credit wage (or eliminate the tip credit wage)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-058507",
+       "date": "2023-05-10",
+       "quote": "increases in minimum wages and benefit costs"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-024317",
+       "date": "2023-02-22",
+       "quote": "increases in minimum wages and benefit costs"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "You come into the year and you've caught up from the past year, but on January 1st or whatever that time is, minimum wage sets in, and you do have some of your new contracts for commodities rolling over."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-058468",
+       "date": "2023-05-10",
+       "quote": "increases in minimum wages and benefit costs"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "Certain state and localities have significantly increased their minimum wage and/or tip credit wage (or have eliminated the tip credit wage), and require significantly more mandated benefits"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "Certain state and localities have significantly increased their minimum wage and/or tip credit wage (or have eliminated the tip credit wage), and require significantly more mandated benefits"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "including such matters as minimum wages, breaks, scheduling, exempt classifications, equal pay, overtime, tip credits"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Increases in minimum wages (including increased minimum wages in industries with which we compete for talent) and minimum tip credit wages"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "laws and regulations govern our operations as they relate to our staff members, including such matters as minimum wages, breaks, scheduling, exempt classifications, equal pay, overtime, tip credits"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-088397",
+       "date": "2023-08-07",
+       "quote": "changes in laws impacting our business, increases in minimum wages and benefit costs"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-25-105631",
+       "date": "2025-11-03",
+       "quote": "increases in minimum wages and benefit costs"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-000636",
+       "date": "2024-05-08",
+       "quote": "increases in minimum wages and benefit costs"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001151",
+       "date": "2024-08-05",
+       "quote": "increases in minimum wages and benefit costs"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001073",
+       "date": "2025-05-05",
+       "quote": "increases in minimum wages and benefit costs"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-086819",
+       "date": "2023-08-02",
+       "quote": "increases in minimum wages and benefit costs"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-113409",
+       "date": "2023-11-01",
+       "quote": "increases in minimum wages and benefit costs"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-026056",
+       "date": "2024-02-21",
+       "quote": "increases in minimum wages and benefit costs"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-058691",
+       "date": "2024-05-08",
+       "quote": "increases in minimum wages and benefit costs"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-084383",
+       "date": "2024-07-31",
+       "quote": "changes in unemployment rates; increases in minimum wages and benefit costs"
+      }
+     ]
+    },
+    {
+     "driver_name": "wage_inflation",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "wage_rate_inflation",
+      "wage_rates"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "This increase was primarily due to wage rate inflation in excess of menu price increases (0.8%)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-088397",
+       "date": "2023-08-07",
+       "quote": "menu pricing leverage in excess of wage rate inflation (1.3%)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "just from a pure inflationary environment, we're saying wage inflation is mid-single digits"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "assumptions related to the COVID-19 pandemic, wage, product and services inflation, competitive environment, macroeconomic and industry conditions"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "This decrease was primarily due to menu price increases in excess of wage rate inflation and improved staffing levels (0.5%)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "contributed to significantly increased commodity and wage inflation and other increased costs"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "could lead to further shifts in consumer behavior, wage inflation, staffing challenges, product and services cost inflation"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "our operating results were impacted by geopolitical and macroeconomic events, causing supply chain challenges and significantly increased commodity and wage inflation"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "causing supply chain challenges and significantly increased commodity and wage inflation"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "could lead to further wage inflation, product and services cost inflation, disruptions in the supply chain, staffing challenges, shifts in consumer behavior, and delays in new restaurant openings"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "historical financial performance, wage, product and services inflation, competitive environment, macroeconomic and industry conditions"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "The impact of ongoing geopolitical and macroeconomic events could lead to further wage inflation, product and services cost inflation, disruptions in the supply chain"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "This decrease was primarily due to menu price increases in excess of wage rate inflation (0.6%)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "our operating results were impacted by geopolitical and macroeconomic events, causing supply chain challenges and significantly increased commodity and wage inflation. Our commodity and wage inflationary environment began returning to more historical levels in fiscal 2024."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "menu price increases in excess of wage rate inflation and improved restaurant staffing levels (1.2%)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-25-105631",
+       "date": "2025-11-03",
+       "quote": "This decrease was primarily due to menu price increases in excess of wage rate inflation and improved staffing levels and productivity (0.3%)."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-000636",
+       "date": "2024-05-08",
+       "quote": "offset by menu price increases in excess of wage rate inflation (0.3%)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001151",
+       "date": "2024-08-05",
+       "quote": "This decrease is primarily driven by menu price increases in excess of wage rate inflation and improved productivity (0.4%)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001742",
+       "date": "2024-11-04",
+       "quote": "menu price increases in excess of wage rate inflation and improved productivity (1.0%)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "we're seeing also wage inflation rates that are below pre-pandemic levels"
+      }
+     ]
+    }
+   ],
+   "idx": 374
+  },
+  {
+   "a": "new_restaurant_capex",
+   "b": "new_restaurant_unit_volumes",
+   "reason": "token_overlap:new,restaurant",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "new_restaurant_capex",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "Capital expenditures for new restaurants, including locations under development, were $61.6 million and $36.9 million for the first nine months of fiscal 2023 and 2022, respectively."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001742",
+       "date": "2024-11-04",
+       "quote": "Capital expenditures for new restaurants, including locations under development, were $76.1 million and $61.6 million for the first nine months of fiscal 2024 and 2023, respectively."
+      }
+     ]
+    },
+    {
+     "driver_name": "new_restaurant_unit_volumes",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "they're practically at the same unit volumes as the rest of the North system, and their margins are great"
+      }
+     ]
+    }
+   ],
+   "idx": 384
+  },
+  {
+   "a": "construction_labor_availability",
+   "b": "revolving_credit_availability",
+   "reason": "token_overlap:availability",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "construction_labor_availability",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "the availability of qualified tradespeople in the local market"
+      }
+     ]
+    },
+    {
+     "driver_name": "revolving_credit_availability",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "revolving_credit_borrowings",
+      "revolving_credit_facility",
+      "revolving_credit_facility_availability"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-042573",
+       "date": "2025-04-30",
+       "quote": "$366.5 million of availability on its revolving credit facility with no outstanding balance"
+      }
+     ]
+    }
+   ],
+   "idx": 120
+  },
+  {
+   "a": "north_italia_segment_margin",
+   "b": "north_italia_traffic",
+   "reason": "token_overlap:italia,north",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "north_italia_segment_margin",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "And then the North Italia segment margins, did you say what the mature units were within that?"
+      }
+     ]
+    },
+    {
+     "driver_name": "north_italia_traffic",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "north_italia_restaurant_traffic"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "The north Italia mix was negative 2%. It's actually a slight improvement from where it was last year. Price is between 4.5% and 5%. Traffic was negative 4%."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "So traffic was negative 6%, prices about 4%, and the mix was negative 2% for the quarter."
+      }
+     ]
+    }
+   ],
+   "idx": 465
+  },
+  {
+   "a": "north_italia_food_cost",
+   "b": "north_italia_menu_mix",
+   "reason": "token_overlap:italia,north",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "north_italia_food_cost",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "so that's an area that cheesecake factory best practices and systems have been deployed over time to North Italia, and we see a really good opportunity to lower food costs over time"
+      }
+     ]
+    },
+    {
+     "driver_name": "north_italia_menu_mix",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "The north Italia mix was negative 2%. It's actually a slight improvement from where it was last year."
+      }
+     ]
+    }
+   ],
+   "idx": 433
+  }
+ ]
+}

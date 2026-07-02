@@ -1,0 +1,711 @@
+{
+ "batch_id": 0,
+ "page": 0,
+ "pairs": [
+  {
+   "a": "flower_child_margin",
+   "b": "flower_child_same_store_sales",
+   "reason": "token_overlap:child,flower",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "flower_child_margin",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "flower_child_restaurant_margin"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "we are on track to get to the margin target that we need to be at to make it a growth vehicle, which is in that mid-teens level. So we feel really good overall about the trajectory of Flower Child."
+      }
+     ]
+    },
+    {
+     "driver_name": "flower_child_same_store_sales",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Flower Child comparable sales increased approximately 6% from fiscal 2023."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001073",
+       "date": "2025-05-05",
+       "quote": "Flower Child comparable sales increased approximately 5% from the first quarter of fiscal 2024."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "Q1 comparable sales for Flower Child were the highest of any of our core concepts, and sales demand and the newer locations continue to trend well"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "the Fire Child comps continue to be the strongest in our system, running mid-single digits"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "Flower Child comparable sales increased approximately 5% from fiscal 2024."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-25-105631",
+       "date": "2025-11-03",
+       "quote": "Flower Child comparable sales increased approximately 7% from the third quarter of fiscal 2024."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001564",
+       "date": "2025-08-04",
+       "quote": "Flower Child comparable sales increased approximately 4% from the second quarter of fiscal 2024"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "Flower Child's comparable sales increased by 11%, significantly outpacing the Black Box Fast Casual Dining Index"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "Flower Child continues on a strong upward trajectory. with comparable sales increasing by 5%, significantly outperforming the Black Box Fast Casual Dining Index"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-07-29T17.00",
+       "date": "2025-07-29",
+       "quote": "Flower Child continues on a strong upward trajectory, with second quarter comparable sales increasing 4%, significantly outperforming the black box fast casual dining index"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "third quarter comparable sales increasing 7%, significantly outpacing the fast casual segment"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "Flower Child continued to perform exceptionally well and meaningfully outpaced the Fast Casual segment. Fourth quarter comparable sales increased 4%, for a two-year comp sales increase of 15%."
+      }
+     ]
+    }
+   ],
+   "idx": 244
+  },
+  {
+   "a": "covid_restrictions",
+   "b": "in_person_dining_restrictions",
+   "reason": "token_overlap:restrictions",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "covid_restrictions",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "covid_dining_restrictions"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "We have experienced significant disruptions to our business as federal, state and local restrictions have fluctuated over time to mitigate the spread of the COVID-19 virus"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-058468",
+       "date": "2023-05-10",
+       "quote": "the COVID-19 pandemic and related containment measures, including the potential for quarantines or restriction on in-person dining"
+      }
+     ]
+    },
+    {
+     "driver_name": "in_person_dining_restrictions",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-015185",
+       "date": "2025-02-19",
+       "quote": "pandemics and related containment measures, including the potential for quarantines or restriction on in-person dining"
+      }
+     ]
+    }
+   ],
+   "idx": 151
+  },
+  {
+   "a": "loyalty_program_enrollment",
+   "b": "loyalty_program_offers",
+   "reason": "token_overlap:loyalty,program",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "loyalty_program_enrollment",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "loyalty_program_membership",
+      "rewards_member_acquisition",
+      "rewards_program_enrollment",
+      "rewards_program_membership"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "early demand continues to exceed our internal expectations and member satisfaction scores are over-indexing"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "Our increased membership enrollment is very, very strong. People are very engaged in the program."
+      }
+     ]
+    },
+    {
+     "driver_name": "loyalty_program_offers",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "personalized_rewards_offers"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "our unpublished offers which are important part of the program as well, where we're taking an individualized approach to drive incrementality"
+      }
+     ]
+    }
+   ],
+   "idx": 357
+  },
+  {
+   "a": "landlord_demand",
+   "b": "landlord_readiness",
+   "reason": "token_overlap:landlord",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "landlord_demand",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "the demand for those concepts from landlords remains very, very high"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "our portfolio of brands continue to attract landlords that want experiential dining in their projects"
+      }
+     ]
+    },
+    {
+     "driver_name": "landlord_readiness",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "landlord_premises_delivery"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-000636",
+       "date": "2024-05-08",
+       "quote": "delays in opening new restaurants primarily due to delays in permitting and landlord readiness"
+      }
+     ]
+    }
+   ],
+   "idx": 335
+  },
+  {
+   "a": "labor_market",
+   "b": "new_market_entry",
+   "reason": "token_overlap:market",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "labor_market",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "based on what we're seeing today with the underlying labor market and the commodities piece, it certainly feels like the margin profile lines up a little bit better"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "I know in 2024, the stable labor market has been a huge tailwind for you."
+      }
+     ]
+    },
+    {
+     "driver_name": "new_market_entry",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "the two new markets that we entered into this year"
+      }
+     ]
+    }
+   ],
+   "idx": 332
+  },
+  {
+   "a": "credit_facility_availability",
+   "b": "restaurant_site_availability",
+   "reason": "token_overlap:availability",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "credit_facility_availability",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001742",
+       "date": "2024-11-04",
+       "quote": "As of October 1, 2024, we had net availability for borrowings of $236.5 million, based on a $130.0 million outstanding debt balance and $33.5 million in standby letters of credit under the Revolver Facility."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-25-105631",
+       "date": "2025-11-03",
+       "quote": "As of September 30, 2025, we had net availability for borrowings of $366.5 million, based on no outstanding debt balance and $33.5 million in standby letters of credit under the Revolver Facility."
+      }
+     ]
+    },
+    {
+     "driver_name": "restaurant_site_availability",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "Our ability to grow our business depends on the availability and selection of high-quality sites that meet our criteria."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "Our ability to grow our business depends on the availability and selection of high-quality sites that meet our criteria"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "Our ability to grow our business depends on the availability and selection of high-quality sites that meet our criteria"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Our ability to grow our business depends on the availability and selection of high-quality sites that meet our criteria"
+      }
+     ]
+    }
+   ],
+   "idx": 157
+  },
+  {
+   "a": "guest_rewards_program",
+   "b": "lapsed_guest_traffic",
+   "reason": "token_overlap:guest",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "guest_rewards_program",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "cheesecake_rewards_program"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "We also are currently testing a guest rewards program pilot for potential national rollout in 2023."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-058507",
+       "date": "2023-05-10",
+       "quote": "augmenting our marketing programs including the anticipated nationwide launch of a guest rewards program"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "offset by launch costs related to our Rewards program (0.3%)"
+      }
+     ]
+    },
+    {
+     "driver_name": "lapsed_guest_traffic",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "we saw that about 60% of our lapsed guests have stated that they have interest in coming within the next six months"
+      }
+     ]
+    }
+   ],
+   "idx": 297
+  },
+  {
+   "a": "labor_efficiency",
+   "b": "supply_chain_efficiency",
+   "reason": "token_overlap:efficiency",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "labor_efficiency",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "really the entire difference I would attribute to sort of efficiency of labor"
+      }
+     ]
+    },
+    {
+     "driver_name": "supply_chain_efficiency",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "Flower Child's purchasing is now integrated into the broader Cheesecake supply chain operation to take advantage of our scale and purchasing capabilities"
+      }
+     ]
+    }
+   ],
+   "idx": 330
+  },
+  {
+   "a": "average_check",
+   "b": "check_mix",
+   "reason": "token_overlap:check",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "average_check",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "The average check for each customer, including beverages and desserts, was approximately $29.40 during fiscal 2022"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-058507",
+       "date": "2023-05-10",
+       "quote": "The increase from fiscal 2022 was primarily driven by an increase in average check of 4.7%"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "We're not necessarily in this environment looking to push check, right? I don't think that that's a wise strategy."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "We strive to increase comparable restaurant sales by improving customer traffic trends and growing average check."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "Changes in customer traffic and average check amount may be impacted by a variety of factors"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "an increase in average check of 0.2% (based on an increase of 5.9% in menu pricing, partially offset by a 5.7% negative change in mix)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "The average check for each customer, including beverages and desserts, was approximately $30.54 during fiscal 2023"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "The increase from fiscal 2022 was primarily driven by an increase in average check of 4.0%"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "We strive to increase comparable restaurant sales by improving customer traffic trends and growing average check."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "The average check for each customer, including beverages and desserts, was approximately $31.79 during fiscal 2025."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "The increase from fiscal 2024 was primarily driven by an increase in average check of 2.4%"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "The average check for each customer, including beverages and desserts, was approximately $31.05 during fiscal 2024."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "The increase from fiscal 2023 was primarily driven by an increase in average check of 1.7%"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "We strive to increase comparable restaurant sales by improving customer traffic trends and growing average check."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-088397",
+       "date": "2023-08-07",
+       "quote": "The increase from fiscal 2022 was primarily driven by an increase in average check of 5.2%"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "primarily driven by an increase in average check of 3.4%"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-25-105631",
+       "date": "2025-11-03",
+       "quote": "primarily driven by an increase in average check of 2.8%"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-000636",
+       "date": "2024-05-08",
+       "quote": "an increase in average check of 0.9% (based on an increase of 5.2% in menu pricing and 4.3% negative impact from mix)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001151",
+       "date": "2024-08-05",
+       "quote": "primarily driven by an increase in average check of 1.6% (based on an increase of 4.5% in menu pricing and 2.9% negative impact from mix)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001742",
+       "date": "2024-11-04",
+       "quote": "This increase was primarily driven by an increase in average check of 2.4%"
+      }
+     ]
+    },
+    {
+     "driver_name": "check_mix",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "these new offerings have contributed to an improvement in check mix"
+      }
+     ]
+    }
+   ],
+   "idx": 33
+  },
+  {
+   "a": "flower_child_off_premise_mix",
+   "b": "flower_child_rewards_program",
+   "reason": "token_overlap:child,flower",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "flower_child_off_premise_mix",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "at Flower Child, you're talking about a 55% off-premise mix"
+      }
+     ]
+    },
+    {
+     "driver_name": "flower_child_rewards_program",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-07-29T17.00",
+       "date": "2025-07-29",
+       "quote": "flower child is much more of a traditional rewards program it's an app based program that has points"
+      }
+     ]
+    }
+   ],
+   "idx": 246
+  }
+ ]
+}

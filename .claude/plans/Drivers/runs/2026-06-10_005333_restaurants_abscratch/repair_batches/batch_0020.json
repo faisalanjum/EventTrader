@@ -1,0 +1,815 @@
+{
+ "batch_id": 20,
+ "page": 0,
+ "pairs": [
+  {
+   "a": "construction_labor_availability",
+   "b": "restaurant_construction_cost",
+   "reason": "token_overlap:construction",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "construction_labor_availability",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "the availability of qualified tradespeople in the local market"
+      }
+     ]
+    },
+    {
+     "driver_name": "restaurant_construction_cost",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "new_restaurant_construction_costs",
+      "restaurant_construction_costs"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "the unionization of construction companies could cause our construction and build-out costs for new restaurants to materially increase"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "the availability and/or cost of raw materials and labor used in construction"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "Total construction costs to build our restaurant premises average approximately $1,100 to $1,200 per interior square foot."
+      }
+     ]
+    }
+   ],
+   "idx": 118
+  },
+  {
+   "a": "flower_child_average_unit_volume",
+   "b": "flower_child_integration",
+   "reason": "token_overlap:child,flower",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "flower_child_average_unit_volume",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "Q1 AUVs, the run rate of those are $4.4 million average unit volume"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "I wanted to dig in a little more on the flower child. What would be the potential average volumes for a fully mature box"
+      }
+     ]
+    },
+    {
+     "driver_name": "flower_child_integration",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "at Flower Child, we continue down the integration path this year"
+      }
+     ]
+    }
+   ],
+   "idx": 219
+  },
+  {
+   "a": "menu_pricing",
+   "b": "pricing_power",
+   "reason": "token_overlap:pricing",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "menu_pricing",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "We have historically targeted menu price increases of approximately 2% to 3% annually, utilizing a market-based strategy to help mitigate cost pressure in higher-wage geographies"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-058507",
+       "date": "2023-05-10",
+       "quote": "based on an increase of 10.4% in menu pricing, partially offset by 5.7% negative impact from mix"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-024317",
+       "date": "2023-02-22",
+       "quote": "successfully implemented incremental pricing to support our stated objective of recovering our operating margins"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "To address this shortfall, we rolled out an additional menu price increase at the start of December with the objective of exiting the year with Cheesecake Factory restaurant-level margins at seasonally adjusted 2019 levels."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "we're hopeful to return to kind of a normal pricing cadence in the summertime. We'll be looking at what the trends are between now and then. I think the key for us is we're going to try to keep up with inflation."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "In the last three fiscal years, we implemented price increases above our historical levels, to help offset inflationary cost pressures."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "We implemented effective menu price increases of approximately 3.25%, 4.25% and 2.8% in the first, third and fourth quarters of fiscal 2022, respectively"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "We utilize menu price increases in an effort to offset inflation of key operating costs. However, our menu price increases may be insufficient to meaningfully offset increased costs"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "we implemented price increases above our historical levels to support our longer-term restaurant-level margin objectives"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "Due to the inflationary cost pressures we experienced in fiscal 2022 and 2023, we implemented price increases above our historical levels to help support our longer-term restaurant-level margin objectives."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "Including the 2.5% February 2024 price increase, we will have 4.5% pricing in The Cheesecake Factory menu, and we will evaluate the level of pricing for the summer menu based on inflationary trends."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "We implemented effective menu price increases of approximately 3.5% and 2.0% in the first and third quarters of fiscal 2023, respectively"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "we implemented price increases above our historical levels, including an incremental price increase in the fourth quarter of fiscal 2022, to help offset significant inflationary cost pressures"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "We implemented menu price increases of approximately 2.4% and 1.5% in the first and third quarters of fiscal 2025, respectively."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "We utilize menu price increases in an effort to help offset inflation of key operating costs."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "We will continue to take the cost and inflationary environment into consideration when implementing future pricing decisions"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "In the last three fiscal years, we implemented price increases above our historical levels, to help offset inflationary cost pressures."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "We utilize menu price increases in an effort to help offset inflation of key operating costs."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "based on an increase of 4.7% in menu pricing, partially offset by a 3.0% negative change from menu mix"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-088397",
+       "date": "2023-08-07",
+       "quote": "based on an increase of 10.6% in menu pricing, partially offset by 5.4% negative impact from mix"
+      }
+     ]
+    },
+    {
+     "driver_name": "pricing_power",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-02-21T17.00",
+       "date": "2024-02-21",
+       "quote": "we feel like we have sufficient pricing power in California, if need be"
+      }
+     ]
+    }
+   ],
+   "idx": 371
+  },
+  {
+   "a": "convertible_note_dilution",
+   "b": "convertible_note_hedging",
+   "reason": "token_overlap:convertible,note",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "convertible_note_dilution",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Our election to convert Notes into common stock may further dilute the economic and voting rights of our existing stockholders and/or reduce the market price of our common stock."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-07-29T17.00",
+       "date": "2025-07-29",
+       "quote": "at, say, $80, a $10 increase over the strike price there, you're talking about 1.5% dilution"
+      }
+     ]
+    },
+    {
+     "driver_name": "convertible_note_hedging",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "convertible_note_arbitrage"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "Hedging activity by investors in the Notes could depress the trading price of our common stock."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Hedging activity by investors in the Notes could depress the trading price of our common stock."
+      }
+     ]
+    }
+   ],
+   "idx": 139
+  },
+  {
+   "a": "bakery_facility_closure",
+   "b": "credit_facility_borrowings",
+   "reason": "token_overlap:facility",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "bakery_facility_closure",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "A closure of or material damage to one or both of our bakery facilities could impede our ability to supply bakery products to our own and our international licensees’ restaurants as well as to other bakery customers."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "A closure of or material damage to one or both of our bakery facilities could impede our ability to supply bakery products to our own and our international licensees’ restaurants"
+      }
+     ]
+    },
+    {
+     "driver_name": "credit_facility_borrowings",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "debt_repayment"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "we had net availability for borrowings of $238.5 million, based on a $130.0 million outstanding debt balance and $31.5 million in standby letters of credit under the Revolver Facility"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "we may again implement mitigation actions such as suspending share repurchases, not declaring future dividends, increasing borrowings under our credit facility"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "In the fourth quarter of fiscal 2024, we repaid $20.0 million on the Revolver Facility."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "we may again implement mitigation actions such as suspending share repurchases, not declaring future dividends, increasing borrowings under our credit facility or modifying our operating strategies"
+      }
+     ]
+    }
+   ],
+   "idx": 40
+  },
+  {
+   "a": "consumer_discretionary_income",
+   "b": "high_income_consumer_spending",
+   "reason": "token_overlap:consumer,income",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "consumer_discretionary_income",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "Lower discretionary income has been fewer jobs created and consumer sentiment is at a low point"
+      }
+     ]
+    },
+    {
+     "driver_name": "high_income_consumer_spending",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "top end of consumers really does feel pressure. We're likely to actually benefit some from that because they typically move down off of the steakhouses and the expensive independents"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "Whereas our cohort, the income, it depends on the slowdown, but incomes aren't slowing down. income of 100 plus K, those jobs are going away. There's not mass layoffs."
+      }
+     ]
+    }
+   ],
+   "idx": 124
+  },
+  {
+   "a": "goodwill_impairment",
+   "b": "lease_impairment",
+   "reason": "token_overlap:impairment",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "goodwill_impairment",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "Should the value of goodwill or other intangible assets become impaired, there could be a material adverse effect on our financial performance."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "We test our goodwill and other indefinite-lived intangible assets for impairment annually or on an interim basis if events or changes in circumstances between annual tests indicate a potential impairment"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "Goodwill and other indefinite-lived intangible assets are not amortized and are tested for impairment annually as of the first day of our fiscal fourth quarter"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "We test our goodwill and other indefinite-lived intangible assets for impairment annually or on an interim basis if events or changes in circumstances between annual tests indicate a potential impairment"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Goodwill and other indefinite-lived intangible assets are not amortized and are tested for impairment annually"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "We test our goodwill and other indefinite-lived intangible assets for impairment annually or on an interim basis if events or changes in circumstances between annual tests indicate a potential impairment"
+      }
+     ]
+    },
+    {
+     "driver_name": "lease_impairment",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "it's it's predominantly uh lease impairment and essentially you know we we hit the the the covet pandemic and there were um several urban locations that while we continue to operate and are recovering haven't fully recovered"
+      }
+     ]
+    }
+   ],
+   "idx": 290
+  },
+  {
+   "a": "revenue_surprise",
+   "b": "royalty_revenue",
+   "reason": "token_overlap:revenue",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "revenue_surprise",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-024317",
+       "date": "2023-02-22",
+       "quote": "Total revenues were $892.8 million in the fourth quarter of fiscal 2022 compared to $776.7 million in the fourth quarter of fiscal 2021"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "Total revenues of $866.1 million, were at the midpoint of the range."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-058468",
+       "date": "2023-05-10",
+       "quote": "revenue finishing in-line with our expectations"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-26-017090",
+       "date": "2026-02-18",
+       "quote": "revenue for the quarter finished within our expected range"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-086819",
+       "date": "2023-08-02",
+       "quote": "Total revenues were $866.2 million in the second quarter of fiscal 2023 compared to $832.6 million in the second quarter of fiscal 2022"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-026056",
+       "date": "2024-02-21",
+       "quote": "Total revenues were $877.0 million in the fourth quarter of fiscal 2023 compared to $892.8 million in the fourth quarter of fiscal 2022."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-058691",
+       "date": "2024-05-08",
+       "quote": "Our first quarter sales improved throughout the quarter culminating at the high-end of our expectations."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-084383",
+       "date": "2024-07-31",
+       "quote": "Our second quarter revenue finished towards the higher end of our expectations"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-112254",
+       "date": "2024-10-29",
+       "quote": "Total revenues were $865.5 million in the third quarter of fiscal 2024 compared to $830.2 million in the third quarter of fiscal 2023."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-015185",
+       "date": "2025-02-19",
+       "quote": "Total revenues were $921.0 million in the fourth quarter of fiscal 2024 compared to $877.0 million in the fourth quarter of fiscal 2023."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-042573",
+       "date": "2025-04-30",
+       "quote": "Sales finished towards the higher end of our expectations, led by The Cheesecake Factory restaurants"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-071758",
+       "date": "2025-07-29",
+       "quote": "Total revenues were $955.8 million in the second quarter of fiscal 2025 compared to $904.0 million in the second quarter of fiscal 2024."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-103205",
+       "date": "2025-10-28",
+       "quote": "We delivered another quarter of solid results, with revenue within our guidance range"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "Total revenues of $866.2 million were just under the low end of the range"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "Total revenues of $830.2 million increased 5.9% over last year, despite finishing just under the low end of the range."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "Total revenues of $891 million finished towards the high end of the range we provided."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "Total revenues of $904 million finished towards the higher end of the range we provided"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "Total revenues of $865 million finished towards the higher end of the range we provided"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "Fourth quarter total revenues of $921 million and adjusted net income margin of 5.6% exceeded the high end of the guidance we provided"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "Total revenues of $927 million finished towards the high end of the range we provided."
+      }
+     ]
+    },
+    {
+     "driver_name": "royalty_revenue",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "leveraging our bakery operations, international and consumer packaged goods royalty revenue streams"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "leveraging our bakery operations, international and consumer packaged goods royalty revenue streams"
+      }
+     ]
+    }
+   ],
+   "idx": 489
+  },
+  {
+   "a": "competitor_promotional_activity",
+   "b": "promotional_activity",
+   "reason": "token_overlap:activity,promotional",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "competitor_promotional_activity",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "This isn't the first time that we've seen our competitors. have a heightened promotion environment."
+      }
+     ]
+    },
+    {
+     "driver_name": "promotional_activity",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "However, we continue to support the off-premise channel with some on-brand promotional activity."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "week to week there can be differences based on holidays or if we're going to run National Cheesecake Day promotions"
+      }
+     ]
+    }
+   ],
+   "idx": 106
+  },
+  {
+   "a": "debt_leverage",
+   "b": "leverage_ratio",
+   "reason": "token_overlap:leverage",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "debt_leverage",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "our increased indebtedness related to our acquisition of Fox Restaurant Concepts and our resulting higher debt-to-equity ratio, as compared to that which has existed on a historical basis, could limit our ability to obtain additional financing in the future"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "our increased indebtedness and our resulting higher debt-to-equity ratio, as compared to that which has existed on a historical basis, could limit our ability to obtain additional financing in the future"
+      }
+     ]
+    },
+    {
+     "driver_name": "leverage_ratio",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "our increased indebtedness and our resulting higher debt-to-equity ratio, as compared to that which has existed on a historical basis, could limit our ability to obtain additional financing in the future"
+      }
+     ]
+    }
+   ],
+   "idx": 173
+  }
+ ]
+}

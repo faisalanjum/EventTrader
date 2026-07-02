@@ -1,0 +1,763 @@
+{
+ "batch_id": 1,
+ "page": 0,
+ "pairs": [
+  {
+   "a": "guest_satisfaction",
+   "b": "lapsed_guest_traffic",
+   "reason": "token_overlap:guest",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "guest_satisfaction",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-112254",
+       "date": "2024-10-29",
+       "quote": "significant improvements in labor productivity, hourly staff and manager retention, and guest satisfaction scores"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "So now it's about providing absolute guest satisfaction and making sure that it's worth it."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "second quarter guest satisfaction scores at the Cheesecake Factory improving both sequentially and year over year"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-26-017090",
+       "date": "2026-02-18",
+       "quote": "delivering year-over-year improvements in labor productivity, wage management, hourly staff and manager retention, and guest satisfaction"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-071758",
+       "date": "2025-07-29",
+       "quote": "guest satisfaction scores"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "record high guest satisfaction scores across all dine-in and to-go metrics"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "Our members continue to show very high guest satisfaction scores, sort of over-indexing on our NPS scores that are already at an all-time high"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "You did mention the CSAT scores are record high"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "first quarter guest satisfaction scores improved both sequentially and year over year"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-07-29T17.00",
+       "date": "2025-07-29",
+       "quote": "our success in staffing continues to be a key driver behind the improvement in guest satisfaction scores"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "our teams drove meaningful performance improvements this quarter, including continued gains in overall guest satisfaction"
+      }
+     ]
+    },
+    {
+     "driver_name": "lapsed_guest_traffic",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "we saw that about 60% of our lapsed guests have stated that they have interest in coming within the next six months"
+      }
+     ]
+    }
+   ],
+   "idx": 301
+  },
+  {
+   "a": "covid_restrictions",
+   "b": "pandemic_dining_restrictions",
+   "reason": "token_overlap:restrictions",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "covid_restrictions",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "covid_dining_restrictions"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "We have experienced significant disruptions to our business as federal, state and local restrictions have fluctuated over time to mitigate the spread of the COVID-19 virus"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-058468",
+       "date": "2023-05-10",
+       "quote": "the COVID-19 pandemic and related containment measures, including the potential for quarantines or restriction on in-person dining"
+      }
+     ]
+    },
+    {
+     "driver_name": "pandemic_dining_restrictions",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-026056",
+       "date": "2024-02-21",
+       "quote": "pandemics and related containment measures, including the potential for quarantines or restriction on in-person dining"
+      }
+     ]
+    }
+   ],
+   "idx": 152
+  },
+  {
+   "a": "cash_on_cash_returns",
+   "b": "operating_cash_flow",
+   "reason": "token_overlap:cash",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "cash_on_cash_returns",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "we're sitting right between the 20% and 25% cash on cash we've been targeting and feel great about the ability to continue to open at that level"
+      }
+     ]
+    },
+    {
+     "driver_name": "operating_cash_flow",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "Cash flows from operations decreased by $51.1 million from fiscal 2021 primarily due to lower net income, the timing of payroll disbursements"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-058507",
+       "date": "2023-05-10",
+       "quote": "Cash flows from operations increased by $31.5 million from the first quarter of fiscal 2022 primarily due to higher net income"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-088397",
+       "date": "2023-08-07",
+       "quote": "Cash flows from operations increased by $14.0 million from the first six months of fiscal 2022 primarily due to higher net income and lower incentive compensation paid"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "Cash flows from operations increased by $33.0 million from fiscal 2024 primarily due to higher net income after excluding non-cash activity"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "Cash flows from operations increased by $56.5 million from fiscal 2022 primarily due to higher net income, a higher payroll accrual due to the timing of payments and higher incentive compensation accrued in fiscal 2023"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Cash flows from operations increased by $49.9 million from fiscal 2023 primarily due to higher net income"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "Cash flows from operations increased by $51.6 million from the first nine months of fiscal 2022 primarily due to higher net income"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "Typically, cash flows generated from operating activities are our principal source of liquidity"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-25-105631",
+       "date": "2025-11-03",
+       "quote": "Cash flows from operations increased by $52.1 million from the first nine months of fiscal 2024 primarily due to net income after excluding the non-cash activity, higher accrued expenses, timing of operating lease commencements, inventory movement and income tax payments"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-000636",
+       "date": "2024-05-08",
+       "quote": "Cash flows from operations increased by $1.7 million from the first quarter of fiscal 2023 primarily due to higher net income"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001151",
+       "date": "2024-08-05",
+       "quote": "Cash flows from operations decreased by $7.1 million from the first six months of fiscal 2023 primarily due to an increase in inventory levels"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001151",
+       "date": "2024-08-05",
+       "quote": "We believe that our cash and cash equivalents, combined with expected cash flows provided by operations and available borrowings under the Revolving Facility, will provide us with adequate liquidity for the next 12 months and the foreseeable future."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001742",
+       "date": "2024-11-04",
+       "quote": "Cash flows from operations increased by $23.8 million from the first nine months of fiscal 2023 primarily due higher net income"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001073",
+       "date": "2025-05-05",
+       "quote": "Cash flows from operations increased by $12.2 million from the first quarter of fiscal 2024"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001564",
+       "date": "2025-08-04",
+       "quote": "Cash flows from operations increased by $41.4 million from the first six months of fiscal 2024"
+      }
+     ]
+    }
+   ],
+   "idx": 81
+  },
+  {
+   "a": "insurance_costs",
+   "b": "medical_insurance_costs",
+   "reason": "token_overlap:costs,insurance",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "insurance_costs",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-000636",
+       "date": "2024-05-08",
+       "quote": "manage cost pressures, including, increasing wage rates and insurance costs"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "And then ultimately we had a little bit of pressure on insurance, too."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-25-105631",
+       "date": "2025-11-03",
+       "quote": "manage market risks and cost pressures, including increasing wage rates and insurance costs"
+      }
+     ]
+    },
+    {
+     "driver_name": "medical_insurance_costs",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "medical_insurance_expense"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "Labor decreased 130 basis points, predominantly driven by pricing leverage and slightly lower medical insurance expenses."
+      }
+     ]
+    }
+   ],
+   "idx": 312
+  },
+  {
+   "a": "restaurant_development_guidance",
+   "b": "unit_development_guidance",
+   "reason": "token_overlap:development,guidance",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "restaurant_development_guidance",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "new_restaurant_openings"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "We expect to open as many as 26 new restaurants in fiscal 2026 across our portfolio of concepts, with approximately one third of the openings occurring in the first half of fiscal 2026."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-086819",
+       "date": "2023-08-02",
+       "quote": "the Company now expects to open as many as 20 new restaurants in fiscal 2023, including as many as six Cheesecake Factory restaurants, five North Italia restaurants"
+      }
+     ]
+    },
+    {
+     "driver_name": "unit_development_guidance",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001073",
+       "date": "2025-05-05",
+       "quote": "We expect to open as many as 25 new restaurants in fiscal 2025 across our portfolio of concepts."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-015185",
+       "date": "2025-02-19",
+       "quote": "The Company now expects to open as many as 25 new restaurants in fiscal 2025, including as many as three to four The Cheesecake Factory restaurants, six to seven North Italia locations, six to seven Flower Child locations, and as many as eight to nine FRC restaurants."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-26-017090",
+       "date": "2026-02-18",
+       "quote": "The Company now expects to open as many as 26 new restaurants in fiscal 2026, including as many as six The Cheesecake Factory restaurants, six to seven North Italia locations, six to seven Flower Child locations and as many as eight FRC restaurants."
+      }
+     ]
+    }
+   ],
+   "idx": 480
+  },
+  {
+   "a": "north_italia_average_unit_volume",
+   "b": "north_italia_restaurant_level_margin",
+   "reason": "token_overlap:italia,north",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "north_italia_average_unit_volume",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "north_italia_unit_volumes"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "Average sales per mature location, defined as open prior to 2020 and adjusted to exclude impaired locations, for North Italia restaurants were approximately $8.0 million for fiscal 2022"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "North Italia first quarter comparable sales increased 3% from the prior year, resulting in annualized AUVs of $7.7 million."
+      }
+     ]
+    },
+    {
+     "driver_name": "north_italia_restaurant_level_margin",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "north_italia_four_wall_margin",
+      "north_italia_margin",
+      "north_italia_restaurant_margin"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "Forewall margin for the adjusted mature North Italia locations improved to 13.3% for the fourth quarter, supported by a menu price increase implemented mid-fourth quarter."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "restaurant-level margin for the adjusted mature North Italia locations was 15%, a 250 basis point improvement from the prior year"
+      }
+     ]
+    }
+   ],
+   "idx": 421
+  },
+  {
+   "a": "new_restaurant_unit_volumes",
+   "b": "new_unit_returns",
+   "reason": "token_overlap:new,unit",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "new_restaurant_unit_volumes",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "they're practically at the same unit volumes as the rest of the North system, and their margins are great"
+      }
+     ]
+    },
+    {
+     "driver_name": "new_unit_returns",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "new_restaurant_returns"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "we wouldn't be moving forward with the 20 to 22 locations if we didn't feel we'd be hitting the returns"
+      }
+     ]
+    }
+   ],
+   "idx": 395
+  },
+  {
+   "a": "off_premise_capacity",
+   "b": "off_premise_promotions",
+   "reason": "token_overlap:off,premise",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "off_premise_capacity",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "so much has moved from on-premise to off-premise that has actually expanded capacity"
+      }
+     ]
+    },
+    {
+     "driver_name": "off_premise_promotions",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "we do the marketing and that type of offer is really off-premise driven. And we do that on occasion."
+      }
+     ]
+    }
+   ],
+   "idx": 466
+  },
+  {
+   "a": "consumer_spending",
+   "b": "high_income_consumer_spending",
+   "reason": "token_overlap:consumer,spending",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "consumer_spending",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-088397",
+       "date": "2023-08-07",
+       "quote": "economic, public health and political conditions that impact consumer confidence and spending"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-113409",
+       "date": "2023-11-01",
+       "quote": "economic, public health and political conditions that impact consumer confidence and spending"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "Can you talk about the strength of the consumer spending environment and any observations on that front would be helpful."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-000636",
+       "date": "2024-05-08",
+       "quote": "economic, public health and political conditions that impact consumer confidence and spending, including rising interest rates, periods of heightened inflation and market instability"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-26-017090",
+       "date": "2026-02-18",
+       "quote": "economic, public health and political conditions that impact consumer confidence and spending, including government shutdowns, trade policy, interest rate fluctuations, periods of heightened inflation and market instability"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-25-105631",
+       "date": "2025-11-03",
+       "quote": "conditions that impact consumer confidence and spending"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001151",
+       "date": "2024-08-05",
+       "quote": "economic, public health and political conditions that impact consumer confidence and spending"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-058691",
+       "date": "2024-05-08",
+       "quote": "economic, public health and political conditions that impact consumer confidence and spending"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-103205",
+       "date": "2025-10-28",
+       "quote": "economic, public health and political conditions that impact consumer confidence and spending"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "the environment overall feels not quite as robust as we expected. And then, you know, all of the news and all of the economists are saying expect a 1% or so impact in the back half of the year"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "there's a lot of pull forward of spending into March from consumers"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "in hindsight, maybe a half a point of that was already some easing of the consumer"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "there is still economic pressure out there for the consumer. You still might see some trade down"
+      }
+     ]
+    },
+    {
+     "driver_name": "high_income_consumer_spending",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "top end of consumers really does feel pressure. We're likely to actually benefit some from that because they typically move down off of the steakhouses and the expensive independents"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "Whereas our cohort, the income, it depends on the slowdown, but incomes aren't slowing down. income of 100 plus K, those jobs are going away. There's not mass layoffs."
+      }
+     ]
+    }
+   ],
+   "idx": 133
+  },
+  {
+   "a": "guest_rewards_program",
+   "b": "guest_value_scores",
+   "reason": "token_overlap:guest",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "guest_rewards_program",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "cheesecake_rewards_program"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "We also are currently testing a guest rewards program pilot for potential national rollout in 2023."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-058507",
+       "date": "2023-05-10",
+       "quote": "augmenting our marketing programs including the anticipated nationwide launch of a guest rewards program"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "offset by launch costs related to our Rewards program (0.3%)"
+      }
+     ]
+    },
+    {
+     "driver_name": "guest_value_scores",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "guest_value_perception"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "I'd say that our value scores are pretty stable"
+      }
+     ]
+    }
+   ],
+   "idx": 296
+  }
+ ]
+}

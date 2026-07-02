@@ -1,0 +1,652 @@
+{
+ "batch_id": 46,
+ "page": 0,
+ "pairs": [
+  {
+   "a": "food_beverage_costs",
+   "b": "food_costs",
+   "reason": "token_overlap:costs,food",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "food_beverage_costs",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "cost_of_goods_sold",
+      "cost_of_sales",
+      "food_and_beverage_cost",
+      "food_and_beverage_costs"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "food and beverage costs were 23.5% and 25.2% in the third quarters of fiscal 2023 and 2022, respectively, primarily due to menu price increases that were slightly in excess of inflation across most categories (1.5%)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-058468",
+       "date": "2023-05-10",
+       "quote": "Food and beverage costs 206,224 23.8 %"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-086819",
+       "date": "2023-08-02",
+       "quote": "Food and beverage cost 201,094 23.2 %"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001742",
+       "date": "2024-11-04",
+       "quote": "food and beverage costs were 22.6% and 23.5% in the third quarters of fiscal 2024 and 2023, respectively, primarily due to menu price increases in excess of inflation across most categories"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-084383",
+       "date": "2024-07-31",
+       "quote": "Food and beverage costs 201,694 22.3 % 201,094 23.2 %"
+      }
+     ]
+    },
+    {
+     "driver_name": "food_costs",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "due to actual-to-theoretical food cost inefficiencies and labor productivity inefficiencies commonly associated with new, highly complex restaurants"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "due to actual-to-theoretical food cost inefficiencies and labor productivity inefficiencies commonly associated with new, highly complex restaurants such as ours"
+      }
+     ]
+    }
+   ],
+   "idx": 270
+  },
+  {
+   "a": "third_party_delivery_cost",
+   "b": "third_party_delivery_fees",
+   "reason": "token_overlap:delivery,party,third",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "third_party_delivery_cost",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "If these measures are successful, delivery costs will significantly increase"
+      }
+     ]
+    },
+    {
+     "driver_name": "third_party_delivery_fees",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "a change in customers’ willingness to pay fees associated with third-party delivery could negatively impact our comparable restaurant sales performance"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "a change in customers’ willingness to pay fees associated with third-party delivery could negatively impact our comparable restaurant sales performance"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "a change in customers’ willingness to pay fees associated with third-party delivery could negatively impact our comparable restaurant sales performance"
+      }
+     ]
+    }
+   ],
+   "idx": 521
+  },
+  {
+   "a": "equity_market_volatility",
+   "b": "new_market_entry",
+   "reason": "token_overlap:market",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "equity_market_volatility",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "the equity markets have experienced price and volume fluctuations that affect the stock price of companies in ways that have been unrelated to an individual company’s operating performance"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "the equity markets have experienced price and volume fluctuations that affect the stock price of companies in ways that have been unrelated to an individual company’s operating performance"
+      }
+     ]
+    },
+    {
+     "driver_name": "new_market_entry",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "the two new markets that we entered into this year"
+      }
+     ]
+    }
+   ],
+   "idx": 203
+  },
+  {
+   "a": "flower_child_acquisition",
+   "b": "flower_child_average_unit_volume",
+   "reason": "token_overlap:child,flower",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "flower_child_acquisition",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "We are on track with Flower Child, bringing it fully under our umbrella for this year."
+      }
+     ]
+    },
+    {
+     "driver_name": "flower_child_average_unit_volume",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "Q1 AUVs, the run rate of those are $4.4 million average unit volume"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "I wanted to dig in a little more on the flower child. What would be the potential average volumes for a fully mature box"
+      }
+     ]
+    }
+   ],
+   "idx": 209
+  },
+  {
+   "a": "dividend_policy",
+   "b": "quarterly_dividend",
+   "reason": "token_overlap:dividend",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "dividend_policy",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "Our failure to pay a dividend or to increase it over time may negatively impact investor confidence in us and may negatively impact our stock price."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Our failure to pay a dividend or to increase it over time may negatively impact investor confidence in us and may negatively impact our stock price."
+      }
+     ]
+    },
+    {
+     "driver_name": "quarterly_dividend",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-26-017090",
+       "date": "2026-02-18",
+       "quote": "the Board approved a $0.03 increase in the quarterly dividend to $0.30 per share"
+      }
+     ]
+    }
+   ],
+   "idx": 189
+  },
+  {
+   "a": "california_weather",
+   "b": "severe_weather",
+   "reason": "token_overlap:weather",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "california_weather",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "Despite the record rainfall in California, our largest market"
+      }
+     ]
+    },
+    {
+     "driver_name": "severe_weather",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "we're talking about unprecedented weather, the fires in Los Angeles, the holiday shifts"
+      }
+     ]
+    }
+   ],
+   "idx": 66
+  },
+  {
+   "a": "flower_child_unit_count",
+   "b": "fox_restaurant_concepts_unit_count",
+   "reason": "token_overlap:count,unit",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "flower_child_unit_count",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "flower_child_unit_development"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Currently, we operate 38 Flower Child locations and believe there is potential for approximately 700 domestic locations over time, which supports our plan for approximately 20% average annual unit growth for this concept."
+      }
+     ]
+    },
+    {
+     "driver_name": "fox_restaurant_concepts_unit_count",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "fox_restaurant_concepts_restaurant_count"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "We target approximately 10% to 15% average annual unit growth for the aggregate Other FRC portfolio"
+      }
+     ]
+    }
+   ],
+   "idx": 266
+  },
+  {
+   "a": "lease_impairment",
+   "b": "restaurant_lease_terms",
+   "reason": "token_overlap:lease",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "lease_impairment",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "it's it's predominantly uh lease impairment and essentially you know we we hit the the the covet pandemic and there were um several urban locations that while we continue to operate and are recovering haven't fully recovered"
+      }
+     ]
+    },
+    {
+     "driver_name": "restaurant_lease_terms",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "generally the leasing environment is similar to what we may have expected historically, though, in terms of terms"
+      }
+     ]
+    }
+   ],
+   "idx": 341
+  },
+  {
+   "a": "tip_credit_wage",
+   "b": "wage_inflation",
+   "reason": "token_overlap:wage",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "tip_credit_wage",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "In addition to increasing the overall wages paid to our minimum wage and tip credit wage earners, these increases create pressure to increase wages and other benefits paid to other staff members"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "Significant increases in minimum wage rates, including any increase in or elimination of the tip credit wage rate in certain states"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "Significant increases in minimum wage rates, including any increase in or elimination of the tip credit wage rate in certain states"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Certain state and localities have significantly increased their minimum wage and/or tip credit wage (or have eliminated the tip credit wage), and require significantly more mandated benefits"
+      }
+     ]
+    },
+    {
+     "driver_name": "wage_inflation",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "wage_rate_inflation",
+      "wage_rates"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "This increase was primarily due to wage rate inflation in excess of menu price increases (0.8%)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-088397",
+       "date": "2023-08-07",
+       "quote": "menu pricing leverage in excess of wage rate inflation (1.3%)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "just from a pure inflationary environment, we're saying wage inflation is mid-single digits"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "assumptions related to the COVID-19 pandemic, wage, product and services inflation, competitive environment, macroeconomic and industry conditions"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "This decrease was primarily due to menu price increases in excess of wage rate inflation and improved staffing levels (0.5%)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "contributed to significantly increased commodity and wage inflation and other increased costs"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "could lead to further shifts in consumer behavior, wage inflation, staffing challenges, product and services cost inflation"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "our operating results were impacted by geopolitical and macroeconomic events, causing supply chain challenges and significantly increased commodity and wage inflation"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "causing supply chain challenges and significantly increased commodity and wage inflation"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "could lead to further wage inflation, product and services cost inflation, disruptions in the supply chain, staffing challenges, shifts in consumer behavior, and delays in new restaurant openings"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "historical financial performance, wage, product and services inflation, competitive environment, macroeconomic and industry conditions"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "The impact of ongoing geopolitical and macroeconomic events could lead to further wage inflation, product and services cost inflation, disruptions in the supply chain"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "This decrease was primarily due to menu price increases in excess of wage rate inflation (0.6%)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "our operating results were impacted by geopolitical and macroeconomic events, causing supply chain challenges and significantly increased commodity and wage inflation. Our commodity and wage inflationary environment began returning to more historical levels in fiscal 2024."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "menu price increases in excess of wage rate inflation and improved restaurant staffing levels (1.2%)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-25-105631",
+       "date": "2025-11-03",
+       "quote": "This decrease was primarily due to menu price increases in excess of wage rate inflation and improved staffing levels and productivity (0.3%)."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-000636",
+       "date": "2024-05-08",
+       "quote": "offset by menu price increases in excess of wage rate inflation (0.3%)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001151",
+       "date": "2024-08-05",
+       "quote": "This decrease is primarily driven by menu price increases in excess of wage rate inflation and improved productivity (0.4%)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001742",
+       "date": "2024-11-04",
+       "quote": "menu price increases in excess of wage rate inflation and improved productivity (1.0%)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "we're seeing also wage inflation rates that are below pre-pandemic levels"
+      }
+     ]
+    }
+   ],
+   "idx": 525
+  },
+  {
+   "a": "north_italia_average_check",
+   "b": "north_italia_restaurant_count",
+   "reason": "token_overlap:italia,north",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "north_italia_average_check",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "The average check for each customer, including beverages and desserts, for fiscal 2024 averaged approximately $34.60 for lunch and approximately $44.40 for dinner."
+      }
+     ]
+    },
+    {
+     "driver_name": "north_italia_restaurant_count",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "fiscal.ai-kpi",
+       "source_id": "fiscal_ai:CAKE:north_italia_company_owned_restaurants",
+       "date": "",
+       "quote": "North Italia Company-Owned Restaurants"
+      }
+     ]
+    }
+   ],
+   "idx": 411
+  }
+ ]
+}

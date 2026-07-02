@@ -1,0 +1,586 @@
+{
+ "batch_id": 8,
+ "page": 0,
+ "pairs": [
+  {
+   "a": "landlord_demand",
+   "b": "restaurant_industry_demand",
+   "reason": "token_overlap:demand",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "landlord_demand",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "the demand for those concepts from landlords remains very, very high"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "our portfolio of brands continue to attract landlords that want experiential dining in their projects"
+      }
+     ]
+    },
+    {
+     "driver_name": "restaurant_industry_demand",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "restaurant_industry_sales"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-103205",
+       "date": "2025-10-28",
+       "quote": "While the restaurant industry is navigating a softer environment, we remain confident in our ability to manage through it"
+      }
+     ]
+    }
+   ],
+   "idx": 336
+  },
+  {
+   "a": "intangible_asset_impairment",
+   "b": "lease_impairment",
+   "reason": "token_overlap:impairment",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "intangible_asset_impairment",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "We recorded impairment charges related to indefinite-lived intangible assets of $180.8 million in fiscal 2020"
+      }
+     ]
+    },
+    {
+     "driver_name": "lease_impairment",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "it's it's predominantly uh lease impairment and essentially you know we we hit the the the covet pandemic and there were um several urban locations that while we continue to operate and are recovering haven't fully recovered"
+      }
+     ]
+    }
+   ],
+   "idx": 315
+  },
+  {
+   "a": "company_owned_restaurant_count",
+   "b": "fox_restaurant_concepts_unit_count",
+   "reason": "token_overlap:count,restaurant",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "company_owned_restaurant_count",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "fiscal.ai-kpi",
+       "source_id": "fiscal_ai:CAKE:total_company_owned_restaurants",
+       "date": "",
+       "quote": "Total Company-Owned Restaurants"
+      }
+     ]
+    },
+    {
+     "driver_name": "fox_restaurant_concepts_unit_count",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "fox_restaurant_concepts_restaurant_count"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "We target approximately 10% to 15% average annual unit growth for the aggregate Other FRC portfolio"
+      }
+     ]
+    }
+   ],
+   "idx": 101
+  },
+  {
+   "a": "flower_child_acquisition",
+   "b": "flower_child_unit_count",
+   "reason": "token_overlap:child,flower",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "flower_child_acquisition",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "We are on track with Flower Child, bringing it fully under our umbrella for this year."
+      }
+     ]
+    },
+    {
+     "driver_name": "flower_child_unit_count",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "flower_child_unit_development"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Currently, we operate 38 Flower Child locations and believe there is potential for approximately 700 domestic locations over time, which supports our plan for approximately 20% average annual unit growth for this concept."
+      }
+     ]
+    }
+   ],
+   "idx": 217
+  },
+  {
+   "a": "labor_unionization",
+   "b": "workforce_unionization",
+   "reason": "token_overlap:unionization",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "labor_unionization",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "Our staff members and others may attempt to unionize our workforce, establish boycotts or picket lines or interrupt our supply chains, which could limit our ability to manage our workforce effectively"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "Our staff members and others may attempt to unionize our workforce, establish boycotts or picket lines or interrupt our supply chains, which could limit our ability to manage our workforce effectively"
+      }
+     ]
+    },
+    {
+     "driver_name": "workforce_unionization",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Our staff members and others may attempt to unionize our workforce, establish boycotts or picket lines or interrupt our supply chains"
+      }
+     ]
+    }
+   ],
+   "idx": 334
+  },
+  {
+   "a": "dining_capacity_restrictions",
+   "b": "pandemic_dining_restrictions",
+   "reason": "token_overlap:dining,restrictions",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "dining_capacity_restrictions",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-058507",
+       "date": "2023-05-10",
+       "quote": "could lead to further government mandates, including but not limited to capacity restrictions, shifts in consumer behavior, wage inflation, staffing challenges"
+      }
+     ]
+    },
+    {
+     "driver_name": "pandemic_dining_restrictions",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-026056",
+       "date": "2024-02-21",
+       "quote": "pandemics and related containment measures, including the potential for quarantines or restriction on in-person dining"
+      }
+     ]
+    }
+   ],
+   "idx": 183
+  },
+  {
+   "a": "supply_chain_costs",
+   "b": "supply_chain_efficiency",
+   "reason": "token_overlap:chain,supply",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "supply_chain_costs",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "Certainly, the supply chain savings will continue"
+      }
+     ]
+    },
+    {
+     "driver_name": "supply_chain_efficiency",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "Flower Child's purchasing is now integrated into the broader Cheesecake supply chain operation to take advantage of our scale and purchasing capabilities"
+      }
+     ]
+    }
+   ],
+   "idx": 505
+  },
+  {
+   "a": "environmental_social_activism",
+   "b": "social_media_marketing",
+   "reason": "token_overlap:social",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "environmental_social_activism",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "Both advocates and opponents to certain environmental and social matters are increasingly resorting to a range of activism, including media campaigns and litigation"
+      }
+     ]
+    },
+    {
+     "driver_name": "social_media_marketing",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "many of our competitors have expanded and improved their use of social media, making it more difficult for us to differentiate our social media messaging"
+      }
+     ]
+    }
+   ],
+   "idx": 195
+  },
+  {
+   "a": "four_wall_margin",
+   "b": "four_wall_margin_guidance",
+   "reason": "token_overlap:four,margin,wall",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "four_wall_margin",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "The four-wall margin for the adjusted mature North Italia locations improved to 15.4% in the quarter from 13% in the first quarter"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "resulted in consolidated four-wall margins of 15% and adjusted net income margin of 4% for the quarter, both exceeding expectations"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "the general direction is for company level four wall to improve 25 to 35 basis points"
+      }
+     ]
+    },
+    {
+     "driver_name": "four_wall_margin_guidance",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "for next year is that we'd like to get 25 basis points of four-wall margin"
+      }
+     ]
+    }
+   ],
+   "idx": 275
+  },
+  {
+   "a": "supply_chain_disruption",
+   "b": "supply_chain_integration",
+   "reason": "token_overlap:chain,supply",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "supply_chain_disruption",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "supply_chain",
+      "supply_chain_disruptions"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "we also began to experience certain supply shortages and transportation delays largely attributable to impacts of the COVID-19 pandemic"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-058507",
+       "date": "2023-05-10",
+       "quote": "We have also encountered delays in opening new restaurants due to supply chain challenges and delays in permitting, construction, landlord readiness, and equipment availability."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-024317",
+       "date": "2023-02-22",
+       "quote": "supply chain disruptions"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "while we continue to experience some delays in opening due to supply chain challenges and permit approval delays beyond our control"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "we began to experience certain supply shortages and transportation delays largely attributable to impacts of the COVID-19 pandemic. These shortages continued in fiscal 2022 and were exacerbated by geopolitical unrest."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "The impact of ongoing geopolitical and macroeconomic events, including evolving government policies and global trade and tariff dynamics, could lead to further wage inflation, product and services cost inflation, disruptions in the supply chain"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "delays in opening new restaurants due to delays in permitting and landlord readiness, as well as supply chain challenges"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "disruptions in the supply chain and delay in new restaurant openings"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "our operating results were impacted by geopolitical and macroeconomic events, causing supply chain challenges"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "we began to experience certain supply shortages and transportation delays largely attributable to impacts of the COVID-19 pandemic. These shortages continued in fiscal 2022 and were exacerbated by geopolitical unrest"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "could lead to further wage inflation, product and services cost inflation, disruptions in the supply chain, staffing challenges"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "could lead to further wage inflation, product and services cost inflation, disruptions in the supply chain, staffing challenges, shifts in consumer behavior, and delays in new restaurant openings"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "The impact of ongoing geopolitical and macroeconomic events could lead to further wage inflation, product and services cost inflation, disruptions in the supply chain, staffing challenges, shifts in consumer behavior, and delays in new restaurant openings."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "could lead to further wage inflation, product and services cost inflation, disruptions in the supply chain, staffing challenges"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "disruptions in the supply chain, staffing challenges, shifts in consumer behavior, and delays in new restaurant openings"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "we were impacted by geopolitical and macroeconomic events, causing supply chain challenges and significantly increased commodity prices"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-088397",
+       "date": "2023-08-07",
+       "quote": "We have also encountered delays in opening new restaurants due to supply chain challenges and delays in permitting, construction, landlord readiness, and equipment availability"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "causing supply chain challenges and significantly increased commodity and wage inflation"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-25-105631",
+       "date": "2025-11-03",
+       "quote": "The impact of ongoing geopolitical and macroeconomic events could lead to further wage inflation, product and services cost inflation, disruptions in the supply chain, staffing challenges, shifts in consumer behavior, and delays in new restaurant openings."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-000636",
+       "date": "2024-05-08",
+       "quote": "causing supply chain challenges and significantly increased commodity and wage inflation"
+      }
+     ]
+    },
+    {
+     "driver_name": "supply_chain_integration",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "Made some really strong improvements there on supply chain integration as well."
+      }
+     ]
+    }
+   ],
+   "idx": 509
+  }
+ ]
+}

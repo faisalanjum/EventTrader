@@ -1,0 +1,32 @@
+{
+ "ticker": "BLMN",
+ "chunk_id": "BLMN__chunk_001",
+ "events": [
+  {
+   "source_id": "0001546417-26-000019",
+   "source_type": "8-K",
+   "date": "2026-04-24",
+   "part_index": 1,
+   "part_count": 1,
+   "content": "FORM: 8-K\n\nITEMS: [\"Item 5.07: Submission of Matters to a Vote of Security Holders\", \"Item 9.01: Financial Statements and Exhibits\"]\n\nDESC: Form 8-K - Current report - Item 5.07 Item 9.01"
+  }
+ ],
+ "fiscal_kpis": [
+  "Company-Owned System-Wide Restaurants",
+  "Franchised System-Wide Restaurants",
+  "International Outback Steakhouse - Brazil Restaurants Average Check Per Person Growth",
+  "International Outback Steakhouse - Brazil Restaurants Comparable Sales Growth",
+  "International Outback Steakhouse - Brazil Restaurants Traffic Growth",
+  "International System-Wide Restaurants",
+  "Total Number of System-Wide Restaurants",
+  "Total US System-Wide Restaurants",
+  "US - Aussie Grill Restaurants",
+  "US - Bonefish Grill Restaurants",
+  "US - Carrabba's Italian Grill Restaurants",
+  "US - Fleming's Prime Steakhouse & Wine Bar Restaurants",
+  "US - Outback Steakhouse Restaurants",
+  "US Restaurants Average Check Per Person Growth",
+  "US Restaurants Comparable Sales Growth",
+  "US Restaurants Traffic Growth"
+ ]
+}

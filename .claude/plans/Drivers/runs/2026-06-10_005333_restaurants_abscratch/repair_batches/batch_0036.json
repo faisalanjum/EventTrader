@@ -1,0 +1,536 @@
+{
+ "batch_id": 36,
+ "page": 0,
+ "pairs": [
+  {
+   "a": "loyalty_program_engagement",
+   "b": "loyalty_program_offers",
+   "reason": "token_overlap:loyalty,program",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "loyalty_program_engagement",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "demand continues to exceed our internal expectations and we remain encouraged by the level of member activity and engagement that we are now seeing"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "we remain encouraged by the level of member activity and engagement that we are seeing"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-07-29T17.00",
+       "date": "2025-07-29",
+       "quote": "Moving to Cheesecake Rewards, the program continues to perform well, with strong member growth and high satisfaction."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "we continue to be very pleased with the performance of the Cheesecake Rewards Program. Demand continues to surpass our internal expectations"
+      }
+     ]
+    },
+    {
+     "driver_name": "loyalty_program_offers",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "personalized_rewards_offers"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "our unpublished offers which are important part of the program as well, where we're taking an individualized approach to drive incrementality"
+      }
+     ]
+    }
+   ],
+   "idx": 356
+  },
+  {
+   "a": "culinary_dropout_average_weekly_sales",
+   "b": "flower_child_average_weekly_sales",
+   "reason": "token_overlap:average,sales,weekly",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "culinary_dropout_average_weekly_sales",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "We now have nine locations open, averaging over $200,000 per week so far this year."
+      }
+     ]
+    },
+    {
+     "driver_name": "flower_child_average_weekly_sales",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "Flower Child average weekly sales were $85,200, up more than 6% from the third quarter of 2023"
+      }
+     ]
+    }
+   ],
+   "idx": 165
+  },
+  {
+   "a": "marketing_campaigns",
+   "b": "social_media_marketing",
+   "reason": "token_overlap:marketing",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "marketing_campaigns",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "Increased awareness through our social media channels and all of our marketing campaigns, along with our strategy to have the bites and bowls on the separate menu card, has paid off really well"
+      }
+     ]
+    },
+    {
+     "driver_name": "social_media_marketing",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "many of our competitors have expanded and improved their use of social media, making it more difficult for us to differentiate our social media messaging"
+      }
+     ]
+    }
+   ],
+   "idx": 362
+  },
+  {
+   "a": "new_restaurant_margin",
+   "b": "north_italia_restaurant_level_margin",
+   "reason": "token_overlap:margin,restaurant",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "new_restaurant_margin",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "The second one that we're focused on is really bringing new restaurants up to speed over time a little bit more faster. The mature margin is one thing, but if you can bring the early stages of the restaurants up faster, it sets up for success in the longer term as well."
+      }
+     ]
+    },
+    {
+     "driver_name": "north_italia_restaurant_level_margin",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "north_italia_four_wall_margin",
+      "north_italia_margin",
+      "north_italia_restaurant_margin"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "Forewall margin for the adjusted mature North Italia locations improved to 13.3% for the fourth quarter, supported by a menu price increase implemented mid-fourth quarter."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "restaurant-level margin for the adjusted mature North Italia locations was 15%, a 250 basis point improvement from the prior year"
+      }
+     ]
+    }
+   ],
+   "idx": 391
+  },
+  {
+   "a": "covid_pandemic",
+   "b": "pandemic",
+   "reason": "token_overlap:pandemic",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "covid_pandemic",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "covid19_pandemic"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "The COVID-19 pandemic significantly disrupted our business and its ongoing effects and other geopolitical and macroeconomic events are having and may continue to have an adverse impact on our operating environment."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-088397",
+       "date": "2023-08-07",
+       "quote": "the suspension that began in fiscal 2020 due to the impact of COVID-19 on our business"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "the COVID-19 pandemic continued to affect our business during periods of accelerated case counts"
+      }
+     ]
+    },
+    {
+     "driver_name": "pandemic",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "The COVID-19 pandemic significantly disrupted our business and may do so in the future as variants of the underlying virus evolve."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "the COVID-19 pandemic continued to affect our business during periods of accelerated case counts in which we experienced increased restaurant staff absenteeism and temporary shifts in consumer behavior"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "three Other restaurants that are primarily located in areas which have not fully recovered from the pandemic"
+      }
+     ]
+    }
+   ],
+   "idx": 148
+  },
+  {
+   "a": "acquisition_expenses",
+   "b": "other_operating_expenses",
+   "reason": "token_overlap:expenses",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "acquisition_expenses",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "acquisition_related_costs",
+      "acquisition_related_expenses",
+      "frc_acquisition_costs"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "primarily related to FRC acquisition-related expenses"
+      }
+     ]
+    },
+    {
+     "driver_name": "other_operating_expenses",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "on that other operating expense line, the leverage there was pretty unexpected and positive"
+      }
+     ]
+    }
+   ],
+   "idx": 5
+  },
+  {
+   "a": "corporate_tax_policy",
+   "b": "tax_policy",
+   "reason": "token_overlap:policy,tax",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "corporate_tax_policy",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "Changes in our tax provision or an increase in our tax liabilities, whether due to changes in applicable laws and regulations, the interpretation or application thereof, or a final determination of tax audits or litigation, could materially adversely affect our financial performance."
+      }
+     ]
+    },
+    {
+     "driver_name": "tax_policy",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "Changes in our tax provision or an increase in our tax liabilities, whether due to changes in applicable laws and regulations, the interpretation or application thereof, or a final determination of tax audits or litigation, could materially adversely affect our financial performance."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "Changes in our tax provision or an increase in our tax liabilities, whether due to changes in applicable laws and regulations, the interpretation or application thereof, or a final determination of tax audits or litigation, could materially adversely affect our financial performance."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Changes in our tax provision or an increase in our tax liabilities, whether due to changes in applicable laws and regulations, the interpretation or application thereof, or a final determination of tax audits or litigation, could materially adversely affect our financial performance."
+      }
+     ]
+    }
+   ],
+   "idx": 144
+  },
+  {
+   "a": "capex_inflation",
+   "b": "new_restaurant_capex",
+   "reason": "token_overlap:capex",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "capex_inflation",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "We, as along with everybody else, have definitely seen CapEx inflation."
+      }
+     ]
+    },
+    {
+     "driver_name": "new_restaurant_capex",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "Capital expenditures for new restaurants, including locations under development, were $61.6 million and $36.9 million for the first nine months of fiscal 2023 and 2022, respectively."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001742",
+       "date": "2024-11-04",
+       "quote": "Capital expenditures for new restaurants, including locations under development, were $76.1 million and $61.6 million for the first nine months of fiscal 2024 and 2023, respectively."
+      }
+     ]
+    }
+   ],
+   "idx": 74
+  },
+  {
+   "a": "bakery_production_capacity",
+   "b": "dining_capacity_restrictions",
+   "reason": "token_overlap:capacity",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "bakery_production_capacity",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "We are evaluating beginning construction on a third bakery production facility in Charlestown, Indiana in fiscal 2025 or fiscal 2026."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "In October 2023, we announced plans for a third bakery production facility"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "last week we announced plans to develop our third bakery production facility in Charlestown, Indiana"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "our preliminary capex estimate for the initial phase of development for the third bakery facility"
+      }
+     ]
+    },
+    {
+     "driver_name": "dining_capacity_restrictions",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-058507",
+       "date": "2023-05-10",
+       "quote": "could lead to further government mandates, including but not limited to capacity restrictions, shifts in consumer behavior, wage inflation, staffing challenges"
+      }
+     ]
+    }
+   ],
+   "idx": 49
+  },
+  {
+   "a": "dining_demand",
+   "b": "experiential_dining_demand",
+   "reason": "token_overlap:demand,dining",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "dining_demand",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "consumer_demand",
+      "consumer_dining_demand"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-042573",
+       "date": "2025-04-30",
+       "quote": "underscoring the consistent consumer demand for the high-quality, differentiated dining experiences we provide"
+      }
+     ]
+    },
+    {
+     "driver_name": "experiential_dining_demand",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "we are uniquely well positioned to capitalize on the continued favorable consumer demand for experiential dining"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-07-29T17.00",
+       "date": "2025-07-29",
+       "quote": "people want to go out to eat for great, wonderful, delicious food, but also as an experience. They want to be in an environment that has a lot of energy."
+      }
+     ]
+    }
+   ],
+   "idx": 184
+  }
+ ]
+}

@@ -1,0 +1,790 @@
+{
+ "batch_id": 3,
+ "page": 0,
+ "pairs": [
+  {
+   "a": "flower_child_off_premise_mix",
+   "b": "flower_child_unit_count",
+   "reason": "token_overlap:child,flower",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "flower_child_off_premise_mix",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "at Flower Child, you're talking about a 55% off-premise mix"
+      }
+     ]
+    },
+    {
+     "driver_name": "flower_child_unit_count",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "flower_child_unit_development"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Currently, we operate 38 Flower Child locations and believe there is potential for approximately 700 domestic locations over time, which supports our plan for approximately 20% average annual unit growth for this concept."
+      }
+     ]
+    }
+   ],
+   "idx": 249
+  },
+  {
+   "a": "rewards_program_contribution",
+   "b": "rewards_program_costs",
+   "reason": "token_overlap:program,rewards",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "rewards_program_contribution",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "I think you guys have talked maybe about 100 basis points from a contribution perspective. Is that still the right level to be thinking about from loyalty?"
+      }
+     ]
+    },
+    {
+     "driver_name": "rewards_program_costs",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "rewards_program_marketing_costs"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-088397",
+       "date": "2023-08-07",
+       "quote": "partially offset by launch cost related to our Rewards program (0.2%)"
+      }
+     ]
+    }
+   ],
+   "idx": 491
+  },
+  {
+   "a": "convertible_notes_issuance",
+   "b": "convertible_notes_maturity",
+   "reason": "token_overlap:convertible,notes",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "convertible_notes_issuance",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "convertible_debt_issuance"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001073",
+       "date": "2025-05-05",
+       "quote": "we issued $575.0 million in aggregate principal amount of convertible senior notes"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-042573",
+       "date": "2025-04-30",
+       "quote": "On February 28, 2025, the Company issued $575 million of 2.00% convertible senior notes due 2030."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "we strengthened our liquidity position and balance sheet through the issuance of $575 million of 2% convertible notes due 2030"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001564",
+       "date": "2025-08-04",
+       "quote": "On February 28, 2025, we issued $575.0 million in aggregate principal amount of convertible senior notes (“2030 Notes”), which will mature on March 15, 2030"
+      }
+     ]
+    },
+    {
+     "driver_name": "convertible_notes_maturity",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "which will mature on June 15, 2026, unless earlier repurchased, redeemed or converted"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001742",
+       "date": "2024-11-04",
+       "quote": "we issued $345.0 million in aggregate principal amount of convertible senior notes (“Notes”), which will mature on June 15, 2026, unless earlier repurchased, redeemed or converted"
+      }
+     ]
+    }
+   ],
+   "idx": 140
+  },
+  {
+   "a": "construction_delays",
+   "b": "construction_labor_availability",
+   "reason": "token_overlap:construction",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "construction_delays",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-086819",
+       "date": "2023-08-02",
+       "quote": "the Company continues to experience some delays in opening dates due to construction challenges and permit approval delays"
+      }
+     ]
+    },
+    {
+     "driver_name": "construction_labor_availability",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "the availability of qualified tradespeople in the local market"
+      }
+     ]
+    }
+   ],
+   "idx": 114
+  },
+  {
+   "a": "dining_capacity_restrictions",
+   "b": "off_premise_capacity",
+   "reason": "token_overlap:capacity",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "dining_capacity_restrictions",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-058507",
+       "date": "2023-05-10",
+       "quote": "could lead to further government mandates, including but not limited to capacity restrictions, shifts in consumer behavior, wage inflation, staffing challenges"
+      }
+     ]
+    },
+    {
+     "driver_name": "off_premise_capacity",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "so much has moved from on-premise to off-premise that has actually expanded capacity"
+      }
+     ]
+    }
+   ],
+   "idx": 182
+  },
+  {
+   "a": "adjusted_eps",
+   "b": "eps_surprise",
+   "reason": "token_overlap:eps",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "adjusted_eps",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-113409",
+       "date": "2023-11-01",
+       "quote": "adjusted net income and adjusted net income per share for the third quarter of fiscal 2023 were $19.0 million and $0.39, respectively"
+      }
+     ]
+    },
+    {
+     "driver_name": "eps_surprise",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-024317",
+       "date": "2023-02-22",
+       "quote": "adjusted net income and adjusted net income per share for the fourth quarter of fiscal 2022 were $27.4 million and $0.56, respectively"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "deliver a solid first quarter with our top and bottom line performance in line with expectations"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-086819",
+       "date": "2023-08-02",
+       "quote": "Net income and diluted net income per share were $42.7 million and $0.87, respectively, in the second quarter of fiscal 2023"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-26-017090",
+       "date": "2026-02-18",
+       "quote": "Margins and adjusted diluted net income per share finished toward the higher end of our expectations"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-026056",
+       "date": "2024-02-21",
+       "quote": "adjusted net income and adjusted net income per share for the fourth quarter of fiscal 2023 were $39.0 million and $0.80, respectively"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-058691",
+       "date": "2024-05-08",
+       "quote": "Net income and diluted net income per share were $33.2 million and $0.68, respectively, in the first quarter of fiscal 2024."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-084383",
+       "date": "2024-07-31",
+       "quote": "Net income and diluted net income per share were $52.4 million and $1.08, respectively, in the second quarter of fiscal 2024."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-112254",
+       "date": "2024-10-29",
+       "quote": "Net income and diluted net income per share were $30.0 million and $0.61, respectively, in the third quarter of fiscal 2024."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-015185",
+       "date": "2025-02-19",
+       "quote": "Net income and diluted net income per share were $41.2 million and $0.83, respectively, in the fourth quarter of fiscal 2024."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-071758",
+       "date": "2025-07-29",
+       "quote": "Net income and diluted net income per share were $54.8 million and $1.14, respectively, in the second quarter of fiscal 2025."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-103205",
+       "date": "2025-10-28",
+       "quote": "earnings and profitability finishing above the high end of our expectations"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "profitability surpassing expectations, resulting in 24% year-over-year growth in adjusted earnings per share, the third consecutive quarter of 20% or greater growth"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "leading to fourth quarter revenues, earnings, and unit development exceeding our guidance"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "revenues finishing towards the higher end of our guidance and profitability surpassing expectations. This resulted in a 27% year over year increase in adjusted earnings per share"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-07-29T17.00",
+       "date": "2025-07-29",
+       "quote": "Our second quarter results exceeded expectations with consolidated revenues and adjusted earnings per share setting new milestones for the company."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "This strong operational execution supported margins and adjusted diluted net income per share, finishing toward the higher end of our expectations."
+      }
+     ]
+    }
+   ],
+   "idx": 11
+  },
+  {
+   "a": "insurance_costs",
+   "b": "self_insurance_cost",
+   "reason": "token_overlap:insurance",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "insurance_costs",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-000636",
+       "date": "2024-05-08",
+       "quote": "manage cost pressures, including, increasing wage rates and insurance costs"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "And then ultimately we had a little bit of pressure on insurance, too."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-25-105631",
+       "date": "2025-11-03",
+       "quote": "manage market risks and cost pressures, including increasing wage rates and insurance costs"
+      }
+     ]
+    },
+    {
+     "driver_name": "self_insurance_cost",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "self_insurance_costs"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "Several factors may significantly increase our self-insurance costs, such as conditions of the insurance market, the availability of insurance, or changes in applicable regulations"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Several factors may significantly increase our self-insurance costs, such as conditions of the insurance market, the availability of insurance, or changes in applicable regulations"
+      }
+     ]
+    }
+   ],
+   "idx": 313
+  },
+  {
+   "a": "cash_capital_expenditure_guidance",
+   "b": "cash_on_cash_returns",
+   "reason": "token_overlap:cash",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "cash_capital_expenditure_guidance",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "We anticipate approximately $165 to $175 million in cash capital expenditures to support this level of unit development"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001151",
+       "date": "2024-08-05",
+       "quote": "We anticipate approximately $180 to $200 million in cash capital expenditures to support this level of unit development"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "We anticipate approximately $180 to $200 million in cash capital expenditures to support this level of unit development, as well as required maintenance on our restaurants."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "We anticipate approximately $190 million to $210 million in capital expenditures to support this level of unit development"
+      }
+     ]
+    },
+    {
+     "driver_name": "cash_on_cash_returns",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "we're sitting right between the 20% and 25% cash on cash we've been targeting and feel great about the ability to continue to open at that level"
+      }
+     ]
+    }
+   ],
+   "idx": 75
+  },
+  {
+   "a": "net_income_margin_surprise",
+   "b": "net_promoter_score",
+   "reason": "token_overlap:net",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "net_income_margin_surprise",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "profit_margin_surprise"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "Adjusted net income margin of 3.5% was at the high end of the range."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "Adjusted net income margin of 5% was above our expectations relative to our sales"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-07-29T17.00",
+       "date": "2025-07-29",
+       "quote": "Total revenues of $956 million and adjusted net income margin of 5.8 percent both exceeded the high end of the guidance ranges we provided."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "Adjusted net income margin of 4% exceeded the 3.5% guidance we provided."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "adjusted net income margin of 5.9% well exceeded the high end of the guidance we provided"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "Adjusted net income margin of 3.3% exceeded the high end of the guidance we provided"
+      }
+     ]
+    },
+    {
+     "driver_name": "net_promoter_score",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "To that end, dine-in net promoter metrics improve sequentially and year over year, and our sales trends are off to a promising start in 2023."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "our retention trends were a key contributor to the sequential and year-over-year improvement in net promoter scores and service and food quality levels for the Cheesecake Factory restaurants"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "virtually every key on-premise and off-premise net promoter score metric that we track for the Cheesecake Factory ending the quarter at an historic high"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "NPS is typically a leading indicator in our industry of where we're going."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "Our internally measured net promoter score metrics across both the dine-in and off-premise are consistently exceeding pre-pandemic levels."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "our internally measured Net Promoter Score metrics during the quarter remained near record highs across both dine-in and off-premise channels"
+      }
+     ]
+    }
+   ],
+   "idx": 380
+  },
+  {
+   "a": "flower_child_sales",
+   "b": "flower_child_same_store_sales",
+   "reason": "token_overlap:child,flower,sales",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "flower_child_sales",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "Flower Child sales increased 11.0% to $127.5 million for fiscal 2023, compared to $114.8 million for fiscal 2022"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-000636",
+       "date": "2024-05-08",
+       "quote": "Flower Child sales increased 10.2% to $34.5 million for the first quarter of fiscal 2024"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "looking at Flower Child, as David Gordon mentioned, the sales continue to improve. quarter over quarter"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "Flower Child sales totaled $32.2 million, up 11% from the prior year, and sales per operating week were $80,000."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001742",
+       "date": "2024-11-04",
+       "quote": "Flower Child sales increased 13.7% to $36.6 million for the third quarter of fiscal 2024"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-02-21T17.00",
+       "date": "2024-02-21",
+       "quote": "Flower Child sales totaled $30.4 million, and sales per operating week were $75,500"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "Flower Child sales totaled $35.7 million, up 7% from the prior year, and sales per operating week were $85,900"
+      }
+     ]
+    },
+    {
+     "driver_name": "flower_child_same_store_sales",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Flower Child comparable sales increased approximately 6% from fiscal 2023."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001073",
+       "date": "2025-05-05",
+       "quote": "Flower Child comparable sales increased approximately 5% from the first quarter of fiscal 2024."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "Q1 comparable sales for Flower Child were the highest of any of our core concepts, and sales demand and the newer locations continue to trend well"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "the Fire Child comps continue to be the strongest in our system, running mid-single digits"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "Flower Child comparable sales increased approximately 5% from fiscal 2024."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-25-105631",
+       "date": "2025-11-03",
+       "quote": "Flower Child comparable sales increased approximately 7% from the third quarter of fiscal 2024."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001564",
+       "date": "2025-08-04",
+       "quote": "Flower Child comparable sales increased approximately 4% from the second quarter of fiscal 2024"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "Flower Child's comparable sales increased by 11%, significantly outpacing the Black Box Fast Casual Dining Index"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "Flower Child continues on a strong upward trajectory. with comparable sales increasing by 5%, significantly outperforming the Black Box Fast Casual Dining Index"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-07-29T17.00",
+       "date": "2025-07-29",
+       "quote": "Flower Child continues on a strong upward trajectory, with second quarter comparable sales increasing 4%, significantly outperforming the black box fast casual dining index"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "third quarter comparable sales increasing 7%, significantly outpacing the fast casual segment"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "Flower Child continued to perform exceptionally well and meaningfully outpaced the Fast Casual segment. Fourth quarter comparable sales increased 4%, for a two-year comp sales increase of 15%."
+      }
+     ]
+    }
+   ],
+   "idx": 259
+  }
+ ]
+}

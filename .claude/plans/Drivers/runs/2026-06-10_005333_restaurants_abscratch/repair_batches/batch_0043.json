@@ -1,0 +1,1089 @@
+{
+ "batch_id": 43,
+ "page": 0,
+ "pairs": [
+  {
+   "a": "north_italia_average_unit_volume",
+   "b": "north_italia_food_cost",
+   "reason": "token_overlap:italia,north",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "north_italia_average_unit_volume",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "north_italia_unit_volumes"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "Average sales per mature location, defined as open prior to 2020 and adjusted to exclude impaired locations, for North Italia restaurants were approximately $8.0 million for fiscal 2022"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "North Italia first quarter comparable sales increased 3% from the prior year, resulting in annualized AUVs of $7.7 million."
+      }
+     ]
+    },
+    {
+     "driver_name": "north_italia_food_cost",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "so that's an area that cheesecake factory best practices and systems have been deployed over time to North Italia, and we see a really good opportunity to lower food costs over time"
+      }
+     ]
+    }
+   ],
+   "idx": 417
+  },
+  {
+   "a": "credit_facility_borrowings",
+   "b": "tip_credit_wage",
+   "reason": "token_overlap:credit",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "credit_facility_borrowings",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "debt_repayment"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "we had net availability for borrowings of $238.5 million, based on a $130.0 million outstanding debt balance and $31.5 million in standby letters of credit under the Revolver Facility"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "we may again implement mitigation actions such as suspending share repurchases, not declaring future dividends, increasing borrowings under our credit facility"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "In the fourth quarter of fiscal 2024, we repaid $20.0 million on the Revolver Facility."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "we may again implement mitigation actions such as suspending share repurchases, not declaring future dividends, increasing borrowings under our credit facility or modifying our operating strategies"
+      }
+     ]
+    },
+    {
+     "driver_name": "tip_credit_wage",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "In addition to increasing the overall wages paid to our minimum wage and tip credit wage earners, these increases create pressure to increase wages and other benefits paid to other staff members"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "Significant increases in minimum wage rates, including any increase in or elimination of the tip credit wage rate in certain states"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "Significant increases in minimum wage rates, including any increase in or elimination of the tip credit wage rate in certain states"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "Certain state and localities have significantly increased their minimum wage and/or tip credit wage (or have eliminated the tip credit wage), and require significantly more mandated benefits"
+      }
+     ]
+    }
+   ],
+   "idx": 163
+  },
+  {
+   "a": "casual_dining_industry_sales",
+   "b": "restaurant_industry_demand",
+   "reason": "token_overlap:industry",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "casual_dining_industry_sales",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "we updated sales projections for some of our lesser-established concepts, which are performing more in line with broader casual dining sales trends"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "Industry sales decelerated in the fourth quarter as reflected by the black box casual dining index declining sequentially by 410 basis points from the third quarter"
+      }
+     ]
+    },
+    {
+     "driver_name": "restaurant_industry_demand",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "restaurant_industry_sales"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-103205",
+       "date": "2025-10-28",
+       "quote": "While the restaurant industry is navigating a softer environment, we remain confident in our ability to manage through it"
+      }
+     ]
+    }
+   ],
+   "idx": 88
+  },
+  {
+   "a": "restaurant_level_margin",
+   "b": "restaurant_margin_guidance",
+   "reason": "token_overlap:margin,restaurant",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "restaurant_level_margin",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "restaurant_level_profit_margin",
+      "restaurant_margin"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "we implemented price increases above our historical levels to support our longer-term restaurant-level margin objectives"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001564",
+       "date": "2025-08-04",
+       "quote": "drive margin expansion by leveraging incremental sales to increase restaurant-level margins at The Cheesecake Factory concept"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "we have been in an exceptionally high inflationary environment which has resulted in restaurant level margin compression as reflected in our physical 2022 results"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "you anticipated restaurant margins um to be somewhere in kind of the low 14 range"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "Our objective is to drive margin expansion over time by leveraging incremental sales to increase restaurant-level margins at The Cheesecake Factory concept"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "drive margin expansion, by leveraging incremental sales to increase restaurant-level margins at The Cheesecake Factory concept"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "require a period of time after reaching normal traffic levels to achieve their targeted restaurant-level margins due to actual-to-theoretical food cost inefficiencies and labor productivity inefficiencies"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "drive incremental sales while maintaining our restaurant level margins"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "our new restaurants have typically required a period of time after reaching normal traffic levels to achieve their targeted restaurant-level margins due to actual-to-theoretical food cost inefficiencies and labor productivity inefficiencies"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "leveraging incremental sales to increase restaurant-level margins at The Cheesecake Factory concept"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "our new restaurants have typically required a period of time after reaching normal traffic levels to achieve their targeted restaurant-level margins due to actual-to-theoretical food cost inefficiencies and labor productivity inefficiencies"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "you guys are kind of keen to get back to a certain restaurant margin. I think you said the mid-14s for the portfolio in 23"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-02-21T17.00",
+       "date": "2024-02-21",
+       "quote": "restaurant-level profit margin of 16.1% at the Cheesecake Factory, not only exceeding our projections, but also surpassing fourth quarter 2019 margin levels"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "the Cheesecake Factory restaurant's four-wall margin was 17.7% for the quarter. the highest level in the past six years"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "Cheesecake factory restaurant level margins for the quarter improved by 180 basis points from Q3 of 2023"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "Cheesecake Factory restaurant level margins for the fourth quarter were 18.4%, marking the highest level in over seven years"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "really impressive cheesecake for all margins. I think you mentioned 18.4% this quarter, highest in over seven years"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "the Cheesecake Factory four-wall restaurant margins increased to 17.4%, up 140 basis points from the first quarter in 2024"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-07-29T17.00",
+       "date": "2025-07-29",
+       "quote": "four-wall restaurant margin increased to 18.5%, up 80 basis points year over year, and the highest level recorded in eight years"
+      }
+     ]
+    },
+    {
+     "driver_name": "restaurant_margin_guidance",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "I think you said the restaurant margin should be at that 15% level for the overall corporate."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "expecting kind of 15 to 25 bps of of restaurant margin expansion is are you just building in some conservatism there now with the tariff talk"
+      }
+     ]
+    }
+   ],
+   "idx": 484
+  },
+  {
+   "a": "net_income_margin_surprise",
+   "b": "revenue_surprise",
+   "reason": "token_overlap:surprise",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "net_income_margin_surprise",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "profit_margin_surprise"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "Adjusted net income margin of 3.5% was at the high end of the range."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "Adjusted net income margin of 5% was above our expectations relative to our sales"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-07-29T17.00",
+       "date": "2025-07-29",
+       "quote": "Total revenues of $956 million and adjusted net income margin of 5.8 percent both exceeded the high end of the guidance ranges we provided."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "Adjusted net income margin of 4% exceeded the 3.5% guidance we provided."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "adjusted net income margin of 5.9% well exceeded the high end of the guidance we provided"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "Adjusted net income margin of 3.3% exceeded the high end of the guidance we provided"
+      }
+     ]
+    },
+    {
+     "driver_name": "revenue_surprise",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-024317",
+       "date": "2023-02-22",
+       "quote": "Total revenues were $892.8 million in the fourth quarter of fiscal 2022 compared to $776.7 million in the fourth quarter of fiscal 2021"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "Total revenues of $866.1 million, were at the midpoint of the range."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-058468",
+       "date": "2023-05-10",
+       "quote": "revenue finishing in-line with our expectations"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-26-017090",
+       "date": "2026-02-18",
+       "quote": "revenue for the quarter finished within our expected range"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-086819",
+       "date": "2023-08-02",
+       "quote": "Total revenues were $866.2 million in the second quarter of fiscal 2023 compared to $832.6 million in the second quarter of fiscal 2022"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-026056",
+       "date": "2024-02-21",
+       "quote": "Total revenues were $877.0 million in the fourth quarter of fiscal 2023 compared to $892.8 million in the fourth quarter of fiscal 2022."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-058691",
+       "date": "2024-05-08",
+       "quote": "Our first quarter sales improved throughout the quarter culminating at the high-end of our expectations."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-084383",
+       "date": "2024-07-31",
+       "quote": "Our second quarter revenue finished towards the higher end of our expectations"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-24-112254",
+       "date": "2024-10-29",
+       "quote": "Total revenues were $865.5 million in the third quarter of fiscal 2024 compared to $830.2 million in the third quarter of fiscal 2023."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-015185",
+       "date": "2025-02-19",
+       "quote": "Total revenues were $921.0 million in the fourth quarter of fiscal 2024 compared to $877.0 million in the fourth quarter of fiscal 2023."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-042573",
+       "date": "2025-04-30",
+       "quote": "Sales finished towards the higher end of our expectations, led by The Cheesecake Factory restaurants"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-071758",
+       "date": "2025-07-29",
+       "quote": "Total revenues were $955.8 million in the second quarter of fiscal 2025 compared to $904.0 million in the second quarter of fiscal 2024."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-25-103205",
+       "date": "2025-10-28",
+       "quote": "We delivered another quarter of solid results, with revenue within our guidance range"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "Total revenues of $866.2 million were just under the low end of the range"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "Total revenues of $830.2 million increased 5.9% over last year, despite finishing just under the low end of the range."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "Total revenues of $891 million finished towards the high end of the range we provided."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "Total revenues of $904 million finished towards the higher end of the range we provided"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "Total revenues of $865 million finished towards the higher end of the range we provided"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "Fourth quarter total revenues of $921 million and adjusted net income margin of 5.6% exceeded the high end of the guidance we provided"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "Total revenues of $927 million finished towards the high end of the range we provided."
+      }
+     ]
+    }
+   ],
+   "idx": 381
+  },
+  {
+   "a": "flower_child_acquisition",
+   "b": "flower_child_average_weekly_sales",
+   "reason": "token_overlap:child,flower",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "flower_child_acquisition",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "We are on track with Flower Child, bringing it fully under our umbrella for this year."
+      }
+     ]
+    },
+    {
+     "driver_name": "flower_child_average_weekly_sales",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "Flower Child average weekly sales were $85,200, up more than 6% from the third quarter of 2023"
+      }
+     ]
+    }
+   ],
+   "idx": 210
+  },
+  {
+   "a": "supply_chain_efficiency",
+   "b": "supply_chain_integration",
+   "reason": "token_overlap:chain,supply",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "supply_chain_efficiency",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "Flower Child's purchasing is now integrated into the broader Cheesecake supply chain operation to take advantage of our scale and purchasing capabilities"
+      }
+     ]
+    },
+    {
+     "driver_name": "supply_chain_integration",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "Made some really strong improvements there on supply chain integration as well."
+      }
+     ]
+    }
+   ],
+   "idx": 511
+  },
+  {
+   "a": "net_income_margin_guidance",
+   "b": "net_promoter_score",
+   "reason": "token_overlap:net",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "net_income_margin_guidance",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "net_margin_guidance"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "we expect fiscal 2023 net income margin of approximately 4% at the mid-point of the estimated revenue range"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-058507",
+       "date": "2023-05-10",
+       "quote": "we expect fiscal 2023 net income margin of approximately 4%"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "8-K",
+       "source_id": "0001104659-23-058468",
+       "date": "2023-05-10",
+       "quote": "adjusted net income margin at the high end of our guidance range"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "We anticipate net income margin of approximately 3% to 3.5% for the first quarter of fiscal 2023, based on the revenue range I previously outlined and the elevated year-over-year commodities."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "we anticipate net income margin of approximately 4.75% for the second quarter of fiscal 2023"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2026-02-18T17.00",
+       "date": "2026-02-18",
+       "quote": "we would anticipate adjusted net income margin to be about 5% at the midpoint of the sales range provided"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "we expect fiscal 2024 net income margin of approximately 4.25% at the estimated revenue."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-088397",
+       "date": "2023-08-07",
+       "quote": "we expect fiscal 2023 net income margin of approximately 4%"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "we expect fiscal 2023 net income margin of approximately 3.8%"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-000636",
+       "date": "2024-05-08",
+       "quote": "we expect fiscal 2024 net income margin of approximately 4.25% at the estimated revenue"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001151",
+       "date": "2024-08-05",
+       "quote": "we expect fiscal 2024 net income margin of approximately 4.3% to 4.4% based on the estimated revenue range provided"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001742",
+       "date": "2024-11-04",
+       "quote": "we expect fiscal 2024 net income margin of approximately 4.5% based on the estimated revenue provided"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-08-02T17.00",
+       "date": "2023-08-02",
+       "quote": "We anticipate net income margin of approximately 2.75% for Q3 at the midpoint of the revenue range"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "I wanted to ask about net income margin guidance, specifically for the fourth quarter. I think you said net income margins in a 4.25% range."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "we anticipate net income margin to be about 4.25% at the midpoint of the sales range"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-02-21T17.00",
+       "date": "2024-02-21",
+       "quote": "we would anticipate net income margin to be about 3.5% at the midpoint of the sales range"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "we would anticipate net income margin to be about 5.25% at the midpoint of the sales range"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "As such, we are increasing our net income margin projections for the full year 2024"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-10-29T17.00",
+       "date": "2024-10-29",
+       "quote": "we would anticipate adjusted net income margin to be about 4.8% to 4.9% based on the sales range we provided"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-02-19T17.00",
+       "date": "2025-02-19",
+       "quote": "we would anticipate adjusted net income margin to be about 4.3% to 4.4% based on the sales range provided"
+      }
+     ]
+    },
+    {
+     "driver_name": "net_promoter_score",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-02-22T17.00",
+       "date": "2023-02-22",
+       "quote": "To that end, dine-in net promoter metrics improve sequentially and year over year, and our sales trends are off to a promising start in 2023."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-05-10T17.00",
+       "date": "2023-05-10",
+       "quote": "our retention trends were a key contributor to the sequential and year-over-year improvement in net promoter scores and service and food quality levels for the Cheesecake Factory restaurants"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-07-31T17.00",
+       "date": "2024-07-31",
+       "quote": "virtually every key on-premise and off-premise net promoter score metric that we track for the Cheesecake Factory ending the quarter at an historic high"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "NPS is typically a leading indicator in our industry of where we're going."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "Our internally measured net promoter score metrics across both the dine-in and off-premise are consistently exceeding pre-pandemic levels."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "our internally measured Net Promoter Score metrics during the quarter remained near record highs across both dine-in and off-premise channels"
+      }
+     ]
+    }
+   ],
+   "idx": 377
+  },
+  {
+   "a": "daypart_marketing",
+   "b": "marketing_campaigns",
+   "reason": "token_overlap:marketing",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "daypart_marketing",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-07-29T17.00",
+       "date": "2025-07-29",
+       "quote": "having the data really makes it more impactful for us to be able to do the right type of targeted messaging to drive specific day part"
+      }
+     ]
+    },
+    {
+     "driver_name": "marketing_campaigns",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-10-28T17.00",
+       "date": "2025-10-28",
+       "quote": "Increased awareness through our social media channels and all of our marketing campaigns, along with our strategy to have the bites and bowls on the separate menu card, has paid off really well"
+      }
+     ]
+    }
+   ],
+   "idx": 167
+  },
+  {
+   "a": "menu_mix",
+   "b": "north_italia_menu_mix",
+   "reason": "token_overlap:menu,mix",
+   "n_companies": 1,
+   "sides": [
+    {
+     "driver_name": "menu_mix",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [
+      "sales_mix"
+     ],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "Average check variations are driven by menu price increases and/or changes in menu mix"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-058507",
+       "date": "2023-05-10",
+       "quote": "Average check variations are driven by menu price increases and/or changes in menu mix."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2023-11-01T17.00",
+       "date": "2023-11-01",
+       "quote": "Compared to last year, just slightly less alcohol attachment, maybe a little bit less appetizer attachment"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-23-026072",
+       "date": "2023-02-27",
+       "quote": "unfavorable menu mix shifts (i.e. customers reducing their spend by purchasing fewer menu items or lower cost menu items)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "partially offset by a 1.9% negative change from menu mix"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "based on an increase of 9.4% in menu pricing, partially offset by a 5.4% negative change from menu mix"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-24-027565",
+       "date": "2024-02-26",
+       "quote": "result in reduced customer traffic and unfavorable menu mix shifts (i.e. customers reducing their spend by purchasing fewer menu items or lower cost menu items)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001104659-26-018643",
+       "date": "2026-02-23",
+       "quote": "unfavorable menu mix shifts (i.e., customers reducing their spend by purchasing fewer menu items or lower cost menu items)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "a 3.0% negative change from menu mix"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-K",
+       "source_id": "0001410578-25-000195",
+       "date": "2025-02-24",
+       "quote": "result in reduced customer traffic and unfavorable menu mix shifts (i.e., customers reducing their spend by purchasing fewer menu items or lower cost menu items)"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-088397",
+       "date": "2023-08-07",
+       "quote": "Average check variations are driven by menu price increases and/or changes in menu mix"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-23-114808",
+       "date": "2023-11-06",
+       "quote": "partially offset by 6.1% negative impact from menu mix"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001104659-25-105631",
+       "date": "2025-11-03",
+       "quote": "partially offset by a 1.7% negative change from menu mix"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-000636",
+       "date": "2024-05-08",
+       "quote": "Average check variations are driven by menu price increases and/or changes in menu mix."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001151",
+       "date": "2024-08-05",
+       "quote": "Average check variations are driven by menu price increases and/or changes in menu mix."
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-24-001742",
+       "date": "2024-11-04",
+       "quote": "Average check variations are driven by menu price increases and/or changes in menu mix"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001073",
+       "date": "2025-05-05",
+       "quote": "partially offset by a 2.2% negative change from menu mix"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "10-Q",
+       "source_id": "0001410578-25-001564",
+       "date": "2025-08-04",
+       "quote": "partially offset by a 2.1% negative change from menu mix"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-02-21T17.00",
+       "date": "2024-02-21",
+       "quote": "Importantly, the improvement was driven by better traffic and menu mix as year-over-year menu pricing declined"
+      },
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2024-05-08T17.00",
+       "date": "2024-05-08",
+       "quote": "we understand the mix. It's behaving like we thought it would be"
+      }
+     ]
+    },
+    {
+     "driver_name": "north_italia_menu_mix",
+     "companies": [
+      "CAKE"
+     ],
+     "same_as_variants": [],
+     "evidence_refs": [
+      {
+       "company": "CAKE",
+       "source_type": "transcript",
+       "source_id": "CAKE_2025-04-30T17.00",
+       "date": "2025-04-30",
+       "quote": "The north Italia mix was negative 2%. It's actually a slight improvement from where it was last year."
+      }
+     ]
+    }
+   ],
+   "idx": 369
+  }
+ ]
+}

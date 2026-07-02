@@ -1,0 +1,5113 @@
+{
+ "gate_verdicts": [
+  {
+   "driver_name": "accounting_standards",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable cause: changes in accounting standards affecting reported results."
+  },
+  {
+   "driver_name": "acquisition_contingent_consideration",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable: fair-value changes in acquisition contingent consideration; recurs across 14 events."
+  },
+  {
+   "driver_name": "acquisition_expenses",
+   "verdict": "rewrite",
+   "rewrite_to": "acquisition_related_expenses",
+   "reason": "Same FRC acquisition-related expense object/scope/mechanism as coined acquisition_related_expenses; duplicate wording."
+  },
+  {
+   "driver_name": "acquisition_integration",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable integration-complexity cause."
+  },
+  {
+   "driver_name": "acquisition_related_costs",
+   "verdict": "rewrite",
+   "rewrite_to": "acquisition_related_expenses",
+   "reason": "Quotes are the same acquisition-related expense line items; costs=expenses, same object/scope/mechanism."
+  },
+  {
+   "driver_name": "acquisition_related_expenses",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical recurring acquisition-related expense cause."
+  },
+  {
+   "driver_name": "activist_investor_campaign",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable event class."
+  },
+  {
+   "driver_name": "adjusted_eps",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Standard metric phrase; reusable."
+  },
+  {
+   "driver_name": "adverse_weather",
+   "verdict": "rewrite",
+   "rewrite_to": "inclement_weather",
+   "reason": "Synonym of coined inclement_weather; same object (bad weather), same scope and mechanism (disrupts traffic/ops)."
+  },
+  {
+   "driver_name": "alcohol_attach_rate",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Specific attach-rate metric, distinct from sales mix."
+  },
+  {
+   "driver_name": "alcohol_mix",
+   "verdict": "rewrite",
+   "rewrite_to": "alcohol_sales_mix",
+   "reason": "Elided wording of same alcohol share-of-sales metric."
+  },
+  {
+   "driver_name": "alcohol_sales",
+   "verdict": "rewrite",
+   "rewrite_to": "alcoholic_beverage_sales",
+   "reason": "Alcohol = alcoholic beverage; same sales object/scope/mechanism as coined name."
+  },
+  {
+   "driver_name": "alcohol_sales_mix",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical alcohol mix metric."
+  },
+  {
+   "driver_name": "alcoholic_beverage_licensing",
+   "verdict": "rewrite",
+   "rewrite_to": "alcoholic_beverage_regulation",
+   "reason": "Quote is the identical ABC-regulation boilerplate as the regulation record; the licensing IS the evidenced regulation."
+  },
+  {
+   "driver_name": "alcoholic_beverage_regulation",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable regulatory cause."
+  },
+  {
+   "driver_name": "alcoholic_beverage_sales",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical alcohol sales driver."
+  },
+  {
+   "driver_name": "american_brand_boycott",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable event class even though seen once."
+  },
+  {
+   "driver_name": "analyst_estimates",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Analyst estimate changes; reusable cause."
+  },
+  {
+   "driver_name": "anti_takeover_provisions",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable structural cause."
+  },
+  {
+   "driver_name": "appetizer_attachment_rate",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Category-specific metric allowed (R9); evidence names appetizer attach rates."
+  },
+  {
+   "driver_name": "asset_impairment",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable impairment event class, 28 events."
+  },
+  {
+   "driver_name": "attachment_rate",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Company-wide attach-rate metric; separate level from item-specific forms (R9)."
+  },
+  {
+   "driver_name": "available_liquidity",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Standard liquidity metric."
+  },
+  {
+   "driver_name": "average_check",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Standard restaurant metric."
+  },
+  {
+   "driver_name": "average_sales_per_operating_week",
+   "verdict": "rewrite",
+   "rewrite_to": "average_weekly_sales",
+   "reason": "Same metric (sales per restaurant operating week) as coined average_weekly_sales; wording variant."
+  },
+  {
+   "driver_name": "average_sales_per_restaurant",
+   "verdict": "rewrite",
+   "rewrite_to": "average_unit_volume",
+   "reason": "Quote is the same annual sales-per-location statement family as AUV evidence; same metric/scope/mechanism."
+  },
+  {
+   "driver_name": "average_unit_volume",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical AUV metric."
+  },
+  {
+   "driver_name": "average_weekly_sales",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical weekly-sales metric (distinct from annual AUV)."
+  },
+  {
+   "driver_name": "avian_influenza",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable outbreak class affecting supply."
+  },
+  {
+   "driver_name": "bakery_distribution_agreement",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable deal class (bakery distribution agreements)."
+  },
+  {
+   "driver_name": "bakery_external_sales",
+   "verdict": "rewrite",
+   "rewrite_to": "external_bakery_sales",
+   "reason": "Same external/third-party bakery sales object as coined external_bakery_sales; word-order variant (same quote family)."
+  },
+  {
+   "driver_name": "bakery_facility_closure",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable facility-closure risk class."
+  },
+  {
+   "driver_name": "bakery_product_recall",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable recall class."
+  },
+  {
+   "driver_name": "bakery_product_supply",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable supply-disruption cause."
+  },
+  {
+   "driver_name": "bakery_production_capacity",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable capacity driver (third facility plans)."
+  },
+  {
+   "driver_name": "bakery_production_costs",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Specific segment cost driver."
+  },
+  {
+   "driver_name": "bakery_sales",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Bakery segment sales; broader scope (incl. internal) than external_bakery_sales, so kept separate."
+  },
+  {
+   "driver_name": "bakery_third_party_sales",
+   "verdict": "rewrite",
+   "rewrite_to": "external_bakery_sales",
+   "reason": "Third-party = external; same object/scope/mechanism, shared quotes with external_bakery_sales."
+  },
+  {
+   "driver_name": "bakery_vertical_integration",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Structural cost-advantage cause."
+  },
+  {
+   "driver_name": "bar_sales_mix",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Bar category mix; equivalence to alcohol mix unclear, kept separate."
+  },
+  {
+   "driver_name": "beef_cost",
+   "verdict": "rewrite",
+   "rewrite_to": "beef_price",
+   "reason": "Same beef commodity input price per evidence; cost=price wording for purchased commodity."
+  },
+  {
+   "driver_name": "beef_costs",
+   "verdict": "rewrite",
+   "rewrite_to": "beef_price",
+   "reason": "Quotes describe beef price moves; same object/scope/mechanism as beef_price."
+  },
+  {
+   "driver_name": "beef_price",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical commodity-price form (R5 oil_price pattern)."
+  },
+  {
+   "driver_name": "beverage_alcohol_sales",
+   "verdict": "rewrite",
+   "rewrite_to": "alcoholic_beverage_sales",
+   "reason": "Word-order variant of alcoholic_beverage_sales; same object."
+  },
+  {
+   "driver_name": "bites_and_bowls_menu_mix",
+   "verdict": "skip",
+   "rewrite_to": "",
+   "reason": "Only evidence is an analyst question fragment; no causal claim supports the name (R10)."
+  },
+  {
+   "driver_name": "brand_awareness",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable brand driver."
+  },
+  {
+   "driver_name": "brand_reputation",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable brand driver."
+  },
+  {
+   "driver_name": "branded_retail_demand",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Branded-retail/CPG demand; distinct from company CPG sales record."
+  },
+  {
+   "driver_name": "butter_price",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Commodity price driver."
+  },
+  {
+   "driver_name": "california_fast_act",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Specific named policy; reusable across events (R5 familiar name)."
+  },
+  {
+   "driver_name": "california_minimum_wage_mandate",
+   "verdict": "rewrite",
+   "rewrite_to": "california_fast_act",
+   "reason": "Evidence (same call/context) is the same CA fast-food wage law as california_fast_act; same object/scope/mechanism."
+  },
+  {
+   "driver_name": "california_wage_legislation",
+   "verdict": "rewrite",
+   "rewrite_to": "california_fast_act",
+   "reason": "April 1 2024 CA fast-food wage implementation = FAST Act law; same object/scope/mechanism."
+  },
+  {
+   "driver_name": "california_weather",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Geography named by evidence as the cause (largest market); kept separate per R9."
+  },
+  {
+   "driver_name": "capex_guidance",
+   "verdict": "rewrite",
+   "rewrite_to": "capital_expenditure_guidance",
+   "reason": "Acronym variant of coined capital_expenditure_guidance; identical meaning."
+  },
+  {
+   "driver_name": "capex_inflation",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Cost inflation on capital projects; distinct variable."
+  },
+  {
+   "driver_name": "capital_expenditure_guidance",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Earnings-convention guidance driver; 14 events."
+  },
+  {
+   "driver_name": "cash_dividend",
+   "verdict": "rewrite",
+   "rewrite_to": "dividend",
+   "reason": "Same company dividend object/scope/mechanism; cash dividend = the dividend."
+  },
+  {
+   "driver_name": "cash_on_cash_returns",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Standard unit-return metric."
+  },
+  {
+   "driver_name": "casual_dining_competition",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Industry competition cause."
+  },
+  {
+   "driver_name": "casual_dining_discounting",
+   "verdict": "rewrite",
+   "rewrite_to": "competitor_discounting",
+   "reason": "Discounting by 'other casual diners' = competitor discounting; same object/scope/mechanism."
+  },
+  {
+   "driver_name": "casual_dining_industry_sales",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Industry sales index driver."
+  },
+  {
+   "driver_name": "casual_dining_industry_traffic",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical industry traffic driver."
+  },
+  {
+   "driver_name": "casual_dining_market_share",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Market-share capture driver."
+  },
+  {
+   "driver_name": "casual_dining_traffic",
+   "verdict": "rewrite",
+   "rewrite_to": "casual_dining_industry_traffic",
+   "reason": "Identical boilerplate quote as casual_dining_industry_traffic; word elision only."
+  },
+  {
+   "driver_name": "catering_sales",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Channel sales driver."
+  },
+  {
+   "driver_name": "cattle_herd_supply",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Supply driver behind beef prices; distinct object."
+  },
+  {
+   "driver_name": "check_mix",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Check composition metric, distinct from average check."
+  },
+  {
+   "driver_name": "cheesecake_rewards_program",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Brand program name; canonical for the loyalty-program driver."
+  },
+  {
+   "driver_name": "chicken_costs",
+   "verdict": "rewrite",
+   "rewrite_to": "chicken_price",
+   "reason": "Same chicken commodity price object per evidence; cost=price wording."
+  },
+  {
+   "driver_name": "chicken_price",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Commodity price driver."
+  },
+  {
+   "driver_name": "civil_unrest",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable event class."
+  },
+  {
+   "driver_name": "class_action_litigation",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable litigation class."
+  },
+  {
+   "driver_name": "climate_change",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable macro cause."
+  },
+  {
+   "driver_name": "climate_disclosure_regulation",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Specific regulatory cause."
+  },
+  {
+   "driver_name": "commodity_contract_coverage",
+   "verdict": "skip",
+   "rewrite_to": "",
+   "reason": "Quote ('We're about 60%...') never names the object; evidence unverifiable/vague."
+  },
+  {
+   "driver_name": "commodity_cost",
+   "verdict": "rewrite",
+   "rewrite_to": "commodity_costs",
+   "reason": "Singular variant of coined commodity_costs; same object."
+  },
+  {
+   "driver_name": "commodity_cost_inflation",
+   "verdict": "rewrite",
+   "rewrite_to": "commodity_inflation",
+   "reason": "Same commodity inflation-rate object as coined commodity_inflation."
+  },
+  {
+   "driver_name": "commodity_costs",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Cost-level driver; kept separate from inflation rate (different metric)."
+  },
+  {
+   "driver_name": "commodity_hedging",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Hedging practice driver."
+  },
+  {
+   "driver_name": "commodity_inflation",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical standard restaurant inflation metric; 33 events."
+  },
+  {
+   "driver_name": "commodity_prices",
+   "verdict": "rewrite",
+   "rewrite_to": "commodity_costs",
+   "reason": "Price=cost for purchased commodities; same boilerplate family as commodity_costs."
+  },
+  {
+   "driver_name": "common_stock_dividend",
+   "verdict": "rewrite",
+   "rewrite_to": "dividend",
+   "reason": "CAKE's only dividend is the common dividend; same object/scope/mechanism as coined dividend."
+  },
+  {
+   "driver_name": "common_stock_dividends",
+   "verdict": "rewrite",
+   "rewrite_to": "dividend",
+   "reason": "Plural variant of same dividend driver."
+  },
+  {
+   "driver_name": "common_stock_issuance",
+   "verdict": "rewrite",
+   "rewrite_to": "equity_issuance",
+   "reason": "Same share-issuance dilution risk text as coined equity_issuance."
+  },
+  {
+   "driver_name": "company_owned_restaurant_count",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Unit-count KPI metric; reusable."
+  },
+  {
+   "driver_name": "comparable_restaurant_sales",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Company's standard comp-sales phrase; no clean coined fold target visible in this batch."
+  },
+  {
+   "driver_name": "competitor_discounting",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical competitive-discounting driver."
+  },
+  {
+   "driver_name": "competitor_promotional_activity",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Promotions broader than discounting; equivalence unclear, kept separate."
+  },
+  {
+   "driver_name": "consolidated_revenue",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Allowed standard phrase (R7); reusable metric."
+  },
+  {
+   "driver_name": "construction_cost",
+   "verdict": "rewrite",
+   "rewrite_to": "construction_costs",
+   "reason": "Singular variant of coined construction_costs."
+  },
+  {
+   "driver_name": "construction_costs",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Development cost driver."
+  },
+  {
+   "driver_name": "construction_delays",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable operational event class (opening delays)."
+  },
+  {
+   "driver_name": "construction_labor_availability",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Specific availability driver."
+  },
+  {
+   "driver_name": "construction_permitting",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical permitting-delay driver."
+  },
+  {
+   "driver_name": "consumer_confidence",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Standard macro driver."
+  },
+  {
+   "driver_name": "consumer_demand",
+   "verdict": "rewrite",
+   "rewrite_to": "consumer_dining_demand",
+   "reason": "Evidence = demand for the company's dining concepts (same boilerplate as target); bare form too categorical (R7)."
+  },
+  {
+   "driver_name": "consumer_dining_demand",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical demand-for-dining driver."
+  },
+  {
+   "driver_name": "consumer_dining_preferences",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Preference-shift driver."
+  },
+  {
+   "driver_name": "consumer_discretionary_income",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Distinct macro metric (discretionary ≠ disposable)."
+  },
+  {
+   "driver_name": "consumer_discretionary_spending",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Standard macro driver."
+  },
+  {
+   "driver_name": "consumer_disposable_income",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Distinct macro metric; kept separate from discretionary income."
+  },
+  {
+   "driver_name": "consumer_health_regulation",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Nutrition/health regulation class."
+  },
+  {
+   "driver_name": "consumer_packaged_goods_sales",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "CPG channel sales driver."
+  },
+  {
+   "driver_name": "consumer_preferences",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Broader site/demographics scope than dining preferences per evidence; kept separate."
+  },
+  {
+   "driver_name": "consumer_price_sensitivity",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Pricing-power driver."
+  },
+  {
+   "driver_name": "consumer_privacy_litigation",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable litigation class."
+  },
+  {
+   "driver_name": "consumer_sentiment",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Familiar macro indicator (not bare 'sentiment')."
+  },
+  {
+   "driver_name": "consumer_shopping_trends",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Shopping-center/mall traffic trend cause affecting sites."
+  },
+  {
+   "driver_name": "consumer_spending",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Familiar macro driver."
+  },
+  {
+   "driver_name": "consumer_trade_down",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable behavior class."
+  },
+  {
+   "driver_name": "convertible_debt_issuance",
+   "verdict": "rewrite",
+   "rewrite_to": "convertible_notes_issuance",
+   "reason": "Same notes-issuance object; debt=notes wording variant of coined name."
+  },
+  {
+   "driver_name": "convertible_debt_refinancing",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Refinancing event class, distinct from issuance/maturity."
+  },
+  {
+   "driver_name": "convertible_note_arbitrage",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable trading-flow cause on stock."
+  },
+  {
+   "driver_name": "convertible_note_conversion",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Conversion event class."
+  },
+  {
+   "driver_name": "convertible_note_dilution",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Dilution cause from conversion."
+  },
+  {
+   "driver_name": "convertible_note_hedging",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Note-investor hedging pressure on stock."
+  },
+  {
+   "driver_name": "convertible_notes",
+   "verdict": "rewrite",
+   "rewrite_to": "convertible_notes_issuance",
+   "reason": "Bare instrument name; 3/4 quotes are the same issuance statements as the coined issuance record."
+  },
+  {
+   "driver_name": "convertible_notes_debt",
+   "verdict": "rewrite",
+   "rewrite_to": "debt_leverage",
+   "reason": "Evidence = total indebtedness limiting flexibility; same object/scope/mechanism as coined debt_leverage."
+  },
+  {
+   "driver_name": "convertible_notes_issuance",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical issuance event class."
+  },
+  {
+   "driver_name": "convertible_notes_maturity",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Maturity event class."
+  },
+  {
+   "driver_name": "corn_price",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Commodity price driver."
+  },
+  {
+   "driver_name": "corporate_tax_policy",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Tax-law change class."
+  },
+  {
+   "driver_name": "cost_inflation",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Company-wide input-cost inflation; broader scope than commodity/labor inflation, kept separate."
+  },
+  {
+   "driver_name": "cost_of_goods_sold",
+   "verdict": "rewrite",
+   "rewrite_to": "food_and_beverage_costs",
+   "reason": "Restaurant COGS line IS the food-and-beverage-costs line per evidence; same object/scope/mechanism."
+  },
+  {
+   "driver_name": "cost_of_sales",
+   "verdict": "rewrite",
+   "rewrite_to": "food_and_beverage_costs",
+   "reason": "Same F&B cost line per evidence (commodity favorability context)."
+  },
+  {
+   "driver_name": "covid19_pandemic",
+   "verdict": "rewrite",
+   "rewrite_to": "covid_pandemic",
+   "reason": "Spelling variant of coined covid_pandemic."
+  },
+  {
+   "driver_name": "covid19_related_costs",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Recurring cost class (PPE, sick pay)."
+  },
+  {
+   "driver_name": "covid_case_counts",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable variable during pandemic periods."
+  },
+  {
+   "driver_name": "covid_dining_restrictions",
+   "verdict": "rewrite",
+   "rewrite_to": "covid_restrictions",
+   "reason": "Same restriction-fluctuation text as coined covid_restrictions; same object/scope/mechanism."
+  },
+  {
+   "driver_name": "covid_pandemic",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable pandemic cause."
+  },
+  {
+   "driver_name": "covid_restrictions",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical containment-measure driver."
+  },
+  {
+   "driver_name": "credit_facility_availability",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Revolver availability metric."
+  },
+  {
+   "driver_name": "credit_facility_borrowings",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical revolver balance-activity driver."
+  },
+  {
+   "driver_name": "credit_facility_covenant",
+   "verdict": "rewrite",
+   "rewrite_to": "debt_covenants",
+   "reason": "Singular variant; same revolver covenants object as coined debt_covenants."
+  },
+  {
+   "driver_name": "credit_facility_covenants",
+   "verdict": "rewrite",
+   "rewrite_to": "debt_covenants",
+   "reason": "Same loan-agreement covenants per identical boilerplate; wording variant."
+  },
+  {
+   "driver_name": "crop_yields",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Agricultural supply driver."
+  },
+  {
+   "driver_name": "culinary_dropout_average_weekly_sales",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Brand-specific metric allowed."
+  },
+  {
+   "driver_name": "culinary_dropout_unit_economics",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Brand-specific unit-economics driver."
+  },
+  {
+   "driver_name": "customer_traffic",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Core traffic metric."
+  },
+  {
+   "driver_name": "cybersecurity_breach",
+   "verdict": "rewrite",
+   "rewrite_to": "cybersecurity_incident",
+   "reason": "Same credential-stuffing incident text family; breach=incident wording."
+  },
+  {
+   "driver_name": "cybersecurity_incident",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical cyber event class."
+  },
+  {
+   "driver_name": "cybersecurity_threat",
+   "verdict": "rewrite",
+   "rewrite_to": "cybersecurity_incident",
+   "reason": "Target's own evidence spans threats and incidents as one cause; same object/scope/mechanism."
+  },
+  {
+   "driver_name": "dairy_cost",
+   "verdict": "rewrite",
+   "rewrite_to": "dairy_price",
+   "reason": "Same dairy commodity price object; cost=price wording."
+  },
+  {
+   "driver_name": "dairy_costs",
+   "verdict": "rewrite",
+   "rewrite_to": "dairy_price",
+   "reason": "Same dairy commodity price object; plural cost wording."
+  },
+  {
+   "driver_name": "dairy_price",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical commodity price form."
+  },
+  {
+   "driver_name": "dairy_prices",
+   "verdict": "rewrite",
+   "rewrite_to": "dairy_price",
+   "reason": "Plural variant."
+  },
+  {
+   "driver_name": "data_privacy_regulation",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Regulatory cause (CCPA etc.)."
+  },
+  {
+   "driver_name": "daypart_marketing",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Marketing initiative class."
+  },
+  {
+   "driver_name": "debt_covenant_compliance",
+   "verdict": "rewrite",
+   "rewrite_to": "debt_covenants",
+   "reason": "Compliance is the state of the covenant variable (R2); same loan covenants object as coined debt_covenants."
+  },
+  {
+   "driver_name": "debt_covenants",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical covenant driver (R2-clean noun)."
+  },
+  {
+   "driver_name": "debt_extinguishment",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable event class (early redemption)."
+  },
+  {
+   "driver_name": "debt_extinguishment_loss",
+   "verdict": "rewrite",
+   "rewrite_to": "debt_extinguishment",
+   "reason": "Loss is the impact of the same extinguishment event (R2); same object/scope/mechanism."
+  },
+  {
+   "driver_name": "debt_issuance",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Debt issuance event class."
+  },
+  {
+   "driver_name": "debt_leverage",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical leverage driver."
+  },
+  {
+   "driver_name": "debt_repayment",
+   "verdict": "rewrite",
+   "rewrite_to": "credit_facility_borrowings",
+   "reason": "Evidence = revolver repayments; same revolver-balance variable as target (which also evidences repayment), direction belongs in state (R7)."
+  },
+  {
+   "driver_name": "delivery_channel_sales",
+   "verdict": "skip",
+   "rewrite_to": "",
+   "reason": "Single quote about a menu category fitting delivery; does not evidence a delivery-sales variable."
+  },
+  {
+   "driver_name": "delivery_commission_rate",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Specific economics driver."
+  },
+  {
+   "driver_name": "delivery_menu_pricing",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Delivery price-premium driver."
+  },
+  {
+   "driver_name": "delivery_partnership",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable partnership class."
+  },
+  {
+   "driver_name": "delivery_sales",
+   "verdict": "rewrite",
+   "rewrite_to": "delivery_sales_mix",
+   "reason": "Evidence is delivery share of off-premise mix — the same metric as coined delivery_sales_mix."
+  },
+  {
+   "driver_name": "delivery_sales_mix",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical delivery mix metric."
+  },
+  {
+   "driver_name": "depreciation_expense",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Standard expense metric."
+  },
+  {
+   "driver_name": "dessert_sales",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Brand-core category sales driver."
+  },
+  {
+   "driver_name": "dessert_sales_mix",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Mix metric kept separate from sales level (different metric)."
+  },
+  {
+   "driver_name": "diluted_eps",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Allowed standard metric phrase (R7)."
+  },
+  {
+   "driver_name": "dining_capacity_restrictions",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Capacity-limit class; narrower object than covid_restrictions, kept separate."
+  },
+  {
+   "driver_name": "dining_demand",
+   "verdict": "rewrite",
+   "rewrite_to": "consumer_dining_demand",
+   "reason": "Same 8-K demand-for-our-dining boilerplate as coined consumer_dining_demand."
+  },
+  {
+   "driver_name": "dividend",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical dividend driver (R8 short, familiar)."
+  },
+  {
+   "driver_name": "dividend_payment",
+   "verdict": "rewrite",
+   "rewrite_to": "dividend",
+   "reason": "Payment is the action of the same dividend variable (R2)."
+  },
+  {
+   "driver_name": "dividend_payments",
+   "verdict": "rewrite",
+   "rewrite_to": "dividend",
+   "reason": "Same dividend variable; action wording."
+  },
+  {
+   "driver_name": "dividend_payout",
+   "verdict": "rewrite",
+   "rewrite_to": "dividend",
+   "reason": "Same dividend variable; payout wording."
+  },
+  {
+   "driver_name": "dividend_policy",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Policy/decision framework angle; mechanism arguably distinct, kept separate."
+  },
+  {
+   "driver_name": "dram_shop_litigation",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable litigation class."
+  },
+  {
+   "driver_name": "effective_tax_rate",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Standard metric; 21 events."
+  },
+  {
+   "driver_name": "egg_price",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical commodity price."
+  },
+  {
+   "driver_name": "egg_prices",
+   "verdict": "rewrite",
+   "rewrite_to": "egg_price",
+   "reason": "Plural variant."
+  },
+  {
+   "driver_name": "egg_supply",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Supply availability distinct from price."
+  },
+  {
+   "driver_name": "employee_attrition",
+   "verdict": "rewrite",
+   "rewrite_to": "employee_retention",
+   "reason": "Attrition and retention are the same turnover variable with opposite polarity; direction belongs in state (R7)."
+  },
+  {
+   "driver_name": "employee_benefit_costs",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Benefit cost driver (broader than medical)."
+  },
+  {
+   "driver_name": "employee_retention",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical turnover/retention driver."
+  },
+  {
+   "driver_name": "employment_credits",
+   "verdict": "rewrite",
+   "rewrite_to": "employment_tax_credits",
+   "reason": "Same tax-credit object; target's own evidence uses both wordings."
+  },
+  {
+   "driver_name": "employment_litigation",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable litigation class."
+  },
+  {
+   "driver_name": "employment_tax_credits",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical credit driver."
+  },
+  {
+   "driver_name": "environmental_regulation",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Regulatory class."
+  },
+  {
+   "driver_name": "environmental_social_activism",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "ESG activism class."
+  },
+  {
+   "driver_name": "environmental_social_ratings",
+   "verdict": "rewrite",
+   "rewrite_to": "esg_ratings",
+   "reason": "Environmental/social ratings = ESG ratings; same object/scope/mechanism, acronym is the familiar form (R5)."
+  },
+  {
+   "driver_name": "eps_surprise",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Earnings-convention driver."
+  },
+  {
+   "driver_name": "equity_issuance",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical issuance/dilution driver."
+  },
+  {
+   "driver_name": "equity_market_volatility",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Market-wide volatility cause."
+  },
+  {
+   "driver_name": "esg_rating",
+   "verdict": "rewrite",
+   "rewrite_to": "esg_ratings",
+   "reason": "Singular variant."
+  },
+  {
+   "driver_name": "esg_ratings",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical ESG ratings driver."
+  },
+  {
+   "driver_name": "executive_succession",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Key-person succession class."
+  },
+  {
+   "driver_name": "experiential_dining_demand",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Specific demand subset named by evidence."
+  },
+  {
+   "driver_name": "external_bakery_sales",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical (company's own reporting phrase), 13 events."
+  },
+  {
+   "driver_name": "facility_costs",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Facility-related cost line driver."
+  },
+  {
+   "driver_name": "fica_tip_tax_credit",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Specific tax credit (SITCA evidence)."
+  },
+  {
+   "driver_name": "fiscal_calendar_shift",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Fiscal-week shift class, distinct from holiday timing."
+  },
+  {
+   "driver_name": "flower_child_acquisition",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Brand acquisition event class; effects recur across events, name not date-bound."
+  },
+  {
+   "driver_name": "flower_child_average_unit_volume",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Brand AUV metric."
+  },
+  {
+   "driver_name": "flower_child_average_weekly_sales",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Brand weekly-sales metric (distinct from AUV)."
+  },
+  {
+   "driver_name": "flower_child_development",
+   "verdict": "rewrite",
+   "rewrite_to": "flower_child_unit_development",
+   "reason": "Evidence is unit-growth purpose; same object as coined flower_child_unit_development."
+  },
+  {
+   "driver_name": "flower_child_integration",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Brand-level integration driver (R9 level kept)."
+  },
+  {
+   "driver_name": "flower_child_margin",
+   "verdict": "rewrite",
+   "rewrite_to": "flower_child_restaurant_margin",
+   "reason": "Mid-teens margin target = restaurant-level margin; same metric as coined flower_child_restaurant_margin."
+  },
+  {
+   "driver_name": "flower_child_off_premise_mix",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Brand mix metric."
+  },
+  {
+   "driver_name": "flower_child_restaurant_margin",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical brand margin metric."
+  },
+  {
+   "driver_name": "flower_child_rewards_program",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Brand program driver."
+  },
+  {
+   "driver_name": "flower_child_sales",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Brand sales metric."
+  },
+  {
+   "driver_name": "flower_child_same_store_sales",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Brand comp-sales metric (R9 separate from company-wide)."
+  },
+  {
+   "driver_name": "flower_child_unit_count",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Count metric kept separate from development pace (different metric)."
+  },
+  {
+   "driver_name": "flower_child_unit_development",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical brand unit-growth driver."
+  },
+  {
+   "driver_name": "food_and_beverage_cost",
+   "verdict": "rewrite",
+   "rewrite_to": "food_and_beverage_costs",
+   "reason": "Singular variant of the F&B cost line."
+  },
+  {
+   "driver_name": "food_and_beverage_costs",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical P&L line driver (R6 standard phrase), 16 events."
+  },
+  {
+   "driver_name": "food_away_from_home_inflation",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Industry inflation index driver."
+  },
+  {
+   "driver_name": "food_beverage_costs",
+   "verdict": "rewrite",
+   "rewrite_to": "food_and_beverage_costs",
+   "reason": "Elided variant of same line."
+  },
+  {
+   "driver_name": "food_borne_illness",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable risk class."
+  },
+  {
+   "driver_name": "food_contamination",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Paired but distinct risk per 10-K wording; kept separate."
+  },
+  {
+   "driver_name": "food_efficiency",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Operational efficiency driver."
+  },
+  {
+   "driver_name": "food_safety_incident",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable event class (admitted even if rare)."
+  },
+  {
+   "driver_name": "food_safety_regulation",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Regulatory class."
+  },
+  {
+   "driver_name": "food_waste",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Specific efficiency component; kept separate."
+  },
+  {
+   "driver_name": "foreign_exchange_rate",
+   "verdict": "rewrite",
+   "rewrite_to": "foreign_exchange_rates",
+   "reason": "Singular variant."
+  },
+  {
+   "driver_name": "foreign_exchange_rates",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical FX driver."
+  },
+  {
+   "driver_name": "four_wall_margin",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Standard restaurant margin metric."
+  },
+  {
+   "driver_name": "four_wall_margin_guidance",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Guidance-convention driver."
+  },
+  {
+   "driver_name": "fox_restaurant_concepts_restaurant_count",
+   "verdict": "rewrite",
+   "rewrite_to": "fox_restaurant_concepts_unit_count",
+   "reason": "Restaurant=unit; same FRC count object as coined unit_count form."
+  },
+  {
+   "driver_name": "fox_restaurant_concepts_sales",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical segment sales driver."
+  },
+  {
+   "driver_name": "fox_restaurant_concepts_unit_count",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical segment unit-count driver."
+  },
+  {
+   "driver_name": "frc_acquisition_costs",
+   "verdict": "rewrite",
+   "rewrite_to": "acquisition_related_expenses",
+   "reason": "Identical FRC acquisition-related expense boilerplate as acquisition_related_expenses (whose evidence is also all FRC)."
+  },
+  {
+   "driver_name": "frc_sales",
+   "verdict": "rewrite",
+   "rewrite_to": "fox_restaurant_concepts_sales",
+   "reason": "Acronym variant; same Other-FRC sales object."
+  },
+  {
+   "driver_name": "gdp",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Familiar macro driver."
+  },
+  {
+   "driver_name": "general_administrative_expense",
+   "verdict": "rewrite",
+   "rewrite_to": "general_and_administrative_expenses",
+   "reason": "Variant of the standard G&A line phrase (R6)."
+  },
+  {
+   "driver_name": "general_administrative_expenses",
+   "verdict": "rewrite",
+   "rewrite_to": "general_and_administrative_expenses",
+   "reason": "Variant of the standard G&A line phrase."
+  },
+  {
+   "driver_name": "general_and_administrative_expense",
+   "verdict": "rewrite",
+   "rewrite_to": "general_and_administrative_expenses",
+   "reason": "Singular variant of the standard G&A line phrase."
+  },
+  {
+   "driver_name": "general_and_administrative_expenses",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical standard phrase (matches income-statement line)."
+  },
+  {
+   "driver_name": "geopolitical_unrest",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable macro cause."
+  },
+  {
+   "driver_name": "gift_card_breakage",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Standard recurring mechanism."
+  },
+  {
+   "driver_name": "gift_card_inventory_write_down",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable write-down class (admitted though seen once)."
+  },
+  {
+   "driver_name": "gift_card_inventory_writedown",
+   "verdict": "rewrite",
+   "rewrite_to": "gift_card_inventory_write_down",
+   "reason": "Spelling variant of same event class."
+  },
+  {
+   "driver_name": "gift_card_redemptions",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Redemption activity metric."
+  },
+  {
+   "driver_name": "gift_card_sales",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Channel sales driver."
+  },
+  {
+   "driver_name": "glp1_agonist_adoption",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable secular demand cause."
+  },
+  {
+   "driver_name": "goodwill_impairment",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable event class."
+  },
+  {
+   "driver_name": "government_permitting",
+   "verdict": "rewrite",
+   "rewrite_to": "construction_permitting",
+   "reason": "Evidence = governmental licensing/permitting delays for new units; same cause as coined construction_permitting."
+  },
+  {
+   "driver_name": "government_shutdown",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable event class."
+  },
+  {
+   "driver_name": "grocery_price_inflation",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Food-at-home inflation; distinct relative-value driver."
+  },
+  {
+   "driver_name": "ground_beef_cost",
+   "verdict": "rewrite",
+   "rewrite_to": "ground_beef_price",
+   "reason": "Same ground-beef commodity price; cost=price wording."
+  },
+  {
+   "driver_name": "ground_beef_price",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Specific commodity named by evidence (R9 level kept vs beef_price)."
+  },
+  {
+   "driver_name": "group_medical_costs",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical self-insured medical claims cost driver."
+  },
+  {
+   "driver_name": "group_medical_expenses",
+   "verdict": "rewrite",
+   "rewrite_to": "group_medical_costs",
+   "reason": "Expenses=costs; same claims-driven object."
+  },
+  {
+   "driver_name": "group_medical_insurance_costs",
+   "verdict": "rewrite",
+   "rewrite_to": "group_medical_costs",
+   "reason": "Same object — target's own evidence uses both wordings ('group medical costs due to claim activity')."
+  },
+  {
+   "driver_name": "guest_incident_rate",
+   "verdict": "rewrite",
+   "rewrite_to": "attachment_rate",
+   "reason": "Industry synonym: 'incident rates' = item attachment rates; both records quote the same 'above 2019 levels' metric."
+  },
+  {
+   "driver_name": "guest_rewards_program",
+   "verdict": "rewrite",
+   "rewrite_to": "cheesecake_rewards_program",
+   "reason": "Evidence is the same program (Cheesecake Rewards pilot/launch); brand name is canonical."
+  },
+  {
+   "driver_name": "guest_satisfaction",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Recurring operational metric."
+  },
+  {
+   "driver_name": "guest_value_perception",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical value-perception driver."
+  },
+  {
+   "driver_name": "guest_value_scores",
+   "verdict": "rewrite",
+   "rewrite_to": "guest_value_perception",
+   "reason": "Scores measure the same perception; target's evidence itself references the score."
+  },
+  {
+   "driver_name": "health_care_costs",
+   "verdict": "rewrite",
+   "rewrite_to": "healthcare_costs",
+   "reason": "Spelling variant."
+  },
+  {
+   "driver_name": "health_insurance_cost",
+   "verdict": "rewrite",
+   "rewrite_to": "group_medical_costs",
+   "reason": "Claims-driven quarterly plan-cost variance = the group medical costs evidence."
+  },
+  {
+   "driver_name": "healthcare_cost",
+   "verdict": "rewrite",
+   "rewrite_to": "healthcare_costs",
+   "reason": "Singular variant."
+  },
+  {
+   "driver_name": "healthcare_costs",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Benefit-plan cost inflation (health+pharmacy+dental); scope vs group medical claims unclear, kept separate."
+  },
+  {
+   "driver_name": "heat_wave",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable weather class."
+  },
+  {
+   "driver_name": "high_income_consumer_spending",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Cohort named by evidence (R9)."
+  },
+  {
+   "driver_name": "holiday_calendar_shift",
+   "verdict": "rewrite",
+   "rewrite_to": "holiday_timing",
+   "reason": "Same holiday-shift comparison cause as coined holiday_timing."
+  },
+  {
+   "driver_name": "holiday_seasonality",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Seasonal demand level, distinct from timing shifts."
+  },
+  {
+   "driver_name": "holiday_timing",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical holiday-timing driver."
+  },
+  {
+   "driver_name": "immigration_employment_regulation",
+   "verdict": "rewrite",
+   "rewrite_to": "immigration_policy",
+   "reason": "Its sentence appears verbatim in immigration_policy's evidence; same object/scope/mechanism."
+  },
+  {
+   "driver_name": "immigration_policy",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical familiar policy driver."
+  },
+  {
+   "driver_name": "immigration_regulation",
+   "verdict": "rewrite",
+   "rewrite_to": "immigration_policy",
+   "reason": "Same immigration-rules-affecting-staffing cause."
+  },
+  {
+   "driver_name": "in_person_dining_restrictions",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Generalized (pandemics) dine-in restriction class; kept separate from covid-specific record."
+  },
+  {
+   "driver_name": "incentive_compensation",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical comp-expense driver."
+  },
+  {
+   "driver_name": "incentive_compensation_expense",
+   "verdict": "rewrite",
+   "rewrite_to": "incentive_compensation",
+   "reason": "Identical quote family ('restaurant-level incentive compensation expense'); same object."
+  },
+  {
+   "driver_name": "inclement_weather",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical bad-weather driver."
+  },
+  {
+   "driver_name": "income_cohort_spending",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Cohort spending pattern variable; broader than high-income record."
+  },
+  {
+   "driver_name": "income_tax_provision",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Provision dollars distinct from effective rate."
+  },
+  {
+   "driver_name": "independent_contractor_regulation",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Specific DOL rule class."
+  },
+  {
+   "driver_name": "indoor_dining_restrictions",
+   "verdict": "rewrite",
+   "rewrite_to": "in_person_dining_restrictions",
+   "reason": "Indoor = in-person dine-in restrictions; same object/scope/mechanism."
+  },
+  {
+   "driver_name": "inflation",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Familiar macro driver (not a bare category like 'macro')."
+  },
+  {
+   "driver_name": "information_technology_outage",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable IT-outage class (CrowdStrike, AWS)."
+  },
+  {
+   "driver_name": "ingredient_supply",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Supply availability cause."
+  },
+  {
+   "driver_name": "input_costs",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Broader-than-commodities input cost variable; scope unclear vs commodity_costs so kept separate."
+  },
+  {
+   "driver_name": "insurance_costs",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "General insurance cost driver, distinct from medical."
+  },
+  {
+   "driver_name": "intangible_asset_impairment",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Distinct from goodwill impairment (different asset class)."
+  },
+  {
+   "driver_name": "intellectual_property_protection",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable IP-risk cause."
+  },
+  {
+   "driver_name": "interest_expense",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Standard expense metric."
+  },
+  {
+   "driver_name": "interest_rate",
+   "verdict": "rewrite",
+   "rewrite_to": "interest_rates",
+   "reason": "Singular variant."
+  },
+  {
+   "driver_name": "interest_rates",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical macro driver."
+  },
+  {
+   "driver_name": "internal_control_material_weakness",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical (standard 'material weakness' term)."
+  },
+  {
+   "driver_name": "internal_control_weakness",
+   "verdict": "rewrite",
+   "rewrite_to": "internal_control_material_weakness",
+   "reason": "Contains the same two boilerplates as the material-weakness record; same object/scope/mechanism."
+  },
+  {
+   "driver_name": "international_licensed_restaurant_count",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Licensed unit-count KPI."
+  },
+  {
+   "driver_name": "international_licensee_operations",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Licensee standards-adherence cause; specific enough."
+  },
+  {
+   "driver_name": "international_licensee_profitability",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Licensee economics driver."
+  },
+  {
+   "driver_name": "international_licensee_royalties",
+   "verdict": "rewrite",
+   "rewrite_to": "international_licensing_royalties",
+   "reason": "Identical royalty-stream quote as coined international_licensing_royalties."
+  },
+  {
+   "driver_name": "international_licensing",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical licensed-expansion driver."
+  },
+  {
+   "driver_name": "international_licensing_royalties",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical royalty-stream driver."
+  },
+  {
+   "driver_name": "international_restaurant_licensing",
+   "verdict": "rewrite",
+   "rewrite_to": "international_licensing",
+   "reason": "Same licensed-openings object as coined international_licensing."
+  },
+  {
+   "driver_name": "international_royalty_revenue",
+   "verdict": "rewrite",
+   "rewrite_to": "international_licensing_royalties",
+   "reason": "Same international licensee royalty revenue stream."
+  },
+  {
+   "driver_name": "international_same_store_sales",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Licensee comp-sales metric."
+  },
+  {
+   "driver_name": "job_creation",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Macro employment variable named by evidence."
+  },
+  {
+   "driver_name": "key_executive_retention",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Retention vs succession mechanisms differ/unclear; kept separate."
+  },
+  {
+   "driver_name": "kitchen_display_system",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Technology rollout cause; evidence states the deployment."
+  },
+  {
+   "driver_name": "labor_availability",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Labor supply driver."
+  },
+  {
+   "driver_name": "labor_cost",
+   "verdict": "rewrite",
+   "rewrite_to": "labor_costs",
+   "reason": "Singular variant."
+  },
+  {
+   "driver_name": "labor_cost_inflation",
+   "verdict": "rewrite",
+   "rewrite_to": "labor_inflation",
+   "reason": "Same labor inflation rate as coined labor_inflation."
+  },
+  {
+   "driver_name": "labor_costs",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical cost-level driver (21 events)."
+  },
+  {
+   "driver_name": "labor_efficiency",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Labor productivity driver."
+  },
+  {
+   "driver_name": "labor_expenses",
+   "verdict": "rewrite",
+   "rewrite_to": "labor_costs",
+   "reason": "Same P&L line — target's own evidence uses 'Labor expenses'; wording variant."
+  },
+  {
+   "driver_name": "labor_inflation",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Canonical rate metric, separate from cost level."
+  },
+  {
+   "driver_name": "labor_market",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Labor market conditions variable."
+  },
+  {
+   "driver_name": "labor_organizing",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable unionization class."
+  },
+  {
+   "driver_name": "labor_productivity",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable labor-efficiency cause; 30 consistent refs (productivity, wage management, new-unit inefficiency)."
+  },
+  {
+   "driver_name": "labor_regulation",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable regulatory class governing staff matters."
+  },
+  {
+   "driver_name": "labor_shortage",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable labor-supply cause; evidence shows workforce shortfalls vs sales levels."
+  },
+  {
+   "driver_name": "labor_unionization",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable class (unionization attempts/boycotts); consistent risk-factor evidence."
+  },
+  {
+   "driver_name": "landlord_demand",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Real cause: landlord demand for CAKE concepts affects site access/terms; 2 consistent refs."
+  },
+  {
+   "driver_name": "landlord_premises_delivery",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable cause: timing of landlord handover of premises delaying openings."
+  },
+  {
+   "driver_name": "landlord_readiness",
+   "verdict": "rewrite",
+   "rewrite_to": "landlord_premises_delivery",
+   "reason": "Same object (landlord ready to deliver premises), same scope (new openings), same mechanism (delays openings) as landlord_premises_delivery; wording-only."
+  },
+  {
+   "driver_name": "lapsed_guest_traffic",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Specific reusable metric: lapsed guests returning; evidence supports."
+  },
+  {
+   "driver_name": "lease_accounting",
+   "verdict": "skip",
+   "rewrite_to": "",
+   "reason": "Vague: single aside that margin range 'takes into consideration lease accounting'; no clear reusable causal variable."
+  },
+  {
+   "driver_name": "lease_impairment",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable class: impairment of lease (ROU) assets at urban locations."
+  },
+  {
+   "driver_name": "lease_termination",
+   "verdict": "rewrite",
+   "rewrite_to": "lease_termination_costs",
+   "reason": "Own evidence is the recorded lease-termination expense/(income) line, identical object/scope/mechanism to lease_termination_costs."
+  },
+  {
+   "driver_name": "lease_termination_costs",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable charge class (CAKE's impairment-and-lease-terminations line); 10 refs; canonical of the variant cluster."
+  },
+  {
+   "driver_name": "lease_termination_expense",
+   "verdict": "rewrite",
+   "rewrite_to": "lease_termination_costs",
+   "reason": "Costs/expense wording variant of same P&L line; same object, scope, mechanism."
+  },
+  {
+   "driver_name": "lease_termination_expenses",
+   "verdict": "rewrite",
+   "rewrite_to": "lease_termination_costs",
+   "reason": "Plural/expense wording variant of same P&L line."
+  },
+  {
+   "driver_name": "lease_terminations",
+   "verdict": "rewrite",
+   "rewrite_to": "lease_termination_costs",
+   "reason": "Quote is the same '(income)/expense' line item; plural wording variant of same driver."
+  },
+  {
+   "driver_name": "legal_expenses",
+   "verdict": "rewrite",
+   "rewrite_to": "legal_fees",
+   "reason": "Its only quote literally says 'lower legal fees' — same object/scope/mechanism as legal_fees; wording-only."
+  },
+  {
+   "driver_name": "legal_fees",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable G&A cost variable; 4 consistent refs."
+  },
+  {
+   "driver_name": "legal_immigration",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable cause: legal immigration levels affecting labor pool; evidence-grounded noun."
+  },
+  {
+   "driver_name": "legal_settlement_costs",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Distinct reusable class (settlement charges), not same object as ongoing legal fees."
+  },
+  {
+   "driver_name": "leverage_ratio",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Standard financial metric; evidence on debt-to-equity limiting flexibility."
+  },
+  {
+   "driver_name": "licensing_royalties",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Licensee-royalty stream; scope vs royalty_revenue (which includes CPG) not clearly identical — kept separate per 3-check."
+  },
+  {
+   "driver_name": "litigation_costs",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable class (claims/class-action litigation costs); distinct from routine legal fees."
+  },
+  {
+   "driver_name": "long_lived_asset_impairment",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Standard reusable GAAP class; 6 consistent refs; canonical for impairment cluster."
+  },
+  {
+   "driver_name": "long_term_debt",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Standard balance-sheet variable; evidence on debt outstanding."
+  },
+  {
+   "driver_name": "los_angeles_wildfires",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Geography-qualified recurring hazard class (no date token); R9 allows geography the evidence names; admitted like government_shutdown-style classes."
+  },
+  {
+   "driver_name": "low_end_consumer_spending",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Customer-cohort demand variable; evidence cites low-end consumer weakness."
+  },
+  {
+   "driver_name": "loyalty_program",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Valid program-level driver (Cheesecake Rewards); canonical for loyalty/rewards synonym pair."
+  },
+  {
+   "driver_name": "loyalty_program_engagement",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Distinct reusable metric (member activity/engagement)."
+  },
+  {
+   "driver_name": "loyalty_program_enrollment",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Distinct reusable metric (member signups); canonical for enrollment/acquisition variants."
+  },
+  {
+   "driver_name": "loyalty_program_membership",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable metric (membership growth); canonical for membership variants."
+  },
+  {
+   "driver_name": "loyalty_program_offers",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable cause: targeted/unpublished member offers driving incrementality."
+  },
+  {
+   "driver_name": "lunch_daypart_sales",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Standard daypart metric; evidence on lunch daypart pressure."
+  },
+  {
+   "driver_name": "manager_staffing_levels",
+   "verdict": "rewrite",
+   "rewrite_to": "restaurant_manager_staffing",
+   "reason": "Same object (restaurant manager staffing), same scope and mechanism; evidence is restaurant manager staffing in labor line; wording-only."
+  },
+  {
+   "driver_name": "market_share",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Standard reusable metric; evidence vs casual-dining benchmarks."
+  },
+  {
+   "driver_name": "marketing_campaigns",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable cause (campaign activity driving awareness); kept separate from spend level."
+  },
+  {
+   "driver_name": "marketing_costs",
+   "verdict": "rewrite",
+   "rewrite_to": "marketing_spend",
+   "reason": "Same object (marketing expenditure), same scope and mechanism as marketing_spend (both even cite 'timing of marketing' costs); wording-only."
+  },
+  {
+   "driver_name": "marketing_publicity",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "CAKE's earned-publicity marketing model; reusable cause, evidence supports."
+  },
+  {
+   "driver_name": "marketing_spend",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable expenditure variable; canonical for spend/costs pair."
+  },
+  {
+   "driver_name": "medical_insurance_costs",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable labor-cost component; canonical for costs/expense pair."
+  },
+  {
+   "driver_name": "medical_insurance_expense",
+   "verdict": "rewrite",
+   "rewrite_to": "medical_insurance_costs",
+   "reason": "Identical object ('lower medical insurance expenses' in labor line); costs/expense wording variant."
+  },
+  {
+   "driver_name": "menu_innovation",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable cause; 18 consistent refs (new items, new categories)."
+  },
+  {
+   "driver_name": "menu_mix",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Standard comps component; 26 consistent refs; canonical for mix variants."
+  },
+  {
+   "driver_name": "menu_pricing",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Core reusable cause; 47 consistent refs."
+  },
+  {
+   "driver_name": "midweek_lunch_traffic",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Specific daypart-traffic metric; midweek is a recurring pattern, not a fiscal period token."
+  },
+  {
+   "driver_name": "minimum_wage",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Familiar policy driver (R5); 35 consistent refs; canonical for wage-mandate variants."
+  },
+  {
+   "driver_name": "minimum_wage_rate",
+   "verdict": "rewrite",
+   "rewrite_to": "minimum_wage",
+   "reason": "Same object ('increases in minimum wage rates'); 'rate' is redundant wording."
+  },
+  {
+   "driver_name": "municipal_permitting",
+   "verdict": "rewrite",
+   "rewrite_to": "restaurant_permitting",
+   "reason": "Same object (permits for restaurant openings), same scope/mechanism (delays); 'municipal' names the same permit issuer; wording-only."
+  },
+  {
+   "driver_name": "natural_disaster",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable event class; 9 refs; canonical singular."
+  },
+  {
+   "driver_name": "natural_disasters",
+   "verdict": "rewrite",
+   "rewrite_to": "natural_disaster",
+   "reason": "Pure plural variant of natural_disaster; identical meaning and evidence family."
+  },
+  {
+   "driver_name": "natural_gas_price",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Commodity-price driver (R5 style); consistent evidence."
+  },
+  {
+   "driver_name": "net_income_margin_guidance",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Earnings-convention guidance driver; 24 consistent refs."
+  },
+  {
+   "driver_name": "net_income_margin_surprise",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Earnings-convention surprise driver; consistent vs-guidance evidence."
+  },
+  {
+   "driver_name": "net_margin_guidance",
+   "verdict": "rewrite",
+   "rewrite_to": "net_income_margin_guidance",
+   "reason": "'Net margin' = net income margin (same metric, scope, mechanism); wording variant."
+  },
+  {
+   "driver_name": "net_promoter_score",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Standard reusable metric; 6 consistent refs."
+  },
+  {
+   "driver_name": "new_market_entry",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable event class (entering new markets)."
+  },
+  {
+   "driver_name": "new_menu_items",
+   "verdict": "rewrite",
+   "rewrite_to": "menu_innovation",
+   "reason": "Same object (introducing new menu items), same scope/mechanism as menu_innovation; wording-only."
+  },
+  {
+   "driver_name": "new_restaurant_capex",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable investment variable; canonical for unit/restaurant capex pair."
+  },
+  {
+   "driver_name": "new_restaurant_construction_costs",
+   "verdict": "rewrite",
+   "rewrite_to": "restaurant_construction_costs",
+   "reason": "Quote is identical to restaurant_construction_costs evidence (unionized construction raising build-out costs); same driver."
+  },
+  {
+   "driver_name": "new_restaurant_development",
+   "verdict": "rewrite",
+   "rewrite_to": "new_unit_development",
+   "reason": "'Unit'='restaurant' at CAKE; same object (opening new restaurants), scope, mechanism as new_unit_development (24 refs); wording-only."
+  },
+  {
+   "driver_name": "new_restaurant_margin",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Distinct reusable metric: new-unit margin ramp vs mature margin."
+  },
+  {
+   "driver_name": "new_restaurant_openings",
+   "verdict": "rewrite",
+   "rewrite_to": "new_unit_development",
+   "reason": "Openings activity = unit development; same object/scope/mechanism as new_unit_development (whose evidence includes the same 'expect to open' statements); wording-only."
+  },
+  {
+   "driver_name": "new_restaurant_returns",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable metric (returns on new units); canonical of returns pair."
+  },
+  {
+   "driver_name": "new_restaurant_sales",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable metric (sales performance of new openings); canonical of pair."
+  },
+  {
+   "driver_name": "new_restaurant_sales_transfer",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable cause in CAKE's own words (sales transfer from new units); canonical for cannibalization cluster."
+  },
+  {
+   "driver_name": "new_restaurant_unit_volumes",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable metric (new units' volumes vs system); evidence supports class."
+  },
+  {
+   "driver_name": "new_unit_cannibalization",
+   "verdict": "rewrite",
+   "rewrite_to": "new_restaurant_sales_transfer",
+   "reason": "Own quote says 'pressure from sales transfer related to recently opened restaurants' — same object/scope/mechanism; wording-only."
+  },
+  {
+   "driver_name": "new_unit_capex",
+   "verdict": "rewrite",
+   "rewrite_to": "new_restaurant_capex",
+   "reason": "Unit=restaurant synonym; same object (capex for new units), scope, mechanism."
+  },
+  {
+   "driver_name": "new_unit_development",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Core reusable growth driver; 24 refs; canonical for development cluster."
+  },
+  {
+   "driver_name": "new_unit_returns",
+   "verdict": "rewrite",
+   "rewrite_to": "new_restaurant_returns",
+   "reason": "Unit=restaurant synonym; same object (returns on new locations), scope, mechanism."
+  },
+  {
+   "driver_name": "new_unit_sales",
+   "verdict": "rewrite",
+   "rewrite_to": "new_restaurant_sales",
+   "reason": "Unit=restaurant synonym; same object (new locations' sales performance), scope, mechanism."
+  },
+  {
+   "driver_name": "new_unit_sales_transfer",
+   "verdict": "rewrite",
+   "rewrite_to": "new_restaurant_sales_transfer",
+   "reason": "Identical phrase 'sales transfer from recently opened restaurants'; unit/restaurant wording variant."
+  },
+  {
+   "driver_name": "nol_carryback_refund",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable event class (NOL carryback refunds); class not date-bound even though seen once."
+  },
+  {
+   "driver_name": "north_italia_average_check",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Brand-specific metric — valid per R9."
+  },
+  {
+   "driver_name": "north_italia_average_unit_volume",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Brand-specific AUV metric; canonical for unit-volume variants."
+  },
+  {
+   "driver_name": "north_italia_comparable_sales",
+   "verdict": "rewrite",
+   "rewrite_to": "north_italia_same_store_sales",
+   "reason": "Comparable sales = same-store sales (R6 standard phrase); same metric, scope, mechanism."
+  },
+  {
+   "driver_name": "north_italia_development",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Brand-specific growth driver; canonical for North Italia development/unit-growth variants."
+  },
+  {
+   "driver_name": "north_italia_food_cost",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Brand-specific cost metric — valid."
+  },
+  {
+   "driver_name": "north_italia_four_wall_margin",
+   "verdict": "rewrite",
+   "rewrite_to": "north_italia_restaurant_level_margin",
+   "reason": "Four-wall margin = restaurant-level margin (twin quotes use both terms for the same mature-location metric); wording-only."
+  },
+  {
+   "driver_name": "north_italia_margin",
+   "verdict": "rewrite",
+   "rewrite_to": "north_italia_restaurant_level_margin",
+   "reason": "Quote refers to North Italia restaurant margins (pricing actions); same object/scope/mechanism as restaurant-level margin record."
+  },
+  {
+   "driver_name": "north_italia_menu_mix",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Brand-specific mix metric — valid."
+  },
+  {
+   "driver_name": "north_italia_menu_pricing",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Brand-specific pricing driver — valid."
+  },
+  {
+   "driver_name": "north_italia_restaurant_count",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Brand unit-count KPI (fiscal.ai series); reusable metric."
+  },
+  {
+   "driver_name": "north_italia_restaurant_level_margin",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Brand-specific restaurant-level margin; canonical for margin variants (matches company-wide restaurant_level_margin form)."
+  },
+  {
+   "driver_name": "north_italia_restaurant_margin",
+   "verdict": "rewrite",
+   "rewrite_to": "north_italia_restaurant_level_margin",
+   "reason": "Same mature restaurant-margin metric as restaurant_level_margin record (same numbers discussion); wording variant."
+  },
+  {
+   "driver_name": "north_italia_restaurant_traffic",
+   "verdict": "rewrite",
+   "rewrite_to": "north_italia_traffic",
+   "reason": "Identical traffic-component-of-comps evidence as north_italia_traffic; wording variant."
+  },
+  {
+   "driver_name": "north_italia_same_store_sales",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Brand-specific standard metric; 43 refs; canonical."
+  },
+  {
+   "driver_name": "north_italia_segment_margin",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Segment-level margin is a different reported metric from restaurant-level margin; kept separate per 3-check."
+  },
+  {
+   "driver_name": "north_italia_traffic",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Brand-specific traffic metric; canonical of pair."
+  },
+  {
+   "driver_name": "north_italia_unit_count",
+   "verdict": "rewrite",
+   "rewrite_to": "north_italia_development",
+   "reason": "Evidence (200-location potential, 20% annual unit growth) is identical text to the development records — same growth-plan cause."
+  },
+  {
+   "driver_name": "north_italia_unit_development",
+   "verdict": "rewrite",
+   "rewrite_to": "north_italia_development",
+   "reason": "Same object (growing North Italia units), same scope/mechanism; wording variant of north_italia_development."
+  },
+  {
+   "driver_name": "north_italia_unit_volumes",
+   "verdict": "rewrite",
+   "rewrite_to": "north_italia_average_unit_volume",
+   "reason": "Quote describes mature-location sales (~$8M) = the AUV metric; same object/scope/mechanism."
+  },
+  {
+   "driver_name": "nutrition_labeling_regulation",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable regulatory class; canonical of pair."
+  },
+  {
+   "driver_name": "nutritional_disclosure_regulation",
+   "verdict": "rewrite",
+   "rewrite_to": "nutrition_labeling_regulation",
+   "reason": "Quote text identical to nutrition_labeling_regulation; same regulation, wording variant."
+  },
+  {
+   "driver_name": "occupancy_cost",
+   "verdict": "rewrite",
+   "rewrite_to": "occupancy_costs",
+   "reason": "Singular variant; same occupancy-cost line (one quote identical to occupancy_costs ref)."
+  },
+  {
+   "driver_name": "occupancy_costs",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Standard expense line; canonical for cost/expense variants."
+  },
+  {
+   "driver_name": "occupancy_expense",
+   "verdict": "rewrite",
+   "rewrite_to": "occupancy_costs",
+   "reason": "Costs/expense wording variant of same line item."
+  },
+  {
+   "driver_name": "occupancy_expenses",
+   "verdict": "rewrite",
+   "rewrite_to": "occupancy_costs",
+   "reason": "Costs/expenses wording variant of same line item (rent, CAM, taxes, utilities)."
+  },
+  {
+   "driver_name": "off_premise_capacity",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Distinct reusable cause (off-premise expanding effective capacity)."
+  },
+  {
+   "driver_name": "off_premise_channel_mix",
+   "verdict": "rewrite",
+   "rewrite_to": "off_premise_sales_mix",
+   "reason": "Quote = 'mix between on-premise and off-premise channels' — same object as off_premise_sales_mix; wording-only."
+  },
+  {
+   "driver_name": "off_premise_promotions",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Distinct reusable cause (off-premise promotional offers)."
+  },
+  {
+   "driver_name": "off_premise_sales",
+   "verdict": "rewrite",
+   "rewrite_to": "off_premise_sales_mix",
+   "reason": "Its 20 refs are the same 'comprised ~21% of restaurant sales' share statements as off_premise_sales_mix (23 refs); same object/scope/mechanism."
+  },
+  {
+   "driver_name": "off_premise_sales_mix",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable channel-mix metric; canonical of the off-premise share cluster."
+  },
+  {
+   "driver_name": "omicron_wave",
+   "verdict": "skip",
+   "rewrite_to": "",
+   "reason": "Bound to one specific historical event (Omicron wave lapping); not a reusable class — pandemic/public_health_emergency cover the class."
+  },
+  {
+   "driver_name": "on_premise_incident_rate",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable incidence-rate metric; canonical singular."
+  },
+  {
+   "driver_name": "on_premise_incident_rates",
+   "verdict": "rewrite",
+   "rewrite_to": "on_premise_incident_rate",
+   "reason": "Pure plural variant; identical metric and quote family."
+  },
+  {
+   "driver_name": "on_premise_traffic",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Distinct channel-traffic metric."
+  },
+  {
+   "driver_name": "operating_cash_flow",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Standard financial metric; 15 consistent refs."
+  },
+  {
+   "driver_name": "operating_lease_liabilities",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Standard GAAP balance-sheet item; canonical of pair."
+  },
+  {
+   "driver_name": "operating_lease_obligations",
+   "verdict": "rewrite",
+   "rewrite_to": "operating_lease_liabilities",
+   "reason": "Same balance-sheet object (operating lease obligation burden), same scope/mechanism; liabilities/obligations synonym wording."
+  },
+  {
+   "driver_name": "operating_margin",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Standard metric; 8 refs (income-from-operations margins, margin expansion)."
+  },
+  {
+   "driver_name": "operating_margin_guidance",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Earnings-convention guidance driver; evidence supports."
+  },
+  {
+   "driver_name": "other_operating_expenses",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Standard expense line item; reusable."
+  },
+  {
+   "driver_name": "pandemic",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable event class (pandemics), not bound to COVID instance by name."
+  },
+  {
+   "driver_name": "pandemic_dining_restrictions",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable class: government dining restrictions during health emergencies."
+  },
+  {
+   "driver_name": "party_size",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable guest-behavior metric (party size normalization)."
+  },
+  {
+   "driver_name": "party_size_mix",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Distribution of party sizes vs average level not clearly the same metric — kept separate per 3-check."
+  },
+  {
+   "driver_name": "patio_sales",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Specific reusable metric."
+  },
+  {
+   "driver_name": "patio_utilization",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Distinct weather-sensitive utilization metric."
+  },
+  {
+   "driver_name": "payment_card_security_compliance",
+   "verdict": "rewrite",
+   "rewrite_to": "pci_dss_compliance",
+   "reason": "Quote identical to pci_dss_compliance refs; spelled-out acronym variant of the same standard (R1)."
+  },
+  {
+   "driver_name": "payroll_taxes",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Standard labor-cost component; consistent refs."
+  },
+  {
+   "driver_name": "pci_dss_compliance",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable compliance driver; canonical acronym form."
+  },
+  {
+   "driver_name": "permit_approval_delays",
+   "verdict": "rewrite",
+   "rewrite_to": "restaurant_permitting",
+   "reason": "'Delays' is a state word (R7); underlying cause = permitting for openings, identical quote family to restaurant_permitting."
+  },
+  {
+   "driver_name": "permit_approvals",
+   "verdict": "rewrite",
+   "rewrite_to": "restaurant_permitting",
+   "reason": "Same object (government permits for openings), same scope/mechanism, same quote family; wording variant."
+  },
+  {
+   "driver_name": "permit_lead_times",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Specific duration metric (license/permit lead times); kept as its own metric-level driver."
+  },
+  {
+   "driver_name": "permitting_lead_times",
+   "verdict": "rewrite",
+   "rewrite_to": "permit_lead_times",
+   "reason": "Identical 'longer lead times in obtaining licenses and permits' evidence; wording variant."
+  },
+  {
+   "driver_name": "personalized_rewards_offers",
+   "verdict": "rewrite",
+   "rewrite_to": "loyalty_program_offers",
+   "reason": "Same object as loyalty_program_offers (individualized/behavior-based member offers driving incrementality); same scope/mechanism."
+  },
+  {
+   "driver_name": "poultry_costs",
+   "verdict": "rewrite",
+   "rewrite_to": "poultry_price",
+   "reason": "Near-identical commodity-agreement evidence as poultry_price; same input-cost object/scope/mechanism."
+  },
+  {
+   "driver_name": "poultry_price",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Commodity-price driver (R5 style); canonical."
+  },
+  {
+   "driver_name": "pre_opening_costs",
+   "verdict": "rewrite",
+   "rewrite_to": "preopening_costs",
+   "reason": "Spelling variant (pre_opening vs preopening) of the same cost item."
+  },
+  {
+   "driver_name": "pre_opening_expenses",
+   "verdict": "rewrite",
+   "rewrite_to": "preopening_costs",
+   "reason": "Spelling + costs/expenses variant of same item."
+  },
+  {
+   "driver_name": "preopening_costs",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Standard reusable cost item; 35 refs; canonical of cluster."
+  },
+  {
+   "driver_name": "preopening_expenses",
+   "verdict": "rewrite",
+   "rewrite_to": "preopening_costs",
+   "reason": "Costs/expenses wording variant of same item."
+  },
+  {
+   "driver_name": "pricing_power",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable concept (capacity to raise prices); distinct from menu_pricing actions."
+  },
+  {
+   "driver_name": "prime_costs",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Standard restaurant metric (food + labor)."
+  },
+  {
+   "driver_name": "product_recall",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable event class."
+  },
+  {
+   "driver_name": "profit_margin",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Standard metric; evidence names only 'profit margin' so name matches evidence specificity (R9)."
+  },
+  {
+   "driver_name": "profit_margin_surprise",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Valid surprise-mechanism driver; not provably the same metric as net_income_margin_surprise, so kept separate per 3-check."
+  },
+  {
+   "driver_name": "promotional_activity",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable cause (own promotions); distinct from industry discounting."
+  },
+  {
+   "driver_name": "public_health_emergency",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable event class; 4 consistent refs."
+  },
+  {
+   "driver_name": "quarterly_dividend",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "'Quarterly dividend' is the standard whole phrase for the recurring dividend (R6); 'quarterly' is frequency, not an instance-binding fiscal marker; no coined plain dividend name in this batch."
+  },
+  {
+   "driver_name": "real_disposable_income",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Standard macro driver; evidence-grounded."
+  },
+  {
+   "driver_name": "repair_and_maintenance_costs",
+   "verdict": "rewrite",
+   "rewrite_to": "repair_maintenance_costs",
+   "reason": "Contains banned glue word 'and' (R7); same R&M cost object as coined clean form."
+  },
+  {
+   "driver_name": "repair_maintenance_costs",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable cost line; clean canonical form."
+  },
+  {
+   "driver_name": "restaurant_asset_impairment",
+   "verdict": "rewrite",
+   "rewrite_to": "long_lived_asset_impairment",
+   "reason": "Evidence is the same impairment-of-long-lived-assets line/cause as long_lived_asset_impairment (overlapping quotes); same object/scope/mechanism."
+  },
+  {
+   "driver_name": "restaurant_closure",
+   "verdict": "rewrite",
+   "rewrite_to": "restaurant_closures",
+   "reason": "Singular/plural variant of same closure driver; canonical = higher-evidence plural."
+  },
+  {
+   "driver_name": "restaurant_closures",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable event class (closing underperforming restaurants); 7 refs; canonical."
+  },
+  {
+   "driver_name": "restaurant_competition",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable competitive-environment driver; 5 consistent refs."
+  },
+  {
+   "driver_name": "restaurant_construction_cost",
+   "verdict": "rewrite",
+   "rewrite_to": "restaurant_construction_costs",
+   "reason": "Singular/plural variant; identical quote family (build-out cost inflation)."
+  },
+  {
+   "driver_name": "restaurant_construction_costs",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable cost driver; 8 refs; canonical of construction-cost cluster."
+  },
+  {
+   "driver_name": "restaurant_construction_permitting",
+   "verdict": "rewrite",
+   "rewrite_to": "restaurant_permitting",
+   "reason": "Same object (governmental licensing/permitting delays for openings) as restaurant_permitting; wording variant."
+  },
+  {
+   "driver_name": "restaurant_development",
+   "verdict": "rewrite",
+   "rewrite_to": "new_unit_development",
+   "reason": "Evidence = revenue from new openings; same development object/scope/mechanism as new_unit_development; wording variant."
+  },
+  {
+   "driver_name": "restaurant_development_guidance",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Earnings-convention guidance on openings; reusable."
+  },
+  {
+   "driver_name": "restaurant_development_pipeline",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Forward site pipeline is a distinct facet from current development; kept separate per 3-check."
+  },
+  {
+   "driver_name": "restaurant_discounting",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable cause (industry discounting/BOGO environment)."
+  },
+  {
+   "driver_name": "restaurant_impairment_charge",
+   "verdict": "rewrite",
+   "rewrite_to": "long_lived_asset_impairment",
+   "reason": "Same impairment-charge cause as long_lived_asset_impairment; same object/scope/mechanism."
+  },
+  {
+   "driver_name": "restaurant_industry_demand",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Industry-level demand environment; reusable."
+  },
+  {
+   "driver_name": "restaurant_industry_sales",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Industry sales trends metric; kept separate from demand/traffic per 3-check (different metrics)."
+  },
+  {
+   "driver_name": "restaurant_industry_traffic",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Industry traffic benchmark (BlackBox/NAPTRAC); reusable."
+  },
+  {
+   "driver_name": "restaurant_lease_cost",
+   "verdict": "rewrite",
+   "rewrite_to": "restaurant_lease_costs",
+   "reason": "Identical quote to restaurant_lease_costs; singular/plural variant."
+  },
+  {
+   "driver_name": "restaurant_lease_costs",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable cost driver (rent/renegotiation costs); canonical of pair."
+  },
+  {
+   "driver_name": "restaurant_lease_renewal",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable event class (renewing leases on similar terms); canonical of pair."
+  },
+  {
+   "driver_name": "restaurant_lease_renewal_cost",
+   "verdict": "rewrite",
+   "rewrite_to": "restaurant_lease_renewal",
+   "reason": "Identical quote to restaurant_lease_renewal; the cost is the impact, same underlying cause; wording-only."
+  },
+  {
+   "driver_name": "restaurant_lease_terms",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Distinct reusable cause (leasing-environment terms)."
+  },
+  {
+   "driver_name": "restaurant_level_margin",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Standard restaurant metric; 19 refs; canonical of margin cluster."
+  },
+  {
+   "driver_name": "restaurant_level_profit_margin",
+   "verdict": "rewrite",
+   "rewrite_to": "restaurant_level_margin",
+   "reason": "Same metric ('restaurant level profit margins' = restaurant-level margin); wording variant."
+  },
+  {
+   "driver_name": "restaurant_management_staffing",
+   "verdict": "rewrite",
+   "rewrite_to": "restaurant_manager_staffing",
+   "reason": "Same object (GM/exec-chef staffing), same scope/mechanism; management/manager wording variant."
+  },
+  {
+   "driver_name": "restaurant_manager_staffing",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable cause (manager staffing for operations/openings); canonical of manager-staffing cluster."
+  },
+  {
+   "driver_name": "restaurant_margin",
+   "verdict": "rewrite",
+   "rewrite_to": "restaurant_level_margin",
+   "reason": "Quotes discuss the restaurant-margin line item (recapture, bps expansion) — same metric as restaurant_level_margin; wording variant."
+  },
+  {
+   "driver_name": "restaurant_margin_guidance",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Guidance form of restaurant margin; only coined guidance name for this metric."
+  },
+  {
+   "driver_name": "restaurant_operating_weeks",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Standard volume metric; 8 consistent refs."
+  },
+  {
+   "driver_name": "restaurant_permit_approvals",
+   "verdict": "rewrite",
+   "rewrite_to": "restaurant_permitting",
+   "reason": "Quote identical to restaurant_permitting refs ('opening dates may be impacted by... permit approval delays'); same driver."
+  },
+  {
+   "driver_name": "restaurant_permitting",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable cause (permitting delaying opening timing); canonical of permitting cluster."
+  },
+  {
+   "driver_name": "restaurant_relocations",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable event class."
+  },
+  {
+   "driver_name": "restaurant_reservations",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable demand-channel metric."
+  },
+  {
+   "driver_name": "restaurant_site_availability",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable growth constraint; 4 consistent refs."
+  },
+  {
+   "driver_name": "restaurant_staff_absenteeism",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable cause; 5 refs; canonical of absenteeism pair."
+  },
+  {
+   "driver_name": "restaurant_staffing",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable cause (ability to staff/staffing levels); 10 refs; canonical of staffing cluster."
+  },
+  {
+   "driver_name": "restaurant_staffing_levels",
+   "verdict": "rewrite",
+   "rewrite_to": "restaurant_staffing",
+   "reason": "Overlapping 'improved staffing levels' evidence with restaurant_staffing's own refs; same object/scope/mechanism; wording variant."
+  },
+  {
+   "driver_name": "restaurant_throughput",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable capacity metric; canonical of throughput pair."
+  },
+  {
+   "driver_name": "restaurant_traffic",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Core reusable metric; 40 consistent refs."
+  },
+  {
+   "driver_name": "restaurant_unit_development",
+   "verdict": "rewrite",
+   "rewrite_to": "new_unit_development",
+   "reason": "Same object (opening new restaurants) as new_unit_development; quotes are the same plan/openings statements; wording variant."
+  },
+  {
+   "driver_name": "restaurant_wallet_share",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable share-of-wallet metric; evidence supports."
+  },
+  {
+   "driver_name": "revenue_guidance",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Earnings-convention guidance driver; 24 refs."
+  },
+  {
+   "driver_name": "revenue_surprise",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Earnings-convention surprise driver; 22 refs."
+  },
+  {
+   "driver_name": "revolving_credit_availability",
+   "verdict": "rewrite",
+   "rewrite_to": "revolving_credit_facility_availability",
+   "reason": "Same object (availability under the revolver) as revolving_credit_facility_availability; wording variant."
+  },
+  {
+   "driver_name": "revolving_credit_borrowings",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Borrowings outstanding is a different metric from availability; quote supports both readings so kept separate per 3-check."
+  },
+  {
+   "driver_name": "revolving_credit_facility",
+   "verdict": "rewrite",
+   "rewrite_to": "revolving_credit_facility_availability",
+   "reason": "Quote identical to facility_availability refs (net availability for borrowings); bare 'facility' under-names the same availability variable; wording-only."
+  },
+  {
+   "driver_name": "revolving_credit_facility_availability",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable liquidity metric; 3 refs; canonical of revolver-availability cluster."
+  },
+  {
+   "driver_name": "rewards_app",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Distinct object (dedicated app launch); reusable product driver."
+  },
+  {
+   "driver_name": "rewards_member_acquisition",
+   "verdict": "rewrite",
+   "rewrite_to": "loyalty_program_enrollment",
+   "reason": "Member acquisition = member enrollment (same signups object, same program scope, same growth mechanism); wording variant."
+  },
+  {
+   "driver_name": "rewards_program",
+   "verdict": "rewrite",
+   "rewrite_to": "loyalty_program",
+   "reason": "Same object as loyalty_program — both name Cheesecake Rewards; same scope/mechanism; rewards/loyalty synonym wording."
+  },
+  {
+   "driver_name": "rewards_program_contribution",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Distinct metric (program's bps contribution to comps)."
+  },
+  {
+   "driver_name": "rewards_program_costs",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable program-cost item (launch costs); canonical of pair."
+  },
+  {
+   "driver_name": "rewards_program_enrollment",
+   "verdict": "rewrite",
+   "rewrite_to": "loyalty_program_enrollment",
+   "reason": "Same enrollment object/scope/mechanism; rewards/loyalty synonym wording."
+  },
+  {
+   "driver_name": "rewards_program_marketing_costs",
+   "verdict": "rewrite",
+   "rewrite_to": "rewards_program_costs",
+   "reason": "Same expense as rewards_program_costs (same-period launch-cost quotes); wording variant."
+  },
+  {
+   "driver_name": "rewards_program_membership",
+   "verdict": "rewrite",
+   "rewrite_to": "loyalty_program_membership",
+   "reason": "Same membership object/scope/mechanism; rewards/loyalty synonym wording."
+  },
+  {
+   "driver_name": "rewards_redemption_rate",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Distinct reusable program metric."
+  },
+  {
+   "driver_name": "royalty_revenue",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable revenue stream (international + CPG royalties)."
+  },
+  {
+   "driver_name": "sales_leverage",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Standard concept (fixed-cost leverage from sales); evidence supports."
+  },
+  {
+   "driver_name": "sales_mix",
+   "verdict": "rewrite",
+   "rewrite_to": "menu_mix",
+   "reason": "Quotes are the comp 'mix' component ('Mix was negative 5.7%') — same object as menu_mix; same scope/mechanism; wording variant."
+  },
+  {
+   "driver_name": "sales_per_square_foot",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Standard productivity metric; 4 consistent refs."
+  },
+  {
+   "driver_name": "sales_seasonality",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable pattern driver; canonical of seasonality pair."
+  },
+  {
+   "driver_name": "sales_to_investment_ratio",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Standard development-return metric."
+  },
+  {
+   "driver_name": "same_store_sales",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Core standard metric (R6); 56 consistent refs."
+  },
+  {
+   "driver_name": "same_store_sales_guidance",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Earnings-convention guidance driver."
+  },
+  {
+   "driver_name": "seasonality",
+   "verdict": "rewrite",
+   "rewrite_to": "sales_seasonality",
+   "reason": "Bare word under-names the variable; evidence is seasonality of sales patterns — same object/scope/mechanism as sales_seasonality."
+  },
+  {
+   "driver_name": "self_insurance_cost",
+   "verdict": "rewrite",
+   "rewrite_to": "self_insurance_costs",
+   "reason": "Identical quote text ('our self-insurance costs'); singular/plural variant, source uses plural."
+  },
+  {
+   "driver_name": "self_insurance_costs",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable cost driver; canonical matching source wording."
+  },
+  {
+   "driver_name": "severe_weather",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable event class; distinct standard class alongside natural_disaster."
+  },
+  {
+   "driver_name": "share_issuance",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable class (issuing shares/rights); canonical of pair."
+  },
+  {
+   "driver_name": "share_issuance_dilution",
+   "verdict": "rewrite",
+   "rewrite_to": "share_issuance",
+   "reason": "'Dilution' is an effect-on-stock word (R7); same issuance risk factor as share_issuance (matching quotes); wording-only."
+  },
+  {
+   "driver_name": "share_repurchase",
+   "verdict": "rewrite",
+   "rewrite_to": "share_repurchases",
+   "reason": "Singular/plural variant of same buyback-activity driver; canonical = 34-ref plural."
+  },
+  {
+   "driver_name": "share_repurchase_authorization",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Distinct event class (board authorization increases); kept separate from buyback activity."
+  },
+  {
+   "driver_name": "share_repurchase_excise_tax",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable tax-cost class (excise tax on buybacks)."
+  },
+  {
+   "driver_name": "share_repurchases",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable capital-return activity driver; 34 refs; canonical."
+  },
+  {
+   "driver_name": "shipping_disruption",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable logistics event class."
+  },
+  {
+   "driver_name": "social_media_marketing",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable competitive-marketing cause."
+  },
+  {
+   "driver_name": "social_media_publicity",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable reputation cause (viral negative publicity); distinct from marketing."
+  },
+  {
+   "driver_name": "staff_absenteeism",
+   "verdict": "rewrite",
+   "rewrite_to": "restaurant_staff_absenteeism",
+   "reason": "Identical quote text ('increased restaurant staff absenteeism') as restaurant_staff_absenteeism; wording variant."
+  },
+  {
+   "driver_name": "staff_attrition",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Attrition is the inverse metric of retention — polarity-flipping fold would not be wording-only, so kept separate."
+  },
+  {
+   "driver_name": "staff_retention",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable workforce driver; 21 consistent refs."
+  },
+  {
+   "driver_name": "staffing_availability",
+   "verdict": "rewrite",
+   "rewrite_to": "restaurant_staffing",
+   "reason": "Quote ('staffing challenges') names the same ability-to-staff cause as restaurant_staffing; same scope/mechanism."
+  },
+  {
+   "driver_name": "staffing_levels",
+   "verdict": "rewrite",
+   "rewrite_to": "restaurant_staffing",
+   "reason": "Same 'improved staffing levels' evidence as restaurant_staffing's own refs; restaurant-scoped per context; wording variant."
+  },
+  {
+   "driver_name": "state_wage_mandates",
+   "verdict": "rewrite",
+   "rewrite_to": "minimum_wage",
+   "reason": "Quote is about scheduled state wage mandates in a wage-inflation discussion = state minimum-wage increases; same object/scope/mechanism as minimum_wage."
+  },
+  {
+   "driver_name": "stock_based_compensation",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Standard expense item; reusable."
+  },
+  {
+   "driver_name": "supplier_concentration",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable supply-risk cause (few-vendor dependence)."
+  },
+  {
+   "driver_name": "supply_chain",
+   "verdict": "rewrite",
+   "rewrite_to": "supply_chain_disruption",
+   "reason": "Bare domain word, too broad (R7); its evidence is supply-chain stability/instability — same cause as supply_chain_disruption; wording-only fix."
+  },
+  {
+   "driver_name": "supply_chain_costs",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Distinct cost variable (supply chain savings/costs)."
+  },
+  {
+   "driver_name": "supply_chain_disruption",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable event class; 35 refs; canonical."
+  },
+  {
+   "driver_name": "supply_chain_disruptions",
+   "verdict": "rewrite",
+   "rewrite_to": "supply_chain_disruption",
+   "reason": "Pure plural variant of supply_chain_disruption."
+  },
+  {
+   "driver_name": "supply_chain_efficiency",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Single quote blends integration and scale benefits; not clearly identical to either sibling — kept separate per 3-check."
+  },
+  {
+   "driver_name": "supply_chain_integration",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Distinct cause (integrating acquired concepts' purchasing)."
+  },
+  {
+   "driver_name": "supply_chain_scale",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Distinct cause (purchasing scale benefits)."
+  },
+  {
+   "driver_name": "supply_shortage",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable class (product supply shortages); facet distinct from general disruption — kept separate."
+  },
+  {
+   "driver_name": "sustainability_regulation",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable regulatory class (GHG/sustainability requirements)."
+  },
+  {
+   "driver_name": "sustainable_product_cost",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Distinct cost/price-volatility driver for sustainable products."
+  },
+  {
+   "driver_name": "sustainable_product_supply",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Distinct supply-availability driver; 3 consistent refs."
+  },
+  {
+   "driver_name": "table_throughput",
+   "verdict": "rewrite",
+   "rewrite_to": "restaurant_throughput",
+   "reason": "Same throughput object ('drive more throughput'/'wouldn't impact throughput'), same scope/mechanism as restaurant_throughput; wording variant."
+  },
+  {
+   "driver_name": "tariff_cost",
+   "verdict": "rewrite",
+   "rewrite_to": "tariff_policy",
+   "reason": "Evidence's causal variable is the tariffs themselves (cost absorption = impact/state); same cause as tariff_policy (R5 familiar form)."
+  },
+  {
+   "driver_name": "tariff_policy",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Familiar policy driver (R5); 32 consistent refs."
+  },
+  {
+   "driver_name": "tax_audit",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable event class."
+  },
+  {
+   "driver_name": "tax_legislation",
+   "verdict": "rewrite",
+   "rewrite_to": "tax_policy",
+   "reason": "Same object as tax_policy (changes in tax law/regulation affecting tax provision); same scope/mechanism; wording variant."
+  },
+  {
+   "driver_name": "tax_policy",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Familiar policy driver; 3 consistent refs; canonical."
+  },
+  {
+   "driver_name": "tenant_allowance_recoupment",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Specific reusable cause (recouping landlord allowances via percentage rent)."
+  },
+  {
+   "driver_name": "third_party_bakery_sales",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Segment-specific revenue driver — valid per R9."
+  },
+  {
+   "driver_name": "third_party_delivery",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable channel driver; 6 consistent refs."
+  },
+  {
+   "driver_name": "third_party_delivery_agreement",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable class (delivery partnership agreements/terms); distinct from the channel itself."
+  },
+  {
+   "driver_name": "third_party_delivery_cost",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Distinct cost driver (delivery cost increases)."
+  },
+  {
+   "driver_name": "third_party_delivery_fees",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable causal variable: customer-paid third-party delivery fees affecting comparable sales; 3 consistent 10-K quotes name the fees as the cause; noun-only, rule-clean."
+  },
+  {
+   "driver_name": "third_party_vendor_failure",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable event class (vendor failure -> data loss, cost, operational disruption); 6 consistent quotes; class names are admissible even if recurring risk language; rule-clean."
+  },
+  {
+   "driver_name": "third_party_vendor_outage",
+   "verdict": "rewrite",
+   "rewrite_to": "third_party_vendor_failure",
+   "reason": "Its single quote ('failure of third-party vendors to provide adequate services') is the exact same sentence as third_party_vendor_failure's 2023 evidence — same object (vendors), same scope, same mechanism. 'Outage' is an invented synonym not in the source; coined clean form exists. Wording-only fold."
+  },
+  {
+   "driver_name": "tip_credit_wage",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable regulatory wage variable (state tip-credit wage rate, incl. elimination risk); 4 quotes consistently name it; distinct from generic minimum wage; noun-only."
+  },
+  {
+   "driver_name": "to_go_packaging_costs",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable cost line: to-go item packaging named in transcript as a cost area (corroborated by same-call company quote on to-go related expenses); specific, noun-only."
+  },
+  {
+   "driver_name": "total_revenue",
+   "verdict": "skip",
+   "rewrite_to": "",
+   "reason": "Evidence is a single reported result vs prior year (no consensus, no outlook) — bare result metric with ambiguous mechanism breaks the earnings convention ({metric}_surprise/{metric}_guidance). Coined revenue_surprise/revenue_guidance exist in the catalog, but rewriting would assert a mechanism the evidence does not show (fails three-check), so skip."
+  },
+  {
+   "driver_name": "total_shareholder_return_guidance",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Metric + mechanism per earnings convention: company's stated long-term total-shareholder-return objective (13-14%) is forward guidance on a named metric; reusable across restatements."
+  },
+  {
+   "driver_name": "trade_policy",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Familiar macro/policy driver (R5); transcript grounds it ('assuming... we get some trade deals' as an outlook assumption). Shutdown in same quote is a separate driver, correctly not bundled."
+  },
+  {
+   "driver_name": "transportation_delay",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable operational event class (transportation delays disrupting supply); grounded in 10-K wording; class admissible despite one occurrence; distinct mechanism from generic supply shortage."
+  },
+  {
+   "driver_name": "uncertain_tax_position_reserve",
+   "verdict": "rewrite",
+   "rewrite_to": "uncertain_tax_positions",
+   "reason": "Both its quotes describe 'a change to our reserve for uncertain tax positions' — the exact same object/scope/mechanism as uncertain_tax_positions (whose XBRL anchor us-gaap:UnrecognizedTaxBenefits IS that reserve). Wording-only variant of a coined standard phrase."
+  },
+  {
+   "driver_name": "uncertain_tax_positions",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Standard financial phrase (R6), XBRL-anchored (us-gaap:UnrecognizedTaxBenefits); reusable tax-rate driver with consistent 8-K evidence; canonical form for the reserve variant."
+  },
+  {
+   "driver_name": "unemployment_rate",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Familiar macro variable; 13 consistent quotes ('changes in unemployment rates', low unemployment driving wage pressure); noun-only, rule-clean."
+  },
+  {
+   "driver_name": "unit_development",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable causal variable: pace of new restaurant openings/development (incl. CapEx supporting it); 4 transcript quotes about the same real-world pipeline. Kept separate from unit_development_guidance (different mechanism: activity vs outlook)."
+  },
+  {
+   "driver_name": "unit_development_guidance",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Metric + guidance mechanism per earnings convention; 3 quotes are explicit forward opening targets ('expects to open as many as X'). Separate driver from unit_development per actual-vs-guidance distinction."
+  },
+  {
+   "driver_name": "urban_restaurant_traffic",
+   "verdict": "skip",
+   "rewrite_to": "",
+   "reason": "Single vague quote ('the very urban locations... areas with the most opportunity') never names traffic — the important noun 'traffic' is not source-grounded (R10), and 'opportunity' could mean sales, margins, or development. Too vague to admit."
+  },
+  {
+   "driver_name": "us_dollar_exchange_rate",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable macro variable: USD value vs other currencies driving imported-goods costs; 4 consistent 10-K quotes; specific, noun-only."
+  },
+  {
+   "driver_name": "utilities_costs",
+   "verdict": "rewrite",
+   "rewrite_to": "utility_costs",
+   "reason": "Plural/spelling variant of coined utility_costs — same object (restaurant utility costs), same scope, same mechanism (utility prices pressuring operating margin); its single quote matches the richer record's meaning exactly. Wording-only fold per one-name-per-driver."
+  },
+  {
+   "driver_name": "utility_costs",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable cost variable with 7 consistent quotes (utilities/nat-gas pressure on other operating expenses); canonical form for the utilities_costs variant; noun-only."
+  },
+  {
+   "driver_name": "wage_and_hour_litigation",
+   "verdict": "rewrite",
+   "rewrite_to": "wage_hour_litigation",
+   "reason": "Same object (wage-and-hour class/collective actions), same scope, same mechanism as coined wage_hour_litigation; name contains banned glue word 'and' (R7). Wording-only fix to the coined clean form."
+  },
+  {
+   "driver_name": "wage_hour_litigation",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable litigation class (wage-and-hour class actions); 2 quotes show recurring exposure; clean form without glue word; canonical for the _and_ variant."
+  },
+  {
+   "driver_name": "wage_inflation",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable labor-cost variable with 25 consistent quotes across 10-K/10-Q/transcripts, XBRL-anchored; standard phrase; canonical for wage_rate_inflation and wage_rates variants."
+  },
+  {
+   "driver_name": "wage_rate_inflation",
+   "verdict": "rewrite",
+   "rewrite_to": "wage_inflation",
+   "reason": "Its only quote ('menu price increases in excess of wage rate inflation') is the same boilerplate sentence found repeatedly inside wage_inflation's evidence — same object, scope, mechanism. Wording-only variant of the coined canonical."
+  },
+  {
+   "driver_name": "wage_rates",
+   "verdict": "rewrite",
+   "rewrite_to": "wage_inflation",
+   "reason": "Despite the bare-level name, both its quotes literally say 'wage rate inflation' — identical sentences to wage_inflation's evidence; same object/scope/mechanism per evidence, so folding aligns the name with its own evidence without changing the driver."
+  },
+  {
+   "driver_name": "weather",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable causal variable (weather impacts on restaurant traffic/comps); 7 quotes consistently attribute traffic effects to weather; familiar short form; canonical for weather_conditions/weather_disruption variants."
+  },
+  {
+   "driver_name": "weather_conditions",
+   "verdict": "rewrite",
+   "rewrite_to": "weather",
+   "reason": "All 9 quotes are 'adverse weather conditions' affecting sales/traffic — same object (weather), same scope (CAKE restaurant sales), same mechanism as coined weather; 'adverse' is state and 'conditions' is filler. Wording-only fold (natural disasters in the quotes are a separate variable, correctly not in this name)."
+  },
+  {
+   "driver_name": "weather_disruption",
+   "verdict": "rewrite",
+   "rewrite_to": "weather",
+   "reason": "Both quotes ('weather-related impacts' on revenue; 'adverse weather conditions... exacerbate' — the latter shared verbatim with weather_conditions) mean the same cause as coined weather; 'disruption' is an effect word that belongs in state. Wording-only fold."
+  },
+  {
+   "driver_name": "wildfire",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable event class (wildfires recur and hit regional traffic); evidence is one instance (LA fires) but the name is a class, not instance-bound; singular form matches ontology class style; canonical for the plural variant."
+  },
+  {
+   "driver_name": "wildfires",
+   "verdict": "rewrite",
+   "rewrite_to": "wildfire",
+   "reason": "Pure plural variant of coined wildfire — both records cite the same LA-fires impact: same object, same scope, same mechanism. §2 resolves plural variants to one canonical form; singular matches ontology class style (government_shutdown, goodwill_impairment)."
+  },
+  {
+   "driver_name": "winter_weather",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable seasonal class ('weather in January' suppressing traffic — a recurring Q1 phenomenon); kept SEPARATE from weather because folding a narrower seasonal scope into the broad form would change scope (fails check 2), like the brand-vs-company R9 rule."
+  },
+  {
+   "driver_name": "workers_compensation_insurance_costs",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable cost variable (workers' comp insurance costs moving with claim activity); 2 consistent 10-Q quotes; specific standard phrase, noun-only."
+  },
+  {
+   "driver_name": "workforce_unionization",
+   "verdict": "admit",
+   "rewrite_to": "",
+   "reason": "Reusable event/risk class (staff unionization attempts, boycotts, supply interruption); grounded in 10-K wording; class admissible despite single appearance; stable noun."
+  }
+ ],
+ "approved_same_as": [
+  {
+   "variant": "beef_costs",
+   "canonical": "beef_cost"
+  },
+  {
+   "variant": "beef_price",
+   "canonical": "beef_cost"
+  },
+  {
+   "variant": "ground_beef_price",
+   "canonical": "ground_beef_cost"
+  },
+  {
+   "variant": "chicken_costs",
+   "canonical": "chicken_price"
+  },
+  {
+   "variant": "dairy_costs",
+   "canonical": "dairy_cost"
+  },
+  {
+   "variant": "dairy_price",
+   "canonical": "dairy_cost"
+  },
+  {
+   "variant": "dairy_prices",
+   "canonical": "dairy_cost"
+  },
+  {
+   "variant": "egg_prices",
+   "canonical": "egg_price"
+  },
+  {
+   "variant": "capital_expenditure",
+   "canonical": "capex"
+  },
+  {
+   "variant": "capital_expenditure_guidance",
+   "canonical": "capex_guidance"
+  },
+  {
+   "variant": "commodity_costs",
+   "canonical": "commodity_cost"
+  },
+  {
+   "variant": "commodity_prices",
+   "canonical": "commodity_cost"
+  },
+  {
+   "variant": "commodity_inflation",
+   "canonical": "commodity_cost"
+  },
+  {
+   "variant": "commodity_cost_inflation",
+   "canonical": "commodity_cost"
+  },
+  {
+   "variant": "dividend_payment",
+   "canonical": "dividend"
+  },
+  {
+   "variant": "dividend_payments",
+   "canonical": "dividend"
+  },
+  {
+   "variant": "dividend_payout",
+   "canonical": "dividend"
+  },
+  {
+   "variant": "cash_dividend",
+   "canonical": "dividend"
+  },
+  {
+   "variant": "common_stock_dividend",
+   "canonical": "dividend"
+  },
+  {
+   "variant": "common_stock_dividends",
+   "canonical": "dividend"
+  },
+  {
+   "variant": "construction_costs",
+   "canonical": "construction_cost"
+  },
+  {
+   "variant": "covid19_pandemic",
+   "canonical": "covid_pandemic"
+  },
+  {
+   "variant": "covid_dining_restrictions",
+   "canonical": "covid_restrictions"
+  },
+  {
+   "variant": "credit_facility_covenant",
+   "canonical": "debt_covenants"
+  },
+  {
+   "variant": "credit_facility_covenants",
+   "canonical": "debt_covenants"
+  },
+  {
+   "variant": "debt_covenant_compliance",
+   "canonical": "debt_covenants"
+  },
+  {
+   "variant": "cybersecurity_incident",
+   "canonical": "cybersecurity_breach"
+  },
+  {
+   "variant": "foreign_exchange_rates",
+   "canonical": "foreign_exchange_rate"
+  },
+  {
+   "variant": "general_administrative_expenses",
+   "canonical": "general_administrative_expense"
+  },
+  {
+   "variant": "general_and_administrative_expense",
+   "canonical": "general_administrative_expense"
+  },
+  {
+   "variant": "general_and_administrative_expenses",
+   "canonical": "general_administrative_expense"
+  },
+  {
+   "variant": "gift_card_inventory_write_down",
+   "canonical": "gift_card_inventory_writedown"
+  },
+  {
+   "variant": "group_medical_expenses",
+   "canonical": "group_medical_costs"
+  },
+  {
+   "variant": "group_medical_insurance_costs",
+   "canonical": "group_medical_costs"
+  },
+  {
+   "variant": "health_insurance_cost",
+   "canonical": "group_medical_costs"
+  },
+  {
+   "variant": "healthcare_costs",
+   "canonical": "healthcare_cost"
+  },
+  {
+   "variant": "health_care_costs",
+   "canonical": "healthcare_cost"
+  },
+  {
+   "variant": "esg_ratings",
+   "canonical": "esg_rating"
+  },
+  {
+   "variant": "environmental_social_ratings",
+   "canonical": "esg_rating"
+  },
+  {
+   "variant": "food_and_beverage_cost",
+   "canonical": "food_beverage_costs"
+  },
+  {
+   "variant": "food_and_beverage_costs",
+   "canonical": "food_beverage_costs"
+  },
+  {
+   "variant": "cost_of_sales",
+   "canonical": "food_beverage_costs"
+  },
+  {
+   "variant": "cost_of_goods_sold",
+   "canonical": "food_beverage_costs"
+  },
+  {
+   "variant": "interest_rates",
+   "canonical": "interest_rate"
+  },
+  {
+   "variant": "internal_control_material_weakness",
+   "canonical": "internal_control_weakness"
+  },
+  {
+   "variant": "labor_costs",
+   "canonical": "labor_cost"
+  },
+  {
+   "variant": "labor_expenses",
+   "canonical": "labor_cost"
+  },
+  {
+   "variant": "labor_cost_inflation",
+   "canonical": "labor_cost"
+  },
+  {
+   "variant": "labor_inflation",
+   "canonical": "labor_cost"
+  },
+  {
+   "variant": "fox_restaurant_concepts_sales",
+   "canonical": "frc_sales"
+  },
+  {
+   "variant": "fox_restaurant_concepts_restaurant_count",
+   "canonical": "fox_restaurant_concepts_unit_count"
+  },
+  {
+   "variant": "beverage_alcohol_sales",
+   "canonical": "alcohol_sales"
+  },
+  {
+   "variant": "bakery_external_sales",
+   "canonical": "external_bakery_sales"
+  },
+  {
+   "variant": "bakery_third_party_sales",
+   "canonical": "external_bakery_sales"
+  },
+  {
+   "variant": "average_sales_per_restaurant",
+   "canonical": "average_unit_volume"
+  },
+  {
+   "variant": "acquisition_related_costs",
+   "canonical": "acquisition_expenses"
+  },
+  {
+   "variant": "acquisition_related_expenses",
+   "canonical": "acquisition_expenses"
+  },
+  {
+   "variant": "frc_acquisition_costs",
+   "canonical": "acquisition_expenses"
+  },
+  {
+   "variant": "california_minimum_wage_mandate",
+   "canonical": "california_fast_act"
+  },
+  {
+   "variant": "california_wage_legislation",
+   "canonical": "california_fast_act"
+  },
+  {
+   "variant": "immigration_employment_regulation",
+   "canonical": "immigration_regulation"
+  },
+  {
+   "variant": "flower_child_unit_development",
+   "canonical": "flower_child_unit_count"
+  },
+  {
+   "variant": "flower_child_restaurant_margin",
+   "canonical": "flower_child_margin"
+  },
+  {
+   "variant": "international_licensee_royalties",
+   "canonical": "international_royalty_revenue"
+  },
+  {
+   "variant": "international_licensing_royalties",
+   "canonical": "international_royalty_revenue"
+  },
+  {
+   "variant": "international_restaurant_licensing",
+   "canonical": "international_licensing"
+  },
+  {
+   "variant": "employment_tax_credits",
+   "canonical": "employment_credits"
+  },
+  {
+   "variant": "holiday_calendar_shift",
+   "canonical": "holiday_timing"
+  },
+  {
+   "variant": "inclement_weather",
+   "canonical": "adverse_weather"
+  },
+  {
+   "variant": "employee_attrition",
+   "canonical": "employee_retention"
+  },
+  {
+   "variant": "key_executive_retention",
+   "canonical": "executive_succession"
+  },
+  {
+   "variant": "debt_extinguishment_loss",
+   "canonical": "debt_extinguishment"
+  },
+  {
+   "variant": "debt_repayment",
+   "canonical": "credit_facility_borrowings"
+  },
+  {
+   "variant": "convertible_note_arbitrage",
+   "canonical": "convertible_note_hedging"
+  },
+  {
+   "variant": "common_stock_issuance",
+   "canonical": "equity_issuance"
+  },
+  {
+   "variant": "food_contamination",
+   "canonical": "food_borne_illness"
+  },
+  {
+   "variant": "food_safety_incident",
+   "canonical": "food_borne_illness"
+  },
+  {
+   "variant": "delivery_sales",
+   "canonical": "delivery_sales_mix"
+  },
+  {
+   "variant": "guest_value_perception",
+   "canonical": "guest_value_scores"
+  },
+  {
+   "variant": "cheesecake_rewards_program",
+   "canonical": "guest_rewards_program"
+  },
+  {
+   "variant": "consumer_demand",
+   "canonical": "dining_demand"
+  },
+  {
+   "variant": "consumer_dining_demand",
+   "canonical": "dining_demand"
+  },
+  {
+   "variant": "casual_dining_industry_traffic",
+   "canonical": "casual_dining_traffic"
+  },
+  {
+   "variant": "casual_dining_discounting",
+   "canonical": "competitor_discounting"
+  },
+  {
+   "variant": "alcoholic_beverage_regulation",
+   "canonical": "alcoholic_beverage_licensing"
+  },
+  {
+   "variant": "construction_permitting",
+   "canonical": "government_permitting"
+  },
+  {
+   "variant": "income_tax_provision",
+   "canonical": "effective_tax_rate"
+  },
+  {
+   "variant": "dessert_sales_mix",
+   "canonical": "dessert_sales"
+  },
+  {
+   "variant": "incentive_compensation_expense",
+   "canonical": "incentive_compensation"
+  },
+  {
+   "variant": "lease_terminations",
+   "canonical": "lease_termination"
+  },
+  {
+   "variant": "lease_termination_costs",
+   "canonical": "lease_termination"
+  },
+  {
+   "variant": "legal_expenses",
+   "canonical": "legal_fees"
+  },
+  {
+   "variant": "medical_insurance_expense",
+   "canonical": "medical_insurance_costs"
+  },
+  {
+   "variant": "minimum_wage_rate",
+   "canonical": "minimum_wage"
+  },
+  {
+   "variant": "natural_disasters",
+   "canonical": "natural_disaster"
+  },
+  {
+   "variant": "net_margin_guidance",
+   "canonical": "net_income_margin_guidance"
+  },
+  {
+   "variant": "nutritional_disclosure_regulation",
+   "canonical": "nutrition_labeling_regulation"
+  },
+  {
+   "variant": "occupancy_costs",
+   "canonical": "occupancy_cost"
+  },
+  {
+   "variant": "occupancy_expense",
+   "canonical": "occupancy_cost"
+  },
+  {
+   "variant": "occupancy_expenses",
+   "canonical": "occupancy_cost"
+  },
+  {
+   "variant": "on_premise_incident_rates",
+   "canonical": "on_premise_incident_rate"
+  },
+  {
+   "variant": "payment_card_security_compliance",
+   "canonical": "pci_dss_compliance"
+  },
+  {
+   "variant": "poultry_costs",
+   "canonical": "poultry_price"
+  },
+  {
+   "variant": "repair_and_maintenance_costs",
+   "canonical": "repair_maintenance_costs"
+  },
+  {
+   "variant": "self_insurance_costs",
+   "canonical": "self_insurance_cost"
+  },
+  {
+   "variant": "permit_approval_delays",
+   "canonical": "restaurant_permitting"
+  },
+  {
+   "variant": "permit_approvals",
+   "canonical": "restaurant_permitting"
+  },
+  {
+   "variant": "permit_lead_times",
+   "canonical": "restaurant_permitting"
+  },
+  {
+   "variant": "permitting_lead_times",
+   "canonical": "restaurant_permitting"
+  },
+  {
+   "variant": "municipal_permitting",
+   "canonical": "restaurant_permitting"
+  },
+  {
+   "variant": "restaurant_permit_approvals",
+   "canonical": "restaurant_permitting"
+  },
+  {
+   "variant": "restaurant_construction_permitting",
+   "canonical": "restaurant_permitting"
+  },
+  {
+   "variant": "pre_opening_costs",
+   "canonical": "preopening_costs"
+  },
+  {
+   "variant": "pre_opening_expenses",
+   "canonical": "preopening_costs"
+  },
+  {
+   "variant": "preopening_expenses",
+   "canonical": "preopening_costs"
+  },
+  {
+   "variant": "restaurant_closures",
+   "canonical": "restaurant_closure"
+  },
+  {
+   "variant": "restaurant_construction_costs",
+   "canonical": "restaurant_construction_cost"
+  },
+  {
+   "variant": "new_restaurant_construction_costs",
+   "canonical": "restaurant_construction_cost"
+  },
+  {
+   "variant": "new_restaurant_development",
+   "canonical": "new_unit_development"
+  },
+  {
+   "variant": "restaurant_development",
+   "canonical": "new_unit_development"
+  },
+  {
+   "variant": "restaurant_unit_development",
+   "canonical": "new_unit_development"
+  },
+  {
+   "variant": "new_restaurant_openings",
+   "canonical": "restaurant_development_guidance"
+  },
+  {
+   "variant": "new_restaurant_returns",
+   "canonical": "new_unit_returns"
+  },
+  {
+   "variant": "new_restaurant_sales",
+   "canonical": "new_unit_sales"
+  },
+  {
+   "variant": "new_restaurant_sales_transfer",
+   "canonical": "new_unit_sales_transfer"
+  },
+  {
+   "variant": "new_unit_cannibalization",
+   "canonical": "new_unit_sales_transfer"
+  },
+  {
+   "variant": "restaurant_level_profit_margin",
+   "canonical": "restaurant_level_margin"
+  },
+  {
+   "variant": "restaurant_margin",
+   "canonical": "restaurant_level_margin"
+  },
+  {
+   "variant": "restaurant_staffing_levels",
+   "canonical": "restaurant_staffing"
+  },
+  {
+   "variant": "staffing_levels",
+   "canonical": "restaurant_staffing"
+  },
+  {
+   "variant": "restaurant_management_staffing",
+   "canonical": "restaurant_manager_staffing"
+  },
+  {
+   "variant": "restaurant_staff_absenteeism",
+   "canonical": "staff_absenteeism"
+  },
+  {
+   "variant": "staff_attrition",
+   "canonical": "staff_retention"
+  },
+  {
+   "variant": "table_throughput",
+   "canonical": "restaurant_throughput"
+  },
+  {
+   "variant": "revolving_credit_facility_availability",
+   "canonical": "revolving_credit_availability"
+  },
+  {
+   "variant": "revolving_credit_facility",
+   "canonical": "revolving_credit_availability"
+  },
+  {
+   "variant": "revolving_credit_borrowings",
+   "canonical": "revolving_credit_availability"
+  },
+  {
+   "variant": "share_repurchases",
+   "canonical": "share_repurchase"
+  },
+  {
+   "variant": "share_issuance_dilution",
+   "canonical": "share_issuance"
+  },
+  {
+   "variant": "supply_chain_disruptions",
+   "canonical": "supply_chain_disruption"
+  },
+  {
+   "variant": "seasonality",
+   "canonical": "sales_seasonality"
+  },
+  {
+   "variant": "marketing_spend",
+   "canonical": "marketing_costs"
+  },
+  {
+   "variant": "rewards_program_marketing_costs",
+   "canonical": "rewards_program_costs"
+  },
+  {
+   "variant": "new_menu_items",
+   "canonical": "menu_innovation"
+  },
+  {
+   "variant": "sales_mix",
+   "canonical": "menu_mix"
+  },
+  {
+   "variant": "loyalty_program",
+   "canonical": "rewards_program"
+  },
+  {
+   "variant": "loyalty_program_enrollment",
+   "canonical": "rewards_program_enrollment"
+  },
+  {
+   "variant": "loyalty_program_membership",
+   "canonical": "rewards_program_enrollment"
+  },
+  {
+   "variant": "rewards_program_membership",
+   "canonical": "rewards_program_enrollment"
+  },
+  {
+   "variant": "rewards_member_acquisition",
+   "canonical": "rewards_program_enrollment"
+  },
+  {
+   "variant": "personalized_rewards_offers",
+   "canonical": "loyalty_program_offers"
+  },
+  {
+   "variant": "north_italia_unit_volumes",
+   "canonical": "north_italia_average_unit_volume"
+  },
+  {
+   "variant": "north_italia_comparable_sales",
+   "canonical": "north_italia_same_store_sales"
+  },
+  {
+   "variant": "north_italia_unit_count",
+   "canonical": "north_italia_unit_development"
+  },
+  {
+   "variant": "north_italia_restaurant_traffic",
+   "canonical": "north_italia_traffic"
+  },
+  {
+   "variant": "north_italia_four_wall_margin",
+   "canonical": "north_italia_restaurant_level_margin"
+  },
+  {
+   "variant": "north_italia_restaurant_margin",
+   "canonical": "north_italia_restaurant_level_margin"
+  },
+  {
+   "variant": "north_italia_margin",
+   "canonical": "north_italia_restaurant_level_margin"
+  },
+  {
+   "variant": "landlord_premises_delivery",
+   "canonical": "landlord_readiness"
+  },
+  {
+   "variant": "restaurant_asset_impairment",
+   "canonical": "long_lived_asset_impairment"
+  },
+  {
+   "variant": "restaurant_impairment_charge",
+   "canonical": "long_lived_asset_impairment"
+  },
+  {
+   "variant": "restaurant_lease_renewal_cost",
+   "canonical": "restaurant_lease_renewal"
+  },
+  {
+   "variant": "restaurant_lease_cost",
+   "canonical": "restaurant_lease_renewal"
+  },
+  {
+   "variant": "restaurant_lease_costs",
+   "canonical": "restaurant_lease_renewal"
+  },
+  {
+   "variant": "off_premise_sales_mix",
+   "canonical": "off_premise_sales"
+  },
+  {
+   "variant": "off_premise_channel_mix",
+   "canonical": "off_premise_sales"
+  },
+  {
+   "variant": "third_party_delivery_agreement",
+   "canonical": "third_party_delivery"
+  },
+  {
+   "variant": "sustainable_product_cost",
+   "canonical": "sustainable_product_supply"
+  },
+  {
+   "variant": "restaurant_industry_sales",
+   "canonical": "restaurant_industry_demand"
+  },
+  {
+   "variant": "profit_margin_surprise",
+   "canonical": "net_income_margin_surprise"
+  },
+  {
+   "variant": "third_party_vendor_outage",
+   "canonical": "third_party_vendor_failure"
+  },
+  {
+   "variant": "uncertain_tax_position_reserve",
+   "canonical": "uncertain_tax_positions"
+  },
+  {
+   "variant": "utilities_costs",
+   "canonical": "utility_costs"
+  },
+  {
+   "variant": "wage_and_hour_litigation",
+   "canonical": "wage_hour_litigation"
+  },
+  {
+   "variant": "wage_rate_inflation",
+   "canonical": "wage_inflation"
+  },
+  {
+   "variant": "wage_rates",
+   "canonical": "wage_inflation"
+  },
+  {
+   "variant": "weather_conditions",
+   "canonical": "weather"
+  },
+  {
+   "variant": "weather_disruption",
+   "canonical": "weather"
+  },
+  {
+   "variant": "wildfires",
+   "canonical": "wildfire"
+  },
+  {
+   "variant": "pandemic_dining_restrictions",
+   "canonical": "covid_restrictions",
+   "post_split": true
+  },
+  {
+   "variant": "restaurant_development_guidance",
+   "canonical": "unit_development_guidance",
+   "post_split": true
+  },
+  {
+   "variant": "revolving_credit_availability",
+   "canonical": "credit_facility_availability",
+   "post_split": true
+  },
+  {
+   "variant": "consumer_discretionary_spending",
+   "canonical": "consumer_spending",
+   "post_split": true
+  },
+  {
+   "variant": "immigration_policy",
+   "canonical": "legal_immigration",
+   "post_split": true
+  },
+  {
+   "variant": "workforce_unionization",
+   "canonical": "labor_unionization",
+   "post_split": true
+  },
+  {
+   "variant": "food_beverage_costs",
+   "canonical": "food_beverage_cogs",
+   "post_split": true
+  },
+  {
+   "variant": "leverage_ratio",
+   "canonical": "debt_leverage",
+   "post_split": true
+  },
+  {
+   "variant": "board_share_repurchase_authorization",
+   "canonical": "share_repurchase_authorization",
+   "post_split": true
+  },
+  {
+   "variant": "quarterly_dividend",
+   "canonical": "dividend",
+   "post_split": true
+  },
+  {
+   "variant": "in_person_dining_restrictions",
+   "canonical": "pandemic_dining_restrictions",
+   "post_split": true
+  },
+  {
+   "variant": "adverse_weather",
+   "canonical": "weather",
+   "post_split": true
+  },
+  {
+   "variant": "equity_issuance",
+   "canonical": "share_issuance",
+   "post_split": true
+  },
+  {
+   "variant": "casual_dining_competition",
+   "canonical": "restaurant_competition",
+   "post_split": true
+  },
+  {
+   "variant": "new_unit_development",
+   "canonical": "unit_development",
+   "post_split": true
+  },
+  {
+   "variant": "covid_pandemic",
+   "canonical": "pandemic",
+   "post_split": true
+  },
+  {
+   "variant": "corporate_tax_policy",
+   "canonical": "tax_policy",
+   "post_split": true
+  },
+  {
+   "variant": "third_party_bakery_sales",
+   "canonical": "external_bakery_sales",
+   "post_split": true
+  },
+  {
+   "variant": "unit_development_guidance",
+   "canonical": "unit_development",
+   "post_split": true
+  },
+  {
+   "variant": "long_lived_asset_impairment",
+   "canonical": "asset_impairment",
+   "post_split": true
+  },
+  {
+   "variant": "restaurant_construction_cost",
+   "canonical": "construction_cost",
+   "post_split": true
+  },
+  {
+   "variant": "casual_dining_market_share",
+   "canonical": "market_share",
+   "post_split": true
+  },
+  {
+   "variant": "medical_insurance_costs",
+   "canonical": "group_medical_costs",
+   "post_split": true
+  },
+  {
+   "variant": "employee_retention",
+   "canonical": "staff_retention",
+   "post_split": true
+  }
+ ],
+ "approved_rewrites": [
+  {
+   "from": "acquisition_expenses",
+   "to": "acquisition_related_expenses"
+  },
+  {
+   "from": "acquisition_related_costs",
+   "to": "acquisition_related_expenses"
+  },
+  {
+   "from": "adverse_weather",
+   "to": "inclement_weather"
+  },
+  {
+   "from": "alcohol_mix",
+   "to": "alcohol_sales_mix"
+  },
+  {
+   "from": "alcohol_sales",
+   "to": "alcoholic_beverage_sales"
+  },
+  {
+   "from": "alcoholic_beverage_licensing",
+   "to": "alcoholic_beverage_regulation"
+  },
+  {
+   "from": "average_sales_per_operating_week",
+   "to": "average_weekly_sales"
+  },
+  {
+   "from": "average_sales_per_restaurant",
+   "to": "average_unit_volume"
+  },
+  {
+   "from": "bakery_external_sales",
+   "to": "external_bakery_sales"
+  },
+  {
+   "from": "bakery_third_party_sales",
+   "to": "external_bakery_sales"
+  },
+  {
+   "from": "beef_cost",
+   "to": "beef_price"
+  },
+  {
+   "from": "beef_costs",
+   "to": "beef_price"
+  },
+  {
+   "from": "beverage_alcohol_sales",
+   "to": "alcoholic_beverage_sales"
+  },
+  {
+   "from": "california_minimum_wage_mandate",
+   "to": "california_fast_act"
+  },
+  {
+   "from": "california_wage_legislation",
+   "to": "california_fast_act"
+  },
+  {
+   "from": "capex_guidance",
+   "to": "capital_expenditure_guidance"
+  },
+  {
+   "from": "cash_dividend",
+   "to": "dividend"
+  },
+  {
+   "from": "casual_dining_discounting",
+   "to": "competitor_discounting"
+  },
+  {
+   "from": "casual_dining_traffic",
+   "to": "casual_dining_industry_traffic"
+  },
+  {
+   "from": "chicken_costs",
+   "to": "chicken_price"
+  },
+  {
+   "from": "commodity_cost",
+   "to": "commodity_costs"
+  },
+  {
+   "from": "commodity_cost_inflation",
+   "to": "commodity_inflation"
+  },
+  {
+   "from": "commodity_prices",
+   "to": "commodity_costs"
+  },
+  {
+   "from": "common_stock_dividend",
+   "to": "dividend"
+  },
+  {
+   "from": "common_stock_dividends",
+   "to": "dividend"
+  },
+  {
+   "from": "common_stock_issuance",
+   "to": "equity_issuance"
+  },
+  {
+   "from": "construction_cost",
+   "to": "construction_costs"
+  },
+  {
+   "from": "consumer_demand",
+   "to": "consumer_dining_demand"
+  },
+  {
+   "from": "convertible_debt_issuance",
+   "to": "convertible_notes_issuance"
+  },
+  {
+   "from": "cost_of_goods_sold",
+   "to": "food_and_beverage_costs"
+  },
+  {
+   "from": "cost_of_sales",
+   "to": "food_and_beverage_costs"
+  },
+  {
+   "from": "covid19_pandemic",
+   "to": "covid_pandemic"
+  },
+  {
+   "from": "covid_dining_restrictions",
+   "to": "covid_restrictions"
+  },
+  {
+   "from": "credit_facility_covenant",
+   "to": "debt_covenants"
+  },
+  {
+   "from": "credit_facility_covenants",
+   "to": "debt_covenants"
+  },
+  {
+   "from": "cybersecurity_breach",
+   "to": "cybersecurity_incident"
+  },
+  {
+   "from": "dairy_cost",
+   "to": "dairy_price"
+  },
+  {
+   "from": "dairy_costs",
+   "to": "dairy_price"
+  },
+  {
+   "from": "dairy_prices",
+   "to": "dairy_price"
+  },
+  {
+   "from": "debt_covenant_compliance",
+   "to": "debt_covenants"
+  },
+  {
+   "from": "debt_extinguishment_loss",
+   "to": "debt_extinguishment"
+  },
+  {
+   "from": "debt_repayment",
+   "to": "credit_facility_borrowings"
+  },
+  {
+   "from": "delivery_sales",
+   "to": "delivery_sales_mix"
+  },
+  {
+   "from": "dining_demand",
+   "to": "consumer_dining_demand"
+  },
+  {
+   "from": "dividend_payment",
+   "to": "dividend"
+  },
+  {
+   "from": "dividend_payments",
+   "to": "dividend"
+  },
+  {
+   "from": "dividend_payout",
+   "to": "dividend"
+  },
+  {
+   "from": "egg_prices",
+   "to": "egg_price"
+  },
+  {
+   "from": "employee_attrition",
+   "to": "employee_retention"
+  },
+  {
+   "from": "employment_credits",
+   "to": "employment_tax_credits"
+  },
+  {
+   "from": "environmental_social_ratings",
+   "to": "esg_ratings"
+  },
+  {
+   "from": "esg_rating",
+   "to": "esg_ratings"
+  },
+  {
+   "from": "flower_child_margin",
+   "to": "flower_child_restaurant_margin"
+  },
+  {
+   "from": "food_and_beverage_cost",
+   "to": "food_and_beverage_costs"
+  },
+  {
+   "from": "food_beverage_costs",
+   "to": "food_and_beverage_costs"
+  },
+  {
+   "from": "foreign_exchange_rate",
+   "to": "foreign_exchange_rates"
+  },
+  {
+   "from": "fox_restaurant_concepts_restaurant_count",
+   "to": "fox_restaurant_concepts_unit_count"
+  },
+  {
+   "from": "frc_acquisition_costs",
+   "to": "acquisition_related_expenses"
+  },
+  {
+   "from": "frc_sales",
+   "to": "fox_restaurant_concepts_sales"
+  },
+  {
+   "from": "general_administrative_expense",
+   "to": "general_and_administrative_expenses"
+  },
+  {
+   "from": "general_administrative_expenses",
+   "to": "general_and_administrative_expenses"
+  },
+  {
+   "from": "general_and_administrative_expense",
+   "to": "general_and_administrative_expenses"
+  },
+  {
+   "from": "gift_card_inventory_writedown",
+   "to": "gift_card_inventory_write_down"
+  },
+  {
+   "from": "government_permitting",
+   "to": "construction_permitting"
+  },
+  {
+   "from": "ground_beef_cost",
+   "to": "ground_beef_price"
+  },
+  {
+   "from": "group_medical_expenses",
+   "to": "group_medical_costs"
+  },
+  {
+   "from": "group_medical_insurance_costs",
+   "to": "group_medical_costs"
+  },
+  {
+   "from": "guest_incident_rate",
+   "to": "attachment_rate"
+  },
+  {
+   "from": "guest_rewards_program",
+   "to": "cheesecake_rewards_program"
+  },
+  {
+   "from": "guest_value_scores",
+   "to": "guest_value_perception"
+  },
+  {
+   "from": "health_care_costs",
+   "to": "healthcare_costs"
+  },
+  {
+   "from": "health_insurance_cost",
+   "to": "group_medical_costs"
+  },
+  {
+   "from": "healthcare_cost",
+   "to": "healthcare_costs"
+  },
+  {
+   "from": "holiday_calendar_shift",
+   "to": "holiday_timing"
+  },
+  {
+   "from": "incentive_compensation_expense",
+   "to": "incentive_compensation"
+  },
+  {
+   "from": "interest_rate",
+   "to": "interest_rates"
+  },
+  {
+   "from": "internal_control_weakness",
+   "to": "internal_control_material_weakness"
+  },
+  {
+   "from": "international_licensee_royalties",
+   "to": "international_licensing_royalties"
+  },
+  {
+   "from": "international_restaurant_licensing",
+   "to": "international_licensing"
+  },
+  {
+   "from": "international_royalty_revenue",
+   "to": "international_licensing_royalties"
+  },
+  {
+   "from": "labor_cost",
+   "to": "labor_costs"
+  },
+  {
+   "from": "labor_cost_inflation",
+   "to": "labor_inflation"
+  },
+  {
+   "from": "labor_expenses",
+   "to": "labor_costs"
+  },
+  {
+   "from": "landlord_readiness",
+   "to": "landlord_premises_delivery"
+  },
+  {
+   "from": "lease_termination",
+   "to": "lease_termination_costs"
+  },
+  {
+   "from": "lease_terminations",
+   "to": "lease_termination_costs"
+  },
+  {
+   "from": "legal_expenses",
+   "to": "legal_fees"
+  },
+  {
+   "from": "marketing_costs",
+   "to": "marketing_spend"
+  },
+  {
+   "from": "medical_insurance_expense",
+   "to": "medical_insurance_costs"
+  },
+  {
+   "from": "minimum_wage_rate",
+   "to": "minimum_wage"
+  },
+  {
+   "from": "municipal_permitting",
+   "to": "restaurant_permitting"
+  },
+  {
+   "from": "natural_disasters",
+   "to": "natural_disaster"
+  },
+  {
+   "from": "net_margin_guidance",
+   "to": "net_income_margin_guidance"
+  },
+  {
+   "from": "new_menu_items",
+   "to": "menu_innovation"
+  },
+  {
+   "from": "new_restaurant_construction_costs",
+   "to": "restaurant_construction_costs"
+  },
+  {
+   "from": "new_restaurant_development",
+   "to": "new_unit_development"
+  },
+  {
+   "from": "new_unit_cannibalization",
+   "to": "new_restaurant_sales_transfer"
+  },
+  {
+   "from": "new_unit_returns",
+   "to": "new_restaurant_returns"
+  },
+  {
+   "from": "new_unit_sales",
+   "to": "new_restaurant_sales"
+  },
+  {
+   "from": "new_unit_sales_transfer",
+   "to": "new_restaurant_sales_transfer"
+  },
+  {
+   "from": "north_italia_comparable_sales",
+   "to": "north_italia_same_store_sales"
+  },
+  {
+   "from": "north_italia_four_wall_margin",
+   "to": "north_italia_restaurant_level_margin"
+  },
+  {
+   "from": "north_italia_margin",
+   "to": "north_italia_restaurant_level_margin"
+  },
+  {
+   "from": "north_italia_restaurant_margin",
+   "to": "north_italia_restaurant_level_margin"
+  },
+  {
+   "from": "north_italia_restaurant_traffic",
+   "to": "north_italia_traffic"
+  },
+  {
+   "from": "north_italia_unit_volumes",
+   "to": "north_italia_average_unit_volume"
+  },
+  {
+   "from": "nutritional_disclosure_regulation",
+   "to": "nutrition_labeling_regulation"
+  },
+  {
+   "from": "occupancy_cost",
+   "to": "occupancy_costs"
+  },
+  {
+   "from": "occupancy_expense",
+   "to": "occupancy_costs"
+  },
+  {
+   "from": "occupancy_expenses",
+   "to": "occupancy_costs"
+  },
+  {
+   "from": "off_premise_channel_mix",
+   "to": "off_premise_sales_mix"
+  },
+  {
+   "from": "off_premise_sales",
+   "to": "off_premise_sales_mix"
+  },
+  {
+   "from": "on_premise_incident_rates",
+   "to": "on_premise_incident_rate"
+  },
+  {
+   "from": "payment_card_security_compliance",
+   "to": "pci_dss_compliance"
+  },
+  {
+   "from": "permit_approval_delays",
+   "to": "restaurant_permitting"
+  },
+  {
+   "from": "permit_approvals",
+   "to": "restaurant_permitting"
+  },
+  {
+   "from": "permitting_lead_times",
+   "to": "permit_lead_times"
+  },
+  {
+   "from": "personalized_rewards_offers",
+   "to": "loyalty_program_offers"
+  },
+  {
+   "from": "poultry_costs",
+   "to": "poultry_price"
+  },
+  {
+   "from": "pre_opening_costs",
+   "to": "preopening_costs"
+  },
+  {
+   "from": "pre_opening_expenses",
+   "to": "preopening_costs"
+  },
+  {
+   "from": "preopening_expenses",
+   "to": "preopening_costs"
+  },
+  {
+   "from": "repair_and_maintenance_costs",
+   "to": "repair_maintenance_costs"
+  },
+  {
+   "from": "restaurant_asset_impairment",
+   "to": "long_lived_asset_impairment"
+  },
+  {
+   "from": "restaurant_closure",
+   "to": "restaurant_closures"
+  },
+  {
+   "from": "restaurant_construction_cost",
+   "to": "restaurant_construction_costs"
+  },
+  {
+   "from": "restaurant_construction_permitting",
+   "to": "restaurant_permitting"
+  },
+  {
+   "from": "restaurant_development",
+   "to": "new_unit_development"
+  },
+  {
+   "from": "restaurant_impairment_charge",
+   "to": "long_lived_asset_impairment"
+  },
+  {
+   "from": "restaurant_lease_cost",
+   "to": "restaurant_lease_costs"
+  },
+  {
+   "from": "restaurant_lease_renewal_cost",
+   "to": "restaurant_lease_renewal"
+  },
+  {
+   "from": "restaurant_level_profit_margin",
+   "to": "restaurant_level_margin"
+  },
+  {
+   "from": "restaurant_management_staffing",
+   "to": "restaurant_manager_staffing"
+  },
+  {
+   "from": "restaurant_margin",
+   "to": "restaurant_level_margin"
+  },
+  {
+   "from": "restaurant_permit_approvals",
+   "to": "restaurant_permitting"
+  },
+  {
+   "from": "restaurant_staffing_levels",
+   "to": "restaurant_staffing"
+  },
+  {
+   "from": "restaurant_unit_development",
+   "to": "new_unit_development"
+  },
+  {
+   "from": "revolving_credit_availability",
+   "to": "revolving_credit_facility_availability"
+  },
+  {
+   "from": "revolving_credit_facility",
+   "to": "revolving_credit_facility_availability"
+  },
+  {
+   "from": "rewards_member_acquisition",
+   "to": "loyalty_program_enrollment"
+  },
+  {
+   "from": "rewards_program",
+   "to": "loyalty_program"
+  },
+  {
+   "from": "rewards_program_enrollment",
+   "to": "loyalty_program_enrollment"
+  },
+  {
+   "from": "rewards_program_marketing_costs",
+   "to": "rewards_program_costs"
+  },
+  {
+   "from": "rewards_program_membership",
+   "to": "loyalty_program_membership"
+  },
+  {
+   "from": "sales_mix",
+   "to": "menu_mix"
+  },
+  {
+   "from": "seasonality",
+   "to": "sales_seasonality"
+  },
+  {
+   "from": "self_insurance_cost",
+   "to": "self_insurance_costs"
+  },
+  {
+   "from": "share_issuance_dilution",
+   "to": "share_issuance"
+  },
+  {
+   "from": "share_repurchase",
+   "to": "share_repurchases"
+  },
+  {
+   "from": "staff_absenteeism",
+   "to": "restaurant_staff_absenteeism"
+  },
+  {
+   "from": "staffing_availability",
+   "to": "restaurant_staffing"
+  },
+  {
+   "from": "staffing_levels",
+   "to": "restaurant_staffing"
+  },
+  {
+   "from": "state_wage_mandates",
+   "to": "minimum_wage"
+  },
+  {
+   "from": "supply_chain",
+   "to": "supply_chain_disruption"
+  },
+  {
+   "from": "supply_chain_disruptions",
+   "to": "supply_chain_disruption"
+  },
+  {
+   "from": "table_throughput",
+   "to": "restaurant_throughput"
+  },
+  {
+   "from": "third_party_vendor_outage",
+   "to": "third_party_vendor_failure"
+  },
+  {
+   "from": "uncertain_tax_position_reserve",
+   "to": "uncertain_tax_positions"
+  },
+  {
+   "from": "utilities_costs",
+   "to": "utility_costs"
+  },
+  {
+   "from": "wage_and_hour_litigation",
+   "to": "wage_hour_litigation"
+  },
+  {
+   "from": "wage_rate_inflation",
+   "to": "wage_inflation"
+  },
+  {
+   "from": "wage_rates",
+   "to": "wage_inflation"
+  },
+  {
+   "from": "weather_conditions",
+   "to": "weather"
+  },
+  {
+   "from": "weather_disruption",
+   "to": "weather"
+  },
+  {
+   "from": "wildfires",
+   "to": "wildfire"
+  }
+ ],
+ "parked_rewrites": [
+  {
+   "driver_name": "convertible_notes",
+   "proposed_to": "convertible_notes_issuance",
+   "why": "Record covers the notes as outstanding instruments (terms, maturity, debt composition incl. revolver context), not just the issuance event — adding 'issuance' narrows the object/mechanism."
+  },
+  {
+   "driver_name": "convertible_notes_debt",
+   "proposed_to": "debt_leverage",
+   "why": "Notes-specific name remapped to generic total-debt leverage is a re-categorization (object change from convertible notes to all indebtedness), not a spelling/word-order fix."
+  },
+  {
+   "driver_name": "cybersecurity_threat",
+   "proposed_to": "cybersecurity_incident",
+   "why": "Evidence describes the security program managing THREATS (defense posture/training), not an experienced incident — threat vs incident is an object/mechanism change."
+  },
+  {
+   "driver_name": "flower_child_development",
+   "proposed_to": "flower_child_unit_development",
+   "why": "Evidence is the multi-concept acquisition rationale (North Italia + Flower Child + FRC, unit growth AND concept development) — not provably the Flower Child unit-growth variable the target names."
+  },
+  {
+   "driver_name": "immigration_employment_regulation",
+   "proposed_to": "immigration_policy",
+   "why": "Evidence is employer-facing employment-verification regulation (hiring compliance); immigration_policy's meaning (macro policy shrinking labor pool / consumer effects) is a different object and mechanism."
+  },
+  {
+   "driver_name": "immigration_regulation",
+   "proposed_to": "immigration_policy",
+   "why": "Evidence is DHS/USCIS/ICE employer compliance regulation, not national immigration policy levels — object/mechanism change, not a wording fix."
+  },
+  {
+   "driver_name": "indoor_dining_restrictions",
+   "proposed_to": "in_person_dining_restrictions",
+   "why": "Indoor dining restrictions are a strict subset of in-person dining restrictions (outdoor/patio dining was often allowed during indoor bans) — the rename widens the restriction object; evidence says 'indoor dining'."
+  },
+  {
+   "driver_name": "lease_termination_expense",
+   "proposed_to": "lease_termination_costs",
+   "why": "This record's evidence is largely the combined impairment-dominated charge ($13.6M/$29.5M/$31.4M, one quote explicitly 'primarily related to the impairment of...'); stamping it 'lease_termination_costs' relabels impairment amounts as termination costs — not wording-only."
+  },
+  {
+   "driver_name": "lease_termination_expenses",
+   "proposed_to": "lease_termination_costs",
+   "why": "Evidence = combined pre-tax special charges ($35.6M/$24.6M impairment-dominated, plus FRC acquisition items); renaming folds a different (impairment) object under termination costs."
+  },
+  {
+   "driver_name": "manager_staffing_levels",
+   "proposed_to": "restaurant_manager_staffing",
+   "why": "Evidence is a labor-line variance from higher manager headcount ('increased manager staffing levels (0.2%)'); target record means having the right GMs/exec chefs to open units — different mechanism (cost variance vs development leadership), not wording-only."
+  },
+  {
+   "driver_name": "new_restaurant_openings",
+   "proposed_to": "new_unit_development",
+   "why": "Evidence is purely a guidance sentence; the proposer's own same_as maps this record to restaurant_development_guidance — the two proposals point the same record at two different canonicals, so this rewrite (outlook folded into the activity record) is not provably wording-only."
+  },
+  {
+   "driver_name": "new_unit_capex",
+   "proposed_to": "new_restaurant_capex",
+   "why": "Context shows the quote is per-unit build cost vs sales volumes (two-to-one sales-to-CapEx returns discussion), not the aggregate new-restaurant capex line — object/mechanism change."
+  },
+  {
+   "driver_name": "north_italia_unit_count",
+   "proposed_to": "north_italia_development",
+   "why": "Target name collides with an existing record whose evidence is a multi-concept 'develop, grow and operate North Italia, Flower Child and other branded concepts' risk — folding NI-only unit-growth evidence there changes scope; not wording-only."
+  },
+  {
+   "driver_name": "north_italia_unit_development",
+   "proposed_to": "north_italia_development",
+   "why": "Same collision: north_italia_development's evidence spans NI + Flower Child + other concepts and includes operating, not just unit growth; the fold changes scope."
+  },
+  {
+   "driver_name": "operating_lease_obligations",
+   "proposed_to": "operating_lease_liabilities",
+   "why": "Evidence describes the practice of leasing all restaurant locations (lease-arrangement structure), while the target record evidences the measured liability/contractual amount ($845.1M extensions) — different evidenced object, not a wording fix."
+  },
+  {
+   "driver_name": "tariff_cost",
+   "proposed_to": "tariff_policy",
+   "why": "Evidence describes CAKE absorbing tariff expense in four-wall margins (company cost impact); 'tariff_policy' names the government policy object — cost-to-policy is a causal-chain hop, not a wording fix."
+  },
+  {
+   "driver_name": "tax_legislation",
+   "proposed_to": "tax_policy",
+   "why": "Evidence is the impact of a specific enacted statute (H.R. 1, July 2025); 'tax_policy' broadens scope and the target record's evidence also spans audits/litigation — generalization, not wording-only."
+  }
+ ]
+}
