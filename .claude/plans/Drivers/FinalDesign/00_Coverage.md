@@ -10,7 +10,7 @@ Legend: ✅ covered · 🟡 partial · ⏳ pending (section not written yet) · 
 | File | Content | Blocks | Status |
 |---|---|---|---|
 | `01_Overview.md` | mission · the one law · history · index-card model | ~15 | ✅ (still to add: 3-tracks map · authority map · dashboard) |
-| `02_DriverCatalog.md` | naming rules NAME-01…19 | 19 | ✅ naming · ⏳ build pipeline + model choice |
+| `02_DriverCatalog.md` | naming rules NAME-01…19 | 19 | ✅ naming · build pipeline + model choice → `10` |
 | `03_Slices_FactScope.md` | slices + fact_scope FS-01…25 | 25 | ✅ |
 | `04_Units.md` | units UNIT-01…14 | 14 | ✅ |
 | `05_Periods.md` | DriverPeriod PER-01…20 | 20 | ✅ |
@@ -18,7 +18,8 @@ Legend: ✅ covered · 🟡 partial · ⏳ pending (section not written yet) · 
 | `07_DriverUpdate.md` | fact_type · states · numbers · verdict DU-01…24 | 24 | ✅ (number layer → superseded by 09) |
 | `08_XBRL_ConceptLinking.md` | concept-linking XC-01…18 | 18 | ✅ |
 | `09_DriverUpdate_Fields.md` | the 23-field spec (owner-adjudicated) | 23 fields | ✅ (pending §8 ack) |
-| `95_Supersession.md` | 20 reversals + stale-trap docs | — | ✅ |
+| `10_BuildPipeline.md` | Track A build manual — engine census · overrides · finalization · model slots · acceptance | PIPE-01…37 | ✅ (adjudicated + committed 2026-07-02) |
+| `95_Supersession.md` | 21 reversals + stale-trap docs | — | ✅ |
 | `90_OpenItems.md` | all open threads (A–E) | — | ✅ |
 | `00_Coverage.md` | this file | — | ✅ |
 
@@ -46,14 +47,14 @@ Legend: ✅ covered · 🟡 partial · ⏳ pending (section not written yet) · 
 | `INDEX.md` | 01 + 95 (the map + supersession) | ✅ |
 | `DriverExperiment.md` | 01 (the WHY) | ✅ |
 | `WIP/GuidanceDriverConsolidation.md` | MF-11 (company_confirmed) + ⏳ Guidance section | 🟡 |
-| `HierarchicalCatalogPlan.md` | ⏳ build-pipeline section (Track A) | ⏳ |
-| `WIP/IncrementalRefresh_FinalDesign.md` | ⏳ incremental-refresh section | ⏳ |
-| `WIP/Fable-to-Opus_Reader_FinalPlan.md` | ⏳ model-choice (in pipeline) | ⏳ |
-| `CostCutting.md` · `C1_FoldInheritance.md` · `C5_BatchedRepair.md` | ⏳ pipeline / cost | ⏳ |
+| `HierarchicalCatalogPlan.md` | `10` (reuse-by-reference — HCP stays the detailed engine spec) | ✅ |
+| `WIP/IncrementalRefresh_FinalDesign.md` | ⏳ incremental-refresh section (seam notes in `10` §13) | ⏳ |
+| `WIP/Fable-to-Opus_Reader_FinalPlan.md` | `10` §7 (model slots; core decision superseded → 95 #15) | ✅ |
+| `CostCutting.md` · `C1_FoldInheritance.md` · `C5_BatchedRepair.md` | `10` §11 (levers, by reference — the three files stay the detailed specs/gates) | ✅ |
 | `WIP/XBRL_Guidance_Borrow.md` | superseded on key-grammar → 95; concept side → 08 | ⛔ / ✅ |
 | `WIP/THROWAWAY_lane_prompt_optimization.md` | throwaway; the principle → DU-11 | ✅ (throwaway) |
 | `DriverContext.md` | full-depth handoff snapshot; superseded by the plan | ⛔ historical |
-| `DriverCatalogProcess.html` | naming → 02; pipeline → ⏳ | 🟡 |
+| `DriverCatalogProcess.html` | naming → 02; pipeline → `10` | ✅ |
 
 ### Evidence (probes — cited, not re-locked)
 | Source | Cited in |
@@ -68,8 +69,8 @@ Legend: ✅ covered · 🟡 partial · ⏳ pending (section not written yet) · 
 |---|---|---|
 | `Drivers/README.md` | old start-here index | ⛔ STALE → `INDEX.md` |
 | `evolution.md` | folder history / generations map | 📜 history only (no design rules); itself now stale post-rename |
-| `DriverCatalogProcess.pdf` | same content as `DriverCatalogProcess.html` | ✅ = the .html (naming → 02, pipeline → pending) |
-| `workflows/` | the built catalog pipeline (code + 257 tests) | ⏳ CODE — design → the pending build-pipeline section |
+| `DriverCatalogProcess.pdf` | same content as `DriverCatalogProcess.html` | ✅ = the .html (naming → 02, pipeline → `10`) |
+| `workflows/` | the built catalog pipeline (code + 261 tests +1 skip, as of 2026-07-02) | ✅ CODE — design → `10` (upgrade delta = `10` §3–§4) |
 | `runs/` | restaurant test-industry runs (names-only catalog, to re-create) | ⏳ generated DATA |
 | `__pycache__/` · `*.pyc` | generated caches | ⛔ ignore (generated) |
 | `FinalDesign/99_Codex_Decision_Audit.md` | Codex's parallel-review audit | ✅ review artifact |
@@ -84,4 +85,4 @@ Legend: ✅ covered · 🟡 partial · ⏳ pending (section not written yet) · 
 - Every origin/WIP doc → ✅ covered, ⏳ pending a named section, or ⛔ excluded-with-a-home.
 - No source is unaccounted for.
 
-**Still to migrate (design not yet written):** the DriverCatalog **build pipeline** (from `HierarchicalCatalogPlan` + `DriverCatalogProcess.html` + cost docs), **Guidance integration** (from `GuidanceDriverConsolidation`), and **incremental refresh** (from `IncrementalRefresh_FinalDesign`). These are the ⏳ rows above — tracked, not lost.
+**Still to migrate (design not yet written):** **Guidance integration** (from `GuidanceDriverConsolidation`) and **incremental refresh** (from `IncrementalRefresh_FinalDesign`). These are the ⏳ rows above — tracked, not lost. *(The DriverCatalog build pipeline landed 2026-07-02 as `10_BuildPipeline.md`.)*

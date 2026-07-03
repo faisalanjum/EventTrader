@@ -30,14 +30,13 @@
 - **§10 dormant rider** — creating 10-K/10-Q metric facts by **XBRL-linking** instead of LLM re-extraction (`origin` field, `[XBRL]` quote, etc.). Activates only if the "Codex §4.8" write-path decision is approved.
 - **Blanket-withdrawal fan-out** — a "guidance withdrawn" fact fans out per open guide (the one place the producer writes beyond the literal quote); owner sign-off noted (09 §7).
 
-## D. Design SECTIONS still to write (the ~35% not done)
-- **DriverCatalog build pipeline** (Track A) — leaf (pull→chunk→menu→converge) → reconcile (dedup ‖ G2 ‖ Refute ‖ D5 ‖ assemble ‖ validate) → fold (D1–D8) → repair; the G1/G2/Refute gates; chunking ladder; run layout + acceptance criteria; consumption contract; PIT safety; **model choice** (Opus reads + Sonnet classifies).
+## D. Design SECTIONS still to write
 - **Guidance integration** (Track C) — regenerate-as-`fact_type=guidance` (decided), the reuse matrix, and the field-map (09 §5 is the core; add the class-level + member/company parts).
-- **Incremental refresh** — re-run only on new events; old↔old frozen; the append-seam rules.
+- **Incremental refresh** — re-run only on new events; old↔old frozen; the append-seam rules. *(Seam notes vs the finalization step already in `10` §13.)*
 - **Overview finish** — the 3-tracks map, the authority/reading map, a status dashboard.
-- **Cost / fold levers** (CostCutting ledger) — can fold into the pipeline section.
 
 ## E. RESOLVED (for the record)
+- **DriverCatalog build pipeline (Track A)** → **WRITTEN 2026-07-02: `10_BuildPipeline.md`** (engine reuse + overrides + class finalization + acceptance; the cost/fold levers folded into its §11; committed 281fd63).
 - **Guidance node-label** (`:GuidanceUpdate` vs `:DriverUpdate` vs dual-label) → **regenerate as `fact_type=guidance` DriverUpdate facts; retire the original guidance extraction** (owner, 2026-07-01 — PER-19).
 - **company_confirmed scope** → **guidance-only** (owner, 2026-07-01 — MF-11); type = **boolean** (09).
 - **FactScope identity package (the old "Q1–Q4+E")** → resolved into `Naming_Slices_XBRL.md` (per memory); the `PENDING` file was deleted, don't reopen.

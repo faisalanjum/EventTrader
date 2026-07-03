@@ -40,6 +40,14 @@ Items #16-18 are the remaining 09 §8 owner-ack bundle. Items #19-20 are already
 
 *(Also corrected by 09: `DriverGraphSchema:331`'s computed "+0.10" surprise example → `change_value=null` (a beat size derives at read from level − comparison). This is an application of DU-16 rule 6, not a new reversal.)*
 
+## C. Pipeline reversals (2026-07-02, from `10_BuildPipeline.md`)
+
+| # | Topic | Was (dead) | Now (locked) | New source |
+|---|---|---|---|---|
+| 21 | The live reuse flow (G1) | show the catalog FIRST (`catalog_first.js` catalog-first flow) | **propose-first**: the producer coins its own name + quote blind → only then sees related existing drivers (PIT-filtered `visible_from ≤ event date`, ranked by semantic match on name+quote+scope; usage counts tie-break only, never decide); G2 (+Refute for fusions) stays the admission authority | HCP §13.1.1–4 (owner-approved 2026-06-10) · 10 PIPE-22 |
+
+*(Considered and left OUT as a row: "names-only catalog → born-complete class with mandatory fact_type" — an ADDITION, not a reversal of a stated locked rule; already recorded in DU-02/DU-07 and HCP's own header. Logged here so the decision trail isn't lost.)*
+
 ---
 
 ## Stale-trap docs — still show OLD rules; never copy from them on these topics

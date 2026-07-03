@@ -18,7 +18,7 @@
 
 #### DU-02 — Producers are the only creators  `[LOCKED]`
 - **Plain:** The catalog build makes the driver CLASS; producers make every DriverUpdate.
-- **Rule:** Catalog build makes the complete Driver CLASS (name + fact_type + optional links), NEVER a DriverUpdate. Producers (earnings-learner / news-driver), LIVE and BACKFILL, are the ONLY creators. No build-time seeder. KPI-only evidence (no event) makes a name only.
+- **Rule:** Catalog build makes the complete Driver CLASS (name + fact_type + optional family/`SAME_AS` links — class-level links only; XBRL concept/member links live on the FACT, never the class: FS-21 / 09 §3 / 10 PIPE-21), NEVER a DriverUpdate. Producers (earnings-learner / news-driver), LIVE and BACKFILL, are the ONLY creators. No build-time seeder. KPI-only evidence (no event) makes a name only.
 - **Why:** Separating class-creation from fact-creation keeps the catalog clean and facts event-sourced.
 - **Source:** DriverGraphSchema.md §0
 

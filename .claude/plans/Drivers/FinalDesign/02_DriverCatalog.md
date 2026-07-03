@@ -168,4 +168,4 @@ This file starts with the **naming rules** (NAME-01 … NAME-19). Later slices �
 - **Source:** Drivers.md · DriverExperiment.md
 - **Replaces:** —
 
-<!-- WORK IN PROGRESS: 02_DriverCatalog still needs its later slices — the build pipeline (menu → reconcile → fold → repair, G1/G2/Refute gates), point-in-time safety ("never show the AI a future name/number"), and model choice. Added one approved piece at a time. -->
+<!-- The later slices now live in 10_BuildPipeline.md (the Track A manual, 2026-07-02): the build pipeline + G1/G2/Refute gates (10 §2–§3), point-in-time safety (10 PIPE-34), and model choice (10 §7). -->
