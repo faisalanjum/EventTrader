@@ -82,9 +82,9 @@
 - **Why:** A Driver/Guidance class is global and company-free, but an XBRL concept is company-specific and can drift over time. This mirrors the proven Guidance design: the anchor/class stays stable, while `xbrl_qname`, `FOR_COMPANY`, and `MAPS_TO_CONCEPT` live on the update/fact. Putting one qname on the class would either be wrong for other companies or fork the class by company, breaking one-name-one-meaning.
 - **Source:** XBRLConceptLinking.md §5
 
-#### XC-11 — Subscription/OAuth, no API key  `[LOCKED]`
-- **Plain:** The linker runs on the OAuth subscription, never a raw API key.
-- **Rule:** Run via `claude_agent_sdk` with `cli_path="/home/faisal/.local/bin/claude"` (OAuth). Never pass/read `ANTHROPIC_API_KEY` (CLAUDE.md). Guards mean conceptless drivers cost ZERO LLM calls.
+#### XC-11 — Subscription billing, no API key  `[LOCKED · mechanism AMENDED 2026-07-03]`
+- **Plain:** The linker runs on the subscription, never a raw API key.
+- **Rule:** **AMENDED (owner 2026-07-03 — 95 #22 · `12` FACT-32/§10.2):** the linker runs via **in-session workflow agents under subscription** — batch AND the default live path; `claude_agent_sdk` is NOT an approved path without separate owner sign-off (June-15 metered-pool change; any future SDK use would still need the fail-closed no-charge guard). Unchanged core: never pass/read `ANTHROPIC_API_KEY` (CLAUDE.md). Guards mean conceptless drivers cost ZERO LLM calls. *(Original mechanism wording — SDK + `cli_path` OAuth — predates the June-15 billing change.)*
 - **Why:** Subscription billing + guards keep cost near-zero.
 - **Source:** XBRLConceptLinking.md §7 · CLAUDE.md billing rule
 

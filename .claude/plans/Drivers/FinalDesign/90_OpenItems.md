@@ -7,14 +7,14 @@
 ## A. Open DESIGN decisions (need an owner call)
 | ID | Question | Lean / note |
 |---|---|---|
-| **09 §8** | Approve the field-spec amendments in one yes/no: `level_bound`→shapes, fact `evhash16` retired, `qualitative`→`value_text` (DU-13/14/16/18) | recommended — see 95_Supersession #16-18 |
+| ~~09 §8~~ | Field-spec amendment bundle | ✅ **APPROVED 2026-07-03** → §E |
 | ~~FS-14~~ | Slice-menu point-in-time | ✅ **RESOLVED 2026-07-02: PIT for DriverUpdate write-time** (3-context split) → §E |
 | **FS-23** | Cross-company **value** comparison (does "International" at A = "International" at B?) — a separate, not-yet-built layer | deferred; conservative bar |
 | **UNIT-12** | Add `percent_qoq` to the 9-unit enum? | lean **no** — keep stable unless production evidence forces it |
-| **09 fields** | Owner was finalizing the per-fact_type field set — largely settled by 09; remaining = the §8 ack above | near-closed |
 | 8-K taxonomy | Is the 24-tag 8-K event taxonomy useful here? | open (README "To Resolve") |
 | Amendments | How to handle filing amendments? | open (README "To Resolve") |
 | **Model policy** | Reader default = **Opus reads + Sonnet classifies** (supersedes Fable/2-pass) — but exact model, number of runs, and job-by-job process need a **larger audit/experiment** | leading default set; full policy open |
+| **ISS-16 routing** | "Beat our own prior guidance" stated as a level: metric (baseline=`previous_guidance`) vs surprise — framing rule proposed in `12` §10.5 | **HELD OPEN 2026-07-03** — owner wants one more framing pass before any lock |
 
 ## B. Design done — BUILD/WIRING not done
 | ID | What | Status |
@@ -36,6 +36,8 @@
 - **Overview finish** — the 3-tracks map, the authority/reading map, a status dashboard.
 
 ## E. RESOLVED (for the record)
+- **EXPLAINED_BY verdict layer** (DU-21…24 · `explained_target` key wording · verdict-edge `evhash16` kept · DailyCompanyMoveEvent = its own label; trade_date owned by the returns/trading-day layer) → **LOCKED by owner 2026-07-03** via the Track B plan (`12_TrackB_FactPipeline.md` §10.1); `07` upgraded.
+- **09 §8 amendment bundle** (`level_bound`→self-describing shapes + transient hints · `qualitative`→`value_text` guidance-only · fact `evhash16` retired) → **APPROVED by owner 2026-07-03**; the per-fact_type field set is FINAL (95 #16–18 applied; DU-13/14/16/18 amendments live).
 - **DriverCatalog build pipeline (Track A)** → **WRITTEN 2026-07-02: `10_BuildPipeline.md`** (engine reuse + overrides + class finalization + acceptance; the cost/fold levers folded into its §11; committed 281fd63).
 - **Guidance node-label** (`:GuidanceUpdate` vs `:DriverUpdate` vs dual-label) → **regenerate as `fact_type=guidance` DriverUpdate facts; retire the original guidance extraction** (owner, 2026-07-01 — PER-19).
 - **company_confirmed scope** → **guidance-only** (owner, 2026-07-01 — MF-11); type = **boolean** (09).

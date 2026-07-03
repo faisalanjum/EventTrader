@@ -28,7 +28,7 @@
 
 ## B. Field-spec amendments (2026-07-02, from `09_DriverUpdate_Fields.md`)
 
-Items #16-18 are the remaining 09 §8 owner-ack bundle. Items #19-20 are already applied cleanups carried here for history.
+Items #16-18 (the 09 §8 bundle) were **owner-APPROVED 2026-07-03** — now applied, nothing pending. Items #19-20 are earlier applied cleanups carried here for history.
 
 | # | Topic | Was | Now | Source |
 |---|---|---|---|---|
@@ -45,6 +45,8 @@ Items #16-18 are the remaining 09 §8 owner-ack bundle. Items #19-20 are already
 | # | Topic | Was (dead) | Now (locked) | New source |
 |---|---|---|---|---|
 | 21 | The live reuse flow (G1) | show the catalog FIRST (`catalog_first.js` catalog-first flow) | **propose-first**: the producer coins its own name + quote blind → only then sees related existing drivers (PIT-filtered `visible_from ≤ event date`, ranked by semantic match on name+quote+scope; usage counts tie-break only, never decide); G2 (+Refute for fusions) stays the admission authority | HCP §13.1.1–4 (owner-approved 2026-06-10) · 10 PIPE-22 |
+| 22 | Concept-linker invocation | `claude_agent_sdk` + OAuth (XC-11's mechanism) | **in-session workflow agents under subscription** — batch AND the default live path; the SDK is NOT approved without separate owner sign-off (June-15 metered-pool change) | owner 2026-07-03 · 12 FACT-32/§10.2 · XC-11 amended |
+| 23 | Driver-item period fallthrough | PER-11's ladder ends in a quiet `gp_UNDEF` fallthrough | **HARD-FAIL for DriverUpdate items** (fields unresolvable + no explicit `sentinel_class` = producer bug); `action_event` sentinel outcomes hard-fail; the fallthrough survives only in the pure shared builder (Guidance parity) | owner 2026-07-03 · 12 §10.7 · PER-11 note |
 
 *(Considered and left OUT as a row: "names-only catalog → born-complete class with mandatory fact_type" — an ADDITION, not a reversal of a stated locked rule; already recorded in DU-02/DU-07 and HCP's own header. Logged here so the decision trail isn't lost.)*
 

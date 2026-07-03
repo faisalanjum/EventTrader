@@ -1,6 +1,6 @@
 # 09 · DriverUpdate Fields — FINAL (adjudicated merge · minimalism pass v2)
 
-> **STATUS (2026-07-02): FINAL DRAFT — pending ONE owner item (§8).** This spec is the adjudicated merge of Fable 5, GPT 5.5, and Opus 4.8, followed by an owner-directed **minimalism pass** (same functionality, maximal cuts). Fable 5, GPT 5.5, and Opus 4.8 were all folded into the adjudicated merge; no source-position archive is kept (their surviving contributions are recorded in §9). Every disputed point and every cut was independently verified against the guidance writer/ids/CLI code, the live Neo4j census (8,432 GuidanceUpdates · 31 companies · 2023–2026), the consumer read-path code, and the locked docs. Model-merge: adopted 8 / rejected 4 / record-corrected 3. Minimalism pass: 4 cuts adopted, 2 proposed cuts rejected with proof (§9). **Resolves `07_DriverUpdate.md` DU-13…DU-18** (DU-15/17 confirmed; DU-13/14/16 amended by the shape-grammar cut; DU-18 amended — see §8).
+> **STATUS (2026-07-03): FINAL — the §8 amendment bundle (shape grammar · `value_text` · fact `evhash16`) was owner-APPROVED 2026-07-03; nothing pending.** This spec is the adjudicated merge of Fable 5, GPT 5.5, and Opus 4.8, followed by an owner-directed **minimalism pass** (same functionality, maximal cuts). Fable 5, GPT 5.5, and Opus 4.8 were all folded into the adjudicated merge; no source-position archive is kept (their surviving contributions are recorded in §9). Every disputed point and every cut was independently verified against the guidance writer/ids/CLI code, the live Neo4j census (8,432 GuidanceUpdates · 31 companies · 2023–2026), the consumer read-path code, and the locked docs. Model-merge: adopted 8 / rejected 4 / record-corrected 3. Minimalism pass: 4 cuts adopted, 2 proposed cuts rejected with proof (§9). **Resolves `07_DriverUpdate.md` DU-13…DU-18** (DU-15/17 confirmed; DU-13/14/16 amended by the shape-grammar cut; DU-18 amended — see §8).
 
 ## §1 The mental model + verdict
 
@@ -124,7 +124,7 @@
 
 ## §8 The ONE owner item + doc amendments
 
-**Owner ack requested — the lock amendments this spec makes (one yes/no covers all):**
+**Owner ack — ✅ APPROVED 2026-07-03 (one yes/no covered all three):**
 - **DU-18** (no free-text qualitative) → amended by `value_text` (guidance-only, numberless-only, value-aware lint). The lock's premise — "the quote carries it" — is false in the running system: quote is rendered to no consumer, while `qualitative` is.
 - **DU-13/14/16 + Codex §3.14 + DriverGraphSchema:287-331** (shape table + comparison grammar) → amended by the self-describing shape grammar (point = BOTH bands; comparison single-value = BOTH; closed-shape delta rule). Must be flipped in ONE pass across those lines — a partial flip silently turns points into floors.
 - **§3.2 fact `evhash16` value-hash line** → amended by the `DriverUpdate.evhash16` retirement (derivable, reader-free). This does not amend any verdict-edge `EXPLAINED_BY.evhash16` rule.

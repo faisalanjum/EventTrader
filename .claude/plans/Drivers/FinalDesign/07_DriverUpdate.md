@@ -2,7 +2,7 @@
 
 **What this is:** the event-level **fact** — how a producer records what happened to a driver in one event, plus the buy/sell **verdict**. This is Track B core.
 
-> **Status split:** the §0 creation contract, `fact_type`, and `driver_state` lanes are **`[LOCKED]`** (2026-06-15). DU-13…DU-18 are now superseded by `09_DriverUpdate_Fields.md`; keep the blocks here as history/cross-reference, but use 09 as the source of truth for stored DriverUpdate fields. The `EXPLAINED_BY` verdict remains **`[AGREED]`** (2026-06-16) until locked separately.
+> **Status split:** the §0 creation contract, `fact_type`, and `driver_state` lanes are **`[LOCKED]`** (2026-06-15). DU-13…DU-18 are now superseded by `09_DriverUpdate_Fields.md`; keep the blocks here as history/cross-reference, but use 09 as the source of truth for stored DriverUpdate fields. The `EXPLAINED_BY` verdict is **`[LOCKED]`** (owner 2026-07-03, via the Track B plan — `12_TrackB_FactPipeline.md` §10.1: explained_target key wording, verdict-edge evhash16 recipe, and DailyCompanyMoveEvent own-label pinned there).
 > Historical source = `WIP/DriverGraphSchema.md`. Units/family/fact_scope are cross-referenced, not re-locked here.
 
 ---
@@ -149,27 +149,27 @@
 - **Why:** Provenance (always) and attribution (only when blamed) are different facts; merging them would fabricate attributions.
 - **Source:** DriverGraphSchema.md §3 (edges) lines 132/134/138
 
-## F. EXPLAINED_BY verdict  `[AGREED]`
+## F. EXPLAINED_BY verdict  `[LOCKED — owner 2026-07-03 via 12 §10.1]`
 
-#### DU-21 — The verdict is the EXPLAINED_BY edge  `[AGREED]`
+#### DU-21 — The verdict is the EXPLAINED_BY edge  `[LOCKED]`
 - **Plain:** The buy/sell verdict is not a node — it's the properties on the Event→DriverUpdate edge, added only when a producer blames the move on the fact.
 - **Rule:** The verdict is NOT a node — it's the property-laden `EXPLAINED_BY` edge (Event → DriverUpdate), added only when a producer believes that fact caused the stock move. A fact may exist with no verdict. It points at the Event (not the Company) because it's graded against the realized return on Event→Company. Term chosen = "attribution" (over "impact").
 - **Why:** Attaching the verdict to the event lets it be scored against that event's realized move in one hop.
 - **Source:** DriverGraphSchema.md §2/§3 (AGREED 2026-06-16)
 
-#### DU-22 — The 3 orthogonal verdict axes  `[AGREED]`
+#### DU-22 — The 3 orthogonal verdict axes  `[LOCKED]`
 - **Plain:** A verdict has direction, force, and certainty — three independent numbers — plus who judged and when.
-- **Rule:** `stock_impact` ∈ {long, short} (the driver's DIRECTION of push, can oppose the net move) · `weightage` ∈ {0.1…1.0 deciles} or null (the driver's standalone FORCE — an INDEPENDENT estimate, NOT a share; never summed, never forced to max; a move may be partly unexplained; null = sure of direction, can't size) · `confidence` ∈ {0…100 deciles} (how sure the attribution is TRUE, orthogonal to weightage). Plus `produced_mode` ∈ {live, backfill} (live wins, never overwritten by backfill; excluded from evhash16) · `llm_producer`. Verdict key = event + driver + fact_scope + **producer** (two producers can disagree without colliding).
+- **Rule:** `stock_impact` ∈ {long, short} (the driver's DIRECTION of push, can oppose the net move) · `weightage` ∈ {0.1…1.0 deciles} or null (the driver's standalone FORCE — an INDEPENDENT estimate, NOT a share; never summed, never forced to max; a move may be partly unexplained; null = sure of direction, can't size) · `confidence` ∈ {0…100 deciles} (how sure the attribution is TRUE, orthogonal to weightage). Plus `produced_mode` ∈ {live, backfill} (live wins, never overwritten by backfill; excluded from evhash16) · `llm_producer`. Verdict key = **explained_target** + driver + fact_scope + **producer**, where explained_target ∈ {Event, DailyCompanyMoveEvent} (wording locked 2026-07-03 via 12 §10.1; two producers can disagree without colliding).
 - **Why:** Direction, force, and certainty are genuinely independent; a share/sum would force a false 100%.
 - **Source:** DriverGraphSchema.md EXPLAINED_BY (FINAL 2026-06-16)
 
-#### DU-23 — Read-time only + PIT  `[AGREED]`
+#### DU-23 — Read-time only + PIT  `[LOCKED]`
 - **Plain:** The "share of the move" is computed at read time, never stored; the real return is never shown to the predictor.
 - **Rule:** Read-time only (never stored): `share_i = weightage_i / Σweightage` within one (event, producer); `signed_force = weightage × stock_impact`. PIT: the realized share / actual return is NEVER stored on the verdict and NEVER shown to the predictor. Grading is aggregate — reality gives one net return, so grade a verdict SET on net sign/magnitude + relative ranking, never a per-driver "true share."
 - **Why:** Storing/showing the realized share would leak the answer (look-ahead); shares are derived, not truth.
 - **Source:** DriverGraphSchema.md verdict rules
 
-#### DU-24 — Verdict validator  `[AGREED]`
+#### DU-24 — Verdict validator  `[LOCKED]`
 - **Plain:** Code checks every verdict edge has a valid direction, decile confidence, and decile-or-null weightage — no sum rule.
 - **Rule:** Deterministic hard-fail: every `EXPLAINED_BY` edge has `stock_impact` ∈ {long, short}, `confidence` ∈ {0,10,…100}, `weightage` ∈ {0.1,…1.0} or null — both on a 10-step decile ladder (no false-precision floats; keeps evhash16 stable across re-runs). NO cross-edge sum constraint.
 - **Why:** Deciles keep the value-hash stable; no-sum protects the independent-force design.

@@ -78,6 +78,7 @@
 #### PER-11 — Code computes the id; the LLM only emits fields  `[LOCKED]`
 - **Plain:** The AI sends period fields; code turns them into the final period id. The AI never writes the id.
 - **Rule:** Code computes `period_u_id`; the LLM emits only period fields and never writes `period_u_id`. Producer routing is first-match-wins: exact dates → sentinel_class → long_range_end_year → month → half → fiscal_quarter → fiscal_year → gp_UNDEF fallthrough. Don't emit conflicting fields. Never silently default a missing FYE to December (`ensure_driver_period` returns None only when there's truly no period).
+- **Driver-wrapper amendment (owner 2026-07-03 — 95 #23 · `12_TrackB_FactPipeline.md` §10.7):** for DriverUpdate items, fields-present-but-unresolvable with NO explicit `sentinel_class` HARD-FAILS as a producer bug (never a quiet gp_UNDEF); `action_event` sentinel outcomes hard-fail (only a real stated window — which resolves to dated periods — qualifies); guidance still requires a real resolved period OR an explicit sentinel. The gp_UNDEF fallthrough survives only inside the pure shared builder (Guidance parity).
 - **Why:** Deterministic code-built ids keep identity stable and stop the LLM fabricating a window.
 - **Source:** GuidancePeriod.md §Producer Input Contract · §Public API Shape
 
