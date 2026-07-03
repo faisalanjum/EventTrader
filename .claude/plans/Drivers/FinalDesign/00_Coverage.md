@@ -2,7 +2,7 @@
 
 **What this is:** proof that **every source doc is accounted for** — either covered by a written section, pending a not-yet-written section, or explicitly excluded. Nothing is silently dropped.
 
-Legend: ✅ covered · 🟡 partial · ⏳ pending (section not written yet) · ⛔ excluded / superseded (→ where it lives).
+Legend: ✅ covered · 🟡 partial · ⏳ pending (section not written yet) · ⛔ excluded / superseded (→ where it lives) · 📜 history only.
 
 ---
 
@@ -23,7 +23,7 @@ Legend: ✅ covered · 🟡 partial · ⏳ pending (section not written yet) · 
 | `90_OpenItems.md` | all open threads (A–E) | — | ✅ |
 | `00_Coverage.md` | this file | — | ✅ |
 
-**≈ 170 locked decision-blocks** across the record model. (A full decision-ID-level checklist grows here as the pipeline/Guidance sections land.)
+**≈ 170 locked record-model decision-blocks + 37 PIPE build-manual blocks (`10`).** (A full decision-ID-level checklist grows here as the Guidance section lands.)
 
 ## 2. Source doc → where it's covered
 ### Consolidation/ (the authoritative set)
@@ -82,7 +82,7 @@ Legend: ✅ covered · 🟡 partial · ⏳ pending (section not written yet) · 
 
 ## 4. Zero-loss statement
 - Every Consolidation doc → ✅ covered.
-- Every origin/WIP doc → ✅ covered, ⏳ pending a named section, or ⛔ excluded-with-a-home.
+- Every origin/WIP doc → ✅ covered, 🟡 partially covered, ⏳ pending a named section, or ⛔ excluded-with-a-home.
 - No source is unaccounted for.
 
 **Still to migrate (design not yet written):** **Guidance integration** (from `GuidanceDriverConsolidation`) and **incremental refresh** (from `IncrementalRefresh_FinalDesign`). These are the ⏳ rows above — tracked, not lost. *(The DriverCatalog build pipeline landed 2026-07-02 as `10_BuildPipeline.md`.)*
