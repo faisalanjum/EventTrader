@@ -26,7 +26,9 @@
 | 14 | RavenPack's 7,400 categories | import as the name vocabulary | **checklist only** (borrowed just `rumored` + `failed` states) | INDEX §3e · DU-11 |
 | 15 | The document-reader model | Fable | **Opus** reads + **Sonnet** classifies (a mixture) — *current leading default; supersedes the Fable/2-pass plan. Full model policy (exact model · # runs · job-by-job) still needs a larger audit → `90_OpenItems`* | INDEX · Consolidation README 5d |
 
-## B. Field-spec amendments (2026-07-02, from `09_DriverUpdate_Fields.md` — pending owner §8 ack)
+## B. Field-spec amendments (2026-07-02, from `09_DriverUpdate_Fields.md`)
+
+Items #16-18 are the remaining 09 §8 owner-ack bundle. Items #19-20 are already applied cleanups carried here for history.
 
 | # | Topic | Was | Now | Source |
 |---|---|---|---|---|

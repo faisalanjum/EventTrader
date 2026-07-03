@@ -63,7 +63,7 @@
 
 #### MF-10 — Only the base metric is XBRL-concept-matched  `[LOCKED]`
 - **Plain:** `_guidance`/`_surprise` don't get their own XBRL concept — they inherit it from their base metric.
-- **Rule:** Only the base metric Driver is XBRL-concept-matched. `_guidance`/`_surprise` INHERIT the concept via `BASE_METRIC` — never matched directly (XBRL tags the underlying metric, not a forecast/surprise; feeding `revenue_guidance` to the matcher correctly abstains). See the XBRL concept-link section.
+- **Rule:** Only the base metric Driver is XBRL-concept-matched. `_guidance`/`_surprise` INHERIT the concept via `BASE_METRIC` — never matched directly (XBRL tags the underlying metric, not a forecast/surprise; feeding `revenue_guidance` to the matcher correctly abstains). If the base metric is latent and has no linked metric fact yet, inheritance returns no concept for now; do not write a direct guidance/surprise concept to fill that gap. See the XBRL concept-link section.
 - **Why:** A forecast/surprise has no XBRL tag of its own; the concept lives on the metric.
 - **Source:** MetricGuidanceFamily.md §rules · XBRLConceptLinking.md §6
 

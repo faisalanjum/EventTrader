@@ -86,7 +86,7 @@ This file starts with the **naming rules** (NAME-01 … NAME-19). Later slices �
 #### NAME-11 — When a brand/product DOES go in the name (the exception ladder)  `[LOCKED]`
 - **Plain:** A brand/product enters the name only in rare cases — decided by a short top-down test.
 - **Rule:** Ask in order, stop at the first hit:
-  - **0.** Strip direction/impact words first (rose, headwind…) — never in the name.
+  - **0.** Strip direction/impact words first (rose, headwind, generic pressure…) — never in the name. Exception: a word like `pressure` may stay only when it is part of a specific reusable market force (`glp1_pressure`), not a generic effect word.
   - **1.** Strip the brand. Normal cause left (revenue, a recall)? → YES → **SLICE** it.
   - **2.** Only a fragment needing an object (demand, ban), OR that exact brand/product itself moves OTHER companies? → YES → **NAME** it (`iphone_demand`, `glp1_pressure`, `tiktok_ban`).
   - Unsure → **SLICE**.
@@ -97,8 +97,8 @@ This file starts with the **naming rules** (NAME-01 … NAME-19). Later slices �
 ### C. What's in / out of a name
 
 #### NAME-12 — What's allowed IN the name  `[LOCKED]`
-- **Plain:** Only three things: the cause, a per-X denominator, and a benchmark name.
-- **Rule:** In the name: (a) the cause; (b) per-X denominators (`oil_price_per_barrel`, `dividend_per_share`); (c) benchmark identity when a commodity has named, differently-priced benchmarks (`brent_oil_price` vs `wti_oil_price`). Nothing else.
+- **Plain:** The cause, plus only the few locked extras that change identity: per-X denominator, benchmark name, or the terminal guidance/surprise suffix.
+- **Rule:** In the name: (a) the cause; (b) per-X denominators (`oil_price_per_barrel`, `dividend_per_share`); (c) benchmark identity when a commodity has named, differently-priced benchmarks (`brent_oil_price` vs `wti_oil_price`); (d) terminal `_guidance` / `_surprise` suffixes under NAME-17. Nothing else.
 - **Why:** Per-X and benchmark change the actual number → must be separate drivers; the read key has no other slot for them.
 - **Source:** Naming_Slices_XBRL.md §3
 - **Replaces:** —
@@ -106,13 +106,14 @@ This file starts with the **naming rules** (NAME-01 … NAME-19). Later slices �
 #### NAME-13 — Per-X goes in the name (business AND physical)  `[LOCKED]`
 - **Plain:** Source states a "per-X" → put it in the name. Not stated → leave the name bare.
 - **Rule:** Transcribe whatever per-X the source states — business (`per_share`, `per_square_foot`) AND physical (`per_barrel`, `per_tonne`, `per_hour`), no judgment. Stated → oil at $80/barrel → `oil_price_per_barrel`; not stated → oil rose 8% → `oil_price`. Different per-X = a different driver (`oil_price_per_barrel` ≠ `oil_price_per_tonne`), never same-as. No per-X unit — the unit stays the base (usually `usd`/`count`).
+- **Note:** Standard financial acronyms that already include the denominator keep their familiar name: `eps` is valid and does not need to become `earnings_per_share`.
 - **Why:** The read-time key uses name + unit and ignores the quote, so a per-X left out of the name would merge two different numbers.
 - **Source:** Consolidation/UnitExtraction.md Rules 2/3 · Naming_Slices_XBRL.md §3
 - **Replaces:** old "$/physical → unknown / per-X stays bare" — 95_Supersession #3
 
 #### NAME-14 — The version of a number is NOT in the name  `[LOCKED]`
 - **Plain:** adjusted / diluted / constant-currency go in a separate "measurement" tag, not the name.
-- **Rule:** The version of a number (adjusted, diluted, basic, constant-currency, core, cash…) goes in the **measurement** slot INSIDE fact_scope — a sibling of the slice, NOT a 7th slice kind. `adjusted eps` → name=`eps`, measurement=`{adjusted}`. Store the specific stated word (case/spacing normalized); default empty (never assume gaap); gaap/non_gaap is a read-time view, never stored.
+- **Rule:** The version of a number (adjusted, diluted, basic, constant-currency, core, cash…) goes in the **measurement** slot INSIDE fact_scope — a sibling of the slice, NOT a 7th slice kind. `adjusted eps` → name=`eps`, measurement=`{adjusted}`. Store the specific stated word (case/whitespace/punctuation normalized); default empty (never assume gaap); gaap/non_gaap is a read-time view, never stored.
 - **Why:** Keeps the base metric (`eps`) able to carry both its gaap and adjusted readings as separate, comparable facts.
 - **Source:** Naming_Slices_XBRL.md §1 / §5
 - **Replaces:** old "adjusted_eps in the name" (DriverOntology R9) — 95_Supersession #2
@@ -136,7 +137,7 @@ This file starts with the **naming rules** (NAME-01 … NAME-19). Later slices �
   7. source-type labels
   8. provider/vendor labels
   9. XBRL prefixes
-  10. metaphors/sentiment/effect-on-stock words
+  10. metaphors/sentiment/effect-on-stock words *[OK only when the word is part of a specific reusable market force, e.g. `glp1_pressure`; generic "pressure" stays banned]*
   11. a bare category word alone (`macro`, `sector`, `demand`, `sentiment`)
   12. vague descriptors too broad to name a cause
   13. glue words (`the`, `of`, `in`, `and`, `to`, `for`)

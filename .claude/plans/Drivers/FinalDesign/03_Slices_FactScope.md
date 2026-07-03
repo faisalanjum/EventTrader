@@ -24,7 +24,7 @@
 
 #### FS-03 — quote_hash is a tie-breaker only  `[LOCKED]`
 - **Plain:** The quote-hash is only for two genuinely different facts in one event the structured parts can't split.
-- **Rule:** `quote_hash` is added ONLY when the structured slot can't separate two different facts in one event (same slot, different value-hash). Restatements (same value) merge; never added when the structured scope already identifies the fact.
+- **Rule:** `quote_hash` is added ONLY when the structured slot can't separate two different facts in one event (same slot, different value-hash). Restatements (same value) merge; never added when the structured scope already identifies the fact. Fusion comes first: if one fact has level + change + comparison, write one fused DriverUpdate before testing collision. If a true collision remains, every fact in that collision set gets its own deterministic `quote_hash` built from normalized quote + normalized value signature; no colliding fact keeps the bare id.
 - **Why:** Prevents over-splitting restatements (press release + MD&A both "Q1 +3%" → one fact).
 - **Source:** Naming_Slices_XBRL.md §1
 
@@ -105,7 +105,7 @@
 #### FS-14 — The per-company menu  `[LOCKED]`
 - **Plain:** For each company + kind, the menu = the **union** of members from the company's 10-Q/10-K filings + the values the catalog already used. **Not just the latest filing.**
 - **Rule:** `menu(company, kind)` = the **unique set (union) of XBRL members across the company's 10-Q/10-K filings** ∪ values the catalog already used — **not just the single latest filing**, so discontinued or renamed segments aren't missed. 8-K/transcript/news events usually carry no member breakout, so their menu comes from these filings (unless the event itself has usable member data).
-- **Point-in-time (LOCKED 2026-07-02):** For **DriverUpdate write-time** producers, the menu is **restricted to filings at or before the event date** (both the XBRL-members half **and** the catalog-history half cut at ≤ T) — a historical/backfill fact never sees a future segment structure (*err over-split, never leak*). **3-context split:** driver-**name** creation → slice-menu PIT is N/A (names carry no slice) · DriverUpdate **write** → PIT · **read / offline repair** → all known history OK (no fact is being written). *(Slice-value immutability (FS-17) is orthogonal — both hold. Same cutoff as the concept-link menu, XC-09.)*
+- **Point-in-time (LOCKED 2026-07-02):** For **DriverUpdate write-time** producers, the menu is **restricted to filings at or before the event timestamp / public source time** (both the XBRL-members half **and** the catalog-history half cut at ≤ T) — a historical/backfill fact never sees a future segment structure (*err over-split, never leak*). Use the source's public/accepted time, not our system write time. **3-context split:** driver-**name** creation → slice-menu PIT is N/A (names carry no slice) · DriverUpdate **write** → PIT · **read / offline repair** → all known history OK (no fact is being written). *(Slice-value immutability (FS-17) is orthogonal — both hold. Same cutoff as the concept-link menu, XC-09.)*
 - **Why:** A union across filings (not just the latest) maximizes reuse — a fact about a discontinued/renamed segment finds its existing value instead of coining a duplicate.
 - **Source:** Naming_Slices_XBRL.md §7 *(menu contents extended from "latest prior" → "union of all prior filings"; PIT re-locked per owner, 2026-07-02 — see 90_OpenItems §E)*
 
@@ -185,7 +185,7 @@
 
 #### FS-25 — Measurement = a multi-label set in fact_scope  `[LOCKED]`
 - **Plain:** The "version of the number" (adjusted, diluted…) is stored as a set of exact stated words, in its own fact_scope slot. Empty by default.
-- **Rule:** `measurement` = a multi-label, code-sorted SET inside fact_scope. Store the SPECIFIC stated label, format-normalized only (case/spacing; no stemming): `{adjusted}` · `{diluted, gaap}` · `{core}`. Default = empty — NEVER assume gaap. A novel word ("cash EPS") is kept verbatim as its own token. gaap/non_gaap is a READ-TIME grouping view, never the stored key. Multi-label because flavors stack ("adjusted diluted EPS" = `{adjusted, diluted}`).
+- **Rule:** `measurement` = a multi-label, code-sorted SET inside fact_scope. Store the SPECIFIC stated label, format-normalized only (case/whitespace/punctuation; no stemming): `{adjusted}` · `{diluted, gaap}` · `{core}`. For serialization, normalize each token, code-sort tokens, then comma-join inside the slot (`measurement=adjusted,diluted`). Default = empty — NEVER assume gaap. A novel word ("cash EPS") is kept verbatim after the same format-normalization as its own token. gaap/non_gaap is a READ-TIME grouping view, never the stored key. Multi-label because flavors stack ("adjusted diluted EPS" = `{adjusted, diluted}`).
 - **Why:** A single-slot tag would merge "GAAP basic" with "GAAP diluted"; storing the specific word keeps "Adjusted EPS" ≠ "Core EPS", so the same base metric can carry opposite verdicts.
 - **Source:** Naming_Slices_XBRL.md §5 / §1
 - **Replaces:** the full version of NAME-14 — 95_Supersession #2

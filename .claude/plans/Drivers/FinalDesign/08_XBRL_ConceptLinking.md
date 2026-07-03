@@ -40,7 +40,7 @@
 
 #### XC-05 — Deterministic guards (G0/G1/G2)  `[LOCKED]`
 - **Plain:** Before any LLM call, drop drivers that can't have an exact GAAP line — events/macro, ratios/derived, non-GAAP.
-- **Rule:** Guards (pure Python, no LLM, ordered G2→G0→G1): **G0** = events/macro (resignation, buyback, oil_price, interest_rates, tariffs, weather…) · **G1** = ratios/derived/growth (margin, _growth, roic, ebitda, fcf, _per_square, _mix…) — tax_rate/effective_tax_rate are NOT here (real GAAP concepts) · **G2** = non-GAAP/adjusted — key on the **`measurement` set** (primary; since "adjusted"/"diluted" now live in `measurement`, not the name — reversal #2, per 09), keeping the name-prefix regex (adjusted_/non_gaap_/core_/organic_/pro_forma_) only as the **legacy-name fallback** for un-regenerated catalog names (e.g. old `adjusted_eps`). Guards are PRINCIPLES not a dict (mirror fact_type routing + GAAP/non-GAAP); prefer routing by fact_type, regex = raw-name fallback. Guarded drivers cost ZERO LLM calls.
+- **Rule:** Guards (pure Python, no LLM, ordered G2→G0→G1): **G0** = events/macro (resignation, buyback, oil_price, interest_rates, tariffs, weather…) · **G1** = ratios/derived/growth (margin, _growth, roic, ebitda, fcf, _per_square, _mix…) — tax_rate/effective_tax_rate are NOT here (real GAAP concepts) · **G2** = non-GAAP/adjusted — key on the **`measurement` set** (primary; since "adjusted"/"diluted" now live in `measurement`, not the name — reversal #2, per 09), keeping the name-prefix regex (adjusted_/non_gaap_/core_/organic_/pro_forma_) only as the **legacy-name fallback** for un-regenerated catalog names (e.g. old `adjusted_eps`). Operational rule: empty measurement, `{gaap}`, `{basic}`, `{diluted}`, `{reported}`, or `{as_reported}` are GAAP-compatible; any other measurement token is conservatively treated as non-GAAP/measurement-specific and G2 abstains rather than inheriting or emitting a wrong GAAP concept. Guards are PRINCIPLES not a broad merge dictionary; prefer routing by fact_type, measurement, and only then raw-name fallback. Guarded drivers cost ZERO LLM calls.
 - **Why:** Guards remove the no-concept pile for free and stop the model forcing a line where none exists.
 - **Source:** XBRLConceptLinking.md §3.1
 
@@ -69,7 +69,7 @@
 ## F. The menu
 
 #### XC-09 — The company menu (point-in-time)  `[LOCKED]`
-- **Plain:** The menu = the consolidated numeric concepts the company actually reports; for a historical fact, only concepts available at the event date.
+- **Plain:** The menu = the consolidated numeric concepts the company actually reports; for a historical fact, only concepts available at the event timestamp / public source time.
 - **Rule:** menu = consolidated (no-segment) numeric concepts the company reports (`QUERY_2A`: latest 10-K + subsequent 10-K/10-Q, `is_numeric='1'`, empty `member_u_ids`). Carries {qname, label, period_type, balance, usage}; pass the WHOLE menu (don't pre-filter); ~150–530 concepts, LLM sees ~40 after guards. REQUIRED PIT cutoff for historical DriverUpdates: `r.created ≤ event_time` (latest 10-K ≤ T), where `r.created` means the source's public/accepted filing time, not when our system wrote the node; live can use the latest 10-K. (Same cutoff as the slice menu, **FS-14** — both are PIT, resolved 2026-07-02.)
 - **Why:** The answer is almost always a concept the company itself reports, so the menu IS the candidate set; PIT prevents look-ahead.
 - **Source:** XBRLConceptLinking.md §4 · cross-ref FS-14
@@ -79,7 +79,7 @@
 #### XC-10 — Writing the link  `[LOCKED]`
 - **Plain:** Store the concept's qname on the fact + create a MAPS_TO_CONCEPT edge; best-effort, self-healing.
 - **Rule:** Store `DriverUpdate.xbrl_qname` (string, cross-taxonomy safe) AND `MERGE (du)-[:MAPS_TO_CONCEPT]->(con)` (MATCH by qname, `WITH…LIMIT 1` — a qname spans taxonomy years). Best-effort, non-blocking, idempotent, self-healing; no match → no edge, core write still succeeds. On the FACT, not the class.
-- **Why:** An idempotent best-effort write means a missing/failed link never blocks the fact and self-heals.
+- **Why:** A Driver/Guidance class is global and company-free, but an XBRL concept is company-specific and can drift over time. This mirrors the proven Guidance design: the anchor/class stays stable, while `xbrl_qname`, `FOR_COMPANY`, and `MAPS_TO_CONCEPT` live on the update/fact. Putting one qname on the class would either be wrong for other companies or fork the class by company, breaking one-name-one-meaning.
 - **Source:** XBRLConceptLinking.md §5
 
 #### XC-11 — Subscription/OAuth, no API key  `[LOCKED]`
@@ -92,15 +92,15 @@
 
 #### XC-12 — fact_type routing (all 4)  `[LOCKED]`
 - **Plain:** metric → link it. guidance/surprise → don't link directly; inherit from the base metric. action_event → always abstain.
-- **Rule:** metric → call `link()`. guidance/surprise → do NOT feed `<base>_guidance`/`<base>_surprise` to `link()` (it abstains on suffixed slugs by design, 96.6%); resolve the BASE metric's concept and INHERIT via `BASE_METRIC` (mandatory — else they silently get no link). action_event → ALWAYS abstain (G0 catches most names).
+- **Rule:** metric → call `link()`. guidance/surprise → do NOT feed `<base>_guidance`/`<base>_surprise` to `link()` (it abstains on suffixed slugs by design, 96.6%); resolve the BASE metric's concept and INHERIT via `BASE_METRIC` (mandatory — else they silently get no link). If the base metric is only latent and has no metric fact with a concept yet, inheritance returns no concept for now; do NOT write a direct concept on guidance/surprise to fill that gap. action_event → ALWAYS abstain (G0 catches most names).
 - **Why:** XBRL tags the underlying metric, not a forecast/surprise/action — so only the metric is matched.
 - **Source:** XBRLConceptLinking.md §6 · cross-ref MF-10
 
 ## I. Evidence
 
 #### XC-13 — Evidence (proof + re-validation)  `[EVIDENCE]`
-- **Plain:** Proven twice: a 31-company build proof + a 274-company re-validation — 100% precision, zero wrong links.
-- **Rule:** Build proof (`concept_link_probe/`, 31 guidance co, value-anchored + adversarial-panel key): 100% precision (0 wrong/249), 100% abstention (0/1,178), long-tail recall 99.4%; beat curated `concept_resolver.py` (21 leaks→0). Re-validation (`concept_link_revalidation/`, 274 co, 11 sectors, all 4 fact_types, NON-LLM ground truth): 100% precision / ~70% recall (guidance + non-guidance identical); 98.0% identical across 3 runs, 0 flips create a wrong link.
+- **Plain:** Proven twice: a 31-company build proof + a 274-company re-validation. The final emitted-link score has zero wrong links; XC-15 explains the separate tuning-set caveat.
+- **Rule:** Build proof (`concept_link_probe/`, 31 guidance co, value-anchored + adversarial-panel key): 100% precision (0 wrong/249), 100% abstention (0/1,178), long-tail recall 99.4%; beat curated `concept_resolver.py` (21 leaks→0). Re-validation (`concept_link_revalidation/`, 274 co, 11 sectors, all 4 fact_types, NON-LLM ground truth): 100% precision / ~70% recall (guidance + non-guidance identical); 98.0% identical across 3 runs, 0 flips create a wrong link. Read this as the final emitted-link score under that validation setup, not as proof that the hand deny-list is complete forever.
 - **Source:** XBRLConceptLinking.md §9 · concept_link_probe/PROOF.md · concept_link_revalidation/VERDICT.md
 
 #### XC-14 — The two error buckets  `[EVIDENCE]`
@@ -111,8 +111,8 @@
 ## J. Caveats + proper endpoint
 
 #### XC-15 — Honest caveats on the "1 wrong"  `[EVIDENCE]`
-- **Plain:** "1 wrong" is only on the 274 tuning companies; the 4-entry deny-set is a hand list, not a rule.
-- **Rule:** (1) "1 wrong" is the TUNING-SET number — new part-for-whole pairs slip through on the other 521 companies + future filings until added (the residual `CCL cost_of_revenue→OperatingCostsAndExpenses` already shows the list is incomplete). (2) The deny-set is pattern-matched, not principled (denies `total_debt→NotesPayable` but keeps `total_debt→LongTermDebt` — same shape, opposite treatment). (3) The monitor does NOT catch new bucket-2 slips (same balance/period). (4) Coverage ≈ 35% of 795 — representative, but a full-universe run is pending.
+- **Plain:** The "1 wrong" line is a tuning/end-point caveat, not a second final emitted-link score. The 4-entry deny-set is still a hand list, not a rule.
+- **Rule:** (1) "1 wrong" is the TUNING-SET / pre-endpoint caveat — new part-for-whole pairs can still slip through on the other 521 companies + future filings until added (the residual `CCL cost_of_revenue→OperatingCostsAndExpenses` already shows the list is incomplete). (2) The deny-set is pattern-matched, not principled (denies `total_debt→NotesPayable` but keeps `total_debt→LongTermDebt` — same shape, opposite treatment). (3) The monitor does NOT catch new bucket-2 slips (same balance/period). (4) Coverage ≈ 35% of 795 — representative, but a full-universe run is pending.
 - **Source:** XBRLConceptLinking.md §0/§9
 
 #### XC-16 — The proper endpoint (calc-hierarchy veto)  `⏳ RECOMMENDED (before full rollout)`

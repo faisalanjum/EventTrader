@@ -2,9 +2,8 @@
 
 **What this is:** the event-level **fact** — how a producer records what happened to a driver in one event, plus the buy/sell **verdict**. This is Track B core.
 
-> **Status split:** the §0 creation contract, `fact_type`, and `driver_state` lanes are **`[LOCKED]`** (2026-06-15). The number/comparison layer and the `EXPLAINED_BY` verdict are **`[AGREED]`** (2026-06-16) — not yet locked.
-> ⏳ **Owner is still finalizing the exact per-fact_type field set (DU-13…DU-18).** Treat those as provisional.
-> Source of truth = `WIP/DriverGraphSchema.md`. Units/family/fact_scope are cross-referenced, not re-locked here.
+> **Status split:** the §0 creation contract, `fact_type`, and `driver_state` lanes are **`[LOCKED]`** (2026-06-15). DU-13…DU-18 are now superseded by `09_DriverUpdate_Fields.md`; keep the blocks here as history/cross-reference, but use 09 as the source of truth for stored DriverUpdate fields. The `EXPLAINED_BY` verdict remains **`[AGREED]`** (2026-06-16) until locked separately.
+> Historical source = `WIP/DriverGraphSchema.md`. Units/family/fact_scope are cross-referenced, not re-locked here.
 
 ---
 

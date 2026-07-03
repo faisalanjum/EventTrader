@@ -499,8 +499,9 @@ Locked:
   writer.
 - Verdict / `EXPLAINED_BY` `evhash16` remains separate and tracks the verdict
   judgment.
-- Macro/news DriverUpdate fact identity is not locked yet because its
-  source/evidence shape is not locked yet.
+- Macro/news attribution target identity is locked as `DailyCompanyMoveEvent`
+  (`dcm:<cik>:<trade_date>`). Only the pure-macro/source-evidence details remain
+  open.
 
 Owner review: approved clarification.
 
@@ -575,6 +576,9 @@ Use `quote_hash` only when:
 - the same event has more than one genuinely different fact,
 - the structured slots cannot separate them,
 - and the values are different enough that they must not merge.
+- Fusion happens first. If a true collision remains, every fact in that
+  collision set gets its own deterministic `quote_hash`; no colliding fact keeps
+  the bare id.
 
 ### 3.4 DriverPeriod
 
@@ -803,7 +807,10 @@ Owner review: approved sorted multi-label set.
 - Measurement is a sorted set inside fact_scope.
 - Sort measurement labels by normalized text in deterministic code order before
   serializing fact_scope; do not preserve source-word order.
-- Store the specific stated label, normalized for format only.
+- Store the specific stated label, normalized for format only
+  (case/whitespace/punctuation).
+- Serialize by comma-joining the sorted tokens inside the measurement slot, for
+  example `measurement=adjusted,diluted`.
 - Do not stem or merge measurement labels by meaning.
 - Default is empty or unspecified.
 - Never assume GAAP.
@@ -1511,8 +1518,9 @@ Locked:
 - Menu must be point-in-time.
 - Use only data available at or before the event time.
 - No future data.
-- For 8-Ks, transcripts, and news, usually use latest prior 10-Q/10-K member data
-  unless the event itself has usable member data.
+- For 8-Ks, transcripts, and news, use the union of prior 10-Q/10-K member data
+  available at or before the event time, unless the event itself has usable
+  member data.
 
 Producer outcomes:
 
@@ -1790,7 +1798,8 @@ Build gates:
 - Producer is absent from fact ID.
 - Every DriverUpdate has exactly one `OF_DRIVER`.
 - Every normal Event-sourced DriverUpdate has exactly one `FROM_SOURCE`.
-- Macro/news DriverUpdate `FROM_SOURCE` behavior is not locked yet.
+- Macro/news with a source event keeps that source as `FROM_SOURCE`; pure-macro
+  source/evidence details remain open.
 - If period edge exists, fact_scope has the same period ID.
 - If fact_scope has period ID, period edge exists.
 - quote_hash is present only when structured scope cannot separate facts.
@@ -1943,11 +1952,11 @@ Needs owner approval:
   `same_as_variants`.
 - Final producer role names and the exact rule for when a stock-move judgment
   producer may create a missing `DriverUpdate`.
-- Final source/evidence link shape for macro/news DriverUpdates.
-- Exact macro/news DriverUpdate identity when source evidence is not one Event.
-- Exact `DailyCompanyMoveEvent` identity fields.
-- Exact `DailyCompanyMoveEvent` return fields, if any.
-- Exact threshold rule for creating a `DailyCompanyMoveEvent`.
+- Macro/news core shape is locked as `DailyCompanyMoveEvent
+  {id=dcm:<cik>:<trade_date>, trade_date, created}` with returns read from
+  `Date-HAS_PRICE-Company`.
+- Remaining macro/news decisions: pure-macro source/evidence handling and the
+  threshold rule for creating a `DailyCompanyMoveEvent`.
 
 ## 10. Decisions This File Replaces
 
