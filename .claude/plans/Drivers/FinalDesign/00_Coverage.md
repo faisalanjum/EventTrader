@@ -19,7 +19,7 @@ Legend: ✅ covered · 🟡 partial · ⏳ pending (section not written yet) · 
 | `08_XBRL_ConceptLinking.md` | concept-linking XC-01…18 | 18 | ✅ |
 | `09_DriverUpdate_Fields.md` | the 23-field spec (owner-adjudicated) | 23 fields | ✅ (§8 acked 2026-07-03) |
 | `10_BuildPipeline.md` | Track A build manual — engine census · overrides · finalization · model slots · acceptance | PIPE-01…37 | ✅ (adjudicated + committed 2026-07-02) |
-| `95_Supersession.md` | 23 reversals + stale-trap docs | — | ✅ |
+| `95_Supersession.md` | 24 reversals + stale-trap docs | — | ✅ |
 | `90_OpenItems.md` | all open threads (A–E) | — | ✅ |
 | `00_Coverage.md` | this file | — | ✅ |
 

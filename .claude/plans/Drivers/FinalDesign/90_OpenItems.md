@@ -14,7 +14,7 @@
 | 8-K taxonomy | Is the 24-tag 8-K event taxonomy useful here? | open (README "To Resolve") |
 | Amendments | How to handle filing amendments? | open (README "To Resolve") |
 | **Model policy** | Reader default = **Opus reads + Sonnet classifies** (supersedes Fable/2-pass) — but exact model, number of runs, and job-by-job process need a **larger audit/experiment** | leading default set; full policy open |
-| **ISS-16 routing** | "Beat our own prior guidance" stated as a level: metric (baseline=`previous_guidance`) vs surprise — framing rule proposed in `12` §10.5 | **HELD OPEN 2026-07-03** — owner wants one more framing pass before any lock |
+| ~~ISS-16 routing~~ | actual vs own guidance: metric / surprise / both | ✅ **LOCKED 2026-07-03** (`12` §10.5) — expectation comparison → metric + surprise, state derived from stated numbers, in_line materialized; corpus-grounded + adversarially checked. OBJ-2 resolved: `previous_guidance` also forbidden on metric (95 #24). **Fully closed.** → §E |
 
 ## B. Design done — BUILD/WIRING not done
 | ID | What | Status |

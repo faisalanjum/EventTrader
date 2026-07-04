@@ -71,8 +71,9 @@
 #### DU-10 — guidance + surprise lanes  `[LOCKED]`
 - **Plain:** guidance: introduced/raised/lowered/reaffirmed/withdrawn. surprise: beat/in_line/missed (vs the expectation).
 - **Rule:** **guidance** = introduced (first time) · raised/lowered (prior guide moved) · reaffirmed (kept) · withdrawn (pulled) · unknown. **surprise** = beat · in_line · missed · unknown, vs the EXPECTATION (consensus or the company's own prior guide/target) — NOT vs a prior-period actual (that's a metric change).
+- **Surprise-state derivation (ISS-16, owner-LOCKED 2026-07-03 via `12` §10.5):** the surprise state is DERIVED from the two stated numbers when both are present (actual `> high → beat` · `< low → missed` · `within [low,high] / == → in_line`) — **no explicit "beat/miss" word required**, mirroring the metric lane's DU-09 "prior value present → increased/decreased." A characterization word, when present, is the truth (DU-08) and sets the state; a DIRECTIONAL word/number conflict hard-fails, but a marginal in_line (word=in_line, tiny arithmetic beat vs a point estimate) is not a conflict (word wins, logged). The stated actual always also writes the metric fact; a TEMPORAL comparison (prior_year/sequential) is a metric change, never a surprise.
 - **Why:** Forecast-moves and beat/miss are their own signals, distinct from a metric's direction.
-- **Source:** DriverGraphSchema.md driver_state
+- **Source:** DriverGraphSchema.md driver_state · ISS-16 lock (`12` §10.5)
 
 #### DU-11 — action_event lane + decision ladder  `[LOCKED]`
 - **Plain:** 10 action states via a step-by-step ladder: is the action terminal or not, then pick the word.
@@ -112,7 +113,7 @@
 
 #### DU-15 — comparison_baseline (one primary)  `[AGREED]`
 - **Plain:** What the number is compared against — store ONE primary baseline; null when it's not a temporal prior.
-- **Rule:** `comparison_baseline` ∈ {consensus, prior_year, sequential_period, previous_guidance, null}. Store the PRIMARY only (the source's headline; tiebreak prior_year > sequential_period); the rest stay in the quote. `null` when NOT a temporal prior baseline (vs peers / vs 2019 / any anchor-year / a streak). "Exceeded expectations" is fact_type-aware: a surprise fact → consensus; a metric/guidance fact's "exceeded our guidance" → previous_guidance (else null). Rule of thumb: consensus = analyst/Street/market; previous_guidance = clearly company guidance.
+- **Rule:** `comparison_baseline` ∈ {consensus, prior_year, sequential_period, previous_guidance, null}. Store the PRIMARY only (the source's headline; tiebreak prior_year > sequential_period); the rest stay in the quote. `null` when NOT a temporal prior baseline (vs peers / vs 2019 / any anchor-year / a streak). "Exceeded expectations" is fact_type-aware: a surprise fact → consensus; a guidance fact's "exceeded our guidance" → previous_guidance (else null). Rule of thumb: consensus = analyst/Street/market; previous_guidance = clearly company guidance. **ISS-16/OBJ-2 amendment (owner 2026-07-03):** on the METRIC lane BOTH expectation baselines are FORBIDDEN — a metric fact's `comparison_baseline` is temporal-only ({prior_year, sequential_period, null}); an "exceeded our guidance"/consensus comparison on a reported actual does NOT sit on the metric fact, it routes to the `_surprise` fact (which stores the expectation baseline). Expectation baselines thus live only on surprise (and guidance-revision) facts.
 - **Why:** One queryable baseline per fact; the rest preserved in the quote.
 - **Source:** DriverGraphSchema.md hard rule 5
 

@@ -52,7 +52,7 @@
   `95` header calls the live plan "`01`–`09`" (yet 95 §C row #21's current rule lives in `10 PIPE-22`). `99` header lists "01–09, 90, 95" and its §8 build-order tells the builder to create topic files that never existed (`03_DriverUpdate`, `04_GuidanceIntegration`, `05_XBRL`, `06_BuildPlan`). `10 PIPE-06` and `00` both classify `10` as a live topic file.
   *Fix:* 95 header → "01–10"; add a one-line note to 99 (historical) that 10 outranks it on pipeline matters.
 
-- **ISS-6 · `[A-CRIT1 + B-M4/M6/R8]` · 🔴 medium — The within-company read-time alias layer is load-bearing but specified nowhere.**
+- **ISS-6 · `[A-CRIT1 + B-M4/M6/R8]` · ✅ RESOLVED 2026-07-03 (was 🔴 medium) — the alias layer is REPLACED by owner-approved member-anchored read-time grouping (census §14.4 / T12.9).**
   `FS-02/FS-19/09 §3/§5` lean on "per-company alias files" as the **only** recovery path for accepted over-splits (e.g. "adjusted" vs "non-GAAP" series splits) and even grant code a "confident alias" merge (FS-19) — but no doc defines its owner, format, confidence bar, storage, or validator, and `90` doesn't track it (its only alias row, FS-23, is the *separate* cross-company layer). Corollary: `FS-04` lists code "MERGE two existing values" but `FS-17` immutability leaves no identity-level mechanism → it must BE this read-time layer.
   *Fix:* write the alias-layer spec (or add a 90 §D "to-write" row); reconcile FS-04's "MERGE" wording with immutability.
   → **✅ RESOLVED 2026-07-03 (owner): member-anchored read-time grouping APPROVED with 3 pins** (the owner-reviewed alias-layer proposal itself stays rejected — human in the loop). Read-time only · label-level · conflict-fail-closed (zero/conflicting/missing/different links = keep separate) · group key = the `(axis_qname, member_qname)` pair, never a label · one company only · stored labels/fact IDs/write-time identity never change · `MAPS_TO_MEMBER` records which slice part it anchors. Census §14.4 + T12.9. Residuals stay split (safe): prose-only drift, measurement drift.
@@ -92,7 +92,7 @@
 
 - **ISS-16 · `[B-R13]` · 🔴 real — "Beat our own prior guidance" (as a level) is metric-vs-surprise ambiguous.**
   Only `consensus` is force-routed to `_surprise`; `previous_guidance` is legal on **both** metric and surprise lanes (09 §4 / DU-15). The same sentence can land as a metric or a surprise fact — a routing call with permanent-merge consequences and no deterministic guard. *Fix:* add a forcing rule.
-  → **⏸ HELD OPEN 2026-07-03 (owner):** framing rule proposed (`12` §10.5) but NOT locked — owner wants one more framing pass ("actual $5B vs prior guide $4.8B" may be surprise, not always metric). Tracked in 90 §A.
+  → **✅ LOCKED 2026-07-03 (owner, corpus-grounded + adversarially checked):** three-way — (0) forward-looking guide-vs-guide → GUIDANCE lane (the tense trap); (1) closed actual vs an EXPECTATION comparison (own guidance OR consensus, producer-detected) → BOTH a metric fact (the level) AND a `_surprise` fact whose state is DERIVED from the two stated numbers (>high→beat · <low→missed · within→in_line) — no beat/miss word required (mirrors DU-09's metric-lane increased/decreased); a DIRECTIONAL word/number conflict hard-fails, a marginal in_line does not (word wins, DU-08); (2) actual vs a TEMPORAL prior (prior_year/sequential) → metric change only. in_line surprises materialized (full). Adversarial pass folded OBJ-1 (producer-detect trigger) + OBJ-2 (**`previous_guidance` also forbidden on metric** — true symmetry, no double-store; owner 2026-07-03, 95 #24) + OBJ-3 (directional-conflict-only). Fully closed. (90 §E.)
 
 - **ISS-17 · `[B-R14]` · 🔴 real — A mis-kinded bare self-canonical driver has no deterministic catch.**
   `F3` keys on suffix, `F5` on variant records; a suffixless self-canonical record's fact_type rides on the finalization classifier's single verdict, and the fitness gate tests reuse/direction, not fact_type. No named safeguard.
@@ -144,7 +144,7 @@
 - **ISS-29 `[A-CRIT5]`** — Two stale cross-refs in `09`: (1) §8 points at a "Codex §9 L1/L2/L3 row" that does **not exist** in `99` (0 hits); (2) §5 cites "(§6.6)" for predictor citation IDs, but those are **glue rule 5** (§6.6 = policy-vs-reading routing) — an off-by-one from the pre-cut 10-rule numbering. *(overlaps B-M40)*
 - **ISS-30 `[A-CRIT6]`** — Glue rule 9 "same-day" and `dcm:<cik>:<trade_date>` have **no day-boundary / timezone convention**; `date` is a full ISO timestamp, so an after-hours 8-K (18:05 ET = next-day UTC) buckets differently across implementations. *(distinct from ISS-2: which facts share a day at all.)* → **✅ RESOLVED 2026-07-03 (owner):** ET (America/New_York) calendar date of `date` for both collapse buckets and `dcm` trade_date; trading-day attribution stays with the returns layer (census §14.2).
 - **ISS-31 `[A-CRIT7]`** — **News is excluded from the leaf catalog build** ("ALL non-news company sources") while the mission says the news bot reuses the catalog; the rationale lives only in the `§14` adjudication record, never in the normative body (§0–§13). News-coined drivers can only enter via live G2 (itself blocked on open G1 rules) — a consequence the manual never spells out.
-- **ISS-32 `[A-OBSE1]`** — `09 §4` matrix labels `xbrl_qname`/`MAPS_TO_CONCEPT` and `company_confirmed` as **"WS = only when the source states it,"** but §3 says xbrl_qname is enrichment-written and `company_confirmed` is derivable on every guidance fact. The legend has no enrichment/always-derivable category → under-specifies when these must be present.
+- **ISS-32 `[A-OBSE1]`** — `09 §4` matrix labels `xbrl_qname`/`MAPS_TO_CONCEPT` and `company_confirmed` as **"WS = only when the source states it,"** but §3 says xbrl_qname is enrichment-written and `company_confirmed` is derivable on every guidance fact. The legend has no enrichment/always-derivable category → under-specifies when these must be present. → **✅ RESOLVED 2026-07-03:** census §6.4 legend note + 12 FACT-16 (xbrl_qname = enrichment-written, producer-FORBID at write; company_confirmed = derived who-said-it on every guidance fact).
 - **ISS-33 `[A-OBSE2 + B-M17]`** — `09 §3` change row says only "strictly stated-only," dropping `DU-16` rule 6's second half (a **stated** delta still stays null when derivable from a closed level+comparison — no third copy). A builder from 09 alone stores a redundant delta 07 forbids.
 - **ISS-34 `[A-OBSE3]`** — No explicit **"`change_unit` required when `change_value` is non-null"** mirror rule, though `level_unit`-required-when-any-number is pinned and delta-only facts key their series on the change-unit family (glue 1). → **✅ RESOLVED 2026-07-03 (owner):** `change_unit` REQUIRED when `change_value` non-null; `unknown` allowed (census §14.6).
 - **ISS-35 `[A-OBSE4 + B-M33/M42]`** — `DU-22` verdict key says "**event** + driver + fact_scope + producer," but macro verdicts attach to a `DailyCompanyMoveEvent`; only historical `99` generalizes to "**explained_target**." *Fix:* adopt "explained_target" in DU-22.
@@ -176,7 +176,7 @@
 - **ISS-59 `[B-M38]`** — Two build orders: `99 §8` (16-step, whole-system, **omits the fitness gate**) vs `10 §9` (12-step Track-A, ends at the fitness gate). PIPE-06 authority makes `10 §9` govern Track A.
 - **ISS-60 `[B-E1 residual]`** — No validator cross-checks **name↔unit coherence** (a per-X in the name like `per_square_foot` vs the resolved base `usd`/`count`).
 - **ISS-61 `[B-M19/E8]` (reconciled w/ A-REF15)** — `level_shape_hint` enum includes `none` but the contract says it's emitted only "for level numbers"; it's **under-specified whether a numberless fact must carry `hint='none'`** and whether a **missing** hint (numbers present) is itself a hard-fail. The forgotten-high protection assumes the hint is mandatory-when-numbers-present. → **✅ RESOLVED 2026-07-03 (owner):** hints REQUIRED whenever their numbers are present; missing or mismatched → hard-fail; numberless facts omit them (census §14.7).
-- **ISS-62 `[B-EXTRA1 residual]`** — **Under-extraction has no write-time guard**: a producer emitting only the metric fact and dropping the co-stated surprise (or the 2nd of two scenario guidances) is silently lossy; only the fitness gate might catch it.
+- **ISS-62 `[B-EXTRA1 residual]`** — **Under-extraction has no write-time guard**: a producer emitting only the metric fact and dropping the co-stated surprise (or the 2nd of two scenario guidances) is silently lossy; only the fitness gate might catch it. → **Partly mitigated 2026-07-03:** the §10.8 no-null-clobber merge means a subsequent richer extraction of the same event FILLS the dropped field instead of being blocked, and a weaker rerun can't erase it (`12` §10.8/FACT-14b); genuine first-pass under-extraction still relies on §12.5 measurement.
 
 **⚪ Checked, scoped, non-issues (recorded so we don't re-raise):**
 `[B-M2/M47]` "nothing deleted" (drivers) vs frozen-delete (menu members) — scoped differently · `[B-M7]` unit in read-key not identity-key — collision safety implicit via fusion+quote_hash · `[B-M12]` glp1 carve-out described two ways, same outcome · `[B-M16]` slice-menu PIT timing wobble (reconciled 2026-07-02) · `[B-M20]` "quote is/isn't rendered" (old vs new renderer) · `[B-M25]` 99 §3.5 surprise-period example (its example has a stated period) · `[B-M28]` 09 §6.9 vs §7 time_type list (period id already encodes it) · `[B-M32]` G1 guard abbrev tokens `fcf`/`ebitda` (illustrative list) · `[B-M35]` DU-21 one-hop grading vs macro two-hop (scoped) · `[B-M41]` 795-vs-796 count (immaterial; see §3/REF9) · `[B-M48/M54]` model "Locked" in 99 vs leading-default (disposed by PIPE-08) · `[B-M49]` 10's self-stale "257" note (00 already says 261) · `[B-M57]` FS-23 filed under 90 §A vs deferred-language.
@@ -218,7 +218,7 @@
 | E4 | Latent base collides with a `same_as_variants` string / a `skips[]` park entry | ✅ F4 catches the variant-string case · ⚠️ F4 doesn't check side-lists (ISS-20) |
 | E5 | Macro/news fact with no filing event; multi-company shared macro fact | ⚠️ pure-macro FROM_SOURCE open; shared-fact `event`-id undefined (ISS-11, ISS-26) |
 | E6 | Segment structure changes; backfill fact lands in the gap | ✅ PIT menu → over-split-safe · subtlety: write-order immutability vs event-time PIT can strand a segment until the unbuilt cross-company layer (FS-23) |
-| E7 | "adjusted" vs "non-GAAP" splits one series | ✅ explicitly accepted loss; recovered by the read-time alias view (which is itself unspecified — ISS-6) |
+| E7 | "adjusted" vs "non-GAAP" splits one series | ✅ explicitly accepted loss (measurement drift is NOT covered by member grouping — stays split by design; ISS-6's slice-label half resolved via T12.9) |
 | E8 | Producer fills `level_low`, forgets `level_high` on a point | ✅ shape-hint hard-fails (point≠floor) · ⚠️ missing-hint-as-hard-fail unstated (ISS-61) |
 | E9 | Instant vs one-day-duration FY ending Dec-31 | ⚠️ same id → silent merge (ISS-23) |
 | E10 | `BASE_METRIC` target resolves to an action_event (`dividend_guidance → dividend`) | ✅ F2 hard-fails a record target · ⚠️ absent base → wrong latent metric (ISS-20) |
@@ -234,7 +234,7 @@
 
 **Design-done, build/wiring not done:** UNIT-14 (resolver wiring) · PER-20 (`driver_period_resolver.py`, 21 tests, YTD/TTM non-Dec-FYE proof) · XC-16 + concept-link full-universe run · min_score 0.60 vs code-0.72 · prompt-mirror tests for the inlined NAME rules · `--measure-inherit` counter.
 
-**Sections still to write (90 §D + surfaced):** Guidance/Track-C integration · incremental refresh · Overview finish · **the scanner / change-flag layer (ISS-8)** · **the within-company alias layer (ISS-6)**.
+**Sections still to write (90 §D + surfaced):** Guidance/Track-C integration · incremental refresh · Overview finish · **the scanner / change-flag layer (ISS-8)**. *(The within-company alias layer is no longer a section to write — ISS-6 resolved 2026-07-03 by member-anchored grouping, census §14.4/T12.9.)*
 
 **The real gate:** RUN the fitness/honesty gate (`PIPE-37`) — never run, 0 graph nodes; must beat 0.634 / 0.535 / 72%; criterion "quality budget 0.1%" undefined (ISS-9).
 
@@ -247,3 +247,110 @@
 - **Reconciliation rule applied:** where the two audits disagreed on severity, Audit A's refuter verdict governs (its dismissals are §3, not silently dropped).
 - **Doc paths:** issues cite files by number/rule-id (`FS-15`, `PIPE-37`, `09 §4`, `90 §A`) — unambiguous within `FinalDesignClaude/`.
 - **No spec files were modified.** Suggested fixes are inline (`*Fix:*`); nothing applied per the standing "propose before changing" rule.
+
+
+
+******
+
+  Group 1 — new edge cases NOT in the 66 ledger (the highest-value output):
+
+  #: 1
+  Finding: Lower-is-better metrics break the new surprise arithmetic. ISS-16
+    (just locked) derives beat/missed as above range → beat. For cost_guidance
+    (06's own example!), capex, tax_rate, churn: "opex came in below our
+    guidance, beating expectations" → word says beat, number is below range →
+  the
+     directional-conflict rule hard-fails a correct,  common fact
+  Why it bites: A freshly-locked rule mis-handles a whole metric class
+  ────────────────────────────────────────
+  #: 2
+  Finding: Negative/loss values have no sign convention. "A loss of up to $2B"
+  is
+     a ceiling in loss-space but a floor in signed space; the shape hints can't
+    catch a wrong choice
+  Why it bites: Identity + rendering fork between two implementers
+  ────────────────────────────────────────
+  #: 3
+  Finding: No chronological-write invariant. Guidance states + withdrawal
+  fan-out
+     depend on the PIT prior view of what's already written; late-arriving
+    old-dated filings (first-class in the refresh design) can silently corrupt
+    states — no repair trigger exists
+  Why it bites: Silent wrong states, no validator catches it
+  ────────────────────────────────────────
+  #: 4
+  Finding: quote_hash isn't idempotent. A weaker re-run that extracts only 1 of
+  2
+     colliding facts sees no collision → writes the bare id → a third duplicate
+    node
+  Why it bites: Undoes the "none keeps the bare id" guarantee
+  ────────────────────────────────────────
+  #: 5
+  Finding: Late filing breaks the Event/DCM single-target rule retroactively
+    (rule checks only at creation time); re-issued-after-withdrawal guidance
+    (introduced vs raised?) is undefined; two concurrent producers can coin
+    near-synonym drivers with no serialization point
+  Why it bites: Three write-path races with no doc'd remediation
+  ────────────────────────────────────────
+  #: 6
+  Finding: %-only sequential guides get stamped percent_yoy (09 §7 hard-codes
+  it)
+     — wrong denomination for QoQ-guiding companies (semis)
+  Why it bites: Actively wrong data, worse than unknown
+  ────────────────────────────────────────
+  #: 7
+  Finding: Live governed-create (12 §10.6) has no fact_type path. The only
+    stamping machinery is Track A's end-of-build finalize (which hard-fails on
+    stamped input), yet FACT-15 rejects facts on fact_type-less drivers
+  Why it bites: Blocks the owner-revised missing-driver rule when G1/G2 wires
+  ────────────────────────────────────────
+  #: 8
+  Finding: Nobody owns catalog→graph materialization. 12 assumes Driver nodes
+    exist in Neo4j ("assumed from Track A"); 10 declares Neo4j writes a non-goal
+  Why it bites: A missing build step between the two manuals
+  ────────────────────────────────────────
+  #: 9
+  Finding: Identity-bearing under-specifications: the quote_hash recipe
+    (algorithm/normalization/"value signature" unpinned), multi-word measurement
+
+    token form ("cash EPS" → cash_eps or casheps?), and the read-time unit
+  family
+     map (which of the 9 units group) are all left to  the builder
+  Why it bites: Two independent builds could permanently fork fact ids
+
+  Group 2 — stale docs after the 2026-07-03 owner rulings (the back-port sweep
+  that's still owed):
+
+  - 03 + 09 still prescribe the REJECTED alias layer as the drift-recovery path
+  (three auditors independently flagged this as the top item; no 95 row logs the
+  reversal to member-anchored grouping).
+  - 03 FS-15 still carries the dead axis:value unknown-axis grammar, marked
+  LOCKED, no annotation — identity-bearing, so a builder of 03 alone forks fact
+  ids (the hex format lives only in 11 §14.5 / 12).
+  - 09 §3 + §8 and 07's §D banner still show the pre-OBJ-2 wording
+  (previous_guidance allowed on metric); the §4 matrices are correct.
+  - 04 UNIT-04 still says one hint pair; 12 pins per-slot pairs.
+  - 00_Coverage has no rows at all for 11, 12, or 66 — confirmed a stale map,
+  not deliberate (00's own rule requires explicit exclusions), so the zero-loss
+  statement no longer covers its own folder. Related header drift: 95 says the
+  live plan is "01–09", 99 says "01–09+90+95", while 95's own §C rows cite 10
+  and 12.
+  - ISS-19/20 fixes (semantic suffix guard; F4 scanning side-lists) are
+  "proposed to 10" by 12 §11 — but 10 doesn't contain them and doesn't track
+  them.
+  - Glossary hazards for any future builder: G1/G2 mean two unrelated systems
+  (concept-linker guards vs catalog admission gates — both senses inside
+  doc 12), "menu" means three artifacts, "slice" also means batch-splitting in
+  the Track A diagram, and created means system-write-time on facts but
+  public-filing-time on the PIT menu queries.
+
+  Group 3 — the honest boundary of "the entire design." The folder is
+  deliberately a rule-delta over external substrates, so full build-grade
+  mastery also requires: HCP (the engine mechanics 10 reuses by pointer), the
+  Consolidation docs (the 21 period tests, unit steps 1–7, the axis catalog —
+  the ~24/~241 elimination lists exist nowhere as files yet), ~4,000 lines of
+  substrate code that doc 12 line-cites, and the unwritten sections (Track C,
+  incremental refresh, the scanner, Track B "part 2"). My audit read the 17 docs
+  only — it did not verify the ~40 code-line claims against the actual code,
+  open the external docs, or query the live graph. Those are the three natural
+  next passes if you want them.

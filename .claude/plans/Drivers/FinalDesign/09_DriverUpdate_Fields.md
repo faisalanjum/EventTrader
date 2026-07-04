@@ -69,7 +69,7 @@
 | `level_*` | WS | WS | WS (the actual) | WS (deal/buyback size) |
 | `change_value/unit` | WS stated-only | WS stated-only (= the guide's own revision size) | WS stated-only | WS stated-only |
 | `comparison_low/high` | WS | WS (prior band) | WS (the expectation) | WS |
-| `comparison_baseline` | WS ∈ {prior_year, sequential_period, previous_guidance} — **`consensus` FORBID** (→ `_surprise`) | WS | WS (default `consensus`) | WS |
+| `comparison_baseline` | WS ∈ {prior_year, sequential_period} — **`consensus` AND `previous_guidance` FORBID** (both expectation baselines → `_surprise`; ISS-16/OBJ-2, owner 2026-07-03) | WS | WS (default `consensus`) | WS |
 | `value_text` | FORBID | WS (numberless-only) | FORBID | FORBID |
 | `conditions` | FORBID | WS | FORBID | FORBID |
 | `company_confirmed` | FORBID | WS | FORBID | FORBID |
