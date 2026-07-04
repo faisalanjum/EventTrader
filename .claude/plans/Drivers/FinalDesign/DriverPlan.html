@@ -674,7 +674,7 @@
   </p>
 
   <div class="kv">
-    <div class="k">Two required hints</div><div class="v"><code>unit_kind_hint</code> {money, ratio, count, multiplier, unknown} + <code>money_mode_hint</code> when money. Lifts the resolver ~70% → 100%.</div>
+    <div class="k">Two required hints</div><div class="v"><code>unit_kind_hint</code> {money, ratio, count, multiplier, unknown} + <code>money_mode_hint</code> when money. Lifts the resolver ~70% → 100%. <strong>Track B sharpens this to per-slot hints</strong> — <code>level</code> and <code>change</code> each get their own pair (04 UNIT-04's "one pair" is superseded; 14 §6).</div>
     <div class="k">Level vs change</div><div class="v">Resolved <strong>separately</strong>: "rose 60 bps to 17.6%" → level <code>percent</code>, change <code>basis_points</code>.</div>
     <div class="k">No per-X unit</div><div class="v">per-X lives in the name; the unit stays base (<code>oil_price_per_barrel</code> → <code>usd</code>).</div>
     <div class="k"><span class="dot build"></span>Status</div><div class="v">Proven in scratch (117/117), <strong>not wired</strong> into the producer (UNIT-14).</div>
@@ -914,7 +914,7 @@ ACCEPT:    ⚠ the fitness / honesty gate — HAS NEVER RUN</div>
   <div class="wasnow"><div class="was"><span class="lbl">#25</span><s>explicit company-wide → <code>slice=total</code></s></div><div class="ar">→</div><div class="now">whole-company = omitted slice</div></div>
 
   <div class="panel danger tight">
-    <p><strong>Stale-trap docs — never copy naming rules from these:</strong> <code>Drivers.md</code> · <code>DriverOntology.md</code> · <code>INDEX §3b</code> · <code>unit_probe/RESULTS.md</code> · <code>13_Track_RetiredDesign.md</code>. And a live back-port debt: <code>03 FS-15</code>, <code>09 §3</code>, <code>04 UNIT-04</code> still carry pre-reversal wording (14 §6).</p>
+    <p><strong>Stale-trap docs — never copy naming rules from these:</strong> <code>Drivers.md</code> · <code>DriverOntology.md</code> · <code>INDEX §3b</code> · <code>unit_probe/RESULTS.md</code> · <code>13_Track_RetiredDesign.md</code>. And a live back-port debt: <code>09 §3</code> and <code>04 UNIT-04</code> still carry pre-reversal wording (14 §6). (<code>03 FS-15</code> is now fixed.)</p>
   </div>
 </section>
 
@@ -1062,7 +1062,7 @@ ACCEPT:    ⚠ the fitness / honesty gate — HAS NEVER RUN</div>
     <tr><td>10</td><td>Model / cost router</td><td>cheap model for extraction; escalated one hard call to a strong model</td></tr>
     <tr><td>11</td><td>QA / recall monitor</td><td>checks recall vs the archive, logs token cost, parked-rate OK</td></tr>
   </table></div>
-  <p class="note"><strong>Result:</strong> new facts + a graded verdict in the graph, zero human review. Illustrative — this belt (slide 25) is <em>not built yet</em>; it is the target behaviour Fable must design.</p>
+  <p class="note"><strong>Result:</strong> new facts + a graded verdict in the graph, zero human review. Illustrative — this belt (slide 26) is <em>not built yet</em>; it is the target behaviour Fable must design.</p>
 </section>
 
 <!-- ============================================================ 28 · RUNNING LAYER (§2) ============================================================ -->
@@ -1118,34 +1118,6 @@ ACCEPT:    ⚠ the fitness / honesty gate — HAS NEVER RUN</div>
 <!-- ============================================================ 30 · OWNER DECISIONS (DECIDE) ============================================================ -->
 <section class="step" data-step="30">
   <span class="tag red">Decision-prep · §5</span>
-  <h1>Owner decisions — enough to actually decide. <span class="src">14 §5 · 90</span></h1>
-  <p class="lead">Twelve calls stand open. Each with the plain question, why it matters, and the current lean.</p>
-  <div class="wrap"><table>
-    <tr><th>Decision</th><th>Plain question</th><th>Why it matters</th><th>Lean / options</th></tr>
-    <tr><td><code>FS-23</code> cross-company value</td><td>Does "International" at company A mean the same as at B?</td><td>comparing them would silently merge different businesses (permanent)</td><td>Deferred; stay conservative</td></tr>
-    <tr><td><code>UNIT-12</code> percent_qoq</td><td>Add a quarter-over-quarter % unit?</td><td>QoQ growth now mixes with level %; enum churn breaks alignment</td><td>Lean NO — close or defer</td></tr>
-    <tr><td>8-K taxonomy</td><td>Reuse the old 24-tag 8-K event taxonomy?</td><td>could speed routing or add overfit noise</td><td>Open</td></tr>
-    <tr><td>Amendments</td><td>How do amended/corrected filings change old facts?</td><td>a late amendment can flip a prior value/state; no rule yet</td><td>Open (ties to chronological writes)</td></tr>
-    <tr><td>Final model policy</td><td>Exact model per job, # runs, grader, fallback?</td><td>cost + quality; "Opus reads / Sonnet classifies" is only a lean</td><td>Open — run the §7 cost experiment</td></tr>
-    <tr><td>G1 reuse-display</td><td>How is the catalog shown to a live producer at coin-time?</td><td>blocks the live propose-first reuse flow</td><td>Open</td></tr>
-    <tr><td>K2 fold-repair gate</td><td>What profile gates batched fold-repair?</td><td>controls repair cost vs precision at folds</td><td>Open</td></tr>
-    <tr><td>Target universe</td><td>Is the build target 796 or 786 tickers?</td><td>unreconciled counts; affects scope</td><td>Open — reconcile</td></tr>
-    <tr><td>Lifecycle / IPO</td><td>How do new tickers/IPOs and dormant drivers enter/leave?</td><td>keeps the catalog current without manual curation</td><td>Lean: live G1/G2 absorbs (not final)</td></tr>
-    <tr><td>Macro threshold + source</td><td>What move creates a DailyCompanyMoveEvent; pure-macro source?</td><td>too low = noise; shared-macro-fact id (ISS-11) unresolved</td><td>Open (core DCM shape locked)</td></tr>
-    <tr><td>Dormant XBRL-link path</td><td>Make 10-K/10-Q facts by XBRL-linking, not LLM re-extraction?</td><td>bounds historical backfill cost</td><td>Deferred; owner rider only</td></tr>
-    <tr><td>Blanket-withdrawal fan-out</td><td>Does "guidance withdrawn" fan out per open guide?</td><td>the one place a producer writes beyond the literal quote</td><td>Parked; needs a final rule</td></tr>
-  </table></div>
-  <details>
-    <summary>Also open — §4 unowned pieces · §6 cross-doc cleanup · §9 handoff gate</summary>
-    <p><strong>§4 unowned (11):</strong> UNIT-14 resolver wiring · PER-20 period resolver · XC-16 veto · backstops C/D · full concept run · slice/member lists · PIT menu query · news admission · prompt-mirror tests · min_score 0.60-vs-0.72 · --measure-inherit.</p>
-    <p><strong>§6 cleanup:</strong> back-port the rejected alias layer · previous_guidance-on-metric · UNIT-04 one-hint-pair · ISS-19/20 into 10 · finish the Overview · add a glossary.</p>
-    <p><strong>§9 handoff:</strong> start coding only when every permanent id has an exact recipe + examples · every packet has input/output/validator/park behavior · the run ledger is the only status source · fresh guidance from source docs · graph materialization has one owner · prediction degrades safely on empty guidance · QA gates say what blocks rollout · contradictions patched.</p>
-  </details>
-</section>
-
-<!-- ============================================================ 31 · OWNER DECISIONS (DECIDE) ============================================================ -->
-<section class="step" data-step="31">
-  <span class="tag red">Decision-prep · §5</span>
   <h1>Owner decisions — grouped by urgency. <span class="src">14 §5 · 90</span></h1>
   <p class="lead">Twelve calls stand open. Six shape the ingestion design (decide first); six have a clear lean and can wait.</p>
   <div class="wrap"><table>
@@ -1168,9 +1140,34 @@ ACCEPT:    ⚠ the fitness / honesty gate — HAS NEVER RUN</div>
   <details>
     <summary>Also open — §4 unowned pieces · §6 cross-doc cleanup · §9 handoff gate</summary>
     <p><strong>§4 unowned (11):</strong> UNIT-14 resolver wiring · PER-20 period resolver · XC-16 veto · backstops C/D · full concept run · slice/member lists · PIT menu query · news admission · prompt-mirror tests · min_score 0.60-vs-0.72 · --measure-inherit.</p>
-    <p><strong>§6 cleanup:</strong> back-port the rejected alias layer · previous_guidance-on-metric · UNIT-04 one-hint-pair · ISS-19/20 into 10 · finish the Overview · add a glossary.</p>
+    <p><strong>§6 cleanup:</strong> back-port the rejected alias layer · previous_guidance-on-metric · UNIT-04 one-hint-pair · ISS-19/20 into 10 · finish the Overview.</p>
     <p><strong>§9 handoff:</strong> start coding only when every permanent id has an exact recipe + examples · every packet has input/output/validator/park behavior · the run ledger is the only status source · fresh guidance from source docs · graph materialization has one owner · prediction degrades safely on empty guidance · QA gates say what blocks rollout · contradictions patched.</p>
   </details>
+</section>
+
+<!-- ============================================================ 31 · ORDER + FABLE TASK ============================================================ -->
+<section class="step" data-step="31">
+  <span class="tag violet">The next task</span>
+  <h1>The order to work in — and the Fable assignment. <span class="src">14 §7 · §8</span></h1>
+
+  <h3>Recommended order (ask Fable to work in this sequence)</h3>
+  <div class="wrap"><table>
+    <tr><th>#</th><th>Step</th></tr>
+    <tr><td>1</td><td>Write the full <strong>living-ingestion design</strong> first (trigger → worker reuse → ledger → Driver reuse/create → fact → verdict → parks → subscription path)</td></tr>
+    <tr><td>2</td><td>Close all <strong>P0 identity/write rules</strong> (slide 29)</td></tr>
+    <tr><td>3</td><td>Define <strong>producer packets/prompts</strong> exactly — no human path</td></tr>
+    <tr><td>4</td><td>Design the <strong>model/cost experiment</strong> — cheap vs strong vs advisor</td></tr>
+    <tr><td>5</td><td>Design <strong>live + historical backfill together</strong> (staged by upcoming earnings)</td></tr>
+    <tr><td>6</td><td>Define <strong>QA gates + rollout blockers</strong></td></tr>
+    <tr><td>7</td><td>Patch owning docs + update the presentation <strong>last</strong></td></tr>
+  </table></div>
+
+  <div class="panel accent">
+    <h3>📋 Fable assignment — copy-paste</h3>
+    <p><em>"Fable — do not redo Track A / B / C. Your task is to design the missing <strong>living-ingestion layer</strong> and close the exact-rule handoff gaps."</em></p>
+    <p><strong>Expected output:</strong> recommended ingestion architecture · alternatives considered + rejected · live trigger + scheduling design · a reuse matrix for the existing extraction daemon/worker/run-ledger · producer packet contracts · a model/cost experiment plan · a no-human-loop park/fail strategy · a historical backfill plan · QA gates + rollout blockers · the exact owning docs to patch.</p>
+  </div>
+  <p class="note">Most important: every identity-bearing field must have ONE exact recipe + worked examples — no "builder decides" for ids, keys, or write-order.</p>
 </section>
 
 <!-- ============================================================ 32 · TRADING-ACTIONABLE ============================================================ -->
@@ -1243,8 +1240,8 @@ ACCEPT:    ⚠ the fitness / honesty gate — HAS NEVER RUN</div>
   <div class="panel accent">
     <h3>Two moves from here</h3>
     <ol>
-      <li><strong>Finalize</strong> — walk slide 22's buckets; every P0 identity fix must get one exact recipe + worked examples before any coding handoff.</li>
-      <li><strong>Understand impact</strong> — use slide 20's Explorer; before flipping any open item, trace its ripple so you know what re-opens.</li>
+      <li><strong>Finalize</strong> — walk slide 24's buckets; every P0 identity fix must get one exact recipe + worked examples before any coding handoff.</li>
+      <li><strong>Understand impact</strong> — use slide 22's Explorer; before flipping any open item, trace its ripple so you know what re-opens.</li>
     </ol>
   </div>
   <p class="small">This is a <strong>study packet</strong>: a decision-graph viewed through six lenses (learn · rules · tracks · impact · finalize · index). Ask me to deepen any slide to full verbatim depth.</p>
@@ -1290,7 +1287,7 @@ ACCEPT:    ⚠ the fitness / honesty gate — HAS NEVER RUN</div>
   <h1>Numbers, periods &amp; family <span class="src">04 · 05 · 06</span></h1>
   <p class="idxnote">Units, the time window, and how the four flavours stay separate-but-linked.</p>
   <div class="idx"><div class="idxgrid">
-    <div><h3>Units — UNIT-01…14</h3><div class="wrap"><table><tr><th>Ref</th><th>What it decides</th></tr><tr><td>UNIT-01</td><td>Exactly 9 allowed final units; every unit must be one.</td></tr><tr><td>UNIT-02</td><td>Reuse Guidance V2 resolver as one shared pure module.</td></tr><tr><td>UNIT-03</td><td>Producer sends number + raw text; code decides unit/scaling.</td></tr><tr><td>UNIT-04</td><td>Producer must send unit_kind_hint, money_mode_hint, and verbatim unit_raw.</td></tr><tr><td>UNIT-05</td><td>Resolve level_* and change_* units separately.</td></tr><tr><td>UNIT-06</td><td>Validate final unit is one of 9 and scaled value.</td></tr><tr><td>UNIT-07</td><td>Units live on the fact, never on the Driver.</td></tr><tr><td>UNIT-08</td><td>No per-X unit; per-X in name, unit stays base.</td></tr><tr><td>UNIT-09</td><td>No comparison_unit; comparison values share level_unit.</td></tr><tr><td>UNIT-10</td><td>No number means skip resolver; leave numeric fields null.</td></tr><tr><td>UNIT-11</td><td>Guards: unglue $1.5B, reject cents-on-aggregate, keep unit_raw clean.</td></tr><tr><td>UNIT-12</td><td>Keep enum stable; do NOT add percent_qoq now.</td></tr><tr><td>UNIT-13</td><td>Proven: 117/117 units, 29/29 tests, naming 33/33.</td></tr><tr><td>UNIT-14</td><td>Resolver locked and proven, but not yet wired in.</td></tr></table></div><h3>Metric family — MF-01…12</h3><div class="wrap"><table><tr><th>Ref</th><th>What it decides</th></tr><tr><td>MF-01</td><td>Each driver's fact_type: metric, guidance, surprise, or action_event; set once.</td></tr><tr><td>MF-02</td><td>Same topic, different flavors = separate drivers, linked never merged.</td></tr><tr><td>MF-03</td><td>Every _guidance/_surprise has exactly one BASE_METRIC edge; validator enforced.</td></tr><tr><td>MF-04</td><td>BASE_METRIC arrow is for integrity/orphan-catching, not solving synonyms.</td></tr><tr><td>MF-05</td><td>Base metric must exist; create it, may stay empty.</td></tr><tr><td>MF-06</td><td>Only a terminal _guidance/_surprise suffix creates the family link.</td></tr><tr><td>MF-07</td><td>action_event gets no base metric; it hits many metrics.</td></tr><tr><td>MF-08</td><td>Synonyms link metrics via SAME_AS, never via BASE_METRIC.</td></tr><tr><td>MF-09</td><td>Keep both the _guidance suffix and the fact_type field.</td></tr><tr><td>MF-10</td><td>Only base metric is XBRL-matched; guidance/surprise inherit the concept.</td></tr><tr><td>MF-11</td><td>company_confirmed is guidance-only; DriverPeriod applies to all fact-types.</td></tr><tr><td>MF-12</td><td>Over-merging is permanent damage; under-linking is easily fixed later.</td></tr></table></div></div>
+    <div><h3>Units — UNIT-01…14</h3><div class="wrap"><table><tr><th>Ref</th><th>What it decides</th></tr><tr><td>UNIT-01</td><td>Exactly 9 allowed final units; every unit must be one.</td></tr><tr><td>UNIT-02</td><td>Reuse Guidance V2 resolver as one shared pure module.</td></tr><tr><td>UNIT-03</td><td>Producer sends number + raw text; code decides unit/scaling.</td></tr><tr><td>UNIT-04</td><td>Producer sends unit_kind_hint + money_mode_hint + verbatim unit_raw (Track B: one pair PER SLOT — level &amp; change).</td></tr><tr><td>UNIT-05</td><td>Resolve level_* and change_* units separately.</td></tr><tr><td>UNIT-06</td><td>Validate final unit is one of 9 and scaled value.</td></tr><tr><td>UNIT-07</td><td>Units live on the fact, never on the Driver.</td></tr><tr><td>UNIT-08</td><td>No per-X unit; per-X in name, unit stays base.</td></tr><tr><td>UNIT-09</td><td>No comparison_unit; comparison values share level_unit.</td></tr><tr><td>UNIT-10</td><td>No number means skip resolver; leave numeric fields null.</td></tr><tr><td>UNIT-11</td><td>Guards: unglue $1.5B, reject cents-on-aggregate, keep unit_raw clean.</td></tr><tr><td>UNIT-12</td><td>Keep enum stable; do NOT add percent_qoq now.</td></tr><tr><td>UNIT-13</td><td>Proven: 117/117 units, 29/29 tests, naming 33/33.</td></tr><tr><td>UNIT-14</td><td>Resolver locked and proven, but not yet wired in.</td></tr></table></div><h3>Metric family — MF-01…12</h3><div class="wrap"><table><tr><th>Ref</th><th>What it decides</th></tr><tr><td>MF-01</td><td>Each driver's fact_type: metric, guidance, surprise, or action_event; set once.</td></tr><tr><td>MF-02</td><td>Same topic, different flavors = separate drivers, linked never merged.</td></tr><tr><td>MF-03</td><td>Every _guidance/_surprise has exactly one BASE_METRIC edge; validator enforced.</td></tr><tr><td>MF-04</td><td>BASE_METRIC arrow is for integrity/orphan-catching, not solving synonyms.</td></tr><tr><td>MF-05</td><td>Base metric must exist; create it, may stay empty.</td></tr><tr><td>MF-06</td><td>Only a terminal _guidance/_surprise suffix creates the family link.</td></tr><tr><td>MF-07</td><td>action_event gets no base metric; it hits many metrics.</td></tr><tr><td>MF-08</td><td>Synonyms link metrics via SAME_AS, never via BASE_METRIC.</td></tr><tr><td>MF-09</td><td>Keep both the _guidance suffix and the fact_type field.</td></tr><tr><td>MF-10</td><td>Only base metric is XBRL-matched; guidance/surprise inherit the concept.</td></tr><tr><td>MF-11</td><td>company_confirmed is guidance-only; DriverPeriod applies to all fact-types.</td></tr><tr><td>MF-12</td><td>Over-merging is permanent damage; under-linking is easily fixed later.</td></tr></table></div></div>
     <div><h3>Periods — PER-01…20</h3><div class="wrap"><table><tr><th>Ref</th><th>What it decides</th></tr><tr><td>PER-01</td><td>DriverPeriod = the real calendar date window a fact covers.</td></tr><tr><td>PER-02</td><td>One resolved-window node serves metric, guidance, surprise, action facts.</td></tr><tr><td>PER-03</td><td>Name it DriverPeriod; keep the gp_ id prefix.</td></tr><tr><td>PER-04</td><td>One HAS_PERIOD edge; its meaning comes from fact_type.</td></tr><tr><td>PER-05</td><td>Guidance always; metric/surprise if real; never fabricate a window.</td></tr><tr><td>PER-06</td><td>Omitted metric period → take event's single clear period.</td></tr><tr><td>PER-07</td><td>YTD/TTM facts get exact date window, not one quarter.</td></tr><tr><td>PER-08</td><td>Periodless actions get no edge, not even gp_UNDEF.</td></tr><tr><td>PER-09</td><td>Dateless horizons use gp_ST/MT/LT/UNDEF sentinels only.</td></tr><tr><td>PER-10</td><td>Reuse proven Guidance period code in one shared module.</td></tr><tr><td>PER-11</td><td>LLM emits period fields; code builds the period_u_id.</td></tr><tr><td>PER-12</td><td>Same period id on HAS_PERIOD edge and in fact_scope.</td></tr><tr><td>PER-13</td><td>Node holds only dates; fiscal framing stays on fact.</td></tr><tr><td>PER-14</td><td>Never group by period alone — it blends forecast/actual.</td></tr><tr><td>PER-15</td><td>Market-wide drivers resolve on plain calendar, no company FYE.</td></tr><tr><td>PER-16</td><td>Missing fiscal-year-end → raise error, never guess December.</td></tr><tr><td>PER-17</td><td>Instant and duration are separate nodes; dates write-once.</td></tr><tr><td>PER-18</td><td>MERGE period by id, MERGE edge, unique-constrain id.</td></tr><tr><td>PER-19</td><td>Archive/retire old guidance; create new guidance facts fresh.</td></tr><tr><td>PER-20</td><td>Design locked; build resolver and pass 21 tests first.</td></tr></table></div></div>
   </div></div>
 </section>
