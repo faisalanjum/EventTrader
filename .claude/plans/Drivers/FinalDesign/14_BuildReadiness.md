@@ -127,23 +127,107 @@ These are mostly wording and authority-map fixes, but they matter because coding
 
 ---
 
-## 7. What Fable or another design agent should do
+## 7. Aspirational brief for Driver ingestion
+
+This is not a locked design yet. It is the design challenge Fable must solve with full attention.
+
+**North-star aspiration:** both `Driver` and `DriverUpdate` should be continuously and super quickly updated for all live ingestion. As soon as a new asset is ingested -- report, transcript, filing, news, or any future source -- the system should automatically start converting it into the right Drivers and DriverUpdates.
+
+There should be **no human in the loop by construction**. No steady-state review process. The system should be robust enough to handle parked and fail-closed facts automatically and efficiently, with parked/failed cases minimized as much as possible, ideally near none.
+
+The target is **100% recall, 100% precision, and the lowest practical cost**. Fable must treat misses and false writes as unacceptable design failures, then define how recall and precision are measured, how uncertain cases retry or escalate, what parks/fails closed, and how every unresolved gap becomes visible instead of silent.
+
+Cost and model use must be designed deliberately. Fable should first understand every task that truly requires an LLM, then design the best combination of deterministic code, cheap models, strong models, multiple runs/iterations where needed, and an advisor strategy where a lower-intelligence model uses a higher-intelligence model only when needed. Fable should propose the small experiments needed to find the best combination.
+
+Reuse existing machinery wherever possible. The old guidance extraction pipeline is only one example of the generic extraction process; Fable must inspect whether the existing daemon, worker, queues, sidecars, run ledger, source ingestion, and extraction framework can be reused safely for Drivers and DriverUpdates.
+
+Historical backfill is required, but it may be staged intelligently if full backfill is too much at once. For example, the first pass may prioritize companies with upcoming earnings in the next day or two, then expand to higher-value companies and finally the full historical universe.
+
+The execution path should use the Claude Code subscription / workflow path, not the API or metered SDK path, unless the owner explicitly approves a different path.
+
+The design should use minimalistic machinery and aim for 100% reliability. Do not add complex machinery unless it clearly improves recall, precision, cost, speed, or reliability.
+
+Most importantly, Fable must think hard about the best possible design for an actual living, intelligent Driver system. Even before prediction or learner loops, the Driver and DriverUpdate graph should become powerful by virtue of being so well designed, so well connected, fully automated, perfectly actionable, and useful for automatic trading. The graph should become intelligent through its structure: Drivers, DriverUpdates, sources, companies, events, periods, concepts, members, verdicts, and time should connect in the right way so the system keeps becoming more useful as new assets arrive.
+
+Fable's output should not be a vague architecture. It should compare design choices, reject weaker options, and produce the simplest design that can satisfy the requirements above.
+
+### Tentative living-ingestion component breakdown
+
+This breakdown is tentative. Fable should use it as a starting map, not as a locked architecture. The final design may merge, split, rename, or reject components if that produces a simpler and more reliable system.
+
+```text
+new asset arrives
+-> decide what work to run
+-> extract Drivers + DriverUpdates
+-> validate/write graph
+-> enrich/link/verdict
+-> measure quality/cost
+-> retry, escalate, park, or fail closed without human review
+```
+
+| # | Component | What it owns |
+|---|---|---|
+| 1 | Asset trigger | Detects a new report, transcript, filing, news item, or future source immediately after ingestion and starts Driver work automatically. |
+| 2 | Source normalizer | Converts every asset into one standard packet: company, source id, timestamp, source type, text, sections, metadata, and hashes. |
+| 3 | Run ledger | One truth table for status: `pending`, `running`, `done`, `parked`, `failed`, per source + fact type + model + ruleset + hash. |
+| 4 | Work router | Decides which tasks to run for that source: Driver discovery, DriverUpdate extraction, guidance, surprise, verdict, enrichment. |
+| 5 | Driver resolver | Reuses an existing Driver when safe; creates/proposes a new Driver only through governed rules; parks if unsafe. |
+| 6 | DriverUpdate producer | Reads the source and emits fact candidates: state, value, period, unit hints, slice, quote, conditions, comparison, and related fields. |
+| 7 | Code validator/writer | Deterministic layer: builds ids, resolves units/periods, validates fields, writes good facts, parks/fails unsafe facts. |
+| 8 | Verdict producer | Writes `EXPLAINED_BY`: whether this fact explained the stock move, plus direction, force, and confidence. |
+| 9 | Enrichment layer | Adds XBRL concept links, member links, `BASE_METRIC` inheritance, source links, and read grouping. |
+| 10 | Park/fail handler | Automatically retries, escalates, parks, or fail-closes unresolved cases. No human review queue. |
+| 11 | Model/cost router | Chooses cheap model, strong model, multi-run, or advisor strategy based on task difficulty, risk, and cost. |
+| 12 | QA and recall monitor | Measures misses, false writes, field accuracy, source coverage, parked rate, latency, and token/model cost. |
+| 13 | Backfill scheduler | Runs historical work in stages: upcoming earnings first, then high-value companies, then full history. |
+| 14 | Graph readiness layer | Ensures outputs are useful for trading: company, source, event, time, concept, member, period, Driver, DriverUpdate, and verdict links are connected correctly. |
+
+Three large layers:
+
+| Layer | Plain meaning |
+|---|---|
+| Orchestration | What runs, when it runs, in what order, and with what priority. |
+| Production | How Drivers and DriverUpdates are extracted, validated, written, enriched, and linked. |
+| Reliability | How the system reaches the 100% recall / 100% precision target, keeps cost low, avoids humans, and makes every failure measurable. |
+
+Most important point: Fable should design the full living ingestion conveyor belt, not just prompts. Prompts are only one piece. The real system is the full loop:
+
+```text
+Asset -> Work Router -> Driver Resolver -> DriverUpdate Producer
+-> Validator/Writer -> Enrichment -> Verdict -> QA/Cost Monitor
+-> Retry/Escalate/Park/Fail Closed
+```
+
+**Recommended order before coding:**
+
+1. Write the full living-ingestion design first: live trigger -> daemon/worker reuse -> run ledger -> Driver reuse/create -> DriverUpdate write -> verdict write -> retries/parks -> Claude subscription execution path.
+2. Close all P0 identity/write rules immediately after: `quote_hash`, measurement tokens, unit-family map, sequential percent guidance, loss signs, lower-is-better metrics, chronological writes, concurrency, and catalog-to-graph materialization.
+3. Define producer packets/prompts exactly: what every report/transcript/filing/news job receives, emits, validates, retries, parks, and writes. No human review path.
+4. Design the model/cost experiment: break down every LLM task, test cheap model vs strong model vs advisor/escalation, aiming for 100% recall, 100% precision, and lowest practical cost.
+5. Design live + historical backfill together: live is immediate; historical can be staged by upcoming earnings first, then high-value companies, then the full history.
+6. Define QA gates and rollout blockers: how recall/precision are measured, how silent misses are found, what blocks production, and how parked/failed cases are minimized.
+7. Patch owning docs and update presentation last: after the design is accepted, write rules into the owning docs (`10`, `12`, `14`, `90`, etc.); update `DriverPlan.html` only after the real design is settled.
+
+---
+
+## 8. What Fable or another design agent should do
 
 Do not redo Track A, Track B, or Track C from scratch.
 
 The right task is narrower:
 
-1. Write the missing running-layer design in §2.
-2. Pin the exact identity and write-order rules in §3.
-3. Assign owners for the unowned build pieces in §4.
-4. Force the owner decisions in §5 to either "decided" or "explicitly deferred."
-5. Patch the cross-doc wording and glossary in §6.
+1. Use the aspiration in §7 as the north star for the ingestion design.
+2. Write the missing running-layer design in §2.
+3. Pin the exact identity and write-order rules in §3.
+4. Assign owners for the unowned build pieces in §4.
+5. Force the owner decisions in §5 to either "decided" or "explicitly deferred."
+6. Patch the cross-doc wording and glossary in §6.
 
 The most important instruction: every identity-bearing field must have one exact recipe and worked examples. No "builder decides" rule can remain for IDs, graph keys, or write-order behavior.
 
 ---
 
-## 8. Coding handoff checklist
+## 9. Coding handoff checklist
 
 Coding should start only when all of these are true:
 

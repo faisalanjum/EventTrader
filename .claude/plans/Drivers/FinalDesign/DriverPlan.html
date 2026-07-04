@@ -1,0 +1,1284 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Driver Final Design — the whole thing, made easy</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #0f172a;
+    --muted: #64748b;
+    --line: #e2e8f0;
+    --soft: #f8fafc;
+    --soft2: #f1f5f9;
+    --accent: #4f46e5;
+    --accent-soft: #eef2ff;
+    --green: #059669;
+    --green-soft: #d1fae5;
+    --amber: #d97706;
+    --amber-soft: #fef3c7;
+    --red: #dc2626;
+    --red-soft: #fee2e2;
+    --violet: #7c3aed;
+    --violet-soft: #ede9fe;
+    --blue: #2563eb;
+    --blue-soft: #dbeafe;
+    --slate: #64748b;
+    --slate-soft: #e2e8f0;
+    --code: #1e293b;
+    --code-fg: #e2e8f0;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg); color: var(--fg);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    font-size: 24px; line-height: 1.55;
+  }
+
+  /* ---------- persistent chrome ---------- */
+  header {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255,255,255,0.97);
+    border-bottom: 2px solid var(--line);
+    padding: 14px 36px 0;
+    backdrop-filter: blur(8px);
+  }
+  .headrow { display: flex; align-items: center; gap: 18px; padding-bottom: 12px; }
+  header .brand { font-weight: 800; font-size: 21px; letter-spacing: 0.02em; color: var(--accent); }
+  header .title-text { font-weight: 600; font-size: 18px; color: var(--fg); }
+  header .counter { margin-left: auto; font-variant-numeric: tabular-nums; color: var(--muted); font-size: 18px; }
+
+  /* the one-law rail — always visible */
+  .rail {
+    display: flex; align-items: stretch; gap: 0; margin: 0 0 12px;
+    border-radius: 12px; overflow: hidden; border: 1px solid var(--line);
+    font-size: 15px; font-weight: 700;
+  }
+  .rail .r {
+    flex: 1; padding: 9px 16px; display: flex; align-items: center; gap: 8px;
+  }
+  .rail .merge { background: var(--red-soft); color: #991b1b; }
+  .rail .split { background: var(--green-soft); color: #065f46; }
+  .rail .unsure { background: var(--accent-soft); color: var(--accent); flex: 0 0 auto; }
+  @media (max-width: 820px) { .rail { flex-direction: column; } }
+
+  .progress { display: flex; gap: 4px; padding: 10px 36px 12px; background: var(--soft); border-bottom: 1px solid var(--line); }
+  .progress .pip { flex: 1; height: 6px; border: 0; border-radius: 999px; background: #d1d5db; cursor: pointer; padding: 0; transition: background 0.15s, transform 0.15s; }
+  .progress .pip.done { background: #a5b4fc; }
+  .progress .pip.active { background: var(--accent); transform: scaleY(1.5); }
+  .progress .pip:hover { background: #818cf8; }
+
+  main { max-width: 1140px; margin: 0 auto; padding: 56px 40px 220px; }
+
+  .step { display: none; padding-bottom: 60px; }
+  .step.active { display: block; animation: fadeIn 0.3s ease-out; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ---------- typography ---------- */
+  h1 { font-size: 56px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.06; margin: 0 0 16px; }
+  h2 { font-size: 34px; font-weight: 700; margin: 38px 0 12px; letter-spacing: -0.02em; }
+  h3 { font-size: 24px; font-weight: 700; margin: 26px 0 10px; color: #1e293b; }
+  .lead { font-size: 27px; line-height: 1.42; color: #334155; margin: 0 0 30px; font-weight: 400; }
+  p, li { font-size: 21px; line-height: 1.58; color: #1e293b; }
+  ul, ol { padding-left: 26px; margin: 14px 0; }
+  ul li, ol li { margin: 7px 0; }
+  strong { color: var(--fg); font-weight: 700; }
+
+  .tag { display: inline-block; font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); font-weight: 800; background: var(--accent-soft); padding: 6px 14px; border-radius: 999px; margin-bottom: 16px; }
+  .tag.green { color: var(--green); background: var(--green-soft); }
+  .tag.amber { color: var(--amber); background: var(--amber-soft); }
+  .tag.red { color: var(--red); background: var(--red-soft); }
+  .tag.violet { color: var(--violet); background: var(--violet-soft); }
+
+  .src { display: inline-block; margin-left: 12px; font-size: 13px; font-weight: 700; color: var(--muted); background: var(--soft2); padding: 4px 12px; border-radius: 999px; letter-spacing: 0.04em; vertical-align: middle; }
+
+  /* ---------- panels ---------- */
+  .panel { background: var(--soft); border: 1px solid var(--line); border-radius: 18px; padding: 24px 28px; margin: 20px 0; }
+  .panel.accent { background: var(--accent-soft); border-color: #c7d2fe; }
+  .panel.green { background: var(--green-soft); border-color: #6ee7b7; }
+  .panel.amber { background: var(--amber-soft); border-color: #fcd34d; }
+  .panel.danger { background: var(--red-soft); border-color: #fca5a5; }
+  .panel h3:first-child, .panel p:first-child { margin-top: 0; }
+  .panel.tight p { font-size: 19px; }
+
+  code { background: var(--soft2); padding: 2px 8px; border-radius: 6px; font-family: ui-monospace, "JetBrains Mono", Menlo, monospace; font-size: 0.82em; color: #1e293b; }
+
+  .ascii { background: var(--code); color: var(--code-fg); padding: 20px 24px; border-radius: 14px; font-family: ui-monospace, monospace; font-size: 15px; line-height: 1.5; white-space: pre; overflow-x: auto; margin: 22px 0; }
+
+  details { margin-top: 18px; border: 1.5px solid var(--line); border-radius: 14px; padding: 16px 22px; background: white; transition: background 0.15s; }
+  details[open] { background: var(--soft); border-color: #c7d2fe; }
+  summary { cursor: pointer; font-weight: 700; color: var(--accent); font-size: 19px; padding: 3px 0; }
+  summary::marker { color: var(--accent); }
+  details > *:not(summary) { font-size: 19px; }
+
+  .twocol { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin: 22px 0; }
+  .threecol { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; margin: 22px 0; }
+  .col { background: var(--soft); border: 1px solid var(--line); border-radius: 16px; padding: 20px 24px; }
+  .col h3 { margin-top: 0; font-size: 20px; }
+  @media (max-width: 900px) { .twocol, .threecol { grid-template-columns: 1fr; } }
+
+  /* ---------- flow diagram ---------- */
+  .flow { display: flex; flex-wrap: wrap; align-items: stretch; gap: 8px; margin: 26px 0; }
+  .flow .node { flex: 1 1 0; min-width: 150px; background: white; border: 1.5px solid var(--line); border-radius: 14px; padding: 14px 14px; }
+  .flow .node strong { display: block; font-size: 18px; line-height: 1.2; margin-bottom: 6px; color: var(--fg); }
+  .flow .node span { display: block; color: var(--muted); font-size: 14px; line-height: 1.35; }
+  .flow .arrow { align-self: center; color: var(--accent); font-size: 24px; font-weight: 800; }
+  .flow .node.a { border-color: #c7d2fe; background: var(--accent-soft); }
+  .flow .node.b { border-color: #6ee7b7; background: var(--green-soft); }
+  .flow .node.c { border-color: #fcd34d; background: var(--amber-soft); }
+  @media (max-width: 940px) { .flow { flex-direction: column; } .flow .arrow { transform: rotate(90deg); align-self: center; } }
+
+  .kv { display: grid; grid-template-columns: 300px 1fr; gap: 12px 26px; align-items: start; margin: 16px 0; }
+  .kv .k { font-weight: 700; color: var(--fg); font-size: 19px; }
+  .kv .v { color: #1e293b; font-size: 19px; }
+  @media (max-width: 720px) { .kv { grid-template-columns: 1fr; gap: 2px 0; } .kv .v { margin-bottom: 10px; } }
+
+  /* ---------- pills, chips, status ---------- */
+  .pill { display: inline-block; padding: 4px 13px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 15px; font-weight: 700; margin: 0 6px 6px 0; }
+  .pill.green { background: var(--green-soft); color: var(--green); }
+  .pill.amber { background: var(--amber-soft); color: var(--amber); }
+  .pill.red { background: var(--red-soft); color: var(--red); }
+  .pill.gray { background: var(--soft2); color: var(--muted); }
+
+  /* status dot: decided-ness */
+  .dot { display: inline-block; width: 11px; height: 11px; border-radius: 50%; margin-right: 8px; vertical-align: middle; }
+  .dot.locked { background: var(--green); }
+  .dot.open { background: var(--amber); }
+  .dot.build { background: var(--blue); }
+  .dot.super { background: var(--slate); }
+  .dot.evid { background: var(--violet); }
+  .legend { display: flex; flex-wrap: wrap; gap: 16px; padding: 13px 18px; background: var(--soft); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; font-size: 15px; }
+  .legend span { display: inline-flex; align-items: center; gap: 4px; }
+
+  /* decision id chips that jump */
+  .idchip { display: inline-block; font-family: ui-monospace, monospace; font-size: 14px; font-weight: 700; padding: 3px 10px; border-radius: 8px; background: var(--soft2); color: #334155; margin: 0 5px 5px 0; border: 1px solid var(--line); }
+  .idchip.jump { cursor: pointer; }
+  .idchip.jump:hover { background: var(--accent-soft); color: var(--accent); border-color: #c7d2fe; }
+
+  /* impacts row on cards */
+  .impacts { font-size: 15px; color: var(--muted); margin-top: 10px; }
+  .impacts b { color: var(--amber); }
+  .impacts .up { color: var(--blue); }
+
+  /* ---------- tables ---------- */
+  table { border-collapse: collapse; width: 100%; margin: 20px 0; font-size: 17px; }
+  th, td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: 14px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 800; background: var(--soft); }
+  .wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; }
+  .wrap table { margin: 0; }
+  td code { font-size: 15px; }
+
+  /* compact decision-index (lookup) tables */
+  .idx table { font-size: 15px; margin: 8px 0; }
+  .idx th, .idx td { padding: 6px 12px; }
+  .idx td:first-child { white-space: nowrap; font-family: ui-monospace, "JetBrains Mono", Menlo, monospace; font-weight: 700; color: var(--accent); width: 1%; font-size: 13.5px; }
+  .idx h3 { margin: 4px 0 4px; font-size: 20px; }
+  .idxnote { font-size: 16px; color: var(--muted); margin: 6px 0 14px; }
+  .idxgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+  @media (max-width: 900px) { .idxgrid { grid-template-columns: 1fr; } }
+
+  /* lane matrix cells */
+  .cell { font-weight: 800; font-size: 13px; text-align: center; border-radius: 6px; }
+  .req { background: var(--green-soft); color: #065f46; }
+  .ws { background: var(--amber-soft); color: #92400e; }
+  .forbid { background: var(--red-soft); color: #991b1b; }
+
+  /* number-shape glyphs */
+  .shapes { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; margin: 22px 0; }
+  .shape { background: var(--soft); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; text-align: center; }
+  .shape .g { font-size: 34px; font-weight: 800; color: var(--accent); line-height: 1; }
+  .shape strong { display: block; margin: 8px 0 4px; font-size: 18px; }
+  .shape span { font-size: 14px; color: var(--muted); }
+
+  /* was -> now reversal cards */
+  .wasnow { display: grid; grid-template-columns: 1fr auto 1fr; gap: 14px; align-items: stretch; margin: 14px 0; }
+  .wasnow .was { background: var(--slate-soft); border-radius: 12px; padding: 14px 18px; color: #475569; }
+  .wasnow .was s { color: #64748b; }
+  .wasnow .now { background: var(--green-soft); border-radius: 12px; padding: 14px 18px; color: #065f46; }
+  .wasnow .ar { align-self: center; color: var(--green); font-size: 22px; font-weight: 800; }
+  .wasnow .lbl { font-size: 13px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 800; opacity: 0.7; display: block; margin-bottom: 4px; }
+  @media (max-width: 760px) { .wasnow { grid-template-columns: 1fr; } .wasnow .ar { transform: rotate(90deg); } }
+
+  /* toc / map grid */
+  .toc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; margin: 24px 0; }
+  .toc-grid .item { padding: 14px 18px; background: var(--soft); border: 1px solid var(--line); border-radius: 14px; cursor: pointer; transition: all 0.15s; font-size: 17px; }
+  .toc-grid .item:hover { background: var(--accent-soft); border-color: #c7d2fe; transform: translateY(-2px); }
+  .toc-grid .item .num { color: var(--accent); font-weight: 800; margin-right: 8px; font-variant-numeric: tabular-nums; }
+
+  /* honest dashboard */
+  .dash { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; margin: 22px 0; }
+  .dash .stat { background: var(--soft); border: 1px solid var(--line); border-radius: 16px; padding: 18px 20px; }
+  .dash .stat .n { font-size: 40px; font-weight: 800; letter-spacing: -0.02em; line-height: 1; }
+  .dash .stat .l { font-size: 15px; color: var(--muted); margin-top: 8px; line-height: 1.3; }
+  .dash .stat.g .n { color: var(--green); }
+  .dash .stat.a .n { color: var(--amber); }
+  .dash .stat.r .n { color: var(--red); }
+  .dash .stat.b .n { color: var(--blue); }
+
+  /* honest segmented readiness bar (no fake %) */
+  .segbar { display: flex; height: 46px; border-radius: 12px; overflow: hidden; margin: 20px 0 8px; font-size: 14px; font-weight: 800; border: 1px solid var(--line); }
+  .segbar .seg { display: flex; align-items: center; justify-content: center; color: #fff; padding: 0 12px; text-align: center; line-height: 1.15; }
+  .segbar .seg.done { background: var(--green); }
+  .segbar .seg.fix { background: var(--amber); }
+  .segbar .seg.todo { background: var(--red); }
+
+  .small { font-size: 16px; color: var(--muted); }
+  .note { font-size: 16px; color: var(--muted); margin-top: 10px; font-style: italic; }
+
+  /* ---------- impact explorer ---------- */
+  .ie-help { font-size: 17px; color: var(--muted); margin: 6px 0 16px; }
+  .ie-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; margin: 18px 0; }
+  .ie-node {
+    padding: 12px 14px; border-radius: 12px; cursor: pointer; user-select: none;
+    background: var(--soft); border: 1.5px solid var(--line); transition: all 0.18s;
+    font-size: 15px; line-height: 1.25;
+  }
+  .ie-node .nid { font-family: ui-monospace, monospace; font-weight: 800; font-size: 13px; color: var(--accent); display: block; margin-bottom: 3px; }
+  .ie-node .nlbl { color: #334155; font-weight: 600; }
+  .ie-node:hover { border-color: #c7d2fe; }
+  .ie-node.focus { background: var(--accent); border-color: var(--accent); box-shadow: 0 4px 16px rgba(79,70,229,0.35); }
+  .ie-node.focus .nid, .ie-node.focus .nlbl { color: #fff; }
+  .ie-node.impacts { background: var(--amber-soft); border-color: var(--amber); }
+  .ie-node.impacts .nid { color: #b45309; }
+  .ie-node.rests { background: var(--blue-soft); border-color: var(--blue); }
+  .ie-node.rests .nid { color: #1d4ed8; }
+  .ie-node.threat { background: var(--red-soft); border-color: var(--red); }
+  .ie-node.threat .nid { color: #b91c1c; }
+  .ie-node.dim { opacity: 0.28; }
+  .ie-read { background: var(--code); color: var(--code-fg); border-radius: 14px; padding: 18px 22px; margin: 16px 0; font-size: 18px; line-height: 1.5; min-height: 64px; }
+  .ie-read b { color: #fbbf24; }
+  .ie-read .u { color: #93c5fd; }
+  .ie-read .t { color: #fca5a5; }
+  .ie-legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 15px; margin: 8px 0 0; }
+  .ie-legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .sw { width: 14px; height: 14px; border-radius: 4px; display: inline-block; }
+
+  /* ---------- bottom nav ---------- */
+  .nav { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); background: rgba(255,255,255,0.8); backdrop-filter: blur(14px) saturate(140%); -webkit-backdrop-filter: blur(14px) saturate(140%); border: 1px solid rgba(226,232,240,0.9); border-radius: 999px; padding: 6px 10px; display: flex; gap: 6px; align-items: center; box-shadow: 0 6px 22px rgba(15,23,42,0.08); z-index: 60; }
+  .nav:hover { background: rgba(255,255,255,0.96); }
+  .nav button { font: inherit; font-size: 15px; font-weight: 700; background: transparent; color: var(--fg); border: 0; padding: 6px 14px; border-radius: 999px; cursor: pointer; }
+  .nav button:hover { background: var(--accent-soft); color: var(--accent); }
+  .nav button:disabled { color: #cbd5e1; cursor: not-allowed; }
+  .nav button:disabled:hover { background: transparent; }
+  .nav .pos { font-size: 15px; color: var(--muted); font-variant-numeric: tabular-nums; min-width: 60px; text-align: center; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="headrow">
+    <div class="brand">DRIVER · FINAL DESIGN</div>
+    <div class="title-text">The whole design, made easy — and how every decision ripples</div>
+    <div class="counter" id="counter">1 / 36</div>
+  </div>
+  <div class="rail" aria-label="The one law">
+    <div class="r merge">🔴 Merge two causes into one name = <strong>permanent damage</strong></div>
+    <div class="r split">🟢 Split one cause into two = <strong>a cheap one-line fix</strong></div>
+    <div class="r unsure">Unsure → keep separate</div>
+  </div>
+</header>
+
+<div class="progress" id="progress" aria-label="Slide progress"></div>
+
+<main>
+
+<!-- ============================================================ 1 · TITLE ============================================================ -->
+<section class="step active" data-step="1">
+  <span class="tag">Read me first · v1 (format + architecture demo)</span>
+  <h1>One idea, seen from six angles.</h1>
+  <p class="lead">A "driver" is an index card for one cause that moves a stock. This deck is <strong>every rule that keeps one card = one meaning</strong> — and it shows how each choice ripples into all the others. Built to help you <strong>finalize the design</strong> and <strong>see impact</strong>.</p>
+
+  <div class="dash" aria-label="Honest status dashboard">
+    <div class="stat"><div class="n">20</div><div class="l">design files · ~185 numbered rule-blocks (~450 decision atoms total)</div></div>
+    <div class="stat g"><div class="n">Locked</div><div class="l">record model (naming, facts, verdict) is exhaustively decided</div></div>
+    <div class="stat r"><div class="n">Not yet</div><div class="l">code-ready — the running layer (part 2) is unwritten</div></div>
+    <div class="stat a"><div class="n">13 + 12</div><div class="l">P0 identity fixes still open · owner decisions still to call</div></div>
+  </div>
+  <p class="small">Honest by design (per <code>14_BuildReadiness</code>): the model is strong, but 0 graph nodes exist and the fitness gate has never run. This deck never shows "95% done."</p>
+
+  <div class="panel accent">
+    <h3>How to read this</h3>
+    <ol>
+      <li><strong>Top rail</strong> = the one law. It never scrolls away because every rule exists to serve it.</li>
+      <li><strong>Each slide</strong> opens with the crux + one visual. Open <code>Details ▸</code> for the full spec.</li>
+      <li><strong>Blue ID chips</strong> like <span class="idchip jump" data-goto="9">FS · slices</span> jump to that topic — reading and impact-tracing are the same click.</li>
+      <li><strong>Slide 20 = the Impact Explorer</strong>: click any decision, watch what it touches light up.</li>
+      <li><strong>Slides 22–26 = build readiness</strong>: the north-star ambition + what's actually left to decide.</li>
+    </ol>
+  </div>
+
+  <div class="legend" aria-label="Status legend">
+    <span><span class="dot locked"></span>Locked</span>
+    <span><span class="dot open"></span>Open — needs an owner call</span>
+    <span><span class="dot build"></span>Design done · build/wiring pending</span>
+    <span><span class="dot evid"></span>Evidence / proven in scratch</span>
+    <span><span class="dot super"></span>Superseded — history only</span>
+  </div>
+
+  <h3>The 36 slides</h3>
+  <div class="toc-grid" aria-label="Map">
+    <div class="item" data-goto="2"><span class="num">02</span>Index-card model</div>
+    <div class="item" data-goto="3"><span class="num">03</span>Asymmetric authority</div>
+    <div class="item" data-goto="4"><span class="num">04</span>The 3 layers</div>
+    <div class="item" data-goto="5"><span class="num">05</span>The 3 tracks + part 2</div>
+    <div class="item" data-goto="6"><span class="num">06</span>Pipeline journey</div>
+    <div class="item" data-goto="7"><span class="num">07</span>Naming · NAME</div>
+    <div class="item" data-goto="8"><span class="num">08</span>Slices + fact_scope · FS</div>
+    <div class="item" data-goto="9"><span class="num">09</span>Units · UNIT</div>
+    <div class="item" data-goto="10"><span class="num">10</span>Periods · PER</div>
+    <div class="item" data-goto="11"><span class="num">11</span>Family · MF</div>
+    <div class="item" data-goto="12"><span class="num">12</span>The fact · 23 fields</div>
+    <div class="item" data-goto="13"><span class="num">13</span>Number shapes</div>
+    <div class="item" data-goto="14"><span class="num">14</span>Concept linking · XC</div>
+    <div class="item" data-goto="15"><span class="num">15</span>The verdict · EXPLAINED_BY</div>
+    <div class="item" data-goto="16"><span class="num">16</span>ISS-16 routing</div>
+    <div class="item" data-goto="17"><span class="num">17</span>Track A build</div>
+    <div class="item" data-goto="18"><span class="num">18</span>Track B write</div>
+    <div class="item" data-goto="19"><span class="num">19</span>Track C reversal</div>
+    <div class="item" data-goto="20"><span class="num">20</span>⚡ Impact Explorer</div>
+    <div class="item" data-goto="21"><span class="num">21</span>Reversals · Was→Now</div>
+    <div class="item" data-goto="22"><span class="num">22</span>🎯 Build readiness</div>
+    <div class="item" data-goto="23"><span class="num">23</span>★ North-star ingestion</div>
+    <div class="item" data-goto="24"><span class="num">24</span>The running layer</div>
+    <div class="item" data-goto="25"><span class="num">25</span>P0 identity fixes</div>
+    <div class="item" data-goto="26"><span class="num">26</span>Owners + handoff</div>
+    <div class="item" data-goto="27"><span class="num">27</span>Coverage map</div>
+    <div class="item" data-goto="28"><span class="num">28</span>Honest status</div>
+    <div class="item" data-goto="29"><span class="num">29</span>Index · naming + slices</div>
+    <div class="item" data-goto="30"><span class="num">30</span>Index · units/periods/family</div>
+    <div class="item" data-goto="31"><span class="num">31</span>Index · fact + concepts</div>
+    <div class="item" data-goto="32"><span class="num">32</span>Index · fields + glue</div>
+    <div class="item" data-goto="33"><span class="num">33</span>Index · Track A (PIPE)</div>
+    <div class="item" data-goto="34"><span class="num">34</span>Index · Track B (FACT)</div>
+    <div class="item" data-goto="35"><span class="num">35</span>Index · Track C + reversals</div>
+    <div class="item" data-goto="36"><span class="num">36</span>Index · open + readiness</div>
+  </div>
+</section>
+
+<!-- ============================================================ 2 · MENTAL MODEL ============================================================ -->
+<section class="step" data-step="2">
+  <span class="tag">The mental model</span>
+  <h1>A driver is an index card. <span class="src">01_Overview</span></h1>
+  <p class="lead">Like one idea per slip in a Zettelkasten: each driver is one atomic cause on its own card — specific, uniquely named, reusable. <strong>One card = one meaning.</strong></p>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>Driver = a CLASS</h3>
+      <p>The reusable cause (<code>same_store_sales</code>, <code>oil_price</code>). Coined once. Backed by a real quote.</p>
+      <p class="small">In code: a class definition.</p>
+    </div>
+    <div class="col">
+      <h3>Driver-update = an INSTANCE</h3>
+      <p>One occurrence of that cause in one event (one earnings call, one 8-K). Written every time it happens.</p>
+      <p class="small">In code: one stamped object of the class.</p>
+    </div>
+  </div>
+
+  <div class="panel green">
+    <p><strong>The promise:</strong> the same cause always gets the same name everywhere. Scattered mentions line up into one clean history per cause — across companies and over time. That clean history is the tradeable signal.</p>
+  </div>
+
+  <p><strong>The edge over RavenPack / Bigdata:</strong> they list that an event <em>happened</em>. This grades each cause against <em>what the stock actually did</em>. Don't drift toward "just list events."</p>
+
+  <details>
+    <summary>The two deaths that shaped every rule</summary>
+    <ul>
+      <li><strong>v1 — the closed word-list.</strong> Validated names against a fixed vocabulary → rejected 82% of even-correct names → died. Lesson locked in <span class="idchip jump" data-goto="7">NAME-03</span> (open vocabulary) + NAME-19 (principles, never examples).</li>
+      <li><strong>v2 — the eager merger.</strong> Merged too aggressively, collapsed 3 demand stories into one generic name, failed a fresh exam → died. Lesson locked in NAME-04 (specific by default; breadth <em>emerges</em>).</li>
+      <li><strong>v3 — this design.</strong> The AI judges <em>meaning</em>; code checks only <em>structure</em>; every ambiguous call leans <em>specific</em>.</li>
+    </ul>
+  </details>
+</section>
+
+<!-- ============================================================ 3 · ASYMMETRIC AUTHORITY ============================================================ -->
+<section class="step" data-step="3">
+  <span class="tag">The safety engine</span>
+  <h1>Why the AI can be wrong and the graph is still correct. <span class="src">FS-04 · PIPE-04</span></h1>
+  <p class="lead">The whole design hangs on one asymmetry: the AI may only <strong>propose</strong>; only code may <strong>merge</strong>. So every AI mistake becomes a recoverable over-split — never a permanent over-merge.</p>
+
+  <div class="twocol">
+    <div class="col" style="background:var(--accent-soft);border-color:#c7d2fe">
+      <h3>🤖 The AI judges MEANING</h3>
+      <ul>
+        <li>assign to an existing value</li>
+        <li>coin a new value</li>
+        <li>flag / mark provisional</li>
+      </ul>
+      <p><strong>Never</strong> merges two existing identities.</p>
+    </div>
+    <div class="col" style="background:var(--green-soft);border-color:#6ee7b7">
+      <h3>⚙️ Code checks STRUCTURE</h3>
+      <ul>
+        <li>merges only on exact / confident match</li>
+        <li>deletes only from frozen lists</li>
+        <li>hard-fails on anything malformed</li>
+      </ul>
+      <p><strong>Never</strong> guesses meaning.</p>
+    </div>
+  </div>
+
+  <div class="panel green">
+    <p><strong>The payoff (the proof, not a slogan):</strong> because the AI can only over-split, and the one law says over-split is a cheap fix, the graph is correct <em>from day one no matter how wrong the model is</em>. That single asymmetry is the spine everything else hangs on.</p>
+  </div>
+  <p class="note">One advertised exception where over-split is NOT free: write-once period dates (ISS-42) — a bad first write persists.</p>
+</section>
+
+<!-- ============================================================ 4 · THREE LAYERS ============================================================ -->
+<section class="step" data-step="4">
+  <span class="tag">The shape</span>
+  <h1>Three physical layers. <span class="src">07 · 09 · DU-20/21</span></h1>
+  <p class="lead">Everything company/value/time-specific lives on the <strong>fact</strong>, never the <strong>class</strong>. The verdict is an <strong>edge</strong>, never a node.</p>
+
+  <div class="flow">
+    <div class="node a"><strong>Driver CLASS</strong><span>name + fact_type + SAME_AS / BASE_METRIC links. Nothing time/value-specific.</span></div>
+    <div class="arrow">→</div>
+    <div class="node b"><strong>DriverUpdate FACT</strong><span>id = event + driver + fact_scope · 23 fields · self-describing numbers</span></div>
+    <div class="arrow">→</div>
+    <div class="node c"><strong>VERDICT edge</strong><span>EXPLAINED_BY (Event → fact) · graded vs the realized return</span></div>
+  </div>
+
+  <div class="kv">
+    <div class="k"><span class="dot locked"></span>Fact identity</div>
+    <div class="v"><code>id = event + driver + fact_scope</code> — code-built, <strong>producer excluded</strong>, so two readers of one fact converge to <em>one</em> node.</div>
+    <div class="k"><span class="dot locked"></span>fact_scope</div>
+    <div class="v"><code>period=… | slice=… | measurement=…</code> — one canonical string, immutable, format-normalized only.</div>
+    <div class="k"><span class="dot locked"></span>Company</div>
+    <div class="v">Never on the fact — reached via <code>Event → Company</code>. (<code>FOR_COMPANY</code> was dropped.)</div>
+  </div>
+
+  <div class="panel accent tight">
+    <p><strong>The scoping law (PIPE-03):</strong> slice values, measurement, period, units, numbers, state, verdict, XBRL links — all live on the <strong>fact</strong>. The catalog build never writes a fact. <em>New in Track C:</em> once any fact points at a Driver, that Driver's name + fact_type <strong>freeze</strong> — later catalog sync must hard-fail rather than rename/re-type it.</p>
+  </div>
+</section>
+
+<!-- ============================================================ 5 · THREE TRACKS ============================================================ -->
+<section class="step" data-step="5">
+  <span class="tag">The build</span>
+  <h1>Three tracks build it — and a fourth is deliberately unwritten. <span class="src">10 · 11/12 · 13 · 14</span></h1>
+
+  <div class="threecol">
+    <div class="col" style="border-color:#c7d2fe">
+      <h3><span class="dot locked"></span>Track A</h3>
+      <p>Build the <strong>name catalog</strong> (the classes).</p>
+      <p class="small"><code>10_BuildPipeline</code> · PIPE-01…37 · design-locked, never run.</p>
+    </div>
+    <div class="col" style="border-color:#6ee7b7">
+      <h3><span class="dot locked"></span>Track B</h3>
+      <p>Write the <strong>facts + verdict</strong>.</p>
+      <p class="small"><code>11</code> census + <code>12</code> pipeline · 100% decided.</p>
+    </div>
+    <div class="col" style="border-color:#fcd34d">
+      <h3><span class="dot locked"></span>Track C</h3>
+      <p><strong>Archive + retire</strong> old guidance. QA evidence only.</p>
+      <p class="small"><code>13</code> · v2.0 — recently reversed from "replay".</p>
+    </div>
+  </div>
+
+  <div class="panel danger">
+    <h3><span class="dot open"></span>Part 2 — the running layer (UNWRITTEN)</h3>
+    <p>How new facts are <strong>produced, backfilled, retried, checked, and refreshed</strong> over time. This is the biggest missing piece. Live producers, cadence, the run ledger, incremental refresh, the change-flag scanner — all deferred to part 2.</p>
+  </div>
+  <p class="small">Design ≠ built ≠ proven. The record model is locked; the running layer is the work. See <span class="idchip jump" data-goto="22">build readiness</span>.</p>
+</section>
+
+<!-- ============================================================ 6 · PIPELINE JOURNEY ============================================================ -->
+<section class="step" data-step="6">
+  <span class="tag violet">Learn mode · one worked example</span>
+  <h1>Follow one event through the whole machine.</h1>
+  <p class="lead">Worked quote — <em>"Taco Bell same-store sales rose 8%; Q4 adjusted EPS came in at $5.10, ahead of the $4.80 consensus; and we're raising FY25 EPS guidance to $5.30–$5.60."</em></p>
+
+  <div class="ascii">RAW SOURCE ─▶ COIN/ADMIT NAME ─▶ WRITE FACT ─▶ ENRICH ─▶ VERDICT ─▶ GRADE ─▶ PREDICTOR
+ (8-K/call)     (Track A)          (Track B)      (XBRL)    (edge)    (return)   (learn→trade)
+                                                                  └── Track C siding: archive/retire old guidance</div>
+
+  <h3>Where each phrase lands</h3>
+  <div class="wrap">
+    <table>
+      <tr><th>Phrase in the quote</th><th>Where it goes</th><th>Field / rule</th></tr>
+      <tr><td>"same-store sales"</td><td>the driver <strong>name</strong> (the cause)</td><td><code>same_store_sales</code> · NAME-01/08</td></tr>
+      <tr><td>"Taco Bell"</td><td>the <strong>slice</strong> (which part)</td><td><code>slice=segment:taco_bell</code> · NAME-10</td></tr>
+      <tr><td>"rose 8%"</td><td><strong>state</strong> + number</td><td><code>increased</code>, <code>level=8 percent_yoy</code></td></tr>
+      <tr><td>"adjusted"</td><td>the <strong>measurement</strong> set</td><td><code>measurement={adjusted}</code> · NAME-14</td></tr>
+      <tr><td>"Q4 adjusted EPS came in at $5.10"</td><td>a <strong>metric</strong> fact (the level)</td><td><code>eps</code>, <code>level=5.10</code> (point), state <code>reported</code></td></tr>
+      <tr><td>"ahead of the $4.80 consensus"</td><td>→ a <code>_surprise</code> fact <em>(an actual vs an expectation)</em></td><td><code>eps_surprise</code>, state <code>beat</code> (5.10 &gt; 4.80) · <a data-goto="16" style="color:var(--accent);cursor:pointer">ISS-16 case 1</a></td></tr>
+      <tr><td>"raising FY25 EPS guidance to $5.30–$5.60"</td><td>→ the <strong>guidance</strong> driver <em>(a forward guide)</em></td><td><code>eps_guidance</code>, state <code>raised</code>, range shape · <a data-goto="16" style="color:var(--accent);cursor:pointer">ISS-16 case 0</a></td></tr>
+    </table>
+  </div>
+  <div class="panel amber tight">
+    <p><strong>The ISS-16 lesson, in one example:</strong> an <strong>actual</strong> beating consensus → a <code>_surprise</code> (beat). A forward <strong>guide</strong> above expectations → a <code>guidance</code> <strong>raise</strong>, <em>never</em> a surprise. Same "$X vs consensus" shape, different lanes — the exact trap ISS-16 exists to prevent.</p>
+  </div>
+  <p class="note">The NAME station is built once, offline (Track A) — reuse is the common path. The GRADE/PREDICTOR endpoints belong to part 2 (largely unwritten).</p>
+</section>
+
+<!-- ============================================================ 7 · NAMING ============================================================ -->
+<section class="step" data-step="7">
+  <span class="tag">Topic · Naming</span>
+  <h1>The name holds ONLY the cause. <span class="src">02 · NAME-01…19</span></h1>
+  <p class="lead">A specific, reusable causal noun. Everything else moves to another field.</p>
+
+  <div class="wrap">
+    <table>
+      <tr><th>In the source</th><th>Where it goes (NOT the name)</th></tr>
+      <tr><td>Brand / segment / geography / product / customer / channel</td><td>→ the <strong>slice</strong> <span class="idchip jump" data-goto="8">FS</span></td></tr>
+      <tr><td>adjusted / diluted / constant-currency</td><td>→ the <strong>measurement</strong> set</td></tr>
+      <tr><td>direction / size / date / company / period / units</td><td>→ their own fields</td></tr>
+      <tr><td>per-X (per_barrel, per_share)</td><td>→ <strong>INTO</strong> the name (it changes the number)</td></tr>
+    </table>
+  </div>
+
+  <div class="twocol">
+    <div class="col"><h3>Locked principles</h3>
+      <p><span class="pill green">open vocab</span><span class="pill green">specific by default</span><span class="pill green">breadth emerges</span><span class="pill green">one cause / name</span><span class="pill green">familiar names win</span></p>
+    </div>
+    <div class="col"><h3>The gate (NAME-18)</h3>
+      <p>Coin a driver only if it's a genuinely reusable class, grounded in the source, unambiguous. Vague text → skip, never invent.</p>
+    </div>
+  </div>
+
+  <details>
+    <summary>The brand→name exception ladder (NAME-11) + the 13-item banned list</summary>
+    <p>Ask in order, stop at first hit: (0) strip direction words · (1) strip brand — normal cause left? → <strong>slice</strong> · (2) only a fragment needing an object (<code>demand</code>, <code>ban</code>) OR the brand moves OTHER companies? → <strong>name</strong> it (<code>iphone_demand</code>, <code>glp1_pressure</code>, <code>tiktok_ban</code>) · unsure → slice.</p>
+    <p class="small">Banned inside a name: state words, direction, motion nouns, tickers/people, periods, numbers/units, source labels, vendors, XBRL prefixes, sentiment words, bare categories, vague descriptors, glue words.</p>
+  </details>
+</section>
+
+<!-- ============================================================ 8 · SLICES ============================================================ -->
+<section class="step" data-step="8">
+  <span class="tag">Topic · Slices + identity</span>
+  <h1>Six slice kinds, one immutable identity. <span class="src">03 · FS-01…25</span></h1>
+  <p class="lead">A slice = <code>kind:value</code>. The kind comes from an "operate / sell" test — the same test works for any metric.</p>
+
+  <div class="wrap">
+    <table>
+      <tr><th>Kind</th><th>Test</th><th>Example</th></tr>
+      <tr><td><strong>segment</strong></td><td>operates AS it</td><td><code>taco_bell</code></td></tr>
+      <tr><td><strong>product</strong></td><td>SELLS it</td><td><code>iphone</code>, <code>aws</code></td></tr>
+      <tr><td><strong>geography</strong></td><td>operates IN it</td><td><code>china</code></td></tr>
+      <tr><td><strong>customer</strong></td><td>SELLS TO it</td><td><code>major_customer_a</code></td></tr>
+      <tr><td><strong>channel</strong></td><td>HOW it sells/runs</td><td><code>franchised</code></td></tr>
+      <tr><td><strong>entity_ownership</strong></td><td>a stake it OWNS</td><td><code>jv_x</code></td></tr>
+      <tr><td colspan="3" class="small">+ <code>unknown</code> = the safe 7th. Test: is "revenue/earnings from ___" a real business population? Accounting labels are NOT slices.</td></tr>
+    </table>
+  </div>
+
+  <div class="panel amber">
+    <h3><span class="dot locked"></span>Just reversed — whole-company = OMITTED slice <span class="src">95 #25</span></h3>
+    <div class="wasnow" style="margin-top:10px">
+      <div class="was"><span class="lbl">Was</span><s>explicit company-wide → <code>slice=total</code> (stored)</s></div>
+      <div class="ar">→</div>
+      <div class="now"><span class="lbl">Now</span>whole-company / consolidated → <strong>no slice slot</strong>. Omitted = consolidated whole company, not missing.</div>
+    </div>
+    <p class="impacts">Ripples to → <b>FS-10 · FS-15 · fact_scope · fact-id · read-key · validators</b> across docs <b>03 · 09 · 11 · 12 · 13</b>. <span class="up">Rests on ← the one law.</span></p>
+  </div>
+
+  <details>
+    <summary>Why identity never forks — the safety engine at the fact level</summary>
+    <p>The LLM may pick/coin a slice value and mark it <strong>provisional</strong>, but never merges two existing values — only code merges, exact-after-normalization only. The write-time menu is point-in-time (union of the company's 10-Q/10-K XBRL members ∪ catalog-used values, cut at ≤ event time). Values are immutable, first-written-wins. Alias grouping is a <strong>read-time</strong> view — it can never touch the immutable id.</p>
+  </details>
+</section>
+
+<!-- ============================================================ 9 · UNITS ============================================================ -->
+<section class="step" data-step="9">
+  <span class="tag">Topic · Units</span>
+  <h1>Nine units, one shared resolver. <span class="src">04 · UNIT-01…14</span></h1>
+  <p class="lead">The producer sends raw text + hints; <strong>code</strong> decides the final unit and all scaling. The producer never converts.</p>
+
+  <p>
+    <span class="pill">usd</span><span class="pill">m_usd</span><span class="pill">percent</span><span class="pill">percent_yoy</span><span class="pill">percent_points</span><span class="pill">basis_points</span><span class="pill">count</span><span class="pill">x</span><span class="pill gray">unknown</span>
+  </p>
+
+  <div class="kv">
+    <div class="k">Two required hints</div><div class="v"><code>unit_kind_hint</code> {money, ratio, count, multiplier, unknown} + <code>money_mode_hint</code> when money. Lifts the resolver ~70% → 100%.</div>
+    <div class="k">Level vs change</div><div class="v">Resolved <strong>separately</strong>: "rose 60 bps to 17.6%" → level <code>percent</code>, change <code>basis_points</code>.</div>
+    <div class="k">No per-X unit</div><div class="v">per-X lives in the name; the unit stays base (<code>oil_price_per_barrel</code> → <code>usd</code>).</div>
+    <div class="k"><span class="dot build"></span>Status</div><div class="v">Proven in scratch (117/117), <strong>not wired</strong> into the producer (UNIT-14).</div>
+  </div>
+  <p class="note">Open: the read-time unit-family map (which of the 9 group together) is unpinned — a P0 identity fix (14 §3 #4). <code>percent_qoq</code> lean-no but unclosed.</p>
+</section>
+
+<!-- ============================================================ 10 · PERIODS ============================================================ -->
+<section class="step" data-step="10">
+  <span class="tag">Topic · Periods</span>
+  <h1>A real calendar window, never "Q1". <span class="src">05 · PER-01…20</span></h1>
+  <p class="lead">"Q1" can't compare across companies (Dec-FYE Q1 ≠ Sep-FYE Q1). A <code>DriverPeriod</code> is the resolved date window: <code>gp_2025-01-01_2025-03-31</code>.</p>
+
+  <div class="kv">
+    <div class="k">One edge</div><div class="v"><code>HAS_PERIOD → DriverPeriod</code>; meaning comes from fact_type.</div>
+    <div class="k">Code builds the id</div><div class="v">The LLM emits only period <em>fields</em>; code computes <code>gp_…</code>. The id appears BOTH on the edge AND inside fact_scope (validated both ways).</div>
+    <div class="k">4 sentinels</div><div class="v"><code>gp_ST · gp_MT · gp_LT</code> (dateless horizons) · <code>gp_UNDEF</code> (period-like but undefined).</div>
+    <div class="k">Reuse</div><div class="v">Guidance's proven fiscal math, extended to all 4 fact-types + exact-date YTD/TTM.</div>
+    <div class="k"><span class="dot build"></span>Status</div><div class="v">Design locked, <strong>not built</strong> — extract <code>driver_period_resolver.py</code>, pass 21 tests (PER-20).</div>
+  </div>
+  <p class="note">Guard: never group by period alone — forecast, actual, and surprise share a window.</p>
+</section>
+
+<!-- ============================================================ 11 · FAMILY ============================================================ -->
+<section class="step" data-step="11">
+  <span class="tag">Topic · Family</span>
+  <h1>Related, never merged. <span class="src">06 · MF-01…12</span></h1>
+  <p class="lead"><code>revenue</code>, <code>revenue_guidance</code>, <code>revenue_surprise</code> are <strong>separate drivers</strong> — because they can move the stock opposite ways the same day ("beat this quarter, cut next year's guide" → down).</p>
+
+  <div class="ascii">net_sales_guidance ──BASE_METRIC──▶ net_sales ──SAME_AS──▶ revenue
+     (family: guidance/surprise → its base)      (synonyms: two names, one metric)</div>
+
+  <div class="twocol">
+    <div class="col"><h3>BASE_METRIC — family</h3><p>Exactly one, on every <code>_guidance</code>/<code>_surprise</code>. For integrity (catch orphans). <code>action_event</code> gets none.</p></div>
+    <div class="col"><h3>SAME_AS — identity</h3><p>Two names, one metric. Reversible link; both nodes survive. Nothing is ever deleted.</p></div>
+  </div>
+  <div class="panel green tight"><p><strong>The one law, applied:</strong> over-merging flavors is permanent damage; forgetting to link them is a recoverable missing comparison. Always err toward separate + add links.</p></div>
+</section>
+
+<!-- ============================================================ 12 · THE FACT / 23 FIELDS ============================================================ -->
+<section class="step" data-step="12">
+  <span class="tag">Topic · The fact</span>
+  <h1>One node shape, 23 fields, one lane matrix. <span class="src">09 · DU-01…24</span></h1>
+  <p class="lead"><strong>5 code-written</strong> (zero hallucination) + <strong>18 producer/enrichment</strong> (every one validator-gated). <code>fact_type</code> is the router.</p>
+
+  <div class="twocol">
+    <div class="col"><h3>5 code-written</h3><p><code>id</code> · <code>fact_scope</code> · <code>created</code> · <code>date</code> · <code>source_type</code></p></div>
+    <div class="col"><h3>fact_type routes everything</h3><p><span class="pill">metric</span><span class="pill">guidance</span><span class="pill">surprise</span><span class="pill">action_event</span> — set once, permanent. Decides legal state words, which fields attach, XBRL link vs inherit.</p></div>
+  </div>
+
+  <h3>The per-lane validator matrix (the most-referenced object)</h3>
+  <div class="wrap">
+    <table>
+      <tr><th>Field</th><th>metric</th><th>guidance</th><th>surprise</th><th>action</th></tr>
+      <tr><td>level_* / change_* (when stated)</td><td class="cell ws">WS</td><td class="cell ws">WS</td><td class="cell ws">WS</td><td class="cell ws">WS</td></tr>
+      <tr><td>comparison_baseline = consensus</td><td class="cell forbid">FORBID</td><td class="cell ws">WS</td><td class="cell ws">WS</td><td class="cell ws">WS</td></tr>
+      <tr><td>comparison_baseline = previous_guidance</td><td class="cell forbid">FORBID</td><td class="cell ws">WS</td><td class="cell ws">WS</td><td class="cell ws">WS</td></tr>
+      <tr><td>value_text · conditions · company_confirmed</td><td class="cell forbid">FORBID</td><td class="cell ws">WS</td><td class="cell forbid">FORBID</td><td class="cell forbid">FORBID</td></tr>
+      <tr><td>xbrl_qname (concept)</td><td class="cell ws">WS</td><td class="cell forbid">inherit</td><td class="cell forbid">inherit</td><td class="cell forbid">FORBID</td></tr>
+      <tr><td>any computed/fabricated number</td><td class="cell forbid" colspan="4">FORBID — all lanes</td></tr>
+    </table>
+  </div>
+  <p class="small"><span class="cell req" style="padding:2px 8px">REQ</span> required · <span class="cell ws" style="padding:2px 8px">WS</span> only when stated · <span class="cell forbid" style="padding:2px 8px">FORBID</span> hard-fail. Both expectation baselines are metric-FORBID → route to <span class="idchip jump" data-goto="16">the surprise fact</span> (95 #24).</p>
+
+  <details>
+    <summary>The 4 driver_state lanes</summary>
+    <p><strong>metric:</strong> increased / decreased / unchanged / mixed / reported / persists / unknown (pick-first ladder).</p>
+    <p><strong>guidance:</strong> introduced / raised / lowered / reaffirmed / withdrawn.</p>
+    <p><strong>surprise:</strong> beat / in_line / missed (vs the expectation).</p>
+    <p><strong>action_event:</strong> at_risk / announced / occurred / continued / resolved / canceled / suspended / rumored / failed (a finality ladder).</p>
+  </details>
+</section>
+
+<!-- ============================================================ 13 · NUMBER SHAPES ============================================================ -->
+<section class="step" data-step="13">
+  <span class="tag">Topic · Numbers</span>
+  <h1>Shapes describe themselves. <span class="src">09 §3 · 95 #16</span></h1>
+  <p class="lead">No "shape" field — the shape is read from <em>which slots are filled</em>. A transient hint is checked, then <strong>discarded</strong>.</p>
+
+  <div class="shapes">
+    <div class="shape"><div class="g">●</div><strong>point</strong><span>low == high (both set)</span></div>
+    <div class="shape"><div class="g">▭</div><strong>range</strong><span>low &lt; high</span></div>
+    <div class="shape"><div class="g">≥</div><strong>floor</strong><span>low only ("at least X")</span></div>
+    <div class="shape"><div class="g">≤</div><strong>ceiling</strong><span>high only ("up to X")</span></div>
+    <div class="shape"><div class="g">○</div><strong>numberless</strong><span>all null</span></div>
+  </div>
+
+  <div class="panel accent tight">
+    <p><strong>The transient hint (the safety net):</strong> the producer emits <code>level_shape_hint</code>; code derives the shape from the slots, hard-fails on mismatch, then throws the hint away (never stored). Catches BOTH slips — a forgotten <em>high</em> (point→floor) AND a forgotten <em>low</em> (floor→point) — where the old <code>level_bound</code> field caught only one.</p>
+  </div>
+  <p class="note">Open P0: negative/loss values ("loss of up to $2B" = ceiling or floor?) have no sign convention yet (14 §3 #6).</p>
+</section>
+
+<!-- ============================================================ 14 · CONCEPT LINKING ============================================================ -->
+<section class="step" data-step="14">
+  <span class="tag">Topic · XBRL concept-linking</span>
+  <h1>Link the one real accounting line — or nothing. <span class="src">08 · XC-01…18</span></h1>
+  <p class="lead">A <strong>wrong link is the only real failure</strong>; a missing link is harmless. So the whole pipeline is built to abstain rather than risk a wrong merge.</p>
+
+  <div class="ascii">GUARDS ─▶ PIT MENU ─▶ Haiku PICK ─▶ in-menu ─▶ adversarial VERIFY ─▶ backstop A–D veto ─▶ emit / abstain
+ (G0/G1/G2)  (company's    (or null)    check    (default refuted)   (can only ABSTAIN)
+             own concepts)</div>
+
+  <div class="kv">
+    <div class="k">On the FACT, not the class</div><div class="v">A class is global; concepts are company-specific and drift → a class link would over-merge.</div>
+    <div class="k">metric only</div><div class="v">guidance/surprise <strong>inherit</strong> via BASE_METRIC; action_event always abstains.</div>
+    <div class="k"><span class="dot build"></span>Status</div><div class="v">100% precision on 274 companies (~35% of universe); backstops C+D spec-only; XC-16 calc-hierarchy veto recommended before full run.</div>
+  </div>
+</section>
+
+<!-- ============================================================ 15 · VERDICT ============================================================ -->
+<section class="step" data-step="15">
+  <span class="tag">The payoff</span>
+  <h1>The verdict is an edge, with three independent axes. <span class="src">07 · DU-21…24</span></h1>
+  <p class="lead">Not a node — the property-laden <code>EXPLAINED_BY</code> edge (Event → fact), added only when a producer blames the move on that fact.</p>
+
+  <div class="threecol">
+    <div class="col"><h3>stock_impact</h3><p>{long, short} — the driver's direction of push. Can oppose the net move.</p></div>
+    <div class="col"><h3>weightage</h3><p>{0.1…1.0} or null — an <strong>independent force</strong>. Never a share, never summed to 100%. A move may be partly unexplained.</p></div>
+    <div class="col"><h3>confidence</h3><p>{0…100} — how sure the attribution is TRUE. Orthogonal to weightage.</p></div>
+  </div>
+
+  <div class="panel danger tight">
+    <p><strong>PIT / no look-ahead:</strong> the share-of-move is computed at read time, never stored; the realized return is <strong>never stored on the verdict and never shown to the predictor</strong>. Grading is aggregate (net sign/magnitude + ranking), never a per-driver "true share".</p>
+  </div>
+
+  <details>
+    <summary>The macro/news path — DailyCompanyMoveEvent</summary>
+    <p>A significant move with no filing event attaches the verdict to a thin <code>DailyCompanyMoveEvent</code> (<code>dcm:&lt;cik&gt;:&lt;trade_date&gt;</code>, its own label, not an <code>:Event</code>). Returns are read from the existing <code>Date-HAS_PRICE-Company</code>, never duplicated. On filing days the filing Event is the single attribution target. <span class="pill amber">open: significance threshold · pure-macro source · shared-fact id (ISS-11)</span></p>
+  </details>
+</section>
+
+<!-- ============================================================ 16 · ISS-16 ============================================================ -->
+<section class="step" data-step="16">
+  <span class="tag amber">The hardest rule · just locked</span>
+  <h1>Beat / miss routing — a three-way split. <span class="src">12 §10.5 · ISS-16</span></h1>
+  <p class="lead">"Compared to an expectation" is the trigger — <strong>not</strong> a "beat" word. The state is derived from the two stated numbers.</p>
+
+  <div class="wrap">
+    <table>
+      <tr><th>The comparison is…</th><th>Routes to</th><th>Why</th></tr>
+      <tr><td>Forward guide vs old guide ("now expect $X, was $Y")</td><td><strong>guidance</strong> lane (raised/lowered)</td><td>the tense trap — it's a revision, not a surprise</td></tr>
+      <tr><td>Closed actual vs an EXPECTATION (own guide OR consensus)</td><td><strong>metric</strong> fact (the level) + a <strong>_surprise</strong> fact</td><td>state derived: &gt;high→beat · &lt;low→missed · within→in_line. <em>No "beat" word needed.</em></td></tr>
+      <tr><td>Actual vs a TEMPORAL prior (prior_year / sequential)</td><td><strong>metric</strong> change only</td><td>that's a metric change, never a surprise</td></tr>
+    </table>
+  </div>
+
+  <div class="panel danger">
+    <h3><span class="dot open"></span>Live threat to this just-locked rule</h3>
+    <p>The beat/miss arithmetic <strong>inverts for lower-is-better metrics</strong> — cost, capex, tax rate, churn. "Opex below guidance, <em>beating</em> expectations" → word says beat, number is below range → the directional-conflict check would <strong>hard-fail a correct fact</strong>. Marked "fully closed" but needs direction-aware arithmetic (14 §3 #7).</p>
+  </div>
+  <p class="impacts">Rests on ← <span class="up">DU-09 (state-from-numbers) · fact_type · number-shapes</span> · Impacts → <b>the verdict · BASE_METRIC · 95 #24 · the whole metric class</b>.</p>
+</section>
+
+<!-- ============================================================ 17 · TRACK A ============================================================ -->
+<section class="step" data-step="17">
+  <span class="tag">Track A · build the catalog</span>
+  <h1>Coin names bottom-up; the AI proposes, gates admit. <span class="src">10 · PIPE-01…37</span></h1>
+  <p class="lead">A bottom-up folder-merge tree: 11 sectors → 115 industries → 796 companies. Names are born only at the leaf.</p>
+
+  <div class="ascii">LEAF:      blind reader coins names ─▶ converge(seed)
+RECONCILE: dedup ‖ G2 admit ─▶ Refute skeptic ─▶ high-blast 2nd skeptic ─▶ D5 same-name review
+FOLD:      collapse ─▶ review ─▶ Refute ─▶ reconcile (same pipeline every level)
+FINALIZE:  stamp fact_type (once) + BASE_METRIC ─▶ validate --final (F1–F5)
+ACCEPT:    ⚠ the fitness / honesty gate — HAS NEVER RUN</div>
+
+  <div class="kv">
+    <div class="k">Propose-first (G1)</div><div class="v">The producer coins blind, then sees related PIT-filtered drivers ranked by meaning. G2 stays admission authority.</div>
+    <div class="k">Refute</div><div class="v">Attacks every proposed fusion; default survives=false; flips only if it can't refute same object + scope + mechanism.</div>
+    <div class="k"><span class="dot open"></span>The real gate</div><div class="v">Freeze catalog → feed fresh PIT events → grade name+direction vs a locked key. Must beat <strong>0.634 / 0.535 / 72%</strong>. Never run · 0 graph nodes · "quality budget 0.1%" undefined.</div>
+  </div>
+</section>
+
+<!-- ============================================================ 18 · TRACK B ============================================================ -->
+<section class="step" data-step="18">
+  <span class="tag">Track B · write the facts</span>
+  <h1>One writer stack, every validator hard-fails closed. <span class="src">11 census · 12 pipeline</span></h1>
+  <p class="lead">A producer emits an item contract (one CLI call = one event); code does fusion → period → units → id → validators → write.</p>
+
+  <div class="kv">
+    <div class="k">Producer-free id</div><div class="v">Two writers of one fact converge to one node; re-runs MERGE in place, never fork.</div>
+    <div class="k">No-null-clobber merge</div><div class="v">A weaker re-run never erases a richer prior field; only <code>--repair</code> may clear. (12 §10.8)</div>
+    <div class="k">17 ordered validators</div><div class="v">lane matrix · state ∈ lane · shape hints · sign rule · stated-only · period⇔fact_scope · units · … (FACT-16)</div>
+    <div class="k"><span class="dot locked"></span>Owner bundle</div><div class="v">All 9 §10 items decided — verdict lock, in-session billing, per-slot hints, ISS-16, period strictness, Event/DCM single-target.</div>
+  </div>
+  <p class="note">Reuses the proven Guidance substrate (ids, period cascade, unit resolver, writer, read path — 468 tests) by fork-and-override, never re-derived.</p>
+</section>
+
+<!-- ============================================================ 19 · TRACK C ============================================================ -->
+<section class="step" data-step="19">
+  <span class="tag amber">Track C · just reversed</span>
+  <h1>Old guidance is a museum piece, not the new truth. <span class="src">13 · v2.0</span></h1>
+
+  <div class="wasnow">
+    <div class="was"><span class="lbl">Was — v1.2 (now dead)</span><s>Rebuild the 8,432 old guidance rows as new facts (Legacy Replay Producer, legacy_name_map, equivalence gate).</s></div>
+    <div class="ar">→</div>
+    <div class="now"><span class="lbl">Now — v2.0</span>Do not rebuild anything. <strong>Archive → delete → keep as QA evidence only.</strong> Real guidance is created fresh from source docs by the new pipeline.</div>
+  </div>
+
+  <div class="panel accent tight">
+    <p>The old v1.2 design is preserved verbatim in <code>13_Track_RetiredDesign.md</code> with a "do not build from this" banner. Two new <strong>general</strong> rules rode in: whole-company = omitted slice (<span class="idchip jump" data-goto="8">95 #25</span>), and fact-bearing Driver immutability (once used, a Driver's name+fact_type freeze).</p>
+  </div>
+  <div class="panel danger tight">
+    <p><strong>The risk to watch:</strong> retire old guidance → but the new pipeline hasn't backfilled the 894 old sources yet → 3 years of guidance live only in the archive. Retirement must not fire before the predictor is safely off old guidance (14 §2 #8, #12).</p>
+  </div>
+</section>
+
+<!-- ============================================================ 20 · IMPACT EXPLORER ============================================================ -->
+<section class="step" data-step="20">
+  <span class="tag violet">⚡ Impact Explorer</span>
+  <h1>Click a decision — watch what it touches.</h1>
+  <p class="ie-help">The core question — <em>"how does each decision impact everything else?"</em> — made a single gesture. Tap any node: <span style="color:var(--amber);font-weight:700">amber</span> = what it changes downstream · <span style="color:var(--blue);font-weight:700">blue</span> = what it rests on · <span style="color:var(--red);font-weight:700">red</span> = a live threat.</p>
+
+  <div class="ie-read" id="ieRead">Tap a decision below to trace its blast radius.</div>
+
+  <div class="ie-legend">
+    <span><span class="sw" style="background:var(--accent)"></span>focused</span>
+    <span><span class="sw" style="background:var(--amber)"></span>impacts (downstream)</span>
+    <span><span class="sw" style="background:var(--blue)"></span>rests on (upstream)</span>
+    <span><span class="sw" style="background:var(--red)"></span>threatens</span>
+  </div>
+
+  <div class="ie-grid" id="ieGrid"></div>
+  <p class="note">A curated slice of ~22 load-bearing decisions (the full graph is ~450 nodes / ~600 edges). Edges harvested from the docs' own <code>Replaces</code> pointers + cross-citations.</p>
+</section>
+
+<!-- ============================================================ 21 · REVERSALS ============================================================ -->
+<section class="step" data-step="21">
+  <span class="tag">History · Was → Now</span>
+  <h1>Twenty-five reversals. Never re-copy a dead rule. <span class="src">95_Supersession</span></h1>
+  <p class="lead">The live plan carries only the current rule; this ledger preserves the old one + why it flipped. A few of the load-bearing ones:</p>
+
+  <div class="wasnow"><div class="was"><span class="lbl">#1</span><s>brand in the name — <code>taco_bell_same_store_sales</code></s></div><div class="ar">→</div><div class="now">name = cause only; brand → the slice</div></div>
+  <div class="wasnow"><div class="was"><span class="lbl">#2</span><s>version in the name — <code>adjusted_eps</code></s></div><div class="ar">→</div><div class="now">name = <code>eps</code>; adjusted → the measurement slot</div></div>
+  <div class="wasnow"><div class="was"><span class="lbl">#13</span><s>hand-curated XBRL dictionary</s></div><div class="ar">→</div><div class="now">LLM picks from the company's own reported menu + guards</div></div>
+  <div class="wasnow"><div class="was"><span class="lbl">#24</span><s><code>previous_guidance</code> allowed on a metric fact</s></div><div class="ar">→</div><div class="now">BOTH expectation baselines forbidden on metric → route to surprise</div></div>
+  <div class="wasnow"><div class="was"><span class="lbl">#25</span><s>explicit company-wide → <code>slice=total</code></s></div><div class="ar">→</div><div class="now">whole-company = omitted slice</div></div>
+
+  <div class="panel danger tight">
+    <p><strong>Stale-trap docs — never copy naming rules from these:</strong> <code>Drivers.md</code> · <code>DriverOntology.md</code> · <code>INDEX §3b</code> · <code>unit_probe/RESULTS.md</code> · <code>13_Track_RetiredDesign.md</code>. And a live back-port debt: <code>03 FS-15</code>, <code>09 §3</code>, <code>04 UNIT-04</code> still carry pre-reversal wording (14 §6).</p>
+  </div>
+</section>
+
+<!-- ============================================================ 22 · BUILD READINESS OVERVIEW ============================================================ -->
+<section class="step" data-step="22">
+  <span class="tag red">🎯 Build readiness · the honest picture</span>
+  <h1>Designed — but not yet code-ready. <span class="src">14_BuildReadiness</span></h1>
+  <p class="lead">The core Track A / B / C design is strong. But the full system can't be handed to coding agents yet: the running layer is unwritten, and a handful of identity rules would let two builders fork the graph.</p>
+
+  <h3>Progress, told honestly — no fake %</h3>
+  <div class="segbar" aria-label="Honest readiness bar">
+    <div class="seg done" style="flex:6">Record model — LOCKED</div>
+    <div class="seg fix" style="flex:2">13 P0 identity fixes</div>
+    <div class="seg todo" style="flex:5">Running layer (part 2) — UNWRITTEN</div>
+  </div>
+  <p class="small">A segmented bar, not a ring: the red block is a whole missing layer, not a rounding error.</p>
+
+  <div class="twocol">
+    <div class="col" style="background:var(--green-soft);border-color:#6ee7b7">
+      <h3>✅ Solid — do not reopen</h3>
+      <ul style="font-size:18px">
+        <li>Track A catalog shape + build pipeline</li>
+        <li>Track B fact model — fields, periods, slices, units, validators</li>
+        <li>Track C — archive/retire old guidance; QA evidence only</li>
+      </ul>
+    </div>
+    <div class="col" style="background:var(--amber-soft);border-color:#fcd34d">
+      <h3>⚠ "Solid" ≠ zero ambiguity</h3>
+      <p style="font-size:18px">The five buckets below must still close before a safe handoff. <code>P0</code> = blocks handoff · <code>P1</code> = owner/home must be clear.</p>
+    </div>
+  </div>
+
+  <div class="dash">
+    <div class="stat r"><div class="n">12</div><div class="l">§2 · running-layer design (part 2)</div></div>
+    <div class="stat a"><div class="n">13</div><div class="l">§3 · P0 exact-rule identity fixes</div></div>
+    <div class="stat b"><div class="n">11</div><div class="l">§4 · unowned build pieces</div></div>
+    <div class="stat a"><div class="n">12</div><div class="l">§5 · open owner decisions</div></div>
+    <div class="stat"><div class="n">6</div><div class="l">§6 · cross-doc cleanups</div></div>
+  </div>
+  <p class="note">Next: the <strong>north-star ambition</strong> (§7), then §2, §3, and §4–§6 + the §9 handoff gate.</p>
+</section>
+
+<!-- ============================================================ 23 · NORTH-STAR INGESTION (§7) ============================================================ -->
+<section class="step" data-step="23">
+  <span class="tag violet">The north star · the real ambition</span>
+  <h1>A living, self-driving Driver graph. <span class="src">14 §7 · aspirational</span></h1>
+  <p class="lead">The end goal isn't a catalog — it's a system where every new asset (report, transcript, filing, news) is <strong>automatically and near-instantly</strong> turned into the right Drivers + DriverUpdates. No human in the loop, by construction.</p>
+
+  <div class="threecol">
+    <div class="col" style="background:var(--green-soft);border-color:#6ee7b7"><h3>100%</h3><p>recall — a miss is an unacceptable design failure</p></div>
+    <div class="col" style="background:var(--green-soft);border-color:#6ee7b7"><h3>100%</h3><p>precision — a false write is just as unacceptable</p></div>
+    <div class="col" style="background:var(--accent-soft);border-color:#c7d2fe"><h3>Lowest</h3><p>practical cost — deterministic code first, cheap models, strong only when needed</p></div>
+  </div>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>How it should work</h3>
+      <ul style="font-size:18px">
+        <li>Live trigger → daemon/worker <strong>reuse</strong> → run ledger → reuse/create Driver → write fact → write verdict</li>
+        <li><strong>Advisor model strategy</strong>: a cheap model escalates to a strong one only when needed</li>
+        <li>Staged backfill — <strong>upcoming-earnings companies first</strong>, then high-value, then full history</li>
+      </ul>
+    </div>
+    <div class="col">
+      <h3>Hard constraints</h3>
+      <ul style="font-size:18px">
+        <li>No steady-state human review · parks/fails <strong>minimized to near-none</strong>, never silent</li>
+        <li>Claude Code <strong>subscription / workflow path</strong> — not the metered SDK (unless owner-approved)</li>
+        <li>Minimalist machinery · aim for <strong>100% reliability</strong> — no complexity without a clear win</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="panel accent tight">
+    <p><strong>The graph should become intelligent through its structure</strong> — Drivers, DriverUpdates, sources, companies, events, periods, concepts, members, verdicts, and time connected so the system gets more useful with every asset that arrives. Powerful and trading-actionable <em>before</em> any predictor/learner loop even runs.</p>
+  </div>
+
+  <details>
+    <summary>§7 · Recommended order before coding (the 7 steps)</summary>
+    <ol style="font-size:18px">
+      <li>Write the full <strong>living-ingestion design</strong> first — trigger → worker reuse → ledger → Driver reuse/create → fact → verdict → retries/parks → subscription path.</li>
+      <li>Close all <strong>P0 identity/write rules</strong> — quote_hash, measurement tokens, unit-family, sequential %, loss signs, lower-is-better, chronological writes, concurrency, catalog→graph.</li>
+      <li>Define <strong>producer packets/prompts</strong> exactly — input, emit, validate, retry, park, write. No human path.</li>
+      <li>Design the <strong>model/cost experiment</strong> — cheap vs strong vs advisor/escalation, for 100% recall+precision at lowest cost.</li>
+      <li>Design <strong>live + historical backfill together</strong> — live immediate, historical staged by upcoming earnings.</li>
+      <li>Define <strong>QA gates + rollout blockers</strong> — measure recall/precision, surface silent misses, minimize parks.</li>
+      <li>Patch owning docs + update the presentation <strong>last</strong>.</li>
+    </ol>
+  </details>
+  <p class="note">Not locked — this is the design challenge for the ingestion layer (part 2). Shown here so the ambition is visible, not just the checklist.</p>
+</section>
+
+<!-- ============================================================ 24 · RUNNING LAYER (§2) ============================================================ -->
+<section class="step" data-step="24">
+  <span class="tag red">Bucket §2 · the biggest gap</span>
+  <h1>The running layer — how facts get made over time. <span class="src">14 §2 · "part 2"</span></h1>
+  <p class="lead">The record model says what a fact <em>is</em>. This says how new facts are produced, backfilled, retried, checked, and refreshed — and it is almost entirely unwritten.</p>
+
+  <div class="wrap">
+    <table>
+      <tr><th>#</th><th>Needed design</th><th>What must be defined</th></tr>
+      <tr><td>1</td><td>Source schedule</td><td>which sources run · priority · live cadence · backfill order</td></tr>
+      <tr><td>2</td><td>Run ledger</td><td>per source×fact_type: pending/running/done/parked/failed · ruleset+model version · hashes · retries</td></tr>
+      <tr><td>3</td><td>Producer packets</td><td>exact input/output contract per fact_type · no human in the loop</td></tr>
+      <tr><td>4</td><td>Verdict producer</td><td>EXPLAINED_BY contract · decile fields · PIT inputs · Event vs DCM · may it create a missing fact?</td></tr>
+      <tr><td>5</td><td>Report scope</td><td>re-extract 10-K/10-Q, or use the dormant XBRL-link rider? (bounds backfill cost)</td></tr>
+      <tr><td>6</td><td>Historical backfill</td><td>freshly process 2023–2026 incl. the 894 old-guidance sources — without replaying old rows</td></tr>
+      <tr><td>7</td><td>QA gates</td><td>recall vs the Track C archive · field checks · dual-producer agreement · rollout blockers</td></tr>
+      <tr><td>8</td><td>Prediction cutover</td><td>read new facts · stop reading guidance_history.v1 · tolerate empty guidance</td></tr>
+      <tr><td>9</td><td>Incremental refresh</td><td>append · amendments · freeze old decisions unless a repair path is invoked</td></tr>
+      <tr><td>10</td><td>Model + execution policy</td><td>exact model per job · #runs · grader · fallback · allowed path (metered SDK needs owner OK)</td></tr>
+      <tr><td>11</td><td>Source edge cases</td><td>amendments · corrected filings · reissued guidance · duplicate ids · pure-macro days</td></tr>
+      <tr><td>12</td><td>Retirement gates</td><td>delete old guidance only if archive complete + consumers safe + owner accepts the gap</td></tr>
+    </table>
+  </div>
+  <p class="note">This is where design should invest next — it dwarfs the remaining record-model polish.</p>
+</section>
+
+<!-- ============================================================ 25 · P0 IDENTITY FIXES (§3) ============================================================ -->
+<section class="step" data-step="25">
+  <span class="tag amber">Bucket §3 · dangerous because permanent</span>
+  <h1>Thirteen exact-rule fixes that guard graph identity. <span class="src">14 §3</span></h1>
+  <p class="lead">Small rules — but if two coding agents read them differently, they create <strong>different permanent graph data</strong>. Every identity-bearing field needs ONE recipe + worked examples.</p>
+
+  <div class="wrap">
+    <table>
+      <tr><th>Fix to close</th><th>Why it bites</th></tr>
+      <tr><td><code>quote_hash</code> recipe</td><td>fact ids fork if hash inputs differ</td></tr>
+      <tr><td><code>quote_hash</code> rerun idempotency</td><td>a partial rerun could write the bare id → a duplicate node</td></tr>
+      <tr><td>measurement tokenization</td><td>"cash EPS" → <code>cash_eps</code>? <code>casheps</code>? must pin it</td></tr>
+      <tr><td>unit-family map</td><td>read-time grouping differs by implementer (incl. <code>percent_qoq</code>)</td></tr>
+      <tr><td>sequential percent guides</td><td><code>09 §7</code> stamps percent-only as <code>percent_yoy</code> — wrong for QoQ guiders</td></tr>
+      <tr><td><strong>negative / loss values</strong></td><td>"loss of up to $2B" = ceiling or floor? no sign convention yet</td></tr>
+      <tr><td><strong>lower-is-better metrics</strong></td><td>cost / capex / tax / churn invert beat/miss → <em>threatens ISS-16</em></td></tr>
+      <tr><td>chronological writes</td><td>late old-dated filings corrupt guidance state + the single-target rule</td></tr>
+      <tr><td>concurrent producers</td><td>two producers can coin near-synonym drivers at once</td></tr>
+      <tr><td>live missing-Driver creation</td><td>live coining has no fact_type path (finalize is batch-only)</td></tr>
+      <tr><td><strong>catalog → graph materialization</strong></td><td>nobody owns writing finalized Drivers into Neo4j</td></tr>
+      <tr><td>fitness-gate budget</td><td>"quality budget 0.1%" is undefined → ungradeable</td></tr>
+      <tr><td>change-flag scanner</td><td>cited by locked rules but specified nowhere</td></tr>
+    </table>
+  </div>
+  <p class="impacts">These are the red / threat nodes in <span class="idchip jump" data-goto="20">the Impact Explorer</span> — the permanent-damage hotspots.</p>
+</section>
+
+<!-- ============================================================ 26 · OWNERS / UNOWNED / CLEANUP / HANDOFF (§4–§6 · §9) ============================================================ -->
+<section class="step" data-step="26">
+  <span class="tag">Buckets §4–§6 + the handoff gate</span>
+  <h1>Owners, decisions, and the line to start coding. <span class="src">14 §4–§6 · §9</span></h1>
+
+  <div class="twocol">
+    <div class="col">
+      <h3><span class="dot open"></span>§5 · Owner decisions (12)</h3>
+      <p style="font-size:17px">FS-23 cross-company value · UNIT-12 percent_qoq · 8-K taxonomy · amendments · final model policy · G1 display rules · K2 gate · 796-vs-786 · lifecycle/IPO · macro threshold + pure-macro source · dormant XBRL rider · blanket-withdrawal fan-out.</p>
+    </div>
+    <div class="col">
+      <h3><span class="dot build"></span>§4 · Unowned build pieces (11)</h3>
+      <p style="font-size:17px">UNIT-14 resolver wiring · PER-20 period resolver · XC-16 veto · backstops C/D · full concept run · slice/member lists · PIT menu query · news admission · prompt-mirror tests · <code>min_score</code> 0.60-vs-0.72 · <code>--measure-inherit</code>.</p>
+    </div>
+  </div>
+
+  <div class="panel amber tight">
+    <h3>§6 · Cross-doc cleanup — the back-port debt</h3>
+    <p>Live docs still carry dead wording: the rejected alias layer · <code>previous_guidance</code>-on-metric · <code>04 UNIT-04</code> one-hint-pair · ISS-19/20 not reflected in <code>10</code> · unfinished Overview · a missing glossary (<code>G1/G2</code>, <code>menu</code>, <code>slice</code>, <code>created</code>, <code>parked</code> are all overloaded).</p>
+  </div>
+
+  <details open>
+    <summary>§8 · Coding handoff checklist — start only when ALL are true</summary>
+    <ul style="font-size:18px">
+      <li>Every permanent id has an exact recipe + examples</li>
+      <li>Every producer packet has exact input / output / validator / park behavior</li>
+      <li>The run ledger is the only source of run status</li>
+      <li>Model execution path + billing guard specified</li>
+      <li>Fresh guidance produced from source docs, not old rows</li>
+      <li>Graph materialization has a single owner path</li>
+      <li>Prediction degrades safely when guidance is empty</li>
+      <li>QA gates say exactly what blocks rollout · cross-doc contradictions patched</li>
+    </ul>
+  </details>
+</section>
+
+<!-- ============================================================ 27 · COVERAGE MAP ============================================================ -->
+<section class="step" data-step="27">
+  <span class="tag">Completeness · nothing silently dropped</span>
+  <h1>Every file has a home. <span class="src">00_Coverage</span></h1>
+
+  <div class="wrap">
+    <table>
+      <tr><th>Files</th><th>What they hold</th><th>In this deck</th></tr>
+      <tr><td><code>00</code>–<code>01</code></td><td>map + the one law + mental model</td><td>slides 1–2</td></tr>
+      <tr><td><code>02</code>–<code>09</code></td><td>the record model (naming, slices, units, periods, family, fact, concept, 23 fields)</td><td>slides 7–15</td></tr>
+      <tr><td><code>10</code></td><td>Track A build pipeline</td><td>slide 17</td></tr>
+      <tr><td><code>11</code>–<code>12</code></td><td>Track B census + fact pipeline</td><td>slides 16, 18</td></tr>
+      <tr><td><code>13</code> + <code>13_Retired</code></td><td>Track C active + dead replay design</td><td>slide 19</td></tr>
+      <tr><td><code>14</code></td><td>build readiness + the north-star ambition</td><td>slides 22–26</td></tr>
+      <tr><td><code>66 · 90 · 95</code></td><td>issues · open items · reversals</td><td>slides 21, 22–26, Explorer</td></tr>
+      <tr><td><code>99</code></td><td>Codex audit (history; topic files win)</td><td>referenced</td></tr>
+    </table>
+  </div>
+  <p class="note">This v1 demo carries the load-bearing content of all 20 files. The full ~450-atom card set (every NAME-/FS-/DU-/PIPE-/FACT-/GI- decision at verbatim depth) is the next pass — the format holds it via progressive disclosure.</p>
+</section>
+
+<!-- ============================================================ 28 · HONEST STATUS ============================================================ -->
+<section class="step" data-step="28">
+  <span class="tag red">The honest bottom line</span>
+  <h1>Designed. Not yet proven. Not yet built.</h1>
+
+  <div class="threecol">
+    <div class="col" style="background:var(--green-soft);border-color:#6ee7b7"><h3>✅ Designed</h3><p>~185 numbered rule-blocks locked across the record model + all three tracks. The one law is consistent everywhere.</p></div>
+    <div class="col" style="background:var(--amber-soft);border-color:#fcd34d"><h3>⏳ Not proven</h3><p>The fitness/honesty gate has never run. 0 graph nodes exist. "Quality budget 0.1%" is undefined.</p></div>
+    <div class="col" style="background:var(--red-soft);border-color:#fca5a5"><h3>🔴 Not built</h3><p>The running layer (part 2) is unwritten. 13 P0 identity fixes + 12 owner decisions still open.</p></div>
+  </div>
+
+  <div class="panel accent">
+    <h3>Two moves from here</h3>
+    <ol>
+      <li><strong>Finalize</strong> — walk slide 22's buckets; every P0 identity fix must get one exact recipe + worked examples before any coding handoff.</li>
+      <li><strong>Understand impact</strong> — use slide 20's Explorer; before flipping any open item, trace its ripple so you know what re-opens.</li>
+    </ol>
+  </div>
+  <p class="small">This DriverPlan.html is a <strong>format + architecture</strong> demo (v1): the look copies <code>PredictorLearner/plan.html</code>; the structure is the design-panel's "One Object, Six Lenses" hybrid. Tell me what to deepen and I'll expand any slide to full verbatim depth.</p>
+</section>
+
+
+<!-- ============================================================ 29 · DECISION INDEX ============================================================ -->
+<section class="step" data-step="29">
+  <span class="tag">Decision Index · lookup (1/8)</span>
+  <h1>Naming &amp; identity <span class="src">02 · 03</span></h1>
+  <p class="idxnote">Every marker → one line. Paste any ref (e.g. <code>FS-14</code>) to a chatbot with its gloss for instant context.</p>
+  <div class="idx"><div class="idxgrid">
+    <div><h3>Naming — NAME-01…19</h3><div class="wrap"><table><tr><th>Ref</th><th>What it decides</th></tr><tr><td>NAME-01</td><td>Name holds only the cause; everything else lives in other fields.</td></tr><tr><td>NAME-02</td><td>Exactly one name per driver; variants fold in, no aliases list.</td></tr><tr><td>NAME-03</td><td>Open vocabulary; name words come from source text, not a fixed list.</td></tr><tr><td>NAME-04</td><td>Name as specifically as evidence allows; breadth emerges only from reuse.</td></tr><tr><td>NAME-05</td><td>Lowercase letters, digits, underscores; starts with letter, no double/trailing underscore.</td></tr><tr><td>NAME-06</td><td>Multi-part order: thing/actor then detail then metric/mechanism.</td></tr><tr><td>NAME-07</td><td>Use the familiar name for well-known market/policy causes.</td></tr><tr><td>NAME-08</td><td>Keep standard finance phrases whole (gross_margin, free_cash_flow).</td></tr><tr><td>NAME-09</td><td>One cause per name; split bundles; keep short and noun-like.</td></tr><tr><td>NAME-10</td><td>Brand/segment/geography/product/customer/channel go in the slice, not the name.</td></tr><tr><td>NAME-11</td><td>Brand enters name only via top-down test; default to slice.</td></tr><tr><td>NAME-12</td><td>In name: cause, per-X, benchmark identity, guidance/surprise suffix; nothing else.</td></tr><tr><td>NAME-13</td><td>Stated per-X goes in name; unit stays base; different per-X = different driver.</td></tr><tr><td>NAME-14</td><td>adjusted/diluted/constant-currency go in measurement slot, not the name.</td></tr><tr><td>NAME-15</td><td>Direction, state, date, company, period, units, size kept out of name.</td></tr><tr><td>NAME-16</td><td>Thirteen banned things inside a name, with a few carve-outs.</td></tr><tr><td>NAME-17</td><td>_guidance/_surprise suffix stays in name; base linked via BASE_METRIC.</td></tr><tr><td>NAME-18</td><td>New driver only if reusable, source-grounded, unambiguous; vague text is skipped.</td></tr><tr><td>NAME-19</td><td>Rule changes state one general principle, never sector-specific examples.</td></tr></table></div></div>
+    <div><h3>Slices &amp; fact_scope — FS-01…25</h3><div class="wrap"><table><tr><th>Ref</th><th>What it decides</th></tr><tr><td>FS-01</td><td>Fact identity = event + driver + fact_scope; code builds ID, not LLM.</td></tr><tr><td>FS-02</td><td>fact_scope = one fixed-order string; omit slice if no narrower part.</td></tr><tr><td>FS-03</td><td>quote_hash only splits two real facts structured parts can't.</td></tr><tr><td>FS-04</td><td>AI assigns/coins provisionally; only code merges, exact-match only.</td></tr><tr><td>FS-05</td><td>Slice = kind:value; 6 fixed kinds + free-text value.</td></tr><tr><td>FS-06</td><td>The 6 kinds: segment, product, geography, customer, channel, entity_ownership.</td></tr><tr><td>FS-07</td><td>Slice only if "revenue from ___"; accounting labels aren't slices.</td></tr><tr><td>FS-08</td><td>Kind comes from a brand's XBRL axis, not the word.</td></tr><tr><td>FS-09</td><td>Many parts → code-sorted, joined by ';'; never drop one.</td></tr><tr><td>FS-10</td><td>All 4 fact-types sliceable; whole-company = omit slice; time isn't a slice.</td></tr><tr><td>FS-11</td><td>axis→kind is a frozen code table; runtime = exact lookup.</td></tr><tr><td>FS-12</td><td>Known slice→kind, known non-slice→skip, unknown→provisional (never dropped).</td></tr><tr><td>FS-13</td><td>~55 verified slice axes; classify by members, not axis name.</td></tr><tr><td>FS-14</td><td>Menu = union of members across all filings; PIT-cut at write-time.</td></tr><tr><td>FS-15</td><td>Per fact: pick menu, coin, mark unknown, or omit whole-company.</td></tr><tr><td>FS-16</td><td>Code checks pick format only; never snaps to near-match.</td></tr><tr><td>FS-17</td><td>A slice value is immutable; first-written wins.</td></tr><tr><td>FS-18</td><td>Code folds a member only on exact normalized-label equality.</td></tr><tr><td>FS-19</td><td>Producer reuses existing value by prose; coins new when unsure.</td></tr><tr><td>FS-20</td><td>Segment eliminations filtered by three exact lists, never regex.</td></tr><tr><td>FS-21</td><td>XBRL member link is enrichment on the fact, never identity.</td></tr><tr><td>FS-22</td><td>Recurring driver name = real; recurring slice value = generic.</td></tr><tr><td>FS-23</td><td>Sure kind ≠ comparable values; cross-company value matching unbuilt.</td></tr><tr><td>FS-24</td><td>Readers group by driver + slice + period, never driver alone.</td></tr><tr><td>FS-25</td><td>measurement = code-sorted set of stated words; empty default, never assume gaap.</td></tr></table></div></div>
+  </div></div>
+</section>
+
+
+<!-- ============================================================ 30 · DECISION INDEX ============================================================ -->
+<section class="step" data-step="30">
+  <span class="tag">Decision Index · lookup (2/8)</span>
+  <h1>Numbers, periods &amp; family <span class="src">04 · 05 · 06</span></h1>
+  <p class="idxnote">Units, the time window, and how the four flavours stay separate-but-linked.</p>
+  <div class="idx"><div class="idxgrid">
+    <div><h3>Units — UNIT-01…14</h3><div class="wrap"><table><tr><th>Ref</th><th>What it decides</th></tr><tr><td>UNIT-01</td><td>Exactly 9 allowed final units; every unit must be one.</td></tr><tr><td>UNIT-02</td><td>Reuse Guidance V2 resolver as one shared pure module.</td></tr><tr><td>UNIT-03</td><td>Producer sends number + raw text; code decides unit/scaling.</td></tr><tr><td>UNIT-04</td><td>Producer must send unit_kind_hint, money_mode_hint, and verbatim unit_raw.</td></tr><tr><td>UNIT-05</td><td>Resolve level_* and change_* units separately.</td></tr><tr><td>UNIT-06</td><td>Validate final unit is one of 9 and scaled value.</td></tr><tr><td>UNIT-07</td><td>Units live on the fact, never on the Driver.</td></tr><tr><td>UNIT-08</td><td>No per-X unit; per-X in name, unit stays base.</td></tr><tr><td>UNIT-09</td><td>No comparison_unit; comparison values share level_unit.</td></tr><tr><td>UNIT-10</td><td>No number means skip resolver; leave numeric fields null.</td></tr><tr><td>UNIT-11</td><td>Guards: unglue $1.5B, reject cents-on-aggregate, keep unit_raw clean.</td></tr><tr><td>UNIT-12</td><td>Keep enum stable; do NOT add percent_qoq now.</td></tr><tr><td>UNIT-13</td><td>Proven: 117/117 units, 29/29 tests, naming 33/33.</td></tr><tr><td>UNIT-14</td><td>Resolver locked and proven, but not yet wired in.</td></tr></table></div><h3>Metric family — MF-01…12</h3><div class="wrap"><table><tr><th>Ref</th><th>What it decides</th></tr><tr><td>MF-01</td><td>Each driver's fact_type: metric, guidance, surprise, or action_event; set once.</td></tr><tr><td>MF-02</td><td>Same topic, different flavors = separate drivers, linked never merged.</td></tr><tr><td>MF-03</td><td>Every _guidance/_surprise has exactly one BASE_METRIC edge; validator enforced.</td></tr><tr><td>MF-04</td><td>BASE_METRIC arrow is for integrity/orphan-catching, not solving synonyms.</td></tr><tr><td>MF-05</td><td>Base metric must exist; create it, may stay empty.</td></tr><tr><td>MF-06</td><td>Only a terminal _guidance/_surprise suffix creates the family link.</td></tr><tr><td>MF-07</td><td>action_event gets no base metric; it hits many metrics.</td></tr><tr><td>MF-08</td><td>Synonyms link metrics via SAME_AS, never via BASE_METRIC.</td></tr><tr><td>MF-09</td><td>Keep both the _guidance suffix and the fact_type field.</td></tr><tr><td>MF-10</td><td>Only base metric is XBRL-matched; guidance/surprise inherit the concept.</td></tr><tr><td>MF-11</td><td>company_confirmed is guidance-only; DriverPeriod applies to all fact-types.</td></tr><tr><td>MF-12</td><td>Over-merging is permanent damage; under-linking is easily fixed later.</td></tr></table></div></div>
+    <div><h3>Periods — PER-01…20</h3><div class="wrap"><table><tr><th>Ref</th><th>What it decides</th></tr><tr><td>PER-01</td><td>DriverPeriod = the real calendar date window a fact covers.</td></tr><tr><td>PER-02</td><td>One resolved-window node serves metric, guidance, surprise, action facts.</td></tr><tr><td>PER-03</td><td>Name it DriverPeriod; keep the gp_ id prefix.</td></tr><tr><td>PER-04</td><td>One HAS_PERIOD edge; its meaning comes from fact_type.</td></tr><tr><td>PER-05</td><td>Guidance always; metric/surprise if real; never fabricate a window.</td></tr><tr><td>PER-06</td><td>Omitted metric period → take event's single clear period.</td></tr><tr><td>PER-07</td><td>YTD/TTM facts get exact date window, not one quarter.</td></tr><tr><td>PER-08</td><td>Periodless actions get no edge, not even gp_UNDEF.</td></tr><tr><td>PER-09</td><td>Dateless horizons use gp_ST/MT/LT/UNDEF sentinels only.</td></tr><tr><td>PER-10</td><td>Reuse proven Guidance period code in one shared module.</td></tr><tr><td>PER-11</td><td>LLM emits period fields; code builds the period_u_id.</td></tr><tr><td>PER-12</td><td>Same period id on HAS_PERIOD edge and in fact_scope.</td></tr><tr><td>PER-13</td><td>Node holds only dates; fiscal framing stays on fact.</td></tr><tr><td>PER-14</td><td>Never group by period alone — it blends forecast/actual.</td></tr><tr><td>PER-15</td><td>Market-wide drivers resolve on plain calendar, no company FYE.</td></tr><tr><td>PER-16</td><td>Missing fiscal-year-end → raise error, never guess December.</td></tr><tr><td>PER-17</td><td>Instant and duration are separate nodes; dates write-once.</td></tr><tr><td>PER-18</td><td>MERGE period by id, MERGE edge, unique-constrain id.</td></tr><tr><td>PER-19</td><td>Archive/retire old guidance; create new guidance facts fresh.</td></tr><tr><td>PER-20</td><td>Design locked; build resolver and pass 21 tests first.</td></tr></table></div></div>
+  </div></div>
+</section>
+
+
+<!-- ============================================================ 31 · DECISION INDEX ============================================================ -->
+<section class="step" data-step="31">
+  <span class="tag">Decision Index · lookup (3/8)</span>
+  <h1>The fact &amp; concept-linking <span class="src">07 · 08</span></h1>
+  <p class="idxnote">The DriverUpdate record (states + numbers + verdict) and the XBRL concept pipeline.</p>
+  <div class="idx"><div class="idxgrid">
+    <div><h3>DriverUpdate — DU-01…24</h3><div class="wrap"><table><tr><th>Ref</th><th>What it decides</th></tr><tr><td>DU-01</td><td>A DriverUpdate = one real event fact, not a mention.</td></tr><tr><td>DU-02</td><td>Build makes the driver class; only producers make facts.</td></tr><tr><td>DU-03</td><td>Write a fact only if event carries a real fact.</td></tr><tr><td>DU-04</td><td>Reader saves name+quote; producer fills state+numbers.</td></tr><tr><td>DU-05</td><td>4 fact_types: metric, guidance, surprise, action_event.</td></tr><tr><td>DU-06</td><td>metric vs action: is a level re-readable next quarter?</td></tr><tr><td>DU-07</td><td>Strong model sets fact_type once; no fact_type = reject.</td></tr><tr><td>DU-08</td><td>State lives on the fact, from its fact_type lane.</td></tr><tr><td>DU-09</td><td>metric states via first-match ladder; quote carries precision.</td></tr><tr><td>DU-10</td><td>guidance lane + surprise beat/in_line/missed vs expectation.</td></tr><tr><td>DU-11</td><td>10 action states via terminal-or-not ladder; at_risk strict.</td></tr><tr><td>DU-12</td><td>Code hard-fails if state isn't in the lane.</td></tr><tr><td>DU-13</td><td>Nullable number fields; fill only stated; never fabricate.</td></tr><tr><td>DU-14</td><td>Point/range/floor/ceiling read from which slots filled.</td></tr><tr><td>DU-15</td><td>Store ONE primary baseline; metric lane forbids expectation baselines.</td></tr><tr><td>DU-16</td><td>7 code-enforced write checks; producer proposes, code decides.</td></tr><tr><td>DU-17</td><td>level_unit and change_unit from 9-enum; may differ; no comparison_unit.</td></tr><tr><td>DU-18</td><td>Fields we won't add (derivable); value_text returns for guidance.</td></tr><tr><td>DU-19</td><td>Fact key = event + driver + fact_scope; re-runs merge.</td></tr><tr><td>DU-20</td><td>Fact edges: OF_DRIVER, FROM_SOURCE, HAS_PERIOD; verdict is separate.</td></tr><tr><td>DU-21</td><td>Verdict = properties on the Event→fact EXPLAINED_BY edge.</td></tr><tr><td>DU-22</td><td>Verdict axes: direction, force, certainty, independent; plus mode/producer.</td></tr><tr><td>DU-23</td><td>Share-of-move computed at read time; real return hidden.</td></tr><tr><td>DU-24</td><td>Validator: valid direction, decile confidence/weightage; no sum rule.</td></tr></table></div></div>
+    <div><h3>Concept-linking — XC-01…18</h3><div class="wrap"><table><tr><th>Ref</th><th>What it decides</th></tr><tr><td>XC-01</td><td>Attach the one exact XBRL line company reports, or nothing</td></tr><tr><td>XC-02</td><td>Number-match, string-match, dictionary, agreement all failed; menu-pick won</td></tr><tr><td>XC-03</td><td>Guard → menu → pick → in-menu → verify → veto → emit</td></tr><tr><td>XC-04</td><td>Use cheapest model Haiku; structure gives the precision</td></tr><tr><td>XC-05</td><td>Drop events, ratios, non-GAAP before any LLM call</td></tr><tr><td>XC-06</td><td>Loose PICK prompt plus strict default-refute VERIFY prompt</td></tr><tr><td>XC-07</td><td>Deterministic veto can only abstain, never make a link</td></tr><tr><td>XC-08</td><td>Veto beats prompt-rule: surgical, keeps 87 correct links</td></tr><tr><td>XC-09</td><td>Menu = company's reported consolidated concepts, as-of event time</td></tr><tr><td>XC-10</td><td>Store qname on fact plus MAPS_TO_CONCEPT edge; self-healing</td></tr><tr><td>XC-11</td><td>Run on subscription agents; never pass ANTHROPIC_API_KEY</td></tr><tr><td>XC-12</td><td>Link metrics; guidance/surprise inherit base; action_event always abstains</td></tr><tr><td>XC-13</td><td>Proven: 100% precision, zero wrong links, ~70-99% recall</td></tr><tr><td>XC-14</td><td>Two error types: worse-in-menu pick, part-for-whole approximation</td></tr><tr><td>XC-15</td><td>The 1-wrong is tuning-set only; deny-list still incomplete</td></tr><tr><td>XC-16</td><td>Replace hand deny-list with official us-gaap calculation hierarchy</td></tr><tr><td>XC-17</td><td>Cheap non-LLM alarm: check concept balance/period vs metric</td></tr><tr><td>XC-18</td><td>Resolve once per company-metric, store; batch one call/company</td></tr></table></div></div>
+  </div></div>
+</section>
+
+
+<!-- ============================================================ 32 · DECISION INDEX ============================================================ -->
+<section class="step" data-step="32">
+  <span class="tag">Decision Index · lookup (4/8)</span>
+  <h1>The 23 fields &amp; 9 glue rules <span class="src">09</span></h1>
+  <p class="idxnote">The final field spec (5 code-written + 18 producer) and the read/write glue rules.</p>
+  <div class="idx"><div class="idxgrid">
+    <div><h3>The 23 stored fields</h3><div class="wrap"><table><tr><th>Ref</th><th>What it decides</th></tr><tr><td>id</td><td>MERGE key = event + driver + fact_scope</td></tr><tr><td>fact_scope</td><td>Identity slots: period, slice, measurement; immutable, never write-aliased</td></tr><tr><td>created</td><td>Write time; when the system first knew (forensic anchor)</td></tr><tr><td>date</td><td>Statement time; full ISO timestamp from source node</td></tr><tr><td>source_type</td><td>8k/transcript/10q/10k/news; the same-day collapse-priority rank key</td></tr><tr><td>driver_state</td><td>Locked lane vocab (raised/lowered/reaffirmed/etc.); what happened</td></tr><tr><td>quote</td><td>Verbatim proof text; required on every lane</td></tr><tr><td>level_low</td><td>Lower band of stated level (alone = floor, 'at least X')</td></tr><tr><td>level_high</td><td>Upper band of stated level (alone = ceiling, 'up to X')</td></tr><tr><td>level_unit</td><td>Unit for level and comparison; required when any number set</td></tr><tr><td>change_value</td><td>Stated delta only, never computed ('rose 60 bps')</td></tr><tr><td>change_unit</td><td>Unit of the change; may differ from level</td></tr><tr><td>comparison_low</td><td>Lower band of stated baseline/expectation; single value fills both</td></tr><tr><td>comparison_high</td><td>Upper band of the stated baseline number</td></tr><tr><td>comparison_baseline</td><td>What it's compared to: consensus/prior_year/sequential_period/previous_guidance</td></tr><tr><td>value_text</td><td>Guidance-only stated value in words; numberless facts only</td></tr><tr><td>conditions</td><td>Guidance-only caveat clause; also kept inside quote</td></tr><tr><td>company_confirmed</td><td>Guidance-only boolean: company stated it (true) vs claimed (false)</td></tr><tr><td>xbrl_qname</td><td>Metric-only XBRL concept link; others inherit via BASE_METRIC</td></tr><tr><td>fiscal_year</td><td>The fiscal year the fact frames</td></tr><tr><td>fiscal_quarter</td><td>The fiscal quarter the fact frames</td></tr><tr><td>period_scope</td><td>Window kind: quarter/annual/ytd/long_term/etc. (long_range retired to exact_range)</td></tr><tr><td>time_type</td><td>Period framing; same window reads differently per company</td></tr></table></div></div>
+    <div><h3>Glue rules 1…9</h3><div class="wrap"><table><tr><th>Ref</th><th>What it decides</th></tr><tr><td>glue 1</td><td>Series-key unit = level_unit, else the change-unit's family</td></tr><tr><td>glue 2</td><td>Same driver + scope in one event = ONE node</td></tr><tr><td>glue 3</td><td>Decompose into named slices; 'mixed' only when unsliceable</td></tr><tr><td>glue 4</td><td>Render order: level → change → comparison → value_text → quote</td></tr><tr><td>glue 5</td><td>Citations use Driver.name (+fact_scope), not old metric_id</td></tr><tr><td>glue 6</td><td>Standing policy level → metric; discrete decision → action_event</td></tr><tr><td>glue 7</td><td>bps/percent_points delta, no 'to X%' → change_value not level_low</td></tr><tr><td>glue 8</td><td>'narrowed' derived at read (width shrank), never stored</td></tr><tr><td>glue 9</td><td>Same-day collapse by source rank; latest event-date is current</td></tr></table></div></div>
+  </div></div>
+</section>
+
+
+<!-- ============================================================ 33 · DECISION INDEX ============================================================ -->
+<section class="step" data-step="33">
+  <span class="tag">Decision Index · lookup (5/8)</span>
+  <h1>Track A — build the catalog <span class="src">10</span></h1>
+  <p class="idxnote">The name-catalog build pipeline (PIPE-01…37): engine reuse, gates, finalization, the fitness gate.</p>
+  <div class="idx"><div class="idxgrid">
+    <div><h3>PIPE-01…19</h3><div class="wrap"><table><tr><th>Ref</th><th>What it decides</th></tr><tr><td>PIPE-01</td><td>Build one shared catalog of reusable, evidence-backed cause-names.</td></tr><tr><td>PIPE-02</td><td>A Driver = name + fact_type + family/SAME_AS links + evidence.</td></tr><tr><td>PIPE-03</td><td>Class holds names only; company/value/time specifics live on facts.</td></tr><tr><td>PIPE-04</td><td>When unsure keep separate; over-merge permanent, over-split cheap.</td></tr><tr><td>PIPE-05</td><td>Non-goals: no facts, slices, numbers, verdicts, XBRL, Neo4j writes.</td></tr><tr><td>PIPE-06</td><td>Authority: topic files 01-09 &gt; this file &gt; code &gt; runs &gt; HCP.</td></tr><tr><td>PIPE-07</td><td>State rules here; point to code/HCP; tag REUSE/OVERRIDE/ADD/DROP/RUN.</td></tr><tr><td>PIPE-08</td><td>Use 99 audit as completeness cross-check; resolve conflicts explicitly, never drop.</td></tr><tr><td>PIPE-09</td><td>Bottom-up folder merge; names born only at the leaf.</td></tr><tr><td>PIPE-10</td><td>Every code stage mapped to REUSE/OVERRIDE/ADD/DROP disposition.</td></tr><tr><td>PIPE-11</td><td>Reuse D1-D8 decision rules (fusion-approval, tree, reconcile, SAME_AS, D5) verbatim.</td></tr><tr><td>PIPE-12</td><td>Reuse eight relay-trust integrity guards (sidecars, cross-checks, hashes) verbatim.</td></tr><tr><td>PIPE-13</td><td>Gate semantics: G2 admit, Refute skeptic, high-blast second skeptic.</td></tr><tr><td>PIPE-14</td><td>Evidence atom = locked 5-tuple: company, source_type, source_id, date, quote.</td></tr><tr><td>PIPE-15</td><td>One run dir per scope; manifest records exact model IDs.</td></tr><tr><td>PIPE-16</td><td>Judges use 02's NAME rules, inlined; flavors never SAME_AS.</td></tr><tr><td>PIPE-17</td><td>Strip brand/segment/geo to bare cause via NAME-11 ladder.</td></tr><tr><td>PIPE-18</td><td>Measurement words out of name; per-X stays in name.</td></tr><tr><td>PIPE-19</td><td>Refute scope = business population; slices don't separate drivers.</td></tr></table></div></div>
+    <div><h3>PIPE-20…37</h3><div class="wrap"><table><tr><th>Ref</th><th>What it decides</th></tr><tr><td>PIPE-20</td><td>Same-name convergence across companies is normal; don't fix it.</td></tr><tr><td>PIPE-21</td><td>Delete reader XBRL guessing and optional_links everywhere.</td></tr><tr><td>PIPE-22</td><td>Keep catalog_first.js unwired; propose-first reuse replaces it.</td></tr><tr><td>PIPE-23</td><td>Models become per-role config slots, no hard-coded pins.</td></tr><tr><td>PIPE-24</td><td>End-of-build pass stamps every Driver's fact_type once, permanently.</td></tr><tr><td>PIPE-25</td><td>One BASE_METRIC edge per suffixed record; latent bases stay non-records.</td></tr><tr><td>PIPE-26</td><td>New --final validator: F1-F5 fact_type/family/suffix checks, F5 alarm.</td></tr><tr><td>PIPE-27</td><td>Micro-hardening: throw-on-fail, auto-load approved, single-source HIGH_BLAST, close guard gaps.</td></tr><tr><td>PIPE-28</td><td>Record = old shape plus fact_type, minus optional_links.</td></tr><tr><td>PIPE-29</td><td>XBRL concepts are company/time-specific, so linked at fact time.</td></tr><tr><td>PIPE-30</td><td>Model choice deferred; resolved by experiment after building pipeline.</td></tr><tr><td>PIPE-31</td><td>Leading model defaults per role; Sonnet-for-Refute stays rejected.</td></tr><tr><td>PIPE-32</td><td>Optimization experiments need A/B gate; owner rule-changes exempt.</td></tr><tr><td>PIPE-33</td><td>Pick reader via A/B gate before the fitness gate.</td></tr><tr><td>PIPE-34</td><td>Name-building is PIT-exempt; PIT applies at show/write time.</td></tr><tr><td>PIPE-35</td><td>Consumers verify sidecar first, read only clean records; latents never tradeable.</td></tr><tr><td>PIPE-36</td><td>Per-run acceptance: structural checks plus new fact_type/naming greens.</td></tr><tr><td>PIPE-37</td><td>Real gate: run fitness gate once, must beat baselines.</td></tr></table></div></div>
+  </div></div>
+</section>
+
+
+<!-- ============================================================ 34 · DECISION INDEX ============================================================ -->
+<section class="step" data-step="34">
+  <span class="tag">Decision Index · lookup (6/8)</span>
+  <h1>Track B — write the facts <span class="src">11 · 12</span></h1>
+  <p class="idxnote">The fact writer stack (FACT-01…35): ids, validators, resolvers, enrichment, verdict, read views.</p>
+  <div class="idx"><div class="idxgrid">
+    <div><h3>FACT-01…18</h3><div class="wrap"><table><tr><th>Ref</th><th>What it decides</th></tr><tr><td>FACT-01</td><td>Build the whole fact machinery: writer, enrichment, verdicts, read views.</td></tr><tr><td>FACT-02</td><td>Over-merge is permanent; merge only on exact ids; fail closed.</td></tr><tr><td>FACT-03</td><td>Build against the item contract; fact id excludes the producer.</td></tr><tr><td>FACT-04</td><td>Non-goals: producer prompts, Track A/C, live production, incremental refresh.</td></tr><tr><td>FACT-05</td><td>The exact new/overridden files to build; everything else is reused.</td></tr><tr><td>FACT-06</td><td>Authority order: 01-09/90/95 rule, census implements, this file builds facts.</td></tr><tr><td>FACT-07</td><td>Five dispositions per file: REUSE, OVERRIDE, ADD, DROP, PART-2.</td></tr><tr><td>FACT-08</td><td>Reused code has 468 passing tests; ports must stay green.</td></tr><tr><td>FACT-09</td><td>Pipeline: producer item → CLI write → enrich → verdict → read.</td></tr><tr><td>FACT-10</td><td>Census of every reusable file, path-verified, each with a disposition.</td></tr><tr><td>FACT-11</td><td>Id = du:source:driver_name:fact_scope; code-built; id event always FROM_SOURCE.</td></tr><tr><td>FACT-12</td><td>Drop evhash16, mid, basis_norm, per-share label magic, total-slice default.</td></tr><tr><td>FACT-13</td><td>Reuse by import: slug, source-id, units, period builder, member-normalize.</td></tr><tr><td>FACT-14</td><td>Write: MERGE, skip no-ops, never overwrite a non-null field with null.</td></tr><tr><td>FACT-15</td><td>Edges OF_DRIVER, FROM_SOURCE, HAS_PERIOD; drop FOR_COMPANY and UPDATES.</td></tr><tr><td>FACT-16</td><td>17 ordered deterministic validators, all hard-fail closed before any write.</td></tr><tr><td>FACT-17</td><td>CLI: dry-run default, within-event fusion, quote_hash, serves PIT prior view.</td></tr><tr><td>FACT-17b</td><td>The producer JSON contract; one CLI invocation = one source event.</td></tr><tr><td>FACT-18a</td><td>Don't edit the live guidance CLI; ship shared module alongside it.</td></tr></table></div></div>
+    <div><h3>FACT-18…</h3><div class="wrap"><table><tr><th>Ref</th><th>What it decides</th></tr><tr><td>FACT-18</td><td>Move period cascade and builders into ensure_driver_period; add exact-date input.</td></tr><tr><td>FACT-19</td><td>Driver-only period fixes: hard-fail unresolvable, rename long_range, fix calendar_override routing.</td></tr><tr><td>FACT-20</td><td>Gate: 21 period tests plus YTD/TTM proof plus parity before wiring.</td></tr><tr><td>FACT-21</td><td>Move unit_resolver beside guidance_ids; parity test is the CI tripwire.</td></tr><tr><td>FACT-22</td><td>Resolve units per slot; cents/pre-scaled fatal; unknown unit legal, logged.</td></tr><tr><td>FACT-23</td><td>Level and change each carry their own unit-kind/money-mode hint pair.</td></tr><tr><td>FACT-24</td><td>Comparison values borrow level_unit; they carry no unit fields themselves.</td></tr><tr><td>FACT-25</td><td>Money-per-denominator without _per_ in name hard-fails on the level slot.</td></tr><tr><td>FACT-26</td><td>Frozen axis tables, 3-way sentinel classify, PIT member menu, format-only validation.</td></tr><tr><td>FACT-27</td><td>Drop the human-curated alias layer; keep only pure member matching.</td></tr><tr><td>FACT-28</td><td>Member-link edges store their slice_part for per-part grouping and disambiguation.</td></tr><tr><td>FACT-29</td><td>Reuse linker; G2 keyed on measurement set; fresh backstops A-D; per-company.</td></tr><tr><td>FACT-30</td><td>Concept menu = MENU_Q shape plus new PIT cutoff at event_time.</td></tr><tr><td>FACT-31</td><td>Write concept edge best-effort; monitor signatures; resolve once per driver.</td></tr><tr><td>FACT-32</td><td>Enrichment runs via in-session subscription agents, not SDK; Haiku by exact id.</td></tr><tr><td>FACT-33</td><td>Read views ported: series key adds period_scope, collapse, render adds quote.</td></tr><tr><td>FACT-34</td><td>Two read modes: backtest uses strict du.date &lt; as_of; live = now.</td></tr><tr><td>FACT-35</td><td>Group labels by shared member pair at read time; conflicts stay split.</td></tr></table></div></div>
+  </div></div>
+</section>
+
+
+<!-- ============================================================ 35 · DECISION INDEX ============================================================ -->
+<section class="step" data-step="35">
+  <span class="tag">Decision Index · lookup (7/8)</span>
+  <h1>Track C &amp; the 25 reversals <span class="src">13 · 95</span></h1>
+  <p class="idxnote">Guidance archive/retire (v2.0) and every old→new reversal (paste <code>95 #N</code> to see what flipped).</p>
+  <div class="idx"><div class="idxgrid">
+    <div><h3>Track C — GI + sections</h3><div class="wrap"><table><tr><th>Ref</th><th>What it decides</th></tr><tr><td>GI-01</td><td>One law: retire old guidance; never mint production Drivers from it.</td></tr><tr><td>GI-02</td><td>Track C owns: archive, retire old guidance, keep rows as QA evidence.</td></tr><tr><td>GI-03</td><td>Not owned: names (A), DriverUpdate machinery (B), live producer (part 2).</td></tr><tr><td>GI-04</td><td>No bridge keeping old guidance as a hidden production source.</td></tr><tr><td>§1</td><td>Authority boundary: who owns names, facts, archive, live producer.</td></tr><tr><td>§2</td><td>Legacy census to archive: 8,432 updates, sources, anchors, periods.</td></tr><tr><td>§3</td><td>Core changes from retired v1.2: no replay, archive-only.</td></tr><tr><td>§4</td><td>Old machinery disposition: reuse helpers, retire writers and prompts.</td></tr><tr><td>§5</td><td>Old guidance is QA/regression evidence only, never production truth.</td></tr><tr><td>§6</td><td>New guidance facts created fresh from source documents.</td></tr><tr><td>§7</td><td>Whole-company slice = omitted slice, not slice=total.</td></tr><tr><td>§8</td><td>Fact-bearing Driver immutable: no rename, re-type, or delete.</td></tr><tr><td>§9</td><td>Archive contract: full offline export before any deletion.</td></tr><tr><td>§10</td><td>Retirement runbook: freeze, archive, cut consumers, then delete.</td></tr><tr><td>§11</td><td>Retirement gates: counts match, no consumers, no replay.</td></tr><tr><td>§12</td><td>Cross-doc updates applied: slice reversal and immutability alignment.</td></tr><tr><td>§13</td><td>What Track C does not build: producer, backfill, catalog, bridge.</td></tr><tr><td>§14</td><td>Minimalism proof: archive, retire, preserve QA, keep new clean.</td></tr><tr><td>§15</td><td>Drafting record: v1.2 replay retired, v2.0 archive-only active.</td></tr></table></div></div>
+    <div><h3>Reversals — 95 #1…25</h3><div class="wrap"><table><tr><th>Ref</th><th>What it decides</th></tr><tr><td>95 #1</td><td>Brand/segment/geo was in name → now name = cause only, rest is slice</td></tr><tr><td>95 #2</td><td>Adjusted/diluted was in name → now name = base metric, version in measurement</td></tr><tr><td>95 #3</td><td>Per-X price was bare/unknown unit → now denominator in name, unit = usd</td></tr><tr><td>95 #4</td><td>Driver-update was a change (X→Y) → now any real event fact</td></tr><tr><td>95 #5</td><td>Needed &gt;2 events → now a single event is valid</td></tr><tr><td>95 #6</td><td>Importance field named magnitude → now named weightage</td></tr><tr><td>95 #7</td><td>Importance was a 100% share → now independent force, never summed</td></tr><tr><td>95 #8</td><td>Verdict lived on the node → now on EXPLAINED_BY edge</td></tr><tr><td>95 #9</td><td>Related drivers unlinked → now linked by BASE_METRIC, never same-as</td></tr><tr><td>95 #10</td><td>Period was guidance-only → now one generic DriverPeriod for all fact-types</td></tr><tr><td>95 #11</td><td>4 slice types → now 6 kinds + unknown; store_type folded into channel</td></tr><tr><td>95 #12</td><td>Slice identified by XBRL member-id → now by plain segment text</td></tr><tr><td>95 #13</td><td>XBRL linked via hand dictionary → now LLM picks company's reported menu</td></tr><tr><td>95 #14</td><td>Import all 7,400 RavenPack categories → now checklist for rumored/failed only</td></tr><tr><td>95 #15</td><td>Reader was Fable → now Opus reads + Sonnet classifies</td></tr><tr><td>95 #16</td><td>level_bound field → now cut; shapes self-describe (point/floor/ceiling), hint never stored</td></tr><tr><td>95 #17</td><td>No free-text for numberless guidance → now returns as value_text</td></tr><tr><td>95 #18</td><td>evhash16 stored on fact node → now retired there, kept on verdict edge</td></tr><tr><td>95 #19</td><td>company_confirmed was enum → now boolean true/false</td></tr><tr><td>95 #20</td><td>Non-GAAP guard by name regex → now keyed on measurement set</td></tr><tr><td>95 #21</td><td>Reuse showed catalog first → now propose-first, name+quote coined blind</td></tr><tr><td>95 #22</td><td>Concept-linker via SDK/OAuth → now in-session workflow agents under subscription</td></tr><tr><td>95 #23</td><td>Period fallthrough was quiet gp_UNDEF → now hard-fail for DriverUpdate items</td></tr><tr><td>95 #24</td><td>previous_guidance allowed on metric → now both expectation baselines forbidden, route to _surprise</td></tr><tr><td>95 #25</td><td>Whole-company stored slice=total → now omitted slice means consolidated whole company</td></tr></table></div></div>
+  </div></div>
+</section>
+
+
+<!-- ============================================================ 36 · DECISION INDEX ============================================================ -->
+<section class="step" data-step="36">
+  <span class="tag">Decision Index · lookup (8/8)</span>
+  <h1>Open issues &amp; build readiness <span class="src">66 · 90 · 14</span></h1>
+  <p class="idxnote">The act-on issues and the readiness buckets — the finalize worklist by reference.</p>
+  <div class="idx"><div class="idxgrid">
+    <div><h3>Issues — ISS (66)</h3><div class="wrap"><table><tr><th>Ref</th><th>What it decides</th></tr><tr><td>ISS-1</td><td>90 §A misses 4 owner-opens living only in 10 §13. (OPEN)</td></tr><tr><td>ISS-2</td><td>Equal-rank same-day facts: later timestamp wins, tie → source_id. (RESOLVED)</td></tr><tr><td>ISS-3</td><td>EXPLAINED_BY verdict edge lock defined; DU-21…24 now LOCKED. (RESOLVED)</td></tr><tr><td>ISS-4</td><td>Unknown XBRL axis → hex-encoded serialization, kind stays unknown. (RESOLVED)</td></tr><tr><td>ISS-5</td><td>Doc headers say 01–09, omit the live 10_BuildPipeline. (OPEN)</td></tr><tr><td>ISS-6</td><td>Per-company alias layer replaced by member-anchored read-time grouping. (RESOLVED)</td></tr><tr><td>ISS-7</td><td>Producer history read needs PIT cutoff (date &lt; source time). (RESOLVED)</td></tr><tr><td>ISS-8</td><td>Scanner / change-flag layer cited as rationale but undefined. (OPEN)</td></tr><tr><td>ISS-9</td><td>Fitness gate's 'quality budget 0.1%' criterion is undefined. (OPEN)</td></tr><tr><td>ISS-10</td><td>'LLM never merges' is a write guarantee, not decision guarantee. (OPEN)</td></tr><tr><td>ISS-11</td><td>Macro fact shared across events has no single event id. (OPEN)</td></tr><tr><td>ISS-12</td><td>FS-03 restatement 'merge' is read-time; point to glue rule 9. (OPEN)</td></tr><tr><td>ISS-13</td><td>NAME-11 cross-company call impossible for the blind leaf reader. (OPEN)</td></tr><tr><td>ISS-14</td><td>FS-22 'recurs → generic' mis-flags real comparable geography/product values. (OPEN)</td></tr><tr><td>ISS-15</td><td>Sentinel NON_SLICE 'skip' over-merge hole has no runtime self-heal. (OPEN)</td></tr><tr><td>ISS-16</td><td>Beat-own-guidance splits into metric fact + derived _surprise state. (RESOLVED)</td></tr><tr><td>ISS-17</td><td>Suffixless self-canonical driver's fact_type has no deterministic catch. (OPEN)</td></tr><tr><td>ISS-18</td><td>Missing _surprise driver: governed G1/G2 reuse-or-create first, else PARK. (RESOLVED)</td></tr><tr><td>ISS-19</td><td>Terminal _guidance/_surprise family is lexical → regulatory_guidance mis-familied. (OPEN)</td></tr><tr><td>ISS-20</td><td>Latent bases force-typed metric; action roots and skips[] missed. (OPEN)</td></tr><tr><td>ISS-21</td><td>Eligibility gate decides period fields; unresolved → hard-fail. (RESOLVED)</td></tr><tr><td>ISS-22</td><td>FS-24 read key too narrow; align to full series key. (OPEN)</td></tr><tr><td>ISS-23</td><td>Instant vs one-day-duration collide; start==end illegal, mark instant. (RESOLVED)</td></tr><tr><td>ISS-24</td><td>Concept-link headline '100% precision' vs admitted 1-wrong residual. (OPEN)</td></tr><tr><td>ISS-25</td><td>08 XC-12 omits the non-GAAP-measurement no-inheritance carve-out. (OPEN)</td></tr><tr><td>ISS-26</td><td>News FROM_SOURCE locked; only pure-macro source still open. (OPEN)</td></tr><tr><td>ISS-27</td><td>fact_type stated inconsistently; 'Sonnet classifies' role has no home. (OPEN)</td></tr><tr><td>ISS-28</td><td>DailyCompanyMoveEvent is its own label, not an :Event subtype. (RESOLVED)</td></tr><tr><td>ISS-29…62</td><td>doc-hygiene / low-severity nits — see 66 §2</td></tr></table></div></div>
+    <div><h3>Readiness &amp; P0 fixes (14)</h3><div class="wrap"><table><tr><th>Ref</th><th>What it decides</th></tr><tr><td>14 §1</td><td>What's already solid; don't reopen Track A/B/C as blank slate.</td></tr><tr><td>14 §2</td><td>P0 missing running layer: 12 production/update jobs to design.</td></tr><tr><td>14 §3</td><td>P0 exact-rule fixes for permanent graph identity.</td></tr><tr><td>14 §4</td><td>P1 build pieces still needing a clear owner.</td></tr><tr><td>14 §5</td><td>Open owner decisions to force decided or explicitly defer.</td></tr><tr><td>14 §6</td><td>Cross-doc wording, authority-map, and glossary cleanup before coding.</td></tr><tr><td>14 §7</td><td>North-star aspiration: fully-automated living Driver ingestion, no humans.</td></tr><tr><td>14 §8</td><td>Fable's narrow task: fill §2–§6, not redo tracks.</td></tr><tr><td>14 §9</td><td>Coding-handoff checklist: all must be true to start.</td></tr><tr><td>P0-1</td><td>Pin quote_hash algorithm, normalization, value-signature recipe, examples.</td></tr><tr><td>P0-2</td><td>quote_hash collision handling stable across partial reruns.</td></tr><tr><td>P0-3</td><td>Pin multi-word measurement token normalization (e.g. cash EPS).</td></tr><tr><td>P0-4</td><td>Pin full unit-family map for 9-unit enum, incl. percent_qoq.</td></tr><tr><td>P0-5</td><td>Fix percent-only guidance: sequential percent guides not forced percent_yoy.</td></tr><tr><td>P0-6</td><td>Pin loss/negative sign, storage, rendering convention, examples.</td></tr><tr><td>P0-7</td><td>Direction-aware surprise math for lower-is-better metrics.</td></tr><tr><td>P0-8</td><td>Define event-time/write-time order for chronological writes; repair trigger.</td></tr><tr><td>P0-9</td><td>Locking/serialization point for concurrent Driver creation and writes.</td></tr><tr><td>P0-10</td><td>Safe path giving live-created Drivers fact_type, validation, write/park.</td></tr><tr><td>P0-11</td><td>One owner step materializes finalized Drivers into the graph.</td></tr><tr><td>P0-12</td><td>Pin fitness/honesty gate scoring, threshold, sample, failure action.</td></tr><tr><td>P0-13</td><td>Write change-flag scanner contract or remove the dependency.</td></tr></table></div></div>
+  </div></div>
+</section>
+
+</main>
+
+<nav class="nav">
+  <button id="prev" type="button">◀ Prev</button>
+  <div class="pos" id="pos">1 / 36</div>
+  <button id="next" type="button">Next ▶</button>
+</nav>
+
+<script>
+(function () {
+  /* ---------- slide navigation ---------- */
+  const steps = Array.from(document.querySelectorAll('.step'));
+  const total = steps.length;
+  const counter = document.getElementById('counter');
+  const pos = document.getElementById('pos');
+  const prev = document.getElementById('prev');
+  const next = document.getElementById('next');
+  const progress = document.getElementById('progress');
+  let cur = 1;
+
+  const pips = steps.map((_, i) => {
+    const pip = document.createElement('button');
+    pip.type = 'button'; pip.className = 'pip'; pip.title = 'Slide ' + (i + 1);
+    pip.addEventListener('click', () => { cur = i + 1; render(); });
+    progress.appendChild(pip);
+    return pip;
+  });
+
+  function render() {
+    steps.forEach((s, i) => s.classList.toggle('active', i + 1 === cur));
+    pips.forEach((p, i) => { p.classList.toggle('done', i + 1 < cur); p.classList.toggle('active', i + 1 === cur); });
+    counter.textContent = cur + ' / ' + total;
+    pos.textContent = cur + ' / ' + total;
+    prev.disabled = (cur === 1); next.disabled = (cur === total);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  function go(d) { const n = cur + d; if (n < 1 || n > total) return; cur = n; render(); }
+
+  prev.addEventListener('click', () => go(-1));
+  next.addEventListener('click', () => go(1));
+  document.addEventListener('keydown', (e) => {
+    const tag = (e.target && e.target.tagName) || '';
+    if (tag === 'SUMMARY') return;
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); go(1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(-1); }
+    else if (e.key === 'Home') { e.preventDefault(); cur = 1; render(); }
+    else if (e.key === 'End') { e.preventDefault(); cur = total; render(); }
+  });
+  document.querySelectorAll('[data-goto]').forEach((el) => {
+    el.addEventListener('click', () => {
+      const n = Number(el.getAttribute('data-goto'));
+      if (Number.isInteger(n) && n >= 1 && n <= total) { cur = n; render(); }
+    });
+  });
+
+  /* ---------- Impact Explorer ---------- */
+  // node: id, label ; edges: impacts (downstream), rests (upstream), threat
+  const NODES = [
+    { id: 'ONE-LAW', label: 'The one law', impacts: ['ASYM','BASE_METRIC','SLICE-OMIT','SAME_AS','IMMUT'], rests: [] },
+    { id: 'ASYM', label: 'Asymmetric authority', impacts: ['SLICE-ID','SLICE-OMIT','CONCEPT'], rests: ['ONE-LAW'] },
+    { id: 'FACT-ID', label: 'fact id = event+driver+fact_scope', impacts: ['NO-CLOBBER','READ-KEY','VERDICT'], rests: ['FACT-SCOPE','FACT-TYPE','PERIOD','UNITS','SLICE-ID','MEASURE'] },
+    { id: 'FACT-SCOPE', label: 'fact_scope (period|slice|measurement)', impacts: ['FACT-ID','READ-KEY'], rests: ['PERIOD','SLICE-ID','MEASURE'] },
+    { id: 'FACT-TYPE', label: 'fact_type (the router)', impacts: ['LANE-MATRIX','CONCEPT','ISS16','PERIOD','IMMUT'], rests: ['ONE-LAW'] },
+    { id: 'SLICE-ID', label: 'slice = kind:value', impacts: ['FACT-SCOPE','READ-KEY'], rests: ['ASYM'] },
+    { id: 'SLICE-OMIT', label: 'whole-company = omit (95 #25)', impacts: ['FACT-SCOPE','FACT-ID','READ-KEY','LANE-MATRIX','TRACKC'], rests: ['ONE-LAW','SLICE-ID'] },
+    { id: 'MEASURE', label: 'measurement set', impacts: ['FACT-SCOPE','CONCEPT'], rests: ['ONE-LAW'] },
+    { id: 'PERIOD', label: 'DriverPeriod', impacts: ['FACT-SCOPE','READ-KEY'], rests: [] },
+    { id: 'UNITS', label: '9-unit resolver', impacts: ['READ-KEY','NUM-SHAPES'], rests: [] },
+    { id: 'NUM-SHAPES', label: 'self-describing number shapes', impacts: ['ISS16','LANE-MATRIX'], rests: [] },
+    { id: 'BASE_METRIC', label: 'BASE_METRIC family', impacts: ['CONCEPT','ISS16','READ-KEY'], rests: ['ONE-LAW'] },
+    { id: 'SAME_AS', label: 'SAME_AS synonyms', impacts: ['READ-KEY','IMMUT'], rests: ['ONE-LAW'] },
+    { id: 'CONCEPT', label: 'XBRL concept-linking', impacts: [], rests: ['FACT-TYPE','MEASURE','BASE_METRIC','PIT'] },
+    { id: 'LANE-MATRIX', label: 'per-lane validator matrix', impacts: ['ISS16','VERDICT'], rests: ['FACT-TYPE','NUM-SHAPES'] },
+    { id: 'ISS16', label: 'ISS-16 beat/miss routing', impacts: ['VERDICT','BASE_METRIC','R95-24'], rests: ['FACT-TYPE','NUM-SHAPES','LANE-MATRIX'], threat: ['LOWER-BETTER'] },
+    { id: 'R95-24', label: 'previous_guidance forbidden on metric', impacts: ['LANE-MATRIX'], rests: ['ISS16'] },
+    { id: 'PIT', label: 'point-in-time discipline', impacts: ['CONCEPT','SLICE-ID','VERDICT'], rests: ['ONE-LAW'] },
+    { id: 'VERDICT', label: 'EXPLAINED_BY verdict', impacts: ['GRADE'], rests: ['FACT-ID','ISS16','PIT'] },
+    { id: 'GRADE', label: 'grade vs realized return', impacts: [], rests: ['VERDICT'] },
+    { id: 'NO-CLOBBER', label: 'no-null-clobber merge', impacts: [], rests: ['FACT-ID'] },
+    { id: 'READ-KEY', label: 'read series key', impacts: [], rests: ['FACT-SCOPE','FACT-TYPE','UNITS','BASE_METRIC'] },
+    { id: 'IMMUT', label: 'fact-bearing Driver immutability', impacts: ['TRACKC'], rests: ['ONE-LAW','FACT-TYPE'] },
+    { id: 'TRACKC', label: 'Track C archive/retire', impacts: [], rests: ['SLICE-OMIT','IMMUT'] },
+    { id: 'LOWER-BETTER', label: '⚠ lower-is-better metrics (open)', impacts: ['ISS16'], rests: [] },
+    { id: 'QUOTE-HASH', label: '⚠ quote_hash recipe (P0, unpinned)', impacts: ['FACT-ID'], rests: [] }
+  ];
+  const byId = {}; NODES.forEach(n => byId[n.id] = n);
+  const grid = document.getElementById('ieGrid');
+  const read = document.getElementById('ieRead');
+  const els = {};
+
+  NODES.forEach(n => {
+    const d = document.createElement('div');
+    d.className = 'ie-node'; d.setAttribute('data-id', n.id);
+    d.innerHTML = '<span class="nid">' + n.id + '</span><span class="nlbl">' + n.label + '</span>';
+    d.addEventListener('click', () => focus(n.id));
+    grid.appendChild(d); els[n.id] = d;
+  });
+
+  function clearAll() {
+    Object.values(els).forEach(e => { e.className = 'ie-node'; });
+  }
+  function focus(id) {
+    const n = byId[id];
+    const imp = n.impacts || [], rst = n.rests || [], thr = n.threat || [];
+    Object.keys(els).forEach(k => {
+      const e = els[k];
+      e.className = 'ie-node dim';
+      if (k === id) e.className = 'ie-node focus';
+      else if (imp.indexOf(k) >= 0) e.className = 'ie-node impacts';
+      else if (rst.indexOf(k) >= 0) e.className = 'ie-node rests';
+      else if (thr.indexOf(k) >= 0) e.className = 'ie-node threat';
+    });
+    // also surface reverse threats (nodes that threaten this one)
+    NODES.forEach(m => { if ((m.threat||[]).indexOf(id) >= 0) { if (els[m.id]) els[m.id].className = 'ie-node threat'; } });
+
+    const lbl = w => '<b>' + w + '</b>';
+    const lblU = w => '<span class="u">' + w + '</span>';
+    let html = 'Change <b style="color:#fff">' + id + '</b> — ' + n.label + '. ';
+    html += 'Impacts ' + lbl(imp.length) + ' downstream';
+    if (rst.length) html += ' · rests on ' + lblU(rst.length) + ' upstream';
+    if (thr.length) html += ' · <span class="t">threatens ' + thr.length + '</span>';
+    html += '.';
+    if (imp.length) html += '<br><span style="font-size:15px;opacity:0.85">→ re-check: ' + imp.map(x => (byId[x] ? byId[x].label : x)).join(' · ') + '</span>';
+    read.innerHTML = html;
+  }
+
+  render();
+})();
+</script>
+
+</body>
+</html>
