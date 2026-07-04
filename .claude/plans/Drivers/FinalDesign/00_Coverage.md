@@ -23,12 +23,13 @@ Legend: ✅ covered · 🟡 partial · ⏳ pending (section not written yet) · 
 | `12_TrackB_FactPipeline.md` | Track B build manual — writer · validators · enrichment · read views | FACT-01… | ✅ |
 | `13_TrackC_GuidanceIntegration.md` | Track C active design — archive/retire old guidance; QA evidence only | GI-01… | ✅ |
 | `13_Track_RetiredDesign.md` | retired Track C replay design | — | 📜 history only |
+| `14_BuildReadiness.md` | remaining pre-coding readiness work — running layer, exact-rule fixes, open decisions, cross-doc cleanup | — | ✅ |
 | `66_IssuesToBeHandled.md` | review backlog / issue ledger | ISS rows | ✅ |
 | `95_Supersession.md` | 25 reversals + stale-trap docs | — | ✅ |
 | `90_OpenItems.md` | all open threads (A–E) | — | ✅ |
 | `00_Coverage.md` | this file | — | ✅ |
 
-**Live coverage now spans `01`–`13` plus `66`, `90`, `95`, and `99` as history/audit.**
+**Live coverage now spans `01`–`14` plus `66`, `90`, `95`, and `99` as history/audit.**
 
 ## 2. Source doc → where it's covered
 ### Consolidation/ (the authoritative set)

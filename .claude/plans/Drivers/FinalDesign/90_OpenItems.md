@@ -31,6 +31,8 @@
 - **Blanket-withdrawal fan-out** — a "guidance withdrawn" fact fans out per open guide (the one place the producer writes beyond the literal quote); owner sign-off noted (09 §7).
 
 ## D. Design SECTIONS still to write
+See `14_BuildReadiness.md` for the pre-coding readiness work order that organizes these sections plus exact-rule fixes and cross-doc cleanup.
+
 - **Actual update / live-backfill process** — how fresh DriverUpdates are produced from reports/transcripts/news/filings over time, including fresh `fact_type=guidance` production from source documents.
 - **Incremental refresh** — re-run only on new events; old↔old frozen; the append-seam rules. *(Seam notes vs the finalization step already in `10` §13.)*
 - **Overview finish** — the 3-tracks map, the authority/reading map, a status dashboard.
