@@ -19,11 +19,16 @@ Legend: ✅ covered · 🟡 partial · ⏳ pending (section not written yet) · 
 | `08_XBRL_ConceptLinking.md` | concept-linking XC-01…18 | 18 | ✅ |
 | `09_DriverUpdate_Fields.md` | the 23-field spec (owner-adjudicated) | 23 fields | ✅ (§8 acked 2026-07-03) |
 | `10_BuildPipeline.md` | Track A build manual — engine census · overrides · finalization · model slots · acceptance | PIPE-01…37 | ✅ (adjudicated + committed 2026-07-02) |
-| `95_Supersession.md` | 24 reversals + stale-trap docs | — | ✅ |
+| `11_TrackB_DriverUpdate_Census.md` | Track B requirements inventory | T1…T15 | ✅ |
+| `12_TrackB_FactPipeline.md` | Track B build manual — writer · validators · enrichment · read views | FACT-01… | ✅ |
+| `13_TrackC_GuidanceIntegration.md` | Track C active design — archive/retire old guidance; QA evidence only | GI-01… | ✅ |
+| `13_Track_RetiredDesign.md` | retired Track C replay design | — | 📜 history only |
+| `66_IssuesToBeHandled.md` | review backlog / issue ledger | ISS rows | ✅ |
+| `95_Supersession.md` | 25 reversals + stale-trap docs | — | ✅ |
 | `90_OpenItems.md` | all open threads (A–E) | — | ✅ |
 | `00_Coverage.md` | this file | — | ✅ |
 
-**≈ 170 locked record-model decision-blocks + 37 PIPE build-manual blocks (`10`).** (A full decision-ID-level checklist grows here as the Guidance section lands.)
+**Live coverage now spans `01`–`13` plus `66`, `90`, `95`, and `99` as history/audit.**
 
 ## 2. Source doc → where it's covered
 ### Consolidation/ (the authoritative set)
@@ -42,11 +47,11 @@ Legend: ✅ covered · 🟡 partial · ⏳ pending (section not written yet) · 
 | Source | Covered by | Status |
 |---|---|---|
 | `WIP/DriverGraphSchema.md` | 07 (DriverUpdate) + 09 (fields) | ✅ |
-| `DriverOntology.md` | 02 (naming R-rules) | ✅ |
+| `DriverOntology.md` | 02 (naming R-rules); stale naming traps logged in 95 | ✅ / ⛔ stale bits |
 | `Drivers.md` | 01 + 02 (origin; drift → 95) | ✅ / ⛔ stale bits in 95 |
-| `INDEX.md` | 01 + 95 (the map + supersession) | ✅ |
+| `INDEX.md` | 01 + 95 (the map + supersession); stale measurement/name bits logged in 95 | ✅ / ⛔ stale bits |
 | `DriverExperiment.md` | 01 (the WHY) | ✅ |
-| `WIP/GuidanceDriverConsolidation.md` | MF-11 (company_confirmed) + ⏳ Guidance section | 🟡 |
+| `WIP/GuidanceDriverConsolidation.md` | MF-11 (company_confirmed) + `13` active Track C archive/retire; live guidance producer/backfill belongs to part 2 | 🟡 |
 | `HierarchicalCatalogPlan.md` | `10` (reuse-by-reference — HCP stays the detailed engine spec) | ✅ |
 | `WIP/IncrementalRefresh_FinalDesign.md` | ⏳ incremental-refresh section (seam notes in `10` §13) | ⏳ |
 | `WIP/Fable-to-Opus_Reader_FinalPlan.md` | `10` §7 (model slots; core decision superseded → 95 #15) | ✅ |
@@ -85,4 +90,4 @@ Legend: ✅ covered · 🟡 partial · ⏳ pending (section not written yet) · 
 - Every origin/WIP doc → ✅ covered, 🟡 partially covered, ⏳ pending a named section, or ⛔ excluded-with-a-home.
 - No source is unaccounted for.
 
-**Still to migrate (design not yet written):** **Guidance integration** (from `GuidanceDriverConsolidation`) and **incremental refresh** (from `IncrementalRefresh_FinalDesign`). These are the ⏳ rows above — tracked, not lost. *(The DriverCatalog build pipeline landed 2026-07-02 as `10_BuildPipeline.md`.)*
+**Still to write:** **incremental refresh** and the **actual update/live-backfill process**. Track C guidance archive/retire is written in `13`; fresh guidance production belongs to part 2, not old-guidance replay.

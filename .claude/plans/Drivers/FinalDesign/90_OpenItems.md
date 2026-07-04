@@ -23,7 +23,7 @@
 | **PER-20** | DriverPeriod design locked; **not built** — extract `driver_period_resolver.py`, pass the 21 tests, prove YTD/TTM math, write-once hardening | build-pending |
 | **XC-16** | Concept-linker: replace the hand 4-entry deny-set with the us-gaap **calculation-hierarchy** veto | recommended **before** the full-universe run |
 | Concept-link full run | Validated on 274/795 companies (~35%); a **full-universe run** is pending | pending |
-| Guidance field-map | `09 §5` delivers old-guidance-field → new-home; still verify against the **real guidance schema** (`guidance_ids.py`) + the member/company reconciliation | mostly done |
+| Guidance field-map / member-company reconciliation | No longer a Track C production-replay task. Old guidance fields and links are archived as QA evidence; fresh guidance field mapping and member/company reconciliation belong to Track B, part 2, and enrichment design. | re-homed |
 
 ## C. Parked / deferred (out of scope for now)
 - **Macro/news attribution** — **core shape LOCKED 2026-07-02**: `DailyCompanyMoveEvent {id=dcm:<cik>:<trade_date>, trade_date, created}` `-FOR_COMPANY->Company` `-ON_DATE->Date`; verdict via `EXPLAINED_BY`; realized return **read from `Date-HAS_PRICE-Company`** (never duplicated); News stays `FROM_SOURCE`. **Open details:** the significance threshold · the source for a *pure-macro* driver (e.g. `oil_price` with no company news) · `subject_company` / 0..N `FROM_SOURCE` if ever needed.
@@ -31,7 +31,7 @@
 - **Blanket-withdrawal fan-out** — a "guidance withdrawn" fact fans out per open guide (the one place the producer writes beyond the literal quote); owner sign-off noted (09 §7).
 
 ## D. Design SECTIONS still to write
-- **Guidance integration** (Track C) — regenerate-as-`fact_type=guidance` (decided), the reuse matrix, and the field-map (09 §5 is the core; add the class-level + member/company parts).
+- **Actual update / live-backfill process** — how fresh DriverUpdates are produced from reports/transcripts/news/filings over time, including fresh `fact_type=guidance` production from source documents.
 - **Incremental refresh** — re-run only on new events; old↔old frozen; the append-seam rules. *(Seam notes vs the finalization step already in `10` §13.)*
 - **Overview finish** — the 3-tracks map, the authority/reading map, a status dashboard.
 
@@ -39,7 +39,8 @@
 - **EXPLAINED_BY verdict layer** (DU-21…24 · `explained_target` key wording · verdict-edge `evhash16` kept · DailyCompanyMoveEvent = its own label; trade_date owned by the returns/trading-day layer) → **LOCKED by owner 2026-07-03** via the Track B plan (`12_TrackB_FactPipeline.md` §10.1); `07` upgraded.
 - **09 §8 amendment bundle** (`level_bound`→self-describing shapes + transient hints · `qualitative`→`value_text` guidance-only · fact `evhash16` retired) → **APPROVED by owner 2026-07-03**; the per-fact_type field set is FINAL (95 #16–18 applied; DU-13/14/16/18 amendments live).
 - **DriverCatalog build pipeline (Track A)** → **WRITTEN 2026-07-02: `10_BuildPipeline.md`** (engine reuse + overrides + class finalization + acceptance; the cost/fold levers folded into its §11; committed 281fd63).
-- **Guidance node-label** (`:GuidanceUpdate` vs `:DriverUpdate` vs dual-label) → **regenerate as `fact_type=guidance` DriverUpdate facts; retire the original guidance extraction** (owner, 2026-07-01 — PER-19).
+- **Guidance retirement / QA evidence (Track C)** → **WRITTEN 2026-07-04: `13_TrackC_GuidanceIntegration.md`**. Old guidance is archived/retired and kept as QA evidence only; no production replay of old `GuidanceUpdate` rows.
+- **Guidance node-label** (`:GuidanceUpdate` vs `:DriverUpdate` vs dual-label) → **archive/retire old `GuidanceUpdate`; create fresh `fact_type=guidance` DriverUpdate facts through the new Driver pipeline** (owner update, 2026-07-04 — Track C v2.0).
 - **company_confirmed scope** → **guidance-only** (owner, 2026-07-01 — MF-11); type = **boolean** (09).
 - **FactScope identity package (the old "Q1–Q4+E")** → resolved into `Naming_Slices_XBRL.md` (per memory); the `PENDING` file was deleted, don't reopen.
 - **`_guidance`/`_surprise` suffix vs `fact_type` "redundant?"** → keep both (NAME-17 / MF-09).

@@ -3,7 +3,7 @@
 **What this is:** how a fact gets a **time window**. `DriverPeriod` = the resolved calendar date window a DriverUpdate is about. It reuses the proven Guidance period math, extended to all fact-types.
 
 > Every rule is **LOCKED** unless marked **⏳ BUILD-PENDING**. Source = `Consolidation/GuidancePeriod.md`.
-> **Still open here:** PER-20 (build not done). PER-19 (transition) was **DECIDED 2026-07-01**.
+> **Still open here:** PER-20 (build not done). PER-19 (transition) was **UPDATED 2026-07-04** by Track C v2.0.
 
 ---
 
@@ -70,8 +70,8 @@
 ## D. Reuse + code-decides
 
 #### PER-10 — Reuse the Guidance mechanism; one shared module  `[LOCKED]`
-- **Plain:** Reuse Guidance's proven period code as-is, + ~15-20 lines for exact-date/YTD/TTM, in one shared module.
-- **Rule:** Reuse EXACTLY: `build_guidance_period_id()`, the `gp_` shape, the 4 sentinels, FYE math, `calendar_override`, `time_type`, instant collapse, existing-period lookup, SEC cache, prev-quarter prediction, SEC-corrected FYE, fail-closed on missing FYE. Add minimal extensions (exact-date input, `period_scope=ytd/ttm`, ~15-20 lines) to the SHARED mechanism. Extract the cascade into `driver_period_resolver.py`; Guidance + DriverUpdate both call `ensure_driver_period(...)`. Same behavior — only the label and call gates change.
+- **Plain:** Reuse Guidance's proven period code as-is, + ~15-20 lines for exact-date/YTD/TTM, in one shared module for new DriverUpdate writes.
+- **Rule:** Reuse EXACTLY: `build_guidance_period_id()`, the `gp_` shape, the 4 sentinels, FYE math, `calendar_override`, `time_type`, instant collapse, existing-period lookup, SEC cache, prev-quarter prediction, SEC-corrected FYE, fail-closed on missing FYE. Add minimal extensions (exact-date input, `period_scope=ytd/ttm`, ~15-20 lines) to the SHARED mechanism. Extract the cascade into `driver_period_resolver.py`; new DriverUpdate writes call `ensure_driver_period(...)`. The old Guidance CLI may be used as a parity oracle before retirement, but Track C does not rewire it into the new system.
 - **Why:** Reusing proven, tested fiscal math avoids a fork and re-deriving hard edge cases.
 - **Source:** GuidancePeriod.md §Reusing Guidance Mechanism · §What Can Be Used As-Is
 
@@ -130,15 +130,15 @@
 - **Why:** MERGE-by-id makes the same window converge to one node; the constraint enforces it.
 - **Source:** GuidancePeriod.md §Cypher Shape
 
-#### PER-19 — Transition strategy  `[LOCKED — decided 2026-07-01]`
-- **Plain:** Decided: regenerate guidance as `fact_type=guidance` driver facts, and retire the original guidance extraction. (Not dual-labeling.)
-- **Rule:** The transition is **DECIDED**: **REGENERATE** guidance as `fact_type=guidance` DriverUpdate facts, and **RETIRE** the original guidance extraction pipeline — do NOT dual-label existing nodes long-term. Final target = one label (`DriverPeriod`) and one guidance representation (`DriverUpdate`, `fact_type=guidance`); no duplicate `gp_` windows with different labels. During transition only, the period lookup may search both labels (`GuidancePeriod` + `DriverPeriod`) so old and new periods don't fork.
-- **Why:** Regenerate keeps one clean pipeline (guidance becomes just another fact_type) rather than maintaining two node types and two extractors.
-- **Source:** GuidancePeriod.md §Cypher Shape · **owner decision 2026-07-01**
-- **Replaces:** — *(resolves the former open transition decision; also settles the broader Guidance node-label fork → see the Guidance section)*
+#### PER-19 — Transition strategy  `[LOCKED — updated 2026-07-04]`
+- **Plain:** Old guidance is archived and retired. New guidance facts are created fresh by the Driver pipeline, not replayed from old `GuidanceUpdate` rows.
+- **Rule:** The transition is **DECIDED**: Track C archives and retires the old guidance graph/code path. It does not relabel old `GuidancePeriod` nodes, does not build a both-label lookup transition, and does not replay old guidance rows into production `DriverUpdate` facts. New `fact_type=guidance` DriverUpdates use `DriverPeriod` only. Old `GuidancePeriod` nodes remain old/archive objects until deletion or explicit inert quarantine.
+- **Why:** This keeps the new Driver system source-document based and avoids building replay machinery around legacy guidance mistakes.
+- **Source:** GuidancePeriod.md §Cypher Shape · **owner decision 2026-07-04** · `13_TrackC_GuidanceIntegration.md`
+- **Replaces:** older regenerate/both-label transition wording — 95_Supersession #10 context plus active Track C v2.0
 
 #### PER-20 — Status: design locked, build/verify pending  `⏳ BUILD-PENDING`
 - **Plain:** The design is final; the code isn't built. A gate of 21 tests + a few hardening tasks before wiring.
-- **Rule:** DESIGN LOCKED, BUILD/VERIFY PENDING. Gates: extract `driver_period_resolver.py` (cascade still lives in the Guidance write CLI); pass the 21 "Required Tests Before Wiring"; PROVE YTD/TTM math with Dec-FYE and non-Dec-FYE examples before coding (pseudocode unverified); write-once-date hardening (parity tests + constraints); ship the `HAS_XBRL` race guard as a producer eligibility check (not inside the resolver).
+- **Rule:** DESIGN LOCKED, BUILD/VERIFY PENDING. Gates: extract `driver_period_resolver.py` from the proven Guidance cascade; pass the 21 "Required Tests Before Wiring"; PROVE YTD/TTM math with Dec-FYE and non-Dec-FYE examples before coding (pseudocode unverified); write-once-date hardening (parity tests + constraints); ship the `HAS_XBRL` race guard as a producer eligibility check (not inside the resolver). This build does not rewire old Guidance as a Track C transition path.
 - **Why:** These are build/verify gates, not redesigns — the target design above is locked.
 - **Source:** GuidancePeriod.md §STATUS · §Required Tests · §Exactness Notes

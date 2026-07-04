@@ -1,6 +1,6 @@
 # 95 · Supersession ledger (history — old rule → new rule)
 
-**What this is:** the single record of every decision that was **reversed**. The live plan (`01`–`09`) carries only the *current* rule; this file preserves the *old* version + why it changed, so history is never lost. Rule blocks that flipped carry a `Replaces: 95_Supersession #N` pointer that resolves here.
+**What this is:** the single record of every decision that was **reversed**. The live plan (`01`–`13`, plus `90`) carries the *current* rule; this file preserves the *old* version + why it changed, so history is never lost. Rule blocks that flipped carry a `Replaces: 95_Supersession #N` pointer where practical.
 
 **How to read:** **Was** = the dead rule (do NOT copy it). **Now** = the locked current rule (in the live plan). Rule #s are stable — never renumbered.
 
@@ -28,7 +28,7 @@
 
 ## B. Field-spec amendments (2026-07-02, from `09_DriverUpdate_Fields.md`)
 
-Items #16-18 (the 09 §8 bundle) were **owner-APPROVED 2026-07-03** — now applied, nothing pending. Items #19-20 are earlier applied cleanups carried here for history.
+Items #16-25 are applied reversals/amendments carried here for history; nothing in this ledger is a pending owner item.
 
 | # | Topic | Was | Now | Source |
 |---|---|---|---|---|
@@ -48,6 +48,7 @@ Items #16-18 (the 09 §8 bundle) were **owner-APPROVED 2026-07-03** — now appl
 | 22 | Concept-linker invocation | `claude_agent_sdk` + OAuth (XC-11's mechanism) | **in-session workflow agents under subscription** — batch AND the default live path; the SDK is NOT approved without separate owner sign-off (June-15 metered-pool change) | owner 2026-07-03 · 12 FACT-32/§10.2 · XC-11 amended |
 | 23 | Driver-item period fallthrough | PER-11's ladder ends in a quiet `gp_UNDEF` fallthrough | **HARD-FAIL for DriverUpdate items** (fields unresolvable + no explicit `sentinel_class` = producer bug); `action_event` sentinel outcomes hard-fail; the fallthrough survives only in the pure shared builder (Guidance parity) | owner 2026-07-03 · 12 §10.7 · PER-11 note |
 | 24 | `previous_guidance` on the metric lane | metric `comparison_baseline` allowed `previous_guidance` (09 §4 / §6.4 matrix); only `consensus` was metric-FORBID | **BOTH expectation baselines FORBID on metric** — metric baseline is temporal-only ({prior_year, sequential_period, null}); an actual-vs-guidance/consensus comparison routes to the `_surprise` fact (which stores the expectation baseline) — no duplicate guide-store, true symmetry (ISS-16/OBJ-2) | owner 2026-07-03 · 12 §10.5 · amends 09 §4 · 07 DU-15 |
+| 25 | Whole-company slice serialization | explicit company-wide/total facts stored `slice=total`; silence/no stated part omitted slice | **Whole-company / consolidated / total-company / no stated segment = omitted slice**. For metric/guidance/surprise, omitted means consolidated whole company, not missing/unknown; for action_event, omitted means no slice applies or no narrower business part is stated. Real narrower parts still serialize as slices. | owner 2026-07-04 · 13 §7 · amends FS-10/FS-15 |
 
 *(Considered and left OUT as a row: "names-only catalog → born-complete class with mandatory fact_type" — an ADDITION, not a reversal of a stated locked rule; already recorded in DU-02/DU-07 and HCP's own header. Logged here so the decision trail isn't lost.)*
 

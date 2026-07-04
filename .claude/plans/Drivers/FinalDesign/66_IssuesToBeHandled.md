@@ -19,7 +19,7 @@
 - **One law everywhere:** over-merge = permanent damage, over-split = cheap fix → when unsure, keep separate. LLM judges meaning (assign / coin / flag, never merges two existing identities); code checks structure (exact merges, frozen deletes, hard-fails).
 - **Three layers:** Driver **class** (name + fact_type + SAME_AS/BASE_METRIC only — Track A builds it; end-of-build finalization stamps fact_type + families) → DriverUpdate **fact** (id = event + driver + fact_scope; 23 fields, 5 code-written; self-describing point/range/floor/ceiling shapes with transient hints; everything company/time-specific incl. XBRL links lives here) → **verdict** as the `EXPLAINED_BY` edge (direction / force / certainty in deciles, producer in the key, PIT-safe grading).
 - **fact_scope** = period + slice + measurement (format-normalized only, immutable; quote_hash last-resort); **DriverPeriod** = real calendar windows on Guidance's proven math; **units** = the 9-enum via the shared resolver with producer hints; **concept-linking** = guards → PIT menu → Haiku pick → adversarial verify → deterministic veto, abstain-biased.
-- **Status honestly held:** ~170 record-model blocks + 37 PIPE blocks locked; **the fitness/honesty gate has never run (0 graph nodes)**; open = 09 §8 owner ack, Guidance regeneration (Track C), incremental refresh, model policy, FS-23, XC-16, UNIT-14/PER-20 wiring. `07`'s number layer and `99` are history; `09` and topic files win.
+- **Status honestly held:** the record-model, Track A, Track B, and Track C archive/retire designs are written; **the fitness/honesty gate has never run (0 graph nodes)**. Still open/written-elsewhere = actual update/live-backfill process, incremental refresh, model policy, FS-23, XC-16, UNIT-14/PER-20 wiring. `07`'s number layer and `99` are history; `09` and topic files win.
 
 ---
 
@@ -149,6 +149,7 @@
 - **ISS-34 `[A-OBSE3]`** — No explicit **"`change_unit` required when `change_value` is non-null"** mirror rule, though `level_unit`-required-when-any-number is pinned and delta-only facts key their series on the change-unit family (glue 1). → **✅ RESOLVED 2026-07-03 (owner):** `change_unit` REQUIRED when `change_value` non-null; `unknown` allowed (census §14.6).
 - **ISS-35 `[A-OBSE4 + B-M33/M42]`** — `DU-22` verdict key says "**event** + driver + fact_scope + producer," but macro verdicts attach to a `DailyCompanyMoveEvent`; only historical `99` generalizes to "**explained_target**." *Fix:* adopt "explained_target" in DU-22.
 - **ISS-36 `[A-OBSE7]`** — `90 §B` says the `09 §5` field-map "still verify against the real guidance schema (`guidance_ids.py`)," while `09`'s header says it was "already verified against the guidance writer/ids/CLI code" — residual verification scope stated in neither.
+  → **✅ SUPERSEDED 2026-07-04 (Track C v2.0):** the old guidance field-map is archive/QA reference only, not a Track C production replay map. Fresh field mapping belongs to Track B / part 2.
 - **ISS-37 `[A-OBSE8]`** — `00_Coverage` gives `DriverOntology.md` and `INDEX.md` a plain "✅ covered" with **no stale-trap flag**, while `95`'s stale-trap list and `PIPE-06` both mark them stale on naming (00 *does* flag `Drivers.md`). A reader of 00 alone could treat DriverOntology as a safe naming source.
 - **ISS-38 `[A-OBSE9 + B-M46]`** — `95` header claims every flipped block carries a "Replaces #N" back-pointer, but rows **#6/#7/#8/#12/#14/#15** have no such pointer in their live blocks → a grep-based reversal audit under-counts.
 - **ISS-39 `[A-OBSE10]`** — `95` row #12 still carries "(re-confirm at slices)" although `03` is written and locks it (`FS-21`); the row also cites `FS-08/FS-02` while the block that states the reversal is `FS-21`.
@@ -169,6 +170,7 @@
 - **ISS-52 `[B-M23]`** — **action↔action SAME_AS is unspecified** (e.g. `buyback` ↔ `share_repurchase`). The rules forbid cross-flavor and action↔metric SAME_AS but never address within-action-flavor synonyms.
 - **ISS-53 `[B-M24]`** — A **relayed unconfirmed surprise** (consensus is inherently third-party; news-driver is a producer) has no field to mark it unconfirmed — `company_confirmed` is guidance-only.
 - **ISS-54 `[B-M27]`** — `PER-19` transition relies on a Neo4j uniqueness constraint that is **per-label**, so `gp_X` can exist as both `:GuidancePeriod` and `:DriverPeriod`; the "one clean window" guarantee rests only on lookup-both-labels code, not the cited constraint.
+  → **✅ SUPERSEDED 2026-07-04 (Track C v2.0):** no both-label period transition is built. Old `GuidancePeriod` stays old/archive until deletion or inert quarantine; new DriverUpdate writes use `DriverPeriod`.
 - **ISS-55 `[B-M29]`** — Enum asymmetry: `percent_yoy` exists but no **`percent_qoq`**; a stated QoQ growth % lands on `percent`/`percent_points`, mixing sequential and level semantics (UNIT-12 open, lean no).
 - **ISS-56 `[B-M30]`** — The money enum is **USD-only** (`usd`/`m_usd`); every non-USD money fact → `unknown` (called a "safe under-merge," but currency is permanently dropped with no flag).
 - **ISS-57 `[B-M36]`** — `MF-05` "**create** the base metric Driver in the same run (latent empty folder)" vs `PIPE-25` "a latent base is **NOT** a catalog.json record" (families.json only). Reconciled (artifact vs graph node) but reads as a contradiction.
@@ -234,7 +236,7 @@
 
 **Design-done, build/wiring not done:** UNIT-14 (resolver wiring) · PER-20 (`driver_period_resolver.py`, 21 tests, YTD/TTM non-Dec-FYE proof) · XC-16 + concept-link full-universe run · min_score 0.60 vs code-0.72 · prompt-mirror tests for the inlined NAME rules · `--measure-inherit` counter.
 
-**Sections still to write (90 §D + surfaced):** Guidance/Track-C integration · incremental refresh · Overview finish · **the scanner / change-flag layer (ISS-8)**. *(The within-company alias layer is no longer a section to write — ISS-6 resolved 2026-07-03 by member-anchored grouping, census §14.4/T12.9.)*
+**Sections still to write (90 §D + surfaced):** actual update/live-backfill process · incremental refresh · Overview finish · **the scanner / change-flag layer (ISS-8)**. *(Track C archive/retire is now written in `13`; the within-company alias layer is no longer a section to write — ISS-6 resolved 2026-07-03 by member-anchored grouping, census §14.4/T12.9.)*
 
 **The real gate:** RUN the fitness/honesty gate (`PIPE-37`) — never run, 0 graph nodes; must beat 0.634 / 0.535 / 72%; criterion "quality budget 0.1%" undefined (ISS-9).
 
@@ -326,7 +328,7 @@
   reversal to member-anchored grouping).
   - 03 FS-15 still carries the dead axis:value unknown-axis grammar, marked
   LOCKED, no annotation — identity-bearing, so a builder of 03 alone forks fact
-  ids (the hex format lives only in 11 §14.5 / 12).
+  ids (the hex format lives only in 11 §14.5 / 12). → **✅ RESOLVED 2026-07-04:** 03 now carries the hex unknown-axis format.
   - 09 §3 + §8 and 07's §D banner still show the pre-OBJ-2 wording
   (previous_guidance allowed on metric); the §4 matrices are correct.
   - 04 UNIT-04 still says one hint pair; 12 pins per-slot pairs.
@@ -334,7 +336,7 @@
   not deliberate (00's own rule requires explicit exclusions), so the zero-loss
   statement no longer covers its own folder. Related header drift: 95 says the
   live plan is "01–09", 99 says "01–09+90+95", while 95's own §C rows cite 10
-  and 12.
+  and 12. → **✅ RESOLVED 2026-07-04:** 00 lists 11/12/13/66, and 95/99 headers point to the expanded live set.
   - ISS-19/20 fixes (semantic suffix guard; F4 scanning side-lists) are
   "proposed to 10" by 12 §11 — but 10 doesn't contain them and doesn't track
   them.

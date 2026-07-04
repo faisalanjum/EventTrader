@@ -17,8 +17,8 @@
 - **Source:** Naming_Slices_XBRL.md §1
 
 #### FS-02 — fact_scope is one canonical string  `[LOCKED]`
-- **Plain:** The parts join into one string in a fixed order. If no part is stated, leave the slice empty. Use a quote hash only when two different facts in one event still collide.
-- **Rule:** Serialized as ONE canonical string, named parts in a fixed order (`period=…|slice=segment:enterprise|measurement=adjusted`). If the source names no business part, omit the slice slot; do NOT default to total and do NOT add a quote hash. Add `quote_hash=<hash>` only as the FS-03 tie-breaker when the structured parts still cannot separate two different facts in one event. **Identity uses format-normalization only** (case/whitespace/punctuation); per-company alias files that unify drift are **read-time views + member-matching, NEVER part of the id** — else growing an alias file would change a fact's id (ids are immutable). *(Pinned with 09.)*
+- **Plain:** The parts join into one string in a fixed order. If no narrower company part is stated, leave the slice empty; for numeric/reading lanes that means consolidated whole-company, while for action events it means no slice applies. Use a quote hash only when two different facts in one event still collide.
+- **Rule:** Serialized as ONE canonical string, named parts in a fixed order (`period=…|slice=segment:enterprise|measurement=adjusted`). If the source names no narrower business part, omit the slice slot. For metric/guidance/surprise, omitted slice means consolidated whole-company, not missing/unknown. For action_event, omitted slice means no slice applies or no narrower business part is stated. Do NOT add a quote hash for an omitted slice. Add `quote_hash=<hash>` only as the FS-03 tie-breaker when the structured parts still cannot separate two different facts in one event. **Identity uses format-normalization only** (case/whitespace/punctuation); per-company alias files that unify drift are **read-time views + member-matching, NEVER part of the id** — else growing an alias file would change a fact's id (ids are immutable). *(Pinned with 09.)*
 - **Why:** One fixed string → the same fact always makes the same key; code builds/compares it deterministically.
 - **Source:** Naming_Slices_XBRL.md §1 · DriverGraphSchema.md §4
 
@@ -75,10 +75,11 @@
 - **Source:** Naming_Slices_XBRL.md §4
 
 #### FS-10 — Slices apply to all 4 fact-types; period is not a slice  `[LOCKED]`
-- **Plain:** Every fact-type can be sliced. Explicit company-wide reads use "Total" for display, stored as `total`. Time is not a slice.
-- **Rule:** Slices apply to ALL 4 fact_types. Explicit company-wide → serialized value `total` (display label "Total"). Silence/no stated part → no slice. Never default silence to `total`. period (time) is NOT a slice — it's its own fact_scope part (DriverPeriod).
-- **Why:** "Which part" is orthogonal to "what kind of statement"; total-only-on-explicit-read stops silence being mislabeled as company-wide.
+- **Plain:** Every fact-type can be sliced. Whole-company / total / consolidated / no stated part uses an omitted slice; for actions, omitted simply means no slice applies. Time is not a slice.
+- **Rule:** Slices apply to ALL 4 fact_types. Whole-company / consolidated / total-company / no stated segment → omitted slice. For metric/guidance/surprise, omitted slice means consolidated whole-company, not missing/unknown. For action_event, omitted slice means no slice applies or no narrower business part is stated; "Total" display is not an action-event claim. Store a slice only when the source names a real narrower business part. period (time) is NOT a slice — it's its own fact_scope part (DriverPeriod).
+- **Why:** "Which part" is orthogonal to "what kind of statement"; the omitted slice is the one canonical company-wide bucket, while real narrower parts keep their own slice values.
 - **Source:** Naming_Slices_XBRL.md §4
+- **Replaces:** explicit total → `slice=total` — 95_Supersession #25
 
 ## C. The frozen axis table + sentinel (deterministic)
 
@@ -110,10 +111,11 @@
 - **Source:** Naming_Slices_XBRL.md §7 *(menu contents extended from "latest prior" → "union of all prior filings"; PIT re-locked per owner, 2026-07-02 — see 90_OpenItems §E)*
 
 #### FS-15 — The producer's 4 outcomes per fact  `[LOCKED]`
-- **Plain:** For each fact the producer picks a menu value, coins one, marks it unknown, uses explicit total, or leaves the slice empty. A quote-hash is only a last tie-breaker.
-- **Rule:** (1) on menu → pick (code supplies kind + a free XBRL link); (2) real, off-menu → coin in-style (no link); (3) no kind fits → `unknown:value` (unknown XBRL axis → carry the axis → `axis:value`, so two "Other" axes never merge); (4) explicit company-wide read → `total`; no stated part → omit slice. If two different facts in the same event still collide after all structured parts are set, add `quote_hash`.
+- **Plain:** For each fact the producer picks a menu value, coins one, marks a real slice unknown, or omits the slice for whole-company. A quote-hash is only a last tie-breaker.
+- **Rule:** (1) on menu → pick (code supplies kind + a free XBRL link); (2) real, off-menu → coin in-style (no link); (3) real slice but no kind fits → `unknown:value`; unknown XBRL axis (code-emitted sentinel path only) → `unknown:xbrlaxis_<hex_encoded_exact_axis_qname>__<normalized_member_value>` so two "Other" axes never merge; (4) whole-company / consolidated / total-company / no stated segment → omit slice. If two different facts in the same event still collide after all structured parts are set, add `quote_hash`.
 - **Why:** Covers every case without forcing a wrong link or a silent merge.
 - **Source:** Naming_Slices_XBRL.md §7
+- **Replaces:** explicit total → `slice=total` — 95_Supersession #25
 
 #### FS-16 — Code validates format only; never near-match snaps  `[LOCKED]`
 - **Plain:** Code only checks the shape of the pick (valid kind, lowercase). It never "snaps" a value to a close match.

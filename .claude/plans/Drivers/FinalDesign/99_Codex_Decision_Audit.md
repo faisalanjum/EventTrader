@@ -2,7 +2,7 @@
 
 Status: historical audit / loss-prevention file.
 
-Canonical plan: `FinalDesign` topic files (`01` through `09`, `90`, and
+Canonical plan: `FinalDesign` topic files (`01` through `13`, `66`, `90`, and
 `95`). If this file conflicts with those topic files, the topic files win.
 
 Purpose: preserve decisions surfaced during the Codex review so nothing discussed
@@ -1369,6 +1369,11 @@ Locked:
 - LLM does not build IDs.
 
 ### 4.5 GuidanceUpdate To DriverUpdate Mapping
+
+Supersession note, 2026-07-04: active Track C v2.0 supersedes this section's
+old replay/bridge transition. Old guidance is archived and retired; it is not
+production-replayed into DriverUpdate facts. Fresh guidance facts are created
+from source documents by the new Driver pipeline.
 
 Locked target:
 
