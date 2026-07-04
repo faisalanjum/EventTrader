@@ -1,5 +1,6 @@
 {
   "plansDirectory": ".claude/plans",
+  "includeCoAuthoredBy": false,
   "permissions": {
     "allow": [
       "Write",
@@ -12,12 +13,16 @@
       "WebFetch",
       "WebSearch",
       "Task",
-      "mcp__neo4j-cypher",
+      "mcp__neo4j-cypher__read_neo4j_cypher",
+      "mcp__neo4j-cypher__get_neo4j_schema",
       "mcp__perplexity",
       "mcp__alphavantage",
       "mcp__obsidian",
       "mcp__ibkr-live",
       "mcp__ibkr-paper"
+    ],
+    "ask": [
+      "mcp__neo4j-cypher__write_neo4j_cypher"
     ]
   },
   "env": {
@@ -91,6 +96,27 @@
           {
             "type": "command",
             "command": "/home/faisal/EventMarketDB/.claude/hooks/obsidian_capture.sh"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/faisal/EventMarketDB/.claude/hooks/comm_style_post_compact.sh"
+          }
+        ]
+      }
+    ],
+    "PostCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/faisal/EventMarketDB/.claude/hooks/comm_style_post_compact.sh"
           }
         ]
       }
