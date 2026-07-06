@@ -3,15 +3,15 @@
 **What this is:** how a DriverUpdate's numbers get a **unit**. The per-X-in-the-name rules live in the naming section (NAME-12/13); this section is the **unit resolution** mechanics — the enum, the shared resolver, the hints, and validation.
 
 > Every rule is **LOCKED** unless marked **⏳ OPEN** / **⏳ BUILD-PENDING**. Source = `Consolidation/UnitExtraction.md`.
-> **Still open here:** UNIT-12 (add `percent_qoq`?) · UNIT-14 (wiring not done). Both tracked in `90_OpenItems.md`.
+> **Still open here:** UNIT-14 (wiring not done), tracked in `90_OpenItems.md`. *(UNIT-12 RESOLVED 2026-07-06 — `percent_sequential` added; see below.)*
 
 ---
 
 ## A. The enum + the resolver
 
-#### UNIT-01 — The 9-unit enum  `[LOCKED]`
-- **Plain:** There are exactly 9 allowed final units. Every resolved unit must be one of them.
-- **Rule:** The unit enum, borrowed **verbatim** from Guidance's `canonical_unit` (so the Guidance link + dedup line up with no translation table): `usd · m_usd · percent · percent_yoy · percent_points · basis_points · count · x · unknown`.
+#### UNIT-01 — The 10-unit enum  `[LOCKED — percent_sequential added 2026-07-06]`
+- **Plain:** There are exactly 10 allowed final units. Every resolved unit must be one of them.
+- **Rule:** The 10-unit enum: `usd · m_usd · percent · percent_yoy · percent_sequential · percent_points · basis_points · count · x · unknown`. *[Was a 9-unit enum borrowed verbatim from Guidance's `canonical_unit`; **`percent_sequential` added by OD-11** (owner 2026-07-06 · 66 §0.R OD-11) = "% growth vs the immediately prior comparable period," mirroring `percent_yoy`, period-agnostic (`period_scope` carries QoQ/MoM/HoH), its own series family. The verbatim-Guidance-alignment rationale is superseded — Track C v2.0 archives/retires old Guidance, so enum divergence is moot.]*
 - **Why:** One shared, fixed vocabulary means Driver and Guidance units compare directly.
 - **Source:** UnitExtraction.md (enum) · DriverGraphSchema.md (unit enum)
 
@@ -79,11 +79,11 @@
 
 ## C. Stability + evidence + status
 
-#### UNIT-12 — Whether to add `percent_qoq`  `⏳ OPEN`
-- **Plain:** The 9-unit enum has no "quarter-over-quarter percent". Whether to add one is left open.
-- **Rule:** Keep the 9-unit enum stable. Do **NOT** add `percent_qoq` now. Revisit **only** if production evidence proves a new unit is required. *(Current lean: don't add.)*
-- **Why:** Enum churn breaks the Guidance↔Driver alignment and evhash stability; add only on proven need.
-- **Source:** UnitExtraction.md (decision) · also in `90_OpenItems.md`
+#### UNIT-12 — Sequential-growth unit  `[RESOLVED — owner 2026-07-06]`
+- **Plain:** The enum needed a sequential-growth unit; it was added as `percent_sequential` (not `percent_qoq`).
+- **Rule:** **RESOLVED (owner 2026-07-06 · 66 §0.R OD-11):** add **`percent_sequential`** — "% growth vs the immediately prior comparable period," period-agnostic (`period_scope` carries QoQ/MoM/HoH), its own series family, mirroring `percent_yoy` (see UNIT-01, now 10 units). NOT `percent_qoq` — that would misname a MoM/HoH sequential guide and force future enum sprawl. The old "don't add" lean is superseded: the historical blocker (verbatim Guidance-`canonical_unit` alignment + fact-evhash stability) is dead — Track C v2.0 retires old Guidance and the fact `evhash16` was retired (09 §8) — and sequential guides are a material class.
+- **Why:** A blanket `percent_yoy` hard-stamp on a sequential guide is wrong data + interleaves QoQ with YoY in the read series; `percent_sequential` (its own family) gives clean series separation.
+- **Source:** UnitExtraction.md (decision) · 66 §0.R OD-11 · also in `90_OpenItems.md`
 
 #### UNIT-13 — Evidence  `[EVIDENCE]`
 - **Plain:** The shared resolver was proven: 117/117 on the production path, 29/29 tests, naming 100%.

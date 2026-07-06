@@ -66,6 +66,7 @@ This file starts with the **naming rules** (NAME-01 … NAME-19). Later slices �
 - **Why:** These are recognized units; splitting them makes non-standard, non-reusable names.
 - **Source:** DriverOntology.md R6
 - **Replaces:** —
+- **Note (signed-driver pin — OD-12, owner 2026-07-06 · 66 §0.R OD-12):** a loss/deficit is the NEGATIVE region of the standard signed metric, not a separate cause — coin `net_income` / `operating_margin` / `eps`, never a loss-magnitude driver (`net_loss` / `loss_margin` / `loss_per_share`). The loss is stored as a negative value (09 §3), so two producers can't fork on `loss_margin=+5` vs `operating_margin=−5`. Consistent with NAME-15 (what-happened / size are not in the name).
 
 #### NAME-09 — One cause per name (split multiples; short; a noun)  `[LOCKED]`
 - **Plain:** One name = one cause. Two causes → two drivers. Keep names short and noun-like.
