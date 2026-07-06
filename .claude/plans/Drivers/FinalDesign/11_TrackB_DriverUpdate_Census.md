@@ -19,9 +19,9 @@
 - **T1.7 Provenance ≠ attribution.** `FROM_SOURCE` (where the fact came from — always present) is never collapsed with `EXPLAINED_BY` (what the stock move is blamed on — optional). A fact can be reported without explaining the move. `[DU-20]`
 - **T1.8 Class vs fact (the scoping law).** Everything company/value/time-specific — slice VALUES, measurement, periods, units, numbers, states, verdicts, XBRL links, PIT menus — lives on the DriverUpdate fact, written at fact time; the catalog build never writes a DriverUpdate. `[PIPE-03 · DU-02]`
 
-## §2 The record — 23 stored fields
+## §2 The record — 24 stored fields
 
-### §2a Code-written (5) — zero hallucination surface `[09 §3]`
+### §2a Code-written (6) — zero hallucination surface `[09 §3]`
 
 | # | Field | Rule | Source |
 |---|---|---|---|
@@ -30,6 +30,7 @@
 | 3 | `created` | system write time, ON CREATE only — the non-backfillable "when the system knew" forensic anchor | 09 §3 |
 | 4 | `date` | statement time, FULL ISO timestamp (intraday PIT cutoffs); writer-authoritative from the source node (old `given_date` semantics incl. transcript conference_datetime derivation) | 09 §3 |
 | 5 | `source_type` | `8k \| transcript \| 10q \| 10k \| news` — deliberately denormalized: the collapse-priority key (§12.3) over a 73%-restatement corpus | 09 §3 |
+| 6 | `series_unit` | code-written OD-10 grouping tag, stamped at write; read groups by equality on it. Level fact → level's canonical axis; delta-only → evidence-unique fold, else exact `change_unit`/`unknown`; numberless → null. Never rewrites stated value/unit fields | 09 §6.1 · 66 §0.R OD-10 |
 
 Retired from the old 33-field guidance shape (loss-proofed in 09 §5): fact-node `evhash16` (**approved cut 2026-07-03** — no-op re-run detection = direct field comparison; the verdict-edge hash is untouched) · `mid` · `derivation` · `label`/`label_slug` · `section`/`source_key`/`source_refs` (zero readers, verified) · `unit_raw`/`resolved_*` (transient resolver I/O) · guidance-side `xbrl_qname` (inherits via `BASE_METRIC`) · `concept_family_qname` · the `FOR_COMPANY` edge (company via Event → Company). **Parked DORMANT, not retired:** `origin` — activates only with the §10-rider decision (§15).
 
