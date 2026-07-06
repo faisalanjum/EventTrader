@@ -42,8 +42,8 @@
 - **Source:** UnitExtraction.md (DriverUpdate side)
 
 #### UNIT-06 — Validate the final unit AND the scaled value  `[LOCKED]`
-- **Plain:** Check the final resolved unit is one of the 9, and check the scaled number — not just the unit string.
-- **Rule:** Validate the FINAL resolved units only (`level_unit`, `change_unit`) AND assert the scaled VALUE, not just the unit string. Reject any final unit outside the 9 (`usd_per_share`, `shares`, `dollars_per_store`, `bps_yoy` = a resolver/prompt failure).
+- **Plain:** Check the final resolved unit is one of the 10, and check the scaled number — not just the unit string.
+- **Rule:** Validate the FINAL resolved units only (`level_unit`, `change_unit`) AND assert the scaled VALUE, not just the unit string. Reject any final unit outside the 10 (`usd_per_share`, `shares`, `dollars_per_store`, `bps_yoy` = a resolver/prompt failure).
 - **Why:** A right unit string with a wrong scale is still wrong; an out-of-enum unit means something upstream failed.
 - **Source:** UnitExtraction.md (validate final resolved units)
 
