@@ -62,7 +62,7 @@ These are not large sections, but they are dangerous because two coding agents c
 | 5 | Sequential percent guides | `09 §7` formerly hard-stamped percent-only guidance as `percent_yoy`, which was wrong for sequential-guiding companies. | **✅ RESOLVED — owner-approved 2026-07-06 (66 §0.R OD-11):** read the growth basis from the source; **add `percent_sequential`** (period-agnostic, own family; UNIT-01 now 10 units, UNIT-12 resolved); metric-type gate first (static-% level bare "up X%" → `unknown`); bare dated growth → `percent_yoy`, sentinel → `unknown`; measurement adjustments (cc/organic) go in the measurement slot and never decide the basis. Amends 09 §7 · UNIT-01/12; back-ported to 66/09/04/11/12/14/90/95. |
 | 6 | Negative / loss values | "Loss of up to $2B" can be represented as a ceiling in loss-space or a floor in signed-space. | **✅ RESOLVED — owner-approved 2026-07-06 (66 §0.R OD-12):** SIGNED value-space on the driver's numeric axis (not good/bad); value-first ("loss up to $X" → floor, the mirror of "revenue up to $X" → ceiling); no loss-magnitude drivers (02 naming pin); amends 09 §3 / 07 DU-14 shape grammar; back-ported to 66/09/07/02/90/95. |
 | 7 | Lower-is-better metrics | Cost, capex, tax rate, churn, and similar metrics can invert beat/miss logic. | **✅ RESOLVED — owner-approved 2026-07-06 (66 §0.R OD-13):** favorability = producer MEANING judgment, code stays polarity-free (computes position + `in_line` only); wordless-outside-range → transient polarity proof else `unknown`. Amends ISS-16 (12 §10.5) + DU-16.2; back-ported to 12/07/90/95. |
-| 8 | Chronological writes | Late old-dated filings can corrupt guidance state, withdrawal logic, and the Event-vs-DCM single-target rule. | Define event-time order, write-time order, repair trigger, and validation rule. |
+| 8 | Chronological writes | Late old-dated filings can corrupt guidance state, withdrawal logic, and the Event-vs-DCM single-target rule. | **✅ RESOLVED — owner-approved 2026-07-06 (66 §0.R OD-14):** order by public source time; guidance movement READ-DERIVED (bare→`unknown`, read layer derives `effective_driver_state`; validator skips `unknown`) so no stored-state staleness; withdrawal fan-out stays WRITTEN but strictly bounded (clear-withdrawal + exact resolved-scope, open guides only, add-only, no delete); amendments = new facts at amendment time (correction events/wording excluded from the derive); Event/DCM resolved at READ on trade date. No repair queue, no mutation, no human. Back-ported to 66/11/12/09/90/95. |
 | 9 | Concurrent producers | Two producers can coin near-synonym Drivers at the same time. | Define locking/serialization point for Driver creation and fact writes. |
 | 10 | Live missing-Driver creation | Track A stamps `fact_type` at catalog finalization, but live creation also needs a safe path. | Define how a live proposed Driver gets `fact_type`, validation, graph write, or parking. |
 | 11 | Catalog to graph materialization | Track B assumes Driver nodes exist; Track A says Neo4j writes are not its goal. | Assign one owner step that writes finalized Drivers to the graph. |
@@ -99,7 +99,7 @@ These should not stay vague before a coding handoff.
 |---|---|
 | `FS-23` cross-company value comparison | Deferred; keep conservative unless explicitly built. |
 | 8-K taxonomy | Open: whether the 24-tag taxonomy is reused. |
-| Amendments | Open: how amended filings affect old facts and states. |
+| Amendments | **Resolved by OD-14:** amended/corrected filings create new facts at amendment public time; current reads prefer the latest collapsed value; correction events/wording are excluded from read-derived guidance movement; exact retractions write numberless facts, otherwise do not guess. |
 | Final model policy | Open: exact model, number of runs, and job-by-job policy. |
 | G1 reuse-display rules | Open; blocks live catalog-first display details. |
 | K2 fold-repair profile gate | Open. |
@@ -107,7 +107,7 @@ These should not stay vague before a coding handoff.
 | Lifecycle / dormancy / IPO absorption | Open; default lean is live G1/G2 absorbs, but not final. |
 | Macro/news details | Open: significance threshold and pure-macro source representation. |
 | Dormant XBRL-link write path | Deferred; activate only if the owner approves the XBRL-link rider. |
-| Blanket withdrawal fan-out | Parked; needs explicit final rule if included in production. |
+| Blanket withdrawal fan-out | **Resolved by OD-14:** kept written only because each withdrawn guide needs a gradable node; exact-scope-only, open guides only, resolved-period containment, add-only for late covered guides, never delete. |
 
 ---
 

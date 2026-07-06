@@ -11,13 +11,12 @@ Split: **A** = design *decisions* still needing an owner call · **B** = design 
 |---|---|---|
 | **FS-23** | Cross-company slice-VALUE comparison ("International" at A = "International" at B?) — a separate, unbuilt layer | deferred; conservative bar · `03` FS-23 |
 | 8-K taxonomy | Reuse the 24-tag 8-K event taxonomy for Driver extraction? | open · part-2 input (`99` §4.7) |
-| Amendments | How amended/corrected filings affect old facts and states | open · part-2 input; interacts with `66` §0.R OD-14 |
 | **Model policy** | Final model per job · # runs · process | leading default only ("Opus reads + Sonnet classifies", 95 #15); experiments per `10` §7 PIPE-30/32 |
 | G1 reuse-display rules | Blocks the live propose-first display + `catalog_first.js` rebuild — NOT the fitness gate | `10` §13 |
 | K2 fold-repair profile gate | Batched repair on folds stays per-pair until decided | `10` §13 |
 | Target N | 796 vs 786 tickers (unreconciled) | `10` §13 |
 | Lifecycle / dormancy / IPO absorption | default lean: live G1/G2 absorbs | `10` §13 |
-| **66 §0.R sign-off queue** | 9 pinned design recommendations + 3 paste-ready 95 rows (#26/#27/#28) awaiting one owner pass | `66` §0.R closing |
+| **66 §0.R sign-off queue** | Remaining pinned owner calls + paste-ready 95 rows (#26/#27/#28) awaiting one owner pass | `66` §0.R closing |
 
 ## B. Design done — BUILD/WIRING not done
 | ID | What | Home |
@@ -32,7 +31,6 @@ Split: **A** = design *decisions* still needing an owner call · **B** = design 
 ## C. Parked / deferred (out of scope for now)
 - **Macro/news attribution details** — core DCM shape **LOCKED** (`dcm:<cik>:<trade_date>` · FOR_COMPANY/ON_DATE · returns read from `HAS_PRICE`; single-target-on-filing-days ✅ `12` §10.9). Still parked: the significance **threshold** · the **pure-macro source** (+ the `09` §4 pure-macro FROM_SOURCE carve-out that ships with it) · the two-independent-same-day-catalysts residual.
 - **§10 dormant XBRL-link rider** — activates only with the Codex §4.8 write-path decision (`09` §10).
-- **Blanket-withdrawal fan-out** — owner sign-off noted (`09` §7); final production rule lands with part 2.
 
 ## D. Design SECTIONS still to write
 See `14_BuildReadiness.md` for the full pre-coding work order (running layer §2 · exact-rule fixes §3 · cross-doc cleanup §6).
@@ -49,6 +47,7 @@ See `14_BuildReadiness.md` for the full pre-coding work order (running layer §2
 - **OD-13 lower-is-better surprise arithmetic** (favorability = producer MEANING judgment; code computes only polarity-free position + `in_line`; wordless-outside-range → transient discarded polarity proof, else `unknown`; proof allowed only when the chosen favorable direction has no common mainstream counter-story; amends ISS-16's `>high→beat` derivation + drops beat/missed from DU-16.2's sign rule; `change_value` stated-only + null-if-sign-ambiguous; report-only mixed-polarity monitor, no human) → **APPROVED** owner 2026-07-06 · `66` §0.R OD-13; back-port → `12` §10.5 · `07` DU-16.2 · `14` §3 #7 · 95 #31.
 - **OD-12 negative/loss sign convention** (SIGNED value-space on the driver's numeric AXIS, not good/bad; value-first — "loss up to $X" → floor, the mirror of "revenue up to $X" → ceiling; a charge amount positive, a benefit/reversal negative; zero-crossing ranges store both signed endpoints; comparatives polarity-read; numberless → no bounds; conditionals → narrative; co-bounds → existing fusion; naming pin: no loss-magnitude drivers; report-only history-based sign monitor, never keyword/primary; no new field/list/human) → **APPROVED** owner 2026-07-06 · `66` §0.R OD-12; back-port → `09` §3 · `07` DU-14 · `02` (naming pin) · `14` §3 #6 · 95 #32.
 - **OD-11 %-guide basis routing** (read the growth basis from the source, not a hard-stamp; **ADD `percent_sequential`** — period-agnostic, own series family, mirrors `percent_yoy`, resolves UNIT-12; metric-type gate first — static-% level bare "up X%" → `unknown`; sequential → `percent_sequential`, yoy/comparable/annual/bare-dated → `percent_yoy`, sentinel → `unknown`; measurement adjustments cc/organic/adjusted go in the MEASUREMENT slot and never decide the basis; annual: sequential==yoy → `percent_yoy`; growth never → plain percent; multi-basis → split; no new field/list/human) → **APPROVED** owner 2026-07-06 · `66` §0.R OD-11; back-port → `09` §7 · `04` UNIT-01/12 · `07` DU-17 · `11` T8/T11 · `12` constants/deferred list · `14` §3 #5 · 95 #33.
+- **OD-14 chronological writes / amendments** (order by public source time; guidance movement READ-DERIVED — bare→`driver_state=unknown`, read layer derives `effective_driver_state` from the prior COLLAPSED value in the canonical guidance series, never written back, validator skips `unknown`; correction events/wording are excluded; withdrawal fan-out stays WRITTEN but strictly bounded — clear withdrawal + exact resolved-scope, OPEN guides only, replace/reaffirm excluded, **add-only** for late covered guides, never delete; amendments = new facts at amendment time; Event/DCM resolved at READ on trade date, no stored flag; no repair queue/mutation/human) → **APPROVED** owner 2026-07-06 · `66` §0.R OD-14; back-port → `11` T11.6/T11.7 · `12` §10.9 + validator scope · `09` driver_state + §6.9 · `14` §3 #8 · 95 #34.
 - **Track A build pipeline** → **WRITTEN** 2026-07-02: `10_BuildPipeline.md` (committed 281fd63).
 - **Track C** → **archive/retire old guidance, NO production replay** (owner 2026-07-04, v2.0) · `13_TrackC_GuidanceIntegration.md`; the guidance node-label question closed the same way (fresh `fact_type=guidance` DriverUpdates; old `GuidanceUpdate` archived).
 - **company_confirmed** → guidance-only **boolean** (owner 2026-07-01) · MF-11 + `09`.
