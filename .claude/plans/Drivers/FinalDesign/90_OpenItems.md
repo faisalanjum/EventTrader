@@ -1,50 +1,55 @@
 # 90 · Open items (what's not yet decided or not yet built)
 
-**What this is:** every open thread in one place. Split into: **A** = design *decisions* still needing an owner call · **B** = design done, *code/wiring* not built · **C** = parked/deferred · **D** = design *sections* still to write · **E** = resolved (kept for the record).
+**What this is:** the owner's open-decisions DASHBOARD — every open thread, one line each, pointing at its home. This file stays thin on purpose: definitions, evidence, and recommendations live at the pointers, never here, so nothing can drift. **The full validated issue census + recommended resolutions = `66_IssuesToBeHandled.md` §0 (2026-07-05) · the pre-coding readiness work order = `14_BuildReadiness.md`.**
+
+Split: **A** = design *decisions* still needing an owner call · **B** = design done, *code/wiring* not built · **C** = parked/deferred · **D** = design *sections* still to write · **E** = resolved (the record).
 
 ---
 
 ## A. Open DESIGN decisions (need an owner call)
-| ID | Question | Lean / note |
+| ID | Question (one line) | Lean / home |
 |---|---|---|
-| ~~09 §8~~ | Field-spec amendment bundle | ✅ **APPROVED 2026-07-03** → §E |
-| ~~FS-14~~ | Slice-menu point-in-time | ✅ **RESOLVED 2026-07-02: PIT for DriverUpdate write-time** (3-context split) → §E |
-| **FS-23** | Cross-company **value** comparison (does "International" at A = "International" at B?) — a separate, not-yet-built layer | deferred; conservative bar |
-| **UNIT-12** | Add `percent_qoq` to the 9-unit enum? | lean **no** — keep stable unless production evidence forces it |
-| 8-K taxonomy | Is the 24-tag 8-K event taxonomy useful here? | open (README "To Resolve") |
-| Amendments | How to handle filing amendments? | open (README "To Resolve") |
-| **Model policy** | Reader default = **Opus reads + Sonnet classifies** (supersedes Fable/2-pass) — but exact model, number of runs, and job-by-job process need a **larger audit/experiment** | leading default set; full policy open |
-| ~~ISS-16 routing~~ | actual vs own guidance: metric / surprise / both | ✅ **LOCKED 2026-07-03** (`12` §10.5) — expectation comparison → metric + surprise, state derived from stated numbers, in_line materialized; corpus-grounded + adversarially checked. OBJ-2 resolved: `previous_guidance` also forbidden on metric (95 #24). **Fully closed.** → §E |
+| **FS-23** | Cross-company slice-VALUE comparison ("International" at A = "International" at B?) — a separate, unbuilt layer | deferred; conservative bar · `03` FS-23 |
+| **UNIT-12** | Add `percent_qoq` to the 9-unit enum? | lean **no** — sequential-% counter first: `66` §0.R OD-11 |
+| 8-K taxonomy | Reuse the 24-tag 8-K event taxonomy for Driver extraction? | open · part-2 input (`99` §4.7) |
+| Amendments | How amended/corrected filings affect old facts and states | open · part-2 input; interacts with `66` §0.R OD-14 |
+| **Model policy** | Final model per job · # runs · process | leading default only ("Opus reads + Sonnet classifies", 95 #15); experiments per `10` §7 PIPE-30/32 |
+| G1 reuse-display rules | Blocks the live propose-first display + `catalog_first.js` rebuild — NOT the fitness gate | `10` §13 |
+| K2 fold-repair profile gate | Batched repair on folds stays per-pair until decided | `10` §13 |
+| Target N | 796 vs 786 tickers (unreconciled) | `10` §13 |
+| Lifecycle / dormancy / IPO absorption | default lean: live G1/G2 absorbs | `10` §13 |
+| **66 §0.R sign-off queue** | 9 pinned design recommendations + 3 paste-ready 95 rows (#26/#27/#28) awaiting one owner pass | `66` §0.R closing |
 
 ## B. Design done — BUILD/WIRING not done
-| ID | What | Status |
+| ID | What | Home |
 |---|---|---|
-| **UNIT-14** | The shared unit resolver is proven in scratch (117/117), **not wired** into the producer (old Steps 5-7) | build-pending |
-| **PER-20** | DriverPeriod design locked; **not built** — extract `driver_period_resolver.py`, pass the 21 tests, prove YTD/TTM math, write-once hardening | build-pending |
-| **XC-16** | Concept-linker: replace the hand 4-entry deny-set with the us-gaap **calculation-hierarchy** veto | recommended **before** the full-universe run |
-| Concept-link full run | Validated on 274/795 companies (~35%); a **full-universe run** is pending | pending |
-| Guidance field-map / member-company reconciliation | No longer a Track C production-replay task. Old guidance fields and links are archived as QA evidence; fresh guidance field mapping and member/company reconciliation belong to Track B, part 2, and enrichment design. | re-homed |
+| **UNIT-14** | Shared unit resolver proven in scratch (117/117), **not wired** into a producer | `04` · `12` §6 |
+| **PER-20** | Extract `driver_period_resolver.py` · pass the 21 tests · prove YTD/TTM math · write-once hardening | `05` · `12` §5 |
+| **XC-16** | Calc-hierarchy veto replaces the hand 4-entry deny set — recommended **before** the full-universe run | `08` · `12` §8 |
+| Concept-link full run | Validated on 274/795 companies (~35%); full-universe run pending | `08` XC-13/15 |
+| Catalog→graph sync | `catalog_graph_sync.py` — spec pinned, Track-B ownership recommended | `66` §0.R OD-16 |
+| Guidance field-map / member reconciliation | re-homed: old guidance = archive/QA evidence (Track C v2.0); fresh mapping = Track B / part 2 | `13` §5 |
 
 ## C. Parked / deferred (out of scope for now)
-- **Macro/news attribution** — **core shape LOCKED 2026-07-02**: `DailyCompanyMoveEvent {id=dcm:<cik>:<trade_date>, trade_date, created}` `-FOR_COMPANY->Company` `-ON_DATE->Date`; verdict via `EXPLAINED_BY`; realized return **read from `Date-HAS_PRICE-Company`** (never duplicated); News stays `FROM_SOURCE`. **Open details:** the significance threshold · the source for a *pure-macro* driver (e.g. `oil_price` with no company news) · `subject_company` / 0..N `FROM_SOURCE` if ever needed.
-- **§10 dormant rider** — creating 10-K/10-Q metric facts by **XBRL-linking** instead of LLM re-extraction (`origin` field, `[XBRL]` quote, etc.). Activates only if the "Codex §4.8" write-path decision is approved.
-- **Blanket-withdrawal fan-out** — a "guidance withdrawn" fact fans out per open guide (the one place the producer writes beyond the literal quote); owner sign-off noted (09 §7).
+- **Macro/news attribution details** — core DCM shape **LOCKED** (`dcm:<cik>:<trade_date>` · FOR_COMPANY/ON_DATE · returns read from `HAS_PRICE`; single-target-on-filing-days ✅ `12` §10.9). Still parked: the significance **threshold** · the **pure-macro source** (+ the `09` §4 pure-macro FROM_SOURCE carve-out that ships with it) · the two-independent-same-day-catalysts residual.
+- **§10 dormant XBRL-link rider** — activates only with the Codex §4.8 write-path decision (`09` §10).
+- **Blanket-withdrawal fan-out** — owner sign-off noted (`09` §7); final production rule lands with part 2.
 
 ## D. Design SECTIONS still to write
-See `14_BuildReadiness.md` for the pre-coding readiness work order that organizes these sections plus exact-rule fixes and cross-doc cleanup.
+See `14_BuildReadiness.md` for the full pre-coding work order (running layer §2 · exact-rule fixes §3 · cross-doc cleanup §6).
+- **Actual update / live-backfill process (part 2)** — incl. fresh `fact_type=guidance` production from source documents + the 894-source historical backfill.
+- **Incremental refresh** — seam notes in `10` §13; design substrate `WIP/IncrementalRefresh_FinalDesign.md`.
+- **Scanner / change-flag layer** — contract pinned in `66` §0.R OD-5; the component itself = part 2. *(row added 2026-07-05 — closes ISS-8's missing-row half)*
+- **Overview finish** — the 3-tracks map · authority/reading map · status dashboard (`01`'s WIP note).
 
-- **Actual update / live-backfill process** — how fresh DriverUpdates are produced from reports/transcripts/news/filings over time, including fresh `fact_type=guidance` production from source documents.
-- **Incremental refresh** — re-run only on new events; old↔old frozen; the append-seam rules. *(Seam notes vs the finalization step already in `10` §13.)*
-- **Overview finish** — the 3-tracks map, the authority/reading map, a status dashboard.
-
-## E. RESOLVED (for the record)
-- **EXPLAINED_BY verdict layer** (DU-21…24 · `explained_target` key wording · verdict-edge `evhash16` kept · DailyCompanyMoveEvent = its own label; trade_date owned by the returns/trading-day layer) → **LOCKED by owner 2026-07-03** via the Track B plan (`12_TrackB_FactPipeline.md` §10.1); `07` upgraded.
-- **09 §8 amendment bundle** (`level_bound`→self-describing shapes + transient hints · `qualitative`→`value_text` guidance-only · fact `evhash16` retired) → **APPROVED by owner 2026-07-03**; the per-fact_type field set is FINAL (95 #16–18 applied; DU-13/14/16/18 amendments live).
-- **DriverCatalog build pipeline (Track A)** → **WRITTEN 2026-07-02: `10_BuildPipeline.md`** (engine reuse + overrides + class finalization + acceptance; the cost/fold levers folded into its §11; committed 281fd63).
-- **Guidance retirement / QA evidence (Track C)** → **WRITTEN 2026-07-04: `13_TrackC_GuidanceIntegration.md`**. Old guidance is archived/retired and kept as QA evidence only; no production replay of old `GuidanceUpdate` rows.
-- **Guidance node-label** (`:GuidanceUpdate` vs `:DriverUpdate` vs dual-label) → **archive/retire old `GuidanceUpdate`; create fresh `fact_type=guidance` DriverUpdate facts through the new Driver pipeline** (owner update, 2026-07-04 — Track C v2.0).
-- **company_confirmed scope** → **guidance-only** (owner, 2026-07-01 — MF-11); type = **boolean** (09).
-- **FactScope identity package (the old "Q1–Q4+E")** → resolved into `Naming_Slices_XBRL.md` (per memory); the `PENDING` file was deleted, don't reopen.
+## E. RESOLVED (the record — one line each; detail lives at the pointer)
+- **EXPLAINED_BY verdict layer** (DU-21…24 · explained_target key · edge evhash16 kept · DCM own label · trade_date owned by the returns layer) → **LOCKED** owner 2026-07-03 · `12` §10.1; `07` upgraded.
+- **09 §8 amendment bundle** (self-describing shapes + transient hints · `value_text` · fact `evhash16` retired) → **APPROVED** 2026-07-03 · `09` §8 · 95 #16–18.
+- **FS-14 slice-menu PIT** → **RESOLVED** 2026-07-02: PIT for DriverUpdate write-time, 3-context split · `03` FS-14.
+- **ISS-16 routing** (expectation comparison → metric + surprise, state derived from stated numbers, in_line materialized; OBJ-1/2/3 folded; `previous_guidance` also metric-FORBID) → **LOCKED** 2026-07-03 · `12` §10.5 · 95 #24.
+- **Track A build pipeline** → **WRITTEN** 2026-07-02: `10_BuildPipeline.md` (committed 281fd63).
+- **Track C** → **archive/retire old guidance, NO production replay** (owner 2026-07-04, v2.0) · `13_TrackC_GuidanceIntegration.md`; the guidance node-label question closed the same way (fresh `fact_type=guidance` DriverUpdates; old `GuidanceUpdate` archived).
+- **company_confirmed** → guidance-only **boolean** (owner 2026-07-01) · MF-11 + `09`.
+- **FactScope identity package** (the old "Q1–Q4+E") → resolved into `Naming_Slices_XBRL.md`; the PENDING file was deleted — don't reopen.
 - **`_guidance`/`_surprise` suffix vs `fact_type` "redundant?"** → keep both (NAME-17 / MF-09).
-- **FS-14 (slice-menu PIT)** → **PIT for DriverUpdate write-time** (owner, 2026-07-02); 3-context split (name-creation N/A · write=PIT · read/repair=all-history). Re-locked to `Naming_Slices §7` after a brief in-session reopen; slice-value immutability is orthogonal.
-- **Macro/news core shape** → **LOCKED** (`DailyCompanyMoveEvent`, CIK-based id, returns from `HAS_PRICE`) — open *details* in §C.
+- **Macro/news core shape** → **LOCKED** (DCM · CIK-based id · returns from `HAS_PRICE`) — open *details* in §C.
