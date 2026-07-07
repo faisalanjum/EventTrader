@@ -64,10 +64,10 @@ These are not large sections, but they are dangerous because two coding agents c
 | 7 | Lower-is-better metrics | Cost, capex, tax rate, churn, and similar metrics can invert beat/miss logic. | **✅ RESOLVED — owner-approved 2026-07-06 (66 §0.R OD-13):** favorability = producer MEANING judgment, code stays polarity-free (computes position + `in_line` only); wordless-outside-range → transient polarity proof else `unknown`. Amends ISS-16 (12 §10.5) + DU-16.2; back-ported to 12/07/90/95. |
 | 8 | Chronological writes | Late old-dated filings can corrupt guidance state, withdrawal logic, and the Event-vs-DCM single-target rule. | **✅ RESOLVED — owner-approved 2026-07-06 (66 §0.R OD-14):** order by public source time; guidance movement READ-DERIVED (bare→`unknown`, read layer derives `effective_driver_state`; validator skips `unknown`) so no stored-state staleness; withdrawal fan-out stays WRITTEN but strictly bounded (clear-withdrawal + exact resolved-scope, open guides only, add-only, no delete); amendments = new facts at amendment time (correction events/wording excluded from the derive); Event/DCM resolved at READ on trade date. No repair queue, no mutation, no human. Back-ported to 66/11/12/09/90/95. |
 | 9 | Concurrent producers | Two producers can coin near-synonym Drivers at the same time. | **✅ RESOLVED — owner-approved 2026-07-06 (66 §0.R OD-15):** exact duplicate Driver names already converge through `Driver.name` uniqueness + `MERGE`; near-synonym names are accepted over-splits handled by normal SAME_AS repair/fold. No new lock, queue, serialization layer, or special repair path. |
-| 10 | Live missing-Driver creation | Track A stamps `fact_type` at catalog finalization, but live creation also needs a safe path. | Define how a live proposed Driver gets `fact_type`, validation, graph write, or parking. |
-| 11 | Catalog to graph materialization | Track B assumes Driver nodes exist; Track A says Neo4j writes are not its goal. | Assign one owner step that writes finalized Drivers to the graph. |
+| 10 | Live missing-Driver creation | Track A stamps `fact_type` at catalog finalization, but live creation also needs a safe path. | **Tracked nonblocking:** handle in the final Driver Catalog/live-admission pass with G1; not a current DriverUpdate rule blocker. |
+| 11 | Catalog to graph materialization | Track B assumes Driver nodes exist; Track A says Neo4j writes are not its goal. | **Build wiring:** assign/write the finalized-catalog → graph materialization step; not a schema/rule ambiguity. |
 | 12 | Fitness / honesty gate | The gate is required, but the exact quality budget is still unclear. | Pin scoring, threshold, sample, answer key protocol, and failure action. |
-| 13 | Change-flag scanner | Several rules cite a scanner/change detector that is not yet specified. | Write the scanner contract or explicitly remove the dependency. |
+| 13 | Change-flag scanner | Several rules cite a scanner/change detector that is not yet specified. | **Downstream / part 2:** scanner consumes DriverUpdates; it does not change how Drivers or DriverUpdates are stored. |
 
 ---
 
@@ -91,21 +91,21 @@ These do not necessarily change the model, but a coding agent still needs a clea
 
 ---
 
-## 5. Open owner decisions to close or explicitly defer
+## 5. Tracked items by bucket
 
-These should not stay vague before a coding handoff.
+These stay visible, but they should not be read as current Driver/DriverUpdate rule blockers.
 
-| Decision | Current status |
+| Decision | Current bucket / status |
 |---|---|
-| `FS-23` cross-company value comparison | Deferred; keep conservative unless explicitly built. |
-| 8-K taxonomy | Open: whether the 24-tag taxonomy is reused. |
+| `FS-23` cross-company value comparison | Deferred separate cross-company comparison layer; keep conservative unless explicitly built. |
+| 8-K taxonomy | Deferred / low urgency part-2 routing helper. |
 | Amendments | **Resolved by OD-14:** amended/corrected filings create new facts at amendment public time; current reads prefer the latest collapsed value; correction events/wording are excluded from read-derived guidance movement; exact retractions write numberless facts, otherwise do not guess. |
-| Final model policy | Open: exact model, number of runs, and job-by-job policy. |
-| G1 reuse-display rules | Open; blocks live catalog-first display details. |
+| Final model policy | Build config / experiment: exact model, number of runs, fallback, and job-by-job policy. |
+| G1 reuse-display rules | Final Driver Catalog/live-admission pass; blocks live catalog-first display details, not the current rule lock. |
 | K2 fold-repair profile gate | **Resolved:** folds stay slow per-pair for safety; batched fold repair is deferred as a future optimization experiment/gate, not required for build readiness. |
-| Target universe count | Open: 796 vs 786 tickers. |
-| Lifecycle / dormancy / IPO absorption | Open; default lean is live G1/G2 absorbs, but not final. |
-| Macro/news details | Open: significance threshold and pure-macro source representation. |
+| Target universe count | Final catalog build-scope choice: 796 vs 786 tickers. |
+| Lifecycle / dormancy / IPO absorption | Final catalog maintenance policy; default lean is live G1/G2 absorbs. |
+| Macro/news details | Deferred DCM attribution layer: significance threshold and pure-macro source representation; core DCM shape already locked. |
 | Dormant XBRL-link write path | Deferred; activate only if the owner approves the XBRL-link rider. |
 | Blanket withdrawal fan-out | **Resolved by OD-14:** kept written only because each withdrawn guide needs a gradable node; exact-scope-only, open guides only, resolved-period containment, add-only for late covered guides, never delete. |
 
