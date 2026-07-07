@@ -77,21 +77,23 @@ This file starts with the **naming rules** (NAME-01 … NAME-19). Later slices �
 
 ### B. Name vs slice
 
-#### NAME-10 — Brand/segment/geography/product/customer/channel → the slice, not the name  `[LOCKED]`
-- **Plain:** The "which part of the company" detail goes in the slice tag, not the name.
-- **Rule:** Brand, segment, geography, product, customer, channel → the SLICE. `taco_bell_same_store_sales` → `same_store_sales` + `slice=segment:taco_bell`.
-- **Why:** The read-time series already partitions by slice + period; a part in the name would fragment the history and duplicate causes.
+#### NAME-10 — Own measured company parts → the slice, not the name  `[LOCKED]`
+- **Plain:** If the quote is measuring one part of the reporting company's own business, put that part in the slice tag, not the Driver name.
+- **Rule:** Segment, geography, product, customer, channel, and entity_ownership are slices ONLY when the quote clearly frames them as the reporting company's own measured part. Stored slice kinds are FS-06's six kinds; "brand" is a source word, not a stored kind. Capture every such qualifier with FS-02 multi-slice. Examples: Apple reports iPhone sales → `sales` + `slice=product:iphone`; Nike revenue in China → `revenue` + `slice=geography:china`; supplier orders from Walmart → `orders` + `slice=customer:walmart`.
+- **Why:** The read-time series already partitions by slice + period; an own-part in the name would fragment the history and duplicate causes.
 - **Source:** Naming_Slices_XBRL.md §2
 - **Replaces:** old "brand = its own driver" (DriverOntology R9) — 95_Supersession #1
 
-#### NAME-11 — When a brand/product DOES go in the name (the exception ladder)  `[LOCKED]`
-- **Plain:** A brand/product enters the name only in rare cases — decided by a short top-down test.
+#### NAME-11 — External or unclear objects stay in the name  `[LOCKED]`
+- **Plain:** Decide from this quote and this company only. Own measured part → slice. Outside thing causing the outcome, or unclear role → name.
 - **Rule:** Ask in order, stop at the first hit:
-  - **0.** Strip direction/impact words first (rose, headwind, generic pressure…) — never in the name. Exception: a word like `pressure` may stay only when it is part of a specific reusable market force (`glp1_pressure`), not a generic effect word.
-  - **1.** Strip the brand. Normal cause left (revenue, a recall)? → YES → **SLICE** it.
-  - **2.** Only a fragment needing an object (demand, ban), OR that exact brand/product itself moves OTHER companies? → YES → **NAME** it (`iphone_demand`, `glp1_pressure`, `tiktok_ban`).
-  - Unsure → **SLICE**.
-- **Why:** Default to slice (safe over-split); catch the real cross-company brand causes.
+  - **0.** Strip freestanding direction/impact words first (rose, headwind, generic pressure…) — never in the name. Exception: a word like `pressure` may stay only when it is part of a specific reusable market force (`glp1_pressure`), not a generic effect word.
+  - **1.** Is the qualifier clearly the reporting company's own measured part (segment/geography/product/customer/channel/entity_ownership)? → **SLICE** it under NAME-10.
+  - **2.** Is the qualifier an external object, actor, platform, policy, event, or product causing the outcome? → keep it in the **NAME** (`iphone_demand`, `aws_outage`, `china_lockdown`, `freight_cost_pressure`, `tiktok_ban`).
+  - **3.** Is the role unclear, or would stripping the qualifier leave only a vague fragment (`demand`, `ban`, `pressure`, `outage`)? → keep it in the **NAME**.
+- **Customer pin:** `customer:walmart` is a slice only when the metric measures the reporting company's own business with Walmart (orders/revenue from Walmart). If Walmart's independent action is the cause, keep Walmart in the name (`walmart_price_cuts`).
+- **Vendor pin:** Do not add a vendor slice kind here. A vendor/platform as an external cause stays in the name (`aws_outage`, `aws_spending`) unless a later owner rule creates a vendor slice.
+- **Why:** Slicing an unclear external cause can merge two different causes. Naming it may over-split, which is repairable.
 - **Source:** Naming_Slices_XBRL.md §2
 - **Replaces:** —
 
@@ -136,7 +138,7 @@ This file starts with the **naming rules** (NAME-01 … NAME-19). Later slices �
   5. period tokens
   6. numbers/sizes/bare units (`bps`, `percent`, `usd`)
   7. source-type labels
-  8. provider/vendor labels
+  8. provider/vendor labels as metadata *[OK when the vendor/platform is the external cause under NAME-11: `aws_outage`, `aws_spending`]*
   9. XBRL prefixes
   10. metaphors/sentiment/effect-on-stock words *[OK only when the word is part of a specific reusable market force, e.g. `glp1_pressure`; generic "pressure" stays banned]*
   11. a bare category word alone (`macro`, `sector`, `demand`, `sentiment`)

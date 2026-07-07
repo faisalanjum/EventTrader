@@ -165,11 +165,8 @@
 
 ## H. Cross-company + read rule
 
-#### FS-22 — Recurrence means OPPOSITE things for names vs values  `[LOCKED]`
-- **Plain:** A driver NAME repeating across companies is good (breadth). A slice VALUE repeating across companies is a red flag (it's generic, like "Other").
-- **Rule:** A DRIVER NAME that recurs across companies → REAL (breadth). A SLICE VALUE that recurs across companies → GENERIC (Corporate/Other/International), NOT a real brand. A real specific part lives at ONE company. Promoting a provisional value to cross-company-eligible needs the REAL signal (persistent magnitude on a confirmed axis), NEVER recurrence alone.
-- **Why:** Stops generic buckets ("International", "Other") being treated as comparable real businesses.
-- **Source:** Naming_Slices_XBRL.md §11
+#### FS-22 — Retired: slice-value recurrence is not a rule  `[RETIRED]`
+- **Status:** No active rule. Retired by OD-4; cross-company value comparison remains deferred to FS-23.
 
 #### FS-23 — Cross-company VALUE comparison is a separate, unbuilt layer  `⏳ OPEN`
 - **Plain:** Knowing a value's KIND is sure does NOT mean values compare across companies. That layer isn't built yet.

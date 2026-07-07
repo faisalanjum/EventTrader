@@ -156,7 +156,7 @@ Retired from the old 33-field guidance shape (loss-proofed in 09 §5): fact-node
 - **T9.6** Elimination guard (segment-family axes only): 3 exact-list buckets, NEVER regex — HARD-EXCLUDE ~24 pure eliminations (logged; real-activity auto-demotes to provisional) · PROVISIONAL ~241 reconciling/Corporate/Other/Unallocated (own row, quarantined from cross-company, never deleted) · KEEP everything else. `[FS-20 · 99 §5.6]`
 - **T9.7** Frozen axis→kind table (~55 verified slice axes) + 3-way runtime sentinel: `SLICE_AXES` → its kind · `NON_SLICE_AXES` → skip · anything unknown → PROVISIONAL slice, never silently skipped. Classify by MEMBERS, never axis names. Refreshed offline only. (The axis-list DATA + member examples live in `Consolidation/XBRL_SliceAxis_Catalog.md`.) `[FS-11/12/13]`
 - **T9.8** Member link (`MAPS_TO_MEMBER`) = enrichment only (§4); the slice TEXT identifies the fact (~57% linkless is fine). `entity_ownership` = the least clean bucket — JV/equity-method strongest, rest conservative/provisional. `[FS-21 · 99 §5.7]`
-- **T9.9** Cross-company: a driver NAME recurring = real (breadth); a slice VALUE recurring = generic red flag ("International"/"Other"); promotion to cross-company-eligible needs the REAL signal (persistent magnitude on a confirmed axis), never recurrence. Value comparison across companies = a separate, unbuilt layer (FS-23, conservative bar). Provisional values excluded from cross-company reads until promoted. `[FS-22/23/24]`
+- **T9.9** Cross-company: slice-value recurrence has no active rule (FS-22 retired). Value comparison across companies = a separate, unbuilt layer (FS-23, conservative bar). Provisional values excluded from cross-company reads until promoted. `[FS-23/24 · 95 #37]`
 
 ## §10 Sub-system: XBRL concept link (enrichment step)
 
@@ -239,7 +239,7 @@ Retired from the old 33-field guidance shape (loss-proofed in 09 §5): fact-node
 |---|---|---|
 | `01_Overview` | mission 1–13, one law | §1 (T1.1/1.2) |
 | `02_DriverCatalog` | NAME-01…19 | Track A (naming authority) — Track B touchpoints only: per-X + benchmark in the read key (NAME-12/13 → §8.7), measurement out of names (NAME-14 → §3.5), suffix+fact_type both kept (NAME-17 → §6.1); producers coining names at fact time = part 2 (G1) |
-| `03_Slices_FactScope` | FS-01…25 | ALL in: identity §3 · write-time slices §9 · measurement §3.5 · read rule §12.1 · FS-22/23 §9.9/§15 |
+| `03_Slices_FactScope` | FS-01…25 | ALL in: identity §3 · write-time slices §9 · measurement §3.5 · read rule §12.1 · FS-23 §9.9/§15 (FS-22 retired) |
 | `04_Units` | UNIT-01…14 | ALL in §8 (+ UNIT-14 in §13/§15; UNIT-12 resolved by OD-11) |
 | `05_Periods` | PER-01…20 | ALL in §7 (PER-12 → §3.7 + §13) |
 | `06_MetricFamily` | MF-01…12 | fact_type §6.1 (MF-01) · separate-but-linked + family reads §12.1 (MF-02/03/12) · concept inheritance §10.6 (MF-10) · company_confirmed §2c (MF-11) · edge creation/validation (MF-03…09) = Track A finalization (10 PIPE-24/25/26) |
