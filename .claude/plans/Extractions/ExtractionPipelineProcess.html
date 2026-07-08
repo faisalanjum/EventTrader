@@ -1,0 +1,1933 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>The Extraction Pipeline — How It Works</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #0f172a;
+    --muted: #64748b;
+    --line: #e2e8f0;
+    --soft: #f8fafc;
+    --soft2: #f1f5f9;
+    --accent: #4f46e5;
+    --accent-soft: #eef2ff;
+    --green: #059669;
+    --green-soft: #d1fae5;
+    --amber: #d97706;
+    --amber-soft: #fef3c7;
+    --red: #dc2626;
+    --red-soft: #fee2e2;
+    --code: #1e293b;
+    --code-fg: #e2e8f0;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg); color: var(--fg);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    font-size: 24px; line-height: 1.55;
+  }
+
+  header {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255,255,255,0.97);
+    border-bottom: 2px solid var(--line);
+    padding: 18px 36px;
+    display: flex; align-items: center; gap: 20px;
+    backdrop-filter: blur(8px);
+  }
+  header .brand { font-weight: 800; font-size: 22px; letter-spacing: -0.01em; color: var(--accent); }
+  header .title-text { font-weight: 600; font-size: 20px; color: var(--fg); }
+  header .counter { margin-left: auto; font-variant-numeric: tabular-nums; color: var(--muted); font-size: 20px; }
+
+  .progress { display: flex; gap: 3px; padding: 12px 36px 14px; background: var(--soft); border-bottom: 1px solid var(--line); }
+  .progress .pip {
+    flex: 1; height: 7px; border: 0; border-radius: 999px;
+    background: #d1d5db; cursor: pointer; padding: 0;
+    transition: background 0.15s, transform 0.15s;
+  }
+  .progress .pip.done { background: #a5b4fc; }
+  .progress .pip.active { background: var(--accent); transform: scaleY(1.45); }
+  .progress .pip:hover { background: #818cf8; }
+
+  main { max-width: 1120px; margin: 0 auto; padding: 64px 40px 220px; }
+
+  .step { display: none; padding-bottom: 80px; }
+  .step.active { display: block; animation: fadeIn 0.3s ease-out; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  .tag {
+    display: inline-block;
+    font-size: 14px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--accent); font-weight: 800;
+    background: var(--accent-soft); padding: 6px 14px; border-radius: 999px;
+    margin-bottom: 18px;
+  }
+  .tag.green { color: var(--green); background: var(--green-soft); }
+  .tag.amber { color: var(--amber); background: var(--amber-soft); }
+  .tag.red { color: var(--red); background: var(--red-soft); }
+
+  h1 { font-size: 58px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.06; margin: 0 0 18px; }
+  h2 { font-size: 36px; font-weight: 700; margin: 40px 0 14px; letter-spacing: -0.02em; }
+  h3 { font-size: 26px; font-weight: 700; margin: 28px 0 10px; color: #1e293b; }
+
+  .lead { font-size: 28px; line-height: 1.45; color: #334155; margin: 0 0 32px; font-weight: 400; }
+  .lead b { color: var(--fg); font-weight: 700; }
+
+  p, li { font-size: 22px; line-height: 1.6; color: #1e293b; }
+  ul, ol { padding-left: 28px; margin: 16px 0; }
+  ul li, ol li { margin: 8px 0; }
+  ul li strong, ol li strong { color: var(--fg); font-weight: 700; }
+
+  .panel { background: var(--soft); border: 1px solid var(--line); border-radius: 18px; padding: 28px 32px; margin: 22px 0; }
+  .panel.accent { background: var(--accent-soft); border-color: #c7d2fe; }
+  .panel.green { background: var(--green-soft); border-color: #6ee7b7; }
+  .panel.amber { background: var(--amber-soft); border-color: #fcd34d; }
+  .panel.danger { background: var(--red-soft); border-color: #fca5a5; }
+  .panel h3:first-child { margin-top: 0; }
+  .panel p:last-child, .panel ul:last-child { margin-bottom: 0; }
+
+  code {
+    background: var(--soft2); padding: 2px 8px; border-radius: 6px;
+    font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+    font-size: 0.84em; color: #1e293b;
+  }
+
+  pre {
+    background: var(--code); color: var(--code-fg);
+    padding: 22px 26px; border-radius: 14px; overflow-x: auto;
+    font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+    font-size: 17px; line-height: 1.55;
+  }
+
+  details { margin-top: 22px; border: 1.5px solid var(--line); border-radius: 14px; padding: 18px 24px; background: white; transition: background 0.15s; }
+  details[open] { background: var(--soft); border-color: #c7d2fe; }
+  summary { cursor: pointer; font-weight: 700; color: var(--accent); font-size: 20px; padding: 4px 0; }
+  summary::marker { color: var(--accent); }
+  details > *:not(summary) { font-size: 20px; }
+  details pre { font-size: 16px; }
+  details .kv .k, details .kv .v { font-size: 19px; }
+
+  .twocol { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 24px 0; }
+  .threecol { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin: 24px 0; }
+  .twocol .col, .threecol .col { background: var(--soft); border: 1px solid var(--line); border-radius: 16px; padding: 24px 28px; }
+  .twocol .col h3, .threecol .col h3 { margin-top: 0; font-size: 22px; }
+  .threecol .col h3 { font-size: 20px; }
+  @media (max-width: 880px) { .twocol, .threecol { grid-template-columns: 1fr; } }
+
+  .flowline { display: grid; grid-auto-flow: column; gap: 10px; align-items: stretch; margin: 30px 0; overflow-x: auto; }
+  .flowline .node { background: white; border: 1.5px solid var(--line); border-radius: 16px; padding: 16px 16px; min-width: 148px; }
+  .flowline .node strong { display: block; font-size: 19px; line-height: 1.2; margin-bottom: 6px; color: var(--fg); }
+  .flowline .node span { display: block; color: var(--muted); font-size: 15px; line-height: 1.3; }
+  .flowline .arrow { color: var(--accent); font-size: 26px; font-weight: 800; align-self: center; }
+
+  .kv { display: grid; grid-template-columns: 320px 1fr; gap: 14px 28px; align-items: start; margin: 18px 0; }
+  .kv .k { font-weight: 700; color: var(--fg); font-size: 20px; }
+  .kv .v { color: #1e293b; font-size: 20px; }
+  @media (max-width: 760px) { .kv { grid-template-columns: 1fr; gap: 4px 0; } .kv .v { margin-bottom: 10px; } }
+
+  .pill { display: inline-block; padding: 4px 14px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 16px; font-weight: 700; margin-right: 8px; margin-bottom: 6px; }
+  .pill.green { background: var(--green-soft); color: var(--green); }
+  .pill.amber { background: var(--amber-soft); color: var(--amber); }
+  .pill.red { background: var(--red-soft); color: var(--red); }
+  .pill.gray { background: var(--soft2); color: var(--muted); }
+
+  .nav {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    background: rgba(255,255,255,0.78);
+    backdrop-filter: blur(14px) saturate(140%); -webkit-backdrop-filter: blur(14px) saturate(140%);
+    border: 1px solid rgba(226,232,240,0.9); border-radius: 999px;
+    padding: 6px 10px; display: flex; gap: 6px; align-items: center;
+    box-shadow: 0 6px 22px rgba(15,23,42,0.08); z-index: 60;
+  }
+  .nav:hover { background: rgba(255,255,255,0.96); }
+  .nav button { font: inherit; font-size: 15px; font-weight: 700; background: transparent; color: var(--fg); border: 0; padding: 6px 14px; border-radius: 999px; cursor: pointer; }
+  .nav button:hover { background: var(--accent-soft); color: var(--accent); }
+  .nav button:disabled { color: #cbd5e1; cursor: not-allowed; }
+  .nav button:disabled:hover { background: transparent; }
+  .nav .pos { font-size: 15px; color: var(--muted); font-variant-numeric: tabular-nums; min-width: 60px; text-align: center; }
+
+  .toc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 12px; margin: 28px 0; }
+  .toc-grid .item { padding: 14px 18px; background: var(--soft); border: 1px solid var(--line); border-radius: 14px; cursor: pointer; transition: all 0.15s; font-size: 17px; }
+  .toc-grid .item:hover { background: var(--accent-soft); border-color: #c7d2fe; transform: translateY(-2px); }
+  .toc-grid .item .num { color: var(--accent); font-weight: 700; margin-right: 8px; }
+
+  .small { font-size: 18px; color: var(--muted); }
+
+  .ascii {
+    background: var(--code); color: var(--code-fg);
+    padding: 22px 26px; border-radius: 14px;
+    font-family: ui-monospace, monospace; font-size: 16px; line-height: 1.5;
+    white-space: pre; overflow-x: auto;
+  }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; padding: 14px 18px; background: var(--soft); border: 1px solid var(--line); border-radius: 12px; margin: 18px 0; font-size: 16px; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+
+  table.t { width: 100%; border-collapse: collapse; margin: 22px 0; font-size: 19px; }
+  table.t th, table.t td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  table.t th { background: var(--soft); font-weight: 700; font-size: 17px; letter-spacing: 0.02em; }
+  table.t td code { font-size: 0.82em; }
+  table.t tr:last-child td { border-bottom: 0; }
+
+  .big-num { font-size: 40px; font-weight: 800; color: var(--accent); letter-spacing: -0.02em; }
+  .note { font-size: 18px; color: var(--muted); margin-top: 10px; }
+  .srcchip { font-size: 16px; color: var(--muted); background: var(--soft2); padding: 3px 10px; border-radius: 999px; font-weight: 700; }
+
+  /* ===== PRINT / PDF — show ALL slides, expand ALL details, fit the page (screen view unaffected) ===== */
+  @media print {
+    @page { size: letter portrait; margin: 11mm 12mm 12mm; }
+    html, body { font-size: 13px !important; background: #fff !important; }
+    header, .progress, #progress, .nav { display: none !important; }
+    main { max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
+    .step { display: block !important; break-before: page; page-break-before: always; padding: 0 0 4mm !important; animation: none !important; opacity: 1 !important; transform: none !important; }
+    .step:first-of-type { break-before: avoid; page-break-before: avoid; }
+    h1, h2, h3 { break-after: avoid; page-break-after: avoid; }
+    .panel, .twocol, .threecol, .kv, table, .legend, pre, .ascii, details, .toc-grid, .col, .node { break-inside: avoid; page-break-inside: avoid; }
+    h1 { font-size: 24px !important; line-height: 1.08 !important; margin: 0 0 8px !important; }
+    h2 { font-size: 17px !important; margin: 14px 0 6px !important; }
+    h3 { font-size: 14.5px !important; margin: 10px 0 5px !important; }
+    .lead { font-size: 14px !important; line-height: 1.35 !important; margin: 0 0 10px !important; }
+    p, li, .kv .k, .kv .v, .small, .note, td, th, summary, details p, details li, .col p, .col li { font-size: 11.5px !important; line-height: 1.4 !important; }
+    .tag, .pill, .badge, .srcchip { font-size: 9.5px !important; }
+    .panel { padding: 14px 16px !important; margin: 12px 0 !important; }
+    .ascii { font-size: 9px !important; line-height: 1.3 !important; white-space: pre !important; overflow: visible !important; padding: 10px 12px !important; }
+    pre { font-size: 10px !important; line-height: 1.35 !important; white-space: pre-wrap !important; word-break: break-word; overflow: visible !important; padding: 10px 12px !important; }
+    .twocol, .threecol { grid-template-columns: 1fr 1fr !important; gap: 12px !important; }
+    .step.active .toc-grid { grid-template-columns: 1fr 1fr 1fr !important; gap: 8px !important; }
+    .kv { grid-template-columns: 160px 1fr !important; gap: 6px 16px !important; }
+    .flowline { display: flex !important; flex-wrap: wrap !important; gap: 6px !important; overflow: visible !important; align-items: stretch !important; }
+    .flowline .node { min-width: 0 !important; flex: 1 1 120px !important; padding: 8px 10px !important; }
+    .flowline .node strong { font-size: 11px !important; }
+    .flowline .node span { font-size: 8.5px !important; }
+    .flowline .arrow { font-size: 15px !important; align-self: center !important; }
+    details { background: var(--soft) !important; border-color: #c7d2fe !important; }
+    a { color: inherit !important; text-decoration: none !important; }
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">EXTRACTION PIPELINE</div>
+  <div class="title-text">How the machine reads filings and writes facts — plain English</div>
+  <div class="counter" id="counter">1 / 60</div>
+</header>
+
+<div class="progress" id="progress" aria-label="Slide progress"></div>
+
+<main>
+
+<!-- ===== 1 TITLE ===== -->
+<section class="step active" data-step="1">
+  <span class="tag">Explainer · 60 slides (53 walkthrough + a 7-slide file appendix)</span>
+  <h1>One machine that turns filings into structured facts.</h1>
+  <p class="lead">This walks the <b>whole extraction pipeline</b>, one idea per slide — nothing left out. First <b>the generic machine</b> (reads any document, extracts any fact-type), then <b>guidance</b> (the one fact-type that's actually built), then <b>how it ran live in production</b> (the triggers, the daemon, the worker, the cluster). The <b>Appendix (slides 54–60)</b> explains every code file. Open the <code>Details</code> boxes for the deeper version.</p>
+
+  <div class="panel accent">
+    <h3>How to read this</h3>
+    <ol>
+      <li><strong>Use → and ←</strong> (or the buttons at the bottom) to move between slides.</li>
+      <li><strong>Each slide = one concept.</strong> The big text is the whole point; panels are the detail.</li>
+      <li><strong>Click a <code>Details</code> box</strong> for the deeper / technical version — that's where the fine print lives.</li>
+      <li><strong>Examples are real</strong> — pulled from actual runs (Apple, Salesforce, Analog Devices) and the live Neo4j graph.</li>
+    </ol>
+  </div>
+
+  <div class="toc-grid" aria-label="Contents">
+    <div class="item" data-goto="2"><span class="num">02</span>The goal (one analogy)</div>
+    <div class="item" data-goto="3"><span class="num">03</span>The one golden rule</div>
+    <div class="item" data-goto="4"><span class="num">04</span>Two generations (old → new)</div>
+    <div class="item" data-goto="5"><span class="num">05</span>The big picture (end to end)</div>
+    <div class="item" data-goto="6"><span class="num">06</span>The 3 axes (Type × Asset × Pass)</div>
+    <div class="item" data-goto="7"><span class="num">07</span>The 8-slot backpack</div>
+    <div class="item" data-goto="8"><span class="num">08</span>The orchestrator</div>
+    <div class="item" data-goto="9"><span class="num">09</span>The two reader bots</div>
+    <div class="item" data-goto="10"><span class="num">10</span>Add a type / add an asset</div>
+    <div class="item" data-goto="11"><span class="num">11</span>Modes &amp; the write gate</div>
+    <div class="item" data-goto="12"><span class="num">12</span>Result files &amp; status</div>
+    <div class="item" data-goto="13"><span class="num">13</span>What IS guidance?</div>
+    <div class="item" data-goto="14"><span class="num">14</span>The 3 nodes</div>
+    <div class="item" data-goto="15"><span class="num">15</span>The 6 links</div>
+    <div class="item" data-goto="16"><span class="num">16</span>The 20 fields</div>
+    <div class="item" data-goto="17"><span class="num">17</span>The slot ID</div>
+    <div class="item" data-goto="18"><span class="num">18</span>The value-hash (evhash16)</div>
+    <div class="item" data-goto="19"><span class="num">19</span>Idempotency (safe re-runs)</div>
+    <div class="item" data-goto="20"><span class="num">20</span>Periods: calendar windows</div>
+    <div class="item" data-goto="21"><span class="num">21</span>The 4-step period cascade</div>
+    <div class="item" data-goto="22"><span class="num">22</span>Fiscal vs calendar (+Opus bug)</div>
+    <div class="item" data-goto="23"><span class="num">23</span>Units: one clean scale</div>
+    <div class="item" data-goto="24"><span class="num">24</span>Units V2: the 3-axis judge</div>
+    <div class="item" data-goto="25"><span class="num">25</span>Derivation (7 shapes)</div>
+    <div class="item" data-goto="26"><span class="num">26</span>Basis (GAAP vs adjusted)</div>
+    <div class="item" data-goto="27"><span class="num">27</span>Segment (the iPhone test)</div>
+    <div class="item" data-goto="28"><span class="num">28</span>XBRL concept linking</div>
+    <div class="item" data-goto="29"><span class="num">29</span>Member (segment) linking</div>
+    <div class="item" data-goto="30"><span class="num">30</span>The 6 quality filters</div>
+    <div class="item" data-goto="31"><span class="num">31</span>The 5 assets at a glance</div>
+    <div class="item" data-goto="32"><span class="num">32</span>Transcripts (2 passes)</div>
+    <div class="item" data-goto="33"><span class="num">33</span>8-K filings</div>
+    <div class="item" data-goto="34"><span class="num">34</span>10-Q / 10-K</div>
+    <div class="item" data-goto="35"><span class="num">35</span>News (attribution)</div>
+    <div class="item" data-goto="36"><span class="num">36</span>One full worked example</div>
+    <div class="item" data-goto="37"><span class="num">37</span>The live runtime (overview)</div>
+    <div class="item" data-goto="38"><span class="num">38</span>Trigger 1: manual CLI</div>
+    <div class="item" data-goto="39"><span class="num">39</span>Trigger 2: the auto daemon</div>
+    <div class="item" data-goto="40"><span class="num">40</span>The Redis queue</div>
+    <div class="item" data-goto="41"><span class="num">41</span>The worker</div>
+    <div class="item" data-goto="42"><span class="num">42</span>Worker safety nets</div>
+    <div class="item" data-goto="43"><span class="num">43</span>KEDA autoscaling</div>
+    <div class="item" data-goto="44"><span class="num">44</span>The Neo4j MCP bridge</div>
+    <div class="item" data-goto="45"><span class="num">45</span>Billing (the key guard)</div>
+    <div class="item" data-goto="46"><span class="num">46</span>Warmup caches</div>
+    <div class="item" data-goto="47"><span class="num">47</span>The run ledger</div>
+    <div class="item" data-goto="48"><span class="num">48</span>Current live state</div>
+    <div class="item" data-goto="49"><span class="num">49</span>Model choice (Sonnet wins)</div>
+    <div class="item" data-goto="50"><span class="num">50</span>Validation runs</div>
+    <div class="item" data-goto="51"><span class="num">51</span>The shelved 8-K event map</div>
+    <div class="item" data-goto="52"><span class="num">52</span>Docs vs code (drift)</div>
+    <div class="item" data-goto="53"><span class="num">53</span>Gaps, footguns &amp; status</div>
+    <div class="item" data-goto="54" style="background:var(--accent-soft); border-color:#c7d2fe;"><span class="num">A</span>Appendix: the skill files</div>
+    <div class="item" data-goto="55"><span class="num">55</span>guidance_ids.py</div>
+    <div class="item" data-goto="56"><span class="num">56</span>guidance_writer.py</div>
+    <div class="item" data-goto="57"><span class="num">57</span>guidance_write_cli.py</div>
+    <div class="item" data-goto="58"><span class="num">58</span>concept_resolver + fiscal_math</div>
+    <div class="item" data-goto="59"><span class="num">59</span>extraction_worker.py</div>
+    <div class="item" data-goto="60"><span class="num">60</span>The triggers + cluster files</div>
+  </div>
+
+  <details>
+    <summary>Tiny glossary (the words you'll see — skim now, refer back later)</summary>
+    <div class="kv">
+      <div class="k">extraction</div><div class="v">reading a real document and pulling out clean, structured facts to store in the database.</div>
+      <div class="k">type</div><div class="v">WHAT to extract. Only one is built: <code>guidance</code>. The machine is designed so more can be added.</div>
+      <div class="k">asset</div><div class="v">WHERE to look: <code>transcript</code>, <code>8k</code>, <code>10q</code>, <code>10k</code>, <code>news</code>.</div>
+      <div class="k">pass</div><div class="v">a phase of reading: <code>primary</code> (main content) and optional <code>enrichment</code> (a second pass).</div>
+      <div class="k">guidance</div><div class="v">a company's own forward-looking numbers — "we expect next-quarter revenue of $94–98B".</div>
+      <div class="k">GuidanceUpdate</div><div class="v">one extracted fact (one number, one period, from one document). The thing we store.</div>
+      <div class="k">orchestrator</div><div class="v">the <code>/extract</code> skill — the conductor that runs the reader bots in order.</div>
+      <div class="k">agent / reader bot</div><div class="v">an AI sub-process that actually reads the document and proposes facts.</div>
+      <div class="k">deterministic</div><div class="v">plain code that always gives the same answer — used for IDs, units, dates, and the database write.</div>
+      <div class="k">MERGE</div><div class="v">a Neo4j write that means "create if new, update if it already exists" — makes re-runs safe.</div>
+      <div class="k">trigger / daemon</div><div class="v">the things that decide which documents to process and put jobs on the queue.</div>
+      <div class="k">worker</div><div class="v">the always-on program that takes a job off the queue and runs the extraction.</div>
+      <div class="k">KEDA</div><div class="v">the autoscaler that adds/removes worker copies based on how full the queue is.</div>
+      <div class="k">dry_run vs write</div><div class="v">practice mode (compute everything, save nothing) vs the real database write.</div>
+      <div class="k">warmup</div><div class="v">pre-fetching big lookup data into <code>/tmp</code> files before the AI reads, so nothing gets cut off.</div>
+      <div class="k">XBRL</div><div class="v">the standard machine tags companies file their numbers under, so software can compare them.</div>
+      <div class="k">MD&amp;A</div><div class="v">"management discussion &amp; analysis" — the narrative section of a 10-Q / 10-K.</div>
+      <div class="k">CIK</div><div class="v">a company's SEC ID number (used to look its data up).</div>
+      <div class="k">FYE</div><div class="v">fiscal year-end month — decides which calendar months each "quarter" covers.</div>
+      <div class="k">GAAP vs non-GAAP</div><div class="v">official accounting numbers vs the company's own "adjusted" numbers.</div>
+      <div class="k">Reg-FD / 8-K item</div><div class="v">an SEC fair-disclosure rule; an 8-K's "item number" says what kind of event it reports.</div>
+    </div>
+  </details>
+</section>
+
+<!-- ===== 2 GOAL ===== -->
+<section class="step" data-step="2">
+  <span class="tag">The goal</span>
+  <h1>Read a filing like a person — then save the facts like a robot.</h1>
+  <p class="lead">Companies bury their forward-looking numbers inside long documents. We want to <b>pull those numbers out automatically</b>, clean them up so every company looks the same, and store them in the graph so software can compare and trade on them.</p>
+
+  <div class="panel accent">
+    <h3>The analogy</h3>
+    <p>Imagine a tireless intern who reads <b>every</b> earnings call, press release, and SEC filing. For each one they fill in the <em>same</em> index card:</p>
+    <ul>
+      <li><b>What</b> metric? (Revenue) · <b>How much?</b> ($94–98B) · <b>When?</b> (next quarter) · <b>On what basis?</b> (non-GAAP) · <b>Proof?</b> (the exact quote).</li>
+    </ul>
+    <p>The pipeline is that intern — but it never tires, never guesses a number, and files every card with a barcode so the same fact is never filed twice.</p>
+  </div>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>Why bother?</h3>
+      <p>Once every company's guidance lives in one shape, you can ask: "who just <em>cut</em> their outlook?", "whose revenue guide is above consensus?" — across the whole market, instantly.</p>
+    </div>
+    <div class="col">
+      <h3>Why it's hard</h3>
+      <p>The same number can be said five ways ("$1.13 billion", "1,130 million", "$1.13B"), tied to a fiscal quarter that isn't a calendar quarter, on GAAP <em>or</em> adjusted basis. Cleaning that up consistently is the whole game.</p>
+    </div>
+  </div>
+
+  <p class="note">Guidance is the <b>one fact-type built so far</b>. The machine underneath is generic — it was designed so a future "analyst estimates" or "announcements" type drops in with no new plumbing.</p>
+</section>
+
+<!-- ===== 3 GOLDEN RULE ===== -->
+<section class="step" data-step="3">
+  <span class="tag">The spine</span>
+  <h1>One rule explains the whole system.</h1>
+  <p class="lead" style="font-weight:600; color:var(--fg);">The AI <b>reads and understands</b>. Plain code <b>computes IDs, units, dates, and does every database write</b>. The AI never touches the database directly.</p>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>🧠 The AI (reader bots)</h3>
+      <p>Anything needing <em>understanding</em>:</p>
+      <ul class="small" style="font-size:19px;">
+        <li>"Is this a real forward-looking number?"</li>
+        <li>"What metric / period / basis is this?"</li>
+        <li>"Copy the exact proof quote."</li>
+      </ul>
+    </div>
+    <div class="col">
+      <h3>⚙️ The code (Python)</h3>
+      <p>Anything <em>mechanical</em>:</p>
+      <ul class="small" style="font-size:19px;">
+        <li>Turn "$1.13B" into <code>1130</code> in millions.</li>
+        <li>Build the barcode ID, compute the date window.</li>
+        <li><b>Write to Neo4j</b> and refuse anything malformed.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="panel green">
+    <h3>Why this split is the whole trick</h3>
+    <p>LLMs are brilliant at reading but <b>wobbly at arithmetic and consistency</b>. If the AI built IDs or scaled numbers, two runs could disagree and you'd get duplicate or corrupt facts. So the AI only ever hands code a <b>clean list of proposed facts</b>; code does the exact, repeatable parts. The reader bots literally don't have the database "write" tool.</p>
+  </div>
+
+  <p><span class="pill">evidence-first</span> No quote = no fact. <span class="pill">recall over precision</span> When unsure whether something is guidance, extract it — a spare fact is cheaper than a missed one.</p>
+</section>
+
+<!-- ===== 4 TWO GENERATIONS ===== -->
+<section class="step" data-step="4">
+  <span class="tag amber">Orientation</span>
+  <h1>There are two generations — make sure you read the live one.</h1>
+  <p class="lead">An older, single-purpose guidance tool was rebuilt into a <b>generic</b> machine. The old one still sits in the repo as a frozen reference, which trips people up.</p>
+
+  <table class="t">
+    <thead><tr><th></th><th>OLD (reference only)</th><th>NEW (live)</th></tr></thead>
+    <tbody>
+      <tr><td><b>Skill</b></td><td><code>guidance-inventory</code></td><td><code>extract</code> (generic)</td></tr>
+      <tr><td><b>Reader</b></td><td><code>guidance-extract</code> agent <span class="pill red">deleted</span></td><td><code>extraction-primary</code> + <code>extraction-enrichment</code></td></tr>
+      <tr><td><b>Config</b></td><td>baked into the agent</td><td>per-type files + <code>config.yaml</code></td></tr>
+      <tr><td><b>Status</b></td><td>frozen doc, not run</td><td><b>the active path</b></td></tr>
+    </tbody>
+  </table>
+
+  <div class="panel danger">
+    <h3>The trap</h3>
+    <p>The skill registry still describes <code>guidance-inventory</code> as <em>"auto-loaded by guidance-extract agent."</em> That sentence is <b>stale</b> — that agent was deleted. The new <code>core-contract.md</code> is the old spec re-homed under the generic skill. When in doubt, the live files live under <code>.claude/skills/extract/</code>.</p>
+  </div>
+  <p class="note">Everything after this slide describes the <b>new, live</b> generic machine.</p>
+</section>
+
+<!-- ===== 5 BIG PICTURE ===== -->
+<section class="step" data-step="5">
+  <span class="tag">Big picture</span>
+  <h1>One job flows through five stages — every time.</h1>
+  <p class="lead">A "job" is one tiny unit: <b>one fact-type, one document, one company</b>. It rides a queue to a worker, which runs an AI that reads the doc, and finishes with deterministic code writing the facts to Neo4j.</p>
+
+  <div class="ascii">  trigger ──&#8594; Redis queue ──&#8594; KEDA scales 1–7 worker pods ──&#8594; extraction_worker.py
+  (what to do)   (extract:pipeline)        (more jobs = more pods)        (one job at a time)
+                                                                              │
+                                                                              v
+                                              Claude Agent SDK  (runs the AI; limits on slide 45)
+                                                                              │
+                                                                              v
+                                                  /extract  (the orchestrator skill)
+                                                       ├─&#8594; extraction-primary-agent      (reads main text)
+                                                       └─&#8594; extraction-enrichment-agent   (only transcripts: Q&amp;A)
+                                                                              │
+                                                                              v
+                                  guidance_write.sh ─&#8594; guidance_write_cli.py ─&#8594; guidance_writer.py
+                                                                              │
+                                                                              v
+                                          Neo4j:  MERGE Guidance / GuidanceUpdate / GuidancePeriod</div>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>The generic half (never changes)</h3>
+      <p>Trigger, queue, worker, orchestrator, the two bot shells. They don't know or care <em>what</em> they're extracting.</p>
+    </div>
+    <div class="col">
+      <h3>The specialized half (per type)</h3>
+      <p>The instruction files + the writer scripts. Today only <code>guidance</code> exists. Add a folder and you've added a type.</p>
+    </div>
+  </div>
+  <p class="note">We'll walk the generic half first (slides 6–12), then guidance in depth (13–36), then how this ran live (37–48).</p>
+</section>
+
+<!-- ===== 6 THREE AXES ===== -->
+<section class="step" data-step="6">
+  <span class="tag green">The machine · part 1</span>
+  <h1>Everything is decided by three independent dials.</h1>
+  <p class="lead">Adding capability never means rewriting the engine — you just turn a dial. The three dials are <b>Type × Asset × Pass</b>.</p>
+
+  <div class="threecol">
+    <div class="col">
+      <h3>TYPE <span class="pill gray">what</span></h3>
+      <p class="small" style="font-size:18px;">What to pull out. Live: <code>guidance</code>. Designed-for: estimates, announcements, anything.</p>
+    </div>
+    <div class="col">
+      <h3>ASSET <span class="pill gray">where</span></h3>
+      <p class="small" style="font-size:18px;">Which document to read: <code>transcript</code> · <code>8k</code> · <code>10q</code> · <code>10k</code> · <code>news</code>.</p>
+    </div>
+    <div class="col">
+      <h3>PASS <span class="pill gray">phase</span></h3>
+      <p class="small" style="font-size:18px;">A reading phase: <code>primary</code> (always) + optional <code>enrichment</code> (a 2nd look).</p>
+    </div>
+  </div>
+
+  <div class="panel accent">
+    <h3>The grid this creates</h3>
+    <p>1 type × 5 assets means <b>5 jobs you can run today</b> — guidance from a transcript, guidance from an 8-K, and so on. Each combination gets its own tiny rule-sheet, so an 8-K's quirks never leak into how transcripts are read.</p>
+    <div class="ascii">             transcript   8k    10q    10k    news
+  guidance      ✔(+Q&amp;A)    ✔     ✔      ✔      ✔        &#8592; the 5 live jobs
+  (estimates)    …          …     …      …      …        &#8592; a future type: same grid, zero new plumbing</div>
+  </div>
+
+  <details>
+    <summary>Why three dials and not two?</summary>
+    <p>Two (type × asset) couldn't express "read the prepared remarks, <em>then</em> separately read the Q&amp;A." That second look needs different rules from the first. So <b>pass</b> is its own dial — but it belongs <em>under</em> a type (each type defines its own passes). Today only <code>guidance × transcript</code> uses a second pass.</p>
+  </details>
+</section>
+
+<!-- ===== 7 EIGHT SLOTS ===== -->
+<section class="step" data-step="7">
+  <span class="tag green">The machine · part 2</span>
+  <h1>Before reading, each bot loads an 8-file "backpack."</h1>
+  <p class="lead">A reader bot is a <b>blank shell</b>. What makes it a "guidance-from-an-8-K reader" is the exact 8 files it loads first — chosen automatically by the Type/Asset/Pass dials.</p>
+
+  <table class="t">
+    <thead><tr><th>#</th><th>File</th><th>What it gives the bot</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><code>core-contract.md</code></td><td>the schema bible (fields, IDs, rules)</td></tr>
+      <tr><td>2</td><td><code>{pass}.md</code></td><td><b>the working brief</b> — do this, start to finish</td></tr>
+      <tr><td>3</td><td><code>{asset}.md</code></td><td>how this document is shaped in the database</td></tr>
+      <tr><td>4</td><td><code>{asset}-{pass}.md</code> ◄</td><td><b>the key trick</b> — what to extract from THIS asset</td></tr>
+      <tr><td>5</td><td><code>queries-common.md</code></td><td>shared database queries</td></tr>
+      <tr><td>6</td><td><code>{asset}-queries.md</code></td><td>queries to fetch this document's text</td></tr>
+      <tr><td>7</td><td><code>{type}-queries.md</code></td><td>type-specific lookups (e.g. existing guidance)</td></tr>
+      <tr><td>8</td><td><code>evidence-standards.md</code></td><td>4 anti-hallucination rules</td></tr>
+    </tbody>
+  </table>
+
+  <div class="panel amber">
+    <h3>Slot 4 is the load-bearing wall</h3>
+    <p>The "intersection file" holds rules like <em>"in an 8-K, the press-release exhibit usually holds the guidance."</em> It keeps <b>type rules out of asset files</b>. Without it, the 8-K profile would fill up with guidance-only rules and break the day you add a second type. Slot 4 is the reason the machine stays generic.</p>
+  </div>
+  <p class="note">If a slot-4 file doesn't exist for a combo, it's silently skipped — that combo just has no special rules.</p>
+</section>
+
+<!-- ===== 8 ORCHESTRATOR ===== -->
+<section class="step" data-step="8">
+  <span class="tag green">The machine · part 3</span>
+  <h1>The orchestrator is a 3-step conductor.</h1>
+  <p class="lead"><code>/extract</code> (the <code>SKILL.md</code>) doesn't read documents itself. It runs the reader bots in order and collects their results. Input: <code>TICKER ASSET SOURCE_ID TYPE= MODE=</code>.</p>
+
+  <div class="flowline" aria-label="Orchestrator steps">
+    <div class="node"><strong>1 · Primary</strong><span>spawn primary bot, wait, read its result file</span></div>
+    <div class="arrow">&#8594;</div>
+    <div class="node"><strong>2 · Enrichment?</strong><span>only if both enrichment files exist → spawn 2nd bot</span></div>
+    <div class="arrow">&#8594;</div>
+    <div class="node"><strong>3 · Report</strong><span>combine counts, write result, clean up /tmp</span></div>
+  </div>
+
+  <div class="panel">
+    <h3>The enrichment gate is just "do the files exist?"</h3>
+    <p>Step 2 runs the second bot <b>only if</b> both <code>enrichment-pass.md</code> AND <code>{asset}-enrichment.md</code> are on disk. Today that's true for exactly one combo: <code>guidance × transcript</code> (to mine the Q&amp;A). Everything else is single-pass. Want to add a second pass somewhere? Add the two files — no code change.</p>
+  </div>
+
+  <details>
+    <summary>How the orchestrator picks the model per bot</summary>
+    <p>When the worker launches <code>/extract</code>, it passes <code>PRIMARY_MODEL=</code> and <code>ENRICHMENT_MODEL=</code>. The orchestrator passes those straight to the <code>Agent</code> tool, overriding the bot's default. So one job can run the primary bot on Haiku and the enrichment bot on Sonnet — decided by <code>config.yaml</code> (slide 49). If no model is passed (a manual run), the bot's own default applies.</p>
+  </details>
+</section>
+
+<!-- ===== 9 TWO BOTS ===== -->
+<section class="step" data-step="9">
+  <span class="tag green">The machine · part 4</span>
+  <h1>Two reader bots — same shell, different briefs.</h1>
+  <p class="lead">Both are <b>generic shells</b>. They load their 8-file backpack, follow the brief, and write a small result file. Neither can write to Neo4j — they only <em>read</em> it and call the writer script.</p>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>🔵 extraction-primary-agent</h3>
+      <p class="small" style="font-size:18px;">Reads the <b>main content</b> (prepared remarks, the press release, the MD&amp;A). <code>FETCH → EXTRACT → VALIDATE → WRITE</code>. This is where most facts come from.</p>
+    </div>
+    <div class="col">
+      <h3>🟣 extraction-enrichment-agent</h3>
+      <p class="small" style="font-size:18px;">Reads the <b>secondary content</b> (the Q&amp;A). For each item: <code>ENRICHES</code> an existing fact, is a <code>NEW</code> fact, or <code>NO GUIDANCE</code>. Writes only what changed.</p>
+    </div>
+  </div>
+
+  <div class="panel danger">
+    <h3>Three non-negotiable guardrails (in both bots)</h3>
+    <ul class="small" style="font-size:18px;">
+      <li><b>Never</b> use the Neo4j write tool — all writes go through the Python writer via Bash.</li>
+      <li><b>Never</b> compute IDs, scale units, or build dates by hand — call the scripts.</li>
+      <li><b>Follow the brief</b> (<code>primary-pass.md</code> / <code>enrichment-pass.md</code>) start to finish.</li>
+    </ul>
+  </div>
+  <p class="note">Tools each bot has: read-only Neo4j, Bash, Read/Write (for <code>/tmp</code> files), and the task tools. That's it. Default model: Sonnet.</p>
+</section>
+
+<!-- ===== 10 EXTENSIBLE ===== -->
+<section class="step" data-step="10">
+  <span class="tag">The machine · part 5</span>
+  <h1>Adding capability = adding files, (almost) never code.</h1>
+  <p class="lead">The folder layout <em>is</em> the configuration. The worker scans the <code>types/</code> folder on disk to discover what exists — so a new type needs zero changes to the engine.</p>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>➕ New TYPE (e.g. estimates)</h3>
+      <p class="small" style="font-size:18px;">Drop a folder <code>types/analyst_estimates/</code> with a contract, a pass brief, queries, and per-asset rule files. Plus Python writer scripts. <b>Zero</b> runtime-code edits — it's auto-discovered.</p>
+    </div>
+    <div class="col">
+      <h3>➕ New ASSET (e.g. a proxy filing)</h3>
+      <p class="small" style="font-size:18px;">Add two files (<code>proxy.md</code> + <code>proxy-queries.md</code>) <b>and</b> register it in 2 Python dicts (the trigger's <code>ASSET_QUERIES</code> + the worker's <code>ASSET_LABELS</code>). Assets cost a tiny code edit; types don't.</p>
+    </div>
+  </div>
+
+  <div class="panel green">
+    <h3>The rule that keeps it clean: no contagion</h3>
+    <p>Generic files (asset profiles, shared queries) contain <b>zero</b> guidance-specific words. All guidance rules live in the <code>types/guidance/</code> folder. That's why a future type can reuse the exact same 8-K reader without inheriting guidance's habits.</p>
+  </div>
+  <p class="note">Naming rule: asset names have <b>no hyphens</b> (the <code>-{pass}</code> suffix uses the hyphen as a separator). Use <code>10q</code>, not <code>10-q</code>.</p>
+</section>
+
+<!-- ===== 11 MODES + GATE ===== -->
+<section class="step" data-step="11">
+  <span class="tag">The machine · part 6</span>
+  <h1>Two safety switches must BOTH be on to write.</h1>
+  <p class="lead">By default the pipeline <b>practices</b> — it computes every fact and ID but saves nothing. Writing to the real graph takes two independent "yes" votes.</p>
+
+  <div class="kv">
+    <div class="k"><code>MODE=dry_run</code> <span class="pill gray">default</span></div><div class="v">Read, extract, validate, build IDs. Print results. <b>No write.</b></div>
+    <div class="k"><code>MODE=shadow</code></div><div class="v">Same as dry_run, but also logs the exact Cypher it <em>would</em> run.</div>
+    <div class="k"><code>MODE=write</code></div><div class="v">Real write — but only if the second switch is also on.</div>
+  </div>
+
+  <div class="panel amber">
+    <h3>The two-layer write gate</h3>
+    <div class="ascii">  MODE = write          AND       ENABLE_GUIDANCE_WRITES = true     &#8594;  REAL WRITE
+  (per job)                       (global env flag, default false)</div>
+    <p class="small">Both must be permissive. <code>MODE=write</code> with the flag off still writes nothing. This is why a stray run can't accidentally mutate the graph.</p>
+  </div>
+
+  <div class="panel danger">
+    <h3>Two footguns to know</h3>
+    <ul class="small" style="font-size:18px;">
+      <li><b>The mode check is literal:</b> the code is <code>dry_run = (mode != '--write')</code>. Any argument that isn't exactly <code>--write</code> silently becomes a dry-run.</li>
+      <li><b>The flag is read once at import:</b> changing <code>ENABLE_GUIDANCE_WRITES</code> mid-process has no effect — it's frozen when the script loads.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===== 12 RESULT FILES + STATUS ===== -->
+<section class="step" data-step="12">
+  <span class="tag">The machine · part 7</span>
+  <h1>Bots talk through files, not chat — and stamp each document.</h1>
+  <p class="lead">Big AI outputs are unreliable to parse from a chat stream, so each bot <b>writes its result to a small JSON file</b> in <code>/tmp</code>, and the orchestrator reads it back.</p>
+
+  <div class="ascii">  primary bot   &#8594;  /tmp/extract_pass_guidance_primary_{SOURCE_ID}.json   {status, items_extracted, items_written}
+  enrichment    &#8594;  /tmp/extract_pass_guidance_enrichment_{SOURCE_ID}.json {status, items_enriched, new_secondary_items}
+  the facts     &#8594;  /tmp/gu_{TICKER}_{SOURCE_ID}.json                       (the payload handed to the writer)</div>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>Status lives on the document</h3>
+      <p class="small" style="font-size:18px;">After a job, the worker sets <code>guidance_status</code> on the source node: <code>in_progress → completed | failed</code>. Each type gets its <em>own</em> status field, so guidance and a future type don't collide.</p>
+    </div>
+    <div class="col">
+      <h3>Why file-based?</h3>
+      <p class="small" style="font-size:18px;">A transcript can yield a 50KB+ result. Passing that through the model's text output corrupts easily. A file is robust — and lets the worker count exactly what was written.</p>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Six error codes, one acceptable "failure"</h3>
+    <p><code>SOURCE_NOT_FOUND</code> · <code>EMPTY_CONTENT</code> · <code>QUERY_FAILED</code> · <code>NO_GUIDANCE</code> · <code>WRITE_FAILED</code> · <code>VALIDATION_FAILED</code>. Of these, <b><code>NO_GUIDANCE</code> is a success</b> — plenty of documents simply contain no forward-looking numbers, and saying so is the correct answer.</p>
+  </div>
+</section>
+
+<!-- ===== 13 WHAT IS GUIDANCE ===== -->
+<section class="step" data-step="13">
+  <span class="tag green">Guidance · 1 of 24</span>
+  <h1>Guidance = the company telling you its own future numbers.</h1>
+  <p class="lead">Not analyst opinions. Not last quarter's results. <b>Forward-looking statements the company itself makes</b> about a period that hasn't happened yet.</p>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>✅ Is guidance</h3>
+      <ul class="small" style="font-size:19px;">
+        <li>"We <b>expect</b> Q2 revenue of <b>$94–98B</b>."</li>
+        <li>"Gross margin <b>around 47%</b>."</li>
+        <li>"Services to grow <b>double digits</b>."</li>
+        <li>"CapEx of <b>approximately $2B</b>."</li>
+        <li>"We're <b>withdrawing</b> full-year guidance." (still a guidance event)</li>
+      </ul>
+    </div>
+    <div class="col">
+      <h3>❌ Is NOT guidance</h3>
+      <ul class="small" style="font-size:19px;">
+        <li>"Q1 revenue <b>was</b> $124B." (past = actuals)</li>
+        <li>"Analysts <b>expect</b> $3.50." (not the company)</li>
+        <li>"We <b>see strength</b> in iPhone." (no number)</li>
+        <li>"$10B <b>buyback authorized</b>." (an announcement, different type)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>The two filters that draw the line</h3>
+    <p><b>Forward-looking:</b> the target period must be <em>after</em> the document's date. <b>Specific:</b> there must be a quantitative anchor — a number, a range, or a phrase like "low double digits". Vague words ("strong", "significant") with no magnitude are dropped. Dividend-per-share guidance counts; buyback/investment <em>announcements</em> belong to a separate (unbuilt) type. One exception to "must have a number": <b>withdrawing or reaffirming</b> guidance is itself a guidance event — the action is the signal, so it's kept even with no number.</p>
+  </div>
+</section>
+
+<!-- ===== 14 THREE NODES ===== -->
+<section class="step" data-step="14">
+  <span class="tag green">Guidance · 2 of 24 · the schema</span>
+  <h1>Three node types: a label, a data-point, and a time-window.</h1>
+  <p class="lead">Everything guidance writes is one of just three shapes. Get these and the graph clicks.</p>
+
+  <div class="threecol">
+    <div class="col">
+      <h3>1 · Guidance <span class="pill gray">label</span></h3>
+      <p class="small" style="font-size:18px;">The reusable <b>metric name</b>, e.g. <code>guidance:revenue</code>. Created once. Just <code>label</code> + <code>aliases</code>.</p>
+    </div>
+    <div class="col">
+      <h3>2 · GuidanceUpdate <span class="pill gray">data-point</span></h3>
+      <p class="small" style="font-size:18px;">One <b>fact</b>: this metric, this number, this period, from this document. 20 fields. Many pile up under one label.</p>
+    </div>
+    <div class="col">
+      <h3>3 · GuidancePeriod <span class="pill gray">window</span></h3>
+      <p class="small" style="font-size:18px;">The <b>calendar window</b> the number is about, e.g. <code>gp_2025-04-01_2025-06-30</code>. Shared across companies.</p>
+    </div>
+  </div>
+
+  <div class="panel accent">
+    <h3>The thermometer analogy</h3>
+    <p><b>Guidance</b> is a blank thermometer labelled "Revenue." A <b>GuidanceUpdate</b> is one reading taken from one filing ("$94–98B, expected, non-GAAP"). A <b>GuidancePeriod</b> is the dated window that reading is about ("next quarter"). Three separate things — never mashed together.</p>
+  </div>
+
+  <p class="note">Two node types that an older design had were <b>removed</b>: no <code>Context</code> node (a direct <code>FOR_COMPANY</code> link replaces it) and no <code>Unit</code> node (the unit is just a property). Simpler graph, same information.</p>
+</section>
+
+<!-- ===== 15 SIX EDGES ===== -->
+<section class="step" data-step="15">
+  <span class="tag green">Guidance · 3 of 24 · the schema</span>
+  <h1>Six links wire each fact into the graph.</h1>
+  <p class="lead">A <code>GuidanceUpdate</code> always has the first four links. The last two are best-effort — they attach only on a confident match.</p>
+
+  <table class="t">
+    <thead><tr><th>Link</th><th>From &#8594; To</th><th>When</th></tr></thead>
+    <tbody>
+      <tr><td><code>UPDATES</code></td><td>GuidanceUpdate &#8594; Guidance</td><td>always</td></tr>
+      <tr><td><code>FROM_SOURCE</code></td><td>GuidanceUpdate &#8594; Report / Transcript / News</td><td>always (the proof)</td></tr>
+      <tr><td><code>FOR_COMPANY</code></td><td>GuidanceUpdate &#8594; Company</td><td>always</td></tr>
+      <tr><td><code>HAS_PERIOD</code></td><td>GuidanceUpdate &#8594; GuidancePeriod</td><td>always (exactly 1)</td></tr>
+      <tr><td><code>MAPS_TO_CONCEPT</code></td><td>GuidanceUpdate &#8594; Concept (XBRL)</td><td>0 or 1, if a concept matches</td></tr>
+      <tr><td><code>MAPS_TO_MEMBER</code></td><td>GuidanceUpdate &#8594; Member (segment)</td><td>0 to many, if segment matches</td></tr>
+    </tbody>
+  </table>
+
+  <div class="ascii">                ( Guidance: "Revenue" )
+                       &#94;
+                       | UPDATES
+   FROM_SOURCE   ( GuidanceUpdate )  HAS_PERIOD                MAPS_TO_CONCEPT (XBRL)
+   ┌──────────────┘   │    │    └──────────────&#8594; ( GuidancePeriod )      ┌─&#8594; ( Concept )
+   v                  |    └─ FOR_COMPANY &#8594; ( Company )                   |
+ ( 8-K / Transcript / News )                                              ( GuidanceUpdate )──┘
+                                                          MAPS_TO_MEMBER &#8594; ( Member: "iPhone" )</div>
+
+  <p class="note">The last two links connect a fact to the company's official accounting concepts (<b>XBRL</b> = the standard tags companies file numbers under) and business segments — they "wire it to the books." If no good match, the link is simply skipped; the fact is still written. (Full detail on slides 28–29.)</p>
+</section>
+
+<!-- ===== 16 TWENTY FIELDS ===== -->
+<section class="step" data-step="16">
+  <span class="tag green">Guidance · 4 of 24 · the schema</span>
+  <h1>One fact carries 20 fields. Here they are, grouped.</h1>
+  <p class="lead">Don't memorize — just see the four buckets. The next slides zoom into the tricky ones (period, units, derivation, basis, segment).</p>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>📊 The number</h3>
+      <p class="small" style="font-size:18px;"><code>low</code> · <code>mid</code> · <code>high</code> · <code>canonical_unit</code> · <code>qualitative</code> (a words-only value like "low double digits") · <code>derivation</code> (how the number was formed)</p>
+      <h3>🗓️ The period</h3>
+      <p class="small" style="font-size:18px;"><code>period_scope</code> (quarter/annual/…) · <code>time_type</code> (duration vs instant) · <code>fiscal_year</code> · <code>fiscal_quarter</code></p>
+    </div>
+    <div class="col">
+      <h3>🏷️ The meaning</h3>
+      <p class="small" style="font-size:18px;"><code>segment</code> (e.g. "iPhone", default "Total") · <code>basis_norm</code> (GAAP / non-GAAP) · <code>basis_raw</code> (the verbatim word) · <code>conditions</code> ("assuming no FX headwinds")</p>
+      <h3>🔖 The provenance</h3>
+      <p class="small" style="font-size:18px;"><code>quote</code> (≤500 chars, verbatim) · <code>given_date</code> · <code>section</code> · <code>source_key</code> · <code>source_type</code> · <code>source_refs</code> (sub-source IDs, deduped) · <code>created</code></p>
+    </div>
+  </div>
+
+  <div class="panel danger">
+    <h3>The iron rule</h3>
+    <p><b>No quote = no fact.</b> Every GuidanceUpdate must have a <code>quote</code>, a <code>FROM_SOURCE</code> link, and a <code>given_date</code>. If a field is genuinely unclear, leave it null — never invent it.</p>
+  </div>
+  <p class="note">Plus system fields code adds at write time: the <code>id</code> (slide 17), the <code>evhash16</code> (slide 18), <code>label_slug</code>/<code>segment_slug</code> (for fast filtering), and the V2 resolution fields (slide 24).</p>
+</section>
+
+<!-- ===== 17 SLOT ID ===== -->
+<section class="step" data-step="17">
+  <span class="tag green">Guidance · 5 of 24 · identity</span>
+  <h1>Every fact gets a barcode built from 5 ingredients.</h1>
+  <p class="lead">The ID is the fact's <b>slot</b> — it answers "<em>which</em> guidance item is this?", never "what does it say?". No number lives in the ID. That's the secret to safe re-runs.</p>
+
+  <pre>guidance_update_id = "gu:" + source_id + ":" + label_slug + ":" + period
+                          + ":" + basis_norm + ":" + segment_slug
+
+<span style="color:#94a3b8">// worked example — Apple's next-quarter non-GAAP revenue from one transcript:</span>
+gu:AAPL_2025-01-30T17.00:revenue:gp_2025-04-01_2025-06-30:non_gaap:total</pre>
+
+  <div class="panel accent">
+    <h3>Why no value in the ID?</h3>
+    <p>The ID is "Apple's Q3-2025 non-GAAP <em>total</em> revenue guidance, from this transcript." If Apple <b>revises</b> that number, it's the <em>same slot</em> → same ID → the row just updates. If the ID contained the value, a revision would make a confusing duplicate.</p>
+  </div>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>Same slot, same ID</h3>
+      <p class="small" style="font-size:18px;">Same document + metric + period + basis + segment → one row. Re-run safely overwrites it.</p>
+    </div>
+    <div class="col">
+      <h3>Different slot, different ID</h3>
+      <p class="small" style="font-size:18px;">Change the segment (iPhone vs Total), the basis (GAAP vs non-GAAP), or the period → a separate, correct row. No false duplicates.</p>
+    </div>
+  </div>
+  <details>
+    <summary>Fine print: how the barcode string is built</summary>
+    <p>"Barcode" just means the slot ID — it names the row, never the value. <code>slug()</code> = lowercase + turn spaces/punctuation into <code>_</code>. The Guidance <em>label</em> node's ID is simply <code>guidance:{slug(label)}</code>. A <code>source_id</code> can itself contain colons (e.g. a timestamp like <code>17.00.00-04.00</code>) — those are swapped to <code>_</code> first, so they can't break the five-part delimiter.</p>
+  </details>
+</section>
+
+<!-- ===== 18 EVHASH ===== -->
+<section class="step" data-step="18">
+  <span class="tag green">Guidance · 6 of 24 · identity</span>
+  <h1>A separate fingerprint tracks when the VALUE changes.</h1>
+  <p class="lead">The ID is the slot. The <b><code>evhash16</code></b> is a fingerprint of the actual contents — so you can tell "did this number change?" without it ever affecting the ID.</p>
+
+  <pre>evhash16 = sha256("{low}|{mid}|{high}|{unit}|{qualitative}|{conditions}")[:16]
+
+<span style="color:#94a3b8">// it is a stored PROPERTY, never part of the id</span>
+low=94000, mid=96000, high=98000, unit=m_usd   <span style="color:#94a3b8">// AFTER billions &#8594; millions</span>
+   &#8594; "94000|96000|98000|m_usd|.|."  &#8594; sha256  &#8594; evhash16 = "a3f1c9d2e0b7..."</pre>
+
+  <div class="panel">
+    <h3>What it's for</h3>
+    <p>Two documents (say an 8-K and the transcript) can carry the <em>same</em> slot. Comparing their <code>evhash16</code> tells you instantly whether they agree or whether one revised the number — a change detector that's totally independent of identity. Nulls are encoded as <code>.</code>, numbers are canonicalized first, text is lowercased and trimmed.</p>
+  </div>
+  <p class="note">Per-share metrics (EPS) are normalized to dollars and aggregates to millions <em>before</em> hashing, so "$1.13B" and "1,130 million" produce the <b>same</b> fingerprint.</p>
+</section>
+
+<!-- ===== 19 IDEMPOTENCY ===== -->
+<section class="step" data-step="19">
+  <span class="tag green">Guidance · 7 of 24 · identity</span>
+  <h1>Re-running is always safe — by construction.</h1>
+  <p class="lead">Every write is a Neo4j <code>MERGE</code> on the barcode ID: "create if new, update if it exists." So you can re-extract the same document a hundred times and never get duplicates.</p>
+
+  <div class="ascii">  first run:   MERGE gu:...:revenue:...  &#8594;  node created     (was_created = true)
+  second run:  MERGE gu:...:revenue:...  &#8594;  same node updated (was_created = false)
+                                              &#8594;  ZERO new nodes</div>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>Latest write wins</h3>
+      <p class="small" style="font-size:18px;">A re-run with better/newer data overwrites ~25 properties on the existing node. The slot stays; the contents refresh.</p>
+    </div>
+    <div class="col">
+      <h3>One catch: run ONE model</h3>
+      <p class="small" style="font-size:18px;">Because latest-write-wins, running a second model after the first <b>overwrites</b> the first's work (incl. its XBRL links). Pick one model and stick to it.</p>
+    </div>
+  </div>
+
+  <div class="panel green">
+    <h3>What this buys you</h3>
+    <p>No "delete before re-run." No idempotency bookkeeping. No pre-check queries. The math of the ID + <code>MERGE</code> makes correctness automatic. The enrichment pass relies on this too: it just re-MERGEs the items it touched.</p>
+  </div>
+</section>
+
+<!-- ===== 20 PERIODS ===== -->
+<section class="step" data-step="20">
+  <span class="tag green">Guidance · 8 of 24 · the hard parts</span>
+  <h1>Periods are real calendar dates — not fiscal labels.</h1>
+  <p class="lead">"Q2 FY2025" means different months at different companies. So instead of storing the fiscal label, we store the actual <b>calendar window</b>. Two companies guiding the same window share the <em>same</em> period node.</p>
+
+  <table class="t">
+    <thead><tr><th>period_scope</th><th>Example window</th><th>From text like…</th></tr></thead>
+    <tbody>
+      <tr><td><code>quarter</code></td><td><code>gp_2025-04-01_2025-06-30</code></td><td>"Q3 revenue of $85B"</td></tr>
+      <tr><td><code>annual</code></td><td><code>gp_2024-10-01_2025-09-30</code></td><td>"FY2025 CapEx of $30B"</td></tr>
+      <tr><td><code>half</code></td><td><code>gp_2025-04-01_2025-09-30</code></td><td>"second-half margin expansion"</td></tr>
+      <tr><td><code>long_range</code></td><td><code>gp_2026-01-01_2028-12-31</code></td><td>"by 2028", "2026–2028 target"</td></tr>
+    </tbody>
+  </table>
+
+  <div class="panel">
+    <h3>Four "fuzzy" windows have no dates — they use sentinels</h3>
+    <p>When the company gives no date anchor, the period is one of four fixed sentinel nodes (dates = null):</p>
+    <p><span class="pill">gp_ST short-term</span> <span class="pill">gp_MT medium-term</span> <span class="pill">gp_LT long-term</span> <span class="pill">gp_UNDEF undefined</span></p>
+    <p class="small">"In the near term" → <code>gp_ST</code>. "Long-term margin model of 38–40%" → <code>gp_LT</code>. "Going forward" (no anchor) → <code>gp_UNDEF</code>. But "by 2028" → <code>long_range</code> (it has a year!).</p>
+  </div>
+  <p class="note">For balance-sheet "instant" items (cash, debt, shares outstanding), the window collapses to a single day: <code>start_date = end_date</code>.</p>
+</section>
+
+<!-- ===== 21 PERIOD CASCADE ===== -->
+<section class="step" data-step="21">
+  <span class="tag green">Guidance · 9 of 24 · the hard parts</span>
+  <h1>To get exact dates, code tries four sources in order.</h1>
+  <p class="lead">The AI only says "fiscal year 2025, quarter 2." Turning that into exact calendar dates is a deterministic <b>4-step cascade</b> in the CLI — it stops at the first source that answers.</p>
+
+  <div class="flowline" aria-label="Period cascade">
+    <div class="node"><strong>A · Reuse</strong><span>same quarter already in graph? inherit its dates</span></div>
+    <div class="arrow">&#8594;</div>
+    <div class="node"><strong>B · SEC cache</strong><span>real filed dates from a Redis cache of SEC data</span></div>
+    <div class="arrow">&#8594;</div>
+    <div class="node"><strong>C · Predict</strong><span>unfiled quarter? estimate from the prior one</span></div>
+    <div class="arrow">&#8594;</div>
+    <div class="node"><strong>D · FYE math</strong><span>last resort: month-math from fiscal year-end</span></div>
+  </div>
+
+  <div class="panel accent">
+    <h3>Why so many fallbacks?</h3>
+    <p><b>Step B is the gold standard</b> — exact dates the company actually filed with the SEC. But guidance often points at a quarter that <em>hasn't been filed yet</em> (that's the whole point of guidance!). So C predicts it, and D does pure calendar math as a safety net. Earlier the answer just used D; the cache + prediction were added to get the boundaries exactly right.</p>
+  </div>
+  <p class="note"><span class="srcchip">guidance_write_cli.py</span> Step A is a real, working reuse/dedup step (it copies an existing period's dates) — it just rarely fires, because the quarter being guided usually isn't in the graph yet. The whole cascade lives in <code>_ensure_period()</code>.</p>
+
+  <details>
+    <summary>Where the exact SEC dates (Step B) come from</summary>
+    <p>Step B reads a Redis cache keyed <code>fiscal_quarter:{TICKER}:{FY}:Q{n}</code>, built by <code>sec_quarter_cache_loader.py</code> — it polls the SEC EDGAR XBRL <em>companyconcept</em> API (EPS, falling back to net income), derives the real filed quarter / year boundaries with a 52/53-week adjustment, and the triggers call <code>refresh_ticker()</code> to pre-warm it. Step C predicts an unfiled quarter from the prior one's end + a median quarter length. Step D is pure month-math from the fiscal year-end — the only step that can fail.</p>
+  </details>
+</section>
+
+<!-- ===== 22 FISCAL VS CALENDAR ===== -->
+<section class="step" data-step="22">
+  <span class="tag green">Guidance · 10 of 24 · the hard parts</span>
+  <h1>"Q1" isn't January for everyone — and that broke Opus.</h1>
+  <p class="lead">A company's fiscal year-end (FYE) decides which calendar months its quarters cover. Apple's FYE is September, so Apple's "Q2" is Jan–Mar, not Apr–Jun.</p>
+
+  <table class="t">
+    <thead><tr><th>FYE month</th><th>Example</th><th>Q1</th><th>Q2</th><th>Q3</th><th>Q4</th></tr></thead>
+    <tbody>
+      <tr><td>Dec (most)</td><td>—</td><td>Jan–Mar</td><td>Apr–Jun</td><td>Jul–Sep</td><td>Oct–Dec</td></tr>
+      <tr><td>Sep</td><td>Apple</td><td>Oct–Dec</td><td>Jan–Mar</td><td>Apr–Jun</td><td>Jul–Sep</td></tr>
+      <tr><td>Jun</td><td>Microsoft</td><td>Jul–Sep</td><td>Oct–Dec</td><td>Jan–Mar</td><td>Apr–Jun</td></tr>
+    </tbody>
+  </table>
+
+  <div class="panel danger">
+    <h3>The real-world bug this caused</h3>
+    <p>On Analog Devices (FYE = October), <b>Opus consistently put every period one month too late</b> — FY2026 became <code>gp_2025-12-01_2026-11-30</code> instead of the correct <code>gp_2025-11-01_2026-10-31</code>. Because the date is part of the ID, every fact got the <em>wrong barcode</em>, so re-runs couldn't dedup. Reproduced twice. This single bug is why <b>Opus was rejected</b> for production.</p>
+  </div>
+  <div class="ascii">  Opus said:   Dec 2025 &#8594; Nov 2026   <span>(WRONG — one month late, every period)</span>
+  Correct:     Nov 2025 &#8594; Oct 2026</div>
+
+  <p class="note">Rule: in earnings calls and filings, all periods are <b>fiscal</b> unless the text literally says "calendar". The math lives in <code>fiscal_math.py</code> + <code>guidance_ids.py</code>. (A buggy old helper, <code>fiscal_resolve.py</code>, was deleted in March 2026.)</p>
+</section>
+
+<!-- ===== 23 UNITS V1 ===== -->
+<section class="step" data-step="23">
+  <span class="tag green">Guidance · 11 of 24 · the hard parts</span>
+  <h1>Every number is forced onto ONE clean scale.</h1>
+  <p class="lead">The AI copies the number <em>exactly as printed</em> ("$10.3 billion") plus the raw unit word. <b>Code does all the scaling</b> — so "$1.13B" and "1,130 million" both become <code>1130</code> in millions.</p>
+
+  <div class="ascii">  canonical units: usd · m_usd · percent · percent_yoy · percent_points · basis_points · x · count · unknown
+
+  "$10.3 billion" revenue  &#8594; 10300  m_usd        (aggregate money &#8594; millions)
+  "EPS of $1.50"           &#8594; 1.50   usd          (PER-SHARE money &#8594; dollars, not millions)
+  "4.94 billion shares"    &#8594; 4.94e9 count        (a share COUNT &#8594; absolute count)
+  "gross margin 46–47%"    &#8594; 46/47  percent
+  "growth of 5–7% YoY"     &#8594; 5/7    percent_yoy</div>
+
+  <div class="panel">
+    <h3>Three overrides keep money honest</h3>
+    <ul class="small" style="font-size:18px;">
+      <li><b>Per-share</b> labels (EPS, DPS) → <code>usd</code>, never millions.</li>
+      <li><b>Share-count</b> labels (shares outstanding) → <code>count</code>.</li>
+      <li>Everything else aggregate → <code>m_usd</code> (millions of dollars).</li>
+    </ul>
+  </div>
+  <p class="note">No alias match → <code>canonical_unit = unknown</code>, and the raw text is kept in <code>unit_raw</code> so nothing is lost. (This "unknown" bucket is bigger than it should be — see the gaps slide 53.)</p>
+</section>
+
+<!-- ===== 24 UNITS V2 ===== -->
+<section class="step" data-step="24">
+  <span class="tag green">Guidance · 12 of 24 · the hard parts</span>
+  <h1>The newer unit judge uses evidence, not just the word.</h1>
+  <p class="lead">"$2.50" could be EPS (dollars) or a $2.50B aggregate (millions). V2 resolution decides the <b>kind</b> of thing from the strongest evidence available, in 3 axes.</p>
+
+  <div class="threecol">
+    <div class="col">
+      <h3>1 · kind</h3>
+      <p class="small" style="font-size:18px;"><code>money</code> / <code>ratio</code> / <code>count</code> / <code>multiplier</code> / <code>unknown</code></p>
+    </div>
+    <div class="col">
+      <h3>2 · money_mode</h3>
+      <p class="small" style="font-size:18px;">if money: <code>aggregate</code> (millions) or <code>price_like</code> (per-share dollars)</p>
+    </div>
+    <div class="col">
+      <h3>3 · ratio_subtype</h3>
+      <p class="small" style="font-size:18px;">if ratio: <code>percent</code> / <code>percent_yoy</code> / <code>percent_points</code> / <code>basis_points</code></p>
+    </div>
+  </div>
+
+  <div class="panel accent">
+    <h3>The evidence ladder (strongest wins)</h3>
+    <p>Hard surface marks (a literal <code>%</code>, <code>$</code>, "per share", "bps") <b>beat</b> the XBRL concept, which beats label hints, which beat the AI's own <code>unit_kind_hint</code>. The AI's hint is the <em>last</em> tiebreaker, not the boss. This is why the bot must always send <code>unit_kind_hint</code> + (for money) <code>money_mode_hint</code> + the verbatim <code>unit_raw</code>.</p>
+  </div>
+  <details>
+    <summary>The bookkeeping (safe to skip)</summary>
+    <p>V2-written rows carry <code>resolved_kind</code> / <code>resolved_money_mode</code> / <code>resolved_ratio_subtype</code> + <code>resolution_version="v2"</code>. Older rows (~97% of the live graph) predate V2 and don't. There's also a "shadow" mode that writes the V1 answer but logs what V2 <em>would</em> have said, for safe comparison before flipping over.</p>
+  </details>
+</section>
+
+<!-- ===== 25 DERIVATION ===== -->
+<section class="step" data-step="25">
+  <span class="tag green">Guidance · 13 of 24 · the hard parts</span>
+  <h1>How was the number formed? Seven shapes.</h1>
+  <p class="lead">The <code>derivation</code> field records the <em>shape</em> of the guidance, which controls how low/mid/high are filled. It stops the AI from inventing fake midpoints.</p>
+
+  <table class="t">
+    <thead><tr><th>derivation</th><th>Example</th><th>Numbers</th></tr></thead>
+    <tbody>
+      <tr><td><code>explicit</code></td><td>"revenue of $94–97B"</td><td>low + high (mid computed)</td></tr>
+      <tr><td><code>point</code></td><td>"CapEx of ~$2B"</td><td>low = mid = high</td></tr>
+      <tr><td><code>calculated</code></td><td>margin = guided profit ÷ guided revenue</td><td>computed</td></tr>
+      <tr><td><code>floor</code></td><td>"at least $150M"</td><td>low only</td></tr>
+      <tr><td><code>ceiling</code></td><td>"up to $500M"</td><td>high only</td></tr>
+      <tr><td><code>implied</code></td><td>"low to mid single digits"</td><td>none — <code>qualitative</code> filled</td></tr>
+      <tr><td><code>comparative</code></td><td>"roughly in line with Q2"</td><td>none — anchor in <code>qualitative</code></td></tr>
+    </tbody>
+  </table>
+
+  <p class="note">Hard rule: <code>floor</code>/<code>ceiling</code> never fabricate a midpoint; <code>implied</code>/<code>comparative</code> never invent numbers. If it's words-only, it stays words-only.</p>
+</section>
+
+<!-- ===== 26 BASIS ===== -->
+<section class="step" data-step="26">
+  <span class="tag green">Guidance · 14 of 24 · the hard parts</span>
+  <h1>GAAP or adjusted? Only if the text says so.</h1>
+  <p class="lead">The same metric can be reported two ways. <code>basis_norm</code> records which — but <b>only when the qualifier is explicit in the same sentence</b>. Otherwise it's <code>unknown</code>.</p>
+
+  <div class="kv">
+    <div class="k"><code>gaap</code></div><div class="v">"GAAP", "as reported"</div>
+    <div class="k"><code>non_gaap</code></div><div class="v">"non-GAAP", "adjusted", "core", "excluding special items"</div>
+    <div class="k"><code>constant_currency</code></div><div class="v">"constant currency", "FX-neutral"</div>
+    <div class="k"><code>unknown</code></div><div class="v">no explicit qualifier next to the number</div>
+  </div>
+
+  <div class="panel danger">
+    <h3>The implicit-switch trap</h3>
+    <p>A CFO can flip basis mid-paragraph: <em>"On a GAAP basis, we expect EPS of $3.20. And revenue should be about $95 billion."</em> → EPS is <code>gaap</code>, but Revenue is <code>unknown</code> (no qualifier attached to <em>it</em>). Decide basis <b>per metric span</b>, never per paragraph. And <code>basis_norm</code> is part of the ID, so a GAAP and a non-GAAP version of the same metric are correctly two separate facts.</p>
+  </div>
+  <p class="note">Query-time safety: never compare a metric's history without filtering by <code>basis_norm</code> first — mixing GAAP and adjusted gives nonsense trends.</p>
+</section>
+
+<!-- ===== 27 SEGMENT ===== -->
+<section class="step" data-step="27">
+  <span class="tag green">Guidance · 15 of 24 · the hard parts</span>
+  <h1>"iPhone Revenue" splits into a metric + a segment.</h1>
+  <p class="lead">When a metric is qualified by a <b>business dimension</b> (a product, geography, or unit), we split it: the base metric is the <code>label</code>, the qualifier is the <code>segment</code> (default "Total").</p>
+
+  <div class="ascii">  "iPhone Revenue"              &#8594; label="Revenue",          segment="iPhone"     (decompose)
+  "North America Op. Income"    &#8594; label="Operating Income", segment="North America"
+  "Cost of Revenue"             &#8594; label="Cost of Revenue",  segment="Total"      (do NOT split)
+  "Adjusted EBITDA"             &#8594; label="Adjusted EBITDA",  segment="Total"      (do NOT split)</div>
+
+  <div class="panel accent">
+    <h3>The one test</h3>
+    <p>"Could I have this metric for <b>iPhone</b> AND for <b>Total</b>?" If yes → the prefix is a segment, split it. If the prefix changes <em>what is measured</em> ("Cost of", "Adjusted", "Pro Forma") → keep it whole. Because <code>segment</code> is in the ID, iPhone revenue and total revenue never collide — that's why 5 revenue facts for one period is correct, not a duplicate.</p>
+  </div>
+  <p class="note">The bot just writes the segment <em>text</em> and sets <code>member_u_ids: []</code>. Linking that text to a real segment node is the code's job (next slide but one).</p>
+</section>
+
+<!-- ===== 28 CONCEPT ===== -->
+<section class="step" data-step="28">
+  <span class="tag green">Guidance · 16 of 24 · wiring to the books</span>
+  <h1>Link each fact to the official accounting concept (XBRL).</h1>
+  <p class="lead">Companies file numbers under standardized XBRL concepts (e.g. <code>us-gaap:Revenues</code>). Linking guidance to the concept lets you later compare a guide against the actual reported number. Code does this, deterministically. <span class="srcchip"><code>concept_resolver.py</code></span></p>
+
+  <div class="panel">
+    <h3>How <code>concept_resolver.py</code> decides</h3>
+    <ol class="small" style="font-size:18px;">
+      <li>Look up the metric in a <b>65-entry reviewed registry</b> (e.g. <code>capex</code> → 3 candidate concept names, tried in order).</li>
+      <li>Match a candidate against the concepts the company actually uses, ranked by usage.</li>
+      <li><b>Fail-closed:</b> if the top two candidates tie, or nothing matches → <code>xbrl_qname = null</code> (no guess).</li>
+      <li>Force <code>null</code> for derived metrics that have no clean concept (EBITDA, FCF, margins, anything ending <code>_growth</code>/<code>_change</code>/<code>_yoy</code>).</li>
+    </ol>
+  </div>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>Two outputs</h3>
+      <p class="small" style="font-size:18px;"><code>xbrl_qname</code> (a stable property that survives across years) + a <code>MAPS_TO_CONCEPT</code> link to the actual Concept node.</p>
+    </div>
+    <div class="col">
+      <h3>Plus a family</h3>
+      <p class="small" style="font-size:18px;">A 19-entry <code>concept_family_qname</code> table maps derived metrics to their closest anchor (e.g. adjusted revenue → <code>us-gaap:Revenues</code>).</p>
+    </div>
+  </div>
+  <p class="note">Live coverage: ~49% of facts have a concept link. Two gaps cap it: unreviewed labels (like <code>adjusted_eps</code>), and the concept cache being built <b>only from 10-K/10-Q numeric facts</b> — so guidance for a metric that never appears in those filings (some 8-K cases) can't link, no matter the registry (slide 53).</p>
+</section>
+
+<!-- ===== 29 MEMBER ===== -->
+<section class="step" data-step="29">
+  <span class="tag green">Guidance · 17 of 24 · wiring to the books</span>
+  <h1>Link the segment text to a real segment node — in code.</h1>
+  <p class="lead">The bot writes <code>segment = "iPhone"</code> and leaves the linking to code. The CLI matches that text to the company's official segment ("Member") nodes.</p>
+
+  <div class="ascii">  warmup builds /tmp/member_map_{TICKER}.json  (every Member node for the company, by CIK)
+  CLI normalizes "iPhone Segment" &#8594; "iphone"  (lowercase, drop "member/segment", de-plural)
+  exact normalized match  &#8594;  MAPS_TO_MEMBER link    |    no match  &#8594;  no link (text still kept)</div>
+
+  <div class="panel green">
+    <h3>Why code owns this (not the AI)</h3>
+    <p>Letting the AI match segments only covered ~30–40% (it only saw segments in context). A code lookup by the company's tax ID (CIK) sees <b>all</b> the company's segments — 2–3× the coverage — and is deterministic. In write mode, if the cache file is missing it self-heals with a live database query.</p>
+  </div>
+  <p class="note">A fact can link to <b>0..N</b> members (a product <em>and</em> a geography can both apply). Live coverage: ~42% of non-Total segments get a member link.</p>
+</section>
+
+<!-- ===== 30 QUALITY FILTERS ===== -->
+<section class="step" data-step="30">
+  <span class="tag green">Guidance · 18 of 24 · the gate</span>
+  <h1>Six filters decide what's worth keeping.</h1>
+  <p class="lead">Applied after the AI reads, before anything is written. They lean toward <b>recall</b> — when unsure, keep it.</p>
+
+  <table class="t">
+    <thead><tr><th>Filter</th><th>Rule</th></tr></thead>
+    <tbody>
+      <tr><td><b>Forward-looking only</b></td><td>target period must be after the document's date; past results are actuals, not guidance</td></tr>
+      <tr><td><b>Specificity required</b></td><td>needs a quantitative anchor; drop vague "strong"/"significant" with no magnitude</td></tr>
+      <tr><td><b>No fabricated numbers</b></td><td>qualitative → <code>implied</code>/<code>comparative</code>; never invent a value</td></tr>
+      <tr><td><b>Quote ≤ 500 chars</b></td><td>truncate at a sentence boundary; no quote = no fact</td></tr>
+      <tr><td><b>100% recall priority</b></td><td>when in doubt, extract — a false positive is cheaper than a miss</td></tr>
+      <tr><td><b>Factors are conditions</b></td><td>an FX headwind affecting revenue goes in revenue's <code>conditions</code>, not as its own fact</td></tr>
+    </tbody>
+  </table>
+
+  <p class="note">Plus the standing exclusion: capital-allocation <b>announcements</b> (buybacks, investment programs) are <em>not</em> guidance — they belong to a separate, unbuilt type. Dividend-<em>per-share</em> guidance is kept.</p>
+</section>
+
+<!-- ===== 31 FIVE ASSETS ===== -->
+<section class="step" data-step="31">
+  <span class="tag green">Guidance · 19 of 24 · per asset</span>
+  <h1>Same machine, five very different documents.</h1>
+  <p class="lead">Where guidance hides — and the one trap each document throws — changes a lot by asset. The slot-4 intersection file holds these rules.</p>
+
+  <table class="t">
+    <thead><tr><th>Asset</th><th>Guidance lives in…</th><th>The trap</th></tr></thead>
+    <tbody>
+      <tr><td><b>Transcript</b></td><td>CFO prepared remarks + Q&amp;A</td><td>don't take an analyst's number unless management confirms it</td></tr>
+      <tr><td><b>8-K</b></td><td>the EX-99.1 press release (+ EX-99.2 deck)</td><td>read sections AND exhibits — a 2nd event hides in the section</td></tr>
+      <tr><td><b>10-Q</b></td><td>MD&amp;A (mostly backward-looking)</td><td>zero guidance is the normal, correct result</td></tr>
+      <tr><td><b>10-K</b></td><td>MD&amp;A + multi-year targets</td><td>the MD&amp;A name has a curly apostrophe</td></tr>
+      <tr><td><b>News</b></td><td>Benzinga article title/body</td><td>attribution — skip analyst/Street numbers</td></tr>
+    </tbody>
+  </table>
+
+  <div class="panel amber">
+    <h3>One shared trap: huge text breaks the AI's input</h3>
+    <p>Transcripts, MD&amp;As, and 8-K exhibits routinely exceed ~50–80KB, which corrupts when fed through the AI tool layer. So for these the bot <b>fetches via a Bash "warmup" command into a <code>/tmp</code> file</b> and reads the file, instead of querying through the AI tool. (More on warmup at slide 46.)</p>
+  </div>
+</section>
+
+<!-- ===== 32 TRANSCRIPT ===== -->
+<section class="step" data-step="32">
+  <span class="tag green">Guidance · 20 of 24 · per asset</span>
+  <h1>Transcripts: the only asset read twice.</h1>
+  <p class="lead">Pass 1 reads the scripted <b>prepared remarks</b>. Pass 2 (enrichment) mines the unscripted <b>Q&amp;A</b>, where segment-level and conditional guidance often first appears.</p>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>Speaker priority</h3>
+      <p class="small" style="font-size:18px;"><b>CFO</b> remarks = formal guidance (highest). Then CFO Q&amp;A, then CEO. Operator = skip. Tag prepared-remark quotes <code>[PR]</code>, Q&amp;A quotes <code>[Q&amp;A]</code>.</p>
+    </div>
+    <div class="col">
+      <h3>The analyst-framing rule</h3>
+      <p class="small" style="font-size:18px;">A number in an analyst's <em>question</em> is NOT guidance — only management's <em>answer</em> counts, and only if it clearly affirms the number.</p>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Confirm vs not-confirm — the line</h3>
+    <div class="ascii">  Analyst: "so ~12% operating margin?"   Mgmt: "yes, that's reasonable"   &#8594; EXTRACT (confirmed)
+  Analyst: "double-digit margins?"       Mgmt: "we see improving leverage" &#8594; NO GUIDANCE (dodged)</div>
+    <p class="small">"We'll see", "it depends", "time will tell" = NOT confirmation. The proof quote must be management-answer text only.</p>
+  </div>
+  <p class="note">Enrichment verdicts per Q&amp;A: <code>ENRICHES</code> an existing fact · <code>NEW ITEM</code> · <code>NO GUIDANCE</code>. It also runs a completeness check — comparing against metrics the company guided in prior quarters, to catch anything dropped. (Not every transcript has clean structured Q&amp;A: ~88 fall back to a single Q&amp;A blob, ~68 to raw full text — enrichment quality degrades on those.)</p>
+</section>
+
+<!-- ===== 33 EIGHTK ===== -->
+<section class="step" data-step="33">
+  <span class="tag green">Guidance · 21 of 24 · per asset</span>
+  <h1>8-Ks: the event filing — read the attachments.</h1>
+  <p class="lead">An 8-K is a short "something happened" filing. The real content is usually an <b>attached exhibit</b> (the press release, <code>EX-99.1</code>), not the filing body.</p>
+
+  <p class="note">Plain version: an 8-K reports one event, and its <b>item number</b> says which kind — <code>2.02</code> = earnings, <code>7.01</code> = a voluntary disclosure (Reg-FD), <code>8.01</code> = other, <code>9.01</code> = "exhibits are attached." <code>EX-99.1</code> = the attached press release.</p>
+
+  <div class="panel">
+    <h3>Which 8-Ks, and where to look</h3>
+    <ul class="small" style="font-size:18px;">
+      <li>Only items <b>2.02</b> (earnings), <b>7.01</b> (Reg-FD / pre-announcements), <b>8.01</b> (other) are scanned for guidance. ~99.9% recall, and the extraction AI is the precision gate.</li>
+      <li>Item 2.02 guidance is 94% in the exhibit; 7.01 is 85% in the exhibit → <b>exhibit-first</b>.</li>
+      <li>But always fetch <b>both</b> sections and ALL <code>EX-99.x</code> exhibits — guidance can be split across the press release (99.1) and the slide deck (99.2).</li>
+    </ul>
+  </div>
+
+  <div class="panel danger">
+    <h3>The multi-item trap</h3>
+    <p>An 8-K can carry items 2.02 + 8.01 at once: the EX-99.1 is the earnings release (item 2.02), but a <em>buyback</em> sits in the "Other Events" section (item 8.01). Read only the exhibit and you lose the section's event. <b>Always read both.</b> (Item 9.01 is just "exhibits attached" — pure noise.)</p>
+  </div>
+  <p class="note">Dirty exhibit numbers exist (<code>EX-99.01</code>, <code>EX-99.-1</code>) — the query uses "starts with EX-99" to catch them. Quote prefix: <code>[8-K]</code>.</p>
+</section>
+
+<!-- ===== 34 TENQ TENK ===== -->
+<section class="step" data-step="34">
+  <span class="tag green">Guidance · 22 of 24 · per asset</span>
+  <h1>10-Q &amp; 10-K: mostly backward-looking — and that's fine.</h1>
+  <p class="lead">Quarterly (10-Q) and annual (10-K) filings are dominated by <em>past</em> results. Guidance, if any, sits in the MD&amp;A (management's discussion). For 10-Ks, watch for multi-year targets.</p>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>Zero is a valid answer</h3>
+      <p class="small" style="font-size:18px;">10-Qs almost never carry guidance — in the live graph only <b>one</b> GuidanceUpdate ever came from a 10-Q. Don't lower the bar to force a fact. Apply the forward-looking filter strictly.</p>
+    </div>
+    <div class="col">
+      <h3>The apostrophe trap</h3>
+      <p class="small" style="font-size:18px;">The 10-K MD&amp;A section name uses a <b>curly apostrophe</b> (<code>Management&#8217;sDiscussion…</code>, U+2019); the 10-Q version has <b>no apostrophe</b>. Match the right one per form, or query by "starts with Management".</p>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>What to skip, what to fetch</h3>
+    <p>Skip Risk Factors, Legal, Controls, Signatures as guidance targets. Fetch the MD&amp;A first (via the Bash warmup, since it's ~56–72KB), then other narrative sections, then financial-statement notes, with raw filing text only as a last bounded fallback. Quote prefix: <code>[10-Q]</code> / <code>[10-K]</code>.</p>
+  </div>
+  <p class="note">Cross-asset rule: never suppress a 10-Q/10-K fact just because similar guidance appeared in an 8-K or transcript — the barcode ID + value-hash sort out genuine duplicates vs real updates.</p>
+</section>
+
+<!-- ===== 35 NEWS ===== -->
+<section class="step" data-step="35">
+  <span class="tag green">Guidance · 23 of 24 · per asset</span>
+  <h1>News: the messiest source — attribution is everything.</h1>
+  <p class="lead">A news article mixes company statements, analyst opinions, and reporter narration in one blob. The rule: <b>extract only what the article attributes to the company itself.</b></p>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>Take</h3>
+      <p class="small" style="font-size:18px;">"Apple expects Q2 revenue $94–98B." Reaffirmations ("reaffirms FY guidance" → <code>conditions=reaffirmed</code>). Withdrawals ("pulls guidance" → <code>qualitative=withdrawn</code>).</p>
+    </div>
+    <div class="col">
+      <h3>Skip</h3>
+      <p class="small" style="font-size:18px;">Analyst targets, "the Street expects", price targets, rating changes, unnamed third parties. When attribution is unclear → skip (precision over recall here).</p>
+    </div>
+  </div>
+
+  <div class="panel accent">
+    <h3>A tuned upstream filter narrows the haul first</h3>
+    <p>Before the AI even reads, a filter picks news worth looking at: the Benzinga <b>"Guidance" channel</b> as anchor + a <b>17-keyword title whitelist</b> ("sees", "guidance", "outlook"…) + a <code>$[0-9]</code> regex. Result: ~97% precision, ~98.7% recall. Embeddings and tags were <em>tested and rejected</em> — they cluster by company, not by "is this guidance."</p>
+  </div>
+  <p class="note">Prior-period values: "Raised to $3.50 from prior $3.20" → extract $3.50 only. Storage gotcha: <code>channels</code>/<code>tags</code> are JSON <em>strings</em>, not lists. News runs on the cheaper Haiku model. Quote prefix: <code>[News]</code>.</p>
+</section>
+
+<!-- ===== 36 WORKED EXAMPLE ===== -->
+<section class="step" data-step="36">
+  <span class="tag green">Guidance · 24 of 24 · end to end</span>
+  <h1>One quote → one clean fact → graph rows.</h1>
+  <p class="lead">Watch a single sentence travel the whole pipeline.</p>
+
+  <div class="panel">
+    <h3>The raw quote (from an Apple transcript)</h3>
+    <p style="font-style:italic;">"For the June quarter, we expect revenue to be between $94 billion and $98 billion, on a non-GAAP basis."</p>
+  </div>
+
+  <pre><span style="color:#94a3b8">// 1) the AI proposes (it copies numbers raw, classifies, quotes):</span>
+{ "label":"Revenue", "segment":"Total", "low":94, "high":98, "unit_raw":"billion",
+  "unit_kind_hint":"money", "money_mode_hint":"aggregate",
+  "basis_norm":"non_gaap", "basis_raw":"non-GAAP", "derivation":"explicit",
+  "fiscal_year":2025, "fiscal_quarter":3, "quote":"[PR] For the June quarter, we expect...",
+  "xbrl_qname":"us-gaap:Revenues", "member_u_ids":[] }
+
+<span style="color:#94a3b8">// 2) code canonicalizes + builds the period + barcode:</span>
+low=94000  high=98000  mid=96000   canonical_unit = m_usd          <span style="color:#94a3b8">// billions &#8594; millions</span>
+period   = gp_2025-04-01_2025-06-30                                 <span style="color:#94a3b8">// Apple FYE Sep, Q3 = Apr–Jun</span>
+id       = gu:AAPL_2025-01-30T17.00:revenue:gp_2025-04-01_2025-06-30:non_gaap:total
+evhash16 = sha256("94000|96000|98000|m_usd|.|.")[:16]</pre>
+
+  <div class="ascii"><span>// 3) code MERGEs into Neo4j:</span>
+  (Guidance "Revenue") &#8592;UPDATES&#8211; (GuidanceUpdate gu:AAPL...) &#8211;HAS_PERIOD&#8594; (GuidancePeriod gp_2025-04-01_2025-06-30)
+                                          |  &#8211;FROM_SOURCE&#8594; (Transcript AAPL_2025-01-30...)
+                                          |  &#8211;FOR_COMPANY&#8594; (Company AAPL)
+                                          └  &#8211;MAPS_TO_CONCEPT&#8594; (Concept us-gaap:Revenues)</div>
+  <p class="note">Re-run tomorrow with the same transcript → same barcode → the row just updates. Apple revises to $95–99B in an 8-K → same metric, <em>different</em> <code>source_id</code> → a separate fact, and the <code>evhash16</code> difference flags the change.</p>
+</section>
+
+<!-- ===== 37 RUNTIME OVERVIEW ===== -->
+<section class="step" data-step="37">
+  <span class="tag amber">Production · 1 of 12</span>
+  <h1>Live, this ran as a self-feeding factory on Kubernetes.</h1>
+  <p class="lead">Nobody had to babysit it. A daemon noticed which companies had fresh filings, dropped jobs on a queue, and a pool of worker pods drained the queue — scaling up when busy, down to idle when not.</p>
+
+  <div class="ascii">  ┌─ trade_ready:entries (Redis) ── written 4&#215;/day by trade_ready_scanner.py (a CronJob): who reports soon
+  │
+  ├─&#8594; guidance_trigger_daemon.py  (auto, every 60s)  ─┐
+  │                                                      ├─&#8594; LPUSH jobs &#8594; Redis list "extract:pipeline"
+  └─&#8594; trigger-extract.py          (manual CLI)       ─┘                          │
+                                                                                    v
+                              KEDA watches the queue length &#8594; scales extraction-worker pods 1..7
+                                                                                    │
+                                                                                    v
+                              each worker: BRPOP one job &#8594; run /extract via Claude SDK &#8594; write to Neo4j
+                                                                                    │
+                                                                                    v
+                              set guidance_status on the document  +  log to the run-ledger</div>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>One job = one tiny unit</h3>
+      <p class="small" style="font-size:18px;"><code>{type, asset, source_id, ticker, mode}</code>. No batching. One document, one company. Easy to retry, easy to parallelize.</p>
+    </div>
+    <div class="col">
+      <h3>Everything is in-cluster</h3>
+      <p class="small" style="font-size:18px;">Redis, Neo4j, and the Neo4j MCP bridge all run as Kubernetes services. The worker talks to them by internal DNS names.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 38 MANUAL TRIGGER ===== -->
+<section class="step" data-step="38">
+  <span class="tag amber">Production · 2 of 12 · trigger</span>
+  <h1>Trigger #1 — the manual CLI (for backfills &amp; testing).</h1>
+  <p class="lead"><code>trigger-extract.py</code> is how a human queues work by hand: "process guidance from Apple's transcripts."</p>
+
+  <pre>python3 scripts/trigger-extract.py CRM                       <span style="color:#94a3b8"># guidance/transcript for CRM</span>
+python3 scripts/trigger-extract.py --all                     <span style="color:#94a3b8"># every unprocessed source</span>
+python3 scripts/trigger-extract.py --type guidance --asset 8k CRM
+python3 scripts/trigger-extract.py --force CRM               <span style="color:#94a3b8"># re-do even if completed</span>
+python3 scripts/trigger-extract.py --list --all             <span style="color:#94a3b8"># show, don't queue</span></pre>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>What it does</h3>
+      <p class="small" style="font-size:18px;">Asks Neo4j for documents whose <code>guidance_status</code> is null or "failed", then <b>LPUSH</b>es one job per document onto <code>extract:pipeline</code>. It also pre-warms the SEC date cache for each ticker.</p>
+    </div>
+    <div class="col">
+      <h3>Self-discovering</h3>
+      <p class="small" style="font-size:18px;">It learns the valid types by <b>scanning the <code>types/</code> folder</b> on disk — no hardcoded list. Assets live in a small <code>ASSET_QUERIES</code> table (all 5).</p>
+    </div>
+  </div>
+  <p class="note">Flags: <code>--all</code>, <code>--force</code>, <code>--retry-failed</code>, <code>--type</code>, <code>--asset</code>, <code>--list</code>, <code>--source-id</code>, <code>--mode</code>. This is the only path that can re-queue a <em>failed</em> document and the only one that handles the <code>news</code> asset.</p>
+</section>
+
+<!-- ===== 39 DAEMON ===== -->
+<section class="step" data-step="39">
+  <span class="tag amber">Production · 3 of 12 · trigger</span>
+  <h1>Trigger #2 — the always-on daemon (the autopilot).</h1>
+  <p class="lead"><code>guidance_trigger_daemon.py</code> is a pod that wakes every 60 seconds, finds companies with near-term earnings, and queues their unprocessed documents — automatically.</p>
+
+  <div class="panel accent">
+    <h3>Where the worklist comes from (the true head of the chain)</h3>
+    <p>The daemon doesn't <em>decide</em> who reports soon — it just reads a list. That list is written by <code>trade_ready_scanner.py</code>, a Kubernetes <b>CronJob that runs 4× a day</b> (07:00, 12:00, 16:30, 21:00, Mon–Fri). It scans for near-term earnings and writes the <code>trade_ready:entries</code> Redis hash (plus a per-date index and a scan log). The daemon only <b>reads</b> it.</p>
+  </div>
+
+  <div class="flowline" aria-label="Daemon sweep">
+    <div class="node"><strong>Read</strong><span>trade_ready:entries (who reports soon)</span></div>
+    <div class="arrow">&#8594;</div>
+    <div class="node"><strong>Filter</strong><span>earnings within the active window</span></div>
+    <div class="arrow">&#8594;</div>
+    <div class="node"><strong>Find</strong><span>their unprocessed transcripts/8k/10q/10k</span></div>
+    <div class="arrow">&#8594;</div>
+    <div class="node"><strong>Claim</strong><span>4-hour Redis lease so no double-queue</span></div>
+    <div class="arrow">&#8594;</div>
+    <div class="node"><strong>Queue</strong><span>nearest earnings first</span></div>
+  </div>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>The active window</h3>
+      <p class="small" style="font-size:18px;"><code>ACTIVE_WINDOW_DAYS</code> = 1 in code (just-in-time), but set to <b>45</b> in the live deployment — a backfill window covering the SEC's 10-Q filing deadline after earnings.</p>
+    </div>
+    <div class="col">
+      <h3>The lease (no duplicates)</h3>
+      <p class="small" style="font-size:18px;">Before queueing, it sets <code>guidance_lease:{asset}:{source_id}</code> for 4 hours. If the key already exists, it skips — so overlapping sweeps or restarts never double-queue.</p>
+    </div>
+  </div>
+  <p class="note">It also <b>recovers stalls</b>: a document stuck "in_progress" with no live lease gets re-queued. It deliberately does <em>not</em> retry "failed" docs (that's the manual tool's job) and does <em>not</em> handle <code>news</code> (only the 4 filing/transcript assets).</p>
+</section>
+
+<!-- ===== 40 QUEUE ===== -->
+<section class="step" data-step="40">
+  <span class="tag amber">Production · 4 of 12</span>
+  <h1>One Redis list is the conveyor belt.</h1>
+  <p class="lead">All jobs — every type, every asset — share a single queue, <code>extract:pipeline</code>. Triggers push on one end (<code>LPUSH</code>); workers pull from the other (<code>BRPOP</code>). Simple, FIFO, no per-type queues to manage.</p>
+
+  <pre><span style="color:#94a3b8">// a job payload on the queue:</span>
+{ "asset":"transcript", "ticker":"AAPL",
+  "source_id":"AAPL_2025-01-30T17.00", "type":"guidance", "mode":"write" }</pre>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>Why one shared queue?</h3>
+      <p class="small" style="font-size:18px;">Isolation comes from the <b>prompt stack + job granularity</b>, not from separate queues. The worker reads each job's <code>type</code> field and routes itself. Different types/assets naturally run in parallel across pods.</p>
+    </div>
+    <div class="col">
+      <h3>The dead-letter list</h3>
+      <p class="small" style="font-size:18px;">Three outcomes: a job that fails processing 3 times moves to <code>extract:pipeline:dead</code>; an invalid payload is dead-lettered immediately; un-parseable junk is just logged and dropped. Rate-limit "failures" never count toward the 3 (next slide).</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 41 WORKER ===== -->
+<section class="step" data-step="41">
+  <span class="tag amber">Production · 5 of 12</span>
+  <h1>The worker is a patient loop: take one, run it, mark it.</h1>
+  <p class="lead"><code>extraction_worker.py</code> is the heart. It blocks on the queue, and when a job arrives it runs the whole <code>/extract</code> skill through the Claude Agent SDK, then records the outcome.</p>
+
+  <pre><span style="color:#94a3b8"># the core loop (simplified)</span>
+job = BRPOP("extract:pipeline")
+mark_status(source, "in_progress")
+models = resolve_models(load_config(job.type), job.asset)     <span style="color:#94a3b8"># e.g. news&#8594;haiku</span>
+prompt = "/extract {ticker} {asset} {source_id} TYPE={type} MODE={mode} PRIMARY_MODEL=... RESULT_PATH=..."
+run via Claude Agent SDK(cli_path=~/.local/bin/claude, model=orchestrator,
+                         max_turns=80, max_budget_usd=15, permission=bypassPermissions)
+read result file &#8594; mark_status(source, "completed" | "failed")</pre>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>Per-job model routing</h3>
+      <p class="small" style="font-size:18px;">It reads <code>config.yaml</code> and resolves three roles (orchestrator / primary / enrichment), passing them into the prompt. So guidance/news ran on Haiku and guidance/transcript on Sonnet — on the same pod.</p>
+    </div>
+    <div class="col">
+      <h3>Talks to Neo4j two ways</h3>
+      <p class="small" style="font-size:18px;">The AI <b>reads</b> via an MCP bridge (slide 44); the deterministic <b>writes</b> go through the Python writer over Bash. The worker itself only sets the status property.</p>
+    </div>
+  </div>
+  <p class="note">Boots by <code>chdir</code> into the project first (so the SDK finds <code>.claude/</code>), then connects Redis + Neo4j. ~800 lines.</p>
+</section>
+
+<!-- ===== 42 WORKER SAFETY ===== -->
+<section class="step" data-step="42">
+  <span class="tag amber">Production · 6 of 12</span>
+  <h1>Four safety nets keep it from burning money or looping.</h1>
+  <p class="lead">Running an LLM in a loop is dangerous without guards. The worker has four.</p>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>1 · Rate-limit re-queue</h3>
+      <p class="small" style="font-size:18px;">If a message contains "hit your limit", the job is put back <b>without</b> a retry penalty + the worker sleeps 5 min. A rate-limit isn't a failure.</p>
+      <h3>2 · The write sidecar</h3>
+      <p class="small" style="font-size:18px;">The writer drops a <b>sidecar</b> (a small companion file, <code>/tmp/gu_written_{source_id}.json</code>) so the worker can count exactly what was written. It's deleted at job start to avoid stale counts.</p>
+    </div>
+    <div class="col">
+      <h3>3 · Usage throttle</h3>
+      <p class="small" style="font-size:18px;">Every 5 min it checks the Claude usage stats; if over the reserved daily quota it <b>pauses 300s</b> before the next job — so batch work never starves your interactive sessions. It guards <em>two</em> buckets: a 7-day all-model quota and a separate 7-day Sonnet quota.</p>
+      <h3>4 · Graceful shutdown</h3>
+      <p class="small" style="font-size:18px;">On SIGTERM it stops pulling new jobs but lets the current one finish — K8s gives it a 300s grace period (covers one full extraction).</p>
+    </div>
+  </div>
+
+  <div class="panel danger">
+    <h3>One footgun in here</h3>
+    <p>The rate-limit re-queue has <b>no cap</b> — a persistently rate-limited job could loop forever — and detection is a fragile substring match on "hit your limit". Worth hardening (slide 53).</p>
+  </div>
+</section>
+
+<!-- ===== 43 KEDA ===== -->
+<section class="step" data-step="43">
+  <span class="tag amber">Production · 7 of 12</span>
+  <h1>KEDA grows the worker pool when the queue fills.</h1>
+  <p class="lead">KEDA is a Kubernetes autoscaler that watches the Redis list length and adds/removes worker copies to match the load.</p>
+
+  <div class="kv">
+    <div class="k">Min pods</div><div class="v"><b>1</b> in the manifest, so KEDA can't kill a pod mid-extraction. (The <em>live</em> cluster was hand-patched to 0 + a KEDA pause — see slide 48.)</div>
+    <div class="k">Max pods</div><div class="v"><b>7</b> — safe parallelism across many tickers</div>
+    <div class="k">Scale trigger</div><div class="v">Redis list <code>extract:pipeline</code>, length ≥ 1 adds a pod</div>
+    <div class="k">Poll / cooldown</div><div class="v">checks every 30s; waits 300s before scaling down (no churn)</div>
+  </div>
+
+  <div class="panel">
+    <h3>Why min = 1 and a long cooldown?</h3>
+    <p>Each extraction takes minutes. Scaling to 0 or shrinking too fast could terminate a pod mid-job. min=1 keeps one warm; the 300s cooldown + 300s termination grace mean an in-flight job always finishes. The trade-off is one idle pod when there's no work.</p>
+  </div>
+  <p class="note">Pods are pinned to one node (<code>minisforum</code>), mount the project + the Claude CLI, and copy a writable <code>.claude.json</code> at startup.</p>
+</section>
+
+<!-- ===== 44 MCP ===== -->
+<section class="step" data-step="44">
+  <span class="tag amber">Production · 8 of 12</span>
+  <h1>The AI reads Neo4j through a read-only HTTP bridge.</h1>
+  <p class="lead">The reader bots query the graph via an MCP server (<b>MCP = a small adapter the AI talks to instead of the database directly</b>) — an HTTP service that wraps Neo4j and exposes <b>only a read tool</b>. There is no write tool anywhere in the AI's reach.</p>
+
+  <div class="ascii">  reader bot ──(MCP over HTTP)──&#8594; mcp-neo4j-cypher-http  ──(Bolt)──&#8594; Neo4j
+              read_neo4j_cypher only                      pinned ClusterIP, /health probe</div>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>Why HTTP (not direct)?</h3>
+      <p class="small" style="font-size:18px;">In-cluster routing with a stable address. A readiness probe runs <code>RETURN 1</code> against Neo4j; if Neo4j is down, the bridge stops taking traffic but the pod stays alive (no cascade).</p>
+    </div>
+    <div class="col">
+      <h3>The safety this enforces</h3>
+      <p class="small" style="font-size:18px;">Because the bridge has no write capability, an AI <em>cannot</em> mutate the graph even if it tried. All writes are forced through the audited Python writer.</p>
+    </div>
+  </div>
+
+  <details>
+    <summary>The fiddly in-cluster bits (skip unless deploying)</summary>
+    <p>The MCP call must send a <code>Host: localhost:8000</code> header so in-cluster routing works. Readiness is an HTTP <code>/health</code> check that runs <code>RETURN 1</code> against Neo4j (over the Bolt protocol); liveness is a plain TCP check, so a brief Neo4j blip stops <em>traffic</em> without killing the pod. Separately, the worker must <code>chdir</code> into the project <b>before</b> importing the SDK, because the SDK resolves <code>.claude/</code> relative to the current directory.</p>
+  </details>
+</section>
+
+<!-- ===== 45 BILLING ===== -->
+<section class="step" data-step="45">
+  <span class="tag amber">Production · 9 of 12</span>
+  <h1>Billing safety: the worker rides the subscription, not the API.</h1>
+  <p class="lead">Running thousands of extractions on a metered API key would be ruinous. So the worker authenticates through the Claude <b>OAuth subscription</b> (the CLI's saved credentials), not a pay-per-token key.</p>
+
+  <div class="panel amber">
+    <h3>How it's enforced — and where</h3>
+    <p>The Kubernetes manifest <b>blanks out</b> <code>ANTHROPIC_API_KEY</code> (and the OAuth token env) to empty strings, forcing the CLI to fall back to its subscription credentials file. The worker calls the CLI at <code>~/.local/bin/claude</code>.</p>
+  </div>
+
+  <div class="panel danger">
+    <h3>Important nuance (verified in code)</h3>
+    <p>This guard lives <b>only in the YAML manifest</b> — the worker's Python code never references <code>ANTHROPIC_API_KEY</code> at all. So the protection is the deployment config, not the code. ⚠️ If you ran the worker <em>outside</em> Kubernetes with a real key present in the environment, it could bill the metered API. Inside K8s it's safe.</p>
+  </div>
+  <p class="note">Per-job ceilings as a second guard: <code>max_turns=80</code>, <code>max_budget_usd=$15</code>. (The reference doc says $5 — the code says $15; the code wins.)</p>
+</section>
+
+<!-- ===== 46 WARMUP ===== -->
+<section class="step" data-step="46">
+  <span class="tag amber">Production · 10 of 12</span>
+  <h1>Warmup: pre-load the big lookups so nothing gets clipped.</h1>
+  <p class="lead">Before the AI reads, a Bash command (<code>warmup_cache.sh</code>) pre-computes the heavy reference data into <code>/tmp</code> files. The bot reads the files instead of querying through the AI tool layer, which truncates large outputs.</p>
+
+  <table class="t">
+    <thead><tr><th>Cache file</th><th>What it holds</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td><code>concept_cache_{TICKER}.json</code></td><td>the company's XBRL concepts + usage</td><td>so code can match metrics to concepts</td></tr>
+      <tr><td><code>member_map_{TICKER}.json</code></td><td>all the company's segment nodes (by CIK)</td><td>so code can link segments deterministically</td></tr>
+      <tr><td><code>transcript_content_{ID}.json</code></td><td>the full transcript text</td><td>50KB+ would corrupt via the AI tool</td></tr>
+      <tr><td><code>mda_content_{ACC}.json</code> / <code>8k_content_{ACC}.json</code></td><td>the MD&amp;A / 8-K sections + exhibits</td><td>same — fetch via Bash, read the file</td></tr>
+    </tbody>
+  </table>
+  <p class="note">This is the fix for the recurring "~50KB output gets persisted/truncated" problem. Even so, very large <code>/tmp</code> reads can still hit limits — a known low-grade nuisance the bots work around with chunked reads.</p>
+</section>
+
+<!-- ===== 47 LEDGER ===== -->
+<section class="step" data-step="47">
+  <span class="tag amber">Production · 11 of 12</span>
+  <h1>Every run is logged for audit — append-only.</h1>
+  <p class="lead">For guidance (and prediction/learning) jobs, the worker opens and closes a <b>run-ledger</b> entry: a crash-safe JSONL log + a Markdown index, recording what ran, when, and what it produced.</p>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>What it captures</h3>
+      <p class="small" style="font-size:18px;">Per job: start, outcome (succeeded / failed / rate_limited), and a summary (items extracted, items written). So you can answer "what did this pod do last Tuesday?".</p>
+    </div>
+    <div class="col">
+      <h3>One counting nuance</h3>
+      <p class="small" style="font-size:18px;">The "items written" count reads the <em>last</em> writer batch's sidecar. For transcripts (two passes), that's the <b>enrichment</b> batch — so the ledger under-counts the true total. The full set is still in the graph.</p>
+    </div>
+  </div>
+
+  <details>
+    <summary>The ledger file, precisely</summary>
+    <p>An append-only line-per-entry log at <code>earnings-analysis/operations/run_ledger.jsonl</code>, guarded by <code>flock</code> + <code>fsync</code> on every append (safe for multiple pods on the one pinned node — not NFS-safe), plus an atomically-rewritten <code>Run Index.md</code>. Only three job kinds get a ledger row: <code>guidance</code>, <code>prediction</code>, <code>learning</code>.</p>
+  </details>
+  <p class="note">The pre-Write validation hook that was meant to gate output is currently inactive — it matches an old <code>/gx/*.tsv</code> path, not the live <code>/tmp/gu_*.json</code> outputs (slide 53).</p>
+</section>
+
+<!-- ===== 48 CURRENT STATE ===== -->
+<section class="step" data-step="48">
+  <span class="tag amber">Production · 12 of 12</span>
+  <h1>Where it stands right now: built, proven, paused.</h1>
+  <p class="lead">The pipeline is production-ready and has written real data, but the live workers are currently scaled to zero (paused) — the infrastructure is ready to resume.</p>
+
+  <div class="threecol">
+    <div class="col">
+      <h3>In the graph <span class="pill green">live</span></h3>
+      <p class="small" style="font-size:18px;"><span class="big-num">8,432</span> GuidanceUpdate facts<br><span class="big-num">548</span> Guidance labels<br>~4,800 concept links · ~460 member links</p>
+    </div>
+    <div class="col">
+      <h3>Processed so far</h3>
+      <p class="small" style="font-size:18px;">266 8-Ks · 69 10-Qs · 27 10-Ks · 19 transcripts.<br><b>News: 0</b> (never auto-run — daemon skips it).</p>
+    </div>
+    <div class="col">
+      <h3>Status <span class="pill amber">paused</span></h3>
+      <p class="small" style="font-size:18px;">Worker scaled to 0 (as of the last snapshot). Resume = scale the deployment back up / un-pause the KEDA object.</p>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Resume checklist (plain)</h3>
+    <ol class="small" style="font-size:18px;">
+      <li><b>Restart the worker:</b> remove the KEDA pause annotation <code>autoscaling.keda.sh/paused-replicas</code> from the <code>extraction-worker-scaler</code> ScaledObject (that's what holds the worker at 0).</li>
+      <li><b>Restart the autopilot — separate switch:</b> <code>kubectl scale deployment guidance-trigger -n processing --replicas=1</code>. No KEDA watches the daemon, so it must be scaled by hand.</li>
+      <li>Confirm <code>ENABLE_GUIDANCE_WRITES=true</code> where the writer runs (for real writes).</li>
+      <li>The daemon then picks up near-term earnings automatically; or backfill by hand with <code>trigger-extract.py</code>.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ===== 49 MODEL CHOICE ===== -->
+<section class="step" data-step="49">
+  <span class="tag">Models &amp; proof · 1 of 2</span>
+  <h1>Sonnet won the bake-off. Opus was disqualified.</h1>
+  <p class="lead">Three models were tested head-to-head on real filings. The winner runs everywhere except news (which uses cheap Haiku).</p>
+
+  <table class="t">
+    <thead><tr><th>Model</th><th>Verdict</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td><b>Sonnet 4.6</b> <span class="pill green">production</span></td><td>winner</td><td>best XBRL linking (88%), best basis capture, correct periods, stable re-runs</td></tr>
+      <tr><td>Haiku 4.5 <span class="pill">news only</span></td><td>cheap &amp; fast</td><td>weak XBRL linking (38% vs Sonnet's 88%), 0% segment links, mixed basis capture — fine for simple news</td></tr>
+      <tr><td>Opus 4.6 <span class="pill red">rejected</span></td><td>disqualified</td><td>reproducible <b>+1-month fiscal-period bug</b> → wrong IDs → broken dedup</td></tr>
+    </tbody>
+  </table>
+
+  <div class="panel">
+    <h3>The config that encodes this</h3>
+    <pre>orchestrator: sonnet
+primary: sonnet
+enrichment: sonnet
+assets:
+  news: { orchestrator: haiku, primary: haiku }   <span style="color:#94a3b8"># news is cheap</span></pre>
+  </div>
+  <p class="note">Reminder from slide 19: because MERGE is latest-write-wins, you must run <b>one</b> model — a later Opus run would overwrite Sonnet's good XBRL links with worse ones.</p>
+</section>
+
+<!-- ===== 50 VALIDATION ===== -->
+<section class="step" data-step="50">
+  <span class="tag">Models &amp; proof · 2 of 2</span>
+  <h1>It was proven end-to-end before going live.</h1>
+  <p class="lead">Two milestone runs showed the whole pipeline works across every asset, with hand-checked accuracy.</p>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>AAPL — first production run</h3>
+      <p class="small" style="font-size:18px;">5 transcripts → 46 GuidanceUpdate nodes, all graph links correct, KEDA parallel scaling (1→4 pods) verified. First proof the full machine works.</p>
+    </div>
+    <div class="col">
+      <h3>CRM — all 5 assets in one company</h3>
+      <p class="small" style="font-size:18px;">Transcript (5), 8-K earnings (20), 8-K non-earnings (0, correct), 10-Q (1), 10-K (1), news guidance (1), news analyst (0, correct). <b>28 facts, 100% hand-verified accuracy.</b> Enrichment correctly ran only for the transcript.</p>
+    </div>
+  </div>
+
+  <div class="panel green">
+    <h3>What the CRM run proved</h3>
+    <ul class="small" style="font-size:18px;">
+      <li>The 8-slot loading gave each asset exactly the right rules with zero cross-contamination.</li>
+      <li>Per-segment revenue (5 rows, one period) was correctly <b>not</b> flagged as duplicates.</li>
+      <li>Non-guidance documents (a board appointment 8-K, an analyst-rating news item) correctly returned <code>NO_GUIDANCE</code>.</li>
+    </ul>
+  </div>
+  <p class="note">ADI (FYE October) was the stress test that exposed Opus's period bug and confirmed Sonnet's correctness on a non-standard fiscal calendar.</p>
+</section>
+
+<!-- ===== 51 EVENT TAXONOMY ===== -->
+<section class="step" data-step="51">
+  <span class="tag amber">The bigger picture</span>
+  <h1>There's a grander 8-K plan — designed, not built.</h1>
+  <p class="lead">A 4,767-line strategy doc designs a <b>24-tag event taxonomy</b> for <em>all</em> 8-K events (not just guidance) — to feed a stock-move predictor. It is shelved: guidance is the only piece actually built.</p>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>The idea</h3>
+      <p class="small" style="font-size:18px;">Tag every 8-K with events (EARNINGS, M&amp;A, BUYBACK, LITIGATION, RESTRUCTURING, EXEC_CHANGE…). Part deterministic (from the item code), part AI-judged. Then a predictor reasons over the event timeline.</p>
+    </div>
+    <div class="col">
+      <h3>Why it stalled the way it did</h3>
+      <p class="small" style="font-size:18px;">A Haiku "classifier-first" router was tested and <b>retired</b> (only 59% precision binary, 33% on the 24-way). The rule became: no classifier gate — <b>the extraction LLM is the precision gate.</b> That same rule is why guidance routing is just "items 2.02/7.01/8.01, then let Sonnet read."</p>
+    </div>
+  </div>
+
+  <div class="panel accent">
+    <h3>The most useful finding hiding in there: the amplifier effect</h3>
+    <p>Earnings alone move a stock ~6.8% on average. But <b>earnings + restructuring ≈ 9.5%</b> (and negative); earnings + an exec change ≈ +31% bigger. Co-occurring events matter more than any single one. Also: the more 8-Ks a company files between earnings, the <em>smaller</em> the eventual earnings surprise (the market already knows).</p>
+  </div>
+  <p class="note">Treat this as a roadmap, not current behavior. Today: guidance extraction only.</p>
+</section>
+
+<!-- ===== 52 DRIFT ===== -->
+<section class="step" data-step="52">
+  <span class="tag red">Reality check · 1 of 2</span>
+  <h1>Where the docs and the real code disagree (verified).</h1>
+  <p class="lead">The markdown specs are mostly accurate, but a few claims have drifted from the code. These were checked directly against the source.</p>
+
+  <table class="t">
+    <thead><tr><th>Topic</th><th>Docs say</th><th>Code actually does</th></tr></thead>
+    <tbody>
+      <tr><td>Per-job budget</td><td>$5</td><td><b>$15</b> (<code>MAX_BUDGET_USD=15.0</code>)</td></tr>
+      <tr><td>API-key guard</td><td>"worker strips the key"</td><td>worker code never mentions it; the blank is <b>only in the K8s YAML</b></td></tr>
+      <tr><td>Concept registry size</td><td>~49 entries</td><td><b>65</b> entries (family table = 19)</td></tr>
+      <tr><td>V2 units / 4-step period / segment aliases</td><td>absent or V1-only</td><td>all three <b>exist in code</b>, undocumented in the spec</td></tr>
+    </tbody>
+  </table>
+
+  <div class="panel danger">
+    <h3>The one that matters for safety</h3>
+    <p>Because the billing guard is YAML-only, <b>running the worker outside Kubernetes with a real <code>ANTHROPIC_API_KEY</code> in the environment could bill the metered API.</b> Inside the cluster it's safe (the manifest blanks the key). Keep that in mind for any local or ad-hoc run.</p>
+  </div>
+  <p class="note">Rule of thumb the project already follows: when a markdown plan conflicts with code, trust the code.</p>
+</section>
+
+<!-- ===== 53 GAPS ===== -->
+<section class="step" data-step="53">
+  <span class="tag red">Reality check · 2 of 2</span>
+  <h1>Known gaps, footguns &amp; where each part stands.</h1>
+  <p class="lead">Nothing here blocks the pipeline — but these are the things to fix when you resume.</p>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>🐞 Open gaps</h3>
+      <ul class="small" style="font-size:18px;">
+        <li><b>~19.8% of facts have <code>unit=unknown</code></b> — many fixable ("per share" isn't in the alias table).</li>
+        <li><b>XBRL coverage holes</b> — unreviewed labels (<code>adjusted_eps</code>, <code>effective_tax_rate</code>); no live fallback when the concept cache is missing.</li>
+        <li><b>Period race</b> — 10-Q/10-K can extract before XBRL lands → a duplicate period later (add a <code>HAS_XBRL</code> gate).</li>
+        <li><b>News never auto-runs</b>; amendments (/A filings) excluded by design (~809 unprocessed).</li>
+      </ul>
+    </div>
+    <div class="col">
+      <h3>⚠️ Footguns</h3>
+      <ul class="small" style="font-size:18px;">
+        <li><code>dry_run = (mode != '--write')</code> → any non-exact arg silently dry-runs.</li>
+        <li><code>ENABLE_GUIDANCE_WRITES</code> is read once at import — runtime changes don't take.</li>
+        <li>Rate-limit re-queue has no cap → can loop forever.</li>
+        <li>The pre-Write validation hook is inactive (wrong path).</li>
+        <li>Ledger "items written" under-counts transcripts (last batch only).</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="panel green">
+    <h3>Where it stands</h3>
+    <p><b>Built &amp; proven:</b> the generic machine, guidance for all 5 assets, the deterministic core, the production runtime. <b>Live data:</b> 8,432 facts. <b>Paused:</b> workers at 0. <b>Designed-not-built:</b> the 24-tag event taxonomy and any second extraction type. The architecture is ready for both.</p>
+  </div>
+  <p class="note">The Appendix (next 7 slides) walks every code file, one at a time.</p>
+</section>
+
+<!-- ===== 54 APPENDIX: SKILL FILES ===== -->
+<section class="step" data-step="54">
+  <span class="tag accent" style="color:var(--accent); background:var(--accent-soft);">Appendix · the prompt stack</span>
+  <h1>The skill files — the AI's instruction set.</h1>
+  <p class="lead">All under <code>.claude/skills/extract/</code>. These are <b>markdown</b>, not code — they're what the bots read. ~23 files, ~3,400 lines.</p>
+
+  <div class="kv">
+    <div class="k"><code>SKILL.md</code></div><div class="v">the orchestrator — runs primary, conditionally enrichment, reports (slide 8)</div>
+    <div class="k"><code>evidence-standards.md</code></div><div class="v">the 4 universal anti-hallucination rules</div>
+    <div class="k"><code>queries-common.md</code></div><div class="v">shared Cypher: company/FYE lookup, warmup caches, fulltext recall</div>
+    <div class="k"><code>assets/{asset}.md</code></div><div class="v">×5 — how each document is shaped in Neo4j (slot 3)</div>
+    <div class="k"><code>assets/{asset}-queries.md</code></div><div class="v">×5 — the Cypher to fetch each document's text (slot 6)</div>
+    <div class="k"><code>types/guidance/core-contract.md</code></div><div class="v">the 746-line schema bible (slot 1)</div>
+    <div class="k"><code>types/guidance/primary-pass.md</code></div><div class="v">the primary working brief (slot 2)</div>
+    <div class="k"><code>types/guidance/enrichment-pass.md</code></div><div class="v">the enrichment working brief (slot 2, transcripts only)</div>
+    <div class="k"><code>types/guidance/assets/{asset}-{pass}.md</code></div><div class="v">×6 — the slot-4 intersection rules (the key trick)</div>
+    <div class="k"><code>types/guidance/config.yaml</code></div><div class="v">per-asset model routing (slide 49)</div>
+  </div>
+
+  <div class="panel">
+    <h3>And the two agent shells</h3>
+    <p><code>.claude/agents/extraction-primary-agent.md</code> + <code>extraction-enrichment-agent.md</code> — generic bodies that just say "load these 8 files, follow the brief, write a result file." Tools: read-only Neo4j, Bash, Read/Write, task tools. Model: Sonnet.</p>
+  </div>
+</section>
+
+<!-- ===== 55 guidance_ids.py ===== -->
+<section class="step" data-step="55">
+  <span class="tag accent" style="color:var(--accent); background:var(--accent-soft);">Appendix · code 1 of 6</span>
+  <h1><code style="background:var(--accent-soft); color:var(--accent);">guidance_ids.py</code> — the identity &amp; unit brain.</h1>
+  <p class="lead">~1,000 lines. The single source of truth for every ID, every unit, every period. "Never hand-build IDs — call these."</p>
+
+  <div class="kv">
+    <div class="k"><code>build_guidance_ids()</code></div><div class="v">the slot ID + evhash16 + canonical unit/values (slides 17–18, 23)</div>
+    <div class="k"><code>build_guidance_period_id()</code></div><div class="v">first-match-wins router → <code>gp_{start}_{end}</code> or a sentinel (slide 20)</div>
+    <div class="k"><code>canonicalize_unit / _value</code></div><div class="v">V1 scaling + per-share/share-count overrides (slide 23)</div>
+    <div class="k">V2 resolvers</div><div class="v"><code>_resolve_kind / _money_mode / _ratio_subtype</code> — evidence beats hints (slide 24)</div>
+    <div class="k"><code>compute_evhash16()</code></div><div class="v">the value fingerprint (slide 18)</div>
+    <div class="k"><code>slug()</code> / <code>normalize_for_member_match()</code></div><div class="v">clean text for IDs and member matching</div>
+  </div>
+  <p class="note">Holds <b>two</b> unit engines side by side: V1 (legacy alias table) and the V2 3-axis resolver, plus a "shadow" mode that writes V1 but logs the V2 answer. Backed by a large test suite.</p>
+</section>
+
+<!-- ===== 56 guidance_writer.py ===== -->
+<section class="step" data-step="56">
+  <span class="tag accent" style="color:var(--accent); background:var(--accent-soft);">Appendix · code 2 of 6</span>
+  <h1><code style="background:var(--accent-soft); color:var(--accent);">guidance_writer.py</code> — the only thing that writes to Neo4j.</h1>
+  <p class="lead">~524 lines. One atomic <code>MERGE</code> per fact, plus the concept/member edges. The single doorway to the graph.</p>
+
+  <div class="ascii">  per item:  MERGE Guidance  +  MERGE GuidancePeriod  +  MERGE GuidanceUpdate
+             + 4 core edges (UPDATES, FROM_SOURCE, FOR_COMPANY, HAS_PERIOD)
+             + best-effort MAPS_TO_CONCEPT  +  best-effort MAPS_TO_MEMBER (UNWIND)</div>
+
+  <div class="twocol">
+    <div class="col">
+      <h3>Write semantics</h3>
+      <p class="small" style="font-size:18px;">~25 properties SET on every write (latest-wins). <code>source_refs</code> &amp; <code>aliases</code> are append-only. <code>given_date</code> is re-derived from the source node (not the AI's value). <code>GuidancePeriod</code> dates are <code>ON CREATE</code> only.</p>
+    </div>
+    <div class="col">
+      <h3>The gate &amp; guards</h3>
+      <p class="small" style="font-size:18px;">Refuses to write unless <code>ENABLE_GUIDANCE_WRITES</code> is true. 8 validation guards reject corrupt rows (e.g. a per-share value mislabeled as millions). Also creates constraints + the 4 sentinel periods.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 57 guidance_write_cli.py ===== -->
+<section class="step" data-step="57">
+  <span class="tag accent" style="color:var(--accent); background:var(--accent-soft);">Appendix · code 3 of 6</span>
+  <h1><code style="background:var(--accent-soft); color:var(--accent);">guidance_write_cli.py</code> — the orchestrating CLI.</h1>
+  <p class="lead">~656 lines. The bot shells out to this (via <code>guidance_write.sh</code>). It is the sole authority that turns a flat JSON payload into graph writes.</p>
+
+  <div class="panel">
+    <h3>What it does, in order</h3>
+    <ol class="small" style="font-size:18px;">
+      <li>Parse the JSON envelope; classify <code>payload_origin</code> (extract_v2 / readback / legacy).</li>
+      <li>Inject <code>source_id</code>, run the <b>4-step period cascade</b> (slide 21), validate V2 hints.</li>
+      <li>Run <code>concept_resolver</code> to set/repair <code>xbrl_qname</code> + family.</li>
+      <li><b>Recompute ALL IDs</b> via <code>build_guidance_ids()</code> — overwriting anything the AI sent.</li>
+      <li>Resolve members from the <code>/tmp</code> map (live fallback in write mode).</li>
+      <li>Dry-run validate, or write a batch; emit the <code>/tmp/gu_written_*.json</code> sidecar.</li>
+    </ol>
+  </div>
+  <p class="note">Key behaviors: <code>dry_run = (mode != '--write')</code> (the footgun). It is the authority for IDs — the AI's IDs are never trusted as-is. Degrades gracefully: Neo4j/Redis lookups are best-effort, falling back to FYE math.</p>
+</section>
+
+<!-- ===== 58 concept_resolver + fiscal_math ===== -->
+<section class="step" data-step="58">
+  <span class="tag accent" style="color:var(--accent); background:var(--accent-soft);">Appendix · code 4 of 6</span>
+  <h1><code style="background:var(--accent-soft); color:var(--accent);">concept_resolver.py</code> + <code style="background:var(--accent-soft); color:var(--accent);">fiscal_math.py</code></h1>
+  <p class="lead">The two small, sharp helpers behind XBRL linking and date math.</p>
+
+  <div class="twocol">
+    <div class="col">
+      <h3><code>concept_resolver.py</code> <span class="pill gray">442 ln</span></h3>
+      <p class="small" style="font-size:18px;">A <b>65-entry</b> reviewed registry (label → ordered concept candidates), a <b>19-entry</b> family table, force-null lists for derived metrics. Usage-ranked, <b>fail-closed</b> on ties → null. Overwrites the AI's concept pick (slide 28).</p>
+    </div>
+    <div class="col">
+      <h3><code>fiscal_math.py</code> <span class="pill gray">140 ln</span></h3>
+      <p class="small" style="font-size:18px;">Calendar ↔ fiscal date math. The date-builder <code>_compute_fiscal_dates()</code> (what guidance calls) maps (FYE, year, quarter) → <b>whole-month</b> start/end dates with no 52/53-week awareness — so a wrong raw FYE produces ~28-day offsets (the Opus bug, slide 22). A sibling, <code>period_to_fiscal()</code>, <em>does</em> handle week-based calendars.</p>
+    </div>
+  </div>
+  <p class="note">A buggy predecessor, <code>fiscal_resolve.py</code>, was deleted March 2026; its job now lives in <code>guidance_write_cli.py</code> (orchestration) + these two files (the math).</p>
+</section>
+
+<!-- ===== 59 extraction_worker.py ===== -->
+<section class="step" data-step="59">
+  <span class="tag amber">Appendix · code 5 of 6 · runtime</span>
+  <h1><code style="background:var(--amber-soft); color:var(--amber);">extraction_worker.py</code> — the engine room.</h1>
+  <p class="lead">~800 lines. The always-on K8s loop that drives every job through the Claude SDK (slides 41–42).</p>
+
+  <div class="kv">
+    <div class="k">queue loop</div><div class="v"><code>BRPOP extract:pipeline</code> → process one → status → repeat</div>
+    <div class="k"><code>load_config / resolve_models</code></div><div class="v">read <code>config.yaml</code>, pick orchestrator/primary/enrichment models per asset</div>
+    <div class="k">SDK call</div><div class="v"><code>ClaudeAgentOptions(cli_path, model, max_turns=80, max_budget_usd=15, bypassPermissions)</code></div>
+    <div class="k">safety</div><div class="v">rate-limit re-queue, usage throttle, dead-letter after 3, graceful shutdown</div>
+    <div class="k">ledger + sidecar</div><div class="v">open/close run-ledger row; read <code>/tmp/gu_written_*.json</code> for counts</div>
+  </div>
+  <p class="note">Billing nuance: this code <b>never</b> references <code>ANTHROPIC_API_KEY</code> — the OAuth guard is entirely in the K8s manifest (slide 45).</p>
+</section>
+
+<!-- ===== 60 triggers + cluster ===== -->
+<section class="step" data-step="60">
+  <span class="tag amber">Appendix · code 6 of 6 · runtime</span>
+  <h1>The triggers + the cluster files.</h1>
+  <p class="lead">The last pieces — what queues work, and what runs it on Kubernetes.</p>
+
+  <div class="kv">
+    <div class="k"><code>scripts/trigger-extract.py</code></div><div class="v">~299 ln · manual CLI: disk-scan types, find unprocessed, LPUSH, SEC prefetch (slide 38)</div>
+    <div class="k"><code>scripts/guidance_trigger_daemon.py</code></div><div class="v">~353 ln · autopilot: trade_ready window, 4-hr lease, priority queue, stall recovery (slide 39)</div>
+    <div class="k"><code>guidance_write.sh</code></div><div class="v">tiny wrapper: activate venv + Neo4j env vars → call the write CLI</div>
+    <div class="k"><code>warmup_cache.py / .sh</code></div><div class="v">pre-fetch concept/member/content caches into <code>/tmp</code> (slide 46)</div>
+    <div class="k"><code>k8s/processing/extraction-worker.yaml</code></div><div class="v">deployment + KEDA (min 1, max 7) + the <code>ANTHROPIC_API_KEY=""</code> guard</div>
+    <div class="k"><code>k8s/processing/guidance-trigger.yaml</code></div><div class="v">the daemon pod (1 replica, 45-day window)</div>
+    <div class="k">MCP Neo4j HTTP</div><div class="v"><code>run_http.py</code> + its deployment — the read-only graph bridge (slide 44)</div>
+  </div>
+
+  <div class="panel green">
+    <h3>That's the whole machine</h3>
+    <p>Generic engine (never changes) + guidance prompt-stack + deterministic write core + a self-feeding K8s runtime. One fact-type built, four more designed-for. <b>Press ← to revisit any slide.</b></p>
+  </div>
+  <p class="note">Source docs in this folder: <code>extraction-pipeline-reference.md</code> (the canonical map), <code>GuidanceExtractionImplemented.md</code> (the deep implementation record), the per-asset <code>*_reference.md</code> files, and <code>8k_strategy.md</code> (the shelved event-taxonomy vision).</p>
+</section>
+
+</main>
+
+<nav class="nav">
+  <button id="prev" type="button">&#9664; Prev</button>
+  <div class="pos" id="pos">1 / 60</div>
+  <button id="next" type="button">Next &#9654;</button>
+</nav>
+
+<script>
+(function() {
+  const steps = Array.from(document.querySelectorAll('.step'));
+  const total = steps.length;
+  const counter = document.getElementById('counter');
+  const pos = document.getElementById('pos');
+  const prev = document.getElementById('prev');
+  const next = document.getElementById('next');
+  const progress = document.getElementById('progress');
+  let cur = 1;
+
+  const pips = steps.map((_, i) => {
+    const pip = document.createElement('button');
+    pip.type = 'button';
+    pip.className = 'pip';
+    pip.title = 'Go to slide ' + (i + 1);
+    pip.addEventListener('click', () => { cur = i + 1; render(); });
+    progress.appendChild(pip);
+    return pip;
+  });
+
+  function render() {
+    steps.forEach((s, i) => s.classList.toggle('active', i + 1 === cur));
+    pips.forEach((p, i) => {
+      p.classList.toggle('done', i + 1 < cur);
+      p.classList.toggle('active', i + 1 === cur);
+    });
+    counter.textContent = cur + ' / ' + total;
+    pos.textContent = cur + ' / ' + total;
+    prev.disabled = (cur === 1);
+    next.disabled = (cur === total);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function go(delta) {
+    const n = cur + delta;
+    if (n < 1 || n > total) return;
+    cur = n;
+    render();
+  }
+
+  prev.addEventListener('click', () => go(-1));
+  next.addEventListener('click', () => go(1));
+
+  document.addEventListener('keydown', (e) => {
+    if (e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); go(1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(-1); }
+    else if (e.key === 'Home') { e.preventDefault(); cur = 1; render(); }
+    else if (e.key === 'End') { e.preventDefault(); cur = total; render(); }
+  });
+
+  document.querySelectorAll('[data-goto]').forEach((el) => {
+    el.addEventListener('click', () => {
+      const n = Number(el.getAttribute('data-goto'));
+      if (Number.isInteger(n) && n >= 1 && n <= total) { cur = n; render(); }
+    });
+  });
+
+  render();
+
+  // Print/PDF: expand every <details> so nothing is hidden on paper; restore afterwards.
+  window.addEventListener('beforeprint', function () {
+    document.querySelectorAll('details').forEach(function (d) {
+      d.dataset.printPrev = d.open ? '1' : '0';
+      d.open = true;
+    });
+  });
+  window.addEventListener('afterprint', function () {
+    document.querySelectorAll('details').forEach(function (d) {
+      if (d.dataset.printPrev === '0') d.open = false;
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
