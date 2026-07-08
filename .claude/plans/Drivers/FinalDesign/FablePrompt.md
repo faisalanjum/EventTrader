@@ -4,7 +4,9 @@
 
 Your budget is constrained. Use Opus/Sonnet when spawning sub-agents unless the quality of Fable is truly needed.
 
-The purpose of this session is not to accept the current design as final. The purpose is to stress-test and redesign the Driver Catalog creation process into the simplest possible world-class system.
+The current baseline is `/home/faisal/EventMarketDB/.claude/plans/Drivers/FinalDesign/FableAdmissionKernelDesign.md` v3.4 plus the live FinalDesign topic docs and ledgers.
+
+The purpose of this session is not to rubber-stamp v3.4, and not to restart from scratch. The purpose is to stress-test v3.4, find any fatal gaps, stale text, hidden failure modes, or needless complexity, and propose the smallest better design only if one exists.
 
 Fable must think with full attention about how to create Drivers inside a living Driver/DriverUpdate system, where the catalog can be created in batch and also extended later on demand without damaging identity.
 
@@ -12,20 +14,26 @@ Nothing in this prompt is itself a new locked design.
 
 Existing locked rules and owner-approved decisions in the FinalDesign docs must be preserved unless Fable explicitly identifies a contradiction, a hidden failure mode, or a better minimal rule for the owner to consider.
 
-The open design challenge is the admission process: how to unify, harden, and complete the no-human Driver reuse/create/rewrite/skip/park path without damaging Driver identity.
+The open design challenge is the next iteration of the admission process: how to confirm, harden, simplify, or minimally revise the no-human Driver reuse/create/rewrite/skip/park path without damaging Driver identity.
 
 ## 2. Context Loading Instructions
 
 Before solving, read:
 
-1. `/home/faisal/EventMarketDB/.claude/plans/Drivers/FinalDesign/FableContextPack.md`
-2. `/home/faisal/EventMarketDB/.claude/plans/Drivers/FinalDesign/66_IssuesToBeHandled.md`
+1. `/home/faisal/EventMarketDB/.claude/plans/Drivers/FinalDesign/FableAdmissionKernelDesign.md`
+2. `/home/faisal/EventMarketDB/.claude/plans/Drivers/FinalDesign/FableContextPack.md`
+3. `/home/faisal/EventMarketDB/.claude/plans/Drivers/FinalDesign/WorkflowContextPack.md`
+4. `/home/faisal/EventMarketDB/.claude/plans/Drivers/FinalDesign/66_IssuesToBeHandled.md`
+
+Treat `FableAdmissionKernelDesign.md` v3.4 as the current kernel baseline.
 
 Treat `FableContextPack.md` as the navigation and status map, not as authority.
 
+Treat `WorkflowContextPack.md` as the map of old workflow code: useful for implementation and experiments, but stale wherever it conflicts with FinalDesign rules.
+
 Use it to decide which source docs to open next.
 
-On conflict, topic docs win over the context pack.
+On conflict, topic docs plus `90_OpenItems.md` and `95_Supersession.md` win over context packs. v3.4 wins for the current kernel synthesis unless it conflicts with those binding docs.
 
 Pay special attention to already-decided or partially-decided admission rules:
 
@@ -36,7 +44,11 @@ Pay special attention to already-decided or partially-decided admission rules:
 - OD-2 bare-name fact_type proof,
 - OD-3 name-vs-slice local role rule,
 - OD-7 live-created Driver fact_type/family stamping recommendation,
-- OD-15 concurrent live Driver creation / near-synonym over-split handling.
+- OD-15 concurrent live Driver creation / near-synonym over-split handling,
+- `95 #26-#30` and `90 §E` status cleanups,
+- `95 #39` / `10 PIPE-11 D4` scoped automatic quarantine.
+- 2026-07-08 model default: Haiku or another cheap/lower-intelligence model for blind leaf Driver proposals; Sonnet 5 as the default strong-judge candidate for judgments, Refute, LINK/SAME_AS, BASE_METRIC/fact_type confirmations, quarantine, and similar identity-changing checks; higher models only if experiments prove they are needed.
+- 2026-07-08 chunking idea: test paragraph-at-a-time source chunks versus huge wall-of-text chunks for blind leaf producers, but adopt only if automatic chunking preserves context and does not reduce recall/precision.
 
 ## 3. Scope
 
@@ -306,7 +318,9 @@ Section 9's required output is the concrete deliverable.
 
 Section 8 describes the quality bar the deliverable must satisfy.
 
-Your single highest-impact task is to design the Driver Identity Admission Kernel.
+Your single highest-impact task is to audit and, only if necessary, revise the v3.4 Driver Identity Admission Kernel.
+
+Do not discard v3.4. Treat it as the baseline to attack from first principles. If it survives, say so and recommend only the smallest cleanup, experiment, or implementation next step. If it does not survive, explain the exact failure and produce the minimal v3.5 delta.
 
 This is the one core process that decides, for every source-backed candidate market cause, whether the system should:
 
@@ -320,7 +334,7 @@ This kernel must work for both batch Driver Catalog creation and live/on-demand 
 
 There must not be separate batch and live identity logic.
 
-Before proposing the design, do a blind-spot pass.
+Before proposing any change, do a blind-spot pass.
 
 Classify the unknowns:
 
@@ -337,7 +351,7 @@ The central danger to solve:
 
 Weak LLMs, over time, may quietly break `one Driver = one stable cause` by missing real reusable causes, merging different causes, splitting one cause into duplicates, coining vague names, or stamping the wrong type/family, while the catalog still looks clean.
 
-Design the simplest production-safe admission kernel that prevents this.
+Confirm or revise the simplest production-safe admission kernel that prevents this.
 
 The design must define:
 
@@ -374,18 +388,19 @@ Hard constraints:
 
 Required output:
 
-1. Blind-spot pass: the most important unknowns and hidden risks.
-2. Recommended kernel design: the exact decision flow from candidate cause to final outcome.
-3. Reuse-display policy: the exact information shown to the producer and why.
-4. Admission policy: precise rules for reuse/create/rewrite/skip/park.
-5. Family policy: `fact_type`, `SAME_AS`, `BASE_METRIC`, and terminal suffix handling.
-6. Validator policy: deterministic checks and fail-closed gates.
-7. Model policy: cheapest safe model strategy for each step, with Fable only where quality truly matters.
-8. Evaluation plan: tests and adversarial cases proving near-100% recall/precision, tied explicitly to `10 PIPE-37` and OD-6's quality budget.
-9. Rejected alternatives: weaker designs and why they fail.
-10. Final minimal spec: implementation-ready, with no vague architecture.
+1. Blind-spot pass: the most important unknowns and hidden risks remaining in v3.4.
+2. Kernel verdict: keep v3.4 as-is, revise it minimally, or reject a part of it with a stronger replacement.
+3. Recommended kernel design or delta: the exact decision flow from candidate cause to final outcome, clearly marking what is unchanged from v3.4 and what changed.
+4. Reuse-display policy: confirm v3.4 or give the exact minimal correction.
+5. Admission policy: precise rules for reuse/create/rewrite/skip/park.
+6. Family policy: `fact_type`, `SAME_AS`, `BASE_METRIC`, and terminal suffix handling.
+7. Validator policy: deterministic checks and fail-closed gates.
+8. Model policy: cheapest safe model strategy for each step, starting from the 2026-07-08 owner default above, with Fable only where quality truly matters.
+9. Evaluation plan: tests and adversarial cases proving near-100% recall/precision, tied explicitly to `10 PIPE-37` and OD-6's quality budget.
+10. Rejected alternatives: weaker designs and why they fail.
+11. Final minimal spec: implementation-ready, with no vague architecture.
 
-If file write access is available, save the final design to `/home/faisal/EventMarketDB/.claude/plans/Drivers/FinalDesign/FableAdmissionKernelDesign.md`.
+If file write access is available and a design change is needed, update `/home/faisal/EventMarketDB/.claude/plans/Drivers/FinalDesign/FableAdmissionKernelDesign.md` in place. Do not create a new side document or changelog unless explicitly asked.
 
 Do not spend the main effort on predictor, learner, report scope, full backfill strategy, or generic model benchmarking unless it directly changes the admission kernel.
 

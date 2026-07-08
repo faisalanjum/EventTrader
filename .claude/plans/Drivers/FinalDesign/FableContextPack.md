@@ -6,13 +6,13 @@
 | Label | Meaning |
 |---|---|
 | **LOCKED** | current rule, clearly locked in a live doc |
-| **OWNER-APPROVED / BACKPORT DEBT** | owner decided it, but not yet reflected in every doc (some doc spots still stale) |
+| **OWNER-APPROVED / TOPIC-BACKPORT DEBT** | owner decided it, but at least one topic doc may still carry shorter or stale prose; the ledger/status docs record the decision |
 | **RECOMMENDED / NOT LOCKED** | a recommendation exists (usually in `66 §0.R`), but it is not final rule text yet |
 | **TRACKED** | a visible open item / follow-up — not necessarily Fable's task |
 | **DEFERRED** | intentionally a later layer / part 2 |
 | **SUPERSEDED / DO NOT USE** | dead rule or history only |
 
-> **Sharpest backport fact to carry:** OD-9…OD-15 (owner-approved 2026-07-06) are back-ported and their reversals ARE pasted into `95` (rows #31–#38). OD-1/OD-2/OD-6/OD-8 (owner-approved 2026-07-05) are **not** fully back-ported — their drafted ledger rows **`95 #26–#30` are missing**, and `90 §E` omits OD-1/2/6/8. Treat those four as OWNER-APPROVED / BACKPORT DEBT, not as clean locked text.
+> **Sharpest status fact to carry:** the 2026-07-07 cleanup is applied. `95 #26-#30` now exist for D-1, D-3, FS-14, OD-2, and OD-8; OD-1 and OD-6 correctly have **no** `95` row because they are additions/definitions, not reversals, and are recorded in `90 §E`; D4 scoped automatic quarantine is ratified in principle as `95 #39` and back-ported into `10 PIPE-11 D4`. If an older note says these rows are missing or pending, that note is stale.
 
 ---
 
@@ -22,7 +22,7 @@
 
 **Why one-name-one-meaning matters** (`01` "the one law", `MF-12`): blending two different causes into one name is **permanent** damage (every later fact and lesson is polluted → bad trades you cannot undo). Splitting one cause into two names is a **cheap** one-line fix. Therefore: **when unsure, keep separate.**
 
-**What Fable is being asked to design** (`FablePrompt §9`, `14 §7/§8`): the simplest world-class **Driver Identity Admission Kernel** inside a *living, no-human ingestion system*. The kernel decides whether each source-backed candidate cause should reuse an existing Driver, admit a new Driver, rewrite and re-check, skip, or park/fail closed. Batch catalog creation and live/on-demand Driver creation must share this one identity logic. The older task areas — batch vs live, reuse display, report scope, Guidance machinery, evaluation harness, and model strategy — are secondary lenses only when they directly change the admission kernel.
+**What fresh Fable is being asked to do** (`FablePrompt §9`, `FableAdmissionKernelDesign.md`): stress-test the v3.4 **Driver Identity Admission Kernel** as the current baseline, not restart from scratch. The kernel decides whether each source-backed candidate cause should reuse an existing Driver, admit a new Driver, rewrite and re-check, skip, or park/fail closed. Batch catalog creation and live/on-demand Driver creation must share this one identity logic. The older task areas — batch vs live, reuse display, report scope, Guidance machinery, evaluation harness, and model strategy — are secondary lenses only when they directly change the admission kernel.
 
 **What Fable must NOT waste time re-designing** (`14 §8`, this pack §12):
 - the locked record model (`01`–`09`) — naming, fact_scope, units, periods, family, DriverUpdate fields, verdict;
@@ -38,8 +38,8 @@
 |---|---|---|---|---|
 | `01_Overview.md` | mission, the one law, index-card model | **LOCKED** (record model) | the *why* / framing | file self-notes it is a WIP stub (3-tracks map/dashboard unwritten) |
 | `02_DriverCatalog.md` | naming rules NAME-01…19 | **LOCKED** | any naming decision | NAME-11 now the local-role rule (OD-3); NAME-08 signed-driver pin (OD-12) |
-| `03_Slices_FactScope.md` | fact_scope + slices FS-01…25 | **LOCKED** (FS-22 retired; FS-23 open) | identity, slices, measurement | still names the **rejected alias layer** (FS-02/FS-19) = D-3 debt |
-| `04_Units.md` | unit enum + resolver UNIT-01…14 | **LOCKED** (10-unit enum) | units | UNIT-04 still says **one hint pair**; 12 uses per-slot (D-1 debt) |
+| `03_Slices_FactScope.md` | fact_scope + slices FS-01…25 | **LOCKED** (FS-22 retired; FS-23 open) | identity, slices, measurement | may still name the **rejected alias layer** (FS-02/FS-19); use `95 #27` |
+| `04_Units.md` | unit enum + resolver UNIT-01…14 | **LOCKED** (10-unit enum) | units | UNIT-04 may still say **one hint pair**; use per-slot hints via `95 #26` / `90 §E` |
 | `05_Periods.md` | DriverPeriod PER-01…20 | **LOCKED** (PER-20 build-pending) | time windows | PER-19 updated by Track C v2.0 (no both-label transition) |
 | `06_MetricFamily.md` | fact_type + BASE_METRIC MF-01…12 | **LOCKED** | family/fact_type | — |
 | `07_DriverUpdate.md` | fact record + verdict DU-01…24 | **LOCKED** (DU-13…18 → superseded by 09) | fact fields, verdict | DU-13 says "9-enum" (now 10); use `09` for fields |
@@ -52,11 +52,12 @@
 | `13_Track_RetiredDesign.md` | old Track C **replay** design | **SUPERSEDED / DO NOT USE** | never (history only) | whole file is dead; useful only for its live-graph census numbers |
 | `14_BuildReadiness.md` | readiness ledger + missing design + Fable brief | mixed: status doc | what is still un-coded | §7 is aspiration, **not locked design** |
 | `66_IssuesToBeHandled.md` | **newest** issue ledger + resolution blocks | status source (recommendations ≠ locked) | issue status, OD blocks | a `66 §0.R` "recommendation" is NOT locked unless it says owner-approved |
-| `90_OpenItems.md` | tracked items A–E | status source | open threads | §E omits OD-1/2/6/8 (backport debt) |
-| `95_Supersession.md` | reversal ledger | **LOCKED** (dead rules) | "is this rule dead?" | rows **#26–#30 missing** (OD-1/2/6/8 + D-1/D-3 not pasted) |
+| `90_OpenItems.md` | tracked items A–E | status source | open threads | §E now records OD-1/2/6/8 and D4 scoped quarantine cleanup |
+| `95_Supersession.md` | reversal ledger | **LOCKED** (dead rules) | "is this rule dead?" | rows #26-#30 and #39 are now present; OD-1/OD-6 intentionally have no 95 row |
 | `99_Codex_Decision_Audit.md` | historical audit / completeness cross-check | history only; topic docs win | a completeness cross-check | non-authority; may quote pre-reversal wording |
 | `DriverPlan.html` | study slideshow | **DO NOT USE as authority** | a plain-English tour | its authority-tiebreak sentence lives in no md doc |
-| `FablePrompt.md` | Fable's mission prompt | brief, not design | the ask itself | explicitly "nothing here is locked design" |
+| `FableAdmissionKernelDesign.md` | current Driver Identity Admission Kernel baseline | **LOCK CANDIDATE / proposal baseline**; topic docs + `90`/`95` win on conflict | the current kernel flow and v3.4 owner-ruling synthesis | implementation experiments still not run |
+| `FablePrompt.md` | Fable's mission prompt | brief, not design | the ask itself | now asks fresh Fable to stress-test v3.4, not restart from zero |
 
 ---
 
@@ -134,17 +135,17 @@ ACCEPT: reader A/B → recreate calibration catalog → first real fold → RUN 
 
 ## 6. Live / Missing-Driver / Governed-Create State
 
-> This is **not** a finished "on-demand Driver creation" design. Below is the current source-backed state only.
+> `FableAdmissionKernelDesign.md` v3.4 is now the current kernel baseline for live/on-demand Driver creation. The table below records the source-backed topic-doc state around that baseline. If a row looks older than v3.4, fresh Fable should open the cited topic doc and reconcile it explicitly instead of assuming the pack is authority.
 
 | Item | Status | What it says | Source |
 |---|---|---|---|
 | **Missing-Driver handling** | **LOCKED** (owner-revised 07-03) | a missing Driver does **not** auto-park: the producer proposes a source-grounded name → checks PIT-safe candidates → **reuses only an exact-same-meaning match** → else the proposal goes through the governed **G1/G2 admission path** → G2 admits/reuses/rewrites → the fact writes. **PARK only when that governed path is unavailable / unresolved / rejected.** The low-level writer never invents Drivers. Scope = any missing driver | `12 §10.6` |
-| **G1** | **TRACKED / open** | the live **reuse-display** — how a live producer *sees* related existing Drivers before creating a new one; its display rules (formatting/lanes) are the **open owner decision** blocking `catalog_first.js` rebuild | `10 §13`, `90 §A`, `66 §0.2-A` |
+| **G1** | **TRACKED / v3.4 baseline exists** | the live **reuse-display** — how a live producer *sees* related existing Drivers before creating a new one. Topic docs tracked this as open; v3.4 supplies the current baseline display policy, still to be tested/implemented | `10 §13`, `90 §A`, `66 §0.2-A`, `FableAdmissionKernelDesign.md §3` |
 | **G2** | **LOCKED** | the admission gate — from evidence, per candidate: reuse / admit / rewrite / skip | `10 PIPE-13` |
 | **propose-first** | **LOCKED** (`95 #21`) | producer coins its own name+quote **blind**, THEN sees related existing drivers, PIT-filtered (`visible_from ≤ event date`), ranked by semantic match on name+quote+scope; usage counts tie-break only. (Reverses the dead "catalog-first" flow) | `10 PIPE-22` |
-| **What's open about G1 reuse-display** | **TRACKED** | the exact reuse-display rules are unset; until they're set the live path stays unwired and parking is the lawful interim | `12 §10.6`, `90 §A` |
+| **What's open about G1 reuse-display** | **TRACKED / implementation-gated** | the topic-doc wiring still needs implementation/testing; v3.4 is the current design baseline to attack or confirm | `12 §10.6`, `90 §A`, `FableAdmissionKernelDesign.md` |
 | **OD-7: live-created Driver fact_type/family stamping** | **RECOMMENDED / NOT LOCKED** (TRACKED-NONBLOCKING) | recommendation = "born complete" at live admission (stamp fact_type + resolve BASE_METRIC before the first fact write, reusing Track A's exact components), plus a residual quarantine exit (`retrieval_excluded=true`) for a fact-bearing live Driver later proven wrong. Belongs to the final live-admission pass; not a current DriverUpdate rule blocker | `66 §0.R OD-7`, `14 §3 #10`, `90 §A` |
-| **What Fable must design (per the current prompt)** | open | the **Driver identity admission kernel**: how batch + on-demand share ONE core logic for naming, reuse, admission, dedupe, fact_type, SAME_AS, BASE_METRIC, validation, and fold/repair | `FablePrompt §9`, `14 §2/§7` |
+| **What fresh Fable must now do** | v3.4 stress-test | attack the v3.4 **Driver identity admission kernel** from first principles, then either confirm it, minimally revise it, or identify the exact fatal reason it is not enough | `FablePrompt §9`, `FableAdmissionKernelDesign.md`, `14 §2/§7` |
 
 ---
 
@@ -215,11 +216,11 @@ Extracted from `66`/`90`/`14`, scoped to Driver Catalog / live Driver creation. 
 
 | Issue | Status | Source | Why it matters | Fable's stance per the docs |
 |---|---|---|---|---|
-| **G1 reuse-display rules** | **TRACKED** (open owner decision) | `90 §A`, `66 §0.2-A`, `10 §13` | blocks live propose-first display + `catalog_first.js` rebuild | design the live reuse-display as part of the creation path; not blocking the locked rules |
-| **Live-created Driver fact_type/family stamping** | **RECOMMENDED / NOT LOCKED** (OD-7) | `66 §0.R OD-7`, `14 §3 #10` | a live-admitted Driver has no stamping path today (finalize hard-fails on stamped input; writer rejects fact_type-less drivers) | decide the born-complete live-admission path; recommendation exists, not locked |
+| **G1 reuse-display rules** | **TRACKED / v3.4 baseline exists** | `90 §A`, `66 §0.2-A`, `10 §13`, `FableAdmissionKernelDesign.md §3` | live propose-first display must be implemented/tested; old `catalog_first.js` remains dead | attack or confirm v3.4's display policy only where it changes Driver identity safety |
+| **Live-created Driver fact_type/family stamping** | **RECOMMENDED / v3.4 baseline exists** (OD-7 still noted as recommendation in the kernel) | `66 §0.R OD-7`, `14 §3 #10`, `FableAdmissionKernelDesign.md §5` | live admission needs born-complete stamping before first fact write | attack or confirm v3.4's born-complete path; do not treat stale stamp-later ideas as live |
 | **Catalog → graph materialization** | **RECOMMENDED / NOT LOCKED** (OD-16) | `66 §0.R OD-16`, `14 §3 #11`, `90 §A` | nobody writes finalized catalog → Neo4j (12 assumes nodes exist; 10 says Neo4j writes are a non-goal) | recommendation = a Track-B-owned `catalog_graph_sync.py`; build wiring, not a rule ambiguity |
 | **Final model policy** | **TRACKED / DEFERRED** | `90 §B`, `10 §7`, `95 #15`, `14 §2 #10` | exact model/#runs/fallback/grader per job unset ("Opus reads / Sonnet classifies" is a leading default only) | design the model strategy + experiments; verify prior claims first |
-| **Fitness gate / quality budget** | gate never run; budget = **OWNER-APPROVED / BACKPORT DEBT** (OD-6) | `10 PIPE-37`, `66 §0.R OD-6`, `14 §3 #12` | the gate is the real GO; OD-6 defines the budget (zero confirmed wrong merges over ≥3,000 pre-registered graded slots) but is not yet in `10 PIPE-37` | use OD-6's definition; the gate still must actually run |
+| **Fitness gate / quality budget** | gate never run; OD-6 budget recorded in `90 §E` | `10 PIPE-37`, `66 §0.R OD-6`, `90 §E`, `14 §3 #12` | the gate is the real GO; OD-6 defines the budget (zero confirmed wrong merges over ≥3,000 pre-registered graded slots). `10 PIPE-37` still carries the shorter gate wording | use OD-6's definition; the gate still must actually run |
 | **Lifecycle / IPO / dormancy** | **TRACKED** | `90 §A`, `10 §13`, `14 §5` | how new/dormant/delisted/IPO companies enter/leave the catalog; current lean: live G1/G2 absorbs | decide as part of catalog maintenance policy |
 | **Target universe count** | **TRACKED** | `90 §A`, `10 §13`, `14 §5` | 796 vs 786 tickers unreconciled | a scope choice for build planning |
 | **News Driver admission** | **TRACKED / DEFERRED** (D-10) | `66 §0.R D-10`, `14 §4` | news is excluded from the leaf build; news-coined drivers can enter ONLY via live governed G1/G2 (else park) | design the news admission path in part 2 |
@@ -239,7 +240,7 @@ Extracted from `66`/`90`/`14`, scoped to Driver Catalog / live Driver creation. 
 | Hand-curated **XBRL dictionary** | company-reported menu + guards | `95 #13`, `XC-02` |
 | **Old guidance replay** into new facts (`legacy_name_map`, mini-run, bridge) | archive/retire; fresh facts from source docs (Track C v2.0) | `13_TrackC`, `13_Retired` = do-not-build |
 | Whole-company **`slice=total`** | whole-company = **omitted slice** | `95 #25`, `FS-10/15` |
-| **Alias-layer / fuzzy slice merging** (per-company alias files; "confident alias" merge) | member-anchored **read-time** grouping only (T12.9); alias layer rejected (human-in-loop) | census §14.4; ⚠️ `03 FS-02/FS-19` still name it (**D-3 debt**, no `95` row) |
+| **Alias-layer / fuzzy slice merging** (per-company alias files; "confident alias" merge) | member-anchored **read-time** grouping only (T12.9); alias layer rejected (human-in-loop) | census §14.4; `95 #27`; ⚠️ `03 FS-02/FS-19` may still carry stale prose |
 | **FS-22** slice-value recurrence = generic/red-flag | retired; no slice-value recurrence rule | `95 #37`, `03 FS-22` |
 | **`level_bound`** field; `qualitative` free-text dropped; fact-node `evhash16` | self-describing shapes + transient hints; `value_text`; evhash16 retired on the fact (kept on the verdict edge) | `95 #16/#17/#18` |
 | `previous_guidance` on the **metric** lane | both expectation baselines FORBID on metric → route to `_surprise` | `95 #24`; ⚠️ `09 §3/§8`, `07 §D` prose still stale (**D-2 debt**) |
@@ -252,10 +253,10 @@ Extracted from `66`/`90`/`14`, scoped to Driver Catalog / live Driver creation. 
 |---|---|---|---|
 | **Reader A/B gate** | **LOCKED** (must precede acceptance) | at minimum Opus single-pass vs Sonnet-5 single-pass; ground truth = Fable-era CAKE evidence + a fresh key under NEW naming rules; scoring is NEW code (the `ab_*` kit is repair-pair-shaped) | `10 PIPE-33`, `§9 step 7` |
 | **Fitness / honesty gate** | **LOCKED** requirement; **never run** | freeze catalog → fresh PIT events → reuse/create/skip → grader scores name+direction once, no retuning; ≥2 producers; must beat 0.634/0.535/72% | `10 PIPE-37` |
-| **Quality budget definition** | **OWNER-APPROVED / BACKPORT DEBT** (OD-6) | GREEN = ≥3,000 pre-registered graded slots (fixed denominator) · zero confirmed wrong merges (2-grader) · zero unresolved flags · existing bars pass; the 0.1% claim = rule-of-three | `66 §0.R OD-6` (not yet in `10 PIPE-37`) |
-| **Model policy open status** | **TRACKED / DEFERRED** | models = config slots resolved by experiment AFTER the pipeline is built; "Opus reads / Sonnet-5 classifies" is a leading default only; standing rejections: Sonnet-for-Refute, cheap-clerk bundle, nested subagents | `10 PIPE-30/31/32`, `95 #15` |
+| **Quality budget definition** | **OWNER-APPROVED / RECORDED IN 90** (OD-6) | GREEN = ≥3,000 pre-registered graded slots (fixed denominator) · zero confirmed wrong merges (2-grader) · zero unresolved flags · existing bars pass; the 0.1% claim = rule-of-three | `66 §0.R OD-6`, `90 §E`; `10 PIPE-37` still carries the shorter gate wording |
+| **Model policy baseline** | **OWNER DEFAULT / EXPERIMENT-GATED** | start with Haiku or another cheap/lower-intelligence model for blind leaf Driver proposals, and Sonnet 5 as the default strong-judge candidate for judgments, Refute, LINK/SAME_AS, BASE_METRIC/fact_type confirmations, quarantine, and similar identity-changing checks. Escalate to Opus 4.8 / GPT-5.5 / Fable only if experiments prove the default misses the locked quality bars. Exact model IDs still pin in `manifest.models` | `FableAdmissionKernelDesign.md §11.0`, `10 PIPE-30/31/32`, `95 #15` |
 | **Prior model comparisons mentioned** | context | Sonnet-5 18/19 vs Opus 17/19 on the naming/slice/fact_type golden; multi-pass adds junk (3rd pass ~82%); the open question "did Opus underperform Fable for lack of full context / did multi-run fix it" | `10 PIPE-31`, `FablePrompt §9 output #7` |
-| **What Fable should verify before proposing a model strategy** | to-check | whether the workflow JS matches the latest rules; whether the A/B kit (`ab_stratum.py`/`ab_pair_judge.js`/`ab_differ.py`) fits; score **judged precision/recall against an adjudicated key, never quote-match/name-overlap** (quote-match measured ~99% while judged precision was ~29%) | `10 PIPE-32`, `FablePrompt §9 output #7` |
+| **What Fable should verify before proposing a model strategy** | to-check | whether the workflow JS matches the latest rules; whether the A/B kit (`ab_stratum.py`/`ab_pair_judge.js`/`ab_differ.py`) fits; score **judged precision/recall against an adjudicated key, never quote-match/name-overlap** (quote-match measured ~99% while judged precision was ~29%); test paragraph-at-a-time chunks against larger chunks for blind leaf producers, adopting only if context is preserved and recall/precision do not drop | `10 PIPE-32`, `FablePrompt §9 output #8`, `FableAdmissionKernelDesign.md §12` |
 
 ---
 
@@ -275,7 +276,7 @@ Extracted from `66`/`90`/`14`, scoped to Driver Catalog / live Driver creation. 
 | model policy | `10 §7 (PIPE-30/31/32)`, `95 #15`, `90 §B`, `FablePrompt §9 output #7` |
 | open issues / status | `66` (newest ledger), `90` (tracked), `14` (readiness) |
 | superseded rules | `95` (reversal ledger) — the authority on what is dead |
-| fact identity recipes still to pin | `66 §0.R OD-8/OD-9/OD-10` + `14 §3` (quote_hash, measurement token, series_unit) |
+| recent fact identity amendments | `66 §0.R OD-8/OD-9/OD-10`, `90 §E`, `95 #30/#35/#36`, `14 §3` (quote_hash, measurement token, series_unit) |
 
 ---
 
