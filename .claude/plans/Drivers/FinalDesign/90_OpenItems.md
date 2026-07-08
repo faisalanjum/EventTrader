@@ -29,7 +29,7 @@ Split: **A** = final Driver Catalog/live-admission pass · **B** = build/wiring/
 - **FS-23** — cross-company slice-VALUE comparison ("International" at A = "International" at B?) is a separate, unbuilt comparison layer; stay conservative · `03` FS-23.
 - **8-K taxonomy** — whether to reuse the old 24-tag 8-K event taxonomy for Driver extraction; low-urgency part-2 input (`99` §4.7).
 - **Macro/news attribution details** — core DCM shape **LOCKED** (`dcm:<cik>:<trade_date>` · FOR_COMPANY/ON_DATE · returns read from `HAS_PRICE`; single-target-on-filing-days ✅ `12` §10.9). Still parked: the significance **threshold** · the **pure-macro source** (+ the `09` §4 pure-macro FROM_SOURCE carve-out that ships with it) · the two-independent-same-day-catalysts residual.
-- **§10 dormant XBRL-link rider** — activates only with the Codex §4.8 write-path decision (`09` §10).
+- **§10 dormant XBRL-link rider** — activates only with the Codex §4.8 write-path decision (`09` §10). **Current lock candidate for that decision: `XBRLIntegrationDesign.md` (2026-07-08) — owner-ratification pending; its 10 amendments (§12.3) are proposed, not yet applied.**
 
 ## D. Downstream / part-2 sections still to write
 See `14_BuildReadiness.md` for the full pre-coding work order (running layer §2 · exact-rule fixes §3 · cross-doc cleanup §6).

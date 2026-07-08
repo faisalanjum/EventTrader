@@ -149,6 +149,8 @@ This table is a lineage / QA reference only. Active Track C does **not** product
 
 ## §10 Dormant rider — activates ONLY with the Codex §4.8 decision (XBRL-link write path)
 
+> **Pointer (navigation, 2026-07-08):** a concrete design for that Codex §4.8 decision now exists — `XBRLIntegrationDesign.md` (LOCK CANDIDATE, owner-ratification pending). This rider stays **dormant and unchanged** until the owner ratifies; that doc's §12.3 lists the proposed amendments. **Nothing here is applied yet.**
+
 If the owner approves creating 10-K/10-Q metric facts by XBRL-linking instead of LLM re-extraction, add — nothing before then:
 1. `origin` = `llm \| xbrl_link` (code-written, fail-closed; null = llm — retroactively correct, migration-free).
 2. `xbrl_link` facts: `quote` = deterministic code-generated `[XBRL] <qname> <period> = <scaled value>` render; empty measurement; `driver_state = reported`; exact-window DriverPeriods from XBRL context dates; member → slice via the frozen axis table.

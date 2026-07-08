@@ -17,7 +17,7 @@ Legend: ✅ covered · 🟡 partial · ⏳ pending (section not written yet) · 
 | `06_MetricFamily.md` | BASE_METRIC family MF-01…12 | 12 | ✅ |
 | `07_DriverUpdate.md` | fact_type · states · numbers · verdict DU-01…24 | 24 | ✅ (number layer → superseded by 09) |
 | `08_XBRL_ConceptLinking.md` | concept-linking XC-01…18 | 18 | ✅ |
-| `09_DriverUpdate_Fields.md` | the 23-field spec (owner-adjudicated) | 23 fields | ✅ (§8 acked 2026-07-03) |
+| `09_DriverUpdate_Fields.md` | the 24-field spec (owner-adjudicated; 6 code + 18 producer) | 24 fields | ✅ (§8 acked 2026-07-03) |
 | `10_BuildPipeline.md` | Track A build manual — engine census · overrides · finalization · model slots · acceptance | PIPE-01…37 | ✅ (adjudicated + committed 2026-07-02) |
 | `11_TrackB_DriverUpdate_Census.md` | Track B requirements inventory | T1…T15 | ✅ |
 | `12_TrackB_FactPipeline.md` | Track B build manual — writer · validators · enrichment · read views | FACT-01… | ✅ |
@@ -25,11 +25,22 @@ Legend: ✅ covered · 🟡 partial · ⏳ pending (section not written yet) · 
 | `13_Track_RetiredDesign.md` | retired Track C replay design | — | 📜 history only |
 | `14_BuildReadiness.md` | remaining pre-coding readiness work — running layer, exact-rule fixes, open decisions, cross-doc cleanup | — | ✅ |
 | `66_IssuesToBeHandled.md` | review backlog / issue ledger | ISS rows | ✅ |
-| `95_Supersession.md` | 25 reversals + stale-trap docs | — | ✅ |
+| `95_Supersession.md` | 39 reversals + stale-trap docs | — | ✅ |
 | `90_OpenItems.md` | all open threads (A–E) | — | ✅ |
 | `00_Coverage.md` | this file | — | ✅ |
 
-**Live coverage now spans `01`–`14` plus `66`, `90`, `95`, and `99` as history/audit.**
+**Live coverage now spans `01`–`14` plus `66`, `90`, `95`, and `99` as history/audit.** The 2026-07-07/08 Fable design + navigation docs are listed in §1b below.
+
+## 1b. Fable design + navigation docs (added to this map 2026-07-08 — they postdate §1's original table)
+| File | What it is | Status |
+|---|---|---|
+| `FableAdmissionKernelDesign.md` | Driver Identity Admission Kernel — current kernel synthesis | LOCK CANDIDATE v3.4 (owner decisions §15 pending) |
+| `XBRLIntegrationDesign.md` | XBRL-native 10-K/10-Q DriverUpdate integration (Pass 2) | LOCK CANDIDATE (2026-07-08), owner-ratification pending — its 10 §12.3 amendments are proposed, NOT yet applied |
+| `FableContextPack.md` | navigation + status map over `FinalDesign/` | navigation only (non-authority) |
+| `WorkflowContextPack.md` | map of the old build code (`workflows/`) | navigation only (code can be stale) |
+| `FablePrompt.md` | the admission-kernel design prompt | → produced `FableAdmissionKernelDesign.md` |
+| `FablePromptv2.md` | the XBRL-integration prompt (separate topic, NOT a newer `FablePrompt.md`) | → produced `XBRLIntegrationDesign.md` |
+| `DriverPlan.html` | study slideshow / tour | non-authority; static export (2026-07-06) |
 
 ## 2. Source doc → where it's covered
 ### Consolidation/ (the authoritative set)

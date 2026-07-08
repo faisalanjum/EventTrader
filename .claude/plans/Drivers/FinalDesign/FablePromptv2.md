@@ -1,5 +1,7 @@
 # Fable Prompt v2: XBRL-Native Driver / DriverUpdate Integration
 
+> **Note (2026-07-08):** This is the **XBRL-integration** prompt — a *separate* brief from `FablePrompt.md`, **not a newer version of it**. "v2" = the second design topic (how XBRL fits), not a revision of the admission-kernel prompt. `FablePrompt.md` = the Driver-identity admission-kernel challenge; this file = how XBRL 10-K/10-Q facts fit the Driver/DriverUpdate system. Both prompts are already executed — their deliverables are `FableAdmissionKernelDesign.md` and `XBRLIntegrationDesign.md` respectively.
+
 ## 1. Mission
 
 Your task is to design the minimal way for existing Neo4j XBRL facts and LLM-extracted 10-K/10-Q text to become one natural Driver/DriverUpdate system.

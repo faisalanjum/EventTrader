@@ -38,7 +38,7 @@ This is the largest remaining design section. It should become the actual "part 
 | 2 | Run ledger | Per `source_id × fact_type`: `pending`, `running`, `done`, `parked`, `failed`; ruleset version; model version; hashes; retry count; timestamps. |
 | 3 | Producer packets | Exact input/output contract for every fact type, especially fresh `fact_type=guidance`; no human in the loop. |
 | 4 | Verdict / attribution producer | Exact contract for `EXPLAINED_BY` stock-move judgments: decile fields, PIT/no-look-ahead inputs, Event vs DCM target, two-producer split, and whether it may create a missing `DriverUpdate`. |
-| 5 | Report processing scope | Decide whether 10-K/10-Q facts are re-extracted like other sources or created through the dormant XBRL-link rider; this bounds historical backfill cost. |
+| 5 | Report processing scope | Current lock candidate exists: `XBRLIntegrationDesign.md` proposes the 10-K/10-Q XBRL path; owner-ratification pending. Until ratified, the rider remains dormant. |
 | 6 | Historical backfill | Freshly process 2023-2026 sources, including the 894 old-guidance sources, without replaying old guidance rows. |
 | 7 | QA gates | Recall against the Track C archive, field checks, dual-producer agreement, thresholds, and rollout blockers. |
 | 8 | Prediction / learner cutover | Read new Driver facts, stop reading `guidance_history.v1`, and tolerate empty guidance until fresh backfill exists. |
@@ -106,7 +106,7 @@ These stay visible, but they should not be read as current Driver/DriverUpdate r
 | Target universe count | Final catalog build-scope choice: 796 vs 786 tickers. |
 | Lifecycle / dormancy / IPO absorption | Final catalog maintenance policy; default lean is live G1/G2 absorbs. |
 | Macro/news details | Deferred DCM attribution layer: significance threshold and pure-macro source representation; core DCM shape already locked. |
-| Dormant XBRL-link write path | Deferred; activate only if the owner approves the XBRL-link rider. |
+| Dormant XBRL-link write path | Current lock candidate: `XBRLIntegrationDesign.md`; owner-ratification pending. Activate only if the owner approves the XBRL-link rider. |
 | Blanket withdrawal fan-out | **Resolved by OD-14:** kept written only because each withdrawn guide needs a gradable node; exact-scope-only, open guides only, resolved-period containment, add-only for late covered guides, never delete. |
 
 ---

@@ -1,6 +1,6 @@
 # FableContextPack — neutral context pack for the Driver Catalog design challenge
 
-> **What this is:** a navigation + status pack over `/.claude/plans/Drivers/FinalDesign`, written so Fable can act without re-reading all 22 files, while still seeing every rule's true status. **It is not authority.** Where this pack and a topic file disagree, the topic file wins. This pack labels status; it does **not** solve or extend the design.
+> **What this is:** a navigation + status pack over `/.claude/plans/Drivers/FinalDesign`, written so Fable can act without re-reading every file in `FinalDesign/`, while still seeing every rule's true status. **It is not authority.** Where this pack and a topic file disagree, the topic file wins. This pack labels status; it does **not** solve or extend the design.
 
 ## How to read the status labels
 | Label | Meaning |
@@ -57,7 +57,11 @@
 | `99_Codex_Decision_Audit.md` | historical audit / completeness cross-check | history only; topic docs win | a completeness cross-check | non-authority; may quote pre-reversal wording |
 | `DriverPlan.html` | study slideshow | **DO NOT USE as authority** | a plain-English tour | its authority-tiebreak sentence lives in no md doc |
 | `FableAdmissionKernelDesign.md` | current Driver Identity Admission Kernel baseline | **LOCK CANDIDATE / proposal baseline**; topic docs + `90`/`95` win on conflict | the current kernel flow and v3.4 owner-ruling synthesis | implementation experiments still not run |
-| `FablePrompt.md` | Fable's mission prompt | brief, not design | the ask itself | now asks fresh Fable to stress-test v3.4, not restart from zero |
+| `FablePrompt.md` | Fable's mission prompt (admission kernel) | brief, not design | the ask itself | now asks fresh Fable to stress-test v3.4, not restart from zero |
+| `FablePromptv2.md` | the **XBRL-integration** design prompt (NOT a newer `FablePrompt.md`) | brief, not design | the XBRL task framing | "v2" = second topic (XBRL fit), not a version bump of `FablePrompt.md` |
+| `XBRLIntegrationDesign.md` | **latest XBRL integration design** (10-K/10-Q source-of-truth, Pass 2) | **LOCK CANDIDATE (2026-07-08), owner-ratification pending**; topic docs + `90`/`95` win | XBRL-native DriverUpdate materialization | its 10 amendments (§12.3) are PROPOSED, not yet applied to `08`/`09`/`12`/kernel |
+| `WorkflowContextPack.md` | map of the old build **code** (`workflows/`) | navigation only; **code can still be stale** | which existing code to reuse for a build/experiment | topic docs + `95` win over the code |
+| `00_Coverage.md` | zero-loss source/index map | **INDEX — non-authority** | a completeness cross-check | its §1 table predates the 2026-07-08 Fable docs (see its §1b) |
 
 ---
 
@@ -224,7 +228,7 @@ Extracted from `66`/`90`/`14`, scoped to Driver Catalog / live Driver creation. 
 | **Lifecycle / IPO / dormancy** | **TRACKED** | `90 §A`, `10 §13`, `14 §5` | how new/dormant/delisted/IPO companies enter/leave the catalog; current lean: live G1/G2 absorbs | decide as part of catalog maintenance policy |
 | **Target universe count** | **TRACKED** | `90 §A`, `10 §13`, `14 §5` | 796 vs 786 tickers unreconciled | a scope choice for build planning |
 | **News Driver admission** | **TRACKED / DEFERRED** (D-10) | `66 §0.R D-10`, `14 §4` | news is excluded from the leaf build; news-coined drivers can enter ONLY via live governed G1/G2 (else park) | design the news admission path in part 2 |
-| **Report scope (10-K/10-Q trade-off)** | **DEFERRED** (P0 running-layer) | `14 §2 #5`, `FablePrompt §9` | whether 10-K/10-Q facts are re-extracted vs built from XBRL bounds historical backfill cost | secondary lens only; handle only where it changes the admission kernel |
+| **Report scope (10-K/10-Q trade-off)** | **DEFERRED** (P0 running-layer) — but a **lock candidate now exists** | `14 §2 #5`, `FablePrompt §9`, **`XBRLIntegrationDesign.md` (7/8, owner-ratification pending)** | whether 10-K/10-Q facts are re-extracted vs built from XBRL bounds historical backfill cost | secondary lens only; handle only where it changes the admission kernel |
 | **Incremental refresh / live-backfill (running layer)** | **DEFERRED** (the biggest missing design) | `14 §2`, `90 §D`, `10 §13` | the whole "part 2" production loop is unwritten | not the primary Fable task unless it changes Driver admission safety |
 
 ---
@@ -270,7 +274,7 @@ Extracted from `66`/`90`/`14`, scoped to Driver Catalog / live Driver creation. 
 | G1 reuse display | `90 §A`, `10 §13 + PIPE-22/37`, `66 §0.2-A` |
 | DriverUpdate fields | `09` (the 24-field spec), `11` (T-refs), `07` (history) |
 | slices | `03` (FS-01…25), `12 §7`, `66 §0.R OD-3/OD-4` |
-| XBRL | `08` (XC-01…18), `12 §8`, `06 MF-10` |
+| XBRL | `08` (XC-01…18), `12 §8`, `06 MF-10`; **latest integration design → `XBRLIntegrationDesign.md` (lock candidate, 7/8)** |
 | units / periods | `04` (+ OD-9/10/11), `05` (PER-01…20), `12 §5/§6` |
 | guidance retirement | `13_TrackC_GuidanceIntegration.md` (active); `13_Track_RetiredDesign.md` = do-not-build |
 | model policy | `10 §7 (PIPE-30/31/32)`, `95 #15`, `90 §B`, `FablePrompt §9 output #7` |
@@ -280,4 +284,6 @@ Extracted from `66`/`90`/`14`, scoped to Driver Catalog / live Driver creation. 
 
 ---
 
-*This pack was assembled from a first-hand read of all 22 files in `FinalDesign/` on 2026-07-07. It records status only; it neither solves the design nor assigns work beyond what the docs already frame as open. On any conflict, the cited topic file wins.*
+*This pack was originally assembled from a first-hand read of the then-current `FinalDesign/` set on 2026-07-07. It records status only; it neither solves the design nor assigns work beyond what the docs already frame as open. On any conflict, the cited topic file wins.*
+
+*(Refreshed 2026-07-08: added Authority-Map rows for `00_Coverage.md`, `WorkflowContextPack.md`, `XBRLIntegrationDesign.md` (the latest XBRL lock candidate), and `FablePromptv2.md`; the folder now holds 27 items. Still navigation only — topic docs win on any conflict.)*
