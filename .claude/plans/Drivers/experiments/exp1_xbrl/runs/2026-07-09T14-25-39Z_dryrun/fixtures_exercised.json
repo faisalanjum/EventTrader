@@ -1,0 +1,118 @@
+{
+  "p4f_multi_registrant_synthetic": {
+    "counts": {
+      "A": {
+        "in": 3,
+        "no_context": 1,
+        "out": 2
+      },
+      "B": {
+        "in": 2,
+        "no_context": 1,
+        "out": 3
+      }
+    },
+    "isolation_ok": true,
+    "padded_cik_scoped_with_A": true,
+    "run_as_A": {
+      "entity_scoped_out": [
+        "B1",
+        "B2"
+      ],
+      "no_context_skipped": [
+        "NOCTX"
+      ],
+      "scoped_in": [
+        "A1",
+        "A2_padded",
+        "A3"
+      ]
+    },
+    "run_as_B": {
+      "entity_scoped_out": [
+        "A1",
+        "A2_padded",
+        "A3"
+      ],
+      "no_context_skipped": [
+        "NOCTX"
+      ],
+      "scoped_in": [
+        "B1",
+        "B2"
+      ]
+    },
+    "spec": "P4f: per-registrant runs; ctx.cik != registrant filer cik -> entity_scoped_out; ctx None -> no_context skip; norm_cik strips zero-pad",
+    "synthetic_filing": "2 registrants (A cik 111 incl. one zero-padded ctx, B cik 222) + 1 no-context fact"
+  },
+  "p4g_precision_dup_real_scan": {
+    "all_keep_highest_kinds": {
+      "keep_highest_identical": 166
+    },
+    "canonical_report_id": null,
+    "examples": [],
+    "kept_highest_precision_count": 0,
+    "precision_dup_groups_diff_decimals": 0,
+    "precision_dup_groups_total": 166,
+    "reports_with_precision_dups": [],
+    "spec": "intra-filing precision-duplicate pair (mandatory X-XL0 fixture) -- scanned from the 60-filing dry run"
+  },
+  "p4g_precision_dup_synthetic": {
+    "conflict_beyond_rounding": {
+      "decimals": [
+        "-6",
+        "-3"
+      ],
+      "ok": true,
+      "outcome": "conflict",
+      "raw": [
+        "1000000",
+        "2000000"
+      ]
+    },
+    "keep_highest_identical_value": {
+      "decimals": [
+        "-6",
+        "-3"
+      ],
+      "kept_decimals": "-3",
+      "ok": true,
+      "outcome": "keep_highest_identical",
+      "raw": [
+        "1000000",
+        "1000000"
+      ]
+    },
+    "keep_highest_within_rounding": {
+      "decimals": [
+        "-6",
+        "-3"
+      ],
+      "kept_decimals": "-3",
+      "ok": true,
+      "outcome": "keep_highest_rounding",
+      "raw": [
+        "1000000",
+        "1000200"
+      ]
+    },
+    "spec": "P4g: within-rounding agreement -> keep highest precision (max decimals); beyond rounding -> skip + xbrl_internal_conflict"
+  },
+  "p4h_null_periodofreport_synthetic": {
+    "derive_branch": {
+      "derived_periodOfReport": "2024-12-31",
+      "expected": "2024-12-31",
+      "input": "2 durations (eff-ends 2024-03-31, 2024-12-31) + 1 instant",
+      "ok": true
+    },
+    "harness_note": "materializer main() implements only the COUNT branch (line: if not por: null_por_report_skip += 1); the SPEC derive is proven here on synthetic input (EXPERIMENT_ONLY -- promotes to the FACT-18 resolver in production)",
+    "spec": "P4h: null periodOfReport -> derive = max EFFECTIVE duration end (end_date-1, Fable ruling); none -> skip report + count null_por_report_skip (fail-closed)",
+    "underivable_skip_branch": {
+      "action": "skip report + count null_por_report_skip",
+      "derived_periodOfReport": null,
+      "input": "2 instants, 0 durations",
+      "ok": true
+    }
+  },
+  "probe": "fixtures_exercised (mandatory X-XL0 fixtures: P4f multi-registrant, P4h null-pOR, P4g precision-dup)"
+}

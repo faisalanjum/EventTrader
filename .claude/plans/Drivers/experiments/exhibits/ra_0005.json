@@ -1,0 +1,20 @@
+{
+  "id": "ra_0005",
+  "raised_in": "EXP-1 completion review",
+  "doc": "XBRLIntegrationDesign 5.2 P4g / O12",
+  "rule": "P4g raw-duplicate key and precision-duplicate fixture evidence",
+  "description": "P4g says raw duplicates are identical concept+context+value, but does not state whether decimals is part of the key. Opus found no real same-context same-value differing-decimals precision pair in the 60-filing EXP-1 corpus, while the synthetic fixture proves the intended keep-highest and conflict branches.",
+  "why_two_ways": "A production implementer could key raw duplicates without decimals and silently keep first-by-id, or key with decimals so same-value different-decimals rows fall through to the precision rule. The observed 60-filing corpus has zero behavior delta because no such real pair occurred.",
+  "fable_ruling": "Accept synthetic-only precision-duplicate proof for EXP-1/O12 evidence. Do not widen the graph search. Proposed O12 pin: raw-duplicate key = identical concept, context, value, decimals; same-context same-value different-decimals pairs fall through to the precision rule and keep highest precision.",
+  "status": "closed_resolved_fable",
+  "zero_behavior_delta": "No EXP-1 rerun or gate reopen: no real differing-decimals pair appeared in the 60-filing corpus, and fixtures_exercised.json proves the intended code paths synthetically.",
+  "production_notes": [
+    "Publish p4g_precision_kept at rollout so the real base rate is monitored continuously.",
+    "Add a production build-gate synthetic variant for the same-context different-decimals raw-duplicate boundary.",
+    "Record the D6 scope asymmetry: multi-registrant and null-pOR absence were graph-wide; precision-pair absence was only checked inside the 60-filing corpus."
+  ],
+  "evidence": [
+    "exp1_xbrl/runs/2026-07-09T14-25-39Z_dryrun/fixtures_exercised.json",
+    "exp1_xbrl/runs/2026-07-09T14-25-39Z_dryrun/collision_census.json"
+  ]
+}

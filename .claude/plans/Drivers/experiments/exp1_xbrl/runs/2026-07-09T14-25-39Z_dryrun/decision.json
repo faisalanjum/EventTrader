@@ -1,7 +1,58 @@
 {
   "blockers": [],
   "exp_id": "EXP-1",
-  "fable_signoff": null,
-  "note": "EXP-1 dry-run gate: determinism(x2 sha) + X-XL0 field-match + period unclassified==0 + PIT-menu + no open ambiguities. Resolved pins ra_0002/ra_0004 -> O12 bundle; dual-CIK slices are skip+count by Fable ruling.",
+  "fable_signoff": {
+    "signed_by": "fable",
+    "signed_at": "2026-07-09T17:19:42Z",
+    "verdict": "PASS - accepted",
+    "verified_first_hand": [
+      "Gate criteria recomputed from the artifacts themselves (scores.json / determinism.json two-run sha equality / xxl0_report.json 67,221 checks 0 mismatches = 7 fields x 9,603 rows / pit_menu_proof.json 5/5 events both directions / skips.json / ambiguity_register.json 0 open).",
+      "P4g invariant (a) verified directly over materialized.jsonl: 9,603/9,603 unique du_ids, 0 post-dedup multi-row groups (collision_census.json file was missing - see completion items).",
+      "Binding (d) + the P4c conversion table are live in the output (sample: raw_end_date 2023-01-01 -> gp_2022-01-01_2022-12-31 on effective dates, raw kept in provenance; value_canonical 21.0 m_usd from raw 21,000,000).",
+      "period_end_convention_suspect=0 EXPLAINED, no counter bug: the corpus's single raw-end==pOR fact (LUV 10-K 0000092380-26-000004, us-gaap:RepaymentsOfDebt, $100M, a GENUINE ONE-DAY window 2025-12-30 -> raw end 2025-12-31) is not in fixture_resolutions scope and never entered the run (verified: absent from fixtures and from materialized.jsonl).",
+      "Rows with effective end 2025-12-30 attributed to CAKE's real 52/53 fiscal end (por 2025-12-30), not LUV mis-decodes (see signoff addendum in WORKORDER_STATUS log)."
+    ],
+    "completion_items_before_ratification_memo": [
+      "File collision_census.json: invariant (a) numbers (0 dupes, verified) + the informational value-confusability base rate (b) per D1.",
+      "File comparator_census.json: the P15 prior-window fraction over materialized.jsonl.",
+      "Record fixtures_exercised results with numbers: synthetic P4f multi-registrant scoping counts; synthetic P4h derived-pOR check (both derive and underivable-skip branches); precision_dup_pair actual report id + kept-highest-precision count > 0, replacing the BACKFILLED_BY_DRYRUN placeholder in FA_selection.mandatory_fixtures.",
+      "One-line counting-basis note reconciling slice_pairing_dualcik_unresolved=2,633 (run) vs 2,587 (probe).",
+      "Enumerate the 7 X-XL0 re-derived fields in the run record."
+    ],
+    "notes": [
+      "Resolved pins carried to the O12 bundle: ra_0002 (P4c conversion factors), ra_0003 (period binding d), ra_0004 (dual-CIK fail-closed skip policy).",
+      "exact_range=972 (12.4% of durations) is the declared exact_range+WARN fallback, not a failure.",
+      "O12 wording note: the period_end_convention_suspect class as worded may also catch genuine one-day event windows whose exclusive raw end lands on pOR (safe over-skip, zero wrong data); revisit the wording at ratification.",
+      "Scope of this signature: the EXP-1 machine gate + real-corpus dry-run are ACCEPTED; EXP-6 is unblocked. The XBRL ratification memo (O12) waits on the completion items above."
+    ]
+  },
+  "completion_review": {
+    "reviewed_by": "fable",
+    "reviewed_at": "2026-07-09T17:45:00Z",
+    "verdict": "accepted",
+    "items_filed": [
+      "collision_census.json",
+      "comparator_census.json",
+      "fixtures_exercised.json",
+      "dualcik_count_reconcile.json",
+      "xxl0_fields.json",
+      "manifest.json update"
+    ],
+    "precision_dup_pair_resolution": {
+      "decision": "accept synthetic-only proof; do not widen graph search",
+      "real_precision_dup_pairs_in_60_filing_corpus": 0,
+      "graph_wide_searched": false,
+      "synthetic_exercised": true,
+      "scope_caveat": "multi-registrant and null-pOR absence were verified graph-wide; precision-pair absence was checked only inside the 60-filing corpus"
+    },
+    "o12_followups": [
+      "ra_0005 filed for P4g raw-duplicate key under-determination",
+      "O12 pin proposal: raw-duplicate key includes decimals",
+      "production rollout counter: p4g_precision_kept",
+      "production build-gate synthetic for same-context/different-decimals raw-duplicate boundary",
+      "P4h derive-first must be implemented in the FACT-18 resolver port"
+    ]
+  },
+  "note": "EXP-1 dry-run gate: determinism(x2 sha) + X-XL0 field-match + period unclassified==0 + PIT-menu + no open ambiguities. O12 queue includes ra_0002/ra_0003/ra_0004 plus ra_0005 and the accepted synthetic-only precision fixture note; dual-CIK slices are skip+count by Fable ruling.",
   "outcome": "PASS"
 }

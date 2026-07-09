@@ -1,0 +1,1449 @@
+{
+  "contested": [
+    {
+      "fable_sidecar": {
+        "note": "Fable 2026-07-09: gold verified against the 3-check (object/scope/mechanism); names canon-legal; quotes carry the identity. | v1.1: canonical name form",
+        "status": "closed",
+        "verdict": "confirmed"
+      },
+      "gold": "SAME",
+      "gold_rationale": "Same premises cost, different words.",
+      "graders": {
+        "opus": {
+          "cited_a": "Expenses tied to holding restaurant premises rose.",
+          "cited_b": "Lease and property charges for our locations increased.",
+          "reason": "OBJECT is not the same. Side A \"occupancy_costs\" \u2014 \"Expenses tied to holding restaurant premises rose.\" \u2014 is the broad umbrella category covering ALL costs of holding premises (rent, property taxes, insurance, CAM, maintenance). Side B \"rent_and_related_expenses\" \u2014 \"Lease and property charges for our locations increased.\" \u2014 is the lease/rent-specific component of that umbrella. This is a component-vs-aggregate relationship: rent is one of the drivers that rolls UP into occupancy costs, so they sit at different granularities and are not the same underlying metric. MECHANISM also differs \u2014 occupancy costs can rise from property taxes or insurance without rent moving at all, so Side B is a downstream/subset driver of Side A rather than an identical cause. The instructions require the OBJECT to be clearly the same and exclude downstream/component relationships; here it is unclear-to-false. Default-to-DIFFERENT applies, and over-merging an aggregate with one of its components is exactly the permanent damage to avoid.",
+          "verdict": "DIFFERENT"
+        },
+        "sonnet_a": {
+          "cited_a": "Expenses tied to holding restaurant premises rose.",
+          "cited_b": "Lease and property charges for our locations increased.",
+          "reason": "OBJECT unclear/not-same: \"occupancy_costs\" is typically a broader bucket (rent + property tax + insurance + utilities + CAM + depreciation on leasehold improvements) than \"rent_and_related_expenses,\" which A's own quote doesn't narrow down (\"expenses tied to holding premises\" could include non-lease items) while B's quote is specifically \"lease and property charges.\" SCOPE is unclear on both sides -- neither quote states company-owned vs. franchised, or segment vs. consolidated. MECHANISM is unclear on both sides -- neither quote gives the actual cause (new store growth, renegotiated leases, rate escalators, tax reassessment, etc.), just that a cost category \"rose\"/\"increased.\" Since object equivalence is not established and scope/mechanism are both unclear, default to DIFFERENT per the rule.",
+          "verdict": "DIFFERENT"
+        },
+        "sonnet_b": {
+          "cited_a": "Expenses tied to holding restaurant premises rose.",
+          "cited_b": "Lease and property charges for our locations increased.",
+          "reason": "OBJECT is not compellingly the same: \"occupancy_costs\" (A) reads as a broad bucket (\"expenses tied to holding premises\") that can include rent, property tax, insurance, CAM, utilities, and depreciation, while \"rent_and_related_expenses\" (B) names a narrower object (\"lease and property charges\") centered on lease payments. Neither quote confirms these resolve to the identical cost set. SCOPE is also unclear for both sides -- neither quote nor slice_tokens indicates whether these costs apply to company-owned vs. franchised locations, or a segment vs. consolidated population -- so same-scope cannot be confirmed. Since OBJECT is unclear and SCOPE is unclear, the rule requires DIFFERENT even though MECHANISM (rising real-estate-related costs) looks plausibly aligned.",
+          "verdict": "DIFFERENT"
+        }
+      },
+      "hard": true,
+      "n_refused": 3,
+      "pair_id": "kp_0132",
+      "refused_by": [
+        "sonnet_a",
+        "sonnet_b",
+        "opus"
+      ],
+      "refused_by_all3": true,
+      "refused_by_opus": true,
+      "side_a": {
+        "name": "occupancy_costs",
+        "quotes": [
+          "Expenses tied to holding restaurant premises rose."
+        ]
+      },
+      "side_b": {
+        "name": "rent_and_related_expenses",
+        "quotes": [
+          "Lease and property charges for our locations increased."
+        ]
+      }
+    },
+    {
+      "fable_sidecar": {
+        "note": "Fable 2026-07-09: gold verified against the 3-check (object/scope/mechanism); names canon-legal; quotes carry the identity. | v1.1: canonical name form",
+        "status": "closed",
+        "verdict": "confirmed"
+      },
+      "gold": "SAME",
+      "gold_rationale": "Same digital-share driver.",
+      "graders": {
+        "opus": {
+          "cited_a": "The online share of what we sold kept rising.",
+          "cited_b": "How much of the basket came through apps grew.",
+          "reason": "OBJECT/MECHANISM differ. Side A tracks the total \"online share\" of sales (ecommerce penetration across all web channels). Side B tracks the share that \"came through apps\" \u2014 a mobile-app-specific channel that is a strict subset of online (desktop/mobile-web online sales are excluded). Since online overall is broader than apps, the underlying object is not the same and the mechanism (general channel shift to digital vs. app-specific adoption) is not compellingly identical. OBJECT is at best unclear, so per default-to-DIFFERENT the pair must be treated as different causes.",
+          "verdict": "DIFFERENT"
+        },
+        "sonnet_a": {
+          "cited_a": "The online share of what we sold kept rising.",
+          "cited_b": "How much of the basket came through apps grew.",
+          "reason": "Object mismatch: Side A describes overall online/e-commerce share of sales (which spans website, mobile web, and app), while Side B describes specifically the app channel's share of the basket -- a narrower subset of \"online.\" These are not verified as the same metric (a company's online share could rise from desktop/web growth even if app share is flat, or vice versa). Scope is also unclear/unstated on both sides (no slice_tokens, no per_x, no segment or ownership-class language), so scope sameness cannot be confirmed. Mechanism is at best correlated (app growth can contribute to overall online penetration) rather than shown to be the identical causal driver. Since object and scope are both unclear or unconfirmed, default to DIFFERENT.",
+          "verdict": "DIFFERENT"
+        },
+        "sonnet_b": {
+          "cited_a": "The online share of what we sold kept rising.",
+          "cited_b": "How much of the basket came through apps grew.",
+          "reason": "Object differs: Side A is total online sales share of everything sold, while Side B is specifically app-channel share of the basket -- apps are only one sub-channel within \"online\" (which could also include desktop/mobile web), not synonymous with overall e-commerce penetration. Scope also differs: Side A's unit is aggregate sales (\"what we sold\"), Side B's unit is basket composition, a different measurement base. Mechanism is therefore not clearly the same either -- a broad offline-to-online shift vs. a narrower web-to-app channel shift are distinct causal stories. None of the three required conditions (object, scope, mechanism) is compellingly satisfied, so default to DIFFERENT.",
+          "verdict": "DIFFERENT"
+        }
+      },
+      "hard": true,
+      "n_refused": 3,
+      "pair_id": "kp_0141",
+      "refused_by": [
+        "sonnet_a",
+        "sonnet_b",
+        "opus"
+      ],
+      "refused_by_all3": true,
+      "refused_by_opus": true,
+      "side_a": {
+        "name": "ecommerce_penetration",
+        "quotes": [
+          "The online share of what we sold kept rising."
+        ]
+      },
+      "side_b": {
+        "name": "digital_mix",
+        "quotes": [
+          "How much of the basket came through apps grew."
+        ]
+      }
+    },
+    {
+      "fable_sidecar": {
+        "note": "Fable 2026-07-09: gold verified against the 3-check (object/scope/mechanism); names canon-legal; quotes carry the identity. | v1.1: canonical name form",
+        "status": "closed",
+        "verdict": "confirmed"
+      },
+      "gold": "SAME",
+      "gold_rationale": "Same wage driver.",
+      "graders": {
+        "opus": {
+          "cited_a": "What we pay front-line staff by the hour increased.",
+          "cited_b": "Pay for the people running our kitchens went up.",
+          "reason": "Both sides describe restaurant labor pay rising, so the OBJECT and MECHANISM (wage increase) are plausibly similar. But SCOPE differs: Side A cites \"front-line staff by the hour\" \u2014 customer-facing / front-of-house hourly workers \u2014 while Side B cites \"the people running our kitchens\" \u2014 back-of-house kitchen crew. Front-line staff and kitchen staff are different worker populations, and \"front-line\" typically excludes kitchen. Because same-SCOPE is not established (unclear at best), not all three tests hold, so the default DIFFERENT applies; over-merging distinct labor populations is permanent damage.",
+          "verdict": "DIFFERENT"
+        },
+        "sonnet_a": {
+          "cited_a": "What we pay front-line staff by the hour increased.",
+          "cited_b": "Pay for the people running our kitchens went up.",
+          "reason": "Scope is unclear/mismatched: \"front-line staff\" (A) reads as the general hourly workforce, which could include front-of-house roles like cashiers/servers, while B explicitly narrows to \"the people running our kitchens\" -- back-of-house crew only. No quote confirms these are the same population. Mechanism is also unclear: A specifies the driver is the hourly rate itself increasing (\"by the hour increased\"), while B only says \"pay...went up,\" which is ambiguous between a rate increase, more hours/overtime, or headcount changes. Since scope and mechanism are not both clearly confirmed identical, default to DIFFERENT.",
+          "verdict": "DIFFERENT"
+        },
+        "sonnet_b": {
+          "cited_a": "What we pay front-line staff by the hour increased.",
+          "cited_b": "Pay for the people running our kitchens went up.",
+          "reason": "Scope mismatch: Side A's \"front-line staff\" is the broad restaurant term covering all hourly customer-facing and operational workers (cooks, cashiers, counter staff), while Side B narrows explicitly to \"the people running our kitchens\" -- back-of-house crew only, excluding front-of-house. That is a different business population, not a verified identical scope. Mechanism is also unclear/mismatched: A specifies the hourly rate itself rose (\"by the hour increased\"), whereas B only says total pay \"went up,\" which could reflect more hours worked or headcount rather than a rate increase. Since scope is not demonstrably identical and mechanism is ambiguous/possibly different, at least two of the three required conditions fail -> default to DIFFERENT.",
+          "verdict": "DIFFERENT"
+        }
+      },
+      "hard": true,
+      "n_refused": 3,
+      "pair_id": "kp_0143",
+      "refused_by": [
+        "sonnet_a",
+        "sonnet_b",
+        "opus"
+      ],
+      "refused_by_all3": true,
+      "refused_by_opus": true,
+      "side_a": {
+        "name": "hourly_labor_cost",
+        "quotes": [
+          "What we pay front-line staff by the hour increased."
+        ]
+      },
+      "side_b": {
+        "name": "crew_wages",
+        "quotes": [
+          "Pay for the people running our kitchens went up."
+        ]
+      }
+    },
+    {
+      "fable_sidecar": {
+        "note": "Fable: quotes upgraded to realistic style. | v1.1: canonical name form",
+        "status": "closed",
+        "verdict": "reworded"
+      },
+      "gold": "SAME",
+      "gold_rationale": "Same on-premise channel, different words.",
+      "graders": {
+        "opus": {
+          "cited_a": "Dining rooms drove the recovery as guests returned to tables.",
+          "cited_b": "On-premise consumption led growth while takeaway normalized.",
+          "reason": "OBJECT is not compellingly identical: Side A is specifically table service in the dining room (\"guests returned to tables\"), whereas Side B's \"On-premise consumption\" is the broader industry aggregate of all sales consumed at the location (dining room plus bar, counter, patio), defined against off-premise/takeaway. Dine-in is a narrower sub-channel of on-premise, not the same underlying metric. SCOPE is neutral (both restaurants, no ownership/segment tokens) but does not confirm an identical population. MECHANISM is only loosely aligned (a general return-to-restaurant story). With the object superset/subset mismatch and the default-DIFFERENT rule (unclear object -> DIFFERENT; over-merging is permanent damage), these stay separate.",
+          "verdict": "DIFFERENT"
+        },
+        "sonnet_a": {
+          "cited_a": "Dining rooms drove the recovery as guests returned to tables.",
+          "cited_b": "On-premise consumption led growth while takeaway normalized.",
+          "reason": "OBJECT differs: A names a specific physical population (dining rooms/tables \u2014 guests seated for table service), while B names a broader industry category, \"on-premise consumption,\" which conventionally spans bar/counter/patio/standing consumption in addition to table seating \u2014 not shown to be limited to dining-room tables. SCOPE is therefore unclear/not proven identical: nothing in either quote confirms \"dine-in\" and \"on-premise\" cover the same population here (no slice_tokens or per_x to anchor them together). MECHANISM also diverges: A's causal story is behavioral \u2014 guests choosing to return to tables (recovery of in-room traffic) \u2014 while B's causal story is a channel-mix normalization \u2014 takeaway receding from an elevated base, which mechanically lifts on-premise's share, a distinct (and partly compositional/downstream) dynamic rather than the same \"guests returning\" mechanism. Since OBJECT and SCOPE are not compellingly shown identical and MECHANISM reads as different, the default-to-DIFFERENT rule applies.",
+          "verdict": "DIFFERENT"
+        },
+        "sonnet_b": {
+          "cited_a": "Dining rooms drove the recovery as guests returned to tables.",
+          "cited_b": "On-premise consumption led growth while takeaway normalized.",
+          "reason": "OBJECT is not compellingly the same: Side A names a specific physical channel (\"dining rooms\"/\"tables\"), while Side B uses the broader accounting category \"on-premise consumption,\" which in restaurant reporting can include more than table service (e.g., bar/counter consumption). SCOPE is unclear/unstated for both \u2014 no quote ties them to the same company, segment, or ownership class, so the \"same business population\" requirement is not met. MECHANISM also diverges on the text given: A attributes the change to guest traffic recovery (\"guests returned to tables\"), while B attributes it to a channel-mix shift (\"takeaway normalized\") \u2014 a different causal story, not merely a rephrasing. With object, scope, and mechanism all unconfirmed or diverging, the default-to-DIFFERENT rule applies.",
+          "verdict": "DIFFERENT"
+        }
+      },
+      "hard": true,
+      "n_refused": 3,
+      "pair_id": "kp_0151",
+      "refused_by": [
+        "sonnet_a",
+        "sonnet_b",
+        "opus"
+      ],
+      "refused_by_all3": true,
+      "refused_by_opus": true,
+      "side_a": {
+        "name": "dine_in_sales",
+        "quotes": [
+          "Dining rooms drove the recovery as guests returned to tables."
+        ]
+      },
+      "side_b": {
+        "name": "on_premise_sales",
+        "quotes": [
+          "On-premise consumption led growth while takeaway normalized."
+        ]
+      }
+    },
+    {
+      "fable_sidecar": {
+        "note": "Fable 2026-07-09: gold verified against the 3-check (object/scope/mechanism); names canon-legal; quotes carry the identity. | v1.1: canonical name form",
+        "status": "closed",
+        "verdict": "confirmed"
+      },
+      "gold": "SAME",
+      "gold_rationale": "Same promotional-spend driver.",
+      "graders": {
+        "opus": {
+          "cited_a": "What we spent to promote the brand through media rose.",
+          "cited_b": "Outlays to reach shoppers with campaigns increased.",
+          "reason": "OBJECT differs: Side A is advertising specifically \"through media\" (paid media buys), while Side B is broader \"campaigns\" to \"reach shoppers\" \u2014 marketing spend. Advertising is a subset of marketing (which also covers direct mail, in-store, loyalty, email, non-media outreach), so they are not the same underlying object. SCOPE matches (both retail, no ownership/population split) and MECHANISM is broadly similar (promotional outlays), but a similar mechanism cannot rescue a differing object. Per the default-to-DIFFERENT rule and the subset relationship, these are different drivers.",
+          "verdict": "DIFFERENT"
+        },
+        "sonnet_a": {
+          "cited_a": "What we spent to promote the brand through media rose.",
+          "cited_b": "Outlays to reach shoppers with campaigns increased.",
+          "reason": "OBJECT fails: Side A (advertising_expense) is specifically media-based brand promotion spend (paid advertising), while Side B (marketing_spend) is broader \"campaign\" outlays to reach shoppers, a category that typically also includes promotions, direct outreach, and non-media campaign activity beyond paid advertising. Advertising is normally a subset of marketing, not an identical object to it, so the two quotes describe overlapping but non-identical spending categories. No slice_tokens or per_x are given to confirm scope alignment either. Since OBJECT is not clearly the same, default to DIFFERENT per the grading rule.",
+          "verdict": "DIFFERENT"
+        },
+        "sonnet_b": {
+          "cited_a": "What we spent to promote the brand through media rose.",
+          "cited_b": "Outlays to reach shoppers with campaigns increased.",
+          "reason": "OBJECT is unclear/not compelled as identical: Side A names \"advertising_expense\" \u2014 specifically media spend to promote the brand \u2014 while Side B names \"marketing_spend\" via \"campaigns,\" a broader category that typically includes non-media items (promotions, in-store activity, direct mail) beyond paid advertising. Advertising is conventionally a subset of marketing, not the same object. Since OBJECT sameness is not clearly evidenced, and the rule defaults to DIFFERENT when any criterion is false or unclear, this pair is DIFFERENT despite both being retail with no distinguishing scope/slice tokens.",
+          "verdict": "DIFFERENT"
+        }
+      },
+      "hard": true,
+      "n_refused": 3,
+      "pair_id": "kp_0154",
+      "refused_by": [
+        "sonnet_a",
+        "sonnet_b",
+        "opus"
+      ],
+      "refused_by_all3": true,
+      "refused_by_opus": true,
+      "side_a": {
+        "name": "advertising_expense",
+        "quotes": [
+          "What we spent to promote the brand through media rose."
+        ]
+      },
+      "side_b": {
+        "name": "marketing_spend",
+        "quotes": [
+          "Outlays to reach shoppers with campaigns increased."
+        ]
+      }
+    },
+    {
+      "fable_sidecar": {
+        "note": "Fable 2026-07-09: gold verified against the 3-check (object/scope/mechanism); names canon-legal; quotes carry the identity. | v1.1: canonical name form",
+        "status": "closed",
+        "verdict": "confirmed"
+      },
+      "gold": "SAME",
+      "gold_rationale": "Same supply-movement cost.",
+      "graders": {
+        "opus": {
+          "cited_a": "Expenses to move parts from warehouses to stores grew.",
+          "cited_b": "The cost of getting merchandise onto shelves rose.",
+          "reason": "OBJECT/MECHANISM differ and are not compellingly the same. Side A (\"move parts from warehouses to stores\") is inter-facility freight/transportation between a warehouse and a store location. Side B (\"getting merchandise onto shelves\") describes in-store placement/stocking at the point of sale \u2014 a distinct downstream step in the supply chain, not the same warehouse-to-store transport. Endpoints also differ: A stops at \"stores,\" B ends \"onto shelves.\" While both sit in auto_parts logistics and the names sound synonymous, the quotes point to different causal drivers (freight movement vs. shelf-stocking). With OBJECT and MECHANISM unclear/mismatched, the rule forces DIFFERENT; over-merging is permanent damage.",
+          "verdict": "DIFFERENT"
+        },
+        "sonnet_a": {
+          "cited_a": "Expenses to move parts from warehouses to stores grew.",
+          "cited_b": "The cost of getting merchandise onto shelves rose.",
+          "reason": "Object is only loosely aligned: A scopes strictly to the warehouse-to-store transportation leg, while B's \"onto shelves\" phrasing could extend to in-store stocking/handling, a broader or different cost pool. Scope is unclear/unverifiable: both have empty slice_tokens and null per_x, so there's no evidence either quote refers to the same store population or ownership class (e.g., company-owned vs franchised, same segment vs consolidated) - this alone is unclear and defaults to DIFFERENT. Mechanism is not clearly identical either: \"expenses to move parts\" (freight/transport) vs \"cost of getting merchandise onto shelves\" (could include labor/handling) are correlated but not verbatim-confirmed as the same causal driver. Since scope is unclear and object/mechanism are not compellingly identical, all three prongs are not clearly satisfied, so per the default-to-DIFFERENT rule the verdict is DIFFERENT.",
+          "verdict": "DIFFERENT"
+        },
+        "sonnet_b": {
+          "cited_a": "Expenses to move parts from warehouses to stores grew.",
+          "cited_b": "The cost of getting merchandise onto shelves rose.",
+          "reason": "OBJECT is plausibly similar (inventory movement to point of sale) but SCOPE and MECHANISM are not established as matching. Neither quote specifies the business population/ownership class (company-owned vs franchised stores, segment vs consolidated) \u2014 scope sameness is unclear, not confirmed. On MECHANISM, Side A is specific to warehouse-to-store transportation (\"move parts from warehouses to stores\"), while Side B's \"getting merchandise onto shelves\" could include final in-store shelf-stocking labor, a distinct cost driver from pure distribution/freight expense. Since scope is unclear and mechanism is not verifiably identical, the default-to-DIFFERENT rule applies.",
+          "verdict": "DIFFERENT"
+        }
+      },
+      "hard": true,
+      "n_refused": 3,
+      "pair_id": "kp_0155",
+      "refused_by": [
+        "sonnet_a",
+        "sonnet_b",
+        "opus"
+      ],
+      "refused_by_all3": true,
+      "refused_by_opus": true,
+      "side_a": {
+        "name": "distribution_costs",
+        "quotes": [
+          "Expenses to move parts from warehouses to stores grew."
+        ]
+      },
+      "side_b": {
+        "name": "logistics_expense",
+        "quotes": [
+          "The cost of getting merchandise onto shelves rose."
+        ]
+      }
+    },
+    {
+      "fable_sidecar": {
+        "note": "Fable: quotes upgraded to realistic style. | v1.1: canonical name form",
+        "status": "closed",
+        "verdict": "reworded"
+      },
+      "gold": "SAME",
+      "gold_rationale": "Same reliability metric, different words.",
+      "graders": {
+        "opus": {
+          "cited_a": "The share of flights arriving within schedule improved despite weather.",
+          "cited_b": "Arrival reliability strengthened on better turn execution at hubs.",
+          "reason": "Same airlines industry and same network-operations scope, but the evidence does not compel sameness. OBJECT is unclear/not identical: A measures \"share of flights arriving within schedule\" \u2014 a punctuality (on-time) rate \u2014 while B cites \"arrival reliability,\" a broader reliability notion that need not equal on-time share. MECHANISM diverges: A's gain came \"despite weather\" (a headwind overcome, no operational lever named), whereas B's came \"on better turn execution at hubs\" (a specific hub-turnaround lever) \u2014 different causal stories. With OBJECT unclear and MECHANISM differing, the default-DIFFERENT / \"if unclear \u2192 DIFFERENT\" rule applies; over-splitting is cheap and reversible, over-merging is not.",
+          "verdict": "DIFFERENT"
+        },
+        "sonnet_a": {
+          "cited_a": "The share of flights arriving within schedule improved despite weather.",
+          "cited_b": "Arrival reliability strengthened on better turn execution at hubs.",
+          "reason": "Object is plausibly aligned (on-time arrival share vs. arrival reliability), but SCOPE and MECHANISM fail. Scope: Side B is explicitly scoped to \"at hubs\" (hub operations), while Side A's quote gives no scope qualifier at all -- it reads as network-wide \"flights\" with no hub restriction, so the business populations are not confirmed equal. Mechanism: Side A only states the result held \"despite weather\" -- ruling out one negative factor, not naming the actual positive cause -- whereas Side B names an explicit causal mechanism, \"better turn execution.\" Nothing in Side A's quote confirms turn execution (or any hub-related operational factor) as its driver. Since scope and mechanism sameness are both unconfirmed (not merely uncertain, but pointing toward a narrower hub-specific driver in B vs. an unspecified/broader one in A), the default of DIFFERENT applies.",
+          "verdict": "DIFFERENT"
+        },
+        "sonnet_b": {
+          "cited_a": "The share of flights arriving within schedule improved despite weather.",
+          "cited_b": "Arrival reliability strengthened on better turn execution at hubs.",
+          "reason": "Object is plausibly close (on-time arrival metric vs arrival reliability), but MECHANISM fails: Side A names no causal driver, only that on-time performance improved \"despite weather\" (weather as a headwind overcome, not a cause). Side B gives an explicit, specific mechanism -- \"better turn execution at hubs\" (faster aircraft turnaround at hub airports) -- which Side A never mentions. SCOPE is also questionable: Side B's driver is tied specifically to hub operations, while Side A describes system-wide flight schedule performance with no hub-specific scoping. Since mechanism sameness is not established by a matching quote and scope is unclear, default to DIFFERENT.",
+          "verdict": "DIFFERENT"
+        }
+      },
+      "hard": true,
+      "n_refused": 3,
+      "pair_id": "kp_0157",
+      "refused_by": [
+        "sonnet_a",
+        "sonnet_b",
+        "opus"
+      ],
+      "refused_by_all3": true,
+      "refused_by_opus": true,
+      "side_a": {
+        "name": "on_time_performance",
+        "quotes": [
+          "The share of flights arriving within schedule improved despite weather."
+        ]
+      },
+      "side_b": {
+        "name": "arrival_reliability",
+        "quotes": [
+          "Arrival reliability strengthened on better turn execution at hubs."
+        ]
+      }
+    },
+    {
+      "fable_sidecar": {
+        "note": "Fable 2026-07-09: gold verified against the 3-check (object/scope/mechanism); names canon-legal; quotes carry the identity. | v1.1: canonical name form",
+        "status": "closed",
+        "verdict": "confirmed"
+      },
+      "gold": "SAME",
+      "gold_rationale": "Same non-discretionary demand driver.",
+      "graders": {
+        "opus": {
+          "cited_a": "Demand for durable components like brakes and pumps grew.",
+          "cited_b": "Purchases driven by broken components increased.",
+          "reason": "OBJECT differs: Side A is a product-category driver (\"durable components like brakes and pumps\") \u2014 hard parts classified by part type; Side B is a demand-trigger driver (\"broken components\") \u2014 sales classified by why the purchase happened (failure/breakage). \"Durable\" and \"broken\" are near-opposite framings, not the same underlying thing. MECHANISM differs: A is general demand growth for a category of parts, which can arise from many causes (vehicle age, DIY, new builds); B is specifically failure/breakage-driven replacement. These overlap only by correlation (some hard parts are bought because they broke), not identity \u2014 many durable-component sales are not failure-driven and many failure-driven purchases are not durable/hard parts. With OBJECT and MECHANISM both unequal, the three-part test fails, so default to DIFFERENT.",
+          "verdict": "DIFFERENT"
+        },
+        "sonnet_a": {
+          "cited_a": "Demand for durable components like brakes and pumps grew.",
+          "cited_b": "Purchases driven by broken components increased.",
+          "reason": "Fails the MECHANISM test (and OBJECT is shaky too). Side A's object is a product category \u2014 \"durable components\" (hard parts like brakes/pumps) \u2014 with an unspecified cause of demand growth (could be more miles driven, fleet aging, new-vehicle builds, scheduled maintenance, etc.). Side B's object is purchases specifically attributed to a failure event \u2014 \"driven by broken components\" \u2014 which is a demand-reason classification that could apply to any part type, not just hard parts, and says nothing about the hard-parts category as such. Neither quote states that the hard-parts demand growth in A is CAUSED BY breakage as in B, so the causal mechanism is not shown to be the same, only possibly correlated. Scope (company-owned vs franchised, segment vs consolidated) is also unstated on both sides, so it can't be confirmed identical. Since not all three criteria are clearly satisfied by verbatim evidence, default to DIFFERENT.",
+          "verdict": "DIFFERENT"
+        },
+        "sonnet_b": {
+          "cited_a": "Demand for durable components like brakes and pumps grew.",
+          "cited_b": "Purchases driven by broken components increased.",
+          "reason": "Object differs: A is a product-category concept (\"durable/hard components\" \u2014 brakes, pumps, defined by build type) while B is a purchase-reason concept (\"broken components\" \u2014 defined by failure event, which could span hard or soft parts). Mechanism differs and is unclear for A: A only states demand \"grew\" with no stated cause (could be fleet aging, more miles driven, new-car attach, etc.), whereas B explicitly attributes the increase to breakage/failure. Since A never ties its growth to failure, sameness of mechanism is not established \u2014 and scope is unstated on both sides (no slice_tokens, no ownership/population given). With object unclear and mechanism unclear, at least two of the three required conditions fail, so per the default-to-DIFFERENT rule this is DIFFERENT.",
+          "verdict": "DIFFERENT"
+        }
+      },
+      "hard": true,
+      "n_refused": 3,
+      "pair_id": "kp_0160",
+      "refused_by": [
+        "sonnet_a",
+        "sonnet_b",
+        "opus"
+      ],
+      "refused_by_all3": true,
+      "refused_by_opus": true,
+      "side_a": {
+        "name": "hard_parts_sales",
+        "quotes": [
+          "Demand for durable components like brakes and pumps grew."
+        ]
+      },
+      "side_b": {
+        "name": "failure_related_sales",
+        "quotes": [
+          "Purchases driven by broken components increased."
+        ]
+      }
+    },
+    {
+      "fable_sidecar": {
+        "note": "Fable: duplicated kp_0122's spell-out pattern; replaced with adjusted-EBITDA vs spelled-out form (adds a non-GAAP-flavored SAME). | v1.1: canonical name form",
+        "status": "closed",
+        "verdict": "reworded"
+      },
+      "gold": "SAME",
+      "gold_rationale": "Abbreviation vs spelled-out form of the same non-GAAP measure.",
+      "graders": {
+        "opus": {
+          "cited_a": "Adjusted EBITDA strips interest, taxes, depreciation, amortization and the named special items.",
+          "cited_b": "The spelled-out measure applies the same exclusions in the same way.",
+          "reason": "Side B's name is the verbatim spelled-out expansion of Side A's acronym (EBITDA = Earnings Before Interest, Taxes, Depreciation and Amortization; \"as adjusted\" = Adjusted). OBJECT: same measure \u2014 A strips \"interest, taxes, depreciation, amortization and the named special items,\" B \"applies the same exclusions.\" SCOPE: identical \u2014 both restaurants, no slice_tokens, no per_x, no ownership/segment distinction on either side. MECHANISM: identical \u2014 same set of exclusions; B states it does so \"in the same way.\" All three tests pass with verbatim support, so this is one driver expressed as acronym vs. full name.",
+          "verdict": "SAME"
+        },
+        "sonnet_a": {
+          "cited_a": "Adjusted EBITDA strips interest, taxes, depreciation, amortization and the named special items.",
+          "cited_b": "The spelled-out measure applies the same exclusions in the same way.",
+          "reason": "Object/mechanism look plausibly aligned (B's quote asserts \"the same exclusions in the same way\" as A's interest/tax/D&A/special-items strip), but SCOPE is never established: neither quote states the business population or ownership class (e.g., company-owned vs franchised, segment vs consolidated) that the measure covers, and slice_tokens/per_x are empty/null on both sides too. With scope unaddressed, it is unclear rather than confirmed-same, and the rule says any unclear criterion forces DIFFERENT. Additionally, B's only quote is a bare assertion of equivalence (\"same...in the same way\") rather than an independent description of the measure, which is too thin to compel a merge given the default-to-DIFFERENT bias against over-merging.",
+          "verdict": "DIFFERENT"
+        },
+        "sonnet_b": {
+          "cited_a": "Adjusted EBITDA strips interest, taxes, depreciation, amortization and the named special items.",
+          "cited_b": "The spelled-out measure applies the same exclusions in the same way.",
+          "reason": "Object: plausible by name only (EBITDA-as-adjusted vs Adjusted EBITDA). Scope: fails -- neither quote states the business population or ownership class (no mention of consolidated vs. segment, company-owned vs. franchised, etc.), so scope is simply unaddressed, not shown to match. Mechanism: B gives no independent description of what it excludes -- it only asserts \"the same exclusions in the same way,\" a conclusory reference back to A rather than verbatim evidence of B's own mechanism. Per the rule, an unclear/unaddressed criterion (scope) and a circular, non-independent mechanism claim both mean the evidence does not compel sameness, so this defaults to DIFFERENT.",
+          "verdict": "DIFFERENT"
+        }
+      },
+      "hard": false,
+      "n_refused": 2,
+      "pair_id": "kp_0124",
+      "refused_by": [
+        "sonnet_a",
+        "sonnet_b"
+      ],
+      "refused_by_all3": false,
+      "refused_by_opus": false,
+      "side_a": {
+        "name": "adjusted_ebitda",
+        "quotes": [
+          "Adjusted EBITDA strips interest, taxes, depreciation, amortization and the named special items."
+        ]
+      },
+      "side_b": {
+        "name": "earnings_before_interest_taxes_depreciation_and_amortization_as_adjusted",
+        "quotes": [
+          "The spelled-out measure applies the same exclusions in the same way."
+        ]
+      }
+    },
+    {
+      "fable_sidecar": {
+        "note": "Fable: quotes upgraded to realistic style. | v1.1: canonical name form",
+        "status": "closed",
+        "verdict": "reworded"
+      },
+      "gold": "SAME",
+      "gold_rationale": "Same per-guest spend; different jargon.",
+      "graders": {
+        "opus": {
+          "cited_a": "The amount a typical party spends per visit rose on menu pricing.",
+          "cited_b": "Average ticket moved higher, with pricing more than offsetting lighter add-on attach.",
+          "reason": "OBJECT (same): Both name the average spend per restaurant transaction \u2014 Side A \"The amount a typical party spends per visit,\" Side B \"Average ticket moved higher.\" In restaurants \"average check\" and \"average ticket\" are standard synonyms, and a party-per-visit equals one ticket/check. SCOPE (same): Both are restaurant-level with no slice tokens and no ownership/segment restriction (neither says company-owned vs franchised or segment vs consolidated), so the transaction population is symmetric. MECHANISM (same): Both increases are driven by menu pricing \u2014 A \"rose on menu pricing,\" B \"pricing more than offsetting lighter add-on attach.\" B only adds that add-on attach softened while pricing dominated, so pricing is the shared primary causal driver, not a downstream effect. All three tests pass, compelling SAME over the DIFFERENT default.",
+          "verdict": "SAME"
+        },
+        "sonnet_a": {
+          "cited_a": "The amount a typical party spends per visit rose on menu pricing.",
+          "cited_b": "Average ticket moved higher, with pricing more than offsetting lighter add-on attach.",
+          "reason": "Mechanism differs. Side A attributes the rise to a single cause: menu pricing, full stop. Side B describes a compound mechanism: pricing pushed the metric up while a separate, offsetting force -- lighter add-on attach (fewer add-ons per visit, a mix/volume effect) -- pushed it down, with pricing merely winning the net. That negative attach-rate headwind has no counterpart anywhere in Side A's quote. Treating these as the same driver would erase the fact that B's increase happened despite a weakening mix trend that A shows no sign of. Since the causal story is not identical (same MECHANISM fails), the pair defaults to DIFFERENT regardless of whether 'average check' and 'average ticket' name the same OBJECT.",
+          "verdict": "DIFFERENT"
+        },
+        "sonnet_b": {
+          "cited_a": "The amount a typical party spends per visit rose on menu pricing.",
+          "cited_b": "Average ticket moved higher, with pricing more than offsetting lighter add-on attach.",
+          "reason": "Object is plausibly shared (average check/ticket are common restaurant-industry synonyms for per-visit spend), but mechanism and scope are not verifiably shared. Side A attributes the rise to a single factor, pure menu pricing (\"rose on menu pricing\"), with no mention of any offsetting effect. Side B describes a compound mechanism: pricing gains that \"more than offset\" a decline in add-on attach (mix/upsell rate) \u2014 i.e., two opposing causal forces netting to a smaller increase than pricing alone would produce. Since Side A gives no indication a mix/attach headwind was also present, and Side B gives no indication pricing was the sole driver, the two are not confirmed to describe the same causal story (simple pricing pass-through vs. pricing net of mix erosion). Additionally, neither quote specifies business population or ownership class (company-owned vs. franchised, segment vs. consolidated), so same-scope cannot be confirmed by quote either. Per the default-to-DIFFERENT rule, unclear/unconfirmed mechanism and scope mean this pair does not qualify as SAME.",
+          "verdict": "DIFFERENT"
+        }
+      },
+      "hard": true,
+      "n_refused": 2,
+      "pair_id": "kp_0126",
+      "refused_by": [
+        "sonnet_a",
+        "sonnet_b"
+      ],
+      "refused_by_all3": false,
+      "refused_by_opus": false,
+      "side_a": {
+        "name": "average_check",
+        "quotes": [
+          "The amount a typical party spends per visit rose on menu pricing."
+        ]
+      },
+      "side_b": {
+        "name": "average_ticket",
+        "quotes": [
+          "Average ticket moved higher, with pricing more than offsetting lighter add-on attach."
+        ]
+      }
+    },
+    {
+      "fable_sidecar": {
+        "note": "Fable: quotes upgraded to realistic style. | v1.1: canonical name form",
+        "status": "closed",
+        "verdict": "reworded"
+      },
+      "gold": "SAME",
+      "gold_rationale": "Within restaurants, both mean the same driver.",
+      "graders": {
+        "opus": {
+          "cited_a": "Guest counts improved for the first time in six quarters.",
+          "cited_b": "More diners came through our doors even as the industry stayed promotional.",
+          "reason": "OBJECT (same): A's \"Guest counts improved\" and B's \"More diners came through our doors\" both measure the number of restaurant customers/visits \u2014 \"guest counts\" and \"traffic\" are the standard restaurant-industry synonym for the visit/transaction count (distinct from average check). SCOPE (same): both quotes are company-wide and unqualified \u2014 \"Guest counts improved\" and \"our doors\" carry no franchised-vs-company-owned or segment restriction, so the same population and ownership class. MECHANISM (same): both name the same direct causal driver \u2014 an increase in customers physically visiting \u2014 not a downstream revenue effect. All three tests hold with verbatim support, so SAME.",
+          "verdict": "SAME"
+        },
+        "sonnet_a": {
+          "cited_a": "Guest counts improved for the first time in six quarters.",
+          "cited_b": "More diners came through our doors even as the industry stayed promotional.",
+          "reason": "Object is plausibly shared (both describe more customers/guests visiting), but SCOPE and MECHANISM cannot be verified as same from the text, so default to DIFFERENT. Neither quote states the business population or ownership class (no franchised/company-owned, segment/consolidated distinction given; slice_tokens and per_x are empty/null on both sides) -- scope is simply unaddressed, not confirmed identical. On MECHANISM, Side A is a bare metric statement with no causal context (\"improved for the first time in six quarters\"), while Side B frames the gain against a competitive backdrop (\"even as the industry stayed promotional\"), implying a share-gain-despite-discounting story that Side A gives no basis to confirm or deny. With two of the three required elements unclear rather than compelled by the evidence, the pair fails the bar for SAME.",
+          "verdict": "DIFFERENT"
+        },
+        "sonnet_b": {
+          "cited_a": "Guest counts improved for the first time in six quarters.",
+          "cited_b": "More diners came through our doors even as the industry stayed promotional.",
+          "reason": "Object is plausibly overlapping (guest counts and diner traffic both describe customer visit volume), but SCOPE is unclear/unestablished on both sides: neither quote states the business population or ownership class (e.g., company-owned vs franchised, segment vs consolidated, systemwide vs a specific banner) \u2014 there is no slice_tokens/per_x data and no verbatim text tying the two to the same population. MECHANISM also isn't confirmed as identical: Side A only reports the metric moved (\"improved\") with no stated cause, while Side B frames it as traffic gained despite an industry-wide promotional backdrop, implying a value/quality driver not present in A's quote. Since scope sameness cannot be backed by a verbatim quote from either side (unclear), the rule requires DIFFERENT by default.",
+          "verdict": "DIFFERENT"
+        }
+      },
+      "hard": true,
+      "n_refused": 2,
+      "pair_id": "kp_0128",
+      "refused_by": [
+        "sonnet_a",
+        "sonnet_b"
+      ],
+      "refused_by_all3": false,
+      "refused_by_opus": false,
+      "side_a": {
+        "name": "guest_counts",
+        "quotes": [
+          "Guest counts improved for the first time in six quarters."
+        ]
+      },
+      "side_b": {
+        "name": "traffic",
+        "quotes": [
+          "More diners came through our doors even as the industry stayed promotional."
+        ]
+      }
+    },
+    {
+      "fable_sidecar": {
+        "note": "Fable: 'crew labor cost' (hourly wages only) vs 'payroll and benefits' (all-in) was a real scope mismatch - defensibly refusable. Side_a broadened to restaurant labor costs; now co-extensive. | v1.1: canonical name form",
+        "status": "closed",
+        "verdict": "reworded"
+      },
+      "gold": "SAME",
+      "gold_rationale": "Same all-in staffing cost, different labels.",
+      "graders": {
+        "opus": {
+          "cited_a": "Total pay and benefits for restaurant teams climbed with market wage moves.",
+          "cited_b": "Compensation for restaurant employees, all in, rose.",
+          "reason": "OBJECT matches: A's \"Total pay and benefits for restaurant teams\" equals B's \"Compensation for restaurant employees, all in\" \u2014 both are total labor compensation (pay plus benefits). SCOPE matches: \"restaurant teams\" = \"restaurant employees,\" both restaurant-level staff, with no ownership-class or segment/consolidated distinction on either side. MECHANISM matches: both describe restaurant labor compensation rising; A attributes it to market wage moves while B is silent on cause but fully compatible \u2014 the same underlying cost driver, not a downstream effect. All three tests pass with verbatim support.",
+          "verdict": "SAME"
+        },
+        "sonnet_a": {
+          "cited_a": "Total pay and benefits for restaurant teams climbed with market wage moves.",
+          "cited_b": "Compensation for restaurant employees, all in, rose.",
+          "reason": "MECHANISM fails/is unclear: Side A explicitly attributes the rise to \"market wage moves\" (external labor-market wage inflation as the causal driver). Side B states only that compensation \"rose\" with no stated cause -- it could be from wage increases, headcount growth, benefit plan changes, overtime, or mix shift. Since Side B gives no mechanism at all, sameness of mechanism cannot be confirmed from the quote. Additionally, SCOPE is unclear: neither quote specifies ownership class (company-owned vs franchised restaurants), so the required scope match is not verifiable either. Per the rule, any unclear criterion forces DIFFERENT, so this does not qualify as SAME despite both quotes plausibly referring to the same OBJECT (total restaurant labor compensation).",
+          "verdict": "DIFFERENT"
+        },
+        "sonnet_b": {
+          "cited_a": "Total pay and benefits for restaurant teams climbed with market wage moves.",
+          "cited_b": "Compensation for restaurant employees, all in, rose.",
+          "reason": "MECHANISM fails: Side A states an explicit causal driver \u2014 \"climbed with market wage moves\" (i.e., driven by market-rate wage increases). Side B states only the outcome \u2014 \"rose\" \u2014 with no stated cause at all, so there is nothing to confirm it's the same mechanism rather than a different or unstated cause (e.g., headcount growth, benefits cost inflation, overtime). SCOPE is also unclear: \"restaurant teams\" vs \"restaurant employees\" doesn't establish the same ownership class (company-owned vs franchised) or population. Per the rule, any unclear leg forces DIFFERENT, and default is DIFFERENT absent compelling evidence.",
+          "verdict": "DIFFERENT"
+        }
+      },
+      "hard": true,
+      "n_refused": 2,
+      "pair_id": "kp_0129",
+      "refused_by": [
+        "sonnet_a",
+        "sonnet_b"
+      ],
+      "refused_by_all3": false,
+      "refused_by_opus": false,
+      "side_a": {
+        "name": "restaurant_labor_costs",
+        "quotes": [
+          "Total pay and benefits for restaurant teams climbed with market wage moves."
+        ]
+      },
+      "side_b": {
+        "name": "payroll_and_benefits",
+        "quotes": [
+          "Compensation for restaurant employees, all in, rose."
+        ]
+      }
+    },
+    {
+      "fable_sidecar": {
+        "note": "Fable: 'food and paper' vs 'cost of sales' scope is genuinely underdetermined (COS composition varies by chain) - replaced side_b with food and packaging costs (decisive synonym). | v1.1: canonical name form",
+        "status": "closed",
+        "verdict": "reworded"
+      },
+      "gold": "SAME",
+      "gold_rationale": "Paper and packaging are the same component under two names.",
+      "graders": {
+        "opus": {
+          "cited_a": "Ingredient and packaging spend moved with commodity prices.",
+          "cited_b": "What we spend on ingredients and disposables tracked input markets.",
+          "reason": "OBJECT: both are combined ingredient + packaging/disposable spend \u2014 A \"Ingredient and packaging spend\" vs B \"What we spend on ingredients and disposables\"; packaging = disposables in restaurant accounting (the standard food-and-paper line). SCOPE: both unqualified, same restaurants industry, no ownership-class or segment distinction on either side, so no conflict. MECHANISM: both attribute movement to input/commodity price markets \u2014 A \"moved with commodity prices\" vs B \"tracked input markets\". All three match (names paper = packaging confirm it), so SAME.",
+          "verdict": "SAME"
+        },
+        "sonnet_a": {
+          "cited_a": "Ingredient and packaging spend moved with commodity prices.",
+          "cited_b": "What we spend on ingredients and disposables tracked input markets.",
+          "reason": "Object is not clearly matched: Side A names \"packaging\" (materials that wrap/contain food product) while Side B says \"disposables\" (a broader/different category that could include cups, straws, napkins, utensils) -- these are not verbatim the same object. Scope is unclear on both sides: neither quote states whether this covers company-owned vs franchised locations, or segment vs consolidated results, so same-scope cannot be confirmed. Mechanism is arguably shared (both describe costs moving with commodity/input market prices), but since object and scope are each unclear/unmatched, not all three required conditions are met. Default to DIFFERENT.",
+          "verdict": "DIFFERENT"
+        },
+        "sonnet_b": {
+          "cited_a": "Ingredient and packaging spend moved with commodity prices.",
+          "cited_b": "What we spend on ingredients and disposables tracked input markets.",
+          "reason": "Object and mechanism look plausibly aligned (both: ingredient/packaging-type spend moving with commodity/input prices), but SCOPE is never established by either quote. Neither side states which business population or ownership class this applies to (e.g., company-operated vs. franchised restaurants, segment vs. consolidated) - slice_tokens is empty and per_x is null on both. In the restaurant industry, \"food and paper\" costs are frequently reported specifically for company-owned/operated units, so without a quote confirming the two sides cover the same population, sameness cannot be confirmed. Since scope is unclear/unverifiable, rule 2 fails, and per the grading rule, any unclear criterion forces DIFFERENT (default to DIFFERENT unless evidence compels sameness).",
+          "verdict": "DIFFERENT"
+        }
+      },
+      "hard": true,
+      "n_refused": 2,
+      "pair_id": "kp_0130",
+      "refused_by": [
+        "sonnet_a",
+        "sonnet_b"
+      ],
+      "refused_by_all3": false,
+      "refused_by_opus": false,
+      "side_a": {
+        "name": "food_and_paper_costs",
+        "quotes": [
+          "Ingredient and packaging spend moved with commodity prices."
+        ]
+      },
+      "side_b": {
+        "name": "food_and_packaging_costs",
+        "quotes": [
+          "What we spend on ingredients and disposables tracked input markets."
+        ]
+      }
+    },
+    {
+      "fable_sidecar": {
+        "note": "Fable: quotes upgraded to realistic style. | v1.1: canonical name form",
+        "status": "closed",
+        "verdict": "reworded"
+      },
+      "gold": "SAME",
+      "gold_rationale": "Same loss driver; jargon vs plain.",
+      "graders": {
+        "opus": {
+          "cited_a": "Shrink stepped up again, concentrated in high-theft categories.",
+          "cited_b": "Inventory shortage results worsened, reflecting losses discovered at physical counts.",
+          "reason": "OBJECT: In retail accounting \"shrink\"/\"shrinkage\" and \"inventory shortage\" are synonyms for the book-to-physical inventory loss. Side B's clause \"losses discovered at physical counts\" is the textbook definition of shrink, matching Side A's \"Shrink.\" Same object. SCOPE: Both are retail, aggregate/company-wide inventory loss; neither quote adds any distinguishing qualifier (no company-owned vs franchised, no segment vs consolidated). Same population and ownership class. MECHANISM: Same causal driver \u2014 real physical inventory loss measured at counts. Side A attributes it to theft (\"high-theft categories\"), the primary cause of exactly the \"losses discovered at physical counts\" Side B reports; both are worsening in the same direction (\"stepped up again\" / \"results worsened\"). This is the same phenomenon described operationally (A) vs as the reported result (B), not merely correlated. The only alternate reading of \"inventory shortage\" (a stock-out) is ruled out by \"losses discovered at physical counts.\" All three tests hold with verbatim support.",
+          "verdict": "SAME"
+        },
+        "sonnet_a": {
+          "cited_a": "Shrink stepped up again, concentrated in high-theft categories.",
+          "cited_b": "Inventory shortage results worsened, reflecting losses discovered at physical counts.",
+          "reason": "Object is plausibly shared (both describe unaccounted inventory loss) and scope isn't contradicted, but mechanism is not confirmed identical: A explicitly attributes the rise to theft (\"concentrated in high-theft categories\"), while B only states losses were \"discovered at physical counts\" \u2014 a measurement/detection method, not a stated cause. B's quote leaves the actual driver (theft vs. damage vs. clerical error vs. vendor issues) unspecified, so the mechanism match is unclear. Per the rule, unclear mechanism defaults to DIFFERENT.",
+          "verdict": "DIFFERENT"
+        },
+        "sonnet_b": {
+          "cited_a": "Shrink stepped up again, concentrated in high-theft categories.",
+          "cited_b": "Inventory shortage results worsened, reflecting losses discovered at physical counts.",
+          "reason": "Object is plausibly similar (inventory loss), but MECHANISM is not confirmed same: A explicitly attributes the increase to theft in specific high-theft categories, while B's quote only describes the discovery method (physical counts) without naming a cause -- the loss in B could stem from theft, damage, administrative error, or vendor fraud, none of which is specified. SCOPE is also unstated on both sides (no ownership class, segment, or population given). Since mechanism sameness is unconfirmed and scope is unclear on both sides, default to DIFFERENT per the rule that any unclear criterion forces a DIFFERENT verdict.",
+          "verdict": "DIFFERENT"
+        }
+      },
+      "hard": true,
+      "n_refused": 2,
+      "pair_id": "kp_0133",
+      "refused_by": [
+        "sonnet_a",
+        "sonnet_b"
+      ],
+      "refused_by_all3": false,
+      "refused_by_opus": false,
+      "side_a": {
+        "name": "shrink",
+        "quotes": [
+          "Shrink stepped up again, concentrated in high-theft categories."
+        ]
+      },
+      "side_b": {
+        "name": "inventory_shortage",
+        "quotes": [
+          "Inventory shortage results worsened, reflecting losses discovered at physical counts."
+        ]
+      }
+    },
+    {
+      "fable_sidecar": {
+        "note": "Fable 2026-07-09: gold verified against the 3-check (object/scope/mechanism); names canon-legal; quotes carry the identity. | v1.1: canonical name form; side_b quote sharpened to pin the object decisively (adversarial pass finding)",
+        "status": "closed",
+        "verdict": "confirmed"
+      },
+      "gold": "SAME",
+      "gold_rationale": "Same profitability ratio, different name.",
+      "graders": {
+        "opus": {
+          "cited_a": "Profit as a share of revenue widened over the year.",
+          "cited_b": "Operating profit per dollar of revenue improved on cost discipline.",
+          "reason": "OBJECT: same metric \u2014 operating margin and return on sales are synonyms for operating profit / revenue. A's name operating_margin pins its generic \"profit as a share of revenue\" to operating profit, matching B's explicit \"operating profit per dollar of revenue.\" SCOPE: same \u2014 both restaurants, both slice_tokens empty, per_x null; no company-owned vs franchised or segment vs consolidated split; both are whole-company margins. MECHANISM: same \u2014 both describe margin expansion (widened/improved); the \"cost discipline\" in B is the reason the same margin driver moved, not a different or downstream driver. All three tests hold.",
+          "verdict": "SAME"
+        },
+        "sonnet_a": {
+          "cited_a": "Profit as a share of revenue widened over the year.",
+          "cited_b": "Operating profit per dollar of revenue improved on cost discipline.",
+          "reason": "Object is only loosely aligned: A says unspecified \"profit\" as a share of revenue, B explicitly says \"operating profit\" per dollar of revenue \u2014 plausibly the same ratio but not confirmed identical from A's wording alone. Scope is unconfirmed on both sides: neither quote states the business population or ownership class (company-owned vs franchised, segment vs consolidated) \u2014 slice_tokens are empty for both. Mechanism fails outright: A gives no causal driver at all (just notes the metric \"widened over the year\"), while B attributes the change to \"cost discipline.\" Since A cites no mechanism, sameness of mechanism cannot be verified by a quote from A. With scope unclear and mechanism unconfirmed, the evidence does not compel sameness, so default to DIFFERENT.",
+          "verdict": "DIFFERENT"
+        },
+        "sonnet_b": {
+          "cited_a": "Profit as a share of revenue widened over the year.",
+          "cited_b": "Operating profit per dollar of revenue improved on cost discipline.",
+          "reason": "OBJECT is unclear: Side A only says \"profit\" (no type specified \u2014 could be net, gross, or operating profit), while Side B explicitly names \"operating profit\" \u2014 not confirmed as the same metric from the quotes alone. MECHANISM fails outright: Side A's quote states no cause at all, just an outcome (\"widened over the year\"), whereas Side B attributes the change to a specific driver (\"cost discipline\"). With no mechanism given on Side A, sameness of mechanism cannot be verified. SCOPE is also unstated on both sides (no segment/ownership detail). Since OBJECT is unclear and MECHANISM is unconfirmed, the default-to-DIFFERENT rule applies.",
+          "verdict": "DIFFERENT"
+        }
+      },
+      "hard": true,
+      "n_refused": 2,
+      "pair_id": "kp_0137",
+      "refused_by": [
+        "sonnet_a",
+        "sonnet_b"
+      ],
+      "refused_by_all3": false,
+      "refused_by_opus": false,
+      "side_a": {
+        "name": "operating_margin",
+        "quotes": [
+          "Profit as a share of revenue widened over the year."
+        ]
+      },
+      "side_b": {
+        "name": "return_on_sales",
+        "quotes": [
+          "Operating profit per dollar of revenue improved on cost discipline."
+        ]
+      }
+    },
+    {
+      "fable_sidecar": {
+        "note": "Fable 2026-07-09: gold verified against the 3-check (object/scope/mechanism); names canon-legal; quotes carry the identity. | v1.1: canonical name form",
+        "status": "closed",
+        "verdict": "confirmed"
+      },
+      "gold": "SAME",
+      "gold_rationale": "Abbreviation vs full metric.",
+      "graders": {
+        "opus": {
+          "cited_a": "Growth at stores open a full year measured demand.",
+          "cited_b": "Like-for-like locations showed how underlying demand moved.",
+          "reason": "OBJECT: both describe comparable/same-store sales \u2014 \"stores open a full year\" (A) and \"like-for-like locations\" (B) are the same metric, and \"comps\" is the standard shorthand for \"comparable_store_sales_growth.\" SCOPE: identical store population (established/like-for-like store base), same auto_parts industry, with no differing ownership class (neither splits company-owned vs franchised). MECHANISM: both use it as a gauge of underlying demand \u2014 \"measured demand\" (A) and \"showed how underlying demand moved\" (B). All three tests pass with verbatim support, so the compelling-sameness bar overcomes the DIFFERENT default.",
+          "verdict": "SAME"
+        },
+        "sonnet_a": {
+          "cited_a": "Growth at stores open a full year measured demand.",
+          "cited_b": "Like-for-like locations showed how underlying demand moved.",
+          "reason": "OBJECT and MECHANISM look aligned (both describe existing-store growth as a demand signal), but SCOPE is unverified: neither quote states the store population's ownership class (company-owned vs franchised) or reporting basis (segment vs consolidated, gross vs net). \"Stores open a full year\" and \"like-for-like locations\" are generic comp-store phrasings that could still refer to different store populations within an auto-parts retailer. With scope unconfirmed by verbatim text, default to DIFFERENT per the rule.",
+          "verdict": "DIFFERENT"
+        },
+        "sonnet_b": {
+          "cited_a": "Growth at stores open a full year measured demand.",
+          "cited_b": "Like-for-like locations showed how underlying demand moved.",
+          "reason": "OBJECT and MECHANISM look aligned (both describe comparable/like-for-like store growth as a proxy for underlying demand), but SCOPE is not established by either quote. Neither side states the business population or ownership class (e.g. company-owned vs franchised/jobber stores, segment vs consolidated) - a distinction that matters in auto_parts retail where franchise networks are common. Since scope is unconfirmed by verbatim evidence, the rule requires defaulting to DIFFERENT.",
+          "verdict": "DIFFERENT"
+        }
+      },
+      "hard": true,
+      "n_refused": 2,
+      "pair_id": "kp_0140",
+      "refused_by": [
+        "sonnet_a",
+        "sonnet_b"
+      ],
+      "refused_by_all3": false,
+      "refused_by_opus": false,
+      "side_a": {
+        "name": "comps",
+        "quotes": [
+          "Growth at stores open a full year measured demand."
+        ]
+      },
+      "side_b": {
+        "name": "comparable_store_sales_growth",
+        "quotes": [
+          "Like-for-like locations showed how underlying demand moved."
+        ]
+      }
+    },
+    {
+      "fable_sidecar": {
+        "note": "Fable: occupancy strictly contains rent (hyponym - the judge contract itself refuses hyponyms); side_b changed to property and lease costs (co-extensive). | v1.1: canonical name form",
+        "status": "closed",
+        "verdict": "reworded"
+      },
+      "gold": "SAME",
+      "gold_rationale": "Co-extensive premises cost under two labels.",
+      "graders": {
+        "opus": {
+          "cited_a": "The cost of keeping store space open weighed in.",
+          "cited_b": "Rent, utilities and related charges for our locations rose.",
+          "reason": "Same OBJECT: occupancy expense is definitionally the cost of occupying store space, i.e. rent + utilities + related location charges \u2014 so A's \"cost of keeping store space open\" and B's \"Rent, utilities and related charges for our locations\" name the identical underlying cost item. Same SCOPE: both refer to the company's own retail store locations (\"store space\" / \"our locations\"), consolidated, with no franchise-vs-owned or segment distinction. Same MECHANISM: both are the direct cost of occupying physical store space as the driver, not a downstream or merely correlated effect. All three tests hold with verbatim support, so the evidence compels sameness.",
+          "verdict": "SAME"
+        },
+        "sonnet_a": {
+          "cited_a": "The cost of keeping store space open weighed in.",
+          "cited_b": "Rent, utilities and related charges for our locations rose.",
+          "reason": "SCOPE cannot be confirmed as same: neither quote states the business population or ownership class (company-owned vs franchised, segment vs consolidated) \u2014 Side A says only \"store space\" and Side B says only \"our locations,\" both generic. Per the rule, unclear scope defaults to DIFFERENT even though the general topic (cost of retail space) is similar. MECHANISM also differs in specificity: Side A is a vague catch-all (\"cost of keeping store space open\") while Side B names a specific mechanism (rent and utilities rising), which is not verbatim confirmed as the same causal driver rather than a related-but-distinct one.",
+          "verdict": "DIFFERENT"
+        },
+        "sonnet_b": {
+          "cited_a": "The cost of keeping store space open weighed in.",
+          "cited_b": "Rent, utilities and related charges for our locations rose.",
+          "reason": "Object is plausibly aligned (both concern store/location occupancy-type costs), but SCOPE and MECHANISM are not established as same. Neither quote states the business population or ownership class (company-owned vs. franchised, segment vs. consolidated) -- scope is simply unstated, not confirmed equal. Mechanism also diverges: side B explicitly asserts a trend (\"rose\" -- costs increased), while side A only says the cost \"weighed in,\" which describes a burden/level, not confirmed as an increase. Since scope is unclear and mechanism isn't verbatim-confirmed as the same directional driver, default to DIFFERENT per the rubric.",
+          "verdict": "DIFFERENT"
+        }
+      },
+      "hard": true,
+      "n_refused": 2,
+      "pair_id": "kp_0144",
+      "refused_by": [
+        "sonnet_a",
+        "sonnet_b"
+      ],
+      "refused_by_all3": false,
+      "refused_by_opus": false,
+      "side_a": {
+        "name": "occupancy_expense",
+        "quotes": [
+          "The cost of keeping store space open weighed in."
+        ]
+      },
+      "side_b": {
+        "name": "property_and_lease_costs",
+        "quotes": [
+          "Rent, utilities and related charges for our locations rose."
+        ]
+      }
+    },
+    {
+      "fable_sidecar": {
+        "note": "Fable 2026-07-09: gold verified against the 3-check (object/scope/mechanism); names canon-legal; quotes carry the identity. | v1.1: canonical name form",
+        "status": "closed",
+        "verdict": "confirmed"
+      },
+      "gold": "SAME",
+      "gold_rationale": "Same measure, near-identical wording.",
+      "graders": {
+        "opus": {
+          "cited_a": "Net sales are company revenue after returns and allowances.",
+          "cited_b": "Total net sales are company revenue after returns too.",
+          "reason": "All three tests hold. OBJECT: both define the metric as the same thing \u2014 company revenue after returns (net sales); A adds \"and allowances,\" which is the standard net-sales deduction, and B's \"too\" explicitly mirrors A. SCOPE: both say \"company\" revenue, same retail population and ownership class \u2014 no segment/franchise/gross split, slice_tokens empty and per_x null on both sides; \"Total\" is merely an aggregate synonym for the same consolidated net sales, not a different population. MECHANISM: identical causal driver \u2014 revenue net of returns, not a downstream or correlated effect. Evidence compels sameness.",
+          "verdict": "SAME"
+        },
+        "sonnet_a": {
+          "cited_a": "Net sales are company revenue after returns and allowances.",
+          "cited_b": "Total net sales are company revenue after returns too.",
+          "reason": "OBJECT: both quotes define the identical metric \u2014 \"net sales\" \u2014 as company revenue net of deductions; Side B's \"total\" prefix is a label variant, not a different metric. SCOPE: both quotes explicitly anchor to the same unqualified population \u2014 \"company revenue\" appears verbatim in both \u2014 with no segment, franchise/company-owned, or gross/net qualifier in either (slice_tokens empty on both sides, industry matches: retail/retail). MECHANISM: both attribute the gross-to-net adjustment to the same cause \u2014 returns (Side A: \"after returns and allowances\"; Side B: \"after returns too\", the \"too\" signaling continuity with the same returns-based adjustment, not a contrasting narrower mechanism). No verbatim evidence distinguishes population, ownership class, or causal driver, so the evidence compels SAME rather than the DIFFERENT default.",
+          "verdict": "SAME"
+        },
+        "sonnet_b": {
+          "cited_a": "Net sales are company revenue after returns and allowances.",
+          "cited_b": "Total net sales are company revenue after returns too.",
+          "reason": "Object and mechanism look similar (both define the metric as revenue after returns/allowances), but SCOPE is never established. Neither quote states the business population or ownership class (e.g., consolidated total vs a segment/subset, company-owned vs franchised), and the name difference (\"net_sales\" vs \"total_net_sales\") hints at a possible scope gap (total/consolidated vs a narrower slice) that the evidence doesn't rule out. Since scope sameness isn't compelled by a verbatim quote, the default-to-DIFFERENT rule applies.",
+          "verdict": "DIFFERENT"
+        }
+      },
+      "hard": false,
+      "n_refused": 1,
+      "pair_id": "kp_0111",
+      "refused_by": [
+        "sonnet_b"
+      ],
+      "refused_by_all3": false,
+      "refused_by_opus": false,
+      "side_a": {
+        "name": "net_sales",
+        "quotes": [
+          "Net sales are company revenue after returns and allowances."
+        ]
+      },
+      "side_b": {
+        "name": "total_net_sales",
+        "quotes": [
+          "Total net sales are company revenue after returns too."
+        ]
+      }
+    },
+    {
+      "fable_sidecar": {
+        "note": "Fable: replaced a redundant abbreviation pair with the cross-company convergence case (same driver, two companies, identical names) - design-central (PIPE-20) and breaks name-equality heuristics in the SAME direction. | v1.1: canonical name form",
+        "status": "closed",
+        "verdict": "reworded"
+      },
+      "gold": "SAME",
+      "gold_rationale": "The same reusable driver stated by two different companies; cross-company convergence.",
+      "graders": {
+        "opus": {
+          "cited_a": "Our like-for-like sales at stores open more than a year rose modestly.",
+          "cited_b": "Sales at outlets operating for more than twelve months improved on stronger do-it-yourself demand.",
+          "reason": "OBJECT (same): A's \"like-for-like sales at stores open more than a year\" and B's \"Sales at outlets operating for more than twelve months\" are synonyms for the identical retail metric \u2014 comparable store sales with the same >12-month definition. SCOPE (same): both cover existing stores in the auto_parts industry at the consolidated level, with no ownership-class distinction (company-owned vs franchised) or segment split on either side. MECHANISM (same): both describe existing-store sales growth as the driver; B's \"on stronger do-it-yourself demand\" is a sub-reason explaining WHY the same comp-sales figure rose, not a different or downstream driver. All three tests pass with verbatim support, so the two are the same underlying driver.",
+          "verdict": "SAME"
+        },
+        "sonnet_a": {
+          "cited_a": "Our like-for-like sales at stores open more than a year rose modestly.",
+          "cited_b": "Sales at outlets operating for more than twelve months improved on stronger do-it-yourself demand.",
+          "reason": "OBJECT: both describe the identical metric \u2014 the standard comparable/same-store sales figure. A: \"like-for-like sales at stores open more than a year\"; B: \"Sales at outlets operating for more than twelve months\" \u2014 \"like-for-like\" = \"comparable,\" and \"a year\" = \"twelve months,\" so this is one metric definition in two phrasings, not two different metrics. SCOPE: both name the same population with no conflicting ownership/segment qualifier \u2014 A's population is \"stores open more than a year,\" B's is \"outlets operating for more than twelve months\"; neither quote carves out a franchise-vs-company-owned or segment-vs-consolidated distinction, so there is no textual signal of a scope mismatch, and both sit in the same industry (\"auto_parts\"). MECHANISM: both attribute a change in overall results to the same causal driver \u2014 growth in sales at the existing (>1yr) store base \u2014 A: sales \"rose modestly,\" B: sales \"improved.\" B adds color on the demand source (\"stronger do-it-yourself demand\") but that explains WHY comp sales moved, it does not substitute a different driver; the cited causal factor in both is comp-store-sales performance itself, not a downstream or merely correlated effect. All three prongs hold with verbatim support, so this is a genuine match rather than an over-merge.",
+          "verdict": "SAME"
+        },
+        "sonnet_b": {
+          "cited_a": "Our like-for-like sales at stores open more than a year rose modestly.",
+          "cited_b": "Sales at outlets operating for more than twelve months improved on stronger do-it-yourself demand.",
+          "reason": "Object and scope look plausibly aligned (both are comparable-store/like-for-like sales at locations open 12+ months, same auto_parts industry), but MECHANISM cannot be confirmed as matching. Side A's quote states only an outcome (\"rose modestly\") with no stated cause. Side B explicitly attributes the improvement to a specific demand-side driver (\"stronger do-it-yourself demand\") that is absent from Side A's quote. Since Side A provides no verbatim mechanism to compare against Side B's stated cause, the same-mechanism criterion is unverifiable/unclear, and per the rule any unclear criterion forces DIFFERENT.",
+          "verdict": "DIFFERENT"
+        }
+      },
+      "hard": true,
+      "n_refused": 1,
+      "pair_id": "kp_0118",
+      "refused_by": [
+        "sonnet_b"
+      ],
+      "refused_by_all3": false,
+      "refused_by_opus": false,
+      "side_a": {
+        "name": "comparable_store_sales",
+        "quotes": [
+          "Our like-for-like sales at stores open more than a year rose modestly."
+        ]
+      },
+      "side_b": {
+        "name": "comparable_store_sales",
+        "quotes": [
+          "Sales at outlets operating for more than twelve months improved on stronger do-it-yourself demand."
+        ]
+      }
+    },
+    {
+      "fable_sidecar": {
+        "note": "Fable 2026-07-09: gold verified against the 3-check (object/scope/mechanism); names canon-legal; quotes carry the identity. | v1.1: canonical name form",
+        "status": "closed",
+        "verdict": "confirmed"
+      },
+      "gold": "SAME",
+      "gold_rationale": "Same cost line here.",
+      "graders": {
+        "opus": {
+          "cited_a": "Cost of goods sold covers merchandise and inbound freight.",
+          "cited_b": "Cost of sales covers merchandise and inbound freight too.",
+          "reason": "\"Cost of goods sold\" and \"cost of sales\" are standard accounting synonyms, and here both sides are explicitly defined by the identical composition. OBJECT: same \u2014 Side A \"Cost of goods sold covers merchandise and inbound freight.\" and Side B \"Cost of sales covers merchandise and inbound freight too.\" describe the same underlying cost (merchandise + inbound freight). SCOPE: same \u2014 both industry auto_parts, no differing ownership class or business population (no company-owned vs franchised, no segment vs consolidated). MECHANISM: same \u2014 both are the direct cost of merchandise plus inbound freight, the same causal driver, not a downstream effect. All three tests pass, so the evidence compels SAME.",
+          "verdict": "SAME"
+        },
+        "sonnet_a": {
+          "cited_a": "Cost of goods sold covers merchandise and inbound freight.",
+          "cited_b": "Cost of sales covers merchandise and inbound freight too.",
+          "reason": "Object: both quotes describe the identical cost composition -- merchandise cost plus inbound freight -- with no additional or differing components on either side, so the same underlying line item is being described (just under two common synonymous labels, COGS vs. \"cost of sales,\" both standard in auto_parts retail). Scope: neither side qualifies the line with any narrower population or ownership class (no company-owned vs. franchised, no segment vs. consolidated, no gross vs. net split); both are stated as plain, unqualified totals in the same industry, so absent any contrary signal the scope reads as the same (consolidated/whole-line). Mechanism: in both quotes the line IS the merchandise+freight cost itself, not a downstream or merely correlated effect of it -- identical causal composition, not just a correlated metric. All three criteria are satisfied by direct, near-verbatim wording on both sides, which is the compelling level of evidence needed to overcome the default-to-DIFFERENT presumption.",
+          "verdict": "SAME"
+        },
+        "sonnet_b": {
+          "cited_a": "Cost of goods sold covers merchandise and inbound freight.",
+          "cited_b": "Cost of sales covers merchandise and inbound freight too.",
+          "reason": "Object/mechanism look aligned (both quotes describe a cost line composed of merchandise plus inbound freight), but SCOPE is never established on either side \u2014 neither quote states the business population or ownership class (e.g., consolidated vs. segment, company-owned vs. franchised, gross vs. net). With scope unaddressed and the two sides using distinct account names (cost_of_goods_sold vs. cost_of_sales, which can be non-identical line items), criterion 2 is unclear. Per the rule, any unclear criterion forces DIFFERENT.",
+          "verdict": "DIFFERENT"
+        }
+      },
+      "hard": false,
+      "n_refused": 1,
+      "pair_id": "kp_0123",
+      "refused_by": [
+        "sonnet_b"
+      ],
+      "refused_by_all3": false,
+      "refused_by_opus": false,
+      "side_a": {
+        "name": "cost_of_goods_sold",
+        "quotes": [
+          "Cost of goods sold covers merchandise and inbound freight."
+        ]
+      },
+      "side_b": {
+        "name": "cost_of_sales",
+        "quotes": [
+          "Cost of sales covers merchandise and inbound freight too."
+        ]
+      }
+    },
+    {
+      "fable_sidecar": {
+        "note": "Fable 2026-07-09: gold verified against the 3-check (object/scope/mechanism); names canon-legal; quotes carry the identity. | v1.1: canonical name form; second corroborating quote added both sides",
+        "status": "closed",
+        "verdict": "confirmed"
+      },
+      "gold": "SAME",
+      "gold_rationale": "Same fuel driver.",
+      "graders": {
+        "opus": {
+          "cited_a": "What our jets burned during the period cost more.",
+          "cited_b": "The reported price of powering the fleet increased.",
+          "reason": "Same OBJECT: both describe jet-fuel expense \u2014 A \"What our jets burned during the period cost more\" vs B \"The reported price of powering the fleet increased.\" Same SCOPE: both are the company's own fleet as a consolidated operating cost, and each independently ranks it #2 behind labor \u2014 A \"The fuel line is our second-largest operating expense\" vs B \"Only labor exceeds it among our operating costs.\" Same MECHANISM: both attribute it to fuel cost/price rising, not a downstream effect. All three criteria met with verbatim support; same airline industry.",
+          "verdict": "SAME"
+        },
+        "sonnet_a": {
+          "cited_a": "What our jets burned during the period cost more.",
+          "cited_b": "The reported price of powering the fleet increased.",
+          "reason": "Object/scope are plausibly aligned (both airlines, both describe fuel for \"our jets\"/\"the fleet,\" both confirmed as the #2 operating expense behind labor), but MECHANISM is not confirmed identical. Side A's \"what our jets burned...cost more\" is ambiguous \u2014 it could reflect higher consumption/volume (more flying) as much as a per-unit price rise \u2014 while Side B explicitly attributes the change to \"the reported price...increased,\" a pure price-based driver. Since the quotes don't compel that both point to the same causal mechanism (price vs. possibly volume), and the rule requires DIFFERENT whenever any of the three prongs is false or unclear, this defaults to DIFFERENT.",
+          "verdict": "DIFFERENT"
+        },
+        "sonnet_b": {
+          "cited_a": "What our jets burned during the period cost more.",
+          "cited_b": "The reported price of powering the fleet increased.",
+          "reason": "Object: both describe the same metric \u2014 the expense/cost of jet fuel used to power the airline's aircraft (\"what our jets burned...cost more\" = \"price of powering the fleet increased\"). Scope: both refer to the whole company fleet (\"our jets\" / \"the fleet\") with no sub-segment or ownership split indicated on either side (slice_tokens empty, per_x null for both), so no evidence of differing populations. Mechanism: both attribute the change to the cost/price of fueling the same fleet activity (a price-type driver), not to a downstream or merely correlated effect, and this is corroborated by the parallel magnitude claims (\"second-largest operating expense\" vs \"only labor exceeds it among operating costs\"), which describe the identical ranking fact (fuel is the #2 opex behind labor) \u2014 confirming they refer to the same underlying driver, just paraphrased.",
+          "verdict": "SAME"
+        }
+      },
+      "hard": true,
+      "n_refused": 1,
+      "pair_id": "kp_0134",
+      "refused_by": [
+        "sonnet_a"
+      ],
+      "refused_by_all3": false,
+      "refused_by_opus": false,
+      "side_a": {
+        "name": "aircraft_fuel",
+        "quotes": [
+          "What our jets burned during the period cost more.",
+          "The fuel line is our second-largest operating expense."
+        ]
+      },
+      "side_b": {
+        "name": "jet_fuel_expense",
+        "quotes": [
+          "The reported price of powering the fleet increased.",
+          "Only labor exceeds it among our operating costs."
+        ]
+      }
+    },
+    {
+      "fable_sidecar": {
+        "note": "Fable 2026-07-09: gold verified against the 3-check (object/scope/mechanism); names canon-legal; quotes carry the identity. | v1.1: canonical name form",
+        "status": "closed",
+        "verdict": "confirmed"
+      },
+      "gold": "SAME",
+      "gold_rationale": "Same paid-loyalty revenue driver.",
+      "graders": {
+        "opus": {
+          "cited_a": "Money earned from paid loyalty tiers grew this year.",
+          "cited_b": "Subscriptions to our rewards plans brought in more.",
+          "reason": "All three criteria hold. OBJECT: both describe recurring-fee income from a paid loyalty/rewards membership \u2014 A's \"paid loyalty tiers\" and B's \"subscriptions to our rewards plans\" are the same underlying thing. SCOPE: both retail, company-wide/consolidated, with no segment or ownership-class distinction on either side. MECHANISM: both are the same causal driver \u2014 customers paying a recurring fee to belong to a premium loyalty/rewards program, where that fee is itself the revenue (\"paid\" in A, \"Subscriptions\" in B). The differences are purely vocabulary: membership fee = subscription, loyalty tiers = rewards plans, income = revenue.",
+          "verdict": "SAME"
+        },
+        "sonnet_a": {
+          "cited_a": "Money earned from paid loyalty tiers grew this year.",
+          "cited_b": "Subscriptions to our rewards plans brought in more.",
+          "reason": "Same object: both describe revenue from customers paying into a loyalty/rewards program (\"paid loyalty tiers\" and \"rewards plans\" are synonymous retail terms). Same scope: neither quote restricts to a sub-population (segment, brand, ownership class) \u2014 both appear company-wide, same retail industry, no slice_tokens to differentiate. Same mechanism: both attribute the increase to growth in paid loyalty/rewards enrollment (\"grew\" vs \"brought in more\" from subscriptions), not to a different or downstream cause. All three criteria hold, so this is a terminology paraphrase of one driver, not two distinct causes.",
+          "verdict": "SAME"
+        },
+        "sonnet_b": {
+          "cited_a": "Money earned from paid loyalty tiers grew this year.",
+          "cited_b": "Subscriptions to our rewards plans brought in more.",
+          "reason": "OBJECT is plausibly shared (both point to paid loyalty/rewards membership revenue) and MECHANISM looks similar (both describe growth in that revenue), but SCOPE is unverifiable from either quote \u2014 neither states the business population or ownership class (e.g., which brand/segment, company-owned vs franchised, gross vs net, one program vs many \"tiers\" vs a single \"plan\"). Since SCOPE sameness cannot be backed by a verbatim quote from either side, the rule that all three criteria must hold (each unclear factor forces DIFFERENT) applies, so the pair defaults to DIFFERENT.",
+          "verdict": "DIFFERENT"
+        }
+      },
+      "hard": true,
+      "n_refused": 1,
+      "pair_id": "kp_0135",
+      "refused_by": [
+        "sonnet_b"
+      ],
+      "refused_by_all3": false,
+      "refused_by_opus": false,
+      "side_a": {
+        "name": "membership_fee_income",
+        "quotes": [
+          "Money earned from paid loyalty tiers grew this year."
+        ]
+      },
+      "side_b": {
+        "name": "loyalty_program_revenue",
+        "quotes": [
+          "Subscriptions to our rewards plans brought in more."
+        ]
+      }
+    },
+    {
+      "fable_sidecar": {
+        "note": "Fable: 'new restaurant openings' denotes GROSS openings; side_a is NET growth - defensibly refusable. Side_b changed to net new units (decisively SAME). | v1.1: canonical name form",
+        "status": "closed",
+        "verdict": "reworded"
+      },
+      "gold": "SAME",
+      "gold_rationale": "Net unit expansion under two names.",
+      "graders": {
+        "opus": {
+          "cited_a": "The count of restaurants, net of closures, expanded.",
+          "cited_b": "Locations added net of those we retired increased the footprint.",
+          "reason": "All three tests pass. OBJECT: both describe the net count of restaurant units \u2014 A's \"count of restaurants, net of closures\" equals B's \"Locations added net of those we retired... footprint.\" SCOPE: both are the total restaurant/location population in the restaurants industry with no ownership-class or segment distinction (neither specifies company-owned vs franchised, neither is a subsegment). MECHANISM: both are the same causal driver \u2014 net unit expansion, i.e. gross new units minus units closed/retired (\"net of closures\" = \"net of those we retired\"; \"expanded\" = \"increased the footprint\"). No differing dimension, so this is the same underlying driver.",
+          "verdict": "SAME"
+        },
+        "sonnet_a": {
+          "cited_a": "The count of restaurants, net of closures, expanded.",
+          "cited_b": "Locations added net of those we retired increased the footprint.",
+          "reason": "Object and mechanism look aligned (both describe net unit count growth: additions minus closures/retirements). But SCOPE is unverifiable from either quote \u2014 neither states ownership class (company-owned vs franchised) or population (segment vs consolidated/system-wide); slice_tokens and per_x are empty/null on both sides, giving no corroborating evidence. Since scope match is unclear rather than confirmed, the rule requires defaulting to DIFFERENT.",
+          "verdict": "DIFFERENT"
+        },
+        "sonnet_b": {
+          "cited_a": "The count of restaurants, net of closures, expanded.",
+          "cited_b": "Locations added net of those we retired increased the footprint.",
+          "reason": "Same OBJECT: both describe the total count of restaurant units/locations (count of restaurants vs. footprint). Same SCOPE: neither quote qualifies by ownership class or segment (no company-owned/franchised or segment/consolidated split; both unqualified with empty slice_tokens, same industry), so no evidence of differing populations. Same MECHANISM: both describe net unit change as gross additions minus closures/retirements (net of closures vs. net of those we retired) \u2014 identical causal arithmetic, not a correlated or downstream effect, just different wording for the same net-unit-growth driver.",
+          "verdict": "SAME"
+        }
+      },
+      "hard": true,
+      "n_refused": 1,
+      "pair_id": "kp_0136",
+      "refused_by": [
+        "sonnet_a"
+      ],
+      "refused_by_all3": false,
+      "refused_by_opus": false,
+      "side_a": {
+        "name": "unit_growth",
+        "quotes": [
+          "The count of restaurants, net of closures, expanded."
+        ]
+      },
+      "side_b": {
+        "name": "net_new_units",
+        "quotes": [
+          "Locations added net of those we retired increased the footprint."
+        ]
+      }
+    },
+    {
+      "fable_sidecar": {
+        "note": "Fable: side_b per_x nulled (per_x-asymmetry class-purity fix; realistic candidate variation). | v1.1: canonical name form",
+        "status": "closed",
+        "verdict": "reworded"
+      },
+      "gold": "SAME",
+      "gold_rationale": "Spelled-out vs abbreviation of per-unit volume.",
+      "graders": {
+        "opus": {
+          "cited_a": "Typical annual takings at one location edged up.",
+          "cited_b": "Mean yearly sales per unit improved over the period.",
+          "reason": "OBJECT: Both name the same metric \u2014 average annual sales per single restaurant location. \"auv\" is the standard industry abbreviation for Average Unit Volume, which is precisely \"average restaurant sales volume.\" A: \"Typical annual takings at one location\" equals B: \"Mean yearly sales per unit\" (unit = one restaurant). SCOPE: Both are per single location in the restaurants industry (A per_x \"restaurant\"; B \"per unit\"). Neither restricts to company-owned vs franchised or segment vs consolidated, so they sit at the same population level with no conflicting qualifier. MECHANISM: Both describe the same causal driver \u2014 per-location annual sales rising (\"edged up\" / \"improved over the period\"), not a downstream or merely correlated effect. All three tests hold, so the default-DIFFERENT is overcome.",
+          "verdict": "SAME"
+        },
+        "sonnet_a": {
+          "cited_a": "Typical annual takings at one location edged up.",
+          "cited_b": "Mean yearly sales per unit improved over the period.",
+          "reason": "Same OBJECT: both quotes describe average annual revenue per single restaurant unit -- AUV (Average Unit Volume) is the standard industry term for exactly \"average restaurant sales volume,\" so the two names refer to one concept. Same SCOPE: neither quote narrows to a subset -- no ownership-class split (franchised vs company-owned), no segment qualifier, no gross/net distinction appears in either; both are generic per-unit references within the same \"restaurants\" industry, so there's no evidence of differing scope. Same MECHANISM: \"edged up\" and \"improved over the period\" both describe the metric itself rising, not a downstream or merely correlated effect. All three criteria hold -> SAME.",
+          "verdict": "SAME"
+        },
+        "sonnet_b": {
+          "cited_a": "Typical annual takings at one location edged up.",
+          "cited_b": "Mean yearly sales per unit improved over the period.",
+          "reason": "Object is plausibly shared (both describe average annual sales per restaurant unit, i.e., AUV), and mechanism direction matches (both describe an increase). But SCOPE is unclear on both sides: neither quote specifies ownership class or population (company-owned vs. franchised vs. system-wide, gross vs. net) -- Side A only says \"one location\" and Side B only says \"per unit,\" with no basis to confirm they cover the same business population. Per the rule, unclear scope defaults to DIFFERENT.",
+          "verdict": "DIFFERENT"
+        }
+      },
+      "hard": true,
+      "n_refused": 1,
+      "pair_id": "kp_0145",
+      "refused_by": [
+        "sonnet_b"
+      ],
+      "refused_by_all3": false,
+      "refused_by_opus": false,
+      "side_a": {
+        "name": "average_restaurant_sales_volume",
+        "quotes": [
+          "Typical annual takings at one location edged up."
+        ]
+      },
+      "side_b": {
+        "name": "auv",
+        "quotes": [
+          "Mean yearly sales per unit improved over the period."
+        ]
+      }
+    },
+    {
+      "fable_sidecar": {
+        "note": "Fable 2026-07-09: gold verified against the 3-check (object/scope/mechanism); names canon-legal; quotes carry the identity. | v1.1: canonical name form",
+        "status": "closed",
+        "verdict": "confirmed"
+      },
+      "gold": "SAME",
+      "gold_rationale": "Same cost-recovery fee, different name.",
+      "graders": {
+        "opus": {
+          "cited_a": "An add-on fee to recover pricier fuel was applied.",
+          "cited_b": "A levy offsetting higher energy cost was charged.",
+          "reason": "OBJECT: both describe an add-on charge that recovers higher fuel cost \u2014 A \"add-on fee to recover pricier fuel,\" B \"levy offsetting higher energy cost\" (in airlines, the energy cost being offset is jet fuel, and B's name is literally fuel_recovery_fee). SCOPE: both airlines, no slice_tokens, per_x null on each \u2014 same customer-facing fare surcharge population, no ownership/segment split. MECHANISM: both are the identical pass-through mechanism, charging a supplemental fee to offset/recover elevated fuel cost. A fuel surcharge and a fuel recovery fee are the same underlying driver; all three tests hold, so SAME.",
+          "verdict": "SAME"
+        },
+        "sonnet_a": {
+          "cited_a": "An add-on fee to recover pricier fuel was applied.",
+          "cited_b": "A levy offsetting higher energy cost was charged.",
+          "reason": "Object/mechanism are only loosely aligned: A names the input as \"fuel\" specifically, B says \"energy cost\" - a broader category that isn't confirmed to mean jet fuel rather than some other energy input, so OBJECT sameness isn't compelled, just plausible. Fatal gap is SCOPE: neither quote (nor slice_tokens/per_x, both empty/null) says what business population or ownership class the charge applies to - no mention of consolidated vs segment, gross vs net, or which routes/services are covered. With no verbatim text backing scope sameness, that criterion is unclear, and per the rule any unclear criterion forces DIFFERENT. Defaulting to DIFFERENT per the over-splitting-is-cheap principle.",
+          "verdict": "DIFFERENT"
+        },
+        "sonnet_b": {
+          "cited_a": "An add-on fee to recover pricier fuel was applied.",
+          "cited_b": "A levy offsetting higher energy cost was charged.",
+          "reason": "OBJECT: both are an extra fee/levy tied to fuel expense -- \"fee to recover pricier fuel\" vs \"levy offsetting higher energy cost\"; in the airline industry \"energy cost\" is the standard paraphrase for jet-fuel cost, so this is the same underlying charge, not a different metric. SCOPE: neither quote nor metadata (empty slice_tokens, null per_x, same \"airlines\" industry tag) indicates a different business population or ownership class (e.g., cargo vs passenger, one carrier vs another) -- both read as a general, unrestricted surcharge, so scope is consistent, not merely unclear. MECHANISM: both describe the identical causal chain -- fuel/energy costs rose, so a surcharge/levy was added to recover/offset that increase -- same direction, same causal driver, not a downstream or correlated effect.",
+          "verdict": "SAME"
+        }
+      },
+      "hard": true,
+      "n_refused": 1,
+      "pair_id": "kp_0146",
+      "refused_by": [
+        "sonnet_a"
+      ],
+      "refused_by_all3": false,
+      "refused_by_opus": false,
+      "side_a": {
+        "name": "fuel_surcharge",
+        "quotes": [
+          "An add-on fee to recover pricier fuel was applied."
+        ]
+      },
+      "side_b": {
+        "name": "fuel_recovery_fee",
+        "quotes": [
+          "A levy offsetting higher energy cost was charged."
+        ]
+      }
+    },
+    {
+      "fable_sidecar": {
+        "note": "Fable 2026-07-09: gold verified against the 3-check (object/scope/mechanism); names canon-legal; quotes carry the identity. | v1.1: canonical name form",
+        "status": "closed",
+        "verdict": "confirmed"
+      },
+      "gold": "SAME",
+      "gold_rationale": "Same time measure, named vs described.",
+      "graders": {
+        "opus": {
+          "cited_a": "Time from leaving the gate to reaching the next added up.",
+          "cited_b": "The full taxi-and-fly duration per trip was tallied.",
+          "reason": "All three tests pass. OBJECT: both describe the same metric \u2014 total gate-to-gate elapsed time of a flight. \"Block hours\" is the airline-industry term for block time (off-blocks to on-blocks), i.e. from leaving one gate to reaching the next; A says exactly that, and B's \"full taxi-and-fly duration\" (taxi-out + fly + taxi-in) is precisely that same gate-to-gate span. SCOPE: both airlines, both aggregate totals of that duration (\"added up\" / \"per trip was tallied\"), with no differing ownership class, segment, or population. MECHANISM: both measure the same actual aircraft operating time from departure gate to arrival gate \u2014 the same causal driver, not a correlated or downstream effect. Block hours and gate-to-gate time are the identical underlying driver.",
+          "verdict": "SAME"
+        },
+        "sonnet_a": {
+          "cited_a": "Time from leaving the gate to reaching the next added up.",
+          "cited_b": "The full taxi-and-fly duration per trip was tallied.",
+          "reason": "Object and mechanism are plausibly aligned (block hours is standard airline terminology for gate-to-gate/taxi-plus-flight duration, summed across trips in both quotes), but SCOPE is never established on either side. Neither quote (nor slice_tokens, which are empty on both, nor per_x, null on both) specifies the business population or ownership class covered -- e.g., mainline vs regional, all flights vs a specific fleet/route subset, scheduled vs charter. With no verbatim quote to back scope-sameness, criterion 2 is unclear, and per the rule an unclear criterion forces DIFFERENT.",
+          "verdict": "DIFFERENT"
+        },
+        "sonnet_b": {
+          "cited_a": "Time from leaving the gate to reaching the next added up.",
+          "cited_b": "The full taxi-and-fly duration per trip was tallied.",
+          "reason": "OBJECT: Side A's \"leaving the gate to reaching the next [gate]\" is the textbook definition of aviation block time; Side B's \"full taxi-and-fly duration\" (taxi-out + airborne + taxi-in) sums to the identical gate-to-gate span -- both describe the same underlying metric, just named differently (block_hours is the industry synonym for gate-to-gate time). SCOPE: both are per-trip, industry=airlines, with no segment/ownership qualifier (e.g., mainline vs regional, owned vs leased fleet) distinguishing them in either quote. MECHANISM: both attribute the outcome to the same causal driver -- aircraft ground-plus-air transit time per trip -- not a correlated or downstream effect. All three prongs hold on the verbatim text, so this is a naming variant of one driver, not two.",
+          "verdict": "SAME"
+        }
+      },
+      "hard": true,
+      "n_refused": 1,
+      "pair_id": "kp_0149",
+      "refused_by": [
+        "sonnet_a"
+      ],
+      "refused_by_all3": false,
+      "refused_by_opus": false,
+      "side_a": {
+        "name": "block_hours",
+        "quotes": [
+          "Time from leaving the gate to reaching the next added up."
+        ]
+      },
+      "side_b": {
+        "name": "gate_to_gate_time",
+        "quotes": [
+          "The full taxi-and-fly duration per trip was tallied."
+        ]
+      }
+    },
+    {
+      "fable_sidecar": {
+        "note": "Fable 2026-07-09: gold verified against the 3-check (object/scope/mechanism); names canon-legal; quotes carry the identity. | v1.1: canonical name form; second corroborating quote added both sides",
+        "status": "closed",
+        "verdict": "confirmed"
+      },
+      "gold": "SAME",
+      "gold_rationale": "Same free-cash-flow driver, described vs named.",
+      "graders": {
+        "opus": {
+          "cited_a": "We define it as operating cash flow less capital expenditures.",
+          "cited_b": "Operating cash net of investment in property rose.",
+          "reason": "OBJECT: both define the same metric \u2014 operating cash flow minus capital spending (A: \"operating cash flow less capital expenditures\"; B: \"Operating cash net of investment in property,\" where investment in property = capex). SCOPE: both are consolidated company-level cash flow in restaurants, with no company-owned vs franchised or segment vs consolidated distinction on either side. MECHANISM: both name the same causal driver, free cash flow generation after reinvestment; B's \"funds dividends and buybacks\" is only a downstream use, not a different driver. All three criteria hold, so these are the same underlying driver.",
+          "verdict": "SAME"
+        },
+        "sonnet_a": {
+          "cited_a": "We define it as operating cash flow less capital expenditures.",
+          "cited_b": "Operating cash net of investment in property rose.",
+          "reason": "Object: A explicitly defines its metric as \"operating cash flow less capital expenditures\" - that is the standard formula for free cash flow. B's \"operating cash net of investment in property\" is the same math in different words (\"investment in property\" = capital spending). Same object. Scope: both entries are tagged industry \"restaurants\" with no slice tokens or per-unit qualifier, and neither quote narrows to a segment, franchise-only, or gross/net subset - both read as whole-company, consolidated cash flow. Same scope. Mechanism: both describe cash left over after funding capital projects (building/buying property); B's second quote (\"Cash after reinvestment funds dividends and buybacks\") reinforces that this leftover cash is the source for shareholder returns, consistent with the FCF concept in A, not a different or downstream cause. Same mechanism. All three tests hold, so this is one underlying driver described two ways.",
+          "verdict": "SAME"
+        },
+        "sonnet_b": {
+          "cited_a": "We define it as operating cash flow less capital expenditures.",
+          "cited_b": "Cash after reinvestment funds dividends and buybacks.",
+          "reason": "Object is roughly aligned (both describe operating cash flow minus a capex-like outflow), but SCOPE is never established as matching on either side -- no quote from A or B states whether this is consolidated vs. segment, company-owned vs. franchised, or gross vs. net, so scope is unclear rather than confirmed same. MECHANISM also diverges: A gives an explicit accounting definition (\"operating cash flow less capital expenditures\"), while B's second quote frames the metric by its downstream use (\"funds dividends and buybacks\") rather than a matching causal definition, and 'investment in property' is not confirmed equivalent in scope to 'capital expenditures.' Since scope is unclear and mechanism is not clearly identical, the rule (any unclear criterion -> DIFFERENT) applies.",
+          "verdict": "DIFFERENT"
+        }
+      },
+      "hard": true,
+      "n_refused": 1,
+      "pair_id": "kp_0156",
+      "refused_by": [
+        "sonnet_b"
+      ],
+      "refused_by_all3": false,
+      "refused_by_opus": false,
+      "side_a": {
+        "name": "free_cash_flow",
+        "quotes": [
+          "Cash from operations left after building assets improved.",
+          "We define it as operating cash flow less capital expenditures."
+        ]
+      },
+      "side_b": {
+        "name": "cash_generation_after_capex",
+        "quotes": [
+          "Operating cash net of investment in property rose.",
+          "Cash after reinvestment funds dividends and buybacks."
+        ]
+      }
+    },
+    {
+      "fable_sidecar": {
+        "note": "Fable 2026-07-09: gold verified against the 3-check (object/scope/mechanism); names canon-legal; quotes carry the identity. | v1.1: canonical name form; second corroborating quote added both sides",
+        "status": "closed",
+        "verdict": "confirmed"
+      },
+      "gold": "SAME",
+      "gold_rationale": "Same attach-rate driver, different jargon.",
+      "graders": {
+        "opus": {
+          "cited_a": "How often diners added a drink to the order rose.",
+          "cited_b": "The rate of beverages sold alongside meals climbed.",
+          "reason": "All three tests pass. OBJECT: both name the beverage attach rate \u2014 the rate at which a drink accompanies a food order. A: \"How often diners added a drink to the order rose.\" B: \"The rate of beverages sold alongside meals climbed.\" (\"drink\" = \"beverage\"; \"attachment\" = \"incidence\"; \"the order\" = \"meals\"). SCOPE: identical \u2014 both restaurants, both the general diner/meal population, with no ownership-class or segment split (no company-vs-franchise, gross-vs-net distinction on either side). MECHANISM: identical causal driver \u2014 both rises are attributed to combo/bundle pricing. A: \"Attachment improved with combo pricing changes.\" B: \"Incidence rose as bundles gained traction.\" These are two names for one metric with one driver, so SAME.",
+          "verdict": "SAME"
+        },
+        "sonnet_a": {
+          "cited_a": "How often diners added a drink to the order rose.",
+          "cited_b": "The rate of beverages sold alongside meals climbed.",
+          "reason": "OBJECT: A's \"added a drink to the order\" and B's \"beverages sold alongside meals\" describe the identical metric \u2014 the frequency of a beverage accompanying a food order (attach rate = incidence rate, just different vocabulary). SCOPE: neither side has slice_tokens or per_x; both are generic \"restaurants\" industry with no ownership-class or segment qualifier, so scope is consistent (unscoped, overall order-level). MECHANISM: A's \"Attachment improved with combo pricing changes\" and B's \"Incidence rose as bundles gained traction\" cite the same causal driver \u2014 combo/bundle pricing deals increasing beverage attach. All three tests (object, scope, mechanism) are satisfied with direct textual support, so this clears the bar for SAME despite the default-to-DIFFERENT prior.",
+          "verdict": "SAME"
+        },
+        "sonnet_b": {
+          "cited_a": "How often diners added a drink to the order rose.",
+          "cited_b": "The rate of beverages sold alongside meals climbed.",
+          "reason": "OBJECT is plausibly shared (both describe a drink-with-meal attach/incidence rate), but SCOPE is unverifiable on both sides: neither quote states the business population or ownership class (e.g., company-owned vs franchised, dine-in vs all channels, segment vs consolidated) \u2014 \"added a drink to the order\" and \"beverages sold alongside meals\" never specify which restaurant population is measured. MECHANISM also diverges in wording: Side A attributes the rise to \"combo pricing changes\" (a pricing action) while Side B attributes it to \"bundles gained traction\" (adoption momentum), which are not clearly the same causal lever. Since scope is unclear and mechanism identity is not compelled by the text, the rule requires DIFFERENT.",
+          "verdict": "DIFFERENT"
+        }
+      },
+      "hard": true,
+      "n_refused": 1,
+      "pair_id": "kp_0159",
+      "refused_by": [
+        "sonnet_b"
+      ],
+      "refused_by_all3": false,
+      "refused_by_opus": false,
+      "side_a": {
+        "name": "beverage_attachment",
+        "quotes": [
+          "How often diners added a drink to the order rose.",
+          "Attachment improved with combo pricing changes."
+        ]
+      },
+      "side_b": {
+        "name": "drink_incidence",
+        "quotes": [
+          "The rate of beverages sold alongside meals climbed.",
+          "Incidence rose as bundles gained traction."
+        ]
+      }
+    }
+  ],
+  "contested_count": 28,
+  "execution_note_for_O10": "EXP-0 graders ran under DEFAULT Claude Code workflow thinking settings; NO explicit thinking-effort / reasoning-budget was set for Sonnet or Opus (agent() called with model + schema only, no effort option). Flag for O10 reproducibility review -- a different reasoning budget could shift verdicts.",
+  "false_refusal_over_50": {
+    "bar": "<=5 (10% of 50)",
+    "opus": 8,
+    "sonnet_a": 21,
+    "sonnet_b": 24
+  },
+  "gate": "FAIL (no tier qualifies)",
+  "gold_same_total": 50,
+  "hard_among_contested": 25,
+  "invariants": {
+    "invalid_per_arm": {
+      "opus": 0,
+      "sonnet_a": 0,
+      "sonnet_b": 0
+    },
+    "wrong_same_note": "0/110 for EVERY arm -- zero over-merge (the dangerous error never happened)",
+    "wrong_same_per_arm_over_110": {
+      "opus": 0,
+      "sonnet_a": 0,
+      "sonnet_b": 0
+    }
+  },
+  "key": "K-pairs.v1.1.jsonl (sha 400f4dd9)",
+  "pass_analysis": {
+    "note": "A 'flip' = a gold-SAME pair whose label moves to DIFFERENT, making the refusal correct (removes it from false_refusal and adds no wrong_same for the arm that refused it). Opus flips come from its own 8-refused set; the Sonnet tier requires BOTH instances <=5.",
+    "opus_min_SAME_to_DIFFERENT_flips_to_pass": 3,
+    "opus_refused_pids": [
+      "kp_0132",
+      "kp_0141",
+      "kp_0143",
+      "kp_0151",
+      "kp_0154",
+      "kp_0155",
+      "kp_0157",
+      "kp_0160"
+    ],
+    "sonnet_tier_min_flips_to_pass": 19
+  },
+  "refused_by_all3": 8,
+  "run_id": "2026-07-09T20-31-24Z_exp0"
+}

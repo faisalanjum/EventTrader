@@ -1,0 +1,302 @@
+{
+  "denominators": {
+    "n_DIFFERENT": 110,
+    "n_SAME": 50,
+    "n_records": 160
+  },
+  "exhibit_refs": [],
+  "exp_id": "EXP-0",
+  "gate": {
+    "expr": "EXISTS tier T: forall g in T: wrong_same==0 && false_refusal<=0.10 && invalid_rate<=0.02",
+    "pass": false
+  },
+  "key_sha_verified": true,
+  "metrics": {
+    "arms_present": {
+      "g_opus": true,
+      "g_sonnet_a": true,
+      "g_sonnet_b": true
+    },
+    "grader_tier": "none",
+    "opus_tier_pass": false,
+    "sonnet_tier_pass": false
+  },
+  "per_arm": {
+    "g_opus": {
+      "by_family": {
+        "adjusted_vs_gaap": {
+          "false_refusal": 0,
+          "invalid": 0,
+          "n": 9,
+          "wrong_same": 0
+        },
+        "benchmark_siblings": {
+          "false_refusal": 0,
+          "invalid": 0,
+          "n": 9,
+          "wrong_same": 0
+        },
+        "bookings_billings": {
+          "false_refusal": 0,
+          "invalid": 0,
+          "n": 9,
+          "wrong_same": 0
+        },
+        "cause_consequence": {
+          "false_refusal": 0,
+          "invalid": 0,
+          "n": 9,
+          "wrong_same": 0
+        },
+        "channel_homonym": {
+          "false_refusal": 0,
+          "invalid": 0,
+          "n": 10,
+          "wrong_same": 0
+        },
+        "cross_flavor": {
+          "false_refusal": 0,
+          "invalid": 0,
+          "n": 10,
+          "wrong_same": 0
+        },
+        "deferred_recognized": {
+          "false_refusal": 0,
+          "invalid": 0,
+          "n": 9,
+          "wrong_same": 1
+        },
+        "genus_species": {
+          "false_refusal": 0,
+          "invalid": 0,
+          "n": 9,
+          "wrong_same": 0
+        },
+        "gross_net": {
+          "false_refusal": 0,
+          "invalid": 0,
+          "n": 9,
+          "wrong_same": 0
+        },
+        "ownership_axis": {
+          "false_refusal": 0,
+          "invalid": 0,
+          "n": 9,
+          "wrong_same": 0
+        },
+        "per_x": {
+          "false_refusal": 0,
+          "invalid": 0,
+          "n": 9,
+          "wrong_same": 0
+        },
+        "segment_consolidated": {
+          "false_refusal": 0,
+          "invalid": 0,
+          "n": 9,
+          "wrong_same": 0
+        },
+        "synonym": {
+          "false_refusal": 0,
+          "invalid": 0,
+          "n": 50,
+          "wrong_same": 0
+        }
+      },
+      "false_refusal": 0,
+      "false_refusal_denom": 50,
+      "false_refusal_rate": 0.0,
+      "invalid": 0,
+      "invalid_rate": 0.0,
+      "n": 160,
+      "pass": false,
+      "wrong_same": 1,
+      "wrong_same_denom": 110
+    },
+    "g_sonnet_a": {
+      "by_family": {
+        "adjusted_vs_gaap": {
+          "false_refusal": 0,
+          "invalid": 0,
+          "n": 9,
+          "wrong_same": 0
+        },
+        "benchmark_siblings": {
+          "false_refusal": 0,
+          "invalid": 0,
+          "n": 9,
+          "wrong_same": 0
+        },
+        "bookings_billings": {
+          "false_refusal": 0,
+          "invalid": 0,
+          "n": 9,
+          "wrong_same": 0
+        },
+        "cause_consequence": {
+          "false_refusal": 0,
+          "invalid": 0,
+          "n": 9,
+          "wrong_same": 0
+        },
+        "channel_homonym": {
+          "false_refusal": 0,
+          "invalid": 0,
+          "n": 10,
+          "wrong_same": 0
+        },
+        "cross_flavor": {
+          "false_refusal": 0,
+          "invalid": 0,
+          "n": 10,
+          "wrong_same": 0
+        },
+        "deferred_recognized": {
+          "false_refusal": 0,
+          "invalid": 0,
+          "n": 9,
+          "wrong_same": 0
+        },
+        "genus_species": {
+          "false_refusal": 0,
+          "invalid": 0,
+          "n": 9,
+          "wrong_same": 0
+        },
+        "gross_net": {
+          "false_refusal": 0,
+          "invalid": 1,
+          "n": 9,
+          "wrong_same": 0
+        },
+        "ownership_axis": {
+          "false_refusal": 0,
+          "invalid": 0,
+          "n": 9,
+          "wrong_same": 0
+        },
+        "per_x": {
+          "false_refusal": 0,
+          "invalid": 0,
+          "n": 9,
+          "wrong_same": 0
+        },
+        "segment_consolidated": {
+          "false_refusal": 0,
+          "invalid": 0,
+          "n": 9,
+          "wrong_same": 0
+        },
+        "synonym": {
+          "false_refusal": 0,
+          "invalid": 0,
+          "n": 50,
+          "wrong_same": 0
+        }
+      },
+      "false_refusal": 0,
+      "false_refusal_denom": 50,
+      "false_refusal_rate": 0.0,
+      "invalid": 1,
+      "invalid_rate": 0.00625,
+      "n": 160,
+      "pass": true,
+      "wrong_same": 0,
+      "wrong_same_denom": 110
+    },
+    "g_sonnet_b": {
+      "by_family": {
+        "adjusted_vs_gaap": {
+          "false_refusal": 0,
+          "invalid": 0,
+          "n": 9,
+          "wrong_same": 0
+        },
+        "benchmark_siblings": {
+          "false_refusal": 0,
+          "invalid": 0,
+          "n": 9,
+          "wrong_same": 0
+        },
+        "bookings_billings": {
+          "false_refusal": 0,
+          "invalid": 0,
+          "n": 9,
+          "wrong_same": 0
+        },
+        "cause_consequence": {
+          "false_refusal": 0,
+          "invalid": 0,
+          "n": 9,
+          "wrong_same": 0
+        },
+        "channel_homonym": {
+          "false_refusal": 0,
+          "invalid": 0,
+          "n": 10,
+          "wrong_same": 0
+        },
+        "cross_flavor": {
+          "false_refusal": 0,
+          "invalid": 0,
+          "n": 10,
+          "wrong_same": 0
+        },
+        "deferred_recognized": {
+          "false_refusal": 0,
+          "invalid": 0,
+          "n": 9,
+          "wrong_same": 1
+        },
+        "genus_species": {
+          "false_refusal": 0,
+          "invalid": 0,
+          "n": 9,
+          "wrong_same": 0
+        },
+        "gross_net": {
+          "false_refusal": 0,
+          "invalid": 0,
+          "n": 9,
+          "wrong_same": 0
+        },
+        "ownership_axis": {
+          "false_refusal": 0,
+          "invalid": 0,
+          "n": 9,
+          "wrong_same": 0
+        },
+        "per_x": {
+          "false_refusal": 0,
+          "invalid": 0,
+          "n": 9,
+          "wrong_same": 0
+        },
+        "segment_consolidated": {
+          "false_refusal": 0,
+          "invalid": 0,
+          "n": 9,
+          "wrong_same": 0
+        },
+        "synonym": {
+          "false_refusal": 1,
+          "invalid": 0,
+          "n": 50,
+          "wrong_same": 0
+        }
+      },
+      "false_refusal": 1,
+      "false_refusal_denom": 50,
+      "false_refusal_rate": 0.02,
+      "invalid": 0,
+      "invalid_rate": 0.0,
+      "n": 160,
+      "pass": false,
+      "wrong_same": 1,
+      "wrong_same_denom": 110
+    }
+  },
+  "run_id": "2026-07-09T23-03-31Z_exp0v12",
+  "shared_miss_by_family": {},
+  "upper_bounds": {}
+}

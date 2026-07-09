@@ -434,7 +434,13 @@
     "filer_5253": "DRI",
     "multi_registrant_report": "SYNTHETIC (D6 extension: census found 0 multi-registrant graph-wide; harness-constructed 2-registrant input for EXP-1 P4f coverage only; NOT production evidence/design rule)",
     "null_periodofreport_report": "SYNTHETIC (D6 extension: census found 0 COMPLETED-XBRL null-pOR graph-wide; harness blanks a real report periodOfReport - fixture-only, never a graph write; NOT production evidence/design rule)",
-    "precision_dup_pair_report": "BACKFILLED_BY_DRYRUN"
+    "precision_dup_pair_report": {
+      "note": "no intra-filing precision-dup pair with differing decimals occurred in the 60-filing real corpus; graph-wide was not searched. Opus found 166 collision groups in the 60 filings, all same-value/same-decimals. Fable accepted synthetic-only proof for EXP-1/O12 evidence; P4g keep-highest path exercised via synthetic fixture (fixtures_exercised.json p4g_precision_dup_synthetic).",
+      "collision_groups_in_60_filing_corpus": 166,
+      "graph_wide_searched": false,
+      "real_precision_dup_pairs": 0,
+      "synthetic_exercised": true
+    }
   },
   "note": "EXP-1 dry-run draft: 12 companies + ~60 filings + fixtures. 36 events NOT included (materializer does not consume them; filled at full WP-FA).",
   "o2_status": "PENDING_FABLE_SIGNOFF",

@@ -1,0 +1,16 @@
+{
+  "adopted": {
+    "grader_tier": "none"
+  },
+  "blindness_discounts": null,
+  "exp_id": "EXP-0",
+  "fable_signoff": null,
+  "failure_attribution": [
+    {
+      "cause": "tiering",
+      "evidence": "no tier meets wrong_same==0 & false_refusal<=0.10 & invalid_rate<=0.02"
+    }
+  ],
+  "outcome": "FAIL",
+  "shared_miss_flags": {}
+}

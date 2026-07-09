@@ -1,0 +1,27 @@
+{
+  "by_scope": {
+    "annual": {
+      "availability_fraction": 0.632189,
+      "comparator_found": 1473,
+      "eligible": 2330
+    },
+    "quarter": {
+      "availability_fraction": 0.399288,
+      "comparator_found": 1122,
+      "eligible": 2810
+    },
+    "ytd": {
+      "availability_fraction": 0.462457,
+      "comparator_found": 813,
+      "eligible": 1758
+    }
+  },
+  "headline_quarter_ytd": {
+    "availability_fraction": 0.423599,
+    "comparator_found": 1935,
+    "eligible": 4568
+  },
+  "note": "availability over the materialized set (comparatives the filing itself tags are counted); instants (scope=null) & exact_range excluded per P15 (instants stay 'reported'). Effective end dates (end_date-1) parsed from gp_id.",
+  "probe": "comparator_census (P15 data check : effective_driver_state derived-comparator availability)",
+  "spec": "fraction of quarter/ytd rows with a prior row in same (registrant,driver,slices,scope) whose window end is within +/-7d of (end - 1 year); annual analog"
+}

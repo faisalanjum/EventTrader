@@ -1,0 +1,32 @@
+{
+ "kp_0132": {"cat": "KEY", "note": "occupancy_costs is the umbrella bucket (rent + property tax + insurance + utilities + CAM); rent_and_related is narrower. Genuine genus/species — all 3 graders split, reasoning holds. Candidate re-label to DIFFERENT or drop."},
+ "kp_0141": {"cat": "KEY", "note": "B's quote narrows digital_mix to 'came through apps' (app-only), while A is total online share. As written the two are different sub-channels. Quote-authoring narrowed B; re-label or fix-and-defer to v2."},
+ "kp_0143": {"cat": "KEY", "note": "Quotes split the population: A 'front-line staff by the hour' (incl. front-of-house) vs B 'people running our kitchens' (back-of-house). Different labor populations as written."},
+ "kp_0151": {"cat": "KEY", "note": "dine_in (table service in dining rooms) is a subset of on_premise (all on-site: bar, counter, patio). Genuine genus/species; all 3 split."},
+ "kp_0154": {"cat": "KEY", "note": "advertising (paid media) is a subset of marketing (broader campaigns). B's quote 'campaigns to reach shoppers' is broader than A's 'through media'. Defensible subset split."},
+ "kp_0155": {"cat": "KEY", "note": "A = warehouse-to-store freight; B 'getting merchandise onto shelves' can include in-store stocking/handling. Scope ambiguity as written — contestable."},
+ "kp_0157": {"cat": "KEY", "note": "Names are near-synonyms (arrival punctuality), but B's quote adds 'at hubs' scope + a different mechanism; A adds 'despite weather'. Quotes introduced a scope/mechanism gap — all 3 split. Re-adjudicate wording."},
+ "kp_0160": {"cat": "KEY", "note": "hard_parts_sales is a product-type category; failure_related_sales is a demand-trigger (purchase-reason) concept. Different classification axes / objects. Defensible DIFFERENT."},
+
+ "kp_0124": {"cat": "PROMPT", "note": "adjusted_ebitda vs its spelled-out expansion 'EBITDA...as adjusted' — an acronym=expansion identity (Opus: SAME). BOTH Sonnet refused on 'scope never stated' — the SCOPE clause over-applied even to an obvious identity. Key label is correct."},
+ "kp_0126": {"cat": "PROMPT", "note": "average_check = average_ticket (restaurant synonyms; Opus SAME). Both Sonnet over-read a secondary mechanism (attach-rate offset) mentioned only in the quotes. Driver identical; label correct."},
+ "kp_0128": {"cat": "PROMPT", "note": "guest_counts = traffic within restaurants (Opus SAME). Both Sonnet refused on 'business population/ownership not stated'. Systematic SCOPE-clause over-strictness. Label correct."},
+ "kp_0129": {"cat": "PROMPT", "note": "restaurant_labor_costs = payroll_and_benefits (all-in labor; Opus SAME). Both Sonnet over-read MECHANISM (A cites 'market wage moves', B doesn't). Same driver; label correct."},
+ "kp_0130": {"cat": "PROMPT", "note": "food_and_paper = food_and_packaging; packaging = disposables in restaurant accounting (Opus SAME). Both Sonnet quibbled packaging-vs-disposables. Label correct."},
+ "kp_0133": {"cat": "PROMPT", "note": "shrink = inventory_shortage (retail synonyms; Opus SAME). Both Sonnet over-read MECHANISM (theft vs physical-count discovery). Same loss driver; label correct."},
+ "kp_0137": {"cat": "PROMPT", "note": "operating_margin = return_on_sales (Opus SAME). Both Sonnet said A's 'profit' is unspecified — ignoring the operating_margin NAME field. SCOPE/object-from-quote-only over-reading; label correct."},
+ "kp_0140": {"cat": "PROMPT", "note": "comps = comparable_store_sales_growth (abbreviation; Opus SAME). Both Sonnet refused on 'ownership class not stated'. SCOPE-clause over-strictness; label correct."},
+ "kp_0144": {"cat": "PROMPT", "note": "occupancy_expense = property_and_lease_costs; B's quote 'rent, utilities and related' IS occupancy (Opus SAME). Both Sonnet refused on 'scope not established'. Contrast kp_0132, where B was the narrower 'rent' — Opus discriminated correctly. Label correct."},
+
+ "kp_0111": {"cat": "MODEL", "note": "net_sales = total_net_sales, near-identical wording (non-hard). Only Sonnet B split (on 'scope not established'); Sonnet A + Opus SAME. Instance noise."},
+ "kp_0118": {"cat": "MODEL", "note": "Cross-company comparable_store_sales convergence — Fable's DELIBERATE doctrine probe (PIPE-20). Only Sonnet B refused (on 'mechanism can't confirm'); within the 1-refusal budget Fable set for this pair. Expected signal, not key noise."},
+ "kp_0123": {"cat": "MODEL", "note": "cost_of_goods_sold = cost_of_sales, explicitly same composition (non-hard). Only Sonnet B split; Sonnet A + Opus SAME. Instance noise."},
+ "kp_0134": {"cat": "MODEL", "note": "aircraft_fuel = jet_fuel_expense (Opus + Sonnet B SAME). Only Sonnet A split (mechanism not confirmed). Instance noise."},
+ "kp_0135": {"cat": "MODEL", "note": "membership_fee_income = loyalty_program_revenue (Opus + Sonnet A SAME). Only Sonnet B split (scope). Instance noise."},
+ "kp_0136": {"cat": "MODEL", "note": "unit_growth = net_new_units (Opus + Sonnet B SAME). Only Sonnet A split (scope). Instance noise."},
+ "kp_0145": {"cat": "MODEL", "note": "average_restaurant_sales_volume = auv, the standard abbreviation (Opus + Sonnet A SAME). Only Sonnet B split (scope). Instance noise."},
+ "kp_0146": {"cat": "MODEL", "note": "fuel_surcharge = fuel_recovery_fee (Opus + Sonnet B SAME). Only Sonnet A split ('energy' broader than 'fuel'). Instance noise."},
+ "kp_0149": {"cat": "MODEL", "note": "block_hours = gate_to_gate_time, definitional synonyms (Opus + Sonnet B SAME). Only Sonnet A split (scope). Instance noise."},
+ "kp_0156": {"cat": "MODEL", "note": "free_cash_flow = cash_generation_after_capex; A's quote states the FCF formula (Opus + Sonnet A SAME). Only Sonnet B split (scope). Instance noise."},
+ "kp_0159": {"cat": "MODEL", "note": "beverage_attachment = drink_incidence, attach-rate = incidence-rate (Opus + Sonnet A SAME). Only Sonnet B split (scope). Instance noise."}
+}

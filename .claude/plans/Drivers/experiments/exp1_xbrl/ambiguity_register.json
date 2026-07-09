@@ -11,6 +11,12 @@
       "ref": "ra_0003",
       "status": "closed_fable_2026-07-09",
       "summary": "Fable binding (d): stored Period dates are exclusive-end; all reads decode to effective dates first (duration end_date - 1d; instant stored - 1d; starts unshifted per period_start_check.json). Raw==pOR rows skip+count as period_end_convention_suspect; instant_off_pOR_by_one retired."
+    },
+    {
+      "area": "P4g raw-duplicate key and precision fixture",
+      "ref": "ra_0005",
+      "status": "closed_fable_2026-07-09",
+      "summary": "Fable accepted synthetic-only precision-duplicate proof and proposed the O12 pin: raw-duplicate key includes decimals, so same-context same-value different-decimals pairs fall through to the precision rule."
     }
   ],
   "entries_open": [],
@@ -35,6 +41,13 @@
       "ref": "ra_0004",
       "resolution": "skip+count slice_pairing_dualcik_unresolved; NO aliasing / qname-only / cross-CIK; AAL kept",
       "status": "closed_resolved_fable"
+    },
+    {
+      "area": "P4g raw-duplicate key and precision fixture",
+      "goes_to": "O12 bundle (raw-duplicate key pin + rollout counter)",
+      "ref": "ra_0005",
+      "resolution": "accept synthetic-only precision fixture; raw-duplicate key includes decimals; add p4g_precision_kept rollout counter",
+      "status": "closed_resolved_fable_pin"
     }
   ],
   "exp_id": "EXP-1",

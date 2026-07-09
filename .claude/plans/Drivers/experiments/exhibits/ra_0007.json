@@ -1,0 +1,17 @@
+{
+  "adjudicators_split": false,
+  "case_ref": "EXP-0 run 2026-07-09T20-31-24Z: Sonnet refused 21/50 and 24/50 gold-SAME pairs incl. trivial synonyms (kp_0111 net_sales vs total_net_sales, kp_0123 cost_of_goods_sold vs cost_of_sales) with the recorded reason 'scope is never stated -> unclear -> DIFFERENT'; Opus refused 0 of these (opus_only refusals = 0)",
+  "description": "The EXP-0 grader contract (protocol section 6) instructs 'Any one false/unclear -> DIFFERENT' but never defines 'unclear'. On snippet records where BOTH sides are symmetrically silent about population/ownership (which is ALL 160 records by construction), a literal reader must refuse every pair - making the <=10% false-refusal bar unsatisfiable in principle by a rule-following grader. Sonnet followed the letter; Opus applied the intended mismatch semantics. The same literalism also treated explanatory color (a price move, a demand source, an offsetting mix effect) as a different MECHANISM. This is a genuine two-ways-to-read-it defect in the instrument contract, not a model defect: the audit shows the two readings partition the arms cleanly (both-sonnets-not-opus = 9 pairs, all with correct golds per Opus's articulated verdicts).",
+  "doc": "keys/K-pairs/protocol.md section 6 (grader contract; sources kernel 10.3 + PIPE-13)",
+  "evidence_files": [
+    "exp0_graders/runs/2026-07-09T20-31-24Z_exp0/contested_pairs_package.md",
+    "exp0_graders/runs/2026-07-09T20-31-24Z_exp0/contested_evidence.json"
+  ],
+  "id": "ra_0007",
+  "proposed_amendment": "Adopted for K-pairs (protocol section 6, O10 pin 2026-07-09): 'Unclear means CONFLICT, not silence' - a check is unclear when the sides conflict or one side carries a qualifier the other lacks; symmetric silence is not evidence against sameness; explanatory color on WHY the same quantity moved is not a different mechanism. Default-DIFFERENT untouched. CARRY-FORWARD REQUIRED: review the EXP-4 judge contract (kernel 6.1 five-check wording) for the same silence-vs-conflict semantics BEFORE K-pairs.v2 locks - the judge contract has the same 'unclear -> REFUSE' shape and real catalog cards are also silent on many dimensions.",
+  "raised_in": "EXP-0 O10 review (Fable, 2026-07-09)",
+  "resolution": "Fable ruling 2026-07-09: contract clarified in protocol v1.2 (semantics pin, no bar change, no gold flips); instrument defects in 8 all-three-refused pairs fixed (4 quote-sharpenings on true-synonym pairs, 4 arguable-both-ways pairs replaced with fresh unseen hard-SAMEs); reasoning-effort execution parameter must be explicitly pinned in rerun manifests (first run left it unset). The evidence package's recommendation to re-label >=3 golds so Opus passes was REJECTED as retune-to-pass: tiers re-earn the bar on the corrected instrument in a fresh run.",
+  "rule": "Protocol section 6: 'Any one false/unclear -> DIFFERENT' with 'unclear' undefined",
+  "status": "closed_resolved",
+  "why_two_ways": "(A) literal: unstated scope = unclear = refuse (Sonnet's reading - makes the bar unsatisfiable on snippet records). (B) mismatch-semantics: refuse only on conflict or asymmetric qualifiers (Opus's reading - the design intent; the kernel's scope check exists to DETECT mismatches, not to demand affirmative proof of every dimension on every record)."
+}

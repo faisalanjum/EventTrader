@@ -1,6 +1,33 @@
 {
-  "global_cap": 4000,
   "abort_at": 6000,
-  "entries": [],
-  "totals": {"all": 0, "strong_tier": 0}
+  "entries": [
+    {
+      "by_model": {
+        "sonnet (workflow verify agents)": 8
+      },
+      "calls": 8,
+      "note": "read-only sidecar source-claim verification fan-out; Fable adjudication itself = main session, 0 workflow calls",
+      "pkg": "WP-KEYS",
+      "run_id": "kpairs_v1_adjudication_2026-07-09T19:55:57Z"
+    },
+    {
+      "by_model": {
+        "claude-opus-4-8": 163,
+        "claude-sonnet-5": 320
+      },
+      "gate": "FAIL",
+      "invalid": 0,
+      "pkg": "EXP-0",
+      "preflight_probe_calls": 3,
+      "record_clerk_calls": 3,
+      "run_id": "2026-07-09T20-31-24Z_exp0",
+      "strong_grader_calls": 480,
+      "subagent_tokens_approx": 15580676
+    }
+  ],
+  "global_cap": 4000,
+  "totals": {
+    "all": 494,
+    "strong_tier": 488
+  }
 }

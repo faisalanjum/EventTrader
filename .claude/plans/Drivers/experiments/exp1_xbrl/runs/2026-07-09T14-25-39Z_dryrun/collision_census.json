@@ -1,0 +1,23 @@
+{
+  "a_p4g_invariant": {
+    "distinct_du_id": 9603,
+    "duplicate_du_id_count": 0,
+    "duplicate_examples": [],
+    "pass": true,
+    "spec": "post-dedup (registrant,period,qname,fact_scope) groups MUST be 0 -- enforced via du_id=du:{report}:{driver}:{fact_scope} uniqueness (report_id in key => per-filing)",
+    "total_rows": 9603
+  },
+  "b_value_confusability_base_rate": {
+    "base_rate_excl_zero": 0.29375,
+    "base_rate_unit_scoped": 0.296875,
+    "base_rate_value_only": 0.3,
+    "confusable_pairs_excl_zero_value": 94,
+    "confusable_pairs_unit_scoped": 95,
+    "confusable_pairs_value_only": 96,
+    "confusable_value_instances": 346,
+    "note": "headline = literal value-only per spec; excl_zero removes the many shared 0.0 facts; unit_scoped keys (level_unit,value) so m_usd 21.0 is not conflated with count 21.0",
+    "spec": "(registrant,period) pairs where >=2 different qnames carry identical canonical values (informational; feeds detector calibration)",
+    "total_registrant_period_pairs": 320
+  },
+  "probe": "collision_census (D1 / WorkOrder 10-D1 : falsifier-iii dry-run)"
+}

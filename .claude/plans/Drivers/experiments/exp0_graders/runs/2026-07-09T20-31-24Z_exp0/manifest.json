@@ -1,0 +1,158 @@
+{
+  "arms": {
+    "g_opus": {
+      "model": "opus",
+      "n": 160,
+      "page_h32": 498866316
+    },
+    "g_sonnet_a": {
+      "model": "sonnet",
+      "n": 160,
+      "page_h32": 4041904286
+    },
+    "g_sonnet_b": {
+      "model": "sonnet",
+      "n": 160,
+      "page_h32": 1479902246
+    }
+  },
+  "caps": {
+    "max_calls": 900
+  },
+  "counts": {
+    "made_calls": 483,
+    "planned_record_clerk_calls": 3,
+    "planned_strong_grader_calls": 480
+  },
+  "exp_id": "EXP-0",
+  "gate": {
+    "expr": "EXISTS tier T: forall g in T: wrong_same==0 && false_refusal<=0.10 && invalid_rate<=0.02"
+  },
+  "keys": {
+    "K-pairs": "400f4dd9bc43ed47ddf71e367b2e29baa4b2da9292aabe0e9fd328f7396630e9",
+    "lock": "K-pairs.v1.1.lock.json",
+    "protocol": "37f51629b129c7e75c3b57657bdb7e8c74859322611b7bf502ee50fc717edd6f"
+  },
+  "pre_call_confirmations": {
+    "1_lock_hash_verified": {
+      "key_matches_required": true,
+      "key_sha256": "400f4dd9bc43ed47ddf71e367b2e29baa4b2da9292aabe0e9fd328f7396630e9",
+      "lock_file": "K-pairs.v1.1.lock.json",
+      "lock_key_sha256": "400f4dd9bc43ed47ddf71e367b2e29baa4b2da9292aabe0e9fd328f7396630e9",
+      "lock_protocol_sha256": "37f51629b129c7e75c3b57657bdb7e8c74859322611b7bf502ee50fc717edd6f",
+      "locked_by": "fable",
+      "ok": true,
+      "protocol_sha256": "37f51629b129c7e75c3b57657bdb7e8c74859322611b7bf502ee50fc717edd6f",
+      "required_sha256": "400f4dd9bc43ed47ddf71e367b2e29baa4b2da9292aabe0e9fd328f7396630e9"
+    },
+    "2_blind_fields_only": {
+      "allowed_pair_keys": [
+        "pair_id",
+        "side_a",
+        "side_b"
+      ],
+      "allowed_side_keys": [
+        "industry",
+        "name",
+        "per_x",
+        "quotes",
+        "slice_tokens"
+      ],
+      "forbidden_keys_found": [],
+      "key_n_pairs": 160,
+      "n_pairs_per_arm": {
+        "g_opus": 160,
+        "g_sonnet_a": 160,
+        "g_sonnet_b": 160
+      },
+      "non_blind_findings": [],
+      "ok": true,
+      "pair_ids_match_key": true
+    },
+    "3_prompt_matches_protocol": {
+      "checklist": {
+        "cite_verbatim_each_side": true,
+        "default_DIFFERENT": true,
+        "no_backtick_or_dollarbrace": true,
+        "over_merge_permanent": true,
+        "placeholders_present": true,
+        "three_check_object_scope_mechanism": true
+      },
+      "framing_sha256": "098ffceec634308138b62aec896b66b2abbc625e3cb311d0926ae0d22ddea109",
+      "framing_text": "You are a driver-identity grader. A deterministic step proposed that two business drivers (causes of a company's results) MIGHT be the same underlying driver. Decide from the raw evidence ONLY.\n\nDefault to DIFFERENT: treat the two as different causes UNLESS the evidence compels sameness. Over-merging is permanent damage; over-splitting is cheap and reversible.\n\nApprove SAME only if ALL THREE hold, each backed by a verbatim quote from that side:\n1. same OBJECT -- the same underlying thing/metric is described.\n2. same SCOPE -- the same business population AND ownership class (e.g. company-owned vs franchised, segment vs consolidated, gross vs net).\n3. same MECHANISM -- the same causal driver, not a merely correlated or downstream effect.\nIf any one is false or unclear -> DIFFERENT.\n\nSIDE A:\n<<SIDE_A>>\nSIDE B:\n<<SIDE_B>>\n\nCite ONE verbatim quote from EACH side (copy characters exactly from that side's quotes). Then return the schema with pair_id exactly \"<<PAIR_ID>>\".",
+      "ok": true,
+      "protocol_sha256": "37f51629b129c7e75c3b57657bdb7e8c74859322611b7bf502ee50fc717edd6f"
+    },
+    "4_model_routes": {
+      "g_opus": {
+        "resolved": "claude-opus-4-8",
+        "slot": "opus"
+      },
+      "g_sonnet_a": {
+        "resolved": "claude-sonnet-5",
+        "slot": "sonnet"
+      },
+      "g_sonnet_b": {
+        "resolved": "claude-sonnet-5",
+        "slot": "sonnet"
+      },
+      "record_clerk": {
+        "resolved": "claude-opus-4-8",
+        "slot": "opus"
+      }
+    },
+    "5_anthropic_api_key": {
+      "agent_env_probe": "ANTHROPIC_API_KEY empty in subagent env (preflight task w8p52kz0b: APIKEY=)",
+      "note": "judges run via the Workflow subscription path; NO server clerks during judging; CLAUDE.md billing guard in force",
+      "policy": "unset / subscription (OAuth) only"
+    },
+    "6_outputs_plan": {
+      "budget": "../../BUDGET.json",
+      "decision": "decision.json",
+      "saved": true,
+      "scores": "scores.json",
+      "status_board": "WORKORDER_STATUS.md",
+      "verdicts_raw": [
+        "verdicts.g_sonnet_a.json",
+        "verdicts.g_sonnet_b.json",
+        "verdicts.g_opus.json"
+      ]
+    }
+  },
+  "result": {
+    "diagnostic": {
+      "easy_same_refused": 3,
+      "gold_same": 50,
+      "refused_by_all3": 8,
+      "refused_by_any": 28,
+      "verdicts_hash_verified": true
+    },
+    "gate_pass": false,
+    "grader_tier": "none",
+    "per_arm": {
+      "g_opus": {
+        "false_refusal": 8,
+        "false_refusal_rate": 0.16,
+        "invalid": 0,
+        "pass": false,
+        "wrong_same": 0
+      },
+      "g_sonnet_a": {
+        "false_refusal": 21,
+        "false_refusal_rate": 0.42,
+        "invalid": 0,
+        "pass": false,
+        "wrong_same": 0
+      },
+      "g_sonnet_b": {
+        "false_refusal": 24,
+        "false_refusal_rate": 0.48,
+        "invalid": 0,
+        "pass": false,
+        "wrong_same": 0
+      }
+    }
+  },
+  "run_id": "2026-07-09T20-31-24Z_exp0",
+  "status": "scored_gate_FAIL"
+}

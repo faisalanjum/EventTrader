@@ -1,0 +1,25 @@
+{
+  "counting_basis_note": "Run 2633 (slice_pairing_dualcik_unresolved) counts UNRESOLVED-NODE skips on de-duplicated, entity-scoped, unit-whitelisted SURVIVING facts (per-fact, at the slice step); probe 2587 (dualcik_scope fail) counts ARITY mismatches (explicit-dim-count != member-count) over ALL AAL dimensional fixture-facts with NO unit/dedup/entity filter. Delta +46 = 457 run-only facts (dimension resolves explicit but the coined MEMBER node is unresolved -> run flags dual-CIK, probe's arity test passes) minus 411 probe-only facts the run drops before the slice step (0 raw-duplicate, 411 non-whitelist-unit, 0 all-nodes-resolve arity-only->failclosed, 0 entity/no-context).",
+  "crosstab": {
+    "both": 2176,
+    "po_unit": 411,
+    "probe_fail": 2587,
+    "run_dualcik": 2633,
+    "run_only": 457,
+    "run_only_member_unresolved": 457
+  },
+  "delta": 46,
+  "identity_check": {
+    "all_ok": true,
+    "delta == run_only - probe_only": true,
+    "probe_fail == both + probe_only": true,
+    "run_dualcik == both + run_only": true
+  },
+  "probe": "dual-CIK count reconcile (run slice_pairing_dualcik_unresolved vs dualcik_scope_proof fail)",
+  "probe_fail_authoritative_scope_proof": 2587,
+  "probe_fail_match": true,
+  "probe_fail_recomputed": 2587,
+  "run_dualcik_authoritative_skips_json": 2633,
+  "run_dualcik_match": true,
+  "run_dualcik_recomputed": 2633
+}

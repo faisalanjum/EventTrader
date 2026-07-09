@@ -1,6 +1,6 @@
 {
   "purpose": "Fable rulings and clarifications to carry into the O12 XBRL pin-amendment / Track-B read-view bundle. This file records decisions; it does not change experiment bars.",
-  "updated_utc": "2026-07-09T16:13:02Z",
+  "updated_utc": "2026-07-09T17:45:00Z",
   "entries": [
     {
       "id": "o12_link_birth_source_independence",
@@ -119,6 +119,50 @@
         "exp1_xbrl/runs/2026-07-09T14-25-39Z_dryrun/period_convention_proof.json (durations 21,017:1; instants 12,828:0; 59/60 filings pure exclusive)",
         "exp1_xbrl/runs/2026-07-09T14-25-39Z_dryrun/period_start_check.json (STARTS_UNSHIFTED_OK_TO_APPLY)",
         "exhibits/ra_0003.json"
+      ]
+    },
+    {
+      "id": "o12_dualcik_ingestion_repair",
+      "source": "Fable ruling, 2026-07-09 (ra_0004)",
+      "status": "recorded_for_o12",
+      "principle": "Dual-CIK unresolved slice references fail closed in EXP-1 and production until ingestion repair or certified recovery is ratified.",
+      "rules": [
+        "No aliasing, qname-only matching, or cross-CIK/global matching ships in EXP-1.",
+        "After normal normalization, if a dimension/member node still does not resolve, skip the whole affected fact and count slice_pairing_dualcik_unresolved.",
+        "AAL remains in the corpus; the skipped cohort is evidence for ingestion repair, not a reason to drop the company.",
+        "Future recovery belongs to ingestion/O12: repair Dimension/Member nodes for dual-CIK filings or add a validated filer-to-entity CIK map with a certified uniqueness proof."
+      ],
+      "evidence": [
+        "exhibits/ra_0004.json",
+        "exp1_xbrl/o12_bundle.json#dualcik_ingestion_repair",
+        "exp1_xbrl/runs/2026-07-09T14-25-39Z_dryrun/dualcik_scope_proof.json",
+        "exp1_xbrl/runs/2026-07-09T14-25-39Z_dryrun/dualcik_count_reconcile.json"
+      ]
+    },
+    {
+      "id": "o12_p4g_precision_fixture_and_raw_dup_key",
+      "source": "Fable ruling, 2026-07-09 (ra_0005)",
+      "status": "recorded_for_o12",
+      "principle": "Accept synthetic-only precision-duplicate proof for EXP-1, and pin P4g raw-duplicate identity precisely enough that precision metadata cannot be lost.",
+      "rules": [
+        "P4g raw-duplicate key = identical concept, context, value, decimals.",
+        "A same-context, same-value, different-decimals pair is not a raw duplicate; it falls through to the precision rule, which keeps the highest precision.",
+        "The signed EXP-1 PASS stands with zero behavior delta on observed data because no real differing-decimals pair appeared in the 60-filing corpus.",
+        "Synthetic-only precision fixture is accepted under the D6 pattern, with a scope caveat: multi-registrant and null-pOR absence were verified graph-wide, but precision-pair absence was checked only inside the 60-filing corpus; graph-wide was not searched.",
+        "Production rollout must publish p4g_precision_kept so the real-world frequency is monitored continuously.",
+        "Production build gates should include a synthetic same-context/different-decimals raw-duplicate boundary case; the current synthetic fixture proves the cross-item precision path, not that boundary.",
+        "P4h derive-first belongs in production: the harness main path only counts null-pOR, while fixtures_exercised.json proves derive and underivable-skip synthetically; the FACT-18 resolver port must implement derive-first."
+      ],
+      "interpretive_notes": [
+        "Comparator-census figures are fixture-scoped denominators over about five filings per company: quarter/ytd 42%, annual 63%. They are not production availability estimates because production backfills full history.",
+        "Ratification wording for X-XL0 should say: seven per-row fields independently re-derived at 1.0, plus full-output two-run byte determinism covering all remaining fields such as period_scope, fiscal fields, and primary."
+      ],
+      "evidence": [
+        "exhibits/ra_0005.json",
+        "exp1_xbrl/runs/2026-07-09T14-25-39Z_dryrun/fixtures_exercised.json",
+        "exp1_xbrl/runs/2026-07-09T14-25-39Z_dryrun/collision_census.json",
+        "exp1_xbrl/runs/2026-07-09T14-25-39Z_dryrun/comparator_census.json",
+        "exp1_xbrl/runs/2026-07-09T14-25-39Z_dryrun/xxl0_fields.json"
       ]
     }
   ]

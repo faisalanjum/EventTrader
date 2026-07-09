@@ -1,0 +1,13 @@
+{
+  "adjudicators_split": false,
+  "case_ref": "kp_0114 as drafted: 'same-store sales' vs 'same-store sales growth', drafter gold SAME",
+  "description": "During K-pairs.v1 adjudication, one drafted SAME pair placed a metric against its own growth rate. The naming/unit rules under-determine pair identity for this shape: comps-style metrics are conventionally REPORTED as growth percentages (arguing SAME), but a level reading exists ('comparable sales of $4.2B') and UNIT-01/OD-11 treat growth bases as their own series families (arguing DIFFERENT). A grader refusing SAME here is defensible, so the gold is contestable either way - unacceptable in a calibration key where every gold must be bulletproof (a wrong DIFFERENT gold is fatal to the 0/110 bar; a contestable SAME gold unfairly burns the 10% false-refusal budget).",
+  "doc": "02 NAME rules / 04 UNIT-01 / 66 OD-11 (percent_sequential precedent)",
+  "id": "ra_0006",
+  "proposed_amendment": "Before K-pairs.v2 mined-pair adjudication (mined pairs WILL contain metric-vs-own-growth shapes from the real catalog), pin the pair-identity rule for a metric vs its own growth/change rate: recommended default = DIFFERENT unless the corpus convention makes the growth reading the ONLY natural reading of both sides (comps-style). Owner/Fable to ratify at v2 lock.",
+  "raised_in": "K-pairs.v1 Fable adjudication (2026-07-09)",
+  "resolution": "v1 resolved by AVOIDANCE, not by pinning: kp_0114 reworded to a decisively-SAME abbreviation pair (same-store sales vs comps). No v1 gold rests on the unpinned boundary. The boundary question itself stays open for v2 (proposed_amendment).",
+  "rule": "Pair-identity for metric vs its own growth rate is unpinned",
+  "status": "closed_resolved",
+  "why_two_ways": "(A) comps-convention reading: the growth suffix adds nothing, SAME. (B) series-family reading: level and growth are different objects with different units, DIFFERENT. Both defensible from current locked text."
+}

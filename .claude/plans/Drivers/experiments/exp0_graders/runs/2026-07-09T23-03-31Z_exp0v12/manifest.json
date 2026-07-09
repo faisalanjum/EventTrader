@@ -1,0 +1,142 @@
+{
+  "arms": {
+    "g_opus": {
+      "effort": "high",
+      "model": "opus",
+      "n": 160,
+      "page_h32": 2921540777
+    },
+    "g_sonnet_a": {
+      "effort": "high",
+      "model": "sonnet",
+      "n": 160,
+      "page_h32": 1815106985
+    },
+    "g_sonnet_b": {
+      "effort": "high",
+      "model": "sonnet",
+      "n": 160,
+      "page_h32": 3326899939
+    }
+  },
+  "caps": {
+    "max_calls": 900
+  },
+  "counts": {
+    "made_calls": 0,
+    "planned_record_clerk_calls": 3,
+    "planned_strong_grader_calls": 480
+  },
+  "exp_id": "EXP-0",
+  "gate": {
+    "expr": "EXISTS tier T: forall g in T: wrong_same==0 && false_refusal<=0.10 && invalid_rate<=0.02"
+  },
+  "grader_effort": "high",
+  "keys": {
+    "K-pairs": "446587f4e029288f81ff3866e67ddd4f560e0c5cd9785d029551e5ec62767c5c",
+    "lock": "K-pairs.v1.1.lock.json",
+    "protocol": "c6f19518e68fc14416f663b73a4094ef06a2fb5d5b3e0bf979da8850128cb354"
+  },
+  "pre_call_confirmations": {
+    "1_lock_hash_verified": {
+      "key_matches_required": true,
+      "key_sha256": "446587f4e029288f81ff3866e67ddd4f560e0c5cd9785d029551e5ec62767c5c",
+      "lock_file": "K-pairs.v1.1.lock.json",
+      "lock_key_sha256": "446587f4e029288f81ff3866e67ddd4f560e0c5cd9785d029551e5ec62767c5c",
+      "lock_protocol_sha256": "c6f19518e68fc14416f663b73a4094ef06a2fb5d5b3e0bf979da8850128cb354",
+      "locked_by": "fable",
+      "ok": true,
+      "protocol_sha256": "c6f19518e68fc14416f663b73a4094ef06a2fb5d5b3e0bf979da8850128cb354",
+      "required_sha256": "446587f4e029288f81ff3866e67ddd4f560e0c5cd9785d029551e5ec62767c5c"
+    },
+    "2_blind_fields_only": {
+      "allowed_pair_keys": [
+        "pair_id",
+        "side_a",
+        "side_b"
+      ],
+      "allowed_side_keys": [
+        "industry",
+        "name",
+        "per_x",
+        "quotes",
+        "slice_tokens"
+      ],
+      "forbidden_keys_found": [],
+      "key_n_pairs": 160,
+      "n_pairs_per_arm": {
+        "g_opus": 160,
+        "g_sonnet_a": 160,
+        "g_sonnet_b": 160
+      },
+      "non_blind_findings": [],
+      "ok": true,
+      "pair_ids_match_key": true
+    },
+    "3_prompt_matches_protocol": {
+      "checklist": {
+        "cite_verbatim_each_side": true,
+        "default_DIFFERENT": true,
+        "no_backtick_or_dollarbrace": true,
+        "over_merge_permanent": true,
+        "placeholders_present": true,
+        "three_check_object_scope_mechanism": true
+      },
+      "framing_sha256": "5a543bd118c2e8af59bfd6cc9130b81b42c1112ca6bb9ff425af7f8aefdf5d74",
+      "framing_text": "You are a driver-identity grader. A deterministic step proposed that two business drivers (causes of a company's results) MIGHT be the same underlying driver. Decide from the raw evidence ONLY.\n\nDefault to DIFFERENT: treat the two as different causes UNLESS the evidence compels sameness. Over-merging is permanent damage; over-splitting is cheap and reversible.\n\nApprove SAME only if ALL THREE hold, each backed by a verbatim quote from that side:\n1. same OBJECT -- the same underlying thing/metric.\n2. same SCOPE -- same business population AND ownership class (company-owned vs franchised, segment vs consolidated, gross vs net).\n3. same MECHANISM -- the same causal driver, not a correlated or downstream effect.\n\nAny one false or unclear -> DIFFERENT. UNCLEAR MEANS CONFLICT, NOT SILENCE: a check is unclear only when the two sides CONFLICT, or when one side carries a qualifier the other lacks (a segment, an ownership class, a sub-channel, a different denominator). When BOTH sides are symmetrically SILENT on a dimension (for example, neither states company-owned vs franchised, or consolidated vs segment), that silence is NOT evidence against sameness -- do not refuse on it. Likewise, a sub-reason or color explaining WHY the same quantity moved (a price move, a demand source, an offsetting mix effect) is NOT a different MECHANISM; mechanism differs only when the sides measure different quantities or occupy different causal positions. Default-DIFFERENT still governs whenever the sides genuinely conflict or the OBJECT itself is not the same thing.\n\nSIDE A:\n<<SIDE_A>>\nSIDE B:\n<<SIDE_B>>\n\nCite ONE verbatim quote from EACH side (copy characters exactly from that side's quotes). Then return the schema with pair_id exactly \"<<PAIR_ID>>\".",
+      "ok": true,
+      "protocol_sha256": "c6f19518e68fc14416f663b73a4094ef06a2fb5d5b3e0bf979da8850128cb354"
+    },
+    "4_model_routes": {
+      "g_opus": {
+        "effort": "high",
+        "resolved": "claude-opus-4-8",
+        "slot": "opus"
+      },
+      "g_sonnet_a": {
+        "effort": "high",
+        "resolved": "claude-sonnet-5",
+        "slot": "sonnet"
+      },
+      "g_sonnet_b": {
+        "effort": "high",
+        "resolved": "claude-sonnet-5",
+        "slot": "sonnet"
+      },
+      "record_clerk": {
+        "effort": "default (mechanical file write, not a grader arm)",
+        "resolved": "claude-opus-4-8",
+        "slot": "opus"
+      }
+    },
+    "5_anthropic_api_key": {
+      "agent_env_probe": "ANTHROPIC_API_KEY empty in subagent env (preflight task w8p52kz0b: APIKEY=)",
+      "note": "judges run via the Workflow subscription path; NO server clerks during judging; CLAUDE.md billing guard in force",
+      "policy": "unset / subscription (OAuth) only"
+    },
+    "6_outputs_plan": {
+      "budget": "../../BUDGET.json",
+      "decision": "decision.json",
+      "saved": false,
+      "scores": "scores.json",
+      "status_board": "WORKORDER_STATUS.md",
+      "verdicts_raw": [
+        "verdicts.g_sonnet_a.json",
+        "verdicts.g_sonnet_b.json",
+        "verdicts.g_opus.json"
+      ]
+    },
+    "7_effort_pinned": {
+      "grader_effort": "high",
+      "note": "Fable O10: identical reasoning effort across arms; qualified tier identity = (model_id, effort); downstream graded calls must reuse the same (model_id, effort); NO effort laddering. Effort honored-verified before the run (Sonnet 2.9x, Opus 2.8x high/low token ratio on the grading task) -- applied+recordable, not silently ignored.",
+      "ok": true,
+      "per_arm": {
+        "g_opus": "high",
+        "g_sonnet_a": "high",
+        "g_sonnet_b": "high"
+      }
+    }
+  },
+  "run_id": "2026-07-09T23-03-31Z_exp0v12",
+  "status": "pre_call_verified"
+}

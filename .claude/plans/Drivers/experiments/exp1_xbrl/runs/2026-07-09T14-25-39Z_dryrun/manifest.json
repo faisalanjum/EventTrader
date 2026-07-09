@@ -155,5 +155,47 @@
   "started": "2026-07-09T14:25:39Z",
   "status": "recorded_building_materializer",
   "verifier_note": "X-XL0 verifier independently re-implements the same 3-row conversion table (NOT imported from the materializer)",
-  "workorder_sha256": "554529dde8e972b29a3e941b730b5eadf2e666d6769a27268886ffc6aa6cd164"
+  "workorder_sha256": "554529dde8e972b29a3e941b730b5eadf2e666d6769a27268886ffc6aa6cd164",
+  "xxl0_rederived_fields": {
+    "count": 7,
+    "detail": [
+      {
+        "field": "level_unit",
+        "rederivation": "P4c/P4a unit table re-implemented independently (iso4217:USD non-divide->m_usd, shares non-divide->count, iso4217:USDshares divide->usd) from source Unit.name/is_divide"
+      },
+      {
+        "field": "value_canonical",
+        "rederivation": "raw Fact.value comma-stripped->float then P4c scale (USD/1e6 round6; shares & usd/share passthrough), independent 3-row table"
+      },
+      {
+        "field": "decimals",
+        "rederivation": "source Fact.decimals compared verbatim (precision metadata, never a multiplier)"
+      },
+      {
+        "field": "qname",
+        "rederivation": "source Concept.qname compared verbatim"
+      },
+      {
+        "field": "time_type",
+        "rederivation": "source Period.period_type (instant|duration) compared verbatim"
+      },
+      {
+        "field": "gp_id",
+        "rederivation": "period-window id rebuilt from source Period dates with Fable exclusive-end decode (duration: start .. end_date-1; instant: (stored-1)..(stored-1)) -- independent of the materializer"
+      },
+      {
+        "field": "slices",
+        "rederivation": "O13 explicit-dim positional pairing re-implemented over Context.dimension_u_ids || member_u_ids with CIK-normalized u_ids, CONFIRMED_AXES kind, elimination guard, dual-CIK unresolved sentinel"
+      }
+    ],
+    "fields": [
+      "level_unit",
+      "value_canonical",
+      "decimals",
+      "qname",
+      "time_type",
+      "gp_id",
+      "slices"
+    ]
+  }
 }

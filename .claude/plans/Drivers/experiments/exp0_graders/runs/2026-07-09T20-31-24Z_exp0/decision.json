@@ -1,0 +1,47 @@
+{
+  "adopted": {
+    "grader_tier": "none"
+  },
+  "blindness_discounts": null,
+  "exp_id": "EXP-0",
+  "fable_signoff": {
+    "signed_by": "fable",
+    "signed_at": "2026-07-09T21:20:00Z",
+    "verdict": "FAIL UPHELD - safe fail; no tier ratified; O10 resolution recorded below",
+    "headline": "wrong_same 0/110 and invalid 0/480 on every arm - the catastrophic axis is perfectly clean. The gate failed only on false_refusal (21/24/8 of 50), and the O10 review attributes that failure to the instrument, in two audited classes.",
+    "findings": [
+      "Class 1 - eight all-three-refused pairs (the complete Opus refusal set; audit: opus_only=0): 4 true-synonym pairs whose QUOTES broke co-extension (kp_0141 app-subset, kp_0143 population split, kp_0155 shelf-stocking extension, kp_0157 divergent mechanisms introduced by Fable's own pass-2 realism edit) -> quotes sharpened, golds unchanged; 4 pairs arguable-both-ways from visible fields (kp_0132 umbrella-vs-component, kp_0151 subset channel, kp_0154 subset spend, kp_0160 classification-axis mismatch) -> REPLACED with fresh decisive hard-SAMEs never seen by any arm.",
+      "Class 2 - contract defect (ra_0007): protocol section 6 never defined 'unclear'; the literal reading (symmetric silence on scope -> refuse) is unsatisfiable in principle and rejected even net_sales vs total_net_sales. Fixed with the 'unclear means conflict, not silence' pin + 'explanatory color is not a different mechanism'. Default-DIFFERENT untouched. Both Sonnet instances followed the letter of the defective text - the 9 both-sonnet refusals all carry correct golds (Opus's verdicts articulate the sameness case).",
+      "Execution gap: no reasoning-effort/thinking setting was recorded for any grader call (audit-confirmed absent from manifest). Reruns MUST pin it explicitly and record it in the manifest - it is a model-resolution-class parameter (workorder 1.3 discipline).",
+      "kp_0118 doctrine probe performed exactly as budgeted (one Sonnet-instance refusal; Sonnet A and Opus judged it SAME with correct PIPE-20 reasoning)."
+    ],
+    "rejected": "The package's 'exact re-labels to pass a tier' path (flip >=3 golds so Opus clears the bar) is REJECTED as retune-to-pass. Zero golds were flipped. Tiers re-earn the bar on the corrected instrument in a fresh run.",
+    "rerun_preconditions": [
+      "Key = K-pairs.v1.2.jsonl under its Fable lock (sha in K-pairs.v1.2.lock.json); v1.1 and v1 stay byte-frozen",
+      "Prompt framing rebuilt from protocol v1.2 (new framing sha recorded; the O10 semantics pin is part of the contract)",
+      "Explicit reasoning effort set for every grader call and recorded in manifest",
+      "OWNER BUDGET AUTHORIZATION REQUIRED: EXP-0 has consumed 494 of its 500-call cap; the rerun needs ~+500 (package total ~1000, beyond the 1.5x abort convention) - do not start without the owner's recorded sign-off"
+    ],
+    "preregistered_outcomes": [
+      "Both Sonnet instances pass (wrong_same 0, false_refusal <=5/50, invalid <=2%) -> Sonnet = grader tier; O10 ratified",
+      "Sonnet fails, Opus passes -> Opus tier + the workorder v1.8 guardrail FIRES: fresh Fable-authored ~24-pair probe (unseen by the Opus implementer) must also pass before O10 ratification",
+      "No tier passes on the corrected instrument -> STOP stands (1.8.1); escalate to owner with two options: Fable-tier grading for downstream EXPs, or an owner-level review of the 10% refusal bar vs the protocol's hard-SAME mandate (bar changes are the owner's alone)"
+    ]
+  },
+  "failure_attribution": [
+    {
+      "cause": "rules",
+      "evidence": "protocol section 6 'unclear' undefined -> literal scope reading unsatisfiable (ra_0007); 9 both-sonnet refusals on correct golds all cite unstated scope/mechanism color"
+    },
+    {
+      "cause": "context",
+      "evidence": "8 all-three refusals trace to quote-authorship defects or arguable-both-ways golds in K-pairs.v1.1 (fixed/replaced in v1.2)"
+    },
+    {
+      "cause": "tiering",
+      "evidence": "residual after instrument fixes unknown until rerun; effort parameter was unset in this run (audit-confirmed), so tier capability was measured handicapped"
+    }
+  ],
+  "outcome": "FAIL",
+  "shared_miss_flags": {}
+}
