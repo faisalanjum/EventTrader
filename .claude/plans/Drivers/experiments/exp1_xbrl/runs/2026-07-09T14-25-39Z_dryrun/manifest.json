@@ -62,6 +62,16 @@
       "not_a_design_ruling": true,
       "type": "implementation_bug_fix",
       "verified": "normalized u_id matches Dimension+Member count=1; dry3 re-run: slice_pairing_failclosed drops and slices populate."
+    },
+    {
+      "bug": "entity-scope used filer = report-id accession prefix, which is the FILING AGENT cik for agent-filed reports (AZO/CAKE/ULTA: 1104659/1558370/1410578). ctx.cik = the COMPANY cik (AZO 866787 etc.) -> all their facts entity_scoped_out -> AZO/CAKE/ULTA emitted 0.",
+      "file": "harness/xbrl_dryrun_materializer.py",
+      "fix": "entity-scope uses the registrant COMPANY cik (Company.cik via ticker), normalized. Verified: AZO ctx.cik=866787==Company.cik; AAL ctx.cik=6201 uniform.",
+      "function": "entity-scope (P4f)",
+      "id": "bug_entity_scope_agent_cik",
+      "not_a_design_ruling": true,
+      "type": "implementation_bug_fix",
+      "verified": "full re-run: AZO/CAKE/ULTA now emit; entity_scoped_out drops to genuine co-registrant facts."
     }
   ],
   "inputs": {
@@ -106,7 +116,7 @@
       "disposition": "PROMOTE_CANDIDATE",
       "file": "harness/xbrl_dryrun_materializer.py",
       "function": "per-report pull + entity-scope + P4g collision",
-      "production_rewrite_needed": "production runs inside driver_writer; same logic; entity-scope via IN_CONTEXT->FOR_COMPANY (harness compares ctx.cik == filer cik derived from report id)",
+      "production_rewrite_needed": "production runs inside driver_writer; same logic; entity-scope compares context/company CIK to the registrant Company.cik, never the accession/report-id prefix CIK (agent-filed reports may use a filing-agent CIK)",
       "proof_file": "skips.json + collision_census.json",
       "rule": "P4f entity-scope (IN_CONTEXT->cik) + P4g raw dedup/collision on raw values+decimals BEFORE conversion"
     },

@@ -1,0 +1,10 @@
+{
+  "checks": 67221,
+  "examples": [],
+  "field_match_rate": 1.0,
+  "field_mismatches": {},
+  "mismatches": 0,
+  "pass": true,
+  "probe": "X-XL0 independent verifier",
+  "rows": 9603
+}

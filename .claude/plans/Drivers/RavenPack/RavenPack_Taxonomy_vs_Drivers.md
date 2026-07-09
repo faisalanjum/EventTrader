@@ -4,6 +4,8 @@
 
 **Provenance:** multi-agent web hunt 2026-06-16 (5 source channels + targeted gap-fill). The 6-level hierarchy, the 13 entity types, the fact-level enum, and the 10-column taxonomy-file schema were **verified verbatim** against a local extract of the *RavenPack Analytics User Guide* PDF. The exhaustive ~7,400-leaf list itself is **gated** (not on the open web) — we captured the full *frame* (~85–90%) but only ~1–5% of the actual leaf names.
 
+> ⚠️ **Stale recommendation note (2026-07-08):** This comparison predates the July Driver locks (ISS-16, OD-9/13/14, MF locks) and the final XBRL integration pass. Its RavenPack recommendations have since been re-judged: **do not reopen R1** (`fact_level` replacing/complementing `fact_type=guidance`). Guidance remains a separate fact_type linked by `BASE_METRIC` and read-time family joins; RavenPack is retained only as a non-authoritative coverage checklist plus optional later read-time predictor features such as scheduled-vs-surprise.
+
 > ⚠️ **Coverage caveat:** structure + scale = HIGH confidence (verbatim). The closed top-level TOPIC list and the full leaf CATEGORY list live only in a login-gated CSV / API (see §1.7). Treat the leaf examples here as illustrative, not exhaustive.
 >
 > 📂 **Companion files (this folder):** `RavenPack_Taxonomy.md` (full taxonomy dump) · `RavenPack_categories_365.csv` (365 real leaf categories now pulled in — a concrete sample of the gated ~7,400).

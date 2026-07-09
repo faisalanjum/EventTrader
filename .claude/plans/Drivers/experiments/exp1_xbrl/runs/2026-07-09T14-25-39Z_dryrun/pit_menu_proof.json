@@ -1,0 +1,66 @@
+{
+  "events": [
+    {
+      "a_menu_concepts_all_le_event": true,
+      "a_violations": [],
+      "b_post_event_absent_from_menu": true,
+      "event_time": "2024-07-19T16:20:34-04:00",
+      "leaks": [],
+      "menu_size": 450,
+      "pass": true,
+      "post_event_concepts": 31,
+      "report_id": "0000940944-24-000035",
+      "ticker": "DRI"
+    },
+    {
+      "a_menu_concepts_all_le_event": true,
+      "a_violations": [],
+      "b_post_event_absent_from_menu": true,
+      "event_time": "2024-10-28T16:54:30-04:00",
+      "leaks": [],
+      "menu_size": 329,
+      "pass": true,
+      "post_event_concepts": 24,
+      "report_id": "0001558370-24-013758",
+      "ticker": "AZO"
+    },
+    {
+      "a_menu_concepts_all_le_event": true,
+      "a_violations": [],
+      "b_post_event_absent_from_menu": true,
+      "event_time": "2025-02-05T16:24:21-05:00",
+      "leaks": [],
+      "menu_size": 385,
+      "pass": true,
+      "post_event_concepts": 28,
+      "report_id": "0001058090-25-000014",
+      "ticker": "CMG"
+    },
+    {
+      "a_menu_concepts_all_le_event": true,
+      "a_violations": [],
+      "b_post_event_absent_from_menu": true,
+      "event_time": "2025-02-07T16:00:58-05:00",
+      "leaks": [],
+      "menu_size": 547,
+      "pass": true,
+      "post_event_concepts": 71,
+      "report_id": "0000092380-25-000024",
+      "ticker": "LUV"
+    },
+    {
+      "a_menu_concepts_all_le_event": true,
+      "a_violations": [],
+      "b_post_event_absent_from_menu": true,
+      "event_time": "2025-02-11T17:02:24-05:00",
+      "leaks": [],
+      "menu_size": 437,
+      "pass": true,
+      "post_event_concepts": 27,
+      "report_id": "0000027904-25-000004",
+      "ticker": "DAL"
+    }
+  ],
+  "pass": true,
+  "probe": "PIT-menu proof (5 FA events, read-only)"
+}

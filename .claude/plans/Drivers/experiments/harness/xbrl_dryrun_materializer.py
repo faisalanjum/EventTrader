@@ -60,7 +60,12 @@ IMPLEMENTATION_FIXES = [
   "file": "harness/xbrl_dryrun_materializer.py", "function": "norm_uid + dim/mem u_id lookup",
   "bug": "Context.dimension_u_ids/member_u_ids carry a zero-padded 10-digit cik (0000023217:...); Dimension.u_id/Member.u_id carry the unpadded cik (23217:...). Lookup missed -> every explicit dim dropped -> slice_pairing_failclosed.",
   "fix": "norm_uid() strips leading zeros on the cik segment before the u_id lookup.",
-  "verified": "normalized u_id matches Dimension+Member count=1; dry3 re-run: slice_pairing_failclosed drops and slices populate."}]
+  "verified": "normalized u_id matches Dimension+Member count=1; dry3 re-run: slice_pairing_failclosed drops and slices populate."},
+ {"id": "bug_entity_scope_agent_cik", "type": "implementation_bug_fix", "not_a_design_ruling": True,
+  "file": "harness/xbrl_dryrun_materializer.py", "function": "entity-scope (P4f)",
+  "bug": "entity-scope used filer = report-id accession prefix, which is the FILING AGENT cik for agent-filed reports (AZO/CAKE/ULTA: 1104659/1558370/1410578). ctx.cik = the COMPANY cik (AZO 866787 etc.) -> all their facts entity_scoped_out -> AZO/CAKE/ULTA emitted 0.",
+  "fix": "entity-scope uses the registrant COMPANY cik (Company.cik via ticker), normalized. Verified: AZO ctx.cik=866787==Company.cik; AAL ctx.cik=6201 uniform.",
+  "verified": "full re-run: AZO/CAKE/ULTA now emit; entity_scoped_out drops to genuine co-registrant facts."}]
 
 FABLE_RULINGS = [
  {"id": "period_end_exclusive_decode", "ruled_by": "Fable 2026-07-09",
@@ -169,12 +174,13 @@ def main():
                           'period_end_convention_suspect', 'report_primary_window_missing', 'fixture_fact_seen', 'emitted', 'proc_error']}
     drv = GraphDatabase.driver(uri, auth=(user or 'neo4j', pw)); out = []; known_cache = {}
     with drv.session() as s:
+        cik_map = {y['t']: norm_cik(y['c']) for y in s.run("MATCH (c:Company) WHERE c.ticker IN $ts RETURN c.ticker AS t, c.cik AS c", ts=sorted(set(f[0] for f in filings)))}
         for tk, rid, form, por in filings:
             fixq = {r['qname']: r['driver'] for r in fr.get(tk, [])}
             if tk not in known_cache: known_cache[tk] = build_known(s, tk)
             known, fye = known_cache[tk]
             if not por: ctr['null_por_report_skip'] += 1
-            filer = norm_cik(rid.split('-')[0])
+            filer = cik_map.get(tk) or norm_cik(rid.split('-')[0])   # Bug fix: registrant = COMPANY cik, not the accession prefix (filing agent for agent-filed reports)
             rows = list(s.run(
                 "MATCH (r:Report {id:$rid})-[:HAS_XBRL]->(:XBRLNode)<-[:REPORTS]-(f:Fact)-[:HAS_CONCEPT]->(con:Concept) WHERE f.is_numeric='1' AND f.is_nil='0' "
                 "OPTIONAL MATCH (f)-[:IN_CONTEXT]->(ctx:Context) OPTIONAL MATCH (f)-[:HAS_PERIOD]->(p:Period) OPTIONAL MATCH (f)-[:HAS_UNIT]->(u:Unit) "

@@ -1,0 +1,32 @@
+{
+  "criteria": {
+    "determinism": true,
+    "field_match_rate_eq_1": true,
+    "open_ambiguities_eq_0": true,
+    "pit_pass": true,
+    "unclassified_eq_0": true
+  },
+  "exp_id": "EXP-1",
+  "gate": {
+    "expr": "determinism && field_match_rate==1.0 && unclassified_windows==0 && pit_menu_proof && open_ambiguities==0",
+    "pass": true
+  },
+  "metrics": {
+    "determinism_shas_equal": true,
+    "emitted": 9603,
+    "exact_range_WARN": 972,
+    "field_match_rate": 1.0,
+    "open_ambiguities": 0,
+    "pit_menu_proof_pass": true,
+    "unclassified_windows": 0,
+    "xxl0_checks": 67221
+  },
+  "period_scopes": {
+    "annual": 2330,
+    "exact_range": 972,
+    "null": 1733,
+    "quarter": 2810,
+    "ytd": 1758
+  },
+  "run_kind": "dry-run X-XL0 + census + PIT"
+}

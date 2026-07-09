@@ -17,6 +17,12 @@ Bootstrap (WP-0) completed: 2026-07-09T01:05:17Z
 - Fact total: 13775616 (work order estimate was ~9.9M; live figure governs, per P19)
 - Report total: 42633
 
+## Codex triage guardrail
+- Durable Fable/Opus rulings must not live only in chat.
+- If Fable/Opus already recorded the issue, Codex verifies the pointers and leaves it alone.
+- If a durable issue is missing, Codex adds the smallest note to the right experiment artifact (exhibit, ambiguity register, O12 bundle, manifest, census binding, or this board).
+- FinalDesign docs stay untouched unless owner/Fable explicitly ratifies a back-port.
+
 ## Status board (one row per package)
 
 | Package | State | run_id | Gate | Blockers / notes |
@@ -24,7 +30,7 @@ Bootstrap (WP-0) completed: 2026-07-09T01:05:17Z
 | WP-0 bootstrap | DONE | - | - | tree + BUDGET.json + board created 2026-07-09T01:05:17Z |
 | WP-FA corpus | PENDING | - | - | 0-LLM; O2 Fable sign-off pending |
 | EXP-1 census | DONE | - | no-gate (descriptive) | 7 aggregates -> exp1_xbrl/census.json |
-| EXP-1 dry-run | IN_PROGRESS (resumed) | 2026-07-09T14-25-39Z_dryrun | - | ra_0002 + ra_0003 RESOLVED (Fable pins: P4c/P4a conversion table; period binding (d) effective dates); building materializer |
+| EXP-1 dry-run | IN_PROGRESS (full materialization + determinism passed) | 2026-07-09T14-25-39Z_dryrun | - | 60 filings emitted 9,603 facts across all 12 companies; determinism PASS sha256 64518e74...60522c6; verifier/PIT/gate still pending |
 | K-pairs.v1 | PENDING | - | - | protocol + Fable lock (pre EXP-0) |
 | K-pairs.v2 | PENDING | - | - | needs FREEZE (mining) |
 | K-reader | PENDING | - | - | needs frozen chunks |
@@ -55,3 +61,4 @@ Bootstrap (WP-0) completed: 2026-07-09T01:05:17Z
 
 - 2026-07-09T16:35:13Z EXP-1 dual-CIK ruling APPLIED (Fable 2026-07-09): unresolved dim/member node after normalization -> skip whole fact + count slice_pairing_dualcik_unresolved; NO aliasing/qname-only/cross-CIK; AAL kept. Recorded ra_0004, ambiguity_register (closed), census binding_b.dualcik_subcase, o12_bundle (ingestion repair / future certified recovery). O13/P4f otherwise unchanged.
 - 2026-07-09T16:41:17Z Work order bumped v1.6 -> v1.7 by Fable (owner instruction): O16 cheap-tier fallback policy added - optional DeepSeek V4 Flash via OpenRouter arm ('cheap_fallback', 1.3 registry + rule; 7; 8 O16; 9 budget row). Trigger = Haiku cheap-arm bar FAIL in EXP-2/3/5 or Fable-marked inconclusive; Fable authorizes; same key/sample/prompts/bars incl. invalid-rate gate; OPENROUTER_API_KEY = second conditional metered lane (key setup deferred; ANTHROPIC billing guard unchanged); cost cap 1.5x the failed arm's calls; Haiku stays default; none->Sonnet terminal rule unchanged; passing evidence informs PRODUCTION strategy only (workflow engine stays agent()-only in-program). NO BARS CHANGED. New workorder_sha256 = af491c3515c6fa04806de81d530622e9021c65c625a2c5ba3f558a29adb8599c. Manifests pin the sha at their own run time - the EXP-1 run's recorded v1.6 sha (554529dd...6164) stays historically correct; runs started from now record v1.7.
+- 2026-07-09T16:55:00Z EXP-1 full materialization + determinism reported by Opus: 60 filings / 34,102 fixture facts seen; 9,603 emitted across all 12 companies; AAL dual-CIK skips counted as slice_pairing_dualcik_unresolved=2,633; generic slice_pairing_failclosed=0; entity_scoped_out=0; period_end_convention_suspect=0; report_primary_window_missing=0. Mid-pass implementation fix recorded in manifest: entity-scope must compare to registrant Company.cik, not accession/report-id prefix CIK. Determinism PASS: two full runs byte-identical, sha256 64518e7474c102ecdebf5cc9483504ab97822f161b9dafee8211009df60522c6. Remaining EXP-1 steps: X-XL0 independent verifier, PIT-menu proof, final gate.

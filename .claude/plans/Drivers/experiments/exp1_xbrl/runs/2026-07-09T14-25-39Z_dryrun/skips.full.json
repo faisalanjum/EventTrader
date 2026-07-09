@@ -1,0 +1,18 @@
+{
+  "emitted": 9603,
+  "entity_scoped_out": 0,
+  "fixture_fact_seen": 34102,
+  "latent_excluded": 0,
+  "no_context": 28,
+  "nonslice_or_elimination_axis": 10132,
+  "null_por_report_skip": 0,
+  "period_end_convention_suspect": 0,
+  "proc_error": 0,
+  "raw_duplicate": 9270,
+  "report_primary_window_missing": 0,
+  "slice_pairing_dualcik_unresolved": 2633,
+  "slice_pairing_failclosed": 0,
+  "unit_nonwhitelist": 2270,
+  "usd_bare_pershare_suspect": 0,
+  "xbrl_internal_conflict": 0
+}

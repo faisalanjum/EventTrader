@@ -1,0 +1,7 @@
+{
+  "blockers": [],
+  "exp_id": "EXP-1",
+  "fable_signoff": null,
+  "note": "EXP-1 dry-run gate: determinism(x2 sha) + X-XL0 field-match + period unclassified==0 + PIT-menu + no open ambiguities. Resolved pins ra_0002/ra_0004 -> O12 bundle; dual-CIK slices are skip+count by Fable ruling.",
+  "outcome": "PASS"
+}
