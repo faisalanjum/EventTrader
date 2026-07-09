@@ -1,0 +1,125 @@
+{
+  "purpose": "Fable rulings and clarifications to carry into the O12 XBRL pin-amendment / Track-B read-view bundle. This file records decisions; it does not change experiment bars.",
+  "updated_utc": "2026-07-09T16:13:02Z",
+  "entries": [
+    {
+      "id": "o12_link_birth_source_independence",
+      "source": "Fable ruling, 2026-07-09",
+      "status": "recorded_for_o12",
+      "principle": "Driver birth source must not affect XBRL linking or materialization.",
+      "details": [
+        "A Driver born from 8-K, transcript, news, 10-Q text, or 10-K text has the same XBRL-linking shape: no XBRL concept is carried at birth.",
+        "Resolution input is company + driver meaning + the company's filed PIT concept menu, not the driver's birth context.",
+        "Materialization is order-independent: du ids are functions of report id, driver, and fact_scope, not when the link landed.",
+        "A late active resolution backfills the same rows a day-one resolution would have written.",
+        "The only source-sensitive residue is Driver identity quality itself, which belongs to the admission/kernel experiments, not the XBRL linker."
+      ]
+    },
+    {
+      "id": "o12_missing_link_inference_gap",
+      "source": "Fable ruling, 2026-07-09",
+      "status": "recorded_for_o12",
+      "principle": "A missing XBRL link at inference time is a safe under-attribution gap, not wrong data.",
+      "kept_before_link": [
+        "text DriverUpdates and event coverage",
+        "PIT safety",
+        "surprise lane facts, which are text-born by design",
+        "company slice vocabulary from FS-14 menus"
+      ],
+      "lost_until_link_backfill": [
+        "full tagged series depth and regularity",
+        "exact XBRL values instead of rounded/as-stated text values",
+        "guaranteed per-period actual comparator for linked metric bases"
+      ],
+      "fail_closed_behavior": "Before a link lands, read views fall back to available text facts and reported states; the gap self-heals through backfill once an active resolution is confirmed."
+    },
+    {
+      "id": "o12_xbrl_link_status_read_view",
+      "source": "Fable ruling, 2026-07-09",
+      "status": "add_to_o12_track_b_bundle",
+      "field": "xbrl_link_status",
+      "enum": [
+        "active",
+        "revoked",
+        "none"
+      ],
+      "rule": "Read-time derived field only, never stored on Driver, never shown to producers.",
+      "derivation": {
+        "active": "An active ConceptResolution exists for the company + metric driver as of the read time.",
+        "revoked": "A revoked ConceptResolution exists as of the read time; keep distinct from none because consumers should know a wrong-link event happened and facts may have been excluded.",
+        "none": "No active or revoked ConceptResolution exists as of the read time. Abstained and never-attempted both read as none because the pinned store has no per-(company, driver) attempt log."
+      },
+      "pit_rule": "In backtest/historical mode, derive as-of with the strict-< law: resolution date < as-of. In live/current mode, use current active/revoked state. State transitions (revocation / un-revoke RecoveryEvents) obey the same strict-< as-of law: the rendered status is the state as of that moment - a link active at as-of but revoked later reads active in that backtest.",
+      "notes": [
+        "This mirrors the effective_driver_state idiom: read-derived, fail-closed, never written back.",
+        "This is awareness for consumers, not a gate on backfilled facts. P8d still permits backfill because values must exist inside each source filing."
+      ]
+    },
+    {
+      "id": "o12_no_provisional_materialization",
+      "source": "Fable ruling, 2026-07-09",
+      "status": "reaffirm_locked_rule",
+      "principle": "Only strong-verified active ConceptResolutions may materialize XBRL facts.",
+      "details": [
+        "No provisional link may write or materialize DriverUpdates.",
+        "The cheap pick before strong verification is invisible: it either becomes active after verify or becomes nothing.",
+        "A stored provisional/final distinction is rejected as over-engineering and wrong-data risk.",
+        "This follows P9 and P8a: materialization-grade resolution is mass-consequence and enrichment consumes active resolutions only."
+      ]
+    },
+    {
+      "id": "o12_reporting_only_bias_checks",
+      "source": "Fable ruling, 2026-07-09",
+      "status": "reporting_only_no_design_change",
+      "principle": "Measure possible source-birth or thin-evidence bias without changing the linking design.",
+      "reporting_knobs": [
+        "When resolution audits are parameterized, include a stratum for drivers resolved with no 10-K/10-Q text evidence yet or with thin evidence.",
+        "When X-XL2 twin_suspect calibration runs, report twin_suspect_rate split by driver birth source."
+      ]
+    },
+    {
+      "id": "o12_p4c_value_conversion_factors",
+      "source": "Fable ruling, 2026-07-09 (ra_0002)",
+      "status": "recorded_for_o12",
+      "principle": "P4c gains one clarifying sentence: the explicit XBRL-to-canonical conversion factors, applied by the materializer at emit time - the text canonicalizer is never called on XBRL facts.",
+      "conversion_table": [
+        {"unit_name": "iso4217:USD", "is_divide": "!=1", "level_unit": "m_usd", "value": "round(raw / 1e6, 6)"},
+        {"unit_name": "shares", "is_divide": "!=1", "level_unit": "count", "value": "raw (absolute count)"},
+        {"unit_name": "iso4217:USDshares", "is_divide": "1", "level_unit": "usd", "value": "raw (per-share; per-X lives in the driver name per NAME-13/UNIT-08)"},
+        {"unit_name": "*else*", "action": "skip + count per class (P4c v1 whitelist)"}
+      ],
+      "riders": [
+        "P4g dedupe/collision math runs on RAW values + RAW decimals BEFORE conversion; scaling happens at the emit step only.",
+        "Guard skip class usd_bare_pershare_suspect: per-share-looking concept qname with bare iso4217:USD -> skip + count.",
+        "X-XL0 verifier implements the same table independently (never imported from the materializer).",
+        "Unit names are keyed to live Unit.name spellings confirmed by the census unit inventory."
+      ],
+      "classification": "Implementation clarification of P4a/P4c. NOT a UNIT-11 or OD-10 amendment (text-side rules, untouched).",
+      "evidence": ["exhibits/ra_0002.json"]
+    },
+    {
+      "id": "o12_period_storage_binding_d",
+      "source": "Fable ruling, 2026-07-09 (ra_0003)",
+      "status": "recorded_for_o12",
+      "principle": "Binding (d): stored XBRL Period dates are exclusive-end (half-open storage). Every stored Period read decodes to effective human/reporting dates BEFORE any pinned rule runs.",
+      "rules": [
+        "Duration: effective_start = start_date (unshifted); effective_end = end_date - 1 calendar day (date-component arithmetic, no timezone math).",
+        "Instant: effective_instant = stored date - 1 calendar day (start_date field; end_date='null' quirk).",
+        "P4b primacy, P14 classification, gp ids, build_known, comparator census, and the P4h null-pOR fallback (max EFFECTIVE duration end) all run on effective dates; raw dates stay in provenance.",
+        "True inclusive day count = raw end_date - raw start_date = effective_end - effective_start + 1; one shared helper, never double-adjust."
+      ],
+      "guards": [
+        "Rows with raw end/instant == periodOfReport (would-be-inclusive signature) -> SKIP + count period_end_convention_suspect + per-fact log; never materialized (undecidable one-day windows must not mint gp ids).",
+        "Per-report tripwire: >=5 or >1% suspect current-period rows -> STOP for review (protects future refreshes/feeds).",
+        "report_primary_window_missing: reports with zero primary facts after decode -> count + WARN.",
+        "instant_off_pOR_by_one RETIRED - the +1 was the convention, not an anomaly."
+      ],
+      "amendment_target": "One clarification line for P4b / P14 / XBRLIntegrationDesign 5.3.",
+      "evidence": [
+        "exp1_xbrl/runs/2026-07-09T14-25-39Z_dryrun/period_convention_proof.json (durations 21,017:1; instants 12,828:0; 59/60 filings pure exclusive)",
+        "exp1_xbrl/runs/2026-07-09T14-25-39Z_dryrun/period_start_check.json (STARTS_UNSHIFTED_OK_TO_APPLY)",
+        "exhibits/ra_0003.json"
+      ]
+    }
+  ]
+}

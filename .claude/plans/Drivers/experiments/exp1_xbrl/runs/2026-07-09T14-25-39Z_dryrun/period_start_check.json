@@ -1,0 +1,133 @@
+{
+  "interpretation": "primary_end_decodes_to_por==primary_windows => end_date-1==periodOfReport (exclusive end confirmed). primary_start_chains high => start_date is a prior period exclusive end (UNSHIFTED). invalid_start_ge_end must be 0.",
+  "per_company": {
+    "AAL": {
+      "boundary_chain_pct": 40.0,
+      "invalid_start_ge_end": 0,
+      "n_starts": 60,
+      "n_windows": 86,
+      "primary_end_decodes_to_por": 15,
+      "primary_start_chains_to_prior_end": 11,
+      "primary_windows": 15,
+      "starts_that_are_also_ends": 24
+    },
+    "AZO": {
+      "boundary_chain_pct": 47.2,
+      "invalid_start_ge_end": 0,
+      "n_starts": 36,
+      "n_windows": 68,
+      "primary_end_decodes_to_por": 12,
+      "primary_start_chains_to_prior_end": 9,
+      "primary_windows": 12,
+      "starts_that_are_also_ends": 17
+    },
+    "BBY": {
+      "boundary_chain_pct": 66.7,
+      "invalid_start_ge_end": 0,
+      "n_starts": 27,
+      "n_windows": 43,
+      "primary_end_decodes_to_por": 9,
+      "primary_start_chains_to_prior_end": 9,
+      "primary_windows": 9,
+      "starts_that_are_also_ends": 18
+    },
+    "CAKE": {
+      "boundary_chain_pct": 36.7,
+      "invalid_start_ge_end": 0,
+      "n_starts": 49,
+      "n_windows": 66,
+      "primary_end_decodes_to_por": 9,
+      "primary_start_chains_to_prior_end": 9,
+      "primary_windows": 9,
+      "starts_that_are_also_ends": 18
+    },
+    "CMG": {
+      "boundary_chain_pct": 81.8,
+      "invalid_start_ge_end": 0,
+      "n_starts": 22,
+      "n_windows": 36,
+      "primary_end_decodes_to_por": 9,
+      "primary_start_chains_to_prior_end": 9,
+      "primary_windows": 9,
+      "starts_that_are_also_ends": 18
+    },
+    "DAL": {
+      "boundary_chain_pct": 73.1,
+      "invalid_start_ge_end": 0,
+      "n_starts": 26,
+      "n_windows": 44,
+      "primary_end_decodes_to_por": 13,
+      "primary_start_chains_to_prior_end": 9,
+      "primary_windows": 13,
+      "starts_that_are_also_ends": 19
+    },
+    "DRI": {
+      "boundary_chain_pct": 42.2,
+      "invalid_start_ge_end": 0,
+      "n_starts": 45,
+      "n_windows": 61,
+      "primary_end_decodes_to_por": 13,
+      "primary_start_chains_to_prior_end": 11,
+      "primary_windows": 13,
+      "starts_that_are_also_ends": 19
+    },
+    "LUV": {
+      "boundary_chain_pct": 38.7,
+      "invalid_start_ge_end": 0,
+      "n_starts": 75,
+      "n_windows": 118,
+      "primary_end_decodes_to_por": 19,
+      "primary_start_chains_to_prior_end": 16,
+      "primary_windows": 19,
+      "starts_that_are_also_ends": 29
+    },
+    "MCD": {
+      "boundary_chain_pct": 87.5,
+      "invalid_start_ge_end": 0,
+      "n_starts": 16,
+      "n_windows": 33,
+      "primary_end_decodes_to_por": 12,
+      "primary_start_chains_to_prior_end": 12,
+      "primary_windows": 12,
+      "starts_that_are_also_ends": 14
+    },
+    "ORLY": {
+      "boundary_chain_pct": 55.3,
+      "invalid_start_ge_end": 0,
+      "n_starts": 38,
+      "n_windows": 79,
+      "primary_end_decodes_to_por": 9,
+      "primary_start_chains_to_prior_end": 9,
+      "primary_windows": 9,
+      "starts_that_are_also_ends": 21
+    },
+    "ULTA": {
+      "boundary_chain_pct": 75.0,
+      "invalid_start_ge_end": 0,
+      "n_starts": 28,
+      "n_windows": 41,
+      "primary_end_decodes_to_por": 9,
+      "primary_start_chains_to_prior_end": 9,
+      "primary_windows": 9,
+      "starts_that_are_also_ends": 21
+    },
+    "YUM": {
+      "boundary_chain_pct": 70.3,
+      "invalid_start_ge_end": 0,
+      "n_starts": 37,
+      "n_windows": 62,
+      "primary_end_decodes_to_por": 11,
+      "primary_start_chains_to_prior_end": 9,
+      "primary_windows": 11,
+      "starts_that_are_also_ends": 26
+    }
+  },
+  "probe": "PART-1 start-date check (read-only): are starts unshifted (inclusive) under exclusive-end?",
+  "totals": {
+    "invalid_start_ge_end": 0,
+    "primary_end_decodes_to_por": 140,
+    "primary_start_chains_to_prior_end": 122,
+    "primary_windows": 140
+  },
+  "verdict": "STARTS_UNSHIFTED_OK_TO_APPLY"
+}

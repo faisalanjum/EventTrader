@@ -1,0 +1,18 @@
+{
+  "adjudicators_split": false,
+  "case_ref": "fx_revenues raw 2,898,810,000 (iso4217:USD, aggregate); materialized-row example expects value_canonical in m_usd (millions)",
+  "description": "The production canonicalize_value (UNIT-11) has NO base-units->millions path. _scale_aggregate_money scales a TEXT value by its scale token (B -> x1000 to millions; M -> x1); a TOKENLESS value returns UNCHANGED (factor is None -> return value). _SCALE_TO_MILLIONS has only b/m/k/trillion - no ones/dollars/base entry. XBRL facts carry raw base-unit values with no token, so the real resolver labels them m_usd but keeps raw dollar magnitude. VERIFIED: resolve_unit(fx_revenues, None, 2898810000, money/aggregate) -> canonical=m_usd, scaled=2898810000.0 (unchanged). The materialized example (value_canonical=-2000.0) + text/XBRL convergence (X-XL1) require millions (2898.81).",
+  "doc": "XBRLIntegrationDesign 5.2 P4a/P4c",
+  "id": "ra_0002",
+  "proposed_amendment": "O12 bundle only: add one clarifying sentence to P4c listing the explicit conversion factors so future implementers do not route XBRL values through the text canonicalizer.",
+  "raised_in": "EXP-1 dry-run materializer build (value canonicalization P4a / OD-10 / UNIT-11)",
+  "resolution": "Fable ruling 2026-07-09 (accepted): XBRL materializer applies its OWN fixed P4c/P4a conversion table at emit time (iso4217:USD is_divide!=1 -> m_usd, raw/1e6; shares is_divide!=1 -> count, raw; iso4217:USDshares is_divide=1 -> usd, raw; else skip+count). Do NOT call the text canonicalizer on XBRL facts. Authority: Fable ruling + XBRL 5.2 P4a/P4c.",
+  "rule": "P4a/P4c: XBRL values are parsed from f.value and converted by the materializer's fixed unit map into the DriverUpdate canonical scale.",
+  "secondary_observations": [
+    "Instant off-by-one: DRI 10-Q (periodOfReport 2026-02-22) balance instant start_date=2026-02-23 (pend=null) -> P4b exact 'period end == periodOfReport' would mark it NON-primary; likely a 52/53-week artifact to verify at P4b/P14c.",
+    "Raw duplication present in per-report pulls (P4g dedup required) - expected, not an ambiguity.",
+    "Comma-formatted values confirmed in situ (e.g. 3,800,000) - strip-commas required, already planned."
+  ],
+  "status": "closed_resolved",
+  "why_two_ways": "Initial stop only: (A) use the text resolver as-is -> XBRL money stays raw dollars, breaks m_usd convergence with text guidance (X-XL1). (B) hand-scale raw/1e6 -> looked like a second canonicalizer. Fable ruled this was not a real design ambiguity: XBRL P4a/P4c already put the fixed conversion table inside the materializer, and the text canonicalizer is not the XBRL path."
+}

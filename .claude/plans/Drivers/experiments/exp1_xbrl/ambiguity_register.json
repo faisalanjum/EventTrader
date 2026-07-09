@@ -1,0 +1,43 @@
+{
+  "closed_entries": [
+    {
+      "area": "value_canonicalization P4a/P4c",
+      "ref": "ra_0002",
+      "status": "closed_fable_2026-07-09",
+      "summary": "Fable ruled this was not a true design ambiguity: XBRL values do not call the text canonicalizer. The materializer applies P4c's fixed conversion table at emit time."
+    },
+    {
+      "area": "period-end storage convention P4b/P14 (binding d)",
+      "ref": "ra_0003",
+      "status": "closed_fable_2026-07-09",
+      "summary": "Fable binding (d): stored Period dates are exclusive-end; all reads decode to effective dates first (duration end_date - 1d; instant stored - 1d; starts unshifted per period_start_check.json). Raw==pOR rows skip+count as period_end_convention_suspect; instant_off_pOR_by_one retired."
+    }
+  ],
+  "entries_open": [],
+  "entries_resolved": [
+    {
+      "area": "value_canonicalization P4a/OD-10/UNIT-11",
+      "goes_to": "XBRL ratification bundle pin",
+      "ref": "ra_0002",
+      "resolution": "fixed P4c/P4a conversion table at emit time; text canonicalizer not called on XBRL facts",
+      "status": "closed_resolved_fable_pin"
+    },
+    {
+      "area": "period-end storage convention (exclusive dates) P4b/P14/5.3",
+      "goes_to": "XBRL ratification bundle pin (binding d)",
+      "ref": "ra_0003",
+      "resolution": "effective-date decode everywhere (P4b primacy, P14 classifier, gp ids, build_known, P4h on effective dates; raw in provenance); suspect-skip for raw==pOR rows; counters replaced (period_end_convention_suspect + report_primary_window_missing)",
+      "status": "closed_resolved_fable_pin"
+    },
+    {
+      "area": "axis<->member dual-CIK subcase (P4d/P4f/O13)",
+      "goes_to": "O12 bundle (ingestion repair / future certified recovery)",
+      "ref": "ra_0004",
+      "resolution": "skip+count slice_pairing_dualcik_unresolved; NO aliasing / qname-only / cross-CIK; AAL kept",
+      "status": "closed_resolved_fable"
+    }
+  ],
+  "exp_id": "EXP-1",
+  "gate_note": "gate counts len(entries_open); resolved pins go to the XBRL ratification bundle",
+  "note": "Open entries only. Gate requires len(entries)==0 to PASS."
+}

@@ -1,0 +1,167 @@
+{
+  "categories": {
+    "FAIL_dims_gt_mems": 0,
+    "FAIL_mems_gt_dims": 0,
+    "FAIL_other": 0,
+    "FAIL_typed_with_member": 1345,
+    "clean_dim_pass": 826,
+    "nondimensional_pass": 199
+  },
+  "examples_typed_with_member": [
+    {
+      "positional_pairs": [
+        {
+          "dim": "us-gaap:CreditFacilityAxis",
+          "is_explicit": "1",
+          "member": "us-gaap:RevolvingCreditFacilityMember"
+        },
+        {
+          "dim": "us-gaap:DebtInstrumentAxis",
+          "is_explicit": "1",
+          "member": "?"
+        },
+        {
+          "dim": "us-gaap:LongtermDebtTypeAxis",
+          "is_explicit": "1",
+          "member": "us-gaap:SecuredDebtMember"
+        },
+        {
+          "dim": "us-gaap:VariableRateAxis",
+          "is_explicit": "1",
+          "member": "us-gaap:BaseRateMember"
+        },
+        {
+          "dim": "?",
+          "is_explicit": "?",
+          "member": "?"
+        }
+      ],
+      "qname": "aal:DebtInstrumentBasisSpreadOnVariableRateInterestRateMargin"
+    },
+    {
+      "positional_pairs": [
+        {
+          "dim": "us-gaap:CreditFacilityAxis",
+          "is_explicit": "1",
+          "member": "us-gaap:RevolvingCreditFacilityMember"
+        },
+        {
+          "dim": "us-gaap:DebtInstrumentAxis",
+          "is_explicit": "1",
+          "member": "?"
+        },
+        {
+          "dim": "us-gaap:LongtermDebtTypeAxis",
+          "is_explicit": "1",
+          "member": "us-gaap:SecuredDebtMember"
+        },
+        {
+          "dim": "us-gaap:VariableRateAxis",
+          "is_explicit": "1",
+          "member": "us-gaap:BaseRateMember"
+        },
+        {
+          "dim": "?",
+          "is_explicit": "?",
+          "member": "?"
+        }
+      ],
+      "qname": "aal:DebtInstrumentBasisSpreadOnVariableRateInterestRateMargin"
+    },
+    {
+      "positional_pairs": [
+        {
+          "dim": "us-gaap:CreditFacilityAxis",
+          "is_explicit": "1",
+          "member": "us-gaap:RevolvingCreditFacilityMember"
+        },
+        {
+          "dim": "us-gaap:DebtInstrumentAxis",
+          "is_explicit": "1",
+          "member": "?"
+        },
+        {
+          "dim": "us-gaap:LongtermDebtTypeAxis",
+          "is_explicit": "1",
+          "member": "us-gaap:SecuredDebtMember"
+        },
+        {
+          "dim": "us-gaap:VariableRateAxis",
+          "is_explicit": "1",
+          "member": "us-gaap:BaseRateMember"
+        },
+        {
+          "dim": "?",
+          "is_explicit": "?",
+          "member": "?"
+        }
+      ],
+      "qname": "aal:DebtInstrumentBasisSpreadOnVariableRateInterestRateMargin"
+    },
+    {
+      "positional_pairs": [
+        {
+          "dim": "us-gaap:CreditFacilityAxis",
+          "is_explicit": "1",
+          "member": "us-gaap:RevolvingCreditFacilityMember"
+        },
+        {
+          "dim": "us-gaap:DebtInstrumentAxis",
+          "is_explicit": "1",
+          "member": "?"
+        },
+        {
+          "dim": "us-gaap:LongtermDebtTypeAxis",
+          "is_explicit": "1",
+          "member": "us-gaap:SecuredDebtMember"
+        },
+        {
+          "dim": "us-gaap:VariableRateAxis",
+          "is_explicit": "1",
+          "member": "us-gaap:SecuredOvernightFinancingRateSofrMember"
+        },
+        {
+          "dim": "?",
+          "is_explicit": "?",
+          "member": "?"
+        }
+      ],
+      "qname": "aal:DebtInstrumentBasisSpreadOnVariableRateInterestRateMargin"
+    },
+    {
+      "positional_pairs": [
+        {
+          "dim": "us-gaap:CreditFacilityAxis",
+          "is_explicit": "1",
+          "member": "us-gaap:RevolvingCreditFacilityMember"
+        },
+        {
+          "dim": "us-gaap:DebtInstrumentAxis",
+          "is_explicit": "1",
+          "member": "?"
+        },
+        {
+          "dim": "us-gaap:LongtermDebtTypeAxis",
+          "is_explicit": "1",
+          "member": "us-gaap:SecuredDebtMember"
+        },
+        {
+          "dim": "us-gaap:VariableRateAxis",
+          "is_explicit": "1",
+          "member": "us-gaap:SecuredOvernightFinancingRateSofrMember"
+        },
+        {
+          "dim": "?",
+          "is_explicit": "?",
+          "member": "?"
+        }
+      ],
+      "qname": "aal:DebtInstrumentBasisSpreadOnVariableRateInterestRateMargin"
+    }
+  ],
+  "hypothesis": "FAIL_typed_with_member = aligned length + a typed dim (is_explicit=0) carrying a member -> current code drops the dim not its member",
+  "hypothesis_confirmed_pct_of_fails": 100.0,
+  "mechanical_fix": "positional pairing dimension_u_ids[i]<->member_u_ids[i]; skip (drop BOTH dim and member) when is_explicit=0; misaligned length -> fail-closed. == the ratified O13 rule as literally written.",
+  "probe": "slice_pairing residual verification (read-only, dry3 3 reports)",
+  "total_fail_closed": 1345
+}

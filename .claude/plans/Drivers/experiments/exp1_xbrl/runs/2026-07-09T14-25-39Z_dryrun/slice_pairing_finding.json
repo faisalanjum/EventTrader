@@ -1,0 +1,12 @@
+{
+  "correction_to": "slice_pairing_probe.json - its 'FAIL_typed_with_member' label is a MISNOMER (unresolved dims defaulted to is_explicit=0)",
+  "hypothesis_typed_dim_with_member": "DISPROVEN",
+  "actual_root_cause": "dual-CIK co-filer u_id mismatch. AAL files as American Airlines GROUP (CIK 6201, primary filer) carrying American Airlines INC (CIK 4515) documents. Context dimension_u_ids/member_u_ids reference coined elements with the FILER cik (0000006201:http://www.aa.com/...:aal:X), but the coined aal: Dimension/Member NODES are stored with the ENTITY cik (4515:...:aal:X). norm_uid strips zero-padding (0000006201->6201) but the node cik is 4515 (a different number), so coined-member/dim lookup misses. Standard us-gaap: elements are shared and resolve regardless of cik.",
+  "evidence": {"context_member_uid": "0000006201:http://www.aa.com/20241231:aal:A2023TermLoanFacilityMember",
+               "node_member_uid": "4515:http://www.aa.com/20241231:aal:A2023TermLoanFacilityMember"},
+  "scope_and_impact": "dry3 = first 3 report_ids = all AAL (dual-CIK) -> over-represents this. Single-CIK filers (other 11) have no filer-vs-entity split and are EXPECTED to pair fine (inference; broader read-only check would confirm). Affected AAL dry3 facts are debt-instrument facts on NON-SLICE axes -> skipped anyway; BUT the same mismatch could hide REAL AAL coined slice members (segment/geo) -> AAL coverage loss.",
+  "refines_prior_finding": "the multi_registrant census (FOR_COMPANY-based) found 0. AAL dual-CIK lives in the XBRL element u_ids (filer 6201 in contexts vs entity 4515 in coined nodes), which FOR_COMPANY did not surface.",
+  "mechanical": false,
+  "decision": "HOLD O13 change - NOT purely mechanical. Dual-CIK/co-filer coined-element resolution question (touches P4f entity scoping / multi-registrant). Options for owner/Fable: (a) resolve coined dims/members by non-cik key (namespace:qname), or (b) map filer<->entity cik. Handle with/after the period-end ruling.",
+  "o13_status": "UNCHANGED"
+}

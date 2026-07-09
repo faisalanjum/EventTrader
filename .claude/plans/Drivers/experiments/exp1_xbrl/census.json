@@ -1,0 +1,781 @@
+{
+  "census": {
+    "comma_values": {
+      "sample_method": "first N numeric facts by scan order",
+      "sample_size": 1000000,
+      "with_comma": 807132
+    },
+    "decimals_distribution": {
+      "dist": [
+        {
+          "decimals": "-6",
+          "n": 351142
+        },
+        {
+          "decimals": "-3",
+          "n": 290112
+        },
+        {
+          "decimals": "-5",
+          "n": 209423
+        },
+        {
+          "decimals": "INF",
+          "n": 55896
+        },
+        {
+          "decimals": "2",
+          "n": 35645
+        },
+        {
+          "decimals": "3",
+          "n": 17419
+        },
+        {
+          "decimals": "4",
+          "n": 12972
+        },
+        {
+          "decimals": "0",
+          "n": 12904
+        },
+        {
+          "decimals": "-8",
+          "n": 5822
+        },
+        {
+          "decimals": "null",
+          "n": 2438
+        },
+        {
+          "decimals": "5",
+          "n": 1747
+        },
+        {
+          "decimals": "-7",
+          "n": 1736
+        },
+        {
+          "decimals": "-4",
+          "n": 1147
+        },
+        {
+          "decimals": "1",
+          "n": 531
+        },
+        {
+          "decimals": "-2",
+          "n": 368
+        },
+        {
+          "decimals": "-9",
+          "n": 293
+        },
+        {
+          "decimals": "6",
+          "n": 189
+        },
+        {
+          "decimals": "7",
+          "n": 90
+        },
+        {
+          "decimals": "-1",
+          "n": 62
+        },
+        {
+          "decimals": "8",
+          "n": 50
+        },
+        {
+          "decimals": "9",
+          "n": 8
+        },
+        {
+          "decimals": "-10",
+          "n": 3
+        },
+        {
+          "decimals": "-11",
+          "n": 2
+        },
+        {
+          "decimals": "10",
+          "n": 1
+        }
+      ],
+      "sample_method": "first N numeric facts by scan order",
+      "sample_size": 1000000
+    },
+    "multi_registrant": {
+      "by_year": [
+        {
+          "multireg_reports": 0,
+          "year": 2018
+        },
+        {
+          "multireg_reports": 0,
+          "year": 2019
+        },
+        {
+          "multireg_reports": 0,
+          "year": 2020
+        },
+        {
+          "multireg_reports": 0,
+          "year": 2021
+        },
+        {
+          "multireg_reports": 0,
+          "year": 2022
+        },
+        {
+          "multireg_reports": 0,
+          "year": 2023
+        },
+        {
+          "multireg_reports": 0,
+          "year": 2024
+        },
+        {
+          "multireg_reports": 0,
+          "year": 2025
+        },
+        {
+          "multireg_reports": 0,
+          "year": 2026
+        }
+      ],
+      "samples": [],
+      "total_multireg_reports": 0
+    },
+    "no_context_facts": 15109,
+    "null_period_of_report": {
+      "n": 0,
+      "sample": []
+    },
+    "unit_inventory": [
+      {
+        "is_divide": "0",
+        "n": 10575512,
+        "unit": "iso4217:USD"
+      },
+      {
+        "is_divide": "0",
+        "n": 692129,
+        "unit": "shares"
+      },
+      {
+        "is_divide": "0",
+        "n": 664107,
+        "unit": "pure"
+      },
+      {
+        "is_divide": "1",
+        "n": 327402,
+        "unit": "iso4217:USDshares"
+      },
+      {
+        "is_divide": "0",
+        "n": 13543,
+        "unit": "iso4217:CAD"
+      },
+      {
+        "is_divide": "0",
+        "n": 10407,
+        "unit": "iso4217:EUR"
+      },
+      {
+        "is_divide": "0",
+        "n": 4426,
+        "unit": "utr:sqft"
+      },
+      {
+        "is_divide": "0",
+        "n": 4382,
+        "unit": "utr:Rate"
+      },
+      {
+        "is_divide": "0",
+        "n": 2772,
+        "unit": "utr:MMBbls"
+      },
+      {
+        "is_divide": "0",
+        "n": 2467,
+        "unit": "iso4217:JPY"
+      },
+      {
+        "is_divide": "1",
+        "n": 2302,
+        "unit": "iso4217:USDutr:bbl"
+      },
+      {
+        "is_divide": "0",
+        "n": 2263,
+        "unit": "iso4217:GBP"
+      },
+      {
+        "is_divide": "0",
+        "n": 2207,
+        "unit": "utr:MBbls"
+      },
+      {
+        "is_divide": "0",
+        "n": 2099,
+        "unit": "utr:bbl"
+      },
+      {
+        "is_divide": "0",
+        "n": 1989,
+        "unit": "utr:MMBTU"
+      },
+      {
+        "is_divide": "0",
+        "n": 1748,
+        "unit": "utr:acre"
+      },
+      {
+        "is_divide": "0",
+        "n": 1526,
+        "unit": "eqr:ApartmentUnit"
+      },
+      {
+        "is_divide": "0",
+        "n": 1452,
+        "unit": "utr:MW"
+      },
+      {
+        "is_divide": "1",
+        "n": 1169,
+        "unit": "iso4217:USDutr:MWh"
+      },
+      {
+        "is_divide": "1",
+        "n": 1147,
+        "unit": "iso4217:USDutr:MMBTU"
+      },
+      {
+        "is_divide": "0",
+        "n": 1101,
+        "unit": "iso4217:CNY"
+      },
+      {
+        "is_divide": "0",
+        "n": 1090,
+        "unit": "utr:MMcf"
+      },
+      {
+        "is_divide": "0",
+        "n": 1068,
+        "unit": "utr:Bcf"
+      },
+      {
+        "is_divide": "0",
+        "n": 1051,
+        "unit": "utr:D"
+      },
+      {
+        "is_divide": "0",
+        "n": 1026,
+        "unit": "ess:apartment"
+      },
+      {
+        "is_divide": "0",
+        "n": 932,
+        "unit": "utr:MWh"
+      },
+      {
+        "is_divide": "0",
+        "n": 918,
+        "unit": "ohi:facility"
+      },
+      {
+        "is_divide": "0",
+        "n": 897,
+        "unit": "pgr:security"
+      },
+      {
+        "is_divide": "0",
+        "n": 777,
+        "unit": "iso4217:CHF"
+      },
+      {
+        "is_divide": "0",
+        "n": 757,
+        "unit": "iso4217:BRL"
+      },
+      {
+        "is_divide": "0",
+        "n": 702,
+        "unit": "cvs:security"
+      },
+      {
+        "is_divide": "0",
+        "n": 701,
+        "unit": "utr:T"
+      },
+      {
+        "is_divide": "0",
+        "n": 686,
+        "unit": "o:property"
+      },
+      {
+        "is_divide": "0",
+        "n": 672,
+        "unit": "iso4217:AUD"
+      },
+      {
+        "is_divide": "0",
+        "n": 656,
+        "unit": "utr:lb"
+      },
+      {
+        "is_divide": "0",
+        "n": 649,
+        "unit": "utr:mi"
+      },
+      {
+        "is_divide": "1",
+        "n": 620,
+        "unit": "iso4217:CADshares"
+      },
+      {
+        "is_divide": "0",
+        "n": 608,
+        "unit": "pfg:item"
+      },
+      {
+        "is_divide": "0",
+        "n": 589,
+        "unit": "luv:aircraft"
+      },
+      {
+        "is_divide": "0",
+        "n": 587,
+        "unit": "utr:gal"
+      },
+      {
+        "is_divide": "0",
+        "n": 558,
+        "unit": "gs:yr"
+      },
+      {
+        "is_divide": "0",
+        "n": 557,
+        "unit": "lnc:item"
+      },
+      {
+        "is_divide": "0",
+        "n": 533,
+        "unit": "plnt:store"
+      },
+      {
+        "is_divide": "0",
+        "n": 523,
+        "unit": "all:contract"
+      },
+      {
+        "is_divide": "0",
+        "n": 516,
+        "unit": "hig:claim"
+      },
+      {
+        "is_divide": "0",
+        "n": 516,
+        "unit": "utr:MBoe"
+      },
+      {
+        "is_divide": "1",
+        "n": 481,
+        "unit": "iso4217:EURshares"
+      },
+      {
+        "is_divide": "0",
+        "n": 476,
+        "unit": "ulta:store"
+      },
+      {
+        "is_divide": "0",
+        "n": 456,
+        "unit": "ash:Claim"
+      },
+      {
+        "is_divide": "0",
+        "n": 439,
+        "unit": "utr:ft3"
+      },
+      {
+        "is_divide": "0",
+        "n": 435,
+        "unit": "amp:security"
+      },
+      {
+        "is_divide": "0",
+        "n": 424,
+        "unit": "psa:storage_facility"
+      },
+      {
+        "is_divide": "0",
+        "n": 423,
+        "unit": "exr:store"
+      },
+      {
+        "is_divide": "0",
+        "n": 420,
+        "unit": "utr:MMBoe"
+      },
+      {
+        "is_divide": "0",
+        "n": 404,
+        "unit": "utr:Y"
+      },
+      {
+        "is_divide": "0",
+        "n": 390,
+        "unit": "slg:building"
+      },
+      {
+        "is_divide": "0",
+        "n": 389,
+        "unit": "fcpt:Property"
+      },
+      {
+        "is_divide": "0",
+        "n": 388,
+        "unit": "utr:Bcfe"
+      },
+      {
+        "is_divide": "0",
+        "n": 379,
+        "unit": "fdx:AirCraft"
+      },
+      {
+        "is_divide": "0",
+        "n": 358,
+        "unit": "invh:property"
+      },
+      {
+        "is_divide": "0",
+        "n": 352,
+        "unit": "nclh:item"
+      },
+      {
+        "is_divide": "1",
+        "n": 347,
+        "unit": "iso4217:USDutr:kWh"
+      },
+      {
+        "is_divide": "0",
+        "n": 344,
+        "unit": "moh:position"
+      },
+      {
+        "is_divide": "0",
+        "n": 343,
+        "unit": "mmm:lawsuit"
+      },
+      {
+        "is_divide": "0",
+        "n": 333,
+        "unit": "spg:property"
+      },
+      {
+        "is_divide": "0",
+        "n": 332,
+        "unit": "utr:GWh"
+      },
+      {
+        "is_divide": "0",
+        "n": 330,
+        "unit": "iso4217:INR"
+      },
+      {
+        "is_divide": "0",
+        "n": 322,
+        "unit": "jblu:aircraft"
+      },
+      {
+        "is_divide": "0",
+        "n": 317,
+        "unit": "txrh:restaurant"
+      },
+      {
+        "is_divide": "0",
+        "n": 314,
+        "unit": "utr:t"
+      },
+      {
+        "is_divide": "0",
+        "n": 300,
+        "unit": "tol:joint_ventures"
+      },
+      {
+        "is_divide": "0",
+        "n": 274,
+        "unit": "udr:home"
+      },
+      {
+        "is_divide": "0",
+        "n": 264,
+        "unit": "eqr:Property"
+      },
+      {
+        "is_divide": "0",
+        "n": 259,
+        "unit": "ohi:item"
+      },
+      {
+        "is_divide": "0",
+        "n": 251,
+        "unit": "met:Claims"
+      },
+      {
+        "is_divide": "0",
+        "n": 250,
+        "unit": "eix:item"
+      },
+      {
+        "is_divide": "0",
+        "n": 249,
+        "unit": "utr:Mcf"
+      },
+      {
+        "is_divide": "0",
+        "n": 247,
+        "unit": "amch:item"
+      },
+      {
+        "is_divide": "0",
+        "n": 244,
+        "unit": "exr:property"
+      },
+      {
+        "is_divide": "0",
+        "n": 244,
+        "unit": "iipr:lease"
+      },
+      {
+        "is_divide": "0",
+        "n": 241,
+        "unit": "voya:security"
+      },
+      {
+        "is_divide": "0",
+        "n": 238,
+        "unit": "iso4217:MXN"
+      },
+      {
+        "is_divide": "0",
+        "n": 237,
+        "unit": "utr:oz"
+      },
+      {
+        "is_divide": "0",
+        "n": 233,
+        "unit": "cc:Lawsuit"
+      },
+      {
+        "is_divide": "0",
+        "n": 231,
+        "unit": "amp:position"
+      },
+      {
+        "is_divide": "0",
+        "n": 230,
+        "unit": "dlr:property"
+      },
+      {
+        "is_divide": "1",
+        "n": 227,
+        "unit": "iso4217:USDnog:MMbtu"
+      },
+      {
+        "is_divide": "0",
+        "n": 226,
+        "unit": "iso4217:PLN"
+      },
+      {
+        "is_divide": "0",
+        "n": 223,
+        "unit": "mu:patent"
+      },
+      {
+        "is_divide": "0",
+        "n": 213,
+        "unit": "pkg:Security"
+      },
+      {
+        "is_divide": "0",
+        "n": 208,
+        "unit": "land:farm"
+      },
+      {
+        "is_divide": "0",
+        "n": 206,
+        "unit": "land:property"
+      },
+      {
+        "is_divide": "0",
+        "n": 206,
+        "unit": "pfe:patent"
+      },
+      {
+        "is_divide": "0",
+        "n": 203,
+        "unit": "nflx:membership"
+      },
+      {
+        "is_divide": "0",
+        "n": 198,
+        "unit": "vktx:Milestone"
+      },
+      {
+        "is_divide": "0",
+        "n": 195,
+        "unit": "cost:warehouse"
+      },
+      {
+        "is_divide": "0",
+        "n": 193,
+        "unit": "aig:country"
+      },
+      {
+        "is_divide": "0",
+        "n": 193,
+        "unit": "fls:claim"
+      },
+      {
+        "is_divide": "0",
+        "n": 192,
+        "unit": "utr:Boe"
+      },
+      {
+        "is_divide": "0",
+        "n": 192,
+        "unit": "kim:Property"
+      }
+    ],
+    "xbrl_status_distribution": [
+      {
+        "n": 10465,
+        "status": "COMPLETED"
+      },
+      {
+        "n": 3,
+        "status": "PROCESSING"
+      },
+      {
+        "n": 3,
+        "status": "FAILED"
+      },
+      {
+        "n": 1,
+        "status": "REFERENCE_ONLY"
+      }
+    ]
+  },
+  "db": {
+    "fact_count": 13775616,
+    "report_count": 42633
+  },
+  "exp_id": "EXP-1",
+  "notes": [],
+  "probe": "census",
+  "run_utc": "2026-07-09T13:31:56Z",
+  "schema_bindings": {
+    "binding_a_fact_period": {
+      "decision": "use direct (f)-[:HAS_PERIOD]->(:Period); fallback (f)-[:IN_CONTEXT]->(:Context)-[:HAS_PERIOD]->(:Period)",
+      "evidence": "5 COMPLETED-XBRL reports / 3692 numeric non-nil facts: missing_direct=0, multi_period=0, direct_vs_context_disagree=0",
+      "reports_tested": [
+        "0001437749-23-000496",
+        "0000940944-23-000004",
+        "0001013237-23-000006",
+        "0001558370-23-000048",
+        "0001003078-23-000008"
+      ],
+      "status": "CLEAN"
+    },
+    "binding_b_axis_member": {
+      "dualcik_subcase": {
+        "case": "dual-CIK filer/entity (AAL: filer Group cik 6201 carries entity Inc cik 4515 docs). Dimension/Member nodes stored under entity cik 4515; contexts reference filer cik 6201 -> unresolved after zero-pad normalization.",
+        "deferred_to": "O12 bundle (ingestion repair / possible future certified recovery)",
+        "rule": "No aliasing rule ships in EXP-1. After normal normalization, if a dimension/member node still does not resolve -> SKIP the whole affected fact + count slice_pairing_dualcik_unresolved. NO qname-only matching; NO cross-CIK/global alias matching; do NOT drop AAL.",
+        "ruled_by": "Fable 2026-07-09",
+        "scope": "AAL-only (11/12 companies pair clean). Touches REAL slice axes (entity/product/geography); 701 would-materialize facts skipped (dualcik_scope_proof.json)."
+      },
+      "evidence": {
+        "aligned": 4549501,
+        "dimensional_contexts": 4552138,
+        "misaligned_before_typed_drop": 2637,
+        "misaligned_cause": "typed dimensions add to dimension_u_ids with no explicit member (all 2637 have more dims than members)",
+        "misaligned_touching_slice_axes": 1290
+      },
+      "o13": "CLOSED (owner ratified 2026-07-09T02:50:49Z)",
+      "rule": {
+        "fail_closed": "after dropping typed dims, if a context is still misaligned or ambiguous -> skip + COUNT the affected fact/context; never guess",
+        "pairing": "Context.dimension_u_ids[i] <-> Context.member_u_ids[i] positional, over EXPLICIT dimensions only (Dimension.is_explicit = true)",
+        "typed_dimensions": "dropped from slice pairing (they create no slice member)"
+      },
+      "stated_candidates_rejected": "FACT_DIMENSION path + FACT_MEMBER edge both incomplete; member_u_ids alone lacks the axis",
+      "status": "RATIFIED"
+    },
+    "binding_c_concept_balance": {
+      "decision": "Concept.balance present; PIT menu keeps the balance column",
+      "evidence": "618754 concepts all non-null balance; values null=237677 credit=192743 debit=188334",
+      "o15_triggered": false,
+      "status": "CLEAN"
+    },
+    "binding_d_period_convention": {
+      "decision": "stored Period dates are EXCLUSIVE-end (half-open storage). Decode BEFORE any pinned rule: duration effective_start = start_date (unshifted), effective_end = end_date - 1 day; instant effective_instant = stored date - 1 day (start_date field; end_date='null' quirk). P4b primacy, P14 classifier, gp ids, build_known, comparator census, and the P4h fallback (max EFFECTIVE duration end) all run on effective dates; raw dates stay in provenance; true inclusive day count = raw end_date - raw start_date (never double-adjust).",
+      "evidence": "period_convention_proof.json (60 FA filings: durations 21,017 end==pOR+1 vs 1; instants 12,828:0; 59/60 pure exclusive; 52/53 filers 100%) + period_start_check.json (STARTS_UNSHIFTED_OK_TO_APPLY; 140/140 primary end-decode; 0 invalid start>=end)",
+      "exhibit": "ra_0003 (closed; O12 amendment line for P4b/P14/5.3)",
+      "guards": "raw end/instant == periodOfReport -> SKIP + count period_end_convention_suspect + per-fact log (the 1 LUV fact in 0000092380-26-000004); per-report >=5 or >1% suspect -> STOP; report_primary_window_missing warn counter; instant_off_pOR_by_one RETIRED",
+      "status": "PINNED_BY_FABLE_2026-07-09"
+    },
+    "db": {
+      "fact_count": 13775616,
+      "report_count": 42633
+    },
+    "o13_ratified_utc": "2026-07-09T02:50:49Z",
+    "probe": "EXP-1 step-0 schema binding",
+    "run_utc": "2026-07-09T01:34:55Z",
+    "workorder_sha256": "554529dde8e972b29a3e941b730b5eadf2e666d6769a27268886ffc6aa6cd164",
+    "xbrl_value_conversion": {
+      "observed_unit_spellings": {
+        "money": "iso4217:USD",
+        "shares": "shares",
+        "usd_per_share": "iso4217:USDshares"
+      },
+      "rule": "XBRL facts do not call the text canonicalizer. The materializer applies this fixed conversion table at emit time; P4g dedupe/collision math runs on raw values + raw decimals before conversion.",
+      "skip_rules": [
+        "anything outside the explicit P4c whitelist skips + counts",
+        "USD with is_divide='1' but not the observed per-share unit skips + counts",
+        "per-share-looking concept qname with bare iso4217:USD skips + counts as usd_bare_pershare_suspect"
+      ],
+      "source": "XBRLIntegrationDesign 5.2 P4a/P4c; closed exhibit ra_0002",
+      "status": "PINNED_BY_FABLE_2026-07-09",
+      "table": [
+        {
+          "condition": "is_divide != '1'",
+          "conversion": "round(raw / 1e6, 6)",
+          "level_unit": "m_usd",
+          "unit_name": "iso4217:USD"
+        },
+        {
+          "condition": "is_divide != '1'",
+          "conversion": "raw",
+          "level_unit": "count",
+          "unit_name": "shares"
+        },
+        {
+          "condition": "is_divide == '1'",
+          "conversion": "raw",
+          "level_unit": "usd",
+          "unit_name": "iso4217:USDshares"
+        }
+      ],
+      "verifier_requirement": "X-XL0 verifier independently implements this table rather than importing it from the materializer."
+    }
+  }
+}

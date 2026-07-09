@@ -1,0 +1,13 @@
+{
+  "bundle": "O12 XBRL pin-amendment / ratification bundle (EXP-1 findings)",
+  "entries": [
+    {
+      "candidate_repair": "INGESTION-side: store/index dim/member nodes so filer-cik contexts resolve, OR record a VALIDATED filer<->entity cik map at load. Possible future CERTIFIED recovery of the skipped AAL slice facts once a safe resolution ships. This is NOT an EXP-1 aliasing rule.",
+      "fable_ruling_in_exp1": "skip+count, no aliasing (dualcik_unresolved_slice_skip)",
+      "id": "dualcik_ingestion_repair",
+      "issue": "dual-filer (AAL Group cik 6201 / Inc entity cik 4515) stores dimension/member nodes under the ENTITY cik while contexts reference the FILER cik -> real slice facts (revenue by product/geo/entity) skipped. AAL-only in this corpus; 701 would-materialize facts lost.",
+      "raised_by": "EXP-1 dual-CIK scope (ra_0004)",
+      "status": "open_for_owner_ratification"
+    }
+  ]
+}

@@ -1,0 +1,3895 @@
+{
+  "by_company": {
+    "AAL": [
+      {
+        "driver": "fx_revenuefromcontractwithcustomerexcludingassessedtax",
+        "qname": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 1056
+      },
+      {
+        "driver": "fx_debtinstrumentcarryingamount",
+        "qname": "us-gaap:DebtInstrumentCarryingAmount",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 985
+      },
+      {
+        "driver": "fx_availableforsalesecuritiesdebtsecuritiescurrent",
+        "qname": "us-gaap:AvailableForSaleSecuritiesDebtSecuritiesCurrent",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 802
+      },
+      {
+        "driver": "fx_stockholdersequity",
+        "qname": "us-gaap:StockholdersEquity",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 746
+      },
+      {
+        "driver": "fx_debtinstrumentinterestratestatedpercentage",
+        "qname": "us-gaap:DebtInstrumentInterestRateStatedPercentage",
+        "units": [
+          "pure"
+        ],
+        "usage": 435
+      },
+      {
+        "driver": "fx_definedbenefitplanfairvalueofplanassets",
+        "qname": "us-gaap:DefinedBenefitPlanFairValueOfPlanAssets",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 356
+      },
+      {
+        "driver": "fx_debtinstrumentbasisspreadonvariablerateinterestratemargin",
+        "qname": "aal:DebtInstrumentBasisSpreadOnVariableRateInterestRateMargin",
+        "units": [
+          "pure"
+        ],
+        "usage": 297
+      },
+      {
+        "driver": "fx_netincomeloss",
+        "qname": "us-gaap:NetIncomeLoss",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 288
+      },
+      {
+        "driver": "fx_definedbenefitplanplanassetstargetallocationpercentage",
+        "qname": "us-gaap:DefinedBenefitPlanPlanAssetsTargetAllocationPercentage",
+        "units": [
+          "pure"
+        ],
+        "usage": 256
+      },
+      {
+        "driver": "fx_longtermdebtfairvalue",
+        "qname": "us-gaap:LongTermDebtFairValue",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 227
+      },
+      {
+        "driver": "fx_othercomprehensiveincomelossnetoftaxportionattributabletoparent",
+        "qname": "us-gaap:OtherComprehensiveIncomeLossNetOfTaxPortionAttributableToParent",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 224
+      },
+      {
+        "driver": "fx_nonoperatingincomeexpense",
+        "qname": "us-gaap:NonoperatingIncomeExpense",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 216
+      },
+      {
+        "driver": "fx_adjustmentstoadditionalpaidincapitalsharebasedcompensationrequisiteserviceperiodrecognitionvalue",
+        "qname": "us-gaap:AdjustmentsToAdditionalPaidInCapitalSharebasedCompensationRequisiteServicePeriodRecognitionValue",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 200
+      },
+      {
+        "driver": "fx_depreciationandamortization",
+        "qname": "us-gaap:DepreciationAndAmortization",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 176
+      },
+      {
+        "driver": "fx_aircraftrental",
+        "qname": "us-gaap:AircraftRental",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 176
+      },
+      {
+        "driver": "fx_definedbenefitplanexpectedreturnonplanassets",
+        "qname": "us-gaap:DefinedBenefitPlanExpectedReturnOnPlanAssets",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 176
+      },
+      {
+        "driver": "fx_definedbenefitplanamortizationofgainslosses",
+        "qname": "us-gaap:DefinedBenefitPlanAmortizationOfGainsLosses",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 176
+      },
+      {
+        "driver": "fx_definedbenefitplanservicecost",
+        "qname": "us-gaap:DefinedBenefitPlanServiceCost",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 176
+      },
+      {
+        "driver": "fx_definedbenefitplaninterestcost",
+        "qname": "us-gaap:DefinedBenefitPlanInterestCost",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 176
+      },
+      {
+        "driver": "fx_definedbenefitplannetperiodicbenefitcost",
+        "qname": "us-gaap:DefinedBenefitPlanNetPeriodicBenefitCost",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 176
+      },
+      {
+        "driver": "fx_definedbenefitplanamortizationofpriorservicecostcredit",
+        "qname": "us-gaap:DefinedBenefitPlanAmortizationOfPriorServiceCostCredit",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 176
+      },
+      {
+        "driver": "fx_lineofcreditfacilityremainingborrowingcapacity",
+        "qname": "us-gaap:LineOfCreditFacilityRemainingBorrowingCapacity",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 174
+      },
+      {
+        "driver": "fx_restructuringandothernet",
+        "qname": "aal:RestructuringAndOtherNet",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 172
+      },
+      {
+        "driver": "fx_contractwithcustomerliability",
+        "qname": "us-gaap:ContractWithCustomerLiability",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 168
+      },
+      {
+        "driver": "fx_airlinecapacitypurchasearrangements",
+        "qname": "us-gaap:AirlineCapacityPurchaseArrangements",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 159
+      },
+      {
+        "driver": "fx_lineofcreditfacilitymaximumborrowingcapacity",
+        "qname": "us-gaap:LineOfCreditFacilityMaximumBorrowingCapacity",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 149
+      },
+      {
+        "driver": "fx_assetsfairvaluedisclosure",
+        "qname": "us-gaap:AssetsFairValueDisclosure",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 144
+      },
+      {
+        "driver": "fx_restrictedcashandcashequivalentsandshortterminvestmentsfairvaluedisclosure",
+        "qname": "aal:RestrictedCashAndCashEquivalentsAndShorttermInvestmentsFairValueDisclosure",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 128
+      },
+      {
+        "driver": "fx_debtinstrumentbasisspreadonvariableratefloorinterestrate",
+        "qname": "aal:DebtInstrumentBasisSpreadOnVariableRateFloorInterestRate",
+        "units": [
+          "pure"
+        ],
+        "usage": 124
+      },
+      {
+        "driver": "fx_longtermdebtpercentagebearingvariableinterestrate",
+        "qname": "us-gaap:LongTermDebtPercentageBearingVariableInterestRate",
+        "units": [
+          "pure"
+        ],
+        "usage": 118
+      },
+      {
+        "driver": "fx_aocibeforetaxattributabletoparent",
+        "qname": "us-gaap:AociBeforeTaxAttributableToParent",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 116
+      },
+      {
+        "driver": "fx_cashcashequivalentsrestrictedcashandrestrictedcashequivalents",
+        "qname": "us-gaap:CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 112
+      },
+      {
+        "driver": "fx_contractwithcustomerliabilitycurrent",
+        "qname": "us-gaap:ContractWithCustomerLiabilityCurrent",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 112
+      },
+      {
+        "driver": "fx_adjustmentsrelatedtotaxwithholdingforsharebasedcompensation",
+        "qname": "us-gaap:AdjustmentsRelatedToTaxWithholdingForShareBasedCompensation",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 109
+      },
+      {
+        "driver": "fx_otheroperatingspecialchargesnet",
+        "qname": "aal:OtherOperatingSpecialChargesNet",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 94
+      },
+      {
+        "driver": "fx_severancecosts1",
+        "qname": "us-gaap:SeveranceCosts1",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 90
+      },
+      {
+        "driver": "fx_equitymethodinvestmentownershippercentage",
+        "qname": "us-gaap:EquityMethodInvestmentOwnershipPercentage",
+        "units": [
+          "pure"
+        ],
+        "usage": 90
+      },
+      {
+        "driver": "fx_fuelcosts",
+        "qname": "us-gaap:FuelCosts",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 88
+      },
+      {
+        "driver": "fx_incometaxexpensebenefit",
+        "qname": "us-gaap:IncomeTaxExpenseBenefit",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 88
+      },
+      {
+        "driver": "fx_incomelossfromcontinuingoperationsbeforeincometaxesextraordinaryitemsnoncontrollinginterest",
+        "qname": "us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 88
+      }
+    ],
+    "AZO": [
+      {
+        "driver": "fx_stockholdersequity",
+        "qname": "us-gaap:StockholdersEquity",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 641
+      },
+      {
+        "driver": "fx_debtinstrumentinterestratestatedpercentage",
+        "qname": "us-gaap:DebtInstrumentInterestRateStatedPercentage",
+        "units": [
+          "pure"
+        ],
+        "usage": 438
+      },
+      {
+        "driver": "fx_seniornotes",
+        "qname": "us-gaap:SeniorNotes",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 402
+      },
+      {
+        "driver": "fx_debtinstrumentinterestrateeffectivepercentage",
+        "qname": "us-gaap:DebtInstrumentInterestRateEffectivePercentage",
+        "units": [
+          "pure"
+        ],
+        "usage": 373
+      },
+      {
+        "driver": "fx_availableforsalesecuritiesdebtsecurities",
+        "qname": "us-gaap:AvailableForSaleSecuritiesDebtSecurities",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 210
+      },
+      {
+        "driver": "fx_revenues",
+        "qname": "us-gaap:Revenues",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 167
+      },
+      {
+        "driver": "fx_availableforsaledebtsecuritiesamortizedcostbasis",
+        "qname": "us-gaap:AvailableForSaleDebtSecuritiesAmortizedCostBasis",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 134
+      },
+      {
+        "driver": "fx_othercomprehensiveincomelossbeforereclassificationsnetoftax",
+        "qname": "us-gaap:OtherComprehensiveIncomeLossBeforeReclassificationsNetOfTax",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 133
+      },
+      {
+        "driver": "fx_availableforsaledebtsecuritiesaccumulatedgrossunrealizedlossbeforetax",
+        "qname": "us-gaap:AvailableForSaleDebtSecuritiesAccumulatedGrossUnrealizedLossBeforeTax",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 127
+      },
+      {
+        "driver": "fx_grossprofit",
+        "qname": "us-gaap:GrossProfit",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 127
+      },
+      {
+        "driver": "fx_treasurystockretiredcostmethodamount",
+        "qname": "us-gaap:TreasuryStockRetiredCostMethodAmount",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 124
+      },
+      {
+        "driver": "fx_stockissuedduringperiodvaluesharebasedcompensation",
+        "qname": "us-gaap:StockIssuedDuringPeriodValueShareBasedCompensation",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 117
+      },
+      {
+        "driver": "fx_netincomeloss",
+        "qname": "us-gaap:NetIncomeLoss",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 114
+      },
+      {
+        "driver": "fx_treasurystockvalueacquiredcostmethod",
+        "qname": "us-gaap:TreasuryStockValueAcquiredCostMethod",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 112
+      },
+      {
+        "driver": "fx_othercomprehensiveincomelossnetoftax",
+        "qname": "us-gaap:OtherComprehensiveIncomeLossNetOfTax",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 100
+      },
+      {
+        "driver": "fx_reclassificationfromaccumulatedothercomprehensiveincomecurrentperiodnetoftax",
+        "qname": "us-gaap:ReclassificationFromAccumulatedOtherComprehensiveIncomeCurrentPeriodNetOfTax",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 98
+      },
+      {
+        "driver": "fx_availableforsaledebtsecuritiesaccumulatedgrossunrealizedgainbeforetax",
+        "qname": "us-gaap:AvailableForSaleDebtSecuritiesAccumulatedGrossUnrealizedGainBeforeTax",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 97
+      },
+      {
+        "driver": "fx_adjustmentstoadditionalpaidincapitalsharebasedcompensationrequisiteserviceperiodrecognitionvalue",
+        "qname": "us-gaap:AdjustmentsToAdditionalPaidInCapitalSharebasedCompensationRequisiteServicePeriodRecognitionValue",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 86
+      },
+      {
+        "driver": "fx_availableforsalesecuritiesdebtsecuritiesnoncurrent",
+        "qname": "us-gaap:AvailableForSaleSecuritiesDebtSecuritiesNoncurrent",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 82
+      },
+      {
+        "driver": "fx_availableforsalesecuritiesdebtsecuritiescurrent",
+        "qname": "us-gaap:AvailableForSaleSecuritiesDebtSecuritiesCurrent",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 81
+      },
+      {
+        "driver": "fx_treasurystocksharesacquired",
+        "qname": "us-gaap:TreasuryStockSharesAcquired",
+        "units": [
+          "shares"
+        ],
+        "usage": 68
+      },
+      {
+        "driver": "fx_lineofcreditfacilitymaximumborrowingcapacity",
+        "qname": "us-gaap:LineOfCreditFacilityMaximumBorrowingCapacity",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 66
+      },
+      {
+        "driver": "fx_interestincomeexpensenonoperatingnet",
+        "qname": "us-gaap:InterestIncomeExpenseNonoperatingNet",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 59
+      },
+      {
+        "driver": "fx_incomelossfromcontinuingoperationsbeforeincometaxesextraordinaryitemsnoncontrollinginterest",
+        "qname": "us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 57
+      },
+      {
+        "driver": "fx_incometaxexpensebenefit",
+        "qname": "us-gaap:IncomeTaxExpenseBenefit",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 55
+      },
+      {
+        "driver": "fx_cashcashequivalentsrestrictedcashandrestrictedcashequivalentsincludingdisposalgroupanddiscontinuedoperations",
+        "qname": "us-gaap:CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalentsIncludingDisposalGroupAndDiscontinuedOperations",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 54
+      },
+      {
+        "driver": "fx_commonstocksharesissued",
+        "qname": "us-gaap:CommonStockSharesIssued",
+        "units": [
+          "shares"
+        ],
+        "usage": 53
+      },
+      {
+        "driver": "fx_costofgoodsandservicessold",
+        "qname": "us-gaap:CostOfGoodsAndServicesSold",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 52
+      },
+      {
+        "driver": "fx_sellinggeneralandadministrativeexpense",
+        "qname": "us-gaap:SellingGeneralAndAdministrativeExpense",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 49
+      },
+      {
+        "driver": "fx_sharebasedcompensationarrangementbysharebasedpaymentawardfairvalueassumptionsexpectedforfeiturerate",
+        "qname": "azo:ShareBasedCompensationArrangementByShareBasedPaymentAwardFairValueAssumptionsExpectedForfeitureRate",
+        "units": [
+          "pure"
+        ],
+        "usage": 49
+      },
+      {
+        "driver": "fx_othercomprehensiveincomelossforeigncurrencytransactionandtranslationadjustmentnetoftax",
+        "qname": "us-gaap:OtherComprehensiveIncomeLossForeignCurrencyTransactionAndTranslationAdjustmentNetOfTax",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 43
+      },
+      {
+        "driver": "fx_earningspersharediluted",
+        "qname": "us-gaap:EarningsPerShareDiluted",
+        "units": [
+          "iso4217:USDshares"
+        ],
+        "usage": 43
+      },
+      {
+        "driver": "fx_weightedaveragenumberofdilutedsharesoutstanding",
+        "qname": "us-gaap:WeightedAverageNumberOfDilutedSharesOutstanding",
+        "units": [
+          "shares"
+        ],
+        "usage": 43
+      },
+      {
+        "driver": "fx_othercomprehensiveincomelossavailableforsalesecuritiesadjustmentnetoftax",
+        "qname": "us-gaap:OtherComprehensiveIncomeLossAvailableForSaleSecuritiesAdjustmentNetOfTax",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 43
+      },
+      {
+        "driver": "fx_earningspersharebasic",
+        "qname": "us-gaap:EarningsPerShareBasic",
+        "units": [
+          "iso4217:USDshares"
+        ],
+        "usage": 43
+      },
+      {
+        "driver": "fx_othercomprehensiveincomelosscashflowhedgegainlossafterreclassificationandtax",
+        "qname": "us-gaap:OtherComprehensiveIncomeLossCashFlowHedgeGainLossAfterReclassificationAndTax",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 43
+      },
+      {
+        "driver": "fx_operatingincomeloss",
+        "qname": "us-gaap:OperatingIncomeLoss",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 43
+      },
+      {
+        "driver": "fx_stockissuedduringperiodsharessharebasedcompensation",
+        "qname": "us-gaap:StockIssuedDuringPeriodSharesShareBasedCompensation",
+        "units": [
+          "shares"
+        ],
+        "usage": 43
+      },
+      {
+        "driver": "fx_concentrationriskpercentage1",
+        "qname": "us-gaap:ConcentrationRiskPercentage1",
+        "units": [
+          "pure"
+        ],
+        "usage": 34
+      },
+      {
+        "driver": "fx_sharebasedcompensationarrangementbysharebasedpaymentawardfairvalueassumptionsexpecteddividendrate",
+        "qname": "us-gaap:ShareBasedCompensationArrangementByShareBasedPaymentAwardFairValueAssumptionsExpectedDividendRate",
+        "units": [
+          "pure"
+        ],
+        "usage": 29
+      }
+    ],
+    "BBY": [
+      {
+        "driver": "fx_revenues",
+        "qname": "us-gaap:Revenues",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 540
+      },
+      {
+        "driver": "fx_stockholdersequityincludingportionattributabletononcontrollinginterest",
+        "qname": "us-gaap:StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 293
+      },
+      {
+        "driver": "fx_restructuringchargesincludinginventorywritedown",
+        "qname": "bby:RestructuringChargesIncludingInventoryWriteDown",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 278
+      },
+      {
+        "driver": "fx_revenuefromcontractwithcustomerincludingassessedtax",
+        "qname": "us-gaap:RevenueFromContractWithCustomerIncludingAssessedTax",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 172
+      },
+      {
+        "driver": "fx_finitelivedintangibleassetsaccumulatedamortization",
+        "qname": "us-gaap:FiniteLivedIntangibleAssetsAccumulatedAmortization",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 146
+      },
+      {
+        "driver": "fx_finitelivedintangibleassetsgross",
+        "qname": "us-gaap:FiniteLivedIntangibleAssetsGross",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 144
+      },
+      {
+        "driver": "fx_contractwithcustomerliabilitycurrent",
+        "qname": "us-gaap:ContractWithCustomerLiabilityCurrent",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 142
+      },
+      {
+        "driver": "fx_derivativenotionalamount",
+        "qname": "us-gaap:DerivativeNotionalAmount",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 140
+      },
+      {
+        "driver": "fx_restructuringreserve",
+        "qname": "us-gaap:RestructuringReserve",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 133
+      },
+      {
+        "driver": "fx_assets",
+        "qname": "us-gaap:Assets",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 113
+      },
+      {
+        "driver": "fx_stockrepurchasedduringperiodincludingwrittenprepaidputoptionvalue",
+        "qname": "bby:StockRepurchasedDuringPeriodIncludingWrittenPrepaidPutOptionValue",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 110
+      },
+      {
+        "driver": "fx_derivativegainlossonderivativenet",
+        "qname": "us-gaap:DerivativeGainLossOnDerivativeNet",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 95
+      },
+      {
+        "driver": "fx_operatingincomeloss",
+        "qname": "us-gaap:OperatingIncomeLoss",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 94
+      },
+      {
+        "driver": "fx_restructuringcharges",
+        "qname": "us-gaap:RestructuringCharges",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 89
+      },
+      {
+        "driver": "fx_revenueremainingperformanceobligation",
+        "qname": "us-gaap:RevenueRemainingPerformanceObligation",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 87
+      },
+      {
+        "driver": "fx_goodwillgross",
+        "qname": "us-gaap:GoodwillGross",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 87
+      },
+      {
+        "driver": "fx_goodwillimpairedaccumulatedimpairmentloss",
+        "qname": "us-gaap:GoodwillImpairedAccumulatedImpairmentLoss",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 87
+      },
+      {
+        "driver": "fx_netincomeloss",
+        "qname": "us-gaap:NetIncomeLoss",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 86
+      },
+      {
+        "driver": "fx_adjustmentstoadditionalpaidincapitalsharebasedcompensationrequisiteserviceperiodrecognitionvalue",
+        "qname": "us-gaap:AdjustmentsToAdditionalPaidInCapitalSharebasedCompensationRequisiteServicePeriodRecognitionValue",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 84
+      },
+      {
+        "driver": "fx_stockissuedduringperiodvaluestockoptionsexercised",
+        "qname": "us-gaap:StockIssuedDuringPeriodValueStockOptionsExercised",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 82
+      },
+      {
+        "driver": "fx_increasedecreasetoadditionalpaidincapitaldividendsinexcessofretainedearnings",
+        "qname": "bby:IncreaseDecreaseToAdditionalPaidInCapitalDividendsInExcessOfRetainedEarnings",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 78
+      },
+      {
+        "driver": "fx_othercomprehensiveincomeforeigncurrencytransactionandtranslationgainlossarisingduringperiodnetoftax",
+        "qname": "us-gaap:OtherComprehensiveIncomeForeignCurrencyTransactionAndTranslationGainLossArisingDuringPeriodNetOfTax",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 77
+      },
+      {
+        "driver": "fx_costofgoodsandservicessold",
+        "qname": "us-gaap:CostOfGoodsAndServicesSold",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 76
+      },
+      {
+        "driver": "fx_paymentsforrestructuring",
+        "qname": "us-gaap:PaymentsForRestructuring",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 72
+      },
+      {
+        "driver": "fx_cashandcashequivalentsfairvaluedisclosure",
+        "qname": "us-gaap:CashAndCashEquivalentsFairValueDisclosure",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 70
+      },
+      {
+        "driver": "fx_restructuringreserveaccrualadjustment1",
+        "qname": "us-gaap:RestructuringReserveAccrualAdjustment1",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 69
+      },
+      {
+        "driver": "fx_propertyplantandequipmentnet",
+        "qname": "us-gaap:PropertyPlantAndEquipmentNet",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 68
+      },
+      {
+        "driver": "fx_stockrepurchasedduringperiodshares",
+        "qname": "us-gaap:StockRepurchasedDuringPeriodShares",
+        "units": [
+          "shares"
+        ],
+        "usage": 68
+      },
+      {
+        "driver": "fx_depreciation",
+        "qname": "us-gaap:Depreciation",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 66
+      },
+      {
+        "driver": "fx_notespayable",
+        "qname": "us-gaap:NotesPayable",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 66
+      },
+      {
+        "driver": "fx_stockrepurchasedduringperiodvalue",
+        "qname": "us-gaap:StockRepurchasedDuringPeriodValue",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 63
+      },
+      {
+        "driver": "fx_longtermdebtexcludingdebtdiscountsandissuancecostsandfinancingandcapitalleaseobligations",
+        "qname": "bby:LongTermDebtExcludingDebtDiscountsAndIssuanceCostsAndFinancingAndCapitalLeaseObligations",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 62
+      },
+      {
+        "driver": "fx_segmentexpenditureadditiontolonglivedassets",
+        "qname": "us-gaap:SegmentExpenditureAdditionToLongLivedAssets",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 57
+      },
+      {
+        "driver": "fx_goodwill",
+        "qname": "us-gaap:Goodwill",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 55
+      },
+      {
+        "driver": "fx_othercurrentassetsfairvaluedisclosure",
+        "qname": "bby:OtherCurrentAssetsFairValueDisclosure",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 54
+      },
+      {
+        "driver": "fx_cashcashequivalentsrestrictedcashandrestrictedcashequivalents",
+        "qname": "us-gaap:CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 52
+      },
+      {
+        "driver": "fx_adjustmentstoadditionalpaidincapitaldividendsinexcessofretainedearnings",
+        "qname": "us-gaap:AdjustmentsToAdditionalPaidInCapitalDividendsInExcessOfRetainedEarnings",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 48
+      },
+      {
+        "driver": "fx_adjustedoperatingincomeloss",
+        "qname": "bby:AdjustedOperatingIncomeLoss",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 48
+      },
+      {
+        "driver": "fx_adjustedsellinggeneralandadministrativeexpense",
+        "qname": "bby:AdjustedSellingGeneralAndAdministrativeExpense",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 48
+      },
+      {
+        "driver": "fx_allocatedsharebasedcompensationexpense",
+        "qname": "us-gaap:AllocatedShareBasedCompensationExpense",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 48
+      }
+    ],
+    "CAKE": [
+      {
+        "driver": "fx_stockholdersequityincludingportionattributabletononcontrollinginterest",
+        "qname": "us-gaap:StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 448
+      },
+      {
+        "driver": "fx_depreciationdepletionandamortization",
+        "qname": "us-gaap:DepreciationDepletionAndAmortization",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 225
+      },
+      {
+        "driver": "fx_operatingincomeloss",
+        "qname": "us-gaap:OperatingIncomeLoss",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 221
+      },
+      {
+        "driver": "fx_paymentstoacquireproductiveassets",
+        "qname": "us-gaap:PaymentsToAcquireProductiveAssets",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 210
+      },
+      {
+        "driver": "fx_allocatedsharebasedcompensationexpense",
+        "qname": "us-gaap:AllocatedShareBasedCompensationExpense",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 168
+      },
+      {
+        "driver": "fx_assets",
+        "qname": "us-gaap:Assets",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 158
+      },
+      {
+        "driver": "fx_revenuefromcontractwithcustomerincludingassessedtax",
+        "qname": "us-gaap:RevenueFromContractWithCustomerIncludingAssessedTax",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 147
+      },
+      {
+        "driver": "fx_impairmentofassetsandleaseterminationincomeexpenses",
+        "qname": "cake:ImpairmentOfAssetsAndLeaseTerminationIncomeExpenses",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 140
+      },
+      {
+        "driver": "fx_treasurystockvalueacquiredcostmethod",
+        "qname": "us-gaap:TreasuryStockValueAcquiredCostMethod",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 132
+      },
+      {
+        "driver": "fx_othercomprehensiveincomelossforeigncurrencytransactionandtranslationadjustmentnetoftax",
+        "qname": "us-gaap:OtherComprehensiveIncomeLossForeignCurrencyTransactionAndTranslationAdjustmentNetOfTax",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 127
+      },
+      {
+        "driver": "fx_profitloss",
+        "qname": "us-gaap:ProfitLoss",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 125
+      },
+      {
+        "driver": "fx_preopeningcosts",
+        "qname": "us-gaap:PreOpeningCosts",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 125
+      },
+      {
+        "driver": "fx_preopeningcost",
+        "qname": "cake:PreOpeningCost",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 115
+      },
+      {
+        "driver": "fx_costsandexpenses",
+        "qname": "us-gaap:CostsAndExpenses",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 112
+      },
+      {
+        "driver": "fx_laborandrelatedexpense",
+        "qname": "us-gaap:LaborAndRelatedExpense",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 111
+      },
+      {
+        "driver": "fx_foodandbeveragecosts",
+        "qname": "cake:FoodAndBeverageCosts",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 110
+      },
+      {
+        "driver": "fx_othercostandexpenseoperating",
+        "qname": "us-gaap:OtherCostAndExpenseOperating",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 109
+      },
+      {
+        "driver": "fx_dividendscommonstockcashnetofforfeitures",
+        "qname": "cake:DividendsCommonStockCashNetOfForfeitures",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 107
+      },
+      {
+        "driver": "fx_adjustmentstoadditionalpaidincapitalsharebasedcompensationrequisiteserviceperiodrecognitionvalue",
+        "qname": "us-gaap:AdjustmentsToAdditionalPaidInCapitalSharebasedCompensationRequisiteServicePeriodRecognitionValue",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 95
+      },
+      {
+        "driver": "fx_businesscombinationacquisitionrelatedcostscontingentconsiderationcompensationandamortizationexpense",
+        "qname": "cake:BusinessCombinationAcquisitionRelatedCostsContingentConsiderationCompensationAndAmortizationExpense",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 89
+      },
+      {
+        "driver": "fx_stockissuedduringperiodvaluesharebasedcompensation",
+        "qname": "us-gaap:StockIssuedDuringPeriodValueShareBasedCompensation",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 81
+      },
+      {
+        "driver": "fx_revenuefromcontractwithcustomerexcludingassessedtax",
+        "qname": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 80
+      },
+      {
+        "driver": "fx_sharesoutstanding",
+        "qname": "us-gaap:SharesOutstanding",
+        "units": [
+          "shares"
+        ],
+        "usage": 80
+      },
+      {
+        "driver": "fx_debtinstrumentbasisspreadonvariablerate1",
+        "qname": "us-gaap:DebtInstrumentBasisSpreadOnVariableRate1",
+        "units": [
+          "pure"
+        ],
+        "usage": 78
+      },
+      {
+        "driver": "fx_contractwithcustomerliabilitycurrent",
+        "qname": "us-gaap:ContractWithCustomerLiabilityCurrent",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 70
+      },
+      {
+        "driver": "fx_commonstockdividendspersharedeclared",
+        "qname": "us-gaap:CommonStockDividendsPerShareDeclared",
+        "units": [
+          "iso4217:USDshares"
+        ],
+        "usage": 70
+      },
+      {
+        "driver": "fx_giftcardsassetscurrent",
+        "qname": "cake:GiftCardsAssetsCurrent",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 68
+      },
+      {
+        "driver": "fx_debtinstrumentfaceamount",
+        "qname": "us-gaap:DebtInstrumentFaceAmount",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 68
+      },
+      {
+        "driver": "fx_antidilutivesecuritiesexcludedfromcomputationofearningspershareamount",
+        "qname": "us-gaap:AntidilutiveSecuritiesExcludedFromComputationOfEarningsPerShareAmount",
+        "units": [
+          "shares"
+        ],
+        "usage": 67
+      },
+      {
+        "driver": "fx_propertyplantandequipmentgross",
+        "qname": "us-gaap:PropertyPlantAndEquipmentGross",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 64
+      },
+      {
+        "driver": "fx_generalandadministrativeexpense",
+        "qname": "us-gaap:GeneralAndAdministrativeExpense",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 63
+      },
+      {
+        "driver": "fx_earningspersharediluted",
+        "qname": "us-gaap:EarningsPerShareDiluted",
+        "units": [
+          "iso4217:USDshares"
+        ],
+        "usage": 61
+      },
+      {
+        "driver": "fx_netincomeloss",
+        "qname": "us-gaap:NetIncomeLoss",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 60
+      },
+      {
+        "driver": "fx_weightedaveragenumberofsharesoutstandingbasic",
+        "qname": "us-gaap:WeightedAverageNumberOfSharesOutstandingBasic",
+        "units": [
+          "shares"
+        ],
+        "usage": 58
+      },
+      {
+        "driver": "fx_earningspersharebasic",
+        "qname": "us-gaap:EarningsPerShareBasic",
+        "units": [
+          "iso4217:USDshares"
+        ],
+        "usage": 56
+      },
+      {
+        "driver": "fx_weightedaveragenumberofdilutedsharesoutstanding",
+        "qname": "us-gaap:WeightedAverageNumberOfDilutedSharesOutstanding",
+        "units": [
+          "shares"
+        ],
+        "usage": 53
+      },
+      {
+        "driver": "fx_cashcashequivalentsrestrictedcashandrestrictedcashequivalents",
+        "qname": "us-gaap:CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 53
+      },
+      {
+        "driver": "fx_incomelossfromcontinuingoperationsbeforeincometaxesextraordinaryitemsnoncontrollinginterest",
+        "qname": "us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 47
+      },
+      {
+        "driver": "fx_amortizationoffinancingcosts",
+        "qname": "us-gaap:AmortizationOfFinancingCosts",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 46
+      },
+      {
+        "driver": "fx_debtinstrumentconvertibleconversionratio1",
+        "qname": "us-gaap:DebtInstrumentConvertibleConversionRatio1",
+        "units": [
+          "pure"
+        ],
+        "usage": 34
+      }
+    ],
+    "CMG": [
+      {
+        "driver": "fx_stockholdersequity",
+        "qname": "us-gaap:StockholdersEquity",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 426
+      },
+      {
+        "driver": "fx_stockissuedduringperiodvalueother",
+        "qname": "us-gaap:StockIssuedDuringPeriodValueOther",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 190
+      },
+      {
+        "driver": "fx_treasurystockvalueacquiredcostmethod",
+        "qname": "us-gaap:TreasuryStockValueAcquiredCostMethod",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 184
+      },
+      {
+        "driver": "fx_revenues",
+        "qname": "us-gaap:Revenues",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 180
+      },
+      {
+        "driver": "fx_netincomeloss",
+        "qname": "us-gaap:NetIncomeLoss",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 172
+      },
+      {
+        "driver": "fx_adjustmentstoadditionalpaidincapitalsharebasedcompensationrequisiteserviceperiodrecognitionvalue",
+        "qname": "us-gaap:AdjustmentsToAdditionalPaidInCapitalSharebasedCompensationRequisiteServicePeriodRecognitionValue",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 160
+      },
+      {
+        "driver": "fx_othercomprehensiveincomelossnetoftaxportionattributabletoparent",
+        "qname": "us-gaap:OtherComprehensiveIncomeLossNetOfTaxPortionAttributableToParent",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 160
+      },
+      {
+        "driver": "fx_heldtomaturitysecuritiesnoncurrent",
+        "qname": "us-gaap:HeldToMaturitySecuritiesNoncurrent",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 155
+      },
+      {
+        "driver": "fx_heldtomaturitysecuritiesaccumulatedunrecognizedholdinggain",
+        "qname": "us-gaap:HeldToMaturitySecuritiesAccumulatedUnrecognizedHoldingGain",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 141
+      },
+      {
+        "driver": "fx_heldtomaturitysecuritiescurrent",
+        "qname": "us-gaap:HeldToMaturitySecuritiesCurrent",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 136
+      },
+      {
+        "driver": "fx_cashandcashequivalentsatcarryingvalue",
+        "qname": "us-gaap:CashAndCashEquivalentsAtCarryingValue",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 131
+      },
+      {
+        "driver": "fx_heldtomaturitysecuritiesaccumulatedunrecognizedholdingloss",
+        "qname": "us-gaap:HeldToMaturitySecuritiesAccumulatedUnrecognizedHoldingLoss",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 122
+      },
+      {
+        "driver": "fx_heldtomaturitysecuritiesfairvalue",
+        "qname": "us-gaap:HeldToMaturitySecuritiesFairValue",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 113
+      },
+      {
+        "driver": "fx_heldtomaturitysecurities",
+        "qname": "us-gaap:HeldToMaturitySecurities",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 113
+      },
+      {
+        "driver": "fx_contractwithcustomerliabilitycurrent",
+        "qname": "us-gaap:ContractWithCustomerLiabilityCurrent",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 110
+      },
+      {
+        "driver": "fx_operatingincomeloss",
+        "qname": "us-gaap:OperatingIncomeLoss",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 90
+      },
+      {
+        "driver": "fx_longterminvestments",
+        "qname": "us-gaap:LongTermInvestments",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 79
+      },
+      {
+        "driver": "fx_equitymethodinvestments",
+        "qname": "us-gaap:EquityMethodInvestments",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 72
+      },
+      {
+        "driver": "fx_contractwithcustomerliabilityrevenuerecognized",
+        "qname": "us-gaap:ContractWithCustomerLiabilityRevenueRecognized",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 71
+      },
+      {
+        "driver": "fx_treasurystocksharesacquired",
+        "qname": "us-gaap:TreasuryStockSharesAcquired",
+        "units": [
+          "shares"
+        ],
+        "usage": 66
+      },
+      {
+        "driver": "fx_stockissuedduringperiodsharesother",
+        "qname": "us-gaap:StockIssuedDuringPeriodSharesOther",
+        "units": [
+          "shares"
+        ],
+        "usage": 64
+      },
+      {
+        "driver": "fx_costdirectmaterial",
+        "qname": "us-gaap:CostDirectMaterial",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 58
+      },
+      {
+        "driver": "fx_depreciationdepletionandamortization",
+        "qname": "us-gaap:DepreciationDepletionAndAmortization",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 58
+      },
+      {
+        "driver": "fx_othernonoperatingincomeexpense",
+        "qname": "us-gaap:OtherNonoperatingIncomeExpense",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 58
+      },
+      {
+        "driver": "fx_othercostandexpenseoperating",
+        "qname": "us-gaap:OtherCostAndExpenseOperating",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 58
+      },
+      {
+        "driver": "fx_costdirectlabor",
+        "qname": "us-gaap:CostDirectLabor",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 58
+      },
+      {
+        "driver": "fx_occupancynet",
+        "qname": "us-gaap:OccupancyNet",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 58
+      },
+      {
+        "driver": "fx_treasurystockcommonshares",
+        "qname": "us-gaap:TreasuryStockCommonShares",
+        "units": [
+          "shares"
+        ],
+        "usage": 56
+      },
+      {
+        "driver": "fx_sharesoutstanding",
+        "qname": "us-gaap:SharesOutstanding",
+        "units": [
+          "shares"
+        ],
+        "usage": 53
+      },
+      {
+        "driver": "fx_relatedpartytransactionamountsoftransaction",
+        "qname": "us-gaap:RelatedPartyTransactionAmountsOfTransaction",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 52
+      },
+      {
+        "driver": "fx_cashcashequivalentsrestrictedcashandrestrictedcashequivalents",
+        "qname": "us-gaap:CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 52
+      },
+      {
+        "driver": "fx_sharebasedcompensationarrangementbysharebasedpaymentawardcompensationcost1",
+        "qname": "us-gaap:SharebasedCompensationArrangementBySharebasedPaymentAwardCompensationCost1",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 50
+      },
+      {
+        "driver": "fx_numberofrestaurants",
+        "qname": "us-gaap:NumberOfRestaurants",
+        "units": [
+          "cmg:item",
+          "cmg:restaurant"
+        ],
+        "usage": 49
+      },
+      {
+        "driver": "fx_propertyplantandequipmentgross",
+        "qname": "us-gaap:PropertyPlantAndEquipmentGross",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 48
+      },
+      {
+        "driver": "fx_cashandcashequivalentsatcarryingvalueanddebtsecuritiesheldtomaturityfairvalue",
+        "qname": "cmg:CashAndCashEquivalentsAtCarryingValueAndDebtSecuritiesHeldToMaturityFairValue",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 48
+      },
+      {
+        "driver": "fx_cashandcashequivalentsatcarryingvalueanddebtsecuritiesheldtomaturityamortizedcost",
+        "qname": "cmg:CashAndCashEquivalentsAtCarryingValueAndDebtSecuritiesHeldToMaturityAmortizedCost",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 48
+      },
+      {
+        "driver": "fx_commonstocksharesissued",
+        "qname": "us-gaap:CommonStockSharesIssued",
+        "units": [
+          "shares"
+        ],
+        "usage": 44
+      },
+      {
+        "driver": "fx_effectiveincometaxratecontinuingoperations",
+        "qname": "us-gaap:EffectiveIncomeTaxRateContinuingOperations",
+        "units": [
+          "pure"
+        ],
+        "usage": 42
+      },
+      {
+        "driver": "fx_earningspersharebasic",
+        "qname": "us-gaap:EarningsPerShareBasic",
+        "units": [
+          "iso4217:USDshares"
+        ],
+        "usage": 42
+      },
+      {
+        "driver": "fx_conditionaltargetnumberofsharesearnedpercentage",
+        "qname": "cmg:ConditionalTargetNumberOfSharesEarnedPercentage",
+        "units": [
+          "pure"
+        ],
+        "usage": 39
+      }
+    ],
+    "DAL": [
+      {
+        "driver": "fx_revenuefromcontractwithcustomerexcludingassessedtax",
+        "qname": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 1089
+      },
+      {
+        "driver": "fx_stockholdersequity",
+        "qname": "us-gaap:StockholdersEquity",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 445
+      },
+      {
+        "driver": "fx_debtinstrumentcarryingamount",
+        "qname": "us-gaap:DebtInstrumentCarryingAmount",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 336
+      },
+      {
+        "driver": "fx_debtinstrumentinterestratestatedpercentage",
+        "qname": "us-gaap:DebtInstrumentInterestRateStatedPercentage",
+        "units": [
+          "pure"
+        ],
+        "usage": 213
+      },
+      {
+        "driver": "fx_availableforsalesecuritiesdebtsecurities",
+        "qname": "us-gaap:AvailableForSaleSecuritiesDebtSecurities",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 200
+      },
+      {
+        "driver": "fx_equitysecuritiesfvniownershippercentage",
+        "qname": "dal:EquitySecuritiesFVNIOwnershipPercentage",
+        "units": [
+          "pure"
+        ],
+        "usage": 186
+      },
+      {
+        "driver": "fx_definedbenefitplanfairvalueofplanassets",
+        "qname": "us-gaap:DefinedBenefitPlanFairValueOfPlanAssets",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 184
+      },
+      {
+        "driver": "fx_equitysecuritiesfvni",
+        "qname": "us-gaap:EquitySecuritiesFvNi",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 180
+      },
+      {
+        "driver": "fx_depreciationdepletionandamortization",
+        "qname": "us-gaap:DepreciationDepletionAndAmortization",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 158
+      },
+      {
+        "driver": "fx_operatingincomeloss",
+        "qname": "us-gaap:OperatingIncomeLoss",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 152
+      },
+      {
+        "driver": "fx_paymentstoacquireproductiveassets",
+        "qname": "us-gaap:PaymentsToAcquireProductiveAssets",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 152
+      },
+      {
+        "driver": "fx_stockissuedduringperiodvaluesharebasedcompensation",
+        "qname": "us-gaap:StockIssuedDuringPeriodValueShareBasedCompensation",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 148
+      },
+      {
+        "driver": "fx_assets",
+        "qname": "us-gaap:Assets",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 138
+      },
+      {
+        "driver": "fx_restrictedinvestmentsatfairvalue",
+        "qname": "us-gaap:RestrictedInvestmentsAtFairValue",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 112
+      },
+      {
+        "driver": "fx_netincomeloss",
+        "qname": "us-gaap:NetIncomeLoss",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 112
+      },
+      {
+        "driver": "fx_aocibeforetaxattributabletoparent",
+        "qname": "us-gaap:AociBeforeTaxAttributableToParent",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 112
+      },
+      {
+        "driver": "fx_derivativeassetsliabilitiesatfairvaluenet",
+        "qname": "us-gaap:DerivativeAssetsLiabilitiesAtFairValueNet",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 112
+      },
+      {
+        "driver": "fx_cashandcashequivalentsfairvaluedisclosure",
+        "qname": "us-gaap:CashAndCashEquivalentsFairValueDisclosure",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 112
+      },
+      {
+        "driver": "fx_interestincomeexpensenonoperatingnet",
+        "qname": "us-gaap:InterestIncomeExpenseNonoperatingNet",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 104
+      },
+      {
+        "driver": "fx_unrecordedunconditionalpurchaseobligationminimumquantityrequired",
+        "qname": "us-gaap:UnrecordedUnconditionalPurchaseObligationMinimumQuantityRequired",
+        "units": [
+          "dal:aircraft"
+        ],
+        "usage": 102
+      },
+      {
+        "driver": "fx_treasurystockcommonshares",
+        "qname": "us-gaap:TreasuryStockCommonShares",
+        "units": [
+          "shares"
+        ],
+        "usage": 100
+      },
+      {
+        "driver": "fx_othercomprehensiveincomelossnetoftax",
+        "qname": "us-gaap:OtherComprehensiveIncomeLossNetOfTax",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 100
+      },
+      {
+        "driver": "fx_incomelossfromcontinuingoperationsbeforeincometaxesextraordinaryitemsnoncontrollinginterest",
+        "qname": "us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 99
+      },
+      {
+        "driver": "fx_definedbenefitplanservicecost",
+        "qname": "us-gaap:DefinedBenefitPlanServiceCost",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 88
+      },
+      {
+        "driver": "fx_definedbenefitplanexpectedreturnonplanassets",
+        "qname": "us-gaap:DefinedBenefitPlanExpectedReturnOnPlanAssets",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 88
+      },
+      {
+        "driver": "fx_definedbenefitplanamortizationofgainslosses",
+        "qname": "us-gaap:DefinedBenefitPlanAmortizationOfGainsLosses",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 88
+      },
+      {
+        "driver": "fx_definedbenefitplanamortizationofpriorservicecostcredit",
+        "qname": "us-gaap:DefinedBenefitPlanAmortizationOfPriorServiceCostCredit",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 88
+      },
+      {
+        "driver": "fx_definedbenefitplannetperiodicbenefitcost",
+        "qname": "us-gaap:DefinedBenefitPlanNetPeriodicBenefitCost",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 88
+      },
+      {
+        "driver": "fx_definedbenefitplaninterestcost",
+        "qname": "us-gaap:DefinedBenefitPlanInterestCost",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 88
+      },
+      {
+        "driver": "fx_equitysecuritiesandequitymethodinvestments",
+        "qname": "dal:EquitySecuritiesAndEquityMethodInvestments",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 76
+      },
+      {
+        "driver": "fx_commonstocksharesoutstanding",
+        "qname": "us-gaap:CommonStockSharesOutstanding",
+        "units": [
+          "shares"
+        ],
+        "usage": 74
+      },
+      {
+        "driver": "fx_interestincomeexpensenet",
+        "qname": "us-gaap:InterestIncomeExpenseNet",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 72
+      },
+      {
+        "driver": "fx_dividends",
+        "qname": "us-gaap:Dividends",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 66
+      },
+      {
+        "driver": "fx_equitymethodinvestmentownershippercentage",
+        "qname": "us-gaap:EquityMethodInvestmentOwnershipPercentage",
+        "units": [
+          "pure"
+        ],
+        "usage": 62
+      },
+      {
+        "driver": "fx_fuelcosts",
+        "qname": "us-gaap:FuelCosts",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 62
+      },
+      {
+        "driver": "fx_laborandrelatedexpense",
+        "qname": "us-gaap:LaborAndRelatedExpense",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 62
+      },
+      {
+        "driver": "fx_contractwithcustomerliability",
+        "qname": "us-gaap:ContractWithCustomerLiability",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 60
+      },
+      {
+        "driver": "fx_equitysecuritiesfvnicurrentandnoncurrent",
+        "qname": "us-gaap:EquitySecuritiesFvNiCurrentAndNoncurrent",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 58
+      },
+      {
+        "driver": "fx_cashcashequivalentsrestrictedcashandrestrictedcashequivalents",
+        "qname": "us-gaap:CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 58
+      },
+      {
+        "driver": "fx_aocitaxattributabletoparent",
+        "qname": "us-gaap:AociTaxAttributableToParent",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 56
+      }
+    ],
+    "DRI": [
+      {
+        "driver": "fx_stockholdersequity",
+        "qname": "us-gaap:StockholdersEquity",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 513
+      },
+      {
+        "driver": "fx_derivativeassetsliabilitiesatfairvaluenet",
+        "qname": "us-gaap:DerivativeAssetsLiabilitiesAtFairValueNet",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 366
+      },
+      {
+        "driver": "fx_allocatedsharebasedcompensationexpense",
+        "qname": "us-gaap:AllocatedShareBasedCompensationExpense",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 329
+      },
+      {
+        "driver": "fx_derivativefairvalueofderivativeliability",
+        "qname": "us-gaap:DerivativeFairValueOfDerivativeLiability",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 307
+      },
+      {
+        "driver": "fx_derivativefairvalueofderivativeasset",
+        "qname": "us-gaap:DerivativeFairValueOfDerivativeAsset",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 306
+      },
+      {
+        "driver": "fx_gainlossonsalesofassetsandassetimpairmentcharges",
+        "qname": "us-gaap:GainLossOnSalesOfAssetsAndAssetImpairmentCharges",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 296
+      },
+      {
+        "driver": "fx_depreciationdepletionandamortization",
+        "qname": "us-gaap:DepreciationDepletionAndAmortization",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 294
+      },
+      {
+        "driver": "fx_grossprofit",
+        "qname": "us-gaap:GrossProfit",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 284
+      },
+      {
+        "driver": "fx_revenuefromcontractwithcustomerexcludingassessedtax",
+        "qname": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 284
+      },
+      {
+        "driver": "fx_costofgoodsandservicessold",
+        "qname": "us-gaap:CostOfGoodsAndServicesSold",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 274
+      },
+      {
+        "driver": "fx_restaurantandmarketingexpense",
+        "qname": "dri:RestaurantAndMarketingExpense",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 204
+      },
+      {
+        "driver": "fx_othercomprehensiveincomelosscashflowhedgegainlossbeforereclassificationandtax",
+        "qname": "us-gaap:OtherComprehensiveIncomeLossCashFlowHedgeGainLossBeforeReclassificationAndTax",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 197
+      },
+      {
+        "driver": "fx_othercomprehensiveincomelosscashflowhedgegainlossreclassificationbeforetax",
+        "qname": "us-gaap:OtherComprehensiveIncomeLossCashFlowHedgeGainLossReclassificationBeforeTax",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 196
+      },
+      {
+        "driver": "fx_netincomeloss",
+        "qname": "us-gaap:NetIncomeLoss",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 195
+      },
+      {
+        "driver": "fx_ocibeforereclassificationsnetoftaxattributabletoparent",
+        "qname": "us-gaap:OciBeforeReclassificationsNetOfTaxAttributableToParent",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 176
+      },
+      {
+        "driver": "fx_reclassificationfromaocicurrentperiodnetoftaxattributabletoparent",
+        "qname": "us-gaap:ReclassificationFromAociCurrentPeriodNetOfTaxAttributableToParent",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 176
+      },
+      {
+        "driver": "fx_incometaxexpensebenefit",
+        "qname": "us-gaap:IncomeTaxExpenseBenefit",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 145
+      },
+      {
+        "driver": "fx_treasurystockvalueacquiredcostmethod",
+        "qname": "us-gaap:TreasuryStockValueAcquiredCostMethod",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 141
+      },
+      {
+        "driver": "fx_incomelossfromcontinuingoperationsbeforeincometaxesextraordinaryitemsnoncontrollinginterest",
+        "qname": "us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 135
+      },
+      {
+        "driver": "fx_segmentexpenditureadditiontolonglivedassets",
+        "qname": "us-gaap:SegmentExpenditureAdditionToLongLivedAssets",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 132
+      },
+      {
+        "driver": "fx_generalandadministrativeexpense",
+        "qname": "us-gaap:GeneralAndAdministrativeExpense",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 119
+      },
+      {
+        "driver": "fx_marketingexpense",
+        "qname": "us-gaap:MarketingExpense",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 116
+      },
+      {
+        "driver": "fx_costdirectlabor",
+        "qname": "us-gaap:CostDirectLabor",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 116
+      },
+      {
+        "driver": "fx_commonstocksharesoutstanding",
+        "qname": "us-gaap:CommonStockSharesOutstanding",
+        "units": [
+          "shares"
+        ],
+        "usage": 108
+      },
+      {
+        "driver": "fx_assetsliabilitiesnetfairvaluedisclosure",
+        "qname": "dri:AssetsLiabilitiesNetFairValueDisclosure",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 104
+      },
+      {
+        "driver": "fx_stockholdersequityother",
+        "qname": "us-gaap:StockholdersEquityOther",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 102
+      },
+      {
+        "driver": "fx_contractwithcustomerliabilitycurrent",
+        "qname": "us-gaap:ContractWithCustomerLiabilityCurrent",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 100
+      },
+      {
+        "driver": "fx_othercomprehensiveincomelossnetoftaxportionattributabletoparent",
+        "qname": "us-gaap:OtherComprehensiveIncomeLossNetOfTaxPortionAttributableToParent",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 96
+      },
+      {
+        "driver": "fx_dividends",
+        "qname": "us-gaap:Dividends",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 94
+      },
+      {
+        "driver": "fx_adjustmentstoadditionalpaidincapitalsharebasedcompensationrequisiteserviceperiodrecognitionvalue",
+        "qname": "us-gaap:AdjustmentsToAdditionalPaidInCapitalSharebasedCompensationRequisiteServicePeriodRecognitionValue",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 94
+      },
+      {
+        "driver": "fx_stockissuedduringperiodvaluestockoptionsexercised",
+        "qname": "us-gaap:StockIssuedDuringPeriodValueStockOptionsExercised",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 94
+      },
+      {
+        "driver": "fx_goodwill",
+        "qname": "us-gaap:Goodwill",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 92
+      },
+      {
+        "driver": "fx_assets",
+        "qname": "us-gaap:Assets",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 91
+      },
+      {
+        "driver": "fx_costdirectlaborandgeneralandadministrativeexpenses",
+        "qname": "dri:CostDirectLaborAndGeneralAndAdministrativeExpenses",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 86
+      },
+      {
+        "driver": "fx_derivativeinstrumentsnotdesignatedashedginginstrumentsgainlossnet",
+        "qname": "us-gaap:DerivativeInstrumentsNotDesignatedAsHedgingInstrumentsGainLossNet",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 85
+      },
+      {
+        "driver": "fx_numberofrestaurants",
+        "qname": "us-gaap:NumberOfRestaurants",
+        "units": [
+          "dri:restaurant",
+          "dri:location"
+        ],
+        "usage": 63
+      },
+      {
+        "driver": "fx_sharebasedcompensationarrangementbysharebasedpaymentawardfairvalueassumptionsriskfreeinterestrate",
+        "qname": "us-gaap:ShareBasedCompensationArrangementByShareBasedPaymentAwardFairValueAssumptionsRiskFreeInterestRate",
+        "units": [
+          "pure"
+        ],
+        "usage": 62
+      },
+      {
+        "driver": "fx_sharebasedcompensationarrangementbysharebasedpaymentawardfairvalueassumptionsexpectedvolatilityrate",
+        "qname": "us-gaap:ShareBasedCompensationArrangementByShareBasedPaymentAwardFairValueAssumptionsExpectedVolatilityRate",
+        "units": [
+          "pure"
+        ],
+        "usage": 62
+      },
+      {
+        "driver": "fx_sharebasedcompensationarrangementbysharebasedpaymentawardfairvalueassumptionsexpecteddividendrate",
+        "qname": "us-gaap:ShareBasedCompensationArrangementByShareBasedPaymentAwardFairValueAssumptionsExpectedDividendRate",
+        "units": [
+          "pure"
+        ],
+        "usage": 62
+      },
+      {
+        "driver": "fx_effectiveincometaxratecontinuingoperations",
+        "qname": "us-gaap:EffectiveIncomeTaxRateContinuingOperations",
+        "units": [
+          "pure"
+        ],
+        "usage": 47
+      }
+    ],
+    "LUV": [
+      {
+        "driver": "fx_stockholdersequity",
+        "qname": "us-gaap:StockholdersEquity",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 627
+      },
+      {
+        "driver": "fx_revenuefromcontractwithcustomerexcludingassessedtax",
+        "qname": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 388
+      },
+      {
+        "driver": "fx_cashandcashequivalentsfairvaluedisclosure",
+        "qname": "us-gaap:CashAndCashEquivalentsFairValueDisclosure",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 346
+      },
+      {
+        "driver": "fx_derivativefairvalueofderivativeasset",
+        "qname": "us-gaap:DerivativeFairValueOfDerivativeAsset",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 263
+      },
+      {
+        "driver": "fx_othercomprehensiveincomelosscashflowhedgegainlossreclassificationbeforetax",
+        "qname": "us-gaap:OtherComprehensiveIncomeLossCashFlowHedgeGainLossReclassificationBeforeTax",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 237
+      },
+      {
+        "driver": "fx_debtinstrumentinterestratestatedpercentage",
+        "qname": "us-gaap:DebtInstrumentInterestRateStatedPercentage",
+        "units": [
+          "pure"
+        ],
+        "usage": 209
+      },
+      {
+        "driver": "fx_comprehensiveincomenetoftax",
+        "qname": "us-gaap:ComprehensiveIncomeNetOfTax",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 170
+      },
+      {
+        "driver": "fx_derivativefairvalueofderivativeliability",
+        "qname": "us-gaap:DerivativeFairValueOfDerivativeLiability",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 140
+      },
+      {
+        "driver": "fx_netincomeloss",
+        "qname": "us-gaap:NetIncomeLoss",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 135
+      },
+      {
+        "driver": "fx_investmentsfairvaluedisclosure",
+        "qname": "us-gaap:InvestmentsFairValueDisclosure",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 128
+      },
+      {
+        "driver": "fx_derivativeassetmeasurementinput",
+        "qname": "us-gaap:DerivativeAssetMeasurementInput",
+        "units": [
+          "pure"
+        ],
+        "usage": 120
+      },
+      {
+        "driver": "fx_longtermdebt",
+        "qname": "us-gaap:LongTermDebt",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 118
+      },
+      {
+        "driver": "fx_debtinstrumentcarryingamount",
+        "qname": "us-gaap:DebtInstrumentCarryingAmount",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 118
+      },
+      {
+        "driver": "fx_reclassificationfromaocicurrentperiodnetoftaxattributabletoparent",
+        "qname": "us-gaap:ReclassificationFromAociCurrentPeriodNetOfTaxAttributableToParent",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 108
+      },
+      {
+        "driver": "fx_assetsfairvaluedisclosure",
+        "qname": "us-gaap:AssetsFairValueDisclosure",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 107
+      },
+      {
+        "driver": "fx_notespayablefairvaluedisclosure",
+        "qname": "us-gaap:NotesPayableFairValueDisclosure",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 106
+      },
+      {
+        "driver": "fx_ocibeforereclassificationsnetoftaxattributabletoparent",
+        "qname": "us-gaap:OciBeforeReclassificationsNetOfTaxAttributableToParent",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 104
+      },
+      {
+        "driver": "fx_adjustmentstoadditionalpaidincapitalsharebasedcompensationrequisiteserviceperiodrecognitionvalue",
+        "qname": "us-gaap:AdjustmentsToAdditionalPaidInCapitalSharebasedCompensationRequisiteServicePeriodRecognitionValue",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 100
+      },
+      {
+        "driver": "fx_collateralalreadypostedaggregatefairvalue",
+        "qname": "us-gaap:CollateralAlreadyPostedAggregateFairValue",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 98
+      },
+      {
+        "driver": "fx_stockissuedduringperiodvalueemployeestockplans",
+        "qname": "luv:StockIssuedDuringPeriodValueEmployeeStockPlans",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 96
+      },
+      {
+        "driver": "fx_incometaxexpensebenefit",
+        "qname": "us-gaap:IncomeTaxExpenseBenefit",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 94
+      },
+      {
+        "driver": "fx_otherassetsfairvaluedisclosure",
+        "qname": "us-gaap:OtherAssetsFairValueDisclosure",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 94
+      },
+      {
+        "driver": "fx_derivativefairvalueofderivativeassetamountnotoffsetagainstcollateral",
+        "qname": "us-gaap:DerivativeFairValueOfDerivativeAssetAmountNotOffsetAgainstCollateral",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 93
+      },
+      {
+        "driver": "fx_financialinstrumentsownedusgovernmentandagencyobligationsatfairvalue",
+        "qname": "us-gaap:FinancialInstrumentsOwnedUSGovernmentAndAgencyObligationsAtFairValue",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 88
+      },
+      {
+        "driver": "fx_dividendscash",
+        "qname": "us-gaap:DividendsCash",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 84
+      },
+      {
+        "driver": "fx_contractwithcustomerliabilityloyaltyprogramrevenuerecognized",
+        "qname": "luv:ContractWithCustomerLiabilityLoyaltyProgramRevenueRecognized",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 80
+      },
+      {
+        "driver": "fx_gainlossonderivativeinstrumentsnetpretax",
+        "qname": "us-gaap:GainLossOnDerivativeInstrumentsNetPretax",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 79
+      },
+      {
+        "driver": "fx_investmentgraderatingfairvalueoffuelderivativelevelsinwhichcashisprovidedthreshold1",
+        "qname": "luv:InvestmentGradeRatingFairValueOfFuelDerivativeLevelsInWhichCashIsProvidedThreshold1",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 77
+      },
+      {
+        "driver": "fx_investmentgraderatingfairvalueoffuelderivativelevelinwhichcashisreceived",
+        "qname": "luv:InvestmentGradeRatingFairValueOfFuelDerivativeLevelInWhichCashIsReceived",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 77
+      },
+      {
+        "driver": "fx_debtinstrumentfaceamount",
+        "qname": "us-gaap:DebtInstrumentFaceAmount",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 74
+      },
+      {
+        "driver": "fx_cashcashequivalentsrestrictedcashandrestrictedcashequivalents",
+        "qname": "us-gaap:CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 71
+      },
+      {
+        "driver": "fx_contractwithcustomerliabilityairtrafficliabilityloyaltyprogram",
+        "qname": "luv:ContractWithCustomerLiabilityAirTrafficLiabilityLoyaltyProgram",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 70
+      },
+      {
+        "driver": "fx_fuelcosts",
+        "qname": "us-gaap:FuelCosts",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 64
+      },
+      {
+        "driver": "fx_derivativeassetfairvaluegrossliability",
+        "qname": "us-gaap:DerivativeAssetFairValueGrossLiability",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 63
+      },
+      {
+        "driver": "fx_othercostandexpenseoperating",
+        "qname": "us-gaap:OtherCostAndExpenseOperating",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 62
+      },
+      {
+        "driver": "fx_repaymentsofotherlongtermdebtandfinanceleaseobligations",
+        "qname": "luv:RepaymentsOfOtherLongTermDebtAndFinanceLeaseObligations",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 61
+      },
+      {
+        "driver": "fx_earningspersharebasic",
+        "qname": "us-gaap:EarningsPerShareBasic",
+        "units": [
+          "iso4217:USDshares"
+        ],
+        "usage": 60
+      },
+      {
+        "driver": "fx_derivativeliabilities",
+        "qname": "us-gaap:DerivativeLiabilities",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 60
+      },
+      {
+        "driver": "fx_othercomprehensiveincomelosscashflowhedgegainlossbeforereclassificationaftertax",
+        "qname": "us-gaap:OtherComprehensiveIncomeLossCashFlowHedgeGainLossBeforeReclassificationAfterTax",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 60
+      },
+      {
+        "driver": "fx_earningspersharediluted",
+        "qname": "us-gaap:EarningsPerShareDiluted",
+        "units": [
+          "iso4217:USDshares"
+        ],
+        "usage": 60
+      }
+    ],
+    "MCD": [
+      {
+        "driver": "fx_stockholdersequity",
+        "qname": "us-gaap:StockholdersEquity",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 512
+      },
+      {
+        "driver": "fx_derivativefairvalueofderivativeasset",
+        "qname": "us-gaap:DerivativeFairValueOfDerivativeAsset",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 255
+      },
+      {
+        "driver": "fx_derivativefairvalueofderivativeliability",
+        "qname": "us-gaap:DerivativeFairValueOfDerivativeLiability",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 226
+      },
+      {
+        "driver": "fx_numberofrestaurants",
+        "qname": "us-gaap:NumberOfRestaurants",
+        "units": [
+          "mcd:Restaurant",
+          "pure"
+        ],
+        "usage": 181
+      },
+      {
+        "driver": "fx_operatingincomeloss",
+        "qname": "us-gaap:OperatingIncomeLoss",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 168
+      },
+      {
+        "driver": "fx_revenues",
+        "qname": "us-gaap:Revenues",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 168
+      },
+      {
+        "driver": "fx_othercomprehensiveincomelossnetoftax",
+        "qname": "us-gaap:OtherComprehensiveIncomeLossNetOfTax",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 168
+      },
+      {
+        "driver": "fx_restructuringreserve",
+        "qname": "us-gaap:RestructuringReserve",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 159
+      },
+      {
+        "driver": "fx_restructuringandrelatedcostincurredcost",
+        "qname": "us-gaap:RestructuringAndRelatedCostIncurredCost",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 143
+      },
+      {
+        "driver": "fx_debtinstrumentcarryingamount",
+        "qname": "us-gaap:DebtInstrumentCarryingAmount",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 135
+      },
+      {
+        "driver": "fx_paymentstoacquirepropertyplantandequipment",
+        "qname": "us-gaap:PaymentsToAcquirePropertyPlantAndEquipment",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 108
+      },
+      {
+        "driver": "fx_depreciationandamortization",
+        "qname": "us-gaap:DepreciationAndAmortization",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 108
+      },
+      {
+        "driver": "fx_sharesissued",
+        "qname": "us-gaap:SharesIssued",
+        "units": [
+          "shares"
+        ],
+        "usage": 108
+      },
+      {
+        "driver": "fx_restructuringreserveaccrualadjustment1",
+        "qname": "us-gaap:RestructuringReserveAccrualAdjustment1",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 108
+      },
+      {
+        "driver": "fx_paymentsforrestructuring",
+        "qname": "us-gaap:PaymentsForRestructuring",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 108
+      },
+      {
+        "driver": "fx_derivativegainlossonderivativenet",
+        "qname": "us-gaap:DerivativeGainLossOnDerivativeNet",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 103
+      },
+      {
+        "driver": "fx_debtinstrumentinterestrateeffectivepercentage",
+        "qname": "us-gaap:DebtInstrumentInterestRateEffectivePercentage",
+        "units": [
+          "pure"
+        ],
+        "usage": 88
+      },
+      {
+        "driver": "fx_adjustmentstoadditionalpaidincapitalsharebasedcompensationrequisiteserviceperiodrecognitionvalue",
+        "qname": "us-gaap:AdjustmentsToAdditionalPaidInCapitalSharebasedCompensationRequisiteServicePeriodRecognitionValue",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 84
+      },
+      {
+        "driver": "fx_netincomeloss",
+        "qname": "us-gaap:NetIncomeLoss",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 84
+      },
+      {
+        "driver": "fx_dividendscash",
+        "qname": "us-gaap:DividendsCash",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 84
+      },
+      {
+        "driver": "fx_companyoperatedrestaurantexpenses",
+        "qname": "mcd:CompanyOperatedRestaurantExpenses",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 84
+      },
+      {
+        "driver": "fx_treasurystockvalueacquiredcostmethod",
+        "qname": "us-gaap:TreasuryStockValueAcquiredCostMethod",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 84
+      },
+      {
+        "driver": "fx_stockissuedduringperiodvaluesharebasedcompensation",
+        "qname": "us-gaap:StockIssuedDuringPeriodValueShareBasedCompensation",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 78
+      },
+      {
+        "driver": "fx_assets",
+        "qname": "us-gaap:Assets",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 66
+      },
+      {
+        "driver": "fx_segmentreportingotheritemamount",
+        "qname": "us-gaap:SegmentReportingOtherItemAmount",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 64
+      },
+      {
+        "driver": "fx_cashcashequivalentsrestrictedcashandrestrictedcashequivalents",
+        "qname": "us-gaap:CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 64
+      },
+      {
+        "driver": "fx_sellinggeneralandadministrativeexpense",
+        "qname": "us-gaap:SellingGeneralAndAdministrativeExpense",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 64
+      },
+      {
+        "driver": "fx_othercomprehensiveincomelossnetinvestmenthedgegainlossbeforereclassificationandtax",
+        "qname": "us-gaap:OtherComprehensiveIncomeLossNetInvestmentHedgeGainLossBeforeReclassificationAndTax",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 54
+      },
+      {
+        "driver": "fx_othercomprehensiveincomelosscashflowhedgegainlossbeforereclassificationandtax",
+        "qname": "us-gaap:OtherComprehensiveIncomeLossCashFlowHedgeGainLossBeforeReclassificationAndTax",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 54
+      },
+      {
+        "driver": "fx_othercomprehensiveincomelosscashflowhedgegainlossreclassificationbeforetax",
+        "qname": "us-gaap:OtherComprehensiveIncomeLossCashFlowHedgeGainLossReclassificationBeforeTax",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 54
+      },
+      {
+        "driver": "fx_goodwill",
+        "qname": "us-gaap:Goodwill",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 50
+      },
+      {
+        "driver": "fx_othercomprehensiveincomelossbeforetax",
+        "qname": "us-gaap:OtherComprehensiveIncomeLossBeforeTax",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 48
+      },
+      {
+        "driver": "fx_othercomprehensiveincomelosscashflowhedgegainlossafterreclassificationtax",
+        "qname": "us-gaap:OtherComprehensiveIncomeLossCashFlowHedgeGainLossAfterReclassificationTax",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 42
+      },
+      {
+        "driver": "fx_proceedsfromissuanceoflongtermdebt",
+        "qname": "us-gaap:ProceedsFromIssuanceOfLongTermDebt",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 42
+      },
+      {
+        "driver": "fx_othercomprehensiveincomelossforeigncurrencytransactionandtranslationadjustmentnetoftax",
+        "qname": "us-gaap:OtherComprehensiveIncomeLossForeignCurrencyTransactionAndTranslationAdjustmentNetOfTax",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 42
+      },
+      {
+        "driver": "fx_incometaxexpensebenefit",
+        "qname": "us-gaap:IncomeTaxExpenseBenefit",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 42
+      },
+      {
+        "driver": "fx_netcashprovidedbyusedinoperatingactivities",
+        "qname": "us-gaap:NetCashProvidedByUsedInOperatingActivities",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 42
+      },
+      {
+        "driver": "fx_weightedaveragenumberofdilutedsharesoutstanding",
+        "qname": "us-gaap:WeightedAverageNumberOfDilutedSharesOutstanding",
+        "units": [
+          "shares"
+        ],
+        "usage": 42
+      },
+      {
+        "driver": "fx_equitymethodinvestmentownershippercentage",
+        "qname": "us-gaap:EquityMethodInvestmentOwnershipPercentage",
+        "units": [
+          "pure"
+        ],
+        "usage": 42
+      },
+      {
+        "driver": "fx_effectiveincometaxratecontinuingoperations",
+        "qname": "us-gaap:EffectiveIncomeTaxRateContinuingOperations",
+        "units": [
+          "pure"
+        ],
+        "usage": 42
+      }
+    ],
+    "ORLY": [
+      {
+        "driver": "fx_stockholdersequity",
+        "qname": "us-gaap:StockholdersEquity",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 432
+      },
+      {
+        "driver": "fx_debtinstrumentinterestratestatedpercentage",
+        "qname": "us-gaap:DebtInstrumentInterestRateStatedPercentage",
+        "units": [
+          "pure"
+        ],
+        "usage": 251
+      },
+      {
+        "driver": "fx_debtinstrumentfaceamount",
+        "qname": "us-gaap:DebtInstrumentFaceAmount",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 227
+      },
+      {
+        "driver": "fx_revenuefromcontractwithcustomerexcludingassessedtax",
+        "qname": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 225
+      },
+      {
+        "driver": "fx_debtinstrumentinterestrateeffectivepercentage",
+        "qname": "us-gaap:DebtInstrumentInterestRateEffectivePercentage",
+        "units": [
+          "pure"
+        ],
+        "usage": 216
+      },
+      {
+        "driver": "fx_stockrepurchasedandretiredduringperiodvalue",
+        "qname": "us-gaap:StockRepurchasedAndRetiredDuringPeriodValue",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 168
+      },
+      {
+        "driver": "fx_allocatedsharebasedcompensationexpense",
+        "qname": "us-gaap:AllocatedShareBasedCompensationExpense",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 148
+      },
+      {
+        "driver": "fx_othercomprehensiveincomelossnetoftaxportionattributabletoparent",
+        "qname": "us-gaap:OtherComprehensiveIncomeLossNetOfTaxPortionAttributableToParent",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 139
+      },
+      {
+        "driver": "fx_netincomeloss",
+        "qname": "us-gaap:NetIncomeLoss",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 136
+      },
+      {
+        "driver": "fx_stockissuedduringperiodvaluestockoptionsexercised",
+        "qname": "us-gaap:StockIssuedDuringPeriodValueStockOptionsExercised",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 121
+      },
+      {
+        "driver": "fx_employeeservicesharebasedcompensationtaxbenefitfromcompensationexpense",
+        "qname": "us-gaap:EmployeeServiceShareBasedCompensationTaxBenefitFromCompensationExpense",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 106
+      },
+      {
+        "driver": "fx_stockrepurchasedandretiredduringperiodshares",
+        "qname": "us-gaap:StockRepurchasedAndRetiredDuringPeriodShares",
+        "units": [
+          "shares"
+        ],
+        "usage": 106
+      },
+      {
+        "driver": "fx_commonstocksharesoutstanding",
+        "qname": "us-gaap:CommonStockSharesOutstanding",
+        "units": [
+          "shares"
+        ],
+        "usage": 95
+      },
+      {
+        "driver": "fx_stockissuedduringperiodvalueemployeebenefitplan",
+        "qname": "us-gaap:StockIssuedDuringPeriodValueEmployeeBenefitPlan",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 95
+      },
+      {
+        "driver": "fx_adjustmentstoadditionalpaidincapitalsharebasedcompensationrequisiteserviceperiodrecognitionvalue",
+        "qname": "us-gaap:AdjustmentsToAdditionalPaidInCapitalSharebasedCompensationRequisiteServicePeriodRecognitionValue",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 84
+      },
+      {
+        "driver": "fx_propertyplantandequipmentgross",
+        "qname": "us-gaap:PropertyPlantAndEquipmentGross",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 76
+      },
+      {
+        "driver": "fx_earningspersharediluted",
+        "qname": "us-gaap:EarningsPerShareDiluted",
+        "units": [
+          "iso4217:USDshares"
+        ],
+        "usage": 74
+      },
+      {
+        "driver": "fx_grossprofit",
+        "qname": "us-gaap:GrossProfit",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 74
+      },
+      {
+        "driver": "fx_earningspersharebasic",
+        "qname": "us-gaap:EarningsPerShareBasic",
+        "units": [
+          "iso4217:USDshares"
+        ],
+        "usage": 70
+      },
+      {
+        "driver": "fx_stockissuedduringperiodsharesemployeebenefitplan",
+        "qname": "us-gaap:StockIssuedDuringPeriodSharesEmployeeBenefitPlan",
+        "units": [
+          "shares"
+        ],
+        "usage": 66
+      },
+      {
+        "driver": "fx_treasurystockvalueacquiredparvaluemethod",
+        "qname": "us-gaap:TreasuryStockValueAcquiredParValueMethod",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 64
+      },
+      {
+        "driver": "fx_treasurystockacquiredaveragecostpershare",
+        "qname": "us-gaap:TreasuryStockAcquiredAverageCostPerShare",
+        "units": [
+          "iso4217:USDshares"
+        ],
+        "usage": 64
+      },
+      {
+        "driver": "fx_incometaxexpensebenefit",
+        "qname": "us-gaap:IncomeTaxExpenseBenefit",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 64
+      },
+      {
+        "driver": "fx_weightedaveragenumberofsharesoutstandingbasic",
+        "qname": "us-gaap:WeightedAverageNumberOfSharesOutstandingBasic",
+        "units": [
+          "shares"
+        ],
+        "usage": 59
+      },
+      {
+        "driver": "fx_weightedaveragenumberofdilutedsharesoutstanding",
+        "qname": "us-gaap:WeightedAverageNumberOfDilutedSharesOutstanding",
+        "units": [
+          "shares"
+        ],
+        "usage": 58
+      },
+      {
+        "driver": "fx_interestexpensedebt",
+        "qname": "us-gaap:InterestExpenseDebt",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 58
+      },
+      {
+        "driver": "fx_costofgoodsandservicessold",
+        "qname": "us-gaap:CostOfGoodsAndServicesSold",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 58
+      },
+      {
+        "driver": "fx_operatingincomeloss",
+        "qname": "us-gaap:OperatingIncomeLoss",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 58
+      },
+      {
+        "driver": "fx_depreciationdepletionandamortization",
+        "qname": "us-gaap:DepreciationDepletionAndAmortization",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 58
+      },
+      {
+        "driver": "fx_stockholdersequityother",
+        "qname": "us-gaap:StockholdersEquityOther",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 58
+      },
+      {
+        "driver": "fx_lettersofcreditoutstandingamount",
+        "qname": "us-gaap:LettersOfCreditOutstandingAmount",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 56
+      },
+      {
+        "driver": "fx_stockissuedduringperiodsharesstockoptionsexercised",
+        "qname": "us-gaap:StockIssuedDuringPeriodSharesStockOptionsExercised",
+        "units": [
+          "shares"
+        ],
+        "usage": 56
+      },
+      {
+        "driver": "fx_cashcashequivalentsrestrictedcashandrestrictedcashequivalents",
+        "qname": "us-gaap:CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 54
+      },
+      {
+        "driver": "fx_investmentsfairvaluedisclosure",
+        "qname": "us-gaap:InvestmentsFairValueDisclosure",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 52
+      },
+      {
+        "driver": "fx_incomelossfromcontinuingoperationsbeforeincometaxesextraordinaryitemsnoncontrollinginterest",
+        "qname": "us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 46
+      },
+      {
+        "driver": "fx_debtinstrumentbasisspreadonvariablerate1",
+        "qname": "us-gaap:DebtInstrumentBasisSpreadOnVariableRate1",
+        "units": [
+          "pure"
+        ],
+        "usage": 46
+      },
+      {
+        "driver": "fx_subleaseincome",
+        "qname": "us-gaap:SubleaseIncome",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 42
+      },
+      {
+        "driver": "fx_variableleasecost",
+        "qname": "us-gaap:VariableLeaseCost",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 42
+      },
+      {
+        "driver": "fx_sharebasedcompensationarrangementbysharebasedpaymentawardfairvalueassumptionsexpecteddividendrate",
+        "qname": "us-gaap:ShareBasedCompensationArrangementByShareBasedPaymentAwardFairValueAssumptionsExpectedDividendRate",
+        "units": [
+          "pure"
+        ],
+        "usage": 30
+      },
+      {
+        "driver": "fx_sharebasedcompensationarrangementbysharebasedpaymentawardfairvalueassumptionsexpectedvolatilityrate",
+        "qname": "us-gaap:ShareBasedCompensationArrangementByShareBasedPaymentAwardFairValueAssumptionsExpectedVolatilityRate",
+        "units": [
+          "pure"
+        ],
+        "usage": 30
+      }
+    ],
+    "ULTA": [
+      {
+        "driver": "fx_numberofstores",
+        "qname": "us-gaap:NumberOfStores",
+        "units": [
+          "ulta:store"
+        ],
+        "usage": 370
+      },
+      {
+        "driver": "fx_stockholdersequity",
+        "qname": "us-gaap:StockholdersEquity",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 361
+      },
+      {
+        "driver": "fx_concentrationriskpercentage1",
+        "qname": "us-gaap:ConcentrationRiskPercentage1",
+        "units": [
+          "pure"
+        ],
+        "usage": 294
+      },
+      {
+        "driver": "fx_stockrepurchasedandretiredduringperiodvalue",
+        "qname": "us-gaap:StockRepurchasedAndRetiredDuringPeriodValue",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 203
+      },
+      {
+        "driver": "fx_allocatedsharebasedcompensationexpense",
+        "qname": "us-gaap:AllocatedShareBasedCompensationExpense",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 147
+      },
+      {
+        "driver": "fx_stockoptionsexercisedandotherawards",
+        "qname": "ulta:StockOptionsExercisedAndOtherAwards",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 132
+      },
+      {
+        "driver": "fx_netincomeloss",
+        "qname": "us-gaap:NetIncomeLoss",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 120
+      },
+      {
+        "driver": "fx_commonstocksharesoutstanding",
+        "qname": "us-gaap:CommonStockSharesOutstanding",
+        "units": [
+          "shares"
+        ],
+        "usage": 105
+      },
+      {
+        "driver": "fx_numberofstoresoperatedinunitedstates",
+        "qname": "ulta:NumberOfStoresOperatedInUnitedStates",
+        "units": [
+          "ulta:store"
+        ],
+        "usage": 103
+      },
+      {
+        "driver": "fx_treasurystockvalueacquiredcostmethod",
+        "qname": "us-gaap:TreasuryStockValueAcquiredCostMethod",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 96
+      },
+      {
+        "driver": "fx_adjustmentstoadditionalpaidincapitalsharebasedcompensationrequisiteserviceperiodrecognitionvalue",
+        "qname": "us-gaap:AdjustmentsToAdditionalPaidInCapitalSharebasedCompensationRequisiteServicePeriodRecognitionValue",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 96
+      },
+      {
+        "driver": "fx_stockrepurchasedandretiredduringperiodshares",
+        "qname": "us-gaap:StockRepurchasedAndRetiredDuringPeriodShares",
+        "units": [
+          "shares"
+        ],
+        "usage": 78
+      },
+      {
+        "driver": "fx_treasurystockcommonshares",
+        "qname": "us-gaap:TreasuryStockCommonShares",
+        "units": [
+          "shares"
+        ],
+        "usage": 70
+      },
+      {
+        "driver": "fx_debtinstrumentbasisspreadonvariablerate1",
+        "qname": "us-gaap:DebtInstrumentBasisSpreadOnVariableRate1",
+        "units": [
+          "pure"
+        ],
+        "usage": 66
+      },
+      {
+        "driver": "fx_revenues",
+        "qname": "us-gaap:Revenues",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 65
+      },
+      {
+        "driver": "fx_contractwithcustomerliability",
+        "qname": "us-gaap:ContractWithCustomerLiability",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 65
+      },
+      {
+        "driver": "fx_incometaxexpensebenefit",
+        "qname": "us-gaap:IncomeTaxExpenseBenefit",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 65
+      },
+      {
+        "driver": "fx_weightedaveragenumberofsharesoutstandingbasic",
+        "qname": "us-gaap:WeightedAverageNumberOfSharesOutstandingBasic",
+        "units": [
+          "shares"
+        ],
+        "usage": 59
+      },
+      {
+        "driver": "fx_sharebasedcompensationarrangementbysharebasedpaymentawardequityinstrumentsotherthanoptionsgrantsinperiod",
+        "qname": "us-gaap:ShareBasedCompensationArrangementByShareBasedPaymentAwardEquityInstrumentsOtherThanOptionsGrantsInPeriod",
+        "units": [
+          "shares"
+        ],
+        "usage": 59
+      },
+      {
+        "driver": "fx_earningspersharebasic",
+        "qname": "us-gaap:EarningsPerShareBasic",
+        "units": [
+          "iso4217:USDshares"
+        ],
+        "usage": 58
+      },
+      {
+        "driver": "fx_cashcashequivalentsrestrictedcashandrestrictedcashequivalents",
+        "qname": "us-gaap:CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 57
+      },
+      {
+        "driver": "fx_interestincomeexpensenonoperatingnet",
+        "qname": "us-gaap:InterestIncomeExpenseNonoperatingNet",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 57
+      },
+      {
+        "driver": "fx_goodwill",
+        "qname": "us-gaap:Goodwill",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 56
+      },
+      {
+        "driver": "fx_preopeningcosts",
+        "qname": "us-gaap:PreOpeningCosts",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 55
+      },
+      {
+        "driver": "fx_weightedaveragenumberofdilutedsharesoutstanding",
+        "qname": "us-gaap:WeightedAverageNumberOfDilutedSharesOutstanding",
+        "units": [
+          "shares"
+        ],
+        "usage": 55
+      },
+      {
+        "driver": "fx_earningspersharediluted",
+        "qname": "us-gaap:EarningsPerShareDiluted",
+        "units": [
+          "iso4217:USDshares"
+        ],
+        "usage": 55
+      },
+      {
+        "driver": "fx_netincomelossavailabletocommonstockholdersbasic",
+        "qname": "us-gaap:NetIncomeLossAvailableToCommonStockholdersBasic",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 55
+      },
+      {
+        "driver": "fx_costofrevenue",
+        "qname": "us-gaap:CostOfRevenue",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 53
+      },
+      {
+        "driver": "fx_stockoptionsexercisedandotherawardsshares",
+        "qname": "ulta:StockOptionsExercisedAndOtherAwardsShares",
+        "units": [
+          "shares"
+        ],
+        "usage": 46
+      },
+      {
+        "driver": "fx_lineofcredit",
+        "qname": "us-gaap:LineOfCredit",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 46
+      },
+      {
+        "driver": "fx_effectiveincometaxratecontinuingoperations",
+        "qname": "us-gaap:EffectiveIncomeTaxRateContinuingOperations",
+        "units": [
+          "pure"
+        ],
+        "usage": 42
+      },
+      {
+        "driver": "fx_antidilutivesecuritiesexcludedfromcomputationofearningspershareamount",
+        "qname": "us-gaap:AntidilutiveSecuritiesExcludedFromComputationOfEarningsPerShareAmount",
+        "units": [
+          "shares"
+        ],
+        "usage": 42
+      },
+      {
+        "driver": "fx_sellinggeneralandadministrativeexpense",
+        "qname": "us-gaap:SellingGeneralAndAdministrativeExpense",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 42
+      },
+      {
+        "driver": "fx_accountsreceivablenetcurrent",
+        "qname": "us-gaap:AccountsReceivableNetCurrent",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 42
+      },
+      {
+        "driver": "fx_incrementalcommonsharesattributabletosharebasedpaymentarrangements",
+        "qname": "us-gaap:IncrementalCommonSharesAttributableToShareBasedPaymentArrangements",
+        "units": [
+          "shares"
+        ],
+        "usage": 42
+      },
+      {
+        "driver": "fx_depreciationdepletionandamortization",
+        "qname": "us-gaap:DepreciationDepletionAndAmortization",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 42
+      },
+      {
+        "driver": "fx_proceedsfromstockoptionsexercised",
+        "qname": "us-gaap:ProceedsFromStockOptionsExercised",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 42
+      },
+      {
+        "driver": "fx_grossprofit",
+        "qname": "us-gaap:GrossProfit",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 42
+      },
+      {
+        "driver": "fx_operatingincomeloss",
+        "qname": "us-gaap:OperatingIncomeLoss",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 42
+      },
+      {
+        "driver": "fx_operatingleasecost",
+        "qname": "us-gaap:OperatingLeaseCost",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 42
+      }
+    ],
+    "YUM": [
+      {
+        "driver": "fx_revenuefromcontractwithcustomerexcludingassessedtax",
+        "qname": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 2256
+      },
+      {
+        "driver": "fx_revenues",
+        "qname": "us-gaap:Revenues",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 291
+      },
+      {
+        "driver": "fx_operatingincomeloss",
+        "qname": "us-gaap:OperatingIncomeLoss",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 230
+      },
+      {
+        "driver": "fx_stockholdersequity",
+        "qname": "us-gaap:StockholdersEquity",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 193
+      },
+      {
+        "driver": "fx_generalandadministrativeexpense",
+        "qname": "us-gaap:GeneralAndAdministrativeExpense",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 183
+      },
+      {
+        "driver": "fx_stockrepurchasedduringperiodvalue",
+        "qname": "us-gaap:StockRepurchasedDuringPeriodValue",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 154
+      },
+      {
+        "driver": "fx_accumulatedothercomprehensiveincomelossnetoftax",
+        "qname": "us-gaap:AccumulatedOtherComprehensiveIncomeLossNetOfTax",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 152
+      },
+      {
+        "driver": "fx_depreciationdepletionandamortization",
+        "qname": "us-gaap:DepreciationDepletionAndAmortization",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 145
+      },
+      {
+        "driver": "fx_cooperativeadvertisingexpense",
+        "qname": "us-gaap:CooperativeAdvertisingExpense",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 134
+      },
+      {
+        "driver": "fx_costofgoodsandservicessold",
+        "qname": "us-gaap:CostOfGoodsAndServicesSold",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 132
+      },
+      {
+        "driver": "fx_longtermdebtfairvalue",
+        "qname": "us-gaap:LongTermDebtFairValue",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 130
+      },
+      {
+        "driver": "fx_othercomprehensiveincomelossnetoftax",
+        "qname": "us-gaap:OtherComprehensiveIncomeLossNetOfTax",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 119
+      },
+      {
+        "driver": "fx_othernonoperatingincomeexpense",
+        "qname": "us-gaap:OtherNonoperatingIncomeExpense",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 118
+      },
+      {
+        "driver": "fx_segmentexpenditureadditiontolonglivedassets",
+        "qname": "us-gaap:SegmentExpenditureAdditionToLongLivedAssets",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 114
+      },
+      {
+        "driver": "fx_gainlossondispositionofassets1",
+        "qname": "us-gaap:GainLossOnDispositionOfAssets1",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 113
+      },
+      {
+        "driver": "fx_stockrepurchasedduringperiodshares",
+        "qname": "us-gaap:StockRepurchasedDuringPeriodShares",
+        "units": [
+          "shares"
+        ],
+        "usage": 111
+      },
+      {
+        "driver": "fx_definedbenefitplanfairvalueofplanassets",
+        "qname": "us-gaap:DefinedBenefitPlanFairValueOfPlanAssets",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 108
+      },
+      {
+        "driver": "fx_costsoffranchisedoutlets",
+        "qname": "us-gaap:CostsOfFranchisedOutlets",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 103
+      },
+      {
+        "driver": "fx_longtermdebt",
+        "qname": "us-gaap:LongTermDebt",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 101
+      },
+      {
+        "driver": "fx_reclassificationfromaccumulatedothercomprehensiveincomecurrentperiodnetoftax",
+        "qname": "us-gaap:ReclassificationFromAccumulatedOtherComprehensiveIncomeCurrentPeriodNetOfTax",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 92
+      },
+      {
+        "driver": "fx_othercomprehensiveincomelossbeforereclassificationsnetoftax",
+        "qname": "us-gaap:OtherComprehensiveIncomeLossBeforeReclassificationsNetOfTax",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 92
+      },
+      {
+        "driver": "fx_goodwill",
+        "qname": "us-gaap:Goodwill",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 90
+      },
+      {
+        "driver": "fx_netincomeloss",
+        "qname": "us-gaap:NetIncomeLoss",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 86
+      },
+      {
+        "driver": "fx_othercomprehensiveincomelosscashflowhedgegainlossbeforereclassificationandtax",
+        "qname": "us-gaap:OtherComprehensiveIncomeLossCashFlowHedgeGainLossBeforeReclassificationAndTax",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 84
+      },
+      {
+        "driver": "fx_stockissuedduringperiodvaluesharebasedcompensation",
+        "qname": "us-gaap:StockIssuedDuringPeriodValueShareBasedCompensation",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 84
+      },
+      {
+        "driver": "fx_othercomprehensiveincomeforeigncurrencytransactionandtranslationgainlossarisingduringperiodnetoftax",
+        "qname": "us-gaap:OtherComprehensiveIncomeForeignCurrencyTransactionAndTranslationGainLossArisingDuringPeriodNetOfTax",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 84
+      },
+      {
+        "driver": "fx_dividendscommonstock",
+        "qname": "us-gaap:DividendsCommonStock",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 84
+      },
+      {
+        "driver": "fx_othercomprehensiveincomelosspensionandotherpostretirementbenefitplansadjustmentnetoftax",
+        "qname": "us-gaap:OtherComprehensiveIncomeLossPensionAndOtherPostretirementBenefitPlansAdjustmentNetOfTax",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 83
+      },
+      {
+        "driver": "fx_seniorlongtermnotes",
+        "qname": "us-gaap:SeniorLongTermNotes",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 81
+      },
+      {
+        "driver": "fx_othercomprehensiveincomelosscashflowhedgegainlossafterreclassificationandtax",
+        "qname": "us-gaap:OtherComprehensiveIncomeLossCashFlowHedgeGainLossAfterReclassificationAndTax",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 81
+      },
+      {
+        "driver": "fx_revenueremainingperformanceobligation",
+        "qname": "us-gaap:RevenueRemainingPerformanceObligation",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 78
+      },
+      {
+        "driver": "fx_otheroperatingincomeexpensenet",
+        "qname": "us-gaap:OtherOperatingIncomeExpenseNet",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 75
+      },
+      {
+        "driver": "fx_franchisorcosts",
+        "qname": "us-gaap:FranchisorCosts",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 74
+      },
+      {
+        "driver": "fx_definedbenefitplannetperiodicbenefitcost",
+        "qname": "us-gaap:DefinedBenefitPlanNetPeriodicBenefitCost",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 65
+      },
+      {
+        "driver": "fx_stockholdersequityincludingportionattributabletononcontrollinginterest",
+        "qname": "us-gaap:StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 64
+      },
+      {
+        "driver": "fx_sharesissued",
+        "qname": "us-gaap:SharesIssued",
+        "units": [
+          "shares"
+        ],
+        "usage": 64
+      },
+      {
+        "driver": "fx_assets",
+        "qname": "us-gaap:Assets",
+        "units": [
+          "iso4217:USD"
+        ],
+        "usage": 61
+      },
+      {
+        "driver": "fx_debtinstrumentinterestratestatedpercentage",
+        "qname": "us-gaap:DebtInstrumentInterestRateStatedPercentage",
+        "units": [
+          "pure",
+          "utr:Rate"
+        ],
+        "usage": 60
+      },
+      {
+        "driver": "fx_debtinstrumentinterestrateeffectivepercentage",
+        "qname": "us-gaap:DebtInstrumentInterestRateEffectivePercentage",
+        "units": [
+          "pure",
+          "utr:Rate"
+        ],
+        "usage": 60
+      },
+      {
+        "driver": "fx_numberofstores",
+        "qname": "us-gaap:NumberOfStores",
+        "units": [
+          "yum:restaurants"
+        ],
+        "usage": 44
+      }
+    ]
+  },
+  "nonwhitelist_counts": {
+    "AAL": 6,
+    "AZO": 5,
+    "BBY": 0,
+    "CAKE": 2,
+    "CMG": 3,
+    "DAL": 4,
+    "DRI": 5,
+    "LUV": 2,
+    "MCD": 4,
+    "ORLY": 5,
+    "ULTA": 5,
+    "YUM": 3
+  },
+  "nonwhitelist_coverage_caveat": "best effort / where available - NOT guaranteed >=5 per company (recipe: \">=5 non-whitelist-unit concepts per company WHERE THEY EXIST\"). BBY has 0 non-whitelist-unit concepts in its top set.",
+  "probe": "EXP-1 fixture resolutions",
+  "recipe": "top<=40 concepts/company by usage>=4 (2023-2026) numeric non-nil; driver=fx_+slug(qname local); >=5 non-whitelist-unit included; 1:1 qname->driver",
+  "whitelist_units": [
+    "iso4217:USD",
+    "iso4217:USDshares",
+    "shares"
+  ]
+}

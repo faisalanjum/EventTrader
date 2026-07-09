@@ -1,0 +1,12 @@
+{
+  "id": "ra_0001",
+  "raised_in": "EXP-1 step-0 schema binding (axis<->member)",
+  "doc": "XBRLIntegrationDesign 5.2 / WorkOrder EXP-1 step-0(b) / O13",
+  "rule": "O13 axis<->member pairing binding",
+  "case_ref": "achc:NumberOfBedsForSpecialtyTreatment (CIK 1520697); conagra segment facts (CIK 23217); 2637 typed-dim misaligned contexts",
+  "description": "Both work-order candidate pairings fail on live data: (1) FACT_DIMENSION->HAS_DOMAIN->HAS_MEMBER is incomplete; (2) Context.member_u_ids alone lacks the axis. Deterministic source = Context.dimension_u_ids||member_u_ids positional pairing (aligned 4549501/4552138), 2637 misaligned via typed dimensions; 1290 touch slice axes.",
+  "adjudicators_split": false,
+  "proposed_amendment": "Pair explicit dims only (Dimension.is_explicit); drop typed dims; fail-closed skip+count residual.",
+  "status": "resolved",
+  "resolution": "owner ratified 2026-07-09: explicit-dims-only positional pairing; typed dims dropped; after dropping, fail-closed skip+count any still-misaligned/ambiguous context. Rule recorded in exp1_xbrl/schema_bindings_probe.json binding_b_axis_member.rule."
+}

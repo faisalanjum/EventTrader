@@ -1,0 +1,59 @@
+{
+  "binding_a_fact_period": {
+    "decision": "use direct (f)-[:HAS_PERIOD]->(:Period); fallback (f)-[:IN_CONTEXT]->(:Context)-[:HAS_PERIOD]->(:Period)",
+    "evidence": "5 COMPLETED-XBRL reports / 3692 numeric non-nil facts: missing_direct=0, multi_period=0, direct_vs_context_disagree=0",
+    "reports_tested": [
+      "0001437749-23-000496",
+      "0000940944-23-000004",
+      "0001013237-23-000006",
+      "0001558370-23-000048",
+      "0001003078-23-000008"
+    ],
+    "status": "CLEAN"
+  },
+  "binding_b_axis_member": {
+    "dualcik_subcase": {
+      "case": "dual-CIK filer/entity (AAL: filer Group cik 6201 carries entity Inc cik 4515 docs). Dimension/Member nodes stored under entity cik 4515; contexts reference filer cik 6201 -> unresolved after zero-pad normalization.",
+      "deferred_to": "O12 bundle (ingestion repair / possible future certified recovery)",
+      "rule": "No aliasing rule ships in EXP-1. After normal normalization, if a dimension/member node still does not resolve -> SKIP the whole affected fact + count slice_pairing_dualcik_unresolved. NO qname-only matching; NO cross-CIK/global alias matching; do NOT drop AAL.",
+      "ruled_by": "Fable 2026-07-09",
+      "scope": "AAL-only (11/12 companies pair clean). Touches REAL slice axes (entity/product/geography); 701 would-materialize facts skipped (dualcik_scope_proof.json)."
+    },
+    "evidence": {
+      "aligned": 4549501,
+      "dimensional_contexts": 4552138,
+      "misaligned_before_typed_drop": 2637,
+      "misaligned_cause": "typed dimensions add to dimension_u_ids with no explicit member (all 2637 have more dims than members)",
+      "misaligned_touching_slice_axes": 1290
+    },
+    "o13": "CLOSED (owner ratified 2026-07-09T02:50:49Z)",
+    "rule": {
+      "fail_closed": "after dropping typed dims, if a context is still misaligned or ambiguous -> skip + COUNT the affected fact/context; never guess",
+      "pairing": "Context.dimension_u_ids[i] <-> Context.member_u_ids[i] positional, over EXPLICIT dimensions only (Dimension.is_explicit = true)",
+      "typed_dimensions": "dropped from slice pairing (they create no slice member)"
+    },
+    "stated_candidates_rejected": "FACT_DIMENSION path + FACT_MEMBER edge both incomplete; member_u_ids alone lacks the axis",
+    "status": "RATIFIED"
+  },
+  "binding_c_concept_balance": {
+    "decision": "Concept.balance present; PIT menu keeps the balance column",
+    "evidence": "618754 concepts all non-null balance; values null=237677 credit=192743 debit=188334",
+    "o15_triggered": false,
+    "status": "CLEAN"
+  },
+  "db": {
+    "fact_count": 13775616,
+    "report_count": 42633
+  },
+  "fs18_slice_normalizer": {
+    "applied_normalizer_od9": "lower -> every run of non-alphanumeric chars -> \"_\" -> trim \"_\" -> collapse repeats (03 FS-25 / 66 OD-9; format-only: case/whitespace/punctuation, no stemming)",
+    "bridge": "FS-18 says \"normalized labels\"; FS-25/OD-9 give the exact character recipe. Bridge treated as explicit.",
+    "fs18": "exact-after-normalization only (03 FS-18 [LOCKED]): code folds an XBRL member into an existing value only when normalized labels are exactly equal",
+    "o14": "NOT triggered. If the FS-18->OD-9 normalizer bridge is later found not explicit enough for some character class -> STOP as O14.",
+    "status": "PINNED"
+  },
+  "o13_ratified_utc": "2026-07-09T02:50:49Z",
+  "probe": "EXP-1 step-0 schema binding",
+  "run_utc": "2026-07-09T01:34:55Z",
+  "workorder_sha256": "554529dde8e972b29a3e941b730b5eadf2e666d6769a27268886ffc6aa6cd164"
+}

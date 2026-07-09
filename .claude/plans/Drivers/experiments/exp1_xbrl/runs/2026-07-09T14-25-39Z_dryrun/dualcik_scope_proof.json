@@ -1,0 +1,363 @@
+{
+  "aal_only": true,
+  "by_ticker": {
+    "AAL": {
+      "dim_facts": 3413,
+      "fail": 2587,
+      "fail_real_would_materialize": 701,
+      "fail_skipped_anyway": 1886,
+      "pass": 826
+    },
+    "AZO": {
+      "dim_facts": 2743,
+      "fail": 0,
+      "fail_real_would_materialize": 0,
+      "fail_skipped_anyway": 0,
+      "pass": 2743
+    },
+    "BBY": {
+      "dim_facts": 1666,
+      "fail": 0,
+      "fail_real_would_materialize": 0,
+      "fail_skipped_anyway": 0,
+      "pass": 1666
+    },
+    "CAKE": {
+      "dim_facts": 2431,
+      "fail": 0,
+      "fail_real_would_materialize": 0,
+      "fail_skipped_anyway": 0,
+      "pass": 2431
+    },
+    "CMG": {
+      "dim_facts": 1106,
+      "fail": 0,
+      "fail_real_would_materialize": 0,
+      "fail_skipped_anyway": 0,
+      "pass": 1106
+    },
+    "DAL": {
+      "dim_facts": 2073,
+      "fail": 0,
+      "fail_real_would_materialize": 0,
+      "fail_skipped_anyway": 0,
+      "pass": 2073
+    },
+    "DRI": {
+      "dim_facts": 2607,
+      "fail": 0,
+      "fail_real_would_materialize": 0,
+      "fail_skipped_anyway": 0,
+      "pass": 2607
+    },
+    "LUV": {
+      "dim_facts": 1785,
+      "fail": 0,
+      "fail_real_would_materialize": 0,
+      "fail_skipped_anyway": 0,
+      "pass": 1785
+    },
+    "MCD": {
+      "dim_facts": 1330,
+      "fail": 0,
+      "fail_real_would_materialize": 0,
+      "fail_skipped_anyway": 0,
+      "pass": 1330
+    },
+    "ORLY": {
+      "dim_facts": 2132,
+      "fail": 0,
+      "fail_real_would_materialize": 0,
+      "fail_skipped_anyway": 0,
+      "pass": 2132
+    },
+    "ULTA": {
+      "dim_facts": 1716,
+      "fail": 0,
+      "fail_real_would_materialize": 0,
+      "fail_skipped_anyway": 0,
+      "pass": 1716
+    },
+    "YUM": {
+      "dim_facts": 2978,
+      "fail": 0,
+      "fail_real_would_materialize": 0,
+      "fail_skipped_anyway": 0,
+      "pass": 2978
+    }
+  },
+  "fail_unresolved_axis_kinds": {
+    "nonslice_std": 3107,
+    "slice_entity": 1410,
+    "slice_geography": 104,
+    "slice_product": 513,
+    "unknown_coined": 85
+  },
+  "filer_entity_cik_map_evidence": {
+    "AAL": [
+      "1003078",
+      "1013237",
+      "1065280",
+      "1137789",
+      "1144215",
+      "1170010",
+      "1481646",
+      "1646972",
+      "1679273",
+      "1702744",
+      "22444",
+      "23217",
+      "320187",
+      "4515",
+      "6201",
+      "707549",
+      "723254",
+      "795266",
+      "796343",
+      "80424",
+      "87347",
+      "923120",
+      "940944",
+      "94845"
+    ]
+  },
+  "namespace_qname_uniqueness_sample": {
+    "ambiguous": 5,
+    "samples": [
+      {
+        "context_filer_cik": "6201",
+        "member_qname": "aal:CreditFacility2013Member",
+        "n_uids": 14,
+        "node_ciks": [
+          "4515",
+          "6201"
+        ],
+        "ticker": "AAL"
+      },
+      {
+        "context_filer_cik": "6201",
+        "member_qname": "us-gaap:MainlineMember",
+        "n_uids": 2665,
+        "node_ciks": [
+          "23217",
+          "940944",
+          "1646972",
+          "1481646",
+          "22444",
+          "723254",
+          "923120",
+          "1170010"
+        ],
+        "ticker": "AAL"
+      },
+      {
+        "context_filer_cik": "6201",
+        "member_qname": "us-gaap:PensionPlansDefinedBenefitMember",
+        "n_uids": 1278,
+        "node_ciks": [
+          "23217",
+          "940944",
+          "1646972",
+          "1144215",
+          "795266",
+          "80424",
+          "94845",
+          "87347"
+        ],
+        "ticker": "AAL"
+      },
+      {
+        "context_filer_cik": "6201",
+        "member_qname": "us-gaap:MoneyMarketFundsMember",
+        "n_uids": 1078,
+        "node_ciks": [
+          "1013237",
+          "320187",
+          "1481646",
+          "22444",
+          "796343",
+          "1137789",
+          "707549",
+          "1065280"
+        ],
+        "ticker": "AAL"
+      },
+      {
+        "context_filer_cik": "6201",
+        "member_qname": "us-gaap:RevolvingCreditFacilityMember",
+        "n_uids": 2089,
+        "node_ciks": [
+          "23217",
+          "1013237",
+          "1679273",
+          "1003078",
+          "1702744",
+          "1144215",
+          "22444",
+          "723254"
+        ],
+        "ticker": "AAL"
+      }
+    ],
+    "unique": 0
+  },
+  "probe": "PART-2 dual-CIK slice-pairing scope (read-only, all 60 FA filings)",
+  "real_would_materialize_examples": [
+    {
+      "axes": [
+        [
+          "srt:ProductOrServiceAxis",
+          "slice_product"
+        ]
+      ],
+      "qname": "aal:RestructuringAndOtherNet",
+      "report_id": "0000006201-25-000038",
+      "ticker": "AAL",
+      "unit": "iso4217:USD"
+    },
+    {
+      "axes": [
+        [
+          "srt:ProductOrServiceAxis",
+          "slice_product"
+        ]
+      ],
+      "qname": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "report_id": "0000006201-25-000038",
+      "ticker": "AAL",
+      "unit": "iso4217:USD"
+    },
+    {
+      "axes": [
+        [
+          "srt:ProductOrServiceAxis",
+          "slice_product"
+        ]
+      ],
+      "qname": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "report_id": "0000006201-25-000038",
+      "ticker": "AAL",
+      "unit": "iso4217:USD"
+    },
+    {
+      "axes": [
+        [
+          "srt:ProductOrServiceAxis",
+          "slice_product"
+        ]
+      ],
+      "qname": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "report_id": "0000006201-25-000038",
+      "ticker": "AAL",
+      "unit": "iso4217:USD"
+    },
+    {
+      "axes": [
+        [
+          "srt:ProductOrServiceAxis",
+          "slice_product"
+        ]
+      ],
+      "qname": "aal:RestructuringAndOtherNet",
+      "report_id": "0000006201-25-000038",
+      "ticker": "AAL",
+      "unit": "iso4217:USD"
+    },
+    {
+      "axes": [
+        [
+          "srt:ProductOrServiceAxis",
+          "slice_product"
+        ]
+      ],
+      "qname": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "report_id": "0000006201-25-000038",
+      "ticker": "AAL",
+      "unit": "iso4217:USD"
+    },
+    {
+      "axes": [
+        [
+          "srt:ProductOrServiceAxis",
+          "slice_product"
+        ]
+      ],
+      "qname": "us-gaap:SeveranceCosts1",
+      "report_id": "0000006201-25-000038",
+      "ticker": "AAL",
+      "unit": "iso4217:USD"
+    },
+    {
+      "axes": [
+        [
+          "srt:ProductOrServiceAxis",
+          "slice_product"
+        ]
+      ],
+      "qname": "us-gaap:SeveranceCosts1",
+      "report_id": "0000006201-25-000038",
+      "ticker": "AAL",
+      "unit": "iso4217:USD"
+    },
+    {
+      "axes": [
+        [
+          "srt:ProductOrServiceAxis",
+          "slice_product"
+        ]
+      ],
+      "qname": "aal:RestructuringAndOtherNet",
+      "report_id": "0000006201-25-000038",
+      "ticker": "AAL",
+      "unit": "iso4217:USD"
+    },
+    {
+      "axes": [
+        [
+          "srt:ProductOrServiceAxis",
+          "slice_product"
+        ]
+      ],
+      "qname": "aal:OtherOperatingSpecialChargesNet",
+      "report_id": "0000006201-25-000038",
+      "ticker": "AAL",
+      "unit": "iso4217:USD"
+    },
+    {
+      "axes": [
+        [
+          "srt:ProductOrServiceAxis",
+          "slice_product"
+        ]
+      ],
+      "qname": "us-gaap:SeveranceCosts1",
+      "report_id": "0000006201-25-000038",
+      "ticker": "AAL",
+      "unit": "iso4217:USD"
+    },
+    {
+      "axes": [
+        [
+          "srt:ProductOrServiceAxis",
+          "slice_product"
+        ]
+      ],
+      "qname": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "report_id": "0000006201-25-000038",
+      "ticker": "AAL",
+      "unit": "iso4217:USD"
+    }
+  ],
+  "tickers_with_failures": [
+    "AAL"
+  ],
+  "total_fail": 2587,
+  "total_fail_real_would_materialize": 701,
+  "touches_real_slice_axes_or_materialized_facts": true,
+  "unresolved_SLICE_axes_in_failures": {
+    "slice_entity": 1410,
+    "slice_geography": 104,
+    "slice_product": 513
+  },
+  "verdict": "STOP_FOR_FABLE_touches_real_slices_or_materialized"
+}

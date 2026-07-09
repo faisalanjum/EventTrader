@@ -1,0 +1,17 @@
+{
+  "adjudicators_split": false,
+  "case_ref": "60 FA filings, current-period facts: durations 21,017 end==pOR+1 vs 1 end==pOR; instants 12,828 pOR+1 vs 0 pOR; the DRI 10-Q instant 2026-02-23 vs pOR 2026-02-22 (ra_0002 secondary observation, now explained by the convention)",
+  "description": "Stored XBRL Period dates are EXCLUSIVE-end (processor end-of-day midnight normalization): duration end_date and the instant date = human/reporting date + 1 day; duration start_date is UNSHIFTED, so durations are half-open [start_date, end_date). Verified by period_convention_proof.json (59/60 filings pure exclusive; 52/53-week filers 100%; one mixed = a single LUV duration fact) and period_start_check.json (verdict STARTS_UNSHIFTED_OK_TO_APPLY; 140/140 primary ends decode to pOR; 122/140 primary starts chain to a prior exclusive end; 0 invalid start>=end). Without a pinned binding, P4b/P14 comparisons against human dates (periodOfReport) are two-ways-to-code-it.",
+  "doc": "XBRLIntegrationDesign 5.2 P4b / 5.3 P14 (+ gp ids, build_known, P4h fallback)",
+  "evidence_files": [
+    "exp1_xbrl/runs/2026-07-09T14-25-39Z_dryrun/period_convention_proof.json",
+    "exp1_xbrl/runs/2026-07-09T14-25-39Z_dryrun/period_start_check.json"
+  ],
+  "id": "ra_0003",
+  "proposed_amendment": "O12 bundle: one clarification line for P4b/P14/5.3 - all stored Period reads pass through binding (d): effective_end = end_date - 1 day (durations), effective_instant = stored date - 1 day (instants; start_date field, end_date='null' quirk); primacy, gp ids, classification, and day counts run on EFFECTIVE dates; raw dates preserved in provenance; true inclusive day count = raw end_date - raw start_date (never double-adjust).",
+  "raised_in": "EXP-1 dry-run (period decode; escalated by owner with the read-only proof)",
+  "resolution": "Fable ruling 2026-07-09 (binding (d), schema-binding class like O13; execution-accepted now, production ratification rides O12): adopt the exclusive-end decode universally at the READ layer; instants at effective==pOR are PRIMARY (P4b 'durations and instants alike' restored); rows with raw end/instant == pOR (would-be-inclusive signature; exactly 1 LUV fact in report 0000092380-26-000004) -> SKIP + count period_end_convention_suspect + per-fact log, never materialized (undecidable one-day windows must not mint gp ids); per-report tripwire >=5 or >1% suspect rows -> STOP for Fable review; report_primary_window_missing warn counter; instant_off_pOR_by_one RETIRED (superseded - the +1 was the convention, not an anomaly); X-XL0 verifier implements the decode independently (no import from the materializer).",
+  "rule": "P4b primacy + P14 classifier + gp ids operate on human/reporting dates; stored Period dates require the binding-(d) decode first",
+  "status": "closed_resolved",
+  "why_two_ways": "(A) compare raw stored dates to periodOfReport -> every primary fact misclassifies as non-primary and every gp id shifts +1 vs the text lane (EXP-6 twins would fail wholesale, both sides of a systematic shift). (B) decode -1 day -> matches design intent (the docs reason in human dates throughout; the quote rider and periodOfReport are human dates). Data proved (B); the single LUV residue fails closed as a suspect skip."
+}

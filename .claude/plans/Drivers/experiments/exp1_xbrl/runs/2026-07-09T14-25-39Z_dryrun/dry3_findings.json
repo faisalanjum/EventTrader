@@ -1,0 +1,27 @@
+{
+  "run": "dry3",
+  "reports": 3,
+  "emitted": 199,
+  "value_table_status": "WORKS (raw 21,000,000 -> 21.0 m_usd; Fable ra_0002 table verified live)",
+  "bugs": [
+    {
+      "id": "bug1_cik_zero_padding",
+      "severity": "harness_bug_CLEAN_FIX",
+      "symptom": "slice_pairing_failclosed=1856 (~78% of fixture facts)",
+      "root_cause": "Context.dimension_u_ids / member_u_ids use a 10-digit ZERO-PADDED cik prefix (e.g. 0000023217:...), but Dimension.u_id / Member.u_id use the UNPADDED cik (23217:...). u_id lookup missed for every dimensional fact -> all explicit dims dropped -> length mismatch -> fail-closed.",
+      "fix": "normalize the cik segment (strip leading zeros) before the u_id lookup. VERIFIED: normalized u_id matches Dimension count=1 and Member count=1.",
+      "design_implication": "none (pure harness read bug)",
+      "status": "fix_confirmed_will_apply_on_resume"
+    },
+    {
+      "id": "bug2_exclusive_end_convention",
+      "severity": "NEW_AMBIGUITY_NEEDS_OWNER_FABLE_RULING",
+      "symptom": "0 primary facts; every duration period_scope=exact_range",
+      "root_cause": "XBRL periods are stored EXCLUSIVE: end_date (and instant start_date) = inclusive_end + 1 = periodOfReport + 1. VERIFIED on AAL 10-K (periodOfReport=2024-12-31): current-year duration end_date=2025-01-01 (n=729); current-year instant=2025-01-01 (n=763). Strict literal 'end_date == periodOfReport' therefore matches NOTHING -> 0 primary for ALL facts (durations too, not just instants).",
+      "correct_reading": "period end = INCLUSIVE end = end_date - 1 = periodOfReport for a primary fact. P4b: (end_date - 1) == periodOfReport (still strict equality, just the correct field). build_known joins on (end_date - 1) == periodOfReport. Classifier matches inclusive windows.",
+      "interaction_with_prior_ruling": "SUPERSEDES the 'instant off-by-one = observation, change nothing, strict P4b remains' ruling: the DRI instant +1 was NOT a 52/53-week anomaly, it is THIS universal exclusive-end convention. Under the inclusive reading the DRI instant is a NORMAL primary; instant_off_pOR_by_one becomes ~0 / retired.",
+      "recommendation": "adopt inclusive-end (end_date - 1) reading for P4b + build_known + classifier, after a quick corpus-wide confirmation the +1 convention is universal (verified AAL + DRI so far). Strict equality preserved.",
+      "status": "STOP_awaiting_owner_fable_ruling"
+    }
+  ]
+}

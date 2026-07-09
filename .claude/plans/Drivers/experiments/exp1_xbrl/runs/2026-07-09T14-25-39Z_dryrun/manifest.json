@@ -1,0 +1,149 @@
+{
+  "caps": {
+    "max_llm_calls": 0
+  },
+  "conversion_table_live_unit_names": {
+    "note": "keyed to live Unit.name spellings confirmed by census.json unit_inventory",
+    "rows": [
+      {
+        "is_divide": "!=1",
+        "level_unit": "m_usd",
+        "unit_name": "iso4217:USD",
+        "value": "round(raw/1e6, 6)"
+      },
+      {
+        "is_divide": "!=1",
+        "level_unit": "count",
+        "unit_name": "shares",
+        "value": "raw"
+      },
+      {
+        "is_divide": "1",
+        "level_unit": "usd",
+        "unit_name": "iso4217:USDshares",
+        "value": "raw (per-share; per-X in driver name)"
+      },
+      {
+        "action": "skip + count (unit_nonwhitelist)",
+        "unit_name": "*else*"
+      }
+    ]
+  },
+  "exp_id": "EXP-1",
+  "fable_ruling_ra_0002": {
+    "authority": "Fable ruling + XBRL 5.2 P4a/P4c",
+    "rule": "Do NOT call the text canonicalizer on XBRL facts; materializer applies its own fixed P4c/P4a conversion table at emit time.",
+    "status": "RESOLVED-ACCEPTED 2026-07-09"
+  },
+  "fable_rulings": [
+    {
+      "id": "period_end_exclusive_decode",
+      "rule": "stored end_date is EXCLUSIVE. duration: effective_start=start_date, effective_end=end_date-1. instant: effective_instant=stored-1. P4b/gp_ids/build_known/classifier/fiscal/P4h use EFFECTIVE dates; raw dates stay in provenance; inclusive day count = raw_end-raw_start (no double adjust). A raw end_date==periodOfReport row (LUV-style) -> skip+count period_end_convention_suspect, never non-primary. instant_off_pOR_by_one RETIRED (the +1 is the convention).",
+      "ruled_by": "Fable 2026-07-09",
+      "verified_precondition": "start-date check STARTS_UNSHIFTED_OK_TO_APPLY (period_start_check.json: 140/140 primary end-decode-to-por, 122/140 start-chains, 0 invalid)",
+      "verifier_note": "X-XL0 verifier must INDEPENDENTLY implement this decode (not import from the materializer)."
+    },
+    {
+      "deferred_to": "O12 bundle (ingestion repair / possible future certified recovery of skipped AAL slice facts)",
+      "id": "dualcik_unresolved_slice_skip",
+      "rule": "No aliasing rule ships in EXP-1. After normal normalization, if a dimension/member node still does NOT resolve -> SKIP the whole affected fact + count slice_pairing_dualcik_unresolved. Do NOT use qname-only matching; do NOT use cross-CIK/global alias matching; do NOT drop AAL.",
+      "ruled_by": "Fable 2026-07-09",
+      "verified_precondition": "dualcik_scope_proof.json: AAL-only (11/12 companies pair clean); 701 would-materialize; real slice axes affected (entity=1410, product=513, geography=104)"
+    }
+  ],
+  "git_commit": "edf40f42433da66779bb8d7b18eebcf69c0407bd",
+  "implementation_fixes": [
+    {
+      "bug": "Context.dimension_u_ids/member_u_ids carry a zero-padded 10-digit cik (0000023217:...); Dimension.u_id/Member.u_id carry the unpadded cik (23217:...). Lookup missed -> every explicit dim dropped -> slice_pairing_failclosed.",
+      "file": "harness/xbrl_dryrun_materializer.py",
+      "fix": "norm_uid() strips leading zeros on the cik segment before the u_id lookup.",
+      "function": "norm_uid + dim/mem u_id lookup",
+      "id": "bug1_cik_zero_padding",
+      "not_a_design_ruling": true,
+      "type": "implementation_bug_fix",
+      "verified": "normalized u_id matches Dimension+Member count=1; dry3 re-run: slice_pairing_failclosed drops and slices populate."
+    }
+  ],
+  "inputs": {
+    "fa_selection": "fixtures/FA_selection.json",
+    "fixture_resolutions": "fixtures/fixture_resolutions.json"
+  },
+  "models": {},
+  "observation_counters": [
+    "report_primary_window_missing"
+  ],
+  "p4g_note": "collision/dedupe runs on RAW values + RAW decimals BEFORE conversion",
+  "pit": {
+    "visible_from_filter": "structural - materializer reads only facts inside R"
+  },
+  "plan_sha256": "51966848183e2a48ba3d4faac36c5b352027939fd962a90798a73e8cd2ed7472",
+  "promotion_notes": [
+    {
+      "disposition": "PROMOTE_CANDIDATE",
+      "file": "harness/xbrl_dryrun_materializer.py",
+      "function": "convert_value",
+      "production_rewrite_needed": "this 3-row table IS the production XBRL value step; production driver_writer/xbrl_link_writer calls it (not the harness); extend per OD-10 back-port (non-USD currency axis, count-scale)",
+      "proof_file": "materialized.jsonl + X-XL0 verifier",
+      "rule": "P4c/P4a Fable-pinned fixed conversion table (ra_0002)"
+    },
+    {
+      "disposition": "PROMOTE_CANDIDATE",
+      "file": "harness/xbrl_dryrun_materializer.py",
+      "function": "resolve_slices",
+      "production_rewrite_needed": "same binding; CONFIRMED_AXES must LOAD from the frozen catalog table (not hardcode); ELIMINATION_LOCALS must be the full vetted ~24 list (harness carries a partial set)",
+      "proof_file": "materialized.jsonl slices + determinism_report.json",
+      "rule": "O13 ratified explicit-dim positional pairing + CONFIRMED_AXES + FS-18/OD-9 label normalizer"
+    },
+    {
+      "disposition": "PROMOTE_CANDIDATE",
+      "file": "harness/xbrl_dryrun_materializer.py",
+      "function": "build_known + classify_period",
+      "production_rewrite_needed": "promote into the FACT-18 resolver wrapper (shared classifier); harness derivation (shortest=quarter / longest=ytd|annual) is APPROXIMATE - production needs full P14c actual-fiscal-end algorithm incl SEC quarter cache + half/ttm/monthly",
+      "proof_file": "materialized.jsonl period_scope + determinism_report.json",
+      "rule": "P14 period_scope from XBRL-history windows + exact_range/WARN fallback; quarter>Q1-YTD"
+    },
+    {
+      "disposition": "PROMOTE_CANDIDATE",
+      "file": "harness/xbrl_dryrun_materializer.py",
+      "function": "per-report pull + entity-scope + P4g collision",
+      "production_rewrite_needed": "production runs inside driver_writer; same logic; entity-scope via IN_CONTEXT->FOR_COMPANY (harness compares ctx.cik == filer cik derived from report id)",
+      "proof_file": "skips.json + collision_census.json",
+      "rule": "P4f entity-scope (IN_CONTEXT->cik) + P4g raw dedup/collision on raw values+decimals BEFORE conversion"
+    },
+    {
+      "disposition": "PROMOTE_CANDIDATE",
+      "file": "harness/xbrl_dryrun_materializer.py",
+      "function": "write_reason (primary vs comparative)",
+      "production_rewrite_needed": "harness emits ALL facts flagged primary/comparative; production non-primary-on-change (backfill vs restatement) needs series-aware cross-event state - NOT implemented in the X-XL0 harness",
+      "proof_file": "materialized.jsonl primary flag",
+      "rule": "P4b strict primary (period end == periodOfReport)"
+    },
+    {
+      "disposition": "EXPERIMENT_ONLY",
+      "file": "harness/xbrl_dryrun_materializer.py",
+      "function": "<module scaffolding: argparse, neo4j session, jsonl writers>",
+      "production_rewrite_needed": "throwaway (12 \u00a72.2, never imported by prod); production entrypoint is xbrl_link_writer.py (12 build step 9b) - the RULES/TABLES above promote, this scaffolding does not",
+      "proof_file": "the run dir",
+      "rule": "EXP-1 X-XL0 probe harness"
+    }
+  ],
+  "run_id": "2026-07-09T14-25-39Z_dryrun",
+  "run_kind": "dry-run materializer + X-XL0 verifier",
+  "skip_counters": [
+    "no_context",
+    "unit_nonwhitelist",
+    "usd_bare_pershare_suspect",
+    "nonslice_or_elimination_axis",
+    "xbrl_internal_conflict",
+    "slice_pairing_failclosed",
+    "null_por_report_skip",
+    "raw_duplicate",
+    "latent_excluded",
+    "period_end_convention_suspect",
+    "slice_pairing_dualcik_unresolved"
+  ],
+  "started": "2026-07-09T14:25:39Z",
+  "status": "recorded_building_materializer",
+  "verifier_note": "X-XL0 verifier independently re-implements the same 3-row conversion table (NOT imported from the materializer)",
+  "workorder_sha256": "554529dde8e972b29a3e941b730b5eadf2e666d6769a27268886ffc6aa6cd164"
+}

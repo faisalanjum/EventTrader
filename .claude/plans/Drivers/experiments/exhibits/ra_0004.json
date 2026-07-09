@@ -1,0 +1,12 @@
+{
+  "case_ref": "AAL filer cik 6201 / entity cik 4515; dim/member nodes under entity cik; contexts reference filer cik -> lookup misses after normalization",
+  "description": "Scope pass over all 60 FA filings (dualcik_scope_proof.json): AAL-ONLY (11/12 companies pair cleanly). AAL: 2587 pairing failures, 701 would-materialize, unresolved SLICE axes entity=1410 product=513 geography=104 (e.g. AAL revenue by product/service on srt:ProductOrServiceAxis). Touches real slices + materialized facts.",
+  "doc": "XBRLIntegrationDesign 5.2 P4d/P4f \u00b7 O13 axis<->member \u00b7 O12",
+  "fable_ruling": "No aliasing rule ships in EXP-1. After normal normalization, if a dimension/member node still does not resolve -> SKIP the whole affected fact + count slice_pairing_dualcik_unresolved. NO qname-only matching; NO cross-CIK/global alias matching; do NOT drop AAL.",
+  "id": "ra_0004",
+  "o12_ref": "o12_bundle.json#dualcik_ingestion_repair",
+  "raised_in": "EXP-1 dry-run PART-2 dual-CIK slice-pairing scope pass",
+  "resolution": "Fable 2026-07-09: skip+count slice_pairing_dualcik_unresolved, no aliasing. Ingestion-repair / possible future certified recovery deferred to O12.",
+  "rule": "dual-CIK unresolved slice reference handling",
+  "status": "closed_resolved_fable"
+}
