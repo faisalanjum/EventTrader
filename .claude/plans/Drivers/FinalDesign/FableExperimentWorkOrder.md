@@ -1,6 +1,12 @@
 # FableExperimentWorkOrder — execution work order for FableExperimentPlan v1.0
 
-> **STATUS (2026-07-08): WORK ORDER v1.0 — execution-ready, derived 1:1 from `FableExperimentPlan.md` (sha256 `51966848183e2a48ba3d4faac36c5b352027939fd962a90798a73e8cd2ed7472`).**
+> **STATUS (2026-07-08): WORK ORDER v1.6 — execution-ready, derived 1:1 from `FableExperimentPlan.md` (sha256 `51966848183e2a48ba3d4faac36c5b352027939fd962a90798a73e8cd2ed7472`).**
+> **v1.1 (same day)** = v1.0 + owner decision closing O3: the K-fields gate = the locked DU-03 write gate ("DriverUpdate-worthy fact", significance-agnostic); schema field renamed `market_moving` → `du_worthy` (§3 K-fields · §4 EXP-5 · §7 · §8).
+> **v1.2 (same day)** = v1.1 + owner decision closing O1 (+ the company half of O2): the **Phase-1 corpus** = 12 companies in 3 groups — Restaurants base {CAKE, DRI, MCD, YUM, CMG} · SpecialtyRetail adjacent {AZO, ORLY, BBY, ULTA} · Airlines cross-sector contrast {DAL, AAL, LUV} (§3 WP-FA · §8 O1/O2/O7/O8 · §10 D6). **Phase-1 pass ≠ whole-market readiness** — it only unlocks a later, wider sector-wave validation before broad production; do NOT expand the Phase-1 corpus in-program. No bars changed.
+> **v1.3 (same day)** = v1.2 + owner decision closing O7/O8: DB verified **frozen at 2026-04-28** → the time-split is EMPTY → leakage control = **company-split + per-event PIT** (§10 D7); F-C catalog roster = **8 Restaurants {CAKE, DRI, MCD, YUM, CMG, SBUX, QSR, TXRH}**, 600-chunk checkpoint KEPT with trim priority **TXRH → QSR → SBUX**; same-industry hold-outs = **{BLMN, SHAK}**; retail + airlines stay out-of-catalog candidate groups. The 12-company F-A event/key corpus is UNCHANGED. No bars changed.
+> **v1.4 (same day)** = v1.3 + owner decision on O2 events: the **36-event DRAFT set is ACCEPTED** — mix kept **12/8/8/4/4**; the 32 filing/transcript source_ids pinned verbatim (§3 WP-FA step 5); the 4 news slots (AAL · MCD · BBY · CMG) filled with Fable-drafted article ids; the **catalog-independence leakage rule** added (EXP-5/EXP-6 may overlap mini-catalog companies; producer never sees gold/returns/future context; K-fields gold labeled from event TEXT only, never XBRL). **O2 stays OPEN until the five sign-off review checks are run and recorded** — a failed check swaps the smallest number of events, never a bar. No bars changed.
+> **v1.5 (same day)** = v1.4 + owner acceptance of the coverage-check results: **O2 is READY FOR FABLE SIGN-OFF** — the six review checks are RECORDED (twins · OD-12 · guidance · numberless · action_event all PASS; **OD-11 sequential BORDERLINE-accepted** with a pinned contingency); final news IDs pinned incl. the **MCD action-state-diversity swap → `bzNews_42014391`** (E. coli $100M — an occurred/at-risk incident state); the **OD-11 contingency** pinned (ULTA 10-Q → LUV 10-Q `0000092380-26-000047` iff K-fields drafting finds <5 sequential facts); EXP-1 mandatory fixtures stay separate probes. Mix 12/8/8/4/4 unchanged; no bars changed.
+> **v1.6 (same day)** = v1.5 + owner decisions closing the pre-run operational items **O4/O5/O6/O9**: K-route real-candidate quotas **LOCKED** (≥40 reuse · ≥40 create · ≥20 skip · ≤20 free/best-available hard; a stratum shortfall is RECORDED and STOPS for Fable/owner review — never silently re-quotaed) · EXP-2 shared-miss **reruns FORBIDDEN without a Fable-named concrete fix** (exhibits always) · the **8,000-char chunk arm KEPT** vs the 40k baseline (no one-paragraph switch; an optional "8k + neighbor rescue" follow-on noted as an experiment option only) · EXP-4's `opus_anchor` arm fires **mechanically ONLY on a Sonnet wrong-SAME** (zero wrong-SAME → skipped, +250 strong calls saved). O10/O11/O12 stay open (result-dependent); O13/O14/O15 unchanged (conditional implementation checks). No bars changed.
 > **What this is:** the HOW for the plan's WHAT. Experiment IDs (EXP-0…EXP-6), sequence, and every pass/fail bar are preserved verbatim from the plan. This file adds only execution detail: paths, queries, schemas, prompt contracts, scoring logic, gates, scheduling, and budget. It amends no design doc.
 > **Ambiguity rule:** anything the plan or the design docs do not pin is marked **`OPEN FOR OWNER/FABLE`** (register §8) — an implementer must STOP on those, never improvise. Genuine operationalizations (where the plan's intent needed a concrete recipe) are declared in §10, none changes a bar.
 > **Authority:** topic docs + `95` > `90`/`14` > lock candidates (`FableAdmissionKernelDesign.md`, `XBRLIntegrationDesign.md` — still candidates under test) > context packs > this file. All asset paths below verified on disk 2026-07-08.
@@ -33,7 +39,7 @@ All paths repo-relative to `/home/faisal/EventMarketDB`.
 ├── WORKORDER_STATUS.md                       ← living status board (one row per WP/EXP)
 ├── BUDGET.json                               ← call ledger (§1.7)
 ├── fixtures/
-│   ├── scope_restaurants.json                ← WP-FA (resolver output)
+│   ├── scope_{restaurants,specialtyretail,airlines}.json + scope_phase1.json   ← WP-FA (resolver outputs + the 12-ticker corpus scope)
 │   ├── FA_selection.json                     ← WP-FA (companies + 36 events; Fable-signed)
 │   ├── frozen_restaurants/                   ← copied chunks + manifests (never resume the source run)
 │   ├── rechunk_para/                         ← paragraph re-chunk output (EXP-2 arms A4/A5)
@@ -211,7 +217,7 @@ Rule: if Track B `12 §17` steps 1–2 (`driver_ids.py`, `driver_period_resolver
 7. `repair_duplicates.py` — `min_score` 0.72→**0.60** (`:82,:110,:491`); embeddings default ON; suggest `limit:0`.
 8. `repair_duplicates.js` — model pins → `MODELS` slots.
 9. `chunk_company_sources.py` — ADD `--budget-chars` CLI flag (default 40000, backward-compatible).
-10. `resolve_driver_scope.py` — ADD `--exclude T1,T2` flag (hold-outs, O7).
+10. `resolve_driver_scope.py` — ADD `--exclude T1,T2` flag (pins the F-C build to the 8-ticker roster: `--exclude BLMN,SHAK,WING,CBRL,EAT,PZZA` — O7/O8, decided).
 11. `workflows/tests/` — lockstep fixture updates dropping `optional_links`/`xbrl_or_null` per the pack §4 table (`test_build_seed`, `test_slice_seed`, `test_assemble_catalog`, `test_validate_catalog_d1`, `test_validate_fold`, `test_fold_catalogs`, `test_fold_repair_review`, `test_repair_duplicates`, `test_resume_menus`, `test_stage0_hardening` fixture noise).
 Acceptance for the batch: full workflow test suite green (261+1skip baseline). Prompt-mirror tests (10 §9 step 1's ADD) are Track A's deliverable — NOT an F-C blocker; note in status if absent. Fold/build_tree files untouched (F-C is one leaf; no folds).
 
@@ -228,10 +234,29 @@ Create the §1.1 tree; write `BUDGET.json` (zeroed), `WORKORDER_STATUS.md` (all 
 
 ### WP-FA — corpus (S; 0 LLM except nothing)
 
-1. **Scope:** `python3 .claude/plans/Drivers/workflows/resolve_driver_scope.py --industry "Restaurants" --out .claude/plans/Drivers/experiments/fixtures/scope_restaurants.json`. First verify the exact `Industry.name` value: `MATCH (i:Industry) WHERE toLower(i.name) CONTAINS 'restaurant' RETURN i.name`.
-2. **Adjacent industry** = **O1 (OPEN FOR OWNER/FABLE)** — recommended default: the same Sector's sibling industry with the most companies (list via `MATCH (i:Industry)<-[:BELONGS_TO]-(c:Company) ... RETURN i.name, count(c)`; verify BELONGS_TO direction first — schema-binding note).
-3. **Frozen chunks:** copy `chunks/ + chunks_manifest.json + sources_manifest.json` from `runs/2026-06-11_204218_restaurants/` → `fixtures/frozen_restaurants/`; run `chunk_company_sources.py --verify` against the copy. Missing/verify-fail → older restaurant runs (§2.1), else FRESH `fetch → chunk` on the scope (both options are PIPE-33-sanctioned); record which in `FIXTURES_MANIFEST.json`.
-4. **Mandatory-fixture discovery queries** (exact property names per validated schema; compute date math in Python — `Period.end_date` may be `'null'`):
+1. **The Phase-1 corpus — ✅ DECIDED (owner 2026-07-08; closes O1 + the company half of O2).** Twelve companies, three groups (Opus recommendation adopted; coverage figures from live-DB reads 2026-07-08 — cheap re-confirm at run time, P19 spirit):
+
+   | Role | Industry (`Industry.name`, DB-confirmed spelling) | Sector | Tickers |
+   |---|---|---|---|
+   | **Base / calibration** (the F-C catalog vocabulary) | `Restaurants` | ConsumerCyclical | CAKE, DRI, MCD, YUM, CMG |
+   | **Adjacent** (same sector; overlapping drivers → legit reuse) | `SpecialtyRetail` | ConsumerCyclical | AZO, ORLY, BBY, ULTA |
+   | **Contrast** (cross-sector; same words, different mechanisms) | `Airlines` | Industrials | DAL, AAL, LUV |
+
+   Why (owner's rationale): SpecialtyRetail supplies TRUE cross-company reuse (AZO↔ORLY comparable-store-sales; comps/traffic/ticket vocabulary); Airlines supplies REAL over-merge landmines in real filings (traffic = RPMs · capacity = ASMs · yield · per-ASM unit economics vs the restaurant/retail senses of the same words). 5 of the 12 are 52/53-week filers across 4 fiscal months (DRI-May · AZO-Aug · BBY/ULTA-Jan/Feb · CAKE-Dec/Jan boundary) — the plan's 52/53-week mandatory fixture is satisfied IN-corpus. Every one of the 12 has ≥3 COMPLETED-XBRL 10-Ks · ≥9 10-Qs · ≥12 earnings 8-Ks · ≥10 transcripts · 320+ news (Opus, live counts).
+   **Phase-1 scope note (owner 2026-07-08):** this corpus is **PHASE 1**. Passing every Phase-1 gate does NOT prove whole-market readiness — it only unlocks a later, wider **sector-wave validation** before broad production. Do not expand the Phase-1 corpus during this program. Known Phase-1 limits (by design, recorded): non-USD facts thinly covered; financials/utilities/energy vocabulary and pure-macro news attribution out of scope — deferred to the sector wave.
+   Mechanics: verify each `Industry.name` spelling (`MATCH (i:Industry) WHERE toLower(i.name) CONTAINS $frag RETURN i.name`), run `resolve_driver_scope.py` once per industry (`--industry "Restaurants" | "SpecialtyRetail" | "Airlines"`) → `fixtures/scope_{restaurants,specialtyretail,airlines}.json`, then write **`fixtures/scope_phase1.json` = exactly the 12 tickers above** (the corpus is the ticker list, NOT the full industries; this file is the scope every fetch pins against).
+
+   **Catalog-side roster (O7/O8 — ✅ DECIDED owner 2026-07-08; catalog machinery, NOT an F-A corpus expansion — the 36-event/key corpus stays the 12 above):**
+
+   | Set | Tickers | Role |
+   |---|---|---|
+   | F-C mini-catalog build (O8) | CAKE, DRI, MCD, YUM, CMG + **SBUX, QSR, TXRH** | the frozen catalog's vocabulary (Restaurants-only; filings + transcripts ≤ T0; news never enters the leaf build) |
+   | Same-industry hold-outs (O7) | **BLMN, SHAK** | never in the catalog; their events feed EXP-3's same-industry candidates (casual-dining + fast-casual — reuse SHOULD fire on comps/traffic/labor/commodity) |
+   | Out-of-catalog candidate groups | AZO, ORLY, BBY, ULTA · DAL, AAL, LUV | adjacent reuse + cross-sector over-merge traps (already corpus members) |
+
+   Always-hidden from the catalog: BLMN, SHAK, AZO, ORLY, BBY, ULTA, DAL, AAL, LUV. The Restaurants industry's remaining 4 (WING, CBRL, EAT, PZZA) are unused in Phase 1. **Split axis = COMPANY + per-event PIT, not time** — the DB is verified frozen at **2026-04-28** (max `Report.created` / `Transcript.conference_datetime` / `News.created`), so "events later than the catalog" do not exist (§10 D7).
+3. **Frozen chunks:** copy `chunks/ + chunks_manifest.json + sources_manifest.json` from `runs/2026-06-11_204218_restaurants/` → `fixtures/frozen_restaurants/`; run `chunk_company_sources.py --verify` against the copy. Missing/verify-fail → older restaurant runs (§2.1), else FRESH `fetch → chunk` on the scope (both options are PIPE-33-sanctioned); record which in `FIXTURES_MANIFEST.json`. **Pre-run check (d):** confirm `chunks_manifest.json` covers all 8 catalog-roster tickers + BLMN/SHAK (10 of the industry's 14; expected present), and read its per-ticker chunk counts for the 8-ticker roster — the O8 pre-estimate (live chunk-source counts put the 8-set ≈ 478 of the industry's ≈ 805).
+4. **Mandatory-fixture discovery + pre-run data checks** (exact property names per validated schema; compute date math in Python — `Period.end_date` may be `'null'`). **Sourcing rules (updated for verified data, see §10 D6):** `filer_5253` = IN-corpus, default pick = **DRI** (clean May 52/53; 5 verified candidates: DRI, AZO, BBY, ULTA, CAKE — FA-Q1 re-confirms) · `multi_registrant_report` = **corpus-WIDE** (Opus verified NONE exists among the 12) — an EXP-1-ONLY dry-run fixture; no keys/events attach to it · `null_periodofreport_report` = corpus-wide IF a COMPLETED-XBRL one exists (the 3 known null-pOR reports are all `xbrl_status=FAILED`), else **SYNTHETIC** (a real COMPLETED report's pull with `periodOfReport` blanked in the harness input — fixture-only, never a graph write) · `precision_dup_pair` = backfilled by the EXP-1 dry-run (unchanged). Queries:
 ```cypher
 -- FA-Q1 52/53-week filers in scope (tolerance 363–371 days on annual duration windows)
 MATCH (c:Company)<-[:PRIMARY_FILER]-(r:Report)
@@ -252,22 +277,83 @@ RETURN count(r) AS n, collect(r.id)[..10] AS sample
 MATCH (r:Report)-[:PRIMARY_FILER]->(c:Company {ticker:$ticker})
 WHERE r.formType='8-K' AND r.items CONTAINS '2.02'
 RETURN r.id, r.created ORDER BY r.created DESC LIMIT 10
--- FA-Q5 news per ticker (INFLUENCES; News.created is an ISO string)
+-- FA-Q5 news per ticker (INFLUENCES; News.created is an ISO string; add size(n.body)>500 for substance)
 MATCH (n:News)-[:INFLUENCES]->(c:Company {ticker:$ticker})
 WHERE n.created >= $from AND n.created <= $to
 RETURN n.id, n.title, n.created ORDER BY n.created DESC LIMIT 20
+-- FA-Q6 action-event backstop (only if sign-off check 1 fails): non-earnings 8-K items
+MATCH (c:Company)<-[:PRIMARY_FILER]-(r:Report)
+WHERE c.ticker IN $tickers AND r.formType='8-K' AND NOT r.items CONTAINS '2.02'
+  AND (r.items CONTAINS '5.02' OR r.items CONTAINS '1.01' OR r.items CONTAINS '2.05' OR r.items CONTAINS '8.01')
+RETURN c.ticker, r.id, substring(r.created,0,10) AS d, r.items ORDER BY r.created DESC LIMIT 40
+-- FA-Q7 text-part sanity (run over the 24 chosen filings before signing)
+MATCH (r:Report) WHERE r.id IN $chosen_ids
+RETURN r.id, r.formType,
+  COUNT { (r)-[:HAS_EXHIBIT]->(:ExhibitContent) } AS exhibits,
+  COUNT { (r)-[:HAS_SECTION]->(:ExtractedSectionContent) } AS sections
 ```
-   Transcript pull: verify edge direction first (`MATCH (a)-[:HAS_TRANSCRIPT]->(b) RETURN labels(a), labels(b) LIMIT 1`), then select 8 transcripts by `conference_datetime`.
-5. **Selection:** draft `FA_selection.json` (schema below) — 12 companies (calibration + adjacent; ≥1 52/53-week filer) × 36 events (12 earnings 8-K · 8 transcripts · 8 10-Q · 4 10-K · 4 news) + the mandatory fixtures. **O2: Fable signs off** (`signed_off_by`).
+   Transcript pull: verify edge direction first (`MATCH (a)-[:HAS_TRANSCRIPT]->(b) RETURN labels(a), labels(b) LIMIT 1`; Opus-verified 2026-07-08: `Company→Transcript`), then select 8 transcripts by `conference_datetime`.
+   **Remaining pre-run checks (Opus's "still to run" — data checks, NOT closed facts):** **(a)** the corpus-wide multi-registrant search (FA-Q2 pattern, run sliced/off-hours) — required because none exists among the 12; **(b)** the COMPLETED-XBRL null-pOR existence query — if it returns 0, P4h uses the synthetic fixture; **(c)** EXP-6 twin-feasibility census per ticker (matched earnings-8-K + same-quarter 10-Q/10-K: `MATCH (r:Report)-[:PRIMARY_FILER]->(c:Company) WHERE c.ticker IN $twelve AND ((r.formType='8-K' AND r.items CONTAINS '2.02') OR r.formType IN ['10-Q','10-K']) RETURN c.ticker, r.formType, r.periodOfReport, r.created ORDER BY c.ticker, r.created`); **(d)** the frozen-run coverage disk check (step 3); **(e)** hold-out overlap: confirm BLMN/SHAK filings/transcripts state the driver families the catalog will coin (comps / traffic / labor / commodity costs) so reuse CAN fire — quick fulltext/section check; **(f)** candidate supply: count harvestable ≤-T0 events across the 9 always-hidden companies — expect ≫ 150 (live: ~50–70 chunk-sources each); **(g)** T0: re-confirm the 2026-04-28 frozen-DB boundary if the graph is ever refreshed (time-split then becomes available as a supplement — §10 D7). Results land in `FIXTURES_MANIFEST.json.preflight`.
+5. **The 36-event set — ✅ ACCEPTED by owner 2026-07-08 (mix kept 12/8/8/4/4); coverage checks RECORDED same day (results table below) → READY FOR FABLE SIGN-OFF.** Two pinned review notes ride along: the MCD action-state pick (already applied) and the OD-11 contingency swap (below). Filings/transcripts = the latest of each type per company, Feb–Apr 2026, ≤ T0 (PIT-clean); per-company spread ≤ 4 (DRI/YUM/DAL/AAL/BBY = 4 · MCD/CMG/AZO/ULTA = 3 · CAKE = 2 · ORLY/LUV = 1). Copy verbatim into `FA_selection.json.events`.
+
+   **12 earnings 8-K:** CAKE `0001104659-26-017090` (02-18; +Item 8.01 action, +7.01) · DRI `0000940944-26-000005` (03-19) · MCD `0000063908-26-000032` (02-11; constant-currency → OD-9) · YUM `0001041061-26-000003` (02-04; multi-brand, CC) · CMG `0001058090-26-000007` (02-03) · AZO `0001171843-26-001288` (03-03) · ORLY `0000898173-26-000006` (02-04) · BBY `0000764478-26-000005` (03-03) · ULTA `0001104659-26-027061` (03-12) · DAL `0000027904-26-000020` (04-08; CASM lower-is-better → OD-13) · AAL `0000006201-26-000031` (04-23; +Item 7.01 guidance deck) · LUV `0000092380-26-000044` (04-22).
+   **8 transcripts:** DAL `DAL_2026-04-08T10.00` · AAL `AAL_2026-04-23T08.30` · DRI `DRI_2026-03-19T08.30` · YUM `YUM_2026-02-04T08.15` · CMG `CMG_2026-02-03T16.30` · MCD `MCD_2026-02-11T16.30` · BBY `BBY_2026-03-03T08.00` · ULTA `ULTA_2026-03-12T16.30`.
+   **8 10-Q (all `xbrl_status='COMPLETED'`; trap in parens):** AZO `0001104659-26-032757` (2026-02-14; 52/53 shifted quarter) · DRI `0000940944-26-000009` (2026-02-22; 52/53, 9-mo YTD) · BBY `0000764478-25-000057` (2025-11-01; 52/53 Q3, 9-mo YTD) · ULTA `0001104659-25-118458` (2025-11-01; 52/53 Q3; **subject to the pinned OD-11 contingency swap below**) · YUM `0001041061-25-000109` (2025-09-30; multi-brand slices) · CAKE `0001104659-25-105631` (2025-09-30; Q3) · DAL `0000027904-26-000022` (2026-03-31; Q1 3mo=YTD edge) · AAL `0000006201-26-000032` (2026-03-31; Q1, unit-cost slices).
+   **4 10-K:** DRI `0000940944-25-000038` (FY 2025-05-25; 52/53 May) · AZO `0001104659-25-102611` (FY 2025-08-30; 52/53 Aug) · YUM `0001041061-26-000084` (FY 2025-12-31; multi-brand) · DAL `0000027904-26-000013` (FY 2025-12-31; airline geo regions).
+   **4 news — ✅ FINAL (owner 2026-07-08; ids live-verified same day; action states in parens):** AAL `bzNews_50877032` (2026-02-26 — invests $1B in Miami airport expansion; announced/capex) · MCD `bzNews_42014391` (2024-11-15 — spends $100M to move past the E. coli outbreak; **occurred/at-risk incident response** — the owner's action-state-diversity swap; DATE OUTLIER, ≤ T0) · BBY `bzNews_51962983` (2026-04-22 — appoints Jason Bonfig as CEO; announced/leadership) · CMG `bzNews_49256211` (2025-12-08 — authorizes an additional $1.8B for share repurchases; announced/buyback; ≤ T0). Alternates on file if a late veto ever needs one (O2 close-out appendix): AAL `bzNews_40839967` (contract ratified — resolved state) · BBY `bzNews_35439277` (recall — occurred) · CMG `bzNews_45236504` (COO appointment) · MCD `bzNews_43613789` (store expansion).
+
+   **O2 sign-off checklist (owner 2026-07-08 — run + record in `FA_selection.json.review_checks` BEFORE Fable signs; any failure → swap the SMALLEST number of events using FA-Q6/FA-Q7 + the named swap-candidates, never changing the 12/8/8/4/4 mix, any bar, or the design):**
+   (1) **action_event coverage ≥ 5** gold-able facts across **≥ 4 action states** (the thinnest lane: 4 news + CAKE's Item 8.01 + 10-K business/risk + transcript Q&A);
+   (2) **OD-12 loss/signed examples ≥ 5** (impairments / charges / special items in the selected quarters);
+   (3) **OD-11 sequential-basis examples ≥ 5** (airline sequential capacity/CASM framing — restaurants skew YoY);
+   (4) **guidance actually present in each selected earnings 8-K** (record the raised/lowered/reaffirmed mix; AAL's 7.01 deck helps);
+   (5) **the EXP-1 mandatory fixtures stay SEPARATE from the 36** unless naturally inside (multi-registrant + null-pOR are corpus-wide/synthetic per §10 D6);
+   plus **FA-Q7 text-part sanity**: every chosen filing returns extractable exhibits/sections > 0.
+
+   **✅ RECORDED RESULTS (Opus coverage run, live Neo4j; owner-ACCEPTED 2026-07-08 — copy into `FA_selection.json.review_checks` at materialization):**
+   | Check | Verdict | Headline evidence |
+   |---|---|---|
+   | XBRL/text twins | **PASS** (huge margin) | 5,253 consolidated primary facts across the 12 XBRL filings; 52/53 filers alone supply thousands |
+   | OD-12 loss/signed | **PASS** (huge margin) | 232 impairment/restructuring/write-off facts (BBY 10-Q 125 · DRI 10-Q 44 · …) + 1,323 negative-signed facts |
+   | Guidance in earnings 8-Ks | **PASS** | 11/12 carry guidance language; BBY's guidance arrives via its selected transcript |
+   | Numberless / qualitative | **PASS** | 13 numberless-guidance exchanges (DRI 4 · DAL 2 · AAL 2 · …) + qualitative state language across all 8 transcripts |
+   | action_event ≥5 / ≥4 states | **PASS with the MCD swap** | 4 quantified news actions + CAKE Item 8.01 + 10-K legal/business + Q&A; MCD E. coli adds the occurred/at-risk state (news otherwise skews "announced") |
+   | OD-11 sequential | **BORDERLINE — accepted** | ~6 events carry sequential framing (DAL/CAKE/AAL 10-Q · AAL 8-K · AAL/MCD Q&A), airline-concentrated; prepared remarks likely add more → contingency below |
+   | FA-Q7 text sanity | **PASS** | per-filing exhibit/section content confirmed in the coverage run's text checks |
+   Drafting note (bonus, not a check): the ISS-16 surprise lane rests on the 12 earnings 8-Ks — at K-fields drafting, confirm each surprise gold fact cites a STATED expectation comparison, never a market-implied one.
+
+   **PINNED OD-11 CONTINGENCY (owner 2026-07-08 — the one live swap):** if K-fields drafting yields **< 5** sequential-basis facts, swap **ULTA 10-Q `0001104659-25-118458` → LUV 10-Q `0000092380-26-000047`** (adds a third airline quarterly: sequential-rich unit cost/capacity + more twins). Mix stays 12/8/8/4/4; four 52/53-week 10-Qs remain (AZO, DRI, BBY, CAKE) plus two 52/53 10-Ks, so EXP-6's ≥10-twins-from-52/53 quota survives the swap. Apply ONLY if short; record the trigger evidence in `review_checks.od11_sequential.evidence`.
 ```jsonc
-{"industry": "Restaurants", "adjacent_industry": "<O1>",
- "companies": [{"ticker": "CAKE", "cik": "...", "is_5253": true}],
- "events": [{"source_id": "...", "source_type": "8k", "ticker": "...", "date": "<ISO>", "why": ["earnings"]}],
- "mandatory_fixtures": {"filer_5253": "<ticker>", "multi_registrant_report": "<rep id>",
-   "null_periodofreport_report": "<rep id>", "precision_dup_pair_report": "<rep id — found by EXP-1 dry-run, backfilled>"},
+{"phase": 1,   // Phase-1 corpus (owner 2026-07-08). Phase-1 pass ≠ whole-market readiness —
+               // a later, wider sector-wave validation gates broad production. Never expand in-program.
+ "groups": {"base":     {"industry": "Restaurants",    "tickers": ["CAKE","DRI","MCD","YUM","CMG"]},
+            "adjacent": {"industry": "SpecialtyRetail","tickers": ["AZO","ORLY","BBY","ULTA"]},
+            "contrast": {"industry": "Airlines",       "tickers": ["DAL","AAL","LUV"]}},
+ "catalog_side": {   // O7/O8 (owner 2026-07-08) — catalog machinery; NOT part of the 36-event corpus
+   "fc_build_tickers": ["CAKE","DRI","MCD","YUM","CMG","SBUX","QSR","TXRH"],
+   "holdout_tickers": ["BLMN","SHAK"],
+   "trim_priority": ["TXRH","QSR","SBUX"],
+   "t0_frozen_db": "2026-04-28"},
+ "companies": [{"ticker": "CAKE", "cik": "...", "group": "base", "is_5253": true}],
+ "draft_accepted_by_owner": "2026-07-08",   // O2: 36 events accepted + checks RECORDED (step 5 results table); ready for Fable sign-off
+ "events": [ /* the 36 events pinned in step 5, copied VERBATIM: {source_id, source_type, ticker, date, why} */ ],
+ "review_checks": {   // copy the RECORDED verdicts from step 5's results table (owner-accepted 2026-07-08)
+   "xbrl_text_twins":        {"pass": true,  "evidence": "5,253 primary facts / 12 filings"},
+   "od12_loss_signed":       {"pass": true,  "evidence": "232 charge facts + 1,323 negative-signed"},
+   "guidance_in_8ks":        {"pass": true,  "evidence": "11/12; BBY via its transcript"},
+   "numberless_qualitative": {"pass": true,  "evidence": "13 numberless-guidance exchanges + 8 transcripts"},
+   "action_event_cov":       {"pass": true,  "evidence": ">=5 across >=4 states WITH the MCD E.coli pick"},
+   "od11_sequential":        {"pass": "borderline_accepted", "evidence": "~6 sequential events; LUV-swap contingency pinned (step 5)"},
+   "exp1_fixtures_separate": {"pass": true,  "evidence": "multi-registrant + null-pOR corpus-wide/synthetic; precision-dup via EXP-1 dry run"},
+   "text_part_sanity":       {"pass": true,  "evidence": "FA-Q7 content hits per filing (coverage run)"}},
+ "mandatory_fixtures": {
+   "filer_5253": "<in-corpus ticker; 5 verified candidates: DRI, AZO, BBY, ULTA, CAKE (FA-Q1 re-confirms)>",
+   "multi_registrant_report": "<rep id — corpus-WIDE, EXP-1-only fixture (none exists among the 12)>",
+   "null_periodofreport_report": "<rep id if a COMPLETED-XBRL one exists, else \"SYNTHETIC\" (P4h harness fixture)>",
+   "precision_dup_pair_report": "<rep id — found by EXP-1 dry-run, backfilled>"},
  "signed_off_by": null}
 ```
-6. **Event packets:** filings/transcripts via `fetch_company_sources.py` per company → select the 36 by `source_id`; news via `harness/news_pull.py` (FA-Q5 + `title/teaser/body`). Write `fixtures/events/<safe_source_id>.json`:
+6. **Event packets:** filings/transcripts via `fetch_company_sources.py` per company — all 12 corpus companies, scope-pinned against `fixtures/scope_phase1.json` → select the 36 by `source_id`; news via `harness/news_pull.py` (FA-Q5 + `title/teaser/body`). Write `fixtures/events/<safe_source_id>.json`:
 ```jsonc
 {"source_id": "...", "source_type": "8k|transcript|10q|10k|news", "ticker": "...", "cik": "...",
  "date": "<Report.created | Transcript.conference_datetime | News.created>",
@@ -289,7 +375,7 @@ Common protocol (every `keys/<K>/protocol.md` restates it + key-specific rules):
  "side_b": { ... }, "rival": null,          // optional third card name+quote for check-4 cases
  "gold": "SAME|DIFFERENT", "gold_rationale": "<1-2 sentences>", "hard": false}
 ```
-Strata: 110 planted-DIFFERENT (≥8 per family across the ≥9 families; plan §4) + 50 planted-SAME synonyms. Planted quotes may be synthetic-but-realistic filing language (they are calibration plants — kernel §9.6's own pattern). Mined 90 (v2): run `harness/mine_pairs.py` on the frozen F-C catalog — suggestion channels exactly `token-overlap ∪ rare-token ∪ embeddings(top_k=5, min_score=0.60)` (the repair suggester's channels) → `ab_stratum.py`-style selection stratified by channel + score band → Fable adjudicates gold.
+Strata: 110 planted-DIFFERENT (≥8 per family across the ≥9 families; plan §4) + 50 planted-SAME synonyms. Planted quotes may be synthetic-but-realistic filing language (they are calibration plants — kernel §9.6's own pattern). Where the Phase-1 corpus provides them, PREFER its real language: planted-DIFFERENT from the cross-domain homonym set (traffic = guest count vs store foot-traffic vs RPMs · capacity = throughput vs ASMs · yield · unit = store vs per-ASM · the "comparable/comps" senses); planted-SAME from real synonym clusters (AZO↔ORLY comparable-store-sales; multi-brand system-sales). Synthetic remains the legal fallback. Mined 90 (v2): run `harness/mine_pairs.py` on the frozen F-C catalog — suggestion channels exactly `token-overlap ∪ rare-token ∪ embeddings(top_k=5, min_score=0.60)` (the repair suggester's channels) → `ab_stratum.py`-style selection stratified by channel + score band → Fable adjudicates gold.
 
 **K-reader** (`kr_`; 40 chunks; locks before EXP-2):
 ```jsonc
@@ -310,17 +396,20 @@ Chunk sample: 40 from `chunks_manifest.json`, h32-seeded, stratified by source_t
  "gold_arm": "ATTACH|ADOPT|CLAIM|CREATE|SKIP", "gold_target": "<catalog driver_name|null>",
  "planted_family": "P1|P3|P4|P5|P6|P7|P8|P9|null", "rationale": "..."}
 ```
-120 real candidates (generation recipe in EXP-3) + 30 planted probes = the gauntlet families (P1 three-demand-stories · P3 own-segment-vs-external · P4 measurement words · P5 per-X trio · P6 brand/geo slice traps · P7 same-words-different-mechanism homonyms · P8 genus-species · P9 benchmark identity — kernel §8.3). Real-candidate strata quotas = **O4** (recommended default: ≥40 reuse-gold, ≥40 create-gold, ≥20 skip-gold, remainder free).
+120 real candidates (generation recipe in EXP-3) + 30 planted probes = the gauntlet families (P1 three-demand-stories · P3 own-segment-vs-external · P4 measurement words · P5 per-X trio · P6 brand/geo slice traps · P7 same-words-different-mechanism homonyms · P8 genus-species · P9 benchmark identity — kernel §8.3; draw P7-style homonyms from the corpus's real airline/retail language where available). Real-candidate strata quotas — **✅ LOCKED (owner 2026-07-08; closes O4):** ≥40 reuse-gold · ≥40 create-gold · ≥20 skip-gold · remaining ≤20 free / best-available HARD real cases (= the 120 real; + 30 planted = 150). **Shortfall rule:** if any required stratum cannot be filled from real candidate data, RECORD the shortfall in the protocol and **STOP for Fable/owner review** — quotas are never silently changed.
 
 **K-fields** (`kf_`; ~150 gold facts over the 36 events; locks before EXP-5):
 ```jsonc
 {"key_id": "kf_0001", "source_id": "...", "ticker": "...", "lane": "metric|guidance|surprise|action_event",
- "market_moving": true,
+ "du_worthy": true,   // the locked DU-03 gate (owner 2026-07-08, closes O3): "DriverUpdate-worthy fact" —
+                      // NOT stock-move attribution (that is EXPLAINED_BY's job, DU-21…24).
+                      // false = OPTIONAL near-miss exemplar row (gate-dropped bare mention / boilerplate),
+                      // excluded from EVERY recall denominator; adjudication context + precision spot-checks only.
  "gold_item": { /* the FULL FACT-17b item, incl. transients — field list §4/EXP-5 */ },
  "gold_extra": {"expectation_comparison_present": false},   // ISS-16 trigger ground truth
  "trap_class": "shape_point|OD-12_loss_floor|OD-11_sequential|OD-9_spans|OD-13_favorability|ISS-16_routing|slice_menu|unknown_axis|null"}
 ```
-Protocol MUST define "market-moving fact" before drafting = **O3 (OPEN FOR OWNER/FABLE — Fable authors; constraints: source-stated only, covers all 4 lanes, excludes boilerplate)**. Trap quotas: every `12 §12.3` planted class + OD-9/11/12/13/14 + ISS-16 represented ≥5× each. An expectation-comparison source sentence yields TWO gold facts (metric + surprise) per ISS-16.
+**The gate — ✅ DECIDED (owner 2026-07-08; closes O3): `du_worthy` ≡ the locked DU-03 write gate ("DriverUpdate-worthy fact"), significance-agnostic.** A gold fact exists iff the source STATES a real, non-boilerplate fact about a driver in one of the four lanes. DU-03 verbatim (`07` :25-29, `[LOCKED]`): *"does this event carry a real fact about the driver (state/change/surprise/guidance/action)? A bare mention → NO DriverUpdate. Generic risk boilerplate ('litigation could harm us', 'weather may affect results') → dropped."* Explicitly NOT part of the gate — no recurrence, no "must be a change", no materiality/significance bar, no realized-price-move test: those are read-time filters, never write gates (DU-01 · `11` T11.1 · `95` #4/#5). Numberless/qualitative facts COUNT (DU-05; ~19.2% of real facts are numberless — `09` §1). Threat-like language: the one locked lane-level boundary is DU-11's `at_risk` STRICT (a specific, current, source-flagged adverse threat = fact; generic = drop); fuzzy-middle cases on the other lanes have NO locked boundary — file `ra_*` exhibits at drafting, never invent one. Stock-move attribution is `EXPLAINED_BY` (DU-21…24) and NEVER enters this gate — the field is named `du_worthy` so no implementer misreads it as attribution; wherever the plan says "market-moving facts", read `du_worthy==true`. Two axes, never blurred in gold labeling: the GATE decides fact-vs-no-fact; `trap_class` grades how an admitted fact is ENCODED (`12 §12.3` field classes). The ~150 target counts `du_worthy:true` facts only. Trap quotas: every `12 §12.3` planted class + OD-9/11/12/13/14 + ISS-16 represented ≥5× each. An expectation-comparison source sentence yields TWO gold facts (metric + surprise) per ISS-16. **Adjudication independence (owner 2026-07-08):** K-fields gold is labeled from the event TEXT ONLY — drafters and adjudicators must NOT consult the filing's XBRL facts while labeling (EXP-6's text-vs-XBRL twin comparison would otherwise be circular); the producer is never shown gold labels, realized returns, or any > event_time context. **Two drafting-time hooks (O2 close-out):** (a) count sequential-basis facts as drafting proceeds — if the total lands **< 5**, fire the pinned OD-11 contingency (§3 WP-FA step 5: ULTA 10-Q → LUV 10-Q) BEFORE locking this key; (b) every surprise-lane gold fact must cite a STATED expectation comparison from the text, never a market-implied one.
 
 **K-stamp** (`ks_`; ~100; locks before EXP-4B):
 ```jsonc
@@ -336,8 +425,8 @@ Mix: real F-C records (post-run) + planted (all 5 `deceptive_suffix` are plants 
 
 **WP-FC-EDITS** (code work; before EXP-2): apply §2.3 items 1–11; suite green. Unblocks EXP-2 (the inlined reader prompt is EXP-2's rulebook block) and WP-FC-RUN.
 
-**WP-FC-RUN** (after EXP-2's `decision.json`): run the existing engine via the in-session Workflow tool — `menu_build.js {industry: "Restaurants"}` (scope resolved with `--exclude <2 held-out tickers>` if O7's fallback is active) → `reconcile.js` → `repair_duplicates.js` → `validate_catalog.py` (WITH `approved.json` — footgun 3). Models: `MODELS.reader` = EXP-2's adopted reader; `MODELS.{dedup,gate,refute,d5,repair}` = `strong` (Sonnet — kernel §11.0 owner default; exact IDs in the run's `manifest.models`).
-**Budget checkpoint (O8):** after chunking, if chunk-file count > 600 → STOP for owner/Fable scope decision (default: cap at 8 h32-selected companies incl. CAKE + the 52/53-week filer) before the reader fan-out.
+**WP-FC-RUN** (after EXP-2's `decision.json`; **O8 ✅ DECIDED owner 2026-07-08**): run the existing engine via the in-session Workflow tool — `menu_build.js {industry: "Restaurants"}` with the company scope pinned BEFORE fetch to the **8-ticker catalog roster** {CAKE, DRI, MCD, YUM, CMG, SBUX, QSR, TXRH} via `resolve_driver_scope.py --industry "Restaurants" --exclude BLMN,SHAK,WING,CBRL,EAT,PZZA` (§2.3 item 10). Build inputs = the roster's filings + transcripts ≤ T0 only (news never enters the leaf build). Then `reconcile.js` → `repair_duplicates.js` → `validate_catalog.py` (WITH `approved.json` — footgun 3). Models: `MODELS.reader` = EXP-2's adopted reader; `MODELS.{dedup,gate,refute,d5,repair}` = `strong` (Sonnet — kernel §11.0 owner default; exact IDs in the run's `manifest.models`).
+**Budget checkpoint (KEPT, owner 2026-07-08):** after chunking, if fresh chunk-file count > 600 → **trim the density adds in reverse priority: drop TXRH, re-count; still > 600 → drop QSR; then SBUX** (floor = the 5 corpus restaurants; no other trims). Pre-estimate before fetch from the frozen 2026-06-11 manifest (check d: 8-set ≈ 478 — expected UNDER the cap); the FRESH manifest is definitive.
 **Hard checks** (fixture-grade; fix-and-rerun allowed — plan §4 F-C): `validation_exit.json` exit==0 incl. D1 · brand/measurement token scan = deterministic lint over coined names against (a) measurement tokens {adjusted, diluted, constant_currency, organic, pro_forma, gaap, non_gaap, reported, as_reported} and (b) a gazetteer = scope companies' names/tickers ∪ their XBRL Member labels (via the EXP-5 slice-menu query) — hits reviewed by Fable (NAME-11 ladder survivors are legal) · per-X spot-check · same-name convergence PRESENT across companies (PIPE-20; absence = override-layer failure) · `harness/recall_floor_check.py` (tickers with ≥2000 content chars and 0 candidates — the PIPE-10 ADD is unbuilt; this is its fixture stand-in) · D5/Refute traffic counts reported.
 Then EXP-4B stamps → write `catalog_fc/{families_fixture.json, fact_type_decisions_fixture.json, terminal_admissions_fixture.json}` → `harness/retrieval_index.py` embeds cards → `FREEZE.lock.json` (shas of catalog.json + approved.json + validation_exit.json + the three fixture files + retrieval_index.jsonl). F-C NEVER feeds the real fitness gate.
 
@@ -372,7 +461,7 @@ Then EXP-4B stamps → write `catalog_fc/{families_fixture.json, fact_type_decis
 
 **Plan bars (verbatim):** 100% field determinism (dry X-XL0) · period classifier: 0 windows unclassifiable except the declared `exact_range`+WARN fallback · every skip class counted · PIT menu proof passes · ANY two-ways-to-code-it ambiguity = FAIL.
 
-- **Inputs:** Neo4j (read-only); `FA_selection.json` (12 companies / ~60 filings incl. mandatory fixtures); `XBRLIntegrationDesign.md` §5.2/§5.3 pins P1–P17 (the spec under test); `fixtures/fixture_resolutions.json`.
+- **Inputs:** Neo4j (read-only); `FA_selection.json` (the 12 Phase-1 companies / ~60 filings + the mandatory fixtures — multi-registrant and null-pOR may be out-of-corpus or synthetic per §3 WP-FA step 4 and §10 D6); `XBRLIntegrationDesign.md` §5.2/§5.3 pins P1–P17 (the spec under test); `fixtures/fixture_resolutions.json`.
 - **Fixture-resolution recipe (PINNED):** per FA company C: candidate concepts = concepts of numeric non-nil Facts in C's 10-K/10-Q with usage ≥4 (2023–2026), ranked by usage, top ≤40; driver name = `"fx_" + slug(qname local part)`; deliberately include ≥5 non-whitelist-unit concepts per company where they exist (to exercise skip counters). 1:1 qname→driver (see §10-D1).
 - **Create:** `harness/xbrl_census.py` → `census.json`; `harness/xbrl_dryrun_materializer.py` → `materialized.jsonl` + `skips.jsonl` + `determinism_report.json` + `comparator_census.json` + `collision_census.json` + `ambiguity_register.json`; `harness/pit_menu_probe.py` → `pit_menu_proof.json`; `harness/scorers/score_exp1.py`.
 - **Step 0 — schema binding (mandatory; P19's own instruction):** record in `census.json.schema_bindings`: (a) Fact→Period path in use (`(f)-[:HAS_PERIOD]->` direct vs via Context — verify both, pick per XBRL design's `HAS_PERIOD → Period` off the Fact, fall back to Context path where absent); (b) axis↔member pairing method — candidates: `(f)-[:FACT_DIMENSION]->(d:Dimension)-[:HAS_DOMAIN]->(:Domain)-[:HAS_MEMBER]->(m)` reachability test per fact, or `Context.member_u_ids` parsing; if NEITHER yields a deterministic pairing for multi-axis facts → skip those facts fail-closed + count + **O13**; (c) `Concept.balance` presence (if absent, the PIT menu drops that column — **O15**).
@@ -426,7 +515,8 @@ ORDER BY usage DESC
 **Plan bars (verbatim):** cheap reader ADOPTED only at recall ≥ (strong arm − 2 pts) AND precision within the Wilson noise gate · paragraph chunks adopted only if recall AND precision non-inferior AND cost drops · multi-run union adopted only if recall gain ≥ 5 pts AND junk stays under the single-run precision bar. Cap ≤ ~350 reader calls + grading.
 
 - **Inputs:** `fixtures/frozen_restaurants/` chunks; `keys/K-reader/` (locked; its protocol pre-registers the 40-chunk sample); the WP-FC-EDITS reader prompt (menu_build.js post-edit RULES block = the inlined `02` NAME-01…19 + OD-3).
-- **Create:** `harness/reader_probe.js` (one blind reader call per chunk×arm, byte-identical prompt except MODELS slot + rules block variant), `harness/rechunk.py` (re-chunk the 40 key chunks' source events via `chunk_company_sources.py --budget-chars 8000` — **O6**: 8,000 pre-registered default), `harness/scorers/score_exp2.py`.
+- **Create:** `harness/reader_probe.js` (one blind reader call per chunk×arm, byte-identical prompt except MODELS slot + rules block variant), `harness/rechunk.py` (re-chunk the 40 key chunks' source events via `chunk_company_sources.py --budget-chars 8000` — **O6 ✅ DECIDED (owner 2026-07-08): the 8,000-char arm is KEPT against the 40k baseline; do NOT switch to one-paragraph chunks**), `harness/scorers/score_exp2.py`.
+- **Optional follow-on — "8k + neighbor rescue" (owner 2026-07-08; an experiment OPTION, never production law):** trigger = the 8k arm loses recall specifically because facts cross chunk boundaries (boundary-adjacent misses in the attribution tables). Shape: extract from 8k chunks first → rerun ONLY the flagged incomplete/ambiguous items with the adjacent chunk's context appended → adopt only if recall improves WITHOUT added junk (same Wilson discipline, fresh sample). Not one of the 8 pre-registered arms; spec it fully only if triggered.
 - **Arms (8, pre-registered):**
   | Arm id | model | chunks | runs | rules |
   |---|---|---|---|---|
@@ -441,7 +531,7 @@ ORDER BY usage DESC
   **best-cheap selection rule (pinned):** the cheaper of {Haiku, Sonnet} whose A1/A2 judged recall ≥ max(A1,A2,A3) − 2 pts; none qualifies → Sonnet. **Ablated rules text (pinned verbatim):** `RULES: From this chunk only, list reusable market/company cause candidates. Each candidate: a lowercase_underscore name (letters/digits/_, starts with a letter) + one verbatim quote from the chunk. Do not invent causes not stated in the text.`
 - **Reader output schema:** the post-edit MENU_SCHEMA (no `xbrl_or_null`): `{"chunk_id": "...", "candidates": [{"proposed_name": "...", "quote": "<verbatim>", "evidence": {"company","source_type","source_id","date"}, "per_x": null, "slice_note": null}]}`. Null-tolerant (footgun 18). Readers receive the chunk text inline in the packet (probe-served; the Bash-`cat` rule applies to the production flow, not this probe).
 - **Scoring logic:** per key item k, per arm a: `covered(a,k)` = grader-judged — do the candidates from the chunk(s) containing k's `evidence_locator` include one capturing the same cause (gold name + alts shown to the grader as REFERENCE, judged not string-matched)? `recall(a) = Σcovered/|K|`. `precision(a)` = judged-valid fraction of 60 h32-sampled candidates of that arm (valid = a real reusable, source-grounded cause named within the rules — grader cites the quote). Union arms: candidate set = per-chunk union deduped by `norm(name)`; `junk(run j) = 1 − precision(new items first appearing in run j)`. Grading batched ≤10 (§1.5). Cost/chunk recorded per arm.
-- **PASS check:** `score_exp2.py` emits the three adoption verdicts per the verbatim bars (Wilson gate via `stats.py`, `ab_differ` math) + attribution tables: per-item miss lists by arm · misses shared by ALL arms (→ `ra_*` exhibits: rulebook/prompt defect; re-run trigger = **O5, Fable at scoring**) · A8-vs-best delta (rules doing work?) · para-vs-40k miss overlap (boundary effects). `decision.json.adopted = {reader_model, chunking, runs}`.
+- **PASS check:** `score_exp2.py` emits the three adoption verdicts per the verbatim bars (Wilson gate via `stats.py`, `ab_differ` math) + attribution tables: per-item miss lists by arm · misses shared by ALL arms (→ `ra_*` exhibits ALWAYS; **rerun rule ✅ DECIDED — owner 2026-07-08, closes O5: NO automatic rerun. A rerun happens ONLY after Fable names a CONCRETE fix** — rule wording · prompt wording · scorer/key bug · chunk-boundary problem · missing source context; **a rerun without a named fix is FORBIDDEN**; the fresh-sample rule of §2 still applies) · A8-vs-best delta (rules doing work?) · para-vs-40k miss overlap (boundary effects). `decision.json.adopted = {reader_model, chunking, runs}`.
 - **Parallel:** needs EXP-0 (grading) + WP-FC-EDITS + K-reader lock; runs parallel with WP-FA leftovers. **Blocks:** WP-FC-RUN (reader choice), EXP-3 candidate generation. **Stops whole run:** never.
 - **Calls/cost:** readers 8 arms ≈ 360 (A6/A7 add runs on 40 chunks each) · grading ≈ 100–140 batched calls · class M.
 - **Decisions:** adoption verdicts → Fable sign-off in `decision.json`; **O5**, **O6**.
@@ -453,7 +543,7 @@ ORDER BY usage DESC
 **Plan bars (verbatim):** wrong merges = **0** per surviving arm (0/150 ⇒ ≤2% upper bound; the fine 0.1% bound stays the fitness gate's) · retrieval recall ≥ **95%** · missed-reuse ≤ **15%**. Cap ~600 router calls + suggest-only embeddings.
 
 - **Prereqs:** `catalog_fc/FREEZE.lock.json` (post EXP-4B stamps) · `retrieval_index.jsonl` · `keys/K-route/` locked · EXP-0 grader.
-- **Candidate generation (recipe):** T0 = max evidence date in the frozen catalog. Primary source: events with date > T0 from scope+adjacent companies (fetch → chunk → EXP-2's ADOPTED reader, blind) → candidate pool → h32 sample 120 per O4 quotas. If supply < 120 → **O7** fallback (2 pre-registered held-out companies — MUST be excluded from WP-FC-RUN's scope beforehand; their events run with per-event PIT filtering). ~40–60 reader calls.
+- **Candidate generation (recipe — O7 ✅ DECIDED owner 2026-07-08; leakage control = COMPANY-split + per-event PIT, §10 D7):** candidate companies = the **9 always-hidden tickers** — same-industry hold-outs **BLMN, SHAK** (casual-dining + fast-casual; reuse SHOULD fire on comps/traffic/labor/commodity) + adjacent **AZO, ORLY, BBY, ULTA** + contrast **DAL, AAL, LUV**. In-catalog companies' events are NEVER candidates (their text built the catalog — the company boundary IS the leak barrier; the time-split is empty on the frozen DB). fetch → chunk → EXP-2's ADOPTED reader, blind → candidate pool → h32 sample 120 per the LOCKED O4 quotas (≥40 reuse · ≥40 create · ≥20 skip · ≤20 free-hard; stratum shortfall → record + STOP, see WP-KEYS), **preferring the most-recent (Q1-2026) events first** — the catalog is fully populated there, so the over-merge temptation is maximal (fill from older events only if a stratum runs short) — and preferring the corpus's REAL trap language where the pool provides it (airline traffic/capacity/yield/per-ASM unit economics; retail comps/foot-traffic). Supply is abundant (9 companies × ~50–70 chunk-sources each ≫ 120; pre-run check f). Each candidate carries its own `event_time`; the retrieval PIT filter (`visible_from ≤ event_time`, quotes PIT-cut) governs what it sees. ~40–60 reader calls.
 - **Create:** `harness/retrieval_index.py`, `harness/router_probe.js`, `harness/scorers/score_exp3.py`.
 - **Retrieval (pinned):** embedding text (BOTH sides, symmetric — HCP §13.1.2-3 shape): `"{name} | {quote≤300 chars} | {industry}"`; catalog-side quote = the record's first evidence quote by (date, company) sort. Cosine top-K; **PIT filter `visible_from ≤ candidate.event_time`** where `visible_from` = record's earliest non-empty evidence date (PIPE-34; KPI-only records excluded fail-close). **Cluster-dedup:** group hits by `canonical_name`, keep max-score per group. **Exact slot:** an exact-`norm()` name match is forced into slot 1 flagged `EXACT` (kernel Stage-0). Card fields (kernel §3): `name · fact_type (from EXP-4B stamps) · companies_count · badge · base_metric_line (families_fixture) · same_as_variants · ≤2 evidence quotes PIT-cut to date ≤ event_time`. Badge = `"YOUNG"` uniformly (no establishment machinery pre-build — declared limitation §10-D3).
 - **Arms:** R1 `haiku_k10full` · R2 `sonnet_k10full` · R3 `sonnet_k25full` · R4 `sonnet_k10stripped` (cards minus badges/quotes; keep name + fact_type + counts). Each = 150 calls, ONE candidate per call. Plus RB `sonnet_k10full_batched` — report-only replay grouping candidates per event (kernel Stage-1's ≤400/≤300k batch shape; ~30 calls; §10-D2).
@@ -479,7 +569,7 @@ ORDER BY usage DESC
 **A) SAME_AS pair judge**
 - **Inputs:** `keys/K-pairs/K-pairs.v2.jsonl` (~250; locked after mining from the frozen catalog).
 - **Create:** `harness/judge_probe.js` (modeled on `ab_pair_judge.js`; workflow kit untouched), `harness/scorers/score_exp4.py` (shared with B).
-- **Arms:** J1 `sonnet_anchor` (250) · J2 `sonnet_full` (250) · J3 `opus_full` (planted subset, 110) · J4 `opus_anchor` (250) **conditional — O9, only if Sonnet fails**.
+- **Arms:** J1 `sonnet_anchor` (250) · J2 `sonnet_full` (250) · J3 `opus_full` (planted subset, 110) · J4 `opus_anchor` (250) — **trigger ✅ DECIDED (owner 2026-07-08, closes O9): J4 fires ONLY if Sonnet shows ANY wrong-SAME on either input shape; zero wrong-SAME → J4 is SKIPPED and the +250 strong calls are not spent.** The firing (or skip) is recorded in the run manifest.
 - **Input shapes (pinned):** *anchor-shape* — side A = `{name, quotes(≤2), slice_tokens, per_x, industry}`, side B = frozen-anchor form `{name, birth_quotes(=2 earliest by date, deterministic), industry}` (kernel §6.3's shape; for key pairs "earliest" = first 2 quotes listed). *full-evidence* — up to 20 quotes/side via the deterministic draw (sort by (company, date); round-robin least-represented company — HCP §12.8 discipline).
 - **Judge prompt contract (kernel §6.1 VERBATIM — code-assembled input, no producer advocacy, default `survives=false`, each check quoting BOTH sides):** (1) same OBJECT — co-extensive, never hyponym: either side a narrower species of the other → REFUSE (breadth only from the SAME name recurring); (2) same SCOPE — business population AND referent ownership class {own-entity-internal | external-market | counterparty} (a firm-realized quantity is never the external market variable driving it); (3) same MECHANISM — same measured quantity at the same causal position; upstream/downstream/correlated on one chain → REFUSE; the financial transmission channel must match; (4) NO RIVAL — evaluated ONLY when the pair record carries `rival ≠ null`: unless the quote uniquely discriminates ONE target → REFUSE (else auto-pass); (5) head anchor MONO-mechanism — an anchor spanning mechanisms → REFUSE + flag. Output:
 ```jsonc
@@ -513,7 +603,10 @@ ORDER BY usage DESC
 
 **Plan bars (verbatim):** recall ≥ **95%** single or ≥ **98%** 2-run union on market-moving facts · wrong-lane = **0** after routing rules · value/shape accuracy ≥ **98%** · driver_state ≥ **95%** · would-park ≤ **10%**. Cap ~150 extraction calls + ~400 grading calls.
 
+**Terminology (owner 2026-07-08, closes O3):** the plan's phrase "market-moving facts" = `du_worthy` facts — the locked DU-03 "DriverUpdate-worthy" gate (§3 K-fields), significance-agnostic. It does NOT mean proven stock-movers; stock-move attribution is `EXPLAINED_BY` (DU-21…24) and never enters this gate or these bars.
+
 - **Inputs:** `fixtures/events/` (36 packets); `keys/K-fields/` (locked); PIT slice menus via `harness/slice_menu_probe.py`.
+- **Leakage rule (owner 2026-07-08):** EXP-5/EXP-6 are **CATALOG-INDEPENDENT** — the 36 events may freely overlap the mini-catalog companies; no hold-out applies here (the EXP-3 candidate hold-outs are a SEPARATE selection — never reuse the 36's restaurant events as EXP-3 candidates). The producer sees ONLY event text + the PIT slice menu + the item-contract instructions: no gold labels, no realized returns, no > event_time context; K-fields gold is text-only-labeled (§3 WP-KEYS).
 - **Slice menu (read-only FS-14 approximation; pre-build catalog-used half = empty, stated honestly in the packet):**
 ```cypher
 MATCH (r:Report)-[:PRIMARY_FILER]->(c:Company {ticker:$ticker})
@@ -535,11 +628,11 @@ measurement_raw_spans[] · period_start_date · period_end_date · fiscal_year �
 half · month · long_range_start_year · long_range_end_year · sentinel_class · time_type ·
 period_scope · slice[]
 ```
-- **Scoring logic:** (1) MATCH produced items ↔ gold facts: same event; code first (quote ≥20-char overlap with gold quote OR value equality post-canonicalization via `unit_resolver` import); ties/unclear → grader confirms same-fact. (2) `recall(arm)` per run and per same-tier 2-run union (item sets unioned before matching); denominator = gold `market_moving==true`. (3) `fact16_checks.py` = the deterministic FACT-16 subset — rules 3 (lane matrix incl. value_text/conditions/company_confirmed guidance-only + metric expectation-baseline FORBID), 5 (shape-hint coherence, point-as-low-only trap), 8 (baseline enum), 9 (unit-required-when), 14 (value_text lint), 15 (start==end illegal), 17 (period_scope enum) → `would_park` rate + reason codes. (4) Field accuracy on matched pairs: code-comparable directly (values post-scaling, shapes, signs per OD-12, enums, measurement token SETS after OD-9 code normalization: lowercase → non-alphanumeric runs → `_` → trim → collapse; maximal contiguous spans = one token); meaning fields via grader (driver_state, lane routing incl. the ISS-16 surprise-twin presence, OD-13 favorability, OD-11 basis, slice pick vs menu). (5) `wrong_lane` = matched fact on the wrong lane OR a missing gold surprise twin where `expectation_comparison_present=true`. (6) `presence_disagreement(tier)` = captured-by-exactly-one-run / captured-by-either. (7) Per-OD-rule error table (OD-9/11/12/13/14, ISS-16, shapes, slices).
+- **Scoring logic:** (1) MATCH produced items ↔ gold facts: same event; code first (quote ≥20-char overlap with gold quote OR value equality post-canonicalization via `unit_resolver` import); ties/unclear → grader confirms same-fact. (2) `recall(arm)` per run and per same-tier 2-run union (item sets unioned before matching); denominator = gold `du_worthy==true` (the DU-03 gate, §3 K-fields; `du_worthy:false` exemplar rows never enter any denominator). (3) `fact16_checks.py` = the deterministic FACT-16 subset — rules 3 (lane matrix incl. value_text/conditions/company_confirmed guidance-only + metric expectation-baseline FORBID), 5 (shape-hint coherence, point-as-low-only trap), 8 (baseline enum), 9 (unit-required-when), 14 (value_text lint), 15 (start==end illegal), 17 (period_scope enum) → `would_park` rate + reason codes. Authority for these checks = `12` FACT-16 + the `09 §4` matrix — NEVER `99 §7.2`, whose validator mirror is known-incomplete (ISS-50). (4) Field accuracy on matched pairs: code-comparable directly (values post-scaling, shapes, signs per OD-12, enums, measurement token SETS after OD-9 code normalization: lowercase → non-alphanumeric runs → `_` → trim → collapse; maximal contiguous spans = one token); meaning fields via grader (driver_state, lane routing incl. the ISS-16 surprise-twin presence, OD-13 favorability, OD-11 basis, slice pick vs menu). (5) `wrong_lane` = matched fact on the wrong lane OR a missing gold surprise twin where `expectation_comparison_present=true`. (6) `presence_disagreement(tier)` = captured-by-exactly-one-run / captured-by-either. (7) Per-OD-rule error table (OD-9/11/12/13/14, ISS-16, shapes, slices).
 - **PASS check:** `score_exp5.py` gate per tier = `(recall_single>=0.95 || recall_union>=0.98) && wrong_lane==0 && value_shape_acc>=0.98 && state_acc>=0.95 && would_park<=0.10`.
 - **Parallel:** needs only EXP-0 + K-fields + WP-FA; runs parallel with Phase-2 (EXP-3/4). **Blocks:** EXP-6; part-2 packet design. **Stops whole run:** never.
 - **Calls/cost:** 36×4 + 12 = 156 producer calls (large prompts) + ~50–60 batched grading calls · class M.
-- **Decisions:** **O3** (before drafting); Fable: per-field failure attributions; §12.5 threshold basis handed to owner.
+- **Decisions:** O3 ✅ decided (owner 2026-07-08 — the DU-03 gate, §3 K-fields); Fable: per-field failure attributions; §12.5 threshold basis handed to owner.
 
 ---
 
@@ -547,7 +640,7 @@ period_scope · slice[]
 
 **Plan bars (verbatim):** id-equality ≥ **99%** on true twins · value gate: zero suppressed non-twins in a hand-checked sample · every divergence classified {period, slice, measurement, value} with a named fix. Cap ~0 LLM + small spot-grading.
 
-- **Inputs:** `exp1/.../materialized.jsonl` · EXP-5 winning-tier responses (union of its 2 runs) · `harness/id_recipe.py`.
+- **Inputs:** `exp1/.../materialized.jsonl` · EXP-5 winning-tier responses (union of its 2 runs; their gold was TEXT-only labeled per the K-fields independence guard — the text side never derives from XBRL) · `harness/id_recipe.py`.
 - **`id_recipe.py` (pinned):** fact_scope serialization per FACT-11/T3.2 (`period=<gp_id>|slice=<kind:value;…>|measurement=<tok,…>`, absent slots omitted; slices code-sorted; measurement tokens code-normalized per OD-9 and sorted); period ids: exact-date branch first (`gp_<start>_<end>`), else READ-ONLY import of `guidance_ids.build_guidance_period_id` + `fiscal_math` (FACT-18's "what moves"), with the driver-wrapper deltas (period_scope `long_range`→`exact_range`; no silent gp_UNDEF). If Track B's real `driver_ids.py`/`driver_period_resolver.py` exist by run time → import THEM + parity-assert against the local subset (§2.2 rule).
 - **Twin recipe (pinned):** candidates = pairs (text metric item i from a 10-Q/10-K event E, materialized row m of the SAME report E) with: same registrant; value match within half-ULP of the text value's least significant digit (both post-canonical scaling); period windows equal after resolution (or the text label resolves to m's window). Fable confirms same-quantity on the full candidate list (≤150) → `true_twins`. Target ≥100 twins, ≥10 from the 52/53-week filer; shortfall → widen to more FA 10-Q/10-K events (never to cross-event pairs — different events = different ids by design).
 - **Scoring logic:** per twin, component equality: `period_u_id` · slice set (post FS-18 normalization on the text side vs member→slice on the XBRL side) · measurement fold (text token set ⊆ {∅, gaap, reported, as_reported} ∪ concept's Basic/Diluted token — the P3 fold — vs XBRL ∅) · value gate (P5c half-ULP). `id_equal` = ALL components equal (event + driver equal by twin construction; the driver-name component's cross-lane equality is the concept-linker's separately-validated job — plan §3.1). Divergences classified with the named fix per the plan's failure map.
@@ -571,14 +664,14 @@ period_scope · slice[]
 | WP-FC-EDITS | WP-0 | EXP-2 · WP-FC-RUN | Lane B |
 | K-reader lock | frozen chunks + Fable | EXP-2 | Lane B |
 | **EXP-2** | EXP-0 PASS · WP-FC-EDITS · K-reader.lock | WP-FC-RUN · EXP-3 candidates | Lane B |
-| WP-FC-RUN | EXP-2 decision · O7 · O8 checkpoint | K-pairs.v2 mining · EXP-4B | Lane B |
+| WP-FC-RUN | EXP-2 decision (O7/O8 ✅ decided — roster + hold-outs pinned) | K-pairs.v2 mining · EXP-4B | Lane B |
 | **EXP-4B** | WP-FC-RUN · K-stamp.lock · EXP-0 PASS | F-C FREEZE | Lane B |
 | F-C FREEZE | EXP-4B outputs | EXP-3 · K-pairs.v2 · retrieval index | Lane B |
 | K-route lock | FREEZE + candidate pool + Fable | EXP-3 | Lane B |
 | **EXP-3** | FREEZE · K-route.lock · EXP-0 PASS | router memo (O11) | Lane B1 |
 | K-pairs.v2 lock | FREEZE (mining) + Fable | EXP-4A | Lane B2 |
 | **EXP-4A** | K-pairs.v2.lock · EXP-0 PASS | judge memo | Lane B2 |
-| K-fields lock | WP-FA events + O3 + Fable | EXP-5 | Lane C |
+| K-fields lock | WP-FA events (O2 SIGNED — review checks recorded) + Fable (O3 ✅) | EXP-5 | Lane C |
 | **EXP-5** | EXP-0 PASS · K-fields.lock | EXP-6 · packet basis | Lane C |
 | **EXP-6** | EXP-1 PASS · EXP-5 scored | ratification memo | final |
 
@@ -596,12 +689,12 @@ Global (§1.8). Per-package FAILs never stop the program (they produce attributi
 
 | When | Who | Decision |
 |---|---|---|
-| WP-FA | Fable | O1 adjacent industry · O2 `FA_selection.json` sign-off |
-| Key locks | Fable | every key adjudication + lock (O3, O4 inside protocols) |
-| Before WP-FC-RUN | Owner/Fable | O7 hold-outs · O8 scope checkpoint (if triggered) |
+| WP-FA | Fable | O1 ✅ decided · O2 checks ✅ RECORDED (owner-accepted 2026-07-08) — remaining: Fable signs `FA_selection.json` at materialization; OD-11 contingency live during K-fields drafting |
+| Key locks | Fable | every key adjudication + lock (O3 ✅ DU-03 gate · O4 ✅ quotas locked — a stratum shortfall STOPS for review) |
+| Before WP-FC-RUN | Owner/Fable | O7/O8 ✅ decided 2026-07-08 (8-ticker roster · {BLMN, SHAK} hold-outs · TXRH→QSR→SBUX trim rule); remaining = run pre-run checks (d)–(g) + the chunk pre-estimate |
 | EXP-0 scoring | Fable | O10 grader-tier ratification + blindness discounts |
-| EXP-2 scoring | Fable | reader/chunking/runs adoption · O5 re-run trigger |
-| EXP-4A failure only | Fable | O9 conditional Opus-anchor budget |
+| EXP-2 scoring | Fable | reader/chunking/runs adoption (O5 ✅ rerun-only-with-named-fix · O6 ✅ 8k arm kept + optional neighbor-rescue) |
+| EXP-4A | mechanical | O9 ✅ decided: J4 `opus_anchor` fires on any Sonnet wrong-SAME, else skipped — no separate approval step |
 | EXP-3 verdict | Owner | O11 ATTACH synchronous strong-confirm (only if triggered; memo either way) |
 | EXP-1/6 done | Owner | O12 XBRL pin-amendment bundle → ratification (with XBRL §11) |
 | Program end | Fable→Owner | tier-membership table + `manifest.models` pins · kernel §15 memo · plan §10 review list |
@@ -612,15 +705,15 @@ Global (§1.8). Per-package FAILs never stop the program (they produce attributi
 
 | # | Item | Default recommendation (not a decision) |
 |---|---|---|
-| O1 | Adjacent industry for F-A | same-sector sibling with most companies |
-| O2 | F-A company/event list sign-off | code-drafted list stands unless Fable edits |
-| O3 | "Market-moving fact" definition (K-fields protocol) | Fable authors before drafting; source-stated, all-lane |
-| O4 | K-route real-candidate strata quotas | ≥40 reuse / ≥40 create / ≥20 skip / rest free |
-| O5 | EXP-2 shared-miss re-run trigger | exhibits always; re-run only on Fable's named fix |
-| O6 | Paragraph-arm chunk budget | 8,000 chars (pre-registered; owner may override pre-run) |
-| O7 | EXP-3 candidate sourcing if post-T0 supply <120 | 2 held-out companies, pre-registered BEFORE WP-FC-RUN |
-| O8 | F-C scope if chunk count >600 | cap at 8 h32-selected companies (incl. CAKE + 52/53wk filer) |
-| O9 | EXP-4 conditional `opus_anchor` arm (+250 strong calls) | run only on Sonnet wrong-SAME failure |
+| O1 | ✅ **DECIDED (owner 2026-07-08):** the **Phase-1 corpus** = Restaurants {CAKE, DRI, MCD, YUM, CMG} + SpecialtyRetail {AZO, ORLY, BBY, ULTA} + Airlines {DAL, AAL, LUV}. Phase-1 pass ≠ whole-market readiness — a later, wider sector-wave validation gates broad production; do NOT expand in-program | closed — §3 WP-FA step 1 |
+| O2 | **✅ READY FOR FABLE SIGN-OFF (owner 2026-07-08):** 36 events final — 32 filing/transcript ids + 4 news (AAL `bzNews_50877032` · MCD `bzNews_42014391` E.coli occurred/at-risk · BBY `bzNews_51962983` CEO · CMG `bzNews_49256211` $1.8B buyback). All checks RECORDED: twins/OD-12/guidance/numberless/action_event PASS · **OD-11 BORDERLINE-accepted** with the pinned ULTA→LUV 10-Q contingency (fires only if K-fields drafting finds <5 sequential facts). **REMAINING:** Fable's signature at WP-FA materialization + the live contingency | sign-off unblocked; contingency during K-fields drafting |
+| O3 | ✅ **DECIDED (owner 2026-07-08):** the K-fields gate = the locked **DU-03** write gate ("DriverUpdate-worthy fact") — real, source-stated, non-boilerplate, one of the 4 lanes; NO recurrence/materiality/significance/price-move threshold (DU-01 · T11.1 · 95 #4/#5); bare mentions + generic risk boilerplate excluded; attribution stays `EXPLAINED_BY`; field renamed `du_worthy` | closed — full wording at §3 K-fields |
+| O4 | ✅ **DECIDED (owner 2026-07-08):** K-route quotas LOCKED — ≥40 reuse-gold · ≥40 create-gold · ≥20 skip-gold · remaining ≤20 free/best-available hard real cases. A required stratum that cannot be filled from real data → RECORD the shortfall + **STOP for Fable/owner review**; never silently re-quota | closed — WP-KEYS K-route |
+| O5 | ✅ **DECIDED (owner 2026-07-08):** NO automatic EXP-2 rerun on shared misses. Exhibits ALWAYS; a rerun only after Fable names a concrete fix (rule wording · prompt wording · scorer/key bug · chunk boundary · missing source context); **rerun without a named fix = FORBIDDEN** | closed — EXP-2 PASS check |
+| O6 | ✅ **DECIDED (owner 2026-07-08):** the 8,000-char smaller-chunk arm KEPT vs the 40k baseline; NO one-paragraph switch. Optional later experiment noted: "8k + neighbor rescue" (rerun flagged boundary-incomplete items with adjacent-chunk context; adopt only if recall gains without junk) — an option, not production law | closed — EXP-2 arms |
+| O7 | ✅ **DECIDED (owner 2026-07-08):** same-industry hold-outs = **{BLMN, SHAK}** (never in the catalog; the PRIMARY same-industry candidate source) + retail {AZO, ORLY, BBY, ULTA} and airlines {DAL, AAL, LUV} stay out-of-catalog candidate groups. Split axis = **company + per-event PIT** — the time-split is empty at the verified frozen-DB boundary T0 = 2026-04-28 (§10 D7) | closed — §3 WP-FA roster · EXP-3 recipe |
+| O8 | ✅ **DECIDED (owner 2026-07-08):** F-C catalog = **8 Restaurants {CAKE, DRI, MCD, YUM, CMG, SBUX, QSR, TXRH}**. 600-chunk checkpoint KEPT — if the fresh chunk count exceeds it, trim the density adds in reverse priority **TXRH → QSR → SBUX** (floor = the 5 corpus restaurants). Pre-estimate ≈ 478 chunk-sources (under cap); the fresh manifest is definitive | closed — §3 WP-FC-RUN |
+| O9 | ✅ **DECIDED (owner 2026-07-08):** J4 `opus_anchor` fires MECHANICALLY iff Sonnet shows any wrong-SAME in EXP-4 (either input shape); zero wrong-SAME → skipped, the +250 strong calls are not spent | closed — EXP-4 arms |
 | O10 | Grader-tier ratification post-EXP-0 | per gate result |
 | O11 | ATTACH strong-confirm design change | only if EXP-3 triggers; owner memo either way |
 | O12 | XBRL pin-amendment bundle text | Fable drafts from EXP-1/6 registers; owner ratifies |
@@ -638,7 +731,7 @@ Global (§1.8). Per-package FAILs never stop the program (they produce attributi
 | EXP-0 | ~500 | ~500 | M | 500 |
 | EXP-1 | 0 | 0 | S | — |
 | EXP-2 (+grading) | ~480 | ~150 | M | 350 readers + grading |
-| WP-FC-RUN | ≤600 readers (O8 checkpoint) + ~90 judges/repair | ~90 | M/L | checkpointed |
+| WP-FC-RUN | ~480 readers (8-ticker roster; ≈478 chunk-sources pre-est.) + ~90 judges/repair | ~90 | M/L | >600-chunk checkpoint + TXRH→QSR→SBUX trim |
 | EXP-3 (+candidates+grading) | ~730 | ~500 | L | 900 |
 | EXP-4 A+B | ~940 (+250 conditional) | ~940 | L | 900 (§10-D5) |
 | EXP-5 (+grading) | ~215 | ~170 | M | 550 |
@@ -655,7 +748,9 @@ See §10-D4: the plan's "~4,000 total / ~1,500 strong" were approximations; refi
 - **D2 — router batching:** the kernel batches Stage-1 per event; the probe's primary arms are per-candidate calls (scoring isolation), plus one report-only batched replay (RB, ~30 calls) to measure the batch-vs-single delta. Primary bars score the per-candidate arms only.
 - **D3 — badge ablation limitation:** all F-C cards carry badge `YOUNG` (no establishment machinery exists pre-build) → the badge's routing effect has no variance pre-build; R4 still ablates quotes/BASE_METRIC/fact_type-line. Recorded as a known limitation, not a bar.
 - **D4 — budget arithmetic:** the plan's "~4,000 / ~1,500 strong" under-counted F-C readers and EXP-3's Sonnet arms; refined totals in §9. Caps interpreted via the plan's own 1.5× abort convention; no experiment shrunk.
-- **D5 — EXP-4 cap:** summed pre-registered arms ≈940 vs the plan's "~900" — within rounding; the conditional J4 arm additionally requires O9. Abort stays at 1.5× (1,350).
+- **D5 — EXP-4 cap:** summed pre-registered arms ≈940 vs the plan's "~900" — within rounding; the conditional J4 arm fires mechanically on any Sonnet wrong-SAME (O9 ✅ owner 2026-07-08). Abort stays at 1.5× (1,350).
+- **D6 — mandatory-fixture sourcing vs the plan's F-A wording (owner corpus decision, 2026-07-08):** the plan places the multi-registrant filing and the null-`periodOfReport` report INSIDE F-A; verified data says the Phase-1 corpus cannot supply them — no multi-registrant 10-K/10-Q exists among the 12 (live-DB check), and the only null-pOR reports graph-wide are `xbrl_status=FAILED`. Operationalized: the 52/53-week filer stays IN-corpus (5 candidates); multi-registrant + null-pOR become **EXP-1-only dry-run fixtures sourced corpus-wide**, with null-pOR falling back to a **synthetic harness fixture** if pre-run check (b) finds no COMPLETED one. Intent (exercise the P4f entity-scoping and P4h null-pOR code paths) preserved; keys, events, and bars unaffected.
+- **D7 — company-split replaces the plan's "candidates strictly later than catalog evidence" (owner 2026-07-08):** verified frozen-DB boundary — max `Report.created` / `Transcript.conference_datetime` / `News.created` all = **2026-04-28** — makes the plan's time-split EMPTY (0 post-T0 events across all 34 companies; the latest activity is the Q1-2026 earnings wave). Operationalized per owner decision: the catalog/candidate boundary is drawn **BY COMPANY** (the 8-ticker build roster vs the 9 always-hidden candidate companies), and **per-event PIT** (`visible_from ≤ event_time`; quotes PIT-cut; strict `<` on history reads; ET day) controls what each candidate sees — nothing a candidate's router view shows postdates its event. If the DB is refreshed past 2026-04-28, the time-split becomes available again as a supplement. Honest limits while the DB stays frozen (recorded): post-T0 / live-arrival behavior is not provable pre-refresh, and all catalog cards carry `YOUNG` badges (D3). Bars unchanged.
 
 ---
 
