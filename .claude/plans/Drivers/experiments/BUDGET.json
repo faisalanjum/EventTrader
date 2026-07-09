@@ -23,11 +23,27 @@
       "run_id": "2026-07-09T20-31-24Z_exp0",
       "strong_grader_calls": 480,
       "subagent_tokens_approx": 15580676
+    },
+    {
+      "by_model": {
+        "claude-opus-4-8": 163,
+        "claude-sonnet-5": 320
+      },
+      "effort": "high",
+      "effort_probe_calls": 24,
+      "gate": "FAIL",
+      "invalid_after_recovery": 0,
+      "kp0073_recovery_calls": 1,
+      "note": "high effort ~2.5-3x tokens vs v1.1 (subagent_tokens 15.7M judges only)",
+      "pkg": "EXP-0-v1.2-rerun",
+      "record_clerk_calls": 3,
+      "run_id": "2026-07-09T23-03-31Z_exp0v12",
+      "strong_grader_calls": 480
     }
   ],
   "global_cap": 4000,
   "totals": {
-    "all": 494,
-    "strong_tier": 488
+    "all": 1002,
+    "strong_tier": 968
   }
 }

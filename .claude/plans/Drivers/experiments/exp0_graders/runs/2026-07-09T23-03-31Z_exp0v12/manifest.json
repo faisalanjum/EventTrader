@@ -23,7 +23,7 @@
     "max_calls": 900
   },
   "counts": {
-    "made_calls": 0,
+    "made_calls": 483,
     "planned_record_clerk_calls": 3,
     "planned_strong_grader_calls": 480
   },
@@ -117,7 +117,7 @@
     "6_outputs_plan": {
       "budget": "../../BUDGET.json",
       "decision": "decision.json",
-      "saved": false,
+      "saved": true,
       "scores": "scores.json",
       "status_board": "WORKORDER_STATUS.md",
       "verdicts_raw": [
@@ -137,6 +137,39 @@
       }
     }
   },
+  "result": {
+    "failure_axis": "wrong_same (over-merge) -- the DANGEROUS axis; a REVERSAL from v1.1 which failed on false_refusal (over-split)",
+    "gate_pass": false,
+    "grader_tier": "none",
+    "over_merges": {
+      "kp_0022": "deferred_membership_fees vs membership_fee_income (gold DIFFERENT, deferred_recognized) -- over-merged by BOTH g_sonnet_b and g_opus, each explicitly invoking the v1.2 'silence is not a conflict' pin; g_sonnet_a split it correctly. The contract fix over-corrected on this deferred-vs-recognized pair."
+    },
+    "per_arm": {
+      "g_opus": {
+        "false_refusal": 0,
+        "false_refusal_rate": 0.0,
+        "invalid": 0,
+        "pass": false,
+        "wrong_same": 1
+      },
+      "g_sonnet_a": {
+        "false_refusal": 0,
+        "false_refusal_rate": 0.0,
+        "invalid": 0,
+        "pass": true,
+        "wrong_same": 0
+      },
+      "g_sonnet_b": {
+        "false_refusal": 1,
+        "false_refusal_rate": 0.02,
+        "invalid": 0,
+        "pass": false,
+        "wrong_same": 1
+      }
+    },
+    "record_fidelity_note": "verdicts.g_sonnet_b.json h32 mismatch (got 2296370236 vs recorded 2197237812) = benign Record-write artifact in a NON-verdict field (compact one-line file, counts 50/110 match the workflow return, both off-gold verdicts carry coherent verdict-consistent reasoning). Gate-relevant verdicts confirmed real; a byte-clean re-derivation is available via cached resume if Fable wants it.",
+    "sonnet_a_kp_0073_recovered": "DIFFERENT"
+  },
   "run_id": "2026-07-09T23-03-31Z_exp0v12",
-  "status": "pre_call_verified"
+  "status": "scored_gate_FAIL_wrong_same_axis"
 }

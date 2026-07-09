@@ -165,7 +165,7 @@
         },
         "gross_net": {
           "false_refusal": 0,
-          "invalid": 1,
+          "invalid": 0,
           "n": 9,
           "wrong_same": 0
         },
@@ -197,8 +197,8 @@
       "false_refusal": 0,
       "false_refusal_denom": 50,
       "false_refusal_rate": 0.0,
-      "invalid": 1,
-      "invalid_rate": 0.00625,
+      "invalid": 0,
+      "invalid_rate": 0.0,
       "n": 160,
       "pass": true,
       "wrong_same": 0,
