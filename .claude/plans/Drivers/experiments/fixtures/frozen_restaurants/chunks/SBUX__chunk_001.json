@@ -1,0 +1,42 @@
+{
+ "ticker": "SBUX",
+ "chunk_id": "SBUX__chunk_001",
+ "events": [
+  {
+   "source_id": "0000829224-26-000064",
+   "source_type": "8-K",
+   "date": "2026-04-02",
+   "part_index": 1,
+   "part_count": 1,
+   "content": "FORM: 8-K\n\nITEMS: [\"Item 7.01: Regulation FD Disclosure\", \"Item 9.01: Financial Statements and Exhibits\"]\n\nDESC: Form 8-K - Current report - Item 7.01 Item 9.01"
+  },
+  {
+   "source_id": "0000829224-26-000058",
+   "source_type": "8-K",
+   "date": "2026-03-30",
+   "part_index": 1,
+   "part_count": 1,
+   "content": "FORM: 8-K\n\nITEMS: [\"Item 5.07: Submission of Matters to a Vote of Security Holders\"]\n\nDESC: Form 8-K - Current report - Item 5.07"
+  }
+ ],
+ "fiscal_kpis": [
+  "All Other International Company-Operated Stores",
+  "Canada Company-Operated Stores",
+  "China Company-Operated Stores",
+  "Company Average Ticket Growth",
+  "Company Comparable Transactions Growth",
+  "Global Comparable Sales Growth",
+  "International Licensed Stores",
+  "Japan Company-Operated Stores",
+  "North America Licensed Stores",
+  "Siren Retail - International Company-Operated Stores",
+  "Siren Retail - North America Company-Operated Stores",
+  "Total Company-Operated Stores",
+  "Total Global Stores",
+  "Total International Company-Operated Stores",
+  "Total Licensed Stores",
+  "Total North America Company-Operated Stores",
+  "UK Company-Operated Stores",
+  "US Company-Operated Stores"
+ ]
+}

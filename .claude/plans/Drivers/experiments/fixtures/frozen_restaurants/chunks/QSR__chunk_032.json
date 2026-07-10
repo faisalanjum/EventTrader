@@ -1,0 +1,30 @@
+{
+ "ticker": "QSR",
+ "chunk_id": "QSR__chunk_032",
+ "events": [
+  {
+   "source_id": "0001618756-23-000022",
+   "source_type": "10-Q",
+   "date": "2023-05-02",
+   "part_index": 2,
+   "part_count": 2,
+   "content": "There were 140,782,568 Partnership exchangeable units outstanding as of April 25, 2023. During the three months ended March 31, 2023, Partnership exchanged 2,214,072 Partnership exchangeable units pursuant to exchange notices received. The holders of Partnership exchangeable units have the right to require Partnership to exchange all or any portion of such holder’s Partnership exchangeable units for our common shares at a ratio of one share for each Partnership exchangeable unit, subject to our right as the general partner of Partnership to determine to settle any such exchange for a cash payment in lieu of our common shares. \n\nComparative Cash Flows \n\nOperating Activities \n\nCash provided by operating activities was $95 million for the three months ended March 31, 2023, compared to $234 million during the same period in the prior year. The decrease in cash provided by operating activities was driven by an increase in interest payments, an increase in cash used for working capital and an increase in income tax payments, partially offset by an increase in segment income in each of our segments. \n\nInvesting Activities \n\nThere was no net cash provided by or used from investing activities for the three months ended March 31, 2023, compared to $1 million of cash provided by investing activities during the same period in the prior year. This change was primarily driven by an increase in proceeds from derivatives, partially offset by an increase in capital expenditures. \n\nFinancing Activities \n\nCash used for financing activities was $240 million for the three months ended March 31, 2023, compared to $426 million during the same period in the prior year. The change in cash used for financing activities was driven primarily by the non-recurrence of RBI common share repurchases in the current year and proceeds from derivatives in the current year compared to payments from derivatives in the prior year, partially offset by an increase in long-term debt repayments. \n\nCritical Accounting Policies and Estimates \n\nFor information regarding our Critical Accounting Policies and Estimates, see the “Critical Accounting Policies and Estimates” section of “Item 7. Management’s Discussion and Analysis of Financial Condition and Results of Operations” in our Annual Report on Form 10-K, filed with the U.S. Securities and Exchange Commission (the “SEC”) on February 22, 2023. \n\nNew Accounting Pronouncements \n\nSee Note 3 – New Accounting Pronouncements in the notes to the accompanying unaudited condensed consolidated financial statements. \n\n"
+  },
+  {
+   "source_id": "0001618756-23-000020",
+   "source_type": "8-K",
+   "date": "2023-05-02",
+   "part_index": 1,
+   "part_count": 1,
+   "content": "FORM: 8-K\n\nITEMS: [\"Item 2.02: Results of Operations and Financial Condition\", \"Item 9.01: Financial Statements and Exhibits\"]\n\nDESC: Form 8-K - Current report - Item 2.02 Item 9.01"
+  },
+  {
+   "source_id": "0001618756-23-000017",
+   "source_type": "8-K",
+   "date": "2023-02-28",
+   "part_index": 1,
+   "part_count": 1,
+   "content": "FORM: 8-K\n\nITEMS: [\"Item 1.01: Entry into a Material Definitive Agreement\", \"Item 7.01: Regulation FD Disclosure\", \"Item 9.01: Financial Statements and Exhibits\"]\n\nDESC: Form 8-K - Current report - Item 1.01 Item 7.01 Item 9.01"
+  }
+ ]
+}

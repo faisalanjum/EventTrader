@@ -1,0 +1,22 @@
+{
+ "ticker": "SBUX",
+ "chunk_id": "SBUX__chunk_010",
+ "events": [
+  {
+   "source_id": "0000829224-25-000074",
+   "source_type": "8-K",
+   "date": "2025-10-29",
+   "part_index": 2,
+   "part_count": 2,
+   "content": "19 Year Ended (1) Sep 28, Sep 29, Consolidated 2025 2024 Change Constant Currency Impact Change in Constant Currency Operating income, as reported (GAAP) $ 2,936.6 $ 5,408.8 (45.7)% Restructuring and impairment costs (2) 892.0 — Litigation settlements (3) (145.2) — Transaction costs (4) 8.2 — Non-GAAP operating income $ 3,691.6 $ 5,408.8 (31.7)% 0.6% (31.1)% Operating margin, as reported (GAAP) 7.9 % 15.0 % (710) bps Restructuring and impairment costs (2) 2.4 % — % Litigation settlements (3) (0.4) % — % Transaction costs (4) — % — % Non-GAAP operating margin 9.9 % 15.0 % (510) bps 10 bps (500) bps Diluted net earnings per share, as reported (GAAP) $ 1.63 $ 3.31 (50.8)% Restructuring and impairment costs (2) 0.78 — Litigation settlements (3) (0.13) — Transaction costs (4) 0.01 — Income tax effect on Non-GAAP adjustments (5) (0.16) — Non-GAAP EPS $ 2.13 $ 3.31 (35.6)% 0.9% (34.7)% (1)Certain numbers may not foot due to rounding convention. (2)Represents costs associated with our restructuring efforts. (3)Related to settlements associated with litigation events that are not expected to recur at a similar frequency and magnitude in the future. (4)Represents costs associated with a potential strategic partnership. (5)Adjustments were determined based on the nature of the underlying items and their relevant jurisdictional tax rates. 20 Q4 QTD FY25 NON-GAAP DISCLOSURE DETAILS (in millions and before income taxes) Q4 QTD FY25 North America International Channel Development Corporate and Other Consolidated Statement of Earnings Line Item Restructuring and Impairment costs Litigation Settlements Restructuring and impairment costs Restructuring and impairment costs Restructuring and impairment costs Transaction costs Total Non-GAAP Adjustment Restructuring and impairments $ 628.7 $ — $ 62.6 $ 0.8 $ 62.9 $ — $ 755.0 Store operating expenses — (145.2) — — — — (145.2) General and administrative expenses — — — — — 8.2 8.2 Total impact to operating income $ (628.7) $ 145.2 $ (62.6) $ (0.8) $ (62.9) $ (8.2) $ (618.0) Q4 YTD FY25 NON-GAAP DISCLOSURE DETAILS (in millions and before income taxes) Q4 YTD FY25 North America International Channel Development Corporate and Other Consolidated Statement of Earnings Line Item Restructuring and Impairment costs Litigation Settlements Restructuring and impairment costs Restructuring and impairment costs Restructuring and impairment costs Transaction costs Total Non-GAAP Adjustment Restructuring and impairments $ 653.2 $ — $ 82.5 $ 1.9 $ 154.4 $ — $ 892.0 Store operating expenses — (145.2) — — — — (145.2) General and administrative expenses — — — — — 8.2 8.2 Total impact to operating income $ (653.2) $ 145.2 $ (82.5) $ (1.9) $ (154.4) $ (8.2) $ (755.0)"
+  },
+  {
+   "source_id": "0000829224-25-000067",
+   "source_type": "8-K",
+   "date": "2025-09-25",
+   "part_index": 1,
+   "part_count": 1,
+   "content": "FORM: 8-K\n\nITEMS: [\"Item 2.05: Cost Associated with Exit or Disposal Activities\", \"Item 7.01: Regulation FD Disclosure\", \"Item 9.01: Financial Statements and Exhibits\"]\n\nDESC: Form 8-K - Current report - Item 2.05 Item 7.01 Item 9.01"
+  }
+ ]
+}

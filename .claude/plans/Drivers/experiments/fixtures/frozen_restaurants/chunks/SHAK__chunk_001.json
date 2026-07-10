@@ -1,0 +1,41 @@
+{
+ "ticker": "SHAK",
+ "chunk_id": "SHAK__chunk_001",
+ "events": [
+  {
+   "source_id": "0001104659-26-038234",
+   "source_type": "8-K",
+   "date": "2026-04-01",
+   "part_index": 1,
+   "part_count": 1,
+   "content": "FORM: 8-K\n\nITEMS: [\"Item 7.01: Regulation FD Disclosure\", \"Item 9.01: Financial Statements and Exhibits\"]\n\nDESC: Form 8-K - Current report - Item 7.01 Item 9.01"
+  },
+  {
+   "source_id": "0001104659-26-025312",
+   "source_type": "8-K",
+   "date": "2026-03-09",
+   "part_index": 1,
+   "part_count": 1,
+   "content": "FORM: 8-K\n\nITEMS: [\"Item 5.02: Departure of Directors or Certain Officers; Election of Directors; Appointment of Certain Officers: Compensatory Arrangements of Certain Officers\"]\n\nDESC: Form 8-K - Current report - Item 5.02"
+  },
+  {
+   "source_id": "0001104659-26-021888",
+   "source_type": "8-K",
+   "date": "2026-03-02",
+   "part_index": 1,
+   "part_count": 1,
+   "content": "FORM: 8-K\n\nITEMS: [\"Item 8.01: Other Events\"]\n\nDESC: Form 8-K - Current report - Item 8.01"
+  }
+ ],
+ "fiscal_kpis": [
+  "Average Weekly Sales",
+  "New Domestic Company-Operated Shacks Opened",
+  "New Licensed Shacks Opened",
+  "Shack-Level Operating Profit",
+  "System-Wide Sales",
+  "System-Wide Shack Count",
+  "Total Price/Mix Increase",
+  "Total Same-Shack Sales",
+  "Total Traffic Increase"
+ ]
+}

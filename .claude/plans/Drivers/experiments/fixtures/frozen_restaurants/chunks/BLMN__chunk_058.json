@@ -1,0 +1,14 @@
+{
+ "ticker": "BLMN",
+ "chunk_id": "BLMN__chunk_058",
+ "events": [
+  {
+   "source_id": "BLMN_2025-05-07T08.30",
+   "source_type": "transcript",
+   "date": "2025-05-07",
+   "part_index": 2,
+   "part_count": 2,
+   "content": "[{\"role\": \"question\", \"text\": \"Jared Lutzinski [2375]: Great, thanks. And then curious how you're seeing guests interact with Outback's Aussie three-course pricing tiers. I know last call you discussed leading with the $14.99 tier, but significant number of guests trading up to the $17.99 or $20.99 tier. Wondering if this is still the case and maybe how you've seen the mix of guests at the $14.99 tier change relative to last quarter. Thank you.\", \"speaker\": \"Jared Lutzinski\", \"title\": \"BMO Analyst\"}, {\"role\": \"answer\", \"text\": \"Mike Spanos [2400]: You bet. First of all, our C3 course had pretty limited impact in Q1 because we're lapping the same promotion from last year. But we feel good about the mix. It's very much in line with our expectations. And we've now got it as a core menu item starting in June. And I like that because we can execute at a higher level. It's on the base menu. It's easier for our team in the back of the house. So we do expect a better momentum out of it in Q2 and actually more second half of the year. And that's embedded in our mixed assumptions that Michael talked about. I would also say, again, we're going to continue to iterate and refine all these offers. We are seeing a nice trade-up into the $17.99 and the $20.99 levels, and we're seeing a good amount of trade-up on the desserts as well. So when we get it right, our guests trade up, and they feel good about the proposition, and they'll pay more for more.\", \"speaker\": \"Mike Spanos\", \"title\": \"Chief Executive Officer\"}, {\"role\": \"answer\", \"text\": \"Tara Kurian [2456]: Great. Thank you very much.\", \"speaker\": \"Tara Kurian\", \"title\": \"Vice President, Corporate Finance and Investor Relations\"}, {\"role\": \"answer\", \"text\": \"Mike Spanos [2471]: Thank you once again for your investment and support of Bloomin' Brands. I want to close by thanking our people. I greatly appreciate their passion for our guests and each other, their hard work, and their excellence.\", \"speaker\": \"Mike Spanos\", \"title\": \"Chief Executive Officer\"}, {\"role\": \"answer\", \"text\": \"Tara Kurian [2488]: The conference is now concluded.\", \"speaker\": \"Tara Kurian\", \"title\": \"Vice President, Corporate Finance and Investor Relations\"}]"
+  }
+ ]
+}

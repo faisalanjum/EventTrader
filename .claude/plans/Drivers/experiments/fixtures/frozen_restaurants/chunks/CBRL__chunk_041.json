@@ -1,0 +1,14 @@
+{
+ "ticker": "CBRL",
+ "chunk_id": "CBRL__chunk_041",
+ "events": [
+  {
+   "source_id": "CBRL_2026-03-04T17.00",
+   "source_type": "transcript",
+   "date": "2026-03-04",
+   "part_index": 2,
+   "part_count": 2,
+   "content": "[{\"role\": \"question\", \"text\": \"Todd Brooks [2526]: Yeah. Okay. Thanks. If we didn't talk about holiday meal performance, and I know the strategies maybe have been changed to better balance profitability versus sales, but I guess if you could review how holiday meal performed during the quarter, is that behind any of the improvement or maybe less bad restaurant cogs than maybe what some of us were expecting and just how that overall offering resonated at holiday?\", \"speaker\": \"Todd Brooks\", \"title\": \"Analyst, Benchmark StoneX\"}, {\"role\": \"answer\", \"text\": \"Julie Messina [2555]: Sure. We did a little bit on the last call because it was right after Thanksgiving. But look, gosh, November feels like a long time ago. But really, we built on the learnings from last year. Because if you remember, Q2 of 25 was a really strong performance for us. And we had spent a lot of time really restructuring that business. especially from an operations standpoint, to make sure that we were delivering great experiences for our guests as well as our team members and making sure that we weren't overspending on labor and all of those things. So we took those learnings into this year, really simplified the operations, made sure we had great guest experience. We were proud of the metrics, and we did almost $110 million in sales on Thanksgiving week. which was a big week for us. Thanksgiving traffic was in line with the rest of the month, so it didn't crazily outperform or anything like that. We were pleased with the performance. We were pleased that people invited us into their homes for Thanksgiving and that they celebrated with us in the restaurants, all leading to that $110 million in that week.\", \"speaker\": \"Julie Messina\", \"title\": \"President and CEO\"}]\n---\n[{\"role\": \"question\", \"text\": \"Todd Brooks [2621]: Okay, great. Thanks.\", \"speaker\": \"Todd Brooks\", \"title\": \"Analyst, Benchmark StoneX\"}, {\"role\": \"answer\", \"text\": \"Julie Messina [2634]: Thank you for joining us today. We're encouraged by the improvements we've seen in key guest experience metrics and in our traffic trend, and we remain confident that the plan we are executing will drive improved performance. Lastly, I want to again express my gratitude to our over 70,000 team members who remain focused on delivering an exceptional guest experience every shift, every day. Thank you.\", \"speaker\": \"Julie Messina\", \"title\": \"President and CEO\"}]"
+  }
+ ]
+}

@@ -1,0 +1,430 @@
+{
+ "generated_utc": "2026-07-10T09:55:34+00:00",
+ "wp": "WP-FA",
+ "no_llm": true,
+ "fa_selection": {
+  "path": "fixtures/FA_selection.json",
+  "sha256": "8e9556f981189a41c7764b72f7cb8ab037fa0897630c31cdfa6a990629de48db",
+  "signed_off_by": "fable",
+  "n_events": 36
+ },
+ "frozen_chunks": {
+  "source_run": "runs/2026-06-11_204218_restaurants",
+  "path": "fixtures/frozen_restaurants",
+  "verify_result": "VERIFY OK (845 events byte-exact)",
+  "chunk_files": 969,
+  "source_files": 14,
+  "roster8_chunk_files": 537,
+  "roster8_source_events": 478,
+  "provenance": "copied from the frozen restaurants run; adopted via staged verify-then-rename"
+ },
+ "scope_files_sha256": {
+  "scope_phase1.json": "fda5f703df868777387f173dcaac3f9526fee29f52e9837ab715ef976917c426",
+  "scope_restaurants.json": "91441503f2a4bb9005d2fea895578c98be86faa63d266ab7ae7ef7d8a3acacc0",
+  "scope_specialtyretail.json": "4d801a5bcfe51bac123cdd45bda341b3d05d2649712e0e97a7320e9a3e1cba82",
+  "scope_airlines.json": "2f8d36f7a26f5bf1b69b52995bbab903ef898f371cef9b86428f18b971a5cd95"
+ },
+ "event_packets": {
+  "dir": "fixtures/events",
+  "count": 36,
+  "by_type": {
+   "8k": 12,
+   "transcript": 8,
+   "10q": 8,
+   "10k": 4,
+   "news": 4
+  },
+  "byte_provenance_crosschecked_vs_frozen": 14,
+  "packets": [
+   {
+    "source_id": "0000006201-26-000031",
+    "source_type": "8k",
+    "ticker": "AAL",
+    "file": "events/0000006201-26-000031.json",
+    "sha256": "86e107b1a8ff88255f9c0f4ba201fa14edd48e21f90b0059a5bf9cba780c86b9",
+    "chars": 38524
+   },
+   {
+    "source_id": "0000006201-26-000032",
+    "source_type": "10q",
+    "ticker": "AAL",
+    "file": "events/0000006201-26-000032.json",
+    "sha256": "1f397c4d57bb36bbc9123f68be120f4441e7912121756ae503ef608e60a81d9e",
+    "chars": 47930
+   },
+   {
+    "source_id": "0000027904-26-000013",
+    "source_type": "10k",
+    "ticker": "DAL",
+    "file": "events/0000027904-26-000013.json",
+    "sha256": "ebfdd77f25072c36da3592d9fac1c903b01b00ae9960d663cc26f84115a13fe5",
+    "chars": 176533
+   },
+   {
+    "source_id": "0000027904-26-000020",
+    "source_type": "8k",
+    "ticker": "DAL",
+    "file": "events/0000027904-26-000020.json",
+    "sha256": "f0af6070519d150e3f07ae4c9e04ec11df54134e2ec705ad26dbb31051b753c7",
+    "chars": 41539
+   },
+   {
+    "source_id": "0000027904-26-000022",
+    "source_type": "10q",
+    "ticker": "DAL",
+    "file": "events/0000027904-26-000022.json",
+    "sha256": "22330c9e366346f9c17fd477eee3dcdb9968b522f03255a5012de34eaa3ed52b",
+    "chars": 30754
+   },
+   {
+    "source_id": "0000063908-26-000032",
+    "source_type": "8k",
+    "ticker": "MCD",
+    "file": "events/0000063908-26-000032.json",
+    "sha256": "1a5085434a1a27bc884bdf438917428eeca8e996bca027c08bd5375c9968acd7",
+    "chars": 16133
+   },
+   {
+    "source_id": "0000092380-26-000044",
+    "source_type": "8k",
+    "ticker": "LUV",
+    "file": "events/0000092380-26-000044.json",
+    "sha256": "3c6b4266e75faca57699f6ebc908a8b56ecc37ec2a228c48dac902f923a070d1",
+    "chars": 32133
+   },
+   {
+    "source_id": "0000764478-25-000057",
+    "source_type": "10q",
+    "ticker": "BBY",
+    "file": "events/0000764478-25-000057.json",
+    "sha256": "74e5ef1fd2734acbf9441444f65c42190129d83e14ae99f19e25c1f978bf443a",
+    "chars": 44293
+   },
+   {
+    "source_id": "0000764478-26-000005",
+    "source_type": "8k",
+    "ticker": "BBY",
+    "file": "events/0000764478-26-000005.json",
+    "sha256": "a0fc69f830868adbee03b6c8bdbcf5c07c9ac7ee297fbfce4bdb812b12c5daab",
+    "chars": 181
+   },
+   {
+    "source_id": "0000898173-26-000006",
+    "source_type": "8k",
+    "ticker": "ORLY",
+    "file": "events/0000898173-26-000006.json",
+    "sha256": "a48214c50f16b08f3c64482fbdcb66956d4980b1f39a6b7cc02ff5fcca025dfc",
+    "chars": 26024
+   },
+   {
+    "source_id": "0000940944-25-000038",
+    "source_type": "10k",
+    "ticker": "DRI",
+    "file": "events/0000940944-25-000038.json",
+    "sha256": "20c599d6fc4f65ee3772accefa4f90145186f27949e37d39d039eb5ee195f8c1",
+    "chars": 170953
+   },
+   {
+    "source_id": "0000940944-26-000005",
+    "source_type": "8k",
+    "ticker": "DRI",
+    "file": "events/0000940944-26-000005.json",
+    "sha256": "3853210b4faeb670c910bb48ab3672007fde9374db472f536cb52b51ff9dbb96",
+    "chars": 18660
+   },
+   {
+    "source_id": "0000940944-26-000009",
+    "source_type": "10q",
+    "ticker": "DRI",
+    "file": "events/0000940944-26-000009.json",
+    "sha256": "357dcf9369de89e41489f3eb21927ff9314f5cecce9db9c21f72ef02fd838227",
+    "chars": 41268
+   },
+   {
+    "source_id": "0001041061-25-000109",
+    "source_type": "10q",
+    "ticker": "YUM",
+    "file": "events/0001041061-25-000109.json",
+    "sha256": "deb16ddccb2478bca5b5c5a39c2813e5c5899c0f26707a0805ce5edaadcbac62",
+    "chars": 50131
+   },
+   {
+    "source_id": "0001041061-26-000003",
+    "source_type": "8k",
+    "ticker": "YUM",
+    "file": "events/0001041061-26-000003.json",
+    "sha256": "f30530fbe13b93b8f5c82935baeadfcae9fe7851f902a9b186aa3ba246c653e2",
+    "chars": 52379
+   },
+   {
+    "source_id": "0001041061-26-000084",
+    "source_type": "10k",
+    "ticker": "YUM",
+    "file": "events/0001041061-26-000084.json",
+    "sha256": "4b9a92f5dc9d35f70618db28e9c9b1669dff633581be3adc75d07a77511f4892",
+    "chars": 192781
+   },
+   {
+    "source_id": "0001058090-26-000007",
+    "source_type": "8k",
+    "ticker": "CMG",
+    "file": "events/0001058090-26-000007.json",
+    "sha256": "86bf9d8ec9e3e0e26192032a99269c73dcde587109f12b10f5aaabbd241cb08f",
+    "chars": 33392
+   },
+   {
+    "source_id": "0001104659-25-102611",
+    "source_type": "10k",
+    "ticker": "AZO",
+    "file": "events/0001104659-25-102611.json",
+    "sha256": "434018716417a1599b34f754712a92efc852721bd69729fe54d7b0e2bb24ae44",
+    "chars": 136081
+   },
+   {
+    "source_id": "0001104659-25-105631",
+    "source_type": "10q",
+    "ticker": "CAKE",
+    "file": "events/0001104659-25-105631.json",
+    "sha256": "05d3ae59fa93c30ce0c24f5df602406469bc92d46f353223f9b1e547a9f37d9e",
+    "chars": 49631
+   },
+   {
+    "source_id": "0001104659-25-118458",
+    "source_type": "10q",
+    "ticker": "ULTA",
+    "file": "events/0001104659-25-118458.json",
+    "sha256": "bb8f33fec9607bb36483a179cd78005b0359db04ecd080a45ef78e353f0ebddf",
+    "chars": 37698
+   },
+   {
+    "source_id": "0001104659-26-017090",
+    "source_type": "8k",
+    "ticker": "CAKE",
+    "file": "events/0001104659-26-017090.json",
+    "sha256": "4a6fc05ab089b32b4e03462c4a88589eaaafd03fe38ce1ade1bb6339dda28661",
+    "chars": 23028
+   },
+   {
+    "source_id": "0001104659-26-027061",
+    "source_type": "8k",
+    "ticker": "ULTA",
+    "file": "events/0001104659-26-027061.json",
+    "sha256": "999a35b111b2270b55e7d4820c34fd314af140046ad1dbff3ab0ac21407a65ef",
+    "chars": 20598
+   },
+   {
+    "source_id": "0001104659-26-032757",
+    "source_type": "10q",
+    "ticker": "AZO",
+    "file": "events/0001104659-26-032757.json",
+    "sha256": "dc697017f5fe70591d7657a4da52b64e6d2694e59b93e04081a9ae12aa7c671b",
+    "chars": 35075
+   },
+   {
+    "source_id": "0001171843-26-001288",
+    "source_type": "8k",
+    "ticker": "AZO",
+    "file": "events/0001171843-26-001288.json",
+    "sha256": "a3cb47ba7c0e836185f9bac9504cd7d6fc6e936aa46a50144cdb3d6f0d634b13",
+    "chars": 16918
+   },
+   {
+    "source_id": "AAL_2026-04-23T08.30",
+    "source_type": "transcript",
+    "ticker": "AAL",
+    "file": "events/AAL_2026-04-23T08.30.json",
+    "sha256": "294e7fa819bb3b48e2c451da7fa1ec0282e2e456155e6b0a45037d721b9c48f5",
+    "chars": 57098
+   },
+   {
+    "source_id": "BBY_2026-03-03T08.00",
+    "source_type": "transcript",
+    "ticker": "BBY",
+    "file": "events/BBY_2026-03-03T08.00.json",
+    "sha256": "d9853008dd45e91c4e25e3102c5b82a75e9873fcb788d626fa74e2b9b6608eb7",
+    "chars": 58820
+   },
+   {
+    "source_id": "CMG_2026-02-03T16.30",
+    "source_type": "transcript",
+    "ticker": "CMG",
+    "file": "events/CMG_2026-02-03T16.30.json",
+    "sha256": "a217b35ae36f88f17b38bab07887397a0056e687b074d700aa2a4f8950c94cf8",
+    "chars": 61848
+   },
+   {
+    "source_id": "DAL_2026-04-08T10.00",
+    "source_type": "transcript",
+    "ticker": "DAL",
+    "file": "events/DAL_2026-04-08T10.00.json",
+    "sha256": "81f309e10115e939d78493cf74e3ef87233d15c2ee7f69c65802593d431f7c09",
+    "chars": 52258
+   },
+   {
+    "source_id": "DRI_2026-03-19T08.30",
+    "source_type": "transcript",
+    "ticker": "DRI",
+    "file": "events/DRI_2026-03-19T08.30.json",
+    "sha256": "251ada179e6efde4a3540fdc4214bee12ec2cfb49049abafc4d9c48e41370d3b",
+    "chars": 76612
+   },
+   {
+    "source_id": "MCD_2026-02-11T16.30",
+    "source_type": "transcript",
+    "ticker": "MCD",
+    "file": "events/MCD_2026-02-11T16.30.json",
+    "sha256": "e2677e1a3d71876ab94265bb630c767870432c1efa8ea92749da3dd34fefd3c3",
+    "chars": 58999
+   },
+   {
+    "source_id": "ULTA_2026-03-12T16.30",
+    "source_type": "transcript",
+    "ticker": "ULTA",
+    "file": "events/ULTA_2026-03-12T16.30.json",
+    "sha256": "853f6ebda222796e3a9e3f2a1440f2580412afe2fd61e5bb52c26bfd3fcc41a8",
+    "chars": 56380
+   },
+   {
+    "source_id": "YUM_2026-02-04T08.15",
+    "source_type": "transcript",
+    "ticker": "YUM",
+    "file": "events/YUM_2026-02-04T08.15.json",
+    "sha256": "f2a39e0e3ac81a4ea0657709d447a43afcb4780a90d7cd0cf2f061032259eb92",
+    "chars": 47209
+   },
+   {
+    "source_id": "bzNews_42014391",
+    "source_type": "news",
+    "ticker": "MCD",
+    "file": "events/bzNews_42014391.json",
+    "sha256": "361957aeff39b4e7ce2bef9e5505a8dffda1f9e6a26161ab303c70026c0b0b73",
+    "chars": 679
+   },
+   {
+    "source_id": "bzNews_49256211",
+    "source_type": "news",
+    "ticker": "CMG",
+    "file": "events/bzNews_49256211.json",
+    "sha256": "d4ffe5a36e2778f1897a6b124a43a3164e6e0e31803c49e1418b966dcdbaf4c8",
+    "chars": 72
+   },
+   {
+    "source_id": "bzNews_50877032",
+    "source_type": "news",
+    "ticker": "AAL",
+    "file": "events/bzNews_50877032.json",
+    "sha256": "5988f9fe78f40280109d7baee7dde9511f5719c4ee932e897ec38063297f630d",
+    "chars": 2390
+   },
+   {
+    "source_id": "bzNews_51962983",
+    "source_type": "news",
+    "ticker": "BBY",
+    "file": "events/bzNews_51962983.json",
+    "sha256": "4e2ff9e40b958e83d2c085384d703d2ca1b722cea7a377dcd77f2c06a6217432",
+    "chars": 61
+   }
+  ]
+ },
+ "preflight_a_to_g": {
+  "a_multi_registrant": {
+   "count": 0,
+   "expect": 0,
+   "source": "prior graph-wide census (recorded FA_selection.mandatory_fixtures.multi_registrant_report=SYNTHETIC)",
+   "reconfirm": "not re-run at step 6 \u2014 full XBRL fact-traversal cost; the graph-wide census is authoritative",
+   "disposition": "0 -> multi_registrant_report = SYNTHETIC"
+  },
+  "b_null_por_completed_xbrl": {
+   "count": 0,
+   "expect": 0,
+   "disposition": "0 -> null_periodofreport_report = SYNTHETIC (matches mandatory_fixtures)"
+  },
+  "c_twin_feasibility": {
+   "DRI": {
+    "earn8k": 13,
+    "periodic_10q_10k": 14
+   },
+   "LUV": {
+    "earn8k": 16,
+    "periodic_10q_10k": 14
+   },
+   "MCD": {
+    "earn8k": 13,
+    "periodic_10q_10k": 13
+   },
+   "ORLY": {
+    "earn8k": 13,
+    "periodic_10q_10k": 13
+   },
+   "AZO": {
+    "earn8k": 13,
+    "periodic_10q_10k": 13
+   },
+   "BBY": {
+    "earn8k": 13,
+    "periodic_10q_10k": 13
+   },
+   "CAKE": {
+    "earn8k": 13,
+    "periodic_10q_10k": 13
+   },
+   "YUM": {
+    "earn8k": 13,
+    "periodic_10q_10k": 13
+   },
+   "CMG": {
+    "earn8k": 13,
+    "periodic_10q_10k": 13
+   },
+   "DAL": {
+    "earn8k": 14,
+    "periodic_10q_10k": 14
+   },
+   "ULTA": {
+    "earn8k": 13,
+    "periodic_10q_10k": 13
+   },
+   "AAL": {
+    "earn8k": 14,
+    "periodic_10q_10k": 14
+   }
+  },
+  "d_frozen_coverage": {
+   "source_run": "runs/2026-06-11_204218_restaurants",
+   "verify": "VERIFY OK (845 events byte-exact)",
+   "roster8_chunk_files": 537,
+   "roster8_source_events": 478,
+   "all_10_roster_holdout_present": true
+  },
+  "e_holdout_overlap": {
+   "BLMN": 19,
+   "SHAK": 19
+  },
+  "f_candidate_supply": {
+   "nine_hidden_reports": 511,
+   "nine_hidden_transcripts": 117,
+   "total_leaf_events": 628,
+   "expect": ">> 150"
+  },
+  "g_t0_boundary": {
+   "max_report_created": "2026-04-27",
+   "max_transcript_cdt": "2026-04-23",
+   "t0": "2026-04-28",
+   "within_t0": true
+  }
+ },
+ "od11_contingency": {
+  "trigger": "K-fields drafting yields < 5 sequential-basis facts -> swap ULTA 10-Q -> LUV 10-Q",
+  "review_checks_verdict": {
+   "pass": "borderline_accepted",
+   "evidence": "owner-accepted 2026-07-08: ~6 sequential events; LUV-swap contingency pinned (text-judged)"
+  },
+  "triggered": false,
+  "reason": "review_checks.od11_sequential = borderline_accepted (~6 sequential events, owner-recorded 2026-07-08) >= 5 -> NOT triggered; ULTA 10-Q retained per signed FA_selection",
+  "ulta_10q_in_selection": true,
+  "ulta_10q_id": "0001104659-25-118458",
+  "luv_10q_swap_alternate": "0000092380-26-000047",
+  "luv_10q_alternate_exists": true,
+  "decided_at": "K-fields drafting (not WP-FA step 6)"
+ }
+}

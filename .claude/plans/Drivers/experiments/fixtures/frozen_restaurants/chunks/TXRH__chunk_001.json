@@ -1,0 +1,36 @@
+{
+ "ticker": "TXRH",
+ "chunk_id": "TXRH__chunk_001",
+ "events": [
+  {
+   "source_id": "0001104659-26-024099",
+   "source_type": "8-K",
+   "date": "2026-03-05",
+   "part_index": 1,
+   "part_count": 1,
+   "content": "FORM: 8-K\n\nITEMS: [\"Item 5.02: Departure of Directors or Certain Officers; Election of Directors; Appointment of Certain Officers: Compensatory Arrangements of Certain Officers\", \"Item 7.01: Regulation FD Disclosure\", \"Item 9.01: Financial Statements and Exhibits\"]\n\nDESC: Form 8-K - Current report - Item 5.02 Item 7.01 Item 9.01"
+  }
+ ],
+ "fiscal_kpis": [
+  "Bubba's 33 - Avg Unit Volume",
+  "Bubba's 33 - Comparable Restaurant Sales",
+  "Bubba's 33 - Total Store Weeks",
+  "Company - Bubba's 33 Restaurant Count",
+  "Company - Comparable Restaurant Sales",
+  "Company - Guest Traffic Count Increase",
+  "Company - Increase in Avg Unit Volume",
+  "Company - Increase in Store Weeks",
+  "Company - Jaggers Restaurant Count",
+  "Company - Per Person Avg Check Increase",
+  "Company - Texas Roadhouse Restaurant Count",
+  "Company - Total Store Weeks",
+  "Franchise - Jaggers - International Restaurant Count",
+  "Franchise - Jaggers - US Restaurant Count",
+  "Franchise - Texas Roadhouse - International Restaurant Count",
+  "Franchise - Texas Roadhouse - US Restaurant Count",
+  "Texas Roadhouse - Avg Unit Volume",
+  "Texas Roadhouse - Comparable Restaurant Sales",
+  "Texas Roadhouse - Total Store Weeks",
+  "Total Restaurant Count"
+ ]
+}

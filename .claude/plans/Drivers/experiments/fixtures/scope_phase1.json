@@ -1,0 +1,49 @@
+{
+ "phase": 1,
+ "tickers": [
+  "CAKE",
+  "DRI",
+  "MCD",
+  "YUM",
+  "CMG",
+  "AZO",
+  "ORLY",
+  "BBY",
+  "ULTA",
+  "DAL",
+  "AAL",
+  "LUV"
+ ],
+ "n_tickers": 12,
+ "groups": {
+  "base": {
+   "industry": "Restaurants",
+   "tickers": [
+    "CAKE",
+    "DRI",
+    "MCD",
+    "YUM",
+    "CMG"
+   ]
+  },
+  "adjacent": {
+   "industry": "SpecialtyRetail",
+   "tickers": [
+    "AZO",
+    "ORLY",
+    "BBY",
+    "ULTA"
+   ]
+  },
+  "contrast": {
+   "industry": "Airlines",
+   "tickers": [
+    "DAL",
+    "AAL",
+    "LUV"
+   ]
+  }
+ },
+ "t0_frozen_db": "2026-04-28",
+ "note": "Phase-1 corpus (owner 2026-07-08). The corpus is this ticker list, NOT the full industries; every fetch pins against this file."
+}

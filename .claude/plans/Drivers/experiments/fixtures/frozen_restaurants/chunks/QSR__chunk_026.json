@@ -1,0 +1,46 @@
+{
+ "ticker": "QSR",
+ "chunk_id": "QSR__chunk_026",
+ "events": [
+  {
+   "source_id": "0001618756-24-000020",
+   "source_type": "10-K",
+   "date": "2024-02-22",
+   "part_index": 6,
+   "part_count": 6,
+   "content": "We are regularly involved in litigation including related to disputes with franchisees, suppliers, employees, team members, and customers, as well as disputes over our advertising claims about our food and over our intellectual property. See the discussion of Legal Proceedings in Note 16, “Commitments and Contingencies,” to the Consolidated Financial Statements included in Item 8 of this Form 10-K. Active and potential disputes with franchisees could damage our brand reputation and our relationships with our broader franchise base. Such litigation may be expensive to defend, harm our reputation and divert resources away from our operations and negatively impact our reported earnings. Also, legal proceedings against a franchisee or its affiliates by third parties, whether in the ordinary course of business or otherwise, may include claims against us by virtue of our relationship with the franchisee. We, or our business partners, may become subject to claims for infringement of intellectual property rights and we may be required to indemnify \n\nor defend our business partners from such claims. Should management’s evaluation of our current exposure to legal matters pending against us prove incorrect and if such claims are successful, our exposure could exceed expectations and have a material adverse effect on our business, financial condition and results of operations. Although some losses may be covered by insurance, if there are significant losses that are not covered, or there is a delay in receiving insurance proceeds, or the proceeds are insufficient to offset our losses fully, our financial condition or results of operations may be adversely affected. \n\n"
+  },
+  {
+   "source_id": "0001618756-24-000015",
+   "source_type": "8-K",
+   "date": "2024-02-13",
+   "part_index": 1,
+   "part_count": 1,
+   "content": "FORM: 8-K\n\nITEMS: [\"Item 2.02: Results of Operations and Financial Condition\", \"Item 9.01: Financial Statements and Exhibits\"]\n\nDESC: Form 8-K - Current report - Item 2.02 Item 9.01"
+  },
+  {
+   "source_id": "0000950142-24-000110",
+   "source_type": "8-K",
+   "date": "2024-01-16",
+   "part_index": 1,
+   "part_count": 1,
+   "content": "FORM: 8-K\n\nITEMS: [\"Item 7.01: Regulation FD Disclosure\", \"Item 8.01: Other Events\", \"Item 9.01: Financial Statements and Exhibits\"]\n\nDESC: Form 8-K - Current report - Item 7.01 Item 8.01 Item 9.01"
+  },
+  {
+   "source_id": "0001618756-24-000007",
+   "source_type": "8-K",
+   "date": "2024-01-08",
+   "part_index": 1,
+   "part_count": 1,
+   "content": "FORM: 8-K\n\nITEMS: [\"Item 7.01: Regulation FD Disclosure\", \"Item 9.01: Financial Statements and Exhibits\"]\n\nDESC: Form 8-K - Current report - Item 7.01 Item 9.01"
+  },
+  {
+   "source_id": "0001618756-24-000002",
+   "source_type": "8-K",
+   "date": "2024-01-04",
+   "part_index": 1,
+   "part_count": 1,
+   "content": "FORM: 8-K\n\nITEMS: [\"Item 1.01: Entry into a Material Definitive Agreement\", \"Item 2.03: Creation of a Direct Financial Obligation or an Obligation under an Off-Balance Sheet Arrangement of a Registrant\", \"Item 9.01: Financial Statements and Exhibits\"]\n\nDESC: Form 8-K - Current report - Item 1.01 Item 2.03 Item 9.01"
+  }
+ ]
+}

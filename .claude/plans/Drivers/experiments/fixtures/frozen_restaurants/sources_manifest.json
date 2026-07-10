@@ -1,0 +1,103 @@
+{
+ "fetched_at": "2026-06-11T20:42:36+00:00",
+ "sources": [
+  {
+   "ticker": "BLMN",
+   "file": "BLMN.json",
+   "sha256": "a73c999da9775c65d90b73f5b809b3cc76e82598594af3cfb5ce0f15cc16aa87",
+   "source_id_count": 67,
+   "bytes": 2583641
+  },
+  {
+   "ticker": "CAKE",
+   "file": "CAKE.json",
+   "sha256": "13f4b9bc60f33456bc4c735b58ef9e8e64a6d0d9620797a7a258237f0250f1a6",
+   "source_id_count": 47,
+   "bytes": 2326078
+  },
+  {
+   "ticker": "CBRL",
+   "file": "CBRL.json",
+   "sha256": "ef7ee20be440a0eebe1a8da4c4bb5ad6b2f047665f7a2749a23b6645db5fde1f",
+   "source_id_count": 59,
+   "bytes": 2144231
+  },
+  {
+   "ticker": "CMG",
+   "file": "CMG.json",
+   "sha256": "4b58029b6c129e3c52b0987955277cdb569b101ad2f5487c027b2725a294eb74",
+   "source_id_count": 60,
+   "bytes": 1983360
+  },
+  {
+   "ticker": "DRI",
+   "file": "DRI.json",
+   "sha256": "8982c0a47035c497cbac0e49282b3dbdb80b2e6d9479d23e490ce6e55036ec7d",
+   "source_id_count": 55,
+   "bytes": 2181628
+  },
+  {
+   "ticker": "EAT",
+   "file": "EAT.json",
+   "sha256": "dec635ed633b314dda41a9240f41b295de50c1c500efd39960f518281a037741",
+   "source_id_count": 55,
+   "bytes": 2173095
+  },
+  {
+   "ticker": "MCD",
+   "file": "MCD.json",
+   "sha256": "8d5b040c9805e49158c2505bb239d5762619832f193932ebfd14641a03117e95",
+   "source_id_count": 59,
+   "bytes": 2115058
+  },
+  {
+   "ticker": "PZZA",
+   "file": "PZZA.json",
+   "sha256": "3d25e718ff671a71d446b89f904db754e6b3d6e729194d74096869f5570c65dc",
+   "source_id_count": 69,
+   "bytes": 2661304
+  },
+  {
+   "ticker": "QSR",
+   "file": "QSR.json",
+   "sha256": "695aa581362a6a1b097f1c2544acd962f8c38d3c0cfbc6de907d45b1aca50dfc",
+   "source_id_count": 62,
+   "bytes": 2197954
+  },
+  {
+   "ticker": "SBUX",
+   "file": "SBUX.json",
+   "sha256": "1dc73657720ce31cdc456e07a961710296a5f661b428e96b27880a1b52d0d74d",
+   "source_id_count": 72,
+   "bytes": 2436069
+  },
+  {
+   "ticker": "SHAK",
+   "file": "SHAK.json",
+   "sha256": "25d9f22538bb5f5c4d5626f5d31614ade341c9ef8a73cfab1e21f5d30171f6da",
+   "source_id_count": 64,
+   "bytes": 2839339
+  },
+  {
+   "ticker": "TXRH",
+   "file": "TXRH.json",
+   "sha256": "dc97cbaa23cb8258898b0a6b0cfe855f85641358a104d14d008d24511b44a85a",
+   "source_id_count": 62,
+   "bytes": 2167459
+  },
+  {
+   "ticker": "WING",
+   "file": "WING.json",
+   "sha256": "cbd3cb0151defddad752ef1129a4b8d5e5d92f3ce6bb043b9fc17a351501972d",
+   "source_id_count": 53,
+   "bytes": 2066536
+  },
+  {
+   "ticker": "YUM",
+   "file": "YUM.json",
+   "sha256": "4a8309ab05b8216f62b4b8b8f620346be7f2b5b5e3ac10f51e245a3cb1a1ed3d",
+   "source_id_count": 61,
+   "bytes": 2460105
+  }
+ ]
+}

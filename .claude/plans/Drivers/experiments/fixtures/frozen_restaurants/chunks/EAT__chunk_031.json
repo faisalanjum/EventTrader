@@ -1,0 +1,22 @@
+{
+ "ticker": "EAT",
+ "chunk_id": "EAT__chunk_031",
+ "events": [
+  {
+   "source_id": "0000703351-23-000006",
+   "source_type": "10-Q",
+   "date": "2023-02-01",
+   "part_index": 2,
+   "part_count": 2,
+   "content": "[RiskFactors]\n ITEM 1A. RISK FACTORS \n\nIn addition to the other information in this Form 10-Q report, you should carefully consider the factors discussed in Part I, Item 1A, “Risk Factors” of our Annual Report on Form 10-K for the fiscal year ended June 29, 2022, which could materially affect our business, financial condition or results of operations. It is not possible to predict or identify all risk factors. Additional risks and uncertainties not presently known to us or that we currently believe to be immaterial may also impair our business, financial condition or results of operations. Therefore, the risks identified are not intended to be a complete discussion of all potential risks or uncertainties. \n\nThere have been no material changes in the risk factors set forth in Part I, Item 1A, “Risk Factors” in our Annual Report on Form 10-K for the fiscal year ended June 29, 2022. \n\n"
+  },
+  {
+   "source_id": "0000703351-23-000004",
+   "source_type": "8-K",
+   "date": "2023-02-01",
+   "part_index": 1,
+   "part_count": 1,
+   "content": "FORM: 8-K\n\nITEMS: [\"Item 9.01: Financial Statements and Exhibits\"]\n\nDESC: Form 8-K - Current report - Item 9.01"
+  }
+ ]
+}

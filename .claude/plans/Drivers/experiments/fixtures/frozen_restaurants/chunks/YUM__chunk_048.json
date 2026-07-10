@@ -1,0 +1,38 @@
+{
+ "ticker": "YUM",
+ "chunk_id": "YUM__chunk_048",
+ "events": [
+  {
+   "source_id": "0001041061-23-000037",
+   "source_type": "8-K",
+   "date": "2023-08-02",
+   "part_index": 2,
+   "part_count": 2,
+   "content": "We recognized the call premium and the write-off of $5 million of unamortized debt issuance costs associated with the 2025 Notes within Interest expense, net as a Special Item due to their size and the fact that the amounts are not indicative of our ongoing interest expense. (e)The below table includes the detail of Special Items Tax (Benefit) Expense: Quarter ended Year to date 6/30/23 6/30/22 6/30/23 6/30/22 Tax (Benefit) Expense on Special Items Operating Profit and Interest Expense $ (2) $ (3) $ (2) $ (1) Tax (Benefit) Expense - Income tax impacts from decision to exit Russia (6) 71 (8) 71 Tax (Benefit) - U.S. foreign tax credit regulations issued in January 2022 — — — (82) Tax (Benefit) - Other Income tax impacts recorded as Special (22) — (22) — Special Items Tax (Benefit) Expense $ (30) $ 68 $ (32) $ (12) Tax (Benefit) Expense on Special Items Operating Profit and Interest Expense was determined by assessing the tax impact of each individual component within Special Items based upon the nature of the item and jurisdictional tax law. 18 Special Items Tax (Benefit) Expense includes $71 million of net tax expense recorded in the quarter ended June 30, 2022, resulting from the Company’s decision to exit KFC Russia. We remeasured and reassessed the need for a valuation allowance on deferred tax assets in Switzerland due to the expected reduction in the tax basis of intellectual property rights associated with the loss of the Russian royalty income going forward. In addition, we reassessed certain deferred tax liabilities associated with the Russia business given the expectation that the existing basis difference will now reverse by way of sale. Special Items Tax (Benefit) Expense includes a tax benefit discretely recorded in the quarter ended March 31, 2022 of $82 million, from the release of a valuation allowance on foreign tax credit carryforwards. Subsequent clarifying guidance from the U.S. Treasury resulted in the re-establishment of the valuation allowance in the quarter ended December 31, 2022. Other Income Tax impacts recorded as Special in the quarter and year to date ended June 30, 2023 include benefits related to the reversal of reserves due to the favorable resolution of a tax audit in a foreign jurisdiction. Such reserves were established in prior years related to deferred tax assets originally recorded as a Special Item as part of an intercompany restructuring of intellectual property. Other Income Tax impacts recorded as Special in the quarter and year to date ended June 30, 2023 also include the release of valuation allowances associated with a jurisdiction in which a market-wide refranchising event occurred. 19"
+  },
+  {
+   "source_id": "0001041061-23-000035",
+   "source_type": "8-K",
+   "date": "2023-07-19",
+   "part_index": 1,
+   "part_count": 1,
+   "content": "FORM: 8-K\n\nITEMS: [\"Item 5.02: Departure of Directors or Certain Officers; Election of Directors; Appointment of Certain Officers: Compensatory Arrangements of Certain Officers\"]\n\nDESC: Form 8-K - Current report - Item 5.02"
+  },
+  {
+   "source_id": "0001041061-23-000033",
+   "source_type": "8-K",
+   "date": "2023-06-29",
+   "part_index": 1,
+   "part_count": 1,
+   "content": "FORM: 8-K\n\nITEMS: [\"Item 5.02: Departure of Directors or Certain Officers; Election of Directors; Appointment of Certain Officers: Compensatory Arrangements of Certain Officers\"]\n\nDESC: Form 8-K - Current report - Item 5.02"
+  },
+  {
+   "source_id": "0001041061-23-000028",
+   "source_type": "8-K",
+   "date": "2023-05-24",
+   "part_index": 1,
+   "part_count": 1,
+   "content": "FORM: 8-K\n\nITEMS: [\"Item 5.07: Submission of Matters to a Vote of Security Holders\"]\n\nDESC: Form 8-K - Current report - Item 5.07"
+  }
+ ]
+}

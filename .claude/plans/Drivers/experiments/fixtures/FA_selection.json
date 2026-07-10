@@ -1,449 +1,748 @@
 {
-  "catalog_side": {
-    "fc_build_tickers": [
-      "CAKE",
-      "DRI",
-      "MCD",
-      "YUM",
-      "CMG",
-      "SBUX",
-      "QSR",
-      "TXRH"
-    ],
-    "holdout_tickers": [
-      "BLMN",
-      "SHAK"
-    ],
-    "t0_frozen_db": "2026-04-28"
+ "catalog_side": {
+  "fc_build_tickers": [
+   "CAKE",
+   "DRI",
+   "MCD",
+   "YUM",
+   "CMG",
+   "SBUX",
+   "QSR",
+   "TXRH"
+  ],
+  "holdout_tickers": [
+   "BLMN",
+   "SHAK"
+  ],
+  "t0_frozen_db": "2026-04-28"
+ },
+ "draft": false,
+ "filing_count": 60,
+ "filings": {
+  "AAL": [
+   {
+    "created": "2026-02-18",
+    "form": "10-K",
+    "periodOfReport": "2025-12-31",
+    "report_id": "0000006201-26-000014"
+   },
+   {
+    "created": "2025-02-19",
+    "form": "10-K",
+    "periodOfReport": "2024-12-31",
+    "report_id": "0000006201-25-000010"
+   },
+   {
+    "created": "2026-04-23",
+    "form": "10-Q",
+    "periodOfReport": "2026-03-31",
+    "report_id": "0000006201-26-000032"
+   },
+   {
+    "created": "2025-10-23",
+    "form": "10-Q",
+    "periodOfReport": "2025-09-30",
+    "report_id": "0000006201-25-000052"
+   },
+   {
+    "created": "2025-07-24",
+    "form": "10-Q",
+    "periodOfReport": "2025-06-30",
+    "report_id": "0000006201-25-000038"
+   }
+  ],
+  "AZO": [
+   {
+    "created": "2025-10-27",
+    "form": "10-K",
+    "periodOfReport": "2025-08-30",
+    "report_id": "0001104659-25-102611"
+   },
+   {
+    "created": "2024-10-28",
+    "form": "10-K",
+    "periodOfReport": "2024-08-31",
+    "report_id": "0001558370-24-013758"
+   },
+   {
+    "created": "2026-03-20",
+    "form": "10-Q",
+    "periodOfReport": "2026-02-14",
+    "report_id": "0001104659-26-032757"
+   },
+   {
+    "created": "2025-12-19",
+    "form": "10-Q",
+    "periodOfReport": "2025-11-22",
+    "report_id": "0001104659-25-123222"
+   },
+   {
+    "created": "2025-06-13",
+    "form": "10-Q",
+    "periodOfReport": "2025-05-10",
+    "report_id": "0001558370-25-008618"
+   }
+  ],
+  "BBY": [
+   {
+    "created": "2026-03-18",
+    "form": "10-K",
+    "periodOfReport": "2026-01-31",
+    "report_id": "0000764478-26-000009"
+   },
+   {
+    "created": "2025-03-19",
+    "form": "10-K",
+    "periodOfReport": "2025-02-01",
+    "report_id": "0000764478-25-000007"
+   },
+   {
+    "created": "2025-12-05",
+    "form": "10-Q",
+    "periodOfReport": "2025-11-01",
+    "report_id": "0000764478-25-000057"
+   },
+   {
+    "created": "2025-09-05",
+    "form": "10-Q",
+    "periodOfReport": "2025-08-02",
+    "report_id": "0000764478-25-000040"
+   },
+   {
+    "created": "2025-06-06",
+    "form": "10-Q",
+    "periodOfReport": "2025-05-03",
+    "report_id": "0000764478-25-000019"
+   }
+  ],
+  "CAKE": [
+   {
+    "created": "2026-02-23",
+    "form": "10-K",
+    "periodOfReport": "2025-12-30",
+    "report_id": "0001104659-26-018643"
+   },
+   {
+    "created": "2025-02-24",
+    "form": "10-K",
+    "periodOfReport": "2024-12-31",
+    "report_id": "0001410578-25-000195"
+   },
+   {
+    "created": "2025-11-03",
+    "form": "10-Q",
+    "periodOfReport": "2025-09-30",
+    "report_id": "0001104659-25-105631"
+   },
+   {
+    "created": "2025-08-04",
+    "form": "10-Q",
+    "periodOfReport": "2025-07-01",
+    "report_id": "0001410578-25-001564"
+   },
+   {
+    "created": "2025-05-05",
+    "form": "10-Q",
+    "periodOfReport": "2025-04-01",
+    "report_id": "0001410578-25-001073"
+   }
+  ],
+  "CMG": [
+   {
+    "created": "2026-02-04",
+    "form": "10-K",
+    "periodOfReport": "2025-12-31",
+    "report_id": "0001058090-26-000009"
+   },
+   {
+    "created": "2025-02-05",
+    "form": "10-K",
+    "periodOfReport": "2024-12-31",
+    "report_id": "0001058090-25-000014"
+   },
+   {
+    "created": "2025-10-29",
+    "form": "10-Q",
+    "periodOfReport": "2025-09-30",
+    "report_id": "0001058090-25-000088"
+   },
+   {
+    "created": "2025-07-23",
+    "form": "10-Q",
+    "periodOfReport": "2025-06-30",
+    "report_id": "0001058090-25-000056"
+   },
+   {
+    "created": "2025-04-23",
+    "form": "10-Q",
+    "periodOfReport": "2025-03-31",
+    "report_id": "0001058090-25-000031"
+   }
+  ],
+  "DAL": [
+   {
+    "created": "2026-02-10",
+    "form": "10-K",
+    "periodOfReport": "2025-12-31",
+    "report_id": "0000027904-26-000013"
+   },
+   {
+    "created": "2025-02-11",
+    "form": "10-K",
+    "periodOfReport": "2024-12-31",
+    "report_id": "0000027904-25-000004"
+   },
+   {
+    "created": "2026-04-08",
+    "form": "10-Q",
+    "periodOfReport": "2026-03-31",
+    "report_id": "0000027904-26-000022"
+   },
+   {
+    "created": "2025-10-09",
+    "form": "10-Q",
+    "periodOfReport": "2025-09-30",
+    "report_id": "0000027904-25-000020"
+   },
+   {
+    "created": "2025-07-10",
+    "form": "10-Q",
+    "periodOfReport": "2025-06-30",
+    "report_id": "0000027904-25-000012"
+   }
+  ],
+  "DRI": [
+   {
+    "created": "2025-07-18",
+    "form": "10-K",
+    "periodOfReport": "2025-05-25",
+    "report_id": "0000940944-25-000038"
+   },
+   {
+    "created": "2024-07-19",
+    "form": "10-K",
+    "periodOfReport": "2024-05-26",
+    "report_id": "0000940944-24-000035"
+   },
+   {
+    "created": "2026-03-27",
+    "form": "10-Q",
+    "periodOfReport": "2026-02-22",
+    "report_id": "0000940944-26-000009"
+   },
+   {
+    "created": "2025-12-30",
+    "form": "10-Q",
+    "periodOfReport": "2025-11-23",
+    "report_id": "0000940944-25-000071"
+   },
+   {
+    "created": "2025-09-26",
+    "form": "10-Q",
+    "periodOfReport": "2025-08-24",
+    "report_id": "0000940944-25-000054"
+   }
+  ],
+  "LUV": [
+   {
+    "created": "2026-02-05",
+    "form": "10-K",
+    "periodOfReport": "2025-12-31",
+    "report_id": "0000092380-26-000004"
+   },
+   {
+    "created": "2025-02-07",
+    "form": "10-K",
+    "periodOfReport": "2024-12-31",
+    "report_id": "0000092380-25-000024"
+   },
+   {
+    "created": "2026-04-23",
+    "form": "10-Q",
+    "periodOfReport": "2026-03-31",
+    "report_id": "0000092380-26-000047"
+   },
+   {
+    "created": "2025-10-23",
+    "form": "10-Q",
+    "periodOfReport": "2025-09-30",
+    "report_id": "0000092380-25-000140"
+   },
+   {
+    "created": "2025-07-24",
+    "form": "10-Q",
+    "periodOfReport": "2025-06-30",
+    "report_id": "0000092380-25-000134"
+   }
+  ],
+  "MCD": [
+   {
+    "created": "2026-02-24",
+    "form": "10-K",
+    "periodOfReport": "2025-12-31",
+    "report_id": "0000063908-26-000035"
+   },
+   {
+    "created": "2025-02-25",
+    "form": "10-K",
+    "periodOfReport": "2024-12-31",
+    "report_id": "0000063908-25-000012"
+   },
+   {
+    "created": "2025-11-05",
+    "form": "10-Q",
+    "periodOfReport": "2025-09-30",
+    "report_id": "0000063908-25-000059"
+   },
+   {
+    "created": "2025-08-06",
+    "form": "10-Q",
+    "periodOfReport": "2025-06-30",
+    "report_id": "0000063908-25-000039"
+   },
+   {
+    "created": "2025-05-12",
+    "form": "10-Q",
+    "periodOfReport": "2025-03-31",
+    "report_id": "0000063908-25-000025"
+   }
+  ],
+  "ORLY": [
+   {
+    "created": "2026-02-27",
+    "form": "10-K",
+    "periodOfReport": "2025-12-31",
+    "report_id": "0000898173-26-000009"
+   },
+   {
+    "created": "2025-02-28",
+    "form": "10-K",
+    "periodOfReport": "2024-12-31",
+    "report_id": "0000898173-25-000008"
+   },
+   {
+    "created": "2025-11-07",
+    "form": "10-Q",
+    "periodOfReport": "2025-09-30",
+    "report_id": "0000898173-25-000057"
+   },
+   {
+    "created": "2025-08-08",
+    "form": "10-Q",
+    "periodOfReport": "2025-06-30",
+    "report_id": "0000898173-25-000049"
+   },
+   {
+    "created": "2025-05-09",
+    "form": "10-Q",
+    "periodOfReport": "2025-03-31",
+    "report_id": "0000898173-25-000029"
+   }
+  ],
+  "ULTA": [
+   {
+    "created": "2026-03-26",
+    "form": "10-K",
+    "periodOfReport": "2026-01-31",
+    "report_id": "0001104659-26-035243"
+   },
+   {
+    "created": "2025-03-27",
+    "form": "10-K",
+    "periodOfReport": "2025-02-01",
+    "report_id": "0001558370-25-003810"
+   },
+   {
+    "created": "2025-12-04",
+    "form": "10-Q",
+    "periodOfReport": "2025-11-01",
+    "report_id": "0001104659-25-118458"
+   },
+   {
+    "created": "2025-08-28",
+    "form": "10-Q",
+    "periodOfReport": "2025-08-02",
+    "report_id": "0001558370-25-011804"
+   },
+   {
+    "created": "2025-05-29",
+    "form": "10-Q",
+    "periodOfReport": "2025-05-03",
+    "report_id": "0001558370-25-008243"
+   }
+  ],
+  "YUM": [
+   {
+    "created": "2026-02-20",
+    "form": "10-K",
+    "periodOfReport": "2025-12-31",
+    "report_id": "0001041061-26-000084"
+   },
+   {
+    "created": "2025-02-19",
+    "form": "10-K",
+    "periodOfReport": "2024-12-31",
+    "report_id": "0001041061-25-000013"
+   },
+   {
+    "created": "2025-11-07",
+    "form": "10-Q",
+    "periodOfReport": "2025-09-30",
+    "report_id": "0001041061-25-000109"
+   },
+   {
+    "created": "2025-08-07",
+    "form": "10-Q",
+    "periodOfReport": "2025-06-30",
+    "report_id": "0001041061-25-000057"
+   },
+   {
+    "created": "2025-05-06",
+    "form": "10-Q",
+    "periodOfReport": "2025-03-31",
+    "report_id": "0001041061-25-000025"
+   }
+  ]
+ },
+ "groups": {
+  "adjacent": {
+   "tickers": [
+    "AZO",
+    "ORLY",
+    "BBY",
+    "ULTA"
+   ]
   },
-  "draft": true,
-  "filing_count": 60,
-  "filings": {
-    "AAL": [
-      {
-        "created": "2026-02-18",
-        "form": "10-K",
-        "periodOfReport": "2025-12-31",
-        "report_id": "0000006201-26-000014"
-      },
-      {
-        "created": "2025-02-19",
-        "form": "10-K",
-        "periodOfReport": "2024-12-31",
-        "report_id": "0000006201-25-000010"
-      },
-      {
-        "created": "2026-04-23",
-        "form": "10-Q",
-        "periodOfReport": "2026-03-31",
-        "report_id": "0000006201-26-000032"
-      },
-      {
-        "created": "2025-10-23",
-        "form": "10-Q",
-        "periodOfReport": "2025-09-30",
-        "report_id": "0000006201-25-000052"
-      },
-      {
-        "created": "2025-07-24",
-        "form": "10-Q",
-        "periodOfReport": "2025-06-30",
-        "report_id": "0000006201-25-000038"
-      }
-    ],
-    "AZO": [
-      {
-        "created": "2025-10-27",
-        "form": "10-K",
-        "periodOfReport": "2025-08-30",
-        "report_id": "0001104659-25-102611"
-      },
-      {
-        "created": "2024-10-28",
-        "form": "10-K",
-        "periodOfReport": "2024-08-31",
-        "report_id": "0001558370-24-013758"
-      },
-      {
-        "created": "2026-03-20",
-        "form": "10-Q",
-        "periodOfReport": "2026-02-14",
-        "report_id": "0001104659-26-032757"
-      },
-      {
-        "created": "2025-12-19",
-        "form": "10-Q",
-        "periodOfReport": "2025-11-22",
-        "report_id": "0001104659-25-123222"
-      },
-      {
-        "created": "2025-06-13",
-        "form": "10-Q",
-        "periodOfReport": "2025-05-10",
-        "report_id": "0001558370-25-008618"
-      }
-    ],
-    "BBY": [
-      {
-        "created": "2026-03-18",
-        "form": "10-K",
-        "periodOfReport": "2026-01-31",
-        "report_id": "0000764478-26-000009"
-      },
-      {
-        "created": "2025-03-19",
-        "form": "10-K",
-        "periodOfReport": "2025-02-01",
-        "report_id": "0000764478-25-000007"
-      },
-      {
-        "created": "2025-12-05",
-        "form": "10-Q",
-        "periodOfReport": "2025-11-01",
-        "report_id": "0000764478-25-000057"
-      },
-      {
-        "created": "2025-09-05",
-        "form": "10-Q",
-        "periodOfReport": "2025-08-02",
-        "report_id": "0000764478-25-000040"
-      },
-      {
-        "created": "2025-06-06",
-        "form": "10-Q",
-        "periodOfReport": "2025-05-03",
-        "report_id": "0000764478-25-000019"
-      }
-    ],
-    "CAKE": [
-      {
-        "created": "2026-02-23",
-        "form": "10-K",
-        "periodOfReport": "2025-12-30",
-        "report_id": "0001104659-26-018643"
-      },
-      {
-        "created": "2025-02-24",
-        "form": "10-K",
-        "periodOfReport": "2024-12-31",
-        "report_id": "0001410578-25-000195"
-      },
-      {
-        "created": "2025-11-03",
-        "form": "10-Q",
-        "periodOfReport": "2025-09-30",
-        "report_id": "0001104659-25-105631"
-      },
-      {
-        "created": "2025-08-04",
-        "form": "10-Q",
-        "periodOfReport": "2025-07-01",
-        "report_id": "0001410578-25-001564"
-      },
-      {
-        "created": "2025-05-05",
-        "form": "10-Q",
-        "periodOfReport": "2025-04-01",
-        "report_id": "0001410578-25-001073"
-      }
-    ],
-    "CMG": [
-      {
-        "created": "2026-02-04",
-        "form": "10-K",
-        "periodOfReport": "2025-12-31",
-        "report_id": "0001058090-26-000009"
-      },
-      {
-        "created": "2025-02-05",
-        "form": "10-K",
-        "periodOfReport": "2024-12-31",
-        "report_id": "0001058090-25-000014"
-      },
-      {
-        "created": "2025-10-29",
-        "form": "10-Q",
-        "periodOfReport": "2025-09-30",
-        "report_id": "0001058090-25-000088"
-      },
-      {
-        "created": "2025-07-23",
-        "form": "10-Q",
-        "periodOfReport": "2025-06-30",
-        "report_id": "0001058090-25-000056"
-      },
-      {
-        "created": "2025-04-23",
-        "form": "10-Q",
-        "periodOfReport": "2025-03-31",
-        "report_id": "0001058090-25-000031"
-      }
-    ],
-    "DAL": [
-      {
-        "created": "2026-02-10",
-        "form": "10-K",
-        "periodOfReport": "2025-12-31",
-        "report_id": "0000027904-26-000013"
-      },
-      {
-        "created": "2025-02-11",
-        "form": "10-K",
-        "periodOfReport": "2024-12-31",
-        "report_id": "0000027904-25-000004"
-      },
-      {
-        "created": "2026-04-08",
-        "form": "10-Q",
-        "periodOfReport": "2026-03-31",
-        "report_id": "0000027904-26-000022"
-      },
-      {
-        "created": "2025-10-09",
-        "form": "10-Q",
-        "periodOfReport": "2025-09-30",
-        "report_id": "0000027904-25-000020"
-      },
-      {
-        "created": "2025-07-10",
-        "form": "10-Q",
-        "periodOfReport": "2025-06-30",
-        "report_id": "0000027904-25-000012"
-      }
-    ],
-    "DRI": [
-      {
-        "created": "2025-07-18",
-        "form": "10-K",
-        "periodOfReport": "2025-05-25",
-        "report_id": "0000940944-25-000038"
-      },
-      {
-        "created": "2024-07-19",
-        "form": "10-K",
-        "periodOfReport": "2024-05-26",
-        "report_id": "0000940944-24-000035"
-      },
-      {
-        "created": "2026-03-27",
-        "form": "10-Q",
-        "periodOfReport": "2026-02-22",
-        "report_id": "0000940944-26-000009"
-      },
-      {
-        "created": "2025-12-30",
-        "form": "10-Q",
-        "periodOfReport": "2025-11-23",
-        "report_id": "0000940944-25-000071"
-      },
-      {
-        "created": "2025-09-26",
-        "form": "10-Q",
-        "periodOfReport": "2025-08-24",
-        "report_id": "0000940944-25-000054"
-      }
-    ],
-    "LUV": [
-      {
-        "created": "2026-02-05",
-        "form": "10-K",
-        "periodOfReport": "2025-12-31",
-        "report_id": "0000092380-26-000004"
-      },
-      {
-        "created": "2025-02-07",
-        "form": "10-K",
-        "periodOfReport": "2024-12-31",
-        "report_id": "0000092380-25-000024"
-      },
-      {
-        "created": "2026-04-23",
-        "form": "10-Q",
-        "periodOfReport": "2026-03-31",
-        "report_id": "0000092380-26-000047"
-      },
-      {
-        "created": "2025-10-23",
-        "form": "10-Q",
-        "periodOfReport": "2025-09-30",
-        "report_id": "0000092380-25-000140"
-      },
-      {
-        "created": "2025-07-24",
-        "form": "10-Q",
-        "periodOfReport": "2025-06-30",
-        "report_id": "0000092380-25-000134"
-      }
-    ],
-    "MCD": [
-      {
-        "created": "2026-02-24",
-        "form": "10-K",
-        "periodOfReport": "2025-12-31",
-        "report_id": "0000063908-26-000035"
-      },
-      {
-        "created": "2025-02-25",
-        "form": "10-K",
-        "periodOfReport": "2024-12-31",
-        "report_id": "0000063908-25-000012"
-      },
-      {
-        "created": "2025-11-05",
-        "form": "10-Q",
-        "periodOfReport": "2025-09-30",
-        "report_id": "0000063908-25-000059"
-      },
-      {
-        "created": "2025-08-06",
-        "form": "10-Q",
-        "periodOfReport": "2025-06-30",
-        "report_id": "0000063908-25-000039"
-      },
-      {
-        "created": "2025-05-12",
-        "form": "10-Q",
-        "periodOfReport": "2025-03-31",
-        "report_id": "0000063908-25-000025"
-      }
-    ],
-    "ORLY": [
-      {
-        "created": "2026-02-27",
-        "form": "10-K",
-        "periodOfReport": "2025-12-31",
-        "report_id": "0000898173-26-000009"
-      },
-      {
-        "created": "2025-02-28",
-        "form": "10-K",
-        "periodOfReport": "2024-12-31",
-        "report_id": "0000898173-25-000008"
-      },
-      {
-        "created": "2025-11-07",
-        "form": "10-Q",
-        "periodOfReport": "2025-09-30",
-        "report_id": "0000898173-25-000057"
-      },
-      {
-        "created": "2025-08-08",
-        "form": "10-Q",
-        "periodOfReport": "2025-06-30",
-        "report_id": "0000898173-25-000049"
-      },
-      {
-        "created": "2025-05-09",
-        "form": "10-Q",
-        "periodOfReport": "2025-03-31",
-        "report_id": "0000898173-25-000029"
-      }
-    ],
-    "ULTA": [
-      {
-        "created": "2026-03-26",
-        "form": "10-K",
-        "periodOfReport": "2026-01-31",
-        "report_id": "0001104659-26-035243"
-      },
-      {
-        "created": "2025-03-27",
-        "form": "10-K",
-        "periodOfReport": "2025-02-01",
-        "report_id": "0001558370-25-003810"
-      },
-      {
-        "created": "2025-12-04",
-        "form": "10-Q",
-        "periodOfReport": "2025-11-01",
-        "report_id": "0001104659-25-118458"
-      },
-      {
-        "created": "2025-08-28",
-        "form": "10-Q",
-        "periodOfReport": "2025-08-02",
-        "report_id": "0001558370-25-011804"
-      },
-      {
-        "created": "2025-05-29",
-        "form": "10-Q",
-        "periodOfReport": "2025-05-03",
-        "report_id": "0001558370-25-008243"
-      }
-    ],
-    "YUM": [
-      {
-        "created": "2026-02-20",
-        "form": "10-K",
-        "periodOfReport": "2025-12-31",
-        "report_id": "0001041061-26-000084"
-      },
-      {
-        "created": "2025-02-19",
-        "form": "10-K",
-        "periodOfReport": "2024-12-31",
-        "report_id": "0001041061-25-000013"
-      },
-      {
-        "created": "2025-11-07",
-        "form": "10-Q",
-        "periodOfReport": "2025-09-30",
-        "report_id": "0001041061-25-000109"
-      },
-      {
-        "created": "2025-08-07",
-        "form": "10-Q",
-        "periodOfReport": "2025-06-30",
-        "report_id": "0001041061-25-000057"
-      },
-      {
-        "created": "2025-05-06",
-        "form": "10-Q",
-        "periodOfReport": "2025-03-31",
-        "report_id": "0001041061-25-000025"
-      }
-    ]
+  "base": {
+   "tickers": [
+    "CAKE",
+    "DRI",
+    "MCD",
+    "YUM",
+    "CMG"
+   ]
   },
-  "groups": {
-    "adjacent": {
-      "tickers": [
-        "AZO",
-        "ORLY",
-        "BBY",
-        "ULTA"
-      ]
-    },
-    "base": {
-      "tickers": [
-        "CAKE",
-        "DRI",
-        "MCD",
-        "YUM",
-        "CMG"
-      ]
-    },
-    "contrast": {
-      "tickers": [
-        "DAL",
-        "AAL",
-        "LUV"
-      ]
-    }
+  "contrast": {
+   "tickers": [
+    "DAL",
+    "AAL",
+    "LUV"
+   ]
+  }
+ },
+ "mandatory_fixtures": {
+  "filer_5253": "DRI",
+  "multi_registrant_report": "SYNTHETIC (D6 extension: census found 0 multi-registrant graph-wide; harness-constructed 2-registrant input for EXP-1 P4f coverage only; NOT production evidence/design rule)",
+  "null_periodofreport_report": "SYNTHETIC (D6 extension: census found 0 COMPLETED-XBRL null-pOR graph-wide; harness blanks a real report periodOfReport - fixture-only, never a graph write; NOT production evidence/design rule)",
+  "precision_dup_pair_report": {
+   "note": "no intra-filing precision-dup pair with differing decimals occurred in the 60-filing real corpus; graph-wide was not searched. Opus found 166 collision groups in the 60 filings, all same-value/same-decimals. Fable accepted synthetic-only proof for EXP-1/O12 evidence; P4g keep-highest path exercised via synthetic fixture (fixtures_exercised.json p4g_precision_dup_synthetic).",
+   "collision_groups_in_60_filing_corpus": 166,
+   "graph_wide_searched": false,
+   "real_precision_dup_pairs": 0,
+   "synthetic_exercised": true
+  }
+ },
+ "note": "EXP-1 dry-run draft: 12 companies + ~60 filings + fixtures. 36 pinned events + review_checks added at WP-FA; O2 signed by Fable.",
+ "o2_status": "SIGNED",
+ "phase": 1,
+ "signed_off_by": "fable",
+ "signed_off_at": "2026-07-10T09:41:49Z",
+ "o2_signoff_note": "O2 SIGNED after first-hand verification: all 36 events verbatim vs WorkOrder v1.8 s3 step 5 (24 accessions + 8 transcript ids + 4 news ids; tickers/dates exact); mix 12/8/8/4/4; per-company spread per spec (DRI/YUM/DAL/AAL/BBY=4, MCD/CMG/AZO/ULTA=3, CAKE=2, ORLY/LUV=1); all dates <= T0 2026-04-28 (MCD news 2024-11-15 = pinned deliberate outlier); all 36 re-verified live in Neo4j (existence, ticker edge, formType, created; all 12 8-Ks carry Item 2.02; CAKE 8.01+7.01 and AAL 7.01 extras confirmed); review_checks match the owner-recorded verdicts incl. od11_sequential=borderline_accepted; mandatory fixtures SYNTHETIC per D6 extension and disjoint from the 36. LIVE CONTINGENCY: OD-11 ULTA->LUV 10-Q swap (0000092380-26-000047) fires iff K-fields drafting finds <5 sequential-basis gold facts. DUE at WP-FA completion after step 6: FIXTURES_MANIFEST.json (frozen-chunk provenance + verify result, scope shas, event-packet shas, preflight a-g, FA_selection sha).",
+ "events": [
+  {
+   "source_id": "0001104659-26-017090",
+   "source_type": "8k",
+   "ticker": "CAKE",
+   "date": "2026-02-18",
+   "why": "earnings 8-K; +Item 8.01 action, +7.01"
   },
-  "mandatory_fixtures": {
-    "filer_5253": "DRI",
-    "multi_registrant_report": "SYNTHETIC (D6 extension: census found 0 multi-registrant graph-wide; harness-constructed 2-registrant input for EXP-1 P4f coverage only; NOT production evidence/design rule)",
-    "null_periodofreport_report": "SYNTHETIC (D6 extension: census found 0 COMPLETED-XBRL null-pOR graph-wide; harness blanks a real report periodOfReport - fixture-only, never a graph write; NOT production evidence/design rule)",
-    "precision_dup_pair_report": {
-      "note": "no intra-filing precision-dup pair with differing decimals occurred in the 60-filing real corpus; graph-wide was not searched. Opus found 166 collision groups in the 60 filings, all same-value/same-decimals. Fable accepted synthetic-only proof for EXP-1/O12 evidence; P4g keep-highest path exercised via synthetic fixture (fixtures_exercised.json p4g_precision_dup_synthetic).",
-      "collision_groups_in_60_filing_corpus": 166,
-      "graph_wide_searched": false,
-      "real_precision_dup_pairs": 0,
-      "synthetic_exercised": true
-    }
+  {
+   "source_id": "0000940944-26-000005",
+   "source_type": "8k",
+   "ticker": "DRI",
+   "date": "2026-03-19",
+   "why": "earnings 8-K"
   },
-  "note": "EXP-1 dry-run draft: 12 companies + ~60 filings + fixtures. 36 events NOT included (materializer does not consume them; filled at full WP-FA).",
-  "o2_status": "PENDING_FABLE_SIGNOFF",
-  "phase": 1,
-  "signed_off_by": null
+  {
+   "source_id": "0000063908-26-000032",
+   "source_type": "8k",
+   "ticker": "MCD",
+   "date": "2026-02-11",
+   "why": "earnings 8-K; constant-currency -> OD-9"
+  },
+  {
+   "source_id": "0001041061-26-000003",
+   "source_type": "8k",
+   "ticker": "YUM",
+   "date": "2026-02-04",
+   "why": "earnings 8-K; multi-brand, CC"
+  },
+  {
+   "source_id": "0001058090-26-000007",
+   "source_type": "8k",
+   "ticker": "CMG",
+   "date": "2026-02-03",
+   "why": "earnings 8-K"
+  },
+  {
+   "source_id": "0001171843-26-001288",
+   "source_type": "8k",
+   "ticker": "AZO",
+   "date": "2026-03-03",
+   "why": "earnings 8-K"
+  },
+  {
+   "source_id": "0000898173-26-000006",
+   "source_type": "8k",
+   "ticker": "ORLY",
+   "date": "2026-02-04",
+   "why": "earnings 8-K"
+  },
+  {
+   "source_id": "0000764478-26-000005",
+   "source_type": "8k",
+   "ticker": "BBY",
+   "date": "2026-03-03",
+   "why": "earnings 8-K"
+  },
+  {
+   "source_id": "0001104659-26-027061",
+   "source_type": "8k",
+   "ticker": "ULTA",
+   "date": "2026-03-12",
+   "why": "earnings 8-K"
+  },
+  {
+   "source_id": "0000027904-26-000020",
+   "source_type": "8k",
+   "ticker": "DAL",
+   "date": "2026-04-08",
+   "why": "earnings 8-K; CASM lower-is-better -> OD-13"
+  },
+  {
+   "source_id": "0000006201-26-000031",
+   "source_type": "8k",
+   "ticker": "AAL",
+   "date": "2026-04-23",
+   "why": "earnings 8-K; +Item 7.01 guidance deck"
+  },
+  {
+   "source_id": "0000092380-26-000044",
+   "source_type": "8k",
+   "ticker": "LUV",
+   "date": "2026-04-22",
+   "why": "earnings 8-K"
+  },
+  {
+   "source_id": "DAL_2026-04-08T10.00",
+   "source_type": "transcript",
+   "ticker": "DAL",
+   "date": "2026-04-08",
+   "why": "earnings call"
+  },
+  {
+   "source_id": "AAL_2026-04-23T08.30",
+   "source_type": "transcript",
+   "ticker": "AAL",
+   "date": "2026-04-23",
+   "why": "earnings call"
+  },
+  {
+   "source_id": "DRI_2026-03-19T08.30",
+   "source_type": "transcript",
+   "ticker": "DRI",
+   "date": "2026-03-19",
+   "why": "earnings call"
+  },
+  {
+   "source_id": "YUM_2026-02-04T08.15",
+   "source_type": "transcript",
+   "ticker": "YUM",
+   "date": "2026-02-04",
+   "why": "earnings call"
+  },
+  {
+   "source_id": "CMG_2026-02-03T16.30",
+   "source_type": "transcript",
+   "ticker": "CMG",
+   "date": "2026-02-03",
+   "why": "earnings call"
+  },
+  {
+   "source_id": "MCD_2026-02-11T16.30",
+   "source_type": "transcript",
+   "ticker": "MCD",
+   "date": "2026-02-11",
+   "why": "earnings call"
+  },
+  {
+   "source_id": "BBY_2026-03-03T08.00",
+   "source_type": "transcript",
+   "ticker": "BBY",
+   "date": "2026-03-03",
+   "why": "earnings call"
+  },
+  {
+   "source_id": "ULTA_2026-03-12T16.30",
+   "source_type": "transcript",
+   "ticker": "ULTA",
+   "date": "2026-03-12",
+   "why": "earnings call"
+  },
+  {
+   "source_id": "0001104659-26-032757",
+   "source_type": "10q",
+   "ticker": "AZO",
+   "date": "2026-03-20",
+   "why": "52/53 shifted quarter"
+  },
+  {
+   "source_id": "0000940944-26-000009",
+   "source_type": "10q",
+   "ticker": "DRI",
+   "date": "2026-03-27",
+   "why": "52/53, 9-mo YTD"
+  },
+  {
+   "source_id": "0000764478-25-000057",
+   "source_type": "10q",
+   "ticker": "BBY",
+   "date": "2025-12-05",
+   "why": "52/53 Q3, 9-mo YTD"
+  },
+  {
+   "source_id": "0001104659-25-118458",
+   "source_type": "10q",
+   "ticker": "ULTA",
+   "date": "2025-12-04",
+   "why": "52/53 Q3; OD-11 contingency-swap candidate"
+  },
+  {
+   "source_id": "0001041061-25-000109",
+   "source_type": "10q",
+   "ticker": "YUM",
+   "date": "2025-11-07",
+   "why": "multi-brand slices"
+  },
+  {
+   "source_id": "0001104659-25-105631",
+   "source_type": "10q",
+   "ticker": "CAKE",
+   "date": "2025-11-03",
+   "why": "Q3"
+  },
+  {
+   "source_id": "0000027904-26-000022",
+   "source_type": "10q",
+   "ticker": "DAL",
+   "date": "2026-04-08",
+   "why": "Q1 3mo=YTD edge"
+  },
+  {
+   "source_id": "0000006201-26-000032",
+   "source_type": "10q",
+   "ticker": "AAL",
+   "date": "2026-04-23",
+   "why": "Q1, unit-cost slices"
+  },
+  {
+   "source_id": "0000940944-25-000038",
+   "source_type": "10k",
+   "ticker": "DRI",
+   "date": "2025-07-18",
+   "why": "FY; 52/53 May"
+  },
+  {
+   "source_id": "0001104659-25-102611",
+   "source_type": "10k",
+   "ticker": "AZO",
+   "date": "2025-10-27",
+   "why": "FY; 52/53 Aug"
+  },
+  {
+   "source_id": "0001041061-26-000084",
+   "source_type": "10k",
+   "ticker": "YUM",
+   "date": "2026-02-20",
+   "why": "FY; multi-brand"
+  },
+  {
+   "source_id": "0000027904-26-000013",
+   "source_type": "10k",
+   "ticker": "DAL",
+   "date": "2026-02-10",
+   "why": "FY; airline geo regions"
+  },
+  {
+   "source_id": "bzNews_50877032",
+   "source_type": "news",
+   "ticker": "AAL",
+   "date": "2026-02-26",
+   "why": "invests $1B in Miami airport expansion; announced/capex"
+  },
+  {
+   "source_id": "bzNews_42014391",
+   "source_type": "news",
+   "ticker": "MCD",
+   "date": "2024-11-15",
+   "why": "$100M to move past E. coli outbreak; occurred/at-risk; DATE OUTLIER <=T0"
+  },
+  {
+   "source_id": "bzNews_51962983",
+   "source_type": "news",
+   "ticker": "BBY",
+   "date": "2026-04-22",
+   "why": "appoints Jason Bonfig as CEO; announced/leadership"
+  },
+  {
+   "source_id": "bzNews_49256211",
+   "source_type": "news",
+   "ticker": "CMG",
+   "date": "2025-12-08",
+   "why": "authorizes additional $1.8B buyback; announced/buyback"
+  }
+ ],
+ "draft_accepted_by_owner": "2026-07-08",
+ "review_checks": {
+  "xbrl_text_twins": {
+   "pass": true,
+   "evidence": "owner-accepted 2026-07-08 (5,253 primary facts / 12 filings)",
+   "reconfirm_2026-07-10": {
+    "total_xbrl_facts_across_12_filings": 13351,
+    "note": "TOTAL facts (superset of the owner-recorded 5,253 consolidated-primary figure); confirms twins abundant"
+   }
+  },
+  "od12_loss_signed": {
+   "pass": true,
+   "evidence": "owner-accepted 2026-07-08: 232 charge facts + 1,323 negative-signed (LLM-judged; not re-derived, no-LLM run)"
+  },
+  "guidance_in_8ks": {
+   "pass": true,
+   "evidence": "owner-accepted 2026-07-08: 11/12; BBY via its transcript (text-judged; not re-derived)"
+  },
+  "numberless_qualitative": {
+   "pass": true,
+   "evidence": "owner-accepted 2026-07-08: 13 numberless-guidance exchanges + 8 transcripts (text-judged)"
+  },
+  "action_event_cov": {
+   "pass": true,
+   "evidence": "owner-accepted 2026-07-08: >=5 across >=4 states WITH the MCD E.coli pick (text-judged)"
+  },
+  "od11_sequential": {
+   "pass": "borderline_accepted",
+   "evidence": "owner-accepted 2026-07-08: ~6 sequential events; LUV-swap contingency pinned (text-judged)"
+  },
+  "exp1_fixtures_separate": {
+   "pass": true,
+   "evidence": "re-confirmed 2026-07-10: mandatory fixtures (multi-registrant/null-pOR SYNTHETIC, precision-dup synthetic, filer_5253=DRI ticker) disjoint from the 36 event ids"
+  },
+  "text_part_sanity": {
+   "pass": true,
+   "evidence": "re-confirmed 2026-07-10 (FA-Q7): all 24 filings have exhibits+sections>0; min(exhibits+sections)=2"
+  }
+ },
+ "filer_5253_reconfirm": {
+  "ticker": "DRI",
+  "dri_10k_has_5253_week_annual_period": true
+ }
 }

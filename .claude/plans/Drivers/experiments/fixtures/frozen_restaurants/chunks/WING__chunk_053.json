@@ -1,0 +1,14 @@
+{
+ "ticker": "WING",
+ "chunk_id": "WING__chunk_053",
+ "events": [
+  {
+   "source_id": "WING_2024-05-01T10.00",
+   "source_type": "transcript",
+   "date": "2024-05-01",
+   "part_index": 2,
+   "part_count": 2,
+   "content": "[{\"role\": \"question\", \"text\": \"Chris O'Call [2481]: Thanks. Good morning, guys. I had a question about international markets, and I was just wondering, are there any international markets where development has slowed or you've run into issues? And also, have current events altered the progress, Michael, of just signing new agreements? And then if you could maybe talk a little bit about the commitments. I know you talked about the overall commitments that you have from franchisees, What about the commitments in the pipeline for international development that'd be helpful?\", \"speaker\": \"Chris O'Call\", \"title\": \"Analyst, Stiefel\"}, {\"role\": \"answer\", \"text\": \"Michael Skipworth [2511]: Hey, Chris. Good morning. I guess I would actually say it's quite the opposite in that Raj and I had dinner a few weeks ago with our partner for Canada, just to highlight an example. And that conversation over dinner centered around how happy they were with the returns, with how the brand was resonating. And the conversation quickly moved from well past their current development agreement of call it 100 restaurants to Canada is a much bigger opportunity than that. And how can we go faster? And so we're encouraged by how the brand is resonating around the globe. And I wouldn't say any of the geopolitical or any of the unrest that's around the globe right now is impacting our progress or the level of interest we have from parties that are looking to grow with the brand. And we actually believe we'll have some, with the strength we've talked about over the quarters in the development pipeline, we believe we'll have a few new deals to talk about over the coming quarters that we're pretty excited about. That will just further grow and strengthen that pipeline of commitments.\", \"speaker\": \"Michael Skipworth\", \"title\": \"President and Chief Executive Officer\"}]\n---\n[{\"role\": \"question\", \"text\": \"Chris O'Call [2589]: Are all these deals going to be direct franchise to franchise relationships with you, or are you looking at master arrangements?\", \"speaker\": \"Chris O'Call\", \"title\": \"Analyst, Stiefel\"}, {\"role\": \"answer\", \"text\": \"Michael Skipworth [2598]: Yeah, I would say generally speaking, Chris, they're all direct. Obviously, I think use the UK as a great example where we have AUVs north of $2.5 million. There's no need for us to dilute our economics on that, and so we're looking to just be direct.\", \"speaker\": \"Michael Skipworth\", \"title\": \"President and Chief Executive Officer\"}]"
+  }
+ ]
+}
