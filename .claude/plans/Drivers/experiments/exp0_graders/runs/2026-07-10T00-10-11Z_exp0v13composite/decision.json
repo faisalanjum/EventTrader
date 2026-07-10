@@ -1,0 +1,47 @@
+{
+    "adopted":  {
+                    "grader_tier":  "sonnet"
+                },
+    "blindness_discounts":  null,
+    "composite":  {
+                      "all_three_DIFFERENT":  true,
+                      "basis":  "run-2 (v1.2) 159 unchanged verdicts + 3 fresh kp_0022(v1.3) judgments, scored vs v1.3 key",
+                      "fable_signoff":  "signed - see top-level fable_signoff",
+                      "kp_0022_v13_verdicts":  {
+                                                   "g_opus":  "DIFFERENT",
+                                                   "g_sonnet_a":  "DIFFERENT",
+                                                   "g_sonnet_b":  "DIFFERENT"
+                                               },
+                      "o10_memo_ref":  "o10_memo.json",
+                      "outcome_v13":  "RATIFY_SONNET_TIER",
+                      "sonnet_tier_pass":  true,
+                      "wm_exhibits_key_erratum":  [
+                                                      "wm_exp0_0001",
+                                                      "wm_exp0_0002"
+                                                  ]
+                  },
+    "exp_id":  "EXP-0",
+    "fable_signoff":  {
+                          "signed_by":  "fable",
+                          "signed_at":  "2026-07-10T00:15:20Z",
+                          "verdict":  "PASS RATIFIED - O10 CLOSED",
+                          "grader_tier_identity":  "claude-sonnet-5 x 2 independent instances at effort=high (the qualified identity is the model+effort PAIR)",
+                          "escalation_reference":  "claude-opus-4-8 at effort=high - qualified backup/escalation tier",
+                          "binding_rule":  "Every downstream graded call (EXP-2/3/4/5 scoring, EXP-6 spot-grading) runs at the qualified (model, effort) pair; qualification does not transfer across effort settings",
+                          "blindness_discounts":  "NONE - shared_miss_by_family empty in every run; no family flagged",
+                          "verified_first_hand":  [
+                                                      "Composite scores recomputed from artifacts: A 0/0/0, B 0 wrong_same + 1/50 refusal (kp_0134, named+reasoned in o10_memo - a legitimate qualifier-asymmetry read) + 0 invalid, Opus 0/0/0; rule-of-three UB 2.73% recorded",
+                                                      "kp_0022-v1.3 supplement: all three arms DIFFERENT with crisp stock-vs-flow citations - the two arms that merged the defective wording now articulate the balance/income split correctly, validating the item-defect diagnosis",
+                                                      "wm_exp0_0001/0002 exist with fable_review=key_erratum; run-1 and run-2 scores intact as FAIL history; BUDGET totals 1005 (+3 supplement calls booked)",
+                                                      "Provenance gap closed at signature: supplement manifest.json written into this run dir (v1.3 key sha, models, effort=high, 3 calls)"
+                                                  ],
+                          "unblocks":  "ALL graded scoring program-wide (1.8.1 stop lifted). EXP-2 now gates only on WP-FC-EDITS + K-reader lock; Lane C on O2 sign-off + K-fields; K-pairs.v2 mining waits on F-C FREEZE + the ra_0007 kernel-6.1 semantics review"
+                      },
+    "failure_attribution":  [
+
+                            ],
+    "outcome":  "PASS",
+    "shared_miss_flags":  {
+
+                          }
+}

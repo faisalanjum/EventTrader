@@ -1,0 +1,30 @@
+{
+  "basis": {
+    "fresh_supplement": "3 calls: kp_0022 (v1.3 record) x {g_sonnet_a, g_sonnet_b, g_opus}, one pair per call, byte-identical prompt template to run-2",
+    "unchanged_records": "159/160 verdicts carried from run 2026-07-09T23-03-31Z_exp0v12 (records byte-identical between v1.2 and v1.3; per-pair stateless calls, so carried verdicts are valid)"
+  },
+  "caps": {
+    "max_calls": 10
+  },
+  "counts": {
+    "invalid_retries": 0,
+    "made_calls": 3,
+    "planned_calls": 3
+  },
+  "exp_id": "EXP-0",
+  "grader_effort": "high",
+  "grader_effort_note": "identical for all three arms per the O10 effort pin (status log 2026-07-09T22:48:18Z); the qualified tier identity is the (model id, effort) pair",
+  "keys": {
+    "K-pairs": "023fb1ceddbb8ce912b26bf68e7361a7be42cd18fca86bf396f733e80a054896"
+  },
+  "key_file": "keys/K-pairs/K-pairs.v1.3.jsonl",
+  "models": {
+    "g_opus": "claude-opus-4-8",
+    "g_sonnet_a": "claude-sonnet-5",
+    "g_sonnet_b": "claude-sonnet-5"
+  },
+  "note": "Supplement manifest written at Fable signature time (2026-07-10) to close the provenance gap - the composite run dir lacked a manifest for the 3 fresh calls. Facts recorded here were verified against kp0022_v13_verdicts.json, the v1.3 lock, run-2's manifest config, and BUDGET.json (+3 calls booked).",
+  "run_id": "2026-07-10T00-10-11Z_exp0v13composite",
+  "run_kind": "composite gate: run-2 carryover + kp_0022 v1.3 supplement",
+  "status": "scored_gate_PASS_fable_signed"
+}

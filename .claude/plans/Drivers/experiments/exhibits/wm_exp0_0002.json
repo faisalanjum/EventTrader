@@ -1,0 +1,22 @@
+{
+  "arm": "g_opus",
+  "case_ref": "kp_0022 (v1.2 defective item; re-anchored in v1.3)",
+  "exp_id": "EXP-0",
+  "fable_review": {
+    "note": "Fair reading of a DEFECTIVE item: the v1.2 quote emphasized the recognition PATTERN (amortize/ratable) and hid the deferred-liability nature, so the arm's SAME was reasonable. Fixed in v1.3 (side_a re-anchored to 'sit as an obligation'). Run-2 scores.json is NEVER retro-edited; this exhibit excuses the miss.",
+    "verdict": "key_erratum"
+  },
+  "family": "deferred_recognized",
+  "gold": {
+    "gold": "DIFFERENT",
+    "note": "deferred liability (obligation) vs recognized income"
+  },
+  "id": "wm_exp0_0002",
+  "model_output": {
+    "cited_a": "Prepaid program dues amortize across the coverage term.",
+    "cited_b": "Ratable recognition posts each month of the plan.",
+    "reason": "OBJECT: both describe membership/program dues fees recognized over the coverage term \u2014 the same underlying quantity (\"prepaid program dues\" vs \"membership fee ... plan\"). SCOPE: both retail, and both are symmetrically silent on segment/ownership class, so that silence is not a conflict. MECHANISM: both state the identical driver \u2014 ratable amortization of the prepaid dues across the coverage/plan term (\"amortize across the coverage term\" = \"ratable recognition posts each month of the plan\"). The name difference (deferred balance vs recognized income) is just two labels for the same ratable-recognition event, not a different causal position. All three checks hold.",
+    "verdict": "SAME"
+  },
+  "target_visible": false
+}

@@ -1,0 +1,25 @@
+{
+  "kp_0022_v13": {
+    "g_opus": {
+      "cited_a": "Prepaid program dues we have collected sit as an obligation until the coverage period is delivered.",
+      "cited_b": "Ratable recognition posts each month of the plan.",
+      "pair_id": "kp_0022",
+      "reason": "Different OBJECT and causal position. Side A (\"deferred_membership_fees\") is a balance-sheet liability -- prepaid dues sitting \"as an obligation until the coverage period is delivered.\" Side B (\"membership_fee_income\") is recognized income -- \"ratable recognition posts each month.\" One is the unearned obligation (a stock/liability); the other is the revenue released from it (a flow/income). These occupy different causal positions (upstream deferral vs downstream recognition), so MECHANISM differs. Default-DIFFERENT governs.",
+      "verdict": "DIFFERENT"
+    },
+    "g_sonnet_a": {
+      "cited_a": "Prepaid program dues we have collected sit as an obligation until the coverage period is delivered.",
+      "cited_b": "Ratable recognition posts each month of the plan.",
+      "pair_id": "kp_0022",
+      "reason": "Different OBJECT and MECHANISM. Side A's object is the deferred-fee liability balance \u2014 dues collected up front that sit as an unearned obligation until service is delivered (the deferral/build side). Side B's object is membership_fee_income \u2014 the recognized revenue amount that posts to the income statement each month (the recognition/release side). These are two distinct financial-statement line items (balance-sheet liability vs. P&L income), not the same metric, and the causal mechanisms are opposite: A is driven by new cash collections creating an obligation, B is driven by the passage of time/ratable amortization converting that obligation into income. Related by the same underlying membership program, but not the same object or mechanism, so default-DIFFERENT stands.",
+      "verdict": "DIFFERENT"
+    },
+    "g_sonnet_b": {
+      "cited_a": "Prepaid program dues we have collected sit as an obligation until the coverage period is delivered.",
+      "cited_b": "Ratable recognition posts each month of the plan.",
+      "pair_id": "kp_0022",
+      "reason": "Side A describes the deferred (unearned) membership fee liability sitting on the balance sheet until coverage is delivered -- the OBJECT is an obligation/balance. Side B describes the monthly ratable recognition of membership fee income into revenue -- the OBJECT is recognized income. These are different quantities occupying different causal/accounting positions (liability roll-off vs income statement recognition), not the same measured object, so MECHANISM/OBJECT sameness is not established. Default-DIFFERENT governs.",
+      "verdict": "DIFFERENT"
+    }
+  }
+}

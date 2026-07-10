@@ -1,0 +1,13 @@
+{
+  "note": "Sonnet B's single false-refusal in run-2 (within the <=10% bar: 1/50=0.02). Recorded per Fable for the O10 memo.",
+  "sonnet_b_false_refusal": [
+    {
+      "family": "synonym",
+      "pair_id": "kp_0134",
+      "reason": "Object/scope roughly line up (fuel expense for the fleet, both ranked as second-largest operating cost after labor). But mechanism is not confirmed as identical: Side A only says the fuel burned \"cost more\" -- a generic total-cost statement that could stem from higher price, higher volume burned (more flying), or both. Side B specifically attributes the increase to \"the reported price... increased,\" i.e., a price-per-unit driver. Side B carries a price-specific qualifier that Side A's quote lacks, so the two are not confirmed to be measuring the same causal mechanism -- this is an unresolved qualifier asymmetry, not symmetric silence, so per the default-DIFFERENT rule this fails the MECHANISM check.",
+      "side_a": "aircraft_fuel",
+      "side_b": "jet_fuel_expense",
+      "verdict": "DIFFERENT"
+    }
+  ]
+}

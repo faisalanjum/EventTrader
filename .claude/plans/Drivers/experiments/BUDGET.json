@@ -39,11 +39,23 @@
       "record_clerk_calls": 3,
       "run_id": "2026-07-09T23-03-31Z_exp0v12",
       "strong_grader_calls": 480
+    },
+    {
+      "by_model": {
+        "claude-opus-4-8": 1,
+        "claude-sonnet-5": 2
+      },
+      "composite": "477 run-2 reused + 3 fresh",
+      "effort": "high",
+      "fresh_calls": 3,
+      "outcome": "RATIFY_SONNET_TIER",
+      "pkg": "EXP-0-v1.3-composite",
+      "run_id": "2026-07-10T00-10-11Z_exp0v13composite"
     }
   ],
   "global_cap": 4000,
   "totals": {
-    "all": 1002,
+    "all": 1005,
     "strong_tier": 968
   }
 }
