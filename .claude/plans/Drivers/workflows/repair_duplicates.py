@@ -79,7 +79,7 @@ def cosine(a, b):
     return dot / (na * nb) if na and nb else 0.0
 
 
-def embedding_pairs_from_vectors(recs, vectors, top_k=5, min_score=0.72):
+def embedding_pairs_from_vectors(recs, vectors, top_k=5, min_score=0.60):
     """Embeddings suggest only. They never decide SAME_AS."""
     out = {}
     names = [norm(r.get("driver_name")) for r in recs]
@@ -107,7 +107,7 @@ def _openai_key():
     return ""
 
 
-def embedding_pairs(recs, top_k=5, min_score=0.72):
+def embedding_pairs(recs, top_k=5, min_score=0.60):
     key = _openai_key()
     if not key:
         raise SystemExit("REPAIR FAIL: --use-embeddings requires OPENAI_API_KEY")
@@ -147,7 +147,7 @@ def _reason_score(reason):
 
 
 def suggest(run_dir, min_token_overlap=2, limit=2000, extra_candidates=None,
-            use_embeddings=False, embedding_top_k=5, embedding_min_score=0.72):
+            use_embeddings=False, embedding_top_k=5, embedding_min_score=0.60):
     run = Path(run_dir)
     cat = json.load(open(run / "catalog.json"))
     recs = sorted(self_records(cat), key=lambda r: norm(r.get("driver_name")))
@@ -484,11 +484,15 @@ def main(argv=None):
     s = sub.add_parser("suggest")
     s.add_argument("run_dir")
     s.add_argument("--min-token-overlap", type=int, default=2)
-    s.add_argument("--limit", type=int, default=2000)
+    s.add_argument("--limit", type=int, default=0,
+                   help="0 = no cap (default): rank ALL pairs (13.2 C5 batched mode)")
     s.add_argument("--extra-candidates", default=None)
-    s.add_argument("--use-embeddings", action="store_true")
+    s.add_argument("--use-embeddings", dest="use_embeddings", action="store_true", default=True,
+                   help="embeddings suggester ON by default (13.2, min_score 0.60); --no-embeddings to disable")
+    s.add_argument("--no-embeddings", dest="use_embeddings", action="store_false",
+                   help="disable the embeddings suggester (offline / no OPENAI_API_KEY)")
     s.add_argument("--embedding-top-k", type=int, default=5)
-    s.add_argument("--embedding-min-score", type=float, default=0.72)
+    s.add_argument("--embedding-min-score", type=float, default=0.60)
     s.add_argument("--print-summary", action="store_true",
                    help="C5 slim relay: print counts/hashes/params only (full blob still "
                         "written to repair_candidates.json on disk)")

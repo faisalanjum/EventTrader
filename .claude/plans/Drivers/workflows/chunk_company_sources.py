@@ -219,7 +219,7 @@ def verify_run(run_dir):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("run_dir")
-    ap.add_argument("--budget", type=int, default=CHUNK_BUDGET_CHARS)
+    ap.add_argument("--budget", "--budget-chars", dest="budget", type=int, default=CHUNK_BUDGET_CHARS)
     ap.add_argument("--verify", action="store_true")
     a = ap.parse_args()
     if a.verify:

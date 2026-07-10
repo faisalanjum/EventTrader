@@ -32,6 +32,9 @@ def main():
     ap.add_argument("--list", action="store_true", help="list valid sectors + industries")
     ap.add_argument("--out", help="ALSO write the result JSON to this path (Stage-0 #8: "
                                   "code-to-code scope file for fetch_company_sources.py --scope)")
+    ap.add_argument("--exclude", default=None,
+                    help="comma-separated tickers to DROP from a resolved industry scope "
+                         "(O7/O8 F-C roster pin, e.g. BLMN,SHAK,WING,CBRL,EAT,PZZA)")
     a = ap.parse_args()
     if not PW:
         print("ERROR: NEO4J_PASSWORD not set (.env)", file=sys.stderr); sys.exit(1)
@@ -48,6 +51,9 @@ def main():
                 tickers = [r["t"] for r in s.run(
                     "MATCH (c:Company {industry:$ind}) WHERE c.ticker IS NOT NULL AND trim(c.ticker) <> '' "
                     "RETURN DISTINCT c.ticker AS t ORDER BY t", ind=a.industry)]
+                if a.exclude:
+                    drop = {t.strip().upper() for t in a.exclude.split(",") if t.strip()}
+                    tickers = [t for t in tickers if t.upper() not in drop]
                 if not tickers:
                     print(f"ERROR: industry '{a.industry}' resolved 0 tickers (run --list for valid names)", file=sys.stderr); sys.exit(1)
                 if len(tickers) == 1:

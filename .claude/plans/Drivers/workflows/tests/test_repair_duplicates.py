@@ -21,8 +21,7 @@ def rec(name, companies=("AAA",), refs=None):
     refs = refs or [ref(company=c, sid=f"{name}_{c}") for c in companies]
     return {"driver_name": name, "canonical_name": name, "companies": sorted(companies),
             "evidence_refs": refs,
-            "same_as_variants": [],
-            "optional_links": {"xbrl_concept": None, "xbrl_member": None, "guidance_ref": None}}
+            "same_as_variants": []}
 
 
 def cands(run, *pairs):
@@ -410,7 +409,7 @@ def test_suggest_cli_print_summary_omits_candidates(tmp_path):
           "approved_sha256": _h.sha256((run / "approved.json").read_bytes()).hexdigest()}
     (run / "validation_exit.json").write_text(json.dumps(sc))
     out = subprocess.run([_sys.executable, str(WORKFLOWS / "repair_duplicates.py"), "suggest",
-                          str(run), "--limit", "0", "--print-summary"],
+                          str(run), "--limit", "0", "--no-embeddings", "--print-summary"],
                          capture_output=True, text=True)
     assert out.returncode == 0, out.stdout + out.stderr
     printed = json.loads(out.stdout.strip().splitlines()[-1])

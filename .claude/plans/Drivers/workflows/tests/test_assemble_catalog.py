@@ -6,7 +6,7 @@ Ports reconcile.js:89-94's 5-way precedence VERBATIM:
   3 approved rewrite w/ KEPT target    -> canonical_name = target
   4 parked rewrite -> unresolved_rewrites[]
   5 else -> self-canonical
-KEPT = seed names - skipped - parked. Evidence/optional_links copied VERBATIM.
+KEPT = seed names - skipped - parked. Evidence copied VERBATIM.
 same_as_variants mirrors the applied folds (HierarchicalCatalogPlan §3e/§11.5).
 """
 import hashlib
@@ -35,7 +35,6 @@ def rec(name, company="AAA", quote=None):
             "source_id": f"ev_{name}_{company}", "date": "2026-01-01",
             "quote": quote or f"quote about {name}",
         }],
-        "optional_links": {"xbrl_concept": None, "xbrl_member": None, "guidance_ref": None},
     }
 
 
@@ -147,7 +146,6 @@ def test_verbatim_copy_of_evidence_and_links():
     seed = seed_of("alpha_sales")
     cat, _ = assemble(seed, dec())
     assert by_name(cat, "alpha_sales")["evidence_refs"] == seed["catalog"][0]["evidence_refs"]
-    assert by_name(cat, "alpha_sales")["optional_links"] == seed["catalog"][0]["optional_links"]
 
 
 def test_gate_rewrite_without_list_entry_hard_fails():
@@ -204,17 +202,16 @@ def ref(company, sid, st="transcript", date="2026-01-01", quote=None):
             "date": date, "quote": quote or f"quote {sid}"}
 
 
-def mrec(name, refs, xbrl=None):
+def mrec(name, refs):
     return {"driver_name": name, "canonical_name": name,
             "companies": sorted({r["company"] for r in refs}),
-            "evidence_refs": refs, "same_as_variants": [],
-            "optional_links": {"xbrl_concept": xbrl, "xbrl_member": None, "guidance_ref": None}}
+            "evidence_refs": refs, "same_as_variants": []}
 
 
 def mixed_seed():
     """Leaf seed whose delivery_mix record mixes two meanings (AAA + BBB evidence)."""
     return {"industry": "TestInd", "catalog": [
-        mrec("delivery_mix", [ref("AAA", "e1"), ref("BBB", "e2")], xbrl="us-gaap:Mix"),
+        mrec("delivery_mix", [ref("AAA", "e1"), ref("BBB", "e2")]),
         mrec("other_metric", [ref("AAA", "e3")])], "analysis": {}}
 
 
@@ -268,8 +265,6 @@ def test_review_different_replaces_record_with_split_records():
     assert [e["source_id"] for e in co["evidence_refs"]] == ["e2"]
     assert ch["companies"] == ["AAA"] and co["companies"] == ["BBB"]
     assert ch["same_as_variants"] == [] and co["same_as_variants"] == []
-    assert ch["optional_links"] == {"xbrl_concept": None, "xbrl_member": None,
-                                    "guidance_ref": None}          # splits start all-null
     assert "unresolved_same_name" not in cat                       # a split is not a park
     assert cat["counts"] == {"keep": 3, "same_as": 0, "rewrite": 0, "skip": 0, "unresolved": 0}
 

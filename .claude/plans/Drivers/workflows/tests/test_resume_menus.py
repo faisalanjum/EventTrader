@@ -36,7 +36,7 @@ def menu(run, cid, ticker=None, candidates=None, raw=None):
         return
     cands = candidates if candidates is not None else [
         {"driver_name": "alpha_sales", "evidence_quote": "q", "source_type": "8-K",
-         "source_id": "e1", "date": "2026-01-01", "xbrl_or_null": "null"}]
+         "source_id": "e1", "date": "2026-01-01"}]
     (run / "menus" / f"{cid}.json").write_text(json.dumps(
         {"ticker": ticker or cid.split("__")[0], "chunk_id": cid, "candidates": cands,
          "candidate_count": len(cands), "skipped_count": 0, "notes": []}))
@@ -89,9 +89,9 @@ def test_blank_driver_name_not_counted_matches_build_seed_rule(tmp_path):
     run = make_run(tmp_path, tickers=("AAA",))
     menu(run, "AAA__chunk_001", candidates=[
         {"driver_name": "  ", "evidence_quote": "q", "source_type": "8-K",
-         "source_id": "e1", "date": "2026-01-01", "xbrl_or_null": "null"},
+         "source_id": "e1", "date": "2026-01-01"},
         {"driver_name": "real_name", "evidence_quote": "q", "source_type": "8-K",
-         "source_id": "e2", "date": "2026-01-01", "xbrl_or_null": "null"}])
+         "source_id": "e2", "date": "2026-01-01"}])
     assert plan(run)["done_counts"] == {"AAA": 1}
 
 
@@ -209,7 +209,7 @@ def test_cli_prints_final_json_line(tmp_path):
 def full_menu(cid, ticker=None, candidates=None, count=None):
     cands = candidates if candidates is not None else [
         {"driver_name": "alpha_sales", "evidence_quote": "q", "source_type": "8-K",
-         "source_id": "e1", "date": "2026-01-01", "xbrl_or_null": "null"}]
+         "source_id": "e1", "date": "2026-01-01"}]
     return {"ticker": ticker or cid.split("__")[0], "chunk_id": cid, "candidates": cands,
             "candidate_count": len(cands) if count is None else count,
             "skipped_count": 0, "notes": []}
@@ -227,7 +227,7 @@ def test_candidate_null_evidence_fields_goes_back_to_todo(tmp_path):
     menu(run, "AAA__chunk_001", raw=json.dumps(full_menu(
         "AAA__chunk_001", candidates=[{"driver_name": "x", "evidence_quote": None,
                                        "source_type": None, "source_id": None,
-                                       "date": None, "xbrl_or_null": None}])))
+                                       "date": None}])))
     assert plan(run)["todo"] == ["AAA__chunk_001"]
 
 
@@ -236,7 +236,7 @@ def test_named_candidate_with_blank_evidence_goes_back_to_todo(tmp_path):
     menu(run, "AAA__chunk_001", raw=json.dumps(full_menu(
         "AAA__chunk_001", candidates=[{"driver_name": "x", "evidence_quote": "  ",
                                        "source_type": "8-K", "source_id": "e1",
-                                       "date": "2026-01-01", "xbrl_or_null": "null"}])))
+                                       "date": "2026-01-01"}])))
     assert plan(run)["todo"] == ["AAA__chunk_001"]
 
 
@@ -266,8 +266,7 @@ def test_kpi_candidate_with_empty_date_still_valid(tmp_path):
         "AAA__chunk_001", candidates=[{"driver_name": "same_store_sales",
                                        "evidence_quote": "Raw KPI Label",
                                        "source_type": "fiscal.ai-kpi",
-                                       "source_id": "fiscal_ai:AAA:ssg", "date": "",
-                                       "xbrl_or_null": "null"}])))
+                                       "source_id": "fiscal_ai:AAA:ssg", "date": ""}])))
     p = plan(run)
     assert p["todo"] == [] and p["done_counts"] == {"AAA": 1}
 

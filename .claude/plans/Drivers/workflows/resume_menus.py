@@ -32,15 +32,14 @@ def norm(s):  # §12.1 shared norm()
 
 
 REQUIRED_TOP = ("ticker", "chunk_id", "candidate_count", "candidates", "skipped_count", "notes")
-CANDIDATE_FIELDS = ("driver_name", "evidence_quote", "source_type", "source_id", "date",
-                    "xbrl_or_null")
+CANDIDATE_FIELDS = ("driver_name", "evidence_quote", "source_type", "source_id", "date")
 
 
 def menu_valid(path, cid):
     """The menu file for chunk `cid`, or None (fail-close -> re-run the reader).
     Mirrors the live MENU_SCHEMA closely enough that no absent/null/blank-evidence
     candidate can be REUSED into build_seed: top-level keys present, exact chunk_id +
-    ticker match, candidate_count == len(candidates), every candidate carries all six
+    ticker match, candidate_count == len(candidates), every candidate carries all five
     string fields, and every NAMED candidate has non-blank quote/source_type/source_id
     (date may be "" — the fiscal-KPI contract). Verified against all 68 real CAKE
     menus: zero false rejections."""

@@ -9,7 +9,6 @@ and the grouping logic is pytest-able (structure -> code; the AI never transport
   - groups candidates by norm()'d driver_name; the record's final driver_name IS the
     lowercased form (E1 + §11.14)
   - unions evidence_refs, dedup by the exact 5-tuple; companies = sorted distinct
-  - first non-null xbrl (ticker-sorted, candidate order) -> optional_links.xbrl_concept
   - writes <run_dir>/seed.json (sorted by driver_name) + prints a one-line JSON summary
     {seed_sha256, total_distinct_drivers, total_candidates, per_ticker, file}
   - --expect '{"TICK": n, ...}' cross-checks per-ticker raw candidate counts against the
@@ -71,9 +70,7 @@ def build_seed(run_dir, industry, slug, run_id):
             r = by.get(k)
             if r is None:
                 r = by[k] = {"driver_name": k, "canonical_name": k, "companies": set(),
-                             "evidence_refs": [],
-                             "optional_links": {"xbrl_concept": None, "xbrl_member": None,
-                                                "guidance_ref": None}}
+                             "evidence_refs": []}
                 seen[k] = set()
             r["companies"].add(tk)
             ref = {"company": tk, "source_type": c.get("source_type"),
@@ -84,16 +81,12 @@ def build_seed(run_dir, industry, slug, run_id):
             if key5 not in seen[k]:
                 seen[k].add(key5)
                 r["evidence_refs"].append(ref)
-            xb = (c.get("xbrl_or_null") or "").strip()
-            if xb and xb.lower() != "null" and not r["optional_links"]["xbrl_concept"]:
-                r["optional_links"]["xbrl_concept"] = xb
 
     catalog = []
     for k in sorted(by):
         r = by[k]
         catalog.append({"driver_name": r["driver_name"], "canonical_name": r["canonical_name"],
-                        "companies": sorted(r["companies"]), "evidence_refs": r["evidence_refs"],
-                        "optional_links": r["optional_links"]})
+                        "companies": sorted(r["companies"]), "evidence_refs": r["evidence_refs"]})
     shared = [{"driver_name": r["driver_name"], "companies": r["companies"]}
               for r in catalog if len(r["companies"]) >= 2]
     return {"industry": industry, "slug": slug, "run_id": run_id, "catalog": catalog,
@@ -113,9 +106,6 @@ def main():
     seed = build_seed(a.run_dir, a.industry, a.slug, a.run_id)
 
     per_ticker = {}
-    for r in seed["catalog"]:
-        for e in r["evidence_refs"]:
-            pass  # per-ticker counts come from raw candidates, recomputed below
     # recompute raw per-ticker counts the same way build_seed did
     files = sorted((Path(a.run_dir) / "menus").glob("*.json"))
     for f in files:

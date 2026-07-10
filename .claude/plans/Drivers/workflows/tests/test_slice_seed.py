@@ -27,8 +27,7 @@ def rec(name, refs=None):
     refs = refs if refs is not None else [ref(sid=f"ev_{name}")]
     return {"driver_name": name, "canonical_name": name,
             "companies": sorted({r["company"] for r in refs}),
-            "evidence_refs": refs, "same_as_variants": [],
-            "optional_links": {"xbrl_concept": None, "xbrl_member": None, "guidance_ref": None}}
+            "evidence_refs": refs, "same_as_variants": []}
 
 
 def write_seed(run_dir, records, industry="Test"):

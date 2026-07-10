@@ -12,6 +12,13 @@ export const meta = {
 const DIR = '/home/faisal/EventMarketDB/.claude/plans/Drivers'
 const PY  = '/home/faisal/EventMarketDB/venv/bin/python3'
 const A = (typeof args === 'string') ? JSON.parse(args) : (args || {})
+// Model slots (args-overridable; owner 2026-07-10): SAME_AS judges = sonnet @ effort high; clerks/mechanical
+// relays = sonnet, engine-default effort. No haiku/opus defaults.
+const _M = (A.models && typeof A.models === 'object') ? A.models : {}
+const MODELS = { refute: _M.refute || 'sonnet', clerk: _M.clerk || 'sonnet' }
+const MODEL_IDS = { sonnet: 'claude-sonnet-5', opus: 'claude-opus-4-8', fable: 'claude-fable-5', haiku: 'claude-haiku-4-5-20251001' }
+const rid = a => (a == null ? null : (MODEL_IDS[a] || a))   // resolve alias -> exact model ID at run time; an explicit ID passes through
+const MODELS_PROV = { effort_strong: 'high', refute: { alias: MODELS.refute, id: rid(MODELS.refute) }, clerk: { alias: MODELS.clerk, id: rid(MODELS.clerk) } }
 const RUN_ID = A.run_id || ''
 // C5 batched lane (OFF by default — batching is a judge-input change gated on its A/B):
 // batch_size=1 = today's per-pair path byte-identical; >1 = batched PROPOSER + blind
@@ -38,6 +45,7 @@ const PAIR_REVIEW_PROMPT = c => `You are the duplicate-repair judge. A determini
 Candidate JSON:
 ${JSON.stringify(c)}
 ${EXACT_MEANING_RULE}
+MF-02 (cross-flavor guard): different flavors of one topic — base vs \`_guidance\` vs \`_surprise\` — are NEVER the same driver; never SAME_AS, never a cross-flavor rewrite target.
 Return REVIEW_SCHEMA. Copy a and b EXACTLY as given in the candidate (the same two strings). SAME means add reversible SAME_AS. DIFFERENT/UNCLEAR means keep separate.`
 const REFUTE2_PROMPT = c => `SECOND independent skeptic for a HIGH-BLAST duplicate repair SAME_AS. This pair spans ${c.n_companies} companies. A wrong link becomes a false cross-company read-through.
 Candidate JSON:
@@ -71,7 +79,7 @@ phase('Suggest')
 // candidates blob lives on DISK (pinned file), where plan/show/apply read and enforce it.
 // Per-pair mode keeps the full relay + content-hash verification (today's path).
 const SUGGEST_CMD = `Run with Bash:
-test -z "$ANTHROPIC_API_KEY" || { echo "BILLING-GUARD FAIL: ANTHROPIC_API_KEY present in env — refusing to run (subscription-only policy, CLAUDE.md)"; exit 9; } && ${PY} ${DIR}/workflows/repair_duplicates.py suggest ${RUN_DIR} --limit ${LIMIT}${USE_EMBEDDINGS ? ' --use-embeddings' : ''}`
+test -z "$ANTHROPIC_API_KEY" || { echo "BILLING-GUARD FAIL: ANTHROPIC_API_KEY present in env — refusing to run (subscription-only policy, CLAUDE.md)"; exit 9; } && ${PY} ${DIR}/workflows/repair_duplicates.py suggest ${RUN_DIR} --limit ${LIMIT}${USE_EMBEDDINGS ? ' --use-embeddings' : ' --no-embeddings'}`
 // decision-④ frozen fixture: args.frozen_candidates=true reuses the PINNED candidates file
 // byte-frozen (summary CLI, never regenerates) — batched lane only; experiment arms must
 // never let suggest re-run between arms.
@@ -80,12 +88,12 @@ if (FROZEN && BATCH_K <= 1) throw new Error('frozen_candidates requires the batc
 const suggested = (FROZEN && BATCH_K > 1)
   ? await agent(`Run with Bash:
 ${PY} ${DIR}/workflows/repair_duplicates.py summary ${RUN_DIR}
-Return the printed JSON exactly as SUGGEST_SLIM_SCHEMA.`, {schema:SUGGEST_SLIM_SCHEMA, model:'opus', label:'repair-summary-frozen', phase:'Suggest'})
+Return the printed JSON exactly as SUGGEST_SLIM_SCHEMA.`, {schema:SUGGEST_SLIM_SCHEMA, model:MODELS.clerk, label:'repair-summary-frozen', phase:'Suggest'})
   : BATCH_K > 1
   ? await agent(`${SUGGEST_CMD} --print-summary
-Return the printed JSON exactly as SUGGEST_SLIM_SCHEMA.`, {schema:SUGGEST_SLIM_SCHEMA, model:'opus', label:'repair-suggest', phase:'Suggest'})
+Return the printed JSON exactly as SUGGEST_SLIM_SCHEMA.`, {schema:SUGGEST_SLIM_SCHEMA, model:MODELS.clerk, label:'repair-suggest', phase:'Suggest'})
   : await agent(`${SUGGEST_CMD}
-Return the printed JSON exactly as SUGGEST_SCHEMA.`, {schema:SUGGEST_SCHEMA, model:'opus', label:'repair-suggest', phase:'Suggest'})
+Return the printed JSON exactly as SUGGEST_SCHEMA.`, {schema:SUGGEST_SCHEMA, model:MODELS.clerk, label:'repair-suggest', phase:'Suggest'})
 if (!suggested) throw new Error('repair suggest agent died — fail-close.')
 if (!FROZEN && (suggested.limit_used !== LIMIT || suggested.use_embeddings !== USE_EMBEDDINGS)) throw new Error(`repair-suggest ran with wrong params (limit=${suggested.limit_used} embeddings=${suggested.use_embeddings}, commanded limit=${LIMIT} embeddings=${USE_EMBEDDINGS}) — relay dropped/changed a flag; fail-close.`)
 const canon = v => { if (Array.isArray(v)) return '[' + v.map(canon).join(',') + ']'
@@ -111,7 +119,7 @@ phase('Review')
 let reviewFile
 if (BATCH_K <= 1) {
 // ===== per-pair lane (today's path, byte-identical prompts) =====
-const reviews = (await parallel((suggested.candidates || []).map(c => () => agent(PAIR_REVIEW_PROMPT(c), {schema:REVIEW_SCHEMA, model:'opus', label:`repair:${c.a}:${c.b}`, phase:'Review'}).then(v => ({candidate:c, verdict:v}))))).filter(Boolean)
+const reviews = (await parallel((suggested.candidates || []).map(c => () => agent(PAIR_REVIEW_PROMPT(c), {schema:REVIEW_SCHEMA, model:MODELS.refute, effort:'high', label:`repair:${c.a}:${c.b}`, phase:'Review'}).then(v => ({candidate:c, verdict:v}))))).filter(Boolean)
 if (reviews.length !== suggested.candidates.length) throw new Error(`repair review lost ${suggested.candidates.length - reviews.length} verdict(s) — fail-close.`)
 // Stage-0 #7: a verdict must name the pair it was ASSIGNED — a transposed verdict would
 // link two real records the judgment never covered (no other code path catches it).
@@ -124,7 +132,7 @@ for (const row of reviews) {
   const c = row.candidate
   const v = row.verdict
   if (v.verdict === 'SAME' && (c.n_companies || 0) >= 8) {
-    const r2 = await agent(REFUTE2_PROMPT(c), {schema:REFUTE2_SCHEMA, model:'opus', label:`repair-refute2:${c.a}:${c.b}`, phase:'Review'})
+    const r2 = await agent(REFUTE2_PROMPT(c), {schema:REFUTE2_SCHEMA, model:MODELS.refute, effort:'high', label:`repair-refute2:${c.a}:${c.b}`, phase:'Review'})
     const ok = r2 && r2.survives === true && r2.object && r2.object.pass === true && r2.scope && r2.scope.pass === true && r2.mechanism && r2.mechanism.pass === true
     if (ok) v.high_blast_refute2_survived = true
     else v.verdict = 'UNCLEAR'
@@ -147,7 +155,7 @@ const SHOW_SCHEMA = { type:'object', additionalProperties:false, required:['cand
 // h32-shuffled order (breaks the similarity-ranked anchoring adjacency), batch files on disk.
 const plan = await agent(`Run with Bash:
 ${PY} ${DIR}/workflows/repair_duplicates.py plan ${RUN_DIR} --k ${BATCH_K} --page-size ${PAGE_SIZE}
-Return the printed JSON exactly as PLAN_SCHEMA2.`, {schema:PLAN_SCHEMA2, model:'opus', label:'repair-plan', phase:'Review'})
+Return the printed JSON exactly as PLAN_SCHEMA2.`, {schema:PLAN_SCHEMA2, model:MODELS.clerk, label:'repair-plan', phase:'Review'})
 if (!plan || !plan.ok) throw new Error('repair plan agent died/failed — fail-close.')
 if (plan.n_candidates !== suggested.count) throw new Error(`repair plan covers ${plan.n_candidates} pairs but suggest pinned ${suggested.count} — mixed generations; fail-close.`)
 log(`C5 batched lane: ${plan.n_candidates} pairs -> ${plan.batches} batch(es) over ${plan.pages} page(s) of ${PAGE_SIZE} (k=${BATCH_K}); every batched SAME gets a blind per-pair confirm`)
@@ -155,7 +163,7 @@ log(`C5 batched lane: ${plan.n_candidates} pairs -> ${plan.batches} batch(es) ov
 // PROPOSER fan-out: each judge Reads its own code-written batch file (no giant relay).
 const batchOuts = (await parallel(plan.batch_counts.map((cnt, bid) => () => agent(`You are the duplicate-repair judge. Read the file ${RUN_DIR}/repair_batches/batch_${String(bid).padStart(4, '0')}.json with the Read tool — it contains { batch_id, pairs: [...] } with ${cnt} candidate pair(s) (each { idx, a, b, reason, n_companies, sides }). A deterministic suggester found each as a possible missed duplicate; embeddings/token overlap only suggested them; YOU decide exact meaning from evidence. Judge EVERY pair INDEPENDENTLY — never let one pair's verdict influence another.
 ${EXACT_MEANING_RULE}
-Return BATCH_SCHEMA: exactly one verdict per pair, copying idx, a and b EXACTLY as given in that pair. SAME means propose a reversible SAME_AS (a blind second judge will re-check it in isolation). DIFFERENT/UNCLEAR means keep separate.`, {schema:BATCH_SCHEMA, model:'opus', label:`repair-batch:${bid}`, phase:'Review'}).then(v => ({bid, cnt, v}))))).filter(Boolean)
+Return BATCH_SCHEMA: exactly one verdict per pair, copying idx, a and b EXACTLY as given in that pair. SAME means propose a reversible SAME_AS (a blind second judge will re-check it in isolation). DIFFERENT/UNCLEAR means keep separate.`, {schema:BATCH_SCHEMA, model:MODELS.refute, effort:'high', label:`repair-batch:${bid}`, phase:'Review'}).then(v => ({bid, cnt, v}))))).filter(Boolean)
 if (batchOuts.length !== plan.batches) throw new Error(`repair batched review lost ${plan.batches - batchOuts.length} batch(es) — fail-close, no partial review.`)
 const rows = []
 for (const b of batchOuts) {
@@ -178,7 +186,7 @@ for (let s = 0; s < sameIdx.length; s += 3) {
   const grp = sameIdx.slice(s, s + 3)
   const shown = await agent(`Run with Bash:
 ${PY} ${DIR}/workflows/repair_duplicates.py show ${RUN_DIR} --idx ${grp.join(',')}
-Return the printed JSON exactly as SHOW_SCHEMA.`, {schema:SHOW_SCHEMA, model:'opus', label:`repair-show:${grp.join(',')}`, phase:'Review'})
+Return the printed JSON exactly as SHOW_SCHEMA.`, {schema:SHOW_SCHEMA, model:MODELS.clerk, label:`repair-show:${grp.join(',')}`, phase:'Review'})
   if (!shown) throw new Error('repair show clerk died — fail-close.')
   if (h32(canon(shown.candidates)) !== shown.page_h32) throw new Error('repair show relay drift: candidates != code-printed page_h32 — fail-close.')
   const gotIdx = shown.candidates.map(c => c.idx)
@@ -187,7 +195,7 @@ Return the printed JSON exactly as SHOW_SCHEMA.`, {schema:SHOW_SCHEMA, model:'op
 }
 const confirms = (await parallel(sameIdx.map(i => () => {
   const { idx, ...c } = candByIdx[i]
-  return agent(PAIR_REVIEW_PROMPT(c), {schema:REVIEW_SCHEMA, model:'opus', label:`repair-confirm:${c.a}:${c.b}`, phase:'Review'}).then(v => ({i, c, v}))
+  return agent(PAIR_REVIEW_PROMPT(c), {schema:REVIEW_SCHEMA, model:MODELS.refute, effort:'high', label:`repair-confirm:${c.a}:${c.b}`, phase:'Review'}).then(v => ({i, c, v}))
 }))).filter(Boolean)
 if (confirms.length !== sameIdx.length) throw new Error(`repair confirm lost ${sameIdx.length - confirms.length} verdict(s) — fail-close.`)
 for (const r of confirms) {
@@ -210,7 +218,7 @@ const finalRows = rows.map(r => {
 for (const r of finalRows) {
   if (r.verdict === 'SAME' && (candByIdx[r.idx].n_companies || 0) >= 8) {
     const { idx, ...c } = candByIdx[r.idx]
-    const r2 = await agent(REFUTE2_PROMPT(c), {schema:REFUTE2_SCHEMA, model:'opus', label:`repair-refute2:${c.a}:${c.b}`, phase:'Review'})
+    const r2 = await agent(REFUTE2_PROMPT(c), {schema:REFUTE2_SCHEMA, model:MODELS.refute, effort:'high', label:`repair-refute2:${c.a}:${c.b}`, phase:'Review'})
     const ok = r2 && r2.survives === true && r2.object && r2.object.pass === true && r2.scope && r2.scope.pass === true && r2.mechanism && r2.mechanism.pass === true
     if (ok) r.high_blast_refute2_survived = true
     else r.verdict = 'UNCLEAR'
@@ -237,7 +245,7 @@ if (elig.length) {
     const grp = canIdx.slice(s, s + 3)
     const shown = await agent(`Run with Bash:
 ${PY} ${DIR}/workflows/repair_duplicates.py show ${RUN_DIR} --idx ${grp.join(',')}
-Return the printed JSON exactly as SHOW_SCHEMA.`, {schema:SHOW_SCHEMA, model:'opus', label:`repair-canary-show:${grp.join(',')}`, phase:'Review'})
+Return the printed JSON exactly as SHOW_SCHEMA.`, {schema:SHOW_SCHEMA, model:MODELS.clerk, label:`repair-canary-show:${grp.join(',')}`, phase:'Review'})
     if (!shown) throw new Error('repair canary show clerk died — fail-close.')
     if (h32(canon(shown.candidates)) !== shown.page_h32) throw new Error('repair canary show relay drift: candidates != code-printed page_h32 — fail-close.')
     const gotIdx = shown.candidates.map(c => c.idx)
@@ -246,7 +254,7 @@ Return the printed JSON exactly as SHOW_SCHEMA.`, {schema:SHOW_SCHEMA, model:'op
   }
   const solos = (await parallel(canIdx.map(i => () => {
     const { idx, ...c } = canBy[i]
-    return agent(PAIR_REVIEW_PROMPT(c), {schema:REVIEW_SCHEMA, model:'opus', label:`repair-canary:${c.a}:${c.b}`, phase:'Review'}).then(v => ({i, c, v}))
+    return agent(PAIR_REVIEW_PROMPT(c), {schema:REVIEW_SCHEMA, model:MODELS.refute, effort:'high', label:`repair-canary:${c.a}:${c.b}`, phase:'Review'}).then(v => ({i, c, v}))
   }))).filter(Boolean)
   if (solos.length !== canIdx.length) throw new Error(`repair canary lost ${canIdx.length - solos.length} solo verdict(s) — fail-close.`)
   for (const r of solos) {
@@ -291,18 +299,23 @@ const written = (await parallel(pieces.map((txt, i) => () => {
 ${txt}
 Then run with Bash:
 ${PY} -c "import sys; sys.path.insert(0, '${DIR}/workflows'); from repair_duplicates import h32; s = open('${f}', encoding='utf-8').read(); assert h32(s) == ${h32(txt)}, f'piece drift: got {h32(s)}'"
-If the assert fails, re-Write the exact text and re-run the assert until it passes. Return ok=true ONLY if the assert passed.`, {schema:PIECE_SCHEMA, model:'opus', label:`repair-write:${i}`, phase:'Apply'})
+If the assert fails, re-Write the exact text and re-run the assert until it passes. Return ok=true ONLY if the assert passed.`, {schema:PIECE_SCHEMA, model:MODELS.clerk, label:`repair-write:${i}`, phase:'Apply'})
 }))).filter(Boolean)
 if (written.length !== pieces.length || written.some(v => v.ok !== true)) throw new Error(`repair piece write failed: ${written.filter(v => v && v.ok === true).length}/${pieces.length} pieces verified — fail-close.`)
 const applied = await agent(`Run with Bash:
 ${PY} ${DIR}/workflows/repair_duplicates.py assemble-review ${RUN_DIR} --pieces ${pieces.length} --expect '${EXPECT}' && ${PY} ${DIR}/workflows/repair_duplicates.py apply ${RUN_DIR} --review ${RUN_DIR}/repair_review.json --expect '${EXPECT}'
-Return ok=true and summary = the printed JSON of the apply command. If any command exits non-zero, ok=false and summary = exact error.`, {schema:APPLY_SCHEMA, model:'opus', label:'repair-apply', phase:'Apply'})
+Return ok=true and summary = the printed JSON of the apply command. If any command exits non-zero, ok=false and summary = exact error.`, {schema:APPLY_SCHEMA, model:MODELS.clerk, label:'repair-apply', phase:'Apply'})
 if (!applied || !applied.ok) throw new Error(`repair apply failed: ${applied && applied.summary}`)
 
 phase('Validate')
 const val = await agent(`Run with Bash:
 ${PY} ${DIR}/workflows/validate_catalog.py ${RUN_DIR}/seed.json ${RUN_DIR}/catalog.json ${RUN_DIR}/approved.json $([ -f ${RUN_DIR}/same_name_review.json ] && echo "--review ${RUN_DIR}/same_name_review.json") | tee ${RUN_DIR}/repair_validation.txt ; echo "exit=\${PIPESTATUS[0]}"
-Return passed=(exit==0) and output=verbatim validator output.`, {schema:VAL_SCHEMA, model:'opus', label:'repair-validate', phase:'Validate'})
+Return passed=(exit==0) and output=verbatim validator output.`, {schema:VAL_SCHEMA, model:MODELS.clerk, label:'repair-validate', phase:'Validate'})
 if (!val || !val.passed) throw new Error(`repair validation failed: ${val && val.output}`)
+
+// F4: persist the resolved model map (provenance) to the run dir.
+await agent(`Use the Write tool to save EXACTLY this JSON (byte-for-byte) to ${RUN_DIR}/repair_models.json:
+${JSON.stringify(MODELS_PROV)}
+Then return {ok:true}.`, {schema:{ type:'object', additionalProperties:true, required:['ok'], properties:{ ok:{type:'boolean'} } }, model:MODELS.clerk, label:'record-models', phase:'Validate'})
 
 return { run_id: RUN_ID, candidates: suggested.count, approved: reviewFile.reviews.filter(r => r.verdict === 'SAME').length, apply: applied.summary, validation: 'PASSED' }

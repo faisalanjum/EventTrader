@@ -2,7 +2,7 @@
 
 Replaces menu_build.js's in-JS Converge grouping: reads menus/*.json (one per blind bot),
 groups by norm()'d driver_name (final name = the lowercased form), unions evidence
-(dedup by exact 5-tuple), first non-null xbrl wins, writes seed.json IN CODE (sha printed).
+(dedup by exact 5-tuple), writes seed.json IN CODE (sha printed).
 --expect cross-checks per-ticker candidate counts against the workflow's structured outputs.
 """
 import hashlib
@@ -20,9 +20,9 @@ PY = sys.executable
 CLI = str(WORKFLOWS / "build_seed.py")
 
 
-def cand(name, source_id="ev1", quote="q", date="2026-01-01", source_type="transcript", xbrl="null"):
+def cand(name, source_id="ev1", quote="q", date="2026-01-01", source_type="transcript"):
     return {"driver_name": name, "evidence_quote": quote, "source_type": source_type,
-            "source_id": source_id, "date": date, "xbrl_or_null": xbrl}
+            "source_id": source_id, "date": date}
 
 
 def menu(ticker, *cands):
@@ -54,15 +54,6 @@ def test_five_tuple_dedup(tmp_path):
     seed = build_seed(tmp_path, industry="T", slug="t", run_id="r1")
     assert len(seed["catalog"][0]["evidence_refs"]) == 1
     assert seed["analysis"]["total_candidates"] == 2  # raw count preserved in analysis
-
-
-def test_first_xbrl_wins_and_null_ignored(tmp_path):
-    write_menus(tmp_path,
-                menu("AAA", cand("gross_margin", source_id="e1", xbrl="null")),
-                menu("BBB", cand("gross_margin", source_id="e2", xbrl="us-gaap:GrossProfit"),
-                     cand("gross_margin", source_id="e3", xbrl="us-gaap:Other")))
-    seed = build_seed(tmp_path, industry="T", slug="t", run_id="r1")
-    assert seed["catalog"][0]["optional_links"]["xbrl_concept"] == "us-gaap:GrossProfit"
 
 
 def test_shared_drivers_only_multi_company(tmp_path):

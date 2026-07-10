@@ -23,6 +23,7 @@ const PAIR_REVIEW_PROMPT = c => `You are the duplicate-repair judge. A determini
 Candidate JSON:
 ${JSON.stringify(c)}
 ${EXACT_MEANING_RULE}
+MF-02 (cross-flavor guard): different flavors of one topic — base vs \`_guidance\` vs \`_surprise\` — are NEVER the same driver; never SAME_AS, never a cross-flavor rewrite target.
 Return REVIEW_SCHEMA. Copy a and b EXACTLY as given in the candidate (the same two strings). SAME means add reversible SAME_AS. DIFFERENT/UNCLEAR means keep separate.`
 const REVIEW_SCHEMA = { type:'object', additionalProperties:false, required:['a','b','verdict','why'], properties:{
   a:{type:'string'}, b:{type:'string'}, verdict:{type:'string', enum:['SAME','DIFFERENT','UNCLEAR']}, why:{type:'string'} } }

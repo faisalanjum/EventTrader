@@ -101,9 +101,6 @@ def serialize(obj):  # pinned output format: indent=1 (matches fetch), trailing 
     return json.dumps(obj, indent=1, ensure_ascii=False) + "\n"
 
 
-ALL_NULL_LINKS = {"xbrl_concept": None, "xbrl_member": None, "guidance_ref": None}
-
-
 def key5(ref):
     """The exact normed 5-tuple evidence identity (matches the validator's ev_full)."""
     return (norm(ref.get("company")), norm(ref.get("source_type")), norm(ref.get("source_id")),
@@ -232,8 +229,7 @@ def _apply_leaf_split(name, entry, rec):
             raise SystemExit(f"ASSEMBLE REVIEW FAIL: split '{name}': target '{t}' received zero "
                              f"refs (empty record cannot ship)")
         out.append({"driver_name": t, "canonical_name": t, "companies": companies_of(refs),
-                    "evidence_refs": refs, "same_as_variants": [],
-                    "optional_links": dict(ALL_NULL_LINKS)})
+                    "evidence_refs": refs, "same_as_variants": []})
     return out
 
 
@@ -407,7 +403,6 @@ def assemble(seed, dec, review=None):
             "companies": r.get("companies"),
             "evidence_refs": r.get("evidence_refs"),
             "same_as_variants": [],                       # mirror filled below
-            "optional_links": r.get("optional_links"),
         })
 
     for cr in catalog:

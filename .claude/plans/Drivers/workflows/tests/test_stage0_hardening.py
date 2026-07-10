@@ -51,8 +51,7 @@ def ref(company="AAA", sid="e1", quote=None):
 def rec(name, companies=("AAA",)):
     return {"driver_name": name, "canonical_name": name, "companies": sorted(companies),
             "evidence_refs": [ref(company=c, sid=f"{name}_{c}") for c in sorted(companies)],
-            "same_as_variants": [],
-            "optional_links": {"xbrl_concept": None, "xbrl_member": None, "guidance_ref": None}}
+            "same_as_variants": []}
 
 
 def admit_all(seed, but=()):
@@ -192,11 +191,11 @@ def test_require_validated_child_without_approved_file_ok(tmp_path):
 
 def test_repair_suggest_cli_requires_valid_sidecar(tmp_path):
     run = make_run(tmp_path, names=("guest_count_growth", "guest_transactions_growth"))
-    out = subprocess.run([PY, REPAIR, "suggest", str(run)], capture_output=True, text=True)
+    out = subprocess.run([PY, REPAIR, "suggest", str(run), "--no-embeddings"], capture_output=True, text=True)
     assert out.returncode != 0
     assert "validat" in (out.stdout + out.stderr).lower()
     assert validate_cli(run).returncode == 0                    # real validation stamps it
-    out2 = subprocess.run([PY, REPAIR, "suggest", str(run)], capture_output=True, text=True)
+    out2 = subprocess.run([PY, REPAIR, "suggest", str(run), "--no-embeddings"], capture_output=True, text=True)
     assert out2.returncode == 0, out2.stdout + out2.stderr
     assert json.loads(out2.stdout)["count"] == 1
 
@@ -207,7 +206,7 @@ def test_repair_suggest_cli_rejects_stale_catalog(tmp_path):
     cat = json.loads((run / "catalog.json").read_text())
     cat["catalog"][0]["companies"] = ["ZZZ"]                    # edited after validation
     (run / "catalog.json").write_text(serialize(cat))
-    out = subprocess.run([PY, REPAIR, "suggest", str(run)], capture_output=True, text=True)
+    out = subprocess.run([PY, REPAIR, "suggest", str(run), "--no-embeddings"], capture_output=True, text=True)
     assert out.returncode != 0 and "changed since" in (out.stdout + out.stderr)
 
 
@@ -420,7 +419,7 @@ def menu(run, cid, ticker, names=("alpha_sales",)):
     (run / "menus" / f"{cid}.json").write_text(json.dumps(
         {"ticker": ticker, "chunk_id": cid,
          "candidates": [{"driver_name": n, "evidence_quote": "q", "source_type": "transcript",
-                         "source_id": "e1", "date": "2026-01-01", "xbrl_or_null": "null"}
+                         "source_id": "e1", "date": "2026-01-01"}
                         for n in names],
          "candidate_count": len(names), "skipped_count": 0, "notes": []}))
 

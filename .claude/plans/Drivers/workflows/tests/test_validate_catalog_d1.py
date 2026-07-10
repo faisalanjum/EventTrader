@@ -27,7 +27,6 @@ def rec(name, company="AAA"):
             "company": company, "source_type": "transcript",
             "source_id": f"ev_{name}", "date": "2026-01-01", "quote": f"quote about {name}",
         }],
-        "optional_links": {"xbrl_concept": None, "xbrl_member": None, "guidance_ref": None},
     }
 
 
@@ -141,8 +140,7 @@ def mrec_multi(name, companies):
     refs = [{"company": c, "source_type": "transcript", "source_id": f"ev_{name}_{c}",
              "date": "2026-01-01", "quote": f"quote about {name} at {c}"} for c in companies]
     return {"driver_name": name, "canonical_name": name, "companies": sorted(companies),
-            "evidence_refs": refs,
-            "optional_links": {"xbrl_concept": None, "xbrl_member": None, "guidance_ref": None}}
+            "evidence_refs": refs}
 
 
 def test_high_blast_fusion_requires_recorded_second_skeptic(tmp_path):
