@@ -1,0 +1,33 @@
+{
+    "file":  "K-pairs.v1.jsonl",
+    "sha256":  "12f8c4c0c18ac8f4301f64e89118fd13c397b047c85e3561a1ea6bdc245a19c9",
+    "n_records":  160,
+    "strata":  {
+                   "planted":  160,
+                   "planted_different":  110,
+                   "planted_same":  50,
+                   "hard_same_flagged":  36,
+                   "families_different":  12,
+                   "per_family_min":  8,
+                   "rival_records":  2
+               },
+    "locked_by":  "fable",
+    "locked_at":  "2026-07-09T19:55:57Z",
+    "drafted_by":  "opus-implementer 0-LLM deterministic emitter (build_kpairs_v1.py) + fable authored/reworded 41/160 (25.6%, all 13 families) per workorder v1.8",
+    "protocol_sha256":  "435f71a1cf013908c8d4b414f4dd01c0fbe0d767a66c51e79dad81cf4f27c864",
+    "sidecar_sha256":  "8b57837843415b5751b56e45653bb4af91ab5e9dc44946624d1517e74273752b",
+    "records_adjudicated":  160,
+    "flipped":  0,
+    "reworded":  41,
+    "dropped":  0,
+    "ra_exhibits":  [
+                        "ra_0006"
+                    ],
+    "lint":  "key_lint.py lint ok=true errors=[] (run post-adjudication 2026-07-09T19:55:57Z, Python 3.14 local vs S: paths)",
+    "notes":  [
+                  "Grounding: all 160 records synthetic-realistic; 8-agent workflow verified 0 false real-language claims in the sidecar. The work-order PREFERENCE for real corpus language is deliberately not exercised in v1 (recorded deviation) - v2\u0027s 90 mined pairs carry the real-language burden.",
+                  "Fable adjudication fixed two class-purity leaks the presence-only lint missed (per_x XOR 13:0 -\u003e 11:3; name-equality now 7:1 with a SAME instance), added the missing MF-02 cross-flavor traps (guidance/surprise vs base), the per-X-vs-per-Y denominator traps (kernel P5), a cross-company convergence SAME (PIPE-20), and 2 rival cards for EXP-4 check-4 coverage (rival is EXP-0-invisible).",
+                  "EXP-0 guardrail (workorder v1.8): if the Sonnet tier fails and Opus alone qualifies, O10 additionally requires a fresh Fable-authored ~24-pair probe unseen by the implementer.",
+                  "No grader call ran before this lock. Runner must re-verify sha256 before the first call; scorer re-verifies; mismatch = abort (WorkOrder 1.4)."
+              ]
+}

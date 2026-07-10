@@ -1,0 +1,35 @@
+{
+    "file":  "K-pairs.v1.2.jsonl",
+    "sha256":  "446587f4e029288f81ff3866e67ddd4f560e0c5cd9785d029551e5ec62767c5c",
+    "n_records":  160,
+    "supersedes":  "K-pairs.v1.1.jsonl (sha 400f4dd9...30e9) after EXP-0 run 2026-07-09T20-31-24Z FAIL - O10 instrument corrections; v1/v1.1 stay byte-frozen; the failed run\u0027s record is untouched and its scores stand",
+    "strata":  {
+                   "planted":  160,
+                   "planted_different":  110,
+                   "planted_same":  50,
+                   "hard_same_flagged":  36,
+                   "families_different":  12,
+                   "per_family_min":  8,
+                   "rival_records":  2
+               },
+    "locked_by":  "fable",
+    "locked_at":  "2026-07-09T22:35:28Z",
+    "drafted_by":  "opus emitter + fable pass-1 (41) + fable pass-2 v1.1 + fable O10 v1.2 (4 quote-sharpenings, 4 fresh replacements unseen by any arm; contract \u0027unclear means conflict\u0027 pin)",
+    "protocol_sha256":  "c6f19518e68fc14416f663b73a4094ef06a2fb5d5b3e0bf979da8850128cb354",
+    "sidecar_sha256":  "0be0b21a341b84ea6568bae0baacc9a8b7a2dc8e1bfdb93cec50faa70a94391d",
+    "records_adjudicated":  160,
+    "flipped":  0,
+    "sharpened_o10":  4,
+    "replaced_o10":  4,
+    "dropped":  0,
+    "ra_exhibits":  [
+                        "ra_0006",
+                        "ra_0007"
+                    ],
+    "lint":  "key_lint.py lint ok=true errors=[] on v1.2 (2026-07-09T22:35:28Z)",
+    "notes":  [
+                  "ZERO golds flipped at O10 - the evidence package\u0027s re-label-to-pass path was rejected. Replacements are fresh pairs no arm has seen.",
+                  "Rerun preconditions (see run decision.json fable_signoff): v1.2 key + protocol-v1.2 framing (new sha) + EXPLICIT reasoning effort recorded in manifest + OWNER budget authorization (~+500 calls beyond the consumed EXP-0 cap).",
+                  "ra_0007 carry-forward: review the EXP-4 judge contract (kernel 6.1) for silence-vs-conflict semantics BEFORE K-pairs.v2 locks."
+              ]
+}

@@ -1,0 +1,37 @@
+{
+    "file":  "K-pairs.v1.1.jsonl",
+    "sha256":  "400f4dd9bc43ed47ddf71e367b2e29baa4b2da9292aabe0e9fd328f7396630e9",
+    "n_records":  160,
+    "supersedes":  "K-pairs.v1.jsonl (lock 12f8c4c0c18ac8f4301f64e89118fd13c397b047c85e3561a1ea6bdc245a19c9) - superseded PRE-FIRST-USE by owner-directed second adjudication pass; v1 files remain byte-frozen; zero grader calls ever consumed v1",
+    "strata":  {
+                   "planted":  160,
+                   "planted_different":  110,
+                   "planted_same":  50,
+                   "hard_same_flagged":  36,
+                   "families_different":  12,
+                   "per_family_min":  8,
+                   "rival_records":  2,
+                   "multi_quote_records":  24,
+                   "digit_bearing_records":  12,
+                   "canonical_snake_case_names":  true
+               },
+    "locked_by":  "fable",
+    "locked_at":  "2026-07-09T20:03:54Z",
+    "drafted_by":  "opus-implementer 0-LLM emitter + fable pass-1 (41 reworded) + fable pass-2 v1.1 (canon names all records; 24 second-quotes; 2 decisiveness sharpenings; full adversarial gold re-derivation 160/160, 0 flips)",
+    "protocol_sha256":  "37f51629b129c7e75c3b57657bdb7e8c74859322611b7bf502ee50fc717edd6f",
+    "sidecar_sha256":  "9fab3b2df089178a0fae70c1cd1a0434765a1c63b9ad2bec3fb19984b8207274",
+    "records_adjudicated":  160,
+    "flipped":  0,
+    "reworded_pass1":  41,
+    "sharpened_pass2":  2,
+    "dropped":  0,
+    "ra_exhibits":  [
+                        "ra_0006"
+                    ],
+    "lint":  "key_lint.py lint ok=true errors=[] on v1.1 (2026-07-09T20:03:54Z); digit AUC 0.5009; quote totals 135.5/135.7; name-eq 7:1; per_x XOR 11:3",
+    "notes":  [
+                  "EXP-0 MUST consume K-pairs.v1.1.jsonl + this lock. Runner verifies this sha before the first grader call; scorer re-verifies; mismatch = abort.",
+                  "Adversarial re-derivation: all 110 DIFFERENT golds withstand refutation under locked doctrine (MF-02, OD-9/11, per-X, ownership-class, hyponym rules); SAME set carries exactly one deliberate doctrine probe (kp_0118).",
+                  "EXP-0 guardrail (workorder v1.8) unchanged: Sonnet-fail + Opus-only qualification requires a fresh Fable probe subset before O10."
+              ]
+}

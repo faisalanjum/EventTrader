@@ -5,6 +5,15 @@
   "blindness_discounts": null,
   "exp_id": "EXP-0",
   "fable_signoff": null,
+  "post_run_resolution": {
+    "status": "superseded_by_v1.3_composite",
+    "note": "This run remains a historical FAIL and its scores are not edited. Fable O10-2 later ruled the shared kp_0022 wrong-SAMEs were a key_erratum / quote-authorship defect, not tier blindness; K-pairs.v1.3 re-anchored only kp_0022 and the composite run 2026-07-10T00-10-11Z_exp0v13composite ratified the Sonnet tier.",
+    "composite_decision": "../2026-07-10T00-10-11Z_exp0v13composite/decision.json",
+    "wm_exhibits": [
+      "../../../exhibits/wm_exp0_0001.json",
+      "../../../exhibits/wm_exp0_0002.json"
+    ]
+  },
   "failure_attribution": [
     {
       "cause": "tiering",
