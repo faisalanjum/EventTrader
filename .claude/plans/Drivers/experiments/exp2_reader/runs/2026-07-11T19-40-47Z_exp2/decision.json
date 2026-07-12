@@ -1,0 +1,42 @@
+{
+ "exp_id": "EXP-2",
+ "outcome": "PASS",
+ "adopted": {
+  "reader_model": "claude-sonnet-5",
+  "reader_effort": "high",
+  "chunking": "40k",
+  "runs": 1
+ },
+ "verdict_summary": {
+  "cheap_reader": "ADOPT sonnet@high (recall 40.43% vs opus 42.38%: gap 1.96pts <= 2pts bar - borderline, noted; precision 85.0% vs 88.3%: within Wilson noise). Haiku FAILED (31.0%, 11.4pts below bar).",
+  "para_chunks": "REJECT per verbatim bar: recall/precision non-inferior (para recall actually higher, 48.3% vs 40.4% - boundary effects not harmful) BUT cost RISES 4.6x (183 vs 40 calls/pass); bar requires cost drop.",
+  "multi_run_union": "REJECT both: 2-run gain 2.2pts < 5pt bar; 3-run gain 8.2pts >= 5 BUT new-run junk 36.7% far above the 15% single-run precision bar.",
+  "rules_ablation": "Rules block does decisive work: ablated precision collapses to 18.3% vs 85.0% with rules (ablated recall 57.5% is name-spray, not skill)."
+ },
+ "o16_ruling": "Haiku cheap arm FAILED its bar -> O16 trigger fires. Fable DECLINES the DeepSeek fallback arm: the pinned best-cheap rule already resolved to Sonnet (the cheaper qualifying tier); a fallback result could not change any in-program downstream step (engine is agent()-only); spend not justified. Memo to owner: revisit only if production cost pressure demands a sub-Sonnet reader.",
+ "failure_attribution": [
+  {
+   "cause": "model",
+   "evidence": "haiku 31.0% vs sonnet 40.4% vs opus 42.4% recall at identical prompts/effort - capability-ordered, prompt held constant"
+  },
+  {
+   "cause": "chunking",
+   "evidence": "para-8k recall +7.9pts over 40k at same model (sonnet): long-context attention, not context absence, drives single-pass misses"
+  },
+  {
+   "cause": "runs",
+   "evidence": "3-run union +8.2pts recall but 36.7% junk in later runs: repeated sampling harvests tail causes at precision cost"
+  },
+  {
+   "cause": "key-density",
+   "evidence": "251/1175 gold items (21.4%) missed by ALL 7 full-rules arms; union-built gold (2 tiers + Fable adds) is structurally denser than any single read - absolute recall levels reflect key density, not reader failure alone; bars are relative by design"
+  }
+ ],
+ "shared_miss_rule": "O5: exhibits recorded (ra_exp2_shared_misses.json); NO rerun - none authorized without a Fable-named concrete fix.",
+ "incidents": "see manifest.incidents (prefix-cache re-run +80 calls; 8-chunk args error +24; two session-limit outages recovered with zero data loss - all declared, validity intact)",
+ "fable_signoff": {
+  "by": "fable (claude-fable-5)",
+  "at": "2026-07-12T03:44:04.296467+00:00",
+  "note": "adoption verdicts computed from fully reconciled judged verdicts (9400 coverage + 570 precision items, invalid-rate 0); K-reader v3 sha verified at manifest and scoring time; adopted (model, effort) pair flows to WP-FC-RUN per owner pin"
+ }
+}

@@ -49,13 +49,14 @@ This file starts with the **naming rules** (NAME-01 … NAME-19). Later slices �
 #### NAME-06 — Word order  `[LOCKED]`
 - **Plain:** When a name has several parts, order them: thing/actor → detail → metric.
 - **Rule:** When coining a multi-part name, order the parts: concrete thing or actor → needed detail → metric or mechanism. ("Thing or actor" = a commodity, customer group, or policy body like the Fed / OPEC.) Brand/segment/place parts are sliced off first (NAME-10), so they don't appear here. Examples: `hyperscaler_capex`, `restaurant_traffic`, `oil_price`, `fed_rate`.
+- **Note (singular-by-default — owner 2026-07-11):** SINGULAR BY DEFAULT — coin the singular form of a count noun (`store_closure` not `store_closures`, `tariff` not `tariffs`): the name is the cause CLASS; how many, how big, and how often live in the fact's fields, never the name. Keep the plural ONLY when (a) the plural is the standard financial/business term for that concept — the form it is normally reported under (`earnings`, `bookings`, `sales`, `savings`, `futures`, `receivables`) — or (b) the singular would name a DIFFERENT concept (`product_returns` — a "return" is an investment concept). The exception list is illustrative, never exhaustive — the two-part test decides (NAME-19). Locked whole phrases (NAME-08) are never singularized (`same_store_sales`).
 - **Why:** One consistent order means the same cause is always written the same way, so word-order variants collapse to one canonical name (NAME-02).
 - **Source:** DriverOntology.md R3
 - **Replaces:** old example `iphone_china_sales` (brand/geo now sliced) — 95_Supersession #1
 
 #### NAME-07 — Familiar names win  `[LOCKED]`
 - **Plain:** For well-known market/policy causes, use the familiar name, not an invented one.
-- **Rule:** Use the familiar form: `fed_rate`, `yield_curve`, `oil_price`, `tariff_policy`, `fda_approval`.
+- **Rule:** Use the familiar form: `fed_rate`, `yield_curve`, `oil_price`, `tariff_policy`, `fda_approval`. **Precedence (owner 2026-07-11):** the familiar short form applies only when the source does not itself distinguish a specific named sibling instrument or benchmark within that family; when the source names the sibling (SOFR vs the fed-funds family → coin `sofr_rate`), NAME-04 specificity wins. Familiarity is a fallback for undifferentiated mentions, never a license to flatten stated specificity. (Commodity benchmarks: already NAME-12(c).)
 - **Why:** Everyone already calls it the same thing → maximum reuse.
 - **Source:** DriverOntology.md R5
 - **Replaces:** —
@@ -93,9 +94,20 @@ This file starts with the **naming rules** (NAME-01 … NAME-19). Later slices �
   - **3.** Is the role unclear, or would stripping the qualifier leave only a vague fragment (`demand`, `ban`, `pressure`, `outage`)? → keep it in the **NAME**.
 - **Customer pin:** `customer:walmart` is a slice only when the metric measures the reporting company's own business with Walmart (orders/revenue from Walmart). If Walmart's independent action is the cause, keep Walmart in the name (`walmart_price_cuts`).
 - **Vendor pin:** Do not add a vendor slice kind here. A vendor/platform as an external cause stays in the name (`aws_outage`, `aws_spending`) unless a later owner rule creates a vendor slice.
+- **Portion pin (OD-17):** a qualifier naming a PORTION of the measured quantity is never a slice — it stays in the name (see OD-17 below).
 - **Why:** Slicing an unclear external cause can merge two different causes. Naming it may over-split, which is repairable.
 - **Source:** Naming_Slices_XBRL.md §2
 - **Replaces:** —
+
+#### OD-17 — Portion qualifiers & non-population aggregates  `[LOCKED — owner 2026-07-11 · 66 §0.R OD-17]`
+- **Plain:** A word naming which portion of a quantity is counted stays in the name. Aggregates map to the omitted slice only when they equal the whole consolidated company. Residual buckets are legal slice values. Accounting constructs are neither names nor slices.
+- **Rule (core):** A qualifier naming which PORTION of the company's own measured quantity is counted — and that is not one of the six slice kinds, not a period window, and not a measurement version — stays in the NAME (`current_rpo`, `fee_earning_aum`, `funded_backlog`). Different portion = different driver, never SAME_AS the bare form. If unclear whether a word is a window or a portion, keep it in the name; never drop it.
+- **(a) All-parts aggregates (population test):** a stated aggregate maps to FS-10's omitted slice ONLY when its population is the consolidated reporting entity ("total company", "consolidated", "group"). An aggregate crossing the ownership boundary or curating a subset is NEVER the omitted slice: network/system aggregates (`systemwide_sales`, `gmv`, `total_payment_volume`) are their own whole-phrase Drivers (NAME-08 posture); curated subsets ("core operations", ex-items, pro-forma combined) keep their qualifier — never mapped to the consolidated series.
+- **(b) Residual buckets:** a company-stated residual ("Other", "Rest of World", "Corporate unallocated") is a LEGAL slice value of its stated kind (`segment:other`) — never a name token, never dropped. Residuals are company-specific and their composition may drift across periods: guards in 03 FS-07 note.
+- **(c) Accounting constructs:** pure consolidation artifacts (eliminations, fair-value levels, reconciling items) are excluded as slice values AND as Driver names — never coin an eliminations Driver; drop-and-log (FS-20's log). An eliminations-driven mover is recorded as a fact on the AFFECTED reported metric (e.g. `operating_income`, lane state, quote carrying the eliminations mechanism) — evidence is never dropped.
+- **Why:** Portion words otherwise fork producers or silently merge a portion into its total (the forbidden over-merge); "system-wide" maps ~5× different populations onto one series if read as consolidated; residuals and eliminations otherwise fork three ways.
+- **Source:** 66 §0.R OD-17 (owner 2026-07-11) · FS-06a review (tracker T1-01/a/b/c as amended)
+- **Replaces:** — (addition)
 
 ### C. What's in / out of a name
 
@@ -116,7 +128,7 @@ This file starts with the **naming rules** (NAME-01 … NAME-19). Later slices �
 
 #### NAME-14 — The version of a number is NOT in the name  `[LOCKED]`
 - **Plain:** adjusted / diluted / constant-currency go in a separate "measurement" tag, not the name.
-- **Rule:** The version of a number (adjusted, diluted, basic, constant-currency, core, cash…) goes in the **measurement** slot INSIDE fact_scope — a sibling of the slice, NOT a 7th slice kind. `adjusted eps` → name=`eps`, measurement=`{adjusted}`. Store the specific stated word (case/whitespace/punctuation normalized); default empty (never assume gaap); gaap/non_gaap is a read-time view, never stored.
+- **Rule:** The version of a number (adjusted, diluted, basic, constant-currency, core, cash…) goes in the **measurement** slot INSIDE fact_scope — a sibling of the slice, NOT a 7th slice kind. `adjusted eps` → name=`eps`, measurement=`{adjusted}`. Store the specific stated word (case/whitespace/punctuation normalized); default empty (never assume gaap); gaap/non_gaap is a read-time view, never stored. A measurement word re-expresses the SAME quantity through a different lens; a word that changes WHICH portion is counted is never a measurement token — it belongs in the name (OD-17).
 - **Why:** Keeps the base metric (`eps`) able to carry both its gaap and adjusted readings as separate, comparable facts.
 - **Source:** Naming_Slices_XBRL.md §1 / §5
 - **Replaces:** old "adjusted_eps in the name" (DriverOntology R9) — 95_Supersession #2
@@ -134,7 +146,7 @@ This file starts with the **naming rules** (NAME-01 … NAME-19). Later slices �
   1. state words → driver_state *[OK: stable nouns/metric phrases ending -ing/-ed: `pricing`, `bookings`, `operating_margin`]*
   2. direction/polarity → verdict
   3. motion/change nouns → driver_state
-  4. any ticker/legal/person name *[OK: institutions/regulators as a cause: `fed_rate`, `opec_supply`, `fda_approval`]*
+  4. the reporting company's own name/brand (redundant — the fact already links to the company), and any incidental co-mentioned entity adding no causal specificity (an analyst, executive, law firm, or counterparty named in passing) *[OK: an external company, platform, institution, or person whose own independent action or state IS the stated cause (NAME-11 test 2): `fed_rate`, `opec_supply`, `fda_approval`, `walmart_price_cuts`, `aws_outage`, `tiktok_ban`]*
   5. period tokens
   6. numbers/sizes/bare units (`bps`, `percent`, `usd`)
   7. source-type labels
@@ -146,7 +158,7 @@ This file starts with the **naming rules** (NAME-01 … NAME-19). Later slices �
   13. glue words (`the`, `of`, `in`, `and`, `to`, `for`)
 - **Why:** Each has its own field; in the name they break reuse and one-name-one-meaning.
 - **Source:** DriverOntology.md R7
-- **Replaces:** —
+- **Replaces:** #4 ticker/legal/person ban → external-actor principle — 95_Supersession #40 (owner 2026-07-11)
 
 ### D. Family, gate & meta
 

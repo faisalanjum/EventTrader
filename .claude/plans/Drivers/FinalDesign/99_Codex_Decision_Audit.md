@@ -289,6 +289,7 @@ Locked:
 - Historical backfill means running the same producer over old events.
 - KPI-only evidence can create or reuse a Driver name only.
 - KPI-only evidence never creates a DriverUpdate.
+- Current FiscalAI KPI/segment source snapshot for inventory/audits lives at `data/fiscal_ai_segments/runs/2026-05-07/`; this is a provenance path only, not a build-time seeder.
 - No separate build-time seeder or change detector.
 - No write-time recurrence rule such as ">2 events."
 - A single event can create a valid DriverUpdate.

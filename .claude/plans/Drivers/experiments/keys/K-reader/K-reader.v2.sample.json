@@ -1,0 +1,501 @@
+{
+ "key": "K-reader",
+ "version": "v2",
+ "seed": "K-reader.v2",
+ "supersedes": {
+  "version": "v1",
+  "sha256": "a0090b90fff9e58ae097423525f8419054341663b56d7dd8c09dcd87f4e551d1",
+  "status": "superseded-pre-drafting",
+  "reason": "Fable amendment 2026-07-10: v1 (source-type-only stratification) covered only 8/14 tickers, missed core calibration companies CAKE/MCD/CMG/SBUX/TXRH, and drew 13/40 from Phase-1-unused tickers WING/EAT/PZZA."
+ },
+ "h32_formula": "h=0; for c in s: h=(h*31+ord(c)) & 0xFFFFFFFF  (harness 32-bit hash)",
+ "recipe": "universe = frozen restaurant chunks for the 10 Phase-1 tickers (8-roster + BLMN/SHAK; WING/CBRL/EAT/PZZA excluded); 4 chunks per ticker (equal); within each ticker, Hamilton-allocate 4 across the ticker's primary source_types; rank each (ticker,source_type) cell by ascending h32('K-reader.v2:'+filename), take top-k; final sorted by (ticker, filename).",
+ "phase1_tickers": [
+  "CAKE",
+  "DRI",
+  "MCD",
+  "YUM",
+  "CMG",
+  "SBUX",
+  "QSR",
+  "TXRH",
+  "BLMN",
+  "SHAK"
+ ],
+ "universe_chunk_files": 700,
+ "per_ticker": 4,
+ "n": 40,
+ "source_type_counts": {
+  "8-K": 9,
+  "10-Q": 8,
+  "10-K": 10,
+  "transcript": 13
+ },
+ "ticker_counts": {
+  "BLMN": 4,
+  "CAKE": 4,
+  "CMG": 4,
+  "DRI": 4,
+  "MCD": 4,
+  "QSR": 4,
+  "SBUX": 4,
+  "SHAK": 4,
+  "TXRH": 4,
+  "YUM": 4
+ },
+ "distinct_documents_primary": 37,
+ "distinct_source_ids_all": 47,
+ "chunks": [
+  {
+   "chunk_file": "BLMN__chunk_001.json",
+   "ticker": "BLMN",
+   "primary_source_type": "8-K",
+   "primary_source_id": "0001546417-26-000019",
+   "source_ids": [
+    "0001546417-26-000019"
+   ],
+   "content_chars": 187,
+   "h32": 591830327
+  },
+  {
+   "chunk_file": "BLMN__chunk_008.json",
+   "ticker": "BLMN",
+   "primary_source_type": "10-Q",
+   "primary_source_id": "0001546417-25-000141",
+   "source_ids": [
+    "0001546417-25-000141"
+   ],
+   "content_chars": 39743,
+   "h32": 792234384
+  },
+  {
+   "chunk_file": "BLMN__chunk_047.json",
+   "ticker": "BLMN",
+   "primary_source_type": "10-K",
+   "primary_source_id": "0001546417-23-000009",
+   "source_ids": [
+    "0001546417-23-000009"
+   ],
+   "content_chars": 39864,
+   "h32": 18652661
+  },
+  {
+   "chunk_file": "BLMN__chunk_051.json",
+   "ticker": "BLMN",
+   "primary_source_type": "transcript",
+   "primary_source_id": "BLMN_2026-02-25T08.30",
+   "source_ids": [
+    "BLMN_2026-02-25T08.30"
+   ],
+   "content_chars": 38775,
+   "h32": 734381436
+  },
+  {
+   "chunk_file": "CAKE__chunk_010.json",
+   "ticker": "CAKE",
+   "primary_source_type": "10-Q",
+   "primary_source_id": "0001410578-25-001564",
+   "source_ids": [
+    "0001410578-25-001564"
+   ],
+   "content_chars": 39288,
+   "h32": 145428646
+  },
+  {
+   "chunk_file": "CAKE__chunk_011.json",
+   "ticker": "CAKE",
+   "primary_source_type": "8-K",
+   "primary_source_id": "0001104659-25-071758",
+   "source_ids": [
+    "0001104659-25-053643",
+    "0001104659-25-071758",
+    "0001410578-25-001564"
+   ],
+   "content_chars": 31310,
+   "h32": 174057797
+  },
+  {
+   "chunk_file": "CAKE__chunk_014.json",
+   "ticker": "CAKE",
+   "primary_source_type": "10-K",
+   "primary_source_id": "0001410578-25-000195",
+   "source_ids": [
+    "0001410578-25-000195"
+   ],
+   "content_chars": 39755,
+   "h32": 259945250
+  },
+  {
+   "chunk_file": "CAKE__chunk_060.json",
+   "ticker": "CAKE",
+   "primary_source_type": "transcript",
+   "primary_source_id": "CAKE_2024-05-08T17.00",
+   "source_ids": [
+    "CAKE_2024-05-08T17.00"
+   ],
+   "content_chars": 10554,
+   "h32": 287979755
+  },
+  {
+   "chunk_file": "CMG__chunk_020.json",
+   "ticker": "CMG",
+   "primary_source_type": "8-K",
+   "primary_source_id": "0001058090-24-000012",
+   "source_ids": [
+    "0001058090-24-000012",
+    "0001193125-24-071595"
+   ],
+   "content_chars": 24088,
+   "h32": 512659074
+  },
+  {
+   "chunk_file": "CMG__chunk_021.json",
+   "ticker": "CMG",
+   "primary_source_type": "10-K",
+   "primary_source_id": "0001562762-24-000023",
+   "source_ids": [
+    "0001562762-24-000023"
+   ],
+   "content_chars": 22711,
+   "h32": 541288225
+  },
+  {
+   "chunk_file": "CMG__chunk_037.json",
+   "ticker": "CMG",
+   "primary_source_type": "transcript",
+   "primary_source_id": "CMG_2026-02-03T16.30",
+   "source_ids": [
+    "CMG_2026-02-03T16.30"
+   ],
+   "content_chars": 38456,
+   "h32": 1600566812
+  },
+  {
+   "chunk_file": "CMG__chunk_038.json",
+   "ticker": "CMG",
+   "primary_source_type": "transcript",
+   "primary_source_id": "CMG_2026-02-03T16.30",
+   "source_ids": [
+    "CMG_2026-02-03T16.30"
+   ],
+   "content_chars": 23392,
+   "h32": 1629195963
+  },
+  {
+   "chunk_file": "DRI__chunk_004.json",
+   "ticker": "DRI",
+   "primary_source_type": "8-K",
+   "primary_source_id": "0000940944-25-000067",
+   "source_ids": [
+    "0000940944-25-000067"
+   ],
+   "content_chars": 18227,
+   "h32": 23921370
+  },
+  {
+   "chunk_file": "DRI__chunk_007.json",
+   "ticker": "DRI",
+   "primary_source_type": "10-K",
+   "primary_source_id": "0000940944-25-000038",
+   "source_ids": [
+    "0000940944-25-000038"
+   ],
+   "content_chars": 39710,
+   "h32": 109808823
+  },
+  {
+   "chunk_file": "DRI__chunk_050.json",
+   "ticker": "DRI",
+   "primary_source_type": "transcript",
+   "primary_source_id": "DRI_2024-09-19T08.30",
+   "source_ids": [
+    "DRI_2024-09-19T08.30"
+   ],
+   "content_chars": 38337,
+   "h32": 51955875
+  },
+  {
+   "chunk_file": "DRI__chunk_051.json",
+   "ticker": "DRI",
+   "primary_source_type": "transcript",
+   "primary_source_id": "DRI_2024-09-19T08.30",
+   "source_ids": [
+    "DRI_2024-09-19T08.30"
+   ],
+   "content_chars": 10644,
+   "h32": 80585026
+  },
+  {
+   "chunk_file": "MCD__chunk_001.json",
+   "ticker": "MCD",
+   "primary_source_type": "8-K",
+   "primary_source_id": "0000063908-26-000032",
+   "source_ids": [
+    "0000063908-26-000028",
+    "0000063908-26-000032",
+    "0000063908-26-000035",
+    "0000063908-26-000042"
+   ],
+   "content_chars": 17015,
+   "h32": 527323888
+  },
+  {
+   "chunk_file": "MCD__chunk_002.json",
+   "ticker": "MCD",
+   "primary_source_type": "10-Q",
+   "primary_source_id": "0000063908-25-000059",
+   "source_ids": [
+    "0000063908-25-000059"
+   ],
+   "content_chars": 39820,
+   "h32": 555953039
+  },
+  {
+   "chunk_file": "MCD__chunk_029.json",
+   "ticker": "MCD",
+   "primary_source_type": "10-K",
+   "primary_source_id": "0000063908-23-000012",
+   "source_ids": [
+    "0000063908-23-000012"
+   ],
+   "content_chars": 39295,
+   "h32": 2531364458
+  },
+  {
+   "chunk_file": "MCD__chunk_049.json",
+   "ticker": "MCD",
+   "primary_source_type": "transcript",
+   "primary_source_id": "MCD_2024-07-29T08.30",
+   "source_ids": [
+    "MCD_2024-07-29T08.30"
+   ],
+   "content_chars": 37954,
+   "h32": 11404524
+  },
+  {
+   "chunk_file": "QSR__chunk_001.json",
+   "ticker": "QSR",
+   "primary_source_type": "10-K",
+   "primary_source_id": "0001618756-26-000017",
+   "source_ids": [
+    "0001618756-26-000017"
+   ],
+   "content_chars": 39726,
+   "h32": 142614514
+  },
+  {
+   "chunk_file": "QSR__chunk_005.json",
+   "ticker": "QSR",
+   "primary_source_type": "10-Q",
+   "primary_source_id": "0001618756-25-000300",
+   "source_ids": [
+    "0001618756-25-000300"
+   ],
+   "content_chars": 39724,
+   "h32": 257131118
+  },
+  {
+   "chunk_file": "QSR__chunk_050.json",
+   "ticker": "QSR",
+   "primary_source_type": "transcript",
+   "primary_source_id": "QSR_2024-04-30T10.00",
+   "source_ids": [
+    "QSR_2024-04-30T10.00"
+   ],
+   "content_chars": 38476,
+   "h32": 256536472
+  },
+  {
+   "chunk_file": "QSR__chunk_051.json",
+   "ticker": "QSR",
+   "primary_source_type": "transcript",
+   "primary_source_id": "QSR_2024-04-30T10.00",
+   "source_ids": [
+    "QSR_2024-04-30T10.00"
+   ],
+   "content_chars": 19360,
+   "h32": 285165623
+  },
+  {
+   "chunk_file": "SBUX__chunk_014.json",
+   "ticker": "SBUX",
+   "primary_source_type": "10-Q",
+   "primary_source_id": "0000829224-25-000034",
+   "source_ids": [
+    "0000829224-25-000034"
+   ],
+   "content_chars": 39826,
+   "h32": 26511900
+  },
+  {
+   "chunk_file": "SBUX__chunk_016.json",
+   "ticker": "SBUX",
+   "primary_source_type": "8-K",
+   "primary_source_id": "0000829224-25-000033",
+   "source_ids": [
+    "0000829224-25-000016",
+    "0000829224-25-000020",
+    "0000829224-25-000024",
+    "0000829224-25-000027",
+    "0000829224-25-000033"
+   ],
+   "content_chars": 36768,
+   "h32": 83770202
+  },
+  {
+   "chunk_file": "SBUX__chunk_019.json",
+   "ticker": "SBUX",
+   "primary_source_type": "10-K",
+   "primary_source_id": "0000829224-24-000057",
+   "source_ids": [
+    "0000829224-24-000057"
+   ],
+   "content_chars": 39868,
+   "h32": 169657655
+  },
+  {
+   "chunk_file": "SBUX__chunk_060.json",
+   "ticker": "SBUX",
+   "primary_source_type": "transcript",
+   "primary_source_id": "SBUX_2024-07-30T17.00",
+   "source_ids": [
+    "SBUX_2024-07-30T17.00"
+   ],
+   "content_chars": 39530,
+   "h32": 54546405
+  },
+  {
+   "chunk_file": "SHAK__chunk_002.json",
+   "ticker": "SHAK",
+   "primary_source_type": "10-K",
+   "primary_source_id": "0001620533-26-000018",
+   "source_ids": [
+    "0001620533-26-000018"
+   ],
+   "content_chars": 39632,
+   "h32": 658306986
+  },
+  {
+   "chunk_file": "SHAK__chunk_046.json",
+   "ticker": "SHAK",
+   "primary_source_type": "8-K",
+   "primary_source_id": "0001620533-23-000086",
+   "source_ids": [
+    "0001620533-23-000086"
+   ],
+   "content_chars": 28021,
+   "h32": 27871018
+  },
+  {
+   "chunk_file": "SHAK__chunk_047.json",
+   "ticker": "SHAK",
+   "primary_source_type": "10-Q",
+   "primary_source_id": "0001620533-23-000078",
+   "source_ids": [
+    "0001620533-23-000078"
+   ],
+   "content_chars": 39988,
+   "h32": 56500169
+  },
+  {
+   "chunk_file": "SHAK__chunk_061.json",
+   "ticker": "SHAK",
+   "primary_source_type": "transcript",
+   "primary_source_id": "SHAK_2026-02-26T08.00",
+   "source_ids": [
+    "SHAK_2026-02-26T08.00"
+   ],
+   "content_chars": 38152,
+   "h32": 1659732625
+  },
+  {
+   "chunk_file": "TXRH__chunk_001.json",
+   "ticker": "TXRH",
+   "primary_source_type": "8-K",
+   "primary_source_id": "0001104659-26-024099",
+   "source_ids": [
+    "0001104659-26-024099"
+   ],
+   "content_chars": 330,
+   "h32": 58882950
+  },
+  {
+   "chunk_file": "TXRH__chunk_002.json",
+   "ticker": "TXRH",
+   "primary_source_type": "10-K",
+   "primary_source_id": "0001104659-26-021292",
+   "source_ids": [
+    "0001104659-26-021292"
+   ],
+   "content_chars": 39911,
+   "h32": 87512101
+  },
+  {
+   "chunk_file": "TXRH__chunk_008.json",
+   "ticker": "TXRH",
+   "primary_source_type": "10-Q",
+   "primary_source_id": "0001104659-25-108178",
+   "source_ids": [
+    "0001104659-25-108178"
+   ],
+   "content_chars": 39998,
+   "h32": 259287007
+  },
+  {
+   "chunk_file": "TXRH__chunk_050.json",
+   "ticker": "TXRH",
+   "primary_source_type": "transcript",
+   "primary_source_id": "TXRH_2024-10-24T17.00",
+   "source_ids": [
+    "TXRH_2024-10-24T17.00"
+   ],
+   "content_chars": 38744,
+   "h32": 172804908
+  },
+  {
+   "chunk_file": "YUM__chunk_030.json",
+   "ticker": "YUM",
+   "primary_source_type": "10-Q",
+   "primary_source_id": "0001041061-24-000033",
+   "source_ids": [
+    "0001041061-24-000033"
+   ],
+   "content_chars": 5280,
+   "h32": 144930135
+  },
+  {
+   "chunk_file": "YUM__chunk_031.json",
+   "ticker": "YUM",
+   "primary_source_type": "8-K",
+   "primary_source_id": "0001041061-24-000029",
+   "source_ids": [
+    "0001041061-24-000023",
+    "0001041061-24-000029"
+   ],
+   "content_chars": 39987,
+   "h32": 173559286
+  },
+  {
+   "chunk_file": "YUM__chunk_034.json",
+   "ticker": "YUM",
+   "primary_source_type": "10-K",
+   "primary_source_id": "0001041061-24-000011",
+   "source_ids": [
+    "0001041061-24-000011"
+   ],
+   "content_chars": 39944,
+   "h32": 259446739
+  },
+  {
+   "chunk_file": "YUM__chunk_080.json",
+   "ticker": "YUM",
+   "primary_source_type": "transcript",
+   "primary_source_id": "YUM_2023-05-03T08.15",
+   "source_ids": [
+    "YUM_2023-05-03T08.15"
+   ],
+   "content_chars": 37445,
+   "h32": 287481244
+  }
+ ]
+}

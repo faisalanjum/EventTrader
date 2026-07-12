@@ -1,0 +1,567 @@
+{
+ "key": "K-reader",
+ "version": "v3",
+ "seed": "K-reader.v3",
+ "supersedes": [
+  {
+   "version": "v1",
+   "sha256": "a0090b90fff9e58ae097423525f8419054341663b56d7dd8c09dcd87f4e551d1",
+   "status": "superseded-pre-drafting"
+  },
+  {
+   "version": "v2",
+   "sha256": "050376fceca53cb0e31c989e7ee8c009034280a33c39966bceaec3ecb5cad9e8",
+   "status": "superseded-pre-drafting"
+  }
+ ],
+ "rank": "ascending sha256('K-reader.v3:'+filename) (hex, lexicographic)",
+ "recipe": "universe = 10 Phase-1 tickers' frozen restaurant chunks; 4 chunks/ticker; strict <=1 chunk per primary_source_id within a ticker (4 distinct documents/ticker); within each ticker Hamilton-allocate 4 across primary source_types, fill cells with top-sha256 distinct-doc files; on cell runout substitute the ticker's next-sha256-ranked file of ANY type (doc cap preserved), recorded.",
+ "phase1_tickers": [
+  "CAKE",
+  "DRI",
+  "MCD",
+  "YUM",
+  "CMG",
+  "SBUX",
+  "QSR",
+  "TXRH",
+  "BLMN",
+  "SHAK"
+ ],
+ "universe_chunk_files": 700,
+ "per_ticker": 4,
+ "n": 40,
+ "source_type_counts": {
+  "8-K": 9,
+  "10-Q": 8,
+  "10-K": 10,
+  "transcript": 13
+ },
+ "ticker_counts": {
+  "BLMN": 4,
+  "CAKE": 4,
+  "CMG": 4,
+  "DRI": 4,
+  "MCD": 4,
+  "QSR": 4,
+  "SBUX": 4,
+  "SHAK": 4,
+  "TXRH": 4,
+  "YUM": 4
+ },
+ "distinct_primary_documents": 40,
+ "distinct_source_ids_all": 62,
+ "substitutions": [],
+ "thin_chunks_lt_500": [
+  {
+   "chunk_file": "SBUX__chunk_001.json",
+   "ticker": "SBUX",
+   "type": "8-K",
+   "chars": 289
+  }
+ ],
+ "chunks": [
+  {
+   "chunk_file": "BLMN__chunk_007.json",
+   "ticker": "BLMN",
+   "primary_source_type": "8-K",
+   "primary_source_id": "0001546417-26-000006",
+   "source_ids": [
+    "0001546417-25-000143",
+    "0001546417-26-000002",
+    "0001546417-26-000004",
+    "0001546417-26-000006"
+   ],
+   "content_chars": 29831,
+   "selection": "primary",
+   "sha256_rank_key": "0ab2015220d8a0fbdd5621751c76ba961e9a0d7f31f1ab791cd3afc17cd5388f"
+  },
+  {
+   "chunk_file": "BLMN__chunk_023.json",
+   "ticker": "BLMN",
+   "primary_source_type": "10-Q",
+   "primary_source_id": "0001546417-24-000160",
+   "source_ids": [
+    "0001193125-24-253707",
+    "0001546417-24-000160"
+   ],
+   "content_chars": 22790,
+   "selection": "primary",
+   "sha256_rank_key": "10e8564077741f44fdc4aa8c34556324bf500013453b265d48a0410b8b0d2415"
+  },
+  {
+   "chunk_file": "BLMN__chunk_031.json",
+   "ticker": "BLMN",
+   "primary_source_type": "10-K",
+   "primary_source_id": "0001546417-24-000037",
+   "source_ids": [
+    "0001546417-24-000037"
+   ],
+   "content_chars": 39798,
+   "selection": "primary",
+   "sha256_rank_key": "191b5f409d3e68cff687b3ab1acafecebaa8ed3fe6189328cd3827c3fdc8b23f"
+  },
+  {
+   "chunk_file": "BLMN__chunk_075.json",
+   "ticker": "BLMN",
+   "primary_source_type": "transcript",
+   "primary_source_id": "BLMN_2023-04-28T08.15",
+   "source_ids": [
+    "BLMN_2023-04-28T08.15"
+   ],
+   "content_chars": 38427,
+   "selection": "primary",
+   "sha256_rank_key": "02241afc7d31365f8b03f3b2e37b7e7b71afd61af00877d40f3bdab72fc73cf3"
+  },
+  {
+   "chunk_file": "CAKE__chunk_024.json",
+   "ticker": "CAKE",
+   "primary_source_type": "10-Q",
+   "primary_source_id": "0001410578-24-000636",
+   "source_ids": [
+    "0001410578-24-000636"
+   ],
+   "content_chars": 39688,
+   "selection": "primary",
+   "sha256_rank_key": "1887d82092cffd688a8fdbe355580610cd62922e239112e566848b7faf78ed43"
+  },
+  {
+   "chunk_file": "CAKE__chunk_029.json",
+   "ticker": "CAKE",
+   "primary_source_type": "10-K",
+   "primary_source_id": "0001104659-24-027565",
+   "source_ids": [
+    "0001104659-24-027565"
+   ],
+   "content_chars": 39937,
+   "selection": "primary",
+   "sha256_rank_key": "08e4694e528e7c3eca9d6c19cf6cab330c61f9ab5bb88a1f9c4b12bfc78a8d2c"
+  },
+  {
+   "chunk_file": "CAKE__chunk_033.json",
+   "ticker": "CAKE",
+   "primary_source_type": "8-K",
+   "primary_source_id": "0001104659-23-113409",
+   "source_ids": [
+    "0001104659-23-113409",
+    "0001104659-23-114808"
+   ],
+   "content_chars": 29323,
+   "selection": "primary",
+   "sha256_rank_key": "24584b684ca1e4e78c25c2aa0e4b32543da880d5b1e416ebddb47273f7fedfc1"
+  },
+  {
+   "chunk_file": "CAKE__chunk_050.json",
+   "ticker": "CAKE",
+   "primary_source_type": "transcript",
+   "primary_source_id": "CAKE_2025-07-29T17.00",
+   "source_ids": [
+    "CAKE_2025-07-29T17.00"
+   ],
+   "content_chars": 10363,
+   "selection": "primary",
+   "sha256_rank_key": "003ee155b8d09ac3494f7fed1452f4a137c71ccb87c87b91922dc41ef4a3c3bf"
+  },
+  {
+   "chunk_file": "CMG__chunk_029.json",
+   "ticker": "CMG",
+   "primary_source_type": "8-K",
+   "primary_source_id": "0001058090-23-000026",
+   "source_ids": [
+    "0001058090-23-000026",
+    "0001193125-23-155446",
+    "0001193125-23-158496"
+   ],
+   "content_chars": 27870,
+   "selection": "primary",
+   "sha256_rank_key": "03587485954e689e03fb38b608670ad4b499879420d192282179b97c3fb9c0bc"
+  },
+  {
+   "chunk_file": "CMG__chunk_033.json",
+   "ticker": "CMG",
+   "primary_source_type": "10-K",
+   "primary_source_id": "0001058090-23-000010",
+   "source_ids": [
+    "0001058090-23-000010"
+   ],
+   "content_chars": 38195,
+   "selection": "primary",
+   "sha256_rank_key": "0950aa9efcc276a6b1af75a846c58cfd25a9df33ce7a93b8593a83caf2cbf17d"
+  },
+  {
+   "chunk_file": "CMG__chunk_049.json",
+   "ticker": "CMG",
+   "primary_source_type": "transcript",
+   "primary_source_id": "CMG_2024-07-24T16.30",
+   "source_ids": [
+    "CMG_2024-07-24T16.30"
+   ],
+   "content_chars": 37930,
+   "selection": "primary",
+   "sha256_rank_key": "09ef5c9512de30f1ce4326673282a047bd7947d0aa5a2680bf103e6958713832"
+  },
+  {
+   "chunk_file": "CMG__chunk_058.json",
+   "ticker": "CMG",
+   "primary_source_type": "transcript",
+   "primary_source_id": "CMG_2023-10-26T16.30",
+   "source_ids": [
+    "CMG_2023-10-26T16.30"
+   ],
+   "content_chars": 25309,
+   "selection": "primary",
+   "sha256_rank_key": "1a89eff219232fc704fccd45ac3a1c826c1357c9057763e83bb4555c36f68cac"
+  },
+  {
+   "chunk_file": "DRI__chunk_002.json",
+   "ticker": "DRI",
+   "primary_source_type": "8-K",
+   "primary_source_id": "0000940944-26-000005",
+   "source_ids": [
+    "0000940944-26-000005",
+    "0000940944-26-000009"
+   ],
+   "content_chars": 20043,
+   "selection": "primary",
+   "sha256_rank_key": "302cedb77dfc73e77edd6f6ab70c2c136f52de933ba3b2e135e505ba1daf0c31"
+  },
+  {
+   "chunk_file": "DRI__chunk_019.json",
+   "ticker": "DRI",
+   "primary_source_type": "10-K",
+   "primary_source_id": "0000940944-24-000035",
+   "source_ids": [
+    "0000940944-24-000035"
+   ],
+   "content_chars": 39572,
+   "selection": "primary",
+   "sha256_rank_key": "16d43103fded7c4ce3104f99d78af70ff0534d2263d1a134c3654adcc1738703"
+  },
+  {
+   "chunk_file": "DRI__chunk_041.json",
+   "ticker": "DRI",
+   "primary_source_type": "transcript",
+   "primary_source_id": "DRI_2025-09-18T08.30",
+   "source_ids": [
+    "DRI_2025-09-18T08.30"
+   ],
+   "content_chars": 39797,
+   "selection": "primary",
+   "sha256_rank_key": "13c2648c7638d44018804488e3c1cf041f05b24369c9a291cc28d614ab074cf1"
+  },
+  {
+   "chunk_file": "DRI__chunk_047.json",
+   "ticker": "DRI",
+   "primary_source_type": "transcript",
+   "primary_source_id": "DRI_2024-12-19T08.30",
+   "source_ids": [
+    "DRI_2024-12-19T08.30"
+   ],
+   "content_chars": 39378,
+   "selection": "primary",
+   "sha256_rank_key": "07e9d64179c44e52b9a47cae67c11d73c16afcbe1735a13b222aec6c0dfcad27"
+  },
+  {
+   "chunk_file": "MCD__chunk_019.json",
+   "ticker": "MCD",
+   "primary_source_type": "8-K",
+   "primary_source_id": "0000063908-24-000029",
+   "source_ids": [
+    "0000063908-23-000112",
+    "0000063908-24-000029",
+    "0000063908-24-000059",
+    "0000063908-24-000072",
+    "0000063908-24-000081",
+    "0000063908-24-000089",
+    "0000063908-24-000092",
+    "0000950103-24-003769"
+   ],
+   "content_chars": 35381,
+   "selection": "primary",
+   "sha256_rank_key": "1398c9100c521d369a3d81a209071e79e2abe0b3e1681ed994045568bd8a6877"
+  },
+  {
+   "chunk_file": "MCD__chunk_023.json",
+   "ticker": "MCD",
+   "primary_source_type": "10-Q",
+   "primary_source_id": "0000063908-23-000076",
+   "source_ids": [
+    "0000063908-23-000076"
+   ],
+   "content_chars": 39986,
+   "selection": "primary",
+   "sha256_rank_key": "0d20279a743d3ace6013c0fd80f25f69ed1536c3528d62740226b852a1e7bc4e"
+  },
+  {
+   "chunk_file": "MCD__chunk_033.json",
+   "ticker": "MCD",
+   "primary_source_type": "10-K",
+   "primary_source_id": "0000063908-23-000012",
+   "source_ids": [
+    "0000063908-23-000012"
+   ],
+   "content_chars": 39913,
+   "selection": "primary",
+   "sha256_rank_key": "209eb74d3710d6265c1864a2df6f42d7cf4b22ad3e9264ffe94913ec444cac80"
+  },
+  {
+   "chunk_file": "MCD__chunk_039.json",
+   "ticker": "MCD",
+   "primary_source_type": "transcript",
+   "primary_source_id": "MCD_2026-02-11T16.30",
+   "source_ids": [
+    "MCD_2026-02-11T16.30"
+   ],
+   "content_chars": 38228,
+   "selection": "primary",
+   "sha256_rank_key": "06952bb88a9b08286c58a2eb1b15f96dafff5525cd01d4b936197417b153d0ce"
+  },
+  {
+   "chunk_file": "QSR__chunk_005.json",
+   "ticker": "QSR",
+   "primary_source_type": "10-Q",
+   "primary_source_id": "0001618756-25-000300",
+   "source_ids": [
+    "0001618756-25-000300"
+   ],
+   "content_chars": 39724,
+   "selection": "primary",
+   "sha256_rank_key": "09335c4fdfb9011813fc7be97c756863b0634a1e7af2c7d2e1384497045fe01a"
+  },
+  {
+   "chunk_file": "QSR__chunk_025.json",
+   "ticker": "QSR",
+   "primary_source_type": "10-K",
+   "primary_source_id": "0001618756-24-000020",
+   "source_ids": [
+    "0001618756-24-000020"
+   ],
+   "content_chars": 39709,
+   "selection": "primary",
+   "sha256_rank_key": "109a0fa9aaeee3989aea8ac536b01da8593dbdc69678b4365f0228471df5aade"
+  },
+  {
+   "chunk_file": "QSR__chunk_044.json",
+   "ticker": "QSR",
+   "primary_source_type": "transcript",
+   "primary_source_id": "QSR_2025-02-12T08.30",
+   "source_ids": [
+    "QSR_2025-02-12T08.30"
+   ],
+   "content_chars": 39996,
+   "selection": "primary",
+   "sha256_rank_key": "0596b29fd995b681c2e51f5c87804651218ae4571c3df87cf5d19081b1211980"
+  },
+  {
+   "chunk_file": "QSR__chunk_048.json",
+   "ticker": "QSR",
+   "primary_source_type": "transcript",
+   "primary_source_id": "QSR_2024-08-08T08.30",
+   "source_ids": [
+    "QSR_2024-08-08T08.30"
+   ],
+   "content_chars": 37841,
+   "selection": "primary",
+   "sha256_rank_key": "05bcdf2add00e3795ed77e25801ef1daf6fc59744968e63624bfda19dc8c9b9a"
+  },
+  {
+   "chunk_file": "SBUX__chunk_001.json",
+   "ticker": "SBUX",
+   "primary_source_type": "8-K",
+   "primary_source_id": "0000829224-26-000064",
+   "source_ids": [
+    "0000829224-26-000058",
+    "0000829224-26-000064"
+   ],
+   "content_chars": 289,
+   "selection": "primary",
+   "sha256_rank_key": "0cb366a86e781ad2d301088f53839c495166f05a3466203325ac400cf41ecd47"
+  },
+  {
+   "chunk_file": "SBUX__chunk_038.json",
+   "ticker": "SBUX",
+   "primary_source_type": "10-K",
+   "primary_source_id": "0000829224-23-000058",
+   "source_ids": [
+    "0000829224-23-000058"
+   ],
+   "content_chars": 7676,
+   "selection": "primary",
+   "sha256_rank_key": "0da4e0880ea39824acefb1b87e55a500eb931677d0c1d1e2ee33b7cc45c2f547"
+  },
+  {
+   "chunk_file": "SBUX__chunk_046.json",
+   "ticker": "SBUX",
+   "primary_source_type": "10-Q",
+   "primary_source_id": "0000829224-23-000017",
+   "source_ids": [
+    "0000829224-23-000017"
+   ],
+   "content_chars": 37954,
+   "selection": "primary",
+   "sha256_rank_key": "0b86db37656b9b6d8821395b58d994e8de533ca9658328b3df739d1d07bdab85"
+  },
+  {
+   "chunk_file": "SBUX__chunk_065.json",
+   "ticker": "SBUX",
+   "primary_source_type": "transcript",
+   "primary_source_id": "SBUX_2024-01-30T17.00",
+   "source_ids": [
+    "SBUX_2024-01-30T17.00"
+   ],
+   "content_chars": 35212,
+   "selection": "primary",
+   "sha256_rank_key": "069aed2874a2f0d20c616801510feed2dcdf0cd578f0707f671dd8eca7eec9b0"
+  },
+  {
+   "chunk_file": "SHAK__chunk_016.json",
+   "ticker": "SHAK",
+   "primary_source_type": "10-Q",
+   "primary_source_id": "0001620533-25-000029",
+   "source_ids": [
+    "0001620533-25-000029"
+   ],
+   "content_chars": 39914,
+   "selection": "primary",
+   "sha256_rank_key": "0f1cd02fbd37411dd29826afb831445b0e1fe0f1f029989788e70fba2cbee0de"
+  },
+  {
+   "chunk_file": "SHAK__chunk_029.json",
+   "ticker": "SHAK",
+   "primary_source_type": "8-K",
+   "primary_source_id": "0001620533-24-000105",
+   "source_ids": [
+    "0001104659-24-093435",
+    "0001620533-24-000105"
+   ],
+   "content_chars": 28107,
+   "selection": "primary",
+   "sha256_rank_key": "138db318b8c4b69e7ac6db0bba77fe8683c6f6704af4776fd84985d6ab38f121"
+  },
+  {
+   "chunk_file": "SHAK__chunk_056.json",
+   "ticker": "SHAK",
+   "primary_source_type": "10-K",
+   "primary_source_id": "0001620533-23-000015",
+   "source_ids": [
+    "0001620533-23-000015"
+   ],
+   "content_chars": 39964,
+   "selection": "primary",
+   "sha256_rank_key": "01adbbac36954bde8f96ea2a6ec0827c255735ac408daf8fd64e8cc12ea598e0"
+  },
+  {
+   "chunk_file": "SHAK__chunk_073.json",
+   "ticker": "SHAK",
+   "primary_source_type": "transcript",
+   "primary_source_id": "SHAK_2024-08-01T08.00",
+   "source_ids": [
+    "SHAK_2024-08-01T08.00"
+   ],
+   "content_chars": 38354,
+   "selection": "primary",
+   "sha256_rank_key": "03da6d6e0188f5eddf47f696ab57c1f040222746f297747bad2c4a578c8f9ae2"
+  },
+  {
+   "chunk_file": "TXRH__chunk_010.json",
+   "ticker": "TXRH",
+   "primary_source_type": "10-Q",
+   "primary_source_id": "0001558370-25-010861",
+   "source_ids": [
+    "0001558370-25-010861"
+   ],
+   "content_chars": 39872,
+   "selection": "primary",
+   "sha256_rank_key": "0372b1d37540a9fe5cbda2694b6235a71688c4fc3e6e66e78862fd11cdc252a4"
+  },
+  {
+   "chunk_file": "TXRH__chunk_023.json",
+   "ticker": "TXRH",
+   "primary_source_type": "8-K",
+   "primary_source_id": "0001558370-24-010176",
+   "source_ids": [
+    "0001104659-24-062790",
+    "0001558370-24-010176",
+    "0001558370-24-010663"
+   ],
+   "content_chars": 23898,
+   "selection": "primary",
+   "sha256_rank_key": "0a6657163c0e6400570d7383bc9d17f23b576978757582bb5e7fd5861ac84154"
+  },
+  {
+   "chunk_file": "TXRH__chunk_040.json",
+   "ticker": "TXRH",
+   "primary_source_type": "10-K",
+   "primary_source_id": "0001558370-23-001979",
+   "source_ids": [
+    "0001558370-23-001979"
+   ],
+   "content_chars": 39139,
+   "selection": "primary",
+   "sha256_rank_key": "002204a38d2aa5645dd5ac40781c42495a0c19330b9badaf2b346b4a85a19267"
+  },
+  {
+   "chunk_file": "TXRH__chunk_045.json",
+   "ticker": "TXRH",
+   "primary_source_type": "transcript",
+   "primary_source_id": "TXRH_2025-08-07T17.00",
+   "source_ids": [
+    "TXRH_2025-08-07T17.00"
+   ],
+   "content_chars": 2656,
+   "selection": "primary",
+   "sha256_rank_key": "0526454971208285fccaf061b7b0c2ac52d7d10d88fcbc972caafb018495d05e"
+  },
+  {
+   "chunk_file": "YUM__chunk_003.json",
+   "ticker": "YUM",
+   "primary_source_type": "10-K",
+   "primary_source_id": "0001041061-26-000084",
+   "source_ids": [
+    "0001041061-26-000084"
+   ],
+   "content_chars": 39553,
+   "selection": "primary",
+   "sha256_rank_key": "08666d5246d8fd32c8c04449a68bf30847ae7dd29f0ebfca654335d1cdc1fa41"
+  },
+  {
+   "chunk_file": "YUM__chunk_046.json",
+   "ticker": "YUM",
+   "primary_source_type": "10-Q",
+   "primary_source_id": "0001041061-23-000041",
+   "source_ids": [
+    "0001041061-23-000041"
+   ],
+   "content_chars": 13881,
+   "selection": "primary",
+   "sha256_rank_key": "031c7104592916076bd0459b388f18a84a2517c55b51c632dc1d43f1f790831f"
+  },
+  {
+   "chunk_file": "YUM__chunk_048.json",
+   "ticker": "YUM",
+   "primary_source_type": "8-K",
+   "primary_source_id": "0001041061-23-000037",
+   "source_ids": [
+    "0001041061-23-000028",
+    "0001041061-23-000033",
+    "0001041061-23-000035",
+    "0001041061-23-000037"
+   ],
+   "content_chars": 3252,
+   "selection": "primary",
+   "sha256_rank_key": "08aecc77779222c41936d76aabc4b8a506accc3ce1c1246d98dcd24cc78cb950"
+  },
+  {
+   "chunk_file": "YUM__chunk_079.json",
+   "ticker": "YUM",
+   "primary_source_type": "transcript",
+   "primary_source_id": "YUM_2023-08-02T08.15",
+   "source_ids": [
+    "YUM_2023-08-02T08.15"
+   ],
+   "content_chars": 5428,
+   "selection": "primary",
+   "sha256_rank_key": "0493125ae45a7125035e5243b40303c2e01420cf3a79cedea27aa6d8789f6651"
+  }
+ ]
+}

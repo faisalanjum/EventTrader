@@ -1,0 +1,76 @@
+{
+ "key": "K-reader",
+ "version": "v3",
+ "status": "LOCKED",
+ "locked_by": "fable",
+ "locked_at": "2026-07-10T15:13:39Z",
+ "drafted_by": {
+  "route": "dual-tier union",
+  "tiers": [
+   "claude-sonnet-5",
+   "claude-opus-4-8"
+  ],
+  "effort": "high"
+ },
+ "adjudicated_by": {
+  "model": "claude-fable-5",
+  "role": "sole adjudicator: every union record ruled by Fable",
+  "route": "union -> per-chunk evidence briefs -> 15 Fable wave-verdict files -> deterministic materialization (materialize.py + apply_fixes.py, 0-LLM) -> UTF-8 lint",
+  "support_agents": {
+   "count": 24,
+   "model": "claude-sonnet-5",
+   "effort": "high",
+   "breakdown": "20 brief agents (2 chunks each) + 1 consistency agent + 2 brief redos + 1 quote re-anchor; non-graded evidence preparation only, no rulings"
+  }
+ },
+ "counts": {
+  "union_records": 1326,
+  "final_records": 1175,
+  "hard": 410,
+  "group_keeps": 1115,
+  "fable_adds": 60,
+  "pruned_groups": 20,
+  "merged_away_groups": 18,
+  "rejected_missed_proposals": 10,
+  "renamed_canonicals": 178,
+  "quote_fixes": {
+   "trimmed_to_200": 59,
+   "extended_to_60": 6,
+   "reanchored_encoding": 5,
+   "invalid_alt_dropped": 1
+  }
+ },
+ "lint": {
+  "status": "PASS",
+  "errors": 0,
+  "warnings": 0,
+  "decoding": "strict UTF-8 (utf-8-sig)",
+  "checks": [
+   "quote verbatim in pinned chunk",
+   "quote length 60-200",
+   "occurrence <= count",
+   "chunk in pinned v3 sample-40",
+   "ticker + source_id match sample",
+   "name/alt regex ^[a-z][a-z0-9_]*$",
+   "no duplicate (chunk, name)",
+   "no name-in-alts collisions within chunk"
+  ]
+ },
+ "shas": {
+  "protocol_sha256": "9402cca1cc613a58c0bea9b302662decb905e29cfc45b56c222d0ab84bfa291c",
+  "sample_sha256": "41fbc82774a0bfcfa140301a9061fb1cd4eb0c6fe67512c1ebe846521b9e0291",
+  "key_sha256": "cf87a09af1c7b7c6f708c8df56d86bfc600edf8c1eaf6e41a8c6ab783b181736",
+  "adjudication_sha256": "dacdea3c64afb3beac02a23cf918ab4b4ad732c917331a4ed688c0492adb51d7",
+  "draft_union_sha256_post_fable_fill": "9bfbeda5657d205be518788d7d153deddbce698317a58e1cd65890c30623061b"
+ },
+ "supersedes": {
+  "v2_sample": "050376fceca53cb0e31c989e7ee8c009034280a33c39966bceaec3ecb5cad9e8",
+  "v1_sample": "a0090b90fff9e58ae097423525f8419054341663b56d7dd8c09dcd87f4e551d1"
+ },
+ "notes": [
+  "SBUX__chunk_001.json deliberate thin/skip-test: zero gold causes (protocol §4.3).",
+  "Union fable{} blocks back-filled with per-record fate (keep/merge/prune -> final key_id) per §8.1.",
+  "CMG_029 missed-3 (G&A split from g3) restored after a brief regeneration dropped it; marked restored_by_fable in the brief.",
+  "All quotes re-verified under strict UTF-8 decoding, closing the Windows-1252 misdecode risk found during briefing."
+ ]
+}

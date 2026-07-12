@@ -1,0 +1,75 @@
+{
+ "exp_id": "EXP-2",
+ "run_id": "2026-07-11T19-40-47Z_exp2",
+ "workorder_sha256": "774c20c224eb912a17709b364032232cd246c9260b65442301eafc0573208c72",
+ "models": {
+  "cheap": "claude-haiku-4-5-20251001",
+  "strong": "claude-sonnet-5",
+  "escalation": "claude-opus-4-8",
+  "grader": "claude-sonnet-5"
+ },
+ "model_alias_note": "workflow agent() aliases haiku/sonnet/opus map to the registry IDs above (session harness 2026-07-11); a mid-run CLI/model change = abort per 1.3",
+ "reader_effort": "high",
+ "reader_effort_note": "OWNER PIN 2026-07-11: effort=high on ALL reader arms; adopted tier = (model, effort) pair; identical effort across arms for fair model comparison",
+ "grader_effort": "high",
+ "grading_plan": "strict 1.5 batching: <=10 UNRELATED judgment items per call (Fable ruling 2026-07-11: closest to production per-case judging; per-chunk list grading rejected for anchoring + correlated-error risk)",
+ "prompt_shas": {
+  "reader_rules_full": "b33ab08ba2ae03c04c34e65951675e647dcb4f9a9d66439ddfdd22a34e848f06",
+  "reader_rules_ablated": "7895052289207173375f132ed3beab8202308d33c882263dbf40e5f3860dcc64"
+ },
+ "keys": {
+  "K-reader": "cf87a09af1c7b7c6f708c8df56d86bfc600edf8c1eaf6e41a8c6ab783b181736"
+ },
+ "sample_sha256": "41fbc82774a0bfcfa140301a9061fb1cd4eb0c6fe67512c1ebe846521b9e0291",
+ "arms": [
+  "haiku_40k_1",
+  "sonnet_40k_1",
+  "opus_40k_1",
+  "cheap_para_1",
+  "opus_para_1",
+  "cheap_40k_2u",
+  "cheap_40k_3u",
+  "cheap_40k_norules"
+ ],
+ "caps": {
+  "max_calls": 1900,
+  "abort_at": 2200,
+  "authorized_by": "owner 2026-07-11 (raised 1800->1900 after two declared incidents: prefix-cache re-run +80; 8-chunk args error +24 corrective)"
+ },
+ "counts": {
+  "planned_calls": 1760,
+  "planned_readers": 726,
+  "planned_grading": 1000,
+  "made_calls": 1799,
+  "invalid_retries": 0
+ },
+ "para8k_projection": {
+  "R_chunks_exact": 183,
+  "method": "ADOPTED operationalization: production splitter ladder (split_event) + production greedy packing applied to the 40 KEY CHUNKS content (byte-conserving, 1,224,178 chars), packing scoped per parent key chunk",
+  "rejected_alternative": "full-source-event rechunk = 525 chunks / 2,458 projected calls: breaches the owner abort (2,200) AND confounds para-vs-40k recall with 3.1x never-gold text (fixture events are parts of source events)",
+  "estimate_basis_superseded": "pre-run arithmetic estimate 163 (ceil per chunk) superseded by exact packing count 183"
+ },
+ "pit": {
+  "note": "readers see frozen fixture chunk content only; no gold, no sidecar, no key (K-reader protocol section 3 blindness)"
+ },
+ "best_cheap_rule": "the cheaper of {Haiku, Sonnet} whose A1/A2 judged recall >= max(A1,A2,A3) - 2 pts; none qualifies -> Sonnet",
+ "seed": "h32:exp2-2026-07-11T19-40-47Z_exp2",
+ "status": "scored_PASS_fable_signed",
+ "started": "2026-07-11T19:40:47.286218+00:00",
+ "finished": "2026-07-12T03:44:04.296467+00:00",
+ "incidents": [
+  {
+   "id": "exp2-inc-1",
+   "kind": "prefix-cache re-run",
+   "calls": 80,
+   "validity": "none (identical prompts, pre-scoring; operative A2/A3 = second generation, declared)"
+  },
+  {
+   "id": "exp2-inc-2",
+   "kind": "hand-assembled args: 8/40 wrong chunk ids",
+   "calls": 24,
+   "validity": "none (pinned 8 get fresh blind reads; off-sample quarantined; no grading had run)",
+   "prevention": "all stage args generated programmatically from packets files"
+  }
+ ]
+}

@@ -1,61 +1,189 @@
 {
-  "abort_at": 6000,
-  "entries": [
-    {
-      "by_model": {
-        "sonnet (workflow verify agents)": 8
-      },
-      "calls": 8,
-      "note": "read-only sidecar source-claim verification fan-out; Fable adjudication itself = main session, 0 workflow calls",
-      "pkg": "WP-KEYS",
-      "run_id": "kpairs_v1_adjudication_2026-07-09T19:55:57Z"
-    },
-    {
-      "by_model": {
-        "claude-opus-4-8": 163,
-        "claude-sonnet-5": 320
-      },
-      "gate": "FAIL",
-      "invalid": 0,
-      "pkg": "EXP-0",
-      "preflight_probe_calls": 3,
-      "record_clerk_calls": 3,
-      "run_id": "2026-07-09T20-31-24Z_exp0",
-      "strong_grader_calls": 480,
-      "subagent_tokens_approx": 15580676
-    },
-    {
-      "by_model": {
-        "claude-opus-4-8": 163,
-        "claude-sonnet-5": 320
-      },
-      "effort": "high",
-      "effort_probe_calls": 24,
-      "gate": "FAIL",
-      "invalid_after_recovery": 0,
-      "kp0073_recovery_calls": 1,
-      "note": "high effort ~2.5-3x tokens vs v1.1 (subagent_tokens 15.7M judges only)",
-      "pkg": "EXP-0-v1.2-rerun",
-      "record_clerk_calls": 3,
-      "run_id": "2026-07-09T23-03-31Z_exp0v12",
-      "strong_grader_calls": 480
-    },
-    {
-      "by_model": {
-        "claude-opus-4-8": 1,
-        "claude-sonnet-5": 2
-      },
-      "composite": "477 run-2 reused + 3 fresh",
-      "effort": "high",
-      "fresh_calls": 3,
-      "outcome": "RATIFY_SONNET_TIER",
-      "pkg": "EXP-0-v1.3-composite",
-      "run_id": "2026-07-10T00-10-11Z_exp0v13composite"
-    }
-  ],
-  "global_cap": 4000,
-  "totals": {
-    "all": 1005,
-    "strong_tier": 968
+ "abort_at": 6000,
+ "entries": [
+  {
+   "by_model": {
+    "sonnet (workflow verify agents)": 8
+   },
+   "calls": 8,
+   "note": "read-only sidecar source-claim verification fan-out; Fable adjudication itself = main session, 0 workflow calls",
+   "pkg": "WP-KEYS",
+   "run_id": "kpairs_v1_adjudication_2026-07-09T19:55:57Z"
+  },
+  {
+   "by_model": {
+    "claude-opus-4-8": 163,
+    "claude-sonnet-5": 320
+   },
+   "gate": "FAIL",
+   "invalid": 0,
+   "pkg": "EXP-0",
+   "preflight_probe_calls": 3,
+   "record_clerk_calls": 3,
+   "run_id": "2026-07-09T20-31-24Z_exp0",
+   "strong_grader_calls": 480,
+   "subagent_tokens_approx": 15580676
+  },
+  {
+   "by_model": {
+    "claude-opus-4-8": 163,
+    "claude-sonnet-5": 320
+   },
+   "effort": "high",
+   "effort_probe_calls": 24,
+   "gate": "FAIL",
+   "invalid_after_recovery": 0,
+   "kp0073_recovery_calls": 1,
+   "note": "high effort ~2.5-3x tokens vs v1.1 (subagent_tokens 15.7M judges only)",
+   "pkg": "EXP-0-v1.2-rerun",
+   "record_clerk_calls": 3,
+   "run_id": "2026-07-09T23-03-31Z_exp0v12",
+   "strong_grader_calls": 480
+  },
+  {
+   "by_model": {
+    "claude-opus-4-8": 1,
+    "claude-sonnet-5": 2
+   },
+   "composite": "477 run-2 reused + 3 fresh",
+   "effort": "high",
+   "fresh_calls": 3,
+   "outcome": "RATIFY_SONNET_TIER",
+   "pkg": "EXP-0-v1.3-composite",
+   "run_id": "2026-07-10T00-10-11Z_exp0v13composite"
+  },
+  {
+   "by_model": {
+    "claude-opus-4-8": 40,
+    "claude-sonnet-5": 40
+   },
+   "calls": 80,
+   "effort": "high",
+   "note": "40 chunks x Sonnet+Opus @ high; + 4 probe; Fable-cleared/booked",
+   "pkg": "WP-KEYS-K-reader-v3-draft",
+   "probe_calls": 4,
+   "route": "dual-tier union (blind)",
+   "stage": "locked 2026-07-10T15:13:39Z (Fable per-record adjudication complete; K-reader.v3.lock.json)"
+  },
+  {
+   "pkg": "WP-KEYS-K-reader-v3-adjudication-support",
+   "calls": 24,
+   "by_model": {
+    "claude-sonnet-5": 24
+   },
+   "effort": "high",
+   "route": "Fable-run support workflow: 20 evidence-brief agents (2 chunks each) + 1 consistency agent + 2 brief redos + 1 quote re-anchor",
+   "note": "non-graded evidence preparation; ALL rulings by Fable (booked to WP-KEYS per K-pairs precedent)",
+   "stage": "complete"
+  },
+  {
+   "pkg": "EXP-2",
+   "run_id": "2026-07-11T19-40-47Z_exp2",
+   "stage": "stage-1 readers A1/A2/A3",
+   "calls": 121,
+   "by_model": {
+    "claude-haiku-4-5-20251001": 41,
+    "claude-sonnet-5": 40,
+    "claude-opus-4-8": 40
+   },
+   "note": "120 planned + 1 retry (API server error mid-response, haiku BLMN_007; §1.5 retry-once); invalid outputs: 0/119 validated",
+   "effort": "high"
+  },
+  {
+   "pkg": "EXP-2",
+   "run_id": "2026-07-11T19-40-47Z_exp2",
+   "stage": "stage-1 retry cache-footgun correction",
+   "calls": 80,
+   "by_model": {
+    "claude-sonnet-5": 40,
+    "claude-opus-4-8": 40
+   },
+   "note": "prefix-cache resume re-ran A2/A3 live (failed haiku agent sat early in call order); operative A2/A3 outputs = second generation (identical prompts, pre-scoring, declared); stage-2 arms isolated per-workflow to prevent recurrence",
+   "effort": "high"
+  },
+  {
+   "pkg": "EXP-2",
+   "run_id": "2026-07-11T19-40-47Z_exp2",
+   "stage": "stage-1 corrective readers (8 pinned chunks x 3 arms)",
+   "calls": 24,
+   "by_model": {
+    "claude-haiku-4-5-20251001": 8,
+    "claude-sonnet-5": 8,
+    "claude-opus-4-8": 8
+   },
+   "effort": "high"
+  },
+  {
+   "pkg": "EXP-2",
+   "run_id": "2026-07-11T19-40-47Z_exp2",
+   "stage": "stage-1 coverage grading A1/A2/A3",
+   "calls": 356,
+   "by_model": {
+    "claude-sonnet-5": 356
+   },
+   "effort": "high",
+   "note": "354 batches + 1 transient retry + 1 two-item supplement (grader dropped 2 verdicts; caught by 1:1 reconciliation); recalls h=.3098 s=.4043 o=.4238; best-cheap=sonnet per pinned rule"
+  },
+  {
+   "pkg": "EXP-2",
+   "run_id": "2026-07-11T19-40-47Z_exp2",
+   "stage": "stage-2 readers wave-1 (SESSION-LIMIT INTERRUPTED)",
+   "calls": 18,
+   "by_model": {
+    "claude-sonnet-5": 12,
+    "claude-opus-4-8": 6
+   },
+   "note": "subscription session limit hit (resets 6:20pm ET); ~588 attempts rejected without producing work (not booked as calls); owner ruled: continue in small batches",
+   "effort": "high"
+  },
+  {
+   "pkg": "EXP-2",
+   "run_id": "2026-07-11T19-40-47Z_exp2",
+   "stage": "stage-2 readers wave-2 (post-limit resume)",
+   "calls": 545,
+   "by_model": {
+    "claude-sonnet-5": 382,
+    "claude-opus-4-8": 163
+   },
+   "effort": "high",
+   "note": "533 agent-successes + 12 transient failures of which 2 wrote valid files anyway; disk ground truth: 596/606 outputs valid, 10-call mop-up follows"
+  },
+  {
+   "pkg": "EXP-2",
+   "run_id": "2026-07-11T19-40-47Z_exp2",
+   "stage": "stage-2 mop-up (10 transient retries)",
+   "calls": 10,
+   "by_model": {
+    "claude-sonnet-5": 10
+   },
+   "effort": "high"
+  },
+  {
+   "pkg": "EXP-2",
+   "run_id": "2026-07-11T19-40-47Z_exp2",
+   "stage": "stage-2 grading waves 1-2 (session-limit interrupted twice)",
+   "calls": 219,
+   "by_model": {
+    "claude-sonnet-5": 219
+   },
+   "effort": "high",
+   "note": "163 coverage + 56 precision/junk batches graded; ~470 session-limit rejections not booked (no work produced); 428-batch recovery wave running"
+  },
+  {
+   "pkg": "EXP-2",
+   "run_id": "2026-07-11T19-40-47Z_exp2",
+   "stage": "grading recovery waves + supplements (COMPLETE; EXP-2 scored PASS)",
+   "calls": 444,
+   "by_model": {
+    "claude-sonnet-5": 444
+   },
+   "effort": "high",
+   "note": "428 recovery + 7 stragglers + 2 supplements + 7 item-level fills embedded; total EXP-2 spend 1,799 of authorized 1,900"
   }
+ ],
+ "global_cap": 4000,
+ "totals": {
+  "all": 2930,
+  "strong_tier": 2760
+ }
 }

@@ -1,0 +1,94 @@
+{
+ "key": "K-reader",
+ "version": "v3",
+ "stage": "dual-tier union draft (pre-adjudication)",
+ "models": {
+  "sonnet": "claude-sonnet-5",
+  "opus": "claude-opus-4-8",
+  "effort": "high"
+ },
+ "union_causes": 1326,
+ "agreement": {
+  "both_tiers": 350,
+  "sonnet_only": 431,
+  "opus_only": 545
+ },
+ "per_chunk_cause_counts": {
+  "BLMN__chunk_007.json": 47,
+  "BLMN__chunk_023.json": 31,
+  "BLMN__chunk_031.json": 17,
+  "BLMN__chunk_075.json": 34,
+  "CAKE__chunk_024.json": 47,
+  "CAKE__chunk_029.json": 41,
+  "CAKE__chunk_033.json": 41,
+  "CAKE__chunk_050.json": 12,
+  "CMG__chunk_029.json": 29,
+  "CMG__chunk_033.json": 50,
+  "CMG__chunk_049.json": 52,
+  "CMG__chunk_058.json": 25,
+  "DRI__chunk_002.json": 32,
+  "DRI__chunk_019.json": 29,
+  "DRI__chunk_041.json": 44,
+  "DRI__chunk_047.json": 42,
+  "MCD__chunk_019.json": 40,
+  "MCD__chunk_023.json": 38,
+  "MCD__chunk_033.json": 23,
+  "MCD__chunk_039.json": 33,
+  "QSR__chunk_005.json": 41,
+  "QSR__chunk_025.json": 23,
+  "QSR__chunk_044.json": 36,
+  "QSR__chunk_048.json": 48,
+  "SBUX__chunk_038.json": 6,
+  "SBUX__chunk_046.json": 35,
+  "SBUX__chunk_065.json": 39,
+  "SHAK__chunk_016.json": 53,
+  "SHAK__chunk_029.json": 37,
+  "SHAK__chunk_056.json": 26,
+  "SHAK__chunk_073.json": 49,
+  "TXRH__chunk_010.json": 48,
+  "TXRH__chunk_023.json": 31,
+  "TXRH__chunk_040.json": 43,
+  "TXRH__chunk_045.json": 2,
+  "YUM__chunk_003.json": 53,
+  "YUM__chunk_046.json": 34,
+  "YUM__chunk_048.json": 5,
+  "YUM__chunk_079.json": 10
+ },
+ "chunks_with_zero_causes": [
+  "SBUX__chunk_001.json"
+ ],
+ "lint": {
+  "errors": [
+   "kr_0084 [sonnet]: evidence_quote NOT verbatim in BLMN__chunk_031.json/0001546417-24-000037",
+   "kr_0085 [sonnet]: evidence_quote NOT verbatim in BLMN__chunk_031.json/0001546417-24-000037",
+   "kr_0089 [sonnet]: evidence_quote NOT verbatim in BLMN__chunk_031.json/0001546417-24-000037",
+   "kr_0102 [opus]: evidence_quote NOT verbatim in BLMN__chunk_075.json/BLMN_2023-04-28T08.15",
+   "kr_0328 [sonnet]: evidence_quote NOT verbatim in CMG__chunk_033.json/0001058090-23-000010",
+   "kr_0349 [sonnet]: evidence_quote NOT verbatim in CMG__chunk_033.json/0001058090-23-000010",
+   "kr_0592 [sonnet]: evidence_quote NOT verbatim in MCD__chunk_019.json/0000063908-24-000029",
+   "kr_0620 [sonnet]: evidence_quote NOT verbatim in MCD__chunk_023.json/0000063908-23-000076",
+   "kr_0644 [sonnet]: evidence_quote NOT verbatim in MCD__chunk_023.json/0000063908-23-000076",
+   "kr_0660 [opus]: evidence_quote NOT verbatim in MCD__chunk_033.json/0000063908-23-000012",
+   "kr_0690 [opus]: evidence_quote NOT verbatim in MCD__chunk_039.json/MCD_2026-02-11T16.30",
+   "kr_0691 [sonnet]: evidence_quote NOT verbatim in MCD__chunk_039.json/MCD_2026-02-11T16.30",
+   "kr_0733 [sonnet]: evidence_quote NOT verbatim in QSR__chunk_005.json/0001618756-25-000300",
+   "kr_0788 [sonnet]: evidence_quote NOT verbatim in QSR__chunk_044.json/QSR_2025-02-12T08.30",
+   "kr_0941 [sonnet]: evidence_quote NOT verbatim in SHAK__chunk_016.json/0001620533-25-000029",
+   "kr_1046 [sonnet]: evidence_quote NOT verbatim in SHAK__chunk_056.json/0001620533-23-000015",
+   "kr_1104 [sonnet]: evidence_quote NOT verbatim in TXRH__chunk_010.json/0001558370-25-010861",
+   "kr_1182 [sonnet]: evidence_quote NOT verbatim in TXRH__chunk_040.json/0001558370-23-001979"
+  ],
+  "warnings": [
+   "kr_1272 [opus]: quote 51<60 chars"
+  ],
+  "clean": false,
+  "checks": "schema + 40-chunk coverage + verbatim quotes + lower_snake names",
+  "categorization": {
+   "genuine_mismatch": 15,
+   "wrong_source_id": 1,
+   "whitespace_only": 2
+  },
+  "flagged_records": 18,
+  "note": "18 quote misses flagged per-record in the union (fable.note): 15 genuine paraphrase (re-anchor or drop), 2 whitespace, 1 wrong-source_id. Union otherwise ready for record-by-record adjudication."
+ }
+}
