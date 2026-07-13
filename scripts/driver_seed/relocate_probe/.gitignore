@@ -1,3 +1,9 @@
 batches/
 batches_*/
 __pycache__/
+relocate_out.json
+relocate_out_design.json
+relocate_out_holdout.json
+truth.jsonl
+truth_design.jsonl
+truth_holdout.jsonl
