@@ -35,6 +35,17 @@ NOTE: this is the harder no-value FUTURE-fetch case; annual only, A–D companie
   (B) caption grabbed MD&A prose → `caption_of` takes the heading.
 - Recall ceiling ~90%; misses are safe abstains or value not on the fetched pages.
 
+## Phase 6 (B) — source generalization: TRANSCRIPTS (2026-07-13)
+Same shape-neutral reader, candidates from earnings-call PreparedRemark+QAExchange text (fetch by
+conference_datetime within 120d after period end; `prep_transcript.py`). 37 pairs, bind-only:
+emitted 2 / CORRECT 2 / MISBIND 0 / **HALLUCINATIONS 0** / abstained 35 → precision 100%, and clean
+abstention on the 35 where the number wasn't spoken. Reader correctly read SPOKEN ROUNDED prose
+("51 million members", "$5.41 billion"). RECALL is source-limited: transcripts state only ~5% lossless
+/ ~15% rounded of our ANNUAL SEGMENT metrics (calls discuss headline totals + narrative, not segment
+tables) — same data-block pattern as XBRL (5%). CONCLUSION: reader is source-agnostic (precision +
+abstention hold on filings AND spoken transcripts); segment-detail metrics belong to FILINGS; a proper
+transcript/news RECALL test needs a HEADLINE-metric population (total rev / EPS / key counts), not built.
+
 ## Deferred (seed-side, NOT relocation) — do with a certified-pipeline regression check
 - **XBRL member-parser bug** (`link_lib.seg_members`): `explicitMember` can be a LIST of `{dimension,$t}`
   (multi-axis, e.g. OperatingSegments × GroceryAndSnacks) — current code only reads a single dict, so
