@@ -16,13 +16,15 @@ touches nothing in production seeding.
 5. `grade.py` — leave-one-out oracle: build address from period A, blind-refetch period B, grade the
    picked number vs fiscal.ai's known B value (rounding-tolerant). Sources: 10-K/10-Q + 8-K EX-99.1.
 
-## Results (blind, unseen companies)
+## Results (blind, unseen companies; HONEST ruler = sign-aware stated-precision, 3-way CORRECT/MISBIND/UNGRADEABLE-REF)
 | run | precision | recall | notes |
 |---|---|---|---|
-| 39-pair (design+holdout) | 100% | 90% | small sample |
-| **150-pair validation** (A–D, annual) | **95.8%** | **76%** | the trustworthy corpus-wide read |
+| 150-pair, pre-fix (honest ruler) | 94.8% | 76.9% | baseline before Phases 1a/2/3 |
+| **150-pair CERTIFIED (Phases 1a+2+3)** | **97.8%** | **92.3%** | bind-only; 143 gradeable, 3 misbind, 7 ungradeable-ref |
 
-Per type (150): geography 100% / segment-rev 100% / operational 97% / non-GAAP 92% / other 78%.
+Per type (certified): geography 100/95 · non-GAAP 100/91 · operational 98/94 · segment 94/88 · other 90/82 · percent 100/100.
+Residual 3 misbinds = adjusted-vs-GAAP (CAG), sign flip (AFL), count off-by-2 (BJ) — known-hard ~2%; ~100% for real SEEDING (value-gate skips them).
+NOTE: this is the harder no-value FUTURE-fetch case; annual only, A–D companies. Phases done: 0 (honest ruler), 1a (identity), 2 (retrieval), 3 (shape-neutral reader). Skipped: 4 (XBRL lane, 5% payoff). Next: 6 (news/transcript sources).
 
 ## Key findings
 - The 5 precision misses are DEFINITIONAL near-misses: fiscal.ai stores an ADJUSTED number, the filing
