@@ -40,6 +40,52 @@ verbatim quote and are excluded.
 
 ---
 
+## Sources read, scope, and the key architecture insight
+
+**Sources (per company-period):** the WHOLE 10-K/10-Q — XBRL financial tables + ALL ~21 text
+sections (Business, Properties, Risk, MD&A, Notes… not just MD&A) + the earnings **8-K EX-99.1**
+press release. *Not* used: transcripts, news, non-earnings 8-Ks, or non-EX-99.1 exhibits (only gap:
+a value hidden solely in a slide-deck exhibit — rare; EX-99.1 is the standard home for the numbers).
+
+**Scope = recent periods only** (~2-3 per KPI): fiscal.ai's free tier only fills the latest ~2-3
+periods with values (older = paywalled) ∩ Neo4j filings. Old filings ARE in Neo4j; we just lack
+fiscal.ai *values* for them.
+
+**~48% of metrics are XBRL, ~52% text** (Part-1 sample; the 52% is an upper bound on truly
+text-only — segment revenue/income is usually XBRL, unit counts / per-unit / non-GAAP are text-only).
+
+### fiscal.ai is a ONE-TIME BOOTSTRAP — once a driver's identity is locked, you don't need it again
+
+```
+fiscal.ai's real job = tell us WHICH metric matters + bootstrap its identity ONCE.
+After that, fetch values for ANY period (past or future) from the filings ourselves.
+```
+
+- **XBRL driver** (identity = concept + member, already stored on T1 records): pull the value for
+  any period straight from that period's XBRL — pure code, exact, free. **This unlocks paywalled
+  history** (old filings are in Neo4j). = the `XBRLIntegrationDesign.md` materializer.
+- **Text driver** (identity = name + where it's disclosed): keyword-search the known label in each
+  period's filing → extract the value. A light per-period read; no fiscal.ai value needed.
+
+Our current pipeline is **value-first** (uses fiscal.ai's value to *find* the quote). Relocking for
+future/historical periods is **identity-first** (use the locked identity to *fetch* the value):
+trivial for XBRL (query concept+member+period), a modest extension for text.
+
+**Future-value sources, per driver type:**
+
+| | Best/only source | Notes |
+|---|---|---|
+| **XBRL driver** | XBRL from the 10-Q/10-K | exact, but waits weeks for the formal filing; press release/transcript can give it earlier but *rounded* |
+| **Text driver** | text: earnings release / filing text / transcript / news | press release + transcript land first (earnings day); XBRL n/a |
+
+**Text-driver fetch mechanism = keyword-search-first, never a whole-doc LLM read:** know the label →
+jump to that spot → code extracts if clean, LLM reads only the ~1-paragraph snippet if the table is
+ambiguous. XBRL driver = zero reading (DB query). Adding transcripts/news/other-8-Ks is possible
+with the *same* pipeline (small fetch + period-match add) and mostly boosts recall for prose-stated
+numbers. fiscal.ai stays useful only to (a) curate which metrics matter and (b) catch *new* metrics.
+
+---
+
 ## Read these to understand it 100% (in order)
 
 | # | File | What it is |
