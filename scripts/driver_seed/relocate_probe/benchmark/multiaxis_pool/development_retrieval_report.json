@@ -1,0 +1,719 @@
+{
+  "split": "development",
+  "requested": 100,
+  "built": 100,
+  "companies": 100,
+  "keep": 24,
+  "source_present": 97,
+  "candidate_present": 96,
+  "skipped": {
+    "no_exact_visible_lock_address": 13,
+    "target_number_form_in_non_candidate_input": 4,
+    "old_number_form_in_non_candidate_input": 1
+  },
+  "reader_input_contains_old_or_target_value": false,
+  "records": [
+    {
+      "id": 0,
+      "sources": 11,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 1,
+      "sources": 10,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 2,
+      "sources": 9,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 3,
+      "sources": 7,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 4,
+      "sources": 10,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 5,
+      "sources": 11,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 6,
+      "sources": 11,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 7,
+      "sources": 7,
+      "candidates": 4,
+      "source_present": false,
+      "candidate_present": false
+    },
+    {
+      "id": 8,
+      "sources": 9,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 9,
+      "sources": 11,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 10,
+      "sources": 15,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 11,
+      "sources": 11,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 12,
+      "sources": 10,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 13,
+      "sources": 10,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 14,
+      "sources": 9,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 15,
+      "sources": 11,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 16,
+      "sources": 15,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 17,
+      "sources": 11,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 18,
+      "sources": 11,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 19,
+      "sources": 11,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 20,
+      "sources": 8,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 21,
+      "sources": 9,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 22,
+      "sources": 8,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 23,
+      "sources": 9,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 24,
+      "sources": 9,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 25,
+      "sources": 11,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 26,
+      "sources": 11,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 27,
+      "sources": 11,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 28,
+      "sources": 9,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": false
+    },
+    {
+      "id": 29,
+      "sources": 9,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 30,
+      "sources": 10,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 31,
+      "sources": 11,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 32,
+      "sources": 10,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 33,
+      "sources": 9,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 34,
+      "sources": 9,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 35,
+      "sources": 7,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 36,
+      "sources": 11,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 37,
+      "sources": 9,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 38,
+      "sources": 10,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 39,
+      "sources": 11,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 40,
+      "sources": 8,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 41,
+      "sources": 8,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 42,
+      "sources": 11,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 43,
+      "sources": 9,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 44,
+      "sources": 9,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 45,
+      "sources": 13,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 46,
+      "sources": 9,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 47,
+      "sources": 12,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 48,
+      "sources": 11,
+      "candidates": 24,
+      "source_present": false,
+      "candidate_present": false
+    },
+    {
+      "id": 49,
+      "sources": 9,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 50,
+      "sources": 11,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 51,
+      "sources": 11,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 52,
+      "sources": 9,
+      "candidates": 13,
+      "source_present": false,
+      "candidate_present": false
+    },
+    {
+      "id": 53,
+      "sources": 9,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 54,
+      "sources": 11,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 55,
+      "sources": 12,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 56,
+      "sources": 8,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 57,
+      "sources": 9,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 58,
+      "sources": 11,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 59,
+      "sources": 11,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 60,
+      "sources": 10,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 61,
+      "sources": 10,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 62,
+      "sources": 12,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 63,
+      "sources": 9,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 64,
+      "sources": 17,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 65,
+      "sources": 9,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 66,
+      "sources": 11,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 67,
+      "sources": 13,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 68,
+      "sources": 9,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 69,
+      "sources": 10,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 70,
+      "sources": 9,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 71,
+      "sources": 9,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 72,
+      "sources": 12,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 73,
+      "sources": 11,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 74,
+      "sources": 8,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 75,
+      "sources": 9,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 76,
+      "sources": 13,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 77,
+      "sources": 10,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 78,
+      "sources": 8,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 79,
+      "sources": 11,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 80,
+      "sources": 9,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 81,
+      "sources": 11,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 82,
+      "sources": 10,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 83,
+      "sources": 11,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 84,
+      "sources": 9,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 85,
+      "sources": 9,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 86,
+      "sources": 8,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 87,
+      "sources": 11,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 88,
+      "sources": 11,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 89,
+      "sources": 11,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 90,
+      "sources": 16,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 91,
+      "sources": 8,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 92,
+      "sources": 9,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 93,
+      "sources": 8,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 94,
+      "sources": 9,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 95,
+      "sources": 9,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 96,
+      "sources": 11,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 97,
+      "sources": 9,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 98,
+      "sources": 11,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    },
+    {
+      "id": 99,
+      "sources": 10,
+      "candidates": 24,
+      "source_present": true,
+      "candidate_present": true
+    }
+  ],
+  "script_sha256": "e0bc31dc8789d6a2cb2c21ee4752ba90d8d5540639a39402ba89715841c1f51c",
+  "link_lib_sha256": "031b19451e632c70166da60db8a406f1412d72850b7f19d9b2cc68f336884e25"
+}

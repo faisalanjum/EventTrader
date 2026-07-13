@@ -1,0 +1,44 @@
+{
+  "adjacent_nontrivial_pairs_unbalanced": 16926,
+  "balanced_pairs": 1523,
+  "companies": 316,
+  "confirmed_facet_counts": {
+    "0": 3,
+    "1": 36,
+    "2": 1413,
+    "3": 71
+  },
+  "counts": {
+    "bad_or_zero_value": 487261,
+    "eligible_fact_rows": 120130,
+    "elimination": 188,
+    "equal_lock_target": 1568,
+    "fewer_than_two_slices": 1624809,
+    "identity_value_collision": 22840,
+    "known_non_slice_axis": 1278780,
+    "non_metric": 5263095,
+    "raw_fact_rows": 8941902,
+    "unresolved_dimension": 158559,
+    "unresolved_member": 9080
+  },
+  "eligible_observations_after_report_dedup": 120130,
+  "eligible_series": 8634,
+  "facet_counts": {
+    "2": 1452,
+    "3": 71
+  },
+  "maps": {
+    "dimensions": 955960,
+    "members": 1499049
+  },
+  "rules_sha256": "a41a92fe921fb29e216b265f5493eaedd6bc2e3692b1b4bb009ed19c64c19a9b",
+  "scope": {
+    "all_database_companies": true,
+    "max_per_company": 5,
+    "since": "2022-01-01"
+  },
+  "splits": {
+    "development": 1227,
+    "holdout": 296
+  }
+}
