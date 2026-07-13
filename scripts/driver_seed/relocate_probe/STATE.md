@@ -52,8 +52,10 @@ LLM owns ONE judgment ("is this snippet THIS driver's value for THIS period?"). 
 0. **DONE** — Freeze emit gates + output schema in `link_lib.py`: `quote_in_candidates` (anti-hallucination),
    `precision_grade` (exact|rounded|approx|None), `evidence_or_abstain` (frozen record), `stated_match` moved
    here. 0 tokens, self-checked; certified-150 re-grade UNCHANGED at 97.8/92.3 (no regression).
-1. XBRL ORACLE — answer key = each filing's own UNAMBIGUOUS single-axis XBRL facts (headline + quarterly,
-   3-month duration-picked). = `tier1` in reverse + existing `prep.py` harness, new truth source. 0 LLM.
+1. **DONE** — XBRL ORACLE (`oracle.py`): answer key = each filing's own UNAMBIGUOUS facts (0/1/**multi-axis**;
+   duration 3-month vs YTD-183d picked; value unique within (concept,member,endDate)). Multi-axis INCLUDED
+   (FS-09 req; reads all members locally — safe, oracle only READS not tier1-matches). Self-checked; 97% of
+   oracle values appear verbatim in filing text (8 cos). `clean_facts(xbrls,kind)`, `series(session,tk,kind)`.
 2. QUARTERLY cert — 30→150 oracle pairs; grader flags YTD-column misbinds (oracle emits YTD as a labeled
    distractor). Proves the 3-month-vs-YTD guard → supersedes manual #760. Do before transcripts.
 3. TRANSCRIPT + NEWS on HEADLINE metrics — census News first (Cypher, 5 tickers); 20-40 pairs each; CODE
