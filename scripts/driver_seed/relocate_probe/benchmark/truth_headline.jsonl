@@ -1,0 +1,40 @@
+{"id": 0, "ticker": "AA", "kpi": "revenue", "fmt": "number", "period_target": "2025-09-30", "value_target": 2995000000, "source": "transcript"}
+{"id": 1, "ticker": "AA", "kpi": "cost of goods and service excluding depreciation depletion and amortization", "fmt": "number", "period_target": "2025-09-30", "value_target": 2695000000, "source": "transcript"}
+{"id": 2, "ticker": "AA", "kpi": "depreciation depletion and amortization", "fmt": "number", "period_target": "2025-09-30", "value_target": 160000000, "source": "transcript"}
+{"id": 3, "ticker": "AA", "kpi": "restructuring and other charges", "fmt": "number", "period_target": "2023-03-31", "value_target": 149000000, "source": "transcript"}
+{"id": 4, "ticker": "AAPL", "kpi": "revenue", "fmt": "number", "period_target": "2025-12-27", "value_target": 143756000000, "source": "transcript"}
+{"id": 5, "ticker": "AAPL", "kpi": "cost of goods and services sold", "fmt": "number", "period_target": "2025-12-27", "value_target": 74525000000, "source": "transcript"}
+{"id": 6, "ticker": "AAPL", "kpi": "gross profit", "fmt": "number", "period_target": "2025-12-27", "value_target": 69231000000, "source": "transcript"}
+{"id": 7, "ticker": "AAPL", "kpi": "research and development expense", "fmt": "number", "period_target": "2025-12-27", "value_target": 10887000000, "source": "transcript"}
+{"id": 8, "ticker": "ABBV", "kpi": "revenue", "fmt": "number", "period_target": "2025-09-30", "value_target": 15776000000, "source": "transcript"}
+{"id": 9, "ticker": "ABBV", "kpi": "cost of goods and services sold", "fmt": "number", "period_target": "2025-03-31", "value_target": 4002000000, "source": "transcript"}
+{"id": 10, "ticker": "ABBV", "kpi": "selling general and administrative expense", "fmt": "number", "period_target": "2025-09-30", "value_target": 3569000000, "source": "transcript"}
+{"id": 11, "ticker": "ABBV", "kpi": "research and development expense excluding acquired in process cost", "fmt": "number", "period_target": "2025-09-30", "value_target": 2319000000, "source": "transcript"}
+{"id": 12, "ticker": "ABNB", "kpi": "revenue", "fmt": "number", "period_target": "2025-09-30", "value_target": 4095000000, "source": "transcript"}
+{"id": 13, "ticker": "ABNB", "kpi": "cost of revenue", "fmt": "number", "period_target": "2025-09-30", "value_target": 549000000, "source": "transcript"}
+{"id": 14, "ticker": "ABNB", "kpi": "operations and support expense", "fmt": "number", "period_target": "2025-09-30", "value_target": 365000000, "source": "transcript"}
+{"id": 15, "ticker": "ABNB", "kpi": "research and development expense", "fmt": "number", "period_target": "2025-09-30", "value_target": 587000000, "source": "transcript"}
+{"id": 16, "ticker": "ABT", "kpi": "revenue", "fmt": "number", "period_target": "2024-09-30", "value_target": 10635000000, "source": "transcript"}
+{"id": 17, "ticker": "ABT", "kpi": "cost of goods and services sold", "fmt": "number", "period_target": "2025-09-30", "value_target": 5075000000, "source": "transcript"}
+{"id": 18, "ticker": "ABT", "kpi": "research and development expense", "fmt": "number", "period_target": "2025-09-30", "value_target": 766000000, "source": "transcript"}
+{"id": 19, "ticker": "ABT", "kpi": "selling general and administrative expense", "fmt": "number", "period_target": "2025-03-31", "value_target": 3061000000, "source": "transcript"}
+{"id": 20, "ticker": "ACM", "kpi": "revenue", "fmt": "number", "period_target": "2024-06-30", "value_target": 4151251000, "source": "transcript"}
+{"id": 21, "ticker": "ACM", "kpi": "cost of revenue", "fmt": "number", "period_target": "2025-06-30", "value_target": 3851490000, "source": "transcript"}
+{"id": 22, "ticker": "ACM", "kpi": "gross profit", "fmt": "number", "period_target": "2025-06-30", "value_target": 326950000, "source": "transcript"}
+{"id": 23, "ticker": "ACM", "kpi": "income loss from equity method investments", "fmt": "number", "period_target": "2025-06-30", "value_target": 5290000, "source": "transcript"}
+{"id": 24, "ticker": "ACMR", "kpi": "revenue", "fmt": "number", "period_target": "2025-03-31", "value_target": 172347000, "source": "transcript"}
+{"id": 25, "ticker": "ACMR", "kpi": "cost of revenue", "fmt": "number", "period_target": "2024-09-30", "value_target": 99142000, "source": "transcript"}
+{"id": 26, "ticker": "ACMR", "kpi": "gross profit", "fmt": "number", "period_target": "2025-03-31", "value_target": 82550000, "source": "transcript"}
+{"id": 27, "ticker": "ACMR", "kpi": "selling and marketing expense", "fmt": "number", "period_target": "2023-06-30", "value_target": 11439000, "source": "transcript"}
+{"id": 28, "ticker": "ACN", "kpi": "revenue", "fmt": "number", "period_target": "2026-02-28", "value_target": 18044066000, "source": "transcript"}
+{"id": 29, "ticker": "ACN", "kpi": "cost of goods and services sold", "fmt": "number", "period_target": "2026-02-28", "value_target": 12584705000, "source": "transcript"}
+{"id": 30, "ticker": "ACN", "kpi": "selling and marketing expense", "fmt": "number", "period_target": "2026-02-28", "value_target": 1748902000, "source": "transcript"}
+{"id": 31, "ticker": "ACN", "kpi": "general and administrative expense", "fmt": "number", "period_target": "2026-02-28", "value_target": 1216912000, "source": "transcript"}
+{"id": 32, "ticker": "ADBE", "kpi": "subscription revenue", "fmt": "number", "period_target": "2024-03-01", "value_target": 4916000000, "source": "transcript"}
+{"id": 33, "ticker": "ADBE", "kpi": "product revenue", "fmt": "number", "period_target": "2024-03-01", "value_target": 119000000, "source": "transcript"}
+{"id": 34, "ticker": "ADBE", "kpi": "services and other revenue", "fmt": "number", "period_target": "2024-03-01", "value_target": 147000000, "source": "transcript"}
+{"id": 35, "ticker": "ADBE", "kpi": "revenue", "fmt": "number", "period_target": "2026-02-27", "value_target": 6398000000, "source": "transcript"}
+{"id": 36, "ticker": "ADM", "kpi": "revenue", "fmt": "number", "period_target": "2025-09-30", "value_target": 20372000000, "source": "transcript"}
+{"id": 37, "ticker": "ADM", "kpi": "cost of revenue", "fmt": "number", "period_target": "2025-09-30", "value_target": 19102000000, "source": "transcript"}
+{"id": 38, "ticker": "ADM", "kpi": "gross profit", "fmt": "number", "period_target": "2025-09-30", "value_target": 1270000000, "source": "transcript"}
+{"id": 39, "ticker": "ADM", "kpi": "selling general and administrative expense", "fmt": "number", "period_target": "2025-03-31", "value_target": 932000000, "source": "transcript"}

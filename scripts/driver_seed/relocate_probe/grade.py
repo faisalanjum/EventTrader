@@ -33,10 +33,10 @@ def _check():
 
 
 def main():
-    ap = argparse.ArgumentParser(); ap.add_argument('--set', default='validation'); a = ap.parse_args()
+    ap = argparse.ArgumentParser(); ap.add_argument('--set', default='validation'); ap.add_argument('--root', default=HERE); a = ap.parse_args()
     _check()
-    truth = {t['id']: t for t in (json.loads(l) for l in open(f'{HERE}/truth_{a.set}.jsonl'))}
-    recs = {r['i']: r for r in json.load(open(f'{HERE}/relocate_out_{a.set}.json'))['records']}
+    truth = {t['id']: t for t in (json.loads(l) for l in open(f'{a.root}/truth_{a.set}.jsonl'))}
+    recs = {r['i']: r for r in json.load(open(f'{a.root}/relocate_out_{a.set}.json'))['records']}
 
     RC.load_env_neo4j()
     from neo4j import GraphDatabase
@@ -60,7 +60,7 @@ def main():
     for i, t in sorted(truth.items()):
         if i not in recs:                                   # subset run -> grade only what was run
             continue
-        b = json.load(open(f'{HERE}/batches_{a.set}/batch_{i}.json'))
+        b = json.load(open(f'{a.root}/batches_{a.set}/batch_{i}.json'))
         tv, fmt = t['value_target'], t['fmt']
         r = recs.get(i)
         found = bool(r and r['found'] and r.get('value'))

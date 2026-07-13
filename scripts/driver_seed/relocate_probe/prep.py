@@ -123,7 +123,7 @@ def build_address(kpi, fmt, is_currency, lock_texts, lock_quote, lock_value):
             'unit': dim, 'lock_row': lock_quote}
 
 
-def locate(target_texts, addr, keep=8, win=600):
+def locate(target_texts, addr, keep=12, win=600):  # 8->12: big docs, right window lost rank race
     """Phase 2 — ONE source-agnostic candidate pool. Units = (a) each ##TABLE block (head-biased 3KB
     crop) AND (b) a digit-bearing +-win window around EVERY occurrence of ANY label token — the prose/
     transcript/news path, no tables needed; one word like 'warehouse' pulls the snippet. One score for
@@ -292,3 +292,20 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+def drop_ambiguous(truth_path, bdir):
+    """TEST-HONESTY guard: if one (ticker, name, period) maps to >1 distinct truth value, the name is
+    under-specified — no reader could resolve it (production names come from the user). Drop those pairs."""
+    import collections
+    rows = [json.loads(l) for l in open(truth_path)]
+    vals = collections.defaultdict(set)
+    for t in rows:
+        vals[(t['ticker'], t['kpi'], t['period_target'])].add(t['value_target'])
+    keep = [t for t in rows if len(vals[(t['ticker'], t['kpi'], t['period_target'])]) == 1]
+    for t in rows:
+        if t not in keep:
+            p = f"{bdir}/batch_{t['id']}.json"
+            os.path.exists(p) and os.remove(p)
+    open(truth_path, 'w').write(''.join(json.dumps(t) + '\n' for t in keep))
+    return len(keep), len(rows) - len(keep)

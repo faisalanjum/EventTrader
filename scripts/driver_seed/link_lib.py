@@ -151,8 +151,9 @@ def stated_match(vstr, truth):
     if neg != (float(truth) < 0):
         return False
     at = abs(float(truth))
-    return any(st >= 0.5 and round(st, dec) == round(val, dec)
+    return any(st >= 0.5 and round(val, dec) in (round(st, dec), math.floor(st * 10**dec) / 10**dec)
                for st in ([at / mult] if mult else (at, at / 1e3, at / 1e6, at / 1e9, at / 1e12)))
+    # filers TRUNCATE as often as they round (ACM prints 4,151.2 for 4,151,251K), so accept either
 
 
 def value_present_rounded(value, fmt, quote):
@@ -189,6 +190,8 @@ def evidence_or_abstain(driver_name_raw, period, value, fmt, quote, candidates, 
     Same gate for value-known (seed) and value-read (relocation); the value is whatever we're emitting."""
     if not quote_in_candidates(quote, candidates):
         return None
+    if fmt != '%' and re.search(r'%|percent', str(value), re.I):
+        return None                       # unit gate: a percent-shaped answer to a non-percent metric
     grade = precision_grade(value, fmt, quote)
     if grade is None:
         return None

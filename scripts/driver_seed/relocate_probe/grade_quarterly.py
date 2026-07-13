@@ -10,23 +10,30 @@ HERE = os.path.dirname(__file__)
 
 
 def main():
-    truth = {t['id']: t for t in (json.loads(l) for l in open(f'{HERE}/truth_quarterly.jsonl'))}
-    recs = {r['i']: r for r in json.load(open(f'{HERE}/relocate_out_quarterly.json'))['records']}
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument('--set', default='quarterly', help='suffix: truth_<set>.jsonl / relocate_out_<set>.json / batches_<set>/')
+    ap.add_argument('--root', default=HERE)
+    a = ap.parse_args()
+    truth = {t['id']: t for t in (json.loads(l) for l in open(f'{a.root}/truth_{a.set}.jsonl'))}
+    recs = {r['i']: r for r in json.load(open(f'{a.root}/relocate_out_{a.set}.json'))['records']}
     C = collections.Counter()
     by = collections.defaultdict(lambda: collections.Counter())     # type -> {correct, emitted, total}
     rows = []
     for i, t in sorted(truth.items()):
-        typ = t['type']; by[typ]['total'] += 1
+        typ = t.get('type', t.get('kpi', '?').split()[0]); by[typ]['total'] += 1
         r = recs.get(i)
         if not (r and r['found'] and r.get('value')):
             C['abstain'] += 1; continue
         # (b) Step-0 emit gates (production config): quote must be verbatim in a candidate AND the picked
         # value must be a real number — a hallucinated quote or a "—" pick is abstained, not emitted.
-        cands = [L._tidy(c['text']) for c in json.load(open(f'{HERE}/batches_quarterly/batch_{i}.json'))['candidates']]
+        cands = [L._tidy(c['text']) for c in json.load(open(f'{a.root}/batches_{a.set}/batch_{i}.json'))['candidates']]
         vcore = re.sub(r'[^0-9.,]', '', r['value'] or '')
         val_in_cand = bool(re.search(r'\d', vcore)) and any(vcore in c for c in cands)
         if L._parse_stated(r['value']) is None or not val_in_cand:   # "—" or hallucinated number -> abstain
             C['gate-abstain'] += 1; continue
+        if t['fmt'] != '%' and re.search(r'%|percent', r['value'], re.I):
+            C['gate-abstain'] += 1; continue                         # unit gate (mirrors evidence_or_abstain)
         v = r['value']; by[typ]['emitted'] += 1
         if L.stated_match(v, t['value_target']):
             C['CORRECT'] += 1; by[typ]['correct'] += 1
@@ -35,7 +42,7 @@ def main():
         else:
             C['MISBIND'] += 1; rows.append((i, t['ticker'], t['kpi'][:34], 'other', v, t['value_target']))
     emit = C['CORRECT'] + C['YTD-MISBIND'] + C['MISBIND']; n = len(truth)
-    print(f"QUARTERLY (oracle truth) — {n} pairs, bind-only:")
+    print(f"{a.set.upper()} (oracle truth) — {n} pairs, bind-only:")
     print(f"  emitted {emit} | CORRECT {C['CORRECT']} | YTD-MISBIND {C['YTD-MISBIND']} | other-MISBIND {C['MISBIND']} | abstain {C['abstain']}")
     print(f"  PRECISION = {C['CORRECT']}/{emit} = {100*C['CORRECT']/max(emit,1):.1f}%")
     print(f"  RECALL    = {C['CORRECT']}/{n} = {100*C['CORRECT']/n:.1f}%")

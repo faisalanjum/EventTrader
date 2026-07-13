@@ -14,28 +14,21 @@ import prep, oracle as O, link_lib as L, run_code_tier as RC
 HERE = os.path.dirname(__file__)
 
 
+# the standard us-gaap TOTAL concepts (universal taxonomy vocab, like scale words) -> plain name.
+# Everything else keeps its FULL qname words: 'SubscriptionRevenue' -> "subscription revenue",
+# 'CostOfRevenue' -> "cost of revenue" — NOT collapsed to "revenue" (substring buckets mis-named
+# CostOfRevenue as "revenue" and collided 3 ADBE sub-revenues into one ambiguous name).
+CANON = {'Revenues': 'revenue', 'RevenueFromContractWithCustomerExcludingAssessedTax': 'revenue',
+         'RevenueFromContractWithCustomerIncludingAssessedTax': 'revenue', 'SalesRevenueNet': 'revenue',
+         'GrossProfit': 'gross profit', 'OperatingIncomeLoss': 'operating income',
+         'NetIncomeLoss': 'net income', 'ProfitLoss': 'net income',
+         'EarningsPerShareBasic': 'earnings per share basic', 'EarningsPerShareDiluted': 'earnings per share diluted'}
+
+
 def kind_word(con):
-    """concept qname -> a plain metric-kind label (universal financial vocab, not per-company)."""
-    c = con.lower()
-    for key, w in (('revenue', 'revenue'), ('sales', 'revenue'), ('grossprofit', 'gross profit'),
-                   ('operatingincome', 'operating income'), ('operatingprofit', 'operating income'),
-                   ('netincome', 'net income'), ('profitloss', 'net income'),
-                   ('earningspershare', 'earnings per share'), ('costofgoods', 'cost'),
-                   ('costofrevenue', 'cost'), ('assets', 'assets')):
-        if key in c:
-            return w
-    return ' '.join(re.findall(r'[A-Z][a-z]+', con)).lower() or c
-
-
-def row_label(quote, value):
-    """the FILER'S OWN words for this row — alphabetic tokens just before the value in the lock quote
-    (Fable's fix: use the filing's wording, not the XBRL-qname-derived name, esp. for multi-axis)."""
-    for f in L._tableforms(value, 'number'):
-        m = re.search(r'(?<![\d.,])' + re.escape(f) + r'(?![\d.,])', quote)
-        if m:
-            toks = re.findall(r"[A-Za-z][A-Za-z&]+", quote[max(0, m.start() - 70):m.start()])
-            return ' '.join(toks[-6:])
-    return ''
+    """concept qname -> faithful plain-words metric name (exact canonical totals; else qname words)."""
+    c = con.split(':')[-1]
+    return CANON.get(c, ' '.join(re.findall(r'[A-Z][a-z]*|\d+', c)).lower() or c.lower())
 
 
 def main():
@@ -73,7 +66,7 @@ def main():
                     continue                                     # both need their own 10-Q
                 txA = txA + RC.fetch_press_release(s, tk, pA); txB = txB + RC.fetch_press_release(s, tk, pB)
                 strict, snips = L.scan_text(txA, search_name, vA, 'number')
-                lock_q = strict or (snips[0] if snips else None)
+                lock_q = strict          # STRICT lossless lock only — a loose fallback can lock a wrong row (ACMR '8.4%')
                 if not lock_q:
                     continue                                     # can't lock value_A -> skip
                 # IDENTITY = metric-kind (from concept) + XBRL member tokens (the filer's segment names).
@@ -95,6 +88,8 @@ def main():
                     ceil += 1
                 made += 1; per_tk += 1
     drv.close(); tr.close()
+    kept, dropped = prep.drop_ambiguous(f'{HERE}/truth_quarterly.jsonl', bdir)
+    print(f"ambiguous-name pairs dropped: {dropped} (kept {kept})")
     print(f"quarterly pairs built: {made}")
     print(f"  target value in candidates (ceiling): {ceil}/{made} = {100*ceil/max(made,1):.0f}%")
 

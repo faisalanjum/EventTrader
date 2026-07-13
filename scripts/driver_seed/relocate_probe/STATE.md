@@ -56,17 +56,40 @@ LLM owns ONE judgment ("is this snippet THIS driver's value for THIS period?"). 
    duration 3-month vs YTD-183d picked; value unique within (concept,member,endDate)). Multi-axis INCLUDED
    (FS-09 req; reads all members locally — safe, oracle only READS not tier1-matches). Self-checked; 97% of
    oracle values appear verbatim in filing text (8 cos). `clean_facts(xbrls,kind)`, `series(session,tk,kind)`.
-2. **DONE (headline+segment)** — QUARTERLY cert from oracle (`prep_oracle.py`, `grade_quarterly.py`; 40 pairs,
-   bind-only + Step-0 gates). **Q-vs-YTD GUARD PROVEN: 0 YTD-picks / 30 cases** (supersedes manual #760).
-   Precision by type: **headline 93% · segment 100% · multi-axis 73%** (best = derived name kind+member;
-   overall 88.6%). **KNOWN WEAK & PARKED: MULTI-AXIS (2-D cross-tab grid lookup)** — wall is row×column×cell
-   in a flattened table (text/1-D fine). Attempt (a) filer-label via `row_label` BACKFIRED (grabs neighbouring
-   cells on TOTAL lines, headline 93→62%) → reverted. Attempt (b) softer value-in-candidate gate HELPED
-   (catches "—"/hallucinated, keeps correct). In PRODUCTION the user supplies a clean name, so the messy
-   auto-name part of multi-axis mostly disappears; the 2-D grid lookup remains the residual hard case.
+2. **DONE — QUARTERLY CERTIFIED 97.4% precision / 92.5% recall** (40 pairs, keep=12, faithful names,
+   strict gates). **Q-vs-YTD GUARD PROVEN: 0 YTD-picks across ALL runs** (supersedes manual #760).
+   Per type: headline 100% · segment 100% · "multi-axis" bucket 94% (1 miss = ACM VIE cross-tab).
+   Journey: 71.8% (filer-label backfired, reverted) → 88.6% → 94.3 (faithful names) → **97.4 (keep=12)**.
+   Root causes fixed en route (ALL were test-construction or checker bugs, reader was mostly right):
+   `kind_word` substring buckets mis-named CostOfRevenue as "revenue" + collided sub-revenues (→ exact
+   CANON map + full qname words + `drop_ambiguous` guard); `value_forms` bare 1-2 digit scaled forms
+   ("20" for $20.372B) matched stray text (→ removed; annual cert IMPROVED to 98.5/93.0);
+   `stated_match` rejected filer TRUNCATION 4,151.2 for 4,151.251M (→ accepts round OR truncate);
+   percent-shaped answer for currency metric (→ unit gate in `evidence_or_abstain` + graders);
+   locate keep 8→12 (right window lost rank race in big docs; ceiling 88→98%).
+2b. TRANSCRIPT CERTIFIED (Step 3 half): **100% precision (7/7), 100% recall-of-present, 0 hallucinations,
+   0 YTD leaks; 33 correct abstains incl. 3 look-alike traps refused** (buybacks/dividends/CapEx numbers
+   that round-match a DIFFERENT metric — reader identity discipline is the real precision defence in prose).
+   Transcripts state few exact numbers (~10/40 even for "headline" concepts) → per-source recall is
+   SOURCE-BOUND; catalog recall comes from multi-source input, not one source.
+2c. INDEPENDENT AUDIT (ChatGPT 2026-07-13, artifacts /tmp/regression_audit_axes.cHcqXo) — verified verdicts:
+   TRUE: prep_oracle 'type' used len(member_TOKENS)>1 → my "multi-axis" bucket = word-count proxy, NOT true
+   axis count (their census: 1,013 true 2+-axis series in 57 A-D cos — sizeable). TRUE: fallback lock
+   (snips[0]) could lock a wrong row (ACMR "8.4%") → builders now STRICT-lock only. TRUE: on their 156-pair
+   TRUE-multi-axis benchmark my locate ceiling = 130/153 @keep=8 → 133/153 @keep=12 — keep alone doesn't fix
+   true multi-axis; root cause = XBRL member qnames ≠ printed row words ("AllOtherSegments" prints as
+   "Other Business"). Their fix direction (identity from the LOCK ROW's printed words, not qname tokens)
+   = the right next step IF multi-axis is un-parked; their 156-pair set = ready-made Step-6 stratum.
+   ALREADY-DONE/MOOT: "never use old value as size hint" (removed long ago); ABT/ADM/ADBE examples were
+   the old name-collision bug (fixed, now grade CORRECT/abstain).
 3. TRANSCRIPT + NEWS on HEADLINE metrics — census News first (Cypher, 5 tickers); 20-40 pairs each; CODE
    period-stamp each candidate (call/article date) + one forward-looking-exclusion clause; window 120d→75d.
-4. UNION cascade — try sources in precision order filing→EX-99.1→transcript→news, stop at first emit. 4 lines.
+4. UNION = OPTIONAL MODE, NOT DEFAULT (user 2026-07-13): the engine's default input includes the SOURCE
+   ({name, period, value, source}) and reads that source only — catalog wants each source's own value/quote.
+   A try-other-sources flag can come later; no cascade built by default.
+4b. REGRESSION MARKER (user 2026-07-13, BEFORE any cost work): freeze the certified sample (annual 150 +
+   quarterly 40 + transcript 40 batches/truth/reader-outputs) + `regress.py` that re-grades all three
+   token-free and FAILS if any score drops below the certified floor. Every future change must pass it.
 5. BATCH/cost — per-company-period reader, lean agent, warm cache; A/B bar = IDENTICAL outputs on ~100 pairs.
 6. GRAND cert — stratified UNSEEN companies, all 5 sources × both periods, XBRL oracle + a fiscal.ai stratum
    (avoid tag-selection bias), ~50-quote LLM spot audit.
