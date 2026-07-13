@@ -33,19 +33,29 @@ KPI_STOP = {'the', 'and', 'of', 'by', 'for', 'from', 'inc', 'corp', 'company', '
 
 
 def kpi_tokens(name):
-    """KPI label tokens that KEEP metric-kind words (profit/revenue/income/margin/...). So
-    'Operating Profit' and 'Net Sales' get DIFFERENT labels -> the locator ranks the right table and
-    the reader can tell the metric KIND apart, not just the segment."""
-    return [t for t in re.findall(r"[A-Za-z]{3,}", name) if t.lower() not in KPI_STOP]
+    """KPI label tokens: regex only, no domain list. KEEP metric-kind words (profit/revenue/margin)
+    AND short identity tokens (AI, FX, R&D, US, 5G, 737) via [A-Za-z0-9&]{2,} after dropping dots.
+    So 'Operating Profit' != 'Net Sales' and 'AI Backlog' no longer collapses to 'Backlog'."""
+    return [t for t in re.findall(r"[A-Za-z0-9&]{2,}", name.replace('.', '')) if t.lower() not in KPI_STOP]
 
 
 def caption_of(pretext):
-    """BUG-B FIX: the table's nearest heading, not a whole paragraph. Take only the trailing clause
-    before the table (after the last sentence break), capped — 'Segment Operating Profit' not a
-    200-char MD&A sentence."""
+    """The table's nearest heading, or '' (honest zero-signal). Trailing clause before the table, kept
+    ONLY if heading-like: starts uppercase, <=90 chars, no long digit-run or table marker. Structural
+    test, NO keyword list — an empty caption is better than a junk one (both locate + prompts tolerate '')."""
     p = L._tidy(pretext)
     frag = re.split(r'(?<=[.;:])\s+', p)[-1] if p else ''
-    return frag[-160:]
+    if frag[:1].isupper() and len(frag) <= 90 and not re.search(r'\d{3,}|##TABLE', frag):
+        return frag
+    return ''
+
+
+def unit_dim(fmt, is_currency):
+    """Unit DIMENSION from the SOURCE's own fields only — no scale, no keyword vocabulary. fiscal.ai
+    fmt gives percent; is_currency gives currency; everything else is a count. Stored once → source-agnostic."""
+    if fmt == '%':
+        return 'percent'
+    return 'currency' if is_currency else 'count'
 
 
 def raw_path(ticker):
@@ -78,17 +88,6 @@ def label_terms(s):
     return {w.lower() for w in re.findall(r"[A-Za-z]{3,}", s)} - STRUCT
 
 
-def unit_of(fmt, text):
-    if fmt == '%':
-        return 'percent'
-    low = text.lower()
-    if 'thousand' in low:
-        return '$ thousands' if '$' in text else 'thousands'
-    if 'million' in low:
-        return '$ millions' if '$' in text else 'millions'
-    return '$' if '$' in text else 'count/number'
-
-
 def split_tables(texts):
     """(caption, block) for every ##TABLE_START..##TABLE_END in the corpus. Caption = nearest
     heading text before the table (general — the disclosure's own title)."""
@@ -102,71 +101,66 @@ def split_tables(texts):
     return out
 
 
-def prose_windows(texts, kpi, keep):
-    """label-anchored prose windows (fallback for metrics stated in sentences, not tables)."""
-    toks = [t.lower() for t in L._toks(kpi)]
-    if not toks:
-        return []
-    anchor = max(toks, key=len)
-    out = []
-    for t in texts:
-        low = t.lower()
-        for m in re.finditer(re.escape(anchor), low):
-            s = m.start()
-            if '##TABLE_START' in t[max(0, s-400):s+400]:
-                continue                                    # already covered by table split
-            out.append({'caption': '', 'text': L._tidy(t[max(0, s-400):s+500])})
-            if len(out) >= keep:
-                return out
-    return out
-
-
-def build_address(kpi, fmt, lock_texts, lock_quote, lock_value):
-    """GENERAL address of where/how this driver was disclosed in the lock period."""
-    kt = kpi_tokens(kpi)                                     # keeps metric-kind words (BUG-A fix)
+def build_address(kpi, fmt, is_currency, lock_texts, lock_quote, lock_value):
+    """GENERAL address. Home table = the one that CONTAINS the certified lock_quote (deterministic —
+    no dependence on Neo4j section order); fall back to a value-form hunt only if not found. Unit is a
+    source-field dimension, not text-sniffed. 'kind' field dropped (was written, never read)."""
+    kt = kpi_tokens(kpi)
     lt = [t.lower() for t in kt]
-    forms = L._tableforms(lock_value, fmt)
-    for cap, block in split_tables(lock_texts):
+    dim = unit_dim(fmt, is_currency)
+    lq = L._tidy(lock_quote)
+    tables = split_tables(lock_texts)
+    for cap, block in tables:                                 # deterministic: lock_quote containment
+        if lq and lq in block:
+            sib = sorted(label_terms(block) - set(lt))[:40]
+            return {'label': kt, 'caption': cap[:120], 'siblings': sib, 'unit': dim, 'lock_row': lock_quote}
+    forms = L._tableforms(lock_value, fmt)                     # fallback: value-form hunt
+    for cap, block in tables:
         if any(L.bounded_hit(block, f) for f in forms) and (not lt or any(t in block.lower() for t in lt)):
             sib = sorted(label_terms(block) - set(lt))[:40]
-            return {'kind': 'table', 'label': kt, 'caption': cap[:240],
-                    'siblings': sib, 'unit': unit_of(fmt, cap + ' ' + block), 'lock_row': lock_quote}
-    return {'kind': 'prose', 'label': kt, 'caption': '',
-            'siblings': sorted(label_terms(lock_quote))[:40], 'unit': unit_of(fmt, lock_quote),
-            'lock_row': lock_quote}
+            return {'label': kt, 'caption': cap[:120], 'siblings': sib, 'unit': dim, 'lock_row': lock_quote}
+    return {'label': kt, 'caption': '', 'siblings': sorted(label_terms(lock_quote))[:40],
+            'unit': dim, 'lock_row': lock_quote}
 
 
-def locate(target_texts, addr, kpi, keep=6):
-    """Find candidate disclosures in the TARGET filing by GENERAL structural match: overlap of the
-    address's sibling row-labels + caption terms + the KPI's own label. Value is NOT used (unknown).
-
-    FIX 1 (widen the net, UNIFORMLY for every metric — no per-company logic): hand the reader more
-    snippets (keep=6), ALWAYS also include any table that literally contains the metric's WHOLE label
-    (the strongest 'the metric is here' signal, even if its siblings drifted), plus prose windows.
-    More snippets can't create a wrong answer — verify + the column gate still decide — so this only
-    moves recall, never precision."""
+def locate(target_texts, addr, keep=8, win=600):
+    """Phase 2 — ONE source-agnostic candidate pool. Units = (a) each ##TABLE block (head-biased 3KB
+    crop) AND (b) a digit-bearing +-win window around EVERY occurrence of ANY label token — the prose/
+    transcript/news path, no tables needed; one word like 'warehouse' pulls the snippet. One score for
+    both; force-include any unit holding ALL label tokens; dedupe; keep top-`keep`. The reader + gates
+    decide WHICH metric, so broad retrieval only moves recall, never precision."""
     lt = [t.lower() for t in addr['label']]
     sib = set(addr['siblings']); capt = label_terms(addr['caption'])
-    tables = split_tables(target_texts)
-    scored = []
-    for cap, block in tables:
+    units = []
+    for t in target_texts:
+        low = t.lower()
+        for m in re.finditer('##TABLE_START', t):             # (a) whole tables, 3KB head-biased crop
+            s = m.start(); e = t.find('##TABLE_END', s)
+            if e >= 0:
+                units.append((caption_of(t[max(0, s - 300):s]), L._tidy(t[s:min(e + 11, s + 3000)])))
+        buckets = set()                                       # (b) digit windows around label words
+        for tok in set(lt):
+            for m in re.finditer(re.escape(tok), low):
+                b = (m.start() - win) // 300                  # collapse overlapping windows
+                if b in buckets:
+                    continue
+                buckets.add(b)
+                w = t[max(0, m.start() - win):m.start() + win]
+                if re.search(r'\d', w) and '##TABLE_START' not in w:
+                    units.append(('', L._tidy(w)))
+    scored, seen = [], set()
+    for cap, block in units:
+        key = block[:200]
+        if key in seen:
+            continue
+        seen.add(key)
         bt = label_terms(block)
-        score = 2 * len(sib & bt) + 2 * len(capt & label_terms(cap)) + sum(1 for t in lt if t in block.lower())
-        if score > 0:
-            scored.append((score, len(block), cap[:240], block))
-    scored.sort(key=lambda c: (-c[0], c[1]))                # label presence already lifts the score
-    picked, seen = [], set()
-
-    def add(cap, block):
-        k = block[:80]
-        if k not in seen:
-            seen.add(k); picked.append({'caption': cap, 'text': block})
-
-    for _, _, cap, block in scored[:keep]:                  # top-keep ranked tables (bounded)
-        add(cap, block)
-    for w in prose_windows(target_texts, kpi, 2):           # + sentences (prose-stated metrics)
-        add(w['caption'], w['text'])
-    return picked
+        score = 2 * len(sib & bt) + 2 * len(capt & label_terms(cap)) + sum(1 for x in lt if x in block.lower())
+        allhit = 1 if (lt and all(x in block.lower() for x in lt)) else 0
+        if score > 0 or allhit:
+            scored.append((allhit, score, len(block), cap, block))
+    scored.sort(key=lambda c: (-c[0], -c[1], c[2]))           # all-label first, then score, then shorter
+    return [{'caption': c[3], 'text': c[4]} for c in scored[:keep]]
 
 
 def metric_type(sd):
@@ -208,8 +202,8 @@ def build_pair(s, sd, raw_cache):
         tx = txf + RC.fetch_press_release(s, tk, pb)
         _, txa, _ = RC.fetch_corpus(s, tk, sd['form'], pa)
         txa = txa + RC.fetch_press_release(s, tk, pa)
-        addr = build_address(sd['kpi'], sd['fmt'], txa, sd['quote'], periods[pa])
-        cands = locate(tx, addr, sd['kpi'])
+        addr = build_address(sd['kpi'], sd['fmt'], sd.get('is_currency', 1), txa, sd['quote'], periods[pa])
+        cands = locate(tx, addr)
         if not cands:
             continue
         return {'addr': addr, 'pb': pb, 'cands': cands, 'v_lock': periods[pa], 'v_target': periods[pb]}

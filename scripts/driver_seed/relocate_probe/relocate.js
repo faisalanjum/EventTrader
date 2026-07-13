@@ -6,6 +6,7 @@ export const meta = {
 const A = typeof args === 'string' ? JSON.parse(args) : (args || {})
 const IDX = A.idx
 const DIR = A.dir
+const BIND_ONLY = A.bind_only        // skip verify (net-negative) — grade the raw bind during iteration
 
 const BSCHEMA = { type: 'object', properties: {
   found: { type: 'boolean' },
@@ -46,6 +47,7 @@ const records = await pipeline(IDX,
     .then(r => ({ i, found: !!(r && r.found && r.quote && r.value), quote: (r && r.quote) || '',
                   value: (r && r.value) || '', candidate_index: (r && r.candidate_index) })),
   (r) => {
+    if (BIND_ONLY) return { ...r, correct: r.found }
     if (!r.found) return { ...r, correct: false }
     return agent(verifyPrompt(r.i, r.value, r.quote),
       { label: `verify:${r.i}`, phase: 'Verify', schema: VSCHEMA,

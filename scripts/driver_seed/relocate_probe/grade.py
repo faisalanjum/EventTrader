@@ -88,6 +88,8 @@ def main():
     by = collections.defaultdict(lambda: collections.Counter())   # per-type
     rows = []
     for i, t in sorted(truth.items()):
+        if i not in recs:                                   # subset run -> grade only what was run
+            continue
         b = json.load(open(f'{HERE}/batches_{a.set}/batch_{i}.json'))
         tv, fmt = t['value_target'], t['fmt']
         r = recs.get(i)
