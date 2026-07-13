@@ -98,10 +98,22 @@ multi-row headers via arithmetic column checks.
 The result is strong but not yet a broad multi-company audit. Recommended: sample-audit ~50
 records per part as Parts 1–4 run, don't assume.
 
+### Cost (MEASURED) + effort decision — LOCKED
+
+- **Effort = `high` for both bind+verify** (locked 2026-07-12). A/B tested `medium`: only ~9% cheaper
+  but −8% recall → rejected. Token cost is dominated by the candidate EVIDENCE, not reasoning, so
+  no cheap lever preserves both precision AND recall. Pipeline is at its cost floor. Do NOT lower
+  effort without a fresh recall+precision A/B.
+- **Measured cost:** ~89K tokens per company-period at `high`.
+- **Finish Part 1:** ~267 batches left → ~24M tokens.
+- **Whole catalog:** ~1,370 residual company-periods → ~121M tokens (subscription; ~8 session windows).
+
 ### Next step (agreed direction)
 
-Run the remaining work with `snippet_bind.js` in chunks of ~70 company-period batches, merge +
-value-gate after each chunk, and sample-audit. Full job estimate ~60–90M tokens (vs ~200M old).
+Run the remaining work with `snippet_bind.js` (effort `high`) in chunks that fit the session token
+cap (~16M/window), merge + value-gate after each chunk, then audit ONLY the non-self-sufficient
+residual (`fix_quotes.py` detector) before certifying — that residual audit is what catches
+coincidental small-value mis-bindings (13 found & removed in Part 1).
 
 **⚠️ Session token limit is the binding constraint.** The full job is ~30–200M tokens depending on
 variant and won't fit one session — run in chunks of ~70 company-period batches and **merge after

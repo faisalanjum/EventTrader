@@ -7,6 +7,12 @@ export const meta = {
 // args: { path: 'data/driver_catalog_seed/partN/llm_batches.json', lo, hi } or { idx:[...] }
 const A = typeof args === 'string' ? JSON.parse(args) : (args || {})
 const PATH = A.path
+// LOCKED DECISION (2026-07-12): effort = 'high' for BOTH agents. A controlled A/B on 20 batches
+// showed 'medium' saves only ~9% tokens but LOSES ~8% recall (missed 7 real KPIs) — rejected,
+// because precision AND recall must stay unchanged. Do NOT lower this without a fresh A/B that
+// proves recall+precision hold. The bind_effort/verify_effort args exist ONLY for such experiments.
+const BIND_EFF = A.bind_effort || 'high'
+const VERIFY_EFF = A.verify_effort || 'high'
 const idx = []
 if (Array.isArray(A.idx) && A.idx.length) { for (const i of A.idx) idx.push(i) }
 else { for (let i = (A.lo || 0); i < (A.hi || (A.lo || 0) + 1); i++) idx.push(i) }
@@ -37,7 +43,7 @@ const out = await pipeline(idx,
     `Then set candidate_index to that candidate, and set quote to the ENTIRE candidate string copied IN FULL — the whole excerpt, character-for-character, do NOT shorten or clip it (the full row/headers are what make it verifiable). Do not paraphrase, reorder, or reformat any number.\n` +
     `If no candidate satisfies all of the above, set found=false, quote="", candidate_index=-1. Abstaining on a genuinely ambiguous one is correct.`,
     { label: `bind:${i}`, phase: 'Bind', schema: SCHEMA, agentType: 'general-purpose',
-      model: 'sonnet', effort: 'high' }
+      model: 'sonnet', effort: BIND_EFF }
   ).then(r => ({ i, bindings: (r && r.bindings) || [] })))
 
 // Fix A: the quote is the FULL candidate the model copied (whole row + headers), not a clip.
@@ -60,7 +66,7 @@ const verified = await parallel(Object.keys(byBatch).map(bi => () =>
     `Verify KPI->quote bindings. For EACH, decide correct=true ONLY if a careful reader of the quote would agree the number is THIS kpi's value for the period — right line/segment (not a neighbouring or prior-period column, not a subtotal/superset). Judge from the quote text alone; do NOT fetch anything.\n\n` +
     JSON.stringify(byBatch[bi].map(n => ({ kpi: n.kpi, quote: n.quote }))),
     { label: `verify:${bi}`, phase: 'Verify', schema: VSCHEMA, agentType: 'general-purpose',
-      model: 'sonnet', effort: 'high' }
+      model: 'sonnet', effort: VERIFY_EFF }
   ).then(v => ({ bi, verdicts: (v && v.verdicts) || [] }))))
 
 const okKpi = {}
