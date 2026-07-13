@@ -33,6 +33,18 @@ Per type (150): geography 100% / segment-rev 100% / operational 97% / non-GAAP 9
   (B) caption grabbed MD&A prose → `caption_of` takes the heading.
 - Recall ceiling ~90%; misses are safe abstains or value not on the fetched pages.
 
+## Deferred (seed-side, NOT relocation) — do with a certified-pipeline regression check
+- **XBRL member-parser bug** (`link_lib.seg_members`): `explicitMember` can be a LIST of `{dimension,$t}`
+  (multi-axis, e.g. OperatingSegments × GroceryAndSnacks) — current code only reads a single dict, so
+  multi-axis segment facts parse to `[]`. **The naive ~4-line "loop over the list" fix is NOT safe:
+  tested 2026-07-13, it BROKE 50 / 1761 certified T1 records (~3%).** Reason: parsing the extra members
+  makes previously-invisible multi-axis facts (that used to return `[]`) collide at the same value with
+  the single-axis fact, so `tier1` sees an ambiguous member tie and ABSTAINS → loses the clean match.
+  So the real fix needs a COMPANION ambiguity resolver (prefer the member set that best/most-specifically
+  matches the KPI slice, or dedupe same-value facts across axis-decompositions) — not a one-liner. Only
+  worth it for the SEED side (free Lane-0 count = 5% on the text-relocation residual). Regression harness:
+  `scratchpad/t1_regression.py` (re-runs tier1 on all certified T1 records; must show 0 BROKE before merge).
+
 ## Known limits / next
 - Annual only (quarterly leave-one-out infeasible: fiscal.ai free + Neo4j lag too thin).
 - A–D companies, recent periods (oracle = fiscal.ai free values).
