@@ -45,6 +45,22 @@ Per type (150): geography 100% / segment-rev 100% / operational 97% / non-GAAP 9
   worth it for the SEED side (free Lane-0 count = 5% on the text-relocation residual). Regression harness:
   `scratchpad/t1_regression.py` (re-runs tier1 on all certified T1 records; must show 0 BROKE before merge).
 
+## Alignment with the LOCKED FinalDesign (audited 2026-07-13, 3 Opus readers)
+Verdict: probe `kind/slice/units` are **COMPATIBLE-BUT-CRUDER retrieval aids**, LOW risk — they enforce the
+distinctions that matter (won't bind wrong-kind/measurement/slice) and NEVER write typed identity.
+- **Units:** probe's currency/count/percent = a coarse hint like the design's `unit_kind_hint`; NOT the final
+  10-value enum (`usd/m_usd/percent…`). Per-X → base unit matches UNIT-08. `locate()` doesn't even use it. Guard: never let this become the stored unit.
+- **Slices:** design = typed `kind:value`, 6 kinds (segment/product/geography/customer/channel/entity_ownership + unknown);
+  period is NOT a slice; total = OMITTED slice (not `slice=total`); LLM never merges (over-split-safe). Probe = untyped
+  word-bag naming 4 of 6 kinds — benign because scope is same-company + same-KPI + cross-period only (the design's
+  cross-company/cross-axis hazard FS-08/FS-23 is out of scope). Probe emits no typed slice → can't corrupt identity.
+- **Kind:** there is NO `metric_family` field/taxonomy. Identity = separate fields: `name` (revenue vs profit) ·
+  `unit` · `measurement` (adjusted/organic/GAAP — NOT the name; GAAP = empty, read-time view) · `slice` · `fact_type`.
+  Adjusted vs GAAP = SAME driver, DIFFERENT facts (measurement token). Probe's "don't swap" = correct for retrieval.
+- **REQUIRED HANDOFF (pipeline's job, not the probe's):** a decomposition step must split the raw fiscal.ai name into
+  `name / measurement / slice`, stamp `fact_type` (else DU-12 reject), and resolve the enum unit BEFORE any write.
+  NEVER store the raw fiscal.ai name as `Driver.name` (violates NAME-10/14; re-creates the retired `adjusted_eps` defect, 95 #2).
+
 ## Known limits / next
 - Annual only (quarterly leave-one-out infeasible: fiscal.ai free + Neo4j lag too thin).
 - A–D companies, recent periods (oracle = fiscal.ai free values).
