@@ -1,0 +1,13 @@
+{
+  "part": 1,
+  "code_in": 3066,
+  "llm_in": 621,
+  "gate_dropped": 38,
+  "seed_records": 3390,
+  "by_tier": {
+    "T1-xbrl": 1611,
+    "T2-label": 1277,
+    "T3-llm": 502
+  },
+  "companies": 153
+}

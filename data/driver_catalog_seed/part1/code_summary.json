@@ -1,0 +1,12 @@
+{
+  "part": 1,
+  "instances": 19469,
+  "company_periods": 370,
+  "code_resolved": 3066,
+  "residual_to_llm": 2787,
+  "abstain": 13616,
+  "T1_xbrl": 1761,
+  "T2_label": 1305,
+  "cp_no_corpus": 0,
+  "code_pct": 15.7
+}

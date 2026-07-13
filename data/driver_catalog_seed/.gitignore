@@ -1,0 +1,9 @@
+# large regenerable intermediates (rebuild via build_worklist.py / run_code_tier.py / prep_llm_batches.py)
+worklist.jsonl
+part*/residual.jsonl
+part*/llm_batches.json
+part*/abstain.jsonl
+part*/seed_records.jsonl.bak
+part*/missing_batches.json
+part*/quote_residual.json
+raw/

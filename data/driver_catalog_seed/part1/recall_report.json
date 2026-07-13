@@ -1,0 +1,11 @@
+{
+  "stats": {
+    "MISS (value is in the filing)": 12646,
+    "correct_abstain (value not in filing)": 3069,
+    "bound": 3753,
+    "bound_via_xbrl_only": 1
+  },
+  "ceiling": 16400,
+  "bound": 3754,
+  "total": 19469
+}
