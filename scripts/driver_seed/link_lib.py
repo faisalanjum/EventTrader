@@ -47,9 +47,13 @@ def value_forms(value, fmt='number', is_currency=1):
     for div, tag in ((1e3, 'K'), (1e6, 'M'), (1e9, 'B'), (1e12, 'T')):
         if av >= div / 10:
             scaled = av / div; si = int(round(scaled))
-            forms.add(_grp(str(si))); forms.add(str(si))
+            if si >= 100:                # bare scaled int only when ≥3 digits — "20" for $20.372B would
+                forms.add(_grp(str(si))); forms.add(str(si))   # match any stray "20"; "20 billion" kept below
+
             for f in _round_forms(scaled):
-                forms.add(f); forms.add(f + tag)
+                if '.' in f or len(f) >= 3:   # bare scaled form needs a decimal or ≥3 digits ("20" for
+                    forms.add(f)              # $20.372B matches any stray "20"; tagged forms below suffice)
+                forms.add(f + tag)
                 forms.add(f + ' ' + {'K': 'thousand', 'M': 'million', 'B': 'billion', 'T': 'trillion'}[tag])
     if is_currency:
         base = [f for f in forms if not f.startswith('$') and len(f) <= 12]
