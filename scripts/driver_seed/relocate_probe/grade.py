@@ -19,37 +19,7 @@ import link_lib as L
 import run_code_tier as RC
 
 HERE = os.path.dirname(__file__)
-SCALE_WORD = {'thousand': 1e3, 'thousands': 1e3, 'million': 1e6, 'millions': 1e6,
-              'billion': 1e9, 'billions': 1e9, 'trillion': 1e12, 'trillions': 1e12}
-
-
-def _parse(vstr):
-    s = (vstr or '').lower().strip()
-    if not re.search(r'\d', s):
-        return None
-    neg = ('(' in s and ')' in s) or s.lstrip().startswith('-')
-    mult = next((m for w, m in SCALE_WORD.items() if w in s), None)
-    core = re.sub(r'[^0-9.]', '', s)
-    if not re.search(r'\d', core) or core.count('.') > 1:
-        return None
-    dec = len(core.split('.')[1]) if '.' in core else 0
-    return neg, float(core), dec, mult
-
-
-def stated_match(vstr, truth):
-    """printed value == truth at the printed number's own precision, sign-aware, over the scale ladder."""
-    p = _parse(vstr)
-    if p is None:
-        return False
-    neg, val, dec, mult = p
-    if neg != (float(truth) < 0):
-        return False
-    at = abs(float(truth))
-    for sc in ([mult] if mult else (1, 1e3, 1e6, 1e9, 1e12)):
-        st = at / sc
-        if st >= 0.5 and round(st, dec) == round(val, dec):
-            return True
-    return False
+stated_match = L.stated_match          # shared primitive now lives in link_lib (Step 0)
 
 
 def _check():

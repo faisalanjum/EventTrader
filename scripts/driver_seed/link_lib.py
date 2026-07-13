@@ -114,6 +114,84 @@ def value_ok(value, fmt, quote):
     return any(exact_form(f, value, fmt) for f in hits)
 
 
+# ---------- Step-0 emit gates: anti-hallucination + graded value presence (0 tokens) ----------
+# Precision is STRUCTURAL, not trusted: an answer is emitted only if its quote is a verbatim substring
+# of a code-located candidate AND the value actually appears in that quote. The grade records HOW
+# exactly (exact | rounded | approx) so a downstream consumer never mistakes a rounded prose figure
+# for an exact seed value. Shared by the seed pipeline (value known) and relocation (value read).
+SCALE_WORD = {'thousand': 1e3, 'thousands': 1e3, 'million': 1e6, 'millions': 1e6,
+              'billion': 1e9, 'billions': 1e9, 'trillion': 1e12, 'trillions': 1e12}
+_HEDGE = re.compile(r'\b(about|approximately|approx|roughly|nearly|around|almost)\b|~', re.I)
+
+
+def _parse_stated(vstr):
+    """(negative, magnitude, decimals, scale-word-multiplier|None) from a printed number string."""
+    s = (vstr or '').lower().strip()
+    if not re.search(r'\d', s):
+        return None
+    neg = ('(' in s and ')' in s) or s.lstrip().startswith('-')
+    mult = next((m for w, m in SCALE_WORD.items() if w in s), None)
+    core = re.sub(r'[^0-9.]', '', s)
+    if not re.search(r'\d', core) or core.count('.') > 1:
+        return None
+    return neg, float(core), (len(core.split('.')[1]) if '.' in core else 0), mult
+
+
+def stated_match(vstr, truth):
+    """printed value == truth at the printed number's OWN precision, sign-aware, over the scale ladder.
+    Accepts legitimate rounding ('24.6' for 24.644B) but rejects a genuinely different number."""
+    p = _parse_stated(vstr)
+    if p is None:
+        return False
+    neg, val, dec, mult = p
+    if neg != (float(truth) < 0):
+        return False
+    at = abs(float(truth))
+    return any(st >= 0.5 and round(st, dec) == round(val, dec)
+               for st in ([at / mult] if mult else (at, at / 1e3, at / 1e6, at / 1e9, at / 1e12)))
+
+
+def value_present_rounded(value, fmt, quote):
+    """a form of value appears at a numeric boundary in quote, allowing lossy rounding (prose scale)."""
+    return any(bounded_hit(quote, f) for f in value_forms(value, fmt or 'number') if len(f) >= 2)
+
+
+def _hedged(quote, value, fmt):
+    """a hedge word ('about', 'approximately', ...) sits just before the value in the quote."""
+    for f in value_forms(value, fmt or 'number'):
+        for m in re.finditer(re.escape(f), quote):
+            if _HEDGE.search(quote[max(0, m.start() - 25):m.start()]):
+                return True
+    return False
+
+
+def precision_grade(value, fmt, quote):
+    """exact (lossless in quote) | rounded (present at its stated precision) | approx (hedged) | None."""
+    if value_ok(value, fmt, quote):
+        return 'approx' if _hedged(quote, value, fmt) else 'exact'
+    if value_present_rounded(value, fmt, quote):
+        return 'approx' if _hedged(quote, value, fmt) else 'rounded'
+    return None
+
+
+def quote_in_candidates(quote, candidates):
+    """ANTI-HALLUCINATION: the emitted quote must be a verbatim substring of a code-located candidate."""
+    q = _tidy(quote)
+    return bool(q) and any(q in _tidy(c) for c in candidates)
+
+
+def evidence_or_abstain(driver_name_raw, period, value, fmt, quote, candidates, source, period_evidence):
+    """The SINGLE emit gate + FROZEN output schema. Returns the evidence record, or None to abstain.
+    Same gate for value-known (seed) and value-read (relocation); the value is whatever we're emitting."""
+    if not quote_in_candidates(quote, candidates):
+        return None
+    grade = precision_grade(value, fmt, quote)
+    if grade is None:
+        return None
+    return {'driver_name_raw': driver_name_raw, 'period': period, 'value': value, 'fmt': fmt,
+            'quote': _tidy(quote), 'source': source, 'period_evidence': period_evidence, 'grade': grade}
+
+
 # ---------- Tier-1: XBRL structured ----------
 STOP = {'revenue', 'sales', 'the', 'and', 'of', 'by', 'other', 'net', 'income', 'operating',
         'gross', 'profit', 'for', 'from', 'inc', 'corp', 'company', 'revenues', 'change', 'due',
@@ -448,4 +526,16 @@ if __name__ == '__main__':
     assert tier1(xb3, "Total Revenue", 500000, "2025-09-30"), "+500k binds +500k"
     # no slice tokens and no 'total' -> slice identity unrecoverable -> abstain
     assert tier1(xb3, "Other Revenue by Geography", 500000, "2025-09-30") is None, "'other' bucket -> abstain"
+    # Step-0 emit gates: grade + anti-hallucination + frozen schema
+    assert precision_grade(6115000000, 'number', "United States $ 6,115") == 'exact'
+    assert precision_grade(24643957000, 'number', "EMEA 24.6") == 'rounded'          # rounded-consistent
+    assert precision_grade(2000000000, 'number', "revenue was about $2 billion") == 'approx'   # hedged
+    assert precision_grade(989400000, 'number', "$ 1,017.0") is None                 # different number
+    assert stated_match("24.6", 24643957000) and not stated_match("1,017.0", 989400000)
+    assert quote_in_candidates("United States $ 6,115", ["x Sales: United States $ 6,115 Australia y"])
+    assert not quote_in_candidates("United States $ 9,999", ["x United States $ 6,115 y"])   # hallucinated
+    assert evidence_or_abstain("US Revenue", "2025", 6115000000, 'number', "United States $ 6,115",
+                               ["a United States $ 6,115 b"], "10-K", "FY2025")['grade'] == 'exact'
+    assert evidence_or_abstain("US Revenue", "2025", 6115000000, 'number', "United States $ 6,115",
+                               ["unrelated text"], "10-K", "FY2025") is None          # not in candidate
     print("link_lib self-check OK")

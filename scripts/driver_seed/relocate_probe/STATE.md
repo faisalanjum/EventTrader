@@ -46,6 +46,26 @@ tables) — same data-block pattern as XBRL (5%). CONCLUSION: reader is source-a
 abstention hold on filings AND spoken transcripts); segment-detail metrics belong to FILINGS; a proper
 transcript/news RECALL test needs a HEADLINE-metric population (total rev / EPS / key counts), not built.
 
+## GAME PLAN (Fable-5-reviewed 2026-07-13) — remaining order to full certification
+One pipeline: value-known (seed) = no-value (fetch) + the value gate. Code takes every 0-token exit; the
+LLM owns ONE judgment ("is this snippet THIS driver's value for THIS period?"). ~35-50M tokens ≈ 3-4 sessions.
+0. **DONE** — Freeze emit gates + output schema in `link_lib.py`: `quote_in_candidates` (anti-hallucination),
+   `precision_grade` (exact|rounded|approx|None), `evidence_or_abstain` (frozen record), `stated_match` moved
+   here. 0 tokens, self-checked; certified-150 re-grade UNCHANGED at 97.8/92.3 (no regression).
+1. XBRL ORACLE — answer key = each filing's own UNAMBIGUOUS single-axis XBRL facts (headline + quarterly,
+   3-month duration-picked). = `tier1` in reverse + existing `prep.py` harness, new truth source. 0 LLM.
+2. QUARTERLY cert — 30→150 oracle pairs; grader flags YTD-column misbinds (oracle emits YTD as a labeled
+   distractor). Proves the 3-month-vs-YTD guard → supersedes manual #760. Do before transcripts.
+3. TRANSCRIPT + NEWS on HEADLINE metrics — census News first (Cypher, 5 tickers); 20-40 pairs each; CODE
+   period-stamp each candidate (call/article date) + one forward-looking-exclusion clause; window 120d→75d.
+4. UNION cascade — try sources in precision order filing→EX-99.1→transcript→news, stop at first emit. 4 lines.
+5. BATCH/cost — per-company-period reader, lean agent, warm cache; A/B bar = IDENTICAL outputs on ~100 pairs.
+6. GRAND cert — stratified UNSEEN companies, all 5 sources × both periods, XBRL oracle + a fiscal.ai stratum
+   (avoid tag-selection bias), ~50-quote LLM spot audit.
+KEEP: the residual-audit lane (only belt that caught the 13 wrong Part-1 records). When grading vs the XBRL
+oracle, EXCLUDE XBRL blobs from the reader's candidate corpus (else circular). CUT (over-engineering): hedge
+detector (regex sets grade), relative-period as LLM skill (code stamps it), a new quarterly harness, news NER.
+
 ## Deferred (seed-side, NOT relocation) — do with a certified-pipeline regression check
 - **XBRL member-parser bug** (`link_lib.seg_members`): `explicitMember` can be a LIST of `{dimension,$t}`
   (multi-axis, e.g. OperatingSegments × GroceryAndSnacks) — current code only reads a single dict, so
