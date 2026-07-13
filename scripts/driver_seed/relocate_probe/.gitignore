@@ -7,3 +7,7 @@ relocate_out_holdout.json
 truth.jsonl
 truth_design.jsonl
 truth_holdout.jsonl
+relocate_out_quarterly.json
+truth_quarterly.jsonl
+relocate_out_transcript.json
+truth_transcript.jsonl

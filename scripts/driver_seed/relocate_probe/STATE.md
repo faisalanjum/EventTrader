@@ -56,8 +56,14 @@ LLM owns ONE judgment ("is this snippet THIS driver's value for THIS period?"). 
    duration 3-month vs YTD-183d picked; value unique within (concept,member,endDate)). Multi-axis INCLUDED
    (FS-09 req; reads all members locally — safe, oracle only READS not tier1-matches). Self-checked; 97% of
    oracle values appear verbatim in filing text (8 cos). `clean_facts(xbrls,kind)`, `series(session,tk,kind)`.
-2. QUARTERLY cert — 30→150 oracle pairs; grader flags YTD-column misbinds (oracle emits YTD as a labeled
-   distractor). Proves the 3-month-vs-YTD guard → supersedes manual #760. Do before transcripts.
+2. **DONE (headline+segment)** — QUARTERLY cert from oracle (`prep_oracle.py`, `grade_quarterly.py`; 40 pairs,
+   bind-only + Step-0 gates). **Q-vs-YTD GUARD PROVEN: 0 YTD-picks / 30 cases** (supersedes manual #760).
+   Precision by type: **headline 93% · segment 100% · multi-axis 73%** (best = derived name kind+member;
+   overall 88.6%). **KNOWN WEAK & PARKED: MULTI-AXIS (2-D cross-tab grid lookup)** — wall is row×column×cell
+   in a flattened table (text/1-D fine). Attempt (a) filer-label via `row_label` BACKFIRED (grabs neighbouring
+   cells on TOTAL lines, headline 93→62%) → reverted. Attempt (b) softer value-in-candidate gate HELPED
+   (catches "—"/hallucinated, keeps correct). In PRODUCTION the user supplies a clean name, so the messy
+   auto-name part of multi-axis mostly disappears; the 2-D grid lookup remains the residual hard case.
 3. TRANSCRIPT + NEWS on HEADLINE metrics — census News first (Cypher, 5 tickers); 20-40 pairs each; CODE
    period-stamp each candidate (call/article date) + one forward-looking-exclusion clause; window 120d→75d.
 4. UNION cascade — try sources in precision order filing→EX-99.1→transcript→news, stop at first emit. 4 lines.

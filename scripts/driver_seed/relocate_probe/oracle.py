@@ -15,7 +15,8 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 import link_lib as L
 import run_code_tier as RC
 
-DUR = {'annual': (350, 380), 'quarter': (84, 100)}      # 52/53-week aware; excludes 183/273d YTD
+DUR = {'annual': (350, 380), 'quarter': (84, 100),      # 52/53-week aware
+       'ytd': (150, 285)}                                # year-to-date (6mo/9mo) — the Q-vs-YTD distractor
 
 
 def axis_count(fc):
