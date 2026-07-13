@@ -98,6 +98,20 @@ multi-row headers via arithmetic column checks.
 The result is strong but not yet a broad multi-company audit. Recommended: sample-audit ~50
 records per part as Parts 1–4 run, don't assume.
 
+### Cost levers — QUALITY-SAFE, proven, NOT yet live
+
+Workflow agent calls carry big fixed harness overhead. Measured (trivial-task probe):
+`general-purpose` (all tools) ~53K context/call vs a 2-tool agent ~34K → **strip unused tools = ~37%
+less context, ZERO quality change** (same answer). Un-removable floor ~34-40K = the Claude Code
+"uniform" (a `claude -p` probe confirmed `--allowedTools ""` does NOT remove it — use a lean AGENT
+TYPE, `.claude/agents/lean-probe.md`, not tool-gating). Safe levers, in adoption order:
+1. **lean agent type** (~37% context) · 2. **keep the prompt cache warm** — run chunks back-to-back
+within the 1h TTL (a warm read is ~5-10× cheaper than a cold write) · 3. return candidate INDEX not
+the full quote (cuts output).
+**Status: NOT live.** `snippet_bind.js` default is still `general-purpose`; `agent_type` arg is the
+switch. Blocked to a FRESH session (registry snapshots at startup) + must re-verify identical
+bindings on a real batch first. **NOT safe:** downgrading to Haiku (moves recall/precision).
+
 ### Cost (MEASURED) + effort decision — LOCKED
 
 - **Effort = `high` for both bind+verify** (locked 2026-07-12). A/B tested `medium`: only ~9% cheaper
