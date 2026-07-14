@@ -1,0 +1,22 @@
+[
+ {
+  "ticker": "EOG",
+  "concept": "us-gaap:RevenueFromContractWithCustomerIncludingAssessedTax",
+  "row_old": "Natural Gas Liquids",
+  "row_new": "NGLs",
+  "col_old": "United States",
+  "col_new": "United States",
+  "pool_id": 1219,
+  "split": "development"
+ },
+ {
+  "ticker": "MTCH",
+  "concept": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+  "row_old": "Match Group Asia",
+  "row_new": "Match Group Asia (a)",
+  "col_old": "(In thousands)",
+  "col_new": "(In thousands)",
+  "pool_id": 510,
+  "split": "development"
+ }
+]
