@@ -114,6 +114,18 @@ KEEP: the residual-audit lane (only belt that caught the 13 wrong Part-1 records
 oracle, EXCLUDE XBRL blobs from the reader's candidate corpus (else circular). CUT (over-engineering): hedge
 detector (regex sets grade), relative-period as LLM skill (code stamps it), a new quarterly harness, news NER.
 
+## GPT FINAL DESIGN — verified + landing (2026-07-13, commits f36dbcb/ab66cc1; work now on MAIN)
+HEAD-TO-HEAD on their frozen 100 unseen-company TRUE-multi-axis cases (identical candidates):
+their reader 100%/95% · **OUR certified reader + THEIR exact addresses 98%/96%** · our reader + our old
+addresses 92%/85% → the win is the EXACT ADDRESS (row × column × section from the HTML grid), readers are
+equivalent. Both our 2 misses = ADM segment-table rows (their reader abstained same cases). Artifacts +
+FINAL_HANDOFF archived `benchmark/multiaxis_pool/final/` (SHAs match their declared snapshots).
+LANDED: `xbrl_lane.py` (#767 step 1) — deterministic full-identity resolver, self-check 130/20-abstain/0-wrong
+on 150 random pool pairs; abstains = OUR graph's missing facts (SEC fallback = future). REMAINING (#767):
+step 2 port HTML grid extractor into lock flow (needs EDGAR inline-HTML fetch — new infra); step 3
+`exact_section` reader TIE-BREAK (prompt change → bundle with twin-fix hardening, ONE re-cert bill).
+DO NOT PORT: per-company axis map; naive explicitMember loop into tier1.
+
 ## Deferred (seed-side, NOT relocation) — do with a certified-pipeline regression check
 - **XBRL member-parser bug** (`link_lib.seg_members`): `explicitMember` can be a LIST of `{dimension,$t}`
   (multi-axis, e.g. OperatingSegments × GroceryAndSnacks) — current code only reads a single dict, so
