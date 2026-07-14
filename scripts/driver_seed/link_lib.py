@@ -237,6 +237,25 @@ def seg_members(fc):
     return out
 
 
+def seg_axis_members(fc):
+    """[(axis_qname, member_qname)] for both {dimension,value} and explicitMember.$t shapes.
+    FETCH-only: the raw XBRL axis+member the shared decomposer classifies into a slice kind."""
+    seg = fc.get('segment')
+    if not seg:
+        return []
+    items = seg if isinstance(seg, list) else [seg]
+    out = []
+    for s in items:
+        if not isinstance(s, dict):
+            continue
+        if isinstance(s.get('value'), str):
+            out.append((s.get('dimension', ''), s['value']))
+        em = s.get('explicitMember')
+        if isinstance(em, dict) and em.get('$t'):
+            out.append((em.get('dimension', ''), em['$t']))
+    return out
+
+
 def member_tokens(members):
     toks = set()
     for m in members:
@@ -339,7 +358,13 @@ def tier1(xbrls, name, val, per):
     score, concept, mlabel, _, fc = cands[0]
     pe = fc.get('period') or {}
     q = f'{concept} [{mlabel}] [{pe.get("startDate","")}..{pe.get("endDate","")}] = {fc.get("value")}'
-    return {'member': mlabel, 'concept': concept, 'quote': q}
+    # raw XBRL context for the FETCH packet (concept + axis+member + exact period + instant/duration).
+    # The shared decomposer/resolver consumes these; FETCH never interprets them.
+    return {'member': mlabel, 'concept': concept, 'quote': q,
+            'axis_members': seg_axis_members(fc),
+            'period_start': pe.get('startDate', ''),
+            'period_end': pe.get('endDate') or pe.get('instant', ''),
+            'ptype': 'instant' if 'instant' in pe else 'duration'}
 
 
 # ---------- Tier-2: strict same-row text label ----------
