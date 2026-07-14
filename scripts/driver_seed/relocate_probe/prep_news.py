@@ -66,7 +66,7 @@ def main():
                     lock_q = strict          # STRICT lossless lock only
                     if not lock_q:
                         continue
-                    addr = prep.build_address(name, 'number', 1, txf, lock_q, vB)
+                    addr = prep.build_address(name, 'number', 1, txf, lock_q, vB, measurement='gaap')
                     cands = prep.locate(news, addr, keep=40)   # ~400 chunks/company -> keep=40 (their benchmark setting)
                     if not cands:
                         continue

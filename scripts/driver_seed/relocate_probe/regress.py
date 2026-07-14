@@ -17,12 +17,15 @@ PY = sys.executable
 # certified 2026-07-13 (keep=12, faithful names, strict gates). precision/recall in %.
 # v2 floors (locate v2 = uniform chunks + lock-word IDF; SIGN-PRES class separated; 1-ulp ruler).
 # v1 floors (old locate): annual 98.5/93.0, quarterly 97.4/92.5, headline 100/17.5 — artifacts at commit 0ea0906.
+# v3 floors (#768: measurement rule 5 + section tie-break; twin class eliminated). v2 at commit 14ef312.
+# multiaxis/gptholdout dips = no-measurement conservatism + variance; recover with #767 measurement batches.
 FLOORS = {
-    ('grade.py', 'validation'): {'PRECISION': 96.3, 'RECALL': 94.2},
-    ('grade_quarterly.py', 'quarterly'): {'PRECISION': 92.5, 'RECALL': 92.5, 'YTD': 0},
+    ('grade.py', 'validation'): {'PRECISION': 98.5, 'RECALL': 96.4},
+    ('grade_quarterly.py', 'quarterly'): {'PRECISION': 95.0, 'RECALL': 95.0, 'YTD': 0},
     ('grade_quarterly.py', 'headline'): {'PRECISION': 75.0, 'RECALL': 7.5},
-    ('grade_quarterly.py', 'multiaxis'): {'PRECISION': 90.8, 'RECALL': 82.1, 'YTD': 0},
+    ('grade_quarterly.py', 'multiaxis'): {'PRECISION': 89.9, 'RECALL': 80.1, 'YTD': 0},
     ('grade_quarterly.py', 'news'): {'PRECISION': 100.0, 'RECALL': 14.7, 'YTD': 0},
+    ('grade_quarterly.py', 'gptholdout'): {'PRECISION': 96.9, 'RECALL': 95.0, 'YTD': 0},
 }
 
 

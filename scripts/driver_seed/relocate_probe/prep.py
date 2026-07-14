@@ -101,26 +101,34 @@ def split_tables(texts):
     return out
 
 
-def build_address(kpi, fmt, is_currency, lock_texts, lock_quote, lock_value):
+def measurement_of(kpi, lock_quote):
+    """measurement FLAVOR for the address: 'adjusted' when the driver name or the locked row itself
+    says adjusted/non-GAAP; '' = unknown. Oracle-built (XBRL) locks pass 'gaap' explicitly."""
+    t = f"{kpi} {lock_quote}".lower()
+    return 'adjusted' if re.search(r'\badjusted\b|non-?gaap', t) else ''
+
+
+def build_address(kpi, fmt, is_currency, lock_texts, lock_quote, lock_value, measurement=None):
     """GENERAL address. Home table = the one that CONTAINS the certified lock_quote (deterministic —
     no dependence on Neo4j section order); fall back to a value-form hunt only if not found. Unit is a
     source-field dimension, not text-sniffed. 'kind' field dropped (was written, never read)."""
     kt = kpi_tokens(kpi)
     lt = [t.lower() for t in kt]
     dim = unit_dim(fmt, is_currency)
+    meas = measurement_of(kpi, lock_quote) if measurement is None else measurement
     lq = L._tidy(lock_quote)
     tables = split_tables(lock_texts)
     for cap, block in tables:                                 # deterministic: lock_quote containment
         if lq and lq in block:
             sib = sorted(label_terms(block) - set(lt))[:40]
-            return {'label': kt, 'caption': cap[:120], 'siblings': sib, 'unit': dim, 'lock_row': lock_quote}
+            return {'label': kt, 'caption': cap[:120], 'siblings': sib, 'unit': dim, 'lock_row': lock_quote, 'measurement': meas}
     forms = L._tableforms(lock_value, fmt)                     # fallback: value-form hunt
     for cap, block in tables:
         if any(L.bounded_hit(block, f) for f in forms) and (not lt or any(t in block.lower() for t in lt)):
             sib = sorted(label_terms(block) - set(lt))[:40]
-            return {'label': kt, 'caption': cap[:120], 'siblings': sib, 'unit': dim, 'lock_row': lock_quote}
+            return {'label': kt, 'caption': cap[:120], 'siblings': sib, 'unit': dim, 'lock_row': lock_quote, 'measurement': meas}
     return {'label': kt, 'caption': '', 'siblings': sorted(label_terms(lock_quote))[:40],
-            'unit': dim, 'lock_row': lock_quote}
+            'unit': dim, 'lock_row': lock_quote, 'measurement': meas}
 
 
 _SPLIT_STOP = {'a', 'an', 'and', 'as', 'at', 'by', 'for', 'from', 'in', 'into', 'is', 'of', 'on',

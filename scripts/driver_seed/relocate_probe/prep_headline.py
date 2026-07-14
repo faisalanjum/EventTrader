@@ -55,7 +55,7 @@ def main():
                     lock_q = strict          # STRICT lossless lock only — a loose fallback can lock a wrong row (ACMR '8.4%')
                     if not lock_q:
                         continue                                 # can't lock the identity in the filing
-                    addr = prep.build_address(name, 'number', 1, txf, lock_q, vB)
+                    addr = prep.build_address(name, 'number', 1, txf, lock_q, vB, measurement='gaap')
                     cands = prep.locate(src_texts, addr)         # candidates from the TRANSCRIPT
                     if not cands:
                         continue

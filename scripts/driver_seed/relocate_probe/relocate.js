@@ -20,13 +20,15 @@ const VSCHEMA = { type: 'object', properties: { correct: { type: 'boolean' } }, 
 const bindPrompt = (i) =>
   `You re-find ONE company metric's value for a specific period in a NEW document. 100% precision is required; abstaining is correct and expected — never guess.\n\n` +
   `Read ${DIR}/batch_${i}.json = {kpi, period_type, period_target, address, candidates:[...]}.\n` +
-  `- address = the metric's identity from an earlier disclosure: label, caption, siblings (labels near it), unit, lock_row (how it read in an EARLIER period — for RECOGNITION only; its number will differ, never copy it).\n` +
+  `- address = the metric's identity from an earlier disclosure: label, caption, siblings (labels near it), unit, lock_row (how it read in an EARLIER period — for RECOGNITION only; its number will differ, never copy it), and possibly measurement ('gaap' = the plain unadjusted figure; 'adjusted' = the adjusted/non-GAAP figure; absent/empty = unknown).\n` +
   `- candidates = excerpts from the target document. Each may be a TABLE ROW or a plain SENTENCE — the rules below apply the same way to both.\n\n` +
   `Choose the ONE candidate that satisfies ALL FOUR; if none does, found=false:\n` +
   `1. METRIC KIND — the SAME kind as the address: a profit is not a revenue is not a margin is not a count; and "adjusted"/"organic"/"non-GAAP" vs the plain GAAP figure is part of the identity — do not swap them.\n` +
   `2. SLICE — the SAME segment / geography / product / entity as the address (matching its label + siblings), not a different slice, a subtotal, or a superset.\n` +
   `3. PERIOD — the number must be the TARGET period: a ${'`'}period_type${'`'} figure (annual = a FULL YEAR; quarterly = a SINGLE three-month quarter, never a six-/nine-month or year-to-date figure) for the period ending period_target. Prove it from EITHER a column header OR the sentence's own words (e.g. "for fiscal 2025", "in the quarter ended June 30"). If you cannot see period evidence, found=false — do NOT default to the first, largest, or leftmost number.\n` +
-  `4. CONSISTENCY — if the candidate also shows the EARLIER (lock) period, that earlier figure must agree with lock_row's number; if it clearly disagrees, this is a different line → found=false.\n\n` +
+  `4. CONSISTENCY — if the candidate also shows the EARLIER (lock) period, that earlier figure must agree with lock_row's number; if it clearly disagrees, this is a different line → found=false.\n` +
+  `5. MEASUREMENT — when the text offers BOTH a plain/GAAP figure and an adjusted/non-GAAP figure for this metric (e.g. "GAAP and adjusted earnings were $X and $Y"), take the one matching address.measurement; if measurement is unknown/absent and both flavors appear, found=false. If the candidate's own words mark its figure as a DIFFERENT flavor than address.measurement (e.g. an explicitly non-GAAP figure when measurement='gaap'), found=false.\n\n` +
+  `TIE-BREAK (never a filter): if TWO candidates satisfy all rules, prefer the one whose surrounding section/heading words match address.caption; NEVER reject a sole qualifying candidate because its section differs.\n\n` +
   `Set value to ONLY the target-period number; quote to the ENTIRE row/sentence copied verbatim IN FULL (character-for-character; do not reformat numbers); period_evidence to the exact header words or phrase proving the period.\n` +
   `Return {found, candidate_index, value, quote, period_evidence}.`
 

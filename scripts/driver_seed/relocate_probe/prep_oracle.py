@@ -73,7 +73,7 @@ def main():
                 # NOTE: tried deriving the label from the lock-quote row words (row_label) — it grabbed
                 # NEIGHBOURING cells for TOTAL lines (headline 93%->62%), so reverted to the derived name.
                 name = search_name
-                addr = prep.build_address(name, 'number', 1, txA, lock_q, vA)
+                addr = prep.build_address(name, 'number', 1, txA, lock_q, vA, measurement='gaap')
                 cands = prep.locate(txB, addr)
                 if not cands:
                     continue
