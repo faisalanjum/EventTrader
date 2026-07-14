@@ -22,6 +22,7 @@ FLOORS = {
     ('grade_quarterly.py', 'quarterly'): {'PRECISION': 92.5, 'RECALL': 92.5, 'YTD': 0},
     ('grade_quarterly.py', 'headline'): {'PRECISION': 75.0, 'RECALL': 7.5},
     ('grade_quarterly.py', 'multiaxis'): {'PRECISION': 90.8, 'RECALL': 82.1, 'YTD': 0},
+    ('grade_quarterly.py', 'news'): {'PRECISION': 100.0, 'RECALL': 14.7, 'YTD': 0},
 }
 
 

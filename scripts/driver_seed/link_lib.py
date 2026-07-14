@@ -428,7 +428,8 @@ def scan_text(texts, name, val, fmt, max_hits=20, keep=6):
     KPI's own label tokens ranks above a bare occurrence — because a shared value (e.g. a capex
     figure that also appears as a prior-year column elsewhere) must surface its header row, not just
     its first textual hit."""
-    nt = _toks(name); ntl = [x.lower() for x in nt]
+    nt = _toks(name) or re.findall(r"[A-Za-z0-9&]{2,}", name)   # pure-kind names ('revenue') must not
+    ntl = [x.lower() for x in nt]                                # tokenize to EMPTY -> strict lock dies
     strict = row_quote(texts, nt, val, fmt)
     forms = _tableforms(val, fmt)
     cands = []

@@ -1,0 +1,34 @@
+{"id": 2, "ticker": "AA", "kpi": "revenue", "fmt": "number", "period_target": "2025-09-30", "value_target": 2995000000, "source": "news"}
+{"id": 3, "ticker": "AAPL", "kpi": "net income", "fmt": "number", "period_target": "2025-12-27", "value_target": 42097000000, "source": "news"}
+{"id": 4, "ticker": "AAPL", "kpi": "operating income", "fmt": "number", "period_target": "2025-12-27", "value_target": 50852000000, "source": "news"}
+{"id": 5, "ticker": "AAPL", "kpi": "revenue", "fmt": "number", "period_target": "2025-12-27", "value_target": 143756000000, "source": "news"}
+{"id": 6, "ticker": "ABBV", "kpi": "net income", "fmt": "number", "period_target": "2025-09-30", "value_target": 188000000, "source": "news"}
+{"id": 7, "ticker": "ABBV", "kpi": "revenue", "fmt": "number", "period_target": "2025-09-30", "value_target": 15776000000, "source": "news"}
+{"id": 8, "ticker": "ABBV", "kpi": "amortization of intangible assets", "fmt": "number", "period_target": "2025-09-30", "value_target": 1900000000, "source": "news"}
+{"id": 9, "ticker": "ABNB", "kpi": "net income", "fmt": "number", "period_target": "2025-09-30", "value_target": 1374000000, "source": "news"}
+{"id": 10, "ticker": "ABNB", "kpi": "revenue", "fmt": "number", "period_target": "2025-09-30", "value_target": 4095000000, "source": "news"}
+{"id": 11, "ticker": "ABNB", "kpi": "change in funds payable and amounts payable to customers", "fmt": "number", "period_target": "2025-03-31", "value_target": 3074000000, "source": "news"}
+{"id": 12, "ticker": "ABT", "kpi": "amortization of intangible assets", "fmt": "number", "period_target": "2025-09-30", "value_target": 420000000, "source": "news"}
+{"id": 13, "ticker": "ABT", "kpi": "increase decrease in inventories", "fmt": "number", "period_target": "2025-03-31", "value_target": 255000000, "source": "news"}
+{"id": 14, "ticker": "ABT", "kpi": "proceeds from stock options exercised", "fmt": "number", "period_target": "2025-03-31", "value_target": 287000000, "source": "news"}
+{"id": 15, "ticker": "ACM", "kpi": "gross profit", "fmt": "number", "period_target": "2025-06-30", "value_target": 326950000, "source": "news"}
+{"id": 16, "ticker": "ACM", "kpi": "net income", "fmt": "number", "period_target": "2025-06-30", "value_target": 130966000, "source": "news"}
+{"id": 17, "ticker": "ACM", "kpi": "revenue", "fmt": "number", "period_target": "2024-06-30", "value_target": 4151251000, "source": "news"}
+{"id": 18, "ticker": "ACMR", "kpi": "net income", "fmt": "number", "period_target": "2025-03-31", "value_target": 20380000, "source": "news"}
+{"id": 19, "ticker": "ACMR", "kpi": "operating income", "fmt": "number", "period_target": "2024-09-30", "value_target": 44184000, "source": "news"}
+{"id": 20, "ticker": "ACMR", "kpi": "revenue", "fmt": "number", "period_target": "2025-03-31", "value_target": 172347000, "source": "news"}
+{"id": 21, "ticker": "ACN", "kpi": "revenue", "fmt": "number", "period_target": "2026-02-28", "value_target": 18044066000, "source": "news"}
+{"id": 22, "ticker": "ACN", "kpi": "net cash provided by used in operating activities", "fmt": "number", "period_target": "2025-11-30", "value_target": 1664097000, "source": "news"}
+{"id": 23, "ticker": "ADBE", "kpi": "gross profit", "fmt": "number", "period_target": "2026-02-27", "value_target": 5734000000, "source": "news"}
+{"id": 24, "ticker": "ADBE", "kpi": "net income", "fmt": "number", "period_target": "2026-02-27", "value_target": 1889000000, "source": "news"}
+{"id": 25, "ticker": "ADBE", "kpi": "operating income", "fmt": "number", "period_target": "2026-02-27", "value_target": 2418000000, "source": "news"}
+{"id": 26, "ticker": "ADM", "kpi": "gross profit", "fmt": "number", "period_target": "2025-09-30", "value_target": 1270000000, "source": "news"}
+{"id": 29, "ticker": "ADSK", "kpi": "gross profit", "fmt": "number", "period_target": "2025-10-31", "value_target": 1688000000, "source": "news"}
+{"id": 30, "ticker": "ADSK", "kpi": "net income", "fmt": "number", "period_target": "2025-10-31", "value_target": 343000000, "source": "news"}
+{"id": 31, "ticker": "ADSK", "kpi": "operating income", "fmt": "number", "period_target": "2025-10-31", "value_target": 470000000, "source": "news"}
+{"id": 32, "ticker": "AEE", "kpi": "operating income", "fmt": "number", "period_target": "2025-09-30", "value_target": 825000000, "source": "news"}
+{"id": 33, "ticker": "AEE", "kpi": "net income", "fmt": "number", "period_target": "2025-09-30", "value_target": 641000000, "source": "news"}
+{"id": 34, "ticker": "AEE", "kpi": "revenue", "fmt": "number", "period_target": "2025-09-30", "value_target": 2699000000, "source": "news"}
+{"id": 35, "ticker": "AEIS", "kpi": "gross profit", "fmt": "number", "period_target": "2025-09-30", "value_target": 174400000, "source": "news"}
+{"id": 36, "ticker": "AEIS", "kpi": "net income", "fmt": "number", "period_target": "2025-06-30", "value_target": 25200000, "source": "news"}
+{"id": 37, "ticker": "AEIS", "kpi": "net income", "fmt": "number", "period_target": "2025-09-30", "value_target": 46200000, "source": "news"}
