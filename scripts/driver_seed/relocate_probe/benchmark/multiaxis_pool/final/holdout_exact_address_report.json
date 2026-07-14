@@ -1,0 +1,17 @@
+{
+  "split": "holdout",
+  "requested": 120,
+  "addresses": 120,
+  "attempted": 128,
+  "companies": 58,
+  "failures": 8,
+  "failure_reasons": {
+    "'NoneType' object has no attribute 'find_parent'": 3,
+    "no_visible_row_label": 2,
+    "displayed_value_does_not_match_structured_value": 2,
+    "exact fact count was 2, expected 1": 1
+  },
+  "model_address_contains_old_value_or_old_numeric_row": false,
+  "script_sha256": "b05421071f89166064bae69f909f0beec3d95d756f6bf0ac23895a8273b5dce7",
+  "extractor_sha256": "38690c7b5025660d7490c43eea099ff69f359a39b1a2b7bf8149235deea4996f"
+}
