@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""NEWS-source pairs: lock a headline metric in the period's 10-Q (strict), relocate into NEWS articles
+"""PARKED (user decision 2026-07-14): NEWS IS A SEPARATE TRACK — design lives in news_track/
+(GPT taxonomy + census + samples). This builder + the frozen news benchmark (100% precision,
+5/18 recall baseline) are the EVIDENCE TO BEAT, not the path forward. The filing/transcript
+algorithm is locked and must not grow news-specific logic.
+
+NEWS-source pairs: lock a headline metric in the period's 10-Q (strict), relocate into NEWS articles
 covering that period's earnings (created within [period_end, +90d]); truth = XBRL oracle. Census 2026-07-13:
 10/10 tickers had headline revenue verbatim/rounded in coverage articles — news is a rich day-0 source.
 

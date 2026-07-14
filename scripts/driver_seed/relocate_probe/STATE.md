@@ -126,6 +126,16 @@ step 2 port HTML grid extractor into lock flow (needs EDGAR inline-HTML fetch �
 `exact_section` reader TIE-BREAK (prompt change → bundle with twin-fix hardening, ONE re-cert bill).
 DO NOT PORT: per-company axis map; naive explicitMember loop into tier1.
 
+## NEWS TRACK (separate process — user decision 2026-07-14)
+News is NOT part of the locked source ladder anymore. Rationale (3 facts): retrieval shape differs
+(pick-the-article vs find-the-cell), secondary-source noise (estimates/prior-year adjacent to actuals),
+and its catalog role is the SURPRISE lane (actual-vs-consensus) + day-0 headline, not level extraction.
+LOCKED baseline to beat: precision 100% (5/5, 0 traps), recall-of-present 5/18 (benchmark `news` set +
+floor stay in regress.py as evidence). Design inputs archived in `news_track/` (GPT taxonomy/risks,
+census: Earnings channel 16% hit-rate vs 3% base -> RANK never filter; actuals live in title+lead of
+beat/miss wires; 16/34 values structurally absent from news). Reader + gates + ruler stay SHARED;
+only fetch/orchestration/record-shape are news-specific. Next: dedicated brainstorm session.
+
 ## Deferred (seed-side, NOT relocation) — do with a certified-pipeline regression check
 - **XBRL member-parser bug** (`link_lib.seg_members`): `explicitMember` can be a LIST of `{dimension,$t}`
   (multi-axis, e.g. OperatingSegments × GroceryAndSnacks) — current code only reads a single dict, so
