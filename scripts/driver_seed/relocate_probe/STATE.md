@@ -141,6 +141,27 @@ PRODUCTION TRANSITION (#771, user goal): every driver x period x every source th
 (news excluded -> its own track) -> frozen evidence record each, so part-2 writes DriverUpdates
 without re-reading sources. Design-mandated (FROM_SOURCE per-source facts + collapse ranking).
 
+## MINI-EXAM / GRAND CERT (#772 + #766 DONE 2026-07-14) — VERDICT: PASS
+111 fresh cases (unseen companies / unseen pool pairs), batched (`batch_groups.py` caps 8/100KB) +
+lean Read-only agents, 80 calls, **2.8M tokens actual** (vs 4-5M est). Strata (grade_quarterly, oracle truth):
+- exam_annual 44: 36/38 = 94.7% strict (97.4% cell-level incl 1 sign-pres), recall 81.8%, YTD 0.
+  1 real miss (DE: grabbed 61,251 from a messy segment table, period_evidence invalid — rule-3 lapse).
+- exam_mafresh 36 (multi-axis, fresh holdout pool pairs): **100% precision (34/34), recall 94.4% = its ceiling**, YTD 0.
+- exam_madrift 8 (renamed-label torture): mechanical 4/6; **adjudicated 6/6 — 0 real wrong picks.**
+  The 2 mechanical misses are a FILER TAGGING ERROR (MDT 10-Q acc 0001613103-23-000149: inline-XBRL
+  contexts row-shifted — (US,Diabetes)-tagged fact wraps the printed "Medical Surgical 963" cell;
+  printed table sums correctly, reader picked the printed truth 217/740). Proof = filing's own ix
+  contexts c-151/c-155 + segment-total sums. **Drift scan doubles as a filer-tagging-error detector.**
+  3rd overturn was OUR truth bug: `int(float(-0.2))=0` — fixed (float), PSN regraded CORRECT.
+- exam_transcript 23: 4/5 = 80%, recall-of-present 4/9, YTD 0. 1 miss = DAL call speaks ADJUSTED
+  revenue unlabeled ($14.2B vs GAAP 15,854) — the known transcript adjusted-trap class (ACMR).
+POOLED filing-source (annual+mafresh+madrift+banked gptholdout-100): **precision 171/176 = 97.2%
+(97.7% cell-level), recall 171/188 = 91.0%, YTD-misbinds 0** — within the ±5pt bar of every floor.
+Quote spot audit 25 random emits: 24/25 byte-verbatim, 1 reconstructed row with correct real value.
+DRIFT CENSUS FINAL (#766): full pool ~1,490 pairs scanned -> 6 true soft renames + 2 filer-tag errors
+(0.5%); renames relocate fine (EOG NGLs, PFE footnote, MTCH marker, PSN, AA reorder all CORRECT).
+Levers certified in-exam: batching + lean agent + hybrid addresses. CLEARED FOR #771.
+
 ## NEWS TRACK (separate process — user decision 2026-07-14)
 News is NOT part of the locked source ladder anymore. Rationale (3 facts): retrieval shape differs
 (pick-the-article vs find-the-cell), secondary-source noise (estimates/prior-year adjacent to actuals),

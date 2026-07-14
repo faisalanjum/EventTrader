@@ -16,8 +16,9 @@ MAX_CHARS = 100_000
 
 
 def main():
-    ap = argparse.ArgumentParser(); ap.add_argument('--set', required=True); a = ap.parse_args()
-    B = f'{HERE}/benchmark'
+    ap = argparse.ArgumentParser(); ap.add_argument('--set', required=True)
+    ap.add_argument('--root', default=f'{HERE}/benchmark'); a = ap.parse_args()
+    B = a.root
     batches = {}
     for f in glob.glob(f'{B}/batches_{a.set}/batch_*.json'):
         b = json.load(open(f)); batches[b['id']] = b

@@ -1,0 +1,188 @@
+{
+ "records": [
+  {
+   "i": 0,
+   "found": false,
+   "value": "",
+   "quote": "",
+   "period_evidence": "No explicit net income dollar figure appears anywhere in the candidate excerpts; only pre-tax profit ($530 million) and operating margin (4.6%) are stated, neither of which is net income.",
+   "gid": 0
+  },
+  {
+   "i": 1,
+   "found": false,
+   "value": "",
+   "quote": "",
+   "period_evidence": "No explicit operating income dollar figure appears anywhere in the candidate excerpts; only operating margin percentages (4.6% actual, 6%-8% June quarter guidance) are stated, not an operating income dollar amount.",
+   "gid": 0
+  },
+  {
+   "i": 2,
+   "found": true,
+   "value": "$14.2 billion",
+   "quote": "Total revenue of $14.2 billion was a first quarter record and 9.4% higher than last year, several points above our initial outlook.",
+   "period_evidence": "March quarter results demonstrate the power of this model. Total revenue of $14.2 billion was a first quarter record and 9.4% higher than last year",
+   "gid": 0
+  },
+  {
+   "i": 3,
+   "found": false,
+   "value": "",
+   "quote": "",
+   "period_evidence": "",
+   "gid": 1
+  },
+  {
+   "i": 4,
+   "found": false,
+   "value": "",
+   "quote": "",
+   "period_evidence": "",
+   "gid": 1
+  },
+  {
+   "i": 5,
+   "found": true,
+   "value": "19.4 million",
+   "quote": "Overall net income was 19.4 million for the quarter or 12 cents per diluted share compared to net income of 16.9 million or 11 cents per diluted share for the third quarter of 2024.",
+   "period_evidence": "\"for the quarter\" (Q3 2025, this being the Darling Ingredients Third Quarter 2025 Earnings Call) contrasted with \"for the third quarter of 2024\" confirms the stated figure is for the current Q3 2025 quarter, matching target period ending September 27, 2025",
+   "gid": 3
+  },
+  {
+   "i": 6,
+   "found": false,
+   "value": "",
+   "quote": "",
+   "period_evidence": "",
+   "gid": 3
+  },
+  {
+   "i": 7,
+   "found": false,
+   "value": "",
+   "quote": "",
+   "period_evidence": "",
+   "gid": 2
+  },
+  {
+   "i": 8,
+   "found": false,
+   "value": "",
+   "quote": "",
+   "period_evidence": "",
+   "gid": 4
+  },
+  {
+   "i": 9,
+   "found": false,
+   "value": "",
+   "quote": "",
+   "period_evidence": "",
+   "gid": 4
+  },
+  {
+   "i": 10,
+   "found": false,
+   "value": "",
+   "quote": "",
+   "period_evidence": "No candidate reports a gross profit dollar figure; only 'Gross margin was 81.4% for the quarter' (a percentage, not gross profit dollars) appears.",
+   "gid": 5
+  },
+  {
+   "i": 11,
+   "found": false,
+   "value": "",
+   "quote": "",
+   "period_evidence": "Net income figure present ($197 million, third quarter) but text explicitly states 'unless otherwise indicated, all income statement figures mentioned are non-GAAP' \u2014 so this net income is adjusted, not GAAP as required by address.measurement -> measurement mismatch, found=false.",
+   "gid": 5
+  },
+  {
+   "i": 12,
+   "found": false,
+   "value": "",
+   "quote": "",
+   "period_evidence": "No candidate reports an operating income dollar figure; only 'Operating margin was 41.1%' (a percentage, not operating income dollars) appears, and it too is under the non-GAAP caveat.",
+   "gid": 5
+  },
+  {
+   "i": 13,
+   "found": false,
+   "value": "",
+   "quote": "",
+   "period_evidence": "",
+   "gid": 7
+  },
+  {
+   "i": 14,
+   "found": false,
+   "value": "",
+   "quote": "",
+   "period_evidence": "",
+   "gid": 6
+  },
+  {
+   "i": 15,
+   "found": true,
+   "value": "886",
+   "quote": "To start, our Q3 revenue was $886 million, up 28% year-over-year and up 7% quarter-over-quarter.",
+   "period_evidence": "our Q3 revenue was $886 million (call explicitly identified as the 'third quarter 2025 Data Dog Earnings Conference call')",
+   "gid": 7
+  },
+  {
+   "i": 16,
+   "found": false,
+   "value": "",
+   "quote": "",
+   "period_evidence": "",
+   "gid": 8
+  },
+  {
+   "i": 17,
+   "found": false,
+   "value": "",
+   "quote": "During this call, unless otherwise indicated, all references to financial measures refer to non-GAAP financial measures, including non-GAAP gross margin, operating expenses, operating income, net income, diluted earnings per share, free cash flow, and adjusted free cash flow.",
+   "period_evidence": "",
+   "gid": 9
+  },
+  {
+   "i": 18,
+   "found": false,
+   "value": "",
+   "quote": "During this call, unless otherwise indicated, all references to financial measures refer to non-GAAP financial measures, including non-GAAP gross margin, operating expenses, operating income, net income, diluted earnings per share, free cash flow, and adjusted free cash flow.",
+   "period_evidence": "",
+   "gid": 9
+  },
+  {
+   "i": 19,
+   "found": false,
+   "value": "",
+   "quote": "During this call, unless otherwise indicated, all references to financial measures refer to non-GAAP financial measures, including non-GAAP gross margin, operating expenses, operating income, net income, diluted earnings per share, free cash flow, and adjusted free cash flow.",
+   "period_evidence": "",
+   "gid": 9
+  },
+  {
+   "i": 21,
+   "found": true,
+   "value": "$399 million",
+   "quote": "Reported operating income in the first quarter was $399 million or 13.8% of revenues compared to $346 million or 13% of revenues last year.",
+   "period_evidence": "\"Reported operating income in the first quarter was $399 million\" \u2014 read alongside surrounding context (\"Consolidated revenues were $2.9 billion... in the quarter\", comparisons to \"the first quarter of 2025\" and \"raising our full-year 2026 guidance\") confirms this is Q1 2026 (quarter ended 2026-03-31), the target period.",
+   "gid": 10
+  },
+  {
+   "i": 23,
+   "found": true,
+   "value": "$60 million",
+   "quote": "In the third quarter, we delivered revenue of $60 million, down 4% year-over-year, adjusted EBITDA of $18.9 million, reflecting a 32% margin, and adjusted net income was $9.7 million, resulting in 7 cents of non-GAAP earnings per share in the period, all of which were at or above the high end of our guidance for the quarter.",
+   "period_evidence": "In the third quarter, we delivered revenue of $60 million",
+   "gid": 12
+  },
+  {
+   "i": 24,
+   "found": false,
+   "value": "",
+   "quote": "",
+   "period_evidence": "",
+   "gid": 11
+  }
+ ]
+}

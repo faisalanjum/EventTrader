@@ -1,0 +1,44 @@
+{"id": 0, "ticker": "DAL", "kpi": "net income", "fmt": "number", "period_target": "2025-12-31", "value_target": 5005000000}
+{"id": 1, "ticker": "DAL", "kpi": "operating income", "fmt": "number", "period_target": "2025-12-31", "value_target": 5822000000}
+{"id": 2, "ticker": "DAL", "kpi": "revenue", "fmt": "number", "period_target": "2025-12-31", "value_target": 63364000000}
+{"id": 3, "ticker": "DAN", "kpi": "depreciation", "fmt": "number", "period_target": "2025-12-31", "value_target": 345000000}
+{"id": 4, "ticker": "DAN", "kpi": "income tax expense benefit", "fmt": "number", "period_target": "2025-12-31", "value_target": 53000000}
+{"id": 5, "ticker": "DAN", "kpi": "interest expense", "fmt": "number", "period_target": "2025-12-31", "value_target": 181000000}
+{"id": 6, "ticker": "DAR", "kpi": "net income", "fmt": "number", "period_target": "2026-01-03", "value_target": 62804000}
+{"id": 7, "ticker": "DAR", "kpi": "operating income", "fmt": "number", "period_target": "2026-01-03", "value_target": 273440000}
+{"id": 8, "ticker": "DAR", "kpi": "interest expense", "fmt": "number", "period_target": "2023-12-30", "value_target": 259223000}
+{"id": 11, "ticker": "DASH", "kpi": "revenue", "fmt": "number", "period_target": "2025-12-31", "value_target": 13717000000}
+{"id": 12, "ticker": "DBX", "kpi": "gross profit", "fmt": "number", "period_target": "2025-12-31", "value_target": 2020200000}
+{"id": 13, "ticker": "DBX", "kpi": "net income", "fmt": "number", "period_target": "2025-12-31", "value_target": 508400000}
+{"id": 14, "ticker": "DBX", "kpi": "operating income", "fmt": "number", "period_target": "2025-12-31", "value_target": 689100000}
+{"id": 15, "ticker": "DDOG", "kpi": "net income", "fmt": "number", "period_target": "2025-12-31", "value_target": 107741000}
+{"id": 16, "ticker": "DDOG", "kpi": "net income", "fmt": "number", "period_target": "2025-12-31", "value_target": 107741000}
+{"id": 17, "ticker": "DDOG", "kpi": "revenue", "fmt": "number", "period_target": "2025-12-31", "value_target": 3427158000}
+{"id": 20, "ticker": "DE", "kpi": "revenue", "fmt": "number", "period_target": "2025-11-02", "value_target": 45684000000}
+{"id": 21, "ticker": "DELL", "kpi": "net income", "fmt": "number", "period_target": "2026-01-30", "value_target": 5936000000}
+{"id": 22, "ticker": "DELL", "kpi": "operating income", "fmt": "number", "period_target": "2026-01-30", "value_target": 8149000000}
+{"id": 23, "ticker": "DELL", "kpi": "net income", "fmt": "number", "period_target": "2026-01-30", "value_target": 5936000000}
+{"id": 25, "ticker": "DGX", "kpi": "operating income", "fmt": "number", "period_target": "2025-12-31", "value_target": 1556000000}
+{"id": 27, "ticker": "DH", "kpi": "revenue", "fmt": "number", "period_target": "2025-12-31", "value_target": 241521000}
+{"id": 28, "ticker": "DH", "kpi": "amortization of intangible assets", "fmt": "number", "period_target": "2025-12-31", "value_target": 52807000}
+{"id": 29, "ticker": "DH", "kpi": "deferred contract costs", "fmt": "number", "period_target": "2025-12-31", "value_target": -13352000}
+{"id": 32, "ticker": "DHI", "kpi": "revenue", "fmt": "number", "period_target": "2025-09-30", "value_target": 34250400000}
+{"id": 33, "ticker": "DHR", "kpi": "gross profit", "fmt": "number", "period_target": "2025-12-31", "value_target": 14523000000}
+{"id": 34, "ticker": "DHR", "kpi": "net income", "fmt": "number", "period_target": "2025-12-31", "value_target": 3614000000}
+{"id": 35, "ticker": "DHR", "kpi": "revenue", "fmt": "number", "period_target": "2025-12-31", "value_target": 24568000000}
+{"id": 38, "ticker": "DIS", "kpi": "revenue", "fmt": "number", "period_target": "2025-09-27", "value_target": 94425000000}
+{"id": 40, "ticker": "DK", "kpi": "operating income", "fmt": "number", "period_target": "2025-12-31", "value_target": 301000000}
+{"id": 42, "ticker": "DKS", "kpi": "gross profit", "fmt": "number", "period_target": "2026-01-31", "value_target": 5667262000}
+{"id": 43, "ticker": "DKS", "kpi": "net income", "fmt": "number", "period_target": "2026-01-31", "value_target": 849239000}
+{"id": 44, "ticker": "DKS", "kpi": "increase decrease in inventories", "fmt": "number", "period_target": "2026-01-31", "value_target": -181316000}
+{"id": 45, "ticker": "DLTR", "kpi": "net income", "fmt": "number", "period_target": "2026-01-31", "value_target": 1282500000}
+{"id": 46, "ticker": "DLTR", "kpi": "operating income", "fmt": "number", "period_target": "2026-01-31", "value_target": 1653100000}
+{"id": 47, "ticker": "DLTR", "kpi": "revenue", "fmt": "number", "period_target": "2026-01-31", "value_target": 19395700000}
+{"id": 49, "ticker": "DNB", "kpi": "operating income", "fmt": "number", "period_target": "2024-12-31", "value_target": 194800000}
+{"id": 52, "ticker": "DNUT", "kpi": "operating income", "fmt": "number", "period_target": "2025-12-28", "value_target": -469270000}
+{"id": 54, "ticker": "DOCN", "kpi": "gross profit", "fmt": "number", "period_target": "2025-12-31", "value_target": 539592000}
+{"id": 55, "ticker": "DOCN", "kpi": "revenue", "fmt": "number", "period_target": "2025-12-31", "value_target": 901427000}
+{"id": 56, "ticker": "DOCS", "kpi": "net income", "fmt": "number", "period_target": "2025-03-31", "value_target": 223185000}
+{"id": 57, "ticker": "DOCS", "kpi": "revenue", "fmt": "number", "period_target": "2025-03-31", "value_target": 570399000}
+{"id": 58, "ticker": "DOCS", "kpi": "increase decrease in capitalized contract cost", "fmt": "number", "period_target": "2025-03-31", "value_target": 12051000}
+{"id": 59, "ticker": "DOCU", "kpi": "revenue", "fmt": "number", "period_target": "2026-01-31", "value_target": 3219500000}

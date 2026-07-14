@@ -1,0 +1,292 @@
+{
+ "records": [
+  {
+   "i": 0,
+   "found": true,
+   "value": "0.1",
+   "quote": "Maggiano\u2019s Segment Thirteen Week Period Ended March 29, 2023 compared to March 30, 2022 Thirteen Week Periods Ended Favorable (Unfavorable) Variance Variance as a percentage March 29, 2023 March 30, 2022 Company sales $ 119.7 $ 100.7 $ 19.0 18.9 % Franchise revenues 0.1 0.1 \u2014 \u2014 % Total revenues $ 119.8 $ 100.8 $ 19.0 18.8 %",
+   "period_evidence": "Maggiano\u2019s Segment Thirteen Week Period Ended March 29, 2023 compared to March 30, 2022 ... March 29, 2023 (column header)",
+   "gid": 7
+  },
+  {
+   "i": 1,
+   "found": true,
+   "value": "193",
+   "quote": "Three Months Ended September 30, 2023 2022 North America International TOTAL North America International TOTAL Home and Commercial Solutions $ 764 $ 359 $ 1,123 $ 835 $ 377 $ 1,212 Learning and Development 501 193 694 559 192 751 Outdoor and Recreation 131 100 231 159 130 289 $ 1,396 $ 652 $ 2,048 $ 1,553 $ 699 $ 2,252",
+   "period_evidence": "Three Months Ended September 30, 2023",
+   "gid": 24
+  },
+  {
+   "i": 2,
+   "found": true,
+   "value": "22",
+   "quote": "Three Months Ended June 30, 2023 Total by Countries/Regions Dollars in millions Government Solutions Sustainable Technology Solutions Total United States $ 782 $ 138 $ 920 Europe 387 66 453 Middle East 40 91 131 Australia 106 23 129 Africa 16 22 38 Asia 5 35 40 Other countries 16 26 42 Total revenue $ 1,352 $ 401 $ 1,753",
+   "period_evidence": "Three Months Ended June 30, 2023",
+   "gid": 17
+  },
+  {
+   "i": 3,
+   "found": true,
+   "value": "7,434",
+   "quote": "Three Months Ended March 31, Nine Months Ended March 31, 2024 2023 2024 2023 Small-to-midsize businesses, accounting firms, spending businesses and other $ 273,860 $ 227,573 $ 803,909 $ 652,800 Financial institutions 7,434 11,922 17,519 32,401 Total subscription and transaction fees 281,294 239,495 821,428 685,201 Interest on funds held for customers 41,734 33,060 125,080 77,284 Total revenue $ 323,028 $ 272,555 $ 946,508 $ 762,485",
+   "period_evidence": "Three Months Ended March 31, ... 2024 2023 2024 2023 (column header pairing 'Three Months Ended March 31' with first column year '2024' places 7,434 in the three-months-ended March 31, 2024 quarter)",
+   "gid": 3
+  },
+  {
+   "i": 4,
+   "found": true,
+   "value": "159.3",
+   "quote": "Paper 159.3 \u2014 159.3 38.5",
+   "period_evidence": "Sales, net Three Months Ended September 30, 2024",
+   "gid": 27
+  },
+  {
+   "i": 5,
+   "found": true,
+   "value": "24.8",
+   "quote": "APAC 17.4 7.4 \u2014 24.8 16.2 9.0 \u2014 25.2",
+   "period_evidence": "Three Month Period Ended April 2, 2023",
+   "gid": 31
+  },
+  {
+   "i": 6,
+   "found": false,
+   "value": "",
+   "quote": "",
+   "period_evidence": "No candidate visible in the readable portion of the file explicitly states Lease Revenue broken out by United States for the Integrated Solutions & Services segment for the quarter ended 2023-09-30; the geography table only covers contract revenue and the lease revenue total is company-wide only (not split by segment/geography). Note: file could not be fully read (single-line JSON exceeds token read cap; ~35% of candidates unreadable with available tools), so this abstain is based on partial visibility.",
+   "gid": 34
+  },
+  {
+   "i": 7,
+   "found": true,
+   "value": "682.6",
+   "quote": "Sales Channel Distributors $ 682.6 $ 292.4 $ 152.7 $ 1,127.7 Direct customers 437.2 357.1 172.4 966.7 Total $ 1,119.8 $ 649.5 $ 325.1 $ 2,094.4",
+   "period_evidence": "Quarter Ended June 30, 2023 PSG ASG ISG Total Geographic Location ... Sales Channel Distributors $ 682.6 ...",
+   "gid": 26
+  },
+  {
+   "i": 8,
+   "found": true,
+   "value": "612",
+   "quote": "Asia Pacific 612 216 632 43 1,503",
+   "period_evidence": "Quarter Ended September 29, 2024 Aeronautics MFC RMS Space Total",
+   "gid": 22
+  },
+  {
+   "i": 9,
+   "found": true,
+   "value": "19,355",
+   "quote": "Segment loss, including significant segment expenses, for the three and nine months ended September 30, 2025 and 2024 is as follows (in thousands): Three Months Ended September 30, Nine Months Ended September 30, 2025 2024 2025 2024 Product revenues, net $ 142,342 $ 93,425 $ 342,580 $ 259,265 Less: Cost of product revenues (excluding amortization of intangible assets) 29,365 21,170 78,718 59,591 ARIKAYCE external R&D expenses 9,214 16,370 32,338 45,192 Brensocatib external R&D expenses 19,355 17,288 73,576 74,612 TPIP external R&D expenses 28,754 16,635 58,556 45,190 Other external R&D expenses 36,579 26,919 93,107 55,111",
+   "period_evidence": "Three Months Ended September 30, Nine Months Ended September 30, 2025 2024 2025 2024 ... Brensocatib external R&D expenses 19,355 17,288 73,576 74,612 (19,355 is the first column = Three Months Ended September 30, 2025)",
+   "gid": 14
+  },
+  {
+   "i": 10,
+   "found": true,
+   "value": "1,318",
+   "quote": "Energy & Transportation External Sales Three Months Ended June 30 Six Months Ended June 30 (Millions of dollars) 2023 2022 2023 2022 Oil and gas $ 1,760 $ 1,232 $ 3,074 $ 2,180 Power generation 1,645 1,186 2,929 2,198 Industrial 1,318 1,117 2,573 2,137 Transportation 1,234 1,105 2,436 2,157 Energy & Transportation External Sales $ 5,957 $ 4,640 $ 11,012 $ 8,672",
+   "period_evidence": "Energy & Transportation External Sales Three Months Ended June 30 Six Months Ended June 30 (Millions of dollars) 2023 2022 2023 2022 \u2014 Industrial value in the first data column (Three Months Ended June 30, 2023) is 1,318",
+   "gid": 6
+  },
+  {
+   "i": 11,
+   "found": true,
+   "value": "9,053",
+   "quote": "Axatilimab-related costs 9,053 8,503 28,764 14,104 14,660",
+   "period_evidence": "Research and Development The following table summarizes the research and development expenses for the three and six months ended June 30, 2025 and 2024: Three Months Ended June 30, Change Six Months Ended June 30, Change",
+   "gid": 30
+  },
+  {
+   "i": 12,
+   "found": true,
+   "value": "78.1",
+   "quote": "Three Months Ended June 30, Six Months Ended June 30, in millions 2024 2023 2024 2023 Net sales United States $ 879.7 $ 786.6 $ 1,732.9 $ 1,526.9 International 46.8 44.2 87.6 85.5 Total Utility Solutions $ 926.5 $ 830.8 $ 1,820.5 $ 1,612.4 United States $ 447.9 $ 465.2 $ 882.1 $ 904.2 International 78.1 69.9 149.0 134.7 Total Electrical Solutions $ 526.0 $ 535.1 $ 1,031.1 $ 1,038.9 TOTAL $ 1,452.5 $ 1,365.9 $ 2,851.6 $ 2,651.3",
+   "period_evidence": "Three Months Ended June 30, ... 2024 2023 2024 2023 (International row's first data column, 78.1, aligns with the 'Three Months Ended June 30, 2024' column); consistency check: Six Months Ended June 30, 2023 value 134.7 = lock_row Q1 2023 value 64.8 + this row's Q2 2023 value 69.9, confirming column alignment, and Six Months 2024 value 149.0 = lock_row Q1 2024 value 70.9 + Q2 2024 value 78.1.",
+   "gid": 11
+  },
+  {
+   "i": 13,
+   "found": true,
+   "value": "168",
+   "quote": "Three Months Ended June 28, 2024 Six Months Ended June 28, 2024 Dollars in millions Government Solutions Sustainable Technology Solutions Total Government Solutions Sustainable Technology Solutions Total Cost Reimbursable $ 839 $ \u2014 $ 839 $ 1,683 $ \u2014 $ 1,683 Time-and-Materials 263 290 553 508 553 1,061 Fixed Price 295 168 463 592 337 929 Total revenue $ 1,397 $ 458 $ 1,855 $ 2,783 $ 890 $ 3,673",
+   "period_evidence": "Three Months Ended June 28, 2024",
+   "gid": 18
+  },
+  {
+   "i": 14,
+   "found": true,
+   "value": "8,301",
+   "quote": "Other Expansion Markets 21,204 8,301 12,903 21,991 9,001 12,990",
+   "period_evidence": "Quarter Ended September 30, 2025 Quarter Ended September 30, 2024 Rental Income Operating Expenses NOI Rental Income Operating Expenses NOI",
+   "gid": 9
+  },
+  {
+   "i": 15,
+   "found": true,
+   "value": "6.9",
+   "quote": "Three months ended June 30, 2024 Six months ended June 30, 2024 In millions Allegion Americas Allegion International Total Allegion Americas Allegion International Total Net revenues Products $ 733.0 $ 188.0 $ 921.0 $ 1,399.8 $ 366.9 $ 1,766.7 Services 37.7 6.9 44.6 80.2 12.6 92.8 Total Net revenues $ 770.7 $ 194.9 $ 965.6 $ 1,480.0 $ 379.5 $ 1,859.5",
+   "period_evidence": "Three months ended June 30, 2024",
+   "gid": 1
+  },
+  {
+   "i": 16,
+   "found": true,
+   "value": "26.8",
+   "quote": "Other, primarily gardening and controls 26.8 31.5 35.0 46.8",
+   "period_evidence": "Three Months Ended Six Months Ended April 1, 2023 April 2, 2022 April 1, 2023 April 2, 2022",
+   "gid": 29
+  },
+  {
+   "i": 17,
+   "found": true,
+   "value": "122,002",
+   "quote": "Three months ended June 30, 2025 Greens Creek Lucky Friday Keno Hill Casa Berardi Other Total Metal sales $ 122,002 $ 64,273 $ 26,121 $ 85,035 $ \u2014 $ 297,431 Environmental remediation services \u2014 \u2014 \u2014 \u2014 6,596 6,596 Intersegment sales \u2014 \u2014 1,201 \u2014 \u2014 1,201 Reconciliation of sales 122,002 64,273 27,322 85,035 6,596 305,228 Elimination of intersegment sales \u2014 \u2014 ( 1,201 ) \u2014 \u2014 ( 1,201 ) Total consolidated sales 304,027",
+   "period_evidence": "Three months ended June 30, 2025",
+   "gid": 10
+  },
+  {
+   "i": 18,
+   "found": true,
+   "value": "4,254",
+   "quote": "Professional services 4,254 5,027 8,638 8,971",
+   "period_evidence": "Three Months Ended June 30, Six Months Ended June 30, 2023 2022 2023 2022",
+   "gid": 15
+  },
+  {
+   "i": 19,
+   "found": true,
+   "value": "$20,419 million",
+   "quote": "The following table disaggregates our revenue by major source (in millions): Three Months Ended June 30, Six Months Ended June 30, Automotive sales $ 20,419 $ 13,670 $ 39,297 $ 29,184 Automotive regulatory credits 1,023 Energy generation and storage sales 1,359 2,772 1,220 Services and other 2,150 1,466 3,987 2,745 Total revenues from sales and services 24,210 16,197 46,859 34,172 Automotive leasing 1,131 1,256 Energy generation and storage leasing Total revenues $ 24,927 $ 16,934 $ 48,256 $ 35,690",
+   "period_evidence": "Three Months Ended June 30, [column header, first value column] applied to Automotive sales row = $ 20,419 (the Six Months Ended June 30 columns show $39,297/$29,184, distinct from the three-month figures)",
+   "gid": 32
+  },
+  {
+   "i": 20,
+   "found": true,
+   "value": "62,018",
+   "quote": "Advertising fees 62,018 56,764 186,252 161,567",
+   "period_evidence": "Thirteen Weeks Ended Thirty-Nine Weeks Ended September 27, 2025 September 28, 2024 September 27, 2025 September 28, 2024 Revenue: Royalty revenue, franchise fees and other $ 81,187 $ 74,395 $ 239,851 $ 212,652 Advertising fees 62,018 56,764 186,252 161,567",
+   "gid": 33
+  },
+  {
+   "i": 21,
+   "found": true,
+   "value": "84",
+   "quote": "Three Months Ended September 30, 2025 (in millions) Turbos & Thermal Technologies Drivetrain & Morse Systems PowerDrive Systems Battery & Charging Systems Total North America $ 351 $ 564 $ 78 $ 44 $ 1,037 Europe 688 288 163 84 1,223 Asia 326 595 335 \u2014 1,256 Other 71 \u2014 \u2014 4 75 Total $ 1,436 $ 1,447 $ 576 $ 132 $ 3,591",
+   "period_evidence": "Three Months Ended September 30, 2025",
+   "gid": 5
+  },
+  {
+   "i": 22,
+   "found": true,
+   "value": "96,722",
+   "quote": "Three months ended March 31, 2023 Three months ended March 31, 2024 (Amounts in thousands) Marina/storage locations $ 70,655 $ 71,733 Locations without marina/storage 26,040 24,989 Maintenance, repair, storage, rental, charter services, parts and accessories revenue $ 96,695 $ 96,722",
+   "period_evidence": "Three months ended March 31, 2023 Three months ended March 31, 2024",
+   "gid": 12
+  },
+  {
+   "i": 23,
+   "found": true,
+   "value": "102.0",
+   "quote": "Data-driven fund solutions 102.0 90.2 290.9 262.0",
+   "period_evidence": "Three Months Ended March 31, Nine Months Ended March 31, 2023 2022 2023 2022 (in millions) Investor Communication Solutions Regulatory $ 345.7 $ 320.9 $ 697.1 $ 652.6 Data-driven fund solutions 102.0 90.2 290.9 262.0",
+   "gid": 4
+  },
+  {
+   "i": 24,
+   "found": true,
+   "value": "548.6",
+   "quote": "Three Months Ended September 27, 2025 September 28, 2024 Seating E-Systems Total Seating E-Systems Total North America $ 2,032.4 $ 548.6 $ 2,581.0 $ 1,885.2 $ 518.2 $ 2,403.4",
+   "period_evidence": "Three Months Ended September 27, 2025",
+   "gid": 21
+  },
+  {
+   "i": 25,
+   "found": true,
+   "value": "24%",
+   "quote": "The following table presents Kennametal's revenue disaggregated by geography: Three Months Ended December 31, 2023 December 31, 2022 (in percentages) Metal Cutting Infrastructure Total Kennametal Metal Cutting Infrastructure Total Kennametal Americas 43 % 57 % 48 % 44 % 60 % 50 % Europe, the Middle East and Africa (EMEA) 38 19 31 36 18 29 Asia Pacific 19 24 21 20 22 21",
+   "period_evidence": "Three Months Ended December 31, 2023 (header over the Metal Cutting / Infrastructure / Total Kennametal columns containing the 'Asia Pacific 19 24 21 20 22 21' row)",
+   "gid": 20
+  },
+  {
+   "i": 26,
+   "found": true,
+   "value": "3,614",
+   "quote": "The following table disaggregates components of the Company\u2019s revenue: Three Months Ended June 30, Six Months Ended June 30, (In millions) 2023 2022 2023 2022 Marsh: EMEA (a) (b) $ 858 $ 780 $ 1,790 $ 1,649 Asia Pacific (a) 357 347 669 641 Latin America 137 118 252 222 Total International 1,352 1,245 2,711 2,512 U.S./Canada 1,686 1,533 3,071 2,812 Total Marsh 3,038 2,778 5,782 5,324 Guy Carpenter 576 522 1,647 1,521 Subtotal 3,614 3,300 7,429 6,845 Fiduciary interest income 108 13 199 17 Total Risk and Insurance Services $ 3,722 $ 3,313 $ 7,628 $ 6,862",
+   "period_evidence": "Three Months Ended June 30, Six Months Ended June 30, (In millions) 2023 2022 2023 2022",
+   "gid": 23
+  },
+  {
+   "i": 27,
+   "found": true,
+   "value": "4,104",
+   "quote": "Revenue from subscription and non-subscription contractual arrangements were as follows: Three Months Ended September 30, Nine Months Ended September 30, 2023 2022 2023 2022 (in thousands) SaaS subscription and support and maintenance $ 133,626 $ 112,351 $ 380,954 $ 312,992 On-premise subscription 4,895 6,173 15,388 17,140 Subscription revenue 138,521 118,524 396,342 330,132 Professional services 3,956 5,216 12,594 14,187 Perpetual licenses 148 817 990 4,134 Non-subscription revenue 4,104 6,033 13,584 18,321 Total revenue $ 142,625 $ 124,557 $ 409,926 $ 348,453",
+   "period_evidence": "Three Months Ended September 30, ... 2023 2022 2023 2022 (in thousands) ... Non-subscription revenue 4,104 6,033 13,584 18,321 \u2014 first data column (2023) under 'Three Months Ended September 30' aligns with the value 4,104",
+   "gid": 16
+  },
+  {
+   "i": 28,
+   "found": true,
+   "value": "458",
+   "quote": "Defense & Intel 458 397 1,272 1,143",
+   "period_evidence": "Three Months Ended Nine Months Ended September 27, September 29, September 27, September 29, Dollars in millions 2024 2023 2024 2023 ... Defense & Intel 458 397 1,272 1,143 (first column = Three Months Ended September 27, 2024)",
+   "gid": 19
+  },
+  {
+   "i": 29,
+   "found": true,
+   "value": "117",
+   "quote": "Three Months Ended June 30, Six Months Ended June 30, 2024 2023 2024 2023 Commercial $ 349 $ 378 $ 673 $ 726 Kitchen 496 549 934 1,008 Home Fragrance 117 131 248 295 Home and Commercial Solutions 962 1,058 1,855 2,029 Baby 251 251 471 468 Writing 562 562 901 909 Learning and Development 813 813 1,372 1,377 Outdoor and Recreation 258 333 459 603 $ 2,033 $ 2,204 $ 3,686 $ 4,009",
+   "period_evidence": "Three Months Ended June 30, Six Months Ended June 30, 2024 2023 2024 2023 (Home Fragrance figure 117 is in the first '2024' column, i.e. Three Months Ended June 30, 2024)",
+   "gid": 25
+  },
+  {
+   "i": 30,
+   "found": true,
+   "value": "20,649",
+   "quote": "TPIP external R&D expenses 20,649 14,773 29,802 28,555",
+   "period_evidence": "Three Months Ended June 30, Six Months Ended June 30, 2025 2024 2025 2024",
+   "gid": 13
+  },
+  {
+   "i": 31,
+   "found": true,
+   "value": "0.2",
+   "quote": "The following tables reconcile our segment results to our consolidated results reported in accordance with GAAP: Thirteen Week Period Ended March 27, 2024 Chili's Maggiano's Corporate Consolidated Company sales $ 988.4 $ 120.5 $ \u2014 $ 1,108.9 Franchise revenues 11.2 0.2 \u2014 11.4 Total revenues 999.6 120.7 \u2014 1,120.3",
+   "period_evidence": "Thirteen Week Period Ended March 27, 2024",
+   "gid": 8
+  },
+  {
+   "i": 32,
+   "found": true,
+   "value": "269,845",
+   "quote": "Three Months Ended December 31, Six Months Ended December 31, 2023 2022 2023 2022 Small-to-midsize businesses, accounting firms, spending businesses and other $ 269,845 $ 220,406 $ 530,049 $ 425,227 Financial institutions 5,147 10,689 10,085 20,479 Total subscription and transaction fees 274,992 231,095 540,134 445,706 Interest on funds held for customers 43,503 28,911 83,346 44,224 Total revenue $ 318,495 $ 260,006 $ 623,480 $ 489,930",
+   "period_evidence": "Three Months Ended December 31, 2023 2022 (first data column = three months ended December 31, 2023)",
+   "gid": 2
+  },
+  {
+   "i": 33,
+   "found": true,
+   "value": "316",
+   "quote": "Life insurance 316 390 655 812",
+   "period_evidence": "Three Months Ended June 30, Six Months Ended June 30, (In millions) 2024 2023 2024 2023 Net earned premiums: Aflac Japan ... Life insurance 316 390 655 812 (first column = Three Months Ended June 30, 2024)",
+   "gid": 0
+  },
+  {
+   "i": 34,
+   "found": true,
+   "value": "(6,074)",
+   "quote": "International other revenues (a) \u2014 \u2014 \u2014 ( 6,074 ) 6,074 \u2014",
+   "period_evidence": "Reportable Segments Three Months Ended September 29, 2024",
+   "gid": 28
+  },
+  {
+   "i": 35,
+   "found": true,
+   "value": "450",
+   "quote": "International Companion animal 506 452 1,540 1,412 Livestock 450 437 1,389 1,368 956 889 2,929 2,780",
+   "period_evidence": "Revenue by major species Three Months Ended Nine Months Ended September 30, September 30, (MILLIONS OF DOLLARS) 2023 2022 2023 2022 -- first data column = Three Months Ended September 30, 2023",
+   "gid": 35
+  }
+ ]
+}

@@ -1,0 +1,68 @@
+{
+ "records": [
+  {
+   "i": 0,
+   "found": true,
+   "value": "534",
+   "quote": "NGLs 534 \u2014 \u2014 534",
+   "period_evidence": "Three Months Ended June 30, 2025",
+   "gid": 1
+  },
+  {
+   "i": 1,
+   "found": true,
+   "value": "76,605",
+   "quote": "Match Group Asia (a) 76,605 79,646 152,266 166,855",
+   "period_evidence": "Three Months Ended June 30, Six Months Ended June 30, 2023 2022 2023 2022 (In thousands) Direct Revenue: ... Match Group Asia (a) 76,605 79,646 152,266 166,855 ... [first data column = Three Months Ended June 30, 2023]",
+   "gid": 4
+  },
+  {
+   "i": 2,
+   "found": false,
+   "value": "",
+   "quote": "",
+   "period_evidence": "",
+   "gid": 0
+  },
+  {
+   "i": 3,
+   "found": true,
+   "value": "217",
+   "quote": "Diabetes 217 228 (5) 310 254 22 84 74 14",
+   "period_evidence": "The table below includes net sales by market geography for each of our segments for the three and six months ended October 27, 2023 and October 28, 2022: U.S. (1) Non-U.S. Developed Markets (2) Emerging Markets (3) Three months ended Three months ended Three months ended (in millions) October 27, 2023 October 28, 2022 % Change",
+   "gid": 2
+  },
+  {
+   "i": 4,
+   "found": true,
+   "value": "$ ( 0.20 )",
+   "quote": "The following table presents certain financial statement impacts from changes in estimates on unconsolidated joint ventures in the Critical Infrastructure segment (in thousands): Three Months Ended Six Months Ended June 30, 2024 June 30, 2023 June 30, 2024 June 30, 2023 Operating income (loss) $ ( 22,433 ) $ ( 6,987 ) $ ( 30,793 ) $ ( 16,974 ) Net income (loss) ( 22,433 ) ( 5,198 ) ( 30,793 ) ( 12,629 ) Diluted income (loss) per share $ ( 0.20 ) $ ( 0.05 ) $ ( 0.29 ) $ ( 0.11 )",
+   "period_evidence": "Three Months Ended ... June 30, 2024 June 30, 2023 June 30, 2024 June 30, 2023 (first data column = Three Months Ended June 30, 2024, aligned with the first Diluted income (loss) per share value of $ ( 0.20 ))",
+   "gid": 6
+  },
+  {
+   "i": 5,
+   "found": true,
+   "value": "740",
+   "quote": "Medical Surgical 963 895 740 685 438 421",
+   "period_evidence": "U.S. (1) Non-U.S. Developed Markets (2) Emerging Markets (3) Three months ended Three months ended Three months ended (in millions) October 27, 2023 October 28, 2022 October 27, 2023 October 28, 2022 October 27, 2023 October 28, 2022",
+   "gid": 3
+  },
+  {
+   "i": 6,
+   "found": true,
+   "value": "291",
+   "quote": "Pfizer CentreOne (f) Various 291 318 903 972",
+   "period_evidence": "This row is part of the Significant Product Revenues table whose header (in the adjacent excerpt) reads 'Three Months Ended Nine Months Ended ... Oct. 1, 2023 Oct. 2, 2022 Oct. 1, 2023 Oct. 2, 2022'. Column order is confirmed within this same row block: the adjacent subtotal 'BUSINESS INNOVATION (e) $ 302 $ 319 $ 928 $ 974' matches the independently-labeled MD&A figures 'Business Innovation QTD $302 ... Worldwide $ 302 $ 319 (5) (7) YTD $928 ... Worldwide $ 928 $ 974' where $302 is explicitly the quarter (QTD) ended Oct. 1, 2023 \u2014 so the first column (291) for Pfizer CentreOne is the three months ended October 1, 2023.",
+   "gid": 5
+  },
+  {
+   "i": 7,
+   "found": false,
+   "value": "",
+   "quote": "",
+   "period_evidence": "",
+   "gid": 7
+  }
+ ]
+}

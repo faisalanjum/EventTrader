@@ -26,6 +26,12 @@ FLOORS = {
     ('grade_quarterly.py', 'multiaxis'): {'PRECISION': 91.9, 'RECALL': 87.8, 'YTD': 0},  # v4: exact-cell+hybrid blob
     ('grade_quarterly.py', 'news'): {'PRECISION': 100.0, 'RECALL': 14.7, 'YTD': 0},
     ('grade_quarterly.py', 'gptholdout'): {'PRECISION': 96.9, 'RECALL': 95.0, 'YTD': 0},
+    # mini-exam 2026-07-14 (grand cert, fresh companies/pairs, batched+lean). madrift mechanical floor:
+    # the 2 "misses" are MDT filer tag-shift (reader picked the printed truth) — see STATE.md.
+    ('grade_quarterly.py', 'exam_annual'): {'PRECISION': 94.7, 'RECALL': 81.8, 'YTD': 0},
+    ('grade_quarterly.py', 'exam_transcript'): {'PRECISION': 80.0, 'RECALL': 17.4, 'YTD': 0},
+    ('grade_quarterly.py', 'exam_mafresh'): {'PRECISION': 100.0, 'RECALL': 94.4, 'YTD': 0},
+    ('grade_quarterly.py', 'exam_madrift'): {'PRECISION': 66.7, 'RECALL': 50.0, 'YTD': 0},
 }
 
 

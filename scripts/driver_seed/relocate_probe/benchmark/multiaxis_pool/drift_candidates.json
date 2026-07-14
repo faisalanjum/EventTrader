@@ -18,5 +18,65 @@
   "col_new": "(In thousands)",
   "pool_id": 510,
   "split": "development"
+ },
+ {
+  "ticker": "AA",
+  "concept": "us-gaap:ProfitLoss",
+  "row_old": "Net income (loss)",
+  "row_new": "Net (loss) income",
+  "col_old": "Mining",
+  "col_new": "Mining",
+  "pool_id": 78,
+  "split": "development"
+ },
+ {
+  "ticker": "MDT",
+  "concept": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+  "row_old": "Diabetes",
+  "row_new": "Medical Surgical",
+  "col_old": "July 28, 2023",
+  "col_new": "October 27, 2023",
+  "pool_id": 304,
+  "split": "development"
+ },
+ {
+  "ticker": "PSN",
+  "concept": "us-gaap:EarningsPerShareDiluted",
+  "row_old": "Diluted loss per share",
+  "row_new": "Diluted income (loss) per share",
+  "col_old": "March 31, 2024",
+  "col_new": "June 30, 2024",
+  "pool_id": 733,
+  "split": "development"
+ },
+ {
+  "ticker": "MDT",
+  "concept": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+  "row_old": "Medical Surgical",
+  "row_new": "Neuroscience",
+  "col_old": "July 28, 2023",
+  "col_new": "October 27, 2023",
+  "pool_id": 965,
+  "split": "development"
+ },
+ {
+  "ticker": "PFE",
+  "concept": "us-gaap:Revenues",
+  "row_old": "Pfizer CentreOne (e)",
+  "row_new": "Pfizer CentreOne (f)",
+  "col_old": "July 2, 2023",
+  "col_new": "Oct. 1, 2023",
+  "pool_id": 1152,
+  "split": "development"
+ },
+ {
+  "ticker": "YMAB",
+  "concept": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+  "row_old": "Other countries",
+  "row_new": "Total international",
+  "col_old": "Three months ended March 31,",
+  "col_new": "(in thousands)",
+  "pool_id": 1227,
+  "split": "development"
  }
 ]

@@ -1,0 +1,23 @@
+{"id": 0, "ticker": "DAL", "kpi": "net income", "fmt": "number", "period_target": "2026-03-31", "value_target": -289000000}
+{"id": 1, "ticker": "DAL", "kpi": "operating income", "fmt": "number", "period_target": "2026-03-31", "value_target": 501000000}
+{"id": 2, "ticker": "DAL", "kpi": "revenue", "fmt": "number", "period_target": "2026-03-31", "value_target": 15854000000}
+{"id": 3, "ticker": "DAN", "kpi": "weighted average number of diluted shares outstanding", "fmt": "number", "period_target": "2025-09-30", "value_target": 130800000}
+{"id": 4, "ticker": "DAN", "kpi": "weighted average number of shares outstanding basic", "fmt": "number", "period_target": "2025-09-30", "value_target": 128400000}
+{"id": 5, "ticker": "DAR", "kpi": "net income", "fmt": "number", "period_target": "2025-09-27", "value_target": 19363000}
+{"id": 6, "ticker": "DAR", "kpi": "operating income", "fmt": "number", "period_target": "2025-09-27", "value_target": 71726000}
+{"id": 7, "ticker": "DAR", "kpi": "interest revenue expense net", "fmt": "number", "period_target": "2024-09-28", "value_target": -66846000}
+{"id": 8, "ticker": "DASH", "kpi": "increase decrease in funds held at payment processors", "fmt": "number", "period_target": "2025-03-31", "value_target": -119000000}
+{"id": 9, "ticker": "DASH", "kpi": "net cash provided by used in investing activities", "fmt": "number", "period_target": "2025-03-31", "value_target": -160000000}
+{"id": 10, "ticker": "DBX", "kpi": "gross profit", "fmt": "number", "period_target": "2025-09-30", "value_target": 506100000}
+{"id": 11, "ticker": "DBX", "kpi": "net income", "fmt": "number", "period_target": "2025-09-30", "value_target": 123800000}
+{"id": 12, "ticker": "DBX", "kpi": "operating income", "fmt": "number", "period_target": "2025-09-30", "value_target": 174700000}
+{"id": 13, "ticker": "DDOG", "kpi": "net income", "fmt": "number", "period_target": "2025-09-30", "value_target": 33885000}
+{"id": 14, "ticker": "DDOG", "kpi": "net income", "fmt": "number", "period_target": "2025-03-31", "value_target": 24642000}
+{"id": 15, "ticker": "DDOG", "kpi": "revenue", "fmt": "number", "period_target": "2025-09-30", "value_target": 885651000}
+{"id": 16, "ticker": "DE", "kpi": "other comprehensive income loss net of tax", "fmt": "number", "period_target": "2024-07-28", "value_target": -197000000}
+{"id": 17, "ticker": "DELL", "kpi": "net income", "fmt": "number", "period_target": "2025-10-31", "value_target": 1548000000}
+{"id": 18, "ticker": "DELL", "kpi": "operating income", "fmt": "number", "period_target": "2025-10-31", "value_target": 2119000000}
+{"id": 19, "ticker": "DELL", "kpi": "net income", "fmt": "number", "period_target": "2025-10-31", "value_target": 1548000000}
+{"id": 21, "ticker": "DGX", "kpi": "operating income", "fmt": "number", "period_target": "2026-03-31", "value_target": 399000000}
+{"id": 23, "ticker": "DH", "kpi": "revenue", "fmt": "number", "period_target": "2025-09-30", "value_target": 60046000}
+{"id": 24, "ticker": "DH", "kpi": "amortization of intangible assets", "fmt": "number", "period_target": "2025-03-31", "value_target": 13226000}
