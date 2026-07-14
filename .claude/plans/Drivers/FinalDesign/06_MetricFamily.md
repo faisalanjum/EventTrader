@@ -8,7 +8,7 @@
 
 #### MF-01 — The 4 flavors (fact_type)  `[LOCKED]`
 - **Plain:** Every driver has one flavor: metric, guidance, surprise, or action_event. Set once, permanent.
-- **Rule:** `fact_type` ∈ {**metric** (a standing variable **or condition**, numeric **or** qualitative, re-readable over time — "revenue was $5B", "consumer sentiment") · **guidance** (company forecast — "we expect $6B") · **surprise** (actual vs expected — "beat by $0.2B") · **action_event** (a one-off — "CEO resigned", "$2B buyback")}. Set once per driver, permanent. (Full decider — persistence test, dual framing — lives in the DriverUpdate section.)
+- **Rule:** `fact_type` ∈ {**metric** (a standing variable **or condition**, numeric **or** qualitative, re-readable over time — "revenue was $5B", "consumer sentiment") · **guidance** (company forecast — "we expect $6B") · **surprise** (a DELIVERED actual OR a PROMISED guide vs a cross-party expectation — "beat consensus by $0.2B"; ONE `_surprise` Driver holds all 3 types — `actual_vs_consensus`/`actual_vs_guidance`/`guidance_vs_consensus` — via the `surprise=` fact_scope slot, never separate drivers; OD-21) · **action_event** (a one-off — "CEO resigned", "$2B buyback")}. Set once per driver, permanent. (Full decider — persistence test, dual framing — lives in the DriverUpdate section.)
 - **Why:** The flavor routes which state words are legal + whether a guidance period / company_confirmed attaches.
 - **Source:** MetricGuidanceFamily.md · DriverGraphSchema.md fact_type lock
 

@@ -76,7 +76,7 @@ Locked:
 |---|---|---|
 | `metric` | A real number that can be read again | `revenue was $5B` |
 | `guidance` | Company forecast | `we expect $6B revenue` |
-| `surprise` | Actual versus expected | `revenue beat by $0.2B` |
+| `surprise` | A delivered actual OR a promised guide vs a cross-party expectation (3 types via the `surprise=` fact_scope slot; OD-21 — this doc is non-authoritative, see 66 §0.R OD-21 / 95 #42) | `revenue beat consensus by $0.2B` |
 | `action_event` | A discrete thing that happened | `CEO resigned` |
 
 Locked:

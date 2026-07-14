@@ -164,7 +164,7 @@ This file starts with the **naming rules** (NAME-01 … NAME-19). Later slices �
 
 #### NAME-17 — Metric-family suffix stays in the name  `[LOCKED]`
 - **Plain:** For earnings, the `_guidance` / `_surprise` suffix stays in the name; fact_type is separate.
-- **Rule:** Name metric + mechanism: `{metric}_surprise` (actual vs expected), `{metric}_guidance` (forward outlook) — `eps_surprise`, `revenue_guidance`. Suffix stays in the name AND fact_type is a separate permanent field. The base `{metric}` is a separate driver linked by `BASE_METRIC` (never same-as). Beat/miss/raised → driver_state, never the name.
+- **Rule:** Name metric + mechanism: `{metric}_surprise` (a delivered-or-promised value vs a cross-party expectation; the 3 types live in the `surprise=` fact_scope slot, NOT the name — one `{metric}_surprise` Driver, OD-21), `{metric}_guidance` (forward outlook) — `eps_surprise`, `revenue_guidance`. Suffix stays in the name AND fact_type is a separate permanent field. The base `{metric}` is a separate driver linked by `BASE_METRIC` (never same-as). Beat/miss/raised → driver_state, never the name.
 - **Why:** The guidance/surprise version is a genuinely different fact → its own driver, connected (not merged) to the base.
 - **Source:** DriverOntology.md (earnings convention) · Consolidation/MetricGuidanceFamily.md
 - **Replaces:** old "related-but-not-same must not be linked" — 95_Supersession #9

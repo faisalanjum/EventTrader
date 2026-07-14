@@ -11,16 +11,22 @@
 ## A. fact_scope = a fact's identity
 
 #### FS-01 — fact_scope is a fact's identity  `[LOCKED]`
-- **Plain:** A fact's identity = event + driver + fact_scope. `fact_scope = period + slice + measurement`.
+- **Plain:** A fact's identity = event + driver + fact_scope. `fact_scope = period + slice + measurement (+ surprise, on the surprise lane only)`.
 - **Rule:** fact ID = event + driver + fact_scope (NO producer). Code builds the ID from the parts the LLM extracts — the LLM never builds the ID.
 - **Why:** A code-built, producer-free key means two readers of the same fact converge to one node.
 - **Source:** Naming_Slices_XBRL.md §1
 
 #### FS-02 — fact_scope is one canonical string  `[LOCKED]`
 - **Plain:** The parts join into one string in a fixed order. If no narrower company part is stated, leave the slice empty; for numeric/reading lanes that means consolidated whole-company, while for action events it means no slice applies. Use a quote hash only when two different facts in one event still collide.
-- **Rule:** Serialized as ONE canonical string, named parts in a fixed order (`period=…|slice=segment:enterprise|measurement=adjusted`). If the source names no narrower business part, omit the slice slot. For metric/guidance/surprise, omitted slice means consolidated whole-company, not missing/unknown. For action_event, omitted slice means no slice applies or no narrower business part is stated. Do NOT add a quote hash for an omitted slice. Add `quote_hash=<hash>` only as the FS-03 tie-breaker when the structured parts still cannot separate two different facts in one event. **Identity uses format-normalization only** (case/whitespace/punctuation); per-company alias files that unify drift are **read-time views + member-matching, NEVER part of the id** — else growing an alias file would change a fact's id (ids are immutable). *(Pinned with 09.)*
+- **Rule:** Serialized as ONE canonical string, named parts in a fixed order (`period=…|slice=segment:enterprise|measurement=adjusted|surprise=guidance_vs_consensus`). The `surprise=` slot is **surprise-lane only** (omitted on every other lane) and sits LAST among structured slots, before any `quote_hash` (FS-27 · OD-21). If the source names no narrower business part, omit the slice slot. For metric/guidance/surprise, omitted slice means consolidated whole-company, not missing/unknown. For action_event, omitted slice means no slice applies or no narrower business part is stated. Do NOT add a quote hash for an omitted slice. Add `quote_hash=<hash>` only as the FS-03 tie-breaker when the structured parts still cannot separate two different facts in one event. **Identity uses format-normalization only** (case/whitespace/punctuation); per-company alias files that unify drift are **read-time views + member-matching, NEVER part of the id** — else growing an alias file would change a fact's id (ids are immutable). *(Pinned with 09.)*
 - **Why:** One fixed string → the same fact always makes the same key; code builds/compares it deterministically.
 - **Source:** Naming_Slices_XBRL.md §1 · DriverGraphSchema.md §4
+
+#### FS-27 — the `surprise=` slot + slot-admission governance  `[LOCKED — OD-21, owner 2026-07-14]`
+- **Plain:** A surprise fact carries WHICH KIND of expectation-gap it is; and no new fact_scope slot is added without passing a test.
+- **Rule:** `surprise=` is a fact_scope slot **REQUIRED on every surprise fact and FORBIDDEN on metric/guidance/action_event**, with three values — `actual_vs_consensus` · `actual_vs_guidance` · `guidance_vs_consensus`. CODE composes it (the producer NEVER emits the final label) from the producer's transient `surprise_basis_hint ∈ {actual, guidance}` (the producer's forward-guide-vs-reported-actual call — DU-05/DU-06 outlook-verb + ISS-16 — that it already makes for the sibling fact) × the `comparison_baseline`: actual+consensus → `actual_vs_consensus` · actual+previous_guidance → `actual_vs_guidance` · guidance+consensus → `guidance_vs_consensus` · anything else (e.g. guidance+previous_guidance = a guide-vs-own-prior movement) is rejected or routed off the surprise lane. Basis comes from the hint, NEVER from whether the period has ended (a guide restated after its period ends is still a guide). `surprise=` is composed + validated **BEFORE within-event fusion and is part of the fusion scope key** (so two surprise types from one event never fuse). Every GROUNDED surprise requires its matching home fact — a numberless grounded surprise still gets its sibling (`unknown`+quote); an ungrounded "results beat" (no identifiable metric) is parked (12 FACT-16 #18). It is **identity-constitutive**: it enters the id AND the read/collapse series key (09 §6.9 · 11 T12.1), so a later earnings surprise never collapses over an earlier outlook surprise on the same driver+period, and a same-event "beat consensus AND own guidance" splits into two facts instead of deduping. **Slot-admission governance (general rule):** a NEW fact_scope slot is admitted ONLY if the dimension is (a) identity-constitutive for its lane, (b) underivable from the other slots, and (c) never compared across lanes. `surprise=` passes all three; the next proposed slot must too.
+- **Why:** Two different-tense expectation gaps on one driver+period are BOTH permanently true → the address must separate them; the governance test stops slot sprawl.
+- **Source:** OD-21 (66 §0.R · 95 #42)
 
 #### FS-03 — quote_hash is a tie-breaker only  `[LOCKED]`
 - **Plain:** The quote-hash is only for two genuinely different facts in one event the structured parts can't split.
@@ -178,7 +184,7 @@
 
 #### FS-24 — Read rule: group by driver + slice + period  `[LOCKED]`
 - **Plain:** When reading the data, always group by driver + slice + period together — never by driver alone.
-- **Rule:** Consumers must group by driver + slice + period, never by driver alone (else Taco Bell, China, and the company total blur into one line). Provisional values are excluded from cross-company until promoted.
+- **Rule:** Consumers must group by driver + slice + period (+ `surprise` on the surprise lane, so the 3 surprise types don't blur — OD-21; the full read/collapse key with measurement/period_scope/series_unit/time_type lives in 09 §7 · 11 T12.1), never by driver alone (else Taco Bell, China, and the company total blur into one line). Provisional values are excluded from cross-company until promoted.
 - **Why:** Grouping by driver alone would merge different parts into one meaningless series.
 - **Source:** Naming_Slices_XBRL.md §13
 

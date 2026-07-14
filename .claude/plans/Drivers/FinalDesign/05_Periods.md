@@ -31,19 +31,19 @@
 
 #### PER-04 — One edge: HAS_PERIOD  `[LOCKED]`
 - **Plain:** There's just one edge, HAS_PERIOD; its meaning comes from the driver's fact_type.
-- **Rule:** One edge: `(:DriverUpdate)-[:HAS_PERIOD]->(:DriverPeriod)`. No separate names (TARGETS_PERIOD/REPORTS_PERIOD/OCCURS_DURING). Meaning from fact_type: guidance → future target window · metric → reported window · surprise → actual-vs-expectation window · action_event → rare stated action window.
+- **Rule:** One edge: `(:DriverUpdate)-[:HAS_PERIOD]->(:DriverPeriod)`. No separate names (TARGETS_PERIOD/REPORTS_PERIOD/OCCURS_DURING). Meaning from fact_type (and, for surprise, its subtype): guidance → future target window · metric → reported window · surprise → the compared value's target window (a reported ACTUAL → its reported period; a forward GUIDE-vs-consensus → its guidance fact's target period, even if it has since ended; OD-21) · action_event → rare stated action window.
 - **Why:** One edge is enough; fact_type already carries the "what kind of window" meaning.
 - **Source:** GuidancePeriod.md §Graph Shape
 
 #### PER-05 — By fact-type; never force a period  `[LOCKED]`
 - **Plain:** Guidance always has a period; metric/surprise when one exists; action_event rarely. No window → no edge.
-- **Rule:** guidance → REQUIRED. metric/surprise → used when the fact has a stated, source-implied, or code-derivable period. action_event → rare/optional, only when the action has a real stated window. Never force a period; no real window → no HAS_PERIOD. (For guidance, both `company_confirmed` true/false still require a period.)
+- **Rule:** guidance → REQUIRED. metric/surprise → used when the fact has a stated, source-implied, or code-derivable period. action_event → rare/optional, only when the action has a real stated window. Never force a period; no real window → no HAS_PERIOD. (For guidance, both `company_confirmed` true/false still require a period.) **OD-21:** a `guidance_vs_consensus` surprise REQUIRES a period = its matching guidance fact's TARGET period — may be future, or already ended for a restated guide (never the reported quarter, never absent); an `actual_vs_*` surprise takes its reported period. Actual-vs-guide is decided by the producer's basis hint, NEVER by whether the period has ended.
 - **Why:** Forcing periods onto periodless facts fabricates structure.
 - **Source:** GuidancePeriod.md §By Fact Type
 
 #### PER-06 — Implied reported periods  `[LOCKED]`
 - **Plain:** If a metric/surprise sentence omits the period but the event/report clearly is (say) Q1, use that Q1.
-- **Rule:** For metric/surprise with an omitted period, derive it from event/report metadata when the source gives exactly ONE clear period (a Q1 10-Q saying "revenue grew 12%" → the event's Q1 window, not gp_UNDEF, not no-period). Only when deterministic from the source; don't guess from vague wording; ambiguous market/news → no period unless dates are stated. For 10-Q/10-K prefer XBRL/SEC exact dates when available.
+- **Rule:** For metric/surprise with an omitted period, derive it from event/report metadata when the source gives exactly ONE clear period (a Q1 10-Q saying "revenue grew 12%" → the event's Q1 window, not gp_UNDEF, not no-period). Only when deterministic from the source; don't guess from vague wording; ambiguous market/news → no period unless dates are stated. For 10-Q/10-K prefer XBRL/SEC exact dates when available. **OD-21 carve-out:** this metadata-derivation does NOT apply to a `guidance_vs_consensus` surprise — it takes its guidance fact's target period (PER-05), never the event's reported quarter.
 - **Why:** The period is really in the event even when the sentence doesn't restate it.
 - **Source:** GuidancePeriod.md §Implied Reported Periods
 
