@@ -37,14 +37,16 @@ def main():
         v = r['value']; by[typ]['emitted'] += 1
         if L.stated_match(v, t['value_target']):
             C['CORRECT'] += 1; by[typ]['correct'] += 1
+        elif L.stated_match(v.replace('(', '').replace(')', '').replace('-', ''), abs(t['value_target'])):
+            C['SIGN-PRES'] += 1                                  # same magnitude at stated precision; sign
         elif t.get('ytd_distractor') and L.stated_match(v, t['ytd_distractor']):
             C['YTD-MISBIND'] += 1; rows.append((i, t['ticker'], t['kpi'][:34], 'YTD', v, t['value_target']))
         else:
             C['MISBIND'] += 1; rows.append((i, t['ticker'], t['kpi'][:34], 'other', v, t['value_target']))
-    emit = C['CORRECT'] + C['YTD-MISBIND'] + C['MISBIND']; n = len(truth)
+    emit = C['CORRECT'] + C['YTD-MISBIND'] + C['MISBIND'] + C['SIGN-PRES']; n = len(truth)
     print(f"{a.set.upper()} (oracle truth) — {n} pairs, bind-only:")
-    print(f"  emitted {emit} | CORRECT {C['CORRECT']} | YTD-MISBIND {C['YTD-MISBIND']} | other-MISBIND {C['MISBIND']} | abstain {C['abstain']}")
-    print(f"  PRECISION = {C['CORRECT']}/{emit} = {100*C['CORRECT']/max(emit,1):.1f}%")
+    print(f"  emitted {emit} | CORRECT {C['CORRECT']} | SIGN-PRES {C['SIGN-PRES']} | YTD-MISBIND {C['YTD-MISBIND']} | other-MISBIND {C['MISBIND']} | abstain {C['abstain']}")
+    print(f"  PRECISION = {C['CORRECT']}/{emit} = {100*C['CORRECT']/max(emit,1):.1f}%   (cell-level incl sign-pres: {100*(C['CORRECT']+C['SIGN-PRES'])/max(emit,1):.1f}%)")
     print(f"  RECALL    = {C['CORRECT']}/{n} = {100*C['CORRECT']/n:.1f}%")
     print(f"  Q-vs-YTD GUARD: {C['YTD-MISBIND']} picks were the year-to-date value (the guard must prevent these)")
     print(f"  per type:")

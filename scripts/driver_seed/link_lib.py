@@ -151,9 +151,12 @@ def stated_match(vstr, truth):
     if neg != (float(truth) < 0):
         return False
     at = abs(float(truth))
-    return any(st >= 0.5 and round(val, dec) in (round(st, dec), math.floor(st * 10**dec) / 10**dec)
+    return any(st >= 0.05 and (round(val, dec) in (round(st, dec), math.floor(st * 10**dec) / 10**dec)
+               or (abs(val - st) <= 10**-dec * 1.0000001 and abs(val - st) / st <= 0.0015))
                for st in ([at / mult] if mult else (at, at / 1e3, at / 1e6, at / 1e9, at / 1e12)))
-    # filers TRUNCATE as often as they round (ACM prints 4,151.2 for 4,151,251K), so accept either
+    # filers TRUNCATE as often as they round (ACM 4,151.2 for 4,151,251K) -> accept round OR floor; and
+    # two prints of one fact can differ by ONE unit of the last printed digit when the REFERENCE itself
+    # is rounded (XBRL decimals=-5: filing 3,277.1 vs tag 3,277.2) -> accept 1 ulp ONLY at <=0.15% error
 
 
 def value_present_rounded(value, fmt, quote):

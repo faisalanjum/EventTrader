@@ -12,7 +12,7 @@ slice of companies never inspected while designing the method.
 
 Writes batches_<set>/batch_<i>.json (address + target candidates, NO target value) and truth_<set>.jsonl.
 """
-import os, re, json, glob, gzip, argparse, sys, collections
+import os, re, json, glob, gzip, argparse, sys, collections, math
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 import link_lib as L
 import run_code_tier as RC
@@ -123,44 +123,72 @@ def build_address(kpi, fmt, is_currency, lock_texts, lock_quote, lock_value):
             'unit': dim, 'lock_row': lock_quote}
 
 
-def locate(target_texts, addr, keep=12, win=600):  # 8->12: big docs, right window lost rank race
-    """Phase 2 — ONE source-agnostic candidate pool. Units = (a) each ##TABLE block (head-biased 3KB
-    crop) AND (b) a digit-bearing +-win window around EVERY occurrence of ANY label token — the prose/
-    transcript/news path, no tables needed; one word like 'warehouse' pulls the snippet. One score for
-    both; force-include any unit holding ALL label tokens; dedupe; keep top-`keep`. The reader + gates
-    decide WHICH metric, so broad retrieval only moves recall, never precision."""
-    lt = [t.lower() for t in addr['label']]
-    sib = set(addr['siblings']); capt = label_terms(addr['caption'])
-    units = []
+_SPLIT_STOP = {'a', 'an', 'and', 'as', 'at', 'by', 'for', 'from', 'in', 'into', 'is', 'of', 'on',
+               'or', 'the', 'to', 'with', 'axis', 'member', 'members', 'table', 'page', 'note', 'notes',
+               'ended', 'ending', 'month', 'months', 'quarter', 'quarterly', 'year', 'years', 'fiscal',
+               'three', 'six', 'nine', 'twelve', 'million', 'millions', 'thousand', 'thousands'}
+
+
+def _words(text):
+    text = re.sub(r'(?<=[a-z0-9])(?=[A-Z])', ' ', str(text or ''))
+    text = re.sub(r'(?<=[A-Z])(?=[A-Z][a-z])', ' ', text)
+    return [w.lower() for w in re.findall(r"[A-Za-z][A-Za-z0-9&'-]*", text)
+            if len(w) >= 2 and w.lower() not in _SPLIT_STOP]
+
+
+def _phrases(text, max_n=4):
+    ws = _words(text); out = set()
+    for n in range(2, max_n + 1):
+        for i in range(len(ws) - n + 1):
+            p = ' '.join(ws[i:i + n])
+            if len(p) >= 8:
+                out.add(p)
+    return out
+
+
+def locate(target_texts, addr, keep=12, span=3600, stride=2200):
+    """Phase 2 v2 (ported from the verified independent-audit retriever, 2026-07-13): OVERLAPPING
+    uniform chunks over the WHOLE source guarantee the value's neighbourhood is always in some chunk
+    (the old label-window design could miss entirely — true-multi-axis holdout 87% -> 100% here).
+    Rank by the LOCK QUOTE's own printed words (IDF-weighted) + exact lock phrases + per-axis facet
+    groups (when the address carries identity axes) + label words. No force-include needed. The
+    reader + gates decide WHICH metric, so broad retrieval only moves recall, never precision."""
+    units, seen = [], set()
     for t in target_texts:
-        low = t.lower()
-        for m in re.finditer('##TABLE_START', t):             # (a) whole tables, 3KB head-biased crop
-            s = m.start(); e = t.find('##TABLE_END', s)
-            if e >= 0:
-                units.append((caption_of(t[max(0, s - 300):s]), L._tidy(t[s:min(e + 11, s + 3000)])))
-        buckets = set()                                       # (b) digit windows around label words
-        for tok in set(lt):
-            for m in re.finditer(re.escape(tok), low):
-                b = (m.start() - win) // 300                  # collapse overlapping windows
-                if b in buckets:
-                    continue
-                buckets.add(b)
-                w = t[max(0, m.start() - win):m.start() + win]
-                if re.search(r'\d', w) and '##TABLE_START' not in w:
-                    units.append(('', L._tidy(w)))
-    scored, seen = [], set()
-    for cap, block in units:
-        key = block[:200]
-        if key in seen:
-            continue
-        seen.add(key)
-        bt = label_terms(block)
-        score = 2 * len(sib & bt) + 2 * len(capt & label_terms(cap)) + sum(1 for x in lt if x in block.lower())
-        allhit = 1 if (lt and all(x in block.lower() for x in lt)) else 0
-        if score > 0 or allhit:
-            scored.append((allhit, score, len(block), cap, block))
-    scored.sort(key=lambda c: (-c[0], -c[1], c[2]))           # all-label first, then score, then shorter
-    return [{'caption': c[3], 'text': c[4]} for c in scored[:keep]]
+        t = str(t or '')
+        for s in range(0, len(t), stride):
+            block = L._tidy(t[s:s + span])
+            if block and re.search(r'\d', block) and block[:200] not in seen:
+                seen.add(block[:200])
+                units.append({'text': block, 'words': set(_words(block)), 'low': block.lower()})
+            if s + span >= len(t):
+                break
+    facet_groups, facet_phr = [], []
+    for ax in (addr.get('identity') or {}).get('axes') or []:      # multi-axis: each axis = own group
+        if not ax.get('structural'):
+            ws = _words(ax.get('member_label') or ax.get('member_qname'))
+            if ws:
+                facet_groups.append(set(ws)); facet_phr.append(' '.join(ws))
+    metric = set(_words(' '.join(addr.get('label') or [])))
+    lock = addr.get('lock_row') or ''
+    lock_words, lock_phr = set(_words(lock)), _phrases(lock)
+    df = collections.Counter()
+    for u in units:
+        df.update(u['words'] & lock_words)
+    n = max(len(units), 1)
+    scored = []
+    for u in units:
+        shared = lock_words & u['words']
+        overlap = sum(math.log((n + 1) / (df[w] + 1)) + 1 for w in shared) / math.sqrt(max(len(u['words']), 1))
+        fs = [len(g & u['words']) / len(g) for g in facet_groups]
+        score = (10 * sum(s == 1 for s in fs) + 4 * sum(fs)
+                 + 6 * sum(p in u['low'] for p in facet_phr)
+                 + min(sum(p in u['low'] for p in lock_phr), 8)
+                 + 3 * (len(metric & u['words']) / max(len(metric), 1)) + overlap)
+        if score > 0:
+            scored.append((score, -len(u['text']), u['text']))
+    scored.sort(key=lambda c: c[:2], reverse=True)
+    return [{'caption': '', 'text': c[2]} for c in scored[:keep]]
 
 
 def metric_type(sd):

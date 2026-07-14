@@ -72,6 +72,8 @@ def main():
             outcome = 'UNGRADEABLE-REF'
         elif emitted and right:
             outcome = 'CORRECT'
+        elif emitted and stated_match(r['value'].replace('(', '').replace(')', '').replace('-', ''), abs(float(tv))):
+            outcome = 'SIGN-PRES'          # right cell + magnitude; sign printed as subtraction/parens
         elif emitted:
             outcome = 'TRUE-MISBIND'
         else:
@@ -80,13 +82,13 @@ def main():
         by[t.get('type', 'other')][outcome] += 1
         if gradeable and found:                                      # verify quadrant over gradeable binds
             quad[('accept' if r['correct'] else 'reject', 'right' if right else 'wrong')] += 1
-        if outcome in ('TRUE-MISBIND', 'UNGRADEABLE-REF'):
+        if outcome in ('TRUE-MISBIND', 'SIGN-PRES', 'UNGRADEABLE-REF'):
             rows.append((i, t['ticker'], t['kpi'][:30], outcome, f"picked {r['value']!r} vs {tv}"))
 
-    grad = C['CORRECT'] + C['TRUE-MISBIND'] + C['abstain']           # gradeable pairs
-    emit = C['CORRECT'] + C['TRUE-MISBIND']
+    grad = C['CORRECT'] + C['TRUE-MISBIND'] + C['SIGN-PRES'] + C['abstain']  # gradeable pairs
+    emit = C['CORRECT'] + C['TRUE-MISBIND'] + C['SIGN-PRES']
     print(f"[{a.set}]  n={len(truth)}  gradeable={grad}  UNGRADEABLE-REF={C['UNGRADEABLE-REF']}")
-    print(f"  CORRECT {C['CORRECT']} | TRUE-MISBIND {C['TRUE-MISBIND']} | abstain {C['abstain']}")
+    print(f"  CORRECT {C['CORRECT']} | SIGN-PRES {C['SIGN-PRES']} | TRUE-MISBIND {C['TRUE-MISBIND']} | abstain {C['abstain']}")
     print(f"  PRECISION (gradeable) = {C['CORRECT']}/{emit} = {100*C['CORRECT']/emit:.1f}%" if emit else "  precision n/a")
     print(f"  RECALL    (gradeable) = {C['CORRECT']}/{grad} = {100*C['CORRECT']/grad:.1f}%" if grad else "")
     print(f"\n  VERIFY QUADRANT (gradeable binds):")

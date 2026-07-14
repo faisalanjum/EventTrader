@@ -2,149 +2,149 @@
 {"id": 1, "ticker": "AA", "kpi": "Alumina Production (kmt)", "fmt": "ratio", "type": "operational", "period_target": "2025-12-31", "value_target": 9640, "value_lock": 10034}
 {"id": 2, "ticker": "ACN", "kpi": "EMEA Operating Income", "fmt": "number", "type": "other", "period_target": "2025-08-31", "value_target": 3090993000, "value_lock": 2803610000}
 {"id": 3, "ticker": "ASO", "kpi": "Comparable Sales Growth", "fmt": "%", "type": "percent", "period_target": "2025-02-01", "value_target": -5.1, "value_lock": -1.5}
-{"id": 4, "ticker": "AAPL", "kpi": "Products Gross Profit", "fmt": "number", "type": "nongaap", "period_target": "2025-09-27", "value_target": 112887000000, "value_lock": 109633000000}
-{"id": 5, "ticker": "ACN", "kpi": "Americas Operating Income", "fmt": "number", "type": "other", "period_target": "2024-08-31", "value_target": 5079651000, "value_lock": 5324339000}
-{"id": 6, "ticker": "AAPL", "kpi": "Services Gross Profit", "fmt": "number", "type": "nongaap", "period_target": "2025-09-27", "value_target": 82314000000, "value_lock": 71050000000}
-{"id": 7, "ticker": "AAL", "kpi": "Revenue Passenger Miles", "fmt": "number", "type": "operational", "period_target": "2025-12-31", "value_target": 250294000000, "value_lock": 248795000000}
-{"id": 8, "ticker": "AEE", "kpi": "Ameren Missouri Net Income", "fmt": "number", "type": "nongaap", "period_target": "2025-12-31", "value_target": 747000000, "value_lock": 559000000}
-{"id": 9, "ticker": "AAL", "kpi": "Available Seat Miles", "fmt": "number", "type": "operational", "period_target": "2025-12-31", "value_target": 299411000000, "value_lock": 292948000000}
-{"id": 10, "ticker": "AEE", "kpi": "Ameren Illinois Electric Distribution Net Income", "fmt": "number", "type": "nongaap", "period_target": "2025-12-31", "value_target": 281000000, "value_lock": 234000000}
-{"id": 11, "ticker": "AMD", "kpi": "Data Center Operating Income", "fmt": "number", "type": "other", "period_target": "2025-12-27", "value_target": 3603000000, "value_lock": 3482000000}
-{"id": 12, "ticker": "AMD", "kpi": "Client and Gaming Operating Income", "fmt": "number", "type": "other", "period_target": "2024-12-28", "value_target": 1187000000, "value_lock": 2855000000}
-{"id": 13, "ticker": "ABNB", "kpi": "North America - Nights and Seats Booked", "fmt": "number", "type": "operational", "period_target": "2024-12-31", "value_target": 154000000, "value_lock": 158000000}
-{"id": 14, "ticker": "AIR", "kpi": "Commercial Gross Profit", "fmt": "number", "type": "nongaap", "period_target": "2025-05-31", "value_target": 391600000, "value_lock": 322800000}
-{"id": 15, "ticker": "ABNB", "kpi": "EMEA - Nights and Seats Booked", "fmt": "number", "type": "operational", "period_target": "2024-12-31", "value_target": 201000000, "value_lock": 215000000}
-{"id": 16, "ticker": "APH", "kpi": "Harsh Environment Solutions Segment Operating Income", "fmt": "number", "type": "other", "period_target": "2024-12-31", "value_target": 1093200000, "value_lock": 1541400000}
-{"id": 17, "ticker": "ABBV", "kpi": "Immunology Revenue", "fmt": "number", "type": "segment", "period_target": "2025-12-31", "value_target": 30406000000, "value_lock": 26682000000}
-{"id": 18, "ticker": "AIR", "kpi": "Government and Defense Gross Profit", "fmt": "number", "type": "nongaap", "period_target": "2025-05-31", "value_target": 136100000, "value_lock": 119500000}
-{"id": 19, "ticker": "ACI", "kpi": "Loyalty Members", "fmt": "number", "type": "operational", "period_target": "2026-02-28", "value_target": 51200000, "value_lock": 45600000}
-{"id": 20, "ticker": "APH", "kpi": "Communications Solutions Segment Operating Income", "fmt": "number", "type": "other", "period_target": "2024-12-31", "value_target": 1569600000, "value_lock": 3746600000}
-{"id": 21, "ticker": "ABBV", "kpi": "Neuroscience Revenue", "fmt": "number", "type": "segment", "period_target": "2025-12-31", "value_target": 10767000000, "value_lock": 8999000000}
-{"id": 22, "ticker": "ALB", "kpi": "Energy Storage Adjusted EBITDA", "fmt": "number", "type": "nongaap", "period_target": "2025-12-31", "value_target": 697215000000, "value_lock": 757540000000}
-{"id": 23, "ticker": "ACM", "kpi": "Americas Backlog", "fmt": "number", "type": "operational", "period_target": "2025-09-30", "value_target": 32800000000, "value_lock": 31000000000}
-{"id": 24, "ticker": "ALB", "kpi": "Specialties Adjusted EBITDA", "fmt": "number", "type": "nongaap", "period_target": "2024-12-31", "value_target": 228504000000, "value_lock": 275739000000}
-{"id": 25, "ticker": "ACM", "kpi": "Total Backlog", "fmt": "number", "type": "operational", "period_target": "2025-09-30", "value_target": 39700000000, "value_lock": 37400000000}
-{"id": 26, "ticker": "ALL", "kpi": "Protection Services Adjusted Net Income", "fmt": "number", "type": "nongaap", "period_target": "2025-12-31", "value_target": 218000000, "value_lock": 217000000}
-{"id": 27, "ticker": "ABT", "kpi": "United States Revenue", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 17126000000, "value_lock": 16323000000}
-{"id": 28, "ticker": "AMP", "kpi": "Advice & Wealth Management Adjusted Operating Earnings", "fmt": "number", "type": "nongaap", "period_target": "2025-12-31", "value_target": 3411000000, "value_lock": 3233000000}
-{"id": 29, "ticker": "ACMR", "kpi": "First Tool Shipments", "fmt": "number", "type": "operational", "period_target": "2025-12-31", "value_target": 388000000, "value_lock": 468000000}
-{"id": 30, "ticker": "ABT", "kpi": "Germany Revenue", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 2759000000, "value_lock": 2539000000}
-{"id": 31, "ticker": "APO", "kpi": "Principal Investing Income", "fmt": "number", "type": "nongaap", "period_target": "2025-12-31", "value_target": 338000000, "value_lock": 271000000}
-{"id": 32, "ticker": "ACMR", "kpi": "Repeat Tool Shipments", "fmt": "number", "type": "operational", "period_target": "2025-12-31", "value_target": 466000000, "value_lock": 505000000}
-{"id": 33, "ticker": "ASH", "kpi": "Life Sciences EBITDA", "fmt": "number", "type": "nongaap", "period_target": "2024-09-30", "value_target": 229000000, "value_lock": -187000000}
-{"id": 34, "ticker": "BR", "kpi": "Other Income Before Taxes", "fmt": "number", "type": "other", "period_target": "2025-06-30", "value_target": -196700000, "value_lock": -246300000}
-{"id": 35, "ticker": "AXTA", "kpi": "Performance Coatings Adjusted EBITDA", "fmt": "number", "type": "nongaap", "period_target": "2025-12-31", "value_target": 788000000, "value_lock": 838000000}
-{"id": 36, "ticker": "ADBE", "kpi": "Digital Experience Subscription Revenue", "fmt": "number", "type": "operational", "period_target": "2025-11-28", "value_target": 5409000000, "value_lock": 4864000000}
-{"id": 37, "ticker": "BR", "kpi": "Investor Communication Solutions Income Before Taxes", "fmt": "number", "type": "other", "period_target": "2024-06-30", "value_target": 950400000, "value_lock": 1054000000}
-{"id": 38, "ticker": "BEN", "kpi": "Investment Management Fee Revenue", "fmt": "number", "type": "segment", "period_target": "2025-12-31", "value_target": 1847900000, "value_lock": 1819300000}
-{"id": 39, "ticker": "AXTA", "kpi": "Mobility Coatings Adjusted EBITDA", "fmt": "number", "type": "nongaap", "period_target": "2025-12-31", "value_target": 340000000, "value_lock": 278000000}
-{"id": 40, "ticker": "ADBE", "kpi": "Remaining Performance Obligations (RPO)", "fmt": "number", "type": "operational", "period_target": "2025-11-28", "value_target": 22520000000, "value_lock": 19960000000}
-{"id": 41, "ticker": "CAG", "kpi": "Grocery & Snacks Operating Profit", "fmt": "number", "type": "other", "period_target": "2025-05-25", "value_target": 989400000, "value_lock": 1012400000}
-{"id": 42, "ticker": "BEN", "kpi": "Sales and Distribution Fee Revenue", "fmt": "number", "type": "segment", "period_target": "2025-12-31", "value_target": 388700000, "value_lock": 396600000}
-{"id": 43, "ticker": "BWA", "kpi": "Turbos & Thermal Technologies Adjusted Operating Income", "fmt": "number", "type": "nongaap", "period_target": "2024-12-31", "value_target": 877000000, "value_lock": 879000000}
-{"id": 44, "ticker": "CAG", "kpi": "Refrigerated & Frozen Operating Profit", "fmt": "number", "type": "other", "period_target": "2025-05-25", "value_target": 500800000, "value_lock": -92500000}
-{"id": 45, "ticker": "CF", "kpi": "Other Segment Gross Margin", "fmt": "number", "type": "nongaap", "period_target": "2025-12-31", "value_target": 205000000, "value_lock": 201000000}
-{"id": 46, "ticker": "CI", "kpi": "Evernorth Adjusted Revenue", "fmt": "number", "type": "nongaap", "period_target": "2025-12-31", "value_target": 234953000000, "value_lock": 202155000000}
-{"id": 47, "ticker": "ADSK", "kpi": "Recurring Revenue", "fmt": "number", "type": "operational", "period_target": "2026-01-31", "value_target": 7024000000, "value_lock": 5974000000}
-{"id": 48, "ticker": "CI", "kpi": "Cigna Healthcare Adjusted Revenue", "fmt": "number", "type": "nongaap", "period_target": "2025-12-31", "value_target": 47163000000, "value_lock": 52914000000}
-{"id": 49, "ticker": "ADSK", "kpi": "Total Billings", "fmt": "number", "type": "operational", "period_target": "2026-01-31", "value_target": 7771000000, "value_lock": 5996000000}
-{"id": 50, "ticker": "CDW", "kpi": "Corporate Operating Income", "fmt": "number", "type": "other", "period_target": "2024-12-31", "value_target": 879500000, "value_lock": 889300000}
-{"id": 51, "ticker": "CDW", "kpi": "Small Business Operating Income", "fmt": "number", "type": "other", "period_target": "2024-12-31", "value_target": 181000000, "value_lock": 203200000}
-{"id": 52, "ticker": "COUR", "kpi": "Consumer Gross Profit", "fmt": "number", "type": "nongaap", "period_target": "2024-12-31", "value_target": 272050000, "value_lock": 308300000}
-{"id": 53, "ticker": "AJG", "kpi": "United States Revenue", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 9391000000, "value_lock": 7427900000}
-{"id": 54, "ticker": "COUR", "kpi": "Enterprise Gross Profit", "fmt": "number", "type": "nongaap", "period_target": "2024-12-31", "value_target": 163877000, "value_lock": 178100000}
-{"id": 55, "ticker": "AFRM", "kpi": "Gross Merchandise Volume", "fmt": "number", "type": "operational", "period_target": "2025-06-30", "value_target": 36700000000, "value_lock": 26600000000}
-{"id": 56, "ticker": "CROX", "kpi": "HEYDUDE Brand Income from Operations", "fmt": "number", "type": "other", "period_target": "2025-12-31", "value_target": -668855000, "value_lock": 137401000}
-{"id": 57, "ticker": "AJG", "kpi": "United Kingdom Revenue", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 2477000000, "value_lock": 2225400000}
-{"id": 58, "ticker": "CVNA", "kpi": "Retail Vehicle Gross Profit", "fmt": "number", "type": "nongaap", "period_target": "2025-12-31", "value_target": 1978000000, "value_lock": 1379000000}
-{"id": 59, "ticker": "AFRM", "kpi": "Active Consumers", "fmt": "number", "type": "operational", "period_target": "2025-06-30", "value_target": 23003000, "value_lock": 18713000}
-{"id": 60, "ticker": "CVNA", "kpi": "Wholesale Gross Profit", "fmt": "number", "type": "nongaap", "period_target": "2025-12-31", "value_target": 481000000, "value_lock": 346000000}
-{"id": 61, "ticker": "CVS", "kpi": "Health Care Benefits Adjusted Operating Income", "fmt": "number", "type": "nongaap", "period_target": "2025-12-31", "value_target": 2939000000, "value_lock": 307000000}
-{"id": 62, "ticker": "ALK", "kpi": "Fuel Gallons", "fmt": "number", "type": "operational", "period_target": "2025-12-31", "value_target": 1146000000, "value_lock": 925000000}
-{"id": 63, "ticker": "D", "kpi": "Dominion Energy Virginia Net Income", "fmt": "number", "type": "nongaap", "period_target": "2025-12-31", "value_target": 2325000000, "value_lock": 2011000000}
-{"id": 64, "ticker": "AMG", "kpi": "Aggregate Fees", "fmt": "number", "type": "operational", "period_target": "2025-12-31", "value_target": 6167500000, "value_lock": 5236000000}
-{"id": 65, "ticker": "D", "kpi": "Corporate and Other Net Income", "fmt": "number", "type": "nongaap", "period_target": "2024-12-31", "value_target": -734000000, "value_lock": -300000000}
-{"id": 66, "ticker": "AMGN", "kpi": "McKesson Corporation Revenue", "fmt": "number", "type": "operational", "period_target": "2025-12-31", "value_target": 26253000000, "value_lock": 22173000000}
-{"id": 67, "ticker": "ALLE", "kpi": "Non-US Revenue", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 1017500000, "value_lock": 913500000}
-{"id": 68, "ticker": "AMGN", "kpi": "Cardinal Health, Inc. Revenue", "fmt": "number", "type": "operational", "period_target": "2025-12-31", "value_target": 12562000000, "value_lock": 11278000000}
-{"id": 69, "ticker": "ALSN", "kpi": "United States Revenue", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 2132000000, "value_lock": 2324000000}
-{"id": 70, "ticker": "AMH", "kpi": "Number of Single-Family Properties", "fmt": "ratio", "type": "operational", "period_target": "2025-12-31", "value_target": 60337, "value_lock": 60531}
-{"id": 71, "ticker": "ALV", "kpi": "China Revenue", "fmt": "number", "type": "geography", "period_target": "2024-12-31", "value_target": 2010000000, "value_lock": 2095000000}
-{"id": 72, "ticker": "AMP", "kpi": "Advice & Wealth Management AUM", "fmt": "number", "type": "operational", "period_target": "2025-12-31", "value_target": 666437000000, "value_lock": 570064000000}
-{"id": 73, "ticker": "AMAT", "kpi": "China Revenue", "fmt": "number", "type": "geography", "period_target": "2025-10-26", "value_target": 8529000000, "value_lock": 10117000000}
-{"id": 74, "ticker": "AMAT", "kpi": "Korea Revenue", "fmt": "number", "type": "geography", "period_target": "2025-10-26", "value_target": 5608000000, "value_lock": 4493000000}
-{"id": 75, "ticker": "ADM", "kpi": "Ag Services & Oilseeds Segment Profit", "fmt": "number", "type": "segment", "period_target": "2025-12-31", "value_target": 1614000000, "value_lock": 2447000000}
-{"id": 76, "ticker": "ADM", "kpi": "Nutrition Segment Profit", "fmt": "number", "type": "segment", "period_target": "2025-12-31", "value_target": 417000000, "value_lock": 386000000}
-{"id": 77, "ticker": "ARES", "kpi": "Real Assets Group AUM", "fmt": "number", "type": "operational", "period_target": "2025-12-31", "value_target": 139088000000, "value_lock": 75298000000}
-{"id": 78, "ticker": "ARES", "kpi": "Credit Group AUM", "fmt": "number", "type": "operational", "period_target": "2024-12-31", "value_target": 348858000000, "value_lock": 406866000000}
-{"id": 79, "ticker": "AMC", "kpi": "US Markets Adjusted EBITDA", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 346000000, "value_lock": 301500000}
-{"id": 80, "ticker": "ASO", "kpi": "Ending Stores", "fmt": "ratio", "type": "operational", "period_target": "2026-01-31", "value_target": 322, "value_lock": 298}
-{"id": 81, "ticker": "AMC", "kpi": "International Markets Adjusted EBITDA", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 41500000, "value_lock": 42400000}
-{"id": 82, "ticker": "AWK", "kpi": "Residential Billed Water Services Volume (Gallons)", "fmt": "number", "type": "operational", "period_target": "2025-12-31", "value_target": 161270000000, "value_lock": 163583000000}
-{"id": 83, "ticker": "BA", "kpi": "Commercial Airplanes Backlog", "fmt": "number", "type": "operational", "period_target": "2025-12-31", "value_target": 567290000000, "value_lock": 435175000000}
-{"id": 84, "ticker": "BA", "kpi": "Contractual Backlog", "fmt": "number", "type": "operational", "period_target": "2025-12-31", "value_target": 639721000000, "value_lock": 498802000000}
-{"id": 85, "ticker": "AEIS", "kpi": "United States Revenue", "fmt": "number", "type": "segment", "period_target": "2024-12-31", "value_target": 508700000, "value_lock": 541400000}
-{"id": 86, "ticker": "AEIS", "kpi": "Mexico Revenue", "fmt": "number", "type": "segment", "period_target": "2024-12-31", "value_target": 160100000, "value_lock": 252800000}
-{"id": 87, "ticker": "AES", "kpi": "Non-Regulated Revenue", "fmt": "number", "type": "segment", "period_target": "2025-12-31", "value_target": 8195000000, "value_lock": 8756000000}
-{"id": 88, "ticker": "AMZN", "kpi": "AWS Operating Income", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 45606000000, "value_lock": 39834000000}
-{"id": 89, "ticker": "AES", "kpi": "Regulated Revenue", "fmt": "number", "type": "segment", "period_target": "2025-12-31", "value_target": 4038000000, "value_lock": 3522000000}
-{"id": 90, "ticker": "ASH", "kpi": "International Revenue", "fmt": "number", "type": "geography", "period_target": "2025-09-30", "value_target": 1360000000, "value_lock": 1489000000}
-{"id": 91, "ticker": "BILL", "kpi": "BILL Spend & Expense Spending Businesses", "fmt": "ratio", "type": "operational", "period_target": "2025-06-30", "value_target": 41100, "value_lock": 34800}
-{"id": 92, "ticker": "AFL", "kpi": "US Adjusted Net Investment Income", "fmt": "number", "type": "segment", "period_target": "2025-12-31", "value_target": 830000000, "value_lock": 847000000}
-{"id": 93, "ticker": "BILL", "kpi": "Total Payment Volume", "fmt": "number", "type": "operational", "period_target": "2025-06-30", "value_target": 329800000000, "value_lock": 292400000000}
-{"id": 94, "ticker": "AFL", "kpi": "Amortized Hedge Income", "fmt": "number", "type": "segment", "period_target": "2025-12-31", "value_target": -98000000, "value_lock": -113000000}
-{"id": 95, "ticker": "AYI", "kpi": "Domestic Revenue", "fmt": "number", "type": "geography", "period_target": "2025-08-31", "value_target": 3756700000, "value_lock": 3262900000}
-{"id": 96, "ticker": "AYI", "kpi": "International Revenue", "fmt": "number", "type": "geography", "period_target": "2025-08-31", "value_target": 588900000, "value_lock": 578100000}
-{"id": 97, "ticker": "BC", "kpi": "United States Revenue", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 3925200000, "value_lock": 3861600000}
-{"id": 98, "ticker": "BC", "kpi": "Europe Revenue", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 781900000, "value_lock": 758600000}
-{"id": 99, "ticker": "BJ", "kpi": "Total Clubs at End of Period", "fmt": "ratio", "type": "operational", "period_target": "2025-02-01", "value_target": 252, "value_lock": 263}
-{"id": 100, "ticker": "BL", "kpi": "Number of Customers", "fmt": "ratio", "type": "operational", "period_target": "2025-12-31", "value_target": 4394, "value_lock": 4443}
-{"id": 101, "ticker": "BDX", "kpi": "United States Revenue", "fmt": "number", "type": "geography", "period_target": "2025-09-30", "value_target": 12790000000, "value_lock": 11663000000}
-{"id": 102, "ticker": "BLK", "kpi": "Equity AUM", "fmt": "number", "type": "operational", "period_target": "2025-12-31", "value_target": 7793875000000, "value_lock": 6310191000000}
-{"id": 103, "ticker": "BDX", "kpi": "International Revenue", "fmt": "number", "type": "geography", "period_target": "2025-09-30", "value_target": 9049000000, "value_lock": 8515000000}
-{"id": 104, "ticker": "BLK", "kpi": "Cash Management AUM", "fmt": "number", "type": "operational", "period_target": "2025-12-31", "value_target": 1080732000000, "value_lock": 920663000000}
-{"id": 105, "ticker": "BSX", "kpi": "Europe, Middle East and Africa Revenue", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 3451000000, "value_lock": 3228000000}
-{"id": 106, "ticker": "CAH", "kpi": "United States Revenue", "fmt": "number", "type": "geography", "period_target": "2025-06-30", "value_target": 220993000000, "value_lock": 225231000000}
-{"id": 107, "ticker": "CAH", "kpi": "International Revenue", "fmt": "number", "type": "geography", "period_target": "2025-06-30", "value_target": 1669000000, "value_lock": 1681000000}
-{"id": 108, "ticker": "BRX", "kpi": "Number of Shopping Centers", "fmt": "ratio", "type": "operational", "period_target": "2025-12-31", "value_target": 348, "value_lock": 363}
-{"id": 109, "ticker": "AIG", "kpi": "Net Investment Income", "fmt": "number", "type": "segment", "period_target": "2025-12-31", "value_target": 3433000000, "value_lock": 3060000000}
-{"id": 110, "ticker": "CC", "kpi": "North America Revenue", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 2654000000, "value_lock": 2589000000}
-{"id": 111, "ticker": "BRZE", "kpi": "Total Customers", "fmt": "ratio", "type": "operational", "period_target": "2026-01-31", "value_target": 2609, "value_lock": 2296}
-{"id": 112, "ticker": "CC", "kpi": "Asia Pacific Revenue", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 1243000000, "value_lock": 1386000000}
-{"id": 113, "ticker": "BRZE", "kpi": "Customers w/ ARR > 500K", "fmt": "ratio", "type": "operational", "period_target": "2026-01-31", "value_target": 333, "value_lock": 247}
-{"id": 114, "ticker": "CCK", "kpi": "United States Revenue", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 4813000000, "value_lock": 4419000000}
-{"id": 115, "ticker": "BSY", "kpi": "Annualized Recurring Revenues (ARR)", "fmt": "number", "type": "operational", "period_target": "2025-12-31", "value_target": 1462145000, "value_lock": 1283256000}
-{"id": 116, "ticker": "CCK", "kpi": "Mexico Revenue", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 989000000, "value_lock": 1053000000}
-{"id": 117, "ticker": "BX", "kpi": "Total Fee-Earning AUM", "fmt": "number", "type": "operational", "period_target": "2025-12-31", "value_target": 921674454000, "value_lock": 830708603000}
-{"id": 118, "ticker": "BX", "kpi": "Real Estate Total AUM", "fmt": "number", "type": "operational", "period_target": "2025-12-31", "value_target": 319342875000, "value_lock": 315353132000}
-{"id": 119, "ticker": "CE", "kpi": "Belgium Revenue", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 2000000, "value_lock": 400000000}
-{"id": 120, "ticker": "CE", "kpi": "Brazil Revenue", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 127000000, "value_lock": 140000000}
-{"id": 121, "ticker": "CAKE", "kpi": "The Cheesecake Factory Restaurants Company-Owned Restaurants", "fmt": "ratio", "type": "operational", "period_target": "2025-12-30", "value_target": 218, "value_lock": 215}
-{"id": 122, "ticker": "AKAM", "kpi": "Compute Revenue", "fmt": "number", "type": "segment", "period_target": "2024-12-31", "value_target": 630376000, "value_lock": 708050000}
-{"id": 123, "ticker": "CAKE", "kpi": "Total Company-Owned Restaurants", "fmt": "ratio", "type": "operational", "period_target": "2025-12-30", "value_target": 371, "value_lock": 348}
-{"id": 124, "ticker": "CARG", "kpi": "U.S. Paying Dealers", "fmt": "ratio", "type": "operational", "period_target": "2025-12-31", "value_target": 26049, "value_lock": 24692}
-{"id": 125, "ticker": "CARG", "kpi": "International Paying Dealers", "fmt": "ratio", "type": "operational", "period_target": "2025-12-31", "value_target": 8360, "value_lock": 7318}
-{"id": 126, "ticker": "ALGN", "kpi": "Imaging Systems and CAD/CAM Services Revenue", "fmt": "number", "type": "segment", "period_target": "2024-12-31", "value_target": 768890000, "value_lock": 789560000}
-{"id": 127, "ticker": "CCL", "kpi": "Passenger Cruise Days (PCDs)", "fmt": "number", "type": "operational", "period_target": "2025-11-30", "value_target": 101700000, "value_lock": 100500000}
-{"id": 128, "ticker": "ALGN", "kpi": "Clear Aligner Income from Operations", "fmt": "number", "type": "segment", "period_target": "2024-12-31", "value_target": 1142204000, "value_lock": 1034791000}
-{"id": 129, "ticker": "CCL", "kpi": "Available Lower Berth Days (ALBDs)", "fmt": "number", "type": "operational", "period_target": "2025-11-30", "value_target": 96500000, "value_lock": 95600000}
-{"id": 130, "ticker": "ALK", "kpi": "Loyalty Program Other Revenue", "fmt": "number", "type": "segment", "period_target": "2025-12-31", "value_target": 855000000, "value_lock": 733000000}
-{"id": 131, "ticker": "CHWY", "kpi": "Net Sales per Active Customer", "fmt": "ratio", "type": "operational", "period_target": "2026-02-01", "value_target": 591, "value_lock": 578}
-{"id": 132, "ticker": "CLF", "kpi": "United States Revenue", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 15887000000, "value_lock": 17340000000}
-{"id": 133, "ticker": "CHWY", "kpi": "Autoship Customer Sales", "fmt": "number", "type": "operational", "period_target": "2025-02-02", "value_target": 9393326000, "value_lock": 10497100000}
-{"id": 134, "ticker": "CLF", "kpi": "Canada Revenue", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 2071000000, "value_lock": 1067000000}
-{"id": 135, "ticker": "CMCSA", "kpi": "United States Revenue", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 95143000000, "value_lock": 96237000000}
-{"id": 136, "ticker": "CMG", "kpi": "Total Number of Company-Owned Restaurants", "fmt": "ratio", "type": "operational", "period_target": "2025-12-31", "value_target": 4042, "value_lock": 3726}
-{"id": 137, "ticker": "ALL", "kpi": "Eliminations from Revenue", "fmt": "number", "type": "segment", "period_target": "2025-12-31", "value_target": -137000000, "value_lock": -180000000}
-{"id": 138, "ticker": "CMCSA", "kpi": "United Kingdom Revenue", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 15182000000, "value_lock": 14194000000}
-{"id": 139, "ticker": "COIN", "kpi": "Assets on Platform", "fmt": "number", "type": "operational", "period_target": "2025-12-31", "value_target": 376000000000, "value_lock": 404000000000}
-{"id": 140, "ticker": "COST", "kpi": "United States Revenue", "fmt": "number", "type": "geography", "period_target": "2025-08-31", "value_target": 200046000000, "value_lock": 184143000000}
-{"id": 141, "ticker": "COIN", "kpi": "Consumer Trading Volume", "fmt": "number", "type": "operational", "period_target": "2024-12-31", "value_target": 224000000000, "value_lock": 239000000000}
-{"id": 142, "ticker": "COST", "kpi": "Canada Revenue", "fmt": "number", "type": "geography", "period_target": "2025-08-31", "value_target": 36923000000, "value_lock": 34874000000}
-{"id": 143, "ticker": "ALLE", "kpi": "Allegion Americas Revenue", "fmt": "number", "type": "segment", "period_target": "2025-12-31", "value_target": 3218800000, "value_lock": 3012400000}
-{"id": 144, "ticker": "CSCO", "kpi": "EMEA Revenue", "fmt": "number", "type": "geography", "period_target": "2025-07-26", "value_target": 14824000000, "value_lock": 14117000000}
-{"id": 145, "ticker": "CSCO", "kpi": "APJC Revenue", "fmt": "number", "type": "geography", "period_target": "2025-07-26", "value_target": 8174000000, "value_lock": 7716000000}
-{"id": 146, "ticker": "CP", "kpi": "Gross Ton Miles", "fmt": "number", "type": "operational", "period_target": "2025-12-31", "value_target": 403891000000, "value_lock": 388958000000}
-{"id": 147, "ticker": "CP", "kpi": "Grain Revenue per Carload", "fmt": "ratio", "type": "operational", "period_target": "2025-12-31", "value_target": 5636, "value_lock": 5480}
-{"id": 148, "ticker": "CRSP", "kpi": "Remaining Performance Obligations", "fmt": "number", "type": "operational", "period_target": "2025-12-31", "value_target": 12300000, "value_lock": 12300000}
-{"id": 149, "ticker": "CRWD", "kpi": "Annual Recurring Revenue", "fmt": "number", "type": "operational", "period_target": "2026-01-31", "value_target": 5252751000, "value_lock": 4241838000}
+{"id": 4, "ticker": "AA", "kpi": "Bauxite Revenue", "fmt": "number", "type": "segment", "period_target": "2025-12-31", "value_target": 737000000, "value_lock": 381000000}
+{"id": 5, "ticker": "AAPL", "kpi": "Products Gross Profit", "fmt": "number", "type": "nongaap", "period_target": "2025-09-27", "value_target": 112887000000, "value_lock": 109633000000}
+{"id": 6, "ticker": "ACN", "kpi": "Americas Operating Income", "fmt": "number", "type": "other", "period_target": "2024-08-31", "value_target": 5079651000, "value_lock": 5324339000}
+{"id": 7, "ticker": "AAPL", "kpi": "Services Gross Profit", "fmt": "number", "type": "nongaap", "period_target": "2025-09-27", "value_target": 82314000000, "value_lock": 71050000000}
+{"id": 8, "ticker": "AAL", "kpi": "Revenue Passenger Miles", "fmt": "number", "type": "operational", "period_target": "2025-12-31", "value_target": 250294000000, "value_lock": 248795000000}
+{"id": 9, "ticker": "ACN", "kpi": "Asia Pacific Operating Income", "fmt": "number", "type": "other", "period_target": "2024-08-31", "value_target": 1712586000, "value_lock": 1810332000}
+{"id": 10, "ticker": "AEE", "kpi": "Ameren Missouri Net Income", "fmt": "number", "type": "nongaap", "period_target": "2025-12-31", "value_target": 747000000, "value_lock": 559000000}
+{"id": 11, "ticker": "AAL", "kpi": "Available Seat Miles", "fmt": "number", "type": "operational", "period_target": "2025-12-31", "value_target": 299411000000, "value_lock": 292948000000}
+{"id": 12, "ticker": "AAL", "kpi": "Passenger Revenue", "fmt": "number", "type": "segment", "period_target": "2025-12-31", "value_target": 49643000000, "value_lock": 49586000000}
+{"id": 13, "ticker": "AEE", "kpi": "Ameren Illinois Electric Distribution Net Income", "fmt": "number", "type": "nongaap", "period_target": "2025-12-31", "value_target": 281000000, "value_lock": 234000000}
+{"id": 14, "ticker": "AMD", "kpi": "Data Center Operating Income", "fmt": "number", "type": "other", "period_target": "2025-12-27", "value_target": 3603000000, "value_lock": 3482000000}
+{"id": 15, "ticker": "AAPL", "kpi": "Americas Revenue", "fmt": "number", "type": "geography", "period_target": "2024-09-28", "value_target": 167045000000, "value_lock": 178353000000}
+{"id": 16, "ticker": "AEE", "kpi": "Ameren Illinois Natural Gas Net Income", "fmt": "number", "type": "nongaap", "period_target": "2025-12-31", "value_target": 158000000, "value_lock": 149000000}
+{"id": 17, "ticker": "AMD", "kpi": "Client and Gaming Operating Income", "fmt": "number", "type": "other", "period_target": "2024-12-28", "value_target": 1187000000, "value_lock": 2855000000}
+{"id": 18, "ticker": "ABNB", "kpi": "North America - Nights and Seats Booked", "fmt": "number", "type": "operational", "period_target": "2024-12-31", "value_target": 154000000, "value_lock": 158000000}
+{"id": 19, "ticker": "AMD", "kpi": "Embedded Operating Income", "fmt": "number", "type": "other", "period_target": "2024-12-28", "value_target": 1421000000, "value_lock": 1243000000}
+{"id": 20, "ticker": "AIR", "kpi": "Commercial Gross Profit", "fmt": "number", "type": "nongaap", "period_target": "2025-05-31", "value_target": 391600000, "value_lock": 322800000}
+{"id": 21, "ticker": "ABNB", "kpi": "EMEA - Nights and Seats Booked", "fmt": "number", "type": "operational", "period_target": "2024-12-31", "value_target": 201000000, "value_lock": 215000000}
+{"id": 22, "ticker": "APH", "kpi": "Harsh Environment Solutions Segment Operating Income", "fmt": "number", "type": "other", "period_target": "2024-12-31", "value_target": 1093200000, "value_lock": 1541400000}
+{"id": 23, "ticker": "ABBV", "kpi": "Immunology Revenue", "fmt": "number", "type": "segment", "period_target": "2025-12-31", "value_target": 30406000000, "value_lock": 26682000000}
+{"id": 24, "ticker": "AIR", "kpi": "Government and Defense Gross Profit", "fmt": "number", "type": "nongaap", "period_target": "2025-05-31", "value_target": 136100000, "value_lock": 119500000}
+{"id": 25, "ticker": "ACI", "kpi": "Loyalty Members", "fmt": "number", "type": "operational", "period_target": "2026-02-28", "value_target": 51200000, "value_lock": 45600000}
+{"id": 26, "ticker": "APH", "kpi": "Communications Solutions Segment Operating Income", "fmt": "number", "type": "other", "period_target": "2024-12-31", "value_target": 1569600000, "value_lock": 3746600000}
+{"id": 27, "ticker": "ABBV", "kpi": "Neuroscience Revenue", "fmt": "number", "type": "segment", "period_target": "2025-12-31", "value_target": 10767000000, "value_lock": 8999000000}
+{"id": 28, "ticker": "ALB", "kpi": "Energy Storage Adjusted EBITDA", "fmt": "number", "type": "nongaap", "period_target": "2025-12-31", "value_target": 697215000000, "value_lock": 757540000000}
+{"id": 29, "ticker": "ACM", "kpi": "Americas Backlog", "fmt": "number", "type": "operational", "period_target": "2025-09-30", "value_target": 32800000000, "value_lock": 31000000000}
+{"id": 30, "ticker": "APH", "kpi": "Interconnect and Sensor Systems Segment Operating Income", "fmt": "number", "type": "other", "period_target": "2024-12-31", "value_target": 825900000, "value_lock": 1005100000}
+{"id": 31, "ticker": "ABBV", "kpi": "Oncology Revenue", "fmt": "number", "type": "segment", "period_target": "2025-12-31", "value_target": 6655000000, "value_lock": 6555000000}
+{"id": 32, "ticker": "ALB", "kpi": "Specialties Adjusted EBITDA", "fmt": "number", "type": "nongaap", "period_target": "2024-12-31", "value_target": 228504000000, "value_lock": 275739000000}
+{"id": 33, "ticker": "ACM", "kpi": "Total Backlog", "fmt": "number", "type": "operational", "period_target": "2025-09-30", "value_target": 39700000000, "value_lock": 37400000000}
+{"id": 34, "ticker": "ALL", "kpi": "Protection Services Adjusted Net Income", "fmt": "number", "type": "nongaap", "period_target": "2025-12-31", "value_target": 218000000, "value_lock": 217000000}
+{"id": 35, "ticker": "ACM", "kpi": "International Backlog", "fmt": "number", "type": "operational", "period_target": "2024-09-30", "value_target": 6400000000, "value_lock": 6900000000}
+{"id": 36, "ticker": "ABT", "kpi": "United States Revenue", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 17126000000, "value_lock": 16323000000}
+{"id": 37, "ticker": "AMP", "kpi": "Advice & Wealth Management Adjusted Operating Earnings", "fmt": "number", "type": "nongaap", "period_target": "2025-12-31", "value_target": 3411000000, "value_lock": 3233000000}
+{"id": 38, "ticker": "ACMR", "kpi": "First Tool Shipments", "fmt": "number", "type": "operational", "period_target": "2025-12-31", "value_target": 388000000, "value_lock": 468000000}
+{"id": 39, "ticker": "ABT", "kpi": "Germany Revenue", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 2759000000, "value_lock": 2539000000}
+{"id": 40, "ticker": "APO", "kpi": "Principal Investing Income", "fmt": "number", "type": "nongaap", "period_target": "2025-12-31", "value_target": 338000000, "value_lock": 271000000}
+{"id": 41, "ticker": "ACMR", "kpi": "Repeat Tool Shipments", "fmt": "number", "type": "operational", "period_target": "2025-12-31", "value_target": 466000000, "value_lock": 505000000}
+{"id": 42, "ticker": "ABT", "kpi": "China Revenue", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 1907000000, "value_lock": 2113000000}
+{"id": 43, "ticker": "ASH", "kpi": "Life Sciences EBITDA", "fmt": "number", "type": "nongaap", "period_target": "2024-09-30", "value_target": 229000000, "value_lock": -187000000}
+{"id": 44, "ticker": "ACMR", "kpi": "Total Shipments", "fmt": "number", "type": "operational", "period_target": "2025-12-31", "value_target": 854000000, "value_lock": 973000000}
+{"id": 45, "ticker": "BR", "kpi": "Other Income Before Taxes", "fmt": "number", "type": "other", "period_target": "2025-06-30", "value_target": -196700000, "value_lock": -246300000}
+{"id": 46, "ticker": "AXTA", "kpi": "Performance Coatings Adjusted EBITDA", "fmt": "number", "type": "nongaap", "period_target": "2025-12-31", "value_target": 788000000, "value_lock": 838000000}
+{"id": 47, "ticker": "ADBE", "kpi": "Digital Experience Subscription Revenue", "fmt": "number", "type": "operational", "period_target": "2025-11-28", "value_target": 5409000000, "value_lock": 4864000000}
+{"id": 48, "ticker": "BR", "kpi": "Investor Communication Solutions Income Before Taxes", "fmt": "number", "type": "other", "period_target": "2024-06-30", "value_target": 950400000, "value_lock": 1054000000}
+{"id": 49, "ticker": "BEN", "kpi": "Investment Management Fee Revenue", "fmt": "number", "type": "segment", "period_target": "2025-12-31", "value_target": 1847900000, "value_lock": 1819300000}
+{"id": 50, "ticker": "AXTA", "kpi": "Mobility Coatings Adjusted EBITDA", "fmt": "number", "type": "nongaap", "period_target": "2025-12-31", "value_target": 340000000, "value_lock": 278000000}
+{"id": 51, "ticker": "ADBE", "kpi": "Remaining Performance Obligations (RPO)", "fmt": "number", "type": "operational", "period_target": "2025-11-28", "value_target": 22520000000, "value_lock": 19960000000}
+{"id": 52, "ticker": "CAG", "kpi": "Grocery & Snacks Operating Profit", "fmt": "number", "type": "other", "period_target": "2025-05-25", "value_target": 989400000, "value_lock": 1012400000}
+{"id": 53, "ticker": "BEN", "kpi": "Sales and Distribution Fee Revenue", "fmt": "number", "type": "segment", "period_target": "2025-12-31", "value_target": 388700000, "value_lock": 396600000}
+{"id": 54, "ticker": "BWA", "kpi": "Turbos & Thermal Technologies Adjusted Operating Income", "fmt": "number", "type": "nongaap", "period_target": "2024-12-31", "value_target": 877000000, "value_lock": 879000000}
+{"id": 55, "ticker": "ADBE", "kpi": "Business Professionals and Consumers Revenue", "fmt": "number", "type": "operational", "period_target": "2024-11-29", "value_target": 5660000000, "value_lock": 6500000000}
+{"id": 56, "ticker": "CAG", "kpi": "Refrigerated & Frozen Operating Profit", "fmt": "number", "type": "other", "period_target": "2025-05-25", "value_target": 500800000, "value_lock": -92500000}
+{"id": 57, "ticker": "BEN", "kpi": "Shareholder Servicing Fee Revenue", "fmt": "number", "type": "segment", "period_target": "2025-12-31", "value_target": 70900000, "value_lock": 69000000}
+{"id": 58, "ticker": "CF", "kpi": "Other Segment Gross Margin", "fmt": "number", "type": "nongaap", "period_target": "2025-12-31", "value_target": 205000000, "value_lock": 201000000}
+{"id": 59, "ticker": "CAG", "kpi": "International Operating Profit", "fmt": "number", "type": "other", "period_target": "2025-05-25", "value_target": 142800000, "value_lock": 97900000}
+{"id": 60, "ticker": "CI", "kpi": "Evernorth Adjusted Revenue", "fmt": "number", "type": "nongaap", "period_target": "2025-12-31", "value_target": 234953000000, "value_lock": 202155000000}
+{"id": 61, "ticker": "ADSK", "kpi": "Recurring Revenue", "fmt": "number", "type": "operational", "period_target": "2026-01-31", "value_target": 7024000000, "value_lock": 5974000000}
+{"id": 62, "ticker": "CI", "kpi": "Cigna Healthcare Adjusted Revenue", "fmt": "number", "type": "nongaap", "period_target": "2025-12-31", "value_target": 47163000000, "value_lock": 52914000000}
+{"id": 63, "ticker": "ADSK", "kpi": "Total Billings", "fmt": "number", "type": "operational", "period_target": "2026-01-31", "value_target": 7771000000, "value_lock": 5996000000}
+{"id": 64, "ticker": "CDW", "kpi": "Corporate Operating Income", "fmt": "number", "type": "other", "period_target": "2024-12-31", "value_target": 879500000, "value_lock": 889300000}
+{"id": 65, "ticker": "CI", "kpi": "Evernorth Adjusted Operating Income", "fmt": "number", "type": "nongaap", "period_target": "2025-12-31", "value_target": 7221000000, "value_lock": 7001000000}
+{"id": 66, "ticker": "ADSK", "kpi": "Current Remaining Performance Obligations (RPO)", "fmt": "number", "type": "operational", "period_target": "2025-01-31", "value_target": 4457000000, "value_lock": 5479000000}
+{"id": 67, "ticker": "CDW", "kpi": "Small Business Operating Income", "fmt": "number", "type": "other", "period_target": "2024-12-31", "value_target": 181000000, "value_lock": 203200000}
+{"id": 68, "ticker": "COUR", "kpi": "Consumer Gross Profit", "fmt": "number", "type": "nongaap", "period_target": "2024-12-31", "value_target": 272050000, "value_lock": 308300000}
+{"id": 69, "ticker": "CDW", "kpi": "Public Operating Income", "fmt": "number", "type": "other", "period_target": "2024-12-31", "value_target": 745900000, "value_lock": 750300000}
+{"id": 70, "ticker": "AJG", "kpi": "United States Revenue", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 9391000000, "value_lock": 7427900000}
+{"id": 71, "ticker": "COUR", "kpi": "Enterprise Gross Profit", "fmt": "number", "type": "nongaap", "period_target": "2024-12-31", "value_target": 163877000, "value_lock": 178100000}
+{"id": 72, "ticker": "AFRM", "kpi": "Gross Merchandise Volume", "fmt": "number", "type": "operational", "period_target": "2025-06-30", "value_target": 36700000000, "value_lock": 26600000000}
+{"id": 73, "ticker": "CROX", "kpi": "HEYDUDE Brand Income from Operations", "fmt": "number", "type": "other", "period_target": "2025-12-31", "value_target": -668855000, "value_lock": 137401000}
+{"id": 74, "ticker": "AJG", "kpi": "United Kingdom Revenue", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 2477000000, "value_lock": 2225400000}
+{"id": 75, "ticker": "CVNA", "kpi": "Retail Vehicle Gross Profit", "fmt": "number", "type": "nongaap", "period_target": "2025-12-31", "value_target": 1978000000, "value_lock": 1379000000}
+{"id": 76, "ticker": "AFRM", "kpi": "Active Consumers", "fmt": "number", "type": "operational", "period_target": "2025-06-30", "value_target": 23003000, "value_lock": 18713000}
+{"id": 77, "ticker": "AJG", "kpi": "Australia Revenue", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 586000000, "value_lock": 574600000}
+{"id": 78, "ticker": "CVNA", "kpi": "Wholesale Gross Profit", "fmt": "number", "type": "nongaap", "period_target": "2025-12-31", "value_target": 481000000, "value_lock": 346000000}
+{"id": 79, "ticker": "AFRM", "kpi": "Total Transactions", "fmt": "number", "type": "operational", "period_target": "2025-06-30", "value_target": 134100000, "value_lock": 91100000}
+{"id": 80, "ticker": "CVS", "kpi": "Health Care Benefits Adjusted Operating Income", "fmt": "number", "type": "nongaap", "period_target": "2025-12-31", "value_target": 2939000000, "value_lock": 307000000}
+{"id": 81, "ticker": "ALK", "kpi": "Fuel Gallons", "fmt": "number", "type": "operational", "period_target": "2025-12-31", "value_target": 1146000000, "value_lock": 925000000}
+{"id": 82, "ticker": "D", "kpi": "Dominion Energy Virginia Net Income", "fmt": "number", "type": "nongaap", "period_target": "2025-12-31", "value_target": 2325000000, "value_lock": 2011000000}
+{"id": 83, "ticker": "AMG", "kpi": "Aggregate Fees", "fmt": "number", "type": "operational", "period_target": "2025-12-31", "value_target": 6167500000, "value_lock": 5236000000}
+{"id": 84, "ticker": "D", "kpi": "Corporate and Other Net Income", "fmt": "number", "type": "nongaap", "period_target": "2024-12-31", "value_target": -734000000, "value_lock": -300000000}
+{"id": 85, "ticker": "AMGN", "kpi": "McKesson Corporation Revenue", "fmt": "number", "type": "operational", "period_target": "2025-12-31", "value_target": 26253000000, "value_lock": 22173000000}
+{"id": 86, "ticker": "ALLE", "kpi": "Non-US Revenue", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 1017500000, "value_lock": 913500000}
+{"id": 87, "ticker": "AMGN", "kpi": "Cardinal Health, Inc. Revenue", "fmt": "number", "type": "operational", "period_target": "2025-12-31", "value_target": 12562000000, "value_lock": 11278000000}
+{"id": 88, "ticker": "ALSN", "kpi": "United States Revenue", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 2132000000, "value_lock": 2324000000}
+{"id": 89, "ticker": "AMH", "kpi": "Number of Single-Family Properties", "fmt": "ratio", "type": "operational", "period_target": "2025-12-31", "value_target": 60337, "value_lock": 60531}
+{"id": 90, "ticker": "ALV", "kpi": "China Revenue", "fmt": "number", "type": "geography", "period_target": "2024-12-31", "value_target": 2010000000, "value_lock": 2095000000}
+{"id": 91, "ticker": "AMP", "kpi": "Advice & Wealth Management AUM", "fmt": "number", "type": "operational", "period_target": "2025-12-31", "value_target": 666437000000, "value_lock": 570064000000}
+{"id": 92, "ticker": "AMAT", "kpi": "China Revenue", "fmt": "number", "type": "geography", "period_target": "2025-10-26", "value_target": 8529000000, "value_lock": 10117000000}
+{"id": 93, "ticker": "AMP", "kpi": "Asset Management AUM", "fmt": "number", "type": "operational", "period_target": "2025-12-31", "value_target": 678105000000, "value_lock": 644913000000}
+{"id": 94, "ticker": "AMAT", "kpi": "Korea Revenue", "fmt": "number", "type": "geography", "period_target": "2025-10-26", "value_target": 5608000000, "value_lock": 4493000000}
+{"id": 95, "ticker": "ADM", "kpi": "Ag Services & Oilseeds Segment Profit", "fmt": "number", "type": "segment", "period_target": "2025-12-31", "value_target": 1614000000, "value_lock": 2447000000}
+{"id": 96, "ticker": "AMAT", "kpi": "Taiwan Revenue", "fmt": "number", "type": "geography", "period_target": "2025-10-26", "value_target": 6857000000, "value_lock": 4010000000}
+{"id": 97, "ticker": "ADM", "kpi": "Nutrition Segment Profit", "fmt": "number", "type": "segment", "period_target": "2025-12-31", "value_target": 417000000, "value_lock": 386000000}
+{"id": 98, "ticker": "ARES", "kpi": "Real Assets Group AUM", "fmt": "number", "type": "operational", "period_target": "2025-12-31", "value_target": 139088000000, "value_lock": 75298000000}
+{"id": 99, "ticker": "ADM", "kpi": "Ag Services & Oilseeds Revenue", "fmt": "number", "type": "segment", "period_target": "2024-12-31", "value_target": 66516000000, "value_lock": 61571000000}
+{"id": 100, "ticker": "ARES", "kpi": "Credit Group AUM", "fmt": "number", "type": "operational", "period_target": "2024-12-31", "value_target": 348858000000, "value_lock": 406866000000}
+{"id": 101, "ticker": "ARES", "kpi": "Private Equity Group AUM", "fmt": "number", "type": "operational", "period_target": "2024-12-31", "value_target": 24041000000, "value_lock": 25288000000}
+{"id": 102, "ticker": "AMC", "kpi": "US Markets Adjusted EBITDA", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 346000000, "value_lock": 301500000}
+{"id": 103, "ticker": "ASO", "kpi": "Ending Stores", "fmt": "ratio", "type": "operational", "period_target": "2026-01-31", "value_target": 322, "value_lock": 298}
+{"id": 104, "ticker": "AMC", "kpi": "International Markets Adjusted EBITDA", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 41500000, "value_lock": 42400000}
+{"id": 105, "ticker": "AWK", "kpi": "Residential Billed Water Services Volume (Gallons)", "fmt": "number", "type": "operational", "period_target": "2025-12-31", "value_target": 161270000000, "value_lock": 163583000000}
+{"id": 106, "ticker": "AMC", "kpi": "US Markets Capital Expenditures", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 174200000, "value_lock": 171400000}
+{"id": 107, "ticker": "BA", "kpi": "Commercial Airplanes Backlog", "fmt": "number", "type": "operational", "period_target": "2025-12-31", "value_target": 567290000000, "value_lock": 435175000000}
+{"id": 108, "ticker": "BA", "kpi": "Contractual Backlog", "fmt": "number", "type": "operational", "period_target": "2025-12-31", "value_target": 639721000000, "value_lock": 498802000000}
+{"id": 109, "ticker": "AEIS", "kpi": "United States Revenue", "fmt": "number", "type": "segment", "period_target": "2024-12-31", "value_target": 508700000, "value_lock": 541400000}
+{"id": 110, "ticker": "BA", "kpi": "Unobligated Backlog", "fmt": "number", "type": "operational", "period_target": "2025-12-31", "value_target": 42486000000, "value_lock": 22534000000}
+{"id": 111, "ticker": "AEIS", "kpi": "Mexico Revenue", "fmt": "number", "type": "segment", "period_target": "2024-12-31", "value_target": 160100000, "value_lock": 252800000}
+{"id": 112, "ticker": "AEIS", "kpi": "Taiwan Revenue", "fmt": "number", "type": "segment", "period_target": "2024-12-31", "value_target": 159600000, "value_lock": 130200000}
+{"id": 113, "ticker": "AES", "kpi": "Non-Regulated Revenue", "fmt": "number", "type": "segment", "period_target": "2025-12-31", "value_target": 8195000000, "value_lock": 8756000000}
+{"id": 114, "ticker": "AMZN", "kpi": "AWS Operating Income", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 45606000000, "value_lock": 39834000000}
+{"id": 115, "ticker": "AES", "kpi": "Regulated Revenue", "fmt": "number", "type": "segment", "period_target": "2025-12-31", "value_target": 4038000000, "value_lock": 3522000000}
+{"id": 116, "ticker": "AES", "kpi": "Renewables SBU Revenue", "fmt": "number", "type": "segment", "period_target": "2024-12-31", "value_target": 2617000000, "value_lock": 2913000000}
+{"id": 117, "ticker": "ASH", "kpi": "International Revenue", "fmt": "number", "type": "geography", "period_target": "2025-09-30", "value_target": 1360000000, "value_lock": 1489000000}
+{"id": 118, "ticker": "BILL", "kpi": "BILL Spend & Expense Spending Businesses", "fmt": "ratio", "type": "operational", "period_target": "2025-06-30", "value_target": 41100, "value_lock": 34800}
+{"id": 119, "ticker": "AXTA", "kpi": "North America Revenue", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 1761000000, "value_lock": 2014000000}
+{"id": 120, "ticker": "AFL", "kpi": "US Adjusted Net Investment Income", "fmt": "number", "type": "segment", "period_target": "2025-12-31", "value_target": 830000000, "value_lock": 847000000}
+{"id": 121, "ticker": "BILL", "kpi": "Total Payment Volume", "fmt": "number", "type": "operational", "period_target": "2025-06-30", "value_target": 329800000000, "value_lock": 292400000000}
+{"id": 122, "ticker": "AFL", "kpi": "Amortized Hedge Income", "fmt": "number", "type": "segment", "period_target": "2025-12-31", "value_target": -98000000, "value_lock": -113000000}
+{"id": 123, "ticker": "AYI", "kpi": "Domestic Revenue", "fmt": "number", "type": "geography", "period_target": "2025-08-31", "value_target": 3756700000, "value_lock": 3262900000}
+{"id": 124, "ticker": "BILL", "kpi": "BILL AP/AR Customers", "fmt": "ratio", "type": "operational", "period_target": "2024-06-30", "value_target": 151200, "value_lock": 169500}
+{"id": 125, "ticker": "AYI", "kpi": "International Revenue", "fmt": "number", "type": "geography", "period_target": "2025-08-31", "value_target": 588900000, "value_lock": 578100000}
+{"id": 126, "ticker": "AFL", "kpi": "Aflac Japan Premiums Written", "fmt": "number", "type": "segment", "period_target": "2025-12-31", "value_target": 7820000000, "value_lock": 7866000000}
+{"id": 127, "ticker": "BC", "kpi": "United States Revenue", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 3925200000, "value_lock": 3861600000}
+{"id": 128, "ticker": "BC", "kpi": "Europe Revenue", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 781900000, "value_lock": 758600000}
+{"id": 129, "ticker": "BC", "kpi": "Asia-Pacific Revenue", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 377600000, "value_lock": 360800000}
+{"id": 130, "ticker": "BJ", "kpi": "Total Clubs at End of Period", "fmt": "ratio", "type": "operational", "period_target": "2025-02-01", "value_target": 252, "value_lock": 263}
+{"id": 131, "ticker": "BL", "kpi": "Number of Customers", "fmt": "ratio", "type": "operational", "period_target": "2025-12-31", "value_target": 4394, "value_lock": 4443}
+{"id": 132, "ticker": "BDX", "kpi": "United States Revenue", "fmt": "number", "type": "geography", "period_target": "2025-09-30", "value_target": 12790000000, "value_lock": 11663000000}
+{"id": 133, "ticker": "BLK", "kpi": "Equity AUM", "fmt": "number", "type": "operational", "period_target": "2025-12-31", "value_target": 7793875000000, "value_lock": 6310191000000}
+{"id": 134, "ticker": "BDX", "kpi": "International Revenue", "fmt": "number", "type": "geography", "period_target": "2025-09-30", "value_target": 9049000000, "value_lock": 8515000000}
+{"id": 135, "ticker": "BLK", "kpi": "Cash Management AUM", "fmt": "number", "type": "operational", "period_target": "2025-12-31", "value_target": 1080732000000, "value_lock": 920663000000}
+{"id": 136, "ticker": "BR", "kpi": "Canada Revenue", "fmt": "number", "type": "geography", "period_target": "2025-06-30", "value_target": 463800000, "value_lock": 393900000}
+{"id": 137, "ticker": "BLK", "kpi": "Total AUM", "fmt": "number", "type": "operational", "period_target": "2025-12-31", "value_target": 14041518000000, "value_lock": 11551251000000}
+{"id": 138, "ticker": "BSX", "kpi": "Europe, Middle East and Africa Revenue", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 3451000000, "value_lock": 3228000000}
+{"id": 139, "ticker": "CAH", "kpi": "United States Revenue", "fmt": "number", "type": "geography", "period_target": "2025-06-30", "value_target": 220993000000, "value_lock": 225231000000}
+{"id": 140, "ticker": "CAH", "kpi": "International Revenue", "fmt": "number", "type": "geography", "period_target": "2025-06-30", "value_target": 1669000000, "value_lock": 1681000000}
+{"id": 141, "ticker": "BRX", "kpi": "Number of Shopping Centers", "fmt": "ratio", "type": "operational", "period_target": "2025-12-31", "value_target": 348, "value_lock": 363}
+{"id": 142, "ticker": "AIG", "kpi": "Net Investment Income", "fmt": "number", "type": "segment", "period_target": "2025-12-31", "value_target": 3433000000, "value_lock": 3060000000}
+{"id": 143, "ticker": "CC", "kpi": "North America Revenue", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 2654000000, "value_lock": 2589000000}
+{"id": 144, "ticker": "BRZE", "kpi": "Total Customers", "fmt": "ratio", "type": "operational", "period_target": "2026-01-31", "value_target": 2609, "value_lock": 2296}
+{"id": 145, "ticker": "AIR", "kpi": "Commercial Revenue", "fmt": "number", "type": "segment", "period_target": "2025-05-31", "value_target": 1976100000, "value_lock": 1637900000}
+{"id": 146, "ticker": "CC", "kpi": "Asia Pacific Revenue", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 1243000000, "value_lock": 1386000000}
+{"id": 147, "ticker": "BRZE", "kpi": "Customers w/ ARR > 500K", "fmt": "ratio", "type": "operational", "period_target": "2026-01-31", "value_target": 333, "value_lock": 247}
+{"id": 148, "ticker": "CC", "kpi": "Europe, the Middle East, and Africa Revenue", "fmt": "number", "type": "geography", "period_target": "2025-12-31", "value_target": 1163000000, "value_lock": 1138000000}
+{"id": 149, "ticker": "BRZE", "kpi": "Remaining Performance Obligations", "fmt": "number", "type": "operational", "period_target": "2026-01-31", "value_target": 1033000000, "value_lock": 793100000}

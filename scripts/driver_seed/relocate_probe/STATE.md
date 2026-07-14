@@ -87,12 +87,29 @@ LLM owns ONE judgment ("is this snippet THIS driver's value for THIS period?"). 
 4. UNION = OPTIONAL MODE, NOT DEFAULT (user 2026-07-13): the engine's default input includes the SOURCE
    ({name, period, value, source}) and reads that source only — catalog wants each source's own value/quote.
    A try-other-sources flag can come later; no cascade built by default.
-4b. REGRESSION MARKER (user 2026-07-13, BEFORE any cost work): freeze the certified sample (annual 150 +
-   quarterly 40 + transcript 40 batches/truth/reader-outputs) + `regress.py` that re-grades all three
-   token-free and FAILS if any score drops below the certified floor. Every future change must pass it.
+4b. REGRESSION MARKER (user 2026-07-13, BEFORE any cost work): frozen `benchmark/` + `regress.py` gate.
+   **v2 (current)** = locate v2 artifacts, 4 sets, floors: annual 96.3/94.2 · quarterly 92.5/92.5/YTD0 ·
+   headline 75/7.5 (n=4 emits) · multiaxis 90.8/82.1/YTD0. v1 (old locate) at commit 0ea0906.
+4c. LOCATE V2 (ported from verified ChatGPT retriever, 2026-07-13): uniform overlapping 3.6KB chunks
+   (whole doc = guaranteed coverage) + lock-word IDF + lock phrases + per-axis facet groups. TRUE-multi-axis
+   findability 87→97-100%. RE-CERT (same reader, new locate, STRICT-lock rebuilt pairs): annual cell 97.8
+   strict 96.3/94.2 (2 sign-pres; 3 real = 2×AEE GAAP-vs-adjusted same-sentence + BJ count) · quarterly
+   cell 97.5 strict 92.5/92.5 (1 real = AEE sub-entity) · transcript 3/4 (1 real = ACMR call speaks
+   NON-GAAP opex vs GAAP truth) · **multi-axis (UNPARKED, 156 true pairs, ChatGPT benchmark): cell 97.2
+   strict 90.8/82.1, holdout 92/85, 3-axis 100%, 4 real errors**. RULER upgrADES en route (all verified
+   artifact classes): SIGN-PRES class (parenthesized-subtraction presentation ≠ wrong number; catalog-side
+   normalization decides sign), 1-ulp agreement (two prints of one fact differ by one last-digit step,
+   ≤0.15% rel err — XBRL decimals rounding), ladder guard 0.5→0.05 (0.4M=400K). **RESIDUAL = ONE dominant
+   class: GAAP-vs-ADJUSTED measurement twin** (AEE ×2, ACMR call; value-gate kills it in seed mode; fetch
+   fix = carry measurement hint from lock context) + rare sub-entity/count. ChatGPT iXBRL exact-cell
+   extraction (30+ layout test) pending verification for the lock side.
 5. BATCH/cost — per-company-period reader, lean agent, warm cache; A/B bar = IDENTICAL outputs on ~100 pairs.
 6. GRAND cert — stratified UNSEEN companies, all 5 sources × both periods, XBRL oracle + a fiscal.ai stratum
-   (avoid tag-selection bias), ~50-quote LLM spot audit.
+   (avoid tag-selection bias), ~50-quote LLM spot audit. **+ DRIFT TEST (user 2026-07-13, task #766):**
+   pairs where the same XBRL concept+member persists but the PRINTED label changed across years
+   ("same store sales" -> "comparable store sales"); lock OLD wording, relocate into NEW year; report
+   found-despite-rename % / wrong-pick % (~0 required) / abstain %. + ChatGPT 156-pair true-multi-axis
+   stratum (already adopted).
 KEEP: the residual-audit lane (only belt that caught the 13 wrong Part-1 records). When grading vs the XBRL
 oracle, EXCLUDE XBRL blobs from the reader's candidate corpus (else circular). CUT (over-engineering): hedge
 detector (regex sets grade), relative-period as LLM skill (code stamps it), a new quarterly harness, news NER.
