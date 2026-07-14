@@ -1,0 +1,68 @@
+{
+ "records": [
+  {
+   "i": 0,
+   "found": true,
+   "value": "534",
+   "quote": "NGLs 534 \u2014 \u2014 534",
+   "period_evidence": "Three Months Ended June 30, 2025",
+   "gid": 1
+  },
+  {
+   "i": 1,
+   "found": true,
+   "value": "76,605",
+   "quote": "Match Group Asia (a) 76,605 79,646 152,266 166,855",
+   "period_evidence": "Three Months Ended June 30, Six Months Ended June 30, 2023 2022 2023 2022",
+   "gid": 4
+  },
+  {
+   "i": 2,
+   "found": false,
+   "value": "",
+   "quote": "",
+   "period_evidence": "",
+   "gid": 0
+  },
+  {
+   "i": 3,
+   "found": true,
+   "value": "217",
+   "quote": "Diabetes 217 228 310 254 84 74",
+   "period_evidence": "U.S. (1) Non-U.S. Developed Markets (2) Emerging Markets (3) Three months ended Three months ended Three months ended (in millions) October 27, 2023 October 28, 2022 October 27, 2023 October 28, 2022 October 27, 2023 October 28, 2022",
+   "gid": 2
+  },
+  {
+   "i": 4,
+   "found": true,
+   "value": "-0.20",
+   "quote": "Diluted income (loss) per share $ ( 0.20 ) $ ( 0.05 ) $ ( 0.29 ) $ ( 0.11 )",
+   "period_evidence": "Three Months Ended Six Months Ended June 30, 2024 June 30, 2023 June 30, 2024 June 30, 2023",
+   "gid": 6
+  },
+  {
+   "i": 5,
+   "found": true,
+   "value": "740",
+   "quote": "Medical Surgical 963 895 740 685 438 421",
+   "period_evidence": "U.S. (1) Non-U.S. Developed Markets (2) Emerging Markets (3) Three months ended Three months ended Three months ended (in millions) October 27, 2023 October 28, 2022 October 27, 2023 October 28, 2022 October 27, 2023 October 28, 2022",
+   "gid": 3
+  },
+  {
+   "i": 6,
+   "found": true,
+   "value": "291",
+   "quote": "Pfizer CentreOne (f) Various 291 318 903 972",
+   "period_evidence": "(MILLIONS) Three Months Ended Nine Months Ended PRODUCT PRIMARY INDICATION OR CLASS Oct. 1, 2023 Oct. 2, 2022 Oct. 1, 2023 Oct. 2, 2022",
+   "gid": 5
+  },
+  {
+   "i": 7,
+   "found": true,
+   "value": "7,572",
+   "quote": "Total international 7,572 4,900 2,672",
+   "period_evidence": "three months ended June 30, 2024",
+   "gid": 7
+  }
+ ]
+}

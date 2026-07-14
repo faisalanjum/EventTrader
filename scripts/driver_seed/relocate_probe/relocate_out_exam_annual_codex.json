@@ -1,0 +1,356 @@
+{
+ "records": [
+  {
+   "i": 0,
+   "found": true,
+   "value": "5,005",
+   "quote": "Net income $ 5,005 $ 3,457 $ 4,609",
+   "period_evidence": "Consolidated Statements of Cash Flows ##TABLE_START Year Ended December 31, (in millions) 2025 2024 2023",
+   "gid": 0
+  },
+  {
+   "i": 1,
+   "found": true,
+   "value": "5,822",
+   "quote": "Operating income $ 5,822 $ 5,995",
+   "period_evidence": "Operating income, adjusted reconciliation Year Ended December 31, (in millions) 2025 2024",
+   "gid": 0
+  },
+  {
+   "i": 2,
+   "found": true,
+   "value": "63,364",
+   "quote": "Total operating revenue 63,364 61,643 58,048",
+   "period_evidence": "Consolidated Statements of Operations ##TABLE_START Year Ended December 31, (in millions, except per share data) 2025 2024 2023",
+   "gid": 0
+  },
+  {
+   "i": 3,
+   "found": true,
+   "value": "345",
+   "quote": "Depreciation 345 337 299",
+   "period_evidence": "Dana Incorporated Consolidated Statement of Cash Flows (In millions) ##TABLE_START 2025 2024 2023",
+   "gid": 1
+  },
+  {
+   "i": 4,
+   "found": true,
+   "value": "53",
+   "quote": "Income tax expense 53 31 7",
+   "period_evidence": "The following table provides a reconciliation of net loss from continuing operations to adjusted EBITDA. ##TABLE_START 2025 2024 2023",
+   "gid": 1
+  },
+  {
+   "i": 5,
+   "found": true,
+   "value": "181",
+   "quote": "Interest expense 181 158 23",
+   "period_evidence": "Consolidated Results of Operations (2025 versus 2024) ##TABLE_START 2025 2024 % of % of Increase/ Dollars Net Sales Dollars Net Sales (Decrease)",
+   "gid": 1
+  },
+  {
+   "i": 6,
+   "found": true,
+   "value": "62,804",
+   "quote": "Net income attributable to Darling $ 62,804 $ 278,880",
+   "period_evidence": "Fiscal Year Ended (dollars in thousands) January 3, 2026 December 28, 2024",
+   "gid": 3
+  },
+  {
+   "i": 7,
+   "found": true,
+   "value": "273.4",
+   "quote": "Segment operating income for the fiscal year ended January 3, 2026 was $273.4 million, which reflects a decrease of $(194.8) million or (41.6)% as compared to the fiscal year ended December 28, 2024.",
+   "period_evidence": "for the fiscal year ended January 3, 2026",
+   "gid": 3
+  },
+  {
+   "i": 8,
+   "found": true,
+   "value": "259.2",
+   "quote": "Interest Expense. Interest expense was $259.2 million for fiscal year 2023, compared to $125.6 million for fiscal year 2022, an increase of approximately $133.6 million.",
+   "period_evidence": "fiscal year 2023",
+   "gid": 2
+  },
+  {
+   "i": 11,
+   "found": true,
+   "value": "13,717",
+   "quote": "Revenue $ 8,635 $ 10,722 $ 13,717",
+   "period_evidence": "Year Ended December 31, 2023 2024 2025",
+   "gid": 4
+  },
+  {
+   "i": 12,
+   "found": true,
+   "value": "2,020.2",
+   "quote": "Gross profit 2,020.2 2,103.1 2,023.1",
+   "period_evidence": "Year Ended December 31, 2025 2024 2023",
+   "gid": 5
+  },
+  {
+   "i": 13,
+   "found": true,
+   "value": "508.4",
+   "quote": "Net income $ 508.4 $ 452.3 $ 453.6",
+   "period_evidence": "Year Ended December 31, 2025 2024 2023",
+   "gid": 5
+  },
+  {
+   "i": 14,
+   "found": true,
+   "value": "689.1",
+   "quote": "Income from operations 689.1 486.2 538.7",
+   "period_evidence": "Year Ended December 31, 2025 2024 2023",
+   "gid": 5
+  },
+  {
+   "i": 15,
+   "found": true,
+   "value": "107,741",
+   "quote": "Net income $ 107,741 $ 183,746 $ 48,568",
+   "period_evidence": "Year Ended December 31, 2025 2024 2023",
+   "gid": 6
+  },
+  {
+   "i": 16,
+   "found": true,
+   "value": "107,741",
+   "quote": "Net income $ 107,741 $ 183,746 $ 48,568",
+   "period_evidence": "Year Ended December 31, 2025 2024 2023",
+   "gid": 6
+  },
+  {
+   "i": 17,
+   "found": true,
+   "value": "3,427,158",
+   "quote": "Revenue $ 3,427,158 $ 2,684,275 $ 2,128,359",
+   "period_evidence": "Year Ended December 31, 2025 2024 2023",
+   "gid": 6
+  },
+  {
+   "i": 20,
+   "found": false,
+   "value": "",
+   "quote": "",
+   "period_evidence": "",
+   "gid": 7
+  },
+  {
+   "i": 21,
+   "found": true,
+   "value": "5,936",
+   "quote": "Net income attributable to Dell Technologies Inc. $ 5,936 $ 4,592 $ 3,388",
+   "period_evidence": "Fiscal Year Ended January 30, 2026 January 31, 2025 February 2, 2024",
+   "gid": 8
+  },
+  {
+   "i": 22,
+   "found": true,
+   "value": "8,149",
+   "quote": "Operating income $ 8,149 31 % $ 6,237 15 % $ 5,411",
+   "period_evidence": "Fiscal Year Ended January 30, 2026 % Change January 31, 2025 % Change February 2, 2024",
+   "gid": 8
+  },
+  {
+   "i": 23,
+   "found": true,
+   "value": "5,936",
+   "quote": "Net income $ 5,936 30 % $ 4,576 36 % $ 3,372",
+   "period_evidence": "Fiscal Year Ended January 30, 2026 % Change January 31, 2025 % Change February 2, 2024",
+   "gid": 8
+  },
+  {
+   "i": 25,
+   "found": true,
+   "value": "1,556",
+   "quote": "Operating income 1,556 1,346 1,262",
+   "period_evidence": "CONSOLIDATED STATEMENTS OF OPERATIONS FOR THE YEARS ENDED DECEMBER 31, 2025, 2024 AND 2023 (in millions, except per share data) ##TABLE_START 2025 2024 2023",
+   "gid": 9
+  },
+  {
+   "i": 27,
+   "found": true,
+   "value": "$241.5 million",
+   "quote": "Full Year 2025 Financial Highlights: \u2022Revenue was $241.5 million, compared to $252.2 million for the full year 2024.",
+   "period_evidence": "Full Year 2025 Financial Highlights; financial results for the quarter and full year ended December 31, 2025",
+   "gid": 10
+  },
+  {
+   "i": 28,
+   "found": true,
+   "value": "$ 52.8 million",
+   "quote": "Amortization expense associated with finite-lived intangible assets was $ 52.8 million, $ 49.4 million, and $4 9.8 million for the years ended December 31, 2025, 2024, and 2023 , respectively, of which $ 20.3 million, $ 14.0 million, and $ 12.7 million was included in cost of revenue for each respective period.",
+   "period_evidence": "for the years ended December 31, 2025, 2024, and 2023 , respectively",
+   "gid": 10
+  },
+  {
+   "i": 29,
+   "found": true,
+   "value": "(13,352 )",
+   "quote": "Deferred contract costs (3,976 ) (4,481 ) (13,352 ) (12,756 )",
+   "period_evidence": "Three Months Ended December 31, Year Ended December 31, 2025 2024 2025 2024",
+   "gid": 10
+  },
+  {
+   "i": 32,
+   "found": false,
+   "value": "",
+   "quote": "",
+   "period_evidence": "",
+   "gid": 11
+  },
+  {
+   "i": 33,
+   "found": true,
+   "value": "14,523",
+   "quote": "Gross profit 14,523 14,206 14,034",
+   "period_evidence": "Year Ended December 31 2025 2024 2023",
+   "gid": 12
+  },
+  {
+   "i": 34,
+   "found": true,
+   "value": "3,614",
+   "quote": "Net earnings 3,614 3,899 4,764",
+   "period_evidence": "Year Ended December 31 2025 2024 2023",
+   "gid": 13
+  },
+  {
+   "i": 35,
+   "found": true,
+   "value": "24,568",
+   "quote": "Total $ 7,293 $ 7,334 $ 9,941 $ 24,568",
+   "period_evidence": "Year ended December 31, 2025:",
+   "gid": 13
+  },
+  {
+   "i": 38,
+   "found": true,
+   "value": "94,425",
+   "quote": "Total revenues $ 22,464 $ 22,574 \u2014 % $ 94,425 $ 91,361 3 %",
+   "period_evidence": "The following table summarizes fourth quarter and full year segment revenue and operating income for fiscal 2025 and 2024: Quarter Ended Year Ended Sept. 27, Sept. 28, Sept. 27, Sept. 28, ($ in millions) 2025 2024 Change 2025 2024 Change",
+   "gid": 14
+  },
+  {
+   "i": 40,
+   "found": true,
+   "value": "301.0",
+   "quote": "Operating income (loss) 301.0 ( 491.5 ) 244.7",
+   "period_evidence": "Year Ended December 31, 2025 2024 2023",
+   "gid": 15
+  },
+  {
+   "i": 42,
+   "found": true,
+   "value": "5,667,262",
+   "quote": "GROSS PROFIT 5,667,262 4,825,696 4,533,735",
+   "period_evidence": "Fiscal Year Ended January 31, 2026 February 1, 2025 February 3, 2024",
+   "gid": 16
+  },
+  {
+   "i": 43,
+   "found": true,
+   "value": "849,239",
+   "quote": "NET INCOME $ 849,239 $ 1,165,308 $ 1,046,519",
+   "period_evidence": "Fiscal Year Ended January 31, 2026 February 1, 2025 February 3, 2024",
+   "gid": 16
+  },
+  {
+   "i": 44,
+   "found": true,
+   "value": "181,316",
+   "quote": "Inventories 181,316 ( 501,033 ) 18,823",
+   "period_evidence": "Fiscal Year Ended January 31, 2026 February 1, 2025 February 3, 2024",
+   "gid": 16
+  },
+  {
+   "i": 45,
+   "found": true,
+   "value": "1,282.5",
+   "quote": "Net income (loss) $ 1,282.5 $ ( 3,030.1 ) $ ( 998.4 )",
+   "period_evidence": "Year Ended (in millions, except per share data) January 31, 2026 February 1, 2025 February 3, 2024",
+   "gid": 17
+  },
+  {
+   "i": 46,
+   "found": true,
+   "value": "1,653.1",
+   "quote": "Operating income 1,653.1 1,462.0 1,774.5",
+   "period_evidence": "Year Ended (in millions, except per share data) January 31, 2026 February 1, 2025 February 3, 2024",
+   "gid": 17
+  },
+  {
+   "i": 47,
+   "found": true,
+   "value": "19,395.7",
+   "quote": "Revenues Net sales $ 19,395.7 $ 17,565.8 $ 16,770.3",
+   "period_evidence": "Year Ended (dollars in millions) January 31, 2026 February 1, 2025 February 3, 2024",
+   "gid": 17
+  },
+  {
+   "i": 49,
+   "found": true,
+   "value": "194.8",
+   "quote": "Operating income (loss) 194.8 140.3 149.9",
+   "period_evidence": "Year Ended December 31, 2024 2023 2022",
+   "gid": 18
+  },
+  {
+   "i": 52,
+   "found": true,
+   "value": "(469.3)",
+   "quote": "Operating loss $ (7.3) $ (11.5) 36.8 % $ (469.3) $ (8.7) nm",
+   "period_evidence": "Quarters Ended Fiscal Years Ended $ in millions, except per share data December 28, 2025 December 29, 2024 Change December 28, 2025 December 29, 2024 Change",
+   "gid": 19
+  },
+  {
+   "i": 54,
+   "found": true,
+   "value": "539,592",
+   "quote": "Gross profit 539,592 465,943 397,497",
+   "period_evidence": "Year Ended December 31, 2025 2024 2023",
+   "gid": 20
+  },
+  {
+   "i": 55,
+   "found": true,
+   "value": "901,427",
+   "quote": "Revenue $ 901,427 $ 780,615 $ 692,884",
+   "period_evidence": "Year Ended December 31, 2025 2024 2023",
+   "gid": 20
+  },
+  {
+   "i": 56,
+   "found": true,
+   "value": "223,185",
+   "quote": "Net income $ 223,185 $ 147,582 $ 112,818",
+   "period_evidence": "Fiscal Year Ended March 31, 2025 2024 2023",
+   "gid": 21
+  },
+  {
+   "i": 57,
+   "found": true,
+   "value": "570,399",
+   "quote": "Revenue $ 570,399 $ 475,422 $ 419,052",
+   "period_evidence": "Fiscal Year Ended March 31, 2025 2024 2023",
+   "gid": 21
+  },
+  {
+   "i": 58,
+   "found": true,
+   "value": "12.1",
+   "quote": "The Company capitalized $ 12.1 million, $ 8.6 million, and $ 8.5 million of contract acquisition costs for the fiscal years ended March 31, 2025, 2024, and 2023, respectively.",
+   "period_evidence": "for the fiscal years ended March 31, 2025, 2024, and 2023, respectively",
+   "gid": 21
+  },
+  {
+   "i": 59,
+   "found": true,
+   "value": "3,219,500",
+   "quote": "Total revenue $ 3,219,500 100 % $ 2,976,739 100 % 8 %",
+   "period_evidence": "Year Ended January 31, 2026 vs 2025 (in thousands) 2026 As % of Revenue 2025 As % of Revenue",
+   "gid": 22
+  }
+ ]
+}

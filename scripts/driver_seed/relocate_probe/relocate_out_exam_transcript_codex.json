@@ -1,0 +1,188 @@
+{
+ "records": [
+  {
+   "i": 0,
+   "found": false,
+   "value": "",
+   "quote": "",
+   "period_evidence": "",
+   "gid": 0
+  },
+  {
+   "i": 1,
+   "found": false,
+   "value": "",
+   "quote": "",
+   "period_evidence": "",
+   "gid": 0
+  },
+  {
+   "i": 2,
+   "found": true,
+   "value": "$14.2 billion",
+   "quote": "Total revenue of $14.2 billion was a first quarter record and 9.4% higher than last year, several points above our initial outlook.",
+   "period_evidence": "March quarter results demonstrate the power of this model. Total revenue of $14.2 billion was a first quarter record",
+   "gid": 0
+  },
+  {
+   "i": 3,
+   "found": false,
+   "value": "",
+   "quote": "",
+   "period_evidence": "",
+   "gid": 1
+  },
+  {
+   "i": 4,
+   "found": false,
+   "value": "",
+   "quote": "",
+   "period_evidence": "",
+   "gid": 1
+  },
+  {
+   "i": 5,
+   "found": true,
+   "value": "19.4 million",
+   "quote": "Overall net income was 19.4 million for the quarter or 12 cents per diluted share compared to net income of 16.9 million or 11 cents per diluted share for the third quarter of 2024.",
+   "period_evidence": "for the three months ended September 27, 2025",
+   "gid": 3
+  },
+  {
+   "i": 6,
+   "found": false,
+   "value": "",
+   "quote": "",
+   "period_evidence": "",
+   "gid": 3
+  },
+  {
+   "i": 7,
+   "found": false,
+   "value": "",
+   "quote": "",
+   "period_evidence": "",
+   "gid": 2
+  },
+  {
+   "i": 8,
+   "found": false,
+   "value": "",
+   "quote": "",
+   "period_evidence": "",
+   "gid": 4
+  },
+  {
+   "i": 9,
+   "found": false,
+   "value": "",
+   "quote": "",
+   "period_evidence": "",
+   "gid": 4
+  },
+  {
+   "i": 10,
+   "found": false,
+   "value": "",
+   "quote": "",
+   "period_evidence": "",
+   "gid": 5
+  },
+  {
+   "i": 11,
+   "found": false,
+   "value": "",
+   "quote": "",
+   "period_evidence": "",
+   "gid": 5
+  },
+  {
+   "i": 12,
+   "found": false,
+   "value": "",
+   "quote": "",
+   "period_evidence": "",
+   "gid": 5
+  },
+  {
+   "i": 13,
+   "found": false,
+   "value": "",
+   "quote": "",
+   "period_evidence": "",
+   "gid": 7
+  },
+  {
+   "i": 14,
+   "found": false,
+   "value": "",
+   "quote": "",
+   "period_evidence": "",
+   "gid": 6
+  },
+  {
+   "i": 15,
+   "found": true,
+   "value": "$886 million",
+   "quote": "To start, our Q3 revenue was $886 million, up 28% year-over-year and up 7% quarter-over-quarter.",
+   "period_evidence": "our Q3 revenue",
+   "gid": 7
+  },
+  {
+   "i": 16,
+   "found": false,
+   "value": "",
+   "quote": "",
+   "period_evidence": "",
+   "gid": 8
+  },
+  {
+   "i": 17,
+   "found": false,
+   "value": "",
+   "quote": "",
+   "period_evidence": "",
+   "gid": 9
+  },
+  {
+   "i": 18,
+   "found": false,
+   "value": "",
+   "quote": "",
+   "period_evidence": "",
+   "gid": 9
+  },
+  {
+   "i": 19,
+   "found": false,
+   "value": "",
+   "quote": "",
+   "period_evidence": "",
+   "gid": 9
+  },
+  {
+   "i": 21,
+   "found": true,
+   "value": "$399 million",
+   "quote": "Reported operating income in the first quarter was $399 million or 13.8% of revenues compared to $346 million or 13% of revenues last year.",
+   "period_evidence": "in the first quarter",
+   "gid": 10
+  },
+  {
+   "i": 23,
+   "found": true,
+   "value": "$60 million",
+   "quote": "In the third quarter, we delivered revenue of $60 million, down 4% year-over-year, adjusted EBITDA of $18.9 million, reflecting a 32% margin, and adjusted net income was $9.7 million, resulting in 7 cents of non-GAAP earnings per share in the period, all of which were at or above the high end of our guidance for the quarter.",
+   "period_evidence": "In the third quarter",
+   "gid": 12
+  },
+  {
+   "i": 24,
+   "found": false,
+   "value": "",
+   "quote": "",
+   "period_evidence": "",
+   "gid": 11
+  }
+ ]
+}

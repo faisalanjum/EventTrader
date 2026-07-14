@@ -162,6 +162,23 @@ DRIFT CENSUS FINAL (#766): full pool ~1,490 pairs scanned -> 6 true soft renames
 (0.5%); renames relocate fine (EOG NGLs, PFE footnote, MTCH marker, PSN, AA reorder all CORRECT).
 Levers certified in-exam: batching + lean agent + hybrid addresses. CLEARED FOR #771.
 
+## ENGINE = ChatGPT/Codex for #771 harvest (A/B CERTIFIED 2026-07-14)
+User has a bigger ChatGPT account -> bulk harvest bills that, not the Claude sub. `codex_reader.py`
+runs the IDENTICAL relocate_batch prompt via `codex exec -m gpt-5.5 --output-schema` (strict JSON,
+per-gid checkpoint/resume). A/B on the frozen 111-case exam (same inputs Claude passed):
+- Format: 79/79 valid strict JSON, 0 parse fails (fix: OpenAI strict mode needs ALL fields in `required`).
+- Quality GPT-5.5 vs Claude (pooled filing 88 cases): 95.2%/90.9% vs 94.9%/84.1% — GPT-5.5 EQUAL/BETTER
+  (higher recall). Annual: GPT 0 real wrong picks + 93.2% recall (beat Claude's 1 miss + 81.8%). Its only
+  extra soft miss (KMT) = a broken truth entry (percent stored 0 via old int() bug), not a real error.
+  madrift + transcript IDENTICAL to Claude (same 2 benign MDT filer-tag cases, same DAL adjusted trap).
+- Model ladder (user): GPT-5.6 Sol Ultra/Max = hard escalation only; **GPT-5.5 = default reader**;
+  GPT-5.6 Luna Max = simple steps. Run 5.5 first, escalate only failing strata.
+CENSUS (all 637 cos, 0 tokens): 148,112 raw KPI-instances -> 73,267 addressable (in-corpus) ->
+free code tier resolves 11,301 (~15.5%; T1-xbrl 6,596 + T2-label 4,705); LLM residual 10,237 cases ->
+~1,947 batched calls -> **~78-101M ChatGPT tokens** for the filing lane (latest ~2-3 periods fiscal.ai
+fills). Abstains: 45,270 derived (no quote can exist) + 5,010 value-absent + 1,412 plug. PR lane +
+transcripts not yet wired (free scan first; est. +30-60M PR, ~150M transcripts = decide later).
+
 ## NEWS TRACK (separate process — user decision 2026-07-14)
 News is NOT part of the locked source ladder anymore. Rationale (3 facts): retrieval shape differs
 (pick-the-article vs find-the-cell), secondary-source noise (estimates/prior-year adjacent to actuals),
