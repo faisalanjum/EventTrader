@@ -8,7 +8,8 @@ sys.path.insert(0, os.path.dirname(__file__))
 import link_lib as L
 
 ENVELOPE = {'source_id', 'source_type', 'ticker', 'fye_month', 'event_time', 'items'}
-ITEM_REQ = {'raw_label', 'value', 'fmt', 'quote', 'period_end', 'cadence', 'tier'}
+ITEM_REQ = {'raw_label', 'value', 'fmt', 'quote', 'period_end', 'cadence', 'tier',
+            'level_unit_kind_hint', 'level_shape_hint'}
 DECOMP_BANNED = {'proposed_name', 'slice', 'slice_tokens', 'measurement_spans', 'measurement',
                  'per_x', 'fiscal_quarter', 'fiscal_year', 'time_type', 'series_unit', 'id', 'fact_scope'}
 

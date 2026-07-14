@@ -16,13 +16,27 @@ sys.path.insert(0, os.path.dirname(__file__))
 OUT = 'data/driver_catalog_seed'
 FORMMAP = {'10-K': '10k', '10-Q': '10q', '8-K': '8k'}
 # frozen FETCH raw-item fields carried into each packet item (Part D FETCH list). Decomposition
-# outputs (proposed_name/slice/measurement/time_type/fiscal_quarter/unit) are DELIBERATELY absent.
+# outputs (proposed_name/slice/measurement/time_type/fiscal_quarter/series_unit) are DELIBERATELY
+# absent. concept/member are NOT top-level -- they live raw inside `xbrl` (no duplication).
 ITEM_FIELDS = ('raw_label', 'value', 'fmt', 'is_currency', 'period_end', 'cadence',
-               'quote', 'period_evidence', 'tier', 'quote_source', 'concept', 'member', 'xbrl')
+               'quote', 'period_evidence', 'tier', 'quote_source', 'xbrl')
 
 
 def canonicalize_source_id(s):
     return (s or '').replace(':', '_')
+
+
+def unit_hints(fmt, is_currency):
+    """Deterministic fmt/is_currency -> raw unit HINTS the shared resolver canonicalizes (D.2).
+    Pure code, no semantic call; the decomposer refines (e.g. per-X -> price_like) and owns series_unit."""
+    if fmt == '%':
+        raw, kind = 'percent', 'ratio'
+    elif is_currency:
+        raw, kind = 'usd', 'money'
+    else:
+        raw, kind = 'count', 'count'
+    return {'level_unit_raw': raw, 'level_unit_kind_hint': kind,
+            'level_money_mode_hint': 'aggregate', 'level_shape_hint': 'point'}
 
 
 def corpus_complete(searched, form):
@@ -42,7 +56,9 @@ def build(records, abstains, fye_map):
             pk = packets[sid] = {'source_id': sid, 'source_type': r['source_type'],
                                  'ticker': r['ticker'], 'fye_month': fye_map.get(r['ticker']),
                                  'event_time': r.get('event_time'), 'items': []}
-        pk['items'].append({k: r[k] for k in ITEM_FIELDS if k in r})
+        item = {k: r[k] for k in ITEM_FIELDS if k in r}
+        item.update(unit_hints(r.get('fmt'), r.get('is_currency')))
+        pk['items'].append(item)
 
     skip, park = [], []
     for a in abstains:

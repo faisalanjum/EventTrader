@@ -28,15 +28,21 @@ def test_grouping_and_envelope():
 
 
 def test_no_decomposition_leak():
-    """A stray decomposition field on a record must NOT reach the packet item."""
+    """A stray decomposition field must NOT reach the item; unit HINTS must; concept/member -> xbrl only."""
     r = rec('ACC-1', '10k', 'AAA', 'revenue', 5000, proposed_name='revenue', slice='product:iphone',
-            measurement_spans=['adjusted'], fiscal_quarter='Q4')
+            measurement_spans=['adjusted'], fiscal_quarter='Q4', concept='us-gaap:Revenues', member='IPhone',
+            xbrl={'concept': 'us-gaap:Revenues', 'axis_members': [['a', 'm']], 'period_start': 's',
+                  'period_end': 'e', 'ptype': 'duration'})
     packets, _, _ = BP.build([r], [], {'AAA': 12})
     item = packets[0]['items'][0]
-    for banned in ('proposed_name', 'slice', 'measurement_spans', 'fiscal_quarter', 'series_unit', 'id'):
-        assert banned not in item, f"decomposition field leaked: {banned}"
-    assert item['raw_label'] == 'revenue' and item['tier'] == 'T2-label'
-    print("[ok] no decomposition field leaks into the packet")
+    for banned in ('proposed_name', 'slice', 'measurement_spans', 'fiscal_quarter', 'series_unit', 'id',
+                   'concept', 'member'):                    # concept/member live in xbrl only, not top-level
+        assert banned not in item, f"leaked into item: {banned}"
+    assert item['xbrl']['concept'] == 'us-gaap:Revenues', 'raw xbrl concept must survive inside the block'
+    for h in ('level_unit_raw', 'level_unit_kind_hint', 'level_money_mode_hint', 'level_shape_hint'):
+        assert h in item, f"missing unit hint {h}"
+    assert item['level_unit_kind_hint'] == 'money' and item['level_shape_hint'] == 'point', item
+    print("[ok] no decomposition leak · unit hints present · concept/member only inside xbrl")
 
 
 def test_canonicalize():
