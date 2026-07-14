@@ -126,6 +126,21 @@ step 2 port HTML grid extractor into lock flow (needs EDGAR inline-HTML fetch �
 `exact_section` reader TIE-BREAK (prompt change → bundle with twin-fix hardening, ONE re-cert bill).
 DO NOT PORT: per-company axis map; naive explicitMember loop into tier1.
 
+## COST/BATCHING (#770 DONE 2026-07-14, commit 1822a66)
+BATCHING VALIDATED: `batch_groups.py` (group cases by company+period; merged deduped candidates;
+HARD CAPS <=8 metrics + <=100KB per call, recursive split) + `relocate_batch.js` (one call binds all
+group metrics, same 5 rules). A/B vs certified one-by-one: quarterly 40/40 IDENTICAL @ 45% cheaper;
+multiaxis grouped 32/33 (1 id<->row slip in an 8-case group — production seed mode's value gate
+neutralizes it). keep-trim REJECTED (24->16 saves 30% but loses 5 reachable values). Lever stack for
+the production harvest (#771): XBRL lane (free) -> batching (45%+, denser on real fiscal.ai ~14 KPIs/co)
+-> seed value gate -> lean agent (-37%, A/B folds into grand cert).
+DRIFT CENSUS (#766 free half): 300 exact-cell pairs -> renames 2/270 extractable (0.7%), both soft
+("Natural Gas Liquids"->"NGLs", footnote marker). drift_candidates.json committed. Scoring + the
+annual-boundary variant = small grand-cert stratum.
+PRODUCTION TRANSITION (#771, user goal): every driver x period x every source that states it
+(news excluded -> its own track) -> frozen evidence record each, so part-2 writes DriverUpdates
+without re-reading sources. Design-mandated (FROM_SOURCE per-source facts + collapse ranking).
+
 ## NEWS TRACK (separate process — user decision 2026-07-14)
 News is NOT part of the locked source ladder anymore. Rationale (3 facts): retrieval shape differs
 (pick-the-article vs find-the-cell), secondary-source noise (estimates/prior-year adjacent to actuals),
