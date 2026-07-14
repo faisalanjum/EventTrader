@@ -23,7 +23,7 @@ FLOORS = {
     ('grade.py', 'validation'): {'PRECISION': 98.5, 'RECALL': 96.4},
     ('grade_quarterly.py', 'quarterly'): {'PRECISION': 95.0, 'RECALL': 95.0, 'YTD': 0},
     ('grade_quarterly.py', 'headline'): {'PRECISION': 75.0, 'RECALL': 7.5},
-    ('grade_quarterly.py', 'multiaxis'): {'PRECISION': 89.9, 'RECALL': 80.1, 'YTD': 0},
+    ('grade_quarterly.py', 'multiaxis'): {'PRECISION': 91.9, 'RECALL': 87.8, 'YTD': 0},  # v4: exact-cell+hybrid blob
     ('grade_quarterly.py', 'news'): {'PRECISION': 100.0, 'RECALL': 14.7, 'YTD': 0},
     ('grade_quarterly.py', 'gptholdout'): {'PRECISION': 96.9, 'RECALL': 95.0, 'YTD': 0},
 }
