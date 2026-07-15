@@ -91,7 +91,10 @@ class finalization → final validation → fitness gate.
   chunk manifest; every seed needs a gate result or review entry; repair judges only code-suggested pairs.
 - Prompts use NAME-01..19 + slice law + MF-02 ONLY (never old ontology files). Delete class-level XBRL guesses
   and unused `optional_links`. Live reuse is propose-first + bounded PIT related view + strong admission.
-  Finalization stamps permanent types, builds `families.json` (latents are not records or retrieval candidates).
+  Finalization stamps permanent types and builds family records: a suffix base resolves to an existing record,
+  a matching variant's representative, or a latent name in `families.json` (a latent is not a catalog record or
+  retrieval candidate). Final checks cover type completeness, family target/type, suffix coherence, latent
+  sanity, and cross-flavor disagreement — no hand edits.
 - **Exact constants (carry, never re-derive):** 40,000-char chunks · seed limits 400 records / 300,000
   compact-JSON chars · evidence 20 items/side, smallest side first, round-robin least-represented company, one
   per source type first, next disjoint 20 for view 2, no padding · high blast = 8 companies or a global fold
@@ -306,6 +309,10 @@ mechanics) · `../Consolidation/GuidancePeriod.md` (21 period tests) · `../Cons
 4. **Adapter/writer machine contracts:** exact field types/nullability, versioned schema, complete
    outcome/reason codes, cursor/completeness record shapes, certification fixtures (contract not
    implementation-ready until closed).
+5. **Exact blocks still source-resident (transfer proved at Phase 4, per the front-door banner rule):**
+   kernel §15.0's MVP split + §16's honest residuals (§8.1 above notes them) · `12` §12.3's exact fixture
+   tables · any remaining prompt-block text the section-14 diff finds. Until each transfers, the frozen source
+   carries it.
 
 ## 12. Evidence worth keeping once
 

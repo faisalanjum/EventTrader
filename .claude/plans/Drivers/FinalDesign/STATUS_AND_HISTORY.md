@@ -17,7 +17,7 @@
 | Rule meaning (FINAL_DESIGN §1-§9) | FINAL (locked set + 5 owner rulings 2026-07-15) | — | — | — |
 | Track A catalog engine | FINAL | PARTIAL (WP-FC-EDITS `5db902f`) | 260 pass + 1 skip | NEVER RUN (no graph catalog; fitness gate never run) |
 | Fiscal.ai channel adapter (S1) | FINAL | BUILT | smoke 16 packets / 175 items, 0 tokens | not live |
-| Track B fact stack | FINAL (build-ready) | UNBUILT (S3 awaits owner GO) | — | — |
+| Track B fact stack | FINAL (all decisions made; affected contracts NOT implementation-ready — BUILD §11 gaps) | UNBUILT (S3 awaits owner GO) | — | — |
 | Track C guidance retirement | FINAL v2.0 (no replay) | not started | — | — |
 | Concept linker (text facts) | FINAL | PARTIAL (vetoes C/D + PIT query spec-only) | 31-co + 274-co evidence | not rolled out |
 | Admission kernel | accepted parts FINAL; bundle CANDIDATE | — | — | — |
