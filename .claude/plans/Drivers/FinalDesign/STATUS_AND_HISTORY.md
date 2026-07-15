@@ -1,6 +1,6 @@
 # STATUS_AND_HISTORY.md — the one mutable dashboard, supersession ledger, and crosswalk
 
-> **Status: PROVISIONAL LIVE (Phase 3, 2026-07-15).** This file owns STATUS and HISTORY only — live rule
+> **Status: LIVE — Phase 4 verified through round 9 (2026-07-15); Phase 5 archive pends owner GO.** This file owns STATUS and HISTORY only — live rule
 > wording stays in `FINAL_DESIGN.md`; procedures stay in `BUILD_AND_OPERATIONS.md`; channel duties stay in
 > `ChannelContract.md`. Any status shown in another live file is a generated summary of THIS file. A status
 > change edits this dashboard — and only if rule meaning changed through owner approval, the one owning rule
@@ -25,7 +25,7 @@
 | XBRL-native materializer | CANDIDATE (dormant + `09` rider dormant) | — | EXP-1 signed | — |
 | Experiment program | EXP-0/1/2 SIGNED PASS | — | — | EXP-3..6 / WP-FC-RUN PENDING |
 | Running layer (schedules/ledger/QA) | NOT designed-complete | — | — | — |
-| Consolidation itself | Phase 3 files written | — | Phase 4 in progress (round-8 exact-transfer pass done; mechanical + blank-reader reruns next) | archive (Phase 5) blocked |
+| Consolidation itself | Phases 1-4 done (9 review rounds) | — | mechanical sweeps green; reader tests 10/10 + 8/10→fixed | archive (Phase 5) owner-gated; root keeps Plan/WorkOrder live until EXP-3..6 migrate |
 
 ## 2. Lists by status
 
@@ -186,7 +186,7 @@ column — the map is total over every ID listed in `CONSOLIDATION.md` §14.1.
 | PIPE-01..37 (+27a/27c/27d/31b) | BUILD §4 | PIPE-12 relay-trust + PIPE-15 run layout summarized in D1-D8/constants · PIPE-16 authority swap (prompts inline NAME rules) · PIPE-24/25/26/35 finalization/consumption inline · PIPE-32 A/B gate |
 | FACT-01..36 (+14b/17b/18a/26b/26e/26f) | BUILD §5 | FACT-16 validators + §12 gates (F1-F9/P1-P8) inline · FACT-17b = the internal packet → BUILD §2 · law mirrored in FINAL_DESIGN §5/§7 |
 | T1.1..T12.9 (census `11`) | same law as FINAL_DESIGN §4-§9 + BUILD §5 | the census DUPLICATES `09`/`12` normatively; numbering retires at archive; T9.x slices → §5.2 · T11.x producer/validator → §7.1 + BUILD §5 · T12.9 member grouping → §9 |
-| GI-01..04 + active `13` §§1-11 | BUILD §6 | runbook/deletion/gates inline |
+| GI-01..04 + active `13` §§0-15 | BUILD §6 | runbook/deletion/gates inline; §§12-15 are meta sections (cross-doc edit log, non-goals, minimalism proof, drafting record) with no rule IDs — covered by the §7 file-level row |
 | GI-05..36 (retired `13_Track` file) | history only — §2 RETIRED list | never live mechanics; still-useful non-replay analysis pointer in §7 crosswalk row |
 | Track A D1..D8 | BUILD §4 | — |
 | `66` D-1..D-13 | doc-debt history, resolved in place | archive only |

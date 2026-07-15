@@ -1,9 +1,9 @@
 # BUILD_AND_OPERATIONS.md — how to build, test, run, and retire the Driver system
 
-> **Status: PROVISIONAL LIVE (Phase 3, 2026-07-15).** This file owns PROCEDURE: build steps, contracts'
+> **Status: LIVE — Phase 4 verified through round 9 (2026-07-15); Phase 5 archive pends owner GO.** This file owns PROCEDURE: build steps, contracts'
 > mechanics, gates, run rules, and hazards. Rule MEANING lives only in `FINAL_DESIGN.md` (rule IDs referenced
 > here, never restated). Public channel duties live only in `ChannelContract.md`. Status/history/supersessions
-> live only in `STATUS_AND_HISTORY.md`. Until the section-14 zero-loss checks pass, the frozen sources remain
+> live only in `STATUS_AND_HISTORY.md`. Until Phase 5 archives them, the frozen sources remain
 > the byte evidence baseline (`archive/2026-07-15_pre-consolidation/MANIFEST.json`).
 >
 > **Honest status banner (generated; owning dashboard = `STATUS_AND_HISTORY.md`):** DESIGN is final for
@@ -146,7 +146,8 @@ class finalization → final validation → fitness gate.
 - **ID shape:** `du:{safe_source_id}:{driver_name}:{fact_scope}` + the OD-8 collision overlay. Known mapping:
   fiscal `:`→`_`. STILL MISSING (10.3 gap — not implementation-ready): the complete cross-channel escaping/
   delimiter recipe, collision-safe namespaces, and fixed ID test vectors.
-- **Writer:** one atomic write; MERGE on id; `created` only on create; legal non-null fields; a sparse rerun
+- **Writer:** one atomic write; MERGE on id; no-op re-runs detected by DIRECT FIELD COMPARISON against the
+  existing node (no stored fact hash — `evhash16` retired); `created` only on create; legal non-null fields; a sparse rerun
   never null-clobbers a richer value (`SET x = null` REMOVES a property in Neo4j — validate before any SET);
   conflicting signature slot → sibling (repair lane only may correct); non-signature conflicts →
   last-write-wins-with-log; edges/periods/concepts/constraints inside the atomic path; dry-run DEFAULT, writes
@@ -171,7 +172,7 @@ class finalization → final validation → fitness gate.
   1. Resolver gates: the 21 period tests + YTD/TTM proof + `_ensure_period` parity · unit relocation 29+7 green + parity tripwire · full validator suite TDD (every FACT-16 rule has a failing-then-green test).
   2. Archive-backed guidance fixture test (optional QA, never a Track C gate): old rows sampled in DRY-RUN for resolver/read parity; test-only shims derive the missing hints; fixture Driver nodes minted from label_slugs; member-linkless; never writes production facts.
   3. Synthetic lane fixtures: one golden item per lane × shape (point/range/floor/ceiling/numberless/delta-only) + planted traps (point-as-low-only · missing hint · sign flip · consensus-on-metric · value_text-with-number · duration start==end · fabricated period · two-scenario same-event collision → both quote_hashed · per-X name/unit mismatch · unknown-axis hex round-trip). **OD-21 FAILURE traps (validate BEFORE fusion; must hard-fail/PARK with the right reason):** F1 `surprise=` missing on a surprise fact · F2 `surprise=` on a non-surprise fact · F3 missing/misplaced `surprise_basis_hint` · F4 missing `comparison_baseline` · F5 `guidance`+`previous_guidance` combo → REJECT (guide-vs-own-prior = movement, not surprise) · F6 grounded surprise with no in-batch home fact → fail-closed PARK, then the WHOLE event re-extracted (never orphan-only replay) · F7 impossible tense (`actual_vs_*` on a not-ended period) · F8 ungrounded surprise ("results beat") → PARK, never dropped · F9 a candidate sibling mismatching on ANY ONE of {family, period, period_scope, slice, measurement, value, unit} — each tested SEPARATELY — rejected as a match → PARK. **OD-21 POSITIVE fixtures (must pass):** P1 outlook surprise + later earnings surprise on the same driver+period survive as TWO series · P2 same-event "beat consensus AND own guidance" splits into TWO surprise facts · P3 guide range containing consensus → `in_line` · P4 an old guide restated after period end stays `guidance_vs_consensus` via the basis hint · P5 a numberless grounded surprise writes WITH its numberless home sibling · P6 all three valid basis×baseline mappings compose · P7 two facts identical on every key field except `surprise=` stay SEPARATE · P8 a lower-is-better beat (opex/cost/inventory) is ACCEPTED, not sign-rejected. Only P1/P2/P7 need the real fusion + read-collapse code and are BLOCKED until the Track-B build; the failure traps and other positives are static/validator-level and run now.
-  4. Concept-link gates: backstop A-D unit tests + `vetoed_correct == 0` invariant + PIT menu-query proof + XC-16 before any full-universe run.
+  4. Concept-link gates: backstop A-D unit tests + `vetoed_correct == 0` invariant + PIT menu-query proof + XC-16 before any full-universe run · the XC-17 sampling monitor live at rollout (balance/period_type-vs-expected-signature check + abstention-by-fact_type tracking; structural slips only — scope mismatches need XC-16/the periodic audit) · XC-18 scale rules (resolve once per company × base-metric driver + store; one batched LLM call per company; cache only if volume bites).
   5. Dual-producer probe: ≥2 independent producer runs over a pre-registered PIT-filtered sample; score field-level, state-lane, and fact-PRESENCE disagreement; grader ≠ producer, graded once; thresholds proposed after first calibration (protocol pinned now, bar = owner after data).
   6. Read-view gates: collapse/tie-break/day-boundary golden tests (incl. an after-hours 8-K ET-vs-UTC case) · T12.9 grouping fixtures · two-mode PIT proof (backtest at T excludes a date==T fact; live sees it).
 - Substrate floor: 468 tests + 7 guards is PROVENANCE of the audited old stack, not proof the new one passes.
@@ -279,6 +280,23 @@ reads realized returns.
   auditable UpgradeEvent.
 - Active/revoked ConceptResolution lifecycle, cohort exclusion, recovery/re-extraction, menu-evidence invariant,
   isolated kernel falsifier, duplicate/miss ledger. Honest non-repair lanes for divergent periods/slices remain.
+- **The full pin map (P1..P17/P19 — authoritative text in the archived candidate's §11; no P18). Pins beyond the
+  recipe above:** P1a no-enrichment (a text twin is skipped whole; the xbrl node never gains prose) · P2
+  read-time collapse tie-break (`xbrl_link` beats `llm` within one event+series) · P4j falsifier-(iv) scoped to
+  `origin≠xbrl_link` · P5b-e skip-log records crossing SAME_AS edge ids; the value gate; STATE-BASED parks
+  (`xbrl_conflict`/`duplicate_of_xbrl`) re-enqueue on revocation/edge-quarantine · P6 xbrl facts/resolutions
+  never count toward BROAD/ESTABLISHED eligibility · P7 provenance `attach_mode='xbrl_link'` +
+  `attached_via=resolution_id` + `xbrl_fact_id` · P8a-d revoke = 2 strong graders + RecoveryEvent + read-time
+  cohort exclusion; un-revoke at the same bar; gap-repair re-enqueue triggers; the XC-09 backfill-era exception ·
+  P9(+b) strong-judge final verify LOCKED + the qualifier veto · P10 origin-gated `xbrl_qname`/`MAPS_TO_CONCEPT`
+  write carve-outs + `reported`-state legality · P11c/d/f the UpgradeEvent writer validator; graded reversal;
+  fold-equivalent twins converge at read · P12 a resolution-on-create enqueues backfill materialization (text
+  never waits) · P13 the `xbrl_twin_suspect{slice|period}` tripwire; `twin_suspect_rate` gates rollout ·
+  P14(+a-c) the shared deterministic `period_scope` classifier in the FACT-18 wrapper; fiscal fields
+  null-not-guessed; sentinels illegal; company-ACTUAL period-end anchoring (52/53-week) · P15
+  `effective_driver_state` read derivation (DriverPeriod date arithmetic; fallback `reported`) · P17
+  prompt-narrowing = a cost experiment only · P19 the X-XL0-3 proofs + a fresh Neo4j census +
+  industry-by-industry rollout = the enablement condition.
 - P1-P17/P19 + ten document amendments require owner approval after EXP-1/EXP-6 evidence. **The dormant `09`
   rider stays dormant: no `origin`, no `xbrl_link`, no empty≡GAAP folding, no XBRL producer rules before
   ratification.**
