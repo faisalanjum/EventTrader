@@ -27,8 +27,9 @@ channel adapter (SELECT · FETCH · SUBMIT, per ChannelContract.md)
 ## 2. The internal core packet (frozen Candidate Fact Packet v1.0)
 
 - **The frozen source file `15_CandidateFactPacket.md` stays the temporary FIFTH live file** — owner-frozen
-  2026-07-14, amended once by the owner 2026-07-15 (Q4 XBRL row; post-amendment sha `038a0f89…`, pre-amendment
-  baseline `86b2fc17…` pinned in the Phase-1 manifest). Relocating its content into this file requires explicit
+  2026-07-14, amended twice by the owner 2026-07-15 (Q4 XBRL row, then the Q1-extension on the FETCH
+  guidance clause; current post-amendment sha `aa7239ed…`, pre-amendment baseline `86b2fc17…` pinned in the
+  Phase-1 manifest). Relocating its content into this file requires explicit
   owner approval plus a byte/hash proof; until then this section only summarizes and points.
 - Structure ("three blocks" = three required + one optional): Block 0 event envelope (source id/type, ticker,
   fiscal-year-end, optional calendar override, event time) · Block 1 transient identity signals (proposed name,
@@ -91,10 +92,19 @@ class finalization → final validation → fitness gate.
   chunk manifest; every seed needs a gate result or review entry; repair judges only code-suggested pairs.
 - Prompts use NAME-01..19 + slice law + MF-02 ONLY (never old ontology files). Delete class-level XBRL guesses
   and unused `optional_links`. Live reuse is propose-first + bounded PIT related view + strong admission.
-  Finalization stamps permanent types and builds family records: a suffix base resolves to an existing record,
-  a matching variant's representative, or a latent name in `families.json` (a latent is not a catalog record or
-  retrieval candidate). Final checks cover type completeness, family target/type, suffix coherence, latent
-  sanity, and cross-flavor disagreement — no hand edits.
+  Finalization = PIPE-24/25, the mandatory end-of-build pass (`finalize_catalog.py`) — stamps every surviving
+  Driver once, permanently; no consumer ever sees a fact_type-less Driver (the sidecar gate blocks
+  pre-finalization catalogs). Artifacts: `fact_type_decisions.json` · `families.json` · `fact_type_disagreements.json`.
+  **BASE_METRIC lookup order (deterministic, all via `norm()`, suffix stripped ONCE):** (1) the stripped name is
+  a record (self-canonical or final-level variant) → the edge targets the STRIPPED NAME ITSELF, never re-pointed
+  at the head (`net_sales_guidance → BASE_METRIC → net_sales → SAME_AS → revenue`); (2) the stripped name matches
+  a string in any record's `same_as_variants` → the edge targets that containing rep (a collapsed name never
+  becomes a node); (3) found nowhere → the name goes in `families.json.latent` ONLY — a latent is NOT a
+  catalog.json record, can never enter a fold input or retrieval view, is implicitly `fact_type=metric`, and
+  graduates AUTOMATICALLY when a later build gives the exact `norm()` name real evidence; `action_event` gets no
+  edge; a suffixed rolled-up variant inherits the family through its `SAME_AS` rep (no edge of its own). Final
+  checks cover type completeness, family target/type, suffix coherence, latent sanity, and cross-flavor
+  disagreement — no hand edits.
 - **Exact constants (carry, never re-derive):** 40,000-char chunks · seed limits 400 records / 300,000
   compact-JSON chars · evidence 20 items/side, smallest side first, round-robin least-represented company, one
   per source type first, next disjoint 20 for view 2, no padding · high blast = 8 companies or a global fold
@@ -163,8 +173,16 @@ class finalization → final validation → fitness gate.
   `guidance_status` exists on only 24/894 sources — never a run ledger.
 - Retirement order: freeze/drain old writers → export + verify (restorable archive: every property/edge/anchor/
   period, code/prompts, manifests/locators, hashes/counts, timestamps, git + database identity) → scan all
-  consumers → cut prediction/learner readers over or prove empty-history tolerance → prove no old packet/read
-  path remains → owner approval for deletion → delete old nodes/edges, orphan only old periods → remove seams.
+  consumers (exact search list: `GuidanceUpdate`, `Guidance`, `build_guidance_history`, `guidance_history.v1`,
+  old guidance extraction profiles, guidance daemons/workers, old writer scripts) → cut prediction/learner
+  readers over or prove empty-history tolerance → prove no old packet/read path remains → owner approval for
+  deletion → delete → remove seams (old writer, CLI, shell wrapper, concept resolver, extraction profiles,
+  worker guidance sidecars).
+- **Exact deletion target:** delete `GuidanceUpdate` and `Guidance` nodes; delete ONLY orphan `GuidancePeriod`
+  nodes with no `DriverPeriod` label AND no incoming DriverUpdate links; drop old guidance constraints/indexes;
+  **never relabel old `GuidancePeriod` into `DriverPeriod` as a transition shortcut.** Gate check: archive edge
+  counts must match the old graph for `UPDATES`, `FOR_COMPANY`, `FROM_SOURCE`, `HAS_PERIOD`, `MAPS_TO_CONCEPT`,
+  and `MAPS_TO_MEMBER`.
 - Green gates: exact export counts/evidence · drained writers · no remaining consumers · no replay marker ·
   acceptable empty-history behavior or explicit wait · owner acceptance of the temporary history gap · no
   production residue. Shared pure helpers may move under Track B ownership.

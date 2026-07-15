@@ -8,7 +8,8 @@
 >
 > **Reading order (front door = `FINAL_DESIGN.md`):** FINAL_DESIGN → ChannelContract (adapters only) →
 > BUILD_AND_OPERATIONS (builders/operators) → this file (what is open, replaced, or archived). Temporary fifth
-> live file: `15_CandidateFactPacket.md` (owner-frozen v1.0 + the 2026-07-15 Q4 amendment, sha `038a0f89…`).
+> live file: `15_CandidateFactPacket.md` (owner-frozen v1.0 + the two 2026-07-15 owner amendments Q4/Q1-ext,
+> current sha `aa7239ed…`).
 
 ## 1. One-page dashboard (2026-07-15)
 
@@ -28,9 +29,11 @@
 
 ## 2. Lists by status
 
-- **FINAL / BUILD-PENDING · CONDITIONAL · OPEN(owner) · CANDIDATE:** the authoritative tag lists live in
-  `FINAL_DESIGN.md` §10 (generated from this file's rows). Owner-question detail: `CONSOLIDATION.md` §9.2/§10
-  until Phase 5, then here.
+- **FINAL / BUILD-PENDING · CONDITIONAL · OPEN(owner) · CANDIDATE · DESIGN-INCOMPLETE:** THIS file owns the
+  status lists (one-copy law); `FINAL_DESIGN.md` §10 is the GENERATED mirror of these rows and says so. Current
+  owning rows = the §1 dashboard above plus FINAL_DESIGN §10's enumerations, adopted here as the master until
+  the Phase-5 migration inlines them fully; owner-question decision detail rides in `CONSOLIDATION.md` §9.2/§10.2
+  until Phase 5, then moves here.
 - **RETIRED (never a production path):** old Guidance replay plan (`13_Track_RetiredDesign.md` — GI stale-trap
   rows in its GI-07) · fixed-vocabulary Driver v1 · eager-reuse v2 · `slice=total` · alias layers · `long_range`
   scope value · `gp_UNDEF` quiet fallback · `evhash16` on DriverUpdate · FS-22 cross-company recurrence ·
@@ -142,7 +145,7 @@ WorkOrder current sha `4911a22f…` (status board stale at `1586761a…` — fix
 | 66_IssuesToBeHandled | owner blocks + stale tail | rules → FINAL_DESIGN; status here; archive |
 | 90_OpenItems · 95_Supersession · 99_Codex audit | status · 42-row ledger · history | this file §1-§3; archive (99 wholesale) |
 | BayesProposal | unvetted proposal | BUILD §8.3 pointer; archive under proposals |
-| ChannelContract | ACTIVE live file | kept (amended 2026-07-15, sha `4fdeb821…`) |
+| ChannelContract | ACTIVE live file | kept (amended 2026-07-15, sha `4fdeb821…`) — the SOLE public channel authority under the one-copy law; its banner's "source of truth = the frozen S2 packet spec" line records content PROVENANCE, not a second live authority (an owner banner one-liner can retire that phrasing at the next amendment batch) |
 | DriverGenesisRestructure | unapproved rationale | open charter questions in FINAL_DESIGN §10; archive |
 | DriverPlan.html | stale study export | none (regenerate later from live docs); archive |
 | FableAdmissionKernelDesign | candidate + accepted inserts | FINAL_DESIGN §4/§5 (accepted) + BUILD §8.1; archive after exact candidate map preserved |
