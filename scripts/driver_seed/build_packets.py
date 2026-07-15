@@ -12,9 +12,9 @@ shared-core, added downstream). `build()` is pure (no Neo4j) so it is unit-teste
 """
 import os, re, sys, json, argparse, collections
 sys.path.insert(0, os.path.dirname(__file__))
+import run_code_tier as RC          # shared FORMMAP + load_env_neo4j (channel-side, moves together at reorg)
 
 OUT = 'data/driver_catalog_seed'
-FORMMAP = {'10-K': '10k', '10-Q': '10q', '8-K': '8k'}
 # frozen FETCH raw-item fields carried into each packet item (Part D FETCH list). Decomposition
 # outputs (proposed_name/slice/measurement/time_type/fiscal_quarter/series_unit) are DELIBERATELY
 # absent. concept/member are NOT top-level -- they live raw inside `xbrl` (no duplication).
@@ -42,7 +42,7 @@ def unit_hints(fmt, is_currency):
 def corpus_complete(searched, form):
     """The expected source set for a company-period was present AND searched: the named filing
     AND the earnings 8-K EX-99.1. Anything less = corpus-incomplete -> PARK, never a SKIP."""
-    return FORMMAP.get(form) in (searched or []) and '8k' in (searched or [])
+    return RC.FORMMAP.get(form) in (searched or []) and '8k' in (searched or [])
 
 
 def build(records, abstains, fye_map):
@@ -93,7 +93,6 @@ def main():
     tickers = {r['ticker'] for r in records} | {a.get('ticker') for a in abstains}
     tickers.discard(None)
 
-    import run_code_tier as RC
     RC.load_env_neo4j()
     from neo4j import GraphDatabase
     drv = GraphDatabase.driver(os.environ['NEO4J_URI'],

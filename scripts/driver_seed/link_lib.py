@@ -478,9 +478,8 @@ def scan_text(texts, name, val, fmt, max_hits=20, keep=6):
     return strict, [c[2] for c in cands[:keep]]
 
 
-def is_derived(kpi):
-    """fiscal.ai-computed rows (% change, common size). No filing states them -> never linkable."""
-    return ('% Chg' in kpi) or ('%Chg' in kpi) or ('Common Size' in kpi)
+# is_derived moved to fiscal_ai_rules.py (2026-07-15) — it is a fiscal.ai VENDOR-label rule, not shared
+# core; other channels must not inherit it. link_lib stays channel-agnostic.
 
 
 def label_adjacent(kpi, value, fmt, quote, gap=40):

@@ -22,6 +22,7 @@ import os, re, json, argparse, collections, sys
 from datetime import date, timedelta
 sys.path.insert(0, os.path.dirname(__file__))
 import link_lib as L
+import fiscal_ai_rules as FA          # fiscal.ai channel-specific rules (is_derived / plug) — not shared core
 
 OUT = 'data/driver_catalog_seed'
 FORMMAP = {'10-K': '10k', '10-Q': '10q', '8-K': '8k'}
@@ -164,9 +165,9 @@ def process_cp(items, filing, prs):
                 'form': it['form'], 'cadence': it.get('section'), 'sources_searched': searched}
         if val is None:
             continue
-        if L.is_derived(name):                   # fiscal.ai-computed (% Chg / Common Size) -> terminal SKIP
+        if FA.is_derived(name):                  # fiscal.ai-computed (% Chg / Common Size) -> terminal SKIP
             abstain.append({**base, 'status': 'skip', 'reason': 'derived_metric'}); continue
-        if fmt in (None, 'number') and abs(float(val)) <= 1000:
+        if FA.is_plug(val, fmt):
             abstain.append({**base, 'status': 'skip', 'reason': 'plug'}); continue
         emitted = False; cands = []
         for src, allow_t1 in [(filing, True)] + [(p, False) for p in prs]:
