@@ -167,10 +167,13 @@ class finalization → final validation → fitness gate.
   tables from a FRESH graph census · 8 verdict writer + DCM · 9 concept linker + rollout gates (vetoes C/D and
   the historical PIT menu query were spec-only — build before rollout) · 10 read layer + golden tests · 11
   dual-producer probe when real producers exist.
-- **Acceptance:** resolver/parity gates · synthetic fixtures for every lane and shape incl. all OD-21 cases ·
-  concept backstop + PIT menu proof · ≥2 independent producers over a locked sample measuring field/state/
-  fact-presence disagreement (threshold owner-set after calibration) · collapse/day-boundary/member-grouping/
-  raw-reconciled/backtest-live read tests.
+- **Acceptance gates (in order, every one mechanical — `12` §12):**
+  1. Resolver gates: the 21 period tests + YTD/TTM proof + `_ensure_period` parity · unit relocation 29+7 green + parity tripwire · full validator suite TDD (every FACT-16 rule has a failing-then-green test).
+  2. Archive-backed guidance fixture test (optional QA, never a Track C gate): old rows sampled in DRY-RUN for resolver/read parity; test-only shims derive the missing hints; fixture Driver nodes minted from label_slugs; member-linkless; never writes production facts.
+  3. Synthetic lane fixtures: one golden item per lane × shape (point/range/floor/ceiling/numberless/delta-only) + planted traps (point-as-low-only · missing hint · sign flip · consensus-on-metric · value_text-with-number · duration start==end · fabricated period · two-scenario same-event collision → both quote_hashed · per-X name/unit mismatch · unknown-axis hex round-trip). **OD-21 FAILURE traps (validate BEFORE fusion; must hard-fail/PARK with the right reason):** F1 `surprise=` missing on a surprise fact · F2 `surprise=` on a non-surprise fact · F3 missing/misplaced `surprise_basis_hint` · F4 missing `comparison_baseline` · F5 `guidance`+`previous_guidance` combo → REJECT (guide-vs-own-prior = movement, not surprise) · F6 grounded surprise with no in-batch home fact → fail-closed PARK, then the WHOLE event re-extracted (never orphan-only replay) · F7 impossible tense (`actual_vs_*` on a not-ended period) · F8 ungrounded surprise ("results beat") → PARK, never dropped · F9 a candidate sibling mismatching on ANY ONE of {family, period, period_scope, slice, measurement, value, unit} — each tested SEPARATELY — rejected as a match → PARK. **OD-21 POSITIVE fixtures (must pass):** P1 outlook surprise + later earnings surprise on the same driver+period survive as TWO series · P2 same-event "beat consensus AND own guidance" splits into TWO surprise facts · P3 guide range containing consensus → `in_line` · P4 an old guide restated after period end stays `guidance_vs_consensus` via the basis hint · P5 a numberless grounded surprise writes WITH its numberless home sibling · P6 all three valid basis×baseline mappings compose · P7 two facts identical on every key field except `surprise=` stay SEPARATE · P8 a lower-is-better beat (opex/cost/inventory) is ACCEPTED, not sign-rejected. Only P1/P2/P7 need the real fusion + read-collapse code and are BLOCKED until the Track-B build; the failure traps and other positives are static/validator-level and run now.
+  4. Concept-link gates: backstop A-D unit tests + `vetoed_correct == 0` invariant + PIT menu-query proof + XC-16 before any full-universe run.
+  5. Dual-producer probe: ≥2 independent producer runs over a pre-registered PIT-filtered sample; score field-level, state-lane, and fact-PRESENCE disagreement; grader ≠ producer, graded once; thresholds proposed after first calibration (protocol pinned now, bar = owner after data).
+  6. Read-view gates: collapse/tie-break/day-boundary golden tests (incl. an after-hours 8-K ET-vs-UTC case) · T12.9 grouping fixtures · two-mode PIT proof (backtest at T excludes a date==T fact; live sees it).
 - Substrate floor: 468 tests + 7 guards is PROVENANCE of the audited old stack, not proof the new one passes.
 
 ## 6. Track C — old Guidance retirement (active v2.0; NO replay)
@@ -236,9 +239,11 @@ reads realized returns.
   the named zero-wrong stage · frozen raw birth quotes + refuted negatives, no default evidence distillation,
   controlled refreeze · broad/established eligibility, live transaction freeze, split review, validators V1-V14,
   rollout gauntlet, smoke-alarm immune system, falsifier/attach audits, BASE_METRIC/family recovery propagation.
-- **Transfer whole at migration, never re-derive:** kernel §15.0's exact MVP split (day-1 core vs deferred-inert,
-  incl. no-XBRL admission fenced until falsifier (v) ships) and §16's honest residuals — above all: qualitative
-  homonyms have NO model-independent tripwire (the design's stated deepest worry).
+- **Kernel §15.0 MVP split (transferred whole — the exact first-build fence):**
+  - Day-1 core: kernel Stages 0-3 (ATTACH+confirm · ADOPT · CREATE born-complete · SKIP/PARK) · async LINK trigger + deferred-pair ledger with no-mint-on-flagged-head · frozen birth anchors · evidence-mass gate + skeptic-minted ESTABLISHED (cannot defer: the day-1 sweep's eligibility rule depends on it) + BROAD split · validators V1-V14 · falsifier signals (i)(ii)(iii)+(vii) + ATTACH-audit · minimal calibration stream · recovery core (quarantine + variant/family propagation + RecoveryEvent) · seed + gauntlet static scans (S-A2/A3/A6) · park/outage discipline. **Coverage rule:** if the MVP admits no-XBRL (news/qualitative/action) drivers, falsifier (v) ships day-1; otherwise admission is FENCED to XBRL-backed sources until (v) ships — the qualitative space is never live-and-uninstrumented.
+  - Deferred (flag/experiment-gated, inert until enabled): CLAIM-ON (S3) · anchor enrichment M2 · item-codes M3 · UNSURE valve · union-preview · falsifier (iv)(vi) · full dynamic gauntlet P1-P9 if the owner ships the seed YOUNG-only · transitive-drift cadence beyond quarterly · exotic-latent propagation · head-degree sharding · time-keyed anchor revalidation · sampled-audit rate tuning · type-CORRECTION lane (recall optimization; parking covers safety).
+- **Kernel §16 honest residuals (transferred whole):** the irreducible floor = a single-shot hardened judge wrong on a genuinely co-extensive-looking pair at FIRST encounter, before any falsifier signal — measured by OD-6, reversible by recovery once evidence accumulates (zero-by-construction impossible; zero-by-measurement with honest upper bounds is the promise) · homonym facts written before detection stay on the quarantined node as flagged history — contained, never erased, excluded from features · all in-session judges share one model vendor; the falsifier is the only fully independent oracle · **qualitative homonyms have no model-independent tripwire** (for no-XBRL non-numeric heads, falsifier channels (i)-(iv) are silent and (v) detects duplicates, not one-name-two-meanings; only drift/dispersion probes and audits watch; the quarterly held-out gate re-runs are the backstop — the stated deepest worry) · history completeness is the ambition's success metric (duplicate half-life + reconciliation efficacy + park drain + false-refusal rate as a first-class dashboard number) · conservative splits and deferred thin pairs under-attribute during their window — the safe direction, visible in metrics.
+- **The exact ratification bundle (what the owner must ratify to activate the candidate):** (1) the v3.2 architecture (variant-anchored storage · one LINK mechanism/two triggers · frozen birth anchors + split-reconciliation lane · skeptic-minted establishment with CLAIM_FROZEN de-mint) · (2) edge-state recovery + D4 scoping (automatic tightening-only quarantine, 2-grader confirmed, 3-grader for seed links; INCONCLUSIVE escalates the RULE, not the case) · (3) the seed gauntlet as a launch gate incl. seed cards earning ESTABLISHED (unprovable → YOUNG) · (4) launch blockers: corrected model-free falsifier + ATTACH audit before production writes; flagged-head audit intensity bounded with a hard SLA that never hangs on the owner queue · (5) CLAIM ships OFF; shadow-log from Phase 2; ON only after S3 passes with zero wrong links · (6) carried items: gate protocol amendment · experiment promotion rules (M2/M3 default OFF) · G1 display spec · OD-7 born-complete · the [PIN] set · reject auto in-context teaching · thresholds post-calibration · time/standard-keyed anchor revalidation as an owner RULE question · outage discipline · ADOPT takes the same 3-part confirmation as ATTACH.
 - Never call the whole file ratified because the title says v3.4 or some OD rules were inserted.
 
 ### 8.2 XBRL-native materializer — CANDIDATE, dormant (title says FINAL; status = pending ratification)
@@ -250,9 +255,28 @@ reads realized returns.
   representable axes, allowed unit, exact period, source-stated value. Non-GAAP, unlinked, qualitative, causal,
   guidance, and action material stays text-side. **Unit whitelist v1: USD, shares, USD-per-share — eligible
   EPS/per-share facts ARE materialized (per-X in the name per NAME-13); every other unit skips + counts.**
+- **The exact materializer recipe (candidate map — per Report with `xbrl_status=COMPLETED`, per registrant with
+  active resolutions):** 1. load ACTIVE `(company, driver)→qname` resolutions — full catalog records only,
+  latents excluded [P4e] · 2. select Facts entity-scoped via `IN_CONTEXT→Context→FOR_COMPANY` (no edge → skip +
+  count), filters `is_numeric='1'`/`is_nil='0'` [P4f] · 3. unit whitelist + map [P4c]: `iso4217:USD` → money on
+  the driver's canonical scale · `shares` → count · `iso4217:USD/shares` → usd per-share level (EPS materialized,
+  per-X in the name) · everything else (pure, other currencies, utr/custom, other divides) → skip + count
+  (`pure`→percent ×100 is a fenced-out value rewrite) · 4. intra-filing dedupe + collision [P4g]: drop identical
+  concept+context+value duplicates; within a fact_scope keep the highest-precision Fact when values agree within
+  stated `decimals`; disagreement beyond precision → skip the WHOLE scope + log `xbrl_internal_conflict`, never
+  fuse · 5. axes never dropped (FS-09): frozen table → `kind:normalized_member_label`; unknown axis → the hex
+  sentinel; any NON_SLICE axis or HARD-EXCLUDE member → skip the whole fact, logged [P4d] · 6. period from the
+  exact context (its own §5.3) · 7. id = `du:{R.source_id}:{d}:{fact_scope}` · 8. primary ⇔ the Fact's period end
+  == `periodOfReport` (write always); everything else writes ONLY as backfill (no same-scope fact exists) or
+  RESTATEMENT (canonical value differs) — identical-value re-tags skipped + counted; null `periodOfReport` →
+  derive as max duration-period end among the report's own facts, else skip the report [P4b/P4h] · 9. write via
+  `driver_writer`, atomic, all validators on, `level_shape_hint='point'` [P4i]; stamps: `origin=xbrl_link` ·
+  `level_low=level_high` = the exact signed value scaled [P4a] · change/comparison/value_text/conditions/
+  company_confirmed = FORBID (XBRL states levels only) · `driver_state=reported` · `quote=[XBRL] <qname> <period>
+  = <scaled value>` · `measurement=∅` always [P3].
 - Materialize before text; text twins dedupe only on same event/head/period/slice/fold/value; mismatch splits
-  or parks. Prefer period-of-report facts; comparatives are backfill/restatement. Same-series exact XBRL wins
-  ties; same-day 8-K remains; compatible upgrades via repair lane + auditable UpgradeEvent.
+  or parks. Same-series exact XBRL wins ties; same-day 8-K remains; compatible upgrades via repair lane +
+  auditable UpgradeEvent.
 - Active/revoked ConceptResolution lifecycle, cohort exclusion, recovery/re-extraction, menu-evidence invariant,
   isolated kernel falsifier, duplicate/miss ledger. Honest non-repair lanes for divergent periods/slices remain.
 - P1-P17/P19 + ten document amendments require owner approval after EXP-1/EXP-6 evidence. **The dormant `09`
@@ -339,10 +363,11 @@ mechanics) · `../Consolidation/GuidancePeriod.md` (21 period tests) · `../Cons
 4. **Adapter/writer machine contracts:** exact field types/nullability, versioned schema, complete
    outcome/reason codes, cursor/completeness record shapes, certification fixtures (contract not
    implementation-ready until closed).
-5. **Exact blocks still source-resident (transfer proved at Phase 4, per the front-door banner rule):**
-   kernel §15.0's MVP split + §16's honest residuals (§8.1 above notes them) · `12` §12.3's exact fixture
-   tables · any remaining prompt-block text the section-14 diff finds. Until each transfers, the frozen source
-   carries it.
+5. **Exact-block transfers — CLOSED (Phase 4 round 8):** kernel §15.0 MVP split + §16 residuals + the
+   ratification bundle → §8.1 above; `12` §12's six acceptance gates incl. the F1-F9/P1-P8 fixture set → §5
+   above; the XBRL materializer exact recipe + pins → §8.2 above. Prompt text: the XC PICK/VERIFY prompts and
+   the classifier prompt content live in FINAL_DESIGN §8/§4.1 + §4 here; the hash-pinned experiment Plan/
+   WorkOrder prompt packs stay live files until the experiment program migrates (their pins forbid edits).
 
 ## 12. Evidence worth keeping once
 

@@ -25,7 +25,7 @@
 | XBRL-native materializer | CANDIDATE (dormant + `09` rider dormant) | — | EXP-1 signed | — |
 | Experiment program | EXP-0/1/2 SIGNED PASS | — | — | EXP-3..6 / WP-FC-RUN PENDING |
 | Running layer (schedules/ledger/QA) | NOT designed-complete | — | — | — |
-| Consolidation itself | Phase 3 files written | — | Phase 4 §14 checks PENDING | archive (Phase 5) pending |
+| Consolidation itself | Phase 3 files written | — | Phase 4 in progress (round-8 exact-transfer pass done; mechanical + blank-reader reruns next) | archive (Phase 5) blocked |
 
 ## 2. Lists by status
 
@@ -150,7 +150,7 @@ WorkOrder current sha `4911a22f…` (status board stale at `1586761a…` — fix
 | 66_IssuesToBeHandled | owner blocks + stale tail | rules → FINAL_DESIGN; status here; archive |
 | 90_OpenItems · 95_Supersession · 99_Codex audit | status · 42-row ledger · history | this file §1-§3; archive (99 wholesale) |
 | BayesProposal | unvetted proposal | BUILD §8.3 pointer; archive under proposals |
-| ChannelContract | ACTIVE live file | kept (amended 2026-07-15, sha `4fdeb821…`) — the SOLE public channel authority under the one-copy law; its banner's "source of truth = the frozen S2 packet spec" line records content PROVENANCE, not a second live authority (an owner banner one-liner can retire that phrasing at the next amendment batch) |
+| ChannelContract | ACTIVE live file | kept — the SOLE public channel authority under the one-copy law; banner amended 2026-07-15 (owner batch: XBRL row, evidence row, provenance one-liner replacing the old "source of truth" phrasing); current sha tracked in git + CONSOLIDATION §16 hash freeze |
 | DriverGenesisRestructure | unapproved rationale | open charter questions in FINAL_DESIGN §10; archive |
 | DriverPlan.html | stale study export | none (regenerate later from live docs); archive |
 | FableAdmissionKernelDesign | candidate + accepted inserts | FINAL_DESIGN §4/§5 (accepted) + BUILD §8.1; archive after exact candidate map preserved |
@@ -162,25 +162,38 @@ WorkOrder current sha `4911a22f…` (status board stale at `1586761a…` — fix
 
 ### 7.1 Rule-ID crosswalk (every stable ID range → its one live anchor; §14.1 artifact)
 
-| Rule IDs | Live anchor | Exceptions / notes |
+Coverage law: every ID in a range maps to the range's DEFAULT anchor unless it appears in the exceptions
+column — the map is total over every ID listed in `CONSOLIDATION.md` §14.1.
+
+| Rule IDs | Default anchor | Per-ID exceptions (exact) |
 |---|---|---|
-| NAME-01..19 | FINAL_DESIGN §3 | all 19 inline |
-| FS-01..27 | FINAL_DESIGN §5.1-§5.4 | FS-03's old collision text is dead → OD-8 (§5.1) · FS-22 RETIRED (row 37) · FS-23 OPEN · FS-26 → §5.4 |
-| UNIT-01..14 | FINAL_DESIGN §6.1 | UNIT-04 replaced by per-slot hints (row 26) · UNIT-14 = build wiring → BUILD §5 |
-| PER-01..20 | FINAL_DESIGN §6.2 | PER-20 build → BUILD §5 |
-| MF-01..12 | FINAL_DESIGN §4.1 | MF-11 (`company_confirmed`) → §7.1 |
-| DU-01..24 | FINAL_DESIGN §4.1/§4.3/§7 | DU-13..18 explicitly replaced by `09`'s contract → §7.1 · DU-19..24 (verdict/DCM) → §7.3 |
-| XC-01..18 | FINAL_DESIGN §8 | XC-16 CONDITIONAL |
-| PIPE-01..37 (+27a/27c/27d/31b) | BUILD §4 | PIPE-24/25/26/35 finalization/consumption inline · PIPE-32 A/B gate |
-| FACT-01..36 (+14b/15b/17b/18a/26b/26e/26f) | BUILD §5 (mirroring law in FINAL_DESIGN §5/§7) | FACT-16 validator list inline BUILD §5 · FACT-17b = the internal packet → BUILD §2 |
-| T1.1..T12.9 (census `11`) | the same law as FINAL_DESIGN §4-§9 + BUILD §5 | the census duplicates `09`/`12` normatively; its numbering retires at archive |
-| GI-01..04 + active `13` §§ | BUILD §6 | GI-05..35 belong to the RETIRED replay file — history only (§2 RETIRED list) |
-| Track A D1..D8 | BUILD §4 | disciplines inline |
-| `66` D-1..D-13 | resolved-in-place doc-debt history | archive only; no live rule content |
-| OD-1..21 | FINAL_DESIGN §3-§9 + §3/§4 rows above | per-ID anchors in the additions list (§3) |
-| K2 | BUILD §4 | per-pair fold repair; batching deferred |
+| NAME-01..19 | FINAL_DESIGN §3 (inline, own numbers) | — |
+| FS-01..04, 27 | FINAL_DESIGN §5.1 | FS-03's old collision text dead → OD-8 (§5.1) |
+| FS-05..24 | FINAL_DESIGN §5.2 | FS-09 separators also §5.1 · FS-14 menu + PIT · FS-15 kind ladder · FS-16/18 code-exact rules · FS-20 buckets · FS-21 member link · FS-22 RETIRED (row 37) · FS-23 OPEN (§2) |
+| FS-25 | FINAL_DESIGN §5.3 | — |
+| FS-26 | FINAL_DESIGN §5.4 | storage shapes + guards + recovery inline |
+| UNIT-01..13 | FINAL_DESIGN §6.1 | UNIT-04 replaced by per-slot hints (row 26) · UNIT-08 per-X also §3 NAME-13 |
+| UNIT-14 | BUILD §5 | build wiring only |
+| PER-01..19 | FINAL_DESIGN §6.2 | — |
+| PER-20 | BUILD §5 | resolver build + 21 tests |
+| MF-01..10, 12 | FINAL_DESIGN §4.1 | MF-05 latent anchors also §4.2 · MF-10 inheritance also §8 |
+| MF-11 | FINAL_DESIGN §7.1 | `company_confirmed` |
+| DU-01..07 | FINAL_DESIGN §4.1/§4.2 | DU-05/06/07 classifier content §4.1; prompt pin BUILD §4 |
+| DU-08..12 | FINAL_DESIGN §4.3 | state vocabularies |
+| DU-13..18 | FINAL_DESIGN §7.1 | explicitly REPLACED by `09`'s contract (banner row `07`) — shapes, DU-15 baseline, sign rule, value_text/conditions/confirmed |
+| DU-19..24 | FINAL_DESIGN §7.3 | edges, verdict, DCM |
+| XC-01..18 | FINAL_DESIGN §8 | XC-04..08 verbatim blocks inline · XC-16 CONDITIONAL · rollout/vetoes-build → BUILD §5 |
+| PIPE-01..37 (+27a/27c/27d/31b) | BUILD §4 | PIPE-12 relay-trust + PIPE-15 run layout summarized in D1-D8/constants · PIPE-16 authority swap (prompts inline NAME rules) · PIPE-24/25/26/35 finalization/consumption inline · PIPE-32 A/B gate |
+| FACT-01..36 (+14b/17b/18a/26b/26e/26f) | BUILD §5 | FACT-16 validators + §12 gates (F1-F9/P1-P8) inline · FACT-17b = the internal packet → BUILD §2 · law mirrored in FINAL_DESIGN §5/§7 |
+| T1.1..T12.9 (census `11`) | same law as FINAL_DESIGN §4-§9 + BUILD §5 | the census DUPLICATES `09`/`12` normatively; numbering retires at archive; T9.x slices → §5.2 · T11.x producer/validator → §7.1 + BUILD §5 · T12.9 member grouping → §9 |
+| GI-01..04 + active `13` §§1-11 | BUILD §6 | runbook/deletion/gates inline |
+| GI-05..36 (retired `13_Track` file) | history only — §2 RETIRED list | never live mechanics; still-useful non-replay analysis pointer in §7 crosswalk row |
+| Track A D1..D8 | BUILD §4 | — |
+| `66` D-1..D-13 | doc-debt history, resolved in place | archive only |
+| OD-1..21 | per-ID anchors in the §3 additions list | all 21 individually anchored there |
+| K2 | BUILD §4 | — |
 | 42 supersession rows | §3 above | — |
-| Contract clauses · packet blocks · candidate bundles · open items | ChannelContract · the frozen packet · BUILD §8 · FINAL_DESIGN §10 mirror of §2 | — |
+| Contract clauses · packet blocks · candidate bundles · open items | ChannelContract · the frozen packet · BUILD §8 (incl. the kernel §15.0/§16 transfer + ratification bundle + XBRL recipe) · §2 lists | — |
 
 **External inbound citations (verified 2026-07-15):** 12 files cite exact FinalDesign filenames — the
 experiments board/handover/exhibits/keys/harness plus the engine prompts `workflows/menu_build.js`,
