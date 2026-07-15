@@ -1,0 +1,243 @@
+{
+ "frozen_at": "2026-07-15",
+ "freeze_rule": "These 33 source files are FROZEN: no edits until Phase 5 archives them byte-for-byte. Owner-approved contract amendments (CONSOLIDATION.md \u00a710.2 rulings Q1/Q4) apply at the Phase-3 review of the live-continuing files, with these pre-amendment bytes as the preserved baseline.",
+ "provenance_commit_for_untracked_three": "49f1cd8",
+ "totals": {
+  "files": 33,
+  "bytes": 1362208,
+  "lines": 11320
+ },
+ "files": [
+  {
+   "file": "00_Coverage.md",
+   "bytes": 7962,
+   "lines": 105,
+   "sha256": "a2eba010c44bae5b7a4f7098f0c54e9ec095bfb819a954a53893544863fcb6ef",
+   "git_last_commit": "30ccab3 2026-07-08"
+  },
+  {
+   "file": "01_Overview.md",
+   "bytes": 3387,
+   "lines": 27,
+   "sha256": "6477d51f1aea046314d969ff40b34bd1e2c94f2eb66c20616b5ef8bacab95625",
+   "git_last_commit": "b5836ea 2026-07-02"
+  },
+  {
+   "file": "02_DriverCatalog.md",
+   "bytes": 20965,
+   "lines": 186,
+   "sha256": "bc8b72b2063fd9bca571dcd5457a4dc5b7b6e8e8aa6c92b1fee3b455a3d07afa",
+   "git_last_commit": "a361bc1 2026-07-14"
+  },
+  {
+   "file": "03_Slices_FactScope.md",
+   "bytes": 31763,
+   "lines": 219,
+   "sha256": "3434840a611b3bccb0dce591be3145d83b4818dde16192dce2dac1c757d30537",
+   "git_last_commit": "a361bc1 2026-07-14"
+  },
+  {
+   "file": "04_Units.md",
+   "bytes": 10127,
+   "lines": 96,
+   "sha256": "b75d2a29d7ceb61c9f6ca2abd132434394738064055672591dcca9dd75c5371a",
+   "git_last_commit": "43108fe 2026-07-06"
+  },
+  {
+   "file": "05_Periods.md",
+   "bytes": 16162,
+   "lines": 144,
+   "sha256": "7dd62f69300dbd59ffecddd43f9a76391b656a56a49df17b4759322b4fd4f307",
+   "git_last_commit": "a361bc1 2026-07-14"
+  },
+  {
+   "file": "06_MetricFamily.md",
+   "bytes": 9174,
+   "lines": 81,
+   "sha256": "f40184118b148ca0d34fd9f00cf712d17ca1b6f6866948947be44d0d9b4c4c53",
+   "git_last_commit": "a361bc1 2026-07-14"
+  },
+  {
+   "file": "07_DriverUpdate.md",
+   "bytes": 27037,
+   "lines": 178,
+   "sha256": "3e958422601db1ba6293a6bc788227fd0299c0469b2ca60e131a46502dde419b",
+   "git_last_commit": "a361bc1 2026-07-14"
+  },
+  {
+   "file": "08_XBRL_ConceptLinking.md",
+   "bytes": 16072,
+   "lines": 134,
+   "sha256": "a86b4e3f1642eeb798f0268faf2c48e73a9b81257779475c68f351df0bfdbf40",
+   "git_last_commit": "fbb3ddb 2026-07-03"
+  },
+  {
+   "file": "09_DriverUpdate_Fields.md",
+   "bytes": 35449,
+   "lines": 162,
+   "sha256": "5caa48e49857a11ee1556d05e676799d747e233d02d7d2c88905b7395e0e3315",
+   "git_last_commit": "36e0610 2026-07-15"
+  },
+  {
+   "file": "10_BuildPipeline.md",
+   "bytes": 74023,
+   "lines": 256,
+   "sha256": "1a5206d9204facccecbe44f9eecd51ff0a0724beb2fb7d9b012d9f4712936ae3",
+   "git_last_commit": "c1c217a 2026-07-12"
+  },
+  {
+   "file": "11_TrackB_DriverUpdate_Census.md",
+   "bytes": 66982,
+   "lines": 257,
+   "sha256": "87cdf5a32517053792e47897465a74117fc5e3db8921a225a67d395e907c154a",
+   "git_last_commit": "36e0610 2026-07-15"
+  },
+  {
+   "file": "12_TrackB_FactPipeline.md",
+   "bytes": 79357,
+   "lines": 229,
+   "sha256": "a92cc70f8bb83a49f2c28c671a446194e1f8c022f81e4a0288517204b838aae1",
+   "git_last_commit": "36e0610 2026-07-15"
+  },
+  {
+   "file": "13_TrackC_GuidanceIntegration.md",
+   "bytes": 14559,
+   "lines": 204,
+   "sha256": "fd08d099a2401a9db8b8a5dda3739cf64000bea3a9d94b8a50d125f92f90eb54",
+   "git_last_commit": "2c43431 2026-07-04"
+  },
+  {
+   "file": "13_Track_RetiredDesign.md",
+   "bytes": 60834,
+   "lines": 190,
+   "sha256": "fb0e3ccc5de43e6bdd63f04b91b636669cdcb98dd5e8bd40d8e7d57fa4b80c3c",
+   "git_last_commit": "2c43431 2026-07-04"
+  },
+  {
+   "file": "14_BuildReadiness.md",
+   "bytes": 23701,
+   "lines": 242,
+   "sha256": "512ee3b89a0771d6659a8e5f8c9255f4b4802424344cbe405091c032ef1b5920",
+   "git_last_commit": "30ccab3 2026-07-08"
+  },
+  {
+   "file": "15_CandidateFactPacket.md",
+   "bytes": 27432,
+   "lines": 183,
+   "sha256": "86b2fc179c12c6e6179d819f18058bb57d2af72f908705e0e97e719383ceb3ab",
+   "git_last_commit": "49f1cd8 2026-07-15"
+  },
+  {
+   "file": "66_IssuesToBeHandled.md",
+   "bytes": 183603,
+   "lines": 903,
+   "sha256": "7f781e5b0019b7c3c5780530af7dde531b3281e276307f5656f43b855eb74e46",
+   "git_last_commit": "36e0610 2026-07-15"
+  },
+  {
+   "file": "90_OpenItems.md",
+   "bytes": 16566,
+   "lines": 66,
+   "sha256": "6008ee6c4a76b375a4142ad1a2147ac9fbd51e870591fb5c0764bf3a2b40cbeb",
+   "git_last_commit": "a361bc1 2026-07-14"
+  },
+  {
+   "file": "95_Supersession.md",
+   "bytes": 21808,
+   "lines": 81,
+   "sha256": "e8ba0c255e51929b87f00c261573dc01fbf418c06e8b593fd03412adf379828d",
+   "git_last_commit": "a361bc1 2026-07-14"
+  },
+  {
+   "file": "99_Codex_Decision_Audit.md",
+   "bytes": 57813,
+   "lines": 1993,
+   "sha256": "3ed15f39565ad41a6de936d8377648ae81294f89322c27df437204153f842996",
+   "git_last_commit": "a361bc1 2026-07-14"
+  },
+  {
+   "file": "BayesProposal.md",
+   "bytes": 37577,
+   "lines": 911,
+   "sha256": "424daf0654cfeb12ced584185820ccb77d575d8eac0294285b42b1cbc64b2027",
+   "git_last_commit": "38a7be4 2026-07-09"
+  },
+  {
+   "file": "ChannelContract.md",
+   "bytes": 4499,
+   "lines": 68,
+   "sha256": "0ccb8bced1ec74d838a4627801a491f46ec1079c20d8268102872affe19f3b39",
+   "git_last_commit": "49f1cd8 2026-07-15"
+  },
+  {
+   "file": "DriverGenesisRestructure.md",
+   "bytes": 23801,
+   "lines": 197,
+   "sha256": "45bf0d208ea8c956625e21462c757e5eca5ad699b38e60918afb5b048143a15b",
+   "git_last_commit": "49f1cd8 2026-07-15"
+  },
+  {
+   "file": "DriverPlan.html",
+   "bytes": 149043,
+   "lines": 1490,
+   "sha256": "7a756d615e01d2428fad7e5c519cb49652661efc1d4b01e7811facad7884e18b",
+   "git_last_commit": "22aa4ef 2026-07-06"
+  },
+  {
+   "file": "FableAdmissionKernelDesign.md",
+   "bytes": 59029,
+   "lines": 323,
+   "sha256": "a813b05a49842d98d46d7cc52f126f650e1ce17e4971b6503254f2385d375ef6",
+   "git_last_commit": "c1c217a 2026-07-12"
+  },
+  {
+   "file": "FableContextPack.md",
+   "bytes": 33659,
+   "lines": 289,
+   "sha256": "313c17136f1e48e21fbb86b27b4a68a95a70f8b3ce9ddf60b4a728e50995cb1d",
+   "git_last_commit": "30ccab3 2026-07-08"
+  },
+  {
+   "file": "FableExperimentPlan.md",
+   "bytes": 33335,
+   "lines": 257,
+   "sha256": "51966848183e2a48ba3d4faac36c5b352027939fd962a90798a73e8cd2ed7472",
+   "git_last_commit": "db4b880 2026-07-08"
+  },
+  {
+   "file": "FableExperimentWorkOrder.md",
+   "bytes": 109075,
+   "lines": 769,
+   "sha256": "4911a22f187cff1ca30a4c5bd9e4ddf452de4d178379b4b441b9d69416ef33b3",
+   "git_last_commit": "36e0610 2026-07-15"
+  },
+  {
+   "file": "FablePrompt.md",
+   "bytes": 17517,
+   "lines": 407,
+   "sha256": "51c7d8583597d2667926239585d9d8001d274f10f65879fd3fcf298754d5c44b",
+   "git_last_commit": "9936837 2026-07-08"
+  },
+  {
+   "file": "FablePromptv2.md",
+   "bytes": 5849,
+   "lines": 166,
+   "sha256": "db63653703ca2aadebd1e91fec9e82c2f582b971fc84cacfb82096f5b5a4b7e4",
+   "git_last_commit": "30ccab3 2026-07-08"
+  },
+  {
+   "file": "WorkflowContextPack.md",
+   "bytes": 26781,
+   "lines": 199,
+   "sha256": "a9cf541037d4e8df7e2ae06b36bde9293ad4a8246e3bae178ffe0122b89446d0",
+   "git_last_commit": "9936837 2026-07-08"
+  },
+  {
+   "file": "XBRLIntegrationDesign.md",
+   "bytes": 57267,
+   "lines": 308,
+   "sha256": "0fb89a0c4067bf37b79cdb511b4ff1fc06a8871909063ce63e7fee208984dc52",
+   "git_last_commit": "30ccab3 2026-07-08"
+  }
+ ]
+}
