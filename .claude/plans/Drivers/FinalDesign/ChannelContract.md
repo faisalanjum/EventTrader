@@ -2,6 +2,9 @@
 > **Status: ACTIVE (owner-directed 2026-07-15). Source of truth = the frozen S2 packet spec (owner-approved
 > 2026-07-14). This file contains ONLY the contract. Every channel (fiscal.ai, guidance, learner, DCM, analyst
 > news, action feed, future) reads THIS file. Changes only via owner amendment. Moves with the code at reorg.**
+> **Amended 2026-07-15 (owner, one batch — pre-amendment bytes pinned in the Phase-1 freeze manifest):
+> §3 XBRL row (exact context always + verified-empty `dimensions=[]`) · §3 guidance row (channels send
+> company-confirmation EVIDENCE; the core derives the boolean).**
 
 ## 1. What a channel is (one line)
 A channel FETCHES evidence and SUBMITS it. It never creates drivers, never names them, never decides identity —
@@ -28,8 +31,8 @@ YOUR CHANNEL (fetch only) ──packet──▶ shared decomposer ──▶ kern
 | `raw_label_or_claim` | the source/vendor label or claim sentence, untouched |
 | stated value(s) | **SIGNED** (negatives stay negative — never absolute-value), unscaled; + the raw unit text / format flags |
 | period signals | stated end/start date · **your own cadence signal** (quarterly-vs-annual series — filing form alone is ambiguous) · **adjacent period wording** (column header / "as of" phrase you saw) · XBRL context verbatim when present (start/end dates + instant-vs-duration) |
-| XBRL (when present) | concept qname + axis + member — all three, not just axis+member |
-| guidance lane only | `value_text` (numberless stated value) · `conditions` · `company_confirmed` |
+| XBRL (when present) | concept qname + the EXACT context (start/end dates, instant-vs-duration) — ALWAYS. Assert a VERIFIED-empty dimension list explicitly (`dimensions=[]`); a missed extraction must never masquerade as consolidated. Every supplied dimension carries BOTH axis and member. Never fragments. |
+| guidance lane only | `value_text` (numberless stated value) · `conditions` · company-confirmation EVIDENCE (verbatim who-said-it attribution; the CORE derives the `company_confirmed` boolean, never the channel) |
 
 ## 4. What you MUST NOT send (sent anyway ⇒ ignored and recomputed)
 Final driver names · fact ids / fact_scope · fiscal_year/quarter you computed · measurement tokens ·
