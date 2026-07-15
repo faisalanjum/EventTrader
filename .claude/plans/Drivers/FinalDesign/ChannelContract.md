@@ -1,10 +1,12 @@
 # CHANNEL CONTRACT v1.0 — the ONE input contract for every Driver channel
-> **Status: ACTIVE (owner-directed 2026-07-15). Source of truth = the frozen S2 packet spec (owner-approved
-> 2026-07-14). This file contains ONLY the contract. Every channel (fiscal.ai, guidance, learner, DCM, analyst
+> **Status: ACTIVE (owner-directed 2026-07-15). THIS file is the sole public channel authority (one-copy law);
+> its content derives from the frozen S2 packet spec (owner-approved 2026-07-14) as provenance, not a second
+> authority. This file contains ONLY the contract. Every channel (fiscal.ai, guidance, learner, DCM, analyst
 > news, action feed, future) reads THIS file. Changes only via owner amendment. Moves with the code at reorg.**
 > **Amended 2026-07-15 (owner, one batch — pre-amendment bytes pinned in the Phase-1 freeze manifest):
 > §3 XBRL row (exact context always + verified-empty `dimensions=[]`) · §3 guidance row (channels send
-> company-confirmation EVIDENCE; the core derives the boolean).**
+> company-confirmation EVIDENCE; the core derives the boolean) · banner provenance one-liner (Phase-4 seed,
+> same owner batch).**
 
 ## 1. What a channel is (one line)
 A channel FETCHES evidence and SUBMITS it. It never creates drivers, never names them, never decides identity —

@@ -112,6 +112,18 @@ class finalization → final validation → fitness gate.
   `PIECE_ROWS=100`, batch `k=10`, record-disjoint deterministic h32 shuffle, canary `0.02` min `5` · retrieval:
   `text-embedding-3-large`, `top_k=5`, `min_score=0.60`, embeddings suggestion-only · `norm()` = strip+lowercase;
   h32 = non-cryptographic 31-polynomial UTF-16 rolling hash.
+- **Finalization exactness (PIPE-24/26/35 operational guards):** the classifier prompt = DU-05's four
+  definitions + DU-06's decider, both VERBATIM, nothing else — a tested extra clause overfit (DU-07); input per
+  record = name + representative evidence. Verdicts for BOTH populations land in `fact_type_decisions.json`,
+  each row tagged `self_canonical: true/false`, bound by `--expect`+h32, run in name-sorted ≤400/≤300k batches,
+  relayed via `PIECE_ROWS` piece-writes; stamps come ONLY from `self_canonical:true` rows (variants copy their
+  canonical's type). Finalize HARD-FAILS if any input record already carries `fact_type` (re-stamping reachable
+  only through the re-assemble remediation path). All three outputs written temp-file + atomic rename; crash
+  recovery = re-run assemble → validate → finalize. `validate_catalog.py --final` rewrites `validation_exit.json`
+  with the new catalog sha + `families_sha256` + `final:true` + the PRESERVED `fold` flag. PIPE-35 consumers
+  verify all of that FIRST, then read only clean `catalog[]` records; side-lists, UNCLEAR parks, and latent
+  names are never tradeable and never reuse candidates. **K2:** fold repair stays per-pair; batched fold repair
+  is a deferred optimization needing its own experiment.
 - **Models:** configuration slots chosen by experiment. Reader = signed EXP-2: `claude-sonnet-5`, effort=high,
   40k chunks, one run. Strong identity/refute roles are governed separately and may NOT be weakened by that
   result. Any optimization changing a judge's visible context or model needs a measured A/B gate (PIPE-32);

@@ -29,11 +29,12 @@
 
 ## 2. Lists by status
 
-- **FINAL / BUILD-PENDING · CONDITIONAL · OPEN(owner) · CANDIDATE · DESIGN-INCOMPLETE:** THIS file owns the
-  status lists (one-copy law); `FINAL_DESIGN.md` §10 is the GENERATED mirror of these rows and says so. Current
-  owning rows = the §1 dashboard above plus FINAL_DESIGN §10's enumerations, adopted here as the master until
-  the Phase-5 migration inlines them fully; owner-question decision detail rides in `CONSOLIDATION.md` §9.2/§10.2
-  until Phase 5, then moves here.
+- THIS file owns the status lists (one-copy law); `FINAL_DESIGN.md` §10 is the GENERATED mirror. The master lists:
+- **FINAL / BUILD-PENDING:** Track A remainder (fold/tree mirrors, finalizer, real folds, WP-FC-RUN, OD-6 fitness gate — never run) · UNIT-14 production wiring · PER-20 resolver build + 21 tests · slice table materialization + PIT menu code · concept-linker vetoes C/D + PIT query build · the whole Track B writer/validator/CLI/park-ledger stack · read layer · verdict/DCM writer · channel adapters + certification · Track C execution · incremental refresh.
+- **DESIGN-INCOMPLETE:** the production running layer (BUILD §7's runbook list). The OD-5 change scanner is a recommendation only.
+- **CONDITIONAL:** OD-19 (inert until K-pairs.v2 zero wrong-same) · XC-16 timing · model-role membership (experiment-gated) · XBRL-native materializer + `09` rider (dormant until ratification) · multi-run concept stability/caching (only if monitoring justifies).
+- **OPEN (owner):** G1 live reuse display · catalog 796-vs-786 + lifecycle/IPO · full model/cost policy beyond signed EXP-2 · FS-23 · 8-K taxonomy · DCM threshold/pure-macro/two-catalyst · Track B dual-producer thresholds · non-USD expansion · metric `value_text`/action `conditions` revisit triggers · Driver Genesis charter questions · Track C history-gap acceptance · third-party `company_confirmed=false` class enablement (part-2/news-channel).
+- **CANDIDATE:** Admission Kernel v3.4 bundle (accepted parts are law) · XBRL-native materializer · Bayes proposal · Driver Genesis restructure (rationale). Owner-question decision detail rides in `CONSOLIDATION.md` §10.2 until Phase 5, then moves here.
 - **RETIRED (never a production path):** old Guidance replay plan (`13_Track_RetiredDesign.md` — GI stale-trap
   rows in its GI-07) · fixed-vocabulary Driver v1 · eager-reuse v2 · `slice=total` · alias layers · `long_range`
   scope value · `gp_UNDEF` quiet fallback · `evhash16` on DriverUpdate · FS-22 cross-company recurrence ·
@@ -77,7 +78,7 @@
 | 31 | Surprise arithmetic | above=beat, sign hard-fail | §4.3 · §7.1 (OD-13) |
 | 32 | Loss values | positive loss magnitude / loss Drivers | §6.1 OD-12 |
 | 33 | Sequential percent | all growth = YoY | §6.1 OD-11 |
-| 34 | Guidance history | store derived movement | §9 (read-derived) |
+| 34 | Guidance chronology: movement, amendments, withdrawal fan-out, Event/DCM overlap | movement stored from the write-time prior view; creation-only DCM single-target; open amendment handling | §9 + §7.3 |
 | 35 | Measurement tokens | producer-final tokens; droppable | §5.3 OD-9 |
 | 36 | Unit grouping | read-time family map / absorption | §6.1 OD-10 · §9 |
 | 37 | Slice recurrence | cross-company recurrence identity | §5.2 (FS-22 retired) |
@@ -89,10 +90,14 @@
 
 **Additions that are not reversals (each anchored in FINAL_DESIGN):** born-complete + latent-base exception
 (§4.2) · OD-1 suffix admission (§4.1) · OD-2 metric-proof + first-fact pin scoped to bare names (§4.1/§4.2) ·
-OD-6 fitness gate (BUILD §4) · OD-7 broader live admission = tracked recommendation only · OD-8 (§5.1) ·
-OD-9..15 (§5.3/§6.1/§4.3) · OD-16 resolved 2026-07-15 → lazy born-complete (§4.2) · OD-17 (§3) · OD-18 (§5.4;
-CLAIM separate, ships off) · OD-19 (§5.4) · OD-20 (§5.4) · OD-21 (§5.1/§6.2/§7) · frozen packet v1.0 + Channel
-Contract v1.0 (boundary files) · Track C full no-replay reversal (BUILD §6).
+OD-3 blind local role test (§3 NAME-11) · OD-4 = FS-22 retirement, no slice-value recurrence rule (§5.2, row 37) ·
+OD-5 scanner recommendation (BUILD §7) · OD-6 fitness gate (BUILD §4) · OD-7 broader live admission = tracked
+recommendation only · OD-8 (§5.1) · OD-9 (§5.3) · OD-10 (§6.1/§9) · OD-11 (§6.1) · OD-12 (§6.1) · OD-13
+(§4.3/§7.1) · OD-14 (§9) · OD-15 = near-synonym live races accepted as normal over-splits, no new locking (§4.2) ·
+OD-16 resolved 2026-07-15 → lazy born-complete (§4.2) · OD-17 (§3) · OD-18 (§5.4; CLAIM separate, ships off) ·
+OD-19 (§5.4) · OD-20 (§5.4) · OD-21 (§5.1/§6.2/§7) · K2 = fold repair stays per-pair, batched fold repair
+deferred (BUILD §4) · frozen packet v1.0 + Channel Contract v1.0 (boundary files) · Track C full no-replay
+reversal (BUILD §6).
 
 ## 4. Owner rulings record (2026-07-15, all five §10.2 questions)
 
@@ -141,7 +146,7 @@ WorkOrder current sha `4911a22f…` (status board stale at `1586761a…` — fix
 | 11_TrackB Census · 12_FactPipeline | normative census + build manual | FINAL_DESIGN (rules) + BUILD §5; archive |
 | 13_TrackC (active) · 13_Track_RetiredDesign | retirement plan · retired history | BUILD §6 · archive (one pointer to its still-useful non-replay analysis: GI-31 `<=` rationale, 894-source reachability audit, 4 stated-mid outliers) |
 | 14_BuildReadiness | stale checklist | BUILD + this file's dashboard; archive |
-| 15_CandidateFactPacket | FROZEN v1.0 + Q4 amendment | temporary fifth live file (sha `038a0f89…`) |
+| 15_CandidateFactPacket | FROZEN v1.0 + the two 2026-07-15 owner amendments (Q4, Q1-ext) | temporary fifth live file (current sha `aa7239ed…`) |
 | 66_IssuesToBeHandled | owner blocks + stale tail | rules → FINAL_DESIGN; status here; archive |
 | 90_OpenItems · 95_Supersession · 99_Codex audit | status · 42-row ledger · history | this file §1-§3; archive (99 wholesale) |
 | BayesProposal | unvetted proposal | BUILD §8.3 pointer; archive under proposals |
@@ -155,6 +160,28 @@ WorkOrder current sha `4911a22f…` (status board stale at `1586761a…` — fix
 | XBRLIntegrationDesign | pending candidate | BUILD §8.2; archive once exact candidate map preserved |
 | CONSOLIDATION.md | audit + migration map | moves into the same dated archive after the four live files pass review (never a fifth rule source) |
 
+### 7.1 Rule-ID crosswalk (every stable ID range → its one live anchor; §14.1 artifact)
+
+| Rule IDs | Live anchor | Exceptions / notes |
+|---|---|---|
+| NAME-01..19 | FINAL_DESIGN §3 | all 19 inline |
+| FS-01..27 | FINAL_DESIGN §5.1-§5.4 | FS-03's old collision text is dead → OD-8 (§5.1) · FS-22 RETIRED (row 37) · FS-23 OPEN · FS-26 → §5.4 |
+| UNIT-01..14 | FINAL_DESIGN §6.1 | UNIT-04 replaced by per-slot hints (row 26) · UNIT-14 = build wiring → BUILD §5 |
+| PER-01..20 | FINAL_DESIGN §6.2 | PER-20 build → BUILD §5 |
+| MF-01..12 | FINAL_DESIGN §4.1 | MF-11 (`company_confirmed`) → §7.1 |
+| DU-01..24 | FINAL_DESIGN §4.1/§4.3/§7 | DU-13..18 explicitly replaced by `09`'s contract → §7.1 · DU-19..24 (verdict/DCM) → §7.3 |
+| XC-01..18 | FINAL_DESIGN §8 | XC-16 CONDITIONAL |
+| PIPE-01..37 (+27a/27c/27d/31b) | BUILD §4 | PIPE-24/25/26/35 finalization/consumption inline · PIPE-32 A/B gate |
+| FACT-01..36 (+14b/15b/17b/18a/26b/26e/26f) | BUILD §5 (mirroring law in FINAL_DESIGN §5/§7) | FACT-16 validator list inline BUILD §5 · FACT-17b = the internal packet → BUILD §2 |
+| T1.1..T12.9 (census `11`) | the same law as FINAL_DESIGN §4-§9 + BUILD §5 | the census duplicates `09`/`12` normatively; its numbering retires at archive |
+| GI-01..04 + active `13` §§ | BUILD §6 | GI-05..35 belong to the RETIRED replay file — history only (§2 RETIRED list) |
+| Track A D1..D8 | BUILD §4 | disciplines inline |
+| `66` D-1..D-13 | resolved-in-place doc-debt history | archive only; no live rule content |
+| OD-1..21 | FINAL_DESIGN §3-§9 + §3/§4 rows above | per-ID anchors in the additions list (§3) |
+| K2 | BUILD §4 | per-pair fold repair; batching deferred |
+| 42 supersession rows | §3 above | — |
+| Contract clauses · packet blocks · candidate bundles · open items | ChannelContract · the frozen packet · BUILD §8 · FINAL_DESIGN §10 mirror of §2 | — |
+
 **External inbound citations (verified 2026-07-15):** 12 files cite exact FinalDesign filenames — the
 experiments board/handover/exhibits/keys/harness plus the engine prompts `workflows/menu_build.js`,
 `reconcile.js`, `gate.js` (their inlined rulebooks cite `02_DriverCatalog.md` as verbatim provenance — keep
@@ -165,7 +192,8 @@ false positive. Re-run both scans at migration; update or validate every hit BEF
 
 - **Freeze manifest:** `archive/2026-07-15_pre-consolidation/MANIFEST.json` — all 33 sources sha-256-pinned
   (11,320 lines / 1,362,208 bytes verified), git provenance, commits `49f1cd8`/`87bc150`. Owner-amended
-  live-continuing files verify against post-amendment hashes: ChannelContract `4fdeb821…` · packet `038a0f89…`
+  live-continuing files verify against post-amendment hashes: ChannelContract (see git for current after the
+  2026-07-15 provenance one-liner) · packet `aa7239ed…`
   (recorded in `CONSOLIDATION.md` §16).
 - **Evidence/rejected-alternative pointers:** v1/v2 death evidence, unit proofs (117/117 · 29/29+7 · 3×33/33),
   concept-link proofs (31-co zero-wrong · 274-co 100%/~70%/98% + caveat) → BUILD §12. Bayes proposal → BUILD
