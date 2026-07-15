@@ -1,5 +1,65 @@
 # Driver-value relocation probe — state
 
+═══════════════════════════════════════════════════════════════════════════════
+## 🧭 RESUME-HERE (2026-07-15) — REORG + ONE-CERTIFIED-LOCATOR (read this block first)
+═══════════════════════════════════════════════════════════════════════════════
+**My role:** I am the **fiscal.ai CHANNEL / producer** (FETCH only). I hand the shared core ONE
+packet per source event. I NEVER name drivers, decide identity, or write Neo4j. The core
+(`driver/core/`) is Fable's — never edit or import it. Interface = **ChannelContract v1.0**
+(`.claude/plans/Drivers/FinalDesign/ChannelContract.md`, committed 07-15) ⇐ the ONLY file I need;
+its source-of-truth is the frozen S2 packet spec (`15_CandidateFactPacket.md`, owner-approved 07-14).
+My packets already match ChannelContract §3 field-for-field (9/9, 0 forbidden fields — verified).
+
+**Folder reorg (authority: `driver/README.md`).** Everything moves into `driver/` AT END-REORG
+(a porting manifest); until then code WORKS IN PLACE in `scripts/driver_seed/` (+ `relocate_probe/`).
+Targets: `driver/relocation/` ← the certified engine (`relocate_probe/`; serves ALL channels) ·
+`driver/channels/fiscal_ai/` ← my channel (`driver_seed/`: worklist, is_derived, adapter, wrapper) ·
+`driver/core/` = Fable's. 3 RULES: write only in your folder · core CLI is the only Neo4j pen ·
+FinalDesign law wins.
+
+**The 3 lego blocks (each independently usable, compose for the run):**
+- **A · LOCATOR** value + a source → exact verbatim quote (the certified 97% engine)
+- **B · SWEEP** a driver fingerprint → all (period, source) it appears in  (NOT built yet)
+- **C · WRAPPER** one occurrence → one ChannelContract packet (`build_packets.py`, built+tested)
+- Component 1 "link where it came from" = A→C · Component 2 "assemble all sources" = B→A→C.
+
+**PORTING MANIFEST (each step gated by `regress.py` 97% floors + packet smoke — nothing lands if either drops):**
+- R0 manifest ✅ · **R1 unify to ONE certified locator (best-of-both)** ← NEXT, design below ·
+  R2 fold old fast code-tiers into the one ladder · R3 split reusable engine vs fiscal.ai-channel ·
+  R4 de-hardcode (✅ FORMMAP dedup + is_derived/plug→`fiscal_ai_rules.py` DONE 07-15) ·
+  R5 end-reorg physical move into `driver/`.
+
+**R1 DESIGN (test-fit spike DONE, free, 60/62 agree):** the unified locator needs **TWO MODES**:
+- **value-known** (fiscal.ai gives the value) → match the fact BY VALUE, but extract its members with
+  the CERTIFIED parser `xbrl_lane._members_all` (NOT `link_lib.seg_members`) + the value gate.
+- **value-unknown** (the sweep) → `xbrl_lane.resolve(xbrls, concept, member_qnames, start, end)` (unique or None).
+- **WHY (the spike's payoff):** old `seg_members` returns `[]` for MULTI-AXIS facts (known bug) → today's
+  packets stamp a SEGMENT value (e.g. WMG "Total US Revenue"=2,874, a segment) with `members=[]`
+  (=aggregate; the true aggregate is 6,707). The certified `_members_all` parses multi-axis correctly →
+  **R1 also FIXES this multi-axis slice-metadata bug.** A blind identity-only swap would break value-known
+  (return 6,707 not 2,874) — hence two modes.
+- xbrl_lane caveat: matches DURATION facts (start+end); abstains on INSTANT (balance-sheet) → value-known
+  mode covers those.
+
+**ENGINE = ChatGPT/Codex GPT-5.5** for the LLM lane (`codex_reader.py`; A/B-certified equal/better than
+Claude, 79/79 valid JSON). **OpenAI ONLY via the codex SUBSCRIPTION (`auth_mode=chatgpt`), NEVER the API**
+(P0; runner strips `OPENAI_API_KEY`). Ladder: GPT-5.5 default · 5.6 Sol Ultra/Max hard-escalation · 5.6 Luna Max simple.
+
+**Two producers exist, being unified:** value-first `run_code_tier.py` (fiscal.ai recent periods,
+filings+PR) vs identity-first `relocate_probe/` (certified, all sources incl transcripts, value-unknown).
+R1 makes the certified engine the single Block A; value-first keeps its role as the fast cheap rung.
+
+**Files (all `scripts/driver_seed/`):** `run_code_tier.py` (FETCH harvest, per-source provenance,
+expanded emit — REWRITTEN 07-15) · `build_packets.py` (WRAPPER → packets; envelope+group+PARK/SKIP+unit
+hints — NEW) · `fiscal_ai_rules.py` (is_derived/is_plug — NEW) · `link_lib.py` (shared gates+tier1+
+scan_text+seg_members+seg_axis_members; is_derived REMOVED) · `relocate_probe/{prep,relocate*.js,
+xbrl_lane,lock_cell}.py` (certified engine) · `relocate_probe/regress.py` (THE GATE) · tests
+`test_{run_code_tier,build_packets,smoke_packets}.py` · smoke data `data/driver_catalog_seed/smoke/`.
+**NEXT ACTION:** build R1 two-mode locator (fixes multi-axis bug), TDD, each step gated. User approved
+Full-first thin-slice; awaiting "build R1 now" (last question asked). Then thin-slice pilot (~1-2M GPT tok).
+
+---
+
 **What it does:** given a text metric locked from one period (its verbatim quote), blind-refetch its
 exact value in a DIFFERENT period's filing — 100% precision is the hard rule; abstain > guess.
 This is the "how locked text drivers get future/historical values" mechanism. ISOLATED test harness;
