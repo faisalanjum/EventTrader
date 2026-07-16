@@ -348,7 +348,7 @@ def tier1(xbrls, name, val, per):
                     if score is None:
                         continue
                 else:
-                    if members:              # aggregate KPI must be undimensioned
+                    if seg_axis_members(fc):  # aggregate KPI binds ONLY an UNdimensioned fact (multi-axis-aware)
                         continue
                     score = 0
                 mlabel = ", ".join(m.split(':')[-1] for m in members) or "total"
