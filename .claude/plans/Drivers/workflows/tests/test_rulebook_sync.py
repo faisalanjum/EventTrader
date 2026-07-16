@@ -8,7 +8,7 @@ menu_build's block may append producer-specific guidance AFTER the shared rules 
 import re
 import pathlib
 
-BASE = pathlib.Path(__file__).parent
+BASE = pathlib.Path(__file__).parent.parent
 
 
 def _block(fname: str, const: str) -> str:
@@ -34,7 +34,8 @@ def test_menu_build_prefix():
 def test_name17_carries_od21():
     for f, c in [("gate.js", "RULEBOOK"), ("reconcile.js", "RULEBOOK"), ("menu_build.js", "RULES")]:
         b = _block(f, c)
-        assert "guidance_vs_consensus" in b, f"{f}: NAME-17 missing the OD-21 surprise types"
+        for t in ("actual_vs_consensus", "actual_vs_guidance", "guidance_vs_consensus"):
+            assert t in b, f"{f}: NAME-17 missing OD-21 surprise type {t}"
         assert "(actual vs expected)" not in b, f"{f}: stale pre-OD-21 NAME-17 wording present"
 
 
