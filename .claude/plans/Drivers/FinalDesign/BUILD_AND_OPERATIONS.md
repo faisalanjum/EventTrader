@@ -226,24 +226,25 @@ reads realized returns.
 
 ## 8. Candidate bundles (clearly split: accepted vs pending)
 
-> **Candidate-file policy (round 11):** the two candidate documents — `FableAdmissionKernelDesign.md` and
-> `XBRLIntegrationDesign.md` — **stay LIVE at the root until their ratification decisions**, exactly like the
-> experiment Plan/WorkOrder. This section's job (per the consolidation spec) is the accepted-vs-pending SPLIT
-> and the exact ratification bundles — NOT a duplicate of the candidates' full mechanics: an independent
-> enumeration found ~68 kernel-only build-critical elements (park codes, the five LINK-check meanings, V1-V14
-> definitions, falsifier definitions, phase/gauntlet mechanics…) whose faithful transfer would copy the whole
-> unratified file into this guide. On ratification, accepted content transfers into the law/build files
-> properly; a rejected candidate archives. Until then the live candidate file is the full text.
+> **🏛️ RATIFIED (owner, 2026-07-15):** the Admission Kernel v3.4 and XBRL Integration designs are APPROVED as
+> the current WORKING DESIGNS — no longer pending candidates. **This approval does NOT authorize
+> implementation, activation, or production use**: every experiment gate, dormant state, OFF switch, and
+> unresolved item stays in force and marked. Their complete mechanics are being integrated into the four live
+> documents (tasks INT-2..INT-5, with a per-element destination proof); the two source files stay live only
+> until that integration + the post-move full reader test complete, then archive (historical discussion stays
+> in the archive copies). Until INT-2/INT-3 finish, the two files remain the full mechanics text.
 > **Authority, three tiers (round 12):** `FINAL_DESIGN.md` owns CURRENT LAW · the two live candidate files own
 > PROPOSAL-ONLY mechanics (their internal "topic docs win on conflict" lines resolve against FINAL_DESIGN as
 > the topic docs' successor, with the archived originals as evidence) · archived files are EVIDENCE ONLY, never
-> authority.
+> authority. **Where this guide records a NAMED CORRECTION to a retained candidate (e.g. the graph-verified
+> `10-K/A`/`10-Q/A` slash literals in §8.2), the correction OVERRIDES the candidate's text — corrections are
+> part of the operative map, verified against ground truth, and travel into the bundle at ratification.**
 > **Reading rule for the split below:** where a name appears on BOTH sides (born-complete, recovery, CLAIM-off),
 > the accepted side is the PRINCIPLE — already law in FINAL_DESIGN — while the candidate side is this kernel's
 > specific IMPLEMENTATION of it (stages, arms, recipes, thresholds); ratifying the bundle ratifies the
 > implementation, never re-opens the principle.
 
-### 8.1 Admission Kernel v3.4 — LOCK CANDIDATE (live file at root until ratified)
+### 8.1 Admission Kernel v3.4 — APPROVED WORKING DESIGN (owner 2026-07-15; NOT activated; gates in force)
 
 - **Accepted / owner-approved (law, in FINAL_DESIGN):** born-complete admission + first fact · cheap roles never
   final-confirm · OD-18 flagged-ATTACH confirmation · `SAME_AS`/`CONTINUES_AS` quarantine + `disputed` recovery ·
@@ -265,7 +266,7 @@ reads realized returns.
 - **The exact ratification bundle (what the owner must ratify to activate the candidate):** (1) the v3.2 architecture (variant-anchored storage · one LINK mechanism/two triggers · frozen birth anchors + split-reconciliation lane · skeptic-minted establishment with CLAIM_FROZEN de-mint) · (2) edge-state recovery + D4 scoping (automatic tightening-only quarantine for all links, 2-grader confirmed on RAW EVIDENCE with no falsifier framing, 3-grader for seed links; INCONCLUSIVE escalates the RULE, not the case) · (3) the seed gauntlet as a launch gate incl. seed cards earning ESTABLISHED (unprovable → YOUNG) · (4) launch blockers: corrected model-free falsifier + ATTACH audit before production writes; flagged-head audit intensity bounded — 100% for the first N/T, then risk-stratified — with a hard SLA that never hangs on the owner queue · (5) CLAIM ships OFF; shadow-log from Phase 2; ON only after S3 passes with zero wrong links (S3 controls: pre-locked keys, per-arm forked state, ratchet instrumentation, false-refusal/recall metrics) · (6) carried items: gate protocol amendment · experiment promotion rules (M2/M3 default OFF) · G1 display spec · OD-7 born-complete · the [PIN] set · reject auto in-context teaching · thresholds post-calibration · time/standard-keyed anchor revalidation as an owner RULE question · outage discipline (RETRY-age alarms, drain rate-limiter, catalog-frozen signal flag) · ADOPT takes the same 3-part confirmation as ATTACH.
 - Never call the whole file ratified because the title says v3.4 or some OD rules were inserted.
 
-### 8.2 XBRL-native materializer — CANDIDATE, dormant (live file at root until ratified; title says FINAL, status = pending)
+### 8.2 XBRL-native materializer — APPROVED WORKING DESIGN (owner 2026-07-15; DORMANT until the P19 enablement condition + experiment gates; NOT activated)
 
 - Text remains the only path that creates Drivers and narrative facts. The existing text-fact concept linker
   (FINAL_DESIGN §8) stays current.
@@ -327,6 +328,12 @@ reads realized returns.
   - **P16** menus narrow, EVIDENCE creates (five-point structural enforcement: quote-required validator · FS-16 no-near-snap · the materializer's in-filing gate · PIPE-21 producers never see concept data · kernel blindness); never extend hints to values or scales.
   - **P17** prompt-narrowing = a cost experiment only; code-side suppression is the guarantee.
   - **P19** (renumbered; no reserved slots) the X-XL0-3 proofs + pre-gates + a fresh Neo4j census + industry-by-industry rollout are the enablement condition; all graph counts re-read at implementation.
+- **Dependency (round 13): this candidate is NOT fully independently decidable.** Its pins amend and consume
+  the KERNEL candidate's machinery (P6 eligibility exclusion → kernel §6.5 · P7 provenance → kernel V9/§10.1 ·
+  P8 revocation → the kernel recovery/grader lanes · P4j → kernel §9.1(iv)). If the kernel bundle is REJECTED,
+  the XBRL bundle must be RE-BASED onto whatever recovery/provenance machinery replaces it — the already-law
+  recovery paths (FINAL_DESIGN §5.4) cover `SAME_AS`/`CONTINUES_AS`/`disputed`, NOT ConceptResolution
+  revocation. Decide the kernel first, or decide both together.
 - **The ten declared amendments to locked docs (all additive; zero reversals — ratified WITH the bundle):**
   (1) `12` FACT-16.17 instant `period_scope=null` carve-out · (2) kernel V9/§2/§10.1 `attach_mode` gains
   `xbrl_link`, `attached_via` gains resolution-ids, `xbrl_fact_id` added · (3) `12` FACT-16(3)/(4) origin-gated
@@ -425,7 +432,9 @@ mechanics) · `../Consolidation/GuidancePeriod.md` (21 period tests) · `../Cons
    ratification bundle → §8.1 above; `12` §12's six acceptance gates incl. the F1-F9/P1-P8 fixture set → §5
    above; the XBRL materializer exact recipe + pins → §8.2 above. Prompt text: the XC PICK/VERIFY prompts and
    the classifier prompt content live in FINAL_DESIGN §8/§4.1 + §4 here; the hash-pinned experiment Plan/
-   WorkOrder prompt packs stay live files until the experiment program migrates (their pins forbid edits).
+   WorkOrder prompt packs stay live files until the experiment program migrates (the PLAN's byte-pin forbids
+   edits; the WorkOrder's hash is recorded-not-pinned — it IS edited and re-hashed at Phase-5 step 21c, with
+   its frozen original snapshot-archived first).
 
 ## 12. Evidence worth keeping once
 

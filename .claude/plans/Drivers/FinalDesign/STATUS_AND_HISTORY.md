@@ -21,8 +21,8 @@
 | Track B fact stack | FINAL (all decisions made; affected contracts NOT implementation-ready — BUILD §11 gaps) | UNBUILT (S3 awaits owner GO) | — | — |
 | Track C guidance retirement | FINAL v2.0 (no replay) | not started | — | — |
 | Concept linker (text facts) | FINAL | PARTIAL (vetoes C/D + PIT query spec-only) | 31-co + 274-co evidence | not rolled out |
-| Admission kernel | accepted parts FINAL; bundle CANDIDATE | — | — | — |
-| XBRL-native materializer | CANDIDATE (dormant + `09` rider dormant) | — | EXP-1 signed | — |
+| Admission kernel | **APPROVED WORKING DESIGN (owner 2026-07-15; not activated)** | — | gates in force; integration INT-2 in progress | — |
+| XBRL-native materializer | **APPROVED WORKING DESIGN (owner 2026-07-15; DORMANT until P19 enablement + gates)** | — | EXP-1 signed | — |
 | Experiment program | EXP-0/1/2 SIGNED PASS | — | — | EXP-3..6 / WP-FC-RUN PENDING |
 | Running layer (schedules/ledger/QA) | NOT designed-complete | — | — | — |
 | Consolidation itself | Phases 1-4 done (12 review rounds) | — | mechanical sweeps green; reader tests 10/10 ×3 (the round-9 8/10 was file-induced, fixed and re-passed) | archive (Phase 5) owner-gated; root keeps the 4 pending-decision files (Plan · WorkOrder · the 2 candidates) until their own decisions |
@@ -34,7 +34,9 @@
 - **DESIGN-INCOMPLETE:** the production running layer (BUILD §7's runbook list). The OD-5 change scanner is a recommendation only.
 - **CONDITIONAL:** OD-19 (inert until K-pairs.v2 zero wrong-same) · XC-16 timing · model-role membership (experiment-gated) · XBRL-native materializer + `09` rider (dormant until ratification) · multi-run concept stability/caching (only if monitoring justifies).
 - **OPEN (owner):** G1 live reuse display · catalog 796-vs-786 + lifecycle/IPO · full model/cost policy beyond signed EXP-2 · FS-23 · 8-K taxonomy · DCM threshold/pure-macro/two-catalyst · Track B dual-producer thresholds · non-USD expansion · metric `value_text`/action `conditions` revisit triggers · Driver Genesis charter questions · Track C history-gap acceptance · third-party `company_confirmed=false` class enablement (part-2/news-channel).
-- **CANDIDATE:** Admission Kernel v3.4 bundle (accepted parts are law) · XBRL-native materializer · Bayes proposal · Driver Genesis restructure (rationale). Owner-question decision detail rides in `CONSOLIDATION.md` §10.2 until Phase 5, then moves here.
+- **APPROVED WORKING DESIGN (owner 2026-07-15; not activated; gates/OFF-switches in force):** Admission Kernel v3.4 · XBRL-native materializer — full integration into the live files in progress (INT-2..INT-5); originals archive after integration + the post-move full reader test.
+- **CANDIDATE:** Bayes proposal · Driver Genesis restructure (rationale). Owner-question decision detail rides in `CONSOLIDATION.md` §10.2 until Phase 5, then moves here.
+- **Change law (owner 2026-07-15):** every future design correction updates the ONE owning live section and adds a short history entry here; no parallel live copies.
 - **RETIRED (never a production path):** old Guidance replay plan (`13_Track_RetiredDesign.md` — GI stale-trap
   rows in its GI-07) · fixed-vocabulary Driver v1 · eager-reuse v2 · `slice=total` · alias layers · `long_range`
   scope value · `gp_UNDEF` quiet fallback · `evhash16` on DriverUpdate · FS-22 cross-company recurrence ·
@@ -153,11 +155,11 @@ WorkOrder current sha `4911a22f…` (status board stale at `1586761a…` — fix
 | ChannelContract | ACTIVE live file | kept — the SOLE public channel authority under the one-copy law; banner amended 2026-07-15 (owner batch: XBRL row, evidence row, provenance one-liner replacing the old "source of truth" phrasing); current sha tracked in git + CONSOLIDATION §16 hash freeze |
 | DriverGenesisRestructure | unapproved rationale | open charter questions in FINAL_DESIGN §10; archive |
 | DriverPlan.html | stale study export | none (regenerate later from live docs); archive |
-| FableAdmissionKernelDesign | candidate + accepted inserts | FINAL_DESIGN §4/§5 (accepted parts) + BUILD §8.1 (split + ratification bundle); **file stays LIVE at root until the owner ratifies/rejects — then content transfers into law or archives as rejected** (round-11 policy; a ~68-element enumeration proved pre-ratification transfer = full duplication) |
+| FableAdmissionKernelDesign | **RATIFIED working design (owner 2026-07-15; not activated)** | full mechanics → BUILD §8.1 + law-grade parts → FINAL_DESIGN (INT-2, destination-proof per element); archives after integration + the post-move full reader test |
 | FableContextPack · WorkflowContextPack | stale navigation/code maps | archive (Workflow pack: after live-code re-audit + link repair) |
 | FableExperimentPlan · WorkOrder | pinned plan · runbook | BUILD §9; keep Plan byte-identical until program migrates; archive after. The Plan's frozen authority ladder (lines 4/257) resolves externally: its "lock candidates" stay live at root; its topic docs resolve to the archive paths with meaning carried by the four live files (step 21c note) |
 | FablePrompt · FablePromptv2 | executed briefs | provenance entries only; archive |
-| XBRLIntegrationDesign | pending candidate | BUILD §8.2 (recipe + pin map + amendments = the ratification index); **file stays LIVE at root until ratified/rejected** (round-11 policy, same as the kernel) |
+| XBRLIntegrationDesign | **RATIFIED working design (owner 2026-07-15; DORMANT until P19 enablement)** | recipe + pin map + the ten amendments → BUILD §8.2 + owning law sections (INT-3, gate-tagged); archives after integration + the post-move full reader test |
 | CONSOLIDATION.md | audit + migration map | moves into the same dated archive after the four live files pass review (never a fifth rule source) |
 
 ### 7.1 Rule-ID crosswalk (every stable ID range → its one live anchor; §14.1 artifact)
@@ -207,12 +209,12 @@ column — the map is total over every ID listed in `CONSOLIDATION.md` §14.1.
 | T3 (T3.1-T3.8) | Identity — id + fact_scope grammar | FINAL_DESIGN §5.1 (OD-8 replaces T3.4); T3.5 measurement → §5.3 · T3.6/T3.8 slices → §5.2 · T3.7 period-both-places → §6.2 |
 | T4 (§4 edge table) | Edges & neighbor nodes | FINAL_DESIGN §7.3; HAS_PERIOD lane rules → §6.2 |
 | T5 (T5.1-T5.5) | The verdict edge | FINAL_DESIGN §7.3 |
-| T6 (T6.1-T6.5) | Lanes — type × state × field matrix | FINAL_DESIGN §4.1 + §4.3 + §7.2; T6.5 revisit triggers → §10 OPEN list |
+| T6 (T6.1-T6.5) | Lanes — type × state × field matrix | per rule: T6.1 fact_type definitions + verbatim classifier → FINAL_DESIGN §4.1 · T6.2 state lanes → §4.3 · T6.3 state-in-lane hard-fail → §4.3 (final line) · T6.4 per-lane matrix + OD-21 amendments → §7.2 (+ §5.1 for the `surprise=` slot) · T6.5 revisit triggers → §10 OPEN list |
 | T7 (T7.1-T7.12) | DriverPeriod | FINAL_DESIGN §6.2; T7.12 build gates (PER-20) → BUILD §5 |
 | T8 (T8.1-T8.10) | Units | FINAL_DESIGN §6.1; T8.10 build gate (UNIT-14) → BUILD §5 |
 | T9 (T9.1-T9.9) | Slice & member at write time | FINAL_DESIGN §5.2 |
 | T10 (T10.1-T10.8) | XBRL concept link | FINAL_DESIGN §8; rollout/veto build → BUILD §5 gate 4 |
-| T11 (T11.1-T11.11) | Producer interface contract | FINAL_DESIGN §4.2 (T11.1 real-fact gate; T11.2 who-fills-what: channel submits raw, the core alone fills state+numbers after the gate) · §5.1 (T11.3 fusion + basis hint) · §6.1/§7.1 (T11.5 hints, T11.8 %-guidance basis, T11.10 rate-vs-level) · §9 (T11.4 slices-beat-mixed · T11.6 chronological processing + the code-served strict-`<` PIT prior view, guidance-lane-only, with §4.3's no-graph-read rule for the other lanes · T11.7 fan-out · T11.9 policy routing · T11.11 one-update-per-source-time-statement, trajectory always derived never stored) · BUILD §5 (CLI order + PIT prior view) |
+| T11 (T11.1-T11.11) | Producer interface contract | FINAL_DESIGN §4.2 (T11.1 real-fact gate; T11.2 who-fills-what: channel submits raw, the core alone fills state+numbers after the gate — contract side: ChannelContract §1 "never creates, never names, never decides identity" + §4 never-send list) · §5.1 (T11.3 fusion + basis hint) · §6.1/§7.1 (T11.5 hints, T11.8 %-guidance basis, T11.10 rate-vs-level) · §9 (T11.4 slices-beat-mixed · T11.6 chronological processing + the code-served strict-`<` PIT prior view, guidance-lane-only, with §4.3's no-graph-read rule — contract side: ChannelContract §5 "submit events chronologically per company" · T11.7 fan-out · T11.9 policy routing · T11.11 one-update-per-source-time-statement, trajectory always derived never stored — writer-side law only, no contract-side content by design) · BUILD §5 (CLI order + PIT prior view) |
 | T12 (T12.1-T12.9) | Read contract | FINAL_DESIGN §9; T12.6 series_unit law also §6.1 |
 
 **External inbound citations (verified 2026-07-15):** 12 files cite exact FinalDesign filenames — the
