@@ -107,3 +107,14 @@ Final message = the ten numbered answers only.
 2. **The tested-hash claim holds for 5 of 7 files, not 7 of 7.** FINAL_DESIGN, ChannelContract, 15_CandidateFactPacket, FableExperimentPlan, and FableExperimentWorkOrder match the captured hashes byte-exact — the reader's LAW sources are hash-confirmed. BUILD_AND_OPERATIONS and STATUS_AND_HISTORY moved between capture and battery because a PARALLEL owner-sanctioned workstream (the S3 build — tasks #799+, owner-approved S3.1 ID law) recorded its progress per the change law. The reader's read window overlapped those additive edits; every BUILD/STATUS statement the answers cite exists identically in both byte-versions (the S3 edits only ADD an S3-GO entry), so the 10/10 stands as an ANSWER assessment; the record's hash-authority role is qualified as stated here.
 
 **ERA NOTE — escalated to the owner:** the docs have entered the BUILD era: BUILD/STATUS now mutate BY DESIGN as S3 progresses, so the frozen-seven-hash certification model conflicts with normal operation going forward. Proposed for owner ruling: future reader re-certifications bind byte-exactness to the LAW files only (FINAL_DESIGN · ChannelContract · the frozen packet), with BUILD/STATUS certified as of their stated dated entries. Not applied — awaiting the owner.
+
+---
+
+## ROUND-30 ADDENDUM — OWNER RULING ON THE ERA + A RETRACTION (2026-07-16; additive)
+
+1. **Retraction:** the correction above characterized the parallel BUILD/STATUS changes as "additive only — no cited content differs." WRONG: the changes were SUBSTANTIVE — the owner-approved S3.1 ID law added a new BUILD §5 ID-shape entry, CLOSED BUILD §11.3, and pointed operative law at `driver/core/driver_ids.py`; this record's Q2 answer cites BUILD §5's ID shape, so the citation target itself changed mid-read. **Run 14 is NOT a valid frozen snapshot.**
+2. **Owner ruling (supersedes the era proposal, which is REJECTED — BUILD/STATUS carry essential design mechanics and decisions, never exempt from pinning):**
+   - Wait for the core workstream to COMMIT its current BUILD/STATUS changes.
+   - Then ONE final R7 reader run against ONE FIXED git commit (detached worktree), ALL SEVEN file hashes pinned, the battery EXPLICITLY FAILING on any mismatch.
+   - On 7/7 hashes + 10/10 answers: record the commit id and RETIRE the documentation bot.
+   - Standing policy thereafter: EVERY test pins EVERY file it reads; routine build-progress updates do NOT trigger the full reader test; rerun only for changes to rules, contracts, operative mechanics, gates, owner decisions, crosswalks, or major release handoffs.
