@@ -27,7 +27,7 @@ SEVEN root files + this `archive/`.
   the evidence trail, never a fifth rule source.
 - `READER_TEST_RECORD_*.md` — durable blank-context reader-test records (append-only; a record is
   never overwritten — corrections are labeled additive addenda; each rerun writes a new file).
-  The Phase-5 definitive record is `READER_TEST_RECORD_2026-07-16_phase5-final-run14.md`
+  The Phase-5 definitive record is `READER_TEST_RECORD_2026-07-16_phase5-final-run15.md`
   (all earlier runs' records are preserved beside it, append-only — each carries its own grade
   history and any withdrawal/regrade addenda; the banner-named file above is always the definitive one).
 
