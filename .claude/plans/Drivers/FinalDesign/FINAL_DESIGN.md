@@ -1,6 +1,6 @@
 # FINAL_DESIGN.md — the Driver system rulebook (front door)
 
-> **Status: LIVE — Phase 4 verified (2026-07-15: eleven external review rounds, three blank-context reader tests incl. a full 10/10 pass on the current files, and two multi-agent source-verification fan-outs; §14.1-14.3 green as of round 11). Phase 5 (archive) pends owner GO.** This file is the single
+> **Status: LIVE — Phase 4 verified (2026-07-15: twelve external review rounds, four blank-context reader runs — full ten-question passes at rounds 8, 10, and 12 — and three multi-agent source-verification fan-outs; §14.1-14.3 green as of round 12; the definitive final reader run re-executes at the Phase-5 gate against the actual post-archive root set, step 21d). Phase 5 (archive) pends owner GO.** This file is the single
 > front door and rule-meaning authority of the four-file set. It was built from the verified consolidation
 > atom ledger (`CONSOLIDATION.md`, nine verification rounds, two independent reviewers) over the 33 frozen
 > sources. **Until Phase 5 archives them, the frozen sources remain the byte evidence baseline**; on any

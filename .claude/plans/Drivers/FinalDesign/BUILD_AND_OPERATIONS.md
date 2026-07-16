@@ -1,6 +1,6 @@
 # BUILD_AND_OPERATIONS.md — how to build, test, run, and retire the Driver system
 
-> **Status: LIVE — Phase 4 verified through round 11 (2026-07-15); Phase 5 archive pends owner GO.** This file owns PROCEDURE: build steps, contracts'
+> **Status: LIVE — Phase 4 verified through round 12 (2026-07-15); Phase 5 archive pends owner GO.** This file owns PROCEDURE: build steps, contracts'
 > mechanics, gates, run rules, and hazards. Rule MEANING lives only in `FINAL_DESIGN.md` (rule IDs referenced
 > here, never restated). Public channel duties live only in `ChannelContract.md`. Status/history/supersessions
 > live only in `STATUS_AND_HISTORY.md`. Until Phase 5 archives them, the frozen sources remain
@@ -234,6 +234,14 @@ reads realized returns.
 > definitions, falsifier definitions, phase/gauntlet mechanics…) whose faithful transfer would copy the whole
 > unratified file into this guide. On ratification, accepted content transfers into the law/build files
 > properly; a rejected candidate archives. Until then the live candidate file is the full text.
+> **Authority, three tiers (round 12):** `FINAL_DESIGN.md` owns CURRENT LAW · the two live candidate files own
+> PROPOSAL-ONLY mechanics (their internal "topic docs win on conflict" lines resolve against FINAL_DESIGN as
+> the topic docs' successor, with the archived originals as evidence) · archived files are EVIDENCE ONLY, never
+> authority.
+> **Reading rule for the split below:** where a name appears on BOTH sides (born-complete, recovery, CLAIM-off),
+> the accepted side is the PRINCIPLE — already law in FINAL_DESIGN — while the candidate side is this kernel's
+> specific IMPLEMENTATION of it (stages, arms, recipes, thresholds); ratifying the bundle ratifies the
+> implementation, never re-opens the principle.
 
 ### 8.1 Admission Kernel v3.4 — LOCK CANDIDATE (live file at root until ratified)
 
@@ -266,8 +274,11 @@ reads realized returns.
   representable axes, allowed unit, exact period, source-stated value. Non-GAAP, unlinked, qualitative, causal,
   guidance, and action material stays text-side. **Unit whitelist v1: USD, shares, USD-per-share — eligible
   EPS/per-share facts ARE materialized (per-X in the name per NAME-13); every other unit skips + counts.**
-- **The exact materializer recipe (candidate map — per Report (10-K/10-Q/10-K-A/10-Q-A) with
-  `xbrl_status=COMPLETED`, per registrant with active resolutions):** 1. load ACTIVE `(company, driver)→qname` resolutions — full catalog records only,
+- **The exact materializer recipe (candidate map — per Report with `xbrl_status=COMPLETED`, per registrant with
+  active resolutions). Filing-type filter, GRAPH-VERIFIED LITERALS (Neo4j census 2026-07-15): `formType` ∈
+  {`10-K`, `10-Q`, `10-K/A`, `10-Q/A`} — the amended forms use a SLASH (137× `10-K/A`, 41× `10-Q/A` live); the
+  candidate document's "10-K-A/10-Q-A" notation is prose shorthand — matching it literally would silently skip
+  every amended filing:** 1. load ACTIVE `(company, driver)→qname` resolutions — full catalog records only,
   latents excluded [P4e] · 2. select Facts entity-scoped via `IN_CONTEXT→Context→FOR_COMPANY` (no edge → skip +
   count), filters `is_numeric='1'`/`is_nil='0'` [P4f] · 3. unit whitelist + map [P4c]: `iso4217:USD` → money on
   the driver's canonical scale · `shares` → count · `iso4217:USD/shares` → usd per-share level (EPS materialized,

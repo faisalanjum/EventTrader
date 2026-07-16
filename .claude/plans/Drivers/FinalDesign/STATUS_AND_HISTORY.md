@@ -1,6 +1,6 @@
 # STATUS_AND_HISTORY.md — the one mutable dashboard, supersession ledger, and crosswalk
 
-> **Status: LIVE — Phase 4 verified through round 11 (2026-07-15); Phase 5 archive pends owner GO.** This file owns STATUS and HISTORY only — live rule
+> **Status: LIVE — Phase 4 verified through round 12 (2026-07-15); Phase 5 archive pends owner GO.** This file owns STATUS and HISTORY only — live rule
 > wording stays in `FINAL_DESIGN.md`; procedures stay in `BUILD_AND_OPERATIONS.md`; channel duties stay in
 > `ChannelContract.md`. Any status shown in another live file is a generated summary of THIS file. A status
 > change edits this dashboard — and only if rule meaning changed through owner approval, the one owning rule
@@ -25,7 +25,7 @@
 | XBRL-native materializer | CANDIDATE (dormant + `09` rider dormant) | — | EXP-1 signed | — |
 | Experiment program | EXP-0/1/2 SIGNED PASS | — | — | EXP-3..6 / WP-FC-RUN PENDING |
 | Running layer (schedules/ledger/QA) | NOT designed-complete | — | — | — |
-| Consolidation itself | Phases 1-4 done (9 review rounds) | — | mechanical sweeps green; reader tests 10/10 + 8/10→fixed | archive (Phase 5) owner-gated; root keeps Plan/WorkOrder live until EXP-3..6 migrate |
+| Consolidation itself | Phases 1-4 done (12 review rounds) | — | mechanical sweeps green; reader tests 10/10 ×3 (the round-9 8/10 was file-induced, fixed and re-passed) | archive (Phase 5) owner-gated; root keeps the 4 pending-decision files (Plan · WorkOrder · the 2 candidates) until their own decisions |
 
 ## 2. Lists by status
 
@@ -193,7 +193,10 @@ column — the map is total over every ID listed in `CONSOLIDATION.md` §14.1.
 | OD-1..21 | per-ID anchors in the §3 additions list | all 21 individually anchored there |
 | K2 | BUILD §4 | — |
 | 42 supersession rows | §3 above | — |
-| Contract clauses · packet blocks · candidate bundles · open items | ChannelContract · the frozen packet · BUILD §8 (incl. the kernel §15.0/§16 transfer + ratification bundle + XBRL recipe) · §2 lists | — |
+| Contract clauses §1-§9 | ChannelContract.md (live; one section per clause: what-a-channel-is · flow · packet · never-send · submission · outcomes · ledger duties · never-list · onboarding) | — |
+| Packet blocks 0-3 + Parts B/C/D | the live frozen packet (structure summarized BUILD §2) | — |
+| Candidate bundles | BUILD §8.1 (kernel split + ratification bundle) · §8.2 (XBRL recipe + pin map + amendments); full text = the two LIVE candidate files | — |
+| Open items | §2 OPEN list (mirrored FINAL_DESIGN §10) + BUILD §11 missing recipes | — |
 
 ### 7.2 Census T-group anchors (per-group exact map; within a group, rules share the group anchor unless a per-rule exception is listed)
 
@@ -209,7 +212,7 @@ column — the map is total over every ID listed in `CONSOLIDATION.md` §14.1.
 | T8 (T8.1-T8.10) | Units | FINAL_DESIGN §6.1; T8.10 build gate (UNIT-14) → BUILD §5 |
 | T9 (T9.1-T9.9) | Slice & member at write time | FINAL_DESIGN §5.2 |
 | T10 (T10.1-T10.8) | XBRL concept link | FINAL_DESIGN §8; rollout/veto build → BUILD §5 gate 4 |
-| T11 (T11.1-T11.11) | Producer interface contract | FINAL_DESIGN §4.2 (T11.1) · §5.1 (T11.3 fusion + basis hint) · §6.1/§7.1 (T11.5 hints, T11.8 %-guidance basis, T11.10 rate-vs-level) · §9 (T11.4 slices-beat-mixed, T11.7 fan-out, T11.9 policy routing, OD-14 prior view) · BUILD §5 (CLI order + PIT prior view) |
+| T11 (T11.1-T11.11) | Producer interface contract | FINAL_DESIGN §4.2 (T11.1 real-fact gate; T11.2 who-fills-what: channel submits raw, the core alone fills state+numbers after the gate) · §5.1 (T11.3 fusion + basis hint) · §6.1/§7.1 (T11.5 hints, T11.8 %-guidance basis, T11.10 rate-vs-level) · §9 (T11.4 slices-beat-mixed · T11.6 chronological processing + the code-served strict-`<` PIT prior view, guidance-lane-only, with §4.3's no-graph-read rule for the other lanes · T11.7 fan-out · T11.9 policy routing · T11.11 one-update-per-source-time-statement, trajectory always derived never stored) · BUILD §5 (CLI order + PIT prior view) |
 | T12 (T12.1-T12.9) | Read contract | FINAL_DESIGN §9; T12.6 series_unit law also §6.1 |
 
 **External inbound citations (verified 2026-07-15):** 12 files cite exact FinalDesign filenames — the
