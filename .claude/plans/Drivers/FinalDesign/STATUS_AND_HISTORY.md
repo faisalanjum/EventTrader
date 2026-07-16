@@ -187,7 +187,7 @@ column — the map is total over every ID listed in `CONSOLIDATION.md` §14.1.
 | FACT-01..36 (+14b/17b/18a/26b/26e/26f) | BUILD §5 | FACT-16 validators + §12 gates (F1-F9/P1-P8) inline · FACT-17b = the internal packet → BUILD §2 · law mirrored in FINAL_DESIGN §5/§7 |
 | T1.1..T12.9 (census `11`) | same law as FINAL_DESIGN §4-§9 + BUILD §5 | the census DUPLICATES `09`/`12` normatively; numbering retires at archive; T9.x slices → §5.2 · T11.x producer/validator → §7.1 + BUILD §5 · T12.9 member grouping → §9 |
 | GI-01..04 + active `13` §§0-15 | BUILD §6 | runbook/deletion/gates inline; §§12-15 are meta sections (cross-doc edit log, non-goals, minimalism proof, drafting record) with no rule IDs — covered by the §7 file-level row |
-| GI-05..36 (retired `13_Track` file) | history only — §2 RETIRED list | never live mechanics; still-useful non-replay analysis pointer in §7 crosswalk row |
+| Retired `13_Track` file's OWN GI-01..07 and GI-10..36 (a separate numbering from the active file's GI-01..04; **no GI-08 or GI-09 exist**) | history only — §2 RETIRED list | never live mechanics; still-useful non-replay analysis pointer in §7 crosswalk row |
 | Track A D1..D8 | BUILD §4 | — |
 | `66` D-1..D-13 | doc-debt history, resolved in place | archive only |
 | OD-1..21 | per-ID anchors in the §3 additions list | all 21 individually anchored there |
