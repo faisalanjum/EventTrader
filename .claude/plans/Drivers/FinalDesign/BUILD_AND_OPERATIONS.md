@@ -295,6 +295,9 @@ evidence_atom, slice_tokens[], measurement_spans[], per_x, event_time}.
   write | park. **Provenance on every fact:** `attach_mode ∈ {exact, adopt, claim, create}` + `attached_via`
   (birth-id); seed/fold-built facts get lineage recorded at sync.
 - **Async:** the LINK sweep (second trigger) + the immune system + edge-state recovery.
+- **Storage ruling (owner ruling 3, carried):** NO `head_id` denormalization initially — reads use the locked
+  one-hop union over committed `SAME_AS` edges; if ever added: same-tx invalidation + version-stamped
+  derivations + a head-degree SLO watched from day 1.
 - **The real-time guarantee (axiom C, scoped):** at write the fact sits on its own wording-node — final forever
   (ids immutable) — and is event-level signal-eligible immediately. Cross-wording SERIES membership completes
   synchronously only with CLAIM ON; with CLAIM OFF it completes asynchronously (minutes-to-nightly) by ADDING
@@ -517,9 +520,11 @@ MEMBERSHIP is experiment-gated via the locked A/B gate + pinned model IDs. Curre
 survive only if experiments show no loss): Haiku-class as the blind leaf producer; Sonnet 5 as the strong-judge
 candidate (G2, Refute, LINK judging, BASE_METRIC/fact_type confirmations, quarantine confirmation,
 establishment-minting, gauntlet adjudication, every recovery grader); Opus 4.8 / GPT-5.5 / Fable as escalation.
-One LINK judge (absorbs the reuse-skeptic/sweep-judge roles; lens-split high-blast variant). Graders'
-independence is measured, never assumed. Billing: subscription workflow agents + step-0 guards; SDK banned;
-embeddings remain the one metered, suggest-only lane.
+One LINK judge (absorbs the reuse-skeptic/sweep-judge roles; lens-split high-blast variant). **Principles
+P1-P7 (unchanged):** structure over model strength · diversity over repetition · cheap-first with zero-loss
+promotion · strong-by-default on permanent classes · structural escalation only · pinned IDs + canary ·
+park/skip rates never targets. Graders' independence is measured, never assumed. Billing: subscription
+workflow agents + step-0 guards; SDK banned; embeddings remain the one metered, suggest-only lane.
 
 **8.1.12 Kernel experiments (designed, NOT run — gates in force):** S1 seed-size knee · S2 three-world
 shootout · S3 synchronous-vs-async LINK trigger (zero wrong-link tolerance; must instrument the RATCHET —
@@ -535,7 +540,8 @@ S3 shows the async path avoided → CLAIM flag OFF · a shared-miss rate the fal
 judge-tier escalation via the A/B gate, else the claim class disables and the owner is told the honest limit ·
 the gauntlet failing to reach zero on P1/P7/P8 after two remediation rounds → the seed ships YOUNG-only · a
 falsifier fire-rate above the permanent-error budget in shadow → Phase 3 blocked, contingency ladder ·
-batch/live equivalence divergence (X8) → fork bug, build stops.
+X-S1 showing no coverage knee → re-open the D1 seed strategy WITH THE OWNER · batch/live equivalence
+divergence (X8) → fork bug, build stops.
 **Rejected alternatives (terse, load-bearing):** attach-to-head physicalization (irreversible wrong merges) ·
 physical fact replay as recovery · count-minted establishment + persistence lanes (echo-maturity) ·
 "seed-built ⇒ ESTABLISHED" (born-fat gravity) · CLAIM-off as PERMANENT posture (it must EARN ON through S3) ·
@@ -572,8 +578,10 @@ full-catalog display.
   per-X in the name) · everything else (pure, other currencies, utr/custom, other divides) → skip + count
   (`pure`→percent ×100 is a fenced-out value rewrite) · 4. intra-filing dedupe + collision [P4g]: drop identical
   concept+context+value duplicates; within a fact_scope keep the highest-precision Fact when values agree within
-  stated `decimals`; disagreement beyond precision → skip the WHOLE scope + log `xbrl_internal_conflict`, never
-  fuse · 5. axes never dropped (FS-09): frozen table → `kind:normalized_member_label`; unknown axis → the hex
+  stated `decimals`; disagreement beyond precision → the WHOLE scope is NOT materialized and is recorded under
+  the STATE-BASED park class `xbrl_internal_conflict` (fail-closed; never fuse, never last-write-wins;
+  re-enqueues only if the filing's XBRL is re-parsed/amended — this is the ONE interpretation unifying P4g's
+  "skip + log" wording with amendment 9's state-based park registration; named clarification, round 14) · 5. axes never dropped (FS-09): frozen table → `kind:normalized_member_label`; unknown axis → the hex
   sentinel; any NON_SLICE axis or HARD-EXCLUDE member → skip the whole fact, logged [P4d] · 6. period from the
   exact context (its own §5.3) · 7. id = `du:{R.source_id}:{d}:{fact_scope}` · 8. primary ⇔ the Fact's period end
   == `periodOfReport` (write always); everything else writes ONLY as backfill (no same-scope fact exists) or
@@ -608,12 +616,20 @@ full-catalog display.
   - **P10** lane-matrix carve-outs, origin-gated: `xbrl_qname`/`MAPS_TO_CONCEPT` written at write time by this code producer only; `reported` legal on the metric lane for `origin=xbrl_link`.
   - **P11** reverse-order upgrade: **a** repair-grade in-place upgrade on value-compatible · **b** immutable `UpgradeEvent` with full prior payload; no prior_* fields · **c** writer validator: origin flip ⇔ exactly one event · **d** graded reversal: on 2-strong-grader confirmation, re-apply the UpgradeEvent's archived payload through the same repair lane, emitting a counter-event — lossless both directions, zero humans · **e** conflict → xbrl parks, the written fact stands · **f** fold-equivalent twins converge at read, not in storage.
   - **P12** resolution-on-create enqueues materialize(company, driver, all filings incl. current); text never waits.
-  - **P13** `xbrl_twin_suspect{slice|period}` tripwire (measurement-diff EXCLUDED); `twin_suspect_rate` gates rollout [exp bar].
+  - **P13** the `xbrl_twin_suspect{slice|period}` tripwire — exact trigger, at TEXT-write time: same event + same head + value-compatible level + exactly ONE scope component differs (slice OR period; a measurement diff is EXCLUDED — a non-folding measurement is a legitimately different fact) → log `xbrl_twin_suspect{component}` with both ids; no park, no snap, no id change. It makes the silent over-split channels measurable, GATES rollout (`twin_suspect_rate` is an acceptance metric, bar pre-registered from X-XL2), and feeds the offline re-vet + the falsifier's exhibit stream.
   - **P14** period pins: the shared deterministic scope classifier in the FACT-18 wrapper — quarter > Q1-YTD; ytd = FY-start-anchored; `half` = non-FY-start two-quarter; annual/ttm/monthly; else `exact_range`+WARN · **a** fiscal fields null-not-guessed · **b** sentinels illegal · **c** classifier + text-label resolution anchor on company-ACTUAL period ends (XBRL history / SEC cache first; month-math fallback) — the 52/53-week convergence rule · instants `period_scope=null` (the FACT-16.17 carve-out).
   - **P15** `effective_driver_state` read field: stored-if-stated; derived-if-`reported` with the comparator by DriverPeriod DATE ARITHMETIC (YoY ±7d for quarter/ytd; prior collapsed annual for annual); fallback `reported` on missing/ambiguous comparator; instants `reported` [exp]; never written back.
   - **P16** menus narrow, EVIDENCE creates (five-point structural enforcement: quote-required validator · FS-16 no-near-snap · the materializer's in-filing gate · PIPE-21 producers never see concept data · kernel blindness); never extend hints to values or scales.
   - **P17** prompt-narrowing = a cost experiment only; code-side suppression is the guarantee.
-  - **P19** (renumbered; no reserved slots) the X-XL0-3 proofs + pre-gates + a fresh Neo4j census + industry-by-industry rollout are the enablement condition; all graph counts re-read at implementation.
+  - **P19** (renumbered; no reserved slots) the proof plan below + pre-gates + a fresh Neo4j census + industry-by-industry rollout are the enablement condition; all graph counts re-read at implementation.
+- **The enablement PROOF PLAN (exact bars — before any live enablement):**
+  - **X-XL0 determinism:** code-diff every materialized DriverUpdate against its SURVIVING source Fact (value/scale, period dates, members→slice, unit, concept, entity). **Bar: 100%.** Required fixtures: a multi-registrant filing · a null-`periodOfReport` report · an intra-filing precision-duplicate pair · a 52/53-week filer.
+  - **X-XL1 twin fidelity:** N (company, driver, period) triples with both a text and an xbrl fact — value agreement + period-window id-equality rate, every divergence classified. **Bar: ≥99% id equality on true twins**; 52/53-week filers mandatory in-sample.
+  - **X-XL2 suppression + tripwire calibration:** suppression ON vs OFF over M 10-Qs — skip precision (**zero suppressed non-twins, hard zero**), `duplicate_of_xbrl`≈0, the `xbrl_conflict`/`xbrl_internal_conflict` census, `twin_suspect_rate` measured; **the rollout bar is PRE-REGISTERED from this run.**
+  - **X-XL3 recall:** a pre-registered sha-locked key (the PIPE-37/OD-6 protocol) over K filings; (xbrl ∪ suppressed-text) coverage ≥ the text-only baseline; **zero market-moving fact lost — hard zero.**
+  - **X-XL4 cost:** tokens/filing + backfill, hybrid vs text-only — INFORMATIONAL ONLY, never gating.
+  - **Hard pre-gates (locked, load-bearing):** XC-16 + the full-universe concept run · the PIT menu proof · a falsifier-(iii) dry-run over a materialized sample · the FRESH Neo4j census (counts, `FACT_MEMBER`/`FACT_DIMENSION` edge wiring, unit-type inventory, no-context and null-`periodOfReport` cohort sizes).
+  - **Rollout:** flag-on, ONE industry → industry-by-industry; each promotion gated on the X-XL0-3 bars HOLDING (X-XL4 excluded from gating).
 - **Dependency (round 13): this candidate is NOT fully independently decidable.** Its pins amend and consume
   the KERNEL candidate's machinery (P6 eligibility exclusion → kernel §6.5 · P7 provenance → kernel V9/§10.1 ·
   P8 revocation → the kernel recovery/grader lanes · P4j → kernel §9.1(iv)). If the kernel bundle is REJECTED,
