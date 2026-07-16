@@ -11,9 +11,10 @@
 > `ChannelContract.md` · build/test/run procedure lives only in `BUILD_AND_OPERATIONS.md` · status, history,
 > supersessions, and crosswalks live only in `STATUS_AND_HISTORY.md`. The frozen Candidate Fact Packet
 > (`15_CandidateFactPacket.md`, owner-frozen v1.0 + the two 2026-07-15 owner amendments Q4 and Q1-ext) is a temporary fifth live
-> file until its relocation is separately approved; also at the root until their own decisions: the hash-pinned
-> `FableExperimentPlan.md` + `FableExperimentWorkOrder.md` (until the experiment program migrates) and the two
-> candidates `FableAdmissionKernelDesign.md` + `XBRLIntegrationDesign.md` (until ratified or rejected). Status
+> file until its relocation is separately approved; also at the root until the experiment program migrates: the
+> hash-pinned `FableExperimentPlan.md` + `FableExperimentWorkOrder.md`. The two RATIFIED designs
+> (`FableAdmissionKernelDesign.md`, `XBRLIntegrationDesign.md`) are fully integrated into these files
+> (BUILD §8.1/§8.2) and their originals archive on the post-integration reader-test pass. Status
 > tags in this file (FINAL / BUILD-PENDING / CONDITIONAL / OPEN / CANDIDATE) are generated summaries — the
 > owning rows live in `STATUS_AND_HISTORY.md`.
 >
