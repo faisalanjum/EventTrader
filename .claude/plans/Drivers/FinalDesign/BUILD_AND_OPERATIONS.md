@@ -235,9 +235,9 @@ reads realized returns.
 > the current WORKING DESIGNS — no longer pending candidates. **This approval does NOT authorize
 > implementation, activation, or production use**: every experiment gate, dormant state, OFF switch, and
 > unresolved item stays in force and marked. Their complete mechanics are being integrated into the four live
-> documents (tasks INT-2..INT-5, with a per-element destination proof); the two source files stay live only
-> until that integration + the post-move full reader test complete, then archive (historical discussion stays
-> in the archive copies). Until INT-2/INT-3 finish, the two files remain the full mechanics text.
+> documents — DONE (INT-2..INT-5 complete; per-element destination proof = STATUS §7.1b; the post-move reader
+> tests passed). Both originals are ARCHIVED (2026-07-15, byte-verified vs the Phase-1 manifest); the full
+> operative mechanics live in §8.1/§8.2 below, with the archived originals as historical evidence.
 > **Authority, three tiers (round 12):** `FINAL_DESIGN.md` owns CURRENT LAW · the two live candidate files own
 > PROPOSAL-ONLY mechanics (their internal "topic docs win on conflict" lines resolve against FINAL_DESIGN as
 > the topic docs' successor, with the archived originals as evidence) · archived files are EVIDENCE ONLY, never
@@ -520,7 +520,9 @@ MEMBERSHIP is experiment-gated via the locked A/B gate + pinned model IDs. Curre
 survive only if experiments show no loss): Haiku-class as the blind leaf producer; Sonnet 5 as the strong-judge
 candidate (G2, Refute, LINK judging, BASE_METRIC/fact_type confirmations, quarantine confirmation,
 establishment-minting, gauntlet adjudication, every recovery grader); Opus 4.8 / GPT-5.5 / Fable as escalation.
-One LINK judge (absorbs the reuse-skeptic/sweep-judge roles; lens-split high-blast variant). **Principles
+One LINK judge (absorbs the reuse-skeptic/sweep-judge roles; lens-split high-blast variant). **The ROUTER's
+promotion bar adds claim-precision/recall AND zero wrong-ATTACH on the cross-industry fixture family;
+establishment-minting checks and gauntlet adjudications use the judge tier.** **Principles
 P1-P7 (unchanged):** structure over model strength · diversity over repetition · cheap-first with zero-loss
 promotion · strong-by-default on permanent classes · structural escalation only · pinned IDs + canary ·
 park/skip rates never targets. Graders' independence is measured, never assumed. Billing: subscription
@@ -579,9 +581,11 @@ full-catalog display.
   (`pure`→percent ×100 is a fenced-out value rewrite) · 4. intra-filing dedupe + collision [P4g]: drop identical
   concept+context+value duplicates; within a fact_scope keep the highest-precision Fact when values agree within
   stated `decimals`; disagreement beyond precision → the WHOLE scope is NOT materialized and is recorded under
-  the STATE-BASED park class `xbrl_internal_conflict` (fail-closed; never fuse, never last-write-wins;
-  re-enqueues only if the filing's XBRL is re-parsed/amended — this is the ONE interpretation unifying P4g's
-  "skip + log" wording with amendment 9's state-based park registration; named clarification, round 14) · 5. axes never dropped (FS-09): frozen table → `kind:normalized_member_label`; unknown axis → the hex
+  the STATE-BASED park class `xbrl_internal_conflict` (fail-closed; never fuse, never last-write-wins). The
+  RETRY TRIGGER is **OWNER-PENDING (round 15)**: the source registers the class as state-based but never names
+  its clearing state; the PROPOSED reading — re-enqueue only when the filing's XBRL is re-parsed/amended — is
+  new wording awaiting owner confirmation (alternatives: also on manual repair-lane action, or leave
+  unspecified until build) · 5. axes never dropped (FS-09): frozen table → `kind:normalized_member_label`; unknown axis → the hex
   sentinel; any NON_SLICE axis or HARD-EXCLUDE member → skip the whole fact, logged [P4d] · 6. period from the
   exact context (its own §5.3) · 7. id = `du:{R.source_id}:{d}:{fact_scope}` · 8. primary ⇔ the Fact's period end
   == `periodOfReport` (write always); everything else writes ONLY as backfill (no same-scope fact exists) or
@@ -646,7 +650,9 @@ full-catalog display.
   scoping · (9) `12` state-based park-class additions + CLI skip/no-enrichment rules + the UpgradeEvent writer
   validator · (10) `09 §6.9` intra-event origin tie-break addendum. Declared but not an amendment: the XC-09
   backfill-era judgment exception (P8d).
-- P1-P17/P19 + ten document amendments require owner approval after EXP-1/EXP-6 evidence. **The dormant `09`
+- P1-P17/P19 + the ten document amendments were RATIFIED by the owner 2026-07-15 (design only). **Activation
+  still waits on ALL of: the P19 proof plan (the X-XL0-3 bars above) · every hard pre-gate · the EXP-6
+  convergence evidence — approval is done; none of the gates moved.** **The dormant `09`
   rider stays dormant: no `origin`, no `xbrl_link`, no empty≡GAAP folding, no XBRL producer rules before
   ratification.**
 
