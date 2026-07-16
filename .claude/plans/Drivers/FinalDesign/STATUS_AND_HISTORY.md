@@ -120,6 +120,12 @@ report, never a silent rewrite → BUILD §8.2 recipe step 4. · R7 (2026-07-16)
 required family, period, period scope, slice, measurement, and normalized value/unit match." — supersedes the
 archived CONSOLIDATION §14.3 item-3 text; design files and preamble otherwise unchanged. Full decision text + verification trail:
 the archived `CONSOLIDATION.md` §10.2/§16 (`archive/2026-07-15_pre-consolidation/CONSOLIDATION.md`, archived at Phase-5 step 7, 2026-07-16).
+· **2026-07-16 (S3 GO):** owner approved the S3.1 cross-channel ID law — 7 decisions one-by-one (reject-not-
+escape · 4-segment id w/ trailing colon on empty scope · `[A-Za-z0-9._-]` source charset case-preserved ·
+readable-date `gp_` ids · the one text normalizer w/ park-on-empty · the one decimal canonicalizer · text-based
+10-slot sha256 fingerprint) → BUILD §5 ID-shape entry; BUILD §11.3 closed; operative law =
+`driver/core/driver_ids.py` + its frozen vector suite. Owner also blessed the build sequence (S3 writer stack →
+S4 kernel day-1 + pilot → enrichment); ratification-vs-authorization wording never blocks the agreed sequence.
 
 ## 5. Signed experiment decisions + remaining gates (authority = signed decision.json artifacts)
 
@@ -138,7 +144,8 @@ frozen original `4911a22f…` = archive MANIFEST). Artifacts:
   Biggest traps: `03`/`11`/`12` old collision text (OD-8 is current) · `04` one-hint-pair (per-slot is current) ·
   `09 §8`/`07 §D` expectation-baseline wording · stale experiment headers (signed artifacts win) ·
   `15` "already built" = "fully specified" (stale-item 11).
-- Missing build recipes (packet lifecycle · born-complete transaction · ID namespaces · machine contracts):
+- Missing build recipes (packet lifecycle · born-complete transaction · machine contracts; ID namespaces
+  CLOSED 2026-07-16 — owner-approved S3.1 ID law, BUILD §5/§11.3):
   BUILD §11.
 - Truly open owner choices: FINAL_DESIGN §10 OPEN list.
 

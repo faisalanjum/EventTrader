@@ -168,9 +168,17 @@ class finalization → final validation → fitness gate.
 
 - Deliverables: IDs, writer/CLI/shell, period resolver, unit resolver, slice menu, concept linker, verdict/DCM
   writer, reads, park ledger, validators, tests. Producer-agnostic: build against the internal packet only.
-- **ID shape:** `du:{safe_source_id}:{driver_name}:{fact_scope}` + the OD-8 collision overlay. Known mapping:
-  fiscal `:`→`_`. STILL MISSING (10.3 gap — not implementation-ready): the complete cross-channel escaping/
-  delimiter recipe, collision-safe namespaces, and fixed ID test vectors.
+- **ID shape:** `du:{safe_source_id}:{driver_name}:{fact_scope}` + the OD-8 collision overlay. **The
+  cross-channel ID law is CLOSED (owner-approved 2026-07-16, 7 decisions, one-by-one): NO escaping anywhere —
+  validated grammar, fail-closed REJECT** (grounded: 0 charset violations across all Reports/Transcripts + 50k
+  News). Source ids `^[A-Za-z0-9._-]+$` colon-free, case preserved; per-channel maps injective, pinned at
+  channel certification (fiscal `:`→`_`); driver names re-checked vs NAME-05; period ids `gp_{start}_{end}`
+  (instant = date-twice `gp_X_X`, the PROVEN substrate form — owner amendment 2026-07-16 replacing the
+  single-date proposal; real-calendar-validated; single-date form illegal) + the 4 sentinels; ONE text normalizer (ASCII-fold/casefold/
+  runs→`_`; empty ⇒ REJECT-park) · ONE decimal canonicalizer (no exponent/trailing zeros; −0→0; floats banned);
+  OD-8 hash = sha256 over the 10 slots as canonical STRINGS in compact ASCII JSON. Operative law = the code +
+  frozen vectors: `driver/core/driver_ids.py` + `driver/core/test_driver_ids.py` (52 tests incl. 14 pinned
+  vectors with computed hashes; changing a pinned vector = an owner-level ID-law amendment).
 - **Writer:** one atomic write; MERGE on id; no-op re-runs detected by DIRECT FIELD COMPARISON against the
   existing node (no stored fact hash — `evhash16` retired); `created` only on create; legal non-null fields; a sparse rerun
   never null-clobbers a richer value (`SET x = null` REMOVES a property in Neo4j — validate before any SET);
@@ -764,8 +772,9 @@ mechanics) · `../Consolidation/GuidancePeriod.md` (21 period tests) · `../Cons
 2. **Born-complete transaction:** the exact atomic CREATE write + failure behavior — still an unwritten recipe
    (the 2026-07-15 kernel ratification changed design status only, not this gap; lazy-create-on-ATTACH
    mechanics land at the OD-7/live-admission pass).
-3. **Source identity namespaces:** the complete cross-channel escaping/delimiter law + fixed test vectors
-   (only fiscal `:`→`_` is explicit today).
+3. **Source identity namespaces — CLOSED 2026-07-16 (owner-approved S3.1 ID law):** no-escaping/validated-
+   grammar recipe + namespace registry (`du:`/`dcm:`/`gp_`) + fixed test vectors, all in §5's ID-shape entry;
+   operative law = `driver/core/driver_ids.py` + its frozen vector suite.
 4. **Adapter/writer machine contracts:** exact field types/nullability, versioned schema, complete
    outcome/reason codes, cursor/completeness record shapes, certification fixtures (contract not
    implementation-ready until closed).
