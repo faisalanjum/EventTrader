@@ -1,6 +1,6 @@
 # FINAL_DESIGN.md — the Driver system rulebook (front door)
 
-> **Status: LIVE — the four-file set is the design authority; front door = this file. Consolidation Phases 1-5 EXECUTED (owner GO 2026-07-16): the 33 frozen sources are fully accounted for — 29 originals + 3 frozen-original/pre-amendment snapshots ARCHIVED in `archive/2026-07-15_pre-consolidation/` (evidence only, never authority) + the byte-pinned `FableExperimentPlan.md` (source 33) live at the root, manifest-verified in place. The definitive blank-context reader test's outcome, per-question grades, and the authoritative tested live-file hashes live in `archive/2026-07-15_pre-consolidation/READER_TEST_RECORD_2026-07-16_phase5-final-run12.md`; Phase 5 is COMPLETE ONLY IF that exact record shows 10/10 PASS. (All review rounds, the round-17 run's withdrawal, and the owner-decision trail are recorded in the archived `CONSOLIDATION.md` §10.2/§16.)** This file is the single
+> **Status: LIVE — the four-file set is the design authority; front door = this file. Consolidation Phases 1-5 EXECUTED (owner GO 2026-07-16): the 33 frozen sources are fully accounted for — 29 originals + 3 frozen-original/pre-amendment snapshots ARCHIVED in `archive/2026-07-15_pre-consolidation/` (evidence only, never authority) + the byte-pinned `FableExperimentPlan.md` (source 33) live at the root, manifest-verified in place. The definitive blank-context reader test's outcome, per-question grades, and the authoritative tested live-file hashes live in `archive/2026-07-15_pre-consolidation/READER_TEST_RECORD_2026-07-16_phase5-final-run13.md`; Phase 5 is COMPLETE ONLY IF that exact record shows 10/10 PASS. (All review rounds, the round-17 run's withdrawal, and the owner-decision trail are recorded in the archived `CONSOLIDATION.md` §10.2/§16.)** This file is the single
 > front door and rule-meaning authority of the four-file set. It was built from the verified consolidation
 > atom ledger (the archived `CONSOLIDATION.md` — the full audit, decision trail, and round-by-round
 > verification record) over the 33 frozen sources — 29 originals + 3 snapshots archived, the pinned Plan live
@@ -72,6 +72,9 @@ Event/Report/Transcript/News -> DriverUpdate -> Driver
 The source channel never creates graph identity; the shared core does. The public input boundary is
 `ChannelContract.md` (raw adapter submission); the internal core object is the frozen Candidate Fact Packet
 (envelope · transient identity signals · proven fact · optional verdict — see `BUILD_AND_OPERATIONS.md`).
+XBRL at the boundary, the exact conditional (mirror of ChannelContract §3, which governs): the EXACT context
+ALWAYS; every SUPPLIED dimension carries BOTH axis and member; `dimensions=[]` is sent ONLY as an explicit
+VERIFIED-empty assertion — a missed extraction must never masquerade as consolidated.
 
 ## 3. Driver naming — NAME-01..19 + OD-17 `[FINAL]`
 
