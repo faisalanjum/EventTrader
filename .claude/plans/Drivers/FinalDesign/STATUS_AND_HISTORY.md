@@ -1,6 +1,6 @@
 # STATUS_AND_HISTORY.md — the one mutable dashboard, supersession ledger, and crosswalk
 
-> **Status: LIVE — Phase 4 verified through round 18 (2026-07-15); Phase 5 archive pends owner GO.** This file owns STATUS and HISTORY only — live rule
+> **Status: LIVE — Phase 4 review complete through round 19 (2026-07-16); the reader test of the CURRENT bytes is PENDING — it executes at the Phase-5 gate (card step 10 / 24b); Phase 5 archive pends owner GO.** This file owns STATUS and HISTORY only — live rule
 > wording stays in `FINAL_DESIGN.md`; procedures stay in `BUILD_AND_OPERATIONS.md`; channel duties stay in
 > `ChannelContract.md`. Any status shown in another live file is a generated summary of THIS file. A status
 > change edits this dashboard — and only if rule meaning changed through owner approval, the one owning rule
@@ -25,7 +25,7 @@
 | XBRL-native materializer | **APPROVED WORKING DESIGN (owner 2026-07-15; DORMANT until P19 enablement + hard pre-gates + EXP-6)** | — | EXP-1 signed | — |
 | Experiment program | EXP-0/1/2 SIGNED PASS | — | — | EXP-3..6 / WP-FC-RUN PENDING |
 | Running layer (schedules/ledger/QA) | NOT designed-complete | — | — | — |
-| Consolidation itself | Phases 1-4 done (18 review rounds); both ratified designs integrated + archived | — | mechanical sweeps green; repeated full reader runs (latest full-hash run recorded in CONSOLIDATION §16; the round-17 run re-graded in round 18 — correction addendum in the archived test record) | archive (Phase 5) owner-gated; root keeps Plan + WorkOrder until the experiment program migrates |
+| Consolidation itself | Phases 1-4 done (19 review rounds); both ratified designs integrated + archived | — | mechanical sweeps green; earlier reader runs passed OLDER byte-sets only (hash blocks in CONSOLIDATION §16); the round-17 strict run WITHDRAWN in round 18 (6/10, VOID — addendum in the archived record); reader test of the CURRENT bytes PENDING at the Phase-5 gate (card step 10 / 24b) | archive (Phase 5) owner-gated; root keeps Plan + WorkOrder until the experiment program migrates |
 
 ## 2. Lists by status
 
@@ -33,8 +33,8 @@
 - **FINAL / BUILD-PENDING:** Track A remainder (fold/tree mirrors, finalizer, real folds, WP-FC-RUN, OD-6 fitness gate — never run) · UNIT-14 production wiring · PER-20 resolver build + 21 tests · slice table materialization + PIT menu code · concept-linker vetoes C/D + PIT query build · the whole Track B writer/validator/CLI/park-ledger stack · read layer · verdict/DCM writer · channel adapters + certification · Track C execution · incremental refresh.
 - **DESIGN-INCOMPLETE:** the production running layer (BUILD §7's runbook list). The OD-5 change scanner is a recommendation only.
 - **CONDITIONAL:** OD-19 (inert until K-pairs.v2 zero wrong-same) · XC-16 timing · model-role membership (experiment-gated) · XBRL-native materializer + `09` rider (RATIFIED as design 2026-07-15; DORMANT until the P19 enablement proof plan — X-XL0-3 bars — every hard pre-gate pass, and the EXP-6 convergence evidence) · multi-run concept stability/caching (only if monitoring justifies).
-- **OPEN (owner):** G1 live reuse display · catalog 796-vs-786 + lifecycle/IPO · full model/cost policy beyond signed EXP-2 · FS-23 · 8-K taxonomy · DCM threshold/pure-macro/two-catalyst · Track B dual-producer thresholds · non-USD expansion · metric `value_text`/action `conditions` revisit triggers · Driver Genesis charter questions · Track C history-gap acceptance · third-party `company_confirmed=false` class enablement (part-2/news-channel).
-- **APPROVED WORKING DESIGN (owner 2026-07-15; not activated; gates/OFF-switches in force):** Admission Kernel v3.4 · XBRL-native materializer — integration COMPLETE (INT-2..INT-5, destination proof §7.1b); both originals archived 2026-07-15, byte-verified vs the Phase-1 manifest.
+- **OPEN (owner):** catalog 796-vs-786 + lifecycle/IPO · full model/cost policy beyond signed EXP-2 · FS-23 · 8-K taxonomy · DCM threshold/pure-macro/two-catalyst · Track B dual-producer thresholds · non-USD expansion · metric `value_text`/action `conditions` revisit triggers · Driver Genesis charter questions · Track C history-gap acceptance · third-party `company_confirmed=false` class enablement (part-2/news-channel).
+- **APPROVED WORKING DESIGN (owner 2026-07-15; not activated; gates/OFF-switches in force):** Admission Kernel v3.4 · XBRL-native materializer — integration COMPLETE (INT-2..INT-5, destination proof §7.1b); both originals archived 2026-07-15, byte-verified vs the Phase-1 manifest. The kernel bundle also settled two formerly-open/tracked items: G1 reuse-display rules (→ BUILD §8.1.3) · OD-7 live admission (→ BUILD §8.1; residual build gap in BUILD §11.2).
 - **CANDIDATE:** Bayes proposal · Driver Genesis restructure (rationale). Owner-question decision detail rides in `CONSOLIDATION.md` §10.2 until Phase 5, then moves here.
 - **Change law (owner 2026-07-15):** every future design correction updates the ONE owning live section and adds a short history entry here; no parallel live copies.
 - **RETIRED (never a production path):** old Guidance replay plan (`13_Track_RetiredDesign.md` — GI stale-trap
@@ -93,8 +93,10 @@
 **Additions that are not reversals (each anchored in FINAL_DESIGN):** born-complete + latent-base exception
 (§4.2) · OD-1 suffix admission (§4.1) · OD-2 metric-proof + first-fact pin scoped to bare names (§4.1/§4.2) ·
 OD-3 blind local role test (§3 NAME-11) · OD-4 = FS-22 retirement, no slice-value recurrence rule (§5.2, row 37) ·
-OD-5 scanner recommendation (BUILD §7) · OD-6 fitness gate (BUILD §4) · OD-7 broader live admission = tracked
-recommendation only · OD-8 (§5.1) · OD-9 (§5.3) · OD-10 (§6.1/§9) · OD-11 (§6.1) · OD-12 (§6.1) · OD-13
+OD-5 scanner recommendation (BUILD §7) · OD-6 fitness gate (BUILD §4) · OD-7 broader live admission = ratified
+into Admission Kernel v3.4 (owner 2026-07-15, NOT activated — BUILD §8.1; a tracked recommendation only
+pre-ratification; residual = the unwritten born-complete transaction recipe + lazy-create mechanics, BUILD
+§11.2) · OD-8 (§5.1) · OD-9 (§5.3) · OD-10 (§6.1/§9) · OD-11 (§6.1) · OD-12 (§6.1) · OD-13
 (§4.3/§7.1) · OD-14 (§9) · OD-15 = near-synonym live races accepted as normal over-splits, no new locking (§4.2) ·
 OD-16 resolved 2026-07-15 → lazy born-complete (§4.2) · OD-17 (§3) · OD-18 (§5.4; CLAIM separate, ships off) ·
 OD-19 (§5.4) · OD-20 (§5.4) · OD-21 (§5.1/§6.2/§7) · K2 = fold repair stays per-pair, batched fold repair
@@ -120,7 +122,9 @@ EXP-1 PASS 07-09 (O13 dimension binding owner-ratified) · EXP-0 PASS 07-10 (gra
 @effort=high; the (model,effort) pair binds) · WP-FC-EDITS `5db902f` 07-10 · WP-FA + O2 signed 07-10 · K-reader
 v3 LOCKED 07-10 · EXP-2 PASS 07-11 (sonnet-5@high/40k/1-run) · PENDING: EXP-3..6, remaining keys, WP-FC-RUN,
 F-C freeze. Standing gates: ra_0007 kernel-§6.1 review BEFORE K-pairs.v2; Plan sha `51966848…7472` byte-pinned;
-WorkOrder current sha `4911a22f…` (status board stale at `1586761a…` — fix before next run). Artifacts:
+WorkOrder sha recorded, never pinned — authoritative record = `experiments/WORKORDER_STATUS.md`, re-recorded at
+every edit incl. the Phase-5 21c re-point (board stale at `1586761a…` as of 2026-07-15 — re-record before any
+run; frozen original `4911a22f…` = archive MANIFEST). Artifacts:
 `.claude/plans/Drivers/experiments/`.
 
 ## 6. Known documentation/logic issues (open; no new authority)

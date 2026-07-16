@@ -1,6 +1,6 @@
 # BUILD_AND_OPERATIONS.md — how to build, test, run, and retire the Driver system
 
-> **Status: LIVE — Phase 4 verified through round 18 (2026-07-15); Phase 5 archive pends owner GO.** This file owns PROCEDURE: build steps, contracts'
+> **Status: LIVE — Phase 4 review complete through round 19 (2026-07-16); the reader test of the CURRENT bytes is PENDING — it executes at the Phase-5 gate (card step 10 / 24b); Phase 5 archive pends owner GO.** This file owns PROCEDURE: build steps, contracts'
 > mechanics, gates, run rules, and hazards. Rule MEANING lives only in `FINAL_DESIGN.md` (rule IDs referenced
 > here, never restated). Public channel duties live only in `ChannelContract.md`. Status/history/supersessions
 > live only in `STATUS_AND_HISTORY.md`. Until Phase 5 archives them, the frozen sources remain
@@ -235,8 +235,9 @@ reads realized returns.
 > the current WORKING DESIGNS — no longer pending candidates. **This approval does NOT authorize
 > implementation, activation, or production use**: every experiment gate, dormant state, OFF switch, and
 > unresolved item stays in force and marked. Their complete mechanics are being integrated into the four live
-> documents — DONE (INT-2..INT-5 complete; per-element destination proof = STATUS §7.1b; the post-move reader
-> tests passed). Both originals are ARCHIVED (2026-07-15, byte-verified vs the Phase-1 manifest); the full
+> documents — DONE (INT-2..INT-5 complete; per-element destination proof = STATUS §7.1b; the integration-era
+> reader tests passed — the archive-gate run + the post-integration standard run; the DEFINITIVE post-move
+> reader test = the Phase-5 gate, not yet run). Both originals are ARCHIVED (2026-07-15, byte-verified vs the Phase-1 manifest); the full
 > operative mechanics live in §8.1/§8.2 below, with the archived originals as historical evidence.
 > **Authority, three tiers (round 16 wording; both designs now ratified + archived):** `FINAL_DESIGN.md` owns
 > CURRENT LAW · THIS guide's §8.1/§8.2 own the ratified designs' OPERATIVE MECHANICS (the archived originals'
@@ -669,8 +670,10 @@ Archive under proposals; import nothing without owner approval.
 ## 9. Experiment program (signed artifacts are the ONLY status authority)
 
 - `FableExperimentPlan.md` defines WHAT to test (sha-pinned `51966848…7472` — keep byte-identical, no banner).
-  `FableExperimentWorkOrder.md` defines HOW (current sha `4911a22f…`; the status board still pins stale
-  `1586761a…` as v1.8 — record the actual hash/version before more runs). Neither amends production law.
+  `FableExperimentWorkOrder.md` defines HOW (sha recorded, never pinned — the CURRENT sha lives on
+  `experiments/WORKORDER_STATUS.md`, re-recorded at every edit incl. the Phase-5 21c re-point; that board is
+  stale at `1586761a…`/v1.8 as of 2026-07-15 — re-record before more runs; frozen original `4911a22f…` = the
+  archive MANIFEST). Neither amends production law.
 - Ladder: EXP-0 graders · EXP-1 deterministic XBRL reality · EXP-2 reader config · EXP-3 G1/router · EXP-4
   identity/type/families · EXP-5 the 24-field packet · EXP-6 text/XBRL convergence. Pre-register + hash-lock
   keys, grade once, PIT inputs, subscription execution, exact model IDs, ambiguity exhibits, recorded
