@@ -238,7 +238,8 @@ def seg_members(fc):
 
 
 def seg_axis_members(fc):
-    """[(axis_qname, member_qname)] for both {dimension,value} and explicitMember.$t shapes.
+    """[(axis_qname, member_qname)] for {dimension,value}, single explicitMember.$t, AND the multi-axis
+    explicitMember-LIST shape (mirrors oracle._members_all — the certified multi-axis reader).
     FETCH-only: the raw XBRL axis+member the shared decomposer classifies into a slice kind."""
     seg = fc.get('segment')
     if not seg:
@@ -251,7 +252,10 @@ def seg_axis_members(fc):
         if isinstance(s.get('value'), str):
             out.append((s.get('dimension', ''), s['value']))
         em = s.get('explicitMember')
-        if isinstance(em, dict) and em.get('$t'):
+        if isinstance(em, list):                         # multi-axis: explicitMember is a LIST
+            out += [(m.get('dimension', ''), m['$t']) for m in em
+                    if isinstance(m, dict) and m.get('$t')]
+        elif isinstance(em, dict) and em.get('$t'):
             out.append((em.get('dimension', ''), em['$t']))
     return out
 
