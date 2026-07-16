@@ -7,7 +7,9 @@ Bootstrap (WP-0) completed: 2026-07-09T01:05:17Z
 - working tree at bootstrap: 352 uncommitted files (pre-existing; NOT touched by this program)
 - plan_sha256: 51966848183e2a48ba3d4faac36c5b352027939fd962a90798a73e8cd2ed7472 (VERIFIED == work order header)
 - workorder_sha256_at_bootstrap: 554529dde8e972b29a3e941b730b5eadf2e666d6769a27268886ffc6aa6cd164
-- current_workorder_sha256_v1.8: 1586761a475683f40100e8740cfbe43773a94009a08c316198151a3e790b0501
+- workorder_sha256_v1.8_at_board_write (2026-07-09; later became stale via intermediate edits): 1586761a475683f40100e8740cfbe43773a94009a08c316198151a3e790b0501
+- workorder_sha256_frozen_original (= archive MANIFEST + Phase-5 snapshot `FinalDesign/archive/2026-07-15_pre-consolidation/FableExperimentWorkOrder.md`): 4911a22f187cff1ca30a4c5bd9e4ddf452de4d178379b4b441b9d69416ef33b3
+- current_workorder_sha256 (v1.8 + Phase-5 path re-point 2026-07-16 — authority line now says ratified working designs; archive path note added; NO experiment IDs/bars/sequence/assets changed): 57a6b86090083560af476f23125a2f95bbce2e572bb93cc132e9ed6cdff9033e
 - Neo4j read access: CONFIRMED via env-first creds; live counts at bootstrap: Fact=13775616 Report=42633
 - OPENAI_API_KEY: present (env-first; embeddings lane; not used by EXP-1)
 - ANTHROPIC_API_KEY: UNSET (billing guard 1.8.3 clean)
