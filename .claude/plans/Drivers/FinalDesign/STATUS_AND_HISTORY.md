@@ -1,6 +1,6 @@
 # STATUS_AND_HISTORY.md — the one mutable dashboard, supersession ledger, and crosswalk
 
-> **Status: LIVE — Phase 4 verified through round 9 (2026-07-15); Phase 5 archive pends owner GO.** This file owns STATUS and HISTORY only — live rule
+> **Status: LIVE — Phase 4 verified through round 11 (2026-07-15); Phase 5 archive pends owner GO.** This file owns STATUS and HISTORY only — live rule
 > wording stays in `FINAL_DESIGN.md`; procedures stay in `BUILD_AND_OPERATIONS.md`; channel duties stay in
 > `ChannelContract.md`. Any status shown in another live file is a generated summary of THIS file. A status
 > change edits this dashboard — and only if rule meaning changed through owner approval, the one owning rule
@@ -153,11 +153,11 @@ WorkOrder current sha `4911a22f…` (status board stale at `1586761a…` — fix
 | ChannelContract | ACTIVE live file | kept — the SOLE public channel authority under the one-copy law; banner amended 2026-07-15 (owner batch: XBRL row, evidence row, provenance one-liner replacing the old "source of truth" phrasing); current sha tracked in git + CONSOLIDATION §16 hash freeze |
 | DriverGenesisRestructure | unapproved rationale | open charter questions in FINAL_DESIGN §10; archive |
 | DriverPlan.html | stale study export | none (regenerate later from live docs); archive |
-| FableAdmissionKernelDesign | candidate + accepted inserts | FINAL_DESIGN §4/§5 (accepted) + BUILD §8.1; archive after exact candidate map preserved |
+| FableAdmissionKernelDesign | candidate + accepted inserts | FINAL_DESIGN §4/§5 (accepted parts) + BUILD §8.1 (split + ratification bundle); **file stays LIVE at root until the owner ratifies/rejects — then content transfers into law or archives as rejected** (round-11 policy; a ~68-element enumeration proved pre-ratification transfer = full duplication) |
 | FableContextPack · WorkflowContextPack | stale navigation/code maps | archive (Workflow pack: after live-code re-audit + link repair) |
-| FableExperimentPlan · WorkOrder | pinned plan · runbook | BUILD §9; keep Plan byte-identical until program migrates; archive after |
+| FableExperimentPlan · WorkOrder | pinned plan · runbook | BUILD §9; keep Plan byte-identical until program migrates; archive after. The Plan's frozen authority ladder (lines 4/257) resolves externally: its "lock candidates" stay live at root; its topic docs resolve to the archive paths with meaning carried by the four live files (step 21c note) |
 | FablePrompt · FablePromptv2 | executed briefs | provenance entries only; archive |
-| XBRLIntegrationDesign | pending candidate | BUILD §8.2; archive once exact candidate map preserved |
+| XBRLIntegrationDesign | pending candidate | BUILD §8.2 (recipe + pin map + amendments = the ratification index); **file stays LIVE at root until ratified/rejected** (round-11 policy, same as the kernel) |
 | CONSOLIDATION.md | audit + migration map | moves into the same dated archive after the four live files pass review (never a fifth rule source) |
 
 ### 7.1 Rule-ID crosswalk (every stable ID range → its one live anchor; §14.1 artifact)
@@ -185,7 +185,7 @@ column — the map is total over every ID listed in `CONSOLIDATION.md` §14.1.
 | XC-01..18 | FINAL_DESIGN §8 | XC-04..08 verbatim blocks inline · XC-16 CONDITIONAL · rollout/vetoes-build → BUILD §5 |
 | PIPE-01..37 (+27a/27c/27d/31b) | BUILD §4 | PIPE-12 relay-trust + PIPE-15 run layout summarized in D1-D8/constants · PIPE-16 authority swap (prompts inline NAME rules) · PIPE-24/25/26/35 finalization/consumption inline · PIPE-32 A/B gate |
 | FACT-01..36 (+14b/17b/18a/26b/26e/26f) | BUILD §5 | FACT-16 validators + §12 gates (F1-F9/P1-P8) inline · FACT-17b = the internal packet → BUILD §2 · law mirrored in FINAL_DESIGN §5/§7 |
-| T1.1..T12.9 (census `11`) | same law as FINAL_DESIGN §4-§9 + BUILD §5 | the census DUPLICATES `09`/`12` normatively; numbering retires at archive; T9.x slices → §5.2 · T11.x producer/validator → §7.1 + BUILD §5 · T12.9 member grouping → §9 |
+| T1.1..T12.9 (census `11`) | per-group anchors in the T-table below | the census DUPLICATES `09`/`12` normatively; numbering retires at archive |
 | GI-01..04 + active `13` §§0-15 | BUILD §6 | runbook/deletion/gates inline; §§12-15 are meta sections (cross-doc edit log, non-goals, minimalism proof, drafting record) with no rule IDs — covered by the §7 file-level row |
 | Retired `13_Track` file's OWN GI-01..07 and GI-10..36 (a separate numbering from the active file's GI-01..04; **no GI-08 or GI-09 exist**) | history only — §2 RETIRED list | never live mechanics; still-useful non-replay analysis pointer in §7 crosswalk row |
 | Track A D1..D8 | BUILD §4 | — |
@@ -194,6 +194,23 @@ column — the map is total over every ID listed in `CONSOLIDATION.md` §14.1.
 | K2 | BUILD §4 | — |
 | 42 supersession rows | §3 above | — |
 | Contract clauses · packet blocks · candidate bundles · open items | ChannelContract · the frozen packet · BUILD §8 (incl. the kernel §15.0/§16 transfer + ratification bundle + XBRL recipe) · §2 lists | — |
+
+### 7.2 Census T-group anchors (per-group exact map; within a group, rules share the group anchor unless a per-rule exception is listed)
+
+| T-group | Census topic | Exact live anchor(s) |
+|---|---|---|
+| T1 (T1.1-T1.8) | Mission constraints & laws | FINAL_DESIGN §1; exceptions: T1.4 producer-free id → §5.1 · T1.6 enrichment-never-identity → §8 · T1.7 FROM_SOURCE ≠ EXPLAINED_BY → §7.3 |
+| T2 (§2 tables, no T-bullets) | The record — 24 stored fields | FINAL_DESIGN §7.1 |
+| T3 (T3.1-T3.8) | Identity — id + fact_scope grammar | FINAL_DESIGN §5.1 (OD-8 replaces T3.4); T3.5 measurement → §5.3 · T3.6/T3.8 slices → §5.2 · T3.7 period-both-places → §6.2 |
+| T4 (§4 edge table) | Edges & neighbor nodes | FINAL_DESIGN §7.3; HAS_PERIOD lane rules → §6.2 |
+| T5 (T5.1-T5.5) | The verdict edge | FINAL_DESIGN §7.3 |
+| T6 (T6.1-T6.5) | Lanes — type × state × field matrix | FINAL_DESIGN §4.1 + §4.3 + §7.2; T6.5 revisit triggers → §10 OPEN list |
+| T7 (T7.1-T7.12) | DriverPeriod | FINAL_DESIGN §6.2; T7.12 build gates (PER-20) → BUILD §5 |
+| T8 (T8.1-T8.10) | Units | FINAL_DESIGN §6.1; T8.10 build gate (UNIT-14) → BUILD §5 |
+| T9 (T9.1-T9.9) | Slice & member at write time | FINAL_DESIGN §5.2 |
+| T10 (T10.1-T10.8) | XBRL concept link | FINAL_DESIGN §8; rollout/veto build → BUILD §5 gate 4 |
+| T11 (T11.1-T11.11) | Producer interface contract | FINAL_DESIGN §4.2 (T11.1) · §5.1 (T11.3 fusion + basis hint) · §6.1/§7.1 (T11.5 hints, T11.8 %-guidance basis, T11.10 rate-vs-level) · §9 (T11.4 slices-beat-mixed, T11.7 fan-out, T11.9 policy routing, OD-14 prior view) · BUILD §5 (CLI order + PIT prior view) |
+| T12 (T12.1-T12.9) | Read contract | FINAL_DESIGN §9; T12.6 series_unit law also §6.1 |
 
 **External inbound citations (verified 2026-07-15):** 12 files cite exact FinalDesign filenames — the
 experiments board/handover/exhibits/keys/harness plus the engine prompts `workflows/menu_build.js`,

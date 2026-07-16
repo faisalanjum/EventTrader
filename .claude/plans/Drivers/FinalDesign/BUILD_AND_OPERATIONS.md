@@ -1,6 +1,6 @@
 # BUILD_AND_OPERATIONS.md — how to build, test, run, and retire the Driver system
 
-> **Status: LIVE — Phase 4 verified through round 9 (2026-07-15); Phase 5 archive pends owner GO.** This file owns PROCEDURE: build steps, contracts'
+> **Status: LIVE — Phase 4 verified through round 11 (2026-07-15); Phase 5 archive pends owner GO.** This file owns PROCEDURE: build steps, contracts'
 > mechanics, gates, run rules, and hazards. Rule MEANING lives only in `FINAL_DESIGN.md` (rule IDs referenced
 > here, never restated). Public channel duties live only in `ChannelContract.md`. Status/history/supersessions
 > live only in `STATUS_AND_HISTORY.md`. Until Phase 5 archives them, the frozen sources remain
@@ -226,7 +226,16 @@ reads realized returns.
 
 ## 8. Candidate bundles (clearly split: accepted vs pending)
 
-### 8.1 Admission Kernel v3.4 — LOCK CANDIDATE
+> **Candidate-file policy (round 11):** the two candidate documents — `FableAdmissionKernelDesign.md` and
+> `XBRLIntegrationDesign.md` — **stay LIVE at the root until their ratification decisions**, exactly like the
+> experiment Plan/WorkOrder. This section's job (per the consolidation spec) is the accepted-vs-pending SPLIT
+> and the exact ratification bundles — NOT a duplicate of the candidates' full mechanics: an independent
+> enumeration found ~68 kernel-only build-critical elements (park codes, the five LINK-check meanings, V1-V14
+> definitions, falsifier definitions, phase/gauntlet mechanics…) whose faithful transfer would copy the whole
+> unratified file into this guide. On ratification, accepted content transfers into the law/build files
+> properly; a rejected candidate archives. Until then the live candidate file is the full text.
+
+### 8.1 Admission Kernel v3.4 — LOCK CANDIDATE (live file at root until ratified)
 
 - **Accepted / owner-approved (law, in FINAL_DESIGN):** born-complete admission + first fact · cheap roles never
   final-confirm · OD-18 flagged-ATTACH confirmation · `SAME_AS`/`CONTINUES_AS` quarantine + `disputed` recovery ·
@@ -248,7 +257,7 @@ reads realized returns.
 - **The exact ratification bundle (what the owner must ratify to activate the candidate):** (1) the v3.2 architecture (variant-anchored storage · one LINK mechanism/two triggers · frozen birth anchors + split-reconciliation lane · skeptic-minted establishment with CLAIM_FROZEN de-mint) · (2) edge-state recovery + D4 scoping (automatic tightening-only quarantine for all links, 2-grader confirmed on RAW EVIDENCE with no falsifier framing, 3-grader for seed links; INCONCLUSIVE escalates the RULE, not the case) · (3) the seed gauntlet as a launch gate incl. seed cards earning ESTABLISHED (unprovable → YOUNG) · (4) launch blockers: corrected model-free falsifier + ATTACH audit before production writes; flagged-head audit intensity bounded — 100% for the first N/T, then risk-stratified — with a hard SLA that never hangs on the owner queue · (5) CLAIM ships OFF; shadow-log from Phase 2; ON only after S3 passes with zero wrong links (S3 controls: pre-locked keys, per-arm forked state, ratchet instrumentation, false-refusal/recall metrics) · (6) carried items: gate protocol amendment · experiment promotion rules (M2/M3 default OFF) · G1 display spec · OD-7 born-complete · the [PIN] set · reject auto in-context teaching · thresholds post-calibration · time/standard-keyed anchor revalidation as an owner RULE question · outage discipline (RETRY-age alarms, drain rate-limiter, catalog-frozen signal flag) · ADOPT takes the same 3-part confirmation as ATTACH.
 - Never call the whole file ratified because the title says v3.4 or some OD rules were inserted.
 
-### 8.2 XBRL-native materializer — CANDIDATE, dormant (title says FINAL; status = pending ratification)
+### 8.2 XBRL-native materializer — CANDIDATE, dormant (live file at root until ratified; title says FINAL, status = pending)
 
 - Text remains the only path that creates Drivers and narrative facts. The existing text-fact concept linker
   (FINAL_DESIGN §8) stays current.
@@ -257,8 +266,8 @@ reads realized returns.
   representable axes, allowed unit, exact period, source-stated value. Non-GAAP, unlinked, qualitative, causal,
   guidance, and action material stays text-side. **Unit whitelist v1: USD, shares, USD-per-share — eligible
   EPS/per-share facts ARE materialized (per-X in the name per NAME-13); every other unit skips + counts.**
-- **The exact materializer recipe (candidate map — per Report with `xbrl_status=COMPLETED`, per registrant with
-  active resolutions):** 1. load ACTIVE `(company, driver)→qname` resolutions — full catalog records only,
+- **The exact materializer recipe (candidate map — per Report (10-K/10-Q/10-K-A/10-Q-A) with
+  `xbrl_status=COMPLETED`, per registrant with active resolutions):** 1. load ACTIVE `(company, driver)→qname` resolutions — full catalog records only,
   latents excluded [P4e] · 2. select Facts entity-scoped via `IN_CONTEXT→Context→FOR_COMPANY` (no edge → skip +
   count), filters `is_numeric='1'`/`is_nil='0'` [P4f] · 3. unit whitelist + map [P4c]: `iso4217:USD` → money on
   the driver's canonical scale · `shares` → count · `iso4217:USD/shares` → usd per-share level (EPS materialized,
@@ -275,25 +284,31 @@ reads realized returns.
   `driver_writer`, atomic, all validators on, `level_shape_hint='point'` [P4i]; stamps: `origin=xbrl_link` ·
   `level_low=level_high` = the exact signed value scaled [P4a] · change/comparison/value_text/conditions/
   company_confirmed = FORBID (XBRL states levels only) · `driver_state=reported` · `quote=[XBRL] <qname> <period>
-  = <scaled value>` · `measurement=∅` always [P3].
+  = <scaled value>` · `measurement=∅` always [P3] · `date`=`R.created` (public filing time — PIT) ·
+  `created`=write time · `source_type`=`10q`|`10k` · edges `OF_DRIVER`/`FROM_SOURCE`/`HAS_PERIOD`/
+  `MAPS_TO_MEMBER`+`slice_part` (P7/P10 add provenance + `MAPS_TO_CONCEPT`/`xbrl_qname`).
 - Materialize before text; text twins dedupe only on same event/head/period/slice/fold/value; mismatch splits
   or parks. Same-series exact XBRL wins ties; same-day 8-K remains; compatible upgrades via repair lane +
   auditable UpgradeEvent.
+- **Non-numeric/TextBlock facts, dispositioned:** numeric XBRL is the ONLY materialization path. TextBlocks
+  never create Drivers, DriverUpdates, slices, state, SAME_AS, or concept links; they may serve only as
+  source-text aids (chunking experiments, read-time context packets, possible change-flag scanner input).
+  TextBlocks-only extraction is forbidden; full section text remains the completeness baseline.
 - Active/revoked ConceptResolution lifecycle, cohort exclusion, recovery/re-extraction, menu-evidence invariant,
   isolated kernel falsifier, duplicate/miss ledger. Honest non-repair lanes for divergent periods/slices remain.
-- **The full ratification pin map (P1-P17 and P19; no P18 — the source removed it; carried faithfully HERE as
-  the operative candidate map; the archived candidate file keeps the full historical prose, non-authority):**
+- **The ratification pin map (P1-P17 and P19; no P18 — the source removed it). The LIVE candidate file
+  `XBRLIntegrationDesign.md` remains the full text until ratification; this map is the ratification index:**
   - **P1** activate the `09 §10` rider items 1-4 as written (origin · `[XBRL]` quote · `reported` state · exact windows · member→slice · full-producer validators); **P1a** normal-order no-enrichment (a text twin is skipped whole; the xbrl node never gains prose).
   - **P2** rider item 5 closed: NO new stored rank slot; read-time tie-break addendum — within one event and one series, `origin=xbrl_link` beats `origin=llm` at collapse.
   - **P3** xbrl `measurement` always ∅; the DECLARED GAAP-family fold — {∅, gaap, reported, as_reported} ∪ the linked concept's own Basic/Diluted token — applied in the skip test AND as the rider-3 read bucket's extension (xbrl-side-only, value-gated, fixed token set; stored ids never change); basic never folds against diluted.
   - **P4** materialization: **a** value = as-tagged signed exact, canonical scale, decimals = precision-only · **b** primary ⇔ period end == `periodOfReport`; non-primary on new-scope-or-value-change · **c** unit whitelist {USD→money, shares→count, USD/shares→usd-per-share}; all else skip+count [exp enablement] · **d** SLICE_AXES + hex sentinel; NON_SLICE/elimination → skip whole fact · **e** latent bases excluded · **f** entity-scoping via `IN_CONTEXT→FOR_COMPANY`; no-context Facts skip; multi-registrant = per-registrant runs · **g** intra-filing collision (highest precision wins within rounding; beyond-rounding → skip + `xbrl_internal_conflict`) · **h** null-`periodOfReport` fallback (max duration end, else skip report) · **i** `level_shape_hint='point'` on every item · **j** falsifier (iv) runs over `origin≠xbrl_link` only · plus: no Q4 derivation, no auto-surprise, raw-duplicate dedupe, `is_numeric='1'`/`is_nil='0'`.
-  - **P5 a** materialize-before-text per event; no-XBRL filings unsuppressed · **b** head-scoped skip, crossing SAME_AS edge ids recorded in the skip log · **c** value-compatibility gate · **d** `xbrl_conflict` STATE-BASED park (re-enqueues on revocation/edge-quarantine; TERMINAL only after graders re-confirm) + falsifier exhibit · **e** writer REJECT backstop `duplicate_of_xbrl`, same state-based keying.
+  - **P5 a** materialize-before-text per event; no-XBRL filings unsuppressed · **b** head-scoped skip, crossing SAME_AS edge ids recorded in the skip log · **c** value-compatibility gate: the text value matches the xbrl value within the text's own stated precision (half-ULP of its least significant digit, post-canonicalization); compatible → skip, logged with the deferred-to fact id + crossing edge ids · **d** `xbrl_conflict` STATE-BASED park (re-enqueues on revocation/edge-quarantine; TERMINAL only after graders re-confirm) + falsifier exhibit · **e** writer REJECT backstop `duplicate_of_xbrl`, same state-based keying. A QUARANTINED target driver → PARK-RETRY; CLAIM_FROZEN does NOT block materialization (the kernel blocks QUARANTINED only).
   - **P6** xbrl facts/resolutions excluded from BROAD/ESTABLISHED eligibility evidence (kernel §6.5 amendment).
   - **P7** provenance: `attach_mode='xbrl_link'` · `attached_via=resolution_id` · `xbrl_fact_id` (kernel V9/§10.1 wording).
-  - **P8** `ConceptResolution` reified (readers named) · **a** revoke = 2 strong graders + RecoveryEvent + read-time cohort exclusion; enrichment consumes active only · **b** un-revoke at the same bar + counter-event · **c** gap repair triggered by revocation OR recorded-edge quarantine: parks re-enqueue + skip-log-bounded re-extraction · **d** the declared XC-09 judgment-exception for backfill eras, with era re-resolution.
+  - **P8** `ConceptResolution` reified: `{resolution_id, company, driver, qname, method, model_id, menu_sha, date, state ∈ {active, revoked}}` — method/model_id/menu_sha are read by the risk-stratified re-verification and revocation graders to reproduce the original pick context · **a** revoke = 2 strong graders + RecoveryEvent + read-time cohort exclusion; enrichment consumes active only · **b** un-revoke at the same bar + counter-event · **c** gap repair triggered by revocation OR recorded-edge quarantine: parks re-enqueue + skip-log-bounded re-extraction · **d** the declared XC-09 judgment-exception for backfill eras, with era re-resolution.
   - **P9** strong-judge-tier FINAL VERIFY for materialization-grade resolutions — LOCKED per kernel §11.0 (only tier membership stays [exp] via PIPE-32); XC-16 + full-universe = hard pre-gate · **b** qualifier veto (adjusted/organic/pro-forma-class tokens in a candidate qname → refuse).
   - **P10** lane-matrix carve-outs, origin-gated: `xbrl_qname`/`MAPS_TO_CONCEPT` written at write time by this code producer only; `reported` legal on the metric lane for `origin=xbrl_link`.
-  - **P11** reverse-order upgrade: **a** repair-grade in-place upgrade on value-compatible · **b** immutable `UpgradeEvent` with full prior payload; no prior_* fields · **c** writer validator: origin flip ⇔ exactly one event · **d** graded reversal · **e** conflict → xbrl parks, the written fact stands · **f** fold-equivalent twins converge at read, not in storage.
+  - **P11** reverse-order upgrade: **a** repair-grade in-place upgrade on value-compatible · **b** immutable `UpgradeEvent` with full prior payload; no prior_* fields · **c** writer validator: origin flip ⇔ exactly one event · **d** graded reversal: on 2-strong-grader confirmation, re-apply the UpgradeEvent's archived payload through the same repair lane, emitting a counter-event — lossless both directions, zero humans · **e** conflict → xbrl parks, the written fact stands · **f** fold-equivalent twins converge at read, not in storage.
   - **P12** resolution-on-create enqueues materialize(company, driver, all filings incl. current); text never waits.
   - **P13** `xbrl_twin_suspect{slice|period}` tripwire (measurement-diff EXCLUDED); `twin_suspect_rate` gates rollout [exp bar].
   - **P14** period pins: the shared deterministic scope classifier in the FACT-18 wrapper — quarter > Q1-YTD; ytd = FY-start-anchored; `half` = non-FY-start two-quarter; annual/ttm/monthly; else `exact_range`+WARN · **a** fiscal fields null-not-guessed · **b** sentinels illegal · **c** classifier + text-label resolution anchor on company-ACTUAL period ends (XBRL history / SEC cache first; month-math fallback) — the 52/53-week convergence rule · instants `period_scope=null` (the FACT-16.17 carve-out).
