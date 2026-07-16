@@ -1,6 +1,6 @@
 # STATUS_AND_HISTORY.md — the one mutable dashboard, supersession ledger, and crosswalk
 
-> **Status: LIVE — consolidation Phases 1-5 EXECUTED (owner GO 2026-07-16); the definitive reader test's outcome, per-question grades, and tested hashes live in `archive/2026-07-15_pre-consolidation/READER_TEST_RECORD_2026-07-16_phase5-final-run4.md` — Phase 5 is COMPLETE ONLY IF that exact record shows 10/10 PASS. Review rounds + decision trail = the archived `CONSOLIDATION.md` §10.2/§16.** This file owns STATUS and HISTORY only — live rule
+> **Status: LIVE — consolidation Phases 1-5 EXECUTED (owner GO 2026-07-16); the definitive reader test's outcome, per-question grades, and tested hashes live in `archive/2026-07-15_pre-consolidation/READER_TEST_RECORD_2026-07-16_phase5-final-run5.md` — Phase 5 is COMPLETE ONLY IF that exact record shows 10/10 PASS. Review rounds + decision trail = the archived `CONSOLIDATION.md` §10.2/§16.** This file owns STATUS and HISTORY only — live rule
 > wording stays in `FINAL_DESIGN.md`; procedures stay in `BUILD_AND_OPERATIONS.md`; channel duties stay in
 > `ChannelContract.md`. Any status shown in another live file is a generated summary of THIS file. A status
 > change edits this dashboard — and only if rule meaning changed through owner approval, the one owning rule
@@ -25,7 +25,7 @@
 | XBRL-native materializer | **APPROVED WORKING DESIGN (owner 2026-07-15; DORMANT until P19 enablement + hard pre-gates + EXP-6)** | — | EXP-1 signed | — |
 | Experiment program | EXP-0/1/2 SIGNED PASS | — | — | EXP-3..6 / WP-FC-RUN PENDING |
 | Running layer (schedules/ledger/QA) | NOT designed-complete | — | — | — |
-| Consolidation itself | Phases 1-5 EXECUTED (owner GO 2026-07-16); all 33 sources accounted for byte-verified (29 originals + 3 snapshots archived; the byte-pinned Plan at root); audit trail = the archived CONSOLIDATION.md | — | definitive blank-context reader test: outcome + per-question grades + authoritative tested hashes in `archive/2026-07-15_pre-consolidation/READER_TEST_RECORD_2026-07-16_phase5-final-run4.md` — Phase 5 COMPLETE only if that record shows 10/10 PASS | root = the 7 sanctioned files + archive/; Plan + WorkOrder stay until the experiment program migrates |
+| Consolidation itself | Phases 1-5 EXECUTED (owner GO 2026-07-16); all 33 sources accounted for byte-verified (29 originals + 3 snapshots archived; the byte-pinned Plan at root); audit trail = the archived CONSOLIDATION.md | — | definitive blank-context reader test: outcome + per-question grades + authoritative tested hashes in `archive/2026-07-15_pre-consolidation/READER_TEST_RECORD_2026-07-16_phase5-final-run5.md` — Phase 5 COMPLETE only if that record shows 10/10 PASS | root = the 7 sanctioned files + archive/; Plan + WorkOrder stay until the experiment program migrates |
 
 ## 2. Lists by status
 
@@ -263,10 +263,11 @@ graded reversal + kernel-dependency note → BUILD §8.2.
 | T11 (T11.1-T11.11) | Producer interface contract | FINAL_DESIGN §4.2 (T11.1 real-fact gate; T11.2 who-fills-what: channel submits raw, the core alone fills state+numbers after the gate — contract side: ChannelContract §1 "never creates, never names, never decides identity" + §4 never-send list) · §5.1 (T11.3 fusion + basis hint) · §6.1/§7.1 (T11.5 hints, T11.8 %-guidance basis, T11.10 rate-vs-level) · §9 (T11.4 slices-beat-mixed · T11.6 chronological processing + the code-served strict-`<` PIT prior view, guidance-lane-only, with §4.3's no-graph-read rule — contract side: ChannelContract §5 "submit events chronologically per company" · T11.7 fan-out · T11.9 policy routing · T11.11 one-update-per-source-time-statement, trajectory always derived never stored — writer-side law only, no contract-side content by design) · BUILD §5 (CLI order + PIT prior view) |
 | T12 (T12.1-T12.9) | Read contract | FINAL_DESIGN §9; T12.6 series_unit law also §6.1 |
 
-**External inbound citations (verified 2026-07-15):** 12 files cite exact FinalDesign filenames — the
-experiments board/handover/exhibits/keys/harness plus the engine prompts `workflows/menu_build.js`,
-`reconcile.js`, `gate.js` (their inlined rulebooks cite `02_DriverCatalog.md` as verbatim provenance — keep
-resolvable or re-point in the same change). Stem scans reach 21; bare-word 22 incl. one `INDEX.md` name-collision
+**External inbound citations (link sweep EXECUTED at Phase-5 step 8, 2026-07-16; repo-wide scan clean):** 12 files
+cite exact FinalDesign filenames — the experiments board/handover/exhibits/keys/harness plus the engine prompts
+`workflows/menu_build.js`, `reconcile.js`, `gate.js` (re-pointed: labels name FINAL_DESIGN §3 as authority with
+archived-02 provenance; runtime archive reads removed round 22; NAME-17 synced to OD-21 round 23 — rulebook-sync
+test `workflows/test_rulebook_sync.py` guards drift; re-certification vs `5db902f` owed before the next Track A run). Stem scans reach 21; bare-word 22 incl. one `INDEX.md` name-collision
 false positive. Re-run both scans at migration; update or validate every hit BEFORE moving sources.
 
 ## 8. Archive manifest + evidence pointers

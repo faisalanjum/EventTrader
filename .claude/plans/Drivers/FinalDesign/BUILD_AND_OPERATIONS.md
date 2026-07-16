@@ -1,6 +1,6 @@
 # BUILD_AND_OPERATIONS.md — how to build, test, run, and retire the Driver system
 
-> **Status: LIVE — consolidation Phases 1-5 EXECUTED (owner GO 2026-07-16); the definitive reader test's outcome, per-question grades, and tested hashes live in `archive/2026-07-15_pre-consolidation/READER_TEST_RECORD_2026-07-16_phase5-final-run4.md` — Phase 5 is COMPLETE ONLY IF that exact record shows 10/10 PASS.** This file owns PROCEDURE: build steps, contracts'
+> **Status: LIVE — consolidation Phases 1-5 EXECUTED (owner GO 2026-07-16); the definitive reader test's outcome, per-question grades, and tested hashes live in `archive/2026-07-15_pre-consolidation/READER_TEST_RECORD_2026-07-16_phase5-final-run5.md` — Phase 5 is COMPLETE ONLY IF that exact record shows 10/10 PASS.** This file owns PROCEDURE: build steps, contracts'
 > mechanics, gates, run rules, and hazards. Rule MEANING lives only in `FINAL_DESIGN.md` (rule IDs referenced
 > here, never restated). Public channel duties live only in `ChannelContract.md`. Status/history/supersessions
 > live only in `STATUS_AND_HISTORY.md`. The 33 frozen sources are fully accounted for, byte-verified (29 originals + 3 snapshots archived; the
@@ -131,6 +131,12 @@ class finalization → final validation → fitness gate.
   owner-locked rule supersessions are exempt. Pin exact model IDs in `manifest.models`.
 - **PIT:** offline NAME creation may use full history (names carry no fact value); anything shown to a
   historical producer and every fact-time menu cuts at public time.
+- **State (updated round 23, 2026-07-16):** engine-prompt changes since the certified baseline — runtime archive
+  reads removed + authority labels → FINAL_DESIGN §3 (round 22) · NAME-17 synced to OD-21 law in all three
+  rulebooks (round 23; the pre-OD-21 "actual vs expected" form is gone) · drift guard added
+  (`workflows/test_rulebook_sync.py`: gate==reconcile identical, menu_build prefix, OD-21 markers) · suite
+  re-run GREEN 2026-07-16: **263 passed + 1 skip**; all three engine scripts parse clean harness-wrapped.
+  **RE-CERTIFICATION vs `5db902f` still owed before the next Track A run (prompt bytes changed).**
 - **State:** WP-FC-EDITS landed (`5db902f`, 2026-07-10; 260 tests + 1 skip): NAME rules inlined, dead leaf XBRL
   code removed, MF-02 + model slots + `min_score=0.60` at all four sites. Remaining: fold/tree prompt mirrors —
   re-verified on disk 2026-07-16 (pre-archive audit of WorkflowContextPack): the same fix classes are still open
@@ -244,7 +250,7 @@ reads realized returns.
 > documents — DONE (INT-2..INT-5 complete; per-element destination proof = STATUS §7.1b; the integration-era
 > reader tests passed — the archive-gate run + the post-integration standard run; the DEFINITIVE post-move
 > reader test = the Phase-5 gate — executed: outcome, per-question grades, and tested hashes live in the
-> archive's `READER_TEST_RECORD_2026-07-16_phase5-final-run4.md`). Both originals are ARCHIVED (2026-07-15, byte-verified vs the Phase-1 manifest); the full
+> archive's `READER_TEST_RECORD_2026-07-16_phase5-final-run5.md`). Both originals are ARCHIVED (2026-07-15, byte-verified vs the Phase-1 manifest); the full
 > operative mechanics live in §8.1/§8.2 below, with the archived originals as historical evidence.
 > **Authority, three tiers (round 16 wording; both designs now ratified + archived):** `FINAL_DESIGN.md` owns
 > CURRENT LAW · THIS guide's §8.1/§8.2 own the ratified designs' OPERATIVE MECHANICS (the archived originals'

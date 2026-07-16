@@ -1,6 +1,6 @@
 export const meta = {
   name: 'driver-reconcile',
-  description: 'Step 2 reconcile over a per-industry seed catalog (args.run_id = the exact menu_build run; reads runs/<run_id>/seed.json, writes catalog.json + approved.json + decisions.json + validation.txt there): (Dedup) canonical + reversible SAME_AS for exact-same-meaning only = the REUSE arm; (Gate) independent admit/rewrite/skip per the 02 NAME rules; (Refute) skeptic breaks bad SAME_AS + meaning-changing rewrites; (Assemble) DETERMINISTIC CODE writes the catalog (assemble_catalog.py ports the 5-way precedence; HierarchicalCatalogPlan §11.19 — the writer cannot fabricate a fusion); (Validate) incl. the D1 fusion-approval check. Review-file only; no graph writes; no merges/deletes. Roll-up/rewrite targets must be COINED names.',
+  description: 'Step 2 reconcile over a per-industry seed catalog (args.run_id = the exact menu_build run; reads runs/<run_id>/seed.json, writes catalog.json + approved.json + decisions.json + validation.txt there): (Dedup) canonical + reversible SAME_AS for exact-same-meaning only = the REUSE arm; (Gate) independent admit/rewrite/skip per the FINAL_DESIGN §3 NAME rules; (Refute) skeptic breaks bad SAME_AS + meaning-changing rewrites; (Assemble) DETERMINISTIC CODE writes the catalog (assemble_catalog.py ports the 5-way precedence; HierarchicalCatalogPlan §11.19 — the writer cannot fabricate a fusion); (Validate) incl. the D1 fusion-approval check. Review-file only; no graph writes; no merges/deletes. Roll-up/rewrite targets must be COINED names.',
   phases: [ { title: 'Guard', detail: '§11.11 SEED_MAX measure; over caps → deterministic name-sorted review batches (cross-batch SAME_AS = accepted residual)' }, { title: 'Review', detail: 'dedup proposer + independent gate, in parallel (per batch)' }, { title: 'Refute', detail: 'independent skeptic breaks bad SAME_AS + meaning-changing rewrites; JS filters them out' }, { title: 'SameName', detail: 'leaf flag-triggered D5 (rare): review flagged mixed-meaning unions → SAME(Refute-confirmed)/DIFFERENT(split+mini-gate)/UNCLEAR(park)' }, { title: 'Assemble', detail: 'JS lists → decisions.json (+ same_name_review.json) → assemble_catalog.py (code writes catalog.json + approved.json, prints sha)' }, { title: 'Validate', detail: 'deterministic structure check incl. D1 fusion-approval (zero judgment); HARD-FAIL if broken' } ],
 }
 
@@ -19,7 +19,7 @@ if (!RUN_ID) throw new Error('reconcile.js requires args.run_id (e.g. "2026-06-0
 const RUN_DIR = `${DIR}/runs/${RUN_ID}`
 const SEED = `${RUN_DIR}/seed.json`
 const CAT  = `${RUN_DIR}/catalog.json`
-// PIPE-16: naming judges use the inlined RULEBOOK below — verbatim from the now-archived 02_DriverCatalog.md (byte-identical); current law = FINAL_DESIGN §3 NAME-01…19; readers cannot fetch docs. No runtime file reads of archived docs (evidence-only law; Phase-5 round 22).
+// PIPE-16: naming judges use the inlined RULEBOOK below — verbatim from the now-archived 02_DriverCatalog.md, SYNCED to current law at NAME-17 (OD-21, 2026-07-16); current law = FINAL_DESIGN §3 NAME-01…19; readers cannot fetch docs. No runtime file reads of archived docs (evidence-only law; Phase-5 round 22).
 const RULEBOOK = `## Naming rules
 
 ### A. Core naming rules
@@ -108,7 +108,7 @@ const RULEBOOK = `## Naming rules
 ### D. Family, gate & meta
 
 #### NAME-17 — Metric-family suffix stays in the name  \`[LOCKED]\`
-- **Rule:** Name metric + mechanism: \`{metric}_surprise\` (actual vs expected), \`{metric}_guidance\` (forward outlook) — \`eps_surprise\`, \`revenue_guidance\`. Suffix stays in the name AND fact_type is a separate permanent field. The base \`{metric}\` is a separate driver linked by \`BASE_METRIC\` (never same-as). Beat/miss/raised → driver_state, never the name.
+- **Rule:** Name metric + mechanism: \`{metric}_surprise\` (a delivered actual OR a promised guide compared with a cross-party expectation; ONE surprise driver holds all three surprise types: actual_vs_consensus, actual_vs_guidance, guidance_vs_consensus — OD-21, synced 2026-07-16), \`{metric}_guidance\` (forward outlook) — \`eps_surprise\`, \`revenue_guidance\`. Suffix stays in the name AND fact_type is a separate permanent field. The base \`{metric}\` is a separate driver linked by \`BASE_METRIC\` (never same-as). Beat/miss/raised → driver_state, never the name.
 
 #### NAME-18 — The new-driver gate  \`[LOCKED]\`
 - **Rule:** Propose a new driver only when ALL hold: (a) no existing name means the same cause; (b) it satisfies every naming rule; (c) each important noun comes from the source or an existing driver; (d) it's attached to ≥1 causal claim with real evidence; (e) it's a reusable CLASS, not bound to a single instance (\`government_shutdown\` OK even once; \`q1_2026_shutdown_effect\` rejected); (f) if the rules leave >1 candidate name → reject as ambiguous; (g) if the evidence is vague or names no reusable cause → skip, never invent.
@@ -180,7 +180,7 @@ for (let bi = 0; bi < BATCH_FILES.length; bi++) {
   const tag = BATCH_FILES.length > 1 ? ` [batch ${bi + 1}/${BATCH_FILES.length}]` : ''
   const batchNote = BATCH_FILES.length > 1 ? ' (This file is ONE name-sorted batch of a larger seed — judge only what is in it.)' : ''
   const [dedup, gate] = await parallel([
-    () => agent(`NAMING RULES — authority = FINAL_DESIGN.md §3 (NAME-01…19); inlined verbatim from the archived 02_DriverCatalog.md (byte-identical; PIPE-16):
+    () => agent(`NAMING RULES — authority = FINAL_DESIGN.md §3 (NAME-01…19); inlined verbatim from the archived 02_DriverCatalog.md, synced to current law at NAME-17 — OD-21 2026-07-16 (PIPE-16):
 ${RULEBOOK}
 ${MF02}
 
@@ -193,7 +193,7 @@ TASK = propose final reversible SAME_AS links over them. STRICT rules:
 - For each link pick the CANONICAL (shortest standard form, NAME-06/08 — and it MUST be one of the COINED driver_names in the catalog, never an invented name) + the variant. Reversible only; never delete or merge nodes. A singular/plural pair naming the same concept is a wording variant — fold to one form; if meaning may differ (booking/bookings), keep separate.
 Return DEDUP_SCHEMA.`, {schema:DEDUP_SCHEMA, model:MODELS.dedup, effort:'high', label:`dedup${tag}`, phase:'Review'}),
     () => agent(`You are an INDEPENDENT admission gate — judge each name FRESH and skeptically; do NOT assume the producer that coined it was right.
-NAMING RULES — authority = FINAL_DESIGN.md §3 (NAME-01…19); inlined verbatim from the archived 02_DriverCatalog.md (byte-identical; PIPE-16):
+NAMING RULES — authority = FINAL_DESIGN.md §3 (NAME-01…19); inlined verbatim from the archived 02_DriverCatalog.md, synced to current law at NAME-17 — OD-21 2026-07-16 (PIPE-16):
 ${RULEBOOK}
 ${MF02}
 
@@ -329,7 +329,7 @@ for e in view: gs.setdefault((e.get('company') or '').strip(),[]).append(e)
 names=sorted((x.get('driver_name') or '').strip().lower() for x in d['catalog'])
 print(json.dumps({'name':r['driver_name'],'total_refs':len(allr),'truncated':len(allr)>200,'existing_seed_names':names,'sides':[{'company':c,'refs':v} for c,v in sorted(gs.items(), key=lambda kv:(len(kv[1]),kv[0]))]}))"`
   const rawReviews = (await parallel(flagged.map(f => () => agent(`SAME-NAME REVIEW (leaf, flag-triggered — HierarchicalCatalogPlan D5). The single record "${norm(f.driver_name)}" was FLAGGED as possibly mixing different meanings under one name (reviewer note: ${f.why}).
-NAMING RULES — authority = FINAL_DESIGN.md §3 (NAME-01…19); full text inlined verbatim below from the archived 02_DriverCatalog.md (byte-identical; PIPE-16):
+NAMING RULES — authority = FINAL_DESIGN.md §3 (NAME-01…19); full text inlined verbatim below from the archived 02_DriverCatalog.md, synced to current law at NAME-17 — OD-21 2026-07-16 (PIPE-16):
 ${RULEBOOK}
 LOAD THE EVIDENCE (grouped per company, smallest side first): run Bash:
 ${pyRec(norm(f.driver_name))}

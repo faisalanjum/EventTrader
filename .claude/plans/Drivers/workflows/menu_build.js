@@ -37,7 +37,7 @@ const CONV_SCHEMA = { type:'object', additionalProperties:false,
 const REC_SCHEMA = { type:'object', additionalProperties:false, required:['files_written'],
   properties:{ files_written:{type:'array', items:{type:'string'}}, git_commit:{type:'string'} } }
 
-const RULES = `NAMING RULES — authority = FINAL_DESIGN.md §3 (NAME-01…19), inlined verbatim below from the archived 02_DriverCatalog.md (byte-identical; readers cannot fetch docs, PIPE-16). Coin names per these rules exactly.
+const RULES = `NAMING RULES — authority = FINAL_DESIGN.md §3 (NAME-01…19), inlined verbatim below from the archived 02_DriverCatalog.md, synced to current law at NAME-17 — OD-21 2026-07-16 (readers cannot fetch docs, PIPE-16). Coin names per these rules exactly.
 
 ## Naming rules
 
@@ -127,7 +127,7 @@ const RULES = `NAMING RULES — authority = FINAL_DESIGN.md §3 (NAME-01…19), 
 ### D. Family, gate & meta
 
 #### NAME-17 — Metric-family suffix stays in the name  \`[LOCKED]\`
-- **Rule:** Name metric + mechanism: \`{metric}_surprise\` (actual vs expected), \`{metric}_guidance\` (forward outlook) — \`eps_surprise\`, \`revenue_guidance\`. Suffix stays in the name AND fact_type is a separate permanent field. The base \`{metric}\` is a separate driver linked by \`BASE_METRIC\` (never same-as). Beat/miss/raised → driver_state, never the name.
+- **Rule:** Name metric + mechanism: \`{metric}_surprise\` (a delivered actual OR a promised guide compared with a cross-party expectation; ONE surprise driver holds all three surprise types: actual_vs_consensus, actual_vs_guidance, guidance_vs_consensus — OD-21, synced 2026-07-16), \`{metric}_guidance\` (forward outlook) — \`eps_surprise\`, \`revenue_guidance\`. Suffix stays in the name AND fact_type is a separate permanent field. The base \`{metric}\` is a separate driver linked by \`BASE_METRIC\` (never same-as). Beat/miss/raised → driver_state, never the name.
 
 #### NAME-18 — The new-driver gate  \`[LOCKED]\`
 - **Rule:** Propose a new driver only when ALL hold: (a) no existing name means the same cause; (b) it satisfies every naming rule; (c) each important noun comes from the source or an existing driver; (d) it's attached to ≥1 causal claim with real evidence; (e) it's a reusable CLASS, not bound to a single instance (\`government_shutdown\` OK even once; \`q1_2026_shutdown_effect\` rejected); (f) if the rules leave >1 candidate name → reject as ambiguous; (g) if the evidence is vague or names no reusable cause → skip, never invent.

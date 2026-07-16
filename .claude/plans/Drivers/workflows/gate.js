@@ -1,6 +1,6 @@
 export const meta = {
   name: 'driver-gate-g2',
-  description: 'G2 — INDEPENDENT admission gate (reusable). One test per candidate driver_name: is it a VALID, REUSABLE driver? Verdict = reuse / admit / rewrite / skip, per the 02 NAME rules, fail-closed (never delete/merge; err specific). No route bucket; no fundamental/news split (a producer concern, not a catalog one). Reusable in BATCH reconcile AND LIVE production (per new name, against the live catalog). Pass evidence-bearing candidates + catalog via args; defaults to the Restaurants seed.',
+  description: 'G2 — INDEPENDENT admission gate (reusable). One test per candidate driver_name: is it a VALID, REUSABLE driver? Verdict = reuse / admit / rewrite / skip, per the FINAL_DESIGN §3 NAME rules, fail-closed (never delete/merge; err specific). No route bucket; no fundamental/news split (a producer concern, not a catalog one). Reusable in BATCH reconcile AND LIVE production (per new name, against the live catalog). Pass evidence-bearing candidates + catalog via args; defaults to the Restaurants seed.',
   phases: [ { title: 'Gate' } ],
 }
 
@@ -8,7 +8,7 @@ const A = (typeof args === 'string') ? JSON.parse(args) : (args || {})   // harn
 // Model slots (args-overridable; owner 2026-07-10): strong judge = sonnet @ effort high; clerk = sonnet engine-default. No haiku/opus defaults.
 const _M = (A.models && typeof A.models === 'object') ? A.models : {}
 const MODELS = { gate: _M.gate || 'sonnet', clerk: _M.clerk || 'sonnet' }
-// PIPE-16: rulebook inlined verbatim below — from the now-archived 02_DriverCatalog.md (byte-identical); current law = FINAL_DESIGN §3 NAME-01…19 (readers cannot fetch docs).
+// PIPE-16: rulebook inlined verbatim below — from the now-archived 02_DriverCatalog.md, SYNCED to current law at NAME-17 (OD-21, 2026-07-16); current law = FINAL_DESIGN §3 NAME-01…19 (readers cannot fetch docs).
 const RULEBOOK = `## Naming rules
 
 ### A. Core naming rules
@@ -97,7 +97,7 @@ const RULEBOOK = `## Naming rules
 ### D. Family, gate & meta
 
 #### NAME-17 — Metric-family suffix stays in the name  \`[LOCKED]\`
-- **Rule:** Name metric + mechanism: \`{metric}_surprise\` (actual vs expected), \`{metric}_guidance\` (forward outlook) — \`eps_surprise\`, \`revenue_guidance\`. Suffix stays in the name AND fact_type is a separate permanent field. The base \`{metric}\` is a separate driver linked by \`BASE_METRIC\` (never same-as). Beat/miss/raised → driver_state, never the name.
+- **Rule:** Name metric + mechanism: \`{metric}_surprise\` (a delivered actual OR a promised guide compared with a cross-party expectation; ONE surprise driver holds all three surprise types: actual_vs_consensus, actual_vs_guidance, guidance_vs_consensus — OD-21, synced 2026-07-16), \`{metric}_guidance\` (forward outlook) — \`eps_surprise\`, \`revenue_guidance\`. Suffix stays in the name AND fact_type is a separate permanent field. The base \`{metric}\` is a separate driver linked by \`BASE_METRIC\` (never same-as). Beat/miss/raised → driver_state, never the name.
 
 #### NAME-18 — The new-driver gate  \`[LOCKED]\`
 - **Rule:** Propose a new driver only when ALL hold: (a) no existing name means the same cause; (b) it satisfies every naming rule; (c) each important noun comes from the source or an existing driver; (d) it's attached to ≥1 causal claim with real evidence; (e) it's a reusable CLASS, not bound to a single instance (\`government_shutdown\` OK even once; \`q1_2026_shutdown_effect\` rejected); (f) if the rules leave >1 candidate name → reject as ambiguous; (g) if the evidence is vague or names no reusable cause → skip, never invent.
@@ -128,7 +128,7 @@ const catClause = catalog.length
   : `(No prior catalog supplied — verdict=reuse only if two candidates are exact-same.)`
 
 const res = await agent(`You are an INDEPENDENT admission gate — judge each candidate driver_name FRESH and skeptically; do NOT assume whoever coined it was right.
-NAMING RULES — authority = FINAL_DESIGN.md §3 (NAME-01…19); inlined verbatim from the archived 02_DriverCatalog.md (byte-identical; PIPE-16):
+NAMING RULES — authority = FINAL_DESIGN.md §3 (NAME-01…19); inlined verbatim from the archived 02_DriverCatalog.md, synced to current law at NAME-17 — OD-21 2026-07-16 (PIPE-16):
 ${RULEBOOK}
 ${candsClause}
 ${catClause}
