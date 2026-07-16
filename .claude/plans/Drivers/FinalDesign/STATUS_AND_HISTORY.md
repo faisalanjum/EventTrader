@@ -155,11 +155,11 @@ WorkOrder current sha `4911a22f…` (status board stale at `1586761a…` — fix
 | ChannelContract | ACTIVE live file | kept — the SOLE public channel authority under the one-copy law; banner amended 2026-07-15 (owner batch: XBRL row, evidence row, provenance one-liner replacing the old "source of truth" phrasing); current sha tracked in git + CONSOLIDATION §16 hash freeze |
 | DriverGenesisRestructure | unapproved rationale | open charter questions in FINAL_DESIGN §10; archive |
 | DriverPlan.html | stale study export | none (regenerate later from live docs); archive |
-| FableAdmissionKernelDesign | **RATIFIED working design (owner 2026-07-15; not activated)** | full mechanics → BUILD §8.1 + law-grade parts → FINAL_DESIGN (INT-2, destination-proof per element); archives after integration + the post-move full reader test |
+| FableAdmissionKernelDesign | **RATIFIED working design (owner 2026-07-15; not activated)** | full mechanics → BUILD §8.1 + law-grade parts → FINAL_DESIGN (destination proof §7.1b); **original ARCHIVED 2026-07-15, byte-verified — DONE** |
 | FableContextPack · WorkflowContextPack | stale navigation/code maps | archive (Workflow pack: after live-code re-audit + link repair) |
 | FableExperimentPlan · WorkOrder | pinned plan · runbook | BUILD §9; keep Plan byte-identical until program migrates; archive after. The Plan's frozen authority ladder (lines 4/257) resolves externally: its "lock candidates" stay live at root; its topic docs resolve to the archive paths with meaning carried by the four live files (step 21c note) |
 | FablePrompt · FablePromptv2 | executed briefs | provenance entries only; archive |
-| XBRLIntegrationDesign | **RATIFIED working design (owner 2026-07-15; DORMANT until P19 enablement)** | recipe + pin map + the ten amendments → BUILD §8.2 + owning law sections (INT-3, gate-tagged); archives after integration + the post-move full reader test |
+| XBRLIntegrationDesign | **RATIFIED working design (owner 2026-07-15; DORMANT until P19 + gates + EXP-6)** | recipe + pin map + the ten amendments → BUILD §8.2 + owning law sections (gate-tagged); **original ARCHIVED 2026-07-15, byte-verified — DONE** |
 | CONSOLIDATION.md | audit + migration map | moves into the same dated archive after the four live files pass review (never a fifth rule source) |
 
 ### 7.1 Rule-ID crosswalk (every stable ID range → its one live anchor; §14.1 artifact)
