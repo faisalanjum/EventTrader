@@ -200,6 +200,40 @@ column — the map is total over every ID listed in `CONSOLIDATION.md` §14.1.
 | Candidate bundles | BUILD §8.1 (kernel split + ratification bundle) · §8.2 (XBRL recipe + pin map + amendments); full text = the two LIVE candidate files | — |
 | Open items | §2 OPEN list (mirrored FINAL_DESIGN §10) + BUILD §11 missing recipes | — |
 
+### 7.1b Ratified-design destination proof (owner order 2026-07-15: every transferred item → its exact live anchor)
+
+**Kernel (FableAdmissionKernelDesign.md → live anchors; BUILD §8.1.x unless noted):**
+
+| Kernel section | Content | Live anchor |
+|---|---|---|
+| §1 strategy D1-D4 + 8 answers/3 amendments | anchor-first live-always | BUILD §8.1.1 |
+| §2 decision flow (Stage 0-3, async, axiom C) | intake/router/arms/guards/provenance | BUILD §8.1.2 |
+| §3 G1 display | cards, never-shown, verbatim instruction | BUILD §8.1.3 |
+| §4 arms + the 8 park codes | ATTACH/ADOPT/CLAIM rules, park governance | BUILD §8.1.4 |
+| §5 family policy | stamp/resolve functions, variant stamping, latents | BUILD §8.1.5 (+ FINAL_DESIGN §4.1/§4.2 law) |
+| §6.1 LINK operation | pair assembly, auto-refusal taxonomy, the 5 checks, high-blast, apply/memo/head election, cache | BUILD §8.1.6 |
+| §6.2 two triggers + ledger hygiene | CLAIM-off/shadow, sweep, deferred ledger | BUILD §8.1.6 |
+| §6.3 frozen anchor | birth_quotes, refuted negatives, enrichment-OFF, re-freeze | BUILD §8.1.6 |
+| §6.4 union-preview | abstain-only | BUILD §8.1.6 |
+| §6.5 eligibility/establishment | BROAD/ESTABLISHED/CLAIM_FROZEN, in-tx read, single-company exception | BUILD §8.1.6 |
+| §6.6 split-reconciliation lane | batch-grade re-judgment of mutual refusals | BUILD §8.1.6 |
+| §7 validators V1-V14 | full meanings | BUILD §8.1.7 (V14 also FINAL_DESIGN §5.4) |
+| §8.1-8.5 phases/seed/gauntlet/eligibility/contingency | sequence, S-A1..6, P1..P9, pass bar, BROAD-keyed features, ladder | BUILD §8.1.8 |
+| §9 immune system | doctrine, falsifier (i)-(vii), audits, calibration stream, flow metrics, launch blockers | BUILD §8.1.9 (ATTACH-audit law in FINAL_DESIGN §5.4) |
+| §10 recovery items 1-8 | provenance, signal-quarantine, 2-grader confirm, propagation, RecoveryEvent, wrong-quarantine, D4 scoping, disputed | BUILD §8.1.10 (+ FINAL_DESIGN §5.4 law) |
+| §11.0/§11 model tiers | locked rule, tiers, owner defaults, P1-P7 deltas | BUILD §8.1.11 (principle in FINAL_DESIGN §1) |
+| §12 experiments | S1-S4, X0-X9, X-G, X-IM, X-C | BUILD §8.1.12 |
+| §13 rejected · §14 reject-conditions | terse load-bearing lists | BUILD §8.1.13 |
+| §15.0 MVP split · §15 bundle · §16 residuals | day-1 core/deferred/coverage rule · six ratified items · five residuals | BUILD §8.1 (the three dedicated blocks) |
+
+**XBRL (XBRLIntegrationDesign.md → live anchors):** §3 coverage five-conditions + §5.2 recipe steps 1-9 +
+graph-verified formType literals → BUILD §8.2 recipe · §5.3 period classifier + P14 → BUILD §8.2 pin map + §5
+dormant-amendment note · pins P1-P17/P19 (incl. P16) → BUILD §8.2 pin map · the ten amendments → their owning
+sections, gate-tagged: (1)(3)(7)(9) → BUILD §5 validator note · (2) → BUILD §8.1.7 V9 · (4) → FINAL_DESIGN §8
+rider line · (5) → BUILD §8.1.6 eligibility · (6) → FINAL_DESIGN §8 XC-18 · (8) → BUILD §8.1.9 falsifier ·
+(10) → FINAL_DESIGN §9 collapse rank · TextBlock disposition + half-ULP gate + ConceptResolution schema +
+graded reversal + kernel-dependency note → BUILD §8.2.
+
 ### 7.2 Census T-group anchors (per-group exact map; within a group, rules share the group anchor unless a per-rule exception is listed)
 
 | T-group | Census topic | Exact live anchor(s) |

@@ -157,7 +157,12 @@ class finalization → final validation → fitness gate.
   matrix · state-in-lane · shape hints/grammar · signed-value rules · stated-only fields · baseline enum ·
   units/scaling/per-X · period-edge/scope symmetry both ways · ISO dates · quote required · value_text lint ·
   instant/duration legality · stated-movement midpoint (skips stored `unknown`) · period-scope/sentinel pairing ·
-  surprise composition/home/tense (all OD-21 cases).
+  surprise composition/home/tense (all OD-21 cases). **Ratified-XBRL amendments, DORMANT until the materializer
+  enables (owner 2026-07-15):** instants take `period_scope=null` (the FACT-16.17 carve-out) · origin-gated
+  write-time `xbrl_qname`/`MAPS_TO_CONCEPT` + `reported`-state legality for the xbrl producer only
+  (FACT-16(3)/(4)) · the shared deterministic `period_scope` classifier as the FACT-17b/18 exact-date-branch
+  authority · the state-based park classes `xbrl_conflict`/`duplicate_of_xbrl`/`xbrl_internal_conflict` + the
+  CLI skip/no-enrichment rules + the UpgradeEvent writer validator (origin flip ⇔ exactly one event).
 - **CLI order:** hints → compose/validate surprise → fuse → period/slice/measurement → units/canonical values →
   collision → ID → validate → write; plus code-served PIT prior view (`date <` source time), sidecar, park
   ledger, shell seam.
@@ -246,25 +251,306 @@ reads realized returns.
 
 ### 8.1 Admission Kernel v3.4 — APPROVED WORKING DESIGN (owner 2026-07-15; NOT activated; gates in force)
 
-- **Accepted / owner-approved (law, in FINAL_DESIGN):** born-complete admission + first fact · cheap roles never
-  final-confirm · OD-18 flagged-ATTACH confirmation · `SAME_AS`/`CONTINUES_AS` quarantine + `disputed` recovery ·
-  OD-19 conditional gate + permanent refusals · OD-20 continuity · role TIERS locked (exact membership
-  experiment-driven).
-- **Candidate (needs the named owner bundle/tests):** anchor-first live kernel + seed/deep-clean tree · blind
-  candidate normalization/lint/suffix/collision/PIT top-K + arms (ATTACH/ADOPT/CLAIM/LINK/CREATE/SKIP + one
-  UNSURE rejudge) · limited G1 view (exact + bounded related, safe badges; never full catalog/values/XBRL/
-  latents/future data/hidden scores) · exact attach, reorder-only adopt, at-most-one claim, named retry/terminal
-  park classes, one shared type/family resolver, protected live nodes · LINK pair assembly + five-check
-  default-refuse judge + high-blast second skeptic + reversible SAME_AS memo/head/cache; CLAIM ships OFF until
-  the named zero-wrong stage · frozen raw birth quotes + refuted negatives, no default evidence distillation,
-  controlled refreeze · broad/established eligibility, live transaction freeze, split review, validators V1-V14,
-  rollout gauntlet, smoke-alarm immune system, falsifier/attach audits, BASE_METRIC/family recovery propagation.
+**Already-law pieces (carried in FINAL_DESIGN):** born-complete admission + first fact (§4.2) · cheap roles
+never final-confirm (§1/§4.2) · OD-18 flagged-ATTACH confirmation incl. triggers (§5.4) · quarantine +
+`disputed` recovery paths (§5.4) · OD-19 gate + permanent refusals (§5.4) · OD-20 continuity (§5.4). Everything
+below is the ratified IMPLEMENTATION — gates and OFF-switches in force.
+
+**8.1.1 Strategy (anchor-first, live-always):** D1 a head-focused machine-built gate-proven seed (stratified
+leaves, default 3 companies/industry, X-S1-tuned; the never-run fitness gate must go GREEN before launch) · D2
+live kernel from day 1 (exact ATTACH · code-verified ADOPT · the LINK mechanism · born-complete CREATE ·
+fail-closed PARK) · D3 the async LINK trigger (event-driven + nightly) as backstop · D4 write-time-final signal
+eligibility. The old leaf→industry→sector workflow = seed-builder, contingency deep-clean, component donor —
+never a scheduled production backbone. Three amendments to the eight strategy answers: seed cards are NOT
+auto-ESTABLISHED (gauntlet-earned); ESTABLISHED is skeptic-minted, never count-minted; cross-company signal
+features key off BROAD, not ESTABLISHED.
+
+**8.1.2 The decision flow.** INPUT per candidate (from the blind extraction pass): {proposed_name, quote,
+evidence_atom, slice_tokens[], measurement_spans[], per_x, event_time}.
+- **Stage 0 — deterministic intake (code, zero LLM):** `norm()` absorbs ALL typography (case/separators/
+  whitespace/unicode) and NEVER plural/stem/acronym — that is meaning (the v1 line; plural convergence comes
+  from canonical coining + sweep SAME_AS, plural handling experiment-gated OFF) → NAME-05 format check →
+  banned-token lint (exact full-token, tiny frozen list) → terminal-suffix scan → collision probe over records
+  ∪ variant nodes ∪ latent anchors → PIT retrieval (embed name+quote+scope; `visible_from` ≤ event date;
+  cluster-deduped top-K; an exact-norm match is flagged EXACT in slot 1; badges ESTABLISHED / YOUNG /
+  CLAIM_FROZEN / QUARANTINED) → build the G1 reuse view.
+- **Stage 1 — the G2 router (ONE batched call per event, ≤400 records/≤300k chars; ATTACH/CLAIM discrimination
+  is strong-judge-tier identity work per §8.1.11; CREATE/SKIP may run cheap where experiments prove no loss):**
+  ATTACH(card) = EXACT card only, same cause + same causal scope + SAME MECHANISM confirmed from the card's
+  evidence · ADOPT(card) = sorted-token-multiset reorder, code-verified → ATTACH · CLAIM(card) = different
+  wording, same cause as a claim-eligible card → routes the pair to the LINK judge (the router only PROPOSES;
+  the judge's input is code-assembled — producer rationale never reaches it) · CREATE = no surviving match,
+  NAME-18(a-g), born-complete · SKIP = vague/not-reusable/single-event-bound · UNSURE = one strong-tier
+  re-judge. Hard rules: never claim across flavors; never claim a QUARANTINED card; a homonym-quarantined exact
+  name forces a more-specific re-coin; unsure → keep separate.
+- **Stage 2 — arm execution:** ATTACH writes the fact to the exact-matched node (its own wording, always).
+  CLAIM **[SHIPS OFF — shadow-log only until S3 passes]**: when ON, the LINK judge fires synchronously;
+  APPROVED → ONE atomic tx (variant node created with fact_type copied from the head + `SAME_AS`→head edge +
+  judge memo on the edge + the fact written TO THE VARIANT — union joins the head series at write time);
+  REFUSED/timeout → fall through to CREATE, pair → the deferred ledger. CREATE: collision routing → stamping
+  (OD-1 ×2 | DU-06 roots | C1→C2; live thin-evidence UNCLEAR → PARK-RETRY, never a default) → BASE_METRIC
+  (PIPE-25) → atomic tx → indexed immediately → first fact flagged `new_driver=true` → pair enqueued to the
+  suggester. SKIP/PARK: the park ledger.
+- **Stage 3 — fact guards (the Track B writer, unchanged):** FACT-16 + the first-fact lane-exercise guard →
+  write | park. **Provenance on every fact:** `attach_mode ∈ {exact, adopt, claim, create}` + `attached_via`
+  (birth-id); seed/fold-built facts get lineage recorded at sync.
+- **Async:** the LINK sweep (second trigger) + the immune system + edge-state recovery.
+- **The real-time guarantee (axiom C, scoped):** at write the fact sits on its own wording-node — final forever
+  (ids immutable) — and is event-level signal-eligible immediately. Cross-wording SERIES membership completes
+  synchronously only with CLAIM ON; with CLAIM OFF it completes asynchronously (minutes-to-nightly) by ADDING
+  committed edges — additive, safe-direction latency (nothing wrong is asserted meanwhile; splits
+  under-attribute). A later quarantine only REMOVES a link confirmed wrong. No written fact ever moves, re-keys,
+  or waits on a cleanup job.
+
+**8.1.3 G1 reuse display:** propose-first; Tier-0 exact probe + Tier-1 semantic top-K=10, cluster-deduped.
+Cards show: name · fact_type · companies-count (tie-break only) · the ESTABLISHED/YOUNG/QUARANTINED badge ·
+BASE_METRIC line · SAME_AS variants · ≤2 evidence quotes PIT-cut to `date ≤ event date`. NEVER shown: the full
+catalog, facts/values, XBRL, latents/parked/quarantined-as-targets, scores, future text, hierarchy lanes.
+Producer instruction (verbatim): "ATTACH only on an EXACT card whose evidence shows the same cause, scope, AND
+mechanism. ADOPT trivial reorders. CLAIM a differently-worded claim-eligible card only when the evidence
+supports same cause — a skeptic decides, and your reasoning is not forwarded to it. Never claim YOUNG (except
+your own company's per-X causes), never claim QUARANTINED. When unsure, keep separate."
+
+**8.1.4 Arms + parks:** ATTACH = exact-name only + the 3-part confirmation; a homonym verdict → more-specific
+re-coin (one cycle) else PARK-TERMINAL. ADOPT = code-verified reorder only. CLAIM = at most ONE claim per
+candidate per event; refused claims CREATE and defer the pair. **Park classes (exact):** RETRY
+{`gate_unavailable`, `stamp_thin_evidence`, `base_unresolved`, `stamp_conflict`, `lane_unexercised`} — drains
+on arrival; TERMINAL {`vague_skip`, `rule_reject`, `gate_rejected`} — counted + aged. Parks drain ONLY through
+the full kernel; park rates are never model targets.
+
+**8.1.5 Family policy:** ONE `stamp_fact_type()` (suffix → OD-1 gate ×2 → DU-06 roots → C1 → C2; live UNCLEAR
+parks, never defaults) and ONE `resolve_base_metric()` (PIPE-25 order; OD-1 latent rules; the proven-metric F2
+gate), shared by seed finalize AND live admission. CLAIM-approved variants copy the head's fact_type — stamped
+only AFTER judge approval (a refused claim takes full CREATE stamping). Latent graduation exact-norm only;
+stamp conflicts park; `visible_from = min(existing, new evidence date)`; batch imports treat live nodes as
+PROTECTED.
+
+**8.1.6 The LINK mechanism — one judge, two triggers.**
+- **Pair assembly (code, no producer advocacy):** side A = the proposal/new node's name + quote(s) + slice
+  tokens + per_x + industry tag; side B = the target head's FROZEN definitional anchor + industry tag.
+- **Auto-refusals (code, pre-judge), each classified for repairability:** PERMANENT-BY-LOCKED-RULE (re-opening
+  one is an owner RULE question): cross-flavor · terminal-suffix mismatch · per-X mismatch · portion-qualifier
+  supersets (current_rpo vs rpo) ALWAYS different. GATED: the token-subset species (brent_oil_price vs
+  oil_price) moves to judge-territory once OD-19's K-pairs.v2 gate passes wrong-same=0; until then auto-refused.
+  STATE-BASED (auto-re-enqueued when the state clears): target not claim-eligible · either side
+  QUARANTINED/flagged. JUDGE-TERRITORY: sibling named-series pairs (Brent vs WTI, SOFR vs fed_funds — code
+  cannot know two benchmarks are distinct without a curated list, the v1 pattern) → the judge's check-1 with a
+  dedicated fixture family.
+- **THE JUDGE (strong tier, default survives=false, code-assembled input only) — 5 checks, ALL must hold, each
+  quoting both sides:** (1) same OBJECT — CO-EXTENSIVE, never hyponym: a narrower species of the other's object
+  (iphone⊂smartphone, brent⊂oil) → REFUSE; breadth may only emerge from the SAME name recurring, never
+  absorption. (2) same SCOPE — business population AND referent ownership class {own-entity-internal ·
+  external-market · counterparty}: a firm-realized quantity is never the external variable driving it
+  (fx_headwind ≠ dollar_strength). (3) same MECHANISM — same measured quantity at the same causal position:
+  upstream/downstream/correlated on one chain → REFUSE (energy_costs ≠ oil_price); the financial transmission
+  channel to equity must match; same-flavor cross-industry homonyms refuse here (telecom churn ≠ deposit churn).
+  (4) NO RIVAL — with ≥2 claim-eligible cards above threshold, the judge sees the top rival and REFUSES unless
+  the quote uniquely discriminates ONE target. (5) the head's own anchor is MONO-mechanism — an anchor spanning
+  mechanisms → REFUSE + flag.
+- **HIGH-BLAST second skeptic:** a link onto a head spanning ≥8 companies gets a SECOND independent lens-split
+  (object/scope/mechanism) AND-voted skeptic on a disjoint evidence view.
+- **Apply (code):** `SAME_AS` variant→head + memo {trigger, judge model id, date, anchor hash, verdict quotes};
+  head election: ESTABLISHED beats YOUNG, then earlier `visible_from`, then lexicographic; star-flatten;
+  D1-traceable. **Cache:** refuted pairs cached; re-judged only when either side gains ≥1 distinct company;
+  approved links never LOOSENED automatically — tightening (quarantine) is the recovery path.
+- **Two triggers:** synchronous CLAIM (ships OFF; shadow-log from Phase 2 — the judge fires and the would-be
+  edge + verdict log in strict admission order against PIT catalog state, nothing written; ON only after S3
+  passes with ZERO wrong links; one confirmed wrong production link flips it OFF again) · the async SWEEP:
+  on-create enqueue to the suggester (embeddings top_k=5 min_score=0.60 ∪ token-overlap ∪ rare-token — suggest,
+  never decide); corroborated pairs judged immediately; fresh single-quote thin pairs → the DEFERRED-PAIR
+  LEDGER, auto-re-judged on evidence growth; batch passes event-driven keyed to the earnings calendar /
+  CREATE-burst detector, nightly as backstop.
+- **Deferred-ledger hygiene:** a claim against a falsifier-flagged head parks as `deferred(head_flagged)` — no
+  node minted (a false flag must not cause a duplicate storm); recovery resolution RE-ENQUEUES every pair
+  deferred against that head immediately. Deferred pairs age → after N periods a TERMINAL-defer class —
+  counted, reported, re-openable on any evidence growth.
+- **The frozen definitional anchor (the anti-ratchet):** every card carries `definitional_evidence` with an
+  immutable `birth_quotes` sub-field — seed cards: the build-stack evidence draw + slice tokens; live cards:
+  the RAW quotes from the first qualifying events — never an LLM distillation. Every judge and audit judges
+  against THIS anchor only; the drift probe pins to `birth_quotes` forever. Claim-attached quotes are
+  display-only. The anchor accumulates a frozen REFUTED-NEGATIVE set (refused pairs sharpen what the card is
+  NOT). Anchor ENRICHMENT is experiment-gated, default OFF. Anchor RE-FREEZE: when recovery graders confirm an
+  anchor quote itself was mis-attributed, the anchor is RE-DRAWN from the next clean qualifying events in one
+  RecoveryEvent-audited step — re-drawn, never distilled.
+- **Union-preview:** suggested-but-unjudged pairs are consumed ABSTAIN-ONLY — they may suppress a
+  "this signal is narrow" conclusion, never assert a merged signal.
+- **Claim-eligibility + establishment:** `BROAD(card)` ⇔ evidence from ≥K distinct companies (K=2 default,
+  X-S4) — a pure code count used only for cross-company signal features. `ESTABLISHED(card)` (=claim-eligible)
+  ⇔ SKEPTIC-MINTED: crossed an eligibility floor (BROAD, or seed-built + gauntlet-passed) AND passed a ONE-TIME
+  mono-mechanism coherence check by the LINK judge over its accumulated evidence (default-suspect); fails →
+  stays YOUNG + flagged. Single-company causes: a claim may target a YOUNG card iff same company AND same per_x
+  AND entity-bound family (a company converging its own wordings); macro/standard-KPI families require BROAD.
+  "Distinct event" everywhere = a distinct primary filing/earnings event (accession-level), never news
+  re-quotes. REJECTED as gate inputs: source-quality ranks and LLM-graded quote clarity. **Eligibility is read
+  LIVE, in-tx:** `claim_eligible = ESTABLISHED ∧ ¬falsifier_flagged ∧ ¬quarantined ∧ ¬CLAIM_FROZEN`, re-checked
+  inside the commit transaction with an edge-set version bump (a stale retrieval badge can never authorize a
+  claim). CLAIM_FROZEN = the de-mint state: a formerly-established card whose evidence turns incoherent loses
+  claim-eligibility while its existing edges route to per-edge adjudication. (XBRL amendment 5, dormant with
+  the materializer: `origin=xbrl_link` facts/resolutions never count toward BROAD/ESTABLISHED eligibility.)
+- **The split-reconciliation lane (recall's governed exit, mirroring quarantine):** frozen anchors + cached
+  refusals could make two valid synonyms refuse each other forever; so periodically (and on TERMINAL-defer
+  aging) mutual-refusal and long-deferred pairs where BOTH sides are now evidence-rich are re-judged by the
+  BATCH-GRADE process — full evidence on both sides, lens-split skeptic, high-blast rules — never the
+  frozen-anchor fast judge. Two regimes matched to their information: frozen anchors govern thin-evidence live
+  claims (anti-ratchet); full-evidence batch-grade judgment governs mature-pair reconciliation
+  (anti-permanent-split). Reconciliation approvals are ordinary reversible `SAME_AS` links with memos;
+  false-refusal rate and time-to-reconcile are first-class metrics.
+
+**8.1.7 Validators V1-V14 (all code, zero LLM, hard-fail):** V1 format/lint · V2 link legality (claims only on
+claim-eligible targets; auto-refusal classes enforced pre-judge; ADOPT reorder-only) · V3 OD-1 memo
+completeness · V4 exactly-one BASE_METRIC on a proven-metric target · V5 suffix⇔fact_type · V6 latent sanity ·
+V7 create-collision invariants · V8 admission atomicity + ON-CREATE-only fact_type · V9 fact-side (FACT-16 +
+lane-exercise) + attach_mode/attached_via provenance present on every fact (XBRL amendment 2, dormant with the
+materializer: `attach_mode` gains `xbrl_link`, `attached_via` gains resolution-ids, `xbrl_fact_id` added) · V10 park-ledger integrity · V11
+link-side (memo'd, D1-traceable, deterministic head election/star-flatten, refuted-cache respected) · V12
+variant rules (copied fact_type + memo + edge in one tx; variants never claim targets) · V13 anchor integrity
+(`definitional_evidence` frozen at establishment, hash-pinned, never rewritten; judge inputs assembled from it
+verbatim) · V14 recovery integrity (quarantine is edge-state only, plus the two reversible recovery-lane
+booleans — fact `disputed`, `ContinuationClaim.quarantined` — set only by the recovery machinery; no mutation
+of fact identity/content, no deletion; every recovery emits a RecoveryEvent).
+
+**8.1.8 Phases, the seed gauntlet, eligibility, contingency:**
+- Sequence: Phase 0 stale-trap fixes + FINALIZE build → Phase 1 SEED (stratified leaves → folds → finalize →
+  validate --final → GAUNTLET → fitness gate GREEN → graph sync) → Phase 2 shadow burn-in → Phase 3 production
+  with priority backfill → forever: the async LINK trigger + the immune system + quarterly fresh-key gate
+  re-runs.
+- The seed: the head of every industry's vocabulary through the full defense stack; sizing X-S1 (default 3
+  companies/industry); by-products = keys, fixtures, the gate's frozen catalog.
+- **The gauntlet (pre-sync, zero-tolerance). Layer A — static (code + ONE strong-model pass):** S-A1
+  single-token scan (forced through S-A4 + homonym adjudication before any standing) · S-A2 bare NAME-16
+  category scan (hard-fail) · S-A3 brand/measurement/ticker/period/direction token scan vs a gazetteer
+  (hard-fail — the `taco_bell_same_store_sales`/`adjusted_eps` prompt-drift classes, deterministically) · S-A4
+  mechanism-spread audit (embed each card's own evidence; internal dispersion ≥2 clusters flags; embeddings
+  flag, a strong model adjudicates) · S-A5 gravity-well scan (retrieval-neighbors of many distinct causes) ·
+  S-A6 suffix-blind fact_type/BASE_METRIC re-derivation (a strong model re-derives from evidence IGNORING the
+  suffix; disagreement on any `_guidance`/`_surprise` card = hard fail). **Layer B — dynamic probes (crafted
+  candidates through the live kernel against the frozen seed; meaning-graded, 2-grader, zero merge tolerance):**
+  P1 three-demand-stories (three different demand mechanisms must yield three creates) · P2
+  metric/guidance/surprise routing + family edges · P3 own-segment vs external cause · P4 measurement words
+  route to the slot, never an `adjusted_*` card · P5 the per-X trio · P6 brand/geo slice traps · P7
+  same-words-different-mechanism homonym pairs (any double-accept quarantines the card) · P8 genus-species
+  traps (species candidates at a genus card must CREATE) · P9 benchmark identity (Brent/WTI/generic).
+  **Pass bar:** zero S-A2/A3/A6 hits; every S-A1/A4/A5 flag adjudicated clean or the card quarantined from the
+  seed; zero wrong convergences across P1-P9. Seed cards earn ESTABLISHED only by passing; unprovable cards
+  ship YOUNG. Failure → bootstrap-time D4 out-of-band fix → FULL gauntlet re-run; no partial sync.
+- Signal eligibility: write-time-final, deterministic; every written fact immediately event-signal-eligible;
+  `new_driver` flags empty-history-by-construction; cross-company/history-weighted features key off BROAD;
+  parked invisible; quarantined never; signal-quarantine pauses history-weighted features on detector-fired
+  links pending confirmation (event-level reads unaffected).
+- Contingency ladder: judge/cadence/suggester escalations → claim-flag OFF (trigger-2-only, zero redesign) →
+  partial batch rebuilds (live nodes PROTECTED) → full Track A build.
+
+**8.1.9 The immune system (the anti-"looks clean while corrupting" layer).** Principle: every detector uses NO
+model, a DIFFERENT information channel than the decision's, or measures the graders themselves. **Smoke-alarm
+doctrine:** code surfaces form-level contradictions and takes exactly ONE automatic action — the reversible
+signal-quarantine; code never concludes "different causes" (that verdict belongs to the recovery graders, who
+receive RAW FACTS only — never the falsifier's conclusion or framing; a shared code-derived prior would
+collapse two graders into one).
+- **The model-free merge FALSIFIER (deterministic graph queries, ~free):** (i) one head whose SAME-COMPANY
+  facts map to ≥2 distinct XBRL concepts or inconsistent dimensional members (cross-company multi-concept is
+  NORMAL; flagged only as an industry-partitioned concept split — the cross-industry-homonym signature) ·
+  (ii) co-occurring same-company same-fiscal-normalized-period same-scope members with OPPOSITE numeric
+  directions — suspicion only · (iii) two differently-named heads repeatedly sharing company+period+XBRL-concept
+  — the duplicate oracle, independent of the embedding suggester · (iv) periodicity coherence: a metric-stamped
+  head whose per-company facts never recur across periods behaves like a mistyped one-off · (v) company-set ×
+  event-time co-occurrence — the XBRL-free DUPLICATE channel for qualitative space (high company-Jaccard +
+  tight temporal co-occurrence; 8-K item-code family sets as abstain-only evidence, fail-OPEN when absent) ·
+  (vi) bimodal post-event return signatures — abstain-only audit priority · (vii) live suffix-blind
+  re-derivation as a SAMPLED ops lane (disagreement = raw-evidence exhibit → recovery). Runs offline over
+  stored facts. Every flag → recovery as raw evidence; features gate on `BROAD ∧ ¬falsifier_flagged ∧
+  ¬homonym_suspect ∧ ¬CLAIM_FROZEN`. (Ratified-XBRL amendment 8, dormant: detector (iv) periodicity is scoped
+  to `origin≠xbrl_link`.)
+- The ATTACH-channel audit (triggers/flow already law — FINAL_DESIGN §5.4) with its P7 counters: flag rate ·
+  refuse rate · escalation-disagreement rate · re-coin-failure rate; the post-write sampled audit continues.
+- Transitive-drift probe: per established head per period, EARLIEST anchor quote vs LATEST attached quote as a
+  hypothetical fresh pair; refusal = drift → freeze claims + recovery; plus a deterministic centroid-drift
+  alarm on the frozen-anchor embedding vs newest members.
+- Evidence-dispersion re-cluster: S-A4 run continuously on live heads; bifurcation into ≥2 stable mechanism
+  clusters = homonym tripwire.
+- Risk-stratified audits + honest bounds: the audit budget concentrates on structurally risky cases
+  (cross-industry, homonym-shaped names, just-crossed-K thin sides, high-connectivity heads —
+  blast-radius-weighted toward 100%); dashboards publish the statistical UPPER BOUND (0 wrong in n ⇒ ≤3/n at
+  95%) × live population against a permanent-error budget; a published "0 wrong in n" bounds the
+  flagged/audited strata ONLY — the unflagged stratum is bounded pre-launch (gauntlet + fixture families + one
+  pre-registered unflagged sample) and monitored by the detectors.
+- Planted calibration stream + grader-independence measurement: a permanent stream of known-answer
+  surface-similar pairs (bookings/billings · adjusted-vs-GAAP EBITDA · gross/net · segment/consolidated ·
+  deferred/recognized revenue) through the live judge AND both graders — in a tagged SHADOW namespace, never
+  admissible to the live graph. The shared-miss rate quantifies generation-level blindness (measured and
+  reported, NEVER auto-applied as a gate discount — owner decision); a suspiciously LOW grader-disagreement
+  rate is itself an alarm. The stream also injects known-SYNONYM pairs at the suggester (retrieval-recall
+  decay watch); suggester tuning faces a JOINT promotion bar (planted-synonym recall AND false-merge rate).
+  Honest limitation: all in-session judges are one vendor's models — the falsifier is the only fully
+  independent channel, which is why it is a launch blocker.
+- Flow metrics: per-head fan-in rate + evidence-spread trend (fan-in, not sweep_link_ratio, is the gravity-well
+  detector) · duplicate_half_life SLO · claim_refusal_rate · park drain age.
+- **Launch blockers: detectors (1) and (2) must exist before Phase 3.**
+
+**8.1.10 Edge-state recovery (automatic, no-human, reversible) — full mechanics:** (1) immutable write-time
+provenance (attach_mode + attached_via; link memos + anchor hashes; frozen anchors) · (2) detect →
+signal-quarantine (pauses history-weighted features through the link; event-level reads untouched) · (3)
+confirm: two independent blind strong graders must confirm "different cause" citing evidence; unresolved → one
+blind re-grade; still split → INCONCLUSIVE: the signal-quarantine stays, the case becomes a calibration-stream
+fixture, and the CLASS goes to the owner as a RULE question — never a silent keep · (4) quarantine = the only
+write: `quarantined=true` on the SAME_AS edge, never deleted, one edge-flip tx; the variant reverts to a
+standalone driver (revert is a STATE: in-flight facts PARK-RETRY(`variant_reverting`); recoveries serialize per
+SAME_AS component). A confirmed homonym NODE gets the `homonym_quarantined` badge — never claim-eligible,
+excluded from cross-company features; future exact proposals router-forced to more-specific re-coins; existing
+facts stay as flagged history. Propagation: homonym-quarantining a head with variants signal-quarantines ALL
+its variant edges → per-edge two-grader adjudication; quarantining a BASE signal-quarantines its
+BASE_METRIC-derived members pending re-resolution to a clean base, else they revert standalone; the tx re-keys
+or drops latent anchors keyed to the quarantined exact-norm name (no permanently ungraduatable latents) · (5)
+audit + regate: every recovery emits an immutable RecoveryEvent (detector, both grader memos, frozen evidence
+snapshot, edge/node ids); the case joins the regression fixtures; remediation may DISABLE a claim-class
+immediately (reversible) but a model/prompt change only lands through the locked A/B gate · (6) wrong
+quarantine = an over-split: reversible — the pair re-enters the suggester once either side grows, re-judged
+with the quarantine memo in view; un-quarantine is the same one-flip tx · (7) D4 scoping (ratified `95` #39):
+absolute against automatic LOOSENING; automatic TIGHTENING enabled for ALL link origins, seed-built links
+require a THIRD grader · (8) fact-level `disputed` (already law — FINAL_DESIGN §5.4).
+
+**8.1.11 Model tiers (§11.0 — LOCKED rule, owner 2026-07-07):** any second-check or confirmation that can
+change Driver identity, family/type, `SAME_AS` state, `BASE_METRIC`, claim-eligibility, quarantine state, seed
+standing, or fact placement (incl. flagged exact-ATTACH) MUST be strong-judge tier; cheap models may propose/
+extract/route/draft but NEVER final-confirm a permanent identity decision. Three tiers by ROLE (never a
+hard-coded model name): cheap producer · strong judge · exceptional/fallback. The RULE is locked; tier
+MEMBERSHIP is experiment-gated via the locked A/B gate + pinned model IDs. Current owner defaults (2026-07-08,
+survive only if experiments show no loss): Haiku-class as the blind leaf producer; Sonnet 5 as the strong-judge
+candidate (G2, Refute, LINK judging, BASE_METRIC/fact_type confirmations, quarantine confirmation,
+establishment-minting, gauntlet adjudication, every recovery grader); Opus 4.8 / GPT-5.5 / Fable as escalation.
+One LINK judge (absorbs the reuse-skeptic/sweep-judge roles; lens-split high-blast variant). Graders'
+independence is measured, never assumed. Billing: subscription workflow agents + step-0 guards; SDK banned;
+embeddings remain the one metered, suggest-only lane.
+
+**8.1.12 Kernel experiments (designed, NOT run — gates in force):** S1 seed-size knee · S2 three-world
+shootout · S3 synchronous-vs-async LINK trigger (zero wrong-link tolerance; must instrument the RATCHET —
+head-meaning drift across sequential approvals vs the frozen anchor) · S4 K + eligibility floors · ladders
+X0-X9 (X0 fixtures: genus-species, benchmark siblings, cause-vs-consequence, transmission-channel homonyms,
+ownership-axis pairs, no-rival ambiguity, calibration pairs) · X-G the gauntlet itself (a launch gate) · X-IM
+immune-system proofs (each detector must catch its seeded corruption class; each validator has a failing
+mutation test; a seeded mis-attach must end `disputed=true`) · X-C chunking granularity (paragraph-at-a-time
+leaf inputs — an experiment, never a locked prompt shape).
+
+**8.1.13 Reject-conditions (what would flip pieces OFF after testing):** any confirmed wrong synchronous link
+S3 shows the async path avoided → CLAIM flag OFF · a shared-miss rate the falsifier cannot compensate →
+judge-tier escalation via the A/B gate, else the claim class disables and the owner is told the honest limit ·
+the gauntlet failing to reach zero on P1/P7/P8 after two remediation rounds → the seed ships YOUNG-only · a
+falsifier fire-rate above the permanent-error budget in shadow → Phase 3 blocked, contingency ladder ·
+batch/live equivalence divergence (X8) → fork bug, build stops.
+**Rejected alternatives (terse, load-bearing):** attach-to-head physicalization (irreversible wrong merges) ·
+physical fact replay as recovery · count-minted establishment + persistence lanes (echo-maturity) ·
+"seed-built ⇒ ESTABLISHED" (born-fat gravity) · CLAIM-off as PERMANENT posture (it must EARN ON through S3) ·
+LLM-distilled card definitions (re-broadening) · union-preview as signal input (abstain-only) · plus the
+carried v1/v2 rejections: closed vocabulary, unguarded semantic reuse, hand-seeded vocabulary, alias caches,
+morphology in code, self-declared-confidence routing, LLM validators, threshold-decided admissions,
+full-catalog display.
 - **Kernel §15.0 MVP split (transferred whole — the exact first-build fence):**
   - Day-1 core: kernel Stages 0-3 (ATTACH+confirm · ADOPT · CREATE born-complete · SKIP/PARK) · async LINK trigger + deferred-pair ledger with no-mint-on-flagged-head · frozen birth anchors · evidence-mass gate + skeptic-minted ESTABLISHED (cannot defer: the day-1 sweep's eligibility rule depends on it) + BROAD split · validators V1-V14 · falsifier signals (i)(ii)(iii)+(vii) + ATTACH-audit · minimal calibration stream · recovery core (quarantine + variant/family propagation + RecoveryEvent) · seed + gauntlet static scans (S-A2/A3/A6) · park/outage discipline. **Coverage rule:** if the MVP admits no-XBRL (news/qualitative/action) drivers, falsifier (v) ships day-1; otherwise admission is FENCED to XBRL-backed sources until (v) ships — the qualitative space is never live-and-uninstrumented.
   - Deferred (flag/experiment-gated, inert until enabled): CLAIM-ON (S3) · anchor enrichment M2 · item-codes M3 · UNSURE valve · union-preview · falsifier (iv)(vi) · full dynamic gauntlet P1-P9 if the owner ships the seed YOUNG-only · transitive-drift cadence beyond quarterly · exotic-latent propagation · head-degree sharding · time-keyed anchor revalidation · sampled-audit rate tuning · type-CORRECTION lane (recall optimization; parking covers safety).
 - **Kernel §16 honest residuals (transferred whole):** the irreducible floor = a single-shot hardened judge wrong on a genuinely co-extensive-looking pair at FIRST encounter, before any falsifier signal — measured by OD-6, reversible by recovery once evidence accumulates (zero-by-construction impossible; zero-by-measurement with honest upper bounds is the promise) · homonym facts written before detection stay on the quarantined node as flagged history — contained, never erased, excluded from features · all in-session judges share one model vendor; the falsifier is the only fully independent oracle · **qualitative homonyms have no model-independent tripwire** (for no-XBRL non-numeric heads, falsifier channels (i)-(iv) are silent and (v) detects duplicates, not one-name-two-meanings; only drift/dispersion probes and audits watch; the quarterly held-out gate re-runs are the backstop — the stated deepest worry) · history completeness is the ambition's success metric (duplicate half-life + reconciliation efficacy + park drain + false-refusal rate as a first-class dashboard number) · conservative splits and deferred thin pairs under-attribute during their window — the safe direction, visible in metrics.
 - **The exact ratification bundle (what the owner must ratify to activate the candidate):** (1) the v3.2 architecture (variant-anchored storage · one LINK mechanism/two triggers · frozen birth anchors + split-reconciliation lane · skeptic-minted establishment with CLAIM_FROZEN de-mint) · (2) edge-state recovery + D4 scoping (automatic tightening-only quarantine for all links, 2-grader confirmed on RAW EVIDENCE with no falsifier framing, 3-grader for seed links; INCONCLUSIVE escalates the RULE, not the case) · (3) the seed gauntlet as a launch gate incl. seed cards earning ESTABLISHED (unprovable → YOUNG) · (4) launch blockers: corrected model-free falsifier + ATTACH audit before production writes; flagged-head audit intensity bounded — 100% for the first N/T, then risk-stratified — with a hard SLA that never hangs on the owner queue · (5) CLAIM ships OFF; shadow-log from Phase 2; ON only after S3 passes with zero wrong links (S3 controls: pre-locked keys, per-arm forked state, ratchet instrumentation, false-refusal/recall metrics) · (6) carried items: gate protocol amendment · experiment promotion rules (M2/M3 default OFF) · G1 display spec · OD-7 born-complete · the [PIN] set · reject auto in-context teaching · thresholds post-calibration · time/standard-keyed anchor revalidation as an owner RULE question · outage discipline (RETRY-age alarms, drain rate-limiter, catalog-frozen signal flag) · ADOPT takes the same 3-part confirmation as ATTACH.
-- Never call the whole file ratified because the title says v3.4 or some OD rules were inserted.
+- The design IS now ratified (owner 2026-07-15) — as a WORKING DESIGN only; nothing above is activated, and
+  every experiment gate (S1-S4, X0-X9, X-G, X-IM), the CLAIM-OFF posture, the launch blockers, and the
+  reject-conditions remain binding exactly as written.
 
 ### 8.2 XBRL-native materializer — APPROVED WORKING DESIGN (owner 2026-07-15; DORMANT until the P19 enablement condition + experiment gates; NOT activated)
 
