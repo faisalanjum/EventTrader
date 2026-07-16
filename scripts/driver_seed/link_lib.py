@@ -238,8 +238,12 @@ def seg_members(fc):
 
 
 def seg_axis_members(fc):
-    """[(axis_qname, member_qname)] for {dimension,value}, single explicitMember.$t, AND the multi-axis
-    explicitMember-LIST shape (mirrors oracle._members_all — the certified multi-axis reader).
+    """[(axis_qname, member_qname)] for ALL four segment shapes — {dimension,value}, single
+    explicitMember.$t, the multi-axis explicitMember-LIST, and explicitMember-as-bare-string — so it reads
+    every shape oracle._members_all does. Completeness is load-bearing twice over: tier1's aggregate guard
+    (`if seg_axis_members(fc)`) uses it to reject dimensioned facts, so a shape missed here becomes a
+    segment value mis-bound as a consolidated total; and [] must mean VERIFIED-undimensioned, never
+    parse-failure (ChannelContract §3 / OD-17c: a missed extraction must never masquerade as consolidated).
     FETCH-only: the raw XBRL axis+member the shared decomposer classifies into a slice kind."""
     seg = fc.get('segment')
     if not seg:
@@ -257,6 +261,8 @@ def seg_axis_members(fc):
                     if isinstance(m, dict) and m.get('$t')]
         elif isinstance(em, dict) and em.get('$t'):
             out.append((em.get('dimension', ''), em['$t']))
+        elif isinstance(em, str) and em:                 # bare string: the axis sits on `s`, not on `em`
+            out.append((s.get('dimension', ''), em))
     return out
 
 

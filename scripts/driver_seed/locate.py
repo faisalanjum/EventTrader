@@ -59,8 +59,11 @@ def locate_by_value(req):
 
 def locate_by_fingerprint(req):
     """value-unknown: the certified xbrl_lane. req: {xbrls, concept, members, period_start, period_end}."""
-    # ponytail: import xbrl_lane lazily — it pulls oracle -> run_code_tier, and run_code_tier imports THIS
-    # module; a top-level import would cycle. By call time every module is loaded, so this is safe.
+    # Lazy import: the dependency graph really does cycle (locate -> xbrl_lane -> oracle -> run_code_tier ->
+    # locate, via oracle.py's module-level `import run_code_tier`), but testing shows a top-level import does
+    # NOT actually fail on today's entry paths — so this is DEFENSIVE, not load-bearing. It is the visible
+    # symptom of the engine->channel edge; when R3 extracts the shared fetchers out of run_code_tier, the
+    # cycle and this workaround both disappear and this becomes a normal top-level import.
     sys.path.insert(0, os.path.join(HERE, 'relocate_probe'))
     import xbrl_lane
     return {'value': xbrl_lane.resolve(req.get('xbrls') or [], req['concept'], req['members'],

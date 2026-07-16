@@ -67,3 +67,25 @@ def test_aggregate_kpi_still_binds_a_true_undimensioned_fact():
     # GREEN both before and after: the guard must not cost recall on a genuine consolidated fact.
     got = link_lib.tier1([_AGG_BLOB], "Total Revenue", 6707000000, "2024-12-31")
     assert got is not None and got["member"] == "total", got
+
+
+# ---- Step 1: the explicitMember-as-STRING hole that R1 step 2 opened ----
+# seg_members handles em-as-str (link_lib.py:235-236); seg_axis_members did NOT. After step 2 swapped the
+# aggregate guard onto seg_axis_members, a string-shape DIMENSIONED fact reads as [] -> an aggregate KPI
+# binds it: the WMG-class mis-bind, reintroduced through the back door. 0 occurrences in today's corpus,
+# but it is a precision hole and the seg_axis_members docstring's "mirrors oracle._members_all" was false.
+_STR_FC = {"segment": {"dimension": "srt:ProductOrServiceAxis", "explicitMember": "co:WidgetsMember"},
+           "value": "2874000000", "period": {"startDate": "2024-01-01", "endDate": "2024-12-31"}}
+_STR_BLOB = json.dumps({"RevenueFromContractWithCustomerExcludingAssessedTax": [_STR_FC]})
+
+
+def test_string_shape_member_is_captured_with_its_axis():
+    # RED: seg_axis_members must mirror the certified reader on the em-as-string shape.
+    assert oracle._members_all(_STR_FC) == ["co:WidgetsMember"]          # certified reader sees it
+    assert set(link_lib.seg_axis_members(_STR_FC)) == {("srt:ProductOrServiceAxis", "co:WidgetsMember")}
+
+
+def test_aggregate_kpi_must_not_bind_a_string_shape_dimensioned_fact():
+    # RED: the guard must reject EVERY dimensioned shape, not just LIST/dict.
+    got = link_lib.tier1([_STR_BLOB], "Total Revenue", 2874000000, "2024-12-31")
+    assert got is None, f"aggregate KPI bound a string-shape dimensioned fact: {got}"

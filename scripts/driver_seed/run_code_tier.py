@@ -21,7 +21,6 @@ Reads data/driver_catalog_seed/worklist.jsonl; writes data/driver_catalog_seed/<
 import os, re, json, argparse, collections, sys
 from datetime import date, timedelta
 sys.path.insert(0, os.path.dirname(__file__))
-import link_lib as L
 import fiscal_ai_rules as FA          # fiscal.ai channel-specific rules (is_derived / plug) — not shared core
 import locate                          # the shared, channel-neutral two-mode locator (value-known lane here)
 
