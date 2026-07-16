@@ -23,6 +23,7 @@ from datetime import date, timedelta
 sys.path.insert(0, os.path.dirname(__file__))
 import link_lib as L
 import fiscal_ai_rules as FA          # fiscal.ai channel-specific rules (is_derived / plug) — not shared core
+import locate                          # the shared, channel-neutral two-mode locator (value-known lane here)
 
 OUT = 'data/driver_catalog_seed'
 FORMMAP = {'10-K': '10k', '10-Q': '10q', '8-K': '8k'}
@@ -128,30 +129,13 @@ def resolve_one(it, src, allow_t1):
             'raw_label': name, 'value': val, 'fmt': fmt, 'is_currency': it['is_currency'],
             'period_end': per, 'form': it['form'], 'cadence': it.get('section'),
             'category': it.get('category', '')}
-    t1 = L.tier1(src['xbrls'], name, val, per) if (allow_t1 and src['xbrls'] and fmt != '%') else None
-    strict, snips = L.scan_text(src['texts'], name, val, fmt)
-    if t1 and not strict:                        # XBRL matched but KPI wording absent by the value;
-        strict = L.row_quote(src['texts'], L.member_tokens([t1['member']]), val, fmt)   # try filer's member wording
-    xbrl = None
-    if t1:
-        xbrl = {'concept': t1['concept'], 'axis_members': t1['axis_members'],
-                'period_start': t1['period_start'], 'period_end': t1['period_end'], 'ptype': t1['ptype']}
-    if t1 and strict:
-        rec = {**base, 'tier': 'T1-xbrl', 'member': t1['member'].split(':')[-1], 'concept': t1['concept'],
-               'quote': strict, 'quote_source': 'section', 'period_evidence': (snips[0] if snips else strict),
-               'xbrl': xbrl, 'xbrl_fact': t1['quote']}
-    elif t1:
-        rec = {**base, 'tier': 'T1-xbrl', 'member': t1['member'].split(':')[-1], 'concept': t1['concept'],
-               'quote': t1['quote'], 'quote_source': 'xbrl_fact', 'period_evidence': '',
-               'xbrl': xbrl, 'xbrl_fact': t1['quote']}
-    elif strict:
-        rec = {**base, 'tier': 'T2-label', 'quote': strict, 'quote_source': 'section',
-               'period_evidence': (snips[0] if snips else strict)}
-    else:
-        return None, snips
-    if L.value_ok(val, fmt, rec['quote']):       # deterministic belt+braces: number really in the quote
-        return rec, snips
-    return None, snips                            # gate-fail -> residual candidates
+    # value-known locate + the value_ok gate = the SHARED, channel-neutral core (locate.locate_by_value).
+    r = locate.locate_by_value({'xbrls': src['xbrls'], 'texts': src['texts'], 'name': name,
+                                'value': val, 'fmt': fmt, 'period': per, 'allow_xbrl': allow_t1})
+    hit, snips = r['hit'], r['snips']
+    if hit is None:
+        return None, snips                        # gate-fail or no locate -> residual candidates for the LLM tier
+    return {**base, **hit}, snips                 # fiscal.ai record fields + the shared locator hit
 
 
 def process_cp(items, filing, prs):
