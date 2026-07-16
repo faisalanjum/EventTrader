@@ -1,6 +1,6 @@
 # STATUS_AND_HISTORY.md — the one mutable dashboard, supersession ledger, and crosswalk
 
-> **Status: LIVE — Phase 4 verified through round 12 (2026-07-15); Phase 5 archive pends owner GO.** This file owns STATUS and HISTORY only — live rule
+> **Status: LIVE — Phase 4 verified through round 18 (2026-07-15); Phase 5 archive pends owner GO.** This file owns STATUS and HISTORY only — live rule
 > wording stays in `FINAL_DESIGN.md`; procedures stay in `BUILD_AND_OPERATIONS.md`; channel duties stay in
 > `ChannelContract.md`. Any status shown in another live file is a generated summary of THIS file. A status
 > change edits this dashboard — and only if rule meaning changed through owner approval, the one owning rule
@@ -22,17 +22,17 @@
 | Track C guidance retirement | FINAL v2.0 (no replay) | not started | — | — |
 | Concept linker (text facts) | FINAL | PARTIAL (vetoes C/D + PIT query spec-only) | 31-co + 274-co evidence | not rolled out |
 | Admission kernel | **APPROVED WORKING DESIGN (owner 2026-07-15; not activated)** | — | gates in force; integration COMPLETE (BUILD §8.1; original archived) | — |
-| XBRL-native materializer | **APPROVED WORKING DESIGN (owner 2026-07-15; DORMANT until P19 enablement + gates)** | — | EXP-1 signed | — |
+| XBRL-native materializer | **APPROVED WORKING DESIGN (owner 2026-07-15; DORMANT until P19 enablement + hard pre-gates + EXP-6)** | — | EXP-1 signed | — |
 | Experiment program | EXP-0/1/2 SIGNED PASS | — | — | EXP-3..6 / WP-FC-RUN PENDING |
 | Running layer (schedules/ledger/QA) | NOT designed-complete | — | — | — |
-| Consolidation itself | Phases 1-4 done (16 review rounds); both ratified designs integrated + archived | — | mechanical sweeps green; repeated full reader runs (latest full-hash run recorded in CONSOLIDATION §16) | archive (Phase 5) owner-gated; root keeps Plan + WorkOrder until the experiment program migrates |
+| Consolidation itself | Phases 1-4 done (18 review rounds); both ratified designs integrated + archived | — | mechanical sweeps green; repeated full reader runs (latest full-hash run recorded in CONSOLIDATION §16; the round-17 run re-graded in round 18 — correction addendum in the archived test record) | archive (Phase 5) owner-gated; root keeps Plan + WorkOrder until the experiment program migrates |
 
 ## 2. Lists by status
 
 - THIS file owns the status lists (one-copy law); `FINAL_DESIGN.md` §10 is the GENERATED mirror. The master lists:
 - **FINAL / BUILD-PENDING:** Track A remainder (fold/tree mirrors, finalizer, real folds, WP-FC-RUN, OD-6 fitness gate — never run) · UNIT-14 production wiring · PER-20 resolver build + 21 tests · slice table materialization + PIT menu code · concept-linker vetoes C/D + PIT query build · the whole Track B writer/validator/CLI/park-ledger stack · read layer · verdict/DCM writer · channel adapters + certification · Track C execution · incremental refresh.
 - **DESIGN-INCOMPLETE:** the production running layer (BUILD §7's runbook list). The OD-5 change scanner is a recommendation only.
-- **CONDITIONAL:** OD-19 (inert until K-pairs.v2 zero wrong-same) · XC-16 timing · model-role membership (experiment-gated) · XBRL-native materializer + `09` rider (RATIFIED as design 2026-07-15; DORMANT until the P19 enablement proof plan — X-XL0-3 bars — and every hard pre-gate pass) · multi-run concept stability/caching (only if monitoring justifies).
+- **CONDITIONAL:** OD-19 (inert until K-pairs.v2 zero wrong-same) · XC-16 timing · model-role membership (experiment-gated) · XBRL-native materializer + `09` rider (RATIFIED as design 2026-07-15; DORMANT until the P19 enablement proof plan — X-XL0-3 bars — every hard pre-gate pass, and the EXP-6 convergence evidence) · multi-run concept stability/caching (only if monitoring justifies).
 - **OPEN (owner):** G1 live reuse display · catalog 796-vs-786 + lifecycle/IPO · full model/cost policy beyond signed EXP-2 · FS-23 · 8-K taxonomy · DCM threshold/pure-macro/two-catalyst · Track B dual-producer thresholds · non-USD expansion · metric `value_text`/action `conditions` revisit triggers · Driver Genesis charter questions · Track C history-gap acceptance · third-party `company_confirmed=false` class enablement (part-2/news-channel).
 - **APPROVED WORKING DESIGN (owner 2026-07-15; not activated; gates/OFF-switches in force):** Admission Kernel v3.4 · XBRL-native materializer — integration COMPLETE (INT-2..INT-5, destination proof §7.1b); both originals archived 2026-07-15, byte-verified vs the Phase-1 manifest.
 - **CANDIDATE:** Bayes proposal · Driver Genesis restructure (rationale). Owner-question decision detail rides in `CONSOLIDATION.md` §10.2 until Phase 5, then moves here.
@@ -101,7 +101,7 @@ OD-19 (§5.4) · OD-20 (§5.4) · OD-21 (§5.1/§6.2/§7) · K2 = fold repair st
 deferred (BUILD §4) · frozen packet v1.0 + Channel Contract v1.0 (boundary files) · Track C full no-replay
 reversal (BUILD §6).
 
-## 4. Owner rulings record (2026-07-15, all five §10.2 questions)
+## 4. Owner rulings record (2026-07-15)
 
 Q1 `company_confirmed`: CORE derives from who-said-it evidence; unclear = SKIP (ruling's own content); `false`
 stays reserved for explicitly-ALLOWED future third-party classes (enabling any class = part-2/news-channel
@@ -109,7 +109,9 @@ decision) → FINAL_DESIGN §7.1. · Q2 non-slice/elimination: NO change — fro
 auto-demotion is the drain → §3 OD-17. · Q3 catalog sync: resolution (b) — offline catalog + lazy born-complete
 nodes; OD-16 narrowed → §4.2. · Q4 XBRL packet shape: amendment APPLIED 2026-07-15 to ChannelContract + frozen
 packet (`dimensions=[]` verified-empty; both axis+member; never fragments). · Q5 first-fact guard scoped to
-bare names; suffix-proven lanes may be born `unknown` → §4.2. Full decision text + verification trail:
+bare names; suffix-proven lanes may be born `unknown` → §4.2. · R6 (round 16) `xbrl_internal_conflict` retry
+trigger: retry ONLY when the affected report's parsed XBRL facts actually change; an amended filing is a NEW
+report, never a silent rewrite → BUILD §8.2 recipe step 4. Full decision text + verification trail:
 `CONSOLIDATION.md` §10.2/§16 (moves to the archive with it at Phase 5).
 
 ## 5. Signed experiment decisions + remaining gates (authority = signed decision.json artifacts)
@@ -157,7 +159,7 @@ WorkOrder current sha `4911a22f…` (status board stale at `1586761a…` — fix
 | DriverPlan.html | stale study export | none (regenerate later from live docs); archive |
 | FableAdmissionKernelDesign | **RATIFIED working design (owner 2026-07-15; not activated)** | full mechanics → BUILD §8.1 + law-grade parts → FINAL_DESIGN (destination proof §7.1b); **original ARCHIVED 2026-07-15, byte-verified — DONE** |
 | FableContextPack · WorkflowContextPack | stale navigation/code maps | archive (Workflow pack: after live-code re-audit + link repair) |
-| FableExperimentPlan · WorkOrder | pinned plan · runbook | BUILD §9; keep Plan byte-identical until program migrates; archive after. The Plan's frozen authority ladder (lines 4/257) resolves externally: its "lock candidates" stay live at root; its topic docs resolve to the archive paths with meaning carried by the four live files (step 21c note) |
+| FableExperimentPlan · WorkOrder | pinned plan · runbook | BUILD §9; keep Plan byte-identical until program migrates; archive after. The Plan's frozen authority ladder (lines 4/257) resolves externally: its "lock candidates" were RATIFIED 2026-07-15 (operative mechanics = BUILD §8.1/§8.2; originals = archive evidence); its topic docs resolve to the archive paths with meaning carried by the four live files (step 21c note) |
 | FablePrompt · FablePromptv2 | executed briefs | provenance entries only; archive |
 | XBRLIntegrationDesign | **RATIFIED working design (owner 2026-07-15; DORMANT until P19 + gates + EXP-6)** | recipe + pin map + the ten amendments → BUILD §8.2 + owning law sections (gate-tagged); **original ARCHIVED 2026-07-15, byte-verified — DONE** |
 | CONSOLIDATION.md | audit + migration map | moves into the same dated archive after the four live files pass review (never a fifth rule source) |

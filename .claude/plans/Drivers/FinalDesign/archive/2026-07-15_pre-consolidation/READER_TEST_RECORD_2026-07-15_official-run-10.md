@@ -1,6 +1,7 @@
 # READER TEST RECORD — official §14.3 run 10 (2026-07-15)
 
 **Status: PASS (graded 10/10 by the session lead against FINAL_DESIGN/BUILD/STATUS law; grade recorded in CONSOLIDATION.md §16).**
+> **ROUND-18 REGRADE (2026-07-15): the 10/10 is WITHDRAWN — re-graded 6/10 strict; certification value VOID (the tested FINAL/STATUS bytes carried an EXP-6 omission). See the CORRECTION ADDENDUM at the end of this file. Original text above and below is untouched.**
 Durable evidence per the round-17 standard: agent id, full prompt, full answers with citations, full tested hashes — repo-portable, no machine-local paths required.
 
 - Workflow run: `wf_2e462b6d-c84` · agent label `official-reader-run-10` · subagent tokens ~127k.
@@ -80,3 +81,28 @@ const Q = [
 - **Historical:** the 42 supersession rows' dead rules (STATUS §3), archived originals as evidence-only (both ratified-design originals archived 2026-07-15; BUILD §8 banner), retired `13_Track` GI rows, `66` D-1..D-13.
 
 10. **The complete source→replacement map lives in STATUS_AND_HISTORY.md §7 family:** §7 = the 33-source-file crosswalk (each file → status → destination); §7.1 = the rule-ID crosswalk (every stable ID range — NAME/FS/UNIT/PER/MF/DU/XC/PIPE/FACT/T/GI/D/OD/K2/contract clauses/packet blocks — → its one live anchor, with per-ID exceptions); §7.2 = the census T-group anchors (T1–T12); §7.1b = the ratified-design destination proof (every transferred kernel §1–§16 element → BUILD §8.1.x, every XBRL element/pin/amendment → BUILD §8.2 + owning sections). Supporting: STATUS §3 (42 dead-rule supersession rows + OD-1..21 additions) and §8 (freeze manifest `archive/2026-07-15_pre-consolidation/MANIFEST.json`). Destination ≠ current location: most crosswalk destinations say "archive" but Phase 5 pends owner GO, so the 33 frozen sources currently remain in place as the byte evidence baseline (FINAL_DESIGN banner; BUILD banner) — the exceptions already moved are the two ratified-design originals (archived 2026-07-15, byte-verified); currently still live at root: the four live files, `15_CandidateFactPacket.md` (temporary fifth live file, sha `aa7239ed…`), and `FableExperimentPlan.md`/`FableExperimentWorkOrder.md` until the experiment program migrates; `ChannelContract.md` is kept (moves with the code at reorg).
+
+---
+
+## ROUND-18 CORRECTION ADDENDUM (2026-07-15 — additive; nothing above was rewritten)
+
+**The 10/10 grade is WITHDRAWN → re-graded 6/10 strict. The run's file-certification value is VOID:** the tested FINAL_DESIGN/STATUS bytes themselves omitted the EXP-6 convergence evidence from the materializer/rider unlock (fixed in round 18; BUILD stated all three conditions at test time).
+
+Answer flaws found in the round-18 external review, each verified against the live law:
+
+1. **Q3** — the rubric demanded `driver_state` + the FORBIDDEN fields per lane for EACH of the five examples; the actual-surprise example lists no forbidden fields, and the guidance-vs-consensus example lists neither its state nor its forbidden fields.
+2. **Q7** — "corrupts cross-company series/reads permanently" overstates: wrong links are revocable by design (XC-18 ConceptResolution revocation states, ratified 2026-07-15, dormant until the materializer enables — FINAL_DESIGN §8). The correct claim: wrong links corrupt SILENTLY until detected, which is why missing links are safer than wrong links.
+3. **Q9** — the conditional bucket omitted EXP-6 from the materializer/rider unlock. File-induced (FINAL §10/STATUS §2 omitted it at test time) — but BUILD §8.2 stated all three conditions inside the same permitted source set, and the reader did not flag the discrepancy.
+4. **Q10** — "the 33 frozen sources currently remain in place" is wrong as stated (31 remained at root; the two ratified-design originals were already archived) — the sentence contradicts its own exception clause.
+
+**Prompt-block truncation repair:** the stored snippet above ends mid-expression at `].join('\n`. The persisted workflow manifest (session `workflows/wf_2e462b6d-c84.json`, field `script`) ends:
+
+```js
+].join('\n')
+phase('Test')
+return await agent(Q, { label: 'official-reader-run-10', phase: 'Test' })
+```
+
+All ten Q-array lines quoted above were and are complete; only the closing `')` and the two dispatch lines were cut from the stored snippet.
+
+**The definitive reader test** is the Phase-5 post-move run (execution card step (10) / step 24b): the official §14.3 ten, unmodified, against the post-archive seven-file root, with a durable in-repo record.

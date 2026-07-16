@@ -1,6 +1,6 @@
 # BUILD_AND_OPERATIONS.md — how to build, test, run, and retire the Driver system
 
-> **Status: LIVE — Phase 4 verified through round 12 (2026-07-15); Phase 5 archive pends owner GO.** This file owns PROCEDURE: build steps, contracts'
+> **Status: LIVE — Phase 4 verified through round 18 (2026-07-15); Phase 5 archive pends owner GO.** This file owns PROCEDURE: build steps, contracts'
 > mechanics, gates, run rules, and hazards. Rule MEANING lives only in `FINAL_DESIGN.md` (rule IDs referenced
 > here, never restated). Public channel duties live only in `ChannelContract.md`. Status/history/supersessions
 > live only in `STATUS_AND_HISTORY.md`. Until Phase 5 archives them, the frozen sources remain
@@ -229,7 +229,7 @@ triggers = named state transitions, closed-shape deltas over per-unit-family thr
 exact inequality of normalized `value_text`; output = notification/flag events, never facts; no model; never
 reads realized returns.
 
-## 8. Candidate bundles (clearly split: accepted vs pending)
+## 8. Ratified working designs (owner 2026-07-15; NOT activated) + unvetted proposals
 
 > **🏛️ RATIFIED (owner, 2026-07-15):** the Admission Kernel v3.4 and XBRL Integration designs are APPROVED as
 > the current WORKING DESIGNS — no longer pending candidates. **This approval does NOT authorize
@@ -241,13 +241,13 @@ reads realized returns.
 > **Authority, three tiers (round 16 wording; both designs now ratified + archived):** `FINAL_DESIGN.md` owns
 > CURRENT LAW · THIS guide's §8.1/§8.2 own the ratified designs' OPERATIVE MECHANICS (the archived originals'
 > internal "topic docs win on conflict" lines resolve against FINAL_DESIGN as the topic docs' successor) ·
-> archived files — including both design originals — are EVIDENCE ONLY, never authority. **Where this guide records a NAMED CORRECTION to a retained candidate (e.g. the graph-verified
-> `10-K/A`/`10-Q/A` slash literals in §8.2), the correction OVERRIDES the candidate's text — corrections are
-> part of the operative map, verified against ground truth, and travel into the bundle at ratification.**
+> archived files — including both design originals — are EVIDENCE ONLY, never authority. **Where this guide records a NAMED CORRECTION to an archived original (e.g. the graph-verified
+> `10-K/A`/`10-Q/A` slash literals in §8.2), the correction OVERRIDES the original's text — corrections are
+> part of the operative map, verified against ground truth, and traveled into the bundle at ratification.**
 > **Reading rule for the split below:** where a name appears on BOTH sides (born-complete, recovery, CLAIM-off),
-> the accepted side is the PRINCIPLE — already law in FINAL_DESIGN — while the candidate side is this kernel's
-> specific IMPLEMENTATION of it (stages, arms, recipes, thresholds); ratifying the bundle ratifies the
-> implementation, never re-opens the principle.
+> the accepted side is the PRINCIPLE — already law in FINAL_DESIGN — while the design side is this kernel's
+> specific IMPLEMENTATION of it (stages, arms, recipes, thresholds); the 2026-07-15 ratification approved the
+> implementation, never re-opening the principle.
 
 ### 8.1 Admission Kernel v3.4 — APPROVED WORKING DESIGN (owner 2026-07-15; NOT activated; gates in force)
 
@@ -565,15 +565,15 @@ full-catalog display.
 
 - Text remains the only path that creates Drivers and narrative facts. The existing text-fact concept linker
   (FINAL_DESIGN §8) stays current.
-- The candidate: deterministic code materializes entity-scoped numeric metric facts for already-admitted ACTIVE
+- The ratified design (DORMANT): deterministic code materializes entity-scoped numeric metric facts for already-admitted ACTIVE
   (company, driver)→concept resolutions. Covered facts need in-filing entity match, approved measurement fold,
   representable axes, allowed unit, exact period, source-stated value. Non-GAAP, unlinked, qualitative, causal,
   guidance, and action material stays text-side. **Unit whitelist v1: USD, shares, USD-per-share — eligible
   EPS/per-share facts ARE materialized (per-X in the name per NAME-13); every other unit skips + counts.**
-- **The exact materializer recipe (candidate map — per Report with `xbrl_status=COMPLETED`, per registrant with
+- **The exact materializer recipe (the materialization map — per Report with `xbrl_status=COMPLETED`, per registrant with
   active resolutions). Filing-type filter, GRAPH-VERIFIED LITERALS (Neo4j census 2026-07-15): `formType` ∈
   {`10-K`, `10-Q`, `10-K/A`, `10-Q/A`} — the amended forms use a SLASH (137× `10-K/A`, 41× `10-Q/A` live); the
-  candidate document's "10-K-A/10-Q-A" notation is prose shorthand — matching it literally would silently skip
+  archived original's "10-K-A/10-Q-A" notation is prose shorthand — matching it literally would silently skip
   every amended filing:** 1. load ACTIVE `(company, driver)→qname` resolutions — full catalog records only,
   latents excluded [P4e] · 2. select Facts entity-scoped via `IN_CONTEXT→Context→FOR_COMPANY` (no edge → skip +
   count), filters `is_numeric='1'`/`is_nil='0'` [P4f] · 3. unit whitelist + map [P4c]: `iso4217:USD` → money on
@@ -636,12 +636,13 @@ full-catalog display.
   - **X-XL4 cost:** tokens/filing + backfill, hybrid vs text-only — INFORMATIONAL ONLY, never gating; the results are REPORTED TO THE OWNER.
   - **Hard pre-gates (locked, load-bearing):** XC-16 + the full-universe concept run · the PIT menu proof · a falsifier-(iii) dry-run over a materialized sample · the FRESH Neo4j census (counts, `FACT_MEMBER`/`FACT_DIMENSION` edge wiring, unit-type inventory, no-context and null-`periodOfReport` cohort sizes).
   - **Rollout:** flag-on, ONE industry → industry-by-industry; each promotion gated on the X-XL0-3 bars HOLDING (X-XL4 excluded from gating).
-- **Dependency (round 13): this candidate is NOT fully independently decidable.** Its pins amend and consume
-  the KERNEL candidate's machinery (P6 eligibility exclusion → kernel §6.5 · P7 provenance → kernel V9/§10.1 ·
-  P8 revocation → the kernel recovery/grader lanes · P4j → kernel §9.1(iv)). If the kernel bundle is REJECTED,
-  the XBRL bundle must be RE-BASED onto whatever recovery/provenance machinery replaces it — the already-law
-  recovery paths (FINAL_DESIGN §5.4) cover `SAME_AS`/`CONTINUES_AS`/`disputed`, NOT ConceptResolution
-  revocation. Decide the kernel first, or decide both together.
+- **Dependency (round 13 — RESOLVED by the joint ratification 2026-07-15): the XBRL design is not
+  independently decidable.** Its pins amend and consume the KERNEL's machinery (P6 eligibility exclusion →
+  kernel §6.5 · P7 provenance → kernel V9/§10.1 · P8 revocation → the kernel recovery/grader lanes · P4j →
+  kernel §9.1(iv)). Both bundles were ratified TOGETHER, so the rejection contingency is MOOT — kept for
+  history: had the kernel been rejected, the XBRL bundle would have re-based onto whatever recovery/provenance
+  machinery replaced it (the already-law recovery paths, FINAL_DESIGN §5.4, cover
+  `SAME_AS`/`CONTINUES_AS`/`disputed`, NOT ConceptResolution revocation).
 - **The ten declared amendments to locked docs (all additive; zero reversals — ratified WITH the bundle):**
   (1) `12` FACT-16.17 instant `period_scope=null` carve-out · (2) kernel V9/§2/§10.1 `attach_mode` gains
   `xbrl_link`, `attached_via` gains resolution-ids, `xbrl_fact_id` added · (3) `12` FACT-16(3)/(4) origin-gated
@@ -731,8 +732,9 @@ mechanics) · `../Consolidation/GuidancePeriod.md` (21 period tests) · `../Cons
 
 1. **Packet lifecycle:** when exactly the strong admission decision stamps the permanent type; how Block 1→2
    hand off without treating a proposal as final.
-2. **Born-complete transaction:** the exact atomic CREATE write + failure behavior, specified WITHOUT ratifying
-   the rest of the candidate kernel (lazy-create-on-ATTACH mechanics land at the OD-7/live-admission pass).
+2. **Born-complete transaction:** the exact atomic CREATE write + failure behavior — still an unwritten recipe
+   (the 2026-07-15 kernel ratification changed design status only, not this gap; lazy-create-on-ATTACH
+   mechanics land at the OD-7/live-admission pass).
 3. **Source identity namespaces:** the complete cross-channel escaping/delimiter law + fixed test vectors
    (only fiscal `:`→`_` is explicit today).
 4. **Adapter/writer machine contracts:** exact field types/nullability, versioned schema, complete
