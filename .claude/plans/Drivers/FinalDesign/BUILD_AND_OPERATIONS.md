@@ -1,6 +1,6 @@
 # BUILD_AND_OPERATIONS.md — how to build, test, run, and retire the Driver system
 
-> **Status: LIVE — consolidation Phases 1-5 EXECUTED (owner GO 2026-07-16); the definitive reader test's outcome, per-question grades, and tested hashes live in `archive/2026-07-15_pre-consolidation/READER_TEST_RECORD_2026-07-16_phase5-final-run7.md` — Phase 5 is COMPLETE ONLY IF that exact record shows 10/10 PASS.** This file owns PROCEDURE: build steps, contracts'
+> **Status: LIVE — consolidation Phases 1-5 EXECUTED (owner GO 2026-07-16); the definitive reader test's outcome, per-question grades, and tested hashes live in `archive/2026-07-15_pre-consolidation/READER_TEST_RECORD_2026-07-16_phase5-final-run8.md` — Phase 5 is COMPLETE ONLY IF that exact record shows 10/10 PASS.** This file owns PROCEDURE: build steps, contracts'
 > mechanics, gates, run rules, and hazards. Rule MEANING lives only in `FINAL_DESIGN.md` (rule IDs referenced
 > here, never restated). Public channel duties live only in `ChannelContract.md`. Status/history/supersessions
 > live only in `STATUS_AND_HISTORY.md`. The 33 frozen sources are fully accounted for, byte-verified (29 originals + 3 snapshots archived; the
@@ -143,8 +143,11 @@ class finalization → final validation → fitness gate.
   WP-FC-RUN never ran):** before ANY Track A run, the implementing agent must (1) verify EVERY rule-bearing
   component — the three engine rulebooks, judge prompts, thresholds, model slots — against the THEN-CURRENT
   live design, and (2) pass a pinned current-law certification it defines and records at that time (suite green
-  incl. the drift guard is necessary, never sufficient). The old Restaurant run outputs (`runs/2026-06-*`) are
-  HISTORICAL EVIDENCE ONLY — never inputs, never baselines. Pending code cleanup, recorded not implemented:
+  incl. the drift guard is necessary, never sufficient). The old Restaurant runs' RULE-BEARING outputs
+  (menus, seed, catalog, decisions — anything produced under the superseded rules; `runs/2026-06-*`) are
+  HISTORICAL EVIDENCE ONLY — never inputs, never baselines. Carve-out: their mechanical RAW-TEXT chunk copies
+  (rule-independent source slices) remain legitimate pinned experiment inputs exactly where the WorkOrder
+  already sanctions them (frozen-chunks source, copy-only + hash-verified, PIPE-33; WorkOrder §2.1/§3 step 3). Pending code cleanup, recorded not implemented:
   `gate.js` meta description still claims a default Restaurants seed the code removed (the code correctly
   throws without `args.candidates`).
 - **State:** WP-FC-EDITS landed (`5db902f`, 2026-07-10; 260 tests + 1 skip): NAME rules inlined, dead leaf XBRL
@@ -260,7 +263,7 @@ reads realized returns.
 > documents — DONE (INT-2..INT-5 complete; per-element destination proof = STATUS §7.1b; the integration-era
 > reader tests passed — the archive-gate run + the post-integration standard run; the DEFINITIVE post-move
 > reader test = the Phase-5 gate — executed: outcome, per-question grades, and tested hashes live in the
-> archive's `READER_TEST_RECORD_2026-07-16_phase5-final-run7.md`). Both originals are ARCHIVED (2026-07-15, byte-verified vs the Phase-1 manifest); the full
+> archive's `READER_TEST_RECORD_2026-07-16_phase5-final-run8.md`). Both originals are ARCHIVED (2026-07-15, byte-verified vs the Phase-1 manifest); the full
 > operative mechanics live in §8.1/§8.2 below, with the archived originals as historical evidence.
 > **Authority, three tiers (round 16 wording; both designs now ratified + archived):** `FINAL_DESIGN.md` owns
 > CURRENT LAW · THIS guide's §8.1/§8.2 own the ratified designs' OPERATIVE MECHANICS (the archived originals'
