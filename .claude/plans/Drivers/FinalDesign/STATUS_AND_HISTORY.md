@@ -1,6 +1,6 @@
 # STATUS_AND_HISTORY.md — the one mutable dashboard, supersession ledger, and crosswalk
 
-> **Status: LIVE — Phase 4 review complete through round 19 (2026-07-16); the reader test of the CURRENT bytes is PENDING — it executes at the Phase-5 gate (card step 10 / 24b); Phase 5 archive pends owner GO.** This file owns STATUS and HISTORY only — live rule
+> **Status: LIVE — Phase 4 review complete (every round recorded in CONSOLIDATION §16); the reader test of the CURRENT bytes is PENDING — it executes at the Phase-5 gate (card step 10 / 24b); Phase 5 archive pends owner GO.** This file owns STATUS and HISTORY only — live rule
 > wording stays in `FINAL_DESIGN.md`; procedures stay in `BUILD_AND_OPERATIONS.md`; channel duties stay in
 > `ChannelContract.md`. Any status shown in another live file is a generated summary of THIS file. A status
 > change edits this dashboard — and only if rule meaning changed through owner approval, the one owning rule
@@ -25,7 +25,7 @@
 | XBRL-native materializer | **APPROVED WORKING DESIGN (owner 2026-07-15; DORMANT until P19 enablement + hard pre-gates + EXP-6)** | — | EXP-1 signed | — |
 | Experiment program | EXP-0/1/2 SIGNED PASS | — | — | EXP-3..6 / WP-FC-RUN PENDING |
 | Running layer (schedules/ledger/QA) | NOT designed-complete | — | — | — |
-| Consolidation itself | Phases 1-4 done (19 review rounds); both ratified designs integrated + archived | — | mechanical sweeps green; earlier reader runs passed OLDER byte-sets only (hash blocks in CONSOLIDATION §16); the round-17 strict run WITHDRAWN in round 18 (6/10, VOID — addendum in the archived record); reader test of the CURRENT bytes PENDING at the Phase-5 gate (card step 10 / 24b) | archive (Phase 5) owner-gated; root keeps Plan + WorkOrder until the experiment program migrates |
+| Consolidation itself | Phases 1-3 done; Phase 4 review-complete (rounds in CONSOLIDATION §16) — its definitive reader test executes at the Phase-5 gate; both ratified designs integrated + archived | — | mechanical sweeps green; earlier reader runs passed OLDER byte-sets only (hash blocks in CONSOLIDATION §16); the round-17 strict run WITHDRAWN in round 18 (6/10, VOID — addendum in the archived record); reader test of the CURRENT bytes PENDING at the Phase-5 gate (card step 10 / 24b) | archive (Phase 5) owner-gated; root keeps Plan + WorkOrder until the experiment program migrates |
 
 ## 2. Lists by status
 
@@ -167,7 +167,7 @@ run; frozen original `4911a22f…` = archive MANIFEST). Artifacts:
 | FableExperimentPlan · WorkOrder | pinned plan · runbook | BUILD §9; keep Plan byte-identical until program migrates; archive after. The Plan's frozen authority ladder (lines 4/257) resolves externally: its "lock candidates" were RATIFIED 2026-07-15 (operative mechanics = BUILD §8.1/§8.2; originals = archive evidence); its topic docs resolve to the archive paths with meaning carried by the four live files (step 21c note) |
 | FablePrompt · FablePromptv2 | executed briefs | provenance entries only; archive |
 | XBRLIntegrationDesign | **RATIFIED working design (owner 2026-07-15; DORMANT until P19 + gates + EXP-6)** | recipe + pin map + the ten amendments → BUILD §8.2 + owning law sections (gate-tagged); **original ARCHIVED 2026-07-15, byte-verified — DONE** |
-| CONSOLIDATION.md | audit + migration map | moves into the same dated archive after the four live files pass review (never a fifth rule source) |
+| CONSOLIDATION.md | audit + migration map | moves into the same dated archive at Phase-5 card step 7 — BEFORE the final link/root checks and the last-gate reader test (never a fifth rule source) |
 
 ### 7.1 Rule-ID crosswalk (every stable ID range → its one live anchor; §14.1 artifact)
 

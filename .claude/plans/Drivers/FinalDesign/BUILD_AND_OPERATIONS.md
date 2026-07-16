@@ -1,6 +1,6 @@
 # BUILD_AND_OPERATIONS.md — how to build, test, run, and retire the Driver system
 
-> **Status: LIVE — Phase 4 review complete through round 19 (2026-07-16); the reader test of the CURRENT bytes is PENDING — it executes at the Phase-5 gate (card step 10 / 24b); Phase 5 archive pends owner GO.** This file owns PROCEDURE: build steps, contracts'
+> **Status: LIVE — Phase 4 review complete (every round recorded in CONSOLIDATION §16); the reader test of the CURRENT bytes is PENDING — it executes at the Phase-5 gate (card step 10 / 24b); Phase 5 archive pends owner GO.** This file owns PROCEDURE: build steps, contracts'
 > mechanics, gates, run rules, and hazards. Rule MEANING lives only in `FINAL_DESIGN.md` (rule IDs referenced
 > here, never restated). Public channel duties live only in `ChannelContract.md`. Status/history/supersessions
 > live only in `STATUS_AND_HISTORY.md`. Until Phase 5 archives them, the frozen sources remain
