@@ -25,7 +25,7 @@
 | XBRL-native materializer | **APPROVED WORKING DESIGN (owner 2026-07-15; DORMANT until P19 enablement + gates)** | — | EXP-1 signed | — |
 | Experiment program | EXP-0/1/2 SIGNED PASS | — | — | EXP-3..6 / WP-FC-RUN PENDING |
 | Running layer (schedules/ledger/QA) | NOT designed-complete | — | — | — |
-| Consolidation itself | Phases 1-4 done (12 review rounds) | — | mechanical sweeps green; reader tests 10/10 ×3 (the round-9 8/10 was file-induced, fixed and re-passed) | archive (Phase 5) owner-gated; root keeps the 4 pending-decision files (Plan · WorkOrder · the 2 candidates) until their own decisions |
+| Consolidation itself | Phases 1-4 done (16 review rounds); both ratified designs integrated + archived | — | mechanical sweeps green; repeated full reader runs (latest full-hash run recorded in CONSOLIDATION §16) | archive (Phase 5) owner-gated; root keeps Plan + WorkOrder until the experiment program migrates |
 
 ## 2. Lists by status
 
@@ -197,7 +197,7 @@ column — the map is total over every ID listed in `CONSOLIDATION.md` §14.1.
 | 42 supersession rows | §3 above | — |
 | Contract clauses §1-§9 | ChannelContract.md (live; one section per clause: what-a-channel-is · flow · packet · never-send · submission · outcomes · ledger duties · never-list · onboarding) | — |
 | Packet blocks 0-3 + Parts B/C/D | the live frozen packet (structure summarized BUILD §2) | — |
-| Candidate bundles | BUILD §8.1 (kernel split + ratification bundle) · §8.2 (XBRL recipe + pin map + amendments); full text = the two LIVE candidate files | — |
+| Ratified design bundles (formerly candidates) | BUILD §8.1 (kernel mechanics whole) · §8.2 (XBRL recipe + pin map + amendments) = the OPERATIVE text; the archived originals are historical evidence only (destination proof §7.1b) | — |
 | Open items | §2 OPEN list (mirrored FINAL_DESIGN §10) + BUILD §11 missing recipes | — |
 
 ### 7.1b Ratified-design destination proof (owner order 2026-07-15: every transferred item → its exact live anchor)

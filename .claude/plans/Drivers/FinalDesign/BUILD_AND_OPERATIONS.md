@@ -238,10 +238,10 @@ reads realized returns.
 > documents — DONE (INT-2..INT-5 complete; per-element destination proof = STATUS §7.1b; the post-move reader
 > tests passed). Both originals are ARCHIVED (2026-07-15, byte-verified vs the Phase-1 manifest); the full
 > operative mechanics live in §8.1/§8.2 below, with the archived originals as historical evidence.
-> **Authority, three tiers (round 12):** `FINAL_DESIGN.md` owns CURRENT LAW · the two live candidate files own
-> PROPOSAL-ONLY mechanics (their internal "topic docs win on conflict" lines resolve against FINAL_DESIGN as
-> the topic docs' successor, with the archived originals as evidence) · archived files are EVIDENCE ONLY, never
-> authority. **Where this guide records a NAMED CORRECTION to a retained candidate (e.g. the graph-verified
+> **Authority, three tiers (round 16 wording; both designs now ratified + archived):** `FINAL_DESIGN.md` owns
+> CURRENT LAW · THIS guide's §8.1/§8.2 own the ratified designs' OPERATIVE MECHANICS (the archived originals'
+> internal "topic docs win on conflict" lines resolve against FINAL_DESIGN as the topic docs' successor) ·
+> archived files — including both design originals — are EVIDENCE ONLY, never authority. **Where this guide records a NAMED CORRECTION to a retained candidate (e.g. the graph-verified
 > `10-K/A`/`10-Q/A` slash literals in §8.2), the correction OVERRIDES the candidate's text — corrections are
 > part of the operative map, verified against ground truth, and travel into the bundle at ratification.**
 > **Reading rule for the split below:** where a name appears on BOTH sides (born-complete, recovery, CLAIM-off),
@@ -525,8 +525,9 @@ promotion bar adds claim-precision/recall AND zero wrong-ATTACH on the cross-ind
 establishment-minting checks and gauntlet adjudications use the judge tier.** **Principles
 P1-P7 (unchanged):** structure over model strength · diversity over repetition · cheap-first with zero-loss
 promotion · strong-by-default on permanent classes · structural escalation only · pinned IDs + canary ·
-park/skip rates never targets. Graders' independence is measured, never assumed. Billing: subscription
-workflow agents + step-0 guards; SDK banned; embeddings remain the one metered, suggest-only lane.
+park/skip rates never targets. Graders' independence is measured, never assumed. **The falsifier and ALL §8.1.9 pre-filters are CODE — no
+model ever.** Billing: subscription workflow agents + step-0 guards; SDK banned; embeddings remain the one
+metered, suggest-only lane.
 
 **8.1.12 Kernel experiments (designed, NOT run — gates in force):** S1 seed-size knee · S2 three-world
 shootout · S3 synchronous-vs-async LINK trigger (zero wrong-link tolerance; must instrument the RATCHET —
@@ -581,11 +582,11 @@ full-catalog display.
   (`pure`→percent ×100 is a fenced-out value rewrite) · 4. intra-filing dedupe + collision [P4g]: drop identical
   concept+context+value duplicates; within a fact_scope keep the highest-precision Fact when values agree within
   stated `decimals`; disagreement beyond precision → the WHOLE scope is NOT materialized and is recorded under
-  the STATE-BASED park class `xbrl_internal_conflict` (fail-closed; never fuse, never last-write-wins). The
-  RETRY TRIGGER is **OWNER-PENDING (round 15)**: the source registers the class as state-based but never names
-  its clearing state; the PROPOSED reading — re-enqueue only when the filing's XBRL is re-parsed/amended — is
-  new wording awaiting owner confirmation (alternatives: also on manual repair-lane action, or leave
-  unspecified until build) · 5. axes never dropped (FS-09): frozen table → `kind:normalized_member_label`; unknown axis → the hex
+  the STATE-BASED park class `xbrl_internal_conflict` (fail-closed; never fuse, never last-write-wins). **RETRY
+  TRIGGER — OWNER-RULED 2026-07-15 (round 16): retry ONLY when the affected report's parsed XBRL facts actually
+  change; an amended filing is processed as a NEW report — it never silently rewrites the old filing.**
+  (History: the source registered the class as state-based without naming its clearing state; round-14's
+  proposed reading was refined into this ruling.) · 5. axes never dropped (FS-09): frozen table → `kind:normalized_member_label`; unknown axis → the hex
   sentinel; any NON_SLICE axis or HARD-EXCLUDE member → skip the whole fact, logged [P4d] · 6. period from the
   exact context (its own §5.3) · 7. id = `du:{R.source_id}:{d}:{fact_scope}` · 8. primary ⇔ the Fact's period end
   == `periodOfReport` (write always); everything else writes ONLY as backfill (no same-scope fact exists) or
@@ -606,8 +607,9 @@ full-catalog display.
   TextBlocks-only extraction is forbidden; full section text remains the completeness baseline.
 - Active/revoked ConceptResolution lifecycle, cohort exclusion, recovery/re-extraction, menu-evidence invariant,
   isolated kernel falsifier, duplicate/miss ledger. Honest non-repair lanes for divergent periods/slices remain.
-- **The ratification pin map (P1-P17 and P19; no P18 — the source removed it). The LIVE candidate file
-  `XBRLIntegrationDesign.md` remains the full text until ratification; this map is the ratification index:**
+- **The pin map (P1-P17 and P19; no P18 — the source removed it). RATIFIED 2026-07-15 and the original
+  archived: this map + the recipe above ARE the operative mechanics; the archived original is historical
+  evidence only:**
   - **P1** activate the `09 §10` rider items 1-4 as written (origin · `[XBRL]` quote · `reported` state · exact windows · member→slice · full-producer validators); **P1a** normal-order no-enrichment (a text twin is skipped whole; the xbrl node never gains prose).
   - **P2** rider item 5 closed: NO new stored rank slot; read-time tie-break addendum — within one event and one series, `origin=xbrl_link` beats `origin=llm` at collapse.
   - **P3** xbrl `measurement` always ∅; the DECLARED GAAP-family fold — {∅, gaap, reported, as_reported} ∪ the linked concept's own Basic/Diluted token — applied in the skip test AND as the rider-3 read bucket's extension (xbrl-side-only, value-gated, fixed token set; stored ids never change); basic never folds against diluted.
@@ -631,7 +633,7 @@ full-catalog display.
   - **X-XL1 twin fidelity:** N (company, driver, period) triples with both a text and an xbrl fact — value agreement + period-window id-equality rate, every divergence classified. **Bar: ≥99% id equality on true twins**; 52/53-week filers mandatory in-sample.
   - **X-XL2 suppression + tripwire calibration:** suppression ON vs OFF over M 10-Qs — skip precision (**zero suppressed non-twins, hard zero**), `duplicate_of_xbrl`≈0, the `xbrl_conflict`/`xbrl_internal_conflict` census, `twin_suspect_rate` measured; **the rollout bar is PRE-REGISTERED from this run.**
   - **X-XL3 recall:** a pre-registered sha-locked key (the PIPE-37/OD-6 protocol) over K filings; (xbrl ∪ suppressed-text) coverage ≥ the text-only baseline; **zero market-moving fact lost — hard zero.**
-  - **X-XL4 cost:** tokens/filing + backfill, hybrid vs text-only — INFORMATIONAL ONLY, never gating.
+  - **X-XL4 cost:** tokens/filing + backfill, hybrid vs text-only — INFORMATIONAL ONLY, never gating; the results are REPORTED TO THE OWNER.
   - **Hard pre-gates (locked, load-bearing):** XC-16 + the full-universe concept run · the PIT menu proof · a falsifier-(iii) dry-run over a materialized sample · the FRESH Neo4j census (counts, `FACT_MEMBER`/`FACT_DIMENSION` edge wiring, unit-type inventory, no-context and null-`periodOfReport` cohort sizes).
   - **Rollout:** flag-on, ONE industry → industry-by-industry; each promotion gated on the X-XL0-3 bars HOLDING (X-XL4 excluded from gating).
 - **Dependency (round 13): this candidate is NOT fully independently decidable.** Its pins amend and consume
@@ -654,7 +656,7 @@ full-catalog display.
   still waits on ALL of: the P19 proof plan (the X-XL0-3 bars above) · every hard pre-gate · the EXP-6
   convergence evidence — approval is done; none of the gates moved.** **The dormant `09`
   rider stays dormant: no `origin`, no `xbrl_link`, no empty≡GAAP folding, no XBRL producer rules before
-  ratification.**
+  ENABLEMENT (ratification is done — only the P19 bars + hard pre-gates unlock the rider).**
 
 ### 8.3 Bayes learner proposal — UNVETTED
 
