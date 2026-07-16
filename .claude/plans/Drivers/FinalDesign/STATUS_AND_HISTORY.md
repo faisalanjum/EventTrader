@@ -1,6 +1,6 @@
 # STATUS_AND_HISTORY.md — the one mutable dashboard, supersession ledger, and crosswalk
 
-> **Status: LIVE — Phase 4 review complete (every round recorded in CONSOLIDATION §16); the reader test of the CURRENT bytes is PENDING — it executes at the Phase-5 gate (card step 10 / 24b); Phase 5 archive pends owner GO.** This file owns STATUS and HISTORY only — live rule
+> **Status: LIVE — consolidation Phases 1-5 EXECUTED (owner GO 2026-07-16); the definitive reader test's outcome, per-question grades, and tested hashes live in `archive/2026-07-15_pre-consolidation/READER_TEST_RECORD_2026-07-16_phase5-final-run2.md` — Phase 5 is COMPLETE ONLY IF that exact record shows 10/10 PASS. Review rounds + decision trail = the archived `CONSOLIDATION.md` §10.2/§16.** This file owns STATUS and HISTORY only — live rule
 > wording stays in `FINAL_DESIGN.md`; procedures stay in `BUILD_AND_OPERATIONS.md`; channel duties stay in
 > `ChannelContract.md`. Any status shown in another live file is a generated summary of THIS file. A status
 > change edits this dashboard — and only if rule meaning changed through owner approval, the one owning rule
@@ -25,7 +25,7 @@
 | XBRL-native materializer | **APPROVED WORKING DESIGN (owner 2026-07-15; DORMANT until P19 enablement + hard pre-gates + EXP-6)** | — | EXP-1 signed | — |
 | Experiment program | EXP-0/1/2 SIGNED PASS | — | — | EXP-3..6 / WP-FC-RUN PENDING |
 | Running layer (schedules/ledger/QA) | NOT designed-complete | — | — | — |
-| Consolidation itself | Phases 1-3 done; Phase 4 review-complete (rounds in CONSOLIDATION §16) — its definitive reader test executes at the Phase-5 gate; both ratified designs integrated + archived | — | mechanical sweeps green; earlier reader runs passed OLDER byte-sets only (hash blocks in CONSOLIDATION §16); the round-17 strict run WITHDRAWN in round 18 (6/10, VOID — addendum in the archived record); reader test of the CURRENT bytes PENDING at the Phase-5 gate (card step 10 / 24b) | archive (Phase 5) owner-gated; root keeps Plan + WorkOrder until the experiment program migrates |
+| Consolidation itself | Phases 1-5 EXECUTED (owner GO 2026-07-16); all 33 sources archived byte-verified; audit trail = the archived CONSOLIDATION.md | — | definitive blank-context reader test: outcome + per-question grades + authoritative tested hashes in `archive/2026-07-15_pre-consolidation/READER_TEST_RECORD_2026-07-16_phase5-final-run2.md` — Phase 5 COMPLETE only if that record shows 10/10 PASS | root = the 7 sanctioned files + archive/; Plan + WorkOrder stay until the experiment program migrates |
 
 ## 2. Lists by status
 
@@ -35,7 +35,7 @@
 - **CONDITIONAL:** OD-19 (inert until K-pairs.v2 zero wrong-same) · XC-16 timing · model-role membership (experiment-gated) · XBRL-native materializer + `09` rider (RATIFIED as design 2026-07-15; DORMANT until the P19 enablement proof plan — X-XL0-3 bars — every hard pre-gate pass, and the EXP-6 convergence evidence) · multi-run concept stability/caching (only if monitoring justifies).
 - **OPEN (owner):** catalog 796-vs-786 + lifecycle/IPO · full model/cost policy beyond signed EXP-2 · FS-23 · 8-K taxonomy · DCM threshold/pure-macro/two-catalyst · Track B dual-producer thresholds · non-USD expansion · metric `value_text`/action `conditions` revisit triggers · Driver Genesis charter questions · Track C history-gap acceptance · third-party `company_confirmed=false` class enablement (part-2/news-channel).
 - **APPROVED WORKING DESIGN (owner 2026-07-15; not activated; gates/OFF-switches in force):** Admission Kernel v3.4 · XBRL-native materializer — integration COMPLETE (INT-2..INT-5, destination proof §7.1b); both originals archived 2026-07-15, byte-verified vs the Phase-1 manifest. The kernel bundle also settled two formerly-open/tracked items: G1 reuse-display rules (→ BUILD §8.1.3) · OD-7's born-complete/live-create CORE (→ BUILD §8.1; the broader OD-7 design stays UNRATIFIED — FINAL §4.2 Q5 note; the mis-name/mis-type exit + exact recipes land at the future OD-7 pass, BUILD §11.2).
-- **CANDIDATE:** Bayes proposal · Driver Genesis restructure (rationale). Owner-question decision detail rides in `CONSOLIDATION.md` §10.2 until Phase 5, then moves here.
+- **CANDIDATE:** Bayes proposal · Driver Genesis restructure (rationale). Owner-question decision record = §4 below; the full decision text + verification trail = the archived `CONSOLIDATION.md` §10.2/§16 (`archive/2026-07-15_pre-consolidation/`).
 - **Change law (owner 2026-07-15):** every future design correction updates the ONE owning live section and adds a short history entry here; no parallel live copies.
 - **RETIRED (never a production path):** old Guidance replay plan (`13_Track_RetiredDesign.md` — GI stale-trap
   rows in its GI-07) · fixed-vocabulary Driver v1 · eager-reuse v2 · `slice=total` · alias layers · `long_range`
@@ -110,12 +110,13 @@ Q1 `company_confirmed`: CORE derives from who-said-it evidence; unclear = SKIP (
 stays reserved for explicitly-ALLOWED future third-party classes (enabling any class = part-2/news-channel
 decision) → FINAL_DESIGN §7.1. · Q2 non-slice/elimination: NO change — frozen packet PARK+log stands; FS-20
 auto-demotion is the drain → §3 OD-17. · Q3 catalog sync: resolution (b) — offline catalog + lazy born-complete
-nodes; OD-16 narrowed → §4.2. · Q4 XBRL packet shape: amendment APPLIED 2026-07-15 to ChannelContract + frozen
+nodes (created in the same write when an ATTACH targets a card with no node yet — mechanics TO BE specified at
+the future OD-7/live-admission pass, recipe not yet written, BUILD §11.2); OD-16 narrowed → §4.2. · Q4 XBRL packet shape: amendment APPLIED 2026-07-15 to ChannelContract + frozen
 packet (`dimensions=[]` verified-empty; both axis+member; never fragments). · Q5 first-fact guard scoped to
 bare names; suffix-proven lanes may be born `unknown` → §4.2. · R6 (round 16) `xbrl_internal_conflict` retry
 trigger: retry ONLY when the affected report's parsed XBRL facts actually change; an amended filing is a NEW
 report, never a silent rewrite → BUILD §8.2 recipe step 4. Full decision text + verification trail:
-`CONSOLIDATION.md` §10.2/§16 (moves to the archive with it at Phase 5).
+the archived `CONSOLIDATION.md` §10.2/§16 (`archive/2026-07-15_pre-consolidation/CONSOLIDATION.md`, archived at Phase-5 step 7, 2026-07-16).
 
 ## 5. Signed experiment decisions + remaining gates (authority = signed decision.json artifacts)
 
@@ -130,7 +131,7 @@ run; frozen original `4911a22f…` = archive MANIFEST). Artifacts:
 
 ## 6. Known documentation/logic issues (open; no new authority)
 
-- The 24 stale-text items (per-file) and the interim hazard rule: `CONSOLIDATION.md` §10.1 + Phase-2 note.
+- The 24 stale-text items (per-file) and the interim hazard rule: the archived `CONSOLIDATION.md` §10.1 + Phase-2 note.
   Biggest traps: `03`/`11`/`12` old collision text (OD-8 is current) · `04` one-hint-pair (per-slot is current) ·
   `09 §8`/`07 §D` expectation-baseline wording · stale experiment headers (signed artifacts win) ·
   `15` "already built" = "fully specified" (stale-item 11).
@@ -139,6 +140,10 @@ run; frozen original `4911a22f…` = archive MANIFEST). Artifacts:
 - Truly open owner choices: FINAL_DESIGN §10 OPEN list.
 
 ## 7. Source crosswalk (33 files → destinations; every row re-verified at Phase 4/5)
+
+**Phase 5 EXECUTED 2026-07-16 (owner GO):** every "archive" destination below is DONE — all 27 remaining
+sources moved byte-verified vs the manifest (the two ratified-design originals had already moved 2026-07-15);
+the three pre-amendment/frozen-original snapshots sit beside them.
 
 | Source | Status | Destination |
 |---|---|---|
@@ -167,12 +172,12 @@ run; frozen original `4911a22f…` = archive MANIFEST). Artifacts:
 | FableExperimentPlan · WorkOrder | pinned plan · runbook | BUILD §9; keep Plan byte-identical until program migrates; archive after. The Plan's frozen authority ladder (lines 4/257) resolves externally: its "lock candidates" were RATIFIED 2026-07-15 (operative mechanics = BUILD §8.1/§8.2; originals = archive evidence); its topic docs resolve to the archive paths with meaning carried by the four live files (step 21c note) |
 | FablePrompt · FablePromptv2 | executed briefs | provenance entries only; archive |
 | XBRLIntegrationDesign | **RATIFIED working design (owner 2026-07-15; DORMANT until P19 + gates + EXP-6)** | recipe + pin map + the ten amendments → BUILD §8.2 + owning law sections (gate-tagged); **original ARCHIVED 2026-07-15, byte-verified — DONE** |
-| CONSOLIDATION.md | audit + migration map | moves into the same dated archive at Phase-5 card step 7 — BEFORE the final link/root checks and the last-gate reader test (never a fifth rule source) |
+| CONSOLIDATION.md | audit + migration map | MOVED into the dated archive at Phase-5 step 7 (2026-07-16) ✓ — never a fifth rule source |
 
 ### 7.1 Rule-ID crosswalk (every stable ID range → its one live anchor; §14.1 artifact)
 
 Coverage law: every ID in a range maps to the range's DEFAULT anchor unless it appears in the exceptions
-column — the map is total over every ID listed in `CONSOLIDATION.md` §14.1.
+column — the map is total over every ID listed in the archived `CONSOLIDATION.md` §14.1.
 
 | Rule IDs | Default anchor | Per-ID exceptions (exact) |
 |---|---|---|
@@ -270,7 +275,7 @@ false positive. Re-run both scans at migration; update or validate every hit BEF
   (11,320 lines / 1,362,208 bytes verified), git provenance, commits `49f1cd8`/`87bc150`. Owner-amended
   live-continuing files verify against post-amendment hashes: ChannelContract (see git for current after the
   2026-07-15 provenance one-liner) · packet `aa7239ed…`
-  (recorded in `CONSOLIDATION.md` §16).
+  (recorded in the archived `CONSOLIDATION.md` §16).
 - **Evidence/rejected-alternative pointers:** v1/v2 death evidence, unit proofs (117/117 · 29/29+7 · 3×33/33),
   concept-link proofs (31-co zero-wrong · 274-co 100%/~70%/98% + caveat) → BUILD §12. Bayes proposal → BUILD
   §8.3. Executed prompt briefs (FablePrompt/v2) → archive provenance. Experiment artifacts + signed decisions →

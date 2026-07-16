@@ -1,10 +1,10 @@
 # BUILD_AND_OPERATIONS.md — how to build, test, run, and retire the Driver system
 
-> **Status: LIVE — Phase 4 review complete (every round recorded in CONSOLIDATION §16); the reader test of the CURRENT bytes is PENDING — it executes at the Phase-5 gate (card step 10 / 24b); Phase 5 archive pends owner GO.** This file owns PROCEDURE: build steps, contracts'
+> **Status: LIVE — consolidation Phases 1-5 EXECUTED (owner GO 2026-07-16); the definitive reader test's outcome, per-question grades, and tested hashes live in `archive/2026-07-15_pre-consolidation/READER_TEST_RECORD_2026-07-16_phase5-final-run2.md` — Phase 5 is COMPLETE ONLY IF that exact record shows 10/10 PASS.** This file owns PROCEDURE: build steps, contracts'
 > mechanics, gates, run rules, and hazards. Rule MEANING lives only in `FINAL_DESIGN.md` (rule IDs referenced
 > here, never restated). Public channel duties live only in `ChannelContract.md`. Status/history/supersessions
-> live only in `STATUS_AND_HISTORY.md`. Until Phase 5 archives them, the frozen sources remain
-> the byte evidence baseline (`archive/2026-07-15_pre-consolidation/MANIFEST.json`).
+> live only in `STATUS_AND_HISTORY.md`. The 33 frozen sources are ARCHIVED byte-verified — evidence baseline =
+> `archive/2026-07-15_pre-consolidation/MANIFEST.json`; audit trail = the archived `CONSOLIDATION.md`.
 >
 > **Honest status banner (generated; owning dashboard = `STATUS_AND_HISTORY.md`):** DESIGN is final for
 > everything labeled FINAL in `FINAL_DESIGN.md`. CODE/TESTS exist only where stated below (WP-FC-EDITS batch,
@@ -131,9 +131,14 @@ class finalization → final validation → fitness gate.
 - **PIT:** offline NAME creation may use full history (names carry no fact value); anything shown to a
   historical producer and every fact-time menu cuts at public time.
 - **State:** WP-FC-EDITS landed (`5db902f`, 2026-07-10; 260 tests + 1 skip): NAME rules inlined, dead leaf XBRL
-  code removed, MF-02 + model slots + `min_score=0.60` at all four sites. Remaining: fold/tree prompt mirrors,
-  finalizer, hardening/recall floor, fixture rebuild, calibration leaf, first real two-industry fold,
-  finalization, then the OD-6 fitness gate.
+  code removed, MF-02 + model slots + `min_score=0.60` at all four sites. Remaining: fold/tree prompt mirrors —
+  re-verified on disk 2026-07-16 (pre-archive audit of WorkflowContextPack): the same fix classes are still open
+  in the fold layer only — `fold_catalogs.js` (old-ontology prompt pointer `:84` + `model:'opus'` pins),
+  `build_tree.js` (`model:'opus'` pins; its read-only `{list:true}` mode lacks the step-0 billing guard the
+  fold/walk modes embed), `fold_catalogs.py` + the three fold tests (`optional_links` machinery/fixtures),
+  `ab_pair_judge.js` (`model:'opus'` pins; its pair prompt is already MF-02-current), `validate_catalog.py:8`
+  (stale docstring nit) — plus finalizer, hardening/recall floor, fixture rebuild, calibration leaf, first real
+  two-industry fold, finalization, then the OD-6 fitness gate.
 - **OD-6 fitness gate (never run):** freeze a catalog · fresh covered-industry events · ≥3,000 fixed
   pre-registered slots, key hash-locked before calls · ≥2 independent producers, grader ≠ producer ·
   name+direction floor 0.634 · inter-producer agreement floor 72% · ZERO two-grader-confirmed wrong merges ·

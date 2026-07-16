@@ -19,7 +19,7 @@ if (!RUN_ID) throw new Error('reconcile.js requires args.run_id (e.g. "2026-06-0
 const RUN_DIR = `${DIR}/runs/${RUN_ID}`
 const SEED = `${RUN_DIR}/seed.json`
 const CAT  = `${RUN_DIR}/catalog.json`
-const ONT  = `${DIR}/FinalDesign/02_DriverCatalog.md`
+const ONT  = `${DIR}/FinalDesign/archive/2026-07-15_pre-consolidation/02_DriverCatalog.md`  // Phase-5 archive path (byte-identical, manifest-verified); rules law = FINAL_DESIGN §3
 // PIPE-16: naming judges derive the rulebook from 02_DriverCatalog.md NAME-01…19, inlined verbatim (readers cannot fetch docs).
 const RULEBOOK = `## Naming rules
 
