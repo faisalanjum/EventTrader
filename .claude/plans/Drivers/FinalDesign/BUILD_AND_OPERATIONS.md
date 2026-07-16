@@ -1,10 +1,11 @@
 # BUILD_AND_OPERATIONS.md — how to build, test, run, and retire the Driver system
 
-> **Status: LIVE — consolidation Phases 1-5 EXECUTED (owner GO 2026-07-16); the definitive reader test's outcome, per-question grades, and tested hashes live in `archive/2026-07-15_pre-consolidation/READER_TEST_RECORD_2026-07-16_phase5-final-run2.md` — Phase 5 is COMPLETE ONLY IF that exact record shows 10/10 PASS.** This file owns PROCEDURE: build steps, contracts'
+> **Status: LIVE — consolidation Phases 1-5 EXECUTED (owner GO 2026-07-16); the definitive reader test's outcome, per-question grades, and tested hashes live in `archive/2026-07-15_pre-consolidation/READER_TEST_RECORD_2026-07-16_phase5-final-run3.md` — Phase 5 is COMPLETE ONLY IF that exact record shows 10/10 PASS.** This file owns PROCEDURE: build steps, contracts'
 > mechanics, gates, run rules, and hazards. Rule MEANING lives only in `FINAL_DESIGN.md` (rule IDs referenced
 > here, never restated). Public channel duties live only in `ChannelContract.md`. Status/history/supersessions
-> live only in `STATUS_AND_HISTORY.md`. The 33 frozen sources are ARCHIVED byte-verified — evidence baseline =
-> `archive/2026-07-15_pre-consolidation/MANIFEST.json`; audit trail = the archived `CONSOLIDATION.md`.
+> live only in `STATUS_AND_HISTORY.md`. The 33 frozen sources are fully accounted for, byte-verified (29 originals + 3 snapshots archived; the
+> byte-pinned Plan live at root) — evidence baseline = `archive/2026-07-15_pre-consolidation/MANIFEST.json`;
+> audit trail = the archived `CONSOLIDATION.md`.
 >
 > **Honest status banner (generated; owning dashboard = `STATUS_AND_HISTORY.md`):** DESIGN is final for
 > everything labeled FINAL in `FINAL_DESIGN.md`. CODE/TESTS exist only where stated below (WP-FC-EDITS batch,
@@ -242,7 +243,8 @@ reads realized returns.
 > unresolved item stays in force and marked. Their complete mechanics are being integrated into the four live
 > documents — DONE (INT-2..INT-5 complete; per-element destination proof = STATUS §7.1b; the integration-era
 > reader tests passed — the archive-gate run + the post-integration standard run; the DEFINITIVE post-move
-> reader test = the Phase-5 gate, not yet run). Both originals are ARCHIVED (2026-07-15, byte-verified vs the Phase-1 manifest); the full
+> reader test = the Phase-5 gate — executed: outcome, per-question grades, and tested hashes live in the
+> archive's `READER_TEST_RECORD_2026-07-16_phase5-final-run3.md`). Both originals are ARCHIVED (2026-07-15, byte-verified vs the Phase-1 manifest); the full
 > operative mechanics live in §8.1/§8.2 below, with the archived originals as historical evidence.
 > **Authority, three tiers (round 16 wording; both designs now ratified + archived):** `FINAL_DESIGN.md` owns
 > CURRENT LAW · THIS guide's §8.1/§8.2 own the ratified designs' OPERATIVE MECHANICS (the archived originals'
@@ -676,9 +678,9 @@ Archive under proposals; import nothing without owner approval.
 
 - `FableExperimentPlan.md` defines WHAT to test (sha-pinned `51966848…7472` — keep byte-identical, no banner).
   `FableExperimentWorkOrder.md` defines HOW (sha recorded, never pinned — the CURRENT sha lives on
-  `experiments/WORKORDER_STATUS.md`, re-recorded at every edit incl. the Phase-5 21c re-point; that board is
-  stale at `1586761a…`/v1.8 as of 2026-07-15 — re-record before more runs; frozen original `4911a22f…` = the
-  archive MANIFEST). Neither amends production law.
+  `experiments/WORKORDER_STATUS.md`, re-recorded at every edit incl. the Phase-5 21c re-point; the board was
+  UPDATED at Phase-5 step 21c (2026-07-16) with the full hash chain — its current_workorder_sha256 line is
+  authoritative; frozen original `4911a22f…` = the archive MANIFEST). Neither amends production law.
 - Ladder: EXP-0 graders · EXP-1 deterministic XBRL reality · EXP-2 reader config · EXP-3 G1/router · EXP-4
   identity/type/families · EXP-5 the 24-field packet · EXP-6 text/XBRL convergence. Pre-register + hash-lock
   keys, grade once, PIT inputs, subscription execution, exact model IDs, ambiguity exhibits, recorded

@@ -1,5 +1,7 @@
 # READER TEST RECORD — Phase-5 LAST GATE, run 2 (2026-07-16) — THE DEFINITIVE RECORD
 
+> **ROUND-22 WITHDRAWAL (2026-07-16): the 10/10 below is WITHDRAWN — re-graded 8/10; Q4 and Q9 FAIL. See the CORRECTION ADDENDUM at the end. The definitive record is now `READER_TEST_RECORD_2026-07-16_phase5-final-run3.md`. Original text below untouched.**
+
 **VERDICT: PASS — 10/10 (every question graded PASS below; the PASS RULE bar met). This record is the post-Phase-5 HASH AUTHORITY for the live files and the completion evidence the live banners point at.**
 
 - Workflow run: `wf_c49f6c25-f2a` · agent label `phase5-final-reader-run2` · ~197k subagent tokens · fresh zero-context reader.
@@ -79,3 +81,15 @@ The ten official exercises verbatim as in `READER_TEST_RECORD_2026-07-16_phase5-
 - **Historical:** the 33 frozen sources, CURRENTLY in `archive/2026-07-15_pre-consolidation/` (Phase 5 executed 2026-07-16) — evidence only, never authority (STATUS §7/§8; FINAL_DESIGN banner); dead rules kept once in the 42 supersession rows (STATUS §3). Plan/WorkOrder: currently live at the root; DESTINATION = archive only after the experiment program migrates (STATUS §7).
 
 10. **The complete source→anchor maps, all in STATUS_AND_HISTORY.md:** §7 "Source crosswalk" maps every one of the 33 source FILES to its destination (with current archived location, Phase-5 note); §7.1 "Rule-ID crosswalk" maps every RULE-ID RANGE (NAME, FS, UNIT, PER, MF, DU, XC, PIPE, FACT, T-census, GI both numberings, D1–D8, `66` D-1..13, OD-1..21 via the §3 additions list, K2, contract clauses, packet blocks) to its one live anchor with per-ID exceptions; §7.2 "Census T-group anchors" maps every T-GROUP T1–T12; §7.1b "Ratified-design destination proof" maps every transferred RATIFIED-DESIGN element (kernel §1–§16 → BUILD §8.1.x; XBRL recipe/pins/ten amendments → BUILD §8.2 + owning sections). Supporting: §3 = the 42 supersession rows (dead rule → current anchor); §8 = the archive manifest (`MANIFEST.json`, sha-pinned bytes); the full decision/audit trail is the archived `CONSOLIDATION.md` §10.2/§16 (cited as evidence pointer only — not a live authority).
+
+---
+
+## ROUND-22 CORRECTION ADDENDUM (2026-07-16 — additive; nothing above rewritten)
+
+**The 10/10 is WITHDRAWN → re-graded 8/10.** External review (round 22) caught two grading errors, both verified against the live law + archived origins:
+
+1. **Q4 FAIL** — the answer states the one-sibling trigger as THE rule ("conflicts (≥1 shared non-null slot disagrees) with a sibling"). The actual OD-8 law (FINAL_DESIGN §5.1:155; origin 66:336-339): one sibling + conflict → flagged hashed member; **multiple siblings → hash ONLY on conflict-with-ALL; exact → MERGE; compatible-but-not-exact → PARK as ambiguous (never guess)**; two in-batch competitors for one partial sibling → park both. The answer never mentions the multi-sibling merge/park outcomes. The file is explicit — reader error, not file-induced.
+2. **Q9 FAIL** — "the 33 frozen sources, CURRENTLY in `archive/…`" contradicts the same answer's own "Plan/WorkOrder: currently live at the root". Truth: 29 originals + 3 frozen-original/pre-amendment snapshots in the archive; the byte-pinned Plan (source 33) lives at root with NO archive copy. FILE-INDUCED: the live banners then said "all 33 frozen sources are ARCHIVED" — that banner falsehood is fixed in round 22 (29+3+1 wording).
+3. **Record defect (mine):** this record did not carry its FULL prompt inline (it referenced run 1 + a machine-local script path) — violating the 24b standard. Run 3's record carries its complete prompt inline.
+
+**The definitive record is `READER_TEST_RECORD_2026-07-16_phase5-final-run3.md`.**

@@ -8,7 +8,7 @@ const A = (typeof args === 'string') ? JSON.parse(args) : (args || {})   // harn
 // Model slots (args-overridable; owner 2026-07-10): strong judge = sonnet @ effort high; clerk = sonnet engine-default. No haiku/opus defaults.
 const _M = (A.models && typeof A.models === 'object') ? A.models : {}
 const MODELS = { gate: _M.gate || 'sonnet', clerk: _M.clerk || 'sonnet' }
-// PIPE-16: rulebook = 02_DriverCatalog.md NAME-01…19, inlined verbatim (readers cannot fetch docs).
+// PIPE-16: rulebook inlined verbatim below — from the now-archived 02_DriverCatalog.md (byte-identical); current law = FINAL_DESIGN §3 NAME-01…19 (readers cannot fetch docs).
 const RULEBOOK = `## Naming rules
 
 ### A. Core naming rules
@@ -128,7 +128,7 @@ const catClause = catalog.length
   : `(No prior catalog supplied — verdict=reuse only if two candidates are exact-same.)`
 
 const res = await agent(`You are an INDEPENDENT admission gate — judge each candidate driver_name FRESH and skeptically; do NOT assume whoever coined it was right.
-NAMING RULES — authority = 02_DriverCatalog.md NAME-01…19 (inlined verbatim; PIPE-16):
+NAMING RULES — authority = FINAL_DESIGN.md §3 (NAME-01…19); inlined verbatim from the archived 02_DriverCatalog.md (byte-identical; PIPE-16):
 ${RULEBOOK}
 ${candsClause}
 ${catClause}

@@ -19,8 +19,7 @@ if (!RUN_ID) throw new Error('reconcile.js requires args.run_id (e.g. "2026-06-0
 const RUN_DIR = `${DIR}/runs/${RUN_ID}`
 const SEED = `${RUN_DIR}/seed.json`
 const CAT  = `${RUN_DIR}/catalog.json`
-const ONT  = `${DIR}/FinalDesign/archive/2026-07-15_pre-consolidation/02_DriverCatalog.md`  // Phase-5 archive path (byte-identical, manifest-verified); rules law = FINAL_DESIGN §3
-// PIPE-16: naming judges derive the rulebook from 02_DriverCatalog.md NAME-01…19, inlined verbatim (readers cannot fetch docs).
+// PIPE-16: naming judges use the inlined RULEBOOK below — verbatim from the now-archived 02_DriverCatalog.md (byte-identical); current law = FINAL_DESIGN §3 NAME-01…19; readers cannot fetch docs. No runtime file reads of archived docs (evidence-only law; Phase-5 round 22).
 const RULEBOOK = `## Naming rules
 
 ### A. Core naming rules
@@ -181,7 +180,7 @@ for (let bi = 0; bi < BATCH_FILES.length; bi++) {
   const tag = BATCH_FILES.length > 1 ? ` [batch ${bi + 1}/${BATCH_FILES.length}]` : ''
   const batchNote = BATCH_FILES.length > 1 ? ' (This file is ONE name-sorted batch of a larger seed — judge only what is in it.)' : ''
   const [dedup, gate] = await parallel([
-    () => agent(`NAMING RULES — authority = 02_DriverCatalog.md NAME-01…19 (inlined verbatim; PIPE-16):
+    () => agent(`NAMING RULES — authority = FINAL_DESIGN.md §3 (NAME-01…19); inlined verbatim from the archived 02_DriverCatalog.md (byte-identical; PIPE-16):
 ${RULEBOOK}
 ${MF02}
 
@@ -194,7 +193,7 @@ TASK = propose final reversible SAME_AS links over them. STRICT rules:
 - For each link pick the CANONICAL (shortest standard form, NAME-06/08 — and it MUST be one of the COINED driver_names in the catalog, never an invented name) + the variant. Reversible only; never delete or merge nodes. A singular/plural pair naming the same concept is a wording variant — fold to one form; if meaning may differ (booking/bookings), keep separate.
 Return DEDUP_SCHEMA.`, {schema:DEDUP_SCHEMA, model:MODELS.dedup, effort:'high', label:`dedup${tag}`, phase:'Review'}),
     () => agent(`You are an INDEPENDENT admission gate — judge each name FRESH and skeptically; do NOT assume the producer that coined it was right.
-NAMING RULES — authority = 02_DriverCatalog.md NAME-01…19 (inlined verbatim; PIPE-16):
+NAMING RULES — authority = FINAL_DESIGN.md §3 (NAME-01…19); inlined verbatim from the archived 02_DriverCatalog.md (byte-identical; PIPE-16):
 ${RULEBOOK}
 ${MF02}
 
@@ -330,7 +329,9 @@ for e in view: gs.setdefault((e.get('company') or '').strip(),[]).append(e)
 names=sorted((x.get('driver_name') or '').strip().lower() for x in d['catalog'])
 print(json.dumps({'name':r['driver_name'],'total_refs':len(allr),'truncated':len(allr)>200,'existing_seed_names':names,'sides':[{'company':c,'refs':v} for c,v in sorted(gs.items(), key=lambda kv:(len(kv[1]),kv[0]))]}))"`
   const rawReviews = (await parallel(flagged.map(f => () => agent(`SAME-NAME REVIEW (leaf, flag-triggered — HierarchicalCatalogPlan D5). The single record "${norm(f.driver_name)}" was FLAGGED as possibly mixing different meanings under one name (reviewer note: ${f.why}).
-Read ${ONT}. LOAD THE EVIDENCE (grouped per company, smallest side first): run Bash:
+NAMING RULES — authority = FINAL_DESIGN.md §3 (NAME-01…19); full text inlined verbatim below from the archived 02_DriverCatalog.md (byte-identical; PIPE-16):
+${RULEBOOK}
+LOAD THE EVIDENCE (grouped per company, smallest side first): run Bash:
 ${pyRec(norm(f.driver_name))}
 ${EXACT_MEANING_RULE}
 ONE verdict:
@@ -360,7 +361,9 @@ Return JSON per schema.`, {schema:{ type:'object', additionalProperties:false, r
       leafReviews.push(ok ? { collision_name: nm, verdict: 'SAME', why: v.why, refute_survived: true, ...(hbD5 ? { high_blast_refute2_survived: true } : {}) }
                           : { collision_name: nm, verdict: 'UNCLEAR', why: `SAME refuted by skeptic (fail-close): ${v.why}` })
     } else if (v.verdict === 'DIFFERENT') {
-      const mg = await agent(`Mini-G2 on ${v.new_names.length} proposed split names (from the homonym split of "${nm}"): ${JSON.stringify(v.new_names)}. Read ${ONT}. all_admit=TRUE only if EVERY name is a valid, reusable, rule-following lower_snake driver name (no tickers, no states, not vague). Return MINIGATE_SCHEMA.`, {schema:MINIGATE_SCHEMA, model:MODELS.gate, effort:'high', label:`d5-gate:${nm}`, phase:'SameName'})
+      const mg = await agent(`Mini-G2 on ${v.new_names.length} proposed split names (from the homonym split of "${nm}"): ${JSON.stringify(v.new_names)}. NAMING RULES — authority = FINAL_DESIGN.md §3 (NAME-01…19); inlined verbatim (PIPE-16):
+${RULEBOOK}
+all_admit=TRUE only if EVERY name is a valid, reusable, rule-following lower_snake driver name (no tickers, no states, not vague). Return MINIGATE_SCHEMA.`, {schema:MINIGATE_SCHEMA, model:MODELS.gate, effort:'high', label:`d5-gate:${nm}`, phase:'SameName'})
       if (mg && mg.all_admit === true) {
         leafReviews.push({ collision_name: nm, verdict: 'DIFFERENT', new_names: v.new_names, why: v.why })
         leafSplitMap.push({ from: nm, to: v.new_names, assignments: v.assignments.map(a => { const row = { company: a.company, to: a.to }; if (Array.isArray(a.ref_idx) && a.ref_idx.length) row.ref_idx = a.ref_idx; return row }) })

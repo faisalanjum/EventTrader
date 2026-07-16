@@ -1,6 +1,6 @@
 # STATUS_AND_HISTORY.md — the one mutable dashboard, supersession ledger, and crosswalk
 
-> **Status: LIVE — consolidation Phases 1-5 EXECUTED (owner GO 2026-07-16); the definitive reader test's outcome, per-question grades, and tested hashes live in `archive/2026-07-15_pre-consolidation/READER_TEST_RECORD_2026-07-16_phase5-final-run2.md` — Phase 5 is COMPLETE ONLY IF that exact record shows 10/10 PASS. Review rounds + decision trail = the archived `CONSOLIDATION.md` §10.2/§16.** This file owns STATUS and HISTORY only — live rule
+> **Status: LIVE — consolidation Phases 1-5 EXECUTED (owner GO 2026-07-16); the definitive reader test's outcome, per-question grades, and tested hashes live in `archive/2026-07-15_pre-consolidation/READER_TEST_RECORD_2026-07-16_phase5-final-run3.md` — Phase 5 is COMPLETE ONLY IF that exact record shows 10/10 PASS. Review rounds + decision trail = the archived `CONSOLIDATION.md` §10.2/§16.** This file owns STATUS and HISTORY only — live rule
 > wording stays in `FINAL_DESIGN.md`; procedures stay in `BUILD_AND_OPERATIONS.md`; channel duties stay in
 > `ChannelContract.md`. Any status shown in another live file is a generated summary of THIS file. A status
 > change edits this dashboard — and only if rule meaning changed through owner approval, the one owning rule
@@ -25,7 +25,7 @@
 | XBRL-native materializer | **APPROVED WORKING DESIGN (owner 2026-07-15; DORMANT until P19 enablement + hard pre-gates + EXP-6)** | — | EXP-1 signed | — |
 | Experiment program | EXP-0/1/2 SIGNED PASS | — | — | EXP-3..6 / WP-FC-RUN PENDING |
 | Running layer (schedules/ledger/QA) | NOT designed-complete | — | — | — |
-| Consolidation itself | Phases 1-5 EXECUTED (owner GO 2026-07-16); all 33 sources archived byte-verified; audit trail = the archived CONSOLIDATION.md | — | definitive blank-context reader test: outcome + per-question grades + authoritative tested hashes in `archive/2026-07-15_pre-consolidation/READER_TEST_RECORD_2026-07-16_phase5-final-run2.md` — Phase 5 COMPLETE only if that record shows 10/10 PASS | root = the 7 sanctioned files + archive/; Plan + WorkOrder stay until the experiment program migrates |
+| Consolidation itself | Phases 1-5 EXECUTED (owner GO 2026-07-16); all 33 sources accounted for byte-verified (29 originals + 3 snapshots archived; the byte-pinned Plan at root); audit trail = the archived CONSOLIDATION.md | — | definitive blank-context reader test: outcome + per-question grades + authoritative tested hashes in `archive/2026-07-15_pre-consolidation/READER_TEST_RECORD_2026-07-16_phase5-final-run3.md` — Phase 5 COMPLETE only if that record shows 10/10 PASS | root = the 7 sanctioned files + archive/; Plan + WorkOrder stay until the experiment program migrates |
 
 ## 2. Lists by status
 
@@ -125,8 +125,8 @@ EXP-1 PASS 07-09 (O13 dimension binding owner-ratified) · EXP-0 PASS 07-10 (gra
 v3 LOCKED 07-10 · EXP-2 PASS 07-11 (sonnet-5@high/40k/1-run) · PENDING: EXP-3..6, remaining keys, WP-FC-RUN,
 F-C freeze. Standing gates: ra_0007 kernel-§6.1 review BEFORE K-pairs.v2; Plan sha `51966848…7472` byte-pinned;
 WorkOrder sha recorded, never pinned — authoritative record = `experiments/WORKORDER_STATUS.md`, re-recorded at
-every edit incl. the Phase-5 21c re-point (board stale at `1586761a…` as of 2026-07-15 — re-record before any
-run; frozen original `4911a22f…` = archive MANIFEST). Artifacts:
+every edit incl. the Phase-5 21c re-point (board UPDATED at Phase-5 step 21c 2026-07-16 — the full hash chain recorded, its current line authoritative;
+frozen original `4911a22f…` = archive MANIFEST). Artifacts:
 `.claude/plans/Drivers/experiments/`.
 
 ## 6. Known documentation/logic issues (open; no new authority)

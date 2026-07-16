@@ -37,7 +37,7 @@ const CONV_SCHEMA = { type:'object', additionalProperties:false,
 const REC_SCHEMA = { type:'object', additionalProperties:false, required:['files_written'],
   properties:{ files_written:{type:'array', items:{type:'string'}}, git_commit:{type:'string'} } }
 
-const RULES = `NAMING RULES — authority = 02_DriverCatalog.md NAME-01…19, inlined verbatim below (readers cannot fetch docs, PIPE-16). Coin names per these rules exactly.
+const RULES = `NAMING RULES — authority = FINAL_DESIGN.md §3 (NAME-01…19), inlined verbatim below from the archived 02_DriverCatalog.md (byte-identical; readers cannot fetch docs, PIPE-16). Coin names per these rules exactly.
 
 ## Naming rules
 
