@@ -1374,7 +1374,7 @@ This section records the 2026-07-15 re-check of the later Claude update. It is a
 
 **Round-11 hash freeze (superseded by round 12 below):** FINAL_DESIGN `f3e99ad1…` · BUILD_AND_OPERATIONS `806d896b…` · STATUS_AND_HISTORY `9462ab3b…`.
 
-**Round-12 hash freeze (current):** FINAL_DESIGN `…` · BUILD_AND_OPERATIONS `…` · STATUS_AND_HISTORY `…` · ChannelContract `9e6ffcbb…` · frozen packet `aa7239ed…`. Owner wording review = the twelve external rounds recorded above.
+**Round-12 hash freeze (current):** FINAL_DESIGN `d4841644…` · BUILD_AND_OPERATIONS `d917d553…` · STATUS_AND_HISTORY `61715ed5…` · ChannelContract `9e6ffcbb…` · frozen packet `aa7239ed…`. Owner wording review = the twelve external rounds recorded above.
 - Remaining before/at Phase 5 (owner GO required; "do not archive yet" stands): the 14.4 archive tests execute AT the move (recompute every archived source hash vs the Phase-1 manifest · rewrite/validate every inbound citation incl. the 12 exact-filename citers and the three engine prompts · verify the root then contains only the intended live set) · CONSOLIDATION.md itself moves into the archive at the end.
 
 **Eighth external round (2026-07-15) — Phase 4 REOPENED on the reviewer's block; all six findings source-verified REAL and fixed:**
