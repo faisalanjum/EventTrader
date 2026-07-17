@@ -120,6 +120,18 @@ report, never a silent rewrite → BUILD §8.2 recipe step 4. · R7 (2026-07-16)
 required family, period, period scope, slice, measurement, and normalized value/unit match." — supersedes the
 archived CONSOLIDATION §14.3 item-3 text; design files and preamble otherwise unchanged. · R8 (2026-07-16, final closure + standing reader-test policy): (a) the proposed "hash only the three law files" rule is REJECTED — every reader test pins EVERY file it reads (BUILD and STATUS carry essential design mechanics and decisions); (b) routine build/status progress updates do NOT require a full reader-test rerun; changes to rules, contracts, operative mechanics, gates, owner decisions, crosswalks, or major release handoffs DO; (c) final closure = ONE fresh R7-amended reader test against ONE committed seven-file freeze — 10/10 + 7/7 exact hashes + explicit command-exit checks required, the record added AFTER the test without changing the seven tested files, the freeze-commit SHA recorded in the definitive record — then the documentation track RETIRES (run 14's record preserved as qualified historical evidence). Full decision text + verification trail:
 the archived `CONSOLIDATION.md` §10.2/§16 (`archive/2026-07-15_pre-consolidation/CONSOLIDATION.md`, archived at Phase-5 step 7, 2026-07-16).
+· **R9 (2026-07-17) FS-18 kind-scoping ruling:** the fold equality is WITHIN one company on the complete
+`kind:norm(value)` token only; equal values under different kinds (incl. `unknown`) never fold or share a
+member link; member-label normalization = the shared format-only normalizer, never stemming/suffix-stripping →
+FINAL_DESIGN §5.2 FS-18. Basis: third-bot DB finding, independently reproduced + corrected by the core bot
+(real exact-collision population: `international` 5 cos · `corporateandother` 4 · `other` 3 · `corporate`/`us`
+2, same label on both geo+segment axes at one company; suffix-stripped collisions americas 21 / northamerica
+19 / europe 11 / emea 10 are NOT at risk — stripping was already unlawful, archived 03 "no stemming"); the
+archived original FS-18 was equally silent (under-spec closure, NOT a reversal — supersession row 12 not
+reopened; FS-15 "kind never reconsidered" + the unknown-axis sentinel already pointed within-kind). A
+CLARIFICATION, not a meaning change → no supersession row. Five pinned test cases land with the S3 step-7
+menu/dedupe build (same-kind fold · cross-kind separate · unknown-vs-known separate · Europe≠EuropeSegment ·
+same member on different axes = separate exact axis/member links). No migration; no production code today.
 · **2026-07-16 (S3 GO):** owner approved the S3.1 cross-channel ID law — 7 decisions one-by-one (reject-not-
 escape · 4-segment id w/ trailing colon on empty scope · `[A-Za-z0-9._-]` source charset case-preserved ·
 readable-date `gp_` ids · the one text normalizer w/ park-on-empty · the one decimal canonicalizer · text-based
