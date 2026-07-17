@@ -68,21 +68,20 @@ def dec_canon(value):
 
 def num_canon(value):
     """Canonical decimal string for ANY sanctioned numeric input. Floats cross the
-    bridge via repr + a 15-significant-digit quantize: 15 digits IS the double's own
-    faithful precision, so this kills IEEE representation artifacts (0.1+0.2 -> '0.3')
-    while provably never merging two values a float itself can distinguish (verified:
-    13-digit exact integers stay distinct; 12 digits merged them — review round 4).
-    Non-floats go straight to the strict dec_canon ('floats banned' = BUILD §5's
-    approved input discipline for the strict canonicalizer)."""
+    bridge via repr — the EXACT shortest round-trip decimal text of that double.
+    NOTHING is rounded, ever: repr is injective over doubles, so two distinguishable
+    values can never merge (review round 5 settled this after two rounding detours —
+    no rounding rule can kill IEEE dust without destroying real information; dust from
+    unlawful upstream arithmetic now surfaces as a VISIBLE conflict sibling, the one
+    law's safe direction). Values with >15 significant digits cannot ride a float
+    faithfully — the channel contract requires them as text/Decimal. Non-floats go
+    straight to the strict dec_canon ('floats banned' = its approved input discipline)."""
     if isinstance(value, bool):
         raise IdLawError("bool is not a number")
     if isinstance(value, float):
         if not math.isfinite(value):
             raise IdLawError(f"non-finite number: {value!r}")
-        d = Decimal(repr(value))
-        if d != 0:
-            d = d.quantize(Decimal(1).scaleb(d.adjusted() - 14))
-        return dec_canon(str(d))
+        return dec_canon(repr(value))
     return dec_canon(value)
 
 

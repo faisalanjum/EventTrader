@@ -207,13 +207,15 @@ def test_dec_canon_fail_closed():
             dec_canon(bad)
 
 
-def test_num_canon_float_bridge_kills_ieee_dirt():
+def test_num_canon_is_exact_and_injective():
+    # round-5 final rule: EXACT text, zero rounding — dust splits visibly, never merges
     from driver.core.driver_ids import num_canon
-    assert num_canon(0.1 + 0.2) == "0.3"                    # the 0.3 trap
-    assert num_canon(570.0000000000001) == "570"
+    assert num_canon(0.1 + 0.2) == "0.30000000000000004"    # dust VISIBLE, not merged
+    assert num_canon(0.3) == "0.3"
     assert num_canon(570.0) == "570"
+    assert num_canon(570.0000000000001) == "570.0000000000001"
     assert num_canon(-0.2) == "-0.2"
-    assert num_canon(1.234) == "1.234"                       # real precision preserved
+    assert num_canon(1.234) == "1.234"
     assert num_canon(2000) == "2000" and num_canon("2.50") == "2.5"
     with pytest.raises(IdLawError):
         num_canon(float("nan"))
@@ -222,10 +224,10 @@ def test_num_canon_float_bridge_kills_ieee_dirt():
 
 
 def test_num_canon_never_merges_float_distinguishable_values():
-    # round-4 fix: 15 significant digits = the double's own precision boundary
     from driver.core.driver_ids import num_canon
-    assert num_canon(1234567890123.0) != num_canon(1234567890124.0)  # 13-digit exacts
-    assert num_canon(1234567890123.4) == "1234567890123.4"           # 14 digits kept
+    assert num_canon(1234567890123.0) != num_canon(1234567890124.0)   # 13-digit exacts
+    assert num_canon(1.000000000000001) != num_canon(1.000000000000002)  # 16-digit
+    assert num_canon(1234567890123.4) == "1234567890123.4"
 
 
 def test_member_id_never_stacks():

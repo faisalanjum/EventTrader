@@ -503,11 +503,14 @@ def test_dated_period_dates_must_match_the_gp_id():
     assert "PERIOD_SYM" in codes(check(bad2))
 
 
-def test_F9_value_match_survives_float_representation_dirt():
+def test_F9_value_match_is_exact_dusty_home_parks():
+    # round-5 final rule: exact numbers — a 16th-digit difference is a real mismatch;
+    # the surprise PARKS (safe over-park) instead of silently matching
     s = mk("surprise", "point", level_low=570.0, level_high=570.0)
     home = home_for(s)
     home["level_low"] = home["level_high"] = 570.0000000000001
-    assert check(s, homes=[home]) == []            # same real value — never a mismatch
+    v = [x for x in check(s, homes=[home]) if x.code == "F9"]
+    assert v and v[0].action == "PARK" and "value" in v[0].message
 
 
 def test_id_and_scope_rebuild_agreement():

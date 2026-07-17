@@ -155,7 +155,10 @@ def _plan_group(bare_id, group, graph, prior_series_units):
         sig_groups.setdefault(signature(fact), []).append((i, fact))
     kept, dedups = [], []
     for items in sig_groups.values():
-        ordered = sorted(items, key=lambda t: t[1].get("quote") or "")
+        # total deterministic order: latest date, then ALL non-signature content —
+        # two duplicates differing in ANY field always fuse the same way
+        ordered = sorted(items,
+                         key=lambda t: tuple(str(t[1].get(k)) for k in _LWW_FIELDS))
         ordered = sorted(ordered, key=lambda t: t[1].get("date") or "", reverse=True)
         rep_i, rep = ordered[0]
         kept.append((rep_i, rep))
@@ -281,6 +284,10 @@ def _create(fact, *, hashed, late, graph, prior_series_units):
 
     props = {k: fact.get(k) for k in _COPIED_FIELDS}
     props.update(id=fact_id, created="__now__", series_unit=series_unit)
+    if hashed:
+        # quote_hash is a fact_scope SLOT (FINAL §5.1 grammar) — id and scope stay
+        # the same string down to the byte: scope == everything after the 3rd colon
+        props["fact_scope"] = fact_id.split(":", 3)[3]
     if set(props) != STORED_FACT_FIELDS:               # drift guard: exactly the 24
         raise WriterError(f"stored-field drift: {set(props) ^ STORED_FACT_FIELDS}")
     ops = [{"op": "create_fact", "id": fact_id, "props": props},

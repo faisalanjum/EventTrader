@@ -208,11 +208,22 @@ def test_permutation_single_filler_plus_conflicter():
     assert [r.outcome for r in res] == ["filled", "created_member"]
 
 
-def test_float_representation_dirt_never_mints_a_sibling():
+def test_float_dust_surfaces_as_a_visible_conflict_never_a_silent_merge():
+    # round-5 final rule: numbers are EXACT — a value differing in the 16th digit is
+    # a DIFFERENT value; it conflicts visibly (safe over-split) instead of merging
     existing = mk(level=570.0, series_unit="m_usd", created="x")
-    dirty = mk(level=570.0000000000001)
-    res = plan_event_write([dirty], FakeGraph([existing]))
-    assert res[0].outcome == "noop"                    # same real value, one fact
+    dusty = mk(level=570.0000000000001)
+    res = plan_event_write([dusty], FakeGraph([existing]))
+    assert res[0].outcome == "created_member"
+
+
+def test_member_fact_scope_carries_the_quote_hash_slot():
+    a, b = mk(level=100.0, quote="A"), mk(level=999.0, quote="B")
+    for r in plan_event_write([a, b], FakeGraph()):
+        create = [o for o in r.ops if o["op"] == "create_fact"][0]
+        assert create["props"]["fact_scope"].endswith(
+            "|quote_hash=" + create["id"].rsplit("=", 1)[1])
+        assert create["id"].endswith(create["props"]["fact_scope"])  # id == scope tail
 
 
 def test_series_unit_filled_when_a_compatible_fact_gains_a_level():
