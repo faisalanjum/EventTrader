@@ -62,7 +62,9 @@ def exact_cell(html_path, concept_qname, start, end, pairs):
         import lock_row_extract as X
         out = X.extract(html_path, _resolve_concept(html_path, concept_qname), start, end,
                         [tuple(p) for p in pairs])
-        return out['source_words']
+        sw = dict(out['source_words'])
+        sw['row_cells'] = out.get('evidence', {}).get('row_cells', [])   # verbatim row WITH numbers
+        return sw
     except (SystemExit, Exception):
         return None                     # non-unique / hidden / parse failure -> next rung
 
