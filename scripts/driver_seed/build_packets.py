@@ -32,11 +32,13 @@ def unit_hints(fmt, is_currency):
     A hint is never a GUESS: an fmt we do not know maps to 'unknown', not to the nearest-looking kind."""
     if fmt == '%':
         raw, kind = 'percent', 'ratio'
+    elif fmt == 'ratio':              # a ratio is ambiguous ($-per-X / dimensionless) EVEN when the vendor
+        raw, kind = 'unknown', 'unknown'   # marks currency (543 rows) -> never guess money; the resolver decides
     elif is_currency:
         raw, kind = 'usd', 'money'
     elif fmt == 'number':
         raw, kind = 'count', 'count'
-    else:                              # fiscal.ai's 'ratio' (2,567 rows) + any future fmt -> never guess
+    else:                            # any other/unknown fmt -> never guess
         raw, kind = 'unknown', 'unknown'
     # UNIT-04: money kind requires money_mode; NULL otherwise — never assert a money property off the lane.
     return {'level_unit_raw': raw, 'level_unit_kind_hint': kind,

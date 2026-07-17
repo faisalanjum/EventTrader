@@ -63,6 +63,14 @@ def test_ratio_fmt_is_never_guessed_as_a_count():
     assert BP.unit_hints('number', 0)['level_unit_kind_hint'] == 'count'        # a real count still counts
 
 
+def test_currency_marked_ratio_is_not_guessed_as_money():
+    """#6: 543 worklist rows are fmt='ratio' + is_currency=1. A ratio is ambiguous ($-per-X / dimensionless),
+    so it must NOT be hinted aggregate money — the shared resolver decides from the concept/quote."""
+    h = BP.unit_hints('ratio', 1)
+    assert h['level_unit_kind_hint'] == 'unknown', h
+    assert h['level_money_mode_hint'] is None, h
+
+
 def test_canonicalize():
     packets, _, _ = BP.build([rec('AC:C:1', '10k', 'AAA', 'revenue', 5000)], [], {'AAA': 12})
     assert packets[0]['source_id'] == 'AC_C_1', packets[0]['source_id']
