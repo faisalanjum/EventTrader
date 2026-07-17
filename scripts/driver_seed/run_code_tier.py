@@ -81,13 +81,14 @@ def fetch_corpus(session, tk, form, period):
 
 
 def fetch_filing(session, tk, form, period):
-    """The named filing as ONE source event: {source_id, source_type, event_time, xbrls, texts}."""
+    """The named filing as ONE source event: {source_id, source_type, event_time, doc_url, xbrls, texts}.
+    doc_url = the inline-XBRL document, so the locator's exact-cell rung can quote the PRINTED row."""
     rows = list(session.run(
         """MATCH (r:Report {formType:$form})-[:PRIMARY_FILER]->(c:Company {ticker:$tk})
            WHERE r.periodOfReport STARTS WITH $period
            OPTIONAL MATCH (r)-[:HAS_FINANCIAL_STATEMENT]->(f:FinancialStatementContent)
            OPTIONAL MATCH (r)-[:HAS_SECTION]->(x:ExtractedSectionContent)
-           RETURN r.accessionNo AS acc, r.created AS created,
+           RETURN r.accessionNo AS acc, r.created AS created, r.primaryDocumentUrl AS doc_url,
                   collect(DISTINCT f.value)   AS xbrls,
                   collect(DISTINCT x.content) AS texts""",
         form=form, tk=tk, period=period))
@@ -95,6 +96,7 @@ def fetch_filing(session, tk, form, period):
         return None
     r = rows[0]
     return {'source_id': r['acc'], 'source_type': FORMMAP.get(form, form), 'event_time': r['created'],
+            'doc_url': r['doc_url'],
             'xbrls': [x for x in r['xbrls'] if x], 'texts': [x for x in r['texts'] if x]}
 
 
@@ -130,7 +132,8 @@ def resolve_one(it, src, allow_t1):
             'category': it.get('category', '')}
     # value-known locate + the value_ok gate = the SHARED, channel-neutral core (locate.locate_by_value).
     r = locate.locate_by_value({'xbrls': src['xbrls'], 'texts': src['texts'], 'name': name,
-                                'value': val, 'fmt': fmt, 'period': per, 'allow_xbrl': allow_t1})
+                                'value': val, 'fmt': fmt, 'period': per, 'allow_xbrl': allow_t1,
+                                'doc_url': src.get('doc_url'), 'source_id': src['source_id']})
     hit, snips = r['hit'], r['snips']
     if hit is None:
         return None, snips                        # gate-fail or no locate -> residual candidates for the LLM tier

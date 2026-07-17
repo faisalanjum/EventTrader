@@ -24,9 +24,41 @@ def locate(req):
     return locate_by_fingerprint(req)
 
 
+def _exact_cell(req, t1):
+    """TOP rung for an XBRL-matched item: anchor the known fact to its PRINTED CELL and quote the filer's
+    own row verbatim. Returns (row_quote, column_header) or None (abstain -> next rung).
+    Needs the filing's inline HTML (10-K/10-Q carry ix: tags); the caller supplies the doc url."""
+    url, acc = req.get('doc_url'), req.get('source_id')
+    if not (url and acc):
+        return None
+    sys.path.insert(0, os.path.join(HERE, 'relocate_probe'))
+    import lock_cell
+    path = lock_cell.fetch_inline_html(url, acc)
+    if not path:
+        return None
+    sw = lock_cell.exact_cell(path, t1['concept'], t1['period_start'], t1['period_end'],
+                              [tuple(p) for p in (t1.get('axis_members') or [])])
+    if not sw or not sw.get('row'):
+        return None
+    cells = [str(c).strip() for c in (sw.get('row_cells') or []) if str(c).strip()]
+    quote = ' '.join(cells)
+    # the printed row can carry SEVERAL years; the column header says which one is ours (ChannelContract
+    # §3 "adjacent period wording (column header ...)"). The XBRL context pins the period authoritatively.
+    return (quote, sw.get('column') or '') if quote else None
+
+
+def _sign_visible(val, fmt, quote):
+    """does the quote PRINT this value's negative sign — '(123)' or '-123'? notation only, never words."""
+    forms = {f for f in L.value_forms(val, fmt or 'number') if len(f) >= 2}
+    return any(L.printed_negative(quote, f) for f in forms if L.bounded_hit(quote, f))
+
+
 def locate_by_value(req):
-    """value-known: the certified link_lib ladder (XBRL tier1 -> strict text label) + the value_ok gate.
-    req: {xbrls, texts, name, value, fmt, period, allow_xbrl?}. Returns {'hit': hit|None, 'snips': [...]}."""
+    """value-known. LADDER (each rung falls to the next; nothing is invented):
+        1. exact-cell  — the filer's own printed row, for an XBRL-matched item (needs doc_url)
+        2. text-strict — the strict same-row label match
+        3. no hit      — hand the snippets to the LLM tier. There is NO fabricated-quote rung.
+    req: {xbrls, texts, name, value, fmt, period, allow_xbrl?, doc_url?, source_id?}."""
     xbrls = req.get('xbrls') or []
     texts = req.get('texts') or []
     name, val, fmt, per = req['name'], req['value'], req.get('fmt'), req.get('period')
@@ -39,22 +71,31 @@ def locate_by_value(req):
     if t1:
         xbrl = {'concept': t1['concept'], 'axis_members': t1['axis_members'],
                 'period_start': t1['period_start'], 'period_end': t1['period_end'], 'ptype': t1['ptype']}
-    if t1 and strict:
-        hit = {'tier': 'T1-xbrl', 'member': t1['member'].split(':')[-1], 'concept': t1['concept'],
-               'quote': strict, 'quote_source': 'section', 'period_evidence': (snips[0] if snips else strict),
-               'xbrl': xbrl, 'xbrl_fact': t1['quote']}
-    elif t1:
-        hit = {'tier': 'T1-xbrl', 'member': t1['member'].split(':')[-1], 'concept': t1['concept'],
-               'quote': t1['quote'], 'quote_source': 'xbrl_fact', 'period_evidence': '',
-               'xbrl': xbrl, 'xbrl_fact': t1['quote']}
-    elif strict:
-        hit = {'tier': 'T2-label', 'quote': strict, 'quote_source': 'section',
-               'period_evidence': (snips[0] if snips else strict)}
-    else:
+    base_t1 = {'tier': 'T1-xbrl', 'member': (t1['member'].split(':')[-1] if t1 else None),
+               'concept': (t1['concept'] if t1 else None), 'xbrl': xbrl,
+               'xbrl_fact': (t1['quote'] if t1 else None)}
+    hit = None
+    if t1:                                                    # rung 1 — the printed cell
+        cell = _exact_cell(req, t1)
+        if cell and L.value_ok(val, fmt, cell[0]):
+            hit = {**base_t1, 'quote': cell[0], 'quote_source': 'exact_cell', 'period_evidence': cell[1]}
+    if hit is None and strict:                                # rung 2 — strict text label
+        if t1:
+            hit = {**base_t1, 'quote': strict, 'quote_source': 'section',
+                   'period_evidence': (snips[0] if snips else strict)}
+        else:
+            hit = {'tier': 'T2-label', 'quote': strict, 'quote_source': 'section',
+                   'period_evidence': (snips[0] if snips else strict)}
+    if hit is None:
+        return {'hit': None, 'snips': snips}                  # rung 3 — the LLM tier
+    if not L.value_ok(val, fmt, hit['quote']):   # deterministic belt+braces: the number really is in the quote
         return {'hit': None, 'snips': snips}
-    if L.value_ok(val, fmt, hit['quote']):   # deterministic belt+braces: the number really is in the quote
-        return {'hit': hit, 'snips': snips}
-    return {'hit': None, 'snips': snips}      # gate-fail -> no hit; snips still hand off to the LLM tier
+    # TEXT-ONLY sign routing: with no XBRL the sign is unproven, and if the print does not SHOW it the minus
+    # lives in a word ("operating loss of 331") — a MEANING call. Never guess it here; hand it to the tier
+    # that reads meaning. (T1 needs no check: tier1 matched the SIGNED value, link_lib.py:318.)
+    if t1 is None and float(val) < 0 and not _sign_visible(val, fmt, hit['quote']):
+        return {'hit': None, 'snips': snips}
+    return {'hit': hit, 'snips': snips}
 
 
 def locate_by_fingerprint(req):
