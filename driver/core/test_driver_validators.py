@@ -469,6 +469,22 @@ def test_nan_rejects_cleanly():
     assert "MALFORMED" in codes(got)
 
 
+def test_float_dust_rejected_at_the_boundary():
+    # round-6 guard: >15 significant digits in a float = dust or unfaithful precision
+    dust = 0.1 + 0.2
+    got = check(mk("metric", "point", level_low=dust, level_high=dust))
+    assert "MALFORMED" in codes(got)
+    got2 = check(mk("metric", "point", level_low=570.0000000000001,
+                    level_high=570.0000000000001))
+    assert "MALFORMED" in codes(got2)
+
+
+def test_exact_decimal_inputs_accepted():
+    from decimal import Decimal
+    fact = mk("metric", "point", level_low=Decimal("100"), level_high=Decimal("100"))
+    assert check(fact) == []
+
+
 def test_P4_old_guide_restated_after_period_end_stays_gvc():
     s = mk("surprise", "point", surprise="guidance_vs_consensus",
            surprise_basis_hint="guidance")          # QP ended before event_time

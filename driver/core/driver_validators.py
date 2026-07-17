@@ -10,6 +10,7 @@ import math
 import re
 from collections import namedtuple
 from datetime import date, datetime
+from decimal import Decimal
 
 from driver.core.driver_ids import IdLawError, build_id, num_canon
 from driver.core.driver_units import DRIVER_UNITS
@@ -136,11 +137,20 @@ def validate_fact(fact, *, driver, home_facts=None):
     malformed = False
     for k in _NUMERIC_FIELDS:
         val = fact.get(k)
-        if val is not None and (isinstance(val, bool) or not isinstance(val, (int, float))):
+        if val is not None and (isinstance(val, bool)
+                                or not isinstance(val, (int, float, Decimal))):
             add("MALFORMED", "REJECT", f"{k} must be a number, got {type(val).__name__}")
             malformed = True
         elif isinstance(val, float) and not math.isfinite(val):
             add("MALFORMED", "REJECT", f"{k} must be finite, got {val!r}")
+            malformed = True
+        elif isinstance(val, float) and len(Decimal(repr(val)).as_tuple().digits) > 15:
+            # >15 significant digits in a float = IEEE dust or a value a float cannot
+            # faithfully carry — either way an input violation: REJECT at the boundary,
+            # never store a number no source ever stated (round-6 boundary guard)
+            add("MALFORMED", "REJECT",
+                f"{k}={val!r} exceeds exact float fidelity (>15 significant digits) — "
+                f"computer dust, or send the exact value as text/Decimal")
             malformed = True
     if malformed:
         return v
