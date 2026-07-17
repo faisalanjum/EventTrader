@@ -47,19 +47,19 @@ def mk(lane="metric", shape="point", **over):
         "surprise_basis_hint": None, "surprise": None,
     }
     if shape == "point":
-        fact.update(level_low=100.0, level_high=100.0, level_unit="m_usd",
+        fact.update(level_low=100, level_high=100, level_unit="m_usd",
                     level_shape_hint="point")
     elif shape == "range":
-        fact.update(level_low=100.0, level_high=120.0, level_unit="m_usd",
+        fact.update(level_low=100, level_high=120, level_unit="m_usd",
                     level_shape_hint="range")
     elif shape == "floor":
-        fact.update(level_low=100.0, level_high=None, level_unit="m_usd",
+        fact.update(level_low=100, level_high=None, level_unit="m_usd",
                     level_shape_hint="floor")
     elif shape == "ceiling":
-        fact.update(level_low=None, level_high=120.0, level_unit="m_usd",
+        fact.update(level_low=None, level_high=120, level_unit="m_usd",
                     level_shape_hint="ceiling")
     elif shape == "delta-only":
-        fact.update(change_value=12.0, change_unit="percent_yoy")
+        fact.update(change_value=12, change_unit="percent_yoy")
     # numberless: all value slots stay None
     if lane == "guidance":
         fact["company_confirmed"] = True
@@ -73,7 +73,7 @@ def mk(lane="metric", shape="point", **over):
                     period_scope=None, fiscal_year=None, fiscal_quarter=None,
                     driver_state="announced")
         if shape == "delta-only":
-            fact.update(change_value=5000.0, change_unit="count")
+            fact.update(change_value=5000, change_unit="count")
     fact.update(over)
     if "id" not in fact:            # the CLI builds these before validation
         fact["id"], fact["fact_scope"] = build_id(
@@ -137,21 +137,21 @@ def test_quote_required_all_lanes():
 def test_shape_hint_missing_or_mismatched():
     assert "SHAPE" in codes(check(mk("metric", "point", level_shape_hint=None)))
     assert "SHAPE" in codes(check(mk("metric", "point", level_shape_hint="point",
-                                     level_high=None, level_low=100.0)))  # point-as-low-only
-    assert "SHAPE" in codes(check(mk("metric", "range", level_low=120.0, level_high=100.0)))
+                                     level_high=None, level_low=100)))  # point-as-low-only
+    assert "SHAPE" in codes(check(mk("metric", "range", level_low=120, level_high=100)))
 
 
 def test_sign_rule_increased_needs_positive():
-    bad = mk("metric", "delta-only", driver_state="increased", change_value=-5.0)
+    bad = mk("metric", "delta-only", driver_state="increased", change_value=-5)
     assert "SIGN" in codes(check(bad))
-    ok = mk("metric", "delta-only", driver_state="increased", change_value=5.0)
+    ok = mk("metric", "delta-only", driver_state="increased", change_value=5)
     assert check(ok) == []
 
 
 def test_sign_rule_excludes_beat_missed_P8():
     # P8: a lower-is-better beat (negative delta) must NOT be sign-rejected
     fact = mk("surprise", "point", driver_state="beat", change_value=None)
-    fact.update(comparison_low=110.0, comparison_high=110.0, comparison_shape_hint="point")
+    fact.update(comparison_low=110, comparison_high=110, comparison_shape_hint="point")
     assert "SIGN" not in codes(check(fact, homes=[home_for(fact)]))
 
 
@@ -232,23 +232,23 @@ def test_xbrl_qname_metric_only():
 
 def test_movement_midpoint_rule():
     raised_ok = mk("guidance", "range", driver_state="raised",
-                   comparison_low=90.0, comparison_high=100.0,
+                   comparison_low=90, comparison_high=100,
                    comparison_shape_hint="range", comparison_baseline="previous_guidance")
     assert "MOVEMENT" not in codes(check(raised_ok))
     raised_bad = mk("guidance", "range", driver_state="raised",
-                    comparison_low=120.0, comparison_high=140.0,
+                    comparison_low=120, comparison_high=140,
                     comparison_shape_hint="range", comparison_baseline="previous_guidance")
     assert "MOVEMENT" in codes(check(raised_bad))
     unknown_skipped = mk("guidance", "range", driver_state="unknown",
-                         comparison_low=120.0, comparison_high=140.0,
+                         comparison_low=120, comparison_high=140,
                          comparison_shape_hint="range",
                          comparison_baseline="previous_guidance")
     assert "MOVEMENT" not in codes(check(unknown_skipped))
 
 
 def test_derivable_surprise_delta_never_stored():
-    s = mk("surprise", "point", change_value=-10.0, change_unit="m_usd",
-           comparison_low=110.0, comparison_high=110.0, comparison_shape_hint="point")
+    s = mk("surprise", "point", change_value=-10, change_unit="m_usd",
+           comparison_low=110, comparison_high=110, comparison_shape_hint="point")
     assert "DERIVABLE" in codes(check(s, homes=[home_for(s)]))
 
 
@@ -334,7 +334,7 @@ def test_F8_ungrounded_results_beat_parks():
     ("period_scope", lambda h: h.update(period_scope="ytd")),
     ("slice", lambda h: h.update(slice_parts=[("product", "iphone")])),
     ("measurement", lambda h: h.update(measurement_tokens=["adjusted"])),
-    ("value", lambda h: h.update(level_low=999.0, level_high=999.0)),
+    ("value", lambda h: h.update(level_low=999, level_high=999)),
     ("unit", lambda h: h.update(level_unit="usd")),
 ])
 def test_F9_each_home_key_tested_separately(break_key, mutate):
@@ -354,7 +354,7 @@ def test_P5_numberless_surprise_with_numberless_home():
 # ---- surprise position + in_line (P3 / correction law) ----
 
 def test_P3_guide_range_containing_consensus_is_in_line():
-    pos = surprise_position(100.0, 120.0, 110.0, 110.0,   # guide range vs consensus point
+    pos = surprise_position(100, 120, 110, 110,   # guide range vs consensus point
                             value_is_guide=True)
     assert pos == "inside"
     assert apply_inline_correction("beat", pos, has_favorability_wording=False) == "in_line"
@@ -363,7 +363,7 @@ def test_P3_guide_range_containing_consensus_is_in_line():
 def test_actual_range_bracketing_expectation_is_the_unclear_case():
     # asymmetry per §4.3: an ACTUAL range overlapping the expectation unclearly stays
     # unknown unless the source states favorability — never auto-in_line
-    pos = surprise_position(4.9, 5.0, 4.95, 4.95, value_is_guide=False)
+    pos = surprise_position(4.9, 5, 4.95, 4.95, value_is_guide=False)
     assert pos == "overlap"
     assert apply_inline_correction("unknown", pos, has_favorability_wording=False) == "unknown"
 
@@ -445,7 +445,7 @@ def test_named_numberless_surprise_missing_home_is_F6_whole_event():
 
 
 def test_reversed_range_with_invalid_hint_rejected():
-    got = check(mk("metric", "range", level_low=120.0, level_high=100.0,
+    got = check(mk("metric", "range", level_low=120, level_high=100,
                    level_shape_hint="invalid"))
     assert "SHAPE" in codes(got)
 
@@ -495,8 +495,8 @@ def test_P8_lower_is_better_beat_with_stated_negative_delta():
     # cost came in BELOW guidance by a stated $10M -> beat with a negative delta;
     # neither sign-rejected nor derivable-rejected (floor comparison = not derivable)
     s = mk("surprise", "numberless", driver_state="beat",
-           change_value=-10.0, change_unit="m_usd",
-           comparison_low=110.0, comparison_high=None, comparison_shape_hint="floor")
+           change_value=-10, change_unit="m_usd",
+           comparison_low=110, comparison_high=None, comparison_shape_hint="floor")
     got = check(s, homes=[home_for(s)])
     assert "SIGN" not in codes(got) and "DERIVABLE" not in codes(got)
 
@@ -522,7 +522,7 @@ def test_dated_period_dates_must_match_the_gp_id():
 def test_F9_value_match_is_exact_dusty_home_parks():
     # round-5 final rule: exact numbers — a 16th-digit difference is a real mismatch;
     # the surprise PARKS (safe over-park) instead of silently matching
-    s = mk("surprise", "point", level_low=570.0, level_high=570.0)
+    s = mk("surprise", "point", level_low=570, level_high=570)
     home = home_for(s)
     home["level_low"] = home["level_high"] = 570.0000000000001
     v = [x for x in check(s, homes=[home]) if x.code == "F9"]
@@ -559,9 +559,9 @@ def test_garbage_date_types_reject_without_crash():
 
 
 def test_position_boundaries_and_open_shapes():
-    assert surprise_position(110.0, 110.0, 100.0, 120.0) == "inside"
-    assert surprise_position(120.0, 120.0, 100.0, 120.0) == "inside"   # exact boundary
-    assert surprise_position(130.0, 130.0, 100.0, 120.0) == "above"
-    assert surprise_position(90.0, 90.0, 100.0, 120.0) == "below"
-    assert surprise_position(100.0, 100.0, 100.0, None) == "at_floor"
-    assert surprise_position(120.0, 120.0, None, 120.0) == "at_ceiling"
+    assert surprise_position(110, 110, 100, 120) == "inside"
+    assert surprise_position(120, 120, 100, 120) == "inside"   # exact boundary
+    assert surprise_position(130, 130, 100, 120) == "above"
+    assert surprise_position(90, 90, 100, 120) == "below"
+    assert surprise_position(100, 100, 100, None) == "at_floor"
+    assert surprise_position(120, 120, None, 120) == "at_ceiling"

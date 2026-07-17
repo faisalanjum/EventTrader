@@ -207,27 +207,32 @@ def test_dec_canon_fail_closed():
             dec_canon(bad)
 
 
-def test_num_canon_is_exact_and_injective():
-    # round-5 final rule: EXACT text, zero rounding — dust splits visibly, never merges
+def test_num_canon_terminal_regime_rejects_every_float():
+    # round-7 final rule: a float may have ALREADY lost source digits at parse time
+    # (float('1.00000000000000000001') == 1.0) — exactness cannot be proven after the
+    # fact, so floats are rejected wholesale at identity boundaries
+    from decimal import Decimal
     from driver.core.driver_ids import num_canon
-    assert num_canon(0.1 + 0.2) == "0.30000000000000004"    # dust VISIBLE, not merged
-    assert num_canon(0.3) == "0.3"
-    assert num_canon(570.0) == "570"
-    assert num_canon(570.0000000000001) == "570.0000000000001"
-    assert num_canon(-0.2) == "-0.2"
-    assert num_canon(1.234) == "1.234"
-    assert num_canon(2000) == "2000" and num_canon("2.50") == "2.5"
-    with pytest.raises(IdLawError):
-        num_canon(float("nan"))
+    for f in (0.3, 570.0, 0.1 + 0.2, float("nan"), 1.000000000000001):
+        with pytest.raises(IdLawError, match="float|number"):
+            num_canon(f)
     with pytest.raises(IdLawError):
         num_canon(True)
+    # exact inputs pass through the strict canonicalizer unchanged
+    assert num_canon(2000) == "2000"
+    assert num_canon("2.50") == "2.5"
+    assert num_canon(Decimal("1.00000000000000000001")) == "1.00000000000000000001"
+    assert num_canon(Decimal("100000000000000000001")) == "100000000000000000001"
 
 
-def test_num_canon_never_merges_float_distinguishable_values():
-    from driver.core.driver_ids import num_canon
-    assert num_canon(1234567890123.0) != num_canon(1234567890124.0)   # 13-digit exacts
-    assert num_canon(1.000000000000001) != num_canon(1.000000000000002)  # 16-digit
-    assert num_canon(1234567890123.4) == "1234567890123.4"
+def test_neo4j_numeric_fidelity_within_the_declared_domain():
+    # storage mapping (S3.5 paper): int -> Neo4j long (exact under 2^63);
+    # Decimal -> float64 property — exact round-trip for <=15 significant digits
+    from decimal import Decimal
+    for text in ("1234567890123.45", "0.000123", "570", "-0.2", "99999999999999.9"):
+        d = Decimal(text)
+        assert Decimal(repr(float(d))) == d, text     # float64 round-trip is exact
+    assert 999999999999999 < 2**63                    # 15-digit ints fit a long
 
 
 def test_member_id_never_stacks():

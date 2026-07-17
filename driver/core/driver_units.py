@@ -11,6 +11,8 @@ what current law layers on top:
     fails closed to unknown; points/bps always win (they resolve upstream)
   - the 10-unit enum (adds percent_sequential to the substrate's 9)
 """
+from decimal import Decimal
+
 from driver.core.unit_resolver import CANONICAL_UNITS, resolve_unit
 
 __all__ = ["DRIVER_UNITS", "UnitResolutionError", "resolve_driver_units"]
@@ -96,7 +98,12 @@ def _slot(name, raw, values, kind_hint, money_hint, quote, xbrl_qname, warnings,
         warnings.extend(w for w in r.warnings if w not in warnings)
         unit = r.canonical_unit
         if value is not None:
-            scaled.append(r.scaled_value)
+            s = r.scaled_value
+            if isinstance(s, float):
+                # the resolver's canonical output, exact-textified at THE seam — no
+                # float ever travels beyond this point (terminal numeric regime)
+                s = Decimal(repr(s))
+            scaled.append(s)
         elif values:                                  # keep positional None (e.g. open range)
             scaled.append(None)
     return _SlotResult(unit, scaled if list(values) else [])

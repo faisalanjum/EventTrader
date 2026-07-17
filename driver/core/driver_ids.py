@@ -6,7 +6,6 @@ Authority: FINAL_DESIGN §5.1 (OD-8, OD-21) + the approved S3.1 paper. Pure func
 """
 import hashlib
 import json
-import math
 import re
 import unicodedata
 from datetime import date
@@ -67,21 +66,19 @@ def dec_canon(value):
 
 
 def num_canon(value):
-    """Canonical decimal string for ANY sanctioned numeric input. Floats cross the
-    bridge via repr — the EXACT shortest round-trip decimal text of that double.
-    NOTHING is rounded, ever: repr is injective over doubles, so two distinguishable
-    values can never merge (review round 5 settled this after two rounding detours —
-    no rounding rule can kill IEEE dust without destroying real information; dust from
-    unlawful upstream arithmetic now surfaces as a VISIBLE conflict sibling, the one
-    law's safe direction). Values with >15 significant digits cannot ride a float
-    faithfully — the channel contract requires them as text/Decimal. Non-floats go
-    straight to the strict dec_canon ('floats banned' = its approved input discipline)."""
+    """Canonical decimal string for identity/hash use. TERMINAL numeric regime (review
+    round 7): floats are REJECTED here outright — a float may have ALREADY lost source
+    digits at parse time (float('1.00000000000000000001') == 1.0), and no downstream
+    check can prove preservation. Numbers must arrive exact: JSON parsed with
+    parse_float=Decimal (ints are exact natively); the unit resolver's float outputs
+    are exact-textified at the driver_units seam. int/Decimal/str go through the strict
+    dec_canon unchanged."""
     if isinstance(value, bool):
         raise IdLawError("bool is not a number")
     if isinstance(value, float):
-        if not math.isfinite(value):
-            raise IdLawError(f"non-finite number: {value!r}")
-        return dec_canon(repr(value))
+        raise IdLawError(
+            "floats are banned at identity boundaries — parse exactly "
+            "(parse_float=Decimal) and convert resolver outputs at the seam")
     return dec_canon(value)
 
 

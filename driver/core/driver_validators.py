@@ -60,6 +60,28 @@ _VALUE_TEXT_NUMERIC = re.compile(
     r"[$€£¥]\s*\d|\d+(?:\.\d+)?\s*%|\d+\.\d+|\b(?!(?:19|20)\d\d\b)\d+\b")
 
 
+def _num_error(val):
+    """Exact-number gate: int/Decimal only, inside the declared storage domain
+    (<=15 significant digits after trailing-zero strip; integers within Neo4j's long).
+    These checks run on EXACT values, so — unlike any float heuristic — they prove
+    the source number is preserved end-to-end."""
+    if val is None:
+        return None
+    if isinstance(val, bool) or isinstance(val, float) or \
+            not isinstance(val, (int, Decimal)):
+        return (f"must be an EXACT number (int/Decimal), got {type(val).__name__} — "
+                f"parse the packet with parse_float=Decimal; floats are banned")
+    d = Decimal(val)
+    if not d.is_finite():
+        return f"must be finite, got {val!r}"
+    if len(d.normalize().as_tuple().digits) > 15:
+        return (f"{val!r} exceeds the numeric storage domain "
+                f"(>15 significant digits cannot round-trip float64 storage)")
+    if isinstance(val, int) and abs(val) >= 2 ** 63:
+        return f"{val!r} exceeds the storable integer range (Neo4j long)"
+    return None
+
+
 def compose_surprise_scope(basis_hint, comparison_baseline):
     """OD-21: CODE composes the surprise= slot from basis x baseline, pre-fusion."""
     pair = (basis_hint, comparison_baseline)
@@ -133,24 +155,15 @@ def validate_fact(fact, *, driver, home_facts=None):
         add("DRIVER", "REJECT", f"fact names driver {fact.get('driver_name')!r} but was "
                                 f"validated against {driver['name']!r}")
 
-    # malformed numbers reject CLEANLY and stop here — later checks assume real numbers
+    # TERMINAL numeric regime (round 7): numbers must be EXACT (int/Decimal). A float
+    # may have already lost source digits at parse time, so floats reject wholesale —
+    # dust can never enter, and nothing needs to "prove" preservation after the fact.
     malformed = False
     for k in _NUMERIC_FIELDS:
         val = fact.get(k)
-        if val is not None and (isinstance(val, bool)
-                                or not isinstance(val, (int, float, Decimal))):
-            add("MALFORMED", "REJECT", f"{k} must be a number, got {type(val).__name__}")
-            malformed = True
-        elif isinstance(val, float) and not math.isfinite(val):
-            add("MALFORMED", "REJECT", f"{k} must be finite, got {val!r}")
-            malformed = True
-        elif isinstance(val, float) and len(Decimal(repr(val)).as_tuple().digits) > 15:
-            # >15 significant digits in a float = IEEE dust or a value a float cannot
-            # faithfully carry — either way an input violation: REJECT at the boundary,
-            # never store a number no source ever stated (round-6 boundary guard)
-            add("MALFORMED", "REJECT",
-                f"{k}={val!r} exceeds exact float fidelity (>15 significant digits) — "
-                f"computer dust, or send the exact value as text/Decimal")
+        err = _num_error(val)
+        if err:
+            add("MALFORMED", "REJECT", f"{k}: {err}")
             malformed = True
     if malformed:
         return v
@@ -497,4 +510,9 @@ def _norm_parts(parts):
 
 
 def _num(x):
-    return None if x is None else num_canon(x)
+    if x is None:
+        return None
+    try:
+        return num_canon(x)
+    except IdLawError:
+        return "«non-exact»"   # an unlawful number can never MATCH anything — park-safe
