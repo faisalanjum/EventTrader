@@ -198,6 +198,13 @@ class finalization → final validation → fitness gate.
   (FACT-16(3)/(4)) · the shared deterministic `period_scope` classifier as the FACT-17b/18 exact-date-branch
   authority · the state-based park classes `xbrl_conflict`/`duplicate_of_xbrl`/`xbrl_internal_conflict` + the
   CLI skip/no-enrichment rules + the UpgradeEvent writer validator (origin flip ⇔ exactly one event).
+  **Until that flip, the resolver runs an owner-ruled INTERIM scope guard (R11, 2026-07-17 — explicitly NOT
+  P14):** exact-date scope labeled from declared fields (one shared mapping — paths converge when fiscal
+  framing is supplied; frameless exact dates honestly stay `exact_range`); one strict period-shape check on
+  every path (conflicting/mixed/out-of-range fields, sentinel+dated combos, label-vs-window contradictions,
+  invalid dates → all PARK; zero values validated via is-not-None); bands sized so the KNOWN TESTED calendars
+  (52/53-wk, KR/COST irregular quarters, full-year YTD, January-to-date) pass. P14 later replaces ONLY the
+  temporary labels/bands — the basic input validation is permanent.
 - **CLI order:** hints → compose/validate surprise → fuse → period/slice/measurement → units/canonical values →
   collision → ID → validate → write; plus code-served PIT prior view (`date <` source time), sidecar, park
   ledger, shell seam.
@@ -785,7 +792,11 @@ mechanics) · `../Consolidation/GuidancePeriod.md` (21 period tests) · `../Cons
    input = `PreparedFactV1` dataclass pinned to the frozen packet (sha `aa7239ed…`) Block 2 + `source_id` +
    optional `calendar_override`, unknown fields reject, JSON parsed exact (`parse_float=Decimal`,
    NaN/Infinity reject), source time/type/company read FROM NEO4J (duplicated input metadata never trusted),
-   the CLI builds ids/scopes · deterministic tail IN the CLI per this section's locked order, with FUSION
+   the CLI builds ids/scopes · deterministic tail IN the CLI per this section's locked order — AMENDED at
+   schema approval (owner 2026-07-17): units are canonicalized BEFORE fusion (surprise → period → UNITS →
+   slice/measurement → fusion → collision); fusion compares only CANONICAL values — raw "1" billion and raw
+   "1" million must never look equal; surprise-before-fusion (OD-21) and fusion-before-collision (§5.1)
+   both preserved — with FUSION
    (to build + test): fusion fills nulls only — a disagreement in any of the fixed ten value-signature
    fields prevents fusion; quote/state/date differences use the deterministic last-write-with-log rule;
    unfused facts enter the complete OD-8 collision ladder (fusion itself does not promise they will be

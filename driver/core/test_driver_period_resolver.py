@@ -191,7 +191,9 @@ def test_20_exact_dates_win_over_fiscal_shorthand():
     out = resolve({"period_start_date": "2025-06-29", "period_end_date": "2025-09-27",
                    "fiscal_year": 2025, "fiscal_quarter": 3, "time_type": "duration"})
     assert out["period_u_id"] == "gp_2025-06-29_2025-09-27"
-    assert out["period_scope"] == "exact_range"
+    # scope pin AMENDED (period-audit round): a declared quarter is "quarter" on every
+    # path — the old exact_range pin was the reproduced scope-divergence bug itself
+    assert out["period_scope"] == "quarter"
 
 
 def test_20b_exact_instant_single_date():
@@ -308,6 +310,164 @@ def test_bad_input_scope_rejected():
     with pytest.raises(PeriodResolutionError):
         resolve({"fiscal_year": 2025, "fiscal_quarter": 3, "period_scope": "quarter",
                  "time_type": "duration"})   # input scope may only be ytd/ttm
+
+
+# ---- path convergence: same declared shape -> same scope on EVERY dated path ----
+# (reproduced divergence: exact XBRL dates stamped exact_range while the SEC/math paths
+#  said quarter for the IDENTICAL window -> the OD-21 surprise↔home scope match broke)
+
+@pytest.mark.parametrize("fields,start,end,scope", [
+    ({"fiscal_year": 2025, "fiscal_quarter": 4},              # 52/53-wk: dates ≠ month math
+     "2025-06-29", "2025-09-27", "quarter"),
+    ({"fiscal_year": 2025}, "2024-09-29", "2025-09-27", "annual"),   # 364d, 52-wk year
+    ({"fiscal_year": 2025, "half": 2}, "2025-03-30", "2025-09-27", "half"),
+    ({"fiscal_year": 2025, "month": 7}, "2025-07-01", "2025-07-31", "monthly"),
+    ({"long_range_start_year": 2025, "long_range_end_year": 2030},
+     "2025-01-01", "2030-12-31", "exact_range"),
+    ({}, "2025-06-29", "2025-09-27", "exact_range"),          # no framing: stays honest
+])
+def test_exact_dates_scope_matches_declared_fields(fields, start, end, scope):
+    out = resolve({"period_start_date": start, "period_end_date": end,
+                   "time_type": "duration", **fields})
+    assert out["period_u_id"] == f"gp_{start}_{end}"          # exact dates always win
+    assert out["period_scope"] == scope
+
+
+# ---- INTERIM GUARD (NOT P14 — dormant until materializer): contradictions PARK ----
+
+def test_interim_guard_parks_contradictory_framing():
+    # ChatGPT-audit case: fq declared on a six-month window — never label it quarter
+    with pytest.raises(PeriodResolutionError, match="contradictory"):
+        resolve({"period_start_date": "2025-01-01", "period_end_date": "2025-06-30",
+                 "fiscal_year": 2025, "fiscal_quarter": 2, "time_type": "duration"})
+    with pytest.raises(PeriodResolutionError, match="contradictory"):
+        resolve({"period_start_date": "2025-01-01", "period_end_date": "2025-06-30",
+                 "period_scope": "ttm", "time_type": "duration"})
+
+
+def test_interim_guard_passes_real_52_53_week_windows():
+    # 13-week (91d) and 14-week (98d) quarters both label quarter, no park
+    for start, end in (("2025-06-29", "2025-09-27"), ("2024-09-29", "2025-01-04")):
+        out = resolve({"period_start_date": start, "period_end_date": end,
+                       "fiscal_year": 2025, "fiscal_quarter": 1, "time_type": "duration"})
+        assert out["period_scope"] == "quarter"
+    out = resolve({"period_start_date": "2023-12-31", "period_end_date": "2025-01-04",
+                   "period_scope": "ttm", "time_type": "duration"})   # 371d, 53-wk year
+    assert out["period_scope"] == "ttm"
+
+
+def test_interim_guard_passes_irregular_quarter_filers():
+    # KR 16-week Q1 = 112d; COST 12-week quarter = 84d; COST 53-week-year Q4 = 17 weeks
+    # = 119d — all real quarters, never park
+    for start, end in (("2025-02-02", "2025-05-24"), ("2025-02-17", "2025-05-11"),
+                       ("2025-05-05", "2025-08-31")):
+        out = resolve({"period_start_date": start, "period_end_date": end,
+                       "fiscal_year": 2025, "fiscal_quarter": 1, "time_type": "duration"})
+        assert out["period_scope"] == "quarter"
+
+
+def test_interim_guard_passes_29_week_half():
+    # 12-week + 17-week quarters (53-week year) = a real 203-day half — never park
+    out = resolve({"period_start_date": "2025-02-10", "period_end_date": "2025-08-31",
+                   "fiscal_year": 2025, "half": 2, "time_type": "duration"})
+    assert out["period_scope"] == "half"
+
+
+def test_interim_guard_passes_full_year_ytd():
+    # Q4-YTD = the whole fiscal year (365d calendar / 371d 53-week) — legal ytd
+    for start, end in (("2025-01-01", "2025-12-31"), ("2023-12-31", "2025-01-04")):
+        out = resolve({"period_start_date": start, "period_end_date": end,
+                       "fiscal_year": 2025, "fiscal_quarter": 4, "period_scope": "ytd",
+                       "time_type": "duration"})
+        assert out["period_scope"] == "ytd"
+
+
+def test_conflicting_shape_fields_park_on_every_path():
+    for extra in ({"month": 1}, {"half": 1}):
+        with pytest.raises(PeriodResolutionError, match="conflicting"):
+            resolve({"period_start_date": "2025-01-01", "period_end_date": "2025-03-31",
+                     "fiscal_year": 2025, "fiscal_quarter": 1, "time_type": "duration",
+                     **extra})
+    with pytest.raises(PeriodResolutionError, match="conflicting"):   # math path too
+        resolve({"fiscal_year": 2025, "fiscal_quarter": 1, "month": 1,
+                 "time_type": "duration"})
+
+
+def test_out_of_range_shape_values_park():
+    for bad in ({"fiscal_quarter": 5}, {"fiscal_quarter": 0}, {"half": 3},
+                {"month": 13}, {"fiscal_quarter": True}):
+        with pytest.raises(PeriodResolutionError, match="out of range"):
+            resolve({"fiscal_year": 2025, "time_type": "duration", **bad})
+
+
+def test_strict_shape_check_rejects_mixed_and_incomplete_framing():
+    cases = [
+        {"period_start_date": "2025-01-01", "period_end_date": "2025-06-30",
+         "fiscal_year": 2025, "half": 1, "period_scope": "ytd"},       # cumulative+half
+        {"fiscal_year": 2025, "month": 2, "period_scope": "ttm"},      # cumulative+month
+        {"sentinel_class": "long_term", "fiscal_year": 2025},          # sentinel+fiscal
+        {"sentinel_class": "short_term", "period_end_date": "2025-06-30"},  # sentinel+dated
+        {"long_range_start_year": 2027},                               # incomplete range
+        {"long_range_start_year": 2030, "long_range_end_year": 2027},  # reversed range
+        {"fiscal_year": 205},                                          # invalid year
+    ]
+    for c in cases:
+        with pytest.raises(PeriodResolutionError):
+            resolve({**c, "time_type": "duration"})
+
+
+def test_zero_values_are_validated_not_treated_as_absent():
+    # fiscal_quarter=0 used to fall through `any()` truthiness as "no period fields"
+    with pytest.raises(PeriodResolutionError, match="out of range"):
+        resolve({"fiscal_quarter": 0, "time_type": "duration"})
+
+
+def test_short_ytd_has_no_minimum_duration():
+    out = resolve({"period_start_date": "2025-01-01", "period_end_date": "2025-01-31",
+                   "fiscal_year": 2025, "period_scope": "ytd", "time_type": "duration"})
+    assert out["period_scope"] == "ytd"          # January year-to-date is real data
+
+
+def test_invalid_dates_park_cleanly_never_crash():
+    with pytest.raises(PeriodResolutionError, match="invalid ISO date"):
+        resolve({"period_start_date": "2025-01-01", "period_end_date": "2025-13-45",
+                 "fiscal_year": 2025, "fiscal_quarter": 1, "time_type": "duration"})
+    with pytest.raises(PeriodResolutionError, match="invalid ISO date"):
+        resolve({"period_start_date": "2025-02-30", "period_end_date": "2025-06-30",
+                 "time_type": "duration"})                     # Feb 30 doesn't exist
+    with pytest.raises(PeriodResolutionError):                 # reversed order parks too
+        resolve({"period_start_date": "2025-09-27", "period_end_date": "2025-06-29",
+                 "time_type": "duration"})
+
+
+def test_same_window_same_scope_across_xbrl_and_sec_paths():
+    lk = {"existing": lambda *a: None,
+          "sec": lambda t, fy, fp: {"start": "2025-06-29", "end": "2025-09-27"},
+          "predict": lambda *a: None, "corrected_fye": lambda t: None}
+    via_dates = resolve({"period_start_date": "2025-06-29", "period_end_date": "2025-09-27",
+                         "fiscal_year": 2025, "fiscal_quarter": 4, "time_type": "duration"},
+                        fye=9, ticker="AAPL", lookups=lk)
+    via_sec = resolve({"fiscal_year": 2025, "fiscal_quarter": 4, "time_type": "duration"},
+                      fye=9, ticker="AAPL", lookups=lk)
+    assert via_dates == via_sec              # one real fact -> one id AND one scope
+
+
+def test_exact_date_instant_scope_matches_pure_math_label():
+    out = resolve({"period_end_date": "2025-09-27", "fiscal_year": 2025,
+                   "fiscal_quarter": 4, "time_type": "instant"})
+    assert out["period_u_id"] == "gp_2025-09-27_2025-09-27"
+    assert out["period_scope"] == "quarter"  # pure-math instant quarter says "quarter" too
+
+
+def test_exact_dates_ytd_ttm_scope_still_preserved():
+    out = resolve({"period_start_date": "2024-09-29", "period_end_date": "2025-06-28",
+                   "fiscal_year": 2025, "fiscal_quarter": 3, "period_scope": "ytd",
+                   "time_type": "duration"})                   # 273d Q3-YTD
+    assert out["period_scope"] == "ytd"      # cumulative label beats the quarter fields
+    out = resolve({"period_start_date": "2024-06-30", "period_end_date": "2025-06-28",
+                   "fiscal_year": 2025, "fiscal_quarter": 3, "period_scope": "ttm",
+                   "time_type": "duration"})                   # 364d trailing window
+    assert out["period_scope"] == "ttm"
 
 
 def test_pure_lane_never_imports_the_heavy_substrate():

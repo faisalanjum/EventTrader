@@ -1,7 +1,9 @@
 """The ONE shared fiscal period resolver (FINAL_DESIGN §6.2, PER-01..20; GuidancePeriod.md).
 
 Wraps the PROVEN guidance period machinery BY REFERENCE (never copied):
-  - pure math: guidance_ids.build_guidance_period_id -> fiscal_math (99.1%-proven)
+  - pure math: guidance_ids.build_guidance_period_id -> fiscal_math (its 99.1% = date ->
+    fiscal-QUARTER classification, 544/549 vs SEC focus tags — NOT exact-window accuracy;
+    exact calendar windows come only from the date/SEC branches above the math fallback)
   - cascade:   existing-graph window -> SEC exact dates -> predicted quarter -> pure math
 New-law deltas over the old substrate (each anchored): exact-date branch first + ytd/ttm
 windows (GuidancePeriod.md) · calendar_override routed BEFORE any company lookup (BUILD §10
@@ -41,14 +43,15 @@ def ensure_driver_period(item, *, fact_type, fye_month, ticker=None,
     gp_start_date, gp_end_date} or None when the fact truly has no period fields."""
     if item.get("period_u_id"):
         return _preserved(item)
-    if not any(item.get(k) for k in _FIELD_KEYS):
-        return None
+    if all(item.get(k) is None for k in _FIELD_KEYS):   # is-not-None: zero VALUES (e.g.
+        return None                                     # fiscal_quarter=0) get VALIDATED
 
     cal = bool(calendar_override or item.get("calendar_override"))
     time_type = item.get("time_type")
     if time_type not in ("duration", "instant"):
         raise PeriodResolutionError(
             f"time_type is a required semantic judgment (got {time_type!r}) — park")
+    _check_declared_fields(item)
     scope_in = item.get("period_scope")
     if scope_in not in (None, "ytd", "ttm"):
         raise PeriodResolutionError(f"input period_scope may only be ytd/ttm, got {scope_in!r}")
@@ -141,7 +144,89 @@ def _exact_dates(item, time_type, scope_in):
         raise PeriodResolutionError(f"duration with start == end is illegal input: {start}")
     if scope_in in ("ytd", "ttm") and time_type == "instant":
         raise PeriodResolutionError(f"{scope_in} is a cumulative window — cannot be instant")
-    return _result(f"gp_{start}_{end}", scope_in or "exact_range", time_type, start, end)
+    try:                          # real calendar dates only — a bad date PARKS, never crashes
+        days = (date.fromisoformat(end) - date.fromisoformat(start)).days + 1
+    except ValueError as e:
+        raise PeriodResolutionError(f"invalid ISO date ({start!r}..{end!r}): {e} — park")
+    scope = scope_in or _declared_scope(item)
+    # INTERIM GUARD — NOT P14 (owner 2026-07-17). The ratified date-anchored classifier
+    # (BUILD §8.2 P14) is DORMANT until the XBRL materializer enables; it will replace
+    # ONLY these temporary labels/bands — the basic input validation above is permanent.
+    # A declared label whose window length contradicts it PARKS (never guess). Bands are
+    # sized so the KNOWN TESTED calendars pass: 52/53-week years (364/371d), 4-4-5 retail
+    # months, irregular-quarter filers (KR 16-wk Q1 = 112d; COST 84d, 53-wk Q4 = 119d).
+    if time_type == "duration":
+        band = _INTERIM_SCOPE_DAYS.get(scope)
+        if band and not band[0] <= days <= band[1]:
+            raise PeriodResolutionError(
+                f"{scope} declared but the window is {days} days ({start}..{end}) — "
+                f"contradictory framing, park")
+    return _result(f"gp_{start}_{end}", scope, time_type, start, end)
+
+
+_INTERIM_SCOPE_DAYS = {          # sized so the KNOWN TESTED calendars pass
+    "monthly": (25, 35),         # 4-week retail month .. 5-week month
+    "quarter": (75, 120),        # 11-week .. 17-week (KR 112d; COST 84d/119d)
+    "half": (160, 210),          # 24-week .. 29-week (12-wk + 17-wk 53-yr half)
+    "ytd": (1, 390),             # NO minimum — January-to-date is real; cap = 53-wk year
+    "annual": (340, 390),        # 52-week (364d) .. 53-week (371d) with margin
+    "ttm": (350, 380),
+}                                # exact_range: unbounded by definition — no band
+
+
+def _check_declared_fields(item):
+    """The ONE strict period-shape check, on EVERY path. This is PERMANENT basic input
+    validation — P14 later replaces only the temporary labels/bands, never this.
+    Conflicting, mixed, incomplete, or out-of-range framing PARKS; never guess."""
+    shapes = [k for k in ("fiscal_quarter", "half", "month", "long_range_end_year")
+              if item.get(k) is not None]
+    if len(shapes) > 1:
+        raise PeriodResolutionError(f"conflicting period fields: {shapes} — park")
+    for name, lo, hi in (("fiscal_quarter", 1, 4), ("half", 1, 2), ("month", 1, 12),
+                         ("fiscal_year", 1900, 2200),
+                         ("long_range_start_year", 1900, 2200),
+                         ("long_range_end_year", 1900, 2200)):
+        v = item.get(name)
+        if v is not None and not (type(v) is int and lo <= v <= hi):
+            raise PeriodResolutionError(f"{name} out of range: {v!r} — park")
+    lr_s, lr_e = item.get("long_range_start_year"), item.get("long_range_end_year")
+    if lr_s is not None and lr_e is None:      # end-only IS legal ("by 2030" targets —
+        raise PeriodResolutionError(           # proven substrate shape); start-only isn't
+            "long-range start year without an end year — park")
+    if lr_s is not None and lr_s > lr_e:
+        raise PeriodResolutionError(f"long-range years reversed: {lr_s}..{lr_e} — park")
+    if item.get("period_scope") in ("ytd", "ttm") and any(
+            item.get(k) is not None for k in ("half", "month", "long_range_end_year")):
+        raise PeriodResolutionError(
+            f"{item['period_scope']} conflicts with half/month/long-range fields — park")
+    if item.get("sentinel_class") is not None and any(
+            item.get(k) is not None for k in
+            ("period_start_date", "period_end_date", "fiscal_year", "fiscal_quarter",
+             "half", "month", "long_range_start_year", "long_range_end_year",
+             "period_scope")):
+        raise PeriodResolutionError(
+            "sentinel_class excludes every dated/fiscal/scope field — park")
+
+
+def _declared_scope(item):
+    """ONE field→scope mapping so the exact-dates path labels a window exactly as the
+    SEC/prediction/pure-math paths would (reproduced: the same gp_ window got exact_range
+    via XBRL dates but quarter via SEC → the OD-21 surprise↔home scope match broke).
+    Fields, not date math: the window alone can't tell a 52/53-week quarter from an odd
+    range, and the declared fiscal framing is the semantic truth (PER-11/13). Paths
+    converge only when fiscal framing IS supplied; frameless exact dates honestly stay
+    exact_range."""
+    if item.get("fiscal_quarter") is not None:
+        return "quarter"
+    if item.get("half") is not None:
+        return "half"
+    if item.get("month") is not None:
+        return "monthly"
+    if item.get("long_range_end_year") is not None:
+        return "exact_range"           # long_range retired -> exact_range (95 #23)
+    if item.get("fiscal_year") is not None:
+        return "annual"
+    return "exact_range"               # undeclared framing stays honest
 
 
 def _cumulative(item, scope, time_type, fye, cal, ticker, lk):

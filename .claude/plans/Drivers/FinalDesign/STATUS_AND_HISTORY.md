@@ -143,6 +143,21 @@ permutation-identical · whole-event non-retried tx w/ in-tx recheck+reads+final
 truthful outcomes (rollback reports zero written; REJECT beats PARK; date=source time, created=commit time) ·
 write-ahead audit file prepared→committed/failed/dry_run = the interim park ledger · SOURCE_COMPANY_AMBIGUOUS
 via the ownership relationship only · MEMBER_LINK_DEFERRED pre-plan until step 7. CLI build authorized.
+· **R11 (2026-07-17) INTERIM period-scope labeling — explicitly NOT P14; P14 stays DORMANT:** a period
+audit reproduced the exact-date branch labeling the same window `exact_range` while the SEC path said
+`quarter` (breaks the OD-21 surprise↔home scope match; `period_scope` is in the §9 read-series key). The
+ratified cure (the BUILD §8.2 **P14** date-anchored classifier + instant `period_scope=null`) is DORMANT
+until the XBRL materializer enables — so the owner ruled an INTERIM fix in `driver_period_resolver.py`:
+scope labeled from the item's own declared fields via ONE mapping (fq→quarter · half→half · month→monthly ·
+long_range→exact_range · fy→annual · none→exact_range; declared ytd/ttm wins) — paths converge when fiscal
+framing is supplied; frameless exact dates honestly stay exact_range — plus ONE strict period-shape check
+on every path: conflicting/mixed/out-of-range fields, sentinel+dated/fiscal combos, incomplete long-range
+(start-only; end-only = the proven "by 2030" shape, legal), and invalid dates all PARK, never crash; zero
+values are validated (is-not-None), never treated as absent. A declared label contradicting the window
+length PARKS; bands sized so the KNOWN TESTED calendars pass (52/53-wk, 4-4-5, KR 16-wk Q1 = 112d, COST
+84d/119d, full-year Q4-YTD 365/371d, January-to-date ytd — no ytd minimum). Instants keep live-law scope
+until the dormant bundle flips coordinated with the validators. At materializer enablement P14 replaces
+ONLY the temporary labels/bands — the basic input validation is permanent.
 · **2026-07-16 (S3 GO):** owner approved the S3.1 cross-channel ID law — 7 decisions one-by-one (reject-not-
 escape · 4-segment id w/ trailing colon on empty scope · `[A-Za-z0-9._-]` source charset case-preserved ·
 readable-date `gp_` ids · the one text normalizer w/ park-on-empty · the one decimal canonicalizer · text-based
