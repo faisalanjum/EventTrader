@@ -785,8 +785,9 @@ mechanics) · `../Consolidation/GuidancePeriod.md` (21 period tests) · `../Cons
    grammar recipe + namespace registry (`du:`/`dcm:`/`gp_`) + fixed test vectors, all in §5's ID-shape entry;
    operative law = `driver/core/driver_ids.py` + its frozen vector suite.
 4. **Adapter/writer machine contracts — PERMANENTLY PARTIAL until S4 (owner-locked split, 2026-07-17):**
-   the INTERNAL WRITER CONTRACT v3.6 is OWNER-APPROVED (PreparedFactV1 schema review pending; closes only
-   after it passes). The Step-5 CLI is an INTERNAL tool until the decomposer/kernel exist. Flow: prepared
+   the INTERNAL WRITER CONTRACT v3.6 is OWNER-APPROVED and its INTERNAL portion CLOSED 2026-07-17
+   (PreparedFactV1 schema passed review — 39 fields, XBRL all-or-nothing, blanket blank rejection; §11.4
+   stays PERMANENTLY PARTIAL: the public channel portion remains open until S4). The Step-5 CLI is an INTERNAL tool until the decomposer/kernel exist. Flow: prepared
    facts → load stored source + typed Driver → deterministic tail → validate + provisional plan → dry-run
    OR one non-retried transaction (final plan in-tx) → durable write-ahead audit record. Binding rules:
    input = `PreparedFactV1` dataclass pinned to the frozen packet (sha `aa7239ed…`) Block 2 + `source_id` +
