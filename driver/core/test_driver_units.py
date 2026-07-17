@@ -197,14 +197,25 @@ def test_tiny_and_huge_values_are_defined_not_crashes():
                              period_scope="quarter")
 
 
-def test_tiny_money_below_resolver_resolution_parks():
-    # 5E-10 B scales to exactly 0.0000005 m_usd — dead on the proven resolver's own
-    # 6-decimal rounding boundary, where its answer is unstable; the cross-check
-    # catches the divergence and PARKS (fail-closed below the authority's resolution)
-    with pytest.raises(UnitResolutionError, match="diverged"):
-        resolve_driver_units("micro_fee", level_values=[Decimal("5E-10")],
-                             level_unit_raw="B", level_unit_kind_hint="money",
-                             level_money_mode_hint="aggregate", period_scope="quarter")
+def test_tiny_money_scales_exactly_below_the_old_six_decimal_limit():
+    # OWNER EXACTNESS RULING is the tiebreaker (round 10): 5E-10 B == exactly 5E-7
+    # m_usd, storable exactly — the old rounded-result cross-check that parked it
+    # re-imported the 6-decimal limitation and is gone. Exact output wins.
+    out = resolve_driver_units("micro_fee", level_values=[Decimal("5E-10")],
+                               level_unit_raw="B", level_unit_kind_hint="money",
+                               level_money_mode_hint="aggregate",
+                               period_scope="quarter")
+    assert out["level_values"][0] == Decimal("5E-7")
+
+
+def test_straddle_check_scoped_to_where_the_guard_exists():
+    # the >999 guard lives in aggregate-money/count scaling ONLY — a ratio value at
+    # the same boundary flows through exactly, no spurious park (round 10)
+    v = Decimal("999.0000000000000001")
+    out = resolve_driver_units("occupancy_rate", level_values=[v],
+                               level_unit_raw="%", level_unit_kind_hint="ratio",
+                               period_scope="quarter")
+    assert out["level_values"] == [v]
 
 
 def test_prescale_boundary_straddler_parks_fail_closed():

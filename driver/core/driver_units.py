@@ -108,14 +108,6 @@ def _slot(name, raw, values, kind_hint, money_hint, quote, xbrl_qname, warnings,
         if probe_val is not None and not math.isfinite(probe_val):
             raise UnitResolutionError(
                 f"{value!r} exceeds float range for the resolver's guards — park")
-        # the resolver's pre-scaled guard compares value > 999 (guidance_ids) on the
-        # FLOAT — a boundary-straddling exact value could blind it (round 9): if the
-        # Decimal and float disagree about the boundary, fail closed
-        if exact_in is not None and (exact_in > _PRESCALE_BOUNDARY) != (
-                probe_val > _PRESCALE_BOUNDARY):
-            raise UnitResolutionError(
-                f"{value!r} straddles the resolver's pre-scale guard boundary beyond "
-                f"float fidelity — park")
         r = resolve_unit(name, raw, probe_val,
                          unit_kind_hint=kind_hint,
                          money_mode_hint=money_hint, quote=quote, xbrl_qname=xbrl_qname)
@@ -126,6 +118,15 @@ def _slot(name, raw, values, kind_hint, money_hint, quote, xbrl_qname, warnings,
             raise UnitResolutionError(lint[0])       # per-X needs '_per_X' in the NAME
         warnings.extend(w for w in r.warnings if w not in warnings)
         unit = r.canonical_unit
+        # the >999 pre-scaled guard exists ONLY in aggregate-money and count scaling
+        # (guidance_ids) and evaluates on the FLOAT — park a boundary-straddling exact
+        # value there, and only there (rounds 9-10)
+        if exact_in is not None and (r.kind == "count" or (
+                r.kind == "money" and r.money_mode == "aggregate")) and (
+                (exact_in > _PRESCALE_BOUNDARY) != (probe_val > _PRESCALE_BOUNDARY)):
+            raise UnitResolutionError(
+                f"{value!r} straddles the resolver's pre-scale guard boundary beyond "
+                f"float fidelity — park")
         if exact_in is not None:
             if r.scaled_value is None:
                 scaled.append(None)
@@ -149,7 +150,12 @@ def _slot(name, raw, values, kind_hint, money_hint, quote, xbrl_qname, warnings,
                 if not math.isfinite(approx):
                     raise UnitResolutionError(
                         f"scaled {value!r} {raw!r} exceeds float range — park")
-                if round(approx, 6) != round(r.scaled_value, 6):
+                # EXACT OUTPUT WINS (owner exactness ruling; round 10 removed the old
+                # rounded-result comparison — it re-imported the 6-decimal limit).
+                # This tripwire fires ONLY on genuine magnitude divergence (a wrong
+                # scale factor), never on rounding noise:
+                if abs(approx - r.scaled_value) > max(1e-6,
+                                                      abs(r.scaled_value) * 1e-9):
                     raise UnitResolutionError(
                         f"exact scaling diverged from the proven resolver for "
                         f"{value!r} {raw!r} ({exact} vs {r.scaled_value}) — park")
