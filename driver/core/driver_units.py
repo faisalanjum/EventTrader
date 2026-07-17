@@ -91,7 +91,7 @@ def _slot(name, raw, values, kind_hint, money_hint, quote, xbrl_qname, warnings,
     (owner exactness law 2026-07-17: no automatic 6-decimal rounding). The resolver
     stays authoritative for the UNIT, the guards, and the scale FACTOR (probed with
     value=1 — its scaling is linear-then-round); the VALUE itself is computed as
-    Decimal(source) x factor, cross-checked against the resolver's own rounded output."""
+    Decimal(source) x factor — exact output wins, never compared to rounded output."""
     scaled, unit, factor = [], None, None
     for value in (list(values) or [None]):
         if isinstance(value, float):
