@@ -10,7 +10,9 @@
 > **Honest status banner (generated; owning dashboard = `STATUS_AND_HISTORY.md`):** DESIGN is final for
 > everything labeled FINAL in `FINAL_DESIGN.md`. CODE/TESTS exist only where stated below (WP-FC-EDITS batch,
 > S1 fiscal.ai adapter, proven substrate components). **No production Driver graph exists; the fitness gate has
-> never run; the Track B writer stack is unbuilt (S3 awaits owner GO).** "Build-ready" never means "implemented"
+> never run; Track B steps 1-4 are BUILT and pushed (2026-07-17: 252 unit + 1 real-Neo4j integration tests
+> green; step-2's PER-20 HAS_XBRL producer guard pending); step 5 (executor + fusion) builds under the
+> owner-locked §11.4 internal contract.** "Build-ready" never means "implemented"
 > or "run."
 
 ## 1. The flow (one picture)
@@ -164,7 +166,7 @@ class finalization → final validation → fitness gate.
   name+direction floor 0.634 · inter-producer agreement floor 72% · ZERO two-grader-confirmed wrong merges ·
   zero unresolved flags after one blind regrade · red/inconclusive burns the key into regression fixtures.
 
-## 5. Track B — fact stack (FACT-01..36; design final, UNBUILT — S3 awaits owner GO)
+## 5. Track B — fact stack (FACT-01..36; design final; steps 1-4 BUILT 2026-07-16/17 — ids · period resolver (PER-20 HAS_XBRL producer guard pending) · units · validators/planner; step 5 executor+fusion = the §11.4 internal contract, owner-locked)
 
 - Deliverables: IDs, writer/CLI/shell, period resolver, unit resolver, slice menu, concept linker, verdict/DCM
   writer, reads, park ledger, validators, tests. Producer-agnostic: build against the internal packet only.
@@ -775,9 +777,43 @@ mechanics) · `../Consolidation/GuidancePeriod.md` (21 period tests) · `../Cons
 3. **Source identity namespaces — CLOSED 2026-07-16 (owner-approved S3.1 ID law):** no-escaping/validated-
    grammar recipe + namespace registry (`du:`/`dcm:`/`gp_`) + fixed test vectors, all in §5's ID-shape entry;
    operative law = `driver/core/driver_ids.py` + its frozen vector suite.
-4. **Adapter/writer machine contracts:** exact field types/nullability, versioned schema, complete
-   outcome/reason codes, cursor/completeness record shapes, certification fixtures (contract not
-   implementation-ready until closed).
+4. **Adapter/writer machine contracts — PERMANENTLY PARTIAL until S4 (owner-locked split, 2026-07-17):**
+   the INTERNAL WRITER CONTRACT v3.6 is OWNER-APPROVED (PreparedFactV1 schema review pending; closes only
+   after it passes). The Step-5 CLI is an INTERNAL tool until the decomposer/kernel exist. Flow: prepared
+   facts → load stored source + typed Driver → deterministic tail → validate + provisional plan → dry-run
+   OR one non-retried transaction (final plan in-tx) → durable write-ahead audit record. Binding rules:
+   input = `PreparedFactV1` dataclass pinned to the frozen packet (sha `aa7239ed…`) Block 2 + `source_id` +
+   optional `calendar_override`, unknown fields reject, JSON parsed exact (`parse_float=Decimal`,
+   NaN/Infinity reject), source time/type/company read FROM NEO4J (duplicated input metadata never trusted),
+   the CLI builds ids/scopes · deterministic tail IN the CLI per this section's locked order, with FUSION
+   (to build + test): fusion fills nulls only — a disagreement in any of the fixed ten value-signature
+   fields prevents fusion; quote/state/date differences use the deterministic last-write-with-log rule;
+   unfused facts enter the complete OD-8 collision ladder (fusion itself does not promise they will be
+   hashed); ambiguous fusion groups PARK; permutation tests must produce identical results ·
+   MEMBER_LINK_DEFERRED fence PRE-planner (MAPS_TO_MEMBER gains its missing AXIS field at step 7 with the
+   five FS-18 tests) · tx order: prepare outside → open tx → recheck (source · exactly ONE company via the
+   correct OWNERSHIP relationship per source type, never mention-counting · typed Driver) → in-tx reads
+   (siblings/periods/prior-guide units; graph floats read back via `Decimal(repr(f))`) → final plan →
+   write → commit; period write-once conflicts abort in-tx pre-write; tx never auto-retried; ONE local
+   writer enforced by a small file lock; multi-host disabled · truthfulness: dry-run (default;
+   `ENABLE_DRIVER_WRITES=1` gates real writes) performs the SAME reads and SAME final planning with zero
+   writes, audit state `dry_run`; rollback/failure reports ZERO facts written — approved facts become
+   `parked(EXECUTION_FAILED)`; a surprise writes only if its home fact's final plan is accepted (tested) ·
+   output flat per input index `{index, fact_id?, decision, codes[], detail?}` + run status; five outcome
+   words; pinned mapping created*→written, noop/filled/updated/deduped→merged; explicit codes only
+   (+ COLLISION_AMBIGUOUS, IN_BATCH_COMPETITORS, UNFUSED_PAIR, SERIES_UNIT, NOT_STORABLE, EXECUTION_FAILED,
+   MEMBER_LINK_DEFERRED, SOURCE_COMPANY_AMBIGUOUS), one test proves every emitting branch carries a code,
+   free text never parsed; SOURCE_MISSING = failed/rejected; the five park codes = parked; REJECT beats
+   PARK; `date` = stored source public time, `created` = write time stamped once at commit · ONE unique
+   never-overwritten write-ahead audit file per run (exact input bytes + plan/logs `prepared` before any
+   mutation → atomically `committed`/`failed`/`dry_run`; leftover `prepared` = manual idempotent
+   reconciliation; logs live here, never the graph); no scheduler, recovery service, timers, or automatic
+   retries · fences: SOURCE_COMPANY_AMBIGUOUS parks multi-company sources (per-registrant handling = the
+   S4-era materializer law) · explicit setup creates constraints + the 4 sentinel periods, PREFLIGHT
+   verifies them. The PUBLIC channel portion (packet endpoint, receipts, cursors, retries, reason-code API,
+   channel/receipt ids, split/fusion receipt rules) is deliberately OPEN until S4 decomposer/kernel
+   integration — designed ONCE with real fiscal/news packets; ChannelContract v1.0 remains ACTIVE law
+   throughout (only its software connection is deferred).
 5. **Exact-block transfers — CLOSED (Phase 4 round 8):** kernel §15.0 MVP split + §16 residuals + the
    ratification bundle → §8.1 above; `12` §12's six acceptance gates incl. the F1-F9/P1-P8 fixture set → §5
    above; the XBRL materializer exact recipe + pins → §8.2 above. Prompt text: the XC PICK/VERIFY prompts and

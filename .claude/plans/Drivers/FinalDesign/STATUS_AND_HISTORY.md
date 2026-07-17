@@ -18,7 +18,7 @@
 | Rule meaning (FINAL_DESIGN §1-§9) | FINAL (locked set + 5 owner rulings 2026-07-15) | — | — | — |
 | Track A catalog engine | FINAL | PARTIAL (WP-FC-EDITS `5db902f` + rounds 22-23 prompt sync; implementation gate in BUILD §4 governs any run) | 265 pass + 1 skip (2026-07-16, incl. the strengthened rulebook-sync guard in `workflows/tests/`) | NEVER RUN (no graph catalog; fitness gate never run; old June RULE-BEARING outputs = historical evidence only, chunk copies excepted per BUILD §4) |
 | Fiscal.ai channel adapter (S1) | FINAL | BUILT | smoke 16 packets / 175 items, 0 tokens | not live |
-| Track B fact stack | FINAL (all decisions made; affected contracts NOT implementation-ready — BUILD §11 gaps) | UNBUILT (S3 awaits owner GO) | — | — |
+| Track B fact stack | FINAL + the §11.4 INTERNAL writer contract OWNER-LOCKED 2026-07-17 (PreparedFactV1 schema review pending; public channel portion = S4) | steps 1-4 BUILT (`driver/core/`: ids · period resolver, PER-20 HAS_XBRL producer guard PENDING · units · validators/planner); step 5 executor+fusion next | 252 unit + 1 real-Neo4j integration (separate gate) + Track A 265+1 | dry-run only; ENABLE_DRIVER_WRITES off |
 | Track C guidance retirement | FINAL v2.0 (no replay) | not started | — | — |
 | Concept linker (text facts) | FINAL | PARTIAL (vetoes C/D + PIT query spec-only) | 31-co + 274-co evidence | not rolled out |
 | Admission kernel | **APPROVED WORKING DESIGN (owner 2026-07-15; not activated)** | — | gates in force; integration COMPLETE (BUILD §8.1; original archived) | — |
@@ -132,6 +132,17 @@ reopened; FS-15 "kind never reconsidered" + the unknown-axis sentinel already po
 CLARIFICATION, not a meaning change → no supersession row. Five pinned test cases land with the S3 step-7
 menu/dedupe build (same-kind fold · cross-kind separate · unknown-vs-known separate · Europe≠EuropeSegment ·
 same member on different axes = separate exact axis/member links). No migration; no production code today.
+· **R10 (2026-07-17) THE S3.5 INTERNAL WRITER CONTRACT LOCKED (v3.6):** operative text = BUILD §11.4 item 4.
+Converged through the owner's zero-based simplification (the CLI is INTERNAL until the decomposer/kernel —
+the entire public channel runtime is ONE deferral to S4; ChannelContract v1.0 stays ACTIVE law, only its
+software connection deferred) + five reviewer passes, every accepted point independently reproduced. Key
+pins: PreparedFactV1 anchored to packet sha `aa7239ed…` Block 2 (schema review = the remaining gate before
+the internal portion CLOSES; §11.4 stays PERMANENTLY PARTIAL until S4 regardless) · fusion fills nulls only,
+ten-signature-slot disagreement prevents fusion, unfused → the full OD-8 ladder with no hashing promise,
+permutation-identical · whole-event non-retried tx w/ in-tx recheck+reads+final-plan, flock single-writer ·
+truthful outcomes (rollback reports zero written; REJECT beats PARK; date=source time, created=commit time) ·
+write-ahead audit file prepared→committed/failed/dry_run = the interim park ledger · SOURCE_COMPANY_AMBIGUOUS
+via the ownership relationship only · MEMBER_LINK_DEFERRED pre-plan until step 7. CLI build authorized.
 · **2026-07-16 (S3 GO):** owner approved the S3.1 cross-channel ID law — 7 decisions one-by-one (reject-not-
 escape · 4-segment id w/ trailing colon on empty scope · `[A-Za-z0-9._-]` source charset case-preserved ·
 readable-date `gp_` ids · the one text normalizer w/ park-on-empty · the one decimal canonicalizer · text-based
