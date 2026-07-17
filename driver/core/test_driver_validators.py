@@ -477,6 +477,31 @@ def test_P8_lower_is_better_beat_with_stated_negative_delta():
     assert "SIGN" not in codes(got) and "DERIVABLE" not in codes(got)
 
 
+def test_sentinel_periods_store_null_dates_and_need_time_type():
+    bad = mk("guidance", "numberless", period_u_id="gp_ST", period_scope="short_term",
+             gp_start_date="2025-01-01", gp_end_date=None,
+             fiscal_year=None, fiscal_quarter=None)
+    assert "SCOPE_PAIR" in codes(check(bad))
+    bad2 = mk("guidance", "numberless", period_u_id="gp_ST", period_scope="short_term",
+              gp_start_date=None, gp_end_date=None, time_type=None,
+              fiscal_year=None, fiscal_quarter=None)
+    assert "INSTANT" in codes(check(bad2))
+
+
+def test_dated_period_dates_must_match_the_gp_id():
+    bad = mk(gp_start_date="2025-01-01")           # id says 2025-07-01
+    assert "PERIOD_SYM" in codes(check(bad))
+    bad2 = mk(gp_start_date=None, gp_end_date=None)  # dated id with missing dates
+    assert "PERIOD_SYM" in codes(check(bad2))
+
+
+def test_F9_value_match_survives_float_representation_dirt():
+    s = mk("surprise", "point", level_low=570.0, level_high=570.0)
+    home = home_for(s)
+    home["level_low"] = home["level_high"] = 570.0000000000001
+    assert check(s, homes=[home]) == []            # same real value — never a mismatch
+
+
 def test_id_and_scope_rebuild_agreement():
     fact = mk()
     fact["id"] = f"du:0000320193-24-000123:revenue:period={QP}"

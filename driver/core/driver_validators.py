@@ -11,7 +11,7 @@ import re
 from collections import namedtuple
 from datetime import date, datetime
 
-from driver.core.driver_ids import IdLawError, build_id, dec_canon
+from driver.core.driver_ids import IdLawError, build_id, num_canon
 from driver.core.driver_units import DRIVER_UNITS
 
 __all__ = ["Violation", "validate_fact", "compose_surprise_scope",
@@ -259,10 +259,14 @@ def _period(fact, v, add):
         add("SCOPE_PAIR", "REJECT", f"period_scope {scope!r} not in the enum")
     if u_id is None:
         return
+    if fact.get("time_type") not in ("duration", "instant"):
+        add("INSTANT", "REJECT", "time_type required (duration|instant) with a period")
     if u_id in SENTINEL_SCOPE:
         if scope != SENTINEL_SCOPE[u_id]:
             add("SCOPE_PAIR", "REJECT",
                 f"sentinel {u_id} must pair with scope {SENTINEL_SCOPE[u_id]!r}")
+        if start is not None or end is not None:
+            add("SCOPE_PAIR", "REJECT", f"sentinel {u_id} stores null dates")
         return
     if scope in SENTINEL_SCOPE.values():
         add("SCOPE_PAIR", "REJECT", f"dated period {u_id} with sentinel scope {scope!r}")
@@ -273,14 +277,16 @@ def _period(fact, v, add):
             except ValueError:
                 add("ISO", "REJECT", f"bad ISO date {d!r}")
                 return
+    # a dated period's stored dates ARE the gp_ id's dates — no divergence, ever
+    if (start, end) != (u_id[3:13], u_id[14:]):
+        add("PERIOD_SYM", "REJECT",
+            f"gp dates {start}..{end} do not match the period id {u_id}")
+        return
     if fact.get("time_type") == "instant":
         if start != end:
             add("INSTANT", "REJECT", "instant must be a one-day window (gp_X_X)")
-    elif fact.get("time_type") == "duration":
-        if start is not None and start == end:
-            add("INSTANT", "REJECT", "duration with start == end is illegal input")
-    else:
-        add("INSTANT", "REJECT", "time_type required (duration|instant) with a period")
+    elif fact.get("time_type") == "duration" and start == end:
+        add("INSTANT", "REJECT", "duration with start == end is illegal input")
 
 
 def _id_rebuild(fact, add):
@@ -477,4 +483,4 @@ def _norm_parts(parts):
 
 
 def _num(x):
-    return None if x is None else dec_canon(repr(x))
+    return None if x is None else num_canon(x)

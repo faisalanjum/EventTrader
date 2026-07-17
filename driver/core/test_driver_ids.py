@@ -207,6 +207,20 @@ def test_dec_canon_fail_closed():
             dec_canon(bad)
 
 
+def test_num_canon_float_bridge_kills_ieee_dirt():
+    from driver.core.driver_ids import num_canon
+    assert num_canon(0.1 + 0.2) == "0.3"                    # the 0.3 trap
+    assert num_canon(570.0000000000001) == "570"
+    assert num_canon(570.0) == "570"
+    assert num_canon(-0.2) == "-0.2"
+    assert num_canon(1.234) == "1.234"                       # real precision preserved
+    assert num_canon(2000) == "2000" and num_canon("2.50") == "2.5"
+    with pytest.raises(IdLawError):
+        num_canon(float("nan"))
+    with pytest.raises(IdLawError):
+        num_canon(True)
+
+
 def test_member_id_never_stacks():
     bare, _ = build_id(SRC, "revenue", period_id=FY24)
     mem = member_id(bare, H2000)

@@ -12,11 +12,10 @@ siblings: exact MERGES / conflict-with-all -> hashed member / compatible-not-exa
 PARKS · >1 in-batch competitors vs an existing sibling -> park BOTH. Non-signature
 fields keep last-write-wins-WITH-LOG; a true signature correction is the repair lane.
 """
-import math
 import os
 from collections import namedtuple
 
-from driver.core.driver_ids import dec_canon, signature_hash
+from driver.core.driver_ids import IdLawError, num_canon, signature_hash
 
 __all__ = ["WriterError", "FakeGraph", "PlanResult", "plan_event_write",
            "signature", "stamp_series_unit", "assert_writes_enabled"]
@@ -81,9 +80,10 @@ def signature(fact):
     for k in SIGNATURE_FIELDS:
         v = fact.get(k)
         if v is not None and k in _NUMERIC_SIG:
-            if isinstance(v, float) and not math.isfinite(v):
-                raise WriterError(f"non-finite {k}: {v!r} — validators must reject first")
-            v = dec_canon(repr(v))
+            try:
+                v = num_canon(v)
+            except IdLawError as e:
+                raise WriterError(f"{k}: {e} — validators must reject first")
         elif v is not None and k in _TEXT_SIG:
             v = " ".join(str(v).casefold().split())
         sig.append(v)
@@ -143,16 +143,26 @@ def plan_event_write(facts, graph, prior_series_units=None):
 
 
 def _plan_group(bare_id, group, graph, prior_series_units):
-    # exact in-batch duplicates converge (idempotent re-submission)
-    kept, out = [], []
+    # exact in-batch duplicates FUSE deterministically — input order must never pick
+    # the surviving quote/state: representative = latest date, then lexicographic quote
+    sig_groups = {}
     for i, fact in group:
-        dup = next((k for k, (_, f) in enumerate(kept)
-                    if signature(kept[k][1]) == signature(fact)), None)
-        if dup is not None:
+        sig_groups.setdefault(signature(fact), []).append((i, fact))
+    kept, out = [], []
+    for items in sig_groups.values():
+        ordered = sorted(items, key=lambda t: t[1].get("quote") or "")
+        ordered = sorted(ordered, key=lambda t: t[1].get("date") or "", reverse=True)
+        rep_i, rep = ordered[0]
+        kept.append((rep_i, rep))
+        for i, f in ordered[1:]:
+            diffs = {k: f.get(k) for k in _LWW_FIELDS
+                     if f.get(k) is not None and f.get(k) != rep.get(k)}
+            ops = [{"op": "log", "event": "in_batch_duplicate_fused",
+                    "dropped_fields": diffs}] if diffs else []
             out.append((i, PlanResult(bare_id, "deduped",
-                                      "exact in-batch duplicate", [])))
-        else:
-            kept.append((i, fact))
+                                      "exact in-batch duplicate — fused onto the "
+                                      "deterministic representative", ops)))
+    kept.sort(key=lambda t: t[0])
 
     siblings = graph.get_sibling_facts(bare_id)
 
@@ -259,8 +269,6 @@ def _create(fact, *, hashed, late, graph, prior_series_units):
     props.update(id=fact_id, created="__now__", series_unit=series_unit)
     if set(props) != STORED_FACT_FIELDS:               # drift guard: exactly the 24
         raise WriterError(f"stored-field drift: {set(props) ^ STORED_FACT_FIELDS}")
-    if hashed:
-        props["late_collision"] = late
     ops = [{"op": "create_fact", "id": fact_id, "props": props},
            {"op": "edge", "type": "OF_DRIVER", "from": fact_id,
             "to": fact["driver_name"]},
@@ -283,6 +291,9 @@ def _create(fact, *, hashed, late, graph, prior_series_units):
     for ref in fact.get("member_refs") or ():
         ops.append({"op": "edge", "type": "MAPS_TO_MEMBER", "from": fact_id,
                     "to": ref["member"], "props": {"slice_part": ref["slice_part"]}})
+    if late:
+        # OD-8 rule 9: all collision flags are counters/LOGS — zero new stored artifacts
+        ops.append({"op": "log", "event": "late_collision", "fact_id": fact_id})
     return PlanResult(fact_id, "created_member" if hashed else "created", None, ops)
 
 
@@ -301,6 +312,24 @@ def _merge_or_fill(fact, target, rel):
             sets[k] = new
             logs.append({"op": "log", "field": k, "old": target.get(k), "new": new,
                          "fact_id": target["id"]})
+    if sets:
+        # OD-10 on merges: a null series_unit FILLS when merged content now defines an
+        # axis; a merge whose content would CHANGE a stored axis parks (repair lane).
+        merged = {**target, **sets}
+        try:
+            prospective = stamp_series_unit(merged)
+        except WriterError:
+            prospective = target.get("series_unit")
+        current = target.get("series_unit")
+        if current is None and prospective is not None:
+            sets["series_unit"] = prospective
+            logs.append({"op": "log", "field": "series_unit", "old": None,
+                         "new": prospective, "fact_id": target["id"]})
+        elif current is not None and prospective is not None and prospective != current:
+            return PlanResult(target["id"], "parked",
+                              f"series_unit conflict: stored {current!r} vs "
+                              f"merged-content axis {prospective!r} — repair lane only",
+                              [])
     if not sets:
         return PlanResult(target["id"], "noop", None, [])
     ops = [{"op": "set_fields", "id": target["id"], "fields": sets}] + logs

@@ -6,13 +6,14 @@ Authority: FINAL_DESIGN §5.1 (OD-8, OD-21) + the approved S3.1 paper. Pure func
 """
 import hashlib
 import json
+import math
 import re
 import unicodedata
 from datetime import date
 from decimal import Decimal, InvalidOperation
 
 __all__ = [
-    "IdLawError", "norm", "dec_canon", "build_id", "signature_hash",
+    "IdLawError", "norm", "dec_canon", "num_canon", "build_id", "signature_hash",
     "member_id", "probe_forms", "encode_unknown_axis", "decode_unknown_axis",
 ]
 
@@ -63,6 +64,24 @@ def dec_canon(value):
     if "." in out:
         out = out.rstrip("0").rstrip(".")
     return "0" if out in ("-0", "") else out
+
+
+def num_canon(value):
+    """Canonical decimal string for ANY sanctioned numeric input. Floats cross the
+    bridge via repr + a 12-significant-digit quantize — kills IEEE artifacts
+    (0.1+0.2 -> '0.3') while provably preserving every source-stated financial value
+    (nothing source-stated carries >12 significant digits). Non-floats go straight
+    to the strict dec_canon."""
+    if isinstance(value, bool):
+        raise IdLawError("bool is not a number")
+    if isinstance(value, float):
+        if not math.isfinite(value):
+            raise IdLawError(f"non-finite number: {value!r}")
+        d = Decimal(repr(value))
+        if d != 0:
+            d = d.quantize(Decimal(1).scaleb(d.adjusted() - 11))
+        return dec_canon(str(d))
+    return dec_canon(value)
 
 
 def _validate_period_id(period_id):

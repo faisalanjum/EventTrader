@@ -88,7 +88,7 @@ def test_non_signature_conflict_lww_with_log():
 
 # ---- OD-8 collision ladder ----
 
-def test_conflict_with_one_sibling_creates_flagged_member():
+def test_conflict_with_one_sibling_creates_member_with_late_log():
     existing = mk(level=100.0, series_unit="m_usd", created="x")
     new = mk(level=999.0)
     res = plan_event_write([new], FakeGraph([existing]))
@@ -96,7 +96,9 @@ def test_conflict_with_one_sibling_creates_flagged_member():
     create = [o for o in res[0].ops if o["op"] == "create_fact"][0]
     h = signature_hash(list(signature(new)))
     assert create["id"] == f"{new['id']}|quote_hash={h}"
-    assert create["props"]["late_collision"] is True
+    assert "late_collision" not in create["props"]      # flags = logs/counters (OD-8 r9)
+    assert any(o["op"] == "log" and o.get("event") == "late_collision"
+               for o in res[0].ops)
 
 
 def test_two_scenario_same_event_both_hashed_no_bare():
@@ -105,9 +107,8 @@ def test_two_scenario_same_event_both_hashed_no_bare():
     assert [r.outcome for r in res] == ["created_member", "created_member"]
     ids = [o["id"] for r in res for o in r.ops if o["op"] == "create_fact"]
     assert all("|quote_hash=" in i for i in ids) and len(set(ids)) == 2
-    flags = [o["props"]["late_collision"] for r in res for o in r.ops
-             if o["op"] == "create_fact"]
-    assert flags == [False, False]                     # in-batch, not late
+    assert not any(o["op"] == "log" and o.get("event") == "late_collision"
+                   for r in res for o in r.ops)        # in-batch, not late
 
 
 def test_exact_match_among_multiple_siblings_merges():
@@ -207,6 +208,42 @@ def test_permutation_single_filler_plus_conflicter():
     assert [r.outcome for r in res] == ["filled", "created_member"]
 
 
+def test_float_representation_dirt_never_mints_a_sibling():
+    existing = mk(level=570.0, series_unit="m_usd", created="x")
+    dirty = mk(level=570.0000000000001)
+    res = plan_event_write([dirty], FakeGraph([existing]))
+    assert res[0].outcome == "noop"                    # same real value, one fact
+
+
+def test_series_unit_filled_when_a_compatible_fact_gains_a_level():
+    target = mk(series_unit=None, created="x")         # numberless, unit-less
+    new = mk(level=100.0)
+    res = plan_event_write([new], FakeGraph([target]))
+    sets = [o for o in res[0].ops if o["op"] == "set_fields"][0]["fields"]
+    assert sets["series_unit"] == "m_usd"
+
+
+def test_series_unit_conflict_on_fill_parks_for_repair():
+    target = mk(change=12.0, series_unit="percent_yoy", created="x")
+    new = mk(level=100.0, change=12.0)                 # compatible, but changes the axis
+    res = plan_event_write([new], FakeGraph([target]))
+    assert res[0].outcome == "parked" and "series_unit" in res[0].reason
+
+
+def test_inbatch_duplicate_fusion_is_input_order_independent():
+    a = mk(level=100.0, quote="alpha words")
+    b = mk(level=100.0, quote="beta words")            # same signature, different quote
+    res_ab = plan_event_write([dict(a), dict(b)], FakeGraph())
+    res_ba = plan_event_write([dict(b), dict(a)], FakeGraph())
+    kept_ab = [o["props"]["quote"] for r in res_ab for o in r.ops
+               if o["op"] == "create_fact"]
+    kept_ba = [o["props"]["quote"] for r in res_ba for o in r.ops
+               if o["op"] == "create_fact"]
+    assert kept_ab == kept_ba                          # order never picks the quote
+    dedup_ops = [o for r in res_ab + res_ba for o in r.ops if o["op"] == "log"]
+    assert dedup_ops                                    # dropped variant is logged
+
+
 def test_period_op_carries_u_id():
     res = plan_event_write([mk(level=100.0)], FakeGraph())
     op = [o for o in res[0].ops if o["op"] == "merge_period"][0]
@@ -234,14 +271,14 @@ def test_text_signature_drift_never_mints_a_sibling():
     assert res[0].outcome in ("noop", "updated")     # equal canonically — never a member
 
 
-def test_stored_node_is_exactly_the_24_fields():
+def test_stored_node_is_exactly_the_24_fields_members_included():
     res = plan_event_write([mk(level=100.0)], FakeGraph())
     props = [o for o in res[0].ops if o["op"] == "create_fact"][0]["props"]
     assert len(props) == 24 and "driver_name" not in props
     a, b = mk(level=100.0, quote="A"), mk(level=999.0, quote="B")
     member_props = [o for r in plan_event_write([a, b], FakeGraph())
                     for o in r.ops if o["op"] == "create_fact"][0]["props"]
-    assert set(member_props) - {"late_collision"} == set(props)  # 24 + the OD-8 flag
+    assert set(member_props) == set(props)              # zero new stored artifacts
 
 
 def test_withdrawal_without_prior_parks_in_plan():
