@@ -221,6 +221,13 @@ def test_num_canon_float_bridge_kills_ieee_dirt():
         num_canon(True)
 
 
+def test_num_canon_never_merges_float_distinguishable_values():
+    # round-4 fix: 15 significant digits = the double's own precision boundary
+    from driver.core.driver_ids import num_canon
+    assert num_canon(1234567890123.0) != num_canon(1234567890124.0)  # 13-digit exacts
+    assert num_canon(1234567890123.4) == "1234567890123.4"           # 14 digits kept
+
+
 def test_member_id_never_stacks():
     bare, _ = build_id(SRC, "revenue", period_id=FY24)
     mem = member_id(bare, H2000)

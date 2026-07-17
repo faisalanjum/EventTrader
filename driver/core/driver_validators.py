@@ -145,6 +145,10 @@ def validate_fact(fact, *, driver, home_facts=None):
     if malformed:
         return v
 
+    # the CLI order builds id + fact_scope BEFORE validation — both are required here
+    if fact.get("id") is None or fact.get("fact_scope") is None:
+        add("ID", "REJECT", "id and fact_scope are required at validation time")
+
     if not fact.get("quote"):
         add("QUOTE", "REJECT", "verbatim quote required on every lane")
     if fact.get("source_type") not in SOURCE_TYPES:
@@ -274,7 +278,7 @@ def _period(fact, v, add):
         if d is not None:
             try:
                 date.fromisoformat(d)
-            except ValueError:
+            except (ValueError, TypeError):
                 add("ISO", "REJECT", f"bad ISO date {d!r}")
                 return
     # a dated period's stored dates ARE the gp_ id's dates — no divergence, ever
@@ -304,8 +308,8 @@ def _id_rebuild(fact, add):
             slice_parts=fact.get("slice_parts") or (),
             measurement_tokens=fact.get("measurement_tokens") or (),
             surprise=fact.get("surprise"))
-    except IdLawError as e:
-        add("ID", "REJECT", str(e))
+    except (IdLawError, TypeError, ValueError) as e:
+        add("ID", "REJECT", f"id rebuild failed: {e}")
         return
     if fact.get("id") is not None and fact["id"] != rebuilt_id:
         add("ID", "REJECT", f"id {fact['id']!r} != rebuild {rebuilt_id!r}")

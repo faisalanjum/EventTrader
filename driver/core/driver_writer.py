@@ -15,7 +15,7 @@ fields keep last-write-wins-WITH-LOG; a true signature correction is the repair 
 import os
 from collections import namedtuple
 
-from driver.core.driver_ids import IdLawError, num_canon, signature_hash
+from driver.core.driver_ids import IdLawError, norm, num_canon, signature_hash
 
 __all__ = ["WriterError", "FakeGraph", "PlanResult", "plan_event_write",
            "signature", "stamp_series_unit", "assert_writes_enabled"]
@@ -85,7 +85,7 @@ def signature(fact):
             except IdLawError as e:
                 raise WriterError(f"{k}: {e} — validators must reject first")
         elif v is not None and k in _TEXT_SIG:
-            v = " ".join(str(v).casefold().split())
+            v = norm(str(v))         # THE one approved text normalizer — no second cleaner
         sig.append(v)
     return tuple(sig)
 
@@ -123,6 +123,11 @@ def plan_event_write(facts, graph, prior_series_units=None):
     """Plan ONE source event's writes vs the pre-batch graph. Returns [PlanResult]."""
     if not facts:
         return []
+    for f in facts:
+        fid = f.get("id")
+        if not isinstance(fid, str) or not fid.startswith("du:") or fid.count(":") < 3:
+            raise WriterError(f"fact without a valid id reached the writer "
+                              f"({fid!r}) — validators run first")
     sources = {f["id"].split(":", 2)[1] for f in facts}
     if len(sources) != 1:
         raise WriterError(f"one invocation = one source event, got sources {sources}")
@@ -148,7 +153,7 @@ def _plan_group(bare_id, group, graph, prior_series_units):
     sig_groups = {}
     for i, fact in group:
         sig_groups.setdefault(signature(fact), []).append((i, fact))
-    kept, out = [], []
+    kept, dedups = [], []
     for items in sig_groups.values():
         ordered = sorted(items, key=lambda t: t[1].get("quote") or "")
         ordered = sorted(ordered, key=lambda t: t[1].get("date") or "", reverse=True)
@@ -159,11 +164,20 @@ def _plan_group(bare_id, group, graph, prior_series_units):
                      if f.get(k) is not None and f.get(k) != rep.get(k)}
             ops = [{"op": "log", "event": "in_batch_duplicate_fused",
                     "dropped_fields": diffs}] if diffs else []
-            out.append((i, PlanResult(bare_id, "deduped",
-                                      "exact in-batch duplicate — fused onto the "
-                                      "deterministic representative", ops)))
+            dedups.append((i, rep_i, ops))
     kept.sort(key=lambda t: t[0])
+    out = _plan_kept(bare_id, kept, graph, prior_series_units)
+    survivors = dict(out)
+    for i, rep_i, ops in dedups:       # duplicates report the SURVIVOR's real id/status
+        rep = survivors[rep_i]
+        out.append((i, PlanResult(rep.fact_id, "deduped",
+                                  f"exact in-batch duplicate — fused onto "
+                                  f"{rep.fact_id} ({rep.outcome})", ops)))
+    return out
 
+
+def _plan_kept(bare_id, kept, graph, prior_series_units):
+    out = []
     siblings = graph.get_sibling_facts(bare_id)
 
     if len(kept) > 1:

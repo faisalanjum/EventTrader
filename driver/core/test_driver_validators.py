@@ -6,6 +6,7 @@ focused failing test per validator rule, then the OD-21 set. Writer-side traps
 """
 import pytest
 
+from driver.core.driver_ids import build_id
 from driver.core.driver_validators import (
     apply_inline_correction,
     compose_surprise_scope,
@@ -74,6 +75,13 @@ def mk(lane="metric", shape="point", **over):
         if shape == "delta-only":
             fact.update(change_value=5000.0, change_unit="count")
     fact.update(over)
+    if "id" not in fact:            # the CLI builds these before validation
+        fact["id"], fact["fact_scope"] = build_id(
+            "0000320193-24-000123", fact["driver_name"],
+            period_id=fact.get("period_u_id"),
+            slice_parts=fact.get("slice_parts") or (),
+            measurement_tokens=fact.get("measurement_tokens") or (),
+            surprise=fact.get("surprise"))
     return fact
 
 
@@ -512,6 +520,23 @@ def test_id_and_scope_rebuild_agreement():
     fact2 = mk()
     fact2["id"] = "du:0000320193-24-000123:eps:period=" + QP   # wrong driver segment
     assert "ID" in codes(check(fact2))
+
+
+def test_id_and_fact_scope_are_required_at_validation():
+    fact = mk()
+    del fact["id"]
+    assert "ID" in codes(check(fact))
+    fact2 = mk()
+    fact2["fact_scope"] = None
+    assert "ID" in codes(check(fact2))
+
+
+def test_garbage_date_types_reject_without_crash():
+    got = check(mk(gp_start_date=123))
+    assert got and all(x.action in ("REJECT", "PARK") for x in got)
+    fact = mk()
+    fact["slice_parts"] = "not-a-list"               # corrupted AFTER the id was built
+    assert "ID" in codes(check(fact))                # rebuild fails cleanly, never crashes
 
 
 def test_position_boundaries_and_open_shapes():

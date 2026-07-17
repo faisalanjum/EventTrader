@@ -68,10 +68,12 @@ def dec_canon(value):
 
 def num_canon(value):
     """Canonical decimal string for ANY sanctioned numeric input. Floats cross the
-    bridge via repr + a 12-significant-digit quantize — kills IEEE artifacts
-    (0.1+0.2 -> '0.3') while provably preserving every source-stated financial value
-    (nothing source-stated carries >12 significant digits). Non-floats go straight
-    to the strict dec_canon."""
+    bridge via repr + a 15-significant-digit quantize: 15 digits IS the double's own
+    faithful precision, so this kills IEEE representation artifacts (0.1+0.2 -> '0.3')
+    while provably never merging two values a float itself can distinguish (verified:
+    13-digit exact integers stay distinct; 12 digits merged them — review round 4).
+    Non-floats go straight to the strict dec_canon ('floats banned' = BUILD §5's
+    approved input discipline for the strict canonicalizer)."""
     if isinstance(value, bool):
         raise IdLawError("bool is not a number")
     if isinstance(value, float):
@@ -79,7 +81,7 @@ def num_canon(value):
             raise IdLawError(f"non-finite number: {value!r}")
         d = Decimal(repr(value))
         if d != 0:
-            d = d.quantize(Decimal(1).scaleb(d.adjusted() - 11))
+            d = d.quantize(Decimal(1).scaleb(d.adjusted() - 14))
         return dec_canon(str(d))
     return dec_canon(value)
 

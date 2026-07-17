@@ -261,14 +261,32 @@ def test_series_unit_prior_must_be_exactly_one():
 
 
 def test_text_signature_drift_never_mints_a_sibling():
+    # THE one normalizer governs text comparison: case, spacing AND punctuation drift
     g_id = f"du:{SRC}:revenue_guidance:period={QP}"
     existing = mk(level=None, id=g_id, driver_name="revenue_guidance",
-                  state="unknown", value_text="Similar to  Last Year",
+                  state="unknown", value_text="Similar-To, Last Year!",
                   series_unit=None, created="x", company_confirmed=True)
     new = mk(level=None, id=g_id, driver_name="revenue_guidance", state="unknown",
              value_text="similar to last year", company_confirmed=True)
     res = plan_event_write([new], FakeGraph([existing]))
     assert res[0].outcome in ("noop", "updated")     # equal canonically — never a member
+
+
+def test_deduped_results_inherit_the_survivor_final_id():
+    sib = mk(level=100.0, series_unit="m_usd", created="x")
+    a = mk(level=999.0, quote="alpha")
+    b = mk(level=999.0, quote="beta")                # exact duplicate of a's signature
+    res = plan_event_write([a, b], FakeGraph([sib]))
+    by_outcome = {r.outcome: r for r in res}
+    survivor, dup = by_outcome["created_member"], by_outcome["deduped"]
+    assert "|quote_hash=" in survivor.fact_id
+    assert dup.fact_id == survivor.fact_id           # the ledger sees the REAL node
+    assert "created_member" in dup.reason
+
+
+def test_missing_id_is_a_defined_error_not_a_crash():
+    with pytest.raises(WriterError, match="valid id"):
+        plan_event_write([{"quote": "x"}], FakeGraph())
 
 
 def test_stored_node_is_exactly_the_24_fields_members_included():
