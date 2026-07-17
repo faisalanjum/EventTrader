@@ -1,0 +1,1949 @@
+<meta charset="utf-8">
+<title>The Driver Design — every decision, at a glance</title>
+<style>
+:root{
+  --bg:#fbfaf8; --panel:#fff; --ink:#14110e; --mut:#6b625a; --line:#e6e0d8;
+  --old:#b4402f; --new:#1f7a4d; --oldbg:#fdf1ef; --newbg:#eef8f2;
+  --acc:#8a5a2b; --accbg:#fdf6ec; --chip:#f0ebe3;
+  --warn:#8a6d1f; --warnbg:#fdf8e8;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#12100e; --panel:#1a1714; --ink:#eee8e0; --mut:#9a8f84; --line:#2e2822;
+    --old:#f08c78; --new:#68d29b; --oldbg:#2a1a17; --newbg:#14261d;
+    --acc:#d9a566; --accbg:#241c12; --chip:#262019;
+    --warn:#d8bd6a; --warnbg:#241f10;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#12100e; --panel:#1a1714; --ink:#eee8e0; --mut:#9a8f84; --line:#2e2822;
+  --old:#f08c78; --new:#68d29b; --oldbg:#2a1a17; --newbg:#14261d;
+  --acc:#d9a566; --accbg:#241c12; --chip:#262019;
+  --warn:#d8bd6a; --warnbg:#241f10;
+}
+:root[data-theme="light"]{
+  --bg:#fbfaf8; --panel:#fff; --ink:#14110e; --mut:#6b625a; --line:#e6e0d8;
+  --old:#b4402f; --new:#1f7a4d; --oldbg:#fdf1ef; --newbg:#eef8f2;
+  --acc:#8a5a2b; --accbg:#fdf6ec; --chip:#f0ebe3;
+  --warn:#8a6d1f; --warnbg:#fdf8e8;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:16px/1.55 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  -webkit-text-size-adjust:100%}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+code,.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.88em}
+h1,h2,h3{line-height:1.2;margin:0}
+a{color:var(--acc)}
+
+/* ---------- hero ---------- */
+.hero{padding:56px 0 28px;border-bottom:1px solid var(--line)}
+.hero h1{font-size:clamp(28px,4.6vw,46px);letter-spacing:-.02em;font-weight:800}
+.hero .lead{font-size:clamp(17px,2vw,21px);color:var(--mut);margin-top:14px;max-width:62ch}
+.stamp{display:inline-flex;gap:6px;align-items:center;font-size:12px;color:var(--mut);
+  background:var(--chip);border:1px solid var(--line);border-radius:20px;padding:5px 11px;margin-bottom:18px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--new);display:inline-block}
+
+/* ---------- nav ---------- */
+.jump{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line);
+  padding:9px 0;margin-bottom:8px}
+.jump .wrap{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.jump a{font-size:12.5px;text-decoration:none;color:var(--mut);padding:4px 9px;border-radius:6px;white-space:nowrap}
+.jump a:hover{background:var(--chip);color:var(--ink)}
+#themer{margin-left:auto;border:1px solid var(--line);background:var(--panel);color:var(--mut);
+  border-radius:6px;padding:4px 9px;font-size:12.5px;cursor:pointer}
+
+/* ---------- sections ---------- */
+section{padding:44px 0;border-bottom:1px solid var(--line)}
+.sec-h{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;margin-bottom:6px}
+.sec-h h2{font-size:clamp(21px,2.6vw,28px);letter-spacing:-.01em;font-weight:750}
+.sec-n{font:600 12px/1 ui-monospace,monospace;color:var(--acc);background:var(--accbg);
+  border:1px solid var(--line);border-radius:5px;padding:5px 7px;white-space:nowrap}
+.sec-sub{color:var(--mut);font-size:15px;margin:0 0 22px;max-width:70ch}
+
+/* ---------- id chips ---------- */
+.idchip{display:inline-block;font:600 11px/1 ui-monospace,monospace;color:var(--acc);
+  background:var(--accbg);border:1px solid var(--line);border-radius:4px;padding:4px 6px;
+  white-space:nowrap;vertical-align:middle}
+.chiprow{display:flex;gap:5px;flex-wrap:wrap;margin:10px 0 0}
+
+/* ---------- the before/after card: the workhorse ---------- */
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(330px,1fr))}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:15px 16px}
+.card > .t{font-weight:680;font-size:15.5px;margin:9px 0 2px;letter-spacing:-.01em}
+.ba{margin:11px 0 0;border-radius:8px;overflow:hidden;border:1px solid var(--line)}
+.ba .r{display:grid;grid-template-columns:64px 1fr;align-items:start;gap:10px;padding:8px 10px}
+.ba .r + .r{border-top:1px solid var(--line)}
+.ba .b{background:var(--oldbg)}
+.ba .a{background:var(--newbg)}
+.ba .lab{font:700 10px/1.5 ui-monospace,monospace;letter-spacing:.07em}
+.ba .b .lab{color:var(--old)}
+.ba .a .lab{color:var(--new)}
+.ba .txt{font-size:13.5px}
+.ba .b .txt{color:var(--old)}
+.ba .a .txt{color:var(--new)}
+.why{font-size:13.5px;color:var(--mut);margin:10px 0 0;padding-left:11px;border-left:2px solid var(--line)}
+.why b{color:var(--ink);font-weight:640}
+
+/* ---------- misc devices ---------- */
+.note{background:var(--warnbg);border:1px solid var(--line);border-left:3px solid var(--warn);
+  border-radius:0 8px 8px 0;padding:12px 14px;font-size:14px;margin:18px 0}
+.note b{color:var(--warn)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:18px;margin:16px 0}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:7px 14px;font-size:14px;align-items:baseline}
+.kv .k{color:var(--mut);white-space:nowrap}
+.kv .v{font-weight:600}
+.pill{display:inline-block;font-size:11.5px;font-weight:650;border-radius:20px;padding:3px 9px;
+  border:1px solid var(--line);background:var(--chip);color:var(--mut);white-space:nowrap}
+.pill.no{background:var(--oldbg);color:var(--old)}
+.pill.yes{background:var(--newbg);color:var(--new)}
+figure{margin:16px 0}
+pre{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:14px;
+  overflow-x:auto;font-size:12.5px;line-height:1.5;margin:0}
+figcaption{font-size:12.5px;color:var(--mut);margin-top:7px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+.scroll{overflow-x:auto;border:1px solid var(--line);border-radius:9px;background:var(--panel)}
+th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);font-weight:700;
+  white-space:nowrap;background:var(--chip)}
+tr:last-child td{border-bottom:0}
+td.no{color:var(--old)}
+td.yes{color:var(--new)}
+.step{display:grid;grid-template-columns:30px 1fr;gap:12px;align-items:start;margin:0 0 13px}
+.num{width:30px;height:30px;border-radius:50%;background:var(--accbg);border:1px solid var(--line);
+  color:var(--acc);font:700 12px/28px ui-monospace,monospace;text-align:center}
+.step .t{font-weight:660;font-size:14.5px}
+.step .d{font-size:13.5px;color:var(--mut)}
+footer{padding:40px 0 64px;color:var(--mut);font-size:13px}
+@media(max-width:560px){.grid{grid-template-columns:1fr}.ba .r{grid-template-columns:52px 1fr}}
+</style>
+
+<div class="jump"><div class="wrap">
+  <a href="#top">Top</a>
+  <a href="#law">The one law</a>
+  <a href="#shape">Shape</a>
+  <a href="#name">Naming</a>
+  <a href="#types">Types</a>
+  <a href="#id">Identity</a>
+  <a href="#units">Units</a>
+  <a href="#contract">24 fields</a>
+  <a href="#xbrl">XBRL</a>
+  <a href="#read">Read</a>
+  <a href="#ba">42 before/after</a>
+  <a href="#od">21 decisions</a>
+  <a href="#rulings">Rulings</a>
+  <a href="#refresh">Refresh</a>
+  <a href="#dead">Graveyard</a>
+  <button id="themer">◐</button>
+</div></div>
+
+<div id="top" class="hero"><div class="wrap">
+  <div class="stamp"><span class="dot"></span> certified at commit 5d0bd41 · reader-tested 10/10 · 2026-07-16</div>
+  <h1>One index card per cause.<br>Everything else is a rule protecting it.</h1>
+  <p class="lead">The whole Driver design, decision by decision — what we believed before,
+  what we decided instead, and why. No wall of text: every rule is one card.</p>
+</div></div>
+
+<section id="law"><div class="wrap">
+  <div class="sec-h"><span class="sec-n">§1</span><h2>The one law everything bends around</h2></div>
+  <p class="sec-sub">If you remember one thing, this is it. Every other rule exists to serve it.</p>
+
+  <div class="panel">
+    <div class="ba">
+      <div class="r b"><span class="lab">MERGE</span><span class="txt"><b>Two different meanings glued into one driver.</b>
+        The evidence is now mixed. You cannot tell which quote meant which thing. <b>Permanent.</b></span></div>
+      <div class="r a"><span class="lab">SPLIT</span><span class="txt"><b>One meaning kept as two drivers.</b>
+        Ugly, findable, joinable later with a reversible link. <b>Repairable.</b></span></div>
+    </div>
+    <p class="why">The two mistakes are <b>not equal</b>, so the system is deliberately lopsided:
+    <b>when unsure, keep them separate.</b> Nothing is ever deleted or re-keyed to make history look tidy.</p>
+    <div class="chiprow"><span class="idchip">§1</span><span class="idchip">FS-26</span><span class="idchip">OD-18</span></div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="chiprow"><span class="idchip">§1</span></div>
+      <div class="t">What a driver is</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">NOT</span><span class="txt">a metric, a number, a company's business line</span></div>
+        <div class="r a"><span class="lab">IS</span><span class="txt">one reusable <b>cause</b> — a thing that can move a stock, written once, shared by every company</span></div>
+      </div>
+      <p class="why"><b>Reusable is the point.</b> <code>fed_rate</code> means the same thing for a bank
+      and an airline. If a company's own name leaked into it, it couldn't be shared.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">§0</span><span class="idchip">§2</span></div>
+      <div class="t">Driver vs DriverUpdate — the split that makes it work</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">DRIVER</span><span class="txt">the <b>class</b>. Name + permanent kind + family links + birth evidence. Never changes.</span></div>
+        <div class="r a"><span class="lab">UPDATE</span><span class="txt">the <b>fact</b>. One real occurrence, in one source event, with values + a quote.</span></div>
+      </div>
+      <p class="why">Think index card vs. sightings. The card <code>revenue</code> exists once.
+      Every 8-K that mentions revenue adds a <b>sighting</b>, never a new card.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">§1</span><span class="idchip">FS-26</span></div>
+      <div class="t">Recovery is always possible — by design</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">merge two drivers → the losing name is gone forever</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">both survive; a <b>reversible</b> <code>SAME_AS</code> link says "these are the same"</span></div>
+      </div>
+      <p class="why">A link can be cut. A deletion can't. So the system links instead of deleting —
+      that's what makes over-splitting <b>cheap</b> and keeps the law honest.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">§1</span></div>
+      <div class="t">What the writer actually promises</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">CLAIM</span><span class="txt">"over-merge is impossible" — <b>we never claim this</b></span></div>
+        <div class="r a"><span class="lab">CLAIM</span><span class="txt">"conflicting values never silently overwrite each other" — <b>this</b> is guaranteed</span></div>
+      </div>
+      <p class="why">Honest scope. Judging whether two <i>meanings</i> match is a judgment call with a
+      measured error rate, guarded by judges and audits — not a proof. The <b>storage</b> guarantee is absolute.</p>
+    </div>
+  </div>
+</div></section>
+
+<section id="shape"><div class="wrap">
+  <div class="sec-h"><span class="sec-n">§2</span><h2>The shape: what connects to what</h2></div>
+  <p class="sec-sub">Five node kinds. One direction of travel. A quote goes in the left, a series comes out the right.</p>
+
+  <figure><pre>
+   SOURCE EVENT                                                  READ
+   (one 8-K, one call)                                          (a series)
+        │                                                           ▲
+        ▼                                                           │
+   ┌──────────┐   OF_DRIVER    ┌────────┐   SAME_AS ↔ reversible    │
+   │  Driver  │◄───────────────│ Driver │──────────────────────┐    │
+   │  Update  │                │ (card) │   BASE_METRIC ──►    │    │
+   │  (fact)  │                └────────┘   (family)      revenue   │
+   └──────────┘                                                     │
+        │  FROM_SOURCE ──► the document        eps_guidance ────────┘
+        │  HAS_PERIOD  ──► a real date window  eps_surprise  all point home
+        └────────────────────────────────────────────────────────────
+  </pre><figcaption>Facts hang off cards. Cards link to cards. Nothing floats.</figcaption></figure>
+
+  <div class="grid">
+    <div class="card">
+      <div class="chiprow"><span class="idchip">§2</span><span class="idchip">FS-01</span></div>
+      <div class="t">Every fact is chained to a real document</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">a fact could exist because a model inferred it</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">every fact carries a <b>verbatim quote</b> + a link to the source event. No quote → no fact.</span></div>
+      </div>
+      <p class="why">This is what makes the whole thing auditable. You can always ask a number
+      <b>"who said you?"</b> and get a sentence back.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">§2</span><span class="idchip">XC-01</span></div>
+      <div class="t">XBRL at the boundary — the exact conditional</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">LOOSE</span><span class="txt">send whatever tags you have; fragments fine</span></div>
+        <div class="r a"><span class="lab">EXACT</span><span class="txt">the <b>exact context always</b> · every supplied dimension carries <b>both</b> axis and member · <code>dimensions=[]</code> ONLY as a verified-empty assertion</span></div>
+      </div>
+      <p class="why"><b>Empty must mean "I checked and there were none"</b> — never "I didn't look".
+      A silent empty is a lie the reader can't detect.</p>
+    </div>
+  </div>
+</div></section>
+<section id="name"><div class="wrap">
+  <div class="sec-h"><span class="sec-n">§3</span><h2>Naming — 19 rules guarding one sentence</h2></div>
+  <p class="sec-sub">The sentence: <b>the name contains the cause only.</b> Everything the 19 rules do is
+  push something else out of the name — state, size, time, company, unit, measurement — so the card stays reusable.</p>
+
+  <figure><pre>
+  "Apple's adjusted iPhone revenue per unit rose 12% in Q3 to $42.6B"
+       │        │        │       │       │     │      │        │
+       ▼        ▼        ▼       ▼       ▼     ▼      ▼        ▼
+    company  measure-  slice   per-X   NAME  state  period   value
+     DROP      ment     ↓        ↓       ↓      ↓      ↓        ↓
+    NAME-16  fact_scope slice=  stays  revenue  Driver  HAS_    level_low
+             .measure  product: in the         Update  PERIOD  /high
+             NAME-14   iphone   name   ← the only survivor
+                       NAME-10  NAME-13
+  </pre><figcaption>One sentence, eight destinations. Only the cause reaches the name.</figcaption></figure>
+
+  <div class="grid">
+    <div class="card">
+      <div class="chiprow"><span class="idchip">NAME-01</span><span class="idchip">NAME-09</span><span class="idchip">NAME-12</span></div>
+      <div class="t">The cause, and nothing else</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt"><code>apple_iphone_revenue_rose_q3</code></span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt"><code>revenue</code> — state, direction, size, time, company, unit and quote all live elsewhere</span></div>
+      </div>
+      <p class="why">One name carries <b>one</b> cause; independent causes split.
+      Only four things may ever appear: the cause, a stated per-X denominator, a benchmark, a terminal family suffix.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">NAME-03</span></div>
+      <div class="t">Open vocabulary — the v1 death</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">v1</span><span class="txt">a fixed list of allowed driver names → <b>~82% of useful names rejected</b></span></div>
+        <div class="r a"><span class="lab">NOW</span><span class="txt">vocabulary is <b>open and source-born</b> — the world invents causes faster than we can list them</span></div>
+      </div>
+      <p class="why">This was <b>measured, not argued</b>. A closed vocabulary was built, tested, and killed.
+      It's on the graveyard list at the bottom.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">NAME-02</span></div>
+      <div class="t">One name, one meaning — no alias layer</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">keep an alias table: <code>rev</code> → <code>revenue</code>, <code>revenues</code> → <code>revenue</code>…</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">spelling/order/acronym/plural variants <b>reuse the canonical name</b>. No alias lists at all.</span></div>
+      </div>
+      <p class="why">An alias layer is a second place where meaning lives — so it's a second place to be wrong.
+      Genuine later duplicates get a reversible <code>SAME_AS</code> instead.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">NAME-04</span><span class="idchip">NAME-07</span></div>
+      <div class="t">Be as specific as the evidence allows</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">invent a broad bucket so more things can reuse it</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">use <b>all</b> the specificity the evidence supports. Never widen a name to force reuse.</span></div>
+      </div>
+      <p class="why">Forcing reuse is over-merging with extra steps. Use the familiar broad form
+      <b>only</b> when the source names no meaningful sibling or benchmark.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">NAME-05</span><span class="idchip">NAME-06</span></div>
+      <div class="t">Shape and word order</div>
+      <div class="kv">
+        <span class="k">format</span><span class="v mono">lowercase a-z 0-9 _ · starts a letter · ≥2 chars</span>
+        <span class="k">order</span><span class="v">thing/actor → detail → metric</span>
+        <span class="k">number</span><span class="v">singular by default</span>
+        <span class="k">but keep</span><span class="v mono">earnings · bookings · sales · savings · futures · receivables</span>
+      </div>
+      <p class="why">Standard plural financial terms stay plural; so does any plural whose <b>meaning</b> differs
+      (<code>product_returns</code>). <code>booking</code> vs <code>bookings</code> may genuinely differ → keep separate.
+      That list is <b>illustrative</b> — the two-part test decides.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">NAME-08</span></div>
+      <div class="t">A loss is not a thing — it's a negative number</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt"><code>net_loss</code> and <code>net_income</code> as two drivers</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">one signed <code>net_income</code>. A loss is its <b>negative region</b>.</span></div>
+      </div>
+      <p class="why">Otherwise a company's series <b>breaks in half</b> the quarter it dips below zero.
+      Same for deficits and negative margins. Standard financial phrases stay whole.</p>
+    </div>
+  </div>
+
+  <div class="note"><b>The hardest boundary in the whole design ↓</b> — is the thing in the name, or is it a slice?
+  Get it wrong and either the card stops being reusable, or two different meanings collide.</div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="chiprow"><span class="idchip">NAME-10</span><span class="idchip">NAME-11</span></div>
+      <div class="t">Your own parts → slice. Outside causes → name.</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt"><code>iphone_revenue</code>, <code>europe_revenue</code>, <code>aws_revenue</code> — a new card per part, per company, forever</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt"><code>revenue</code> + <code>slice=product:iphone</code> — one shared card, sliced</span></div>
+      </div>
+      <p class="why"><b>The test: "revenue/earnings from ___".</b> If ___ is the company's own measured population
+      (segment, product, geography, customer group, channel, owned entity) → slice.
+      If ___ is an outside actor <b>causing</b> the outcome → it stays in the name.</p>
+      <div class="chiprow"><span class="pill yes">slice: your segments</span><span class="pill no">name: <code>fed_rate</code></span></div>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">NAME-11</span><span class="idchip">OD-3</span></div>
+      <div class="t">The local role test — and its default</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">GUESS</span><span class="txt">unclear whether it's a part or a cause → pick one and hope</span></div>
+        <div class="r a"><span class="lab">RULE</span><span class="txt">unclear role, or a vague stripped fragment → <b>keep it in the name</b></span></div>
+      </div>
+      <p class="why">The default falls to the <b>safe</b> side: a too-specific name over-splits (repairable);
+      a wrong slice collides two meanings (permanent). Two sharp edges: a customer is a slice
+      <b>only</b> if it's your own customer population, and <b>there is no vendor slice kind</b>.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">OD-17</span></div>
+      <div class="t">Portions stay in the name</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt"><code>current_rpo</code> ≡ <code>rpo</code> — same thing, one card</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt"><code>current_rpo</code> ≠ <code>rpo</code> — <b>different drivers</b></span></div>
+      </div>
+      <p class="why">Words like <b>current, funded, fee-earning</b> change <b>which population</b> is measured —
+      that's a different thing, not a flavor. Drop the slice <b>only</b> for the true consolidated population;
+      network/systemwide/GMV subsets stay qualified.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">OD-17</span><span class="idchip">Q2</span></div>
+      <div class="t">Eliminations are neither name nor slice</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">store <code>intersegment_eliminations</code> as if it were a real business thing</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt"><b>drop and log</b> the accounting artifact — keep the real metric's fact</span></div>
+      </div>
+      <p class="why">An elimination is bookkeeping plumbing, not a cause.
+      <b>Owner ruling Q2 (2026-07-15):</b> when a fact's measured population <i>is</i> an accounting construct,
+      the frozen packet's <b>park + log</b> stands. Prose citing a construct as its mechanism writes on the real metric.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">NAME-13</span></div>
+      <div class="t">Per-X lives in the name — never in the unit</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt"><code>oil_price</code> with unit <code>usd_per_barrel</code></span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt"><code>oil_price_per_barrel</code> with unit <code>usd</code> — the base unit</span></div>
+      </div>
+      <p class="why">Per-barrel and per-gallon are <b>different questions</b>, so they're different drivers —
+      and <b>never</b> <code>SAME_AS</code> each other. Never invent a denominator the source didn't state.
+      <code>eps</code> is the one familiar exception.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">NAME-14</span></div>
+      <div class="t">Adjusted / diluted are not different causes</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt"><code>adjusted_eps</code> vs <code>eps</code> — two cards</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">one <code>eps</code>; "adjusted" goes to <code>fact_scope.measurement</code></span></div>
+      </div>
+      <p class="why">Same cause, different lens. <b>The trap:</b> a missing measurement never means GAAP —
+      it means <b>nobody said</b>. Assuming GAAP would invent a fact.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">NAME-15</span><span class="idchip">NAME-16</span></div>
+      <div class="t">Banned from names — and the carve-outs</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">OUT</span><span class="txt">state words · direction · change nouns · the reporting company · period tokens · numbers/units · source labels · vendor metadata · XBRL prefixes · metaphors · bare categories · glue</span></div>
+        <div class="r a"><span class="lab">IN</span><span class="txt"><code>fed_rate</code> · <code>aws_outage</code> · <code>tiktok_ban</code> — an outside party whose own action <b>is</b> the cause</span></div>
+      </div>
+      <p class="why">Two more carve-outs that trip people: stable nouns ending -ing/-ed are fine
+      (<code>pricing</code>, <code>operating_margin</code>), and a sentiment word is legal <b>only</b> inside a
+      specific reusable force — <code>glp1_pressure</code> passes, bare "pressure" never does.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">NAME-17</span><span class="idchip">OD-21</span></div>
+      <div class="t">Two suffixes that mean something</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">a surprise driver per comparison kind</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt"><b>one</b> <code>eps_surprise</code> card holds all three types, in the <code>surprise=</code> slot</span></div>
+      </div>
+      <p class="why">Terminal <code>_guidance</code>/<code>_surprise</code> stay in the name <b>and</b> permanently fix the kind.
+      They link to the base metric with <code>BASE_METRIC</code> — <b>never</b> <code>SAME_AS</code>
+      (a guide is not a synonym of the thing it guides). Only a terminal suffix counts; strip it once.</p>
+      <div class="chiprow"><span class="pill">actual_vs_consensus</span><span class="pill">actual_vs_guidance</span><span class="pill">guidance_vs_consensus</span></div>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">NAME-18</span></div>
+      <div class="t">The six-part gate for a new card</div>
+      <div class="kv">
+        <span class="k">1</span><span class="v">no existing driver has this meaning</span>
+        <span class="k">2</span><span class="v">every name rule passes</span>
+        <span class="k">3</span><span class="v">nouns are source- or catalog-grounded</span>
+        <span class="k">4</span><span class="v">≥1 causal evidence atom exists</span>
+        <span class="k">5</span><span class="v">the result is reusable</span>
+        <span class="k">6</span><span class="v">the meaning is unambiguous</span>
+      </div>
+      <p class="why">All six, or no card. <b>Vague evidence is skipped</b> — not guessed at, not parked for later hope.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">NAME-19</span></div>
+      <div class="t">How naming rules may change</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">hit a bad restaurant name → add a restaurant example to the rules</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">change a <b>general principle</b>, or change nothing</span></div>
+      </div>
+      <p class="why">Sector examples <b>overfit</b> — a rule taught on restaurants quietly fails on banks.
+      This was learned the hard way; a tested extra clause did exactly that (DU-07).</p>
+    </div>
+  </div>
+</div></section>
+
+<section id="types"><div class="wrap">
+  <div class="sec-h"><span class="sec-n">§4</span><h2>Four kinds, four state lists, one birth</h2></div>
+  <p class="sec-sub">Every card is permanently one of four kinds. The kind decides which states are legal
+  and which fields are forbidden. It's stamped once and can never change.
+  The state lists below are the <b>exact</b> vocabularies (<span class="idchip">DU-08</span>..<span class="idchip">DU-12</span>) —
+  <code>driver_state</code> lives on the fact, never in the driver's name, and <b>code hard-fails a state outside its lane</b>.</p>
+
+  <div class="scroll"><table>
+    <tr><th>kind</th><th>the card is about…</th><th>legal states</th></tr>
+    <tr><td><span class="idchip">metric</span></td>
+        <td>a standing variable you could <b>read again later</b> — number <i>or</i> condition (weather, sentiment, labor, brand)</td>
+        <td class="mono">increased · decreased · unchanged · mixed · reported · persists · unknown</td></tr>
+    <tr><td><span class="idchip">guidance</span></td>
+        <td>the company's <b>own forward outlook</b></td>
+        <td class="mono">introduced · raised · lowered · reaffirmed · withdrawn · unknown</td></tr>
+    <tr><td><span class="idchip">surprise</span></td>
+        <td>a company value vs a <b>cross-party expectation</b></td>
+        <td class="mono">beat · in_line · missed · unknown</td></tr>
+    <tr><td><span class="idchip">action_event</span></td>
+        <td>a <b>discrete happening</b></td>
+        <td class="mono">at_risk · announced · occurred · continued · resolved · canceled · suspended · rumored · failed · unknown</td></tr>
+  </table></div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="chiprow"><span class="idchip">DU-06</span></div>
+      <div class="t">The persistence test — metric or action?</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">ASK</span><span class="txt">"is it a number?" — <b>wrong question</b></span></div>
+        <div class="r a"><span class="lab">ASK</span><span class="txt">"between two events, is there a standing level I could <b>re-read</b>?" Yes → metric. No → action.</span></div>
+      </div>
+      <p class="why">"Is it a number" fails both ways: <b>weather</b> is a metric with no number;
+      <b>a $2B buyback</b> has a number but is an action. Dual framing is fine —
+      <code>dividend</code> is an action, <code>dividend_per_share</code> is a metric.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">DU-05</span><span class="idchip">DU-07</span></div>
+      <div class="t">The surprise definition — three near-misses it excludes</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">NOT</span><span class="txt">vs a <b>prior actual</b> → that's a metric change<br>a new guide vs <b>own prior guide</b> → that's a guidance movement</span></div>
+        <div class="r a"><span class="lab">IS</span><span class="txt">a delivered actual <b>or</b> a promised guide, vs a <b>cross-party</b> expectation (Street, or own prior guide for an actual)</span></div>
+      </div>
+      <p class="why">"Cross-party" is the whole idea — a surprise needs <b>two parties</b> disagreeing.
+      You beating your own last quarter isn't a surprise; it's growth.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">DU-07</span></div>
+      <div class="t">The prompt is frozen, word for word</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">improve the classifier prompt by adding a helpful clause or example</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">copy it <b>verbatim</b>. Add nothing.</span></div>
+      </div>
+      <p class="why">Not superstition — <b>a tested extra clause overfit</b>. The prompt text is stored in the
+      rulebook as law, not as a suggestion.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">MF-01</span></div>
+      <div class="t">The type is permanent</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">re-type a driver later when catalog work learns better</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">stamped once at admission. A driver with no type <b>cannot accept a fact</b>. Fact-bearing → never re-typed.</span></div>
+      </div>
+      <p class="why">Re-typing would silently rewrite the meaning of every fact already stored underneath it.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">OD-1</span></div>
+      <div class="t">Suffix admission — ask twice, both must say yes</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">name ends in <code>_guidance</code> → it's guidance. Done.</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">strip <b>one</b> terminal suffix, then ask the one meaning question <b>twice, independently</b>. Any NO / UNCLEAR / disagreement <b>blocks</b>.</span></div>
+      </div>
+      <p class="why">Admits <code>bookings_guidance</code>. Rejects <code>fda_guidance</code> — that's a document, not a guided metric.
+      Mid-name words never count (<code>fda_guidance_issuance</code>). Stacking is invalid (<code>revenue_guidance_surprise</code>).
+      The verdict is <b>frozen in a memo</b> — refreshes reuse it and never re-roll the dice.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">OD-2</span></div>
+      <div class="t">Metric must prove itself — action is the safe default</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">classifier says "metric" → stamp metric</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">metric must pass a <b>challenge</b> with a quoted phrase. Anything less → <code>action_event</code> + a counted warning.</span></div>
+      </div>
+      <p class="why">Asymmetric on purpose: a wrong <code>metric</code> invents a series that was never measured;
+      a wrong <code>action_event</code> is visible and blocks less. <b>Owner's own worked examples:</b>
+      <code>buyback</code> → action · <code>dividend</code> → action · <code>bookings</code> → metric <i>only</i> if the quote proves a standing measure.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">OD-2</span><span class="idchip">F2</span></div>
+      <div class="t">The family gate — you can't guide an unproven thing</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt"><code>buyback_guidance</code> → <code>buyback</code>. Fine, both exist.</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">a family may attach <b>only</b> to a base that is metric <b>AND proven</b> — deterministically, by memo, or as an OD-1 latent anchor</span></div>
+      </div>
+      <p class="why">Otherwise a bad metric stamp <b>propagates</b> into a whole family of guidance and
+      surprise cards hanging off a thing that was never a metric.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">§4.2</span></div>
+      <div class="t">Born complete — no empty cards</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">seed the catalog with names first; facts arrive later</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">every new driver arrives <b>with its first proven fact</b>, in one object</span></div>
+      </div>
+      <p class="why">Name-only seeding is rejected outright. <b>One real fact in one event is enough</b> —
+      recurrence was never a gate. The <b>only</b> legal empty node is a latent base anchor.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">OD-1</span></div>
+      <div class="t">The latent base anchor — the one exception</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">PROBLEM</span><span class="txt"><code>eps_guidance</code> needs a base, but no <code>eps</code> fact has ever arrived</span></div>
+        <div class="r a"><span class="lab">FIX</span><span class="txt">an empty <code>eps</code> anchor, hidden from reuse menus — <b>graduates automatically</b> on an exact-name match</span></div>
+      </div>
+      <p class="why">Exact means exact: <code>net_sales</code> <b>never</b> graduates a latent <code>revenue</code>.
+      That's a normal <code>SAME_AS</code> question, and fuzzy matching here would be an over-merge with a friendly face.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">Q5</span><span class="idchip">OD-2</span></div>
+      <div class="t">The first-fact pin — and who's exempt</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">RULE</span><span class="txt">a bare-named card's first fact must have a real state — <code>unknown</code> → park</span></div>
+        <div class="r a"><span class="lab">EXEMPT</span><span class="txt">suffix cards (<code>_guidance</code>/<code>_surprise</code>) — their lane is <b>already proven</b> by OD-1's two checks, so they may be born <code>unknown</code></span></div>
+      </div>
+      <p class="why"><b>Owner ruling Q5.</b> A bare name born from an unreadable fact is a coin-flip.
+      A suffix name isn't — it already survived two independent checks. This pin applies at <b>first birth only</b>.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">OD-15</span></div>
+      <div class="t">Two channels, same instant, near-synonyms</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">FEAR</span><span class="txt">build a locking / serialization layer so races can't happen</span></div>
+        <div class="r a"><span class="lab">ACCEPT</span><span class="txt">near-synonym races are <b>normal over-splits</b> — repairable later by <code>SAME_AS</code>. No lock layer exists or is needed.</span></div>
+      </div>
+      <p class="why">Straight from the one law: the race produces the <b>safe</b> error.
+      Exact duplicates already converge for free through name uniqueness + <code>MERGE</code>.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">DU-13</span><span class="idchip">§4.3</span></div>
+      <div class="t">Good and bad never decide a state</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">"above expectations" → <code>beat</code></span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">position words are <b>never</b> automatic favorability — they take the polarity test</span></div>
+      </div>
+      <p class="why">Costs above expectations is a <b>miss</b>. "Beat the budget" means spending <b>less</b>.
+      Mapping above→beat was the original bug; the fix is that <code>beat</code>/<code>missed</code> are
+      meaning judgments from the whole phrase — negation-, polarity- and scope-aware.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">DU-13</span><span class="idchip">OD-13</span></div>
+      <div class="t">A wordless surprise needs a polarity proof</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">GUESS</span><span class="txt">no favorability wording → assume higher is better</span></div>
+        <div class="r a"><span class="lab">PROVE</span><span class="txt">a transient, discarded proof: <code>polarity</code> · <code>basis</code> · <code>evidence</code> · one sentence. Invalid or absent → <code>unknown</code>.</span></div>
+      </div>
+      <p class="why"><code>metric_meaning</code> is allowed <b>only</b> where the good direction has no mainstream
+      counter-story — capex, R&D, inventory, hiring and cash-burn all have one, so they need
+      <code>source_framing</code>. Circular, market-reaction, strategy-guess and isolated-keyword proofs are all rejected.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">DU-13</span></div>
+      <div class="t">Code corrects the producer on in_line</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">PRODUCER</span><span class="txt">says <code>beat</code>, but the value sits strictly <b>inside</b> a closed expectation range</span></div>
+        <div class="r a"><span class="lab">CODE</span><span class="txt">overrides to <code>in_line</code> — including a guide range that contains the consensus point</span></div>
+      </div>
+      <p class="why">A clean split: <b>code</b> owns the mechanical geometry (inside/outside/at-boundary),
+      the <b>model</b> owns meaning. Where geometry alone is decisive, code wins.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">DU-13</span></div>
+      <div class="t">The polarity monitor reports — it never blocks</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">hard-fail any fact whose polarity contradicts the driver's usual direction</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">an <b>offline monitor flags</b> it to the repair lane. No write-block, no human queue.</span></div>
+      </div>
+      <p class="why">A hard-fail here would reject <b>correct</b> lower-is-better facts —
+      that <i>was</i> the original bug. So the safety net reports instead of judging.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">DU-12</span></div>
+      <div class="t">Action states — the terminal four</div>
+      <div class="kv">
+        <span class="k mono">failed</span><span class="v">involuntary — incl. declining an offer never committed to</span>
+        <span class="k mono">canceled</span><span class="v">the company's <b>own voluntary</b> withdrawal</span>
+        <span class="k mono">resolved</span><span class="v">a settled two-sided dispute</span>
+        <span class="k mono">occurred</span><span class="v">completion</span>
+      </div>
+      <p class="why">Classify the <b>latest stage</b> of one action, not each mention.
+      <code>rumored</code> survives a denial. <code>at_risk</code> needs a <b>specific</b> flagged threat —
+      generic risk boilerplate is dropped. A threat stays <code>at_risk</code> until it happens, then <code>failed</code>.</p>
+    </div>
+  </div>
+</div></section>
+<section id="id"><div class="wrap">
+  <div class="sec-h"><span class="sec-n">§5</span><h2>Identity — what makes two facts the same fact</h2></div>
+  <p class="sec-sub">Get this wrong and you either overwrite a real number or store the same number twice.
+  The answer: identity is <b>computed by code</b> from three things, and never includes who produced it.</p>
+
+  <figure><pre>
+   id  =  du : {source_id} : {driver} : {fact_scope}
+                    │            │           │
+              the event      the card    everything that makes
+                                          this fact DISTINCT
+                                          inside that event
+
+   fact_scope, in this exact order — absent slots vanish:
+
+     period=gp_2026-06-28_2026-09-27
+    |slice=geography:china;segment:taco_bell    ← sorted, ";" joined
+    |measurement=adjusted,constant_currency     ← sorted, "," joined
+    |surprise=actual_vs_consensus               ← surprise lane ONLY
+    |quote_hash=&lt;full sha256&gt;                   ← rare collisions ONLY
+  </pre><figcaption>Notice what's absent: the model, the producer, the run. Identity can't depend on who was asked.</figcaption></figure>
+
+  <div class="grid">
+    <div class="card">
+      <div class="chiprow"><span class="idchip">FS-01</span></div>
+      <div class="t">The producer is never in the key</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">the fact's ID includes which model/producer made it</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">identity = <b>event + driver + fact_scope</b>. Nothing else.</span></div>
+      </div>
+      <p class="why">Otherwise swapping models <b>duplicates your whole history</b>.
+      Two channels reading the same 8-K must land on the <b>same ID</b> — that's what makes them converge instead of collide.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">FS-27</span></div>
+      <div class="t">Never <code>slice=total</code></div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">whole-company → write <code>slice=total</code></span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">whole-company → <b>omit the slot entirely</b></span></div>
+      </div>
+      <p class="why">"Total" is a word companies also use for real sub-populations —
+      so it would collide with a genuine slice. Absence is unambiguous; a word isn't.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">OD-21</span></div>
+      <div class="t">The surprise type is composed by code, before fusion</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">GUESS</span><span class="txt">period already ended → must be an actual</span></div>
+        <div class="r a"><span class="lab">COMPOSE</span><span class="txt"><code>surprise_basis_hint</code> (actual|guidance) <b>×</b> <code>comparison_baseline</code> (consensus|previous_guidance)</span></div>
+      </div>
+      <p class="why"><b>Never infer basis from whether a period ended</b> — companies guide on ended periods
+      all the time. Required on surprise facts, forbidden everywhere else.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">§5.1</span></div>
+      <div class="t">Every surprise needs a home, in the same event</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">"results beat expectations" → store a surprise</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">ungrounded → <b>park</b>. A surprise must sit beside its own home fact.</span></div>
+      </div>
+      <p class="why">Six things must match: <b>family, period, period scope, slice, measurement, normalized value/unit</b>.
+      An actual surprise <b>before its period ends</b> is rejected outright. A missing home
+      re-extracts <b>the whole event</b> — never an orphan-only replay.</p>
+      <div class="chiprow"><span class="pill">actual → metric home</span><span class="pill">gvc → guidance home</span></div>
+    </div>
+  </div>
+
+  <div class="note"><b>The collision problem:</b> one event says a number twice, differently. Which one is the fact?
+  Guessing = silently overwriting a real number. The answer below is deliberately long, because every case is spelled out.</div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="chiprow"><span class="idchip">OD-8</span><span class="idchip">replaces FS-03</span><span class="idchip">FACT-12</span></div>
+      <div class="t">Hash the values — not the words</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">FS-03</span><span class="txt">hash the <b>quote text</b>, truncated (the field is still called <code>quote_hash</code>)</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">hash exactly <b>ten value slots</b>. Quote text, state, producer, source type, date and XBRL are all <b>excluded</b>.</span></div>
+      </div>
+      <p class="why">Two sentences can word the <b>same number</b> differently — hashing words would split one fact in two.
+      The name stayed for compatibility; the meaning changed completely.</p>
+      <div class="chiprow">
+        <span class="idchip">level_low</span><span class="idchip">level_high</span><span class="idchip">level_unit</span>
+        <span class="idchip">change_value</span><span class="idchip">change_unit</span><span class="idchip">comparison_low</span>
+        <span class="idchip">comparison_high</span><span class="idchip">comparison_baseline</span>
+        <span class="idchip">value_text</span><span class="idchip">conditions</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">OD-8</span></div>
+      <div class="t">The preimage is pinned to the byte</div>
+      <div class="kv">
+        <span class="k">shape</span><span class="v">fixed-order compact JSON <b>array</b>, ASCII-escaped</span>
+        <span class="k">null</span><span class="v">null <b>≠</b> empty string</span>
+        <span class="k">text</span><span class="v">one shared normalizer</span>
+        <span class="k">decimals</span><span class="v">one canonicalizer — no exponent, no trailing zeros, <code>-0</code>→<code>0</code></span>
+        <span class="k">digest</span><span class="v">full untruncated SHA-256</span>
+      </div>
+      <p class="why">Every loose end here is a <b>future collision</b>. <code>1.50</code> vs <code>1.5</code> vs <code>1.5e0</code>
+      are one number and must produce one hash — forever, across every rewrite of the code.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">OD-8</span></div>
+      <div class="t">Input order can never decide identity</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">decide against the graph as it mutates through the batch</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">every decision reads the <b>PRE-BATCH</b> state</span></div>
+      </div>
+      <p class="why">Otherwise the same batch, shuffled, produces <b>different IDs</b> —
+      and identity that depends on arrival order isn't identity.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">OD-8</span></div>
+      <div class="t">The full ladder — every case, no guessing</div>
+      <div class="kv">
+        <span class="k">no sibling</span><span class="v">stays <b>bare</b> — <i>but</i> several pairwise-conflicting in-batch facts are <b>all hashed</b></span>
+        <span class="k">one sibling</span><span class="v">compatible → <b>fills</b> (never null-clobbers) · conflict → <b>flagged hashed</b> member</span>
+        <span class="k">many siblings</span><span class="v">exact → <b>merges</b> · conflicts with all → <b>hashed</b> · compatible-but-not-exact → <b>parks</b></span>
+        <span class="k">two competitors</span><span class="v">for one partial sibling → <b>park both</b>; a richer rerun decides</span>
+      </div>
+      <p class="why">Read the last two rows again — <b>"compatible but not exact" parks rather than guesses.</b>
+      That's the one law showing up in the plumbing: refusing to choose is always available.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">FS-04</span></div>
+      <div class="t">Who may do what — the hard line</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">MODEL</span><span class="txt">may <b>propose</b> and <b>approve</b> a <code>SAME_AS</code> or a fusion</span></div>
+        <div class="r a"><span class="lab">CODE</span><span class="txt">alone <b>applies</b> a reversible link, from an approved trace</span></div>
+      </div>
+      <p class="why">A model <b>never</b> deletes, re-keys, moves facts, or bypasses approval.
+      It can be wrong about meaning; it is never allowed to be wrong about <b>storage</b>.</p>
+    </div>
+  </div>
+
+  <div class="sec-h" style="margin-top:38px"><span class="sec-n">§5.2</span><h2>Slices — six kinds and a safe fallback</h2></div>
+  <p class="sec-sub">The token is <code>KIND:VALUE</code>. The kind comes from a plain-English test.</p>
+
+  <div class="scroll"><table>
+    <tr><th>kind</th><th>the test</th><th>example</th></tr>
+    <tr><td class="mono">segment</td><td>the company <b>operates as</b> it</td><td class="mono">segment:taco_bell</td></tr>
+    <tr><td class="mono">product</td><td>the company <b>sells</b> it</td><td class="mono">product:iphone</td></tr>
+    <tr><td class="mono">geography</td><td>the company <b>operates in</b> it</td><td class="mono">geography:china</td></tr>
+    <tr><td class="mono">customer</td><td>the company <b>sells to</b> it — its <b>own</b> customer population</td><td class="mono">customer:enterprise</td></tr>
+    <tr><td class="mono">channel</td><td><b>how</b> it sells or runs</td><td class="mono">channel:franchised</td></tr>
+    <tr><td class="mono">entity_ownership</td><td>a <b>stake it owns</b> — the least clean kind; JV/equity-method strongest</td><td class="mono">entity_ownership:jv_x</td></tr>
+    <tr><td class="mono">unknown</td><td>the safe fallback — kind unclear → <b>never guess</b></td><td class="mono">unknown:some_label</td></tr>
+  </table></div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="chiprow"><span class="idchip">FS-20</span></div>
+      <div class="t">Why the elimination guard is a list, not a regex</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">REGEX</span><span class="txt">match <code>/elimination/i</code> → also eats <code>GlobalPestElimination</code> — <b>a real business</b> (~20% false positives)</span></div>
+        <div class="r a"><span class="lab">LISTS</span><span class="txt">three frozen exact buckets — <b>~24</b> hard-exclude · <b>~241</b> provisional · <b>~3,000</b> keep</span></div>
+      </div>
+      <p class="why">A missed elimination lands in <b>keep</b> — an over-split, which is safe.
+      A regex's false positive <b>deletes a real segment</b>. Every exclusion is logged, and one that later
+      shows real activity <b>auto-demotes</b> to provisional (FS-20).</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">FS-05</span></div>
+      <div class="t">Judge an axis by its members — names lie</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">read the axis <b>name</b> to decide its kind</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">judge by its <b>members</b> — names lie <b>~20%</b> of the time</span></div>
+      </div>
+      <p class="why">The axis→kind table is <b>frozen in code</b> and refreshed only by a governed offline pass.
+      At runtime, three outcomes: known slice axis → mapped · known non-slice → skip · unknown → <b>PROVISIONAL</b>, never silently dropped.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">FS-18</span></div>
+      <div class="t">Code dedupes exactly — or not at all</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">near-match snap: <code>iPhone</code> ≈ <code>iPhones</code> ≈ <code>iphone_products</code></span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt"><b>exact after normalization</b> folds in. Never a fuzzy snap.</span></div>
+      </div>
+      <p class="why">The split again: <b>code</b> does exact, <b>the producer</b> does meaning —
+      it's shown existing values first and coins a new one when unsure. The model assigns; it <b>never merges two existing identities</b>.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">FS-06</span></div>
+      <div class="t">The menu is cut at public time</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">offer every slice value we know today</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">write menus cut at the <b>event's public time</b> — prior public 10-Q/10-K members only</span></div>
+      </div>
+      <p class="why">Otherwise the past gets labelled with the future and every backtest is quietly poisoned.
+      <b>Naming has no menu at all</b>; repair may see full history.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">OD-4</span><span class="idchip">FS-22</span></div>
+      <div class="t">The recurrence rule is dead</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">FS-22</span><span class="txt">a slice value must recur across companies to count</span></div>
+        <div class="r a"><span class="lab">OD-4</span><span class="txt"><b>retired.</b> There is no slice-value recurrence rule.</span></div>
+      </div>
+      <p class="why">One company's real segment is real on its <b>first</b> mention.
+      Popularity was never evidence. (FS-23, cross-company slice comparison, stays <b>open</b> — and must exclude residuals.)</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">FS-19</span><span class="idchip">FS-21</span></div>
+      <div class="t">Slice values are first-write immutable</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">a "confident alias" merge cleans up label drift</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">immutable. The only grouping is <b>read-time</b>, company-scoped, <b>member-anchored</b>.</span></div>
+      </div>
+      <p class="why">Both labels' facts must share the <b>exact same axis/member pair</b> — real structural proof.
+      <b>Prose-only drift stays split</b>, because prose is exactly where a confident merge goes wrong.</p>
+    </div>
+  </div>
+
+  <div class="sec-h" style="margin-top:38px"><span class="sec-n">§5.3</span><h2>Measurement — the safety sink</h2></div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="chiprow"><span class="idchip">FS-25</span></div>
+      <div class="t">Open tokens, code-normalized</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">a closed enum of allowed measurement words</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">open, source-grounded tokens. The model copies exact spans; <b>code alone</b> normalizes and sorts.</span></div>
+      </div>
+      <p class="why">A maximal contiguous qualifier span is <b>one</b> token:
+      "adjusted, diluted" → <code>adjusted_diluted</code>. Split only where non-qualifier prose interrupts.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">OD-9</span></div>
+      <div class="t">The never-drop sink</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">a modifier nothing else captures → drop it</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">anything not captured by name, period, unit, slice or basis <b>lands in measurement</b>. When unsure, keep.</span></div>
+      </div>
+      <p class="why">This is the design's <b>drain</b>. Example: <code>ttm</code> when the period resolver can't build the
+      true rolling window — it stays, visibly, rather than vanishing. A dropped modifier is a <b>silently wrong fact</b>.
+      Empty measurement is legal and <b>never</b> implies GAAP.</p>
+    </div>
+  </div>
+
+  <div class="sec-h" style="margin-top:38px"><span class="sec-n">§5.4</span><h2>Continuity — when a renamed thing is still the same thing</h2></div>
+  <p class="sec-sub">The hardest question in the system, answered by refusing to answer it unless the company said so.</p>
+
+  <div class="grid">
+    <div class="card">
+      <div class="chiprow"><span class="idchip">OD-20</span></div>
+      <div class="t">Only the company may declare continuity</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">a detector notices the old label vanished and the new one appeared → link them</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">created <b>only</b> when company text explicitly says the old continues as the new, <b>composition unchanged</b></span></div>
+      </div>
+      <p class="why">There is <b>no standing detector</b>. "Recast", "recompose", "reclassify" trigger a code
+      <b>pre-refusal</b> — those words mean the numbers changed shape, so the series must break.
+      A dedicated blind judge (not the sameness judge) confirms, or it <b>fails closed</b>.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">OD-20</span></div>
+      <div class="t">Three determinism guards</div>
+      <div class="kv">
+        <span class="k">fan-out</span><span class="v">one old → two new = <b>refused</b></span>
+        <span class="k">fan-in</span><span class="v">two old → one new = <b>both quarantined</b></span>
+        <span class="k">cycle</span><span class="v">a loop-closing link = <b>auto-refused</b></span>
+      </div>
+      <p class="why">All three are <b>state-based and reversible</b>. A chain that forks isn't a rename —
+      it's a split, and following it would silently fuse two histories.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">OD-18</span></div>
+      <div class="t">Flagged attach — same word, two industries</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">exact name match → attach</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">risky attaches get a <b>blind three-check</b> vs the head's frozen birth anchor: same cause · same causal scope · same mechanism</span></div>
+      </div>
+      <p class="why">The trigger everyone misses: <b>same-industry</b> heterogeneity.
+      Two software firms can both say "churn" and mean <b>subscriber</b> vs <b>employee</b>.
+      <code>REFUSE</code> can <b>never</b> be overturned toward a write; <code>UNSURE</code> gets one blind escalation;
+      only <code>CONFIRM</code> writes; a timeout parks.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">OD-19</span></div>
+      <div class="t">A rule that ships switched off</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">TEMPTING</span><span class="txt">let the judge decide generic token-subset matches (<code>rpo</code> vs <code>current_rpo</code>)</span></div>
+        <div class="r a"><span class="lab">INERT</span><span class="txt">stays off until the K-pairs.v2 gate records <b>zero wrong-same</b></span></div>
+      </div>
+      <p class="why">Cross-flavor, terminal-suffix, per-X and OD-17 portion differences are
+      <b>permanent refusals</b> — no gate ever unlocks those. A designed rule sitting deliberately dormant
+      is what "prove it first" looks like.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">§5.4</span></div>
+      <div class="t">Recovery — mark, never erase</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">found a wrong link → delete it and move the facts</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">signal → <b>two blind strong graders</b> → flip <code>quarantined=true</code> + a <code>RecoveryEvent</code>. A wrong fact is marked <code>disputed</code>.</span></div>
+      </div>
+      <p class="why"><b>Never delete, re-key, or move history.</b> Disputed facts drop out of cross-company and
+      history-weighted features until cleared — they stop influencing decisions without ever being erased.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">§5.4</span></div>
+      <div class="t">The deepest worry, stated out loud</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">XBRL-BACKED</span><span class="txt">a falsifier <b>tripwire</b> watches the boundary — a concept split or opposite-direction jump auto-quarantines it</span></div>
+        <div class="r a"><span class="lab">NO XBRL</span><span class="txt">no tripwire exists. <b>Documented as the design's deepest worry</b> — watched only by drift probes and audits.</span></div>
+      </div>
+      <p class="why">This card exists because the design <b>names its own worst residual risk</b> instead of
+      hiding it. A false continuity with no structural backstop is the one thing nothing can automatically catch.</p>
+    </div>
+  </div>
+</div></section>
+<section id="units"><div class="wrap">
+  <div class="sec-h"><span class="sec-n">§6</span><h2>Units, signs, and periods</h2></div>
+  <p class="sec-sub">Ten units. One resolver. And a signed axis where a loss is simply a negative number.</p>
+
+  <div class="chiprow" style="margin-bottom:18px">
+    <span class="idchip">usd</span><span class="idchip">m_usd</span><span class="idchip">percent</span>
+    <span class="idchip">percent_yoy</span><span class="idchip">percent_sequential</span><span class="idchip">percent_points</span>
+    <span class="idchip">basis_points</span><span class="idchip">count</span><span class="idchip">x</span><span class="idchip">unknown</span>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="chiprow"><span class="idchip">UNIT-01</span></div>
+      <div class="t">The model copies. Code converts.</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">the extractor reports "$42.6 billion" as <code>42600000000</code></span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">it copies the <b>signed unscaled</b> number + the <b>verbatim raw unit</b>. The proven resolver does the math.</span></div>
+      </div>
+      <p class="why">Arithmetic is not a judgment call, so a model shouldn't do it.
+      Glued billions → <code>m_usd</code> ×1,000. Cents-on-aggregate and pre-scaled mistakes <b>hard-fail</b> rather than round.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">UNIT-04</span></div>
+      <div class="t">Every number slot carries its own hint</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">one unit guess for the whole fact</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">each level/change slot brings its <b>own</b> raw unit + kind hint. Level and change resolve <b>separately</b>.</span></div>
+      </div>
+      <p class="why">"Revenue of $42.6B, up 12%" has <b>two</b> units in one sentence.
+      Money kind additionally needs <code>money_mode</code> — is it an <b>aggregate</b> or <b>price-like</b>?</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">UNIT-14</span><span class="idchip">NAME-13</span></div>
+      <div class="t">The per-X lint</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">FAIL</span><span class="txt">money level + a stated denominator + no <code>_per_</code> in the name → <b>hard failure</b></span></div>
+        <div class="r a"><span class="lab">PASS</span><span class="txt"><code>oil_price_per_barrel</code>, unit <code>usd</code></span></div>
+      </div>
+      <p class="why">Code enforces the naming rule mechanically. Also: <b>no <code>comparison_unit</code> exists</b> —
+      comparisons share <code>level_unit</code>, because a number compared in a different unit isn't a comparison.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">OD-11</span></div>
+      <div class="t">"Up 12%" — against what?</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">store plain <code>percent</code> and lose the basis</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">bare growth on a dated period → <b><code>percent_yoy</code></b> (the standard year-ago convention). <b>Growth is never plain <code>percent</code>.</b></span></div>
+      </div>
+      <p class="why">Overridden to <code>percent_sequential</code> <b>only</b> on in-document evidence —
+      <b>never company history</b> (that would let the past rewrite the present).
+      A points/bps unit <b>wins</b> over any sequential/YoY wording. Stated on two bases → <b>splits into two facts</b>.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">OD-11</span></div>
+      <div class="t">The annual pin — a validator you can prove</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">CONFUSED</span><span class="txt">on a full year, "sequential" and "year-over-year" are <b>the same window</b></span></div>
+        <div class="r a"><span class="lab">PINNED</span><span class="txt">annual → <b>always</b> <code>percent_yoy</code>. <code>percent_sequential</code> + <code>period_scope=annual</code> is <b>invalid</b>.</span></div>
+      </div>
+      <p class="why">Two names for one thing would split one series in half.
+      Also pinned: a bare "up X%" on a <b>static-percentage</b> metric (like a margin) is <code>unknown</code>
+      unless it says points/bps or "to X%" — because "margin up 2%" is genuinely ambiguous.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">OD-12</span></div>
+      <div class="t">The signed axis — loss is a negative number</div>
+      <div class="kv">
+        <span class="k mono">"$1.5–2.0B loss"</span><span class="v">→ range <b>−2000, −1500</b> <span class="pill">spoken order flips</span></span>
+        <span class="k mono">"at least a $1B loss"</span><span class="v">→ ceiling null, <b>−1000</b></span>
+        <span class="k mono">"EPS $(0.10) to $0.05"</span><span class="v">→ <b>−0.10, 0.05</b> <span class="pill">zero-crossing</span></span>
+        <span class="k mono">"impairment charge $2B"</span><span class="v">→ point <b>+2000</b></span>
+        <span class="k mono">"provision release $50M"</span><span class="v">→ point <b>−50</b></span>
+      </div>
+      <p class="why">The traps are pinned by <b>golden fixtures</b>: <b>"up to a loss"</b> is a <i>floor</i>, not a ceiling;
+      <b>"loss narrowed"</b> is <code>increased</code>. Charges are positive, benefits/releases/reversals negative.
+      And <code>low ≤ high</code> catches the flipped spoken order <b>for free</b>.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">OD-12</span></div>
+      <div class="t">The sign monitor is a smoke alarm, not a lock</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">TEMPTING</span><span class="txt">a keyword matcher that catches wrong signs</span></div>
+        <div class="r a"><span class="lab">ACTUAL</span><span class="txt">report-only history smoke-alarm. Reliability rests on <b>value-first + naming + low≤high + shape hints + fixtures</b>.</span></div>
+      </div>
+      <p class="why">A keyword matcher is <b>a hidden list</b> — an ungoverned rule nobody reviews.
+      The monitor is explicitly <b>never the primary safety</b>.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">OD-10</span></div>
+      <div class="t"><code>series_unit</code> — the grouping tag</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">group reads with a unit-family map; absorb <code>unknown</code> into the nearest match</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">reads group by <b>equality only</b>. No family map, <b>no unknown absorption</b>.</span></div>
+      </div>
+      <p class="why">Written once at write. Ambiguity gets its <b>own over-split group</b> rather than being
+      quietly folded in. <b>It never rewrites</b> <code>level_*</code>/<code>change_*</code> — those stay source-faithful forever.
+      Numberless → null, <i>except</i> a withdrawal/reaffirmation copying exactly one clear prior guide, else fail-closed.</p>
+    </div>
+  </div>
+
+  <div class="sec-h" style="margin-top:38px"><span class="sec-n">§6.2</span><h2>Periods — a real window, or nothing</h2></div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="chiprow"><span class="idchip">PER-01</span></div>
+      <div class="t">"Q3" is not a period</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">store the raw label <code>"Q3"</code>, or the event date</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">the <b>actual calendar window</b> the fact is about → <code>gp_2026-06-28_2026-09-27</code></span></div>
+      </div>
+      <p class="why">Apple's Q3 and Walmart's Q3 are different months. Comparing them by label
+      compares <b>different periods of the world</b>. Missing fiscal-year-end <b>fails closed</b> — no guessing.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">PER-01</span></div>
+      <div class="t">Real dates beat shorthand</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">collapse a YTD/TTM/stated range down to "a quarter"</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">exact YTD/TTM/cumulative/stated ranges <b>win</b>. Keep the real dates.</span></div>
+      </div>
+      <p class="why">Collapsing nine months into "Q3" doesn't simplify the fact — it <b>falsifies</b> it.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">PER-19</span></div>
+      <div class="t">Four sentinels — and no quiet fallback</div>
+      <div class="kv">
+        <span class="k mono">short_term</span><span class="v mono">gp_ST</span>
+        <span class="k mono">medium_term</span><span class="v mono">gp_MT</span>
+        <span class="k mono">long_term</span><span class="v mono">gp_LT</span>
+        <span class="k mono">undefined</span><span class="v mono">gp_UNDEF</span>
+      </div>
+      <p class="why">For genuinely dateless horizons ("over the long term"), stored two-way.
+      <b><code>gp_UNDEF</code> is never a quiet fallback</b> — unresolved with no explicit sentinel <b>hard-fails</b>,
+      and action sentinels hard-fail outright. <code>long_range</code> is retired; a stated range stores <code>exact_range</code>.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">PER-18</span></div>
+      <div class="t">One window, one node — enforced by the database</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">create a period node per fact → the same quarter exists 400 times</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt"><code>MERGE</code> by id + a <b>UNIQUE CONSTRAINT</b> → the same window converges to one node</span></div>
+      </div>
+      <p class="why">Dates are <b>write-once</b>: a wrong first date does <b>not</b> self-correct — a mismatch hard-fails loudly.
+      An instant is the legal one-day form; a <i>duration</i> with start == end is invalid input.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">PER-20</span></div>
+      <div class="t"><code>time_type</code> must be answered</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">default to <code>duration</code> when nobody says</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">a <b>REQUIRED semantic output</b>. Never a default.</span></div>
+      </div>
+      <p class="why">Revenue <i>over</i> a quarter and cash <i>at</i> quarter-end are different shapes of truth.
+      Defaulting silently converts one into the other.</p>
+    </div>
+  </div>
+</div></section>
+
+<section id="contract"><div class="wrap">
+  <div class="sec-h"><span class="sec-n">§7</span><h2>The stored fact — 24 fields, split by who owns them</h2></div>
+  <p class="sec-sub">Six fields code owns and a model may never touch. Eighteen a model fills in.
+  The split <i>is</i> the safety model.</p>
+
+  <div class="panel">
+    <div class="kv">
+      <span class="k"><b>Code · 6</b></span>
+      <span class="v"><span class="idchip">id</span> <span class="idchip">fact_scope</span> <span class="idchip">series_unit</span> <span class="idchip">created</span> <span class="idchip">date</span> <span class="idchip">source_type</span></span>
+      <span class="k"><b>Semantic · 18</b></span>
+      <span class="v"><span class="idchip">driver_state</span> <span class="idchip">quote</span> <span class="idchip">level_low</span> <span class="idchip">level_high</span> <span class="idchip">level_unit</span> <span class="idchip">change_value</span> <span class="idchip">change_unit</span> <span class="idchip">comparison_low</span> <span class="idchip">comparison_high</span> <span class="idchip">comparison_baseline</span> <span class="idchip">value_text</span> <span class="idchip">conditions</span> <span class="idchip">company_confirmed</span> <span class="idchip">xbrl_qname</span> <span class="idchip">fiscal_year</span> <span class="idchip">fiscal_quarter</span> <span class="idchip">period_scope</span> <span class="idchip">time_type</span></span>
+    </div>
+    <p class="why"><b>Plus one outside the count:</b> <code>disputed</code> — recovery-only, controlled solely by the recovery lane.
+    It's excluded deliberately: it isn't part of what a fact <i>says</i>, only of what we later learned about it.</p>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="chiprow"><span class="idchip">§7.1</span></div>
+      <div class="t">Number shapes describe themselves</div>
+      <div class="kv">
+        <span class="k">point</span><span class="v">both bands <b>equal</b></span>
+        <span class="k">closed range</span><span class="v">both present, low &lt; high</span>
+        <span class="k">floor</span><span class="v">low only</span>
+        <span class="k">ceiling</span><span class="v">high only</span>
+        <span class="k">numberless</span><span class="v">all null</span>
+      </div>
+      <p class="why">No shape <i>field</i> to disagree with the numbers. The transient hints are
+      <b>cross-checked, hard-fail on mismatch, then discarded</b> — a check, never a stored fact.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">§7.1</span></div>
+      <div class="t">Don't store what you can derive</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">store the beat size: <code>2.10 − 1.95 = 0.15</code></span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt"><code>change_value = null</code>. Derive at read.</span></div>
+      </div>
+      <p class="why">A stored derivation is a <b>second copy of the truth</b> that can drift from the first.
+      Stored <b>only</b> when the source states a non-derivable delta <b>and</b> its sign is determinable —
+      "beat by X" with unclear polarity stays null and <b>the quote carries it</b>.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">§7.1</span></div>
+      <div class="t">One primary baseline — the rest live in the quote</div>
+      <div class="kv">
+        <span class="k">values</span><span class="v mono">consensus · prior_year · sequential_period · previous_guidance · null</span>
+        <span class="k">tiebreak</span><span class="v">the source's <b>headline</b> comparison; <code>prior_year</code> &gt; <code>sequential_period</code></span>
+        <span class="k">null when</span><span class="v">not a temporal prior — vs peers, vs 2019, a streak</span>
+        <span class="k">never</span><span class="v">there is <b>no</b> <code>internal_target</code>; own-target → <code>previous_guidance</code>, else null</span>
+      </div>
+      <p class="why">"Exceeded expectations" is <b>kind-aware</b>: on a surprise → <code>consensus</code>;
+      on a guidance fact "exceeded our guidance" → <code>previous_guidance</code>.
+      Rule of thumb: consensus = analyst/Street/market · previous_guidance = clearly the company's own.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">DU-15</span></div>
+      <div class="t">The expectation never rides the home fact</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">one fact holds "up 12% YoY <b>and</b> beat consensus"</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">home keeps <b>one</b> primary (prior-year). The expectation goes to <b>its own <code>_surprise</code> fact</b>.</span></div>
+      </div>
+      <p class="why">The trigger is the <b>producer detecting</b> the comparison at extraction —
+      never a read-back of the stored baseline enum. (Reading back would make the write depend on what was already written.)</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">Q1</span></div>
+      <div class="t"><code>company_confirmed</code> — and the reserved <code>false</code></div>
+      <div class="ba">
+        <div class="r b"><span class="lab">TRUE</span><span class="txt">stated/confirmed by the company or its management</span></div>
+        <div class="r a"><span class="lab">FALSE</span><span class="txt"><b>RESERVED.</b> A future allowed third-party/rumored class — <b>none is enabled today</b>.</span></div>
+      </div>
+      <p class="why"><b>Owner ruling Q1:</b> unclear attribution is <b>SKIPPED</b>, never stored as a guessed boolean —
+      so <code>false</code> can never accidentally mean "we didn't know". Channels submit attribution <b>evidence</b>;
+      the core derives the boolean. A later confirmation is a <b>new fact at its own public time</b> — history is never rewritten.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">§7.1</span></div>
+      <div class="t">Guidance-only fields, tightly fenced</div>
+      <div class="kv">
+        <span class="k mono">value_text</span><span class="v">guidance-only · <b>numberless-only</b> · ≤200 chars · rejects stored numerics · date anchors OK</span>
+        <span class="k mono">conditions</span><span class="v">guidance-only · its clause <b>must remain in the quote</b></span>
+      </div>
+      <p class="why">Both are escape hatches for prose, so both are fenced hard.
+      <code>value_text</code> holding a number would be a <b>second, unvalidated number store</b>.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">FACT-12</span></div>
+      <div class="t">The fact hash is gone</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt"><code>evhash16</code> on every fact to detect re-run changes</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt"><code>MERGE</code> on id + <b>direct field comparison</b>. The hash is retired as a derivable cache.</span></div>
+      </div>
+      <p class="why">A cache of something you can just compare <b>is a thing that can be wrong</b>.
+      (The <code>EXPLAINED_BY</code> verdict hash is a <i>different</i> decision and stays.)</p>
+    </div>
+  </div>
+
+  <div class="sec-h" style="margin-top:38px"><span class="sec-n">§7.2</span><h2>The lane matrix — what each kind forbids</h2></div>
+  <p class="sec-sub">Read the <span class="pill no">red</span> cells. Forbidden fields are how a lane keeps its meaning.</p>
+
+  <div class="scroll"><table>
+    <tr><th>field</th><th>metric</th><th>guidance</th><th>surprise</th><th>action_event</th></tr>
+    <tr><td>identity · state · quote · source · driver edge</td><td class="yes">required</td><td class="yes">required</td><td class="yes">required</td><td class="yes">required</td></tr>
+    <tr><td>period</td><td>when real</td><td class="yes">required</td><td>when real; <b>gvc required</b></td><td>rare, when real</td></tr>
+    <tr><td>level / change</td><td>only when stated</td><td>only when stated</td><td>only when stated</td><td>only when stated</td></tr>
+    <tr><td>comparison values</td><td>when stated</td><td>prior band when stated</td><td>expectation when stated</td><td>when stated</td></tr>
+    <tr><td>comparison baseline</td><td class="no">only prior_year/sequential — expectation baselines FORBIDDEN</td><td class="no">consensus FORBIDDEN</td><td class="yes">required: consensus / previous_guidance</td><td>when stated</td></tr>
+    <tr><td><code>surprise=</code> slot</td><td class="no">forbidden</td><td class="no">forbidden</td><td class="yes">required</td><td class="no">forbidden</td></tr>
+    <tr><td><code>value_text</code> · <code>conditions</code></td><td class="no">forbidden</td><td class="yes">allowed, exact rules</td><td class="no">forbidden</td><td class="no">forbidden</td></tr>
+    <tr><td><code>company_confirmed</code></td><td class="no">forbidden</td><td class="yes"><b>REQUIRED on EVERY stored guidance fact</b> — core-derived, not only when literally stated</td><td class="no">forbidden</td><td class="no">forbidden</td></tr>
+    <tr><td>direct XBRL concept</td><td class="yes">allowed by enrichment</td><td class="no">forbidden — inherit</td><td class="no">forbidden — inherit</td><td class="no">forbidden</td></tr>
+  </table></div>
+
+  <div class="panel">
+    <div class="t" style="font-weight:680;margin-bottom:10px">Where a sentence lands — the four routes</div>
+    <div class="step"><div class="num">1</div><div><div class="t">actual vs consensus or prior guidance</div>
+      <div class="d">→ a <b>surprise</b> fact <b>PLUS</b> its metric home fact</div></div></div>
+    <div class="step"><div class="num">2</div><div><div class="t">forward guide vs consensus</div>
+      <div class="d">→ a <b>surprise</b> fact <b>PLUS</b> its guidance home fact</div></div></div>
+    <div class="step"><div class="num">3</div><div><div class="t">guide vs the company's <b>own</b> prior guide</div>
+      <div class="d">→ guidance <b>MOVEMENT</b>. Not a surprise — no second party.</div></div></div>
+    <div class="step"><div class="num">4</div><div><div class="t">vs prior year or last quarter</div>
+      <div class="d">→ a metric <b>change</b>. Not a surprise — no expectation.</div></div></div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="chiprow"><span class="idchip">§7.3</span></div>
+      <div class="t">The verdict is an edge, not a node</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">a verdict node holding the attribution</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt"><code>EXPLAINED_BY</code> <b>edge</b>, keyed by target + driver + fact_scope + <b>producer</b></span></div>
+      </div>
+      <p class="why">Producer is <b>in the key on purpose</b> — two producers are allowed to disagree,
+      and that disagreement is data. A uniqueness check stops one key pointing at rival same-day facts.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">DU-22</span></div>
+      <div class="t">Weightage is a force — not a share</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">allocate causes as shares that <b>sum to 100%</b></span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">independent 0.1–1.0 deciles. <b>Never a share. Never summed to 100.</b> null = direction known, size not.</span></div>
+      </div>
+      <p class="why">Reality doesn't allocate. Two causes can each be huge, or cancel out.
+      Forcing them to 100% invents precision that was never observed.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">DU-23</span></div>
+      <div class="t">Grading is aggregate — because reality is</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">grade each driver against its "true share" of the move</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">reality gives <b>one net return</b>. Grade the <b>whole set</b> on net sign/magnitude + relative ranking.</span></div>
+      </div>
+      <p class="why">A per-driver true share <b>does not exist to grade against</b>.
+      And the producer is <b>never shown the realized return</b> — that's how you keep a judge honest.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">§7.3</span></div>
+      <div class="t">A move-day isn't a source</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">no document? attach the fact to the day's move event</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">a DCM is <b>only a verdict target</b>, never a substitute source. A pure-macro fact with no source <b>parks</b>.</span></div>
+      </div>
+      <p class="why">If a filing exists that trade-day it is the single move-target and any DCM is <b>ignored — never deleted</b>,
+      its news verdict preserved, an offline monitor logs it. No superseded flag; it <b>self-heals</b> if the filing lands late.</p>
+    </div>
+  </div>
+</div></section>
+<section id="xbrl"><div class="wrap">
+  <div class="sec-h"><span class="sec-n">§8</span><h2>XBRL enrichment — attach the exact concept, or attach nothing</h2></div>
+  <p class="sec-sub">Linking a text fact to the company's own filed accounting concept. The entire design
+  is built around one asymmetry.</p>
+
+  <div class="panel">
+    <div class="ba">
+      <div class="r b"><span class="lab">WRONG</span><span class="txt"><b>Silent until detected.</b> The link is revocable by design — but
+        reads and decisions already made on it <b>are not undone</b>.</span></div>
+      <div class="r a"><span class="lab">ABSENT</span><span class="txt"><b>Self-heals</b> on the next re-run, at zero risk.</span></div>
+    </div>
+    <p class="why"><b>Missing links are safer than wrong links.</b> That single line explains why every layer below
+    can only <i>abstain</i>, never create.</p>
+    <div class="chiprow"><span class="pill no">rejected forever: live value match</span><span class="pill no">token match</span>
+      <span class="pill no">static dictionary</span><span class="pill no">simple multi-method agreement</span></div>
+  </div>
+
+  <figure><pre>
+  deterministic guards  →  PIT company menu  →  cheap model PICKS one-or-null
+    G2 non-GAAP            cut at the fact's       "the ONE qname that IS
+    G0 events/macro        public time              exactly this metric,
+    G1 ratios/derived                               or null"
+         │                                               │
+         ▼                                               ▼
+    can only ABSTAIN                          exact in-menu check
+                                                         │
+                                                         ▼
+                                    adversarial VERIFY (default: REFUTE)
+                                                         │
+                                                         ▼
+                                    deterministic veto A·B·C·D → abstain only
+                                                         │
+                                                    write or abstain
+  </pre><figcaption>Five layers. Not one of them can invent a link — every one can only stop one.</figcaption></figure>
+
+  <div class="grid">
+    <div class="card">
+      <div class="chiprow"><span class="idchip">XC-04</span></div>
+      <div class="t">The cheap model is the right model</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">ASSUMED</span><span class="txt">a harder problem needs a bigger model</span></div>
+        <div class="r a"><span class="lab">MEASURED</span><span class="txt"><b>Haiku, locked</b> — structure + deterministic layers give it top-model precision, cheaply</span></div>
+      </div>
+      <p class="why">The <b>scaffolding</b> carries the precision, not the model.
+      Documented alternatives: Opus/Sonnet (similar precision, higher cost); Haiku-pick + Opus-verify (~90% recall).</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">XC-05</span></div>
+      <div class="t">Three guards, pure code, zero LLM</div>
+      <div class="kv">
+        <span class="k mono">G0</span><span class="v">events/macro — resignation, buyback, oil_price, tariffs, weather</span>
+        <span class="k mono">G1</span><span class="v">ratios/derived/growth — margin, <code>_growth</code>, roic, ebitda, fcf, <code>_mix</code></span>
+        <span class="k mono">G2</span><span class="v">non-GAAP/adjusted — keyed on the <b>measurement set</b></span>
+      </div>
+      <p class="why">The trap worth knowing: <code>tax_rate</code> and <code>effective_tax_rate</code> are
+      <b>NOT</b> in G1 — they're real GAAP concepts. G2 moved from a name regex to the <b>measurement set</b>
+      (the regex survives only as a legacy-name fallback). GAAP-compatible sets: empty, <code>gaap</code>,
+      <code>basic</code>, <code>diluted</code>, <code>reported</code>, <code>as_reported</code> — anything else abstains.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">XC-06</span></div>
+      <div class="t">Keep the prompts loose on purpose</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">INSTINCT</span><span class="txt">tighten the prompt to raise precision</span></div>
+        <div class="r a"><span class="lab">DESIGN</span><span class="txt">prompts stay <b>loose</b> — scope is <b>the veto's job</b>. Tightening costs recall.</span></div>
+      </div>
+      <p class="why">VERIFY is a <b>strict auditor that defaults to REFUTED when unsure</b> — it refutes
+      related-but-different, GAAP-vs-non-GAAP, gross-vs-net, subtotal-vs-total, wrong statement, or a dimension
+      posing as the consolidated line. <b>Parse default: no match ⇒ refuted.</b> Even a broken response fails safe.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">XC-07</span></div>
+      <div class="t">The veto — measured, and it earns its keep</div>
+      <div class="kv">
+        <span class="k">A</span><span class="v">share count must be <code>instant</code>, not a duration weighted-average</span>
+        <span class="k">B</span><span class="v">bare eps must not map to the <b>Basic</b> variant (convention = diluted)</span>
+        <span class="k">C</span><span class="v">a per-share metric must not map to a total-$ Cash concept</span>
+        <span class="k">D</span><span class="v">exactly 4 component-for-aggregate denials</span>
+      </div>
+      <p class="why"><b>Across 274 companies:</b> A–C took wrong links <b>42 → 18</b>. Adding D's four entries
+      took it to <b>1 wrong — at no recall cost.</b> That's why D is four hand-picked pairs and not a clever rule.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">XC-17</span></div>
+      <div class="t">The monitor states its own blind spot</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">CATCHES</span><span class="txt"><b>structural</b> slips — revenue must be credit+duration; shares_outstanding must be instant</span></div>
+        <div class="r a"><span class="lab">MISSES</span><span class="txt">same-balance/same-period <b>SCOPE</b> mismatches — those need XC-16 or the periodic audit</span></div>
+      </div>
+      <p class="why">Stating the limit is the point — an unqualified "we monitor for wrong links"
+      would be <b>read as coverage it doesn't have</b>. Optional stability gate: run 2–3×, abstain on disagreement
+      (~2% flips, all borderline — <b>never creates a wrong link</b>).</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">XC-12</span></div>
+      <div class="t">Families inherit — except through non-GAAP</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">RULE</span><span class="txt">guidance/surprise inherit the concept through <code>BASE_METRIC</code>; action abstains</span></div>
+        <div class="r a"><span class="lab">CARVE-OUT</span><span class="txt"><b>non-GAAP measurement blocks inheritance</b></span></div>
+      </div>
+      <p class="why"><code>adjusted_eps_guidance</code> must not inherit the GAAP <code>eps</code> concept —
+      it isn't that number. Only the base metric ever gets a <b>direct</b> link.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">XC-16</span><span class="idchip">XC-18</span></div>
+      <div class="t">Two things deliberately not switched on</div>
+      <div class="kv">
+        <span class="k">XC-16</span><span class="v"><span class="pill">CONDITIONAL</span> calculation-hierarchy veto — recommended before full rollout; <b>timing open</b></span>
+        <span class="k">XC-18</span><span class="v"><span class="pill">DORMANT</span> reified <code>ConceptResolution</code> + revocation states + the qualifier veto — waits on the materializer</span>
+      </div>
+      <p class="why">Resolve once per (company, base-metric driver) and <b>store</b> it; re-runs self-heal.
+      One batched call per company (~40 non-guarded metrics). A universe-scale cache is an <b>option</b> —
+      adopt only <b>if volume bites</b>, never pre-emptively.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">§8</span></div>
+      <div class="t">Honest about the evidence</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">CLAIM</span><span class="txt">"universal zero error"</span></div>
+        <div class="r a"><span class="lab">CLAIM</span><span class="txt">"evidence supports <b>high precision</b>, not universal zero error — keep the caveats and sampling monitors <b>beside the numbers</b>"</span></div>
+      </div>
+      <p class="why">A rule about how the design talks about itself. Also: invocation uses
+      <b>in-session subscription agents</b> — SDK/API-key use is <b>not approved</b> without separate owner approval.</p>
+    </div>
+  </div>
+</div></section>
+
+<section id="read"><div class="wrap">
+  <div class="sec-h"><span class="sec-n">§9</span><h2>Reading — collapse, point-in-time, and the one derived write</h2></div>
+  <p class="sec-sub">Facts go in append-only and messy. The read layer makes them a series — without ever rewriting them.</p>
+
+  <figure><pre>
+   THE FULL SERIES KEY — group by all of it, never by a piece
+
+   company · Driver · fact_type · slice · resolved period · period_scope
+           · measurement · series_unit · time_type · surprise subtype
+                                                     (surprise lane only)
+
+   SAME COMPANY, SAME SERIES, SAME DAY → rank the sources
+      8k  >  transcript  >  10q  >  10k  >  news
+      ties → later timestamp → then source id
+   ACROSS DAYS → latest wins as the current view; priors kept as PIT history
+  </pre><figcaption>An amendment is just a new fact at its public time — the latest-date rule makes it win by itself.</figcaption></figure>
+
+  <div class="grid">
+    <div class="card">
+      <div class="chiprow"><span class="idchip">§9</span></div>
+      <div class="t">Never group by the quote</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">collapse duplicates by comparing quote text</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">the comparator is the numeric <code>level_*</code> signature — or normalized <code>value_text</code> for qualitative facts. <b>Never the quote.</b></span></div>
+      </div>
+      <p class="why">Same theme as the collision hash: <b>two sentences, one number</b>.
+      The quote is the last display fallback, never the identity.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">§9</span></div>
+      <div class="t">Point-in-time is strict</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">LEAKY</span><span class="txt"><code>date &lt;= as_of</code>, and "day" means whatever the server thinks</span></div>
+        <div class="r a"><span class="lab">STRICT</span><span class="txt"><code>date &lt; as_of</code>. <b>"Day" = Eastern Time.</b> Realized returns are <b>never</b> exposed.</span></div>
+      </div>
+      <p class="why">A <code>&lt;=</code> would let a fact published <i>at</i> the cutoff instant into a backtest —
+      that's lookahead, and it's the bug that makes a strategy look brilliant and lose money.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">OD-14</span></div>
+      <div class="t">Guidance movement is derived, never written back</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">compute "raised" and store it on the fact</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">stated movement is <b>stored as said</b>; a bare guide stores <code>unknown</code> and the read layer <b>derives</b> <code>effective_driver_state</code></span></div>
+      </div>
+      <p class="why">Derived mechanically (the midpoint rule) from the prior collapsed value in the
+      <b>same</b> series — <b>never across years, quarters, series units, or slices</b>.
+      No prior → <code>introduced</code>. Not safely comparable → <code>unknown</code>.
+      <b>Self-healing:</b> a late fact re-derives the whole timeline at the next read.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">OD-14</span></div>
+      <div class="t">A typo fix is not a raise</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">an amendment corrects $1.5B → $1.6B → the derive reads it as <b>"raised"</b></span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">a correction with no business-change wording has <code>effective_driver_state</code> <b>FORCED to <code>unknown</code></b></span></div>
+      </div>
+      <p class="why">Beautiful bug, deliberately killed: the mechanical derive can't tell a
+      <b>fix</b> from a <b>decision</b> — so corrections are excluded by identification, not by cleverness.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">§9</span></div>
+      <div class="t">Withdrawal fan-out — the ONE derived write</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">LOOSE</span><span class="txt">"we're suspending guidance" → withdraw everything that looks covered</span></div>
+        <div class="r a"><span class="lab">BOUNDED</span><span class="txt">ALL must hold: clearly <b>STATES</b> a withdrawal · <b>EXACT</b> scope · only <b>OPEN</b> guides · containment via the <b>RESOLVED</b> period, never loose text</span></div>
+      </div>
+      <p class="why">"Suspending guidance <b>practices</b>" is a policy remark — <b>not</b> a withdrawal.
+      Scope unclear → <b>don't fan out</b>. A guide the same source replaces is <b>excluded per-guide</b>,
+      not a veto on the rest. Add-only, never deletes; a late covered guide gets its <code>withdrawn</code> fact under the same conditions.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">§9</span></div>
+      <div class="t">Every result says which kind it is</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">RAW</span><span class="txt">what the sources literally said</span></div>
+        <div class="r a"><span class="lab">RECONCILED</span><span class="txt">continuity chains applied — <b>disableable</b>, deterministic PIT edges only, per-hop cutoff</span></div>
+      </div>
+      <p class="why">A reconciled view is an <b>interpretation</b>, so it's labelled and switchable.
+      <code>narrowed</code> is read-derived from consecutive closed widths — <b>never stored</b>.</p>
+    </div>
+  </div>
+</div></section>
+<section id="ba"><div class="wrap">
+  <div class="sec-h"><span class="sec-n">§3 STATUS</span><h2>The 42 reversals — every belief we killed</h2></div>
+  <p class="sec-sub">The complete supersession ledger, straight from the certified file.
+  Left = what we used to believe. Right = the rule that replaced it, and where it now lives.
+  <b>The dead rule is kept exactly once, for audit</b> — the live wording exists only at the anchor.</p>
+
+  <div class="scroll"><table>
+    <tr><th>#</th><th>subject</th><th>the dead rule ✗</th><th>current anchor ✓</th></tr>
+    <tr><td class="mono">1</td><td>Own company parts</td><td class="no">brand/segment in the name</td><td class="yes">§3 NAME-10/11</td></tr>
+    <tr><td class="mono">2</td><td>Measurement</td><td class="no">adjusted/diluted in the name</td><td class="yes">§3 NAME-14 · §5.3</td></tr>
+    <tr><td class="mono">3</td><td>Per-X</td><td class="no">omit denominator / treat as unit</td><td class="yes">§3 NAME-13 · §6.1</td></tr>
+    <tr><td class="mono">4</td><td>What makes an update</td><td class="no">only a change qualifies</td><td class="yes">§1 · §4.2</td></tr>
+    <tr><td class="mono">5</td><td>Evidence count</td><td class="no">require &gt;2 events</td><td class="yes">§4.2</td></tr>
+    <tr><td class="mono">6</td><td>Verdict size</td><td class="no"><code>magnitude</code></td><td class="yes">§7.3</td></tr>
+    <tr><td class="mono">7</td><td>Verdict allocation</td><td class="no">shares must total 100%</td><td class="yes">§7.3</td></tr>
+    <tr><td class="mono">8</td><td>Verdict storage</td><td class="no">verdict node/property</td><td class="yes">§7.3 (edge)</td></tr>
+    <tr><td class="mono">9</td><td>Related flavors</td><td class="no">no family link / merge as synonyms</td><td class="yes">§4.1</td></tr>
+    <tr><td class="mono">10</td><td>Period model</td><td class="no">guidance-only period</td><td class="yes">§6.2</td></tr>
+    <tr><td class="mono">11</td><td>Slice kinds</td><td class="no">4 kinds + <code>store_type</code></td><td class="yes">§5.2</td></tr>
+    <tr><td class="mono">12</td><td>Slice identity</td><td class="no">XBRL member ID</td><td class="yes">§5.1/§5.2/§8</td></tr>
+    <tr><td class="mono">13</td><td>Concept linking</td><td class="no">curated dictionary</td><td class="yes">§8</td></tr>
+    <tr><td class="mono">14</td><td>RavenPack</td><td class="no">Driver vocabulary</td><td class="yes">§4.3 (DU-11 context)</td></tr>
+    <tr><td class="mono">15</td><td>Model default</td><td class="no">Fable two-pass reader</td><td class="yes">signed EXP-2 (BUILD §9)</td></tr>
+    <tr><td class="mono">16</td><td>Number shapes</td><td class="no">stored <code>level_bound</code>; low-only point</td><td class="yes">§7.1</td></tr>
+    <tr><td class="mono">17</td><td>Qualitative value</td><td class="no">no qualitative field</td><td class="yes">§7.1 <code>value_text</code></td></tr>
+    <tr><td class="mono">18</td><td>Fact hash</td><td class="no">DriverUpdate <code>evhash16</code></td><td class="yes">§5.1 · §7.3</td></tr>
+    <tr><td class="mono">19</td><td>Confirmation</td><td class="no">confirmation enum</td><td class="yes">§7.1 <code>company_confirmed</code></td></tr>
+    <tr><td class="mono">20</td><td>Non-GAAP guard</td><td class="no">name regex primary</td><td class="yes">§8 XC-05 (measurement set)</td></tr>
+    <tr><td class="mono">21</td><td>Live reuse</td><td class="no">show catalog first</td><td class="yes">BUILD §4 (propose-first)</td></tr>
+    <tr><td class="mono">22</td><td>Concept invocation</td><td class="no">SDK/OAuth metered</td><td class="yes">§8 (subscription only)</td></tr>
+    <tr><td class="mono">23</td><td>Missing period</td><td class="no">quiet <code>gp_UNDEF</code></td><td class="yes">§6.2 sentinels</td></tr>
+    <tr><td class="mono">24</td><td>Metric expectation</td><td class="no">previous-guidance baseline on metric</td><td class="yes">§7.2 matrix</td></tr>
+    <tr><td class="mono">25</td><td>Whole-company slice</td><td class="no">store <code>slice=total</code></td><td class="yes">§5.1/§5.2</td></tr>
+    <tr><td class="mono">26</td><td>Unit hints</td><td class="no">one hint pair per item</td><td class="yes">§6.1 per-slot</td></tr>
+    <tr><td class="mono">27</td><td>Slice label drift</td><td class="no">human alias files / confident alias</td><td class="yes">§5.2 · §9</td></tr>
+    <tr><td class="mono">28</td><td>Slice menu</td><td class="no">latest prior filing only</td><td class="yes">§5.2 union menu</td></tr>
+    <tr><td class="mono">29</td><td>Bare fact type</td><td class="no">trust one classifier</td><td class="yes">§4.1 OD-2</td></tr>
+    <tr><td class="mono">30</td><td>Collision hash</td><td class="no">quote/value truncated hash</td><td class="yes">§5.1 OD-8</td></tr>
+    <tr><td class="mono">31</td><td>Surprise arithmetic</td><td class="no">above=beat, sign hard-fail</td><td class="yes">§4.3 · §7.1 (OD-13)</td></tr>
+    <tr><td class="mono">32</td><td>Loss values</td><td class="no">positive loss magnitude / loss Drivers</td><td class="yes">§6.1 OD-12</td></tr>
+    <tr><td class="mono">33</td><td>Sequential percent</td><td class="no">all growth = YoY</td><td class="yes">§6.1 OD-11</td></tr>
+    <tr><td class="mono">34</td><td>Guidance chronology: movement, amendments, withdrawal fan-out, Event/DCM overlap</td><td class="no">movement stored from the write-time prior view; creation-only DCM single-target; open amendment handling</td><td class="yes">§9 + §7.3</td></tr>
+    <tr><td class="mono">35</td><td>Measurement tokens</td><td class="no">producer-final tokens; droppable</td><td class="yes">§5.3 OD-9</td></tr>
+    <tr><td class="mono">36</td><td>Unit grouping</td><td class="no">read-time family map / absorption</td><td class="yes">§6.1 OD-10 · §9</td></tr>
+    <tr><td class="mono">37</td><td>Slice recurrence</td><td class="no">cross-company recurrence identity</td><td class="yes">§5.2 (FS-22 retired)</td></tr>
+    <tr><td class="mono">38</td><td>Brand/slice test</td><td class="no">external-brand heuristic</td><td class="yes">§3 NAME-11</td></tr>
+    <tr><td class="mono">39</td><td>Wrong <code>SAME_AS</code></td><td class="no">never reopen automatically</td><td class="yes">§5.4 recovery</td></tr>
+    <tr><td class="mono">40</td><td>Entity names</td><td class="no">ban every entity token</td><td class="yes">§3 NAME-11/16 carve-out</td></tr>
+    <tr><td class="mono">41</td><td>Token subset</td><td class="no">permanent automatic refusal</td><td class="yes">§5.4 OD-19 (conditional)</td></tr>
+    <tr><td class="mono">42</td><td>Surprise scope</td><td class="no">actual-only; no subtype slot</td><td class="yes">§5.1 OD-21</td></tr>
+  </table></div>
+  <p class="why" style="margin-top:16px">Row 34 is the biggest single reversal — the whole guidance chronology
+  (movement, amendments, withdrawal fan-out, Event/DCM overlap) was rebuilt at once.
+  Rows 30, 31, 32 and 33 are the ones that would silently corrupt numbers rather than crash.</p>
+</div></section>
+<section id="od"><div class="wrap">
+  <div class="sec-h"><span class="sec-n">OD-1..21</span><h2>The 21 owner decisions</h2></div>
+  <p class="sec-sub">Every one is an <b>addition, not a reversal</b> — each anchored in a live rule.
+  Most are explained in full above; this is the complete roll-call so none hides.</p>
+
+  <div class="scroll"><table>
+    <tr><th>#</th><th>the decision</th><th>lives at</th></tr>
+    <tr><td class="mono">OD-1</td><td>terminal-suffix admission — strip one suffix, ask twice, both must say yes; verdict frozen in a memo</td><td class="yes">§4.1</td></tr>
+    <tr><td class="mono">OD-2</td><td>metric must prove itself; action is the safe default · first-fact pin scoped to bare names</td><td class="yes">§4.1 · §4.2</td></tr>
+    <tr><td class="mono">OD-3</td><td><b>blind local role test</b> — decide name-vs-slice without seeing who else did what</td><td class="yes">§3 NAME-11</td></tr>
+    <tr><td class="mono">OD-4</td><td>FS-22 retirement — <b>there is no slice-value recurrence rule</b></td><td class="yes">§5.2 · row 37</td></tr>
+    <tr><td class="mono">OD-5</td><td>change scanner — a <b>recommendation only</b>, never facts</td><td>BUILD §7</td></tr>
+    <tr><td class="mono">OD-6</td><td>the fitness gate</td><td>BUILD §4</td></tr>
+    <tr><td class="mono">OD-7</td><td>live admission — its born-complete <b>CORE</b> is ratified inside the kernel; the <b>BROADER</b> design stays UNRATIFIED</td><td>BUILD §8.1 · §11.2</td></tr>
+    <tr><td class="mono">OD-8</td><td>the collision law — ten hashed slots, the full ladder, pre-batch state</td><td class="yes">§5.1</td></tr>
+    <tr><td class="mono">OD-9</td><td>measurement as the never-drop safety sink</td><td class="yes">§5.3</td></tr>
+    <tr><td class="mono">OD-10</td><td><code>series_unit</code> — equality grouping, no family map, no absorption</td><td class="yes">§6.1 · §9</td></tr>
+    <tr><td class="mono">OD-11</td><td>growth basis — YoY default, the annual pin, points/bps wins</td><td class="yes">§6.1</td></tr>
+    <tr><td class="mono">OD-12</td><td>the signed axis — a loss is negative</td><td class="yes">§6.1</td></tr>
+    <tr><td class="mono">OD-13</td><td>code never assigns beat/miss from sign — <b>meaning decides favorability</b></td><td class="yes">§4.3 · §7.1</td></tr>
+    <tr><td class="mono">OD-14</td><td>guidance chronology — derived movement, amendments as new facts</td><td class="yes">§9</td></tr>
+    <tr><td class="mono">OD-15</td><td>near-synonym live races = normal over-splits; <b>no locking layer</b></td><td class="yes">§4.2</td></tr>
+    <tr><td class="mono">OD-16</td><td><b>resolved 2026-07-15 → lazy born-complete.</b> Its old materialize-all sync is retired.</td><td class="yes">§4.2</td></tr>
+    <tr><td class="mono">OD-17</td><td>portions stay in names — <code>current_rpo</code> ≠ <code>rpo</code></td><td class="yes">§3</td></tr>
+    <tr><td class="mono">OD-18</td><td>flagged ATTACH — blind three-check; CLAIM is separate and <b>ships off</b></td><td class="yes">§5.4</td></tr>
+    <tr><td class="mono">OD-19</td><td>token-subset matching — <b>inert</b> until the K-pairs.v2 gate reads zero wrong-same</td><td class="yes">§5.4</td></tr>
+    <tr><td class="mono">OD-20</td><td><code>CONTINUES_AS</code> — explicit company declaration only, fail-closed</td><td class="yes">§5.4</td></tr>
+    <tr><td class="mono">OD-21</td><td>the <code>surprise=</code> slot and its three types on <b>one</b> surprise driver</td><td class="yes">§5.1 · §6.2 · §7</td></tr>
+  </table></div>
+
+  <div class="note"><b>OD-3 and OD-16 are why this page exists.</b> Neither is named anywhere in the rulebook —
+  they live in the status file's decision trail, carried in the rules' <i>substance</i> but not their labels.
+  A tool that read only the rulebook would report <b>19</b> owner decisions and never mention the other two.</div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="chiprow"><span class="idchip">OD-7</span></div>
+      <div class="t">A decision split in half — read carefully</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">RATIFIED</span><span class="txt">the born-complete / live-create <b>CORE</b>, inside Admission Kernel v3.4 — <b>and still not activated</b></span></div>
+        <div class="r a"><span class="lab">UNRATIFIED</span><span class="txt">the <b>BROADER</b> OD-7 design — the mis-name/mis-type exit after facts exist, and the exact recipes</span></div>
+      </div>
+      <p class="why">Easy to over-read as "OD-7 is done". It isn't.
+      The rest lands at a <b>future OD-7 pass</b> — the recipe <b>is not yet written</b>.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">K2</span></div>
+      <div class="t">Also decided, outside the OD numbering</div>
+      <div class="kv">
+        <span class="k">K2</span><span class="v">fold repair stays <b>per-pair</b>; batched fold repair deferred</span>
+        <span class="k">frozen</span><span class="v">packet v1.0 + Channel Contract v1.0 — the boundary files</span>
+        <span class="k">Track C</span><span class="v">the full <b>no-replay reversal</b></span>
+      </div>
+      <p class="why">These sit in the same "additions that are not reversals" list —
+      real decisions that simply never got an OD number.</p>
+    </div>
+  </div>
+</div></section>
+
+<section id="rulings"><div class="wrap">
+  <div class="sec-h"><span class="sec-n">§4 STATUS</span><h2>Eight owner rulings</h2></div>
+  <p class="sec-sub">Questions only you could answer. Each closed a real fork in the design.</p>
+
+  <div class="grid">
+    <div class="card">
+      <div class="chiprow"><span class="idchip">Q1</span><span class="idchip">2026-07-15</span></div>
+      <div class="t"><code>company_confirmed</code> — who decides?</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">FORK</span><span class="txt">let channels send the boolean, and guess when attribution is unclear</span></div>
+        <div class="r a"><span class="lab">RULED</span><span class="txt">the <b>CORE</b> derives it from who-said-it evidence. Unclear → <b>SKIP</b>. <code>false</code> stays reserved.</span></div>
+      </div>
+      <p class="why">Enabling a third-party class is a <b>separate</b> part-2/news decision — not something a channel can do by writing a boolean.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">Q2</span><span class="idchip">2026-07-15</span></div>
+      <div class="t">Facts about accounting constructs</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">FORK</span><span class="txt">invent a home for elimination/consolidation facts</span></div>
+        <div class="r a"><span class="lab">RULED</span><span class="txt"><b>No change</b> — the frozen packet's <b>PARK + log</b> stands. FS-20 auto-demotion is the drain.</span></div>
+      </div>
+      <p class="why">A ruling that <b>changed nothing</b> is still a ruling: it closed the question so it can't be reopened by drift.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">Q3</span><span class="idchip">2026-07-15</span></div>
+      <div class="t">How does the catalog reach the graph?</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">FORK</span><span class="txt">materialize every catalog name into graph nodes up front (OD-16)</span></div>
+        <div class="r a"><span class="lab">RULED</span><span class="txt">resolution <b>(b)</b> — offline catalog + <b>lazy born-complete</b> nodes, created in the same write as their first fact</span></div>
+      </div>
+      <p class="why">This <b>retired</b> materialize-all sync and narrowed OD-16.
+      The mechanics are honestly marked <b>"TO BE specified"</b> — the recipe isn't written yet.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">Q4</span><span class="idchip">2026-07-15</span></div>
+      <div class="t">The XBRL packet shape</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">FORK</span><span class="txt">accept partial dimensions and bare fragments</span></div>
+        <div class="r a"><span class="lab">RULED</span><span class="txt">amendment <b>APPLIED</b> — verified-empty <code>dimensions=[]</code> · both axis+member · <b>never fragments</b></span></div>
+      </div>
+      <p class="why">Not just decided — <b>applied</b> the same day to the Channel Contract and the frozen packet.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">Q5</span><span class="idchip">2026-07-15</span></div>
+      <div class="t">Can a card be born from an unreadable fact?</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">FORK</span><span class="txt">apply the first-fact pin to <b>every</b> new driver</span></div>
+        <div class="r a"><span class="lab">RULED</span><span class="txt">scoped to <b>bare names</b>. Suffix-proven lanes may be born <code>unknown</code>.</span></div>
+      </div>
+      <p class="why">A precise cut: OD-1's two checks <b>already</b> proved the suffix lane, so the pin would be
+      redundant there — and would have blocked legitimate bare guides.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">R6</span><span class="idchip">round 16</span></div>
+      <div class="t">When may an XBRL conflict retry?</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">FORK</span><span class="txt">retry whenever something upstream changed</span></div>
+        <div class="r a"><span class="lab">RULED</span><span class="txt">retry <b>only</b> when the affected report's parsed XBRL facts actually change. <b>An amended filing is a NEW report</b> — never a silent rewrite.</span></div>
+      </div>
+      <p class="why">Same principle as everywhere else: <b>new information = a new fact</b>, never an edit to an old one.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">R7</span><span class="idchip">2026-07-16</span></div>
+      <div class="t">The reader test's own bar</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">FORK</span><span class="txt">retry the test and hope · or weaken the question</span></div>
+        <div class="r a"><span class="lab">RULED</span><span class="txt">amend Q3 — every surprise must <b>construct its home fact</b>, name the home's state, and show <b>all six</b> match dimensions</span></div>
+      </div>
+      <p class="why">A ruling about how the design <b>proves itself</b>: option 2 was "retry luck", option 3 "weakens the test".
+      This made the exam <b>harder</b>, and it then passed 10/10.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">R8</span><span class="idchip">2026-07-16</span></div>
+      <div class="t">What must a future test pin?</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">FORK</span><span class="txt">hash only the three "law" files; treat BUILD/STATUS as noise</span></div>
+        <div class="r a"><span class="lab">RULED</span><span class="txt"><b>REJECTED.</b> Every test pins <b>every</b> file it reads — BUILD and STATUS carry essential mechanics and decisions.</span></div>
+      </div>
+      <p class="why">And the rerun trigger: routine build progress <b>doesn't</b> need a full test.
+      Rules, contracts, operative mechanics, gates, owner decisions, crosswalks and major handoffs <b>do</b>.</p>
+    </div>
+  </div>
+</div></section>
+
+<section id="refresh"><div class="wrap">
+  <div class="sec-h"><span class="sec-n">BUILD §7</span><h2>Incremental refresh — the rules that survived</h2></div>
+  <p class="sec-sub">When new filings arrive, re-read <b>only the new documents</b> and staple the result onto the
+  locked catalog. The design is <span class="pill">FINAL · BUILD-PENDING</span> — decided, not yet built.</p>
+
+  <div class="note"><b>Read this before the cards.</b> The June WIP file that first designed this
+  (<code>WIP/IncrementalRefresh_FinalDesign.md</code>, last touched <b>2026-06-14</b>) is <b>not</b> certified law —
+  it isn't one of the 33 consolidated sources, and it's a month older than the rulebook.
+  What survived was <b>curated into BUILD</b>. The card below shows exactly where it went stale.</div>
+
+  <div class="grid">
+    <div class="card" style="border-color:var(--warn)">
+      <div class="chiprow"><span class="idchip">WIP §1c</span><span class="idchip">→</span><span class="idchip">§4.1</span></div>
+      <div class="t">The stale bit — what changed under it</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">JUN 14</span><span class="txt"><b>"<code>fact_type</code> — PENDING, NOT finalized… do NOT wire it in yet"</b><br>
+          "Open question: does <code>fact_type</code> coexist with the name suffixes, or do names simplify?"</span></div>
+        <div class="r a"><span class="lab">NOW</span><span class="txt"><b>FINAL.</b> Four permanent kinds, a verbatim frozen classifier prompt.<br>
+          The open question was <b>answered: BOTH</b> — the suffix stays <i>and</i> fixes the kind (NAME-17), admitted via OD-1.</span></div>
+      </div>
+      <p class="why">Its examples are Restaurant-era (<code>restaurant_closure</code>), and its
+      <code>ruleset_sha</code> still hashes <code>DriverOntology.md</code> — <b>a file that is no longer an authority</b>.
+      Useful history. <b>Not</b> a source of truth.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">BUILD §7</span></div>
+      <div class="t">The freeze rule — the whole point</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">re-judge everything each refresh, so it's all consistent</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt"><b>old ↔ old is FROZEN at every level.</b> Only pairs touching new data are judged.</span></div>
+      </div>
+      <p class="why">Re-judging settled pairs can <b>randomly create a new wrong merge</b> —
+      the one permanent error. So a settled decision is never re-asked. Not for speed. <b>For safety.</b></p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">BUILD §7</span></div>
+      <div class="t">The four buckets</div>
+      <figure style="margin:11px 0"><pre style="font-size:11.5px">
+              OLD (base)      NEW (delta)
+  OLD (base)  ┌ FROZEN ─────┬ SEAM ───────┐
+              │ never       │ judge       │
+              │ re-judge    │ carefully   │
+  NEW (delta) ├ SEAM ───────┼ judge ──────┤
+              │             │ normally    │
+              └─────────────┴─────────────┘</pre></figure>
+      <p class="why">Only the <b>seam</b> and <b>new↔new</b> cost anything. Across repeated refreshes
+      each pair is judged <b>exactly once</b> — which is why <b>no verdict cache is needed</b>.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">BUILD §7</span></div>
+      <div class="t">Skip by document ID — never by date</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">"fetch everything since last Tuesday"</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">a <b>source-id ledger</b> of every document ever read</span></div>
+      </div>
+      <p class="why">A backfilled old-dated filing arrives under a <b>new accession</b> —
+      a since-date query <b>silently skips it forever</b>. An ID check always catches it.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">BUILD §7</span></div>
+      <div class="t">SKIP reopens · PARK is terminal</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">SKIP</span><span class="txt">"too vague" — <b>can flip</b> when clearer evidence arrives</span></div>
+        <div class="r a"><span class="lab">PARK</span><span class="txt">a same-name homonym — <b>stays parked</b>. Only a fresh rebuild revisits it.</span></div>
+      </div>
+      <p class="why">Opposite treatment, one reason: more evidence <b>clarifies</b> a vague skip,
+      but makes a homonym <b>messier</b>. Re-opening a park re-asks the judge its hardest question —
+      and parked is already the safe state.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">BUILD §7</span></div>
+      <div class="t">One rename publishes everything</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">a pointer file per industry → two commits can split the global view</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">ONE canonical <code>_state.json</code>. A <b>single atomic rename</b> flips leaf + sector + global together.</span></div>
+      </div>
+      <p class="why">Crash before the rename → all three old levels stay live and consistent, the new dirs are
+      orphans, the ledger never advanced → a <b>clean re-fetch</b>. There is <b>no window</b> where the pointer
+      names a half-built thing.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">BUILD §7</span></div>
+      <div class="t">The ruleset fingerprint</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">trust an old verdict if the git commit matches</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt">a <b>ruleset hash</b> over the rules + model ids + the locked settings</span></div>
+      </div>
+      <p class="why">Beats a commit id both ways: it <b>catches</b> dirty edits and model swaps a commit
+      wouldn't, and it <b>doesn't over-fire</b> on unrelated commits.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">BUILD §7</span></div>
+      <div class="t">Three that arrived with the kernel</div>
+      <div class="kv">
+        <span class="k">re-run finalization</span><span class="v">with <b>prior types frozen</b></span>
+        <span class="k">latent bases</span><span class="v">stay <b>out of</b> fold inputs</span>
+        <span class="k">hash mismatch</span><span class="v">a <b>loud owner signal</b> — never automatic type invalidation</span>
+      </div>
+      <p class="why">These aren't in the June file at all — they came later, from the kernel integration.
+      The last one matters most: a fingerprint mismatch <b>asks you</b>, it never silently un-types drivers.</p>
+    </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">BUILD §7</span></div>
+      <div class="t">Two things still owed before the first run</div>
+      <div class="kv">
+        <span class="k">GATE</span><span class="v">verify <b>Transcript-ID immutability</b> across re-ingest — a read-only check, not a design choice</span>
+        <span class="k">allow-list</span><span class="v">the <b>industry-level fold</b> must be permitted, or a leaf merge can't run at all</span>
+      </div>
+      <p class="why">If transcript ids <b>aren't</b> stable across re-ingest, the whole ledger premise
+      collapses — so it's checked <b>before</b> the first refresh, never assumed.</p>
+    </div>
+  </div>
+</div></section>
+
+<section id="dead"><div class="wrap">
+  <div class="sec-h"><span class="sec-n">§2 STATUS</span><h2>The graveyard — 13 things that will never ship</h2></div>
+  <p class="sec-sub">Retired means <b>never a production path</b>. Listed so nobody proposes them again.</p>
+
+  <div class="scroll"><table>
+    <tr><th>retired</th><th>why it died</th></tr>
+    <tr><td class="no">old Guidance replay plan</td><td>superseded by the guidance chronology rebuild (row 34)</td></tr>
+    <tr><td class="no">fixed-vocabulary Driver v1</td><td><b>~82% of useful names rejected</b> — measured, not argued</td></tr>
+    <tr><td class="no">eager-reuse v2</td><td>reuse-first pushed different meanings onto one card — the permanent error</td></tr>
+    <tr><td class="no"><code>slice=total</code></td><td>"total" is also a real sub-population name → collides. Absence is unambiguous.</td></tr>
+    <tr><td class="no">alias layers</td><td>a second place where meaning lives = a second place to be wrong</td></tr>
+    <tr><td class="no"><code>long_range</code> scope value</td><td>a stated date range is an <code>exact_range</code>, not a vibe</td></tr>
+    <tr><td class="no"><code>gp_UNDEF</code> quiet fallback</td><td>a silent "unknown period" is a fact pretending to be resolved</td></tr>
+    <tr><td class="no"><code>evhash16</code> on DriverUpdate</td><td>a cache of something you can just compare — retired as derivable</td></tr>
+    <tr><td class="no">FS-22 cross-company recurrence</td><td>popularity was never evidence (OD-4)</td></tr>
+    <tr><td class="no">RavenPack import</td><td>an outside taxonomy is not this system's meaning</td></tr>
+    <tr><td class="no">catalog-first live reuse</td><td>replaced by propose-first (row 21)</td></tr>
+    <tr><td class="no">SDK/OAuth metered concept invocation</td><td>subscription-only invocation (row 22)</td></tr>
+    <tr><td class="no">OD-16 materialize-all catalog sync</td><td>owner ruling Q3 → lazy born-complete instead</td></tr>
+  </table></div>
+
+  <p class="why" style="margin-top:16px">Two entries are worth re-reading: <b>fixed-vocabulary v1</b> and
+  <b>eager-reuse v2</b> are the system's two previous deaths. Both died the same way — they tried to make names
+  reusable by <b>forcing</b> reuse. The one law is the scar tissue from those two.</p>
+</div></section>
+
+<footer><div class="wrap">
+  <div class="kv" style="font-size:13px">
+    <span class="k">sources</span><span class="v" style="font-weight:400"><code>FINAL_DESIGN.md</code> §0–§10 · <code>STATUS_AND_HISTORY.md</code> §2/§3/§4 · <code>BUILD_AND_OPERATIONS.md</code> §7</span>
+    <span class="k">pinned at</span><span class="v" style="font-weight:400">commit <code>5d0bd41</code> — the certified seven-file freeze (reader test 10/10, 7/7 hashes)</span>
+    <span class="k">covers</span><span class="v" style="font-weight:400">23 sections · 71 rule IDs · 21 owner decisions · 42 reversals · 8 rulings · 13 retired</span>
+    <span class="k">not law</span><span class="v" style="font-weight:400">this page is a <b>study aid</b>. On any conflict the seven certified files win — always.</span>
+  </div>
+</div></footer>
+
+<script>
+(function(){
+  var b = document.getElementById('themer'), r = document.documentElement;
+  b.onclick = function(){
+    var cur = r.getAttribute('data-theme');
+    if(!cur){ cur = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; }
+    r.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark');
+  };
+  document.querySelectorAll('.jump a').forEach(function(a){
+    a.onclick = function(e){
+      var t = document.querySelector(a.getAttribute('href'));
+      if(t){ e.preventDefault(); t.scrollIntoView({behavior:'smooth', block:'start'}); }
+    };
+  });
+})();
+</script>
