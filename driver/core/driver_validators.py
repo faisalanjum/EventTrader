@@ -115,11 +115,21 @@ def surprise_position(low, high, exp_low, exp_high, *, value_is_guide=False):
                 return "below"
         return "overlap"
     if exp_low is not None:                                             # floor
-        return "at_floor" if low == exp_low and high == exp_low else (
-            "above" if low is not None and low > exp_low else "overlap")
+        if low == exp_low and high == exp_low:
+            return "at_floor"
+        if low is not None and low > exp_low:
+            return "above"
+        if high is not None and high < exp_low:
+            return "below"           # entirely under an "at least" floor — definitive
+        return "overlap"
     if exp_high is not None:                                            # ceiling
-        return "at_ceiling" if low == exp_high and high == exp_high else (
-            "below" if high is not None and high < exp_high else "overlap")
+        if low == exp_high and high == exp_high:
+            return "at_ceiling"
+        if high is not None and high < exp_high:
+            return "below"
+        if low is not None and low > exp_high:
+            return "above"           # entirely over an "up to" ceiling — definitive
+        return "overlap"
     return "overlap"
 
 

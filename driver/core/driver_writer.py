@@ -42,7 +42,9 @@ _COPIED_FIELDS = SIGNATURE_FIELDS + _LWW_FIELDS + ("fact_scope",)
 STORED_FACT_FIELDS = frozenset(_COPIED_FIELDS) | {"id", "created", "series_unit"}
 assert len(STORED_FACT_FIELDS) == 24
 
-PlanResult = namedtuple("PlanResult", "fact_id outcome reason ops")
+PlanResult = namedtuple("PlanResult", "fact_id outcome reason ops code",
+                        defaults=(None,))   # code: EXPLICIT machine code on parks —
+                                            # §11.4 v3.6: free text is never parsed
 
 
 class WriterError(RuntimeError):
@@ -233,7 +235,8 @@ def _plan_kept(bare_id, kept, graph, prior_series_units):
             for i, _ in kept:                          # fusion should have merged these
                 out.append((i, PlanResult(bare_id, "parked",
                                           "compatible same-scope in-batch facts — "
-                                          "fusion upstream should have merged them", [])))
+                                          "fusion upstream should have merged them", [],
+                                          "UNFUSED_PAIR")))
         return out
 
     i, fact = kept[0]
@@ -263,7 +266,8 @@ def _plan_kept(bare_id, kept, graph, prior_series_units):
         return out
     out.append((i, PlanResult(bare_id, "parked",
                               "ambiguous: compatible-but-not-exact with multiple "
-                              "siblings — never guess which member to fill", [])))
+                              "siblings — never guess which member to fill", [],
+                              "COLLISION_AMBIGUOUS")))
     return out
 
 
@@ -286,7 +290,8 @@ def _plan_competitors(kept, siblings, graph, prior_series_units):
             if compat_count > 1 or len(siblings) > 1:
                 out.append((i, PlanResult(fact["id"], "parked",
                                           "in-batch competitors for one partial "
-                                          "sibling — a richer rerun resolves", [])))
+                                          "sibling — a richer rerun resolves", [],
+                                          "IN_BATCH_COMPETITORS")))
             else:
                 out.append((i, _merge_or_fill(fact, siblings[0], "compatible")))
         elif all(_classify(sigs[i], sigs[j]) == "conflict"
@@ -296,7 +301,8 @@ def _plan_competitors(kept, siblings, graph, prior_series_units):
         else:
             out.append((i, PlanResult(fact["id"], "parked",
                                       "mixed in-batch/sibling ambiguity — "
-                                      "fail closed, never guess", [])))
+                                      "fail closed, never guess", [],
+                                      "COLLISION_AMBIGUOUS")))
     return out
 
 
@@ -306,12 +312,12 @@ def _create(fact, *, hashed, late, graph, prior_series_units):
         if len(prior) != 1:
             return PlanResult(fact["id"], "parked",
                               f"series_unit: need exactly one clear prior guide, "
-                              f"got {len(prior)} — fail closed", [])
+                              f"got {len(prior)} — fail closed", [], "SERIES_UNIT")
         prior = prior[0]
     try:
         series_unit = stamp_series_unit(fact, prior)
     except WriterError as e:
-        return PlanResult(fact["id"], "parked", f"series_unit: {e}", [])
+        return PlanResult(fact["id"], "parked", f"series_unit: {e}", [], "SERIES_UNIT")
 
     fact_id = fact["id"]
     if hashed:
@@ -329,7 +335,8 @@ def _create(fact, *, hashed, late, graph, prior_series_units):
     if bad is not None:
         return PlanResult(fact["id"], "parked",
                           f"{bad[0]}={bad[1]} is not exactly storable "
-                          f"(owner exactness law) — park, never approximate", [])
+                          f"(owner exactness law) — park, never approximate", [],
+                          "NOT_STORABLE")
     ops = [{"op": "create_fact", "id": fact_id, "props": props},
            {"op": "edge", "type": "OF_DRIVER", "from": fact_id,
             "to": fact["driver_name"]},
@@ -390,14 +397,15 @@ def _merge_or_fill(fact, target, rel):
             return PlanResult(target["id"], "parked",
                               f"series_unit conflict: stored {current!r} vs "
                               f"merged-content axis {prospective!r} — repair lane only",
-                              [])
+                              [], "SERIES_UNIT")
     if not sets:
         return PlanResult(target["id"], "noop", None, [])
     bad = _store_numeric(sets)
     if bad is not None:
         return PlanResult(target["id"], "parked",
                           f"{bad[0]}={bad[1]} is not exactly storable "
-                          f"(owner exactness law) — park, never approximate", [])
+                          f"(owner exactness law) — park, never approximate", [],
+                          "NOT_STORABLE")
     ops = [{"op": "set_fields", "id": target["id"], "fields": sets}] + logs
     outcome = "filled" if rel == "compatible" and any(
         k in SIGNATURE_FIELDS for k in sets) else "updated"

@@ -148,9 +148,13 @@ def test_sequential_evidence_carried_and_typed():
 def test_surprise_evidence_fields():
     ok = PreparedFactV1.from_dict(minimal(
         has_favorability_wording=False,
-        polarity_proof={"polarity": "favorable", "basis": "source_framing",
+        polarity_proof={"polarity": "higher_favorable", "basis": "source_framing",
                         "evidence": "came in ahead of plan", "sentence": "one line"}))
     assert ok.has_favorability_wording is False
+    with pytest.raises(SchemaError, match="polarity"):     # pinned two-value enum
+        PreparedFactV1.from_dict(minimal(
+            polarity_proof={"polarity": "favorable", "basis": "source_framing",
+                            "evidence": "e", "sentence": "s"}))
     with pytest.raises(SchemaError, match="basis"):
         PreparedFactV1.from_dict(minimal(
             polarity_proof={"polarity": "favorable", "basis": "gut_feeling",

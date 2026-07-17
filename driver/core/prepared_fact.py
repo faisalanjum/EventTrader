@@ -163,6 +163,9 @@ class PreparedFactV1:
             if proof["basis"] not in _POLARITY_BASES:
                 raise SchemaError(f"polarity_proof.basis: must be one of "
                                   f"{_POLARITY_BASES}, got {proof['basis']!r}")
+            if proof["polarity"] not in ("higher_favorable", "lower_favorable"):
+                raise SchemaError(f"polarity_proof.polarity: exactly higher_favorable "
+                                  f"or lower_favorable, got {proof['polarity']!r}")
 
     @classmethod
     def from_dict(cls, d):

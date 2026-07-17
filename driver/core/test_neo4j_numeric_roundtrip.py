@@ -2,13 +2,21 @@
 2026-07-17 — the ONE sanctioned Neo4j write in S3): a self-deleting probe node under
 its own label proves that every value the writer classifies as storable comes back
 EXACTLY, including whole numbers beyond float precision (why integers store as longs).
-Skips cleanly when no Neo4j is reachable; deletes its node in all cases."""
+Skips cleanly when no Neo4j is reachable; deletes its node in all cases.
+
+OPT-IN ONLY (owner ruling 2026-07-17): normal unit runs must perform ZERO live
+writes. Run this probe only with explicit owner approval when storage behavior
+changes:  RUN_NEO4J_ROUNDTRIP_PROBE=1 venv/bin/python -m pytest driver/core/test_neo4j_numeric_roundtrip.py"""
 import os
 import uuid
 from decimal import Decimal
 from pathlib import Path
 
 import pytest
+
+if not os.environ.get("RUN_NEO4J_ROUNDTRIP_PROBE"):
+    pytest.skip("live write/delete probe is opt-in only (owner approval required) — "
+                "set RUN_NEO4J_ROUNDTRIP_PROBE=1", allow_module_level=True)
 
 neo4j = pytest.importorskip("neo4j")
 
