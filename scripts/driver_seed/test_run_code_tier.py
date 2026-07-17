@@ -60,6 +60,31 @@ def test_plug_and_absent():
     print("[ok] plug SKIP + value_absent (sources_searched carried)")
 
 
+def test_second_source_residual_survives_when_first_resolves(monkeypatch):
+    """#2: a source whose value only the LLM could extract must NOT be dropped just because ANOTHER source
+    already resolved deterministically. Design (15 D.2): the same value on two sources = two records, and the
+    8-K/PR carries EARLIER availability. Old code did `if emitted: continue` -> the PR's candidates vanished.
+    Routing is the defect, so drive resolve_one directly."""
+    filing = {'source_id': 'F', 'source_type': '10q', 'event_time': 't1', 'xbrls': [], 'texts': ['x']}
+    pr = {'source_id': '8K', 'source_type': '8k', 'event_time': 't0', 'xbrls': [], 'texts': ['y']}
+
+    def fake_resolve(it, src, allow_t1):
+        if src['source_id'] == 'F':
+            return ({'source_id': 'F', 'source_type': '10q', 'value': it['value']}, [])   # filing resolves
+        return (None, ['fourth quarter revenue was strong'])                              # PR: snips-only
+    monkeypatch.setattr(RC, 'resolve_one', fake_resolve)
+
+    resolved, residual, abstain = RC.process_cp([mk_item('revenue', 4321)], filing, [pr])
+    assert len(resolved) == 1 and resolved[0]['source_id'] == 'F', resolved
+    # the PR's candidates survive (tagged with their source), even though the filing resolved
+    assert any(c['src'] == '8K' for r in residual for c in r['candidates']), f"PR residual dropped: {residual}"
+    assert not abstain, abstain
+    # and the residual record carries EXACTLY the fields the LLM batcher reads (prep_llm_batches), so the
+    # residual -> LLM path can't KeyError
+    for k in ('ticker', 'kpi', 'value', 'fmt', 'is_currency', 'period', 'form', 'filing_id', 'candidates'):
+        assert k in residual[0], f"residual missing batcher field {k}: {residual[0]}"
+
+
 def test_xbrl_context():
     fc = {'value': '201183', 'period': {'startDate': '2023-10-01', 'endDate': '2024-09-28'},
           'segment': {'dimension': 'us-gaap:ProductOrServiceAxis', 'value': 'aapl:IPhoneMember'}}

@@ -159,13 +159,19 @@ def process_cp(items, filing, prs):
         for src, allow_t1 in [(filing, True)] + [(p, False) for p in prs]:
             rec, snips = resolve_one(it, src, allow_t1)
             if rec:
-                resolved.append(rec); emitted = True
-            cands += [{'text': s, 'src': src['source_id'], 'src_type': src['source_type']} for s in snips]
-        if emitted:
-            continue
+                resolved.append(rec); emitted = True          # this source -> its own record
+            elif snips:                                        # an UNRESOLVED source's evidence for the LLM tier
+                cands += [{'text': s, 'src': src['source_id'], 'src_type': src['source_type']} for s in snips]
         if cands:
-            residual.append({**base, 'candidates': cands}); continue
-        abstain.append({**base, 'status': 'value_absent', 'reason': 'value_absent'})
+            # #2: keep a source's LLM candidates EVEN IF another source already resolved deterministically —
+            # same value on two sources = two records (15 D.2), and the 8-K/PR carries earlier availability.
+            # Fields match the LLM batcher's contract (prep_llm_batches: kpi/period/is_currency/filing_id) so
+            # the residual -> LLM path is schema-compatible.
+            residual.append({'ticker': it['ticker'], 'kpi': name, 'value': val, 'fmt': fmt,
+                             'is_currency': it['is_currency'], 'period': it['period'], 'form': it['form'],
+                             'filing_id': filing['source_id'], 'sources_searched': searched, 'candidates': cands})
+        elif not emitted:
+            abstain.append({**base, 'status': 'value_absent', 'reason': 'value_absent'})
     return resolved, residual, abstain
 
 
