@@ -106,8 +106,30 @@ def exact_form(form, value, fmt):
     return False
 
 
+def printed_negative(quote, form):
+    """Does the quote print THIS number with accounting-negative NOTATION — '(123)' or '-123'?
+    Notation ONLY. A sign carried by a word ("operating loss of 331") is a MEANING call the core owns
+    (OD-12: the sign signal may be a noun, notation, or context) — code must never read words for sign.
+    Requires the closing ')' so an ordinary parenthetical ("(500 employees)") can't be misread."""
+    core = (form or '').lstrip('$( ').rstrip(')%').strip()
+    if not core:
+        return False
+    for m in re.finditer(re.escape(core), quote or ''):
+        pre, post = (quote[:m.start()]).rstrip(), (quote[m.end():]).lstrip()
+        if pre.endswith('(') and post.startswith(')'):
+            return True
+        if re.search(r'(?<![\w.])[-−]\s*$', pre):
+            return True
+    return False
+
+
 def value_ok(value, fmt, quote):
-    """final deterministic self-check: value present at a real boundary AND losslessly."""
+    """final deterministic self-check: value present at a real boundary AND losslessly, and the quote's own
+    NOTATION does not contradict the value's sign.
+    SCOPE (unchanged): this proves the NUMBER is in the quote — never that the KPI/period/slice binding is
+    right (that is the binder + audits). The sign guard adds only the mechanical half: a value whose sign
+    the quote's notation flatly contradicts is a wrong bind. A plain print asserts nothing about sign, so it
+    is left to pass here and be judged where meaning lives — no keyword list, no guessed sign."""
     forms = {f for f in value_forms(value, fmt or 'number') if len(f) >= 2}
     for div in (1e6, 1e9):
         xx = abs(float(value)) / div
@@ -115,7 +137,12 @@ def value_ok(value, fmt, quote):
             for d in (1, 2):
                 forms.add(f"{xx:,.{d}f}")
     hits = [f for f in forms if bounded_hit(quote, f)]
-    return any(exact_form(f, value, fmt) for f in hits)
+    ok = [f for f in hits if exact_form(f, value, fmt)]
+    if not ok:
+        return False
+    if float(value) > 0 and any(printed_negative(quote, f) for f in ok):
+        return False                      # positive value vs a negative print -> wrong bind
+    return True
 
 
 # ---------- Step-0 emit gates: anti-hallucination + graded value presence (0 tokens) ----------
