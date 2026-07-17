@@ -310,6 +310,8 @@ def test_storable_classification():
     assert storable(Decimal("4.9")) == ("float", 4.9)        # round-trip-exact decimal
     assert storable(Decimal("9007199254740993")) == ("int", 9007199254740993)  # 2^53+1
     assert storable(2 ** 63) is None                          # beyond Neo4j long
+    assert storable(-(2 ** 63)) == ("int", -(2 ** 63))        # the long MIN is storable
+    assert storable(Decimal("1E+400")) is None                # float overflow -> park
     assert storable(Decimal("1.0000000000000000001")) is None  # not float-exact -> park
 
 

@@ -485,6 +485,21 @@ def test_exact_decimal_inputs_accepted():
     assert check(fact) == []
 
 
+def test_fiscal_fields_validated():
+    assert "FISCAL" in codes(check(mk(fiscal_year="2025")))
+    assert "FISCAL" in codes(check(mk(fiscal_year=99999)))
+    assert "FISCAL" in codes(check(mk(fiscal_quarter=5)))
+    assert "FISCAL" in codes(check(mk(fiscal_quarter=True)))
+    assert check(mk()) == []                       # 2025 / Q3 golden stays clean
+
+
+def test_violation_order_is_caller_independent():
+    a, b = mk(), mk()
+    a.update([("zzz_extra", 1), ("aaa_extra", 2)])
+    b.update([("aaa_extra", 2), ("zzz_extra", 1)])
+    assert [v.message for v in check(a)] == [v.message for v in check(b)]
+
+
 def test_P4_old_guide_restated_after_period_end_stays_gvc():
     s = mk("surprise", "point", surprise="guidance_vs_consensus",
            surprise_basis_hint="guidance")          # QP ended before event_time

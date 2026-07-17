@@ -113,8 +113,11 @@ def storable(value):
     d = value if isinstance(value, Decimal) else Decimal(value)
     if d == d.to_integral_value():
         i = int(d)
-        return ("int", i) if abs(i) < 2 ** 63 else None
-    f = float(d)
+        return ("int", i) if -(2 ** 63) <= i < 2 ** 63 else None   # the full long range
+    try:
+        f = float(d)
+    except OverflowError:
+        return None
     return ("float", f) if Decimal(repr(f)) == d else None
 
 

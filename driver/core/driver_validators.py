@@ -139,7 +139,7 @@ def validate_fact(fact, *, driver, home_facts=None):
     v = []
     add = lambda code, action, msg: v.append(Violation(code, action, msg))
 
-    for key in fact:
+    for key in sorted(fact):        # sorted: violation ORDER is caller-independent
         if key not in _ALLOWED_FIELDS:
             add("UNKNOWN_FIELD", "REJECT", f"field {key!r} is not in the stored contract")
 
@@ -183,6 +183,13 @@ def validate_fact(fact, *, driver, home_facts=None):
     if fact.get("driver_state") not in LANE_STATES[lane]:
         add("STATE", "REJECT",
             f"state {fact.get('driver_state')!r} outside the {lane} lane")
+
+    fy, fq = fact.get("fiscal_year"), fact.get("fiscal_quarter")
+    if fy is not None and (isinstance(fy, bool) or not isinstance(fy, int)
+                           or not 1900 <= fy <= 2200):
+        add("FISCAL", "REJECT", f"fiscal_year must be a plausible integer year, got {fy!r}")
+    if fq is not None and (isinstance(fq, bool) or fq not in (1, 2, 3, 4)):
+        add("FISCAL", "REJECT", f"fiscal_quarter must be 1-4, got {fq!r}")
 
     _id_rebuild(fact, add)
 

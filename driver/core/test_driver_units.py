@@ -162,3 +162,47 @@ def test_float_source_values_rejected_at_the_units_seam():
         resolve_driver_units("revenue", level_values=[1.5], level_unit_raw="B",
                              level_unit_kind_hint="money",
                              level_money_mode_hint="aggregate", period_scope="quarter")
+
+
+def test_exact_scaling_is_immune_to_the_ambient_decimal_context():
+    # round-8 bug (reproduced): Decimal arithmetic honors the THREAD-GLOBAL context —
+    # any library lowering it silently rounded "exact" products. Now context-pinned.
+    from decimal import localcontext
+    with localcontext() as ctx:
+        ctx.prec = 6
+        out = resolve_driver_units(
+            "revenue", level_values=[Decimal("1.2345678")], level_unit_raw="B",
+            level_unit_kind_hint="money", level_money_mode_hint="aggregate",
+            period_scope="quarter")
+    assert out["level_values"] == [Decimal("1234.5678000")]   # 8 sig digits > prec 6
+
+
+def test_high_precision_product_never_rounds_even_past_28_digits():
+    v = Decimal("1.23456789012345678901234567891")           # 30 significant digits
+    out = resolve_driver_units("eps", level_values=[v], level_unit_raw="$",
+                               level_unit_kind_hint="money",
+                               level_money_mode_hint="price_like",
+                               period_scope="quarter")
+    assert out["level_values"] == [v]                         # default prec=28 beaten
+
+
+def test_tiny_and_huge_values_are_defined_not_crashes():
+    tiny = resolve_driver_units("ratio_metric", level_values=[Decimal("1E-320")],
+                                level_unit_raw="%", level_unit_kind_hint="ratio",
+                                period_scope="quarter")
+    assert tiny["level_values"] == [Decimal("1E-320")]
+    with pytest.raises(UnitResolutionError, match="float range"):
+        resolve_driver_units("ratio_metric", level_values=[Decimal("1E+400")],
+                             level_unit_raw="%", level_unit_kind_hint="ratio",
+                             period_scope="quarter")
+
+
+def test_count_999_prescale_boundary_pinned():
+    ok = resolve_driver_units("share_count", level_values=[999],
+                              level_unit_raw="billion", level_unit_kind_hint="count",
+                              period_scope="quarter")
+    assert ok["level_values"] == [Decimal("999000000000")]
+    with pytest.raises(UnitResolutionError, match="pre-scaled"):
+        resolve_driver_units("share_count", level_values=[1000],
+                             level_unit_raw="billion", level_unit_kind_hint="count",
+                             period_scope="quarter")

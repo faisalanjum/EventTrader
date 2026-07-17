@@ -11,7 +11,8 @@ what current law layers on top:
     fails closed to unknown; points/bps always win (they resolve upstream)
   - the 10-unit enum (adds percent_sequential to the substrate's 9)
 """
-from decimal import Decimal, InvalidOperation
+import math
+from decimal import Decimal, InvalidOperation, localcontext
 
 from driver.core.unit_resolver import CANONICAL_UNITS, resolve_unit
 
@@ -99,7 +100,14 @@ def _slot(name, raw, values, kind_hint, money_hint, quote, xbrl_qname, warnings,
             exact_in = None if value is None else Decimal(str(value))
         except InvalidOperation:
             raise UnitResolutionError(f"not a number: {value!r}")
-        r = resolve_unit(name, raw, None if exact_in is None else float(exact_in),
+        try:
+            probe_val = None if exact_in is None else float(exact_in)
+        except OverflowError:
+            probe_val = math.inf
+        if probe_val is not None and not math.isfinite(probe_val):
+            raise UnitResolutionError(
+                f"{value!r} exceeds float range for the resolver's guards — park")
+        r = resolve_unit(name, raw, probe_val,
                          unit_kind_hint=kind_hint,
                          money_mode_hint=money_hint, quote=quote, xbrl_qname=xbrl_qname)
         if r.error:
@@ -118,8 +126,21 @@ def _slot(name, raw, values, kind_hint, money_hint, quote, xbrl_qname, warnings,
                                          money_mode_hint=money_hint, quote=quote,
                                          xbrl_qname=xbrl_qname).scaled_value
                     factor = Decimal(repr(probe)) if probe is not None else Decimal(1)
-                exact = exact_in * factor
-                if round(float(exact), 6) != round(r.scaled_value, 6):
+                with localcontext() as ctx:
+                    # a x b needs exactly digits(a)+digits(b) precision — NEVER trust
+                    # the ambient thread-global context (any library may lower it;
+                    # even the default 28 silently rounds — review round 8)
+                    ctx.prec = (len(exact_in.as_tuple().digits)
+                                + len(factor.as_tuple().digits) + 2)
+                    exact = exact_in * factor
+                try:
+                    approx = float(exact)
+                except OverflowError:
+                    approx = math.inf
+                if not math.isfinite(approx):
+                    raise UnitResolutionError(
+                        f"scaled {value!r} {raw!r} exceeds float range — park")
+                if round(approx, 6) != round(r.scaled_value, 6):
                     raise UnitResolutionError(
                         f"exact scaling diverged from the proven resolver for "
                         f"{value!r} {raw!r} ({exact} vs {r.scaled_value}) — park")
