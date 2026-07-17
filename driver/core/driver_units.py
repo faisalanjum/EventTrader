@@ -12,7 +12,7 @@ what current law layers on top:
   - the 10-unit enum (adds percent_sequential to the substrate's 9)
 """
 import math
-from decimal import Decimal, InvalidOperation, localcontext
+from decimal import Context, Decimal, InvalidOperation, localcontext
 
 from driver.core.unit_resolver import CANONICAL_UNITS, resolve_unit
 
@@ -118,15 +118,6 @@ def _slot(name, raw, values, kind_hint, money_hint, quote, xbrl_qname, warnings,
             raise UnitResolutionError(lint[0])       # per-X needs '_per_X' in the NAME
         warnings.extend(w for w in r.warnings if w not in warnings)
         unit = r.canonical_unit
-        # the >999 pre-scaled guard exists ONLY in aggregate-money and count scaling
-        # (guidance_ids) and evaluates on the FLOAT — park a boundary-straddling exact
-        # value there, and only there (rounds 9-10)
-        if exact_in is not None and (r.kind == "count" or (
-                r.kind == "money" and r.money_mode == "aggregate")) and (
-                (exact_in > _PRESCALE_BOUNDARY) != (probe_val > _PRESCALE_BOUNDARY)):
-            raise UnitResolutionError(
-                f"{value!r} straddles the resolver's pre-scale guard boundary beyond "
-                f"float fidelity — park")
         if exact_in is not None:
             if r.scaled_value is None:
                 scaled.append(None)
@@ -136,12 +127,23 @@ def _slot(name, raw, values, kind_hint, money_hint, quote, xbrl_qname, warnings,
                                          money_mode_hint=money_hint, quote=quote,
                                          xbrl_qname=xbrl_qname).scaled_value
                     factor = Decimal(repr(probe)) if probe is not None else Decimal(1)
-                with localcontext() as ctx:
-                    # a x b needs exactly digits(a)+digits(b) precision — NEVER trust
-                    # the ambient thread-global context (any library may lower it;
-                    # even the default 28 silently rounds — review round 8)
-                    ctx.prec = (len(exact_in.as_tuple().digits)
-                                + len(factor.as_tuple().digits) + 2)
+                # the >999 pre-scaled guard exists ONLY where the substrate has it —
+                # aggregate money with to_millions>1, count with factor>1e6
+                # (guidance_ids:390/:411; round 11) — and it evaluates on the FLOAT:
+                # park a boundary-straddling exact value there, and only there
+                guard_active = (
+                    (r.kind == "money" and r.money_mode == "aggregate" and factor > 1)
+                    or (r.kind == "count" and factor > 1_000_000))
+                if guard_active and ((exact_in > _PRESCALE_BOUNDARY)
+                                     != (probe_val > _PRESCALE_BOUNDARY)):
+                    raise UnitResolutionError(
+                        f"{value!r} straddles the resolver's pre-scale guard boundary "
+                        f"beyond float fidelity — park")
+                # a x b needs exactly digits(a)+digits(b) precision, in a FULLY OWNED
+                # context — inheriting the ambient one leaks its prec/Emax/traps
+                # (reviews rounds 8 + 11)
+                with localcontext(Context(prec=len(exact_in.as_tuple().digits)
+                                          + len(factor.as_tuple().digits) + 2)):
                     exact = exact_in * factor
                 try:
                     approx = float(exact)
@@ -150,15 +152,9 @@ def _slot(name, raw, values, kind_hint, money_hint, quote, xbrl_qname, warnings,
                 if not math.isfinite(approx):
                     raise UnitResolutionError(
                         f"scaled {value!r} {raw!r} exceeds float range — park")
-                # EXACT OUTPUT WINS (owner exactness ruling; round 10 removed the old
-                # rounded-result comparison — it re-imported the 6-decimal limit).
-                # This tripwire fires ONLY on genuine magnitude divergence (a wrong
-                # scale factor), never on rounding noise:
-                if abs(approx - r.scaled_value) > max(1e-6,
-                                                      abs(r.scaled_value) * 1e-9):
-                    raise UnitResolutionError(
-                        f"exact scaling diverged from the proven resolver for "
-                        f"{value!r} {raw!r} ({exact} vs {r.scaled_value}) — park")
+                # EXACT OUTPUT WINS (owner exactness ruling). No result comparison
+                # against the resolver: the factor is value-independent by source
+                # inspection, and substrate drift is caught by the 29+7 parity suite.
                 scaled.append(exact)
         elif values:                                  # keep positional None (e.g. open range)
             scaled.append(None)

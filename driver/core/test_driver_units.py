@@ -218,6 +218,43 @@ def test_straddle_check_scoped_to_where_the_guard_exists():
     assert out["level_values"] == [v]
 
 
+def test_straddle_check_mirrors_the_substrate_factor_conditions():
+    # round 11 (verified in guidance_ids source): money guard needs to_millions>1,
+    # count guard needs factor>1e6 — 'million'/'thousand' cases have NO guard and
+    # must flow through, boundary or not
+    v = Decimal("999.0000000000000001")
+    money = resolve_driver_units("revenue", level_values=[v], level_unit_raw="million",
+                                 level_unit_kind_hint="money",
+                                 level_money_mode_hint="aggregate",
+                                 period_scope="quarter")
+    assert money["level_values"] == [v]                        # factor 1: no guard
+    count = resolve_driver_units("unit_shipments", level_values=[v],
+                                 level_unit_raw="thousand", level_unit_kind_hint="count",
+                                 period_scope="quarter")
+    assert count["level_values"][0] == v * 1000                # factor 1e3: no guard
+    with pytest.raises(UnitResolutionError, match="straddles"):
+        resolve_driver_units("unit_shipments", level_values=[v],
+                             level_unit_raw="billion", level_unit_kind_hint="count",
+                             period_scope="quarter")           # factor 1e9: guarded
+
+
+def test_exact_math_owns_its_full_context_not_just_precision():
+    # round 11 (reproduced): inheriting the ambient context leaked its Emax/traps —
+    # a hostile ambient exponent cap broke the multiply. Now fully owned.
+    from decimal import getcontext
+    g = getcontext()
+    old_emax = g.Emax
+    g.Emax = 2
+    try:
+        out = resolve_driver_units("revenue", level_values=[Decimal("1.5")],
+                                   level_unit_raw="B", level_unit_kind_hint="money",
+                                   level_money_mode_hint="aggregate",
+                                   period_scope="quarter")
+        assert out["level_values"][0] == Decimal("1500")
+    finally:
+        g.Emax = old_emax
+
+
 def test_prescale_boundary_straddler_parks_fail_closed():
     # Decimal("999.0000000000000001") > 999 but its float collapses to 999.0 —
     # the resolver's guard would be blind, so the seam parks (round 9)
