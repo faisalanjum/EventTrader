@@ -20,6 +20,7 @@ __all__ = ["DRIVER_UNITS", "UnitResolutionError", "resolve_driver_units"]
 
 DRIVER_UNITS = frozenset(CANONICAL_UNITS | {"percent_sequential"})
 _SENTINEL_SCOPES = frozenset({"short_term", "medium_term", "long_term", "undefined"})
+_PRESCALE_BOUNDARY = 999      # the substrate's pre-scaled guard threshold (guidance_ids)
 
 
 class UnitResolutionError(ValueError):
@@ -107,6 +108,14 @@ def _slot(name, raw, values, kind_hint, money_hint, quote, xbrl_qname, warnings,
         if probe_val is not None and not math.isfinite(probe_val):
             raise UnitResolutionError(
                 f"{value!r} exceeds float range for the resolver's guards — park")
+        # the resolver's pre-scaled guard compares value > 999 (guidance_ids) on the
+        # FLOAT — a boundary-straddling exact value could blind it (round 9): if the
+        # Decimal and float disagree about the boundary, fail closed
+        if exact_in is not None and (exact_in > _PRESCALE_BOUNDARY) != (
+                probe_val > _PRESCALE_BOUNDARY):
+            raise UnitResolutionError(
+                f"{value!r} straddles the resolver's pre-scale guard boundary beyond "
+                f"float fidelity — park")
         r = resolve_unit(name, raw, probe_val,
                          unit_kind_hint=kind_hint,
                          money_mode_hint=money_hint, quote=quote, xbrl_qname=xbrl_qname)

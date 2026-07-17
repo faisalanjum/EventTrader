@@ -490,6 +490,7 @@ def test_fiscal_fields_validated():
     assert "FISCAL" in codes(check(mk(fiscal_year=99999)))
     assert "FISCAL" in codes(check(mk(fiscal_quarter=5)))
     assert "FISCAL" in codes(check(mk(fiscal_quarter=True)))
+    assert "FISCAL" in codes(check(mk(fiscal_quarter=1.0)))   # 1.0 == 1 must not pass
     assert check(mk()) == []                       # 2025 / Q3 golden stays clean
 
 

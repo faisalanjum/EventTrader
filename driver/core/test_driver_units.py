@@ -197,6 +197,26 @@ def test_tiny_and_huge_values_are_defined_not_crashes():
                              period_scope="quarter")
 
 
+def test_tiny_money_below_resolver_resolution_parks():
+    # 5E-10 B scales to exactly 0.0000005 m_usd — dead on the proven resolver's own
+    # 6-decimal rounding boundary, where its answer is unstable; the cross-check
+    # catches the divergence and PARKS (fail-closed below the authority's resolution)
+    with pytest.raises(UnitResolutionError, match="diverged"):
+        resolve_driver_units("micro_fee", level_values=[Decimal("5E-10")],
+                             level_unit_raw="B", level_unit_kind_hint="money",
+                             level_money_mode_hint="aggregate", period_scope="quarter")
+
+
+def test_prescale_boundary_straddler_parks_fail_closed():
+    # Decimal("999.0000000000000001") > 999 but its float collapses to 999.0 —
+    # the resolver's guard would be blind, so the seam parks (round 9)
+    with pytest.raises(UnitResolutionError, match="straddles"):
+        resolve_driver_units("revenue",
+                             level_values=[Decimal("999.0000000000000001")],
+                             level_unit_raw="B", level_unit_kind_hint="money",
+                             level_money_mode_hint="aggregate", period_scope="quarter")
+
+
 def test_count_999_prescale_boundary_pinned():
     ok = resolve_driver_units("share_count", level_values=[999],
                               level_unit_raw="billion", level_unit_kind_hint="count",

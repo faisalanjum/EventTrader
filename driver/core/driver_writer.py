@@ -26,8 +26,8 @@ WRITE_GATE_ENV = "ENABLE_DRIVER_WRITES"
 SIGNATURE_FIELDS = ("level_low", "level_high", "level_unit", "change_value",
                     "change_unit", "comparison_low", "comparison_high",
                     "comparison_baseline", "value_text", "conditions")
-_NUMERIC_SIG = {"level_low", "level_high", "change_value",
-                "comparison_low", "comparison_high"}
+_NUMERIC_SIG = ("level_low", "level_high", "change_value",
+                "comparison_low", "comparison_high")   # fixed order: deterministic reports
 # The complete non-signature classification (OD-8: "non-signature fields keep
 # last-write-wins-with-log"): IMMUTABLE = {id, fact_scope, created, series_unit}
 # (identity + write-once); everything else stored and non-signature moves LWW+log.
