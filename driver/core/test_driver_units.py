@@ -6,6 +6,7 @@ per-slot hints, per-X lint as a HARD failure on money levels, the OD-11
 growth-basis ladder consuming the upstream period_scope, and the 10-unit enum.
 """
 import pytest
+from decimal import Decimal
 
 from driver.core.driver_units import (
     DRIVER_UNITS,
@@ -24,7 +25,7 @@ def test_enum_is_the_ten_units():
 def test_per_slot_hints_level_and_change_independent():
     out = resolve_driver_units(
         "revenue",
-        level_values=[1.5, 2.0], level_unit_raw="$B",
+        level_values=[Decimal("1.5"), 2], level_unit_raw="$B",
         level_unit_kind_hint="money", level_money_mode_hint="aggregate",
         change_value=12, change_unit_raw="% yoy", change_unit_kind_hint="ratio",
         period_scope="quarter",
@@ -36,9 +37,9 @@ def test_per_slot_hints_level_and_change_independent():
 def test_comparison_values_share_the_level_resolution():
     out = resolve_driver_units(
         "revenue",
-        level_values=[4.9], level_unit_raw="B",
+        level_values=[Decimal("4.9")], level_unit_raw="B",
         level_unit_kind_hint="money", level_money_mode_hint="aggregate",
-        comparison_values=[4.8, None],
+        comparison_values=[Decimal("4.8"), None],
         period_scope="quarter",
     )
     assert out["level_values"] == [4900.0]
@@ -97,7 +98,7 @@ def test_points_and_bps_win_over_any_basis_wording():
 def test_static_percent_gate_plain_pct_change_on_pct_level_metric():
     out = resolve_driver_units(
         "operating_margin",
-        level_values=[17.6], level_unit_raw="%", level_unit_kind_hint="ratio",
+        level_values=[Decimal("17.6")], level_unit_raw="%", level_unit_kind_hint="ratio",
         change_value=3, change_unit_raw="%", change_unit_kind_hint="ratio",
         period_scope="quarter",
     )
@@ -138,3 +139,26 @@ def test_numberless_growth_takes_unit_from_framing():
 def test_no_numbers_no_raw_no_resolution():
     out = resolve_driver_units("dividend", period_scope=None)
     assert out["level_unit"] is None and out["change_unit"] is None
+
+
+# ---- owner exactness law (2026-07-17): exact Decimal scaling, no auto-rounding ----
+
+def test_exact_scaling_no_six_decimal_rounding():
+    from decimal import Decimal
+    out = resolve_driver_units(
+        "eps", level_values=[Decimal("0.1234567")], level_unit_raw="$",
+        level_unit_kind_hint="money", level_money_mode_hint="price_like",
+        period_scope="quarter")
+    assert out["level_values"] == [Decimal("0.1234567")]   # 7th decimal SURVIVES
+    out2 = resolve_driver_units(
+        "revenue", level_values=[Decimal("8.125")], level_unit_raw="B",
+        level_unit_kind_hint="money", level_money_mode_hint="aggregate",
+        period_scope="quarter")
+    assert out2["level_values"][0] == Decimal("8125")
+
+
+def test_float_source_values_rejected_at_the_units_seam():
+    with pytest.raises(UnitResolutionError, match="exact"):
+        resolve_driver_units("revenue", level_values=[1.5], level_unit_raw="B",
+                             level_unit_kind_hint="money",
+                             level_money_mode_hint="aggregate", period_scope="quarter")

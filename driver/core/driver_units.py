@@ -11,7 +11,7 @@ what current law layers on top:
     fails closed to unknown; points/bps always win (they resolve upstream)
   - the 10-unit enum (adds percent_sequential to the substrate's 9)
 """
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 
 from driver.core.unit_resolver import CANONICAL_UNITS, resolve_unit
 
@@ -85,10 +85,22 @@ class _SlotResult:
 
 
 def _slot(name, raw, values, kind_hint, money_hint, quote, xbrl_qname, warnings, *, hard_lint):
-    """Resolve one slot via the proven resolver; scale each value with the same call."""
-    scaled, unit = [], None
+    """Resolve one slot via the proven resolver, then scale in EXACT Decimal math
+    (owner exactness law 2026-07-17: no automatic 6-decimal rounding). The resolver
+    stays authoritative for the UNIT, the guards, and the scale FACTOR (probed with
+    value=1 — its scaling is linear-then-round); the VALUE itself is computed as
+    Decimal(source) x factor, cross-checked against the resolver's own rounded output."""
+    scaled, unit, factor = [], None, None
     for value in (list(values) or [None]):
-        r = resolve_unit(name, raw, value, unit_kind_hint=kind_hint,
+        if isinstance(value, float):
+            raise UnitResolutionError(
+                f"source values must be exact (int/Decimal/str), got float {value!r}")
+        try:
+            exact_in = None if value is None else Decimal(str(value))
+        except InvalidOperation:
+            raise UnitResolutionError(f"not a number: {value!r}")
+        r = resolve_unit(name, raw, None if exact_in is None else float(exact_in),
+                         unit_kind_hint=kind_hint,
                          money_mode_hint=money_hint, quote=quote, xbrl_qname=xbrl_qname)
         if r.error:
             raise UnitResolutionError(r.error)
@@ -97,13 +109,21 @@ def _slot(name, raw, values, kind_hint, money_hint, quote, xbrl_qname, warnings,
             raise UnitResolutionError(lint[0])       # per-X needs '_per_X' in the NAME
         warnings.extend(w for w in r.warnings if w not in warnings)
         unit = r.canonical_unit
-        if value is not None:
-            s = r.scaled_value
-            if isinstance(s, float):
-                # the resolver's canonical output, exact-textified at THE seam — no
-                # float ever travels beyond this point (terminal numeric regime)
-                s = Decimal(repr(s))
-            scaled.append(s)
+        if exact_in is not None:
+            if r.scaled_value is None:
+                scaled.append(None)
+            else:
+                if factor is None:
+                    probe = resolve_unit(name, raw, 1.0, unit_kind_hint=kind_hint,
+                                         money_mode_hint=money_hint, quote=quote,
+                                         xbrl_qname=xbrl_qname).scaled_value
+                    factor = Decimal(repr(probe)) if probe is not None else Decimal(1)
+                exact = exact_in * factor
+                if round(float(exact), 6) != round(r.scaled_value, 6):
+                    raise UnitResolutionError(
+                        f"exact scaling diverged from the proven resolver for "
+                        f"{value!r} {raw!r} ({exact} vs {r.scaled_value}) — park")
+                scaled.append(exact)
         elif values:                                  # keep positional None (e.g. open range)
             scaled.append(None)
     return _SlotResult(unit, scaled if list(values) else [])

@@ -300,6 +300,41 @@ def test_missing_id_is_a_defined_error_not_a_crash():
         plan_event_write([{"quote": "x"}], FakeGraph())
 
 
+# ---- owner exactness storage law (2026-07-17) ----
+
+def test_storable_classification():
+    from decimal import Decimal
+    from driver.core.driver_writer import storable
+    assert storable(1500) == ("int", 1500)
+    assert storable(Decimal("1500.0")) == ("int", 1500)      # whole numbers -> integers
+    assert storable(Decimal("4.9")) == ("float", 4.9)        # round-trip-exact decimal
+    assert storable(Decimal("9007199254740993")) == ("int", 9007199254740993)  # 2^53+1
+    assert storable(2 ** 63) is None                          # beyond Neo4j long
+    assert storable(Decimal("1.0000000000000000001")) is None  # not float-exact -> park
+
+
+def test_non_storable_value_parks_never_approximates():
+    from decimal import Decimal
+    fact = mk(level=None)
+    fact.update(level_low=Decimal("1.0000000000000000001"),
+                level_high=Decimal("1.0000000000000000001"), level_unit="usd")
+    res = plan_event_write([fact], FakeGraph())
+    assert res[0].outcome == "parked" and "storable" in res[0].reason
+
+
+def test_stored_props_use_native_types_hash_stays_exact():
+    from decimal import Decimal
+    a = mk(level=None)
+    a.update(level_low=Decimal("4.9"), level_high=Decimal("4.9"), level_unit="usd")
+    res = plan_event_write([a], FakeGraph())
+    props = [o for o in res[0].ops if o["op"] == "create_fact"][0]["props"]
+    assert props["level_low"] == 4.9 and isinstance(props["level_low"], float)
+    b = mk(level=Decimal("1500.0"))
+    props_b = [o for r in plan_event_write([b], FakeGraph()) for o in r.ops
+               if o["op"] == "create_fact"][0]["props"]
+    assert props_b["level_low"] == 1500 and isinstance(props_b["level_low"], int)
+
+
 def test_stored_node_is_exactly_the_24_fields_members_included():
     res = plan_event_write([mk(level=100)], FakeGraph())
     props = [o for o in res[0].ops if o["op"] == "create_fact"][0]["props"]

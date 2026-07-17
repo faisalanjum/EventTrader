@@ -14,6 +14,7 @@ fields keep last-write-wins-WITH-LOG; a true signature correction is the repair 
 """
 import os
 from collections import namedtuple
+from decimal import Decimal
 
 from driver.core.driver_ids import IdLawError, norm, num_canon, signature_hash
 
@@ -99,6 +100,37 @@ def _classify(a, b):
         if x is not None and y is not None and x != y:
             return "conflict"
     return "compatible"
+
+
+def storable(value):
+    """The owner exactness storage law (2026-07-17): whole numbers -> Neo4j INTEGER
+    (long range); a non-integral decimal -> Neo4j float ONLY when storing-and-reading
+    provably reproduces the exact original decimal (repr round-trip); anything else is
+    NOT storable and the fact PARKS. Returns (kind, native_value) or None.
+    Read-adapter corollary (S3.5): stored floats are exact by construction, so
+    Decimal(repr(read_float)) recovers the original — the graph adapter converts on
+    read before any signature comparison."""
+    d = value if isinstance(value, Decimal) else Decimal(value)
+    if d == d.to_integral_value():
+        i = int(d)
+        return ("int", i) if abs(i) < 2 ** 63 else None
+    f = float(d)
+    return ("float", f) if Decimal(repr(f)) == d else None
+
+
+def _store_numeric(props):
+    """Convert the numeric props to their native storage form; None = a non-storable
+    value was found (caller parks). The signature/hash was computed on the EXACT
+    values before this conversion."""
+    for k in _NUMERIC_SIG:
+        val = props.get(k)
+        if val is None:
+            continue
+        st = storable(val)
+        if st is None:
+            return k, val
+        props[k] = st[1]
+    return None
 
 
 def stamp_series_unit(fact, prior_series_unit=None):
@@ -290,6 +322,11 @@ def _create(fact, *, hashed, late, graph, prior_series_units):
         props["fact_scope"] = fact_id.split(":", 3)[3]
     if set(props) != STORED_FACT_FIELDS:               # drift guard: exactly the 24
         raise WriterError(f"stored-field drift: {set(props) ^ STORED_FACT_FIELDS}")
+    bad = _store_numeric(props)
+    if bad is not None:
+        return PlanResult(fact["id"], "parked",
+                          f"{bad[0]}={bad[1]} is not exactly storable "
+                          f"(owner exactness law) — park, never approximate", [])
     ops = [{"op": "create_fact", "id": fact_id, "props": props},
            {"op": "edge", "type": "OF_DRIVER", "from": fact_id,
             "to": fact["driver_name"]},
@@ -353,6 +390,11 @@ def _merge_or_fill(fact, target, rel):
                               [])
     if not sets:
         return PlanResult(target["id"], "noop", None, [])
+    bad = _store_numeric(sets)
+    if bad is not None:
+        return PlanResult(target["id"], "parked",
+                          f"{bad[0]}={bad[1]} is not exactly storable "
+                          f"(owner exactness law) — park, never approximate", [])
     ops = [{"op": "set_fields", "id": target["id"], "fields": sets}] + logs
     outcome = "filled" if rel == "compatible" and any(
         k in SIGNATURE_FIELDS for k in sets) else "updated"

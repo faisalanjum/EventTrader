@@ -74,11 +74,8 @@ def _num_error(val):
     d = Decimal(val)
     if not d.is_finite():
         return f"must be finite, got {val!r}"
-    if len(d.normalize().as_tuple().digits) > 15:
-        return (f"{val!r} exceeds the numeric storage domain "
-                f"(>15 significant digits cannot round-trip float64 storage)")
-    if isinstance(val, int) and abs(val) >= 2 ** 63:
-        return f"{val!r} exceeds the storable integer range (Neo4j long)"
+    # storability (int->long / exact-round-trip float / else PARK) is the WRITER's
+    # law (owner exactness ruling 2026-07-17) — validators only enforce exact types
     return None
 
 
