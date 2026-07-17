@@ -45,6 +45,24 @@ def test_no_decomposition_leak():
     print("[ok] no decomposition leak · unit hints present · concept/member only inside xbrl")
 
 
+def test_money_mode_hint_is_null_off_the_money_lane():
+    """UNIT-04: 'money kind requires money_mode (aggregate|price_like|unknown), NULL OTHERWISE.'
+    Emitting 'aggregate' on a percent/count asserts a money property about a non-money number."""
+    assert BP.unit_hints('%', 0)['level_money_mode_hint'] is None
+    assert BP.unit_hints(None, 0)['level_money_mode_hint'] is None
+    assert BP.unit_hints('number', 1)['level_money_mode_hint'] == 'aggregate'   # money keeps it
+
+
+def test_ratio_fmt_is_never_guessed_as_a_count():
+    """fiscal.ai has a FOURTH fmt the map never knew: 'ratio' (2,567 of 73,267 worklist rows, e.g.
+    'Bauxite Production (mdmt)' = 38.3). It fell to the else-branch and was silently hinted 'count'.
+    A hint must never be a guess — emit 'unknown' and let the shared resolver decide."""
+    h = BP.unit_hints('ratio', 0)
+    assert h['level_unit_kind_hint'] == 'unknown', h
+    assert h['level_unit_raw'] == 'unknown', h
+    assert BP.unit_hints('number', 0)['level_unit_kind_hint'] == 'count'        # a real count still counts
+
+
 def test_canonicalize():
     packets, _, _ = BP.build([rec('AC:C:1', '10k', 'AAA', 'revenue', 5000)], [], {'AAA': 12})
     assert packets[0]['source_id'] == 'AC_C_1', packets[0]['source_id']

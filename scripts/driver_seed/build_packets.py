@@ -28,15 +28,20 @@ def canonicalize_source_id(s):
 
 def unit_hints(fmt, is_currency):
     """Deterministic fmt/is_currency -> raw unit HINTS the shared resolver canonicalizes (D.2).
-    Pure code, no semantic call; the decomposer refines (e.g. per-X -> price_like) and owns series_unit."""
+    Pure code, no semantic call; the decomposer refines (e.g. per-X -> price_like) and owns series_unit.
+    A hint is never a GUESS: an fmt we do not know maps to 'unknown', not to the nearest-looking kind."""
     if fmt == '%':
         raw, kind = 'percent', 'ratio'
     elif is_currency:
         raw, kind = 'usd', 'money'
-    else:
+    elif fmt == 'number':
         raw, kind = 'count', 'count'
+    else:                              # fiscal.ai's 'ratio' (2,567 rows) + any future fmt -> never guess
+        raw, kind = 'unknown', 'unknown'
+    # UNIT-04: money kind requires money_mode; NULL otherwise — never assert a money property off the lane.
     return {'level_unit_raw': raw, 'level_unit_kind_hint': kind,
-            'level_money_mode_hint': 'aggregate', 'level_shape_hint': 'point'}
+            'level_money_mode_hint': 'aggregate' if kind == 'money' else None,
+            'level_shape_hint': 'point'}
 
 
 def corpus_complete(searched, form):
