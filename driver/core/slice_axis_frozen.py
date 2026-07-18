@@ -19,6 +19,20 @@ a proven mistake is fixed by the governed update MOVING its qname
 from HARD_EXCLUDE_ELIMINATIONS to PROVISIONAL_MEMBERS — no automatic
 demotion, no refresh engine; the structured logs are the evidence."""
 
+
+# catalog §3 name-liars — each explicitly PROVEN non-slice by reading its
+# members; an axis nobody has reviewed is NEVER added here (it takes the
+# unknown→provisional sentinel path — the a:EndMarketsAxis lesson)
+NON_SLICE_AXES = frozenset({
+    'eqt:DistributionChannelAxis',
+    'isrg:CostOfSalesProductsAxis',
+    'aep:MoneyPoolParticipantbyCompanyTypeAxis',
+    'dks:RevenueFromContractWithCustomerAxis',
+    'wmb:CustomerAxisAxis',
+    'hum:LongDurationInsuranceProductsAxis',
+    'xray:GeographicalBasisAxis',
+})
+
 HARD_EXCLUDE_ELIMINATIONS = frozenset({
     'aes:EliminationsMember',
     'clf:EliminationsMember',

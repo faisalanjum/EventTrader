@@ -101,6 +101,14 @@ def test_check_member_refs_unit_park_shapes():
         toks, frozenset(), matched)
     assert logs == [{"event": "fs20_hard_exclude", "axis": SEG, "member": ELIM,
                      "where": "current_fact_ref"}]
+    # a NON-slice ref is PARK **+ log** (packet slice row: "PARK+log", OD-17c —
+    # never a silent drop)
+    problems, _, logs = check_member_refs(
+        [{"axis": "eqt:DistributionChannelAxis", "member": "x:WTI",
+          "slice_part": "channel:x"}], toks, frozenset(), matched)
+    assert logs == [{"event": "non_slice_ref",
+                     "axis": "eqt:DistributionChannelAxis", "member": "x:WTI",
+                     "where": "current_fact_ref"}]
     # verified but supporting none of the fact's own tokens still parks
     problems, _, _ = check_member_refs(
         [{"axis": GEO, "member": "m", "slice_part": "geography:us"}],
@@ -161,6 +169,9 @@ def test_e2e_non_slice_axis_ref_parks(tmp_path):
           "slice_part": "channel:wti"}], slice_parts=[("channel", "WTI")])], store)
     assert out["items"][0]["codes"] == ["MEMBER_LINK_INVALID"]
     assert "NON-slice" in out["items"][0]["detail"]
+    assert {"event": "non_slice_ref", "axis": "eqt:DistributionChannelAxis",
+            "member": "x:WTI", "where": "current_fact_ref"} in \
+        audit_docs(tmp_path)[0]["member_menu"]["exclusions"]
 
 
 def test_e2e_uncatalogued_real_axis_writes_via_provisional_path(tmp_path):

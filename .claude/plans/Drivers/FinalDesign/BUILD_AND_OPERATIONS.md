@@ -10,8 +10,9 @@
 > **Honest status banner (generated; owning dashboard = `STATUS_AND_HISTORY.md`):** DESIGN is final for
 > everything labeled FINAL in `FINAL_DESIGN.md`. CODE/TESTS exist only where stated below (WP-FC-EDITS batch,
 > S1 fiscal.ai adapter, proven substrate components). **No production Driver graph exists; the fitness gate has
-> never run; Track B steps 1-4 are BUILT and pushed (2026-07-17: 252 unit + 1 real-Neo4j integration tests
-> green; step-2's PER-20 HAS_XBRL producer guard pending); step 5 (executor + fusion) builds under the
+> never run; Track B steps 1-5 + the step-7 slice menu are BUILT and pushed (2026-07-17, `0d6c1d0`:
+> 392 unit + 1 opt-in probe skip, live read-only 10/10; step-2's PER-20 HAS_XBRL producer guard pending);
+> the internal write CLI + fusion + Report-only adapter run dry-run only under the
 > owner-locked §11.4 internal contract.** "Build-ready" never means "implemented"
 > or "run."
 
@@ -166,7 +167,7 @@ class finalization → final validation → fitness gate.
   name+direction floor 0.634 · inter-producer agreement floor 72% · ZERO two-grader-confirmed wrong merges ·
   zero unresolved flags after one blind regrade · red/inconclusive burns the key into regression fixtures.
 
-## 5. Track B — fact stack (FACT-01..36; design final; steps 1-4 BUILT 2026-07-16/17 — ids · period resolver (PER-20 HAS_XBRL producer guard pending) · units · validators/planner; step 5 executor+fusion = the §11.4 internal contract, owner-locked)
+## 5. Track B — fact stack (FACT-01..36; design final; steps 1-5 + step-7 slice menu BUILT 2026-07-16/17 `0d6c1d0` — ids · period resolver (PER-20 HAS_XBRL producer guard pending) · units · validators/planner · fusion · write CLI + Report-only adapter (dry-run only) · slice menu + owner-approved frozen lists (R12); the §11.4 internal contract, owner-locked)
 
 - Deliverables: IDs, writer/CLI/shell, period resolver, unit resolver, slice menu, concept linker, verdict/DCM
   writer, reads, park ledger, validators, tests. Producer-agnostic: build against the internal packet only.

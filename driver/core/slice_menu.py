@@ -39,7 +39,7 @@ from datetime import date, timedelta
 from driver.core.driver_ids import IdLawError, encode_unknown_axis
 from driver.core.driver_member_fold import fold_target, member_token
 from driver.core.slice_axis_frozen import (HARD_EXCLUDE_ELIMINATIONS,
-                                           PROVISIONAL_MEMBERS)
+                                           NON_SLICE_AXES, PROVISIONAL_MEMBERS)
 
 __all__ = ["CONFIRMED_AXES", "NON_SLICE_AXES", "ELIMINATION_QNAMES",
            "PROVISIONAL_MEMBERS", "classify_axis", "build_menu",
@@ -113,21 +113,6 @@ CONFIRMED_AXES = {
     "fe:BusinessUnitsAxis": _ENT,                # kind-corrected (was segment)
     "tsco:ConsolidatedStoresAxis": _ENT,         # kind-corrected (was segment)
 }
-
-# ONLY the catalog §3 name-liars — each explicitly PROVEN non-slice by reading
-# its members. There is NO census complement: an axis nobody has reviewed takes
-# the unknown→PROVISIONAL sentinel path (FINAL_DESIGN:171, "never silently
-# dropped"). The lesson is live in the graph: a:EndMarketsAxis (246 real
-# Agilent end-market revenue facts) sat in the deleted complement.
-NON_SLICE_AXES = frozenset({
-    "eqt:DistributionChannelAxis",
-    "isrg:CostOfSalesProductsAxis",
-    "aep:MoneyPoolParticipantbyCompanyTypeAxis",
-    "dks:RevenueFromContractWithCustomerAxis",
-    "wmb:CustomerAxisAxis",
-    "hum:LongDurationInsuranceProductsAxis",
-    "xray:GeographicalBasisAxis",
-})
 
 # FS-20 hard-exclude (SEGMENT-FAMILY AXES ONLY, per FINAL_DESIGN:176): the
 # hand-vetted PURE eliminations from the 2026-07-17 read-only census — exact
@@ -251,7 +236,9 @@ def check_member_refs(refs, fact_tokens, menu_tokens, matched_dims):
         if status == "non_slice":
             problems.append(f"axis {axis} is NON-slice — its members play no "
                             f"slice role (catalog §3)")
-            continue
+            logs.append({"event": "non_slice_ref", "axis": axis,
+                         "member": member, "where": "current_fact_ref"})
+            continue                               # PARK + log (packet slice row)
         if _is_hard_excluded(status, kind, member):
             problems.append(f"member {member} is a pure elimination — FS-20 "
                             f"hard-exclude on a segment-family axis; an "
