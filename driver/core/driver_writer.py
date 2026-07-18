@@ -357,8 +357,13 @@ def _create(fact, *, hashed, late, graph, prior_series_units):
         ops.append({"op": "edge", "type": "HAS_PERIOD", "from": fact_id,
                     "to": period_id})
     for ref in fact.get("member_refs") or ():
+        # FS-18/R9 case 5: the link needs BOTH axis and member (FINAL_DESIGN:178).
+        # axis sits at TOP LEVEL as part of the edge IDENTITY (from, type, to,
+        # axis) — an apply layer MERGE-ing on it can never let two axes with the
+        # same member overwrite each other's link
         ops.append({"op": "edge", "type": "MAPS_TO_MEMBER", "from": fact_id,
-                    "to": ref["member"], "props": {"slice_part": ref["slice_part"]}})
+                    "to": ref["member"], "axis": ref["axis"],
+                    "props": {"slice_part": ref["slice_part"]}})
     if late:
         # OD-8 rule 9: all collision flags are counters/LOGS — zero new stored artifacts
         ops.append({"op": "log", "event": "late_collision", "fact_id": fact_id})

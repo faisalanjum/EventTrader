@@ -49,6 +49,75 @@ def test_prior_guide_units_real_query_runs(store):
     assert units == []
 
 
+def test_company_slice_menu_retrieval_runs(store):
+    # the REAL fold-menu retrieval (prior 10-K/10-Q members + used
+    # fact_scopes), PIT-cut — executes live
+    src = store.get_source(ACC)
+    menu = store.get_company_slice_menu(ACC, src["date"])
+    assert set(menu) == {"xbrl_members", "used_scopes"}
+    assert menu["used_scopes"] == []               # pre-production: no facts yet
+    for row in menu["xbrl_members"]:
+        assert set(row) == {"axis", "member", "label"}
+    assert store.get_xbrl_fact_dimensions(ACC, "us-gaap:Revenues") == []  # 8-K
+
+
+AAPL_10Q = "0000320193-26-000006"                  # Q1-FY26 10-Q, verified live
+
+
+def test_company_slice_menu_positive_aapl_regression(store):
+    # THE padded/unpadded-CIK regression: AAPL has 1,886 dimensional contexts;
+    # the un-normalized u_id join returned ZERO rows. The proven norm_uid fix
+    # (strip leading zeros on the cik segment) must retrieve real members.
+    src = store.get_source(AAPL_10Q)
+    assert src["ticker"] == "AAPL" and src["source_type"] == "10q"
+    menu = store.get_company_slice_menu(AAPL_10Q, src["date"])
+    assert len(menu["xbrl_members"]) > 0           # prior filings' members
+    axes = {r["axis"] for r in menu["xbrl_members"]}
+    assert "us-gaap:StatementBusinessSegmentsAxis" in axes
+    for row in menu["xbrl_members"]:
+        assert row["axis"] and row["member"] and row["label"]
+
+
+def test_xbrl_fact_level_verification_live_aapl(store):
+    # the REAL fact-level match: AAPL Q1-FY26 product/service revenue —
+    # concept + exact period (stored end EXCLUSIVE) + complete dimension set,
+    # pinned live 2026-07-17
+    from driver.core.slice_menu import match_xbrl_fact
+    rows = store.get_xbrl_fact_dimensions(
+        AAPL_10Q, "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax")
+    assert rows                                    # the 10-Q has these facts
+    matched = match_xbrl_fact(
+        {"time_type": "duration", "start": "2025-09-28", "end": "2025-12-27",
+         "dims": {("srt:ProductOrServiceAxis", "us-gaap:ProductMember")}}, rows)
+    assert matched is not None                     # exact fact found
+    assert matched[0]["label"]                     # label rides for recompute
+    # and a NEVER-FILED dimension set must find nothing
+    assert match_xbrl_fact(
+        {"time_type": "duration", "start": "2025-09-28", "end": "2025-12-27",
+         "dims": {("srt:ProductOrServiceAxis", "us-gaap:GhostMember")}},
+        rows) is None
+
+
+def test_uncatalogued_slice_axis_lives_in_graph_agilent(store):
+    # the a:EndMarketsAxis lesson pinned LIVE: 246 real numeric end-market
+    # facts exist (Pharmaceutical/Food/Diagnostics...) — an axis the catalog
+    # never reviewed; classify_axis must send it down the provisional path
+    from driver.core.slice_menu import classify_axis
+    assert classify_axis("a:EndMarketsAxis") == ("unknown", None)
+    n = store._read(
+        "MATCH (d:Dimension {qname:'a:EndMarketsAxis'}) "
+        "WITH collect(d.id) AS dids "
+        "MATCH (c:Context) WHERE size(c.dimension_u_ids) > 0 "
+        "UNWIND range(0, size(c.dimension_u_ids)-1) AS i "
+        "WITH dids, c, c.dimension_u_ids[i] AS du "
+        "WITH dids, c, split(du, ':')[0] AS ck, du "
+        "WITH dids, c, toString(toInteger(ck)) + substring(du, size(ck)) AS ndu "
+        "WHERE ndu IN dids "
+        "MATCH (f:Fact)-[:IN_CONTEXT]->(c) WHERE f.is_numeric = '1' "
+        "RETURN count(DISTINCT f) AS n")[0]["n"]
+    assert n >= 246                                # append-only graph: safe floor
+
+
 def test_writes_refused_outright(store):
     with pytest.raises(RuntimeError, match="DISABLED"):
         store.transaction()

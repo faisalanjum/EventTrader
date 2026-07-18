@@ -11,14 +11,14 @@
 > live file: `15_CandidateFactPacket.md` (owner-frozen v1.0 + the two 2026-07-15 owner amendments Q4/Q1-ext,
 > current sha `aa7239ed…`).
 
-## 1. One-page dashboard (2026-07-16)
+## 1. One-page dashboard (2026-07-17)
 
 | Layer | Design | Code | Tests | Production run |
 |---|---|---|---|---|
 | Rule meaning (FINAL_DESIGN §1-§9) | FINAL (locked set + 5 owner rulings 2026-07-15) | — | — | — |
 | Track A catalog engine | FINAL | PARTIAL (WP-FC-EDITS `5db902f` + rounds 22-23 prompt sync; implementation gate in BUILD §4 governs any run) | 265 pass + 1 skip (2026-07-16, incl. the strengthened rulebook-sync guard in `workflows/tests/`) | NEVER RUN (no graph catalog; fitness gate never run; old June RULE-BEARING outputs = historical evidence only, chunk copies excepted per BUILD §4) |
 | Fiscal.ai channel adapter (S1) | FINAL | BUILT | smoke 16 packets / 175 items, 0 tokens | not live |
-| Track B fact stack | FINAL + the §11.4 INTERNAL writer contract OWNER-LOCKED 2026-07-17 (PreparedFactV1 schema review pending; public channel portion = S4) | steps 1-4 BUILT (`driver/core/`: ids · period resolver, PER-20 HAS_XBRL producer guard PENDING · units · validators/planner); step 5 executor+fusion next | 252 unit + 1 real-Neo4j integration (separate gate) + Track A 265+1 | dry-run only; ENABLE_DRIVER_WRITES off |
+| Track B fact stack | FINAL + the §11.4 INTERNAL writer contract OWNER-LOCKED 2026-07-17, internal portion CLOSED (PreparedFactV1 schema approved; public channel portion = S4) | steps 1-5 + step-7 slice menu BUILT (`driver/core/`: ids · period resolver, PER-20 HAS_XBRL producer guard PENDING · units · validators/planner · fusion · write CLI `97a46ce` · Report-only Neo4j adapter, writes DISABLED · slice_menu + owner-approved frozen lists, R12) | 392 unit + 1 opt-in probe skip · live read-only 10/10 (separate gate) · Track A 265+1 | dry-run only; ENABLE_DRIVER_WRITES off; adapter transaction() raises |
 | Track C guidance retirement | FINAL v2.0 (no replay) | not started | — | — |
 | Concept linker (text facts) | FINAL | PARTIAL (vetoes C/D + PIT query spec-only) | 31-co + 274-co evidence | not rolled out |
 | Admission kernel | **APPROVED WORKING DESIGN (owner 2026-07-15; not activated)** | — | gates in force; integration COMPLETE (BUILD §8.1; original archived) | — |
@@ -43,7 +43,7 @@
   RavenPack import · catalog-first live reuse · SDK/OAuth metered concept invocation · OD-16 materialize-all
   catalog sync (owner ruling 2026-07-15, Q3).
 
-## 3. The 42 supersession rows (terse; dead rule kept once for audit; current wording ONLY at the anchor)
+## 3. The 43 supersession rows (terse; dead rule kept once for audit; current wording ONLY at the anchor)
 
 | # | Subject | Dead rule | Current anchor (FINAL_DESIGN unless noted) |
 |---:|---|---|---|
@@ -89,6 +89,7 @@
 | 40 | Entity names | ban every entity token | §3 NAME-11/16 carve-out |
 | 41 | Token subset | permanent automatic refusal | §5.4 OD-19 (conditional) |
 | 42 | Surprise scope | actual-only; no subtype slot | §5.1 OD-21 |
+| 43 | FS-20 self-heal | automatic activity-based demotion ("auto-demote, no human") | §5.2 FS-20 (offline-only governed correction — R12) |
 
 **Additions that are not reversals (each anchored in FINAL_DESIGN):** born-complete + latent-base exception
 (§4.2) · OD-1 suffix admission (§4.1) · OD-2 metric-proof + first-fact pin scoped to bare names (§4.1/§4.2) ·
@@ -158,6 +159,19 @@ length PARKS; bands sized so the KNOWN TESTED calendars pass (52/53-wk, 4-4-5, K
 84d/119d, full-year Q4-YTD 365/371d, January-to-date ytd — no ytd minimum). Instants keep live-law scope
 until the dormant bundle flips coordinated with the validators. At materializer enablement P14 replaces
 ONLY the temporary labels/bands — the basic input validation is permanent.
+· **R12 (2026-07-17) FS-20 lists APPROVED as code + automatic demotion SUPERSEDED:** the owner approved
+the frozen slice-axis lists in `driver/core/slice_axis_frozen.py` — 12 hand-vetted pure hard-exclude
+eliminations · 79 provisional members · exactly 7 proven non-slice axes; every unreviewed axis takes the
+unknown→provisional sentinel path (the a:EndMarketsAxis lesson: 246 real Agilent end-market facts sat in
+a censused "non-slice complement", which is deleted and banned); unseen elimination names are never
+pre-frozen. The catalog's "self-heal: auto-demote, no human" line is SUPERSEDED: occurrence counts never
+auto-demote; the structured exclusion logs are evidence for a governed OFFLINE update that simply moves a
+proven-mistake qname from hard-exclude to provisional. Same ruling batch: XBRL member links verify
+FACT-LEVEL (concept + time_type + exact dates + COMPLETE dimension set, `[]` included, entity-scoped,
+numeric non-nil, misaligned context arrays fail closed; stored ends exclusive per the 2026-07-09 decode);
+fusion never combines two different complete dimension sets (identical sets fold, None inherits, anything
+else parks — a union would fabricate a set no real XBRL fact carries); the step-7 slice menu replaced the
+`MEMBER_LINK_DEFERRED` fence with `MEMBER_LINK_INVALID` (§11.4 amended).
 · **2026-07-16 (S3 GO):** owner approved the S3.1 cross-channel ID law — 7 decisions one-by-one (reject-not-
 escape · 4-segment id w/ trailing colon on empty scope · `[A-Za-z0-9._-]` source charset case-preserved ·
 readable-date `gp_` ids · the one text normalizer w/ park-on-empty · the one decimal canonicalizer · text-based
@@ -212,7 +226,7 @@ the three pre-amendment/frozen-original snapshots sit beside them.
 | 14_BuildReadiness | stale checklist | BUILD + this file's dashboard; archive |
 | 15_CandidateFactPacket | FROZEN v1.0 + the two 2026-07-15 owner amendments (Q4, Q1-ext) | temporary fifth live file (current sha `aa7239ed…`) |
 | 66_IssuesToBeHandled | owner blocks + stale tail | rules → FINAL_DESIGN; status here; archive |
-| 90_OpenItems · 95_Supersession · 99_Codex audit | status · 42-row ledger · history | this file §1-§3; archive (99 wholesale) |
+| 90_OpenItems · 95_Supersession · 99_Codex audit | status · 43-row ledger · history | this file §1-§3; archive (99 wholesale) |
 | BayesProposal | unvetted proposal | BUILD §8.3 pointer; ARCHIVED directly in the dated archive 2026-07-16 ✓ |
 | ChannelContract | ACTIVE live file | kept — the SOLE public channel authority under the one-copy law; banner amended 2026-07-15 (owner batch: XBRL row, evidence row, provenance one-liner replacing the old "source of truth" phrasing); current sha tracked in git + CONSOLIDATION §16 hash freeze |
 | DriverGenesisRestructure | unapproved rationale | open charter questions in FINAL_DESIGN §10; archive |
@@ -256,7 +270,7 @@ column — the map is total over every ID listed in the archived `CONSOLIDATION.
 | `66` D-1..D-13 | doc-debt history, resolved in place | archive only |
 | OD-1..21 | per-ID anchors in the §3 additions list | all 21 individually anchored there |
 | K2 | BUILD §4 | — |
-| 42 supersession rows | §3 above | — |
+| 43 supersession rows | §3 above | — |
 | Contract clauses §1-§9 | ChannelContract.md (live; one section per clause: what-a-channel-is · flow · packet · never-send · submission · outcomes · ledger duties · never-list · onboarding) | — |
 | Packet blocks 0-3 + Parts B/C/D | the live frozen packet (structure summarized BUILD §2) | — |
 | Ratified design bundles (formerly candidates) | BUILD §8.1 (kernel mechanics whole) · §8.2 (XBRL recipe + pin map + amendments) = the OPERATIVE text; the archived originals are historical evidence only (destination proof §7.1b) | — |

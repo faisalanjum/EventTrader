@@ -7,8 +7,10 @@ per-slot unit hints (UNIT-04 effective) · surprise_basis_hint + has_favorabilit
 xbrl_concept_raw (transient UNIT-RESOLUTION evidence — feeds the resolver's kind/
 money-mode inference; stored xbrl_qname stays enrichment-only and is NOT input). member_refs tri-state (owner Q4 amendment):
 None = non-XBRL item · [] = XBRL item with VERIFIED-EMPTY dimensions · non-empty =
-exact dimensions (each with axis+member+slice_part; presence parks MEMBER_LINK_DEFERRED
-until step 7). Validation runs in __post_init__ — EVERY construction path rejects
+exact dimensions (each with axis+member+slice_part). Every non-None claim — []
+included — is verified FACT-LEVEL against the current filing at step 7 (R12);
+failures park MEMBER_LINK_INVALID. Validation runs in __post_init__ — EVERY
+construction path rejects
 floats, non-finite Decimals, blank required strings, and malformed shapes cleanly.
 Changing FIELDS = a schema amendment (owner review).
 """

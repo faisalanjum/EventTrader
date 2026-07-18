@@ -801,9 +801,16 @@ mechanics) · `../Consolidation/GuidancePeriod.md` (21 period tests) · `../Cons
    (to build + test): fusion fills nulls only — a disagreement in any of the fixed ten value-signature
    fields prevents fusion; quote/state/date differences use the deterministic last-write-with-log rule;
    unfused facts enter the complete OD-8 collision ladder (fusion itself does not promise they will be
-   hashed); ambiguous fusion groups PARK; permutation tests must produce identical results ·
-   MEMBER_LINK_DEFERRED fence PRE-planner (MAPS_TO_MEMBER gains its missing AXIS field at step 7 with the
-   five FS-18 tests) · tx order: prepare outside → open tx → recheck (source · exactly ONE company via the
+   hashed); ambiguous fusion groups PARK; permutation tests must produce identical results · member_refs
+   fuse by the COMPLETE-LIST rule (R12): each XBRL dimension list is a complete fact-level-verified set —
+   None (no claim) inherits, IDENTICAL sets fold, ANY different sets (subset, [] vs non-empty, same
+   provenance different parts) PARK — combining two complete sets would fabricate a dimension set no real
+   XBRL fact carries ·
+   member-ref law PRE-planner (step 7 DELIVERED 2026-07-17, R12: the MEMBER_LINK_DEFERRED fence is
+   REMOVED; refs verify FACT-LEVEL against the current filing — concept + time_type + exact dates +
+   COMPLETE dimension set incl. `[]`, entity-scoped, slice_part recomputed from the filing's own label,
+   never trusted; failures park MEMBER_LINK_INVALID; MAPS_TO_MEMBER carries axis at top level, edge
+   identity (from, type, to, axis); the five FS-18 tests run unit AND end-to-end) · tx order: prepare outside → open tx → recheck (source · exactly ONE company via the
    correct OWNERSHIP relationship per source type, never mention-counting · typed Driver) → in-tx reads
    (siblings/periods/prior-guide units; graph floats read back via `Decimal(repr(f))`) → final plan →
    write → commit; period write-once conflicts abort in-tx pre-write; tx never auto-retried; ONE local
@@ -814,7 +821,8 @@ mechanics) · `../Consolidation/GuidancePeriod.md` (21 period tests) · `../Cons
    output flat per input index `{index, fact_id?, decision, codes[], detail?}` + run status; five outcome
    words; pinned mapping created*→written, noop/filled/updated/deduped→merged; explicit codes only
    (+ COLLISION_AMBIGUOUS, IN_BATCH_COMPETITORS, UNFUSED_PAIR, SERIES_UNIT, NOT_STORABLE, EXECUTION_FAILED,
-   MEMBER_LINK_DEFERRED, SOURCE_COMPANY_AMBIGUOUS), one test proves every emitting branch carries a code,
+   MEMBER_LINK_INVALID, SOURCE_COMPANY_AMBIGUOUS; MEMBER_LINK_DEFERRED retired at step 7 — R12), one test
+   proves every emitting branch carries a code,
    free text never parsed; SOURCE_MISSING = failed/rejected; the five park codes = parked; REJECT beats
    PARK; `date` = stored source public time, `created` = write time stamped once at commit · ONE unique
    never-overwritten write-ahead audit file per run (exact input bytes + plan/logs `prepared` before any

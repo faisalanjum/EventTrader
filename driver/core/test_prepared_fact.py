@@ -72,7 +72,7 @@ def xbrl(**over):
     return d
 
 
-def test_member_refs_typed_but_carried_for_the_deferral_fence():
+def test_member_refs_typed_and_carried_for_fact_level_verification():
     f = PreparedFactV1.from_dict(minimal(**xbrl(
         member_refs=[{"axis": "srt:StatementGeographicalAxis",
                       "member": "srt:EuropeMember", "slice_part": "geography:europe"}])))

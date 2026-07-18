@@ -35,6 +35,13 @@ def _exact(value):
     return Decimal(repr(value))            # the ONE sanctioned float bridge
 
 
+def _norm_uid(u_id):
+    """The proven harness fix (bug1_cik_zero_padding): context arrays carry a
+    zero-padded cik segment, node ids an unpadded one — strip before lookup."""
+    cik, _, rest = (u_id or "").partition(":")
+    return f"{cik.lstrip('0') or '0'}:{rest}"
+
+
 class Neo4jStore:
     """The same read surface FakeStore mirrors. Dry-run lane only."""
 
@@ -127,6 +134,110 @@ class Neo4jStore:
             scope=fact["fact_scope"], date=fact["date"],
             time_type=fact["time_type"], period_scope=fact.get("period_scope"))
         return _rank_prior_units(rows)
+
+    # the context arrays carry a zero-PADDED cik segment while Dimension/Member
+    # u_ids carry it UNPADDED — the proven harness fix (norm_uid, bug1_cik_zero_
+    # padding): strip the zeros ON the cik segment before the lookup, and look
+    # up by id (== u_id, verified live), the INDEXED property on both labels.
+    # AAPL regression: 1,886 dimensional contexts returned ZERO under a raw join.
+    _MEMBER_PAIRING = (
+        "WITH DISTINCT c "
+        "UNWIND range(0, size(c.dimension_u_ids)-1) AS i "
+        "WITH DISTINCT c.dimension_u_ids[i] AS du, c.member_u_ids[i] AS mu "
+        "WITH du, mu, split(du, ':')[0] AS dcik, split(mu, ':')[0] AS mcik "
+        "WITH toString(toInteger(dcik)) + substring(du, size(dcik)) AS ndu, "
+        "toString(toInteger(mcik)) + substring(mu, size(mcik)) AS nmu "
+        "MATCH (d:Dimension {id: ndu}) "
+        "MATCH (m:Member {id: nmu}) "
+        "RETURN DISTINCT d.qname AS axis, m.qname AS member, m.label AS label")
+
+    def get_company_slice_menu(self, source_id, date):
+        """RAW fold-menu material (FINAL_DESIGN:172/:48 — cut at the event's
+        public time, real datetime compare): (a) fold-menu arm = members from
+        the company's PRIOR public 10-K/10-Q (incl. /A, strictly before the
+        event — the current filing never feeds its own fold-menu), entity-scoped
+        by the P4f FOR_COMPANY edge, numeric facts only; (b) fact_scopes already
+        used on stored facts (≤ event time). Fact-level ref VERIFICATION is
+        get_xbrl_fact_dimensions, not this. Context-first with an EXISTS
+        short-circuit: a company's DIMENSIONAL contexts are few (AAPL: 1,886),
+        its facts are hundreds of thousands. Retrieval ONLY — all law lives in
+        slice_menu.py."""
+        xbrl = self._read(
+            "MATCH (:Report {accessionNo: $src})-[:PRIMARY_FILER]->(co:Company) "
+            "OPTIONAL MATCH (co)<-[:PRIMARY_FILER]-(pr:Report)"
+            "-[:HAS_XBRL]->(px:XBRLNode) "
+            "WHERE pr.formType IN ['10-K','10-Q','10-K/A','10-Q/A'] "
+            "AND datetime(pr.created) < datetime($date) "
+            "WITH co, collect(DISTINCT px) AS xs "
+            "MATCH (co)<-[:FOR_COMPANY]-(c:Context) "
+            "WHERE size(c.dimension_u_ids) > 0 "
+            "AND EXISTS { MATCH (f:Fact)-[:IN_CONTEXT]->(c), "
+            "  (f)-[:REPORTS]->(x2:XBRLNode) "
+            "  WHERE f.is_numeric = '1' AND x2 IN xs } "
+            + self._MEMBER_PAIRING, src=source_id, date=date)
+        used = self._read(
+            "MATCH (:Report {accessionNo: $src})-[:PRIMARY_FILER]->(co:Company) "
+            "MATCH (du:DriverUpdate)-[:FROM_SOURCE]->(:Report)"
+            "-[:PRIMARY_FILER]->(co) "
+            "WHERE datetime(du.date) <= datetime($date) "
+            "RETURN DISTINCT du.fact_scope AS scope", src=source_id, date=date)
+        return {"xbrl_members": xbrl,
+                "used_scopes": [r["scope"] for r in used]}
+
+    def get_xbrl_fact_dimensions(self, source_id, concept_qname):
+        """Fact-level verification material: every numeric non-nil fact of THE
+        current filing carrying this exact concept qname, entity-scoped to the
+        source's PRIMARY company via the P4f FOR_COMPANY edge, with its stored
+        period (raw — stored ends are EXCLUSIVE; slice_menu applies the
+        verified decode) and its COMPLETE dimension set (axis/member qnames +
+        labels via the CIK-normalized indexed-id pairing; [] = a genuinely
+        dimensionless context). Fail-closed exclusions: facts without a
+        Context, contexts with misaligned dimension/member arrays, and
+        unresolvable pairs. Called ONCE per concept per event (the CLI caches).
+        Empty for XBRL-less sources (e.g. 8-K)."""
+        rows = self._read(
+            "MATCH (pr:Report {accessionNo: $src})-[:HAS_XBRL]->(x:XBRLNode) "
+            "MATCH (pr)-[:PRIMARY_FILER]->(co:Company) "
+            "MATCH (f:Fact)-[:REPORTS]->(x) "
+            "WHERE f.is_numeric = '1' AND f.is_nil = '0' "
+            "AND f.qname = $concept "
+            "MATCH (f)-[:HAS_PERIOD]->(p:Period) "
+            "MATCH (f)-[:IN_CONTEXT]->(c:Context)-[:FOR_COMPANY]->(co) "
+            "RETURN f.id AS fid, p.period_type AS period_type, "
+            "p.start_date AS start_date, p.end_date AS end_date, "
+            "c.dimension_u_ids AS dus, c.member_u_ids AS mus",
+            src=source_id, concept=concept_qname)
+        rows = [r for r in rows                    # misaligned arrays: fail-closed
+                if len(r["dus"] or []) == len(r["mus"] or [])]
+        ids = set()
+        for r in rows:
+            for u in (r["dus"] or []) + (r["mus"] or []):
+                ids.add(_norm_uid(u))
+        found = {}
+        if ids:
+            for rec in self._read(
+                    "MATCH (d:Dimension) WHERE d.id IN $ids "
+                    "RETURN d.id AS id, d.qname AS qname, null AS label "
+                    "UNION "
+                    "MATCH (m:Member) WHERE m.id IN $ids "
+                    "RETURN m.id AS id, m.qname AS qname, m.label AS label",
+                    ids=sorted(ids)):
+                found[rec["id"]] = rec
+        out = []
+        for r in rows:
+            dims, ok = [], True
+            for du, mu in zip(r["dus"] or [], r["mus"] or []):
+                d, m = found.get(_norm_uid(du)), found.get(_norm_uid(mu))
+                if not d or not m:
+                    ok = False                     # unresolvable pair: fail-closed —
+                    break                          # this fact can't verify a claim
+                dims.append({"axis": d["qname"], "member": m["qname"],
+                             "label": m["label"]})
+            if ok:
+                out.append({"period_type": r["period_type"],
+                            "start_date": r["start_date"],
+                            "end_date": r["end_date"], "dims": dims})
+        return out
 
     def transaction(self):
         raise RuntimeError("writes are DISABLED on the Neo4j adapter until the "

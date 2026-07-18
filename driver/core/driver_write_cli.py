@@ -1,10 +1,11 @@
 """S3.5 INTERNAL writer CLI — the owner-locked §11.4 v3.6 contract in code.
 
 Flow: prepared facts → load stored source + typed Driver → deterministic tail
-(surprise compose → period → UNITS canonical → slice/measurement → FUSION on
-canonical values → ids → full validation, MEMBER_LINK_DEFERRED fence pre-plan) →
-provisional plan → dry-run (DEFAULT) or ONE non-retried whole-event transaction with
-in-tx recheck → durable write-ahead audit file (prepared → committed/failed/dry_run).
+(surprise compose → period → UNITS canonical → slice/measurement → member-ref law
+via the PIT slice menu (step 7: frozen classification · FS-20 · FS-18 fold; invalid
+refs park MEMBER_LINK_INVALID) → ids → FUSION on canonical values → full validation)
+→ provisional plan → dry-run (DEFAULT) or ONE non-retried whole-event transaction
+with in-tx recheck → durable write-ahead audit (prepared → committed/failed/dry_run).
 
 Truthfulness: rollback/failure reports ZERO facts written — approved facts become
 parked(EXECUTION_FAILED). REJECT beats PARK. date = the STORED source's public time;
@@ -26,6 +27,8 @@ from driver.core.driver_units import UnitResolutionError, resolve_driver_units
 from driver.core.driver_validators import (_expected_home_name, _home_mismatch,
                                            compose_surprise_scope, validate_fact)
 from driver.core.driver_writer import assert_writes_enabled, plan_event_write
+from driver.core.slice_menu import (build_menu, check_member_refs,
+                                    match_xbrl_fact)
 
 __all__ = ["CLI_CODES", "run_event", "load_run_input"]
 
@@ -34,10 +37,11 @@ __all__ = ["CLI_CODES", "run_event", "load_run_input"]
 CLI_CODES = frozenset({
     "SOURCE_MISSING", "SOURCE_COMPANY_AMBIGUOUS", "DRIVER_NOT_READY",
     "SURPRISE_COMPOSE", "PERIOD_UNRESOLVED", "UNIT_UNRESOLVED",
-    "MEMBER_LINK_DEFERRED", "ID_LAW", "FUSION_AMBIGUOUS", "F7", "EMPTY_LABEL",
+    "MEMBER_LINK_INVALID", "ID_LAW", "FUSION_AMBIGUOUS", "F7", "EMPTY_LABEL",
     "SURPRISE_HOME_NOT_ACCEPTED", "EXECUTION_FAILED", "WRITER_BUSY", "WRITE_GATE",
     "INTERNAL_UNTRACKED",
-})
+})   # MEMBER_LINK_DEFERRED retired at step 7 (fence removed) — §11.4 amendment
+     # pending owner approval; MEMBER_LINK_INVALID = ref-level law breach parks
 _ACCEPTED = ("created", "created_member", "noop", "filled", "updated", "deduped")
 _DECISION = {"created": "written", "created_member": "written", "noop": "merged",
              "filled": "merged", "updated": "merged", "deduped": "merged",
@@ -271,6 +275,16 @@ def run_event(run_input, *, store, audit_dir, lock_path=None, enable_writes=Fals
                                      f"relationship — multi-registrant is S4-era")
                         for i in range(n)])
 
+    # ---- PIT slice menu (step 7): fetched ONCE per event, cut at the stored
+    # source's public time; refs verify FACT-LEVEL against the current filing
+    # (match_xbrl_fact); law lives in slice_menu.py, retrieval in the store ----
+    menu_tokens, menu_logs, fold_notes = None, [], {}
+    xbrl_rows = {}                                 # concept -> verification rows,
+    if any(pf.member_refs for pf in run_input.facts):  # fetched ONCE per event
+        menu_raw = store.get_company_slice_menu(run_input.source_id, src["date"])
+        menu_tokens, menu_logs = build_menu(menu_raw["xbrl_members"],
+                                            menu_raw["used_scopes"])
+
     # ---- deterministic tail per fact ----
     items = {}
     staged = []                                    # (index, fact) surviving the tail
@@ -286,11 +300,31 @@ def run_event(run_input, *, store, audit_dir, lock_path=None, enable_writes=Fals
             items[i] = _item(i, res[0], res[1], detail=res[2])
             continue
         fact = res[1]
-        if pf.member_refs:                         # fence BEFORE the planner (step 7)
-            items[i] = _item(i, "parked", ["MEMBER_LINK_DEFERRED"],
-                             detail="fact carries member_refs — parks until step 7 "
-                                    "(MAPS_TO_MEMBER gains its AXIS field)")
-            continue
+        if pf.member_refs is not None:             # the XBRL dims CLAIM — [] too
+            fact["member_refs"] = [dict(r) for r in pf.member_refs]
+            claim = {"time_type": pf.time_type, "start": pf.period_start_date,
+                     "end": pf.period_end_date,
+                     "dims": {(r["axis"], r["member"]) for r in pf.member_refs}}
+            if pf.xbrl_concept_raw not in xbrl_rows:   # once per concept per event
+                xbrl_rows[pf.xbrl_concept_raw] = store.get_xbrl_fact_dimensions(
+                    run_input.source_id, pf.xbrl_concept_raw)
+            matched = match_xbrl_fact(claim, xbrl_rows[pf.xbrl_concept_raw])
+            if matched is None:
+                items[i] = _item(i, "parked", ["MEMBER_LINK_INVALID"],
+                                 detail="no fact in the current filing carries "
+                                        "this exact concept + period + dimension "
+                                        "set — the XBRL claim is unverifiable")
+                continue
+        if pf.member_refs:                         # step-7 member-ref law, pre-id
+            fact_tokens = {f"{k}:{v}" for k, v in fact["slice_parts"]}
+            problems, notes, ref_logs = check_member_refs(
+                pf.member_refs, fact_tokens, menu_tokens, matched)
+            menu_logs.extend(ref_logs)             # current-fact exclusions logged
+            if problems:
+                items[i] = _item(i, "parked", ["MEMBER_LINK_INVALID"],
+                                 detail="; ".join(problems))
+                continue
+            fold_notes[str(i)] = notes             # FS-18 fold-vs-new, audit-bound
         try:
             fact_id, fact_scope = build_id(
                 run_input.source_id, fact["driver_name"],
@@ -376,8 +410,12 @@ def run_event(run_input, *, store, audit_dir, lock_path=None, enable_writes=Fals
     # file (state stays `prepared`) BEFORE any mutation can happen ----
     plan_doc = [{"fact_id": pr.fact_id, "outcome": pr.outcome,
                  "code": pr.code, "ops": pr.ops} for _, pr in plans]
-    audit.update({"plans": plan_doc,
-                  "fusion_logs": [log for ff in fused for log in ff.logs]})
+    audit_extra = {"plans": plan_doc,
+                   "fusion_logs": [log for ff in fused for log in ff.logs]}
+    if menu_tokens is not None:                    # step-7 menu ran: FS-18 verdicts
+        audit_extra["member_menu"] = {"folds": fold_notes,
+                                      "exclusions": menu_logs}
+    audit.update(audit_extra)
 
     approved = [(ff, pr) for ff, pr in checked
                 if pr.outcome in _ACCEPTED and pr.fact_id in accepted_ids]

@@ -107,3 +107,93 @@ def test_fill_never_overwrites_a_present_value():
     assert len(fused) == 1
     assert fused[0].fact["level_low"] == Decimal("5")
     assert fused[0].fact["value_text"] == "approximately five"
+
+
+# ---- step-7 round 3: member_refs union/dedupe/incompatibility (TDD red first) ----
+
+R_GEO = {"axis": "srt:StatementGeographicalAxis", "member": "country:US",
+         "slice_part": "geography:us"}
+R_SEG = {"axis": "us-gaap:StatementBusinessSegmentsAxis", "member": "country:US",
+         "slice_part": "segment:us"}
+
+
+def test_member_refs_identical_complete_lists_fuse():
+    fused, parked = fuse_event([
+        frag(0, level_low=Decimal("5"), level_high=Decimal("5"), level_unit="m_usd",
+             member_refs=[dict(R_SEG), dict(R_GEO)]),
+        frag(1, change_value=Decimal("2"), change_unit="percent_yoy",
+             member_refs=[dict(R_GEO), dict(R_SEG)]),      # same SET, any order
+    ])
+    assert parked == [] and len(fused) == 1
+    assert fused[0].fact["member_refs"] == [R_GEO, R_SEG]  # sorted, deduped
+
+
+def test_member_refs_none_is_no_claim_and_inherits_the_one_list():
+    fused, parked = fuse_event([
+        frag(0, level_low=Decimal("5"), level_high=Decimal("5"), level_unit="m_usd"),
+        frag(1, change_value=Decimal("2"), change_unit="percent_yoy",
+             member_refs=[dict(R_SEG)]),
+    ])
+    assert parked == [] and len(fused) == 1
+    assert fused[0].fact["member_refs"] == [R_SEG]         # None never erases refs
+
+
+def test_member_refs_two_different_complete_lists_park_never_union():
+    # each verified list is COMPLETE — combining [geo] and [seg] would fabricate
+    # a dimension set no real XBRL fact carries (reproduced 2026-07-17)
+    fused, parked = fuse_event([
+        frag(0, level_low=Decimal("5"), level_high=Decimal("5"), level_unit="m_usd",
+             member_refs=[dict(R_GEO)]),
+        frag(1, change_value=Decimal("2"), change_unit="percent_yoy",
+             member_refs=[dict(R_SEG)]),
+    ])
+    assert fused == [] and len(parked) == 1
+    assert parked[0].code == "FUSION_AMBIGUOUS" and parked[0].indexes == (0, 1)
+    assert "different complete dimension sets" in parked[0].reason
+
+
+def test_member_refs_subset_list_also_parks():
+    fused, parked = fuse_event([
+        frag(0, level_low=Decimal("5"), level_high=Decimal("5"), level_unit="m_usd",
+             member_refs=[dict(R_GEO)]),
+        frag(1, change_value=Decimal("2"), change_unit="percent_yoy",
+             member_refs=[dict(R_GEO), dict(R_SEG)]),      # superset != identical
+    ])
+    assert fused == [] and len(parked) == 1
+    assert parked[0].code == "FUSION_AMBIGUOUS"
+
+
+def test_member_refs_verified_empty_vs_refs_is_incompatible_parks():
+    fused, parked = fuse_event([
+        frag(0, level_low=Decimal("5"), level_high=Decimal("5"), level_unit="m_usd",
+             member_refs=[]),                               # VERIFIED no dimensions
+        frag(1, change_value=Decimal("2"), change_unit="percent_yoy",
+             member_refs=[dict(R_SEG)]),
+    ])
+    assert fused == [] and len(parked) == 1
+    assert parked[0].code == "FUSION_AMBIGUOUS" and parked[0].indexes == (0, 1)
+
+
+def test_member_refs_same_provenance_two_slice_parts_parks():
+    fused, parked = fuse_event([
+        frag(0, level_low=Decimal("5"), level_high=Decimal("5"), level_unit="m_usd",
+             member_refs=[dict(R_GEO)]),
+        frag(1, change_value=Decimal("2"), change_unit="percent_yoy",
+             member_refs=[dict(R_GEO, slice_part="geography:americas")]),
+    ])
+    assert fused == [] and len(parked) == 1
+    assert parked[0].code == "FUSION_AMBIGUOUS"
+
+
+def test_member_refs_fold_is_permutation_identical():
+    def build(order):
+        frags = [frag(0, level_low=Decimal("5"), level_high=Decimal("5"),
+                      level_unit="m_usd", member_refs=[dict(R_SEG), dict(R_GEO)]),
+                 frag(1, change_value=Decimal("2"), change_unit="percent_yoy",
+                      member_refs=[dict(R_GEO), dict(R_SEG)])]
+        items = [frags[i] for i in order]
+        items = [(n, k, f) for n, (_, k, f) in enumerate(items)]
+        fused, parked = fuse_event(items)
+        assert parked == []
+        return fused[0].fact["member_refs"]
+    assert build([0, 1]) == build([1, 0]) == [R_GEO, R_SEG]

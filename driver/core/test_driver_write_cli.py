@@ -19,9 +19,12 @@ class FakeStore(FakeGraph):
     """FakeGraph + the source/driver/tx surface the CLI drives."""
 
     def __init__(self, facts=None, periods=None, *, source=..., companies=None,
-                 drivers=None, fail_apply=False, prior_units=None):
+                 drivers=None, fail_apply=False, prior_units=None,
+                 slice_menu=None, xbrl_facts=None):
         super().__init__(facts, periods)
         self.prior_units = prior_units or {}
+        self.slice_menu = slice_menu or {"xbrl_members": [], "used_scopes": []}
+        self.xbrl_facts = xbrl_facts or {}         # concept -> verification rows
         self.source = ({"date": "2026-07-01T12:00:00", "source_type": "8k",
                         "ticker": None, "fye_month": 9} if source is ... else source)
         self.companies = ["AAPL"] if companies is None else companies
@@ -43,6 +46,12 @@ class FakeStore(FakeGraph):
 
     def get_prior_guide_units(self, fact):
         return self.prior_units.get(fact["id"], [])
+
+    def get_company_slice_menu(self, source_id, date):
+        return self.slice_menu
+
+    def get_xbrl_fact_dimensions(self, source_id, concept):
+        return self.xbrl_facts.get(concept, [])
 
     def transaction(self):
         store = self
@@ -140,14 +149,113 @@ def test_date_is_source_time_and_created_unstamped_in_dry_run(tmp_path):
     assert props["created"] == "__now__"               # stamped only at commit
 
 
-# ---- member fence / fusion / validation ----
+# ---- member-ref law (step 7: fence removed) / fusion / validation ----
 
-def test_member_refs_park_before_planner(tmp_path):
-    out = run(tmp_path, [fact(member_refs=[
-        {"axis": "srt:StatementGeographicalAxis", "member": "srt:EuropeMember",
-         "slice_part": "geography:europe"}],
-        xbrl_concept_raw="us-gaap:Revenues")])
-    assert out["items"][0]["codes"] == ["MEMBER_LINK_DEFERRED"]
+GEO_AXIS = "srt:StatementGeographicalAxis"
+EU_DIM = {"axis": GEO_AXIS, "member": "srt:EuropeMember", "label": "Europe"}
+EU_REF = {"axis": GEO_AXIS, "member": "srt:EuropeMember",
+          "slice_part": "geography:europe"}
+
+
+def xrow(dims, ptype="duration", start="2025-06-29", end="2025-09-28"):
+    # a verification row for the default fact() claim: stored end is EXCLUSIVE
+    # (claimed 2025-09-27 inclusive -> stored 2025-09-28)
+    return {"period_type": ptype, "start_date": start, "end_date": end,
+            "dims": [dict(d) for d in dims]}
+
+
+def eu_store(**kw):
+    return FakeStore(xbrl_facts={"us-gaap:Revenues": [xrow([EU_DIM])]}, **kw)
+
+
+def test_member_refs_flow_through_and_op_identity_carries_axis(tmp_path):
+    out = run(tmp_path, [fact(slice_parts=[("geography", "Europe")],
+                              member_refs=[dict(EU_REF)],
+                              xbrl_concept_raw="us-gaap:Revenues")], eu_store())
+    assert out["items"][0]["decision"] == "written"        # fence is GONE
+    doc = audit_docs(tmp_path)[0]
+    edges = [o for o in doc["plans"][0]["ops"] if o.get("type") == "MAPS_TO_MEMBER"]
+    assert edges == [{"op": "edge", "type": "MAPS_TO_MEMBER",
+                      "from": out["items"][0]["fact_id"], "to": "srt:EuropeMember",
+                      "axis": "srt:StatementGeographicalAxis",
+                      "props": {"slice_part": "geography:europe"}}]
+
+
+def test_member_ref_with_no_matching_fact_parks_unverifiable(tmp_path):
+    # refs are NEVER trusted — the current filing has NO fact with this exact
+    # concept + period + dimension set, so the claim parks fail-closed
+    out = run(tmp_path, [fact(slice_parts=[("geography", "Europe")],
+                              member_refs=[dict(EU_REF)],
+                              xbrl_concept_raw="us-gaap:Revenues")])
+    assert out["items"][0]["decision"] == "parked"
+    assert out["items"][0]["codes"] == ["MEMBER_LINK_INVALID"]
+    assert "unverifiable" in out["items"][0]["detail"]
+
+
+def test_member_elsewhere_in_filing_is_insufficient(tmp_path):
+    # the member EXISTS in the filing — but on a different period's fact; the
+    # exact-fact match must fail (a member seen "somewhere" proves nothing)
+    store = FakeStore(xbrl_facts={"us-gaap:Revenues": [
+        xrow([EU_DIM], start="2024-06-30", end="2024-09-29")]})
+    out = run(tmp_path, [fact(slice_parts=[("geography", "Europe")],
+                              member_refs=[dict(EU_REF)],
+                              xbrl_concept_raw="us-gaap:Revenues")], store)
+    assert out["items"][0]["codes"] == ["MEMBER_LINK_INVALID"]
+    assert "unverifiable" in out["items"][0]["detail"]
+
+
+def test_incomplete_dimension_set_never_matches(tmp_path):
+    # the filing's fact carries TWO dimensions; claiming only one of them is a
+    # DIFFERENT population — the complete-set equality must fail it
+    two_dim = xrow([EU_DIM, {"axis": "us-gaap:StatementBusinessSegmentsAxis",
+                             "member": "acme:CoreMember", "label": "Core"}])
+    store = FakeStore(xbrl_facts={"us-gaap:Revenues": [two_dim]})
+    out = run(tmp_path, [fact(slice_parts=[("geography", "Europe")],
+                              member_refs=[dict(EU_REF)],
+                              xbrl_concept_raw="us-gaap:Revenues")], store)
+    assert out["items"][0]["codes"] == ["MEMBER_LINK_INVALID"]
+    assert "unverifiable" in out["items"][0]["detail"]
+
+
+def test_false_verified_empty_dims_claim_parks(tmp_path):
+    # dimensions=[] is a CLAIM: "this concept+period fact has no dimensions" —
+    # here every matching-period fact HAS dimensions, so the [] claim is false
+    store = FakeStore(xbrl_facts={"us-gaap:Revenues": [xrow([EU_DIM])]})
+    out = run(tmp_path, [fact(member_refs=[],
+                              xbrl_concept_raw="us-gaap:Revenues")], store)
+    assert out["items"][0]["decision"] == "parked"
+    assert out["items"][0]["codes"] == ["MEMBER_LINK_INVALID"]
+    assert "unverifiable" in out["items"][0]["detail"]
+
+
+def test_true_verified_empty_dims_claim_writes(tmp_path):
+    store = FakeStore(xbrl_facts={"us-gaap:Revenues": [xrow([])]})
+    out = run(tmp_path, [fact(member_refs=[],
+                              xbrl_concept_raw="us-gaap:Revenues")], store)
+    assert out["items"][0]["decision"] == "written"
+
+
+def test_member_ref_supporting_no_fact_slice_parks_invalid(tmp_path):
+    # a VERIFIED link must still support one of the fact's OWN slice tokens
+    # (FINAL_DESIGN:178) — this fact declares no slices at all
+    out = run(tmp_path, [fact(member_refs=[dict(EU_REF)],
+                              xbrl_concept_raw="us-gaap:Revenues")], eu_store())
+    assert out["items"][0]["decision"] == "parked"
+    assert out["items"][0]["codes"] == ["MEMBER_LINK_INVALID"]
+    assert "supports no slice token" in out["items"][0]["detail"]
+
+
+def test_menu_is_fetched_pit_at_source_time(tmp_path):
+    seen = []
+
+    class Capture(FakeStore):
+        def get_company_slice_menu(self, source_id, date):
+            seen.append((source_id, date))
+            return super().get_company_slice_menu(source_id, date)
+    run(tmp_path, [fact(slice_parts=[("geography", "Europe")],
+                        member_refs=[dict(EU_REF)],
+                        xbrl_concept_raw="us-gaap:Revenues")], Capture())
+    assert seen == [(SRC, "2026-07-01T12:00:00")]  # the STORED source's time, once
 
 
 def test_fragments_fuse_and_share_one_fact_id(tmp_path):
@@ -310,7 +418,7 @@ def test_every_emitting_branch_carries_a_code(tmp_path):
     collect(run(tmp_path / "12", [fact()], enable_writes=True))
     collect(run(tmp_path / "13", [fact(measurement_raw_spans=["—"])]))
     must_reach = {"SOURCE_MISSING", "SOURCE_COMPANY_AMBIGUOUS", "DRIVER_NOT_READY",
-                  "SURPRISE_COMPOSE", "PERIOD_UNRESOLVED", "MEMBER_LINK_DEFERRED",
+                  "SURPRISE_COMPOSE", "PERIOD_UNRESOLVED", "MEMBER_LINK_INVALID",
                   "FUSION_AMBIGUOUS", "NOT_STORABLE", "EXECUTION_FAILED",
                   "WRITE_GATE", "EMPTY_LABEL"}
     assert must_reach <= emitted, must_reach - emitted
@@ -778,3 +886,49 @@ def test_permutation_identical_decisions(tmp_path):
     by_decision1 = sorted((i["decision"], tuple(i["codes"])) for i in out1["items"])
     by_decision2 = sorted((i["decision"], tuple(i["codes"])) for i in out2["items"])
     assert by_decision1 == by_decision2
+
+
+# ---- step-7 round 5: exact-fact query hardening + fetch-once ----
+
+def test_xbrl_fact_query_is_company_scoped_nonnil_and_length_guarded():
+    captured = []
+
+    def fake_read(query, **params):
+        captured.append(query)
+        if "HAS_XBRL" in query:                    # the facts read
+            return [
+                {"fid": "f1", "period_type": "duration",
+                 "start_date": "2025-06-29", "end_date": "2025-09-28",
+                 "dus": ["1:ns:ax"], "mus": ["1:ns:me"]},
+                {"fid": "f2", "period_type": "duration",     # MISALIGNED arrays:
+                 "start_date": "2025-06-29", "end_date": "2025-09-28",
+                 "dus": ["1:ns:ax", "1:ns:ax2"], "mus": ["1:ns:me"]}]
+        return [{"id": "1:ns:ax", "qname": "ns:ax", "label": None},
+                {"id": "1:ns:me", "qname": "ns:me", "label": "Me"}]
+    from driver.core.driver_neo4j_adapter import Neo4jStore
+    store = Neo4jStore.__new__(Neo4jStore)
+    store._read = fake_read
+    rows = store.get_xbrl_fact_dimensions(SRC, "us-gaap:Revenues")
+    q = captured[0]
+    assert "PRIMARY_FILER" in q and "FOR_COMPANY" in q     # company-scoped context
+    assert "f.is_numeric = '1'" in q and "f.is_nil = '0'" in q
+    assert [r["dims"] for r in rows] == [                  # misaligned row DROPPED
+        [{"axis": "ns:ax", "member": "ns:me", "label": "Me"}]]
+
+
+def test_xbrl_fact_rows_fetched_once_per_concept_per_event(tmp_path):
+    calls = []
+
+    class Counting(FakeStore):
+        def get_xbrl_fact_dimensions(self, source_id, concept):
+            calls.append(concept)
+            return super().get_xbrl_fact_dimensions(source_id, concept)
+    store = Counting(xbrl_facts={"us-gaap:Revenues": [xrow([EU_DIM]), xrow([])]})
+    run(tmp_path, [
+        fact(slice_parts=[("geography", "Europe")], member_refs=[dict(EU_REF)],
+             xbrl_concept_raw="us-gaap:Revenues"),
+        fact(level_low=None, level_high=None, level_unit_raw=None,
+             level_shape_hint=None, change_value=Decimal("7"),
+             change_unit_raw="%", member_refs=[],
+             xbrl_concept_raw="us-gaap:Revenues")], store)
+    assert calls == ["us-gaap:Revenues"]           # two facts, ONE fetch

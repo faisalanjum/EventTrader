@@ -167,6 +167,12 @@ Critical — a name-only filter would wrongly admit these. The first 5 are confi
 ---
 
 ## 4. The elimination guard (confirm **b**)
+
+> **2026-07-17 (R12): the AUTHORITATIVE runtime lists now live in CODE — `driver/core/slice_axis_frozen.py`
+> (12 hand-vetted hard-exclude · 79 provisional, observed-on-segment-axes only, owner-approved).** The
+> counts below (~24/~241) are HISTORICAL — this section's study universe; they were never materialized as
+> data. The self-heal "auto-demote, no human" line below is SUPERSEDED by R12: correction is a governed
+> OFFLINE list update only (move the qname hard-exclude → provisional), evidenced by structured exclusion logs.
 Members on the segment-family axes that are accounting plumbing, not businesses. Scoped to segment axes only (a global regex over-catches "CorporateDebtSecurities", pension "ReconcilingItems", etc.).
 
 ```

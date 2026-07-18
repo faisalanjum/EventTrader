@@ -48,6 +48,34 @@ def _conflicts(a, b):
 _TIEBREAK = _LWW_FIELDS + ("level_shape_hint", "comparison_shape_hint") + SIGNATURE_FIELDS
 
 
+def _fold_member_refs(members):
+    """Each XBRL member_refs list is a COMPLETE, fact-level-verified dimension
+    set. Fusion may therefore only: inherit the ONE claim (None = no claim,
+    never erases), or fold IDENTICAL claims (set-identical, any order). TWO
+    DIFFERENT complete sets — subset, superset, [] vs non-empty, same
+    provenance with different parts, anything — are contradictory claims about
+    ONE fact and PARK: combining them would fabricate a dimension set no real
+    XBRL fact carries (reproduced 2026-07-17). Output is sorted, so any input
+    permutation yields identical refs. Returns ('ok', refs_or_None) or
+    ('conflict', reason)."""
+    claims = {}
+    for _, m in members:
+        v = m.get("member_refs")
+        if v is not None:
+            claims[frozenset((r["axis"], r["member"], r["slice_part"])
+                             for r in v)] = True
+    if not claims:
+        return "ok", None
+    if len(claims) > 1:
+        sizes = sorted(len(k) for k in claims)
+        return "conflict", (f"member_refs conflict: {len(claims)} different "
+                            f"complete dimension sets (sizes {sizes}) claimed "
+                            f"for one fact — combining them would fabricate a "
+                            f"set no real XBRL fact carries; never guess")
+    return "ok", [{"axis": a, "member": m, "slice_part": p}
+                  for a, m, p in sorted(next(iter(claims)))]
+
+
 def _rep_order(members):
     """The writer's deterministic representative rule: latest date first, ties broken
     by the FULL content tuple (LWW fields + hints + signature slots) — input order can
@@ -74,8 +102,14 @@ def fuse_event(items):
         pairs = [(a, b) for i, a in enumerate(members) for b in members[i + 1:]]
         conflict_count = sum(1 for a, b in pairs if _conflicts(a[1], b[1]))
         if conflict_count == 0:
+            status, refs = _fold_member_refs(members)
+            if status == "conflict":
+                parked.append(FusionPark(tuple(i for i, _ in members),
+                                         "FUSION_AMBIGUOUS", refs))
+                continue
             ordered = _rep_order(members)
             rep = dict(ordered[0][1])
+            rep["member_refs"] = refs               # inherit / identical-fold
             logs = []
             fill = SIGNATURE_FIELDS + ("level_shape_hint", "comparison_shape_hint",
                                        "company_confirmed")   # never lose a True
