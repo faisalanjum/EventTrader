@@ -48,16 +48,34 @@ def test_derived_skip():
     print("[ok] derived -> terminal SKIP")
 
 
-def test_plug_and_absent():
+def test_no_magnitude_plug_skip__abstain_without_proof():
+    """#4: the magnitude 'plug' skip (<=1000) is GONE — it dropped legit small facts (78 'Total X = 0'
+    rows, 'International Stores = 86', 'ACPU = 670'). No value is pre-skipped by size; a value with no
+    located proof ABSTAINS (value_absent, retryable), NEVER a terminal magnitude skip. A zero in generic
+    text is insufficient -> abstains. An unstated small value (fiscal.ai filler) -> abstains."""
     filing = {'source_id': 'F', 'source_type': '10k', 'event_time': 't', 'xbrls': [],
-              'texts': ['nothing relevant here']}
-    _, _, ab = RC.process_cp([mk_item('Small Count', 12), mk_item('Big Revenue', 7777)], filing, [])
-    reasons = {a['reason'] for a in ab}
-    assert 'plug' in reasons, ab               # 12 <= 1000
-    assert 'value_absent' in reasons, ab       # 7777 not in text
+              'texts': ['revenue grew strongly; nothing here was 0 and no store count is stated']}
+    _, res, ab = RC.process_cp([mk_item('Total Fee Related Earnings', 0),   # a real 0, not in text
+                                mk_item('Other Revenue', -1000),            # fiscal.ai filler, unstated
+                                mk_item('Big Revenue', 7777)], filing, [])
+    assert not any(a.get('reason') == 'plug' for a in ab), ab               # the magnitude skip is gone
+    assert all(a['reason'] == 'value_absent' for a in ab), ab               # all abstain for lack of proof
+    assert not res, res                                                     # none produced LLM candidates
     for a in ab:
-        assert a['sources_searched'] == ['10k'], a   # completeness signal present for the adapter
-    print("[ok] plug SKIP + value_absent (sources_searched carried)")
+        assert a['sources_searched'] == ['10k'], a   # completeness signal still carried
+    print("[ok] no magnitude plug skip; unproven values abstain")
+
+
+def test_small_value_reaches_the_locator_not_magnitude_vetoed():
+    """#4: a small value is no longer VETOED by size before the locator runs. Whether it then resolves
+    depends on locatable printed proof (exact_cell on real HTML, measured at the regenerate) — but it must
+    never be a terminal magnitude 'plug' skip. Here, with no proof, it ABSTAINS (value_absent, retryable)."""
+    filing = {'source_id': 'F', 'source_type': '10k', 'event_time': 't', 'xbrls': [],
+              'texts': ['International stores were up nicely this year']}
+    _, _, ab = RC.process_cp([mk_item('International Stores', 86)], filing, [])
+    assert not any(a.get('reason') == 'plug' for a in ab), ab           # never a magnitude skip
+    assert any(a['reason'] == 'value_absent' for a in ab), ab           # abstains (retryable), not terminal
+    print("[ok] small value reaches the locator; abstains without proof, never a magnitude skip")
 
 
 def test_second_source_residual_survives_when_first_resolves(monkeypatch):
@@ -101,6 +119,7 @@ if __name__ == '__main__':
     test_provenance()
     test_value_in_both_makes_two_events()
     test_derived_skip()
-    test_plug_and_absent()
+    test_no_magnitude_plug_skip__abstain_without_proof()
+    test_small_value_reaches_the_locator_not_magnitude_vetoed()
     test_xbrl_context()
     print("\nALL S1.1 CHECKS PASS")

@@ -153,8 +153,8 @@ def process_cp(items, filing, prs):
             continue
         if FA.is_derived(name):                  # fiscal.ai-computed (% Chg / Common Size) -> terminal SKIP
             abstain.append({**base, 'status': 'skip', 'reason': 'derived_metric'}); continue
-        if FA.is_plug(val, fmt):
-            abstain.append({**base, 'status': 'skip', 'reason': 'plug'}); continue
+        # NO magnitude 'plug' skip: it dropped legit small facts (78 'Total X = 0' rows, stores=86, ACPU=670).
+        # No value is pre-skipped by size; the locator decides, and no located proof -> value_absent (below).
         emitted = False; cands = []
         for src, allow_t1 in [(filing, True)] + [(p, False) for p in prs]:
             rec, snips = resolve_one(it, src, allow_t1)
