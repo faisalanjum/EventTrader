@@ -806,3 +806,34 @@ def test_seg_parse_rejects_invalid_dimension_addresses():
                              ['x:AlphaMember', 'x:BetalandMember'],
                              '2024-01-01', '2024-12-31') is None
     print("[ok] repeated-axis/padded/mixed addresses fail closed in BOTH lanes")
+
+
+def test_comparative_row_equal_values_abstain():
+    """Round-25 (reviewer-reproduced): a comparative row prints TWO different facts with
+    coincidence-equal values ('Revenue 5,432 5,432' under FY2024/FY2023 columns) — same context,
+    so the context-set law wrongly bound (wrong-column risk). Occurrence identity is now the
+    SIGNATURE (full source text, value start, value end): >1 distinct signature ABSTAINS; the
+    certified default path is untouched."""
+    t = 'FY2024 FY2023 comparative Revenue 5,432 5,432'
+    assert L.row_quote([t], ['Revenue'], 5432, None, with_context=True) == (None, None)
+    assert L.row_quote([t], ['Revenue'], 5432, None) is not None      # legacy default untouched
+    import locate
+    r = locate.locate_by_value({'xbrls': [], 'texts': [t], 'name': 'Revenue', 'value': 5432,
+                                'fmt': None, 'period': '2024-12-31', 'allow_xbrl': False})
+    assert r['hit'] is None and r['snips'], "full locate must abstain and hand candidates on"
+    print("[ok] comparative-row equal values abstain by signature; default path untouched")
+
+
+def test_signature_law_duplicates_and_single_spot():
+    """Round-25: EXACT duplicate signatures (identical source texts) may bind — the signature
+    includes the text CONTENT, not its list position; a single spot with a $-prefixed print binds
+    via its ONE match (the round-24 overlap-merge premise was FALSE — _tableforms carries no
+    dollar forms — so the merge is removed as unused complexity)."""
+    dup = 'Fiscal 2024 annual ##TABLE_START Widget revenues 5,432 detail'
+    qa, ca = L.row_quote([dup, dup], ['Widget', 'revenues'], 5432, None, with_context=True)
+    assert qa is not None and ca is not None and qa in ca
+    one = 'annual note Widget revenues $ 5,432 for the year'
+    q2, c2 = L.row_quote([one], ['Widget', 'revenues'], 5432, None, with_context=True)
+    assert q2 is not None and q2 in c2
+    assert not any('$' in f for f in L._tableforms(5432, None))   # the false premise, pinned
+    print("[ok] duplicate-text signatures bind; single-spot binds; no dollar forms exist")

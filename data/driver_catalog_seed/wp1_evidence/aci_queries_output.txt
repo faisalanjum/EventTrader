@@ -1,0 +1,4 @@
+A1 PER-FILING: both-form cells=97  conflicts=0  identical=97
+A2 CROSS-FILING: both-form cells=83  conflicts=7  identical=76
+B  pair-only missing (per-filing): 15
+C  REVIEWER SPEC: targets=126  counterparts=83  MISSING=43 = pair-only 15 + co-member 28

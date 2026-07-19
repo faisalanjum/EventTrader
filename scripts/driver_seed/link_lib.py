@@ -719,23 +719,18 @@ def row_quote(texts, label_tokens, val, fmt, gap=90, scale_gate=False, with_cont
         return best
     if not collected:
         return None, None
-    # merge overlapping spans per text: several FORMS matching one printed number ('5,432' and
-    # '$ 5,432') are ONE occurrence; the merged span's widest bounds window its ONE context
-    collected.sort(key=lambda x: (x[0], x[1], x[2]))
-    groups = []
-    for ti, s0, e0, q, t in collected:
-        if groups and groups[-1][0] == ti and s0 <= groups[-1][2]:
-            g = groups[-1]
-            groups[-1] = (ti, g[1], max(g[2], e0), g[3] + [q], t)
-        else:
-            groups.append((ti, s0, e0, [q], t))
-    ctxs = [t[_snippet_start(t, s0, label_tokens): e0 + 80] for ti, s0, e0, qs, t in groups]
-    if len(set(ctxs)) > 1:
-        return None, None              # >1 DISTINCT context across ALL occurrences (any wording/
-                                       # case/punctuation) -> unattributable -> ABSTAIN; evidence
-                                       # is never chosen alphabetically or by input order
-    allq = [q for _, _, _, qs, _ in groups for q in qs]
-    return min(allq, key=lambda q: (len(q), q)), ctxs[0]
+    # round-25 SIGNATURE law (reviewer-reproduced: a comparative row prints TWO facts with
+    # coincidence-equal values under one context — context-set equality wrongly bound): an
+    # occurrence IS (full source text, value start, value end). EXACT duplicate signatures
+    # (identical texts) may bind; >1 DISTINCT signature is unattributable -> ABSTAIN. The
+    # round-24 overlap-merge is REMOVED as unused complexity (its premise was false:
+    # _tableforms carries no dollar forms, so one printed number yields one match).
+    sigs = {(t, s0, e0) for ti, s0, e0, q, t in collected}
+    if len(sigs) > 1:
+        return None, None
+    t, s0, e0 = next(iter(sigs))
+    qs = [q for _, s, e, q, tt in collected if (tt, s, e) == (t, s0, e0)]
+    return min(qs, key=lambda q: (len(q), q)), t[_snippet_start(t, s0, label_tokens): e0 + 80]
 
 
 def _table_active_start(t, pos, cap=2600):
