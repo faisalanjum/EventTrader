@@ -1,6 +1,6 @@
 {
  "wp": "WP1 Step 4 regenerate",
- "code_commit": "de94ec6-dirty",
+ "code_commit": "f13d3a5-dirty",
  "tickers": [
   "A",
   "AA",
@@ -19,11 +19,11 @@
  "then": "venv/bin/python scripts/driver_seed/build_packets.py --tag wp1",
  "claims_scope": "zero fabricated (quote_source=xbrl_fact) records IN THIS COHORT ONLY; older part1-4 artifacts are STALE/INVALID, not regenerated",
  "output_sha256": {
-  "code_resolved.jsonl": "51f725e8897eb4709c42c0bfc59e71d825845133aafea70f2640a982e5a8580b",
-  "residual.jsonl": "e86b91f539807e466d4be50a169a61ce6419e23b0931cd722e46b3d7d3eda799",
+  "code_resolved.jsonl": "d3f544e98abc7e3b0b4f4cc6e8424786133bffdbe4ec0254784db6c253e7ba7a",
+  "residual.jsonl": "8f1735d5704034f48ec1692d2600d322f8f9a84587241d6850d8d4ef960a3775",
   "abstain.jsonl": "f46729974750f3ea8600f3238513167b4d6a9b12e3dfd08a4858a5935141d0be",
-  "code_summary.json": "ffe684b6b771521b3d56679bf9fca87d0cb4bbac4cbd097d943ba2dd9602ce3c",
-  "packets.jsonl": "a43c864148cbfd1a70292a052f7fb3cc56e85dc7e569cbbb073f5eee41429f1d",
+  "code_summary.json": "c1423853a4233555b2a4ab8c28ef845f8f36383010741222744be84fa74b024d",
+  "packets.jsonl": "d58fb28163ee816c52d05af1f393f227d41077f5ec52efb09cde3416ed8c6fed",
   "skip_ledger.jsonl": "1136c3fb05367b804b3b8d4817b420f1075acf808fdd58b36cfe9f3039b4422c",
   "park_ledger.jsonl": "5e1f916e523766a26aae7282b73e15d2736ea2ad388822dcc7e2874b1926535e",
   "sources_ledger.jsonl": "758c1debdafd3aa25a2c93b77a52c65ca1e0bb8069a8576ab507e0ccc9e8d0e3"
@@ -34,8 +34,8 @@
   "residual": 442,
   "abstain": 997,
   "company_periods": 25,
-  "T1_xbrl": 86,
-  "T2_label": 200,
+  "T1_xbrl": 105,
+  "T2_label": 181,
   "pr_records": 69,
   "cp_no_filing": 0,
   "duplicate_rows_collapsed": 0

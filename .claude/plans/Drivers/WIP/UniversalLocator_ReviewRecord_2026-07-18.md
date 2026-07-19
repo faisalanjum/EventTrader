@@ -665,3 +665,49 @@ no human routing, ever.
 FULL-HASH DETERMINISM PROVEN (two complete runs, all 8 outputs byte-identical).** Every drop
 from 329 is a closed precision hole (coin-flip T1 structures, substring labels, letter-glued
 numbers) — demotions ride to the LLM tier; nothing wrong kept.
+
+## Owner measurement note (2026-07-19) - mandatory at WP4
+
+Measure XBRL coverage with explicit, non-mixed denominators:
+
+1. **Fact-level:** approved XBRL-linked numeric facts / eligible source-stated numeric facts.
+2. **Driver-level:** eligible numeric Drivers with at least one approved XBRL link / all eligible
+   numeric Drivers discovered.
+3. Break both results out by discovery source (10-K/Q, 8-K, Transcript) and report numberless or
+   qualitative Drivers separately.
+4. Bucket every miss: no source XBRL tag, XBRL not ingested, deterministic lookup miss,
+   ambiguous context, or printed-proof failure.
+
+The current `86 / 286` (30.1%) is only a WP1 deterministic-record baseline. The older approximately
+57% result used different rules and is not a comparable release claim. WP4 must publish fresh
+denominators after the approved deterministic fixes; no single blended percentage is sufficient.
+
+## Owner recall packet (2026-07-19, owner-ordered after the first-principles census) —
+## "could we miss a lot of XBRL links?" MEASURED, then fixed only the real classes.
+**Census of 477 money-lane rows without an XBRL link:** 210 value-genuinely-not-tagged (the
+ceiling — no gate can recover) · **113 member-vocabulary misses (country:US vs 'United States' —
+THE systematic class)** · 63 no-XBRL-blobs (infra ingestion gap, out of channel scope) · 44
+correct D9 abstentions (XBRL matched but no printed quote — design note: those contexts could
+ride residuals as reader HINTS, WP4 lane) · 24 allowlist blocks (mostly value-coincidences that
+SHOULD reject; a real Net-Income/'stockholders'-ban collateral class deferred to its own measured
+pass) · 7 tie-abstains · 16 by-design.
+**Fixes (TDD, smallest-real):** (1) `country:XX` members expand via a GENERATED ISO-3166 table
+(`country_names.py`, built from the system's official iso-codes data — never hand-typed;
+precision-safe by construction: an error can only fail to match). (2) ALLCAPS camel tokens
+(EMEASegment → emea+segment) via BOTH-tokenizations-UNION — the first attempt broke Apple's real
+IPhoneMember and the existing battery caught it; the union preserves certified behavior exactly.
+(3) tier1 tie refinement: slice/period ties still ABSTAIN (Q-vs-FY same-end pinned RED);
+concept-only aliases (same value+slice+period, dual-tagged) pick deterministically
+(lexicographic) — a certain-true link is never discarded and order still can never decide.
+NOT done (no-over-engineering): currency members (currency ≠ geography), generic-member chasing,
+allowlist expansion (deferred, measured-pass-of-its-own).
+**Result: T1-xbrl 86 → 105 (+19) — materialized as T2→T1 UPGRADES (same printed quotes, now
+carrying full XBRL context: concept + country member + exact period). Total resolved 286.**
+**Bonus catch — latent nondeterminism EXPOSED and fixed:** the double-run gate caught
+residual.jsonl differing across runs: scan_text/row_quote iterated SETS of forms with
+insertion-order tiebreaks (hash-random per process; earlier identical double-runs were partly
+luck). Fixed with sorted-form iteration + full content tiebreaks. Proof upgraded permanently:
+two complete regenerates under FORCED DIFFERENT PYTHONHASHSEED → 8/8 outputs byte-identical.
+Commits: `013abf2` (recall packet) · `f13d3a5` (total ordering). Battery 107/107 · floors 28/28 ·
+verify RECORD+CHECK green. Manifest `f13d3a5-dirty` ('-dirty' = the two standing untouchable
+files only).
