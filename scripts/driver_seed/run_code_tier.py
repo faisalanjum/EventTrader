@@ -18,7 +18,7 @@ abstain.jsonl. Records carry raw signals ONLY (cadence, period_end, xbrl context
 
 Reads data/driver_catalog_seed/worklist.jsonl; writes data/driver_catalog_seed/<tag>/.
 """
-import os, re, json, argparse, collections, sys, hashlib
+import os, re, json, argparse, collections, sys, hashlib, math
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'earnings'))
 import quarter_identity as QI          # PIT-safe 8-K→quarter labeler (WP1 Step 3 selection gate)
 sys.path.insert(0, os.path.dirname(__file__))
@@ -65,45 +65,91 @@ def fetch_press_release(session, tk, period):
 _QLBL = re.compile(r'^Q([1-4])_FY(\d{4})$')
 
 
-def _8k_gate(info, target_fyq):
-    """PURE gate for one labeled 8-K (round-13 fix: the join compares the resolver's label against
-    the TARGET filing's OWN declared XBRL identity — never period_to_fiscal math. fiscal_math.py
-    documents ACI/AAP as unfixable edge cases: its year-of-start numbering vs ACI's year-of-end
-    convention accepted the FUTURE Q4_FY2025 8-K for period 2025-02-22 and rejected the true
-    Q4_FY2024 one, live-reproduced. Both sides of the new equality are company-XBRL-convention by
-    the resolver's own construction — prior-XBRL + advance — so numbering can never disagree).
-    target_fyq: (fy, q) ints from target_fiscal_identity(), or None (unproven -> fail closed).
-    Returns 'accept' | 'other_period' (confidently another quarter; set stays complete) |
-    'uncertain' (anything unprovable: fail closed; the source set is INCOMPLETE).
-    NOTE: `accession_periodic` is the PIT-safe PRIOR periodic anchor — never a same-quarter key."""
+def periodic_timeline(session, tk):
+    """The ticker's ORIGINAL 10-K/10-Q sequence (no amendments — exact formType match), ordered by
+    period then created. ONE query per ticker; feeds pairing, announcer windows, and uncertainty
+    scoping. Round-14: fiscal identities are GONE from the join — dei conventions are inconsistent
+    even within one company (WMS live: (2024,1)/(2025,2)/(2025,1)), so the round-13 dei join
+    accepted WMS's prior-year 8-K and rejected its true one. Structure never lies."""
+    rows = list(session.run(
+        """MATCH (r:Report)-[:PRIMARY_FILER]->(c:Company {ticker:$tk})
+           WHERE r.formType IN ['10-K','10-Q']
+           RETURN r.accessionNo AS acc, r.formType AS form, r.periodOfReport AS period,
+                  r.created AS created ORDER BY r.periodOfReport, r.created""", tk=tk))
+    return [{'acc': x['acc'], 'form': x['form'], 'period': str(x['period'])[:10],
+             'created': str(x['created'])} for x in rows if x['acc']]
+
+
+def cycle_for(timeline, target_acc):
+    """The target filing's structural cycle: {'pred': accession of the periodic covering the
+    PREVIOUS period, 'target': the target's own accession, 'period_end', 'hi': created of the
+    FIRST later-period periodic (announcer-window upper bound; None = cycle still open)}.
+    None if the target is not in the timeline (fail closed)."""
+    idx = next((i for i, e in enumerate(timeline) if e['acc'] == target_acc), None)
+    if idx is None:
+        return None
+    t = timeline[idx]
+    pred = next((e['acc'] for e in reversed(timeline[:idx]) if e['period'] < t['period']), None)
+    hi = next((e['created'] for e in timeline[idx+1:] if e['period'] > t['period']), None)
+    return {'pred': pred, 'target': t['acc'], 'period_end': t['period'], 'hi': hi}
+
+
+def prior_periodic_acc(timeline, created):
+    """The 8-K's structural prior: the last original periodic FILED on or before the 8-K
+    (full-timestamp compare — same-day announce-then-file order matters). This is the same
+    relationship the certified resolver anchors its labels to; here it is used as PURE PAIRING."""
+    c = str(created)
+    best = None
+    for e in sorted(timeline, key=lambda x: x['created']):
+        if e['created'] <= c:
+            best = e['acc']
+        else:
+            break
+    return best
+
+
+def _8k_gate(info, prior_acc, created, cycle):
+    """PURE round-14 gate — structural pairing, ZERO fiscal identities/labels.
+    accept iff: resolver AUTO_OK; the 8-K's prior periodic == the target's PREDECESSOR (the normal
+    announce-then-file shape); AND created sits in the announcer window (period_end, next-period
+    filing's created] — an announcement can neither precede its period's end nor follow the next
+    quarter's periodic.
+    prior == the target ITSELF is structurally AMBIGUOUS ('ambiguous_cycle_edge'): it is either a
+    late announcement of THIS target (documented 10-Q-before-8-K inversions, PHR/PINC class) or —
+    far more often — the NEXT quarter's announcement filed just before the next periodic (live
+    AAPL: the Q1-FY2025 8-K files one day before the Q1 10-Q, so its prior is the FY24 10-K).
+    The caller settles it in pass 2: an accepted pred-paired announcer exists -> other_period;
+    none -> uncertain (fail closed, poisons).
+    Returns 'accept' | 'other_period' | 'ambiguous_cycle_edge' | 'uncertain'."""
     if (info or {}).get('safety_action') != 'AUTO_OK':
         return 'uncertain'
-    m = _QLBL.match(str(info.get('quarter_label') or ''))
-    if not m:
+    if not prior_acc or not cycle:
         return 'uncertain'
-    if target_fyq is None:
-        return 'uncertain'
-    return 'accept' if (int(m.group(2)), int(m.group(1))) == tuple(target_fyq) else 'other_period'
+    c = str(created)[:10]
+    if not (cycle['period_end'] < c and (cycle['hi'] is None or c <= str(cycle['hi'])[:10])):
+        return 'other_period'
+    if prior_acc == cycle['pred']:
+        return 'accept'
+    if prior_acc == cycle['target']:
+        return 'ambiguous_cycle_edge'
+    return 'other_period'
 
 
-def target_fiscal_identity(session, accession):
-    """The target periodic filing's OWN declared XBRL fiscal identity (dei DocumentFiscalYearFocus
-    + DocumentFiscalPeriodFocus, read via the certified resolver's _XBRL_QUERY + parse — FY maps to
-    Q4, garbage maps to None). Returns (fy:int, q:int) or None. Round-13: this replaces
-    period_to_fiscal in the 8-K join; measured 25/25 cohort targets carry a parseable identity."""
-    row = session.run(QI._XBRL_QUERY, accession=accession).single()
-    parsed = QI.parse_xbrl_fiscal_identity(row['xbrl_year'] if row else None,
-                                           row['xbrl_period'] if row else None)
-    if parsed is None:
-        return None
-    return int(parsed[0]), int(str(parsed[1]).lstrip('Q'))
-
-
-def _uncertain_relevant(created, period):
-    """An 8-K FILED BEFORE the period ended cannot announce that period (the results do not exist
-    yet) — pure impossibility, no windows. Round-13: one unlabelable HISTORICAL 8-K used to mark
-    every later period incomplete."""
-    return str(created)[:10] >= str(period)[:10]
+def poisons(prior_acc, cycle, target_has_accept):
+    """Does one UNPROVABLE 8-K make this target's source set incomplete? Round-14 (reviewer
+    directive; my round-13 'no pairing exists' claim was WRONG — the pairing mechanism works for
+    any 8-K even when labeling failed): scope by the SAME structural pairing.
+    prior == pred  -> its announcement slot IS this target's cycle -> poison.
+    prior == target -> ambiguous (a late announcement of THIS target vs the next quarter's event):
+                       poison only while the target has NO accepted announcer.
+    anything else  -> a different cycle entirely -> no poison. No cycle info -> fail closed."""
+    if cycle is None:
+        return True
+    if prior_acc == cycle['pred']:
+        return True
+    if prior_acc == cycle['target']:
+        return not target_has_accept
+    return False
 
 
 def dedupe_rows(rows):
@@ -176,40 +222,39 @@ def _corpus_missing_row(it):
             'sources_searched': []}
 
 
-def fetch_earnings_8ks(session, tk, period, target_fyq):
+def fetch_earnings_8ks(session, tk, cycle, timeline):
     """Safe 8-K selection (WP1 Step 3 — replaces the 5-75-day window guess and the EX-99-only
-    filter). Enumerate the ticker's REAL 8-K accessions, label each with quarter_identity, gate
-    via _8k_gate (round-13: against the TARGET filing's own XBRL identity), and for every ACCEPTED
-    accession fetch + DEDUPLICATE all stored text (sections + exhibits + filing text).
-    Returns (events, uncertain_count, audit): uncertain_count > 0 means the company-period's
-    expected source set is INCOMPLETE (abstains stay parked, never SKIP) — but round-13 an
-    unprovable 8-K counts ONLY when it could possibly announce this period (created >= period end,
-    _uncertain_relevant). audit = one {'acc','created','verdict','relevant'} row per enumerated
-    8-K, written to the run's sources_ledger for reproducibility."""
+    filter). Enumerate the ticker's REAL 8-K accessions, label each with quarter_identity for the
+    AUTO_OK safety verdict, then gate by PURE STRUCTURAL PAIRING (_8k_gate, round-14) against the
+    target's cycle. For every ACCEPTED accession fetch + DEDUPLICATE all stored text (sections +
+    exhibits + filing text).
+    Returns (events, uncertain_count, audit): uncertain_count > 0 means the target's expected
+    source set is INCOMPLETE (abstains stay parked, never SKIP) — an unprovable 8-K counts ONLY
+    when the pairing places it in THIS target's cycle (poisons(); two passes so a target with an
+    accepted announcer is not poisoned by the next quarter's early event). audit = one
+    {'acc','created','verdict','label','prior_acc','relevant'} row per enumerated 8-K, written to
+    the run's sources_ledger for reproducibility (label is informational only)."""
     rows = list(session.run(
         """MATCH (r:Report {formType:'8-K'})-[:PRIMARY_FILER]->(c:Company {ticker:$tk})
            WHERE r.items CONTAINS '2.02'
            RETURN r.accessionNo AS acc, r.created AS created ORDER BY r.created""", tk=tk))
     # the Item-2.02 filter mirrors quarter_identity's OWN universe (_TICKER_CONTEXT_QUERY) —
     # same definition of "earnings 8-K", same source of truth.
-    events, uncertain, audit = [], 0, []
+    events, audit = [], []
     for x in rows:
         if not x['acc']:
             continue
-        relevant = _uncertain_relevant(x['created'], period)
+        prior_acc = prior_periodic_acc(timeline, x['created'])
         try:
             info = QI.resolve_quarter_info(tk, x['acc'], session=session)
         except ValueError:                 # a 2.02 8-K the resolver still can't place -> fail closed
             audit.append({'acc': x['acc'], 'created': str(x['created']), 'verdict': 'resolver_error',
-                          'label': None, 'relevant': relevant})
-            uncertain += 1 if relevant else 0
+                          'label': None, 'prior_acc': prior_acc, 'relevant': False})
             continue
-        verdict = _8k_gate(info, target_fyq)
+        verdict = _8k_gate(info, prior_acc, x['created'], cycle)
         audit.append({'acc': x['acc'], 'created': str(x['created']), 'verdict': verdict,
-                      'label': (info or {}).get('quarter_label'), 'relevant': relevant})
-        if verdict == 'uncertain':
-            uncertain += 1 if relevant else 0
-            continue
+                      'label': (info or {}).get('quarter_label'), 'prior_acc': prior_acc,
+                      'relevant': False})
         if verdict != 'accept':
             continue
         txt = list(session.run(
@@ -226,6 +271,18 @@ def fetch_earnings_8ks(session, tk, period, target_fyq):
         if contents:
             events.append({'source_id': x['acc'], 'source_type': '8k', 'event_time': x['created'],
                            'xbrls': [], 'texts': contents})
+    # pass 2: settle cycle-edge ambiguity + scope uncertainty by the SAME pairing, knowing whether
+    # an announcer was accepted (accept VERDICT, not stored-text presence).
+    has_accept = any(a['verdict'] == 'accept' for a in audit)
+    uncertain = 0
+    for a in audit:
+        if a['verdict'] == 'ambiguous_cycle_edge':
+            # announcer slot already filled -> this is the next quarter's event; empty slot ->
+            # it MIGHT be this target's late announcement -> unprovable, fail closed.
+            a['verdict'] = 'other_period' if has_accept else 'uncertain'
+        if a['verdict'] in ('uncertain', 'resolver_error'):
+            a['relevant'] = poisons(a['prior_acc'], cycle, has_accept)
+            uncertain += 1 if a['relevant'] else 0
     return events, uncertain, audit
 
 
@@ -273,10 +330,12 @@ def process_cp(items, filing, prs, sources_incomplete=False):
             continue
         if FA.is_derived(name):                  # fiscal.ai-computed (% Chg / Common Size) -> terminal SKIP
             abstain.append({**base, 'status': 'skip', 'reason': 'derived_metric'}); continue
-        try:                                     # round-13: a malformed vendor number is a CHANNEL DATA
-            XN.dec(str(val))                     # defect -> visible PARK, never a crash and never a
-        except XN.ExactError:                    # value_absent/terminal-skip masquerade
-            abstain.append({**base, 'status': 'park', 'reason': 'invalid_value'}); continue
+        try:                                     # round-13/14: a malformed vendor number is a CHANNEL
+            if not math.isfinite(float(XN.dec(str(val)))):   # DATA defect -> visible PARK, never a
+                raise XN.ExactError('non-finite')            # crash and never a value_absent/terminal-
+        except (XN.ExactError, OverflowError, ValueError):   # skip masquerade. float() catches the
+            abstain.append({**base, 'status': 'park', 'reason': 'invalid_value'})   # 1e309 class:
+            continue                             # Decimal-finite but float-infinite -> OverflowError
         # NO magnitude 'plug' skip: it dropped legit small facts (78 'Total X = 0' rows, stores=86, ACPU=670).
         # No value is pre-skipped by size; the locator decides, and no located proof -> value_absent (below).
         emitted = False; cands = []
@@ -335,6 +394,7 @@ def main():
     AB = open(f'{pdir}/abstain.jsonl', 'w'); SL = open(f'{pdir}/sources_ledger.jsonl', 'w')
     nR = nRes = nAb = 0
     stats = collections.Counter()
+    timelines = {}
     with drv.session() as s:
         for i, ((tk, form, period), items) in enumerate(sorted(cps.items())):
             filing = fetch_filing(s, tk, form, period)
@@ -343,11 +403,12 @@ def main():
                     AB.write(json.dumps(_corpus_missing_row(it)) + '\n'); nAb += 1
                 stats['cp_no_filing'] += 1
                 continue
-            tfq = target_fiscal_identity(s, filing['source_id'])
-            prs, uncertain_8ks, audit = fetch_earnings_8ks(s, tk, period, tfq)
+            if tk not in timelines:
+                timelines[tk] = periodic_timeline(s, tk)
+            cycle = cycle_for(timelines[tk], filing['source_id'])
+            prs, uncertain_8ks, audit = fetch_earnings_8ks(s, tk, cycle, timelines[tk])
             SL.write(json.dumps({'ticker': tk, 'form': form, 'period': period,
-                                 'filing_acc': filing['source_id'],
-                                 'target_fyq': list(tfq) if tfq else None,
+                                 'filing_acc': filing['source_id'], 'cycle': cycle,
                                  'eightk': audit}) + '\n')
             resolved, residual, abstain = process_cp(items, filing, prs,
                                                      sources_incomplete=uncertain_8ks > 0)

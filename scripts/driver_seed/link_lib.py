@@ -117,24 +117,48 @@ def _with_trail(t, end):
     return end + _TRAIL.match(t[end:end + 32]).end()
 
 
-# round-13 scale evidence: a bare SCALED print ('1,200' for 1.2B, '1.2' for 1.2B) may only bind
-# when its scale is EVIDENT — a section declaration ('in millions'), the tag riding immediately
-# after the number ('1.2 billion'), or a full-magnitude print. Measured on the wp1 cohort:
-# 315/315 certified table binds sit in sections carrying the strict marker -> zero recall cost.
+# round-13 scale evidence + round-14 tightening (reviewer-confirmed live): a bare SCALED print
+# ('1,200' for 1.2B) may only bind when evidence of THE REQUIRED MULTIPLIER is present — the
+# NEAREST preceding section declaration ('in millions'; 52 cohort text blocks carry MIXED
+# markers, so any-marker-anywhere approved wrong amounts) or the tag riding immediately after the
+# number — and 'million' can never prove a value that needs 'billion'. Full-magnitude prints and
+# zero are self-evident. Measured on the wp1 cohort: 315/315 certified table binds sit in
+# sections carrying the strict marker -> zero recall cost.
 _SCALE_MARK = re.compile(r'(?i)in (millions|thousands|billions)')
 _SCALE_TAIL = re.compile(r'\s?(million|billion|thousand|trillion)s?\b', re.I)
+_WORD2DIV = {'thousand': 1e3, 'million': 1e6, 'billion': 1e9, 'trillion': 1e12}
 
 
-def _self_evident(form, value):
-    """This printed form needs no external scale evidence: it reproduces the full magnitude, or it
-    is zero. (Scale-tagged prose is handled at the hit site via _SCALE_TAIL.)"""
+def _required_div(form, value):
+    """The multiplier this printed form NEEDS to reproduce the value (1e3/1e6/1e9/1e12), or None
+    when the form is self-evident (full magnitude, zero, or a non-numeric core)."""
     s = form.lstrip('$( ').rstrip(')%').replace(',', '').strip()
     try:
         f = abs(float(s))
     except ValueError:
-        return True                        # non-numeric-core forms carry their own words
+        return None                        # non-numeric-core forms carry their own words
     av = abs(float(value))
-    return av == 0 or f == av
+    if av == 0 or f == av:
+        return None
+    for d in (1e3, 1e6, 1e9, 1e12):
+        if f > 0 and abs(f * d - av) / av < 0.001:
+            return d
+    return None                            # no clean multiplier -> exact_form decides elsewhere
+
+
+def _tail_div(text, end):
+    """The scale word IMMEDIATELY after a hit ('1.2 billion' -> 1e9), or None."""
+    m = _SCALE_TAIL.match(text[end:end + 32])
+    return _WORD2DIV[m.group(1).lower()] if m else None
+
+
+def _nearest_mark_div(text, start):
+    """The NEAREST scale declaration BEFORE the hit ('(in millions)' -> 1e6), or None.
+    Nearest-wins is the locality rule: mixed-scale documents make any-marker-anywhere unsafe."""
+    last = None
+    for m in _SCALE_MARK.finditer(text, 0, start):
+        last = m
+    return _WORD2DIV[last.group(1).lower().rstrip('s')] if last else None
 
 
 def exact_form(form, value, fmt):
@@ -174,6 +198,20 @@ def printed_negative(quote, form):
     return False
 
 
+def _scale_tag_ok(quote, form, value):
+    """Round-14: no bind survives on a form whose EVERY occurrence carries a scale tag that
+    CONTRADICTS the claimed value ('1.2 million' never certifies 1.2 BILLION; '5,365 million'
+    never certifies plain 5,365). An occurrence with the right tag — or no tag — keeps it alive."""
+    req = _required_div(form, value)
+    for m in re.finditer(re.escape(form), quote or ''):
+        if not at_boundary(quote, m.start(), m.end()):
+            continue
+        td = _tail_div(quote, m.end())
+        if td is None or td == req:
+            return True
+    return False
+
+
 def value_ok(value, fmt, quote):
     """final deterministic self-check: value present at a real boundary AND losslessly, and the quote's own
     NOTATION does not contradict the value's sign.
@@ -191,6 +229,8 @@ def value_ok(value, fmt, quote):
                 forms.add(f"{xx:,.{d}f}")
     hits = [f for f in forms if bounded_hit(quote, f, forbid_pct=(fmt != '%'))]
     ok = [f for f in hits if exact_form(f, value, fmt)]
+    if fmt != '%':                        # round-14: a printed scale tag that contradicts the
+        ok = [f for f in ok if _scale_tag_ok(quote, f, value)]   # claimed value vetoes the bind
     if not ok:
         return False
     if float(value) > 0 and any(printed_negative(quote, f) for f in ok):
@@ -363,12 +403,9 @@ def concept_ok(con):
     if not any(g in cl for g in ('revenue', 'sales', 'income', 'profit', 'margin', 'operating',
                                  'premium')):
         return False
-    # round-13: a percent/rate/ratio-natured concept never carries a money/count value
-    # ('...DiscountRatePercent' passed via 'operating'). WORD-token check on camel boundaries,
-    # case-insensitive — never substring ('Corporate' contains 'rate' and must survive).
-    toks = {t.lower() for t in re.findall(r'[A-Z]+[a-z0-9]*|[a-z0-9]+', con or '')}
-    if toks & {'rate', 'percent', 'percentage', 'ratio'}:
-        return False
+    # round-14 REVERSAL of the round-13 name-token rate ban (reviewer-confirmed over-reject: the
+    # certified pool's `awk:...GeneralRateCase...RevenuesApprovedAmount` is REAL money, 4 rows).
+    # Names do not decide number-nature; UNIT IDENTITY does — tier1 skips 'pure'-unitRef facts.
     # reject genuine tax / equity / share concepts (specific substrings, so "AssessedTax"
     # inside a revenue concept name is not caught)
     bad = ('incometax', 'taxexpense', 'taxbenefit', 'deferredtax', 'taxespayable', 'taxreceivable',
@@ -440,6 +477,10 @@ def tier1(xbrls, name, val, per, is_currency=None):
                 if not _same_value(fc.get('value', '')):
                     continue
                 u = str(fc.get('unitRef') or '').lower()
+                if 'pure' in u:
+                    continue                      # round-14: a pure-unit fact (rate/ratio/percent)
+                                                  # never binds this money/number lane — unit
+                                                  # identity decides, never concept-name tokens
                 if is_currency == 1 and u and 'usd' not in u:
                     continue                      # shares/other units never satisfy a money KPI
                 if is_currency == 0 and 'usd' in u:
@@ -524,18 +565,23 @@ def row_quote(texts, label_tokens, val, fmt, gap=90, scale_gate=False):
     if not lt:
         return None
     forms = _tableforms(val, fmt)
-    needy = ({f for f in forms if not _self_evident(f, val)}
-             if scale_gate and fmt != '%' else set())
+    needy = ({f: _required_div(f, val) for f in forms if _required_div(f, val)}
+             if scale_gate and fmt != '%' else {})
     best = None
     for t in texts:
         low = t.lower()
-        marked = bool(_SCALE_MARK.search(t)) if needy else True
         for fo in forms:
+            req = needy.get(fo)
             for m in re.finditer(re.escape(fo), t):
                 if not at_boundary(t, m.start(), m.end()):
                     continue
-                if fo in needy and not marked and not _SCALE_TAIL.match(t[m.end():m.end() + 32]):
-                    continue               # scaled print with NO evidence of its scale -> not a bind
+                if req:                    # round-14: evidence must name THE REQUIRED multiplier —
+                    td = _tail_div(t, m.end())        # the immediate tag wins; else the NEAREST
+                    if td is not None:                # preceding declaration; wrong scale = no bind
+                        if td != req:
+                            continue
+                    elif _nearest_mark_div(t, m.start()) != req:
+                        continue
                 ws = max(0, m.start() - gap)
                 seg = low[ws:m.start()]
                 pos = [seg.find(tok) for tok in lt]

@@ -101,29 +101,12 @@ def main():
     bad = {k: v for k, v in byid.items() if len(v) > 1}
     assert not bad, f"ids carrying different (kpi,value): {list(bad.items())[:3]}"
 
-    # round-13 EXPLICIT proof: no future source under an earlier target. Every ACCEPTED 8-K's
-    # resolver label must equal its cp's target XBRL identity (re-checked from the run's own
-    # ledger), and every 8-K-sourced output must trace to an accept row in its OWN cp.
-    import re
-    _lbl = re.compile(r'^Q([1-4])_FY(\d{4})$')
+    # round-14 INDEPENDENT no-future-source proof happens INSIDE the live session below: for every
+    # ACCEPTED 8-K the pairing is RE-DERIVED from the graph via the certified resolver's own prior
+    # query (a different code path from the run's timeline) plus a fresh periodic-window query.
+    # The round-13 check compared a label against a target identity computed by the SAME code under
+    # test — circular (reviewer catch: WMS's wrong pairing would have passed it).
     cp_accepts = collections.defaultdict(set)
-    for row in ledger:
-        tgt = tuple(row['target_fyq']) if row.get('target_fyq') else None
-        for e in row['eightk']:
-            if e['verdict'] == 'accept':
-                m = _lbl.match(str(e.get('label') or ''))
-                assert tgt and m and (int(m.group(2)), int(m.group(1))) == tgt, \
-                    f"accepted 8-K label {e.get('label')} != target {tgt}: {row['ticker']} {row['period']}"
-                cp_accepts[(row['ticker'], row['period'])].add(e['acc'])
-    for r in res:
-        if r['source_type'] == '8k':
-            assert r['source_id'] in cp_accepts[(r['ticker'], r['period_end'])], \
-                f"8-K record without an accept ledger row in its cp: {r['source_id']} {r['ticker']}"
-    for r in rem:
-        for c in r.get('candidates', []):
-            if c.get('src_type') == '8k':
-                assert c['src'] in cp_accepts[(r['ticker'], r['period'])], \
-                    f"8-K candidate without an accept ledger row in its cp: {c['src']} {r['ticker']}"
 
     # mechanical compliance on every resolved record
     fab = [r for r in res if r.get('quote_source') == 'xbrl_fact' or r.get('source') == 'xbrl_fact']
@@ -136,6 +119,45 @@ def main():
                                auth=(os.environ.get('NEO4J_USERNAME', 'neo4j'), os.environ['NEO4J_PASSWORD']))
     cache, bad_sub = {}, []
     with drv.session() as s:
+        # ---- round-14 independent pairing + announcer-window proof for every ACCEPTED 8-K ----
+        tlc = {}
+        for row in ledger:
+            tk = row['ticker']
+            if tk not in tlc:
+                tlc[tk] = [dict(x) for x in s.run(
+                    """MATCH (r:Report)-[:PRIMARY_FILER]->(c:Company {ticker:$tk})
+                       WHERE r.formType IN ['10-K','10-Q']
+                       RETURN r.accessionNo AS acc, r.periodOfReport AS p, r.created AS cr
+                       ORDER BY r.periodOfReport, r.created""", tk=tk)]
+            tl = tlc[tk]
+            tacc = row['filing_acc']
+            idx = next((i for i, e in enumerate(tl) if e['acc'] == tacc), None)
+            assert idx is not None, f"target {tacc} absent from the independent timeline ({tk})"
+            tper = str(tl[idx]['p'])[:10]
+            pred = next((e['acc'] for e in reversed(tl[:idx]) if str(e['p'])[:10] < tper), None)
+            hi = next((str(e['cr']) for e in tl[idx + 1:] if str(e['p'])[:10] > tper), None)
+            for e8 in row['eightk']:
+                if e8['verdict'] != 'accept':
+                    continue
+                c = str(e8['created'])[:10]
+                assert tper < c and (hi is None or c <= hi[:10]), \
+                    f"accepted 8-K outside its announcer window: {e8['acc']} {tk} {row['period']}"
+                priors = RC.QI._prior_rows({'accession_8k': e8['acc'], 'filed_8k': e8['created']},
+                                           neo4j_session=s)
+                top = priors[0]['accession'] if priors else None
+                assert top in (pred, tacc), \
+                    f"pairing mismatch {e8['acc']} ({tk}): resolver prior={top}, expected {pred} or {tacc}"
+                cp_accepts[(tk, row['period'])].add(e8['acc'])
+        for r in res:
+            if r['source_type'] == '8k':
+                assert r['source_id'] in cp_accepts[(r['ticker'], r['period_end'])], \
+                    f"8-K record without an accept ledger row in its cp: {r['source_id']} {r['ticker']}"
+        for r in rem:
+            for cd in r.get('candidates', []):
+                if cd.get('src_type') == '8k':
+                    assert cd['src'] in cp_accepts[(r['ticker'], r['period'])], \
+                        f"8-K candidate without an accept ledger row in its cp: {cd['src']} {r['ticker']}"
+        # ---- mechanical compliance on every resolved record ----
         for r in res:
             key = (r['ticker'], r['form'], r.get('period') or r.get('period_end'),
                    r['source_type'], r['source_id'])
@@ -211,11 +233,14 @@ value bands (resolved): {dict(bands)}
 8-K gate verdicts (sources_ledger): {dict(gate_verdicts)}
 consulted/used source accessions pinned in manifest: {len(src_accessions)}
 
-## 8-K selection honesty (round-13)
+## 8-K selection honesty (round-14)
 Selection = resolver AUTO_OK (its own benchmark documents a **0.24% warm-start wrong-fire
-ceiling** — quarter_identity.py:100-104) AND label == the target filing's own XBRL identity
-(asserted above for every accepted 8-K, from the run's own ledger). Zero-error is a MEASURED
-claim (WP4 grading), never assumed from the resolver alone.
+ceiling** — quarter_identity.py:100-104) AND pure STRUCTURAL PAIRING (the 8-K's certified prior
+periodic == the target's predecessor, or the target itself for documented inversions) inside the
+announcer window (period_end, next-period filing]. NO fiscal identities/labels anywhere — dei
+conventions are inconsistent even within one company (WMS). Every accepted 8-K's pairing +
+window is INDEPENDENTLY re-derived from the graph by this verifier (resolver's own prior query —
+a different code path than the run's). Zero-error is a MEASURED claim (WP4), never assumed.
 
 run summary: {json.dumps(summ)}
 """

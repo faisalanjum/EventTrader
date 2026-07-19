@@ -18,8 +18,10 @@ def test_provenance():
     """A value found only in the filing -> filing accession; only in the PR -> the 8-K accession."""
     filing = {'source_id': 'FILING-ACC', 'source_type': '10k', 'event_time': 't1', 'xbrls': [],
               'texts': ['Total revenue $ 5,432 for the year ended December 31, 2024.']}
+    # round-14 fixture honesty: the old text said '$ 9,876 million' for the PLAIN value 9,876 —
+    # a contradicting scale tag the new value_ok veto rightly rejects. Provenance is the point.
     pr = {'source_id': '8K-ACC', 'source_type': '8k', 'event_time': 't0', 'xbrls': [],
-          'texts': ['Fourth quarter revenue was $ 9,876 million, up 10%.']}
+          'texts': ['Fourth quarter revenue was $ 9,876, up 10%.']}
     resolved, _, _ = RC.process_cp([mk_item('revenue', 5432), mk_item('revenue', 9876)], filing, [pr])
     by = {(r['value'], r['source_type'], r['source_id']) for r in resolved}
     assert (5432, '10k', 'FILING-ACC') in by, by
@@ -108,36 +110,52 @@ def test_second_source_residual_survives_when_first_resolves(monkeypatch):
         assert k in residual[0], f"residual missing batcher field {k}: {residual[0]}"
 
 
-def test_8k_gate_target_identity():
-    """Round-13 fix (reviewer-confirmed, live-reproduced): the join compares the resolver's label
-    against the TARGET filing's OWN declared XBRL identity — never period_to_fiscal math.
-    fiscal_math.py itself documents ACI/AAP as unfixable edge cases; live ACI 2025-02-22 ACCEPTED
-    the future Q4_FY2025 8-K (0001646972-26-000028, 23 leaked candidates) and REJECTED the true
-    Q4_FY2024 one (-25-000040). Both sides of the new equality live in the company's own
-    XBRL-convention space, so year-numbering conventions can never disagree."""
-    lbl = {'safety_action': 'AUTO_OK', 'quarter_label': 'Q4_FY2024'}
-    assert RC._8k_gate(lbl, (2024, 4)) == 'accept'
-    assert RC._8k_gate({'safety_action': 'AUTO_OK', 'quarter_label': 'Q4_FY2025'},
-                       (2024, 4)) == 'other_period'      # the ACI future-8-K case
-    assert RC._8k_gate({'safety_action': 'AUTO_OK', 'quarter_label': 'Q3_FY2024'},
-                       (2024, 4)) == 'other_period'
-    assert RC._8k_gate(lbl, None) == 'uncertain'         # target identity unproven -> fail closed
-    assert RC._8k_gate({'safety_action': 'FAIL_CLOSED', 'quarter_label': 'Q4_FY2024'},
-                       (2024, 4)) == 'uncertain'
-    assert RC._8k_gate({'safety_action': 'AUTO_OK', 'quarter_label': None}, (2024, 4)) == 'uncertain'
-    assert RC._8k_gate({}, (2024, 4)) == 'uncertain'
-    assert RC._8k_gate(None, (2024, 4)) == 'uncertain'
-    print("[ok] 8-K gate: target-XBRL-identity join, convention-safe, fail-closed")
+_CYCLE = {'pred': 'PRED-ACC', 'target': 'T-ACC', 'period_end': '2025-02-22', 'hi': '2025-07-22'}
 
 
-def test_uncertain_only_when_period_relevant():
-    """Round-13: an unlabelable 8-K FILED BEFORE the period ended cannot be its announcer (the
-    results do not exist yet) — pure impossibility, no windows. One unresolved HISTORICAL 8-K must
-    no longer mark every later period incomplete."""
-    assert not RC._uncertain_relevant('2023-01-10T21:05:00Z', '2025-02-22')
-    assert RC._uncertain_relevant('2025-07-15T20:10:00Z', '2025-02-22')
-    assert RC._uncertain_relevant('2025-02-22T09:00:00Z', '2025-02-22')   # same-day: conservative
-    print("[ok] uncertainty is period-relevant (created >= period_end only)")
+def test_8k_gate_structural_pairing():
+    """Round-14 (reviewer-confirmed on WMS, live-reproduced): fiscal-identity joins are DEAD — dei
+    conventions are inconsistent even within ONE company (WMS quarterlies: (2024,1)/(2025,2)/
+    (2025,1)), so the round-13 dei join accepted WMS's prior-year 8-K and rejected the true one.
+    The join is now PURE STRUCTURE, no labels/identities: accept iff resolver AUTO_OK AND the
+    8-K's prior periodic == the target's predecessor (or the target itself — documented
+    10-Q-before-8-K inversions) AND created sits in the announcer window (period_end, next-period
+    filing's created] — an announcement can neither precede its period's end nor follow the next
+    quarter's periodic."""
+    ok = {'safety_action': 'AUTO_OK', 'quarter_label': 'Q4_FY2024'}
+    assert RC._8k_gate(ok, 'PRED-ACC', '2025-04-15T16:00:00', _CYCLE) == 'accept'
+    # prior == the target itself: inversion OR the next quarter's event -> structurally ambiguous;
+    # pass 2 settles it (accepted announcer exists -> other_period, else uncertain/fail-closed)
+    assert RC._8k_gate(ok, 'T-ACC', '2025-05-01T09:00:00', _CYCLE) == 'ambiguous_cycle_edge'
+    assert RC._8k_gate(ok, 'OTHER-ACC', '2025-04-15T16:00:00', _CYCLE) == 'other_period'
+    assert RC._8k_gate(ok, 'PRED-ACC', '2026-04-14T16:00:00', _CYCLE) == 'other_period'  # future
+    assert RC._8k_gate(ok, 'PRED-ACC', '2024-05-16T16:00:00', _CYCLE) == 'other_period'  # prior yr
+    assert RC._8k_gate(ok, 'PRED-ACC', '2025-02-22T09:00:00', _CYCLE) == 'other_period'  # <= end
+    open_cycle = dict(_CYCLE, hi=None)
+    assert RC._8k_gate(ok, 'PRED-ACC', '2026-04-14T16:00:00', open_cycle) == 'accept'
+    assert RC._8k_gate({'safety_action': 'FAIL_CLOSED'}, 'PRED-ACC',
+                       '2025-04-15T16:00:00', _CYCLE) == 'uncertain'
+    assert RC._8k_gate(ok, None, '2025-04-15T16:00:00', _CYCLE) == 'uncertain'
+    assert RC._8k_gate(ok, 'PRED-ACC', '2025-04-15T16:00:00', None) == 'uncertain'
+    assert RC._8k_gate({}, 'PRED-ACC', '2025-04-15T16:00:00', _CYCLE) == 'uncertain'
+    assert RC._8k_gate(None, 'PRED-ACC', '2025-04-15T16:00:00', _CYCLE) == 'uncertain'
+    print("[ok] 8-K gate: pure structural pairing + announcer window, fail-closed")
+
+
+def test_uncertainty_scoped_by_pairing():
+    """Round-14 (reviewer directive adopted; my round-13 'no pairing exists' rejection was WRONG —
+    the pairing MECHANISM exists for any 8-K even when labeling failed): an unresolved 8-K poisons
+    ONLY the cycle it structurally belongs to. prior==pred -> its announcement slot IS this
+    target's. prior==target -> ambiguous (inversion vs next-quarter announcement): poisons only if
+    the target has NO accepted announcer yet. Anything else -> another cycle entirely."""
+    assert RC.poisons('PRED-ACC', _CYCLE, target_has_accept=False)
+    assert RC.poisons('PRED-ACC', _CYCLE, target_has_accept=True)
+    assert RC.poisons('T-ACC', _CYCLE, target_has_accept=False)
+    assert not RC.poisons('T-ACC', _CYCLE, target_has_accept=True)   # ACI annual: stays complete
+    assert not RC.poisons('OTHER-ACC', _CYCLE, target_has_accept=False)
+    assert not RC.poisons(None, _CYCLE, target_has_accept=False)     # no prior -> not this cycle
+    assert RC.poisons('PRED-ACC', None, target_has_accept=False) is True   # no cycle info -> fail closed
+    print("[ok] uncertainty scoped to the structurally matched cycle only")
 
 
 def test_worklist_dedupe_collapses_identical_rows():
@@ -163,41 +181,52 @@ def test_invalid_vendor_value_parks_not_skips():
     print("[ok] malformed vendor value -> visible PARK, never a crash or terminal skip")
 
 
-def test_8k_selection_live_aci_aapl():
-    """LIVE round-13 regression (reviewer directive): ACI 2025-02-22 must accept the true
-    Q4_FY2024 8-K and reject the future -26-000028; AAPL's 52/53-week acceptance must survive.
-    Skips ONLY on genuine graph unavailability (probe policy) — assertion failures always FAIL."""
+def test_8k_selection_live_aci_aapl_wms():
+    """LIVE round-14 regression (reviewer pins): ACI accepts its true announcer and rejects the
+    future 8-K; ACI's ANNUAL period is NOT poisoned by later Q1/Q2/Q3 unlabelable 8-Ks; AAPL
+    selects exactly its pinned 8-K; WMS's true quarterly 8-K is RECOVERED and the prior-year one
+    rejected (the round-13 dei join had both wrong). Skips ONLY on genuine graph unavailability."""
     try:
         RC.load_env_neo4j()
         from neo4j import GraphDatabase
-        from neo4j.exceptions import ServiceUnavailable
         drv = GraphDatabase.driver(os.environ['NEO4J_URI'],
                                    auth=(os.environ.get('NEO4J_USERNAME', 'neo4j'),
                                          os.environ['NEO4J_PASSWORD']))
         with drv.session() as s:
-            tfq = RC.target_fiscal_identity(s, '0001646972-25-000052')   # ACI 10-K 2025-02-22
+            tl = RC.periodic_timeline(s, 'ACI')
     except (KeyError, OSError, Exception) as e:
         if type(e).__name__ in ('ServiceUnavailable', 'KeyError', 'OSError', 'ConnectionError',
                                 'AuthError', 'ConfigurationError'):
             pytest.skip(f"graph unavailable: {e}")
         raise
-    assert tfq == (2024, 4), tfq                          # dei: FY2024 (ACI's own year-of-start)
     with drv.session() as s:
-        events, uncertain, audit = RC.fetch_earnings_8ks(s, 'ACI', '2025-02-22', tfq)
+        cyc = RC.cycle_for(tl, '0001646972-25-000052')            # ACI 10-K 2025-02-22
+        assert cyc and cyc['pred'] == '0001646972-25-000008', cyc  # Q3 10-Q predecessor
+        events, uncertain, audit = RC.fetch_earnings_8ks(s, 'ACI', cyc, tl)
         got = {e['source_id'] for e in events}
-        assert '0001646972-25-000040' in got, got         # the TRUE announcer, recovered
+        assert '0001646972-25-000040' in got, got         # the TRUE announcer
         assert '0001646972-26-000028' not in got, got     # the FUTURE 8-K stays out
         by = {a['acc']: a for a in audit}
         assert by['0001646972-26-000028']['verdict'] == 'other_period', by['0001646972-26-000028']
-        old = by['0001646972-23-000010']                  # unlabelable 8-K from 2023
-        assert old['verdict'] == 'uncertain' and not old['relevant'], old
-        assert uncertain == sum(1 for a in audit
-                                if a['verdict'] in ('uncertain', 'resolver_error') and a['relevant'])
-        tfq_aapl = RC.target_fiscal_identity(s, '0000320193-24-000123')   # AAPL 10-K 2024-09-28
-        assert tfq_aapl == (2024, 4), tfq_aapl
-        ev2, _, _ = RC.fetch_earnings_8ks(s, 'AAPL', '2024-09-28', tfq_aapl)
+        assert not by['0001646972-23-000010']['relevant'], by      # ancient unlabelable: no poison
+        # reviewer round-14 claim 4: the later Q1-FY2025 unlabelable 8-K (prior == the annual
+        # itself, and the annual HAS an accepted announcer) must NOT poison the annual period.
+        assert not by['0001646972-25-000059']['relevant'], by['0001646972-25-000059']
+        assert uncertain == 0, (uncertain, [a for a in audit if a['relevant']])
+        tl_aapl = RC.periodic_timeline(s, 'AAPL')
+        cyc_a = RC.cycle_for(tl_aapl, '0000320193-24-000123')     # AAPL 10-K 2024-09-28
+        ev2, _, _ = RC.fetch_earnings_8ks(s, 'AAPL', cyc_a, tl_aapl)
         got2 = [e['source_id'] for e in ev2]
-        assert got2 == ['0000320193-24-000120'], got2   # the reviewer-pinned exact selection
+        assert got2 == ['0000320193-24-000120'], got2     # the reviewer-pinned exact selection
+        # WMS (round-14 blocking case): quarterly target 2024-06-30 — dei is useless here; the
+        # structural pairing must RECOVER the true 8-K and reject the prior-year one.
+        tl_w = RC.periodic_timeline(s, 'WMS')
+        cyc_w = RC.cycle_for(tl_w, '0001604028-24-000032')
+        assert cyc_w and cyc_w['pred'] == '0001604028-24-000011', cyc_w   # FY2024 10-K
+        ev3, _, audit3 = RC.fetch_earnings_8ks(s, 'WMS', cyc_w, tl_w)
+        got3 = {e['source_id'] for e in ev3}
+        assert '0001604028-24-000029' in got3, got3       # TRUE announcer RECOVERED
+        assert '0001604028-23-000033' not in got3, got3   # prior-year 8-K rejected
     drv.close()
     print("[ok] LIVE: ACI true 8-K accepted + future rejected; AAPL 52/53-week preserved")
 

@@ -104,11 +104,11 @@ def test_dispatch_by_presence_of_value():
 def test_invalid_value_abstains_not_crash():
     """Round-13 (live-reproduced): 'N/A' / '-331x' crashed the public locator with ValueError.
     A malformed vendor number must ABSTAIN cleanly — never raise."""
-    for bad in ('N/A', '-331x', ''):
+    for bad in ('N/A', '-331x', '', '1e309', '-1e309'):   # round-14: Decimal-finite but float-inf
         r = locate.locate({'xbrls': [], 'texts': ['Revenue was 5 million'], 'name': 'Revenue',
                            'value': bad, 'fmt': None, 'period': '2025-01-01'})
         assert r == {'hit': None, 'snips': []}, (bad, r)
-    print("[ok] malformed value -> clean abstain, never a crash")
+    print("[ok] malformed value -> clean abstain, never a crash (incl. float-overflow class)")
 
 
 def test_fingerprint_forwards_unit_args(monkeypatch):
