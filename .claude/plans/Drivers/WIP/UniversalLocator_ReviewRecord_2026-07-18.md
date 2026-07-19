@@ -937,3 +937,41 @@ residual · 997 abstain · 2 parks · battery 134/134 · floors 28/28 · xbrl_la
 0-wrong at baseline · RECORD+CHECK green. The −28 vs round-22 = the distinct-context abstentions
 (multi-occurrence quotes whose evidence could not be attributed — exactly the class his Q1/Q2
 example proved unsafe) + strict-parse abstentions; all ride to the reader lane.**
+
+## Owner ruling (2026-07-19, post-round-23): the CONSERVATIVE evidence approach STANDS.
+Distinct-context quotes abstain to the reader lane; the token cost (~28 cohort rows; reader work
+is pre-hinted and rides the flat-rate Codex subscription) is accepted as the price of the
+zero-wrong law. The "emit with unattributed evidence" alternative was offered and DECLINED —
+do not relitigate without a new owner ruling.
+
+## Round 24 (ChatGPT, 2026-07-19) — both code holes reproduced + census-first enforcement +
+## the ACI record made EXECUTABLE (and my own earlier prose numbers corrected in the process).
+## Commits `89a57be` (code) + artifacts.
+1. Occurrence-level ambiguity (reproduced: 'Revenue 5,432' vs 'Revenue was 5,432' bypassed the
+   round-23 identical-string tie): contexts now collected from ALL qualifying occurrences BEFORE
+   choosing; overlapping form-matches at one printed position MERGE into one occurrence (widest
+   span windows its one context — single-spot multi-form rows still bind); >1 distinct context →
+   ABSTAIN. Wording/case/punctuation + full-locate pinned; certified default byte-identical.
+2. Valid dimension addresses (reproduced ×3): repeated axis / padded names / mixed-format
+   entries → incomplete, BOTH lanes. CENSUS FIRST (his directive): 11 tickers incl. CAG,
+   47,152 dimensioned facts → 0 / 0 / 0 — zero real cost. Lane self-check 0-wrong at baseline.
+3. ACI queries now EXECUTABLE (scripts + outputs verbatim in scratchpad `aci_queries.txt`,
+   summarized here; scope: Neo4j bolt per .env, ALL ACI Report→FinancialStatementContent blobs,
+   run 2026-07-19; THE_PAIR = (us-gaap:StatementBusinessSegmentsAxis,
+   aci:ReportableSegmentMember); Query A groups facts per (accession, concept, period-JSON) into
+   with==[THE_PAIR]-only vs without==no-pairs and compares value-sets; Query B counts with-only
+   groups):
+   - A1 PER-FILING (the binding-relevant granularity): 97 both-form cells, 0 conflicts, 97
+     identical. MY EARLIER PROSE ("0/112") was a per-blob approximation — corrected here.
+   - A2 CROSS-FILING: 83 cells, 7 conflicts (restatement-class differences across filings —
+     further SUPPORTING the pin's removal), 76 identical.
+   - B (his 43): member-only cells with no bare counterpart = 15 per-filing / 8 cross-filing —
+     his 43 matches NEITHER; his exact query requested. The pin stays removed regardless.
+4. WP2 GATE (recorded, NOT built per his directive): the value-unknown lane compares MEMBER SETS
+   (axis-blind `want = frozenset(member_qnames)`); WP2 must pass and compare COMPLETE
+   (axis, member) pairs end-to-end.
+**FINAL (clean stamp `89a57be`, dirty []): 194 resolved (T1 74 · T2 120 · 8-K 51) · 496
+residual · 997 abstain · 2 parks · battery 137/137 · floors 28/28 · lane self-check 0-wrong ·
+RECORD+CHECK green. The −46 vs round-23 = the all-occurrence ambiguity law (spot-checked: real
+multi-context prints — e.g. segment revenue in BOTH prose and the segment table — exactly the
+class the owner's conservative ruling sends to the reader).**

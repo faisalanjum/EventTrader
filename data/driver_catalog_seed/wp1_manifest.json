@@ -1,6 +1,6 @@
 {
  "wp": "WP1 Step 4 regenerate",
- "code_commit": "5d2bba8",
+ "code_commit": "89a57be",
  "tickers": [
   "A",
   "AA",
@@ -19,24 +19,24 @@
  "then": "venv/bin/python scripts/driver_seed/build_packets.py --tag wp1",
  "claims_scope": "zero fabricated (quote_source=xbrl_fact) records IN THIS COHORT ONLY; older part1-4 artifacts are STALE/INVALID, not regenerated",
  "output_sha256": {
-  "code_resolved.jsonl": "0b2c4a97a72c46efd9dbbe4a085661f9b968636a7481cfebf11f43312898bf1a",
-  "residual.jsonl": "8b15e475903162321f890c5bb20831cdcee2015112b5e7981661016942a0a390",
+  "code_resolved.jsonl": "643409fc72a3d9dcdbc7eb7d09625475e7523f5db898a6d6c84c5b405a9b6b12",
+  "residual.jsonl": "d0a12e5e465e560ab36e319cd9f7110bc07e25d78cf3fafe5cbc0bee7d51bb36",
   "abstain.jsonl": "f46729974750f3ea8600f3238513167b4d6a9b12e3dfd08a4858a5935141d0be",
-  "code_summary.json": "c2123cf55615487ccb2b8e2998c856066cc7e8749d2df980476f0779a60ef8b3",
-  "packets.jsonl": "1fd48ca007e776fabf2c18f86fbe1342452d2e7a2edb4757cb17edba91b2a10e",
+  "code_summary.json": "3eb3d9d2b5e6573fbc38464b43ae1e9e6603aa334dd63f052a8a72a389d0c47f",
+  "packets.jsonl": "5b6c01c5a7e8bc25c94f7da4d7103027d55d7988805cf581c207665986351c2b",
   "skip_ledger.jsonl": "1136c3fb05367b804b3b8d4817b420f1075acf808fdd58b36cfe9f3039b4422c",
   "park_ledger.jsonl": "5e1f916e523766a26aae7282b73e15d2736ea2ad388822dcc7e2874b1926535e",
   "sources_ledger.jsonl": "758c1debdafd3aa25a2c93b77a52c65ca1e0bb8069a8576ab507e0ccc9e8d0e3"
  },
  "verified_summary": {
   "tag": "wp1",
-  "records_resolved": 240,
-  "residual": 470,
+  "records_resolved": 194,
+  "residual": 496,
   "abstain": 997,
   "company_periods": 25,
-  "T1_xbrl": 92,
-  "T2_label": 148,
-  "pr_records": 63,
+  "T1_xbrl": 74,
+  "T2_label": 120,
+  "pr_records": 51,
   "cp_no_filing": 0,
   "duplicate_rows_collapsed": 0
  },
@@ -124,7 +124,7 @@
  ],
  "determinism_proof": {
   "method": "two complete regenerates AND the RECORD stamp all inside a CLEAN DETACHED git worktree at the code commit, reading the COMMITTED input slice, under FORCED different seeds",
-  "commit": "5d2bba8",
+  "commit": "89a57be",
   "workdir": "detached worktree",
   "input": "data/driver_catalog_seed/wp1_worklist_slice.jsonl (committed)",
   "battery_command": "venv/bin/python -m pytest scripts/driver_seed/ driver/relocation/ scripts/earnings/test_get_quarterly_filings.py -q --ignore=scripts/driver_seed/relocate_probe/benchmark",
@@ -132,11 +132,11 @@
    {
     "PYTHONHASHSEED": 1,
     "sha256": {
-     "code_resolved.jsonl": "0b2c4a97a72c46efd9dbbe4a085661f9b968636a7481cfebf11f43312898bf1a",
-     "residual.jsonl": "8b15e475903162321f890c5bb20831cdcee2015112b5e7981661016942a0a390",
+     "code_resolved.jsonl": "643409fc72a3d9dcdbc7eb7d09625475e7523f5db898a6d6c84c5b405a9b6b12",
+     "residual.jsonl": "d0a12e5e465e560ab36e319cd9f7110bc07e25d78cf3fafe5cbc0bee7d51bb36",
      "abstain.jsonl": "f46729974750f3ea8600f3238513167b4d6a9b12e3dfd08a4858a5935141d0be",
-     "code_summary.json": "c2123cf55615487ccb2b8e2998c856066cc7e8749d2df980476f0779a60ef8b3",
-     "packets.jsonl": "1fd48ca007e776fabf2c18f86fbe1342452d2e7a2edb4757cb17edba91b2a10e",
+     "code_summary.json": "3eb3d9d2b5e6573fbc38464b43ae1e9e6603aa334dd63f052a8a72a389d0c47f",
+     "packets.jsonl": "5b6c01c5a7e8bc25c94f7da4d7103027d55d7988805cf581c207665986351c2b",
      "skip_ledger.jsonl": "1136c3fb05367b804b3b8d4817b420f1075acf808fdd58b36cfe9f3039b4422c",
      "park_ledger.jsonl": "5e1f916e523766a26aae7282b73e15d2736ea2ad388822dcc7e2874b1926535e",
      "sources_ledger.jsonl": "758c1debdafd3aa25a2c93b77a52c65ca1e0bb8069a8576ab507e0ccc9e8d0e3"
@@ -145,11 +145,11 @@
    {
     "PYTHONHASHSEED": 2,
     "sha256": {
-     "code_resolved.jsonl": "0b2c4a97a72c46efd9dbbe4a085661f9b968636a7481cfebf11f43312898bf1a",
-     "residual.jsonl": "8b15e475903162321f890c5bb20831cdcee2015112b5e7981661016942a0a390",
+     "code_resolved.jsonl": "643409fc72a3d9dcdbc7eb7d09625475e7523f5db898a6d6c84c5b405a9b6b12",
+     "residual.jsonl": "d0a12e5e465e560ab36e319cd9f7110bc07e25d78cf3fafe5cbc0bee7d51bb36",
      "abstain.jsonl": "f46729974750f3ea8600f3238513167b4d6a9b12e3dfd08a4858a5935141d0be",
-     "code_summary.json": "c2123cf55615487ccb2b8e2998c856066cc7e8749d2df980476f0779a60ef8b3",
-     "packets.jsonl": "1fd48ca007e776fabf2c18f86fbe1342452d2e7a2edb4757cb17edba91b2a10e",
+     "code_summary.json": "3eb3d9d2b5e6573fbc38464b43ae1e9e6603aa334dd63f052a8a72a389d0c47f",
+     "packets.jsonl": "5b6c01c5a7e8bc25c94f7da4d7103027d55d7988805cf581c207665986351c2b",
      "skip_ledger.jsonl": "1136c3fb05367b804b3b8d4817b420f1075acf808fdd58b36cfe9f3039b4422c",
      "park_ledger.jsonl": "5e1f916e523766a26aae7282b73e15d2736ea2ad388822dcc7e2874b1926535e",
      "sources_ledger.jsonl": "758c1debdafd3aa25a2c93b77a52c65ca1e0bb8069a8576ab507e0ccc9e8d0e3"
