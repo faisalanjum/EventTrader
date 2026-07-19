@@ -13,10 +13,10 @@ worklist slice sha `473bda9dcb0513a8…` · command: `venv/bin/python scripts/dr
 | base | count |
 |---|---|
 | raw vendor rows (pinned slice) | 1535 |
-| unique targets (item_id) | 1400 |
+| unique targets (item_id) | 1535 |
 | emitted source records (resolved) | 352 |
 
-resolved 352 · residual 344 (unique targets 321) · abstain 1006
+resolved 352 · residual 344 (unique targets 344) · abstain 1006
 (reasons: {'derived_metric': 961, 'value_absent': 45}) · value-absent rows flagged sources_incomplete: 45
 
 ## Routes (resolved)

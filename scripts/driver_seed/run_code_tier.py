@@ -188,9 +188,10 @@ def resolve_one(it, src, allow_t1):
 
 
 def _iid(it):
-    """ONE deterministic item id, carried through resolved/residual/abstain (WP1 traceability)."""
-    key = {k: it.get(k) for k in ('ticker', 'kpi', 'period', 'form')}
-    return hashlib.sha1(json.dumps(key, sort_keys=True).encode()).hexdigest()[:12]
+    """ONE deterministic item id per DISTINCT RAW ROW, carried through resolved/residual/abstain.
+    Hashes the WHOLE row: a 4-field key conflated 26 groups in the wp1 cohort (fiscal.ai repeats a
+    KPI label across category variants with different values — reviewer catch, confirmed)."""
+    return hashlib.sha1(json.dumps(it, sort_keys=True, default=str).encode()).hexdigest()[:12]
 
 
 def process_cp(items, filing, prs, sources_incomplete=False):

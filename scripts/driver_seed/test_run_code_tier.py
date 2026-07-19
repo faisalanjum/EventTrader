@@ -135,6 +135,19 @@ def test_sources_incomplete_propagates():
     print("[ok] sources_incomplete propagates to value-absent abstains")
 
 
+def test_item_id_unique_per_distinct_raw_row():
+    """Reviewer catch, CONFIRMED on the wp1 cohort (26 collision groups): fiscal.ai repeats a KPI
+    label across category variants (geo1 vs geo2) with different values — an id over
+    (ticker,kpi,period,form) alone conflates distinct raw rows. The id must hash the WHOLE row."""
+    a = mk_item('Other Revenue by Geography', 23000)
+    b = mk_item('Other Revenue by Geography', 45029043000)
+    a['category'] = 'Revenue by Geography geo1'
+    b['category'] = 'Revenue by Geography geo2'
+    assert RC._iid(a) != RC._iid(b), "distinct raw rows shared one item_id"
+    assert RC._iid(a) == RC._iid(dict(a)), "id must be deterministic"
+    print("[ok] item_id unique per distinct raw row")
+
+
 def test_item_id_traceability():
     """WP1: ONE deterministic item_id rides through resolved, residual, and abstain."""
     filing = {'source_id': 'F', 'source_type': '10k', 'event_time': 't', 'xbrls': [],
