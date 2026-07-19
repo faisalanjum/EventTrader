@@ -22,23 +22,30 @@ TICKERS = ['A', 'AA', 'AAL', 'AAPL', 'ABT', 'ACI', 'ACN', 'ADM', 'AEE', 'AFL', '
 
 def raw_names(seg):
     """(axis, member) RAW strings from the four storage shapes — NO parser, NO stripping.
-    None marks an unknown/unreadable entry (reported, never skipped)."""
+    None marks an unknown/unreadable entry — INCLUDING a dict that yields no names or yields a
+    non-string side (round-28: malformed dictionary shapes count as unknown; nothing is
+    invisible)."""
     out = []
     for it in (seg if isinstance(seg, list) else [seg]):
         if not isinstance(it, dict):
             out.append(None)
             continue
+        got = 0
         if 'value' in it:
-            out.append((it.get('dimension'), it.get('value')))
+            out.append((it.get('dimension'), it.get('value'))); got += 1
         em = it.get('explicitMember')
         if isinstance(em, list):
-            out += [(m.get('dimension'), m.get('$t')) if isinstance(m, dict) else None
-                    for m in em]
+            for m in em:
+                out.append((m.get('dimension'), m.get('$t')) if isinstance(m, dict) else None)
+                got += 1
         elif isinstance(em, dict):
-            out.append((em.get('dimension'), em.get('$t')))
+            out.append((em.get('dimension'), em.get('$t'))); got += 1
         elif isinstance(em, str):
-            out.append((it.get('dimension'), em))
-    return out
+            out.append((it.get('dimension'), em)); got += 1
+        if got == 0:
+            out.append(None)               # a dict entry yielding NOTHING is unknown, not invisible
+    return [n if (n is None or (isinstance(n[0], str) and isinstance(n[1], str))) else None
+            for n in out]
 
 
 def _positive_controls():
@@ -54,7 +61,9 @@ def _positive_controls():
     assert any(isinstance(it, dict) and 'value' in it and 'explicitMember' in it
                for it in mixed), "mixed-format detector blind"
     assert None in raw_names(['unknown-shape-entry']), "unknown-shape detector blind"
-    print("positive controls: all four raw detectors fire on synthetic violations")
+    assert None in raw_names([{'weird': 'no-keys'}]), "empty-yield dict not counted unknown"
+    assert None in raw_names([{'dimension': 123, 'value': 'x:M'}]), "non-string side not unknown"
+    print("positive controls: all raw detectors fire on synthetic violations")
 
 
 def main():
@@ -106,7 +115,10 @@ def main():
           f"padded-names={padded}  mixed-format-entries={mixed}  "
           f"unreadable-blobs={unreadable_blobs}  nondict-blobs={nondict_blobs}  "
           f"nonfact-entries={nonfact_entries}  unknown-shape={unknown_shape}")
-    assert (unreadable_blobs == nondict_blobs == nonfact_entries == unknown_shape == 0), \
+    assert total > 0, "empty live scan proves nothing"
+    assert (rep_ax == padded == mixed == unknown_shape == 0), \
+        "violation classes must be zero — a nonzero count may NEVER exit green"
+    assert (unreadable_blobs == nondict_blobs == nonfact_entries == 0), \
         "malformed/unknown data must be investigated, never silently skipped"
 
 

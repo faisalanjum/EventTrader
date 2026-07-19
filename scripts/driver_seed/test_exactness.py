@@ -887,3 +887,49 @@ def test_equivalent_duplicate_facts_order_free():
     b = L.tier1([d2], 'total revenue', 999, '2024-12-31', is_currency=1)
     assert a is not None and a == b, (a, b)
     print("[ok] duplicate-equivalent facts: content-total ordering, order-free")
+
+
+def test_dotted_initials_normalize_both_sides():
+    """Round-28 (reviewer-reproduced; 289 dotted-U.S. worklist rows): dotted and plain uppercase
+    initials normalize IDENTICALLY on both sides via ONE general tokenizer (U.S. == US); for
+    country:XX members the KPI may carry the exact ISO code OR the full name (generated table,
+    no name list). Ambiguous issuer initials (L.P.) stay fail-closed."""
+    und = blob('Revenues', [fact('100', '2024-01-01', '2024-12-31')])
+    assert L.tier1([und], 'Total U.S. Revenue', 100, '2024-12-31', is_currency=1) is None, \
+        "dotted U.S. vanished and the bare company total bound"
+    us = blob('Revenues', [fact('200', '2024-01-01', '2024-12-31',
+              seg=[{'dimension': 'srt:StatementGeographicalAxis', 'value': 'country:US'}])])
+    assert L.tier1([us], 'U.S. Revenue', 200, '2024-12-31', is_currency=1) is not None, \
+        "dotted U.S. must bind country:US via ISO-code equivalence"
+    assert L.tier1([us], 'US Revenue', 200, '2024-12-31', is_currency=1) is not None
+    assert L.tier1([us], 'United States Revenue', 200, '2024-12-31', is_currency=1) is not None
+    assert L.tier1([us], 'U.K. Revenue', 200, '2024-12-31', is_currency=1) is None
+    lp = blob('Revenues', [fact('300', '2024-01-01', '2024-12-31',
+              seg=[{'dimension': 'x:A', 'value': 'x:AlphaMember'}])])
+    assert L.tier1([lp], 'Alpha Energy L.P. Revenue', 300, '2024-12-31', is_currency=1) is None, \
+        "issuer initials (LP) are an extra qualifier -> fail closed"
+    print("[ok] one tokenizer for dotted/plain initials; ISO equivalence; LP fail-closed")
+
+
+def test_tie_break_requires_valid_period_and_equal_units():
+    """Round-28: candidacy requires a VALID duration shape (start AND end, nonblank strings) —
+    a lone endDate-only fact must abstain; duplicate-equivalent facts under DIFFERENT normalized
+    unitRefs are not the same identity -> abstain (unit joins the structure key)."""
+    lone = blob('Revenues', [{'value': '999', 'period': {'endDate': '2024-12-31'},
+                              'unitRef': 'U_USD'}])
+    assert L.tier1([lone], 'total revenue', 999, '2024-12-31', is_currency=1) is None, \
+        "endDate-only period shape bound as a single candidate"
+    u = blob('Revenues', [
+        {'value': '999', 'period': {'startDate': '2024-01-01', 'endDate': '2024-12-31'},
+         'unitRef': 'U_USD'},
+        {'value': '999.0', 'period': {'startDate': '2024-01-01', 'endDate': '2024-12-31'},
+         'unitRef': 'usd2'}])
+    assert L.tier1([u], 'total revenue', 999, '2024-12-31', is_currency=1) is None, \
+        "different normalized units tie-broken into one bind"
+    same = blob('Revenues', [
+        {'value': '999', 'period': {'startDate': '2024-01-01', 'endDate': '2024-12-31'},
+         'unitRef': 'U_USD'},
+        {'value': '999.0', 'period': {'startDate': '2024-01-01', 'endDate': '2024-12-31'},
+         'unitRef': 'U_USD'}])
+    assert L.tier1([same], 'total revenue', 999, '2024-12-31', is_currency=1) is not None
+    print("[ok] valid period shape required; equal normalized units required; equals still bind")

@@ -349,11 +349,22 @@ GENERIC_MEM = {'member', 'segment', 'segments', 'consolidation', 'consolidated',
                'sector', 'company'}
 
 
+_INITIALS = re.compile(r'\b((?:[A-Z]\.){2,})')
+
+
+def _norm_initials(s):
+    """Round-28 (reviewer; 289 dotted-U.S. worklist rows): dotted uppercase initials collapse
+    to their plain form (U.S. -> US, U.S.A. -> USA, L.P. -> LP) — ONE general rule applied to
+    BOTH tokenizer sides; no name list."""
+    return _INITIALS.sub(lambda m: m.group(1).replace('.', ''), s)
+
+
 def slice_tokens(name):
-    """THE global KPI slice-token set (round-27, reviewer's corrected rule): long tokens PLUS
-    standalone UPPERCASE two-letter tokens ('RV', 'US') — one set for the early check, exact
-    full-slice equality, aggregate rejection, and scoring. No maintained list; extra qualifiers
-    fail closed ('Total US Revenue' never binds the undimensioned company total)."""
+    """THE global KPI slice-token set (round-27/28): dotted initials normalized, then long
+    tokens PLUS standalone UPPERCASE two-letter tokens ('RV', 'US') — one set for the early
+    check, exact full-slice equality, aggregate rejection, and scoring. No maintained list;
+    extra qualifiers fail closed."""
+    name = _norm_initials(name)
     toks = {t.lower() for t in re.findall(r"[A-Za-z]{3,}", name) if t.lower() not in SLICE_STOP}
     toks |= {t.lower() for t in re.findall(r'\b[A-Z]{2}\b', name)}
     return toks
@@ -446,7 +457,7 @@ def seg_axis_members(fc):
 def member_tokens(members):
     toks = set()
     for m in members:
-        pre, _, local = str(m).rpartition(':')
+        pre, _, local = str(_norm_initials(str(m))).rpartition(':')
         local = local or m
         # owner recall packet (measured 113-row miss class): XBRL tags geography as ISO codes
         # (`country:US`) while KPI names say 'United States' — expand via the generated ISO
@@ -553,8 +564,13 @@ def tier1(xbrls, name, val, per, is_currency=None):
                     continue                      # shares/other units never satisfy a money KPI
                 if is_currency == 0 and 'usd' in u:
                     continue                      # a money fact never satisfies a non-money KPI
-                if (fc.get('period') or {}).get('endDate') != per:
+                _pe = fc.get('period') or {}
+                if _pe.get('endDate') != per:
                     continue
+                if not (isinstance(_pe.get('startDate'), str) and _pe['startDate'].strip()
+                        and isinstance(_pe.get('endDate'), str)):
+                    continue           # round-28: an INVALID duration shape (endDate-only etc.)
+                                       # is never a candidate — shape before tie-breaking
                 _pairs, _complete = seg_parse(fc)      # round-23: THE single strict parser
                 if not _complete:
                     continue           # any unparsed/blank/typed entry -> identity unprovable
@@ -574,8 +590,12 @@ def tier1(xbrls, name, val, per, is_currency=None):
                     _pre, _, _loc = str(_mm).rpartition(':')
                     if _pre == 'country':
                         _nm = COUNTRY_NAME.get(_loc.upper())
-                        _tk = ({w for w in re.findall(r"[A-Za-z]{3,}", _nm.lower())
-                                if w not in SLICE_STOP} if _nm else set())
+                        _code = _loc.lower()
+                        if _nm and _code in kt:        # round-28: exact ISO-code equivalence
+                            _tk = {_code}              # (U.S. -> 'us' == country:US), from the
+                        else:                          # generated table — no name list
+                            _tk = ({w for w in re.findall(r"[A-Za-z]{3,}", _nm.lower())
+                                    if w not in SLICE_STOP} if _nm else set())
                     else:
                         _tk = member_tokens([_mm]) - SLICE_STOP   # ONE shared normalization
                     if not _tk:
@@ -617,8 +637,9 @@ def tier1(xbrls, name, val, per, is_currency=None):
     top = [c for c in cands if c[0] == cands[0][0]]
     structs = {(c[1], tuple(sorted(tuple(p) for p in seg_axis_members(c[4]))),
                 (c[4].get('period') or {}).get('startDate'),
-                (c[4].get('period') or {}).get('endDate') or (c[4].get('period') or {}).get('instant'))
-               for c in top}
+                (c[4].get('period') or {}).get('endDate') or (c[4].get('period') or {}).get('instant'),
+                str(c[4].get('unitRef') or '').strip().lower())   # round-28: equal NORMALIZED
+               for c in top}                                      # units or no tie-break
     if len(structs) > 1:
         return None
     # round-27 (reviewer-reproduced: '999' vs '999.0' duplicates emitted by input order): equal-
@@ -905,7 +926,7 @@ if __name__ == '__main__':
     # short-token SAFETY: unrelated short tokens never leak in; iPhone/Phone stays closed
     assert tier1(xb, "IT New Vehicles Revenue", 2825640000, "2024-12-31") is None, \
         "an unrelated short token must not bridge the slice equality"
-    ip = [json.dumps({"Revenues": [{"value": "200", "period": {"endDate": "2024-12-31"},
+    ip = [json.dumps({"Revenues": [{"value": "200", "period": {"startDate": "2024-01-01", "endDate": "2024-12-31"},
           "unitRef": "U_USD",
           "segment": [{"dimension": "us-gaap:ProductOrServiceAxis", "value": "aapl:IPhoneMember"}]}]})]
     assert tier1(ip, "Phone Revenue", 200, "2024-12-31", is_currency=1) is None, "Phone≠IPhone"
@@ -916,8 +937,8 @@ if __name__ == '__main__':
     # under a DIFFERENT fully-named slice fails equality outright — it is a different fact,
     # not an ambiguity. The named slice binds cleanly.
     xb2 = [json.dumps({"RevenueFromContractWithCustomerExcludingAssessedTax": [
-        {"value": "999000000", "period": {"endDate": "2024-12-31"}, "segment": {"dimension": "d", "value": "co:NewVehiclesMember"}},
-        {"value": "999000000", "period": {"endDate": "2024-12-31"}, "segment": {"dimension": "d", "value": "co:UsedVehiclesMember"}}]})]
+        {"value": "999000000", "period": {"startDate": "2024-01-01", "endDate": "2024-12-31"}, "segment": {"dimension": "d", "value": "co:NewVehiclesMember"}},
+        {"value": "999000000", "period": {"startDate": "2024-01-01", "endDate": "2024-12-31"}, "segment": {"dimension": "d", "value": "co:UsedVehiclesMember"}}]})]
     r2 = tier1(xb2, "New Vehicles Revenue", 999000000, "2024-12-31")
     assert r2 and 'NewVehicles' in r2['member'], "exact-identity bind; Used is a different slice"
     # a TRUE tie — the SAME full identity under two different periods at one end date -> abstain
@@ -929,7 +950,7 @@ if __name__ == '__main__':
     assert tier1(xb2b, "New Vehicles Revenue", 999, "2024-12-31") is None, "Q-vs-FY same end -> abstain"
     # signed match: a negative KPI value must not bind a positive fact
     xb3 = [json.dumps({"RevenueFromContractWithCustomerExcludingAssessedTax": [
-        {"value": "500000", "period": {"endDate": "2025-09-30"}}]})]
+        {"value": "500000", "period": {"startDate": "2025-07-01", "endDate": "2025-09-30"}}]})]
     assert tier1(xb3, "Total Revenue", -500000, "2025-09-30") is None, "-500k must not bind +500k"
     assert tier1(xb3, "Total Revenue", 500000, "2025-09-30"), "+500k binds +500k"
     # no slice tokens and no 'total' -> slice identity unrecoverable -> abstain

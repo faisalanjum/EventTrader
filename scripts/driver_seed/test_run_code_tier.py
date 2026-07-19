@@ -414,3 +414,30 @@ def test_cag_list_shape_members_live():
                             break
     assert found >= 100, f"expected CAG's list-shape facts (census: 519), saw {found}"
     print(f"[ok] CAG live: {found} list-shape facts all visible to the single parser")
+
+
+def test_dotted_initials_live_lmt_podd():
+    """Round-28 live pins (reviewer's missed-link class): plain-'US' KPIs bind dotted-member
+    facts (U.S.GovernmentMember / U.S.OmnipodMember) via the one-tokenizer initials law + ISO
+    equivalence. Skips ONLY on genuine graph unavailability."""
+    try:
+        RC.load_env_neo4j()
+        from neo4j import GraphDatabase
+        drv = GraphDatabase.driver(os.environ['NEO4J_URI'],
+                                   auth=(os.environ.get('NEO4J_USERNAME', 'neo4j'),
+                                         os.environ['NEO4J_PASSWORD']))
+        with drv.session() as s:
+            s.run("RETURN 1").single()
+    except (KeyError, OSError, Exception) as e:
+        if type(e).__name__ in ('ServiceUnavailable', 'KeyError', 'OSError', 'ConnectionError',
+                                'AuthError', 'ConfigurationError'):
+            pytest.skip(f"graph unavailable: {e}")
+        raise
+    with drv.session() as s:
+        f = RC.fetch_filing(s, 'LMT', '10-K', '2024-12-31')
+        r = L.tier1(f['xbrls'], 'US Government Revenue', 52044000000, '2024-12-31', is_currency=1)
+        assert r and 'Government' in r['member'], r
+        f2 = RC.fetch_filing(s, 'PODD', '10-K', '2024-12-31')
+        r2 = L.tier1(f2['xbrls'], 'US Omnipod Revenue', 1509300000, '2024-12-31', is_currency=1)
+        assert r2 and 'Omnipod' in r2['member'], r2
+    print("[ok] LIVE: LMT + PODD plain-US KPIs bind their dotted members")
