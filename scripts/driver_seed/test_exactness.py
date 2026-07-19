@@ -837,3 +837,14 @@ def test_signature_law_duplicates_and_single_spot():
     assert q2 is not None and q2 in c2
     assert not any('$' in f for f in L._tableforms(5432, None))   # the false premise, pinned
     print("[ok] duplicate-text signatures bind; single-spot binds; no dollar forms exist")
+
+
+def test_link_lib_self_check_runs_green():
+    """Round-26 (permanent battery member per reviewer — this module-level self-check existed
+    for the whole arc and was NEVER in the pytest battery; two stale expectations hid in it):
+    run it as a subprocess and require green."""
+    import subprocess
+    r = subprocess.run([sys.executable, os.path.join(HERE, 'link_lib.py')],
+                       capture_output=True, text=True, timeout=120)
+    assert r.returncode == 0, r.stderr[-800:]
+    print("[ok] link_lib __main__ self-check green in the battery")

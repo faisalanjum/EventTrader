@@ -29,6 +29,7 @@ def main():
     drv = GraphDatabase.driver(os.environ['NEO4J_URI'],
                                auth=(os.environ.get('NEO4J_USERNAME', 'neo4j'),
                                      os.environ['NEO4J_PASSWORD']))
+    bad_blobs = []
     per_filing = collections.defaultdict(lambda: {'with': set(), 'without': set()})
     cross = collections.defaultdict(lambda: {'with': set(), 'without': set()})
     targets, pool = [], set()
@@ -39,8 +40,10 @@ def main():
             try:
                 data = json.loads(row['xb'])
             except Exception:
+                bad_blobs.append(row['acc'])   # round-26: REPORTED, never silently skipped
                 continue
             if not isinstance(data, dict):
+                bad_blobs.append(row['acc'])
                 continue
             for con, facts in data.items():
                 for fc in (facts if isinstance(facts, list) else [facts]):
@@ -73,6 +76,8 @@ def main():
     po = sum(1 for t in missing if t[3] == ())
     print(f"C  REVIEWER SPEC: targets={len(uniq)}  counterparts={len(have)}  "
           f"MISSING={len(missing)} = pair-only {po} + co-member {len(missing) - po}")
+    print(f"unreadable/non-dict blobs: {len(bad_blobs)}" + (f" {bad_blobs[:3]}" if bad_blobs else ""))
+    assert not bad_blobs, "unreadable data must be investigated"
 
 
 if __name__ == '__main__':

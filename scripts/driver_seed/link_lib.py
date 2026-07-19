@@ -518,6 +518,11 @@ def tier1(xbrls, name, val, per, is_currency=None):
         except XN.ExactError:
             return False
     kt = slice_tokens(name)
+    # round-26 (reviewer; self-check line 889): a standalone UPPERCASE short token ('RV') is
+    # dropped by slice_tokens' 3-letter floor, so 'Total RV and Outdoor Retail Revenue' could
+    # never equal {rv, outdoor, retail}. It counts ONLY when that exact token is REQUIRED by the
+    # candidate member set (checked per fact below) — no general abbreviation system, no fuzz.
+    short_upper = {w.lower() for w in re.findall(r'\b[A-Z]{2}\b', name)}
     # a KPI with no slice tokens is only an aggregate if it actually says so; otherwise its
     # slice identity is unrecoverable (e.g. a residual "other" bucket) -> abstain
     if not kt and not any(w in name.lower() for w in ('total', 'consolidated')):
@@ -585,7 +590,8 @@ def tier1(xbrls, name, val, per, is_currency=None):
                         if _gate_fail:
                             break
                 _need = set().union(*_contribs) if _contribs else set()
-                if _gate_fail or (pairs and kt and _need != kt):
+                _kt_gate = kt | (short_upper & _need)   # member-REQUIRED short tokens only
+                if _gate_fail or (pairs and kt and _need != _kt_gate):
                     continue
                 mt = member_tokens(members)
                 if kt:
@@ -679,8 +685,8 @@ def row_quote(texts, label_tokens, val, fmt, gap=90, scale_gate=False, with_cont
     needy = ({f: _required_div(f, val) for f in forms if _required_div(f, val)}
              if scale_gate and fmt != '%' else {})
     best = None
-    collected = []                         # round-24: (ti, start, end, q, t) per qualifying occurrence
-    for ti, t in enumerate(texts):
+    collected = []                         # round-25/26: (start, end, q, t) per qualifying occurrence
+    for t in texts:
         low = t.lower()
         for fo in sorted(forms):           # SET iteration is hash-random per process — sorted
                                            # + content tiebreaks make output fully deterministic
@@ -710,9 +716,9 @@ def row_quote(texts, label_tokens, val, fmt, gap=90, scale_gate=False, with_cont
                     continue                      # some label token missing -> not this row
                 q = t[ws + min(pos): _with_trail(t, m.end())]   # RAW slice incl. trailing evidence
                 if with_context:
-                    # round-24: collect EVERY qualifying occurrence FIRST (the round-23 tie only
-                    # compared IDENTICAL quote strings — a wording variant bypassed the law)
-                    collected.append((ti, m.start(), m.end(), q, t))
+                    # round-24/25: collect EVERY qualifying occurrence FIRST (the round-23 tie
+                    # only compared IDENTICAL quote strings — a wording variant bypassed the law)
+                    collected.append((m.start(), m.end(), q, t))
                 elif best is None or len(q) < len(best) or (len(q) == len(best) and q < best):
                     best = q                      # certified default: byte-identical legacy
     if not with_context:
@@ -725,11 +731,11 @@ def row_quote(texts, label_tokens, val, fmt, gap=90, scale_gate=False, with_cont
     # (identical texts) may bind; >1 DISTINCT signature is unattributable -> ABSTAIN. The
     # round-24 overlap-merge is REMOVED as unused complexity (its premise was false:
     # _tableforms carries no dollar forms, so one printed number yields one match).
-    sigs = {(t, s0, e0) for ti, s0, e0, q, t in collected}
+    sigs = {(t, s0, e0) for s0, e0, q, t in collected}
     if len(sigs) > 1:
         return None, None
     t, s0, e0 = next(iter(sigs))
-    qs = [q for _, s, e, q, tt in collected if (tt, s, e) == (t, s0, e0)]
+    qs = [q for s, e, q, tt in collected if (tt, s, e) == (t, s0, e0)]
     return min(qs, key=lambda q: (len(q), q)), t[_snippet_start(t, s0, label_tokens): e0 + 80]
 
 
@@ -886,16 +892,38 @@ if __name__ == '__main__':
          "segment": {"dimension": "srt:ProductOrServiceAxis", "value": "cwh:UsedVehiclesMember"}},
         {"value": "5905399000", "period": {"startDate": "2024-01-01", "endDate": "2024-12-31"},
          "segment": {"dimension": "us-gaap:StatementBusinessSegmentsAxis", "value": "cwh:RvAndOutdoorRetailMember"}}]})]
-    assert tier1(xb, "New Vehicles Revenue", 2825640000, "2024-12-31"), "should match NewVehiclesMember"
-    assert 'NewVehicles' in tier1(xb, "New Vehicles Revenue", 2825640000, "2024-12-31")['member']
+    # round-26: the OLD expectation here was STALE (pre-full-slice law): the fact carries the
+    # RvAndOutdoorRetailMember co-member, so the PARTIAL label must ABSTAIN...
+    assert tier1(xb, "New Vehicles Revenue", 2825640000, "2024-12-31") is None, \
+        "partial label must abstain (RvAndOutdoorRetail co-member unnamed)"
+    # ...and the FULL labels bind — incl. the standalone-uppercase 'RV' token (member-required)
+    full = tier1(xb, "RV and Outdoor Retail New Vehicles Revenue", 2825640000, "2024-12-31")
+    assert full and 'NewVehicles' in full['member'], "full label must bind NewVehiclesMember"
+    # short-token SAFETY: unrelated short tokens never leak in; iPhone/Phone stays closed
+    assert tier1(xb, "IT New Vehicles Revenue", 2825640000, "2024-12-31") is None, \
+        "an unrelated short token must not bridge the slice equality"
+    ip = [json.dumps({"Revenues": [{"value": "200", "period": {"endDate": "2024-12-31"},
+          "unitRef": "U_USD",
+          "segment": [{"dimension": "us-gaap:ProductOrServiceAxis", "value": "aapl:IPhoneMember"}]}]})]
+    assert tier1(ip, "Phone Revenue", 200, "2024-12-31", is_currency=1) is None, "Phone≠IPhone"
     assert tier1(xb, "Used Vehicles Revenue", 1613849000, "2024-12-31"), "Used value -> UsedVehiclesMember"
     assert tier1(xb, "Total RV and Outdoor Retail Revenue", 5905399000, "2024-12-31"), "segment total"
     assert tier1(xb, "Operating Income", 2825640000, "2024-12-31") is None, "revenue value must not bind income KPI"
-    # coincidental same-value under two different members -> ambiguous -> abstain
+    # round-26 (2nd stale expectation): under the FULL-SLICE IDENTITY law a same-value fact
+    # under a DIFFERENT fully-named slice fails equality outright — it is a different fact,
+    # not an ambiguity. The named slice binds cleanly.
     xb2 = [json.dumps({"RevenueFromContractWithCustomerExcludingAssessedTax": [
         {"value": "999000000", "period": {"endDate": "2024-12-31"}, "segment": {"dimension": "d", "value": "co:NewVehiclesMember"}},
         {"value": "999000000", "period": {"endDate": "2024-12-31"}, "segment": {"dimension": "d", "value": "co:UsedVehiclesMember"}}]})]
-    assert tier1(xb2, "New Vehicles Revenue", 999000000, "2024-12-31") is None, "same value/two members -> abstain"
+    r2 = tier1(xb2, "New Vehicles Revenue", 999000000, "2024-12-31")
+    assert r2 and 'NewVehicles' in r2['member'], "exact-identity bind; Used is a different slice"
+    # a TRUE tie — the SAME full identity under two different periods at one end date -> abstain
+    xb2b = [json.dumps({"Revenues": [
+        {"value": "999", "period": {"startDate": "2024-10-01", "endDate": "2024-12-31"}, "unitRef": "U_USD",
+         "segment": {"dimension": "d", "value": "co:NewVehiclesMember"}},
+        {"value": "999", "period": {"startDate": "2024-01-01", "endDate": "2024-12-31"}, "unitRef": "U_USD",
+         "segment": {"dimension": "d", "value": "co:NewVehiclesMember"}}]})]
+    assert tier1(xb2b, "New Vehicles Revenue", 999, "2024-12-31") is None, "Q-vs-FY same end -> abstain"
     # signed match: a negative KPI value must not bind a positive fact
     xb3 = [json.dumps({"RevenueFromContractWithCustomerExcludingAssessedTax": [
         {"value": "500000", "period": {"endDate": "2025-09-30"}}]})]

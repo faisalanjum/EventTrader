@@ -975,3 +975,36 @@ residual · 997 abstain · 2 parks · battery 137/137 · floors 28/28 · lane se
 RECORD+CHECK green. The −46 vs round-23 = the all-occurrence ambiguity law (spot-checked: real
 multi-context prints — e.g. segment revenue in BOTH prose and the segment table — exactly the
 class the owner's conservative ruling sends to the reader).**
+
+## Round 25/26 corrections of stale round-24 record statements (reviewer directive; this record
+## is append-only — these supersede the round-24 wording):
+- The round-24 overlap-merge is REMOVED (round 25): its premise was FALSE (_tableforms carries
+  no dollar forms; I had reasoned from value_forms, the wrong form set). Occurrence identity is
+  the round-25 SIGNATURE (full source text, value start, value end).
+- The ACI evidence is COMMITTED and runnable (`data/driver_catalog_seed/wp1_evidence/`), no
+  longer scratchpad-only; the round-24 "executable evidence in scratchpad" claim was inadequate.
+- The reviewer's 43 is CONFIRMED under his spec (Query C: strip THE_PAIR from co-member-inclusive
+  targets, exact counterpart on concept+value+period+remaining pairs → 126/83/43 = 15+28); the
+  round-24 "matches neither" statement measured narrower questions (A1/B) and is superseded.
+
+## Round 26 (ChatGPT, 2026-07-19) — code-close continues; NO regenerate yet (his process).
+1. **link_lib's own __main__ self-check was RED — and had NEVER been in the battery** (a sibling
+   test path unexecuted through the whole arc; owned — this is lesson-8 material). TWO stale
+   expectations found inside it: (a) line 889 asserted the PARTIAL label 'New Vehicles Revenue'
+   binds a fact carrying the RvAndOutdoorRetailMember co-member — under the full-slice law it
+   must ABSTAIN (now pinned so); (b) the 'coincidental same-value two-members → abstain' case —
+   under the identity law the same-value fact under a DIFFERENT fully-named slice fails equality
+   outright and the named slice binds cleanly (pinned, with a TRUE tie — Q-vs-FY same end —
+   still abstaining). The REAL recall gap fixed: slice_tokens' 3-letter floor dropped 'RV', so
+   'Total RV and Outdoor Retail Revenue' could never equal {rv, outdoor, retail} — a standalone
+   UPPERCASE short token from the KPI now counts ONLY when that exact token is REQUIRED by the
+   candidate member set (no abbreviation system, no fuzz; iPhone/Phone + unrelated-short-token
+   safety pinned). The self-check now runs INSIDE the pytest battery (subprocess wrapper).
+2. **The round-24 census was structurally blind to its own padded claim** (it measured PARSED
+   pairs — seg_parse strips padded entries before the counter could see them; reviewer catch):
+   rewritten to inspect the FOUR RAW storage shapes independently of seg_parse, and unreadable/
+   non-dict data is now REPORTED and asserted zero, never silently skipped (same rule applied to
+   aci_queries.py). Recaptured: 47,152 dimensioned facts — 0 repeated-axis / 0 padded / 0 mixed /
+   0 unreadable — the zeros now rest on a proof that could have seen them.
+3. Cleanups folded in: the unused occurrence index dropped from the collection tuples; stale
+   'multi-form merge' wording updated to the signature law.
