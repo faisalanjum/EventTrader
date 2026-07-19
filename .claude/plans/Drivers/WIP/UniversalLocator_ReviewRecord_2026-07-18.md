@@ -838,3 +838,38 @@ also validates both seed records).**
 normalization → net T1 −14 = (a) the NonUs-class correct rejections + (c) the fully-proven
 demotions (all alive in T2/reader lanes: T2 +8, residual +3). Zero questionable links kept —
 exactly the reviewer's stated goal.
+
+## Round 21 (ChatGPT, 2026-07-19) — THE CLOSURE AUDIT. Five claims, ALL CONFIRMED (my 71/229
+## measurement matched his number exactly; my full CAG scan found 519 list-shape facts vs his
+## 131 — the class was BIGGER than reported). Commits `10609ff` (code) + artifacts.
+## OWNER + REVIEWER ROOT-CAUSE RULING (owner asked "why doesn't Fable resolve all issues at
+## once?"; my owned self-diagnosis is recorded here): I had been fixing EXAMPLES, not LAWS —
+## green tests proved the reviewer's last case, never the input space; parallel parsers/evidence
+## paths meant each fix left siblings broken; per-round minimal diffs summed to MORE total code
+## and MORE bugs than one invariant enforced once; and I kept describing narrow fixes in
+## law-language ("complete/exact/everywhere"), handing the reviewer a falsifiable overclaim each
+## round. Round 21 therefore implemented THREE SYSTEM-WIDE RULES and tested every input shape:
+RULE 1 — ONE PARSER, EVERY DIMENSION PROVEN: seg_members DERIVED from seg_axis_members (the
+  explicitMember-LIST shape was invisible to the local re-parse — CAG live pin 519 facts, and
+  OUR OWN COHORT had them too, see the T1 gain below); structural exemption = EXACT graph-proven
+  (axis,member) pairs only (census-earned frozenset: ConsolidationItems/OperatingSegments 1,363×
+  + aci:ReportableSegment 100×); unknown ∅-token members (OtherNet class) ABSTAIN; overlapping
+  member tokens under different axes (duplicate-Alpha; MY round-20 pin reversed) ABSTAIN.
+  Property test: the same logical fact in ALL FOUR storage shapes behaves identically; parity
+  test pins harvest parser ≡ certified-lane parser (oracle._members_all) on every shape.
+RULE 2 — SAME-OCCURRENCE EVIDENCE, SINGLE PATH: the strict quote and its context come from the
+  SAME row_quote call (no recomputation path to diverge); locate emits it as period_evidence;
+  the VERIFIER asserts quote-in-evidence for every section record — the 71/229 class is
+  structurally impossible now. Whole-word snippet reach; a table marker scores only while that
+  table is STILL OPEN at the value (rank-discriminating test).
+RULE 3 — ONE REPRODUCIBLE PROOF: committed slice hashed by LITERAL BYTES (canonical row-set sha
+  kept separately for identity); dirt check covers ALL imported source paths (scripts/earnings +
+  the earnings-orchestrator skill); RECORD validates the two-seed proof exactly as CHECK does.
+WP4 note (recorded, NOT built): labels appearing AFTER the value = reader-lane recall class.
+**FINAL (clean stamp `10609ff`, dirty []): 280 resolved (T1 106 · T2 174 · 8-K 69) · 445
+residual · 997 abstain · 2 parks · battery 121/121 · floors 28/28 · RECORD+CHECK green (both
+now validating the seed pair, the literal-bytes slice, and the section-occurrence tie).
+Gains/losses vs round-20: total UNCHANGED at 280; T1 +16 (90→106) — the single-parser fix
+UPGRADED 16 of our own cohort's list-shape records from text-only T2 to full XBRL links —
+the closure audit didn't just stop the bug class, it recovered recall the sibling-parser split
+had been silently costing us.**

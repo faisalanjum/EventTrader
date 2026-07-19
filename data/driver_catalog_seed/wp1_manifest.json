@@ -1,6 +1,6 @@
 {
  "wp": "WP1 Step 4 regenerate",
- "code_commit": "7a141dd",
+ "code_commit": "10609ff",
  "tickers": [
   "A",
   "AA",
@@ -19,11 +19,11 @@
  "then": "venv/bin/python scripts/driver_seed/build_packets.py --tag wp1",
  "claims_scope": "zero fabricated (quote_source=xbrl_fact) records IN THIS COHORT ONLY; older part1-4 artifacts are STALE/INVALID, not regenerated",
  "output_sha256": {
-  "code_resolved.jsonl": "10de602166bb55fb1eb9ba1067d82fe21b77f33ee0053f10aabdcdf1efb79277",
-  "residual.jsonl": "e527ac45cfa9f4960b90983d6a5aa7753d915596146cbb7fc71bebebac5515e7",
+  "code_resolved.jsonl": "1d92b9e478f53b97a94ae10dbe11f52d0172bb82d8688206f855d6d74bf33614",
+  "residual.jsonl": "e5c2757958c8e649ae3ac29ef113747f5328df78618006ae66d7e0215257825b",
   "abstain.jsonl": "f46729974750f3ea8600f3238513167b4d6a9b12e3dfd08a4858a5935141d0be",
-  "code_summary.json": "617e2c28eb67613f679d828f35dcc015ccdd2d8ff9fc63b1efc3f682e6c785c8",
-  "packets.jsonl": "08903811b6d3fe86adb1298434c1d758c9d688a020c7f7582811430fd6493288",
+  "code_summary.json": "3545fc81820202dd688a031958a710724219377370a45bac07b0e3c55876cdd9",
+  "packets.jsonl": "5f7f3d1880ad166df26cc8e26b1d251e504dfe2170f70fb0334f1d010917c940",
   "skip_ledger.jsonl": "1136c3fb05367b804b3b8d4817b420f1075acf808fdd58b36cfe9f3039b4422c",
   "park_ledger.jsonl": "5e1f916e523766a26aae7282b73e15d2736ea2ad388822dcc7e2874b1926535e",
   "sources_ledger.jsonl": "758c1debdafd3aa25a2c93b77a52c65ca1e0bb8069a8576ab507e0ccc9e8d0e3"
@@ -34,8 +34,8 @@
   "residual": 445,
   "abstain": 997,
   "company_periods": 25,
-  "T1_xbrl": 90,
-  "T2_label": 190,
+  "T1_xbrl": 106,
+  "T2_label": 174,
   "pr_records": 69,
   "cp_no_filing": 0,
   "duplicate_rows_collapsed": 0
@@ -124,7 +124,7 @@
  ],
  "determinism_proof": {
   "method": "two complete regenerates AND the RECORD stamp all inside a CLEAN DETACHED git worktree at the code commit, reading the COMMITTED input slice, under FORCED different seeds",
-  "commit": "7a141dd",
+  "commit": "10609ff",
   "workdir": "detached worktree",
   "input": "data/driver_catalog_seed/wp1_worklist_slice.jsonl (committed)",
   "battery_command": "venv/bin/python -m pytest scripts/driver_seed/ driver/relocation/ scripts/earnings/test_get_quarterly_filings.py -q --ignore=scripts/driver_seed/relocate_probe/benchmark",
@@ -132,11 +132,11 @@
    {
     "PYTHONHASHSEED": 1,
     "sha256": {
-     "code_resolved.jsonl": "10de602166bb55fb1eb9ba1067d82fe21b77f33ee0053f10aabdcdf1efb79277",
-     "residual.jsonl": "e527ac45cfa9f4960b90983d6a5aa7753d915596146cbb7fc71bebebac5515e7",
+     "code_resolved.jsonl": "1d92b9e478f53b97a94ae10dbe11f52d0172bb82d8688206f855d6d74bf33614",
+     "residual.jsonl": "e5c2757958c8e649ae3ac29ef113747f5328df78618006ae66d7e0215257825b",
      "abstain.jsonl": "f46729974750f3ea8600f3238513167b4d6a9b12e3dfd08a4858a5935141d0be",
-     "code_summary.json": "617e2c28eb67613f679d828f35dcc015ccdd2d8ff9fc63b1efc3f682e6c785c8",
-     "packets.jsonl": "08903811b6d3fe86adb1298434c1d758c9d688a020c7f7582811430fd6493288",
+     "code_summary.json": "3545fc81820202dd688a031958a710724219377370a45bac07b0e3c55876cdd9",
+     "packets.jsonl": "5f7f3d1880ad166df26cc8e26b1d251e504dfe2170f70fb0334f1d010917c940",
      "skip_ledger.jsonl": "1136c3fb05367b804b3b8d4817b420f1075acf808fdd58b36cfe9f3039b4422c",
      "park_ledger.jsonl": "5e1f916e523766a26aae7282b73e15d2736ea2ad388822dcc7e2874b1926535e",
      "sources_ledger.jsonl": "758c1debdafd3aa25a2c93b77a52c65ca1e0bb8069a8576ab507e0ccc9e8d0e3"
@@ -145,11 +145,11 @@
    {
     "PYTHONHASHSEED": 2,
     "sha256": {
-     "code_resolved.jsonl": "10de602166bb55fb1eb9ba1067d82fe21b77f33ee0053f10aabdcdf1efb79277",
-     "residual.jsonl": "e527ac45cfa9f4960b90983d6a5aa7753d915596146cbb7fc71bebebac5515e7",
+     "code_resolved.jsonl": "1d92b9e478f53b97a94ae10dbe11f52d0172bb82d8688206f855d6d74bf33614",
+     "residual.jsonl": "e5c2757958c8e649ae3ac29ef113747f5328df78618006ae66d7e0215257825b",
      "abstain.jsonl": "f46729974750f3ea8600f3238513167b4d6a9b12e3dfd08a4858a5935141d0be",
-     "code_summary.json": "617e2c28eb67613f679d828f35dcc015ccdd2d8ff9fc63b1efc3f682e6c785c8",
-     "packets.jsonl": "08903811b6d3fe86adb1298434c1d758c9d688a020c7f7582811430fd6493288",
+     "code_summary.json": "3545fc81820202dd688a031958a710724219377370a45bac07b0e3c55876cdd9",
+     "packets.jsonl": "5f7f3d1880ad166df26cc8e26b1d251e504dfe2170f70fb0334f1d010917c940",
      "skip_ledger.jsonl": "1136c3fb05367b804b3b8d4817b420f1075acf808fdd58b36cfe9f3039b4422c",
      "park_ledger.jsonl": "5e1f916e523766a26aae7282b73e15d2736ea2ad388822dcc7e2874b1926535e",
      "sources_ledger.jsonl": "758c1debdafd3aa25a2c93b77a52c65ca1e0bb8069a8576ab507e0ccc9e8d0e3"
@@ -158,5 +158,6 @@
   ],
   "outputs_byte_identical": true
  },
- "dirty_files": []
+ "dirty_files": [],
+ "slice_file_sha256": "5035a08472c2d23645d7f600b3bc9f6b1a162af81cd6d5dcab972d7dc613de7d"
 }
