@@ -307,21 +307,30 @@ def test_tier1_tie_rule_order_free():
 
 
 def test_geo_members_match_country_names():
-    """Round-17 tightening (reviewer-reproduced: country:US bound a 'United Kingdom Revenue' KPI
-    on the shared token 'united'): a country member binds ONLY on COMPLETE country-name identity —
-    every significant token of the code's name must appear in the KPI. Partial-name KPIs
-    ('Korea Revenue' vs South Korea) abstain to the text/reader lanes."""
-    seg = [fact('5365000000', '2024-01-01', '2024-12-31', unit='U_USD',
-                seg=[{'dimension': 'srt:StatementGeographicalAxis', 'value': 'country:US'}])]
-    b = blob('RevenueFromContractWithCustomerExcludingAssessedTax', seg)
-    assert L.tier1([b], 'United States Revenue', 5365000000, '2024-12-31', is_currency=1) is not None
-    assert L.tier1([b], 'United Kingdom Revenue', 5365000000, '2024-12-31', is_currency=1) is None
-    kr = [fact('900000000', '2024-01-01', '2024-12-31', unit='U_USD',
-               seg=[{'dimension': 'srt:StatementGeographicalAxis', 'value': 'country:KR'}])]
-    bk = blob('RevenueFromContractWithCustomerExcludingAssessedTax', kr)
-    assert L.tier1([bk], 'South Korea Revenue', 900000000, '2024-12-31', is_currency=1) is not None
-    assert L.tier1([bk], 'North Korea Revenue', 900000000, '2024-12-31', is_currency=1) is None
-    print("[ok] country members: complete-name identity only; US never binds UK, KR never North")
+    """Round-18 (reviewer-reproduced ×2 on my round-17 rule): token CONTAINMENT is not geography
+    identity — country:GE bound 'South Georgia Revenue', country:US bound 'United States and
+    Canada Revenue'. A country member now binds ONLY on EXACT normalized identity: the KPI's
+    slice-token set must EQUAL the country name's token set. Fail closed; no fuzzy geography."""
+    def geo(code, v='100'):
+        return blob('Revenues', [fact(v, '2024-01-01', '2024-12-31', unit='U_USD',
+                    seg=[{'dimension': 'srt:StatementGeographicalAxis',
+                          'value': f'country:{code}'}])])
+    Y, N = (lambda c, k: L.tier1([geo(c)], k, 100, '2024-12-31', is_currency=1) is not None), None
+    assert Y('US', 'United States Revenue')
+    assert not Y('US', 'United Kingdom Revenue')
+    assert not Y('US', 'United States and Canada Revenue')      # combined region ≠ US alone
+    assert Y('GE', 'Georgia Revenue')
+    assert not Y('GE', 'South Georgia Revenue')                 # the island, not the country
+    assert Y('PG', 'Papua New Guinea Revenue')
+    assert not Y('GN', 'Papua New Guinea Revenue')              # Guinea ≠ Papua New Guinea
+    assert Y('WS', 'Samoa Revenue')
+    assert not Y('WS', 'American Samoa Revenue')
+    assert Y('KR', 'South Korea Revenue')
+    assert not Y('KR', 'North Korea Revenue')
+    assert Y('BA', 'Bosnia and Herzegovina Revenue')            # exact long names still bind
+    assert Y('CG', 'Congo Revenue')
+    assert not Y('CD', 'Congo Revenue')                         # DR Congo name ≠ plain Congo
+    print("[ok] country members: EXACT geography identity; all reviewer pin pairs hold")
 
 
 def test_allcaps_camel_members_tokenize():
@@ -339,8 +348,8 @@ def test_allcaps_camel_members_tokenize():
 
 
 def test_reversed_dimension_order_canonical():
-    """Round-17 (reviewer): a fact's dimension list order must not change the emitted record —
-    axis_members are canonicalized (sorted) on emit."""
+    """Round-18 (reviewer: axis list was sorted but member text and quote were NOT): reversing a
+    fact's dimension list must produce a FULLY identical record — every field."""
     segs = [{'dimension': 'us-gaap:StatementBusinessSegmentsAxis', 'value': 'x:AlphaMember'},
             {'dimension': 'srt:StatementGeographicalAxis', 'value': 'x:BetaLandMember'}]
     a = blob('Revenues', [fact('5000', '2024-01-01', '2024-12-31', unit='U_USD', seg=segs)])
@@ -348,20 +357,70 @@ def test_reversed_dimension_order_canonical():
     ra = L.tier1([a], 'alpha betaland revenue', 5000, '2024-12-31', is_currency=1)
     rb = L.tier1([b], 'alpha betaland revenue', 5000, '2024-12-31', is_currency=1)
     assert ra is not None and rb is not None
-    assert ra['axis_members'] == rb['axis_members'], (ra['axis_members'], rb['axis_members'])
-    assert ra['axis_members'] == sorted(map(tuple, ra['axis_members'])) or \
-           ra['axis_members'] == sorted(ra['axis_members']), ra['axis_members']
-    print("[ok] dimension order canonicalized on emit")
+    assert ra == rb, {k: (ra[k], rb[k]) for k in ra if ra[k] != rb[k]}
+    print("[ok] reversed dimensions -> byte-identical record (member, quote, axes, all fields)")
 
 
 def test_reversed_text_input_deterministic():
-    """Round-17 (reviewer): reversing the ORDER of source texts must not change the strict quote
-    or the kept candidate snippets (collection is no longer truncated before the total sort)."""
-    texts = [f'filler section {i} with nothing relevant' for i in range(18)]
-    texts += ['Total widget revenue 5,432 in segment A detail',
-              'Total widget revenue was $ 5,432 for the year',
-              'note: total widget revenue 5,432 again here']
+    """Round-18 upgrade (reviewer: the old fixture had only 3 matches, below the 20-hit cutoff):
+    25 REAL matching occurrences — past the bound — and reversing the text order must still give
+    identical output; snips stay bounded by keep."""
+    texts = [f'section {i}: total widget revenue 5,432 reported in unit {i}' for i in range(25)]
     f1 = L.scan_text(texts, 'total widget revenue', 5432, 'number')
     f2 = L.scan_text(list(reversed(texts)), 'total widget revenue', 5432, 'number')
-    assert f1 == f2, (f1, f2)
-    print("[ok] text input order cannot change scan output")
+    assert f1 == f2, (f1[1][:2], f2[1][:2])
+    assert len(f1[1]) <= 6
+    print("[ok] 25-match reversed input identical; candidates bounded")
+
+
+
+# ---- round-18: the four round-16 safety tests RESTORED UNCHANGED (my round-17 test-file
+# surgery sliced to EOF and silently deleted them — reviewer catch; battery 107->105 explained) --
+def test_boundary_rejects_letter_glued_numbers():
+    """Round-16 (reviewer-confirmed live): '86' inside 'modelX86' or 'FY86' is NOT a value print.
+    The numeric boundary now rejects ALPHANUMERIC neighbors, not just digit-gluing."""
+    assert not L.bounded_hit('the modelX86 line', '86')
+    assert not L.bounded_hit('in FY86 we grew', '86')
+    assert L.bounded_hit('stores grew to 86 units', '86')
+    assert L.bounded_hit('a total of $86 in fees', '86')
+    assert L.bounded_hit('(86)', '86')
+    assert L.bounded_hit('margin was 86% overall', '86')
+    print("[ok] boundary: letter-glued digits never bind")
+
+
+def test_label_tokens_match_whole_words_only():
+    """Round-16: label adjacency must match WHOLE WORDS — 'Net' never matches inside 'Internet',
+    'Car' never inside 'Oscar'. All-tokens-present still required."""
+    assert L.row_quote(['Internet division revenues 5,432 for the year'],
+                       ['Net', 'revenues'], 5432, None) is None
+    assert L.row_quote(['Net revenues 5,432 for the year'], ['Net', 'revenues'], 5432, None) is not None
+    assert L.row_quote(['Oscar brand sales 1,200 in total'], ['Car', 'sales'], 1200, None) is None
+    print("[ok] label tokens are whole words, never substrings")
+
+
+def test_scale_inheritance_requires_unanimity():
+    """Round-16 (reviewer-confirmed hazard): an UNDECLARED table inherits a preceding declaration
+    ONLY when the text declares exactly ONE scale overall (reading convention); any mixed-scale
+    text never lends to undeclared tables. Declared tables stay strict either way."""
+    toks = ['Widget', 'revenues']
+    mixed_borrow = ['(in millions) ##TABLE_START a END (in thousands) ##TABLE_START b END '
+                    '##TABLE_START Widget revenues 1,200 more']
+    assert L.row_quote(mixed_borrow, toks, 1200000000, None, scale_gate=True) is None
+    mixed_near = ['(in thousands) ##TABLE_START a END (in millions) intro '
+                  '##TABLE_START Widget revenues 1,200 more']
+    assert L.row_quote(mixed_near, toks, 1200000000, None, scale_gate=True) is None
+    single = ['(in millions) intro ##TABLE_START alpha END ##TABLE_START Widget revenues 1,200']
+    assert L.row_quote(single, toks, 1200000000, None, scale_gate=True) is not None
+    print("[ok] scale inheritance: unanimous document convention only")
+
+
+def test_thousand_and_trillion_scaled_forms():
+    """Round-16: exact thousand- and trillion-scaled table forms exist and are marker-gated like
+    the rest ('(in thousands) 1,200' can finally prove 1.2 million; wrong marker still rejects)."""
+    toks = ['Widget', 'revenues']
+    k = ['(in thousands) Widget revenues 1,200 for the period']
+    assert L.row_quote(k, toks, 1200000, None, scale_gate=True) is not None
+    assert L.row_quote(k, toks, 1200000000, None, scale_gate=True) is None   # thousands ≠ billions
+    assert L.row_quote(['Widget revenues 1,200 no marker'], toks, 1200000, None,
+                       scale_gate=True) is None
+    print("[ok] thousand/trillion scale forms, marker-gated")

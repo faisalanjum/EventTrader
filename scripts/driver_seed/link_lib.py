@@ -513,20 +513,25 @@ def tier1(xbrls, name, val, per, is_currency=None):
                     continue                      # a money fact never satisfies a non-money KPI
                 if (fc.get('period') or {}).get('endDate') != per:
                     continue
-                members = seg_members(fc)
-                # round-17 country gate (reviewer-reproduced: country:US bound a 'United Kingdom'
-                # KPI on the shared token 'united'): a country-coded member requires COMPLETE
-                # country-name identity — every >=3-letter token of the code's name in the KPI.
+                members = sorted(seg_members(fc))   # round-18: canonicalized ONCE, so every
+                                                     # emitted field (member text, quote, axes)
+                                                     # is dimension-order-free
+                # round-18 country gate (reviewer-reproduced ×2 on round-17's containment rule:
+                # country:GE bound 'South Georgia', country:US bound 'United States and Canada'):
+                # EXACT normalized geography identity — the KPI's slice-token set must EQUAL the
+                # union of the country names' token sets. Fail closed; no fuzzy geography.
+                _ctk = set()
                 _cgate_fail = False
                 for _mm in members:
                     _pre, _, _loc = str(_mm).rpartition(':')
                     if _pre == 'country':
                         _nm = COUNTRY_NAME.get(_loc.upper())
-                        _ntk = set(re.findall(r"[A-Za-z]{3,}", _nm.lower())) if _nm else set()
-                        if not _ntk or not _ntk <= kt:
+                        if not _nm:
                             _cgate_fail = True
                             break
-                if _cgate_fail:
+                        _ctk |= {w for w in re.findall(r"[A-Za-z]{3,}", _nm.lower())
+                                 if w not in SLICE_STOP}   # both sides share ONE normalization
+                if _cgate_fail or (_ctk and _ctk != kt):
                     continue
                 mt = member_tokens(members)
                 if kt:
@@ -695,7 +700,8 @@ def scan_text(texts, name, val, fmt, max_hits=20, keep=6, scale_gate=False):
     strict = row_quote(texts, nt, val, fmt, scale_gate=scale_gate)
     forms = _tableforms(val, fmt)
     cands = []
-    for t in texts:
+    for t in sorted(texts):                # round-18: CANONICAL text order, so the bounded-work
+                                           # cutoff below is input-order-free
         for fo in sorted(forms):           # deterministic scan order (sets are hash-random)
             for m in re.finditer(re.escape(fo), t):
                 if not at_boundary(t, m.start(), m.end()):
@@ -705,8 +711,15 @@ def scan_text(texts, name, val, fmt, max_hits=20, keep=6, scale_gate=False):
                 low = snip.lower()
                 score = (2 if '##TABLE_START' in snip else 0) + sum(1 for tk in ntl if tk in low)
                 cands.append((score, len(snip), snip))
-    # round-17: truncation ONLY AFTER the total sort — a mid-collection cap made the kept set
-    # depend on source/text order (reviewer catch; max_hits stays as the post-sort bound).
+                if len(cands) >= max_hits:
+                    break
+            if len(cands) >= max_hits:
+                break
+        if len(cands) >= max_hits:
+            break
+    # round-18: max_hits RESTORED as a real bounded-work limit (round-17 left it unused —
+    # unbounded candidate lists); the canonical text+form order above makes the cutoff
+    # deterministic regardless of input order, and the total sort orders what was kept.
     cands.sort(key=lambda c: (-c[0], c[1], c[2]))      # score, length, CONTENT — total order
     return strict, [c[2] for c in cands[:keep]]
 

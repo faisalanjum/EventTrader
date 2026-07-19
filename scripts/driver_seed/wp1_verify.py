@@ -60,9 +60,10 @@ def _git_commit():
         dirty = subprocess.run(['git', 'status', '--porcelain', '--', 'scripts/driver_seed',
                                 'driver/relocation'], capture_output=True, text=True,
                                cwd=os.path.join(HERE, '..', '..')).stdout.strip()
-        return c + ('-dirty' if dirty else '')
+        files = [l[3:] for l in dirty.splitlines()]
+        return c + ('-dirty' if dirty else ''), files
     except OSError:
-        return 'unknown'
+        return 'unknown', []
 
 
 def main():
@@ -258,7 +259,7 @@ sources: **{len(target_filings)} target filings + {len(accepted_8ks)} accepted 8
     if a.record:
         man['output_sha256'] = computed
         man['verified_summary'] = summ
-        man['code_commit'] = _git_commit()
+        man['code_commit'], man['dirty_files'] = _git_commit()   # round-18: name the dirt
         man['company_periods'] = sorted(f"{t}|{f}|{p}" for t, f, p in
                                         {(w['ticker'], w['form'], w['period']) for w in uniq_rows})
         man['target_filings'] = target_filings
