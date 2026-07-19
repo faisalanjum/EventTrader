@@ -74,9 +74,11 @@ def locate_by_value(req):
     # scale_gate (round-13): a bare SCALED print ('1,200' for 1.2B) binds only with scale evidence
     # (section marker / immediate tail / full-magnitude print). Opt-in here — certified benchmark
     # preps keep byte-identical legacy behavior.
-    strict, snips = L.scan_text(texts, name, val, fmt, scale_gate=True)
+    strict, snips, strict_ctx = L.scan_text(texts, name, val, fmt, scale_gate=True,
+                                            with_context=True)   # Rule 2: ONE call, same occurrence
     if t1 and not strict:                    # XBRL matched but KPI wording absent by the value;
-        strict = L.row_quote(texts, L.member_tokens([t1['member']]), val, fmt, scale_gate=True)
+        strict, strict_ctx = L.row_quote(texts, L.member_tokens([t1['member']]), val, fmt,
+                                         scale_gate=True, with_context=True)
     xbrl = None
     if t1:
         xbrl = {'concept': t1['concept'], 'axis_members': t1['axis_members'],
@@ -96,10 +98,10 @@ def locate_by_value(req):
     if hit is None and strict:                                # rung 2 — strict text label
         if t1:
             hit = {**base_t1, 'quote': strict, 'quote_source': 'section',
-                   'period_evidence': (snips[0] if snips else strict)}
+                   'period_evidence': (strict_ctx or strict)}
         else:
             hit = {'tier': 'T2-label', 'quote': strict, 'quote_source': 'section',
-                   'period_evidence': (snips[0] if snips else strict)}
+                   'period_evidence': (strict_ctx or strict)}
     if hit is None:
         return {'hit': None, 'snips': snips}                  # rung 3 — the LLM tier
     if not L.value_ok(val, fmt, hit['quote']):   # deterministic belt+braces: the number really is in the quote

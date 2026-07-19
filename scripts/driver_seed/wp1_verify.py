@@ -73,7 +73,9 @@ def _git_commit():
         c = subprocess.run(['git', 'rev-parse', '--short', 'HEAD'], capture_output=True,
                            text=True, cwd=HERE).stdout.strip()
         dirty = subprocess.run(['git', 'status', '--porcelain', '--', 'scripts/driver_seed',
-                                'driver/relocation'], capture_output=True, text=True,
+                                'driver/relocation', 'scripts/earnings',
+                                '.claude/skills/earnings-orchestrator'],   # round-21: IMPORTED
+                               capture_output=True, text=True,             # source paths count
                                cwd=os.path.join(HERE, '..', '..')).stdout.strip()
         files = dirty.splitlines()         # RAW porcelain lines (status + path) — no parsing
         return c + ('-dirty' if dirty else ''), files
@@ -107,6 +109,9 @@ def main():
     # read the COMMITTED slice — the ignored full worklist is never a verifier input (bootstrap
     # of a NEW cohort writes the slice once, separately).
     assert os.path.exists(SLICE_FILE), "committed input slice missing — clean checkout cannot reproduce"
+    if not a.record:                       # round-21: the slice FILE is hashed by LITERAL BYTES
+        assert sha(SLICE_FILE) == man.get('slice_file_sha256'), \
+            "committed slice bytes drifted (line order matters; canonical row-set sha kept separately)"
     rows = [json.loads(l) for l in open(SLICE_FILE)]
     slice_sha = hashlib.sha256(''.join(sorted(json.dumps(r, sort_keys=True) for r in rows)).encode()).hexdigest()
     assert slice_sha == man['worklist_slice_sha256'], "committed slice drifted vs the manifest sha"
@@ -188,6 +193,11 @@ def main():
                     cache[key] = [c for c in (q[0]['cs'] if q else []) if c]
             if not any(r['quote'] in t for t in cache[key]):
                 bad_sub.append((r['item_id'], r['source_id'], r['quote'][:60]))
+        # round-21: every SECTION quote is mechanically tied to its own occurrence — the
+        # supporting evidence must CONTAIN the emitted quote (71/229 previously did not)
+        bad_tie = [r['item_id'] for r in res if r.get('quote_source') == 'section'
+                   and r['quote'] not in (r.get('period_evidence') or '')]
+        assert not bad_tie, f"section quotes not tied to their occurrence: {bad_tie[:5]}"
     drv.close()
     assert not bad_vq and not bad_sub, \
         f"mechanical compliance violated: value-in-quote {bad_vq[:2]} substring {bad_sub[:2]}"
@@ -271,6 +281,7 @@ sources: **{len(target_filings)} target filings + {len(accepted_8ks)} accepted 8
 
     if a.record:
         man['output_sha256'] = computed
+        man['slice_file_sha256'] = sha(SLICE_FILE)   # literal bytes, order-sensitive
         man['verified_summary'] = summ
         man['code_commit'], man['dirty_files'] = _git_commit()   # round-18: name the dirt
         man['company_periods'] = sorted(f"{t}|{f}|{p}" for t, f, p in
@@ -280,7 +291,8 @@ sources: **{len(target_filings)} target filings + {len(accepted_8ks)} accepted 8
         man.pop('source_accessions', None)
         man['unique_targets_ticker_kpi_period'] = uniq_targets
         man['duplicate_rows_collapsed_in_slice'] = dup_dropped
-        json.dump(man, open(MAN, 'w'), indent=1)
+        _validate_determinism({**man, 'output_sha256': computed})   # round-21: RECORD validates
+        json.dump(man, open(MAN, 'w'), indent=1)                     # the two-seed proof too
         open(REPORT, 'w').write(rep)
     else:
         on_disk = open(REPORT).read()

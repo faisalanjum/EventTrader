@@ -344,11 +344,17 @@ def test_country_plus_product_multi_axis():
     assert L.tier1([mixed], 'United States iPhone Revenue', 100, '2024-12-31',
                    is_currency=1) is not None
     # a country + STRUCTURAL co-member (fully generic-filtered) still equals the plain country KPI
+    # round-21: the structural co-member must be the GRAPH-PROVEN exact pair (census:
+    # srt:ConsolidationItemsAxis — 1,363 occurrences); an unpinned axis+member now abstains
     struct = blob('Revenues', [fact('200', '2024-01-01', '2024-12-31', unit='U_USD', seg=[
         {'dimension': 'srt:StatementGeographicalAxis', 'value': 'country:US'},
-        {'dimension': 'us-gaap:StatementBusinessSegmentsAxis',
+        {'dimension': 'srt:ConsolidationItemsAxis',
          'value': 'us-gaap:OperatingSegmentsMember'}])])
     assert L.tier1([struct], 'United States Revenue', 200, '2024-12-31', is_currency=1) is not None
+    unpinned = blob('Revenues', [fact('250', '2024-01-01', '2024-12-31', unit='U_USD', seg=[
+        {'dimension': 'srt:StatementGeographicalAxis', 'value': 'country:US'},
+        {'dimension': 'x:SomeAxis', 'value': 'x:WeirdWrapperMember'}])])
+    assert L.tier1([unpinned], 'United States Revenue', 250, '2024-12-31', is_currency=1) is None
     print("[ok] multi-axis country: the KPI must name the WHOLE slice")
 
 
@@ -468,16 +474,24 @@ def test_full_slice_proof_for_all_dimensions():
         {'dimension': 'x:AxisTwo', 'value': 'x:BetaMember'}])])
     assert L.tier1([ab], 'Alpha Revenue', 100, '2024-12-31', is_currency=1) is None
     assert L.tier1([ab], 'Alpha Beta Revenue', 100, '2024-12-31', is_currency=1) is not None
+    # round-21 REVERSAL (reviewer): two members sharing a token under DIFFERENT axes cannot be
+    # proved by ONE word — ambiguous attribution -> ABSTAIN (round-20 wrongly pinned this as a bind)
     dup = blob('Revenues', [fact('200', '2024-01-01', '2024-12-31', unit='U_USD', seg=[
         {'dimension': 'x:AxisOne', 'value': 'x:AlphaMember'},
         {'dimension': 'x:AxisTwo', 'value': 'y:AlphaMember'}])])
-    assert L.tier1([dup], 'Alpha Revenue', 200, '2024-12-31', is_currency=1) is not None
+    assert L.tier1([dup], 'Alpha Revenue', 200, '2024-12-31', is_currency=1) is None
+    # structural exemption is EXACT graph-proven (axis, member) pairs only
     st = blob('Revenues', [fact('300', '2024-01-01', '2024-12-31', unit='U_USD', seg=[
         {'dimension': 'x:AxisOne', 'value': 'x:AlphaMember'},
-        {'dimension': 'us-gaap:StatementBusinessSegmentsAxis',
+        {'dimension': 'srt:ConsolidationItemsAxis',
          'value': 'us-gaap:OperatingSegmentsMember'}])])
     assert L.tier1([st], 'Alpha Revenue', 300, '2024-12-31', is_currency=1) is not None
-    print("[ok] full-slice proof for every dimension; structural members exempt")
+    # an UNKNOWN member that token-strips to nothing is NOT structural -> abstain (OtherNet class)
+    on = blob('Revenues', [fact('400', '2024-01-01', '2024-12-31', unit='U_USD', seg=[
+        {'dimension': 'x:AxisOne', 'value': 'x:AlphaMember'},
+        {'dimension': 'x:AxisTwo', 'value': 'x:OtherNetMember'}])])
+    assert L.tier1([on], 'Alpha Revenue', 400, '2024-12-31', is_currency=1) is None
+    print("[ok] full-slice proof; exact structural pins only; OtherNet + duplicate-token abstain")
 
 
 def test_ranking_whole_words_before_value_and_cap():
@@ -513,3 +527,91 @@ def test_slice_gate_shared_normalization():
     assert L.tier1([nonus], 'Established Pharmaceutical Products Revenue', 400,
                    '2024-12-31', is_currency=1) is None      # non-US slice stays unproven
     print("[ok] shared normalization recovers furniture-only misses; NonUs still rejects")
+
+
+
+def test_explicit_member_list_shape_matches():
+    """Round-21 (reviewer; CAG carries 131 such facts): the explicitMember-LIST shape must flow
+    through matching — seg_axis_members (the all-shapes parser) is the single member source."""
+    lst = {'value': '300', 'period': {'startDate': '2024-01-01', 'endDate': '2024-12-31'},
+           'unitRef': 'U_USD',
+           'segment': {'explicitMember': [{'dimension': 'x:A', '$t': 'x:AlphaMember'},
+                                          {'dimension': 'x:B', '$t': 'x:BetalandMember'}]}}
+    b = json.dumps({'Revenues': [lst]})
+    r = L.tier1([b], 'alpha betaland revenue', 300, '2024-12-31', is_currency=1)
+    assert r is not None, "list-shape members invisible to matching"
+    assert r['member'] and 'Alpha' in r['member'] and 'Betaland' in r['member'], r['member']
+    assert L.tier1([b], 'alpha revenue', 300, '2024-12-31', is_currency=1) is None  # full slice
+    print("[ok] explicitMember-list facts match with full-slice proof")
+
+
+def test_evidence_tied_to_same_occurrence():
+    """Round-21 (reviewer-measured 71/229): the supporting context must be windowed around THE
+    SAME occurrence as the emitted quote — never a different occurrence of the same number."""
+    texts = ['intro mentions total widget revenue 5,432 loosely here',
+             'far away ##TABLE_START total widget revenue 5,432 in the real table ##TABLE_END']
+    q, ctx = L.row_quote(texts, ['total', 'widget', 'revenue'], 5432, 'number',
+                         with_context=True)
+    assert q is not None and ctx is not None
+    assert q in ctx, (q, ctx[:80])          # the context CONTAINS the exact emitted occurrence
+    print("[ok] evidence context contains the same occurrence as the quote")
+
+
+def test_table_marker_counts_only_inside_open_table():
+    """Round-21: a table-start marker scores only while the table is STILL OPEN at the value —
+    identical label evidence, so table credit alone decides the ranking; the closed-table
+    occurrence must NOT outrank the open-table one."""
+    closed = 'a ##TABLE_START unrelated ##TABLE_END total widget revenue 5,432 after the table'
+    opened = 'z ##TABLE_START total widget revenue 5,432 inside the open table'
+    _, sn = L.scan_text([closed, opened], 'total widget revenue', 5432, 'number')
+    assert sn and 'inside the open table' in sn[0], sn[:1]
+    print("[ok] open-table credit decides rank; closed-table occurrence gets none")
+
+
+
+def test_all_segment_shapes_one_parser():
+    """Round-21 closure (Rule 1): the SAME logical fact in all FOUR storage shapes must behave
+    identically — seg_members derives from seg_axis_members (one parser), full-name KPI binds,
+    partial-name KPI abstains, in EVERY shape."""
+    shapes = [
+        [{'dimension': 'x:A', 'value': 'x:AlphaMember'},
+         {'dimension': 'x:B', 'value': 'x:BetalandMember'}],
+        [{'explicitMember': {'dimension': 'x:A', '$t': 'x:AlphaMember'}},
+         {'explicitMember': {'dimension': 'x:B', '$t': 'x:BetalandMember'}}],
+        {'explicitMember': [{'dimension': 'x:A', '$t': 'x:AlphaMember'},
+                            {'dimension': 'x:B', '$t': 'x:BetalandMember'}]},
+        [{'dimension': 'x:A', 'explicitMember': 'x:AlphaMember'},
+         {'dimension': 'x:B', 'explicitMember': 'x:BetalandMember'}],
+    ]
+    for i, seg in enumerate(shapes):
+        fc = {'value': '500', 'period': {'startDate': '2024-01-01', 'endDate': '2024-12-31'},
+              'unitRef': 'U_USD', 'segment': seg}
+        assert L.seg_members(fc) == [m for _, m in L.seg_axis_members(fc)], f"shape {i} parser split"
+        assert sorted(L.seg_members(fc)) == ['x:AlphaMember', 'x:BetalandMember'], \
+            f"shape {i} members: {L.seg_members(fc)}"
+        b = json.dumps({'Revenues': [fc]})
+        assert L.tier1([b], 'alpha betaland revenue', 500, '2024-12-31', is_currency=1) is not None, \
+            f"shape {i} full-name bind failed"
+        assert L.tier1([b], 'alpha revenue', 500, '2024-12-31', is_currency=1) is None, \
+            f"shape {i} partial-name did not abstain"
+    print("[ok] all four segment shapes: one parser, identical gate behavior")
+
+
+def test_members_all_parity_with_seg_axis_members():
+    """Round-21 closure: the TWO remaining parsers (link_lib.seg_axis_members for the harvest
+    lane, oracle._members_all for the certified xbrl_lane) must agree on every shape — pinned
+    parity instead of a risky merge into certified code."""
+    from oracle import _members_all
+    shapes = [
+        [{'dimension': 'x:A', 'value': 'x:AlphaMember'}],
+        [{'explicitMember': {'dimension': 'x:A', '$t': 'x:AlphaMember'}}],
+        {'explicitMember': [{'dimension': 'x:A', '$t': 'x:AlphaMember'},
+                            {'dimension': 'x:B', '$t': 'x:BetalandMember'}]},
+        [{'dimension': 'x:A', 'explicitMember': 'x:AlphaMember'}],
+        None,
+    ]
+    for i, seg in enumerate(shapes):
+        fc = {'value': '1', 'period': {}, 'segment': seg} if seg is not None else {'value': '1', 'period': {}}
+        assert sorted(_members_all(fc)) == sorted(m for _, m in L.seg_axis_members(fc)), \
+            f"shape {i}: parsers disagree"
+    print("[ok] harvest parser ≡ certified-lane parser on every shape")

@@ -367,3 +367,50 @@ def test_golden_complete_output_row_live():
                                 for k in set(rec) | set(_GOLDEN_ROW)
                                 if rec.get(k) != _GOLDEN_ROW.get(k)}
     print("[ok] golden row: complete record equals the frozen literal, field for field")
+
+
+def test_cag_list_shape_members_live():
+    """Round-21 live pin (reviewer: CAG carries 131 explicitMember-LIST facts): the single parser
+    must see their members. Skips ONLY on genuine graph unavailability."""
+    try:
+        RC.load_env_neo4j()
+        from neo4j import GraphDatabase
+        drv = GraphDatabase.driver(os.environ['NEO4J_URI'],
+                                   auth=(os.environ.get('NEO4J_USERNAME', 'neo4j'),
+                                         os.environ['NEO4J_PASSWORD']))
+        with drv.session() as s:
+            s.run("RETURN 1").single()
+    except (KeyError, OSError, Exception) as e:
+        if type(e).__name__ in ('ServiceUnavailable', 'KeyError', 'OSError', 'ConnectionError',
+                                'AuthError', 'ConfigurationError'):
+            pytest.skip(f"graph unavailable: {e}")
+        raise
+    found = 0
+    with drv.session() as s:
+        rows = list(s.run(
+            """MATCH (r:Report)-[:PRIMARY_FILER]->(c:Company {ticker:'CAG'})
+               WHERE r.formType IN ['10-K','10-Q']
+               MATCH (r)-[:HAS_FINANCIAL_STATEMENT]->(f:FinancialStatementContent)
+               RETURN f.value AS xb"""))         # ALL blobs — the 519 list-shape facts live in
+                                                  # specific filings (a 12-blob sample missed them)
+        for row in rows:
+            try:
+                data = json.loads(row['xb'])
+            except (TypeError, ValueError):
+                continue
+            if not isinstance(data, dict):
+                continue
+            for con, facts in data.items():
+                for fc in (facts if isinstance(facts, list) else [facts]):
+                    if not isinstance(fc, dict):
+                        continue
+                    seg = fc.get('segment')
+                    items = seg if isinstance(seg, list) else [seg] if seg else []
+                    for it in items:
+                        if isinstance(it, dict) and isinstance(it.get('explicitMember'), list):
+                            found += 1
+                            assert L.seg_members(fc) == [m for _, m in L.seg_axis_members(fc)]
+                            assert L.seg_members(fc), f"list-shape fact invisible: {fc.get('segment')}"
+                            break
+    assert found >= 100, f"expected CAG's list-shape facts (census: 519), saw {found}"
+    print(f"[ok] CAG live: {found} list-shape facts all visible to the single parser")

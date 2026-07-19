@@ -353,24 +353,20 @@ def slice_tokens(name):
     return {t.lower() for t in re.findall(r"[A-Za-z]{3,}", name) if t.lower() not in SLICE_STOP}
 
 
+# round-21 (reviewer): the STRUCTURAL exemption is EXACT graph-proven (axis, member) pairs ONLY —
+# each entry earned by live census (2026-07-19 cohort: 1,363 + 100 occurrences), never by
+# token-emptiness (the OtherNet class token-strips to nothing yet is a REAL slice -> abstain).
+STRUCTURAL_PAIRS = frozenset({
+    ('srt:ConsolidationItemsAxis', 'us-gaap:OperatingSegmentsMember'),
+    ('us-gaap:StatementBusinessSegmentsAxis', 'aci:ReportableSegmentMember'),
+})
+
+
 def seg_members(fc):
-    """member value strings, supporting both {dimension,value} and explicitMember.$t shapes."""
-    seg = fc.get('segment')
-    if not seg:
-        return []
-    items = seg if isinstance(seg, list) else [seg]
-    out = []
-    for s in items:
-        if not isinstance(s, dict):
-            continue
-        if isinstance(s.get('value'), str):
-            out.append(s['value'])
-        em = s.get('explicitMember')
-        if isinstance(em, dict) and em.get('$t'):
-            out.append(em['$t'])
-        elif isinstance(em, str):
-            out.append(em)
-    return out
+    """member value strings — DERIVED from seg_axis_members, THE single all-shapes parser
+    (round-21: the local re-parse missed the explicitMember-LIST shape; CAG carries 131 such
+    facts — matching and output now see every shape the axis parser sees)."""
+    return [m for _, m in seg_axis_members(fc)]
 
 
 def seg_axis_members(fc):
@@ -514,33 +510,40 @@ def tier1(xbrls, name, val, per, is_currency=None):
                     continue                      # a money fact never satisfies a non-money KPI
                 if (fc.get('period') or {}).get('endDate') != per:
                     continue
-                members = sorted(seg_members(fc))   # round-18: canonicalized ONCE, so every
-                                                     # emitted field (member text, quote, axes)
-                                                     # is dimension-order-free
+                pairs = sorted(seg_axis_members(fc))   # round-21: THE single all-shapes parser
+                members = [m for _, m in pairs]         # canonical ONCE for every emitted field
                 # round-20 (reviewer-generalized from the country rule): FULL-SLICE PROOF
                 # for EVERY dimension — the KPI's slice-token set must EQUAL the union of every
                 # member's meaningful tokens (country codes expand via the ISO names; structural
                 # members tokenize to ∅ = the exact already-proven class and change nothing).
                 # [Alpha, Beta] never binds plain 'Alpha Revenue'; US+Canada never binds US;
                 # identical member names under different axes still bind when the KPI names them.
-                _need = set()
+                _contribs = []             # per-member token sets (attribution units)
                 _gate_fail = False
-                for _mm in members:
+                for _ax, _mm in pairs:
+                    if (_ax, _mm) in STRUCTURAL_PAIRS:
+                        continue           # exact graph-proven structural pins ONLY
                     _pre, _, _loc = str(_mm).rpartition(':')
                     if _pre == 'country':
                         _nm = COUNTRY_NAME.get(_loc.upper())
-                        if not _nm:
-                            _gate_fail = True
-                            break
-                        _need |= {w for w in re.findall(r"[A-Za-z]{3,}", _nm.lower())
-                                  if w not in SLICE_STOP}   # both sides share ONE normalization
+                        _tk = ({w for w in re.findall(r"[A-Za-z]{3,}", _nm.lower())
+                                if w not in SLICE_STOP} if _nm else set())
                     else:
-                        _need |= member_tokens([_mm])
-                _need -= SLICE_STOP        # round-20b: ONE normalization on BOTH sides — the
-                                           # KPI side strips these words, so the member side
-                                           # must too ('ConsultingRevenueMember' vs 'Consulting
-                                           # Revenue' died to the word 'revenue', reproduced)
-                if _gate_fail or (members and kt and _need != kt):
+                        _tk = member_tokens([_mm]) - SLICE_STOP   # ONE shared normalization
+                    if not _tk:
+                        _gate_fail = True  # round-21: an UNKNOWN ∅-token member is a REAL,
+                        break              # unprovable slice (OtherNet class) -> ABSTAIN
+                    _contribs.append(_tk)
+                if not _gate_fail:
+                    for _i in range(len(_contribs)):
+                        for _j in range(_i + 1, len(_contribs)):
+                            if _contribs[_i] & _contribs[_j]:
+                                _gate_fail = True   # round-21: overlapping members under
+                                break               # different axes = ambiguous attribution
+                        if _gate_fail:
+                            break
+                _need = set().union(*_contribs) if _contribs else set()
+                if _gate_fail or (pairs and kt and _need != kt):
                     continue
                 mt = member_tokens(members)
                 if kt:
@@ -620,7 +623,7 @@ def _tidy(s):
     return re.sub(r'\s+', ' ', s.replace('​', ' ')).strip()
 
 
-def row_quote(texts, label_tokens, val, fmt, gap=90, scale_gate=False):
+def row_quote(texts, label_tokens, val, fmt, gap=90, scale_gate=False, with_context=False):
     """Cleanest verbatim quote: starts at THIS metric's label and runs through the value.
     Every label token must appear within `gap` chars before the value, and the value must sit at
     a numeric boundary. Returns the shortest such quote, or None.
@@ -629,7 +632,7 @@ def row_quote(texts, label_tokens, val, fmt, gap=90, scale_gate=False):
     the hit); %-format and full-magnitude/zero forms are exempt."""
     lt = [t.lower() for t in label_tokens if t]
     if not lt:
-        return None
+        return (None, None) if with_context else None
     forms = _tableforms(val, fmt)
     needy = ({f: _required_div(f, val) for f in forms if _required_div(f, val)}
              if scale_gate and fmt != '%' else {})
@@ -665,7 +668,10 @@ def row_quote(texts, label_tokens, val, fmt, gap=90, scale_gate=False):
                 q = t[ws + min(pos): _with_trail(t, m.end())]   # RAW slice incl. trailing evidence
                 if best is None or len(q) < len(best) or (len(q) == len(best) and q < best):
                     best = q                      # shortest = tightest crop; content tiebreak
-    return best
+                    # round-21: the supporting context is windowed around THIS SAME occurrence
+                    # (71/229 section records carried evidence from a DIFFERENT occurrence)
+                    best_ctx = t[_snippet_start(t, m.start(), label_tokens): m.end() + 80]
+    return (best, best_ctx if best is not None else None) if with_context else best
 
 
 def _snippet_start(t, hit_start, label_tokens, base=320, maxback=2200, table_cap=2600):
@@ -681,21 +687,24 @@ def _snippet_start(t, hit_start, label_tokens, base=320, maxback=2200, table_cap
     low = t.lower()
     near = low[default:hit_start]
     start = default
-    for tok in label_tokens:                          # (a) label-token reach
-        tl = tok.lower()
-        if tl in near:
+    for tok in label_tokens:                          # (a) label-token reach — WHOLE WORDS
+        tl = tok.lower()                              # (round-21: substring reach anchored on
+        pat = re.compile(r'(?<![a-z0-9])' + re.escape(tl) + r'(?![a-z0-9])')   # 'net' inside
+        if pat.search(near):                          # 'internet')
             continue
         region = low[max(0, hit_start - maxback):hit_start]
-        p = region.rfind(tl)
-        if p >= 0:
-            start = min(start, max(0, hit_start - maxback) + p)
+        last = None
+        for mm in pat.finditer(region):
+            last = mm
+        if last is not None:
+            start = min(start, max(0, hit_start - maxback) + last.start())
     ts = t.rfind('##TABLE_START', max(0, hit_start - table_cap), hit_start)  # (b) table-header reach
     if ts >= 0:
         start = min(start, ts)
     return start
 
 
-def scan_text(texts, name, val, fmt, max_hits=20, keep=6, scale_gate=False):
+def scan_text(texts, name, val, fmt, max_hits=20, keep=6, scale_gate=False, with_context=False):
     """(clean_label_anchored_quote_or_None, up_to_`keep` candidate snippets).
     Collects up to max_hits boundary-valid occurrences, each windowed back to its header/label,
     then RANKS so the identifying candidate wins: a snippet that carries a table header and/or the
@@ -706,7 +715,9 @@ def scan_text(texts, name, val, fmt, max_hits=20, keep=6, scale_gate=False):
     permissive — the LLM tier re-verifies its own output."""
     nt = _toks(name) or re.findall(r"[A-Za-z0-9&]{2,}", name)   # pure-kind names ('revenue') must not
     ntl = [x.lower() for x in nt]                                # tokenize to EMPTY -> strict lock dies
-    strict = row_quote(texts, nt, val, fmt, scale_gate=scale_gate)
+    # round-21 Rule 2 (single path): the strict quote AND its supporting context come from the
+    # SAME row_quote call — the context is windowed around the SAME occurrence, never recomputed.
+    strict, strict_ctx = row_quote(texts, nt, val, fmt, scale_gate=scale_gate, with_context=True)
     forms = _tableforms(val, fmt)
     cands = []
     for t in sorted(texts):                # round-18: CANONICAL text order, so the bounded-work
@@ -717,10 +728,13 @@ def scan_text(texts, name, val, fmt, max_hits=20, keep=6, scale_gate=False):
                     continue
                 ws = _snippet_start(t, m.start(), nt)
                 snip = t[ws:m.end()+80]           # RAW slice — snippets are source text (WP1)
-                pre = snip[:m.start() - ws].lower()   # round-20: rank on the text BEFORE the
-                score = (2 if '##TABLE_START' in snip else 0) + sum(   # value, WHOLE WORDS only —
-                    1 for tk in ntl                                    # 'net' scores 0 inside
-                    if re.search(r'(?<![a-z0-9])' + re.escape(tk) + r'(?![a-z0-9])', pre))  # 'internet'
+                vpos = m.start() - ws
+                pre = snip[:vpos].lower()             # round-20: rank on the text BEFORE the value
+                ts_ = snip.rfind('##TABLE_START', 0, vpos)   # round-21: a table marker counts ONLY
+                in_open_table = ts_ >= 0 and snip.find('##TABLE_END', ts_, vpos) < 0  # while that
+                score = (2 if in_open_table else 0) + sum(   # table is STILL OPEN at the value
+                    1 for tk in ntl
+                    if re.search(r'(?<![a-z0-9])' + re.escape(tk) + r'(?![a-z0-9])', pre))
                 cands.append((score, len(snip), snip))
                 if len(cands) >= max_hits * 4:          # round-19: BOUNDED MEMORY without blind
                     cands.sort(key=lambda c: (-c[0], c[1], c[2]))   # eviction — prune by RANK, so
@@ -729,7 +743,8 @@ def scan_text(texts, name, val, fmt, max_hits=20, keep=6, scale_gate=False):
                                                         # round-18 stop-at-N kept the first-N in
                                                         # canonical order, not the best-N)
     cands.sort(key=lambda c: (-c[0], c[1], c[2]))      # score, length, CONTENT — total order
-    return strict, [c[2] for c in cands[:min(keep, max_hits)]]   # round-20: max_hits is honored
+    kept = [c[2] for c in cands[:min(keep, max_hits)]]           # round-20: max_hits is honored
+    return (strict, kept, strict_ctx) if with_context else (strict, kept)
 
 
 # is_derived moved to fiscal_ai_rules.py (2026-07-15) — it is a fiscal.ai VENDOR-label rule, not shared
