@@ -750,3 +750,59 @@ def test_xbrl_lane_shares_the_complete_parse_law():
     clean = blob('Revenues', [fact('7000', '2024-01-01', '2024-12-31')])
     assert xbrl_lane.resolve([clean], 'us-gaap:Revenues', [], '2024-01-01', '2024-12-31') is not None
     print("[ok] the certified lane enforces the same complete-parse law (one parser)")
+
+
+# ---------------- round-24: occurrence-level ambiguity + valid dimension addresses ----------
+def test_context_ambiguity_covers_wording_variants():
+    """Round-24 (reviewer-reproduced): DIFFERENT wording of the same label+value ('Revenue 5,432'
+    vs 'Revenue was 5,432') bypassed the tie — contexts are now collected from ALL qualifying
+    occurrences BEFORE choosing; >1 distinct context abstains. Wording, case, punctuation pinned;
+    a single occurrence matched by MULTIPLE forms ('5,432' and '$ 5,432') is ONE occurrence."""
+    for a, b in [('Q1 heading stuff Revenue 5,432 detail', 'Q2 heading stuff Revenue was 5,432 detail'),
+                 ('Q1 heading stuff Revenue 5,432 detail', 'Q2 heading stuff REVENUE 5,432 detail'),
+                 ('Q1 heading stuff Revenue 5,432 detail', 'Q2 heading stuff Revenue: 5,432 detail')]:
+        assert L.row_quote([a, b], ['Revenue'], 5432, None, with_context=True) == (None, None), a
+        assert L.row_quote([b, a], ['Revenue'], 5432, None, with_context=True) == (None, None)
+    one = 'annual note Widget revenues $ 5,432 for the year'
+    q, c = L.row_quote([one], ['Widget', 'revenues'], 5432, None, with_context=True)
+    assert q is not None and c is not None and q in c   # multi-form single occurrence binds
+    assert L.row_quote(['Q1 x Revenue 5,432', 'Q2 y Revenue was 5,432'], ['Revenue'],
+                       5432, None) is not None           # certified default untouched
+    print("[ok] occurrence-level ambiguity: wording/case/punct variants abstain; one spot binds")
+
+
+def test_locate_full_abstains_on_wording_variant_contexts():
+    """Round-24: the full locator inherits the occurrence-level law."""
+    import locate
+    r = locate.locate_by_value({'xbrls': [], 'texts': ['Q1 head Revenue 5,432 x',
+                                                       'Q2 head Revenue was 5,432 y'],
+                                'name': 'Revenue', 'value': 5432, 'fmt': None,
+                                'period': '2024-12-31', 'allow_xbrl': False})
+    assert r['hit'] is None and r['snips'], r['hit']
+    print("[ok] full locate abstains; candidates still flow to the reader")
+
+
+def test_seg_parse_rejects_invalid_dimension_addresses():
+    """Round-24 (reviewer + census: 0 real facts carry these — zero cost): a REPEATED AXIS is not
+    a valid complete dimension address; padded names and entries mixing storage formats are
+    malformed — all incomplete, both lanes."""
+    rep = {'value': '100', 'period': {}, 'segment': [
+        {'dimension': 'x:A', 'value': 'x:AlphaMember'},
+        {'dimension': 'x:A', 'value': 'x:BetalandMember'}]}
+    assert L.seg_parse(rep)[1] is False
+    pad = {'value': '200', 'period': {}, 'segment': [
+        {'dimension': ' x:A ', 'value': ' x:AlphaMember '}]}
+    assert L.seg_parse(pad)[1] is False
+    mix = {'value': '300', 'period': {}, 'segment': [
+        {'dimension': 'x:A', 'value': 'x:AlphaMember',
+         'explicitMember': {'dimension': 'x:B', '$t': 'x:BetalandMember'}}]}
+    assert L.seg_parse(mix)[1] is False
+    b = blob('Revenues', [dict(rep, period={'startDate': '2024-01-01', 'endDate': '2024-12-31'},
+                               unitRef='U_USD')])
+    assert L.tier1([b], 'alpha betaland revenue', 100, '2024-12-31', is_currency=1) is None
+    xb = blob('Revenues', [dict(rep, period={'startDate': '2024-01-01', 'endDate': '2024-12-31'},
+                                unitRef='U_USD')])
+    assert xbrl_lane.resolve([xb], 'us-gaap:Revenues',
+                             ['x:AlphaMember', 'x:BetalandMember'],
+                             '2024-01-01', '2024-12-31') is None
+    print("[ok] repeated-axis/padded/mixed addresses fail closed in BOTH lanes")

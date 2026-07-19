@@ -371,9 +371,9 @@ def seg_members(fc):
 
 
 def _nb(x):
-    """nonblank string — the ONLY legal axis/member type (round-23: whitespace and numeric
-    axes were binding)."""
-    return isinstance(x, str) and bool(x.strip())
+    """nonblank UNPADDED string — the ONLY legal axis/member form (round-23: whitespace and
+    numeric axes were binding; round-24: padded names are malformed storage, census 0/47,152)."""
+    return isinstance(x, str) and bool(x.strip()) and x == x.strip()
 
 
 def seg_parse(fc):
@@ -394,6 +394,9 @@ def seg_parse(fc):
         if not isinstance(s, dict):
             complete = False
             continue
+        if 'value' in s and 'explicitMember' in s:
+            complete = False               # round-24: an entry MIXING storage formats is
+            continue                       # malformed (census 0/47,152 — zero real cost)
         got = 0
         if 'value' in s:
             if _nb(s.get('dimension')) and _nb(s.get('value')):
@@ -421,6 +424,10 @@ def seg_parse(fc):
             complete = False
         if got == 0:
             complete = False                             # an entry that yields nothing
+    axes = [a for a, _ in out]
+    if len(axes) != len(set(axes)):
+        complete = False                   # round-24: a REPEATED AXIS is not a valid complete
+                                           # dimension address (census 0/47,152)
     return out, complete
 
 
@@ -672,8 +679,8 @@ def row_quote(texts, label_tokens, val, fmt, gap=90, scale_gate=False, with_cont
     needy = ({f: _required_div(f, val) for f in forms if _required_div(f, val)}
              if scale_gate and fmt != '%' else {})
     best = None
-    ctxs = []                              # round-22: contexts of ALL occurrences tied at `best`
-    for t in texts:
+    collected = []                         # round-24: (ti, start, end, q, t) per qualifying occurrence
+    for ti, t in enumerate(texts):
         low = t.lower()
         for fo in sorted(forms):           # SET iteration is hash-random per process — sorted
                                            # + content tiebreaks make output fully deterministic
@@ -702,23 +709,33 @@ def row_quote(texts, label_tokens, val, fmt, gap=90, scale_gate=False, with_cont
                 if pos is None:
                     continue                      # some label token missing -> not this row
                 q = t[ws + min(pos): _with_trail(t, m.end())]   # RAW slice incl. trailing evidence
-                if best is None or len(q) < len(best) or (len(q) == len(best) and q < best):
-                    best = q                      # shortest = tightest crop; content tiebreak
-                    ctxs = []
-                if with_context and q == best:
-                    # round-21/22: the context rides THIS SAME occurrence; ALL tied occurrences'
-                    # contexts are kept so the selection below is input-order-FREE
-                    ctxs.append(t[_snippet_start(t, m.start(), label_tokens): m.end() + 80])
+                if with_context:
+                    # round-24: collect EVERY qualifying occurrence FIRST (the round-23 tie only
+                    # compared IDENTICAL quote strings — a wording variant bypassed the law)
+                    collected.append((ti, m.start(), m.end(), q, t))
+                elif best is None or len(q) < len(best) or (len(q) == len(best) and q < best):
+                    best = q                      # certified default: byte-identical legacy
     if not with_context:
         return best
-    if best is None:
+    if not collected:
         return None, None
+    # merge overlapping spans per text: several FORMS matching one printed number ('5,432' and
+    # '$ 5,432') are ONE occurrence; the merged span's widest bounds window its ONE context
+    collected.sort(key=lambda x: (x[0], x[1], x[2]))
+    groups = []
+    for ti, s0, e0, q, t in collected:
+        if groups and groups[-1][0] == ti and s0 <= groups[-1][2]:
+            g = groups[-1]
+            groups[-1] = (ti, g[1], max(g[2], e0), g[3] + [q], t)
+        else:
+            groups.append((ti, s0, e0, [q], t))
+    ctxs = [t[_snippet_start(t, s0, label_tokens): e0 + 80] for ti, s0, e0, qs, t in groups]
     if len(set(ctxs)) > 1:
-        return None, None              # round-23 (replaces the year heuristic — it missed
-                                       # Q1-vs-Q2/month/FY-label conflicts): ONE winning quote
-                                       # with MULTIPLE DISTINCT contexts is unattributable ->
-                                       # ABSTAIN; never choose evidence alphabetically
-    return best, ctxs[0]               # the single context every occurrence agrees on
+        return None, None              # >1 DISTINCT context across ALL occurrences (any wording/
+                                       # case/punctuation) -> unattributable -> ABSTAIN; evidence
+                                       # is never chosen alphabetically or by input order
+    allq = [q for _, _, _, qs, _ in groups for q in qs]
+    return min(allq, key=lambda q: (len(q), q)), ctxs[0]
 
 
 def _table_active_start(t, pos, cap=2600):
