@@ -1053,3 +1053,26 @@ scripts green. NO regenerate (his process holds).
    identity-structure key (different units abstain; equal units bind). NO decimals policy per
    his ruling. Self-check fixtures modernized to valid shapes.
 Gates: battery 145/145 · floors 28/28 · self-check green · both evidence scripts green.
+
+## Round 29 (ChatGPT, 2026-07-19) — the final code-close pass + THE AUTHORIZED REGENERATION.
+## Commits `3e69fa7` (code) + artifacts. All items reproduced/measured before fixing; the owner
+## sneak-peeked the ISO-code concern and the zero-cost deletion was measured BEFORE his formal
+## directive arrived (0 live binds depended on the shortcut; collision census: 1,242 bare-US
+## rows + AI/GM/SA/GW classes).
+1. Bare ISO codes are NEVER proof: shortcut deleted; country members bind on FULL names only;
+   codes ride to the reader lane. Dotted normalization KEPT for custom members — the LMT/PODD/
+   DNUT live recoveries survive via filer-named members (re-pinned).
+2. Missing final dot: U.S == U.S. (his 16 rows exact: W 10 + BSX 6). LIVE: W 'U.S Revenue' →
+   USSegmentMember pinned; BSX 0 binds — fail-closed exactly as he specified.
+3. Redundant parenthetical acronym dropped ONLY on exact initials-repeat of the adjacent phrase
+   (no list). LIVE: PEGA 'United Kingdom (U.K.) Revenue' → country:GB, 3/3 — his exact count.
+   The same rule defuses the (RPO)/(ARR)/(AUM) poison class (~700 rows universe-wide, censused).
+4. Dates through XN.period_key at candidacy; duration+instant mixed shapes never candidates.
+5. Census rejects blank axis/member names (positive control added); aci_queries fails on an
+   empty database result. ABT: his withdrawn example — closed.
+**FINAL WP1 COHORT (clean stamp `3e69fa7`, dirty []): 183 resolved (T1 76 · T2 107 · 8-K 40) ·
+499 residual · 997 abstain · 2 parks · battery 149/149 · floors 28/28 · self-check green ·
+evidence green · RECORD+CHECK green · seeds byte-identical. The −11 vs round-28 = the deleted
+code shortcut's cohort binds (bare/dotted-code KPIs vs country members — the IT/NA false-bind
+class's flip side) + the stricter period/unit laws; every loss is an abstention riding to the
+reader lane per the owner's standing conservative ruling.**

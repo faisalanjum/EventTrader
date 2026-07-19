@@ -1,12 +1,12 @@
 {
   "tag": "wp1",
-  "records_resolved": 194,
-  "residual": 496,
+  "records_resolved": 183,
+  "residual": 499,
   "abstain": 997,
   "company_periods": 25,
-  "T1_xbrl": 74,
-  "T2_label": 120,
-  "pr_records": 51,
+  "T1_xbrl": 76,
+  "T2_label": 107,
+  "pr_records": 40,
   "cp_no_filing": 0,
   "duplicate_rows_collapsed": 0
 }
