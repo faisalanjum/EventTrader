@@ -1031,3 +1031,25 @@ detector must fire on a synthetic violation before the scan counts anything — 
 unknown shapes (recaptured: 47,152 facts, all violation classes 0, all malformed classes 0).
 Gates: battery 142/142 (self-check inside) · floors 28/28 · self-check green · both evidence
 scripts green. NO regenerate (his process holds).
+
+## Round 28 (ChatGPT, 2026-07-19) — all three reproduced (his 289 dotted-U.S. count EXACT);
+## live recoveries verified; diff-first, NO regenerate. Commit `ef427f6`.
+1. DOTTED INITIALS: `_norm_initials` (dotted uppercase runs collapse: U.S.→US, L.P.→LP) applied
+   in ONE tokenizer on BOTH sides; country:XX accepts the exact ISO code OR the full name (from
+   the generated table — no name list). 'Total U.S. Revenue' no longer binds the bare company
+   total (reproduced binding before). LIVE recoveries pinned: LMT 'US Government Revenue' →
+   USGovernmentMember + U.S.GovernmentMember; PODD 'US Omnipod Revenue' → U.S.OmnipodMember
+   (the MEMBER side carries dotted initials too — his one-tokenizer-both-sides call was exactly
+   right); DNUT dotted rows bind (4/12; the rest lack matching facts). Measured fail-closed
+   classes: US 289 / UK 24 / NA 12 dotted rows in the FULL worklist; L.P./N.A. issuer initials
+   remain extra qualifiers → abstain (the reported recall cost). ABT: NO US-form KPI exists in
+   its worklist rows under any spelling — his ABT basis requested.
+2. CENSUS: empty-yield dicts and non-string sides count as UNKNOWN (raw_names); positive
+   controls extended to those detectors; asserts ALL violation classes zero AND malformed zero
+   AND a NONEMPTY scan — a reported violation can never exit green (his exact catch). Recaptured
+   47,152 → all zeros.
+3. TIE-BREAK PRECONDITIONS: candidacy requires a VALID duration shape (start AND end, nonblank
+   strings; a LONE endDate-only fact bound before — reproduced); normalized unitRef joins the
+   identity-structure key (different units abstain; equal units bind). NO decimals policy per
+   his ruling. Self-check fixtures modernized to valid shapes.
+Gates: battery 145/145 · floors 28/28 · self-check green · both evidence scripts green.
