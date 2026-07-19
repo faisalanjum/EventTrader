@@ -345,7 +345,8 @@ SLICE_STOP = set(STOP) | {'total', 'geography', 'segment', 'ebit', 'type', 'marg
                           'volume', 'growth'}
 # structural tokens carried by XBRL member names that don't identify a slice
 GENERIC_MEM = {'member', 'segment', 'segments', 'consolidation', 'consolidated', 'items', 'axis',
-               'reportable', 'entities', 'operating', 'and', 'the', 'of', 'group'}
+               'reportable', 'entities', 'operating', 'and', 'the', 'of', 'group',
+               'sector', 'company'}
 
 
 def slice_tokens(name):
@@ -535,6 +536,10 @@ def tier1(xbrls, name, val, per, is_currency=None):
                                   if w not in SLICE_STOP}   # both sides share ONE normalization
                     else:
                         _need |= member_tokens([_mm])
+                _need -= SLICE_STOP        # round-20b: ONE normalization on BOTH sides — the
+                                           # KPI side strips these words, so the member side
+                                           # must too ('ConsultingRevenueMember' vs 'Consulting
+                                           # Revenue' died to the word 'revenue', reproduced)
                 if _gate_fail or (members and kt and _need != kt):
                     continue
                 mt = member_tokens(members)

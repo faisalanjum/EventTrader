@@ -491,3 +491,25 @@ def test_ranking_whole_words_before_value_and_cap():
     assert len(snips) <= 5, len(snips)
     assert 'Net Revenue totalled' in snips[0], snips[0]     # the true whole-word line ranks FIRST
     print("[ok] whole-word pre-value ranking; max_hits honored; pruning exercised")
+
+
+
+def test_slice_gate_shared_normalization():
+    """Round-20b: ONE normalization on BOTH sides of the slice equality — member-name furniture
+    ('...RevenueMember', '...SegmentMember' with a stopped word, 'Sector', 'Company') must not
+    fail certified binds; a REAL unproven member (NonUs) still rejects."""
+    c = blob('Revenues', [fact('100', '2024-01-01', '2024-12-31', unit='U_USD', seg=[
+        {'dimension': 'x:A', 'value': 'x:ConsultingRevenueMember'}])])
+    assert L.tier1([c], 'Consulting Revenue', 100, '2024-12-31', is_currency=1) is not None
+    g = blob('Revenues', [fact('200', '2024-01-01', '2024-12-31', unit='U_USD', seg=[
+        {'dimension': 'x:A', 'value': 'x:GrowthMarketsSegmentMember'}])])
+    assert L.tier1([g], 'Growth Markets Revenue', 200, '2024-12-31', is_currency=1) is not None
+    f = blob('Revenues', [fact('300', '2024-01-01', '2024-12-31', unit='U_USD', seg=[
+        {'dimension': 'x:A', 'value': 'x:FinancialServicesSectorMember'}])])
+    assert L.tier1([f], 'Financial Services Revenue', 300, '2024-12-31', is_currency=1) is not None
+    nonus = blob('Revenues', [fact('400', '2024-01-01', '2024-12-31', unit='U_USD', seg=[
+        {'dimension': 'x:A', 'value': 'x:EstablishedPharmaceuticalProductsMember'},
+        {'dimension': 'x:B', 'value': 'us-gaap:NonUsMember'}])])
+    assert L.tier1([nonus], 'Established Pharmaceutical Products Revenue', 400,
+                   '2024-12-31', is_currency=1) is None      # non-US slice stays unproven
+    print("[ok] shared normalization recovers furniture-only misses; NonUs still rejects")
