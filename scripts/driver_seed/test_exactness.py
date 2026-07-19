@@ -284,19 +284,47 @@ def test_scan_text_scale_gate_param():
 
 
 # ---------------- round-16: order-free tier1, letter-glued numbers, inheritance unanimity ----
-def test_tier1_structure_tie_abstains_order_free():
-    """Round-16: two same-score candidates with DIFFERENT structures (concept/axis/period) must
-    ABSTAIN — never let input order pick silently. Identical-structure duplicates still bind.
-    (Reviewer claimed six live order-dependent cases; 0/500 reproduced live forward-vs-reversed,
-    but the structural hole is real — this pins it shut synthetically, both orders.)"""
+def test_tier1_tie_rule_order_free():
+    """Round-16 + owner's recall refinement: ties differing in SLICE (axis+members) or PERIOD are
+    REAL ambiguity -> abstain. Ties that differ ONLY in concept name (dual-tagged aliases of the
+    same printed quantity: same value, same slice, same period) pick DETERMINISTICALLY
+    (lexicographic) — a certain-true link is never thrown away, and order still can't decide."""
     b1 = blob('Revenues', [fact('5000', '2024-01-01', '2024-12-31', unit='U_USD')])
     b2 = blob('RevenuesNet', [fact('5000', '2024-01-01', '2024-12-31', unit='U_USD')])
-    assert L.tier1([b1, b2], 'total revenue', 5000, '2024-12-31', is_currency=1) is None
-    assert L.tier1([b2, b1], 'total revenue', 5000, '2024-12-31', is_currency=1) is None
+    r_ab = L.tier1([b1, b2], 'total revenue', 5000, '2024-12-31', is_currency=1)
+    r_ba = L.tier1([b2, b1], 'total revenue', 5000, '2024-12-31', is_currency=1)
+    assert r_ab is not None and r_ba is not None
+    assert r_ab['concept'] == r_ba['concept'] == 'Revenues'      # deterministic, order-free
+    # DIFFERENT PERIOD START at the same end (Q4 vs FY coincidence) = real ambiguity -> abstain
+    q = blob('Revenues', [fact('5000', '2024-10-01', '2024-12-31', unit='U_USD'),
+                          fact('5000', '2024-01-01', '2024-12-31', unit='U_USD')])
+    assert L.tier1([q], 'total revenue', 5000, '2024-12-31', is_currency=1) is None
     dup = blob('Revenues', [fact('5000', '2024-01-01', '2024-12-31', unit='U_USD'),
                             fact('5000', '2024-01-01', '2024-12-31', unit='U_USD')])
     assert L.tier1([dup], 'total revenue', 5000, '2024-12-31', is_currency=1) is not None
-    print("[ok] tier1: structure ties abstain; order can never decide")
+    print("[ok] tier1: slice/period ties abstain; concept aliases pick deterministically")
+
+
+def test_geo_members_match_country_names():
+    """Owner recall packet (measured: 113 cohort rows): XBRL tags geography as ISO codes
+    (country:US) while KPI names say 'United States' — the closed ISO vocabulary maps them.
+    Precision-safe: an unknown code just fails to match (abstain), never binds wrongly."""
+    assert {'united', 'states'} <= L.member_tokens(['country:US'])
+    assert 'netherlands' in L.member_tokens(['country:NL'])
+    assert 'japan' in L.member_tokens(['country:JP'])
+    seg = [fact('5365000000', '2024-01-01', '2024-12-31', unit='U_USD',
+                seg=[{'dimension': 'srt:StatementGeographicalAxis', 'value': 'country:US'}])]
+    b = blob('RevenueFromContractWithCustomerExcludingAssessedTax', seg)
+    r = L.tier1([b], 'United States Revenue', 5365000000, '2024-12-31', is_currency=1)
+    assert r is not None, "country:US failed to bind 'United States Revenue'"
+    print("[ok] ISO country members bind country-name KPIs")
+
+
+def test_allcaps_camel_members_tokenize():
+    """Owner recall packet: 'EMEASegmentMember' must yield the token 'emea' (the ALLCAPS run was
+    glued to the next word), so 'EMEA Revenue' can bind."""
+    assert 'emea' in L.member_tokens(['acn:EMEASegmentMember'])
+    print("[ok] ALLCAPS camel runs split correctly")
 
 
 def test_boundary_rejects_letter_glued_numbers():

@@ -11,6 +11,7 @@ import re, json, math, os, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                 '..', '..', 'driver', 'relocation'))
 import exact_numbers as XN     # THE shared exact-value helpers (Decimal-exact; no float round-trips)
+from country_names import COUNTRY_NAME   # generated ISO-3166 table (country:XX member expansion)
 
 
 # ---------- value-form generation (recall engine + oracle) ----------
@@ -403,12 +404,24 @@ def seg_axis_members(fc):
 def member_tokens(members):
     toks = set()
     for m in members:
-        m = m.split(':')[-1]
-        m = re.sub(r'Member$', '', m)
-        m = re.sub(r'([a-z])([A-Z])', r'\1 \2', m)
-        for w in re.findall(r"[A-Za-z]{2,}", m.lower()):
-            if w not in GENERIC_MEM:
-                toks.add(w)
+        pre, _, local = str(m).rpartition(':')
+        local = local or m
+        # owner recall packet (measured 113-row miss class): XBRL tags geography as ISO codes
+        # (`country:US`) while KPI names say 'United States' — expand via the generated ISO
+        # table. Precision-safe: unknown code -> no extra tokens -> behaves exactly as before.
+        if pre == 'country' and local.upper() in COUNTRY_NAME:
+            toks.update(w for w in re.findall(r"[A-Za-z]{2,}", COUNTRY_NAME[local.upper()].lower())
+                        if w not in GENERIC_MEM)
+        base = re.sub(r'Member$', '', local)
+        # BOTH tokenizations, unioned: the original split ('IPhone' stays 'iphone' — certified
+        # behavior preserved exactly) plus the ALLCAPS-run split ('EMEASegment' -> 'emea',
+        # 'segment' — the glued form could never match). Extra tokens only widen the match
+        # surface; score/tie/quote gates keep precision.
+        for v in (base, re.sub(r'([A-Z]+)([A-Z][a-z])', r'\1 \2', base)):
+            v = re.sub(r'([a-z])([A-Z])', r'\1 \2', v)
+            for w in re.findall(r"[A-Za-z]{2,}", v.lower()):
+                if w not in GENERIC_MEM:
+                    toks.add(w)
     return toks
 
 
@@ -517,18 +530,22 @@ def tier1(xbrls, name, val, per, is_currency=None):
     if not cands:
         return None
     cands.sort(key=lambda c: -c[0])
-    # round-16 order-free determinism: among ALL top-score candidates, ANY structural difference
-    # (concept, full axis+member pairs, exact period) is a genuine ambiguity -> ABSTAIN. Identical
-    # duplicates collapse. Input order can never decide. (Strictly stronger than the old
-    # member-token tie rule, which missed same-token/different-structure and aggregate ties.)
+    # round-16 order-free determinism + owner's recall refinement: among ALL top-score candidates,
+    # a difference in SLICE (full axis+member pairs) or PERIOD is genuine ambiguity -> ABSTAIN
+    # (covers the Q-vs-FY same-end coincidence and dimension ambiguity the old member-token tie
+    # rule missed). Candidates differing ONLY in concept name are dual-tagged ALIASES of the same
+    # printed quantity (same value, same slice, same period) -> pick DETERMINISTICALLY
+    # (lexicographic smallest concept) — a certain-true link is never discarded, and input order
+    # still can never decide.
     top = [c for c in cands if c[0] == cands[0][0]]
-    structs = {(c[1], tuple(sorted(tuple(p) for p in seg_axis_members(c[4]))),
-                (c[4].get('period') or {}).get('startDate'),
-                (c[4].get('period') or {}).get('endDate') or (c[4].get('period') or {}).get('instant'))
-               for c in top}
-    if len(structs) > 1:
+    dimper = {(tuple(sorted(tuple(p) for p in seg_axis_members(c[4]))),
+               (c[4].get('period') or {}).get('startDate'),
+               (c[4].get('period') or {}).get('endDate') or (c[4].get('period') or {}).get('instant'))
+              for c in top}
+    if len(dimper) > 1:
         return None
-    score, concept, mlabel, _, fc = cands[0]
+    top.sort(key=lambda c: c[1])
+    score, concept, mlabel, _, fc = top[0]
     pe = fc.get('period') or {}
     q = f'{concept} [{mlabel}] [{pe.get("startDate","")}..{pe.get("endDate","")}] = {fc.get("value")}'
     # raw XBRL context for the FETCH packet (concept + axis+member + exact period + instant/duration).
