@@ -903,3 +903,37 @@ honest parks/residuals; my own test says these were all value-identical to conso
 price of removing filer hardcoding) + the fail-closed parsing and period-conflict abstentions.
 Every loss is an abstention, never a kept doubt. Evidence tie now holds 100% of section records
 (verifier-asserted).**
+
+## Round 23 (ChatGPT, 2026-07-19) — his FIVE claims (all reproduced) + MY owner-ordered
+## FULL-SURFACE SWEEP, which found + fixed the SAME hole in the CERTIFIED SIBLING LANE before he
+## could. Commits `5d2bba8` (code) + artifacts.
+His five: (1) the year-token conflict rule missed Q1-vs-Q2 / month / FY-label conflicts
+(reproduced) → NO period parsing at all: ONE winning quote with MULTIPLE DISTINCT contexts
+ABSTAINS; identical duplicates bind; never alphabetical evidence. REVERSES my round-22 same-year
+pin (fixtures updated + this note). (2) The context machinery LEAKED into certified default
+callers (reproduced: certified scan_text strict went None on conflicting-period texts) →
+scoped strictly to with_context=True; default path byte-identical legacy. (3) seg_parse(fc) →
+(pairs, complete): every entry a dict yielding ≥1 pair; every axis/member a NONBLANK STRING
+(whitespace axis, numeric axis, numeric member, valid+garbage list, no-key dicts — ALL
+reproduced binding, all abstain now, sliced AND aggregate; identical-pair duplicates fail
+closed, documented). (4) proof-commit equality EXACT ('8' matched '86c8f44' via startswith —
+reproduced; -dirty base handled; RED-pinned). (5) _check_slice_bytes = a verifier-level gate
+unit-tested with a byte-reordered file — the VERIFIER rejects it, not merely hash inequality.
+TRACK 2 (the owner's "check everything" order): the certified value-unknown lane (xbrl_lane)
+carried the SAME garbage-segment masquerade — reproduced there (a garbage-segment fact resolved
+as undimensioned) — now BOTH lanes consume the ONE strict parser; the lane's LIVE 150-pair
+self-check holds at the exact certified baseline (130 OK / 20 abstain / 0 WRONG).
+ACI RECONCILIATION (both true, different questions; unpinned counts removed from code per his
+directive; the exact queries, verbatim):
+- MY conflict query (0 differing / 112 identical): for every ACI concept+period, compare
+  values of facts whose ONLY pair is (us-gaap:StatementBusinessSegmentsAxis,
+  aci:ReportableSegmentMember) against values of facts with NO pairs:
+  `for con, facts: by_per[period]['with'/'without'].add(value); conflict := with != without
+   where both nonempty` → 0 conflicts, 112 identical cells.
+- HIS 43 = member-only facts with NO exact bare counterpart at the same concept+period (missing
+  counterpart, not conflict). Removal covers both readings; his basis accepted as reconciled.
+**FINAL (clean stamp `5d2bba8`, dirty []): 240 resolved (T1 92 · T2 148 · 8-K 63) · 470
+residual · 997 abstain · 2 parks · battery 134/134 · floors 28/28 · xbrl_lane live self-check
+0-wrong at baseline · RECORD+CHECK green. The −28 vs round-22 = the distinct-context abstentions
+(multi-occurrence quotes whose evidence could not be attributed — exactly the class his Q1/Q2
+example proved unsafe) + strict-parse abstentions; all ride to the reader lane.**
