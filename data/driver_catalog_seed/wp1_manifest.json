@@ -1,6 +1,6 @@
 {
  "wp": "WP1 Step 4 regenerate",
- "code_commit": "4a3577b-dirty",
+ "code_commit": "04d2e1a-dirty",
  "tickers": [
   "A",
   "AA",
@@ -15,15 +15,15 @@
  ],
  "rows_in_slice": 1535,
  "worklist_slice_sha256": "473bda9dcb0513a8e87bc9e438189b52ce196301619108c6c8dec876b14e1559",
- "command": "venv/bin/python scripts/driver_seed/run_code_tier.py --tickers A,AA,AAL,AAPL,ABT,ACI,ACN,ADM,AEE,AFL --tag wp1",
+ "command": "venv/bin/python scripts/driver_seed/run_code_tier.py --worklist data/driver_catalog_seed/wp1_worklist_slice.jsonl --tickers A,AA,AAL,AAPL,ABT,ACI,ACN,ADM,AEE,AFL --tag wp1",
  "then": "venv/bin/python scripts/driver_seed/build_packets.py --tag wp1",
  "claims_scope": "zero fabricated (quote_source=xbrl_fact) records IN THIS COHORT ONLY; older part1-4 artifacts are STALE/INVALID, not regenerated",
  "output_sha256": {
-  "code_resolved.jsonl": "e86e4daf5a151bd0439c70effc2771d5c69e6e6cd8e979b0721a378fb6f96925",
-  "residual.jsonl": "51d37bde6609fac176f3ff4d995bd6c7b367aabea9235cfac0e8e0177919aee6",
+  "code_resolved.jsonl": "28110325c1577a043778540ebbebf81c20939ddcf7488945684aac5ef2bd1134",
+  "residual.jsonl": "1c8be13132e9579800e2e03b1066087afebbae7690b5fe4793d5fb7298e50bcd",
   "abstain.jsonl": "f46729974750f3ea8600f3238513167b4d6a9b12e3dfd08a4858a5935141d0be",
   "code_summary.json": "bf014adf050fbb7e5be59bb8c0dde6b44204cd72cff524c1ed1ff97651067ba9",
-  "packets.jsonl": "2db789b3e5e05d1994ef99eb60bdcd9f9f27886172b947d623f553d0edffac7a",
+  "packets.jsonl": "b55a2a3d24f28c05d478b5553b7c584d3a93e9f5a6bf2a0f504434d10008d9c9",
   "skip_ledger.jsonl": "1136c3fb05367b804b3b8d4817b420f1075acf808fdd58b36cfe9f3039b4422c",
   "park_ledger.jsonl": "5e1f916e523766a26aae7282b73e15d2736ea2ad388822dcc7e2874b1926535e",
   "sources_ledger.jsonl": "758c1debdafd3aa25a2c93b77a52c65ca1e0bb8069a8576ab507e0ccc9e8d0e3"
@@ -123,17 +123,20 @@
   "0001646972-26-000028"
  ],
  "determinism_proof": {
-  "method": "two complete regenerates under FORCED different PYTHONHASHSEED values",
+  "method": "two complete regenerates in a CLEAN DETACHED git worktree at the code commit, reading the COMMITTED input slice, under FORCED different PYTHONHASHSEED values",
+  "commit": "04d2e1a",
+  "workdir": "detached worktree (zero dirty files)",
+  "input": "data/driver_catalog_seed/wp1_worklist_slice.jsonl (committed)",
   "battery_command": "venv/bin/python -m pytest scripts/driver_seed/ driver/relocation/ scripts/earnings/test_get_quarterly_filings.py -q --ignore=scripts/driver_seed/relocate_probe/benchmark",
   "runs": [
    {
     "PYTHONHASHSEED": 1,
     "sha256": {
-     "code_resolved.jsonl": "e86e4daf5a151bd0439c70effc2771d5c69e6e6cd8e979b0721a378fb6f96925",
-     "residual.jsonl": "51d37bde6609fac176f3ff4d995bd6c7b367aabea9235cfac0e8e0177919aee6",
+     "code_resolved.jsonl": "28110325c1577a043778540ebbebf81c20939ddcf7488945684aac5ef2bd1134",
+     "residual.jsonl": "1c8be13132e9579800e2e03b1066087afebbae7690b5fe4793d5fb7298e50bcd",
      "abstain.jsonl": "f46729974750f3ea8600f3238513167b4d6a9b12e3dfd08a4858a5935141d0be",
      "code_summary.json": "bf014adf050fbb7e5be59bb8c0dde6b44204cd72cff524c1ed1ff97651067ba9",
-     "packets.jsonl": "2db789b3e5e05d1994ef99eb60bdcd9f9f27886172b947d623f553d0edffac7a",
+     "packets.jsonl": "b55a2a3d24f28c05d478b5553b7c584d3a93e9f5a6bf2a0f504434d10008d9c9",
      "skip_ledger.jsonl": "1136c3fb05367b804b3b8d4817b420f1075acf808fdd58b36cfe9f3039b4422c",
      "park_ledger.jsonl": "5e1f916e523766a26aae7282b73e15d2736ea2ad388822dcc7e2874b1926535e",
      "sources_ledger.jsonl": "758c1debdafd3aa25a2c93b77a52c65ca1e0bb8069a8576ab507e0ccc9e8d0e3"
@@ -142,11 +145,11 @@
    {
     "PYTHONHASHSEED": 2,
     "sha256": {
-     "code_resolved.jsonl": "e86e4daf5a151bd0439c70effc2771d5c69e6e6cd8e979b0721a378fb6f96925",
-     "residual.jsonl": "51d37bde6609fac176f3ff4d995bd6c7b367aabea9235cfac0e8e0177919aee6",
+     "code_resolved.jsonl": "28110325c1577a043778540ebbebf81c20939ddcf7488945684aac5ef2bd1134",
+     "residual.jsonl": "1c8be13132e9579800e2e03b1066087afebbae7690b5fe4793d5fb7298e50bcd",
      "abstain.jsonl": "f46729974750f3ea8600f3238513167b4d6a9b12e3dfd08a4858a5935141d0be",
      "code_summary.json": "bf014adf050fbb7e5be59bb8c0dde6b44204cd72cff524c1ed1ff97651067ba9",
-     "packets.jsonl": "2db789b3e5e05d1994ef99eb60bdcd9f9f27886172b947d623f553d0edffac7a",
+     "packets.jsonl": "b55a2a3d24f28c05d478b5553b7c584d3a93e9f5a6bf2a0f504434d10008d9c9",
      "skip_ledger.jsonl": "1136c3fb05367b804b3b8d4817b420f1075acf808fdd58b36cfe9f3039b4422c",
      "park_ledger.jsonl": "5e1f916e523766a26aae7282b73e15d2736ea2ad388822dcc7e2874b1926535e",
      "sources_ledger.jsonl": "758c1debdafd3aa25a2c93b77a52c65ca1e0bb8069a8576ab507e0ccc9e8d0e3"
@@ -158,7 +161,6 @@
  "dirty_files": [
   "M scripts/driver_seed/relocate_probe/codex_reader.py",
   " M scripts/driver_seed/relocate_probe/relocate_batch.js",
-  " M scripts/driver_seed/wp1_verify.py",
   "?? scripts/driver_seed/ab_lean.js",
   "?? scripts/driver_seed/relocate_probe/batches_exam_annual_codex",
   "?? scripts/driver_seed/relocate_probe/batches_exam_madrift_codex",

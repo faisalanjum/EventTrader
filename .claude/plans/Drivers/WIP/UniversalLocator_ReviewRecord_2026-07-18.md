@@ -780,3 +780,30 @@ the XBRL-ambiguity sentence goes to Universal Locator §3 only after this pass i
 **FINAL (stamped against `4a3577b`+verifier follow-up): 286 resolved (T1 104 · T2 182 · 8-K 69) ·
 442 residual · 997 abstain · 2 parks · battery 109/109 · floors 28/28 · verify RECORD+CHECK
 green · determinism proven with per-seed hash sets stamped.**
+
+## Round 19 (ChatGPT, 2026-07-19) — THREE claims, ALL CONFIRMED by my own reproductions (incl.
+## his commit arithmetic beating my hand-count: 19 unpushed, not my claimed 23 — counts come
+## from `git rev-list`, never memory). Commits `04d2e1a` (code) + artifacts.
+1. **Multi-axis country facts reversed — CONFIRMED both directions.** [country:US, IPhoneMember]
+   bound plain 'United States Revenue' AND rejected 'United States iPhone Revenue' (my round-18
+   gate compared the KPI against ONLY the country tokens). Fix: with a country member present,
+   the KPI's slice-token set must EQUAL country-name tokens ∪ every co-member's meaningful
+   tokens — the KPI names the WHOLE slice. Verified BEFORE designing: structural co-members
+   (OperatingSegmentsMember) tokenize to ∅, so the common [country, OperatingSegments] pattern
+   keeps binding. Both directions + the seven country pins green. Measured class: 66
+   country+co-member facts across the pinned filings (his 132 = different counting basis).
+2. **Canonical-order fill evicted better evidence — CONFIRMED by reading.** Round-18's
+   stop-at-N kept the first-N in canonical order, not the best-N. Fix: prune-by-RANK at 4×
+   max_hits (bounded memory, full scan, content-total sort at every prune) — the
+   strong-match-at-position-21 test pins it. Still input-order-free and deterministic.
+3. **Reproducibility — ALL SUB-CLAIMS CONFIRMED:** the run read the IGNORED full worklist (fix:
+   `--worklist`, pinned command now reads the COMMITTED slice); CHECK ignored the seed records
+   (fix: `_validate_determinism` — stale/hand-edited proofs fail; it immediately caught my own
+   stamping-order mistake when the report drifted); the stamp was dirty (fix: the double-seed
+   regeneration now runs in a CLEAN DETACHED git worktree at `04d2e1a` — zero dirty files —
+   reading the committed slice, HTML cache linked in; per-seed hash sets byte-identical and
+   stamped with the clean commit + method + battery command; the main-tree `code_commit` env
+   stamp keeps naming its own dirt as raw porcelain lines).
+**FINAL (clean-run proof at `04d2e1a`): 286 resolved (T1 104 · T2 182 · 8-K 69) · 442 residual ·
+997 abstain · 2 parks · battery 111/111 · floors 28/28 · verify RECORD+CHECK green (CHECK now
+also validates both seed records).**

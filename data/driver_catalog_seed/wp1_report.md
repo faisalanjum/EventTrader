@@ -2,7 +2,7 @@
 
 Manifest (incl. output sha256s): `data/driver_catalog_seed/wp1_manifest.json` · slice sha `473bda9dcb0513a8…` ·
 committed input slice: `data/driver_catalog_seed/wp1_worklist_slice.jsonl` (re-hashes to the same sha)
-Command: `venv/bin/python scripts/driver_seed/run_code_tier.py --tickers A,AA,AAL,AAPL,ABT,ACI,ACN,ADM,AEE,AFL --tag wp1` · verifier: `scripts/driver_seed/wp1_verify.py` (CHECK-ONLY default;
+Command: `venv/bin/python scripts/driver_seed/run_code_tier.py --worklist data/driver_catalog_seed/wp1_worklist_slice.jsonl --tickers A,AA,AAL,AAPL,ABT,ACI,ACN,ADM,AEE,AFL --tag wp1` · verifier: `scripts/driver_seed/wp1_verify.py` (CHECK-ONLY default;
 all checks finish before anything is written; `--record` stamps only after every assertion passed).
 
 ## Mechanical compliance (safety checks — NOT precision; true P/R = WP4)
