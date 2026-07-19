@@ -1,0 +1,21 @@
+{
+ "wp": "WP1 Step 4 regenerate",
+ "code_commit": "02d1f07",
+ "tickers": [
+  "A",
+  "AA",
+  "AAL",
+  "AAPL",
+  "ABT",
+  "ACI",
+  "ACN",
+  "ADM",
+  "AEE",
+  "AFL"
+ ],
+ "rows_in_slice": 1535,
+ "worklist_slice_sha256": "473bda9dcb0513a8e87bc9e438189b52ce196301619108c6c8dec876b14e1559",
+ "command": "venv/bin/python scripts/driver_seed/run_code_tier.py --tickers A,AA,AAL,AAPL,ABT,ACI,ACN,ADM,AEE,AFL --tag wp1",
+ "then": "venv/bin/python scripts/driver_seed/build_packets.py --tag wp1",
+ "claims_scope": "zero fabricated (quote_source=xbrl_fact) records IN THIS COHORT ONLY; older part1-4 artifacts are STALE/INVALID, not regenerated"
+}

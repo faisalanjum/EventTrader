@@ -37,6 +37,29 @@ def load_env_neo4j():
 
 
 # --- legacy fetchers (relocate_probe pipeline: prep/grade/oracle/exam depend on these exact signatures) ---
+def fetch_press_release(session, tk, period):
+    """LEGACY BENCHMARK-CORPUS FETCHER — frozen semantics (5-75-day window, EX-99 exhibits).
+    Consumed ONLY by the certified relocation/grading pipelines (grade.py, prep*.py,
+    recall_report.py) whose FROZEN benchmark sets were built with exactly this corpus recipe —
+    changing it would silently re-define the certified floors. The fiscal.ai HARVEST path never
+    uses this: it uses fetch_earnings_8ks (the safe, quarter-identity-gated selector) below.
+    (WP1 lesson: this function was deleted with 10 live consumers — restored verbatim.)"""
+    from datetime import date, timedelta
+    try:
+        d0 = date.fromisoformat(period[:10])
+    except ValueError:
+        return []
+    lo = (d0 + timedelta(days=5)).isoformat(); hi = (d0 + timedelta(days=75)).isoformat()
+    rows = list(session.run(
+        """MATCH (r:Report {formType:'8-K'})-[:PRIMARY_FILER]->(c:Company {ticker:$tk})
+           WHERE r.periodOfReport >= $lo AND r.periodOfReport <= $hi
+           MATCH (r)-[:HAS_EXHIBIT]->(e:ExhibitContent)
+           WHERE e.exhibit_number IN ['EX-99.1','EX-99','99.1']
+           RETURN e.content AS content ORDER BY r.periodOfReport LIMIT 3""",
+        tk=tk, lo=lo, hi=hi))
+    return [x['content'] for x in rows if x['content']]
+
+
 def _8k_gate(info, period):
     """PURE gate for one labeled 8-K (WP1 Step 3). Returns:
       'accept'       — safety_action AUTO_OK and the resolver's own announced period end
