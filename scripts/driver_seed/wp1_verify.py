@@ -54,14 +54,18 @@ def _expect_hashes(saved, computed):
 
 
 def _validate_determinism(man):
-    """Round-19: CHECK validates the stamped seed records — every recorded per-seed hash map
-    must equal the stamped output hashes (a stale or hand-edited proof fails)."""
+    """Round-20 strictness (reviewer: the round-19 version accepted zero or one run): the proof
+    must contain EXACTLY TWO runs under DISTINCT seeds, each with a COMPLETE hash map equal to
+    the stamped outputs."""
     dp = man.get('determinism_proof')
-    if not dp:
-        return
-    for run in dp.get('runs', []):
-        assert run.get('sha256') == man.get('output_sha256'), \
-            f"determinism run (seed {run.get('PYTHONHASHSEED')}) hash map != stamped outputs"
+    assert dp and isinstance(dp.get('runs'), list), "determinism proof missing from the manifest"
+    runs = dp['runs']
+    assert len(runs) == 2, f"need exactly TWO seed runs, got {len(runs)}"
+    seeds = {r.get('PYTHONHASHSEED') for r in runs}
+    assert len(seeds) == 2, f"seed runs must use DISTINCT seeds: {seeds}"
+    for r in runs:
+        assert r.get('sha256') == man.get('output_sha256'), \
+            f"determinism run (seed {r.get('PYTHONHASHSEED')}) hash map != stamped outputs (or incomplete)"
 
 
 def _git_commit():
@@ -99,16 +103,13 @@ def main():
     assert (len(res), len(rem), len(ab)) == (summ['records_resolved'], summ['residual'], summ['abstain']), \
         f"counts != summary: {(len(res), len(rem), len(ab))} vs {summ}"
 
-    # reconciliation by distinct raw-row id (both directions)
-    rows = [json.loads(l) for l in open('data/driver_catalog_seed/worklist.jsonl')
-            if json.loads(l)['ticker'] in set(man['tickers'])]
+    # reconciliation by distinct raw-row id (both directions). Round-20 (reviewer): BOTH modes
+    # read the COMMITTED slice — the ignored full worklist is never a verifier input (bootstrap
+    # of a NEW cohort writes the slice once, separately).
+    assert os.path.exists(SLICE_FILE), "committed input slice missing — clean checkout cannot reproduce"
+    rows = [json.loads(l) for l in open(SLICE_FILE)]
     slice_sha = hashlib.sha256(''.join(sorted(json.dumps(r, sort_keys=True) for r in rows)).encode()).hexdigest()
-    assert slice_sha == man['worklist_slice_sha256'], "worklist slice drifted vs the manifest"
-    if not a.record:
-        assert os.path.exists(SLICE_FILE), "committed input slice missing — clean checkout cannot reproduce"
-        file_rows = [json.loads(l) for l in open(SLICE_FILE)]
-        fs = hashlib.sha256(''.join(sorted(json.dumps(r, sort_keys=True) for r in file_rows)).encode()).hexdigest()
-        assert fs == man['worklist_slice_sha256'], "committed slice file drifted vs the manifest sha"
+    assert slice_sha == man['worklist_slice_sha256'], "committed slice drifted vs the manifest sha"
     uniq_rows, dup_dropped = RC.dedupe_rows(rows)
     raw_ids = {RC._iid(r) for r in uniq_rows}
     assert len(raw_ids) == len(uniq_rows), "distinct rows must have distinct whole-row ids"
@@ -280,9 +281,6 @@ sources: **{len(target_filings)} target filings + {len(accepted_8ks)} accepted 8
         man['unique_targets_ticker_kpi_period'] = uniq_targets
         man['duplicate_rows_collapsed_in_slice'] = dup_dropped
         json.dump(man, open(MAN, 'w'), indent=1)
-        with open(SLICE_FILE, 'w') as f:
-            for r in rows:
-                f.write(json.dumps(r, sort_keys=True) + '\n')
         open(REPORT, 'w').write(rep)
     else:
         on_disk = open(REPORT).read()

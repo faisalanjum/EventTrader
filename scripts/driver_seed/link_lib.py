@@ -345,7 +345,7 @@ SLICE_STOP = set(STOP) | {'total', 'geography', 'segment', 'ebit', 'type', 'marg
                           'volume', 'growth'}
 # structural tokens carried by XBRL member names that don't identify a slice
 GENERIC_MEM = {'member', 'segment', 'segments', 'consolidation', 'consolidated', 'items', 'axis',
-               'reportable', 'entities', 'operating', 'and', 'the', 'of'}
+               'reportable', 'entities', 'operating', 'and', 'the', 'of', 'group'}
 
 
 def slice_tokens(name):
@@ -516,30 +516,26 @@ def tier1(xbrls, name, val, per, is_currency=None):
                 members = sorted(seg_members(fc))   # round-18: canonicalized ONCE, so every
                                                      # emitted field (member text, quote, axes)
                                                      # is dimension-order-free
-                # round-19 country gate (reviewer-reproduced BOTH directions on round-18's
-                # country-only equality: a [country:US, IPhoneMember] fact wrongly bound plain
-                # 'United States Revenue' and wrongly rejected 'United States iPhone Revenue'):
-                # when a country member is present, the KPI's slice-token set must EQUAL the
-                # union of the country names' tokens AND every co-member's meaningful tokens —
-                # the KPI must name the WHOLE slice. Structural co-members (OperatingSegments
-                # etc.) tokenize to nothing and change nothing. Fail closed; no fuzzy geography.
-                _ctk = set()
-                _has_country = False
-                _cgate_fail = False
-                _co_members = []
+                # round-20 (reviewer-generalized from the country rule): FULL-SLICE PROOF
+                # for EVERY dimension — the KPI's slice-token set must EQUAL the union of every
+                # member's meaningful tokens (country codes expand via the ISO names; structural
+                # members tokenize to ∅ = the exact already-proven class and change nothing).
+                # [Alpha, Beta] never binds plain 'Alpha Revenue'; US+Canada never binds US;
+                # identical member names under different axes still bind when the KPI names them.
+                _need = set()
+                _gate_fail = False
                 for _mm in members:
                     _pre, _, _loc = str(_mm).rpartition(':')
                     if _pre == 'country':
-                        _has_country = True
                         _nm = COUNTRY_NAME.get(_loc.upper())
                         if not _nm:
-                            _cgate_fail = True
+                            _gate_fail = True
                             break
-                        _ctk |= {w for w in re.findall(r"[A-Za-z]{3,}", _nm.lower())
-                                 if w not in SLICE_STOP}   # both sides share ONE normalization
+                        _need |= {w for w in re.findall(r"[A-Za-z]{3,}", _nm.lower())
+                                  if w not in SLICE_STOP}   # both sides share ONE normalization
                     else:
-                        _co_members.append(_mm)
-                if _cgate_fail or (_has_country and (_ctk | member_tokens(_co_members)) != kt):
+                        _need |= member_tokens([_mm])
+                if _gate_fail or (members and kt and _need != kt):
                     continue
                 mt = member_tokens(members)
                 if kt:
@@ -716,8 +712,10 @@ def scan_text(texts, name, val, fmt, max_hits=20, keep=6, scale_gate=False):
                     continue
                 ws = _snippet_start(t, m.start(), nt)
                 snip = t[ws:m.end()+80]           # RAW slice — snippets are source text (WP1)
-                low = snip.lower()
-                score = (2 if '##TABLE_START' in snip else 0) + sum(1 for tk in ntl if tk in low)
+                pre = snip[:m.start() - ws].lower()   # round-20: rank on the text BEFORE the
+                score = (2 if '##TABLE_START' in snip else 0) + sum(   # value, WHOLE WORDS only —
+                    1 for tk in ntl                                    # 'net' scores 0 inside
+                    if re.search(r'(?<![a-z0-9])' + re.escape(tk) + r'(?![a-z0-9])', pre))  # 'internet'
                 cands.append((score, len(snip), snip))
                 if len(cands) >= max_hits * 4:          # round-19: BOUNDED MEMORY without blind
                     cands.sort(key=lambda c: (-c[0], c[1], c[2]))   # eviction — prune by RANK, so
@@ -726,7 +724,7 @@ def scan_text(texts, name, val, fmt, max_hits=20, keep=6, scale_gate=False):
                                                         # round-18 stop-at-N kept the first-N in
                                                         # canonical order, not the best-N)
     cands.sort(key=lambda c: (-c[0], c[1], c[2]))      # score, length, CONTENT — total order
-    return strict, [c[2] for c in cands[:keep]]
+    return strict, [c[2] for c in cands[:min(keep, max_hits)]]   # round-20: max_hits is honored
 
 
 # is_derived moved to fiscal_ai_rules.py (2026-07-15) — it is a fiscal.ai VENDOR-label rule, not shared

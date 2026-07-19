@@ -370,7 +370,7 @@ def test_reversed_dimension_order_canonical():
     """Round-18 (reviewer: axis list was sorted but member text and quote were NOT): reversing a
     fact's dimension list must produce a FULLY identical record — every field."""
     segs = [{'dimension': 'us-gaap:StatementBusinessSegmentsAxis', 'value': 'x:AlphaMember'},
-            {'dimension': 'srt:StatementGeographicalAxis', 'value': 'x:BetaLandMember'}]
+            {'dimension': 'srt:StatementGeographicalAxis', 'value': 'x:BetalandMember'}]
     a = blob('Revenues', [fact('5000', '2024-01-01', '2024-12-31', unit='U_USD', seg=segs)])
     b = blob('Revenues', [fact('5000', '2024-01-01', '2024-12-31', unit='U_USD', seg=list(reversed(segs)))])
     ra = L.tier1([a], 'alpha betaland revenue', 5000, '2024-12-31', is_currency=1)
@@ -456,3 +456,38 @@ def test_strong_match_at_position_21_survives():
     assert snips and 'z ' [0] in snips[0][:1] or '##TABLE_START' in snips[0], snips[:1]
     assert any('##TABLE_START' in sn for sn in snips), "strong table match evicted by weak fill"
     print("[ok] rank-based retention: position-21 strong evidence survives")
+
+
+def test_full_slice_proof_for_all_dimensions():
+    """Round-20 (reviewer-reproduced): slice completeness must hold for EVERY meaningful member,
+    not only country: — [Alpha, Beta] must not bind plain 'Alpha Revenue' (Beta unproven);
+    'Alpha Beta Revenue' binds; identical member names under DIFFERENT axes stay bindable;
+    structural members (already-proven exact ∅-token class) change nothing."""
+    ab = blob('Revenues', [fact('100', '2024-01-01', '2024-12-31', unit='U_USD', seg=[
+        {'dimension': 'x:AxisOne', 'value': 'x:AlphaMember'},
+        {'dimension': 'x:AxisTwo', 'value': 'x:BetaMember'}])])
+    assert L.tier1([ab], 'Alpha Revenue', 100, '2024-12-31', is_currency=1) is None
+    assert L.tier1([ab], 'Alpha Beta Revenue', 100, '2024-12-31', is_currency=1) is not None
+    dup = blob('Revenues', [fact('200', '2024-01-01', '2024-12-31', unit='U_USD', seg=[
+        {'dimension': 'x:AxisOne', 'value': 'x:AlphaMember'},
+        {'dimension': 'x:AxisTwo', 'value': 'y:AlphaMember'}])])
+    assert L.tier1([dup], 'Alpha Revenue', 200, '2024-12-31', is_currency=1) is not None
+    st = blob('Revenues', [fact('300', '2024-01-01', '2024-12-31', unit='U_USD', seg=[
+        {'dimension': 'x:AxisOne', 'value': 'x:AlphaMember'},
+        {'dimension': 'us-gaap:StatementBusinessSegmentsAxis',
+         'value': 'us-gaap:OperatingSegmentsMember'}])])
+    assert L.tier1([st], 'Alpha Revenue', 300, '2024-12-31', is_currency=1) is not None
+    print("[ok] full-slice proof for every dimension; structural members exempt")
+
+
+def test_ranking_whole_words_before_value_and_cap():
+    """Round-20: rank candidates by WHOLE-WORD label tokens in the text BEFORE the value —
+    'Internet' lines score zero for a 'Net' KPI; the exact 'Net Revenue' line ranks first.
+    max_hits is an honored return cap (5 in -> never more than 5 out) and pruning actually
+    triggers past 4x max_hits."""
+    texts = [f'a{i:02d} Internet Revenue was 5,432 in region {i}' for i in range(30)]
+    texts += ['z Net Revenue totalled 5,432 for the year']
+    strict, snips = L.scan_text(texts, 'Net Revenue', 5432, 'number', max_hits=5)
+    assert len(snips) <= 5, len(snips)
+    assert 'Net Revenue totalled' in snips[0], snips[0]     # the true whole-word line ranks FIRST
+    print("[ok] whole-word pre-value ranking; max_hits honored; pruning exercised")

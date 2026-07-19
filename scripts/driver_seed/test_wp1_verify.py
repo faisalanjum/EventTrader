@@ -29,3 +29,27 @@ def test_hash_check_requires_and_compares():
     with pytest.raises(AssertionError, match='mismatch'):
         V._expect_hashes({'x.jsonl': 'aa'}, {'x.jsonl': 'aa', 'y.jsonl': 'cc'})
     print("[ok] check mode compares saved hashes, never restamps")
+
+
+def test_determinism_validation_requires_two_distinct_complete_seeds():
+    """Round-20 (reviewer): zero or one seed run must FAIL; exactly two runs with DISTINCT seeds,
+    each complete and matching the stamped hashes, pass."""
+    H = {f'f{i}.jsonl': f'h{i}' for i in range(8)}
+    good = {'output_sha256': H, 'determinism_proof': {'runs': [
+        {'PYTHONHASHSEED': 1, 'sha256': dict(H)}, {'PYTHONHASHSEED': 2, 'sha256': dict(H)}]}}
+    V._validate_determinism(good)
+    for bad_runs in ([],
+                     [{'PYTHONHASHSEED': 1, 'sha256': dict(H)}],
+                     [{'PYTHONHASHSEED': 1, 'sha256': dict(H)}, {'PYTHONHASHSEED': 1, 'sha256': dict(H)}],
+                     [{'PYTHONHASHSEED': 1, 'sha256': dict(H)}, {'PYTHONHASHSEED': 2, 'sha256': {'f0.jsonl': 'h0'}}]):
+        try:
+            V._validate_determinism({'output_sha256': H, 'determinism_proof': {'runs': bad_runs}})
+            raise SystemExit(f"accepted invalid runs: {bad_runs}")
+        except AssertionError:
+            pass
+    try:
+        V._validate_determinism({'output_sha256': H})
+        raise SystemExit("accepted a manifest with NO determinism proof")
+    except AssertionError:
+        pass
+    print("[ok] determinism proof: exactly two distinct complete matching seed runs required")
