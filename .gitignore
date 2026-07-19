@@ -127,4 +127,11 @@ scripts/fiscal_ai_scraper/
 scripts/fiscal_ai_scraper/.venv/
 scripts/fiscal_ai_scraper/output/
 
+# Liquid social feed — runtime state + event log (regenerable, never commit)
+data/liquid_social_feed/.trackers_state.json
+data/liquid_social_feed/trackers_events.jsonl
+
+# Hyperliquid prices — appended time-series snapshots (regenerable, never commit)
+data/hyperliquid_24x7_prices/*.jsonl
+
 scripts/driver_seed/relocate_probe/inline_html_cache/

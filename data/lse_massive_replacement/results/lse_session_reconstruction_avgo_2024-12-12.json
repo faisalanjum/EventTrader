@@ -1,0 +1,65 @@
+{
+  "cases": {
+    "AVGO:2024-12-12": {
+      "exchange_session_utc": {
+        "close": "2024-12-12T21:00:00+00:00",
+        "open": "2024-12-12T14:30:00+00:00"
+      },
+      "lse_minute_rows": {
+        "all_day_count": 958,
+        "first_all_day_ts": "2024-12-12 00:00:00.000000",
+        "last_all_day_ts": "2024-12-12 23:59:00.000000",
+        "regular_session_count": 390,
+        "zero_volume_all_day": 0
+      },
+      "lse_raw_daily": {
+        "close": 207.47,
+        "high": 209.9,
+        "low": 175.97,
+        "open": 182.86,
+        "symbol": "AVGO",
+        "ts": "2024-12-12 00:00:00.000000",
+        "volume": 28366860
+      },
+      "lse_regular_session_from_minutes": {
+        "close": 180.91,
+        "first_ts": "2024-12-12 14:30:00.000000",
+        "high": 182.0,
+        "last_ts": "2024-12-12 20:59:00.000000",
+        "low": 175.97,
+        "open": 181.0,
+        "row_count": 390,
+        "volume": 13679578.0
+      },
+      "massive_derived_graph_daily": {
+        "close": 180.66,
+        "daily_return": -1.39,
+        "date": "2024-12-12",
+        "high": 182.0,
+        "low": 175.99,
+        "open": 180.93,
+        "symbol": "AVGO",
+        "timestamp": "2024-12-12 16:00:00-0500",
+        "transactions": 531173.0,
+        "volume": 46958170.0,
+        "vwap": 183.8315
+      },
+      "raw_daily_minus_graph": {
+        "close": 26.810000000000002,
+        "high": 27.900000000000006,
+        "low": -0.020000000000010232,
+        "open": 1.9300000000000068,
+        "volume": -18591310.0
+      },
+      "reconstructed_minus_graph": {
+        "close": 0.25,
+        "high": 0.0,
+        "low": -0.020000000000010232,
+        "open": 0.06999999999999318,
+        "volume": -33278592.0
+      }
+    }
+  },
+  "generated_at_utc": "2026-07-19T15:14:47+00:00",
+  "safety": "LSE key was not printed or saved; Neo4j was read-only."
+}

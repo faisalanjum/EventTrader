@@ -1,0 +1,6820 @@
+{
+  "generated_at_utc": "2026-07-19T14:12:51Z",
+  "queries": {
+    "dividend_relationships": {
+      "ok": true,
+      "rows": [
+        {
+          "relationship_type": "DECLARED_DIVIDEND",
+          "relationships": 4546,
+          "source_labels": [
+            "Company"
+          ]
+        },
+        {
+          "relationship_type": "HAS_DIVIDEND",
+          "relationships": 4510,
+          "source_labels": [
+            "Date"
+          ]
+        }
+      ]
+    },
+    "dividend_summary": {
+      "ok": true,
+      "rows": [
+        {
+          "cash_amount": 4556,
+          "currency": 4556,
+          "dividend_type": 4556,
+          "ex_dividend_date": 4556,
+          "first_declaration_date": "2023-01-03",
+          "frequency": 4556,
+          "last_declaration_date": "2026-04-27",
+          "nodes": 4556,
+          "pay_date": 4556,
+          "record_date": 4556,
+          "tickers": 433
+        }
+      ]
+    },
+    "event_return_locations": {
+      "ok": true,
+      "rows": [
+        {
+          "daily_industry": 347861,
+          "daily_macro": 348512,
+          "daily_sector": 348512,
+          "daily_stock": 345016,
+          "first_relationship_created_at": "2021-01-01T11:22:56-05:00",
+          "hourly_industry": 347019,
+          "hourly_macro": 348549,
+          "hourly_sector": 348422,
+          "hourly_stock": 345103,
+          "last_relationship_created_at": "2026-04-27T19:30:22-04:00",
+          "relationship_type": "INFLUENCES",
+          "relationships": 348549,
+          "session_industry": 347081,
+          "session_macro": 348512,
+          "session_sector": 348410,
+          "session_stock": 345066,
+          "source_labels": [
+            "News"
+          ],
+          "target_labels": [
+            "Company"
+          ]
+        },
+        {
+          "daily_industry": 347859,
+          "daily_macro": 0,
+          "daily_sector": 0,
+          "daily_stock": 0,
+          "first_relationship_created_at": "2021-01-01T11:22:56-05:00",
+          "hourly_industry": 346678,
+          "hourly_macro": 0,
+          "hourly_sector": 0,
+          "hourly_stock": 0,
+          "last_relationship_created_at": "2026-04-27T19:30:22-04:00",
+          "relationship_type": "INFLUENCES",
+          "relationships": 347930,
+          "session_industry": 346762,
+          "session_macro": 0,
+          "session_sector": 0,
+          "session_stock": 0,
+          "source_labels": [
+            "News"
+          ],
+          "target_labels": [
+            "Industry"
+          ]
+        },
+        {
+          "daily_industry": 0,
+          "daily_macro": 348512,
+          "daily_sector": 0,
+          "daily_stock": 0,
+          "first_relationship_created_at": "2021-01-01T11:22:56-05:00",
+          "hourly_industry": 0,
+          "hourly_macro": 348549,
+          "hourly_sector": 0,
+          "hourly_stock": 0,
+          "last_relationship_created_at": "2026-04-27T19:30:22-04:00",
+          "relationship_type": "INFLUENCES",
+          "relationships": 348549,
+          "session_industry": 0,
+          "session_macro": 348512,
+          "session_sector": 0,
+          "session_stock": 0,
+          "source_labels": [
+            "News"
+          ],
+          "target_labels": [
+            "MarketIndex"
+          ]
+        },
+        {
+          "daily_industry": 0,
+          "daily_macro": 0,
+          "daily_sector": 348512,
+          "daily_stock": 0,
+          "first_relationship_created_at": "2021-01-01T11:22:56-05:00",
+          "hourly_industry": 0,
+          "hourly_macro": 0,
+          "hourly_sector": 348365,
+          "hourly_stock": 0,
+          "last_relationship_created_at": "2026-04-27T19:30:22-04:00",
+          "relationship_type": "INFLUENCES",
+          "relationships": 348549,
+          "session_industry": 0,
+          "session_macro": 0,
+          "session_sector": 348361,
+          "session_stock": 0,
+          "source_labels": [
+            "News"
+          ],
+          "target_labels": [
+            "Sector"
+          ]
+        },
+        {
+          "daily_industry": 42491,
+          "daily_macro": 0,
+          "daily_sector": 0,
+          "daily_stock": 0,
+          "first_relationship_created_at": "2023-01-03T11:08:47+00:00",
+          "hourly_industry": 42349,
+          "hourly_macro": 0,
+          "hourly_sector": 0,
+          "hourly_stock": 0,
+          "last_relationship_created_at": "2026-04-27T22:23:04+00:00",
+          "relationship_type": "INFLUENCES",
+          "relationships": 42558,
+          "session_industry": 42294,
+          "session_macro": 0,
+          "session_sector": 0,
+          "session_stock": 0,
+          "source_labels": [
+            "Report"
+          ],
+          "target_labels": [
+            "Industry"
+          ]
+        },
+        {
+          "daily_industry": 0,
+          "daily_macro": 42503,
+          "daily_sector": 0,
+          "daily_stock": 0,
+          "first_relationship_created_at": "2023-01-03T11:08:47+00:00",
+          "hourly_industry": 0,
+          "hourly_macro": 42566,
+          "hourly_sector": 0,
+          "hourly_stock": 0,
+          "last_relationship_created_at": "2026-04-27T22:23:04+00:00",
+          "relationship_type": "INFLUENCES",
+          "relationships": 42566,
+          "session_industry": 0,
+          "session_macro": 42518,
+          "session_sector": 0,
+          "session_stock": 0,
+          "source_labels": [
+            "Report"
+          ],
+          "target_labels": [
+            "MarketIndex"
+          ]
+        },
+        {
+          "daily_industry": 0,
+          "daily_macro": 0,
+          "daily_sector": 42503,
+          "daily_stock": 0,
+          "first_relationship_created_at": "2023-01-03T11:08:47+00:00",
+          "hourly_industry": 0,
+          "hourly_macro": 0,
+          "hourly_sector": 42515,
+          "hourly_stock": 0,
+          "last_relationship_created_at": "2026-04-27T22:23:04+00:00",
+          "relationship_type": "INFLUENCES",
+          "relationships": 42566,
+          "session_industry": 0,
+          "session_macro": 0,
+          "session_sector": 42475,
+          "session_stock": 0,
+          "source_labels": [
+            "Report"
+          ],
+          "target_labels": [
+            "Sector"
+          ]
+        },
+        {
+          "daily_industry": 42096,
+          "daily_macro": 42129,
+          "daily_sector": 42129,
+          "daily_stock": 41390,
+          "first_relationship_created_at": "2023-01-03T11:08:47+00:00",
+          "hourly_industry": 42031,
+          "hourly_macro": 42191,
+          "hourly_sector": 42164,
+          "hourly_stock": 41449,
+          "last_relationship_created_at": "2026-04-27T22:23:04+00:00",
+          "relationship_type": "PRIMARY_FILER",
+          "relationships": 42191,
+          "session_industry": 41975,
+          "session_macro": 42144,
+          "session_sector": 42121,
+          "session_stock": 41403,
+          "source_labels": [
+            "Report"
+          ],
+          "target_labels": [
+            "Company"
+          ]
+        },
+        {
+          "daily_industry": 518,
+          "daily_macro": 518,
+          "daily_sector": 518,
+          "daily_stock": 445,
+          "first_relationship_created_at": "2023-01-09T21:09:25+00:00",
+          "hourly_industry": 517,
+          "hourly_macro": 519,
+          "hourly_sector": 519,
+          "hourly_stock": 446,
+          "last_relationship_created_at": "2026-04-27T20:15:18+00:00",
+          "relationship_type": "REFERENCED_IN",
+          "relationships": 519,
+          "session_industry": 516,
+          "session_macro": 518,
+          "session_sector": 518,
+          "session_stock": 445,
+          "source_labels": [
+            "Report"
+          ],
+          "target_labels": [
+            "Company"
+          ]
+        },
+        {
+          "daily_industry": 9585,
+          "daily_macro": 9597,
+          "daily_sector": 9597,
+          "daily_stock": 9373,
+          "first_relationship_created_at": "2023-01-05T08:30:00-05:00",
+          "hourly_industry": 9585,
+          "hourly_macro": 9597,
+          "hourly_sector": 9597,
+          "hourly_stock": 9373,
+          "last_relationship_created_at": "2026-04-24T11:00:00-04:00",
+          "relationship_type": "INFLUENCES",
+          "relationships": 9597,
+          "session_industry": 9585,
+          "session_macro": 9597,
+          "session_sector": 9597,
+          "session_stock": 9373,
+          "source_labels": [
+            "Transcript"
+          ],
+          "target_labels": [
+            "Company"
+          ]
+        },
+        {
+          "daily_industry": 9585,
+          "daily_macro": 0,
+          "daily_sector": 0,
+          "daily_stock": 0,
+          "first_relationship_created_at": "2023-01-05T08:30:00-05:00",
+          "hourly_industry": 9585,
+          "hourly_macro": 0,
+          "hourly_sector": 0,
+          "hourly_stock": 0,
+          "last_relationship_created_at": "2026-04-24T11:00:00-04:00",
+          "relationship_type": "INFLUENCES",
+          "relationships": 9585,
+          "session_industry": 9585,
+          "session_macro": 0,
+          "session_sector": 0,
+          "session_stock": 0,
+          "source_labels": [
+            "Transcript"
+          ],
+          "target_labels": [
+            "Industry"
+          ]
+        },
+        {
+          "daily_industry": 0,
+          "daily_macro": 9597,
+          "daily_sector": 0,
+          "daily_stock": 0,
+          "first_relationship_created_at": "2023-01-05T08:30:00-05:00",
+          "hourly_industry": 0,
+          "hourly_macro": 9597,
+          "hourly_sector": 0,
+          "hourly_stock": 0,
+          "last_relationship_created_at": "2026-04-24T11:00:00-04:00",
+          "relationship_type": "INFLUENCES",
+          "relationships": 9597,
+          "session_industry": 0,
+          "session_macro": 9597,
+          "session_sector": 0,
+          "session_stock": 0,
+          "source_labels": [
+            "Transcript"
+          ],
+          "target_labels": [
+            "MarketIndex"
+          ]
+        },
+        {
+          "daily_industry": 0,
+          "daily_macro": 0,
+          "daily_sector": 9597,
+          "daily_stock": 0,
+          "first_relationship_created_at": "2023-01-05T08:30:00-05:00",
+          "hourly_industry": 0,
+          "hourly_macro": 0,
+          "hourly_sector": 9597,
+          "hourly_stock": 0,
+          "last_relationship_created_at": "2026-04-24T11:00:00-04:00",
+          "relationship_type": "INFLUENCES",
+          "relationships": 9597,
+          "session_industry": 0,
+          "session_macro": 0,
+          "session_sector": 9597,
+          "session_stock": 0,
+          "source_labels": [
+            "Transcript"
+          ],
+          "target_labels": [
+            "Sector"
+          ]
+        }
+      ]
+    },
+    "event_return_property_inventory": {
+      "ok": true,
+      "rows": [
+        {
+          "property": "daily_industry",
+          "relationship_type": "INFLUENCES",
+          "relationships": 757381
+        },
+        {
+          "property": "daily_macro",
+          "relationship_type": "INFLUENCES",
+          "relationships": 758721
+        },
+        {
+          "property": "daily_sector",
+          "relationship_type": "INFLUENCES",
+          "relationships": 758721
+        },
+        {
+          "property": "daily_stock",
+          "relationship_type": "INFLUENCES",
+          "relationships": 354389
+        },
+        {
+          "property": "hourly_industry",
+          "relationship_type": "INFLUENCES",
+          "relationships": 755216
+        },
+        {
+          "property": "hourly_macro",
+          "relationship_type": "INFLUENCES",
+          "relationships": 758858
+        },
+        {
+          "property": "hourly_sector",
+          "relationship_type": "INFLUENCES",
+          "relationships": 758496
+        },
+        {
+          "property": "hourly_stock",
+          "relationship_type": "INFLUENCES",
+          "relationships": 354476
+        },
+        {
+          "property": "session_industry",
+          "relationship_type": "INFLUENCES",
+          "relationships": 755307
+        },
+        {
+          "property": "session_macro",
+          "relationship_type": "INFLUENCES",
+          "relationships": 758736
+        },
+        {
+          "property": "session_sector",
+          "relationship_type": "INFLUENCES",
+          "relationships": 758440
+        },
+        {
+          "property": "session_stock",
+          "relationship_type": "INFLUENCES",
+          "relationships": 354439
+        },
+        {
+          "property": "daily_industry",
+          "relationship_type": "PRIMARY_FILER",
+          "relationships": 42096
+        },
+        {
+          "property": "daily_macro",
+          "relationship_type": "PRIMARY_FILER",
+          "relationships": 42129
+        },
+        {
+          "property": "daily_sector",
+          "relationship_type": "PRIMARY_FILER",
+          "relationships": 42129
+        },
+        {
+          "property": "daily_stock",
+          "relationship_type": "PRIMARY_FILER",
+          "relationships": 41390
+        },
+        {
+          "property": "hourly_industry",
+          "relationship_type": "PRIMARY_FILER",
+          "relationships": 42031
+        },
+        {
+          "property": "hourly_macro",
+          "relationship_type": "PRIMARY_FILER",
+          "relationships": 42191
+        },
+        {
+          "property": "hourly_sector",
+          "relationship_type": "PRIMARY_FILER",
+          "relationships": 42164
+        },
+        {
+          "property": "hourly_stock",
+          "relationship_type": "PRIMARY_FILER",
+          "relationships": 41449
+        },
+        {
+          "property": "session_industry",
+          "relationship_type": "PRIMARY_FILER",
+          "relationships": 41975
+        },
+        {
+          "property": "session_macro",
+          "relationship_type": "PRIMARY_FILER",
+          "relationships": 42144
+        },
+        {
+          "property": "session_sector",
+          "relationship_type": "PRIMARY_FILER",
+          "relationships": 42121
+        },
+        {
+          "property": "session_stock",
+          "relationship_type": "PRIMARY_FILER",
+          "relationships": 41403
+        },
+        {
+          "property": "daily_industry",
+          "relationship_type": "REFERENCED_IN",
+          "relationships": 518
+        },
+        {
+          "property": "daily_macro",
+          "relationship_type": "REFERENCED_IN",
+          "relationships": 518
+        },
+        {
+          "property": "daily_sector",
+          "relationship_type": "REFERENCED_IN",
+          "relationships": 518
+        },
+        {
+          "property": "daily_stock",
+          "relationship_type": "REFERENCED_IN",
+          "relationships": 445
+        },
+        {
+          "property": "hourly_industry",
+          "relationship_type": "REFERENCED_IN",
+          "relationships": 517
+        },
+        {
+          "property": "hourly_macro",
+          "relationship_type": "REFERENCED_IN",
+          "relationships": 519
+        },
+        {
+          "property": "hourly_sector",
+          "relationship_type": "REFERENCED_IN",
+          "relationships": 519
+        },
+        {
+          "property": "hourly_stock",
+          "relationship_type": "REFERENCED_IN",
+          "relationships": 446
+        },
+        {
+          "property": "session_industry",
+          "relationship_type": "REFERENCED_IN",
+          "relationships": 516
+        },
+        {
+          "property": "session_macro",
+          "relationship_type": "REFERENCED_IN",
+          "relationships": 518
+        },
+        {
+          "property": "session_sector",
+          "relationship_type": "REFERENCED_IN",
+          "relationships": 518
+        },
+        {
+          "property": "session_stock",
+          "relationship_type": "REFERENCED_IN",
+          "relationships": 445
+        }
+      ]
+    },
+    "event_return_source_span": {
+      "ok": true,
+      "rows": [
+        {
+          "first_source_time": "2021-01-01T11:22:56-05:00",
+          "last_source_time": "2026-04-27T19:30:22-04:00",
+          "relationship_type": "INFLUENCES",
+          "relationships": 348549,
+          "source_labels": [
+            "News"
+          ]
+        },
+        {
+          "first_source_time": "2023-01-03T06:08:47-05:00",
+          "last_source_time": "2026-04-27T18:23:04-04:00",
+          "relationship_type": "PRIMARY_FILER",
+          "relationships": 42191,
+          "source_labels": [
+            "Report"
+          ]
+        },
+        {
+          "first_source_time": "2023-01-09T16:09:25-05:00",
+          "last_source_time": "2026-04-27T16:15:18-04:00",
+          "relationship_type": "REFERENCED_IN",
+          "relationships": 519,
+          "source_labels": [
+            "Report"
+          ]
+        },
+        {
+          "first_source_time": "2023-01-05T08:30:00-05:00",
+          "last_source_time": "2026-04-24T11:00:00-04:00",
+          "relationship_type": "INFLUENCES",
+          "relationships": 9597,
+          "source_labels": [
+            "Transcript"
+          ]
+        }
+      ]
+    },
+    "has_price_by_target_label": {
+      "ok": true,
+      "rows": [
+        {
+          "close": 655858,
+          "daily_return": 655858,
+          "high": 655858,
+          "low": 655858,
+          "open": 655858,
+          "relationships": 655858,
+          "target_label": "Company",
+          "timestamp": 655858,
+          "transactions": 655858,
+          "volume": 655858,
+          "vwap": 655858
+        },
+        {
+          "close": 43141,
+          "daily_return": 43141,
+          "high": 43141,
+          "low": 43141,
+          "open": 43141,
+          "relationships": 43141,
+          "target_label": "Industry",
+          "timestamp": 43141,
+          "transactions": 43141,
+          "volume": 43141,
+          "vwap": 43141
+        },
+        {
+          "close": 831,
+          "daily_return": 831,
+          "high": 831,
+          "low": 831,
+          "open": 831,
+          "relationships": 831,
+          "target_label": "MarketIndex",
+          "timestamp": 831,
+          "transactions": 831,
+          "volume": 831,
+          "vwap": 831
+        },
+        {
+          "close": 9141,
+          "daily_return": 9141,
+          "high": 9141,
+          "low": 9141,
+          "open": 9141,
+          "relationships": 9141,
+          "target_label": "Sector",
+          "timestamp": 9141,
+          "transactions": 9141,
+          "volume": 9141,
+          "vwap": 9141
+        }
+      ]
+    },
+    "has_price_property_inventory": {
+      "ok": true,
+      "rows": [
+        {
+          "property": "close",
+          "relationships": 708971
+        },
+        {
+          "property": "daily_return",
+          "relationships": 708971
+        },
+        {
+          "property": "high",
+          "relationships": 708971
+        },
+        {
+          "property": "low",
+          "relationships": 708971
+        },
+        {
+          "property": "open",
+          "relationships": 708971
+        },
+        {
+          "property": "timestamp",
+          "relationships": 708971
+        },
+        {
+          "property": "transactions",
+          "relationships": 708971
+        },
+        {
+          "property": "volume",
+          "relationships": 708971
+        },
+        {
+          "property": "vwap",
+          "relationships": 708971
+        }
+      ]
+    },
+    "has_price_summary": {
+      "ok": true,
+      "rows": [
+        {
+          "dates_with_prices": 831,
+          "distinct_symbols": 860,
+          "first_date": "2023-01-03",
+          "last_date": "2026-04-27",
+          "relationships": 708971
+        }
+      ]
+    },
+    "has_price_symbols": {
+      "ok": true,
+      "rows": [
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "A"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AA"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AAL"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AAP"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AAPL"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ABBV"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ABM"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ABNB"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ABT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ACAD"
+        },
+        {
+          "dates": 566,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ACCD"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ACHC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ACI"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ACM"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ACMR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ACN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ADBE"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ADC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ADI"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ADM"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ADNT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ADSK"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AEE"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AEIS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AEP"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AES"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AFL"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AFRM"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AGIO"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AGNC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AHCO"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AI"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AIG"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AIR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AJG"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AKAM"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ALB"
+        },
+        {
+          "dates": 800,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ALEX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ALGN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ALGT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ALK"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ALKS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ALL"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ALLE"
+        },
+        {
+          "dates": 829,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ALNY"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ALSN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ALT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ALV"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AMAT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AMBA"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AMC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AMCX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AMD"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AME"
+        },
+        {
+          "dates": 656,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AMED"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AMG"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AMGN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AMH"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AMP"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AMRC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AMRX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AMT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AMTX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AMZN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ANET"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ANF"
+        },
+        {
+          "dates": 634,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ANSS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "APA"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "APD"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "APH"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "APLS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "APO"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "APPN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ARDX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ARES"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ARMK"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ARRY"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ARVN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ARWR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ASAN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ASH"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ASO"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ATEC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ATO"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ATRC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AUPH"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AVAV"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AVGO"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AVXL"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AVY"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AWI"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AWK"
+        },
+        {
+          "dates": 775,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AXL"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AXSM"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AXTA"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AYI"
+        },
+        {
+          "dates": 623,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AZEK"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "AZO"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "BA"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "BAH"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "BAND"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "BAX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "BBIO"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "BBY"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "BC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "BCRX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "BDX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "BE"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "BEAM"
+        },
+        {
+          "dates": 580,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "BECN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "BEN"
+        },
+        {
+          "dates": 581,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "BERY"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "BFAM"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "BG"
+        },
+        {
+          "dates": 646,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "BIGC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "BILL"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "BJ"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "BK"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "BL"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "BLD"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "BLDR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "BLK"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "BLMN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "BMBL"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "BMY"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "BOOT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "BOX"
+        },
+        {
+          "dates": 636,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "BPMC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "BR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "BRBR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "BRX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "BRZE"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "BSX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "BSY"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "BURL"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "BWA"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "BX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "BXP"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CACI"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CAG"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CAH"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CAKE"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CALX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CARG"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CASY"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CAT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CBOE"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CBRE"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CBRL"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CCK"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CCL"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CDLX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CDNA"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CDW"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CE"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CEG"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CF"
+        },
+        {
+          "dates": 802,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CFLT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CG"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CGNX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CHGG"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CHH"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CHRW"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CHTR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CHWY"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CI"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CIEN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CL"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CLF"
+        },
+        {
+          "dates": 829,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CLSK"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CLX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CMC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CMCSA"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CMG"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CNK"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CNM"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CNS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "COIN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "COO"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "COST"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "COTY"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "COUR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CP"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CPB"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CPRT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CPRX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CPT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CRI"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CRM"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CROX"
+        },
+        {
+          "dates": 829,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CRSP"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CRWD"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CSCO"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CSTL"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CTAS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CTSH"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CTVA"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CVNA"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CVS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CWH"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CWK"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CXM"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CYRX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "CYTK"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "D"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "DAL"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "DAN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "DAR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "DASH"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "DBX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "DDOG"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "DE"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "DECK"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "DELL"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "DGX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "DH"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "DHI"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "DHR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "DIS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "DK"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "DKS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "DLR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "DLTR"
+        },
+        {
+          "dates": 663,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "DNB"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "DNUT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "DOCN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "DOCS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "DOCU"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "DOMO"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "DOV"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "DOW"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "DRI"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "DT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "DTE"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "DUK"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "DUOL"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "DV"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "DVN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "DXC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "DXCM"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "DY"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "EAT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "EBAY"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ECL"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ED"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "EDIT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "EEFT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "EFX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "EIX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "EL"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ELAN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ELF"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "EMN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "EMR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ENPH"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ENR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ENTA"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "EOG"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "EOLS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "EPAM"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "EPC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "EPD"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "EQH"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "EQR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "EQT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ESS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ESTC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ETR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ETSY"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "EVER"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "EW"
+        },
+        {
+          "dates": 806,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "EXAS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "EXEL"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "EXPD"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "EXPE"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "EXR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "EYE"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "F"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "FANG"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "FAST"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "FCPT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "FCX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "FDS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "FDX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "FE"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "FFIV"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "FIGS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "FIVE"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "FIVN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "FLNC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "FLR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "FLS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "FLYW"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "FMC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "FN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "FND"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "FNKO"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "FOUR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "FRPT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "FRSH"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "FRT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "FSLR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "FSLY"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "FTI"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "FTNT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "FTV"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "FUN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "G"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "GBX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "GDDY"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "GDRX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "GE"
+        },
+        {
+          "dates": 829,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "GH"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "GIII"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "GILD"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "GIS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "GKOS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "GLW"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "GM"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "GME"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "GMED"
+        },
+        {
+          "dates": 669,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "GMS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "GNRC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "GO"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "GPC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "GRMN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "GRPN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "GS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "GSHD"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "GT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "GTES"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "GTLB"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "GWRE"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "GWW"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "H"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "HAE"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "HAIN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "HAL"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "HAS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "HCA"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "HCAT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "HIG"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "HII"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "HL"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "HLIT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "HLNE"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "HLT"
+        },
+        {
+          "dates": 816,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "HOLX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "HOOD"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "HP"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "HPE"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "HPP"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "HQY"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "HRL"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "HRMY"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "HSY"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "HTZ"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "HUBB"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "HUBG"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "HUBS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "HUM"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "HUN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "HXL"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "HZO"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "IAC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "IART"
+        },
+        {
+          "dates": 746,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "IAS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "IBKR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "IBM"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "IBP"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ICE"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "IDXX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "IEX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "IFF"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "IIPR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ILMN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "INCY"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "INDI"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "INSM"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "INSP"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "INTU"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "INVH"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "IOT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "IOVA"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "IP"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "IR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "IRTC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ISRG"
+        },
+        {
+          "dates": 563,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ITCI"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ITRI"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ITW"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "J"
+        },
+        {
+          "dates": 771,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "JAMF"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "JAZZ"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "JBHT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "JBLU"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "JELD"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "JKHY"
+        },
+        {
+          "dates": 623,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "JNPR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "KBH"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "KBR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "KEYS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "KHC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "KIM"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "KKR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "KLAC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "KMB"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "KMI"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "KMT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "KMX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "KO"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "KR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "KRC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "KRYS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "KSS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "KURA"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "KYMR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "LAND"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "LAZ"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "LBRT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "LEA"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "LECO"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "LEN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "LESL"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "LEVI"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "LH"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "LII"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "LLY"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "LMND"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "LMT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "LNC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "LNTH"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "LOW"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "LPLA"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "LPX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "LRCX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "LSCC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "LSTR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "LULU"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "LUV"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "LW"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "LYB"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "LYFT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "LYV"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MAA"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MAN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MAR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MARA"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MAS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MASI"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MAT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MBUU"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MCD"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MCHP"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MCK"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MDB"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MDGL"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MDT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MELI"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MET"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MGNX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MHK"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MIDD"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MIRM"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MKSI"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MKTX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MLM"
+        },
+        {
+          "dates": 760,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MMC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MMM"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MOH"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MOS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MPC"
+        },
+        {
+          "dates": 772,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MPW"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MPWR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MQ"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MRCY"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MRNA"
+        },
+        {
+          "dates": 750,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MRUS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MRVL"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MSM"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MSTR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MTCH"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MTD"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MTDR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MTH"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MTW"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MTZ"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MU"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MUR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MXL"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "MYGN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "NBIX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "NBR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "NCLH"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "NCNO"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "NDAQ"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "NDSN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "NEM"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "NEO"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "NET"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "NFE"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "NFLX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "NKE"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "NMRK"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "NOC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "NOG"
+        },
+        {
+          "dates": 607,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "NOVA"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "NOW"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "NRG"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "NSC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "NSP"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "NTAP"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "NTLA"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "NTNX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "NTRA"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "NTRS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "NUE"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "NVCR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "NVDA"
+        },
+        {
+          "dates": 647,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "NVEE"
+        },
+        {
+          "dates": 564,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "NVRO"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "NVT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "NWL"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "NXPI"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "NXST"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "NYT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "O"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "OC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ODFL"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "OGE"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "OGS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "OHI"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "OI"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "OKE"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "OKTA"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "OLLI"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "OLN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "OMC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "OMCL"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ON"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ORCL"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ORLY"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "OVV"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "OXM"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "OXY"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PAA"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PACB"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PAGP"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PANW"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PATH"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PAYC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PAYX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PBF"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PCAR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PCOR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PCRX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PCTY"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PD"
+        },
+        {
+          "dates": 573,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PDCO"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PEG"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PEGA"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PEN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PEP"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PFE"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PFG"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PFGC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PG"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PGR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PH"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PHM"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PHR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PI"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PII"
+        },
+        {
+          "dates": 727,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PINC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PINS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PK"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PKG"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PLAY"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PLCE"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PLNT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PLTK"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PLTR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PNR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PNW"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PODD"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "POR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PPL"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PRI"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PRTA"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PRU"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PSA"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PSN"
+        },
+        {
+          "dates": 824,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PSTG"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PSX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PTEN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PTON"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PVH"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PWR"
+        },
+        {
+          "dates": 779,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "PZZA"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "QCOM"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "QDEL"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "QLYS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "QRVO"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "QSR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "QTWO"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "QURE"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "R"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "RARE"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "RBLX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "RCL"
+        },
+        {
+          "dates": 623,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "RDFN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "REGN"
+        },
+        {
+          "dates": 772,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "REVG"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "RGA"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "RGEN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "RGNX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "RH"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "RIG"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "RIVN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "RJF"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "RKLB"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "RL"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "RNG"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "RNR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ROK"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ROKU"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ROP"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ROST"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "RPD"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "RSG"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "RUN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "RVLV"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "RYTM"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "S"
+        },
+        {
+          "dates": 645,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SAGE"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SAIC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SBAC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SBGI"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SBUX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SEDG"
+        },
+        {
+          "dates": 818,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SEE"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SFM"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SGRY"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SHAK"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SHLS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SHOO"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SHOP"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SHW"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SIBN"
+        },
+        {
+          "dates": 675,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SKX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SLAB"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SLB"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SLG"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SLGN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SMCI"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SMG"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SMPL"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SMTC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SNAP"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SNDR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SNDX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SNOW"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SNPS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SNX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SON"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SONO"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SPB"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SPG"
+        },
+        {
+          "dates": 735,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SPR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SPT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SRE"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SSTK"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ST"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "STAA"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "STLD"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "STT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "STX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SWK"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SXC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SYK"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SYNA"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "SYY"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TDC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TDG"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TDOC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TDY"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TEAM"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TECH"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TEL"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TENB"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TENX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TER"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TEX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TFX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TJX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TKR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TMHC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TMO"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TNDM"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TOL"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TOST"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TPG"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TREE"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TRGP"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TRIP"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TRMB"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TROW"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TROX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TRU"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TSCO"
+        },
+        {
+          "dates": 791,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TSE"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TSLA"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TSN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TTD"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TTWO"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TVTX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TW"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TWLO"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TWST"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TXG"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TXN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TXRH"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TXT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "TYL"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "U"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "UBER"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "UDR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "UHS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ULTA"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "UNFI"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "UNH"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "UNP"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "UPS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "UPWK"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "URBN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "URI"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "USFD"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "UTHR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "UTZ"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "VC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "VCTR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "VEEV"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "VFC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "VICI"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "VIR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "VKTX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "VLO"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "VMC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "VNO"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "VNOM"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "VOYA"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "VRNS"
+        },
+        {
+          "dates": 728,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "VRNT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "VRSK"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "VRTX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "VSAT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "VST"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "W"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "WAB"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "WAT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "WDAY"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "WDC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "WEC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "WERN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "WGO"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "WHD"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "WHR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "WING"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "WLK"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "WMB"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "WMG"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "WMS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "WMT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "WSO"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "WST"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "WWW"
+        },
+        {
+          "dates": 616,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "X"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "XENE"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "XPOF"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "XRAY"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "XRX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "XYL"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "YELP"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "YETI"
+        },
+        {
+          "dates": 677,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "YMAB"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "YUM"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ZBRA"
+        },
+        {
+          "dates": 591,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ZI"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ZM"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ZS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ZTS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Company"
+          ],
+          "symbol": "ZYME"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "AMLP"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "CARZ"
+        },
+        {
+          "dates": 760,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "COMM"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "CRAK"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "EATZ"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "FCG"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "FDN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "FTXR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "GAMR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "GDX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "HACK"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "IAI"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "IBB"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "IDU"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "IGV"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "IHE"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "IHF"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "IHI"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "INDS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "ITA"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "ITB"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "IYJ"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "IYM"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "IYR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "IYT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "IYW"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "IYZ"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "JETS"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "KIE"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "MOO"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "OIH"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "PAVE"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "PBJ"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "PEJ"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "PHO"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "PKB"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "REM"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "REZ"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "SCHH"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "SLX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "SOXX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "SRET"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "TAN"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "VAW"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "VCR"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "VDC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "VOX"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "XHB"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "XME"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "XOP"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "XPH"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Industry"
+          ],
+          "symbol": "XRT"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "MarketIndex"
+          ],
+          "symbol": "SPY"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Sector"
+          ],
+          "symbol": "XLB"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Sector"
+          ],
+          "symbol": "XLC"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Sector"
+          ],
+          "symbol": "XLE"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Sector"
+          ],
+          "symbol": "XLF"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Sector"
+          ],
+          "symbol": "XLI"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Sector"
+          ],
+          "symbol": "XLK"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Sector"
+          ],
+          "symbol": "XLP"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Sector"
+          ],
+          "symbol": "XLRE"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Sector"
+          ],
+          "symbol": "XLU"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Sector"
+          ],
+          "symbol": "XLV"
+        },
+        {
+          "dates": 831,
+          "labels": [
+            "Sector"
+          ],
+          "symbol": "XLY"
+        }
+      ]
+    },
+    "massive_risk_factor_relationships": {
+      "ok": true,
+      "rows": [
+        {
+          "relationship_type": "HAS_RISK_CLASSIFICATION",
+          "relationships": 39821,
+          "source_labels": [
+            "ExtractedSectionContent"
+          ],
+          "target_labels": [
+            "RiskClassification"
+          ]
+        },
+        {
+          "relationship_type": "CLASSIFIED_AS",
+          "relationships": 39821,
+          "source_labels": [
+            "RiskClassification"
+          ],
+          "target_labels": [
+            "RiskCategory"
+          ]
+        }
+      ]
+    },
+    "massive_risk_factor_summary": {
+      "ok": true,
+      "rows": [
+        {
+          "embeddings": 39821,
+          "first_filing_date": "2023-01-17",
+          "last_filing_date": "2026-04-13",
+          "nodes": 39821,
+          "source": "massive",
+          "supporting_text": 39821,
+          "tickers": 644
+        }
+      ]
+    },
+    "relevant_node_counts": {
+      "ok": true,
+      "rows": [
+        {
+          "companies": 796,
+          "dates": 1213,
+          "dividends": 4556,
+          "industries": 115,
+          "market_indexes": 1,
+          "risk_categories": 140,
+          "risk_classifications": 39821,
+          "sectors": 11,
+          "splits": 40
+        }
+      ]
+    },
+    "server": {
+      "ok": true,
+      "rows": [
+        {
+          "edition": "enterprise",
+          "name": "Neo4j Kernel",
+          "versions": [
+            "5.26.4"
+          ]
+        }
+      ]
+    },
+    "split_relationships": {
+      "ok": true,
+      "rows": [
+        {
+          "relationship_type": "DECLARED_SPLIT",
+          "relationships": 40,
+          "source_labels": [
+            "Company"
+          ]
+        },
+        {
+          "relationship_type": "HAS_SPLIT",
+          "relationships": 40,
+          "source_labels": [
+            "Date"
+          ]
+        }
+      ]
+    },
+    "split_summary": {
+      "ok": true,
+      "rows": [
+        {
+          "first_execution_date": "2023-01-04",
+          "last_execution_date": "2026-02-09",
+          "nodes": 40,
+          "split_from": 40,
+          "split_to": 40,
+          "tickers": 38
+        }
+      ]
+    }
+  },
+  "safety": "All queries used Neo4j READ_ACCESS and execute_read."
+}

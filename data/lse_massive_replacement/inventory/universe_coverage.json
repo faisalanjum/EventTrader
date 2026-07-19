@@ -1,0 +1,597 @@
+{
+  "catalog_counts": {
+    "bond_futures": 2,
+    "bonds": 202,
+    "commodity": 23,
+    "corporate_bonds": 192,
+    "credit_indices": 79,
+    "crypto": 58,
+    "currency_index": 1,
+    "economics": 14724,
+    "etf": 25,
+    "futures": 69,
+    "fx": 62,
+    "fx_derivatives": 63,
+    "index": 19,
+    "interest_rates": 4,
+    "options": 3186,
+    "sovereign_yields": 88,
+    "stocks": 3979,
+    "volatility": 1
+  },
+  "current_universe": {
+    "companies": 783,
+    "complete_four_leg": 0,
+    "covered_industry_etfs": [
+      "GDX",
+      "SOXX"
+    ],
+    "covered_sector_etfs": [
+      "XLE",
+      "XLF"
+    ],
+    "industry_available": 33,
+    "missing_companies": [
+      "ALEX",
+      "AMED",
+      "AXL",
+      "BIGC",
+      "BPMC",
+      "CFLT",
+      "DNB",
+      "EXAS",
+      "FCPT",
+      "GMS",
+      "HOLX",
+      "IAS",
+      "JAMF",
+      "LESL",
+      "MMC",
+      "MPW",
+      "MRUS",
+      "NVEE",
+      "PINC",
+      "PX",
+      "REVG",
+      "SAGE",
+      "SEE",
+      "SKX",
+      "SPR",
+      "TSE",
+      "VNO",
+      "VRNT",
+      "YMAB"
+    ],
+    "sector_available": 89,
+    "stock_available": 754
+  },
+  "generated_at_utc": "2026-07-19T14:46:26+00:00",
+  "graph_price_universe": {
+    "covered_by_label": {
+      "Company": 754,
+      "Industry": 2,
+      "MarketIndex": 1,
+      "Sector": 2
+    },
+    "covered_total": 759,
+    "missing": [
+      {
+        "dates": 566,
+        "label": "Company",
+        "symbol": "ACCD"
+      },
+      {
+        "dates": 800,
+        "label": "Company",
+        "symbol": "ALEX"
+      },
+      {
+        "dates": 656,
+        "label": "Company",
+        "symbol": "AMED"
+      },
+      {
+        "dates": 634,
+        "label": "Company",
+        "symbol": "ANSS"
+      },
+      {
+        "dates": 775,
+        "label": "Company",
+        "symbol": "AXL"
+      },
+      {
+        "dates": 623,
+        "label": "Company",
+        "symbol": "AZEK"
+      },
+      {
+        "dates": 580,
+        "label": "Company",
+        "symbol": "BECN"
+      },
+      {
+        "dates": 581,
+        "label": "Company",
+        "symbol": "BERY"
+      },
+      {
+        "dates": 646,
+        "label": "Company",
+        "symbol": "BIGC"
+      },
+      {
+        "dates": 636,
+        "label": "Company",
+        "symbol": "BPMC"
+      },
+      {
+        "dates": 802,
+        "label": "Company",
+        "symbol": "CFLT"
+      },
+      {
+        "dates": 663,
+        "label": "Company",
+        "symbol": "DNB"
+      },
+      {
+        "dates": 806,
+        "label": "Company",
+        "symbol": "EXAS"
+      },
+      {
+        "dates": 831,
+        "label": "Company",
+        "symbol": "FCPT"
+      },
+      {
+        "dates": 669,
+        "label": "Company",
+        "symbol": "GMS"
+      },
+      {
+        "dates": 816,
+        "label": "Company",
+        "symbol": "HOLX"
+      },
+      {
+        "dates": 746,
+        "label": "Company",
+        "symbol": "IAS"
+      },
+      {
+        "dates": 563,
+        "label": "Company",
+        "symbol": "ITCI"
+      },
+      {
+        "dates": 771,
+        "label": "Company",
+        "symbol": "JAMF"
+      },
+      {
+        "dates": 623,
+        "label": "Company",
+        "symbol": "JNPR"
+      },
+      {
+        "dates": 831,
+        "label": "Company",
+        "symbol": "LESL"
+      },
+      {
+        "dates": 760,
+        "label": "Company",
+        "symbol": "MMC"
+      },
+      {
+        "dates": 772,
+        "label": "Company",
+        "symbol": "MPW"
+      },
+      {
+        "dates": 750,
+        "label": "Company",
+        "symbol": "MRUS"
+      },
+      {
+        "dates": 607,
+        "label": "Company",
+        "symbol": "NOVA"
+      },
+      {
+        "dates": 647,
+        "label": "Company",
+        "symbol": "NVEE"
+      },
+      {
+        "dates": 564,
+        "label": "Company",
+        "symbol": "NVRO"
+      },
+      {
+        "dates": 573,
+        "label": "Company",
+        "symbol": "PDCO"
+      },
+      {
+        "dates": 727,
+        "label": "Company",
+        "symbol": "PINC"
+      },
+      {
+        "dates": 779,
+        "label": "Company",
+        "symbol": "PX"
+      },
+      {
+        "dates": 623,
+        "label": "Company",
+        "symbol": "RDFN"
+      },
+      {
+        "dates": 772,
+        "label": "Company",
+        "symbol": "REVG"
+      },
+      {
+        "dates": 645,
+        "label": "Company",
+        "symbol": "SAGE"
+      },
+      {
+        "dates": 818,
+        "label": "Company",
+        "symbol": "SEE"
+      },
+      {
+        "dates": 675,
+        "label": "Company",
+        "symbol": "SKX"
+      },
+      {
+        "dates": 735,
+        "label": "Company",
+        "symbol": "SPR"
+      },
+      {
+        "dates": 791,
+        "label": "Company",
+        "symbol": "TSE"
+      },
+      {
+        "dates": 831,
+        "label": "Company",
+        "symbol": "VNO"
+      },
+      {
+        "dates": 728,
+        "label": "Company",
+        "symbol": "VRNT"
+      },
+      {
+        "dates": 616,
+        "label": "Company",
+        "symbol": "X"
+      },
+      {
+        "dates": 677,
+        "label": "Company",
+        "symbol": "YMAB"
+      },
+      {
+        "dates": 591,
+        "label": "Company",
+        "symbol": "ZI"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "AMLP"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "CARZ"
+      },
+      {
+        "dates": 760,
+        "label": "Industry",
+        "symbol": "COMM"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "CRAK"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "EATZ"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "FCG"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "FDN"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "FTXR"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "GAMR"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "HACK"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "IAI"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "IBB"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "IDU"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "IGV"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "IHE"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "IHF"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "IHI"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "INDS"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "ITA"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "ITB"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "IYJ"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "IYM"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "IYR"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "IYT"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "IYW"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "IYZ"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "JETS"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "KIE"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "MOO"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "OIH"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "PAVE"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "PBJ"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "PEJ"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "PHO"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "PKB"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "REM"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "REZ"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "SCHH"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "SLX"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "SRET"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "TAN"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "VAW"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "VCR"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "VDC"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "VOX"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "XHB"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "XME"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "XOP"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "XPH"
+      },
+      {
+        "dates": 831,
+        "label": "Industry",
+        "symbol": "XRT"
+      },
+      {
+        "dates": 831,
+        "label": "Sector",
+        "symbol": "XLB"
+      },
+      {
+        "dates": 831,
+        "label": "Sector",
+        "symbol": "XLC"
+      },
+      {
+        "dates": 831,
+        "label": "Sector",
+        "symbol": "XLI"
+      },
+      {
+        "dates": 831,
+        "label": "Sector",
+        "symbol": "XLK"
+      },
+      {
+        "dates": 831,
+        "label": "Sector",
+        "symbol": "XLP"
+      },
+      {
+        "dates": 831,
+        "label": "Sector",
+        "symbol": "XLRE"
+      },
+      {
+        "dates": 831,
+        "label": "Sector",
+        "symbol": "XLU"
+      },
+      {
+        "dates": 831,
+        "label": "Sector",
+        "symbol": "XLV"
+      },
+      {
+        "dates": 831,
+        "label": "Sector",
+        "symbol": "XLY"
+      }
+    ],
+    "required_by_label": {
+      "Company": 796,
+      "Industry": 52,
+      "MarketIndex": 1,
+      "Sector": 11
+    },
+    "required_total": 860
+  },
+  "inputs": {
+    "catalog_json": "authenticated LSE catalog fetched during the audit; temporary response not retained",
+    "neo4j_inventory": "results/neo4j_inventory.json",
+    "universe_csv": "/home/faisal/EventMarketDB/config/final_symbols.csv"
+  }
+}

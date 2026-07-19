@@ -1,0 +1,120 @@
+{
+  "candidate": "LSE one-second candle close from the newest bar whose bar-start timestamp is at or before each production start/end timestamp.",
+  "case": "AVGO:2024-12-12",
+  "details": [
+    {
+      "created": "2024-12-12T16:15:32-05:00",
+      "difference_percentage_points": -0.06,
+      "end_within_export_bounds": true,
+      "event_id": "bzNews_42472206",
+      "exact_2dp": false,
+      "lse_end": {
+        "bar_start": "2024-12-12T22:15:32+00:00",
+        "close": 186.05
+      },
+      "lse_return": -1.56,
+      "lse_start": {
+        "bar_start": "2024-12-12T21:15:32+00:00",
+        "close": 189.0
+      },
+      "market_session": "post_market",
+      "massive_stored_return": -1.5,
+      "period": "hourly",
+      "production_end": "2024-12-12T17:15:32-05:00",
+      "production_start": "2024-12-12T16:15:32-05:00",
+      "schedule_matches": true,
+      "start_within_export_bounds": true,
+      "stored_scheduled_end": "2024-12-12T17:15:32-05:00"
+    },
+    {
+      "created": "2024-12-12T16:16:27-05:00",
+      "difference_percentage_points": 0.0,
+      "end_within_export_bounds": true,
+      "event_id": "bzNews_42472247",
+      "exact_2dp": true,
+      "lse_end": {
+        "bar_start": "2024-12-12T22:16:27+00:00",
+        "close": 188.0
+      },
+      "lse_return": 1.77,
+      "lse_start": {
+        "bar_start": "2024-12-12T21:16:27+00:00",
+        "close": 184.73
+      },
+      "market_session": "post_market",
+      "massive_stored_return": 1.77,
+      "period": "hourly",
+      "production_end": "2024-12-12T17:16:27-05:00",
+      "production_start": "2024-12-12T16:16:27-05:00",
+      "schedule_matches": true,
+      "start_within_export_bounds": true,
+      "stored_scheduled_end": "2024-12-12T17:16:27-05:00"
+    },
+    {
+      "created": "2024-12-12T16:34:45-05:00",
+      "difference_percentage_points": 0.04,
+      "end_within_export_bounds": true,
+      "event_id": "bzNews_42472970",
+      "exact_2dp": false,
+      "lse_end": {
+        "bar_start": "2024-12-12T22:34:45+00:00",
+        "close": 200.4
+      },
+      "lse_return": 6.65,
+      "lse_start": {
+        "bar_start": "2024-12-12T21:34:45+00:00",
+        "close": 187.9
+      },
+      "market_session": "post_market",
+      "massive_stored_return": 6.61,
+      "period": "hourly",
+      "production_end": "2024-12-12T17:34:45-05:00",
+      "production_start": "2024-12-12T16:34:45-05:00",
+      "schedule_matches": true,
+      "start_within_export_bounds": true,
+      "stored_scheduled_end": "2024-12-12T17:34:45-05:00"
+    },
+    {
+      "created": "2024-12-12T17:03:04-05:00",
+      "difference_percentage_points": -0.09,
+      "end_within_export_bounds": true,
+      "event_id": "bzNews_42473875",
+      "exact_2dp": false,
+      "lse_end": {
+        "bar_start": "2024-12-12T23:03:04+00:00",
+        "close": 205.83
+      },
+      "lse_return": 11.75,
+      "lse_start": {
+        "bar_start": "2024-12-12T22:03:04+00:00",
+        "close": 184.19
+      },
+      "market_session": "post_market",
+      "massive_stored_return": 11.84,
+      "period": "hourly",
+      "production_end": "2024-12-12T18:03:04-05:00",
+      "production_start": "2024-12-12T17:03:04-05:00",
+      "schedule_matches": true,
+      "start_within_export_bounds": true,
+      "stored_scheduled_end": "2024-12-12T18:03:04-05:00"
+    }
+  ],
+  "events": 4,
+  "export_bounds_utc": {
+    "first_bar_start": "2024-12-12T00:00:01+00:00",
+    "last_bar_start": "2024-12-12T23:59:57+00:00"
+  },
+  "generated_at_utc": "2026-07-19T15:58:21+00:00",
+  "period": "hourly",
+  "reference": "Stored Neo4j hourly_stock values originally produced by Massive one-second adjusted aggregates.",
+  "safety": "No network or database calls. Production source was imported read-only only for its exact market-window calculation.",
+  "summary": {
+    "comparable": 4,
+    "exact_2dp": 1,
+    "max_absolute_percentage_points": 0.09,
+    "mean_absolute_percentage_points": 0.0475,
+    "schedule_matches": 4,
+    "within_1bp": 1,
+    "within_5bp": 2
+  }
+}

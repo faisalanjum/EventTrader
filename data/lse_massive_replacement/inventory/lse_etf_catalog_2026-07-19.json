@@ -1,0 +1,42 @@
+{
+  "fetched_at_utc": "2026-07-19T18:58:21Z",
+  "source": "https://api.londonstrategicedge.com/databank-api/catalog",
+  "internal_dataset_name": "etf",
+  "client_display_name": "ETFs",
+  "count": 25,
+  "symbols": [
+    "ARKK",
+    "BITO",
+    "DIA",
+    "EEM",
+    "ETHA",
+    "GDX",
+    "GLD",
+    "HYG",
+    "IBIT",
+    "IWM",
+    "QQQ",
+    "SLV",
+    "SMH",
+    "SOXL",
+    "SOXS",
+    "SOXX",
+    "SPY",
+    "SQQQ",
+    "TLT",
+    "TQQQ",
+    "TSLL",
+    "VOO",
+    "VTI",
+    "XLE",
+    "XLF"
+  ],
+  "cross_category_check": {
+    "same_etf_symbols_in_stocks": [],
+    "same_etf_symbols_in_indices": [],
+    "same_etf_underlyings_with_options_data": 25,
+    "eventmarketdb_missing_required_etfs_checked": 59,
+    "missing_required_etfs_found_in_any_other_category": []
+  },
+  "conclusion": "The missing EventMarketDB benchmark ETFs are not hidden under another LSE dataset name."
+}

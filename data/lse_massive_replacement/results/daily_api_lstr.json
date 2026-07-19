@@ -1,0 +1,138 @@
+{
+  "coverage": {
+    "canonical_sessions": 831,
+    "lse_non_session_symbol_dates": 2,
+    "lse_only_session_symbol_dates": 387,
+    "massive_non_session_symbol_dates": 0,
+    "massive_only_symbol_dates": 1,
+    "overlap_symbol_dates": 443
+  },
+  "daily_returns": {
+    "compared": 442,
+    "max_absolute_percentage_points": 6.4,
+    "mean_absolute_percentage_points": 0.8014027149321268,
+    "p95_absolute_percentage_points": 2.23,
+    "same_rounded_2dp": 104,
+    "within_1bp": 105,
+    "within_5bp": 117
+  },
+  "elapsed_seconds": 0.203,
+  "errors": {},
+  "failed_symbols": 0,
+  "generated_at_utc": "2026-07-19T16:56:23+00:00",
+  "method": {
+    "calendar": "XNYS; non-session LSE rows excluded from accuracy metrics",
+    "end_inclusive": "2026-04-27",
+    "lse": "stocks 1d, asc, limit=5000; end advanced one day because live server treats end date as exclusive",
+    "massive": "1/day adjusted=true, asc, limit=5000",
+    "missing_session_rule": "A return is omitted unless both consecutive XNYS sessions have bars",
+    "return_formula": "round((current_close-prior_close)/prior_close*100, 2)",
+    "start_inclusive": "2023-01-03"
+  },
+  "ohlc": {
+    "close": {
+      "compared": 443,
+      "exact": 202,
+      "max_absolute": 8.930000000000007,
+      "max_absolute_bp": 587.770683867571,
+      "mean_absolute": 0.7425846501128669,
+      "mean_absolute_bp": 47.89001471507316,
+      "median_absolute": 0.05999999999997385,
+      "p95_absolute": 3.140000000000015,
+      "p95_absolute_bp": 192.46861924686328,
+      "within_10_cents": 227,
+      "within_10bp": 233,
+      "within_1_cent": 215,
+      "within_1bp": 215,
+      "within_50bp": 311,
+      "within_5_cents": 221
+    },
+    "high": {
+      "compared": 443,
+      "exact": 38,
+      "max_absolute": 11.620000000000005,
+      "max_absolute_bp": 902.3140239167576,
+      "mean_absolute": 0.7089361173814896,
+      "mean_absolute_bp": 45.23132379589691,
+      "median_absolute": 0.15000000000000568,
+      "p95_absolute": 3.3799999999999955,
+      "p95_absolute_bp": 223.53673723536758,
+      "within_10_cents": 196,
+      "within_10bp": 225,
+      "within_1_cent": 73,
+      "within_1bp": 74,
+      "within_50bp": 336,
+      "within_5_cents": 148
+    },
+    "low": {
+      "compared": 443,
+      "exact": 48,
+      "max_absolute": 21.090000000000003,
+      "max_absolute_bp": 1232.6125073056694,
+      "mean_absolute": 0.8288079006771989,
+      "mean_absolute_bp": 53.05906031333861,
+      "median_absolute": 0.23499999999999943,
+      "p95_absolute": 3.170000000000016,
+      "p95_absolute_bp": 185.66869741804402,
+      "within_10_cents": 170,
+      "within_10bp": 196,
+      "within_1_cent": 77,
+      "within_1bp": 78,
+      "within_50bp": 299,
+      "within_5_cents": 128
+    },
+    "open": {
+      "compared": 443,
+      "exact": 99,
+      "max_absolute": 11.0,
+      "max_absolute_bp": 743.2432432432432,
+      "mean_absolute": 1.017629796839729,
+      "mean_absolute_bp": 64.1789639173494,
+      "median_absolute": 0.47999999999998977,
+      "p95_absolute": 3.9000000000000057,
+      "p95_absolute_bp": 235.89583007149994,
+      "within_10_cents": 135,
+      "within_10bp": 156,
+      "within_1_cent": 110,
+      "within_1bp": 110,
+      "within_50bp": 262,
+      "within_5_cents": 122
+    }
+  },
+  "requested_symbols": 1,
+  "safety": "Read-only HTTPS GET requests only. API keys were not printed or saved. Production code and databases were not changed.",
+  "successful_symbols": 1,
+  "symbol_summaries": {
+    "LSTR": {
+      "first_overlap_date": "2024-07-19",
+      "last_overlap_date": "2026-04-24",
+      "lse_non_session_date_examples": [
+        "2023-12-30",
+        "2025-01-04"
+      ],
+      "lse_non_session_dates": 2,
+      "lse_only_session_dates": 387,
+      "lse_raw_dates": 832,
+      "lse_session_dates": 830,
+      "massive_dates": 444,
+      "massive_non_session_dates": 0,
+      "massive_only_dates": 1,
+      "overlap_dates": 443,
+      "return_overlap_dates": 442
+    }
+  },
+  "volume": {
+    "compared": 443,
+    "exact": 0,
+    "max_absolute": 1163696.0,
+    "max_absolute_bp": 5469.008860240321,
+    "mean_absolute": 105381.88123393683,
+    "mean_absolute_bp": 2706.05942066438,
+    "median_absolute": 87753.0,
+    "p95_absolute": 238918.0,
+    "p95_absolute_bp": 4375.432948140685,
+    "within_10bp": 0,
+    "within_1bp": 0,
+    "within_50bp": 0
+  }
+}

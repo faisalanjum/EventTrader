@@ -1,0 +1,761 @@
+{
+  "counts_by_namespace": {
+    "news:pending_returns": 1,
+    "news:withoutreturns:*": 181,
+    "reports:pending_returns": 1,
+    "reports:withoutreturns:*": 70,
+    "tracking:meta:news:*": 126,
+    "tracking:meta:reports:*": 6547,
+    "tracking:meta:transcripts:*": 1,
+    "transcripts:pending_returns": 1,
+    "transcripts:withoutreturns:*": 6
+  },
+  "database_size_keys": 57722,
+  "generated_at_utc": "2026-07-19T14:40:24+00:00",
+  "matched_unique_keys": 6934,
+  "pending_sets": {
+    "news:pending_returns": {
+      "first_with_score": [
+        [
+          "52091509.2026-04-28T12.56.34+00.00:session",
+          1777384320.0
+        ]
+      ],
+      "last_with_score": [
+        [
+          "52096498.2026-04-28T14.23.00+00.00:session",
+          1777407420.0
+        ]
+      ],
+      "members": 295,
+      "type": "zset"
+    },
+    "reports:pending_returns": {
+      "first_with_score": [
+        [
+          "0000950157-26-000549.2026-04-27T20.17.13+00.00:session",
+          1777384320.0
+        ]
+      ],
+      "last_with_score": [
+        [
+          "0001646972-26-000032.2026-04-27T20.33.13+00.00:daily",
+          1777407420.0
+        ]
+      ],
+      "members": 178,
+      "type": "zset"
+    },
+    "transcripts:pending_returns": {
+      "first_with_score": [
+        [
+          "MMC_2026-04-16T08.30:hourly",
+          1776347220.0
+        ]
+      ],
+      "last_with_score": [
+        [
+          "XYL_2026-04-28T09.00:daily",
+          1777407420.0
+        ]
+      ],
+      "members": 13,
+      "type": "zset"
+    }
+  },
+  "safety": "Only PING, SCAN, TYPE, GET, ZCARD, ZRANGE, TTL, HKEYS, and DBSIZE were used.",
+  "samples_by_namespace": {
+    "news:pending_returns": [
+      {
+        "first_with_score": [
+          [
+            "52091509.2026-04-28T12.56.34+00.00:session",
+            1777384320.0
+          ]
+        ],
+        "key": "news:pending_returns",
+        "last_with_score": [
+          [
+            "52096498.2026-04-28T14.23.00+00.00:session",
+            1777407420.0
+          ]
+        ],
+        "members": 295,
+        "ttl_seconds": -1,
+        "type": "zset"
+      }
+    ],
+    "news:withoutreturns:*": [
+      {
+        "bytes": 2019,
+        "json_shape": {
+          "has_metadata": true,
+          "has_returns": true,
+          "instrument_count": 1,
+          "metadata_fields": [
+            "event",
+            "instruments",
+            "returns_schedule"
+          ],
+          "null_return_leaves": 3,
+          "populated_return_leaves": 0,
+          "return_leaf_field_shapes": [],
+          "return_period_field_shapes": [
+            {
+              "fields": [
+                "daily_return",
+                "hourly_return",
+                "session_return"
+              ],
+              "symbols": 1
+            }
+          ],
+          "return_symbol_count": 1,
+          "returns_schedule_fields": [
+            "daily",
+            "hourly",
+            "session"
+          ],
+          "top_level_fields": [
+            "authors",
+            "body",
+            "channels",
+            "created",
+            "id",
+            "metadata",
+            "returns",
+            "symbols",
+            "tags",
+            "teaser",
+            "title",
+            "updated",
+            "url"
+          ],
+          "valid_json": true
+        },
+        "key": "news:withoutreturns:52092066.2026-04-28T13.01.34+00.00",
+        "ttl_seconds": -1,
+        "type": "string"
+      },
+      {
+        "bytes": 1698,
+        "json_shape": {
+          "has_metadata": true,
+          "has_returns": true,
+          "instrument_count": 1,
+          "metadata_fields": [
+            "event",
+            "instruments",
+            "returns_schedule"
+          ],
+          "null_return_leaves": 2,
+          "populated_return_leaves": 4,
+          "return_leaf_field_shapes": [
+            {
+              "fields": [
+                "industry",
+                "macro",
+                "sector",
+                "stock"
+              ],
+              "periods": 1
+            }
+          ],
+          "return_period_field_shapes": [
+            {
+              "fields": [
+                "daily_return",
+                "hourly_return",
+                "session_return"
+              ],
+              "symbols": 1
+            }
+          ],
+          "return_symbol_count": 1,
+          "returns_schedule_fields": [
+            "daily",
+            "hourly",
+            "session"
+          ],
+          "top_level_fields": [
+            "authors",
+            "body",
+            "channels",
+            "created",
+            "id",
+            "metadata",
+            "returns",
+            "symbols",
+            "tags",
+            "teaser",
+            "title",
+            "updated",
+            "url"
+          ],
+          "valid_json": true
+        },
+        "key": "news:withoutreturns:52078104.2026-04-27T20.00.36+00.00",
+        "ttl_seconds": -1,
+        "type": "string"
+      },
+      {
+        "bytes": 1437,
+        "json_shape": {
+          "has_metadata": true,
+          "has_returns": true,
+          "instrument_count": 1,
+          "metadata_fields": [
+            "event",
+            "instruments",
+            "returns_schedule"
+          ],
+          "null_return_leaves": 3,
+          "populated_return_leaves": 0,
+          "return_leaf_field_shapes": [],
+          "return_period_field_shapes": [
+            {
+              "fields": [
+                "daily_return",
+                "hourly_return",
+                "session_return"
+              ],
+              "symbols": 1
+            }
+          ],
+          "return_symbol_count": 1,
+          "returns_schedule_fields": [
+            "daily",
+            "hourly",
+            "session"
+          ],
+          "top_level_fields": [
+            "authors",
+            "body",
+            "channels",
+            "created",
+            "id",
+            "metadata",
+            "returns",
+            "symbols",
+            "tags",
+            "teaser",
+            "title",
+            "updated",
+            "url"
+          ],
+          "valid_json": true
+        },
+        "key": "news:withoutreturns:52087582.2026-04-28T10.54.29+00.00",
+        "ttl_seconds": -1,
+        "type": "string"
+      }
+    ],
+    "reports:pending_returns": [
+      {
+        "first_with_score": [
+          [
+            "0000950157-26-000549.2026-04-27T20.17.13+00.00:session",
+            1777384320.0
+          ]
+        ],
+        "key": "reports:pending_returns",
+        "last_with_score": [
+          [
+            "0001646972-26-000032.2026-04-27T20.33.13+00.00:daily",
+            1777407420.0
+          ]
+        ],
+        "members": 178,
+        "ttl_seconds": -1,
+        "type": "zset"
+      }
+    ],
+    "reports:withoutreturns:*": [
+      {
+        "bytes": 142314,
+        "json_shape": {
+          "has_metadata": true,
+          "has_returns": true,
+          "instrument_count": 1,
+          "metadata_fields": [
+            "event",
+            "instruments",
+            "returns_schedule"
+          ],
+          "null_return_leaves": 6,
+          "populated_return_leaves": 0,
+          "return_leaf_field_shapes": [
+            {
+              "fields": [
+                "industry",
+                "macro",
+                "sector",
+                "stock"
+              ],
+              "periods": 1
+            }
+          ],
+          "return_period_field_shapes": [
+            {
+              "fields": [
+                "daily_return",
+                "hourly_return",
+                "session_return"
+              ],
+              "symbols": 1
+            }
+          ],
+          "return_symbol_count": 1,
+          "returns_schedule_fields": [
+            "daily",
+            "hourly",
+            "session"
+          ],
+          "top_level_fields": [
+            "accessionNo",
+            "cik",
+            "companyName",
+            "created",
+            "description",
+            "effectivenessDate",
+            "enriched",
+            "entities",
+            "exhibit_contents",
+            "exhibits",
+            "extracted_sections",
+            "filedAt",
+            "filing_text_content",
+            "financial_statements",
+            "formType",
+            "id",
+            "is_xml",
+            "items",
+            "linkToFilingDetails",
+            "linkToHtml",
+            "linkToTxt",
+            "metadata",
+            "periodOfReport",
+            "primaryDocumentUrl",
+            "returns",
+            "symbols",
+            "ticker",
+            "updated"
+          ],
+          "valid_json": true
+        },
+        "key": "reports:withoutreturns:0001104659-26-049837.2026-04-28T12.25.34+00.00",
+        "ttl_seconds": -1,
+        "type": "string"
+      },
+      {
+        "bytes": 27415,
+        "json_shape": {
+          "has_metadata": true,
+          "has_returns": true,
+          "instrument_count": 1,
+          "metadata_fields": [
+            "event",
+            "instruments",
+            "returns_schedule"
+          ],
+          "null_return_leaves": 9,
+          "populated_return_leaves": 0,
+          "return_leaf_field_shapes": [
+            {
+              "fields": [
+                "industry",
+                "macro",
+                "sector",
+                "stock"
+              ],
+              "periods": 2
+            }
+          ],
+          "return_period_field_shapes": [
+            {
+              "fields": [
+                "daily_return",
+                "hourly_return",
+                "session_return"
+              ],
+              "symbols": 1
+            }
+          ],
+          "return_symbol_count": 1,
+          "returns_schedule_fields": [
+            "daily",
+            "hourly",
+            "session"
+          ],
+          "top_level_fields": [
+            "accessionNo",
+            "cik",
+            "companyName",
+            "created",
+            "description",
+            "effectivenessDate",
+            "enriched",
+            "entities",
+            "exhibit_contents",
+            "exhibits",
+            "extracted_sections",
+            "filedAt",
+            "filing_text_content",
+            "financial_statements",
+            "formType",
+            "id",
+            "is_xml",
+            "items",
+            "linkToFilingDetails",
+            "linkToHtml",
+            "linkToTxt",
+            "metadata",
+            "periodOfReport",
+            "primaryDocumentUrl",
+            "returns",
+            "symbols",
+            "ticker",
+            "updated"
+          ],
+          "valid_json": true
+        },
+        "key": "reports:withoutreturns:0000077360-26-000023.2026-04-28T10.52.38+00.00",
+        "ttl_seconds": -1,
+        "type": "string"
+      },
+      {
+        "bytes": 112236,
+        "json_shape": {
+          "has_metadata": true,
+          "has_returns": true,
+          "instrument_count": 1,
+          "metadata_fields": [
+            "event",
+            "instruments",
+            "returns_schedule"
+          ],
+          "null_return_leaves": 6,
+          "populated_return_leaves": 0,
+          "return_leaf_field_shapes": [
+            {
+              "fields": [
+                "industry",
+                "macro",
+                "sector",
+                "stock"
+              ],
+              "periods": 1
+            }
+          ],
+          "return_period_field_shapes": [
+            {
+              "fields": [
+                "daily_return",
+                "hourly_return",
+                "session_return"
+              ],
+              "symbols": 1
+            }
+          ],
+          "return_symbol_count": 1,
+          "returns_schedule_fields": [
+            "daily",
+            "hourly",
+            "session"
+          ],
+          "top_level_fields": [
+            "accessionNo",
+            "cik",
+            "companyName",
+            "created",
+            "description",
+            "effectivenessDate",
+            "enriched",
+            "entities",
+            "exhibit_contents",
+            "exhibits",
+            "extracted_sections",
+            "filedAt",
+            "filing_text_content",
+            "financial_statements",
+            "formType",
+            "id",
+            "is_xml",
+            "items",
+            "linkToFilingDetails",
+            "linkToHtml",
+            "linkToTxt",
+            "metadata",
+            "periodOfReport",
+            "primaryDocumentUrl",
+            "returns",
+            "symbols",
+            "ticker",
+            "updated"
+          ],
+          "valid_json": true
+        },
+        "key": "reports:withoutreturns:0001579241-26-000015.2026-04-28T10.05.21+00.00",
+        "ttl_seconds": -1,
+        "type": "string"
+      }
+    ],
+    "tracking:meta:news:*": [
+      {
+        "fields": [
+          "inserted_into_neo4j_at",
+          "withreturns_at"
+        ],
+        "key": "tracking:meta:news:50283861.2026-01-30T21.49.43+00.00",
+        "ttl_seconds": -1,
+        "type": "hash"
+      },
+      {
+        "fields": [
+          "inserted_into_neo4j_at",
+          "withoutreturns_at",
+          "withreturns_at"
+        ],
+        "key": "tracking:meta:news:52047958.2026-04-24T20.39.11+00.00",
+        "ttl_seconds": -1,
+        "type": "hash"
+      },
+      {
+        "fields": [
+          "inserted_into_neo4j_at",
+          "withoutreturns_at",
+          "withreturns_at"
+        ],
+        "key": "tracking:meta:news:50628484.2026-02-13T21.32.01+00.00",
+        "ttl_seconds": -1,
+        "type": "hash"
+      }
+    ],
+    "tracking:meta:reports:*": [
+      {
+        "fields": [
+          "inserted_into_neo4j_at"
+        ],
+        "key": "tracking:meta:reports:0001013857-25-000217.2025-10-21T16.07.05-04.00",
+        "ttl_seconds": -1,
+        "type": "hash"
+      },
+      {
+        "fields": [
+          "inserted_into_neo4j_at"
+        ],
+        "key": "tracking:meta:reports:0001012975-26-000222.2026-03-03T17.00.02-05.00",
+        "ttl_seconds": -1,
+        "type": "hash"
+      },
+      {
+        "fields": [
+          "inserted_into_neo4j_at"
+        ],
+        "key": "tracking:meta:reports:0001193125-26-007731.2026-01-08T16.20.09-05.00",
+        "ttl_seconds": -1,
+        "type": "hash"
+      }
+    ],
+    "tracking:meta:transcripts:*": [
+      {
+        "fields": [
+          "inserted_into_neo4j_at"
+        ],
+        "key": "tracking:meta:transcripts:MMC_2026-04-16T08.30",
+        "ttl_seconds": -1,
+        "type": "hash"
+      }
+    ],
+    "transcripts:pending_returns": [
+      {
+        "first_with_score": [
+          [
+            "MMC_2026-04-16T08.30:hourly",
+            1776347220.0
+          ]
+        ],
+        "key": "transcripts:pending_returns",
+        "last_with_score": [
+          [
+            "XYL_2026-04-28T09.00:daily",
+            1777407420.0
+          ]
+        ],
+        "members": 13,
+        "ttl_seconds": -1,
+        "type": "zset"
+      }
+    ],
+    "transcripts:withoutreturns:*": [
+      {
+        "bytes": 57456,
+        "json_shape": {
+          "has_metadata": true,
+          "has_returns": true,
+          "instrument_count": 1,
+          "metadata_fields": [
+            "event",
+            "instruments",
+            "returns_schedule"
+          ],
+          "null_return_leaves": 3,
+          "populated_return_leaves": 0,
+          "return_leaf_field_shapes": [],
+          "return_period_field_shapes": [
+            {
+              "fields": [
+                "daily_return",
+                "hourly_return",
+                "session_return"
+              ],
+              "symbols": 1
+            }
+          ],
+          "return_symbol_count": 1,
+          "returns_schedule_fields": [
+            "daily",
+            "hourly",
+            "session"
+          ],
+          "top_level_fields": [
+            "calendar_quarter",
+            "calendar_year",
+            "company_name",
+            "conference_datetime",
+            "created",
+            "fiscal_quarter",
+            "fiscal_year",
+            "formType",
+            "full_transcript",
+            "id",
+            "metadata",
+            "prepared_remarks",
+            "qa_pairs",
+            "quarter_key",
+            "questions_and_answers",
+            "returns",
+            "speaker_roles_LLM",
+            "speakers",
+            "symbol",
+            "symbols",
+            "updated"
+          ],
+          "valid_json": true
+        },
+        "key": "transcripts:withoutreturns:OMCL_2026-04-28T08.30",
+        "ttl_seconds": -1,
+        "type": "string"
+      },
+      {
+        "bytes": 92198,
+        "json_shape": {
+          "has_metadata": true,
+          "has_returns": true,
+          "instrument_count": 1,
+          "metadata_fields": [
+            "event",
+            "instruments",
+            "returns_schedule"
+          ],
+          "null_return_leaves": 0,
+          "populated_return_leaves": 0,
+          "return_leaf_field_shapes": [],
+          "return_period_field_shapes": [],
+          "return_symbol_count": 0,
+          "returns_schedule_fields": [
+            "daily",
+            "hourly",
+            "session"
+          ],
+          "top_level_fields": [
+            "calendar_quarter",
+            "calendar_year",
+            "company_name",
+            "conference_datetime",
+            "created",
+            "fiscal_quarter",
+            "fiscal_year",
+            "formType",
+            "full_transcript",
+            "id",
+            "metadata",
+            "prepared_remarks",
+            "qa_pairs",
+            "quarter_key",
+            "questions_and_answers",
+            "returns",
+            "speaker_roles_LLM",
+            "speakers",
+            "symbol",
+            "symbols",
+            "updated"
+          ],
+          "valid_json": true
+        },
+        "key": "transcripts:withoutreturns:MMC_2026-04-16T08.30",
+        "ttl_seconds": -1,
+        "type": "string"
+      },
+      {
+        "bytes": 93920,
+        "json_shape": {
+          "has_metadata": true,
+          "has_returns": true,
+          "instrument_count": 1,
+          "metadata_fields": [
+            "event",
+            "instruments",
+            "returns_schedule"
+          ],
+          "null_return_leaves": 3,
+          "populated_return_leaves": 0,
+          "return_leaf_field_shapes": [],
+          "return_period_field_shapes": [
+            {
+              "fields": [
+                "daily_return",
+                "hourly_return",
+                "session_return"
+              ],
+              "symbols": 1
+            }
+          ],
+          "return_symbol_count": 1,
+          "returns_schedule_fields": [
+            "daily",
+            "hourly",
+            "session"
+          ],
+          "top_level_fields": [
+            "calendar_quarter",
+            "calendar_year",
+            "company_name",
+            "conference_datetime",
+            "created",
+            "fiscal_quarter",
+            "fiscal_year",
+            "formType",
+            "full_transcript",
+            "id",
+            "metadata",
+            "prepared_remarks",
+            "qa_pairs",
+            "quarter_key",
+            "questions_and_answers",
+            "returns",
+            "speaker_roles_LLM",
+            "speakers",
+            "symbol",
+            "symbols",
+            "updated"
+          ],
+          "valid_json": true
+        },
+        "key": "transcripts:withoutreturns:KMB_2026-04-28T08.00",
+        "ttl_seconds": -1,
+        "type": "string"
+      }
+    ]
+  }
+}

@@ -1,0 +1,816 @@
+{
+  "candidate": "LSE one-second candle close from the newest bar whose bar-start timestamp is at or before each production start/end timestamp.",
+  "case": "TSLA:2023-01-25",
+  "details": [
+    {
+      "created": "2023-01-25T04:41:42-05:00",
+      "difference_percentage_points": -0.03,
+      "end_within_export_bounds": true,
+      "event_id": "bzNews_30562501",
+      "exact_2dp": false,
+      "lse_end": {
+        "bar_start": "2023-01-25T14:35:00+00:00",
+        "close": 141.1
+      },
+      "lse_return": -1.18,
+      "lse_start": {
+        "bar_start": "2023-01-25T09:41:42+00:00",
+        "close": 142.78
+      },
+      "market_session": "pre_market",
+      "massive_stored_return": -1.15,
+      "period": "session",
+      "production_end": "2023-01-25T09:35:00-05:00",
+      "production_start": "2023-01-25T04:41:42-05:00",
+      "schedule_matches": true,
+      "start_within_export_bounds": true,
+      "stored_scheduled_end": "2023-01-25T09:35:00-05:00"
+    },
+    {
+      "created": "2023-01-25T05:50:49-05:00",
+      "difference_percentage_points": -0.03,
+      "end_within_export_bounds": true,
+      "event_id": "bzNews_30563552",
+      "exact_2dp": false,
+      "lse_end": {
+        "bar_start": "2023-01-25T14:35:00+00:00",
+        "close": 141.1
+      },
+      "lse_return": -0.46,
+      "lse_start": {
+        "bar_start": "2023-01-25T10:50:44+00:00",
+        "close": 141.75
+      },
+      "market_session": "pre_market",
+      "massive_stored_return": -0.43,
+      "period": "session",
+      "production_end": "2023-01-25T09:35:00-05:00",
+      "production_start": "2023-01-25T05:50:49-05:00",
+      "schedule_matches": true,
+      "start_within_export_bounds": true,
+      "stored_scheduled_end": "2023-01-25T09:35:00-05:00"
+    },
+    {
+      "created": "2023-01-25T06:39:40-05:00",
+      "difference_percentage_points": -0.01,
+      "end_within_export_bounds": true,
+      "event_id": "bzNews_30564047",
+      "exact_2dp": false,
+      "lse_end": {
+        "bar_start": "2023-01-25T14:35:00+00:00",
+        "close": 141.1
+      },
+      "lse_return": -0.51,
+      "lse_start": {
+        "bar_start": "2023-01-25T11:39:38+00:00",
+        "close": 141.82
+      },
+      "market_session": "pre_market",
+      "massive_stored_return": -0.5,
+      "period": "session",
+      "production_end": "2023-01-25T09:35:00-05:00",
+      "production_start": "2023-01-25T06:39:40-05:00",
+      "schedule_matches": true,
+      "start_within_export_bounds": true,
+      "stored_scheduled_end": "2023-01-25T09:35:00-05:00"
+    },
+    {
+      "created": "2023-01-25T07:21:26-05:00",
+      "difference_percentage_points": -0.01,
+      "end_within_export_bounds": true,
+      "event_id": "bzNews_30565088",
+      "exact_2dp": false,
+      "lse_end": {
+        "bar_start": "2023-01-25T14:35:00+00:00",
+        "close": 141.1
+      },
+      "lse_return": -0.87,
+      "lse_start": {
+        "bar_start": "2023-01-25T12:21:22+00:00",
+        "close": 142.34
+      },
+      "market_session": "pre_market",
+      "massive_stored_return": -0.86,
+      "period": "session",
+      "production_end": "2023-01-25T09:35:00-05:00",
+      "production_start": "2023-01-25T07:21:26-05:00",
+      "schedule_matches": true,
+      "start_within_export_bounds": true,
+      "stored_scheduled_end": "2023-01-25T09:35:00-05:00"
+    },
+    {
+      "created": "2023-01-25T07:23:22-05:00",
+      "difference_percentage_points": -0.03,
+      "end_within_export_bounds": true,
+      "event_id": "bzNews_30565096",
+      "exact_2dp": false,
+      "lse_end": {
+        "bar_start": "2023-01-25T14:35:00+00:00",
+        "close": 141.1
+      },
+      "lse_return": -0.72,
+      "lse_start": {
+        "bar_start": "2023-01-25T12:23:21+00:00",
+        "close": 142.13
+      },
+      "market_session": "pre_market",
+      "massive_stored_return": -0.69,
+      "period": "session",
+      "production_end": "2023-01-25T09:35:00-05:00",
+      "production_start": "2023-01-25T07:23:22-05:00",
+      "schedule_matches": true,
+      "start_within_export_bounds": true,
+      "stored_scheduled_end": "2023-01-25T09:35:00-05:00"
+    },
+    {
+      "created": "2023-01-25T09:00:38-05:00",
+      "difference_percentage_points": 0.02,
+      "end_within_export_bounds": true,
+      "event_id": "bzNews_30567458",
+      "exact_2dp": false,
+      "lse_end": {
+        "bar_start": "2023-01-25T14:35:00+00:00",
+        "close": 141.1
+      },
+      "lse_return": 0.17,
+      "lse_start": {
+        "bar_start": "2023-01-25T14:00:38+00:00",
+        "close": 140.86
+      },
+      "market_session": "pre_market",
+      "massive_stored_return": 0.15,
+      "period": "session",
+      "production_end": "2023-01-25T09:35:00-05:00",
+      "production_start": "2023-01-25T09:00:38-05:00",
+      "schedule_matches": true,
+      "start_within_export_bounds": true,
+      "stored_scheduled_end": "2023-01-25T09:35:00-05:00"
+    },
+    {
+      "created": "2023-01-25T09:02:30-05:00",
+      "difference_percentage_points": -0.03,
+      "end_within_export_bounds": true,
+      "event_id": "bzNews_30562365",
+      "exact_2dp": false,
+      "lse_end": {
+        "bar_start": "2023-01-25T14:35:00+00:00",
+        "close": 141.1
+      },
+      "lse_return": 0.16,
+      "lse_start": {
+        "bar_start": "2023-01-25T14:02:30+00:00",
+        "close": 140.87
+      },
+      "market_session": "pre_market",
+      "massive_stored_return": 0.19,
+      "period": "session",
+      "production_end": "2023-01-25T09:35:00-05:00",
+      "production_start": "2023-01-25T09:02:30-05:00",
+      "schedule_matches": true,
+      "start_within_export_bounds": true,
+      "stored_scheduled_end": "2023-01-25T09:35:00-05:00"
+    },
+    {
+      "created": "2023-01-25T11:27:48-05:00",
+      "difference_percentage_points": 0.08,
+      "end_within_export_bounds": true,
+      "event_id": "bzNews_30570958",
+      "exact_2dp": false,
+      "lse_end": {
+        "bar_start": "2023-01-25T21:00:00+00:00",
+        "close": 144.54
+      },
+      "lse_return": 1.69,
+      "lse_start": {
+        "bar_start": "2023-01-25T16:27:48+00:00",
+        "close": 142.14
+      },
+      "market_session": "in_market",
+      "massive_stored_return": 1.61,
+      "period": "session",
+      "production_end": "2023-01-25T16:00:00-05:00",
+      "production_start": "2023-01-25T11:27:48-05:00",
+      "schedule_matches": true,
+      "start_within_export_bounds": true,
+      "stored_scheduled_end": "2023-01-25T16:00:00-05:00"
+    },
+    {
+      "created": "2023-01-25T11:40:30-05:00",
+      "difference_percentage_points": 0.1,
+      "end_within_export_bounds": true,
+      "event_id": "bzNews_30571495",
+      "exact_2dp": false,
+      "lse_end": {
+        "bar_start": "2023-01-25T21:00:00+00:00",
+        "close": 144.54
+      },
+      "lse_return": 1.06,
+      "lse_start": {
+        "bar_start": "2023-01-25T16:40:30+00:00",
+        "close": 143.03
+      },
+      "market_session": "in_market",
+      "massive_stored_return": 0.96,
+      "period": "session",
+      "production_end": "2023-01-25T16:00:00-05:00",
+      "production_start": "2023-01-25T11:40:30-05:00",
+      "schedule_matches": true,
+      "start_within_export_bounds": true,
+      "stored_scheduled_end": "2023-01-25T16:00:00-05:00"
+    },
+    {
+      "created": "2023-01-25T12:58:10-05:00",
+      "difference_percentage_points": 0.08,
+      "end_within_export_bounds": true,
+      "event_id": "bzNews_30573189",
+      "exact_2dp": false,
+      "lse_end": {
+        "bar_start": "2023-01-25T21:00:00+00:00",
+        "close": 144.54
+      },
+      "lse_return": 0.91,
+      "lse_start": {
+        "bar_start": "2023-01-25T17:58:10+00:00",
+        "close": 143.23
+      },
+      "market_session": "in_market",
+      "massive_stored_return": 0.83,
+      "period": "session",
+      "production_end": "2023-01-25T16:00:00-05:00",
+      "production_start": "2023-01-25T12:58:10-05:00",
+      "schedule_matches": true,
+      "start_within_export_bounds": true,
+      "stored_scheduled_end": "2023-01-25T16:00:00-05:00"
+    },
+    {
+      "created": "2023-01-25T13:24:10-05:00",
+      "difference_percentage_points": 0.07,
+      "end_within_export_bounds": true,
+      "event_id": "bzNews_30573606",
+      "exact_2dp": false,
+      "lse_end": {
+        "bar_start": "2023-01-25T21:00:00+00:00",
+        "close": 144.54
+      },
+      "lse_return": 0.13,
+      "lse_start": {
+        "bar_start": "2023-01-25T18:24:10+00:00",
+        "close": 144.35
+      },
+      "market_session": "in_market",
+      "massive_stored_return": 0.06,
+      "period": "session",
+      "production_end": "2023-01-25T16:00:00-05:00",
+      "production_start": "2023-01-25T13:24:10-05:00",
+      "schedule_matches": true,
+      "start_within_export_bounds": true,
+      "stored_scheduled_end": "2023-01-25T16:00:00-05:00"
+    },
+    {
+      "created": "2023-01-25T13:25:23-05:00",
+      "difference_percentage_points": 0.07,
+      "end_within_export_bounds": true,
+      "event_id": "bzNews_30570553",
+      "exact_2dp": false,
+      "lse_end": {
+        "bar_start": "2023-01-25T21:00:00+00:00",
+        "close": 144.54
+      },
+      "lse_return": 0.14,
+      "lse_start": {
+        "bar_start": "2023-01-25T18:25:23+00:00",
+        "close": 144.34
+      },
+      "market_session": "in_market",
+      "massive_stored_return": 0.07,
+      "period": "session",
+      "production_end": "2023-01-25T16:00:00-05:00",
+      "production_start": "2023-01-25T13:25:23-05:00",
+      "schedule_matches": true,
+      "start_within_export_bounds": true,
+      "stored_scheduled_end": "2023-01-25T16:00:00-05:00"
+    },
+    {
+      "created": "2023-01-25T15:19:54-05:00",
+      "difference_percentage_points": 0.07,
+      "end_within_export_bounds": true,
+      "event_id": "bzNews_30574741",
+      "exact_2dp": false,
+      "lse_end": {
+        "bar_start": "2023-01-25T21:00:00+00:00",
+        "close": 144.54
+      },
+      "lse_return": -0.95,
+      "lse_start": {
+        "bar_start": "2023-01-25T20:19:54+00:00",
+        "close": 145.93
+      },
+      "market_session": "in_market",
+      "massive_stored_return": -1.02,
+      "period": "session",
+      "production_end": "2023-01-25T16:00:00-05:00",
+      "production_start": "2023-01-25T15:19:54-05:00",
+      "schedule_matches": true,
+      "start_within_export_bounds": true,
+      "stored_scheduled_end": "2023-01-25T16:00:00-05:00"
+    },
+    {
+      "created": "2023-01-25T16:06:09-05:00",
+      "difference_percentage_points": null,
+      "end_within_export_bounds": false,
+      "event_id": "bzNews_30575844",
+      "exact_2dp": false,
+      "lse_end": null,
+      "lse_return": null,
+      "lse_start": {
+        "bar_start": "2023-01-25T21:06:09+00:00",
+        "close": 145.16
+      },
+      "market_session": "post_market",
+      "massive_stored_return": 8.92,
+      "period": "session",
+      "production_end": "2023-01-26T09:35:00-05:00",
+      "production_start": "2023-01-25T16:06:09-05:00",
+      "schedule_matches": true,
+      "start_within_export_bounds": true,
+      "stored_scheduled_end": "2023-01-26T09:35:00-05:00"
+    },
+    {
+      "created": "2023-01-25T16:07:03-05:00",
+      "difference_percentage_points": null,
+      "end_within_export_bounds": false,
+      "event_id": "bzNews_30575869",
+      "exact_2dp": false,
+      "lse_end": null,
+      "lse_return": null,
+      "lse_start": {
+        "bar_start": "2023-01-25T21:07:03+00:00",
+        "close": 144.04
+      },
+      "market_session": "post_market",
+      "massive_stored_return": 9.32,
+      "period": "session",
+      "production_end": "2023-01-26T09:35:00-05:00",
+      "production_start": "2023-01-25T16:07:03-05:00",
+      "schedule_matches": true,
+      "start_within_export_bounds": true,
+      "stored_scheduled_end": "2023-01-26T09:35:00-05:00"
+    },
+    {
+      "created": "2023-01-25T16:07:18-05:00",
+      "difference_percentage_points": null,
+      "end_within_export_bounds": false,
+      "event_id": "bzNews_30575876",
+      "exact_2dp": false,
+      "lse_end": null,
+      "lse_return": null,
+      "lse_start": {
+        "bar_start": "2023-01-25T21:07:18+00:00",
+        "close": 144.36
+      },
+      "market_session": "post_market",
+      "massive_stored_return": 9.47,
+      "period": "session",
+      "production_end": "2023-01-26T09:35:00-05:00",
+      "production_start": "2023-01-25T16:07:18-05:00",
+      "schedule_matches": true,
+      "start_within_export_bounds": true,
+      "stored_scheduled_end": "2023-01-26T09:35:00-05:00"
+    },
+    {
+      "created": "2023-01-25T16:07:32-05:00",
+      "difference_percentage_points": null,
+      "end_within_export_bounds": false,
+      "event_id": "bzNews_30575881",
+      "exact_2dp": false,
+      "lse_end": null,
+      "lse_return": null,
+      "lse_start": {
+        "bar_start": "2023-01-25T21:07:32+00:00",
+        "close": 142.72
+      },
+      "market_session": "post_market",
+      "massive_stored_return": 10.77,
+      "period": "session",
+      "production_end": "2023-01-26T09:35:00-05:00",
+      "production_start": "2023-01-25T16:07:32-05:00",
+      "schedule_matches": true,
+      "start_within_export_bounds": true,
+      "stored_scheduled_end": "2023-01-26T09:35:00-05:00"
+    },
+    {
+      "created": "2023-01-25T16:08:15-05:00",
+      "difference_percentage_points": null,
+      "end_within_export_bounds": false,
+      "event_id": "bzNews_30575892",
+      "exact_2dp": false,
+      "lse_end": null,
+      "lse_return": null,
+      "lse_start": {
+        "bar_start": "2023-01-25T21:08:15+00:00",
+        "close": 144.28
+      },
+      "market_session": "post_market",
+      "massive_stored_return": 9.56,
+      "period": "session",
+      "production_end": "2023-01-26T09:35:00-05:00",
+      "production_start": "2023-01-25T16:08:15-05:00",
+      "schedule_matches": true,
+      "start_within_export_bounds": true,
+      "stored_scheduled_end": "2023-01-26T09:35:00-05:00"
+    },
+    {
+      "created": "2023-01-25T16:08:43-05:00",
+      "difference_percentage_points": null,
+      "end_within_export_bounds": false,
+      "event_id": "bzNews_30575900",
+      "exact_2dp": false,
+      "lse_end": null,
+      "lse_return": null,
+      "lse_start": {
+        "bar_start": "2023-01-25T21:08:43+00:00",
+        "close": 146.2
+      },
+      "market_session": "post_market",
+      "massive_stored_return": 8.18,
+      "period": "session",
+      "production_end": "2023-01-26T09:35:00-05:00",
+      "production_start": "2023-01-25T16:08:43-05:00",
+      "schedule_matches": true,
+      "start_within_export_bounds": true,
+      "stored_scheduled_end": "2023-01-26T09:35:00-05:00"
+    },
+    {
+      "created": "2023-01-25T16:09:20-05:00",
+      "difference_percentage_points": null,
+      "end_within_export_bounds": false,
+      "event_id": "bzNews_30575912",
+      "exact_2dp": false,
+      "lse_end": null,
+      "lse_return": null,
+      "lse_start": {
+        "bar_start": "2023-01-25T21:09:20+00:00",
+        "close": 149.46
+      },
+      "market_session": "post_market",
+      "massive_stored_return": 5.9,
+      "period": "session",
+      "production_end": "2023-01-26T09:35:00-05:00",
+      "production_start": "2023-01-25T16:09:20-05:00",
+      "schedule_matches": true,
+      "start_within_export_bounds": true,
+      "stored_scheduled_end": "2023-01-26T09:35:00-05:00"
+    },
+    {
+      "created": "2023-01-25T16:09:45-05:00",
+      "difference_percentage_points": null,
+      "end_within_export_bounds": false,
+      "event_id": "bzNews_30575955",
+      "exact_2dp": false,
+      "lse_end": null,
+      "lse_return": null,
+      "lse_start": {
+        "bar_start": "2023-01-25T21:09:45+00:00",
+        "close": 148.57
+      },
+      "market_session": "post_market",
+      "massive_stored_return": 6.54,
+      "period": "session",
+      "production_end": "2023-01-26T09:35:00-05:00",
+      "production_start": "2023-01-25T16:09:45-05:00",
+      "schedule_matches": true,
+      "start_within_export_bounds": true,
+      "stored_scheduled_end": "2023-01-26T09:35:00-05:00"
+    },
+    {
+      "created": "2023-01-25T16:10:30-05:00",
+      "difference_percentage_points": null,
+      "end_within_export_bounds": false,
+      "event_id": "bzNews_30576012",
+      "exact_2dp": false,
+      "lse_end": null,
+      "lse_return": null,
+      "lse_start": {
+        "bar_start": "2023-01-25T21:10:30+00:00",
+        "close": 145.98
+      },
+      "market_session": "post_market",
+      "massive_stored_return": 8.64,
+      "period": "session",
+      "production_end": "2023-01-26T09:35:00-05:00",
+      "production_start": "2023-01-25T16:10:30-05:00",
+      "schedule_matches": true,
+      "start_within_export_bounds": true,
+      "stored_scheduled_end": "2023-01-26T09:35:00-05:00"
+    },
+    {
+      "created": "2023-01-25T16:12:08-05:00",
+      "difference_percentage_points": null,
+      "end_within_export_bounds": false,
+      "event_id": "bzNews_30576041",
+      "exact_2dp": false,
+      "lse_end": null,
+      "lse_return": null,
+      "lse_start": {
+        "bar_start": "2023-01-25T21:12:08+00:00",
+        "close": 144.27
+      },
+      "market_session": "post_market",
+      "massive_stored_return": 9.73,
+      "period": "session",
+      "production_end": "2023-01-26T09:35:00-05:00",
+      "production_start": "2023-01-25T16:12:08-05:00",
+      "schedule_matches": true,
+      "start_within_export_bounds": true,
+      "stored_scheduled_end": "2023-01-26T09:35:00-05:00"
+    },
+    {
+      "created": "2023-01-25T16:42:09-05:00",
+      "difference_percentage_points": null,
+      "end_within_export_bounds": false,
+      "event_id": "bzNews_30576882",
+      "exact_2dp": false,
+      "lse_end": null,
+      "lse_return": null,
+      "lse_start": {
+        "bar_start": "2023-01-25T21:42:09+00:00",
+        "close": 143.94
+      },
+      "market_session": "post_market",
+      "massive_stored_return": 9.96,
+      "period": "session",
+      "production_end": "2023-01-26T09:35:00-05:00",
+      "production_start": "2023-01-25T16:42:09-05:00",
+      "schedule_matches": true,
+      "start_within_export_bounds": true,
+      "stored_scheduled_end": "2023-01-26T09:35:00-05:00"
+    },
+    {
+      "created": "2023-01-25T16:49:15-05:00",
+      "difference_percentage_points": null,
+      "end_within_export_bounds": false,
+      "event_id": "bzNews_30577033",
+      "exact_2dp": false,
+      "lse_end": null,
+      "lse_return": null,
+      "lse_start": {
+        "bar_start": "2023-01-25T21:49:15+00:00",
+        "close": 145.05
+      },
+      "market_session": "post_market",
+      "massive_stored_return": 9.16,
+      "period": "session",
+      "production_end": "2023-01-26T09:35:00-05:00",
+      "production_start": "2023-01-25T16:49:15-05:00",
+      "schedule_matches": true,
+      "start_within_export_bounds": true,
+      "stored_scheduled_end": "2023-01-26T09:35:00-05:00"
+    },
+    {
+      "created": "2023-01-25T17:37:32-05:00",
+      "difference_percentage_points": null,
+      "end_within_export_bounds": false,
+      "event_id": "bzNews_30577675",
+      "exact_2dp": false,
+      "lse_end": null,
+      "lse_return": null,
+      "lse_start": {
+        "bar_start": "2023-01-25T22:37:32+00:00",
+        "close": 146.78
+      },
+      "market_session": "post_market",
+      "massive_stored_return": 7.92,
+      "period": "session",
+      "production_end": "2023-01-26T09:35:00-05:00",
+      "production_start": "2023-01-25T17:37:32-05:00",
+      "schedule_matches": true,
+      "start_within_export_bounds": true,
+      "stored_scheduled_end": "2023-01-26T09:35:00-05:00"
+    },
+    {
+      "created": "2023-01-25T17:38:19-05:00",
+      "difference_percentage_points": null,
+      "end_within_export_bounds": false,
+      "event_id": "bzNews_30577679",
+      "exact_2dp": false,
+      "lse_end": null,
+      "lse_return": null,
+      "lse_start": {
+        "bar_start": "2023-01-25T22:38:19+00:00",
+        "close": 146.9
+      },
+      "market_session": "post_market",
+      "massive_stored_return": 7.73,
+      "period": "session",
+      "production_end": "2023-01-26T09:35:00-05:00",
+      "production_start": "2023-01-25T17:38:19-05:00",
+      "schedule_matches": true,
+      "start_within_export_bounds": true,
+      "stored_scheduled_end": "2023-01-26T09:35:00-05:00"
+    },
+    {
+      "created": "2023-01-25T17:39:23-05:00",
+      "difference_percentage_points": null,
+      "end_within_export_bounds": false,
+      "event_id": "bzNews_30577688",
+      "exact_2dp": false,
+      "lse_end": null,
+      "lse_return": null,
+      "lse_start": {
+        "bar_start": "2023-01-25T22:39:23+00:00",
+        "close": 146.57
+      },
+      "market_session": "post_market",
+      "massive_stored_return": 7.99,
+      "period": "session",
+      "production_end": "2023-01-26T09:35:00-05:00",
+      "production_start": "2023-01-25T17:39:23-05:00",
+      "schedule_matches": true,
+      "start_within_export_bounds": true,
+      "stored_scheduled_end": "2023-01-26T09:35:00-05:00"
+    },
+    {
+      "created": "2023-01-25T17:43:30-05:00",
+      "difference_percentage_points": null,
+      "end_within_export_bounds": false,
+      "event_id": "bzNews_30577713",
+      "exact_2dp": false,
+      "lse_end": null,
+      "lse_return": null,
+      "lse_start": {
+        "bar_start": "2023-01-25T22:43:30+00:00",
+        "close": 146.09
+      },
+      "market_session": "post_market",
+      "massive_stored_return": 8.34,
+      "period": "session",
+      "production_end": "2023-01-26T09:35:00-05:00",
+      "production_start": "2023-01-25T17:43:30-05:00",
+      "schedule_matches": true,
+      "start_within_export_bounds": true,
+      "stored_scheduled_end": "2023-01-26T09:35:00-05:00"
+    },
+    {
+      "created": "2023-01-25T17:45:04-05:00",
+      "difference_percentage_points": null,
+      "end_within_export_bounds": false,
+      "event_id": "bzNews_30577724",
+      "exact_2dp": false,
+      "lse_end": null,
+      "lse_return": null,
+      "lse_start": {
+        "bar_start": "2023-01-25T22:45:04+00:00",
+        "close": 145.53
+      },
+      "market_session": "post_market",
+      "massive_stored_return": 8.77,
+      "period": "session",
+      "production_end": "2023-01-26T09:35:00-05:00",
+      "production_start": "2023-01-25T17:45:04-05:00",
+      "schedule_matches": true,
+      "start_within_export_bounds": true,
+      "stored_scheduled_end": "2023-01-26T09:35:00-05:00"
+    },
+    {
+      "created": "2023-01-25T17:46:02-05:00",
+      "difference_percentage_points": null,
+      "end_within_export_bounds": false,
+      "event_id": "bzNews_30577729",
+      "exact_2dp": false,
+      "lse_end": null,
+      "lse_return": null,
+      "lse_start": {
+        "bar_start": "2023-01-25T22:46:02+00:00",
+        "close": 145.7
+      },
+      "market_session": "post_market",
+      "massive_stored_return": 8.64,
+      "period": "session",
+      "production_end": "2023-01-26T09:35:00-05:00",
+      "production_start": "2023-01-25T17:46:02-05:00",
+      "schedule_matches": true,
+      "start_within_export_bounds": true,
+      "stored_scheduled_end": "2023-01-26T09:35:00-05:00"
+    },
+    {
+      "created": "2023-01-25T17:53:05-05:00",
+      "difference_percentage_points": null,
+      "end_within_export_bounds": false,
+      "event_id": "bzNews_30577784",
+      "exact_2dp": false,
+      "lse_end": null,
+      "lse_return": null,
+      "lse_start": {
+        "bar_start": "2023-01-25T22:53:04+00:00",
+        "close": 146.4
+      },
+      "market_session": "post_market",
+      "massive_stored_return": 8.19,
+      "period": "session",
+      "production_end": "2023-01-26T09:35:00-05:00",
+      "production_start": "2023-01-25T17:53:05-05:00",
+      "schedule_matches": true,
+      "start_within_export_bounds": true,
+      "stored_scheduled_end": "2023-01-26T09:35:00-05:00"
+    },
+    {
+      "created": "2023-01-25T17:53:46-05:00",
+      "difference_percentage_points": null,
+      "end_within_export_bounds": false,
+      "event_id": "bzNews_30577788",
+      "exact_2dp": false,
+      "lse_end": null,
+      "lse_return": null,
+      "lse_start": {
+        "bar_start": "2023-01-25T22:53:46+00:00",
+        "close": 146.09
+      },
+      "market_session": "post_market",
+      "massive_stored_return": 8.35,
+      "period": "session",
+      "production_end": "2023-01-26T09:35:00-05:00",
+      "production_start": "2023-01-25T17:53:46-05:00",
+      "schedule_matches": true,
+      "start_within_export_bounds": true,
+      "stored_scheduled_end": "2023-01-26T09:35:00-05:00"
+    },
+    {
+      "created": "2023-01-25T17:58:46-05:00",
+      "difference_percentage_points": null,
+      "end_within_export_bounds": false,
+      "event_id": "bzNews_30577836",
+      "exact_2dp": false,
+      "lse_end": null,
+      "lse_return": null,
+      "lse_start": {
+        "bar_start": "2023-01-25T22:58:46+00:00",
+        "close": 146.2
+      },
+      "market_session": "post_market",
+      "massive_stored_return": 8.27,
+      "period": "session",
+      "production_end": "2023-01-26T09:35:00-05:00",
+      "production_start": "2023-01-25T17:58:46-05:00",
+      "schedule_matches": true,
+      "start_within_export_bounds": true,
+      "stored_scheduled_end": "2023-01-26T09:35:00-05:00"
+    },
+    {
+      "created": "2023-01-25T18:03:59-05:00",
+      "difference_percentage_points": null,
+      "end_within_export_bounds": false,
+      "event_id": "bzNews_30577878",
+      "exact_2dp": false,
+      "lse_end": null,
+      "lse_return": null,
+      "lse_start": {
+        "bar_start": "2023-01-25T23:03:59+00:00",
+        "close": 147.2
+      },
+      "market_session": "post_market",
+      "massive_stored_return": 7.5,
+      "period": "session",
+      "production_end": "2023-01-26T09:35:00-05:00",
+      "production_start": "2023-01-25T18:03:59-05:00",
+      "schedule_matches": true,
+      "start_within_export_bounds": true,
+      "stored_scheduled_end": "2023-01-26T09:35:00-05:00"
+    },
+    {
+      "created": "2023-01-25T21:03:54-05:00",
+      "difference_percentage_points": null,
+      "end_within_export_bounds": false,
+      "event_id": "bzNews_30579390",
+      "exact_2dp": false,
+      "lse_end": null,
+      "lse_return": null,
+      "lse_start": null,
+      "market_session": "market_closed",
+      "massive_stored_return": 3.9,
+      "period": "session",
+      "production_end": "2023-01-26T09:35:00-05:00",
+      "production_start": "2023-01-25T20:00:00-05:00",
+      "schedule_matches": true,
+      "start_within_export_bounds": false,
+      "stored_scheduled_end": "2023-01-26T09:35:00-05:00"
+    }
+  ],
+  "events": 36,
+  "export_bounds_utc": {
+    "first_bar_start": "2023-01-25T00:00:03+00:00",
+    "last_bar_start": "2023-01-25T23:59:59+00:00"
+  },
+  "generated_at_utc": "2026-07-19T15:58:20+00:00",
+  "period": "session",
+  "reference": "Stored Neo4j session_stock values originally produced by Massive one-second adjusted aggregates.",
+  "safety": "No network or database calls. Production source was imported read-only only for its exact market-window calculation.",
+  "summary": {
+    "comparable": 13,
+    "exact_2dp": 0,
+    "max_absolute_percentage_points": 0.1,
+    "mean_absolute_percentage_points": 0.04846153846153847,
+    "schedule_matches": 36,
+    "within_1bp": 2,
+    "within_5bp": 7
+  }
+}

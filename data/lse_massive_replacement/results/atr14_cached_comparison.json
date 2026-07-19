@@ -1,0 +1,131 @@
+{
+  "atr_days": 14,
+  "generated_at_utc": "2026-07-19T16:43:20+00:00",
+  "method": "For every rolling common-date window, calculate true range as max(high-low, |high-prior close|, |low-prior close|), then take the arithmetic mean of the final N true ranges.",
+  "safety": "Cached files only; no network, database, or production writes.",
+  "summary": {
+    "max_absolute_price_units": 6.033621428571426,
+    "max_relative_bp": 18370.927318295737,
+    "mean_absolute_price_units": 0.7548283552662837,
+    "mean_relative_bp": 2670.1857922343265,
+    "p95_absolute_price_units": 2.61224285714286,
+    "p95_relative_bp": 9686.896490488134,
+    "rolling_windows": 3007,
+    "same_rounded_2dp": 13,
+    "symbols": 8
+  },
+  "symbols": {
+    "A": {
+      "common_dates": 444,
+      "final_window": {
+        "absolute_difference": 0.26928571428571013,
+        "end_date": "2026-04-27",
+        "lse_atr": 3.7442857142857116,
+        "massive_atr": 3.4750000000000014,
+        "relative_difference_bp": 774.9229188077985,
+        "same_rounded_2dp": false,
+        "symbol": "A"
+      },
+      "first_common_date": "2024-07-19",
+      "last_common_date": "2026-04-27",
+      "rolling_windows": 430
+    },
+    "AVGO": {
+      "common_dates": 444,
+      "final_window": {
+        "absolute_difference": 1.7610714285714355,
+        "end_date": "2026-04-27",
+        "lse_atr": 14.302857142857144,
+        "massive_atr": 12.541785714285709,
+        "relative_difference_bp": 1404.163225788086,
+        "same_rounded_2dp": false,
+        "symbol": "AVGO"
+      },
+      "first_common_date": "2024-07-19",
+      "last_common_date": "2026-04-27",
+      "rolling_windows": 430
+    },
+    "CNS": {
+      "common_dates": 444,
+      "final_window": {
+        "absolute_difference": 0.011428571428572676,
+        "end_date": "2026-04-27",
+        "lse_atr": 1.8892857142857125,
+        "massive_atr": 1.9007142857142851,
+        "relative_difference_bp": 60.12777151447482,
+        "same_rounded_2dp": false,
+        "symbol": "CNS"
+      },
+      "first_common_date": "2024-07-19",
+      "last_common_date": "2026-04-27",
+      "rolling_windows": 430
+    },
+    "EPD": {
+      "common_dates": 444,
+      "final_window": {
+        "absolute_difference": 0.13575000000000215,
+        "end_date": "2026-04-27",
+        "lse_atr": 0.8221428571428581,
+        "massive_atr": 0.6863928571428559,
+        "relative_difference_bp": 1977.730370987079,
+        "same_rounded_2dp": false,
+        "symbol": "EPD"
+      },
+      "first_common_date": "2024-07-19",
+      "last_common_date": "2026-04-27",
+      "rolling_windows": 430
+    },
+    "HP": {
+      "common_dates": 443,
+      "final_window": {
+        "absolute_difference": 0.26300000000000123,
+        "end_date": "2026-04-24",
+        "lse_atr": 1.6650000000000003,
+        "massive_atr": 1.401999999999999,
+        "relative_difference_bp": 1875.8915834522213,
+        "same_rounded_2dp": false,
+        "symbol": "HP"
+      },
+      "first_common_date": "2024-07-19",
+      "last_common_date": "2026-04-24",
+      "rolling_windows": 429
+    },
+    "RGEN": {
+      "common_dates": 443,
+      "final_window": {
+        "absolute_difference": 0.5882142857142911,
+        "end_date": "2026-04-24",
+        "lse_atr": 7.4721428571428605,
+        "massive_atr": 6.883928571428569,
+        "relative_difference_bp": 854.4747081712144,
+        "same_rounded_2dp": false,
+        "symbol": "RGEN"
+      },
+      "first_common_date": "2024-07-19",
+      "last_common_date": "2026-04-24",
+      "rolling_windows": 429
+    },
+    "TPG": {
+      "common_dates": 1,
+      "final_window": null,
+      "first_common_date": "2026-04-27",
+      "last_common_date": "2026-04-27",
+      "rolling_windows": 0
+    },
+    "ZYME": {
+      "common_dates": 443,
+      "final_window": {
+        "absolute_difference": 0.7536999999999991,
+        "end_date": "2026-04-24",
+        "lse_atr": 1.8149999999999997,
+        "massive_atr": 1.0613000000000006,
+        "relative_difference_bp": 7101.667765947412,
+        "same_rounded_2dp": false,
+        "symbol": "ZYME"
+      },
+      "first_common_date": "2024-07-19",
+      "last_common_date": "2026-04-24",
+      "rolling_windows": 429
+    }
+  }
+}

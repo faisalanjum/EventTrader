@@ -1,0 +1,368 @@
+{
+  "generated_at_utc": "2026-07-19T16:41:43+00:00",
+  "missing_lse_indicator_symbols": [
+    "RSP",
+    "SHY",
+    "USO",
+    "UUP",
+    "VIXY"
+  ],
+  "pit": "2026-07-17T16:30:00-04:00",
+  "safety": "GET requests only; API keys were not printed or saved. Production macro functions were imported read-only. No database or production code was changed.",
+  "session": "post_market",
+  "spy": {
+    "differences": {
+      "change_20d": {
+        "difference": 2.41,
+        "lse": 2.72,
+        "massive": 0.31
+      },
+      "change_5d": {
+        "difference": -0.1,
+        "lse": -1.64,
+        "massive": -1.54
+      },
+      "change_ytd": {
+        "difference": -5.14,
+        "lse": 3.66,
+        "massive": 8.8
+      },
+      "last_60m": {
+        "difference": 0.0,
+        "lse": -0.05,
+        "massive": -0.05
+      },
+      "level_at_pit": {
+        "difference": 0.0,
+        "lse": 742.81,
+        "massive": 742.81
+      },
+      "ma_200": {
+        "lse": null,
+        "massive": 696.69
+      },
+      "ma_50": {
+        "difference": -3.84,
+        "lse": 740.54,
+        "massive": 744.38
+      },
+      "open_to_pit": {
+        "difference": 0.0,
+        "lse": -0.4,
+        "massive": -0.4
+      },
+      "overnight_gap": {
+        "difference": 0.21,
+        "lse": -0.44,
+        "massive": -0.65
+      },
+      "today_return": {
+        "difference": 0.11,
+        "lse": -0.88,
+        "massive": -0.99
+      },
+      "volume_20d_avg": {
+        "difference": -1496864.0,
+        "lse": 50957021,
+        "massive": 52453885
+      },
+      "volume_5d_avg": {
+        "difference": -7057684.0,
+        "lse": 39354778,
+        "massive": 46412462
+      },
+      "volume_ratio": {
+        "difference": -0.11,
+        "lse": 0.77,
+        "massive": 0.88
+      },
+      "vs_200d": {
+        "lse": null,
+        "massive": 6.62
+      },
+      "vs_50d": {
+        "difference": 0.52,
+        "lse": 0.31,
+        "massive": -0.21
+      },
+      "yesterday": {
+        "difference": -0.2,
+        "lse": -0.74,
+        "massive": -0.54
+      }
+    },
+    "lse_history": {
+      "covers_pit_year_start": false,
+      "first_date": "2026-04-27",
+      "has_200_settled_rows": false,
+      "last_date": "2026-07-17",
+      "rows": 51
+    },
+    "lse_metric": {
+      "change_20d": 2.72,
+      "change_5d": -1.64,
+      "change_ytd": 3.66,
+      "last_60m": -0.05,
+      "last_settled_date": "2026-07-17",
+      "level_at_pit": 742.81,
+      "ma_200": null,
+      "ma_50": 740.54,
+      "open_to_pit": -0.4,
+      "overnight_gap": -0.44,
+      "today_return": -0.88,
+      "volume_20d_avg": 50957021,
+      "volume_5d_avg": 39354778,
+      "volume_ratio": 0.77,
+      "vs_200d": null,
+      "vs_50d": 0.31,
+      "yesterday": -0.74
+    },
+    "massive_history": {
+      "covers_pit_year_start": true,
+      "first_date": "2025-01-02",
+      "has_200_settled_rows": true,
+      "last_date": "2026-07-17",
+      "rows": 385
+    },
+    "massive_metric": {
+      "change_20d": 0.31,
+      "change_5d": -1.54,
+      "change_ytd": 8.8,
+      "last_60m": -0.05,
+      "last_settled_date": "2026-07-17",
+      "level_at_pit": 742.81,
+      "ma_200": 696.69,
+      "ma_50": 744.38,
+      "open_to_pit": -0.4,
+      "overnight_gap": -0.65,
+      "today_return": -0.99,
+      "volume_20d_avg": 52453885,
+      "volume_5d_avg": 46412462,
+      "volume_ratio": 0.88,
+      "vs_200d": 6.62,
+      "vs_50d": -0.21,
+      "yesterday": -0.54
+    },
+    "raw_row_counts": {
+      "lse_daily_after_exchange_calendar_filter": 51,
+      "lse_minute_after_et_day_filter": 947,
+      "lse_minute_utc_day": 948,
+      "massive_daily": 385,
+      "massive_minute": 920
+    }
+  },
+  "supported_lse_indicators": {
+    "GLD": {
+      "differences": {
+        "change_5d": {
+          "difference": -0.28,
+          "lse": -2.56,
+          "massive": -2.28
+        },
+        "change_ytd": {
+          "difference": -7.04,
+          "lse": -14.54,
+          "massive": -7.5
+        },
+        "last_return": {
+          "difference": -0.26,
+          "lse": 0.69,
+          "massive": 0.95
+        },
+        "level": {
+          "difference": -0.2,
+          "lse": 368.21,
+          "massive": 368.41
+        }
+      },
+      "label": "Gold (GLD)",
+      "lse_history": {
+        "covers_pit_year_start": false,
+        "first_date": "2026-04-27",
+        "has_200_settled_rows": false,
+        "last_date": "2026-07-17",
+        "rows": 51
+      },
+      "lse_metric": {
+        "change_5d": -2.56,
+        "change_ytd": -14.54,
+        "last_return": 0.69,
+        "level": 368.21,
+        "return_label": "today"
+      },
+      "massive_history": {
+        "covers_pit_year_start": true,
+        "first_date": "2025-01-02",
+        "has_200_settled_rows": true,
+        "last_date": "2026-07-17",
+        "rows": 385
+      },
+      "massive_metric": {
+        "change_5d": -2.28,
+        "change_ytd": -7.5,
+        "last_return": 0.95,
+        "level": 368.41,
+        "return_label": "today"
+      }
+    },
+    "HYG": {
+      "differences": {
+        "change_5d": {
+          "difference": 0.07,
+          "lse": -0.01,
+          "massive": -0.08
+        },
+        "change_ytd": {
+          "difference": 0.27,
+          "lse": -0.99,
+          "massive": -1.26
+        },
+        "last_return": {
+          "difference": 0.05,
+          "lse": -0.14,
+          "massive": -0.19
+        },
+        "level": {
+          "difference": 0.04,
+          "lse": 79.69,
+          "massive": 79.65
+        }
+      },
+      "label": "Credit (HYG)",
+      "lse_history": {
+        "covers_pit_year_start": false,
+        "first_date": "2026-04-27",
+        "has_200_settled_rows": false,
+        "last_date": "2026-07-17",
+        "rows": 55
+      },
+      "lse_metric": {
+        "change_5d": -0.01,
+        "change_ytd": -0.99,
+        "last_return": -0.14,
+        "level": 79.69,
+        "return_label": "today"
+      },
+      "massive_history": {
+        "covers_pit_year_start": true,
+        "first_date": "2025-01-02",
+        "has_200_settled_rows": true,
+        "last_date": "2026-07-17",
+        "rows": 385
+      },
+      "massive_metric": {
+        "change_5d": -0.08,
+        "change_ytd": -1.26,
+        "last_return": -0.19,
+        "level": 79.65,
+        "return_label": "today"
+      }
+    },
+    "IWM": {
+      "differences": {
+        "change_5d": {
+          "difference": -0.19,
+          "lse": -0.85,
+          "massive": -0.66
+        },
+        "change_ytd": {
+          "difference": -12.5,
+          "lse": 5.69,
+          "massive": 18.19
+        },
+        "last_return": {
+          "difference": -0.04,
+          "lse": -0.56,
+          "massive": -0.52
+        },
+        "level": {
+          "difference": -0.55,
+          "lse": 293.49,
+          "massive": 294.04
+        }
+      },
+      "label": "Small Cap (IWM)",
+      "lse_history": {
+        "covers_pit_year_start": false,
+        "first_date": "2026-04-27",
+        "has_200_settled_rows": false,
+        "last_date": "2026-07-17",
+        "rows": 51
+      },
+      "lse_metric": {
+        "change_5d": -0.85,
+        "change_ytd": 5.69,
+        "last_return": -0.56,
+        "level": 293.49,
+        "return_label": "today"
+      },
+      "massive_history": {
+        "covers_pit_year_start": true,
+        "first_date": "2025-01-02",
+        "has_200_settled_rows": true,
+        "last_date": "2026-07-17",
+        "rows": 385
+      },
+      "massive_metric": {
+        "change_5d": -0.66,
+        "change_ytd": 18.19,
+        "last_return": -0.52,
+        "level": 294.04,
+        "return_label": "today"
+      }
+    },
+    "TLT": {
+      "differences": {
+        "change_5d": {
+          "difference": -0.11,
+          "lse": -0.05,
+          "massive": 0.06
+        },
+        "change_ytd": {
+          "difference": 0.78,
+          "lse": -2.1,
+          "massive": -2.88
+        },
+        "last_return": {
+          "difference": -0.01,
+          "lse": 0.36,
+          "massive": 0.37
+        },
+        "level": {
+          "difference": -0.02,
+          "lse": 84.5,
+          "massive": 84.52
+        }
+      },
+      "label": "Rates long (TLT)",
+      "lse_history": {
+        "covers_pit_year_start": false,
+        "first_date": "2026-04-27",
+        "has_200_settled_rows": false,
+        "last_date": "2026-07-17",
+        "rows": 55
+      },
+      "lse_metric": {
+        "change_5d": -0.05,
+        "change_ytd": -2.1,
+        "last_return": 0.36,
+        "level": 84.5,
+        "return_label": "today"
+      },
+      "massive_history": {
+        "covers_pit_year_start": true,
+        "first_date": "2025-01-02",
+        "has_200_settled_rows": true,
+        "last_date": "2026-07-17",
+        "rows": 385
+      },
+      "massive_metric": {
+        "change_5d": 0.06,
+        "change_ytd": -2.88,
+        "last_return": 0.37,
+        "level": 84.52,
+        "return_label": "today"
+      }
+    }
+  }
+}

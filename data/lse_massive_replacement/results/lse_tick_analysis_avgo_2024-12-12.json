@@ -1,0 +1,93 @@
+{
+  "boundary": {
+    "first_price_after_boundary": 180.94,
+    "first_ts_after_boundary": "2024-12-12T21:00:00.003225",
+    "last_price_at_or_before_boundary": 180.91,
+    "last_ts_at_or_before_boundary": "2024-12-12T20:59:59.998023"
+  },
+  "full_export": {
+    "close": 207.47,
+    "first_ts": "2024-12-12T00:00:01.855694",
+    "high": 209.9,
+    "last_ts": "2024-12-12T23:59:57.595432",
+    "low": 175.97,
+    "open": 182.86,
+    "ticks": 333839,
+    "volume": 28366860.0
+  },
+  "generated_at_utc": "2026-07-19T15:53:15+00:00",
+  "important_limit": "Raw LSE rows contain only timestamp, symbol, price, and volume; they do not expose exchange, sale conditions, correction flags, participant timestamp, SIP timestamp, or sequence number.",
+  "input": "raw/lse_tick_exports/stocks_AVGO_tick.parquet",
+  "one_second_raw_rollups": {
+    "2024-12-12 20:59:59+00": {
+      "close": 180.91,
+      "first_ts": "2024-12-12T20:59:59.024696",
+      "high": 180.99,
+      "last_ts": "2024-12-12T20:59:59.998023",
+      "low": 180.89,
+      "open": 180.96,
+      "ticks": 110,
+      "volume": 29054.0
+    },
+    "2024-12-12 21:00:00+00": {
+      "close": 180.87,
+      "first_ts": "2024-12-12T21:00:00.003225",
+      "high": 180.99,
+      "last_ts": "2024-12-12T21:00:00.704456",
+      "low": 180.66,
+      "open": 180.94,
+      "ticks": 11,
+      "volume": 5887359.0
+    },
+    "2024-12-12 21:00:01+00": {
+      "close": 180.89,
+      "first_ts": "2024-12-12T21:00:01.245471",
+      "high": 180.89,
+      "last_ts": "2024-12-12T21:00:01.546736",
+      "low": 180.87,
+      "open": 180.87,
+      "ticks": 3,
+      "volume": 72.0
+    }
+  },
+  "reference_close_occurrences": {
+    "first_ts": "2024-12-12T13:36:20.810164",
+    "last_ts": "2024-12-12T21:16:15.253230",
+    "ticks": 691,
+    "ticks_at_or_after_boundary": 119,
+    "ticks_before_boundary": 572,
+    "volume": 5928850.0
+  },
+  "regular_session_half_open": {
+    "close": 180.91,
+    "first_ts": "2024-12-12T14:30:00.016934",
+    "high": 182.0,
+    "last_ts": "2024-12-12T20:59:59.998023",
+    "low": 175.97,
+    "open": 181.0,
+    "ticks": 207273,
+    "volume": 13679578.0
+  },
+  "schema": [
+    {
+      "name": "ts",
+      "nullable": "YES",
+      "type": "TIMESTAMP WITH TIME ZONE"
+    },
+    {
+      "name": "symbol",
+      "nullable": "YES",
+      "type": "VARCHAR"
+    },
+    {
+      "name": "price",
+      "nullable": "YES",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "volume",
+      "nullable": "YES",
+      "type": "DOUBLE"
+    }
+  ]
+}

@@ -1,0 +1,776 @@
+{
+  "generated_at_utc": "2026-07-19T14:19:50+00:00",
+  "probes": {
+    "aapl_daily_2023": {
+      "request": {
+        "params": {
+          "dataset": "stocks",
+          "end": "2023-01-10",
+          "limit": 20,
+          "order": "asc",
+          "start": "2023-01-03",
+          "symbol": "AAPL",
+          "timeframe": "1d"
+        },
+        "path": "/candles"
+      },
+      "response": {
+        "body_type": "list",
+        "field_names": [
+          "close",
+          "high",
+          "low",
+          "open",
+          "symbol",
+          "ts",
+          "volume"
+        ],
+        "first_rows": [
+          {
+            "close": 124.96,
+            "high": 131.46,
+            "low": 124.17,
+            "open": 130.28,
+            "symbol": "AAPL",
+            "ts": "2023-01-03 00:00:00.000000",
+            "volume": 64335834
+          },
+          {
+            "close": 127,
+            "high": 128.66,
+            "low": 124.91,
+            "open": 124.96,
+            "symbol": "AAPL",
+            "ts": "2023-01-04 00:00:00.000000",
+            "volume": 47858779
+          },
+          {
+            "close": 125.17,
+            "high": 127.88,
+            "low": 124.76,
+            "open": 127.01,
+            "symbol": "AAPL",
+            "ts": "2023-01-05 00:00:00.000000",
+            "volume": 43595925
+          }
+        ],
+        "headers": {
+          "x-data-bytes": "627"
+        },
+        "last_rows": [
+          {
+            "close": 125.17,
+            "high": 127.88,
+            "low": 124.76,
+            "open": 127.01,
+            "symbol": "AAPL",
+            "ts": "2023-01-05 00:00:00.000000",
+            "volume": 43595925
+          },
+          {
+            "close": 129.35,
+            "high": 130.29,
+            "low": 124.4,
+            "open": 125.14,
+            "symbol": "AAPL",
+            "ts": "2023-01-06 00:00:00.000000",
+            "volume": 50703575
+          },
+          {
+            "close": 130.02,
+            "high": 133.41,
+            "low": 128.99,
+            "open": 128.99,
+            "symbol": "AAPL",
+            "ts": "2023-01-09 00:00:00.000000",
+            "volume": 37469859
+          }
+        ],
+        "row_count": 5,
+        "status": 200
+      }
+    },
+    "aapl_dividends": {
+      "request": {
+        "params": {
+          "limit": 5,
+          "order": "desc",
+          "symbol": "AAPL"
+        },
+        "path": "/ref/dividends"
+      },
+      "response": {
+        "body_type": "list",
+        "field_names": [
+          "created_at",
+          "currency",
+          "declaration_date",
+          "dividend_amount",
+          "dividend_type",
+          "effective_date",
+          "frequency",
+          "id",
+          "payment_date",
+          "record_date",
+          "symbol"
+        ],
+        "first_rows": [
+          {
+            "created_at": "2026-05-02 04:00:55",
+            "currency": "USD",
+            "declaration_date": "2026-04-30",
+            "dividend_amount": 0.27,
+            "dividend_type": "CD",
+            "effective_date": "2026-05-11",
+            "frequency": "4",
+            "id": 1428149,
+            "payment_date": "2026-05-14",
+            "record_date": "2026-05-11",
+            "symbol": "AAPL"
+          },
+          {
+            "created_at": "2026-04-13 18:42:19",
+            "currency": "USD",
+            "declaration_date": "2026-01-29",
+            "dividend_amount": 0.26,
+            "dividend_type": "CD",
+            "effective_date": "2026-02-09",
+            "frequency": "Quarterly",
+            "id": 783555,
+            "payment_date": "2026-02-12",
+            "record_date": "2026-02-09",
+            "symbol": "AAPL"
+          },
+          {
+            "created_at": "2025-12-09 13:50:43",
+            "currency": "USD",
+            "declaration_date": "2025-10-30",
+            "dividend_amount": 0.26,
+            "dividend_type": "Regular",
+            "effective_date": "2025-11-10",
+            "frequency": "4",
+            "id": 783556,
+            "payment_date": "2025-11-13",
+            "record_date": "2025-11-10",
+            "symbol": "AAPL"
+          }
+        ],
+        "headers": {
+          "x-data-bytes": "1320"
+        },
+        "last_rows": [
+          {
+            "created_at": "2025-12-09 13:50:43",
+            "currency": "USD",
+            "declaration_date": "2025-10-30",
+            "dividend_amount": 0.26,
+            "dividend_type": "Regular",
+            "effective_date": "2025-11-10",
+            "frequency": "4",
+            "id": 783556,
+            "payment_date": "2025-11-13",
+            "record_date": "2025-11-10",
+            "symbol": "AAPL"
+          },
+          {
+            "created_at": "2025-12-09 13:50:43",
+            "currency": "USD",
+            "declaration_date": "2025-07-31",
+            "dividend_amount": 0.26,
+            "dividend_type": "Regular",
+            "effective_date": "2025-08-11",
+            "frequency": "4",
+            "id": 783557,
+            "payment_date": "2025-08-14",
+            "record_date": "2025-08-11",
+            "symbol": "AAPL"
+          },
+          {
+            "created_at": "2025-12-09 13:50:43",
+            "currency": "USD",
+            "declaration_date": "2025-05-01",
+            "dividend_amount": 0.26,
+            "dividend_type": "Regular",
+            "effective_date": "2025-05-12",
+            "frequency": "4",
+            "id": 783558,
+            "payment_date": "2025-05-15",
+            "record_date": "2025-05-12",
+            "symbol": "AAPL"
+          }
+        ],
+        "row_count": 5,
+        "status": 200
+      }
+    },
+    "aapl_one_minute_full_session": {
+      "request": {
+        "params": {
+          "dataset": "stocks",
+          "end": "2026-07-17T20:00:00Z",
+          "limit": 500,
+          "order": "asc",
+          "start": "2026-07-17T13:30:00Z",
+          "symbol": "AAPL",
+          "timeframe": "1m"
+        },
+        "path": "/candles"
+      },
+      "response": {
+        "body": {
+          "detail": "{\"detail\":\"invalid date '2026-07-17T13:30:00Z' (use YYYY-MM-DD)\"}"
+        },
+        "body_type": "dict",
+        "field_names": [
+          "detail"
+        ],
+        "headers": {},
+        "status": 400
+      }
+    },
+    "aapl_one_second_close_window": {
+      "request": {
+        "params": {
+          "dataset": "stocks",
+          "end": "2026-07-17T20:00:10Z",
+          "limit": 100,
+          "order": "asc",
+          "start": "2026-07-17T19:59:50Z",
+          "symbol": "AAPL",
+          "timeframe": "1s"
+        },
+        "path": "/candles"
+      },
+      "response": {
+        "body": {
+          "detail": "{\"detail\":\"invalid date '2026-07-17T19:59:50Z' (use YYYY-MM-DD)\"}"
+        },
+        "body_type": "dict",
+        "field_names": [
+          "detail"
+        ],
+        "headers": {},
+        "status": 400
+      }
+    },
+    "aapl_profile": {
+      "request": {
+        "params": {
+          "limit": 5,
+          "symbol": "AAPL"
+        },
+        "path": "/ref/company_profiles"
+      },
+      "response": {
+        "body_type": "list",
+        "field_names": [
+          "address",
+          "average_volume",
+          "beta",
+          "ceo",
+          "cik",
+          "city",
+          "company_name",
+          "country",
+          "created_at",
+          "currency",
+          "cusip",
+          "description",
+          "exchange",
+          "exchange_full_name",
+          "full_time_employees",
+          "id",
+          "image_url_dark",
+          "image_url_light",
+          "industry",
+          "ipo_date",
+          "is_actively_trading",
+          "is_adr",
+          "is_etf",
+          "is_fund",
+          "isin",
+          "last_dividend",
+          "market_cap",
+          "phone",
+          "price",
+          "price_range",
+          "sector",
+          "state",
+          "symbol",
+          "updated_at",
+          "volume",
+          "website",
+          "zip"
+        ],
+        "first_rows": [
+          {
+            "address": "One Apple Park Way",
+            "average_volume": 47424558,
+            "beta": 1.109,
+            "ceo": "Timothy D. Cook",
+            "cik": "0000320193",
+            "city": "Cupertino",
+            "company_name": "Apple Inc.",
+            "country": "US",
+            "created_at": "2026-01-07 22:26:28",
+            "currency": "USD",
+            "cusip": "037833100",
+            "description": "Apple Inc. designs, manufactures, and markets smartphones, personal computers, tablets, wearables, and accessories worldwide. The company offers iPhone, a line of smartphones; Mac, a line of personal computers; iPad, a line of multi-purpose tablets; and wearables, home, and accessories comprising AirPods, Apple TV, Apple Watch, Beats products, and HomePod. It also provides AppleCare support and cloud services; and operates various platforms, including the App Store that allow customers to discover and download applications and digital content, such as books, music, video, games, and podcasts, as well as advertising services include third-party licensing arrangements and its own advertising platforms. In addition, the company offers various subscription-based services, such as Apple Arcade, a game subscription service; Apple Fitness+, a personalized fitness service; Apple Music, which offers users a curated listening experience with on-demand radio stations; Apple News+, a subscription news and magazine service; Apple TV+, which offers exclusive original content; Apple Card, a co-branded credit card; and Apple Pay, a cashless payment service, as well as licenses its intellectual property. The company serves consumers, and small and mid-sized businesses; and the education, enterprise, and government markets. It distributes third-party applications for its products through the App Store. The company also sells its products through its retail and online stores, and direct sales force; and third-party cellular network carriers, wholesalers, retailers, and resellers. Apple Inc. was founded in 1976 and is headquartered in Cupertino, California.",
+            "exchange": "NASDAQ",
+            "exchange_full_name": "NASDAQ Global Select",
+            "full_time_employees": 164000,
+            "id": 1,
+            "image_url_dark": "https://api.londonstrategicedge.com/logos/AAPL.png",
+            "image_url_light": "https://api.londonstrategicedge.com/logos/AAPL.png",
+            "industry": "Consumer Electronics",
+            "ipo_date": "1980-12-12",
+            "is_actively_trading": 1,
+            "is_adr": 0,
+            "is_etf": 0,
+            "is_fund": 0,
+            "isin": "US0378331005",
+            "last_dividend": 1.03,
+            "market_cap": 3828515423772,
+            "phone": "(408) 996-1010",
+            "price": 260.48,
+            "price_range": "169.21-288.62",
+            "sector": "Technology",
+            "state": "CA",
+            "symbol": "AAPL",
+            "updated_at": "2026-04-13 02:36:12",
+            "volume": 23433118,
+            "website": "https://www.apple.com",
+            "zip": "95014"
+          }
+        ],
+        "headers": {
+          "x-data-bytes": "2581"
+        },
+        "last_rows": [],
+        "row_count": 1,
+        "status": 200
+      }
+    },
+    "catalog_absent_holx_daily": {
+      "request": {
+        "params": {
+          "end": "2026-07-17",
+          "limit": 20,
+          "order": "asc",
+          "start": "2026-07-13",
+          "symbol": "HOLX",
+          "timeframe": "1d"
+        },
+        "path": "/candles"
+      },
+      "response": {
+        "body": {
+          "detail": "{\"detail\":\"'HOLX' has no candle data; browse /catalog\"}"
+        },
+        "body_type": "dict",
+        "field_names": [
+          "detail"
+        ],
+        "headers": {},
+        "status": 404
+      }
+    },
+    "catalog_absent_xlk_daily": {
+      "request": {
+        "params": {
+          "end": "2026-07-17",
+          "limit": 20,
+          "order": "asc",
+          "start": "2026-07-13",
+          "symbol": "XLK",
+          "timeframe": "1d"
+        },
+        "path": "/candles"
+      },
+      "response": {
+        "body": {
+          "detail": "{\"detail\":\"'XLK' has no candle data; browse /catalog\"}"
+        },
+        "body_type": "dict",
+        "field_names": [
+          "detail"
+        ],
+        "headers": {},
+        "status": 404
+      }
+    },
+    "meta": {
+      "request": {
+        "params": {},
+        "path": "/meta"
+      },
+      "response": {
+        "body": {
+          "access": {
+            "bond_futures": [
+              "export",
+              "series"
+            ],
+            "bonds": [
+              "export",
+              "series"
+            ],
+            "commodity": [
+              "candles",
+              "export"
+            ],
+            "corporate_bonds": [
+              "export",
+              "series"
+            ],
+            "credit_indices": [
+              "export",
+              "series"
+            ],
+            "crypto": [
+              "candles",
+              "export"
+            ],
+            "currency_index": [
+              "candles",
+              "export"
+            ],
+            "economics": [
+              "export",
+              "series"
+            ],
+            "etf": [
+              "candles",
+              "export"
+            ],
+            "futures": [
+              "candles",
+              "export"
+            ],
+            "fx": [
+              "candles",
+              "export"
+            ],
+            "fx_derivatives": [
+              "export",
+              "series"
+            ],
+            "index": [
+              "candles",
+              "export"
+            ],
+            "interest_rates": [
+              "candles",
+              "export"
+            ],
+            "options": [
+              "export",
+              "options"
+            ],
+            "sovereign_yields": [
+              "export",
+              "series"
+            ],
+            "stocks": [
+              "candles",
+              "export"
+            ],
+            "volatility": [
+              "candles",
+              "export"
+            ]
+          },
+          "candle_classes": [
+            "commodity",
+            "crypto",
+            "etf",
+            "futures",
+            "fx",
+            "index",
+            "stocks"
+          ],
+          "datasets": [
+            "bond_futures",
+            "bonds",
+            "commodity",
+            "corporate_bonds",
+            "credit_indices",
+            "crypto",
+            "currency_index",
+            "economics",
+            "etf",
+            "futures",
+            "fx",
+            "fx_derivatives",
+            "index",
+            "interest_rates",
+            "options",
+            "sovereign_yields",
+            "stocks",
+            "volatility"
+          ],
+          "options": {
+            "chain": true,
+            "flow": true,
+            "flow_1m": true
+          },
+          "options_timeframes": [
+            "1m",
+            "3m",
+            "5m",
+            "15m",
+            "30m",
+            "1h",
+            "4h",
+            "1d",
+            "1w",
+            "1mo"
+          ],
+          "preview_classes": [
+            "bond_futures",
+            "bonds",
+            "commodity",
+            "corporate_bonds",
+            "credit_indices",
+            "crypto",
+            "economics",
+            "etf",
+            "futures",
+            "fx",
+            "fx_derivatives",
+            "index",
+            "sovereign_yields",
+            "stocks"
+          ],
+          "reference": [
+            "bond_yields",
+            "company_profiles",
+            "cot",
+            "dividends",
+            "economic_calendar",
+            "financial_reports",
+            "insider_trades",
+            "stock_fundamentals",
+            "stock_splits"
+          ],
+          "series_classes": [
+            "bond_futures",
+            "bonds",
+            "corporate_bonds",
+            "credit_indices",
+            "economics",
+            "fx_derivatives",
+            "sovereign_yields"
+          ],
+          "series_timeframes": {
+            "bonds": [
+              "1d",
+              "1h"
+            ]
+          },
+          "synth_candle_classes": [
+            "currency_index",
+            "interest_rates",
+            "volatility"
+          ],
+          "timeframes": [
+            "1s",
+            "5s",
+            "15s",
+            "30s",
+            "1m",
+            "3m",
+            "5m",
+            "15m",
+            "30m",
+            "1h",
+            "4h",
+            "1d",
+            "1w",
+            "1mo"
+          ]
+        },
+        "body_type": "dict",
+        "field_names": [
+          "access",
+          "candle_classes",
+          "datasets",
+          "options",
+          "options_timeframes",
+          "preview_classes",
+          "reference",
+          "series_classes",
+          "series_timeframes",
+          "synth_candle_classes",
+          "timeframes"
+        ],
+        "headers": {},
+        "status": 200
+      }
+    },
+    "nvda_splits": {
+      "request": {
+        "params": {
+          "limit": 5,
+          "order": "desc",
+          "symbol": "NVDA"
+        },
+        "path": "/ref/stock_splits"
+      },
+      "response": {
+        "body_type": "list",
+        "field_names": [
+          "created_at",
+          "effective_date",
+          "id",
+          "split_from",
+          "split_to",
+          "symbol"
+        ],
+        "first_rows": [
+          {
+            "created_at": "2026-04-13 18:19:09",
+            "effective_date": "2024-06-10",
+            "id": 44549,
+            "split_from": 1,
+            "split_to": 10,
+            "symbol": "NVDA"
+          },
+          {
+            "created_at": "2026-04-13 18:18:51",
+            "effective_date": "2021-07-20",
+            "id": 44550,
+            "split_from": 1,
+            "split_to": 4,
+            "symbol": "NVDA"
+          },
+          {
+            "created_at": "2026-04-26 19:18:41",
+            "effective_date": "2007-09-11",
+            "id": 44551,
+            "split_from": 2,
+            "split_to": 3,
+            "symbol": "NVDA"
+          }
+        ],
+        "headers": {
+          "x-data-bytes": "612"
+        },
+        "last_rows": [
+          {
+            "created_at": "2026-04-26 19:18:41",
+            "effective_date": "2007-09-11",
+            "id": 44551,
+            "split_from": 2,
+            "split_to": 3,
+            "symbol": "NVDA"
+          },
+          {
+            "created_at": "2026-04-26 19:18:41",
+            "effective_date": "2006-04-07",
+            "id": 44552,
+            "split_from": 1,
+            "split_to": 2,
+            "symbol": "NVDA"
+          },
+          {
+            "created_at": "2026-04-26 19:18:41",
+            "effective_date": "2001-09-12",
+            "id": 40907,
+            "split_from": 1,
+            "split_to": 2,
+            "symbol": "NVDA"
+          }
+        ],
+        "row_count": 5,
+        "status": 200
+      }
+    },
+    "spy_daily_2023": {
+      "request": {
+        "params": {
+          "dataset": "etf",
+          "end": "2023-01-10",
+          "limit": 20,
+          "order": "asc",
+          "start": "2023-01-03",
+          "symbol": "SPY",
+          "timeframe": "1d"
+        },
+        "path": "/candles"
+      },
+      "response": {
+        "body_type": "list",
+        "field_names": [],
+        "first_rows": [],
+        "headers": {
+          "x-data-bytes": "2"
+        },
+        "last_rows": [],
+        "row_count": 0,
+        "status": 200
+      }
+    },
+    "usage": {
+      "request": {
+        "params": {},
+        "path": "/usage"
+      },
+      "response": {
+        "body": {
+          "bytes_cap_month": 53687091200,
+          "bytes_cap_week": 16106127360,
+          "bytes_used_month": 627,
+          "bytes_used_week": 627,
+          "calls_per_minute": 200,
+          "exports_cap_hour": 5,
+          "exports_this_hour": 0,
+          "historical_data_months": -1,
+          "max_rows_per_request": 5000,
+          "vault_concurrency": 2
+        },
+        "body_type": "dict",
+        "field_names": [
+          "bytes_cap_month",
+          "bytes_cap_week",
+          "bytes_used_month",
+          "bytes_used_week",
+          "calls_per_minute",
+          "exports_cap_hour",
+          "exports_this_hour",
+          "historical_data_months",
+          "max_rows_per_request",
+          "vault_concurrency"
+        ],
+        "headers": {},
+        "status": 200
+      }
+    },
+    "xle_daily_2023": {
+      "request": {
+        "params": {
+          "dataset": "etf",
+          "end": "2023-01-10",
+          "limit": 20,
+          "order": "asc",
+          "start": "2023-01-03",
+          "symbol": "XLE",
+          "timeframe": "1d"
+        },
+        "path": "/candles"
+      },
+      "response": {
+        "body_type": "list",
+        "field_names": [],
+        "first_rows": [],
+        "headers": {
+          "x-data-bytes": "2"
+        },
+        "last_rows": [],
+        "row_count": 0,
+        "status": 200
+      }
+    }
+  },
+  "safety": "The key was not printed or saved."
+}

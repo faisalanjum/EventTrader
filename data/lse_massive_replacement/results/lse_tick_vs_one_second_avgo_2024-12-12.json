@@ -1,0 +1,35 @@
+{
+  "close_tie_analysis": {
+    "candle_close_found_at_final_timestamp": 25330,
+    "candle_close_not_found_at_final_timestamp": 0,
+    "seconds": 25330,
+    "seconds_with_tied_final_timestamp": 1308
+  },
+  "comparison": {
+    "candle_only_seconds": 0,
+    "candle_seconds": 25330,
+    "candle_total_volume": 28366860.0,
+    "close_mismatches": 394,
+    "exact_ohlcv_seconds": 24936,
+    "high_mismatches": 0,
+    "low_mismatches": 0,
+    "max_close_difference": 0.18999999999999773,
+    "max_high_difference": 0.0,
+    "max_low_difference": 0.0,
+    "max_open_difference": 0.0,
+    "max_volume_difference": 0.0,
+    "open_mismatches": 0,
+    "overlap_seconds": 25330,
+    "raw_only_seconds": 0,
+    "raw_seconds": 25330,
+    "raw_ticks": 333839,
+    "raw_total_volume": 28366860.0,
+    "union_seconds": 25330,
+    "volume_mismatches": 0
+  },
+  "generated_at_utc": "2026-07-19T15:53:16+00:00",
+  "interpretation": "Open, high, low, volume, and second presence can be checked directly. Raw close ordering is ambiguous when multiple exported trades have the same final microsecond timestamp because the raw schema has no sequence field. The tie analysis checks whether the candle close is one of the prices at that final timestamp.",
+  "method": "Group raw ticks by UTC second; use first/max/min/last price and sum volume; full-join those rows to the supplied one-second file.",
+  "one_second_input": "raw/lse_one_second_exports/stocks_AVGO_1s.parquet",
+  "tick_input": "raw/lse_tick_exports/stocks_AVGO_tick.parquet"
+}
