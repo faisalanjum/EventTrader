@@ -350,7 +350,13 @@ GENERIC_MEM = {'member', 'segment', 'segments', 'consolidation', 'consolidated',
 
 
 def slice_tokens(name):
-    return {t.lower() for t in re.findall(r"[A-Za-z]{3,}", name) if t.lower() not in SLICE_STOP}
+    """THE global KPI slice-token set (round-27, reviewer's corrected rule): long tokens PLUS
+    standalone UPPERCASE two-letter tokens ('RV', 'US') — one set for the early check, exact
+    full-slice equality, aggregate rejection, and scoring. No maintained list; extra qualifiers
+    fail closed ('Total US Revenue' never binds the undimensioned company total)."""
+    toks = {t.lower() for t in re.findall(r"[A-Za-z]{3,}", name) if t.lower() not in SLICE_STOP}
+    toks |= {t.lower() for t in re.findall(r'\b[A-Z]{2}\b', name)}
+    return toks
 
 
 # round-21/22 (reviewer): the STRUCTURAL exemption is the EXACT STANDARD us-gaap pair ONLY
@@ -517,12 +523,7 @@ def tier1(xbrls, name, val, per, is_currency=None):
             return XN.eq(str(fc_value).strip(), str(val))
         except XN.ExactError:
             return False
-    kt = slice_tokens(name)
-    # round-26 (reviewer; self-check line 889): a standalone UPPERCASE short token ('RV') is
-    # dropped by slice_tokens' 3-letter floor, so 'Total RV and Outdoor Retail Revenue' could
-    # never equal {rv, outdoor, retail}. It counts ONLY when that exact token is REQUIRED by the
-    # candidate member set (checked per fact below) — no general abbreviation system, no fuzz.
-    short_upper = {w.lower() for w in re.findall(r'\b[A-Z]{2}\b', name)}
+    kt = slice_tokens(name)                # round-27: the ONE global set (uppercase shorts in)
     # a KPI with no slice tokens is only an aggregate if it actually says so; otherwise its
     # slice identity is unrecoverable (e.g. a residual "other" bucket) -> abstain
     if not kt and not any(w in name.lower() for w in ('total', 'consolidated')):
@@ -590,9 +591,8 @@ def tier1(xbrls, name, val, per, is_currency=None):
                         if _gate_fail:
                             break
                 _need = set().union(*_contribs) if _contribs else set()
-                _kt_gate = kt | (short_upper & _need)   # member-REQUIRED short tokens only
-                if _gate_fail or (pairs and kt and _need != _kt_gate):
-                    continue
+                if _gate_fail or (pairs and kt and _need != kt):
+                    continue           # round-27: plain equality against the ONE global set
                 mt = member_tokens(members)
                 if kt:
                     score = _member_score(kt, mt)
@@ -621,7 +621,10 @@ def tier1(xbrls, name, val, per, is_currency=None):
                for c in top}
     if len(structs) > 1:
         return None
-    score, concept, mlabel, _, fc = cands[0]
+    # round-27 (reviewer-reproduced: '999' vs '999.0' duplicates emitted by input order): equal-
+    # identity candidates resolve by TOTAL content ordering — the database can never choose.
+    score, concept, mlabel, _, fc = min(
+        top, key=lambda c: (c[1], c[2], json.dumps(c[4], sort_keys=True)))
     pe = fc.get('period') or {}
     q = f'{concept} [{mlabel}] [{pe.get("startDate","")}..{pe.get("endDate","")}] = {fc.get("value")}'
     # raw XBRL context for the FETCH packet (concept + axis+member + exact period + instant/duration).

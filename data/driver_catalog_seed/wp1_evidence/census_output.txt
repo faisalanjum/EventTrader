@@ -1,1 +1,2 @@
-tickers=11  dimensioned facts=47152  repeated-axis=0  padded-names=0  mixed-format-entries=0  unreadable-blobs=0  nondict-blobs=0  nonfact-entries=0
+positive controls: all four raw detectors fire on synthetic violations
+tickers=11  dimensioned facts=47152  repeated-axis=0  padded-names=0  mixed-format-entries=0  unreadable-blobs=0  nondict-blobs=0  nonfact-entries=0  unknown-shape=0

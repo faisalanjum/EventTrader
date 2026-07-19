@@ -757,7 +757,7 @@ def test_context_ambiguity_covers_wording_variants():
     """Round-24 (reviewer-reproduced): DIFFERENT wording of the same label+value ('Revenue 5,432'
     vs 'Revenue was 5,432') bypassed the tie — contexts are now collected from ALL qualifying
     occurrences BEFORE choosing; >1 distinct context abstains. Wording, case, punctuation pinned;
-    a single occurrence matched by MULTIPLE forms ('5,432' and '$ 5,432') is ONE occurrence."""
+    a single printed spot yields ONE signature and binds (the round-25 signature law)."""
     for a, b in [('Q1 heading stuff Revenue 5,432 detail', 'Q2 heading stuff Revenue was 5,432 detail'),
                  ('Q1 heading stuff Revenue 5,432 detail', 'Q2 heading stuff REVENUE 5,432 detail'),
                  ('Q1 heading stuff Revenue 5,432 detail', 'Q2 heading stuff Revenue: 5,432 detail')]:
@@ -765,7 +765,7 @@ def test_context_ambiguity_covers_wording_variants():
         assert L.row_quote([b, a], ['Revenue'], 5432, None, with_context=True) == (None, None)
     one = 'annual note Widget revenues $ 5,432 for the year'
     q, c = L.row_quote([one], ['Widget', 'revenues'], 5432, None, with_context=True)
-    assert q is not None and c is not None and q in c   # multi-form single occurrence binds
+    assert q is not None and c is not None and q in c   # single-signature occurrence binds
     assert L.row_quote(['Q1 x Revenue 5,432', 'Q2 y Revenue was 5,432'], ['Revenue'],
                        5432, None) is not None           # certified default untouched
     print("[ok] occurrence-level ambiguity: wording/case/punct variants abstain; one spot binds")
@@ -848,3 +848,42 @@ def test_link_lib_self_check_runs_green():
                        capture_output=True, text=True, timeout=120)
     assert r.returncode == 0, r.stderr[-800:]
     print("[ok] link_lib __main__ self-check green in the battery")
+
+
+def test_global_slice_tokens_include_uppercase_shorts():
+    """Round-27 (reviewer self-corrects his round-26 candidate-only rule; all three reproduced):
+    the KPI slice-token set is ONE GLOBAL set = long tokens + standalone UPPERCASE two-letter
+    tokens, used for the early check, equality, aggregate rejection, and scoring. Fails closed
+    on extra qualifiers; no maintained list."""
+    und = blob('Revenues', [fact('100', '2024-01-01', '2024-12-31')])
+    assert L.tier1([und], 'Total US Revenue', 100, '2024-12-31', is_currency=1) is None, \
+        "'US' ignored: a US-sliced KPI bound the undimensioned company total"
+    assert L.tier1([und], 'Total Revenue', 100, '2024-12-31', is_currency=1) is not None
+    rv = blob('Revenues', [fact('200', '2024-01-01', '2024-12-31',
+              seg=[{'dimension': 'x:A', 'value': 'x:RvMember'}])])
+    assert L.tier1([rv], 'RV Revenue', 200, '2024-12-31', is_currency=1) is not None, \
+        "'RV Revenue' must bind RvMember (recall gap)"
+    orm = blob('Revenues', [fact('300', '2024-01-01', '2024-12-31',
+               seg=[{'dimension': 'x:A', 'value': 'x:OutdoorRetailMember'}])])
+    assert L.tier1([orm], 'RV Outdoor Retail Revenue', 300, '2024-12-31', is_currency=1) is None, \
+        "extra 'RV' qualifier must fail closed against plain OutdoorRetailMember"
+    both = blob('Revenues', [fact('400', '2024-01-01', '2024-12-31',
+                seg=[{'dimension': 'x:A', 'value': 'x:RvAndOutdoorRetailMember'}])])
+    assert L.tier1([both], 'RV Outdoor Retail Revenue', 400, '2024-12-31', is_currency=1) is not None
+    assert L.tier1([both], 'Outdoor Retail Revenue', 400, '2024-12-31', is_currency=1) is None, \
+        "member's 'rv' token unnamed by the KPI must fail closed"
+    print("[ok] one global slice-token set; RV distinguishes; extra qualifiers fail closed")
+
+
+def test_equivalent_duplicate_facts_order_free():
+    """Round-27 (reviewer-reproduced): equivalent facts stored as '999' and '999.0' emitted
+    order-dependent output. Equal-identity candidates now resolve by TOTAL content ordering —
+    reversed input yields the byte-identical result."""
+    d1 = blob('Revenues', [fact('999', '2024-01-01', '2024-12-31'),
+                           fact('999.0', '2024-01-01', '2024-12-31')])
+    d2 = blob('Revenues', [fact('999.0', '2024-01-01', '2024-12-31'),
+                           fact('999', '2024-01-01', '2024-12-31')])
+    a = L.tier1([d1], 'total revenue', 999, '2024-12-31', is_currency=1)
+    b = L.tier1([d2], 'total revenue', 999, '2024-12-31', is_currency=1)
+    assert a is not None and a == b, (a, b)
+    print("[ok] duplicate-equivalent facts: content-total ordering, order-free")

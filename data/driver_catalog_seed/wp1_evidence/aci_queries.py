@@ -30,6 +30,7 @@ def main():
                                auth=(os.environ.get('NEO4J_USERNAME', 'neo4j'),
                                      os.environ['NEO4J_PASSWORD']))
     bad_blobs = []
+    bad_facts = incomplete_segments = 0
     per_filing = collections.defaultdict(lambda: {'with': set(), 'without': set()})
     cross = collections.defaultdict(lambda: {'with': set(), 'without': set()})
     targets, pool = [], set()
@@ -48,9 +49,14 @@ def main():
             for con, facts in data.items():
                 for fc in (facts if isinstance(facts, list) else [facts]):
                     if not isinstance(fc, dict):
+                        bad_facts += 1     # round-27: counted + asserted, never silent
                         continue
                     per = json.dumps(fc.get('period') or {}, sort_keys=True)
-                    pairs = tuple(sorted(tuple(p) for p in L.seg_axis_members(fc)))
+                    _prs, _ok = L.seg_parse(fc)
+                    if not _ok:
+                        incomplete_segments += 1   # round-27: counted + asserted, never silent
+                        continue
+                    pairs = tuple(sorted(tuple(p) for p in _prs))
                     v = str(fc.get('value'))
                     pool.add((con, v, per, pairs))
                     if pairs == (THE_PAIR,):
@@ -76,8 +82,10 @@ def main():
     po = sum(1 for t in missing if t[3] == ())
     print(f"C  REVIEWER SPEC: targets={len(uniq)}  counterparts={len(have)}  "
           f"MISSING={len(missing)} = pair-only {po} + co-member {len(missing) - po}")
-    print(f"unreadable/non-dict blobs: {len(bad_blobs)}" + (f" {bad_blobs[:3]}" if bad_blobs else ""))
-    assert not bad_blobs, "unreadable data must be investigated"
+    print(f"unreadable/non-dict blobs: {len(bad_blobs)}  non-dict facts: {bad_facts}  "
+          f"incomplete-segment facts: {incomplete_segments}")
+    assert not bad_blobs and bad_facts == 0 and incomplete_segments == 0, \
+        "malformed data must be investigated, never silently skipped"
 
 
 if __name__ == '__main__':

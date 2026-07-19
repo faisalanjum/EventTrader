@@ -1008,3 +1008,26 @@ class the owner's conservative ruling sends to the reader).**
    0 unreadable — the zeros now rest on a proof that could have seen them.
 3. Cleanups folded in: the unused occurrence index dropped from the collection tuples; stale
    'multi-form merge' wording updated to the signature law.
+
+## Round 27 (ChatGPT, 2026-07-19) — the reviewer SELF-CORRECTED his round-26 candidate-only
+## short-token rule after reproducing three failures in it; all three reproduced by me too, and
+## his simpler GLOBAL rule replaces it. Also: my round-26 record claim "stale wording updated"
+## was FALSE for test_exactness.py:760/768 (I had fixed a DIFFERENT copy — the sibling-copy
+## blindness again; verified fixed this time by grep=0, not by claim). Commit follows.
+1. 'Total US Revenue' bound the UNDIMENSIONED company total ('US' dropped by the 3-letter floor
+   → kt=∅ → aggregate path) — reproduced. 2. 'RV Revenue' could not bind RvMember, and the
+   'RV' qualifier could not veto plain OutdoorRetailMember — both reproduced. 3. '999' vs
+   '999.0' duplicate-equivalent facts emitted by input order — reproduced.
+FIX (his corrected instruction): slice_tokens is ONE GLOBAL set = long tokens + standalone
+UPPERCASE two-letter tokens, used for the early check, exact equality, aggregate rejection, and
+scoring; the candidate-specific `short_upper & _need` mechanism is DELETED. Fails closed on
+extra qualifiers; no maintained list; fully automatic. Equal-identity candidates now resolve by
+TOTAL content ordering (concept, member label, canonical fact JSON) — the database can never
+choose the emitted fact. All pins: the three cases, RvAndOutdoorRetail-vs-OutdoorRetail both
+directions, Phone/iPhone, unrelated short tokens ('IT'), reversed duplicate order.
+EVIDENCE (his cleanup): aci_queries.py now counts AND asserts non-dict facts and
+incomplete-segment parses (0/0 live); the census runs POSITIVE CONTROLS first — each raw
+detector must fire on a synthetic violation before the scan counts anything — and counts+asserts
+unknown shapes (recaptured: 47,152 facts, all violation classes 0, all malformed classes 0).
+Gates: battery 142/142 (self-check inside) · floors 28/28 · self-check green · both evidence
+scripts green. NO regenerate (his process holds).
