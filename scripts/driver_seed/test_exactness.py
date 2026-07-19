@@ -281,3 +281,71 @@ def test_scan_text_scale_gate_param():
                              5365000000, None, scale_gate=True)
     assert strict2 is not None
     print("[ok] scan_text: strict result gated, snippets permissive")
+
+
+# ---------------- round-16: order-free tier1, letter-glued numbers, inheritance unanimity ----
+def test_tier1_structure_tie_abstains_order_free():
+    """Round-16: two same-score candidates with DIFFERENT structures (concept/axis/period) must
+    ABSTAIN — never let input order pick silently. Identical-structure duplicates still bind.
+    (Reviewer claimed six live order-dependent cases; 0/500 reproduced live forward-vs-reversed,
+    but the structural hole is real — this pins it shut synthetically, both orders.)"""
+    b1 = blob('Revenues', [fact('5000', '2024-01-01', '2024-12-31', unit='U_USD')])
+    b2 = blob('RevenuesNet', [fact('5000', '2024-01-01', '2024-12-31', unit='U_USD')])
+    assert L.tier1([b1, b2], 'total revenue', 5000, '2024-12-31', is_currency=1) is None
+    assert L.tier1([b2, b1], 'total revenue', 5000, '2024-12-31', is_currency=1) is None
+    dup = blob('Revenues', [fact('5000', '2024-01-01', '2024-12-31', unit='U_USD'),
+                            fact('5000', '2024-01-01', '2024-12-31', unit='U_USD')])
+    assert L.tier1([dup], 'total revenue', 5000, '2024-12-31', is_currency=1) is not None
+    print("[ok] tier1: structure ties abstain; order can never decide")
+
+
+def test_boundary_rejects_letter_glued_numbers():
+    """Round-16 (reviewer-confirmed live): '86' inside 'modelX86' or 'FY86' is NOT a value print.
+    The numeric boundary now rejects ALPHANUMERIC neighbors, not just digit-gluing."""
+    assert not L.bounded_hit('the modelX86 line', '86')
+    assert not L.bounded_hit('in FY86 we grew', '86')
+    assert L.bounded_hit('stores grew to 86 units', '86')
+    assert L.bounded_hit('a total of $86 in fees', '86')
+    assert L.bounded_hit('(86)', '86')
+    assert L.bounded_hit('margin was 86% overall', '86')
+    print("[ok] boundary: letter-glued digits never bind")
+
+
+def test_scale_inheritance_requires_unanimity():
+    """Round-16 (reviewer-confirmed hazard): an UNDECLARED table inherits a preceding declaration
+    ONLY when the text declares exactly ONE scale overall (reading convention); any mixed-scale
+    text never lends to undeclared tables. Declared tables stay strict either way."""
+    toks = ['Widget', 'revenues']
+    mixed_borrow = ['(in millions) ##TABLE_START a END (in thousands) ##TABLE_START b END '
+                    '##TABLE_START Widget revenues 1,200 more']
+    assert L.row_quote(mixed_borrow, toks, 1200000000, None, scale_gate=True) is None
+    # the sharper hazard: the NEAREST marker happens to match, but the text is mixed-scale —
+    # an undeclared table must not borrow from it (nearest-single accepted this before)
+    mixed_near = ['(in thousands) ##TABLE_START a END (in millions) intro '
+                  '##TABLE_START Widget revenues 1,200 more']
+    assert L.row_quote(mixed_near, toks, 1200000000, None, scale_gate=True) is None
+    single = ['(in millions) intro ##TABLE_START alpha END ##TABLE_START Widget revenues 1,200']
+    assert L.row_quote(single, toks, 1200000000, None, scale_gate=True) is not None
+    print("[ok] scale inheritance: unanimous document convention only")
+
+
+def test_label_tokens_match_whole_words_only():
+    """Round-16: label adjacency must match WHOLE WORDS — 'Net' never matches inside 'Internet',
+    'Car' never inside 'Oscar'. All-tokens-present still required."""
+    assert L.row_quote(['Internet division revenues 5,432 for the year'],
+                       ['Net', 'revenues'], 5432, None) is None
+    assert L.row_quote(['Net revenues 5,432 for the year'], ['Net', 'revenues'], 5432, None) is not None
+    assert L.row_quote(['Oscar brand sales 1,200 in total'], ['Car', 'sales'], 1200, None) is None
+    print("[ok] label tokens are whole words, never substrings")
+
+
+def test_thousand_and_trillion_scaled_forms():
+    """Round-16: exact thousand- and trillion-scaled table forms exist and are marker-gated like
+    the rest ('(in thousands) 1,200' can finally prove 1.2 million; wrong marker still rejects)."""
+    toks = ['Widget', 'revenues']
+    k = ['(in thousands) Widget revenues 1,200 for the period']
+    assert L.row_quote(k, toks, 1200000, None, scale_gate=True) is not None
+    assert L.row_quote(k, toks, 1200000000, None, scale_gate=True) is None   # thousands ≠ billions
+    assert L.row_quote(['Widget revenues 1,200 no marker'], toks, 1200000, None,
+                       scale_gate=True) is None
+    print("[ok] thousand/trillion scale forms, marker-gated")

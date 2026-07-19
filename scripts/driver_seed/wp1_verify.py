@@ -1,21 +1,20 @@
 #!/usr/bin/env python3
-"""WP1 verification — CHECK-ONLY by default (round-13).
+"""WP1 verification — CHECK-ONLY by default; ALL checks finish BEFORE anything is written.
 
 Default (check) mode:
   1. output hashes must EQUAL the manifest's recorded hashes (tamper/drift detection — never
-     silently replaced);
-  2. completeness: line counts == the run's own summary (guards against mid-write reads);
-  3. reconciliation BY DISTINCT RAW-ROW ID, BOTH directions: every raw id appears in >=1 outcome
-     AND every output id exists in the raw slice (an INVENTED record fails); no id carries two
-     different (kpi, value);
-  4. mechanical compliance (safety checks, never called precision): value-token-in-quote and
+     silently replaced); the committed input slice must re-hash to the manifest's slice sha;
+  2. completeness: line counts == the run's own summary;
+  3. reconciliation BY DISTINCT RAW-ROW ID, BOTH directions (an INVENTED record fails);
+  4. independent pairing proof per accepted 8-K (inline Cypher — a different code path than the
+     shared matcher) + the production lag window;
+  5. mechanical compliance (safety checks, never called precision): value-token-in-quote and
      quote-is-exact-source-substring over EVERY resolved record (sources re-fetched live);
-  5. zero fabricated (quote_source='xbrl_fact') records.
+  6. zero fabricated records; report re-render must equal the file on disk (drift fails).
   Check mode writes NOTHING.
 
-`--record` mode: same checks minus (1), then stamps output hashes + code commit (+ dirty flag) +
-company-periods + consulted source accessions + denominators into the manifest and regenerates the
-report. Run ONCE, deliberately, after a regenerate.
+`--record` mode: same checks (minus stored-hash equality), then — ONLY after every assertion has
+passed — stamps hashes/commit/pins, writes the input-slice file, and regenerates the report.
 
     venv/bin/python scripts/driver_seed/wp1_verify.py            # check
     venv/bin/python scripts/driver_seed/wp1_verify.py --record   # stamp after a regenerate
@@ -27,7 +26,9 @@ import run_code_tier as RC, link_lib as L
 
 D = 'data/driver_catalog_seed/wp1'
 MAN = 'data/driver_catalog_seed/wp1_manifest.json'
-OUTS = ('code_resolved.jsonl', 'residual.jsonl', 'abstain.jsonl',
+REPORT = 'data/driver_catalog_seed/wp1_report.md'
+SLICE_FILE = 'data/driver_catalog_seed/wp1_worklist_slice.jsonl'
+OUTS = ('code_resolved.jsonl', 'residual.jsonl', 'abstain.jsonl', 'code_summary.json',
         'packets.jsonl', 'skip_ledger.jsonl', 'park_ledger.jsonl', 'sources_ledger.jsonl')
 
 
@@ -36,7 +37,7 @@ def sha(p):
 
 
 def _reconcile(raw_ids, out_ids):
-    """BOTH directions (round-13): missing raw ids AND invented extra ids each fail."""
+    """BOTH directions: missing raw ids AND invented extra ids each fail."""
     missing = raw_ids - out_ids
     assert not missing, f"{len(missing)} raw rows produced NO id-carrying outcome"
     extra = out_ids - raw_ids
@@ -67,7 +68,7 @@ def _git_commit():
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--record', action='store_true',
-                    help='stamp hashes/commit/pins into the manifest (after a deliberate regenerate)')
+                    help='stamp hashes/commit/pins + write slice/report (after ALL checks pass)')
     a = ap.parse_args()
     man = json.load(open(MAN))
 
@@ -90,6 +91,11 @@ def main():
             if json.loads(l)['ticker'] in set(man['tickers'])]
     slice_sha = hashlib.sha256(''.join(sorted(json.dumps(r, sort_keys=True) for r in rows)).encode()).hexdigest()
     assert slice_sha == man['worklist_slice_sha256'], "worklist slice drifted vs the manifest"
+    if not a.record:
+        assert os.path.exists(SLICE_FILE), "committed input slice missing — clean checkout cannot reproduce"
+        file_rows = [json.loads(l) for l in open(SLICE_FILE)]
+        fs = hashlib.sha256(''.join(sorted(json.dumps(r, sort_keys=True) for r in file_rows)).encode()).hexdigest()
+        assert fs == man['worklist_slice_sha256'], "committed slice file drifted vs the manifest sha"
     uniq_rows, dup_dropped = RC.dedupe_rows(rows)
     raw_ids = {RC._iid(r) for r in uniq_rows}
     assert len(raw_ids) == len(uniq_rows), "distinct rows must have distinct whole-row ids"
@@ -101,22 +107,6 @@ def main():
     bad = {k: v for k, v in byid.items() if len(v) > 1}
     assert not bad, f"ids carrying different (kpi,value): {list(bad.items())[:3]}"
 
-    # round-14 INDEPENDENT no-future-source proof happens INSIDE the live session below: for every
-    # ACCEPTED 8-K the pairing is RE-DERIVED from the graph via the certified resolver's own prior
-    # query (a different code path from the run's timeline) plus a fresh periodic-window query.
-    # The round-13 check compared a label against a target identity computed by the SAME code under
-    # test — circular (reviewer catch: WMS's wrong pairing would have passed it).
-    cp_accepts = collections.defaultdict(set)
-
-    # mechanical compliance on every resolved record
-    fab = [r for r in res if r.get('quote_source') == 'xbrl_fact' or r.get('source') == 'xbrl_fact']
-    assert not fab, f"fabricated quotes: {len(fab)}"
-    bad_vq = [r for r in res if not L.value_ok(float(r['value']),
-                                              None if r['fmt'] == 'number' else r['fmt'], r['quote'])]
-    RC.load_env_neo4j()
-    from neo4j import GraphDatabase
-    drv = GraphDatabase.driver(os.environ['NEO4J_URI'],
-                               auth=(os.environ.get('NEO4J_USERNAME', 'neo4j'), os.environ['NEO4J_PASSWORD']))
     _INDEP = """
     MATCH (r:Report {accessionNo:$acc})-[:PRIMARY_FILER]->(c:Company)
     OPTIONAL CALL (r, c) {
@@ -129,14 +119,21 @@ def main():
     """
     from datetime import datetime as _DT
 
-    def _h(a, b):
-        return (_DT.fromisoformat(str(b)[:19]) - _DT.fromisoformat(str(a)[:19])).total_seconds() / 3600
+    def _h(x, y):
+        return (_DT.fromisoformat(str(y)[:19]) - _DT.fromisoformat(str(x)[:19])).total_seconds() / 3600
+
+    fab = [r for r in res if r.get('quote_source') == 'xbrl_fact' or r.get('source') == 'xbrl_fact']
+    assert not fab, f"fabricated quotes: {len(fab)}"
+    bad_vq = [r for r in res if not L.value_ok(float(r['value']),
+                                              None if r['fmt'] == 'number' else r['fmt'], r['quote'])]
+    RC.load_env_neo4j()
+    from neo4j import GraphDatabase
+    drv = GraphDatabase.driver(os.environ['NEO4J_URI'],
+                               auth=(os.environ.get('NEO4J_USERNAME', 'neo4j'), os.environ['NEO4J_PASSWORD']))
+    cp_accepts = collections.defaultdict(set)
     cache, bad_sub = {}, []
     with drv.session() as s:
-        # ---- round-15 independent pairing proof for every ACCEPTED 8-K: re-derived STRAIGHT
-        # from the graph with an inline query (a different code path than the shared matcher the
-        # run imports), plus the production lag window. The round-13/14 checks re-used artifacts
-        # of the code under test — circular (reviewer catch). ----
+        # independent pairing proof for every ACCEPTED 8-K (inline Cypher, different code path)
         for row in ledger:
             for e8 in row['eightk']:
                 if e8['verdict'] != 'accept':
@@ -158,7 +155,7 @@ def main():
                 if cd.get('src_type') == '8k':
                     assert cd['src'] in cp_accepts[(r['ticker'], r['period'])], \
                         f"8-K candidate without an accept ledger row in its cp: {cd['src']} {r['ticker']}"
-        # ---- mechanical compliance on every resolved record ----
+        # mechanical compliance on every resolved record (sources re-fetched live)
         for r in res:
             key = (r['ticker'], r['form'], r.get('period') or r.get('period_end'),
                    r['source_type'], r['source_id'])
@@ -178,25 +175,85 @@ def main():
             if not any(r['quote'] in t for t in cache[key]):
                 bad_sub.append((r['item_id'], r['source_id'], r['quote'][:60]))
     drv.close()
+    assert not bad_vq and not bad_sub, \
+        f"mechanical compliance violated: value-in-quote {bad_vq[:2]} substring {bad_sub[:2]}"
 
-    # coverage views
+    # ---- coverage views (computed AFTER all assertions; writes happen last) ----
     def band(v):
+        if v is None: return 'novalue'
         v = abs(float(v))
         if v == 0: return 'zero'
         if v != int(v): return 'decimal'
         return 'small' if v < 1000 else 'other'
+    rids = {r['item_id'] for r in res}
+    ab_by_id = {x['item_id']: x for x in ab}
+    rem_ids = {r['item_id'] for r in rem}
+    outcome_by_band = collections.defaultdict(collections.Counter)
+    for w in uniq_rows:
+        i = RC._iid(w)
+        if i in rids:
+            o = 'resolved'
+        elif i in ab_by_id:
+            x = ab_by_id[i]
+            o = f"{x['status']}:{x['reason']}"
+        elif i in rem_ids:
+            o = 'residual_only'
+        else:
+            o = 'unaccounted'
+        outcome_by_band[band(w.get('value'))][o] += 1
     routes = collections.Counter((r['tier'], r['source_type']) for r in res)
-    bands = collections.Counter(band(r['value']) for r in res)
     ab_reason = collections.Counter(x['reason'] for x in ab)
     incomplete = sum(1 for x in ab if x.get('sources_incomplete'))
     uniq_targets = len({(w['ticker'], w['kpi'], w['period']) for w in uniq_rows})
     gate_verdicts = collections.Counter(e['verdict'] for row in ledger for e in row['eightk'])
-    src_accessions = sorted({r['source_id'] for r in res}
-                            | {r['filing_id'] for r in rem}
-                            | {c['src'] for r in rem for c in r.get('candidates', [])}
-                            | {row['filing_acc'] for row in ledger}
-                            | {e['acc'] for row in ledger for e in row['eightk']
-                               if e['verdict'] == 'accept'})
+    target_filings = sorted({row['filing_acc'] for row in ledger})
+    accepted_8ks = sorted({acc for s_ in cp_accepts.values() for acc in s_})
+
+    rep = f"""# WP1 Report — regenerated cohort ({','.join(man['tickers'])})
+
+Manifest (incl. output sha256s): `{MAN}` · slice sha `{man['worklist_slice_sha256'][:16]}…` ·
+committed input slice: `{SLICE_FILE}` (re-hashes to the same sha)
+Command: `{man['command']}` · verifier: `scripts/driver_seed/wp1_verify.py` (CHECK-ONLY default;
+all checks finish before anything is written; `--record` stamps only after every assertion passed).
+
+## Mechanical compliance (safety checks — NOT precision; true P/R = WP4)
+- value-token-in-quote: **{len(res)}/{len(res)}** (asserted)
+- quote-is-exact-source-substring: **{len(res)}/{len(res)}** (asserted, live re-fetch)
+- fabricated quotes in THIS cohort: **0** (asserted) · older part1–4 artifacts: **STALE/INVALID**
+
+## 8-K selection (round-15 matcher — the owner's two-file authority)
+Historical pairing = `get_quarterly_filings.match_8k_to_periodic` (the shared structured matcher):
+companion = the original 10-Q/K covering the most recently ENDED period at the 8-K's filing time,
+lag-validated [-24h, +90d]; accept iff that accession EXACTLY equals the target AND
+`quarter_identity` says AUTO_OK (trust gate only — labels and calculated dates are NEVER joined).
+Unclear -> PARK at the matched target. The live lane (no companion yet) = quarter_identity alone
+(S4 wiring). Resolver's own documented wrong-fire ceiling: 0.24% (quarter_identity.py:100-104).
+**Pairing verification claim, stated exactly:** every ACCEPTED 8-K in this cohort
+({len(accepted_8ks)}) is INDEPENDENTLY re-derived from the graph by this verifier. The
+universe-wide sweep cross-checked 9,788 accepts with a convention-free heuristic (9 flags, all
+adjudicated as checker false-alarms) and adjudicated 1,206 parks by class; parked 8-Ks carry NO
+pin claim. (Reviewer's independent audit phrased it: 0 mismatches among 10,264 exact historical
+pins; 730 lacked exact pins.) Zero-error remains a MEASURED claim (WP4), never assumed.
+
+## Reconciliation by distinct raw-row id (asserted, BOTH directions)
+raw rows {len(rows)} ({dup_dropped} identical duplicates collapsed -> {len(uniq_rows)} distinct) =
+unique ids {len(raw_ids)}; every id accounted for; ZERO invented extra ids; no id carries two
+different (kpi,value).
+Denominators: **{len(rows)} raw rows** (reconciliation basis) · **{uniq_targets} unique
+(ticker,kpi,period) targets** (coverage basis).
+
+## Coverage
+resolved {len(res)} (routes: {dict(routes)}) · residual {len(rem)} · abstain {len(ab)}
+(reasons: {dict(ab_reason)}; sources_incomplete-flagged: {incomplete})
+8-K gate verdicts (sources_ledger): {dict(gate_verdicts)}
+sources: **{len(target_filings)} target filings + {len(accepted_8ks)} accepted 8-Ks**
+
+## Outcomes by value band (every distinct raw row)
+"""
+    for b in ('zero', 'small', 'decimal', 'other', 'novalue'):
+        if outcome_by_band.get(b):
+            rep += f"- **{b}**: {dict(outcome_by_band[b])}\n"
+    rep += f"\nrun summary: {json.dumps(summ)}\n"
 
     if a.record:
         man['output_sha256'] = computed
@@ -204,51 +261,20 @@ def main():
         man['code_commit'] = _git_commit()
         man['company_periods'] = sorted(f"{t}|{f}|{p}" for t, f, p in
                                         {(w['ticker'], w['form'], w['period']) for w in uniq_rows})
-        man['source_accessions'] = src_accessions
+        man['target_filings'] = target_filings
+        man['accepted_8ks'] = accepted_8ks
+        man.pop('source_accessions', None)
         man['unique_targets_ticker_kpi_period'] = uniq_targets
         man['duplicate_rows_collapsed_in_slice'] = dup_dropped
         json.dump(man, open(MAN, 'w'), indent=1)
-
-    rep = f"""# WP1 Report — regenerated cohort ({','.join(man['tickers'])})
-
-Manifest (incl. output sha256s): `{MAN}` · slice sha `{man['worklist_slice_sha256'][:16]}…`
-Command: `{man['command']}` · verifier: `scripts/driver_seed/wp1_verify.py` (CHECK-ONLY by default;
-this report is regenerated only by `--record`; all assertions passed or it would have crashed).
-
-## Mechanical compliance (safety checks — NOT precision; true P/R = WP4)
-- value-token-in-quote: **{len(res)-len(bad_vq)}/{len(res)}**{'' if not bad_vq else ' VIOLATIONS ' + str(bad_vq[:3])}
-- quote-is-exact-source-substring: **{len(res)-len(bad_sub)}/{len(res)}**{'' if not bad_sub else ' VIOLATIONS ' + str(bad_sub[:3])}
-- fabricated quotes in THIS cohort: **0** (asserted) · older part1–4 artifacts: **STALE/INVALID**
-
-## Reconciliation by distinct raw-row id (asserted, BOTH directions)
-raw rows {len(rows)} ({dup_dropped} identical duplicates collapsed -> {len(uniq_rows)} distinct) =
-unique ids {len(raw_ids)}; every id accounted for in resolved/residual/abstain; ZERO invented extra
-ids; no id carries two different (kpi,value).
-Denominators: **{len(rows)} raw rows** (reconciliation basis) · **{uniq_targets} unique
-(ticker,kpi,period) targets** (coverage basis).
-
-## Coverage
-resolved {len(res)} (routes: {dict(routes)}) · residual {len(rem)} · abstain {len(ab)}
-(reasons: {dict(ab_reason)}; sources_incomplete-flagged: {incomplete})
-value bands (resolved): {dict(bands)}
-8-K gate verdicts (sources_ledger): {dict(gate_verdicts)}
-consulted/used source accessions pinned in manifest: {len(src_accessions)}
-
-## 8-K selection honesty (round-14)
-Selection = resolver AUTO_OK (its own benchmark documents a **0.24% warm-start wrong-fire
-ceiling** — quarter_identity.py:100-104) AND pure STRUCTURAL PAIRING (the 8-K's certified prior
-periodic == the target's predecessor, or the target itself for documented inversions) inside the
-announcer window (period_end, next-period filing]. NO fiscal identities/labels anywhere — dei
-conventions are inconsistent even within one company (WMS). Every accepted 8-K's pairing +
-window is INDEPENDENTLY re-derived from the graph by this verifier (resolver's own prior query —
-a different code path than the run's). Zero-error is a MEASURED claim (WP4), never assumed.
-
-run summary: {json.dumps(summ)}
-"""
-    if a.record:
-        open('data/driver_catalog_seed/wp1_report.md', 'w').write(rep)
+        with open(SLICE_FILE, 'w') as f:
+            for r in rows:
+                f.write(json.dumps(r, sort_keys=True) + '\n')
+        open(REPORT, 'w').write(rep)
+    else:
+        on_disk = open(REPORT).read()
+        assert on_disk == rep, "report drifted from what this verifier renders (edit or stale data)"
     print(rep)
-    assert not bad_vq and not bad_sub, "mechanical compliance violated"
     print(f"WP1 VERIFY ({'RECORD' if a.record else 'CHECK'}): ALL ASSERTIONS PASSED")
 
 

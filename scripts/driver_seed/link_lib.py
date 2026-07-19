@@ -80,14 +80,15 @@ def value_forms(value, fmt='number', is_currency=1):
 # ---------- gates ----------
 def at_boundary(text, start, end, numeric=True):
     """THE single numeric-boundary rule. A number match is only real if it isn't glued into a
-    bigger number on either side. Used by every matcher — do not duplicate this logic."""
+    bigger number OR a word on either side ('modelX86' / 'FY86' never print the value 86 —
+    round-16, reviewer-confirmed live). Used by every matcher — do not duplicate this logic."""
     b = text[start-1] if start > 0 else ' '
     a = text[end] if end < len(text) else ' '
     nxt = text[end+1] if end+1 < len(text) else ' '
-    if numeric and b in '0123456789.,':
-        return False                       # glued to a preceding digit/separator
-    if a.isdigit():
-        return False
+    if numeric and (b.isalnum() or b in '.,'):
+        return False                       # glued to a preceding digit/letter/separator
+    if a.isalnum():
+        return False                       # glued into a longer number or word
     if a in '.,' and nxt.isdigit():
         return False                       # a thousands separator / decimal continues the number
     return True
@@ -124,7 +125,7 @@ def _with_trail(t, end):
 # number — and 'million' can never prove a value that needs 'billion'. Full-magnitude prints and
 # zero are self-evident. Measured on the wp1 cohort: 315/315 certified table binds sit in
 # sections carrying the strict marker -> zero recall cost.
-_SCALE_MARK = re.compile(r'(?i)in (millions|thousands|billions)')
+_SCALE_MARK = re.compile(r'(?i)in (millions|thousands|billions|trillions)')
 _SCALE_TAIL = re.compile(r'\s?(million|billion|thousand|trillion)s?\b', re.I)
 _WORD2DIV = {'thousand': 1e3, 'million': 1e6, 'billion': 1e9, 'trillion': 1e12}
 
@@ -166,12 +167,12 @@ def _local_scale_divs(text, start):
                 for m in _SCALE_MARK.finditer(text, ts, start)}
         if divs:
             return divs                    # the table declares its own scale(s) -> strict
-        # a table that declares NOTHING inherits the nearest preceding declaration (AA layout:
-        # the '(in millions)' caption sits ABOVE the table-start tag — reading convention)
-    last = None
-    for m in _SCALE_MARK.finditer(text, 0, start):
-        last = m
-    return {_WORD2DIV[last.group(1).lower().rstrip('s')]} if last else set()
+        # a table that declares NOTHING inherits a preceding declaration ONLY when the text
+        # declares exactly ONE scale overall (AA caption layout = reading convention). Round-16
+        # (reviewer-confirmed hazard): a mixed-scale text must never lend a marker across tables.
+    all_divs = {_WORD2DIV[m.group(1).lower().rstrip('s')]
+                for m in _SCALE_MARK.finditer(text, 0, start)}
+    return all_divs if len(all_divs) == 1 else set()
 
 
 def exact_form(form, value, fmt):
@@ -516,8 +517,17 @@ def tier1(xbrls, name, val, per, is_currency=None):
     if not cands:
         return None
     cands.sort(key=lambda c: -c[0])
-    if kt and len(cands) > 1 and cands[0][0] == cands[1][0] and cands[0][3] != cands[1][3]:
-        return None                          # ambiguous tie between different members
+    # round-16 order-free determinism: among ALL top-score candidates, ANY structural difference
+    # (concept, full axis+member pairs, exact period) is a genuine ambiguity -> ABSTAIN. Identical
+    # duplicates collapse. Input order can never decide. (Strictly stronger than the old
+    # member-token tie rule, which missed same-token/different-structure and aggregate ties.)
+    top = [c for c in cands if c[0] == cands[0][0]]
+    structs = {(c[1], tuple(sorted(tuple(p) for p in seg_axis_members(c[4]))),
+                (c[4].get('period') or {}).get('startDate'),
+                (c[4].get('period') or {}).get('endDate') or (c[4].get('period') or {}).get('instant'))
+               for c in top}
+    if len(structs) > 1:
+        return None
     score, concept, mlabel, _, fc = cands[0]
     pe = fc.get('period') or {}
     q = f'{concept} [{mlabel}] [{pe.get("startDate","")}..{pe.get("endDate","")}] = {fc.get("value")}'
@@ -551,7 +561,7 @@ def _tableforms(v, fmt):
         return s
     if '.' not in p:
         s.add(_grp(p))                     # grouped cell form ('5,365,000,000')
-    for div in (1e6, 1e9):
+    for div in (1e3, 1e6, 1e9, 1e12):      # round-16: exact thousand + trillion forms too
         x = av / div
         if x >= 1:
             xi = int(round(x))
@@ -597,8 +607,16 @@ def row_quote(texts, label_tokens, val, fmt, gap=90, scale_gate=False):
                         continue
                 ws = max(0, m.start() - gap)
                 seg = low[ws:m.start()]
-                pos = [seg.find(tok) for tok in lt]
-                if any(p < 0 for p in pos):
+                # round-16: tokens match WHOLE WORDS only ('net' never inside 'internet',
+                # 'car' never inside 'oscar') — alnum lookarounds on the lowered window
+                pos = []
+                for tok in lt:
+                    mt = re.search(r'(?<![a-z0-9])' + re.escape(tok) + r'(?![a-z0-9])', seg)
+                    if not mt:
+                        pos = None
+                        break
+                    pos.append(mt.start())
+                if pos is None:
                     continue                      # some label token missing -> not this row
                 q = t[ws + min(pos): _with_trail(t, m.end())]   # RAW slice incl. trailing evidence
                 if best is None or len(q) < len(best):
