@@ -873,3 +873,33 @@ Gains/losses vs round-20: total UNCHANGED at 280; T1 +16 (90→106) — the sing
 UPGRADED 16 of our own cohort's list-shape records from text-only T2 to full XBRL links —
 the closure audit didn't just stop the bug class, it recovered recall the sibling-parser split
 had been silently costing us.**
+
+## Round 22 (ChatGPT, 2026-07-19) — FOUR holes; 2/3/4 CONFIRMED by my reproductions; claim 1
+## NOT REPRODUCED under my conflict test (0 differing / 112 identical ACI concept+period cells)
+## yet the removal directive APPLIED — strictly conservative, and filer-specific pins are
+## owner-disliked hardcoding; my contrary measurement reported to the reviewer with a request
+## for his 43-fact basis. Commits `86c8f44` (code) + artifacts.
+1. STRUCTURAL_PAIRS = the single standard us-gaap pair only (ACI pin removed; its co-member
+   facts abstain honestly).
+2. Fail-closed parsing at the bind gate (reproduced: a GARBAGE segment passed as 'verified
+   undimensioned' and bound an aggregate KPI — the exact OD-17c masquerade the parser docstring
+   warns about): nonempty-but-unparseable segments and blank axis/member pairs never bind.
+3. Order-free evidence (reproduced: identical quotes under different period headings emitted
+   whichever context came first from the DB): ALL tied occurrences' contexts are collected;
+   CONFLICTING explicit periods (year-token sets minus the quote's own) → ABSTAIN; else the
+   deterministic minimum context. Scoped to with_context (certified preps byte-identical).
+   INCIDENT owned: the first patch attempt was a SILENT NO-OP string replace — caught by grep
+   (lessons 7/8 applied) before any false green.
+4. ONE 'table active at the value' law (_table_active_start) for BOTH ranking and context
+   (reproduced: a closed table's heading traveled into later prose); my first test fixture was
+   shorter than the default 320-char window and could not see the law — rebuilt beyond it.
+5. Verifier: DIRT_PATHS names all four imported code roots (tested by name); literal-bytes
+   reorder test; RECORD-validates-before-writing source-order test; proof-commit == stamp-commit
+   enforced + tested.
+**FINAL (clean stamp `86c8f44`, dirty []): 268 resolved (T1 104 · T2 164 · 8-K 69) · 455
+residual · 997 abstain · 2 parks · battery 129/129 · floors 28/28 · RECORD+CHECK green.
+Losses measured and classed: −12 vs round-21 (280) = the ACI-pin removal (its co-member facts →
+honest parks/residuals; my own test says these were all value-identical to consolidated — the
+price of removing filer hardcoding) + the fail-closed parsing and period-conflict abstentions.
+Every loss is an abstention, never a kept doubt. Evidence tie now holds 100% of section records
+(verifier-asserted).**
