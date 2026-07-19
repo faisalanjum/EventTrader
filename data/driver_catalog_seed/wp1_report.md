@@ -1,35 +1,46 @@
 # WP1 Report — regenerated cohort (A,AA,AAL,AAPL,ABT,ACI,ACN,ADM,AEE,AFL)
 
-Manifest (incl. output sha256s): `data/driver_catalog_seed/wp1_manifest.json` · slice sha `473bda9dcb0513a8…`
-Command: `venv/bin/python scripts/driver_seed/run_code_tier.py --tickers A,AA,AAL,AAPL,ABT,ACI,ACN,ADM,AEE,AFL --tag wp1` · verifier: `scripts/driver_seed/wp1_verify.py` (CHECK-ONLY by default;
-this report is regenerated only by `--record`; all assertions passed or it would have crashed).
+Manifest (incl. output sha256s): `data/driver_catalog_seed/wp1_manifest.json` · slice sha `473bda9dcb0513a8…` ·
+committed input slice: `data/driver_catalog_seed/wp1_worklist_slice.jsonl` (re-hashes to the same sha)
+Command: `venv/bin/python scripts/driver_seed/run_code_tier.py --tickers A,AA,AAL,AAPL,ABT,ACI,ACN,ADM,AEE,AFL --tag wp1` · verifier: `scripts/driver_seed/wp1_verify.py` (CHECK-ONLY default;
+all checks finish before anything is written; `--record` stamps only after every assertion passed).
 
 ## Mechanical compliance (safety checks — NOT precision; true P/R = WP4)
-- value-token-in-quote: **329/329**
-- quote-is-exact-source-substring: **329/329**
+- value-token-in-quote: **286/286** (asserted)
+- quote-is-exact-source-substring: **286/286** (asserted, live re-fetch)
 - fabricated quotes in THIS cohort: **0** (asserted) · older part1–4 artifacts: **STALE/INVALID**
+
+## 8-K selection (round-15 matcher — the owner's two-file authority)
+Historical pairing = `get_quarterly_filings.match_8k_to_periodic` (the shared structured matcher):
+companion = the original 10-Q/K covering the most recently ENDED period at the 8-K's filing time,
+lag-validated [-24h, +90d]; accept iff that accession EXACTLY equals the target AND
+`quarter_identity` says AUTO_OK (trust gate only — labels and calculated dates are NEVER joined).
+Unclear -> PARK at the matched target. The live lane (no companion yet) = quarter_identity alone
+(S4 wiring). Resolver's own documented wrong-fire ceiling: 0.24% (quarter_identity.py:100-104).
+**Pairing verification claim, stated exactly:** every ACCEPTED 8-K in this cohort
+(24) is INDEPENDENTLY re-derived from the graph by this verifier. The
+universe-wide sweep cross-checked 9,788 accepts with a convention-free heuristic (9 flags, all
+adjudicated as checker false-alarms) and adjudicated 1,206 parks by class; parked 8-Ks carry NO
+pin claim. (Reviewer's independent audit phrased it: 0 mismatches among 10,264 exact historical
+pins; 730 lacked exact pins.) Zero-error remains a MEASURED claim (WP4), never assumed.
 
 ## Reconciliation by distinct raw-row id (asserted, BOTH directions)
 raw rows 1535 (0 identical duplicates collapsed -> 1535 distinct) =
-unique ids 1535; every id accounted for in resolved/residual/abstain; ZERO invented extra
-ids; no id carries two different (kpi,value).
+unique ids 1535; every id accounted for; ZERO invented extra ids; no id carries two
+different (kpi,value).
 Denominators: **1535 raw rows** (reconciliation basis) · **1400 unique
 (ticker,kpi,period) targets** (coverage basis).
 
 ## Coverage
-resolved 329 (routes: {('T1-xbrl', '10k'): 88, ('T2-label', '8k'): 81, ('T1-xbrl', '10q'): 15, ('T2-label', '10k'): 111, ('T2-label', '10q'): 34}) · residual 410 · abstain 1006
-(reasons: {'derived_metric': 961, 'value_absent': 45}; sources_incomplete-flagged: 4)
-value bands (resolved): {'other': 298, 'decimal': 31}
+resolved 286 (routes: {('T1-xbrl', '10k'): 72, ('T2-label', '10k'): 104, ('T2-label', '8k'): 69, ('T1-xbrl', '10q'): 14, ('T2-label', '10q'): 27}) · residual 442 · abstain 997
+(reasons: {'derived_metric': 961, 'value_absent': 36}; sources_incomplete-flagged: 2)
 8-K gate verdicts (sources_ledger): {'uncertain': 48, 'other_period': 269, 'accept': 24}
-consulted/used source accessions pinned in manifest: 49
+sources: **25 target filings + 24 accepted 8-Ks**
 
-## 8-K selection honesty (round-14)
-Selection = resolver AUTO_OK (its own benchmark documents a **0.24% warm-start wrong-fire
-ceiling** — quarter_identity.py:100-104) AND pure STRUCTURAL PAIRING (the 8-K's certified prior
-periodic == the target's predecessor, or the target itself for documented inversions) inside the
-announcer window (period_end, next-period filing]. NO fiscal identities/labels anywhere — dei
-conventions are inconsistent even within one company (WMS). Every accepted 8-K's pairing +
-window is INDEPENDENTLY re-derived from the graph by this verifier (resolver's own prior query —
-a different code path than the run's). Zero-error is a MEASURED claim (WP4), never assumed.
+## Outcomes by value band (every distinct raw row)
+- **zero**: {'residual_only': 14, 'skip:derived_metric': 53, 'value_absent:value_absent': 2}
+- **small**: {'skip:derived_metric': 80, 'residual_only': 18}
+- **decimal**: {'skip:derived_metric': 828, 'resolved': 18, 'residual_only': 8, 'value_absent:value_absent': 1}
+- **other**: {'residual_only': 266, 'value_absent:value_absent': 33, 'resolved': 214}
 
-run summary: {"tag": "wp1", "records_resolved": 329, "residual": 410, "abstain": 1006, "company_periods": 25, "T1_xbrl": 103, "T2_label": 226, "pr_records": 81, "cp_no_filing": 0, "duplicate_rows_collapsed": 0}
+run summary: {"tag": "wp1", "records_resolved": 286, "residual": 442, "abstain": 997, "company_periods": 25, "T1_xbrl": 86, "T2_label": 200, "pr_records": 69, "cp_no_filing": 0, "duplicate_rows_collapsed": 0}

@@ -318,3 +318,52 @@ if __name__ == '__main__':
     test_small_value_reaches_the_locator_not_magnitude_vetoed()
     test_xbrl_context()
     print("\nALL S1.1 CHECKS PASS")
+
+
+_GOLDEN_ROW = {"cadence": "Annual", "category": "Revenue by Geography geo",
+    "cell_evidence": "Net sales $ 167,045 $ 162,560 $ 169,658",
+    "concept": "RevenueFromContractWithCustomerExcludingAssessedTax",
+    "event_time": "2024-11-01T06:01:36-04:00", "fmt": "number", "form": "10-K", "is_currency": 1,
+    "item_id": "07d9eb7e62a9", "member": "AmericasSegmentMember", "period_end": "2024-09-28",
+    "period_evidence": "", "quote": "Americas $ 167,045", "quote_source": "exact_cell",
+    "raw_label": "Americas Revenue", "source_id": "0000320193-24-000123", "source_type": "10k",
+    "ticker": "AAPL", "tier": "T1-xbrl", "value": 167045000000,
+    "xbrl": {"axis_members": [["us-gaap:StatementBusinessSegmentsAxis",
+                               "aapl:AmericasSegmentMember"]],
+             "concept": "RevenueFromContractWithCustomerExcludingAssessedTax",
+             "period_end": "2024-09-28", "period_start": "2023-10-01", "ptype": "duration"},
+    "xbrl_fact": "RevenueFromContractWithCustomerExcludingAssessedTax [AmericasSegmentMember] "
+                 "[2023-10-01..2024-09-28] = 167045000000"}
+
+
+def test_golden_complete_output_row_live():
+    """Round-16 directive 10: ONE COMPLETE output row pinned field-for-field. The raw input row
+    comes from the COMMITTED slice file; the record is recomputed end-to-end live (filing fetch ->
+    resolve_one) and must equal the frozen literal exactly — every field, no partial checks."""
+    try:
+        RC.load_env_neo4j()
+        from neo4j import GraphDatabase
+        drv = GraphDatabase.driver(os.environ['NEO4J_URI'],
+                                   auth=(os.environ.get('NEO4J_USERNAME', 'neo4j'),
+                                         os.environ['NEO4J_PASSWORD']))
+        with drv.session() as s:
+            s.run("RETURN 1").single()
+    except (KeyError, OSError, Exception) as e:
+        if type(e).__name__ in ('ServiceUnavailable', 'KeyError', 'OSError', 'ConnectionError',
+                                'AuthError', 'ConfigurationError'):
+            pytest.skip(f"graph unavailable: {e}")
+        raise
+    slice_path = 'data/driver_catalog_seed/wp1_worklist_slice.jsonl'
+    if not os.path.exists(slice_path):
+        pytest.skip("committed slice not present")
+    row = next(json.loads(l) for l in open(slice_path)
+               if '"kpi": "Americas Revenue"' in l and '"ticker": "AAPL"' in l
+               and '"period": "2024-09-28"' in l)
+    with drv.session() as s:
+        f = RC.fetch_filing(s, 'AAPL', '10-K', '2024-09-28')
+    rec, _ = RC.resolve_one(row, f, True)
+    rec = json.loads(json.dumps(rec))       # the pipeline's own serialization (tuples -> lists)
+    assert rec == _GOLDEN_ROW, {k: (rec.get(k), _GOLDEN_ROW.get(k))
+                                for k in set(rec) | set(_GOLDEN_ROW)
+                                if rec.get(k) != _GOLDEN_ROW.get(k)}
+    print("[ok] golden row: complete record equals the frozen literal, field for field")

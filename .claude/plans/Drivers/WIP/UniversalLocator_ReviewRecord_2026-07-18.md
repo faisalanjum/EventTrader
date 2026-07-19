@@ -617,3 +617,51 @@ re-attempts them) — nothing wrong was kept for the sake of a bigger number. Tr
 measured claim.
 STATE: WP1 code + evidence COMPLETE under the owner's two-file authority; push + WP2 remain
 owner words; reviewer re-audit next.
+
+## Owner clarification (2026-07-19) — THE LANE ROUTER for S4 wiring (pinned for the S4 spec):
+The program decides the lane ON ITS OWN; the shared matcher IS the router. For any 8-K:
+`match_8k_to_periodic` pairs it to an existing companion with valid lag → HISTORICAL lane (exact
+accession pairing). No companion yet / invalid lag → LIVE lane by definition (the report is not
+filed yet) → `quarter_identity` prediction alone. A new 8-K always starts in the live branch and
+flips to historical automatically once its report is ingested — the 156 sweep rows are exactly
+8-Ks currently in the live branch with the live branch not yet wired (S4). No labels, no config,
+no human routing, ever.
+
+## Round 16 (ChatGPT, 2026-07-19) — post-Option-D audit. Seven claims; five CONFIRMED by my own
+## reproductions, one NOT REPRODUCIBLE live (fixed anyway on structural proof), one adopted as
+## honesty corrections. Code commit `de94ec6`; artifacts+evidence commit follows.
+1. XBRL order-dependence: his "six live cases" did NOT reproduce (0/500 live forward-vs-reversed
+   evaluations; his accessions requested) — but the STRUCTURAL hole is real (same-score
+   candidates with different structures fell to insertion order; the old member-token tie rule
+   missed same-token/different-structure AND aggregate ties). Fixed: ANY structural difference
+   (concept, full axis+member pairs, exact period) among top-score candidates ABSTAINS —
+   order can never decide; synthetic pins both orders. Cost: T1 103→86 (those 17 were silent
+   coin-flips — correct losses).
+2. modelX86→86 CONFIRMED live → numeric boundary rejects ALPHANUMERIC neighbors (FY86/abc5432).
+3. Whole-word labels (NEW): 'Net' never inside 'Internet', 'Car' never inside 'Oscar' —
+   row_quote label tokens now match with alnum lookarounds. (With 2: T2 226→200 — substring-label
+   and glued-number binds were precision holes, now closed.)
+4. Scale: thousand+trillion exact forms added (marker-gated; '(in thousands) 1,200' can finally
+   prove 1.2M); marker vocab + trillions; inheritance requires UNANIMITY — a mixed-scale text
+   never lends a marker across tables (the nearest-matching-but-mixed hazard pinned RED);
+   single-scale documents still lend to undeclared tables (reading convention, disclosed bound).
+5. Verifier ordering CONFIRMED (the old flow stamped the manifest BEFORE the final compliance
+   assert): now EVERY check finishes before ANY write; code_summary.json hash-pinned; check mode
+   re-renders the report (drift fails) and requires the COMMITTED input slice
+   (`wp1_worklist_slice.jsonl`) to re-hash to the manifest sha — a clean checkout carries the
+   exact 1,535-row input + all outputs (committed this round, ~3MB).
+6. Report corrections: describes the round-15 matcher (not deleted round-14 logic); the pairing
+   claim stated EXACTLY (cohort accepts independently re-derived; universe cross-check 9,788 + 9
+   adjudicated false-alarm flags + 1,206 parks carrying NO pin claim; reviewer's own audit
+   quoted as his: "0 mismatches among 10,264 exact pins; 730 lacked exact pins");
+   sources split as 25 target filings + accepted 8-Ks; outcomes by value band incl. zero.
+7. Golden-row pin (directive 10): ONE complete output record (AAPL Americas Revenue FY2024
+   exact_cell) frozen field-for-field, recomputed end-to-end live from the committed slice row.
+8. WP4 BLOCKERS RECORDED (owner: do not expand WP1): the unused reader lane
+   (evidence_or_abstain/_tidy) has separate sign, percent, scale, and verbatim-quote problems —
+   these become MANDATORY failing tests before the reader is ever activated.
+**FINAL (stamped against `de94ec6`): 286 resolved (T1 86 · T2 200 · 8-K 69) · 442 residual ·
+997 abstain · 2 parks · battery 105/105 · floors 28/28 · verify RECORD+CHECK ALL PASSED ·
+FULL-HASH DETERMINISM PROVEN (two complete runs, all 8 outputs byte-identical).** Every drop
+from 329 is a closed precision hole (coin-flip T1 structures, substring labels, letter-glued
+numbers) — demotions ride to the LLM tier; nothing wrong kept.
