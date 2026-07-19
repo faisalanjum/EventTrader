@@ -1,6 +1,6 @@
 {
  "wp": "WP1 Step 4 regenerate",
- "code_commit": "f13d3a5-dirty",
+ "code_commit": "e25db5f-dirty",
  "tickers": [
   "A",
   "AA",
@@ -20,7 +20,7 @@
  "claims_scope": "zero fabricated (quote_source=xbrl_fact) records IN THIS COHORT ONLY; older part1-4 artifacts are STALE/INVALID, not regenerated",
  "output_sha256": {
   "code_resolved.jsonl": "d3f544e98abc7e3b0b4f4cc6e8424786133bffdbe4ec0254784db6c253e7ba7a",
-  "residual.jsonl": "8f1735d5704034f48ec1692d2600d322f8f9a84587241d6850d8d4ef960a3775",
+  "residual.jsonl": "1c8be13132e9579800e2e03b1066087afebbae7690b5fe4793d5fb7298e50bcd",
   "abstain.jsonl": "f46729974750f3ea8600f3238513167b4d6a9b12e3dfd08a4858a5935141d0be",
   "code_summary.json": "c1423853a4233555b2a4ab8c28ef845f8f36383010741222744be84fa74b024d",
   "packets.jsonl": "d58fb28163ee816c52d05af1f393f227d41077f5ec52efb09cde3416ed8c6fed",
@@ -121,5 +121,21 @@
   "0001628280-26-005458",
   "0001646972-25-000040",
   "0001646972-26-000028"
- ]
+ ],
+ "determinism_proof": {
+  "method": "two complete regenerates under FORCED different PYTHONHASHSEED values",
+  "seed_a": 1,
+  "seed_b": 2,
+  "outputs_byte_identical": true,
+  "sha256_both_runs": {
+   "code_resolved.jsonl": "d3f544e98abc7e3b0b4f4cc6e8424786133bffdbe4ec0254784db6c253e7ba7a",
+   "residual.jsonl": "1c8be13132e9579800e2e03b1066087afebbae7690b5fe4793d5fb7298e50bcd",
+   "abstain.jsonl": "f46729974750f3ea8600f3238513167b4d6a9b12e3dfd08a4858a5935141d0be",
+   "code_summary.json": "c1423853a4233555b2a4ab8c28ef845f8f36383010741222744be84fa74b024d",
+   "packets.jsonl": "d58fb28163ee816c52d05af1f393f227d41077f5ec52efb09cde3416ed8c6fed",
+   "skip_ledger.jsonl": "1136c3fb05367b804b3b8d4817b420f1075acf808fdd58b36cfe9f3039b4422c",
+   "park_ledger.jsonl": "5e1f916e523766a26aae7282b73e15d2736ea2ad388822dcc7e2874b1926535e",
+   "sources_ledger.jsonl": "758c1debdafd3aa25a2c93b77a52c65ca1e0bb8069a8576ab507e0ccc9e8d0e3"
+  }
+ }
 }

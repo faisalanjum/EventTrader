@@ -711,3 +711,41 @@ two complete regenerates under FORCED DIFFERENT PYTHONHASHSEED → 8/8 outputs b
 Commits: `013abf2` (recall packet) · `f13d3a5` (total ordering). Battery 107/107 · floors 28/28 ·
 verify RECORD+CHECK green. Manifest `f13d3a5-dirty` ('-dirty' = the two standing untouchable
 files only).
+
+## Owner rulings on the deferrals (2026-07-19):
+1. Allowlist deferral AGREED, with direction: the future fix must be NO WORD LIST at all (no
+   human-maintained vocabulary — no-human-in-the-loop). Replace with structure when the measured
+   pass happens: XBRL's own monetary-item typing + the fact's unit identity.
+2. Currency members: STAYS OUT of code permanently — currency→segment is a MEANING call
+   (currency:JPY ≠ 'the Japan business' by definition), and the owner's standing LLM-vs-code
+   boundary routes meaning to the reader lane, where these rows already flow.
+3. Reader-hint idea confirmed as WP4 wiring (one extra field on residuals when the reader
+   package is designed; D10 gates apply).
+Also queued for the next reviewer message: ask whether/where to add the three design amendments
+(two-file authority pointer · S4 lane-router · the alias-ambiguity clarification).
+
+## Round 17 (ChatGPT, 2026-07-19) — post-recall-packet audit. FOUR claims, ALL CONFIRMED by my
+## own reproductions; two of them were MY round-16/recall-packet mistakes, owned. Commits
+## `e25db5f` (code) + artifacts commit.
+1. **country:US bound 'United Kingdom Revenue' (shared token 'united') — CONFIRMED synthetic.**
+   Token OVERLAP was the wrong test for a country code. Fix: COMPLETE country-name identity —
+   every >=3-letter token of the code's name must appear in the KPI ('North Korea' vs country:KR
+   pinned; partial names like 'Korea Revenue' abstain to text/reader lanes). My "precision-safe
+   by construction" claim was OVERSTATED and is corrected in the docstrings + here.
+2. **Alphabetical alias pick chose CostOfRevenue over Revenues — CONFIRMED synthetic.** The
+   "same value+slice+period = same quantity" assumption is FALSE across semantically different
+   concepts passing the loose type filter. Round-16's FULL abstention restored (any concept/
+   slice/period difference among top candidates -> None). Empirically re-measured: T1 stays 105 —
+   the alias pick contributed ZERO of the +19 links, exactly as the reviewer said.
+3. **IPhoneMember leaked 'phone' — CONFIRMED.** My "preserved exactly" claim was FALSE (the union
+   produced a superset; a 'Phone Revenue' KPI could bind IPhoneMember — pinned RED). Fix: acronym
+   split requires runs of >=2 capitals, single tokenization; IPhone tokens byte-identical to
+   certified; EMEA still splits.
+4. **Input-order determinism gap — CONFIRMED by reading.** The hash-seed proof did not cover DB
+   ordering. Fixes: emitted axis_members canonicalized (sorted; storage dimension order never
+   leaks — reversed-dimension test); scan_text truncates ONLY AFTER the total sort (reversed
+   21-text test); "total ordering everywhere" claim corrected to what is actually proven.
+**FINAL (stamped against `e25db5f`): 286 resolved (T1 105 · T2 181 · 8-K 69) · 442 residual ·
+997 abstain · 2 parks · battery 105/105 · floors 28/28 · verify RECORD+CHECK green ·
+determinism proven under BOTH seeds with the seed pair + full 8-file hash set stamped into the
+manifest (`determinism_proof`).**
