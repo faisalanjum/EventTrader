@@ -75,10 +75,13 @@ def locate_by_value(req):
                'concept': (t1['concept'] if t1 else None), 'xbrl': xbrl,
                'xbrl_fact': (t1['quote'] if t1 else None)}
     hit = None
-    if t1:                                                    # rung 1 — the printed cell
-        cell = _exact_cell(req, t1)
-        if cell and L.value_ok(val, fmt, cell[0]):
-            hit = {**base_t1, 'quote': cell[0], 'quote_source': 'exact_cell', 'period_evidence': cell[1]}
+    if t1:                                                    # rung 1 — the printed cell ANCHORS;
+        cell = _exact_cell(req, t1)                           # the emitted quote must be a CORPUS
+        if cell:                                              # slice (v5.5 §3); cells = audit data
+            cq = strict or L.row_quote(texts, L.member_tokens([t1['member']]), val, fmt)
+            if cq and L.value_ok(val, fmt, cq):
+                hit = {**base_t1, 'quote': cq, 'quote_source': 'exact_cell',
+                       'period_evidence': cell[1], 'cell_evidence': cell[0]}
     if hit is None and strict:                                # rung 2 — strict text label
         if t1:
             hit = {**base_t1, 'quote': strict, 'quote_source': 'section',

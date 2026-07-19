@@ -51,19 +51,23 @@ def test_derived_skip():
 def test_no_magnitude_plug_skip__abstain_without_proof():
     """#4: the magnitude 'plug' skip (<=1000) is GONE — it dropped legit small facts (78 'Total X = 0'
     rows, 'International Stores = 86', 'ACPU = 670'). No value is pre-skipped by size; a value with no
-    located proof ABSTAINS (value_absent, retryable), NEVER a terminal magnitude skip. A zero in generic
-    text is insufficient -> abstains. An unstated small value (fiscal.ai filler) -> abstains."""
+    located proof ABSTAINS (value_absent, retryable), NEVER a terminal magnitude skip.
+    WP1 update: a stated '0' in generic text does NOT resolve (label-adjacency guards precision) but
+    now legitimately becomes a READER CANDIDATE (residual) — the gray zone belongs to the reader lane
+    (owner F2). Truly unstated values still abstain cleanly."""
     filing = {'source_id': 'F', 'source_type': '10k', 'event_time': 't', 'xbrls': [],
               'texts': ['revenue grew strongly; nothing here was 0 and no store count is stated']}
-    _, res, ab = RC.process_cp([mk_item('Total Fee Related Earnings', 0),   # a real 0, not in text
-                                mk_item('Other Revenue', -1000),            # fiscal.ai filler, unstated
-                                mk_item('Big Revenue', 7777)], filing, [])
+    _, res, ab = RC.process_cp([mk_item('Total Fee Related Earnings', 0),   # a 0 IS in the text ->
+                                mk_item('Other Revenue', -1000),            #   residual, not resolved
+                                mk_item('Big Revenue', 7777)], filing, [])  # unstated -> abstain
     assert not any(a.get('reason') == 'plug' for a in ab), ab               # the magnitude skip is gone
-    assert all(a['reason'] == 'value_absent' for a in ab), ab               # all abstain for lack of proof
-    assert not res, res                                                     # none produced LLM candidates
+    assert all(a['reason'] == 'value_absent' for a in ab), ab               # unstated -> honest abstain
+    assert {a['raw_label'] for a in ab} == {'Other Revenue', 'Big Revenue'}, ab
+    assert len(res) == 1 and res[0]['kpi'] == 'Total Fee Related Earnings', res
+    assert res[0]['candidates'], res                # the stated '0' rides to the reader, unresolved
     for a in ab:
         assert a['sources_searched'] == ['10k'], a   # completeness signal still carried
-    print("[ok] no magnitude plug skip; unproven values abstain")
+    print("[ok] no magnitude plug skip; unproven values abstain; stated-0 -> reader candidate")
 
 
 def test_small_value_reaches_the_locator_not_magnitude_vetoed():

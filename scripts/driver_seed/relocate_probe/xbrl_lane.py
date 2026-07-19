@@ -13,39 +13,57 @@ zero/one-axis matching (the naive seg_members list-fix broke 50/1761 certified r
     venv/bin/python scripts/driver_seed/relocate_probe/xbrl_lane.py   # self-check vs the archived pool
 """
 import os, sys, json, random
-from datetime import date, timedelta
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 sys.path.insert(0, os.path.dirname(__file__))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..', 'driver', 'relocation'))
 from oracle import _rows, _members_all
+import exact_numbers as XN
 
 HERE = os.path.dirname(__file__)
 
 
-def resolve(xbrls, concept_qname, member_qnames, period_start, period_end):
-    """unique fact value (int) for the FULL identity in this filing's XBRL blobs, else None.
-    Date conventions tolerated: inclusive/exclusive start and end (filers tag either)."""
+def resolve(xbrls, concept_qname, member_qnames, period_start, period_end, unit_ref=None):
+    """unique fact value (exact Decimal) for the FULL identity in this filing's XBRL blobs, else
+    None. Dates: normalize-once-by-known-format then EXACT (graph storage is inclusive — verified
+    live; no ±1-day tolerance sets, they accepted convention-inconsistent pairs). start == end =
+    the instant form (gp_DATE_DATE). Concepts: storage keys are BARE local names (verified live) —
+    a request prefix strips deterministically; local names compare EXACTLY. Units: filer-local
+    `unitRef` codes; a caller-supplied unit_ref filters; without one, candidates under CONFLICTING
+    unitRefs are ambiguous → abstain."""
     con = concept_qname.split(':')[-1]
     want = frozenset(member_qnames)
     try:
-        starts = {period_start, (date.fromisoformat(period_start) + timedelta(days=1)).isoformat()}
-        ends = {period_end, (date.fromisoformat(period_end) + timedelta(days=1)).isoformat()}
-    except (ValueError, TypeError):
+        ps, pe = XN.period_key(period_start, period_end)
+    except XN.ExactError:
         return None
-    vals = set()
+    instant = (ps == pe)
+    vals, units = set(), set()
     for c, fc in _rows(xbrls):
         if c.split(':')[-1] != con:
             continue
         p = fc.get('period') or {}
-        if p.get('startDate') not in starts or p.get('endDate') not in ends:
-            continue
+        if instant:
+            if p.get('instant') != ps:
+                continue
+        else:
+            if p.get('startDate') != ps or p.get('endDate') != pe:
+                continue
         if frozenset(_members_all(fc)) != want:
             continue
-        v = str(fc.get('value', '')).strip()
+        u = fc.get('unitRef')
+        if unit_ref is not None and u != unit_ref:
+            continue
         try:
-            vals.add(int(round(float(v))))
-        except ValueError:
+            v = XN.dec(str(fc.get('value', '')).strip())
+        except XN.ExactError:
             return None                       # non-numeric collision -> not cleanly resolvable
-    return next(iter(vals)) if len(vals) == 1 else None   # unique or abstain
+        vals.add(v)
+        units.add(u)
+    if len(vals) != 1:
+        return None                           # unique or abstain
+    if unit_ref is None and len(units) > 1:
+        return None                           # unit conflict -> ambiguous, abstain
+    return next(iter(vals))
 
 
 if __name__ == '__main__':

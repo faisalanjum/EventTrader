@@ -45,6 +45,36 @@ def test_never_emits_a_synthetic_xbrl_quote():
         f"fabricated an XBRL-metadata quote: {hit.get('quote')!r}"
 
 
+# --- #5 + N1: the number-form matcher must FIND a labeled small/decimal/zero value and ABSTAIN on a generic
+# one. Tested through the FULL locator (locate_by_value), never value_ok alone. Precision must come from the
+# KPI label sitting next to the number (row_quote), NOT from a magnitude/length threshold. ---
+def _vk(name, val, fmt, txt):
+    return locate.locate_by_value({'xbrls': [], 'texts': [txt], 'name': name, 'value': val,
+                                   'fmt': fmt, 'period': '2024-12-31'})
+
+
+def test_labeled_ratio_decimal_resolves():
+    r = _vk('Bauxite Production', 38.3, 'ratio', 'Bauxite Production 38.3 for the fiscal year')
+    assert r['hit'] is not None and '38.3' in r['hit']['quote'], r
+
+
+def test_labeled_small_value_resolves():
+    r = _vk('International Stores', 86, 'number', 'International Stores 86 at fiscal year end')
+    assert r['hit'] is not None and '86' in r['hit']['quote'], r
+
+
+def test_labeled_zero_resolves():
+    r = _vk('Total Fee Related Earnings', 0, 'number', 'Total Fee Related Earnings 0 for the segment')
+    assert r['hit'] is not None and '0' in r['hit']['quote'], r
+
+
+def test_generic_small_decimal_or_zero_abstains():
+    # the number is present but the KPI label is NOT next to it -> must NOT resolve (hand to the LLM tier)
+    assert _vk('International Stores', 86, 'number', 'the firm operates in 86 countries')['hit'] is None
+    assert _vk('Bauxite Production', 38.3, 'ratio', 'operating margin rose 38.3 points in banking')['hit'] is None
+    assert _vk('Total Fee Related Earnings', 0, 'number', 'there were 0 recalls during the year')['hit'] is None
+
+
 def test_dispatch_by_presence_of_value():
     vk = locate.locate({'xbrls': [_AGG_BLOB], 'texts': [], 'name': 'Total Revenue',
                         'value': 6707000000, 'fmt': None, 'period': '2024-12-31'})

@@ -7,7 +7,10 @@ Ported verbatim from the calibrated producer (session a0f165d5, 2026-07-10) that
 Tier-1 additionally requires the XBRL concept be revenue/income-ish AND the dimension member
 match the KPI's slice token (entity KPIs) or be undimensioned (aggregate KPIs).
 """
-import re, json, math
+import re, json, math, os, sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                '..', '..', 'driver', 'relocation'))
+import exact_numbers as XN     # THE shared exact-value helpers (Decimal-exact; no float round-trips)
 
 
 # ---------- value-form generation (recall engine + oracle) ----------
@@ -35,8 +38,15 @@ def value_forms(value, fmt='number', is_currency=1):
     if value is None:
         return set()
     v = float(value); av = abs(v); forms = set()
+    if v == 0:
+        return {'0'}                       # a stated zero is a real value (WP1); boundary +
+                                           # label-adjacency provide the precision, never magnitude
     if fmt == '%':
+        integral = (av == int(av))
         for f in _round_forms(av):
+            if not integral and '.' not in f:
+                continue                   # 2.34 never accepts the integer-rounded print '2%'
+                                           # (owner F2: the gray zone belongs to the reader lane)
             forms |= {f + '%', f + ' percent', f + ' percentage points', '(' + f + ')%', '(' + f + ')'}
         bps = av * 100
         if bps == int(bps):
@@ -44,6 +54,10 @@ def value_forms(value, fmt='number', is_currency=1):
         return forms
     ai = int(round(av))
     forms.add(_grp(str(ai))); forms.add(str(ai))
+    p = XN.plain(XN.dec(str(value)).copy_abs())
+    if '.' in p:
+        forms.add(p)                       # the EXACT fractional print (38.3) — WP1; the old code
+                                           # only made int-rounded + scaled forms, losing decimals
     for div, tag in ((1e3, 'K'), (1e6, 'M'), (1e9, 'B'), (1e12, 'T')):
         if av >= div / 10:
             scaled = av / div; si = int(round(scaled))
@@ -79,12 +93,17 @@ def at_boundary(text, start, end, numeric=True):
     return True
 
 
-def bounded_hit(quote, form):
-    """form occurs in quote at a numeric word boundary (not glued inside a bigger number)."""
+def bounded_hit(quote, form, forbid_pct=False):
+    """form occurs in quote at a numeric word boundary (not glued inside a bigger number).
+    forbid_pct: the occurrence must NOT be %-suffixed — a plain-number value never accepts a
+    percent-marked token ('86' must not bind '86%'; reproduced WP1 class-guard defect)."""
     numeric = form[0].isdigit() or form[0] in '$('
     for m in re.finditer(re.escape(form), quote):
-        if at_boundary(quote, m.start(), m.end(), numeric):
-            return True
+        if not at_boundary(quote, m.start(), m.end(), numeric):
+            continue
+        if forbid_pct and quote[m.end():m.end() + 1] == '%':
+            continue
+        return True
     return False
 
 
@@ -98,6 +117,8 @@ def exact_form(form, value, fmt):
     except ValueError:
         return False
     av = abs(float(value))
+    if av == 0:
+        return f == 0                      # a stated zero reproduces itself (WP1)
     if '.' not in s and s.isdigit() and len(s) >= 4:
         return True
     for sc in (1, 1e3, 1e6, 1e9, 1e12):
@@ -130,13 +151,15 @@ def value_ok(value, fmt, quote):
     right (that is the binder + audits). The sign guard adds only the mechanical half: a value whose sign
     the quote's notation flatly contradicts is a wrong bind. A plain print asserts nothing about sign, so it
     is left to pass here and be judged where meaning lives — no keyword list, no guessed sign."""
-    forms = {f for f in value_forms(value, fmt or 'number') if len(f) >= 2}
+    # '0' is a legal single-char form (a stated zero is a real value — WP1); everything else
+    # keeps the >=2 guard against stray single digits.
+    forms = {f for f in value_forms(value, fmt or 'number') if len(f) >= 2 or f == '0'}
     for div in (1e6, 1e9):
         xx = abs(float(value)) / div
         if xx >= 1:
             for d in (1, 2):
                 forms.add(f"{xx:,.{d}f}")
-    hits = [f for f in forms if bounded_hit(quote, f)]
+    hits = [f for f in forms if bounded_hit(quote, f, forbid_pct=(fmt != '%'))]
     ok = [f for f in hits if exact_form(f, value, fmt)]
     if not ok:
         return False
@@ -350,7 +373,13 @@ def tier1(xbrls, name, val, per):
     """match an XBRL fact by value+period+dimension member. Deterministic; returns dict or None.
     Collects all facts equal in (concept-type, value, period); picks the best member match, and
     ABSTAINS if two different members tie (genuinely ambiguous)."""
-    sval = str(int(round(float(val))))          # SIGNED: a -X KPI must not bind a +X fact
+    # SIGNED + Decimal-EXACT: a -X KPI must not bind a +X fact, and 2.34 must never bind a 2.01
+    # fact (the old int-truncation conflated them — WP1 exactness fix).
+    def _same_value(fc_value):
+        try:
+            return XN.eq(str(fc_value).strip(), str(val))
+        except XN.ExactError:
+            return False
     kt = slice_tokens(name)
     # a KPI with no slice tokens is only an aggregate if it actually says so; otherwise its
     # slice identity is unrecoverable (e.g. a residual "other" bucket) -> abstain
@@ -370,7 +399,7 @@ def tier1(xbrls, name, val, per):
             for fc in (facts if isinstance(facts, list) else [facts]):
                 if not isinstance(fc, dict):
                     continue
-                if str(fc.get('value', '')).split('.')[0] != sval:
+                if not _same_value(fc.get('value', '')):
                     continue
                 if (fc.get('period') or {}).get('endDate') != per:
                     continue
@@ -410,19 +439,30 @@ def _toks(n):
 
 
 def _tableforms(v, fmt):
-    s = set(); av = abs(float(v))
+    """Exact printed forms for table/row scanning. WP1: the value's EXACT form is ALWAYS included
+    (zero, small ints, decimals — the old len>=3 filter silently killed them); a fractional value
+    gets its 1-decimal companion but NEVER an integer-rounded print; big money keeps the grouped
+    cell form + per-million/billion scaled forms (scaled bare ints only when >=3 digits — a bare
+    '7' would match stray sevens). Precision comes from boundary + label adjacency (row_quote),
+    never from magnitude or length."""
+    av = abs(float(v))
+    p = XN.plain(XN.dec(str(v)).copy_abs())
+    s = {p}
     if fmt == '%':
-        for d in (0, 1):
-            s.add(f"{av:.{d}f}")
+        if '.' in p:
+            s.add(f"{av:.1f}")             # 2.34 -> '2.3'; the integer print is the reader's call
         return s
-    s.add(f"{int(round(av)):,}")
+    if '.' not in p:
+        s.add(_grp(p))                     # grouped cell form ('5,365,000,000')
     for div in (1e6, 1e9):
         x = av / div
         if x >= 1:
-            s.add(f"{int(round(x)):,}")
+            xi = int(round(x))
+            if xi >= 100:
+                s.add(f"{xi:,}")
             for d in (1, 2):
                 s.add(f"{x:,.{d}f}")
-    return {x for x in s if len(x) >= 3}
+    return {x for x in s if x}
 
 
 def _tidy(s):
@@ -450,7 +490,7 @@ def row_quote(texts, label_tokens, val, fmt, gap=90):
                 pos = [seg.find(tok) for tok in lt]
                 if any(p < 0 for p in pos):
                     continue                      # some label token missing -> not this row
-                q = _tidy(t[ws + min(pos): m.end()])
+                q = t[ws + min(pos): m.end()]     # RAW slice — the quote IS source text (WP1)
                 if best is None or len(q) < len(best):
                     best = q                      # shortest = tightest crop around the row
     return best
@@ -501,7 +541,7 @@ def scan_text(texts, name, val, fmt, max_hits=20, keep=6):
                 if not at_boundary(t, m.start(), m.end()):
                     continue
                 ws = _snippet_start(t, m.start(), nt)
-                snip = _tidy(t[ws:m.end()+80])
+                snip = t[ws:m.end()+80]           # RAW slice — snippets are source text (WP1)
                 low = snip.lower()
                 score = (2 if '##TABLE_START' in snip else 0) + sum(1 for tk in ntl if tk in low)
                 cands.append((score, len(snip), snip))
@@ -540,23 +580,22 @@ def expand_to_table(texts, quote, value, fmt):
     original quote if it can't be relocated in the source. Deterministic, no LLM."""
     forms = sorted(_tableforms(value, fmt), key=len, reverse=True)
     for t in texts:
-        tt = _tidy(t)
-        i = tt.find(quote)                            # quote came from _tidy(source) -> substring
+        i = t.find(quote)                             # quotes are RAW source slices (WP1)
         if i < 0:                                     # LLM may have reformatted; relocate by value
             i = -1
             for f in forms:
-                for m in re.finditer(re.escape(f), tt):
-                    if at_boundary(tt, m.start(), m.end()):
+                for m in re.finditer(re.escape(f), t):
+                    if at_boundary(t, m.start(), m.end()):
                         i = m.start(); break
                 if i >= 0:
                     break
             if i < 0:
                 continue
-        ts = tt.rfind('##TABLE_START', 0, i)
-        te = tt.find('##TABLE_END', i)
+        ts = t.rfind('##TABLE_START', 0, i)
+        te = t.find('##TABLE_END', i)
         if ts >= 0 and te >= 0 and (te - ts) < 6000:  # a real, bounded table
-            return tt[ts:te + len('##TABLE_END')]
-        return tt[max(0, i-1400):i + 500]             # no markers -> generous window
+            return t[ts:te + len('##TABLE_END')]
+        return t[max(0, i-1400):i + 500]              # no markers -> generous window
     return quote
 
 
