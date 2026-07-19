@@ -807,3 +807,34 @@ green · determinism proven with per-seed hash sets stamped.**
 **FINAL (clean-run proof at `04d2e1a`): 286 resolved (T1 104 · T2 182 · 8-K 69) · 442 residual ·
 997 abstain · 2 parks · battery 111/111 · floors 28/28 · verify RECORD+CHECK green (CHECK now
 also validates both seed records).**
+
+## Round 20 (ChatGPT, 2026-07-19) — THREE claims, ALL CONFIRMED (two by live reproduction, one
+## structurally with a luck-surviving fixture noted honestly). Commits `588dc0c` + `7a141dd`
+## (+ a gitignore commit REDONE after it accidentally swept another session's unstaged lines —
+## only my cache line committed; their lines restored unstaged; owned).
+1. **Full-slice proof generalized to EVERY dimension** (round-19's rule fired only for
+   `country:`): [Alpha, Beta] never binds plain 'Alpha Revenue'; identical member names under
+   different axes bind; structural ∅-token members exempt. **Measured before finalizing: the 44
+   binds the gate touched split three ways** — (a) REAL unproven slices (the NonUs class: fact =
+   non-US slice of a segment, KPI never says non-US) = the round's purpose, kept rejected,
+   pinned; (b) COLLATERAL from asymmetric normalization ('revenue' inside ConsultingRevenueMember;
+   'growth' stopped only on the KPI side) → the gate's member side now subtracts the SAME
+   stop-list + 'sector'/'company' joined GENERIC_MEM as furniture → recovered, pinned; (c) HONEST
+   fully-proven losses (KPI names more than the member proves: 'Primary Aluminum' vs
+   AluminumMember, 'Fresh Product' vs FreshMember, the Ameren gas-CapEx class) → demoted to
+   text/reader lanes per the reviewer's own principle.
+2. **Whole-word pre-value ranking** ('net' scores 0 inside 'internet'; the exact Net Revenue
+   line ranks FIRST over thirty Internet fills, pinned) + max_hits honored as the return cap +
+   pruning exercised past 4×.
+3. **Verifier**: BOTH modes read the COMMITTED slice only (the ignored full worklist is never a
+   verifier input); determinism validation requires EXACTLY TWO runs, DISTINCT seeds, each
+   complete and equal to the stamped hashes (zero/one/dup/partial all fail, unit-pinned);
+   and THE STAMP IS FINALLY FULLY CLEAN — regeneration AND RECORD ran inside a detached worktree
+   at `7a141dd`: manifest shows the one clean commit and `dirty_files: []` (the cache noise that
+   polluted the previous attempt is gitignored as derived data).
+**FINAL (clean stamp `7a141dd`, dirty []): 280 resolved (T1 90 · T2 190 · 8-K 69) · 445 residual
+· 997 abstain · 2 parks · battery 115/115 · floors 28/28 · RECORD+CHECK green.**
+**Gains/losses vs round-19 (T1 104):** −22 under the generalized gate → +8 recovered by shared
+normalization → net T1 −14 = (a) the NonUs-class correct rejections + (c) the fully-proven
+demotions (all alive in T2/reader lanes: T2 +8, residual +3). Zero questionable links kept —
+exactly the reviewer's stated goal.

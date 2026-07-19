@@ -6,8 +6,8 @@ Command: `venv/bin/python scripts/driver_seed/run_code_tier.py --worklist data/d
 all checks finish before anything is written; `--record` stamps only after every assertion passed).
 
 ## Mechanical compliance (safety checks — NOT precision; true P/R = WP4)
-- value-token-in-quote: **286/286** (asserted)
-- quote-is-exact-source-substring: **286/286** (asserted, live re-fetch)
+- value-token-in-quote: **280/280** (asserted)
+- quote-is-exact-source-substring: **280/280** (asserted, live re-fetch)
 - fabricated quotes in THIS cohort: **0** (asserted) · older part1–4 artifacts: **STALE/INVALID**
 
 ## 8-K selection (round-15 matcher — the owner's two-file authority)
@@ -32,7 +32,7 @@ Denominators: **1535 raw rows** (reconciliation basis) · **1400 unique
 (ticker,kpi,period) targets** (coverage basis).
 
 ## Coverage
-resolved 286 (routes: {('T1-xbrl', '10k'): 90, ('T2-label', '10k'): 86, ('T2-label', '8k'): 69, ('T1-xbrl', '10q'): 14, ('T2-label', '10q'): 27}) · residual 442 · abstain 997
+resolved 280 (routes: {('T1-xbrl', '10k'): 77, ('T2-label', '10k'): 93, ('T2-label', '8k'): 69, ('T1-xbrl', '10q'): 13, ('T2-label', '10q'): 28}) · residual 445 · abstain 997
 (reasons: {'derived_metric': 961, 'value_absent': 36}; sources_incomplete-flagged: 2)
 8-K gate verdicts (sources_ledger): {'uncertain': 48, 'other_period': 269, 'accept': 24}
 sources: **25 target filings + 24 accepted 8-Ks**
@@ -41,6 +41,6 @@ sources: **25 target filings + 24 accepted 8-Ks**
 - **zero**: {'residual_only': 14, 'skip:derived_metric': 53, 'value_absent:value_absent': 2}
 - **small**: {'skip:derived_metric': 80, 'residual_only': 18}
 - **decimal**: {'skip:derived_metric': 828, 'resolved': 18, 'residual_only': 8, 'value_absent:value_absent': 1}
-- **other**: {'residual_only': 266, 'value_absent:value_absent': 33, 'resolved': 214}
+- **other**: {'residual_only': 272, 'value_absent:value_absent': 33, 'resolved': 208}
 
-run summary: {"tag": "wp1", "records_resolved": 286, "residual": 442, "abstain": 997, "company_periods": 25, "T1_xbrl": 104, "T2_label": 182, "pr_records": 69, "cp_no_filing": 0, "duplicate_rows_collapsed": 0}
+run summary: {"tag": "wp1", "records_resolved": 280, "residual": 445, "abstain": 997, "company_periods": 25, "T1_xbrl": 90, "T2_label": 190, "pr_records": 69, "cp_no_filing": 0, "duplicate_rows_collapsed": 0}
