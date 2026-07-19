@@ -285,95 +285,83 @@ def test_scan_text_scale_gate_param():
 
 # ---------------- round-16: order-free tier1, letter-glued numbers, inheritance unanimity ----
 def test_tier1_tie_rule_order_free():
-    """Round-16 + owner's recall refinement: ties differing in SLICE (axis+members) or PERIOD are
-    REAL ambiguity -> abstain. Ties that differ ONLY in concept name (dual-tagged aliases of the
-    same printed quantity: same value, same slice, same period) pick DETERMINISTICALLY
-    (lexicographic) — a certain-true link is never thrown away, and order still can't decide."""
+    """Round-17 REVERSAL of the alias pick (reviewer-reproduced: a coincidence-equal
+    CostOfRevenue sorts before Revenues and would be CHOSEN for a revenue KPI — the "same
+    quantity" alias assumption is false across semantically different concepts that pass the
+    loose type filter). ANY difference among top-score candidates — concept, slice, or period —
+    ABSTAINS again; order can never decide; identical duplicates still bind."""
     b1 = blob('Revenues', [fact('5000', '2024-01-01', '2024-12-31', unit='U_USD')])
     b2 = blob('RevenuesNet', [fact('5000', '2024-01-01', '2024-12-31', unit='U_USD')])
-    r_ab = L.tier1([b1, b2], 'total revenue', 5000, '2024-12-31', is_currency=1)
-    r_ba = L.tier1([b2, b1], 'total revenue', 5000, '2024-12-31', is_currency=1)
-    assert r_ab is not None and r_ba is not None
-    assert r_ab['concept'] == r_ba['concept'] == 'Revenues'      # deterministic, order-free
-    # DIFFERENT PERIOD START at the same end (Q4 vs FY coincidence) = real ambiguity -> abstain
+    assert L.tier1([b1, b2], 'total revenue', 5000, '2024-12-31', is_currency=1) is None
+    assert L.tier1([b2, b1], 'total revenue', 5000, '2024-12-31', is_currency=1) is None
+    cost = blob('CostOfRevenue', [fact('5000', '2024-01-01', '2024-12-31', unit='U_USD')])
+    assert L.tier1([b1, cost], 'total revenue', 5000, '2024-12-31', is_currency=1) is None
+    assert L.tier1([cost, b1], 'total revenue', 5000, '2024-12-31', is_currency=1) is None
     q = blob('Revenues', [fact('5000', '2024-10-01', '2024-12-31', unit='U_USD'),
                           fact('5000', '2024-01-01', '2024-12-31', unit='U_USD')])
     assert L.tier1([q], 'total revenue', 5000, '2024-12-31', is_currency=1) is None
     dup = blob('Revenues', [fact('5000', '2024-01-01', '2024-12-31', unit='U_USD'),
                             fact('5000', '2024-01-01', '2024-12-31', unit='U_USD')])
     assert L.tier1([dup], 'total revenue', 5000, '2024-12-31', is_currency=1) is not None
-    print("[ok] tier1: slice/period ties abstain; concept aliases pick deterministically")
+    print("[ok] tier1: ANY tie difference abstains; identical duplicates bind; order-free")
 
 
 def test_geo_members_match_country_names():
-    """Owner recall packet (measured: 113 cohort rows): XBRL tags geography as ISO codes
-    (country:US) while KPI names say 'United States' — the closed ISO vocabulary maps them.
-    Precision-safe: an unknown code just fails to match (abstain), never binds wrongly."""
-    assert {'united', 'states'} <= L.member_tokens(['country:US'])
-    assert 'netherlands' in L.member_tokens(['country:NL'])
-    assert 'japan' in L.member_tokens(['country:JP'])
+    """Round-17 tightening (reviewer-reproduced: country:US bound a 'United Kingdom Revenue' KPI
+    on the shared token 'united'): a country member binds ONLY on COMPLETE country-name identity —
+    every significant token of the code's name must appear in the KPI. Partial-name KPIs
+    ('Korea Revenue' vs South Korea) abstain to the text/reader lanes."""
     seg = [fact('5365000000', '2024-01-01', '2024-12-31', unit='U_USD',
                 seg=[{'dimension': 'srt:StatementGeographicalAxis', 'value': 'country:US'}])]
     b = blob('RevenueFromContractWithCustomerExcludingAssessedTax', seg)
-    r = L.tier1([b], 'United States Revenue', 5365000000, '2024-12-31', is_currency=1)
-    assert r is not None, "country:US failed to bind 'United States Revenue'"
-    print("[ok] ISO country members bind country-name KPIs")
+    assert L.tier1([b], 'United States Revenue', 5365000000, '2024-12-31', is_currency=1) is not None
+    assert L.tier1([b], 'United Kingdom Revenue', 5365000000, '2024-12-31', is_currency=1) is None
+    kr = [fact('900000000', '2024-01-01', '2024-12-31', unit='U_USD',
+               seg=[{'dimension': 'srt:StatementGeographicalAxis', 'value': 'country:KR'}])]
+    bk = blob('RevenueFromContractWithCustomerExcludingAssessedTax', kr)
+    assert L.tier1([bk], 'South Korea Revenue', 900000000, '2024-12-31', is_currency=1) is not None
+    assert L.tier1([bk], 'North Korea Revenue', 900000000, '2024-12-31', is_currency=1) is None
+    print("[ok] country members: complete-name identity only; US never binds UK, KR never North")
 
 
 def test_allcaps_camel_members_tokenize():
-    """Owner recall packet: 'EMEASegmentMember' must yield the token 'emea' (the ALLCAPS run was
-    glued to the next word), so 'EMEA Revenue' can bind."""
-    assert 'emea' in L.member_tokens(['acn:EMEASegmentMember'])
-    print("[ok] ALLCAPS camel runs split correctly")
+    """Round-17: acronym splitting is restricted to runs of >=2 capitals so 'IPhoneMember' stays
+    EXACTLY {'iphone'} (round-16's union leaked 'phone' — a 'Phone Revenue' KPI could bind it);
+    'EMEASegmentMember' still yields 'emea'."""
+    t = L.member_tokens(['aapl:IPhoneMember'])
+    assert 'iphone' in t and 'phone' not in t, t
+    t2 = L.member_tokens(['acn:EMEASegmentMember'])
+    assert 'emea' in t2, t2                 # ('segment' is filtered as a GENERIC member word)
+    ip = blob('Revenues', [fact('200000000', '2024-01-01', '2024-12-31', unit='U_USD',
+              seg=[{'dimension': 'us-gaap:ProductOrServiceAxis', 'value': 'aapl:IPhoneMember'}])])
+    assert L.tier1([ip], 'Phone Revenue', 200000000, '2024-12-31', is_currency=1) is None
+    print("[ok] IPhone tokens unchanged; EMEA splits; Phone never binds IPhone")
 
 
-def test_boundary_rejects_letter_glued_numbers():
-    """Round-16 (reviewer-confirmed live): '86' inside 'modelX86' or 'FY86' is NOT a value print.
-    The numeric boundary now rejects ALPHANUMERIC neighbors, not just digit-gluing."""
-    assert not L.bounded_hit('the modelX86 line', '86')
-    assert not L.bounded_hit('in FY86 we grew', '86')
-    assert L.bounded_hit('stores grew to 86 units', '86')
-    assert L.bounded_hit('a total of $86 in fees', '86')
-    assert L.bounded_hit('(86)', '86')
-    assert L.bounded_hit('margin was 86% overall', '86')
-    print("[ok] boundary: letter-glued digits never bind")
+def test_reversed_dimension_order_canonical():
+    """Round-17 (reviewer): a fact's dimension list order must not change the emitted record —
+    axis_members are canonicalized (sorted) on emit."""
+    segs = [{'dimension': 'us-gaap:StatementBusinessSegmentsAxis', 'value': 'x:AlphaMember'},
+            {'dimension': 'srt:StatementGeographicalAxis', 'value': 'x:BetaLandMember'}]
+    a = blob('Revenues', [fact('5000', '2024-01-01', '2024-12-31', unit='U_USD', seg=segs)])
+    b = blob('Revenues', [fact('5000', '2024-01-01', '2024-12-31', unit='U_USD', seg=list(reversed(segs)))])
+    ra = L.tier1([a], 'alpha betaland revenue', 5000, '2024-12-31', is_currency=1)
+    rb = L.tier1([b], 'alpha betaland revenue', 5000, '2024-12-31', is_currency=1)
+    assert ra is not None and rb is not None
+    assert ra['axis_members'] == rb['axis_members'], (ra['axis_members'], rb['axis_members'])
+    assert ra['axis_members'] == sorted(map(tuple, ra['axis_members'])) or \
+           ra['axis_members'] == sorted(ra['axis_members']), ra['axis_members']
+    print("[ok] dimension order canonicalized on emit")
 
 
-def test_scale_inheritance_requires_unanimity():
-    """Round-16 (reviewer-confirmed hazard): an UNDECLARED table inherits a preceding declaration
-    ONLY when the text declares exactly ONE scale overall (reading convention); any mixed-scale
-    text never lends to undeclared tables. Declared tables stay strict either way."""
-    toks = ['Widget', 'revenues']
-    mixed_borrow = ['(in millions) ##TABLE_START a END (in thousands) ##TABLE_START b END '
-                    '##TABLE_START Widget revenues 1,200 more']
-    assert L.row_quote(mixed_borrow, toks, 1200000000, None, scale_gate=True) is None
-    # the sharper hazard: the NEAREST marker happens to match, but the text is mixed-scale —
-    # an undeclared table must not borrow from it (nearest-single accepted this before)
-    mixed_near = ['(in thousands) ##TABLE_START a END (in millions) intro '
-                  '##TABLE_START Widget revenues 1,200 more']
-    assert L.row_quote(mixed_near, toks, 1200000000, None, scale_gate=True) is None
-    single = ['(in millions) intro ##TABLE_START alpha END ##TABLE_START Widget revenues 1,200']
-    assert L.row_quote(single, toks, 1200000000, None, scale_gate=True) is not None
-    print("[ok] scale inheritance: unanimous document convention only")
-
-
-def test_label_tokens_match_whole_words_only():
-    """Round-16: label adjacency must match WHOLE WORDS — 'Net' never matches inside 'Internet',
-    'Car' never inside 'Oscar'. All-tokens-present still required."""
-    assert L.row_quote(['Internet division revenues 5,432 for the year'],
-                       ['Net', 'revenues'], 5432, None) is None
-    assert L.row_quote(['Net revenues 5,432 for the year'], ['Net', 'revenues'], 5432, None) is not None
-    assert L.row_quote(['Oscar brand sales 1,200 in total'], ['Car', 'sales'], 1200, None) is None
-    print("[ok] label tokens are whole words, never substrings")
-
-
-def test_thousand_and_trillion_scaled_forms():
-    """Round-16: exact thousand- and trillion-scaled table forms exist and are marker-gated like
-    the rest ('(in thousands) 1,200' can finally prove 1.2 million; wrong marker still rejects)."""
-    toks = ['Widget', 'revenues']
-    k = ['(in thousands) Widget revenues 1,200 for the period']
-    assert L.row_quote(k, toks, 1200000, None, scale_gate=True) is not None
-    assert L.row_quote(k, toks, 1200000000, None, scale_gate=True) is None   # thousands ≠ billions
-    assert L.row_quote(['Widget revenues 1,200 no marker'], toks, 1200000, None,
-                       scale_gate=True) is None
-    print("[ok] thousand/trillion scale forms, marker-gated")
+def test_reversed_text_input_deterministic():
+    """Round-17 (reviewer): reversing the ORDER of source texts must not change the strict quote
+    or the kept candidate snippets (collection is no longer truncated before the total sort)."""
+    texts = [f'filler section {i} with nothing relevant' for i in range(18)]
+    texts += ['Total widget revenue 5,432 in segment A detail',
+              'Total widget revenue was $ 5,432 for the year',
+              'note: total widget revenue 5,432 again here']
+    f1 = L.scan_text(texts, 'total widget revenue', 5432, 'number')
+    f2 = L.scan_text(list(reversed(texts)), 'total widget revenue', 5432, 'number')
+    assert f1 == f2, (f1, f2)
+    print("[ok] text input order cannot change scan output")

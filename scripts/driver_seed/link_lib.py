@@ -413,15 +413,14 @@ def member_tokens(members):
             toks.update(w for w in re.findall(r"[A-Za-z]{2,}", COUNTRY_NAME[local.upper()].lower())
                         if w not in GENERIC_MEM)
         base = re.sub(r'Member$', '', local)
-        # BOTH tokenizations, unioned: the original split ('IPhone' stays 'iphone' — certified
-        # behavior preserved exactly) plus the ALLCAPS-run split ('EMEASegment' -> 'emea',
-        # 'segment' — the glued form could never match). Extra tokens only widen the match
-        # surface; score/tie/quote gates keep precision.
-        for v in (base, re.sub(r'([A-Z]+)([A-Z][a-z])', r'\1 \2', base)):
-            v = re.sub(r'([a-z])([A-Z])', r'\1 \2', v)
-            for w in re.findall(r"[A-Za-z]{2,}", v.lower()):
-                if w not in GENERIC_MEM:
-                    toks.add(w)
+        # round-17: acronym split ONLY for runs of >=2 capitals — 'EMEASegment' -> 'EMEA Segment'
+        # but 'IPhone' stays whole (the round-16 union leaked 'phone'; a 'Phone Revenue' KPI could
+        # bind IPhoneMember — reviewer-reproduced). Single tokenization, no union.
+        v = re.sub(r'([A-Z]{2,})([A-Z][a-z])', r'\1 \2', base)
+        v = re.sub(r'([a-z])([A-Z])', r'\1 \2', v)
+        for w in re.findall(r"[A-Za-z]{2,}", v.lower()):
+            if w not in GENERIC_MEM:
+                toks.add(w)
     return toks
 
 
@@ -515,6 +514,20 @@ def tier1(xbrls, name, val, per, is_currency=None):
                 if (fc.get('period') or {}).get('endDate') != per:
                     continue
                 members = seg_members(fc)
+                # round-17 country gate (reviewer-reproduced: country:US bound a 'United Kingdom'
+                # KPI on the shared token 'united'): a country-coded member requires COMPLETE
+                # country-name identity — every >=3-letter token of the code's name in the KPI.
+                _cgate_fail = False
+                for _mm in members:
+                    _pre, _, _loc = str(_mm).rpartition(':')
+                    if _pre == 'country':
+                        _nm = COUNTRY_NAME.get(_loc.upper())
+                        _ntk = set(re.findall(r"[A-Za-z]{3,}", _nm.lower())) if _nm else set()
+                        if not _ntk or not _ntk <= kt:
+                            _cgate_fail = True
+                            break
+                if _cgate_fail:
+                    continue
                 mt = member_tokens(members)
                 if kt:
                     score = _member_score(kt, mt)
@@ -530,28 +543,27 @@ def tier1(xbrls, name, val, per, is_currency=None):
     if not cands:
         return None
     cands.sort(key=lambda c: -c[0])
-    # round-16 order-free determinism + owner's recall refinement: among ALL top-score candidates,
-    # a difference in SLICE (full axis+member pairs) or PERIOD is genuine ambiguity -> ABSTAIN
-    # (covers the Q-vs-FY same-end coincidence and dimension ambiguity the old member-token tie
-    # rule missed). Candidates differing ONLY in concept name are dual-tagged ALIASES of the same
-    # printed quantity (same value, same slice, same period) -> pick DETERMINISTICALLY
-    # (lexicographic smallest concept) — a certain-true link is never discarded, and input order
-    # still can never decide.
+    # round-17 (reviewer-reproduced): the round-16 rule RESTORED in full — among top-score
+    # candidates, ANY difference (concept, slice, or period) ABSTAINS. The short-lived
+    # concept-alias pick chose a coincidence-equal CostOfRevenue over Revenues purely by
+    # alphabet; "same value+slice+period = same quantity" is FALSE across semantically
+    # different concepts that pass the loose type filter. Identical duplicates still bind;
+    # input order can never decide. (Measured: the alias pick contributed 0 of the +19 links.)
     top = [c for c in cands if c[0] == cands[0][0]]
-    dimper = {(tuple(sorted(tuple(p) for p in seg_axis_members(c[4]))),
-               (c[4].get('period') or {}).get('startDate'),
-               (c[4].get('period') or {}).get('endDate') or (c[4].get('period') or {}).get('instant'))
-              for c in top}
-    if len(dimper) > 1:
+    structs = {(c[1], tuple(sorted(tuple(p) for p in seg_axis_members(c[4]))),
+                (c[4].get('period') or {}).get('startDate'),
+                (c[4].get('period') or {}).get('endDate') or (c[4].get('period') or {}).get('instant'))
+               for c in top}
+    if len(structs) > 1:
         return None
-    top.sort(key=lambda c: c[1])
-    score, concept, mlabel, _, fc = top[0]
+    score, concept, mlabel, _, fc = cands[0]
     pe = fc.get('period') or {}
     q = f'{concept} [{mlabel}] [{pe.get("startDate","")}..{pe.get("endDate","")}] = {fc.get("value")}'
     # raw XBRL context for the FETCH packet (concept + axis+member + exact period + instant/duration).
     # The shared decomposer/resolver consumes these; FETCH never interprets them.
     return {'member': mlabel, 'concept': concept, 'quote': q,
-            'axis_members': seg_axis_members(fc),
+            'axis_members': sorted(tuple(p) for p in seg_axis_members(fc)),   # round-17: canonical
+                                                     # order — storage dimension order never leaks
             'period_start': pe.get('startDate', ''),
             'period_end': pe.get('endDate') or pe.get('instant', ''),
             'ptype': 'instant' if 'instant' in pe else 'duration'}
@@ -693,12 +705,8 @@ def scan_text(texts, name, val, fmt, max_hits=20, keep=6, scale_gate=False):
                 low = snip.lower()
                 score = (2 if '##TABLE_START' in snip else 0) + sum(1 for tk in ntl if tk in low)
                 cands.append((score, len(snip), snip))
-                if len(cands) >= max_hits:
-                    break
-            if len(cands) >= max_hits:
-                break
-        if len(cands) >= max_hits:
-            break
+    # round-17: truncation ONLY AFTER the total sort — a mid-collection cap made the kept set
+    # depend on source/text order (reviewer catch; max_hits stays as the post-sort bound).
     cands.sort(key=lambda c: (-c[0], c[1], c[2]))      # score, length, CONTENT — total order
     return strict, [c[2] for c in cands[:keep]]
 

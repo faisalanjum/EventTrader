@@ -2,8 +2,9 @@
 iso-codes data (/usr/share/iso-codes/json/iso_3166-1.json, Debian iso-codes package) —
 never hand-typed. Used by link_lib.member_tokens to let `country:XX` XBRL members bind
 country-name KPIs (owner-approved closed vocabulary; measured 113-row miss class).
-PRECISION-SAFE BY CONSTRUCTION: a wrong or missing entry can only cause a failed match
-(abstain/residual), never a wrong bind — name tokens still must overlap the KPI.
+An unknown code simply fails to match. Known codes bind ONLY under tier1's complete-name
+identity gate (every significant name token present in the KPI) — round-17: token OVERLAP
+alone let country:US bind a 'United Kingdom' KPI via the shared word 'united'.
 Regenerate: see the generator command in the WP1 review record (round 16, recall packet).
 """
 
