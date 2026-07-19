@@ -20,6 +20,8 @@ sys.path.insert(0, os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..', 'driver', 'relocation'))
 from oracle import _rows, _members_all
 import exact_numbers as XN
+from link_lib import seg_parse         # round-23 Track-2: ONE strict parser for BOTH lanes —
+                                        # this lane shared the garbage-segment masquerade
 
 HERE = os.path.dirname(__file__)
 
@@ -62,7 +64,11 @@ def resolve(xbrls, concept_qname, member_qnames, period_start, period_end, unit_
         else:
             if p.get('startDate') != ps or p.get('endDate') != pe:
                 continue
-        if frozenset(_members_all(fc)) != want:
+        _pairs, _complete = seg_parse(fc)
+        if not _complete:
+            continue                  # round-23: unparseable/partial/blank segments never
+                                      # pose as undimensioned (same law as the harvest lane)
+        if frozenset(m for _, m in _pairs) != want:
             continue
         u = fc.get('unitRef')
         if unit_ref is not None and u != unit_ref:

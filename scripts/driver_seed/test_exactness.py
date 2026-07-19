@@ -548,8 +548,9 @@ def test_explicit_member_list_shape_matches():
 def test_evidence_tied_to_same_occurrence():
     """Round-21 (reviewer-measured 71/229): the supporting context must be windowed around THE
     SAME occurrence as the emitted quote — never a different occurrence of the same number."""
-    texts = ['intro mentions total widget revenue 5,432 loosely here',
-             'far away ##TABLE_START total widget revenue 5,432 in the real table ##TABLE_END']
+    # round-23 note: the original two-text fixture became a legitimate DISTINCT-CONTEXT abstain
+    # under the new conflict law — the containment purpose is tested on a single occurrence
+    texts = ['far away ##TABLE_START total widget revenue 5,432 in the real table ##TABLE_END']
     q, ctx = L.row_quote(texts, ['total', 'widget', 'revenue'], 5432, 'number',
                          with_context=True)
     assert q is not None and ctx is not None
@@ -654,21 +655,39 @@ def test_unparseable_or_blank_segment_fails_closed():
 
 
 def test_context_order_free_and_period_conflict_abstains():
-    """Round-22 (reviewer-reproduced): identical quotes under DIFFERENT period headings gave
-    order-dependent context. Now: conflicting explicit periods across the tied occurrences ->
-    ABSTAIN; non-conflicting duplicates -> one deterministic context, both orders."""
-    t24 = 'Fiscal 2024 annual results ##TABLE_START Widget revenues 5,432 detail'
-    t23 = 'Fiscal 2023 comparative view ##TABLE_START Widget revenues 5,432 detail'
-    assert L.row_quote([t24, t23], ['Widget', 'revenues'], 5432, None,
-                       with_context=True) == (None, None)
-    assert L.row_quote([t23, t24], ['Widget', 'revenues'], 5432, None,
-                       with_context=True) == (None, None)
-    s24 = 'section two also Fiscal 2024 ##TABLE_START Widget revenues 5,432 detail'
-    qa, ca = L.row_quote([t24, s24], ['Widget', 'revenues'], 5432, None, with_context=True)
-    qb, cb = L.row_quote([s24, t24], ['Widget', 'revenues'], 5432, None, with_context=True)
-    assert qa == qb and ca == cb and qa is not None
-    assert L.row_quote([t24, t23], ['Widget', 'revenues'], 5432, None) is not None  # legacy path untouched
-    print("[ok] tied-quote context is order-free; conflicting explicit periods abstain")
+    """Round-23 (reviewer; REVERSES my round-22 same-year pin): year tokens missed Q1-vs-Q2,
+    month, and FY-label conflicts — so NO period parsing at all: ONE winning quote with MULTIPLE
+    DISTINCT contexts ABSTAINS, period or not; identical duplicate contexts still bind; both
+    input orders identical."""
+    for a, b in [('Q1 2024 results ##TABLE_START Widget revenues 5,432 detail',
+                  'Q2 2024 results ##TABLE_START Widget revenues 5,432 detail'),
+                 ('three months ended March 2024 ##TABLE_START Widget revenues 5,432 detail',
+                  'three months ended June 2024 ##TABLE_START Widget revenues 5,432 detail'),
+                 ('FY23 summary ##TABLE_START Widget revenues 5,432 detail',
+                  'FY24 summary ##TABLE_START Widget revenues 5,432 detail'),
+                 ('Fiscal 2024 annual results ##TABLE_START Widget revenues 5,432 detail',
+                  'Fiscal 2023 comparative view ##TABLE_START Widget revenues 5,432 detail')]:
+        assert L.row_quote([a, b], ['Widget', 'revenues'], 5432, None,
+                           with_context=True) == (None, None), (a[:20], b[:20])
+        assert L.row_quote([b, a], ['Widget', 'revenues'], 5432, None,
+                           with_context=True) == (None, None)
+    dup = 'Fiscal 2024 annual ##TABLE_START Widget revenues 5,432 detail'
+    qa, ca = L.row_quote([dup, dup], ['Widget', 'revenues'], 5432, None, with_context=True)
+    assert qa is not None and ca is not None
+    print("[ok] multiple distinct contexts abstain (no period parser); duplicates bind; order-free")
+
+
+def test_certified_scan_text_default_unchanged():
+    """Round-23 (reviewer-reproduced): the context-conflict rule LEAKED into certified callers —
+    scan_text's DEFAULT path must return the legacy strict quote even when contexts conflict;
+    only with_context=True applies the abstention."""
+    t24 = 'Fiscal 2024 annual ##TABLE_START Widget revenues 5,432 x'
+    t23 = 'Fiscal 2023 annual ##TABLE_START Widget revenues 5,432 x'
+    strict, snips = L.scan_text([t24, t23], 'Widget revenues', 5432, 'number')
+    assert strict is not None, "certified default path lost its strict quote"
+    s2, k2, c2 = L.scan_text([t24, t23], 'Widget revenues', 5432, 'number', with_context=True)
+    assert s2 is None and c2 is None, "harvest path must abstain on conflicting contexts"
+    print("[ok] certified default preserved; abstention scoped to with_context")
 
 
 def test_closed_table_heading_never_enters_context():
@@ -686,3 +705,48 @@ def test_closed_table_heading_never_enters_context():
     q2, c2 = L.row_quote([inside], ['Widget', 'revenues'], 5432, None, with_context=True)
     assert q2 is not None and '##TABLE_START' in c2, c2[:80]   # OPEN table heading still travels
     print("[ok] closed-table headings never enter later-prose evidence; open ones still do")
+
+
+
+def test_segment_entries_must_parse_completely():
+    """Round-23 (reviewer-reproduced x3): whitespace axes, non-string axes/members, and
+    valid+garbage mixed lists must ALL abstain — every entry parses completely or the fact is
+    unusable; clean facts in every shape still bind."""
+    def f(seg, v):
+        return blob('Revenues', [{'value': v, 'period': {'startDate': '2024-01-01',
+                    'endDate': '2024-12-31'}, 'unitRef': 'U_USD', 'segment': seg}])
+    bads = [
+        [{'dimension': '   ', 'value': 'x:AlphaMember'}],
+        [{'dimension': 123, 'value': 'x:AlphaMember'}],
+        [{'dimension': 'x:A', 'value': 456}],
+        [{'dimension': 'x:A', 'value': 'x:AlphaMember'}, 'garbage-entry'],
+        [{'dimension': 'x:A', 'value': 'x:AlphaMember'}, {'weird': 'no-keys'}],
+        {'explicitMember': [{'dimension': 'x:A', '$t': 'x:AlphaMember'}, {'no': 'keys'}]},
+    ]
+    for i, seg in enumerate(bads):
+        assert L.tier1([f(seg, '100')], 'alpha revenue', 100, '2024-12-31', is_currency=1) is None, i
+        assert L.tier1([f(seg, '100')], 'total revenue', 100, '2024-12-31', is_currency=1) is None, i
+    ok = [{'dimension': 'x:A', 'value': 'x:AlphaMember'}]
+    assert L.tier1([f(ok, '200')], 'alpha revenue', 200, '2024-12-31', is_currency=1) is not None
+    # identical pair listed twice: overlapping attribution -> documented fail-closed abstain
+    twice = [{'dimension': 'x:A', 'value': 'x:AlphaMember'},
+             {'dimension': 'x:A', 'value': 'x:AlphaMember'}]
+    assert L.tier1([f(twice, '300')], 'alpha revenue', 300, '2024-12-31', is_currency=1) is None
+    print("[ok] complete-parse law: every entry, every shape; typed nonblank strings only")
+
+
+def test_xbrl_lane_shares_the_complete_parse_law():
+    """Round-23 Track-2 (MY sweep, sibling path): the certified value-unknown lane had the SAME
+    garbage-segment masquerade — resolve() must skip unparseable/partial-segment facts, not
+    treat them as undimensioned; clean facts unchanged."""
+    g = blob('Revenues', [{'value': '5000', 'period': {'startDate': '2024-01-01',
+             'endDate': '2024-12-31'}, 'unitRef': 'U_USD', 'segment': 'garbage-string'}])
+    assert xbrl_lane.resolve([g], 'us-gaap:Revenues', [], '2024-01-01', '2024-12-31') is None
+    mix = blob('Revenues', [{'value': '6000', 'period': {'startDate': '2024-01-01',
+               'endDate': '2024-12-31'}, 'unitRef': 'U_USD',
+               'segment': [{'dimension': 'x:A', 'value': 'x:AlphaMember'}, 'junk']}])
+    assert xbrl_lane.resolve([mix], 'us-gaap:Revenues', ['x:AlphaMember'],
+                             '2024-01-01', '2024-12-31') is None
+    clean = blob('Revenues', [fact('7000', '2024-01-01', '2024-12-31')])
+    assert xbrl_lane.resolve([clean], 'us-gaap:Revenues', [], '2024-01-01', '2024-12-31') is not None
+    print("[ok] the certified lane enforces the same complete-parse law (one parser)")

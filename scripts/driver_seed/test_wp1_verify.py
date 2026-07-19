@@ -99,3 +99,40 @@ def test_proof_commit_must_equal_stamp_commit():
     except AssertionError:
         pass
     print("[ok] proof commit == stamp commit enforced")
+
+
+def test_proof_commit_exact_equality_never_prefix():
+    """Round-23 (reviewer): '8' must NOT satisfy '86c8f44' — exact equality (with or without
+    the -dirty suffix), never startswith."""
+    H = {'f.jsonl': 'h'}
+    def man(cc, pc):
+        return {'output_sha256': H, 'code_commit': cc,
+                'determinism_proof': {'commit': pc, 'runs': [
+                    {'PYTHONHASHSEED': 1, 'sha256': dict(H)},
+                    {'PYTHONHASHSEED': 2, 'sha256': dict(H)}]}}
+    V._validate_determinism(man('86c8f44', '86c8f44'))
+    V._validate_determinism(man('86c8f44-dirty', '86c8f44'))
+    for cc, pc in [('86c8f44', '8'), ('86c8f44', '86c8f4'), ('86c8f44x', '86c8f44')]:
+        try:
+            V._validate_determinism(man(cc, pc))
+            raise SystemExit(f"prefix/partial commit accepted: {cc} vs {pc}")
+        except AssertionError:
+            pass
+    print("[ok] proof commit equality is exact, never prefix")
+
+
+def test_verifier_rejects_reordered_slice(tmp_path, monkeypatch):
+    """Round-23 (reviewer): prove THE VERIFIER rejects a byte-reordered slice — not merely that
+    two hashes differ."""
+    sl = tmp_path / 'slice.jsonl'
+    sl.write_text('{"r": 1}\n{"r": 2}\n')
+    monkeypatch.setattr(V, 'SLICE_FILE', str(sl))
+    man = {'slice_file_sha256': V.sha(str(sl))}
+    V._check_slice_bytes(man)                        # ordered file passes
+    sl.write_text('{"r": 2}\n{"r": 1}\n')            # same rows, reordered bytes
+    try:
+        V._check_slice_bytes(man)
+        raise SystemExit("verifier accepted a byte-reordered slice")
+    except AssertionError:
+        pass
+    print("[ok] the verifier itself rejects reordered input")

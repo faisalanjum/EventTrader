@@ -64,7 +64,8 @@ def _validate_determinism(man):
     seeds = {r.get('PYTHONHASHSEED') for r in runs}
     assert len(seeds) == 2, f"seed runs must use DISTINCT seeds: {seeds}"
     cc = str(man.get('code_commit', ''))
-    assert dp.get('commit') and cc.startswith(str(dp['commit'])), \
+    base = cc[:-6] if cc.endswith('-dirty') else cc    # round-23: EXACT equality, never prefix
+    assert dp.get('commit') and base == str(dp['commit']), \
         f"proof commit {dp.get('commit')!r} != stamped code commit {cc!r}"
     for r in runs:
         assert r.get('sha256') == man.get('output_sha256'), \
@@ -75,6 +76,14 @@ def _validate_determinism(man):
 # and the two earnings modules the pairing/trust gates come from. Tested by name.
 DIRT_PATHS = ('scripts/driver_seed', 'driver/relocation', 'scripts/earnings',
               '.claude/skills/earnings-orchestrator')
+
+
+def _check_slice_bytes(man):
+    """Round-23: THE verifier-level literal-bytes gate (unit-tested with a reordered file —
+    proving the VERIFIER rejects it, not merely that hashes differ)."""
+    assert os.path.exists(SLICE_FILE), "committed input slice missing — clean checkout cannot reproduce"
+    assert sha(SLICE_FILE) == man.get('slice_file_sha256'), \
+        "committed slice bytes drifted (line order matters; canonical row-set sha kept separately)"
 
 
 def _git_commit():
@@ -115,10 +124,10 @@ def main():
     # reconciliation by distinct raw-row id (both directions). Round-20 (reviewer): BOTH modes
     # read the COMMITTED slice — the ignored full worklist is never a verifier input (bootstrap
     # of a NEW cohort writes the slice once, separately).
-    assert os.path.exists(SLICE_FILE), "committed input slice missing — clean checkout cannot reproduce"
-    if not a.record:                       # round-21: the slice FILE is hashed by LITERAL BYTES
-        assert sha(SLICE_FILE) == man.get('slice_file_sha256'), \
-            "committed slice bytes drifted (line order matters; canonical row-set sha kept separately)"
+    if not a.record:                       # round-21/23: literal-bytes gate (verifier-level)
+        _check_slice_bytes(man)
+    else:
+        assert os.path.exists(SLICE_FILE), "committed input slice missing"
     rows = [json.loads(l) for l in open(SLICE_FILE)]
     slice_sha = hashlib.sha256(''.join(sorted(json.dumps(r, sort_keys=True) for r in rows)).encode()).hexdigest()
     assert slice_sha == man['worklist_slice_sha256'], "committed slice drifted vs the manifest sha"

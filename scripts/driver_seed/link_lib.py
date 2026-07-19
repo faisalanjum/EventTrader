@@ -355,49 +355,79 @@ def slice_tokens(name):
 
 # round-21/22 (reviewer): the STRUCTURAL exemption is the EXACT STANDARD us-gaap pair ONLY
 # (census: 1,363 occurrences), never token-emptiness (the OtherNet class token-strips to nothing
-# yet is a REAL slice -> abstain). Round-22 removed the filer-specific ACI pin: my conflict test
-# measured 0 differing / 112 identical concept+period cells (reported to the reviewer), but a
-# filer-local pin is hardcoding with unmeasurable future risk — conservatism wins; those
-# co-member facts now abstain honestly.
+# yet is a REAL slice -> abstain). Round-22 removed the filer-specific ACI pin (conservatism +
+# no filer hardcoding); the reconciled measurements and the EXACT census queries live in the
+# review record (round 23) — no unpinned counts here.
 STRUCTURAL_PAIRS = frozenset({
     ('srt:ConsolidationItemsAxis', 'us-gaap:OperatingSegmentsMember'),
 })
 
 
 def seg_members(fc):
-    """member value strings — DERIVED from seg_axis_members, THE single all-shapes parser
-    (round-21: the local re-parse missed the explicitMember-LIST shape; CAG carries 131 such
+    """member value strings — DERIVED from seg_parse, THE single all-shapes parser
+    (round-21: the local re-parse missed the explicitMember-LIST shape; CAG carries 519 such
     facts — matching and output now see every shape the axis parser sees)."""
-    return [m for _, m in seg_axis_members(fc)]
+    return [m for _, m in seg_parse(fc)[0]]
+
+
+def _nb(x):
+    """nonblank string — the ONLY legal axis/member type (round-23: whitespace and numeric
+    axes were binding)."""
+    return isinstance(x, str) and bool(x.strip())
+
+
+def seg_parse(fc):
+    """(pairs, complete) — THE single all-shapes segment parser (round-23: the strict form).
+    pairs = [(axis_qname, member_qname)] across ALL four storage shapes: {dimension,value},
+    single explicitMember.$t, the multi-axis explicitMember-LIST, explicitMember-as-bare-string.
+    complete = every entry (and every list element) parsed to >=1 pair AND every axis/member is a
+    NONBLANK STRING. A nonempty segment with complete=False must NEVER bind anywhere — a missed
+    extraction must not masquerade as consolidated (ChannelContract §3 / OD-17c), and a partially
+    parsed fact's slice identity is unprovable. FETCH-only: raw axis+member; the shared
+    decomposer classifies downstream."""
+    seg = fc.get('segment')
+    if not seg:
+        return [], True
+    items = seg if isinstance(seg, list) else [seg]
+    out, complete = [], True
+    for s in items:
+        if not isinstance(s, dict):
+            complete = False
+            continue
+        got = 0
+        if 'value' in s:
+            if _nb(s.get('dimension')) and _nb(s.get('value')):
+                out.append((s['dimension'], s['value'])); got += 1
+            else:
+                complete = False
+        em = s.get('explicitMember')
+        if isinstance(em, list):                         # multi-axis: explicitMember is a LIST
+            for m in em:
+                if isinstance(m, dict) and _nb(m.get('dimension')) and _nb(m.get('$t')):
+                    out.append((m['dimension'], m['$t'])); got += 1
+                else:
+                    complete = False
+        elif isinstance(em, dict):
+            if _nb(em.get('dimension')) and _nb(em.get('$t')):
+                out.append((em['dimension'], em['$t'])); got += 1
+            else:
+                complete = False
+        elif isinstance(em, str):                        # bare string: the axis sits on `s`
+            if _nb(s.get('dimension')) and _nb(em):
+                out.append((s['dimension'], em)); got += 1
+            else:
+                complete = False
+        elif em is not None:
+            complete = False
+        if got == 0:
+            complete = False                             # an entry that yields nothing
+    return out, complete
 
 
 def seg_axis_members(fc):
-    """[(axis_qname, member_qname)] for ALL four segment shapes — {dimension,value}, single
-    explicitMember.$t, the multi-axis explicitMember-LIST, and explicitMember-as-bare-string — so it reads
-    every shape oracle._members_all does. Completeness is load-bearing twice over: tier1's aggregate guard
-    (`if seg_axis_members(fc)`) uses it to reject dimensioned facts, so a shape missed here becomes a
-    segment value mis-bound as a consolidated total; and [] must mean VERIFIED-undimensioned, never
-    parse-failure (ChannelContract §3 / OD-17c: a missed extraction must never masquerade as consolidated).
-    FETCH-only: the raw XBRL axis+member the shared decomposer classifies into a slice kind."""
-    seg = fc.get('segment')
-    if not seg:
-        return []
-    items = seg if isinstance(seg, list) else [seg]
-    out = []
-    for s in items:
-        if not isinstance(s, dict):
-            continue
-        if isinstance(s.get('value'), str):
-            out.append((s.get('dimension', ''), s['value']))
-        em = s.get('explicitMember')
-        if isinstance(em, list):                         # multi-axis: explicitMember is a LIST
-            out += [(m.get('dimension', ''), m['$t']) for m in em
-                    if isinstance(m, dict) and m.get('$t')]
-        elif isinstance(em, dict) and em.get('$t'):
-            out.append((em.get('dimension', ''), em['$t']))
-        elif isinstance(em, str) and em:                 # bare string: the axis sits on `s`, not on `em`
-            out.append((s.get('dimension', ''), em))
-    return out
+    """the pairs half of seg_parse — kept for read-only consumers; BINDING code must use
+    seg_parse and honor `complete` (round-23)."""
+    return seg_parse(fc)[0]
 
 
 def member_tokens(members):
@@ -512,12 +542,10 @@ def tier1(xbrls, name, val, per, is_currency=None):
                     continue                      # a money fact never satisfies a non-money KPI
                 if (fc.get('period') or {}).get('endDate') != per:
                     continue
-                pairs = sorted(seg_axis_members(fc))   # round-21: THE single all-shapes parser
-                if fc.get('segment') and not pairs:
-                    continue           # round-22: a NONEMPTY segment we cannot parse is NEVER
-                                       # 'verified undimensioned' (OD-17c) -> fact unusable
-                if any((not _ax or not _mm) for _ax, _mm in pairs):
-                    continue           # round-22: blank axis/member = unprovable identity
+                _pairs, _complete = seg_parse(fc)      # round-23: THE single strict parser
+                if not _complete:
+                    continue           # any unparsed/blank/typed entry -> identity unprovable
+                pairs = sorted(_pairs)
                 members = [m for _, m in pairs]         # canonical ONCE for every emitted field
                 # round-20 (reviewer-generalized from the country rule): FULL-SLICE PROOF
                 # for EVERY dimension — the KPI's slice-token set must EQUAL the union of every
@@ -685,12 +713,12 @@ def row_quote(texts, label_tokens, val, fmt, gap=90, scale_gate=False, with_cont
         return best
     if best is None:
         return None, None
-    _yr = re.compile(r'(?<!\d)(?:19|20)\d{2}(?!\d)')
-    yrs = {frozenset(_yr.findall(c)) - set(_yr.findall(best)) for c in ctxs}
-    if len(yrs) > 1:
-        return None, None              # round-22: identical quotes under CONFLICTING explicit
-                                       # periods — the binding is unattributable -> ABSTAIN
-    return best, min(ctxs)             # deterministic, input-order-free context
+    if len(set(ctxs)) > 1:
+        return None, None              # round-23 (replaces the year heuristic — it missed
+                                       # Q1-vs-Q2/month/FY-label conflicts): ONE winning quote
+                                       # with MULTIPLE DISTINCT contexts is unattributable ->
+                                       # ABSTAIN; never choose evidence alphabetically
+    return best, ctxs[0]               # the single context every occurrence agrees on
 
 
 def _table_active_start(t, pos, cap=2600):
@@ -745,8 +773,14 @@ def scan_text(texts, name, val, fmt, max_hits=20, keep=6, scale_gate=False, with
     nt = _toks(name) or re.findall(r"[A-Za-z0-9&]{2,}", name)   # pure-kind names ('revenue') must not
     ntl = [x.lower() for x in nt]                                # tokenize to EMPTY -> strict lock dies
     # round-21 Rule 2 (single path): the strict quote AND its supporting context come from the
-    # SAME row_quote call — the context is windowed around the SAME occurrence, never recomputed.
-    strict, strict_ctx = row_quote(texts, nt, val, fmt, scale_gate=scale_gate, with_context=True)
+    # SAME row_quote call. Round-23 (reviewer-reproduced leak): the context/conflict machinery
+    # runs ONLY when the caller asked for context — certified default callers keep the exact
+    # legacy strict result.
+    if with_context:
+        strict, strict_ctx = row_quote(texts, nt, val, fmt, scale_gate=scale_gate,
+                                       with_context=True)
+    else:
+        strict, strict_ctx = row_quote(texts, nt, val, fmt, scale_gate=scale_gate), None
     forms = _tableforms(val, fmt)
     cands = []
     for t in sorted(texts):                # round-18: CANONICAL text order, so the bounded-work
