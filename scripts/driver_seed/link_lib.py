@@ -516,22 +516,30 @@ def tier1(xbrls, name, val, per, is_currency=None):
                 members = sorted(seg_members(fc))   # round-18: canonicalized ONCE, so every
                                                      # emitted field (member text, quote, axes)
                                                      # is dimension-order-free
-                # round-18 country gate (reviewer-reproduced ×2 on round-17's containment rule:
-                # country:GE bound 'South Georgia', country:US bound 'United States and Canada'):
-                # EXACT normalized geography identity — the KPI's slice-token set must EQUAL the
-                # union of the country names' token sets. Fail closed; no fuzzy geography.
+                # round-19 country gate (reviewer-reproduced BOTH directions on round-18's
+                # country-only equality: a [country:US, IPhoneMember] fact wrongly bound plain
+                # 'United States Revenue' and wrongly rejected 'United States iPhone Revenue'):
+                # when a country member is present, the KPI's slice-token set must EQUAL the
+                # union of the country names' tokens AND every co-member's meaningful tokens —
+                # the KPI must name the WHOLE slice. Structural co-members (OperatingSegments
+                # etc.) tokenize to nothing and change nothing. Fail closed; no fuzzy geography.
                 _ctk = set()
+                _has_country = False
                 _cgate_fail = False
+                _co_members = []
                 for _mm in members:
                     _pre, _, _loc = str(_mm).rpartition(':')
                     if _pre == 'country':
+                        _has_country = True
                         _nm = COUNTRY_NAME.get(_loc.upper())
                         if not _nm:
                             _cgate_fail = True
                             break
                         _ctk |= {w for w in re.findall(r"[A-Za-z]{3,}", _nm.lower())
                                  if w not in SLICE_STOP}   # both sides share ONE normalization
-                if _cgate_fail or (_ctk and _ctk != kt):
+                    else:
+                        _co_members.append(_mm)
+                if _cgate_fail or (_has_country and (_ctk | member_tokens(_co_members)) != kt):
                     continue
                 mt = member_tokens(members)
                 if kt:
@@ -711,15 +719,12 @@ def scan_text(texts, name, val, fmt, max_hits=20, keep=6, scale_gate=False):
                 low = snip.lower()
                 score = (2 if '##TABLE_START' in snip else 0) + sum(1 for tk in ntl if tk in low)
                 cands.append((score, len(snip), snip))
-                if len(cands) >= max_hits:
-                    break
-            if len(cands) >= max_hits:
-                break
-        if len(cands) >= max_hits:
-            break
-    # round-18: max_hits RESTORED as a real bounded-work limit (round-17 left it unused —
-    # unbounded candidate lists); the canonical text+form order above makes the cutoff
-    # deterministic regardless of input order, and the total sort orders what was kept.
+                if len(cands) >= max_hits * 4:          # round-19: BOUNDED MEMORY without blind
+                    cands.sort(key=lambda c: (-c[0], c[1], c[2]))   # eviction — prune by RANK, so
+                    del cands[max_hits:]                # 20 weak fills can never evict a stronger
+                                                        # match found later (reviewer catch: the
+                                                        # round-18 stop-at-N kept the first-N in
+                                                        # canonical order, not the best-N)
     cands.sort(key=lambda c: (-c[0], c[1], c[2]))      # score, length, CONTENT — total order
     return strict, [c[2] for c in cands[:keep]]
 

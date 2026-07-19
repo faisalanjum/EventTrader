@@ -333,6 +333,25 @@ def test_geo_members_match_country_names():
     print("[ok] country members: EXACT geography identity; all reviewer pin pairs hold")
 
 
+def test_country_plus_product_multi_axis():
+    """Round-19 (reviewer-reproduced, both directions): a [country:US, IPhoneMember] fact is a
+    US-iPhone SLICE — plain 'United States Revenue' must NOT bind it, and 'United States iPhone
+    Revenue' MUST. The identity check covers ALL meaningful members, not only the country."""
+    mixed = blob('Revenues', [fact('100', '2024-01-01', '2024-12-31', unit='U_USD', seg=[
+        {'dimension': 'srt:StatementGeographicalAxis', 'value': 'country:US'},
+        {'dimension': 'us-gaap:ProductOrServiceAxis', 'value': 'aapl:IPhoneMember'}])])
+    assert L.tier1([mixed], 'United States Revenue', 100, '2024-12-31', is_currency=1) is None
+    assert L.tier1([mixed], 'United States iPhone Revenue', 100, '2024-12-31',
+                   is_currency=1) is not None
+    # a country + STRUCTURAL co-member (fully generic-filtered) still equals the plain country KPI
+    struct = blob('Revenues', [fact('200', '2024-01-01', '2024-12-31', unit='U_USD', seg=[
+        {'dimension': 'srt:StatementGeographicalAxis', 'value': 'country:US'},
+        {'dimension': 'us-gaap:StatementBusinessSegmentsAxis',
+         'value': 'us-gaap:OperatingSegmentsMember'}])])
+    assert L.tier1([struct], 'United States Revenue', 200, '2024-12-31', is_currency=1) is not None
+    print("[ok] multi-axis country: the KPI must name the WHOLE slice")
+
+
 def test_allcaps_camel_members_tokenize():
     """Round-17: acronym splitting is restricted to runs of >=2 capitals so 'IPhoneMember' stays
     EXACTLY {'iphone'} (round-16's union leaked 'phone' — a 'Phone Revenue' KPI could bind it);
@@ -424,3 +443,16 @@ def test_thousand_and_trillion_scaled_forms():
     assert L.row_quote(['Widget revenues 1,200 no marker'], toks, 1200000, None,
                        scale_gate=True) is None
     print("[ok] thousand/trillion scale forms, marker-gated")
+
+
+
+def test_strong_match_at_position_21_survives():
+    """Round-19 (reviewer): bounded collection must keep the BEST evidence, not the first-N in
+    canonical order — 20 weak matches in 'a...' texts must not evict a strong labeled table match
+    living in a 'z...' text."""
+    weak = [f'a{i:02d} filler mentions 5,432 without context' for i in range(20)]
+    strong = ['z ##TABLE_START total widget revenue 5,432 in the annual table']
+    strict, snips = L.scan_text(weak + strong, 'total widget revenue', 5432, 'number')
+    assert snips and 'z ' [0] in snips[0][:1] or '##TABLE_START' in snips[0], snips[:1]
+    assert any('##TABLE_START' in sn for sn in snips), "strong table match evicted by weak fill"
+    print("[ok] rank-based retention: position-21 strong evidence survives")

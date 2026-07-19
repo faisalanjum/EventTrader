@@ -53,6 +53,17 @@ def _expect_hashes(saved, computed):
         raise AssertionError("output hash mismatch vs manifest: " + json.dumps(diff)[:500])
 
 
+def _validate_determinism(man):
+    """Round-19: CHECK validates the stamped seed records — every recorded per-seed hash map
+    must equal the stamped output hashes (a stale or hand-edited proof fails)."""
+    dp = man.get('determinism_proof')
+    if not dp:
+        return
+    for run in dp.get('runs', []):
+        assert run.get('sha256') == man.get('output_sha256'), \
+            f"determinism run (seed {run.get('PYTHONHASHSEED')}) hash map != stamped outputs"
+
+
 def _git_commit():
     try:
         c = subprocess.run(['git', 'rev-parse', '--short', 'HEAD'], capture_output=True,
@@ -76,6 +87,7 @@ def main():
     computed = {n: sha(f'{D}/{n}') for n in OUTS}
     if not a.record:
         _expect_hashes(man.get('output_sha256'), computed)
+        _validate_determinism(man)
 
     res = [json.loads(l) for l in open(f'{D}/code_resolved.jsonl')]
     rem = [json.loads(l) for l in open(f'{D}/residual.jsonl')]

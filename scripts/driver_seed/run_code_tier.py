@@ -288,9 +288,12 @@ def main():
     ap.add_argument('--nparts', type=int, default=4)
     ap.add_argument('--tickers', help='comma list; overrides --part (small free run)')
     ap.add_argument('--tag', help='output subdir name (default part<N>)')
+    ap.add_argument('--worklist', default=f'{OUT}/worklist.jsonl',
+                    help='input rows file (pass the COMMITTED slice for reproducible runs — '
+                         'round-19: a clean checkout must not depend on the ignored full sheet)')
     a = ap.parse_args()
 
-    work = [json.loads(l) for l in open(f'{OUT}/worklist.jsonl')]
+    work = [json.loads(l) for l in open(a.worklist)]
     if a.tickers:
         keep = set(a.tickers.split(',')); work = [w for w in work if w['ticker'] in keep]
         tag = a.tag or 'smoke'
