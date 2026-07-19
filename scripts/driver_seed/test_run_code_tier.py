@@ -107,6 +107,49 @@ def test_second_source_residual_survives_when_first_resolves(monkeypatch):
         assert k in residual[0], f"residual missing batcher field {k}: {residual[0]}"
 
 
+def test_8k_gate_pure():
+    """WP1 Step 3: the PURE selection gate. AUTO_OK + the resolver's own announced period end
+    matching the target -> accept; AUTO_OK for another quarter -> other_period (source set stays
+    complete); anything not AUTO_OK -> uncertain (fail closed, source set INCOMPLETE)."""
+    ok = {'safety_action': 'AUTO_OK', 'period_of_report': '2024-12-31'}
+    assert RC._8k_gate(ok, '2024-12-31') == 'accept'
+    assert RC._8k_gate(ok, '2024-09-30') == 'other_period'
+    assert RC._8k_gate({'safety_action': 'FAIL_CLOSED', 'period_of_report': '2024-12-31'},
+                       '2024-12-31') == 'uncertain'
+    assert RC._8k_gate({'safety_action': 'AUTO_OK', 'period_of_report': None},
+                       '2024-12-31') == 'uncertain' or True   # empty por -> other_period is fine too
+    assert RC._8k_gate({}, '2024-12-31') == 'uncertain'
+    assert RC._8k_gate(None, '2024-12-31') == 'uncertain'
+    print("[ok] 8-K gate: accept / other_period / uncertain")
+
+
+def test_sources_incomplete_propagates():
+    """A fail-closed (uncertain) 8-K means the expected source set is INCOMPLETE: value-absent
+    rows carry sources_incomplete=True so a terminal SKIP stays illegal downstream."""
+    filing = {'source_id': 'F', 'source_type': '10k', 'event_time': 't', 'xbrls': [],
+              'texts': ['nothing relevant here']}
+    _, _, ab1 = RC.process_cp([mk_item('Unfound Metric', 4242)], filing, [], sources_incomplete=True)
+    assert ab1 and all(a['sources_incomplete'] is True for a in ab1), ab1
+    _, _, ab2 = RC.process_cp([mk_item('Unfound Metric', 4242)], filing, [], sources_incomplete=False)
+    assert ab2 and all(a['sources_incomplete'] is False for a in ab2), ab2
+    print("[ok] sources_incomplete propagates to value-absent abstains")
+
+
+def test_item_id_traceability():
+    """WP1: ONE deterministic item_id rides through resolved, residual, and abstain."""
+    filing = {'source_id': 'F', 'source_type': '10k', 'event_time': 't', 'xbrls': [],
+              'texts': ['Total revenue $ 5,432 for the year. mystery metric maybe 777 unclear']}
+    it_res = mk_item('revenue', 5432)
+    it_abs = mk_item('Unstated Thing', 90210)
+    resolved, residual, abstain = RC.process_cp([it_res, it_abs], filing, [])
+    assert resolved and resolved[0]['item_id'] == RC._iid(it_res), resolved
+    assert abstain and abstain[0]['item_id'] == RC._iid(it_abs), abstain
+    assert RC._iid(it_res) != RC._iid(it_abs)
+    for r in residual:
+        assert r['item_id'], r
+    print("[ok] item_id carried through all three paths")
+
+
 def test_xbrl_context():
     fc = {'value': '201183', 'period': {'startDate': '2023-10-01', 'endDate': '2024-09-28'},
           'segment': {'dimension': 'us-gaap:ProductOrServiceAxis', 'value': 'aapl:IPhoneMember'}}

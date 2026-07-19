@@ -18,8 +18,9 @@ abstain.jsonl. Records carry raw signals ONLY (cadence, period_end, xbrl context
 
 Reads data/driver_catalog_seed/worklist.jsonl; writes data/driver_catalog_seed/<tag>/.
 """
-import os, re, json, argparse, collections, sys
-from datetime import date, timedelta
+import os, re, json, argparse, collections, sys, hashlib
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'earnings'))
+import quarter_identity as QI          # PIT-safe 8-K→quarter labeler (WP1 Step 3 selection gate)
 sys.path.insert(0, os.path.dirname(__file__))
 import fiscal_ai_rules as FA          # fiscal.ai channel-specific rules (is_derived / plug) — not shared core
 import locate                          # the shared, channel-neutral two-mode locator (value-known lane here)
@@ -36,21 +37,20 @@ def load_env_neo4j():
 
 
 # --- legacy fetchers (relocate_probe pipeline: prep/grade/oracle/exam depend on these exact signatures) ---
-def fetch_press_release(session, tk, period):
-    """earnings 8-K EX-99.1 filed ~5-75 days AFTER the fiscal period end (announce-date offset)."""
-    try:
-        d0 = date.fromisoformat(period[:10])
-    except ValueError:
-        return []
-    lo = (d0 + timedelta(days=5)).isoformat(); hi = (d0 + timedelta(days=75)).isoformat()
-    rows = list(session.run(
-        """MATCH (r:Report {formType:'8-K'})-[:PRIMARY_FILER]->(c:Company {ticker:$tk})
-           WHERE r.periodOfReport >= $lo AND r.periodOfReport <= $hi
-           MATCH (r)-[:HAS_EXHIBIT]->(e:ExhibitContent)
-           WHERE e.exhibit_number IN ['EX-99.1','EX-99','99.1']
-           RETURN e.content AS content ORDER BY r.periodOfReport LIMIT 3""",
-        tk=tk, lo=lo, hi=hi))
-    return [x['content'] for x in rows if x['content']]
+def _8k_gate(info, period):
+    """PURE gate for one labeled 8-K (WP1 Step 3). Returns:
+      'accept'       — safety_action AUTO_OK and the resolver's own announced period end
+                       (`period_of_report`, e.g. Q1_FY2026 -> '2026-03-31') equals the target period;
+      'other_period' — confidently labeled, but announcing a DIFFERENT quarter (not ours; the
+                       company-period source set stays COMPLETE);
+      'uncertain'    — anything not AUTO_OK: fail closed; the source set is INCOMPLETE, so
+                       value-absent rows stay PARKED (retryable), never terminal SKIP.
+    NOTE: `accession_periodic` is the PIT-safe PRIOR periodic anchor (and empty on cached paths) —
+    verified in quarter_identity source; it is NOT a same-quarter join key and is not used."""
+    if (info or {}).get('safety_action') != 'AUTO_OK':
+        return 'uncertain'
+    por = str(info.get('period_of_report') or '')[:10]
+    return 'accept' if por and str(period)[:10] == por else 'other_period'
 
 
 def fetch_corpus(session, tk, form, period):
@@ -100,24 +100,48 @@ def fetch_filing(session, tk, form, period):
             'xbrls': [x for x in r['xbrls'] if x], 'texts': [x for x in r['texts'] if x]}
 
 
-def fetch_press_releases(session, tk, period):
-    """Earnings 8-K EX-99.1 filed ~5-75d AFTER period end -> a list of separate 8-K source events."""
-    try:
-        d0 = date.fromisoformat(period[:10])
-    except ValueError:
-        return []
-    lo = (d0 + timedelta(days=5)).isoformat(); hi = (d0 + timedelta(days=75)).isoformat()
+def fetch_earnings_8ks(session, tk, period):
+    """Safe 8-K selection (WP1 Step 3 — replaces the 5-75-day window guess and the EX-99-only
+    filter). Enumerate the ticker's REAL 8-K accessions, label each with quarter_identity, gate
+    via _8k_gate, and for every ACCEPTED accession fetch + DEDUPLICATE all stored text (sections +
+    exhibits + filing text). Returns (events, uncertain_count) — uncertain_count > 0 means the
+    company-period's expected source set is INCOMPLETE (abstains stay parked, never SKIP)."""
     rows = list(session.run(
         """MATCH (r:Report {formType:'8-K'})-[:PRIMARY_FILER]->(c:Company {ticker:$tk})
-           WHERE r.periodOfReport >= $lo AND r.periodOfReport <= $hi
-           MATCH (r)-[:HAS_EXHIBIT]->(e:ExhibitContent)
-           WHERE e.exhibit_number IN ['EX-99.1','EX-99','99.1']
-           RETURN r.accessionNo AS acc, r.created AS created, r.periodOfReport AS por,
-                  collect(e.content) AS texts
-           ORDER BY por LIMIT 3""",
-        tk=tk, lo=lo, hi=hi))
-    return [{'source_id': x['acc'], 'source_type': '8k', 'event_time': x['created'], 'xbrls': [],
-             'texts': [c for c in x['texts'] if c]} for x in rows if x['acc']]
+           WHERE r.items CONTAINS '2.02'
+           RETURN r.accessionNo AS acc, r.created AS created ORDER BY r.created""", tk=tk))
+    # the Item-2.02 filter mirrors quarter_identity's OWN universe (_TICKER_CONTEXT_QUERY) —
+    # same definition of "earnings 8-K", same source of truth.
+    events, uncertain = [], 0
+    for x in rows:
+        if not x['acc']:
+            continue
+        try:
+            info = QI.resolve_quarter_info(tk, x['acc'], session=session)
+        except ValueError:                 # a 2.02 8-K the resolver still can't place -> fail closed
+            uncertain += 1
+            continue
+        verdict = _8k_gate(info, period)
+        if verdict == 'uncertain':
+            uncertain += 1
+            continue
+        if verdict != 'accept':
+            continue
+        txt = list(session.run(
+            """MATCH (r:Report {accessionNo:$a})
+               OPTIONAL MATCH (r)-[:HAS_EXHIBIT]->(e:ExhibitContent)
+               OPTIONAL MATCH (r)-[:HAS_SECTION]->(sx:ExtractedSectionContent)
+               OPTIONAL MATCH (r)-[:HAS_FILING_TEXT]->(f:FilingTextContent)
+               RETURN collect(DISTINCT e.content) + collect(DISTINCT sx.content)
+                      + collect(DISTINCT f.content) AS cs""", a=x['acc']))
+        seen, contents = set(), []
+        for c in (txt[0]['cs'] if txt else []):
+            if c and c not in seen:
+                seen.add(c); contents.append(c)
+        if contents:
+            events.append({'source_id': x['acc'], 'source_type': '8k', 'event_time': x['created'],
+                           'xbrls': [], 'texts': contents})
+    return events, uncertain
 
 
 def resolve_one(it, src, allow_t1):
@@ -125,7 +149,7 @@ def resolve_one(it, src, allow_t1):
     record present => gate-clean verbatim quote in THIS source. None + snippets => hand to LLM tier."""
     name, val, fmt = it['kpi'], it['value'], it['fmt']
     per = it['period']
-    base = {'source_id': src['source_id'], 'source_type': src['source_type'],
+    base = {'item_id': _iid(it), 'source_id': src['source_id'], 'source_type': src['source_type'],
             'event_time': src.get('event_time'), 'ticker': it['ticker'],
             'raw_label': name, 'value': val, 'fmt': fmt, 'is_currency': it['is_currency'],
             'period_end': per, 'form': it['form'], 'cadence': it.get('section'),
@@ -140,14 +164,23 @@ def resolve_one(it, src, allow_t1):
     return {**base, **hit}, snips                 # fiscal.ai record fields + the shared locator hit
 
 
-def process_cp(items, filing, prs):
+def _iid(it):
+    """ONE deterministic item id, carried through resolved/residual/abstain (WP1 traceability)."""
+    key = {k: it.get(k) for k in ('ticker', 'kpi', 'period', 'form')}
+    return hashlib.sha1(json.dumps(key, sort_keys=True).encode()).hexdigest()[:12]
+
+
+def process_cp(items, filing, prs, sources_incomplete=False):
     """Route each KPI of one company-period through every source event. Returns (resolved, residual, abstain).
-    resolved may hold TWO records for one KPI (filing + PR) -- separate source events, by design."""
+    resolved may hold TWO records for one KPI (filing + PR) -- separate source events, by design.
+    sources_incomplete: an expected 8-K could not be safely labeled (fail-closed drop) -> value-absent
+    rows stay PARKED/retryable; a terminal SKIP is only legal against a clean, complete source set."""
     resolved, residual, abstain = [], [], []
     searched = [filing['source_type']] + [p['source_type'] for p in prs]
     for it in items:
         name, val, fmt = it['kpi'], it['value'], it['fmt']
-        base = {'ticker': it['ticker'], 'raw_label': name, 'value': val, 'fmt': fmt, 'period_end': it['period'],
+        base = {'item_id': _iid(it), 'ticker': it['ticker'], 'raw_label': name, 'value': val,
+                'fmt': fmt, 'period_end': it['period'],
                 'form': it['form'], 'cadence': it.get('section'), 'sources_searched': searched}
         if val is None:
             continue
@@ -167,11 +200,13 @@ def process_cp(items, filing, prs):
             # same value on two sources = two records (15 D.2), and the 8-K/PR carries earlier availability.
             # Fields match the LLM batcher's contract (prep_llm_batches: kpi/period/is_currency/filing_id) so
             # the residual -> LLM path is schema-compatible.
-            residual.append({'ticker': it['ticker'], 'kpi': name, 'value': val, 'fmt': fmt,
-                             'is_currency': it['is_currency'], 'period': it['period'], 'form': it['form'],
-                             'filing_id': filing['source_id'], 'sources_searched': searched, 'candidates': cands})
+            residual.append({'item_id': _iid(it), 'ticker': it['ticker'], 'kpi': name, 'value': val,
+                             'fmt': fmt, 'is_currency': it['is_currency'], 'period': it['period'],
+                             'form': it['form'], 'filing_id': filing['source_id'],
+                             'sources_searched': searched, 'candidates': cands})
         elif not emitted:
-            abstain.append({**base, 'status': 'value_absent', 'reason': 'value_absent'})
+            abstain.append({**base, 'status': 'value_absent', 'reason': 'value_absent',
+                            'sources_incomplete': bool(sources_incomplete)})
     return resolved, residual, abstain
 
 
@@ -217,8 +252,9 @@ def main():
                                          'sources_searched': []}) + '\n'); nAb += 1
                 stats['cp_no_filing'] += 1
                 continue
-            prs = fetch_press_releases(s, tk, period)
-            resolved, residual, abstain = process_cp(items, filing, prs)
+            prs, uncertain_8ks = fetch_earnings_8ks(s, tk, period)
+            resolved, residual, abstain = process_cp(items, filing, prs,
+                                                     sources_incomplete=uncertain_8ks > 0)
             for r in resolved: R.write(json.dumps(r) + '\n'); nR += 1
             for r in residual: RES.write(json.dumps(r) + '\n'); nRes += 1
             for r in abstain: AB.write(json.dumps(r) + '\n'); nAb += 1
