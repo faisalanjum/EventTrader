@@ -353,12 +353,14 @@ def slice_tokens(name):
     return {t.lower() for t in re.findall(r"[A-Za-z]{3,}", name) if t.lower() not in SLICE_STOP}
 
 
-# round-21 (reviewer): the STRUCTURAL exemption is EXACT graph-proven (axis, member) pairs ONLY —
-# each entry earned by live census (2026-07-19 cohort: 1,363 + 100 occurrences), never by
-# token-emptiness (the OtherNet class token-strips to nothing yet is a REAL slice -> abstain).
+# round-21/22 (reviewer): the STRUCTURAL exemption is the EXACT STANDARD us-gaap pair ONLY
+# (census: 1,363 occurrences), never token-emptiness (the OtherNet class token-strips to nothing
+# yet is a REAL slice -> abstain). Round-22 removed the filer-specific ACI pin: my conflict test
+# measured 0 differing / 112 identical concept+period cells (reported to the reviewer), but a
+# filer-local pin is hardcoding with unmeasurable future risk — conservatism wins; those
+# co-member facts now abstain honestly.
 STRUCTURAL_PAIRS = frozenset({
     ('srt:ConsolidationItemsAxis', 'us-gaap:OperatingSegmentsMember'),
-    ('us-gaap:StatementBusinessSegmentsAxis', 'aci:ReportableSegmentMember'),
 })
 
 
@@ -511,6 +513,11 @@ def tier1(xbrls, name, val, per, is_currency=None):
                 if (fc.get('period') or {}).get('endDate') != per:
                     continue
                 pairs = sorted(seg_axis_members(fc))   # round-21: THE single all-shapes parser
+                if fc.get('segment') and not pairs:
+                    continue           # round-22: a NONEMPTY segment we cannot parse is NEVER
+                                       # 'verified undimensioned' (OD-17c) -> fact unusable
+                if any((not _ax or not _mm) for _ax, _mm in pairs):
+                    continue           # round-22: blank axis/member = unprovable identity
                 members = [m for _, m in pairs]         # canonical ONCE for every emitted field
                 # round-20 (reviewer-generalized from the country rule): FULL-SLICE PROOF
                 # for EVERY dimension — the KPI's slice-token set must EQUAL the union of every
@@ -637,6 +644,7 @@ def row_quote(texts, label_tokens, val, fmt, gap=90, scale_gate=False, with_cont
     needy = ({f: _required_div(f, val) for f in forms if _required_div(f, val)}
              if scale_gate and fmt != '%' else {})
     best = None
+    ctxs = []                              # round-22: contexts of ALL occurrences tied at `best`
     for t in texts:
         low = t.lower()
         for fo in sorted(forms):           # SET iteration is hash-random per process — sorted
@@ -668,10 +676,31 @@ def row_quote(texts, label_tokens, val, fmt, gap=90, scale_gate=False, with_cont
                 q = t[ws + min(pos): _with_trail(t, m.end())]   # RAW slice incl. trailing evidence
                 if best is None or len(q) < len(best) or (len(q) == len(best) and q < best):
                     best = q                      # shortest = tightest crop; content tiebreak
-                    # round-21: the supporting context is windowed around THIS SAME occurrence
-                    # (71/229 section records carried evidence from a DIFFERENT occurrence)
-                    best_ctx = t[_snippet_start(t, m.start(), label_tokens): m.end() + 80]
-    return (best, best_ctx if best is not None else None) if with_context else best
+                    ctxs = []
+                if with_context and q == best:
+                    # round-21/22: the context rides THIS SAME occurrence; ALL tied occurrences'
+                    # contexts are kept so the selection below is input-order-FREE
+                    ctxs.append(t[_snippet_start(t, m.start(), label_tokens): m.end() + 80])
+    if not with_context:
+        return best
+    if best is None:
+        return None, None
+    _yr = re.compile(r'(?<!\d)(?:19|20)\d{2}(?!\d)')
+    yrs = {frozenset(_yr.findall(c)) - set(_yr.findall(best)) for c in ctxs}
+    if len(yrs) > 1:
+        return None, None              # round-22: identical quotes under CONFLICTING explicit
+                                       # periods — the binding is unattributable -> ABSTAIN
+    return best, min(ctxs)             # deterministic, input-order-free context
+
+
+def _table_active_start(t, pos, cap=2600):
+    """THE single 'is a table still open at pos' check (round-22): the last ##TABLE_START within
+    cap chars before pos, provided no ##TABLE_END closed it before pos; else -1. Used by BOTH
+    snippet/context windowing and candidate ranking — one law, no sibling logic."""
+    ts = t.rfind('##TABLE_START', max(0, pos - cap), pos)
+    if ts >= 0 and t.find('##TABLE_END', ts, pos) < 0:
+        return ts
+    return -1
 
 
 def _snippet_start(t, hit_start, label_tokens, base=320, maxback=2200, table_cap=2600):
@@ -698,9 +727,9 @@ def _snippet_start(t, hit_start, label_tokens, base=320, maxback=2200, table_cap
             last = mm
         if last is not None:
             start = min(start, max(0, hit_start - maxback) + last.start())
-    ts = t.rfind('##TABLE_START', max(0, hit_start - table_cap), hit_start)  # (b) table-header reach
-    if ts >= 0:
-        start = min(start, ts)
+    ts = _table_active_start(t, hit_start, table_cap)  # (b) table-header reach — round-22: ONLY
+    if ts >= 0:                                        # while that table is STILL OPEN; a closed
+        start = min(start, ts)                         # table's heading never travels into prose
     return start
 
 
@@ -730,11 +759,10 @@ def scan_text(texts, name, val, fmt, max_hits=20, keep=6, scale_gate=False, with
                 snip = t[ws:m.end()+80]           # RAW slice — snippets are source text (WP1)
                 vpos = m.start() - ws
                 pre = snip[:vpos].lower()             # round-20: rank on the text BEFORE the value
-                ts_ = snip.rfind('##TABLE_START', 0, vpos)   # round-21: a table marker counts ONLY
-                in_open_table = ts_ >= 0 and snip.find('##TABLE_END', ts_, vpos) < 0  # while that
-                score = (2 if in_open_table else 0) + sum(   # table is STILL OPEN at the value
-                    1 for tk in ntl
+                score = (2 if _table_active_start(snip, vpos, len(snip) + 1) >= 0 else 0) + sum(
+                    1 for tk in ntl                    # round-22: ranking uses THE SAME
                     if re.search(r'(?<![a-z0-9])' + re.escape(tk) + r'(?![a-z0-9])', pre))
+                                                       # active-table law as context windowing
                 cands.append((score, len(snip), snip))
                 if len(cands) >= max_hits * 4:          # round-19: BOUNDED MEMORY without blind
                     cands.sort(key=lambda c: (-c[0], c[1], c[2]))   # eviction — prune by RANK, so

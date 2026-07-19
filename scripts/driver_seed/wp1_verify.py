@@ -63,19 +63,26 @@ def _validate_determinism(man):
     assert len(runs) == 2, f"need exactly TWO seed runs, got {len(runs)}"
     seeds = {r.get('PYTHONHASHSEED') for r in runs}
     assert len(seeds) == 2, f"seed runs must use DISTINCT seeds: {seeds}"
+    cc = str(man.get('code_commit', ''))
+    assert dp.get('commit') and cc.startswith(str(dp['commit'])), \
+        f"proof commit {dp.get('commit')!r} != stamped code commit {cc!r}"
     for r in runs:
         assert r.get('sha256') == man.get('output_sha256'), \
             f"determinism run (seed {r.get('PYTHONHASHSEED')}) hash map != stamped outputs (or incomplete)"
+
+
+# round-21/22: EVERY code root the run imports counts toward dirt — harvest, shared exactness,
+# and the two earnings modules the pairing/trust gates come from. Tested by name.
+DIRT_PATHS = ('scripts/driver_seed', 'driver/relocation', 'scripts/earnings',
+              '.claude/skills/earnings-orchestrator')
 
 
 def _git_commit():
     try:
         c = subprocess.run(['git', 'rev-parse', '--short', 'HEAD'], capture_output=True,
                            text=True, cwd=HERE).stdout.strip()
-        dirty = subprocess.run(['git', 'status', '--porcelain', '--', 'scripts/driver_seed',
-                                'driver/relocation', 'scripts/earnings',
-                                '.claude/skills/earnings-orchestrator'],   # round-21: IMPORTED
-                               capture_output=True, text=True,             # source paths count
+        dirty = subprocess.run(['git', 'status', '--porcelain', '--', *DIRT_PATHS],
+                               capture_output=True, text=True,
                                cwd=os.path.join(HERE, '..', '..')).stdout.strip()
         files = dirty.splitlines()         # RAW porcelain lines (status + path) — no parsing
         return c + ('-dirty' if dirty else ''), files

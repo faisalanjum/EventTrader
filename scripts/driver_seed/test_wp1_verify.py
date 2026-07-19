@@ -35,7 +35,8 @@ def test_determinism_validation_requires_two_distinct_complete_seeds():
     """Round-20 (reviewer): zero or one seed run must FAIL; exactly two runs with DISTINCT seeds,
     each complete and matching the stamped hashes, pass."""
     H = {f'f{i}.jsonl': f'h{i}' for i in range(8)}
-    good = {'output_sha256': H, 'determinism_proof': {'runs': [
+    good = {'output_sha256': H, 'code_commit': 'abc1234',
+            'determinism_proof': {'commit': 'abc1234', 'runs': [
         {'PYTHONHASHSEED': 1, 'sha256': dict(H)}, {'PYTHONHASHSEED': 2, 'sha256': dict(H)}]}}
     V._validate_determinism(good)
     for bad_runs in ([],
@@ -43,7 +44,8 @@ def test_determinism_validation_requires_two_distinct_complete_seeds():
                      [{'PYTHONHASHSEED': 1, 'sha256': dict(H)}, {'PYTHONHASHSEED': 1, 'sha256': dict(H)}],
                      [{'PYTHONHASHSEED': 1, 'sha256': dict(H)}, {'PYTHONHASHSEED': 2, 'sha256': {'f0.jsonl': 'h0'}}]):
         try:
-            V._validate_determinism({'output_sha256': H, 'determinism_proof': {'runs': bad_runs}})
+            V._validate_determinism({'output_sha256': H, 'code_commit': 'abc1234',
+                                     'determinism_proof': {'commit': 'abc1234', 'runs': bad_runs}})
             raise SystemExit(f"accepted invalid runs: {bad_runs}")
         except AssertionError:
             pass
@@ -53,3 +55,47 @@ def test_determinism_validation_requires_two_distinct_complete_seeds():
     except AssertionError:
         pass
     print("[ok] determinism proof: exactly two distinct complete matching seed runs required")
+
+
+def test_slice_literal_bytes_catch_reordering(tmp_path):
+    """Round-22: the LITERAL-bytes hash must change when lines are reordered (the canonical
+    row-set sha alone cannot see order)."""
+    a = tmp_path / 'a.jsonl'; b = tmp_path / 'b.jsonl'
+    a.write_text('{"r":1}\n{"r":2}\n'); b.write_text('{"r":2}\n{"r":1}\n')
+    assert V.sha(str(a)) != V.sha(str(b))
+    print("[ok] byte-reordered input yields a different literal hash")
+
+
+def test_dirt_paths_cover_every_imported_root():
+    """Round-22: the dirt check must name every code root the run imports."""
+    assert set(V.DIRT_PATHS) == {'scripts/driver_seed', 'driver/relocation', 'scripts/earnings',
+                                 '.claude/skills/earnings-orchestrator'}, V.DIRT_PATHS
+    print("[ok] all four imported code roots in the dirt check")
+
+
+def test_record_validates_before_writing():
+    """Round-22: in --record mode the two-seed validation must execute BEFORE the manifest or
+    report is written (source-order assertion on the record branch)."""
+    src = open(V.__file__).read()
+    rec = src[src.index("if a.record:", src.index("def main")):]
+    assert rec.index('_validate_determinism') < rec.index("json.dump(man, open(MAN"), \
+        "RECORD writes before validating the determinism proof"
+    assert rec.index('_validate_determinism') < rec.index("open(REPORT, 'w')")
+    print("[ok] RECORD validates the proof before any write")
+
+
+def test_proof_commit_must_equal_stamp_commit():
+    """Round-22: the determinism proof's commit must match the manifest's code_commit."""
+    H = {'f.jsonl': 'h'}
+    good = {'output_sha256': H, 'code_commit': 'abc1234',
+            'determinism_proof': {'commit': 'abc1234', 'runs': [
+                {'PYTHONHASHSEED': 1, 'sha256': dict(H)},
+                {'PYTHONHASHSEED': 2, 'sha256': dict(H)}]}}
+    V._validate_determinism(good)
+    bad = {**good, 'code_commit': 'zzz9999'}
+    try:
+        V._validate_determinism(bad)
+        raise SystemExit("accepted a proof pinned to a different commit")
+    except AssertionError:
+        pass
+    print("[ok] proof commit == stamp commit enforced")

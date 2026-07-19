@@ -615,3 +615,74 @@ def test_members_all_parity_with_seg_axis_members():
         assert sorted(_members_all(fc)) == sorted(m for _, m in L.seg_axis_members(fc)), \
             f"shape {i}: parsers disagree"
     print("[ok] harvest parser ≡ certified-lane parser on every shape")
+
+
+# ---------------- round-22: fail-closed parsing, order-free context, active-table law ----------
+def test_aci_pin_removed_filer_pairs_abstain():
+    """Round-22 (reviewer directive; MY conflict test found 0 differing / 112 identical cells —
+    reported to the reviewer — but the removal is strictly conservative and filer-specific pins
+    are owner-disliked hardcoding): only the STANDARD structural pair remains; the ACI pair as a
+    co-member now makes the slice unprovable -> abstain."""
+    assert L.STRUCTURAL_PAIRS == {('srt:ConsolidationItemsAxis', 'us-gaap:OperatingSegmentsMember')}
+    co = blob('Revenues', [fact('100', '2024-01-01', '2024-12-31', unit='U_USD', seg=[
+        {'dimension': 'srt:StatementGeographicalAxis', 'value': 'country:US'},
+        {'dimension': 'us-gaap:StatementBusinessSegmentsAxis',
+         'value': 'aci:ReportableSegmentMember'}])])
+    assert L.tier1([co], 'United States Revenue', 100, '2024-12-31', is_currency=1) is None
+    print("[ok] filer-specific pin removed; only the standard structural pair exempts")
+
+
+def test_unparseable_or_blank_segment_fails_closed():
+    """Round-22 (reviewer-reproduced): a NONEMPTY segment that parses to nothing must NEVER pass
+    as 'verified undimensioned' (aggregate KPIs bound garbage-segment facts); any parsed pair
+    with a blank axis or member is unprovable identity -> abstain, sliced AND aggregate."""
+    garbage = blob('Revenues', [{'value': '5000', 'period': {'startDate': '2024-01-01',
+                   'endDate': '2024-12-31'}, 'unitRef': 'U_USD', 'segment': 'garbage-string'}])
+    assert L.tier1([garbage], 'total revenue', 5000, '2024-12-31', is_currency=1) is None
+    blank_ax = blob('Revenues', [{'value': '6000', 'period': {'startDate': '2024-01-01',
+                    'endDate': '2024-12-31'}, 'unitRef': 'U_USD',
+                    'segment': [{'dimension': '', 'value': 'x:AlphaMember'}]}])
+    assert L.tier1([blank_ax], 'alpha revenue', 6000, '2024-12-31', is_currency=1) is None
+    assert L.tier1([blank_ax], 'total revenue', 6000, '2024-12-31', is_currency=1) is None
+    blank_mm = blob('Revenues', [{'value': '7000', 'period': {'startDate': '2024-01-01',
+                    'endDate': '2024-12-31'}, 'unitRef': 'U_USD',
+                    'segment': [{'dimension': 'x:A', 'value': ''}]}])
+    assert L.tier1([blank_mm], 'total revenue', 7000, '2024-12-31', is_currency=1) is None
+    clean = blob('Revenues', [fact('8000', '2024-01-01', '2024-12-31')])
+    assert L.tier1([clean], 'total revenue', 8000, '2024-12-31', is_currency=1) is not None
+    print("[ok] unparseable/blank segments fail closed; clean undimensioned still binds")
+
+
+def test_context_order_free_and_period_conflict_abstains():
+    """Round-22 (reviewer-reproduced): identical quotes under DIFFERENT period headings gave
+    order-dependent context. Now: conflicting explicit periods across the tied occurrences ->
+    ABSTAIN; non-conflicting duplicates -> one deterministic context, both orders."""
+    t24 = 'Fiscal 2024 annual results ##TABLE_START Widget revenues 5,432 detail'
+    t23 = 'Fiscal 2023 comparative view ##TABLE_START Widget revenues 5,432 detail'
+    assert L.row_quote([t24, t23], ['Widget', 'revenues'], 5432, None,
+                       with_context=True) == (None, None)
+    assert L.row_quote([t23, t24], ['Widget', 'revenues'], 5432, None,
+                       with_context=True) == (None, None)
+    s24 = 'section two also Fiscal 2024 ##TABLE_START Widget revenues 5,432 detail'
+    qa, ca = L.row_quote([t24, s24], ['Widget', 'revenues'], 5432, None, with_context=True)
+    qb, cb = L.row_quote([s24, t24], ['Widget', 'revenues'], 5432, None, with_context=True)
+    assert qa == qb and ca == cb and qa is not None
+    assert L.row_quote([t24, t23], ['Widget', 'revenues'], 5432, None) is not None  # legacy path untouched
+    print("[ok] tied-quote context is order-free; conflicting explicit periods abstain")
+
+
+def test_closed_table_heading_never_enters_context():
+    """Round-22 (reviewer-reproduced): a CLOSED table's heading reached later prose via the
+    snippet-start table reach. One 'table active at the value' check governs ranking AND context."""
+    # the closed table sits BEYOND the default 320-char window — only the table-reach could
+    # pull its heading in, and that reach must refuse a CLOSED table
+    pad = 'neutral filler text. ' * 20                       # ~420 chars
+    t = '##TABLE_START Fiscal 2023 heading row ##TABLE_END ' + pad + \
+        'later prose says Widget revenues 5,432 here'
+    q, c = L.row_quote([t], ['Widget', 'revenues'], 5432, None, with_context=True)
+    assert q is not None and c is not None
+    assert '##TABLE_START' not in c and 'heading row' not in c, c[:80]
+    inside = '##TABLE_START heading alpha ' + pad + ' Widget revenues 5,432 still inside'
+    q2, c2 = L.row_quote([inside], ['Widget', 'revenues'], 5432, None, with_context=True)
+    assert q2 is not None and '##TABLE_START' in c2, c2[:80]   # OPEN table heading still travels
+    print("[ok] closed-table headings never enter later-prose evidence; open ones still do")
