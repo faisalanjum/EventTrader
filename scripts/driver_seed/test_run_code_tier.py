@@ -110,52 +110,38 @@ def test_second_source_residual_survives_when_first_resolves(monkeypatch):
         assert k in residual[0], f"residual missing batcher field {k}: {residual[0]}"
 
 
-_CYCLE = {'pred': 'PRED-ACC', 'target': 'T-ACC', 'period_end': '2025-02-22', 'hi': '2025-07-22'}
-
-
-def test_8k_gate_structural_pairing():
-    """Round-14 (reviewer-confirmed on WMS, live-reproduced): fiscal-identity joins are DEAD — dei
-    conventions are inconsistent even within ONE company (WMS quarterlies: (2024,1)/(2025,2)/
-    (2025,1)), so the round-13 dei join accepted WMS's prior-year 8-K and rejected the true one.
-    The join is now PURE STRUCTURE, no labels/identities: accept iff resolver AUTO_OK AND the
-    8-K's prior periodic == the target's predecessor (or the target itself — documented
-    10-Q-before-8-K inversions) AND created sits in the announcer window (period_end, next-period
-    filing's created] — an announcement can neither precede its period's end nor follow the next
-    quarter's periodic."""
+def test_8k_gate_matched_accession():
+    """Round-15 (OWNER-DECIDED Option D): historical pairing = the EXISTING production matcher's
+    answer (get_quarterly_filings: the original 10-Q/K covering the most recently ENDED period as
+    of the 8-K's filing time, validated by the [-24h, +90d] filing-lag window) compared by EXACT
+    ACCESSION EQUALITY with the target. quarter_identity stays ONLY as the AUTO_OK trust gate; its
+    labels and calculated dates are ignored (year-name conventions poisoned every label-based and
+    every converted-date join — ACI/WMS live-proven). Unclear -> PARK."""
     ok = {'safety_action': 'AUTO_OK', 'quarter_label': 'Q4_FY2024'}
-    assert RC._8k_gate(ok, 'PRED-ACC', '2025-04-15T16:00:00', _CYCLE) == 'accept'
-    # prior == the target itself: inversion OR the next quarter's event -> structurally ambiguous;
-    # pass 2 settles it (accepted announcer exists -> other_period, else uncertain/fail-closed)
-    assert RC._8k_gate(ok, 'T-ACC', '2025-05-01T09:00:00', _CYCLE) == 'ambiguous_cycle_edge'
-    assert RC._8k_gate(ok, 'OTHER-ACC', '2025-04-15T16:00:00', _CYCLE) == 'other_period'
-    assert RC._8k_gate(ok, 'PRED-ACC', '2026-04-14T16:00:00', _CYCLE) == 'other_period'  # future
-    assert RC._8k_gate(ok, 'PRED-ACC', '2024-05-16T16:00:00', _CYCLE) == 'other_period'  # prior yr
-    assert RC._8k_gate(ok, 'PRED-ACC', '2025-02-22T09:00:00', _CYCLE) == 'other_period'  # <= end
-    open_cycle = dict(_CYCLE, hi=None)
-    assert RC._8k_gate(ok, 'PRED-ACC', '2026-04-14T16:00:00', open_cycle) == 'accept'
-    assert RC._8k_gate({'safety_action': 'FAIL_CLOSED'}, 'PRED-ACC',
-                       '2025-04-15T16:00:00', _CYCLE) == 'uncertain'
-    assert RC._8k_gate(ok, None, '2025-04-15T16:00:00', _CYCLE) == 'uncertain'
-    assert RC._8k_gate(ok, 'PRED-ACC', '2025-04-15T16:00:00', None) == 'uncertain'
-    assert RC._8k_gate({}, 'PRED-ACC', '2025-04-15T16:00:00', _CYCLE) == 'uncertain'
-    assert RC._8k_gate(None, 'PRED-ACC', '2025-04-15T16:00:00', _CYCLE) == 'uncertain'
-    print("[ok] 8-K gate: pure structural pairing + announcer window, fail-closed")
+    assert RC._8k_gate(ok, 'T-ACC', True, 'T-ACC') == 'accept'
+    assert RC._8k_gate(ok, 'OTHER-ACC', True, 'T-ACC') == 'other_period'   # matched elsewhere
+    assert RC._8k_gate(ok, 'OTHER-ACC', False, 'T-ACC') == 'other_period'  # elsewhere, lag moot
+    assert RC._8k_gate(ok, 'T-ACC', False, 'T-ACC') == 'uncertain'   # late supplement (PHR class):
+                                                                     # matched HERE but unprovable
+    assert RC._8k_gate(ok, None, False, 'T-ACC') == 'uncertain'      # no period precedes it at all
+    assert RC._8k_gate({'safety_action': 'FAIL_CLOSED'}, 'T-ACC', True, 'T-ACC') == 'uncertain'
+    assert RC._8k_gate({}, 'T-ACC', True, 'T-ACC') == 'uncertain'
+    assert RC._8k_gate(None, 'T-ACC', True, 'T-ACC') == 'uncertain'
+    print("[ok] 8-K gate: existing-matcher accession equality + AUTO_OK; unclear -> park")
 
 
-def test_uncertainty_scoped_by_pairing():
-    """Round-14 (reviewer directive adopted; my round-13 'no pairing exists' rejection was WRONG —
-    the pairing MECHANISM exists for any 8-K even when labeling failed): an unresolved 8-K poisons
-    ONLY the cycle it structurally belongs to. prior==pred -> its announcement slot IS this
-    target's. prior==target -> ambiguous (inversion vs next-quarter announcement): poisons only if
-    the target has NO accepted announcer yet. Anything else -> another cycle entirely."""
-    assert RC.poisons('PRED-ACC', _CYCLE, target_has_accept=False)
-    assert RC.poisons('PRED-ACC', _CYCLE, target_has_accept=True)
-    assert RC.poisons('T-ACC', _CYCLE, target_has_accept=False)
-    assert not RC.poisons('T-ACC', _CYCLE, target_has_accept=True)   # ACI annual: stays complete
-    assert not RC.poisons('OTHER-ACC', _CYCLE, target_has_accept=False)
-    assert not RC.poisons(None, _CYCLE, target_has_accept=False)     # no prior -> not this cycle
-    assert RC.poisons('PRED-ACC', None, target_has_accept=False) is True   # no cycle info -> fail closed
-    print("[ok] uncertainty scoped to the structurally matched cycle only")
+def test_shared_matcher_lag_rule_pure():
+    """The SHARED extracted matcher's pure pieces (get_quarterly_filings — imported, never
+    copied): lag arithmetic + the production validity window [-24h, +MAX_LAG_HOURS]."""
+    import get_quarterly_filings as GQF
+    assert GQF._lag_hours('2023-08-02T16:00:00', '2023-08-03T16:00:00') == 24.0
+    assert GQF._lag_hours('2023-08-03T16:00:00', '2023-08-02T16:00:00') == -24.0
+    assert GQF._lag_hours('garbage', '2023-08-02T16:00:00') is None
+    assert GQF.lag_valid(24.0) and GQF.lag_valid(-24.0) and GQF.lag_valid(0.0)
+    assert GQF.lag_valid(GQF.MAX_LAG_HOURS) and not GQF.lag_valid(GQF.MAX_LAG_HOURS + 0.1)
+    assert not GQF.lag_valid(-24.1)          # late-supplement class -> invalid -> park
+    assert not GQF.lag_valid(None)
+    print("[ok] shared matcher lag rule: production window, unparseable -> invalid")
 
 
 def test_worklist_dedupe_collapses_identical_rows():
@@ -182,10 +168,11 @@ def test_invalid_vendor_value_parks_not_skips():
 
 
 def test_8k_selection_live_aci_aapl_wms():
-    """LIVE round-14 regression (reviewer pins): ACI accepts its true announcer and rejects the
-    future 8-K; ACI's ANNUAL period is NOT poisoned by later Q1/Q2/Q3 unlabelable 8-Ks; AAPL
-    selects exactly its pinned 8-K; WMS's true quarterly 8-K is RECOVERED and the prior-year one
-    rejected (the round-13 dei join had both wrong). Skips ONLY on genuine graph unavailability."""
+    """LIVE round-15 regression (Option D, owner-decided): the existing matcher's accession
+    equality selects exactly the true announcers — ACI true accepted / future rejected; ACI's
+    annual NOT poisoned by later unlabelable quarterly 8-Ks (they match their OWN quarters); AAPL
+    exact pin (and its Q1-early 8-K matches the Q1 10-Q, never the annual); WMS true quarterly
+    recovered + prior-year rejected. Skips ONLY on genuine graph unavailability."""
     try:
         RC.load_env_neo4j()
         from neo4j import GraphDatabase
@@ -193,40 +180,71 @@ def test_8k_selection_live_aci_aapl_wms():
                                    auth=(os.environ.get('NEO4J_USERNAME', 'neo4j'),
                                          os.environ['NEO4J_PASSWORD']))
         with drv.session() as s:
-            tl = RC.periodic_timeline(s, 'ACI')
+            s.run("RETURN 1").single()
     except (KeyError, OSError, Exception) as e:
         if type(e).__name__ in ('ServiceUnavailable', 'KeyError', 'OSError', 'ConnectionError',
                                 'AuthError', 'ConfigurationError'):
             pytest.skip(f"graph unavailable: {e}")
         raise
     with drv.session() as s:
-        cyc = RC.cycle_for(tl, '0001646972-25-000052')            # ACI 10-K 2025-02-22
-        assert cyc and cyc['pred'] == '0001646972-25-000008', cyc  # Q3 10-Q predecessor
-        events, uncertain, audit = RC.fetch_earnings_8ks(s, 'ACI', cyc, tl)
+        events, uncertain, audit = RC.fetch_earnings_8ks(s, 'ACI', '0001646972-25-000052')
         got = {e['source_id'] for e in events}
         assert '0001646972-25-000040' in got, got         # the TRUE announcer
         assert '0001646972-26-000028' not in got, got     # the FUTURE 8-K stays out
         by = {a['acc']: a for a in audit}
         assert by['0001646972-26-000028']['verdict'] == 'other_period', by['0001646972-26-000028']
+        assert by['0001646972-26-000028']['match'] == '0001646972-26-000032'   # its OWN target
         assert not by['0001646972-23-000010']['relevant'], by      # ancient unlabelable: no poison
-        # reviewer round-14 claim 4: the later Q1-FY2025 unlabelable 8-K (prior == the annual
-        # itself, and the annual HAS an accepted announcer) must NOT poison the annual period.
-        assert not by['0001646972-25-000059']['relevant'], by['0001646972-25-000059']
+        # the later Q1-FY2025 unlabelable 8-K matches the Q1 10-Q, NOT the annual -> no poison here
+        assert by['0001646972-25-000059']['match'] == '0001646972-25-000063', by['0001646972-25-000059']
+        assert not by['0001646972-25-000059']['relevant']
         assert uncertain == 0, (uncertain, [a for a in audit if a['relevant']])
-        tl_aapl = RC.periodic_timeline(s, 'AAPL')
-        cyc_a = RC.cycle_for(tl_aapl, '0000320193-24-000123')     # AAPL 10-K 2024-09-28
-        ev2, _, _ = RC.fetch_earnings_8ks(s, 'AAPL', cyc_a, tl_aapl)
+        ev2, _, audit2 = RC.fetch_earnings_8ks(s, 'AAPL', '0000320193-24-000123')
         got2 = [e['source_id'] for e in ev2]
         assert got2 == ['0000320193-24-000120'], got2     # the reviewer-pinned exact selection
-        # WMS (round-14 blocking case): quarterly target 2024-06-30 — dei is useless here; the
-        # structural pairing must RECOVER the true 8-K and reject the prior-year one.
-        tl_w = RC.periodic_timeline(s, 'WMS')
-        cyc_w = RC.cycle_for(tl_w, '0001604028-24-000032')
-        assert cyc_w and cyc_w['pred'] == '0001604028-24-000011', cyc_w   # FY2024 10-K
-        ev3, _, audit3 = RC.fetch_earnings_8ks(s, 'WMS', cyc_w, tl_w)
+        by2 = {a['acc']: a for a in audit2}
+        assert by2['0000320193-25-000007']['match'] == '0000320193-25-000008'  # Q1 8-K -> Q1 10-Q
+        ev3, _, _ = RC.fetch_earnings_8ks(s, 'WMS', '0001604028-24-000032')
         got3 = {e['source_id'] for e in ev3}
-        assert '0001604028-24-000029' in got3, got3       # TRUE announcer RECOVERED
+        assert '0001604028-24-000029' in got3, got3       # TRUE quarterly announcer
         assert '0001604028-23-000033' not in got3, got3   # prior-year 8-K rejected
+
+
+def test_shared_matcher_scope_live():
+    """LIVE seam proof (round-15): the harvest consumes THE SAME match_8k_to_periodic the
+    presentation tool consumes (one structured matcher, imported — never copied/parsed). Checks
+    the one intentional scope difference: require_daily_stock=False must return a SUPERSET of the
+    tool's scope (rows agree wherever both exist), so no 2.02 8-K is silently hidden from the
+    harvest by the returns-availability filter."""
+    try:
+        RC.load_env_neo4j()
+        import get_quarterly_filings as GQF          # path injected by quarter_identity import
+        from neo4j import GraphDatabase
+        drv = GraphDatabase.driver(os.environ['NEO4J_URI'],
+                                   auth=(os.environ.get('NEO4J_USERNAME', 'neo4j'),
+                                         os.environ['NEO4J_PASSWORD']))
+        with drv.session() as s:
+            s.run("RETURN 1").single()
+    except (KeyError, OSError, Exception) as e:
+        if type(e).__name__ in ('ServiceUnavailable', 'KeyError', 'OSError', 'ConnectionError',
+                                'AuthError', 'ConfigurationError', 'ImportError',
+                                'ModuleNotFoundError'):
+            pytest.skip(f"graph/tool unavailable: {e}")
+        raise
+    tickers = ['A', 'AA', 'AAL', 'AAPL', 'ABT', 'ACI', 'ACN', 'ADM', 'AEE', 'AFL']
+    checked = 0
+    with drv.session() as s:
+        for tk in tickers:
+            full = {m['accession_8k']: (m['accession_10q'], m['lag_valid'])
+                    for m in GQF.match_8k_to_periodic(s, tk, require_daily_stock=False)}
+            tool = {m['accession_8k']: (m['accession_10q'], m['lag_valid'])
+                    for m in GQF.match_8k_to_periodic(s, tk, require_daily_stock=True)}
+            assert set(tool) <= set(full), f"{tk}: tool scope not a subset?!"
+            for acc, pair in tool.items():
+                assert full[acc] == pair, f"{tk} {acc}: scope filter changed the pairing?!"
+            checked += len(full)
+    assert checked > 100, f"scope check too small: {checked}"
+    print(f"[ok] one shared matcher; harvest scope superset verified over {checked} 8-Ks")
     drv.close()
     print("[ok] LIVE: ACI true 8-K accepted + future rejected; AAPL 52/53-week preserved")
 

@@ -117,37 +117,38 @@ def main():
     from neo4j import GraphDatabase
     drv = GraphDatabase.driver(os.environ['NEO4J_URI'],
                                auth=(os.environ.get('NEO4J_USERNAME', 'neo4j'), os.environ['NEO4J_PASSWORD']))
+    _INDEP = """
+    MATCH (r:Report {accessionNo:$acc})-[:PRIMARY_FILER]->(c:Company)
+    OPTIONAL CALL (r, c) {
+      MATCH (q:Report)-[:PRIMARY_FILER]->(c)
+      WHERE q.formType IN ['10-Q','10-K'] AND date(q.periodOfReport) < date(datetime(r.created))
+      WITH q ORDER BY q.periodOfReport DESC LIMIT 1
+      RETURN q
+    }
+    RETURN r.created AS f8, q.accessionNo AS match_acc, q.created AS f10
+    """
+    from datetime import datetime as _DT
+
+    def _h(a, b):
+        return (_DT.fromisoformat(str(b)[:19]) - _DT.fromisoformat(str(a)[:19])).total_seconds() / 3600
     cache, bad_sub = {}, []
     with drv.session() as s:
-        # ---- round-14 independent pairing + announcer-window proof for every ACCEPTED 8-K ----
-        tlc = {}
+        # ---- round-15 independent pairing proof for every ACCEPTED 8-K: re-derived STRAIGHT
+        # from the graph with an inline query (a different code path than the shared matcher the
+        # run imports), plus the production lag window. The round-13/14 checks re-used artifacts
+        # of the code under test — circular (reviewer catch). ----
         for row in ledger:
-            tk = row['ticker']
-            if tk not in tlc:
-                tlc[tk] = [dict(x) for x in s.run(
-                    """MATCH (r:Report)-[:PRIMARY_FILER]->(c:Company {ticker:$tk})
-                       WHERE r.formType IN ['10-K','10-Q']
-                       RETURN r.accessionNo AS acc, r.periodOfReport AS p, r.created AS cr
-                       ORDER BY r.periodOfReport, r.created""", tk=tk)]
-            tl = tlc[tk]
-            tacc = row['filing_acc']
-            idx = next((i for i, e in enumerate(tl) if e['acc'] == tacc), None)
-            assert idx is not None, f"target {tacc} absent from the independent timeline ({tk})"
-            tper = str(tl[idx]['p'])[:10]
-            pred = next((e['acc'] for e in reversed(tl[:idx]) if str(e['p'])[:10] < tper), None)
-            hi = next((str(e['cr']) for e in tl[idx + 1:] if str(e['p'])[:10] > tper), None)
             for e8 in row['eightk']:
                 if e8['verdict'] != 'accept':
                     continue
-                c = str(e8['created'])[:10]
-                assert tper < c and (hi is None or c <= hi[:10]), \
-                    f"accepted 8-K outside its announcer window: {e8['acc']} {tk} {row['period']}"
-                priors = RC.QI._prior_rows({'accession_8k': e8['acc'], 'filed_8k': e8['created']},
-                                           neo4j_session=s)
-                top = priors[0]['accession'] if priors else None
-                assert top in (pred, tacc), \
-                    f"pairing mismatch {e8['acc']} ({tk}): resolver prior={top}, expected {pred} or {tacc}"
-                cp_accepts[(tk, row['period'])].add(e8['acc'])
+                r2 = s.run(_INDEP, acc=e8['acc']).single()
+                assert r2 and r2['match_acc'] == row['filing_acc'], \
+                    f"independent pairing mismatch {e8['acc']} ({row['ticker']}): " \
+                    f"graph says {r2 and r2['match_acc']}, run accepted {row['filing_acc']}"
+                lag = _h(r2['f8'], r2['f10'])
+                assert -24 <= lag <= 90 * 24, \
+                    f"accepted 8-K outside the production lag window: {e8['acc']} lag={lag:.1f}h"
+                cp_accepts[(row['ticker'], row['period'])].add(e8['acc'])
         for r in res:
             if r['source_type'] == '8k':
                 assert r['source_id'] in cp_accepts[(r['ticker'], r['period_end'])], \

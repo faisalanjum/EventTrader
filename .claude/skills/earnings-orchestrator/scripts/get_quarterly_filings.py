@@ -365,8 +365,8 @@ MAX_LAG_HOURS = 90 * 24  # 90 days in hours
 
 QUERY = """
 MATCH (r:Report)-[pf:PRIMARY_FILER]->(c:Company)
-WHERE c.ticker = $ticker AND r.formType = '8-K' AND r.items CONTAINS '2.02' AND pf.daily_stock IS NOT NULL
-WITH r, c ORDER BY r.created ASC
+WHERE c.ticker = $ticker AND r.formType = '8-K' AND r.items CONTAINS '2.02'
+WITH r, pf, c ORDER BY r.created ASC
 // Get most recent 10-Q/10-K before this 8-K (by periodOfReport, not filing date)
 OPTIONAL CALL (r, c) {
   MATCH (q:Report)-[:PRIMARY_FILER]->(c)
@@ -381,11 +381,61 @@ OPTIONAL CALL (r, c) {
          CASE WHEN size(xbrl_years) = 1 THEN head(xbrl_years) END AS xbrl_year_focus
 }
 RETURN r.accessionNo AS accession_8k, r.created AS filed_8k, r.market_session AS market_session_8k,
+       pf.daily_stock AS daily_stock_8k,
        q.accessionNo AS accession_10q, q.created AS filed_10q, q.market_session AS market_session_10q,
        q.formType AS form_type, q.periodOfReport AS period_10q,
        xbrl_period_focus, xbrl_year_focus
 ORDER BY r.created ASC
 """
+
+
+def _lag_hours(filed_8k, filed_10q):
+    """Filing lag in hours (10-Q/K minus 8-K), or None when either side is unparseable."""
+    try:
+        dt_8k = filed_8k if hasattr(filed_8k, 'timestamp') else datetime.fromisoformat(str(filed_8k).replace('Z', '+00:00'))
+        dt_10q = filed_10q if hasattr(filed_10q, 'timestamp') else datetime.fromisoformat(str(filed_10q).replace('Z', '+00:00'))
+        if hasattr(dt_8k, 'to_native'):
+            dt_8k = dt_8k.to_native()
+        if hasattr(dt_10q, 'to_native'):
+            dt_10q = dt_10q.to_native()
+        return (dt_10q - dt_8k).total_seconds() / 3600
+    except Exception:
+        return None
+
+
+def lag_valid(hours):
+    """The production validity window: companion filed within -24h .. +MAX_LAG_HOURS of the 8-K."""
+    return hours is not None and -24 <= hours <= MAX_LAG_HOURS
+
+
+def match_8k_to_periodic(session, ticker: str, require_daily_stock: bool = False) -> list:
+    """THE structured historical 8-K→periodic matcher (extracted 2026-07-18; the single shared
+    pairing source — get_earnings_with_10q below AND the driver harvest both consume it; never
+    copy this logic, import it). For every Item-2.02 8-K: companion = the original 10-Q/10-K
+    covering the most recently ENDED period as of the 8-K's filing time (real period dates),
+    lag-validated by lag_valid(). require_daily_stock=True reproduces the presentation tool's
+    historical scope (8-Ks carrying return data only); the driver harvest passes False — pairing
+    is independent of returns availability.
+    Returns dicts in 8-K filing order: accession_8k, filed_8k, market_session_8k, accession_10q
+    (None when no period precedes the 8-K), filed_10q, market_session_10q, form_type, period_10q,
+    xbrl_period_focus, xbrl_year_focus, lag_hours (None when incomputable), lag_valid."""
+    rows = list(session.run(QUERY, ticker=ticker.upper()))
+    out = []
+    for r in rows:
+        if require_daily_stock and r["daily_stock_8k"] is None:
+            continue
+        h = _lag_hours(r["filed_8k"], r["filed_10q"]) if (r["period_10q"] and r["filed_10q"]) else None
+        out.append({
+            "accession_8k": r["accession_8k"], "filed_8k": r["filed_8k"],
+            "market_session_8k": r["market_session_8k"],
+            "accession_10q": r["accession_10q"], "filed_10q": r["filed_10q"],
+            "market_session_10q": r["market_session_10q"],
+            "form_type": r["form_type"], "period_10q": r["period_10q"],
+            "xbrl_period_focus": r["xbrl_period_focus"], "xbrl_year_focus": r["xbrl_year_focus"],
+            "lag_hours": h, "lag_valid": lag_valid(h),
+        })
+    return out
+
 
 def get_earnings_with_10q(ticker: str, dedupe: bool = True) -> str:
     with neo4j_session() as (session, err):
@@ -393,7 +443,7 @@ def get_earnings_with_10q(ticker: str, dedupe: bool = True) -> str:
         try:
             # First, derive actual FYE from 10-K periods (ground truth)
             derived_fye = get_derived_fye(session, ticker.upper())
-            results = list(session.run(QUERY, ticker=ticker.upper()))
+            results = match_8k_to_periodic(session, ticker, require_daily_stock=True)
         except Exception as e:
             return parse_exception(e)
 
@@ -411,28 +461,12 @@ def get_earnings_with_10q(ticker: str, dedupe: bool = True) -> str:
         filed_8k_str = filed_8k.isoformat() if hasattr(filed_8k, "isoformat") else str(filed_8k) if filed_8k else "N/A"
         market_session_8k = r["market_session_8k"] or "N/A"
 
-        # Check if 10-Q match is valid
-        valid_10q = False
-        if period_10q and filed_10q:
-            try:
-                dt_8k = filed_8k if hasattr(filed_8k, 'timestamp') else datetime.fromisoformat(str(filed_8k).replace('Z', '+00:00'))
-                dt_10q = filed_10q if hasattr(filed_10q, 'timestamp') else datetime.fromisoformat(str(filed_10q).replace('Z', '+00:00'))
-
-                # Handle neo4j DateTime objects
-                if hasattr(dt_8k, 'to_native'):
-                    dt_8k = dt_8k.to_native()
-                if hasattr(dt_10q, 'to_native'):
-                    dt_10q = dt_10q.to_native()
-
-                lag_hours = (dt_10q - dt_8k).total_seconds() / 3600
-
-                # Valid if 10-Q/10-K filed within -24h to +90 days of 8-K
-                if -24 <= lag_hours <= MAX_LAG_HOURS:
-                    valid_10q = True
-                    secs = abs(int(lag_hours * 3600))
-                    lag_str = f"{'-' if lag_hours < 0 else ''}{secs//86400}d{secs%86400//3600}h{secs%3600//60}m{secs%60}s"
-            except Exception:
-                pass  # Invalid lag calculation -> treat as invalid match
+        # Validity + lag come from the SHARED structured matcher (single source of truth)
+        valid_10q = r["lag_valid"]
+        lag_hours = r["lag_hours"]
+        if valid_10q:
+            secs = abs(int(lag_hours * 3600))
+            lag_str = f"{'-' if lag_hours < 0 else ''}{secs//86400}d{secs%86400//3600}h{secs%3600//60}m{secs%60}s"
 
         if valid_10q:
             # Valid 10-Q/10-K match: prefer XBRL fiscal identity, fall back to period math.

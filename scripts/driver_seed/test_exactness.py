@@ -230,12 +230,33 @@ def test_row_quote_scale_gate_param():
     # not a round-14 change; the matching-marker positive case uses the millions form instead)
     m_marked = ['(in millions) Widget revenues 1.2 for the period']
     assert L.row_quote(m_marked, toks, 1200000, None, scale_gate=True) is not None
-    # round-14 locality: the NEAREST preceding marker rules; an unrelated earlier one never proves
+    # round-14 locality: the CURRENT TABLE's declarations rule; an unrelated earlier table's
+    # marker never proves this table's scale
     mixed = ['first table (in millions) ... END ##TABLE_START (in thousands) Widget revenues 1,200']
     assert L.row_quote(mixed, toks, 1200000000, None, scale_gate=True) is None
     mixed2 = ['first table (in thousands) ... END ##TABLE_START (in millions) Widget revenues 1,200']
     assert L.row_quote(mixed2, toks, 1200000000, None, scale_gate=True) is not None
-    print("[ok] scale gate: multiplier must match; nearest-marker locality; certified callers intact")
+    # a REAL table header declares several scales for different columns — '(In millions, except
+    # shares in thousands)' (AAPL's standard header; regenerate #1 wrongly dropped 'Products
+    # $ 294,866' because the NEAREST single word was 'thousands'). The required multiplier must be
+    # AMONG the current table's declarations.
+    combined = ['##TABLE_START (In millions, except number of shares, which are reflected in '
+                'thousands, and per-share amounts) Products revenues $ 294,866 for the year']
+    assert L.row_quote(combined, ['Products', 'revenues'], 294866000000, None,
+                       scale_gate=True) is not None
+    # a table that declares NOTHING inherits the nearest preceding declaration (AA/Alcoa layout:
+    # '(in millions)' is a caption ABOVE the table-start tag; regenerate #2 wrongly dropped 70
+    # certified-good binds like 'United States $ 5,365'). A table that DOES declare stays strict.
+    caption = ['(in millions) segment detail follows ##TABLE_START United States revenues '
+               '$ 5,365 for the year']
+    assert L.row_quote(caption, ['United', 'States', 'revenues'], 5365000000, None,
+                       scale_gate=True) is not None
+    caption_wrong = ['(in thousands) segment detail follows ##TABLE_START United States revenues '
+                     '$ 5,365 for the year']
+    assert L.row_quote(caption_wrong, ['United', 'States', 'revenues'], 5365000000, None,
+                       scale_gate=True) is None
+    print("[ok] scale gate: multiplier ∈ the CURRENT table's declared scales; outside tables the "
+          "nearest declaration; certified callers intact")
 
 
 def test_value_ok_rejects_contradicting_scale_tag():

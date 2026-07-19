@@ -152,13 +152,26 @@ def _tail_div(text, end):
     return _WORD2DIV[m.group(1).lower()] if m else None
 
 
-def _nearest_mark_div(text, start):
-    """The NEAREST scale declaration BEFORE the hit ('(in millions)' -> 1e6), or None.
-    Nearest-wins is the locality rule: mixed-scale documents make any-marker-anywhere unsafe."""
+def _local_scale_divs(text, start):
+    """The scale declarations GOVERNING this hit, as a set of divisors.
+    Inside a table (a ##TABLE_START tag precedes the hit): every declaration between the table
+    start and the hit — a real header names several scales for different columns ('(In millions,
+    except shares in thousands)', AAPL's standard header; a single-nearest-word rule wrongly
+    rejected the table's dominant scale). Outside tables: the single NEAREST preceding
+    declaration. Empty set = no local evidence. Mixed-scale documents (52 cohort blocks) make
+    any-marker-anywhere unsafe — locality is the whole point."""
+    ts = text.rfind('##TABLE_START', 0, start)
+    if ts >= 0:
+        divs = {_WORD2DIV[m.group(1).lower().rstrip('s')]
+                for m in _SCALE_MARK.finditer(text, ts, start)}
+        if divs:
+            return divs                    # the table declares its own scale(s) -> strict
+        # a table that declares NOTHING inherits the nearest preceding declaration (AA layout:
+        # the '(in millions)' caption sits ABOVE the table-start tag — reading convention)
     last = None
     for m in _SCALE_MARK.finditer(text, 0, start):
         last = m
-    return _WORD2DIV[last.group(1).lower().rstrip('s')] if last else None
+    return {_WORD2DIV[last.group(1).lower().rstrip('s')]} if last else set()
 
 
 def exact_form(form, value, fmt):
@@ -576,11 +589,11 @@ def row_quote(texts, label_tokens, val, fmt, gap=90, scale_gate=False):
                 if not at_boundary(t, m.start(), m.end()):
                     continue
                 if req:                    # round-14: evidence must name THE REQUIRED multiplier —
-                    td = _tail_div(t, m.end())        # the immediate tag wins; else the NEAREST
-                    if td is not None:                # preceding declaration; wrong scale = no bind
-                        if td != req:
+                    td = _tail_div(t, m.end())        # the immediate tag wins; else the CURRENT
+                    if td is not None:                # table's (or nearest) declarations must
+                        if td != req:                 # include it; wrong scale = no bind
                             continue
-                    elif _nearest_mark_div(t, m.start()) != req:
+                    elif req not in _local_scale_divs(t, m.start()):
                         continue
                 ws = max(0, m.start() - gap)
                 seg = low[ws:m.start()]
