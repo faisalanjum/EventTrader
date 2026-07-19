@@ -126,3 +126,5 @@ data/fiscal_ai_segments/
 scripts/fiscal_ai_scraper/
 scripts/fiscal_ai_scraper/.venv/
 scripts/fiscal_ai_scraper/output/
+
+scripts/driver_seed/relocate_probe/inline_html_cache/
