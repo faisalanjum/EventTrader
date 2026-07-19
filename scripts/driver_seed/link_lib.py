@@ -610,7 +610,8 @@ def row_quote(texts, label_tokens, val, fmt, gap=90, scale_gate=False):
     best = None
     for t in texts:
         low = t.lower()
-        for fo in forms:
+        for fo in sorted(forms):           # SET iteration is hash-random per process — sorted
+                                           # + content tiebreaks make output fully deterministic
             req = needy.get(fo)
             for m in re.finditer(re.escape(fo), t):
                 if not at_boundary(t, m.start(), m.end()):
@@ -636,8 +637,8 @@ def row_quote(texts, label_tokens, val, fmt, gap=90, scale_gate=False):
                 if pos is None:
                     continue                      # some label token missing -> not this row
                 q = t[ws + min(pos): _with_trail(t, m.end())]   # RAW slice incl. trailing evidence
-                if best is None or len(q) < len(best):
-                    best = q                      # shortest = tightest crop around the row
+                if best is None or len(q) < len(best) or (len(q) == len(best) and q < best):
+                    best = q                      # shortest = tightest crop; content tiebreak
     return best
 
 
@@ -683,7 +684,7 @@ def scan_text(texts, name, val, fmt, max_hits=20, keep=6, scale_gate=False):
     forms = _tableforms(val, fmt)
     cands = []
     for t in texts:
-        for fo in forms:
+        for fo in sorted(forms):           # deterministic scan order (sets are hash-random)
             for m in re.finditer(re.escape(fo), t):
                 if not at_boundary(t, m.start(), m.end()):
                     continue
@@ -698,7 +699,7 @@ def scan_text(texts, name, val, fmt, max_hits=20, keep=6, scale_gate=False):
                 break
         if len(cands) >= max_hits:
             break
-    cands.sort(key=lambda c: (-c[0], c[1]))            # higher score first, then shorter
+    cands.sort(key=lambda c: (-c[0], c[1], c[2]))      # score, length, CONTENT — total order
     return strict, [c[2] for c in cands[:keep]]
 
 
