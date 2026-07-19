@@ -749,3 +749,34 @@ Also queued for the next reviewer message: ask whether/where to add the three de
 997 abstain · 2 parks · battery 105/105 · floors 28/28 · verify RECORD+CHECK green ·
 determinism proven under BOTH seeds with the seed pair + full 8-file hash set stamped into the
 manifest (`determinism_proof`).**
+
+## Round 18 (ChatGPT, 2026-07-19) — SIX claims, ALL CONFIRMED by my own reproductions; the worst
+## two were MINE, owned: (a) my round-17 test-file surgery sliced to end-of-file and SILENTLY
+## DELETED four round-16 safety tests (letter-glued numbers, whole-word labels, mixed-scale
+## unanimity, thousand-scale forms) — I even reported "battery 105/105" without noticing the drop
+## from 107; RESTORED UNCHANGED, battery now 109; (b) fresh overclaims — "complete country
+## identity" (was still token containment: country:GE bound 'South Georgia', country:US bound
+## 'United States and Canada', both reproduced) and "dimensions canonicalized" (only the axis
+## LIST was sorted; member text + quote still leaked storage order, reproduced). Commits
+## `4a3577b` + verifier follow-up + artifacts.
+Fixes: (1) EXACT normalized geography identity — KPI slice-token set must EQUAL the union of the
+country names' token sets, both sides normalized with the SAME stop-list (the 'and' in 'Bosnia
+and Herzegovina' initially broke equality — one normalization for both sides); fail closed, no
+fuzzy geography; all seven reviewer pin pairs tested (Georgia/South Georgia · Guinea/Papua New
+Guinea · Samoa/American Samoa · US+Canada · North/South Korea · Bosnia and Herzegovina ·
+Congo/DR Congo). Cost: T1 105→104 (one containment-only bind demoted to its text match — the
+price of exactness). (2) members sorted ONCE before building EVERY emitted field — reversed
+dimensions now yield a byte-identical record (full-record equality pinned). (3) The four tests
+restored verbatim. (4) Text-order test upgraded to 25 REAL matches (past the cutoff); max_hits
+restored as a real bounded-work limit, input-order-free via canonical text+form iteration.
+(5) Manifest: dirty files named as RAW porcelain lines (a parsed version mangled paths — caught
+and fixed); `determinism_proof` now carries SEPARATE per-seed 8-file hash sets (seeds 1 and 2,
+byte-identical) + the exact battery command. (6) These record lines ARE the required corrections
+of the round-17 overclaims.
+**Doc plan per reviewer + owner lock pending:** the two-file 8-K rule is OWNED by Core's staged
+PER-21/BUILD §3 — my design doc will only POINT there (no duplication); the S4 router sentence
+must state: a FAILED historical pairing PARKS — it never falls through to the live resolver;
+the XBRL-ambiguity sentence goes to Universal Locator §3 only after this pass is green.
+**FINAL (stamped against `4a3577b`+verifier follow-up): 286 resolved (T1 104 · T2 182 · 8-K 69) ·
+442 residual · 997 abstain · 2 parks · battery 109/109 · floors 28/28 · verify RECORD+CHECK
+green · determinism proven with per-seed hash sets stamped.**
