@@ -26,6 +26,12 @@ def test_dec_rejects_floats():
         X.dec(2.34)                      # a float may have ALREADY lost the source value
 
 
+def test_dec_rejects_nan_and_infinity():
+    for bad in ('nan', 'NaN', 'Infinity', '-inf', 'inf'):
+        with pytest.raises(Exception):
+            X.dec(bad)                   # round-12: non-finite values are never source numbers
+
+
 def test_eq_no_rounding():
     assert not X.eq("2.34", "2.01")      # int-truncation used to conflate these (tier1 L353)
     assert not X.eq("2.34", "2")

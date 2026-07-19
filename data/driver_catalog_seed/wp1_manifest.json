@@ -17,5 +17,24 @@
  "worklist_slice_sha256": "473bda9dcb0513a8e87bc9e438189b52ce196301619108c6c8dec876b14e1559",
  "command": "venv/bin/python scripts/driver_seed/run_code_tier.py --tickers A,AA,AAL,AAPL,ABT,ACI,ACN,ADM,AEE,AFL --tag wp1",
  "then": "venv/bin/python scripts/driver_seed/build_packets.py --tag wp1",
- "claims_scope": "zero fabricated (quote_source=xbrl_fact) records IN THIS COHORT ONLY; older part1-4 artifacts are STALE/INVALID, not regenerated"
+ "claims_scope": "zero fabricated (quote_source=xbrl_fact) records IN THIS COHORT ONLY; older part1-4 artifacts are STALE/INVALID, not regenerated",
+ "output_sha256": {
+  "code_resolved.jsonl": "019602b6b6b6fcce4017f24786eb1efac887ae4a45aa6c004c1d8a95f3b2d604",
+  "residual.jsonl": "e234f184bcce82d1445caf0158e23c151683a2b3c9b5d7a71f7aa01d9c6147a0",
+  "abstain.jsonl": "c254245bd73dc83441596f8f4c514d8d7319b3968b8e42915b2d55723ec13698",
+  "packets.jsonl": "038bc2e98ab4a502a2e4f3a027b822ed1e8218b138766fcb2cbbebfacacf82de",
+  "skip_ledger.jsonl": "a7c143b505ac42d05eac78e91d286312420011c74752c7ceaef9b641f8aed20c",
+  "park_ledger.jsonl": "60d6d426ec31450738315a6cf7f0af8cf0e29b4c3c4929d9b241888dc343018e"
+ },
+ "verified_summary": {
+  "tag": "wp1",
+  "records_resolved": 389,
+  "residual": 353,
+  "abstain": 1006,
+  "company_periods": 25,
+  "T1_xbrl": 105,
+  "T2_label": 284,
+  "pr_records": 129,
+  "cp_no_filing": 0
+ }
 }

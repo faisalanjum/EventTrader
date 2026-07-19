@@ -70,14 +70,17 @@ def build(records, abstains, fye_map):
     skip, park = [], []
     for a in abstains:
         status, reason = a.get('status'), a.get('reason')
-        led = {'ticker': a.get('ticker'), 'raw_label': a.get('raw_label') or a.get('kpi'),
+        led = {'item_id': a.get('item_id'), 'ticker': a.get('ticker'),
+               'raw_label': a.get('raw_label') or a.get('kpi'),
                'period_end': a.get('period_end') or a.get('period'), 'form': a.get('form'), 'reason': reason}
         if status == 'skip':                             # derived / plug -> terminal, counted
             skip.append(led)
         elif reason == 'corpus_missing':                 # named filing not in graph yet
             park.append({**led, 'reason': 'corpus_missing'})
         elif status == 'value_absent':
-            if corpus_complete(a.get('sources_searched'), a.get('form')):
+            if a.get('sources_incomplete'):              # round-12: a fail-closed-dropped 8-K means the
+                park.append({**led, 'reason': 'sources_incomplete'})   # expected set was NOT fully
+            elif corpus_complete(a.get('sources_searched'), a.get('form')):   # searched -> PARK, never SKIP
                 skip.append({**led, 'reason': 'value_absent_complete'})
             else:                                        # didn't search everything -> retry, don't skip
                 park.append({**led, 'reason': 'corpus_incomplete'})

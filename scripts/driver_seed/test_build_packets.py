@@ -71,6 +71,23 @@ def test_currency_marked_ratio_is_not_guessed_as_money():
     assert h['level_money_mode_hint'] is None, h
 
 
+def test_sources_incomplete_forces_park():
+    """Round-12 (reviewer, confirmed 44/45): a value-absent row whose expected 8-K set was
+    fail-closed-incomplete must PARK (retryable), never terminal-skip — even when the searched
+    TYPE list looks complete. The ledgers must carry item_id for reconciliation."""
+    a = {'item_id': 'abc123', 'ticker': 'T', 'raw_label': 'X', 'value': 1, 'fmt': 'number',
+         'period_end': '2024-12-31', 'form': '10-K', 'status': 'value_absent',
+         'reason': 'value_absent', 'sources_searched': ['10k', '8k'], 'sources_incomplete': True}
+    _, skip, park = BP.build([], [a], {})
+    assert not skip and len(park) == 1 and park[0]['reason'] == 'sources_incomplete', (skip, park)
+    assert park[0]['item_id'] == 'abc123'
+    b = dict(a, sources_incomplete=False)
+    _, skip2, park2 = BP.build([], [b], {})
+    assert len(skip2) == 1 and skip2[0]['reason'] == 'value_absent_complete', (skip2, park2)
+    assert skip2[0]['item_id'] == 'abc123'
+    print('[ok] sources_incomplete forces PARK; ledgers carry item_id')
+
+
 def test_canonicalize():
     packets, _, _ = BP.build([rec('AC:C:1', '10k', 'AAA', 'revenue', 5000)], [], {'AAA': 12})
     assert packets[0]['source_id'] == 'AC_C_1', packets[0]['source_id']

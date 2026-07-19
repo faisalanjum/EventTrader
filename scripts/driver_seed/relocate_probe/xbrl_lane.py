@@ -22,7 +22,8 @@ import exact_numbers as XN
 HERE = os.path.dirname(__file__)
 
 
-def resolve(xbrls, concept_qname, member_qnames, period_start, period_end, unit_ref=None):
+def resolve(xbrls, concept_qname, member_qnames, period_start, period_end, unit_ref=None,
+            expected_unit=None):
     """unique fact value (exact Decimal) for the FULL identity in this filing's XBRL blobs, else
     None. Dates: normalize-once-by-known-format then EXACT (graph storage is inclusive — verified
     live; no ±1-day tolerance sets, they accepted convention-inconsistent pairs). start == end =
@@ -30,7 +31,7 @@ def resolve(xbrls, concept_qname, member_qnames, period_start, period_end, unit_
     a request prefix strips deterministically; local names compare EXACTLY. Units: filer-local
     `unitRef` codes; a caller-supplied unit_ref filters; without one, candidates under CONFLICTING
     unitRefs are ambiguous → abstain."""
-    con = concept_qname.split(':')[-1]
+    req_prefix, _, con = concept_qname.rpartition(':')
     want = frozenset(member_qnames)
     try:
         ps, pe = XN.period_key(period_start, period_end)
@@ -39,7 +40,18 @@ def resolve(xbrls, concept_qname, member_qnames, period_start, period_end, unit_
     instant = (ps == pe)
     vals, units = set(), set()
     for c, fc in _rows(xbrls):
-        if c.split(':')[-1] != con:
+        c_prefix, _, c_local = c.rpartition(':')
+        if c_local != con:
+            continue
+        # round-12: a stored key CARRYING a prefix must match the requested prefix exactly
+        # (evil:Revenues never satisfies us-gaap:Revenues). Bare storage (the graph's verified
+        # canonical form, 109/109 live) matches by local name.
+        if c_prefix and req_prefix and c_prefix != req_prefix:
+            continue
+        u_low = str(fc.get('unitRef') or '').lower()
+        if expected_unit == 'money' and 'usd' not in u_low:
+            continue                              # shares can never satisfy a money request
+        if expected_unit == 'nonmoney' and 'usd' in u_low:
             continue
         p = fc.get('period') or {}
         if instant:

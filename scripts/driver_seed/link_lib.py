@@ -95,16 +95,26 @@ def at_boundary(text, start, end, numeric=True):
 
 def bounded_hit(quote, form, forbid_pct=False):
     """form occurs in quote at a numeric word boundary (not glued inside a bigger number).
-    forbid_pct: the occurrence must NOT be %-suffixed — a plain-number value never accepts a
-    percent-marked token ('86' must not bind '86%'; reproduced WP1 class-guard defect)."""
+    forbid_pct: the occurrence must NOT be %-marked — a plain-number value never accepts a
+    percent token ('86' vs '86%', '86 %', '86 percent'; round-12 widened past the bare '%')."""
     numeric = form[0].isdigit() or form[0] in '$('
     for m in re.finditer(re.escape(form), quote):
         if not at_boundary(quote, m.start(), m.end(), numeric):
             continue
-        if forbid_pct and quote[m.end():m.end() + 1] == '%':
+        if forbid_pct and re.match(r'\s?(%|percent\b)', quote[m.end():m.end() + 9]):
             continue
         return True
     return False
+
+
+_TRAIL = re.compile(r'(?:\s?(?:%|\)|percent\b|million\b|billion\b|thousand\b))*')
+
+
+def _with_trail(t, end):
+    """Extend a crop end to keep the value's IMMEDIATE trailing evidence — '%', ')', 'percent',
+    scale words — so the sign/class/unit gates can see it (round-12: the crop used to cut off the
+    very characters the gates check; '86' was accepted from '86%' and +123 from '(123)')."""
+    return end + _TRAIL.match(t[end:end + 32]).end()
 
 
 def exact_form(form, value, fmt):
@@ -369,10 +379,12 @@ def _member_score(kt, mt):
     return None
 
 
-def tier1(xbrls, name, val, per):
+def tier1(xbrls, name, val, per, is_currency=None):
     """match an XBRL fact by value+period+dimension member. Deterministic; returns dict or None.
     Collects all facts equal in (concept-type, value, period); picks the best member match, and
-    ABSTAINS if two different members tie (genuinely ambiguous)."""
+    ABSTAINS if two different members tie (genuinely ambiguous).
+    is_currency (round-12 unit-class guard): 1 -> a fact tagged with a non-USD unitRef (e.g.
+    shares) never binds; 0 -> a USD-tagged fact never binds; None/absent unitRef -> no opinion."""
     # SIGNED + Decimal-EXACT: a -X KPI must not bind a +X fact, and 2.34 must never bind a 2.01
     # fact (the old int-truncation conflated them — WP1 exactness fix).
     def _same_value(fc_value):
@@ -401,6 +413,11 @@ def tier1(xbrls, name, val, per):
                     continue
                 if not _same_value(fc.get('value', '')):
                     continue
+                u = str(fc.get('unitRef') or '').lower()
+                if is_currency == 1 and u and 'usd' not in u:
+                    continue                      # shares/other units never satisfy a money KPI
+                if is_currency == 0 and 'usd' in u:
+                    continue                      # a money fact never satisfies a non-money KPI
                 if (fc.get('period') or {}).get('endDate') != per:
                     continue
                 members = seg_members(fc)
@@ -490,7 +507,7 @@ def row_quote(texts, label_tokens, val, fmt, gap=90):
                 pos = [seg.find(tok) for tok in lt]
                 if any(p < 0 for p in pos):
                     continue                      # some label token missing -> not this row
-                q = t[ws + min(pos): m.end()]     # RAW slice — the quote IS source text (WP1)
+                q = t[ws + min(pos): _with_trail(t, m.end())]   # RAW slice incl. trailing evidence
                 if best is None or len(q) < len(best):
                     best = q                      # shortest = tightest crop around the row
     return best

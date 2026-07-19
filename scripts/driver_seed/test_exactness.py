@@ -132,6 +132,36 @@ def test_resolve_concept_local_name_exact_only():
     assert xbrl_lane.resolve([b], 'us-gaap:OtherRevenues', [], '2024-01-01', '2024-12-31') is None
 
 
+def test_resolve_rejects_wrong_prefix_when_stored_prefixed():
+    """Round-12: evil:Revenues must NOT satisfy us-gaap:Revenues. Storage is normally BARE
+    (verified live) and a bare key still matches by local name; but when the stored key CARRIES a
+    prefix, it must match the requested prefix exactly."""
+    b = blob('evil:Revenues', [fact('5000', '2024-01-01', '2024-12-31')])
+    assert xbrl_lane.resolve([b], 'us-gaap:Revenues', [], '2024-01-01', '2024-12-31') is None
+    g = blob('us-gaap:Revenues', [fact('5000', '2024-01-01', '2024-12-31')])
+    assert xbrl_lane.resolve([g], 'us-gaap:Revenues', [], '2024-01-01', '2024-12-31') == Decimal('5000')
+
+
+def test_resolve_expected_unit_class():
+    """Round-12: shares must never satisfy a money request (and vice versa)."""
+    b = blob('SomeThing', [fact('100', '2024-01-01', '2024-12-31', unit='U_shares')])
+    assert xbrl_lane.resolve([b], 'SomeThing', [], '2024-01-01', '2024-12-31',
+                             expected_unit='money') is None
+    m = blob('SomeThing', [fact('100', '2024-01-01', '2024-12-31', unit='U_USD')])
+    assert xbrl_lane.resolve([m], 'SomeThing', [], '2024-01-01', '2024-12-31',
+                             expected_unit='money') == Decimal('100')
+    assert xbrl_lane.resolve([m], 'SomeThing', [], '2024-01-01', '2024-12-31',
+                             expected_unit='nonmoney') is None
+
+
+def test_tier1_unit_class_guard():
+    """Round-12: a currency KPI (is_currency=1) must not bind a shares-tagged fact."""
+    sh = blob('Revenues', [fact('5000', '2024-01-01', '2024-12-31', unit='U_shares')])
+    assert L.tier1([sh], 'total revenue', 5000, '2024-12-31', is_currency=1) is None
+    us = blob('Revenues', [fact('5000', '2024-01-01', '2024-12-31', unit='U_USD')])
+    assert L.tier1([us], 'total revenue', 5000, '2024-12-31', is_currency=1) is not None
+
+
 def test_resolve_unit_conflict_abstains():
     """same identity+value under TWO different unitRefs = ambiguous → abstain (RED: no unit logic)."""
     b = blob('SomeCount', [fact('100', '2024-01-01', '2024-12-31', unit='U_USD'),

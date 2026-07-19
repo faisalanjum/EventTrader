@@ -68,6 +68,22 @@ def test_labeled_zero_resolves():
     assert r['hit'] is not None and '0' in r['hit']['quote'], r
 
 
+def test_trailing_evidence_preserved_and_gated():
+    """Round-12 (reviewer, confirmed): the crop used to CUT OFF the very '%' and ')' the gates
+    need. The quote must retain immediate trailing sign/unit evidence, and the gates must act on it
+    THROUGH the full locator: plain 86 never accepts 86% / 86 percent; +123 never accepts (123);
+    -123 does; a scaled print keeps its unit word in the quote."""
+    assert _vk('International Stores', 86, 'number', 'International Stores 86% at year end')['hit'] is None
+    assert _vk('International Stores', 86, 'number', 'International Stores 86 percent at year end')['hit'] is None
+    r = _vk('International Stores', 86, 'number', 'International Stores 86 at fiscal year end')
+    assert r['hit'] is not None                                       # the plain print still resolves
+    assert _vk('Operating Income', 123, 'number', 'Operating income (123) for the quarter')['hit'] is None
+    neg = _vk('Operating Income', -123, 'number', 'Operating income (123) for the quarter')
+    assert neg['hit'] is not None and ')' in neg['hit']['quote']      # closing paren kept in evidence
+    big = _vk('Total Revenue', 5432000000, 'number', 'Total revenue $ 5,432 million for the year')
+    assert big['hit'] is not None and big['hit']['quote'].rstrip().endswith('million')
+
+
 def test_generic_small_decimal_or_zero_abstains():
     # the number is present but the KPI label is NOT next to it -> must NOT resolve (hand to the LLM tier)
     assert _vk('International Stores', 86, 'number', 'the firm operates in 86 countries')['hit'] is None

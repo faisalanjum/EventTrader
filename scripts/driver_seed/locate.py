@@ -63,7 +63,8 @@ def locate_by_value(req):
     texts = req.get('texts') or []
     name, val, fmt, per = req['name'], req['value'], req.get('fmt'), req.get('period')
     allow_t1 = req.get('allow_xbrl', True)
-    t1 = L.tier1(xbrls, name, val, per) if (allow_t1 and xbrls and fmt != '%') else None
+    t1 = (L.tier1(xbrls, name, val, per, is_currency=req.get('is_currency'))
+          if (allow_t1 and xbrls and fmt != '%') else None)
     strict, snips = L.scan_text(texts, name, val, fmt)
     if t1 and not strict:                    # XBRL matched but KPI wording absent by the value;
         strict = L.row_quote(texts, L.member_tokens([t1['member']]), val, fmt)   # try the filer's member wording

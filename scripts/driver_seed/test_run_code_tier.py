@@ -107,20 +107,36 @@ def test_second_source_residual_survives_when_first_resolves(monkeypatch):
         assert k in residual[0], f"residual missing batcher field {k}: {residual[0]}"
 
 
-def test_8k_gate_pure():
-    """WP1 Step 3: the PURE selection gate. AUTO_OK + the resolver's own announced period end
-    matching the target -> accept; AUTO_OK for another quarter -> other_period (source set stays
-    complete); anything not AUTO_OK -> uncertain (fail closed, source set INCOMPLETE)."""
-    ok = {'safety_action': 'AUTO_OK', 'period_of_report': '2024-12-31'}
-    assert RC._8k_gate(ok, '2024-12-31') == 'accept'
-    assert RC._8k_gate(ok, '2024-09-30') == 'other_period'
-    assert RC._8k_gate({'safety_action': 'FAIL_CLOSED', 'period_of_report': '2024-12-31'},
-                       '2024-12-31') == 'uncertain'
-    assert RC._8k_gate({'safety_action': 'AUTO_OK', 'period_of_report': None},
-                       '2024-12-31') == 'uncertain' or True   # empty por -> other_period is fine too
-    assert RC._8k_gate({}, '2024-12-31') == 'uncertain'
-    assert RC._8k_gate(None, '2024-12-31') == 'uncertain'
-    print("[ok] 8-K gate: accept / other_period / uncertain")
+def test_8k_gate_fiscal_identity():
+    """Round-12 fix: the gate compares PROVEN FISCAL IDENTITY (period_to_fiscal, 52/53-week-safe),
+    never calendar-end equality. The AAPL case: vendor period 2024-09-28 (true fiscal end) must
+    ACCEPT an 8-K the resolver labels Q4_FY2024 even though the calendar projection says 09-30.
+    AUTO_OK with a missing label/fye is UNCERTAIN (fail closed) — no always-true assertions."""
+    aapl = {'safety_action': 'AUTO_OK', 'quarter_label': 'Q4_FY2024', 'fye_month': 9}
+    assert RC._8k_gate(aapl, '2024-09-28', '10-K') == 'accept'          # 52/53-week filer
+    assert RC._8k_gate(aapl, '2024-09-30', '10-K') == 'accept'          # calendar filer, same quarter
+    assert RC._8k_gate({'safety_action': 'AUTO_OK', 'quarter_label': 'Q3_FY2024', 'fye_month': 9},
+                       '2024-09-28', '10-K') == 'other_period'          # different quarter
+    q1 = {'safety_action': 'AUTO_OK', 'quarter_label': 'Q1_FY2025', 'fye_month': 9}
+    assert RC._8k_gate(q1, '2024-12-28', '10-Q') == 'accept'            # AAPL Q1 true end
+    assert RC._8k_gate({'safety_action': 'FAIL_CLOSED', 'quarter_label': 'Q4_FY2024',
+                        'fye_month': 9}, '2024-09-28', '10-K') == 'uncertain'
+    assert RC._8k_gate({'safety_action': 'AUTO_OK', 'quarter_label': None, 'fye_month': 9},
+                       '2024-09-28', '10-K') == 'uncertain'             # no label -> fail closed
+    assert RC._8k_gate({'safety_action': 'AUTO_OK', 'quarter_label': 'Q4_FY2024',
+                        'fye_month': None}, '2024-09-28', '10-K') == 'uncertain'
+    assert RC._8k_gate({}, '2024-09-28', '10-K') == 'uncertain'
+    assert RC._8k_gate(None, '2024-09-28', '10-K') == 'uncertain'
+    print("[ok] 8-K gate: fiscal-identity join, 52/53-week safe, fail-closed")
+
+
+def test_corpus_missing_rows_carry_item_id():
+    """Round-12: EVERY raw row yields an id-carrying outcome — including corpus_missing."""
+    it = mk_item('Some Metric', 42)
+    row = RC._corpus_missing_row(it)
+    assert row['item_id'] == RC._iid(it) and row['reason'] == 'corpus_missing'
+    assert row['status'] == 'park'
+    print("[ok] corpus_missing rows carry item_id")
 
 
 def test_sources_incomplete_propagates():

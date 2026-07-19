@@ -19,11 +19,15 @@ def dec(value):
     if isinstance(value, bool) or isinstance(value, float):
         raise ExactError(f"floats are rejected (lossy): {value!r}")
     if isinstance(value, Decimal):
-        return value
-    try:
-        return Decimal(str(value).strip())
-    except (InvalidOperation, TypeError, ValueError):
-        raise ExactError(f"not a decimal number: {value!r}")
+        d = value
+    else:
+        try:
+            d = Decimal(str(value).strip())
+        except (InvalidOperation, TypeError, ValueError):
+            raise ExactError(f"not a decimal number: {value!r}")
+    if not d.is_finite():
+        raise ExactError(f"non-finite is never a source number: {value!r}")   # round-12: NaN/Inf
+    return d
 
 
 def eq(a, b):

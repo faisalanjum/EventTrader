@@ -60,20 +60,31 @@ def fetch_press_release(session, tk, period):
     return [x['content'] for x in rows if x['content']]
 
 
-def _8k_gate(info, period):
-    """PURE gate for one labeled 8-K (WP1 Step 3). Returns:
-      'accept'       — safety_action AUTO_OK and the resolver's own announced period end
-                       (`period_of_report`, e.g. Q1_FY2026 -> '2026-03-31') equals the target period;
-      'other_period' — confidently labeled, but announcing a DIFFERENT quarter (not ours; the
-                       company-period source set stays COMPLETE);
-      'uncertain'    — anything not AUTO_OK: fail closed; the source set is INCOMPLETE, so
-                       value-absent rows stay PARKED (retryable), never terminal SKIP.
-    NOTE: `accession_periodic` is the PIT-safe PRIOR periodic anchor (and empty on cached paths) —
-    verified in quarter_identity source; it is NOT a same-quarter join key and is not used."""
+_QLBL = re.compile(r'^Q([1-4])_FY(\d{4})$')
+
+
+def _8k_gate(info, period, form):
+    """PURE gate for one labeled 8-K (round-12 fix: PROVEN FISCAL IDENTITY, never calendar-end
+    equality — the resolver's announced end is calendar-projected, so 52/53-week filers like AAPL
+    (true end 2024-09-28 vs projected 09-30) were wrongly dropped). Join: the resolver's
+    quarter_label (fy, q) must equal period_to_fiscal(vendor period, resolver's fye_month, form) —
+    the same 52/53-week-safe fiscal math the earnings pipeline trusts (<=5-day next-month rule).
+    Returns 'accept' | 'other_period' (confidently another quarter; set stays complete) |
+    'uncertain' (anything unprovable: fail closed; the source set is INCOMPLETE).
+    NOTE: `accession_periodic` is the PIT-safe PRIOR periodic anchor — never a same-quarter key."""
     if (info or {}).get('safety_action') != 'AUTO_OK':
         return 'uncertain'
-    por = str(info.get('period_of_report') or '')[:10]
-    return 'accept' if por and str(period)[:10] == por else 'other_period'
+    m = _QLBL.match(str(info.get('quarter_label') or ''))
+    fye = info.get('fye_month')
+    try:
+        y, mo, d = (int(x) for x in str(period)[:10].split('-'))
+        fy_v, q_v = QI.period_to_fiscal(y, mo, d, int(fye), form)
+    except (TypeError, ValueError, AttributeError):
+        return 'uncertain'
+    if not m:
+        return 'uncertain'
+    return 'accept' if (int(m.group(2)), int(m.group(1))) == (int(fy_v), int(str(q_v).lstrip('Q'))) \
+        else 'other_period'
 
 
 def fetch_corpus(session, tk, form, period):
@@ -123,7 +134,14 @@ def fetch_filing(session, tk, form, period):
             'xbrls': [x for x in r['xbrls'] if x], 'texts': [x for x in r['texts'] if x]}
 
 
-def fetch_earnings_8ks(session, tk, period):
+def _corpus_missing_row(it):
+    """A raw row whose named filing is absent from the graph — PARKED with its item_id (round-12:
+    EVERY raw row yields an id-carrying outcome; corpus_missing was the one un-id'd path)."""
+    return {**it, 'item_id': _iid(it), 'status': 'park', 'reason': 'corpus_missing',
+            'sources_searched': []}
+
+
+def fetch_earnings_8ks(session, tk, period, form):
     """Safe 8-K selection (WP1 Step 3 — replaces the 5-75-day window guess and the EX-99-only
     filter). Enumerate the ticker's REAL 8-K accessions, label each with quarter_identity, gate
     via _8k_gate, and for every ACCEPTED accession fetch + DEDUPLICATE all stored text (sections +
@@ -144,7 +162,7 @@ def fetch_earnings_8ks(session, tk, period):
         except ValueError:                 # a 2.02 8-K the resolver still can't place -> fail closed
             uncertain += 1
             continue
-        verdict = _8k_gate(info, period)
+        verdict = _8k_gate(info, period, form)
         if verdict == 'uncertain':
             uncertain += 1
             continue
@@ -180,6 +198,7 @@ def resolve_one(it, src, allow_t1):
     # value-known locate + the value_ok gate = the SHARED, channel-neutral core (locate.locate_by_value).
     r = locate.locate_by_value({'xbrls': src['xbrls'], 'texts': src['texts'], 'name': name,
                                 'value': val, 'fmt': fmt, 'period': per, 'allow_xbrl': allow_t1,
+                                'is_currency': it.get('is_currency'),
                                 'doc_url': src.get('doc_url'), 'source_id': src['source_id']})
     hit, snips = r['hit'], r['snips']
     if hit is None:
@@ -272,11 +291,10 @@ def main():
             filing = fetch_filing(s, tk, form, period)
             if filing is None:                   # named filing not in Neo4j yet -> whole cp PARKs downstream
                 for it in items:
-                    AB.write(json.dumps({**it, 'status': 'park', 'reason': 'corpus_missing',
-                                         'sources_searched': []}) + '\n'); nAb += 1
+                    AB.write(json.dumps(_corpus_missing_row(it)) + '\n'); nAb += 1
                 stats['cp_no_filing'] += 1
                 continue
-            prs, uncertain_8ks = fetch_earnings_8ks(s, tk, period)
+            prs, uncertain_8ks = fetch_earnings_8ks(s, tk, period, form)
             resolved, residual, abstain = process_cp(items, filing, prs,
                                                      sources_incomplete=uncertain_8ks > 0)
             for r in resolved: R.write(json.dumps(r) + '\n'); nR += 1
