@@ -60,7 +60,7 @@ def _git_commit():
         dirty = subprocess.run(['git', 'status', '--porcelain', '--', 'scripts/driver_seed',
                                 'driver/relocation'], capture_output=True, text=True,
                                cwd=os.path.join(HERE, '..', '..')).stdout.strip()
-        files = [l[3:] for l in dirty.splitlines()]
+        files = dirty.splitlines()         # RAW porcelain lines (status + path) — no parsing
         return c + ('-dirty' if dirty else ''), files
     except OSError:
         return 'unknown', []
