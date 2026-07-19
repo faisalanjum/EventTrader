@@ -69,6 +69,7 @@ def main():
                         rest = tuple(p for p in pairs if p != THE_PAIR)
                         targets.append((con, v, per, rest))
     drv.close()
+    assert pool, "EMPTY database result — the scan proves nothing"   # round-29
     for name, d in (('A1 PER-FILING', per_filing), ('A2 CROSS-FILING', cross)):
         both = {k: x for k, x in d.items() if x['with'] and x['without']}
         print(f"{name}: both-form cells={len(both)}  "

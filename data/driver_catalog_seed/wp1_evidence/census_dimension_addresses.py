@@ -44,8 +44,9 @@ def raw_names(seg):
             out.append((it.get('dimension'), em)); got += 1
         if got == 0:
             out.append(None)               # a dict entry yielding NOTHING is unknown, not invisible
-    return [n if (n is None or (isinstance(n[0], str) and isinstance(n[1], str))) else None
-            for n in out]
+    return [n if (n is None or (isinstance(n[0], str) and n[0].strip()
+                                and isinstance(n[1], str) and n[1].strip())) else None
+            for n in out]              # round-29: BLANK axis/member strings are unknown too
 
 
 def _positive_controls():
@@ -63,6 +64,7 @@ def _positive_controls():
     assert None in raw_names(['unknown-shape-entry']), "unknown-shape detector blind"
     assert None in raw_names([{'weird': 'no-keys'}]), "empty-yield dict not counted unknown"
     assert None in raw_names([{'dimension': 123, 'value': 'x:M'}]), "non-string side not unknown"
+    assert None in raw_names([{'dimension': '  ', 'value': 'x:M'}]), "blank axis not unknown"
     print("positive controls: all raw detectors fire on synthetic violations")
 
 

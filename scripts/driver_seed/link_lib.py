@@ -349,14 +349,31 @@ GENERIC_MEM = {'member', 'segment', 'segments', 'consolidation', 'consolidated',
                'sector', 'company'}
 
 
-_INITIALS = re.compile(r'\b((?:[A-Z]\.){2,})')
+_INITIALS = re.compile(r'\b([A-Z](?:\.[A-Z])+\.?)(?!\w)')
+_PAREN_ACRO = re.compile(r'([A-Za-z][A-Za-z, ]*?)\s*\(\s*([A-Z][A-Za-z.]*)\s*\)')
 
 
 def _norm_initials(s):
-    """Round-28 (reviewer; 289 dotted-U.S. worklist rows): dotted uppercase initials collapse
-    to their plain form (U.S. -> US, U.S.A. -> USA, L.P. -> LP) — ONE general rule applied to
-    BOTH tokenizer sides; no name list."""
+    """Round-28/29 (reviewer; 289 dotted + 16 missing-final-dot rows): dotted uppercase
+    initials collapse to their plain form — U.S. -> US, U.S -> US, U.S.A. -> USA, L.P. -> LP —
+    ONE general rule applied to BOTH tokenizer sides; no name list."""
     return _INITIALS.sub(lambda m: m.group(1).replace('.', ''), s)
+
+
+def _drop_redundant_acronym(s):
+    """Round-29 (reviewer): remove a parenthetical acronym ONLY when it exactly repeats the
+    initials of the immediately adjacent full phrase — 'United Kingdom (U.K.)' -> 'United
+    Kingdom', 'Remaining Performance Obligations (RPO)' -> the phrase. General initials test,
+    no abbreviation list; anything else in parentheses is untouched."""
+    def repl(m):
+        pre, acro = m.group(1), m.group(2)
+        letters = re.sub(r'[^A-Za-z]', '', acro).upper()
+        words = pre.strip().replace(',', '').split()
+        if len(letters) >= 2 and len(words) >= len(letters) and \
+                ''.join(w[0] for w in words[-len(letters):]).upper() == letters:
+            return pre
+        return m.group(0)
+    return _PAREN_ACRO.sub(repl, s)
 
 
 def slice_tokens(name):
@@ -364,7 +381,7 @@ def slice_tokens(name):
     tokens PLUS standalone UPPERCASE two-letter tokens ('RV', 'US') — one set for the early
     check, exact full-slice equality, aggregate rejection, and scoring. No maintained list;
     extra qualifiers fail closed."""
-    name = _norm_initials(name)
+    name = _norm_initials(_drop_redundant_acronym(name))
     toks = {t.lower() for t in re.findall(r"[A-Za-z]{3,}", name) if t.lower() not in SLICE_STOP}
     toks |= {t.lower() for t in re.findall(r'\b[A-Z]{2}\b', name)}
     return toks
@@ -571,6 +588,12 @@ def tier1(xbrls, name, val, per, is_currency=None):
                         and isinstance(_pe.get('endDate'), str)):
                     continue           # round-28: an INVALID duration shape (endDate-only etc.)
                                        # is never a candidate — shape before tie-breaking
+                if 'instant' in _pe:
+                    continue           # round-29: duration data ALSO carrying instant = malformed
+                try:
+                    XN.period_key(_pe['startDate'], _pe['endDate'])
+                except XN.ExactError:
+                    continue           # round-29: dates must survive the exact-date law
                 _pairs, _complete = seg_parse(fc)      # round-23: THE single strict parser
                 if not _complete:
                     continue           # any unparsed/blank/typed entry -> identity unprovable
@@ -589,13 +612,14 @@ def tier1(xbrls, name, val, per, is_currency=None):
                         continue           # exact graph-proven structural pins ONLY
                     _pre, _, _loc = str(_mm).rpartition(':')
                     if _pre == 'country':
+                        # round-29 (reviewer safety find, reproduced + MEASURED): bare ISO codes
+                        # collide with business abbreviations (IT≠Italy, NA≠North America,
+                        # AI/GM/SA...) and ZERO live binds depended on the round-28 code
+                        # shortcut (filer-named members carry their own tokens) — so codes are
+                        # NEVER proof: country members bind on FULL-NAME tokens only.
                         _nm = COUNTRY_NAME.get(_loc.upper())
-                        _code = _loc.lower()
-                        if _nm and _code in kt:        # round-28: exact ISO-code equivalence
-                            _tk = {_code}              # (U.S. -> 'us' == country:US), from the
-                        else:                          # generated table — no name list
-                            _tk = ({w for w in re.findall(r"[A-Za-z]{3,}", _nm.lower())
-                                    if w not in SLICE_STOP} if _nm else set())
+                        _tk = ({w for w in re.findall(r"[A-Za-z]{3,}", _nm.lower())
+                                if w not in SLICE_STOP} if _nm else set())
                     else:
                         _tk = member_tokens([_mm]) - SLICE_STOP   # ONE shared normalization
                     if not _tk:

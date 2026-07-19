@@ -899,9 +899,10 @@ def test_dotted_initials_normalize_both_sides():
         "dotted U.S. vanished and the bare company total bound"
     us = blob('Revenues', [fact('200', '2024-01-01', '2024-12-31',
               seg=[{'dimension': 'srt:StatementGeographicalAxis', 'value': 'country:US'}])])
-    assert L.tier1([us], 'U.S. Revenue', 200, '2024-12-31', is_currency=1) is not None, \
-        "dotted U.S. must bind country:US via ISO-code equivalence"
-    assert L.tier1([us], 'US Revenue', 200, '2024-12-31', is_currency=1) is not None
+    # round-29 (reviewer safety find): bare/dotted CODES are never proof for country members —
+    # they ride to the text/reader lane; only the FULL NAME binds
+    assert L.tier1([us], 'U.S. Revenue', 200, '2024-12-31', is_currency=1) is None
+    assert L.tier1([us], 'US Revenue', 200, '2024-12-31', is_currency=1) is None
     assert L.tier1([us], 'United States Revenue', 200, '2024-12-31', is_currency=1) is not None
     assert L.tier1([us], 'U.K. Revenue', 200, '2024-12-31', is_currency=1) is None
     lp = blob('Revenues', [fact('300', '2024-01-01', '2024-12-31',
@@ -933,3 +934,67 @@ def test_tie_break_requires_valid_period_and_equal_units():
          'unitRef': 'U_USD'}])
     assert L.tier1([same], 'total revenue', 999, '2024-12-31', is_currency=1) is not None
     print("[ok] valid period shape required; equal normalized units required; equals still bind")
+
+
+def test_iso_code_shortcut_removed_codes_are_not_proof():
+    """Round-29-prep (reviewer's safety find, reproduced + measured): bare ISO codes collide
+    with business abbreviations (IT=Information Technology≠Italy, NA=North America≠Namibia,
+    AI/GM/SA...). MEASURED: zero live binds depended on the code shortcut (filer-named members
+    like U.S.OmnipodMember carry their own 'us' token) -> the shortcut is DELETED. country:XX
+    binds on FULL-NAME tokens only; the dotted/plain normalization stays."""
+    def geo(code, v):
+        return blob('Revenues', [fact(v, '2024-01-01', '2024-12-31', unit='U_USD',
+                    seg=[{'dimension': 'srt:StatementGeographicalAxis',
+                          'value': f'country:{code}'}])])
+    assert L.tier1([geo('IT', '100')], 'IT Revenue', 100, '2024-12-31', is_currency=1) is None, \
+        "IT (Information Technology) bound Italy"
+    assert L.tier1([geo('NA', '200')], 'NA Revenue', 200, '2024-12-31', is_currency=1) is None, \
+        "NA (North America) bound Namibia"
+    assert L.tier1([geo('US', '300')], 'US Revenue', 300, '2024-12-31', is_currency=1) is None, \
+        "bare codes are not proof — full name required for country members"
+    assert L.tier1([geo('IT', '400')], 'Italy Revenue', 400, '2024-12-31', is_currency=1) is not None
+    assert L.tier1([geo('US', '500')], 'United States Revenue', 500, '2024-12-31',
+                   is_currency=1) is not None
+    # the live-recovered class survives WITHOUT the shortcut: filer-named members carry the token
+    fm = blob('Revenues', [fact('600', '2024-01-01', '2024-12-31', unit='U_USD',
+              seg=[{'dimension': 'x:A', 'value': 'x:U.S.OmnipodMember'}])])
+    assert L.tier1([fm], 'US Omnipod Revenue', 600, '2024-12-31', is_currency=1) is not None
+    print("[ok] ISO-code shortcut deleted; codes never bind countries; filer-member class intact")
+
+
+
+def test_missing_final_dot_and_redundant_acronym():
+    """Round-29: 'U.S' (missing final dot) normalizes like 'U.S.' (16 real rows: W 10 + BSX 6);
+    a parenthetical acronym that exactly repeats the adjacent phrase's initials is dropped —
+    'United Kingdom (U.K.)' and the (RPO)/(ARR) class — with NO abbreviation list; non-repeating
+    parentheticals are untouched."""
+    fm = blob('Revenues', [fact('100', '2024-01-01', '2024-12-31', unit='U_USD',
+              seg=[{'dimension': 'x:A', 'value': 'x:U.S.SegmentMember'}])])
+    assert L.tier1([fm], 'U.S Segment Revenue', 100, '2024-12-31', is_currency=1) is not None, \
+        "missing-final-dot U.S must equal the dotted member form"
+    gb = blob('Revenues', [fact('200', '2024-01-01', '2024-12-31', unit='U_USD',
+              seg=[{'dimension': 'srt:StatementGeographicalAxis', 'value': 'country:GB'}])])
+    assert L.tier1([gb], 'United Kingdom (U.K.) Revenue', 200, '2024-12-31',
+                   is_currency=1) is not None, "redundant (U.K.) must not poison the full name"
+    arr = blob('Revenues', [fact('300', '2024-01-01', '2024-12-31', unit='U_USD',
+               seg=[{'dimension': 'x:A', 'value': 'x:AnnualRecurringRevenueMember'}])])
+    assert L.tier1([arr], 'Annual Recurring Revenue (ARR)', 300, '2024-12-31',
+                   is_currency=1) is not None, "the (RPO)/(ARR) initials class must not poison"
+    pre = blob('Revenues', [fact('400', '2024-01-01', '2024-12-31', unit='U_USD',
+               seg=[{'dimension': 'x:A', 'value': 'x:SubscriptionLicenseMember'}])])
+    assert L.tier1([pre], 'Subscription License Revenue (Pre-Q4 2025 Reporting)', 400,
+                   '2024-12-31', is_currency=1) is None, \
+        "a NON-repeating parenthetical is an extra qualifier -> fail closed"
+    print("[ok] missing-dot initials + redundant-acronym drop; non-repeats stay fail-closed")
+
+
+def test_mixed_and_invalid_period_data_rejected():
+    """Round-29: duration data that ALSO carries instant is malformed -> never a candidate;
+    dates must survive XN.period_key."""
+    mixed = blob('Revenues', [{'value': '999', 'period': {'startDate': '2024-01-01',
+                 'endDate': '2024-12-31', 'instant': '2024-12-31'}, 'unitRef': 'U_USD'}])
+    assert L.tier1([mixed], 'total revenue', 999, '2024-12-31', is_currency=1) is None
+    badd = blob('Revenues', [{'value': '999', 'period': {'startDate': 'garbage',
+                'endDate': '2024-12-31'}, 'unitRef': 'U_USD'}])
+    assert L.tier1([badd], 'total revenue', 999, '2024-12-31', is_currency=1) is None
+    print("[ok] mixed duration+instant and unparseable dates never bind")
