@@ -117,6 +117,26 @@ def _with_trail(t, end):
     return end + _TRAIL.match(t[end:end + 32]).end()
 
 
+# round-13 scale evidence: a bare SCALED print ('1,200' for 1.2B, '1.2' for 1.2B) may only bind
+# when its scale is EVIDENT — a section declaration ('in millions'), the tag riding immediately
+# after the number ('1.2 billion'), or a full-magnitude print. Measured on the wp1 cohort:
+# 315/315 certified table binds sit in sections carrying the strict marker -> zero recall cost.
+_SCALE_MARK = re.compile(r'(?i)in (millions|thousands|billions)')
+_SCALE_TAIL = re.compile(r'\s?(million|billion|thousand|trillion)s?\b', re.I)
+
+
+def _self_evident(form, value):
+    """This printed form needs no external scale evidence: it reproduces the full magnitude, or it
+    is zero. (Scale-tagged prose is handled at the hit site via _SCALE_TAIL.)"""
+    s = form.lstrip('$( ').rstrip(')%').replace(',', '').strip()
+    try:
+        f = abs(float(s))
+    except ValueError:
+        return True                        # non-numeric-core forms carry their own words
+    av = abs(float(value))
+    return av == 0 or f == av
+
+
 def exact_form(form, value, fmt):
     """form reproduces value losslessly (grouped cell, long int, or decimal within 0.1%)."""
     if fmt == '%':
@@ -343,6 +363,12 @@ def concept_ok(con):
     if not any(g in cl for g in ('revenue', 'sales', 'income', 'profit', 'margin', 'operating',
                                  'premium')):
         return False
+    # round-13: a percent/rate/ratio-natured concept never carries a money/count value
+    # ('...DiscountRatePercent' passed via 'operating'). WORD-token check on camel boundaries,
+    # case-insensitive — never substring ('Corporate' contains 'rate' and must survive).
+    toks = {t.lower() for t in re.findall(r'[A-Z]+[a-z0-9]*|[a-z0-9]+', con or '')}
+    if toks & {'rate', 'percent', 'percentage', 'ratio'}:
+        return False
     # reject genuine tax / equity / share concepts (specific substrings, so "AssessedTax"
     # inside a revenue concept name is not caught)
     bad = ('incometax', 'taxexpense', 'taxbenefit', 'deferredtax', 'taxespayable', 'taxreceivable',
@@ -487,21 +513,29 @@ def _tidy(s):
     return re.sub(r'\s+', ' ', s.replace('​', ' ')).strip()
 
 
-def row_quote(texts, label_tokens, val, fmt, gap=90):
+def row_quote(texts, label_tokens, val, fmt, gap=90, scale_gate=False):
     """Cleanest verbatim quote: starts at THIS metric's label and runs through the value.
     Every label token must appear within `gap` chars before the value, and the value must sit at
-    a numeric boundary. Returns the shortest such quote, or None."""
+    a numeric boundary. Returns the shortest such quote, or None.
+    scale_gate (round-13, opt-in — certified benchmark callers keep legacy behavior): a bare
+    SCALED form binds only with scale evidence (section _SCALE_MARK, or the tag immediately after
+    the hit); %-format and full-magnitude/zero forms are exempt."""
     lt = [t.lower() for t in label_tokens if t]
     if not lt:
         return None
     forms = _tableforms(val, fmt)
+    needy = ({f for f in forms if not _self_evident(f, val)}
+             if scale_gate and fmt != '%' else set())
     best = None
     for t in texts:
         low = t.lower()
+        marked = bool(_SCALE_MARK.search(t)) if needy else True
         for fo in forms:
             for m in re.finditer(re.escape(fo), t):
                 if not at_boundary(t, m.start(), m.end()):
                     continue
+                if fo in needy and not marked and not _SCALE_TAIL.match(t[m.end():m.end() + 32]):
+                    continue               # scaled print with NO evidence of its scale -> not a bind
                 ws = max(0, m.start() - gap)
                 seg = low[ws:m.start()]
                 pos = [seg.find(tok) for tok in lt]
@@ -540,16 +574,18 @@ def _snippet_start(t, hit_start, label_tokens, base=320, maxback=2200, table_cap
     return start
 
 
-def scan_text(texts, name, val, fmt, max_hits=20, keep=6):
+def scan_text(texts, name, val, fmt, max_hits=20, keep=6, scale_gate=False):
     """(clean_label_anchored_quote_or_None, up_to_`keep` candidate snippets).
     Collects up to max_hits boundary-valid occurrences, each windowed back to its header/label,
     then RANKS so the identifying candidate wins: a snippet that carries a table header and/or the
     KPI's own label tokens ranks above a bare occurrence — because a shared value (e.g. a capex
     figure that also appears as a prior-year column elsewhere) must surface its header row, not just
-    its first textual hit."""
+    its first textual hit.
+    scale_gate (round-13): gates ONLY the strict auto-resolve result; candidate snippets stay
+    permissive — the LLM tier re-verifies its own output."""
     nt = _toks(name) or re.findall(r"[A-Za-z0-9&]{2,}", name)   # pure-kind names ('revenue') must not
     ntl = [x.lower() for x in nt]                                # tokenize to EMPTY -> strict lock dies
-    strict = row_quote(texts, nt, val, fmt)
+    strict = row_quote(texts, nt, val, fmt, scale_gate=scale_gate)
     forms = _tableforms(val, fmt)
     cands = []
     for t in texts:

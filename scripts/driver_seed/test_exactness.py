@@ -181,3 +181,45 @@ def test_resolve_unit_filter_when_caller_supplies_it():
 def test_value_forms_zero_exists():
     forms = L.value_forms(0, 'number')
     assert any(f == '0' or f.endswith(' 0') or f == '$0' or f == '$ 0' for f in forms), forms
+
+
+# ---------------- round-13: rate/percent concepts + scale-evidence gate ----------------
+def test_concept_ok_rejects_rate_percent_ratio_tokens():
+    """Round-13: a percent/rate/ratio-natured concept never carries a money/count value — reject by
+    CASE-INSENSITIVE word token (camel-boundary split), never by substring ('Corporate' survives)."""
+    for bad in ('OperatingLeaseWeightedAverageDiscountRatePercent', 'SalesRevenueGrowthRate',
+                'OperatingMarginRATE', 'GrossProfitPercentage', 'OperatingIncomeRatio'):
+        assert not L.concept_ok(bad), bad
+    for ok in ('RevenuesCorporate', 'CorporateOperatingRevenues', 'Revenues'):
+        assert L.concept_ok(ok), ok
+    print("[ok] rate/percent/ratio concepts rejected case-insensitively; Corporate survives")
+
+
+def test_row_quote_scale_gate_param():
+    """Round-13: scale_gate=True refuses a bare SCALED print in a text with no scale evidence;
+    default (certified callers) is byte-identical old behavior."""
+    naked = ['Widget revenues 5,365 for the period']
+    marked = ['(in millions) Widget revenues 5,365 for the period']
+    toks = ['Widget', 'revenues']
+    assert L.row_quote(naked, toks, 5365000000, None) is not None          # legacy default intact
+    assert L.row_quote(naked, toks, 5365000000, None, scale_gate=True) is None
+    assert L.row_quote(marked, toks, 5365000000, None, scale_gate=True) is not None
+    assert L.row_quote(naked, toks, 5365, None, scale_gate=True) is not None   # full magnitude
+    tail = ['Widget revenues 5.4 billion for the period']
+    assert L.row_quote(tail, toks, 5400000000, None, scale_gate=True) is not None  # tag rides the hit
+    pct = ['Widget margin 12.5 % for the period']
+    assert L.row_quote(pct, ['Widget', 'margin'], 12.5, '%', scale_gate=True) is not None  # % exempt
+    print("[ok] row_quote scale gate: opt-in, tail/marker/full-magnitude all count as evidence")
+
+
+def test_scan_text_scale_gate_param():
+    """Round-13: the strict (auto-resolve) result honors the gate; candidate snippets stay
+    permissive (the LLM tier re-verifies its own output)."""
+    naked = ['Widget revenues 5,365 for the period']
+    strict, snips = L.scan_text(naked, 'Widget Revenues', 5365000000, None, scale_gate=True)
+    assert strict is None, strict
+    assert snips, "candidates must still flow to the LLM tier"
+    strict2, _ = L.scan_text(['(in millions) Widget revenues 5,365'], 'Widget Revenues',
+                             5365000000, None, scale_gate=True)
+    assert strict2 is not None
+    print("[ok] scan_text: strict result gated, snippets permissive")

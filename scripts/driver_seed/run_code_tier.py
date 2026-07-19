@@ -22,6 +22,8 @@ import os, re, json, argparse, collections, sys, hashlib
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'earnings'))
 import quarter_identity as QI          # PIT-safe 8-K→quarter labeler (WP1 Step 3 selection gate)
 sys.path.insert(0, os.path.dirname(__file__))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'driver', 'relocation'))
+import exact_numbers as XN            # Decimal-exact number law (round-13: malformed values PARK)
 import fiscal_ai_rules as FA          # fiscal.ai channel-specific rules (is_derived / plug) — not shared core
 import locate                          # the shared, channel-neutral two-mode locator (value-known lane here)
 
@@ -63,28 +65,61 @@ def fetch_press_release(session, tk, period):
 _QLBL = re.compile(r'^Q([1-4])_FY(\d{4})$')
 
 
-def _8k_gate(info, period, form):
-    """PURE gate for one labeled 8-K (round-12 fix: PROVEN FISCAL IDENTITY, never calendar-end
-    equality — the resolver's announced end is calendar-projected, so 52/53-week filers like AAPL
-    (true end 2024-09-28 vs projected 09-30) were wrongly dropped). Join: the resolver's
-    quarter_label (fy, q) must equal period_to_fiscal(vendor period, resolver's fye_month, form) —
-    the same 52/53-week-safe fiscal math the earnings pipeline trusts (<=5-day next-month rule).
+def _8k_gate(info, target_fyq):
+    """PURE gate for one labeled 8-K (round-13 fix: the join compares the resolver's label against
+    the TARGET filing's OWN declared XBRL identity — never period_to_fiscal math. fiscal_math.py
+    documents ACI/AAP as unfixable edge cases: its year-of-start numbering vs ACI's year-of-end
+    convention accepted the FUTURE Q4_FY2025 8-K for period 2025-02-22 and rejected the true
+    Q4_FY2024 one, live-reproduced. Both sides of the new equality are company-XBRL-convention by
+    the resolver's own construction — prior-XBRL + advance — so numbering can never disagree).
+    target_fyq: (fy, q) ints from target_fiscal_identity(), or None (unproven -> fail closed).
     Returns 'accept' | 'other_period' (confidently another quarter; set stays complete) |
     'uncertain' (anything unprovable: fail closed; the source set is INCOMPLETE).
     NOTE: `accession_periodic` is the PIT-safe PRIOR periodic anchor — never a same-quarter key."""
     if (info or {}).get('safety_action') != 'AUTO_OK':
         return 'uncertain'
     m = _QLBL.match(str(info.get('quarter_label') or ''))
-    fye = info.get('fye_month')
-    try:
-        y, mo, d = (int(x) for x in str(period)[:10].split('-'))
-        fy_v, q_v = QI.period_to_fiscal(y, mo, d, int(fye), form)
-    except (TypeError, ValueError, AttributeError):
-        return 'uncertain'
     if not m:
         return 'uncertain'
-    return 'accept' if (int(m.group(2)), int(m.group(1))) == (int(fy_v), int(str(q_v).lstrip('Q'))) \
-        else 'other_period'
+    if target_fyq is None:
+        return 'uncertain'
+    return 'accept' if (int(m.group(2)), int(m.group(1))) == tuple(target_fyq) else 'other_period'
+
+
+def target_fiscal_identity(session, accession):
+    """The target periodic filing's OWN declared XBRL fiscal identity (dei DocumentFiscalYearFocus
+    + DocumentFiscalPeriodFocus, read via the certified resolver's _XBRL_QUERY + parse — FY maps to
+    Q4, garbage maps to None). Returns (fy:int, q:int) or None. Round-13: this replaces
+    period_to_fiscal in the 8-K join; measured 25/25 cohort targets carry a parseable identity."""
+    row = session.run(QI._XBRL_QUERY, accession=accession).single()
+    parsed = QI.parse_xbrl_fiscal_identity(row['xbrl_year'] if row else None,
+                                           row['xbrl_period'] if row else None)
+    if parsed is None:
+        return None
+    return int(parsed[0]), int(str(parsed[1]).lstrip('Q'))
+
+
+def _uncertain_relevant(created, period):
+    """An 8-K FILED BEFORE the period ended cannot announce that period (the results do not exist
+    yet) — pure impossibility, no windows. Round-13: one unlabelable HISTORICAL 8-K used to mark
+    every later period incomplete."""
+    return str(created)[:10] >= str(period)[:10]
+
+
+def dedupe_rows(rows):
+    """Collapse byte-identical raw rows (fiscal.ai repeats e.g. BX 'Total Distributable Earnings'
+    under two segment groupings — 18 groups / 31 extra occurrences in the full sheet). Identical
+    rows are ONE fact; _iid hashes the whole row, so duplicates share one id by construction.
+    Returns (unique_rows_in_order, dropped_count)."""
+    seen, out, dropped = set(), [], 0
+    for r in rows:
+        k = json.dumps(r, sort_keys=True, default=str)
+        if k in seen:
+            dropped += 1
+            continue
+        seen.add(k)
+        out.append(r)
+    return out, dropped
 
 
 def fetch_corpus(session, tk, form, period):
@@ -141,30 +176,39 @@ def _corpus_missing_row(it):
             'sources_searched': []}
 
 
-def fetch_earnings_8ks(session, tk, period, form):
+def fetch_earnings_8ks(session, tk, period, target_fyq):
     """Safe 8-K selection (WP1 Step 3 — replaces the 5-75-day window guess and the EX-99-only
     filter). Enumerate the ticker's REAL 8-K accessions, label each with quarter_identity, gate
-    via _8k_gate, and for every ACCEPTED accession fetch + DEDUPLICATE all stored text (sections +
-    exhibits + filing text). Returns (events, uncertain_count) — uncertain_count > 0 means the
-    company-period's expected source set is INCOMPLETE (abstains stay parked, never SKIP)."""
+    via _8k_gate (round-13: against the TARGET filing's own XBRL identity), and for every ACCEPTED
+    accession fetch + DEDUPLICATE all stored text (sections + exhibits + filing text).
+    Returns (events, uncertain_count, audit): uncertain_count > 0 means the company-period's
+    expected source set is INCOMPLETE (abstains stay parked, never SKIP) — but round-13 an
+    unprovable 8-K counts ONLY when it could possibly announce this period (created >= period end,
+    _uncertain_relevant). audit = one {'acc','created','verdict','relevant'} row per enumerated
+    8-K, written to the run's sources_ledger for reproducibility."""
     rows = list(session.run(
         """MATCH (r:Report {formType:'8-K'})-[:PRIMARY_FILER]->(c:Company {ticker:$tk})
            WHERE r.items CONTAINS '2.02'
            RETURN r.accessionNo AS acc, r.created AS created ORDER BY r.created""", tk=tk))
     # the Item-2.02 filter mirrors quarter_identity's OWN universe (_TICKER_CONTEXT_QUERY) —
     # same definition of "earnings 8-K", same source of truth.
-    events, uncertain = [], 0
+    events, uncertain, audit = [], 0, []
     for x in rows:
         if not x['acc']:
             continue
+        relevant = _uncertain_relevant(x['created'], period)
         try:
             info = QI.resolve_quarter_info(tk, x['acc'], session=session)
         except ValueError:                 # a 2.02 8-K the resolver still can't place -> fail closed
-            uncertain += 1
+            audit.append({'acc': x['acc'], 'created': str(x['created']), 'verdict': 'resolver_error',
+                          'label': None, 'relevant': relevant})
+            uncertain += 1 if relevant else 0
             continue
-        verdict = _8k_gate(info, period, form)
+        verdict = _8k_gate(info, target_fyq)
+        audit.append({'acc': x['acc'], 'created': str(x['created']), 'verdict': verdict,
+                      'label': (info or {}).get('quarter_label'), 'relevant': relevant})
         if verdict == 'uncertain':
-            uncertain += 1
+            uncertain += 1 if relevant else 0
             continue
         if verdict != 'accept':
             continue
@@ -182,7 +226,7 @@ def fetch_earnings_8ks(session, tk, period, form):
         if contents:
             events.append({'source_id': x['acc'], 'source_type': '8k', 'event_time': x['created'],
                            'xbrls': [], 'texts': contents})
-    return events, uncertain
+    return events, uncertain, audit
 
 
 def resolve_one(it, src, allow_t1):
@@ -229,6 +273,10 @@ def process_cp(items, filing, prs, sources_incomplete=False):
             continue
         if FA.is_derived(name):                  # fiscal.ai-computed (% Chg / Common Size) -> terminal SKIP
             abstain.append({**base, 'status': 'skip', 'reason': 'derived_metric'}); continue
+        try:                                     # round-13: a malformed vendor number is a CHANNEL DATA
+            XN.dec(str(val))                     # defect -> visible PARK, never a crash and never a
+        except XN.ExactError:                    # value_absent/terminal-skip masquerade
+            abstain.append({**base, 'status': 'park', 'reason': 'invalid_value'}); continue
         # NO magnitude 'plug' skip: it dropped legit small facts (78 'Total X = 0' rows, stores=86, ACPU=670).
         # No value is pre-skipped by size; the locator decides, and no located proof -> value_absent (below).
         emitted = False; cands = []
@@ -272,6 +320,7 @@ def main():
         part_tickers = set(tickers[(a.part-1)*chunk: a.part*chunk])
         work = [w for w in work if w['ticker'] in part_tickers]
         tag = a.tag or f'part{a.part}'
+    work, dup_collapsed = dedupe_rows(work)      # round-13: identical rows are ONE fact, ONE id
     cps = collections.defaultdict(list)
     for w in work:
         cps[(w['ticker'], w['form'], w['period'])].append(w)
@@ -283,7 +332,7 @@ def main():
                                auth=(os.environ.get('NEO4J_USERNAME', 'neo4j'), os.environ['NEO4J_PASSWORD']))
     pdir = f'{OUT}/{tag}'; os.makedirs(pdir, exist_ok=True)
     R = open(f'{pdir}/code_resolved.jsonl', 'w'); RES = open(f'{pdir}/residual.jsonl', 'w')
-    AB = open(f'{pdir}/abstain.jsonl', 'w')
+    AB = open(f'{pdir}/abstain.jsonl', 'w'); SL = open(f'{pdir}/sources_ledger.jsonl', 'w')
     nR = nRes = nAb = 0
     stats = collections.Counter()
     with drv.session() as s:
@@ -294,7 +343,12 @@ def main():
                     AB.write(json.dumps(_corpus_missing_row(it)) + '\n'); nAb += 1
                 stats['cp_no_filing'] += 1
                 continue
-            prs, uncertain_8ks = fetch_earnings_8ks(s, tk, period, form)
+            tfq = target_fiscal_identity(s, filing['source_id'])
+            prs, uncertain_8ks, audit = fetch_earnings_8ks(s, tk, period, tfq)
+            SL.write(json.dumps({'ticker': tk, 'form': form, 'period': period,
+                                 'filing_acc': filing['source_id'],
+                                 'target_fyq': list(tfq) if tfq else None,
+                                 'eightk': audit}) + '\n')
             resolved, residual, abstain = process_cp(items, filing, prs,
                                                      sources_incomplete=uncertain_8ks > 0)
             for r in resolved: R.write(json.dumps(r) + '\n'); nR += 1
@@ -305,11 +359,12 @@ def main():
             stats['pr_records'] += sum(1 for r in resolved if r['source_type'] == '8k')
             if (i+1) % 100 == 0:
                 print(f"  {i+1}/{len(cps)} cps  resolved={nR} residual={nRes} abstain={nAb}")
-    drv.close(); R.close(); RES.close(); AB.close()
+    drv.close(); R.close(); RES.close(); AB.close(); SL.close()
     tot = nR + nRes + nAb
     summary = {'tag': tag, 'records_resolved': nR, 'residual': nRes, 'abstain': nAb,
                'company_periods': len(cps), 'T1_xbrl': stats[('tier', 'T1')], 'T2_label': stats[('tier', 'T2')],
-               'pr_records': stats['pr_records'], 'cp_no_filing': stats['cp_no_filing']}
+               'pr_records': stats['pr_records'], 'cp_no_filing': stats['cp_no_filing'],
+               'duplicate_rows_collapsed': dup_collapsed}
     json.dump(summary, open(f'{pdir}/code_summary.json', 'w'), indent=2)
     print(json.dumps(summary, indent=2))
 

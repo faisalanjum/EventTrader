@@ -41,6 +41,15 @@ SOURCE SELECTION (pinned): the universal loop enumerates REAL accessions directl
                  else fails closed (that 8-K is dropped, the filing still searched). NEVER the old
                  5–75-day window. **This correction lands BEFORE WP1's single regeneration** so the
                  fresh baseline is never built on the unsafe guess.
+                 Round-13 tightening (defect fix, live-reproduced): acceptance ALSO requires the
+                 resolver's label to EQUAL the target filing's OWN declared XBRL fiscal identity
+                 (dei, read via the resolver's own query+parser; missing/conflicting identity fails
+                 closed) — NEVER period_to_fiscal math on the vendor date (its year-of-start
+                 numbering vs year-of-end filers is a documented ACI/AAP failure: it accepted a
+                 FUTURE 8-K and rejected the true one). An unprovable 8-K marks a period incomplete
+                 ONLY if it could possibly announce it (created >= period end — pure impossibility,
+                 no windows). The resolver's own 0.24% wrong-fire ceiling is documented; zero-error
+                 remains a MEASURED claim (WP4), never assumed.
       ↓ into
 SHARED LOCATOR   (anchor, source, optional untrusted hints) → raw items[] | no_proven_match
 ```

@@ -2,7 +2,9 @@
 """XBRL-FIRST deterministic lane (GPT final design, head-to-head verified 2026-07-13; task #767 step 1).
 
 When the target source is a 10-K/10-Q with XBRL, a stable full identity resolves the value with NO AI:
-    concept qname + EVERY (axis) member qname + unit(USD) + exact period  ->  unique fact value
+    concept LOCAL NAME + EVERY (axis) member qname + unit + exact period  ->  unique fact value
+(Round-13 wording honesty: stored concept keys are BARE local names — verified live, 109/109 — so
+this is NOT full-qname matching; a namespace prefix is compared only when BOTH sides carry one.)
 Abstains (returns None) on anything ambiguous, missing, or non-unique — the text lane is the fallback.
 Independently re-verified on 150 random pool pairs: 0 wrong, 0 ambiguous; unresolved = graph extraction
 gaps (fact exists at SEC, absent from FinancialStatementContent -> SEC fallback is a future add).

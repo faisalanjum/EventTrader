@@ -62,12 +62,19 @@ def locate_by_value(req):
     xbrls = req.get('xbrls') or []
     texts = req.get('texts') or []
     name, val, fmt, per = req['name'], req['value'], req.get('fmt'), req.get('period')
+    try:                                     # round-13 (live-reproduced): 'N/A' / '-331x' crashed
+        L.XN.dec(str(val))                   # here with ValueError — a malformed vendor number
+    except L.XN.ExactError:                  # ABSTAINS cleanly instead
+        return {'hit': None, 'snips': []}
     allow_t1 = req.get('allow_xbrl', True)
     t1 = (L.tier1(xbrls, name, val, per, is_currency=req.get('is_currency'))
           if (allow_t1 and xbrls and fmt != '%') else None)
-    strict, snips = L.scan_text(texts, name, val, fmt)
+    # scale_gate (round-13): a bare SCALED print ('1,200' for 1.2B) binds only with scale evidence
+    # (section marker / immediate tail / full-magnitude print). Opt-in here — certified benchmark
+    # preps keep byte-identical legacy behavior.
+    strict, snips = L.scan_text(texts, name, val, fmt, scale_gate=True)
     if t1 and not strict:                    # XBRL matched but KPI wording absent by the value;
-        strict = L.row_quote(texts, L.member_tokens([t1['member']]), val, fmt)   # try the filer's member wording
+        strict = L.row_quote(texts, L.member_tokens([t1['member']]), val, fmt, scale_gate=True)
     xbrl = None
     if t1:
         xbrl = {'concept': t1['concept'], 'axis_members': t1['axis_members'],
@@ -79,7 +86,8 @@ def locate_by_value(req):
     if t1:                                                    # rung 1 — the printed cell ANCHORS;
         cell = _exact_cell(req, t1)                           # the emitted quote must be a CORPUS
         if cell:                                              # slice (v5.5 §3); cells = audit data
-            cq = strict or L.row_quote(texts, L.member_tokens([t1['member']]), val, fmt)
+            cq = strict or L.row_quote(texts, L.member_tokens([t1['member']]), val, fmt,
+                                       scale_gate=True)
             if cq and L.value_ok(val, fmt, cq):
                 hit = {**base_t1, 'quote': cq, 'quote_source': 'exact_cell',
                        'period_evidence': cell[1], 'cell_evidence': cell[0]}
@@ -111,8 +119,11 @@ def locate_by_fingerprint(req):
     # cycle and this workaround both disappear and this becomes a normal top-level import.
     sys.path.insert(0, os.path.join(HERE, 'relocate_probe'))
     import xbrl_lane
+    # round-13: unit identity FORWARDED (it was dropped — a shares fact could satisfy a money request)
     return {'value': xbrl_lane.resolve(req.get('xbrls') or [], req['concept'], req['members'],
-                                       req['period_start'], req['period_end'])}
+                                       req['period_start'], req['period_end'],
+                                       unit_ref=req.get('unit_ref'),
+                                       expected_unit=req.get('expected_unit'))}
 
 
 if __name__ == '__main__':

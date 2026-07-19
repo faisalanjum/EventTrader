@@ -1,58 +1,131 @@
 #!/usr/bin/env python3
-"""WP1 verification + report — COMMITTED and reproducible (round-12 requirement 7).
+"""WP1 verification — CHECK-ONLY by default (round-13).
 
-Reads the pinned manifest + the regenerated wp1 outputs, then:
-  1. completeness: line counts == the run's own summary (guards against mid-write reads);
-  2. reconciliation BY DISTINCT RAW-ROW ID: every raw row's item_id appears in >=1 outcome
-     (resolved / residual / abstain incl. corpus_missing); no id carries two different (kpi,value);
-  3. mechanical compliance (safety checks, never called precision): value-token-in-quote and
+Default (check) mode:
+  1. output hashes must EQUAL the manifest's recorded hashes (tamper/drift detection — never
+     silently replaced);
+  2. completeness: line counts == the run's own summary (guards against mid-write reads);
+  3. reconciliation BY DISTINCT RAW-ROW ID, BOTH directions: every raw id appears in >=1 outcome
+     AND every output id exists in the raw slice (an INVENTED record fails); no id carries two
+     different (kpi, value);
+  4. mechanical compliance (safety checks, never called precision): value-token-in-quote and
      quote-is-exact-source-substring over EVERY resolved record (sources re-fetched live);
-  4. zero fabricated (quote_source='xbrl_fact') records in this cohort;
-  5. stamps sha256 output hashes back into the manifest; writes the report.
+  5. zero fabricated (quote_source='xbrl_fact') records.
+  Check mode writes NOTHING.
 
-    venv/bin/python scripts/driver_seed/wp1_verify.py
+`--record` mode: same checks minus (1), then stamps output hashes + code commit (+ dirty flag) +
+company-periods + consulted source accessions + denominators into the manifest and regenerates the
+report. Run ONCE, deliberately, after a regenerate.
+
+    venv/bin/python scripts/driver_seed/wp1_verify.py            # check
+    venv/bin/python scripts/driver_seed/wp1_verify.py --record   # stamp after a regenerate
 """
-import os, sys, json, hashlib, collections
+import os, sys, json, hashlib, collections, argparse, subprocess
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE); sys.path.insert(0, os.path.join(HERE, 'relocate_probe'))
 import run_code_tier as RC, link_lib as L
 
 D = 'data/driver_catalog_seed/wp1'
 MAN = 'data/driver_catalog_seed/wp1_manifest.json'
-man = json.load(open(MAN))
+OUTS = ('code_resolved.jsonl', 'residual.jsonl', 'abstain.jsonl',
+        'packets.jsonl', 'skip_ledger.jsonl', 'park_ledger.jsonl', 'sources_ledger.jsonl')
 
 
 def sha(p):
     return hashlib.sha256(open(p, 'rb').read()).hexdigest()
 
 
+def _reconcile(raw_ids, out_ids):
+    """BOTH directions (round-13): missing raw ids AND invented extra ids each fail."""
+    missing = raw_ids - out_ids
+    assert not missing, f"{len(missing)} raw rows produced NO id-carrying outcome"
+    extra = out_ids - raw_ids
+    assert not extra, f"{len(extra)} INVENTED output ids absent from the raw slice: {sorted(extra)[:3]}"
+
+
+def _expect_hashes(saved, computed):
+    """Check mode: recorded hashes are REQUIRED and COMPARED — never silently replaced."""
+    assert saved, "no recorded hashes in the manifest — run --record ONCE after a deliberate regenerate"
+    if saved != computed:
+        diff = {k: {'recorded': (saved or {}).get(k), 'on_disk': computed.get(k)}
+                for k in sorted(set(saved) | set(computed)) if (saved or {}).get(k) != computed.get(k)}
+        raise AssertionError("output hash mismatch vs manifest: " + json.dumps(diff)[:500])
+
+
+def _git_commit():
+    try:
+        c = subprocess.run(['git', 'rev-parse', '--short', 'HEAD'], capture_output=True,
+                           text=True, cwd=HERE).stdout.strip()
+        dirty = subprocess.run(['git', 'status', '--porcelain', '--', 'scripts/driver_seed',
+                                'driver/relocation'], capture_output=True, text=True,
+                               cwd=os.path.join(HERE, '..', '..')).stdout.strip()
+        return c + ('-dirty' if dirty else '')
+    except OSError:
+        return 'unknown'
+
+
 def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument('--record', action='store_true',
+                    help='stamp hashes/commit/pins into the manifest (after a deliberate regenerate)')
+    a = ap.parse_args()
+    man = json.load(open(MAN))
+
+    computed = {n: sha(f'{D}/{n}') for n in OUTS}
+    if not a.record:
+        _expect_hashes(man.get('output_sha256'), computed)
+
     res = [json.loads(l) for l in open(f'{D}/code_resolved.jsonl')]
     rem = [json.loads(l) for l in open(f'{D}/residual.jsonl')]
     ab = [json.loads(l) for l in open(f'{D}/abstain.jsonl')]
+    ledger = [json.loads(l) for l in open(f'{D}/sources_ledger.jsonl')]
     summ = json.load(open(f'{D}/code_summary.json'))
 
-    # 1. completeness vs the run's own summary
+    # completeness vs the run's own summary
     assert (len(res), len(rem), len(ab)) == (summ['records_resolved'], summ['residual'], summ['abstain']), \
         f"counts != summary: {(len(res), len(rem), len(ab))} vs {summ}"
 
-    # 2. reconciliation by distinct raw-row id
+    # reconciliation by distinct raw-row id (both directions)
     rows = [json.loads(l) for l in open('data/driver_catalog_seed/worklist.jsonl')
             if json.loads(l)['ticker'] in set(man['tickers'])]
     slice_sha = hashlib.sha256(''.join(sorted(json.dumps(r, sort_keys=True) for r in rows)).encode()).hexdigest()
     assert slice_sha == man['worklist_slice_sha256'], "worklist slice drifted vs the manifest"
-    raw_ids = {RC._iid(r) for r in rows}
-    assert len(raw_ids) == len(rows), "duplicate raw rows would need shared-id handling"
-    out_ids = {r['item_id'] for r in res} | {r['item_id'] for r in rem} | {a['item_id'] for a in ab}
-    missing = raw_ids - out_ids
-    assert not missing, f"{len(missing)} raw rows produced NO id-carrying outcome"
+    uniq_rows, dup_dropped = RC.dedupe_rows(rows)
+    raw_ids = {RC._iid(r) for r in uniq_rows}
+    assert len(raw_ids) == len(uniq_rows), "distinct rows must have distinct whole-row ids"
+    out_ids = {r['item_id'] for r in res} | {r['item_id'] for r in rem} | {x['item_id'] for x in ab}
+    _reconcile(raw_ids, out_ids)
     byid = collections.defaultdict(set)
     for r in res + rem + ab:
         byid[r['item_id']].add((r.get('kpi') or r.get('raw_label'), str(r.get('value'))))
     bad = {k: v for k, v in byid.items() if len(v) > 1}
     assert not bad, f"ids carrying different (kpi,value): {list(bad.items())[:3]}"
 
-    # 3. mechanical compliance on every resolved record
+    # round-13 EXPLICIT proof: no future source under an earlier target. Every ACCEPTED 8-K's
+    # resolver label must equal its cp's target XBRL identity (re-checked from the run's own
+    # ledger), and every 8-K-sourced output must trace to an accept row in its OWN cp.
+    import re
+    _lbl = re.compile(r'^Q([1-4])_FY(\d{4})$')
+    cp_accepts = collections.defaultdict(set)
+    for row in ledger:
+        tgt = tuple(row['target_fyq']) if row.get('target_fyq') else None
+        for e in row['eightk']:
+            if e['verdict'] == 'accept':
+                m = _lbl.match(str(e.get('label') or ''))
+                assert tgt and m and (int(m.group(2)), int(m.group(1))) == tgt, \
+                    f"accepted 8-K label {e.get('label')} != target {tgt}: {row['ticker']} {row['period']}"
+                cp_accepts[(row['ticker'], row['period'])].add(e['acc'])
+    for r in res:
+        if r['source_type'] == '8k':
+            assert r['source_id'] in cp_accepts[(r['ticker'], r['period_end'])], \
+                f"8-K record without an accept ledger row in its cp: {r['source_id']} {r['ticker']}"
+    for r in rem:
+        for c in r.get('candidates', []):
+            if c.get('src_type') == '8k':
+                assert c['src'] in cp_accepts[(r['ticker'], r['period'])], \
+                    f"8-K candidate without an accept ledger row in its cp: {c['src']} {r['ticker']}"
+
+    # mechanical compliance on every resolved record
     fab = [r for r in res if r.get('quote_source') == 'xbrl_fact' or r.get('source') == 'xbrl_fact']
     assert not fab, f"fabricated quotes: {len(fab)}"
     bad_vq = [r for r in res if not L.value_ok(float(r['value']),
@@ -83,7 +156,7 @@ def main():
                 bad_sub.append((r['item_id'], r['source_id'], r['quote'][:60]))
     drv.close()
 
-    # 4. buckets / bands / routes
+    # coverage views
     def band(v):
         v = abs(float(v))
         if v == 0: return 'zero'
@@ -91,42 +164,66 @@ def main():
         return 'small' if v < 1000 else 'other'
     routes = collections.Counter((r['tier'], r['source_type']) for r in res)
     bands = collections.Counter(band(r['value']) for r in res)
-    ab_reason = collections.Counter(a['reason'] for a in ab)
-    incomplete = sum(1 for a in ab if a.get('sources_incomplete'))
+    ab_reason = collections.Counter(x['reason'] for x in ab)
+    incomplete = sum(1 for x in ab if x.get('sources_incomplete'))
+    uniq_targets = len({(w['ticker'], w['kpi'], w['period']) for w in uniq_rows})
+    gate_verdicts = collections.Counter(e['verdict'] for row in ledger for e in row['eightk'])
+    src_accessions = sorted({r['source_id'] for r in res}
+                            | {r['filing_id'] for r in rem}
+                            | {c['src'] for r in rem for c in r.get('candidates', [])}
+                            | {row['filing_acc'] for row in ledger}
+                            | {e['acc'] for row in ledger for e in row['eightk']
+                               if e['verdict'] == 'accept'})
 
-    # 5. hashes into the manifest + the report
-    man['output_sha256'] = {n: sha(f'{D}/{n}') for n in
-                            ('code_resolved.jsonl', 'residual.jsonl', 'abstain.jsonl',
-                             'packets.jsonl', 'skip_ledger.jsonl', 'park_ledger.jsonl')}
-    man['verified_summary'] = summ
-    json.dump(man, open(MAN, 'w'), indent=1)
+    if a.record:
+        man['output_sha256'] = computed
+        man['verified_summary'] = summ
+        man['code_commit'] = _git_commit()
+        man['company_periods'] = sorted(f"{t}|{f}|{p}" for t, f, p in
+                                        {(w['ticker'], w['form'], w['period']) for w in uniq_rows})
+        man['source_accessions'] = src_accessions
+        man['unique_targets_ticker_kpi_period'] = uniq_targets
+        man['duplicate_rows_collapsed_in_slice'] = dup_dropped
+        json.dump(man, open(MAN, 'w'), indent=1)
 
     rep = f"""# WP1 Report — regenerated cohort ({','.join(man['tickers'])})
 
 Manifest (incl. output sha256s): `{MAN}` · slice sha `{man['worklist_slice_sha256'][:16]}…`
-Command: `{man['command']}` · verifier: `scripts/driver_seed/wp1_verify.py` (this file regenerates
-this report; all assertions passed or it would have crashed).
+Command: `{man['command']}` · verifier: `scripts/driver_seed/wp1_verify.py` (CHECK-ONLY by default;
+this report is regenerated only by `--record`; all assertions passed or it would have crashed).
 
 ## Mechanical compliance (safety checks — NOT precision; true P/R = WP4)
 - value-token-in-quote: **{len(res)-len(bad_vq)}/{len(res)}**{'' if not bad_vq else ' VIOLATIONS ' + str(bad_vq[:3])}
 - quote-is-exact-source-substring: **{len(res)-len(bad_sub)}/{len(res)}**{'' if not bad_sub else ' VIOLATIONS ' + str(bad_sub[:3])}
 - fabricated quotes in THIS cohort: **0** (asserted) · older part1–4 artifacts: **STALE/INVALID**
 
-## Reconciliation by distinct raw-row id (asserted)
-raw rows {len(rows)} = unique ids {len(raw_ids)}; every id accounted for in
-resolved/residual/abstain; no id carries two different (kpi,value).
+## Reconciliation by distinct raw-row id (asserted, BOTH directions)
+raw rows {len(rows)} ({dup_dropped} identical duplicates collapsed -> {len(uniq_rows)} distinct) =
+unique ids {len(raw_ids)}; every id accounted for in resolved/residual/abstain; ZERO invented extra
+ids; no id carries two different (kpi,value).
+Denominators: **{len(rows)} raw rows** (reconciliation basis) · **{uniq_targets} unique
+(ticker,kpi,period) targets** (coverage basis).
 
 ## Coverage
 resolved {len(res)} (routes: {dict(routes)}) · residual {len(rem)} · abstain {len(ab)}
 (reasons: {dict(ab_reason)}; sources_incomplete-flagged: {incomplete})
 value bands (resolved): {dict(bands)}
+8-K gate verdicts (sources_ledger): {dict(gate_verdicts)}
+consulted/used source accessions pinned in manifest: {len(src_accessions)}
+
+## 8-K selection honesty (round-13)
+Selection = resolver AUTO_OK (its own benchmark documents a **0.24% warm-start wrong-fire
+ceiling** — quarter_identity.py:100-104) AND label == the target filing's own XBRL identity
+(asserted above for every accepted 8-K, from the run's own ledger). Zero-error is a MEASURED
+claim (WP4 grading), never assumed from the resolver alone.
 
 run summary: {json.dumps(summ)}
 """
-    open('data/driver_catalog_seed/wp1_report.md', 'w').write(rep)
+    if a.record:
+        open('data/driver_catalog_seed/wp1_report.md', 'w').write(rep)
     print(rep)
     assert not bad_vq and not bad_sub, "mechanical compliance violated"
-    print("WP1 VERIFY: ALL ASSERTIONS PASSED")
+    print(f"WP1 VERIFY ({'RECORD' if a.record else 'CHECK'}): ALL ASSERTIONS PASSED")
 
 
 if __name__ == '__main__':

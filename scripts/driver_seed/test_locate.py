@@ -18,7 +18,9 @@ def test_value_known_finds_the_printed_quote():
     # value in hand -> find WHERE it is PRINTED. The raw xbrl block rides along as evidence, but the QUOTE
     # must always be text a human wrote. (This test previously asserted a hit with NO text at all, which was
     # only reachable via the fabricated XBRL-metadata quote — it was pinning the bug.)
-    r = locate.locate({'xbrls': [_AGG_BLOB], 'texts': ['Total revenue 6,707 for the year'],
+    # '(in millions)' = the section's scale declaration (round-13: a bare SCALED print like '6,707'
+    # for 6.707B binds only when the containing text shows its scale)
+    r = locate.locate({'xbrls': [_AGG_BLOB], 'texts': ['(in millions) Total revenue 6,707 for the year'],
                        'name': 'Total Revenue', 'value': 6707000000, 'fmt': None, 'period': '2024-12-31'})
     assert r['hit'] is not None and r['hit']['tier'] == 'T1-xbrl', r
     assert r['hit']['quote'] == 'Total revenue 6,707', r['hit']
@@ -97,3 +99,47 @@ def test_dispatch_by_presence_of_value():
     vu = locate.locate({'xbrls': [_AGG_BLOB], 'concept': _CONCEPT, 'members': [],
                         'period_start': '2024-01-01', 'period_end': '2024-12-31'})
     assert 'hit' in vk and 'value' in vu   # value present -> value-known; absent -> value-unknown
+
+
+def test_invalid_value_abstains_not_crash():
+    """Round-13 (live-reproduced): 'N/A' / '-331x' crashed the public locator with ValueError.
+    A malformed vendor number must ABSTAIN cleanly — never raise."""
+    for bad in ('N/A', '-331x', ''):
+        r = locate.locate({'xbrls': [], 'texts': ['Revenue was 5 million'], 'name': 'Revenue',
+                           'value': bad, 'fmt': None, 'period': '2025-01-01'})
+        assert r == {'hit': None, 'snips': []}, (bad, r)
+    print("[ok] malformed value -> clean abstain, never a crash")
+
+
+def test_fingerprint_forwards_unit_args(monkeypatch):
+    """Round-13: the public value-unknown lane dropped unit_ref/expected_unit on the floor —
+    a shares fact could satisfy a money request. They must be forwarded to xbrl_lane.resolve."""
+    import xbrl_lane
+    seen = {}
+
+    def fake(xbrls, concept, members, ps, pe, unit_ref=None, expected_unit=None):
+        seen.update(unit_ref=unit_ref, expected_unit=expected_unit)
+        return None
+    monkeypatch.setattr(xbrl_lane, 'resolve', fake)
+    r = locate.locate({'xbrls': [], 'concept': 'us-gaap:Revenues', 'members': [],
+                       'period_start': '2024-01-01', 'period_end': '2024-12-31',
+                       'unit_ref': 'usd', 'expected_unit': 'money'})
+    assert r == {'value': None}
+    assert seen == {'unit_ref': 'usd', 'expected_unit': 'money'}, seen
+    print("[ok] fingerprint lane forwards unit identity to xbrl_lane")
+
+
+def test_scale_gate_blocks_naked_scaled_number():
+    """Round-13: '1,200' for a 1.2B value with NO scale evidence anywhere must not bind; a section
+    marker ('in millions'), an immediate scale tail ('1.2 billion'), or the full-magnitude print
+    are each sufficient evidence."""
+    naked = {'xbrls': [], 'texts': ['Segment alpha revenue 1,200 for the year'],
+             'name': 'Segment Alpha Revenue', 'value': 1200000000, 'fmt': None, 'period': '2024-12-31'}
+    assert locate.locate(naked)['hit'] is None
+    marked = dict(naked, texts=['(in millions) Segment alpha revenue 1,200 for the year'])
+    assert locate.locate(marked)['hit'] is not None
+    tagged = dict(naked, texts=['Segment alpha revenue was 1.2 billion this year'])
+    assert locate.locate(tagged)['hit'] is not None
+    full = dict(naked, texts=['Segment alpha revenue 1,200,000,000 for the year'])
+    assert locate.locate(full)['hit'] is not None
+    print("[ok] bare scaled prints need scale evidence; tagged/full-magnitude self-evident")

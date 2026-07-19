@@ -366,3 +366,139 @@ answer, and duplicating graph validation in the decoder would be pointless).
 **CORRIGENDUM to round 9 above:** its phrase "a company supplied for a DIFFERENT source must never
 bind" stands, but the implied stronger claim ("injection impossible") is retracted — key-level
 protection only. Probe docstring + design §2 corrected.
+
+## Round 11 (ChatGPT, 2026-07-18) — WP1 PLAN corrections. All 9 verified TRUE (incl. two
+## code-checked: `--tag`-alone selects no work [argparse]; regress.py only re-grades saved outputs).
+Adopted into WP1 Plan v2: tests+fixes commit TOGETHER (main never red — the core session shares
+it) · substring invariant fixed at the link_lib producers, not locate · full-qname + unit tests ·
+8-K = enumerate REAL accessions (no window even for candidates) · dropped-8-K ⇒ completeness
+stays incomplete (park, never SKIP) · pinned regenerate manifest with the exact --tickers command ·
+honest report labels (mechanical compliance ≠ precision; three count bases) · item_id through all
+three paths · frozen before/after locator A/B (regress alone cannot see locator changes).
+GO given: execute independently, return at the gate or a named trigger.
+
+## WP1 EXECUTION RECORD (2026-07-18) — 5 commits, all local main, UNPUSHED
+- `2a59e49` Steps 1-2: exact_numbers.py (Decimal dec/eq/plain + one date rule) · tier1
+  Decimal-exact · %-class guard · fractional-rounding ban (owner F2) · zero legal · _tableforms
+  rewrite · RAW-slice quotes (_tidy search-only) · locate rung-1 corpus-quote + cell_evidence ·
+  xbrl_lane exact dates/instant/unitRef/bare-local-names. A/B on pinned 3-ticker slice: +31
+  resolved (all decimal/small), 0 lost. Battery 71/71 · regress 28/28 identical.
+- `02d1f07` Step 3: fetch_earnings_8ks (Item-2.02 universe = quarter_identity's own), AUTO_OK
+  gate, all-text dedupe, item_id. DEVIATIONS RECORDED: accession_periodic = PIT-safe PRIOR anchor
+  (reviewer's literal join field wrong; intent implemented via the resolver's announced period) ·
+  all-8-K enumeration crashed on non-earnings 8-Ks → Item-2.02 mirror.
+- `88a4f19` Steps 4-5 (AMENDED honest): pinned manifest (10 tickers, 1,535 rows, sha 473bda9d…) ·
+  INCIDENT: fetch_press_release deleted with 10 un-grepped consumers → regress FAILED → caught;
+  an earlier commit falsely claimed 28/28 from tail-truncated output → amended; the legacy fetcher
+  restored VERBATIM as LEGACY-BENCHMARK-ONLY (its window recipe is part of the frozen floor
+  definitions).
+- `28f2aeb` item_id per DISTINCT RAW ROW (reviewer catch confirmed 26/26: fiscal.ai repeats KPI
+  labels across category variants — ACN geo1=23,000 vs geo2=45,029,043,000); whole-row hash;
+  1,535 ids = 1,535 rows; a mid-write verification was caught via mtimes and redone.
+
+## Round 12 (ChatGPT, 2026-07-18) — WP1 audit. SIX findings CONFIRMED by my own reproductions,
+## TWO stale (already fixed in 28f2aeb). Corrective commit `1d4491d`:
+1. 52/53-week drop (AAPL live accepted=0): _8k_gate joins on quarter_label(fy,q) ==
+   period_to_fiscal(vendor period, fye, form) — the ≤5-day-rule fiscal math; never calendar ends.
+   AAPL's true 8-K now selected; cohort pr_records 91→129.
+2. 44/45 illegal skips (exact ledger count): build_packets parks sources_incomplete BEFORE the
+   type-list check; ledgers carry item_id. Now 45 park / 0 illegal.
+3. Trail-cut ('86' accepted from '86%'; +123 from '(123'): _with_trail keeps %/)/'percent'/scale
+   words in the crop; percent-guard widened to ' %'/' percent'.
+4. evil:Revenues + shares-for-USD: stored-prefix must match request-prefix when present (bare
+   storage matches local — verified canonical form); expected_unit money/nonmoney in resolve;
+   tier1 is_currency unit-class guard ('usd' substring — filer-local unitRefs make exact
+   impossible), wired through locate.
+5. NaN/Infinity rejected (is_finite).
+6. 'or True' removed; uncertain cases properly pinned.
++ corpus_missing rows carry item_id · wp1_verify.py COMMITTED (completeness-vs-summary ·
+  reconciliation by raw-row id 1,535=1,535 · both compliance checks · output sha256s → manifest).
+Final: cohort 389 resolved (+37; T1 106→105 = one bind fewer, consistent with the unit guard;
+prior outputs overwritten so no per-record diff — permanently fixed by manifest hashes) ·
+verifier ALL ASSERTIONS PASSED · battery 82/82 · regress 28 [ok] PASS (full output).
+STATE: 5 WP1 commits unpushed; holding push + WP2 for reviewer re-audit / owner word.
+
+## Round 13 (ChatGPT, 2026-07-18) — post-1d4491d re-audit + two follow-ups (the "slimmer
+## correction" supersedes the defensive first draft). NINE claims, ALL CONFIRMED by my own
+## reproductions BEFORE any fix; one prescribed mechanism REJECTED with evidence (flagged).
+Verification-first record (every claim reproduced live or code-cited before fixing):
+1. **ACI future-8-K (CRITICAL) — CONFIRMED, worse than claimed.** Exactly 23 candidate snippets
+   from `0001646972-26-000028` (created 2026-04-14) attached to ACI period 2025-02-22 residuals.
+   Live gate run: math `period_to_fiscal(2025-02-22, fye=2, 10-K) = (2025, Q4)`; resolver labels
+   (company convention, year-of-start): true announcer `-25-000040` = Q4_FY2024 → **other_period
+   (wrongly rejected)**; future `-26-000028` = Q4_FY2025 → **accept (wrongly admitted)**. BOTH
+   directions wrong; ACI 2026-02-28's true announcer was ALSO being rejected. Root cause exactly
+   as reviewer said: `fiscal_math.py:28-40` documents AAP/ACI as unfixable ("Extreme 52-week
+   calendar"; "Only mismatches: ACI (4, known edge case)"); `quarter_identity.py:195-225` documents
+   the year-of-start vs year-of-end split (TRUST_XBRL_ADVANCE).
+   **Fix:** `_8k_gate(info, target_fyq)` — resolver label must EQUAL the TARGET filing's OWN
+   declared XBRL identity, read via the resolver's own `_XBRL_QUERY` (unique-or-null at the query
+   level → conflict fails closed) + `parse_xbrl_fiscal_identity` (FY→Q4, garbage→None). Both sides
+   are company-XBRL-convention BY THE RESOLVER'S CONSTRUCTION (prior-XBRL + advance; rule_h for the
+   trusted year-of-end issuers; mixed-convention issuers FAIL_CLOSED) → numbering can never
+   disagree. NO new resolver built; `period_to_fiscal` fully removed from the harvest join.
+   Measured before building: 25/25 cohort targets carry a parseable dei identity.
+   Live pins (reviewer-named accessions): AAPL target `0000320193-24-000123` selects EXACTLY
+   `['0000320193-24-000120']`; ACI target `-25-000052` accepts `-25-000040`, rejects `-26-000028`.
+2. **Global incompleteness — CONFIRMED by code.** `fetch_earnings_8ks` counted uncertain across
+   the ticker's WHOLE 8-K history; live: every cohort ticker's FIRST-ever 8-K (no prior periodic)
+   is FAIL_CLOSED and poisoned every period. **Fix:** `_uncertain_relevant(created, period)` —
+   an 8-K filed BEFORE the period ended cannot announce it (results don't exist yet); pure
+   impossibility, zero windows, zero new machinery.
+   **FLAGGED DISAGREEMENT (kept mine):** the reviewer prescribed scoping to the unresolved 8-K's
+   "matched filing cycle, using the existing historical pairing". VERIFIED: no such pairing exists
+   for failed resolutions — `_attach_resolution_context` (accession_periodic) is attached ONLY on
+   AUTO_OK paths (quarter_identity.py:632/706/734/781; FAIL_CLOSED returns bare `_result`).
+   Building sequence-position pairing for 8-Ks the certified resolver REFUSED to place = building
+   a new mini-resolver (their own "build no resolver" rule) + trusting an assumption fail-closed
+   philosophy rejects (restatement 8-Ks exist — D11). The impossibility rule fixes the named
+   defect (old 8-K no longer poisons later periods) at the cost of conservative parks for periods
+   BEFORE a recent unresolved 8-K. Owner may overrule.
+3. **Public locator (5 sub-claims, all CONFIRMED):** (a) `locate_by_fingerprint` dropped
+   unit_ref/expected_unit (locate.py:114) → forwarded + monkeypatch test; (b) NO rate rejection
+   existed anywhere ('…DiscountRatePercent' passed `concept_ok` via 'operating') → case-insensitive
+   camel-token rejection {rate, percent, percentage, ratio}; substring ban avoided ('Corporate'
+   survives, tested incl. ALLCAPS 'RATE'); (c) bare scaled prints ('1.2' / '1,200' for 1.2B)
+   accepted with zero scale evidence → MEASURED FIRST: 315/389 resolved quotes are bare-scaled
+   table rows, and 315/315 of their sections carry the strict 'in (millions|thousands|billions)'
+   marker → section-marker OR immediate-tail OR full-magnitude evidence now required, as OPT-IN
+   `scale_gate` (locate.py passes True; the five certified prep consumers keep byte-identical
+   legacy behavior — consumer grep BEFORE design, lesson 3 applied); (d) 'N/A'/'-331x' crash
+   live-reproduced (ValueError) → Decimal-parse guard at entry, clean abstain; malformed vendor
+   values in the harvest PARK as `invalid_value` (visible channel-data defect, never a terminal
+   skip); (e) full-qname overclaim = xbrl_lane MODULE docstring (function docstring was already
+   honest) → wording fixed; behavior was already correct (round-12 prefix guard).
+4. **Verifier not check-only — CONFIRMED by inspection.** Old code checked only raw−out (invented
+   extra ids invisible) and UNCONDITIONALLY overwrote `output_sha256`. **Rewrite:** CHECK-ONLY
+   default (recorded hashes REQUIRED + compared; writes nothing); `_reconcile` both directions;
+   `--record` = explicit stamp mode. NEW explicit no-future-source proof: every ACCEPTED 8-K's
+   label (now in the run's `sources_ledger.jsonl`) re-checked == its cp's target identity; every
+   8-K-sourced record/candidate must trace to an accept row in its OWN cp. Unit tests for both
+   helpers (RED first).
+5. **Manifest — ALL CONFIRMED:** stale `02d1f07` (outputs were from the round-12-fix run) →
+   `--record` stamps `git rev-parse` + dirty flag; company-periods + 49 consulted/used source
+   accessions pinned; full-sheet duplicates counted EXACTLY as reviewer said (18 groups / 31
+   extra occurrences, all BX-style byte-identical repeats) → `dedupe_rows` collapses at load
+   (identical rows are ONE fact; whole-row id shared by construction; verifier dedupes the same
+   way); the 1,400 denominator RESTORED and measured = unique (ticker,kpi,period) targets
+   (1,426 with +value; 1,535 with +category = raw rows) — report now shows BOTH bases.
+6. **0.24% honesty — CONFIRMED at quarter_identity.py:100-104** ("Warm-start (9878) | 97.92% |
+   0.24% | 1.83%"; "structural ceiling"). Report + design now state: selection = AUTO_OK (0.24%
+   documented ceiling) ∧ label==target-identity; zero-error is a MEASURED claim (WP4), never
+   assumed. Reviewer's FCX live-lane pin: N/A to WP1 (historical lane always has the target
+   filing; the slimmer correction dropped it; live resolver untouched per owner's accepted risk).
+**Method:** RED battery first (13 new tests, exact failures confirmed incl. both live crashes) →
+smallest fixes → 94/94 battery (was 82; one old gate test superseded by the new-join test) →
+regress ALL 28 floors hold (full output, counted) → ONE pinned regenerate → `--record` → CHECK
+mode green. Consumer greps before every signature change: `fetch_earnings_8ks`/`_8k_gate` have
+zero outside consumers; `row_quote`/`scan_text`/`value_forms` feed 5 certified preps → opt-in
+param. No scheduler, no retry framework, no Core change, no live waiting, resolver untouched.
+**Fresh cohort (regenerated once, verified):** 391 resolved (T1 105 · T2 286; pr_records 131 —
+ACI's two true announcers recovered) · 356 residual · 1006 abstain (961 derived skips + 45
+value_absent; **parks 45→0 — CORRECT**: every non-ACI ticker's single uncertain 8-K is its
+first-ever 8-K, filed BEFORE all cohort periods → irrelevant by impossibility → those 45 rows'
+source sets are genuinely complete (accept=1 each) → truthful terminal skips; ACI's 3 relevant
+post-period uncertains persist but its cps have no value-absent rows) · gate verdicts 24 accept /
+271 other_period / 46 uncertain · compliance 2× 391/391 · reconciliation both-directions
+1,535=1,535 · sources_ledger.jsonl now pins every enumerated 8-K verdict+label per cp.
+STATE: round-13 corrective commit pending push word; WP2 still held.
