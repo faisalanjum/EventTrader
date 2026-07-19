@@ -502,3 +502,118 @@ post-period uncertains persist but its cps have no value-absent rows) · gate ve
 271 other_period / 46 uncertain · compliance 2× 391/391 · reconciliation both-directions
 1,535=1,535 · sources_ledger.jsonl now pins every enumerated 8-K verdict+label per cp.
 STATE: round-13 corrective commit pending push word; WP2 still held.
+
+## Round 14 (ChatGPT, 2026-07-18) — post-b7da386 re-audit. SEVEN claims, ALL CONFIRMED by my own
+## reproductions — including TWO false claims of MY OWN exposed and owned. Code commit `50676a9`.
+1. **WMS wrong pairing — CONFIRMED live; my round-13 "conventions can never disagree" claim was
+   FALSE.** WMS's dei is inconsistent WITHIN the company ((2024,1)/(2025,2)/(2025,1) across
+   consecutive quarters); for target 10-Q 2024-06-30 the dei join accepted the prior-year 8-K
+   (-23-000033, label Q1_FY2024) and rejected the true announcer (-24-000029, Q1_FY2025).
+   Round-14 replaced identities with a filing-sequence matcher (timeline + predecessor pairing +
+   announcer window); the live battery immediately exposed a further edge I then had to
+   special-case (AAPL's Q1-early 8-K files one day before its own 10-Q → prior == the target →
+   ambiguous two-pass) — a smell the owner later called correctly.
+2. **Scale multiplier/locality — CONFIRMED ×3 live** ('1.2 million' proved 1.2 BILLION; a
+   thousands header proved a millions form; an unrelated earlier marker proved anything; 52
+   cohort text blocks carry MIXED markers). Fix: evidence must name THE REQUIRED multiplier
+   (tail == form's divisor; marker locality). **Regenerate #1 then dropped resolved 391→329 —
+   measured before stamping: ablation isolated 12 casualties and exposed MY over-tight
+   nearest-single-marker rule**: real headers declare SEVERAL scales ("(In millions, except
+   number of shares, which are reflected in thousands…)" — AAPL's standard header; the nearest
+   single word was 'thousands'). Fix: required multiplier ∈ the CURRENT TABLE's declarations
+   (##TABLE_START region); outside tables the nearest declaration. Also `value_ok` now vetoes a
+   printed tag that contradicts the claimed value — which caught one semantically-wrong OLD test
+   fixture ('$ 9,876 million' for plain 9,876) that got corrected, not appeased.
+3. **Rate-name ban — REVERTED (reviewer right, my round-13 rule over-rejected).** The certified
+   truth pool carries `awk:PublicUtilitiesGeneralRateCaseAuthorizationsAnnualizedIncremental
+   RevenuesApprovedAmount` (4 REAL USD rows). Unit identity decides instead: tier1 skips
+   'pure'-unitRef facts in the money/number lane.
+4. **Cycle-scoped uncertainty — ADOPTED; my round-13 "no pairing exists" rejection was WRONG**
+   (the pairing MECHANISM is derivable for any 8-K even when labeling failed). ACI's annual
+   stopped being poisoned by later unlabelable quarterlies.
+5. **1e309 — CONFIRMED live** (Decimal-finite, float-infinite → OverflowError). Entry guards +
+   `invalid_value` park.
+6. **Verifier circularity + dangling commit — CONFIRMED.** The round-13 no-future-source check
+   compared a label to a target identity computed by the code under test; the manifest pointed at
+   an unreachable amend orphan. Fix: independent graph re-derivation per accepted 8-K + the
+   two-commit procedure (clean CODE commit first → regenerate against it → artifacts commit).
+7. **Unapproved locked-design edit — CONFIRMED, REVERTED** byte-identical to `ba0c629` (and my
+   round-13 §1 text contained the false "can never disagree" claim anyway). Design amendments are
+   owner-locked; the corrected mechanism went to the owner instead.
+
+## Round 15 (owner + ChatGPT, 2026-07-18/19) — THE OWNER'S RULING. Option D: the two-file
+## earnings-8-K authority. My round-14 sequence matcher RETIRED.
+- **Owner interjected** rejecting round-14's ordering assumptions and proposing calendar-date
+  comparison (convert the resolver's label to a calendar date; compare calendars). VERIFIED
+  before adopting: the idea is right for ~everything EXCEPT the ACI-class — live-measured, the
+  converter is year-convention-bound (ACI true announcer label Q4_FY2024 → projected 2024-02-29
+  vs true 2025-02-22 → rejected; the FUTURE 8-K projected 2025-02-28 → accepted). The owner's
+  52/53-week tolerance intuition was right; year-NAMES were the real blocker, and they re-enter
+  through the conversion itself. Flagged honestly with a menu instead of implementing.
+- **Reviewer round-15 surfaced the EXISTING production matcher** — real, verified by my own
+  execution (I had rejected "existing pairing" too hard in round 13 without finding this file):
+  `get_quarterly_filings.get_earnings_with_10q` pairs every 2.02 8-K to the original 10-Q/10-K
+  covering the most recently ENDED period as of the 8-K's filing time, lag-validated within
+  [-24h, +90d]. Ran its rule myself on 7 cases: ACI true→its 2025 10-K; ACI future→its OWN 2026
+  10-K (accession equality rejects it for 2025 naturally); AAPL 52/53→pinned target; AAPL
+  Q1-early→the Q1 10-Q (round-14's ambiguity DISSOLVES — no special case needed); WMS true /
+  prior-year / reviewer-cited — all correct.
+- **OWNER RULED (now owner-locked law: memory + FinalDesign PER-21 / BUILD §3):** historical
+  8-K pairing = `get_quarterly_filings.py` exact target-accession equality + `quarter_identity`
+  AUTO_OK as trust gate ONLY; live/new 8-K = `quarter_identity` alone; labels and calculated
+  dates NEVER joined on; missing/ambiguous → PARK; no third matcher ever. Owner stopped the
+  option-C universe sweep and ordered the full read-only pairing check before regeneration.
+- **Extraction (reviewer refinement: one STRUCTURED matcher, never copy or parse pipe-text):**
+  `match_8k_to_periodic()` extracted INSIDE get_quarterly_filings.py (+ pure `_lag_hours`/
+  `lag_valid`; QUERY's daily_stock filter became a parameter — the tool keeps
+  require_daily_stock=True; the harvest passes False so 163/10,994 8-Ks without return data are
+  no longer silently hidden). `get_earnings_with_10q` rewired on top — output proven
+  BYTE-IDENTICAL (4-ticker before/after snapshots; reviewer independently confirmed on 11).
+  All 9 consumers audited (they import only unchanged names); earnings-pipeline suites 116/116;
+  `quarter_identity.py` untouched (empty diff). Round-14's timeline/cycle/ambiguity machinery
+  DELETED. Harvest gate: accession equality + AUTO_OK + lag; an unprovable 8-K poisons ONLY the
+  target it matched (unlabelable true announcers and lag-invalid late supplements park AT their
+  match — the reviewer's honest PHR gap is a counted park, never silent completeness).
+- **Reviewer audited the file refactor: PASSED**, with two pre-commit chores, both done: (a) my
+  "latent NameError" comment was FALSE — `lag_hours if valid_10q else 99999.0` short-circuits, so
+  the crash I claimed could never fire; verified myself, owned, removed (unverified claims about
+  old code are the same sin this arc polices); (b) durable pin test added
+  (`scripts/earnings/test_get_quarterly_filings.py`: ds-filter scope, exact ±1s lag boundaries,
+  nearest-lag dedupe, frozen output shape — 3 tests, pure/fake-session).
+- **FULL READ-ONLY UNIVERSE PAIRING CHECK (owner + reviewer precondition) — 792 tickers /
+  10,994 2.02 8-Ks: ZERO wrong pairings found.** 9,788 clean pairings (89%) · 1,050 fail-closed
+  parks (unlabelable; park at their matched target) · 156 lag-invalid parks (early-2026 8-Ks
+  whose next 10-Q isn't ingested yet — future reruns pair them correctly — plus documented slow
+  filers, e.g. ADSK's 2024 delayed filing, +102d) · 9 label-vs-match flags = ALL false alarms of
+  MY convention-free q-number cross-checker on the documented freak calendars (AAP×6 — its Q1 is
+  16 WEEKS, ends late April, breaking the 3-month heuristic; ACI×2; NTNX×1): in each, the label
+  AND the pairing are both correct; the checker's assumption is what failed. Zero errors.
+
+## Round 15 — FINAL COHORT (Option D, stamped). Regeneration honesty: THREE regenerates this
+## round, each cause-documented before proceeding (never silent): #1 exposed my over-tight
+## nearest-single-marker rule via a −62 drop (measured, 12-case ablation, AAPL combined-header
+## discovery); #2 (post-Option-D) dropped to 265 — ablation-attributed EXACTLY: 70 records to the
+## table-region rule on AA/Alcoa's caption-above-table layout (scale declared ABOVE the
+## ##TABLE_START tag) → the inherit-when-undeclared refinement recovered them, mixed-table
+## strictness intact; #3 = the final. OWNED along the way: my "90-row divergence" scare was a
+## MISREAD of the by-design resolved∩residual overlap (115 rows — the keep-candidates rule), and
+## the network-flakiness hypothesis I briefly held was DISPROVEN by cache mtimes (0 fetches in
+## 2h) before it could mislead. Determinism then PROVEN: two consecutive runs, identical counts.
+**FINAL (produced against clean code commit `6e7f8b1`, stamped + check-verified):**
+329 resolved (T1-xbrl 103 · T2-label 226 · 8-K records 81) · 410 residual (115 of them ALSO
+resolved — multi-source by design) · 1006 abstain (961 derived skips + 45 value_absent) · parks 4
+(sources_incomplete: AA×3 + ABT×1, 2025-12-31 — the designed lag-class behavior: each ticker's
+early-2026 8-K matches the annual target with invalid lag because the next 10-Q isn't ingested
+yet → the target parks; future reruns pair them cleanly) · verifier RECORD + CHECK both ALL
+ASSERTIONS PASSED (both-direction reconciliation 1,535=1,535; compliance 2× 329/329; independent
+inline-Cypher pairing + production-lag proof per accepted 8-K; zero fabricated) · battery 99/99 ·
+regress 28/28 floors · earnings suites 119/119 · manifest code_commit `6e7f8b1-dirty` ('-dirty'
+= the two standing out-of-scope dirty files only; the artifacts commit follows separately per the
+two-commit procedure).
+**Why 329 < the round-13 "391":** the 391 baseline was measured against a CONTAMINATED corpus
+(the label-join's wrong/extra 8-K accepts, ACI-future included) and pre-veto scale rules; records
+that lost their deterministic bind under the hardened gates DEMOTED to residual (the LLM tier
+re-attempts them) — nothing wrong was kept for the sake of a bigger number. True P/R stays a WP4
+measured claim.
+STATE: WP1 code + evidence COMPLETE under the owner's two-file authority; push + WP2 remain
+owner words; reviewer re-audit next.

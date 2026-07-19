@@ -1,6 +1,6 @@
 {
  "wp": "WP1 Step 4 regenerate",
- "code_commit": "d3a9ded-dirty",
+ "code_commit": "6e7f8b1-dirty",
  "tickers": [
   "A",
   "AA",
@@ -19,23 +19,23 @@
  "then": "venv/bin/python scripts/driver_seed/build_packets.py --tag wp1",
  "claims_scope": "zero fabricated (quote_source=xbrl_fact) records IN THIS COHORT ONLY; older part1-4 artifacts are STALE/INVALID, not regenerated",
  "output_sha256": {
-  "code_resolved.jsonl": "10e046349541b52ad01fbcfcdc165923220c8ba4bffe0da905058253ee5e22ad",
-  "residual.jsonl": "45f2201ca643678a77afe9edfce91d00bd3f71d0252bc1262763ba1b6af7ba73",
-  "abstain.jsonl": "d659850f3a5a0702e1fd3e3966594768901d7a5bee3501ee07a7beddcef0624d",
-  "packets.jsonl": "4e6b7dc54d6f24ff3916b7e1ce62e6e868dd138d7963f50683dfa0022f38dda6",
-  "skip_ledger.jsonl": "9a11441e09ebdc3c96e4c19fa39ca703676d07becbda2daf619ca7ccfad56dd1",
-  "park_ledger.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "sources_ledger.jsonl": "df52964e987db16de7a19ed1f79da39ff7d1f4cb6560b0108f16e06b4b404508"
+  "code_resolved.jsonl": "175d35f5f6b55852672d12263d282437af6bcb70932faa3777ac0cc5bf434c72",
+  "residual.jsonl": "caeb2b2c670862ecf0768b73e788ac305ee6b818351cee1825580613b77d973c",
+  "abstain.jsonl": "ece0bba016eab75c8bc7899d3ff439a5c7459353b27bf30df03848f8eb9a51dc",
+  "packets.jsonl": "02142fcfcfeb40cf6513cfd75a1f73af377afd604b9e7265497f685a1ea7cd7a",
+  "skip_ledger.jsonl": "5895829fa10e7c89f838ffa4ed950d68501c8c2602308716a9204091e99d3142",
+  "park_ledger.jsonl": "119ef902208f09a67db2ae9bf005b10fc43e5f3417d751751c9a0c89aa1e21b9",
+  "sources_ledger.jsonl": "758c1debdafd3aa25a2c93b77a52c65ca1e0bb8069a8576ab507e0ccc9e8d0e3"
  },
  "verified_summary": {
   "tag": "wp1",
-  "records_resolved": 391,
-  "residual": 356,
+  "records_resolved": 329,
+  "residual": 410,
   "abstain": 1006,
   "company_periods": 25,
-  "T1_xbrl": 105,
-  "T2_label": 286,
-  "pr_records": 131,
+  "T1_xbrl": 103,
+  "T2_label": 226,
+  "pr_records": 81,
   "cp_no_filing": 0,
   "duplicate_rows_collapsed": 0
  },
