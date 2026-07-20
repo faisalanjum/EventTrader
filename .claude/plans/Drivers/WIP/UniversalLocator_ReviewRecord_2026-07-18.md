@@ -1593,8 +1593,10 @@ PROOFS: bodies verbatim (my own cut/paste of exact text); link_lib = a parenthes
 from-locator import re-exporting all 14 names, zero wrapper logic; same-object proof 14/14
 (link_lib.row_quote IS locator.row_quote); single-definition grep 10/10 functions; locator's
 real imports = Mapping/json/re/exact_numbers only; runtime sweep after importing locator
-alone = ZERO fiscal modules loaded; git diff --check clean. Diff: locator +232, link_lib
-−228/+17 (pointer comments + the import block).
+alone = ZERO fiscal modules loaded; git diff --check clean. Diff (git numstat, scoped to
+commit b934145 exactly — corrected in the follow-up record commit; my first report misread
+--stat's touched-lines display as additions): review record +25/−0 · locator.py +231/−1 ·
+link_lib.py +18/−227 · total +274/−228.
 GATES (his exact commands, PYTHONDONTWRITEBYTECODE=1): focused before=88 → after=88 ·
 regular battery 174/174 (his pinned baseline, no count loss) · live gate 2/2 -rs with the
 fixture BYTE-UNCHANGED (sha256 d7d2f068…, git-clean) at 130/20/0, no per-case movement ·
