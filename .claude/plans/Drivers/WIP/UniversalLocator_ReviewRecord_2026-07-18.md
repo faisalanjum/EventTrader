@@ -1114,3 +1114,83 @@ by the dotted-initials law; the ISO deletion cost this cohort NOTHING.]
 5. Gates this round: battery 149/149 (test count unchanged — assertions added inside the
    already-claiming test) · floors 28/28 · wp1_verify CHECK green · NO regeneration.
 **WP1 CLOSED. Pushed on the owner's word; WP2 begins.**
+
+## WP2 planning round (ChatGPT, 2026-07-19) — plan v1 → v2 BEFORE any code.
+No WP2 code existed (the "pause" was honored trivially). All 10 directive points verified
+against design v5.5 + live source before adoption; his checkable code facts 5/5 TRUE:
+(a) the schema probe is exactly 13 tests; (b) `xbrl_lane.resolve` is one-period-INPUT (period
+args required) → can never be the period-free universal route; (c) the 150-pair live check is
+collected by NO battery test (zero test files reference the truth pool) AND its compare is
+`int(float(...))` — not exact Decimal; (d) resolve does NOT reject a fact carrying BOTH instant
+and duration dates (tier1 does — a sibling-parity gap); (e) pool facets DO carry `axis_qname` →
+the durable full-pair test is pool-drivable without circularity. REACHABILITY VERIFIED:
+`run_code_tier` → `locate_by_value` only (tier1 + text lanes); resolve sits only on
+`locate_by_fingerprint` → WP1 outputs independent of the gate change → NO regeneration.
+His flow (period-free anchor → whole-source scan → XBRL retrieves → same-source text proves →
+emit all proven periods) is design-TRUE: §2 anchor = series key minus period/scope; §3 = every
+item carries a verbatim quote (WP1's own T1 records carried quotes); route notes = prior qname
+retrieves, never proves. Adopted all 10 with two recorded nuances: the deferred register
+ALREADY exists (task #779) — the S4-blocked gate tests go there, no NEW ledger is built; and
+bare-local-name concept storage (verified 109/109) means such facts emit as quote-proven items
+WITHOUT promoted XBRL context (never prefix-promoted from an earlier filing). Doc-boundary note
+adopted: Fiscal edits ONLY its locator design + review record; FinalDesign law files = Core's
+alone (matches the owner-agreed LAW-COMMIT PLAN). Plan v2 rewritten in place
+(`UniversalLocator_WP2_Plan_2026-07-19.md`). AWAITING: the reviewer's verdict on v2 + the
+owner's code-GO; the design-doc lock still awaits the owner's own word.
+
+## WP2 planning round 2 (ChatGPT, 2026-07-19) — v2 flow APPROVED; v3 = his 11 proof-pins.
+All 11 verified before adoption. THREE factual checks TRUE: (a) the probe's decoder
+`strict_decode` is TEST-LOCAL (defined inside test_anchor_schema_probe.py; no production
+rebuild function exists — his exact point); (b) `driver/relocation` has NO `__init__.py` and
+NO locator entrypoint (only exact_numbers + 2 test files) — an empty-package boundary import
+would prove nothing; (c) NO standalone deferred-register file exists under plans/Drivers (find
+shows only an unrelated experiment JSON). TWO OWNED v2 ERRORS: (1) "prior pairs" as anchor
+retrieval clues was MY over-inclusion — design §2 clues = wording (birth_quotes primary, fact
+quote fallback) + ACTIVE ConceptResolution, and route 1 allows prior-QNAME retrieval only;
+pairs appear nowhere — v3 bans them explicitly; (2) my "existing deferred register (task
+#779)" pointer was a phantom — the real authorities = the locked design's own mandatory-gate
+sentences + Core's STATUS_AND_HISTORY. Also confirmed exact: his 130-link baseline
+(xbrl_lane's verified 130/150, floor ≥125). Adopted without change: strict matcher lives in
+driver/relocation with old xbrl_lane as thin adapter (new code ≠ physical move; R5 untouched);
+RED pins (wrong axis · swapped pairs · pair order · malformed vs verified-empty · mixed dates
+· bare-tag-never-promoted); all-period + dedup + ambiguity→abstain test; hints stamped with
+current source_id, mismatch rejected; done-bar gains one real XBRL filing + one real text-only
+8-K with pinned hashes + commands; the 150-case gate becomes FIXED cases, exact Decimal, zero
+wrong, no silent skip, any loss vs 130 owner-gated; REGENERATION decided from the COMPLETE
+final WP2 diff (gate-only reachability already proven, but adapters could touch shared files).
+Plan v3 rewritten in place. AWAITING: reviewer FINAL GO on v3 + owner words (code-GO ·
+doc-lock).
+
+## WP2 planning round 3 (ChatGPT, 2026-07-19) — v3 architecture APPROVED; v4 = final
+## proof-tightening (7 points, 7/7 adopted, 0 rejected — every premise verified first).
+Verifications: (a) LAZY-IMPORT RISK IS REAL HERE — locate.py's own locate_by_fingerprint does
+an in-function `import xbrl_lane` (his exact mechanism, already in this codebase) → the
+boundary test now EXECUTES minimal R1+R2 calls before the sys.modules sweep; (b) the probe's
+four rejection classes EXIST today (cross-wired/missing source→company keys · fact_scope ≠ id
+suffix · Driver-name/type disagreement · time_type) → retained verbatim through the
+production-function migration; (c) XN.period_key REJECTS '2024-13-45', '', '2024-02-30' (run
+live) → his fact-side pins extend an existing law, no new machinery; (d) seg_parse is ONE
+parser today but DEFINED in link_lib (channel-side) with xbrl_lane importing from it — the
+inverted dependency; v4 relocates the definition to the neutral module, BOTH sides import
+from there (pure move; touches link_lib → the complete-final-diff regeneration check WILL
+run). Also adopted: the 150-case gate reconciles EXACTLY all 150 into ok/abstain-with-reason/
+owner-gated-loss buckets; done-bar requires ≥1 COMPLETE field-checked emitted item from EACH
+real source (10-K/Q + text-only 8-K) PLUS one honest negative no_proven_match case; WP2
+stated READ-ONLY, zero Neo4j writes (standing owner law made explicit). Plan v4 in place.
+AWAITING: reviewer code-GO on v4 + the owner's words (code-GO · doc-lock — the reviewer has
+now twice noted the owner may lock Fiscal's three locator-document clarifications; Core's
+law-document commit + R8 stay separate).
+
+## WP2 planning round 4 (ChatGPT FINAL AUDIT, 2026-07-19) — one literal correction, then
+## **CODE-GO GRANTED. No v5.** Correction VERIFIED true before applying: my v4 done-bar
+applied "complete pairs or verified-empty" to BOTH real sources, but a text-only 8-K has no
+XBRL — `[]` there would falsely assert a real XBRL fact was checked and found undimensioned
+(the design's §3 "XBRL context WHEN PRESENT" already carries the distinction; my line blurred
+it). Fixed: the 10-K/Q item = exact full tag + complete dimensions OR verified-empty `[]`;
+the text-only 8-K item = NO XBRL context at all, never `dimensions=[]`. Plan-wide sweep: the
+only other "verified-empty" is the dimension-parsing RED pin (correct context). GATES TO
+BUILD: reviewer code-GO ✓ (this message) + owner code-GO ✓ (standing words "once committed
+and pushed you can start with WP2" — condition met at `80bae52`). WP2 BUILD BEGINS test-first
+per plan v4. Doc-lock: the reviewer instructs locking the three Fiscal-owned amendments;
+per the arc's push-precedent (relayed instruction ≠ owner word for owner-gated actions) the
+lock executes on the owner's OWN word — asked.

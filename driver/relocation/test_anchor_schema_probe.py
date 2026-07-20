@@ -262,3 +262,110 @@ def test_13_real_cross_company_isolation_two_live_edges():
     x, _ = strict_decode(f1, props(f1, "m_usd", "duration"), d, edge_map)
     y, _ = strict_decode(f2, props(f2, "m_usd", "duration"), d, edge_map)
     assert x != y and x["company"] != y["company"]
+
+
+# ---------- WP2 step 1 (plan v4): reconstruction tests call the PRODUCTION rebuild_anchor ----------
+sys.path.insert(0, _HERE)
+from locator import rebuild_anchor                       # the REAL neutral entrypoint, not a test double
+
+
+def test_14_production_parity_with_strict_decode_on_green_fixtures():
+    """The production function reconstructs EVERY strict-decode field exactly (it may ADD clue
+    fields); parity across the synthetic fixture shapes: dimensionless, dimensioned, numberless,
+    instant, measurement series."""
+    cases = [
+        ("SYN-ACC-A", "revenue", dict(period_id="gp_2023-10-01_2024-09-28"),
+         "m_usd", "duration", ("Total revenue $ 6,707",)),
+        ("SYN-ACC-B", "revenue", dict(period_id="gp_2024-11-01_2025-01-31",
+                                      slice_parts=(("segment", "Life Sciences & Applied Markets"),)),
+         "m_usd", "duration", ("Life sciences and applied markets $ 968",)),
+        ("SYN-ACC-C", "weather_condition", dict(period_id="gp_2024-01-01_2024-03-31"),
+         None, "duration", ("unusually cold winter across texas",)),
+        ("SYN-ACC-D", "store_count", dict(period_id="gp_2025-12-31_2025-12-31"),
+         "count", "instant", ("International Stores 86 at fiscal year end",)),
+        ("SYN-ACC-F", "operating_margin", dict(period_id="gp_2024-01-01_2024-12-31",
+                                               measurement_tokens=("adjusted",)),
+         "percent", "duration", ("operating margin was 12.4%",)),
+    ]
+    for acc, name, kw, unit, tt, bq in cases:
+        fid, _ = DI.build_id(acc, name, **kw)
+        em = {acc: f"CIK-{acc}"}
+        a_strict, s_strict = strict_decode(fid, props(fid, unit, tt), drv(name, bq), em)
+        a_prod, s_prod = rebuild_anchor(fid, props(fid, unit, tt), drv(name, bq), em)
+        assert {k: a_prod[k] for k in a_strict} == a_strict, f"parity broke for {fid}"
+        assert s_prod == s_strict
+        assert a_prod["concept_clue"] is None
+
+
+def test_15_production_retains_all_probe_rejection_classes():
+    """v4: NO coverage lost in the migration — the four existing rejection classes hold against
+    the PRODUCTION function, plus the time_type validity check."""
+    fid, _ = DI.build_id("SYN-ACC-K", "eps", period_id="gp_2024-01-01_2024-03-31",
+                         surprise="actual_vs_consensus")
+    with pytest.raises(ValueError, match="forbidden/unknown"):
+        rebuild_anchor(fid, props(fid, "usd", "duration"), drv("eps", ("EPS of $ 1.23",)),
+                       {"SYN-ACC-K": "C"})
+    plain, _ = DI.build_id("SYN-ACC-K", "revenue", period_id="gp_2024-01-01_2024-12-31")
+    with pytest.raises(ValueError, match="!= id driver"):
+        rebuild_anchor(plain, props(plain, "m_usd", "duration"), drv("gross_margin", ("q",)),
+                       {"SYN-ACC-K": "C"})
+    bad = props(plain, "m_usd", "duration")
+    bad["fact_scope"] = "period=gp_2020-01-01_2020-12-31"
+    with pytest.raises(ValueError, match="stored fact_scope != id suffix"):
+        rebuild_anchor(plain, bad, drv("revenue", ("q",)), {"SYN-ACC-K": "C"})
+    with pytest.raises(ValueError, match="cross-wired or missing edge"):
+        rebuild_anchor(plain, props(plain, "m_usd", "duration"), drv("revenue", ("q",)),
+                       {"OTHER-ACC": "C"})
+    with pytest.raises(ValueError, match="time_type"):
+        rebuild_anchor(plain, props(plain, "m_usd", "garbage"), drv("revenue", ("q",)),
+                       {"SYN-ACC-K": "C"})
+
+
+def test_16_blank_wording_fails_closed_and_fact_quote_is_fallback_only():
+    fid, _ = DI.build_id("SYN-ACC-L", "revenue", period_id="gp_2024-01-01_2024-12-31")
+    em = {"SYN-ACC-L": "C"}
+    with pytest.raises(ValueError, match="blank wording"):
+        rebuild_anchor(fid, props(fid, "m_usd", "duration"), drv("revenue", ("", "   ")), em)
+    a, _ = rebuild_anchor(fid, props(fid, "m_usd", "duration"), drv("revenue", ("",)), em,
+                          fact_quote="Total revenue $ 6,707")
+    assert a["wording"] == ("Total revenue $ 6,707",), "fact quote must serve as the fallback"
+    b, _ = rebuild_anchor(fid, props(fid, "m_usd", "duration"),
+                          drv("revenue", ("the birth quote",)), em, fact_quote="an LWW quote")
+    assert b["wording"] == ("the birth quote",), "birth_quotes are PRIMARY — fallback ignored"
+
+
+def test_17_multiple_active_concept_resolutions_fail_closed():
+    fid, _ = DI.build_id("SYN-ACC-M", "revenue", period_id="gp_2024-01-01_2024-12-31")
+    em = {"SYN-ACC-M": "C"}
+    d = drv("revenue", ("q",))
+    with pytest.raises(ValueError, match="ACTIVE ConceptResolutions"):
+        rebuild_anchor(fid, props(fid, "m_usd", "duration"), d, em,
+                       concept_resolutions=("us-gaap:Revenues", "us-gaap:SalesRevenueNet"))
+    a, _ = rebuild_anchor(fid, props(fid, "m_usd", "duration"), d, em,
+                          concept_resolutions=("us-gaap:Revenues",))
+    assert a["concept_clue"] == "us-gaap:Revenues"
+    b, _ = rebuild_anchor(fid, props(fid, "m_usd", "duration"), d, em)
+    assert b["concept_clue"] is None
+
+
+def test_18_numeric_fact_without_series_unit_fails_numberless_stays_legal():
+    fid, _ = DI.build_id("SYN-ACC-N", "weather_condition", period_id="gp_2024-01-01_2024-03-31")
+    em = {"SYN-ACC-N": "C"}
+    d = drv("weather_condition", ("unusually cold winter",))
+    with pytest.raises(ValueError, match="numeric fact lacking series_unit"):
+        rebuild_anchor(fid, props(fid, None, "duration"), d, em, numeric_value_present=True)
+    a, _ = rebuild_anchor(fid, props(fid, None, "duration"), d, em)
+    assert a["series_unit"] is None, "numberless with series_unit=None stays legal"
+
+
+def test_19_smallest_missing_field_is_named():
+    """Prove-or-stop: the error NAMES the smallest missing identity piece."""
+    fid, _ = DI.build_id("SYN-ACC-O", "revenue", period_id="gp_2024-01-01_2024-12-31")
+    d = drv("revenue", ("q",))
+    for missing in ("fact_scope", "series_unit", "time_type"):
+        p = props(fid, "m_usd", "duration")
+        del p[missing]
+        with pytest.raises(ValueError, match=missing):
+            rebuild_anchor(fid, p, d, {"SYN-ACC-O": "C"})
+    with pytest.raises(ValueError, match="bad id shape"):
+        rebuild_anchor("not-a-du-id", props(fid, "m_usd", "duration"), d, {"SYN-ACC-O": "C"})
