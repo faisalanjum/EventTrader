@@ -253,7 +253,7 @@ def process_cp(items, filing, prs, sources_incomplete=False):
         if FA.is_derived(name):                  # fiscal.ai-computed (% Chg / Common Size) -> terminal SKIP
             abstain.append({**base, 'status': 'skip', 'reason': 'derived_metric'}); continue
         try:                                     # round-13/14: a malformed vendor number is a CHANNEL
-            if not math.isfinite(float(XN.dec(str(val)))):   # DATA defect -> visible PARK, never a
+            if not locate.L._finite(XN.dec(str(val))):       # DATA defect -> visible PARK, never a
                 raise XN.ExactError('non-finite')            # crash and never a value_absent/terminal-
         except (XN.ExactError, OverflowError, ValueError):   # skip masquerade. float() catches the
             abstain.append({**base, 'status': 'park', 'reason': 'invalid_value'})   # 1e309 class:

@@ -759,8 +759,8 @@ def match_facts(xbrls, concept_qname, pairs, period_start, period_end, unit_ref=
 
 # ---------- THE neutral locate entrypoint (WP2 Chunk 2: routes R1 + R2, v5.5 §3) ----------
 def _wording_tokens(anchor):
-    """retrieval-only label tokens from the anchor's wording clues — built from each clue's
-    LABEL PORTION (the text BEFORE its first digit). Mechanical rule, no stop-word list."""
+    """retrieval-only label tokens from each wording clue's LABEL PORTION (before its first
+    digit). Search clues ONLY — wording never authorizes slice or measurement identity."""
     toks = []
     for w in anchor.get('wording') or ():
         if isinstance(w, str):
@@ -774,8 +774,6 @@ def _wording_tokens(anchor):
 
 
 def _ident_tokens(field):
-    """identity tokens from an anchor slice/measurement field ('geography:united_states' ->
-    united/states): alpha>=3 from the value part, '_'-split. Mechanical, no vocabulary."""
     if not isinstance(field, str) or not field.strip():
         return []
     val = field.split(':', 1)[-1]
@@ -783,7 +781,6 @@ def _ident_tokens(field):
 
 
 def _fact_period(fc):
-    """('duration'|'instant', ps, pe) for a VALID single-shape stored period, else None."""
     p = fc.get('period')
     if p is None or not isinstance(p, Mapping):
         return None
@@ -816,37 +813,98 @@ def _span_class(shape):
         return None
     if d <= 100:
         return 'q'
+    if 150 <= d <= 320:
+        return 'ytd'
     if d >= 350:
         return 'a'
     return None
 
 
 def _unit_class(u):
-    """corrective 2: the CLASS of a unit string, census/spec-earned markers only — share wins
-    over money (dollars-PER-SHARE is not plain money); UNKNOWN (opaque ids) proves nothing:
-    graph-verified, Unit12 alone maps to FIVE incompatible meanings (USD 41,984 · shares 506 ·
-    pure 126 · employee 15) and U_EUR (1,229 facts) is money-but-not-USD."""
+    """corrective 3 — FACT-side unit class, census-grounded (corpus: USD 10.5M · shares 692k ·
+    pure 664k · USDshares 327k · foreign/physical → abstain): money+share = 'usd' (per-share
+    MONEY — per-X lives in the metric NAME, the owner's locked ruling); share-only = 'count'
+    (share counts ARE counts — recovers the 692k class); money-only = 'usd' (incl.
+    USD-per-physical); percent|pure = 'percent'; anything else (opaque/foreign/physical) =
+    None → abstain (Unit12 alone maps to five incompatible meanings)."""
     if not isinstance(u, str):
         return None
     c = u.casefold()
-    if 'share' in c:
-        return 'share'
-    if 'usd' in c or 'dollar' in c:
-        return 'money'
+    money = 'usd' in c or 'dollar' in c
+    share = 'share' in c
+    if money:
+        return 'usd'
+    if share:
+        return 'count'
     if 'percent' in c or 'pure' in c:
         return 'percent'
-    if 'count' in c:
-        return 'count'
     return None
 
 
-_QUARTER_WORD = re.compile(r'(?<![a-z])(?:quarter|three months)(?![a-z])', re.I)
-_ANNUAL_WORD = re.compile(r'(?<![a-z])(?:full year|annual|year ended|fiscal year|year)(?![a-z])', re.I)
+def _anchor_unit_class(su):
+    """ANCHOR-side class from the LEGAL series-unit vocabulary (usd, m_usd, percent,
+    percent_yoy, percent_sequential, percent_points, basis_points, count, x, unknown)."""
+    if not isinstance(su, str) or not su.strip():
+        return None
+    s = su.casefold().strip()
+    if s in ('usd', 'm_usd') or 'usd' in s or 'dollar' in s:
+        return 'usd'
+    if s == 'count':
+        return 'count'
+    if s.startswith('percent') or s == 'basis_points' or s == 'x':
+        return 'percent'
+    return None
+
+
+_SIG_AFTER_PCT = re.compile(r'\s?(%|percent\b)')
+_SIG_AFTER_SHARES = re.compile(r'\s{0,2}(?:[A-Za-z,\.]{1,12}\s)?shares?\b', re.I)
+_SIG_AFTER_DOLLARS = re.compile(r'\s{0,2}(?:[A-Za-z,\.]{1,12}\s)?dollars?\b', re.I)
+
+
+def _printed_unit_signal(text, vstart, vend):
+    """the value's own PRINTED unit signal: '$'/'US$' immediately before → usd; '%'/'percent'
+    after → percent; a 'shares' word right after → count; a 'dollars' word right after → usd;
+    none → None. Mechanical marks only."""
+    pre = text[:vstart].rstrip()
+    if pre.endswith('$'):
+        return 'usd'
+    after = text[vend:vend + 24]
+    if _SIG_AFTER_PCT.match(after):
+        return 'percent'
+    if _SIG_AFTER_SHARES.match(after):
+        return 'count'
+    if _SIG_AFTER_DOLLARS.match(after):
+        return 'usd'
+    return None
+
+
+# calendar-STRUCTURAL period wording (corrective 3: bare 'year' REMOVED — it swallowed
+# 'prior year' comparisons; 'for the year' stays as the explicit standard FY phrase)
+_Q_W = re.compile(r'(?<![a-z])(?:quarter|three months)(?![a-z])', re.I)
+_YTD_W = re.compile(r'(?<![a-z])(?:six months|nine months|year[ -]to[ -]date)(?![a-z])', re.I)
+_A_W = re.compile(r'(?<![a-z])(?:full year|fiscal year|annual|year ended|twelve months|'
+                  r'for the year|prior year|year earlier|year ago|last year)(?![a-z])', re.I)
+
+
+def _wcls(text, vstart, vend):
+    """the NEAREST period-wording class within the value's own [.;\n]-clause, either side."""
+    cs = max(text.rfind('.', 0, vstart), text.rfind(';', 0, vstart),
+             text.rfind('\n', 0, vstart)) + 1
+    ce_cands = [i for i in (text.find('.', vend), text.find(';', vend),
+                            text.find('\n', vend)) if i >= 0]
+    ce = min(ce_cands) if ce_cands else len(text)
+    clause = text[cs:ce]
+    best = None
+    for cls, pat in (('q', _Q_W), ('ytd', _YTD_W), ('a', _A_W)):
+        for m in pat.finditer(clause):
+            a0, a1 = cs + m.start(), cs + m.end()
+            dist = (vstart - a1) if a1 <= vstart else (a0 - vend) if a0 >= vend else 0
+            if best is None or dist < best[0]:
+                best = (dist, cls)
+    return best[1] if best else None
 
 
 def _value_span_in(text, q, val, fmt):
-    """absolute (start, end) of the value's LAST bounded printed occurrence of q inside text,
-    or None. q must be a slice of text (single-occurrence by the signature law)."""
     if q not in text:
         return None
     base = text.index(q)
@@ -860,43 +918,24 @@ def _value_span_in(text, q, val, fmt):
     return base + best[0], base + best[1]
 
 
-def _period_word_class(text, vstart, vend):
-    """corrective 2 — the printed-period signal for ONE value occurrence: within the value's
-    own CLAUSE ([.;\n]-delimited), the NEAREST quarter-class or annual-class wording (either
-    side of the value) decides; none present = no signal. Calendar-STRUCTURAL patterns only;
-    the nearest-wins rule keeps certified two-clause window bleed harmless (both words in one
-    clause -> the one beside the value governs)."""
-    cs = max(text.rfind('.', 0, vstart), text.rfind(';', 0, vstart),
-             text.rfind('\n', 0, vstart)) + 1
-    ce_cands = [i for i in (text.find('.', vend), text.find(';', vend),
-                            text.find('\n', vend)) if i >= 0]
-    ce = min(ce_cands) if ce_cands else len(text)
-    clause = text[cs:ce]
-    best = None
-    for cls, pat in (('q', _QUARTER_WORD), ('a', _ANNUAL_WORD)):
-        for m in pat.finditer(clause):
-            a0, a1 = cs + m.start(), cs + m.end()
-            dist = (vstart - a1) if a1 <= vstart else (a0 - vend) if a0 >= vend else 0
-            if best is None or dist < best[0]:
-                best = (dist, cls)
-    return best[1] if best else None
-
-
-def _extend_label_start(ctx, q, known):
-    """(extended_quote, extension_words) — extend the quote's start backward over
-    IMMEDIATELY-PRECEDING words that are CAPITALIZED or (case-insensitively) match a KNOWN
-    anchor token (wording/slice/measurement) — lowercase prose connectives never travel, but
-    lowercase 'adjusted' satisfying an adjusted anchor does. Mechanical; exact slices."""
+def _extend_label_start(ctx, q, ident):
+    """(extended_quote, extension_words) — walk back over IMMEDIATELY-PRECEDING words that are
+    CAPITALIZED or case-insensitively match an anchor IDENTITY token (slice/measurement —
+    wording NEVER authorizes identity); tolerate trailing punctuation on the walked word.
+    KNOWN LIMIT (stop-and-report, no vocabulary): a lowercase leading word that is neither an
+    identity token nor prose ('adjusted' vs 'and') is mechanically indistinguishable and is
+    not pulled in."""
     if not ctx or q not in ctx:
         return q, []
     i = ctx.index(q)
     j = i
     while True:
-        m = re.search(r"([A-Za-z][A-Za-z'-]*)\s+$", ctx[:j])
+        m = re.search(r"([A-Za-z][A-Za-z'-]*)(,?)\s+$", ctx[:j])
         if not m:
-            break
-        w = m.group(1)
-        if not (w[0].isupper() or w.lower() in known):
+            break                    # ':'/';' are LABEL BOUNDARIES (speaker prefixes,
+        w = m.group(1)               # headings) — the walk never crosses them; ',' is
+                                     # tolerated qualifier punctuation ('Adjusted, ...')
+        if not (w[0].isupper() or w.lower() in ident):
             break
         j = m.start(1)
     ext = ctx[j:i]
@@ -905,8 +944,6 @@ def _extend_label_start(ctx, q, known):
 
 
 def _row_label(q, val, fmt):
-    """the printed ROW LABEL = the quote up to its (last bounded) value occurrence — an exact
-    target-source slice, never anchor wording."""
     best = None
     for fo in sorted(_tableforms(val, fmt)):
         for m in re.finditer(re.escape(fo), q):
@@ -918,9 +955,6 @@ def _row_label(q, val, fmt):
 
 
 def _prove(texts, tokens, val, fmt):
-    """(quote, context, verdict) — verdict: 'ok' | 'ambiguous' | 'absent'. ONE row_quote
-    implementation used twice + the ONE certified value-proof rule (value_ok) + the ported
-    negative-notation sign law. Never a second matcher."""
     q, ctx = row_quote(texts, tokens, val, fmt, scale_gate=True, with_context=True)
     if q is not None:
         if not value_ok(val, fmt, q):
@@ -941,22 +975,34 @@ def _nb_str(x):
 _CAMEL = re.compile(r'[A-Z]?[a-z]+|[A-Z]+(?![a-z])')
 
 
+def _name_tokens(local):
+    return [tk.lower() for tk in _CAMEL.findall(local) if len(tk) >= 4]
+
+
 def _context_tied(concept_local, q):
-    """corrective 2: XBRL context may attach only when EVERY >=4-char camelCase token of the
-    fact's OWN stored name appears in the quote (substring either direction) — one generic
-    shared word ('operating', 'current') never carries a structured tag. Reduced attachment
-    is the accepted cost: unattached items stay valid text evidence."""
+    """ALL >=4-char camelCase tokens of the fact's OWN stored name must appear in the quote —
+    one generic shared word never carries a structured tag."""
     ql = q.lower()
     qwords = set(re.findall(r"[a-z]{4,}", ql))
-    toks = [tk.lower() for tk in _CAMEL.findall(concept_local) if len(tk) >= 4]
+    toks = _name_tokens(concept_local)
     if not toks:
         return False
     return all(tl in ql or any(tl in w or w in tl for w in qwords) for tl in toks)
 
 
+def _member_tokens_of(spairs):
+    out = set()
+    for _, m in spairs:
+        local = m.rpartition(':')[2]
+        for tk in _CAMEL.findall(local.replace('_', ' ')):
+            if len(tk) >= 3:
+                out.add(tk.lower())
+    return out
+
+
 def _finite(v):
-    """the WP1 round-13/14 invalid_value law: the 1e309 class is Decimal-finite but
-    float-infinite — abstain cleanly, never crash or bind."""
+    """THE one finite-number predicate (the WP1 round-13/14 1e309 class) — re-exported via
+    link_lib and used by the neutral routes, locate.py, and run_code_tier alike."""
     try:
         return math.isfinite(float(v))
     except (OverflowError, ValueError):
@@ -966,16 +1012,15 @@ def _finite(v):
 def locate(anchor, source, hints=None):
     """(anchor, ONE source payload, optional UNTRUSTED hints) →
     {'items': [...], 'status': None | 'no_proven_match' | 'ambiguous' |
-    'insufficient_identity'} — v5.5 §3; reads ONLY the given payload. EVERY present anchor
-    identity field is enforced: time shape filters candidacy; the UNIT-CLASS law requires the
-    fact unit's class to EQUAL the series-unit class (unknown/opaque abstains); an EMPTY slice
-    = the AGGREGATE series — dimensioned facts never bind it; slice/measurement tokens must
-    appear in the quote; words the label-extension adds must be EXPLAINED by anchor tokens;
-    printed period wording beside the value must not contradict the XBRL period (nearest
-    period word in the value's clause decides; equal-valued Q/FY facts with separately printed
-    occurrences resolve to two items via per-clause proof). Percent-class anchors prove in
-    percent format. XBRL context attaches only on a full name-tie; bare names never promote.
-    R2 hints: nonblank unpadded stamps both sides, text-proven, no xbrl, ambiguity abstains."""
+    'insufficient_identity'} — v5.5 §3; reads ONLY the given payload. Corrective-3 laws:
+    the fact unit's CLASS must equal the anchor's legal series-unit class (share-only=count,
+    money±share=usd, percent|pure=percent, opaque/foreign abstain); a printed unit signal
+    beside the value REJECTS on contradiction (R1) and is REQUIRED to match (R2); wording is
+    a search clue only — the qualifier zone is explained by IDENTITY tokens alone; XBRL
+    context attaches only when slice tokens are covered by the member names AND the
+    measurement token appears in the concept name (else text-only); every duration fact needs
+    POSITIVE period wording of its own span class (nearest-in-clause, either side), and
+    multi-occurrence values resolve per-clause one-to-one by class or abstain."""
     if not isinstance(anchor, Mapping) or not isinstance(source, Mapping):
         return {'items': [], 'status': 'insufficient_identity'}
     tokens = _wording_tokens(anchor)
@@ -985,39 +1030,54 @@ def locate(anchor, source, hints=None):
     want_ptype = anchor.get('time_type')
     slice_toks = _ident_tokens(anchor.get('slice'))
     meas_toks = _ident_tokens(anchor.get('measurement'))
-    ident_toks = slice_toks + meas_toks
-    known = set(tokens) | set(ident_toks)
-    anchor_ucls = _unit_class(anchor.get('series_unit'))
+    ident = set(slice_toks + meas_toks)
+    zone = ident | set(tokens)          # the qualifier-zone vocabulary: identity tokens +
+                                        # the label's own wording tokens (label continuation)
+    anchor_ucls = _anchor_unit_class(anchor.get('series_unit'))
     fmt = '%' if anchor_ucls == 'percent' else None
     clue = anchor.get('concept_clue')
     clue_local = clue.rpartition(':')[2] if isinstance(clue, str) and clue.strip() else None
     items, saw_ambiguous = [], False
+    if anchor_ucls is None:
+        return {'items': [], 'status': 'insufficient_identity'}
 
-    def emit(cand, q, ctx):
+    def emit(cand, q, ctx, v):
         c, spairs, shape, u = cand
-        q2, ext_words = _extend_label_start(ctx, q, known)
-        if any(w not in known for w in ext_words):
-            return None              # an UNEXPLAINED leading qualifier is unproven identity
+        q2, ext_words = _extend_label_start(ctx, q, zone)
+        if any(w not in zone for w in ext_words):
+            return None              # an unexplained leading QUALIFIER is unproven identity;
+                                     # wording tokens are label continuation, never identity
         low_q = q2.lower()
-        if ident_toks and not all(
+        toks_all = slice_toks + meas_toks
+        if toks_all and not all(
                 re.search(r'(?<![a-z0-9])' + re.escape(tk) + r'(?![a-z0-9])', low_q)
-                for tk in ident_toks):
+                for tk in toks_all):
             return None
         span = _value_span_in(ctx, q, v, fmt) if ctx and q in ctx else None
         if span is not None:
-            wcls = _period_word_class(ctx, span[0], span[1])
-            scls = _span_class(shape)
-            if wcls and scls and wcls != scls:
-                return None          # printed period wording contradicts the XBRL period
+            sig = _printed_unit_signal(ctx, span[0], span[1])
+            if sig is not None and sig != anchor_ucls:
+                return None              # printed evidence contradicts the stored/anchor unit
+        scls = _span_class(shape)
+        if shape[0] == 'duration':
+            if scls is None or span is None:
+                return None
+            if _wcls(ctx, span[0], span[1]) != scls:
+                return None              # POSITIVE period wording of the fact's own class
         lbl = _row_label(q2, v, fmt)
         if lbl is None:
             return None
         item = {'raw_label': lbl, 'value': v, 'quote': q2, 'period_evidence': ctx}
         prefix, _, local = c.rpartition(':')
         if prefix and _context_tied(local, q2):
-            item['xbrl'] = {'concept': c, 'axis_members': list(spairs),
-                            'period_start': shape[1], 'period_end': shape[2],
-                            'ptype': shape[0], 'unit': u}
+            mem_toks = _member_tokens_of(spairs)
+            slice_cov = all(tk in mem_toks for tk in slice_toks) if slice_toks else not spairs
+            meas_cov = (all(tk in _name_tokens(local) or tk in local.lower()
+                            for tk in meas_toks) if meas_toks else True)
+            if slice_cov and meas_cov:   # structured compatibility PROVEN, else text-only —
+                item['xbrl'] = {'concept': c, 'axis_members': list(spairs),   # never a wrong
+                                'period_start': shape[1], 'period_end': shape[2],  # context
+                                'ptype': shape[0], 'unit': u}
         return item
 
     by_value = {}
@@ -1030,20 +1090,19 @@ def locate(anchor, source, hints=None):
         u = _norm_unit(fc.get('unitRef'))
         if u is None or u is _BAD_UNIT:
             continue
-        if _unit_class(u) != anchor_ucls or anchor_ucls is None:
-            continue                 # the unit-class law: positive class equality or abstain
+        if _unit_class(u) != anchor_ucls:
+            continue
         pairs, complete = seg_parse(fc)
         if not complete:
             continue
         if not slice_toks and pairs:
-            continue                 # an EMPTY slice = the AGGREGATE series: dimensioned
-                                     # facts never bind it (tier1's aggregate law, ported)
+            continue
         try:
             v = XN.dec(fc.get('value'))
         except XN.ExactError:
             continue
         if not _finite(v):
-            continue                 # the 1e309 large-number class
+            continue
         key = (c, frozenset(pairs), shape, u)
         by_value.setdefault(v, {})[key] = (c, tuple(sorted(tuple(p) for p in pairs)), shape, u)
     for v in sorted(by_value, key=str):
@@ -1053,46 +1112,45 @@ def locate(anchor, source, hints=None):
             if len(cands) > 1:
                 saw_ambiguous = True
                 continue
-            it = emit(next(iter(cands.values())), q, ctx)
+            it = emit(next(iter(cands.values())), q, ctx, v)
             if it is not None:
                 items.append(it)
             continue
-        if verdict == 'ambiguous' and len(cands) == 2:
-            # equal-valued Q and FY facts, SEPARATELY printed with their own period wording:
-            # re-prove PER CLAUSE (row_quote REUSED on clause slices — never copied) and
-            # attribute each proven clause by its period-word class; anything short of a
-            # perfect one-to-one pairing stays ambiguous.
-            by_cls = {_span_class(cand[2]): cand for cand in cands.values()}
-            if set(by_cls) == {'q', 'a'}:
-                found, clean = {}, True
-                for t in texts:
-                    pos = 0
-                    for piece in re.split(r'(?<=[.;\n])', t):
-                        if piece.strip():
-                            qq, cctx, verd = _prove([piece], tokens, v, fmt)
-                            if verd == 'ok':
-                                span = _value_span_in(piece, qq, v, fmt)
-                                wcls = (_period_word_class(piece, span[0], span[1])
-                                        if span else None)
-                                if wcls is None or wcls in found:
-                                    clean = False
-                                else:
-                                    found[wcls] = (qq, cctx)
-                        pos += len(piece)
-                if clean and set(found) == {'q', 'a'}:
-                    emitted = []
-                    for wcls, (qq, cctx) in sorted(found.items()):
-                        it = emit(by_cls[wcls], qq, cctx)
-                        if it is None:
-                            emitted = None
-                            break
-                        emitted.append(it)
-                    if emitted:
-                        items.extend(emitted)
-                        continue
-            saw_ambiguous = True
-            continue
         if verdict == 'ambiguous':
+            # ONE general occurrence-local matcher (corrective 3 — replaces the Q/FY-only
+            # branch): re-prove PER CLAUSE (row_quote REUSED, never copied); every candidate
+            # must claim EXACTLY ONE proven clause of its own span class, clauses uniquely
+            # consumed and none left over; anything short of one-to-one abstains.
+            proven = []
+            for t in texts:
+                for piece in re.split(r'(?<=[.;\n])', t):
+                    if piece.strip():
+                        qq, cctx, verd = _prove([piece], tokens, v, fmt)
+                        if verd == 'ok':
+                            span = _value_span_in(piece, qq, v, fmt)
+                            wc = _wcls(piece, span[0], span[1]) if span else None
+                            proven.append((wc, qq, cctx))
+            by_scls = {}
+            for key2, cand in cands.items():
+                by_scls.setdefault(_span_class(cand[2]), []).append(cand)
+            clean = (len(proven) == len(cands)
+                     and all(len(vv) == 1 for vv in by_scls.values())
+                     and None not in by_scls)
+            if clean:
+                wclasses = [wc for wc, _, _ in proven]
+                clean = (len(set(wclasses)) == len(wclasses)
+                         and set(wclasses) == set(by_scls))
+            if clean:
+                emitted = []
+                for wc, qq, cctx in proven:
+                    it = emit(by_scls[wc][0], qq, cctx, v)
+                    if it is None:
+                        emitted = None
+                        break
+                    emitted.append(it)
+                if emitted:
+                    items.extend(emitted)
+                    continue
             saw_ambiguous = True
 
     sid = source.get('source_id')
@@ -1107,21 +1165,26 @@ def locate(anchor, source, hints=None):
             if verdict == 'ambiguous':
                 saw_ambiguous = True
             elif verdict == 'ok':
-                q2, ext_words = _extend_label_start(ctx, q, known)
+                q2, ext_words = _extend_label_start(ctx, q, zone)
                 low_q = q2.lower()
-                if all(w in known for w in ext_words) and (not ident_toks or all(
-                        re.search(r'(?<![a-z0-9])' + re.escape(tk) + r'(?![a-z0-9])', low_q)
-                        for tk in ident_toks)):
-                    lbl = _row_label(q2, hv, fmt)
+                toks_all = slice_toks + meas_toks
+                span = _value_span_in(ctx, q, hv, fmt) if ctx and q in ctx else None
+                sig = (_printed_unit_signal(ctx, span[0], span[1]) if span else None)
+                if (all(w in zone for w in ext_words)
+                        and (not toks_all or all(
+                            re.search(r'(?<![a-z0-9])' + re.escape(tk) + r'(?![a-z0-9])',
+                                      low_q) for tk in toks_all))
+                        and sig == anchor_ucls):     # R2: POSITIVE printed-unit proof —
+                    lbl = _row_label(q2, hv, fmt)    # no stored unit exists to lean on
                     if lbl is not None:
                         items.append({'raw_label': lbl, 'value': hv, 'quote': q2,
                                       'period_evidence': ctx})
 
-    grouped = {}                        # same-evidence dedup: R1+R2 on ONE occurrence
-    for it in items:                    # collapse to the XBRL-backed item; equal-quote items
-        grouped.setdefault(it['quote'], []).append(it)     # with DIFFERENT XBRL identities
-    kept = []                           # (the resolved Q/FY pair) are different evidence and
-    for k, group in grouped.items():    # both survive
+    grouped = {}
+    for it in items:
+        grouped.setdefault(it['quote'], []).append(it)
+    kept = []
+    for k, group in grouped.items():
         with_x = {}
         for it in group:
             if 'xbrl' in it:

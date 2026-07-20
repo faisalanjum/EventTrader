@@ -192,7 +192,8 @@ from locator import (seg_parse,            # WP2 step 2: THE single strict parse
                      _table_active_start, _snippet_start,             # closure moved there —
                      _round_forms, value_forms, bounded_hit,          # + Chunk-2 corrective:
                      exact_form, printed_negative, _scale_tag_ok,     # the value_ok closure
-                     value_ok)                                        # (verbatim move)
+                     value_ok,                                        # (verbatim move)
+                     _finite)                # corrective 3: THE one finite-number predicate
                                            # one implementation each; this channel file
                                            # re-exports the SAME names so every existing caller
                                            # keeps working; dependency points channel→neutral

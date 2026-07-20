@@ -1730,3 +1730,55 @@ d7d2f068 unchanged, 130/20/0 · floors 28/28 · neutral runtime sweep CLEAN · b
 GATES: routes+boundary 31/31 · full battery 205/205 (199+6) · live gate 2/2, fixture
 d7d2f068 unchanged, 130/20/0 · floors 28/28 · runtime sweep CLEAN · boundary 81eca0aa
 byte-unchanged · git diff --check clean. HOLDS all held; Chunk 3 not begun.
+
+## WP2 CHUNK-2 CORRECTIVE 3 (his audit of b4f36a5 — REJECTED; 4 groups; 2026-07-20).
+## CENSUS BEFORE CODING (his order, my runs): plain-shares facts = 692,129 (his 634,581) ·
+## USDshares = 327,402 (his 43,834) — both LOSS CLASSES confirmed decisively, his exact
+## figures NOT reproduced (both numbers recorded); corpus classes: USD 10.5M · shares 692k ·
+## pure 664k · USDshares 327k · foreign CAD/EUR/JPY/GBP · physical utr:sqft/bbl/Rate.
+## Overflow triple-implementation confirmed at his three exact sites.
+1. UNIT LAW v2 (grounded in the LEGAL anchor vocabulary usd/m_usd/percent*/basis_points/
+   count/x/unknown): fact classes — money±share → 'usd' (dollar-per-share SUPPORTS usd, his
+   ordered REVERSAL of my corrective-2 pin — per-X lives in the NAME, the owner's locked
+   ruling; recovers 327k facts); share-only → 'count' (shares ARE counts; recovers 692k);
+   percent|pure → 'percent'; opaque/foreign → abstain. Anchor unknown → insufficient_identity.
+   PRINTED-UNIT SIGNALS ($/US$/dollars → usd · %/percent → percent · shares-word → count):
+   R1 rejects a contradicting signal; R2 REQUIRES a positive matching signal (no stored unit
+   exists to lean on) — count+$91 and money+'91 shares' pinned dead; percent anchors prove in
+   fmt='%' (the 86% inversion dead). FIXTURE CONSEQUENCES (each law-forced, documented):
+   test_27 dollar-share expectation FLIPPED per his order + count/shares positives added;
+   test_8/11/21 R2 fixtures gained $/dollars signals; test_5's member became filer-named.
+2. FULL IDENTITY: the qualifier ZONE = identity tokens ∪ wording tokens (wording = label
+   continuation, NEVER identity authority — an unexplained 'Adjusted' under a plain anchor
+   still abstains); ':'/';' are label BOUNDARIES the extension never crosses (speaker
+   prefixes — 'CFO:' — no longer poison transcripts), ',' tolerated ('Adjusted, …' works);
+   CONTEXT attaches only when slice tokens ⊆ member-name tokens AND the measurement token ∈
+   the concept name — else TEXT-ONLY (US-anchor/UK-fact and adjusted-anchor/plain-fact can
+   never carry wrong context). TWO STOP-AND-REPORT LIMITS (his escape hatch, for his
+   verdict): (a) a lowercase leading word that is neither identity nor wording is
+   mechanically indistinguishable from prose ('organic total…' vs 'and total…') — not pulled,
+   not judged; (b) country-code members (country:US) cannot mechanically cover slice tokens
+   without a country table (channel-only by the crosswalk) → such facts emit TEXT-ONLY.
+   INTERPRETATION recorded for his check: wording-containing-'Adjusted' + empty measurement
+   binds as the PLAIN series it claims to be (the item carries no measurement semantics; the
+   raw label honestly shows what is printed) — wording still authorizes nothing.
+3. PERIOD BINDING v2: bare 'year' REMOVED (it swallowed 'prior year'); classes = q
+   (quarter|three months) · ytd (six|nine months, year-to-date) · a (full/fiscal year,
+   annual, year ended, twelve months, for the year, prior year, year earlier/ago, last
+   year); EVERY duration fact needs POSITIVE wording of its own class — nearest-in-clause,
+   EITHER side of the value (no-wording → abstain; YTD-as-full-year → abstain;
+   annual-as-nine-months → abstain; quarter+prior-year-comparison binds via nearest); the
+   Q/FY-only branch REPLACED by ONE general per-clause one-to-one matcher (every candidate
+   claims exactly one proven clause of its class, none left over, else abstain — covers
+   Q/YTD, FY/comparative (same-class → honestly ambiguous), multi-comparative (ambiguous)).
+4. OVERFLOW: ONE predicate — locator._finite re-exported via link_lib; locate.py:66 and
+   run_code_tier:256 now call it with their outcome handling PRESERVED (dec-ExactError and
+   abstain/park paths byte-equivalent; the OverflowError branch becomes the False branch with
+   the same destination). TOUCHES WP1-REACHABLE FILES — the deferred complete-final-diff
+   covers this by design.
+CLAIM-SCOPING corrections (his order): "shared" is claimed only for the 12 crosswalk rows
+with same-object proofs; "full identity" and "period binding" are claimed ONLY for the
+mechanically-pinned cases above — the two stop-and-report limits are named, not papered over.
+GATES: focused suites 151/151 · full battery 205/205 (NO loss from 205) · live gate 2/2,
+fixture d7d2f068 unchanged, 130/20/0 · floors 28/28 · runtime sweep CLEAN · boundary
+81eca0aa byte-unchanged · git diff --check clean. HOLDS all held; Chunk 3 not begun.

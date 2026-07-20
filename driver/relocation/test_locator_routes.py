@@ -99,13 +99,14 @@ def test_5_fully_stored_xbrl_context_survives_exactly():
     source-proven and the full stored context survives exactly (padded unit stripped)."""
     us = dict(ANCHOR, slice='geography:united_states')
     f = fact('4000000000', D24, unit=' U_USD ',
-             seg=[{'dimension': 'srt:StatementGeographicalAxis', 'value': 'country:US'}])
+             seg=[{'dimension': 'srt:StatementGeographicalAxis',
+                   'value': 'x:UnitedStatesMember'}])
     r = LOC.locate(us, src([blob('us-gaap:Revenues', [f])],
                            ["United States total widget revenue was 4,000,000,000 for the year"]))
     assert len(r['items']) == 1
     x = r['items'][0]['xbrl']
     assert x == {'concept': 'us-gaap:Revenues',
-                 'axis_members': [('srt:StatementGeographicalAxis', 'country:US')],
+                 'axis_members': [('srt:StatementGeographicalAxis', 'x:UnitedStatesMember')],
                  'period_start': '2024-01-01', 'period_end': '2024-12-31',
                  'ptype': 'duration', 'unit': 'U_USD'}
     assert r['items'][0]['quote'].startswith('United States')
@@ -142,7 +143,7 @@ def test_7_ambiguity_table_same_occurrence_identity_differences_abstain():
 
 
 def test_8_r2_accepts_correctly_stamped_hint():
-    s = src(texts=["Total widget revenue was 4,000,000,000 in the quarter"], sid='SRC-8K',
+    s = src(texts=["Total widget revenue was $4,000,000,000 in the quarter"], sid='SRC-8K',
             stype='8k')
     r = LOC.locate(ANCHOR, s, hints={'source_id': 'SRC-8K', 'value': 4000000000})
     assert r['status'] is None and len(r['items']) == 1
@@ -168,7 +169,7 @@ def test_10_r2_multiple_distinct_occurrences_are_ambiguous():
 
 def test_11_transcript_shaped_payload_resolves_through_r2():
     s = {'source_id': 'TR-1', 'source_type': 'transcript', 'xbrls': [],
-         'texts': ["CFO: Total widget revenue was 4,000,000,000 this quarter, ahead of plan."]}
+         'texts': ["CFO: Total widget revenue was 4,000,000,000 dollars this quarter."]}
     r = LOC.locate(ANCHOR, s, hints={'source_id': 'TR-1', 'value': 4000000000})
     assert r['status'] is None and len(r['items']) == 1 and 'xbrl' not in r['items'][0]
 
@@ -254,7 +255,7 @@ def test_20_leading_qualifier_survives_in_raw_label():
 
 def test_21_r1_r2_same_evidence_one_item_xbrl_wins():
     xb = blob('us-gaap:Revenues', [fact('4000000000', D24)])
-    s = src([xb], ["Total widget revenue was 4,000,000,000 for the year"], sid='S1')
+    s = src([xb], ["Total widget revenue was $4,000,000,000 for the year"], sid='S1')
     r = LOC.locate(ANCHOR, s, hints={'source_id': 'S1', 'value': 4000000000})
     assert len(r['items']) == 1, "R1+R2 on the same evidence must emit ONE item"
     assert 'xbrl' in r['items'][0], "the stronger XBRL-backed item wins the dedup"
@@ -310,11 +311,24 @@ def test_27_unit_class_law_positive_match_required():
     """Corrective 2: the fact unit's CLASS must equal the anchor's series-unit class; UNKNOWN
     (opaque) abstains. Graph-verified: U_EUR=1,229 facts; Unit12 maps to FIVE incompatible
     meanings (USD 41,984 · shares 506 · pure 126 · employee 15) — an opaque id proves nothing."""
-    for bad in ('U_EUR', 'Unit12', 'U_UnitedStatesOfAmericaDollarsShare'):
+    for bad in ('U_EUR', 'Unit12'):
         xb = blob('us-gaap:Revenues', [fact('4000000000', D24, unit=bad)])
         r = LOC.locate(ANCHOR, src([xb],
                                    ["Total widget revenue was 4,000,000,000 for the year"]))
         assert r['items'] == [], (bad, r)
+    # corrective-3 ORDERED REVERSAL: dollar-per-share units SUPPORT the usd meaning (per-X
+    # lives in the metric NAME - the owner's locked ruling; 327,402 real USDshares facts)
+    ps = blob('us-gaap:EarningsPerShareDiluted',
+              [fact('4000000000', D24, unit='U_UnitedStatesOfAmericaDollarsShare')])
+    rp = LOC.locate(ANCHOR, src([ps],
+                                ["Total widget revenue was 4,000,000,000 for the year"]))
+    assert len(rp['items']) == 1, 'dollar-per-share is USD money and must support m_usd'
+    # share-only units are COUNTS and support count anchors (692,129 real shares facts)
+    cnt = dict(ANCHOR, series_unit='count', wording=('Widget shares outstanding',))
+    sh = blob('us-gaap:SharesOutstanding', [fact('91000000', D24, unit='shares')])
+    rs = LOC.locate(cnt, src([sh],
+                             ["Widget shares outstanding were 91,000,000 for the year"]))
+    assert len(rs['items']) == 1, 'plain shares must support a count anchor'
     cnt = dict(ANCHOR, series_unit='count', wording=('Widget store count',))
     xb2 = blob('us-gaap:StoreCount', [fact('91', D24, unit='U_USD')])
     r2 = LOC.locate(cnt, src([xb2], ["Widget store count was 91 for the year"]))

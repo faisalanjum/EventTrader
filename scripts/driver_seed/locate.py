@@ -63,10 +63,10 @@ def locate_by_value(req):
     texts = req.get('texts') or []
     name, val, fmt, per = req['name'], req['value'], req.get('fmt'), req.get('period')
     try:                                     # round-13/14 (both live-reproduced): 'N/A'/'-331x'
-        import math                          # crashed with ValueError; '1e309' is Decimal-finite
-        if not math.isfinite(float(L.XN.dec(str(val)))):     # but float-INFINITE -> OverflowError
-            raise L.XN.ExactError('non-finite')              # deeper in. A malformed vendor number
-    except (L.XN.ExactError, OverflowError, ValueError):     # ABSTAINS cleanly instead.
+        if not L._finite(L.XN.dec(str(val))):    # crashed with ValueError; '1e309' is Decimal-
+            raise L.XN.ExactError('non-finite')  # finite but float-INFINITE. ONE shared finite
+    except (L.XN.ExactError, OverflowError, ValueError):     # predicate (corrective 3); the
+                                                             # caller's abstain path unchanged.
         return {'hit': None, 'snips': []}
     allow_t1 = req.get('allow_xbrl', True)
     t1 = (L.tier1(xbrls, name, val, per, is_currency=req.get('is_currency'))
