@@ -127,10 +127,11 @@ def test_nonmoney_needs_positive_evidence_opaque_abstains():
     NEITHER money NOR nonmoney. Census over the 88,236-numeric-fact gate corpus: EVERY genuine
     nonmoney unit is a shares variant (shares / U_shares / Share / Unit_shares /
     Unit_Standard_shares_*), the opaque ids Unit12/Unit1/Unit16 cover 527 facts, and foreign
-    currencies (cny, eur, U_AUD) also currently leaked through nonmoney. KNOWN COARSE-FILTER
-    LIMIT (flagged, pinned below): U_UnitedStatesOfAmericaDollarsShare — dollars-per-share
-    with no 'usd' substring — still passes the shares marker; the heuristic is a pre-filter,
-    never proof."""
+    currencies (cny, eur, U_AUD) also currently leaked through nonmoney. Dollars-per-share
+    units are MONEY (graph-verified: U_UnitedStatesOfAmericaDollarsShare = 38,041 facts, ALL
+    iso4217:USDshares divide=1; the global dollar-sweep shows every dollar-named unit is
+    money-denominated, incl. U_AustralianDollarShare 6 facts AUDshares): 'usd' OR 'dollar'
+    marks money; nonmoney requires positive share evidence AND excludes both money markers."""
     sys.path.insert(0, os.path.join(_HERE, '..', '..', 'scripts', 'driver_seed'))
     import locate
 
@@ -146,8 +147,11 @@ def test_nonmoney_needs_positive_evidence_opaque_abstains():
     assert prod('cny', 'nonmoney') is None, "a foreign CURRENCY is never nonmoney"
     assert prod('Unit12', 'money') is None, "opaque stays out of money too"
     assert prod('U_USD', 'money') == XN.dec('93100000')
-    assert prod('U_UnitedStatesOfAmericaDollarsShare', 'nonmoney') == XN.dec('93100000'), \
-        "KNOWN LIMIT pinned: dollars-per-share evades both substring heuristics (documented)"
+    assert prod('U_UnitedStatesOfAmericaDollarsShare', 'money') == XN.dec('93100000'), \
+        "dollars-per-share IS money (38,041 facts, all iso4217:USDshares) — money must bind"
+    assert prod('U_UnitedStatesOfAmericaDollarsShare', 'nonmoney') is None, \
+        "dollars-per-share must NEVER satisfy a nonmoney ask"
+    assert prod('U_USDollarShare', 'nonmoney') is None, "the second dollars-share spelling too"
 
 
 COLLISION_EVIDENCE_QUERY = """
@@ -155,13 +159,14 @@ MATCH (f:Fact)-[:HAS_UNIT]->(un:Unit) WHERE f.unit_ref IN [$a, $b]
 WITH split(f.id, '_')[0] AS rep, collect(DISTINCT f.unit_ref) AS us,
      collect(DISTINCT un.name) AS names
 WHERE size(us) = 2
-RETURN count(*) AS n, collect(rep)[..3] AS sample, collect(names)[..2] AS nm
+RETURN rep, names ORDER BY rep
 """
-# Captured read-only results (2026-07-20, this graph):
-#   {a:'usdPerMWh',  b:'usdPerMwh'}  -> n=7, sample=[.../pseg-20230331, .../pseg-20230630,
-#     .../pseg-20230930], names=[['iso4217:USDutr:MWh','iso4217:USDpseg:mwh'], ...]
-#   {a:'usdPerMMBTU', b:'usdPerMMBTu'} -> n=2, sample=[.../eog-20231231, .../eog-20241231],
-#     names=[['iso4217:USDutr:MMBTU','iso4217:USDeog:mMBTu'], ...]
+# ALL NINE captured read-only results (2026-07-20, this graph — complete, not sampled):
+#   {a:'usdPerMWh', b:'usdPerMwh'} -> 7 filings, each ['iso4217:USDutr:MWh','iso4217:USDpseg:mwh']:
+#     pseg-20221231, pseg-20230331, pseg-20230630, pseg-20230930, pseg-20231231,
+#     pseg-20240331, pseg-20240630
+#   {a:'usdPerMMBTU', b:'usdPerMMBTu'} -> 2 filings, each
+#     ['iso4217:USDutr:MMBTU','iso4217:USDeog:mMBTu']: eog-20231231, eog-20241231
 # 7 + 2 = the nine filings: same raw spelling apart from case, DIFFERENT semantic Units.
 
 

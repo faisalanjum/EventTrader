@@ -1549,3 +1549,23 @@ writes, push.
 Gates: focused 14/14 · gate 2/2 (fixture unchanged — its path passes explicit unit_ref,
 heuristics bypassed) · battery 176/176 (175+1) · floors 28/28. Still held: routes, quote
 move, regeneration, Core edits, Neo4j writes, push.
+
+## WP2 BUILD — corrective 4 (his audit of 5e14b1d, 2026-07-20; my flagged "known limit"
+## escalated into the required fix — he was right that pinning a wrong result is a precision
+## defect, not a limit).
+1. HIS EVIDENCE VERIFIED EXACTLY: U_UnitedStatesOfAmericaDollarsShare = 38,041 facts
+   globally, ALL iso4217:USDshares divide=1 (88 in the gate corpus). MY global dollar-sweep
+   before adopting the marker: EVERY dollar-named raw unit is money-denominated —
+   U_USDollarShare 5,793 (USDshares) · usdollarsperthousandcubicfeet 12 · usdollarperhour 12
+   · U_AustralianDollarShare 6 (AUDshares — foreign MONEY, correctly money-marked; flagged
+   pre-emptively).
+2. THE FIX (smallest, measured, no registry): money marker = 'usd' OR 'dollar' in the
+   casefolded unit; nonmoney = positive 'share' evidence AND excludes BOTH money markers.
+   The known-limit pin REVERSED RED-first: dollars-per-share now BINDS money and ABSTAINS
+   nonmoney (both spellings pinned); exact-unit authority + opaque abstention preserved;
+   ALL "known limit" wording removed.
+3. EVIDENCE HONESTY (his catch, owned): my [..3] query kept three samples while the prose
+   said nine. The query now collects ALL rows and all NINE filings are captured by name
+   (pseg-20221231/0331/0630/0930/1231/20240331/0630 + eog-20231231/20241231).
+Gates: focused 14/14 · gate 2/2 (fixture unchanged, 130/20/0 holds) · battery 176/176 ·
+floors 28/28. Still held: routes, quote move, regeneration, Core edits, Neo4j writes, push.

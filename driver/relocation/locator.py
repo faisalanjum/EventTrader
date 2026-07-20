@@ -334,16 +334,18 @@ def match_facts_explain(xbrls, concept_qname, pairs, period_start, period_end, u
                                       # zero recall cost); malformed shapes likewise never bind
         if unit_ref is None:          # expected_unit is a HEURISTIC for unit_ref-less asks
             u_cf = u.casefold()       # only — an exact unit_ref is AUTHORITATIVE and must
-            if expected_unit == 'money' and 'usd' not in u_cf:      # never be vetoed by it
-                continue              # (opaque raw ids like Unit12 fail every substring
-            if expected_unit == 'nonmoney' and ('usd' in u_cf or 'share' not in u_cf):
-                continue              # nonmoney needs POSITIVE evidence: census over the
-                                      # 88,236-numeric-fact gate corpus — every genuine
-                                      # nonmoney unit is a shares variant; opaque ids
-                                      # (Unit12/Unit1/Unit16, 527 facts) and foreign
-                                      # currencies (cny/eur/U_AUD) can never be certified
-                                      # nonmoney. Known coarse-filter limit (pinned in
-                                      # tests): dollars-per-share names without 'usd'.
+            money_marked = 'usd' in u_cf or 'dollar' in u_cf        # never be vetoed by it.
+            if expected_unit == 'money' and not money_marked:       # 'dollar' is graph-
+                continue              # verified money (U_UnitedStatesOfAmericaDollarsShare =
+                                      # 38,041 facts, ALL iso4217:USDshares; the global
+                                      # dollar-sweep shows every dollar-named unit is
+                                      # money-denominated). Opaque ids (Unit12/Unit1/Unit16,
+                                      # 527 gate facts) fail every substring guess → abstain.
+            if expected_unit == 'nonmoney' and (money_marked or 'share' not in u_cf):
+                continue              # nonmoney needs POSITIVE share evidence (census: every
+                                      # genuine nonmoney unit in the 88,236-fact gate corpus
+                                      # is a shares variant) AND must exclude BOTH money
+                                      # markers; foreign currencies (cny/eur/U_AUD) abstain.
         if not _period_ok(fc, ps, pe, instant):
             continue
         _pairs, _complete = seg_parse(fc)
