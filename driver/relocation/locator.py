@@ -1,8 +1,12 @@
-"""Neutral locator entrypoint (Universal Locator v5.5 §2-§3; WP2 plan v4 step 1).
+"""Neutral locator entrypoint (Universal Locator v5.5 §2-§3; WP2).
 
-PRODUCTION anchor rebuild — pure, no I/O, ZERO fiscal.ai/channel imports, ZERO Core imports
-(ids are DECODED here independently; only Core composes them). Anchors are rebuilt on demand;
-nothing is stored; no registry.
+THREE responsibilities, all pure, no I/O, ZERO fiscal.ai/channel imports, ZERO Core imports:
+1. PRODUCTION anchor rebuild (`rebuild_anchor`) — ids are DECODED here independently; only
+   Core composes them. Anchors rebuilt on demand; nothing stored; no registry.
+2. THE single strict XBRL dimension parser (`seg_parse`) — relocated verbatim from link_lib;
+   both channel files import it from here.
+3. THE single strict value-unknown fact matcher (`match_facts` / `match_facts_explain`) —
+   pair-complete identity; xbrl_lane delegates to it as a thin adapter.
 
 Anchor identity = the 7 fields: company (via the fact's OWN parsed source id looked up in a
 TRUSTED edge map — the exactly-one graph-edge query's output) · driver · fact_type=metric ·
@@ -243,31 +247,59 @@ def _period_ok(fc, ps, pe, instant):
 
 
 def _concept_ok(stored_key, req_prefix, con):
-    """exact concept identifier AS STORED: local names compare exactly; a namespace prefix is
-    compared ONLY when both sides carry one; bare names are never promoted."""
+    """exact concept identifier AS STORED: local names compare exactly; prefixed request vs
+    BARE storage matches by local name (the verified 109/109 storage convention); prefixed vs
+    prefixed must be EXACT; a BARE request NEVER matches prefixed storage (a bare ask cannot
+    verify a namespace — 'Revenues' must not accept 'evil:Revenues')."""
     c_prefix, _, c_local = stored_key.rpartition(':')
     if c_local != con:
+        return False
+    if c_prefix and not req_prefix:
         return False
     return not (c_prefix and req_prefix and c_prefix != req_prefix)
 
 
-def match_facts(xbrls, concept_qname, pairs, period_start, period_end, unit_ref=None,
-                expected_unit=None):
-    """unique exact-Decimal value for the FULL identity — exact concept identifier AS STORED +
-    COMPLETE (axis,member) PAIRS + exactly one valid period shape + unit — or None (abstain).
-    The wrong-axis class dies here: a right member under a wrong axis never matches."""
+_BAD_UNIT = object()
+
+
+def _norm_unit(u):
+    """None stays None (unit-less facts are legal); a nonblank string normalizes to
+    strip+casefold (U_USD ≡ u_usd — filer-local codes are case-insensitive identity here);
+    any other shape is MALFORMED → the _BAD_UNIT sentinel (that fact is never a candidate;
+    the list-unitRef TypeError crash class dies here)."""
+    if u is None:
+        return None
+    if isinstance(u, str) and u.strip():
+        return u.strip().casefold()
+    return _BAD_UNIT
+
+
+def match_facts_explain(xbrls, concept_qname, pairs, period_start, period_end, unit_ref=None,
+                        expected_unit=None):
+    """(value|None, reason) for the FULL identity — exact concept identifier AS STORED +
+    COMPLETE (axis,member) PAIRS + exactly one valid period shape + NORMALIZED unit + exact
+    Decimal on the RAW stored value (floats are rejected by XN.dec — never laundered through
+    str()). Reasons: ok · bad_request_period · nonnumeric_value · no_candidate ·
+    ambiguous_values · unit_conflict. The wrong-axis class dies here: a right member under a
+    wrong axis never matches."""
     req_prefix, _, con = concept_qname.rpartition(':')
     want = frozenset(pairs)
+    req_unit = _norm_unit(unit_ref)
+    if req_unit is _BAD_UNIT:
+        return None, 'bad_request_unit'           # malformed request-side unit: never guess
     try:
         ps, pe = XN.period_key(period_start, period_end)
     except XN.ExactError:
-        return None
+        return None, 'bad_request_period'
     instant = (ps == pe)
     vals, units = set(), set()
     for c, fc in _fact_rows(xbrls):
         if not _concept_ok(c, req_prefix, con):
             continue
-        u_low = str(fc.get('unitRef') or '').lower()
+        u = _norm_unit(fc.get('unitRef'))
+        if u is _BAD_UNIT:
+            continue                              # malformed stored unit: never a candidate
+        u_low = u or ''
         if expected_unit == 'money' and 'usd' not in u_low:
             continue                              # shares can never satisfy a money request
         if expected_unit == 'nonmoney' and 'usd' in u_low:
@@ -279,42 +311,25 @@ def match_facts(xbrls, concept_qname, pairs, period_start, period_end, unit_ref=
             continue                  # unparseable/partial segments never pose as undimensioned
         if frozenset(_pairs) != want:
             continue                  # COMPLETE pairs — axis AND member must both match
-        u = fc.get('unitRef')
-        if unit_ref is not None and u != unit_ref:
+        if unit_ref is not None and u != req_unit:
             continue
         try:
-            v = XN.dec(str(fc.get('value', '')).strip())
+            v = XN.dec(fc.get('value'))           # RAW — XN.dec rejects floats/None (lossy)
         except XN.ExactError:
-            return None                           # non-numeric collision -> not resolvable
+            return None, 'nonnumeric_value'       # non-numeric collision -> not resolvable
         vals.add(v)
         units.add(u)
+    if not vals:
+        return None, 'no_candidate'
     if len(vals) != 1:
-        return None                               # unique or abstain
+        return None, 'ambiguous_values'           # unique or abstain
     if unit_ref is None and len(units) > 1:
-        return None                               # unit conflict -> ambiguous, abstain
-    return next(iter(vals))
+        return None, 'unit_conflict'              # same value under conflicting units
+    return next(iter(vals)), 'ok'
 
 
-def discover_pairings(xbrls, concept_qname, member_set, period_start, period_end):
-    """DISTINCT complete (axis,member) pairings whose member-set equals member_set, among
-    concept+period-matching facts — the legacy member-only adapter's ambiguity check: a
-    member-only request cannot choose an axis, so more than one distinct pairing = abstain."""
-    req_prefix, _, con = concept_qname.rpartition(':')
-    want_members = frozenset(member_set)
-    try:
-        ps, pe = XN.period_key(period_start, period_end)
-    except XN.ExactError:
-        return set()
-    instant = (ps == pe)
-    found = set()
-    for c, fc in _fact_rows(xbrls):
-        if not _concept_ok(c, req_prefix, con):
-            continue
-        if not _period_ok(fc, ps, pe, instant):
-            continue
-        _pairs, _complete = seg_parse(fc)
-        if not _complete:
-            continue
-        if frozenset(m for _, m in _pairs) == want_members:
-            found.add(frozenset(_pairs))
-    return found
+def match_facts(xbrls, concept_qname, pairs, period_start, period_end, unit_ref=None,
+                expected_unit=None):
+    """the value-only form of match_facts_explain (production callers)."""
+    return match_facts_explain(xbrls, concept_qname, pairs, period_start, period_end,
+                               unit_ref=unit_ref, expected_unit=expected_unit)[0]

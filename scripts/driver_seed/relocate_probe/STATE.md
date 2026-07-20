@@ -41,6 +41,16 @@ FinalDesign law wins.
 - xbrl_lane caveat: matches DURATION facts (start+end); abstains on INSTANT (balance-sheet) → value-known
   mode covers those.
 
+> **WP2 UPDATE (2026-07-20) — the section above is HISTORY; current reality:** the one strict
+> value-unknown matcher is `driver/relocation/locator.match_facts` (PAIR-COMPLETE identity:
+> concept-as-stored · complete (axis,member) pairs · one valid period shape **incl. INSTANT —
+> the caveat above no longer holds** · normalized units · exact Decimal on RAW values).
+> `xbrl_lane.resolve` is a THIN ADAPTER: `pairs` is the identity; a DIMENSIONED member-only
+> request ABSTAINS (an axis is never inferred); dimensionless `[]` stays legal. The multi-axis
+> parser attribution: `_members_all` is **oracle's** function (line 34's naming was loose).
+> Certification = the durable `test_xbrl_gate.py` (150 cases pinned individually with
+> verdict+reason; selection sha-pinned) — the old in-file self-check is retired.
+
 **ENGINE = ChatGPT/Codex GPT-5.5** for the LLM lane (`codex_reader.py`; A/B-certified equal/better than
 Claude, 79/79 valid JSON). **OpenAI ONLY via the codex SUBSCRIPTION (`auth_mode=chatgpt`), NEVER the API**
 (P0; runner strips `OPENAI_API_KEY`). Ladder: GPT-5.5 default · 5.6 Sol Ultra/Max hard-escalation · 5.6 Luna Max simple.

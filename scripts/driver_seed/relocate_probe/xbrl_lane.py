@@ -28,14 +28,16 @@ HERE = os.path.dirname(__file__)
 
 def resolve(xbrls, concept_qname, member_qnames, period_start, period_end, unit_ref=None,
             expected_unit=None, pairs=None):
-    """THIN ADAPTER — see module docstring. `pairs` (full (axis,member) address) is the
-    preferred identity; `member_qnames` is the legacy member-only form."""
+    """THIN ADAPTER — see module docstring. `pairs` (the full (axis,member) address) is THE
+    identity. A DIMENSIONED member-only request is INCOMPLETE identity → abstain, always —
+    an axis is NEVER inferred, not even from uniqueness (the wrong-axis class). Dimensionless
+    requests ([] members) are fully specified and stay legal."""
     if pairs is not None:
+        if member_qnames:
+            raise ValueError("pass pairs OR member_qnames, never both")
         return LOC.match_facts(xbrls, concept_qname, pairs, period_start, period_end,
                                unit_ref=unit_ref, expected_unit=expected_unit)
-    found = LOC.discover_pairings(xbrls, concept_qname, member_qnames,
-                                  period_start, period_end)
-    if len(found) != 1:
-        return None                 # zero = absent; >1 = axis-ambiguous for a member-only ask
-    return LOC.match_facts(xbrls, concept_qname, next(iter(found)), period_start, period_end,
+    if member_qnames:
+        return None                 # dimensioned member-only: incomplete identity, abstain
+    return LOC.match_facts(xbrls, concept_qname, [], period_start, period_end,
                            unit_ref=unit_ref, expected_unit=expected_unit)

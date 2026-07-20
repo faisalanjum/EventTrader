@@ -1374,3 +1374,49 @@ NEXT: Step 2 — execute both real route calls, then prove no fiscal/channel cod
    the WP1 path → the proven-identical status stands.
 NEXT: row_quote's SMALLEST COMPLETE helper group moved in ONE go + ONE final WP1 byte-diff
 (hashes retained in this record) → routes R1/R2 → boundary GREEN.
+
+## WP2 BUILD — ADAPTER + MATCHER HARDENING (his audit of 3150655, 2026-07-20; routes AND the
+## quote move HELD). OWNER'S NEW STANDING ORDER adopted the same day: PRE-EMPT — reviewer-grade
+## self-audit before AND after every message; my own pre-audit was mid-flight and three of its
+## finds ship in this same packet. His FIVE claims: ALL reproduced before fixing.
+1. ADAPTER STILL DISCARDED AXES (reproduced: member-only ['x:USMember'] vs a (WrongAxis,
+   USMember) fact → bound 100 via my uniqueness-inference): uniqueness-inference is BANNED —
+   a DIMENSIONED member-only request is INCOMPLETE identity → abstain, always; dimensionless
+   [] stays legal (fully specified); discover_pairings DELETED (dead once inference is gone);
+   dual-input (pairs AND members) now raises. EXPOSURE VERIFIED SAFE first: the only
+   production caller of the member path is locate()'s fingerprint dispatch; regress/floors
+   never touch resolve; battery had zero member-list resolve tests (171 green unchanged).
+2. LOOSE CONCEPT (reproduced: bare 'Revenues' request accepted stored 'evil:Revenues'):
+   _concept_ok now — bare request NEVER matches prefixed storage; prefixed→bare stays (the
+   109/109 storage convention); prefixed↔prefixed exact.
+3. UNIT HANDLING (reproduced twice: list-unitRef → TypeError CRASH; 'U_USD' vs 'u_usd' same
+   value falsely abstained as a unit conflict): _norm_unit — None legal (unit-less facts),
+   nonblank strings strip+casefold for BOTH the unit_ref filter and the conflict set, any
+   other shape = malformed → never a candidate, never a crash; malformed REQUEST unit →
+   'bad_request_unit' (I initially mislabeled it 'bad_request_period' — caught in my own
+   post-edit re-read, per the owner's check-everything order).
+4. FLOAT LAUNDERING (reproduced: stored 6707000000.0 accepted; XN.dec(raw float) raises
+   'floats are rejected (lossy)'): raw values now go to XN.dec UNWRAPPED — str() laundering
+   removed; XN.dec(None/dict/list) verified to raise clean ExactError.
+5. GATE KEYS OMITTED AXES/UNITS (his catch): _case_key now = accession · concept · period ·
+   value · lock unit · time shape · sorted (axis,member) pair id; the fixture pins verdict +
+   ABSTENTION REASON (match_facts_explain: ok / bad_request_period / bad_request_unit /
+   nonnumeric_value / no_candidate / ambiguous_values / unit_conflict). New selection sha
+   133a027d…; fixture regenerated: {ok:130, abstain:20, wrong:0} EXACTLY AGAIN under all the
+   new strictness — all 20 abstains = 'no_candidate' (the documented graph-gap class); 150
+   distinct keys (no collisions). Nothing owner-gated.
+6. OWNED PROCESS MISS: I built the matcher WITHOUT first writing the v4-promised RED pin
+   battery. It exists now — driver/relocation/test_match_facts.py (7 tests): wrong-axis ·
+   swapped pairs · pair-order · the concept matrix · the unit matrix (normalization, genuine
+   conflict, malformed, unit-less-legal) · fact-side malformed periods (start-only/end-only/
+   blank/impossible/mixed) · float-rejected + fractional-exact · explain reasons · the
+   adapter abstention law.
+7. MY PRE-AUDIT FINDS shipped in this packet: stale locator module docstring (now names its
+   THREE responsibilities); STATE.md living lines corrected via a dated WP2 UPDATE block
+   (resolve is an adapter; INSTANT is now matched — the old caveat is dead; _members_all is
+   oracle's); the dual-input guard (item 1).
+8. HIS RESEQUENCING adopted: THE single final WP1 byte-diff runs only after quote-helpers +
+   routes + boundary are ALL complete (it also covers locator's WP1-reachability via
+   link_lib's import). Any loss vs the 130 correct gate cases → OWNER before acceptance.
+Gates: pins 7/7 · gate 2/2 · battery 171/171 (164+7; working tree additionally = the 1
+intentional boundary RED) · floors 28/28.

@@ -26,13 +26,18 @@ import exact_numbers as XN
 import locator as LOC
 import xbrl_lane
 
-SELECTION_SHA = "84274ebe8730949bc09fe6f59c050456026a9da45615449a5aa4a43912a1259f"
-EXPECTED_FILE = os.path.join(HERE, 'xbrl_gate_expected.json')   # per-case verdict pins
+SELECTION_SHA = "133a027db013dcf8ab92accdd0c63682791e824f7f08563fa9b3876f4f3cc429"
+EXPECTED_FILE = os.path.join(HERE, 'xbrl_gate_expected.json')   # per-case verdict+reason pins
 
 
-def _case_key(t):
-    return (f"{t['accession']}|{t['concept_qname']}|{t['period_start']}|"
-            f"{t['period_end']}|{t['value_raw']}")
+def _case_key(r):
+    """FULL identity key (reviewer: keys must not omit axes/units): accession · concept ·
+    period · value · lock unit · time shape · the sorted (axis,member) pair id."""
+    t = r['target']
+    shape = 'instant' if t['period_start'] == t['period_end'] else 'duration'
+    pair_id = ";".join(sorted(f"{f['axis_qname']}={f['member_qname']}" for f in t['facets']))
+    return (f"{t['accession']}|{t['concept_qname']}|{t['period_start']}|{t['period_end']}|"
+            f"{t['value_raw']}|{r['lock']['unit_name']}|{shape}|{pair_id}")
 
 
 def _selection():
@@ -47,8 +52,7 @@ def _selection():
               and all(f.get('status') == 'confirmed' for f in r['target']['facets'])]
     random.seed(7)
     sample = random.sample(stable, 150)
-    sha = hashlib.sha256("\n".join(sorted(_case_key(r['target'])
-                                          for r in sample)).encode()).hexdigest()
+    sha = hashlib.sha256("\n".join(sorted(_case_key(r) for r in sample)).encode()).hexdigest()
     return sample, sha
 
 
@@ -100,28 +104,28 @@ def test_150_case_gate_pair_complete_individually_pinned():
     verdicts, wrongs = {}, []
     for r in sample:
         t = r['target']
-        got = xbrl_lane.resolve(xbrl.get(t['accession'], []), t['concept_qname'], None,
-                                t['period_start'], t['period_end'],
-                                pairs=[(f['axis_qname'], f['member_qname'])
-                                       for f in t['facets']])
-        key = _case_key(t)
+        got, reason = LOC.match_facts_explain(
+            xbrl.get(t['accession'], []), t['concept_qname'],
+            [(f['axis_qname'], f['member_qname']) for f in t['facets']],
+            t['period_start'], t['period_end'])
+        key = _case_key(r)
         if got is None:
-            verdicts[key] = 'abstain'
+            verdicts[key] = {'verdict': 'abstain', 'reason': reason}
         elif got == XN.dec(str(t['value_raw'])):        # EXACT Decimal — never int(float())
-            verdicts[key] = 'ok'
+            verdicts[key] = {'verdict': 'ok', 'reason': 'ok'}
         else:
-            verdicts[key] = 'wrong'
+            verdicts[key] = {'verdict': 'wrong', 'reason': reason}
             wrongs.append((key, str(got)))
     assert not wrongs, f"deterministic lane returned WRONG values: {wrongs}"
     counts = {'ok': 0, 'abstain': 0, 'wrong': 0}
     for v in verdicts.values():
-        counts[v] += 1
+        counts[v['verdict']] += 1
     assert sum(counts.values()) == 150, "every case must land in exactly one bucket"
-    gained = sorted(k for k, v in verdicts.items()
-                    if v == 'ok' and expected.get(k) == 'abstain')
-    lost = sorted(k for k, v in verdicts.items()
-                  if v == 'abstain' and expected.get(k) == 'ok')
+    gained = sorted(k for k, v in verdicts.items() if v['verdict'] == 'ok'
+                    and expected.get(k, {}).get('verdict') == 'abstain')
+    lost = sorted(k for k, v in verdicts.items() if v['verdict'] == 'abstain'
+                  and expected.get(k, {}).get('verdict') == 'ok')
     assert verdicts == expected, (
         f"per-case pins moved — counts now {counts}; SAFE gains (abstain→ok, re-pin allowed): "
         f"{gained}; LOSSES (ok→abstain, OWNER-GATED): {lost}")
-    print(f"[ok] 150-case gate (pair-complete): {counts} — per-case pins hold")
+    print(f"[ok] 150-case gate (pair-complete): {counts} — per-case verdict+reason pins hold")
