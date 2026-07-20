@@ -418,8 +418,9 @@ def test_cag_list_shape_members_live():
 
 def test_dotted_initials_live_lmt_podd():
     """Round-28 live pins (reviewer's missed-link class): plain-'US' KPIs bind dotted-member
-    facts (U.S.GovernmentMember / U.S.OmnipodMember) via the one-tokenizer initials law + ISO
-    equivalence. Skips ONLY on genuine graph unavailability."""
+    facts (U.S.GovernmentMember / U.S.OmnipodMember) via the one-tokenizer initials law on
+    filer-named members (round 29 DELETED ISO-code binding; codes never prove countries).
+    Skips ONLY on genuine graph unavailability."""
     try:
         RC.load_env_neo4j()
         from neo4j import GraphDatabase
@@ -478,4 +479,21 @@ def test_round29_live_w_pega_recoveries():
                   and json.loads(l)['period'] == '2024-12-31')
         rp = L.tier1(fp['xbrls'], 'United Kingdom (U.K.) Revenue', vp, '2024-12-31', is_currency=1)
         assert rp and rp['member'] == 'GB', rp
-    print("[ok] LIVE: W missing-dot + PEGA redundant-acronym recoveries hold")
+        # BSX fail-closed (round 30: the docstring claimed this without asserting it — reviewer
+        # catch). Live-reproduced reasons: FY2024 carries TWO members with the same 10,210M value
+        # (country:US + bsx:USExcludingOtherNetSalesMember -> ambiguous); FY2025 carries
+        # country:US only and bare 'US' is a code, never country proof (round-29 law).
+        bsx = [r for r in (json.loads(l) for l in open('data/driver_catalog_seed/worklist.jsonl'))
+               if r['ticker'] == 'BSX' and r.get('kpi') == 'U.S Revenue']
+        assert len(bsx) == 2, f"expected BSX's 2 currency dotted-US rows, got {len(bsx)}"
+        checked = 0
+        for b in bsx:
+            fb = RC.fetch_filing(s, 'BSX', '10-K', b['period'])
+            if not fb:
+                continue
+            assert L.tier1(fb['xbrls'], 'U.S Revenue', b['value'], b['period'],
+                           is_currency=1) is None, \
+                f"BSX dotted-US row must stay fail-closed ({b['period']})"
+            checked += 1
+        assert checked, "no BSX filing fetched — the fail-closed claim went unexercised"
+    print("[ok] LIVE: W missing-dot + PEGA redundant-acronym recoveries hold; BSX stays fail-closed")

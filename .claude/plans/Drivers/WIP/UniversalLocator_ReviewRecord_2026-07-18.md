@@ -1036,7 +1036,8 @@ scripts green. NO regenerate (his process holds).
 ## live recoveries verified; diff-first, NO regenerate. Commit `ef427f6`.
 1. DOTTED INITIALS: `_norm_initials` (dotted uppercase runs collapse: U.S.→US, L.P.→LP) applied
    in ONE tokenizer on BOTH sides; country:XX accepts the exact ISO code OR the full name (from
-   the generated table — no name list). 'Total U.S. Revenue' no longer binds the bare company
+   the generated table — no name list) [SUPERSEDED round 29: the ISO-code half was DELETED —
+   codes never prove countries; full names only]. 'Total U.S. Revenue' no longer binds the bare company
    total (reproduced binding before). LIVE recoveries pinned: LMT 'US Government Revenue' →
    USGovernmentMember + U.S.GovernmentMember; PODD 'US Omnipod Revenue' → U.S.OmnipodMember
    (the MEMBER side carries dotted initials too — his one-tokenizer-both-sides call was exactly
@@ -1070,9 +1071,46 @@ Gates: battery 145/145 · floors 28/28 · self-check green · both evidence scri
 4. Dates through XN.period_key at candidacy; duration+instant mixed shapes never candidates.
 5. Census rejects blank axis/member names (positive control added); aci_queries fails on an
    empty database result. ABT: his withdrawn example — closed.
-**FINAL WP1 COHORT (clean stamp `3e69fa7`, dirty []): 183 resolved (T1 76 · T2 107 · 8-K 40) ·
-499 residual · 997 abstain · 2 parks · battery 149/149 · floors 28/28 · self-check green ·
-evidence green · RECORD+CHECK green · seeds byte-identical. The −11 vs round-28 = the deleted
-code shortcut's cohort binds (bare/dotted-code KPIs vs country members — the IT/NA false-bind
-class's flip side) + the stricter period/unit laws; every loss is an abstention riding to the
-reader lane per the owner's standing conservative ruling.**
+**FINAL WP1 COHORT (clean stamp `3e69fa7`, dirty []): 183 resolved SOURCE RECORDS covering 170
+distinct raw items (13 items carry two records each — periodic filing + paired 8-K, separate
+source events by design: 10 pairs with the 10-K, 3 with the 10-Q). Tiers: T1 76 + T2 107 = 183;
+the 40 8-K press-release records are INSIDE T2 (route table: T2×8k 40 · T2×10k 52 · T2×10q 15 ·
+T1×10k 62 · T1×10q 14) · 499 residual · 997 abstain · 2 parks · battery 149/149 · floors 28/28 ·
+self-check green · evidence green · RECORD+CHECK green · seeds byte-identical.**
+[CORRECTED round 30 — the −11 explanation first written here was FALSE (see Round 30 for the
+measured diff): −11 vs the round-24 regeneration = 11 AAL 8-K text records demoted to residual
+by the round-25/26 multiple-occurrence signature law + 2 AFL records upgraded T2-label→T1-xbrl
+by the dotted-initials law; the ISO deletion cost this cohort NOTHING.]
+
+## Round 30 (ChatGPT FINAL AUDIT, 2026-07-19) — "WP1 functionally closed; no more regeneration."
+## He independently confirmed 149/149 + the live verifier. His 5 items: ALL FIVE reproduced
+## true before accepting (0 rejected). OWNER'S WORDS: after these changes → commit → PUSH →
+## start WP2. One tests+wording commit (no code, no regeneration).
+1. FALSE −11 EXPLANATION (mine, owned): the round-29 cohort paragraph blamed the deleted ISO
+   shortcut + stricter period/unit laws — contradicting my OWN zero-cost measurement two
+   paragraphs earlier; written WITHOUT a diff. MEASURED (keyed diff of the two committed
+   code_resolved.jsonl, `ab39ceb` vs `84568da`): 11 leavers = ALL AAL source_type=8k text
+   records (their `form` field shows the paired 10-K by design) → all 11 present in
+   residual.jsonl (reader lane — demoted, never lost); 0 entrants; 2 tier flips = AFL 'Total
+   Aflac US Revenue' T2-label→T1-xbrl (quote "Total adjusted revenue Aflac U.S." — the round-28
+   dotted-initials law binds the XBRL identity, T1 outranks T2). Arithmetic exact: T1 74→76,
+   T2 120→107, 8-K 51→40, total 194→183. LIVE-REPRODUCED the demotion mechanism: Cargo '804'
+   occurs 6× / Total '54,211' 14× / Passenger '49,586' 2× in the 8-K texts → >1 distinct
+   signature → abstain (the comparative-row law). ISO deletion: zero cohort effect — the
+   zero-cost measurement stands.
+2. COUNT SEMANTICS clarified in the cohort paragraph above: 183 SOURCE RECORDS / 170 raw items /
+   13 designed dual-source pairs; the 40 8-K records are INSIDE T2=107, never additive.
+3. BSX ASSERTIONS ADDED (the live test's docstring claimed fail-closed without asserting it):
+   both BSX 'U.S Revenue' rows now assert tier1 None. Reproduced WHY first: FY2024 = TWO members
+   carry the same 10,210M value (country:US + bsx:USExcludingOtherNetSalesMember → ambiguous);
+   FY2025 = country:US only, and bare 'US' is a code, never country proof (round-29 law). Both
+   are the designed abstain. Stale "+ ISO equivalence" docstring wording removed (the LMT/PODD
+   recoveries ride filer-named members, not codes); the round-28 history line carries a
+   SUPERSEDED tag.
+4. WP2 MEASURED RECALL WORK recorded (NO abbreviation list now — the owner's list-free law):
+   digit/compound acronyms (B2B/SaaS class) and conjunction acronyms spanning multi-word member
+   names (EMEA vs EuropeMiddleEastAndAfricaMember; the NAA class) currently abstain — recall
+   cost only, zero precision risk; any future fix must be MEASURED and general.
+5. Gates this round: battery 149/149 (test count unchanged — assertions added inside the
+   already-claiming test) · floors 28/28 · wp1_verify CHECK green · NO regeneration.
+**WP1 CLOSED. Pushed on the owner's word; WP2 begins.**
