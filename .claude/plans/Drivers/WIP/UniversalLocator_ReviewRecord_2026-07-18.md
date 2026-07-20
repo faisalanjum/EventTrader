@@ -1539,7 +1539,8 @@ writes, push.
    'usd' exclusion; opaque and foreign-currency units now abstain from BOTH heuristics.
    RED production-path pin first; U_shares/shares positive cases preserved; cny-abstains
    pinned as the improvement.
-3. MY PRE-EMPT FIND, flagged + pinned as a KNOWN LIMIT: 'U_UnitedStatesOfAmericaDollarsShare'
+3. MY PRE-EMPT FIND — a PRECISION DEFECT, later fixed by corrective 4 (at the time I flagged
+   and pinned it as tolerable, which was wrong): 'U_UnitedStatesOfAmericaDollarsShare'
    (88 real facts) — a dollars-per-share unit with no 'usd' substring — evades BOTH substring
    heuristics (fails money, passes nonmoney via 'share'). Pinned at current behavior with the
    limit documented: the heuristic is a PRE-FILTER, never proof; the reviewer may tighten.
@@ -1550,9 +1551,9 @@ Gates: focused 14/14 · gate 2/2 (fixture unchanged — its path passes explicit
 heuristics bypassed) · battery 176/176 (175+1) · floors 28/28. Still held: routes, quote
 move, regeneration, Core edits, Neo4j writes, push.
 
-## WP2 BUILD — corrective 4 (his audit of 5e14b1d, 2026-07-20; my flagged "known limit"
-## escalated into the required fix — he was right that pinning a wrong result is a precision
-## defect, not a limit).
+## WP2 BUILD — corrective 4 (his audit of 5e14b1d, 2026-07-20; my flagged dollars-per-share
+## defect escalated into the required fix — he was right that pinning a wrong result is a
+## precision defect, never a tolerable limit).
 1. HIS EVIDENCE VERIFIED EXACTLY: U_UnitedStatesOfAmericaDollarsShare = 38,041 facts
    globally, ALL iso4217:USDshares divide=1 (88 in the gate corpus). MY global dollar-sweep
    before adopting the marker: EVERY dollar-named raw unit is money-denominated —
@@ -1561,9 +1562,17 @@ move, regeneration, Core edits, Neo4j writes, push.
    pre-emptively).
 2. THE FIX (smallest, measured, no registry): money marker = 'usd' OR 'dollar' in the
    casefolded unit; nonmoney = positive 'share' evidence AND excludes BOTH money markers.
-   The known-limit pin REVERSED RED-first: dollars-per-share now BINDS money and ABSTAINS
+   The wrong-behavior pin REVERSED RED-first: dollars-per-share now BINDS money and ABSTAINS
    nonmoney (both spellings pinned); exact-unit authority + opaque abstention preserved;
-   ALL "known limit" wording removed.
+   the defect wording removed from code and tests.
+
+## Documentation gate (his audit of b48d87b, 2026-07-20 — code + evidence ACCEPTED; one
+## record contradiction remained). MY THIRD claim-scoping failure of the same class, owned:
+## I wrote "ALL wording removed" while this record still carried four occurrences (I had
+## removed it from code and tests only). This documentation-only commit corrects all four in
+## place (the round-3 item now reads as the precision defect corrective 4 fixed), and the
+## required grep for the phrase over this record returns ZERO. Code, tests, and fixtures are
+## byte-unchanged; batteries deliberately not rerun per his instruction; every hold held.
 3. EVIDENCE HONESTY (his catch, owned): my [..3] query kept three samples while the prose
    said nine. The query now collects ALL rows and all NINE filings are captured by name
    (pseg-20221231/0331/0630/0930/1231/20240331/0630 + eog-20231231/20241231).
