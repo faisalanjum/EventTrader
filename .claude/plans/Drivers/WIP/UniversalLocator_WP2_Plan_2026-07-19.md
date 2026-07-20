@@ -56,9 +56,11 @@ evidence; ambiguity → abstain) | no_proven_match. No printed quote → abstain
    Malformed inputs raise clean ValueError — never an anchor, never a crash.**
 
 2. **NEUTRAL BOUNDARY FIRST — and RED first at the STEP level (lock-correction round):
-   write the FAILING boundary test before anything else in Step 2; it stays RED through the
+   AUTHOR the failing boundary test before anything else in Step 2; it stays RED through the
    parser relocation → the 150-case gate → the route build, and goes GREEN only at the end
-   via real R1/R2 calls.** The boundary test imports the ACTUAL locator entrypoint
+   via real R1/R2 calls. A failing test is NEVER committed to main — it lands in the commit
+   that turns it green with the routes.** The boundary test imports the ACTUAL locator
+   entrypoint
    (`driver/relocation/locator.py`) in a subprocess **and EXECUTES one minimal R1 call and one
    minimal R2 call on fixture input BEFORE sweeping sys.modules** — import-only proof is
    insufficient because lazy in-function imports are a REAL pattern in this codebase

@@ -1303,3 +1303,19 @@ NEXT: Step 2 — execute both real route calls, then prove no fiscal/channel cod
 5. PUSH SEQUENCING RECORDED: Core must separately commit PER-21 and run its required R8
    BEFORE these lock commits are pushed (the owner-agreed LAW-COMMIT PLAN); all WP2 + lock
    commits stay local until then + the owner's push word.
+
+## LOCK-CORRECTION 2 (ChatGPT narrow audit of `a310cea`, 2026-07-20) — router/dimensions/
+## banner/scope/Step-2 order all confirmed correct; two final DOCUMENT-ONLY wording fixes,
+## both verified true against the arc's own laws before applying:
+1. IDENTITY WORDING vs STORAGE REALITY: "concept qname" implied full qnames — but storage is
+   bare local names (verified 109/109) and bare tags are NEVER promoted (WP2 law). Now reads:
+   "the exact concept identifier AS STORED in this source (full qname when present; otherwise
+   bare local name, NEVER promoted) + COMPLETE (axis,member) pairs + exact period/time shape +
+   normalized XBRL unitRef."
+2. POINTER, NOT COPY: my 8-K amendment block copied procedure detail (matcher function names,
+   accession-equality mechanics, AUTO_OK note, labels-never-joined) — copied detail drifts;
+   canonical procedure lives ONLY in Core PER-21/BUILD §3. Block reduced to the pointer + the
+   short lane rule (EXISTS→historical / ABSENT→live / failed match PARKS).
+3. RED-COMMIT RULE (adopted into the plan): the boundary test is AUTHORED first but a failing
+   test is NEVER committed to main — it lands in the commit that turns it green with the
+   routes. No regeneration (document edits only).
