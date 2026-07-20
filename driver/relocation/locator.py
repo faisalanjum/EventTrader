@@ -336,8 +336,14 @@ def match_facts_explain(xbrls, concept_qname, pairs, period_start, period_end, u
             u_cf = u.casefold()       # only — an exact unit_ref is AUTHORITATIVE and must
             if expected_unit == 'money' and 'usd' not in u_cf:      # never be vetoed by it
                 continue              # (opaque raw ids like Unit12 fail every substring
-            if expected_unit == 'nonmoney' and 'usd' in u_cf:       # guess; reproduced)
-                continue
+            if expected_unit == 'nonmoney' and ('usd' in u_cf or 'share' not in u_cf):
+                continue              # nonmoney needs POSITIVE evidence: census over the
+                                      # 88,236-numeric-fact gate corpus — every genuine
+                                      # nonmoney unit is a shares variant; opaque ids
+                                      # (Unit12/Unit1/Unit16, 527 facts) and foreign
+                                      # currencies (cny/eur/U_AUD) can never be certified
+                                      # nonmoney. Known coarse-filter limit (pinned in
+                                      # tests): dollars-per-share names without 'usd'.
         if not _period_ok(fc, ps, pe, instant):
             continue
         _pairs, _complete = seg_parse(fc)

@@ -121,12 +121,53 @@ def test_exact_unit_ref_is_authoritative_over_expected_unit():
     assert a3[0] is None, "without unit_ref the money heuristic still applies (Unit12 opaque)"
 
 
+def test_nonmoney_needs_positive_evidence_opaque_abstains():
+    """Sibling of the Unit12-money case, reproduced through the PRODUCTION fingerprint path:
+    expected_unit='nonmoney' + stored Unit12 bound 93100000. An OPAQUE unit can be certified
+    NEITHER money NOR nonmoney. Census over the 88,236-numeric-fact gate corpus: EVERY genuine
+    nonmoney unit is a shares variant (shares / U_shares / Share / Unit_shares /
+    Unit_Standard_shares_*), the opaque ids Unit12/Unit1/Unit16 cover 527 facts, and foreign
+    currencies (cny, eur, U_AUD) also currently leaked through nonmoney. KNOWN COARSE-FILTER
+    LIMIT (flagged, pinned below): U_UnitedStatesOfAmericaDollarsShare — dollars-per-share
+    with no 'usd' substring — still passes the shares marker; the heuristic is a pre-filter,
+    never proof."""
+    sys.path.insert(0, os.path.join(_HERE, '..', '..', 'scripts', 'driver_seed'))
+    import locate
+
+    def prod(unit, expected):
+        b = blob('Revenues', [fact(value='93100000', unit=unit)])
+        return locate.locate({'xbrls': [b], 'concept': 'us-gaap:Revenues', 'members': [],
+                              'period_start': '2024-01-01', 'period_end': '2024-12-31',
+                              'expected_unit': expected})['value']
+    assert prod('Unit12', 'nonmoney') is None, \
+        "opaque Unit12 must NEVER satisfy a nonmoney ask (the reproduced production bind)"
+    assert prod('U_shares', 'nonmoney') == XN.dec('93100000'), "positive shares case preserved"
+    assert prod('shares', 'nonmoney') == XN.dec('93100000')
+    assert prod('cny', 'nonmoney') is None, "a foreign CURRENCY is never nonmoney"
+    assert prod('Unit12', 'money') is None, "opaque stays out of money too"
+    assert prod('U_USD', 'money') == XN.dec('93100000')
+    assert prod('U_UnitedStatesOfAmericaDollarsShare', 'nonmoney') == XN.dec('93100000'), \
+        "KNOWN LIMIT pinned: dollars-per-share evades both substring heuristics (documented)"
+
+
+COLLISION_EVIDENCE_QUERY = """
+MATCH (f:Fact)-[:HAS_UNIT]->(un:Unit) WHERE f.unit_ref IN [$a, $b]
+WITH split(f.id, '_')[0] AS rep, collect(DISTINCT f.unit_ref) AS us,
+     collect(DISTINCT un.name) AS names
+WHERE size(us) = 2
+RETURN count(*) AS n, collect(rep)[..3] AS sample, collect(names)[..2] AS nm
+"""
+# Captured read-only results (2026-07-20, this graph):
+#   {a:'usdPerMWh',  b:'usdPerMwh'}  -> n=7, sample=[.../pseg-20230331, .../pseg-20230630,
+#     .../pseg-20230930], names=[['iso4217:USDutr:MWh','iso4217:USDpseg:mwh'], ...]
+#   {a:'usdPerMMBTU', b:'usdPerMMBTu'} -> n=2, sample=[.../eog-20231231, .../eog-20241231],
+#     names=[['iso4217:USDutr:MMBTU','iso4217:USDeog:mMBTu'], ...]
+# 7 + 2 = the nine filings: same raw spelling apart from case, DIFFERENT semantic Units.
+
+
 def test_real_corpus_collision_names_case_exact():
-    """The REAL collision ids, pinned durably (evidence: read-only graph query
-    MATCH (f:Fact)-[:HAS_UNIT]->(u:Unit) WHERE f.unit_ref IN [a,b] grouped by report —
-    7 PSEG filings carry usdPerMWh→iso4217:USDutr:MWh AND usdPerMwh→iso4217:USDpseg:mwh;
-    2 EOG filings carry usdPerMMBTU→iso4217:USDutr:MMBTU AND usdPerMMBTu→iso4217:USDeog:mMBTu;
-    same raw spelling, different case, DIFFERENT semantic units)."""
+    """The REAL collision ids, pinned durably — the COMPLETE executable evidence query and
+    its captured nine-filing results are preserved above (COLLISION_EVIDENCE_QUERY)."""
     for ua, ub in (('usdPerMWh', 'usdPerMwh'), ('usdPerMMBTU', 'usdPerMMBTu')):
         both = [blob('Revenues', [fact(value='42', unit=ua)]),
                 blob('Revenues', [fact(value='42', unit=ub)])]

@@ -1524,3 +1524,28 @@ regeneration, push: all still held.
 Gates: focused 13/13 · gate 2/2 (fixture UNCHANGED — zero movement) · battery 175/175
 (173+2) · floors 28/28. Still held: routes, quote move, regeneration, Core edits, Neo4j
 writes, push.
+
+## WP2 BUILD — corrective 3 (his audit of a96cdef, 2026-07-20; the nonmoney SIBLING).
+1. REPRODUCED through the PRODUCTION fingerprint path exactly as he specified: no unit_ref +
+   expected_unit='nonmoney' + stored Unit12 → bound 93100000. My round-2 comment claimed the
+   heuristic never certifies — the nonmoney branch contradicted it (absence of 'usd' treated
+   as proof of nonmoney).
+2. CENSUS BEFORE FIXING (my run, the 88,236-numeric-fact gate corpus, 37 distinct unit
+   spellings): EVERY genuine nonmoney unit is a shares variant (shares 2,813 · U_shares 404 ·
+   Share · Unit_shares · six Unit_Standard_shares_* forms); opaque ids are COMMON (Unit12
+   494 + Unit1 22 + Unit16 11 = 527 facts); foreign currencies present (cny 3 · eur 2 ·
+   U_AUD 2) and ALSO leaked through nonmoney. FIX (smallest, census-earned, no registry):
+   nonmoney requires POSITIVE evidence — 'share' in the casefolded unit — plus the existing
+   'usd' exclusion; opaque and foreign-currency units now abstain from BOTH heuristics.
+   RED production-path pin first; U_shares/shares positive cases preserved; cny-abstains
+   pinned as the improvement.
+3. MY PRE-EMPT FIND, flagged + pinned as a KNOWN LIMIT: 'U_UnitedStatesOfAmericaDollarsShare'
+   (88 real facts) — a dollars-per-share unit with no 'usd' substring — evades BOTH substring
+   heuristics (fails money, passes nonmoney via 'share'). Pinned at current behavior with the
+   limit documented: the heuristic is a PRE-FILTER, never proof; the reviewer may tighten.
+4. EVIDENCE WORDING owned + fixed: my "preserved verbatim" was inaccurate (fragment + prose).
+   The COMPLETE executable Cypher (COLLISION_EVIDENCE_QUERY) + the captured nine-filing
+   results now live in test_match_facts.py.
+Gates: focused 14/14 · gate 2/2 (fixture unchanged — its path passes explicit unit_ref,
+heuristics bypassed) · battery 176/176 (175+1) · floors 28/28. Still held: routes, quote
+move, regeneration, Core edits, Neo4j writes, push.
