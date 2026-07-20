@@ -91,13 +91,18 @@ def test_fractional_decimal_exactness_synthetic():
 
 
 def _unit_rows(session, fact_ids):
-    """{fact_id: [(raw_unit_ref, semantic_name, is_divide), ...]} from the STRUCTURED layer."""
+    """{fact_id: [(raw_unit_ref, semantic_name, is_divide, report_accession), ...]} from the
+    STRUCTURED layer — each Fact JOINED back to its Report
+    ((r:Report)-[:HAS_XBRL]->(x:XBRLNode)<-[:REPORTS]-(f:Fact)) so the pinned accession is
+    asserted per case, never assumed."""
     out = {}
     for rec in session.run(
             """MATCH (f:Fact)-[:HAS_UNIT]->(u:Unit) WHERE f.id IN $ids
+               MATCH (f)-[:REPORTS]->(x:XBRLNode)<-[:HAS_XBRL]-(r:Report)
                RETURN f.id AS fid, f.unit_ref AS raw, u.name AS uname,
-                      u.is_divide AS div""", ids=fact_ids):
-        out.setdefault(rec['fid'], []).append((rec['raw'], rec['uname'], rec['div']))
+                      u.is_divide AS div, r.accessionNo AS acc""", ids=fact_ids):
+        out.setdefault(rec['fid'], []).append((rec['raw'], rec['uname'], rec['div'],
+                                               rec['acc']))
     return out
 
 
@@ -125,11 +130,13 @@ def test_150_case_gate_exact_rows_target_units():
         key = _case_key(r)
         urows = units.get(t['fact_id'], [])
         assert len(urows) == 1, \
-            f"target fact must carry EXACTLY ONE structured unit, got {len(urows)}: {key}"
-        raw_unit, sem_name, sem_div = urows[0]
+            f"target fact must carry EXACTLY ONE structured unit+report row, got {len(urows)}: {key}"
+        raw_unit, sem_name, sem_div, fact_acc = urows[0]
         assert isinstance(raw_unit, str) and raw_unit.strip(), f"blank raw unit_ref: {key}"
         assert sem_name == t['unit_name'] and sem_div == t['unit_is_divide'], \
             f"semantic Unit mismatch vs truth ({sem_name}, {sem_div}): {key}"
+        assert fact_acc == t['accession'], \
+            f"Fact joins to Report {fact_acc!r}, pinned accession is {t['accession']!r}: {key}"
         blobs = xbrl.get(t['accession'], [])
         if not blobs:
             verdicts[key] = {'verdict': 'abstain', 'reason': 'no_source_xbrl',

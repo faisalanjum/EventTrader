@@ -281,17 +281,18 @@ def _norm_unit(u):
 
 
 def _valid_pairs(pairs):
-    """request-pair schema: a list/tuple of (axis, member) TUPLES of nonblank unpadded
-    strings, no repeated axis (which also kills duplicate pairs). Returns the validated
-    list or None (malformed → the caller abstains 'bad_request_pairs' — never a crash,
-    never a silent frozenset collapse)."""
+    """request-pair schema: a list/tuple of (axis, member) pairs — each a TUPLE OR LIST of
+    exactly two nonblank unpadded strings (lists because JSON round-trips tuples into inner
+    lists; canonicalized to tuples here) — with no repeated axis (which also kills duplicate
+    pairs). Returns the canonical tuple list or None (malformed → the caller abstains
+    'bad_request_pairs' — never a crash, never a silent frozenset collapse)."""
     if not isinstance(pairs, (list, tuple)):
         return None
     out = []
     for p in pairs:
-        if not (isinstance(p, tuple) and len(p) == 2 and _nb(p[0]) and _nb(p[1])):
+        if not (isinstance(p, (tuple, list)) and len(p) == 2 and _nb(p[0]) and _nb(p[1])):
             return None
-        out.append(p)
+        out.append((p[0], p[1]))
     axes = [a for a, _ in out]
     if len(axes) != len(set(axes)):
         return None
@@ -331,11 +332,12 @@ def match_facts_explain(xbrls, concept_qname, pairs, period_start, period_end, u
             continue                  # a NUMERIC candidate must carry a nonblank string unit
                                       # (census: 88,236 numeric gate facts, zero unit-less —
                                       # zero recall cost); malformed shapes likewise never bind
-        u_cf = u.casefold()           # LOCAL casefold for the money HEURISTIC only — unit
-        if expected_unit == 'money' and 'usd' not in u_cf:      # IDENTITY stays case-exact
-            continue                              # shares can never satisfy a money request
-        if expected_unit == 'nonmoney' and 'usd' in u_cf:
-            continue
+        if unit_ref is None:          # expected_unit is a HEURISTIC for unit_ref-less asks
+            u_cf = u.casefold()       # only — an exact unit_ref is AUTHORITATIVE and must
+            if expected_unit == 'money' and 'usd' not in u_cf:      # never be vetoed by it
+                continue              # (opaque raw ids like Unit12 fail every substring
+            if expected_unit == 'nonmoney' and 'usd' in u_cf:       # guess; reproduced)
+                continue
         if not _period_ok(fc, ps, pe, instant):
             continue
         _pairs, _complete = seg_parse(fc)

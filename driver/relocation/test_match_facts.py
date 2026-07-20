@@ -85,16 +85,61 @@ def test_unit_case_sensitivity_strip_only_nonblank_required():
 
 def test_request_pairs_validated_never_crash_never_collapse():
     """Reproduced before fixing: unhashable pair items crashed TypeError; a repeated-axis
-    request silently collapsed via frozenset. All malformed request pairs abstain cleanly."""
+    request silently collapsed via frozenset; then a VALID pair failed after
+    json.dumps/json.loads because JSON turns tuples into inner LISTS. Valid JSON pair arrays
+    are accepted and canonicalized; malformed and repeated-axis content still abstains."""
     b = blob('Revenues', [fact(seg=[{'dimension': 'x:A', 'value': 'x:M'}])])
     ex = lambda pairs: LOC.match_facts_explain([b], 'us-gaap:Revenues', pairs,
                                                '2024-01-01', '2024-12-31')
-    for bad in ("x:A=x:M", 3, None, [['x:A', 'x:M']], [('x:A',)], [('x:A', 'x:M', 'extra')],
+    for bad in ("x:A=x:M", 3, None, [('x:A',)], [('x:A', 'x:M', 'extra')],
                 [('x:A', 3)], [(' x:A', 'x:M')], [('x:A', 'x:M'), ('x:A', 'x:N')],
-                [('x:A', 'x:M'), ('x:A', 'x:M')]):
+                [('x:A', 'x:M'), ('x:A', 'x:M')], ['x:A=x:M'], [{'x:A': 'x:M'}]):
         got, reason = ex(bad)
         assert got is None and reason == 'bad_request_pairs', f"{bad!r} -> {reason}"
-    assert ex([('x:A', 'x:M')])[0] == XN.dec('100'), "a valid pair list still matches"
+    assert ex([('x:A', 'x:M')])[0] == XN.dec('100'), "a valid tuple pair list matches"
+    roundtrip = json.loads(json.dumps([('x:A', 'x:M')]))
+    assert roundtrip == [['x:A', 'x:M']]
+    assert ex(roundtrip)[0] == XN.dec('100'), \
+        "a JSON round-tripped pair array (inner LISTS) must be accepted and canonicalized"
+
+
+def test_exact_unit_ref_is_authoritative_over_expected_unit():
+    """Reproduced before fixing: unit_ref='Unit12' matched alone but adding
+    expected_unit='money' vetoed it (the broad heuristic ran BEFORE exact equality). When
+    unit_ref is supplied, exact equality is AUTHORITATIVE; expected_unit applies only when
+    no unit_ref exists (opaque raw ids like Unit12 are exactly why)."""
+    b = blob('Revenues', [fact(value='93100000', unit='Unit12')])
+    a1 = LOC.match_facts_explain([b], 'us-gaap:Revenues', [], '2024-01-01', '2024-12-31',
+                                 unit_ref='Unit12')
+    assert a1 == (XN.dec('93100000'), 'ok')
+    a2 = LOC.match_facts_explain([b], 'us-gaap:Revenues', [], '2024-01-01', '2024-12-31',
+                                 unit_ref='Unit12', expected_unit='money')
+    assert a2 == (XN.dec('93100000'), 'ok'), \
+        "expected_unit must NOT veto an exact unit_ref match"
+    a3 = LOC.match_facts_explain([b], 'us-gaap:Revenues', [], '2024-01-01', '2024-12-31',
+                                 expected_unit='money')
+    assert a3[0] is None, "without unit_ref the money heuristic still applies (Unit12 opaque)"
+
+
+def test_real_corpus_collision_names_case_exact():
+    """The REAL collision ids, pinned durably (evidence: read-only graph query
+    MATCH (f:Fact)-[:HAS_UNIT]->(u:Unit) WHERE f.unit_ref IN [a,b] grouped by report —
+    7 PSEG filings carry usdPerMWh→iso4217:USDutr:MWh AND usdPerMwh→iso4217:USDpseg:mwh;
+    2 EOG filings carry usdPerMMBTU→iso4217:USDutr:MMBTU AND usdPerMMBTu→iso4217:USDeog:mMBTu;
+    same raw spelling, different case, DIFFERENT semantic units)."""
+    for ua, ub in (('usdPerMWh', 'usdPerMwh'), ('usdPerMMBTU', 'usdPerMMBTu')):
+        both = [blob('Revenues', [fact(value='42', unit=ua)]),
+                blob('Revenues', [fact(value='42', unit=ub)])]
+        got, reason = LOC.match_facts_explain(both, 'us-gaap:Revenues', [],
+                                              '2024-01-01', '2024-12-31')
+        assert got is None and reason == 'unit_conflict', \
+            f"{ua}/{ub} same value must be a unit CONFLICT, never merged: {reason}"
+        sel = LOC.match_facts([both[1]], 'us-gaap:Revenues', [], '2024-01-01', '2024-12-31',
+                              unit_ref=ub)
+        assert sel == XN.dec('42')
+        assert LOC.match_facts([both[1]], 'us-gaap:Revenues', [], '2024-01-01', '2024-12-31',
+                               unit_ref=ua) is None, \
+            f"unit_ref={ua} must NOT match a {ub} fact — case is identity"
 
 
 def test_malformed_stored_period_containers_abstain_never_crash():

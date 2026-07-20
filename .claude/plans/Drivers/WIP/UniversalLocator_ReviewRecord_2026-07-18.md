@@ -1500,3 +1500,27 @@ completion + the owner's word.
 Gates at code-close: pins 10/10-in-file · gate 2/2 · battery 173/173 (171+2; working tree
 additionally = the 1 intentional boundary RED) · floors 28/28. Routes, quote move,
 regeneration, push: all still held.
+
+## WP2 BUILD — corrective 2 (his audit of 47b2ecf, 2026-07-20; all 4 items REPRODUCED first,
+## RED tests before fixes). Carry-over trivially intact: the fixture is UNCHANGED — zero
+## verdict movement; the new report-join asserted 150/150.
+1. UNIT_REF PRECEDENCE (reproduced: Unit12 alone matched; +expected_unit='money' vetoed it —
+   the broad heuristic ran BEFORE exact equality): expected_unit now applies ONLY when
+   unit_ref is None; an exact unit_ref is AUTHORITATIVE and can never be vetoed. RED Unit12
+   pin first.
+2. JSON ROUND-TRIP PAIRS (reproduced: json.loads(json.dumps(pairs)) → inner LISTS →
+   bad_request_pairs — MY over-strict tuple-only rule; JSON is this system's wire format):
+   _valid_pairs accepts tuple OR list items of exactly two nonblank unpadded strings and
+   canonicalizes to tuples; malformed shapes and repeated axes still abstain. My earlier
+   [['x:A','x:M']]-is-bad pin FLIPPED and owned.
+3. DURABLE COLLISION-NAME PINS: usdPerMWh vs usdPerMwh + usdPerMMBTU vs usdPerMMBTu — same
+   value under both → unit_conflict; unit_ref selection is case-EXACT both directions; the
+   read-only evidence query + counts preserved in the test docstring (7 PSEG + 2 EOG
+   filings, different semantic Units).
+4. GATE REPORT-JOIN: _unit_rows now joins each exact Fact to its Report
+   ((r:Report)-[:HAS_XBRL]->(x:XBRLNode)<-[:REPORTS]-(f:Fact) — edge discovered by probe,
+   accessionNo verified on the sample) and the test ASSERTS the pinned accession per case —
+   his independent 150/150 is now durably enforced, never assumed.
+Gates: focused 13/13 · gate 2/2 (fixture UNCHANGED — zero movement) · battery 175/175
+(173+2) · floors 28/28. Still held: routes, quote move, regeneration, Core edits, Neo4j
+writes, push.
