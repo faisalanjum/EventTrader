@@ -213,9 +213,239 @@ def seg_parse(fc):
     return out, complete
 
 
-# ---------- THE strict value-unknown fact matcher (WP2: PAIR-COMPLETE, neutral home) ----------
+# ---------- THE quote-proof group (WP2 Chunk 1: row_quote's complete closure, relocated ----------
+# ---------- VERBATIM from link_lib — one implementation each; link_lib re-exports)      ----------
 import json
+import re
 import exact_numbers as XN
+
+
+def _grp(n):
+    neg = n.startswith('-'); n = n.lstrip('-'); out = ''
+    while len(n) > 3:
+        out = ',' + n[-3:] + out; n = n[:-3]
+    return ('-' if neg else '') + n + out
+
+
+def at_boundary(text, start, end, numeric=True):
+    """THE single numeric-boundary rule. A number match is only real if it isn't glued into a
+    bigger number OR a word on either side ('modelX86' / 'FY86' never print the value 86 —
+    round-16, reviewer-confirmed live). Used by every matcher — do not duplicate this logic."""
+    b = text[start-1] if start > 0 else ' '
+    a = text[end] if end < len(text) else ' '
+    nxt = text[end+1] if end+1 < len(text) else ' '
+    if numeric and (b.isalnum() or b in '.,'):
+        return False                       # glued to a preceding digit/letter/separator
+    if a.isalnum():
+        return False                       # glued into a longer number or word
+    if a in '.,' and nxt.isdigit():
+        return False                       # a thousands separator / decimal continues the number
+    return True
+
+
+_TRAIL = re.compile(r'(?:\s?(?:%|\)|percent\b|million\b|billion\b|thousand\b))*')
+
+
+def _with_trail(t, end):
+    """Extend a crop end to keep the value's IMMEDIATE trailing evidence — '%', ')', 'percent',
+    scale words — so the sign/class/unit gates can see it (round-12: the crop used to cut off the
+    very characters the gates check; '86' was accepted from '86%' and +123 from '(123)')."""
+    return end + _TRAIL.match(t[end:end + 32]).end()
+
+
+# round-13 scale evidence + round-14 tightening (reviewer-confirmed live): a bare SCALED print
+# ('1,200' for 1.2B) may only bind when evidence of THE REQUIRED MULTIPLIER is present — the
+# NEAREST preceding section declaration ('in millions'; 52 cohort text blocks carry MIXED
+# markers, so any-marker-anywhere approved wrong amounts) or the tag riding immediately after the
+# number — and 'million' can never prove a value that needs 'billion'. Full-magnitude prints and
+# zero are self-evident. Measured on the wp1 cohort: 315/315 certified table binds sit in
+# sections carrying the strict marker -> zero recall cost.
+_SCALE_MARK = re.compile(r'(?i)in (millions|thousands|billions|trillions)')
+_SCALE_TAIL = re.compile(r'\s?(million|billion|thousand|trillion)s?\b', re.I)
+_WORD2DIV = {'thousand': 1e3, 'million': 1e6, 'billion': 1e9, 'trillion': 1e12}
+
+
+def _required_div(form, value):
+    """The multiplier this printed form NEEDS to reproduce the value (1e3/1e6/1e9/1e12), or None
+    when the form is self-evident (full magnitude, zero, or a non-numeric core)."""
+    s = form.lstrip('$( ').rstrip(')%').replace(',', '').strip()
+    try:
+        f = abs(float(s))
+    except ValueError:
+        return None                        # non-numeric-core forms carry their own words
+    av = abs(float(value))
+    if av == 0 or f == av:
+        return None
+    for d in (1e3, 1e6, 1e9, 1e12):
+        if f > 0 and abs(f * d - av) / av < 0.001:
+            return d
+    return None                            # no clean multiplier -> exact_form decides elsewhere
+
+
+def _tail_div(text, end):
+    """The scale word IMMEDIATELY after a hit ('1.2 billion' -> 1e9), or None."""
+    m = _SCALE_TAIL.match(text[end:end + 32])
+    return _WORD2DIV[m.group(1).lower()] if m else None
+
+
+def _local_scale_divs(text, start):
+    """The scale declarations GOVERNING this hit, as a set of divisors.
+    Inside a table (a ##TABLE_START tag precedes the hit): every declaration between the table
+    start and the hit — a real header names several scales for different columns ('(In millions,
+    except shares in thousands)', AAPL's standard header; a single-nearest-word rule wrongly
+    rejected the table's dominant scale). Outside tables: the single NEAREST preceding
+    declaration. Empty set = no local evidence. Mixed-scale documents (52 cohort blocks) make
+    any-marker-anywhere unsafe — locality is the whole point."""
+    ts = text.rfind('##TABLE_START', 0, start)
+    if ts >= 0:
+        divs = {_WORD2DIV[m.group(1).lower().rstrip('s')]
+                for m in _SCALE_MARK.finditer(text, ts, start)}
+        if divs:
+            return divs                    # the table declares its own scale(s) -> strict
+        # a table that declares NOTHING inherits a preceding declaration ONLY when the text
+        # declares exactly ONE scale overall (AA caption layout = reading convention). Round-16
+        # (reviewer-confirmed hazard): a mixed-scale text must never lend a marker across tables.
+    all_divs = {_WORD2DIV[m.group(1).lower().rstrip('s')]
+                for m in _SCALE_MARK.finditer(text, 0, start)}
+    return all_divs if len(all_divs) == 1 else set()
+
+
+def _tableforms(v, fmt):
+    """Exact printed forms for table/row scanning. WP1: the value's EXACT form is ALWAYS included
+    (zero, small ints, decimals — the old len>=3 filter silently killed them); a fractional value
+    gets its 1-decimal companion but NEVER an integer-rounded print; big money keeps the grouped
+    cell form + per-million/billion scaled forms (scaled bare ints only when >=3 digits — a bare
+    '7' would match stray sevens). Precision comes from boundary + label adjacency (row_quote),
+    never from magnitude or length."""
+    av = abs(float(v))
+    p = XN.plain(XN.dec(str(v)).copy_abs())
+    s = {p}
+    if fmt == '%':
+        if '.' in p:
+            s.add(f"{av:.1f}")             # 2.34 -> '2.3'; the integer print is the reader's call
+        return s
+    if '.' not in p:
+        s.add(_grp(p))                     # grouped cell form ('5,365,000,000')
+    for div in (1e3, 1e6, 1e9, 1e12):      # round-16: exact thousand + trillion forms too
+        x = av / div
+        if x >= 1:
+            xi = int(round(x))
+            if xi >= 100:
+                s.add(f"{xi:,}")
+            for d in (1, 2):
+                s.add(f"{x:,.{d}f}")
+    return {x for x in s if x}
+
+
+def row_quote(texts, label_tokens, val, fmt, gap=90, scale_gate=False, with_context=False):
+    """Cleanest verbatim quote: starts at THIS metric's label and runs through the value.
+    Every label token must appear within `gap` chars before the value, and the value must sit at
+    a numeric boundary. Returns the shortest such quote, or None.
+    scale_gate (round-13, opt-in — certified benchmark callers keep legacy behavior): a bare
+    SCALED form binds only with scale evidence (section _SCALE_MARK, or the tag immediately after
+    the hit); %-format and full-magnitude/zero forms are exempt."""
+    lt = [t.lower() for t in label_tokens if t]
+    if not lt:
+        return (None, None) if with_context else None
+    forms = _tableforms(val, fmt)
+    needy = ({f: _required_div(f, val) for f in forms if _required_div(f, val)}
+             if scale_gate and fmt != '%' else {})
+    best = None
+    collected = []                         # round-25/26: (start, end, q, t) per qualifying occurrence
+    for t in texts:
+        low = t.lower()
+        for fo in sorted(forms):           # SET iteration is hash-random per process — sorted
+                                           # + content tiebreaks make output fully deterministic
+            req = needy.get(fo)
+            for m in re.finditer(re.escape(fo), t):
+                if not at_boundary(t, m.start(), m.end()):
+                    continue
+                if req:                    # round-14: evidence must name THE REQUIRED multiplier —
+                    td = _tail_div(t, m.end())        # the immediate tag wins; else the CURRENT
+                    if td is not None:                # table's (or nearest) declarations must
+                        if td != req:                 # include it; wrong scale = no bind
+                            continue
+                    elif req not in _local_scale_divs(t, m.start()):
+                        continue
+                ws = max(0, m.start() - gap)
+                seg = low[ws:m.start()]
+                # round-16: tokens match WHOLE WORDS only ('net' never inside 'internet',
+                # 'car' never inside 'oscar') — alnum lookarounds on the lowered window
+                pos = []
+                for tok in lt:
+                    mt = re.search(r'(?<![a-z0-9])' + re.escape(tok) + r'(?![a-z0-9])', seg)
+                    if not mt:
+                        pos = None
+                        break
+                    pos.append(mt.start())
+                if pos is None:
+                    continue                      # some label token missing -> not this row
+                q = t[ws + min(pos): _with_trail(t, m.end())]   # RAW slice incl. trailing evidence
+                if with_context:
+                    # round-24/25: collect EVERY qualifying occurrence FIRST (the round-23 tie
+                    # only compared IDENTICAL quote strings — a wording variant bypassed the law)
+                    collected.append((m.start(), m.end(), q, t))
+                elif best is None or len(q) < len(best) or (len(q) == len(best) and q < best):
+                    best = q                      # certified default: byte-identical legacy
+    if not with_context:
+        return best
+    if not collected:
+        return None, None
+    # round-25 SIGNATURE law (reviewer-reproduced: a comparative row prints TWO facts with
+    # coincidence-equal values under one context — context-set equality wrongly bound): an
+    # occurrence IS (full source text, value start, value end). EXACT duplicate signatures
+    # (identical texts) may bind; >1 DISTINCT signature is unattributable -> ABSTAIN. The
+    # round-24 overlap-merge is REMOVED as unused complexity (its premise was false:
+    # _tableforms carries no dollar forms, so one printed number yields one match).
+    sigs = {(t, s0, e0) for s0, e0, q, t in collected}
+    if len(sigs) > 1:
+        return None, None
+    t, s0, e0 = next(iter(sigs))
+    qs = [q for s, e, q, tt in collected if (tt, s, e) == (t, s0, e0)]
+    return min(qs, key=lambda q: (len(q), q)), t[_snippet_start(t, s0, label_tokens): e0 + 80]
+
+
+def _table_active_start(t, pos, cap=2600):
+    """THE single 'is a table still open at pos' check (round-22): the last ##TABLE_START within
+    cap chars before pos, provided no ##TABLE_END closed it before pos; else -1. Used by BOTH
+    snippet/context windowing and candidate ranking — one law, no sibling logic."""
+    ts = t.rfind('##TABLE_START', max(0, pos - cap), pos)
+    if ts >= 0 and t.find('##TABLE_END', ts, pos) < 0:
+        return ts
+    return -1
+
+
+def _snippet_start(t, hit_start, label_tokens, base=320, maxback=2200, table_cap=2600):
+    """Window start for a value hit. Default = base chars back. Then reach further back so the
+    number's identifying header travels with it, two ways (take the earliest):
+      (a) LABEL TOKENS — the nearest occurrence of any of the KPI's label tokens within maxback
+          (catches prose and same-row/near-row segment labels);
+      (b) TABLE HEADER — the nearest `##TABLE_START` marker within table_cap (catches tall/wide
+          tables whose column header — often ABBREVIATED, e.g. 'VIU' for a full segment name — the
+          label-token search can't match). The source text tags every table start, so this
+          deterministically pulls in the column-header row."""
+    default = max(0, hit_start - base)
+    low = t.lower()
+    near = low[default:hit_start]
+    start = default
+    for tok in label_tokens:                          # (a) label-token reach — WHOLE WORDS
+        tl = tok.lower()                              # (round-21: substring reach anchored on
+        pat = re.compile(r'(?<![a-z0-9])' + re.escape(tl) + r'(?![a-z0-9])')   # 'net' inside
+        if pat.search(near):                          # 'internet')
+            continue
+        region = low[max(0, hit_start - maxback):hit_start]
+        last = None
+        for mm in pat.finditer(region):
+            last = mm
+        if last is not None:
+            start = min(start, max(0, hit_start - maxback) + last.start())
+    ts = _table_active_start(t, hit_start, table_cap)  # (b) table-header reach — round-22: ONLY
+    if ts >= 0:                                        # while that table is STILL OPEN; a closed
+        start = min(start, ts)                         # table's heading never travels into prose
+    return start
+
+
+# ---------- THE strict value-unknown fact matcher (WP2: PAIR-COMPLETE, neutral home) ----------
 
 
 def _fact_rows(xbrls):

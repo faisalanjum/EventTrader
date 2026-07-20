@@ -1578,3 +1578,28 @@ move, regeneration, Core edits, Neo4j writes, push.
    (pseg-20221231/0331/0630/0930/1231/20240331/0630 + eog-20231231/20241231).
 Gates: focused 14/14 · gate 2/2 (fixture unchanged, 130/20/0 holds) · battery 176/176 ·
 floors 28/28. Still held: routes, quote move, regeneration, Core edits, Neo4j writes, push.
+
+## WP2 CHUNK 1 (his work order, 2026-07-20; started at HEAD 418bd36): row_quote's COMPLETE
+## transitive closure moved link_lib → locator, implementation MOVED not copied.
+CLOSURE (derived from the live call graph BEFORE editing): row_quote (root) + _tableforms +
+_grp + at_boundary + _with_trail/_TRAIL + _required_div/_tail_div/_local_scale_divs
+(+_SCALE_MARK/_SCALE_TAIL/_WORD2DIV) + _snippet_start + _table_active_start — 10 functions +
+4 constants, all pure text/number logic; NO fetching/packet/graph dependency (stop rule not
+triggered). NOT moved (call graph does not require them): scan_text · value_forms ·
+_round_forms · bounded_hit · _toks · _tidy · exact_form · member_tokens · tier1. Cross-check
+before editing: every non-test caller of every moved symbol lives INSIDE link_lib (plus
+prep.py's L._tableforms attribute access) → the re-export covers all of them.
+PROOFS: bodies verbatim (my own cut/paste of exact text); link_lib = a parenthesized
+from-locator import re-exporting all 14 names, zero wrapper logic; same-object proof 14/14
+(link_lib.row_quote IS locator.row_quote); single-definition grep 10/10 functions; locator's
+real imports = Mapping/json/re/exact_numbers only; runtime sweep after importing locator
+alone = ZERO fiscal modules loaded; git diff --check clean. Diff: locator +232, link_lib
+−228/+17 (pointer comments + the import block).
+GATES (his exact commands, PYTHONDONTWRITEBYTECODE=1): focused before=88 → after=88 ·
+regular battery 174/174 (his pinned baseline, no count loss) · live gate 2/2 -rs with the
+fixture BYTE-UNCHANGED (sha256 d7d2f068…, git-clean) at 130/20/0, no per-case movement ·
+floors 28/28 · boundary test untracked/unmodified (sha256 81eca0aa…), still intentionally
+RED (locate() does not exist). HOLDS honored: no routes/R1/R2, no boundary edit, no
+real-source work, no acronym work, no Core edits, no Neo4j writes, no paid calls, no
+regeneration, final WP1 byte-comparison still deferred until routes complete, no push.
+Chunk 2 NOT begun — awaiting his independent audit.
