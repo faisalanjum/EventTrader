@@ -207,3 +207,114 @@ def seg_parse(fc):
         complete = False                   # round-24: a REPEATED AXIS is not a valid complete
                                            # dimension address (census 0/47,152)
     return out, complete
+
+
+# ---------- THE strict value-unknown fact matcher (WP2: PAIR-COMPLETE, neutral home) ----------
+import json
+import exact_numbers as XN
+
+
+def _fact_rows(xbrls):
+    """(concept_key, fact_dict) across blobs — mirrors the certified iteration exactly
+    (unparseable blobs skipped; dict-of-concept → list-or-single facts)."""
+    for blob in xbrls:
+        try:
+            d = json.loads(blob)
+        except (ValueError, TypeError):
+            continue
+        if isinstance(d, dict):
+            for con, facts in d.items():
+                for fc in (facts if isinstance(facts, list) else [facts]):
+                    if isinstance(fc, dict):
+                        yield con, fc
+
+
+def _period_ok(fc, ps, pe, instant):
+    """exactly ONE valid period shape; a fact carrying BOTH instant and duration dates is
+    malformed and never a candidate (tier1 parity, round-29 law)."""
+    p = fc.get('period') or {}
+    mixed = (p.get('instant') is not None) and (p.get('startDate') is not None
+                                                or p.get('endDate') is not None)
+    if mixed:
+        return False
+    if instant:
+        return p.get('instant') == ps
+    return p.get('startDate') == ps and p.get('endDate') == pe
+
+
+def _concept_ok(stored_key, req_prefix, con):
+    """exact concept identifier AS STORED: local names compare exactly; a namespace prefix is
+    compared ONLY when both sides carry one; bare names are never promoted."""
+    c_prefix, _, c_local = stored_key.rpartition(':')
+    if c_local != con:
+        return False
+    return not (c_prefix and req_prefix and c_prefix != req_prefix)
+
+
+def match_facts(xbrls, concept_qname, pairs, period_start, period_end, unit_ref=None,
+                expected_unit=None):
+    """unique exact-Decimal value for the FULL identity — exact concept identifier AS STORED +
+    COMPLETE (axis,member) PAIRS + exactly one valid period shape + unit — or None (abstain).
+    The wrong-axis class dies here: a right member under a wrong axis never matches."""
+    req_prefix, _, con = concept_qname.rpartition(':')
+    want = frozenset(pairs)
+    try:
+        ps, pe = XN.period_key(period_start, period_end)
+    except XN.ExactError:
+        return None
+    instant = (ps == pe)
+    vals, units = set(), set()
+    for c, fc in _fact_rows(xbrls):
+        if not _concept_ok(c, req_prefix, con):
+            continue
+        u_low = str(fc.get('unitRef') or '').lower()
+        if expected_unit == 'money' and 'usd' not in u_low:
+            continue                              # shares can never satisfy a money request
+        if expected_unit == 'nonmoney' and 'usd' in u_low:
+            continue
+        if not _period_ok(fc, ps, pe, instant):
+            continue
+        _pairs, _complete = seg_parse(fc)
+        if not _complete:
+            continue                  # unparseable/partial segments never pose as undimensioned
+        if frozenset(_pairs) != want:
+            continue                  # COMPLETE pairs — axis AND member must both match
+        u = fc.get('unitRef')
+        if unit_ref is not None and u != unit_ref:
+            continue
+        try:
+            v = XN.dec(str(fc.get('value', '')).strip())
+        except XN.ExactError:
+            return None                           # non-numeric collision -> not resolvable
+        vals.add(v)
+        units.add(u)
+    if len(vals) != 1:
+        return None                               # unique or abstain
+    if unit_ref is None and len(units) > 1:
+        return None                               # unit conflict -> ambiguous, abstain
+    return next(iter(vals))
+
+
+def discover_pairings(xbrls, concept_qname, member_set, period_start, period_end):
+    """DISTINCT complete (axis,member) pairings whose member-set equals member_set, among
+    concept+period-matching facts — the legacy member-only adapter's ambiguity check: a
+    member-only request cannot choose an axis, so more than one distinct pairing = abstain."""
+    req_prefix, _, con = concept_qname.rpartition(':')
+    want_members = frozenset(member_set)
+    try:
+        ps, pe = XN.period_key(period_start, period_end)
+    except XN.ExactError:
+        return set()
+    instant = (ps == pe)
+    found = set()
+    for c, fc in _fact_rows(xbrls):
+        if not _concept_ok(c, req_prefix, con):
+            continue
+        if not _period_ok(fc, ps, pe, instant):
+            continue
+        _pairs, _complete = seg_parse(fc)
+        if not _complete:
+            continue
+        if frozenset(m for _, m in _pairs) == want_members:
+            found.add(frozenset(_pairs))
+    return found

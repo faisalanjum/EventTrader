@@ -1344,3 +1344,33 @@ NEXT: Step 2 — execute both real route calls, then prove no fiscal/channel cod
 5. Gates: battery 163/163 (162+1, RED boundary file excluded as uncommitted) · floors 28/28
    (run post-move). NEXT: routes R1 (own-source enumeration) + R2 (known-value) in locator.py
    → boundary test GREEN → ONE commit carrying the boundary test.
+
+## WP2 BUILD — the PAIR-COMPLETE MATCHER round (reviewer audit of the 150-case gate,
+## 2026-07-20). His main-bug example (wanted Geography+US, found Segment+US — a member-set
+## compare may wrongly accept) = the round-24 recorded WP2 gate item, now BUILT. Routes held.
+1. THE NEUTRAL MATCHER (locator.py): `match_facts` — exact concept identifier AS STORED (a
+   prefix compared only when both sides carry one; bare names never promoted) + COMPLETE
+   (axis,member) PAIRS + exactly ONE valid period shape (a fact carrying both instant and
+   duration dates is never a candidate — tier1 parity) + unit-conflict abstain + exact
+   Decimal. Plus `discover_pairings` (the legacy adapter's ambiguity check) and the faithful
+   `_fact_rows` iteration mirror.
+2. xbrl_lane = a TRUE thin adapter now: `pairs` is the preferred identity; a LEGACY
+   member-only call first discovers the source's distinct pairings — more than one →
+   axis-ambiguous → abstain (a member-only ask cannot choose an axis); exactly one → matched
+   on its FULL pairs. The stale uncollected __main__ deleted (superseded by the durable
+   gate); the oracle import dropped — the xbrl_lane→oracle edge of the old cycle is GONE.
+3. GATE v2 (test_xbrl_gate.py): FULL pairs drive the match · EVERY case pinned INDIVIDUALLY
+   (committed fixture xbrl_gate_expected.json, 150 pins; abstain→ok = safe re-pin, ok→abstain
+   = owner-gated) · database setup/auth/config errors FAIL — only genuine unavailability
+   skips (my previous skip tuple wrongly skipped AuthError/KeyError/ConfigurationError —
+   owned) · fractional-Decimal test added (1.23 / 0.1 exact round-trip).
+4. MEASURED before pinning: pair-complete = {ok:130, abstain:20, wrong:0} — IDENTICAL to the
+   committed baseline with ZERO per-case shifts (pair-vs-legacy diff empty on all 150). No
+   recall lost, nothing to owner-gate; the wrong-axis class is now structurally impossible.
+5. Battery-language precision (his catch, adopted): the WORKING TREE = N passed + 1
+   INTENTIONAL boundary RED (uncommitted tests are still collected); only the COMMITTED tree
+   is fully green. Gates this round: gate 2/2 · battery 164/164 (RED file excluded) · floors
+   28/28. WP1 outputs: link_lib untouched since the byte-diff proof and xbrl_lane is not on
+   the WP1 path → the proven-identical status stands.
+NEXT: row_quote's SMALLEST COMPLETE helper group moved in ONE go + ONE final WP1 byte-diff
+(hashes retained in this record) → routes R1/R2 → boundary GREEN.
