@@ -1265,3 +1265,20 @@ no WP1-reachable file touched → no regeneration.
 ## exactly per his instruction: NO period/numeric/source-name/qname validation added (those
 ## belong elsewhere). Gates: probe 26/26 · battery 162/162 (161+1) · regress floors 28/28 ·
 ## no regeneration.
+
+## THE OWNER'S DOC LOCK + STEP-1 CLOSE (2026-07-20) — "lock the amendments" SPOKEN BY THE
+## OWNER (the held owner-gated action; the reviewer had approved the three clarifications four
+## times), and "WP2 Step 1 is accepted and closed" (reviewer verified 26/26 · 162/162 · 28/28,
+## narrow scope, no regeneration).
+The design file's byte-identical-to-`ba0c629` era ENDS HERE by the owner's word. Three
+owner-locked amendments applied to the LOCKED design (Fiscal-owned files ONLY — Core's
+FINAL_DESIGN law files untouched; their law commit + R8 remain Core's separate work):
+1. SOURCE SELECTION block: the earnings-8-K TWO-FILE AUTHORITY pointer (canonical = Core's
+   PER-21 + BUILD §3; historical = match_8k_to_periodic exact-accession; live =
+   quarter_identity alone, AUTO_OK trust-only).
+2. Same block: the S4 lane-ROUTER sentence — the matcher itself routes (companion+valid lag →
+   historical, else live); a FAILED historical pairing PARKS, never falls through to live.
+3. §3 STATUS: the alias-ambiguity clarification — equal values under different concept/slice/
+   period identities are never aliases; any difference among survivors → ambiguous → abstain;
+   tie-breaks only WITHIN one identity.
+NEXT: Step 2 — execute both real route calls, then prove no fiscal/channel code loaded.
