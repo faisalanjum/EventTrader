@@ -1,601 +1,751 @@
 {
-"0000006201-24-000060|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-07-01|2024-09-30|2110000000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:PassengerMember;us-gaap:AirlineDestinationsAxis=us-gaap:AtlanticDestinationMember": {
-"reason": "no_candidate",
+"007960321081b42e73919ae544b8823f94e219cfd9f62021cb745e7f10ebdcef|https://www.sec.gov/Archives/edgar/data/1306830/000130683024000155/ce-20240630_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-373_usd_f-1357|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-04-01|2024-06-30|390000000|iso4217:USD|duration|srt:StatementGeographicalAxis=srt:NorthAmericaMember;us-gaap:StatementBusinessSegmentsAxis=ce:AcetylChainMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"00d482ec589cbd63c30d225aada7f1b4179f8ab7ba248c616897bee1186d232f|https://www.sec.gov/Archives/edgar/data/1528396/000152839626000014/gwre-20260131_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-94_usd_f-480|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-11-01|2026-01-31|36583000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:LicenseMember;srt:StatementGeographicalAxis=srt:AmericasMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"01a7c0d989403cfa8337a6104676620289c58186590387d01ea336f852eea0cc|https://www.sec.gov/Archives/edgar/data/1488139/000148813923000172/amrc-20230930_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-105_usd_f-610|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-07-01|2023-09-30|674000|iso4217:USD|duration|srt:ProductOrServiceAxis=amrc:OtherRevenueMember;us-gaap:StatementBusinessSegmentsAxis=amrc:OtherUSRegionsMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"01bf0a750d36ef30178852ded49e6420fa78efd40f63baf4b05424b5701c0d25|https://www.sec.gov/Archives/edgar/data/1163302/000116330223000078/x-20230630_htm.xml_us-gaap:Revenues_c-149_usd_f-541|us-gaap:Revenues|2023-04-01|2023-06-30|38000000|iso4217:USD|duration|srt:ProductOrServiceAxis=x:SemifinishedProductsMember;us-gaap:StatementBusinessSegmentsAxis=x:UsSteelEuropeMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"01f4bc361e55178a0a152f07fc3de9ed32ac53e3e346de678e6d223654e80369|https://www.sec.gov/Archives/edgar/data/859737/000085973723000019/holx-20230701_htm.xml_us-gaap:Revenues_c-100_usd_f-511|us-gaap:Revenues|2023-04-02|2023-07-01|10700000|iso4217:USD|duration|srt:ProductOrServiceAxis=holx:BloodScreeningMember;us-gaap:StatementBusinessSegmentsAxis=holx:DiagnosticsMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"02104e7d5d0aa53df0a4675e0d1211ec23a8a1a6b21557127855eabf65a446aa|https://www.sec.gov/Archives/edgar/data/882835/000088283523000052/rop-20230930_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-177_usd_f-809|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-07-01|2023-09-30|139100000|iso4217:USD|duration|srt:ProductOrServiceAxis=rop:SoftwareRelatedNonRecurringMember;us-gaap:StatementBusinessSegmentsAxis=rop:ApplicationSoftwareSegmentMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"0216d26d075f2abd9c11edb952d4bd32e50f05b0730e408703eede1052c5d1fb|https://www.sec.gov/Archives/edgar/data/935703/000093570323000063/dltr-20231028_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-148_usd_f-611|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-07-30|2023-10-28|223100000|iso4217:USD|duration|srt:ProductOrServiceAxis=dltr:SeasonalAndElectronicsMember;us-gaap:StatementBusinessSegmentsAxis=dltr:FamilyDollarMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"02674fab7d63192ea1b06ecce8f9bf4d85ac0a4c3958d10b2912aea767754633|https://www.sec.gov/Archives/edgar/data/1551152/000155115224000031/abbv-20240630_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-450_usd_f-1395|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-04-01|2024-06-30|833000000|iso4217:USD|duration|abbv:KeyProductPortfolioAxis=abbv:HematologicOncologyMember;srt:ProductOrServiceAxis=abbv:ImbruvicaMember": {
+"raw_unit": "usd",
+"reason": "concept_missing",
 "verdict": "abstain"
 },
-"0000014930-23-000174|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-04-02|2023-07-01|242400000|iso4217:USD|duration|srt:StatementGeographicalAxis=country:US;us-gaap:StatementBusinessSegmentsAxis=bcorp:EnginePartsandAccessoriesMember": {
-"reason": "no_candidate",
+"026c3d7f6dbb4a8168af1f2f4c38cee28a8e2d903184d8927c52a55a59e36024|https://www.sec.gov/Archives/edgar/data/217346/000021734624000084/txt-20240629_htm.xml_us-gaap:Revenues_c-246_usd_f-992|us-gaap:Revenues|2024-03-31|2024-06-29|9000000|iso4217:USD|duration|srt:MajorCustomersAxis=txt:CommercialCustomerMember;us-gaap:StatementBusinessSegmentsAxis=txt:TextronEAviationSegmentMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"026eb7f83657868cc68ff3d52e033d2c6111f0605113a1b7635fbb962d304d46|https://www.sec.gov/Archives/edgar/data/882095/000088209523000025/gild-20230630_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-136_usd_f-536|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-04-01|2023-06-30|7000000|iso4217:USD|duration|srt:ProductOrServiceAxis=gild:ProductsOtherHIVMember;srt:StatementGeographicalAxis=srt:EuropeMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"0271b39f9608ad75473916519fa5041e170957ec938bb9d39e43d35abff716ae|https://www.sec.gov/Archives/edgar/data/14930/000001493023000174/bcorp-20230701_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-70_usd_f-547|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-04-02|2023-07-01|242400000|iso4217:USD|duration|srt:StatementGeographicalAxis=country:US;us-gaap:StatementBusinessSegmentsAxis=bcorp:EnginePartsandAccessoriesMember": {
+"raw_unit": "usd",
+"reason": "concept_missing",
 "verdict": "abstain"
 },
-"0000016058-25-000032|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-10-01|2024-12-31|1240213000|iso4217:USD|duration|us-gaap:ContractWithCustomerBasisOfPricingAxis=caci:CostPlusFeeContractMember;us-gaap:StatementBusinessSegmentsAxis=caci:DomesticOperationsMember": {
+"027c880c57ca39334c201626c2ea638f8f540fbe75c6ed2bd1bb68ffe73191fa|https://www.sec.gov/Archives/edgar/data/1552033/000155203323000040/ck0001552033-20230630_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-200_usd_f-956|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-04-01|2023-06-30|22500000|iso4217:USD|duration|srt:StatementGeographicalAxis=srt:AsiaPacificMember;us-gaap:StatementBusinessSegmentsAxis=ck0001552033:InternationalMember": {
+"raw_unit": "usd",
 "reason": "ok",
 "verdict": "ok"
 },
-"0000027904-23-000009|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-04-01|2023-06-30|926000000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:PassengerMember;us-gaap:AirlineDestinationsAxis=us-gaap:LatinAmericaDestinationMember": {
+"028b42271143db79807dfcb5ca34bf777d22e34d9c15b83a188f8d3e06edcfe2|https://www.sec.gov/Archives/edgar/data/352915/000095017024124103/uhs-20240930_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_C_1fbbefb2-22ed-4f79-8ed9-0c700d3d0745_U_USD_F_2c2b3668-8cc0-41bc-944c-863ec51a2f9b|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-07-01|2024-09-30|117679000|iso4217:USD|duration|srt:ProductOrServiceAxis=uhs:OtherPatientRevenueAndAdjustmentsNetMember;us-gaap:StatementBusinessSegmentsAxis=uhs:AcuteCareHospitalServicesMember": {
+"raw_unit": "U_USD",
 "reason": "ok",
 "verdict": "ok"
 },
-"0000027904-24-000009|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-04-01|2024-06-30|2825000000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:PassengerMember;us-gaap:AirlineDestinationsAxis=us-gaap:AtlanticDestinationMember": {
+"029bf52a042de301b8a87f6b0d550edd8a954e84b98762a87a534ce0d8ff951a|https://www.sec.gov/Archives/edgar/data/318154/000031815423000053/amgn-20230630_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-162_usd_f-464|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-04-01|2023-06-30|1947000000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:ProductMember;srt:StatementGeographicalAxis=us-gaap:NonUsMember": {
+"raw_unit": "usd",
 "reason": "ok",
 "verdict": "ok"
 },
-"0000032604-25-000076|emr:RevenueFromContractWithCustomerExcludingAssessedTaxAndIntersegmentEliminations|2025-04-01|2025-06-30|416000000|iso4217:USD|duration|srt:ProductOrServiceAxis=emr:SoftwareAndControlMember;srt:StatementGeographicalAxis=emr:AsiaMiddleEastAndAfricaMember": {
-"reason": "no_candidate",
+"02b4d6a06e677bc5d5b9f4099dae48a649b4387d3621dae8d5fb28fa41fd9f0f|https://www.sec.gov/Archives/edgar/data/936468/000093646824000095/lmt-20240630_htm.xml_us-gaap:Revenues_c-105_usd_f-449|us-gaap:Revenues|2024-04-01|2024-06-30|2742000000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:ProductMember;us-gaap:StatementBusinessSegmentsAxis=lmt:MissilesAndFireControlMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"02cc5f0aefbd1cef06a3537fb6a54cc5586ac5ced64b66aa4a70f67fc5130e77|https://www.sec.gov/Archives/edgar/data/1488139/000148813923000172/amrc-20230930_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-97_usd_f-602|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-07-01|2023-09-30|352000|iso4217:USD|duration|srt:ProductOrServiceAxis=amrc:EnergyAssetsRevenueMember;us-gaap:StatementBusinessSegmentsAxis=us-gaap:AllOtherSegmentsMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"02d6234fc6db7e4ea3fe9ae1e247951e90390a64fa7f8c87e98f712ba2c131e9|https://www.sec.gov/Archives/edgar/data/76334/000007633426000008/ph-20251231_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-29_usd_f-283|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-10-01|2025-12-31|619000000|iso4217:USD|duration|srt:ProductOrServiceAxis=ph:CommercialAftermarketMember;us-gaap:StatementBusinessSegmentsAxis=ph:AerospaceSystemsSegmentMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"02e8bac62d7b4d91470e3f24cb11a9668cef36ef262bb7979c509bd8b9877997|https://www.sec.gov/Archives/edgar/data/96021/000009602124000043/syy-20240330_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-74_usd_f-469|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-12-31|2024-03-30|1416484000|iso4217:USD|duration|srt:ProductOrServiceAxis=syy:DairyProducts1Member;us-gaap:StatementBusinessSegmentsAxis=syy:U.S.FoodserviceOperationsMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"02eeae3aa7e33ea4921bb024a698614c30e207a26a37eeb730e09e4f87842d7a|https://www.sec.gov/Archives/edgar/data/882095/000088209523000031/gild-20230930_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-169_usd_f-580|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-07-01|2023-09-30|45000000|iso4217:USD|duration|srt:ProductOrServiceAxis=gild:CellTherapyProductsTotalCellTherapyProductSalesMember;srt:StatementGeographicalAxis=gild:OtherInternationalMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"0321e7aaa0464bf482cca2b5e1694cb034e7ebd8248f850b2f31318b4db91e61|https://www.sec.gov/Archives/edgar/data/1094285/000109428525000131/tdy-20250629_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-151_usd_f-616|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-03-31|2025-06-29|10800000|iso4217:USD|duration|srt:StatementGeographicalAxis=tdy:CountriesOtherThanUnitedStatesAndEuropeAndAsiaMember;us-gaap:StatementBusinessSegmentsAxis=tdy:AerospaceAndDefenseElectronicsMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"0345ebcd944544b47c16d16439131173cedec48d6293c758ca1341222795a7c9|https://www.sec.gov/Archives/edgar/data/318154/000031815425000056/amgn-20250630_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-171_usd_f-507|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-04-01|2025-06-30|461000000|iso4217:USD|duration|srt:ProductOrServiceAxis=amgn:OtherProductsMember;srt:StatementGeographicalAxis=us-gaap:NonUsMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"034a7dc8dd6a7d24b0842f030200f8bda3263e0d0589a7b10b88480d3af50b8f|https://www.sec.gov/Archives/edgar/data/1545654/000154565425000024/alex-20250630_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-146_usd_f-642|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-04-01|2025-06-30|146000|iso4217:USD|duration|srt:ProductOrServiceAxis=alex:OtherOperationsMember;us-gaap:StatementBusinessSegmentsAxis=alex:LandOperationsMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"0351332a974db0cb72a0de61314e3ddcd936cb3d63fcb0bf6ca12cbf1cc5702c|https://www.sec.gov/Archives/edgar/data/718937/000095017024092753/staa-20240628_htm.xml_us-gaap:Revenues_C_f6e3aa7f-9ac1-4daa-a658-354276f07a41_U_USD_F_415a073a-83c5-4466-adbf-333fd0f9074e|us-gaap:Revenues|2024-03-30|2024-06-28|63395000|iso4217:USD|duration|srt:StatementGeographicalAxis=country:CN;us-gaap:GeographicDistributionAxis=us-gaap:GeographicDistributionForeignMember": {
+"raw_unit": "U_USD",
+"reason": "ok",
+"verdict": "ok"
+},
+"0374c90c8e536d85e2d1fbb507b28b7b3b8704133e8282588021ad44c0cf7ac4|https://www.sec.gov/Archives/edgar/data/825542/000154638023000025/smg-20230701_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-479_usd_f-1293|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-04-02|2023-07-01|165000000|iso4217:USD|duration|srt:ProductOrServiceAxis=smg:LawnCareMember;us-gaap:StatementBusinessSegmentsAxis=smg:UnitedStatesConsumerSegmentMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"0391b0b22864f9035a922a72abc6bb53b72ccd19117d1b4bacd2c220a3552467|https://www.sec.gov/Archives/edgar/data/109177/000010917724000039/spb-20240630_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-175_usd_f-778|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-04-01|2024-06-30|2600000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:ProductMember;srt:StatementGeographicalAxis=srt:LatinAmericaMember;us-gaap:StatementBusinessSegmentsAxis=spb:HomeAndGardenBusinessMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"03a42d03f5c61153ccf9879c43635936b4cf98b6a2b379488ddac4503c2cf101|https://www.sec.gov/Archives/edgar/data/1744489/000174448924000232/dis-20240629_htm.xml_us-gaap:Revenues_c-284_usd_f-748|us-gaap:Revenues|2024-03-31|2024-06-29|931000000|iso4217:USD|duration|srt:StatementGeographicalAxis=srt:AsiaPacificMember;us-gaap:StatementBusinessSegmentsAxis=dis:EntertainmentSegmentMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"03b251a2f323be206bccc953d3856b073c3eddd041806646aad9ee67247d2303|https://www.sec.gov/Archives/edgar/data/100493/000010049323000067/tsn-20230401_htm.xml_us-gaap:Revenues_i925e159a28504d1a8f289b2476761e27_D20230101-20230401_usd_id3VybDovL2RvY3MudjEvZG9jOmNiMzliY2ZkMGNiYjQ2NGZhOWEwNjU2YTUwOWIzMjRhL3NlYzpjYjM5YmNmZDBjYmI0NjRmYTlhMDY1NmE1MDliMzI0YV83OS9mcmFnOjczZDZhZGVhNTQ0OTRkYjZiMTU0ZjIwNmQxMDlhZWY3L3RhYmxlOjI0Y2Y2YmFjMTg1MTRiNzZhMWIzNGU1MGYwNzE3MGZlL3RhYmxlcmFuZ2U6MjRjZjZiYWMxODUxNGI3NmExYjM0ZTUwZjA3MTcwZmVfNi01LTEtMS0yMjk0OTg_bf9de0da-6a19-4234-a6d8-8714d0a91dc8|us-gaap:Revenues|2023-01-01|2023-04-01|634000000|iso4217:USD|duration|us-gaap:ContractWithCustomerSalesChannelAxis=tsn:InternationalSalesChannelMember;us-gaap:StatementBusinessSegmentsAxis=us-gaap:CorporateAndOtherMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"03d67c735be6161118e69e34fac4e58a170b52d686f44acf6d23ca6829af0744|https://www.sec.gov/Archives/edgar/data/16058/000001605825000032/caci-20241231_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-91_usd_f-465|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-10-01|2024-12-31|1240213000|iso4217:USD|duration|us-gaap:ContractWithCustomerBasisOfPricingAxis=caci:CostPlusFeeContractMember;us-gaap:StatementBusinessSegmentsAxis=caci:DomesticOperationsMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"0402311f8e304a7b301f61aafda3535123db6b7245ff8e5f457433f777c20e9e|https://www.sec.gov/Archives/edgar/data/104169/000010416923000132/wmt-20231031_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-299_usd_f-938|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-08-01|2023-10-31|3523000000|iso4217:USD|duration|srt:ProductOrServiceAxis=wmt:FueltobaccoandothercategoriesMember;us-gaap:StatementBusinessSegmentsAxis=wmt:SamsClubSegmentMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"04746998f5d7eb7fb02759950de919d0dbcc6fbd2caaefdeeb02878624680ab3|https://www.sec.gov/Archives/edgar/data/1217234/000121723423000180/cdna-20230630_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-215_usd_f-1008|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-04-01|2023-06-30|4320000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:ProductMember;srt:StatementGeographicalAxis=country:US": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"0480028be1ba57a0fd0f3142b9e294f9468af4ff09d852385f72f3f7fddc275a|https://www.sec.gov/Archives/edgar/data/59478/000005947824000187/lly-20240630_htm.xml_us-gaap:Revenues_c-195_usd_f-519|us-gaap:Revenues|2024-04-01|2024-06-30|285300000|iso4217:USD|duration|srt:ProductOrServiceAxis=lly:TaltzMember;srt:StatementGeographicalAxis=us-gaap:NonUsMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"04ac691c0c9b1c3e6c565093552b561e3f207f51cb51f7a55d9ea61c1866f895|https://www.sec.gov/Archives/edgar/data/1062231/000106223125000087/axl-20250630_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-229_usd_f-816|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-04-01|2025-06-30|111500000|iso4217:USD|duration|srt:StatementGeographicalAxis=srt:EuropeMember;us-gaap:StatementBusinessSegmentsAxis=axl:MetalFormingMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"04fcf978e031ed43c6bca233d0abaf5f7343bd070a9debabdf9fb040d68f8045|https://www.sec.gov/Archives/edgar/data/318154/000031815424000044/amgn-20240930_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-163_usd_f-481|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-07-01|2024-09-30|132000000|iso4217:USD|duration|srt:ProductOrServiceAxis=amgn:VectibixMember;srt:StatementGeographicalAxis=country:US": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"052317b3c0369f61f24faf71223a1b796c0632303f44c13a0d2cbb89e4619eb5|https://www.sec.gov/Archives/edgar/data/1730168/000173016823000077/avgo-20230730_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-86_usd_f-490|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-05-01|2023-07-30|656000000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:ProductMember;srt:StatementGeographicalAxis=srt:AmericasMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"056078c3e4ab1afee88bfa71d1e8593f7acd3524659c3589d19d473608f58604|https://www.sec.gov/Archives/edgar/data/1324404/000132440425000024/cf-20250630_htm.xml_us-gaap:Revenues_c-89_usd_f-507|us-gaap:Revenues|2025-04-01|2025-06-30|16000000|iso4217:USD|duration|srt:StatementGeographicalAxis=cf:EuropeandOtherMember;us-gaap:StatementBusinessSegmentsAxis=us-gaap:AllOtherSegmentsMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"05a771e751b39998390f54f43c2238e84d90e28c034a17b3075e3eec9d1293a5|https://www.sec.gov/Archives/edgar/data/1037540/000103754025000013/bxp-20250930_htm.xml_us-gaap:GrossProfit_c-542_usd_f-2322|us-gaap:GrossProfit|2025-07-01|2025-09-30|75893000|iso4217:USD|duration|srt:OwnershipAxis=bxp:CompanysShareMember;srt:StatementGeographicalAxis=stpr:DC": {
+"raw_unit": "usd",
+"reason": "concept_missing",
 "verdict": "abstain"
 },
-"0000049071-24-000040|us-gaap:PremiumsEarnedNet|2024-04-01|2024-06-30|206000000|iso4217:USD|duration|srt:MajorCustomersAxis=hum:MedicareSupplementProductMember;srt:ProductOrServiceAxis=us-gaap:ProductMember": {
+"05ea0e2c874f1542987ecea1912eb7fcbaada872f20a750370e42687c1844b70|https://www.sec.gov/Archives/edgar/data/1217234/000121723424000083/cdna-20240630_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-242_usd_f-1015|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-04-01|2024-06-30|13000|iso4217:USD|duration|srt:ProductOrServiceAxis=cdna:PatientAndDigitalSolutionsMember;srt:StatementGeographicalAxis=cdna:RestOfTheWorldMember": {
+"raw_unit": "usd",
 "reason": "ok",
 "verdict": "ok"
 },
-"0000049071-24-000055|us-gaap:PremiumsEarnedNet|2024-07-01|2024-09-30|217000000|iso4217:USD|duration|srt:MajorCustomersAxis=hum:MedicareSupplementProductMember;srt:ProductOrServiceAxis=us-gaap:ProductMember": {
+"05ef0493021ecaf989113f2a31d95085e644f651e9477062313acc1a19a8b9d9|https://www.sec.gov/Archives/edgar/data/104169/000010416923000132/wmt-20231031_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-267_usd_f-896|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-08-01|2023-10-31|2378000000|iso4217:USD|duration|srt:ProductOrServiceAxis=wmt:OtherCategoriesMember;us-gaap:StatementBusinessSegmentsAxis=wmt:WalmartUSSegmentMember": {
+"raw_unit": "usd",
 "reason": "ok",
 "verdict": "ok"
 },
-"0000059478-24-000187|us-gaap:Revenues|2024-04-01|2024-06-30|285300000|iso4217:USD|duration|srt:ProductOrServiceAxis=lly:TaltzMember;srt:StatementGeographicalAxis=us-gaap:NonUsMember": {
+"05f3d61c2f1beb15127eff3604dbcbaa612fdf0c7d01710fa6d27796079bd347|https://www.sec.gov/Archives/edgar/data/1110803/000111080324000052/ilmn-20240929_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-117_usd_f-481|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-07-01|2024-09-29|3000000|iso4217:USD|duration|srt:ProductOrServiceAxis=ilmn:InstrumentsMember;us-gaap:StatementBusinessSegmentsAxis=ilmn:MicroarrayMember": {
+"raw_unit": "usd",
 "reason": "ok",
 "verdict": "ok"
 },
-"0000062709-23-000075|us-gaap:RevenueFromContractWithCustomerIncludingAssessedTax|2023-04-01|2023-06-30|576000000|iso4217:USD|duration|us-gaap:StatementBusinessSegmentsAxis=mmc:RiskandInsuranceServicesSegmentMember;us-gaap:SubsegmentsAxis=mmc:GuyCarpenterReinsuranceGroupMember": {
+"069f2b4e682675d0a45f3e0e8bed975d4ad5ecd48af4521d307aa429c9324c47|https://www.sec.gov/Archives/edgar/data/899689/000089968925000032/vno-20250630_htm.xml_us-gaap:Revenues_c-103_usd_f-699|us-gaap:Revenues|2025-04-01|2025-06-30|59185000|iso4217:USD|duration|dei:LegalEntityAxis=vno:VornadoRealtyLpMember;srt:ProductOrServiceAxis=vno:FeeAndOtherIncomeMember": {
+"raw_unit": "usd",
 "reason": "ok",
 "verdict": "ok"
 },
-"0000062996-24-000027|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-04-01|2024-06-30|397000000|iso4217:USD|duration|srt:StatementGeographicalAxis=us-gaap:NonUsMember;us-gaap:StatementBusinessSegmentsAxis=mas:PlumbingProductsMember": {
+"06adeb65570d49df7aa1431ce9f87d8738cb5580ac1e8cfdd8ec36cc66be107e|https://www.sec.gov/Archives/edgar/data/859737/000085973723000011/holx-20230401_htm.xml_us-gaap:Revenues_ia84dfba6a6bc4632b38560142cba9e81_D20230101-20230401_usd_id3VybDovL2RvY3MudjEvZG9jOmNkNzgxMTNhNDRmMTRjZmRhZGZkMzJmNzVkNmNlOGM5L3NlYzpjZDc4MTEzYTQ0ZjE0Y2ZkYWRmZDMyZjc1ZDZjZThjOV8zNy9mcmFnOjUyYTFhZDZjYjJiMzQ4MmU4NTRlNjRmNTc0NjhkMDcwL3RhYmxlOjAyNmI5MzYyYzE0ZDQzNmE4YjI3MmUxNTE2ZDJiNDM1L3RhYmxlcmFuZ2U6MDI2YjkzNjJjMTRkNDM2YThiMjcyZTE1MTZkMmI0MzVfNC00LTEtMS0xMDc5NTc_7637ee49-0ea2-4fde-b4d0-19d94ebe80f2|us-gaap:Revenues|2023-01-01|2023-04-01|342200000|iso4217:USD|duration|srt:ProductOrServiceAxis=holx:MolecularDiagnosticsMember;us-gaap:StatementBusinessSegmentsAxis=holx:DiagnosticsMember": {
+"raw_unit": "usd",
 "reason": "ok",
 "verdict": "ok"
 },
-"0000062996-24-000027|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-04-01|2024-06-30|857000000|iso4217:USD|duration|srt:StatementGeographicalAxis=srt:NorthAmericaMember;us-gaap:StatementBusinessSegmentsAxis=mas:PlumbingProductsMember": {
+"06bd398881693b53f12d407db7352be304b1c2640fc1251ec527d99c339134ce|https://www.sec.gov/Archives/edgar/data/1597264/000155837024010615/bpmc-20240630x10q_htm.xml_us-gaap:RevenueFromContractWithCustomerIncludingAssessedTax_Duration_4_1_2024_To_6_30_2024_srt_ProductOrServiceAxis_us-gaap_ProductMember_srt_StatementGeographicalAxis_us-gaap_NonUsMember_Kgx-GLyVF0OE1My84gRUuw_Unit_Standard_USD_3uouwxGdWUuubGvqg_-OCw_Tc_9nux-_Xmn0CA4dOpagAeIg_5_3|us-gaap:RevenueFromContractWithCustomerIncludingAssessedTax|2024-04-01|2024-06-30|12654000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:ProductMember;srt:StatementGeographicalAxis=us-gaap:NonUsMember": {
+"raw_unit": "Unit_Standard_USD_3uouwxGdWUuubGvqg_-OCw",
 "reason": "ok",
 "verdict": "ok"
 },
-"0000071691-24-000132|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-04-01|2024-06-30|304501000|iso4217:USD|duration|srt:ProductOrServiceAxis=nyt:SubscriptionMember;us-gaap:StatementBusinessSegmentsAxis=nyt:DigitalMember": {
+"07410f01f83c8fd092affd8b189eae92f9d8a194e962db60de7f8494b849a6df|https://www.sec.gov/Archives/edgar/data/1528396/000152839624000057/gwre-20240430_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-113_usd_f-501|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-02-01|2024-04-30|19583000|iso4217:USD|duration|srt:ProductOrServiceAxis=gwre:SubscriptionAndSupportMember;srt:StatementGeographicalAxis=country:CA": {
+"raw_unit": "usd",
 "reason": "ok",
 "verdict": "ok"
 },
-"0000071691-24-000160|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-07-01|2024-09-30|322198000|iso4217:USD|duration|srt:ProductOrServiceAxis=nyt:SubscriptionMember;us-gaap:StatementBusinessSegmentsAxis=nyt:DigitalMember": {
+"0762e3f0ab52bd881efa1dc7007635c024fcc260cc5e4c73b9be5b071450d71d|https://www.sec.gov/Archives/edgar/data/1428439/000142843924000042/roku-20240930_htm.xml_us-gaap:CostOfGoodsAndServicesSold_c-10_usd_f-105|us-gaap:CostOfGoodsAndServicesSold|2024-07-01|2024-09-30|165732000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:ProductMember;us-gaap:StatementBusinessSegmentsAxis=roku:DevicesSegmentMember": {
+"raw_unit": "usd",
 "reason": "ok",
 "verdict": "ok"
 },
-"0000076334-25-000011|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-10-01|2024-12-31|284834000|iso4217:USD|duration|srt:ProductOrServiceAxis=ph:DefenseOriginalEquipmentManufacturerMember;us-gaap:StatementBusinessSegmentsAxis=ph:AerospaceSystemsSegmentMember": {
+"07665432c144b9ede6c2327adbeb6a2ddc829f2364fa5d7377fa162787a4b15e|https://www.sec.gov/Archives/edgar/data/1041061/000104106123000050/yum-20230930_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-126_usd_f-630|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-07-01|2023-09-30|67000000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:FranchiseMember;srt:StatementGeographicalAxis=yum:OtherOutsidetheU.S.andChinaMember;us-gaap:StatementBusinessSegmentsAxis=yum:PizzaHutGlobalDivisionMember": {
+"raw_unit": "usd",
 "reason": "ok",
 "verdict": "ok"
 },
-"0000076334-26-000008|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-10-01|2025-12-31|619000000|iso4217:USD|duration|srt:ProductOrServiceAxis=ph:CommercialAftermarketMember;us-gaap:StatementBusinessSegmentsAxis=ph:AerospaceSystemsSegmentMember": {
+"07f860481e887aae38c627fbca16cdc55efe0daf86ecefca8444a01e57cb5c00|https://www.sec.gov/Archives/edgar/data/94845/000009484523000051/lvis-20230827_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-217_usd_f-830|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-05-29|2023-08-27|499100000|iso4217:USD|duration|us-gaap:ContractWithCustomerSalesChannelAxis=us-gaap:SalesChannelThroughIntermediaryMember;us-gaap:StatementBusinessSegmentsAxis=lvis:AmericasSegmentMember": {
+"raw_unit": "usd",
 "reason": "ok",
 "verdict": "ok"
 },
-"0000093556-23-000025|us-gaap:Revenues|2023-04-02|2023-07-01|497400000|iso4217:USD|duration|srt:ProductOrServiceAxis=swk:EngineeredFasteningMember;us-gaap:StatementBusinessSegmentsAxis=swk:IndustrialSegmentMember": {
+"08c314adf0354a925f92c00a0decaf19d7193d8148673a683ce69a258441aee8|https://www.sec.gov/Archives/edgar/data/1532961/000162828023028805/nvee-20230701_htm.xml_us-gaap:RevenueFromContractWithCustomerIncludingAssessedTax_c-249_usd_f-882|us-gaap:RevenueFromContractWithCustomerIncludingAssessedTax|2023-04-02|2023-07-01|38034000|iso4217:USD|duration|srt:MajorCustomersAxis=nvee:PrivateSectorMember;us-gaap:StatementBusinessSegmentsAxis=nvee:BTSMember": {
+"raw_unit": "usd",
 "reason": "ok",
 "verdict": "ok"
 },
-"0000094845-23-000051|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-05-29|2023-08-27|499100000|iso4217:USD|duration|us-gaap:ContractWithCustomerSalesChannelAxis=us-gaap:SalesChannelThroughIntermediaryMember;us-gaap:StatementBusinessSegmentsAxis=lvis:AmericasSegmentMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0000096021-24-000043|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-12-31|2024-03-30|1416484000|iso4217:USD|duration|srt:ProductOrServiceAxis=syy:DairyProducts1Member;us-gaap:StatementBusinessSegmentsAxis=syy:U.S.FoodserviceOperationsMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0000100493-23-000067|us-gaap:Revenues|2023-01-01|2023-04-01|634000000|iso4217:USD|duration|us-gaap:ContractWithCustomerSalesChannelAxis=tsn:InternationalSalesChannelMember;us-gaap:StatementBusinessSegmentsAxis=us-gaap:CorporateAndOtherMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0000104169-23-000132|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-08-01|2023-10-31|2378000000|iso4217:USD|duration|srt:ProductOrServiceAxis=wmt:OtherCategoriesMember;us-gaap:StatementBusinessSegmentsAxis=wmt:WalmartUSSegmentMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0000104169-23-000132|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-08-01|2023-10-31|3523000000|iso4217:USD|duration|srt:ProductOrServiceAxis=wmt:FueltobaccoandothercategoriesMember;us-gaap:StatementBusinessSegmentsAxis=wmt:SamsClubSegmentMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0000109177-23-000039|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-04-03|2023-07-02|7500000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:ProductMember;srt:StatementGeographicalAxis=srt:AsiaPacificMember;us-gaap:StatementBusinessSegmentsAxis=spb:GlobalPetSuppliesMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0000109177-24-000039|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-04-01|2024-06-30|2600000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:ProductMember;srt:StatementGeographicalAxis=srt:LatinAmericaMember;us-gaap:StatementBusinessSegmentsAxis=spb:HomeAndGardenBusinessMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0000110471-23-000147|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-07-02|2023-09-30|111400000|iso4217:USD|duration|us-gaap:ContractWithCustomerSalesChannelAxis=us-gaap:SalesChannelThroughIntermediaryMember;us-gaap:StatementBusinessSegmentsAxis=www:WorkGroupMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0000217346-24-000084|us-gaap:Revenues|2024-03-31|2024-06-29|9000000|iso4217:USD|duration|srt:MajorCustomersAxis=txt:CommercialCustomerMember;us-gaap:StatementBusinessSegmentsAxis=txt:TextronEAviationSegmentMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0000318154-23-000053|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-04-01|2023-06-30|1947000000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:ProductMember;srt:StatementGeographicalAxis=us-gaap:NonUsMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0000318154-24-000044|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-07-01|2024-09-30|132000000|iso4217:USD|duration|srt:ProductOrServiceAxis=amgn:VectibixMember;srt:StatementGeographicalAxis=country:US": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0000318154-25-000056|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-04-01|2025-06-30|461000000|iso4217:USD|duration|srt:ProductOrServiceAxis=amgn:OtherProductsMember;srt:StatementGeographicalAxis=us-gaap:NonUsMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0000702165-25-000028|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-04-01|2025-06-30|546000000|iso4217:USD|duration|srt:ProductOrServiceAxis=nsc:ChemicalsMember;us-gaap:StatementBusinessSegmentsAxis=nsc:RailwayOperatingRevenuesMarketGroupMerchandiseMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0000703351-24-000015|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-12-28|2024-03-27|200000|iso4217:USD|duration|srt:ProductOrServiceAxis=eat:FranchiseRevenuesMember;us-gaap:StatementBusinessSegmentsAxis=eat:MaggianosRestaurantsMember": {
-"reason": "no_candidate",
+"095ac7cabd51533a811b7cc8085767c52626040aaa04bcd5b5c3883c383e551e|https://www.sec.gov/Archives/edgar/data/1675149/000095017023035168/aa-20230630_htm.xml_us-gaap:Revenues_C_8c4ce406-ea1d-44f0-bc3f-abcbd4f95eaf_U_USD_F_32596ab1-c301-44f8-8d48-5d8ebaa4b054|us-gaap:Revenues|2023-04-01|2023-06-30|116000000|iso4217:USD|duration|srt:ProductOrServiceAxis=aa:OtherProductsMember;us-gaap:EquityMethodInvestmentNonconsolidatedInvesteeAxis=us-gaap:EquityMethodInvestmentNonconsolidatedInvesteeOrGroupOfInvesteesMember": {
+"raw_unit": "U_USD",
+"reason": "concept_missing",
 "verdict": "abstain"
 },
-"0000726728-25-000148|us-gaap:Revenues|2025-07-01|2025-09-30|747000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:ProductAndServiceOtherMember;srt:StatementGeographicalAxis=country:GB": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0000764065-25-000149|us-gaap:Revenues|2025-07-01|2025-09-30|1442000000|iso4217:USD|duration|srt:ProductOrServiceAxis=clf:CoatedSteelMember;us-gaap:StatementBusinessSegmentsAxis=clf:SteelmakingMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0000766421-25-000060|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-07-01|2025-09-30|177000000|iso4217:USD|duration|srt:ProductOrServiceAxis=alk:PassengerAncillaryServicesMember;us-gaap:ContractWithCustomerSalesChannelAxis=alk:PassengerRevenueMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0000794170-24-000043|us-gaap:RevenueFromContractWithCustomerIncludingAssessedTax|2024-05-01|2024-07-31|566336000|iso4217:USD|duration|srt:StatementGeographicalAxis=tol:PacificMember;us-gaap:StatementBusinessSegmentsAxis=tol:TraditionalHomebuildingMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0000804328-25-000031|us-gaap:Revenues|2024-12-30|2025-03-30|6929000000|iso4217:USD|duration|srt:ProductOrServiceAxis=qcom:HandsetsMember;us-gaap:StatementBusinessSegmentsAxis=qcom:QctMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0000804328-25-000031|us-gaap:Revenues|2024-12-30|2025-03-30|959000000|iso4217:USD|duration|srt:ProductOrServiceAxis=qcom:AutomotiveMember;us-gaap:StatementBusinessSegmentsAxis=qcom:QctMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0000814453-23-000148|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-07-01|2023-09-30|501000000|iso4217:USD|duration|srt:StatementGeographicalAxis=srt:NorthAmericaMember;us-gaap:StatementBusinessSegmentsAxis=nwl:LearningAndDevelopmentMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0000817720-26-000017|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-09-28|2025-12-27|93200000|iso4217:USD|duration|srt:ProductOrServiceAxis=syna:InternetOfThingsProductApplicationsMember;us-gaap:StatementBusinessSegmentsAxis=syna:CoreIotMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0000818479-24-000069|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-04-01|2024-06-30|181000000|iso4217:USD|duration|srt:ProductOrServiceAxis=xray:ImplantsAndProstheticsMember;us-gaap:StatementBusinessSegmentsAxis=xray:OrthodonticAndImplantSolutionsMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0000842162-23-000045|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-04-02|2023-07-01|372000000|iso4217:USD|duration|srt:StatementGeographicalAxis=srt:AsiaMember;us-gaap:StatementBusinessSegmentsAxis=lear:ESystemsSegmentMember": {
-"reason": "no_candidate",
+"0997889ea846732f129a4265065691120ab743e4d6710bea62b01d211df54ab7|https://www.sec.gov/Archives/edgar/data/899689/000089968924000033/vno-20240630_htm.xml_us-gaap:OperatingLeaseLeaseIncome_c-162_usd_f-1143|us-gaap:OperatingLeaseLeaseIncome|2024-04-01|2024-06-30|302780000|iso4217:USD|duration|srt:ProductOrServiceAxis=vno:PropertyRentalsMember;us-gaap:StatementBusinessSegmentsAxis=vno:NewYorkSegmentMember": {
+"raw_unit": "usd",
+"reason": "concept_missing",
 "verdict": "abstain"
 },
-"0000842162-25-000076|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-06-29|2025-09-27|548600000|iso4217:USD|duration|srt:StatementGeographicalAxis=srt:NorthAmericaMember;us-gaap:StatementBusinessSegmentsAxis=lear:ESystemsSegmentMember": {
-"reason": "no_candidate",
+"09cf92573608b844c6c25ffd7e5b06752a648ce3bf4ade59ca53be218f315f4f|https://www.sec.gov/Archives/edgar/data/885725/000088572525000041/bsx-20250630_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-352_usd_f-1359|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-04-01|2025-06-30|587000000|iso4217:USD|duration|srt:ProductOrServiceAxis=bsx:ElectrophysiologyEPMember;srt:StatementGeographicalAxis=country:US": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"09e9586dcc02812cc94d9e7bbbf7b6fb153ae4865e2762b81158e6a6a2f934ae|https://www.sec.gov/Archives/edgar/data/908255/000090825523000044/bwa-20230630_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-45_usd_f-349|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-04-01|2023-06-30|414000000|iso4217:USD|duration|srt:StatementGeographicalAxis=srt:NorthAmericaMember;us-gaap:StatementBusinessSegmentsAxis=bwa:DrivetrainBatterySystemsMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"0a50bc1482120887c7d306652288685848747c856a16d3dd235b8bfc13d83de2|https://www.sec.gov/Archives/edgar/data/1585689/000158568925000145/hlt-20250630_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-179_usd_f-694|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-04-01|2025-06-30|751000000|iso4217:USD|duration|srt:ProductOrServiceAxis=hlt:FranchiseandlicensingfeesMember;us-gaap:StatementBusinessSegmentsAxis=hlt:ManagementAndFranchiseMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"0a602dde652d7e632229c57b0c8cd9073a37e853b37f0f524308dd2d1a24e73c|https://www.sec.gov/Archives/edgar/data/891103/000089110323000099/mtch-20230630_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-136_usd_f-577|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-04-01|2023-06-30|76605000|iso4217:USD|duration|srt:ProductOrServiceAxis=mtch:MatchGroupAsiaMember;us-gaap:ContractWithCustomerSalesChannelAxis=us-gaap:SalesChannelDirectlyToConsumerMember": {
+"raw_unit": "usd",
+"reason": "concept_missing",
 "verdict": "abstain"
 },
-"0000859737-23-000011|us-gaap:Revenues|2023-01-01|2023-04-01|342200000|iso4217:USD|duration|srt:ProductOrServiceAxis=holx:MolecularDiagnosticsMember;us-gaap:StatementBusinessSegmentsAxis=holx:DiagnosticsMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0000859737-23-000019|us-gaap:Revenues|2023-04-02|2023-07-01|10700000|iso4217:USD|duration|srt:ProductOrServiceAxis=holx:BloodScreeningMember;us-gaap:StatementBusinessSegmentsAxis=holx:DiagnosticsMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0000864749-25-000245|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-04-05|2025-07-04|70500000|iso4217:USD|duration|srt:StatementGeographicalAxis=srt:NorthAmericaMember;us-gaap:StatementBusinessSegmentsAxis=trmb:TransportationAndLogisticsMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0000874716-24-000139|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-07-01|2024-09-30|14375000|iso4217:USD|duration|srt:ProductOrServiceAxis=idxx:SystemsAndHardwareMember;us-gaap:StatementBusinessSegmentsAxis=idxx:CompanionAnimalGroupSegmentMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0000879169-25-000118|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-07-01|2025-09-30|1149856000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:ProductMember;us-gaap:StatementBusinessSegmentsAxis=incy:ReportableSegmentMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0000882095-23-000025|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-04-01|2023-06-30|7000000|iso4217:USD|duration|srt:ProductOrServiceAxis=gild:ProductsOtherHIVMember;srt:StatementGeographicalAxis=srt:EuropeMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0000882095-23-000031|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-07-01|2023-09-30|45000000|iso4217:USD|duration|srt:ProductOrServiceAxis=gild:CellTherapyProductsTotalCellTherapyProductSalesMember;srt:StatementGeographicalAxis=gild:OtherInternationalMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0000882835-23-000052|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-07-01|2023-09-30|139100000|iso4217:USD|duration|srt:ProductOrServiceAxis=rop:SoftwareRelatedNonRecurringMember;us-gaap:StatementBusinessSegmentsAxis=rop:ApplicationSoftwareSegmentMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0000885725-25-000041|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-04-01|2025-06-30|587000000|iso4217:USD|duration|srt:ProductOrServiceAxis=bsx:ElectrophysiologyEPMember;srt:StatementGeographicalAxis=country:US": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0000891024-23-000012|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-07-30|2023-10-28|200127000|iso4217:USD|duration|srt:ProductOrServiceAxis=pdco:EquipmentAndSoftwareMember;us-gaap:StatementBusinessSegmentsAxis=pdco:DentalSupplyMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0000891103-23-000099|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-04-01|2023-06-30|76605000|iso4217:USD|duration|srt:ProductOrServiceAxis=mtch:MatchGroupAsiaMember;us-gaap:ContractWithCustomerSalesChannelAxis=us-gaap:SalesChannelDirectlyToConsumerMember": {
-"reason": "no_candidate",
+"0a685c546f4084d99c18bbce97c23caa690774ee9eb9ec871cbeb58c90e4331c|https://www.sec.gov/Archives/edgar/data/1474735/000143774924024883/gnrc20240630_10q_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_d_2024-04-01_2024-06-30_ProductOrServiceAxis-ResidentialPowerProductsMember_StatementBusinessSegmentsAxis-DomesticMember_USD_c115218684|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-04-01|2024-06-30|515166000|iso4217:USD|duration|srt:ProductOrServiceAxis=gnrc:ResidentialPowerProductsMember;us-gaap:StatementBusinessSegmentsAxis=gnrc:DomesticMember": {
+"raw_unit": "USD",
+"reason": "concept_missing",
 "verdict": "abstain"
 },
-"0000899689-24-000033|us-gaap:OperatingLeaseLeaseIncome|2024-04-01|2024-06-30|302780000|iso4217:USD|duration|srt:ProductOrServiceAxis=vno:PropertyRentalsMember;us-gaap:StatementBusinessSegmentsAxis=vno:NewYorkSegmentMember": {
-"reason": "no_candidate",
+"0abd829c43fefce816d53ece63bb218aceaca07cafe5bc7602883e57697a1477|https://www.sec.gov/Archives/edgar/data/1590976/000159097626000007/mbuu-20251231_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-97_usd_f-441|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-10-01|2025-12-31|63102000|iso4217:USD|duration|srt:StatementGeographicalAxis=srt:NorthAmericaMember;us-gaap:StatementBusinessSegmentsAxis=mbuu:MalibuMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"0b08ee562574cc89e2465132706924ba79b6aff0ff245b474252c6dd91ccacfc|https://www.sec.gov/Archives/edgar/data/842162/000084216225000076/lear-20250927_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-179_usd_f-870|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-06-29|2025-09-27|548600000|iso4217:USD|duration|srt:StatementGeographicalAxis=srt:NorthAmericaMember;us-gaap:StatementBusinessSegmentsAxis=lear:ESystemsSegmentMember": {
+"raw_unit": "usd",
+"reason": "concept_missing",
 "verdict": "abstain"
 },
-"0000899689-25-000032|us-gaap:Revenues|2025-04-01|2025-06-30|59185000|iso4217:USD|duration|dei:LegalEntityAxis=vno:VornadoRealtyLpMember;srt:ProductOrServiceAxis=vno:FeeAndOtherIncomeMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0000908255-23-000044|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-04-01|2023-06-30|414000000|iso4217:USD|duration|srt:StatementGeographicalAxis=srt:NorthAmericaMember;us-gaap:StatementBusinessSegmentsAxis=bwa:DrivetrainBatterySystemsMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0000917520-24-000108|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-07-01|2024-09-30|40588000|iso4217:USD|duration|srt:ProductOrServiceAxis=iart:ENTMember;us-gaap:StatementBusinessSegmentsAxis=iart:CodmanSpecialtySurgicalMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0000935703-23-000063|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-07-30|2023-10-28|223100000|iso4217:USD|duration|srt:ProductOrServiceAxis=dltr:SeasonalAndElectronicsMember;us-gaap:StatementBusinessSegmentsAxis=dltr:FamilyDollarMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0000936395-24-000032|us-gaap:Revenues|2024-04-28|2024-07-27|92692000|iso4217:USD|duration|srt:ProductOrServiceAxis=cien:RoutingAndSwitchingMember;us-gaap:StatementBusinessSegmentsAxis=cien:NetworkingPlatformsSegmentMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0000936468-24-000095|us-gaap:Revenues|2024-04-01|2024-06-30|2742000000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:ProductMember;us-gaap:StatementBusinessSegmentsAxis=lmt:MissilesAndFireControlMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0000950170-23-033872|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-04-01|2023-06-30|1359000000|iso4217:USD|duration|srt:ProductOrServiceAxis=tsla:EnergyGenerationAndStorageSalesMember;us-gaap:StatementBusinessSegmentsAxis=tsla:EnergyGenerationAndStorageSegmentMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0000950170-23-035168|us-gaap:Revenues|2023-04-01|2023-06-30|116000000|iso4217:USD|duration|srt:ProductOrServiceAxis=aa:OtherProductsMember;us-gaap:EquityMethodInvestmentNonconsolidatedInvesteeAxis=us-gaap:EquityMethodInvestmentNonconsolidatedInvesteeOrGroupOfInvesteesMember": {
-"reason": "no_candidate",
+"0b415f4402330812e0cef0d552e6a4471e0eb5af1c7be77b8d08c1e615aaf4ea|https://www.sec.gov/Archives/edgar/data/842162/000084216223000045/lear-20230701_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-191_usd_f-894|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-04-02|2023-07-01|372000000|iso4217:USD|duration|srt:StatementGeographicalAxis=srt:AsiaMember;us-gaap:StatementBusinessSegmentsAxis=lear:ESystemsSegmentMember": {
+"raw_unit": "usd",
+"reason": "concept_missing",
 "verdict": "abstain"
 },
-"0000950170-23-038578|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-04-01|2023-06-30|411063000|iso4217:USD|duration|srt:StatementGeographicalAxis=country:US;us-gaap:StatementBusinessSegmentsAxis=skx:DirectToConsumerMember": {
+"0b418bf766a7240003f4bf02c7e29e3fe9b91ca82ae6d159e82db120b5a3f455|https://www.sec.gov/Archives/edgar/data/109177/000010917723000039/spb-20230702_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-333_usd_f-1432|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-04-03|2023-07-02|7500000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:ProductMember;srt:StatementGeographicalAxis=srt:AsiaPacificMember;us-gaap:StatementBusinessSegmentsAxis=spb:GlobalPetSuppliesMember": {
+"raw_unit": "usd",
 "reason": "ok",
 "verdict": "ok"
 },
-"0000950170-24-086479|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-04-01|2024-06-30|68181000|iso4217:USD|duration|srt:ProductOrServiceAxis=hzo:MaintenanceRepairStorageRentalCharterServicesPartsAndAccessoriesRevenueMember;srt:StatementGeographicalAxis=hzo:MarinaStorageLocationsMember;us-gaap:StatementBusinessSegmentsAxis=hzo:RetailOperationsMember": {
+"0c93f99934e23add15ec3825c9a9fbc2baedb2522c50143d8447b71a2b7b4794|https://www.sec.gov/Archives/edgar/data/1723128/000172312825000062/amrx-20250930_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-108_usd_f-575|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-07-01|2025-09-30|16415000|iso4217:USD|duration|srt:ProductOrServiceAxis=amrx:OralLiquidMember;srt:StatementGeographicalAxis=country:US;us-gaap:StatementBusinessSegmentsAxis=amrx:AffordableMedicinesSegmentMember": {
+"raw_unit": "usd",
 "reason": "ok",
 "verdict": "ok"
 },
-"0000950170-24-092753|us-gaap:Revenues|2024-03-30|2024-06-28|63395000|iso4217:USD|duration|srt:StatementGeographicalAxis=country:CN;us-gaap:GeographicDistributionAxis=us-gaap:GeographicDistributionForeignMember": {
+"0d29b5eb166255f86dd44de9724f8cd99cf07fa47e23980c888c5f7c8f2f749d|https://www.sec.gov/Archives/edgar/data/1720635/000172063523000057/nvt-20230930_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-73_usd_f-396|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-07-01|2023-09-30|284100000|iso4217:USD|duration|srt:StatementGeographicalAxis=nvt:UnitedStatesAndCanadaMember;us-gaap:StatementBusinessSegmentsAxis=nvt:EnclosuresSegmentMember": {
+"raw_unit": "usd",
 "reason": "ok",
 "verdict": "ok"
 },
-"0000950170-24-119432|us-gaap:IncomeLossFromEquityMethodInvestments|2024-07-01|2024-09-30|216000|iso4217:USD|duration|dei:LegalEntityAxis=kim:KimcoRealtyOpLlcMember;srt:ScheduleOfEquityMethodInvestmentEquityMethodInvesteeNameAxis=kim:OtherRealEstateInvestmentsMember": {
+"0d324c2d98686851954e12eab1d9c08a54128260fdda2fb0e9c2d4fc26dbbca2|https://www.sec.gov/Archives/edgar/data/76334/000007633425000011/ph-20241231_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-33_usd_f-306|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-10-01|2024-12-31|284834000|iso4217:USD|duration|srt:ProductOrServiceAxis=ph:DefenseOriginalEquipmentManufacturerMember;us-gaap:StatementBusinessSegmentsAxis=ph:AerospaceSystemsSegmentMember": {
+"raw_unit": "usd",
 "reason": "ok",
 "verdict": "ok"
 },
-"0000950170-24-122936|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-07-01|2024-09-30|159300000|iso4217:USD|duration|srt:ProductOrServiceAxis=pkg:TradeMember;us-gaap:StatementBusinessSegmentsAxis=pkg:PaperMember": {
+"0db9ad56edd5188903565cf261bbd8541fed4fb66901e0942dd8fbd5bc8c99e7|https://www.sec.gov/Archives/edgar/data/75677/000095017024122936/pkg-20240930_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_C_72fb72fd-3ca3-472c-86b5-48bd95c221ad_U_USD_F_fa0e7f52-ccb6-49e3-839a-cfa709175ada|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-07-01|2024-09-30|159300000|iso4217:USD|duration|srt:ProductOrServiceAxis=pkg:TradeMember;us-gaap:StatementBusinessSegmentsAxis=pkg:PaperMember": {
+"raw_unit": "U_USD",
 "reason": "ok",
 "verdict": "ok"
 },
-"0000950170-24-124103|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-07-01|2024-09-30|117679000|iso4217:USD|duration|srt:ProductOrServiceAxis=uhs:OtherPatientRevenueAndAdjustmentsNetMember;us-gaap:StatementBusinessSegmentsAxis=uhs:AcuteCareHospitalServicesMember": {
+"0dece74300e6c5590d8f193b26f6a52b601c8acdfed24df3187040a6358b6dd7|https://www.sec.gov/Archives/edgar/data/804328/000080432825000031/qcom-20250330_htm.xml_us-gaap:Revenues_c-50_usd_f-397|us-gaap:Revenues|2024-12-30|2025-03-30|959000000|iso4217:USD|duration|srt:ProductOrServiceAxis=qcom:AutomotiveMember;us-gaap:StatementBusinessSegmentsAxis=qcom:QctMember": {
+"raw_unit": "usd",
 "reason": "ok",
 "verdict": "ok"
 },
-"0000950170-25-103192|us-gaap:CostOfRevenue|2025-04-01|2025-06-30|2848000|iso4217:USD|duration|srt:ProductOrServiceAxis=bbio:CostOfGoodsSoldMember;us-gaap:StatementBusinessSegmentsAxis=us-gaap:ReportableSegmentAggregationBeforeOtherOperatingSegmentMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0000950170-25-104199|us-gaap:RevenueFromContractWithCustomerIncludingAssessedTax|2025-04-01|2025-06-30|64273000|iso4217:USD|duration|srt:ProductOrServiceAxis=hl:MetalSalesMember;us-gaap:StatementBusinessSegmentsAxis=hl:LuckyFridayMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001013871-24-000020|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-07-01|2024-09-30|3695000000|iso4217:USD|duration|srt:MajorCustomersAxis=nrg:HomeCustomerMember;srt:ProductOrServiceAxis=nrg:ProductsAndServicesRetailRevenueMember": {
-"reason": "no_candidate",
+"0dfbadd5e80301e461e0d95a9bd7c28e537a170d4a3e17774eb2bb8a2ce80f84|https://www.sec.gov/Archives/edgar/data/882796/000162828023027820/bcrx-20230630_htm.xml_us-gaap:RevenueFromContractWithCustomerIncludingAssessedTax_c-69_usd_f-387|us-gaap:RevenueFromContractWithCustomerIncludingAssessedTax|2023-04-01|2023-06-30|72817000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:ProductMember;us-gaap:GeographicDistributionAxis=us-gaap:GeographicDistributionDomesticMember": {
+"raw_unit": "usd",
+"reason": "concept_missing",
 "verdict": "abstain"
 },
-"0001034054-24-000009|us-gaap:Revenues|2024-04-01|2024-06-30|93100000|iso4217:USD|duration|srt:StatementGeographicalAxis=country:BR;us-gaap:StatementBusinessSegmentsAxis=sbac:InternationalSiteLeasingRevenueMember": {
+"0e13e8499620da7f61014302eec5537610b53c15afcda88cbe14f65963b77e90|https://www.sec.gov/Archives/edgar/data/110471/000011047123000147/www-20230930_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-86_usd_f-597|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-07-02|2023-09-30|111400000|iso4217:USD|duration|us-gaap:ContractWithCustomerSalesChannelAxis=us-gaap:SalesChannelThroughIntermediaryMember;us-gaap:StatementBusinessSegmentsAxis=www:WorkGroupMember": {
+"raw_unit": "usd",
 "reason": "ok",
 "verdict": "ok"
 },
-"0001037540-25-000013|us-gaap:GrossProfit|2025-07-01|2025-09-30|75893000|iso4217:USD|duration|srt:OwnershipAxis=bxp:CompanysShareMember;srt:StatementGeographicalAxis=stpr:DC": {
-"reason": "no_candidate",
+"0f1d0d3ba46b4bcdf5d1ab6e9aeb46375325560c9383e4e20815ad107d370c03|https://www.sec.gov/Archives/edgar/data/814453/000081445323000148/nwl-20230930_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-353_usd_f-1033|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-07-01|2023-09-30|501000000|iso4217:USD|duration|srt:StatementGeographicalAxis=srt:NorthAmericaMember;us-gaap:StatementBusinessSegmentsAxis=nwl:LearningAndDevelopmentMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"0f1dae00949ba06fbbda8c10a2a174f6575fab527ecd611a550aff50f3da475f|https://www.sec.gov/Archives/edgar/data/1306830/000130683025000174/ce-20250630_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-389_usd_f-1516|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-04-01|2025-06-30|294000000|iso4217:USD|duration|srt:StatementGeographicalAxis=srt:AsiaPacificMember;us-gaap:StatementBusinessSegmentsAxis=ce:AcetylChainMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"0f8f2edef384bbdf145ec0ea94217f27ffadc8f3a567ed83ba3b5ff5662f0f11|https://www.sec.gov/Archives/edgar/data/766421/000076642125000060/alk-20250930_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-115_usd_f-553|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-07-01|2025-09-30|177000000|iso4217:USD|duration|srt:ProductOrServiceAxis=alk:PassengerAncillaryServicesMember;us-gaap:ContractWithCustomerSalesChannelAxis=alk:PassengerRevenueMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"0fd15b8e9070ae99c01990a7396c988a1ddbaafa6d79439fa51cbab47ef39e03|https://www.sec.gov/Archives/edgar/data/1437402/000162828025037464/ardx-20250630_htm.xml_us-gaap:CostOfGoodsAndServicesSold_c-283_usd_f-847|us-gaap:CostOfGoodsAndServicesSold|2025-04-01|2025-06-30|3245000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:ProductMember;us-gaap:StatementBusinessSegmentsAxis=ardx:ReportableSegmentMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"10569869f5e170dcb348d51a76b4fccde051d08de824e2555112dd2d22b64e94|https://www.sec.gov/Archives/edgar/data/936395/000093639524000032/cien-20240727_htm.xml_us-gaap:Revenues_c-55_usd_f-394|us-gaap:Revenues|2024-04-28|2024-07-27|92692000|iso4217:USD|duration|srt:ProductOrServiceAxis=cien:RoutingAndSwitchingMember;us-gaap:StatementBusinessSegmentsAxis=cien:NetworkingPlatformsSegmentMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"1056b0f80ef90ebf3b022851446dcd888465ca296fb292797f3c99a043f995b1|https://www.sec.gov/Archives/edgar/data/702165/000070216525000028/nsc-20250630_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-54_usd_f-398|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-04-01|2025-06-30|546000000|iso4217:USD|duration|srt:ProductOrServiceAxis=nsc:ChemicalsMember;us-gaap:StatementBusinessSegmentsAxis=nsc:RailwayOperatingRevenuesMarketGroupMerchandiseMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"11250b23cd8826e240e77117a1e015777370ba99b7768e552dc24f105dc9689e|https://www.sec.gov/Archives/edgar/data/703351/000070335124000015/eat-20240327_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-145_usd_f-779|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-12-28|2024-03-27|200000|iso4217:USD|duration|srt:ProductOrServiceAxis=eat:FranchiseRevenuesMember;us-gaap:StatementBusinessSegmentsAxis=eat:MaggianosRestaurantsMember": {
+"raw_unit": "usd",
+"reason": "concept_missing",
 "verdict": "abstain"
 },
-"0001041061-23-000050|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-07-01|2023-09-30|67000000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:FranchiseMember;srt:StatementGeographicalAxis=yum:OtherOutsidetheU.S.andChinaMember;us-gaap:StatementBusinessSegmentsAxis=yum:PizzaHutGlobalDivisionMember": {
+"123b9780688f5917fa897ca15d78b4e5f485202afe38351dd40c702a0e1066fc|https://www.sec.gov/Archives/edgar/data/1571949/000157194924000017/ice-20240930_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-512_usd_f-1487|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-07-01|2024-09-30|54000000|iso4217:USD|duration|srt:ProductOrServiceAxis=ice:ClosingSolutionsMember;us-gaap:StatementBusinessSegmentsAxis=ice:MortgageTechnologySegmentMember": {
+"raw_unit": "usd",
 "reason": "ok",
 "verdict": "ok"
 },
-"0001048911-26-000011|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-12-01|2026-02-28|55000000|iso4217:USD|duration|srt:StatementGeographicalAxis=us-gaap:NonUsMember;us-gaap:StatementBusinessSegmentsAxis=fdx:FedexFreightSegmentMember": {
+"1258d3b758504b76e868646ef2c75b841fbd6538e840feed06d7dfb5742945d6|https://www.sec.gov/Archives/edgar/data/1758730/000175873025000161/tw-20250630_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-155_usd_f-637|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-04-01|2025-06-30|380148000|iso4217:USD|duration|srt:ProductOrServiceAxis=tw:TransactionFeeRevenueMember;us-gaap:ContractWithCustomerBasisOfPricingAxis=tw:VariablePricingMember": {
+"raw_unit": "usd",
 "reason": "ok",
 "verdict": "ok"
 },
-"0001060822-25-000158|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-06-29|2025-09-27|362307000|iso4217:USD|duration|us-gaap:ContractWithCustomerSalesChannelAxis=us-gaap:SalesChannelDirectlyToConsumerMember;us-gaap:StatementBusinessSegmentsAxis=cri:RetailSegmentMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001062231-24-000094|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-07-01|2024-09-30|322400000|iso4217:USD|duration|srt:StatementGeographicalAxis=srt:NorthAmericaMember;us-gaap:StatementBusinessSegmentsAxis=axl:MetalFormingMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001062231-25-000087|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-04-01|2025-06-30|111500000|iso4217:USD|duration|srt:StatementGeographicalAxis=srt:EuropeMember;us-gaap:StatementBusinessSegmentsAxis=axl:MetalFormingMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001090872-24-000033|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-05-01|2024-07-31|128000000|iso4217:USD|duration|srt:StatementGeographicalAxis=srt:AsiaPacificMember;us-gaap:StatementBusinessSegmentsAxis=a:AgilentCrossLabMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001094285-25-000131|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-03-31|2025-06-29|10800000|iso4217:USD|duration|srt:StatementGeographicalAxis=tdy:CountriesOtherThanUnitedStatesAndEuropeAndAsiaMember;us-gaap:StatementBusinessSegmentsAxis=tdy:AerospaceAndDefenseElectronicsMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001104659-25-104945|us-gaap:Revenues|2025-07-01|2025-09-30|1536090000|iso4217:USD|duration|dei:LegalEntityAxis=dlr:DigitalRealtyTrustLPMember;srt:ProductOrServiceAxis=dlr:RentalAndOtherServicesMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001104659-25-107976|us-gaap:CostOfGoodsAndServicesSold|2025-07-01|2025-09-30|207253000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:ProductMember;us-gaap:StatementBusinessSegmentsAxis=ntra:SingleReportableSegmentMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001104659-26-023455|us-gaap:CostOfGoodsAndServicesSold|2025-11-01|2026-01-30|190209000|iso4217:USD|duration|srt:ProductOrServiceAxis=cbrl:RestaurantMember;us-gaap:StatementBusinessSegmentsAxis=cbrl:SingleReportableSegmentMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001110803-24-000052|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-07-01|2024-09-29|3000000|iso4217:USD|duration|srt:ProductOrServiceAxis=ilmn:InstrumentsMember;us-gaap:StatementBusinessSegmentsAxis=ilmn:MicroarrayMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001163302-23-000078|us-gaap:Revenues|2023-04-01|2023-06-30|38000000|iso4217:USD|duration|srt:ProductOrServiceAxis=x:SemifinishedProductsMember;us-gaap:StatementBusinessSegmentsAxis=x:UsSteelEuropeMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001193125-25-253766|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-06-29|2025-09-27|583369000|iso4217:USD|duration|srt:ProductOrServiceAxis=lstr:VanEquipmentMember;us-gaap:ContractWithCustomerSalesChannelAxis=lstr:BcoIndependentContractorTruckAndBrokerageCarriersTruckMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001193125-25-262664|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-07-01|2025-09-30|1208000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:RoyaltyMember;srt:StatementGeographicalAxis=us-gaap:NonUsMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001193125-25-266879|us-gaap:Revenues|2025-06-28|2025-09-26|11226000|iso4217:USD|duration|srt:StatementGeographicalAxis=country:JP;us-gaap:GeographicDistributionAxis=us-gaap:GeographicDistributionForeignMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001217234-23-000180|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-04-01|2023-06-30|4320000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:ProductMember;srt:StatementGeographicalAxis=country:US": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001217234-24-000083|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-04-01|2024-06-30|13000|iso4217:USD|duration|srt:ProductOrServiceAxis=cdna:PatientAndDigitalSolutionsMember;srt:StatementGeographicalAxis=cdna:RestOfTheWorldMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001262039-25-000028|us-gaap:CostOfGoodsAndServicesSold|2025-04-01|2025-06-30|165900000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:ProductMember;us-gaap:StatementBusinessSegmentsAxis=ftnt:ReportableSegmentMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001262039-25-000039|us-gaap:CostOfGoodsAndServicesSold|2025-07-01|2025-09-30|151000000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:ServiceMember;us-gaap:StatementBusinessSegmentsAxis=ftnt:ReportableSegmentMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001306830-24-000155|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-04-01|2024-06-30|390000000|iso4217:USD|duration|srt:StatementGeographicalAxis=srt:NorthAmericaMember;us-gaap:StatementBusinessSegmentsAxis=ce:AcetylChainMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001306830-25-000174|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-04-01|2025-06-30|294000000|iso4217:USD|duration|srt:StatementGeographicalAxis=srt:AsiaPacificMember;us-gaap:StatementBusinessSegmentsAxis=ce:AcetylChainMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001324404-25-000024|us-gaap:Revenues|2025-04-01|2025-06-30|16000000|iso4217:USD|duration|srt:StatementGeographicalAxis=cf:EuropeandOtherMember;us-gaap:StatementBusinessSegmentsAxis=us-gaap:AllOtherSegmentsMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001334036-25-000085|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-04-01|2025-06-30|494911000|iso4217:USD|duration|us-gaap:ContractWithCustomerSalesChannelAxis=us-gaap:SalesChannelDirectlyToConsumerMember;us-gaap:StatementBusinessSegmentsAxis=crox:CrocsBrandSegmentMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001428439-24-000042|us-gaap:CostOfGoodsAndServicesSold|2024-07-01|2024-09-30|165732000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:ProductMember;us-gaap:StatementBusinessSegmentsAxis=roku:DevicesSegmentMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001437749-23-029653|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-07-01|2023-09-30|202400000|iso4217:USD|duration|srt:ProductOrServiceAxis=vrsk:ClaimsMember;us-gaap:StatementBusinessSegmentsAxis=vrsk:InsuranceMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001437749-24-024883|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-04-01|2024-06-30|515166000|iso4217:USD|duration|srt:ProductOrServiceAxis=gnrc:ResidentialPowerProductsMember;us-gaap:StatementBusinessSegmentsAxis=gnrc:DomesticMember": {
-"reason": "no_candidate",
+"12667598b870cfaf20d40455732d2def5d8cece195257ad0af93039f6c2a2b81|https://www.sec.gov/Archives/edgar/data/4515/000000620124000060/aal-20240930_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-139_usd_f-576|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-07-01|2024-09-30|2110000000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:PassengerMember;us-gaap:AirlineDestinationsAxis=us-gaap:AtlanticDestinationMember": {
+"raw_unit": "usd",
+"reason": "no_source_xbrl",
 "verdict": "abstain"
 },
-"0001443646-24-000010|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-10-01|2023-12-31|1224561000|iso4217:USD|duration|srt:MajorCustomersAxis=bah:DefenseClientsMember;srt:StatementGeographicalAxis=country:US": {
+"1281742b9248621cd40c2fb49aee52bd44c88abc905be3ced493ef4c8c451711|https://www.sec.gov/Archives/edgar/data/49071/000004907124000055/hum-20240930_htm.xml_us-gaap:PremiumsEarnedNet_c-347_usd_f-1241|us-gaap:PremiumsEarnedNet|2024-07-01|2024-09-30|217000000|iso4217:USD|duration|srt:MajorCustomersAxis=hum:MedicareSupplementProductMember;srt:ProductOrServiceAxis=us-gaap:ProductMember": {
+"raw_unit": "usd",
 "reason": "ok",
 "verdict": "ok"
 },
-"0001477294-23-000120|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-04-01|2023-06-30|46832000|iso4217:USD|duration|srt:ProductOrServiceAxis=st:AerospaceEndMarketMember;us-gaap:StatementBusinessSegmentsAxis=st:SensingSolutionsMember": {
+"12cfff6f61d41834e92bfa5d346cbf09d75c8485c0b581ac1a231f20248f6061|https://www.sec.gov/Archives/edgar/data/1534504/000153450424000039/pbf-20240930_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-174_usd_f-745|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-07-01|2024-09-30|199900000|iso4217:USD|duration|srt:ProductOrServiceAxis=pbf:ChemicalsMember;us-gaap:StatementBusinessSegmentsAxis=pbf:RefiningGroupMember": {
+"raw_unit": "usd",
 "reason": "ok",
 "verdict": "ok"
 },
-"0001482512-23-000147|us-gaap:OtherCostAndExpenseOperating|2023-04-01|2023-06-30|76767000|iso4217:USD|duration|dei:LegalEntityAxis=hpp:HudsonPacificPropertiesLPMember;us-gaap:StatementBusinessSegmentsAxis=hpp:OfficeSegmentMember": {
+"135eb4e7d324ac34b20922b8747a56dad7f99c139416715dee4b356c3acfcbf6|https://www.sec.gov/Archives/edgar/data/718937/000119312525266879/staa-20250926_htm.xml_us-gaap:Revenues_C_662183a1-57e8-4a36-af53-199ae642c2d2_U_USD_F_ee4370de-a5e5-43dc-880c-e6c533467479|us-gaap:Revenues|2025-06-28|2025-09-26|11226000|iso4217:USD|duration|srt:StatementGeographicalAxis=country:JP;us-gaap:GeographicDistributionAxis=us-gaap:GeographicDistributionForeignMember": {
+"raw_unit": "U_USD",
 "reason": "ok",
 "verdict": "ok"
 },
-"0001488139-23-000172|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-07-01|2023-09-30|352000|iso4217:USD|duration|srt:ProductOrServiceAxis=amrc:EnergyAssetsRevenueMember;us-gaap:StatementBusinessSegmentsAxis=us-gaap:AllOtherSegmentsMember": {
+"13b25651c02cdecb42985db31136a383cf324b4a474ff028260fdc4555c28946|https://www.sec.gov/Archives/edgar/data/853816/000119312525253766/d36961d10q_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_P06_29_2025To09_27_2025_BcoIndependentContractorTruckAndBrokerageCarriersTruckMemberusgaapContractWithCustomerSalesChannelAxis_VanEquipmentMembersrtProductOrServiceAxis_Unit_USD_ixv-14530|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-06-29|2025-09-27|583369000|iso4217:USD|duration|srt:ProductOrServiceAxis=lstr:VanEquipmentMember;us-gaap:ContractWithCustomerSalesChannelAxis=lstr:BcoIndependentContractorTruckAndBrokerageCarriersTruckMember": {
+"raw_unit": "Unit_USD",
 "reason": "ok",
 "verdict": "ok"
 },
-"0001488139-23-000172|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-07-01|2023-09-30|674000|iso4217:USD|duration|srt:ProductOrServiceAxis=amrc:OtherRevenueMember;us-gaap:StatementBusinessSegmentsAxis=amrc:OtherUSRegionsMember": {
+"140524b33064f06e77f581f6d5e37eadabb0364dcc64d83fb8cd89f196ca9620|https://www.sec.gov/Archives/edgar/data/1682852/000168285225000044/mrna-20250630_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-87_usd_f-418|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-04-01|2025-06-30|26000000|iso4217:USD|duration|srt:ProductOrServiceAxis=mrna:ProductSalesMember;srt:StatementGeographicalAxis=mrna:RestOfTheWorldMember": {
+"raw_unit": "usd",
 "reason": "ok",
 "verdict": "ok"
 },
-"0001514991-25-000034|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-04-01|2025-06-30|122606000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:AdvertisingMember;us-gaap:StatementBusinessSegmentsAxis=amcx:DomesticOperationsMember": {
+"148bc2392dedc70d9129a1abd0978ef05364f830a56754e43dc93b6aa69cbc4c|https://www.sec.gov/Archives/edgar/data/1730168/000173016824000080/avgo-20240505_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-65_usd_f-435|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-02-05|2024-05-05|3401000000|iso4217:USD|duration|srt:ProductOrServiceAxis=avgo:SubscriptionsandServicesMember;srt:StatementGeographicalAxis=srt:AmericasMember": {
+"raw_unit": "usd",
 "reason": "ok",
 "verdict": "ok"
 },
-"0001527166-24-000079|us-gaap:IncomeLossFromEquityMethodInvestments|2024-07-01|2024-09-30|15000000|iso4217:USD|duration|srt:ProductOrServiceAxis=cg:PrincipalInvestmentIncomeLossEquityMethodInvestmentsMember;us-gaap:StatementBusinessSegmentsAxis=cg:GlobalInvestmentSolutionsSegmentMember": {
-"reason": "no_candidate",
+"15579fff24203732a9afadfef77a77aebc7b60b5daf5056b3ab960fb55a735f9|https://www.sec.gov/Archives/edgar/data/49071/000004907124000040/hum-20240630_htm.xml_us-gaap:PremiumsEarnedNet_c-339_usd_f-1223|us-gaap:PremiumsEarnedNet|2024-04-01|2024-06-30|206000000|iso4217:USD|duration|srt:MajorCustomersAxis=hum:MedicareSupplementProductMember;srt:ProductOrServiceAxis=us-gaap:ProductMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"166641202ea34d0eee775912243e9bdfeee9b3222363af3ca4f366a5d808b3ba|https://www.sec.gov/Archives/edgar/data/1334036/000133403625000085/crox-20250630_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-221_usd_f-783|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-04-01|2025-06-30|494911000|iso4217:USD|duration|us-gaap:ContractWithCustomerSalesChannelAxis=us-gaap:SalesChannelDirectlyToConsumerMember;us-gaap:StatementBusinessSegmentsAxis=crox:CrocsBrandSegmentMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"16f60ecdf60a7c044fd5220057298a15e5b7c5324bc342ee06a0a084d08b2362|https://www.sec.gov/Archives/edgar/data/71691/000007169124000132/nyt-20240630_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-115_usd_f-502|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-04-01|2024-06-30|304501000|iso4217:USD|duration|srt:ProductOrServiceAxis=nyt:SubscriptionMember;us-gaap:StatementBusinessSegmentsAxis=nyt:DigitalMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"1781ae3402ca051c0f9127131783480dd3ce6043c3cd863cf69962e539e9234c|https://www.sec.gov/Archives/edgar/data/1262039/000126203925000039/ftnt-20250930_htm.xml_us-gaap:CostOfGoodsAndServicesSold_c-344_usd_f-1157|us-gaap:CostOfGoodsAndServicesSold|2025-07-01|2025-09-30|151000000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:ServiceMember;us-gaap:StatementBusinessSegmentsAxis=ftnt:ReportableSegmentMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"17bfab4b1d1f837b1e11d35f2a11ebfcb25756a41ffe4e8fadd69bfb7ac8a67b|https://www.sec.gov/Archives/edgar/data/891024/000089102423000012/pdco-20231028_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-211_usd_f-710|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-07-30|2023-10-28|200127000|iso4217:USD|duration|srt:ProductOrServiceAxis=pdco:EquipmentAndSoftwareMember;us-gaap:StatementBusinessSegmentsAxis=pdco:DentalSupplyMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"18317e17cadf5ea18720555721123dfdd7a1e359ce9791c858f1aee609720f04|https://www.sec.gov/Archives/edgar/data/48898/000162828024033632/hubb-20240630_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-69_usd_f-391|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-04-01|2024-06-30|78100000|iso4217:USD|duration|srt:StatementGeographicalAxis=us-gaap:NonUsMember;us-gaap:StatementBusinessSegmentsAxis=hubb:ElectricalSegmentMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"18635be3a33b5ace141642e5ba3a161bf6d1aaa919089fe90a16bef4487930b8|https://www.sec.gov/Archives/edgar/data/27904/000002790423000009/dal-20230630_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-116_usd_f-447|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-04-01|2023-06-30|926000000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:PassengerMember;us-gaap:AirlineDestinationsAxis=us-gaap:LatinAmericaDestinationMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"18c8c591b7c9f60ac62788af6752ae929c5ace63ce0275e39edbacc1aea337d2|https://www.sec.gov/Archives/edgar/data/1482512/000148251223000147/hpp-20230630_htm.xml_us-gaap:OtherCostAndExpenseOperating_c-122_usd_f-743|us-gaap:OtherCostAndExpenseOperating|2023-04-01|2023-06-30|76767000|iso4217:USD|duration|dei:LegalEntityAxis=hpp:HudsonPacificPropertiesLPMember;us-gaap:StatementBusinessSegmentsAxis=hpp:OfficeSegmentMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"1a73579033d617cf4fbe2c47fc733b1c4f1cd3d9086e01b2814ef717a1b44a67|https://www.sec.gov/Archives/edgar/data/1800227/000180022724000039/iaci-20240630_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-353_usd_f-993|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-04-01|2024-06-30|281907000|iso4217:USD|duration|srt:StatementGeographicalAxis=country:US;us-gaap:StatementBusinessSegmentsAxis=iaci:AngiIncMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"1ad7bee0361a6c82eb8ff89bff711ba6ac4920f2c9936fe2cdb82aaa7ff89642|https://www.sec.gov/Archives/edgar/data/874716/000087471624000139/idxx-20240930_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-141_usd_f-529|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-07-01|2024-09-30|14375000|iso4217:USD|duration|srt:ProductOrServiceAxis=idxx:SystemsAndHardwareMember;us-gaap:StatementBusinessSegmentsAxis=idxx:CompanionAnimalGroupSegmentMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"1b110e6fc3916cb98ada3f9aa42be2e9327a2ad4a9fa9370c8164df12597ebb8|https://www.sec.gov/Archives/edgar/data/1035002/000162828025046072/vlo-20250930_htm.xml_us-gaap:RevenueFromContractWithCustomerIncludingAssessedTax_c-246_usd_f-1119|us-gaap:RevenueFromContractWithCustomerIncludingAssessedTax|2025-07-01|2025-09-30|212000000|iso4217:USD|duration|srt:ProductOrServiceAxis=vlo:DistillersGrainsMember;us-gaap:StatementBusinessSegmentsAxis=vlo:EthanolMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"1b5416ceeb6c6978d5c9d27a4144f5d02e0e893c0b5005a57d9661b5ae194022|https://www.sec.gov/Archives/edgar/data/864749/000086474925000245/trmb-20250704_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-119_usd_f-620|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-04-05|2025-07-04|70500000|iso4217:USD|duration|srt:StatementGeographicalAxis=srt:NorthAmericaMember;us-gaap:StatementBusinessSegmentsAxis=trmb:TransportationAndLogisticsMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"1bd1219c7c47d560a1d97528a26b7828666253a5fbfc0c7284e78a5ddd3498b8|https://www.sec.gov/Archives/edgar/data/71691/000007169124000160/nyt-20240930_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-114_usd_f-500|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-07-01|2024-09-30|322198000|iso4217:USD|duration|srt:ProductOrServiceAxis=nyt:SubscriptionMember;us-gaap:StatementBusinessSegmentsAxis=nyt:DigitalMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"1c502002c0378fbf92d6c2ecfc0506ed5299e20f1c8960c566f4d8369e8ca0b0|https://www.sec.gov/Archives/edgar/data/794170/000079417024000043/tol-20240731_htm.xml_us-gaap:RevenueFromContractWithCustomerIncludingAssessedTax_c-321_usd_f-1064|us-gaap:RevenueFromContractWithCustomerIncludingAssessedTax|2024-05-01|2024-07-31|566336000|iso4217:USD|duration|srt:StatementGeographicalAxis=tol:PacificMember;us-gaap:StatementBusinessSegmentsAxis=tol:TraditionalHomebuildingMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"1cfe16f77ac466dff6a201ee9cbcd91eda05689ce5a679622c50989109868629|https://www.sec.gov/Archives/edgar/data/27904/000002790424000009/dal-20240630_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-115_usd_f-445|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-04-01|2024-06-30|2825000000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:PassengerMember;us-gaap:AirlineDestinationsAxis=us-gaap:AtlanticDestinationMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"1dcb385e42fa94dbceae5e9e06e161d69cc29d4bb1c543bcab2544c01832de18|https://www.sec.gov/Archives/edgar/data/764065/000076406525000149/clf-20250930_htm.xml_us-gaap:Revenues_c-188_usd_f-677|us-gaap:Revenues|2025-07-01|2025-09-30|1442000000|iso4217:USD|duration|srt:ProductOrServiceAxis=clf:CoatedSteelMember;us-gaap:StatementBusinessSegmentsAxis=clf:SteelmakingMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"1f98d1626595d963ed31e75699484eb30734b460df87a9c7af228ac90f40db81|https://www.sec.gov/Archives/edgar/data/1682852/000168285224000046/mrna-20240630_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-79_usd_f-421|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-04-01|2024-06-30|22000000|iso4217:USD|duration|srt:ProductOrServiceAxis=mrna:ProductSalesMember;srt:StatementGeographicalAxis=mrna:RestOfTheWorldMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"200155fdb17cefe5dad5ac0f53ecc5eedc7d8795240051fb5b5dd39029607dd8|https://www.sec.gov/Archives/edgar/data/1090872/000109087224000033/a-20240731_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-89_usd_f-482|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-05-01|2024-07-31|128000000|iso4217:USD|duration|srt:StatementGeographicalAxis=srt:AsiaPacificMember;us-gaap:StatementBusinessSegmentsAxis=a:AgilentCrossLabMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"208a5a0fd10f1f063e1ea11963df1afd075bd281da8e78f474ffd052ef035b8b|https://www.sec.gov/Archives/edgar/data/872589/000180422023000031/regn-20230930_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-137_usd_f-490|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-07-01|2023-09-30|19100000|iso4217:USD|duration|srt:ProductOrServiceAxis=regn:EvkeezaMember;srt:StatementGeographicalAxis=country:US": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"212d5af6a9c9c24caf6b25f03372d45bda9552141cbaad01fd5dea79570ae448|https://www.sec.gov/Archives/edgar/data/32604/000003260425000076/emr-20250630_htm.xml_emr:RevenueFromContractWithCustomerExcludingAssessedTaxAndIntersegmentEliminations_c-323_usd_f-1192|emr:RevenueFromContractWithCustomerExcludingAssessedTaxAndIntersegmentEliminations|2025-04-01|2025-06-30|416000000|iso4217:USD|duration|srt:ProductOrServiceAxis=emr:SoftwareAndControlMember;srt:StatementGeographicalAxis=emr:AsiaMiddleEastAndAfricaMember": {
+"raw_unit": "usd",
+"reason": "concept_missing",
 "verdict": "abstain"
 },
-"0001527166-25-000104|us-gaap:IncomeLossFromEquityMethodInvestments|2025-04-01|2025-06-30|-500000|iso4217:USD|duration|srt:ProductOrServiceAxis=cg:PrincipalInvestmentIncomeLossEquityMethodInvestmentsMember;us-gaap:StatementBusinessSegmentsAxis=cg:GlobalCreditSegmentMember": {
-"reason": "no_candidate",
+"21a2fad5ddbe223dc828aa1964894ee2531c62c1dbf6c34e5430caac24bbd6dc|https://www.sec.gov/Archives/edgar/data/1062231/000106223124000094/axl-20240930_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-267_usd_f-835|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-07-01|2024-09-30|322400000|iso4217:USD|duration|srt:StatementGeographicalAxis=srt:NorthAmericaMember;us-gaap:StatementBusinessSegmentsAxis=axl:MetalFormingMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"224cb7cd98445631bc2acfc5857b4e72a4401bd8f67df5787c05f1d3eecfcea1|https://www.sec.gov/Archives/edgar/data/726728/000072672825000148/o-20250930_htm.xml_us-gaap:Revenues_c-548_usd_f-1757|us-gaap:Revenues|2025-07-01|2025-09-30|747000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:ProductAndServiceOtherMember;srt:StatementGeographicalAxis=country:GB": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"2439d4047d6ff78bb4e79fad4dea0ac02dfb89479f7a194787a76a60e99f2fff|https://www.sec.gov/Archives/edgar/data/719413/000095017025104199/hl-20250630_htm.xml_us-gaap:RevenueFromContractWithCustomerIncludingAssessedTax_C_3425bc5c-db0d-420c-a161-c2798be70074_U_USD_F_c019ab00-371a-4faa-a582-6df783ef14c4|us-gaap:RevenueFromContractWithCustomerIncludingAssessedTax|2025-04-01|2025-06-30|64273000|iso4217:USD|duration|srt:ProductOrServiceAxis=hl:MetalSalesMember;us-gaap:StatementBusinessSegmentsAxis=hl:LuckyFridayMember": {
+"raw_unit": "U_USD",
+"reason": "ok",
+"verdict": "ok"
+},
+"279ebce4038ef18cfcd7e85c8a28803454e8cb8ecebd205bafdf5d1fe5e58992|https://www.sec.gov/Archives/edgar/data/1013871/000101387124000020/nrg-20240930_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-129_usd_f-644|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-07-01|2024-09-30|3695000000|iso4217:USD|duration|srt:MajorCustomersAxis=nrg:HomeCustomerMember;srt:ProductOrServiceAxis=nrg:ProductsAndServicesRetailRevenueMember": {
+"raw_unit": "usd",
+"reason": "concept_missing",
 "verdict": "abstain"
 },
-"0001528396-24-000057|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-02-01|2024-04-30|19583000|iso4217:USD|duration|srt:ProductOrServiceAxis=gwre:SubscriptionAndSupportMember;srt:StatementGeographicalAxis=country:CA": {
+"2887ed0777afc21f5a19abcd085b31bb2ce8f284607aca1bca4de920f78dc78a|https://www.sec.gov/Archives/edgar/data/1702744/000170274423000019/atk-20230225_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_ie7ca7fa37d214d0c8de4e62bffe8746d_D20221127-20230225_usd_f-403|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2022-11-27|2023-02-25|154598000|iso4217:USD|duration|atk:BrandAxis=atk:QuestMember;srt:StatementGeographicalAxis=srt:NorthAmericaMember": {
+"raw_unit": "usd",
 "reason": "ok",
 "verdict": "ok"
 },
-"0001528396-26-000014|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-11-01|2026-01-31|36583000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:LicenseMember;srt:StatementGeographicalAxis=srt:AmericasMember": {
+"28e116c4384be7caa9538aee276826657317581656a29a2f27891db170d67e27|https://www.sec.gov/Archives/edgar/data/1477294/000147729423000120/st-20230630_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-87_usd_f-461|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-04-01|2023-06-30|46832000|iso4217:USD|duration|srt:ProductOrServiceAxis=st:AerospaceEndMarketMember;us-gaap:StatementBusinessSegmentsAxis=st:SensingSolutionsMember": {
+"raw_unit": "usd",
 "reason": "ok",
 "verdict": "ok"
 },
-"0001530804-25-000019|us-gaap:OtherCostOfOperatingRevenue|2025-07-01|2025-09-30|47000000|iso4217:USD|duration|srt:ProductOrServiceAxis=trox:IdleFacilityAndLowerOfCostOrNetRealizableValueChargesMember;us-gaap:StatementBusinessSegmentsAxis=trox:ReportableSegmentMember": {
+"2914616d800478a1642a76a009ffda6908c402ad94a1f1c9476fc13755390b80|https://www.sec.gov/Archives/edgar/data/1692819/000162828023028436/vistra-20230630_htm.xml_us-gaap:Revenues_c-125_usd_f-481|us-gaap:Revenues|2023-04-01|2023-06-30|262000000|iso4217:USD|duration|srt:ProductOrServiceAxis=vistra:AffiliateSalesMember;us-gaap:StatementBusinessSegmentsAxis=vistra:TexasSegmentMember": {
+"raw_unit": "usd",
 "reason": "ok",
 "verdict": "ok"
 },
-"0001534504-24-000039|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-07-01|2024-09-30|199900000|iso4217:USD|duration|srt:ProductOrServiceAxis=pbf:ChemicalsMember;us-gaap:StatementBusinessSegmentsAxis=pbf:RefiningGroupMember": {
+"2943aa989d9b02b51a5a60e5ad02344d774e93b2d686cb6f98c35023921e06a2|https://www.sec.gov/Archives/edgar/data/917520/000091752024000108/iart-20240930_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-110_usd_f-500|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-07-01|2024-09-30|40588000|iso4217:USD|duration|srt:ProductOrServiceAxis=iart:ENTMember;us-gaap:StatementBusinessSegmentsAxis=iart:CodmanSpecialtySurgicalMember": {
+"raw_unit": "usd",
 "reason": "ok",
 "verdict": "ok"
 },
-"0001545654-25-000024|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-04-01|2025-06-30|146000|iso4217:USD|duration|srt:ProductOrServiceAxis=alex:OtherOperationsMember;us-gaap:StatementBusinessSegmentsAxis=alex:LandOperationsMember": {
+"2be55f06d5cda6c279a48aed0f9fc6081b772837f8843b88c11b3d4f17e96b86|https://www.sec.gov/Archives/edgar/data/1682852/000168285225000075/mrna-20250930_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-95_usd_f-427|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-07-01|2025-09-30|175000000|iso4217:USD|duration|srt:ProductOrServiceAxis=mrna:ProductSalesMember;srt:StatementGeographicalAxis=mrna:RestOfTheWorldMember": {
+"raw_unit": "usd",
 "reason": "ok",
 "verdict": "ok"
 },
-"0001546380-23-000025|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-04-02|2023-07-01|165000000|iso4217:USD|duration|srt:ProductOrServiceAxis=smg:LawnCareMember;us-gaap:StatementBusinessSegmentsAxis=smg:UnitedStatesConsumerSegmentMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001551152-24-000031|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-04-01|2024-06-30|833000000|iso4217:USD|duration|abbv:KeyProductPortfolioAxis=abbv:HematologicOncologyMember;srt:ProductOrServiceAxis=abbv:ImbruvicaMember": {
-"reason": "no_candidate",
+"2c91c63c8117902b479b7338236822192b780adbacd11c9d3fdef15d1a2d111f|https://www.sec.gov/Archives/edgar/data/1692819/000162828023028436/vistra-20230630_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-72_usd_f-427|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-04-01|2023-06-30|44000000|iso4217:USD|duration|srt:ProductOrServiceAxis=vistra:WholesaleGenerationRevenueFromERCOTMember;us-gaap:StatementBusinessSegmentsAxis=vistra:WestSegmentMember": {
+"raw_unit": "usd",
+"reason": "concept_missing",
 "verdict": "abstain"
 },
-"0001552033-23-000040|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-04-01|2023-06-30|22500000|iso4217:USD|duration|srt:StatementGeographicalAxis=srt:AsiaPacificMember;us-gaap:StatementBusinessSegmentsAxis=ck0001552033:InternationalMember": {
+"322c9fe2570ca227beadfd12011de6786183507188a4f7cfa3d19aa3b3b800f7|https://www.sec.gov/Archives/edgar/data/1579428/000119312525262664/axsm-20250930_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_C_1f811e20-6144-45ab-94b7-f4c9a7efc0a9_U_USD_F_96da36fa-502f-4e07-a16f-d2026f3531b4|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-07-01|2025-09-30|1208000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:RoyaltyMember;srt:StatementGeographicalAxis=us-gaap:NonUsMember": {
+"raw_unit": "U_USD",
 "reason": "ok",
 "verdict": "ok"
 },
-"0001558370-23-013321|us-gaap:Revenues|2023-04-01|2023-06-30|15840000|iso4217:USD|duration|dei:LegalEntityAxis=dlr:DigitalRealtyTrustLPMember;srt:ProductOrServiceAxis=dlr:FeeIncomeAndOtherMember": {
+"356b7521bafab2b45eebf6c27c16e7b1bc868ba74615052118bead06e5ce314a|https://www.sec.gov/Archives/edgar/data/1065837/000095017023038578/skx-20230630_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_C_a3459e75-5bb4-4055-823c-a38a8c3b7dff_U_USD_F_583ef9fc-9ad7-489a-930f-a21ff2f1ad43|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-04-01|2023-06-30|411063000|iso4217:USD|duration|srt:StatementGeographicalAxis=country:US;us-gaap:StatementBusinessSegmentsAxis=skx:DirectToConsumerMember": {
+"raw_unit": "U_USD",
 "reason": "ok",
 "verdict": "ok"
 },
-"0001558370-24-010615|us-gaap:RevenueFromContractWithCustomerIncludingAssessedTax|2024-04-01|2024-06-30|12654000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:ProductMember;srt:StatementGeographicalAxis=us-gaap:NonUsMember": {
+"3755866f17ff0fe6ee828e6a89c8baf716e38b3b0005e2f6179344016dfeb956|https://www.sec.gov/Archives/edgar/data/1692819/000162828023028436/vistra-20230630_htm.xml_us-gaap:Revenues_c-126_usd_f-482|us-gaap:Revenues|2023-04-01|2023-06-30|428000000|iso4217:USD|duration|srt:ProductOrServiceAxis=vistra:AffiliateSalesMember;us-gaap:StatementBusinessSegmentsAxis=vistra:EastSegmentMember": {
+"raw_unit": "usd",
 "reason": "ok",
 "verdict": "ok"
 },
-"0001558370-25-010829|us-gaap:CostOfGoodsAndServicesSold|2025-04-01|2025-06-30|199531000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:ProductMember;us-gaap:StatementBusinessSegmentsAxis=ntra:SingleReportableSegmentMember": {
+"395a654377943ac7d2347ea401e5ed6067e4128d54c9ec324edad127514376c4|https://www.sec.gov/Archives/edgar/data/1514991/000151499125000034/amcx-20250630_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-236_usd_f-1039|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-04-01|2025-06-30|122606000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:AdvertisingMember;us-gaap:StatementBusinessSegmentsAxis=amcx:DomesticOperationsMember": {
+"raw_unit": "usd",
 "reason": "ok",
 "verdict": "ok"
 },
-"0001571949-24-000017|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-07-01|2024-09-30|54000000|iso4217:USD|duration|srt:ProductOrServiceAxis=ice:ClosingSolutionsMember;us-gaap:StatementBusinessSegmentsAxis=ice:MortgageTechnologySegmentMember": {
+"3c5b314c9ae514ea5633ccd576504810c476c9ab362bcdd2caa470817385cb28|https://www.sec.gov/Archives/edgar/data/1637207/000163720724000082/plnt-20240930_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-325_usd_f-1160|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-07-01|2024-09-30|98902000|iso4217:USD|duration|srt:StatementGeographicalAxis=country:US;us-gaap:StatementBusinessSegmentsAxis=plnt:FranchiseSegmentMember": {
+"raw_unit": "usd",
 "reason": "ok",
 "verdict": "ok"
 },
-"0001585689-25-000145|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-04-01|2025-06-30|751000000|iso4217:USD|duration|srt:ProductOrServiceAxis=hlt:FranchiseandlicensingfeesMember;us-gaap:StatementBusinessSegmentsAxis=hlt:ManagementAndFranchiseMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001590976-26-000007|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-10-01|2025-12-31|63102000|iso4217:USD|duration|srt:StatementGeographicalAxis=srt:NorthAmericaMember;us-gaap:StatementBusinessSegmentsAxis=mbuu:MalibuMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001609711-23-000129|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-04-01|2023-06-30|492700000|iso4217:USD|duration|srt:ProductOrServiceAxis=gddy:DomainsMember;us-gaap:StatementBusinessSegmentsAxis=gddy:CorePlatformMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001609711-25-000209|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-07-01|2025-09-30|188400000|iso4217:USD|duration|srt:ProductOrServiceAxis=gddy:OtherMember;us-gaap:StatementBusinessSegmentsAxis=gddy:CorePlatformMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001628280-23-027820|us-gaap:RevenueFromContractWithCustomerIncludingAssessedTax|2023-04-01|2023-06-30|72817000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:ProductMember;us-gaap:GeographicDistributionAxis=us-gaap:GeographicDistributionDomesticMember": {
-"reason": "no_candidate",
+"3cdfb875c0bec4063c72736520e91259016c39e6c93801e9110b4485010fd7d2|https://www.sec.gov/Archives/edgar/data/1734722/000173472225000050/path-20251031_htm.xml_path:CostOfRevenueAdjusted_c-129_usd_f-551|path:CostOfRevenueAdjusted|2025-08-01|2025-10-31|24999000|iso4217:USD|duration|srt:ProductOrServiceAxis=path:ProfessionalServicesAndOtherMember;us-gaap:StatementBusinessSegmentsAxis=path:ReportableSegmentMember": {
+"raw_unit": "usd",
+"reason": "concept_missing",
 "verdict": "abstain"
 },
-"0001628280-23-028436|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-04-01|2023-06-30|44000000|iso4217:USD|duration|srt:ProductOrServiceAxis=vistra:WholesaleGenerationRevenueFromERCOTMember;us-gaap:StatementBusinessSegmentsAxis=vistra:WestSegmentMember": {
-"reason": "no_candidate",
+"3d04725a992caa6e6d7ccc2b081cb454cd705af54777e55a2a7db021f5c72694|https://www.sec.gov/Archives/edgar/data/1443646/000144364624000010/bah-20231231_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-97_usd_f-468|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-10-01|2023-12-31|1224561000|iso4217:USD|duration|srt:MajorCustomersAxis=bah:DefenseClientsMember;srt:StatementGeographicalAxis=country:US": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"3d17a64508f192c286f65dc03438b5a54530fb6d656455d3b2e311e606d244d1|https://www.sec.gov/Archives/edgar/data/1800/000162828024044602/abt-20240930_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-309_usd_f-660|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-07-01|2024-09-30|265000000|iso4217:USD|duration|srt:ProductOrServiceAxis=abt:COVID19TestingMember;us-gaap:StatementBusinessSegmentsAxis=abt:DiagnosticProductsMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"3f152a5d676feb8a813393a5117334f24dc0c6930cb3bf2105856b3381da7cf0|https://www.sec.gov/Archives/edgar/data/1318605/000095017023033872/tsla-20230630_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_C_8ab2d81c-c418-4e0c-94d7-3c72678d3f29_U_USD_F_654b9019-03d2-4c43-a7ae-0a16d41d9e74|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-04-01|2023-06-30|1359000000|iso4217:USD|duration|srt:ProductOrServiceAxis=tsla:EnergyGenerationAndStorageSalesMember;us-gaap:StatementBusinessSegmentsAxis=tsla:EnergyGenerationAndStorageSegmentMember": {
+"raw_unit": "U_USD",
+"reason": "ok",
+"verdict": "ok"
+},
+"3fdbca6145ed16d4699c236c6c94a62a59b54b0bfeaa2600a2ea89e8a633b71b|https://www.sec.gov/Archives/edgar/data/1067294/000110465926023455/cbrl-20260130x10q_htm.xml_us-gaap:CostOfGoodsAndServicesSold_Duration_11_1_2025_To_1_30_2026_srt_ProductOrServiceAxis_cbrl_RestaurantMember_us-gaap_StatementBusinessSegmentsAxis_cbrl_SingleReportableSegmentMember_S287xtQ-IUycbLzBS26pow_Unit_Standard_USD_L2S9Q72HGEmkMVzzeUGZsQ_Tc_EmUYyGsW3UeTTbBQQG2s8A_5_3|us-gaap:CostOfGoodsAndServicesSold|2025-11-01|2026-01-30|190209000|iso4217:USD|duration|srt:ProductOrServiceAxis=cbrl:RestaurantMember;us-gaap:StatementBusinessSegmentsAxis=cbrl:SingleReportableSegmentMember": {
+"raw_unit": "Unit_Standard_USD_L2S9Q72HGEmkMVzzeUGZsQ",
+"reason": "ok",
+"verdict": "ok"
+},
+"41246c15730596b6dfbd5e82386f639a33298d1b43780843403afd9060cedb39|https://www.sec.gov/Archives/edgar/data/818479/000081847924000069/xray-20240630_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-99_usd_f-444|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-04-01|2024-06-30|181000000|iso4217:USD|duration|srt:ProductOrServiceAxis=xray:ImplantsAndProstheticsMember;us-gaap:StatementBusinessSegmentsAxis=xray:OrthodonticAndImplantSolutionsMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"41e71f7b44edff93376f7576a6e5ddc8336ae1e2e630ca2bed2a4ae8e2b15cdc|https://www.sec.gov/Archives/edgar/data/62709/000006270923000075/mmc-20230630_htm.xml_us-gaap:RevenueFromContractWithCustomerIncludingAssessedTax_c-93_usd_f-489|us-gaap:RevenueFromContractWithCustomerIncludingAssessedTax|2023-04-01|2023-06-30|576000000|iso4217:USD|duration|us-gaap:StatementBusinessSegmentsAxis=mmc:RiskandInsuranceServicesSegmentMember;us-gaap:SubsegmentsAxis=mmc:GuyCarpenterReinsuranceGroupMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"430e274c184a7e29d5d575836a0e15c7aa1bc57c3a3d0eaf81dba7e73db0f3b2|https://www.sec.gov/Archives/edgar/data/1527166/000152716625000104/cg-20250630_htm.xml_us-gaap:IncomeLossFromEquityMethodInvestments_c-565_usd_f-1476|us-gaap:IncomeLossFromEquityMethodInvestments|2025-04-01|2025-06-30|-500000|iso4217:USD|duration|srt:ProductOrServiceAxis=cg:PrincipalInvestmentIncomeLossEquityMethodInvestmentsMember;us-gaap:StatementBusinessSegmentsAxis=cg:GlobalCreditSegmentMember": {
+"raw_unit": "usd",
+"reason": "concept_missing",
 "verdict": "abstain"
 },
-"0001628280-23-028436|us-gaap:Revenues|2023-04-01|2023-06-30|262000000|iso4217:USD|duration|srt:ProductOrServiceAxis=vistra:AffiliateSalesMember;us-gaap:StatementBusinessSegmentsAxis=vistra:TexasSegmentMember": {
+"44b8ed66da9fed21b69399b350498589907f44a13f8c89289507dac7d167dcd7|https://www.sec.gov/Archives/edgar/data/879101/000095017024119432/kim-20240930_htm.xml_us-gaap:IncomeLossFromEquityMethodInvestments_C_819c14b3-bdff-4a00-bf95-afebe2833254_U_USD_F_4d54eec1-8386-4be2-8e61-37aa571bba88|us-gaap:IncomeLossFromEquityMethodInvestments|2024-07-01|2024-09-30|216000|iso4217:USD|duration|dei:LegalEntityAxis=kim:KimcoRealtyOpLlcMember;srt:ScheduleOfEquityMethodInvestmentEquityMethodInvesteeNameAxis=kim:OtherRealEstateInvestmentsMember": {
+"raw_unit": "U_USD",
 "reason": "ok",
 "verdict": "ok"
 },
-"0001628280-23-028436|us-gaap:Revenues|2023-04-01|2023-06-30|428000000|iso4217:USD|duration|srt:ProductOrServiceAxis=vistra:AffiliateSalesMember;us-gaap:StatementBusinessSegmentsAxis=vistra:EastSegmentMember": {
+"45c676167cb09a106780b29f4cbacc618d70cdc2a6c4f9cd43a725d8c62cec90|https://www.sec.gov/Archives/edgar/data/1297996/000110465925104945/dlr-20250930x10q_htm.xml_us-gaap:Revenues_Duration_7_1_2025_To_9_30_2025_dei_LegalEntityAxis_dlr_DigitalRealtyTrustLPMember_srt_ProductOrServiceAxis_dlr_RentalAndOtherServicesMember_VNU7bN6ZaUGJQl_bEp_v4A_Unit_Standard_USD_LAKdHxDt4kauf9yVfj3ckg_Tc_wXAS4I13b0i-JVn8di0FMg_4_3|us-gaap:Revenues|2025-07-01|2025-09-30|1536090000|iso4217:USD|duration|dei:LegalEntityAxis=dlr:DigitalRealtyTrustLPMember;srt:ProductOrServiceAxis=dlr:RentalAndOtherServicesMember": {
+"raw_unit": "Unit_Standard_USD_LAKdHxDt4kauf9yVfj3ckg",
 "reason": "ok",
 "verdict": "ok"
 },
-"0001628280-23-028805|us-gaap:RevenueFromContractWithCustomerIncludingAssessedTax|2023-04-02|2023-07-01|38034000|iso4217:USD|duration|srt:MajorCustomersAxis=nvee:PrivateSectorMember;us-gaap:StatementBusinessSegmentsAxis=nvee:BTSMember": {
+"4669c8c53b6e5b005496b5ce1fac1fdca90925d1d7dafb390d3ecc968f683edf|https://www.sec.gov/Archives/edgar/data/1609711/000160971123000129/gddy-20230630_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-120_usd_f-512|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-04-01|2023-06-30|492700000|iso4217:USD|duration|srt:ProductOrServiceAxis=gddy:DomainsMember;us-gaap:StatementBusinessSegmentsAxis=gddy:CorePlatformMember": {
+"raw_unit": "usd",
 "reason": "ok",
 "verdict": "ok"
 },
-"0001628280-24-033632|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-04-01|2024-06-30|78100000|iso4217:USD|duration|srt:StatementGeographicalAxis=us-gaap:NonUsMember;us-gaap:StatementBusinessSegmentsAxis=hubb:ElectricalSegmentMember": {
+"47f5a77aee7db4aa69a6e03e8bda624ab524d77973860b1d1cb0868ae160f6e6|https://www.sec.gov/Archives/edgar/data/62996/000006299624000027/mas-20240630_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-73_usd_f-389|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-04-01|2024-06-30|397000000|iso4217:USD|duration|srt:StatementGeographicalAxis=us-gaap:NonUsMember;us-gaap:StatementBusinessSegmentsAxis=mas:PlumbingProductsMember": {
+"raw_unit": "usd",
 "reason": "ok",
 "verdict": "ok"
 },
-"0001628280-24-044602|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-07-01|2024-09-30|265000000|iso4217:USD|duration|srt:ProductOrServiceAxis=abt:COVID19TestingMember;us-gaap:StatementBusinessSegmentsAxis=abt:DiagnosticProductsMember": {
+"486ca96207f212294aa3d39640a16d5a05d144933550f94a6e9d576467f23d33|https://www.sec.gov/Archives/edgar/data/93556/000009355623000025/swk-20230701_htm.xml_us-gaap:Revenues_c-354_usd_f-1398|us-gaap:Revenues|2023-04-02|2023-07-01|497400000|iso4217:USD|duration|srt:ProductOrServiceAxis=swk:EngineeredFasteningMember;us-gaap:StatementBusinessSegmentsAxis=swk:IndustrialSegmentMember": {
+"raw_unit": "usd",
 "reason": "ok",
 "verdict": "ok"
 },
-"0001628280-25-037464|us-gaap:CostOfGoodsAndServicesSold|2025-04-01|2025-06-30|3245000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:ProductMember;us-gaap:StatementBusinessSegmentsAxis=ardx:ReportableSegmentMember": {
+"4926dea9bf1c428fb0a885c4c921d758766f74675c3978ecca100405426a61ad|https://www.sec.gov/Archives/edgar/data/1262039/000126203925000028/ftnt-20250630_htm.xml_us-gaap:CostOfGoodsAndServicesSold_c-330_usd_f-1134|us-gaap:CostOfGoodsAndServicesSold|2025-04-01|2025-06-30|165900000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:ProductMember;us-gaap:StatementBusinessSegmentsAxis=ftnt:ReportableSegmentMember": {
+"raw_unit": "usd",
 "reason": "ok",
 "verdict": "ok"
 },
-"0001628280-25-046072|us-gaap:RevenueFromContractWithCustomerIncludingAssessedTax|2025-07-01|2025-09-30|212000000|iso4217:USD|duration|srt:ProductOrServiceAxis=vlo:DistillersGrainsMember;us-gaap:StatementBusinessSegmentsAxis=vlo:EthanolMember": {
+"4a102a7c27cd7d7b60e6800b2f710aecb68870b8ec4176fb0267b4fc42325e67|https://www.sec.gov/Archives/edgar/data/804328/000080432825000031/qcom-20250330_htm.xml_us-gaap:Revenues_c-46_usd_f-393|us-gaap:Revenues|2024-12-30|2025-03-30|6929000000|iso4217:USD|duration|srt:ProductOrServiceAxis=qcom:HandsetsMember;us-gaap:StatementBusinessSegmentsAxis=qcom:QctMember": {
+"raw_unit": "usd",
 "reason": "ok",
 "verdict": "ok"
 },
-"0001628280-25-049673|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-07-01|2025-09-30|68967000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:ProductMember;us-gaap:StatementBusinessSegmentsAxis=eols:ReportableSegmentMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001637207-24-000082|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-07-01|2024-09-30|98902000|iso4217:USD|duration|srt:StatementGeographicalAxis=country:US;us-gaap:StatementBusinessSegmentsAxis=plnt:FranchiseSegmentMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001682852-24-000046|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-04-01|2024-06-30|22000000|iso4217:USD|duration|srt:ProductOrServiceAxis=mrna:ProductSalesMember;srt:StatementGeographicalAxis=mrna:RestOfTheWorldMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001682852-25-000044|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-04-01|2025-06-30|26000000|iso4217:USD|duration|srt:ProductOrServiceAxis=mrna:ProductSalesMember;srt:StatementGeographicalAxis=mrna:RestOfTheWorldMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001682852-25-000075|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-07-01|2025-09-30|175000000|iso4217:USD|duration|srt:ProductOrServiceAxis=mrna:ProductSalesMember;srt:StatementGeographicalAxis=mrna:RestOfTheWorldMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001692063-23-000152|us-gaap:Revenues|2023-04-01|2023-06-30|16200000|iso4217:USD|duration|us-gaap:StatementBusinessSegmentsAxis=us-gaap:CorporateAndOtherMember;us-gaap:SubsegmentsAxis=sndr:OtherInsuranceMember": {
-"reason": "no_candidate",
+"4a8a4e5fa49745666680601578c26b7e40f822238ab08ae645e91143805e3c46|https://www.sec.gov/Archives/edgar/data/1527166/000152716624000079/cg-20240930_htm.xml_us-gaap:IncomeLossFromEquityMethodInvestments_c-554_usd_f-1451|us-gaap:IncomeLossFromEquityMethodInvestments|2024-07-01|2024-09-30|15000000|iso4217:USD|duration|srt:ProductOrServiceAxis=cg:PrincipalInvestmentIncomeLossEquityMethodInvestmentsMember;us-gaap:StatementBusinessSegmentsAxis=cg:GlobalInvestmentSolutionsSegmentMember": {
+"raw_unit": "usd",
+"reason": "concept_missing",
 "verdict": "abstain"
 },
-"0001692063-24-000121|us-gaap:Revenues|2024-04-01|2024-06-30|24400000|iso4217:USD|duration|us-gaap:StatementBusinessSegmentsAxis=us-gaap:CorporateAndOtherMember;us-gaap:SubsegmentsAxis=sndr:OtherInsuranceMember": {
-"reason": "no_candidate",
+"4bf897ce6e0a24da95305ef7fd0695d0a353f8d252e5c15ba0f7802f7e5818f7|https://www.sec.gov/Archives/edgar/data/62996/000006299624000027/mas-20240630_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-70_usd_f-386|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-04-01|2024-06-30|857000000|iso4217:USD|duration|srt:StatementGeographicalAxis=srt:NorthAmericaMember;us-gaap:StatementBusinessSegmentsAxis=mas:PlumbingProductsMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"530c778b2b5aa7c4dce74efc0855264e1abde46198e0fa210d9e19016ed6b997|https://www.sec.gov/Archives/edgar/data/1604821/000155837025010829/ntra-20250630x10q_htm.xml_us-gaap:CostOfGoodsAndServicesSold_Duration_4_1_2025_To_6_30_2025_srt_ProductOrServiceAxis_us-gaap_ProductMember_us-gaap_StatementBusinessSegmentsAxis_ntra_SingleReportableSegmentMember_8pqlE5xzi0ePW2f3E04_xg_Unit_Standard_USD_jTyYdEgaZ0SCPvN1OFx9Fg_Tc_CitUm-dreEmpFh3xa_o9_w_5_3|us-gaap:CostOfGoodsAndServicesSold|2025-04-01|2025-06-30|199531000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:ProductMember;us-gaap:StatementBusinessSegmentsAxis=ntra:SingleReportableSegmentMember": {
+"raw_unit": "Unit_Standard_USD_jTyYdEgaZ0SCPvN1OFx9Fg",
+"reason": "ok",
+"verdict": "ok"
+},
+"5c05f8db1604c4247d1a34e36c6ddde4ce68d4d281412764067f9660c5b73ce4|https://www.sec.gov/Archives/edgar/data/1297996/000155837023013321/dlr-20230630x10q_htm.xml_us-gaap:Revenues_Duration_4_1_2023_To_6_30_2023_dei_LegalEntityAxis_dlr_DigitalRealtyTrustLPMember_srt_ProductOrServiceAxis_dlr_FeeIncomeAndOtherMember_C5r48IvZk0GWjk8aVaW-rQ_Unit_Standard_USD_C-vICzUWSEyqfZb1tDzoGA_Tc_1tueGiGw-EWDeNyv5-cjhQ_5_3|us-gaap:Revenues|2023-04-01|2023-06-30|15840000|iso4217:USD|duration|dei:LegalEntityAxis=dlr:DigitalRealtyTrustLPMember;srt:ProductOrServiceAxis=dlr:FeeIncomeAndOtherMember": {
+"raw_unit": "Unit_Standard_USD_C-vICzUWSEyqfZb1tDzoGA",
+"reason": "ok",
+"verdict": "ok"
+},
+"5ccda471930d2d4771d58807e0a787ede9a2202c361dbe55e23ec0b5c07d218f|https://www.sec.gov/Archives/edgar/data/1057060/000095017024086479/hzo-20240630_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_C_1f11fc3f-8f83-46dd-927f-d50d3ee05704_U_USD_F_780eb21b-fd24-4338-bf1a-b15c3b1bf8a1|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-04-01|2024-06-30|68181000|iso4217:USD|duration|srt:ProductOrServiceAxis=hzo:MaintenanceRepairStorageRentalCharterServicesPartsAndAccessoriesRevenueMember;srt:StatementGeographicalAxis=hzo:MarinaStorageLocationsMember;us-gaap:StatementBusinessSegmentsAxis=hzo:RetailOperationsMember": {
+"raw_unit": "U_USD",
+"reason": "ok",
+"verdict": "ok"
+},
+"653393b6a7f4b9443f10d832dfc1790e62ac0535e4f99826339b4be9f7285bc4|https://www.sec.gov/Archives/edgar/data/1442145/000143774923029653/vrsk20230930_10q_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_d_2023-07-01_2023-09-30_ProductOrServiceAxis-ClaimsMember_StatementBusinessSegmentsAxis-InsuranceMember_USD_c103439034|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-07-01|2023-09-30|202400000|iso4217:USD|duration|srt:ProductOrServiceAxis=vrsk:ClaimsMember;us-gaap:StatementBusinessSegmentsAxis=vrsk:InsuranceMember": {
+"raw_unit": "USD",
+"reason": "ok",
+"verdict": "ok"
+},
+"6e2b6d772c280ca0ce805b44612ddc6e731c35a1415d537704aa19636de3497b|https://www.sec.gov/Archives/edgar/data/1060822/000106082225000158/cri-20250927_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-90_usd_f-587|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-06-29|2025-09-27|362307000|iso4217:USD|duration|us-gaap:ContractWithCustomerSalesChannelAxis=us-gaap:SalesChannelDirectlyToConsumerMember;us-gaap:StatementBusinessSegmentsAxis=cri:RetailSegmentMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"7549f005f98a05c1eb2130227398700f78711476e01acfb2dfcfb02e0a6ce85d|https://www.sec.gov/Archives/edgar/data/1604821/000110465925107976/ntra-20250930x10q_htm.xml_us-gaap:CostOfGoodsAndServicesSold_Duration_7_1_2025_To_9_30_2025_srt_ProductOrServiceAxis_us-gaap_ProductMember_us-gaap_StatementBusinessSegmentsAxis_ntra_SingleReportableSegmentMember_vM5paxsQq0mM96rGhQRNtA_Unit_Standard_USD_2GmNmdWf2USX2FcETAnrZw_Tc_0GISairBy0egDtcuF-Z8Og_5_3|us-gaap:CostOfGoodsAndServicesSold|2025-07-01|2025-09-30|207253000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:ProductMember;us-gaap:StatementBusinessSegmentsAxis=ntra:SingleReportableSegmentMember": {
+"raw_unit": "Unit_Standard_USD_2GmNmdWf2USX2FcETAnrZw",
+"reason": "ok",
+"verdict": "ok"
+},
+"83550e0b04df119df9a660d4b594f210f03c8037f31da6d4cc30a604a066670a|https://www.sec.gov/Archives/edgar/data/1530804/000153080425000019/trox-20250930_htm.xml_us-gaap:OtherCostOfOperatingRevenue_c-461_usd_f-1302|us-gaap:OtherCostOfOperatingRevenue|2025-07-01|2025-09-30|47000000|iso4217:USD|duration|srt:ProductOrServiceAxis=trox:IdleFacilityAndLowerOfCostOrNetRealizableValueChargesMember;us-gaap:StatementBusinessSegmentsAxis=trox:ReportableSegmentMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"90adbb8984708f624649b9560c341b72a90993bbc87439d868b884b4060e985a|https://www.sec.gov/Archives/edgar/data/1609711/000160971125000209/gddy-20250930_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-122_usd_f-495|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-07-01|2025-09-30|188400000|iso4217:USD|duration|srt:ProductOrServiceAxis=gddy:OtherMember;us-gaap:StatementBusinessSegmentsAxis=gddy:CorePlatformMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"96b82303ac889fad0520bcbee3dda4a4fc056b0ca648b47fabd0505a8fb51327|https://www.sec.gov/Archives/edgar/data/1841666/000178403123000025/apa-20230930_htm.xml_us-gaap:CostOfGoodsAndServicesSold_c-175_usd_f-648|us-gaap:CostOfGoodsAndServicesSold|2023-07-01|2023-09-30|37000000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:OilAndGasPurchasedMember;srt:ScheduleOfEquityMethodInvestmentEquityMethodInvesteeNameAxis=apa:KinetikMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"a59a0f50d1432e52bee818ad7c27b9321d39afd635d0c664e9eb02753df7c140|https://www.sec.gov/Archives/edgar/data/1034054/000103405424000009/sbac-20240630x10q_htm.xml_us-gaap:Revenues_Duration_4_1_2024_To_6_30_2024_srt_StatementGeographicalAxis_country_BR_us-gaap_StatementBusinessSegmentsAxis_sbac_InternationalSiteLeasingRevenueMember_Unit12_ct-nonFraction-d7ac667f-b149-4539-99de-8ca29384730b|us-gaap:Revenues|2024-04-01|2024-06-30|93100000|iso4217:USD|duration|srt:StatementGeographicalAxis=country:BR;us-gaap:StatementBusinessSegmentsAxis=sbac:InternationalSiteLeasingRevenueMember": {
+"raw_unit": "Unit12",
+"reason": "ok",
+"verdict": "ok"
+},
+"b2462f86a2e124fbb5e768262c6c9ca98f8dbd7afe66c712df2918a379bbf8dc|https://www.sec.gov/Archives/edgar/data/817720/000081772026000017/syna-20251227_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-208_usd_f-774|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-09-28|2025-12-27|93200000|iso4217:USD|duration|srt:ProductOrServiceAxis=syna:InternetOfThingsProductApplicationsMember;us-gaap:StatementBusinessSegmentsAxis=syna:CoreIotMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"bfb51710ea87a9e32430d053ef15729457e488a35f968b3f8469495aac9c8761|https://www.sec.gov/Archives/edgar/data/1743881/000095017025103192/bbio-20250630_htm.xml_us-gaap:CostOfRevenue_C_ea74b489-c355-47b2-9144-f056b0841c8c_U_USD_F_fa1b545c-10d4-40dc-a768-9831ea264d1f|us-gaap:CostOfRevenue|2025-04-01|2025-06-30|2848000|iso4217:USD|duration|srt:ProductOrServiceAxis=bbio:CostOfGoodsSoldMember;us-gaap:StatementBusinessSegmentsAxis=us-gaap:ReportableSegmentAggregationBeforeOtherOperatingSegmentMember": {
+"raw_unit": "U_USD",
+"reason": "ok",
+"verdict": "ok"
+},
+"c01991b27748083dccb454e43cebbeb0c71780f87aa2df8c6b4fd5df458febc6|https://www.sec.gov/Archives/edgar/data/879169/000087916925000118/incy-20250930_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-369_usd_f-1062|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-07-01|2025-09-30|1149856000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:ProductMember;us-gaap:StatementBusinessSegmentsAxis=incy:ReportableSegmentMember": {
+"raw_unit": "usd",
+"reason": "ok",
+"verdict": "ok"
+},
+"f5a0ba03dc74a9cfcfab083d9ad023c4945a262ddfa08f6f22861b9c81d3288f|https://www.sec.gov/Archives/edgar/data/1692063/000169206323000152/sndr-20230630_htm.xml_us-gaap:Revenues_c-189_usd_f-828|us-gaap:Revenues|2023-04-01|2023-06-30|16200000|iso4217:USD|duration|us-gaap:StatementBusinessSegmentsAxis=us-gaap:CorporateAndOtherMember;us-gaap:SubsegmentsAxis=sndr:OtherInsuranceMember": {
+"raw_unit": "usd",
+"reason": "concept_missing",
 "verdict": "abstain"
 },
-"0001702744-23-000019|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2022-11-27|2023-02-25|154598000|iso4217:USD|duration|atk:BrandAxis=atk:QuestMember;srt:StatementGeographicalAxis=srt:NorthAmericaMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001720635-23-000057|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-07-01|2023-09-30|284100000|iso4217:USD|duration|srt:StatementGeographicalAxis=nvt:UnitedStatesAndCanadaMember;us-gaap:StatementBusinessSegmentsAxis=nvt:EnclosuresSegmentMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001723128-25-000062|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-07-01|2025-09-30|16415000|iso4217:USD|duration|srt:ProductOrServiceAxis=amrx:OralLiquidMember;srt:StatementGeographicalAxis=country:US;us-gaap:StatementBusinessSegmentsAxis=amrx:AffordableMedicinesSegmentMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001730168-23-000077|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-05-01|2023-07-30|656000000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:ProductMember;srt:StatementGeographicalAxis=srt:AmericasMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001730168-24-000080|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-02-05|2024-05-05|3401000000|iso4217:USD|duration|srt:ProductOrServiceAxis=avgo:SubscriptionsandServicesMember;srt:StatementGeographicalAxis=srt:AmericasMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001734722-25-000050|path:CostOfRevenueAdjusted|2025-08-01|2025-10-31|24999000|iso4217:USD|duration|srt:ProductOrServiceAxis=path:ProfessionalServicesAndOtherMember;us-gaap:StatementBusinessSegmentsAxis=path:ReportableSegmentMember": {
-"reason": "no_candidate",
+"f8739264d48000ef899330aed6ebffca16a006679a0262225d68a2e767543ebf|https://www.sec.gov/Archives/edgar/data/1692063/000169206324000121/sndr-20240630_htm.xml_us-gaap:Revenues_c-184_usd_f-868|us-gaap:Revenues|2024-04-01|2024-06-30|24400000|iso4217:USD|duration|us-gaap:StatementBusinessSegmentsAxis=us-gaap:CorporateAndOtherMember;us-gaap:SubsegmentsAxis=sndr:OtherInsuranceMember": {
+"raw_unit": "usd",
+"reason": "concept_missing",
 "verdict": "abstain"
 },
-"0001744489-24-000232|us-gaap:Revenues|2024-03-31|2024-06-29|931000000|iso4217:USD|duration|srt:StatementGeographicalAxis=srt:AsiaPacificMember;us-gaap:StatementBusinessSegmentsAxis=dis:EntertainmentSegmentMember": {
+"f8c9b168f887a50e4b21b5608877759f7f769a63634af338411014bf5b84e998|https://www.sec.gov/Archives/edgar/data/1048911/000104891126000011/fdx-20260228_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-246_usd_f-1022|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-12-01|2026-02-28|55000000|iso4217:USD|duration|srt:StatementGeographicalAxis=us-gaap:NonUsMember;us-gaap:StatementBusinessSegmentsAxis=fdx:FedexFreightSegmentMember": {
+"raw_unit": "usd",
 "reason": "ok",
 "verdict": "ok"
 },
-"0001758730-25-000161|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-04-01|2025-06-30|380148000|iso4217:USD|duration|srt:ProductOrServiceAxis=tw:TransactionFeeRevenueMember;us-gaap:ContractWithCustomerBasisOfPricingAxis=tw:VariablePricingMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001784031-23-000025|us-gaap:CostOfGoodsAndServicesSold|2023-07-01|2023-09-30|37000000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:OilAndGasPurchasedMember;srt:ScheduleOfEquityMethodInvestmentEquityMethodInvesteeNameAxis=apa:KinetikMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001800227-24-000039|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2024-04-01|2024-06-30|281907000|iso4217:USD|duration|srt:StatementGeographicalAxis=country:US;us-gaap:StatementBusinessSegmentsAxis=iaci:AngiIncMember": {
-"reason": "ok",
-"verdict": "ok"
-},
-"0001804220-23-000031|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2023-07-01|2023-09-30|19100000|iso4217:USD|duration|srt:ProductOrServiceAxis=regn:EvkeezaMember;srt:StatementGeographicalAxis=country:US": {
+"ff1f18c428b09ef947fcf58b165f98ec34c235f725d2f0c110c540d769107f16|https://www.sec.gov/Archives/edgar/data/1570562/000162828025049673/eols-20250930_htm.xml_us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax_c-201_usd_f-817|us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax|2025-07-01|2025-09-30|68967000|iso4217:USD|duration|srt:ProductOrServiceAxis=us-gaap:ProductMember;us-gaap:StatementBusinessSegmentsAxis=eols:ReportableSegmentMember": {
+"raw_unit": "usd",
 "reason": "ok",
 "verdict": "ok"
 }

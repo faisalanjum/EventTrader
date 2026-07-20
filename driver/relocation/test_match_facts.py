@@ -59,17 +59,48 @@ def test_concept_identity_matrix():
         "a BARE request must never accept prefixed storage (the evil:Revenues class)"
 
 
-def test_unit_normalization_conflict_and_malformed():
-    same = [blob('Revenues', [fact(unit='U_USD')]), blob('Revenues', [fact(unit='u_usd')])]
-    assert mf(same) == XN.dec('100'), "U_USD ≡ u_usd — case must not split into a fake conflict"
-    assert mf(same, unit_ref='  U_USD ') == XN.dec('100'), "request unit normalizes too"
+def test_unit_case_sensitivity_strip_only_nonblank_required():
+    """Units are CASE-SENSITIVE (XBRL unitRef is an XML IDREF; corpus-live: 7 PSEG filings
+    carry usdPerMWh vs usdPerMwh as DIFFERENT units). Normalization = strip ONLY. A numeric
+    candidate must carry a nonblank string unit (census: 88,236 numeric gate facts, zero
+    missing/blank/malformed — zero recall cost)."""
+    variants = [blob('Revenues', [fact(unit='U_USD')]), blob('Revenues', [fact(unit='u_usd')])]
+    assert mf(variants) is None, \
+        "U_USD vs u_usd are DIFFERENT units — same value under both must abstain as a conflict"
+    assert mf([blob('Revenues', [fact(unit='U_USD')])], unit_ref='u_usd') is None, \
+        "a request unit must match the raw id CASE-EXACTLY"
+    assert mf([blob('Revenues', [fact(unit=' U_USD ')])], unit_ref='U_USD') == XN.dec('100'), \
+        "strip (padding) still normalizes — case does not"
     conflict = [blob('Revenues', [fact(unit='U_USD')]), blob('Revenues', [fact(unit='U_EUR')])]
     assert mf(conflict) is None, "same value under genuinely conflicting units abstains"
     assert mf([blob('Revenues', [fact(unit=['U_USD'])])]) is None, \
         "a list unitRef is malformed — never a candidate, NEVER a crash"
     assert mf([blob('Revenues', [fact(unit='   ')])]) is None, "blank unit is malformed"
-    assert mf([blob('Revenues', [fact(unit=None)])]) == XN.dec('100'), \
-        "a unit-less fact stays legal"
+    assert mf([blob('Revenues', [fact(unit=None)])]) is None, \
+        "a NUMERIC fact with no unit is never a candidate (nonblank-unit law)"
+    assert mf([blob('Revenues', [fact(unit='USD')])], expected_unit='money') == XN.dec('100'), \
+        "the money heuristic casefolds LOCALLY — uppercase USD units must still match it"
+    assert mf([blob('Revenues', [fact(unit='usd')])], expected_unit='money') == XN.dec('100')
+
+
+def test_request_pairs_validated_never_crash_never_collapse():
+    """Reproduced before fixing: unhashable pair items crashed TypeError; a repeated-axis
+    request silently collapsed via frozenset. All malformed request pairs abstain cleanly."""
+    b = blob('Revenues', [fact(seg=[{'dimension': 'x:A', 'value': 'x:M'}])])
+    ex = lambda pairs: LOC.match_facts_explain([b], 'us-gaap:Revenues', pairs,
+                                               '2024-01-01', '2024-12-31')
+    for bad in ("x:A=x:M", 3, None, [['x:A', 'x:M']], [('x:A',)], [('x:A', 'x:M', 'extra')],
+                [('x:A', 3)], [(' x:A', 'x:M')], [('x:A', 'x:M'), ('x:A', 'x:N')],
+                [('x:A', 'x:M'), ('x:A', 'x:M')]):
+        got, reason = ex(bad)
+        assert got is None and reason == 'bad_request_pairs', f"{bad!r} -> {reason}"
+    assert ex([('x:A', 'x:M')])[0] == XN.dec('100'), "a valid pair list still matches"
+
+
+def test_malformed_stored_period_containers_abstain_never_crash():
+    """Reproduced before fixing: string/int/list period containers crashed AttributeError."""
+    for p in ('garbage', 7, ['x'], None):
+        assert mf([blob('Revenues', [fact(period=p)])]) is None, f"period={p!r} must not bind"
 
 
 def test_fact_side_malformed_periods_never_candidates():
@@ -96,7 +127,12 @@ def test_explain_reasons():
                                                      kw.pop('pairs', ()), '2024-01-01',
                                                      '2024-12-31', **kw)
     assert ex([blob('Revenues', [fact()])])[1] == 'ok'
-    assert ex([])[1] == 'no_candidate'
+    assert ex([])[1] == 'concept_missing', "nothing matched the concept at all"
+    assert ex([blob('OtherConcept', [fact()])])[1] == 'concept_missing'
+    wrong_period = blob('Revenues', [fact(period={'startDate': '2020-01-01',
+                                                  'endDate': '2020-12-31'})])
+    assert ex([wrong_period])[1] == 'no_candidate', \
+        "concept matched but later filters emptied the field"
     assert ex([blob('Revenues', [fact(value='100')]),
                blob('Revenues', [fact(value='200')])])[1] == 'ambiguous_values'
     assert ex([blob('Revenues', [fact(unit='U_USD')]),
@@ -120,3 +156,6 @@ def test_adapter_dimensioned_member_only_always_abstains():
     with pytest.raises(ValueError, match="never both"):
         xbrl_lane.resolve([b], 'us-gaap:Revenues', ['x:USMember'], '2024-01-01', '2024-12-31',
                           pairs=[('x:OnlyAxis', 'x:USMember')])
+    with pytest.raises(ValueError, match="never both"):
+        xbrl_lane.resolve([b], 'us-gaap:Revenues', [], '2024-01-01', '2024-12-31',
+                          pairs=[('x:OnlyAxis', 'x:USMember')])   # [] is STILL a supplied input

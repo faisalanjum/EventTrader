@@ -6,10 +6,10 @@ WP2: THIS FILE IS NOW A THIN ADAPTER over the neutral matcher (driver/relocation
     exact concept identifier AS STORED (full qname when present; otherwise bare local name,
     never promoted — verified live 109/109) + COMPLETE (axis, member) PAIRS + exactly one
     valid period shape + unit  ->  unique exact-Decimal fact value | None (abstain)
-Callers that know the full dimension address pass `pairs`; LEGACY member-only callers cannot
-name an axis, so the adapter first discovers the source's DISTINCT pairings for that member
-set — more than one → axis-ambiguous → abstain; exactly one → matched on its FULL pairs (the
-wrong-axis class can never bind).
+Callers that know the full dimension address pass `pairs` (THE identity). A DIMENSIONED
+member-only request is INCOMPLETE identity → abstain, always — an axis is NEVER inferred,
+not even from uniqueness. Dimensionless requests ([] members, no pairs) stay legal. Supplying
+BOTH inputs (pairs plus any non-None member_qnames, including []) is rejected.
 
 Certification: the durable 150-case live gate = test_xbrl_gate.py (selection sha-pinned,
 exact Decimal, reconciles all 150; the old uncollected __main__ check is retired).
@@ -33,8 +33,8 @@ def resolve(xbrls, concept_qname, member_qnames, period_start, period_end, unit_
     an axis is NEVER inferred, not even from uniqueness (the wrong-axis class). Dimensionless
     requests ([] members) are fully specified and stay legal."""
     if pairs is not None:
-        if member_qnames:
-            raise ValueError("pass pairs OR member_qnames, never both")
+        if member_qnames is not None:              # [] is STILL a supplied input — truthiness
+            raise ValueError("pass pairs OR member_qnames, never both")   # hid it (reproduced)
         return LOC.match_facts(xbrls, concept_qname, pairs, period_start, period_end,
                                unit_ref=unit_ref, expected_unit=expected_unit)
     if member_qnames:

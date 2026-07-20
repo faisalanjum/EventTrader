@@ -1420,3 +1420,83 @@ NEXT: row_quote's SMALLEST COMPLETE helper group moved in ONE go + ONE final WP1
    link_lib's import). Any loss vs the 130 correct gate cases → OWNER before acceptance.
 Gates: pins 7/7 · gate 2/2 · battery 171/171 (164+7; working tree additionally = the 1
 intentional boundary RED) · floors 28/28.
+
+## WP2 BUILD — THE UNIT-EVIDENCE RECONCILIATION + the 10-item corrective adjudication
+## (2026-07-20; his audits of 814a15a. HEAD unchanged at that point — this entry also
+## corrects my process miss: the prior adjudication lived only in memory, not in this record.)
+**THE RECONCILIATION — MY REJECTION WAS WRONG, and the error is owned as a claim-SCOPING
+failure:** I verified his "9 filings / usdPerMwh-vs-usdPerMWh" census against
+FinancialStatementContent blobs (the channel's surface), found zero, and wrote "zero
+occurrences in the ENTIRE GRAPH." He relocated the evidence to the STRUCTURED XBRL layer —
+(Fact)-[:HAS_UNIT]->(Unit) — and MY OWN re-run reproduces it EXACTLY: 7 PSEG filings carry
+BOTH usdPerMWh → iso4217:USDutr:MWh AND usdPerMwh → iso4217:USDpseg:mwh (DIFFERENT semantic
+units, WITHIN the same filings); 2 EOG filings carry usdPerMMBTU → iso4217:USDutr:MMBTU AND
+usdPerMMBTu → iso4217:USDeog:mMBTu. 7+2 = his nine. The blob-level finding stays true for
+the blob surface (those strings are absent THERE) — the false step was generalizing one node
+type to "the graph." The "evidence rejected" verdict is WITHDRAWN; case-preservation is both
+spec-true (XBRL 2.1 / XML Schema: unitRef is a case-sensitive IDREF) and CORPUS-LIVE.
+My blob-scoped "0 within-filing collisions" census is likewise superseded for law-making:
+within-filing case collisions DO exist in structured data (PSEG).
+**THE ADJUDICATED CORRECTIVE (his 10 + my audit finds; routes/quote-move/regeneration/push
+all held; ONE narrow TDD packet):** (1) strip-only unit normalization, numeric candidacy
+requires nonblank string unit (his census 88,236/0/0/0 CONFIRMED by my own run), omitted
+request unit = no filter — with MY audit find honored: the expected_unit money heuristic must
+casefold LOCALLY or 'USD'-cased units silently stop matching; (2) the gate fetches each of
+the 150 exact target Fact.id rows, requires exactly one raw f.unit_ref, verifies its semantic
+Unit vs truth, passes the TARGET-LOCAL raw id to the matcher; (3) semantic unit_name
+('iso4217:USD') is NEVER passed as raw unit_ref (raw ids include usd/U_USD/Unit12 — opaque
+ids prove the money-substring substitute unsafe for verification); (4) the 130 correct rows
+carried over by stable pair_key + target fact_id BEFORE key changes (both fields verified
+present in the pool); pins gain ids + full pairs + period shape + raw unit + semantic unit;
+any lost case → STOP, keyed list to the owner; (5) selection upgrades to full concept +
+pairs + semantic-unit/divide equality; raw value_raw to XN.dec (no str-laundering on the
+test side either); (6) locate_by_fingerprint forwards req['pairs']; (7) members=[] + pairs =
+two inputs → reject; full request-pair validation (containers, shapes, nonblank unpadded,
+uniqueness, one member per axis) — malformed/repeated pairs abstain cleanly (reproduced:
+unhashable pairs crashed TypeError, repeated-axis silently collapsed); (8) malformed stored
+period CONTAINERS abstain (reproduced: string/int/list periods → AttributeError crash — the
+same truthy-non-mapping class as step 1's guard); pins for all shapes; (9) the 20 gate
+abstentions split honestly: 19 source-present/concept-missing + 1 missing-XBRL-source —
+never generic no_candidate; (10) stale xbrl_lane module docstring (deleted discover_pairings
+mechanics) + locate.py's dead oracle-cycle comment corrected (confirmed by read: oracle
+occurs 0 times in xbrl_lane); prefixed-clue→bare-storage = RETRIEVAL-only recorded as a
+route-test requirement. HIS independent measurements to re-verify at build: all 150 target
+raw units resolve; case-preserving exact-target-unit matching stays 130/20/0.
+SEPARATE (Core's, not mine): PER-21/R8 law work uncommitted, stale status text, 2
+design-coverage test failures — Fiscal touches nothing there; push stays blocked on Core's
+completion + the owner's word.
+
+## WP2 BUILD — THE CORRECTIVE EXECUTED (reviewer GO + owner GO, 2026-07-20). One narrow TDD
+## packet, RED-first (4 pins confirmed RED before the fixes). STOP-RULE ARMED AND NOT
+## TRIGGERED: carry-over 130 ok→ok · 20 abstain→abstain · ZERO losses.
+1. UNIT LAWS: _norm_unit = STRIP ONLY (case-sensitive — spec + the reproduced PSEG/EOG
+   corpus evidence); numeric candidacy REQUIRES a nonblank string unit (the 88,236/0 census);
+   the money HEURISTIC casefolds LOCALLY (the pre-audit trap — uppercase USD units keep
+   matching); the U_USD==u_usd equivalence test DELETED and replaced by case-sensitivity pins.
+2. REQUEST-PAIR SCHEMA (_valid_pairs): list/tuple of (axis,member) TUPLES of nonblank
+   unpadded strings, no repeated axis → malformed = 'bad_request_pairs', never a crash
+   (reproduced TypeError dead), never a silent frozenset collapse (reproduced dead).
+3. MALFORMED STORED PERIOD CONTAINERS: Mapping guard in _period_ok — string/int/list periods
+   never bind (3 reproduced AttributeError crashes dead); pins for all shapes.
+4. ADAPTER: `member_qnames is not None` law (members=[] + pairs now rejected — the
+   reproduced truthiness hole dead); locate_by_fingerprint FORWARDS req['pairs'] and nulls
+   the legacy member input when pairs present (test_locate extended).
+5. HONEST REASONS: matcher splits 'concept_missing' (nothing matched the concept) from
+   'no_candidate' (concept matched, filters emptied); the gate maps empty-blob sources to
+   'no_source_xbrl'. MEASURED split of the 20 = 19 concept_missing + 1 no_source_xbrl —
+   HIS prediction exact.
+6. GATE v4 (exact rows): the stable filter upgraded to FULL identity (concept qname + pairs
+   + semantic unit_name/is_divide, lock vs target) — the selection kept the IDENTICAL 150
+   cases (0 population change); each case fetches its exact target Fact.id from
+   (Fact)-[:HAS_UNIT]->(Unit), requires EXACTLY ONE nonblank raw f.unit_ref (all 150 do —
+   his pre-measurement confirmed), verifies the semantic Unit vs truth (150/150 match), and
+   passes the TARGET-LOCAL raw id to the matcher; semantic names never substitute for raw
+   ids; XN.dec(RAW value_raw) both sides. New selection sha f3d3835b…; fixture pins verdict +
+   reason + raw_unit per case. RESULT: {ok:130, abstain:20, wrong:0} EXACT under
+   case-preserving target-unit matching — his final pre-measurement also confirmed.
+7. STALE TEXTS corrected: xbrl_lane module docstring (discover_pairings mechanics gone) +
+   locate.py's cycle comment (the old cycle DIED when xbrl_lane dropped oracle — stated);
+   test_locate's _AGG_BLOB fixture modernized to carry a unit (census-real shape).
+Gates at code-close: pins 10/10-in-file · gate 2/2 · battery 173/173 (171+2; working tree
+additionally = the 1 intentional boundary RED) · floors 28/28. Routes, quote move,
+regeneration, push: all still held.

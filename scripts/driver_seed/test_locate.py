@@ -10,7 +10,10 @@ import locate
 
 # a consolidated (undimensioned) revenue fact, value 6,707M, FY2024.
 _AGG_BLOB = json.dumps({"RevenueFromContractWithCustomerExcludingAssessedTax": [
-    {"value": "6707000000", "period": {"startDate": "2024-01-01", "endDate": "2024-12-31"}}]})
+    {"value": "6707000000", "period": {"startDate": "2024-01-01", "endDate": "2024-12-31"},
+     "unitRef": "usd"}]})   # corrective: numeric candidacy requires a nonblank unit (census:
+                            # 88,236 real numeric gate facts, ZERO unit-less — fixtures mirror
+                            # reality, the round-28 modernization law)
 _CONCEPT = "RevenueFromContractWithCustomerExcludingAssessedTax"
 
 
@@ -117,16 +120,23 @@ def test_fingerprint_forwards_unit_args(monkeypatch):
     import xbrl_lane
     seen = {}
 
-    def fake(xbrls, concept, members, ps, pe, unit_ref=None, expected_unit=None):
-        seen.update(unit_ref=unit_ref, expected_unit=expected_unit)
+    def fake(xbrls, concept, members, ps, pe, unit_ref=None, expected_unit=None, pairs=None):
+        seen.update(unit_ref=unit_ref, expected_unit=expected_unit, pairs=pairs,
+                    members=members)
         return None
     monkeypatch.setattr(xbrl_lane, 'resolve', fake)
     r = locate.locate({'xbrls': [], 'concept': 'us-gaap:Revenues', 'members': [],
                        'period_start': '2024-01-01', 'period_end': '2024-12-31',
                        'unit_ref': 'usd', 'expected_unit': 'money'})
     assert r == {'value': None}
-    assert seen == {'unit_ref': 'usd', 'expected_unit': 'money'}, seen
-    print("[ok] fingerprint lane forwards unit identity to xbrl_lane")
+    assert seen == {'unit_ref': 'usd', 'expected_unit': 'money', 'pairs': None,
+                    'members': []}, seen
+    # corrective: req['pairs'] is FORWARDED and the legacy member input is NOT also sent
+    locate.locate({'xbrls': [], 'concept': 'us-gaap:Revenues', 'members': ['x:M'],
+                   'pairs': [('x:A', 'x:M')],
+                   'period_start': '2024-01-01', 'period_end': '2024-12-31'})
+    assert seen['pairs'] == [('x:A', 'x:M')] and seen['members'] is None, seen
+    print("[ok] fingerprint lane forwards unit identity AND full pairs to xbrl_lane")
 
 
 def test_scale_gate_blocks_naked_scaled_number():

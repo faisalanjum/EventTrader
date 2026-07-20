@@ -235,8 +235,13 @@ def _fact_rows(xbrls):
 
 def _period_ok(fc, ps, pe, instant):
     """exactly ONE valid period shape; a fact carrying BOTH instant and duration dates is
-    malformed and never a candidate (tier1 parity, round-29 law)."""
-    p = fc.get('period') or {}
+    malformed and never a candidate (tier1 parity, round-29 law). A NON-MAPPING period
+    container (string/int/list — the reproduced AttributeError crash class) never binds."""
+    p = fc.get('period')
+    if p is None:
+        p = {}
+    elif not isinstance(p, Mapping):
+        return False
     mixed = (p.get('instant') is not None) and (p.get('startDate') is not None
                                                 or p.get('endDate') is not None)
     if mixed:
@@ -263,15 +268,34 @@ _BAD_UNIT = object()
 
 
 def _norm_unit(u):
-    """None stays None (unit-less facts are legal); a nonblank string normalizes to
-    strip+casefold (U_USD ≡ u_usd — filer-local codes are case-insensitive identity here);
-    any other shape is MALFORMED → the _BAD_UNIT sentinel (that fact is never a candidate;
-    the list-unitRef TypeError crash class dies here)."""
+    """Unit ids are CASE-SENSITIVE (XBRL unitRef is an XML IDREF; corpus-live: PSEG carries
+    usdPerMWh vs usdPerMwh as DIFFERENT units in one filing) — normalization is STRIP ONLY.
+    None passes through (the caller decides whether unit-less is legal); any non-string or
+    blank shape is MALFORMED → _BAD_UNIT (never a candidate; the list-unitRef crash class
+    dies here)."""
     if u is None:
         return None
     if isinstance(u, str) and u.strip():
-        return u.strip().casefold()
+        return u.strip()
     return _BAD_UNIT
+
+
+def _valid_pairs(pairs):
+    """request-pair schema: a list/tuple of (axis, member) TUPLES of nonblank unpadded
+    strings, no repeated axis (which also kills duplicate pairs). Returns the validated
+    list or None (malformed → the caller abstains 'bad_request_pairs' — never a crash,
+    never a silent frozenset collapse)."""
+    if not isinstance(pairs, (list, tuple)):
+        return None
+    out = []
+    for p in pairs:
+        if not (isinstance(p, tuple) and len(p) == 2 and _nb(p[0]) and _nb(p[1])):
+            return None
+        out.append(p)
+    axes = [a for a, _ in out]
+    if len(axes) != len(set(axes)):
+        return None
+    return out
 
 
 def match_facts_explain(xbrls, concept_qname, pairs, period_start, period_end, unit_ref=None,
@@ -279,11 +303,15 @@ def match_facts_explain(xbrls, concept_qname, pairs, period_start, period_end, u
     """(value|None, reason) for the FULL identity — exact concept identifier AS STORED +
     COMPLETE (axis,member) PAIRS + exactly one valid period shape + NORMALIZED unit + exact
     Decimal on the RAW stored value (floats are rejected by XN.dec — never laundered through
-    str()). Reasons: ok · bad_request_period · nonnumeric_value · no_candidate ·
-    ambiguous_values · unit_conflict. The wrong-axis class dies here: a right member under a
-    wrong axis never matches."""
+    str()). Reasons: ok · bad_request_pairs · bad_request_unit · bad_request_period ·
+    nonnumeric_value · concept_missing (nothing matched the concept) · no_candidate (concept
+    matched, later filters emptied) · ambiguous_values · unit_conflict. The wrong-axis class
+    dies here: a right member under a wrong axis never matches."""
     req_prefix, _, con = concept_qname.rpartition(':')
-    want = frozenset(pairs)
+    vp = _valid_pairs(pairs)
+    if vp is None:
+        return None, 'bad_request_pairs'          # malformed request address: never guess
+    want = frozenset(vp)
     req_unit = _norm_unit(unit_ref)
     if req_unit is _BAD_UNIT:
         return None, 'bad_request_unit'           # malformed request-side unit: never guess
@@ -293,16 +321,20 @@ def match_facts_explain(xbrls, concept_qname, pairs, period_start, period_end, u
         return None, 'bad_request_period'
     instant = (ps == pe)
     vals, units = set(), set()
+    hit_concept = False
     for c, fc in _fact_rows(xbrls):
         if not _concept_ok(c, req_prefix, con):
             continue
+        hit_concept = True
         u = _norm_unit(fc.get('unitRef'))
-        if u is _BAD_UNIT:
-            continue                              # malformed stored unit: never a candidate
-        u_low = u or ''
-        if expected_unit == 'money' and 'usd' not in u_low:
+        if u is None or u is _BAD_UNIT:
+            continue                  # a NUMERIC candidate must carry a nonblank string unit
+                                      # (census: 88,236 numeric gate facts, zero unit-less —
+                                      # zero recall cost); malformed shapes likewise never bind
+        u_cf = u.casefold()           # LOCAL casefold for the money HEURISTIC only — unit
+        if expected_unit == 'money' and 'usd' not in u_cf:      # IDENTITY stays case-exact
             continue                              # shares can never satisfy a money request
-        if expected_unit == 'nonmoney' and 'usd' in u_low:
+        if expected_unit == 'nonmoney' and 'usd' in u_cf:
             continue
         if not _period_ok(fc, ps, pe, instant):
             continue
@@ -320,7 +352,7 @@ def match_facts_explain(xbrls, concept_qname, pairs, period_start, period_end, u
         vals.add(v)
         units.add(u)
     if not vals:
-        return None, 'no_candidate'
+        return (None, 'concept_missing') if not hit_concept else (None, 'no_candidate')
     if len(vals) != 1:
         return None, 'ambiguous_values'           # unique or abstain
     if unit_ref is None and len(units) > 1:

@@ -115,19 +115,23 @@ def locate_by_value(req):
 
 
 def locate_by_fingerprint(req):
-    """value-unknown: the certified xbrl_lane. req: {xbrls, concept, members, period_start, period_end}."""
-    # Lazy import: the dependency graph really does cycle (locate -> xbrl_lane -> oracle -> run_code_tier ->
-    # locate, via oracle.py's module-level `import run_code_tier`), but testing shows a top-level import does
-    # NOT actually fail on today's entry paths — so this is DEFENSIVE, not load-bearing. It is the visible
-    # symptom of the engine->channel edge; when R3 extracts the shared fetchers out of run_code_tier, the
-    # cycle and this workaround both disappear and this becomes a normal top-level import.
+    """value-unknown via the thin adapter over the neutral matcher. req: {xbrls, concept,
+    pairs?, members?, period_start, period_end, unit_ref?, expected_unit?}. `pairs` (the FULL
+    (axis,member) address) is THE identity and is FORWARDED when present; a dimensioned
+    members-only req abstains downstream (an axis is never inferred)."""
+    # Lazy import kept for import-order simplicity until R3; the old cycle
+    # (locate -> xbrl_lane -> oracle -> run_code_tier -> locate) DIED in WP2 when xbrl_lane
+    # dropped its oracle import and became a thin adapter over the neutral locator.
     sys.path.insert(0, os.path.join(HERE, 'relocate_probe'))
     import xbrl_lane
     # round-13: unit identity FORWARDED (it was dropped — a shares fact could satisfy a money request)
-    return {'value': xbrl_lane.resolve(req.get('xbrls') or [], req['concept'], req['members'],
+    pairs = req.get('pairs')
+    return {'value': xbrl_lane.resolve(req.get('xbrls') or [], req['concept'],
+                                       None if pairs is not None else req.get('members'),
                                        req['period_start'], req['period_end'],
                                        unit_ref=req.get('unit_ref'),
-                                       expected_unit=req.get('expected_unit'))}
+                                       expected_unit=req.get('expected_unit'),
+                                       pairs=pairs)}
 
 
 if __name__ == '__main__':
