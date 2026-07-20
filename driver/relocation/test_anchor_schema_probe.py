@@ -476,3 +476,34 @@ def test_24_concept_clues_container_must_be_list_or_tuple():
             rebuild_anchor(fid, p, d, em, concept_resolutions=bad)
     a, _ = rebuild_anchor(fid, p, d, em, concept_resolutions=["us-gaap:Revenues"])
     assert a["concept_clue"] == "us-gaap:Revenues"
+
+
+def test_25_input_schema_guard_malformed_inputs_raise_never_emit_or_crash():
+    """Reproduced before fixing: driver_node/edge_map/definitional_evidence as strings CRASHED
+    (AttributeError); padded ' C ' and int 123 were ACCEPTED as company; blank parsed source
+    and driver names EMITTED anchors. All must be clean ValueError."""
+    fid, _ = DI.build_id("SYN-ACC-T", "revenue", period_id="gp_2024-01-01_2024-12-31")
+    d = drv("revenue", ("q",))
+    p = props(fid, "m_usd", "duration")
+    em = {"SYN-ACC-T": "C"}
+    with pytest.raises(ValueError, match="props must be a mapping"):
+        rebuild_anchor(fid, [("a", 1)], d, em)
+    with pytest.raises(ValueError, match="driver_node must be a mapping"):
+        rebuild_anchor(fid, p, "revenue", em)
+    with pytest.raises(ValueError, match="edge_map must be a mapping"):
+        rebuild_anchor(fid, p, d, "SYN-ACC-T")
+    with pytest.raises(ValueError, match="definitional_evidence must be a mapping"):
+        rebuild_anchor(fid, p, {"name": "revenue", "fact_type": "metric",
+                                "definitional_evidence": "x"}, em)
+    blank_src = "du: :revenue:period=gp_2024-01-01_2024-12-31"
+    with pytest.raises(ValueError, match="blank source id"):
+        rebuild_anchor(blank_src, {**p, "fact_scope": blank_src.split(":", 3)[3]}, d, {" ": "C"})
+    blank_drv = "du:SYN-ACC-T: :period=gp_2024-01-01_2024-12-31"
+    with pytest.raises(ValueError, match="blank driver name"):
+        rebuild_anchor(blank_drv, {**p, "fact_scope": blank_drv.split(":", 3)[3]},
+                       {"name": " ", "fact_type": "metric",
+                        "definitional_evidence": {"birth_quotes": ["q"]}}, em)
+    with pytest.raises(ValueError, match="nonblank, unpadded string"):
+        rebuild_anchor(fid, p, d, {"SYN-ACC-T": " C "})
+    with pytest.raises(ValueError, match="nonblank, unpadded string"):
+        rebuild_anchor(fid, p, d, {"SYN-ACC-T": 123})

@@ -1243,3 +1243,17 @@ lock executes on the owner's OWN word — asked.
    (round-1 recorded only probe+battery — floors were his run, not mine).
 5. Gates THIS round (all run by me): probe 24/24 · battery 160/160 (157+3) · regress floors
    28/28 · no WP1-reachable file touched → no regeneration.
+
+## WP2 BUILD round 3 (ChatGPT audit of `6f4a41d`, 2026-07-20) — his final boundary check:
+## ONE table-driven input-schema guard. 7 of 8 gaps reproduced locally before fixing (the
+## 8th — props-as-list — happened to fail cleanly by ACCIDENT, not law; the guard makes it law).
+Reproduced: padded ' C ' ACCEPTED as company (the WP1 padded-names class, at a new boundary) ·
+int 123 ACCEPTED · driver_node/edge_map/definitional_evidence as strings → AttributeError
+CRASHES · blank parsed source id and blank Driver name both EMITTED anchors. FIX (one general
+rule, no special-case machinery): mapping guard for props/driver_node/edge_map at entry; a
+present definitional_evidence must be a mapping (replaces the `or {}` idiom that crashed on
+truthy non-mappings); parsed source id + Driver name must be nonblank; company must be a
+nonblank UNPADDED string (blank keeps its round-2 message; padded/non-string get the new one).
+Stale plan clue wording replaced with "prior qname supplied by the sole ACTIVE
+ConceptResolution". Gates: probe 25/25 · battery 161/161 (160+1) · regress floors 28/28 ·
+no WP1-reachable file touched → no regeneration.

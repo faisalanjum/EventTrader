@@ -25,7 +25,8 @@ evidence; ambiguity → abstain) | no_proven_match. No printed quote → abstain
    function. Pure, no I/O; FAILS CLOSED on: missing identity field · blank wording clues ·
    MULTIPLE active ConceptResolutions · a numeric fact lacking series_unit (numberless stays
    legal with series_unit=None). Anchor clues = birth_quotes PRIMARY · stored fact quote
-   fallback (LWW) · an ACTIVE ConceptResolution · prior qname as RETRIEVAL ONLY.
+   fallback (LWW) · the prior qname supplied by the sole ACTIVE ConceptResolution
+   (retrieval only, never proof).
    **NO prior (axis,member) pairs anywhere — old XBRL dimensions are never reused; each target
    source proves its own complete address.** Prove-or-stop: unreconstructable field → STOP,
    surface the smallest missing field. Pinned fixtures (live Driver nodes don't exist yet).
@@ -49,6 +50,10 @@ evidence; ambiguity → abstain) | no_proven_match. No printed quote → abstain
    carrier of the clue, not a separate clue kind; "reproduced live" is reserved for
    graph-backed runs ("locally" = synthetic calls); the 28/28 floors are run+recorded every
    build round.**
+   **Build-round-3 law (ONE general input-schema guard, table-driven): props / driver_node /
+   edge_map must be mappings; a present definitional_evidence must be a mapping; parsed
+   source id and Driver name must be nonblank; company must be a nonblank, UNPADDED string.
+   Malformed inputs raise clean ValueError — never an anchor, never a crash.**
 
 2. **NEUTRAL BOUNDARY FIRST.** The boundary test imports the ACTUAL locator entrypoint
    (`driver/relocation/locator.py`) in a subprocess **and EXECUTES one minimal R1 call and one
