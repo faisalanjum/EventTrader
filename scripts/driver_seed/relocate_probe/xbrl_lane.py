@@ -20,8 +20,10 @@ sys.path.insert(0, os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..', 'driver', 'relocation'))
 from oracle import _rows, _members_all
 import exact_numbers as XN
-from link_lib import seg_parse         # round-23 Track-2: ONE strict parser for BOTH lanes —
-                                        # this lane shared the garbage-segment masquerade
+from locator import seg_parse          # round-23 Track-2: ONE strict parser for BOTH lanes —
+                                        # this lane shared the garbage-segment masquerade.
+                                        # WP2 step 2: imported from its neutral home
+                                        # (driver/relocation) — the inverted channel edge is gone
 
 HERE = os.path.dirname(__file__)
 

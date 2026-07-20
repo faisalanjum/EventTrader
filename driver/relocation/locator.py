@@ -143,3 +143,67 @@ def rebuild_anchor(fact_id, props, driver_node, edge_map, concept_resolutions=()
         "concept_clue": actives[0] if actives else None,   # RETRIEVAL only — never proof
     }
     return anchor, sorted(k for k in ("period", "quote_hash") if k in parsed)
+
+
+# ---------- THE single strict XBRL dimension parser (WP2 step 2: relocated VERBATIM from ----------
+# ---------- link_lib — "one parser truly one"; link_lib AND xbrl_lane import from HERE ----------
+def _nb(x):
+    """nonblank UNPADDED string — the ONLY legal axis/member form (round-23: whitespace and
+    numeric axes were binding; round-24: padded names are malformed storage, census 0/47,152)."""
+    return isinstance(x, str) and bool(x.strip()) and x == x.strip()
+
+
+def seg_parse(fc):
+    """(pairs, complete) — THE single all-shapes segment parser (round-23: the strict form;
+    relocated here WP2 step 2, body byte-identical).
+    pairs = [(axis_qname, member_qname)] across ALL four storage shapes: {dimension,value},
+    single explicitMember.$t, the multi-axis explicitMember-LIST, explicitMember-as-bare-string.
+    complete = every entry (and every list element) parsed to >=1 pair AND every axis/member is a
+    NONBLANK STRING. A nonempty segment with complete=False must NEVER bind anywhere — a missed
+    extraction must not masquerade as consolidated (ChannelContract §3 / OD-17c), and a partially
+    parsed fact's slice identity is unprovable. FETCH-only: raw axis+member; the shared
+    decomposer classifies downstream."""
+    seg = fc.get('segment')
+    if not seg:
+        return [], True
+    items = seg if isinstance(seg, list) else [seg]
+    out, complete = [], True
+    for s in items:
+        if not isinstance(s, dict):
+            complete = False
+            continue
+        if 'value' in s and 'explicitMember' in s:
+            complete = False               # round-24: an entry MIXING storage formats is
+            continue                       # malformed (census 0/47,152 — zero real cost)
+        got = 0
+        if 'value' in s:
+            if _nb(s.get('dimension')) and _nb(s.get('value')):
+                out.append((s['dimension'], s['value'])); got += 1
+            else:
+                complete = False
+        em = s.get('explicitMember')
+        if isinstance(em, list):                         # multi-axis: explicitMember is a LIST
+            for m in em:
+                if isinstance(m, dict) and _nb(m.get('dimension')) and _nb(m.get('$t')):
+                    out.append((m['dimension'], m['$t'])); got += 1
+                else:
+                    complete = False
+        elif isinstance(em, dict):
+            if _nb(em.get('dimension')) and _nb(em.get('$t')):
+                out.append((em['dimension'], em['$t'])); got += 1
+            else:
+                complete = False
+        elif isinstance(em, str):                        # bare string: the axis sits on `s`
+            if _nb(s.get('dimension')) and _nb(em):
+                out.append((s['dimension'], em)); got += 1
+            else:
+                complete = False
+        elif em is not None:
+            complete = False
+        if got == 0:
+            complete = False                             # an entry that yields nothing
+    axes = [a for a, _ in out]
+    if len(axes) != len(set(axes)):
+        complete = False                   # round-24: a REPEATED AXIS is not a valid complete
+                                           # dimension address (census 0/47,152)
+    return out, complete

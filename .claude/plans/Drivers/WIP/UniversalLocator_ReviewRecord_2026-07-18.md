@@ -1319,3 +1319,28 @@ NEXT: Step 2 — execute both real route calls, then prove no fiscal/channel cod
 3. RED-COMMIT RULE (adopted into the plan): the boundary test is AUTHORED first but a failing
    test is NEVER committed to main — it lands in the commit that turns it green with the
    routes. No regeneration (document edits only).
+
+## WP2 STEP-2 increment A (2026-07-20) — lock final + reviewer GO; the locked order executed:
+## RED boundary test authored → seg_parse relocation PROVEN → the durable 150-case gate.
+1. BOUNDARY TEST AUTHORED RED (driver/relocation/test_neutral_boundary.py, UNCOMMITTED by
+   rule): subprocess imports the real entrypoint, EXECUTES one R1 call (XBRL source) + one R2
+   call (text source + source_id-stamped value hint), then a PATH-BASED sys.modules sweep —
+   no loaded module may live under scripts/driver_seed (general law, no name list). Defines
+   the entrypoint: locate(anchor, source, hints=None) → {'items','status'}. Confirmed RED.
+2. ONE PARSER, ONE HOME: seg_parse + _nb relocated VERBATIM into driver/relocation/locator.py;
+   link_lib AND xbrl_lane now import from there (the inverted channel edge is gone; link_lib
+   already carried the driver/relocation path insert). _nb had no other consumers (grepped).
+3. THE COMPLETE-FINAL-DIFF PROOF (the regeneration law, executed): the pinned manifest command
+   re-run at HEAD to --tag wp2diff + build_packets --tag wp2diff. ALL SEVEN content files
+   BYTE-IDENTICAL to the committed wp1/ outputs (abstain · code_resolved · residual ·
+   sources_ledger · packets · park_ledger · skip_ledger); code_summary differs ONLY by its
+   embedded tag string (sed-normalized diff empty). Relocation ACCEPTED; scratch dir removed;
+   NO regeneration required (outputs unchanged at HEAD).
+4. THE DURABLE 150-CASE GATE SHIPPED (scripts/driver_seed/relocate_probe/test_xbrl_gate.py,
+   battery-collected): the exact seed-7 selection pinned by sha 84274ebe87…; exact-Decimal
+   comparison (never int(float())); every case in exactly one bucket, buckets sum to 150;
+   empty pool/fetch FAILS. FIRST PINNED RUN: baseline holds EXACTLY {ok:130, abstain:20,
+   wrong:0} under exact Decimal — NO loss, nothing to owner-gate.
+5. Gates: battery 163/163 (162+1, RED boundary file excluded as uncommitted) · floors 28/28
+   (run post-move). NEXT: routes R1 (own-source enumeration) + R2 (known-value) in locator.py
+   → boundary test GREEN → ONE commit carrying the boundary test.
