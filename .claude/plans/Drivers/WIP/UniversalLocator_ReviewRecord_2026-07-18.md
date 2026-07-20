@@ -1860,3 +1860,24 @@ fixture d7d2f068 unchanged, 130/20/0 · floors 28/28 · runtime sweep CLEAN · b
 FOR HIS VERDICT: (a) the wording-side Adjusted case above; (b) the rejected 685,614
 (evidence: the 1,367 measured wrong-classes); (c) the sub-70-day count difference
 (213,732 mine vs 245,464 his — population definitions differ, both stand recorded).
+
+## SELF-CAUGHT RESIDUAL — post-68d5941, PRE-AUDIT (2026-07-20, owner's precision-rule
+## re-check; both shapes LIVE-REPRODUCED before recording; no code changed — the fix needs
+## a design ruling and the corrective-4 mandate forbade scope expansion).
+(d) SINGLE-CANDIDATE PERIOD-DETAIL BLINDNESS: on the single-occurrence/single-candidate
+path the (cadence, comparative) clause signature is checked for CADENCE ONLY — the
+comparative flag pairs candidates only in the multi-candidate one-to-one. Reproduced: a
+payload carrying ONLY the current-quarter fact binds the sentence '… in the prior year
+quarter.' to the CURRENT quarter's context (values must collide exactly AND the
+counterpart fact must be absent — full 10-K/Q XBRL tags comparatives, so exposure is
+partial payloads: 8-K/press-release XBRL; R2 is safe, it attaches no context). Same
+class: an instant fact (2024-12-31) binds '… as of December 31, 2023' — printed DATES are
+not parsed (v5.5: XBRL is the period authority; wording contributes CLASS evidence only),
+so the new instant law proves point-in-time-ness, not WHICH point. WHY NOT FIXED HERE:
+enforcing flag↔is-earlier on singles requires defining is-earlier across the SOURCE
+(cross-value/cross-blob 'latest period for this concept'), a change to the enumeration
+law = the reviewer's design call; a date-text parser is likewise a design expansion. His
+options as I see them: (i) source-level is-earlier + flag enforcement on all paths;
+(ii) comparative-flagged clauses REQUIRE a matching earlier candidate else abstain
+(fail-closed, costs the absent-counterpart recall); (iii) accept the residual as a
+documented partial-payload limitation. Awaiting his verdict alongside items (a)-(c).
