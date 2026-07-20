@@ -9,7 +9,8 @@ TRUSTED edge map — the exactly-one graph-edge query's output) · driver · fac
 slice · measurement · series_unit · time_type.
 Search clues (NON-authoritative, retrieval only, never proof): wording = the Driver's immutable
 definitional_evidence.birth_quotes PRIMARY, the stored fact quote as fallback (LWW, hence
-fallback only) · one ACTIVE ConceptResolution qname when EXACTLY one exists.
+fallback only) · the PRIOR QNAME, supplied BY an ACTIVE ConceptResolution when exactly one
+exists (the ConceptResolution is the carrier of the qname clue, not a separate clue kind).
 NO prior (axis, member) pairs — old XBRL dimensions are never reused; each target source proves
 its own complete address.
 
@@ -46,9 +47,11 @@ def rebuild_anchor(fact_id, props, driver_node, edge_map, concept_resolutions=()
     if len(seg) != 4 or seg[0] != "du":
         raise ValueError(f"bad id shape: {fact_id!r}")
     _, source_id, driver, scope = seg
-    for key in ("fact_scope", "series_unit", "time_type"):
-        if key not in props:
-            raise ValueError(f"missing identity field: props[{key!r}]")
+    for key in ("fact_scope", "series_unit", "time_type") + _VALUE_SLOTS:
+        if key not in props:                # ALL five value slots must be PRESENT — explicit
+            raise ValueError(f"missing identity field: props[{key!r}]")   # None is the only
+                                            # legal "no value"; absent keys = missing data,
+                                            # never silently "numberless"
     if props["fact_scope"] != scope:
         raise ValueError(f"stored fact_scope != id suffix: {props['fact_scope']!r} vs {scope!r}")
     parsed = {}
@@ -80,6 +83,8 @@ def rebuild_anchor(fact_id, props, driver_node, edge_map, concept_resolutions=()
     if company is None:
         raise ValueError(f"no company edge for THIS fact's source id {source_id!r} "
                          f"(cross-wired or missing edge)")
+    if isinstance(company, str) and not company.strip():
+        raise ValueError(f"blank company id for source {source_id!r} — corrupt edge, fail closed")
     bq = (driver_node.get("definitional_evidence") or {}).get("birth_quotes", ())
     if not isinstance(bq, (list, tuple)):
         raise ValueError(f"malformed birth_quotes: expected list/tuple of nonblank strings, "
@@ -94,6 +99,10 @@ def rebuild_anchor(fact_id, props, driver_node, edge_map, concept_resolutions=()
             wording = (sq,)
         else:
             raise ValueError("blank wording clues: no birth_quotes and no stored fact quote")
+    if not isinstance(concept_resolutions, (list, tuple)):
+        raise ValueError(f"malformed ConceptResolution clues: expected list/tuple, got "
+                         f"{type(concept_resolutions).__name__}")   # a bare string iterates
+                                                                    # into CHARACTERS; None crashes
     actives = tuple(concept_resolutions)
     if len(actives) > 1:
         raise ValueError(f"{len(actives)} ACTIVE ConceptResolutions — ambiguous, fail closed")

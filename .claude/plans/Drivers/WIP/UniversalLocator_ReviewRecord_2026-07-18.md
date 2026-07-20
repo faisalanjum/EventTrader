@@ -1196,7 +1196,8 @@ per the arc's push-precedent (relayed instruction ≠ owner word for owner-gated
 lock executes on the owner's OWN word — asked.
 
 ## WP2 BUILD round 1 (ChatGPT audit of `5f3aeb9`, 2026-07-19) — step 1 NOT accepted; all
-## three of his bugs REPRODUCED live before fixing; corrective commit follows; NO regeneration.
+## three of his bugs reproduced LOCALLY (synthetic calls — "live" corrected round 2: this arc
+## reserves "live" for graph-backed runs) before fixing; corrective commit follows; NO regen.
 1. LETTERS BUG (reproduced: birth_quotes="Revenue" → wording ('R','e','v','e','n','u','e')):
    birth_quotes must be a list/tuple of NONBLANK STRINGS; a bare string or any blank/non-string
    member is malformed → ValueError, never silently repaired/filtered.
@@ -1220,3 +1221,25 @@ lock executes on the owner's OWN word — asked.
    TRACKED (his auditability request — the untracked convention was mine, not an owner
    ruling). Gates: probe 21/21 · battery 157/157 (155+2; three tests rewritten in place, two
    added) · no WP1-reachable file touched → no regeneration.
+
+## WP2 BUILD round 2 (ChatGPT audit of `3e3e3d9`, 2026-07-20) — fixes confirmed by him
+## (21/21 · 157/157 · floors 28/28 independently); TWO remaining holes + a sibling miss, ALL
+## reproduced locally before fixing. Corrective commit follows; NO regeneration.
+1. ABSENT VALUE SLOTS ≠ NUMBERLESS (reproduced: props with no slot keys → accepted as
+   numberless): all FIVE normalized value keys must be PRESENT — explicit None is the only
+   legal no-value; each absent key is named (prove-or-stop). Closes the unit-less
+   stripped-slots masquerade the round-1 unit law could not reach.
+2. BLANK COMPANY ID (reproduced: edge_map value '' → accepted as the company): blank-string
+   company ids rejected as corrupt edges; None keeps the cross-wired/missing message.
+3. CONCEPT-CLUE CONTAINER (reproduced: bare 'R' ACCEPTED as clue; 'us-gaap:Revenues' failed
+   with the WRONG reason — "16 ACTIVE ConceptResolutions"; None → TypeError CRASH): the
+   SIBLING of round-1's letters bug, in the SAME function — my miss, owned (the
+   sibling-parity lesson yet again). concept_resolutions must be a list/tuple; at most one
+   member; that member a nonblank string.
+4. WORDING (his catches): round-1's "reproduced live" corrected to "reproduced locally" in
+   place — this arc reserves "live" for graph-backed runs; the ACTIVE ConceptResolution
+   SUPPLIES the prior qname (the carrier of the clue, not a separate clue kind) — docstring +
+   plan clarified; the 28/28 regression floors are now RUN AND RECORDED here each build round
+   (round-1 recorded only probe+battery — floors were his run, not mine).
+5. Gates THIS round (all run by me): probe 24/24 · battery 160/160 (157+3) · regress floors
+   28/28 · no WP1-reachable file touched → no regeneration.

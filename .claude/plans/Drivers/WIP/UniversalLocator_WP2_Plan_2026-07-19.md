@@ -41,6 +41,14 @@ evidence; ambiguity → abstain) | no_proven_match. No printed quote → abstain
    ONLY (the caller-supplied fact_quote channel is removed and signature-pinned); birth_quotes
    must be a list/tuple of nonblank strings (a bare string iterates into LETTERS — rejected);
    a sole ConceptResolution clue must be a nonblank string.**
+   **Build-round-2 laws (audit of `3e3e3d9`, all holes reproduced locally): ALL FIVE value
+   keys must be PRESENT — explicit None is the only legal no-value, absent keys = missing
+   data, never "numberless"; blank company ids rejected as corrupt edges; concept clues must
+   arrive as a list/tuple (bare string/None = the letters-bug sibling) holding at most ONE
+   nonblank string. Wording: the ACTIVE ConceptResolution SUPPLIES the prior qname — the
+   carrier of the clue, not a separate clue kind; "reproduced live" is reserved for
+   graph-backed runs ("locally" = synthetic calls); the 28/28 floors are run+recorded every
+   build round.**
 
 2. **NEUTRAL BOUNDARY FIRST.** The boundary test imports the ACTUAL locator entrypoint
    (`driver/relocation/locator.py`) in a subprocess **and EXECUTES one minimal R1 call and one

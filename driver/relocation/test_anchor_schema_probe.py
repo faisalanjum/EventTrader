@@ -431,3 +431,48 @@ def test_21_injection_channels_stay_closed():
     assert "fact_quote" not in params, "caller-supplied quote channel reintroduced"
     assert "numeric_value_present" not in params, "caller-asserted numeric flag reintroduced"
     assert params == {"fact_id", "props", "driver_node", "edge_map", "concept_resolutions"}
+
+
+def test_22_all_five_value_slots_must_be_present():
+    """Absent value-slot keys are MISSING DATA, never silently 'numberless' — explicit None is
+    the only legal no-value. Each missing key is named (prove-or-stop)."""
+    fid, _ = DI.build_id("SYN-ACC-Q", "revenue", period_id="gp_2024-01-01_2024-12-31")
+    d = drv("revenue", ("q",))
+    em = {"SYN-ACC-Q": "C"}
+    bare = {"fact_scope": fid.split(":", 3)[3], "series_unit": None, "time_type": "duration"}
+    with pytest.raises(ValueError, match="level_low"):
+        rebuild_anchor(fid, bare, d, em)
+    for slot in ("level_low", "level_high", "change_value", "comparison_low", "comparison_high"):
+        p = props(fid, None, "duration")
+        del p[slot]
+        with pytest.raises(ValueError, match=slot):
+            rebuild_anchor(fid, p, d, em)
+    a, _ = rebuild_anchor(fid, props(fid, None, "duration"), d, em)
+    assert a["series_unit"] is None, "all-present all-None + series_unit=None stays legal"
+
+
+def test_23_blank_company_id_rejected():
+    fid, _ = DI.build_id("SYN-ACC-R", "revenue", period_id="gp_2024-01-01_2024-12-31")
+    d = drv("revenue", ("q",))
+    p = props(fid, "m_usd", "duration")
+    with pytest.raises(ValueError, match="blank company id"):
+        rebuild_anchor(fid, p, d, {"SYN-ACC-R": ""})
+    with pytest.raises(ValueError, match="blank company id"):
+        rebuild_anchor(fid, p, d, {"SYN-ACC-R": "   "})
+    with pytest.raises(ValueError, match="cross-wired or missing edge"):
+        rebuild_anchor(fid, p, d, {"SYN-ACC-R": None})
+
+
+def test_24_concept_clues_container_must_be_list_or_tuple():
+    """The birth_quotes letters-bug class, sibling parameter: a bare string iterates into
+    CHARACTERS ('R' was accepted as a clue; a long string failed for the WRONG reason); None
+    crashed with TypeError. All must be clean ValueError rejections; a real list/tuple works."""
+    fid, _ = DI.build_id("SYN-ACC-S", "revenue", period_id="gp_2024-01-01_2024-12-31")
+    d = drv("revenue", ("q",))
+    p = props(fid, "m_usd", "duration")
+    em = {"SYN-ACC-S": "C"}
+    for bad in ("R", "us-gaap:Revenues", None, 3):
+        with pytest.raises(ValueError, match="expected list/tuple"):
+            rebuild_anchor(fid, p, d, em, concept_resolutions=bad)
+    a, _ = rebuild_anchor(fid, p, d, em, concept_resolutions=["us-gaap:Revenues"])
+    assert a["concept_clue"] == "us-gaap:Revenues"
