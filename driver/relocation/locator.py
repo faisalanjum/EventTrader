@@ -605,3 +605,152 @@ def match_facts(xbrls, concept_qname, pairs, period_start, period_end, unit_ref=
     """the value-only form of match_facts_explain (production callers)."""
     return match_facts_explain(xbrls, concept_qname, pairs, period_start, period_end,
                                unit_ref=unit_ref, expected_unit=expected_unit)[0]
+
+
+# ---------- THE neutral locate entrypoint (WP2 Chunk 2: routes R1 + R2, v5.5 §3) ----------
+def _wording_tokens(anchor):
+    """retrieval-only label tokens from the anchor's wording clues (order-stable, deduped)."""
+    toks = []
+    for w in anchor.get('wording') or ():
+        if isinstance(w, str):
+            for t in re.findall(r"[A-Za-z]{3,}", w):
+                tl = t.lower()
+                if tl not in toks:
+                    toks.append(tl)
+    return toks
+
+
+def _fact_period(fc):
+    """('duration'|'instant', ps, pe) for a VALID single-shape stored period, else None
+    (mixed instant+duration, partial, impossible, non-mapping, zero-length: never candidates)."""
+    p = fc.get('period')
+    if p is None or not isinstance(p, Mapping):
+        return None
+    inst, sd, ed = p.get('instant'), p.get('startDate'), p.get('endDate')
+    if inst is not None and (sd is not None or ed is not None):
+        return None
+    try:
+        if inst is not None:
+            ps, pe = XN.period_key(inst, inst)
+            return ('instant', ps, pe)
+        if sd is not None and ed is not None:
+            ps, pe = XN.period_key(sd, ed)
+            return None if ps == pe else ('duration', ps, pe)
+    except XN.ExactError:
+        return None
+    return None
+
+
+def _row_label(q, val, fmt):
+    """the printed ROW LABEL = the quote up to its (last bounded) value occurrence — an exact
+    target-source slice, never anchor wording."""
+    best = None
+    for fo in sorted(_tableforms(val, fmt)):
+        for m in re.finditer(re.escape(fo), q):
+            if at_boundary(q, m.start(), m.end()) and (best is None or m.start() > best):
+                best = m.start()
+    if best is None:
+        return None
+    return q[:best].rstrip(' \t$:(–—-') or None
+
+
+def _prove(texts, tokens, val, fmt):
+    """(quote, context, verdict) — verdict: 'ok' | 'ambiguous' (occurrences exist but >1
+    distinct signature) | 'absent'. The two row_quote calls share ONE implementation: the
+    with_context signature law decides attribution; the legacy call only distinguishes
+    occurrences-exist from truly-absent."""
+    q, ctx = row_quote(texts, tokens, val, fmt, scale_gate=True, with_context=True)
+    if q is not None:
+        return q, ctx, 'ok'
+    legacy = row_quote(texts, tokens, val, fmt, scale_gate=True)
+    return None, None, ('ambiguous' if legacy is not None else 'absent')
+
+
+def locate(anchor, source, hints=None):
+    """(anchor, ONE source payload, optional UNTRUSTED hints) →
+    {'items': [...], 'status': None | 'no_proven_match' | 'ambiguous' |
+    'insufficient_identity'} — v5.5 §3; reads ONLY the given payload (no fetching, no graph).
+    R1 (own-source XBRL enumeration): every VALID fact of the anchor's time shape, across ALL
+    periods present; every emission proven by an exact target-source quote (label + number in
+    one row, the scale-evidence law ON); a FULLY-stored concept identifier emits the xbrl
+    block (concept · axis_members · exact dates · ptype · raw unit); a bare stored name emits
+    a quote-proven item with NO xbrl block — never promoted. Candidates competing for ONE
+    printed occurrence with ANY identity difference (concept, pairs, period/shape, unit) are
+    ambiguous and abstain. Exact duplicates dedupe; output is blob-order-independent.
+    R2 (known-value hint): the hint must carry source_id EQUAL to this source's; missing/
+    mismatched/malformed stamps fail closed (the hint is discarded); the hinted value only
+    RETRIEVES — the target text proves; >1 distinct occurrence = ambiguous; text items carry
+    no xbrl block at all. raw_label/quote/period_evidence are always exact source slices."""
+    if not isinstance(anchor, Mapping) or not isinstance(source, Mapping):
+        return {'items': [], 'status': 'insufficient_identity'}
+    tokens = _wording_tokens(anchor)
+    if not tokens:
+        return {'items': [], 'status': 'insufficient_identity'}
+    texts = [t for t in (source.get('texts') or ()) if isinstance(t, str) and t]
+    want_ptype = anchor.get('time_type')
+    fmt = None
+    items, saw_ambiguous = [], False
+
+    by_value = {}                                     # R1: dedup exact duplicates, then group
+    for c, fc in _fact_rows(source.get('xbrls') or ()):   # candidates by printed value
+        shape = _fact_period(fc)
+        if shape is None or shape[0] != want_ptype:
+            continue
+        u = _norm_unit(fc.get('unitRef'))
+        if u is None or u is _BAD_UNIT:
+            continue                                  # numeric candidacy: nonblank string unit
+        pairs, complete = seg_parse(fc)
+        if not complete:
+            continue                                  # incomplete dims never masquerade as []
+        try:
+            v = XN.dec(fc.get('value'))
+        except XN.ExactError:
+            continue
+        key = (c, frozenset(pairs), shape, u)
+        by_value.setdefault(v, {})[key] = (c, tuple(sorted(tuple(p) for p in pairs)), shape, u)
+    for v in sorted(by_value, key=str):
+        q, ctx, verdict = _prove(texts, tokens, v, fmt)
+        if verdict == 'ambiguous':
+            saw_ambiguous = True
+            continue
+        if verdict == 'absent':
+            continue
+        cands = by_value[v]
+        if len(cands) > 1:                            # ONE printed occurrence, >1 identity
+            saw_ambiguous = True                      # -> unattributable, abstain
+            continue
+        c, spairs, shape, u = next(iter(cands.values()))
+        lbl = _row_label(q, v, fmt)
+        if lbl is None:
+            continue
+        item = {'raw_label': lbl, 'value': v, 'quote': q, 'period_evidence': ctx}
+        prefix, _, _local = c.rpartition(':')
+        if prefix:                                    # bare stored names are NEVER promoted
+            item['xbrl'] = {'concept': c, 'axis_members': list(spairs),
+                            'period_start': shape[1], 'period_end': shape[2],
+                            'ptype': shape[0], 'unit': u}
+        items.append(item)
+
+    if isinstance(hints, Mapping) and hints.get('source_id') is not None \
+            and hints.get('source_id') == source.get('source_id') \
+            and hints.get('value') is not None:       # R2: anything else = stamp fails closed
+        try:
+            hv = XN.dec(hints.get('value'))
+        except XN.ExactError:
+            hv = None                                 # malformed hinted value: discarded
+        if hv is not None:
+            q, ctx, verdict = _prove(texts, tokens, hv, fmt)
+            if verdict == 'ambiguous':
+                saw_ambiguous = True
+            elif verdict == 'ok':
+                lbl = _row_label(q, hv, fmt)
+                if lbl is not None:
+                    items.append({'raw_label': lbl, 'value': hv, 'quote': q,
+                                  'period_evidence': ctx})   # text item: NO xbrl block, ever
+
+    items.sort(key=lambda i: (i.get('xbrl', {}).get('period_start', ''),
+                              i.get('xbrl', {}).get('period_end', ''),
+                              str(i['value']), i['raw_label']))
+    if items:
+        return {'items': items, 'status': None}
+    return {'items': [], 'status': 'ambiguous' if saw_ambiguous else 'no_proven_match'}

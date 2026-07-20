@@ -1605,3 +1605,33 @@ RED (locate() does not exist). HOLDS honored: no routes/R1/R2, no boundary edit,
 real-source work, no acronym work, no Core edits, no Neo4j writes, no paid calls, no
 regeneration, final WP1 byte-comparison still deferred until routes complete, no push.
 Chunk 2 NOT begun — awaiting his independent audit.
+
+## WP2 CHUNK 2 (his work order, 2026-07-20; started at HEAD e970759, boundary hash 81eca0aa
+## confirmed + its RED reason re-recorded before any edit): the neutral
+## locate(anchor, source, hints=None) — routes R1 + R2; boundary GREEN untouched.
+RED-FIRST: all 13 required route tests written and confirmed RED (locate absent) before
+implementation; no RED test committed separately — this one commit turns everything green.
+IMPLEMENTATION (locator.py only): locate() + _wording_tokens (retrieval-only clue tokens) +
+_fact_period (valid single-shape stored periods; mixed/partial/impossible/zero-length never
+candidates) + _row_label (the printed row label = an exact quote slice up to the value — never
+anchor wording) + _prove (ONE row_quote implementation used twice: the with_context signature
+law decides attribution; the legacy call only separates occurrences-exist from truly-absent —
+no duplicated matcher logic). R1: enumerate this source's facts of the anchor's time shape
+across ALL periods; candidacy = valid shape + nonblank unit + complete dimensions + exact
+numeric value; dedup exact duplicates; per printed value ONE proof; >1 identity for one
+occurrence (concept/pairs/period-shape/unit) = ambiguous abstain; fully-stored concept emits
+the xbrl block {concept, axis_members, period_start, period_end, ptype, unit}; bare stored
+names NEVER promote (no xbrl key); scale-evidence law ON (fixtures use full-magnitude prints).
+R2: hint must be a Mapping whose source_id EQUALS this source's; missing/foreign/malformed
+stamps fail closed (hint discarded); hinted value retrieves, text proves; text items carry NO
+xbrl block; multi-occurrence = ambiguous. Statuses: None on success; no_proven_match /
+ambiguous / insufficient_identity (unusable anchor) on empty. Deterministic sort; blob-order
+independence pinned.
+GATES: 13 routes RED→GREEN + boundary GREEN UNTOUCHED (hash 81eca0aa before AND after; it
+executes both real routes and sweeps sys.modules — zero fiscal files load) · focused 108/108 ·
+full battery 188/188 (= the 174 baseline + 13 + 1, no loss) · live gate 2/2 -rs, fixture
+d7d2f068 unchanged, 130/20/0, no per-case movement · floors 28/28 · git diff --check clean.
+FILES: locator.py (+locate group) · test_locator_routes.py (new) · test_neutral_boundary.py
+(committed BYTE-UNCHANGED — its first commit) · this record. HOLDS: real-filing proofs, final
+WP1 byte comparison, acronym census, Core files, Neo4j writes, paid calls, regeneration,
+Chunk 3, push — all held. Awaiting his Chunk-2 audit.
