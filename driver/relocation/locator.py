@@ -45,11 +45,12 @@ def rebuild_anchor(fact_id, props, driver_node, edge_map, concept_resolutions=()
     Wording fallback comes ONLY from the stored fact's props["quote"] (LWW) — there is no
     caller-supplied quote channel.
     """
-    for ok, what in ((isinstance(props, Mapping), "props"),        # the input-schema guard:
-                     (isinstance(driver_node, Mapping), "driver_node"),   # malformed inputs
-                     (isinstance(edge_map, Mapping), "edge_map")):        # raise, never crash
-        if not ok:
-            raise ValueError(f"malformed input: {what} must be a mapping")
+    for ok, what in ((isinstance(fact_id, str), "fact_id must be a string"),
+                     (isinstance(props, Mapping), "props must be a mapping"),
+                     (isinstance(driver_node, Mapping), "driver_node must be a mapping"),
+                     (isinstance(edge_map, Mapping), "edge_map must be a mapping")):
+        if not ok:                             # the input-schema guard: malformed inputs
+            raise ValueError(f"malformed input: {what}")   # raise cleanly, never crash
     seg = fact_id.split(":", 3)
     if len(seg) != 4 or seg[0] != "du":
         raise ValueError(f"bad id shape: {fact_id!r}")

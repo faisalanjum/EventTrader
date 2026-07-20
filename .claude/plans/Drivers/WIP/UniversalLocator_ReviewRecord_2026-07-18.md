@@ -1257,3 +1257,11 @@ nonblank UNPADDED string (blank keeps its round-2 message; padded/non-string get
 Stale plan clue wording replaced with "prior qname supplied by the sole ACTIVE
 ConceptResolution". Gates: probe 25/25 · battery 161/161 (160+1) · regress floors 28/28 ·
 no WP1-reachable file touched → no regeneration.
+
+## WP2 BUILD round 4 (ChatGPT audit of `8116326`, 2026-07-20) — the final Step-1 boundary gap;
+## "I found no other material Step-1 issue." Reproduced locally: fact_id None/int/list/dict →
+## AttributeError CRASH, bytes → TypeError CRASH at .split(). FIX: fact_id joins the entry
+## guard table (must be a string); RED loop over all five types → clean ValueError. Scope held
+## exactly per his instruction: NO period/numeric/source-name/qname validation added (those
+## belong elsewhere). Gates: probe 26/26 · battery 162/162 (161+1) · regress floors 28/28 ·
+## no regeneration.

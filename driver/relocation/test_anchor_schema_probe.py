@@ -507,3 +507,15 @@ def test_25_input_schema_guard_malformed_inputs_raise_never_emit_or_crash():
         rebuild_anchor(fid, p, d, {"SYN-ACC-T": " C "})
     with pytest.raises(ValueError, match="nonblank, unpadded string"):
         rebuild_anchor(fid, p, d, {"SYN-ACC-T": 123})
+
+
+def test_26_non_string_fact_id_raises_never_crashes():
+    """Reproduced before fixing: None/int/list/dict fact_id crashed AttributeError and bytes
+    crashed TypeError at .split(). All must be clean ValueError."""
+    d = drv("revenue", ("q",))
+    p = {"fact_scope": "x", "series_unit": None, "time_type": "duration", "level_low": None,
+         "level_high": None, "change_value": None, "comparison_low": None,
+         "comparison_high": None}
+    for bad in (None, 3, ["du"], {"du": 1}, b"du:S:r:period=x"):
+        with pytest.raises(ValueError, match="fact_id must be a string"):
+            rebuild_anchor(bad, p, d, {"S": "C"})
