@@ -1782,3 +1782,81 @@ mechanically-pinned cases above — the two stop-and-report limits are named, no
 GATES: focused suites 151/151 · full battery 205/205 (NO loss from 205) · live gate 2/2,
 fixture d7d2f068 unchanged, 130/20/0 · floors 28/28 · runtime sweep CLEAN · boundary
 81eca0aa byte-unchanged · git diff --check clean. HOLDS all held; Chunk 3 not begun.
+
+## WP2 CHUNK-2 CORRECTIVE 4 (his audit of 742dcb7 — REJECTED; 4 bounded groups; 2026-07-20).
+## VERIFICATION BEFORE CODING (both directions, per the standing iron rule):
+## raw-'count' facts = 125 (his figure EXACT) · sub-70-day duration facts = 213,732 (his
+## 245,464 — same materiality, different query; both recorded) · his raw-recognized census
+## split REPRODUCED EXACTLY (a loose share-token rule yields his 685,614) and then REJECTED
+## WITH EVIDENCE: measured over ALL 12,877 (raw unitRef, semantic Unit.name) pairs, the
+## loose rule WRONG-CLASSES 1,367 facts (USDPShares = USD-per-share as count, 1,125; fused
+## foreign CAD/EUR/CHF-shares as count, 242). Precision-first, his figure is not chased.
+1. UNIT MEANINGS EXACT: the LEGAL enum now maps per-value to (accept-set, print-fmt,
+   expected-printed-signal) — usd accepts {usd, usd_per_share}; m_usd accepts {usd} ONLY
+   (dollar-per-share flip of my corrective-3 pin, HIS ORDER — test_27 rewritten both
+   directions, documented); count→{count}; percent family → {percent} printing '%';
+   basis_points → {percent} printing 'bps' ('120 basis points' accepted, '120%' dead);
+   x → {percent} printing 'x' ('8x' accepted, '8%' dead); unknown/garbage →
+   insufficient_identity. fmt 'x'/'bps' branches live in the NEUTRAL value stack
+   (_tableforms · value_forms · exact_form · value_ok) — channel callers never pass them
+   (zero certified impact; the battery guards). Suffix-print anchors expect NO adjacent
+   signal (their form IS the unit evidence): R1 rejects any contradicting mark, R2 is
+   satisfied by the printed suffix itself.
+   THE TOKENIZER (structural, replaces substrings): TWO splitters union — the standard
+   camelCase splitter (USDPerShare → USD·Per·Share, 5,229 facts) plus a BOUNDARY-ANCHORED
+   acronym-before-word run (USDshares → USD·shares; anchored so a hash-EMBEDDED acronym
+   ('…bUSDecj…', 17 corpus facts, semantic pure) is never extracted); 'xbrli' namespace
+   fusion peels (U_xbrlishares → shares, 1,670; U_iso4217USD_xbrlishares → usd+shares,
+   879); money = 'usd'-prefixed token or the united-states+dollar(s) pair; a
+   CENSUS-EARNED 47-code foreign-currency veto (every iso4217:* code in the graph minus
+   USD; 'usn' = US next-day dollar vetoed as a different series) kills cadPerShare,
+   eurPerShare, U_ChfShares, U_iso4217CAD_xbrlishares; unattributed dollar
+   (U_AustralianDollarShare) and per-without-money prove nothing; share/'count' tokens =
+   count with filler words and hash suffixes as structure (Unit_shares 4,224;
+   Unit_Standard_shares_<hash>). SHIPPED-CODE census: cross-class wrong-accepts 0
+   money-side AND 0 count-side; recall 685,232/692,129 shares · 324,058/327,402
+   USDshares; the remainder is opaque-numeric ids (Unit1 3,674 · U001 1,173 · U002 749 ·
+   Unit12 506 …) abstaining BY DESIGN — his own gap (6,515) shows his rule abstains
+   there too. NEVER claimed as full recovery.
+2. MEASUREMENT FAIL-CLOSED (evidence side): the label walk INSPECTS the word it stops on —
+   outside the zone AND ≥5 letters → HARD ABSTAIN (structural: function words are short;
+   'organic'/'adjusted' abstain, 'and' binds); the word BEFORE a colon is inspected by the
+   SAME rule ('Adjusted: Total …' abstains; the short speaker prefix 'CFO:' still binds —
+   transcripts preserved WITHOUT treating every colon safe); the capitalized case was
+   already dead (corrective 2). STOP-AND-REPORT, wording side (implemented nothing wrong,
+   his verdict requested): when the anchor's WORDING itself contains 'Adjusted' and
+   measurement='', 'Adjusted total revenue' as a fact label is mechanically
+   indistinguishable from a legitimate plain label of that name — without vocabulary the
+   mechanical layer cannot decide; today it binds as the plain series it claims to be
+   (wording authorizes nothing, the raw label shows what is printed). Country-code
+   text-only stands (his acceptance, no country table).
+3. PERIOD SHAPES v3: TIGHT span classes — q 80–100d · ytd6 170–190 · ytd9 260–290 ·
+   fy 350–380 · else abstain (the 31-day-month-as-quarter class is dead; sub-70-day
+   corpus = 213,732 facts); wording splits six-months → ytd6, nine-months → ytd9,
+   'year to date' → generic (honestly covers either; facing two YTD candidates it
+   abstains); COMPARATIVE words (prior|earlier|ago|last) are MODIFIERS, never classes —
+   clause signature = (cadence, comparative-flag), candidate signature = (span-class,
+   is-earlier = not max period_end among same-class candidates), and the per-clause
+   matcher pairs them ONE-TO-ONE (the current-Q/prior-Q same-value pair now resolves to
+   BOTH items; an undistinguished same-class pair stays honestly ambiguous); a
+   comparative-YEAR phrase alone ('in the prior year') carries fy cadence — the
+   corrective-3 recall pin holds; INSTANT facts now need PRINTED point-in-time evidence
+   in the clause (as of … | at … end/close — test_1 'at year end' and test_23 'at period
+   close' were already so worded; a bare instant number binds nothing).
+4. DURABLE PINS: routes 30 → 38 (+8): per-enum accept-sets (33) · structural tokens vs
+   substrings incl. every census-earned spelling both directions (34) · x/bps print
+   classes (35) · lowercase/colon measurement fail-closed (36) · tight spans +
+   six-vs-nine (37) · instant evidence (38) · current/prior one-to-one + honest
+   ambiguous (39) · R1 signal contradictions both directions + R2 positive-signal +
+   comparative-fy cadence (40). Fixture changes: ONLY test_27's dollar-share block
+   (his ordered flip, both directions pinned).
+BATTERY ARITHMETIC RECONCILED (self-audit): the recorded 205 = the 15-file battery list
+which EXCLUDES the live-gate file (run separately as 2/2) — pristine worktrees at
+d8b6ddc/b4f36a5/742dcb7 collect 201/207/207 = battery+gate exactly; no recording slip
+anywhere. Corrective 4 = 213 battery + 2 gate = 215 collected.
+GATES: routes 38/38 · full battery 213/213 (NO loss from 205; +8 new) · live gate 2/2,
+fixture d7d2f068 unchanged, 130/20/0 · floors 28/28 · runtime sweep CLEAN · boundary
+81eca0aa byte-unchanged · git diff --check clean. HOLDS all held; Chunk 3 not begun.
+FOR HIS VERDICT: (a) the wording-side Adjusted case above; (b) the rejected 685,614
+(evidence: the 1,367 measured wrong-classes); (c) the sub-70-day count difference
+(213,732 mine vs 245,464 his — population definitions differ, both stand recorded).

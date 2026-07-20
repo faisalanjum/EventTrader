@@ -316,13 +316,17 @@ def test_27_unit_class_law_positive_match_required():
         r = LOC.locate(ANCHOR, src([xb],
                                    ["Total widget revenue was 4,000,000,000 for the year"]))
         assert r['items'] == [], (bad, r)
-    # corrective-3 ORDERED REVERSAL: dollar-per-share units SUPPORT the usd meaning (per-X
-    # lives in the metric NAME - the owner's locked ruling; 327,402 real USDshares facts)
+    # corrective-4 ORDERED RE-FLIP: dollar-per-share supports the 'usd' anchor enum ONLY —
+    # an 'm_usd' (millions-of-dollars) series can never be a per-share number (his per-enum
+    # accept-sets; 327,402 real USDshares facts stay reachable through 'usd')
     ps = blob('us-gaap:EarningsPerShareDiluted',
               [fact('4000000000', D24, unit='U_UnitedStatesOfAmericaDollarsShare')])
     rp = LOC.locate(ANCHOR, src([ps],
                                 ["Total widget revenue was 4,000,000,000 for the year"]))
-    assert len(rp['items']) == 1, 'dollar-per-share is USD money and must support m_usd'
+    assert rp['items'] == [], 'm_usd must never accept a dollar-per-share unit'
+    rpu = LOC.locate(dict(ANCHOR, series_unit='usd'),
+                     src([ps], ["Total widget revenue was 4,000,000,000 for the year"]))
+    assert len(rpu['items']) == 1, 'dollar-per-share is USD money and must support usd'
     # share-only units are COUNTS and support count anchors (692,129 real shares facts)
     cnt = dict(ANCHOR, series_unit='count', wording=('Widget shares outstanding',))
     sh = blob('us-gaap:SharesOutstanding', [fact('91000000', D24, unit='shares')])
@@ -400,3 +404,173 @@ def test_32_large_number_overflow_class_abstains_never_crashes():
     s = src(texts=["Total widget revenue was 4,000,000,000 in the quarter"], sid='S1')
     r2 = LOC.locate(ANCHOR, s, hints={'source_id': 'S1', 'value': '1e309'})
     assert r2['items'] == []
+
+
+FY_TEXT = ["Total widget revenue was 4,000,000,000 for the year"]
+
+
+def test_33_unit_enum_per_anchor_accept_sets():
+    """Corrective 4: the LEGAL anchor enum maps to exact accept-sets (contract logic — the
+    reviewer's words): usd accepts plain-USD AND dollar-per-share; m_usd plain-USD only
+    (pinned in test_27); money-per-physical is plain money (per-X lives in the NAME — the
+    owner's locked ruling); 'unknown' can never prove a unit."""
+    usd_a = dict(ANCHOR, series_unit='usd')
+    ps = blob('us-gaap:EarningsPerShareDiluted',
+              [fact('4000000000', D24, unit='U_UnitedStatesOfAmericaDollarsShare')])
+    assert len(LOC.locate(usd_a, src([ps], FY_TEXT))['items']) == 1
+    mwh = blob('us-gaap:Revenues', [fact('4000000000', D24, unit='usdPerMWh')])
+    assert len(LOC.locate(usd_a, src([mwh], FY_TEXT))['items']) == 1
+    assert len(LOC.locate(ANCHOR, src([mwh], FY_TEXT))['items']) == 1, \
+        "money-per-physical is PLAIN money and supports m_usd"
+    r = LOC.locate(dict(ANCHOR, series_unit='unknown'), src([ps], FY_TEXT))
+    assert r['items'] == [] and r['status'] == 'insufficient_identity'
+
+
+def test_34_structural_unit_tokens_beat_substrings():
+    """Corrective 4: raw units are TOKENIZED (camelCase + underscore), never substring-matched.
+    Corpus-real foreign per-share money (cadPerShare, U_AustralianDollarShare) must never
+    class as count or usd; an opaque id whose casefold merely CONTAINS 'usd' proves nothing;
+    the raw 'count' token supports count anchors (125 corpus facts)."""
+    cnt = dict(ANCHOR, series_unit='count', wording=('Widget shares outstanding',))
+    sh_text = ["Widget shares outstanding were 91,000,000 for the year"]
+    for u in ('cadPerShare', 'eurPerShare', 'U_AustralianDollarShare'):
+        xb = blob('us-gaap:SharesOutstanding', [fact('91000000', D24, unit=u)])
+        assert LOC.locate(cnt, src([xb], sh_text))['items'] == [], (u, 'count')
+        xb2 = blob('us-gaap:Revenues', [fact('4000000000', D24, unit=u)])
+        assert LOC.locate(dict(ANCHOR, series_unit='usd'),
+                          src([xb2], FY_TEXT))['items'] == [], (u, 'usd')
+        assert LOC.locate(ANCHOR, src([xb2], FY_TEXT))['items'] == [], (u, 'm_usd')
+    op = blob('us-gaap:Revenues', [fact('4000000000', D24, unit='StatUSdata')])
+    assert LOC.locate(dict(ANCHOR, series_unit='usd'), src([op], FY_TEXT))['items'] == []
+    store = dict(ANCHOR, series_unit='count', wording=('Widget store count',))
+    xb3 = blob('us-gaap:StoreCount', [fact('91000000', D24, unit='count')])
+    r = LOC.locate(store, src([xb3], ["Widget store count was 91,000,000 for the year"]))
+    assert len(r['items']) == 1, "the raw 'count' unit token must support a count anchor"
+    # census-earned corpus spellings (2026-07-20 graph run; all semantics verified): filler
+    # words, namespace fusions and split acronyms are STRUCTURE, not meaning
+    for u in ('Unit_shares', 'U_xbrlishares', 'Unit_Standard_shares_Y15NdpV5I02KeniTJOfxXA'):
+        xb4 = blob('us-gaap:SharesOutstanding', [fact('91000000', D24, unit=u)])
+        assert len(LOC.locate(cnt, src([xb4], sh_text))['items']) == 1, (u, 'count-bind')
+    usd_a = dict(ANCHOR, series_unit='usd')
+    for u in ('USDPerShare', 'USDPShares', 'U_iso4217USD_xbrlishares'):
+        xb5 = blob('us-gaap:EarningsPerShareDiluted', [fact('4000000000', D24, unit=u)])
+        assert len(LOC.locate(usd_a, src([xb5], FY_TEXT))['items']) == 1, (u, 'usd-bind')
+    # fused FOREIGN per-share money and a hash-EMBEDDED 'USD' stay dead (corpus-real poison);
+    # each fixture's text WOULD prove the quote — only the unit law kills it
+    for u, a, txts in (('U_iso4217CAD_xbrlishares', cnt, sh_text),
+                       ('U_ChfShares', cnt, sh_text),
+                       ('U_iso4217CAD_xbrlishares', usd_a, FY_TEXT),
+                       ('Unit_Standard_pure_yB7FUlDBbUSDecjWod1rCQ', usd_a, FY_TEXT)):
+        val = '91000000' if txts is sh_text else '4000000000'
+        xb6 = blob('us-gaap:SharesOutstanding', [fact(val, D24, unit=u)])
+        assert LOC.locate(a, src([xb6], txts))['items'] == [], (u, a['series_unit'])
+
+
+def test_35_x_and_bps_print_classes():
+    """Corrective 4: 'x' and 'basis_points' anchors prove in their OWN print classes — an
+    x-anchor accepts '8x' and rejects '8%'; a bps anchor accepts '120 basis points' and
+    rejects '120%'. The '%' mark can never satisfy either."""
+    xa = dict(ANCHOR, series_unit='x', wording=('Net leverage ratio',))
+    xb = blob('us-gaap:LeverageRatio', [fact('8', D24, unit='pure')])
+    ok = LOC.locate(xa, src([xb], ["Net leverage ratio was 8x for the year"]))
+    assert len(ok['items']) == 1, ok
+    assert LOC.locate(xa, src([xb], ["Net leverage ratio was 8% for the year"]))['items'] == []
+    ba = dict(ANCHOR, series_unit='basis_points', wording=('Widget margin improvement',))
+    bp = blob('us-gaap:MarginChange', [fact('120', D24, unit='pure')])
+    ok2 = LOC.locate(ba, src([bp],
+                             ["Widget margin improvement was 120 basis points for the year"]))
+    assert len(ok2['items']) == 1, ok2
+    assert LOC.locate(ba, src([bp],
+                              ["Widget margin improvement was 120% for the year"]))['items'] == []
+
+
+def test_36_measurement_fail_closed_lowercase_and_colon():
+    """Corrective 4: the label walk INSPECTS the word it stops on — a >=5-letter word outside
+    the anchor's zone is an unexplained qualifier (abstain), whether plain or before a colon;
+    short function words and short speaker prefixes ('and', 'CFO:') stay safe."""
+    xb = blob('us-gaap:Revenues', [fact('4000000000', D24)])
+    r = LOC.locate(ANCHOR, src(
+        [xb], ["organic total widget revenue was 4,000,000,000 for the year"]))
+    assert r['items'] == [], "a lowercase unexplained qualifier must abstain"
+    r2 = LOC.locate(ANCHOR, src(
+        [xb], ["Adjusted: Total widget revenue was 4,000,000,000 for the year"]))
+    assert r2['items'] == [], "the word BEFORE a colon is inspected by the same rule"
+    r3 = LOC.locate(ANCHOR, src(
+        [xb], ["Costs fell and total widget revenue was 4,000,000,000 for the year"]))
+    assert len(r3['items']) == 1, "short function words never poison the label"
+
+
+def test_37_period_tight_spans_and_six_vs_nine():
+    """Corrective 4: tight span classes (q 80-100 · ytd6 170-190 · ytd9 260-290 · fy 350-380);
+    a 31-day month is NOT a quarter; six-months wording never binds a nine-month span and
+    vice versa; generic 'year to date' honestly covers either YTD shape."""
+    mo = blob('us-gaap:Revenues', [fact('4000000000',
+              {'startDate': '2024-12-01', 'endDate': '2024-12-31'})])
+    r = LOC.locate(ANCHOR, src([mo], ["Total widget revenue was 4,000,000,000 in the quarter"]))
+    assert r['items'] == [], "a 31-day span must never ride quarter wording"
+    ytd9 = blob('us-gaap:Revenues', [fact('3000000000',
+                {'startDate': '2024-01-01', 'endDate': '2024-09-30'})])
+    assert LOC.locate(ANCHOR, src([ytd9],
+        ["Total widget revenue was 3,000,000,000 for the six months"]))['items'] == []
+    ytd6 = blob('us-gaap:Revenues', [fact('2000000000',
+                {'startDate': '2024-01-01', 'endDate': '2024-06-30'})])
+    assert LOC.locate(ANCHOR, src([ytd6],
+        ["Total widget revenue was 2,000,000,000 for the nine months"]))['items'] == []
+    assert len(LOC.locate(ANCHOR, src([ytd9],
+        ["Total widget revenue was 3,000,000,000 year to date"]))['items']) == 1
+    assert len(LOC.locate(ANCHOR, src([ytd6],
+        ["Total widget revenue was 2,000,000,000 year to date"]))['items']) == 1
+
+
+def test_38_instant_needs_printed_as_of_evidence():
+    """Corrective 4: an instant fact binds only when the clause PRINTS point-in-time evidence
+    ('as of ...' / 'at ... end|close') — instant is no longer exempt from period wording."""
+    inst = dict(ANCHOR, time_type='instant', wording=('Total widget cash',))
+    xb = blob('us-gaap:Cash', [fact('86000000', {'instant': '2024-12-31'})])
+    r = LOC.locate(inst, src([xb], ["Total widget cash was 86,000,000 as reported"]))
+    assert r['items'] == [], "no printed as-of evidence -> abstain"
+    for good in ("Total widget cash was 86,000,000 as of December 31",
+                 "Total widget cash was 86,000,000 at quarter close"):
+        assert len(LOC.locate(inst, src([xb], [good]))['items']) == 1, good
+
+
+def test_39_current_and_prior_quarter_pair_resolve_one_to_one():
+    """Corrective 4: comparative words are MODIFIERS, not period classes — a current/prior
+    quarter pair with the SAME value resolves one-to-one via the (class, comparative) pair;
+    an undistinguished same-class pair stays honestly ambiguous."""
+    xb = blob('us-gaap:Revenues', [
+        fact('4000000000', {'startDate': '2024-10-01', 'endDate': '2024-12-31'}),
+        fact('4000000000', {'startDate': '2023-10-01', 'endDate': '2023-12-31'})])
+    texts = ["Total widget revenue was 4,000,000,000 in the quarter. "
+             "Total widget revenue was 4,000,000,000 in the prior year quarter."]
+    r = LOC.locate(ANCHOR, src([xb], texts))
+    assert r['status'] is None and len(r['items']) == 2, r
+    spans = {(i['xbrl']['period_start'], i['xbrl']['period_end']) for i in r['items']}
+    assert spans == {('2024-10-01', '2024-12-31'), ('2023-10-01', '2023-12-31')}
+    texts2 = ["Total widget revenue was 4,000,000,000 in the quarter. "
+              "Total widget revenue was again 4,000,000,000 in the quarter."]
+    r2 = LOC.locate(ANCHOR, src([xb], texts2))
+    assert r2['items'] == [] and r2['status'] == 'ambiguous', r2
+
+
+def test_40_printed_signal_and_comparative_cadence_pins():
+    """Durable pins for already-working laws (route coverage): R1 printed-signal
+    contradictions both directions; R2's positive-signal requirement; a comparative-only
+    annual clause ('in the prior year') still carries fy cadence."""
+    xb = blob('us-gaap:Revenues', [fact('4000000000', D24)])
+    r = LOC.locate(ANCHOR, src(
+        [xb], ["Total widget revenue was 4,000,000,000 shares for the year"]))
+    assert r['items'] == [], "a money anchor must reject a printed shares signal"
+    cnt = dict(ANCHOR, series_unit='count', wording=('Widget shares outstanding',))
+    sh = blob('us-gaap:SharesOutstanding', [fact('91000000', D24, unit='shares')])
+    r2 = LOC.locate(cnt, src(
+        [sh], ["Widget shares outstanding were $91,000,000 for the year"]))
+    assert r2['items'] == [], "a count anchor must reject a printed dollar sign"
+    s = src(texts=["Total widget revenue was 4,000,000,000 in the quarter"], sid='SRC-8K')
+    r3 = LOC.locate(ANCHOR, s, hints={'source_id': 'SRC-8K', 'value': 4000000000})
+    assert r3['items'] == [], "R2 without any printed unit signal has no positive proof"
+    fy23 = blob('us-gaap:Revenues', [fact('3600000000',
+                {'startDate': '2023-01-01', 'endDate': '2023-12-31'})])
+    r4 = LOC.locate(ANCHOR, src(
+        [fy23], ["Total widget revenue was 3,600,000,000 in the prior year"]))
+    assert len(r4['items']) == 1, "comparative-year wording carries fy cadence"
