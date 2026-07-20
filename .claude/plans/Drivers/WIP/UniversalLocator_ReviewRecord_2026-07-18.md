@@ -1635,3 +1635,52 @@ FILES: locator.py (+locate group) · test_locator_routes.py (new) · test_neutra
 (committed BYTE-UNCHANGED — its first commit) · this record. HOLDS: real-filing proofs, final
 WP1 byte comparison, acronym census, Core files, Neo4j writes, paid calls, regeneration,
 Chunk 3, push — all held. Awaiting his Chunk-2 audit.
+
+## WP2 CHUNK-2 CORRECTIVE (his audit of 7f052b0: 12 production wrong-accepts, 2026-07-20).
+## 11 new pins RED-first (13 required cases; 2 already held), then the fixes; 3 of my first-
+## pass fixes were themselves wrong and re-fixed against failing tests (greedy label
+## extension dragged 'quarter' into an FY quote; the negative-sign law was missing — WP1
+## kept it in the channel's sign gate which I had not ported; the period-conflict surface
+## judged the whole quote, false-killing bled-window quotes — narrowed to the after-value
+## 60-char tail with the scope stated in-code).
+THE VALUE_OK CLOSURE MOVED VERBATIM (link_lib → locator, thin same-object re-exports;
+scripted cut+paste, same-object 7/7): _round_forms · value_forms · bounded_hit · exact_form ·
+printed_negative · _scale_tag_ok · value_ok (+import math). LOCATE LAWS ADDED: value_ok gate
+in _prove (sign/percent/scale/boundary — ONE rule, never copied) + the negative half
+(negative values need printed-negative NOTATION, the ported channel sign law) · retrieval
+tokens from the wording's LABEL PORTION (before its first digit — old prose words never
+required) · slice/measurement identity tokens must appear whole-word in the quote ·
+money/shares unit-class conflict abstains (census-earned markers) · calendar-structural
+period-word contradiction (annual↔quarter) on the after-value tail · XBRL context attaches
+ONLY when a camelCase token of the fact's OWN stored name ties to the quote (else text-only
+item — wrong concepts never ride) · leading CAPITALIZED qualifiers extend the quote/label
+(mechanical case rule, no vocabulary) · both source stamps validated nonblank-unpadded-string
+before equality · R1+R2 same-quote dedup keeps the XBRL-backed item · concept_clue narrows R1
+candidates (never proof, never required — pinned both directions).
+THE WP1 SAFETY-GATE CROSSWALK (his demand — WP1 rule → home → R1/R2? → status):
+1. numeric boundary (at_boundary) → NEUTRAL (Chunk 1) → yes → shared, parity via battery.
+2. value forms + exact/lossless print (value_forms/_round_forms/exact_form) → NEUTRAL (this
+   commit, verbatim) → yes → shared.
+3. percent-class guard (bounded_hit forbid_pct) → NEUTRAL (this commit) → yes → shared.
+4. sign law (printed_negative + the positive-vs-negative veto in value_ok; negative-needs-
+   notation ported into _prove) → NEUTRAL → yes → shared.
+5. scale evidence (required-multiplier: _required_div/_tail_div/_local_scale_divs +
+   _scale_tag_ok; row_quote scale_gate=True) → NEUTRAL (Chunks 1+2) → yes → shared.
+6. label adjacency + whole-word tokens + shortest-quote determinism (row_quote) → NEUTRAL
+   (Chunk 1) → yes → shared.
+7. occurrence SIGNATURE law (row_quote with_context) → NEUTRAL → yes → shared (attribution).
+8. dimension parsing strictness (seg_parse/_nb) → NEUTRAL (earlier) → yes → shared.
+9. pair-complete fact identity + period-shape + unit laws (match_facts) → NEUTRAL → yes.
+10. table/context windowing (_table_active_start/_snippet_start) → NEUTRAL (Chunk 1) → yes.
+CHANNEL-ONLY (correct — NOT route-relevant, stays in link_lib/locate/run_code_tier):
+tier1's value-KNOWN candidate ladder + slice-token/country/STRUCTURAL_PAIRS laws (fiscal
+KPI-name semantics: slice_tokens/member_tokens/_norm_initials/_drop_redundant_acronym/
+COUNTRY_NAME/STOP vocabularies — meaning rules the neutral side must never own) ·
+concept_ok/concept_type_ok (channel concept filters) · scan_text (channel discovery wrapper)
+· exact_cell/lock_cell (channel HTML lane) · stated_match/precision_grade/evidence_or_abstain
+(channel emit gates on FISCAL rows) · label_adjacent/expand_to_table (channel helpers) ·
+fetching/packets/vendor shaping (run_code_tier/build_packets). Every route-relevant WP1 gate
+now has ONE neutral implementation; none copied.
+GATES: routes+boundary 25/25 · full battery 199/199 (188+11) · live gate 2/2, fixture
+d7d2f068 unchanged, 130/20/0 · floors 28/28 · neutral runtime sweep CLEAN · boundary hash
+81eca0aa unchanged · git diff --check clean. HOLDS all held; Chunk 3 not begun.

@@ -445,6 +445,156 @@ def _snippet_start(t, hit_start, label_tokens, base=320, maxback=2200, table_cap
     return start
 
 
+# ---------- the value-proof gate (WP2 Chunk-2 corrective: value_ok closure, verbatim ----------
+# ---------- from link_lib — ONE exact value-proof rule for sign/percent/scale/boundary) ------
+import math
+
+def _round_forms(x):
+    forms = set()
+    for dec in (0, 1, 2, 3):
+        forms.add(f"{x:.{dec}f}")
+        f = math.floor(abs(x) * 10**dec) / 10**dec
+        forms.add(f"{f:.{dec}f}")
+    for f in list(forms):
+        if '.' in f:
+            forms.add(f.rstrip('0').rstrip('.'))
+    return {f for f in forms if f not in ('', '-', '0', '-0')}
+
+def value_forms(value, fmt='number', is_currency=1):
+    """All plausible verbatim string forms of a reported value."""
+    if value is None:
+        return set()
+    v = float(value); av = abs(v); forms = set()
+    if v == 0:
+        return {'0'}                       # a stated zero is a real value (WP1); boundary +
+                                           # label-adjacency provide the precision, never magnitude
+    if fmt == '%':
+        integral = (av == int(av))
+        for f in _round_forms(av):
+            if not integral and '.' not in f:
+                continue                   # 2.34 never accepts the integer-rounded print '2%'
+                                           # (owner F2: the gray zone belongs to the reader lane)
+            forms |= {f + '%', f + ' percent', f + ' percentage points', '(' + f + ')%', '(' + f + ')'}
+        bps = av * 100
+        if bps == int(bps):
+            forms.add(f"{int(bps)} basis points")
+        return forms
+    ai = int(round(av))
+    forms.add(_grp(str(ai))); forms.add(str(ai))
+    p = XN.plain(XN.dec(str(value)).copy_abs())
+    if '.' in p:
+        forms.add(p)                       # the EXACT fractional print (38.3) — WP1; the old code
+                                           # only made int-rounded + scaled forms, losing decimals
+    for div, tag in ((1e3, 'K'), (1e6, 'M'), (1e9, 'B'), (1e12, 'T')):
+        if av >= div / 10:
+            scaled = av / div; si = int(round(scaled))
+            if si >= 100:                # bare scaled int only when ≥3 digits — "20" for $20.372B would
+                forms.add(_grp(str(si))); forms.add(str(si))   # match any stray "20"; "20 billion" kept below
+
+            for f in _round_forms(scaled):
+                if '.' in f or len(f) >= 3:   # bare scaled form needs a decimal or ≥3 digits ("20" for
+                    forms.add(f)              # $20.372B matches any stray "20"; tagged forms below suffice)
+                forms.add(f + tag)
+                forms.add(f + ' ' + {'K': 'thousand', 'M': 'million', 'B': 'billion', 'T': 'trillion'}[tag])
+    if is_currency:
+        base = [f for f in forms if not f.startswith('$') and len(f) <= 12]
+        forms |= {'$' + f for f in base}; forms |= {'$ ' + f for f in base}
+    if v < 0:
+        forms |= {'(' + f.lstrip('$ ') + ')' for f in list(forms)}
+    return {f for f in forms if f and f not in ('0', '-0', '$0')}
+
+def bounded_hit(quote, form, forbid_pct=False):
+    """form occurs in quote at a numeric word boundary (not glued inside a bigger number).
+    forbid_pct: the occurrence must NOT be %-marked — a plain-number value never accepts a
+    percent token ('86' vs '86%', '86 %', '86 percent'; round-12 widened past the bare '%')."""
+    numeric = form[0].isdigit() or form[0] in '$('
+    for m in re.finditer(re.escape(form), quote):
+        if not at_boundary(quote, m.start(), m.end(), numeric):
+            continue
+        if forbid_pct and re.match(r'\s?(%|percent\b)', quote[m.end():m.end() + 9]):
+            continue
+        return True
+    return False
+
+
+# _TRAIL/_with_trail + the scale-evidence group (_SCALE_MARK/_SCALE_TAIL/_WORD2DIV/
+# _required_div/_tail_div/_local_scale_divs): WP2 Chunk 1 — relocated to
+# driver/relocation/locator.py (row_quote's closure); imported below.
+
+def exact_form(form, value, fmt):
+    """form reproduces value losslessly (grouped cell, long int, or decimal within 0.1%)."""
+    if fmt == '%':
+        return True
+    s = form.lstrip('$( ').rstrip(')%').replace(',', '')
+    try:
+        f = abs(float(s))
+    except ValueError:
+        return False
+    av = abs(float(value))
+    if av == 0:
+        return f == 0                      # a stated zero reproduces itself (WP1)
+    if '.' not in s and s.isdigit() and len(s) >= 4:
+        return True
+    for sc in (1, 1e3, 1e6, 1e9, 1e12):
+        if f > 0 and av > 0 and abs(f*sc - av)/av < 0.001:
+            return True
+    return False
+
+def printed_negative(quote, form):
+    """Does the quote print THIS number with accounting-negative NOTATION — '(123)' or '-123'?
+    Notation ONLY. A sign carried by a word ("operating loss of 331") is a MEANING call the core owns
+    (OD-12: the sign signal may be a noun, notation, or context) — code must never read words for sign.
+    Requires the closing ')' so an ordinary parenthetical ("(500 employees)") can't be misread."""
+    core = (form or '').lstrip('$( ').rstrip(')%').strip()
+    if not core:
+        return False
+    for m in re.finditer(re.escape(core), quote or ''):
+        pre, post = (quote[:m.start()]).rstrip(), (quote[m.end():]).lstrip()
+        if pre.endswith('(') and post.startswith(')'):
+            return True
+        if re.search(r'(?<![\w.])[-−]\s*$', pre):
+            return True
+    return False
+
+def _scale_tag_ok(quote, form, value):
+    """Round-14: no bind survives on a form whose EVERY occurrence carries a scale tag that
+    CONTRADICTS the claimed value ('1.2 million' never certifies 1.2 BILLION; '5,365 million'
+    never certifies plain 5,365). An occurrence with the right tag — or no tag — keeps it alive."""
+    req = _required_div(form, value)
+    for m in re.finditer(re.escape(form), quote or ''):
+        if not at_boundary(quote, m.start(), m.end()):
+            continue
+        td = _tail_div(quote, m.end())
+        if td is None or td == req:
+            return True
+    return False
+
+def value_ok(value, fmt, quote):
+    """final deterministic self-check: value present at a real boundary AND losslessly, and the quote's own
+    NOTATION does not contradict the value's sign.
+    SCOPE (unchanged): this proves the NUMBER is in the quote — never that the KPI/period/slice binding is
+    right (that is the binder + audits). The sign guard adds only the mechanical half: a value whose sign
+    the quote's notation flatly contradicts is a wrong bind. A plain print asserts nothing about sign, so it
+    is left to pass here and be judged where meaning lives — no keyword list, no guessed sign."""
+    # '0' is a legal single-char form (a stated zero is a real value — WP1); everything else
+    # keeps the >=2 guard against stray single digits.
+    forms = {f for f in value_forms(value, fmt or 'number') if len(f) >= 2 or f == '0'}
+    for div in (1e6, 1e9):
+        xx = abs(float(value)) / div
+        if xx >= 1:
+            for d in (1, 2):
+                forms.add(f"{xx:,.{d}f}")
+    hits = [f for f in forms if bounded_hit(quote, f, forbid_pct=(fmt != '%'))]
+    ok = [f for f in hits if exact_form(f, value, fmt)]
+    if fmt != '%':                        # round-14: a printed scale tag that contradicts the
+        ok = [f for f in ok if _scale_tag_ok(quote, f, value)]   # claimed value vetoes the bind
+    if not ok:
+        return False
+    if float(value) > 0 and any(printed_negative(quote, f) for f in ok):
+        return False                      # positive value vs a negative print -> wrong bind
+    return True
+
+
 # ---------- THE strict value-unknown fact matcher (WP2: PAIR-COMPLETE, neutral home) ----------
 
 
@@ -609,15 +759,29 @@ def match_facts(xbrls, concept_qname, pairs, period_start, period_end, unit_ref=
 
 # ---------- THE neutral locate entrypoint (WP2 Chunk 2: routes R1 + R2, v5.5 §3) ----------
 def _wording_tokens(anchor):
-    """retrieval-only label tokens from the anchor's wording clues (order-stable, deduped)."""
+    """retrieval-only label tokens from the anchor's wording clues — built from each clue's
+    LABEL PORTION (the text BEFORE its first digit; Chunk-2 corrective: a full prior quote
+    like 'International Stores 86 at fiscal year end' must never make its old prose words
+    required). Mechanical rule, no stop-word list."""
     toks = []
     for w in anchor.get('wording') or ():
         if isinstance(w, str):
-            for t in re.findall(r"[A-Za-z]{3,}", w):
-                tl = t.lower()
+            m = re.search(r'\d', w)
+            label_part = w[:m.start()] if m else w
+            for tk in re.findall(r"[A-Za-z]{3,}", label_part):
+                tl = tk.lower()
                 if tl not in toks:
                     toks.append(tl)
     return toks
+
+
+def _ident_tokens(field):
+    """identity tokens from an anchor slice/measurement field ('geography:united_states' ->
+    united/states): alpha>=3 from the value part, '_'-split. Mechanical, no vocabulary."""
+    if not isinstance(field, str) or not field.strip():
+        return []
+    val = field.split(':', 1)[-1]
+    return [tk.lower() for tk in re.findall(r"[A-Za-z]{3,}", val.replace('_', ' '))]
 
 
 def _fact_period(fc):
@@ -641,6 +805,62 @@ def _fact_period(fc):
     return None
 
 
+def _span_days(shape):
+    from datetime import date
+    if shape[0] != 'duration':
+        return None
+    a = date.fromisoformat(shape[1][:10]); b = date.fromisoformat(shape[2][:10])
+    return (b - a).days + 1
+
+
+_QUARTER_WORD = re.compile(r'(?<![a-z])quarter(?![a-z])', re.I)
+_ANNUAL_WORD = re.compile(r'(?<![a-z])(?:full year|annual|year ended)(?![a-z])', re.I)
+
+
+def _period_words_conflict(shape, q, ctx):
+    """Chunk-2 corrective: an XBRL period that CONTRADICTS the printed period wording abstains.
+    Calendar-STRUCTURAL patterns only (quarter vs annual), never domain vocabulary: an
+    annual-span fact (>=350d) may not ride wording saying 'quarter'; a quarter-span fact
+    (<=100d) may not ride 'full year'/'annual'/'year ended'. Surface = the quote PLUS the 60
+    chars immediately after it (period wording rides right after the value; the wide context
+    window would drag in NEIGHBORING rows' words)."""
+    d = _span_days(shape)
+    if d is None:
+        return False
+    tail = ''
+    if ctx and q in ctx:
+        e = ctx.index(q) + len(q)
+        tail = ctx[e:e + 60]
+    # SCOPE (stated exactly): only the AFTER-VALUE tail is judged — period wording rides
+    # immediately after the number ('… 4,000,000,000 for the year' / '… in the quarter');
+    # judging the quote body false-kills legitimate items when the certified 90-char label
+    # window bleeds a quote across a neighboring clause (reproduced: the two-clause fixture).
+    if d >= 350 and _QUARTER_WORD.search(tail):
+        return True
+    if d <= 100 and _ANNUAL_WORD.search(tail):
+        return True
+    return False
+
+
+def _extend_label_start(ctx, q):
+    """Chunk-2 corrective: preserve the COMPLETE printed label — extend the quote's start
+    backward (inside its own context slice) over IMMEDIATELY-PRECEDING CAPITALIZED words
+    only ('Adjusted', 'United Kingdom', segment names start capitalized; lowercase prose
+    connectives — 'and', 'in the' — never travel). Mechanical case rule, no vocabulary.
+    Exact source slice in, exact source slice out."""
+    if not ctx or q not in ctx:
+        return q
+    i = ctx.index(q)
+    j = i
+    while True:
+        m = re.search(r"([A-Z][A-Za-z'-]*)\s+$", ctx[:j])
+        if not m:
+            break
+        j = m.start(1)
+    ext = ctx[j:i]
+    return (ext + q) if ext else q
+
+
 def _row_label(q, val, fmt):
     """the printed ROW LABEL = the quote up to its (last bounded) value occurrence — an exact
     target-source slice, never anchor wording."""
@@ -651,36 +871,86 @@ def _row_label(q, val, fmt):
                 best = m.start()
     if best is None:
         return None
-    return q[:best].rstrip(' \t$:(–—-') or None
+    return q[:best].rstrip(" \t$:(\u2013\u2014-") or None
 
 
 def _prove(texts, tokens, val, fmt):
-    """(quote, context, verdict) — verdict: 'ok' | 'ambiguous' (occurrences exist but >1
-    distinct signature) | 'absent'. The two row_quote calls share ONE implementation: the
-    with_context signature law decides attribution; the legacy call only distinguishes
-    occurrences-exist from truly-absent."""
+    """(quote, context, verdict) — verdict: 'ok' | 'ambiguous' | 'absent'. ONE row_quote
+    implementation used twice (signature law attributes; the legacy call only separates
+    occurrences-exist from truly-absent) + the ONE certified value-proof rule (value_ok:
+    sign, percent class, scale tag, boundary — Chunk-2 corrective; never a second version)."""
     q, ctx = row_quote(texts, tokens, val, fmt, scale_gate=True, with_context=True)
     if q is not None:
+        if not value_ok(val, fmt, q):
+            return None, None, 'absent'          # the number is not PROVEN in this quote
+        if float(val) < 0:                       # the SIGN law's negative half (the channel's
+            forms = value_forms(val, fmt or 'number')          # certified sign gate, ported):
+            if not any(printed_negative(q, f) for f in forms   # a negative value needs
+                       if bounded_hit(q, f)):                  # negative NOTATION in evidence
+                return None, None, 'absent'
         return q, ctx, 'ok'
     legacy = row_quote(texts, tokens, val, fmt, scale_gate=True)
     return None, None, ('ambiguous' if legacy is not None else 'absent')
+
+
+def _nb_str(x):
+    return isinstance(x, str) and bool(x.strip()) and x == x.strip()
+
+
+_CAMEL = re.compile(r'[A-Z]?[a-z]+|[A-Z]+(?![a-z])')
+
+
+def _context_tied(concept_local, q):
+    """Chunk-2 corrective: XBRL context may ATTACH only when the fact can be tied to the
+    quote by more than its value — at least one camelCase token (>=4 chars) of the fact's OWN
+    stored name must appear in the quote (substring either direction, case-insensitive).
+    Mechanical: the fact's own words vs the source's own words; no vocabulary."""
+    ql = q.lower()
+    qwords = set(re.findall(r"[a-z]{4,}", ql))
+    for tk in _CAMEL.findall(concept_local):
+        tl = tk.lower()
+        if len(tl) < 4:
+            continue
+        if tl in ql or any(tl in w or w in tl for w in qwords):
+            return True
+    return False
+
+
+def _unit_class_conflict(series_unit, raw_unit):
+    """Chunk-2 corrective: a money anchor never accepts a share-marked fact unit and vice
+    versa — reuses the census-earned money ('usd'/'dollar') and shares markers; opaque units
+    conflict with NOTHING here (identity competition and the quote gate own those)."""
+    if not isinstance(series_unit, str) or not isinstance(raw_unit, str):
+        return False
+    s, u = series_unit.casefold(), raw_unit.casefold()
+    s_money = 'usd' in s or 'dollar' in s
+    u_money = 'usd' in u or 'dollar' in u
+    u_share = 'share' in u
+    s_share = 'share' in s
+    if s_money and u_share and not u_money:
+        return True
+    if s_share and u_money and not u_share:
+        return True
+    return False
 
 
 def locate(anchor, source, hints=None):
     """(anchor, ONE source payload, optional UNTRUSTED hints) →
     {'items': [...], 'status': None | 'no_proven_match' | 'ambiguous' |
     'insufficient_identity'} — v5.5 §3; reads ONLY the given payload (no fetching, no graph).
-    R1 (own-source XBRL enumeration): every VALID fact of the anchor's time shape, across ALL
-    periods present; every emission proven by an exact target-source quote (label + number in
-    one row, the scale-evidence law ON); a FULLY-stored concept identifier emits the xbrl
-    block (concept · axis_members · exact dates · ptype · raw unit); a bare stored name emits
-    a quote-proven item with NO xbrl block — never promoted. Candidates competing for ONE
-    printed occurrence with ANY identity difference (concept, pairs, period/shape, unit) are
-    ambiguous and abstain. Exact duplicates dedupe; output is blob-order-independent.
-    R2 (known-value hint): the hint must carry source_id EQUAL to this source's; missing/
-    mismatched/malformed stamps fail closed (the hint is discarded); the hinted value only
-    RETRIEVES — the target text proves; >1 distinct occurrence = ambiguous; text items carry
-    no xbrl block at all. raw_label/quote/period_evidence are always exact source slices."""
+    R1: enumerate this source's XBRL facts of the anchor's time shape across ALL periods;
+    candidacy = valid single period shape + nonblank unit + complete dimensions + exact
+    numeric value; concept_clue NARROWS candidates (a clue, never proof, never required);
+    every emission proven by an exact target-source quote (label + number, scale law ON) AND
+    the certified value-proof rule (sign/percent/scale); EVERY present anchor identity field
+    is enforced — slice and measurement tokens must appear in the quote, a money/shares unit
+    class conflict abstains, an XBRL period contradicted by printed period wording abstains;
+    XBRL context attaches ONLY when the fact's own name ties to the quote (else the item is
+    text-only); bare stored names never promote; leading label qualifiers are preserved.
+    R2: the hint must carry a NONBLANK UNPADDED string source_id equal to this source's (both
+    sides validated); the hinted value retrieves, the text proves; text items carry no xbrl
+    block; multi-occurrence = ambiguous. R1+R2 duplicates (same quote) collapse to ONE item,
+    the XBRL-backed one winning. Deterministic output."""
     if not isinstance(anchor, Mapping) or not isinstance(source, Mapping):
         return {'items': [], 'status': 'insufficient_identity'}
     tokens = _wording_tokens(anchor)
@@ -688,17 +958,24 @@ def locate(anchor, source, hints=None):
         return {'items': [], 'status': 'insufficient_identity'}
     texts = [t for t in (source.get('texts') or ()) if isinstance(t, str) and t]
     want_ptype = anchor.get('time_type')
+    ident_toks = _ident_tokens(anchor.get('slice')) + _ident_tokens(anchor.get('measurement'))
+    clue = anchor.get('concept_clue')
+    clue_local = clue.rpartition(':')[2] if isinstance(clue, str) and clue.strip() else None
     fmt = None
     items, saw_ambiguous = [], False
 
     by_value = {}                                     # R1: dedup exact duplicates, then group
     for c, fc in _fact_rows(source.get('xbrls') or ()):   # candidates by printed value
+        if clue_local is not None and c.rpartition(':')[2] != clue_local:
+            continue                                  # the clue NARROWS retrieval only
         shape = _fact_period(fc)
         if shape is None or shape[0] != want_ptype:
             continue
         u = _norm_unit(fc.get('unitRef'))
         if u is None or u is _BAD_UNIT:
             continue                                  # numeric candidacy: nonblank string unit
+        if _unit_class_conflict(anchor.get('series_unit'), u):
+            continue                                  # money anchor vs shares unit and vice versa
         pairs, complete = seg_parse(fc)
         if not complete:
             continue                                  # incomplete dims never masquerade as []
@@ -715,26 +992,34 @@ def locate(anchor, source, hints=None):
             continue
         if verdict == 'absent':
             continue
+        q = _extend_label_start(ctx, q)               # leading qualifiers survive
+        low_q = q.lower()
+        if ident_toks and not all(
+                re.search(r'(?<![a-z0-9])' + re.escape(tk) + r'(?![a-z0-9])', low_q)
+                for tk in ident_toks):
+            continue          # every PRESENT slice/measurement token must be source-supported
         cands = by_value[v]
         if len(cands) > 1:                            # ONE printed occurrence, >1 identity
             saw_ambiguous = True                      # -> unattributable, abstain
             continue
         c, spairs, shape, u = next(iter(cands.values()))
+        if _period_words_conflict(shape, q, ctx):
+            continue                  # XBRL period vs printed period wording: contradiction
         lbl = _row_label(q, v, fmt)
         if lbl is None:
             continue
         item = {'raw_label': lbl, 'value': v, 'quote': q, 'period_evidence': ctx}
-        prefix, _, _local = c.rpartition(':')
-        if prefix:                                    # bare stored names are NEVER promoted
-            item['xbrl'] = {'concept': c, 'axis_members': list(spairs),
-                            'period_start': shape[1], 'period_end': shape[2],
+        prefix, _, local = c.rpartition(':')
+        if prefix and _context_tied(local, q):        # bare names NEVER promote; an untied
+            item['xbrl'] = {'concept': c, 'axis_members': list(spairs),   # fact never rides
+                            'period_start': shape[1], 'period_end': shape[2],  # the quote
                             'ptype': shape[0], 'unit': u}
         items.append(item)
 
-    if isinstance(hints, Mapping) and hints.get('source_id') is not None \
-            and hints.get('source_id') == source.get('source_id') \
-            and hints.get('value') is not None:       # R2: anything else = stamp fails closed
-        try:
+    sid = source.get('source_id')
+    if isinstance(hints, Mapping) and _nb_str(hints.get('source_id')) and _nb_str(sid) \
+            and hints.get('source_id') == sid and hints.get('value') is not None:
+        try:                                          # anything else: the stamp fails closed
             hv = XN.dec(hints.get('value'))
         except XN.ExactError:
             hv = None                                 # malformed hinted value: discarded
@@ -743,14 +1028,25 @@ def locate(anchor, source, hints=None):
             if verdict == 'ambiguous':
                 saw_ambiguous = True
             elif verdict == 'ok':
-                lbl = _row_label(q, hv, fmt)
-                if lbl is not None:
-                    items.append({'raw_label': lbl, 'value': hv, 'quote': q,
-                                  'period_evidence': ctx})   # text item: NO xbrl block, ever
+                q = _extend_label_start(ctx, q)
+                low_q = q.lower()
+                if not ident_toks or all(
+                        re.search(r'(?<![a-z0-9])' + re.escape(tk) + r'(?![a-z0-9])', low_q)
+                        for tk in ident_toks):
+                    lbl = _row_label(q, hv, fmt)
+                    if lbl is not None:
+                        items.append({'raw_label': lbl, 'value': hv, 'quote': q,
+                                      'period_evidence': ctx})   # text item: NO xbrl, ever
 
-    items.sort(key=lambda i: (i.get('xbrl', {}).get('period_start', ''),
-                              i.get('xbrl', {}).get('period_end', ''),
-                              str(i['value']), i['raw_label']))
+    by_quote = {}                                     # R1+R2 same evidence -> ONE item; the
+    for it in items:                                  # XBRL-backed item wins deterministically
+        k = it['quote']
+        if k not in by_quote or ('xbrl' in it and 'xbrl' not in by_quote[k]):
+            by_quote[k] = it
+    items = sorted(by_quote.values(),
+                   key=lambda i: (i.get('xbrl', {}).get('period_start', ''),
+                                  i.get('xbrl', {}).get('period_end', ''),
+                                  str(i['value']), i['raw_label']))
     if items:
         return {'items': items, 'status': None}
     return {'items': [], 'status': 'ambiguous' if saw_ambiguous else 'no_proven_match'}

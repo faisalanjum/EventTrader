@@ -17,159 +17,21 @@ from country_names import COUNTRY_NAME   # generated ISO-3166 table (country:XX 
 # ---------- value-form generation (recall engine + oracle) ----------
 # _grp: WP2 Chunk 1 — relocated to driver/relocation/locator.py (row_quote's closure);
 # imported below with the other moved symbols.
-def _round_forms(x):
-    forms = set()
-    for dec in (0, 1, 2, 3):
-        forms.add(f"{x:.{dec}f}")
-        f = math.floor(abs(x) * 10**dec) / 10**dec
-        forms.add(f"{f:.{dec}f}")
-    for f in list(forms):
-        if '.' in f:
-            forms.add(f.rstrip('0').rstrip('.'))
-    return {f for f in forms if f not in ('', '-', '0', '-0')}
+# _round_forms: WP2 Chunk-2 corrective — relocated to driver/relocation/locator.py (the value_ok closure); imported below.
 
-
-def value_forms(value, fmt='number', is_currency=1):
-    """All plausible verbatim string forms of a reported value."""
-    if value is None:
-        return set()
-    v = float(value); av = abs(v); forms = set()
-    if v == 0:
-        return {'0'}                       # a stated zero is a real value (WP1); boundary +
-                                           # label-adjacency provide the precision, never magnitude
-    if fmt == '%':
-        integral = (av == int(av))
-        for f in _round_forms(av):
-            if not integral and '.' not in f:
-                continue                   # 2.34 never accepts the integer-rounded print '2%'
-                                           # (owner F2: the gray zone belongs to the reader lane)
-            forms |= {f + '%', f + ' percent', f + ' percentage points', '(' + f + ')%', '(' + f + ')'}
-        bps = av * 100
-        if bps == int(bps):
-            forms.add(f"{int(bps)} basis points")
-        return forms
-    ai = int(round(av))
-    forms.add(_grp(str(ai))); forms.add(str(ai))
-    p = XN.plain(XN.dec(str(value)).copy_abs())
-    if '.' in p:
-        forms.add(p)                       # the EXACT fractional print (38.3) — WP1; the old code
-                                           # only made int-rounded + scaled forms, losing decimals
-    for div, tag in ((1e3, 'K'), (1e6, 'M'), (1e9, 'B'), (1e12, 'T')):
-        if av >= div / 10:
-            scaled = av / div; si = int(round(scaled))
-            if si >= 100:                # bare scaled int only when ≥3 digits — "20" for $20.372B would
-                forms.add(_grp(str(si))); forms.add(str(si))   # match any stray "20"; "20 billion" kept below
-
-            for f in _round_forms(scaled):
-                if '.' in f or len(f) >= 3:   # bare scaled form needs a decimal or ≥3 digits ("20" for
-                    forms.add(f)              # $20.372B matches any stray "20"; tagged forms below suffice)
-                forms.add(f + tag)
-                forms.add(f + ' ' + {'K': 'thousand', 'M': 'million', 'B': 'billion', 'T': 'trillion'}[tag])
-    if is_currency:
-        base = [f for f in forms if not f.startswith('$') and len(f) <= 12]
-        forms |= {'$' + f for f in base}; forms |= {'$ ' + f for f in base}
-    if v < 0:
-        forms |= {'(' + f.lstrip('$ ') + ')' for f in list(forms)}
-    return {f for f in forms if f and f not in ('0', '-0', '$0')}
-
+# value_forms: WP2 Chunk-2 corrective — relocated to driver/relocation/locator.py (the value_ok closure); imported below.
 
 # ---------- gates ----------
 # at_boundary: WP2 Chunk 1 — relocated to driver/relocation/locator.py (row_quote's closure).
-def bounded_hit(quote, form, forbid_pct=False):
-    """form occurs in quote at a numeric word boundary (not glued inside a bigger number).
-    forbid_pct: the occurrence must NOT be %-marked — a plain-number value never accepts a
-    percent token ('86' vs '86%', '86 %', '86 percent'; round-12 widened past the bare '%')."""
-    numeric = form[0].isdigit() or form[0] in '$('
-    for m in re.finditer(re.escape(form), quote):
-        if not at_boundary(quote, m.start(), m.end(), numeric):
-            continue
-        if forbid_pct and re.match(r'\s?(%|percent\b)', quote[m.end():m.end() + 9]):
-            continue
-        return True
-    return False
+# bounded_hit: WP2 Chunk-2 corrective — relocated to driver/relocation/locator.py (the value_ok closure); imported below.
 
+# exact_form: WP2 Chunk-2 corrective — relocated to driver/relocation/locator.py (the value_ok closure); imported below.
 
-# _TRAIL/_with_trail + the scale-evidence group (_SCALE_MARK/_SCALE_TAIL/_WORD2DIV/
-# _required_div/_tail_div/_local_scale_divs): WP2 Chunk 1 — relocated to
-# driver/relocation/locator.py (row_quote's closure); imported below.
+# printed_negative: WP2 Chunk-2 corrective — relocated to driver/relocation/locator.py (the value_ok closure); imported below.
 
+# _scale_tag_ok: WP2 Chunk-2 corrective — relocated to driver/relocation/locator.py (the value_ok closure); imported below.
 
-def exact_form(form, value, fmt):
-    """form reproduces value losslessly (grouped cell, long int, or decimal within 0.1%)."""
-    if fmt == '%':
-        return True
-    s = form.lstrip('$( ').rstrip(')%').replace(',', '')
-    try:
-        f = abs(float(s))
-    except ValueError:
-        return False
-    av = abs(float(value))
-    if av == 0:
-        return f == 0                      # a stated zero reproduces itself (WP1)
-    if '.' not in s and s.isdigit() and len(s) >= 4:
-        return True
-    for sc in (1, 1e3, 1e6, 1e9, 1e12):
-        if f > 0 and av > 0 and abs(f*sc - av)/av < 0.001:
-            return True
-    return False
-
-
-def printed_negative(quote, form):
-    """Does the quote print THIS number with accounting-negative NOTATION — '(123)' or '-123'?
-    Notation ONLY. A sign carried by a word ("operating loss of 331") is a MEANING call the core owns
-    (OD-12: the sign signal may be a noun, notation, or context) — code must never read words for sign.
-    Requires the closing ')' so an ordinary parenthetical ("(500 employees)") can't be misread."""
-    core = (form or '').lstrip('$( ').rstrip(')%').strip()
-    if not core:
-        return False
-    for m in re.finditer(re.escape(core), quote or ''):
-        pre, post = (quote[:m.start()]).rstrip(), (quote[m.end():]).lstrip()
-        if pre.endswith('(') and post.startswith(')'):
-            return True
-        if re.search(r'(?<![\w.])[-−]\s*$', pre):
-            return True
-    return False
-
-
-def _scale_tag_ok(quote, form, value):
-    """Round-14: no bind survives on a form whose EVERY occurrence carries a scale tag that
-    CONTRADICTS the claimed value ('1.2 million' never certifies 1.2 BILLION; '5,365 million'
-    never certifies plain 5,365). An occurrence with the right tag — or no tag — keeps it alive."""
-    req = _required_div(form, value)
-    for m in re.finditer(re.escape(form), quote or ''):
-        if not at_boundary(quote, m.start(), m.end()):
-            continue
-        td = _tail_div(quote, m.end())
-        if td is None or td == req:
-            return True
-    return False
-
-
-def value_ok(value, fmt, quote):
-    """final deterministic self-check: value present at a real boundary AND losslessly, and the quote's own
-    NOTATION does not contradict the value's sign.
-    SCOPE (unchanged): this proves the NUMBER is in the quote — never that the KPI/period/slice binding is
-    right (that is the binder + audits). The sign guard adds only the mechanical half: a value whose sign
-    the quote's notation flatly contradicts is a wrong bind. A plain print asserts nothing about sign, so it
-    is left to pass here and be judged where meaning lives — no keyword list, no guessed sign."""
-    # '0' is a legal single-char form (a stated zero is a real value — WP1); everything else
-    # keeps the >=2 guard against stray single digits.
-    forms = {f for f in value_forms(value, fmt or 'number') if len(f) >= 2 or f == '0'}
-    for div in (1e6, 1e9):
-        xx = abs(float(value)) / div
-        if xx >= 1:
-            for d in (1, 2):
-                forms.add(f"{xx:,.{d}f}")
-    hits = [f for f in forms if bounded_hit(quote, f, forbid_pct=(fmt != '%'))]
-    ok = [f for f in hits if exact_form(f, value, fmt)]
-    if fmt != '%':                        # round-14: a printed scale tag that contradicts the
-        ok = [f for f in ok if _scale_tag_ok(quote, f, value)]   # claimed value vetoes the bind
-    if not ok:
-        return False
-    if float(value) > 0 and any(printed_negative(quote, f) for f in ok):
-        return False                      # positive value vs a negative print -> wrong bind
-    return True
-
+# value_ok: WP2 Chunk-2 corrective — relocated to driver/relocation/locator.py (the value_ok closure); imported below.
 
 # ---------- Step-0 emit gates: anti-hallucination + graded value presence (0 tokens) ----------
 # Precision is STRUCTURAL, not trusted: an answer is emitted only if its quote is a verbatim substring
@@ -327,7 +189,10 @@ from locator import (seg_parse,            # WP2 step 2: THE single strict parse
                      _SCALE_MARK, _SCALE_TAIL, _WORD2DIV,             # (neutral side).
                      _required_div, _tail_div, _local_scale_divs,     # WP2 Chunk 1: the
                      _tableforms, row_quote,                          # row_quote quote-proof
-                     _table_active_start, _snippet_start)             # closure moved there —
+                     _table_active_start, _snippet_start,             # closure moved there —
+                     _round_forms, value_forms, bounded_hit,          # + Chunk-2 corrective:
+                     exact_form, printed_negative, _scale_tag_ok,     # the value_ok closure
+                     value_ok)                                        # (verbatim move)
                                            # one implementation each; this channel file
                                            # re-exports the SAME names so every existing caller
                                            # keeps working; dependency points channel→neutral
