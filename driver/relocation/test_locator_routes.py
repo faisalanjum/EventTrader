@@ -56,9 +56,9 @@ def test_1_all_period_enumeration_q_ytd_fy_comparative_and_instant():
     spans = {(i['xbrl']['period_start'], i['xbrl']['period_end']) for i in r['items']}
     assert spans == {('2024-10-01', '2024-12-31'), ('2024-01-01', '2024-09-30'),
                      ('2024-01-01', '2024-12-31'), ('2023-01-01', '2023-12-31')}
-    inst_anchor = dict(ANCHOR, time_type='instant', wording=('Widget store count',))
-    xb2 = blob('us-gaap:StoreCount', [fact('86', {'instant': '2024-12-31'}, unit='U_cnt')])
-    r2 = LOC.locate(inst_anchor, src([xb2], ["Widget store count stood at 86 at year end"]))
+    inst_anchor = dict(ANCHOR, time_type='instant', wording=('Total widget cash',))
+    xb2 = blob('us-gaap:Cash', [fact('86000000', {'instant': '2024-12-31'})])
+    r2 = LOC.locate(inst_anchor, src([xb2], ["Total widget cash was 86,000,000 at year end"]))
     assert r2['status'] is None and len(r2['items']) == 1
     assert r2['items'][0]['xbrl']['ptype'] == 'instant'
 
@@ -94,16 +94,21 @@ def test_4_incomplete_dimensions_never_masquerade_as_empty():
 
 
 def test_5_fully_stored_xbrl_context_survives_exactly():
+    """Corrective-2 fixture update: the anchor must CARRY the slice (an aggregate anchor may
+    never accept a dimensioned fact — pinned in test_28); the sliced anchor's tokens are
+    source-proven and the full stored context survives exactly (padded unit stripped)."""
+    us = dict(ANCHOR, slice='geography:united_states')
     f = fact('4000000000', D24, unit=' U_USD ',
-             seg=[{'dimension': 'x:GeoAxis', 'value': 'x:USMember'}])
-    r = LOC.locate(ANCHOR, src([blob('us-gaap:Revenues', [f])],
-                               ["Total widget revenue was 4,000,000,000 for the year"]))
+             seg=[{'dimension': 'srt:StatementGeographicalAxis', 'value': 'country:US'}])
+    r = LOC.locate(us, src([blob('us-gaap:Revenues', [f])],
+                           ["United States total widget revenue was 4,000,000,000 for the year"]))
     assert len(r['items']) == 1
     x = r['items'][0]['xbrl']
     assert x == {'concept': 'us-gaap:Revenues',
-                 'axis_members': [('x:GeoAxis', 'x:USMember')],
+                 'axis_members': [('srt:StatementGeographicalAxis', 'country:US')],
                  'period_start': '2024-01-01', 'period_end': '2024-12-31',
                  'ptype': 'duration', 'unit': 'U_USD'}
+    assert r['items'][0]['quote'].startswith('United States')
 
 
 def test_6_bare_stored_concept_emits_no_promoted_context():
@@ -121,17 +126,18 @@ def test_7_ambiguity_table_same_occurrence_identity_differences_abstain():
         ('concept', [blob('us-gaap:Revenues', [fact('4000000000', D24)]),
                      blob('evil:Revenues', [fact('4000000000', D24)])]),
         ('pairs', [blob('us-gaap:Revenues', [
-            fact('4000000000', D24, seg=[{'dimension': 'x:A', 'value': 'x:M'}]),
-            fact('4000000000', D24, seg=[{'dimension': 'x:B', 'value': 'x:M'}])])]),
+            fact('4000000000', D24, seg=[{'dimension': 'x:A', 'value': 'x:WidgetMember'}]),
+            fact('4000000000', D24, seg=[{'dimension': 'x:B', 'value': 'x:WidgetMember'}])])]),
         ('period', [blob('us-gaap:Revenues', [
             fact('4000000000', D24),
             fact('4000000000', {'startDate': '2024-01-01', 'endDate': '2024-06-30'})])]),
         ('unit', [blob('us-gaap:Revenues', [
-            fact('4000000000', D24), fact('4000000000', D24, unit='U_EUR')])]),
+            fact('4000000000', D24), fact('4000000000', D24, unit='usd')])]),
     ]
     for label, xbrls in variants:
-        r = LOC.locate(ANCHOR, src(xbrls,
-                                   ["Total widget revenue was 4,000,000,000 for the year"]))
+        a = dict(ANCHOR, slice='segment:widget') if label == 'pairs' else ANCHOR
+        r = LOC.locate(a, src(xbrls,
+                              ["Total widget revenue was 4,000,000,000 for the year"]))
         assert r['items'] == [] and r['status'] == 'ambiguous', (label, r)
 
 
@@ -234,9 +240,12 @@ def test_19_period_word_contradiction_abstains():
 
 
 def test_20_leading_qualifier_survives_in_raw_label():
+    """Corrective-2 rewrite (reviewer order): the anchor must be ADJUSTED — a plain anchor
+    accepting adjusted evidence is the wrong expected result (pinned in test_28)."""
+    adj = dict(ANCHOR, measurement='adjusted')
     xb = blob('us-gaap:Revenues', [fact('4000000000', D24)])
-    r = LOC.locate(ANCHOR, src([xb],
-                               ["Adjusted total widget revenue was 4,000,000,000 for the year"]))
+    r = LOC.locate(adj, src([xb],
+                            ["Adjusted total widget revenue was 4,000,000,000 for the year"]))
     assert len(r['items']) == 1
     assert r['items'][0]['raw_label'].startswith('Adjusted'), \
         "leading qualifiers are MEANING — the raw label keeps them untouched"
@@ -266,8 +275,8 @@ def test_22_malformed_source_stamps_fail_closed():
 def test_23_retrieval_tokens_from_label_portion_only():
     a = dict(ANCHOR, time_type='instant',
              wording=('International Stores 86 at fiscal year end',))
-    xb = blob('us-gaap:StoreCount', [fact('91', {'instant': '2025-12-31'}, unit='U_cnt')])
-    r = LOC.locate(a, src([xb], ["International Stores totaled 91 at period close"]))
+    xb = blob('us-gaap:StoreCount', [fact('91000000', {'instant': '2025-12-31'})])
+    r = LOC.locate(a, src([xb], ["International Stores totaled 91,000,000 at period close"]))
     assert len(r['items']) == 1, \
         "the changed target wording must still retrieve — old prose words are never required"
 
@@ -296,3 +305,84 @@ def test_13_determinism_regardless_of_blob_order():
     a = LOC.locate(ANCHOR, src([b1, b2], texts))
     b = LOC.locate(ANCHOR, src([b2, b1], texts))
     assert a == b and len(a['items']) == 2
+
+def test_27_unit_class_law_positive_match_required():
+    """Corrective 2: the fact unit's CLASS must equal the anchor's series-unit class; UNKNOWN
+    (opaque) abstains. Graph-verified: U_EUR=1,229 facts; Unit12 maps to FIVE incompatible
+    meanings (USD 41,984 · shares 506 · pure 126 · employee 15) — an opaque id proves nothing."""
+    for bad in ('U_EUR', 'Unit12', 'U_UnitedStatesOfAmericaDollarsShare'):
+        xb = blob('us-gaap:Revenues', [fact('4000000000', D24, unit=bad)])
+        r = LOC.locate(ANCHOR, src([xb],
+                                   ["Total widget revenue was 4,000,000,000 for the year"]))
+        assert r['items'] == [], (bad, r)
+    cnt = dict(ANCHOR, series_unit='count', wording=('Widget store count',))
+    xb2 = blob('us-gaap:StoreCount', [fact('91', D24, unit='U_USD')])
+    r2 = LOC.locate(cnt, src([xb2], ["Widget store count was 91 for the year"]))
+    assert r2['items'] == [], "a count anchor must never accept a money unit"
+
+
+def test_28_full_identity_aggregate_and_measurement_both_directions():
+    agg = ANCHOR                                       # slice='' = the AGGREGATE series
+    xb = blob('us-gaap:Revenues', [fact('4000000000', D24,
+              seg=[{'dimension': 'srt:StatementGeographicalAxis', 'value': 'country:GB'}])])
+    r = LOC.locate(agg, src([xb],
+                            ["United Kingdom total widget revenue was 4,000,000,000"]))
+    assert r['items'] == [], "an aggregate anchor must never accept a DIMENSIONED fact"
+    xb2 = blob('us-gaap:Revenues', [fact('4000000000', D24)])
+    r2 = LOC.locate(ANCHOR, src([xb2],
+                                ["Adjusted total widget revenue was 4,000,000,000 for the year"]))
+    assert r2['items'] == [], \
+        "a PLAIN anchor must never accept ADJUSTED evidence (unexplained qualifier)"
+    adj = dict(ANCHOR, measurement='adjusted')
+    r3 = LOC.locate(adj, src([xb2],
+                             ["adjusted total widget revenue was 4,000,000,000 for the year"]))
+    assert len(r3['items']) == 1, "lowercase 'adjusted' evidence must satisfy an adjusted anchor"
+
+
+def test_29_generic_word_never_attaches_context():
+    for con, text in (('us-gaap:OperatingIncomeLoss',
+                       "Operating widget revenue was 4,000,000,000 for the year"),
+                      ('us-gaap:AssetsCurrent',
+                       "Current widget revenue was 4,000,000,000 for the year")):
+        xb = blob(con, [fact('4000000000', D24)])
+        a = dict(ANCHOR, wording=(text.split(' was')[0],))
+        r = LOC.locate(a, src([xb], [text]))
+        assert len(r['items']) == 1 and 'xbrl' not in r['items'][0], (con, r)
+
+
+def test_30_period_wording_either_side_and_three_months_fiscal_year():
+    xb_fy = blob('us-gaap:Revenues', [fact('4000000000', D24)])
+    for text in ("For the quarter, total widget revenue was 4,000,000,000",
+                 "Total widget revenue was 4,000,000,000 for the three months"):
+        r = LOC.locate(ANCHOR, src([xb_fy], [text]))
+        assert r['items'] == [], (text, r)
+    xb_q = blob('us-gaap:Revenues', [fact('1000000000',
+                {'startDate': '2024-10-01', 'endDate': '2024-12-31'})])
+    r2 = LOC.locate(ANCHOR, src([xb_q],
+                                ["For the fiscal year, total widget revenue was 1,000,000,000"]))
+    assert r2['items'] == [], "a quarterly fact must never ride full-fiscal-year wording"
+
+
+def test_31_equal_q_and_fy_values_resolve_by_period_wording():
+    """Equal-valued Q and FY facts, separately printed with their own period wording, must
+    produce TWO correctly bound items — never a lazy ambiguous."""
+    xb = blob('us-gaap:Revenues', [
+        fact('4000000000', {'startDate': '2024-10-01', 'endDate': '2024-12-31'}),
+        fact('4000000000', D24)])
+    texts = ["Total widget revenue was 4,000,000,000 in the quarter. "
+             "Total widget revenue was 4,000,000,000 for the full year."]
+    r = LOC.locate(ANCHOR, src([xb], texts))
+    assert r['status'] is None and len(r['items']) == 2, r
+    spans = {(i['xbrl']['period_start'], i['xbrl']['period_end']) for i in r['items']}
+    assert spans == {('2024-10-01', '2024-12-31'), ('2024-01-01', '2024-12-31')}
+
+
+def test_32_large_number_overflow_class_abstains_never_crashes():
+    """The WP1 round-13/14 invalid_value law: the 1e309 class is Decimal-finite but
+    float-infinite — candidacy and hints must abstain cleanly, never crash or bind."""
+    xb = blob('us-gaap:Revenues', [fact('1e309', D24)])
+    r = LOC.locate(ANCHOR, src([xb], ["Total widget revenue was 1e309 for the year"]))
+    assert r['items'] == []
+    s = src(texts=["Total widget revenue was 4,000,000,000 in the quarter"], sid='S1')
+    r2 = LOC.locate(ANCHOR, s, hints={'source_id': 'S1', 'value': '1e309'})
+    assert r2['items'] == []

@@ -760,9 +760,7 @@ def match_facts(xbrls, concept_qname, pairs, period_start, period_end, unit_ref=
 # ---------- THE neutral locate entrypoint (WP2 Chunk 2: routes R1 + R2, v5.5 §3) ----------
 def _wording_tokens(anchor):
     """retrieval-only label tokens from the anchor's wording clues — built from each clue's
-    LABEL PORTION (the text BEFORE its first digit; Chunk-2 corrective: a full prior quote
-    like 'International Stores 86 at fiscal year end' must never make its old prose words
-    required). Mechanical rule, no stop-word list."""
+    LABEL PORTION (the text BEFORE its first digit). Mechanical rule, no stop-word list."""
     toks = []
     for w in anchor.get('wording') or ():
         if isinstance(w, str):
@@ -785,8 +783,7 @@ def _ident_tokens(field):
 
 
 def _fact_period(fc):
-    """('duration'|'instant', ps, pe) for a VALID single-shape stored period, else None
-    (mixed instant+duration, partial, impossible, non-mapping, zero-length: never candidates)."""
+    """('duration'|'instant', ps, pe) for a VALID single-shape stored period, else None."""
     p = fc.get('period')
     if p is None or not isinstance(p, Mapping):
         return None
@@ -813,52 +810,98 @@ def _span_days(shape):
     return (b - a).days + 1
 
 
-_QUARTER_WORD = re.compile(r'(?<![a-z])quarter(?![a-z])', re.I)
-_ANNUAL_WORD = re.compile(r'(?<![a-z])(?:full year|annual|year ended)(?![a-z])', re.I)
-
-
-def _period_words_conflict(shape, q, ctx):
-    """Chunk-2 corrective: an XBRL period that CONTRADICTS the printed period wording abstains.
-    Calendar-STRUCTURAL patterns only (quarter vs annual), never domain vocabulary: an
-    annual-span fact (>=350d) may not ride wording saying 'quarter'; a quarter-span fact
-    (<=100d) may not ride 'full year'/'annual'/'year ended'. Surface = the quote PLUS the 60
-    chars immediately after it (period wording rides right after the value; the wide context
-    window would drag in NEIGHBORING rows' words)."""
+def _span_class(shape):
     d = _span_days(shape)
     if d is None:
-        return False
-    tail = ''
-    if ctx and q in ctx:
-        e = ctx.index(q) + len(q)
-        tail = ctx[e:e + 60]
-    # SCOPE (stated exactly): only the AFTER-VALUE tail is judged — period wording rides
-    # immediately after the number ('… 4,000,000,000 for the year' / '… in the quarter');
-    # judging the quote body false-kills legitimate items when the certified 90-char label
-    # window bleeds a quote across a neighboring clause (reproduced: the two-clause fixture).
-    if d >= 350 and _QUARTER_WORD.search(tail):
-        return True
-    if d <= 100 and _ANNUAL_WORD.search(tail):
-        return True
-    return False
+        return None
+    if d <= 100:
+        return 'q'
+    if d >= 350:
+        return 'a'
+    return None
 
 
-def _extend_label_start(ctx, q):
-    """Chunk-2 corrective: preserve the COMPLETE printed label — extend the quote's start
-    backward (inside its own context slice) over IMMEDIATELY-PRECEDING CAPITALIZED words
-    only ('Adjusted', 'United Kingdom', segment names start capitalized; lowercase prose
-    connectives — 'and', 'in the' — never travel). Mechanical case rule, no vocabulary.
-    Exact source slice in, exact source slice out."""
+def _unit_class(u):
+    """corrective 2: the CLASS of a unit string, census/spec-earned markers only — share wins
+    over money (dollars-PER-SHARE is not plain money); UNKNOWN (opaque ids) proves nothing:
+    graph-verified, Unit12 alone maps to FIVE incompatible meanings (USD 41,984 · shares 506 ·
+    pure 126 · employee 15) and U_EUR (1,229 facts) is money-but-not-USD."""
+    if not isinstance(u, str):
+        return None
+    c = u.casefold()
+    if 'share' in c:
+        return 'share'
+    if 'usd' in c or 'dollar' in c:
+        return 'money'
+    if 'percent' in c or 'pure' in c:
+        return 'percent'
+    if 'count' in c:
+        return 'count'
+    return None
+
+
+_QUARTER_WORD = re.compile(r'(?<![a-z])(?:quarter|three months)(?![a-z])', re.I)
+_ANNUAL_WORD = re.compile(r'(?<![a-z])(?:full year|annual|year ended|fiscal year|year)(?![a-z])', re.I)
+
+
+def _value_span_in(text, q, val, fmt):
+    """absolute (start, end) of the value's LAST bounded printed occurrence of q inside text,
+    or None. q must be a slice of text (single-occurrence by the signature law)."""
+    if q not in text:
+        return None
+    base = text.index(q)
+    best = None
+    for fo in sorted(_tableforms(val, fmt)):
+        for m in re.finditer(re.escape(fo), q):
+            if at_boundary(q, m.start(), m.end()) and (best is None or m.start() > best[0]):
+                best = (m.start(), m.end())
+    if best is None:
+        return None
+    return base + best[0], base + best[1]
+
+
+def _period_word_class(text, vstart, vend):
+    """corrective 2 — the printed-period signal for ONE value occurrence: within the value's
+    own CLAUSE ([.;\n]-delimited), the NEAREST quarter-class or annual-class wording (either
+    side of the value) decides; none present = no signal. Calendar-STRUCTURAL patterns only;
+    the nearest-wins rule keeps certified two-clause window bleed harmless (both words in one
+    clause -> the one beside the value governs)."""
+    cs = max(text.rfind('.', 0, vstart), text.rfind(';', 0, vstart),
+             text.rfind('\n', 0, vstart)) + 1
+    ce_cands = [i for i in (text.find('.', vend), text.find(';', vend),
+                            text.find('\n', vend)) if i >= 0]
+    ce = min(ce_cands) if ce_cands else len(text)
+    clause = text[cs:ce]
+    best = None
+    for cls, pat in (('q', _QUARTER_WORD), ('a', _ANNUAL_WORD)):
+        for m in pat.finditer(clause):
+            a0, a1 = cs + m.start(), cs + m.end()
+            dist = (vstart - a1) if a1 <= vstart else (a0 - vend) if a0 >= vend else 0
+            if best is None or dist < best[0]:
+                best = (dist, cls)
+    return best[1] if best else None
+
+
+def _extend_label_start(ctx, q, known):
+    """(extended_quote, extension_words) — extend the quote's start backward over
+    IMMEDIATELY-PRECEDING words that are CAPITALIZED or (case-insensitively) match a KNOWN
+    anchor token (wording/slice/measurement) — lowercase prose connectives never travel, but
+    lowercase 'adjusted' satisfying an adjusted anchor does. Mechanical; exact slices."""
     if not ctx or q not in ctx:
-        return q
+        return q, []
     i = ctx.index(q)
     j = i
     while True:
-        m = re.search(r"([A-Z][A-Za-z'-]*)\s+$", ctx[:j])
+        m = re.search(r"([A-Za-z][A-Za-z'-]*)\s+$", ctx[:j])
         if not m:
+            break
+        w = m.group(1)
+        if not (w[0].isupper() or w.lower() in known):
             break
         j = m.start(1)
     ext = ctx[j:i]
-    return (ext + q) if ext else q
+    words = [w.lower() for w in re.findall(r"[A-Za-z]{3,}", ext)]
+    return ((ext + q) if ext else q), words
 
 
 def _row_label(q, val, fmt):
@@ -876,17 +919,15 @@ def _row_label(q, val, fmt):
 
 def _prove(texts, tokens, val, fmt):
     """(quote, context, verdict) — verdict: 'ok' | 'ambiguous' | 'absent'. ONE row_quote
-    implementation used twice (signature law attributes; the legacy call only separates
-    occurrences-exist from truly-absent) + the ONE certified value-proof rule (value_ok:
-    sign, percent class, scale tag, boundary — Chunk-2 corrective; never a second version)."""
+    implementation used twice + the ONE certified value-proof rule (value_ok) + the ported
+    negative-notation sign law. Never a second matcher."""
     q, ctx = row_quote(texts, tokens, val, fmt, scale_gate=True, with_context=True)
     if q is not None:
         if not value_ok(val, fmt, q):
-            return None, None, 'absent'          # the number is not PROVEN in this quote
-        if float(val) < 0:                       # the SIGN law's negative half (the channel's
-            forms = value_forms(val, fmt or 'number')          # certified sign gate, ported):
-            if not any(printed_negative(q, f) for f in forms   # a negative value needs
-                       if bounded_hit(q, f)):                  # negative NOTATION in evidence
+            return None, None, 'absent'
+        if float(val) < 0:
+            forms = value_forms(val, fmt or 'number')
+            if not any(printed_negative(q, f) for f in forms if bounded_hit(q, f)):
                 return None, None, 'absent'
         return q, ctx, 'ok'
     legacy = row_quote(texts, tokens, val, fmt, scale_gate=True)
@@ -901,56 +942,40 @@ _CAMEL = re.compile(r'[A-Z]?[a-z]+|[A-Z]+(?![a-z])')
 
 
 def _context_tied(concept_local, q):
-    """Chunk-2 corrective: XBRL context may ATTACH only when the fact can be tied to the
-    quote by more than its value — at least one camelCase token (>=4 chars) of the fact's OWN
-    stored name must appear in the quote (substring either direction, case-insensitive).
-    Mechanical: the fact's own words vs the source's own words; no vocabulary."""
+    """corrective 2: XBRL context may attach only when EVERY >=4-char camelCase token of the
+    fact's OWN stored name appears in the quote (substring either direction) — one generic
+    shared word ('operating', 'current') never carries a structured tag. Reduced attachment
+    is the accepted cost: unattached items stay valid text evidence."""
     ql = q.lower()
     qwords = set(re.findall(r"[a-z]{4,}", ql))
-    for tk in _CAMEL.findall(concept_local):
-        tl = tk.lower()
-        if len(tl) < 4:
-            continue
-        if tl in ql or any(tl in w or w in tl for w in qwords):
-            return True
-    return False
-
-
-def _unit_class_conflict(series_unit, raw_unit):
-    """Chunk-2 corrective: a money anchor never accepts a share-marked fact unit and vice
-    versa — reuses the census-earned money ('usd'/'dollar') and shares markers; opaque units
-    conflict with NOTHING here (identity competition and the quote gate own those)."""
-    if not isinstance(series_unit, str) or not isinstance(raw_unit, str):
+    toks = [tk.lower() for tk in _CAMEL.findall(concept_local) if len(tk) >= 4]
+    if not toks:
         return False
-    s, u = series_unit.casefold(), raw_unit.casefold()
-    s_money = 'usd' in s or 'dollar' in s
-    u_money = 'usd' in u or 'dollar' in u
-    u_share = 'share' in u
-    s_share = 'share' in s
-    if s_money and u_share and not u_money:
-        return True
-    if s_share and u_money and not u_share:
-        return True
-    return False
+    return all(tl in ql or any(tl in w or w in tl for w in qwords) for tl in toks)
+
+
+def _finite(v):
+    """the WP1 round-13/14 invalid_value law: the 1e309 class is Decimal-finite but
+    float-infinite — abstain cleanly, never crash or bind."""
+    try:
+        return math.isfinite(float(v))
+    except (OverflowError, ValueError):
+        return False
 
 
 def locate(anchor, source, hints=None):
     """(anchor, ONE source payload, optional UNTRUSTED hints) →
     {'items': [...], 'status': None | 'no_proven_match' | 'ambiguous' |
-    'insufficient_identity'} — v5.5 §3; reads ONLY the given payload (no fetching, no graph).
-    R1: enumerate this source's XBRL facts of the anchor's time shape across ALL periods;
-    candidacy = valid single period shape + nonblank unit + complete dimensions + exact
-    numeric value; concept_clue NARROWS candidates (a clue, never proof, never required);
-    every emission proven by an exact target-source quote (label + number, scale law ON) AND
-    the certified value-proof rule (sign/percent/scale); EVERY present anchor identity field
-    is enforced — slice and measurement tokens must appear in the quote, a money/shares unit
-    class conflict abstains, an XBRL period contradicted by printed period wording abstains;
-    XBRL context attaches ONLY when the fact's own name ties to the quote (else the item is
-    text-only); bare stored names never promote; leading label qualifiers are preserved.
-    R2: the hint must carry a NONBLANK UNPADDED string source_id equal to this source's (both
-    sides validated); the hinted value retrieves, the text proves; text items carry no xbrl
-    block; multi-occurrence = ambiguous. R1+R2 duplicates (same quote) collapse to ONE item,
-    the XBRL-backed one winning. Deterministic output."""
+    'insufficient_identity'} — v5.5 §3; reads ONLY the given payload. EVERY present anchor
+    identity field is enforced: time shape filters candidacy; the UNIT-CLASS law requires the
+    fact unit's class to EQUAL the series-unit class (unknown/opaque abstains); an EMPTY slice
+    = the AGGREGATE series — dimensioned facts never bind it; slice/measurement tokens must
+    appear in the quote; words the label-extension adds must be EXPLAINED by anchor tokens;
+    printed period wording beside the value must not contradict the XBRL period (nearest
+    period word in the value's clause decides; equal-valued Q/FY facts with separately printed
+    occurrences resolve to two items via per-clause proof). Percent-class anchors prove in
+    percent format. XBRL context attaches only on a full name-tie; bare names never promote.
+    R2 hints: nonblank unpadded stamps both sides, text-proven, no xbrl, ambiguity abstains."""
     if not isinstance(anchor, Mapping) or not isinstance(source, Mapping):
         return {'items': [], 'status': 'insufficient_identity'}
     tokens = _wording_tokens(anchor)
@@ -958,92 +983,154 @@ def locate(anchor, source, hints=None):
         return {'items': [], 'status': 'insufficient_identity'}
     texts = [t for t in (source.get('texts') or ()) if isinstance(t, str) and t]
     want_ptype = anchor.get('time_type')
-    ident_toks = _ident_tokens(anchor.get('slice')) + _ident_tokens(anchor.get('measurement'))
+    slice_toks = _ident_tokens(anchor.get('slice'))
+    meas_toks = _ident_tokens(anchor.get('measurement'))
+    ident_toks = slice_toks + meas_toks
+    known = set(tokens) | set(ident_toks)
+    anchor_ucls = _unit_class(anchor.get('series_unit'))
+    fmt = '%' if anchor_ucls == 'percent' else None
     clue = anchor.get('concept_clue')
     clue_local = clue.rpartition(':')[2] if isinstance(clue, str) and clue.strip() else None
-    fmt = None
     items, saw_ambiguous = [], False
 
-    by_value = {}                                     # R1: dedup exact duplicates, then group
-    for c, fc in _fact_rows(source.get('xbrls') or ()):   # candidates by printed value
+    def emit(cand, q, ctx):
+        c, spairs, shape, u = cand
+        q2, ext_words = _extend_label_start(ctx, q, known)
+        if any(w not in known for w in ext_words):
+            return None              # an UNEXPLAINED leading qualifier is unproven identity
+        low_q = q2.lower()
+        if ident_toks and not all(
+                re.search(r'(?<![a-z0-9])' + re.escape(tk) + r'(?![a-z0-9])', low_q)
+                for tk in ident_toks):
+            return None
+        span = _value_span_in(ctx, q, v, fmt) if ctx and q in ctx else None
+        if span is not None:
+            wcls = _period_word_class(ctx, span[0], span[1])
+            scls = _span_class(shape)
+            if wcls and scls and wcls != scls:
+                return None          # printed period wording contradicts the XBRL period
+        lbl = _row_label(q2, v, fmt)
+        if lbl is None:
+            return None
+        item = {'raw_label': lbl, 'value': v, 'quote': q2, 'period_evidence': ctx}
+        prefix, _, local = c.rpartition(':')
+        if prefix and _context_tied(local, q2):
+            item['xbrl'] = {'concept': c, 'axis_members': list(spairs),
+                            'period_start': shape[1], 'period_end': shape[2],
+                            'ptype': shape[0], 'unit': u}
+        return item
+
+    by_value = {}
+    for c, fc in _fact_rows(source.get('xbrls') or ()):
         if clue_local is not None and c.rpartition(':')[2] != clue_local:
-            continue                                  # the clue NARROWS retrieval only
+            continue
         shape = _fact_period(fc)
         if shape is None or shape[0] != want_ptype:
             continue
         u = _norm_unit(fc.get('unitRef'))
         if u is None or u is _BAD_UNIT:
-            continue                                  # numeric candidacy: nonblank string unit
-        if _unit_class_conflict(anchor.get('series_unit'), u):
-            continue                                  # money anchor vs shares unit and vice versa
+            continue
+        if _unit_class(u) != anchor_ucls or anchor_ucls is None:
+            continue                 # the unit-class law: positive class equality or abstain
         pairs, complete = seg_parse(fc)
         if not complete:
-            continue                                  # incomplete dims never masquerade as []
+            continue
+        if not slice_toks and pairs:
+            continue                 # an EMPTY slice = the AGGREGATE series: dimensioned
+                                     # facts never bind it (tier1's aggregate law, ported)
         try:
             v = XN.dec(fc.get('value'))
         except XN.ExactError:
             continue
+        if not _finite(v):
+            continue                 # the 1e309 large-number class
         key = (c, frozenset(pairs), shape, u)
         by_value.setdefault(v, {})[key] = (c, tuple(sorted(tuple(p) for p in pairs)), shape, u)
     for v in sorted(by_value, key=str):
+        cands = by_value[v]
         q, ctx, verdict = _prove(texts, tokens, v, fmt)
-        if verdict == 'ambiguous':
+        if verdict == 'ok':
+            if len(cands) > 1:
+                saw_ambiguous = True
+                continue
+            it = emit(next(iter(cands.values())), q, ctx)
+            if it is not None:
+                items.append(it)
+            continue
+        if verdict == 'ambiguous' and len(cands) == 2:
+            # equal-valued Q and FY facts, SEPARATELY printed with their own period wording:
+            # re-prove PER CLAUSE (row_quote REUSED on clause slices — never copied) and
+            # attribute each proven clause by its period-word class; anything short of a
+            # perfect one-to-one pairing stays ambiguous.
+            by_cls = {_span_class(cand[2]): cand for cand in cands.values()}
+            if set(by_cls) == {'q', 'a'}:
+                found, clean = {}, True
+                for t in texts:
+                    pos = 0
+                    for piece in re.split(r'(?<=[.;\n])', t):
+                        if piece.strip():
+                            qq, cctx, verd = _prove([piece], tokens, v, fmt)
+                            if verd == 'ok':
+                                span = _value_span_in(piece, qq, v, fmt)
+                                wcls = (_period_word_class(piece, span[0], span[1])
+                                        if span else None)
+                                if wcls is None or wcls in found:
+                                    clean = False
+                                else:
+                                    found[wcls] = (qq, cctx)
+                        pos += len(piece)
+                if clean and set(found) == {'q', 'a'}:
+                    emitted = []
+                    for wcls, (qq, cctx) in sorted(found.items()):
+                        it = emit(by_cls[wcls], qq, cctx)
+                        if it is None:
+                            emitted = None
+                            break
+                        emitted.append(it)
+                    if emitted:
+                        items.extend(emitted)
+                        continue
             saw_ambiguous = True
             continue
-        if verdict == 'absent':
-            continue
-        q = _extend_label_start(ctx, q)               # leading qualifiers survive
-        low_q = q.lower()
-        if ident_toks and not all(
-                re.search(r'(?<![a-z0-9])' + re.escape(tk) + r'(?![a-z0-9])', low_q)
-                for tk in ident_toks):
-            continue          # every PRESENT slice/measurement token must be source-supported
-        cands = by_value[v]
-        if len(cands) > 1:                            # ONE printed occurrence, >1 identity
-            saw_ambiguous = True                      # -> unattributable, abstain
-            continue
-        c, spairs, shape, u = next(iter(cands.values()))
-        if _period_words_conflict(shape, q, ctx):
-            continue                  # XBRL period vs printed period wording: contradiction
-        lbl = _row_label(q, v, fmt)
-        if lbl is None:
-            continue
-        item = {'raw_label': lbl, 'value': v, 'quote': q, 'period_evidence': ctx}
-        prefix, _, local = c.rpartition(':')
-        if prefix and _context_tied(local, q):        # bare names NEVER promote; an untied
-            item['xbrl'] = {'concept': c, 'axis_members': list(spairs),   # fact never rides
-                            'period_start': shape[1], 'period_end': shape[2],  # the quote
-                            'ptype': shape[0], 'unit': u}
-        items.append(item)
+        if verdict == 'ambiguous':
+            saw_ambiguous = True
 
     sid = source.get('source_id')
     if isinstance(hints, Mapping) and _nb_str(hints.get('source_id')) and _nb_str(sid) \
             and hints.get('source_id') == sid and hints.get('value') is not None:
-        try:                                          # anything else: the stamp fails closed
+        try:
             hv = XN.dec(hints.get('value'))
         except XN.ExactError:
-            hv = None                                 # malformed hinted value: discarded
-        if hv is not None:
+            hv = None
+        if hv is not None and _finite(hv):
             q, ctx, verdict = _prove(texts, tokens, hv, fmt)
             if verdict == 'ambiguous':
                 saw_ambiguous = True
             elif verdict == 'ok':
-                q = _extend_label_start(ctx, q)
-                low_q = q.lower()
-                if not ident_toks or all(
+                q2, ext_words = _extend_label_start(ctx, q, known)
+                low_q = q2.lower()
+                if all(w in known for w in ext_words) and (not ident_toks or all(
                         re.search(r'(?<![a-z0-9])' + re.escape(tk) + r'(?![a-z0-9])', low_q)
-                        for tk in ident_toks):
-                    lbl = _row_label(q, hv, fmt)
+                        for tk in ident_toks)):
+                    lbl = _row_label(q2, hv, fmt)
                     if lbl is not None:
-                        items.append({'raw_label': lbl, 'value': hv, 'quote': q,
-                                      'period_evidence': ctx})   # text item: NO xbrl, ever
+                        items.append({'raw_label': lbl, 'value': hv, 'quote': q2,
+                                      'period_evidence': ctx})
 
-    by_quote = {}                                     # R1+R2 same evidence -> ONE item; the
-    for it in items:                                  # XBRL-backed item wins deterministically
-        k = it['quote']
-        if k not in by_quote or ('xbrl' in it and 'xbrl' not in by_quote[k]):
-            by_quote[k] = it
-    items = sorted(by_quote.values(),
+    grouped = {}                        # same-evidence dedup: R1+R2 on ONE occurrence
+    for it in items:                    # collapse to the XBRL-backed item; equal-quote items
+        grouped.setdefault(it['quote'], []).append(it)     # with DIFFERENT XBRL identities
+    kept = []                           # (the resolved Q/FY pair) are different evidence and
+    for k, group in grouped.items():    # both survive
+        with_x = {}
+        for it in group:
+            if 'xbrl' in it:
+                xk = (it['xbrl']['period_start'], it['xbrl']['period_end'],
+                      it['xbrl']['concept'], tuple(it['xbrl']['axis_members']),
+                      it['xbrl']['unit'])
+                with_x.setdefault(xk, it)
+        kept.extend(with_x.values() if with_x else group[:1])
+    items = sorted(kept,
                    key=lambda i: (i.get('xbrl', {}).get('period_start', ''),
                                   i.get('xbrl', {}).get('period_end', ''),
                                   str(i['value']), i['raw_label']))

@@ -1684,3 +1684,49 @@ now has ONE neutral implementation; none copied.
 GATES: routes+boundary 25/25 · full battery 199/199 (188+11) · live gate 2/2, fixture
 d7d2f068 unchanged, 130/20/0 · floors 28/28 · neutral runtime sweep CLEAN · boundary hash
 81eca0aa unchanged · git diff --check clean. HOLDS all held; Chunk 3 not begun.
+
+## WP2 CHUNK-2 CORRECTIVE 2 (his audit of d8b6ddc — NOT accepted; 6 defect groups;
+## 2026-07-20). His graph claims verified by my own runs FIRST: U_EUR = 1,229 facts EXACT;
+## Unit12 maps to FIVE incompatible meanings (iso4217:USD 41,984 · shares 506 · pure 126 ·
+## ibkr:employee 12 · vmc:employee 3) — opaque-must-abstain is graph-proven. 6 RED test
+## groups first (test_27-32 + the ordered rewrites of test_20/test_1/test_23), then the laws:
+1. UNIT-CLASS LAW (_unit_class): share (wins over money) > money ('usd'|'dollar') > percent
+   ('percent'|'pure') > count ('count') > UNKNOWN; the fact unit's class must EQUAL the
+   anchor's series-unit class; UNKNOWN either side abstains. Percent-class anchors prove in
+   fmt='%' (fixes the inverted 86%-rejected/plain-86-accepted defect). Fixture consequences
+   documented: test_1/test_23 instant fixtures became money/balance-sheet shapes; test_7's
+   unit-ambiguity variant now uses two SAME-class raw ids (U_USD vs usd) because an EUR fact
+   correctly dies at candidacy under the new law.
+2. FULL IDENTITY: empty slice = the AGGREGATE series — dimensioned facts never bind it
+   (tier1's aggregate law ported; test_5's fixture updated to a SLICED anchor per the same
+   law); the QUALIFIER-ZONE law — words the label-extension ADDS must be explained by anchor
+   tokens (wording ∪ slice ∪ measurement) else abstain (plain anchor + 'Adjusted…' now
+   abstains; test_20 rewritten to an ADJUSTED anchor per his order); the extension walks
+   capitalized words OR case-insensitive anchor-token matches (lowercase 'adjusted' evidence
+   now satisfies an adjusted anchor).
+3. CONTEXT TIE STRICT: ALL ≥4-char camelCase tokens of the fact's own stored name must
+   appear in the quote — one generic shared word never attaches (OperatingIncomeLoss via
+   'operating' and AssetsCurrent via 'current' pinned); reduced attachment documented (long
+   multi-word concepts emit text-only — the accepted precision-first cost).
+4. PRINTED-PERIOD BINDING: 'three months' joins the quarter class, 'fiscal year'/'year' the
+   annual class (calendar-structural); the signal = the NEAREST period word within the
+   value's own [.;\\n]-clause, EITHER side of the value (the certified two-clause bleed test
+   preserved — nearest-wins); equal-valued Q/FY facts with separately printed occurrences now
+   RESOLVE to two correctly bound items via per-clause re-proof (row_quote REUSED on clause
+   slices, never copied; anything short of a perfect one-to-one pairing stays ambiguous);
+   the final dedup refined: equal-quote items with DIFFERENT XBRL identities are different
+   evidence and both survive, while an R2 text duplicate of an R1 item still collapses.
+5. THE LARGE-NUMBER GATE (the WP1 round-13/14 invalid_value law, missed in Chunk 2 — owned):
+   math.isfinite on R1 candidacy AND R2 hints — the 1e309 Decimal-finite/float-infinite
+   class abstains cleanly (pinned).
+6. CROSSWALK CORRECTED (below supersedes the Chunk-2 corrective table where they differ):
+   + row 11: large-number/overflow guard (locate candidacy + hints; the WP1 invalid_value
+   law) → NEUTRAL → yes → shared. Row 9 REWORDED: match_facts protects the PAIR-identity
+   value-unknown path (xbrl_lane/fingerprint) — it is NOT on locate's route path; locate's
+   protections are rows 1-8 + 10-11 plus the route laws. CLASSIFICATION CORRECTED: anchor
+   slice, measurement, unit-class, and period identity are ROUTE REQUIREMENTS (now
+   implemented mechanically in locate); only the fiscal TOKEN VOCABULARIES (STOP/SLICE_STOP/
+   country table/concept name lists) remain channel-only.
+GATES: routes+boundary 31/31 · full battery 205/205 (199+6) · live gate 2/2, fixture
+d7d2f068 unchanged, 130/20/0 · floors 28/28 · runtime sweep CLEAN · boundary 81eca0aa
+byte-unchanged · git diff --check clean. HOLDS all held; Chunk 3 not begun.
