@@ -120,9 +120,18 @@ def drv(name, bq):
             "definitional_evidence": {"birth_quotes": list(bq)}}
 
 
-def props(fid, series_unit, time_type):
-    """simulated stored node props: fact_scope mirrors the writer (= the id suffix)."""
-    return {"fact_scope": fid.split(":", 3)[3], "series_unit": series_unit, "time_type": time_type}
+def props(fid, series_unit, time_type, quote=None, **slots):
+    """simulated stored node props: fact_scope mirrors the writer (= the id suffix). Value
+    slots mirror Core's _NUMERIC_SIG names; a unit-carrying fixture stores level_low=0 —
+    ZERO counts as numeric (is-not-None law) — a unitless fixture stores all-None
+    (numberless). Override any slot via kwargs."""
+    p = {"fact_scope": fid.split(":", 3)[3], "series_unit": series_unit, "time_type": time_type,
+         "level_low": 0 if series_unit is not None else None, "level_high": None,
+         "change_value": None, "comparison_low": None, "comparison_high": None}
+    if quote is not None:
+        p["quote"] = quote
+    p.update(slots)
+    return p
 
 
 # ---------- pinned accessions (from part1 harvest data); edges loaded LIVE in their tests ----------
@@ -319,18 +328,30 @@ def test_15_production_retains_all_probe_rejection_classes():
     with pytest.raises(ValueError, match="time_type"):
         rebuild_anchor(plain, props(plain, "m_usd", "garbage"), drv("revenue", ("q",)),
                        {"SYN-ACC-K": "C"})
+    bad_driver = {"name": "revenue", "fact_type": "event",
+                  "definitional_evidence": {"birth_quotes": ["q"]}}
+    with pytest.raises(ValueError, match="not a metric Driver"):
+        rebuild_anchor(plain, props(plain, "m_usd", "duration"), bad_driver, {"SYN-ACC-K": "C"})
+    bogus = plain + "|bogus=1"
+    with pytest.raises(ValueError, match="forbidden/unknown"):
+        rebuild_anchor(bogus, props(bogus, "m_usd", "duration"), drv("revenue", ("q",)),
+                       {"SYN-ACC-K": "C"})
 
 
-def test_16_blank_wording_fails_closed_and_fact_quote_is_fallback_only():
+def test_16_wording_law_stored_quote_is_the_only_fallback():
+    """Empty birth_quotes → the STORED props['quote'] is the only fallback; blank/absent stored
+    quote → fail closed; nonempty birth_quotes always win over the stored quote."""
     fid, _ = DI.build_id("SYN-ACC-L", "revenue", period_id="gp_2024-01-01_2024-12-31")
     em = {"SYN-ACC-L": "C"}
+    a, _ = rebuild_anchor(fid, props(fid, "m_usd", "duration", quote="Total revenue $ 6,707"),
+                          drv("revenue", ()), em)
+    assert a["wording"] == ("Total revenue $ 6,707",), "stored quote must serve as the fallback"
     with pytest.raises(ValueError, match="blank wording"):
-        rebuild_anchor(fid, props(fid, "m_usd", "duration"), drv("revenue", ("", "   ")), em)
-    a, _ = rebuild_anchor(fid, props(fid, "m_usd", "duration"), drv("revenue", ("",)), em,
-                          fact_quote="Total revenue $ 6,707")
-    assert a["wording"] == ("Total revenue $ 6,707",), "fact quote must serve as the fallback"
-    b, _ = rebuild_anchor(fid, props(fid, "m_usd", "duration"),
-                          drv("revenue", ("the birth quote",)), em, fact_quote="an LWW quote")
+        rebuild_anchor(fid, props(fid, "m_usd", "duration"), drv("revenue", ()), em)
+    with pytest.raises(ValueError, match="blank wording"):
+        rebuild_anchor(fid, props(fid, "m_usd", "duration", quote="   "), drv("revenue", ()), em)
+    b, _ = rebuild_anchor(fid, props(fid, "m_usd", "duration", quote="an LWW quote"),
+                          drv("revenue", ("the birth quote",)), em)
     assert b["wording"] == ("the birth quote",), "birth_quotes are PRIMARY — fallback ignored"
 
 
@@ -348,14 +369,23 @@ def test_17_multiple_active_concept_resolutions_fail_closed():
     assert b["concept_clue"] is None
 
 
-def test_18_numeric_fact_without_series_unit_fails_numberless_stays_legal():
+def test_18_numeric_derived_from_stored_slots_zero_counts_unit_both_directions():
+    """Numeric-ness derives from the STORED value slots (never caller-asserted): a stored ZERO
+    is numeric (is-not-None law); numeric needs a NONBLANK unit; numberless needs
+    series_unit=None — both directions fail closed."""
     fid, _ = DI.build_id("SYN-ACC-N", "weather_condition", period_id="gp_2024-01-01_2024-03-31")
     em = {"SYN-ACC-N": "C"}
     d = drv("weather_condition", ("unusually cold winter",))
-    with pytest.raises(ValueError, match="numeric fact lacking series_unit"):
-        rebuild_anchor(fid, props(fid, None, "duration"), d, em, numeric_value_present=True)
+    with pytest.raises(ValueError, match="numeric fact lacking nonblank series_unit"):
+        rebuild_anchor(fid, props(fid, None, "duration", level_low=0), d, em)
+    with pytest.raises(ValueError, match="numeric fact lacking nonblank series_unit"):
+        rebuild_anchor(fid, props(fid, "   ", "duration", level_low=0), d, em)
+    with pytest.raises(ValueError, match="numeric fact lacking nonblank series_unit"):
+        rebuild_anchor(fid, props(fid, None, "duration", change_value=5), d, em)
     a, _ = rebuild_anchor(fid, props(fid, None, "duration"), d, em)
-    assert a["series_unit"] is None, "numberless with series_unit=None stays legal"
+    assert a["series_unit"] is None, "numberless (all slots None) with series_unit=None is legal"
+    with pytest.raises(ValueError, match="numberless fact must carry series_unit=None"):
+        rebuild_anchor(fid, props(fid, "m_usd", "duration", level_low=None), d, em)
 
 
 def test_19_smallest_missing_field_is_named():
@@ -369,3 +399,35 @@ def test_19_smallest_missing_field_is_named():
             rebuild_anchor(fid, p, d, {"SYN-ACC-O": "C"})
     with pytest.raises(ValueError, match="bad id shape"):
         rebuild_anchor("not-a-du-id", props(fid, "m_usd", "duration"), d, {"SYN-ACC-O": "C"})
+
+
+def test_20_malformed_clues_rejected_never_silently_repaired():
+    """The LETTERS bug pinned: a bare-string birth_quotes ('Revenue') iterates into characters —
+    must be REJECTED as malformed, never accepted as wording. Blank/non-string members and
+    blank/non-string sole ConceptResolution clues are malformed too."""
+    fid, _ = DI.build_id("SYN-ACC-P", "revenue", period_id="gp_2024-01-01_2024-12-31")
+    em = {"SYN-ACC-P": "C"}
+    p = props(fid, "m_usd", "duration")
+    bare = {"name": "revenue", "fact_type": "metric",
+            "definitional_evidence": {"birth_quotes": "Revenue"}}
+    with pytest.raises(ValueError, match="malformed birth_quotes"):
+        rebuild_anchor(fid, p, bare, em)
+    with pytest.raises(ValueError, match="malformed birth_quotes"):
+        rebuild_anchor(fid, p, drv("revenue", ("ok", "")), em)
+    with pytest.raises(ValueError, match="malformed birth_quotes"):
+        rebuild_anchor(fid, p, drv("revenue", ("ok", 3)), em)
+    with pytest.raises(ValueError, match="malformed ConceptResolution"):
+        rebuild_anchor(fid, p, drv("revenue", ("q",)), em, concept_resolutions=("",))
+    with pytest.raises(ValueError, match="malformed ConceptResolution"):
+        rebuild_anchor(fid, p, drv("revenue", ("q",)), em, concept_resolutions=(3,))
+
+
+def test_21_injection_channels_stay_closed():
+    """The removed caller-supplied channels must never return: no fact_quote argument (quote
+    fallback = the STORED props['quote'] only) and no numeric_value_present flag (numeric-ness
+    derives from the STORED value slots only)."""
+    import inspect
+    params = set(inspect.signature(rebuild_anchor).parameters)
+    assert "fact_quote" not in params, "caller-supplied quote channel reintroduced"
+    assert "numeric_value_present" not in params, "caller-asserted numeric flag reintroduced"
+    assert params == {"fact_id", "props", "driver_node", "edge_map", "concept_resolutions"}

@@ -1194,3 +1194,29 @@ and pushed you can start with WP2" — condition met at `80bae52`). WP2 BUILD BE
 per plan v4. Doc-lock: the reviewer instructs locking the three Fiscal-owned amendments;
 per the arc's push-precedent (relayed instruction ≠ owner word for owner-gated actions) the
 lock executes on the owner's OWN word — asked.
+
+## WP2 BUILD round 1 (ChatGPT audit of `5f3aeb9`, 2026-07-19) — step 1 NOT accepted; all
+## three of his bugs REPRODUCED live before fixing; corrective commit follows; NO regeneration.
+1. LETTERS BUG (reproduced: birth_quotes="Revenue" → wording ('R','e','v','e','n','u','e')):
+   birth_quotes must be a list/tuple of NONBLANK STRINGS; a bare string or any blank/non-string
+   member is malformed → ValueError, never silently repaired/filtered.
+2. QUOTE INJECTION (reproduced: fact_quote='INJECTED FROM NOWHERE' became the wording): the
+   caller-supplied fact_quote argument REMOVED; the wording fallback is the STORED
+   props["quote"] (LWW) only. Signature-pinned so the channel cannot return (test_21).
+3. NUMERIC FLAG HOLE (reproduced: numeric zero + series_unit=None + omitted flag → passed as
+   numberless): numeric_value_present REMOVED; numeric-ness DERIVED from the five stored value
+   slots — level_low/level_high/change_value/comparison_low/comparison_high, names VERIFIED
+   exact against Core writer `_NUMERIC_SIG` (data-shape mirror, no Core import) — via
+   `is not None` so a stored ZERO counts. Numeric → NONBLANK unit; numberless → series_unit
+   MUST be None; both directions fail closed (a unit with no value slots is a contradiction —
+   also closes the stripped-slots masquerade).
+4. BLANK CONCEPT CLUE (reproduced: ('',) accepted): a sole ConceptResolution clue must be a
+   nonblank string.
+5. OWNED OVERCLAIM (his catch): `5f3aeb9`'s "all rejection classes retained" was FALSE — the
+   non-metric Driver-type and arbitrary-unknown-slot rejections were NOT re-asserted against
+   the production function. Both added (test_15 extended).
+6. Adopted: the transcript-SHAPED neutral-payload fixture test joins the route step (no
+   fetching, no tokens; real Transcript integration = WP3); the v4 WP2 plan file is now
+   TRACKED (his auditability request — the untracked convention was mine, not an owner
+   ruling). Gates: probe 21/21 · battery 157/157 (155+2; three tests rewritten in place, two
+   added) · no WP1-reachable file touched → no regeneration.
