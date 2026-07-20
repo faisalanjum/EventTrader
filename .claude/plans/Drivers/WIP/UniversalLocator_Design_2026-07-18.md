@@ -2,8 +2,10 @@
 
 **Status:** v5.5 — architecture settled after 9 review rounds; D14-v3 owner-confirmed; the durable
 zero-write schema probe green (13 tests incl. two live company edges + cross-wired-company
-rejection). **LOCKED by the owner 2026-07-18** (reviewer-approved round 10; content identical to
-the approved f98009b7… version except this status line).
+rejection). **LOCKED by the owner 2026-07-18** (reviewer-approved round 10) **+ THREE
+OWNER-LOCKED AMENDMENTS 2026-07-20** (owner word "lock the amendments"; the marked
+[OWNER-LOCKED AMENDMENT] blocks in §1 SOURCE SELECTION and §3 STATUS are the ONLY changes vs
+the approved f98009b7… content).
 History/verdicts/evidence: `UniversalLocator_ReviewRecord_2026-07-18.md`.
 
 ---
@@ -46,9 +48,9 @@ SOURCE SELECTION (pinned): the universal loop enumerates REAL accessions directl
                  PER-21 + BUILD_AND_OPERATIONS §3): HISTORICAL/backfill pairing =
                  `get_quarterly_filings.match_8k_to_periodic` — the shared structured matcher,
                  exact target-accession equality; LIVE (no 10-Q/K exists yet) =
-                 `quarter_identity` alone (AUTO_OK is trust-only). The S4 lane ROUTER is the
-                 matcher itself: companion exists with valid lag → historical, else live. A
-                 FAILED historical pairing PARKS — it NEVER falls through to the live lane.
+                 `quarter_identity` alone (AUTO_OK is trust-only). The lane RULE: the target
+                 10-Q/K EXISTS → the historical lane; the target is ABSENT → the live lane.
+                 ANY failed historical match PARKS — it NEVER falls through to the live lane.
                  Fiscal labels/calculated dates are never joined; no third matcher, ever.]**
       ↓ into
 SHARED LOCATOR   (anchor, source, optional untrusted hints) → raw items[] | no_proven_match
@@ -138,8 +140,9 @@ OUTPUT — ChannelContract-exact, ONE packet per source event:
                   · exact XBRL context when present: concept qname + exact dates + time_type +
                     complete {axis, member} PAIRS, `[]` only as a verified-empty assertion
   STATUS (internal, empty-result cases only): no_proven_match | ambiguous | insufficient_identity
-  **[OWNER-LOCKED AMENDMENT 2026-07-20 — alias-ambiguity: equal VALUES under different
-  concept/slice/period identities are NEVER aliases of one quantity ("same value = same
+  **[OWNER-LOCKED AMENDMENT 2026-07-20 — alias-ambiguity. Alias IDENTITY = concept qname +
+  COMPLETE (axis,member) pairs + exact period/time shape + normalized unit. Equal VALUES under
+  ANY difference in that identity are NEVER aliases of one quantity ("same value = same
   quantity" is FALSE across identities); any such difference among surviving candidates →
   ambiguous → abstain. No alias pick, no alphabetical or any other tie-break ACROSS
   identities (total-content ordering applies only WITHIN one identity).]**

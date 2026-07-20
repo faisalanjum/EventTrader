@@ -1282,3 +1282,24 @@ FINAL_DESIGN law files untouched; their law commit + R8 remain Core's separate w
    period identities are never aliases; any difference among survivors → ambiguous → abstain;
    tie-breaks only WITHIN one identity.
 NEXT: Step 2 — execute both real route calls, then prove no fiscal/channel code loaded.
+
+## LOCK-CORRECTION round (ChatGPT audit of `1ceb16c`, 2026-07-20) — scope confirmed clean
+## (two files), but TWO wording errors in MY amendment text, both verified true and owned:
+1. ROUTER SENTENCE SELF-CONTRADICTED: my "companion exists with valid lag → historical, else
+   live" routed a lag-invalid case to live via the "else" — directly against the parks law one
+   sentence later. I had copied the record's loose round-15 summary instead of the owner's
+   ruling. CORRECTED to the owner's criterion: target 10-Q/K EXISTS → historical; ABSENT →
+   live; ANY failed historical match PARKS, never falls through.
+2. IDENTITY UNDER-SPECIFIED: my "concept/slice/period identities" dropped UNIT and
+   pair-completeness and time shape. CORRECTED to the built round-28 law: alias identity =
+   concept qname + COMPLETE (axis,member) pairs + exact period/time shape + normalized unit;
+   any difference abstains.
+3. STALE BANNER REMOVED: the status line still claimed "content identical to the approved
+   f98009b7… version" — now false; replaced with the lock provenance (the three marked
+   amendment blocks are the ONLY changes vs the approved content).
+4. STEP-2 ORDER (his correction, adopted into the plan): the FAILING boundary test is written
+   FIRST; it stays RED through the parser relocation → 150-case gate → route build; GREEN only
+   at the end via real R1/R2 calls.
+5. PUSH SEQUENCING RECORDED: Core must separately commit PER-21 and run its required R8
+   BEFORE these lock commits are pushed (the owner-agreed LAW-COMMIT PLAN); all WP2 + lock
+   commits stay local until then + the owner's push word.
