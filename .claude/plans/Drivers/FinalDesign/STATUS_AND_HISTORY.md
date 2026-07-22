@@ -187,9 +187,12 @@ ambiguous evidence parks. Any third/copied fiscal-label, projected-date, or fili
 superseded and forbidden. This source-routing decision is distinct from Driver fact-window resolution
 (FINAL_DESIGN PER-21; procedure = BUILD §3). The frozen packet stays byte-identical at `aa7239ed…`: its
 "shared resolver is the sole period authority" phrase means the fact's own window only, never 8-K source
-pairing. Per the standing R8 policy, the owed blank-context reader recheck is DISCHARGED: **PASS 10/10 at
-commit `c87d81bf…`** (record: `archive/2026-07-15_pre-consolidation/READER_TEST_RECORD_2026-07-22_R8-PER21.md`,
-7/7 pins pre+post, first-attempt grading under the locked rule).
+pairing. Per the standing R8 policy the recheck remains OWED: the 2026-07-22 first run's PASS was WITHDRAWN
+on regrade (one exercise failed under the locked no-rescue rule; detail =
+`archive/2026-07-15_pre-consolidation/READER_TEST_RECORD_2026-07-22_R8-PER21_CORRECTION.md`; the original
+record is preserved unedited beside it). A fresh blank-context rerun is prepared; this obligation is
+DISCHARGED only if `archive/2026-07-15_pre-consolidation/READER_TEST_RECORD_2026-07-22_R8-PER21-run2.md`
+records PASS 10/10 with 7/7 unchanged pins at the commit carrying this sentence.
 
 ## 5. Signed experiment decisions + remaining gates (authority = signed decision.json artifacts)
 
