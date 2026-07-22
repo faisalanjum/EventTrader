@@ -57,10 +57,34 @@ def test_law_coupled_to_final_design():
         assert anchor in b, f"rulebook lost law anchor {anchor}"
 
 
+def test_earnings_8k_period_authorities_stay_pinned():
+    """PER-21 must keep historical pairing, live prediction, and fact periods separate."""
+    final_dir = BASE.parent / "FinalDesign"
+    final = (final_dir / "FINAL_DESIGN.md").read_text()
+    build = (final_dir / "BUILD_AND_OPERATIONS.md").read_text()
+    channel = (final_dir / "ChannelContract.md").read_text()
+    status = (final_dir / "STATUS_AND_HISTORY.md").read_text()
+
+    historical = ".claude/skills/earnings-orchestrator/scripts/get_quarterly_filings.py"
+    live = "scripts/earnings/quarter_identity.py"
+    repo = BASE.parents[3]
+    assert (repo / historical).is_file(), "historical 8-K authority file missing"
+    assert (repo / live).is_file(), "live 8-K authority file missing"
+    for name, text in (("FINAL_DESIGN", final), ("BUILD_AND_OPERATIONS", build)):
+        assert historical in text, f"{name}: historical 8-K authority missing"
+        assert live in text, f"{name}: live 8-K authority missing"
+
+    assert "never historical join keys" in final
+    assert "No third matcher" in final
+    assert "PER-21" in channel
+    assert "R13 (2026-07-18) earnings 8-K period authority CLOSED" in status
+
+
 if __name__ == "__main__":
     test_gate_reconcile_identical()
     test_menu_build_prefix()
     test_name17_carries_od21()
     test_all_19_name_headings_present()
     test_law_coupled_to_final_design()
+    test_earnings_8k_period_authorities_stay_pinned()
     print("rulebook sync: ALL GREEN")
