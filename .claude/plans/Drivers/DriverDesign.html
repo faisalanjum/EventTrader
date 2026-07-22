@@ -138,7 +138,7 @@ footer{padding:40px 0 64px;color:var(--mut);font-size:13px}
 </div></div>
 
 <div id="top" class="hero"><div class="wrap">
-  <div class="stamp"><span class="dot"></span> certified at commit 5d0bd41 · reader-tested 10/10 · 2026-07-16</div>
+  <div class="stamp"><span class="dot"></span> certified at commit 5d0bd41 · reader-tested 10/10 · 2026-07-16 · updated 2026-07-20 (PER-21 + supersession row 43)</div>
   <h1>One index card per cause.<br>Everything else is a rule protecting it.</h1>
   <p class="lead">The whole Driver design, decision by decision — what we believed before,
   what we decided instead, and why. No wall of text: every rule is one card.</p>
@@ -1166,6 +1166,18 @@ footer{padding:40px 0 64px;color:var(--mut);font-size:13px}
       <p class="why">Revenue <i>over</i> a quarter and cash <i>at</i> quarter-end are different shapes of truth.
       Defaulting silently converts one into the other.</p>
     </div>
+
+    <div class="card">
+      <div class="chiprow"><span class="idchip">PER-21</span></div>
+      <div class="t">Earnings 8-K routing — exactly two authorities</div>
+      <div class="ba">
+        <div class="r b"><span class="lab">BEFORE</span><span class="txt">pair an earnings 8-K to its 10-Q/10-K by fiscal label, projected dates, or yet another matcher</span></div>
+        <div class="r a"><span class="lab">AFTER</span><span class="txt"><b>historical</b> (the target filing exists) = the one structured exact-accession pairing, <code>AUTO_OK</code> as a trust check only · <b>live</b> (it doesn't exist yet) = the prediction resolver alone; anything else <b>parks</b></span></div>
+      </div>
+      <p class="why">Owner-locked 2026-07-18 (ruling R13). No third matcher, no copied pairing logic, no
+      fiscal-label or projected-date joins — ever. This routes the <b>source</b>; the shared fiscal resolver
+      still resolves the fact's own calendar window afterwards.</p>
+    </div>
   </div>
 </div></section>
 
@@ -1569,7 +1581,7 @@ footer{padding:40px 0 64px;color:var(--mut);font-size:13px}
   </div>
 </div></section>
 <section id="ba"><div class="wrap">
-  <div class="sec-h"><span class="sec-n">§3 STATUS</span><h2>The 42 reversals — every belief we killed</h2></div>
+  <div class="sec-h"><span class="sec-n">§3 STATUS</span><h2>The 43 reversals — every belief we killed</h2></div>
   <p class="sec-sub">The complete supersession ledger, straight from the certified file.
   Left = what we used to believe. Right = the rule that replaced it, and where it now lives.
   <b>The dead rule is kept exactly once, for audit</b> — the live wording exists only at the anchor.</p>
@@ -1618,6 +1630,7 @@ footer{padding:40px 0 64px;color:var(--mut);font-size:13px}
     <tr><td class="mono">40</td><td>Entity names</td><td class="no">ban every entity token</td><td class="yes">§3 NAME-11/16 carve-out</td></tr>
     <tr><td class="mono">41</td><td>Token subset</td><td class="no">permanent automatic refusal</td><td class="yes">§5.4 OD-19 (conditional)</td></tr>
     <tr><td class="mono">42</td><td>Surprise scope</td><td class="no">actual-only; no subtype slot</td><td class="yes">§5.1 OD-21</td></tr>
+    <tr><td class="mono">43</td><td>FS-20 self-heal</td><td class="no">automatic activity-based demotion ("auto-demote, no human")</td><td class="yes">§5.2 FS-20 (offline-only governed correction — R12)</td></tr>
   </table></div>
   <p class="why" style="margin-top:16px">Row 34 is the biggest single reversal — the whole guidance chronology
   (movement, amendments, withdrawal fan-out, Event/DCM overlap) was rebuilt at once.
@@ -1925,7 +1938,7 @@ footer{padding:40px 0 64px;color:var(--mut);font-size:13px}
 <footer><div class="wrap">
   <div class="kv" style="font-size:13px">
     <span class="k">sources</span><span class="v" style="font-weight:400"><code>FINAL_DESIGN.md</code> §0–§10 · <code>STATUS_AND_HISTORY.md</code> §2/§3/§4 · <code>BUILD_AND_OPERATIONS.md</code> §7</span>
-    <span class="k">pinned at</span><span class="v" style="font-weight:400">commit <code>5d0bd41</code> — the certified seven-file freeze (reader test 10/10, 7/7 hashes)</span>
+    <span class="k">pinned at</span><span class="v" style="font-weight:400">commit <code>5d0bd41</code> — the certified seven-file freeze (reader test 10/10, 7/7 hashes); updated 2026-07-20 for PER-21 + row 43 (law commit + its own R8 pending)</span>
     <span class="k">covers</span><span class="v" style="font-weight:400">23 sections · 71 rule IDs · 21 owner decisions · 42 reversals · 8 rulings · 13 retired</span>
     <span class="k">not law</span><span class="v" style="font-weight:400">this page is a <b>study aid</b>. On any conflict the seven certified files win — always.</span>
   </div>

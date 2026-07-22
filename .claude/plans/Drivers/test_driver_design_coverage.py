@@ -9,7 +9,7 @@ test until the page explains it.
 
 Sources of truth (never the archive, never a WIP file):
   FINAL_DESIGN.md  -- sections + rule IDs
-  STATUS_AND_HISTORY.md -- 42 supersessions, owner rulings, OD trail, retired list
+  STATUS_AND_HISTORY.md -- 43 supersessions, owner rulings, OD trail, retired list
 """
 import re
 import pathlib
@@ -73,11 +73,11 @@ def test_all_21_owner_decisions_covered(page, status):
     assert not missing, f'owner decisions not covered: {missing}'
 
 
-def test_all_42_supersession_rows_present(page, status):
+def test_all_43_supersession_rows_present(page, status):
     """Each row's subject text must appear -- the before/after ledger."""
     sec3 = re.search(r'^## 3\..*?(?=^## 4\.)', status, re.M | re.S).group(0)
     rows = re.findall(r'^\|\s*(\d+)\s*\|([^|]+)\|', sec3, re.M)
-    assert len(rows) == 42, f'expected 42 supersession rows, found {len(rows)}'
+    assert len(rows) == 43, f'expected 43 supersession rows, found {len(rows)}'
     # the page renders the table generated from these rows: check subjects survived
     flat = _flat(page)
     missing = [n for n, subj in rows
