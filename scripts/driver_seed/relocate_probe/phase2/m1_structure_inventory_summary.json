@@ -1,0 +1,52 @@
+{
+ "CANONICAL_DECISION": {
+  "population": "canonical (decision-grade)",
+  "files_expected": 12182,
+  "files_on_disk": 12182,
+  "parse_ok": 12182,
+  "parse_errors": {},
+  "bytes": 5767038026,
+  "tokens_table": 6944989,
+  "tokens_prose": 2910151,
+  "table_complete_strict": 4687363,
+  "table_complete_unproven_column": 123291,
+  "table_ambiguous": 1740742,
+  "table_header_zone": 393593,
+  "n_tables": 165466,
+  "files_missing": 0,
+  "transition_old_to_new": {
+   "complete->complete": 4687363,
+   "complete->ambiguous (unproven column credit)": 123291,
+   "ambiguous->ambiguous": 1740742,
+   "header_zone->header_zone": 393593
+  }
+ },
+ "BROAD_STRESS": {
+  "population": "broad stress (structural only \u2014 NEVER accuracy evidence)",
+  "files_expected": 10248,
+  "files_on_disk": 10248,
+  "parse_ok": 10248,
+  "parse_errors": {},
+  "bytes": 4970505783,
+  "tokens_table": 5894173,
+  "tokens_prose": 1804416,
+  "table_complete_strict": 4305640,
+  "table_complete_unproven_column": 99908,
+  "table_ambiguous": 1110174,
+  "table_header_zone": 378451,
+  "n_tables": 153431,
+  "files_missing": 0,
+  "transition_old_to_new": {
+   "complete->complete": 4305640,
+   "complete->ambiguous (unproven column credit)": 99908,
+   "ambiguous->ambiguous": 1110174,
+   "header_zone->header_zone": 378451
+  }
+ },
+ "canonical_fetch_statuses": {
+  "fetched": 2933
+ },
+ "records": "/home/faisal/EventMarketDB/scripts/driver_seed/relocate_probe/phase2/m1_structure_inventory_records.jsonl",
+ "records_sha256": "cc31f63edc75d346f3583f62f7147de107984c04208e7514a7c70e2de3e688af",
+ "secs": 216
+}

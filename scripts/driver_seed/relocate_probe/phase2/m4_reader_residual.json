@@ -1,0 +1,104 @@
+{
+ "v2_supersedes": "v1 sha 70a21434\u2026 (p/li undercount; transcript upper bound; invented output tokens; unearned Route-B saving)",
+ "anchors_and_output_side": "UNAVAILABLE until Phase 5 \u2014 anchor input, output tokens, and tokens-per-accepted-fact are NOT estimated; the anchor multiplier is ceil(anchors/8) calls per chunk group (batch_groups MAX_CASES=8) and multiplies the BASE chunks below",
+ "labelled_strata": {
+  "8k_tables": {
+   "rows": 19,
+   "accepted": 7,
+   "wrong": 0,
+   "disputed": 3,
+   "plural_blocked": 9
+  },
+  "8k_prose": "DEFERRED to Phase 5/6 \u2014 no independent truth exists; none manufactured",
+  "prepared_remarks": "DEFERRED to Phase 5/6",
+  "qa": "DEFERRED to Phase 5/6"
+ },
+ "8k_exhibits": {
+  "files": 12182,
+  "prose_bounds": {
+   "lower_p_li": {
+    "blocks": 196574,
+    "chars": 56792987
+   },
+   "structural_p_li_div_leaves_all": {
+    "blocks": 1079317,
+    "chars": 308345155
+   },
+   "structural_numeric_bearing": {
+    "blocks": 574171,
+    "chars": 228751542
+   },
+   "numeric_div_leaves_alone": {
+    "blocks": 480052,
+    "chars": 188740437
+   },
+   "upper_all_visible_nontable": 279824448
+  },
+  "tables": {
+   "numeric_rows": 1862185,
+   "row_chars": 113275721,
+   "strict_row_chars_UNEARNED_THEORETICAL_CEILING_ONLY": 73113360
+  },
+  "base_text_chunks_at_100k": 12419,
+  "numeric_docs": 12162
+ },
+ "8k_noexhibit_bodies": {
+  "events": 573,
+  "bodies_on_disk": 573,
+  "manifest": "m4_noexhibit_body_manifest.jsonl",
+  "tables_row_chars": 459623,
+  "prose_struct_numeric_chars": 2087230,
+  "base_text_chunks_at_100k": 576
+ },
+ "8k_exhibit_bearing_event_bodies": "UNMEASURED (only the 35 WP1-probe bodies were ever fetched) \u2014 content may duplicate exhibits; measurement deferred with that question open",
+ "pdfs": {
+  "count": 38,
+  "status": "DEFERRED/UNSUPPORTED \u2014 listed, never fetched, never silently removed"
+ },
+ "transcripts": {
+  "prepared_numeric_block_chars": 181499769,
+  "qa_numeric_block_chars": 221628725,
+  "total_numeric_block_chars": 403128494,
+  "transcripts_with_numbers": 9607,
+  "min_text_chunks_at_100k": 9636
+ },
+ "reader_input_chars_structural_numeric": 747702610,
+ "projected_input_tokens_structural": {
+  "@3.5": 213629317,
+  "@4.0": 186925652,
+  "@4.5": 166156136
+ },
+ "base_text_chunks_total": 22631,
+ "historical_vs_live": {
+  "quarters": {
+   "events_total": 9937,
+   "full_quarters": 12,
+   "events_per_quarter_min": 784,
+   "max": 882,
+   "mean": 812.7,
+   "by_quarter": {
+    "2023Q1": 30,
+    "2023Q2": 800,
+    "2023Q3": 788,
+    "2023Q4": 804,
+    "2024Q1": 882,
+    "2024Q2": 799,
+    "2024Q3": 791,
+    "2024Q4": 806,
+    "2025Q1": 863,
+    "2025Q2": 803,
+    "2025Q3": 786,
+    "2025Q4": 784,
+    "2026Q1": 846,
+    "2026Q2": 155
+   }
+  },
+  "live_per_quarter_share": 0.08179,
+  "live_per_quarter_chunks": 1851,
+  "live_per_quarter_input_tokens_structural": {
+   "@3.5": 17471726,
+   "@4.0": 15287761,
+   "@4.5": 13589121
+  }
+ }
+}

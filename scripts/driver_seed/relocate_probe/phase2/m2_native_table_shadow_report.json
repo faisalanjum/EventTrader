@@ -1,0 +1,440 @@
+{
+ "truth_artifact_sha_verified": "5aff53ccb3a3a71ef7b1cc747b219cbd6e75b7918de8c4141fbf8cd8e2d9dc9e",
+ "ACCURACY_19_truth_cells": {
+  "correct": 7,
+  "wrong": 0,
+  "safe_abstain": 12
+ },
+ "REGRESSION_20_records_no_truth_separate": {
+  "abstain": 20
+ },
+ "accuracy_ledger": [
+  {
+   "candidate_id": "0000006201-26-000031__EX-99.1.htm#t2r5c3-5",
+   "ticker": "AAL",
+   "raw_label": "Cargo Revenue",
+   "reason": "abstain_multiple_labeled_rows",
+   "outcome": "safe_abstain"
+  },
+  {
+   "candidate_id": "0000006201-26-000031__EX-99.1.htm#t2r4c4-5",
+   "ticker": "AAL",
+   "raw_label": "Passenger Revenue",
+   "reason": "abstain_multiple_labeled_rows",
+   "outcome": "safe_abstain"
+  },
+  {
+   "candidate_id": "0000006201-26-000031__EX-99.1.htm#t3r5c3-6",
+   "ticker": "AAL",
+   "raw_label": "Passenger Load Factor (Percent)",
+   "reason": "abstain_multiple_labeled_rows",
+   "outcome": "safe_abstain"
+  },
+  {
+   "candidate_id": "0000006201-26-000031__EX-99.1.htm#t3r6c3-6",
+   "ticker": "AAL",
+   "raw_label": "Yield (Cents)",
+   "reason": "abstain_multiple_labeled_rows",
+   "outcome": "safe_abstain"
+  },
+  {
+   "candidate_id": "0000007084-25-000005__EX-99.1.htm#t16r16c19-20",
+   "ticker": "ADM",
+   "raw_label": "Ag Services & Oilseeds Revenue",
+   "reason": "abstain_multiple_labeled_rows",
+   "outcome": "safe_abstain"
+  },
+  {
+   "candidate_id": "0000007084-25-000005__EX-99.1.htm#t16r17c18-20",
+   "ticker": "ADM",
+   "raw_label": "Carbohydrate Solutions Revenue",
+   "reason": "abstain_multiple_labeled_rows",
+   "outcome": "safe_abstain"
+  },
+  {
+   "candidate_id": "0000007084-25-000005__EX-99.1.htm#t16r18c18-20",
+   "ticker": "ADM",
+   "raw_label": "Nutrition Revenue",
+   "reason": "abstain_multiple_labeled_rows",
+   "outcome": "safe_abstain"
+  },
+  {
+   "candidate_id": "0000007084-26-000005__EX-99.1.htm#t10r16c19-20",
+   "ticker": "ADM",
+   "raw_label": "Ag Services & Oilseeds Revenue",
+   "reason": "abstain_multiple_labeled_rows",
+   "outcome": "safe_abstain"
+  },
+  {
+   "candidate_id": "0000007084-26-000005__EX-99.1.htm#t10r17c18-20",
+   "ticker": "ADM",
+   "raw_label": "Carbohydrate Solutions Revenue",
+   "reason": "abstain_multiple_labeled_rows",
+   "outcome": "safe_abstain"
+  },
+  {
+   "candidate_id": "0000007084-26-000005__EX-99.1.htm#t10r18c18-20",
+   "ticker": "ADM",
+   "raw_label": "Nutrition Revenue",
+   "reason": "abstain_multiple_labeled_rows",
+   "outcome": "safe_abstain"
+  },
+  {
+   "candidate_id": "0000950170-25-007765__EX-99.1.htm#t5r5c26-27",
+   "ticker": "AA",
+   "raw_label": "Alumina Production (kmt)",
+   "reason": "accepted",
+   "accept": {
+    "doc": "0000950170-25-007765__EX-99.1.htm",
+    "table_index": 5,
+    "row_index": 5,
+    "grid": [
+     26,
+     27
+    ],
+    "cell_text": "10,034",
+    "printed_tokens": [
+     "10,034"
+    ],
+    "headers": [
+     "2024"
+    ]
+   },
+   "outcome": "correct"
+  },
+  {
+   "candidate_id": "0000950170-25-007765__EX-99.1.htm#t5r3c26-27",
+   "ticker": "AA",
+   "raw_label": "Bauxite Production (mdmt)",
+   "reason": "accepted",
+   "accept": {
+    "doc": "0000950170-25-007765__EX-99.1.htm",
+    "table_index": 5,
+    "row_index": 3,
+    "grid": [
+     26,
+     27
+    ],
+    "cell_text": "38.3",
+    "printed_tokens": [
+     "38.3"
+    ],
+    "headers": [
+     "2024"
+    ]
+   },
+   "outcome": "correct"
+  },
+  {
+   "candidate_id": "0000950170-25-007765__EX-99.1.htm#t5r6c26-27",
+   "ticker": "AA",
+   "raw_label": "Alumina Third-Party Shipments (kmt)",
+   "reason": "accepted",
+   "accept": {
+    "doc": "0000950170-25-007765__EX-99.1.htm",
+    "table_index": 5,
+    "row_index": 6,
+    "grid": [
+     26,
+     27
+    ],
+    "cell_text": "9,005",
+    "printed_tokens": [
+     "9,005"
+    ],
+    "headers": [
+     "2024"
+    ]
+   },
+   "outcome": "correct"
+  },
+  {
+   "candidate_id": "0000950170-25-007765__EX-99.1.htm#t5r4c26-27",
+   "ticker": "AA",
+   "raw_label": "Bauxite Third-Party Shipments (mdmt)",
+   "reason": "accepted",
+   "accept": {
+    "doc": "0000950170-25-007765__EX-99.1.htm",
+    "table_index": 5,
+    "row_index": 4,
+    "grid": [
+     26,
+     27
+    ],
+    "cell_text": "6.4",
+    "printed_tokens": [
+     "6.4"
+    ],
+    "headers": [
+     "2024"
+    ]
+   },
+   "outcome": "correct"
+  },
+  {
+   "candidate_id": "0001002910-25-000052__EX-99.1.htm#t13r10c15-17",
+   "ticker": "AEE",
+   "raw_label": "Ameren Illinois Natural Gas Revenue",
+   "reason": "abstain_multiple_labeled_rows",
+   "outcome": "safe_abstain"
+  },
+  {
+   "candidate_id": "0001002910-26-000005__EX-99.1.htm#t13r10c15-17",
+   "ticker": "AEE",
+   "raw_label": "Ameren Illinois Natural Gas Revenue",
+   "reason": "abstain_multiple_labeled_rows",
+   "outcome": "safe_abstain"
+  },
+  {
+   "candidate_id": "0001193125-26-019438__EX-99.1.htm#t5r5c26-27",
+   "ticker": "AA",
+   "raw_label": "Alumina Production (kmt)",
+   "reason": "accepted",
+   "accept": {
+    "doc": "0001193125-26-019438__EX-99.1.htm",
+    "table_index": 5,
+    "row_index": 5,
+    "grid": [
+     26,
+     27
+    ],
+    "cell_text": "9,640",
+    "printed_tokens": [
+     "9,640"
+    ],
+    "headers": [
+     "2025"
+    ]
+   },
+   "outcome": "correct"
+  },
+  {
+   "candidate_id": "0001193125-26-019438__EX-99.1.htm#t5r3c26-27",
+   "ticker": "AA",
+   "raw_label": "Bauxite Production (mdmt)",
+   "reason": "accepted",
+   "accept": {
+    "doc": "0001193125-26-019438__EX-99.1.htm",
+    "table_index": 5,
+    "row_index": 3,
+    "grid": [
+     26,
+     27
+    ],
+    "cell_text": "37.5",
+    "printed_tokens": [
+     "37.5"
+    ],
+    "headers": [
+     "2025"
+    ]
+   },
+   "outcome": "correct"
+  },
+  {
+   "candidate_id": "0001193125-26-019438__EX-99.1.htm#t5r6c26-27",
+   "ticker": "AA",
+   "raw_label": "Alumina Third-Party Shipments (kmt)",
+   "reason": "accepted",
+   "accept": {
+    "doc": "0001193125-26-019438__EX-99.1.htm",
+    "table_index": 5,
+    "row_index": 6,
+    "grid": [
+     26,
+     27
+    ],
+    "cell_text": "8,829",
+    "printed_tokens": [
+     "8,829"
+    ],
+    "headers": [
+     "2025"
+    ]
+   },
+   "outcome": "correct"
+  }
+ ],
+ "regression_ledger": [
+  {
+   "item_id": "bbd00a60244f",
+   "ticker": "AA",
+   "raw_label": "Total Revenue",
+   "qualification_bucket": "duplicate_cells",
+   "reason": "abstain_multiple_labeled_rows",
+   "outcome": "abstain",
+   "accept": null
+  },
+  {
+   "item_id": "dc401beb37c3",
+   "ticker": "AAL",
+   "raw_label": "Total Revenue",
+   "qualification_bucket": "duplicate_cells",
+   "reason": "abstain_multiple_labeled_rows",
+   "outcome": "abstain",
+   "accept": null
+  },
+  {
+   "item_id": "630f1c4f8670",
+   "ticker": "AAL",
+   "raw_label": "Aircraft at End of Period",
+   "qualification_bucket": "duplicate_cells",
+   "reason": "abstain_no_year_proven_cell",
+   "outcome": "abstain",
+   "accept": null
+  },
+  {
+   "item_id": "f18923ee1f05",
+   "ticker": "ABT",
+   "raw_label": "Diagnostics Revenue",
+   "qualification_bucket": "duplicate_cells",
+   "reason": "abstain_multiple_labeled_rows",
+   "outcome": "abstain",
+   "accept": null
+  },
+  {
+   "item_id": "e980922423e8",
+   "ticker": "ABT",
+   "raw_label": "Medical Devices Revenue",
+   "qualification_bucket": "duplicate_cells",
+   "reason": "abstain_multiple_labeled_rows",
+   "outcome": "abstain",
+   "accept": null
+  },
+  {
+   "item_id": "af68f2df0735",
+   "ticker": "ACI",
+   "raw_label": "Loyalty Members",
+   "qualification_bucket": "prose_only",
+   "reason": "abstain_no_labeled_row",
+   "outcome": "abstain",
+   "accept": null
+  },
+  {
+   "item_id": "6b706b2f8ec3",
+   "ticker": "ACI",
+   "raw_label": "Loyalty Members",
+   "qualification_bucket": "prose_only",
+   "reason": "abstain_no_labeled_row",
+   "outcome": "abstain",
+   "accept": null
+  },
+  {
+   "item_id": "2fdd61622e27",
+   "ticker": "ADM",
+   "raw_label": "Total Revenue",
+   "qualification_bucket": "duplicate_cells",
+   "reason": "abstain_multiple_labeled_rows",
+   "outcome": "abstain",
+   "accept": null
+  },
+  {
+   "item_id": "2d5c90562ce0",
+   "ticker": "ADM",
+   "raw_label": "Nutrition Segment Profit",
+   "qualification_bucket": "duplicate_cells",
+   "reason": "abstain_no_labeled_row",
+   "outcome": "abstain",
+   "accept": null
+  },
+  {
+   "item_id": "c0c783d31323",
+   "ticker": "ADM",
+   "raw_label": "Total Revenue",
+   "qualification_bucket": "duplicate_cells",
+   "reason": "abstain_multiple_labeled_rows",
+   "outcome": "abstain",
+   "accept": null
+  },
+  {
+   "item_id": "13ad41b2fef1",
+   "ticker": "AEE",
+   "raw_label": "Ameren Missouri Net Income",
+   "qualification_bucket": "prose_only",
+   "reason": "abstain_multiple_labeled_rows",
+   "outcome": "abstain",
+   "accept": null
+  },
+  {
+   "item_id": "ea8682a9830b",
+   "ticker": "AEE",
+   "raw_label": "Ameren Illinois Electric Distribution Net Income",
+   "qualification_bucket": "prose_only",
+   "reason": "abstain_multiple_labeled_rows",
+   "outcome": "abstain",
+   "accept": null
+  },
+  {
+   "item_id": "5c834f33e786",
+   "ticker": "AEE",
+   "raw_label": "Ameren Illinois Natural Gas Net Income",
+   "qualification_bucket": "prose_only",
+   "reason": "abstain_multiple_labeled_rows",
+   "outcome": "abstain",
+   "accept": null
+  },
+  {
+   "item_id": "f05f1ad74900",
+   "ticker": "AEE",
+   "raw_label": "Ameren Transmission Net Income",
+   "qualification_bucket": "prose_only",
+   "reason": "abstain_multiple_labeled_rows",
+   "outcome": "abstain",
+   "accept": null
+  },
+  {
+   "item_id": "7c7fed81a5e2",
+   "ticker": "AEE",
+   "raw_label": "Ameren Missouri Net Income",
+   "qualification_bucket": "prose_only",
+   "reason": "abstain_multiple_labeled_rows",
+   "outcome": "abstain",
+   "accept": null
+  },
+  {
+   "item_id": "f3ee606b88de",
+   "ticker": "AEE",
+   "raw_label": "Ameren Illinois Electric Distribution Net Income",
+   "qualification_bucket": "prose_only",
+   "reason": "abstain_multiple_labeled_rows",
+   "outcome": "abstain",
+   "accept": null
+  },
+  {
+   "item_id": "d7c6b8f583b3",
+   "ticker": "AEE",
+   "raw_label": "Ameren Illinois Natural Gas Net Income",
+   "qualification_bucket": "prose_only",
+   "reason": "abstain_multiple_labeled_rows",
+   "outcome": "abstain",
+   "accept": null
+  },
+  {
+   "item_id": "057e9564b04f",
+   "ticker": "AEE",
+   "raw_label": "Ameren Transmission Net Income",
+   "qualification_bucket": "duplicate_cells",
+   "reason": "abstain_multiple_labeled_rows",
+   "outcome": "abstain",
+   "accept": null
+  },
+  {
+   "item_id": "f0d9b6e0dea2",
+   "ticker": "AFL",
+   "raw_label": "US Adjusted Net Investment Income",
+   "qualification_bucket": "duplicate_cells",
+   "reason": "abstain_multiple_labeled_rows",
+   "outcome": "abstain",
+   "accept": null
+  },
+  {
+   "item_id": "ff629deb29f1",
+   "ticker": "AFL",
+   "raw_label": "US Adjusted Net Investment Income",
+   "qualification_bucket": "duplicate_cells",
+   "reason": "abstain_multiple_labeled_rows",
+   "outcome": "abstain",
+   "accept": null
+  }
+ ]
+}

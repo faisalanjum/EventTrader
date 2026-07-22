@@ -1,0 +1,433 @@
+{
+ "round": 3,
+ "claim_scope": "TABLE GEOMETRY ONLY \u2014 real Driver slice identity unavailable until Phase 5; final identity accuracy waits",
+ "anchor_inputs": "PLACEHOLDER label words from WP1 records \u2014 Core authoritative anchor builder VERIFIED UNAVAILABLE (Track A never run); real slice-bearing anchors arrive Phase 5. NO value, NO year; &=and only; trailing-s HELD.",
+ "truth_sha_verified": "465d72cadbbf4cbef63ee288c7722a82effa9ec77e487aff69ad90f7ac08ce2c",
+ "ACCURACY_19_rows_headed_numeric_cells": {
+  "row_correct_full_family": 7,
+  "row_correct_family_diff": 0,
+  "wrong": 0,
+  "abstain_no_row": 9,
+  "abstain_disputed_rows": 3
+ },
+ "consolidated_vs_regional_explicit": [
+  {
+   "case": "Passenger Load Factor (Percent)",
+   "ticker": "AAL",
+   "tables": [
+    {
+     "doc": "0000006201-26-000031__EX-99.1.htm",
+     "table_index": 3,
+     "row_index": 5,
+     "row_label": "Passenger load factor (percent)",
+     "section": "",
+     "caption": ""
+    },
+    {
+     "doc": "0000006201-26-000031__EX-99.1.htm",
+     "table_index": 4,
+     "row_index": 6,
+     "row_label": "Passenger load factor (percent)",
+     "section": "Domestic (1)",
+     "caption": ""
+    },
+    {
+     "doc": "0000006201-26-000031__EX-99.1.htm",
+     "table_index": 4,
+     "row_index": 14,
+     "row_label": "Passenger load factor (percent)",
+     "section": "Latin America (2)",
+     "caption": ""
+    },
+    {
+     "doc": "0000006201-26-000031__EX-99.1.htm",
+     "table_index": 4,
+     "row_index": 22,
+     "row_label": "Passenger load factor (percent)",
+     "section": "Atlantic",
+     "caption": ""
+    },
+    {
+     "doc": "0000006201-26-000031__EX-99.1.htm",
+     "table_index": 4,
+     "row_index": 30,
+     "row_label": "Passenger load factor (percent)",
+     "section": "Pacific",
+     "caption": ""
+    },
+    {
+     "doc": "0000006201-26-000031__EX-99.1.htm",
+     "table_index": 4,
+     "row_index": 38,
+     "row_label": "Passenger load factor (percent)",
+     "section": "Total International",
+     "caption": ""
+    }
+   ]
+  },
+  {
+   "case": "Yield (Cents)",
+   "ticker": "AAL",
+   "tables": [
+    {
+     "doc": "0000006201-26-000031__EX-99.1.htm",
+     "table_index": 3,
+     "row_index": 6,
+     "row_label": "Yield (cents)",
+     "section": "",
+     "caption": ""
+    },
+    {
+     "doc": "0000006201-26-000031__EX-99.1.htm",
+     "table_index": 4,
+     "row_index": 8,
+     "row_label": "Yield (cents)",
+     "section": "Domestic (1)",
+     "caption": ""
+    },
+    {
+     "doc": "0000006201-26-000031__EX-99.1.htm",
+     "table_index": 4,
+     "row_index": 16,
+     "row_label": "Yield (cents)",
+     "section": "Latin America (2)",
+     "caption": ""
+    },
+    {
+     "doc": "0000006201-26-000031__EX-99.1.htm",
+     "table_index": 4,
+     "row_index": 24,
+     "row_label": "Yield (cents)",
+     "section": "Atlantic",
+     "caption": ""
+    },
+    {
+     "doc": "0000006201-26-000031__EX-99.1.htm",
+     "table_index": 4,
+     "row_index": 32,
+     "row_label": "Yield (cents)",
+     "section": "Pacific",
+     "caption": ""
+    },
+    {
+     "doc": "0000006201-26-000031__EX-99.1.htm",
+     "table_index": 4,
+     "row_index": 40,
+     "row_label": "Yield (cents)",
+     "section": "Total International",
+     "caption": ""
+    }
+   ]
+  }
+ ],
+ "searched_documents_pinned": {
+  "0000006201-26-000031__EX-99.1.htm": "59f2a20f3240b354a6172223f32acbfe43bc304fffe44ea0a7f63fd9d921549b",
+  "0000006201-26-000031__EX-99.2.htm": "be83ca725c5fb59d4aa01a68b1d991abcdeb7d2616a24c554b821c553ca12a3e",
+  "0000007084-25-000005__EX-99.1.htm": "0dad3cbab45081db4c3e12f470a5406823652939f7d8af6ef561c0651a457bfe",
+  "0000007084-26-000005__EX-99.1.htm": "fe12e55d34ad7098cc7e0c96ce5d1166c72ef315c41004d38415d25c2691e4cc",
+  "0000950170-25-007765__EX-99.1.htm": "31e8cd05b2ed0bfcc4b290e55adf7d4e5429ed8a97bf505ae97696e625ccf4ba",
+  "0001002910-25-000052__EX-99.1.htm": "2c26c7bb8788df9669454b26ba348b3148b3e7ec22a3fb3eb524003f65123534",
+  "0001002910-25-000052__EX-99.2.htm": "02cc3409852c350f6ba3ddd45140fbf8409087ae378cc10ceb13ef9d80c3ab1e",
+  "0001002910-26-000005__EX-99.1.htm": "5845681eb1b4dd9a5dcf1e13f4b68593f3676e0494df801561e36a1bb4aa4320",
+  "0001002910-26-000005__EX-99.2.htm": "f14aa4fe8c305c33fea34d3e12d48f4684041a6e1103cca42265ead3344bd5c0",
+  "0001193125-26-019438__EX-99.1.htm": "7441a4eb3ac0eda317faca16a8794ec9117f6b691a962cf1461d821a1f804198",
+  "0000006201-26-000031.htm": "ba2eb8b0cc113ce7974cc49a5f7acf504a0798a223aabdd4441b67648af498d7",
+  "0000007084-25-000005.htm": "b4b16e841857c4ee7c53441b18ab544ab02c089b26f0b5e58dcd9c5439eaf8d8",
+  "0000007084-26-000005.htm": "cee477a3e80e28cacafde510bddaaff8ac0fe5002133c55b99f312fbaec1a13b",
+  "0000950170-25-007765.htm": "239296c5d51374a800095e1c5849915104a78969732f788f53c1ac8d189d0525",
+  "0001002910-25-000052.htm": "53d777c5439e531831c2e634ca4cc8b1952a28e0d0a7884aef6db51be6974d10",
+  "0001002910-26-000005.htm": "cdc09a3fa614d2b3a99d8d65cc0ce1ff0306a6c7c3c270a5f9a4a3391c858816",
+  "0001193125-26-019438.htm": "dedcec0edda68ed4eb5097dd72ebac651396fdf760308532d752afee7faaf15a"
+ },
+ "ledger": [
+  {
+   "candidate_id": "0000006201-26-000031__EX-99.1.htm#t2r5c3-5",
+   "ticker": "AAL",
+   "raw_label": "Cargo Revenue",
+   "reason": "abstain_no_row",
+   "outcome": "abstain_no_row"
+  },
+  {
+   "candidate_id": "0000006201-26-000031__EX-99.1.htm#t2r4c4-5",
+   "ticker": "AAL",
+   "raw_label": "Passenger Revenue",
+   "reason": "abstain_disputed_rows",
+   "outcome": "abstain_disputed_rows",
+   "disputed_rows": [
+    {
+     "doc": "0000006201-26-000031__EX-99.1.htm",
+     "table_index": 4,
+     "row_index": 7,
+     "row_label": "Passenger revenue (dollars in millions)",
+     "section": "Domestic (1)",
+     "caption": ""
+    },
+    {
+     "doc": "0000006201-26-000031__EX-99.1.htm",
+     "table_index": 4,
+     "row_index": 15,
+     "row_label": "Passenger revenue (dollars in millions)",
+     "section": "Latin America (2)",
+     "caption": ""
+    },
+    {
+     "doc": "0000006201-26-000031__EX-99.1.htm",
+     "table_index": 4,
+     "row_index": 23,
+     "row_label": "Passenger revenue (dollars in millions)",
+     "section": "Atlantic",
+     "caption": ""
+    },
+    {
+     "doc": "0000006201-26-000031__EX-99.1.htm",
+     "table_index": 4,
+     "row_index": 31,
+     "row_label": "Passenger revenue (dollars in millions)",
+     "section": "Pacific",
+     "caption": ""
+    },
+    {
+     "doc": "0000006201-26-000031__EX-99.1.htm",
+     "table_index": 4,
+     "row_index": 39,
+     "row_label": "Passenger revenue (dollars in millions)",
+     "section": "Total International",
+     "caption": ""
+    }
+   ]
+  },
+  {
+   "candidate_id": "0000006201-26-000031__EX-99.1.htm#t3r5c3-6",
+   "ticker": "AAL",
+   "raw_label": "Passenger Load Factor (Percent)",
+   "reason": "abstain_disputed_rows",
+   "outcome": "abstain_disputed_rows",
+   "disputed_rows": [
+    {
+     "doc": "0000006201-26-000031__EX-99.1.htm",
+     "table_index": 3,
+     "row_index": 5,
+     "row_label": "Passenger load factor (percent)",
+     "section": "",
+     "caption": ""
+    },
+    {
+     "doc": "0000006201-26-000031__EX-99.1.htm",
+     "table_index": 4,
+     "row_index": 6,
+     "row_label": "Passenger load factor (percent)",
+     "section": "Domestic (1)",
+     "caption": ""
+    },
+    {
+     "doc": "0000006201-26-000031__EX-99.1.htm",
+     "table_index": 4,
+     "row_index": 14,
+     "row_label": "Passenger load factor (percent)",
+     "section": "Latin America (2)",
+     "caption": ""
+    },
+    {
+     "doc": "0000006201-26-000031__EX-99.1.htm",
+     "table_index": 4,
+     "row_index": 22,
+     "row_label": "Passenger load factor (percent)",
+     "section": "Atlantic",
+     "caption": ""
+    },
+    {
+     "doc": "0000006201-26-000031__EX-99.1.htm",
+     "table_index": 4,
+     "row_index": 30,
+     "row_label": "Passenger load factor (percent)",
+     "section": "Pacific",
+     "caption": ""
+    },
+    {
+     "doc": "0000006201-26-000031__EX-99.1.htm",
+     "table_index": 4,
+     "row_index": 38,
+     "row_label": "Passenger load factor (percent)",
+     "section": "Total International",
+     "caption": ""
+    }
+   ]
+  },
+  {
+   "candidate_id": "0000006201-26-000031__EX-99.1.htm#t3r6c3-6",
+   "ticker": "AAL",
+   "raw_label": "Yield (Cents)",
+   "reason": "abstain_disputed_rows",
+   "outcome": "abstain_disputed_rows",
+   "disputed_rows": [
+    {
+     "doc": "0000006201-26-000031__EX-99.1.htm",
+     "table_index": 3,
+     "row_index": 6,
+     "row_label": "Yield (cents)",
+     "section": "",
+     "caption": ""
+    },
+    {
+     "doc": "0000006201-26-000031__EX-99.1.htm",
+     "table_index": 4,
+     "row_index": 8,
+     "row_label": "Yield (cents)",
+     "section": "Domestic (1)",
+     "caption": ""
+    },
+    {
+     "doc": "0000006201-26-000031__EX-99.1.htm",
+     "table_index": 4,
+     "row_index": 16,
+     "row_label": "Yield (cents)",
+     "section": "Latin America (2)",
+     "caption": ""
+    },
+    {
+     "doc": "0000006201-26-000031__EX-99.1.htm",
+     "table_index": 4,
+     "row_index": 24,
+     "row_label": "Yield (cents)",
+     "section": "Atlantic",
+     "caption": ""
+    },
+    {
+     "doc": "0000006201-26-000031__EX-99.1.htm",
+     "table_index": 4,
+     "row_index": 32,
+     "row_label": "Yield (cents)",
+     "section": "Pacific",
+     "caption": ""
+    },
+    {
+     "doc": "0000006201-26-000031__EX-99.1.htm",
+     "table_index": 4,
+     "row_index": 40,
+     "row_label": "Yield (cents)",
+     "section": "Total International",
+     "caption": ""
+    }
+   ]
+  },
+  {
+   "candidate_id": "0000007084-25-000005__EX-99.1.htm#t16r16c19-20",
+   "ticker": "ADM",
+   "raw_label": "Ag Services & Oilseeds Revenue",
+   "reason": "abstain_no_row",
+   "outcome": "abstain_no_row"
+  },
+  {
+   "candidate_id": "0000007084-25-000005__EX-99.1.htm#t16r17c18-20",
+   "ticker": "ADM",
+   "raw_label": "Carbohydrate Solutions Revenue",
+   "reason": "abstain_no_row",
+   "outcome": "abstain_no_row"
+  },
+  {
+   "candidate_id": "0000007084-25-000005__EX-99.1.htm#t16r18c18-20",
+   "ticker": "ADM",
+   "raw_label": "Nutrition Revenue",
+   "reason": "abstain_no_row",
+   "outcome": "abstain_no_row"
+  },
+  {
+   "candidate_id": "0000007084-26-000005__EX-99.1.htm#t10r16c19-20",
+   "ticker": "ADM",
+   "raw_label": "Ag Services & Oilseeds Revenue",
+   "reason": "abstain_no_row",
+   "outcome": "abstain_no_row"
+  },
+  {
+   "candidate_id": "0000007084-26-000005__EX-99.1.htm#t10r17c18-20",
+   "ticker": "ADM",
+   "raw_label": "Carbohydrate Solutions Revenue",
+   "reason": "abstain_no_row",
+   "outcome": "abstain_no_row"
+  },
+  {
+   "candidate_id": "0000007084-26-000005__EX-99.1.htm#t10r18c18-20",
+   "ticker": "ADM",
+   "raw_label": "Nutrition Revenue",
+   "reason": "abstain_no_row",
+   "outcome": "abstain_no_row"
+  },
+  {
+   "candidate_id": "0000950170-25-007765__EX-99.1.htm#t5r5c26-27",
+   "ticker": "AA",
+   "raw_label": "Alumina Production (kmt)",
+   "reason": "accepted_row",
+   "outcome": "row_correct_full_family",
+   "emitted_cells": 7,
+   "truth_cells": 7
+  },
+  {
+   "candidate_id": "0000950170-25-007765__EX-99.1.htm#t5r3c26-27",
+   "ticker": "AA",
+   "raw_label": "Bauxite Production (mdmt)",
+   "reason": "accepted_row",
+   "outcome": "row_correct_full_family",
+   "emitted_cells": 7,
+   "truth_cells": 7
+  },
+  {
+   "candidate_id": "0000950170-25-007765__EX-99.1.htm#t5r6c26-27",
+   "ticker": "AA",
+   "raw_label": "Alumina Third-Party Shipments (kmt)",
+   "reason": "accepted_row",
+   "outcome": "row_correct_full_family",
+   "emitted_cells": 7,
+   "truth_cells": 7
+  },
+  {
+   "candidate_id": "0000950170-25-007765__EX-99.1.htm#t5r4c26-27",
+   "ticker": "AA",
+   "raw_label": "Bauxite Third-Party Shipments (mdmt)",
+   "reason": "accepted_row",
+   "outcome": "row_correct_full_family",
+   "emitted_cells": 7,
+   "truth_cells": 7
+  },
+  {
+   "candidate_id": "0001002910-25-000052__EX-99.1.htm#t13r10c15-17",
+   "ticker": "AEE",
+   "raw_label": "Ameren Illinois Natural Gas Revenue",
+   "reason": "abstain_no_row",
+   "outcome": "abstain_no_row"
+  },
+  {
+   "candidate_id": "0001002910-26-000005__EX-99.1.htm#t13r10c15-17",
+   "ticker": "AEE",
+   "raw_label": "Ameren Illinois Natural Gas Revenue",
+   "reason": "abstain_no_row",
+   "outcome": "abstain_no_row"
+  },
+  {
+   "candidate_id": "0001193125-26-019438__EX-99.1.htm#t5r5c26-27",
+   "ticker": "AA",
+   "raw_label": "Alumina Production (kmt)",
+   "reason": "accepted_row",
+   "outcome": "row_correct_full_family",
+   "emitted_cells": 7,
+   "truth_cells": 7
+  },
+  {
+   "candidate_id": "0001193125-26-019438__EX-99.1.htm#t5r3c26-27",
+   "ticker": "AA",
+   "raw_label": "Bauxite Production (mdmt)",
+   "reason": "accepted_row",
+   "outcome": "row_correct_full_family",
+   "emitted_cells": 7,
+   "truth_cells": 7
+  },
+  {
+   "candidate_id": "0001193125-26-019438__EX-99.1.htm#t5r6c26-27",
+   "ticker": "AA",
+   "raw_label": "Alumina Third-Party Shipments (kmt)",
+   "reason": "accepted_row",
+   "outcome": "row_correct_full_family",
+   "emitted_cells": 7,
+   "truth_cells": 7
+  }
+ ]
+}

@@ -10,7 +10,7 @@ shared-core, added downstream). `build()` is pure (no Neo4j) so it is unit-teste
 
     venv/bin/python scripts/driver_seed/build_packets.py --tag smoke
 """
-import os, re, sys, json, argparse, collections
+import os, sys, json, argparse, collections
 sys.path.insert(0, os.path.dirname(__file__))
 import run_code_tier as RC          # shared FORMMAP + load_env_neo4j (channel-side, moves together at reorg)
 
@@ -95,6 +95,23 @@ def fetch_fye(session, tickers):
     return {r['tk']: r['m'] for r in rows}
 
 
+def _exact_default(o):
+    """THE shared packet writer's exact-value law (Phase-3 fold, 2026-07-22):
+    Decimal → its exact string, NEVER through float; any other unhandled type is
+    a bug and raises. Decimal-free rows serialize byte-identically to before."""
+    from decimal import Decimal
+    if isinstance(o, Decimal):
+        return str(o)
+    raise TypeError(f'not JSON serializable: {type(o).__name__}')
+
+
+def write_jsonl(rows, path):
+    """THE one shared packet/ledger writer — exact Decimals as strings."""
+    with open(path, 'w', encoding='utf-8') as f:
+        for r in rows:
+            f.write(json.dumps(r, default=_exact_default) + '\n')
+
+
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument('--tag', required=True); a = ap.parse_args()
     pdir = f'{OUT}/{a.tag}'
@@ -112,12 +129,9 @@ def main():
     drv.close()
 
     packets, skip, park = build(records, abstains, fye)
-    with open(f'{pdir}/packets.jsonl', 'w') as f:
-        for p in packets: f.write(json.dumps(p) + '\n')
-    with open(f'{pdir}/skip_ledger.jsonl', 'w') as f:
-        for x in skip: f.write(json.dumps(x) + '\n')
-    with open(f'{pdir}/park_ledger.jsonl', 'w') as f:
-        for x in park: f.write(json.dumps(x) + '\n')
+    write_jsonl(packets, f'{pdir}/packets.jsonl')
+    write_jsonl(skip, f'{pdir}/skip_ledger.jsonl')
+    write_jsonl(park, f'{pdir}/park_ledger.jsonl')
     items = sum(len(p['items']) for p in packets)
     by_src = collections.Counter(p['source_type'] for p in packets)
     print(json.dumps({'tag': a.tag, 'packets': len(packets), 'items': items, 'by_source': dict(by_src),

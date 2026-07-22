@@ -1,3 +1,12 @@
+> 📌 **AUTHORITY (2026-07-21):** This locked Design v5.5 remains **THE BASE CONTRACT for
+> every rule it contains that has not been explicitly replaced.** The ONLY current
+> execution amendment/work order is `UniversalLocator_SourceLinked_Prose_Simplification_
+> FinalPlan_2026-07-21.md`, which replaces EXACTLY: Corrective-5 Batch B/C/D · this doc's
+> Round-14 §3 · the Batch-C rows of Round-14 §4 · Round-14 §5's old measurement sequence ·
+> the draft disposition table (now FinalPlan §16). Everything else here stands unchanged.
+> Reading order: locked Design base → FinalPlan changes/current steps → Review Record
+> history.
+
 # Universal Locator — Operative Design v5.5
 
 **Status:** v5.5 — architecture settled after 9 review rounds; D14-v3 owner-confirmed; the durable
@@ -193,3 +202,199 @@ Core reconfirms from the old source alone, nothing factual copied backward, dual
 timestamps, source-date PIT views stand (system-state reproduction = run snapshots).
 
 *End v5.5.*
+
+---
+## ADDENDUM (reviewer-ordered 2026-07-21) — MANDATORY WP2-CLOSE BLOCKER
+"WP2 cannot close until the filing-declared semantic unit and divide meaning are passed
+into the neutral matcher for every available XBRL fact. Raw unitRef remains identity.
+This must recover eligible number and opaque unit IDs without spelling guesses,
+registries, an LLM, or tokens."
+(Recorded per the reviewer's round-4 order; the review record holds the full context.)
+
+════════════════════════════════════════════════════════════════════════════════
+ROUND 14 — SOURCE-LINKED PRE-BUILD PACKAGE (reviewer-ordered; NO code until audited)
+════════════════════════════════════════════════════════════════════════════════
+
+### §1 THE JOIN — structured Fact → its exact display element (fail-safe by enumeration)
+One fetch/parse per filing (display inline .htm; the extracted _htm.xml is NEVER a
+substitute — it drops element ids). Join key (CORRECTED law, round 14d — supersedes the
+14c wording, which followed the reviewer's own inverted instruction): the HTML `id=`
+attribute is indexed by **`inline_element_id` = `Fact.fact_id`** (the SHORT id, e.g.
+'f-498'); **`graph_fact_id` = `Fact.id`/`u_id`** is the LONG canonical identity that
+merely ENDS WITH the short id and never equals the HTML id. Graph-verified 2026-07-21:
+13,775,616 facts · long id on all · 34,277 short blank/null · 13,741,339 suffix-
+consistent · zero equal. The M2 resolver already used the correct field — verbatim from
+m234_display.py: cypher `RETURN f.fact_id AS fid …` then `k = ids.get(fid)` where `ids`
+counts the display-HTML `id="…"` attributes. Measured basis: 2,019,825/2,019,825 numeric non-nil usable-id facts resolve
+EXACTLY ONCE across the 1,722-file cache (0 miss · 0 duplicate); all-facts superset
+2,200,113 also 100%.
+Fail-safe law (every branch abstains, never guesses):
+- fact_id missing/'null' (3,332): identity fallback (name, contextRef, unitRef) binds
+  IFF exactly one element matches (3,324); ≥2 (the 8) → ABSTAIN.
+- id not found in the document, or found ≥2 times → ABSTAIN (measured zero; guarded).
+- Malformed element (measured: exactly 2 — one attribute-less, one referencing the
+  undefined context c-410) → ABSTAIN.
+- Element inside ix:hidden → join succeeds, visibility=hidden carried; hidden elements
+  provide NO display evidence (no row/headers); they may satisfy existence, never
+  identity → identity unproven → ABSTAIN unless another lawful path proves it.
+- Filing uncached → fetch once via the lock_cell.py convention; fetch failure → ABSTAIN.
+- Value reconciliation: displayed text ∘ (ixt format, scale, sign) must equal
+  Fact.value by EXACT Decimal arithmetic; mismatch → ABSTAIN.
+
+### §2 ELEMENT-LOCAL PROOF — no document-wide text parser
+Structured facts are proved ONLY from: their own element (+attrs) · their table row
+(untouched) · the aligned column-header stack · the section caption — or, for prose-
+embedded elements, the smallest enclosing structural block (<p>/<td>/<li>). Prototype
+= the SHA-pinned extractor (lock_row_extract.py 38690c7b…; 144/146 gate rows handled,
+2 need the generic parent-paragraph path). Anchor wording/slice/measurement tokens are
+checked against THAT local evidence only; concept remains retrieval-only; missing
+identity proof → ABSTAIN. Unit = raw unitRef + the semantic Unit node (12,402,201
+verified 1:1) — raw-unit SPELLING classification is deleted. Period = the context's
+declared dates (graph stores exclusive ends; normalize once; keep the printed date).
+No sentence splitter, no territory, no scale competition, no cadence wording — the
+element declares scale/sign/period. [Narrowed per round-14c audit: only SCALE/PRINT
+competition for one exactly-joined Fact disappears (its element is unique). DIFFERENT
+surviving Fact identities that each match an anchor still invoke the locked ambiguity
+law — ambiguous → abstain, unchanged.]
+
+### §3 THE PROSE ROUTE — ⛔ SUPERSEDED (round 14c) by FinalPlan §5 Routes B–E
+⛔ THIS SECTION IS NOT ACTIVE. The FinalPlan (2026-07-21) replaces it: conditional
+Routes B/C (measured-or-cut), Route D batched reader, Route E honest no_proven_match.
+Batch C's R2 time law is FROZEN with Batch B/C/D. Kept below only as history.
+Scope: sources without stickers (8-K EX-99.1 prose, transcripts, news, fiscal.ai) and
+R2 value-hints. Kept core: exact print-form families (value_forms incl. the measured
+vs./ppts. dotted forms via the form grammar — no registry) · local identity within the
+containing block · printed unit signal · span-local sign · zero-intervening-word
+adjacent basis phrases. Same-family contest inside the block (measured ≈27% of value
+sentences) → route to the BATCHED READER: reader PROPOSES (occurrence + label), code
+VERIFIES (verbatim byte-check · form cover · identity tokens · uniqueness); unverified
+→ ABSTAIN. Reader batches are cost-approved by the owner before any run. R2's time law
+remains Batch C; R2 stays explicitly incomplete until then.
+
+### §4 DELETION TABLE — exact functions, callers, replacement (net = measured at diff)
+External callers outside locator.py: NONE except test_locator_routes.py (verified).
+| function (lines) | callers | fate |
+| _unit_class (137) | _span_item | DELETE — semantic Unit node replaces spelling walk |
+| _fact_scale_evidence (189) | R1 enumeration | DELETE — no competition vs a unique id |
+| _span_item (172) | emit, competition | REPLACE with element-local proof (≈50-70 L) |
+| _print_candidates (17) | _span_item | DELETE — scale attr declares the printed form |
+| _hard_break/_pieces/_clause_bounds (63) | splitter consumers | DELETE from R1; prose
+|   route uses source structural blocks, never sentence regex |
+| territory block + next-label walk (inside _span_item) | — | DELETE |
+| R2 inline copy (~40) | R2 | DELETE — one shared proof |
+| _printed_basis (56) | basis law | ⛔ SUPERSEDED (14c): its contested-prose case class
+|   routes to the reader (FinalPlan §5D); deleted with the prose parser in Phase 3;
+|   pinned QSR/SBX/Chili's/JOINT cases → reader-certification set |
+| _wcls/_cad_ok cadence | period law | R1: DELETE (context dates are exact);
+|   ⛔ SUPERSEDED (14c): no "prose route until Batch C" — B/C/D frozen; prose period
+|   meaning belongs to the reader (FinalPlan §6) |
+| _suffix_forms/_tableforms/value_forms | print families | KEEP (prose route + R2) |
+Net size: reported from the actual diff; ~713 lines is an ESTIMATE, NOT a target
+(reviewer correction recorded). If the design fails to materially reduce code → STOP
+and report, per order.
+
+### §5 OLD-vs-NEW COMPARISON — ⛔ SUPERSEDED (round 14c) by FinalPlan §8 (M1–M4) + §11
+⛔ THE MEASUREMENT SEQUENCE BELOW IS NOT ACTIVE. FinalPlan order governs: GO → Phase 1
+(Route A build + its shadows/gates) → THEN Phase 2 = M1–M4. Kept below only as history.
+Already-run (this round): the join over all cached facts (numbers above) · the 150-gate
+graph existence (each case fetches its exact Fact.id; 130/20/0 green) · manifests/SHAs.
+To run for the audit package (read-only, no production code): the SHA-pinned extractor
+across the 146 cached gate cases and the cached corpus sample → row/header evidence
+rates; old-route corpora reruns (battery 230 · floors 28 · WP1 outputs) with the
+LAWFUL-FLIP REGISTER: synthetic pins whose expectations change BY RULING —
+'United States 2024' → abstain unless structure/wording proves the year; 'Product 50'
+→ binds only via its own wording token; flat-text territory pins → superseded by
+element-local proof (each flip listed with its ruling citation, none silent).
+Report: precision · recall · lawful losses · reader-queue volume (≈27% of contested
+prose sentences; per-corpus counts) · token estimate for the batched reader.
+PIT ordering (§6) is enforced inside every comparison.
+
+### §6 POINT-IN-TIME LAW
+Evidence for a fact located in source S comes ONLY from S itself (+ the anchor).
+An earlier 8-K/transcript NEVER uses a later 10-Q/10-K as evidence. Retro-twin XBRL
+checks (the later sticker confirming an earlier prose number) are CALIBRATION/grading
+only — never stamped as evidence on the earlier source. Reader outputs obey the same
+scope: the reader sees S and the anchor, nothing later.
+
+════════════════════════════════════════════════════════════════════════════════
+ROUND 14b — COMBINED PRE-BUILD PACKAGE (response to FinalPlan §14; NO code)
+════════════════════════════════════════════════════════════════════════════════
+GOVERNING DOCUMENT from this point: UniversalLocator_SourceLinked_Prose_Simplification_
+FinalPlan_2026-07-21.md (sha256 69e7ebf4a228…). Of this doc's ROUND-14 sections, ONLY §§1–2
+(the Route-A join + element-local proof) and §6 (the point-in-time law) remain valid
+detail; §3, the Batch-C rows of §4, and §5's measurement sequence are ⛔ SUPERSEDED and
+so marked in place. Where anything differs, the FinalPlan wins. Specifically SUPERSEDED here:
+my §3 line "R2's time law remains Batch C" — Batch B/C/D are FROZEN by FinalPlan Phase 0;
+their promised items (≥5-rule deletion · YUM completion criterion · 'while' recall ·
+leading-Q/Q · R2 time law · pp×100) each receive an explicit entry in the disposition
+ledger (destination: reader-certification case, integrity test, or retired-with-ruling)
+— nothing vanishes silently.
+
+§14 CONFIRMATIONS (all seven):
+1. Route A (source-linked) design kept exactly as specified (§1–§2 above + FinalPlan §5A).
+2. Corrective-5 Batch B/C/D FROZEN.
+3. The prose patch sequence is REPLACED by measurements M1–M4 + conditional Routes B/C;
+   Route D (batched reader) + Route E (honest no_proven_match).
+4. TWO OF MY OWN CLAIMS CORRECTED (his catch, supported by MY measurements): (a) "every
+   8-K level later gets a tagged twin" is FALSE — my own redundancy study measured
+   ~35–60% money-level overlap (47.2% transcripts / 44.4% news overall) — a later twin
+   is a GRADING aid only; (b) "spoken percentages can be recomputed from tagged levels"
+   is UNSAFE as stated — organic/adjusted/constant-currency/rounding definitions may not
+   match; M3 measures exact-definition coverage; a calculation may only reject a
+   contradiction, never prove or store a fact (ChannelContract forbids computed facts).
+   Also REVISED my own prior: my "~70% of prose is deterministic at 0 tokens" estimate
+   ignored that prose period proof usually needs period WORDS, which the new law removes
+   from code — Route C's true coverage is UNKNOWN until M1/M4; conditional-and-cut is
+   the correct stance.
+5. News stays a separate channel; Fiscal gains no news retrieval/meaning rules.
+6. Keep/delete/test-migration: FinalPlan §10 adopted verbatim + my exact caller map
+   (round-14 §4 above; external callers = test_locator_routes.py ONLY — deletions are
+   contained). Test disposition ledger: FAMILY-level now (per-test at Phase-1 audit):
+   route/battery families → keep (Route-A behaviours) · flat-text ownership families
+   (territory/competition/splitter/basis-ownership) → reader-certification + falsifier
+   set · synthetic pins flipped by ruling (US-2024, Product-50, test_49 class) → the
+   lawful-flip ledger with citations.
+7. HOLDS CONFIRMED: HEAD c2fc998 · fixture d7d2f068 · boundary 81eca0aa · four dirty WP2
+   paths preserved (never reset/checkout) · zero Neo4j writes · zero reader tokens ·
+   no push · no Core edits before Phase 5 · news untouched.
+
+§15 REPRODUCTIONS (all exact, my own runs, 2026-07-21):
+- 8-K exhibits with content: 26,779 · 0 '<table' · 0 '##TABLE_START' · 0 multiline —
+  stored 8-K text is FLATTENED; Route B must fetch original exhibit HTML.
+- Earnings-8-K EX-99 inventory: 10,274 distinct rows · 10,274 exact-key exhibit URLs ·
+  10,248 HTML · 26 PDF · 10,274 single-line.
+- Transcripts: 9,608 · 9,320 PreparedRemark (all nonblank) · 170,654 QAExchange (all
+  nonblank) — lawful source-native reader blocks exist.
+- Line-growth anchor verified: locator.py at 7f052b0 = 756 lines (now 1,808);
+  test_locator_routes.py 187 → 1,406.
+- Prior reproductions stand: M1 12,402,201 · M2 2,019,825 exactly-once/0/0 · M3 8
+  ambiguous · M4 2,217,620 with exactly 2 malformed (f-1762 → undefined c-410) · M5
+  146/150 cached · manifests/SHAs.
+STATUS (round 14d): ⛔ NO execution sequence lives in this document. The SOLE current
+sequence is FinalPlan §11 (Phase 0–7); the AUTHORITATIVE disposition table is FinalPlan
+§16. This doc remains the Route-A detail CONTRACT (§§1–2 + §6 PIT) and evidence/history.
+
+SIX-ROW DISPOSITION TABLE — ⛔ SUPERSEDED DRAFT (round 14d): the authoritative,
+correctly-formatted five-column table now lives in FinalPlan §16. Kept as history:
+| item | destination | expected result | gate |
+| ≥5-letter qualifier rule | DELETED with the prose parser (Phase 3) — Route A proves
+|   identity from row/headers; prose → reader | its false abstains (e.g. 'In the
+|   quarter,' prefixes) disappear; no wrong accepts appear | Phase-1/3 shadows +
+|   lawful-flip ledger at M2 |
+| YUM verbatim sentence (old Batch-B completion criterion) | reader-certification case
+|   (contested prose by construction) | reader+verifier bind it or abstain honestly;
+|   never a wrong basis | Phase-6 zero-wrong certification |
+| 'while' recall return | SUPERSEDED — recall arrives via Route A structure (tagged) and
+|   the reader (prose), not word rules | previously-lost 'while'-adjacent cases recovered
+|   or honestly abstained | M2 dispositions + Phase 6 |
+| leading 'Q/Q' walk mutilation | RETIRED with the label-walk machinery; Q/Q stays only
+|   as a print/phrase FORM in the verifier | no walk exists to mutilate; form still
+|   recognized mechanically | Phase-1 shadow (zero wrong accepts) |
+| R2 time law (old Batch C) | SUPERSEDED by FinalPlan Route C contract: a known-value
+|   fast path proves the stated period from source-native evidence or the route is CUT;
+|   if cut, prose period meaning lives only in the reader | no R2 emission without
+|   period proof under either outcome | M2 keep-or-cut gate + Phase 6 |
+| pp×100 (was pending one verified real pair) | RETIRED from code — Route A reads the
+|   element's declared scale; prose pp forms remain RAW-only in the verifier's form
+|   families | no behavior change (never enabled); no pinned case depends on it | M2
+|   shadow confirms zero dependence |

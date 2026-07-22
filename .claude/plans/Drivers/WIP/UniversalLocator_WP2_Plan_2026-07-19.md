@@ -1,3 +1,5 @@
+> ⛔ **SUPERSEDED-FOR-EXECUTION (2026-07-21):** The locked `UniversalLocator_Design_2026-07-18.md` is the BASE contract; `UniversalLocator_SourceLinked_Prose_Simplification_FinalPlan_2026-07-21.md` is the SOLE current execution amendment/work order (Phase 0-7; Batch B/C/D FROZEN). Reading order: locked Design v5.5 base (unchanged rules) -> FinalPlan (changes + current steps) -> Review Record (history). This file is history/evidence only — follow no execution instruction in it.
+
 # WP2 Plan — Anchor + one-source locator (v4, 2026-07-19)
 
 v3 architecture APPROVED; v4 = the reviewer's final proof-tightening (7 points, every premise

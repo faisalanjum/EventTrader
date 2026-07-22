@@ -320,14 +320,17 @@ def _tableforms(v, fmt):
     av = abs(float(v))
     p = XN.plain(XN.dec(str(v)).copy_abs())
     s = {p}
-    if fmt == 'x':                         # corrective 4: multiple prints ('8x') — per-enum
-        return {p + 'x'}                   # contract logic for the x anchor unit
-    if fmt == 'bps':                       # basis-point prints; '%' never satisfies bps
-        return {p + ' basis points', p + ' bps'}
+    if fmt in ('x', 'bps', 'pp'):          # suffix-print classes route through ONE
+        return _suffix_forms(v, fmt)       # measured form builder (corrective 5)
     if fmt == '%':
         if '.' in p:
             s.add(f"{av:.1f}")             # 2.34 -> '2.3'; the integer print is the reader's call
-        return s
+            s |= {f"{av:.2f}", f"{av:.3f}"}   # round 4: padded prints ('0.5' ↔ '0.500%',
+        else:                                 # the CAG corpus case) — retrieval must see
+            s.add(p + '.0')                   # the same padded family value_forms proves
+        s |= {f[1:] for f in s if f.startswith('0.')}   # round 5 (the VERIFIED Aflac
+        return s                                        # pair): leading-zero-omitted
+                                                        # prints ('.300 %')
     if '.' not in p:
         s.add(_grp(p))                     # grouped cell form ('5,365,000,000')
     for div in (1e3, 1e6, 1e9, 1e12):      # round-16: exact thousand + trillion forms too
@@ -457,21 +460,56 @@ def _round_forms(x):
     forms = set()
     for dec in (0, 1, 2, 3):
         forms.add(f"{x:.{dec}f}")
-        f = math.floor(abs(x) * 10**dec) / 10**dec
-        forms.add(f"{f:.{dec}f}")
+        y = abs(x) * 10 ** dec
+        if not math.isfinite(y):
+            continue                       # round 6: a huge-but-finite raw overflows the
+        f = math.floor(y) / 10 ** dec      # scaled float — skip the rounded companion,
+        forms.add(f"{f:.{dec}f}")          # never crash (reproduced on both routes)
     for f in list(forms):
         if '.' in f:
             forms.add(f.rstrip('0').rstrip('.'))
     return {f for f in forms if f not in ('', '-', '0', '-0')}
 
+def _suffix_forms(value, fmt):
+    """The MEASURED print forms of the suffix classes (corrective 5 rounds 1-3, his named
+    variants + corpus counts): x → '8x'/'8X'/'8 x' + exact trailing-zero ('2.0x' for a
+    stored 2); bps → 'basis points'/'bps'/no-space/'BPS'/hyphenated 'basis-point'
+    compounds/singular; pp → 'percentage points'/'pp'/'ppt'/'ppts'/no-space/singular;
+    plus the number-only accounting-paren print '(180) BPS' (recognized as NEGATIVE by
+    printed_negative). Built from the value itself — never parsed from text."""
+    d = XN.dec(str(value)).copy_abs()
+    nums = {XN.plain(d), str(d)}           # canonical + lossless-decimal ('2.0') prints
+    for p in list(nums):
+        if '.' not in p:
+            nums |= {p + '.0', p + '.00'}  # exact trailing-zero variants (2 ↔ 2.0x/2.00x)
+        elif len(p.split('.')[1]) == 1:
+            nums.add(p + '0')              # 2.9 ↔ 2.90X (his corpus form)
+    out = set()
+    for p in nums:
+        if fmt == 'x':
+            out |= {p + s for s in ('x', 'X', ' x', ' X', ' times')}
+            out |= {'(' + p + ') x', '(' + p + ')x', '(' + p + ') X'}
+        elif fmt == 'bps':
+            base = {' basis points', ' bps', 'bps', ' BPS', 'BPS', ' BP', 'BP',
+                    ' basis point', ' basis-point', '-basis-point'}
+            out |= {p + s for s in base}
+            out |= {'(' + p + ')' + s for s in (' bps', ' BPS', ' BP', ' basis points',
+                                                ' basis point')}
+        else:
+            base = {' percentage points', ' pp', 'pp', ' ppts', ' ppt', 'ppts',
+                    ' percentage point', ' percentage-point'}
+            out |= {p + s for s in base}
+            out |= {'(' + p + ')' + s for s in (' ppts', ' ppt', ' pp',
+                                                ' percentage points')}
+    return out
+
+
 def value_forms(value, fmt='number', is_currency=1):
     """All plausible verbatim string forms of a reported value."""
     if value is None:
         return set()
-    if fmt in ('x', 'bps'):                # corrective 4: per-enum suffix prints route
-        p0 = XN.plain(XN.dec(str(value)).copy_abs())          # through the same exact law
-        return ({p0 + 'x'} if fmt == 'x'
-                else {p0 + ' basis points', p0 + ' bps'})
+    if fmt in ('x', 'bps', 'pp'):
+        return _suffix_forms(value, fmt)
     v = float(value); av = abs(v); forms = set()
     if v == 0:
         return {'0'}                       # a stated zero is a real value (WP1); boundary +
@@ -482,11 +520,15 @@ def value_forms(value, fmt='number', is_currency=1):
             if not integral and '.' not in f:
                 continue                   # 2.34 never accepts the integer-rounded print '2%'
                                            # (owner F2: the gray zone belongs to the reader lane)
-            forms |= {f + '%', f + ' percent', f + ' percentage points', '(' + f + ')%', '(' + f + ')'}
+            forms |= {f + '%', f + ' %', f + ' percent', f + ' percentage points',
+                      '(' + f + ')%', '(' + f + ')'}
+            if f.startswith('0.'):
+                forms |= {f[1:] + '%', f[1:] + ' %'}   # round 5 (the VERIFIED Aflac
+                                                       # pair): '.300 %' prints
         bps = av * 100
-        if bps == int(bps):
-            forms.add(f"{int(bps)} basis points")
-        return forms
+        if math.isfinite(bps) and bps == int(bps):
+            forms.add(f"{int(bps)} basis points")   # round 6: int(inf) crashed BOTH
+        return forms                                # routes on a huge raw (reproduced)
     ai = int(round(av))
     forms.add(_grp(str(ai))); forms.add(str(ai))
     p = XN.plain(XN.dec(str(value)).copy_abs())
@@ -531,7 +573,7 @@ def bounded_hit(quote, form, forbid_pct=False):
 
 def exact_form(form, value, fmt):
     """form reproduces value losslessly (grouped cell, long int, or decimal within 0.1%)."""
-    if fmt in ('%', 'x', 'bps'):           # suffix-print classes: forms are constructed from
+    if fmt in ('%', 'x', 'bps', 'pp'):     # suffix-print classes: forms are constructed from
         return True                        # the value itself — lossless by construction
     s = form.lstrip('$( ').rstrip(')%').replace(',', '')
     try:
@@ -562,6 +604,18 @@ def printed_negative(quote, form):
             return True
         if re.search(r'(?<![\w.])[-−]\s*$', pre):
             return True
+    # corrective 5: NUMBER-ONLY accounting parentheses on a suffixed form — '(180) BPS'
+    # wraps the number alone (corpus: 112 bps + 182 ppts occurrences). The suffix tail
+    # must follow the closing paren for the negative to register.
+    m2 = re.fullmatch(r'([\d,.]+)[ -]?([A-Za-z][A-Za-z .-]*)', core)
+    if m2:
+        num, suf = m2.group(1), m2.group(2).strip()
+        for mm in re.finditer(re.escape(num), quote or ''):
+            pre = (quote[:mm.start()]).rstrip()
+            post = (quote[mm.end():]).lstrip()
+            if pre.endswith('(') and post.startswith(')') \
+                    and post[1:].lstrip().startswith(suf):
+                return True
     return False
 
 def _scale_tag_ok(quote, form, value):
@@ -587,9 +641,14 @@ def value_ok(value, fmt, quote):
     # '0' is a legal single-char form (a stated zero is a real value — WP1); everything else
     # keeps the >=2 guard against stray single digits.
     forms = {f for f in value_forms(value, fmt or 'number') if len(f) >= 2 or f == '0'}
-    if fmt in ('x', 'bps'):                # suffix classes: the tagged form must be present
-        return any(bounded_hit(quote, f) for f in forms)      # at a boundary; %-marks can
-                                           # never satisfy them (distinct suffixes)
+    if fmt in ('x', 'bps', 'pp'):          # suffix classes: the tagged form must be present
+        hit = [f for f in forms if bounded_hit(quote, f)]     # at a boundary; %-marks can
+        if not hit:                        # never satisfy them (distinct suffixes)
+            return False
+        if float(value) >= 0 and any(printed_negative(quote, f) for f in forms):
+            return False                   # corrective 5: a POSITIVE fact never accepts
+        return True                        # '(8x)', '-120 bps' or '(180) BPS' — the same
+                                           # notation law as every class (helpers reused)
     for div in (1e6, 1e9):
         xx = abs(float(value)) / div
         if xx >= 1:
@@ -810,291 +869,35 @@ def _fact_period(fc):
     return None
 
 
-def _span_days(shape):
-    from datetime import date
-    if shape[0] != 'duration':
-        return None
-    a = date.fromisoformat(shape[1][:10]); b = date.fromisoformat(shape[2][:10])
-    return (b - a).days + 1
-
-
-def _span_class(shape):
-    """TIGHT span classes (corrective 4): real 13/14-week quarters, half-years, nine-month
-    YTDs and 52/53-week years all fit; a 31-day month, a 5-week stub or any other odd span
-    proves nothing (the sub-70-day corpus class is 213,732 facts strong — never quarters)."""
-    d = _span_days(shape)
-    if d is None:
-        return None
-    if 80 <= d <= 100:
-        return 'q'
-    if 170 <= d <= 190:
-        return 'ytd6'
-    if 260 <= d <= 290:
-        return 'ytd9'
-    if 350 <= d <= 380:
-        return 'fy'
-    return None
-
-
-def _cad_ok(cad, scls):
-    """a clause cadence satisfies a fact span-class; generic 'year to date' honestly covers
-    either YTD shape — every other pairing must be exact."""
-    return cad == scls or (cad == 'ytd' and scls in ('ytd6', 'ytd9'))
-
-
-# raw-unit TOKENIZERS (corrective 4): _UT_A = the standard camelCase splitter
-# ('USDPerShare' → USD·Per·Share, 5,229 corpus facts); _UT_B = boundary-anchored
-# acronym-before-word runs ('USDshares' → USD·shares, 'AUDdollar' → AUD·dollar) — anchored
-# so an acronym EMBEDDED inside a hash token ('…bUSDecj…', corpus-real 17 pure-unit facts)
-# is never extracted. The token sets union; underscores separate.
-_UT_A = re.compile(r"[A-Z]+(?=[A-Z][a-z])|[A-Z]?[a-z]+|[A-Z]+")
-_UT_B = re.compile(r"(?<![A-Za-z])[A-Z]{2,}(?=[a-z])")
-# foreign iso4217 codes CENSUS-EARNED from the graph (2026-07-20: every distinct
-# Unit.name STARTS WITH 'iso4217:' → 47 non-USD codes live in corpus units; 'usn' = US
-# next-day dollar, a DIFFERENT series than usd, vetoed like any foreign code).
-_FX = frozenset((
-    'afn ars aud bdt bnd brl cad che chf clp cny cop czk dkk eur gbp ghs hkd huf idr ils '
-    'inr jpy kpw krw kwd mad mxn myr nok nzd omr php pln rub sar sek sgd thb try twd usn '
-    'veb xaf xba xua zar').split())
-
-
-def _unit_class(u):
-    """corrective 4 — FACT-side unit class from STRUCTURAL TOKENS, never substrings.
-    Census-measured over ALL 12,877 (raw unitRef, semantic Unit.name) pairs in the graph
-    (2026-07-20): cross-class wrong-accepts 0 money-side and 0 count-side; recall
-    685,232/692,129 shares · 324,058/327,402 USDshares — the remainder is opaque-numeric
-    ids (Unit1/U001/Unit12 — Unit12 alone maps to five incompatible meanings) abstaining
-    BY DESIGN. Rules: any foreign-currency token → abstain (kills cadPerShare,
-    U_AustralianDollarShare via dollar-veto, fused U_iso4217CAD_xbrlishares); money = a
-    'usd'-prefixed token (USDPerShare, USDPShares) or the united-states pair with
-    dollar(s); money+share = 'usd_per_share' (per-X lives in the metric NAME — the
-    owner's locked ruling); money alone = 'usd' (incl. USD-per-physical); an
-    unattributed dollar or a 'per' without money proves nothing; share/'count' tokens =
-    'count' (filler words and hash suffixes are structure: Unit_shares,
-    Unit_Standard_shares_<hash>); 'xbrli'-fused namespace tokens peel (U_xbrlishares);
-    percent|pure = 'percent'; anything else abstains — an id whose casefold merely
-    CONTAINS 'usd' ('StatUSdata', hash-embedded '…bUSDe…') never makes money."""
-    if not isinstance(u, str):
-        return None
-    s = u.replace('_', ' ')
-    ts = {t.lower() for t in _UT_A.findall(s)} | {t.lower() for t in _UT_B.findall(s)}
-    for t in list(ts):
-        if t.startswith('xbrli') and len(t) > 5:
-            ts.add(t[5:])
-    if ts & _FX:
-        return None
-    money = any(t.startswith('usd') for t in ts) or \
-        ({'united', 'states'} <= ts and bool(ts & {'dollar', 'dollars'}))
-    if money:
-        return 'usd_per_share' if ts & {'share', 'shares'} else 'usd'
-    if ts & {'dollar', 'dollars'}:
-        return None
-    if 'per' in ts:
-        return None
-    if ts & {'share', 'shares'}:
-        return 'count'
-    if 'count' in ts:
-        return 'count'
-    if ts & {'percent', 'pure'}:
-        return 'percent'
-    return None
-
-
-# the LEGAL series-unit enum → (accepted fact classes, print fmt, expected printed signal).
-# A fixed mapping of the legal enum is CONTRACT LOGIC (the reviewer's ruling), not guessing:
-# dollar-per-share supports usd, NOT m_usd (a millions-of-dollars series is never per-share);
-# 'x' and 'basis_points' prove in their OWN print classes ('8x', '120 basis points') — there
-# the printed form itself is the unit evidence, so NO adjacent signal is expected (None).
 _PCT = frozenset({'percent'})
+# Phase-3 closeout: the print-form / signal / basis fields served the deleted
+# prose laws — the series-unit law is now ONLY the structural accept-set.
 _ANCHOR_UNIT = {
-    'usd':                (frozenset({'usd', 'usd_per_share'}), None, 'usd'),
-    'm_usd':              (frozenset({'usd'}), None, 'usd'),
-    'count':              (frozenset({'count'}), None, 'count'),
-    'percent':            (_PCT, '%', 'percent'),
-    'percent_yoy':        (_PCT, '%', 'percent'),
-    'percent_sequential': (_PCT, '%', 'percent'),
-    'percent_points':     (_PCT, '%', 'percent'),
-    'basis_points':       (_PCT, 'bps', None),
-    'x':                  (_PCT, 'x', None),
+    'usd':                frozenset({'usd', 'usd_per_share'}),
+    'm_usd':              frozenset({'usd'}),
+    'count':              frozenset({'count'}),
+    'percent':            _PCT,
+    'percent_yoy':        _PCT,
+    'percent_sequential': _PCT,
+    'percent_points':     _PCT,
+    'basis_points':       _PCT,
+    'x':                  _PCT,
 }
 
+ROUTE_A_SEM_UNIT = {('iso4217:USD', False): 'usd',   # THE measured semantic
+                    ('shares', False): 'count',          # tuple map (module-level:
+                    ('iso4217:USDshares', True): 'usd_per_share'}   # census imports)
+ROUTE_A_BOOLS = {'0': False, '1': True}      # ONLY the exact graph strings —
+                                             # Python booleans/ints ABSTAIN.
 
 def _anchor_unit_law(su):
-    """(accept-set, print fmt, expected printed signal) for a LEGAL series-unit enum value;
+    """The structural unit ACCEPT-SET for a LEGAL series-unit enum value;
     None (incl. 'unknown') → the anchor cannot prove a unit → insufficient_identity."""
     if not isinstance(su, str):
         return None
     return _ANCHOR_UNIT.get(su.strip().casefold())
 
 
-_SIG_AFTER_PCT = re.compile(r'\s?(%|percent\b)')
-_SIG_AFTER_SHARES = re.compile(r'\s{0,2}(?:[A-Za-z,\.]{1,12}\s)?shares?\b', re.I)
-_SIG_AFTER_DOLLARS = re.compile(r'\s{0,2}(?:[A-Za-z,\.]{1,12}\s)?dollars?\b', re.I)
-
-
-def _printed_unit_signal(text, vstart, vend):
-    """the value's own PRINTED unit signal: '$'/'US$' immediately before → usd; '%'/'percent'
-    after → percent; a 'shares' word right after → count; a 'dollars' word right after → usd;
-    none → None. Mechanical marks only."""
-    pre = text[:vstart].rstrip()
-    if pre.endswith('$'):
-        return 'usd'
-    after = text[vend:vend + 24]
-    if _SIG_AFTER_PCT.match(after):
-        return 'percent'
-    if _SIG_AFTER_SHARES.match(after):
-        return 'count'
-    if _SIG_AFTER_DOLLARS.match(after):
-        return 'usd'
-    return None
-
-
-# calendar-STRUCTURAL period wording (corrective 4: tight cadence classes; COMPARATIVE words
-# — prior/earlier/ago/last — are MODIFIERS, never classes: the cadence word says WHAT is
-# compared, the modifier says it is the EARLIER one; a comparative-YEAR phrase alone ('in the
-# prior year') implies fy cadence)
-_Q_W = re.compile(r'(?<![a-z])(?:quarter|three months)(?![a-z])', re.I)
-_Y6_W = re.compile(r'(?<![a-z])six months(?![a-z])', re.I)
-_Y9_W = re.compile(r'(?<![a-z])nine months(?![a-z])', re.I)
-_YG_W = re.compile(r'(?<![a-z])year[ -]to[ -]date(?![a-z])', re.I)
-_FY_W = re.compile(r'(?<![a-z])(?:full year|fiscal year|annual|year ended|twelve months|'
-                   r'for the year)(?![a-z])', re.I)
-_CMP_W = re.compile(r'(?<![a-z])(?:prior|earlier|ago|last)(?![a-z])', re.I)
-_CMPY_W = re.compile(r'(?<![a-z])(?:prior year|year earlier|year ago|last year)(?![a-z])',
-                     re.I)
-_INSTANT_W = re.compile(r'(?<![A-Za-z])(?:as of|at \w* ?(?:end|close))(?![A-Za-z])', re.I)
-
-
-def _clause_bounds(text, vstart, vend):
-    """the value's own [.;\n]-clause bounds — shared by cadence and instant evidence."""
-    cs = max(text.rfind('.', 0, vstart), text.rfind(';', 0, vstart),
-             text.rfind('\n', 0, vstart)) + 1
-    ce_cands = [i for i in (text.find('.', vend), text.find(';', vend),
-                            text.find('\n', vend)) if i >= 0]
-    ce = min(ce_cands) if ce_cands else len(text)
-    return cs, ce
-
-
-def _wcls(text, vstart, vend):
-    """(cadence, comparative-flag) | None — the NEAREST cadence wording within the value's
-    own [.;\n]-clause, either side, plus whether the clause carries a comparative modifier."""
-    cs, ce = _clause_bounds(text, vstart, vend)
-    clause = text[cs:ce]
-    best = None
-    for cls, pat in (('q', _Q_W), ('ytd6', _Y6_W), ('ytd9', _Y9_W), ('ytd', _YG_W),
-                     ('fy', _FY_W)):
-        for m in pat.finditer(clause):
-            a0, a1 = cs + m.start(), cs + m.end()
-            dist = (vstart - a1) if a1 <= vstart else (a0 - vend) if a0 >= vend else 0
-            if best is None or dist < best[0]:
-                best = (dist, cls)
-    flag = bool(_CMP_W.search(clause))
-    if best is None:
-        return ('fy', True) if _CMPY_W.search(clause) else None
-    return best[1], flag
-
-
-def _value_span_in(text, q, val, fmt):
-    if q not in text:
-        return None
-    base = text.index(q)
-    best = None
-    for fo in sorted(_tableforms(val, fmt)):
-        for m in re.finditer(re.escape(fo), q):
-            if at_boundary(q, m.start(), m.end()) and (best is None or m.start() > best[0]):
-                best = (m.start(), m.end())
-    if best is None:
-        return None
-    return base + best[0], base + best[1]
-
-
-def _extend_label_start(ctx, q, ident):
-    """(extended_quote, extension_words) | None = HARD ABSTAIN. Walk back over
-    IMMEDIATELY-PRECEDING words that are CAPITALIZED or case-insensitively match the anchor's
-    zone (identity/wording tokens — wording NEVER authorizes identity); tolerate trailing
-    punctuation on the walked word. Corrective 4: the walk INSPECTS the word it stops on —
-    a word outside the zone of length ≥5 is an unexplained QUALIFIER → abstain (structural:
-    function words are short — 'and'/'the' bind, 'organic'/'adjusted' abstain). ':' stays a
-    label boundary the walk never crosses, but the word BEFORE the colon is inspected by the
-    SAME rule ('Adjusted: Total …' abstains; a short speaker prefix 'CFO:' binds). '.' and
-    newline close a sentence — nothing before them is adjacent."""
-    if not ctx or q not in ctx:
-        return q, []
-    i = ctx.index(q)
-    j = i
-    while True:
-        m = re.search(r"([A-Za-z][A-Za-z'-]*)(,?)\s+$", ctx[:j])
-        if not m:
-            mc = re.search(r"([A-Za-z][A-Za-z'-]*):\s*$", ctx[:j])
-            if mc and len(mc.group(1)) >= 5 and mc.group(1).lower() not in ident:
-                return None
-            break
-        w = m.group(1)               # ',' is tolerated qualifier punctuation ('Adjusted, …')
-        if not (w[0].isupper() or w.lower() in ident):
-            if len(w) >= 5 and w.lower() not in ident:
-                return None
-            break
-        j = m.start(1)
-    ext = ctx[j:i]
-    words = [w.lower() for w in re.findall(r"[A-Za-z]{3,}", ext)]
-    return ((ext + q) if ext else q), words
-
-
-def _row_label(q, val, fmt):
-    best = None
-    for fo in sorted(_tableforms(val, fmt)):
-        for m in re.finditer(re.escape(fo), q):
-            if at_boundary(q, m.start(), m.end()) and (best is None or m.start() > best):
-                best = m.start()
-    if best is None:
-        return None
-    return q[:best].rstrip(" \t$:(\u2013\u2014-") or None
-
-
-def _prove(texts, tokens, val, fmt):
-    q, ctx = row_quote(texts, tokens, val, fmt, scale_gate=True, with_context=True)
-    if q is not None:
-        if not value_ok(val, fmt, q):
-            return None, None, 'absent'
-        if float(val) < 0:
-            forms = value_forms(val, fmt or 'number')
-            if not any(printed_negative(q, f) for f in forms if bounded_hit(q, f)):
-                return None, None, 'absent'
-        return q, ctx, 'ok'
-    legacy = row_quote(texts, tokens, val, fmt, scale_gate=True)
-    return None, None, ('ambiguous' if legacy is not None else 'absent')
-
-
-def _nb_str(x):
-    return isinstance(x, str) and bool(x.strip()) and x == x.strip()
-
-
-_CAMEL = re.compile(r'[A-Z]?[a-z]+|[A-Z]+(?![a-z])')
-
-
-def _name_tokens(local):
-    return [tk.lower() for tk in _CAMEL.findall(local) if len(tk) >= 4]
-
-
-def _context_tied(concept_local, q):
-    """ALL >=4-char camelCase tokens of the fact's OWN stored name must appear in the quote —
-    one generic shared word never carries a structured tag."""
-    ql = q.lower()
-    qwords = set(re.findall(r"[a-z]{4,}", ql))
-    toks = _name_tokens(concept_local)
-    if not toks:
-        return False
-    return all(tl in ql or any(tl in w or w in tl for w in qwords) for tl in toks)
-
-
-def _member_tokens_of(spairs):
-    out = set()
-    for _, m in spairs:
-        local = m.rpartition(':')[2]
-        for tk in _CAMEL.findall(local.replace('_', ' ')):
-            if len(tk) >= 3:
-                out.add(tk.lower())
-    return out
 
 
 def _finite(v):
@@ -1107,201 +910,237 @@ def _finite(v):
 
 
 def locate(anchor, source, hints=None):
-    """(anchor, ONE source payload, optional UNTRUSTED hints) →
+    """(anchor, ONE source payload, optional UNTRUSTED hints — currently unused) →
     {'items': [...], 'status': None | 'no_proven_match' | 'ambiguous' |
-    'insufficient_identity'} — v5.5 §3; reads ONLY the given payload. Corrective-4 laws:
-    the anchor's LEGAL series-unit enum maps to an exact accept-set of structural fact-unit
-    classes (dollar-per-share supports usd, never m_usd; x/basis_points prove in their own
-    print classes; unknown/opaque/foreign abstain); a printed unit signal beside the value
-    REJECTS on contradiction (R1) and is REQUIRED to match (R2); the label walk abstains on
-    an adjacent ≥5-letter word outside the anchor's zone (plain or before a colon); XBRL
-    context attaches only when slice tokens are covered by the member names AND the
-    measurement token appears in the concept name (else text-only); every duration fact
-    needs POSITIVE cadence wording of its own TIGHT span class (nearest-in-clause, either
-    side; comparative words are modifiers), an instant fact needs printed as-of/at-end
-    evidence, and multi-occurrence values resolve per-clause one-to-one on the
-    (cadence, comparative) × (span-class, is-earlier) signatures or abstain."""
+    'insufficient_identity'}.
+    POST-PHASE-3 CONTRACT (FinalPlan §11.3, 2026-07-22): Route A ONLY — when the
+    payload carries the display inline HTML, every XBRL fact is proven by its own
+    inline element (inline_element_id = graph Fact.fact_id) + element-local
+    row/header/section evidence, with the exact-Decimal reconcile, semantic-unit
+    tuple map, fail-closed entity law, exclusive(+1 day) period law and the locked
+    ambiguity laws. Sources WITHOUT a display document are never text-parsed:
+    they return the honest Route E result (no_proven_match). The legacy flat-text
+    R1 walk, the R2 hint duplicate and every prose word-list are DELETED; prose
+    belongs to the certified reader (Phase 6) or abstention. Routes B/C inactive."""
     if not isinstance(anchor, Mapping) or not isinstance(source, Mapping):
         return {'items': [], 'status': 'insufficient_identity'}
     tokens = _wording_tokens(anchor)
     if not tokens:
         return {'items': [], 'status': 'insufficient_identity'}
-    texts = [t for t in (source.get('texts') or ()) if isinstance(t, str) and t]
     want_ptype = anchor.get('time_type')
     slice_toks = _ident_tokens(anchor.get('slice'))
     meas_toks = _ident_tokens(anchor.get('measurement'))
-    ident = set(slice_toks + meas_toks)
-    zone = ident | set(tokens)          # the qualifier-zone vocabulary: identity tokens +
-                                        # the label's own wording tokens (label continuation)
-    law = _anchor_unit_law(anchor.get('series_unit'))
-    if law is None:
+    accept = _anchor_unit_law(anchor.get('series_unit'))
+    if accept is None:
         return {'items': [], 'status': 'insufficient_identity'}
-    accept, fmt, exp_sig = law
     clue = anchor.get('concept_clue')
     clue_local = clue.rpartition(':')[2] if isinstance(clue, str) and clue.strip() else None
     items, saw_ambiguous = [], False
 
-    def emit(cand, q, ctx, v):
-        c, spairs, shape, u = cand
-        res = _extend_label_start(ctx, q, zone)
-        if res is None:
-            return None              # an adjacent unexplained qualifier word (≥5 letters,
-        q2, ext_words = res          # outside the zone) is unproven identity — abstain
-        if any(w not in zone for w in ext_words):
-            return None              # an unexplained leading QUALIFIER is unproven identity;
-                                     # wording tokens are label continuation, never identity
-        low_q = q2.lower()
-        toks_all = slice_toks + meas_toks
-        if toks_all and not all(
-                re.search(r'(?<![a-z0-9])' + re.escape(tk) + r'(?![a-z0-9])', low_q)
-                for tk in toks_all):
-            return None
-        span = _value_span_in(ctx, q, v, fmt) if ctx and q in ctx else None
-        if span is not None:
-            sig = _printed_unit_signal(ctx, span[0], span[1])
-            if sig is not None and sig != exp_sig:
-                return None              # printed evidence contradicts the stored/anchor unit
-        scls = _span_class(shape)
-        if shape[0] == 'duration':
-            if scls is None or span is None:
-                return None
-            w = _wcls(ctx, span[0], span[1])
-            if w is None or not _cad_ok(w[0], scls):
-                return None              # POSITIVE cadence wording of the fact's own class
-        else:
-            if span is None:
-                return None
-            cs, ce = _clause_bounds(ctx, span[0], span[1])
-            if not _INSTANT_W.search(ctx[cs:ce]):
-                return None              # an INSTANT fact needs printed point-in-time
-                                         # evidence ('as of …' / 'at … end|close')
-        lbl = _row_label(q2, v, fmt)
-        if lbl is None:
-            return None
-        item = {'raw_label': lbl, 'value': v, 'quote': q2, 'period_evidence': ctx}
-        prefix, _, local = c.rpartition(':')
-        if prefix and _context_tied(local, q2):
-            mem_toks = _member_tokens_of(spairs)
-            slice_cov = all(tk in mem_toks for tk in slice_toks) if slice_toks else not spairs
-            meas_cov = (all(tk in _name_tokens(local) or tk in local.lower()
-                            for tk in meas_toks) if meas_toks else True)
-            if slice_cov and meas_cov:   # structured compatibility PROVEN, else text-only —
-                item['xbrl'] = {'concept': c, 'axis_members': list(spairs),   # never a wrong
-                                'period_start': shape[1], 'period_end': shape[2],  # context
-                                'ptype': shape[0], 'unit': u}
-        return item
+    inline_doc = source.get('inline_html')
+    if inline_doc is not None:
+        import inline_html as IHM          # lazy: legacy callers never load bs4
+        import datetime as _dt
+        _SEM_UNIT, _BOOLS = ROUTE_A_SEM_UNIT, ROUTE_A_BOOLS
 
-    by_value = {}
-    for c, fc in _fact_rows(source.get('xbrls') or ()):
-        if clue_local is not None and c.rpartition(':')[2] != clue_local:
-            continue
-        shape = _fact_period(fc)
-        if shape is None or shape[0] != want_ptype:
-            continue
-        u = _norm_unit(fc.get('unitRef'))
-        if u is None or u is _BAD_UNIT:
-            continue
-        if _unit_class(u) not in accept:
-            continue
-        pairs, complete = seg_parse(fc)
-        if not complete:
-            continue
-        if not slice_toks and pairs:
-            continue
-        try:
-            v = XN.dec(fc.get('value'))
-        except XN.ExactError:
-            continue
-        if not _finite(v):
-            continue
-        key = (c, frozenset(pairs), shape, u)
-        by_value.setdefault(v, {})[key] = (c, tuple(sorted(tuple(p) for p in pairs)), shape, u)
-    for v in sorted(by_value, key=str):
-        cands = by_value[v]
-        q, ctx, verdict = _prove(texts, tokens, v, fmt)
-        if verdict == 'ok':
-            if len(cands) > 1:
-                saw_ambiguous = True
+        def _plus_one(d):
+            try:
+                return (_dt.date.fromisoformat(d) + _dt.timedelta(days=1)
+                        ).isoformat()
+            except ValueError:
+                return None
+
+        def _pa_period_ok(doc_period, shape):
+            # THE one normalization: graph end dates are EXCLUSIVE — the graph
+            # date must equal the doc date + 1 day EXACTLY (never both forms).
+            ds, de = doc_period
+            if shape[0] == 'instant':
+                return ds == '' and _plus_one(de) == shape[2]
+            return ds == shape[1] and _plus_one(de) == shape[2]
+
+        prepared = IHM.prepare(inline_doc)   # ONE parse per filing, reused
+        want_cik = str(source.get('company_cik') or '').lstrip('0')
+        route_a_claims = {}
+        for c, fc in _fact_rows(source.get('xbrls') or ()):
+            if clue_local is not None and c.rpartition(':')[2] != clue_local:
                 continue
-            it = emit(next(iter(cands.values())), q, ctx, v)
-            if it is not None:
-                items.append(it)
-            continue
-        if verdict == 'ambiguous':
-            # ONE general occurrence-local matcher: re-prove PER CLAUSE (row_quote REUSED,
-            # never copied); corrective 4 — each proven clause's (cadence, comparative)
-            # signature must claim EXACTLY ONE candidate's (span-class, is-earlier)
-            # signature: the comparative flag distinguishes a current/prior same-class pair
-            # (is-earlier = not the max period_end among same-class candidates). Anything
-            # short of a perfect one-to-one — unclassable spans, duplicate signatures, a
-            # generic 'year to date' facing two YTD shapes — abstains.
-            proven = []
-            for t in texts:
-                for piece in re.split(r'(?<=[.;\n])', t):
-                    if piece.strip():
-                        qq, cctx, verd = _prove([piece], tokens, v, fmt)
-                        if verd == 'ok':
-                            span = _value_span_in(piece, qq, v, fmt)
-                            wc = _wcls(piece, span[0], span[1]) if span else None
-                            proven.append((wc, qq, cctx))
-            groups = {}
-            for cand in cands.values():
-                groups.setdefault(_span_class(cand[2]), []).append(cand)
-            csigs = []
-            clean = (None not in groups and len(proven) == len(cands)
-                     and all(w is not None for w, _, _ in proven))
-            if clean:
-                for cls, grp in groups.items():
-                    mx = max(c[2][2] for c in grp)
-                    csigs.extend(((cls, c[2][2] != mx), c) for c in grp)
-                clean = len({s for s, _ in csigs}) == len(csigs)
-            if clean:
-                used, emitted = set(), []
-                for wc, qq, cctx in proven:
-                    hits = [k for k, (s, _) in enumerate(csigs)
-                            if k not in used and s[1] == wc[1] and _cad_ok(wc[0], s[0])]
-                    it = emit(csigs[hits[0]][1], qq, cctx, v) if len(hits) == 1 else None
-                    if it is None:
-                        emitted = None
-                        break
-                    used.add(hits[0])
-                    emitted.append(it)
-                if emitted:
-                    items.extend(emitted)
+            shape = _fact_period(fc)
+            if shape is None or shape[0] != want_ptype:
+                continue
+            raw_unit = fc.get('unitRef')
+            if not isinstance(raw_unit, str) or not raw_unit.strip():
+                continue
+            unit_name = fc.get('unit_name')
+            is_divide = _BOOLS.get(fc.get('is_divide'))
+            if not isinstance(unit_name, str) or is_divide is None:
+                continue                     # declared-unit handoff: FAIL-CLOSED
+            if _SEM_UNIT.get((unit_name, is_divide)) not in accept:
+                continue                     # semantic TUPLE vs anchor accept-set;
+                                             # everything unmapped abstains
+            gctx = fc.get('context_id')
+            has_seg = 'segment' in fc
+            if has_seg:
+                pairs, complete = seg_parse(fc)
+                if not complete:
                     continue
+            elif isinstance(gctx, str) and gctx.strip():
+                pairs = None                 # graph stores no axis pairing; the
+                                             # fact's OWN context_id must equal the
+                                             # element's contextRef (checked below),
+                                             # making the doc dims authoritative
+            else:
+                pairs = []                   # neither given: undimensioned claim —
+                                             # a dimensioned element still mismatches
+            graph_v = IHM.parse_raw(fc.get('value'))   # comma/paren law
+            if graph_v is None or not _finite(graph_v):
+                continue
+            spairs_a = (tuple(sorted(tuple(p) for p in pairs))
+                        if pairs is not None else None)
+            fid_raw = fc.get('fact_id')
+            if fid_raw is not None and not isinstance(fid_raw, str):
+                continue                     # non-string id: REJECT, no fallback
+            if isinstance(fid_raw, str) and fid_raw != fid_raw.strip():
+                continue                     # padded id: REJECT, no fallback
+            fid = (fid_raw or '').strip()
+            if fid and fid != 'null':
+                ev, _why = IHM.element_evidence(prepared, fid)
+            else:                            # missing/blank inline_element_id:
+                ev = None                    # COMPLETE-identity fallback (both
+                if isinstance(gctx, str) and gctx.strip():   # id'd and id-less
+                    el2, w2 = IHM.identity_fallback(prepared, c, gctx.strip(),
+                                                    raw_unit)
+                    if w2 == 'ok':
+                        e2, w3 = IHM.evidence_for_element(prepared, el2)
+                        if w3 == 'ok' and not e2['hidden'] \
+                                and _pa_period_ok(e2['period'], shape):
+                            ev = e2
+                            fid = el2.get('id') or f'__noid__:{c}:{gctx.strip()}'
+                if ev is None:
+                    cands = []               # fixture path: no context pointer —
+                    for eid in IHM.find_by_identity(prepared, c, raw_unit):
+                        e2, w2 = IHM.element_evidence(prepared, eid)
+                        if w2 == 'ok' and not e2['hidden'] \
+                                and _pa_period_ok(e2['period'], shape) \
+                                and (spairs_a is None or e2['dims'] == spairs_a):
+                            cands.append((eid, e2))
+                    fid, ev = cands[0] if len(cands) == 1 else ('', None)
+            if ev is None or ev['hidden'] or ev['name'] != c \
+                    or ev['unit_ref'] != raw_unit:
+                continue
+            if not want_cik or not ev.get('entity') \
+                    or ev['entity'] != want_cik:
+                continue                     # entity law, FAIL-CLOSED: expected CIK
+                                             # AND the element's entity must exist
+                                             # and match EXACTLY
+            if not _pa_period_ok(ev['period'], shape):
+                continue
+            if isinstance(gctx, str) and gctx.strip() \
+                    and ev['context_ref'] != gctx.strip():
+                continue                     # the graph fact's own context pointer
+            if spairs_a is None:
+                spairs_a = ev['dims']        # same context -> dims BY CONSTRUCTION
+            elif ev['dims'] != spairs_a:
+                continue
+            if not slice_toks and spairs_a:
+                continue                     # undimensioned anchor, dimensioned fact
+            if not IHM.reconcile(ev['displayed'], ev['fmt'], ev['scale'],
+                                 ev['sign'], fc.get('value')):
+                continue
+            pv = IHM.printed_value(ev['displayed'], ev['fmt'], ev['sign'])
+            if pv is None:
+                continue
+            surface = ' '.join([*ev['row_cells'], *ev['columns'], ev['section'],
+                                ev['block']]).lower()
+            toks_a = list(tokens) + list(slice_toks) + list(meas_toks)
+            if not all(re.search(r'(?<![a-z0-9])' + re.escape(tk)
+                                 + r'(?![a-z0-9])', surface) for tk in toks_a):
+                continue                     # identity ONLY from element-local
+                                             # row/header-stack/section/block
+            quote = ev['row_text'] if ev['in_table'] else ev['block']
+            span = ev['row_span'] if ev['in_table'] else ev['block_span']
+            if not quote or span is None \
+                    or prepared['text'][span[0]:span[1]] != quote:
+                continue                     # ELEMENT-SPECIFIC offsets: this row's
+                                             # own recorded span must reproduce the
+            q_off = span[0]                  # quote exactly (identical twin rows
+                                             # get their OWN spans, never find())
+            l_off = (prepared['text'].find(ev['row_label'], q_off,
+                                           span[1] + 1)
+                     if ev['row_label'] else -1)
+            fact_key = (c, spairs_a, shape, raw_unit, graph_v)
+            seen_keys = route_a_claims.setdefault(fid, set())
+            if fact_key in seen_keys:
+                continue                     # identical XBRL identity: DEDUPLICATE
+            seen_keys.add(fact_key)
+            items.append({
+                '_element_id': fid,
+                'raw_label': ev['row_label'] or ev['section']
+                             or (ev['columns'][0] if ev['columns'] else '')
+                             or quote[:80],
+                'value': pv, 'quote': quote,   # the SIGNED UNSCALED printed value
+                'period_evidence': quote,      # STRING at the frozen boundary — an
+                                               # EXACT slice (downstream parsers,
+                                               # e.g. wp1_verify substring checks,
+                                               # assume a string; the structured
+                                               # disjoint slices stay INTERNAL
+                                               # below pending ONE owner decision)
+                'ix_evidence': {'scale': ev['scale'], 'sign': ev['sign'],
+                                'format': ev['fmt'], 'unit_ref': raw_unit},
+                'xbrl': {'concept': c, 'axis_members': list(spairs_a),
+                         'period_start': ev['period'][0] or ev['period'][1],
+                         'period_end': ev['period'][1],   # the HTML context's
+                         'ptype': shape[0], 'unit': raw_unit,   # exact dates
+                         'ix': {'scale': ev['scale'], 'sign': ev['sign'],
+                                'format': ev['fmt'],
+                                'unit_ref': raw_unit},    # ChannelContract line 36
+                         'source_evidence': {           # OWNER RULING (corrective-7):
+                             'representation_sha256': prepared['text_sha'],
+                             'quote_span': [q_off, q_off + len(quote)],
+                             'raw_label_span': ([l_off, l_off
+                                                 + len(ev['row_label'])]
+                                                if l_off >= 0 else None),
+                             'pieces': [                # typed slices; the quote is
+                                 {'kind': k, 'text': t,   # NEVER duplicated here
+                                  'span': [a, b]}
+                                 for k, t, (a, b) in (
+                                     [('header', t2, sp) for t2, sp in
+                                      zip(ev['columns'],
+                                          ev.get('column_spans', []))
+                                      if sp is not None and
+                                      prepared['text'][sp[0]:sp[1]]
+                                      .strip(' —-') == t2]
+                                     + ([('section', ev['section'],
+                                          ev['section_span'])]
+                                        if ev['section'] and
+                                        ev.get('section_span') is not None and
+                                        prepared['text'][
+                                            ev['section_span'][0]:
+                                            ev['section_span'][1]]
+                                        .strip(' —-') == ev['section']
+                                        else []))]}},
+            })
+        # LOCKED AMBIGUITY LAWS: (a) one printed element claimed by DIFFERENT fact
+        # identities → ambiguous; (b) one ANCHOR resolving to DIFFERENT surviving
+        # series identities (concept + pairs + unit) → ambiguous — multiple PERIODS
+        # of the SAME complete identity remain valid enumeration.
+        clash = {eid for eid, keys in route_a_claims.items() if len(keys) > 1}
+        if clash:
+            items[:] = [it for it in items if it.get('_element_id') not in clash]
             saw_ambiguous = True
+        series_ids = {(it['xbrl']['concept'], tuple(it['xbrl']['axis_members']),
+                       it['xbrl']['unit'])
+                      for it in items if it.get('_element_id') is not None}
+        if len(series_ids) > 1:
+            items[:] = [it for it in items if it.get('_element_id') is None]
+            saw_ambiguous = True
+        for it in items:
+            it.pop('_element_id', None)
 
-    sid = source.get('source_id')
-    if isinstance(hints, Mapping) and _nb_str(hints.get('source_id')) and _nb_str(sid) \
-            and hints.get('source_id') == sid and hints.get('value') is not None:
-        try:
-            hv = XN.dec(hints.get('value'))
-        except XN.ExactError:
-            hv = None
-        if hv is not None and _finite(hv):
-            q, ctx, verdict = _prove(texts, tokens, hv, fmt)
-            if verdict == 'ambiguous':
-                saw_ambiguous = True
-            elif verdict == 'ok':
-                res = _extend_label_start(ctx, q, zone)
-                if res is not None:
-                    q2, ext_words = res
-                    low_q = q2.lower()
-                    toks_all = slice_toks + meas_toks
-                    span = _value_span_in(ctx, q, hv, fmt) if ctx and q in ctx else None
-                    sig = (_printed_unit_signal(ctx, span[0], span[1]) if span else None)
-                    if (all(w in zone for w in ext_words)
-                            and (not toks_all or all(
-                                re.search(r'(?<![a-z0-9])' + re.escape(tk) + r'(?![a-z0-9])',
-                                          low_q) for tk in toks_all))
-                            and span is not None and sig == exp_sig):
-                        # R2: POSITIVE printed-unit proof — no stored unit exists to lean on
-                        # (suffix-print anchors expect None: their form IS the unit evidence)
-                        lbl = _row_label(q2, hv, fmt)
-                        if lbl is not None:
-                            items.append({'raw_label': lbl, 'value': hv, 'quote': q2,
-                                          'period_evidence': ctx})
-
+    # ─── Phase 3 (FinalPlan §11.3, 2026-07-22): the legacy flat-text R1 walk and
+    # the R2 hint duplicate — the semantic prose machinery — are DELETED. Sources
+    # without a display inline document produce no items here and fall through to
+    # the honest Route E return below (no_proven_match). Routes B/C are inactive;
+    # prose belongs to the certified reader (Phase 6) or abstention.
     grouped = {}
     for it in items:
         grouped.setdefault(it['quote'], []).append(it)

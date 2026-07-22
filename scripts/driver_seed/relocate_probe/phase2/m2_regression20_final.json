@@ -1,0 +1,236 @@
+{
+ "config": "FINAL two-register tracker (answer-free)",
+ "counts": {
+  "duplicate_cells:abstain": 10,
+  "duplicate_cells:accept": 1,
+  "prose_only:abstain": 9
+ },
+ "ledger": [
+  {
+   "item_id": "bbd00a60244f",
+   "ticker": "AA",
+   "raw_label": "Total Revenue",
+   "bucket": "duplicate_cells",
+   "behavior": "abstain",
+   "reason": "abstain_no_row",
+   "note": "NEUTRAL: no truth \u2014 behavior recorded only",
+   "accept": null
+  },
+  {
+   "item_id": "dc401beb37c3",
+   "ticker": "AAL",
+   "raw_label": "Total Revenue",
+   "bucket": "duplicate_cells",
+   "behavior": "accept",
+   "reason": "accepted_row",
+   "note": "NEUTRAL: no truth \u2014 behavior recorded only",
+   "accept": {
+    "doc": "0000006201-26-000031__EX-99.1.htm",
+    "table_index": 1,
+    "row_index": 6,
+    "cells": [
+     {
+      "grid": [
+       3,
+       6
+      ],
+      "cell_text": "Up 13.5% to 16.5%",
+      "tokens": [
+       "13.5%",
+       "16.5%"
+      ],
+      "span": [
+       7801,
+       7818
+      ],
+      "aligned_headers_verbatim": [],
+      "governing_section_verbatim": [
+       "Q2 2026E (vs. Q2 2025)"
+      ],
+      "column_kind": "percent_marked"
+     }
+    ]
+   }
+  },
+  {
+   "item_id": "630f1c4f8670",
+   "ticker": "AAL",
+   "raw_label": "Aircraft at End of Period",
+   "bucket": "duplicate_cells",
+   "behavior": "abstain",
+   "reason": "abstain_no_row",
+   "note": "NEUTRAL: no truth \u2014 behavior recorded only",
+   "accept": null
+  },
+  {
+   "item_id": "f18923ee1f05",
+   "ticker": "ABT",
+   "raw_label": "Diagnostics Revenue",
+   "bucket": "duplicate_cells",
+   "behavior": "abstain",
+   "reason": "abstain_no_row",
+   "note": "NEUTRAL: no truth \u2014 behavior recorded only",
+   "accept": null
+  },
+  {
+   "item_id": "e980922423e8",
+   "ticker": "ABT",
+   "raw_label": "Medical Devices Revenue",
+   "bucket": "duplicate_cells",
+   "behavior": "abstain",
+   "reason": "abstain_no_row",
+   "note": "NEUTRAL: no truth \u2014 behavior recorded only",
+   "accept": null
+  },
+  {
+   "item_id": "af68f2df0735",
+   "ticker": "ACI",
+   "raw_label": "Loyalty Members",
+   "bucket": "prose_only",
+   "behavior": "abstain",
+   "reason": "abstain_no_row",
+   "note": "NEUTRAL: no truth \u2014 behavior recorded only",
+   "accept": null
+  },
+  {
+   "item_id": "6b706b2f8ec3",
+   "ticker": "ACI",
+   "raw_label": "Loyalty Members",
+   "bucket": "prose_only",
+   "behavior": "abstain",
+   "reason": "abstain_no_row",
+   "note": "NEUTRAL: no truth \u2014 behavior recorded only",
+   "accept": null
+  },
+  {
+   "item_id": "2fdd61622e27",
+   "ticker": "ADM",
+   "raw_label": "Total Revenue",
+   "bucket": "duplicate_cells",
+   "behavior": "abstain",
+   "reason": "abstain_no_row",
+   "note": "NEUTRAL: no truth \u2014 behavior recorded only",
+   "accept": null
+  },
+  {
+   "item_id": "2d5c90562ce0",
+   "ticker": "ADM",
+   "raw_label": "Nutrition Segment Profit",
+   "bucket": "duplicate_cells",
+   "behavior": "abstain",
+   "reason": "abstain_disputed_rows",
+   "note": "NEUTRAL: no truth \u2014 behavior recorded only",
+   "accept": null
+  },
+  {
+   "item_id": "c0c783d31323",
+   "ticker": "ADM",
+   "raw_label": "Total Revenue",
+   "bucket": "duplicate_cells",
+   "behavior": "abstain",
+   "reason": "abstain_no_row",
+   "note": "NEUTRAL: no truth \u2014 behavior recorded only",
+   "accept": null
+  },
+  {
+   "item_id": "13ad41b2fef1",
+   "ticker": "AEE",
+   "raw_label": "Ameren Missouri Net Income",
+   "bucket": "prose_only",
+   "behavior": "abstain",
+   "reason": "abstain_no_row",
+   "note": "NEUTRAL: no truth \u2014 behavior recorded only",
+   "accept": null
+  },
+  {
+   "item_id": "ea8682a9830b",
+   "ticker": "AEE",
+   "raw_label": "Ameren Illinois Electric Distribution Net Income",
+   "bucket": "prose_only",
+   "behavior": "abstain",
+   "reason": "abstain_no_row",
+   "note": "NEUTRAL: no truth \u2014 behavior recorded only",
+   "accept": null
+  },
+  {
+   "item_id": "5c834f33e786",
+   "ticker": "AEE",
+   "raw_label": "Ameren Illinois Natural Gas Net Income",
+   "bucket": "prose_only",
+   "behavior": "abstain",
+   "reason": "abstain_no_row",
+   "note": "NEUTRAL: no truth \u2014 behavior recorded only",
+   "accept": null
+  },
+  {
+   "item_id": "f05f1ad74900",
+   "ticker": "AEE",
+   "raw_label": "Ameren Transmission Net Income",
+   "bucket": "prose_only",
+   "behavior": "abstain",
+   "reason": "abstain_no_row",
+   "note": "NEUTRAL: no truth \u2014 behavior recorded only",
+   "accept": null
+  },
+  {
+   "item_id": "7c7fed81a5e2",
+   "ticker": "AEE",
+   "raw_label": "Ameren Missouri Net Income",
+   "bucket": "prose_only",
+   "behavior": "abstain",
+   "reason": "abstain_no_row",
+   "note": "NEUTRAL: no truth \u2014 behavior recorded only",
+   "accept": null
+  },
+  {
+   "item_id": "f3ee606b88de",
+   "ticker": "AEE",
+   "raw_label": "Ameren Illinois Electric Distribution Net Income",
+   "bucket": "prose_only",
+   "behavior": "abstain",
+   "reason": "abstain_no_row",
+   "note": "NEUTRAL: no truth \u2014 behavior recorded only",
+   "accept": null
+  },
+  {
+   "item_id": "d7c6b8f583b3",
+   "ticker": "AEE",
+   "raw_label": "Ameren Illinois Natural Gas Net Income",
+   "bucket": "prose_only",
+   "behavior": "abstain",
+   "reason": "abstain_no_row",
+   "note": "NEUTRAL: no truth \u2014 behavior recorded only",
+   "accept": null
+  },
+  {
+   "item_id": "057e9564b04f",
+   "ticker": "AEE",
+   "raw_label": "Ameren Transmission Net Income",
+   "bucket": "duplicate_cells",
+   "behavior": "abstain",
+   "reason": "abstain_no_row",
+   "note": "NEUTRAL: no truth \u2014 behavior recorded only",
+   "accept": null
+  },
+  {
+   "item_id": "f0d9b6e0dea2",
+   "ticker": "AFL",
+   "raw_label": "US Adjusted Net Investment Income",
+   "bucket": "duplicate_cells",
+   "behavior": "abstain",
+   "reason": "abstain_no_row",
+   "note": "NEUTRAL: no truth \u2014 behavior recorded only",
+   "accept": null
+  },
+  {
+   "item_id": "ff629deb29f1",
+   "ticker": "AFL",
+   "raw_label": "US Adjusted Net Investment Income",
+   "bucket": "duplicate_cells",
+   "behavior": "abstain",
+   "reason": "abstain_no_row",
+   "note": "NEUTRAL: no truth \u2014 behavior recorded only",
+   "accept": null
+  }
+ ]
+}

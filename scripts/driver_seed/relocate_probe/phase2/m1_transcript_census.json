@@ -1,0 +1,18 @@
+{
+ "label": "M1b transcript numeric census (source-native blocks)",
+ "stats": {
+  "prepared_remarks": {
+   "blocks": 9320,
+   "numeric_blocks": 9259,
+   "numeric_occurrences": 926102,
+   "total_chars": 181529757
+  },
+  "qa_exchanges": {
+   "blocks": 170654,
+   "numeric_blocks": 113571,
+   "numeric_occurrences": 520819,
+   "total_chars": 284568945
+  }
+ },
+ "secs": 12
+}

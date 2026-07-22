@@ -1,0 +1,649 @@
+{
+ "round": 2,
+ "round1_status": "location-only (recorded per ruling)",
+ "truth_artifact_sha_verified": "5aff53ccb3a3a71ef7b1cc747b219cbd6e75b7918de8c4141fbf8cd8e2d9dc9e",
+ "ACCURACY_19_truth_cells": {
+  "correct_complete": 9,
+  "wrong": 0,
+  "safe_abstain": 10
+ },
+ "REGRESSION_20_no_truth_NEUTRAL": {
+  "abstain": 17,
+  "accept": 3
+ },
+ "searched_documents_pinned": {
+  "0000004977-25-000006__EX-99.1.htm": "1bdd8565757ed1d0c6c1921bfc27189d43d8daa643efdab0266907e13be808b1",
+  "0000004977-25-000006__EX-99.2.htm": "656c34884643dfa86c12d0b126fc1411cffaf38a801b38c666d10a20e1eb3929",
+  "0000004977-25-000006__EX-99.3.htm": "1101f4c8e4bbf372f586fc26ff7a40e4ae0b593a7c97509eb8c164487f3523ee",
+  "0000004977-25-000006__EX-99.4.htm": "a3cdaa47f9eab338019a7308e083b4ef9b660ae5fe602970d1dfbd7d3aed955f",
+  "0000006201-26-000031__EX-99.1.htm": "59f2a20f3240b354a6172223f32acbfe43bc304fffe44ea0a7f63fd9d921549b",
+  "0000006201-26-000031__EX-99.2.htm": "be83ca725c5fb59d4aa01a68b1d991abcdeb7d2616a24c554b821c553ca12a3e",
+  "0000007084-25-000005__EX-99.1.htm": "0dad3cbab45081db4c3e12f470a5406823652939f7d8af6ef561c0651a457bfe",
+  "0000007084-26-000005__EX-99.1.htm": "fe12e55d34ad7098cc7e0c96ce5d1166c72ef315c41004d38415d25c2691e4cc",
+  "0000950170-25-007765__EX-99.1.htm": "31e8cd05b2ed0bfcc4b290e55adf7d4e5429ed8a97bf505ae97696e625ccf4ba",
+  "0001002910-25-000052__EX-99.1.htm": "2c26c7bb8788df9669454b26ba348b3148b3e7ec22a3fb3eb524003f65123534",
+  "0001002910-25-000052__EX-99.2.htm": "02cc3409852c350f6ba3ddd45140fbf8409087ae378cc10ceb13ef9d80c3ab1e",
+  "0001002910-26-000005__EX-99.1.htm": "5845681eb1b4dd9a5dcf1e13f4b68593f3676e0494df801561e36a1bb4aa4320",
+  "0001002910-26-000005__EX-99.2.htm": "f14aa4fe8c305c33fea34d3e12d48f4684041a6e1103cca42265ead3344bd5c0",
+  "0001193125-26-019438__EX-99.1.htm": "7441a4eb3ac0eda317faca16a8794ec9117f6b691a962cf1461d821a1f804198",
+  "0001628280-25-002092__EX-99.1.htm": "c4ff65f6035e14882de772ff0b328f76b73bfa63fed0535274b5a1c8914858c0",
+  "0001628280-26-005458__EX-99.1.htm": "1dd3335c11e52e1a82307b21a1cefef6f5559aa6cba1c7718dc65f342fa77358",
+  "0001628280-26-005458__EX-99.2.htm": "fff51934ca2e33f6a63a94613757c492540a1aca6ba232c821730e2dfa492a1e",
+  "0001628280-26-005458__EX-99.3.htm": "790c9dec3dece976c587d5138a5515d6d09ac4716a48ba9c5bf9e08749b1f98e",
+  "0001628280-26-005458__EX-99.4.htm": "1a29df1da7e57fd29f2100c59cfead0b624864d4ddf28aa10f72a3392a780aef",
+  "0001646972-25-000040__EX-99.1.htm": "145812380ddf7bc3b13988cd82865721f35b8261513bbd16810c27233526a453",
+  "0001646972-26-000028__EX-99.1.htm": "43ec1797cd568b500c615e7694ed0b3d70e1c3dc8a0f82191b2e5e7c59988c87",
+  "0001646972-26-000028__EX-99.2.htm": "b5d611aebe57d6b4c717712f12e4619b88b72ea17c4eada9a22b6feaecc43d2a",
+  "0001646972-26-000028__EX-99.3.htm": "1486b8077eb61c9c8527563e5b48b08e2f44bdfed50d2d84e49c5fb42b86d10d",
+  "0000004977-25-000006.htm": "8c52d6a961e6d9dda2bea57c1b8edebc5f253abfcc7b675d771bb68e2a3dd939",
+  "0000006201-26-000031.htm": "ba2eb8b0cc113ce7974cc49a5f7acf504a0798a223aabdd4441b67648af498d7",
+  "0000007084-25-000005.htm": "b4b16e841857c4ee7c53441b18ab544ab02c089b26f0b5e58dcd9c5439eaf8d8",
+  "0000007084-26-000005.htm": "cee477a3e80e28cacafde510bddaaff8ac0fe5002133c55b99f312fbaec1a13b",
+  "0000950170-25-007765.htm": "239296c5d51374a800095e1c5849915104a78969732f788f53c1ac8d189d0525",
+  "0001002910-25-000052.htm": "53d777c5439e531831c2e634ca4cc8b1952a28e0d0a7884aef6db51be6974d10",
+  "0001002910-26-000005.htm": "cdc09a3fa614d2b3a99d8d65cc0ce1ff0306a6c7c3c270a5f9a4a3391c858816",
+  "0001193125-26-019438.htm": "dedcec0edda68ed4eb5097dd72ebac651396fdf760308532d752afee7faaf15a",
+  "0001628280-25-002092.htm": "21ab89fc01d56b5206cb7d67a30377d7cdd318581fc303210bf342f6faaad3ac",
+  "0001628280-26-005458.htm": "da9f60e090fa8962af8d7f5e1aed66f595ec2290df36311b2c67d0f390e56d30",
+  "0001646972-25-000040.htm": "cc98679b5903fe0811ffc625674262054dfef118d4ea8c59c007c712ab6ddfbf",
+  "0001646972-26-000028.htm": "d80657593ecfbff9cb009364ebb522cb7a8d2eef4fe6d4a8b9f267d273602db3"
+ },
+ "accuracy_ledger": [
+  {
+   "candidate_id": "0000006201-26-000031__EX-99.1.htm#t2r5c3-5",
+   "ticker": "AAL",
+   "raw_label": "Cargo Revenue",
+   "reason": "abstain_no_full_identity_candidate",
+   "surviving_candidates": 0,
+   "outcome": "safe_abstain"
+  },
+  {
+   "candidate_id": "0000006201-26-000031__EX-99.1.htm#t2r4c4-5",
+   "ticker": "AAL",
+   "raw_label": "Passenger Revenue",
+   "reason": "abstain_no_full_identity_candidate",
+   "surviving_candidates": 0,
+   "outcome": "safe_abstain"
+  },
+  {
+   "candidate_id": "0000006201-26-000031__EX-99.1.htm#t3r5c3-6",
+   "ticker": "AAL",
+   "raw_label": "Passenger Load Factor (Percent)",
+   "reason": "accepted",
+   "surviving_candidates": 1,
+   "accept": {
+    "doc": "0000006201-26-000031__EX-99.1.htm",
+    "table_index": 3,
+    "row_index": 5,
+    "grid": [
+     3,
+     6
+    ],
+    "cell_text": "81.3",
+    "printed_token": "81.3",
+    "value_printed_exact": "81.3",
+    "sign": 1,
+    "headers_verbatim": [
+     "3 Months Ended March 31,",
+     "2026"
+    ],
+    "year_header_form": "bare_year",
+    "scale_unit_cadence_resolution": "not_attempted_literal"
+   },
+   "outcome": "correct_complete_fact_bundle"
+  },
+  {
+   "candidate_id": "0000006201-26-000031__EX-99.1.htm#t3r6c3-6",
+   "ticker": "AAL",
+   "raw_label": "Yield (Cents)",
+   "reason": "accepted",
+   "surviving_candidates": 1,
+   "accept": {
+    "doc": "0000006201-26-000031__EX-99.1.htm",
+    "table_index": 3,
+    "row_index": 6,
+    "grid": [
+     3,
+     6
+    ],
+    "cell_text": "21.34",
+    "printed_token": "21.34",
+    "value_printed_exact": "21.34",
+    "sign": 1,
+    "headers_verbatim": [
+     "3 Months Ended March 31,",
+     "2026"
+    ],
+    "year_header_form": "bare_year",
+    "scale_unit_cadence_resolution": "not_attempted_literal"
+   },
+   "outcome": "correct_complete_fact_bundle"
+  },
+  {
+   "candidate_id": "0000007084-25-000005__EX-99.1.htm#t16r16c19-20",
+   "ticker": "ADM",
+   "raw_label": "Ag Services & Oilseeds Revenue",
+   "reason": "abstain_no_full_identity_candidate",
+   "surviving_candidates": 0,
+   "outcome": "safe_abstain"
+  },
+  {
+   "candidate_id": "0000007084-25-000005__EX-99.1.htm#t16r17c18-20",
+   "ticker": "ADM",
+   "raw_label": "Carbohydrate Solutions Revenue",
+   "reason": "abstain_no_full_identity_candidate",
+   "surviving_candidates": 0,
+   "outcome": "safe_abstain"
+  },
+  {
+   "candidate_id": "0000007084-25-000005__EX-99.1.htm#t16r18c18-20",
+   "ticker": "ADM",
+   "raw_label": "Nutrition Revenue",
+   "reason": "abstain_no_full_identity_candidate",
+   "surviving_candidates": 0,
+   "outcome": "safe_abstain"
+  },
+  {
+   "candidate_id": "0000007084-26-000005__EX-99.1.htm#t10r16c19-20",
+   "ticker": "ADM",
+   "raw_label": "Ag Services & Oilseeds Revenue",
+   "reason": "abstain_no_full_identity_candidate",
+   "surviving_candidates": 0,
+   "outcome": "safe_abstain"
+  },
+  {
+   "candidate_id": "0000007084-26-000005__EX-99.1.htm#t10r17c18-20",
+   "ticker": "ADM",
+   "raw_label": "Carbohydrate Solutions Revenue",
+   "reason": "abstain_no_full_identity_candidate",
+   "surviving_candidates": 0,
+   "outcome": "safe_abstain"
+  },
+  {
+   "candidate_id": "0000007084-26-000005__EX-99.1.htm#t10r18c18-20",
+   "ticker": "ADM",
+   "raw_label": "Nutrition Revenue",
+   "reason": "abstain_no_full_identity_candidate",
+   "surviving_candidates": 0,
+   "outcome": "safe_abstain"
+  },
+  {
+   "candidate_id": "0000950170-25-007765__EX-99.1.htm#t5r5c26-27",
+   "ticker": "AA",
+   "raw_label": "Alumina Production (kmt)",
+   "reason": "accepted",
+   "surviving_candidates": 1,
+   "accept": {
+    "doc": "0000950170-25-007765__EX-99.1.htm",
+    "table_index": 5,
+    "row_index": 5,
+    "grid": [
+     26,
+     27
+    ],
+    "cell_text": "10,034",
+    "printed_token": "10,034",
+    "value_printed_exact": "10034",
+    "sign": 1,
+    "headers_verbatim": [
+     "2024"
+    ],
+    "year_header_form": "bare_year",
+    "scale_unit_cadence_resolution": "not_attempted_literal"
+   },
+   "outcome": "correct_complete_fact_bundle"
+  },
+  {
+   "candidate_id": "0000950170-25-007765__EX-99.1.htm#t5r3c26-27",
+   "ticker": "AA",
+   "raw_label": "Bauxite Production (mdmt)",
+   "reason": "accepted",
+   "surviving_candidates": 1,
+   "accept": {
+    "doc": "0000950170-25-007765__EX-99.1.htm",
+    "table_index": 5,
+    "row_index": 3,
+    "grid": [
+     26,
+     27
+    ],
+    "cell_text": "38.3",
+    "printed_token": "38.3",
+    "value_printed_exact": "38.3",
+    "sign": 1,
+    "headers_verbatim": [
+     "2024"
+    ],
+    "year_header_form": "bare_year",
+    "scale_unit_cadence_resolution": "not_attempted_literal"
+   },
+   "outcome": "correct_complete_fact_bundle"
+  },
+  {
+   "candidate_id": "0000950170-25-007765__EX-99.1.htm#t5r6c26-27",
+   "ticker": "AA",
+   "raw_label": "Alumina Third-Party Shipments (kmt)",
+   "reason": "accepted",
+   "surviving_candidates": 1,
+   "accept": {
+    "doc": "0000950170-25-007765__EX-99.1.htm",
+    "table_index": 5,
+    "row_index": 6,
+    "grid": [
+     26,
+     27
+    ],
+    "cell_text": "9,005",
+    "printed_token": "9,005",
+    "value_printed_exact": "9005",
+    "sign": 1,
+    "headers_verbatim": [
+     "2024"
+    ],
+    "year_header_form": "bare_year",
+    "scale_unit_cadence_resolution": "not_attempted_literal"
+   },
+   "outcome": "correct_complete_fact_bundle"
+  },
+  {
+   "candidate_id": "0000950170-25-007765__EX-99.1.htm#t5r4c26-27",
+   "ticker": "AA",
+   "raw_label": "Bauxite Third-Party Shipments (mdmt)",
+   "reason": "accepted",
+   "surviving_candidates": 1,
+   "accept": {
+    "doc": "0000950170-25-007765__EX-99.1.htm",
+    "table_index": 5,
+    "row_index": 4,
+    "grid": [
+     26,
+     27
+    ],
+    "cell_text": "6.4",
+    "printed_token": "6.4",
+    "value_printed_exact": "6.4",
+    "sign": 1,
+    "headers_verbatim": [
+     "2024"
+    ],
+    "year_header_form": "bare_year",
+    "scale_unit_cadence_resolution": "not_attempted_literal"
+   },
+   "outcome": "correct_complete_fact_bundle"
+  },
+  {
+   "candidate_id": "0001002910-25-000052__EX-99.1.htm#t13r10c15-17",
+   "ticker": "AEE",
+   "raw_label": "Ameren Illinois Natural Gas Revenue",
+   "reason": "abstain_no_full_identity_candidate",
+   "surviving_candidates": 0,
+   "outcome": "safe_abstain"
+  },
+  {
+   "candidate_id": "0001002910-26-000005__EX-99.1.htm#t13r10c15-17",
+   "ticker": "AEE",
+   "raw_label": "Ameren Illinois Natural Gas Revenue",
+   "reason": "abstain_no_full_identity_candidate",
+   "surviving_candidates": 0,
+   "outcome": "safe_abstain"
+  },
+  {
+   "candidate_id": "0001193125-26-019438__EX-99.1.htm#t5r5c26-27",
+   "ticker": "AA",
+   "raw_label": "Alumina Production (kmt)",
+   "reason": "accepted",
+   "surviving_candidates": 1,
+   "accept": {
+    "doc": "0001193125-26-019438__EX-99.1.htm",
+    "table_index": 5,
+    "row_index": 5,
+    "grid": [
+     26,
+     27
+    ],
+    "cell_text": "9,640",
+    "printed_token": "9,640",
+    "value_printed_exact": "9640",
+    "sign": 1,
+    "headers_verbatim": [
+     "2025"
+    ],
+    "year_header_form": "bare_year",
+    "scale_unit_cadence_resolution": "not_attempted_literal"
+   },
+   "outcome": "correct_complete_fact_bundle"
+  },
+  {
+   "candidate_id": "0001193125-26-019438__EX-99.1.htm#t5r3c26-27",
+   "ticker": "AA",
+   "raw_label": "Bauxite Production (mdmt)",
+   "reason": "accepted",
+   "surviving_candidates": 1,
+   "accept": {
+    "doc": "0001193125-26-019438__EX-99.1.htm",
+    "table_index": 5,
+    "row_index": 3,
+    "grid": [
+     26,
+     27
+    ],
+    "cell_text": "37.5",
+    "printed_token": "37.5",
+    "value_printed_exact": "37.5",
+    "sign": 1,
+    "headers_verbatim": [
+     "2025"
+    ],
+    "year_header_form": "bare_year",
+    "scale_unit_cadence_resolution": "not_attempted_literal"
+   },
+   "outcome": "correct_complete_fact_bundle"
+  },
+  {
+   "candidate_id": "0001193125-26-019438__EX-99.1.htm#t5r6c26-27",
+   "ticker": "AA",
+   "raw_label": "Alumina Third-Party Shipments (kmt)",
+   "reason": "accepted",
+   "surviving_candidates": 1,
+   "accept": {
+    "doc": "0001193125-26-019438__EX-99.1.htm",
+    "table_index": 5,
+    "row_index": 6,
+    "grid": [
+     26,
+     27
+    ],
+    "cell_text": "8,829",
+    "printed_token": "8,829",
+    "value_printed_exact": "8829",
+    "sign": 1,
+    "headers_verbatim": [
+     "2025"
+    ],
+    "year_header_form": "bare_year",
+    "scale_unit_cadence_resolution": "not_attempted_literal"
+   },
+   "outcome": "correct_complete_fact_bundle"
+  }
+ ],
+ "regression_ledger": [
+  {
+   "item_id": "bbd00a60244f",
+   "ticker": "AA",
+   "raw_label": "Total Revenue",
+   "qualification_bucket": "duplicate_cells",
+   "reason": "abstain_no_full_identity_candidate",
+   "surviving_candidates": 0,
+   "behavior": "abstain",
+   "note": "NEUTRAL: no truth exists for this record \u2014 behavior recorded only, neither win nor loss",
+   "accept": null
+  },
+  {
+   "item_id": "dc401beb37c3",
+   "ticker": "AAL",
+   "raw_label": "Total Revenue",
+   "qualification_bucket": "duplicate_cells",
+   "reason": "accepted",
+   "surviving_candidates": 1,
+   "behavior": "accept",
+   "note": "NEUTRAL: no truth exists for this record \u2014 behavior recorded only, neither win nor loss",
+   "accept": {
+    "doc": "0000006201-26-000031__EX-99.1.htm",
+    "table_index": 2,
+    "row_index": 7,
+    "grid": [
+     3,
+     5
+    ],
+    "cell_text": "13,912",
+    "printed_token": "13,912",
+    "value_printed_exact": "13912",
+    "sign": 1,
+    "headers_verbatim": [
+     "3 Months Ended March 31,",
+     "2026"
+    ],
+    "year_header_form": "bare_year",
+    "scale_unit_cadence_resolution": "not_attempted_literal"
+   }
+  },
+  {
+   "item_id": "630f1c4f8670",
+   "ticker": "AAL",
+   "raw_label": "Aircraft at End of Period",
+   "qualification_bucket": "duplicate_cells",
+   "reason": "abstain_no_full_identity_candidate",
+   "surviving_candidates": 0,
+   "behavior": "abstain",
+   "note": "NEUTRAL: no truth exists for this record \u2014 behavior recorded only, neither win nor loss",
+   "accept": null
+  },
+  {
+   "item_id": "f18923ee1f05",
+   "ticker": "ABT",
+   "raw_label": "Diagnostics Revenue",
+   "qualification_bucket": "duplicate_cells",
+   "reason": "abstain_no_full_identity_candidate",
+   "surviving_candidates": 0,
+   "behavior": "abstain",
+   "note": "NEUTRAL: no truth exists for this record \u2014 behavior recorded only, neither win nor loss",
+   "accept": null
+  },
+  {
+   "item_id": "e980922423e8",
+   "ticker": "ABT",
+   "raw_label": "Medical Devices Revenue",
+   "qualification_bucket": "duplicate_cells",
+   "reason": "abstain_no_full_identity_candidate",
+   "surviving_candidates": 0,
+   "behavior": "abstain",
+   "note": "NEUTRAL: no truth exists for this record \u2014 behavior recorded only, neither win nor loss",
+   "accept": null
+  },
+  {
+   "item_id": "af68f2df0735",
+   "ticker": "ACI",
+   "raw_label": "Loyalty Members",
+   "qualification_bucket": "prose_only",
+   "reason": "abstain_no_full_identity_candidate",
+   "surviving_candidates": 0,
+   "behavior": "abstain",
+   "note": "NEUTRAL: no truth exists for this record \u2014 behavior recorded only, neither win nor loss",
+   "accept": null
+  },
+  {
+   "item_id": "6b706b2f8ec3",
+   "ticker": "ACI",
+   "raw_label": "Loyalty Members",
+   "qualification_bucket": "prose_only",
+   "reason": "abstain_no_full_identity_candidate",
+   "surviving_candidates": 0,
+   "behavior": "abstain",
+   "note": "NEUTRAL: no truth exists for this record \u2014 behavior recorded only, neither win nor loss",
+   "accept": null
+  },
+  {
+   "item_id": "2fdd61622e27",
+   "ticker": "ADM",
+   "raw_label": "Total Revenue",
+   "qualification_bucket": "duplicate_cells",
+   "reason": "accepted",
+   "surviving_candidates": 1,
+   "behavior": "accept",
+   "note": "NEUTRAL: no truth exists for this record \u2014 behavior recorded only, neither win nor loss",
+   "accept": {
+    "doc": "0000007084-25-000005__EX-99.1.htm",
+    "table_index": 16,
+    "row_index": 21,
+    "grid": [
+     19,
+     20
+    ],
+    "cell_text": "85,530",
+    "printed_token": "85,530",
+    "value_printed_exact": "85530",
+    "sign": 1,
+    "headers_verbatim": [
+     "Year ended",
+     "December 31",
+     "2024",
+     "(in \u2018000s metric tons)"
+    ],
+    "year_header_form": "bare_year",
+    "scale_unit_cadence_resolution": "not_attempted_literal"
+   }
+  },
+  {
+   "item_id": "2d5c90562ce0",
+   "ticker": "ADM",
+   "raw_label": "Nutrition Segment Profit",
+   "qualification_bucket": "duplicate_cells",
+   "reason": "abstain_no_full_identity_candidate",
+   "surviving_candidates": 0,
+   "behavior": "abstain",
+   "note": "NEUTRAL: no truth exists for this record \u2014 behavior recorded only, neither win nor loss",
+   "accept": null
+  },
+  {
+   "item_id": "c0c783d31323",
+   "ticker": "ADM",
+   "raw_label": "Total Revenue",
+   "qualification_bucket": "duplicate_cells",
+   "reason": "accepted",
+   "surviving_candidates": 1,
+   "behavior": "accept",
+   "note": "NEUTRAL: no truth exists for this record \u2014 behavior recorded only, neither win nor loss",
+   "accept": {
+    "doc": "0000007084-26-000005__EX-99.1.htm",
+    "table_index": 10,
+    "row_index": 21,
+    "grid": [
+     19,
+     20
+    ],
+    "cell_text": "80,269",
+    "printed_token": "80,269",
+    "value_printed_exact": "80269",
+    "sign": 1,
+    "headers_verbatim": [
+     "Year ended",
+     "December 31,",
+     "2025",
+     "(in \u2018000s metric tons)"
+    ],
+    "year_header_form": "bare_year",
+    "scale_unit_cadence_resolution": "not_attempted_literal"
+   }
+  },
+  {
+   "item_id": "13ad41b2fef1",
+   "ticker": "AEE",
+   "raw_label": "Ameren Missouri Net Income",
+   "qualification_bucket": "prose_only",
+   "reason": "abstain_no_full_identity_candidate",
+   "surviving_candidates": 0,
+   "behavior": "abstain",
+   "note": "NEUTRAL: no truth exists for this record \u2014 behavior recorded only, neither win nor loss",
+   "accept": null
+  },
+  {
+   "item_id": "ea8682a9830b",
+   "ticker": "AEE",
+   "raw_label": "Ameren Illinois Electric Distribution Net Income",
+   "qualification_bucket": "prose_only",
+   "reason": "abstain_no_full_identity_candidate",
+   "surviving_candidates": 0,
+   "behavior": "abstain",
+   "note": "NEUTRAL: no truth exists for this record \u2014 behavior recorded only, neither win nor loss",
+   "accept": null
+  },
+  {
+   "item_id": "5c834f33e786",
+   "ticker": "AEE",
+   "raw_label": "Ameren Illinois Natural Gas Net Income",
+   "qualification_bucket": "prose_only",
+   "reason": "abstain_no_full_identity_candidate",
+   "surviving_candidates": 0,
+   "behavior": "abstain",
+   "note": "NEUTRAL: no truth exists for this record \u2014 behavior recorded only, neither win nor loss",
+   "accept": null
+  },
+  {
+   "item_id": "f05f1ad74900",
+   "ticker": "AEE",
+   "raw_label": "Ameren Transmission Net Income",
+   "qualification_bucket": "prose_only",
+   "reason": "abstain_no_full_identity_candidate",
+   "surviving_candidates": 0,
+   "behavior": "abstain",
+   "note": "NEUTRAL: no truth exists for this record \u2014 behavior recorded only, neither win nor loss",
+   "accept": null
+  },
+  {
+   "item_id": "7c7fed81a5e2",
+   "ticker": "AEE",
+   "raw_label": "Ameren Missouri Net Income",
+   "qualification_bucket": "prose_only",
+   "reason": "abstain_no_full_identity_candidate",
+   "surviving_candidates": 0,
+   "behavior": "abstain",
+   "note": "NEUTRAL: no truth exists for this record \u2014 behavior recorded only, neither win nor loss",
+   "accept": null
+  },
+  {
+   "item_id": "f3ee606b88de",
+   "ticker": "AEE",
+   "raw_label": "Ameren Illinois Electric Distribution Net Income",
+   "qualification_bucket": "prose_only",
+   "reason": "abstain_no_full_identity_candidate",
+   "surviving_candidates": 0,
+   "behavior": "abstain",
+   "note": "NEUTRAL: no truth exists for this record \u2014 behavior recorded only, neither win nor loss",
+   "accept": null
+  },
+  {
+   "item_id": "d7c6b8f583b3",
+   "ticker": "AEE",
+   "raw_label": "Ameren Illinois Natural Gas Net Income",
+   "qualification_bucket": "prose_only",
+   "reason": "abstain_no_full_identity_candidate",
+   "surviving_candidates": 0,
+   "behavior": "abstain",
+   "note": "NEUTRAL: no truth exists for this record \u2014 behavior recorded only, neither win nor loss",
+   "accept": null
+  },
+  {
+   "item_id": "057e9564b04f",
+   "ticker": "AEE",
+   "raw_label": "Ameren Transmission Net Income",
+   "qualification_bucket": "duplicate_cells",
+   "reason": "abstain_no_full_identity_candidate",
+   "surviving_candidates": 0,
+   "behavior": "abstain",
+   "note": "NEUTRAL: no truth exists for this record \u2014 behavior recorded only, neither win nor loss",
+   "accept": null
+  },
+  {
+   "item_id": "f0d9b6e0dea2",
+   "ticker": "AFL",
+   "raw_label": "US Adjusted Net Investment Income",
+   "qualification_bucket": "duplicate_cells",
+   "reason": "abstain_no_full_identity_candidate",
+   "surviving_candidates": 0,
+   "behavior": "abstain",
+   "note": "NEUTRAL: no truth exists for this record \u2014 behavior recorded only, neither win nor loss",
+   "accept": null
+  },
+  {
+   "item_id": "ff629deb29f1",
+   "ticker": "AFL",
+   "raw_label": "US Adjusted Net Investment Income",
+   "qualification_bucket": "duplicate_cells",
+   "reason": "abstain_no_full_identity_candidate",
+   "surviving_candidates": 0,
+   "behavior": "abstain",
+   "note": "NEUTRAL: no truth exists for this record \u2014 behavior recorded only, neither win nor loss",
+   "accept": null
+  }
+ ]
+}

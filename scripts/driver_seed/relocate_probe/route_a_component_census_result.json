@@ -1,0 +1,24 @@
+{
+ "label": "ROUTE-A COMPONENT CENSUS (not full certification)",
+ "files": 1722,
+ "buckets": {
+  "facts": 2023157,
+  "unit_usd": 1772420,
+  "period_ok": 2016627,
+  "reconcile_ok": 1976414,
+  "has_row_or_header": 1790963,
+  "unit_count": 93778,
+  "unit_usd_per_share": 42590,
+  "unit_abstain": 114369,
+  "reconcile_fail": 40213,
+  "evidence_typed_dimensions_unsupported": 2101,
+  "hidden": 4407,
+  "fallback_ok": 3324,
+  "fallback_ambiguous_identity": 8,
+  "period_mismatch": 12,
+  "evidence_missing_context_ref": 1,
+  "evidence_undefined_context": 1
+ },
+ "file_errors": [],
+ "secs": 953
+}
