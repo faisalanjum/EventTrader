@@ -11,14 +11,14 @@
 > live file: `15_CandidateFactPacket.md` (owner-frozen v1.0 + the two 2026-07-15 owner amendments Q4/Q1-ext,
 > current sha `aa7239ed…`).
 
-## 1. One-page dashboard (2026-07-20)
+## 1. One-page dashboard (2026-07-22)
 
 | Layer | Design | Code | Tests | Production run |
 |---|---|---|---|---|
 | Rule meaning (FINAL_DESIGN §1-§9) | FINAL (locked set + owner rulings through 2026-07-18, incl. PER-21) | — | — | — |
-| Track A catalog engine | FINAL | PARTIAL (WP-FC-EDITS `5db902f` + rounds 22-23 prompt sync; implementation gate in BUILD §4 governs any run) | 265 pass + 1 skip (2026-07-16, incl. the strengthened rulebook-sync guard in `workflows/tests/`) | NEVER RUN (no graph catalog; fitness gate never run; old June RULE-BEARING outputs = historical evidence only, chunk copies excepted per BUILD §4) |
+| Track A catalog engine | FINAL | PARTIAL (WP-FC-EDITS `5db902f` + rounds 22-23 prompt sync; implementation gate in BUILD §4 governs any run) | 266 pass + 1 skip (2026-07-22, incl. the strengthened rulebook-sync guard + the PER-21 authority pin guard in `workflows/tests/`) | NEVER RUN (no graph catalog; fitness gate never run; old June RULE-BEARING outputs = historical evidence only, chunk copies excepted per BUILD §4) |
 | Fiscal.ai channel adapter (S1) | FINAL incl. PER-21 | S1 BUILT; PER-21 historical-router correction SHIPPED — WP1 re-gate CLOSED (`80bae52`). Universal Locator WP2–WP4 execution is governed by `../WIP/UniversalLocator_SourceLinked_Prose_Simplification_FinalPlan_2026-07-21.md`, the sole current execution amendment/work order over the locked `../WIP/UniversalLocator_Design_2026-07-18.md` base (reading order: locked Design base → FinalPlan changes/current steps → Review Record history). Older UniversalLocator WIP plans are history/evidence. This work order does not amend FINAL_DESIGN, ChannelContract, BUILD_AND_OPERATIONS, PER-21, Core ownership, or News. | smoke 16 packets / 175 items, 0 tokens; WP1 close gates green at `80bae52` (battery 149/149 · floors 28/28) | not live |
-| Track B fact stack | FINAL + the §11.4 INTERNAL writer contract OWNER-LOCKED 2026-07-17, internal portion CLOSED (PreparedFactV1 schema approved; public channel portion = S4) | steps 1-5 + step-7 slice menu BUILT (`driver/core/`: ids · period resolver, PER-20 HAS_XBRL producer guard PENDING · units · validators/planner · fusion · write CLI `97a46ce` · Report-only Neo4j adapter, writes DISABLED · slice_menu + owner-approved frozen lists, R12) | 392 unit + 1 opt-in probe skip · live read-only 10/10 (separate gate) · Track A 265+1 | dry-run only; ENABLE_DRIVER_WRITES off; adapter transaction() raises |
+| Track B fact stack | FINAL + the §11.4 INTERNAL writer contract OWNER-LOCKED 2026-07-17, internal portion CLOSED (PreparedFactV1 schema approved; public channel portion = S4) | steps 1-5 + step-7 slice menu BUILT (`driver/core/`: ids · period resolver, PER-20 HAS_XBRL producer guard PENDING · units · validators/planner · fusion · write CLI `97a46ce` · Report-only Neo4j adapter, writes DISABLED · slice_menu + owner-approved frozen lists, R12) | 392 unit + 1 opt-in probe skip · live read-only 10/10 (separate gate) · Track A 266+1 | dry-run only; ENABLE_DRIVER_WRITES off; adapter transaction() raises |
 | Track C guidance retirement | FINAL v2.0 (no replay) | not started | — | — |
 | Concept linker (text facts) | FINAL | PARTIAL (vetoes C/D + PIT query spec-only) | 31-co + 274-co evidence | not rolled out |
 | Admission kernel | **APPROVED WORKING DESIGN (owner 2026-07-15; not activated)** | — | gates in force; integration COMPLETE (BUILD §8.1; original archived) | — |
@@ -187,8 +187,9 @@ ambiguous evidence parks. Any third/copied fiscal-label, projected-date, or fili
 superseded and forbidden. This source-routing decision is distinct from Driver fact-window resolution
 (FINAL_DESIGN PER-21; procedure = BUILD §3). The frozen packet stays byte-identical at `aa7239ed…`: its
 "shared resolver is the sole period authority" phrase means the fact's own window only, never 8-K source
-pairing. Per the standing R8 policy, one blank-context reader recheck against the committed law bytes is
-OWED; it has not run yet.
+pairing. Per the standing R8 policy, the owed blank-context reader recheck is DISCHARGED: **PASS 10/10 at
+commit `c87d81bf…`** (record: `archive/2026-07-15_pre-consolidation/READER_TEST_RECORD_2026-07-22_R8-PER21.md`,
+7/7 pins pre+post, first-attempt grading under the locked rule).
 
 ## 5. Signed experiment decisions + remaining gates (authority = signed decision.json artifacts)
 
