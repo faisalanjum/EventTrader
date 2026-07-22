@@ -59,6 +59,19 @@ channel adapter (SELECT · FETCH · SUBMIT, per ChannelContract.md)
 - Map a real accession to the canonical Report/Event; `canonicalize_source_id` maps `:` → `_`. Graph event
   absent → PARK-RETRY. Store the TRUE document source type (`8k`/`10q`/`10k`); the offline `fiscal.ai-kpi`
   catalog evidence atom is NOT a DriverUpdate channel source type.
+- Apply PER-21 BEFORE fact-period resolution. These are the only two earnings 8-K routes:
+  - **Historical/backfill (the target 10-Q/10-K already exists):** call the ONE structured matcher owned by
+    `.claude/skills/earnings-orchestrator/scripts/get_quarterly_filings.py`, without display deduplication; accept
+    every distinct 8-K whose ONE returned periodic accession exactly equals the requested 10-Q/10-K accession AND
+    `scripts/earnings/quarter_identity.py`'s `resolve_quarter_info()` returns `safety_action=AUTO_OK`. Ignore the
+    resolver's fiscal label/projected dates on this route. For a given 8-K, no periodic match, an ambiguous
+    periodic match, or a failed trust gate means source-incomplete → PARK-RETRY. Multiple distinct 8-Ks that
+    independently map to the same periodic filing remain separate source events.
+  - **Live (the target 10-Q/10-K does not exist yet):** call
+    `scripts/earnings/quarter_identity.py`'s `resolve_quarter_info()` alone; only `AUTO_OK` proceeds, otherwise park.
+  `get_earnings_with_10q()` is a display formatter inside the historical authority file, not a third authority:
+  consumers call the structured matcher and never parse its pipe-formatted text. Do not copy either algorithm,
+  join fiscal labels/projected dates, or add a filing-sequence matcher.
 - Use the Report public timestamp for PIT order; company fiscal-year-end for fiscal math.
 - Period evidence tiers: exact XBRL context first → cadence + adjacent wording → governed fiscal math.
   `time_type` is a REQUIRED semantic output, never defaulted; T1-sibling period type and `KNOWN_INSTANT_LABELS`
@@ -260,6 +273,9 @@ whole-event retries, cursor updates · live + historical backfill orchestration 
 decisions · QA gates, alerting, budgets, exact model policy · catalog-to-graph lazy materialization + protected
 imports · prediction/learner/scanner cutover + empty-history behavior · incremental refresh (below) · Track C
 execution · production write approval + rollback/recovery checks.
+
+The running layer still needs schedules/cursors/retries, but earnings 8-K pairing itself is already CLOSED:
+every future selector must call §3's two authorities exactly as PER-21 defines; it must not build another matcher.
 
 **Incremental refresh rules (already recorded, must survive):** fold base+delta · freeze old-to-old decisions at
 every level · source-id ledger · SKIP reopens while PARK stays terminal as specified · atomic `_state.json`

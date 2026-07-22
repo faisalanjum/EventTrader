@@ -11,13 +11,13 @@
 > live file: `15_CandidateFactPacket.md` (owner-frozen v1.0 + the two 2026-07-15 owner amendments Q4/Q1-ext,
 > current sha `aa7239ed…`).
 
-## 1. One-page dashboard (2026-07-17)
+## 1. One-page dashboard (2026-07-20)
 
 | Layer | Design | Code | Tests | Production run |
 |---|---|---|---|---|
-| Rule meaning (FINAL_DESIGN §1-§9) | FINAL (locked set + 5 owner rulings 2026-07-15) | — | — | — |
+| Rule meaning (FINAL_DESIGN §1-§9) | FINAL (locked set + owner rulings through 2026-07-18, incl. PER-21) | — | — | — |
 | Track A catalog engine | FINAL | PARTIAL (WP-FC-EDITS `5db902f` + rounds 22-23 prompt sync; implementation gate in BUILD §4 governs any run) | 265 pass + 1 skip (2026-07-16, incl. the strengthened rulebook-sync guard in `workflows/tests/`) | NEVER RUN (no graph catalog; fitness gate never run; old June RULE-BEARING outputs = historical evidence only, chunk copies excepted per BUILD §4) |
-| Fiscal.ai channel adapter (S1) | FINAL | BUILT | smoke 16 packets / 175 items, 0 tokens | not live |
+| Fiscal.ai channel adapter (S1) | FINAL incl. PER-21 | S1 BUILT; PER-21 historical-router correction SHIPPED — WP1 re-gate CLOSED (`80bae52`). Universal Locator WP2–WP4 execution is governed by `../WIP/UniversalLocator_SourceLinked_Prose_Simplification_FinalPlan_2026-07-21.md`, the sole current execution amendment/work order over the locked `../WIP/UniversalLocator_Design_2026-07-18.md` base (reading order: locked Design base → FinalPlan changes/current steps → Review Record history). Older UniversalLocator WIP plans are history/evidence. This work order does not amend FINAL_DESIGN, ChannelContract, BUILD_AND_OPERATIONS, PER-21, Core ownership, or News. | smoke 16 packets / 175 items, 0 tokens; WP1 close gates green at `80bae52` (battery 149/149 · floors 28/28) | not live |
 | Track B fact stack | FINAL + the §11.4 INTERNAL writer contract OWNER-LOCKED 2026-07-17, internal portion CLOSED (PreparedFactV1 schema approved; public channel portion = S4) | steps 1-5 + step-7 slice menu BUILT (`driver/core/`: ids · period resolver, PER-20 HAS_XBRL producer guard PENDING · units · validators/planner · fusion · write CLI `97a46ce` · Report-only Neo4j adapter, writes DISABLED · slice_menu + owner-approved frozen lists, R12) | 392 unit + 1 opt-in probe skip · live read-only 10/10 (separate gate) · Track A 265+1 | dry-run only; ENABLE_DRIVER_WRITES off; adapter transaction() raises |
 | Track C guidance retirement | FINAL v2.0 (no replay) | not started | — | — |
 | Concept linker (text facts) | FINAL | PARTIAL (vetoes C/D + PIT query spec-only) | 31-co + 274-co evidence | not rolled out |
@@ -33,7 +33,7 @@
 - **FINAL / BUILD-PENDING:** Track A remainder (fold/tree mirrors, finalizer, real folds, WP-FC-RUN, OD-6 fitness gate — never run) · UNIT-14 production wiring · PER-20 HAS_XBRL producer guard · full slice TABLE materialization (materializer-era; the step-7 PIT menu code IS built) · concept-linker vetoes C/D + PIT query build · Track B remainder (the internal writer/validators/fusion/CLI/audit + step-7 slice menu are BUILT `0d6c1d0`, dry-run only — remaining: S4 decomposer/kernel integration + public channel runtime, FS-18 step-7 menu-for-producers, write enablement behind the fitness gate) · read layer · verdict/DCM writer · channel adapters + certification · Track C execution · incremental refresh.
 - **DESIGN-INCOMPLETE:** the production running layer (BUILD §7's runbook list). The OD-5 change scanner is a recommendation only.
 - **CONDITIONAL:** OD-19 (inert until K-pairs.v2 zero wrong-same) · XC-16 timing · model-role membership (experiment-gated) · XBRL-native materializer + `09` rider (RATIFIED as design 2026-07-15; DORMANT until the P19 enablement proof plan — X-XL0-3 bars — every hard pre-gate pass, and the EXP-6 convergence evidence) · multi-run concept stability/caching (only if monitoring justifies).
-- **OPEN (owner):** catalog 796-vs-786 + lifecycle/IPO · full model/cost policy beyond signed EXP-2 · FS-23 · 8-K taxonomy · DCM threshold/pure-macro/two-catalyst · Track B dual-producer thresholds · non-USD expansion · metric `value_text`/action `conditions` revisit triggers · Driver Genesis charter questions · Track C history-gap acceptance · third-party `company_confirmed=false` class enablement (part-2/news-channel).
+- **OPEN (owner):** catalog 796-vs-786 + lifecycle/IPO · full model/cost policy beyond signed EXP-2 · FS-23 · 8-K item/content taxonomy only (earnings 8-K pairing is CLOSED by PER-21) · DCM threshold/pure-macro/two-catalyst · Track B dual-producer thresholds · non-USD expansion · metric `value_text`/action `conditions` revisit triggers · Driver Genesis charter questions · Track C history-gap acceptance · third-party `company_confirmed=false` class enablement (part-2/news-channel) · **Driver financial classification (owner 2026-07-19): NO field approved — for now derive exact facts (company-specific XBRL linkage, monetary units); revisit before production Driver creation ONLY if a named consumer and a testable definition exist; otherwise the field stays absent.**
 - **APPROVED WORKING DESIGN (owner 2026-07-15; not activated; gates/OFF-switches in force):** Admission Kernel v3.4 · XBRL-native materializer — integration COMPLETE (INT-2..INT-5, destination proof §7.1b); both originals archived 2026-07-15, byte-verified vs the Phase-1 manifest. The kernel bundle also settled two formerly-open/tracked items: G1 reuse-display rules (→ BUILD §8.1.3) · OD-7's born-complete/live-create CORE (→ BUILD §8.1; the broader OD-7 design stays UNRATIFIED — FINAL §4.2 Q5 note; the mis-name/mis-type exit + exact recipes land at the future OD-7 pass, BUILD §11.2).
 - **CANDIDATE:** Bayes proposal · Driver Genesis restructure (rationale). Owner-question decision record = §4 below; the full decision text + verification trail = the archived `CONSOLIDATION.md` §10.2/§16 (`archive/2026-07-15_pre-consolidation/`).
 - **Change law (owner 2026-07-15):** every future design correction updates the ONE owning live section and adds a short history entry here; no parallel live copies.
@@ -105,7 +105,7 @@ OD-19 (§5.4) · OD-20 (§5.4) · OD-21 (§5.1/§6.2/§7) · K2 = fold repair st
 deferred (BUILD §4) · frozen packet v1.0 + Channel Contract v1.0 (boundary files) · Track C full no-replay
 reversal (BUILD §6).
 
-## 4. Owner rulings record (2026-07-15)
+## 4. Owner rulings record (through 2026-07-18)
 
 Q1 `company_confirmed`: CORE derives from who-said-it evidence; unclear = SKIP (ruling's own content); `false`
 stays reserved for explicitly-ALLOWED future third-party classes (enabling any class = part-2/news-channel
@@ -178,6 +178,17 @@ readable-date `gp_` ids · the one text normalizer w/ park-on-empty · the one d
 10-slot sha256 fingerprint) → BUILD §5 ID-shape entry; BUILD §11.3 closed; operative law =
 `driver/core/driver_ids.py` + its frozen vector suite. Owner also blessed the build sequence (S3 writer stack →
 S4 kernel day-1 + pilot → enrichment); ratification-vs-authorization wording never blocks the agreed sequence.
+· **R13 (2026-07-18) earnings 8-K period authority CLOSED:** the owner locked exactly two files for earnings
+8-K routing. Historical/backfill exact periodic-accession pairing belongs to
+`.claude/skills/earnings-orchestrator/scripts/get_quarterly_filings.py`, with `quarter_identity.py` used only
+as an `AUTO_OK` trust gate; its fiscal label/projected dates do not join historical documents. Live, before
+the target periodic filing exists, belongs to `scripts/earnings/quarter_identity.py` alone. Missing or
+ambiguous evidence parks. Any third/copied fiscal-label, projected-date, or filing-sequence matcher is
+superseded and forbidden. This source-routing decision is distinct from Driver fact-window resolution
+(FINAL_DESIGN PER-21; procedure = BUILD §3). The frozen packet stays byte-identical at `aa7239ed…`: its
+"shared resolver is the sole period authority" phrase means the fact's own window only, never 8-K source
+pairing. Per the standing R8 policy, one blank-context reader recheck against the committed law bytes is
+OWED; it has not run yet.
 
 ## 5. Signed experiment decisions + remaining gates (authority = signed decision.json artifacts)
 
@@ -228,7 +239,7 @@ the three pre-amendment/frozen-original snapshots sit beside them.
 | 66_IssuesToBeHandled | owner blocks + stale tail | rules → FINAL_DESIGN; status here; archive |
 | 90_OpenItems · 95_Supersession · 99_Codex audit | status · 43-row ledger · history | this file §1-§3; archive (99 wholesale) |
 | BayesProposal | unvetted proposal | BUILD §8.3 pointer; ARCHIVED directly in the dated archive 2026-07-16 ✓ |
-| ChannelContract | ACTIVE live file | kept — the SOLE public channel authority under the one-copy law; banner amended 2026-07-15 (owner batch: XBRL row, evidence row, provenance one-liner replacing the old "source of truth" phrasing); current sha tracked in git + CONSOLIDATION §16 hash freeze |
+| ChannelContract | ACTIVE live file | kept — the SOLE public channel authority under the one-copy law; amended 2026-07-15 (XBRL/evidence/provenance) and 2026-07-18 (PER-21 source-completeness pointer); current sha tracked in git + CONSOLIDATION §16 hash freeze |
 | DriverGenesisRestructure | unapproved rationale | open charter questions in FINAL_DESIGN §10; archive |
 | DriverPlan.html | stale study export | none (regenerate later from live docs); archive |
 | FableAdmissionKernelDesign | **RATIFIED working design (owner 2026-07-15; not activated)** | full mechanics → BUILD §8.1 + law-grade parts → FINAL_DESIGN (destination proof §7.1b); **original ARCHIVED 2026-07-15, byte-verified — DONE** |
@@ -254,6 +265,7 @@ column — the map is total over every ID listed in the archived `CONSOLIDATION.
 | UNIT-14 | BUILD §5 | build wiring only |
 | PER-01..19 | FINAL_DESIGN §6.2 | — |
 | PER-20 | BUILD §5 | resolver build + 21 tests |
+| PER-21 | FINAL_DESIGN §6.2 | earnings 8-K routing procedure → BUILD §3; owner ruling R13 |
 | MF-01..10, 12 | FINAL_DESIGN §4.1 | MF-05 latent anchors also §4.2 · MF-10 inheritance also §8 |
 | MF-11 | FINAL_DESIGN §7.1 | `company_confirmed` |
 | DU-01..07 | FINAL_DESIGN §4.1/§4.2 | DU-05/06/07 classifier content §4.1; prompt pin BUILD §4 |

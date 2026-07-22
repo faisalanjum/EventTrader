@@ -7,6 +7,8 @@
 > §3 XBRL row (exact context always + verified-empty `dimensions=[]`) · §3 guidance row (channels send
 > company-confirmation EVIDENCE; the core derives the boolean) · banner provenance one-liner (Phase-4 seed,
 > same owner batch).**
+> **Amended 2026-07-18 (owner): §7 points earnings 8-K source completeness to PER-21 / BUILD §3's two
+> canonical routes. No packet field or channel/core boundary changed.**
 
 ## 1. What a channel is (one line)
 A channel FETCHES evidence and SUBMITS it. It never creates drivers, never names them, never decides identity —
@@ -56,6 +58,8 @@ arrives) · `skipped(reason)` (terminal, counted) · `rejected(reason)` (contrac
 - Keep a per-company-period **source-completeness + extraction-status stamp** (which expected sources were
   present and searched, zero extraction errors). A value-absent SKIP is legal ONLY against a clean stamp;
   an incomplete search is PARK-RETRY, not a skip.
+- For earnings 8-K source completeness, use only the two canonical routes in `FINAL_DESIGN.md` PER-21 /
+  `BUILD_AND_OPERATIONS.md` §3. A channel never invents or copies an 8-K-to-periodic-filing matcher.
 - Value-absent SKIPs re-open on: a new source (instance or class) · a repaired corpus · a CERTIFIED locator
   upgrade. Nothing else.
 
