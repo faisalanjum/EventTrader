@@ -1,0 +1,922 @@
+{
+ "label": "PHASE-4 CHRONOLOGICAL DRY RUN v2 (reader OFF, read-only, no Core; publication-time law \u2014 no assumed source-type order)",
+ "universe": {
+  "tickers": [
+   "AA",
+   "AAL",
+   "ABT",
+   "ACI",
+   "ADM",
+   "AEE",
+   "AFL"
+  ],
+  "note": "7 of the 10 WP1 companies \u2014 the 8-K-qualified subset (m2_wp1_8k_qualification); A, AAPL, ACN have no qualified 8-K records",
+  "events": {
+   "transcript": 81,
+   "8k": 84,
+   "periodic": 79
+  },
+  "total_events": 244,
+  "span": [
+   "2023-01-18T17:00:00-05:00",
+   "2026-04-27T16:33:13-04:00"
+  ]
+ },
+ "pair_timing": [
+  {
+   "ticker": "AA",
+   "acc_8k": "0001157523-23-000580",
+   "lane": "both",
+   "periodic": "0000950170-23-017900",
+   "delta_hours": 360.1,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AA",
+   "acc_8k": "0001157523-23-001109",
+   "lane": "both",
+   "periodic": "0000950170-23-035168",
+   "delta_hours": 192.1,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AA",
+   "acc_8k": "0001157523-23-001501",
+   "lane": "both",
+   "periodic": "0000950170-23-055630",
+   "delta_hours": 192.2,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AA",
+   "acc_8k": "0001157523-24-000066",
+   "lane": "both",
+   "periodic": "0000950170-24-018069",
+   "delta_hours": 840.9,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AA",
+   "acc_8k": "0000950170-24-045115",
+   "lane": "both",
+   "periodic": "0000950170-24-052174",
+   "delta_hours": 360.2,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AA",
+   "acc_8k": "0000950170-24-082696",
+   "lane": "both",
+   "periodic": "0000950170-24-090092",
+   "delta_hours": 552.7,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AA",
+   "acc_8k": "0000950170-24-084275",
+   "lane": "both",
+   "periodic": "0000950170-24-090092",
+   "delta_hours": 384.8,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AA",
+   "acc_8k": "0000950170-24-115018",
+   "lane": "both",
+   "periodic": "0000950170-24-119557",
+   "delta_hours": 359.8,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AA",
+   "acc_8k": "0000950170-25-007765",
+   "lane": "both",
+   "periodic": "0000950170-25-024242",
+   "delta_hours": 696.7,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AA",
+   "acc_8k": "0000950170-25-054726",
+   "lane": "both",
+   "periodic": "0000950170-25-061867",
+   "delta_hours": 360.1,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AA",
+   "acc_8k": "0000950170-25-096260",
+   "lane": "both",
+   "periodic": "0000950170-25-100979",
+   "delta_hours": 360.8,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AA",
+   "acc_8k": "0001193125-25-246788",
+   "lane": "both",
+   "periodic": "0001193125-25-253570",
+   "delta_hours": 144.2,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AA",
+   "acc_8k": "0001193125-26-019438",
+   "lane": "both",
+   "periodic": "0001193125-26-077167",
+   "delta_hours": 840.7,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AA",
+   "acc_8k": "0001193125-26-159018",
+   "lane": "live_only",
+   "periodic": "0001193125-26-077167",
+   "delta_hours": -1174.3,
+   "inverted": true,
+   "stale_live_pairing": true
+  },
+  {
+   "ticker": "AAL",
+   "acc_8k": "0000006201-23-000041",
+   "lane": "both",
+   "periodic": "0000006201-23-000042",
+   "delta_hours": 0.0,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AAL",
+   "acc_8k": "0000006201-23-000069",
+   "lane": "both",
+   "periodic": "0000006201-23-000070",
+   "delta_hours": 0.0,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AAL",
+   "acc_8k": "0000006201-23-000091",
+   "lane": "both",
+   "periodic": "0000006201-23-000092",
+   "delta_hours": 0.0,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AAL",
+   "acc_8k": "0000006201-24-000005",
+   "lane": "both",
+   "periodic": "0000006201-24-000010",
+   "delta_hours": 649.0,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AAL",
+   "acc_8k": "0000006201-24-000031",
+   "lane": "both",
+   "periodic": "0000006201-24-000032",
+   "delta_hours": 0.0,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AAL",
+   "acc_8k": "0000006201-24-000047",
+   "lane": "both",
+   "periodic": "0000006201-24-000048",
+   "delta_hours": 0.0,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AAL",
+   "acc_8k": "0000006201-24-000059",
+   "lane": "both",
+   "periodic": "0000006201-24-000060",
+   "delta_hours": 0.0,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AAL",
+   "acc_8k": "0000006201-25-000006",
+   "lane": "both",
+   "periodic": "0000006201-25-000010",
+   "delta_hours": 657.6,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AAL",
+   "acc_8k": "0000006201-25-000022",
+   "lane": "both",
+   "periodic": "0000006201-25-000023",
+   "delta_hours": 0.0,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AAL",
+   "acc_8k": "0000006201-25-000037",
+   "lane": "both",
+   "periodic": "0000006201-25-000038",
+   "delta_hours": 0.0,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AAL",
+   "acc_8k": "0000006201-25-000051",
+   "lane": "both",
+   "periodic": "0000006201-25-000052",
+   "delta_hours": 0.0,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AAL",
+   "acc_8k": "0000006201-26-000008",
+   "lane": "both",
+   "periodic": "0000006201-26-000014",
+   "delta_hours": 537.8,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AAL",
+   "acc_8k": "0000006201-26-000031",
+   "lane": "both",
+   "periodic": "0000006201-26-000032",
+   "delta_hours": 0.0,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "ABT",
+   "acc_8k": "0001628280-23-012020",
+   "lane": "both",
+   "periodic": "0001628280-23-015699",
+   "delta_hours": 368.6,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "ABT",
+   "acc_8k": "0001628280-23-025156",
+   "lane": "both",
+   "periodic": "0001628280-23-027203",
+   "delta_hours": 343.6,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "ABT",
+   "acc_8k": "0001628280-23-034544",
+   "lane": "both",
+   "periodic": "0001628280-23-035957",
+   "delta_hours": 344.5,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "ABT",
+   "acc_8k": "0001628280-24-002009",
+   "lane": "both",
+   "periodic": "0001628280-24-005348",
+   "delta_hours": 560.7,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "ABT",
+   "acc_8k": "0001628280-24-016497",
+   "lane": "both",
+   "periodic": "0001628280-24-020011",
+   "delta_hours": 368.6,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "ABT",
+   "acc_8k": "0001628280-24-032182",
+   "lane": "both",
+   "periodic": "0001628280-24-033740",
+   "delta_hours": 320.4,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "ABT",
+   "acc_8k": "0001628280-24-042893",
+   "lane": "both",
+   "periodic": "0001628280-24-044602",
+   "delta_hours": 369.6,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "ABT",
+   "acc_8k": "0001628280-25-002092",
+   "lane": "both",
+   "periodic": "0001628280-25-007110",
+   "delta_hours": 728.9,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "ABT",
+   "acc_8k": "0001628280-25-017924",
+   "lane": "both",
+   "periodic": "0001628280-25-021090",
+   "delta_hours": 344.6,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "ABT",
+   "acc_8k": "0001628280-25-035135",
+   "lane": "both",
+   "periodic": "0001628280-25-036720",
+   "delta_hours": 320.7,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "ABT",
+   "acc_8k": "0001628280-25-045049",
+   "lane": "both",
+   "periodic": "0001628280-25-047131",
+   "delta_hours": 344.8,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "ABT",
+   "acc_8k": "0001628280-26-002982",
+   "lane": "both",
+   "periodic": "0001628280-26-010185",
+   "delta_hours": 704.5,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "ABT",
+   "acc_8k": "0001628280-26-025365",
+   "lane": "live_only",
+   "periodic": "0001628280-26-010185",
+   "delta_hours": -1310.5,
+   "inverted": true,
+   "stale_live_pairing": true
+  },
+  {
+   "ticker": "ACI",
+   "acc_8k": "0001646972-23-000033",
+   "lane": "both",
+   "periodic": "0001646972-23-000045",
+   "delta_hours": 343.6,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "ACI",
+   "acc_8k": "0001646972-23-000051",
+   "lane": "both",
+   "periodic": "0001646972-23-000056",
+   "delta_hours": 8.1,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "ACI",
+   "acc_8k": "0001646972-24-000059",
+   "lane": "both",
+   "periodic": "0001646972-24-000060",
+   "delta_hours": 0.0,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "ACI",
+   "acc_8k": "0001646972-24-000164",
+   "lane": "both",
+   "periodic": "0001646972-24-000165",
+   "delta_hours": 0.0,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "ACI",
+   "acc_8k": "0001646972-25-000040",
+   "lane": "both",
+   "periodic": "0001646972-25-000052",
+   "delta_hours": 152.9,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "ACI",
+   "acc_8k": "0001646972-26-000028",
+   "lane": "both",
+   "periodic": "0001646972-26-000032",
+   "delta_hours": 321.0,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "ADM",
+   "acc_8k": "0000007084-23-000014",
+   "lane": "both",
+   "periodic": "0000007084-23-000017",
+   "delta_hours": 5.6,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "ADM",
+   "acc_8k": "0000007084-23-000024",
+   "lane": "both",
+   "periodic": "0000007084-23-000028",
+   "delta_hours": 5.6,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "ADM",
+   "acc_8k": "0000007084-23-000037",
+   "lane": "both",
+   "periodic": "0000007084-23-000039",
+   "delta_hours": 5.1,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "ADM",
+   "acc_8k": "0001193125-24-011608",
+   "lane": "both",
+   "periodic": "0000007084-24-000009",
+   "delta_hours": 1198.9,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "ADM",
+   "acc_8k": "0000007084-24-000010",
+   "lane": "both",
+   "periodic": "0000007084-24-000009",
+   "delta_hours": -4.9,
+   "inverted": true,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "ADM",
+   "acc_8k": "0000007084-24-000015",
+   "lane": "both",
+   "periodic": "0000007084-24-000017",
+   "delta_hours": 6.0,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "ADM",
+   "acc_8k": "0000007084-24-000024",
+   "lane": "both",
+   "periodic": "0000007084-24-000026",
+   "delta_hours": 5.5,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "ADM",
+   "acc_8k": "0000007084-24-000031",
+   "lane": "both",
+   "periodic": "0000007084-24-000054",
+   "delta_hours": 331.8,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "ADM",
+   "acc_8k": "0000007084-24-000056",
+   "lane": "both",
+   "periodic": "0000007084-24-000054",
+   "delta_hours": -0.5,
+   "inverted": true,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "ADM",
+   "acc_8k": "0000007084-25-000005",
+   "lane": "both",
+   "periodic": "0000007084-25-000011",
+   "delta_hours": 392.4,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "ADM",
+   "acc_8k": "0000007084-25-000020",
+   "lane": "both",
+   "periodic": "0000007084-25-000022",
+   "delta_hours": 8.9,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "ADM",
+   "acc_8k": "0000007084-25-000040",
+   "lane": "both",
+   "periodic": "0000007084-25-000042",
+   "delta_hours": 8.9,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "ADM",
+   "acc_8k": "0000007084-25-000049",
+   "lane": "both",
+   "periodic": "0000007084-25-000052",
+   "delta_hours": 9.9,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "ADM",
+   "acc_8k": "0000007084-26-000005",
+   "lane": "both",
+   "periodic": "0000007084-26-000011",
+   "delta_hours": 346.0,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AEE",
+   "acc_8k": "0001002910-23-000089",
+   "lane": "both",
+   "periodic": "0001002910-23-000090",
+   "delta_hours": 23.3,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AEE",
+   "acc_8k": "0001002910-23-000101",
+   "lane": "both",
+   "periodic": "0001002910-23-000102",
+   "delta_hours": 24.8,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AEE",
+   "acc_8k": "0001002910-23-000111",
+   "lane": "both",
+   "periodic": "0001002910-23-000112",
+   "delta_hours": 24.3,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AEE",
+   "acc_8k": "0001002910-24-000053",
+   "lane": "both",
+   "periodic": "0001002910-24-000056",
+   "delta_hours": 165.7,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AEE",
+   "acc_8k": "0001002910-24-000087",
+   "lane": "both",
+   "periodic": "0001002910-24-000090",
+   "delta_hours": 94.4,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AEE",
+   "acc_8k": "0001002910-24-000098",
+   "lane": "both",
+   "periodic": "0001002910-24-000101",
+   "delta_hours": 96.6,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AEE",
+   "acc_8k": "0001002910-24-000109",
+   "lane": "both",
+   "periodic": "0001002910-24-000111",
+   "delta_hours": 24.6,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AEE",
+   "acc_8k": "0001002910-25-000052",
+   "lane": "both",
+   "periodic": "0001002910-25-000055",
+   "delta_hours": 119.5,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AEE",
+   "acc_8k": "0001002910-25-000095",
+   "lane": "both",
+   "periodic": "0001002910-25-000098",
+   "delta_hours": 95.0,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AEE",
+   "acc_8k": "0001002910-25-000109",
+   "lane": "both",
+   "periodic": "0001002910-25-000112",
+   "delta_hours": 94.2,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AEE",
+   "acc_8k": "0001002910-25-000127",
+   "lane": "both",
+   "periodic": "0001002910-25-000129",
+   "delta_hours": 20.0,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AEE",
+   "acc_8k": "0001002910-26-000005",
+   "lane": "both",
+   "periodic": "0001002910-26-000009",
+   "delta_hours": 167.7,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AFL",
+   "acc_8k": "0000004977-23-000087",
+   "lane": "both",
+   "periodic": "0000004977-23-000090",
+   "delta_hours": 117.8,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AFL",
+   "acc_8k": "0000004977-23-000146",
+   "lane": "both",
+   "periodic": "0000004977-23-000149",
+   "delta_hours": 19.2,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AFL",
+   "acc_8k": "0000004977-23-000172",
+   "lane": "both",
+   "periodic": "0000004977-23-000177",
+   "delta_hours": 20.5,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AFL",
+   "acc_8k": "0000004977-24-000006",
+   "lane": "both",
+   "periodic": "0000004977-24-000053",
+   "delta_hours": 526.2,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AFL",
+   "acc_8k": "0000004977-24-000082",
+   "lane": "both",
+   "periodic": "0000004977-24-000086",
+   "delta_hours": 18.9,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AFL",
+   "acc_8k": "0000004977-24-000138",
+   "lane": "both",
+   "periodic": "0000004977-24-000140",
+   "delta_hours": 18.0,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AFL",
+   "acc_8k": "0000004977-24-000164",
+   "lane": "both",
+   "periodic": "0000004977-24-000167",
+   "delta_hours": 40.1,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AFL",
+   "acc_8k": "0000004977-25-000006",
+   "lane": "both",
+   "periodic": "0000004977-25-000047",
+   "delta_hours": 499.1,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AFL",
+   "acc_8k": "0000004977-25-000067",
+   "lane": "both",
+   "periodic": "0000004977-25-000075",
+   "delta_hours": 160.6,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AFL",
+   "acc_8k": "0000004977-25-000133",
+   "lane": "both",
+   "periodic": "0000004977-25-000132",
+   "delta_hours": -0.1,
+   "inverted": true,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AFL",
+   "acc_8k": "0001628280-25-048906",
+   "lane": "both",
+   "periodic": "0001628280-25-049279",
+   "delta_hours": 16.6,
+   "inverted": false,
+   "stale_live_pairing": false
+  },
+  {
+   "ticker": "AFL",
+   "acc_8k": "0001628280-26-005458",
+   "lane": "both",
+   "periodic": "0001628280-26-011402",
+   "delta_hours": 495.7,
+   "inverted": false,
+   "stale_live_pairing": false
+  }
+ ],
+ "transcript_gaps": [
+  {
+   "source_id": "AAL_2024-01-25T08.30",
+   "ticker": "AAL",
+   "prepared_blocks": 0,
+   "qa_blocks": 55
+  }
+ ],
+ "pit": {
+  "order_check_real_stream": "PASS",
+  "order_attack_reversed_stream": "REFUSED (out-of-order event AAL_2026-04-23T08.30 at 2026-04-23T08:30:00-04:00 after 2026-04-27T16:33:13-04:00)",
+  "leakage_sweep": {
+   "rows_swept": 402,
+   "violations": []
+  },
+  "source_access_audit": {
+   "note": "SOURCE-level access granularity (one row per source read per event), persisted for independent reproduction",
+   "rows": 406,
+   "ledger": "p4_access_ledger.jsonl",
+   "ledger_sha256": "d2566097f58271ce4d4a988192645b4a09b9a059550d34df1e7fc9535c6c829a",
+   "violations": []
+  }
+ },
+ "route_a_leg": {
+  "filings": 79,
+  "fetched_once": 0,
+  "fetch_or_file_errors": [],
+  "component_reconciliation_coverage": 0.9786,
+  "note": "component reconciliation coverage \u2014 NOT precision/recall; nothing was emitted",
+  "buckets": {
+   "facts": 169286,
+   "unit_usd": 149999,
+   "period_ok": 169218,
+   "reconcile_ok": 165658,
+   "has_row_or_header": 150690,
+   "unit_abstain": 13296,
+   "unit_count": 4013,
+   "unit_usd_per_share": 1978,
+   "reconcile_fail": 3560,
+   "hidden": 44,
+   "evidence_typed_dimensions_unsupported": 24
+  }
+ },
+ "actual_reader_residual": {
+  "note": "reader-off volume at the real caps (MAX_CASES=8, MAX_CHARS=100000); COMPLETE 8-K source events: exhibits + stored sections + filing text, exact-string deduped like the code-tier builder",
+  "8k_exhibits": {
+   "prose_struct_numeric_blocks": 7659,
+   "prose_struct_numeric_chars": 2352732,
+   "table_rows_numeric": 24485,
+   "table_row_chars": 1342681,
+   "strict_table_row_chars": 551436,
+   "doc_chunks": 158,
+   "files": 158,
+   "dedup_dropped": 0
+  },
+  "8k_sections": {
+   "parts": 201,
+   "chars": 150683,
+   "numeric_parts": 201,
+   "numeric_chars": 150683,
+   "chunks": 201
+  },
+  "8k_filing_text": {
+   "parts": 12,
+   "chars": 8799763,
+   "numeric_parts": 12,
+   "numeric_chars": 8799763,
+   "chunks": 93
+  },
+  "transcripts": {
+   "prepared_blocks": 80,
+   "prepared_numeric_blocks": 80,
+   "prepared_numeric_chars": 1560212,
+   "qa_blocks": 1495,
+   "qa_numeric_blocks": 1041,
+   "qa_numeric_chars": 2102628,
+   "doc_chunks": 81
+  },
+  "chunks_per_part_upper_bound": 533,
+  "chunks_packed_by_source": 265,
+  "packing_note": "per-part rounding makes the upper bound; packing the same measured text by complete source gives the lower figure; 12 filing-text records nest already-represented exhibit content (substring, not exact-string) \u2014 exact final packing deferred to Phase 6's certified source-block builder"
+ },
+ "retry": {
+  "parked_items": 2,
+  "transitions": [
+   {
+    "item_id": "5f652af46cf7",
+    "ticker": "ABT",
+    "raw_label": "Other Revenue",
+    "awaited_form": "10-K",
+    "period_end": "2025-12-31",
+    "park_reason": "sources_incomplete",
+    "origin_t": "2026-01-22T07:35:32-05:00",
+    "arrived_at": "2026-02-20T16:05:29-05:00",
+    "arrival_source": "0001628280-26-010185",
+    "disposition": "value_absent_complete",
+    "real_retry": true,
+    "as_of": "2026-02-20T16:05:29-05:00",
+    "filing_searched": "0001628280-26-010185",
+    "accepted_8k_events_searched": 1,
+    "excluded_after_as_of": 1,
+    "uncertain_8ks": 0
+   },
+   {
+    "item_id": "16daa97aa02e",
+    "ticker": "AA",
+    "raw_label": "Alumina Total Shipments (kmt)",
+    "awaited_form": "10-K",
+    "period_end": "2025-12-31",
+    "park_reason": "sources_incomplete",
+    "origin_t": "2026-01-22T16:13:00-05:00",
+    "arrived_at": "2026-02-26T16:52:29-05:00",
+    "arrival_source": "0001193125-26-077167",
+    "disposition": "value_absent_complete",
+    "real_retry": true,
+    "as_of": "2026-02-26T16:52:29-05:00",
+    "filing_searched": "0001193125-26-077167",
+    "accepted_8k_events_searched": 1,
+    "excluded_after_as_of": 1,
+    "uncertain_8ks": 0
+   }
+  ],
+  "final_dispositions": [
+   {
+    "item_id": "16daa97aa02e",
+    "ticker": "AA",
+    "disposition": "value_absent_complete",
+    "real_retry": true,
+    "as_of": "2026-02-26T16:52:29-05:00"
+   },
+   {
+    "item_id": "5f652af46cf7",
+    "ticker": "ABT",
+    "disposition": "value_absent_complete",
+    "real_retry": true,
+    "as_of": "2026-02-20T16:05:29-05:00"
+   }
+  ]
+ }
+}

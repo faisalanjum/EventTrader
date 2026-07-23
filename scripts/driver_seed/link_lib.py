@@ -449,7 +449,7 @@ def scan_text(texts, name, val, fmt, max_hits=20, keep=6, scale_gate=False, with
                                        with_context=True)
     else:
         strict, strict_ctx = row_quote(texts, nt, val, fmt, scale_gate=scale_gate), None
-    forms = _tableforms(val, fmt)
+    forms = _tableforms(val, fmt, padded=False)   # padded family = strict-only (3 ACI cases)
     cands = []
     for t in sorted(texts):                # round-18: CANONICAL text order, so the bounded-work
                                            # cutoff below is input-order-free

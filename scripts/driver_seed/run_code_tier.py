@@ -18,7 +18,7 @@ abstain.jsonl. Records carry raw signals ONLY (cadence, period_end, xbrl context
 
 Reads data/driver_catalog_seed/worklist.jsonl; writes data/driver_catalog_seed/<tag>/.
 """
-import os, re, json, argparse, collections, sys, hashlib, math
+import os, re, json, argparse, collections, sys, hashlib
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'earnings'))
 import quarter_identity as QI          # LIVE lane + trust gate (AUTO_OK); labels NOT used here (round-15)
 from get_quarterly_filings import match_8k_to_periodic   # HISTORICAL lane: THE shared structured
@@ -151,7 +151,7 @@ def _corpus_missing_row(it):
             'sources_searched': []}
 
 
-def fetch_earnings_8ks(session, tk, target_acc):
+def fetch_earnings_8ks(session, tk, target_acc, as_of=None):
     """Safe 8-K selection (WP1 Step 3 — replaces the 5-75-day window guess and the EX-99-only
     filter). Round-15, OWNER RULE: historical 8-K pairing = get_quarterly_filings (THE shared
     structured matcher — real period dates + filing-time checks, imported never copied); live
@@ -172,6 +172,14 @@ def fetch_earnings_8ks(session, tk, target_acc):
         acc8 = m['accession_8k']
         if not acc8:
             continue
+        if as_of is not None:                    # optional PIT cutoff (Phase-4 corrective):
+            from datetime import datetime as _dt  # a historical replay must never see an
+            if _dt.fromisoformat(str(m['filed_8k'])) > _dt.fromisoformat(str(as_of)):
+                audit.append({'acc': acc8, 'created': str(m['filed_8k']),
+                              'verdict': 'excluded_after_as_of', 'label': None,
+                              'match': m['accession_10q'], 'lag_valid': m['lag_valid'],
+                              'relevant': False})   # 8-K filed after its replay clock
+                continue
         cand, lag_ok = m['accession_10q'], m['lag_valid']
         try:
             info = QI.resolve_quarter_info(tk, acc8, session=session)
@@ -342,7 +350,6 @@ def main():
             if (i+1) % 100 == 0:
                 print(f"  {i+1}/{len(cps)} cps  resolved={nR} residual={nRes} abstain={nAb}")
     drv.close(); R.close(); RES.close(); AB.close(); SL.close()
-    tot = nR + nRes + nAb
     summary = {'tag': tag, 'records_resolved': nR, 'residual': nRes, 'abstain': nAb,
                'company_periods': len(cps), 'T1_xbrl': stats[('tier', 'T1')], 'T2_label': stats[('tier', 'T2')],
                'pr_records': stats['pr_records'], 'cp_no_filing': stats['cp_no_filing'],

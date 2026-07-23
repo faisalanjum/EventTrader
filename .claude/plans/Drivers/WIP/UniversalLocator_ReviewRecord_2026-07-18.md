@@ -4339,3 +4339,175 @@ GATE-ATTRIBUTION CORRECTION (2026-07-22, his catch): my Phase-3 entries called t
 structured-XBRL value-unknown matcher (match_facts lane). Route A's own 150-case
 runner remains: 0 attempted · 150 deferred · accuracy AND recall UNMEASURED until
 Phase-5 real anchors. Inline phrases corrected above; no gate result changes.
+
+---
+
+## PHASE-3 AMEND + PHASE-4 EXECUTION (2026-07-22, one batch per the reviewer's order)
+
+HIS ORDER (relayed): approve Phase 3 ("both fixes verified") → amend e64ce11 with only
+the nine audited files, preserve dirt, no push → verify "exactly the intended 59 paths"
+→ run ALL of Phase 4 as one batch (chronological 8-K → transcript → later 10-Q/K,
+reader off, read-only, prove no-future-leakage/retries/reader workload) → stop only for
+wrong result / design change / graph write / reader call / Core dependency → one
+evidence package, do NOT start Phase 5.
+
+VERDICT LEDGER, every claim verified before acting (the 7 inbound checks):
+1. "Both fixes verified" — CONFIRMED on disk: gate-attribution correction present in
+   this Record (12 match_facts mentions; FinalPlan has 0 because it never made the
+   wrong claim); master memory carries the same correction.
+2. "Nine audited files" — CONFIRMED, and it corrected MY saved list of ten:
+   test_phase3_prose_removal.py had no pending changes (fully inside e64ce11).
+   git status showed exactly 9 modified arc files; index was clean (0 staged).
+3. "Exactly 59 paths" — REFUTED (off-by-one): the amended commit has 60 paths.
+   Root cause: build_packets.py (THE shared writer, born in the audited fix set)
+   was never among the original 59, so 9 audited files ⇒ 59+1. comm proof:
+   dropped=0, added={scripts/driver_seed/build_packets.py} only. His own two
+   numbers ("nine files", "59 paths") were mutually inconsistent; content
+   invariant PASSES — the commit contains exactly the audited set.
+THE AMEND: staged the 9 byte-identical audited files → `git commit --amend` →
+**964bb4e** (message refreshed with the cleanup summary; no Co-Authored-By).
+Verified: arc files clean vs HEAD (empty diff); 23 unrelated modified files
+preserved (32−9 exact); local only (ahead 25, NO push). Stale-hash policy: this
+Record's historical "e64ce11" mentions stay as written (append-only history);
+FinalPlan banner/§14 now name 964bb4e.
+
+PHASE 4 EXECUTED — `scripts/driver_seed/relocate_probe/phase4/p4_dry_run.py`
+(+ test_p4_dry_run.py: 6 RED-first law pins written and failing BEFORE the engine).
+Universe = the 7 WP1 companies (AA AAL ABT ACI ADM AEE AFL): every m1-selected
+earnings 8-K (84, all with cached exhibit HTML — 158 exhibit files), every
+Transcript (81), every paired later 10-Q/K (79 distinct; 36 cached + 43 fetched
+ONCE via the pinned lock_cell polite fetcher; 0 fetch/file errors). ONE merged
+public-time stream, 244 events, span 2023-01-18 → 2026-04-27. Reader OFF; Routes
+B/C absent; graph READ-ONLY; zero Core imports; nothing emitted (anchors are
+Phase-5 Core property — same law as the 150-runner's deferral).
+
+RESULTS (report: phase4/p4_dry_run_report.json · ledger: p4_event_ledger.jsonl):
+- PIT: real stream monotonic PASS; the §12 ORDER ATTACK (reversed stream) REFUSED
+  with the violating pair named; leakage sweep over 402 rows (244 events + 158
+  exhibit manifests): 0 violations — every row cites exactly its own source id +
+  sha256 of its own bytes. Independently re-verified FROM THE PERSISTED LEDGER
+  (fresh sweep 0; one exhibit sha re-hashed equal; persisted order monotonic).
+- Route-A leg (component census per paired filing): 169,286 facts; reconcile_ok
+  165,658 (97.86% — consistent with the corpus census 97.69%); period_ok 169,218;
+  reconcile_fail 3,560 + unit_abstain 13,296 + hidden 44 + typed-dims 24 = honest
+  fail-closed abstention volume, zero wrong emissions (nothing emitted at all).
+- ACTUAL reader residual (reader-off volume at the real caps 8/100k):
+  8-K exhibits: 7,659 numeric prose blocks (2,352,732 chars) + 24,485 numeric
+  table rows (1,342,681 chars; strict-headed subset 551,436 chars) → 158 doc
+  chunks. Transcripts: 80 prepared numeric blocks (1,560,212 chars) + 1,041
+  numeric QA exchanges (2,102,628 chars) → 81 chunks. TOTAL 239 chunks for the
+  7-company/3.3-year window. Anchor-side batching (MAX_CASES) stays Phase-5.
+- RETRY OUTCOMES: both WP1 parked items (sources_incomplete, awaiting FY2025
+  10-Ks) transitioned EXACTLY when their awaited filing arrived in replay time —
+  ABT 5f652af46cf7: origin 2026-01-22T07:35 → arrival 2026-02-20T16:05
+  (0001628280-26-010185); AA 16daa97aa02e: origin 2026-01-22T16:13 → arrival
+  2026-02-26T16:52 (0001193125-26-077167). Transition law enforced: strictly
+  later than origin or PITOrderError (pinned). Parked items carry NO value
+  (value_absent) so there is nothing to candidate-match; the actual re-search is
+  the WP1 code-tier re-run on the completed source set — WP1 ops, stated here,
+  not silently skipped.
+GATES AFTER PHASE 4: full battery **251/251** (= the frozen 245 + exactly the 6
+new Phase-4 pins) · floors 28/28 PASS · live XBRL gate 2/2 (the structured
+match_facts lane) · zero production-code changes (all Phase-4 files are new
+under relocate_probe/phase4/). Pre-existing benchmark collection error
+(benchmark/multiaxis_pool/final/test_column_grid.py, /tmp probe dependency)
+remains the declared exclusion — untouched.
+STATE: Phase-4 outputs + these doc updates UNCOMMITTED on 964bb4e for his audit;
+Phase 5 NOT started; NO push; Route C held; reader still OFF.
+
+
+## PHASE-4 CORRECTIVE ROUND (2026-07-22, his audit — one bounded batch, executed)
+
+ALL 17 CLAIMS REPRODUCED FIRST; ZERO refuted this round. Owned: my "parked items
+carry no value" was FALSE (vendor values 13,300 / 0 live in wp1/abstain.jsonl);
+my "8-K → transcript → later filing" framing was false for 3 real pairs; my v1
+leakage sweep was structural-only; my v1 8-K workload missed sections+filing text.
+DIGIT-EXACT reproductions: 5 inverted pairs (ADM −4.9h · ADM −0.5h · AFL −0.1h
+real same-day inversions + AA −1174h · ABT −1310h stale live-only pairings) ·
+sections 201/150,683 chars · filing text 12/8,799,763 chars (his ~8.8M; my first
+26.4M was a cross-product artifact) · WP1 = 10 tickers (A, AAPL, ACN have no
+qualified 8-K records) · AAL_2024-01-25 = 0 prepared / 55 QA. His future-leak
+example CONFIRMED with the right accession: without as_of the matcher enumerates
+AA 0001193125-26-159018 and ABT 0001628280-26-025365 at a February replay clock
+(my first negative control used a wrong filer prefix — my error, not his).
+
+FIXES (RED-first: 5 pins failing before implementation):
+1. run_code_tier.fetch_earnings_8ks(..., as_of=None): optional PIT cutoff —
+   datetime-parsed comparison, audit verdict excluded_after_as_of; single call
+   site unchanged (default None = WP1 behavior identical).
+2. p4_dry_run v2: publication-time law stated (no assumed type order) +
+   pair_timing facts (all 84 pairs, 5 inverted flagged); COMPLETE 8-K source
+   events (exhibits HTML + stored sections + filing text, exact-string deduped
+   like the code-tier builder; dedup_dropped recorded); deterministic hashes —
+   every part sha256 over the exact stored string/file bytes, parent manifest =
+   sha over sha-sorted part hashes (transcripts: raw content/exchanges strings,
+   census separately via spoken_text); REAL ACCESS AUDIT (every content read
+   logged against the replay clock); REAL RETRY at arrival events through the
+   actual code tier under as_of; labels corrected (component reconciliation
+   coverage; 7-of-10 universe; transcript_gaps pinned).
+RESULTS v2 (244 events unchanged): order attack REFUSED · leakage sweep 0 ·
+ACCESS AUDIT: content accesses logged, 0 violations · RETRY: BOTH items ran the
+real code tier — ABT 5f652af46cf7 as_of 2026-02-20 → value_absent_complete;
+AA 16daa97aa02e as_of 2026-02-26 → value_absent_complete (his prediction
+confirmed by execution) · residual RECOMPUTED with complete sources: 239 → 533
+chunks (8-K exhibits 158 + sections/filing-text lanes + transcripts 81 + text
+parts; per-part whole-text chunk law like M4's body lane).
+GATES: Phase-4 pins 12/12 · full battery 257/257 (= 245 + 12) · floors 28/28 ·
+live gate 2/2. ARTIFACT HASHES: report c2513b73d1bad666… · ledger
+d76d41e4d9824493… · FinalPlan (current) 689125026e47e108… (Design + MEMORY.md
+pointers refreshed). STATE: all corrective work UNCOMMITTED on 964bb4e; commit,
+push, Phase 5 all STOPPED per his order; reader OFF; Route C held.
+
+---
+
+## PHASE-4 ROUND-3: THE 3-ACI RESIDUAL FIX (2026-07-22, his GO — bounded batch)
+
+REPRODUCED digit-exact before fixing: exactly 3/499 residual records differ, ALL
+ACI, ALL fmt='%' (values 21 and 2; items a2d445ea7168, ef477ec33ea3,
+ff1b97121b05). MECHANISM (his diagnosis, code-verified): _tableforms round-4
+padded prints ('21'→'21.0'; '0.5'→'0.50'/'0.500') exist for STRICT verification,
+but scan_text's CAPPED candidate loop shared the same set (link_lib.py:453) —
+'21.0' matched an unrelated tax table and displaced the true 'Digital Sales
+increased 21%' passage. Determinism proven (p4diff==p4diff2); NOT graph drift.
+FIX (RED first — test_candidate_forms_exclude_padded_percent failed on the
+missing kwarg): _tableforms(v, fmt, padded=True) — padded=False skips ONLY the
+round-4 padded family; scan_text candidate scan now passes padded=False; strict
+row_quote path unchanged (default padded=True). Two-line change, no new matcher.
+GATES: 10-company regenerate --tag p4diff3 → ALL 7 WP1 files BYTE-IDENTICAL
+(abstain · code_resolved · RESIDUAL · sources_ledger · packets · park_ledger ·
+skip_ledger) · pins 13/13 · battery 258/258 (=257+1) · floors 28/28 · live gate
+2/2 · pyflakes: my edits clean; link_lib.py:187's 13 flags = PRE-EXISTING
+namespace re-exports with live consumers (locate.py L.printed_negative verified)
+— declared, not removed. Round-2 items all landed earlier (original-worklist
+retry + strict pin · packed-by-source 265 · persisted access ledger d2566097f58271ce… ·
+FinalPlan §4/§11 order-law corrections · lint). ARTIFACT HASHES: report 002278bbceb8ee37… ·
+event ledger d76d41e4d9824493… · access ledger d2566097f58271ce…. STATE: everything UNCOMMITTED on 964bb4e;
+commit/push/Phase-5 STOPPED; no re-baseline (the committed wp1/ baseline stands,
+now exactly reproduced).
+
+BOOKKEEPING CORRECTION (2026-07-22, his catch, git-verified): HEAD is now 6e4b0db
+(ahead 29), not 964bb4e — Core's parallel-track PER-21 law commits landed on top
+(2fbae3a DriverDesign catch-up · c87d81b the Core-owned PER-21 LAW COMMIT ·
+cad2b8f Track-A pin guard · 6e4b0db its R8 record; the owner-gated Core plan,
+not Fiscal work). ZERO path overlap with the Fiscal arc (verified: none of the
+four touch WIP/, driver/relocation, or scripts/driver_seed). Correct wording:
+the Phase-4 corrective work is UNCOMMITTED ON TOP OF HEAD 6e4b0db; the Phase-3
+amend 964bb4e is in its history. Fiscal's commit/push/Phase-5 holds unchanged.
+
+---
+
+## PHASE 4 CLOSED — ACCEPTED BY INDEPENDENT AUDIT (2026-07-22)
+
+HIS AUDIT VERDICT (verbatim substance): fresh 244-event Neo4j replay BYTE-IDENTICAL ·
+WP1's seven files matched exactly · tests 259/259 · floors 28/28 · protected hashes
+and Core separation passed · NO Fiscal behavior defect found. Phase-4 final test
+count: 14/14 (the round-1 "6 law pins" grew across rounds 2-4: +5 real-data pins,
++1 hash-determinism, +1 candidate-forms, +1 passage-search end-to-end).
+CLOSURE ORDER EXECUTED: this documentation update → FinalPlan banner PHASE 4 CLOSED
++ §14 refreshed (stale "6 law pins" wording replaced with 14/14) → hash pointers
+refreshed LAST → ONE explicit Phase-4 commit of exactly the 11 audited paths
+(6 modified: locator.py · link_lib.py · run_code_tier.py · FinalPlan · Design ·
+this Record; 5 new under relocate_probe/phase4/: engine · tests · report · event
+ledger · access ledger). NO push — his earlier push approval is SUPERSEDED: Core's
+first R8 pass was withdrawn after regrading; the 29 commits stay unpushed until
+Core's fresh R8 passes. Phase 5 NAMED NEXT BUT HELD on his explicit order.

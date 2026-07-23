@@ -310,7 +310,7 @@ def _local_scale_divs(text, start):
     return all_divs if len(all_divs) == 1 else set()
 
 
-def _tableforms(v, fmt):
+def _tableforms(v, fmt, padded=True):
     """Exact printed forms for table/row scanning. WP1: the value's EXACT form is ALWAYS included
     (zero, small ints, decimals — the old len>=3 filter silently killed them); a fractional value
     gets its 1-decimal companion but NEVER an integer-rounded print; big money keeps the grouped
@@ -325,9 +325,11 @@ def _tableforms(v, fmt):
     if fmt == '%':
         if '.' in p:
             s.add(f"{av:.1f}")             # 2.34 -> '2.3'; the integer print is the reader's call
-            s |= {f"{av:.2f}", f"{av:.3f}"}   # round 4: padded prints ('0.5' ↔ '0.500%',
-        else:                                 # the CAG corpus case) — retrieval must see
-            s.add(p + '.0')                   # the same padded family value_forms proves
+            if padded:                     # round 4: padded prints ('0.5' ↔ '0.500%', the CAG
+                s |= {f"{av:.2f}", f"{av:.3f}"}   # corpus case) — STRICT verification only;
+        elif padded:                       # padded=False = the capped reader-candidate scan,
+            s.add(p + '.0')                # where '21.0' pulled an unrelated tax table ahead
+                                           # of the true passage (the 3 ACI cases, Phase 4)
         s |= {f[1:] for f in s if f.startswith('0.')}   # round 5 (the VERIFIED Aflac
         return s                                        # pair): leading-zero-omitted
                                                         # prints ('.300 %')

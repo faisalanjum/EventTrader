@@ -3,7 +3,7 @@
 **Date:** 2026-07-21
 
 **Status:** owner-approved — **the SOLE CURRENT EXECUTION AMENDMENT / WORK ORDER over
-the locked Locator Design v5.5 base** (NOT the sole source of all Locator law); **PHASE 1 CLOSED (final-accepted 2026-07-22) · PHASE 2 CLOSED (the combined M1–M4 package accepted + frozen 2026-07-22 — cost estimates, not reader/Route-B certification) · PHASE 3 EXECUTED (prose machinery deleted; close commit e64ce11 pending its audit + amend) — Phase 4 NOT started; push blocked; Route C held.** The locked Design v5.5 remains the
+the locked Locator Design v5.5 base** (NOT the sole source of all Locator law); **PHASE 1 CLOSED (final-accepted 2026-07-22) · PHASE 2 CLOSED (the combined M1–M4 package accepted + frozen 2026-07-22 — cost estimates, not reader/Route-B certification) · PHASE 3 CLOSED (prose machinery deleted; reviewer-approved; the one audited amend → commit 964bb4e) · PHASE 4 CLOSED (accepted by the reviewer's independent audit 2026-07-22: fresh 244-event replay byte-identical · WP1 7/7 files exact · 259/259 tests · 28/28 floors · protected hashes + Core separation · no Fiscal behavior defect) — PHASE 5 IS NEXT BUT HELD (his explicit order); push blocked (Core R8 withdrawn, fresh R8 required); Route C held.** The locked Design v5.5 remains the
 base contract for every rule not explicitly replaced here. This plan REPLACES exactly:
 Corrective-5 Batch B/C/D · Design Round-14 §3 · the Batch-C rows of Design Round-14 §4 ·
 Design Round-14 §5's old measurement sequence · the draft disposition table (now §16
@@ -107,6 +107,11 @@ The normal source order is:
 ```text
 8-K / press release  ->  transcript  ->  later 10-Q or 10-K
 ```
+
+[2026-07-22 Phase-4 correction: this order is TYPICAL, never assumed law. The replay
+law is: process every source at its real publication time; never assume which source
+type arrives first. Measured: 5 paired periodics published BEFORE their 8-K (3 real
+same-day inversions + 2 stale live-only pairings) — see p4_dry_run_report pair_timing.]
 
 Each event stands on its own. The later filing may grade earlier output after the fact, but it cannot
 change what evidence was available when the earlier event was public.
@@ -449,6 +454,9 @@ With the reader still off, run one or more companies through real event order:
 8-K -> transcript -> later 10-Q/K
 ```
 
+[2026-07-22 Phase-4 correction: "real event order" = real publication timestamps,
+NOT the typical type sequence above — 5 measured pairs invert it (pair_timing).]
+
 Prove source-local evidence, no future leakage, retry outcomes, and the actual reader residual. Finish
 all Fiscal work that does not require Core.
 
@@ -553,10 +561,15 @@ implementation, and no Core edits before Phase 5 without separate owner approval
 
 ✅ This instruction was fulfilled: all §9/§15 counts were independently reproduced EXACT
 and the combined pre-build package was returned (Design doc ROUND 14b; Record rounds
-14/14b/14c/14d/14e/14f). It is NO LONGER the next action. THE CURRENT NEXT ACTION (2026-07-22): Phases 1–2 CLOSED
-(M1–M4 package accepted + frozen) · Phase 3 EXECUTED — awaiting the reviewer's audit of the
-uncommitted closeout fixes, then ONE amend of e64ce11 · then Phase 4 (PIT chronological dry
-run, reader off). Original text kept below as history only.
+14/14b/14c/14d/14e/14f). It is NO LONGER the next action. THE CURRENT NEXT ACTION (2026-07-22,
+post-amend): Phases 1–3 CLOSED (Phase 3 reviewer-approved; the one audited amend of the close
+commit e64ce11 → 964bb4e, 60 paths = old 59 + the audited build_packets.py; his predicted "59"
+was off-by-one, refuted with the comm path-set proof — dropped 0, added only audited content) ·
+Phase 4 EXECUTED as one batch (the 7-company chronological dry run, reader off, read-only:
+`relocate_probe/phase4/p4_dry_run.py` + report/event+access ledgers + 14/14 tests) — ACCEPTED
+by his independent audit 2026-07-22 and closed with one explicit Phase-4 commit (11 audited
+paths). CURRENT NEXT ACTION: Phase 5 (Core's minimum four items) — NAMED NEXT BUT HELD on his
+explicit order; no push (Core's fresh R8 pending). Original text kept below as history only.
 
 Do not code yet. Independently reproduce the new 8-K storage/URL and Transcript-block counts in §9,
 then return one combined pre-build package that:
