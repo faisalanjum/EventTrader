@@ -26,7 +26,7 @@ from driver.core.driver_period_resolver import PeriodResolutionError, ensure_dri
 from driver.core.driver_units import UnitResolutionError, resolve_driver_units
 from driver.core.driver_validators import (_expected_home_name, _home_mismatch,
                                            compose_surprise_scope, validate_fact)
-from driver.core.driver_writer import assert_writes_enabled, plan_event_write
+from driver.core.driver_writer import WriterError, assert_writes_enabled, plan_event_write
 from driver.core.slice_menu import (build_menu, check_member_refs,
                                     match_xbrl_fact)
 
@@ -109,6 +109,54 @@ class _Audit:
 
 def resolve_or(pair):
     return [pair[0] if pair else None, pair[1] if len(pair) > 1 else None]
+
+
+def _check_admissions(admissions, facts):
+    """S4 v2.5 Step-3 map integrity, enforced BEFORE any planning (a violation is
+    a fixture bug — hard-error, never a per-item park): completeness BOTH ways ·
+    exact triple shape · admission/fact name agreement · per-driver group
+    agreement on decision AND fact_type."""
+    from driver.core.prepared_fact import SchemaError
+    n = len(facts)
+    if not isinstance(admissions, dict):
+        raise SchemaError("admissions: must be a dict keyed by zero-based fact index")
+    for k in admissions:
+        if type(k) is not int:                 # bool True/False == 1/0 must NOT pass
+            raise SchemaError(f"admissions: index keys must be exact ints, "
+                              f"got {k!r} ({type(k).__name__})")
+    if set(admissions) != set(range(n)):
+        missing = sorted(set(range(n)) - set(admissions))
+        extra = sorted(set(admissions) - set(range(n)))
+        raise SchemaError(f"admissions map incomplete both ways: every fact needs "
+                          f"exactly one entry and every entry a fact "
+                          f"(missing {missing}, extra {extra})")
+    groups = {}
+    for i in range(n):
+        a = admissions[i]
+        if (not isinstance(a, dict)
+                or set(a) != {"decision", "driver_name", "fact_type"}
+                or a["decision"] not in ("attach", "create")
+                or not all(isinstance(a[k], str) and a[k].strip()
+                           for k in ("driver_name", "fact_type"))):
+            raise SchemaError(f"admissions[{i}]: exactly "
+                              f"{{decision: attach|create, driver_name, fact_type}} "
+                              f"with non-blank strings")
+        if a["fact_type"] != "metric":
+            # the v2.5 Step-2 mechanical fence: the rehearsal era admits the
+            # metric lane ONLY; widening is an explicit future owner change
+            raise SchemaError(f"admissions[{i}]: fact_type {a['fact_type']!r} — "
+                              f"the rehearsal fence admits 'metric' only "
+                              f"(other lanes rehearse later, separately)")
+        if a["driver_name"] != facts[i].driver_name:
+            raise SchemaError(f"admissions[{i}]: driver_name {a['driver_name']!r} "
+                              f"!= the fact's {facts[i].driver_name!r}")
+        groups.setdefault(a["driver_name"], set()).add(
+            (a["decision"], a["fact_type"]))
+    for name, triples in sorted(groups.items()):
+        if len(triples) > 1:
+            raise SchemaError(f"admissions: group {name!r} carries disagreeing "
+                              f"triples {sorted(triples)} — all facts of one "
+                              f"Driver must agree on decision AND fact_type")
 
 
 def _tail(i, pf, src, driver, fye_month, period_lookups, calendar_override):
@@ -225,9 +273,15 @@ def _tail(i, pf, src, driver, fye_month, period_lookups, calendar_override):
 
 
 def run_event(run_input, *, store, audit_dir, lock_path=None, enable_writes=False,
-              period_lookups=None, now_fn=None, input_bytes=None):
+              period_lookups=None, now_fn=None, input_bytes=None, admissions=None):
     """Run ONE source event end-to-end. Returns the flat §5 output:
-    {status, code?, items: [{index, fact_id, decision, codes, detail}]}."""
+    {status, code?, items: [{index, fact_id, decision, codes, detail}]}.
+
+    admissions (S4 v2.5 Step 3, the ONE kernel handoff — dry-run PLANS only):
+    None → today's behavior unchanged (a missing Driver parks DRIVER_NOT_READY).
+    A map {fact_index: {decision, driver_name, fact_type}} → verified all-three
+    both paths; missing Drivers plan ONE born-complete create_driver bundle per
+    group; combining a supplied map with enable_writes HARD-FAILS."""
     now_fn = now_fn or (lambda: __import__("datetime").datetime.utcnow()
                         .strftime("%Y-%m-%dT%H:%M:%S.%f"))
     if input_bytes is not None:                    # bytes must BE the parsed input
@@ -237,10 +291,22 @@ def run_event(run_input, *, store, audit_dir, lock_path=None, enable_writes=Fals
         if reparsed != run_input:
             raise ValueError("input_bytes do not parse to the given run_input — "
                              "the audit would lie; refuse")
+    if admissions is not None:
+        # the v2.5 rehearsal clamp + map validation run FIRST — before the map
+        # is serialized anywhere (a malformed map must raise the clean input
+        # error, never a raw crash) and before any planning or side effect
+        if enable_writes:
+            raise WriterError("admissions + enable_writes is forbidden: recorded "
+                              "admissions produce dry-run PLANS only (v2.5 clamp)")
+        _check_admissions(admissions, run_input.facts)
     input_doc = {"source_id": run_input.source_id,
                  "calendar_override": run_input.calendar_override,
                  "facts": [{k: getattr(f, k) for k in type(f).FIELDS}
                            for f in run_input.facts]}
+    if admissions is not None:                 # the decisions are RUN INPUT: they
+        input_doc["admissions"] = {            # join the audit + the run-id hash so
+            str(i): dict(admissions[i])        # the run is fully reconstructable
+            for i in sorted(admissions)}
     input_json = json.dumps(input_doc, default=_jsonable, sort_keys=True)
     run_id = (now_fn().replace(":", "").replace(".", "") + "_"
               + hashlib.sha256(input_json.encode()).hexdigest()[:12])
@@ -251,10 +317,12 @@ def run_event(run_input, *, store, audit_dir, lock_path=None, enable_writes=Fals
         "prepared_at": now_fn()})
     n = len(run_input.facts)
 
-    def _finish(status, items, code=None, plans=None):
+    def _finish(status, items, code=None, plans=None, driver_plans=None):
         out = {"status": status, "items": items}
         if code:
             out["code"] = code
+        if driver_plans is not None:               # admissions mode only
+            out["driver_plans"] = driver_plans
         audit.finalize(status, {"code": code, "results": items,
                                 "plans": plans or [], "finished_at": now_fn()})
         return out
@@ -264,7 +332,8 @@ def run_event(run_input, *, store, audit_dir, lock_path=None, enable_writes=Fals
     if src is None:
         return _finish("failed",
                        [_item(i, "rejected", ["SOURCE_MISSING"]) for i in range(n)],
-                       code="SOURCE_MISSING")
+                       code="SOURCE_MISSING",
+                       driver_plans=[] if admissions is not None else None)
     fye_month = src.get("fye_month")               # FYE comes from the STORED source's
                                                    # company, once — no caller override
     companies = store.get_source_companies(run_input.source_id)
@@ -273,7 +342,8 @@ def run_event(run_input, *, store, audit_dir, lock_path=None, enable_writes=Fals
                        [_item(i, "parked", ["SOURCE_COMPANY_AMBIGUOUS"],
                               detail=f"{len(companies)} companies via the ownership "
                                      f"relationship — multi-registrant is S4-era")
-                        for i in range(n)])
+                        for i in range(n)],
+                       driver_plans=[] if admissions is not None else None)
 
     # ---- PIT slice menu (step 7): fetched ONCE per event, cut at the stored
     # source's public time; refs verify FACT-LEVEL against the current filing
@@ -288,12 +358,43 @@ def run_event(run_input, *, store, audit_dir, lock_path=None, enable_writes=Fals
     # ---- deterministic tail per fact ----
     items = {}
     staged = []                                    # (index, fact) surviving the tail
+    resolved_drivers = {}                          # name -> the driver dict in force
+    pending_create = {}                            # name -> fact_type (bundle owed)
     for i, pf in enumerate(run_input.facts):
-        driver = store.get_driver(pf.driver_name)
-        if not driver or not driver.get("fact_type"):
-            items[i] = _item(i, "parked", ["DRIVER_NOT_READY"],
-                             detail=f"driver {pf.driver_name!r} missing or untyped")
-            continue
+        stored_driver = store.get_driver(pf.driver_name)
+        a = admissions.get(i) if admissions is not None else None
+        if a is None:
+            driver = stored_driver
+            if not driver or not driver.get("fact_type"):
+                items[i] = _item(i, "parked", ["DRIVER_NOT_READY"],
+                                 detail=f"driver {pf.driver_name!r} missing or untyped")
+                continue
+        elif stored_driver:
+            # graph-backed: verify ALL THREE admission fields against the store
+            if a["decision"] == "create":
+                items[i] = _item(i, "parked", ["DRIVER_NOT_READY"],
+                                 detail=f"admission requests CREATE but driver "
+                                        f"{pf.driver_name!r} already exists — the "
+                                        f"non-existence check failed")
+                continue
+            if (stored_driver.get("name") != a["driver_name"]
+                    or stored_driver.get("fact_type") != a["fact_type"]):
+                items[i] = _item(i, "parked", ["DRIVER_NOT_READY"],
+                                 detail=f"graph-attach name/fact_type mismatch: "
+                                        f"stored {stored_driver.get('name')!r}/"
+                                        f"{stored_driver.get('fact_type')!r} != "
+                                        f"admission {a['driver_name']!r}/"
+                                        f"{a['fact_type']!r} — never silent")
+                continue
+            driver = stored_driver
+        else:
+            # CREATE or offline-card ATTACH: no graph node — the born-complete
+            # bundle is PLANNED (same shape both, v2.5); fact_type FROM the
+            # admission drives period resolution and validation
+            driver = {"name": a["driver_name"], "fact_type": a["fact_type"]}
+            pending_create[a["driver_name"]] = a["fact_type"]
+        if a is not None:                      # admissions mode only — None mode
+            resolved_drivers[pf.driver_name] = driver   # keeps the OLD read path
         res = _tail(i, pf, src, driver, fye_month, period_lookups,
                     run_input.calendar_override)
         if res[0] != "ok":
@@ -347,7 +448,10 @@ def run_event(run_input, *, store, audit_dir, lock_path=None, enable_writes=Fals
     final = []                                     # (FusedFact, driver)
     all_homes = [ff.fact for ff in fused if not ff.fact.get("surprise")]
     for ff in fused:
-        driver = store.get_driver(ff.fact["driver_name"])
+        # the driver IN FORCE for this fact: admission-constructed for pending
+        # creations, stored otherwise (resolved once in the tail loop)
+        driver = (resolved_drivers.get(ff.fact["driver_name"])
+                  or store.get_driver(ff.fact["driver_name"]))
         homes = [h for h in all_homes if h is not ff.fact]
         violations = validate_fact(ff.fact, driver=driver, home_facts=homes)
         rejects = [x for x in violations if x.action == "REJECT"]
@@ -406,12 +510,58 @@ def run_event(run_input, *, store, audit_dir, lock_path=None, enable_writes=Fals
                 continue
         checked.append((ff, pr))
 
+    # ---- driver creation PLANS (v2.5 Step 3, dry-run only): group accepted
+    # facts by driver_name; a pending Driver is planned ONLY if >=1 fact is
+    # accepted (node invariant); exactly ONE create_driver per group, carrying
+    # its born-complete evidence (name + fact_type + first fact + quote) ----
+    driver_plans = None
+    if admissions is not None:
+        by_driver = {}
+        for ff, pr in checked:
+            if pr.outcome in _ACCEPTED and pr.fact_id in accepted_ids \
+                    and ff.fact["driver_name"] in pending_create:
+                by_driver.setdefault(ff.fact["driver_name"], []).append(
+                    (min(ff.indexes), ff, pr))
+        driver_plans = []
+        for name in sorted(by_driver):
+            entries = sorted(by_driver[name], key=lambda t: t[0])
+            driver_plans.append({
+                "op": "create_driver", "name": name,
+                "fact_type": pending_create[name],
+                "fact_ids": [pr.fact_id for _, _, pr in entries],
+                "first_fact_id": entries[0][2].fact_id,
+                # the LAWFUL evidence shape rebuild_anchor consumes:
+                # driver_node.definitional_evidence.birth_quotes
+                "definitional_evidence": {
+                    "birth_quotes": [entries[0][1].fact["quote"]]}})
+        # ATOMIC bundle (v2.5): the create_driver op HEADS its first accepted
+        # fact's own plan ops — one dry-run group, never a detached side list
+        first_ids = {p["first_fact_id"]: p for p in driver_plans}
+
+        def _bundle(pairs):
+            # each bundle injects EXACTLY once per Driver plan (belt: two prs
+            # can share a fact_id only through writer-level dedup — held
+            # unreachable post-fusion, but a double create must stay impossible)
+            remaining = dict(first_ids)
+            outp = []
+            for ff, pr in pairs:
+                p = remaining.pop(pr.fact_id, None)
+                if p is not None and not (pr.ops and pr.ops[0].get("op")
+                                          == "create_driver"):
+                    pr = pr._replace(ops=[dict(p)] + list(pr.ops))
+                outp.append((ff, pr))
+            return outp
+        plans = _bundle(plans)
+        checked = _bundle(checked)
+
     # ---- write-ahead point: full provisional plan + fusion logs land in the audit
     # file (state stays `prepared`) BEFORE any mutation can happen ----
     plan_doc = [{"fact_id": pr.fact_id, "outcome": pr.outcome,
                  "code": pr.code, "ops": pr.ops} for _, pr in plans]
     audit_extra = {"plans": plan_doc,
                    "fusion_logs": [log for ff in fused for log in ff.logs]}
+    if driver_plans is not None:
+        audit_extra["driver_plans"] = driver_plans
     if menu_tokens is not None:                    # step-7 menu ran: FS-18 verdicts
         audit_extra["member_menu"] = {"folds": fold_notes,
                                       "exclusions": menu_logs}
@@ -506,7 +656,8 @@ def run_event(run_input, *, store, audit_dir, lock_path=None, enable_writes=Fals
                 lockf.close()
 
     out_items = _flatten(items, checked, n, executed=(status == "committed"))
-    return _finish(status, out_items, code=run_code, plans=plan_doc)
+    return _finish(status, out_items, code=run_code, plans=plan_doc,
+                   driver_plans=driver_plans)
 
 
 def _flatten(items, planned, n, *, executed):

@@ -240,3 +240,19 @@ def test_member_id_never_stacks():
     mem = member_id(bare, H2000)
     with pytest.raises(IdLawError):
         member_id(mem, H2000)
+
+
+def test_trailing_newline_rejected_across_every_identity_regex():
+    """The $-anchor trap (reproduced live): re .match with $ accepts a FINAL
+    newline — build_id minted 'du:SRC-1:revenue\n:' before the fullmatch fix.
+    Every identity regex now uses exact full-string matching; nothing trims."""
+    with pytest.raises(IdLawError):
+        build_id("SRC-1\n", "revenue")                 # source id
+    with pytest.raises(IdLawError):
+        build_id("SRC-1", "revenue\n")                 # driver name (NAME-05)
+    with pytest.raises(IdLawError):
+        build_id("SRC-1", "revenue", period_id="gp_ST\n")   # period id
+    with pytest.raises(IdLawError):
+        member_id("du:s:rev:", "a" * 64 + "\n")        # quote hash
+    with pytest.raises(IdLawError):
+        decode_unknown_axis("unknown:xbrlaxis_61__x\n")     # sentinel decode

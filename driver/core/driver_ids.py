@@ -14,6 +14,7 @@ from decimal import Decimal, InvalidOperation
 __all__ = [
     "IdLawError", "norm", "dec_canon", "num_canon", "build_id", "signature_hash",
     "member_id", "probe_forms", "encode_unknown_axis", "decode_unknown_axis",
+    "valid_driver_name",
 ]
 
 
@@ -37,6 +38,15 @@ _SURPRISE_TYPES = frozenset(
 # 10-slot OD-8 signature order; indexes of the numeric slots (must be pre-canonical strings)
 _SIGNATURE_SLOTS = 10
 _NUMERIC_SLOT_INDEXES = (0, 1, 3, 5, 6)  # level_low, level_high, change_value, comparison_low/high
+
+
+def valid_driver_name(name):
+    """THE one NAME-05 predicate (extracted verbatim from build_id's check —
+    one law, every consumer): lowercase [a-z][a-z0-9_]*, length >= 2, no '__',
+    no trailing '_'. Validation only — never cleans or normalizes."""
+    return (isinstance(name, str) and len(name) >= 2
+            and bool(_DRIVER_NAME_RE.fullmatch(name))   # fullmatch: $ would
+            and "__" not in name and not name.endswith("_"))   # pass 'x\n'
 
 
 def norm(text):
@@ -83,7 +93,7 @@ def num_canon(value):
 
 
 def _validate_period_id(period_id):
-    m = _PERIOD_RE.match(period_id or "")
+    m = _PERIOD_RE.fullmatch(period_id or "")
     if not m:
         raise IdLawError(f"bad period id: {period_id!r}")
     if m.group(1) in ("ST", "MT", "LT", "UNDEF"):
@@ -99,7 +109,7 @@ def _validate_period_id(period_id):
 
 
 def _slice_value(kind, raw_value):
-    if kind == "unknown" and _SENTINEL_VALUE_RE.match(raw_value or ""):
+    if kind == "unknown" and _SENTINEL_VALUE_RE.fullmatch(raw_value or ""):
         return raw_value  # pre-canonical unknown-axis sentinel; structural __ preserved
     value = norm(raw_value)
     if not value:
@@ -111,11 +121,9 @@ def build_id(source_id, driver_name, *, period_id=None, slice_parts=(),
              measurement_tokens=(), surprise=None):
     """The ONE entry point. Returns (fact_id, fact_scope) — both canonical, immutable.
     Lane legality of `surprise=` (surprise facts only) is FACT-16's job, not identity's."""
-    if not isinstance(source_id, str) or not _SOURCE_ID_RE.match(source_id):
+    if not isinstance(source_id, str) or not _SOURCE_ID_RE.fullmatch(source_id):
         raise IdLawError(f"bad source id (allowed [A-Za-z0-9._-]): {source_id!r}")
-    if (not isinstance(driver_name, str) or len(driver_name) < 2
-            or not _DRIVER_NAME_RE.match(driver_name)
-            or "__" in driver_name or driver_name.endswith("_")):
+    if not valid_driver_name(driver_name):
         raise IdLawError(f"bad driver name (NAME-05): {driver_name!r}")
 
     slots = []
@@ -165,7 +173,7 @@ def member_id(bare_id, quote_hash):
     """The OD-8 collision-member id. Never stacks onto an existing member."""
     if _MEMBER_MARK in bare_id:
         raise IdLawError(f"already a collision member: {bare_id!r}")
-    if not _HASH_RE.match(quote_hash or ""):
+    if not _HASH_RE.fullmatch(quote_hash or ""):
         raise IdLawError(f"bad quote_hash: {quote_hash!r}")
     return f"{bare_id}{_MEMBER_MARK}{quote_hash}"
 
@@ -186,7 +194,7 @@ def encode_unknown_axis(axis_qname, member_label):
 def decode_unknown_axis(part):
     """Round-trip: 'unknown:xbrlaxis_<hex>__<member>' -> (exact qname, normalized member)."""
     prefix, _, value = part.partition(":")
-    m = _SENTINEL_VALUE_RE.match(value if prefix == "unknown" else part)
+    m = _SENTINEL_VALUE_RE.fullmatch(value if prefix == "unknown" else part)
     if not m:
         raise IdLawError(f"not an unknown-axis sentinel: {part!r}")
     return bytes.fromhex(m.group(1)).decode("utf-8"), m.group(2)

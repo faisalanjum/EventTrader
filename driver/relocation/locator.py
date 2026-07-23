@@ -846,10 +846,21 @@ def _wording_tokens(anchor):
 
 
 def _ident_tokens(field):
+    """Identity tokens from a slice/measurement scope string. A slice field is
+    ';'-joined complete kind:value parts — tokenize the VALUE of EVERY part
+    separately, so a later part's kind word (e.g. 'segment') never becomes
+    identity evidence (the multi-part anchor fix; single-part and comma-joined
+    measurement behavior unchanged)."""
     if not isinstance(field, str) or not field.strip():
         return []
-    val = field.split(':', 1)[-1]
-    return [tk.lower() for tk in re.findall(r"[A-Za-z]{3,}", val.replace('_', ' '))]
+    toks = []
+    for part in field.split(';'):
+        val = part.split(':', 1)[-1]
+        for tk in re.findall(r"[A-Za-z]{3,}", val.replace('_', ' ')):
+            tl = tk.lower()
+            if tl not in toks:
+                toks.append(tl)
+    return toks
 
 
 def _fact_period(fc):
