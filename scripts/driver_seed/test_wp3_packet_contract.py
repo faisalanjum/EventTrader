@@ -224,17 +224,98 @@ def test_packet_fields_survive_serialization():
     import json, os
     out = os.path.join(os.path.dirname(_PATH), '..', 'wp3_aci_stream')
     pks = [json.loads(l) for l in open(os.path.join(out, 'packets.jsonl'))]
-    need = ('raw_label', 'value', 'quote', 'period_evidence', 'tier', 'xbrl',
-            'period_end', 'cadence')                 # contract top-level fields
+    need = ('raw_label_or_claim', 'value', 'quote', 'period_evidence', 'tier',
+            'xbrl', 'period_end', 'cadence')         # PUBLIC contract field names
+    banned = ('raw_label', 'driver', 'fact_id', 'fact_scope', 'fiscal_year',
+              'fiscal_quarter', 'measurement', 'series_unit')
     for p in pks:
         for i in p['items']:
             assert all(k in i for k in need), sorted(set(need) - set(i))
+            assert not any(k in i for k in banned)   # aliases + forbidden fields ABSENT
             assert isinstance(i['value'], str)       # exact Decimal JSON string ("390")
             assert i['tier'] == 'T1-xbrl'            # FISCAL provenance label only
-            ix = i['xbrl']['ix']
+            x = i['xbrl']
+            assert 'dimensions' in x and 'axis_members' not in x
+            assert all(isinstance(d, dict) and set(d) == {'axis', 'member'}
+                       and d['axis'] and d['member'] for d in x['dimensions'])
+            ix = x['ix']
             assert all(k in ix for k in ('scale', 'sign', 'unit_ref'))
     ce = [json.loads(l) for l in
           open(os.path.join(_DATA, 'wp3_ce_compliant', 'packets.jsonl'))]
     for p in ce:
         for i in p['items']:
             assert all(k in i for k in need) and i['tier'] == 'T1-xbrl'
+            assert not any(k in i for k in banned)
+            assert 'dimensions' in i['xbrl'] and 'axis_members' not in i['xbrl']
+
+
+def test_public_adapter_direct_attacks():
+    """His mapper attacks, pinned: forbidden fields fail closed; prose items map
+    without crashing; the mapping is pure (no input mutation) and repeatable."""
+    import copy
+    import pytest as _pt
+    from public_contract import to_public
+    bad = [{'items': [{'raw_label': 'x', 'value': '1', 'driver_name': 'evil'}]}]
+    with _pt.raises(ValueError):
+        to_public(bad)                               # forbidden -> fail closed
+    with _pt.raises(ValueError):
+        to_public([{'items': [{'raw_label': 'x', 'fact_id': 'f1'}]}])
+    prose = [{'items': [{'raw_label': 'Digital sales', 'value': '21',
+                         'quote': 'Digital sales grew 21%'}]}]
+    keep = copy.deepcopy(prose)
+    out = to_public(prose)
+    assert prose == keep                             # input NOT mutated
+    assert out[0]['items'][0]['raw_label_or_claim'] == 'Digital sales'
+    assert 'raw_label' not in out[0]['items'][0]
+    assert to_public(out) == out                     # safely repeatable
+
+
+def test_public_adapter_five_bad_accepts():
+    """His five reproduced bad accepts, pinned RED-first: the adapter must
+    VALIDATE, not just rename."""
+    import pytest as _pt
+    from public_contract import to_public
+    def one(item):
+        return [{'items': [item]}]
+    with _pt.raises(ValueError):
+        to_public(one({'value': '1', 'quote': 'q'}))          # missing label
+    with _pt.raises(ValueError):
+        to_public(one({'raw_label': '  ', 'value': '1'}))     # blank label
+    with _pt.raises(ValueError):
+        to_public(one({'raw_label': 'x', 'xbrl': {'concept': 'c'}}))   # XBRL, no dims
+    with _pt.raises(ValueError):
+        to_public(one({'raw_label': 'x',
+                       'xbrl': {'axis_members': [['axisOnly']]}}))     # fragment
+    with _pt.raises(ValueError):
+        to_public(one({'raw_label': 'x', 'measurement': 'adjusted'}))  # forbidden
+    with _pt.raises(ValueError):
+        to_public(one({'raw_label': 'x', 'series_unit': 'm_usd'}))     # forbidden
+    with _pt.raises(ValueError):
+        to_public(one({'raw_label': 'x', 'driver': 'revenue'}))        # forbidden
+
+
+def test_public_adapter_type_and_exclusivity_attacks():
+    """His four final classes, RED-first: numeric label; numeric/blank axis or
+    member; both label representations together; both dimension representations
+    together; plus the strict allowlist (unknown fields fail closed)."""
+    import pytest as _pt
+    from public_contract import to_public
+    def one(item):
+        return [{'items': [item]}]
+    with _pt.raises(ValueError):
+        to_public(one({'raw_label': 123, 'value': '1'}))            # numeric label
+    with _pt.raises(ValueError):
+        to_public(one({'raw_label': 'x',
+                       'xbrl': {'axis_members': [[1, 'm']]}}))      # numeric axis
+    with _pt.raises(ValueError):
+        to_public(one({'raw_label': 'x',
+                       'xbrl': {'dimensions': [{'axis': 'a', 'member': ''}]}}))
+    with _pt.raises(ValueError):
+        to_public(one({'raw_label': 'x', 'raw_label_or_claim': 'y',
+                       'value': '1'}))                              # both labels
+    with _pt.raises(ValueError):
+        to_public(one({'raw_label': 'x',
+                       'xbrl': {'axis_members': [['a', 'm']],
+                                'dimensions': []}}))                # both dim fields
+    with _pt.raises(ValueError):
+        to_public(one({'raw_label': 'x', 'mystery_field': 1}))      # allowlist

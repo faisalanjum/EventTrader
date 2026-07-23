@@ -17,6 +17,7 @@ sys.path.insert(0, _HERE)
 sys.path.insert(0, os.path.join(_HERE, '..', '..', 'driver', 'relocation'))
 
 import build_packets as BP
+from public_contract import to_public
 import route_a_source as SRC
 import locator as LOC
 
@@ -62,7 +63,7 @@ def ce_packets():
                  period_end=i['xbrl']['period_end'], cadence=CADENCE_FIXTURE[(ACC, i['xbrl']['period_start'], i['xbrl']['period_end'])],
                  event_time=str(created)) for i in r['items']]
     packets, _s, _p = BP.build(recs, [], {'CE': 12})
-    return packets                                   # ALL returned items, no filter
+    return to_public(packets)                        # ALL items, public field names
 
 
 ACI_ANCHOR = {                                       # ONE fixed value-blind fixture
@@ -104,7 +105,7 @@ def aci_stream():
                            'p4_source_sha': ev['sha256']})
     import datetime as _dt
     packs.sort(key=lambda p: _dt.datetime.fromisoformat(p['event_time']))
-    return packs, ledger
+    return to_public(packs), ledger
 
 
 def main():
