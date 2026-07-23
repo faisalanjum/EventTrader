@@ -48,6 +48,24 @@ RETURN x.id AS url, r.formType AS form, c.id AS cik
 """
 
 
+_FORMS = {'10-Q': '10q', '10-K': '10k', '10-Q/A': '10q', '10-K/A': '10k',
+          '8-K': '8k', '8-K/A': '8k'}
+
+
+def normalize_form(form):
+    """THE one shared form law (WP3 corrective): amendments keep the base
+    source_type (Design: 10-Q/A -> 10q); unknown forms FAIL CLOSED."""
+    up = (form or '').strip().upper()
+    for bare, dashed in (('10Q', '10-Q'), ('10K', '10-K'), ('8K', '8-K')):
+        if up.startswith(bare):              # symmetric repair for the bare
+            up = dashed + up[len(bare):]     # lowercase convention ('10q', '8k')
+            break
+    got = _FORMS.get(up)
+    if got is None:
+        raise ValueError(f'unknown report form {form!r} — no source, fail closed')
+    return got
+
+
 def build_source(accession, source_type=None, driver=None):
     """One locate()-ready source for the accession, or None (fail-closed).
     True report form + primary-filer CIK from the graph; display HTML from the
@@ -67,6 +85,11 @@ def build_source(accession, source_type=None, driver=None):
     meta = metas[0]                          # Report/form/company or nothing
     if not meta['cik']:
         return None
+    try:                                     # THE one gate, before any fetch use:
+        source_type = normalize_form(         # missing or unknown form -> None
+            meta['form'] if source_type is None else source_type)
+    except ValueError:                        # (an explicit override is normalized
+        return None                           #  too — no bypass path exists)
     path = os.path.join(_CACHE, accession + '.htm')
     if not os.path.isfile(path):
         from lock_cell import fetch_inline_html
@@ -75,8 +98,6 @@ def build_source(accession, source_type=None, driver=None):
             return None
     raw = open(path, 'rb').read()
     html = raw.decode('utf-8', errors='replace')
-    if source_type is None:
-        source_type = (meta['form'] or '10-Q').replace('-', '').lower()
     by_concept = {}
     for r in rows:
         period = ({'instant': r['start']} if r['ptype'] == 'instant'
