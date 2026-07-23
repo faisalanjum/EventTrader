@@ -4511,3 +4511,54 @@ this Record; 5 new under relocate_probe/phase4/: engine · tests · report · ev
 ledger · access ledger). NO push — his earlier push approval is SUPERSEDED: Core's
 first R8 pass was withdrawn after regrading; the 29 commits stay unpushed until
 Core's fresh R8 passes. Phase 5 NAMED NEXT BUT HELD on his explicit order.
+
+---
+
+## OWNER AI MODEL/COST POLICY EXPANSION — 2026-07-23
+
+The owner directed that future AI reader, token/cost, table-disambiguation, and
+transcript prepared-remarks/Q&A experiments consider an owner-installed local AI
+alongside Haiku, Sonnet 5, and Luna frontier models. Exact local/Luna versions,
+transport, settings, and cost details will come from the owner before any run;
+this entry authorizes no model call.
+
+The complete current law is recorded once in FinalPlan Phase 6: compare the
+cheapest/lowest-resource approved option on independent truth, keep the
+zero-observed-wrong bar, escalate only measured failures or uncertainty through
+explicit outer logic, and measure real quality/resource use without invented
+costs. `CLAUDE.md` and live memory contain pointers only; they are not competing
+authorities.
+
+
+---
+
+## PHASE 5 CLOSED (2026-07-23) — Core c2f021a + Fiscal WP3 632c784
+
+WP3 arc (9 audit rounds; every reviewer claim reproduced before acting): legacy ACI
+dry-run REJECTED (old contract; kept as evidence, never committed) -> CE component
+proof (4 items, filter removed on order) -> ACI complete 18-event publication-time
+stream (3 packets / 7 items / 15 no-match rows hash-linked to the accepted Phase-4
+ledger) -> hardening rounds: printed-value comma/paren law · item-by-item 11-row
+anti-circular test truth (his 390->Annual attack caught) · value-blind period keys ·
+normalize_form moved into the SHARED adapter, gate BEFORE any cache/fetch access
+(zero-fetch pinned with a positive control; my false "before any fetch" claim owned
+and now test-enforced) · the self-caught 8k symmetry. COMMIT 632c784 = exactly the
+six accepted files. Gates at close: pins 13/13 · full battery 278/278 · floors
+28/28 · outputs byte-identical across all rounds (CE 9bfbeb7a… ACI 520710a7…
+ledger bda98813…). CORE: Phase-5 gates accepted + committed at c2f021a (four gates
++ 150-lane 2/2 + WP1 bytes re-proven + their _ident_tokens multi-part fix).
+OPEN DEBT carried forward, not retired: the Route-A 150-case certification
+(0 attempted / 150 deferred, accuracy+recall unmeasured) -> the pre-harvest gate.
+PROCESS INCIDENT, owned (TWO occurrences, same class): my close-record commits
+cceb322 and 6a3f8c6 (both reset) each captured parallel-track doc edits I had not
+read — my edit scripts had FAILED before writing, and the commits ran anyway
+because the shell chain did not gate on the edits succeeding; I committed without
+inspecting the staged diff both times (the commit-before-inspection class). Caught
+each within one command, reset both, content reviewed: the foreign text = the
+parallel session's OWNER-authorized updates (Phase-5-ACTIVE interim status — now
+superseded in place by this CLOSED record · Core-R8 acceptance wording · the
+2026-07-23 EXP-3..6 boundary note · the expanded reader/model-cost policy) —
+legitimate, carried TOGETHER with this close record in one honest commit naming
+both sources. This entry itself is the corrective: content verified ON DISK by
+grep before the commit ran. Phase 6 + Route C HELD; push owner-only; no reader
+tokens; no graph writes.

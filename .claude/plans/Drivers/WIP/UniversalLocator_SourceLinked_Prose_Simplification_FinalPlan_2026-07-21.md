@@ -3,7 +3,7 @@
 **Date:** 2026-07-21
 
 **Status:** owner-approved — **the SOLE CURRENT EXECUTION AMENDMENT / WORK ORDER over
-the locked Locator Design v5.5 base** (NOT the sole source of all Locator law); **PHASE 1 CLOSED (final-accepted 2026-07-22) · PHASE 2 CLOSED (the combined M1–M4 package accepted + frozen 2026-07-22 — cost estimates, not reader/Route-B certification) · PHASE 3 CLOSED (prose machinery deleted; reviewer-approved; the one audited amend → commit 964bb4e) · PHASE 4 CLOSED (accepted by the reviewer's independent audit 2026-07-22: fresh 244-event replay byte-identical · WP1 7/7 files exact · 259/259 tests · 28/28 floors · protected hashes + Core separation · no Fiscal behavior defect) — PHASE 5 IS NEXT BUT HELD (his explicit order); push blocked (Core R8 withdrawn, fresh R8 required); Route C held.** The locked Design v5.5 remains the
+the locked Locator Design v5.5 base** (NOT the sole source of all Locator law); **PHASE 1 CLOSED (final-accepted 2026-07-22) · PHASE 2 CLOSED (the combined M1–M4 package accepted + frozen 2026-07-22 — cost estimates, not reader/Route-B certification) · PHASE 3 CLOSED (prose machinery deleted; reviewer-approved; the one audited amend → commit 964bb4e) · PHASE 4 CLOSED (accepted by the reviewer's independent audit 2026-07-22: fresh 244-event replay byte-identical · WP1 7/7 files exact · 259/259 tests · 28/28 floors · protected hashes + Core separation · no Fiscal behavior defect) · PHASE 5 CLOSED (2026-07-23: Core's minimum gates accepted + committed at c2f021a — Adjusted preservation · create→rebuild→second-source recovery on real CE cross-filing · backfill seam D14-v3 · unit-handoff census 899/899; Fiscal's WP3 packet proof committed at 632c784 — 11 items / 4 packets + the 18-event stream; battery 278/278 · floors 28/28; Core R8 accepted, official Fable PASS 10/10 plus truthful addendum) — PHASE 6 + Route C HELD; the 150-case certification debt stays OPEN at the pre-harvest gate; push = owner-only word.** The locked Design v5.5 remains the
 base contract for every rule not explicitly replaced here. This plan REPLACES exactly:
 Corrective-5 Batch B/C/D · Design Round-14 §3 · the Batch-C rows of Design Round-14 §4 ·
 Design Round-14 §5's old measurement sequence · the draft disposition table (now §16
@@ -472,6 +472,12 @@ Only now unfreeze the minimum Core work required by the locked design:
 
 No broader Core work is authorized by this plan.
 
+**Experiment-program boundary (owner clarification 2026-07-23):** these deterministic Phase-5
+integration gates do not replace or discharge the separate formal EXP-3..6 program; each experiment
+remains required before the AI component it governs is activated. The signed EXP-2 PASS selected the
+earlier catalog-reader configuration; it does not complete this plan's Phase-6 residual-reader
+certification.
+
 When the locked WP2 and WP3 done-bars and these blockers pass, close WP2/WP3 here. The semantic
 reader is WP4; it must not silently enlarge WP2.
 
@@ -485,21 +491,34 @@ reader is WP4; it must not silently enlarge WP2.
    reported denominators/error bounds, and the required Core falsifier.
 5. Add escalation only for a measured failing group; otherwise keep one pass.
 
-**Owner reader policy (recorded 2026-07-22; binding for this phase):**
+**Owner reader/model-cost policy (recorded 2026-07-22; expanded by the owner
+2026-07-23; binding for this phase):**
 - No reader calls during M4.
 - Zero-tool, single-shot, batched reader with minimal JSON output (zero-tool saving:
   `FinalDesign/NewsChannel.md:10`; harness-vs-single-shot cost:
   `experiments/EXP2_COST_QUALITY_ADDENDUM_2026-07-12.md:7-11,41-47`).
-- Start with Sonnet 5 at low effort. Test Haiku-low ONLY on independently labelled
-  easy groups. A cheaper group ships only with zero observed wrong answers AND
-  meaningful savings.
-- Prefer explicit OUTER escalation: Haiku → Sonnet only on ambiguity, invalid
-  output, verifier conflict, or `no_proven_match`; otherwise abstain. Do NOT use
-  the built-in /advisor — it is not reliably conditional
+- Before any AI reader, token/cost experiment, or easy semantic group — including
+  table disambiguation and transcript prepared-remarks/Q&A — compare the
+  owner-approved candidate pool: owner-installed local AI, Haiku, Sonnet 5, and
+  Luna frontier models. This is a test pool, not permission to activate every model.
+- The owner will provide the exact local/Luna models, versions, transports, settings,
+  and cost details when this work begins. Do not guess them or start a run without
+  that information and the owner's explicit approval.
+- Start with the cheapest/lowest-resource approved candidate and effort on
+  independently labelled easy groups. A group ships only with zero observed wrong
+  answers AND meaningful savings. Promote only measured failing or uncertain cases
+  to an approved stronger model; otherwise abstain.
+- Use explicit OUTER escalation only on ambiguity, invalid output, verifier conflict,
+  or `no_proven_match`. Do NOT use the built-in /advisor — it is not reliably conditional
   (`.claude/plans/advisor.md:311-341`).
-- Claude Code subscription only; no API key / API billing. BEFORE Phase 6 runs,
-  reverify the exact allowed transport: SDK / `claude -p` is documented as a
-  SEPARATE programmatic pool, not ordinary subscription usage
+- Report quality and real resource use separately: input/output tokens, latency,
+  calls, accepted facts, and local compute where applicable. Do not invent token,
+  dollar, or local-compute costs.
+- Haiku/Sonnet calls use the Claude Code subscription only; no API key / API billing.
+  Local AI uses the owner-installed local runtime. Luna transport/billing remains
+  owner-supplied and undecided. BEFORE Phase 6 runs, reverify every selected
+  transport: SDK / `claude -p` is documented as a SEPARATE programmatic pool, not
+  ordinary subscription usage
   (`.claude/plans/ANTHROPIC_BILLING_SUBSCRIPTION_CRITICAL.md:53-101`).
 
 ### Phase 7 — WP4 activation and later News work
@@ -568,8 +587,11 @@ was off-by-one, refuted with the comm path-set proof — dropped 0, added only a
 Phase 4 EXECUTED as one batch (the 7-company chronological dry run, reader off, read-only:
 `relocate_probe/phase4/p4_dry_run.py` + report/event+access ledgers + 14/14 tests) — ACCEPTED
 by his independent audit 2026-07-22 and closed with one explicit Phase-4 commit (11 audited
-paths). CURRENT NEXT ACTION: Phase 5 (Core's minimum four items) — NAMED NEXT BUT HELD on his
-explicit order; no push (Core's fresh R8 pending). Original text kept below as history only.
+paths). PHASE 5 CLOSED 2026-07-23 (Core c2f021a + Fiscal WP3 632c784; banner + Record entry).
+CURRENT NEXT ACTION: Phase 6 (reader package + certification) — HELD on the owner's budget GO
++ the Haiku-first 'record it'; the EXP-3..6 program stays required per the owner's 2026-07-23
+boundary note; the 150-case Route-A certification debt remains OPEN and moves to the
+pre-harvest gate. Push = owner-only word. Original text kept below as history only.
 
 Do not code yet. Independently reproduce the new 8-K storage/URL and Transcript-block counts in §9,
 then return one combined pre-build package that:

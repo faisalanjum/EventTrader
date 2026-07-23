@@ -320,7 +320,7 @@ scope: the reader sees S and the anchor, nothing later.
 ROUND 14b — COMBINED PRE-BUILD PACKAGE (response to FinalPlan §14; NO code)
 ════════════════════════════════════════════════════════════════════════════════
 GOVERNING DOCUMENT from this point: UniversalLocator_SourceLinked_Prose_Simplification_
-FinalPlan_2026-07-21.md (sha256 e1825c567fc5…). Of this doc's ROUND-14 sections, ONLY §§1–2
+FinalPlan_2026-07-21.md (sha256 8b925a11b41d…). Of this doc's ROUND-14 sections, ONLY §§1–2
 (the Route-A join + element-local proof) and §6 (the point-in-time law) remain valid
 detail; §3, the Batch-C rows of §4, and §5's measurement sequence are ⛔ SUPERSEDED and
 so marked in place. Where anything differs, the FinalPlan wins. Specifically SUPERSEDED here:
