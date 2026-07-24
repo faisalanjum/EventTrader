@@ -1,0 +1,747 @@
+{
+ "prompt": "You are matching financial facts to their exact printed occurrence. For each REQUEST, examine only the BLOCKS of its named table. Answer with the single occurrence that states the asked fact, or abstain. Copy text exactly from the source; never compute, never paraphrase. request_id and anchor_id are DIFFERENT fields: echo BOTH from the request. Output ONLY a JSON array, one object per request: {\"request_id\", \"anchor_id\", \"block_id\", \"occurrence_id\", \"copied_label\": the row's own label cell text copied exactly (without value symbols like $), \"copied_period_evidence\": the ARRAY of column-header lines for your occurrence, each copied exactly, \"abstain\": bool}.",
+ "tables": {
+  "0000007084-25-000005__EX-99.1.htm#t16": {
+   "source_file": "0000007084-25-000005__EX-99.1.htm",
+   "source_sha256": "0dad3cbab45081db4c3e12f470a5406823652939f7d8af6ef561c0651a457bfe",
+   "blocks": [
+    {
+     "block_id": "0000007084-25-000005__EX-99.1.htm#t16-r01",
+     "text": "Quarter ended Year ended"
+    },
+    {
+     "block_id": "0000007084-25-000005__EX-99.1.htm#t16-r02",
+     "text": "December 31⟨0000007084-25-000005__EX-99.1.htm#t16-r02-o1⟩ December 31⟨0000007084-25-000005__EX-99.1.htm#t16-r02-o2⟩"
+    },
+    {
+     "block_id": "0000007084-25-000005__EX-99.1.htm#t16-r03",
+     "text": "2024⟨0000007084-25-000005__EX-99.1.htm#t16-r03-o1⟩ 2023⟨0000007084-25-000005__EX-99.1.htm#t16-r03-o2⟩ 2024⟨0000007084-25-000005__EX-99.1.htm#t16-r03-o3⟩ 2023⟨0000007084-25-000005__EX-99.1.htm#t16-r03-o4⟩"
+    },
+    {
+     "block_id": "0000007084-25-000005__EX-99.1.htm#t16-r04",
+     "text": "(in ‘000⟨0000007084-25-000005__EX-99.1.htm#t16-r04-o1⟩s metric tons)"
+    },
+    {
+     "block_id": "0000007084-25-000005__EX-99.1.htm#t16-r05",
+     "text": "Processed volumes (by commodity)"
+    },
+    {
+     "block_id": "0000007084-25-000005__EX-99.1.htm#t16-r06",
+     "text": "Oilseeds 9,050⟨0000007084-25-000005__EX-99.1.htm#t16-r06-o1⟩ 8,841⟨0000007084-25-000005__EX-99.1.htm#t16-r06-o2⟩ 35,719⟨0000007084-25-000005__EX-99.1.htm#t16-r06-o3⟩ 34,899⟨0000007084-25-000005__EX-99.1.htm#t16-r06-o4⟩"
+    },
+    {
+     "block_id": "0000007084-25-000005__EX-99.1.htm#t16-r07",
+     "text": "Corn 4,708⟨0000007084-25-000005__EX-99.1.htm#t16-r07-o1⟩ 4,718⟨0000007084-25-000005__EX-99.1.htm#t16-r07-o2⟩ 18,541⟨0000007084-25-000005__EX-99.1.htm#t16-r07-o3⟩ 18,067⟨0000007084-25-000005__EX-99.1.htm#t16-r07-o4⟩"
+    },
+    {
+     "block_id": "0000007084-25-000005__EX-99.1.htm#t16-r08",
+     "text": "Total processed volumes 13,758⟨0000007084-25-000005__EX-99.1.htm#t16-r08-o1⟩ 13,559⟨0000007084-25-000005__EX-99.1.htm#t16-r08-o2⟩ 54,260⟨0000007084-25-000005__EX-99.1.htm#t16-r08-o3⟩ 52,966⟨0000007084-25-000005__EX-99.1.htm#t16-r08-o4⟩"
+    },
+    {
+     "block_id": "0000007084-25-000005__EX-99.1.htm#t16-r11",
+     "text": "Quarter ended Year ended"
+    },
+    {
+     "block_id": "0000007084-25-000005__EX-99.1.htm#t16-r12",
+     "text": "December 31⟨0000007084-25-000005__EX-99.1.htm#t16-r12-o1⟩ December 31⟨0000007084-25-000005__EX-99.1.htm#t16-r12-o2⟩"
+    },
+    {
+     "block_id": "0000007084-25-000005__EX-99.1.htm#t16-r13",
+     "text": "2024⟨0000007084-25-000005__EX-99.1.htm#t16-r13-o1⟩ 2023⟨0000007084-25-000005__EX-99.1.htm#t16-r13-o2⟩ 2024⟨0000007084-25-000005__EX-99.1.htm#t16-r13-o3⟩ 2023⟨0000007084-25-000005__EX-99.1.htm#t16-r13-o4⟩"
+    },
+    {
+     "block_id": "0000007084-25-000005__EX-99.1.htm#t16-r14",
+     "text": "(in millions)"
+    },
+    {
+     "block_id": "0000007084-25-000005__EX-99.1.htm#t16-r15",
+     "text": "Revenues"
+    },
+    {
+     "block_id": "0000007084-25-000005__EX-99.1.htm#t16-r16",
+     "text": "Ag Services and Oilseeds $ 16,874⟨0000007084-25-000005__EX-99.1.htm#t16-r16-o1⟩ $ 18,524⟨0000007084-25-000005__EX-99.1.htm#t16-r16-o2⟩ $ 66,516⟨0000007084-25-000005__EX-99.1.htm#t16-r16-o3⟩ $ 73,426⟨0000007084-25-000005__EX-99.1.htm#t16-r16-o4⟩"
+    },
+    {
+     "block_id": "0000007084-25-000005__EX-99.1.htm#t16-r17",
+     "text": "Carbohydrate Solutions 2,750⟨0000007084-25-000005__EX-99.1.htm#t16-r17-o1⟩ 2,631⟨0000007084-25-000005__EX-99.1.htm#t16-r17-o2⟩ 11,234⟨0000007084-25-000005__EX-99.1.htm#t16-r17-o3⟩ 12,874⟨0000007084-25-000005__EX-99.1.htm#t16-r17-o4⟩"
+    },
+    {
+     "block_id": "0000007084-25-000005__EX-99.1.htm#t16-r18",
+     "text": "Nutrition 1,774⟨0000007084-25-000005__EX-99.1.htm#t16-r18-o1⟩ 1,721⟨0000007084-25-000005__EX-99.1.htm#t16-r18-o2⟩ 7,349⟨0000007084-25-000005__EX-99.1.htm#t16-r18-o3⟩ 7,211⟨0000007084-25-000005__EX-99.1.htm#t16-r18-o4⟩"
+    },
+    {
+     "block_id": "0000007084-25-000005__EX-99.1.htm#t16-r19",
+     "text": "Total Segment Revenues 21,398⟨0000007084-25-000005__EX-99.1.htm#t16-r19-o1⟩ 22,876⟨0000007084-25-000005__EX-99.1.htm#t16-r19-o2⟩ 85,099⟨0000007084-25-000005__EX-99.1.htm#t16-r19-o3⟩ 93,511⟨0000007084-25-000005__EX-99.1.htm#t16-r19-o4⟩"
+    },
+    {
+     "block_id": "0000007084-25-000005__EX-99.1.htm#t16-r20",
+     "text": "Other Business 100⟨0000007084-25-000005__EX-99.1.htm#t16-r20-o1⟩ 102⟨0000007084-25-000005__EX-99.1.htm#t16-r20-o2⟩ 431⟨0000007084-25-000005__EX-99.1.htm#t16-r20-o3⟩ 424⟨0000007084-25-000005__EX-99.1.htm#t16-r20-o4⟩"
+    },
+    {
+     "block_id": "0000007084-25-000005__EX-99.1.htm#t16-r21",
+     "text": "Total Revenues $ 21,498⟨0000007084-25-000005__EX-99.1.htm#t16-r21-o1⟩ $ 22,978⟨0000007084-25-000005__EX-99.1.htm#t16-r21-o2⟩ $ 85,530⟨0000007084-25-000005__EX-99.1.htm#t16-r21-o3⟩ $ 93,935⟨0000007084-25-000005__EX-99.1.htm#t16-r21-o4⟩"
+    }
+   ]
+  },
+  "0000006201-26-000031__EX-99.1.htm#t2": {
+   "source_file": "0000006201-26-000031__EX-99.1.htm",
+   "source_sha256": "59f2a20f3240b354a6172223f32acbfe43bc304fffe44ea0a7f63fd9d921549b",
+   "blocks": [
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t2-r01",
+     "text": "3⟨0000006201-26-000031__EX-99.1.htm#t2-r01-o1⟩ Months Ended March 31,⟨0000006201-26-000031__EX-99.1.htm#t2-r01-o2⟩ Percent Increase (Decrease)"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t2-r02",
+     "text": "2026⟨0000006201-26-000031__EX-99.1.htm#t2-r02-o1⟩ 2025⟨0000006201-26-000031__EX-99.1.htm#t2-r02-o2⟩"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t2-r03",
+     "text": "Operating revenues:"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t2-r04",
+     "text": "Passenger $ 12,495⟨0000006201-26-000031__EX-99.1.htm#t2-r04-o1⟩ $ 11,391⟨0000006201-26-000031__EX-99.1.htm#t2-r04-o2⟩ 9.7⟨0000006201-26-000031__EX-99.1.htm#t2-r04-o3⟩"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t2-r05",
+     "text": "Cargo 214⟨0000006201-26-000031__EX-99.1.htm#t2-r05-o1⟩ 189⟨0000006201-26-000031__EX-99.1.htm#t2-r05-o2⟩ 12.9⟨0000006201-26-000031__EX-99.1.htm#t2-r05-o3⟩"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t2-r06",
+     "text": "Other 1,203⟨0000006201-26-000031__EX-99.1.htm#t2-r06-o1⟩ 971⟨0000006201-26-000031__EX-99.1.htm#t2-r06-o2⟩ 23.9⟨0000006201-26-000031__EX-99.1.htm#t2-r06-o3⟩"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t2-r07",
+     "text": "Total operating revenues 13,912⟨0000006201-26-000031__EX-99.1.htm#t2-r07-o1⟩ 12,551⟨0000006201-26-000031__EX-99.1.htm#t2-r07-o2⟩ 10.8⟨0000006201-26-000031__EX-99.1.htm#t2-r07-o3⟩"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t2-r08",
+     "text": "Operating expenses:"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t2-r09",
+     "text": "Aircraft fuel and related taxes 2,928⟨0000006201-26-000031__EX-99.1.htm#t2-r09-o1⟩ 2,587⟨0000006201-26-000031__EX-99.1.htm#t2-r09-o2⟩ 13.2⟨0000006201-26-000031__EX-99.1.htm#t2-r09-o3⟩"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t2-r10",
+     "text": "Salaries, wages and benefits 4,674⟨0000006201-26-000031__EX-99.1.htm#t2-r10-o1⟩ 4,222⟨0000006201-26-000031__EX-99.1.htm#t2-r10-o2⟩ 10.7⟨0000006201-26-000031__EX-99.1.htm#t2-r10-o3⟩"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t2-r11",
+     "text": "Regional expenses:"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t2-r12",
+     "text": "Regional operating expenses 1,313⟨0000006201-26-000031__EX-99.1.htm#t2-r12-o1⟩ 1,272⟨0000006201-26-000031__EX-99.1.htm#t2-r12-o2⟩ 3.2⟨0000006201-26-000031__EX-99.1.htm#t2-r12-o3⟩"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t2-r13",
+     "text": "Regional depreciation and amortization 91⟨0000006201-26-000031__EX-99.1.htm#t2-r13-o1⟩ 79⟨0000006201-26-000031__EX-99.1.htm#t2-r13-o2⟩ 15.4⟨0000006201-26-000031__EX-99.1.htm#t2-r13-o3⟩"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t2-r14",
+     "text": "Maintenance, materials and repairs 982⟨0000006201-26-000031__EX-99.1.htm#t2-r14-o1⟩ 922⟨0000006201-26-000031__EX-99.1.htm#t2-r14-o2⟩ 6.5⟨0000006201-26-000031__EX-99.1.htm#t2-r14-o3⟩"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t2-r15",
+     "text": "Other rent and landing fees 890⟨0000006201-26-000031__EX-99.1.htm#t2-r15-o1⟩ 826⟨0000006201-26-000031__EX-99.1.htm#t2-r15-o2⟩ 7.7⟨0000006201-26-000031__EX-99.1.htm#t2-r15-o3⟩"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t2-r16",
+     "text": "Aircraft rent 309⟨0000006201-26-000031__EX-99.1.htm#t2-r16-o1⟩ 297⟨0000006201-26-000031__EX-99.1.htm#t2-r16-o2⟩ 3.9⟨0000006201-26-000031__EX-99.1.htm#t2-r16-o3⟩"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t2-r17",
+     "text": "Selling expenses 507⟨0000006201-26-000031__EX-99.1.htm#t2-r17-o1⟩ 450⟨0000006201-26-000031__EX-99.1.htm#t2-r17-o2⟩ 12.8⟨0000006201-26-000031__EX-99.1.htm#t2-r17-o3⟩"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t2-r18",
+     "text": "Depreciation and amortization 475⟨0000006201-26-000031__EX-99.1.htm#t2-r18-o1⟩ 468⟨0000006201-26-000031__EX-99.1.htm#t2-r18-o2⟩ 1.6⟨0000006201-26-000031__EX-99.1.htm#t2-r18-o3⟩"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t2-r19",
+     "text": "Special items, net 14⟨0000006201-26-000031__EX-99.1.htm#t2-r19-o1⟩ 70⟨0000006201-26-000031__EX-99.1.htm#t2-r19-o2⟩ (80.6⟨0000006201-26-000031__EX-99.1.htm#t2-r19-o3⟩)"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t2-r20",
+     "text": "Other 1,770⟨0000006201-26-000031__EX-99.1.htm#t2-r20-o1⟩ 1,628⟨0000006201-26-000031__EX-99.1.htm#t2-r20-o2⟩ 8.7⟨0000006201-26-000031__EX-99.1.htm#t2-r20-o3⟩"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t2-r21",
+     "text": "Total operating expenses 13,953⟨0000006201-26-000031__EX-99.1.htm#t2-r21-o1⟩ 12,821⟨0000006201-26-000031__EX-99.1.htm#t2-r21-o2⟩ 8.8⟨0000006201-26-000031__EX-99.1.htm#t2-r21-o3⟩"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t2-r22",
+     "text": "Operating loss (41⟨0000006201-26-000031__EX-99.1.htm#t2-r22-o1⟩) (270⟨0000006201-26-000031__EX-99.1.htm#t2-r22-o2⟩) (85.0⟨0000006201-26-000031__EX-99.1.htm#t2-r22-o3⟩)"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t2-r23",
+     "text": "Nonoperating income (expense):"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t2-r24",
+     "text": "Interest income 55⟨0000006201-26-000031__EX-99.1.htm#t2-r24-o1⟩ 94⟨0000006201-26-000031__EX-99.1.htm#t2-r24-o2⟩ (41.3⟨0000006201-26-000031__EX-99.1.htm#t2-r24-o3⟩)"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t2-r25",
+     "text": "Interest expense, net (397⟨0000006201-26-000031__EX-99.1.htm#t2-r25-o1⟩) (428⟨0000006201-26-000031__EX-99.1.htm#t2-r25-o2⟩) (7.3⟨0000006201-26-000031__EX-99.1.htm#t2-r25-o3⟩)"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t2-r26",
+     "text": "Other expense, net (93⟨0000006201-26-000031__EX-99.1.htm#t2-r26-o1⟩) (44⟨0000006201-26-000031__EX-99.1.htm#t2-r26-o2⟩) nm (1⟨0000006201-26-000031__EX-99.1.htm#t2-r26-o3⟩)"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t2-r27",
+     "text": "Total nonoperating expense, net (435⟨0000006201-26-000031__EX-99.1.htm#t2-r27-o1⟩) (378⟨0000006201-26-000031__EX-99.1.htm#t2-r27-o2⟩) 15.1⟨0000006201-26-000031__EX-99.1.htm#t2-r27-o3⟩"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t2-r28",
+     "text": "Loss before income taxes (476⟨0000006201-26-000031__EX-99.1.htm#t2-r28-o1⟩) (648⟨0000006201-26-000031__EX-99.1.htm#t2-r28-o2⟩) (26.6⟨0000006201-26-000031__EX-99.1.htm#t2-r28-o3⟩)"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t2-r29",
+     "text": "Income tax benefit (94⟨0000006201-26-000031__EX-99.1.htm#t2-r29-o1⟩) (175⟨0000006201-26-000031__EX-99.1.htm#t2-r29-o2⟩) (46.7⟨0000006201-26-000031__EX-99.1.htm#t2-r29-o3⟩)"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t2-r30",
+     "text": "Net loss $ (382⟨0000006201-26-000031__EX-99.1.htm#t2-r30-o1⟩) $ (473⟨0000006201-26-000031__EX-99.1.htm#t2-r30-o2⟩) (19.2⟨0000006201-26-000031__EX-99.1.htm#t2-r30-o3⟩)"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t2-r32",
+     "text": "Loss per common share:"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t2-r33",
+     "text": "Basic and diluted $ (0.58⟨0000006201-26-000031__EX-99.1.htm#t2-r33-o1⟩) $ (0.72⟨0000006201-26-000031__EX-99.1.htm#t2-r33-o2⟩)"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t2-r35",
+     "text": "Weighted average shares outstanding (in thousands):"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t2-r36",
+     "text": "Basic and diluted 661,181⟨0000006201-26-000031__EX-99.1.htm#t2-r36-o1⟩ 658,880⟨0000006201-26-000031__EX-99.1.htm#t2-r36-o2⟩"
+    }
+   ]
+  },
+  "0000007084-26-000005__EX-99.1.htm#t10": {
+   "source_file": "0000007084-26-000005__EX-99.1.htm",
+   "source_sha256": "fe12e55d34ad7098cc7e0c96ce5d1166c72ef315c41004d38415d25c2691e4cc",
+   "blocks": [
+    {
+     "block_id": "0000007084-26-000005__EX-99.1.htm#t10-r01",
+     "text": "Quarter ended Year ended"
+    },
+    {
+     "block_id": "0000007084-26-000005__EX-99.1.htm#t10-r02",
+     "text": "December 31,⟨0000007084-26-000005__EX-99.1.htm#t10-r02-o1⟩ December 31,⟨0000007084-26-000005__EX-99.1.htm#t10-r02-o2⟩"
+    },
+    {
+     "block_id": "0000007084-26-000005__EX-99.1.htm#t10-r03",
+     "text": "2025⟨0000007084-26-000005__EX-99.1.htm#t10-r03-o1⟩ 2024⟨0000007084-26-000005__EX-99.1.htm#t10-r03-o2⟩ 2025⟨0000007084-26-000005__EX-99.1.htm#t10-r03-o3⟩ 2024⟨0000007084-26-000005__EX-99.1.htm#t10-r03-o4⟩"
+    },
+    {
+     "block_id": "0000007084-26-000005__EX-99.1.htm#t10-r04",
+     "text": "(in ‘000⟨0000007084-26-000005__EX-99.1.htm#t10-r04-o1⟩s metric tons)"
+    },
+    {
+     "block_id": "0000007084-26-000005__EX-99.1.htm#t10-r05",
+     "text": "Certain processed volumes (by commodity)"
+    },
+    {
+     "block_id": "0000007084-26-000005__EX-99.1.htm#t10-r06",
+     "text": "Oilseeds 9,380⟨0000007084-26-000005__EX-99.1.htm#t10-r06-o1⟩ 9,050⟨0000007084-26-000005__EX-99.1.htm#t10-r06-o2⟩ 36,324⟨0000007084-26-000005__EX-99.1.htm#t10-r06-o3⟩ 35,719⟨0000007084-26-000005__EX-99.1.htm#t10-r06-o4⟩"
+    },
+    {
+     "block_id": "0000007084-26-000005__EX-99.1.htm#t10-r07",
+     "text": "Corn 4,664⟨0000007084-26-000005__EX-99.1.htm#t10-r07-o1⟩ 4,708⟨0000007084-26-000005__EX-99.1.htm#t10-r07-o2⟩ 18,525⟨0000007084-26-000005__EX-99.1.htm#t10-r07-o3⟩ 18,541⟨0000007084-26-000005__EX-99.1.htm#t10-r07-o4⟩"
+    },
+    {
+     "block_id": "0000007084-26-000005__EX-99.1.htm#t10-r11",
+     "text": "Quarter ended Year ended"
+    },
+    {
+     "block_id": "0000007084-26-000005__EX-99.1.htm#t10-r12",
+     "text": "December 31,⟨0000007084-26-000005__EX-99.1.htm#t10-r12-o1⟩ December 31,⟨0000007084-26-000005__EX-99.1.htm#t10-r12-o2⟩"
+    },
+    {
+     "block_id": "0000007084-26-000005__EX-99.1.htm#t10-r13",
+     "text": "2025⟨0000007084-26-000005__EX-99.1.htm#t10-r13-o1⟩ 2024⟨0000007084-26-000005__EX-99.1.htm#t10-r13-o2⟩ 2025⟨0000007084-26-000005__EX-99.1.htm#t10-r13-o3⟩ 2024⟨0000007084-26-000005__EX-99.1.htm#t10-r13-o4⟩"
+    },
+    {
+     "block_id": "0000007084-26-000005__EX-99.1.htm#t10-r14",
+     "text": "(in millions)"
+    },
+    {
+     "block_id": "0000007084-26-000005__EX-99.1.htm#t10-r15",
+     "text": "Revenues"
+    },
+    {
+     "block_id": "0000007084-26-000005__EX-99.1.htm#t10-r16",
+     "text": "Ag Services and Oilseeds $ 14,012⟨0000007084-26-000005__EX-99.1.htm#t10-r16-o1⟩ $ 16,874⟨0000007084-26-000005__EX-99.1.htm#t10-r16-o2⟩ $ 61,571⟨0000007084-26-000005__EX-99.1.htm#t10-r16-o3⟩ $ 66,516⟨0000007084-26-000005__EX-99.1.htm#t10-r16-o4⟩"
+    },
+    {
+     "block_id": "0000007084-26-000005__EX-99.1.htm#t10-r17",
+     "text": "Carbohydrate Solutions 2,641⟨0000007084-26-000005__EX-99.1.htm#t10-r17-o1⟩ 2,750⟨0000007084-26-000005__EX-99.1.htm#t10-r17-o2⟩ 10,737⟨0000007084-26-000005__EX-99.1.htm#t10-r17-o3⟩ 11,234⟨0000007084-26-000005__EX-99.1.htm#t10-r17-o4⟩"
+    },
+    {
+     "block_id": "0000007084-26-000005__EX-99.1.htm#t10-r18",
+     "text": "Nutrition 1,786⟨0000007084-26-000005__EX-99.1.htm#t10-r18-o1⟩ 1,774⟨0000007084-26-000005__EX-99.1.htm#t10-r18-o2⟩ 7,512⟨0000007084-26-000005__EX-99.1.htm#t10-r18-o3⟩ 7,349⟨0000007084-26-000005__EX-99.1.htm#t10-r18-o4⟩"
+    },
+    {
+     "block_id": "0000007084-26-000005__EX-99.1.htm#t10-r19",
+     "text": "Total Segment Revenues 18,439⟨0000007084-26-000005__EX-99.1.htm#t10-r19-o1⟩ 21,398⟨0000007084-26-000005__EX-99.1.htm#t10-r19-o2⟩ 79,820⟨0000007084-26-000005__EX-99.1.htm#t10-r19-o3⟩ 85,099⟨0000007084-26-000005__EX-99.1.htm#t10-r19-o4⟩"
+    },
+    {
+     "block_id": "0000007084-26-000005__EX-99.1.htm#t10-r20",
+     "text": "Other Business 117⟨0000007084-26-000005__EX-99.1.htm#t10-r20-o1⟩ 100⟨0000007084-26-000005__EX-99.1.htm#t10-r20-o2⟩ 449⟨0000007084-26-000005__EX-99.1.htm#t10-r20-o3⟩ 431⟨0000007084-26-000005__EX-99.1.htm#t10-r20-o4⟩"
+    },
+    {
+     "block_id": "0000007084-26-000005__EX-99.1.htm#t10-r21",
+     "text": "Total Revenues $ 18,556⟨0000007084-26-000005__EX-99.1.htm#t10-r21-o1⟩ $ 21,498⟨0000007084-26-000005__EX-99.1.htm#t10-r21-o2⟩ $ 80,269⟨0000007084-26-000005__EX-99.1.htm#t10-r21-o3⟩ $ 85,530⟨0000007084-26-000005__EX-99.1.htm#t10-r21-o4⟩"
+    }
+   ]
+  },
+  "0000006201-26-000031__EX-99.1.htm#t3": {
+   "source_file": "0000006201-26-000031__EX-99.1.htm",
+   "source_sha256": "59f2a20f3240b354a6172223f32acbfe43bc304fffe44ea0a7f63fd9d921549b",
+   "blocks": [
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t3-r01",
+     "text": "3⟨0000006201-26-000031__EX-99.1.htm#t3-r01-o1⟩ Months Ended March 31,⟨0000006201-26-000031__EX-99.1.htm#t3-r01-o2⟩ Increase"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t3-r02",
+     "text": "2026⟨0000006201-26-000031__EX-99.1.htm#t3-r02-o1⟩ 2025⟨0000006201-26-000031__EX-99.1.htm#t3-r02-o2⟩"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t3-r03",
+     "text": "Revenue passenger miles (millions) 58,551⟨0000006201-26-000031__EX-99.1.htm#t3-r03-o1⟩ 56,356⟨0000006201-26-000031__EX-99.1.htm#t3-r03-o2⟩ 3.9⟨0000006201-26-000031__EX-99.1.htm#t3-r03-o3⟩ %"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t3-r04",
+     "text": "Available seat miles (ASM) (millions) 72,009⟨0000006201-26-000031__EX-99.1.htm#t3-r04-o1⟩ 69,904⟨0000006201-26-000031__EX-99.1.htm#t3-r04-o2⟩ 3.0⟨0000006201-26-000031__EX-99.1.htm#t3-r04-o3⟩ %"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t3-r05",
+     "text": "Passenger load factor (percent) 81.3⟨0000006201-26-000031__EX-99.1.htm#t3-r05-o1⟩ 80.6⟨0000006201-26-000031__EX-99.1.htm#t3-r05-o2⟩ 0.7⟨0000006201-26-000031__EX-99.1.htm#t3-r05-o3⟩ pts"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t3-r06",
+     "text": "Yield (cents) 21.34⟨0000006201-26-000031__EX-99.1.htm#t3-r06-o1⟩ 20.21⟨0000006201-26-000031__EX-99.1.htm#t3-r06-o2⟩ 5.6⟨0000006201-26-000031__EX-99.1.htm#t3-r06-o3⟩ %"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t3-r07",
+     "text": "Passenger revenue per ASM (cents) 17.35⟨0000006201-26-000031__EX-99.1.htm#t3-r07-o1⟩ 16.30⟨0000006201-26-000031__EX-99.1.htm#t3-r07-o2⟩ 6.5⟨0000006201-26-000031__EX-99.1.htm#t3-r07-o3⟩ %"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t3-r08",
+     "text": "Total revenue per ASM (cents) 19.32⟨0000006201-26-000031__EX-99.1.htm#t3-r08-o1⟩ 17.95⟨0000006201-26-000031__EX-99.1.htm#t3-r08-o2⟩ 7.6⟨0000006201-26-000031__EX-99.1.htm#t3-r08-o3⟩ %"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t3-r09",
+     "text": "Cargo ton miles (millions) 527⟨0000006201-26-000031__EX-99.1.htm#t3-r09-o1⟩ 483⟨0000006201-26-000031__EX-99.1.htm#t3-r09-o2⟩ 9.0⟨0000006201-26-000031__EX-99.1.htm#t3-r09-o3⟩ %"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t3-r10",
+     "text": "Cargo yield per ton mile (cents) 40.55⟨0000006201-26-000031__EX-99.1.htm#t3-r10-o1⟩ 39.14⟨0000006201-26-000031__EX-99.1.htm#t3-r10-o2⟩ 3.6⟨0000006201-26-000031__EX-99.1.htm#t3-r10-o3⟩ %"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t3-r12",
+     "text": "Fuel consumption (gallons in millions) 1,066⟨0000006201-26-000031__EX-99.1.htm#t3-r12-o1⟩ 1,042⟨0000006201-26-000031__EX-99.1.htm#t3-r12-o2⟩ 2.3⟨0000006201-26-000031__EX-99.1.htm#t3-r12-o3⟩ %"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t3-r13",
+     "text": "Average aircraft fuel price including related taxes (dollars per gallon) 2.75⟨0000006201-26-000031__EX-99.1.htm#t3-r13-o1⟩ 2.48⟨0000006201-26-000031__EX-99.1.htm#t3-r13-o2⟩ 10.7⟨0000006201-26-000031__EX-99.1.htm#t3-r13-o3⟩ %"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t3-r15",
+     "text": "Operating cost per ASM (cents) 19.38⟨0000006201-26-000031__EX-99.1.htm#t3-r15-o1⟩ 18.34⟨0000006201-26-000031__EX-99.1.htm#t3-r15-o2⟩ 5.6⟨0000006201-26-000031__EX-99.1.htm#t3-r15-o3⟩ %"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t3-r16",
+     "text": "Operating cost per ASM excluding net special items (cents) 19.36⟨0000006201-26-000031__EX-99.1.htm#t3-r16-o1⟩ 18.24⟨0000006201-26-000031__EX-99.1.htm#t3-r16-o2⟩ 6.1⟨0000006201-26-000031__EX-99.1.htm#t3-r16-o3⟩ %"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t3-r17",
+     "text": "Operating cost per ASM excluding net special items and fuel (cents) 15.29⟨0000006201-26-000031__EX-99.1.htm#t3-r17-o1⟩ 14.54⟨0000006201-26-000031__EX-99.1.htm#t3-r17-o2⟩ 5.2⟨0000006201-26-000031__EX-99.1.htm#t3-r17-o3⟩ %"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t3-r18",
+     "text": "Operating cost per ASM excluding net special items, fuel and profit sharing (cents) 15.29⟨0000006201-26-000031__EX-99.1.htm#t3-r18-o1⟩ 14.54⟨0000006201-26-000031__EX-99.1.htm#t3-r18-o2⟩ 5.2⟨0000006201-26-000031__EX-99.1.htm#t3-r18-o3⟩ %"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t3-r20",
+     "text": "Passenger enplanements (thousands) 51,770⟨0000006201-26-000031__EX-99.1.htm#t3-r20-o1⟩ 51,034⟨0000006201-26-000031__EX-99.1.htm#t3-r20-o2⟩ 1.4⟨0000006201-26-000031__EX-99.1.htm#t3-r20-o3⟩ %"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t3-r21",
+     "text": "Departures (thousands):"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t3-r22",
+     "text": "Mainline 279⟨0000006201-26-000031__EX-99.1.htm#t3-r22-o1⟩ 278⟨0000006201-26-000031__EX-99.1.htm#t3-r22-o2⟩ 0.6⟨0000006201-26-000031__EX-99.1.htm#t3-r22-o3⟩ %"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t3-r23",
+     "text": "Regional 255⟨0000006201-26-000031__EX-99.1.htm#t3-r23-o1⟩ 250⟨0000006201-26-000031__EX-99.1.htm#t3-r23-o2⟩ 1.6⟨0000006201-26-000031__EX-99.1.htm#t3-r23-o3⟩ %"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t3-r24",
+     "text": "Total 534⟨0000006201-26-000031__EX-99.1.htm#t3-r24-o1⟩ 528⟨0000006201-26-000031__EX-99.1.htm#t3-r24-o2⟩ 1.1⟨0000006201-26-000031__EX-99.1.htm#t3-r24-o3⟩ %"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t3-r25",
+     "text": "Average stage length (miles):"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t3-r26",
+     "text": "Mainline 1,200⟨0000006201-26-000031__EX-99.1.htm#t3-r26-o1⟩ 1,176⟨0000006201-26-000031__EX-99.1.htm#t3-r26-o2⟩ 2.0⟨0000006201-26-000031__EX-99.1.htm#t3-r26-o3⟩ %"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t3-r27",
+     "text": "Regional 478⟨0000006201-26-000031__EX-99.1.htm#t3-r27-o1⟩ 470⟨0000006201-26-000031__EX-99.1.htm#t3-r27-o2⟩ 1.7⟨0000006201-26-000031__EX-99.1.htm#t3-r27-o3⟩ %"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t3-r28",
+     "text": "Total 856⟨0000006201-26-000031__EX-99.1.htm#t3-r28-o1⟩ 841⟨0000006201-26-000031__EX-99.1.htm#t3-r28-o2⟩ 1.7⟨0000006201-26-000031__EX-99.1.htm#t3-r28-o3⟩ %"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t3-r29",
+     "text": "Aircraft at end of period:"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t3-r30",
+     "text": "Mainline (2⟨0000006201-26-000031__EX-99.1.htm#t3-r30-o1⟩) 1,022⟨0000006201-26-000031__EX-99.1.htm#t3-r30-o2⟩ 985⟨0000006201-26-000031__EX-99.1.htm#t3-r30-o3⟩ 3.8⟨0000006201-26-000031__EX-99.1.htm#t3-r30-o4⟩ %"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t3-r31",
+     "text": "Regional (3⟨0000006201-26-000031__EX-99.1.htm#t3-r31-o1⟩) 572⟨0000006201-26-000031__EX-99.1.htm#t3-r31-o2⟩ 567⟨0000006201-26-000031__EX-99.1.htm#t3-r31-o3⟩ 0.9⟨0000006201-26-000031__EX-99.1.htm#t3-r31-o4⟩ %"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t3-r32",
+     "text": "Total 1,594⟨0000006201-26-000031__EX-99.1.htm#t3-r32-o1⟩ 1,552⟨0000006201-26-000031__EX-99.1.htm#t3-r32-o2⟩ 2.7⟨0000006201-26-000031__EX-99.1.htm#t3-r32-o3⟩ %"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t3-r33",
+     "text": "Full-time equivalent employees at end of period:"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t3-r34",
+     "text": "Mainline 106,400⟨0000006201-26-000031__EX-99.1.htm#t3-r34-o1⟩ 102,400⟨0000006201-26-000031__EX-99.1.htm#t3-r34-o2⟩ 3.9⟨0000006201-26-000031__EX-99.1.htm#t3-r34-o3⟩ %"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t3-r35",
+     "text": "Regional (4⟨0000006201-26-000031__EX-99.1.htm#t3-r35-o1⟩) 32,500⟨0000006201-26-000031__EX-99.1.htm#t3-r35-o2⟩ 30,700⟨0000006201-26-000031__EX-99.1.htm#t3-r35-o3⟩ 5.9⟨0000006201-26-000031__EX-99.1.htm#t3-r35-o4⟩ %"
+    },
+    {
+     "block_id": "0000006201-26-000031__EX-99.1.htm#t3-r36",
+     "text": "Total 138,900⟨0000006201-26-000031__EX-99.1.htm#t3-r36-o1⟩ 133,100⟨0000006201-26-000031__EX-99.1.htm#t3-r36-o2⟩ 4.4⟨0000006201-26-000031__EX-99.1.htm#t3-r36-o3⟩ %"
+    }
+   ]
+  }
+ },
+ "cases": [
+  {
+   "case_id": "SCR-01",
+   "table": "0000006201-26-000031__EX-99.1.htm#t2",
+   "requests": [
+    {
+     "request_id": "SCR-01-q1",
+     "table": "0000006201-26-000031__EX-99.1.htm#t2",
+     "ask": {
+      "label_wording": "Cargo Revenue",
+      "target": "occurrence #1 of the 3 asked cells of that labeled row (ordinal screen simplification)"
+     },
+     "anchor_id": "SCR-01-anchor"
+    },
+    {
+     "request_id": "SCR-01-q2",
+     "table": "0000006201-26-000031__EX-99.1.htm#t2",
+     "ask": {
+      "label_wording": "Cargo Revenue",
+      "target": "occurrence #2 of the 3 asked cells of that labeled row (ordinal screen simplification)"
+     },
+     "anchor_id": "SCR-01-anchor"
+    },
+    {
+     "request_id": "SCR-01-q3",
+     "table": "0000006201-26-000031__EX-99.1.htm#t2",
+     "ask": {
+      "label_wording": "Cargo Revenue",
+      "target": "occurrence #3 of the 3 asked cells of that labeled row (ordinal screen simplification)"
+     },
+     "anchor_id": "SCR-01-anchor"
+    }
+   ]
+  },
+  {
+   "case_id": "SCR-02",
+   "table": "0000006201-26-000031__EX-99.1.htm#t2",
+   "requests": [
+    {
+     "request_id": "SCR-02-q1",
+     "table": "0000006201-26-000031__EX-99.1.htm#t2",
+     "ask": {
+      "label_wording": "Passenger Revenue",
+      "target": "occurrence #1 of the 3 asked cells of that labeled row (ordinal screen simplification)"
+     },
+     "anchor_id": "SCR-02-anchor"
+    },
+    {
+     "request_id": "SCR-02-q2",
+     "table": "0000006201-26-000031__EX-99.1.htm#t2",
+     "ask": {
+      "label_wording": "Passenger Revenue",
+      "target": "occurrence #2 of the 3 asked cells of that labeled row (ordinal screen simplification)"
+     },
+     "anchor_id": "SCR-02-anchor"
+    },
+    {
+     "request_id": "SCR-02-q3",
+     "table": "0000006201-26-000031__EX-99.1.htm#t2",
+     "ask": {
+      "label_wording": "Passenger Revenue",
+      "target": "occurrence #3 of the 3 asked cells of that labeled row (ordinal screen simplification)"
+     },
+     "anchor_id": "SCR-02-anchor"
+    }
+   ]
+  },
+  {
+   "case_id": "SCR-03",
+   "table": "0000006201-26-000031__EX-99.1.htm#t3",
+   "requests": [
+    {
+     "request_id": "SCR-03-q1",
+     "table": "0000006201-26-000031__EX-99.1.htm#t3",
+     "ask": {
+      "label_wording": "Passenger Load Factor (Percent)",
+      "target": "occurrence #1 of the 3 asked cells of that labeled row (ordinal screen simplification)"
+     },
+     "anchor_id": "SCR-03-anchor"
+    },
+    {
+     "request_id": "SCR-03-q2",
+     "table": "0000006201-26-000031__EX-99.1.htm#t3",
+     "ask": {
+      "label_wording": "Passenger Load Factor (Percent)",
+      "target": "occurrence #2 of the 3 asked cells of that labeled row (ordinal screen simplification)"
+     },
+     "anchor_id": "SCR-03-anchor"
+    },
+    {
+     "request_id": "SCR-03-q3",
+     "table": "0000006201-26-000031__EX-99.1.htm#t3",
+     "ask": {
+      "label_wording": "Passenger Load Factor (Percent)",
+      "target": "occurrence #3 of the 3 asked cells of that labeled row (ordinal screen simplification)"
+     },
+     "anchor_id": "SCR-03-anchor"
+    }
+   ]
+  },
+  {
+   "case_id": "SCR-04",
+   "table": "0000006201-26-000031__EX-99.1.htm#t3",
+   "requests": [
+    {
+     "request_id": "SCR-04-q1",
+     "table": "0000006201-26-000031__EX-99.1.htm#t3",
+     "ask": {
+      "label_wording": "Yield (Cents)",
+      "target": "occurrence #1 of the 3 asked cells of that labeled row (ordinal screen simplification)"
+     },
+     "anchor_id": "SCR-04-anchor"
+    },
+    {
+     "request_id": "SCR-04-q2",
+     "table": "0000006201-26-000031__EX-99.1.htm#t3",
+     "ask": {
+      "label_wording": "Yield (Cents)",
+      "target": "occurrence #2 of the 3 asked cells of that labeled row (ordinal screen simplification)"
+     },
+     "anchor_id": "SCR-04-anchor"
+    },
+    {
+     "request_id": "SCR-04-q3",
+     "table": "0000006201-26-000031__EX-99.1.htm#t3",
+     "ask": {
+      "label_wording": "Yield (Cents)",
+      "target": "occurrence #3 of the 3 asked cells of that labeled row (ordinal screen simplification)"
+     },
+     "anchor_id": "SCR-04-anchor"
+    }
+   ]
+  },
+  {
+   "case_id": "SCR-05",
+   "table": "0000007084-25-000005__EX-99.1.htm#t16",
+   "requests": [
+    {
+     "request_id": "SCR-05-q1",
+     "table": "0000007084-25-000005__EX-99.1.htm#t16",
+     "ask": {
+      "label_wording": "Ag Services & Oilseeds Revenue",
+      "target": "occurrence #1 of the 4 asked cells of that labeled row (ordinal screen simplification)"
+     },
+     "anchor_id": "SCR-05-anchor"
+    },
+    {
+     "request_id": "SCR-05-q2",
+     "table": "0000007084-25-000005__EX-99.1.htm#t16",
+     "ask": {
+      "label_wording": "Ag Services & Oilseeds Revenue",
+      "target": "occurrence #2 of the 4 asked cells of that labeled row (ordinal screen simplification)"
+     },
+     "anchor_id": "SCR-05-anchor"
+    },
+    {
+     "request_id": "SCR-05-q3",
+     "table": "0000007084-25-000005__EX-99.1.htm#t16",
+     "ask": {
+      "label_wording": "Ag Services & Oilseeds Revenue",
+      "target": "occurrence #3 of the 4 asked cells of that labeled row (ordinal screen simplification)"
+     },
+     "anchor_id": "SCR-05-anchor"
+    },
+    {
+     "request_id": "SCR-05-q4",
+     "table": "0000007084-25-000005__EX-99.1.htm#t16",
+     "ask": {
+      "label_wording": "Ag Services & Oilseeds Revenue",
+      "target": "occurrence #4 of the 4 asked cells of that labeled row (ordinal screen simplification)"
+     },
+     "anchor_id": "SCR-05-anchor"
+    }
+   ]
+  },
+  {
+   "case_id": "SCR-06",
+   "table": "0000007084-25-000005__EX-99.1.htm#t16",
+   "requests": [
+    {
+     "request_id": "SCR-06-q1",
+     "table": "0000007084-25-000005__EX-99.1.htm#t16",
+     "ask": {
+      "label_wording": "Carbohydrate Solutions Revenue",
+      "target": "occurrence #1 of the 4 asked cells of that labeled row (ordinal screen simplification)"
+     },
+     "anchor_id": "SCR-06-anchor"
+    },
+    {
+     "request_id": "SCR-06-q2",
+     "table": "0000007084-25-000005__EX-99.1.htm#t16",
+     "ask": {
+      "label_wording": "Carbohydrate Solutions Revenue",
+      "target": "occurrence #2 of the 4 asked cells of that labeled row (ordinal screen simplification)"
+     },
+     "anchor_id": "SCR-06-anchor"
+    },
+    {
+     "request_id": "SCR-06-q3",
+     "table": "0000007084-25-000005__EX-99.1.htm#t16",
+     "ask": {
+      "label_wording": "Carbohydrate Solutions Revenue",
+      "target": "occurrence #3 of the 4 asked cells of that labeled row (ordinal screen simplification)"
+     },
+     "anchor_id": "SCR-06-anchor"
+    },
+    {
+     "request_id": "SCR-06-q4",
+     "table": "0000007084-25-000005__EX-99.1.htm#t16",
+     "ask": {
+      "label_wording": "Carbohydrate Solutions Revenue",
+      "target": "occurrence #4 of the 4 asked cells of that labeled row (ordinal screen simplification)"
+     },
+     "anchor_id": "SCR-06-anchor"
+    }
+   ]
+  },
+  {
+   "case_id": "SCR-07",
+   "table": "0000007084-25-000005__EX-99.1.htm#t16",
+   "requests": [
+    {
+     "request_id": "SCR-07-q1",
+     "table": "0000007084-25-000005__EX-99.1.htm#t16",
+     "ask": {
+      "label_wording": "Nutrition Revenue",
+      "target": "occurrence #1 of the 4 asked cells of that labeled row (ordinal screen simplification)"
+     },
+     "anchor_id": "SCR-07-anchor"
+    },
+    {
+     "request_id": "SCR-07-q2",
+     "table": "0000007084-25-000005__EX-99.1.htm#t16",
+     "ask": {
+      "label_wording": "Nutrition Revenue",
+      "target": "occurrence #2 of the 4 asked cells of that labeled row (ordinal screen simplification)"
+     },
+     "anchor_id": "SCR-07-anchor"
+    },
+    {
+     "request_id": "SCR-07-q3",
+     "table": "0000007084-25-000005__EX-99.1.htm#t16",
+     "ask": {
+      "label_wording": "Nutrition Revenue",
+      "target": "occurrence #3 of the 4 asked cells of that labeled row (ordinal screen simplification)"
+     },
+     "anchor_id": "SCR-07-anchor"
+    },
+    {
+     "request_id": "SCR-07-q4",
+     "table": "0000007084-25-000005__EX-99.1.htm#t16",
+     "ask": {
+      "label_wording": "Nutrition Revenue",
+      "target": "occurrence #4 of the 4 asked cells of that labeled row (ordinal screen simplification)"
+     },
+     "anchor_id": "SCR-07-anchor"
+    }
+   ]
+  },
+  {
+   "case_id": "SCR-08",
+   "table": "0000007084-26-000005__EX-99.1.htm#t10",
+   "requests": [
+    {
+     "request_id": "SCR-08-q1",
+     "table": "0000007084-26-000005__EX-99.1.htm#t10",
+     "ask": {
+      "label_wording": "Ag Services & Oilseeds Revenue",
+      "target": "occurrence #1 of the 4 asked cells of that labeled row (ordinal screen simplification)"
+     },
+     "anchor_id": "SCR-08-anchor"
+    },
+    {
+     "request_id": "SCR-08-q2",
+     "table": "0000007084-26-000005__EX-99.1.htm#t10",
+     "ask": {
+      "label_wording": "Ag Services & Oilseeds Revenue",
+      "target": "occurrence #2 of the 4 asked cells of that labeled row (ordinal screen simplification)"
+     },
+     "anchor_id": "SCR-08-anchor"
+    },
+    {
+     "request_id": "SCR-08-q3",
+     "table": "0000007084-26-000005__EX-99.1.htm#t10",
+     "ask": {
+      "label_wording": "Ag Services & Oilseeds Revenue",
+      "target": "occurrence #3 of the 4 asked cells of that labeled row (ordinal screen simplification)"
+     },
+     "anchor_id": "SCR-08-anchor"
+    },
+    {
+     "request_id": "SCR-08-q4",
+     "table": "0000007084-26-000005__EX-99.1.htm#t10",
+     "ask": {
+      "label_wording": "Ag Services & Oilseeds Revenue",
+      "target": "occurrence #4 of the 4 asked cells of that labeled row (ordinal screen simplification)"
+     },
+     "anchor_id": "SCR-08-anchor"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,1125 @@
+{
+ "note": "GRADER-ONLY",
+ "grading_law": "request_id AND anchor_id echoed (different fields); block+occurrence exact; copied_label = the exact label cell (no $); copied_period_evidence = EXACT ARRAY equality with the audited aligned_headers_verbatim",
+ "answers": {
+  "SCR-01-q1": {
+   "expected_request_id": "SCR-01-q1",
+   "expected_anchor_id": "SCR-01-anchor",
+   "expected_occurrence": "0000006201-26-000031__EX-99.1.htm#t2-r05-o1",
+   "expected_block_id": "0000006201-26-000031__EX-99.1.htm#t2-r05",
+   "expected_copied_label": "Cargo",
+   "expected_period_evidence_array": [
+    "3 Months Ended March 31,",
+    "2026"
+   ],
+   "cell_text": "214"
+  },
+  "SCR-01-q2": {
+   "expected_request_id": "SCR-01-q2",
+   "expected_anchor_id": "SCR-01-anchor",
+   "expected_occurrence": "0000006201-26-000031__EX-99.1.htm#t2-r05-o2",
+   "expected_block_id": "0000006201-26-000031__EX-99.1.htm#t2-r05",
+   "expected_copied_label": "Cargo",
+   "expected_period_evidence_array": [
+    "3 Months Ended March 31,",
+    "2025"
+   ],
+   "cell_text": "189"
+  },
+  "SCR-01-q3": {
+   "expected_request_id": "SCR-01-q3",
+   "expected_anchor_id": "SCR-01-anchor",
+   "expected_occurrence": "0000006201-26-000031__EX-99.1.htm#t2-r05-o3",
+   "expected_block_id": "0000006201-26-000031__EX-99.1.htm#t2-r05",
+   "expected_copied_label": "Cargo",
+   "expected_period_evidence_array": [
+    "Percent Increase (Decrease)"
+   ],
+   "cell_text": "12.9"
+  },
+  "SCR-02-q1": {
+   "expected_request_id": "SCR-02-q1",
+   "expected_anchor_id": "SCR-02-anchor",
+   "expected_occurrence": "0000006201-26-000031__EX-99.1.htm#t2-r04-o1",
+   "expected_block_id": "0000006201-26-000031__EX-99.1.htm#t2-r04",
+   "expected_copied_label": "Passenger",
+   "expected_period_evidence_array": [
+    "3 Months Ended March 31,",
+    "2026"
+   ],
+   "cell_text": "12,495"
+  },
+  "SCR-02-q2": {
+   "expected_request_id": "SCR-02-q2",
+   "expected_anchor_id": "SCR-02-anchor",
+   "expected_occurrence": "0000006201-26-000031__EX-99.1.htm#t2-r04-o2",
+   "expected_block_id": "0000006201-26-000031__EX-99.1.htm#t2-r04",
+   "expected_copied_label": "Passenger",
+   "expected_period_evidence_array": [
+    "3 Months Ended March 31,",
+    "2025"
+   ],
+   "cell_text": "11,391"
+  },
+  "SCR-02-q3": {
+   "expected_request_id": "SCR-02-q3",
+   "expected_anchor_id": "SCR-02-anchor",
+   "expected_occurrence": "0000006201-26-000031__EX-99.1.htm#t2-r04-o3",
+   "expected_block_id": "0000006201-26-000031__EX-99.1.htm#t2-r04",
+   "expected_copied_label": "Passenger",
+   "expected_period_evidence_array": [
+    "Percent Increase (Decrease)"
+   ],
+   "cell_text": "9.7"
+  },
+  "SCR-03-q1": {
+   "expected_request_id": "SCR-03-q1",
+   "expected_anchor_id": "SCR-03-anchor",
+   "expected_occurrence": "0000006201-26-000031__EX-99.1.htm#t3-r05-o1",
+   "expected_block_id": "0000006201-26-000031__EX-99.1.htm#t3-r05",
+   "expected_copied_label": "Passenger load factor (percent)",
+   "expected_period_evidence_array": [
+    "3 Months Ended March 31,",
+    "2026"
+   ],
+   "cell_text": "81.3"
+  },
+  "SCR-03-q2": {
+   "expected_request_id": "SCR-03-q2",
+   "expected_anchor_id": "SCR-03-anchor",
+   "expected_occurrence": "0000006201-26-000031__EX-99.1.htm#t3-r05-o2",
+   "expected_block_id": "0000006201-26-000031__EX-99.1.htm#t3-r05",
+   "expected_copied_label": "Passenger load factor (percent)",
+   "expected_period_evidence_array": [
+    "3 Months Ended March 31,",
+    "2025"
+   ],
+   "cell_text": "80.6"
+  },
+  "SCR-03-q3": {
+   "expected_request_id": "SCR-03-q3",
+   "expected_anchor_id": "SCR-03-anchor",
+   "expected_occurrence": "0000006201-26-000031__EX-99.1.htm#t3-r05-o3",
+   "expected_block_id": "0000006201-26-000031__EX-99.1.htm#t3-r05",
+   "expected_copied_label": "Passenger load factor (percent)",
+   "expected_period_evidence_array": [
+    "Increase"
+   ],
+   "cell_text": "0.7 pts"
+  },
+  "SCR-04-q1": {
+   "expected_request_id": "SCR-04-q1",
+   "expected_anchor_id": "SCR-04-anchor",
+   "expected_occurrence": "0000006201-26-000031__EX-99.1.htm#t3-r06-o1",
+   "expected_block_id": "0000006201-26-000031__EX-99.1.htm#t3-r06",
+   "expected_copied_label": "Yield (cents)",
+   "expected_period_evidence_array": [
+    "3 Months Ended March 31,",
+    "2026"
+   ],
+   "cell_text": "21.34"
+  },
+  "SCR-04-q2": {
+   "expected_request_id": "SCR-04-q2",
+   "expected_anchor_id": "SCR-04-anchor",
+   "expected_occurrence": "0000006201-26-000031__EX-99.1.htm#t3-r06-o2",
+   "expected_block_id": "0000006201-26-000031__EX-99.1.htm#t3-r06",
+   "expected_copied_label": "Yield (cents)",
+   "expected_period_evidence_array": [
+    "3 Months Ended March 31,",
+    "2025"
+   ],
+   "cell_text": "20.21"
+  },
+  "SCR-04-q3": {
+   "expected_request_id": "SCR-04-q3",
+   "expected_anchor_id": "SCR-04-anchor",
+   "expected_occurrence": "0000006201-26-000031__EX-99.1.htm#t3-r06-o3",
+   "expected_block_id": "0000006201-26-000031__EX-99.1.htm#t3-r06",
+   "expected_copied_label": "Yield (cents)",
+   "expected_period_evidence_array": [
+    "Increase"
+   ],
+   "cell_text": "5.6 %"
+  },
+  "SCR-05-q1": {
+   "expected_request_id": "SCR-05-q1",
+   "expected_anchor_id": "SCR-05-anchor",
+   "expected_occurrence": "0000007084-25-000005__EX-99.1.htm#t16-r16-o1",
+   "expected_block_id": "0000007084-25-000005__EX-99.1.htm#t16-r16",
+   "expected_copied_label": "Ag Services and Oilseeds",
+   "expected_period_evidence_array": [
+    "Quarter ended",
+    "December 31",
+    "2024",
+    "(in millions)"
+   ],
+   "cell_text": "16,874"
+  },
+  "SCR-05-q2": {
+   "expected_request_id": "SCR-05-q2",
+   "expected_anchor_id": "SCR-05-anchor",
+   "expected_occurrence": "0000007084-25-000005__EX-99.1.htm#t16-r16-o2",
+   "expected_block_id": "0000007084-25-000005__EX-99.1.htm#t16-r16",
+   "expected_copied_label": "Ag Services and Oilseeds",
+   "expected_period_evidence_array": [
+    "Quarter ended",
+    "December 31",
+    "2023",
+    "(in millions)"
+   ],
+   "cell_text": "18,524"
+  },
+  "SCR-05-q3": {
+   "expected_request_id": "SCR-05-q3",
+   "expected_anchor_id": "SCR-05-anchor",
+   "expected_occurrence": "0000007084-25-000005__EX-99.1.htm#t16-r16-o3",
+   "expected_block_id": "0000007084-25-000005__EX-99.1.htm#t16-r16",
+   "expected_copied_label": "Ag Services and Oilseeds",
+   "expected_period_evidence_array": [
+    "Year ended",
+    "December 31",
+    "2024",
+    "(in millions)"
+   ],
+   "cell_text": "66,516"
+  },
+  "SCR-05-q4": {
+   "expected_request_id": "SCR-05-q4",
+   "expected_anchor_id": "SCR-05-anchor",
+   "expected_occurrence": "0000007084-25-000005__EX-99.1.htm#t16-r16-o4",
+   "expected_block_id": "0000007084-25-000005__EX-99.1.htm#t16-r16",
+   "expected_copied_label": "Ag Services and Oilseeds",
+   "expected_period_evidence_array": [
+    "Year ended",
+    "December 31",
+    "2023",
+    "(in millions)"
+   ],
+   "cell_text": "73,426"
+  },
+  "SCR-06-q1": {
+   "expected_request_id": "SCR-06-q1",
+   "expected_anchor_id": "SCR-06-anchor",
+   "expected_occurrence": "0000007084-25-000005__EX-99.1.htm#t16-r17-o1",
+   "expected_block_id": "0000007084-25-000005__EX-99.1.htm#t16-r17",
+   "expected_copied_label": "Carbohydrate Solutions",
+   "expected_period_evidence_array": [
+    "Quarter ended",
+    "December 31",
+    "2024",
+    "(in millions)"
+   ],
+   "cell_text": "2,750"
+  },
+  "SCR-06-q2": {
+   "expected_request_id": "SCR-06-q2",
+   "expected_anchor_id": "SCR-06-anchor",
+   "expected_occurrence": "0000007084-25-000005__EX-99.1.htm#t16-r17-o2",
+   "expected_block_id": "0000007084-25-000005__EX-99.1.htm#t16-r17",
+   "expected_copied_label": "Carbohydrate Solutions",
+   "expected_period_evidence_array": [
+    "Quarter ended",
+    "December 31",
+    "2023",
+    "(in millions)"
+   ],
+   "cell_text": "2,631"
+  },
+  "SCR-06-q3": {
+   "expected_request_id": "SCR-06-q3",
+   "expected_anchor_id": "SCR-06-anchor",
+   "expected_occurrence": "0000007084-25-000005__EX-99.1.htm#t16-r17-o3",
+   "expected_block_id": "0000007084-25-000005__EX-99.1.htm#t16-r17",
+   "expected_copied_label": "Carbohydrate Solutions",
+   "expected_period_evidence_array": [
+    "Year ended",
+    "December 31",
+    "2024",
+    "(in millions)"
+   ],
+   "cell_text": "11,234"
+  },
+  "SCR-06-q4": {
+   "expected_request_id": "SCR-06-q4",
+   "expected_anchor_id": "SCR-06-anchor",
+   "expected_occurrence": "0000007084-25-000005__EX-99.1.htm#t16-r17-o4",
+   "expected_block_id": "0000007084-25-000005__EX-99.1.htm#t16-r17",
+   "expected_copied_label": "Carbohydrate Solutions",
+   "expected_period_evidence_array": [
+    "Year ended",
+    "December 31",
+    "2023",
+    "(in millions)"
+   ],
+   "cell_text": "12,874"
+  },
+  "SCR-07-q1": {
+   "expected_request_id": "SCR-07-q1",
+   "expected_anchor_id": "SCR-07-anchor",
+   "expected_occurrence": "0000007084-25-000005__EX-99.1.htm#t16-r18-o1",
+   "expected_block_id": "0000007084-25-000005__EX-99.1.htm#t16-r18",
+   "expected_copied_label": "Nutrition",
+   "expected_period_evidence_array": [
+    "Quarter ended",
+    "December 31",
+    "2024",
+    "(in millions)"
+   ],
+   "cell_text": "1,774"
+  },
+  "SCR-07-q2": {
+   "expected_request_id": "SCR-07-q2",
+   "expected_anchor_id": "SCR-07-anchor",
+   "expected_occurrence": "0000007084-25-000005__EX-99.1.htm#t16-r18-o2",
+   "expected_block_id": "0000007084-25-000005__EX-99.1.htm#t16-r18",
+   "expected_copied_label": "Nutrition",
+   "expected_period_evidence_array": [
+    "Quarter ended",
+    "December 31",
+    "2023",
+    "(in millions)"
+   ],
+   "cell_text": "1,721"
+  },
+  "SCR-07-q3": {
+   "expected_request_id": "SCR-07-q3",
+   "expected_anchor_id": "SCR-07-anchor",
+   "expected_occurrence": "0000007084-25-000005__EX-99.1.htm#t16-r18-o3",
+   "expected_block_id": "0000007084-25-000005__EX-99.1.htm#t16-r18",
+   "expected_copied_label": "Nutrition",
+   "expected_period_evidence_array": [
+    "Year ended",
+    "December 31",
+    "2024",
+    "(in millions)"
+   ],
+   "cell_text": "7,349"
+  },
+  "SCR-07-q4": {
+   "expected_request_id": "SCR-07-q4",
+   "expected_anchor_id": "SCR-07-anchor",
+   "expected_occurrence": "0000007084-25-000005__EX-99.1.htm#t16-r18-o4",
+   "expected_block_id": "0000007084-25-000005__EX-99.1.htm#t16-r18",
+   "expected_copied_label": "Nutrition",
+   "expected_period_evidence_array": [
+    "Year ended",
+    "December 31",
+    "2023",
+    "(in millions)"
+   ],
+   "cell_text": "7,211"
+  },
+  "SCR-08-q1": {
+   "expected_request_id": "SCR-08-q1",
+   "expected_anchor_id": "SCR-08-anchor",
+   "expected_occurrence": "0000007084-26-000005__EX-99.1.htm#t10-r16-o1",
+   "expected_block_id": "0000007084-26-000005__EX-99.1.htm#t10-r16",
+   "expected_copied_label": "Ag Services and Oilseeds",
+   "expected_period_evidence_array": [
+    "Quarter ended",
+    "December 31,",
+    "2025",
+    "(in millions)"
+   ],
+   "cell_text": "14,012"
+  },
+  "SCR-08-q2": {
+   "expected_request_id": "SCR-08-q2",
+   "expected_anchor_id": "SCR-08-anchor",
+   "expected_occurrence": "0000007084-26-000005__EX-99.1.htm#t10-r16-o2",
+   "expected_block_id": "0000007084-26-000005__EX-99.1.htm#t10-r16",
+   "expected_copied_label": "Ag Services and Oilseeds",
+   "expected_period_evidence_array": [
+    "Quarter ended",
+    "December 31,",
+    "2024",
+    "(in millions)"
+   ],
+   "cell_text": "16,874"
+  },
+  "SCR-08-q3": {
+   "expected_request_id": "SCR-08-q3",
+   "expected_anchor_id": "SCR-08-anchor",
+   "expected_occurrence": "0000007084-26-000005__EX-99.1.htm#t10-r16-o3",
+   "expected_block_id": "0000007084-26-000005__EX-99.1.htm#t10-r16",
+   "expected_copied_label": "Ag Services and Oilseeds",
+   "expected_period_evidence_array": [
+    "Year ended",
+    "December 31,",
+    "2025",
+    "(in millions)"
+   ],
+   "cell_text": "61,571"
+  },
+  "SCR-08-q4": {
+   "expected_request_id": "SCR-08-q4",
+   "expected_anchor_id": "SCR-08-anchor",
+   "expected_occurrence": "0000007084-26-000005__EX-99.1.htm#t10-r16-o4",
+   "expected_block_id": "0000007084-26-000005__EX-99.1.htm#t10-r16",
+   "expected_copied_label": "Ag Services and Oilseeds",
+   "expected_period_evidence_array": [
+    "Year ended",
+    "December 31,",
+    "2024",
+    "(in millions)"
+   ],
+   "cell_text": "66,516"
+  },
+  "SCR-09-q1": {
+   "expected_request_id": "SCR-09-q1",
+   "expected_anchor_id": "SCR-09-anchor",
+   "expected_occurrence": "0000007084-26-000005__EX-99.1.htm#t10-r17-o1",
+   "expected_block_id": "0000007084-26-000005__EX-99.1.htm#t10-r17",
+   "expected_copied_label": "Carbohydrate Solutions",
+   "expected_period_evidence_array": [
+    "Quarter ended",
+    "December 31,",
+    "2025",
+    "(in millions)"
+   ],
+   "cell_text": "2,641"
+  },
+  "SCR-09-q2": {
+   "expected_request_id": "SCR-09-q2",
+   "expected_anchor_id": "SCR-09-anchor",
+   "expected_occurrence": "0000007084-26-000005__EX-99.1.htm#t10-r17-o2",
+   "expected_block_id": "0000007084-26-000005__EX-99.1.htm#t10-r17",
+   "expected_copied_label": "Carbohydrate Solutions",
+   "expected_period_evidence_array": [
+    "Quarter ended",
+    "December 31,",
+    "2024",
+    "(in millions)"
+   ],
+   "cell_text": "2,750"
+  },
+  "SCR-09-q3": {
+   "expected_request_id": "SCR-09-q3",
+   "expected_anchor_id": "SCR-09-anchor",
+   "expected_occurrence": "0000007084-26-000005__EX-99.1.htm#t10-r17-o3",
+   "expected_block_id": "0000007084-26-000005__EX-99.1.htm#t10-r17",
+   "expected_copied_label": "Carbohydrate Solutions",
+   "expected_period_evidence_array": [
+    "Year ended",
+    "December 31,",
+    "2025",
+    "(in millions)"
+   ],
+   "cell_text": "10,737"
+  },
+  "SCR-09-q4": {
+   "expected_request_id": "SCR-09-q4",
+   "expected_anchor_id": "SCR-09-anchor",
+   "expected_occurrence": "0000007084-26-000005__EX-99.1.htm#t10-r17-o4",
+   "expected_block_id": "0000007084-26-000005__EX-99.1.htm#t10-r17",
+   "expected_copied_label": "Carbohydrate Solutions",
+   "expected_period_evidence_array": [
+    "Year ended",
+    "December 31,",
+    "2024",
+    "(in millions)"
+   ],
+   "cell_text": "11,234"
+  },
+  "SCR-10-q1": {
+   "expected_request_id": "SCR-10-q1",
+   "expected_anchor_id": "SCR-10-anchor",
+   "expected_occurrence": "0000007084-26-000005__EX-99.1.htm#t10-r18-o1",
+   "expected_block_id": "0000007084-26-000005__EX-99.1.htm#t10-r18",
+   "expected_copied_label": "Nutrition",
+   "expected_period_evidence_array": [
+    "Quarter ended",
+    "December 31,",
+    "2025",
+    "(in millions)"
+   ],
+   "cell_text": "1,786"
+  },
+  "SCR-10-q2": {
+   "expected_request_id": "SCR-10-q2",
+   "expected_anchor_id": "SCR-10-anchor",
+   "expected_occurrence": "0000007084-26-000005__EX-99.1.htm#t10-r18-o2",
+   "expected_block_id": "0000007084-26-000005__EX-99.1.htm#t10-r18",
+   "expected_copied_label": "Nutrition",
+   "expected_period_evidence_array": [
+    "Quarter ended",
+    "December 31,",
+    "2024",
+    "(in millions)"
+   ],
+   "cell_text": "1,774"
+  },
+  "SCR-10-q3": {
+   "expected_request_id": "SCR-10-q3",
+   "expected_anchor_id": "SCR-10-anchor",
+   "expected_occurrence": "0000007084-26-000005__EX-99.1.htm#t10-r18-o3",
+   "expected_block_id": "0000007084-26-000005__EX-99.1.htm#t10-r18",
+   "expected_copied_label": "Nutrition",
+   "expected_period_evidence_array": [
+    "Year ended",
+    "December 31,",
+    "2025",
+    "(in millions)"
+   ],
+   "cell_text": "7,512"
+  },
+  "SCR-10-q4": {
+   "expected_request_id": "SCR-10-q4",
+   "expected_anchor_id": "SCR-10-anchor",
+   "expected_occurrence": "0000007084-26-000005__EX-99.1.htm#t10-r18-o4",
+   "expected_block_id": "0000007084-26-000005__EX-99.1.htm#t10-r18",
+   "expected_copied_label": "Nutrition",
+   "expected_period_evidence_array": [
+    "Year ended",
+    "December 31,",
+    "2024",
+    "(in millions)"
+   ],
+   "cell_text": "7,349"
+  },
+  "SCR-11-q1": {
+   "expected_request_id": "SCR-11-q1",
+   "expected_anchor_id": "SCR-11-anchor",
+   "expected_occurrence": "0000950170-25-007765__EX-99.1.htm#t5-r05-o1",
+   "expected_block_id": "0000950170-25-007765__EX-99.1.htm#t5-r05",
+   "expected_copied_label": "Alumina production (kmt)",
+   "expected_period_evidence_array": [
+    "4Q23"
+   ],
+   "cell_text": "2,789"
+  },
+  "SCR-11-q2": {
+   "expected_request_id": "SCR-11-q2",
+   "expected_anchor_id": "SCR-11-anchor",
+   "expected_occurrence": "0000950170-25-007765__EX-99.1.htm#t5-r05-o2",
+   "expected_block_id": "0000950170-25-007765__EX-99.1.htm#t5-r05",
+   "expected_copied_label": "Alumina production (kmt)",
+   "expected_period_evidence_array": [
+    "2023"
+   ],
+   "cell_text": "10,908"
+  },
+  "SCR-11-q3": {
+   "expected_request_id": "SCR-11-q3",
+   "expected_anchor_id": "SCR-11-anchor",
+   "expected_occurrence": "0000950170-25-007765__EX-99.1.htm#t5-r05-o3",
+   "expected_block_id": "0000950170-25-007765__EX-99.1.htm#t5-r05",
+   "expected_copied_label": "Alumina production (kmt)",
+   "expected_period_evidence_array": [
+    "1Q24"
+   ],
+   "cell_text": "2,670"
+  },
+  "SCR-11-q4": {
+   "expected_request_id": "SCR-11-q4",
+   "expected_anchor_id": "SCR-11-anchor",
+   "expected_occurrence": "0000950170-25-007765__EX-99.1.htm#t5-r05-o4",
+   "expected_block_id": "0000950170-25-007765__EX-99.1.htm#t5-r05",
+   "expected_copied_label": "Alumina production (kmt)",
+   "expected_period_evidence_array": [
+    "2Q24"
+   ],
+   "cell_text": "2,539"
+  },
+  "SCR-11-q5": {
+   "expected_request_id": "SCR-11-q5",
+   "expected_anchor_id": "SCR-11-anchor",
+   "expected_occurrence": "0000950170-25-007765__EX-99.1.htm#t5-r05-o5",
+   "expected_block_id": "0000950170-25-007765__EX-99.1.htm#t5-r05",
+   "expected_copied_label": "Alumina production (kmt)",
+   "expected_period_evidence_array": [
+    "3Q24"
+   ],
+   "cell_text": "2,435"
+  },
+  "SCR-11-q6": {
+   "expected_request_id": "SCR-11-q6",
+   "expected_anchor_id": "SCR-11-anchor",
+   "expected_occurrence": "0000950170-25-007765__EX-99.1.htm#t5-r05-o6",
+   "expected_block_id": "0000950170-25-007765__EX-99.1.htm#t5-r05",
+   "expected_copied_label": "Alumina production (kmt)",
+   "expected_period_evidence_array": [
+    "4Q24"
+   ],
+   "cell_text": "2,390"
+  },
+  "SCR-11-q7": {
+   "expected_request_id": "SCR-11-q7",
+   "expected_anchor_id": "SCR-11-anchor",
+   "expected_occurrence": "0000950170-25-007765__EX-99.1.htm#t5-r05-o7",
+   "expected_block_id": "0000950170-25-007765__EX-99.1.htm#t5-r05",
+   "expected_copied_label": "Alumina production (kmt)",
+   "expected_period_evidence_array": [
+    "2024"
+   ],
+   "cell_text": "10,034"
+  },
+  "SCR-12-q1": {
+   "expected_request_id": "SCR-12-q1",
+   "expected_anchor_id": "SCR-12-anchor",
+   "expected_occurrence": "0000950170-25-007765__EX-99.1.htm#t5-r03-o1",
+   "expected_block_id": "0000950170-25-007765__EX-99.1.htm#t5-r03",
+   "expected_copied_label": "Bauxite production (mdmt)",
+   "expected_period_evidence_array": [
+    "4Q23"
+   ],
+   "cell_text": "10.4"
+  },
+  "SCR-12-q2": {
+   "expected_request_id": "SCR-12-q2",
+   "expected_anchor_id": "SCR-12-anchor",
+   "expected_occurrence": "0000950170-25-007765__EX-99.1.htm#t5-r03-o2",
+   "expected_block_id": "0000950170-25-007765__EX-99.1.htm#t5-r03",
+   "expected_copied_label": "Bauxite production (mdmt)",
+   "expected_period_evidence_array": [
+    "2023"
+   ],
+   "cell_text": "41.0"
+  },
+  "SCR-12-q3": {
+   "expected_request_id": "SCR-12-q3",
+   "expected_anchor_id": "SCR-12-anchor",
+   "expected_occurrence": "0000950170-25-007765__EX-99.1.htm#t5-r03-o3",
+   "expected_block_id": "0000950170-25-007765__EX-99.1.htm#t5-r03",
+   "expected_copied_label": "Bauxite production (mdmt)",
+   "expected_period_evidence_array": [
+    "1Q24"
+   ],
+   "cell_text": "10.1"
+  },
+  "SCR-12-q4": {
+   "expected_request_id": "SCR-12-q4",
+   "expected_anchor_id": "SCR-12-anchor",
+   "expected_occurrence": "0000950170-25-007765__EX-99.1.htm#t5-r03-o4",
+   "expected_block_id": "0000950170-25-007765__EX-99.1.htm#t5-r03",
+   "expected_copied_label": "Bauxite production (mdmt)",
+   "expected_period_evidence_array": [
+    "2Q24"
+   ],
+   "cell_text": "9.5"
+  },
+  "SCR-12-q5": {
+   "expected_request_id": "SCR-12-q5",
+   "expected_anchor_id": "SCR-12-anchor",
+   "expected_occurrence": "0000950170-25-007765__EX-99.1.htm#t5-r03-o5",
+   "expected_block_id": "0000950170-25-007765__EX-99.1.htm#t5-r03",
+   "expected_copied_label": "Bauxite production (mdmt)",
+   "expected_period_evidence_array": [
+    "3Q24"
+   ],
+   "cell_text": "9.4"
+  },
+  "SCR-12-q6": {
+   "expected_request_id": "SCR-12-q6",
+   "expected_anchor_id": "SCR-12-anchor",
+   "expected_occurrence": "0000950170-25-007765__EX-99.1.htm#t5-r03-o6",
+   "expected_block_id": "0000950170-25-007765__EX-99.1.htm#t5-r03",
+   "expected_copied_label": "Bauxite production (mdmt)",
+   "expected_period_evidence_array": [
+    "4Q24"
+   ],
+   "cell_text": "9.3"
+  },
+  "SCR-12-q7": {
+   "expected_request_id": "SCR-12-q7",
+   "expected_anchor_id": "SCR-12-anchor",
+   "expected_occurrence": "0000950170-25-007765__EX-99.1.htm#t5-r03-o7",
+   "expected_block_id": "0000950170-25-007765__EX-99.1.htm#t5-r03",
+   "expected_copied_label": "Bauxite production (mdmt)",
+   "expected_period_evidence_array": [
+    "2024"
+   ],
+   "cell_text": "38.3"
+  },
+  "SCR-13-q1": {
+   "expected_request_id": "SCR-13-q1",
+   "expected_anchor_id": "SCR-13-anchor",
+   "expected_occurrence": "0000950170-25-007765__EX-99.1.htm#t5-r06-o1",
+   "expected_block_id": "0000950170-25-007765__EX-99.1.htm#t5-r06",
+   "expected_copied_label": "Third-party alumina shipments (kmt)",
+   "expected_period_evidence_array": [
+    "4Q23"
+   ],
+   "cell_text": "2,259"
+  },
+  "SCR-13-q2": {
+   "expected_request_id": "SCR-13-q2",
+   "expected_anchor_id": "SCR-13-anchor",
+   "expected_occurrence": "0000950170-25-007765__EX-99.1.htm#t5-r06-o2",
+   "expected_block_id": "0000950170-25-007765__EX-99.1.htm#t5-r06",
+   "expected_copied_label": "Third-party alumina shipments (kmt)",
+   "expected_period_evidence_array": [
+    "2023"
+   ],
+   "cell_text": "8,698"
+  },
+  "SCR-13-q3": {
+   "expected_request_id": "SCR-13-q3",
+   "expected_anchor_id": "SCR-13-anchor",
+   "expected_occurrence": "0000950170-25-007765__EX-99.1.htm#t5-r06-o3",
+   "expected_block_id": "0000950170-25-007765__EX-99.1.htm#t5-r06",
+   "expected_copied_label": "Third-party alumina shipments (kmt)",
+   "expected_period_evidence_array": [
+    "1Q24"
+   ],
+   "cell_text": "2,397"
+  },
+  "SCR-13-q4": {
+   "expected_request_id": "SCR-13-q4",
+   "expected_anchor_id": "SCR-13-anchor",
+   "expected_occurrence": "0000950170-25-007765__EX-99.1.htm#t5-r06-o4",
+   "expected_block_id": "0000950170-25-007765__EX-99.1.htm#t5-r06",
+   "expected_copied_label": "Third-party alumina shipments (kmt)",
+   "expected_period_evidence_array": [
+    "2Q24"
+   ],
+   "cell_text": "2,267"
+  },
+  "SCR-13-q5": {
+   "expected_request_id": "SCR-13-q5",
+   "expected_anchor_id": "SCR-13-anchor",
+   "expected_occurrence": "0000950170-25-007765__EX-99.1.htm#t5-r06-o5",
+   "expected_block_id": "0000950170-25-007765__EX-99.1.htm#t5-r06",
+   "expected_copied_label": "Third-party alumina shipments (kmt)",
+   "expected_period_evidence_array": [
+    "3Q24"
+   ],
+   "cell_text": "2,052"
+  },
+  "SCR-13-q6": {
+   "expected_request_id": "SCR-13-q6",
+   "expected_anchor_id": "SCR-13-anchor",
+   "expected_occurrence": "0000950170-25-007765__EX-99.1.htm#t5-r06-o6",
+   "expected_block_id": "0000950170-25-007765__EX-99.1.htm#t5-r06",
+   "expected_copied_label": "Third-party alumina shipments (kmt)",
+   "expected_period_evidence_array": [
+    "4Q24"
+   ],
+   "cell_text": "2,289"
+  },
+  "SCR-13-q7": {
+   "expected_request_id": "SCR-13-q7",
+   "expected_anchor_id": "SCR-13-anchor",
+   "expected_occurrence": "0000950170-25-007765__EX-99.1.htm#t5-r06-o7",
+   "expected_block_id": "0000950170-25-007765__EX-99.1.htm#t5-r06",
+   "expected_copied_label": "Third-party alumina shipments (kmt)",
+   "expected_period_evidence_array": [
+    "2024"
+   ],
+   "cell_text": "9,005"
+  },
+  "SCR-14-q1": {
+   "expected_request_id": "SCR-14-q1",
+   "expected_anchor_id": "SCR-14-anchor",
+   "expected_occurrence": "0000950170-25-007765__EX-99.1.htm#t5-r04-o1",
+   "expected_block_id": "0000950170-25-007765__EX-99.1.htm#t5-r04",
+   "expected_copied_label": "Third-party bauxite shipments (mdmt)",
+   "expected_period_evidence_array": [
+    "4Q23"
+   ],
+   "cell_text": "2.0"
+  },
+  "SCR-14-q2": {
+   "expected_request_id": "SCR-14-q2",
+   "expected_anchor_id": "SCR-14-anchor",
+   "expected_occurrence": "0000950170-25-007765__EX-99.1.htm#t5-r04-o2",
+   "expected_block_id": "0000950170-25-007765__EX-99.1.htm#t5-r04",
+   "expected_copied_label": "Third-party bauxite shipments (mdmt)",
+   "expected_period_evidence_array": [
+    "2023"
+   ],
+   "cell_text": "7.6"
+  },
+  "SCR-14-q3": {
+   "expected_request_id": "SCR-14-q3",
+   "expected_anchor_id": "SCR-14-anchor",
+   "expected_occurrence": "0000950170-25-007765__EX-99.1.htm#t5-r04-o3",
+   "expected_block_id": "0000950170-25-007765__EX-99.1.htm#t5-r04",
+   "expected_copied_label": "Third-party bauxite shipments (mdmt)",
+   "expected_period_evidence_array": [
+    "1Q24"
+   ],
+   "cell_text": "1.0"
+  },
+  "SCR-14-q4": {
+   "expected_request_id": "SCR-14-q4",
+   "expected_anchor_id": "SCR-14-anchor",
+   "expected_occurrence": "0000950170-25-007765__EX-99.1.htm#t5-r04-o4",
+   "expected_block_id": "0000950170-25-007765__EX-99.1.htm#t5-r04",
+   "expected_copied_label": "Third-party bauxite shipments (mdmt)",
+   "expected_period_evidence_array": [
+    "2Q24"
+   ],
+   "cell_text": "1.5"
+  },
+  "SCR-14-q5": {
+   "expected_request_id": "SCR-14-q5",
+   "expected_anchor_id": "SCR-14-anchor",
+   "expected_occurrence": "0000950170-25-007765__EX-99.1.htm#t5-r04-o5",
+   "expected_block_id": "0000950170-25-007765__EX-99.1.htm#t5-r04",
+   "expected_copied_label": "Third-party bauxite shipments (mdmt)",
+   "expected_period_evidence_array": [
+    "3Q24"
+   ],
+   "cell_text": "1.5"
+  },
+  "SCR-14-q6": {
+   "expected_request_id": "SCR-14-q6",
+   "expected_anchor_id": "SCR-14-anchor",
+   "expected_occurrence": "0000950170-25-007765__EX-99.1.htm#t5-r04-o6",
+   "expected_block_id": "0000950170-25-007765__EX-99.1.htm#t5-r04",
+   "expected_copied_label": "Third-party bauxite shipments (mdmt)",
+   "expected_period_evidence_array": [
+    "4Q24"
+   ],
+   "cell_text": "2.4"
+  },
+  "SCR-14-q7": {
+   "expected_request_id": "SCR-14-q7",
+   "expected_anchor_id": "SCR-14-anchor",
+   "expected_occurrence": "0000950170-25-007765__EX-99.1.htm#t5-r04-o7",
+   "expected_block_id": "0000950170-25-007765__EX-99.1.htm#t5-r04",
+   "expected_copied_label": "Third-party bauxite shipments (mdmt)",
+   "expected_period_evidence_array": [
+    "2024"
+   ],
+   "cell_text": "6.4"
+  },
+  "SCR-15-q1": {
+   "expected_request_id": "SCR-15-q1",
+   "expected_anchor_id": "SCR-15-anchor",
+   "expected_occurrence": "0001002910-25-000052__EX-99.1.htm#t13-r10-o1",
+   "expected_block_id": "0001002910-25-000052__EX-99.1.htm#t13-r10",
+   "expected_copied_label": "Ameren Illinois Natural Gas",
+   "expected_period_evidence_array": [
+    "Three Months Ended",
+    "December 31,",
+    "2024"
+   ],
+   "cell_text": "278"
+  },
+  "SCR-15-q2": {
+   "expected_request_id": "SCR-15-q2",
+   "expected_anchor_id": "SCR-15-anchor",
+   "expected_occurrence": "0001002910-25-000052__EX-99.1.htm#t13-r10-o2",
+   "expected_block_id": "0001002910-25-000052__EX-99.1.htm#t13-r10",
+   "expected_copied_label": "Ameren Illinois Natural Gas",
+   "expected_period_evidence_array": [
+    "Three Months Ended",
+    "December 31,",
+    "2023"
+   ],
+   "cell_text": "232"
+  },
+  "SCR-15-q3": {
+   "expected_request_id": "SCR-15-q3",
+   "expected_anchor_id": "SCR-15-anchor",
+   "expected_occurrence": "0001002910-25-000052__EX-99.1.htm#t13-r10-o3",
+   "expected_block_id": "0001002910-25-000052__EX-99.1.htm#t13-r10",
+   "expected_copied_label": "Ameren Illinois Natural Gas",
+   "expected_period_evidence_array": [
+    "Twelve Months Ended",
+    "December 31,",
+    "2024"
+   ],
+   "cell_text": "938"
+  },
+  "SCR-15-q4": {
+   "expected_request_id": "SCR-15-q4",
+   "expected_anchor_id": "SCR-15-anchor",
+   "expected_occurrence": "0001002910-25-000052__EX-99.1.htm#t13-r10-o4",
+   "expected_block_id": "0001002910-25-000052__EX-99.1.htm#t13-r10",
+   "expected_copied_label": "Ameren Illinois Natural Gas",
+   "expected_period_evidence_array": [
+    "Twelve Months Ended",
+    "December 31,",
+    "2023"
+   ],
+   "cell_text": "897"
+  },
+  "SCR-16-q1": {
+   "expected_request_id": "SCR-16-q1",
+   "expected_anchor_id": "SCR-16-anchor",
+   "expected_occurrence": "0001002910-26-000005__EX-99.1.htm#t13-r10-o1",
+   "expected_block_id": "0001002910-26-000005__EX-99.1.htm#t13-r10",
+   "expected_copied_label": "Ameren Illinois Natural Gas",
+   "expected_period_evidence_array": [
+    "Three Months Ended",
+    "December 31,",
+    "2025"
+   ],
+   "cell_text": "282"
+  },
+  "SCR-16-q2": {
+   "expected_request_id": "SCR-16-q2",
+   "expected_anchor_id": "SCR-16-anchor",
+   "expected_occurrence": "0001002910-26-000005__EX-99.1.htm#t13-r10-o2",
+   "expected_block_id": "0001002910-26-000005__EX-99.1.htm#t13-r10",
+   "expected_copied_label": "Ameren Illinois Natural Gas",
+   "expected_period_evidence_array": [
+    "Three Months Ended",
+    "December 31,",
+    "2024"
+   ],
+   "cell_text": "278"
+  },
+  "SCR-16-q3": {
+   "expected_request_id": "SCR-16-q3",
+   "expected_anchor_id": "SCR-16-anchor",
+   "expected_occurrence": "0001002910-26-000005__EX-99.1.htm#t13-r10-o3",
+   "expected_block_id": "0001002910-26-000005__EX-99.1.htm#t13-r10",
+   "expected_copied_label": "Ameren Illinois Natural Gas",
+   "expected_period_evidence_array": [
+    "Twelve Months Ended",
+    "December 31,",
+    "2025"
+   ],
+   "cell_text": "968"
+  },
+  "SCR-16-q4": {
+   "expected_request_id": "SCR-16-q4",
+   "expected_anchor_id": "SCR-16-anchor",
+   "expected_occurrence": "0001002910-26-000005__EX-99.1.htm#t13-r10-o4",
+   "expected_block_id": "0001002910-26-000005__EX-99.1.htm#t13-r10",
+   "expected_copied_label": "Ameren Illinois Natural Gas",
+   "expected_period_evidence_array": [
+    "Twelve Months Ended",
+    "December 31,",
+    "2024"
+   ],
+   "cell_text": "938"
+  },
+  "SCR-17-q1": {
+   "expected_request_id": "SCR-17-q1",
+   "expected_anchor_id": "SCR-17-anchor",
+   "expected_occurrence": "0001193125-26-019438__EX-99.1.htm#t5-r05-o1",
+   "expected_block_id": "0001193125-26-019438__EX-99.1.htm#t5-r05",
+   "expected_copied_label": "Alumina production (kmt)",
+   "expected_period_evidence_array": [
+    "4Q24"
+   ],
+   "cell_text": "2,390"
+  },
+  "SCR-17-q2": {
+   "expected_request_id": "SCR-17-q2",
+   "expected_anchor_id": "SCR-17-anchor",
+   "expected_occurrence": "0001193125-26-019438__EX-99.1.htm#t5-r05-o2",
+   "expected_block_id": "0001193125-26-019438__EX-99.1.htm#t5-r05",
+   "expected_copied_label": "Alumina production (kmt)",
+   "expected_period_evidence_array": [
+    "2024"
+   ],
+   "cell_text": "10,034"
+  },
+  "SCR-17-q3": {
+   "expected_request_id": "SCR-17-q3",
+   "expected_anchor_id": "SCR-17-anchor",
+   "expected_occurrence": "0001193125-26-019438__EX-99.1.htm#t5-r05-o3",
+   "expected_block_id": "0001193125-26-019438__EX-99.1.htm#t5-r05",
+   "expected_copied_label": "Alumina production (kmt)",
+   "expected_period_evidence_array": [
+    "1Q25"
+   ],
+   "cell_text": "2,355"
+  },
+  "SCR-17-q4": {
+   "expected_request_id": "SCR-17-q4",
+   "expected_anchor_id": "SCR-17-anchor",
+   "expected_occurrence": "0001193125-26-019438__EX-99.1.htm#t5-r05-o4",
+   "expected_block_id": "0001193125-26-019438__EX-99.1.htm#t5-r05",
+   "expected_copied_label": "Alumina production (kmt)",
+   "expected_period_evidence_array": [
+    "2Q25"
+   ],
+   "cell_text": "2,351"
+  },
+  "SCR-17-q5": {
+   "expected_request_id": "SCR-17-q5",
+   "expected_anchor_id": "SCR-17-anchor",
+   "expected_occurrence": "0001193125-26-019438__EX-99.1.htm#t5-r05-o5",
+   "expected_block_id": "0001193125-26-019438__EX-99.1.htm#t5-r05",
+   "expected_copied_label": "Alumina production (kmt)",
+   "expected_period_evidence_array": [
+    "3Q25"
+   ],
+   "cell_text": "2,453"
+  },
+  "SCR-17-q6": {
+   "expected_request_id": "SCR-17-q6",
+   "expected_anchor_id": "SCR-17-anchor",
+   "expected_occurrence": "0001193125-26-019438__EX-99.1.htm#t5-r05-o6",
+   "expected_block_id": "0001193125-26-019438__EX-99.1.htm#t5-r05",
+   "expected_copied_label": "Alumina production (kmt)",
+   "expected_period_evidence_array": [
+    "4Q25"
+   ],
+   "cell_text": "2,481"
+  },
+  "SCR-17-q7": {
+   "expected_request_id": "SCR-17-q7",
+   "expected_anchor_id": "SCR-17-anchor",
+   "expected_occurrence": "0001193125-26-019438__EX-99.1.htm#t5-r05-o7",
+   "expected_block_id": "0001193125-26-019438__EX-99.1.htm#t5-r05",
+   "expected_copied_label": "Alumina production (kmt)",
+   "expected_period_evidence_array": [
+    "2025"
+   ],
+   "cell_text": "9,640"
+  },
+  "SCR-18-q1": {
+   "expected_request_id": "SCR-18-q1",
+   "expected_anchor_id": "SCR-18-anchor",
+   "expected_occurrence": "0001193125-26-019438__EX-99.1.htm#t5-r03-o1",
+   "expected_block_id": "0001193125-26-019438__EX-99.1.htm#t5-r03",
+   "expected_copied_label": "Bauxite production (mdmt)",
+   "expected_period_evidence_array": [
+    "4Q24"
+   ],
+   "cell_text": "9.3"
+  },
+  "SCR-18-q2": {
+   "expected_request_id": "SCR-18-q2",
+   "expected_anchor_id": "SCR-18-anchor",
+   "expected_occurrence": "0001193125-26-019438__EX-99.1.htm#t5-r03-o2",
+   "expected_block_id": "0001193125-26-019438__EX-99.1.htm#t5-r03",
+   "expected_copied_label": "Bauxite production (mdmt)",
+   "expected_period_evidence_array": [
+    "2024"
+   ],
+   "cell_text": "38.3"
+  },
+  "SCR-18-q3": {
+   "expected_request_id": "SCR-18-q3",
+   "expected_anchor_id": "SCR-18-anchor",
+   "expected_occurrence": "0001193125-26-019438__EX-99.1.htm#t5-r03-o3",
+   "expected_block_id": "0001193125-26-019438__EX-99.1.htm#t5-r03",
+   "expected_copied_label": "Bauxite production (mdmt)",
+   "expected_period_evidence_array": [
+    "1Q25"
+   ],
+   "cell_text": "9.5"
+  },
+  "SCR-18-q4": {
+   "expected_request_id": "SCR-18-q4",
+   "expected_anchor_id": "SCR-18-anchor",
+   "expected_occurrence": "0001193125-26-019438__EX-99.1.htm#t5-r03-o4",
+   "expected_block_id": "0001193125-26-019438__EX-99.1.htm#t5-r03",
+   "expected_copied_label": "Bauxite production (mdmt)",
+   "expected_period_evidence_array": [
+    "2Q25"
+   ],
+   "cell_text": "9.3"
+  },
+  "SCR-18-q5": {
+   "expected_request_id": "SCR-18-q5",
+   "expected_anchor_id": "SCR-18-anchor",
+   "expected_occurrence": "0001193125-26-019438__EX-99.1.htm#t5-r03-o5",
+   "expected_block_id": "0001193125-26-019438__EX-99.1.htm#t5-r03",
+   "expected_copied_label": "Bauxite production (mdmt)",
+   "expected_period_evidence_array": [
+    "3Q25"
+   ],
+   "cell_text": "9.3"
+  },
+  "SCR-18-q6": {
+   "expected_request_id": "SCR-18-q6",
+   "expected_anchor_id": "SCR-18-anchor",
+   "expected_occurrence": "0001193125-26-019438__EX-99.1.htm#t5-r03-o6",
+   "expected_block_id": "0001193125-26-019438__EX-99.1.htm#t5-r03",
+   "expected_copied_label": "Bauxite production (mdmt)",
+   "expected_period_evidence_array": [
+    "4Q25"
+   ],
+   "cell_text": "9.4"
+  },
+  "SCR-18-q7": {
+   "expected_request_id": "SCR-18-q7",
+   "expected_anchor_id": "SCR-18-anchor",
+   "expected_occurrence": "0001193125-26-019438__EX-99.1.htm#t5-r03-o7",
+   "expected_block_id": "0001193125-26-019438__EX-99.1.htm#t5-r03",
+   "expected_copied_label": "Bauxite production (mdmt)",
+   "expected_period_evidence_array": [
+    "2025"
+   ],
+   "cell_text": "37.5"
+  },
+  "SCR-19-q1": {
+   "expected_request_id": "SCR-19-q1",
+   "expected_anchor_id": "SCR-19-anchor",
+   "expected_occurrence": "0001193125-26-019438__EX-99.1.htm#t5-r06-o1",
+   "expected_block_id": "0001193125-26-019438__EX-99.1.htm#t5-r06",
+   "expected_copied_label": "Third-party alumina shipments (kmt)",
+   "expected_period_evidence_array": [
+    "4Q24"
+   ],
+   "cell_text": "2,289"
+  },
+  "SCR-19-q2": {
+   "expected_request_id": "SCR-19-q2",
+   "expected_anchor_id": "SCR-19-anchor",
+   "expected_occurrence": "0001193125-26-019438__EX-99.1.htm#t5-r06-o2",
+   "expected_block_id": "0001193125-26-019438__EX-99.1.htm#t5-r06",
+   "expected_copied_label": "Third-party alumina shipments (kmt)",
+   "expected_period_evidence_array": [
+    "2024"
+   ],
+   "cell_text": "9,005"
+  },
+  "SCR-19-q3": {
+   "expected_request_id": "SCR-19-q3",
+   "expected_anchor_id": "SCR-19-anchor",
+   "expected_occurrence": "0001193125-26-019438__EX-99.1.htm#t5-r06-o3",
+   "expected_block_id": "0001193125-26-019438__EX-99.1.htm#t5-r06",
+   "expected_copied_label": "Third-party alumina shipments (kmt)",
+   "expected_period_evidence_array": [
+    "1Q25"
+   ],
+   "cell_text": "2,105"
+  },
+  "SCR-19-q4": {
+   "expected_request_id": "SCR-19-q4",
+   "expected_anchor_id": "SCR-19-anchor",
+   "expected_occurrence": "0001193125-26-019438__EX-99.1.htm#t5-r06-o4",
+   "expected_block_id": "0001193125-26-019438__EX-99.1.htm#t5-r06",
+   "expected_copied_label": "Third-party alumina shipments (kmt)",
+   "expected_period_evidence_array": [
+    "2Q25"
+   ],
+   "cell_text": "2,195"
+  },
+  "SCR-19-q5": {
+   "expected_request_id": "SCR-19-q5",
+   "expected_anchor_id": "SCR-19-anchor",
+   "expected_occurrence": "0001193125-26-019438__EX-99.1.htm#t5-r06-o5",
+   "expected_block_id": "0001193125-26-019438__EX-99.1.htm#t5-r06",
+   "expected_copied_label": "Third-party alumina shipments (kmt)",
+   "expected_period_evidence_array": [
+    "3Q25"
+   ],
+   "cell_text": "2,205"
+  },
+  "SCR-19-q6": {
+   "expected_request_id": "SCR-19-q6",
+   "expected_anchor_id": "SCR-19-anchor",
+   "expected_occurrence": "0001193125-26-019438__EX-99.1.htm#t5-r06-o6",
+   "expected_block_id": "0001193125-26-019438__EX-99.1.htm#t5-r06",
+   "expected_copied_label": "Third-party alumina shipments (kmt)",
+   "expected_period_evidence_array": [
+    "4Q25"
+   ],
+   "cell_text": "2,324"
+  },
+  "SCR-19-q7": {
+   "expected_request_id": "SCR-19-q7",
+   "expected_anchor_id": "SCR-19-anchor",
+   "expected_occurrence": "0001193125-26-019438__EX-99.1.htm#t5-r06-o7",
+   "expected_block_id": "0001193125-26-019438__EX-99.1.htm#t5-r06",
+   "expected_copied_label": "Third-party alumina shipments (kmt)",
+   "expected_period_evidence_array": [
+    "2025"
+   ],
+   "cell_text": "8,829"
+  }
+ }
+}

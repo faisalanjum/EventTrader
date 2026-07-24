@@ -1,0 +1,45 @@
+{
+ "label": "PHASE-6 READER SCREEN v13 (exact-keys response law; validator 37/37)",
+ "independent_examples": 19,
+ "requests_cells": 93,
+ "shared_tables": 8,
+ "unmapped": [],
+ "checks": {
+  "prompt_embedded": true,
+  "no_answer_leak": true,
+  "headings_included": true,
+  "all_93_cells_mapped": true,
+  "tables_deduplicated": true,
+  "counts_reconcile": true
+ },
+ "model_input_bytes": 118000,
+ "cost": {
+  "input_tokens_per_tier": 29500,
+  "output_tokens_per_tier_DERIVED": 6897,
+  "output_derivation": "serialized perfect 93-response LIST = 27589 bytes / 4",
+  "calls_per_tier": 3,
+  "three_tier_input_total": 88500
+ },
+ "hidden_answers_sha": "b4a26aa5e356",
+ "independence": {
+  "fact_rows": 19,
+  "independent_tables": 8,
+  "filings": 7,
+  "companies": 4,
+  "honest_unit": "8 independent tables from 7 filings, 4 companies"
+ },
+ "call_files": [
+  "phase6_screen_call_1.json",
+  "phase6_screen_call_2.json",
+  "phase6_screen_call_3.json"
+ ],
+ "call_bytes": [
+  37110,
+  50932,
+  29958
+ ],
+ "grading_note": "verbatim-slice grading strips the occurrence markers (our annotation) first",
+ "grader": "phase6_screen_grade.py (mechanical; attacks proven in validator)",
+ "cases": 19,
+ "requests": 93
+}
