@@ -4562,3 +4562,16 @@ legitimate, carried TOGETHER with this close record in one honest commit naming
 both sources. This entry itself is the corrective: content verified ON DISK by
 grep before the commit ran. Phase 6 + Route C HELD; push owner-only; no reader
 tokens; no graph writes.
+
+---
+
+## 150-CASE GATE: NOT MEASURED (2026-07-24, his ordered census + ruling)
+
+Read-only join census (zero AI, zero writes): the graph holds ZERO Driver and ZERO
+DriverUpdate nodes (no driver-family labels exist) — Core is dry-run-only by law and
+has never written. Census: buildable 0 / missing 150 / ambiguous 0 / invalid 0; the
+one-case end-to-end cannot run. RULING RECORDED: the Route-A 150-case gate is
+**NOT MEASURED** until real Core-written Drivers exist; fixtures must NOT be
+invented from the answer key; writes must NOT be enabled for this. rebuild_anchor
+itself is consumable (driver/relocation/locator.py; lawful evidence shape at
+driver/core/test_admissions_handoff.py:108-150) — the blocker is data, not machinery.

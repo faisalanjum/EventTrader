@@ -17,7 +17,7 @@ Current: tables — 8 INDEPENDENT tables (19 fact rows, 7 filings, 4 companies) 
 ## 2. Answer-key creation (OWNER RULING 2026-07-24: no human reviewer)
 - Hidden answer keys are created and adjudicated by APPROVED FRONTIER MODELS only.
 - NO human reviewer in the loop (supersedes the earlier human-adjudication + 10%-sample design).
-- Qwen NEVER creates or adjudicates its own answer keys — it is only ever the examinee.
+- A model being evaluated must never create or adjudicate its own hidden answer key.
 - The EXACT frontier-model key method (which models, agreement rule, sampling) is HELD
   for a later separate owner approval before any labeling call runs.
 
