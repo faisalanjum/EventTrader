@@ -17,6 +17,8 @@ Changing FIELDS = a schema amendment (owner review).
 from dataclasses import dataclass, field
 from decimal import Decimal
 
+from driver.core.driver_ids import valid_source_id
+
 __all__ = ["SchemaError", "PreparedFactV1", "RunInputV1"]
 
 _POLARITY_BASES = ("source_framing", "metric_meaning")
@@ -140,6 +142,15 @@ class PreparedFactV1:
                 raise SchemaError("member_refs: each entry carries EXACTLY axis, member, "
                                   "and slice_part, all non-blank strings ([] = "
                                   "verified-empty is legal)")
+            from driver.core.slice_menu import axis_member_pairs
+            if axis_member_pairs(refs) is None:
+                # ONE context carries at most one member per axis, so a claim
+                # naming an axis twice describes no fact that can exist. v2
+                # already refused this; v1 is the contract the production writer
+                # actually consumes, so it has to refuse it too.
+                raise SchemaError(
+                    "member_refs names the same axis more than once — one "
+                    "context carries at most one member per axis")
         # XBRL context is ALL-OR-NOTHING (owner 2026-07-17): concept + time_type + the
         # exact required date(s) + explicit dimensions ([] = verified-empty) travel
         # together or not at all. Exact dates ALONE stay legal for non-XBRL facts.
@@ -173,9 +184,13 @@ class PreparedFactV1:
     def from_dict(cls, d):
         if not isinstance(d, dict):
             raise SchemaError(f"fact must be an object, got {type(d).__name__}")
-        unknown = set(d) - set(cls.FIELDS)
+        unknown = len(set(d) - set(cls.FIELDS))
         if unknown:
-            raise SchemaError(f"unknown field(s): {sorted(unknown)} — the CLI builds "
+            # COUNT, never the caller's own keys: sorting them raised a raw
+            # TypeError whenever they mixed types ({1: ..., "zz": ...}). Same
+            # class as the v2 doors — fixed here too, because v1 is the LIVE
+            # writer input until the atomic switch.
+            raise SchemaError(f"{unknown} unknown field(s) — the CLI builds "
                               f"ids/scopes; stored enrichment fields are never input")
         kw = dict(d)
         if isinstance(kw.get("slice_parts"), list):
@@ -198,8 +213,15 @@ class RunInputV1:
     calendar_override: bool = False
 
     def __post_init__(self):
-        if not isinstance(self.source_id, str) or not self.source_id.strip():
-            raise SchemaError("source_id: required non-blank string")
+        if not valid_source_id(self.source_id):
+            # THE one predicate (driver_ids), asked here so BOTH construction
+            # paths obey it. A non-blank-string check let "x/y" through, and the
+            # writer reads the graph roughly a hundred lines before `build_id`
+            # judges the id — so an unlawful id bought several graph reads
+            # before being rejected. Now it cannot be constructed at all.
+            raise SchemaError(
+                "source_id must satisfy the ONE id law "
+                "(driver_ids.valid_source_id: [A-Za-z0-9._-], colon-free)")
         if not isinstance(self.calendar_override, bool):
             raise SchemaError("calendar_override: must be bool")
         if not isinstance(self.facts, list) or any(
@@ -210,9 +232,9 @@ class RunInputV1:
     def from_dict(cls, d):
         if not isinstance(d, dict):
             raise SchemaError(f"run input must be an object, got {type(d).__name__}")
-        unknown = set(d) - {"source_id", "facts", "calendar_override"}
+        unknown = len(set(d) - {"source_id", "facts", "calendar_override"})
         if unknown:
-            raise SchemaError(f"unknown field(s): {sorted(unknown)} — source metadata "
+            raise SchemaError(f"{unknown} unknown field(s) — source metadata "
                               f"is read from Neo4j, never duplicated in input")
         facts = d.get("facts")
         if not isinstance(facts, list):

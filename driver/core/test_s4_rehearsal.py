@@ -165,6 +165,7 @@ def _stamp_pins(audit_dir):
     return doc
 
 
+@pytest.mark.live
 def test_s4_rehearsal(tmp_path):
     assert os.environ.get("ENABLE_DRIVER_WRITES") != "1", \
         "the write gate must be OFF for the rehearsal"

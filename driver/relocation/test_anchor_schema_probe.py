@@ -139,6 +139,7 @@ AA_ACC = "0000950170-25-024242"    # Alcoa 10-K
 AAL_ACC = "0000006201-25-000010"   # American Airlines
 
 
+@pytest.mark.live
 def test_1_real_edge_aa_numeric_text():
     fid, _ = DI.build_id(AA_ACC, "revenue", period_id="gp_2024-01-01_2024-12-31",
                          slice_parts=(("geography", "United States"),))
@@ -256,6 +257,7 @@ def test_12_cross_wired_company_rejected():
         strict_decode(fid, props(fid, "m_usd", "duration"), drv("revenue", ("q",)), {})
 
 
+@pytest.mark.live
 def test_13_real_cross_company_isolation_two_live_edges():
     """Same driver name, two REAL companies — edges loaded live, exactly one each, keyed by
     each fact's own accession."""

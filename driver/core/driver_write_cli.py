@@ -18,6 +18,7 @@ machine code (free text is never parsed). Internal tool until the S4 decomposer/
 import hashlib
 import json
 import os
+from collections.abc import Mapping
 from decimal import Decimal
 
 from driver.core.driver_fusion import fuse_event
@@ -27,8 +28,8 @@ from driver.core.driver_units import UnitResolutionError, resolve_driver_units
 from driver.core.driver_validators import (_expected_home_name, _home_mismatch,
                                            compose_surprise_scope, validate_fact)
 from driver.core.driver_writer import WriterError, assert_writes_enabled, plan_event_write
-from driver.core.slice_menu import (build_menu, check_member_refs,
-                                    match_xbrl_fact)
+from driver.core.slice_menu import (axis_member_pairs, build_menu,
+                                    check_member_refs, match_xbrl_fact)
 
 __all__ = ["CLI_CODES", "run_event", "load_run_input"]
 
@@ -40,8 +41,15 @@ CLI_CODES = frozenset({
     "MEMBER_LINK_INVALID", "ID_LAW", "FUSION_AMBIGUOUS", "F7", "EMPTY_LABEL",
     "SURPRISE_HOME_NOT_ACCEPTED", "EXECUTION_FAILED", "WRITER_BUSY", "WRITE_GATE",
     "INTERNAL_UNTRACKED",
+    # LIVE and previously UNREGISTERED. `driver_writer` emits NOT_STORABLE on
+    # two branches today, but the reachability test only proved that every
+    # REGISTERED code is emitted — never that every EMITTED code is registered
+    # — so a code the CLI really produces sat outside its own registry.
+    "NOT_STORABLE",
 })   # MEMBER_LINK_DEFERRED retired at step 7 (fence removed) — §11.4 amendment
      # pending owner approval; MEMBER_LINK_INVALID = ref-level law breach parks
+     # The three staged XBRL defaults (SOURCE_UNAVAILABLE, XBRL_CONTRACT_INVALID,
+     # XBRL_BINDING_UNAVAILABLE) are registered AT THE SWITCH, not before.
 _ACCEPTED = ("created", "created_member", "noop", "filled", "updated", "deduped")
 _DECISION = {"created": "written", "created_member": "written", "noop": "merged",
              "filled": "merged", "updated": "merged", "deduped": "merged",
@@ -69,6 +77,13 @@ def _item(index, decision, codes=(), fact_id=None, detail=None):
 def _jsonable(obj):
     if isinstance(obj, Decimal):
         return str(obj)
+    if isinstance(obj, Mapping):
+        # THE ONE SERIALIZER, taught to copy any mapping — not a second one.
+        # An immutable mapping is unknown to `json`, so it landed on the
+        # `str(obj)` line below and the whole audit record was written as the
+        # literal text "mappingproxy({...})". Values are handed back UNTOUCHED
+        # so `json` keeps rendering ints as ints.
+        return {str(k): v for k, v in obj.items()}
     if isinstance(obj, (set, frozenset, tuple)):
         return sorted(str(x) for x in obj) if isinstance(obj, (set, frozenset)) \
             else [_jsonable(x) for x in obj]
@@ -405,10 +420,15 @@ def run_event(run_input, *, store, audit_dir, lock_path=None, enable_writes=Fals
             fact["member_refs"] = [dict(r) for r in pf.member_refs]
             claim = {"time_type": pf.time_type, "start": pf.period_start_date,
                      "end": pf.period_end_date,
-                     "dims": {(r["axis"], r["member"]) for r in pf.member_refs}}
+                     "dims": axis_member_pairs(pf.member_refs)}
             if pf.xbrl_concept_raw not in xbrl_rows:   # once per concept per event
-                xbrl_rows[pf.xbrl_concept_raw] = store.get_xbrl_fact_dimensions(
+                read = store.get_xbrl_fact_dimensions(
                     run_input.source_id, pf.xbrl_concept_raw)
+                xbrl_rows[pf.xbrl_concept_raw] = read.rows
+                # #828: the adapter's silent drops become visible here, ONCE per
+                # concept (the cache guarantees it). v1 only CARRIES them — the
+                # counting has one owner, in the adapter.
+                menu_logs.extend(dict(x) for x in read.exclusions)
             matched = match_xbrl_fact(claim, xbrl_rows[pf.xbrl_concept_raw])
             if matched is None:
                 items[i] = _item(i, "parked", ["MEMBER_LINK_INVALID"],
@@ -562,7 +582,12 @@ def run_event(run_input, *, store, audit_dir, lock_path=None, enable_writes=Fals
                    "fusion_logs": [log for ff in fused for log in ff.logs]}
     if driver_plans is not None:
         audit_extra["driver_plans"] = driver_plans
-    if menu_tokens is not None:                    # step-7 menu ran: FS-18 verdicts
+    # EITHER a slice menu ran (FS-18 verdicts) OR something was excluded. The
+    # menu test alone was a SECOND SILENT-DROP GATE: #828's exclusions were
+    # collected into `menu_logs` and then discarded whenever no menu existed,
+    # which is exactly the invisibility #828 exists to remove. A completely
+    # clean no-menu run still emits nothing, so a quiet event stays quiet.
+    if menu_tokens is not None or menu_logs:
         audit_extra["member_menu"] = {"folds": fold_notes,
                                       "exclusions": menu_logs}
     audit.update(audit_extra)

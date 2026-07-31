@@ -77,6 +77,7 @@ def _fixture_source(monkeypatch):
     return route_a_source.build_source(ACC)
 
 
+@pytest.mark.live
 def test_ce_census_exact_rows_graph_to_builder(monkeypatch):
     _require_neo4j_env()
     sys.path.insert(0, str(Path(__file__).resolve()
@@ -123,6 +124,7 @@ def test_ce_census_exact_rows_graph_to_builder(monkeypatch):
         assert div in ("0", "1")
 
 
+@pytest.mark.live
 def test_full_source_end_to_end_recovers_the_388m_fact(tmp_path, monkeypatch):
     # TRULY end-to-end: the COMPLETE 899-row builder source (real decoys
     # included) through locate with the Core-rebuilt two-part anchor

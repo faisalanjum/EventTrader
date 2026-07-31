@@ -1,0 +1,453 @@
+--- a/.claude/plans/Drivers/FinalDesign/FINAL_DESIGN.md
++++ b/.claude/plans/Drivers/FinalDesign/FINAL_DESIGN.md
+@@ -104,7 +104,7 @@
+
+ - Exactly four `fact_type` values: **metric** (a standing variable/condition, numeric or qualitative, readable again) · **guidance** (the company's own forward outlook) · **surprise** (a delivered actual or promised guide compared with a cross-party expectation) · **action_event** (a discrete happening).
+ - Persistence test for metric-vs-action: a standing level/condition readable again later = metric; otherwise action. `_guidance`/`_surprise` framing overrides; outlook verbs route to guidance.
+-- **The VERBATIM classifier prompt text (DU-05 + DU-06, copied exactly — per DU-07 add NO extra clauses or examples; a tested extra clause overfit):**
++- **The VERBATIM classifier prompt text (DU-05 + DU-06, copied exactly — per DU-07 add NO extra clauses or examples; a tested extra clause overfit):** **[v2.2-rev4 AMENDMENT — OWNER-APPROVED 2026-07-26, form O3 (F14): the reader-facing card may RESTATE these two definitions with ONLY plumbing labels (DU-05/06 names, the OD-21 tag, the provenance sentence) and typography changed; the terminal `_guidance`/`_surprise` suffix notation and the three comparison-type names are RETAINED; meaning-identical, side-by-side verified (rev-4 package F13); THIS locked text remains the meaning authority; DU-07's no-added-clauses rule is unchanged.]**
+   - *DU-05:* "**metric** = any standing variable readable again over time (number/cost/price/rate/count/ratio OR a qualitative condition: weather, sentiment, policy-in-force, labor, brand) — NOT only a number · **guidance** = the company's own forward outlook/target/forecast · **surprise** = a company value — DELIVERED (an actual) OR PROMISED (a company guide) — vs a CROSS-PARTY EXPECTATION (analyst consensus/Street, or for an actual the company's own prior guide), NOT vs a prior-period actual (that's a metric change) and NOT a new-guide-vs-own-prior-guide revision (that's a guidance movement); the 3 types (`actual_vs_consensus` / `actual_vs_guidance` / `guidance_vs_consensus`) live in the `surprise=` fact_scope slot (OD-21) · **action_event** = a discrete thing that happened (decision, transaction, incident, approval, one-off charge)." (The source's trailing "Validated on all 1,282 names: 0 fit none" is validation provenance, not prompt text.)
+   - *DU-06:* "Persistence test: between two events, is there a standing level/severity you could re-read? Yes → metric · No → action_event. A `_surprise`/`_guidance` framing OVERRIDES. Outlook verbs (expect/anticipate/target/plan to) → guidance, never a metric state. Dual framing allowed (`dividend` = action_event vs `dividend_per_share` = metric). Bare-root defaults: litigation/convertible_notes/dividend_policy/restructuring_costs → metric; corporate_restructuring/asset_impairment → action_event."
+ - The permanent type is stamped once at final admission. A Driver without a type cannot accept a fact. Later catalog work cannot retype a fact-bearing Driver.
+@@ -201,11 +201,11 @@
+ ### 6.1 Units — UNIT-01..14, OD-10..13
+
+ - Exact unit enum: `usd` · `m_usd` · `percent` · `percent_yoy` · `percent_sequential` · `percent_points` · `basis_points` · `count` · `x` · `unknown`.
+-- The proven pure V2 resolver decides canonical unit and scale; the semantic extractor only copies signed unscaled source numbers + verbatim raw units.
+-- **Effective UNIT-04 (per-slot hints):** each numeric level or change slot carries its own required raw unit + a unit-kind hint (`money`|`ratio`|`count`|`multiplier`|`unknown`); money kind requires `money_mode` (`aggregate`|`price_like`|`unknown`), null otherwise. Resolve level and change separately.
+-- Validate final enum AND scaled value: glued billions → `m_usd` ×1,000; cents-on-aggregate and pre-scaled mistakes hard-fail; non-USD gaps may stay `unknown` (monitored).
+-- Units live on facts, not Drivers. A stated per-X denominator lives in the NAME while the value uses the base unit; the per-X lint (money level + stated denominator + no `_per_` name) is a hard failure. No `comparison_unit` — comparisons share `level_unit`. `level_unit` required when any level/comparison number is non-null; `change_unit` required when `change_value` non-null; `unknown` legal for either when the source does not safely resolve. No number → no unit resolution.
+-- **OD-11 (growth basis):** `percent_sequential` is a separate series; OD-11 CONSUMES the upstream-resolved `period_scope` (the period resolver runs first) and never infers it. Static-percentage gate first: bare "up/down X%" on a static %-level metric is `unknown` unless points/bps or "of/to X%". A points/bps unit WINS over any sequential/YoY wording; growth is never plain `percent`. YoY/comparable/annual growth → `percent_yoy`. Bare growth on a dated period defaults `percent_yoy` (the standard year-ago convention), overridden to `percent_sequential` ONLY on in-document sequential evidence — never company history. An immediately-prior comparable period → `percent_sequential`. Sentinel-horizon basis → `unknown` (fail-closed). **Annual pin: on an annual period sequential == YoY → always `percent_yoy`; `percent_sequential` is valid only on sub-annual periods (validator: `percent_sequential` + `period_scope=annual` is invalid).** A value stated on two or more bases SPLITS into one fact per basis. A numberless GROWTH fact may take its unit from source framing. Measurement adjustments (constant_currency, organic, adjusted…) are orthogonal — they ride the measurement slot and never decide the basis. Accepted residual, MONITORED: a sequential-guiding company omitting the basis word gets the dated-period YoY default — caught by a report-only monitoring counter, never a human or a list.
++- The READER states the final canonical unit and, per numeric slot, the exact `{value, scale_multiplier, unit_scale_evidence}`; code validates structure and evidence membership and performs exact Decimal multiplication only — it never derives a unit or scale from a name, quote, label, or concept name.
++- **Effective UNIT-04 (per-slot statement):** each populated numeric slot carries its own `{value, scale_multiplier, unit_scale_evidence}`. TEXT-lane facts: the evidence span must appear INSIDE the fact's quote — the SMALLEST span supporting the multiplier ("billion" for 10^9; a unit marker like "$" suffices only at multiplier 1); the evidence may be null ONLY when the multiplier is 1 AND no unit or scale marker exists. XBRL-BACKED facts: verified structured metadata (`ix.scale` + `unit_ref` + `source_evidence.pieces`) replaces quote-local evidence entirely. Level and comparison share `level_unit`; `change_value` carries `change_unit`. Resolve level and change separately.
++- Validate the final enum AND the multiplied value: percent-family/`x` require `scale_multiplier` = 1; cents-on-aggregate hard-fails; non-USD money states `unknown` (monitored). No magnitude-based guessing exists on this path.
++- Units live on facts, not Drivers. A stated per-X denominator lives in the NAME while the value uses the base unit; the shared decomposer emits it once as the packet's `per_x` signal and the ADMISSION KERNEL validates name↔per_x↔evidence — a conflict PARKS (the numeric converter never receives names). No `comparison_unit` — comparisons share `level_unit`. `level_unit` required when any level/comparison number is non-null; `change_unit` required when `change_value` non-null; `unknown` legal for either when the source does not safely resolve. No number → no unit resolution.
++- **OD-11 (growth basis):** `percent_sequential` is a separate series; OD-11 is applied by the MODEL — the reader states the final growth-basis unit directly — and VALIDATED by code, which enforces only the mechanical validators: the annual pin (percent_sequential on an annual period is invalid) and the sentinel fail-close (a dateless horizon with a growth-basis unit parks); the resolved `period_scope` still arrives first. Static-percentage gate first: bare "up/down X%" on a static %-level metric is `unknown` unless points/bps or "of/to X%". A points/bps unit WINS over any sequential/YoY wording; growth is never plain `percent`. YoY/comparable/annual growth → `percent_yoy`. Bare growth on a dated period defaults `percent_yoy` (the standard year-ago convention), overridden to `percent_sequential` ONLY on in-document sequential evidence — never company history. An immediately-prior comparable period → `percent_sequential`. Sentinel-horizon basis → `unknown` (fail-closed). **Annual pin: on an annual period sequential == YoY → always `percent_yoy`; `percent_sequential` is valid only on sub-annual periods (validator: `percent_sequential` + `period_scope=annual` is invalid).** A value stated on two or more bases SPLITS into one fact per basis. A numberless GROWTH fact may take its unit from source framing. Measurement adjustments (constant_currency, organic, adjusted…) are orthogonal — they ride the measurement slot and never decide the basis. Accepted residual, MONITORED: a sequential-guiding company omitting the basis word gets the dated-period YoY default — attacked by hidden-grading fixtures and watched by the report-only monitor, never a human or a list.
+ - **OD-12 (signed axis):** a net loss is negative, never a positive loss magnitude. A charge/provision is positive; a benefit/credit/release/reversal is negative. Bounds follow algebra ("loss up to 2B" = floor at −2B); zero-crossing ranges are legal; a numberless loss has no numeric bounds; conditional downside stays narrative. Co-stated one-sided bounds fuse under the normal within-event rule. The sign SIGNAL can be a noun (loss/charge/benefit), a comparative ("no worse/better than", "narrower/wider" — polarity-read like OD-13: "worse" = a lower value for income; "no worse than $500M / no better than $200M loss" → range −500, −200), accounting notation (`()`/`−`), or context; golden trap fixtures pin the counter-intuitive cases ("up to a loss" = floor; "loss narrowed" = `increased`) and the worked validator encodings: "$1.5-2.0B loss" → range −2000, −1500 (spoken order flips; low≤high catches it free) · "at least a $1B loss" → ceiling null, −1000 · "EPS $(0.10) to $0.05" → range −0.10, 0.05 (zero-crossing) · "impairment charge $2B" → point +2000 · "provision release $50M" → point −50. The offline sign monitor is a light per-driver history-based smoke-alarm ONLY — report-only, never a keyword-matcher (a hidden list), never the primary safety: reliability rests on value-first + naming + `low≤high` + shape hints + fixtures.
+ - **OD-13:** code never assigns beat/miss from sign — meaning decides favorability.
+ - **OD-10 (`series_unit`):** code writes it once at WRITE as a grouping tag. Level-bearing facts → the level's canonical axis (money canonicalized to the driver's one scale within a currency). Delta-only facts fold to the Driver's dimension only when the fact's OWN evidence makes the axis unique (metric nature + quote, never the name); any residual ambiguity → exact `change_unit` (own over-split group) or `unknown`, never absorbed. Numberless facts → `series_unit=null`, EXCEPT a withdrawal or reaffirmation, which copies exactly one clear prior guide's `series_unit` and otherwise fails closed. Reads group by equality only — no unit-family map, no unknown absorption. `series_unit` never rewrites `level_*`/`change_*` (those stay source-faithful).
+--- a/.claude/plans/Drivers/FinalDesign/15_CandidateFactPacket.md
++++ b/.claude/plans/Drivers/FinalDesign/15_CandidateFactPacket.md
+@@ -1,4 +1,4 @@
+-# S2 — the ONE candidate-fact packet + decomposition spec ❄️ FROZEN v1.0
++# S2 — the ONE candidate-fact packet + decomposition spec ❄️ v1.0 (frozen) → v2.0 RE-FREEZE PENDING [O-a owner sign-off; the Block/recipe amendments below take effect at that re-freeze]
+ > **AMENDED by OD-21 (owner-approved 2026-07-14, parallel surprise track · 66 §0.R OD-21 · 95 #42):** fact_scope
+ > gains an optional 4th slot `surprise=<actual_vs_consensus|actual_vs_guidance|guidance_vs_consensus>` after
+ > `measurement` — surprise lane ONLY, CODE-composed (basis_hint × comparison_baseline) pre-fusion, in the id +
+@@ -14,7 +14,7 @@
+
+ ## PART A — The ONE packet (assembled from existing law)
+
+-A channel never mints a name. It hands the shared core ONE object. That object has three blocks, and all three field-lists already exist in the locked design:
++A channel never mints a name. It SUBMITS raw evidence (ChannelContract v1.0); the SHARED CORE decomposer assembles this ONE internal object from that submission — including the per-slot numeric objects, which the channel never builds. The object has three blocks, and all three field-lists already exist in the locked design:
+
+ ### Block 0 — ENVELOPE (per source event) — from 12 FACT-17b top-level
+ `source_id · source_type · ticker · fye_month` [+ optional `calendar_override`] · `event_time`
+@@ -26,8 +26,8 @@
+ - `slice_tokens`, `measurement_spans`, `per_x` are TRANSIENT signals: the kernel folds per_x into the canonical name (NAME-13), measurement_spans into `fact_scope.measurement` (OD-9), slice_tokens into `fact_scope.slice`. They are NOT stored raw.
+
+ ### Block 2 — THE PROVEN FACT (per candidate) — from 12 FACT-17b item + 09 fields
+-`driver_name · driver_state · quote` · value slots `level_low / level_high / change_value / comparison_low / comparison_high / comparison_baseline / value_text / conditions / company_confirmed`
+-- transients (propose-then-discard): `level_unit_raw / change_unit_raw` · 4 per-slot hints (`level_unit_kind_hint / level_money_mode_hint / change_unit_kind_hint / change_money_mode_hint`) · `level_shape_hint / comparison_shape_hint` · `measurement_raw_spans`
++`driver_name · driver_state · quote` · value slots — each populated numeric slot a `{value, scale_multiplier, unit_scale_evidence}` object — `level_low / level_high / change_value / comparison_low / comparison_high / comparison_baseline / value_text / conditions / company_confirmed`
++- transients (propose-then-discard): the per-slot `{value, scale_multiplier, unit_scale_evidence}` objects (the numeric slots themselves; converted then stored as canonical scalars) · `level_shape_hint / comparison_shape_hint` · `measurement_raw_spans` — adapter-derived unit-kind/money-mode hints are ADAPTER-INTERNAL, never rendered to the reader, never grading input; the raw `fmt`/`is_currency` facts remain packet evidence
+ - period fields: `period_start_date / period_end_date / fiscal_year / fiscal_quarter / half / month / long_range_start_year / long_range_end_year / sentinel_class / time_type` (+ `period_scope ∈ {ytd,ttm}` on cumulative)
+ - `slice` = list of `kind:value` tokens or menu-pick refs
+ - Code (not the packet) builds: `id · fact_scope · series_unit · created · date` (09 §3 code-written 6).
+@@ -48,27 +48,27 @@
+ **This is "the one unbuilt bridge." The RULES all exist; they were never assembled into one ordered procedure. It is CHANNEL-INDEPENDENT (fiscal.ai label AND guidance label_slug run the same steps).**
+
+ INPUT: a raw label + context (company, quote, value, period, source, and — if present — the XBRL member).
+-OUTPUT: `{proposed_name, slice_tokens[], measurement_spans[], per_x}` + `fact_type` + unit.
++OUTPUT: `{proposed_name, slice_tokens[], measurement_spans[], per_x}` + `fact_type` + the stated final unit + the per-slot `{value, scale_multiplier, unit_scale_evidence}` objects.
+
+ Ordered (stop-at-first is not the pattern here; each step peels one thing off the label):
+ 0. **Strip direction/impact words** (NAME-11 step 0): rose/headwind/pressure… never in the name (unless a specific reusable force like `glp1_pressure`).
+ 1. **Measurement peel** (NAME-14 / FS-25 / OD-9): pull version/basis qualifiers (adjusted, diluted, constant-currency, core…) into `measurement_spans`. `"Adjusted EBITDA"` → spans=["Adjusted"], residual="EBITDA". Code normalizes spans; producer never invents the token; never assume gaap.
+-2. **Per-X peel** (NAME-13): a stated per-X denominator → `per_x` (goes IN the name; unit stays base). Not stated → none.
++2. **Per-X peel** (NAME-13): a stated per-X denominator → `per_x` (goes IN the name; unit stays base). Not stated → none. Applied exactly ONCE, before matching/writing and before `_guidance`/`_surprise` handling; a name↔per_x conflict PARKS — never a guess.
+ 3. **Portion check** (OD-17): a portion qualifier (current / funded / fee-earning…) STAYS IN THE NAME — never a slice, never measurement. `"current RPO"` → name `current_rpo`.
+ 4. **Name-vs-slice split** (NAME-10/11 · OD-3 / 95 #38): for each remaining qualifier, the LOCAL role test (from quote + this company only): own measured part {segment/geography/product/customer/channel/entity_ownership} → `slice_tokens`; external actor/cause or unclear role → stays in the NAME. `"iPhone Revenue"` → iPhone = own product → `slice=product:iphone`, residual "revenue".
+    - **Slice KIND source:** XBRL member present → kind from the FROZEN axis table (FS-08/11/18, deterministic, code). Text-only → producer proposes kind via the FS-15 / FACT-26f ladder (menu-match → coin → `unknown:` when ≥2 kinds fit — never guess).
+ 5. **Name assembly** (NAME-05/06/07/08/09 · singular-by-default): cause-only, lowercase_snake, familiar/standard phrases whole, one cause per name, + per_x. `"revenue"`.
+ 6. **fact_type stamp** (DU-05/06/07 · OD-1/OD-2): metric / guidance / surprise / action_event; suffix-gate first, then DU-06 persistence test, C2 metric-proof if unclear. A reported KPI value → `metric`; a company forward outlook → `guidance`. Strong-tier, at admission (born-complete).
+-7. **Unit** (04 UNIT-01 · OD-10/OD-11 · unit_resolver): unit_raw + hints → 10-unit enum; code stamps `series_unit`.
++7. **Unit** (04 UNIT-01 · OD-10/OD-11): the reader STATES the 10-unit enum directly + the per-slot `{value, scale_multiplier, unit_scale_evidence}`; code multiplies exactly and stamps `series_unit`.
+
+ Then Block 1 + Block 2 go to the kernel/writer.
+
+ ### AUTHORITY SPLIT (the v1-death guardrail — missing-rule #4)
+-- **CODE (deterministic, never decides meaning):** format norm, measurement token normalization (OD-9), unit resolution, XBRL-member→slice-kind (frozen table), id/fact_scope build, ALL validators.
+-- **LLM (proposes the SEMANTIC parts only):** name-vs-slice role test, the cause-only name, a prose slice's kind, fact_type. Per NAME-03/19 + v1's death, the NAME is ALWAYS LLM-proposed — **never code-parsed from the label string** (that IS the closed-vocab death).
++- **CODE (deterministic, never decides meaning):** format norm, measurement token normalization (OD-9), exact Decimal unit multiplication (the reader states the unit and scale), XBRL-member→slice-kind (frozen table), id/fact_scope build, ALL validators.
++- **LLM (proposes the SEMANTIC parts only):** name-vs-slice role test, the cause-only name, a prose slice's kind, fact_type, driver_state, values/signs/shapes, the final canonical unit + the per-slot scale statement (TEXT lane), per_x, period framing, measurement spans, and abstention. Per NAME-03/19 + v1's death, the NAME is ALWAYS LLM-proposed — **never code-parsed from the label string** (that IS the closed-vocab death).
+ - **KERNEL (strong-judge, final identity authority):** reuse/create/reject, SAME_AS, fact_type/BASE_METRIC confirmation, establishment.
+
+-### Structured-channel nuance (needs owner confirm — folded into missing-rule #4)
++### Structured-channel nuance (RESOLVED by the rev-4 ownership table — final sign-off rides the A1-A6/O-f approvals)
+ For fiscal.ai T1-xbrl records the member is known → slice kind is deterministic (code). But the cause-only NAME and the name-vs-slice decision for TEXT-only records (T2/T3, ~52%) must stay LLM-propose + kernel-judge. Proposed rule: **code may fill format/unit/XBRL-member-slice; the NAME and any prose slice stay LLM-proposed + kernel-judged. No channel ever code-derives a Driver name from its label.**
+
+ ---
+@@ -121,10 +121,10 @@
+ ## PART D — Channel adapter contract v0.1 (all a channel implements; everything else is shared)
+
+ 1. **SELECT** — watch its source; enumerate new source events since its cursor (birth backfill = same enumeration over history, chronological per company).
+-2. **FETCH** — per event, emit RAW ITEMS: `{quote (verbatim) · raw_label_or_claim · stated value(s)/unit text · stated period fields · source cadence (the channel's own series membership, e.g. fiscal.ai quarterly-vs-annual — form alone is ambiguous: Q4 stated in a 10-K, FY in an 8-K) · adjacent period wording the locator saw (column header / "as of" phrase — transient evidence; the marker scan + time_type judgment need it when the bound quote lacks the header) · source_id/source_type · optional XBRL (when the record is XBRL-tagged, ALWAYS): concept qname + the EXACT context (start/end dates, instant-vs-duration type) + the dimension list — a VERIFIED-empty list asserted explicitly (`dimensions=[]`; a missed extraction must never masquerade as consolidated), every supplied dimension carrying BOTH axis and member, never fragments; the period row consumes the context verbatim and enrichment/backstop-A consume the concept *[OWNER AMENDMENT 2026-07-15, Q4 batch — pre-amendment bytes pinned in the Phase-1 freeze manifest]* · optional value_text/conditions + company-confirmation attribution EVIDENCE (guidance; the CORE derives the `company_confirmed` boolean, never the channel) *[OWNER AMENDMENT 2026-07-15, Q1 batch extension — same ruling as the ChannelContract guidance row]*}`.
++2. **FETCH** — per event, emit RAW ITEMS: `{quote (verbatim) · raw_label_or_claim · stated value(s)/unit text FORWARDED VERBATIM — the shared CORE decomposer (never the channel) produces the per-slot {value, scale_multiplier, unit_scale_evidence}; XBRL-backed rows carry STRUCTURED identity (ix.scale / unit_ref / source_evidence), never a fabricated text locator · stated period fields · source cadence (the channel's own series membership, e.g. fiscal.ai quarterly-vs-annual — form alone is ambiguous: Q4 stated in a 10-K, FY in an 8-K) · adjacent period wording the locator saw (column header / "as of" phrase — transient evidence; the marker scan + time_type judgment need it when the bound quote lacks the header) · source_id/source_type · optional XBRL (when the record is XBRL-tagged, ALWAYS): concept qname + the EXACT context (start/end dates, instant-vs-duration type) + the dimension list — a VERIFIED-empty list asserted explicitly (`dimensions=[]`; a missed extraction must never masquerade as consolidated), every supplied dimension carrying BOTH axis and member, never fragments; the period row consumes the context verbatim and enrichment/backstop-A consume the concept *[OWNER AMENDMENT 2026-07-15, Q4 batch — pre-amendment bytes pinned in the Phase-1 freeze manifest]* · optional value_text/conditions + company-confirmation attribution EVIDENCE (guidance; the CORE derives the `company_confirmed` boolean, never the channel) *[OWNER AMENDMENT 2026-07-15, Q1 batch extension — same ruling as the ChannelContract guidance row]*}`.
+ 3. **SUBMIT** — one packet per source event; consume per-item machine-readable outcomes into its ledger.
+
+-Shared side (core-owned, identical for all six): DECOMPOSER (LLM proposes name / prose-slice kind / fact_type; code does format, measurement normalization (OD-9), units, member→slice via frozen axis — Part B) → kernel Stage 0–3 → writer stack → read views. The adapter MAY memoize ONLY the LABEL-pure decomposition parts (name proposal, per_x, portion, the label's slice-token split) per identical (company, label, member) — and a cached result stays a PROPOSAL: each record's per-quote decomposer pass must confirm the cached proposal is consistent with ITS OWN quote (mismatch → fresh decomposition + flag; a label-matched cache must never sail past a quote about something else). Zero identity authority either way — the kernel judges every admission. QUOTE-dependent parts are NEVER memoized — measurement spans, time_type evidence, driver_state, and the marker scans run against EVERY record's own quote (OD-9's never-drop sink is per-quote by definition).
++Shared side (core-owned, identical for all six): DECOMPOSER (LLM proposes name / prose-slice kind / fact_type; code does format, measurement normalization (OD-9), exact Decimal multiplication of the reader's stated scale (TEXT lane) / declared `ix.scale` verification (XBRL lane), member→slice via frozen axis — Part B) → kernel Stage 0–3 → writer stack → read views. The adapter MAY memoize ONLY the LABEL-pure decomposition parts (name proposal, per_x, portion, the label's slice-token split) per identical (company, label, member) — and a cached result stays a PROPOSAL: each record's per-quote decomposer pass must confirm the cached proposal is consistent with ITS OWN quote (mismatch → fresh decomposition + flag; a label-matched cache must never sail past a quote about something else). Zero identity authority either way — the kernel judges every admission. QUOTE-dependent parts are NEVER memoized — measurement spans, time_type evidence, driver_state, and the marker scans run against EVERY record's own quote (OD-9's never-drop sink is per-quote by definition).
+
+ ### D.2 — PRECISE fiscal.ai → packet conversion map v0.1 (owner Q2 2026-07-14)
+ Every row: exact source → exact transform → failure mode. NOTHING guesses; every ambiguity PARKS (arrival-retry).
+@@ -136,7 +136,7 @@
+ | `event_time` | Report.created (PIT stamp) | one Neo4j read per filing (batched per company) | missing → PARK |
+ | `fye_month` | Company record | one lookup per ticker (cached) | missing → PARK |
+ | **period** | T1: the matched `xbrl_fact` context (instant/duration + exact start/end) — AUTHORITATIVE, verbatim (~48% deterministic). T2/T3: `period` (end date) + `form` + **the channel's cadence signal** (quarterly-vs-annual series membership; form alone is ambiguous — Q4 in a 10-K, FY in an 8-K) + **raw period wording** (transient evidence for the marker scan/time_type when the quote lacks the header) → fiscal window via `fiscal_math` (52/53-wk safe). **`time_type` (duration vs instant) is a REQUIRED decomposer output — a semantic judgment, NEVER a default** (fixed 2026-07-14; the old "duration default for flows" line was a disguised guess — flow-vs-stock IS the meaning call): judged from label + quote ("amount over a window" = duration: revenue, costs, shipments · "standing amount at a date" = instant: subscribers, stores, backlog, headcount, balances), aided by two hints — (a) the SAME (ticker,kpi)'s own T1 siblings' XBRL period_type (deterministic borrow; conflict → PARK), (b) the substrate `KNOWN_INSTANT_LABELS` list (hint only, per FACT-18: `time_type` stays authoritative). **UNCLEAR → PARK** — and this park HAS real drains (unlike the window-marker case): a later T1 sibling of the KPI, or the driver's concept-link (menu carries `period_type`), resolves it → arrival-retry | code (shared resolver is the sole period authority — FACT-17b) | TWO tripwires, both → **PARK**, never trust either side silently: (a) T1-vs-form mismatch (e.g. 9-month context on a "quarterly" record = YTD leak); (b) **T2/T3 contradicting-marker scan** (added 2026-07-14): an explicit window marker in the quote/snippet ("nine/six months", "year-to-date", "trailing/twelve months", "fourth quarter" on an annual stamp) that contradicts the stamped window. Default derivation stays when no marker contradicts — NOT a guess: the harvest's certified Q-vs-YTD binding (#760 guard, 0 leaks) disambiguated with fuller context than the adapter has, and a no-marker record parked "for evidence" would never drain (nothing new arrives for a text record) = losing certified facts. Wrong time_type NETS (all existing law): the marker scan ("as of" on a duration stamp); concept-link **backstop A = the instant/duration veto** (FACT-29; menu carries `period_type`, FACT-30) — a duration-stamped fact whose driver links an instant concept = flag; FACT-16.15 (start==end duration = illegal input) |
+-| **unit + value** | `value` = the **source-stated SIGNED value, unscaled** (wording fixed 2026-07-14 — "absolute" meant unscaled/full-magnitude, NEVER math `abs()`; OD-12 signed value-space: losses/negatives stay negative — a demonstrated failure class here: the mini-exam truth int() bug turned EPS −0.2 → 0) + `fmt` + `is_currency` | adapter emits `level_unit_raw` (usd/percent/count from fmt) + `level_unit_kind_hint` (money/ratio/count) + `level_money_mode_hint` (aggregate; price_like only for per-X KPIs) + `level_shape_hint='point'`; shared resolver canonicalizes scale (money → the driver's one scale) — deterministic division, no LLM, **sign untouched**. **Free belt+braces: re-assert `value_ok(value, fmt, quote)`** before submit — SCOPE (2026-07-14): the gate guarantees the number appears in the quote at a numeric boundary, NOT that the binding is the correct KPI/period/slice (binding correctness = the binder+verify pass + per-part sample audits; cf. the 13 coincidental small-value mis-bindings found and removed in Part 1); value_ok's sign handling (parenthetical negatives "(0.2)") verified at adapter build | resolver error (cents-on-aggregate, pre-scaled), value_ok fail, or value↔quote SIGN mismatch → **hard-fail → PARK** |
++| **unit + value** | `value` = the **source-stated SIGNED value, unscaled** (wording fixed 2026-07-14 — "absolute" meant unscaled/full-magnitude, NEVER math `abs()`; OD-12 signed value-space: losses/negatives stay negative — a demonstrated failure class here: the mini-exam truth int() bug turned EPS −0.2 → 0) + `fmt` + `is_currency` | adapter FORWARDS the raw declared facts only — `value` + `fmt` + `is_currency` + the structured XBRL shape (`xbrl.ix.scale`, `unit_ref`, exact concept/period/dimensions, `source_evidence.pieces` incl. header/footnote scale evidence) — the derived unit hints are RETIRED per O-f (atomically, after the boundary proof; raw values, format flags, scale evidence, periods, and exact XBRL metadata preserved); XBRL-backed facts scale ONCE by the DECLARED `ix.scale` (code-verified, never double-scaled); text facts scale by the reader's stated per-slot {value, scale_multiplier, unit_scale_evidence} — no LLM in the arithmetic, **sign untouched**. **Free belt+braces: re-assert `value_ok(value, fmt, quote)`** before submit — SCOPE (2026-07-14): the gate guarantees the number appears in the quote at a numeric boundary, NOT that the binding is the correct KPI/period/slice (binding correctness = the binder+verify pass + per-part sample audits; cf. the 13 coincidental small-value mis-bindings found and removed in Part 1); value_ok's sign handling (parenthetical negatives "(0.2)") verified at adapter build | conversion error (cents-on-aggregate, multiplier/evidence structure fail, declared-scale mismatch), value_ok fail, or value↔quote SIGN mismatch → **hard-fail → PARK** |
+ | **measurement** | qualifier spans, grounded in this priority: (1) the QUOTE (the company's own text) · (2) the label ONLY when tier=T2 (T2 verified the label tokens sit next to the value in the filing) | decomposer copies exact spans → `measurement_raw_spans`; CODE normalizes (OD-9: lowercase → non-alnum runs→`_` → maximal contiguous spans = one token); plain KPIs → empty set (never assume gaap) | label-only qualifier with no quote/tier support (vendor wording, not source) → **PARK** — OD-9 is source-grounded; fiscal.ai's label is a vendor label |
+ | **slice** | T1: `xbrl_fact` → (axis_qname, member_qname, member label) | `classify(axis)` via the FROZEN table (code): SLICE_AXES → kind + normalized member label, emitted as a MENU-PICK REF (writer attaches MAPS_TO_MEMBER + slice_part free — FS-21); unknown axis → `unknown:xbrlaxis_<hex>__<member>` sentinel; multi-member → code-sort, join ';' | NON_SLICE axis or FS-20 elimination member → **PARK+log** (accounting construct — never silently consolidate, OD-17c) |
+ | | T2/T3 (no member): the label's own-part qualifier | decomposer ladder (NAME-10/11 local role test) + FS-15/FACT-26f kind ladder vs the company PIT menu: menu-match → pick · prose-clear → coin `kind:value` · ≥2 kinds fit → `unknown:<value>` · whole-company → omit slice | never guess a kind (guessed kind = fake axis-grade confirmation) |
+@@ -178,6 +178,6 @@
+
+ - **fiscal.ai "iPhone Revenue" (AAPL, $201,183M, FY2024, 10-K, member=IPhoneMember):**
+   decomp → measurement=∅ · per_x=none · portion=none · name-vs-slice: iPhone=own product → `slice=product:iphone` (kind from frozen axis, member present) · name=`revenue` · fact_type=`metric` · unit=`m_usd`.
+-  packet → Block1{proposed_name=revenue, slice_tokens=[product:iphone]} + Block2{metric fact: level_low=level_high=201183, level_unit=m_usd, quote="iPhone $ 201,183", period FY2024}. Born-complete: first DriverUpdate rides in.
++  packet → Block1{proposed_name=revenue, slice_tokens=[product:iphone]} + Block2{metric fact — an XBRL-BACKED row: displayed value 201183 + STRUCTURED identity (ix.scale=6, unit_ref=usd, source_evidence pieces incl. the "(in millions)" header) → verified ONCE by code → 201,183 m_usd; level_unit=m_usd, quote="iPhone $ 201,183", period FY2024. (A TEXT-lane fact would instead carry {value, scale_multiplier, unit_scale_evidence} with the evidence INSIDE its quote — extend or abstain.). Born-complete: first DriverUpdate rides in.
+ - **fiscal.ai "Adjusted EBITDA":** measurement peel → spans=["Adjusted"], name=`ebitda`, measurement=`{adjusted}` (the exact 95 #2 retired-defect class — proves the decomposition works). NOT `adjusted_ebitda`.
+ - **guidance label_slug "adjusted_ebitda" (old Neo4j regime):** SAME decomposition → name=`ebitda`, measurement=`{adjusted}`, fact_type=`guidance`. Confirms decomposition is channel-independent (guidance channel must run it too; old label_slugs are raw labels, not names).
+--- a/.claude/plans/Drivers/FinalDesign/BUILD_AND_OPERATIONS.md
++++ b/.claude/plans/Drivers/FinalDesign/BUILD_AND_OPERATIONS.md
+@@ -22,23 +22,25 @@
+ channel adapter (SELECT · FETCH · SUBMIT, per ChannelContract.md)
+    -> raw event packet (one per source event, chronological per company)
+    -> shared decomposer (ONE prompt+code stack for ALL channels)
+-   -> internal Candidate Fact Packet (frozen v1.0 — §2)
++   -> internal Candidate Fact Packet (frozen v1.0 → v2.0 re-freeze pending O-a — §2)
+    -> admission kernel (reuse/create/reject/park; strong-judge tier)
+    -> deterministic writer + validators + enrichment
+    -> outcomes returned to the channel ledger (written/merged/parked/skipped/rejected)
+ ```
+
+-## 2. The internal core packet (frozen Candidate Fact Packet v1.0)
++## 2. The internal core packet (frozen Candidate Fact Packet v1.0 → v2.0 RE-FREEZE PENDING [O-a])
+
+ - **The frozen source file `15_CandidateFactPacket.md` stays the temporary FIFTH live file** — owner-frozen
+   2026-07-14, amended twice by the owner 2026-07-15 (Q4 XBRL row, then the Q1-extension on the FETCH
+   guidance clause; current post-amendment sha `aa7239ed…`, pre-amendment baseline `86b2fc17…` pinned in the
+-  Phase-1 manifest). Relocating its content into this file requires explicit
++  Phase-1 manifest; the sha is RE-STAMPED by the O-a v2.0 re-freeze sweep in the SAME atomic commit that applies the packet amendments — no stale-pin window). Relocating its content into this file requires explicit
+   owner approval plus a byte/hash proof; until then this section only summarizes and points.
+ - Structure ("three blocks" = three required + one optional): Block 0 event envelope (source id/type, ticker,
+   fiscal-year-end, optional calendar override, event time) · Block 1 transient identity signals (proposed name,
+   slices, measurement spans, per-X, quote) · Block 2 the proven fact (all source values/text/conditions/
+-  attribution evidence, raw units + per-slot hints, shape hints, period inputs, slices; code builds identity) ·
++  attribution evidence, the per-slot {value, scale_multiplier, unit_scale_evidence} objects + stated final
++  units, the MODEL-owned shape hints (a NAME COLLISION with — not the same thing as — the RETIRED
++  adapter-derived O-f hint fields), period inputs, slices; code builds identity) ·
+   Block 3 optional verdict (target, direction, force, confidence, mode, producer).
+ - **The unification:** kernel Stage-0 `evidence_atom` ≡ the Block-2 fact item. Block 1 + Block 2 travel as ONE
+   object; on CREATE the same packet's Block 2 becomes the Driver's first DriverUpdate (born-complete,
+@@ -46,7 +48,7 @@
+ - Shared decomposition order (fixed): strip direction/effect words → peel measurement spans → keep stated per-X
+   in the name → keep portion qualifiers in the name → local own-part-vs-external name/slice test → assemble the
+   canonical name → stamp permanent fact type (suffix gate, persistence test, metric-proof) → resolve units,
+-  stamp `series_unit`. Authority split: code owns format norm, axis tables, unit/period/ID build, ALL validators;
++  stamp `series_unit`. Authority split: the MODEL decides unit/scale/time meaning (stated per slot); code owns format norm, axis tables, exact Decimal arithmetic + declared-scale verification, period/ID build, ALL validators;
+   the LLM proposes ONLY the semantic parts (name-vs-slice role, cause-only name, prose slice kind, fact_type);
+   the kernel is final identity authority. **No channel ever code-derives a Driver name from its label.**
+ - A label-only proposal may be cached only with per-quote confirmation; quote-dependent measurement, time,
+@@ -77,7 +79,7 @@
+   `time_type` is a REQUIRED semantic output, never defaulted; T1-sibling period type and `KNOWN_INSTANT_LABELS`
+   are hints only (conflict → PARK). PARK on T1 context-vs-form mismatch or an explicit contradicting window
+   marker. Duration with equal start/end is invalid; instant is the legal one-day form.
+-- Preserve signed unscaled source value + `fmt`; code scales without changing sign; boundary and sign guards on.
++- Preserve signed unscaled source value + `fmt`; code multiplies the stated scale exactly without changing sign; sign guards on (no magnitude/boundary guessing on this path).
+ - Measurement from the quote first or a verified label path; otherwise park. Tagged members use the frozen
+   axis/menu/unknown-sentinel logic; untagged prose uses the same local kind ladder.
+ - A bare table value is `reported`; a quote-stated comparison routes through DU-09. Quote required always.
+@@ -193,8 +195,9 @@
+   single-date proposal; real-calendar-validated; single-date form illegal) + the 4 sentinels; ONE text normalizer (ASCII-fold/casefold/
+   runs→`_`; empty ⇒ REJECT-park) · ONE decimal canonicalizer (no exponent/trailing zeros; −0→0; floats banned);
+   OD-8 hash = sha256 over the 10 slots as canonical STRINGS in compact ASCII JSON. Operative law = the code +
+-  frozen vectors: `driver/core/driver_ids.py` + `driver/core/test_driver_ids.py` (52 tests incl. 14 pinned
+-  vectors with computed hashes; changing a pinned vector = an owner-level ID-law amendment).
++  frozen vectors: `driver/core/driver_ids.py` + `driver/core/test_driver_ids.py` (the pinned computed-hash
++  vector suite — counts live in the test file itself, never restated here; changing a pinned vector = an
++  owner-level ID-law amendment).
+ - **Writer:** one atomic write; MERGE on id; no-op re-runs detected by DIRECT FIELD COMPARISON against the
+   existing node (no stored fact hash — `evhash16` retired); `created` only on create; legal non-null fields; a sparse rerun
+   never null-clobbers a richer value (`SET x = null` REMOVES a property in Neo4j — validate before any SET);
+@@ -219,21 +222,21 @@
+   invalid dates → all PARK; zero values validated via is-not-None); bands sized so the KNOWN TESTED calendars
+   (52/53-wk, KR/COST irregular quarters, full-year YTD, January-to-date) pass. P14 later replaces ONLY the
+   temporary labels/bands — the basic input validation is permanent.
+-- **CLI order:** hints → compose/validate surprise → fuse → period/slice/measurement → units/canonical values →
++- **CLI order:** per-slot statement intake (stated units + {value, scale_multiplier, unit_scale_evidence} objects) → compose/validate surprise → period → units/canonical values (BEFORE fusion — the §11.4 owner amendment) → slice/measurement → fuse →
+   collision → ID → validate → write; plus code-served PIT prior view (`date <` source time), sidecar, park
+   ledger, shell seam.
+ - **Build order:** 1 IDs/scope/unknown-axis round-trip · 2 period resolver + proofs (21 tests, Dec/non-Dec
+   YTD+TTM, parity, write-once mismatch guard, and the `HAS_XBRL` race guard shipped as a PRODUCER ELIGIBILITY
+-  check, never inside the resolver — PER-20) · 3 unit relocation + per-slot hints + lint (keep the resolver
+-  parity test in permanent CI — it calls private old-Guidance helpers) · 4 writer/constraints/field validators/
++  check, never inside the resolver — PER-20) · 3 unit statement + per-slot objects + kernel-side per-X validation (the legacy
++  resolver-parity CI is retired for this path — it intentionally diverges from old-Guidance behavior) · 4 writer/constraints/field validators/
+   lane fixtures · 5 CLI · 6 optional old-Guidance dry-run QA fixture (never production replay) · 7 slice/menu
+   tables from a FRESH graph census · 8 verdict writer + DCM · 9 concept linker + rollout gates (vetoes C/D and
+   the historical PIT menu query were spec-only — build before rollout) · 10 read layer + golden tests · 11
+   dual-producer probe when real producers exist.
+ - **Acceptance gates (in order, every one mechanical — `12` §12):**
+-  1. Resolver gates: the 21 period tests + YTD/TTM proof + `_ensure_period` parity · unit relocation 29+7 green + parity tripwire · full validator suite TDD (every FACT-16 rule has a failing-then-green test).
+-  2. Archive-backed guidance fixture test (optional QA, never a Track C gate): old rows sampled in DRY-RUN for resolver/read parity; test-only shims derive the missing hints (shape from low/high pattern, unit from `canonical_unit`); fixture Driver nodes minted from the sampled label_slugs in DRY-RUN; exact mappings: label_slug → driver_name VERBATIM · a real narrower segment → `segment:slug(segment)` · legacy Total/empty → omitted slice; member-linkless; never writes production facts.
+-  3. Synthetic lane fixtures: one golden item per lane × shape (point/range/floor/ceiling/numberless/delta-only) + planted traps (point-as-low-only · missing hint · sign flip · consensus-on-metric · value_text-with-number · duration start==end · fabricated period · two-scenario same-event collision → both quote_hashed · per-X name/unit mismatch · unknown-axis hex round-trip). **OD-21 FAILURE traps (validate BEFORE fusion; must hard-fail/PARK with the right reason):** F1 `surprise=` missing on a surprise fact · F2 `surprise=` on a non-surprise fact · F3 missing/misplaced `surprise_basis_hint` · F4 missing `comparison_baseline` · F5 `guidance`+`previous_guidance` combo → REJECT (guide-vs-own-prior = movement, not surprise) · F6 grounded surprise with no in-batch home fact → fail-closed PARK, then the WHOLE event re-extracted (never orphan-only replay) · F7 impossible tense (`actual_vs_*` on a not-ended period) · F8 ungrounded surprise ("results beat") → PARK, never dropped · F9 a candidate sibling mismatching on ANY ONE of {family, period, period_scope, slice, measurement, value, unit} — each tested SEPARATELY — rejected as a match → PARK. **OD-21 POSITIVE fixtures (must pass):** P1 outlook surprise + later earnings surprise on the same driver+period survive as TWO series · P2 same-event "beat consensus AND own guidance" splits into TWO surprise facts · P3 guide range containing consensus → `in_line` · P4 an old guide restated after period end stays `guidance_vs_consensus` via the basis hint · P5 a numberless grounded surprise writes WITH its numberless home sibling · P6 all three valid basis×baseline mappings compose · P7 two facts identical on every key field except `surprise=` stay SEPARATE · P8 a lower-is-better beat (opex/cost/inventory) is ACCEPTED, not sign-rejected. Only P1/P2/P7 need the real fusion + read-collapse code and are BLOCKED until the Track-B build; the failure traps and other positives are static/validator-level and run now.
++  1. Resolver gates: the 21 period tests + YTD/TTM proof + `_ensure_period` parity · the new conversion suite green (multiply-only converter + evidence membership + the boundary fixtures; the hint-era 29+7/parity gate is RETIRED [PENDING O-c/O-d sign-off]) · full validator suite TDD (every FACT-16 rule has a failing-then-green test).
++  2. Archive-backed guidance fixture test (optional QA, never a Track C gate): old rows sampled in DRY-RUN for resolver/read parity; the optional test-only shims are RETIRED (rev-4): already-canonical fixture values admit no lawful {value, scale_multiplier, unit_scale_evidence} synthesis — a blind multiplier-1 shim would mis-scale m_usd a million-fold; define an exact evidence-backed inverse or drop the fixture (dropped); fixture Driver nodes minted from the sampled label_slugs in DRY-RUN; exact mappings: label_slug → driver_name VERBATIM · a real narrower segment → `segment:slug(segment)` · legacy Total/empty → omitted slice; member-linkless; never writes production facts.
++  3. Synthetic lane fixtures: one golden item per lane × shape (point/range/floor/ceiling/numberless/delta-only) + planted traps (point-as-low-only · missing/invalid scale_multiplier or unit_scale_evidence · sign flip · consensus-on-metric · value_text-with-number · duration start==end · fabricated period · two-scenario same-event collision → both quote_hashed · per-X name↔per_x mismatch (kernel-side) · unknown-axis hex round-trip). **OD-21 FAILURE traps (validate BEFORE fusion; must hard-fail/PARK with the right reason):** F1 `surprise=` missing on a surprise fact · F2 `surprise=` on a non-surprise fact · F3 missing/misplaced `surprise_basis_hint` · F4 missing `comparison_baseline` · F5 `guidance`+`previous_guidance` combo → REJECT (guide-vs-own-prior = movement, not surprise) · F6 grounded surprise with no in-batch home fact → fail-closed PARK, then the WHOLE event re-extracted (never orphan-only replay) · F7 impossible tense (`actual_vs_*` on a not-ended period) · F8 ungrounded surprise ("results beat") → PARK, never dropped · F9 a candidate sibling mismatching on ANY ONE of {family, period, period_scope, slice, measurement, value, unit} — each tested SEPARATELY — rejected as a match → PARK. **OD-21 POSITIVE fixtures (must pass):** P1 outlook surprise + later earnings surprise on the same driver+period survive as TWO series · P2 same-event "beat consensus AND own guidance" splits into TWO surprise facts · P3 guide range containing consensus → `in_line` · P4 an old guide restated after period end stays `guidance_vs_consensus` via the basis hint · P5 a numberless grounded surprise writes WITH its numberless home sibling · P6 all three valid basis×baseline mappings compose · P7 two facts identical on every key field except `surprise=` stay SEPARATE · P8 a lower-is-better beat (opex/cost/inventory) is ACCEPTED, not sign-rejected. Only P1/P2/P7 need the real fusion + read-collapse code and are BLOCKED until the Track-B build; the failure traps and other positives are static/validator-level and run now.
+   4. Concept-link gates: backstop A-D unit tests + `vetoed_correct == 0` invariant + PIT menu-query proof + XC-16 before any full-universe run · the XC-17 sampling monitor live at rollout (balance/period_type-vs-expected-signature check + abstention-by-fact_type tracking; structural slips only — scope mismatches need XC-16/the periodic audit) · XC-18 scale rules (resolve once per company × base-metric driver + store; one batched LLM call per company; cache only if volume bites).
+   5. Dual-producer probe: ≥2 independent producer runs over a pre-registered PIT-filtered sample; score field-level, state-lane, and fact-PRESENCE disagreement; grader ≠ producer, graded once; thresholds proposed after first calibration (protocol pinned now, bar = owner after data).
+   6. Read-view gates: collapse/tie-break/day-boundary golden tests (incl. an after-hours 8-K ET-vs-UTC case) · T12.9 grouping fixtures (renamed label groups; a CONFLICT stays split) · two-mode PIT proof (backtest at T excludes a date==T fact; live sees it).
+@@ -771,8 +774,8 @@
+ DriverPeriod dates are write-once; mismatch hard-fails · the inherited period cascade may fail OPEN on infra
+ errors — log degradation; the Driver wrapper still hard-fails unresolved items · route `calendar_override`
+ before fiscal cache branches (read too late in the old substrate) · the pure old period builder can mint a
+-year-2000 month when fiscal year is missing — forbidden · the unit resolver calls private old-Guidance helpers —
+-parity test in permanent CI · raw `$/barrel` can resolve dangerously without hints — the per-X hard failure is
++year-2000 month when fiscal year is missing — forbidden · the retired hint-era resolver called private old-Guidance helpers —
++its parity CI retires with it · raw `$/barrel` resolves via the reader's stated unit + the `per_x` signal — the kernel-side name↔per_x park is
+ load-bearing · concept vetoes C/D + the PIT menu query were spec-only — build before rollout · `<` vs `<=`:
+ backtest/history reads strict `< as_of`; write/menu visibility `<= event public time` · the in-menu check is
+ exact string equality — same qname prefix form on both sides · graph quirks: `is_numeric` stored as string `'1'`;
+@@ -802,12 +805,12 @@
+    grammar recipe + namespace registry (`du:`/`dcm:`/`gp_`) + fixed test vectors, all in §5's ID-shape entry;
+    operative law = `driver/core/driver_ids.py` + its frozen vector suite.
+ 4. **Adapter/writer machine contracts — PERMANENTLY PARTIAL until S4 (owner-locked split, 2026-07-17):**
+-   the INTERNAL WRITER CONTRACT v3.6 is OWNER-APPROVED and its INTERNAL portion CLOSED 2026-07-17
+-   (PreparedFactV1 schema passed review — 39 fields, XBRL all-or-nothing, blanket blank rejection; §11.4
++   the INTERNAL WRITER CONTRACT v4 [PENDING OWNER SIGN-OFF O-d; supersedes the owner-approved v3.6 of 2026-07-17]
++   (PreparedFact v2 schema — 34 total / 32 model-owned fields, XBRL all-or-nothing, blanket blank rejection; §11.4
+    stays PERMANENTLY PARTIAL: the public channel portion remains open until S4). The Step-5 CLI is an INTERNAL tool until the decomposer/kernel exist. Flow: prepared
+    facts → load stored source + typed Driver → deterministic tail → validate + provisional plan → dry-run
+    OR one non-retried transaction (final plan in-tx) → durable write-ahead audit record. Binding rules:
+-   input = `PreparedFactV1` dataclass pinned to the frozen packet (sha `aa7239ed…`) Block 2 + `source_id` +
++   input = the PreparedFact v2 dataclass pinned to the RE-FROZEN packet (v2.0 sha assigned at the O-a re-freeze) Block 2 + `source_id` +
+    optional `calendar_override`, unknown fields reject, JSON parsed exact (`parse_float=Decimal`,
+    NaN/Infinity reject), source time/type/company read FROM NEO4J (duplicated input metadata never trusted),
+    the CLI builds ids/scopes · deterministic tail IN the CLI per this section's locked order — AMENDED at
+--- a/.claude/plans/Drivers/experiments/harness/exp5_scoring_spec_v3.md
++++ b/.claude/plans/Drivers/experiments/harness/exp5_scoring_spec_v3.md
+@@ -7,23 +7,24 @@
+ > path (no exam-only shim) · exact would_park math · qualified graders ·
+ > raw-decimal preservation · "eligible for admission" wording.
+
+-## 1. Order-independent one-to-one matching (replaces greedy file-order)
++## 1. Matching — the rev-4 Part D law (exact one-to-one bijection)
+
+-Candidate criterion unchanged (quote ≥20-char overlap OR canonical value
+-equality). Resolution is a fixpoint, order-free by construction:
+-1. Build the full bipartite candidate graph gold ↔ produced per event.
+-2. Repeat until no change, each round computed SIMULTANEOUSLY from the current
+-   graph: (a) golds with exactly ONE live candidate; (b) a produced fact claimed
+-   by exactly ONE such gold → COMMIT the pair, remove both; (c) a produced fact
+-   claimed by >1 such golds → that connected group is AMBIGUOUS, removed.
+-3. Anything still multi-candidate at fixpoint → AMBIGUOUS (grader channel;
+-   unresolved ties still block PASS).
+-4. A committed pair consumes its produced fact GLOBALLY (one-to-one everywhere,
+-   presence_disagreement included).
+-Tests: permutation-invariance PROPERTY (score identical under random shuffles of
+-gold AND produced order — the reproduced defect becomes the RED regression) +
+-the forced-choice propagation case (2 pairs, 0 ambiguous, both orders) + the
+->1-claimants case → grader queue in both orders.
++Candidate criterion RETIRED (rev-4 Part D law): auto-link ONLY an exact
++complete canonical record + exact locator, unique both ways; duplicate golds
++detected FIRST — the whole duplicate-gold group is INCONCLUSIVE (adjudication, never first-match); the exact complete canonical record compares the THREE object fields per numeric slot ({value, scale_multiplier, unit_scale_evidence} — converted scalars never score); ALL remaining facts go to build-time grading — no filters, no
++quote-only fallback.
++
++### HISTORY — superseded matching algorithm (record only, not active law)
++> **v3 (superseded by the rev-4 Part D law)** — the old fixpoint algorithm, record only:
++> 1. Build the full bipartite candidate graph gold ↔ produced per event.
++> 2. Repeat until no change, each round computed SIMULTANEOUSLY from the current
++>    graph: (a) golds with exactly ONE live candidate; (b) a produced fact claimed
++>    by exactly ONE such gold → COMMIT the pair, remove both; (c) a produced fact
++>    claimed by >1 such golds → that connected group is AMBIGUOUS, removed.
++> 3. Anything still multi-candidate at fixpoint → AMBIGUOUS (grader channel).
++> 4. A committed pair consumes its produced fact GLOBALLY.
++> Its permutation-invariance and propagation regressions carry forward against
++> the Part-D matcher (order-free must remain provable), rebuilt at implementation.
+
+ ## 2. Abstention semantics + exact would_park math (owner Q1 ruling, 2026-07-24)
+
+@@ -36,7 +37,7 @@
+
+ An abstention is **gold-linked** when it is a one-to-one tie to an OTHERWISE-
+ UNMATCHED gold fact (its quote covers a du_worthy gold fact that no produced
+-fact matched). The abstention's quote is located by its `occurrence` field — a GLOBAL 1-based count — scan the event's `text_parts` in canonical order and count each verbatim match left-to-right within a part, continuing the SAME count across parts (never reset at a part boundary); a match never spans two parts — required only when the quote repeats (audit-only, outside the 37 PreparedFact fields). Only gold-linked abstentions are parks:
++fact matched). The abstention's quote is located by `part_ref` + `occurrence_in_part` — per-part; null when the quote is unique in that part, else the 1-based left-to-right count within THAT part; code-verified against the part text (audit-only, outside the 32 PreparedFact v2 item fields). Only gold-linked abstentions are parks:
+
+ ```
+ recall     = unambiguously-matched du_worthy gold / total du_worthy gold
+@@ -61,7 +62,7 @@
+ resolvers, and returns the write-ahead audit with park codes WITHOUT opening
+ `store.transaction()` (that opens only under enable_writes + ENABLE_DRIVER_WRITES,
+ :607). The scorer builds a `RunInputV1` from the produced facts via
+-`PreparedFactV1.from_dict` and calls run_event dry-run; the produced-fact
++the PreparedFact v2 `from_dict` and calls run_event dry-run; the produced-fact
+ classification IS the real audit. **`fact16_checks.py` (the second rule engine,
+ own `_NUMY` regex + duplicated enums) is TO BE RETIRED (planned, not yet done —
+ the scorer still imports `check_item`, score_exp5.py:50).** No exam-only
+@@ -101,14 +102,14 @@
+   wrong (values · period · slice · state · units · basis · polarity ·
+   name-meaning), OR an unsupported extra (§5). One → EXAM FAIL.
+ - **Capability bars (all still GATES, AND-ed with the safety gate) — the LOCKED
+-  set + LOCKED formulas (workorder:643):** recall ≥95 single / ≥98 union ·
++  set + LOCKED formulas (the WorkOrder locked-bars block):** recall ≥95 single / ≥98 union ·
+   wrong-lane 0 · **`value_shape_acc` ≥98 computed EXACTLY as the current
+   certified scorer does — the POOLED ratio `code_ok / code_all` over the
+-  code-comparable fields (score_exp5.py:423), NOT a per-field MIN** · state ≥95 ·
++  code-comparable fields (score_exp5.py::score_arm), NOT a per-field MIN** · state ≥95 ·
+   would_park ≤10 (per §2). I do not alter the locked formula.
+ - **PROPOSED refinement (owner-only, NOT applied):** the pooled formula lets a
+-  low-rate wrong-hint dilute (the round-17/18 dilution class). A fix — recompute
+-  `value_shape_acc` as the MIN over the value/shape/unit-hint field group so a
++  low-rate wrong-unit dilute (the round-17/18 dilution class). A fix — recompute
++  `value_shape_acc` as the MIN over the value/shape/final-unit field group so a
+   single weak field can't hide — is a REAL improvement but changes a LOCKED
+   formula → owner ratification required. Until then it is REPORT-ONLY alongside
+   the locked pooled number; the gate uses the locked formula.
+@@ -123,44 +124,40 @@
+ ## 5. Extras classification + INCONCLUSIVE law
+
+ Every unmatched ACCEPTED produced fact → exactly one bucket: (1) **duplicate**
+-of a matched fact → dedup, no penalty; (2) **genuine key miss** (a real fact the
++of a matched fact → deduplicated for counting (no double credit) BUT recorded
++as an emit-once CONTRACT VIOLATION feeding the reliability gate — a run with
++duplicates cannot PASS silently; (2) **genuine key miss** (a real fact the
+ key lacks) → the run is INCONCLUSIVE for the affected bar(s); the key is
+ VERSIONED (erratum recorded, scores never retro-edited) and the retest uses
+ FRESH unseen cases; (3) **unsupported** → confirmed-wrong accepted fact → safety
+ gate FAIL.
+
+-## 6. Decimal-safe transport — TO BE PROVEN (open implementation item)
++## 6. Decimal-safe transport — PROVEN (built in the v2.0 arc)
+
+-Honest status: this is NOT proven today. The current launcher returns
+-SCHEMA-PARSED objects — the workflow `agent(..., schema=…)` path parses the
+-model's JSON (default float parsing) before I ever see raw text, so a
+-high-precision decimal is ALREADY lossy at that boundary. Saving "raw bytes"
+-after a parse proves nothing.
+-
+-The required change (implementation, after approval): capture the model's reply
+-as RAW TEXT at the agent boundary (the string, never a pre-parsed object), write
+-that exact text to disk, and ONLY THEN parse with `parse_float=Decimal`.
+-Named RED regression to WRITE at that point: a reply containing
+-`1.000000000000000000001` and a `2^60`-vs-`2^60+1` pair round-trips through the
+-real transport → the on-disk raw string is byte-identical to the model's emit
+-AND the parsed value is the EXACT Decimal (not a float). Until that test is
+-green, Decimal-safety is a REQUIREMENT, not a fact. All downstream comparisons
+-already run dec_canon exact decimals with no float `repr` bridge; the open gap
+-is purely the transport capture.
++Status: PROVEN. The launcher passes NO `schema:` — agents return RAW TEXT
++(the JS float boundary is removed entirely); `raw_transport.py` writes that
++exact text to disk (mode "x", refuses overwrite) and ONLY THEN parses with
++`parse_float=Decimal` (NaN/Infinity and duplicate JSON keys rejected at any
++depth). The named RED regression EXISTS AND IS GREEN: a
++`1.000000000000000000001`-class pair round-trips byte-identical and parses to
++the EXACT Decimal — mutation-verified by removing `parse_float=Decimal` and
++watching it fail. All downstream comparisons run dec_canon exact decimals
++with no float `repr` bridge.
+
+ ## 7. Graders (reviewer point 9)
+
+ Ambiguity resolutions, extras verdicts, and the meaning-field verdicts
+ (driver_state · lane_routing · favorability_od13 · basis_od11 · slice_vs_menu)
+ require the EXP-0-QUALIFIED grader tier ONLY — two independent instances
+-(claude-sonnet-5 @ effort=high; FableExperimentWorkOrder.md:164). Grader input =
++(the EXP-0-qualified grader tier ONLY, two independent instances — the WorkOrder grader convention). Grader input =
+ RAW evidence only (quotes/names/values), never detector conclusions or the other
+ grader's output. PASS stays None (INCOMPLETE) until every required verdict is in.
+
+ ## 8. Scope boundary — EXP-5 is strictly text-lane (reviewer point 4)
+
+-The exam measures the TEXT decomposer: the model owns `fact_type` + the 37
+-text-lane fields. **Structured XBRL BYPASSES this model exam entirely** — for an
++The exam measures the TEXT decomposer: the model owns `fact_type` + `per_x` +
++the evidence locator (`part_ref` + `occurrence_in_part`) + the 32 text-lane
++item fields. **Structured XBRL BYPASSES this model exam entirely** — for an
+ XBRL-backed fact, CODE owns the context (`xbrl_concept_raw`), the periods (the
+ all-or-nothing bundle dates, prepared_fact.py:143-157) and the slices/dimensions
+ (`member_refs`). None of those are scored here or shown through the menu; they
+--- a/.claude/plans/Drivers/experiments/keys/K-fields/protocol.md
++++ b/.claude/plans/Drivers/experiments/keys/K-fields/protocol.md
+@@ -20,15 +20,16 @@
+  "du_worthy": true,          // false = OPTIONAL near-miss exemplar; excluded from
+                              // EVERY recall denominator (adjudication context +
+                              // precision spot-checks only)
+- "gold_item": { /* the FULL FACT-17b item, transients included — the 37
+-                  model-owned fields (PreparedFact minus member_refs +
+-                  xbrl_concept_raw); EVERY gold_item carries ALL 37 keys
+-                  EXPLICITLY (null where genuinely absent) — never a subset */ },
++ "part_ref": "p01", "occurrence_in_part": null, "per_x": null,
++ "item": { /* the PreparedFact v2 item — the 32 model-owned fields (v2 minus
++                  member_refs + xbrl_concept_raw); EVERY item carries ALL 32
++                  keys EXPLICITLY (null where genuinely absent) — never a
++                  subset */ },
+  "gold_extra": {"expectation_comparison_present": false},   // ISS-16 ground truth
+  "trap_class": "shape_point|OD-12_loss_floor|OD-11_sequential|OD-9_spans|OD-13_favorability|ISS-16_routing|slice_menu|unknown_axis|OD-17_portion|T1-05_menu_ambiguous|null"}
+ ```
+
+-**Producer output contract (what EXP-5 scores — distinct from this gold key).** The producer emits `{"facts":[<fact_type + the 37 fields above>], "abstentions":[{"quote","reason","occurrence"}]}`. `abstentions[]` is producer-only (never in the gold key): each row = a verbatim quote + short reason for a REAL candidate the producer cannot lawfully resolve. `occurrence` is CONDITIONAL — a GLOBAL 1-based count — scan the event's `text_parts` in canonical order and count each verbatim match left-to-right within a part, continuing the SAME count across parts (never reset at a part boundary); a match never spans two parts, REQUIRED only when the quote repeats, kept OUTSIDE the 37 PreparedFact fields (abstentions are never written). Scoring: a gold-linked abstention (1:1 to an otherwise-unmatched gold fact) is a park + recall miss; a non-fact abstention is diagnostic-only.
++**Producer output contract (what EXP-5 scores — distinct from this gold key).** BOTH roles emit the SAME envelope: `{"source_id", "facts":[{fact_type, part_ref, occurrence_in_part, per_x, item:{the 32 fields}}], "abstentions":[{"quote","reason","part_ref","occurrence_in_part"}]}`. Abstentions are emitted by drafter AND producer; adjudication DROPS abstentions when building the final gold-key rows (they are never stored). `occurrence_in_part` is PER-PART: null when the verbatim quote appears exactly once in the named part, else the 1-based left-to-right count within THAT part — code-verified against the part text; this NARROWLY supersedes the earlier global count for event facts and abstentions only. The ONE top-level `source_id` echo is the wrong-event ingestion guard (harness-verified); the assembled prompt DELIVERS source_id in its event view for both roles. Scoring: a gold-linked abstention (1:1 to an otherwise-unmatched gold fact) is a park + recall miss; a non-fact abstention is diagnostic-only.
+
+ ## 2. The gate (owner 2026-07-08, closes O3 — binding verbatim)
+
+@@ -70,12 +71,12 @@
+ Gold is labeled from the event TEXT ONLY. Drafters and adjudicators must NOT
+ consult the filing's XBRL facts/values while labeling (EXP-6's text-vs-XBRL
+ twin comparison would otherwise be circular). **Fable drafting-route detail
+-(2026-07-24):** drafters receive EXACTLY the producer packet — event
+-`text_parts` + `{ticker, fye_month}` + the PIT slice menu + the verbatim ITEM
+-CONTRACT — because gold `slice[]` picks are graded against that same menu; the
++(2026-07-24):** drafters receive EXACTLY the producer prompt from the ONE shared builder —
++`source_id` + event `text_parts` + `{ticker, fye_month, event_date}` + the PIT
++slice menu, all inside the single assembled prompt (no separate contract file)
++— because gold `slice[]` picks are graded against that same menu; the
+ ban covers the CURRENT filing's XBRL fact values/periods, which never enter any
+-prompt. The producer is never shown gold labels, realized returns, or any
+-> event_time context.
++prompt. The producer is never shown gold labels, realized returns, or any post-event_time context.
+
+ ## 5. Drafting route (v1.9, Fable-decided per the v1.8 scope rule)
+
+@@ -94,9 +95,9 @@
+ ## 6. Lint (key_lint kf_ checks)
+
+ Schema-exact fields · quotes verbatim in the pinned event's text under strict
+-UTF-8 AND a UNIQUE span (extend if the phrase repeats; else abstain — never
+-default to first occurrence) · fact_type enum · gold_item keys == EXACTLY the 37
+-model-owned fields (all 37 present on every record, null-filled; a missing OR
++UTF-8 with part_ref + occurrence_in_part locating every span (null when unique
++in that part; code-verified against the part text) · fact_type enum · item keys
++== EXACTLY the 32 model-owned fields (all 32 present, null-filled; a missing OR
+ extra key = lint error) ·
+ du_worthy
+ booleans · trap-quota counts reported · unique key_ids · per-event coverage
+--- a/.claude/plans/Drivers/experiments/OWNER_DECISION_value_text_numeric.md
++++ b/.claude/plans/Drivers/experiments/OWNER_DECISION_value_text_numeric.md
+@@ -68,11 +68,12 @@
+
+ - **Non-Latin / spelled-out numerals** — "revenue roughly **doubled**",
+   "**half** of last year", "**ten** percent" pass as numberless.
+-- **Currencies outside `$€£¥`** — "₹500 crore", "CHF 20", "R$ 30" pass.
+-- **Continental decimals** — "1,5 %" is not `\d+\.\d+`.
++- **Currencies outside `$€£¥`** — CORRECTED 2026-07-26: "₹500 crore", "CHF 20", "R$ 30" are in fact FLAGGED by the bare-integer arm (verified live); the original passing claim was wrong.
++- **Continental decimals** — CORRECTED 2026-07-26: "1,5 %" IS flagged (the `%` arm matches "5 %"); the original passing claim was wrong.
+ - **False positives on lawful prose** — the `\b(?!19|20\d\d)\d+\b` arm rejects
+-  any bare integer, so "Q3", "top 5 markets", "our 3 segments", "Section 401(k)"
+-  are flagged as numeric even though they carry no measured value.
++  any bare integer, so "top 5 markets", "our 3 segments", "Section 401(k)" are
++  flagged as numeric though they carry no measured value ("Q3" is NOT flagged —
++  no word boundary splits Q from 3; corrected 2026-07-26).
+
+ So today it **both** lets real numbers through **and** blocks lawful qualitative
+ text — precisely the silent, sample-invisible failure the generalisation rule

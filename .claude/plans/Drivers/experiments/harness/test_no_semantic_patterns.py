@@ -1,0 +1,581 @@
+"""MACHINE-ENFORCED GATE — mechanical patterns allowed, meaning-based ones fail.
+
+The rule (owner, P0): keep in CODE only what is provably correct across ALL
+unseen input. A regex that checks the SHAPE of a string we generate is
+mechanical and fine. A regex, fuzzy matcher, or keyword list that decides what
+source text MEANS is not — it passes our samples and misfires silently on the
+universe, which is how `_NUMY`, `PERSHARE_HINT` and the 20-char `_overlap`
+window got in.
+
+THE SCOPE IS DERIVED, NEVER HAND-WRITTEN. An earlier version of this gate listed
+files by hand and gave a FALSE CLEAN twice over: it omitted `fact16_checks`
+(which `score_exp5` imports, so `_NUMY` was live while the gate reported "zero
+exam patterns"), and it walked imports with the heuristic `if "driver" in name`,
+which silently dropped `guidance_ids` (imported by `driver_period_resolver`).
+A gate that reports clean while a semantic pattern is reachable is worse than no
+gate — so the closure below is computed by FOLLOWING ACTUAL IMPORTS from the real
+entry points and resolving each to a file in this repo.
+
+Run: venv/bin/python -m pytest harness/test_no_semantic_patterns.py -q
+"""
+import ast
+import os
+
+_HERE = os.path.dirname(os.path.abspath(__file__))
+_REPO = os.path.abspath(os.path.join(_HERE, "..", "..", "..", "..", ".."))
+
+# The real entry points. Everything they reach, transitively, is in scope.
+ENTRY_PRODUCTION = [os.path.join(_REPO, "driver", "core", "driver_write_cli.py")]
+ENTRY_EXAM = [os.path.join(_HERE, "kf_lint.py"),
+              os.path.join(_HERE, "raw_transport.py"),
+              os.path.join(_HERE, "scorers", "score_exp5.py")]
+
+# Where an imported module name may resolve to a file (the roots the code itself
+# puts on sys.path). Ordered; first hit wins.
+_SEARCH_ROOTS = [
+    os.path.join(_REPO, "driver", "core"),
+    _HERE,
+    os.path.join(_HERE, "scorers"),
+    os.path.join(_REPO, ".claude", "skills", "earnings-orchestrator", "scripts"),
+    _REPO,
+]
+
+_RE_FUNCS = ("compile", "search", "match", "findall", "sub", "fullmatch",
+             "finditer", "split", "subn")
+FUZZY_TOKENS = ("difflib", "SequenceMatcher", "fuzz", "levenshtein",
+                "jaro", "soundex", "get_close_matches")
+
+
+def _resolve(modname, rel_roots=None):
+    """Module name -> file in THIS repo, or None if stdlib/third-party.
+    `rel_roots` resolves RELATIVE imports against the importing package dir —
+    an earlier version ignored `from .utils` entirely."""
+    tail = modname.split(".")[-1]
+    for root in (rel_roots or []) + _SEARCH_ROOTS:
+        for cand in (os.path.join(root, *modname.split(".")) + ".py",
+                     os.path.join(root, tail + ".py")):
+            if os.path.exists(cand) and "worktrees" not in cand:
+                return os.path.realpath(cand)
+    return None
+
+
+def closure(entries):
+    """Transitive import closure by FOLLOWING REAL IMPORTS (no name heuristics,
+    no hand-written lists). Returns {realpath: module_basename}."""
+    seen, stack = {}, list(entries)
+    while stack:
+        path = os.path.realpath(stack.pop())
+        if path in seen or not os.path.exists(path):
+            continue
+        seen[path] = os.path.basename(path)[:-3]
+        pkg = os.path.dirname(path)
+        tree = ast.parse(open(path, encoding="utf-8").read())
+        for node in ast.walk(tree):
+            names, rel_roots = [], None
+            if isinstance(node, ast.Import):
+                names = [a.name for a in node.names]
+            elif isinstance(node, ast.ImportFrom):
+                if node.level:                      # RELATIVE: from .utils / from . import x
+                    base = pkg
+                    for _ in range(node.level - 1):
+                        base = os.path.dirname(base)
+                    rel_roots = [base]
+                    names = ([node.module] if node.module
+                             else [a.name for a in node.names])   # `from . import x`
+                elif node.module:
+                    names = [node.module]
+            elif isinstance(node, ast.Call):        # literal dynamic import
+                f = node.func
+                nm = (f.id if isinstance(f, ast.Name) else
+                      f.attr if isinstance(f, ast.Attribute) else None)
+                if nm in ("import_module", "__import__") and node.args:
+                    a0 = node.args[0]
+                    if isinstance(a0, ast.Constant) and isinstance(a0.value, str):
+                        names = [a0.value]
+            for n in names:
+                dep = _resolve(n, rel_roots)
+                if dep and dep not in seen:
+                    stack.append(dep)
+    return seen
+
+
+def regex_patterns(path):
+    """Every regex call site as a [function, operation, pattern] triple.
+
+    Approval is PER SITE, not per module: a module blessed as "mechanical"
+    (e.g. guidance_ids) could otherwise absorb a NEW semantic regex silently.
+    The OPERATION is part of the freeze because pattern text alone gave a
+    FALSE GREEN (reviewer-proven): `re.sub` swapped to `re.search` keeps the
+    pattern byte-identical while changing a rewrite into a meaning probe.
+    The enclosing FUNCTION pins where the site lives; pattern text (not line
+    numbers) keeps the freeze stable under edits above it."""
+    tree = ast.parse(open(path, encoding="utf-8").read())
+    re_names, direct = set(), {}
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Import):
+            for a in node.names:
+                if a.name == "re" or a.name.startswith("re."):
+                    re_names.add(a.asname or a.name.split(".")[0])
+        elif isinstance(node, ast.ImportFrom) and node.module == "re":
+            for a in node.names:
+                direct[a.asname or a.name] = a.name
+    out = []
+
+    def visit(node, func):
+        for child in ast.iter_child_nodes(node):
+            child_func = func
+            if isinstance(child, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                child_func = child.name
+            if isinstance(child, ast.Call):
+                f = child.func
+                op = None
+                if (isinstance(f, ast.Attribute) and isinstance(f.value, ast.Name)
+                        and f.value.id in re_names and f.attr in _RE_FUNCS):
+                    op = f.attr
+                elif isinstance(f, ast.Name) and f.id in direct:
+                    op = direct[f.id]
+                if op:
+                    a0 = child.args[0] if child.args else None
+                    pat = a0.value if isinstance(a0, ast.Constant) and \
+                        isinstance(a0.value, str) else "<non-literal>"
+                    out.append([func, op, pat])
+            visit(child, child_func)
+
+    visit(tree, "<module>")
+    return sorted(out)
+
+
+def keyword_lists(path, min_len=3):
+    """KNOWN-SHAPE TRIPWIRE, deliberately NOT exhaustive: module-level
+    tuples/sets/lists (incl. frozenset()/set()/tuple() over a literal) of >=3
+    string literals — the shape of a hidden keyword list
+    (`_XBRL_PER_SHARE_MARKERS`, YoY token sets).
+
+    HONEST SCOPE (reviewer-proven escapes, accepted): inline sets in
+    expressions, startswith/endswith tuples, dict keyword tables, and
+    runtime-built lists are NOT detected — chasing every encoding of a word
+    list is unwinnable. The LOAD-BEARING defense is structural, not this scan:
+    meaning-deciding code receives structured fields (never free prose), every
+    regex SITE is frozen as (function, operation, pattern), and hidden grading
+    attacks the semantic gaps. This tripwire only catches the common shape
+    cheaply; it must never be described as proof of absence."""
+    tree = ast.parse(open(path, encoding="utf-8").read())
+    found = {}
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Assign):
+            continue
+        v = node.value
+        # frozenset({...}) / set([...]) / tuple((...)) wrap a literal in a Call —
+        # the scan MISSED those entirely (reviewer-demonstrated); unwrap them.
+        if isinstance(v, ast.Call) and isinstance(v.func, ast.Name) \
+                and v.func.id in ("frozenset", "set", "tuple", "list") \
+                and len(v.args) == 1 and not v.keywords \
+                and isinstance(v.args[0], (ast.Tuple, ast.List, ast.Set)):
+            v = v.args[0]
+        if not isinstance(v, (ast.Tuple, ast.List, ast.Set)):
+            continue
+        vals = [e.value for e in v.elts
+                if isinstance(e, ast.Constant) and isinstance(e.value, str)]
+        if len(vals) >= min_len and len(vals) == len(v.elts):
+            for t in node.targets:
+                if isinstance(t, ast.Name):
+                    found[t.id] = sorted(vals)
+    return found
+
+
+# ---------------------------------------------------------------------------
+# CLASSIFICATION — every module reaching a regex must appear in exactly one bucket.
+#   MECHANICAL    : shape of a string we generate / parsing our own format.
+#   GOVERNING_LAW : implements a written law and is exact (not a meaning guess).
+#   SEMANTIC_DEBT : guesses what source text MEANS. Each entry is a DEBT with a
+#                   disposition — never an approval. The set is frozen; a NEW one
+#                   fails the gate until a human classifies it.
+# ---------------------------------------------------------------------------
+MECHANICAL = {
+    "driver_ids": "format validators only: source_id charset · driver_name "
+                  "NAME-05 shape · gp_ period-id shape · sha-256 shape · our "
+                  "own xbrlaxis_ sentinel shape. All check strings WE emit.",
+    "guidance_ids": "slugify/whitespace normalisers, a numeric-token splitter "
+                    "(`^([+-]?\\d+\\.?\\d*)\\s*([a-zA-Z]*)$` on an ALREADY-"
+                    "isolated value string) and an XBRL count matcher on "
+                    "declared qnames — shape work on our own/declared strings, "
+                    "not judgments about prose.",
+    # Reached only because guidance_ids imports the shared XBRL stack at module
+    # level. Included because they ARE import-reachable (scope is derived, not
+    # trimmed to make the gate pass) — and both are pure markup/encoding work.
+    "utils": "XML entity escaping: `&` -> `&amp;` unless already an entity. "
+             "Character-level encoding, no judgment about content.",
+    "xbrl_reporting": "`<[^>]+>` strips markup tags. Structural text cleanup, "
+                      "not a decision about what the text means.",
+}
+GOVERNING_LAW = {}
+SEMANTIC_DEBT = {
+    "driver_validators": "_VALUE_TEXT_NUMERIC — 'does this prose hide a "
+                         "number?'. OWNER RULING 2026-07-25: Option A approved "
+                         "— code enforces numeric-slot/value_text MUTUAL "
+                         "EXCLUSION; the MODEL decides whether prose is "
+                         "genuinely numberless; hidden grading attacks numeric "
+                         "prose in value_text; uncertainty ABSTAINS. The "
+                         "structural check alone does NOT prove numberlessness. "
+                         "Removal lands with that implementation.",
+    "fact16_checks": "_NUMY — hand-written money/percent detector. Retires with "
+                     "the run_event wiring (the duplicate validator goes away "
+                     "entirely). Still LIVE: score_exp5 imports check_item.",
+}
+
+
+# A debt entry covers a MODULE, so adding ANOTHER semantic pattern inside an
+# already-debted file would slip through (proven by mutation-testing this gate).
+# Freezing the site COUNT closes that: growth inside a debted module fails too.
+# PER-SITE FREEZE (measured, never guessed). Approval is per REGEX, not per
+# module: a module blessed "mechanical" (guidance_ids) could otherwise absorb a
+# NEW semantic regex silently — proven by mutation-testing this gate.
+# Each site = [enclosing function, re-operation, literal pattern]. The
+# OPERATION is frozen because pattern-text-only froze gave a FALSE GREEN
+# (re.sub -> re.search, byte-identical pattern \u2014 reviewer-proven on temp copies).
+FROZEN_PATTERNS = {
+    "driver_ids": [
+        ["<module>", "compile", "^[0-9a-f]{64}$"],
+        ["<module>", "compile", "^[A-Za-z0-9._\\-]+$"],
+        ["<module>", "compile", "^[a-z][a-z0-9_]*$"],
+        ["<module>", "compile", "^gp_(ST|MT|LT|UNDEF|\\d{4}-\\d{2}-\\d{2}_\\d{4}-\\d{2}-\\d{2})$"],
+        ["<module>", "compile", "^xbrlaxis_([0-9a-f]+)__([a-z0-9_]+)$"],
+        ["norm", "sub", "[^a-z0-9]+"],
+    ],
+    "driver_validators": [
+        ["<module>", "compile", "[$\u20ac\u00a3\u00a5]\\s*\\d|\\d+(?:\\.\\d+)?\\s*%|\\d+\\.\\d+|\\b(?!(?:19|20)\\d\\d\\b)\\d+\\b"],
+    ],
+    "fact16_checks": [
+        ["<module>", "compile", "[$\u20ac\u00a3\u00a5]\\s?\\d|\\d+(\\.\\d+)?\\s?%|\\b\\d+\\s?bps\\b|\\b\\d+(\\.\\d+)?\\s?(million|billion|thousand)\\b"],
+    ],
+    "guidance_ids": [
+        ["<module>", "compile", "SharesOutstanding|ShareCount|WeightedAverage\\w*Shares|NumberOf\\w*Shares"],
+        ["_normalize_text", "sub", "\\s+"],
+        ["_normalize_unit_text", "sub", "\\s+"],
+        ["_parse_numeric_with_scale", "match", "^([+-]?\\d+\\.?\\d*)\\s*([a-zA-Z]*)\\s*$"],
+        ["normalize_for_member_match", "sub", "[^a-z0-9]"],
+        ["slug", "sub", "[^a-z0-9]+"],
+        ["slug", "sub", "_+"],
+    ],
+    "utils": [
+        ["clean_xml_entities", "sub", "&(?!amp;|lt;|gt;|quot;|apos;|#\\d+;|#x[0-9a-fA-F]+;)"],
+    ],
+    "xbrl_reporting": [
+        ["<module>", "compile", "<[^>]+>"],
+    ],
+}
+
+# Keyword lists = closed vocabularies FROM LAW (legitimate) vs meaning guesses.
+LEGIT_VOCAB = {
+    "LANES", "BASELINES", "SOURCE_TYPES", "PERIOD_SCOPES", "SURPRISE_TYPES",
+    "SHAPES", "CANONICAL_UNITS", "VALID_UNIT_KIND_HINTS",
+    "VALID_MONEY_MODE_HINTS", "valid_bases", "__all__", "EXPECT_BASE",
+    "MEANING_FIELDS", "CODE_FIELDS", "OD_RULES", "ARMS", "SOURCE_OWNED",
+    "FIELDS37", "DOC_KEYS", "FACT_KEYS", "NUMERIC", "STRINGY", "FUZZY_TOKENS",
+    "_RE_FUNCS", "_POLARITY_BASES", "_PROOF_KEYS", "_NUMERIC_FIELDS",
+    "ENTRY_PRODUCTION", "ENTRY_EXAM", "_SEARCH_ROOTS", "RUN_EVENT_CLOSURE",
+    "EXAM_FILES", "LEGIT_VOCAB", "KEYWORD_DEBT",
+    # prepared_fact groups FIELD NAMES by declared type — schema structure,
+    # not a judgment about source text.
+    "_NUMERIC", "_STR", "_INT",
+    # Uncovered by the frozenset unwrap (2026-07-26) and individually judged
+    # LAW ENUMS / schema structure, not meaning guesses:
+    "_SLICE_KINDS",       # driver_ids — the FS-05 slice-kind enum
+    "_SURPRISE_TYPES",    # driver_ids — the OD-21 surprise-type enum
+    "_SENTINEL_SCOPES",   # driver_units — the PER sentinel-horizon enum
+    "_ALLOWED_FIELDS",    # driver_validators — the schema field-name list
+    "_VALID_SHAPES",      # driver_validators — the shape enum
+}
+# Keyword lists that INFER MEANING from a name/label/prose — same class as the
+# forbidden PERSHARE_HINT. Each is a DEBT with a disposition, never an approval.
+KEYWORD_DEBT = {
+    "_XBRL_PER_SHARE_MARKERS": "guidance_ids — matches XBRL concept NAMES "
+        "('PerShare','PerUnit',...) to infer per-share-ness. Identical class to "
+        "the PERSHARE_HINT the register FORBIDS. OWNER ITEM: use the declared "
+        "XBRL unit (numerator/denominator) instead of a name guess.",
+    "PER_SHARE_LABELS": "guidance_ids — infers per-share from a label slug "
+        "('eps','dps'). Same class. OWNER ITEM: declared unit, not the label.",
+    # Uncovered by the frozenset unwrap (2026-07-26) — the scan could not see
+    # frozenset(...) assignments at all, so these three label→meaning lists sat
+    # invisible in an import-reachable module:
+    "_COUNT_LABEL_PRIORS": "guidance_ids — infers unit-kind COUNT from a label "
+        "slug ('headcount','share_count'). Label→meaning guess; same owner "
+        "disposition as PER_SHARE_LABELS.",
+    "_PRICE_LIKE_LABEL_PRIORS": "guidance_ids — infers money_mode price_like "
+        "from a label slug ('arpu','asp','adr'). Same class, same disposition.",
+    "KNOWN_INSTANT_LABELS": "guidance_ids — infers instant-vs-duration from a "
+        "label slug. Documented HINT-ONLY (FACT-18: time_type stays "
+        "authoritative), still a label→meaning list; rides the same owner item.",
+}
+
+
+def _classified(path_map):
+    # reuses regex_patterns (one alias-aware AST walk — the parallel
+    # regex_sites() duplicate was deleted, reviewer sweep 2026-07-26)
+    unknown = {}
+    for path, mod in path_map.items():
+        hits = regex_patterns(path)
+        if hits and mod not in MECHANICAL and mod not in GOVERNING_LAW \
+                and mod not in SEMANTIC_DEBT:
+            unknown[mod] = hits
+    return unknown
+
+
+def test_production_closure_is_derived_not_handwritten():
+    """The run_event closure must be reached by following imports — and must
+    include shared code whose NAME does not contain 'driver' (guidance_ids was
+    missed by exactly that heuristic)."""
+    mods = set(closure(ENTRY_PRODUCTION).values())
+    assert "guidance_ids" in mods, (
+        "guidance_ids is imported by driver_period_resolver but missing from "
+        "the closure — the walker is using a name heuristic again")
+    assert {"driver_validators", "driver_units", "prepared_fact"} <= mods
+
+
+def test_exam_closure_includes_everything_it_imports():
+    """The exam closure must contain fact16_checks while score_exp5 imports it —
+    the hand-written list omitted it and reported a FALSE CLEAN."""
+    mods = set(closure(ENTRY_EXAM).values())
+    src = open(os.path.join(_HERE, "scorers", "score_exp5.py"),
+               encoding="utf-8").read()
+    if "from fact16_checks import" in src:
+        assert "fact16_checks" in mods, "gate is blind to a live exam import"
+
+
+def test_no_unclassified_regex_in_the_production_path():
+    unknown = _classified(closure(ENTRY_PRODUCTION))
+    assert not unknown, (
+        f"UNCLASSIFIED regex in the run_event path: {unknown}. Classify it: "
+        f"mechanical / governing-law / semantic-debt (semantic must go to the "
+        f"model).")
+
+
+def test_no_unclassified_regex_in_the_exam_path():
+    unknown = _classified(closure(ENTRY_EXAM))
+    assert not unknown, f"UNCLASSIFIED regex in the exam path: {unknown}"
+
+
+def test_every_regex_site_is_frozen_individually():
+    """PER-SITE freeze. Approving a whole module lets a new semantic regex slip
+    in beside an approved one — so every pattern's literal text is pinned."""
+    live = {}
+    for path, mod in {**closure(ENTRY_PRODUCTION), **closure(ENTRY_EXAM)}.items():
+        pats = regex_patterns(path)
+        if pats:
+            live[mod] = pats
+    assert live == FROZEN_PATTERNS, (
+        "regex SITES changed. Added one? it needs classification (mechanical / "
+        "governing law / semantic debt) before the freeze is updated. Removed "
+        "one? update FROZEN_PATTERNS.\n"
+        f"only-live={ {k: [x for x in v if x not in FROZEN_PATTERNS.get(k, [])] for k, v in live.items() if v != FROZEN_PATTERNS.get(k)} }")
+
+
+def test_keyword_lists_are_classified():
+    """Every KNOWN-SHAPE keyword list must be a law vocabulary or a declared
+    debt. This is a tripwire, NOT an exhaustive scan (see keyword_lists's
+    honest-scope note): inline sets, startswith tuples, and dict tables escape
+    it by design — the structural fences carry the real guarantee."""
+    unknown = {}
+    for path, mod in {**closure(ENTRY_PRODUCTION), **closure(ENTRY_EXAM)}.items():
+        if mod not in ("guidance_ids", "driver_validators", "driver_units",
+                       "unit_resolver", "fact16_checks", "prepared_fact",
+                       "kf_lint", "score_exp5", "raw_transport", "driver_ids"):
+            continue                      # Driver-relevant modules only
+        for name in keyword_lists(path):
+            if name not in LEGIT_VOCAB and name not in KEYWORD_DEBT:
+                unknown.setdefault(mod, []).append(name)
+    assert not unknown, (
+        f"UNCLASSIFIED keyword list(s): {unknown}. A closed vocabulary from law "
+        f"-> LEGIT_VOCAB; a guess about a name/label/prose -> KEYWORD_DEBT with "
+        f"an owner disposition.")
+
+
+def test_keyword_debt_is_frozen():
+    """The two known meaning-guessing lists must not multiply."""
+    found = set()
+    for path, mod in {**closure(ENTRY_PRODUCTION), **closure(ENTRY_EXAM)}.items():
+        found |= set(keyword_lists(path)) & set(KEYWORD_DEBT)
+    assert found == set(KEYWORD_DEBT), f"{found} vs {set(KEYWORD_DEBT)}"
+
+
+def test_no_fuzzy_matching_anywhere_in_either_path():
+    """No similarity scoring, edit distance, or nearest-match. Identity must be
+    EXACT. Scans the AST, not the text: prose like 'never a fuzzy near-match' is
+    a COMMENT asserting the opposite (an earlier version flagged exactly that)."""
+    paths = list(closure(ENTRY_PRODUCTION)) + list(closure(ENTRY_EXAM))
+    bad = []
+    for path in paths:
+        tree = ast.parse(open(path, encoding="utf-8").read())
+        for node in ast.walk(tree):
+            name = None
+            if isinstance(node, ast.Name):
+                name = node.id
+            elif isinstance(node, ast.Attribute):
+                name = node.attr
+            elif isinstance(node, (ast.Import, ast.ImportFrom)):
+                name = " ".join(a.name for a in node.names) + " " + \
+                       (getattr(node, "module", "") or "")
+            if not name:
+                continue
+            for tok in FUZZY_TOKENS:
+                if tok.lower() in name.lower():
+                    bad.append(f"{os.path.basename(path)}:{node.lineno}:{tok}")
+    assert not bad, f"fuzzy matching found in CODE: {bad} — identity must be EXACT"
+
+
+def test_the_deleted_fuzzy_matcher_stays_deleted():
+    src = open(os.path.join(_HERE, "scorers", "score_exp5.py"),
+               encoding="utf-8").read()
+    assert "def _overlap" not in src, "the fuzzy sliding-window matcher is back"
+    assert "def _ev_key" in src, "exact evidence identity is missing"
+
+
+# ---------------------------------------------------------------------------
+# MUTATION TESTS — the gate must FAIL on each known evasion route, and it must
+# fail ON THE RIGHT DETECTOR. Rebuilt 2026-07-26 after the reviewer showed two
+# holes in the old versions: (a) they appended to LIVE project files (a crash
+# between write and restore leaves the tree mutated); (b) they asserted only
+# "some gate test failed", so an unrelated pre-existing failure could green a
+# mutation that actually slipped through. Now: every mutation happens in a TEMP
+# copy of the whole derived closure, and every test asserts the SPECIFIC
+# detector + the mutated module's name in its message. A baseline test proves
+# the temp copy itself is GREEN, so a failure can only come from the mutation.
+# ---------------------------------------------------------------------------
+import json
+import shutil
+import subprocess
+import sys
+import tempfile
+
+_REL_HARNESS = os.path.relpath(_HERE, _REPO)
+_DETECTORS = ["test_every_regex_site_is_frozen_individually",
+              "test_no_unclassified_regex_in_the_exam_path",
+              "test_no_unclassified_regex_in_the_production_path",
+              "test_keyword_lists_are_classified",
+              "test_no_fuzzy_matching_anywhere_in_either_path"]
+
+
+def _temp_repo():
+    """Copy the ENTIRE derived closure (+ this gate file) into a temp repo
+    skeleton, preserving repo-relative paths. Live files are never written."""
+    tmp = tempfile.mkdtemp(prefix="nsp_gate_")
+    files = set(closure(ENTRY_PRODUCTION)) | set(closure(ENTRY_EXAM))
+    files.update(os.path.realpath(p) for p in ENTRY_PRODUCTION + ENTRY_EXAM)
+    files.add(os.path.join(_HERE, "test_no_semantic_patterns.py"))
+    for src in files:
+        rel = os.path.relpath(src, _REPO)
+        dst = os.path.join(tmp, rel)
+        os.makedirs(os.path.dirname(dst), exist_ok=True)
+        shutil.copy(src, dst)
+    return tmp
+
+
+def _gate_failures(tmp):
+    """Run the five detectors inside the TEMP repo; {detector: message}."""
+    code = (
+        "import json\n"
+        "import test_no_semantic_patterns as g\n"
+        "out = {}\n"
+        f"for n in {_DETECTORS!r}:\n"
+        "    try:\n"
+        "        getattr(g, n)()\n"
+        "    except AssertionError as e:\n"
+        "        out[n] = str(e)[:400]\n"
+        "print(json.dumps(out))\n")
+    r = subprocess.run([sys.executable, "-c", code], capture_output=True,
+                       text=True, cwd=os.path.join(tmp, _REL_HARNESS))
+    assert r.returncode == 0, f"gate crashed in the temp repo: {r.stderr[:400]}"
+    return json.loads(r.stdout.strip())
+
+
+def _mutated_failures(target_rel, extra):
+    tmp = _temp_repo()
+    try:
+        with open(os.path.join(tmp, target_rel), "a", encoding="utf-8") as f:
+            f.write(extra)
+        return _gate_failures(tmp)
+    finally:
+        shutil.rmtree(tmp)
+
+
+def test_MUTATION_baseline_temp_repo_is_green():
+    """No mutation → zero detector failures in the temp copy. This is what
+    makes every assertion below attributable to its mutation alone."""
+    tmp = _temp_repo()
+    try:
+        assert _gate_failures(tmp) == {}
+    finally:
+        shutil.rmtree(tmp)
+
+
+def test_MUTATION_aliased_regex_import_is_caught():
+    """`import re as _re` — the alias an earlier gate missed entirely."""
+    fails = _mutated_failures(
+        os.path.join(_REL_HARNESS, "kf_lint.py"),
+        "\nimport re as _re\n_BAD = _re.compile(r'revenue|sales')\n")
+    msg = fails.get("test_every_regex_site_is_frozen_individually", "")
+    assert "kf_lint" in msg, f"wrong/missing detector: {fails}"
+
+
+def test_MUTATION_from_re_import_form_is_caught():
+    fails = _mutated_failures(
+        os.path.join(_REL_HARNESS, "raw_transport.py"),
+        "\nfrom re import compile as _c\n_B = _c(r'beat|miss')\n")
+    msg = fails.get("test_every_regex_site_is_frozen_individually", "")
+    assert "raw_transport" in msg, f"wrong/missing detector: {fails}"
+
+
+def test_MUTATION_new_regex_inside_an_APPROVED_module_is_caught():
+    """The per-site freeze exists for this: guidance_ids is blessed
+    'mechanical' — it must not absorb a new semantic pattern silently."""
+    fails = _mutated_failures(
+        os.path.join(".claude", "skills", "earnings-orchestrator", "scripts",
+                     "guidance_ids.py"),
+        "\nimport re as _re2\n_X = _re2.compile(r'beats|misses|tops')\n")
+    msg = fails.get("test_every_regex_site_is_frozen_individually", "")
+    assert "guidance_ids" in msg, f"wrong/missing detector: {fails}"
+
+
+def test_MUTATION_operation_swap_is_caught():
+    """re.sub -> re.search with a BYTE-IDENTICAL pattern turns a rewrite into a
+    meaning probe; the old pattern-text-only freeze stayed green on exactly
+    this (reviewer-proven on temp copies). The operation is now frozen."""
+    tmp = _temp_repo()
+    try:
+        target = os.path.join(tmp, ".claude", "skills", "earnings-orchestrator",
+                              "scripts", "guidance_ids.py")
+        src = open(target, encoding="utf-8").read()
+        swapped = src.replace(".sub(", ".search(", 1)
+        assert swapped != src
+        open(target, "w", encoding="utf-8").write(swapped)
+        fails = _gate_failures(tmp)
+        msg = fails.get("test_every_regex_site_is_frozen_individually", "")
+        assert "guidance_ids" in msg, f"wrong/missing detector: {fails}"
+    finally:
+        shutil.rmtree(tmp)
+
+
+def test_MUTATION_new_keyword_list_is_caught():
+    fails = _mutated_failures(
+        os.path.join(_REL_HARNESS, "kf_lint.py"),
+        "\n_GUESS_WORDS = ('beat', 'missed', 'topped')\n")
+    msg = fails.get("test_keyword_lists_are_classified", "")
+    assert "_GUESS_WORDS" in msg, f"wrong/missing detector: {fails}"
+
+
+def test_MUTATION_frozenset_keyword_list_is_caught():
+    """frozenset({...}) hid keyword lists from the scan entirely
+    (reviewer-demonstrated). The unwrap fix must catch it."""
+    fails = _mutated_failures(
+        os.path.join(_REL_HARNESS, "kf_lint.py"),
+        "\n_FS_WORDS = frozenset({'beat', 'missed', 'topped'})\n")
+    msg = fails.get("test_keyword_lists_are_classified", "")
+    assert "_FS_WORDS" in msg, f"wrong/missing detector: {fails}"
+
+
+def test_MUTATION_fuzzy_import_is_caught():
+    fails = _mutated_failures(
+        os.path.join(_REL_HARNESS, "raw_transport.py"),
+        "\nimport difflib  # noqa\n")
+    msg = fails.get("test_no_fuzzy_matching_anywhere_in_either_path", "")
+    assert "difflib" in msg, f"wrong/missing detector: {fails}"

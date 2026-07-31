@@ -225,3 +225,49 @@ def test_blank_strings_rejected_everywhere_none_when_absent():
         PreparedFactV1.from_dict(minimal(**xbrl(
             member_refs=[{"axis": " ", "member": "m", "slice_part": "s"}])))
     assert PreparedFactV1.from_dict(minimal(value_text=None)).value_text is None
+
+
+# ---------------------------------------------------------------------------
+# The ONE source-id rule, in the LIVE v1 contract (reviewer, audit :451).
+# v2 was fixed while v1 — the input the production writer actually consumes —
+# still accepted what the shared predicate rejects.
+# ---------------------------------------------------------------------------
+
+@pytest.mark.parametrize("bad", ["x/y", "a:b", "with space", "", "   ", None, 5,
+                                 True, "acc\n1"])
+def test_v1_run_input_asks_the_ONE_source_id_predicate_on_BOTH_paths(bad):
+    from driver.core.driver_ids import valid_source_id
+    assert not valid_source_id(bad), "the fixture must actually be unlawful"
+    with pytest.raises(SchemaError):
+        RunInputV1(source_id=bad, facts=[])
+    with pytest.raises(SchemaError):
+        RunInputV1.from_dict({"source_id": bad, "facts": []})
+
+
+@pytest.mark.parametrize("good", ["0000006201-26-000031", "SOME-OTHER-FILING",
+                                  "SRC", "x", "a.b_c-1"])
+def test_v1_run_input_still_accepts_every_LAWFUL_id(good):
+    """FIVE EXPLICIT CONTROLS. These are named cases, not a survey: they do not
+    prove anything about ids the fixtures build dynamically or pass positionally.
+    The FULL REGRESSION is the broader evidence that this tightening invalidated
+    nothing — an earlier note of mine claimed 'every fixture id', which a grep
+    for one literal spelling cannot support."""
+    assert RunInputV1(source_id=good, facts=[]).source_id == good
+    assert RunInputV1.from_dict({"source_id": good, "facts": []}).source_id == good
+
+
+def test_an_unlawful_source_id_can_never_REACH_a_graph_read(tmp_path):
+    """The writer reads the graph (`store.get_source`) ~100 lines before
+    `build_id` judges the id, so an unlawful id used to buy several reads before
+    being rejected. Now the run input cannot be CONSTRUCTED, so the reads are
+    unreachable by construction rather than by ordering."""
+    from driver.core.driver_write_cli import run_event
+
+    class NeverRead:
+        def __getattr__(self, name):
+            raise AssertionError(f"the graph was read ({name}!) for an "
+                                 f"unlawful source id")
+
+    with pytest.raises(SchemaError):
+        run_event(RunInputV1.from_dict({"source_id": "x/y", "facts": []}),
+                  store=NeverRead(), audit_dir=str(tmp_path))

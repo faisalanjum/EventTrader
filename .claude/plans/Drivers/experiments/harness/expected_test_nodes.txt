@@ -1,0 +1,1671 @@
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_EVERY_active_harness_module_imports_INERTLY[audit_worker_access]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_EVERY_active_harness_module_imports_INERTLY[build_kfields_inputs]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_EVERY_active_harness_module_imports_INERTLY[build_launch_manifest]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_EVERY_active_harness_module_imports_INERTLY[fact16_checks]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_EVERY_active_harness_module_imports_INERTLY[import_inertness]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_EVERY_active_harness_module_imports_INERTLY[isolated_manifest_check]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_EVERY_active_harness_module_imports_INERTLY[kf_lint]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_EVERY_active_harness_module_imports_INERTLY[make_g_ledger]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_EVERY_active_harness_module_imports_INERTLY[make_pin_inventory]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_EVERY_active_harness_module_imports_INERTLY[raw_transport]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_EVERY_active_harness_module_imports_INERTLY[rev3_build]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_EVERY_active_harness_module_imports_INERTLY[rev4_build_patch]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_EVERY_active_harness_module_imports_INERTLY[rev4_coverage_check]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_EVERY_active_harness_module_imports_INERTLY[rev4_extra]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_EVERY_active_harness_module_imports_INERTLY[score_exp5]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_EVERY_active_harness_module_imports_INERTLY[slice_menu_probe]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_G12_the_assembled_prompt_defines_every_value_it_demands
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_G12_the_live_launcher_still_serves_the_v1_contract
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_G12_the_untrusted_boundary_precedes_the_event
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_G13_attack_fixtures_are_registered_and_classified
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_G13_the_annual_sequential_attack_is_actually_run
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_G13_the_code_catchable_attacks_are_actually_caught
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_G14_guidance_legacy_path_is_untouched
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_G14_the_new_contract_refuses_channel_hint_fields
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_G15_xbrl_declared_metadata_path_is_untouched
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_G16_old_path_removal_is_gated_on_the_switch
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_G17_transport_is_exact_and_refuses_ambiguity
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_G18_the_new_modules_reach_no_graph_write
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_G19_the_patch_still_applies_strictly
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_G19_two_rebuilds_are_byte_identical
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_G28_source_id_echo_mismatch_is_refused
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_G32_source_id_is_delivered_in_the_prompts_event_view
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_G9_one_shared_validation_entry_point_exists
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_MATRIX_a_DUPLICATE_JUNIT_identity_is_REFUSED
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_MATRIX_a_DUPLICATE_pin_is_REFUSED
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_MATRIX_a_DUPLICATE_pinned_identity_is_REFUSED
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_MATRIX_a_FAILED_live_selector_collection_is_REFUSED
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_MATRIX_a_fully_clean_lane_yields_NO_problems
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_MATRIX_a_malformed_pin_is_REFUSED[not json at all-not valid JSON]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_MATRIX_a_malformed_pin_is_REFUSED[{"kind": "live_read", "why": "w"}-missing 'node']
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_MATRIX_a_malformed_pin_is_REFUSED[{"node": "a::b", "kind": "allow_fail", "needs": "x", "why": "w"}-unknown kind]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_MATRIX_a_malformed_pin_is_REFUSED[{"node": "a::b", "kind": "allow_skip", "needs": "x", "why": "w"}-unknown kind]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_MATRIX_a_malformed_pin_is_REFUSED[{"node": "a::b", "kind": "live_read"}-missing 'why']
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_MATRIX_a_malformed_pin_is_REFUSED[{"node": "a::b", "kind": "nonsense", "why": "w"}-unknown kind]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_MATRIX_an_id_containing_HASH_or_SLASH_survives_the_pin_format
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_MATRIX_build_isolated_tree_verifies_HASH_EQUALITY_for_real
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_MATRIX_post_run_changes_SEES_tracked_untracked_AND_ignored_files
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_MATRIX_run_lane_REFUSES_a_run_that_did_not_execute
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_MATRIX_the_gate_REFUSES_each_way_it_used_to_pass[results0-pins0-expected0-must PASS]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_MATRIX_the_gate_REFUSES_each_way_it_used_to_pass[results1-pins1-expected1-must PASS]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_MATRIX_the_gate_REFUSES_each_way_it_used_to_pass[results2-pins2-expected2-NEO4J_URI]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_MATRIX_the_gate_REFUSES_each_way_it_used_to_pass[results3-pins3-expected3-RAN in the clean lane]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_MATRIX_the_gate_REFUSES_each_way_it_used_to_pass[results4-pins4-expected4-neither ran]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_MATRIX_the_gate_REFUSES_each_way_it_used_to_pass[results5-pins5-expected5-not in the pin]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_MATRIX_the_junit_reader_keeps_the_MESSAGE_and_uses_CLASSNAME
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_MATRIX_the_sanitized_environment_carries_NO_credential
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_MATRIX_write_expected_can_NEVER_select_or_execute_live_write
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_MUTATION_each_side_effect_kind_is_caught[chdir-import os\nos.chdir(os.path.dirname(os.path.abspath(__file__)))\n]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_MUTATION_each_side_effect_kind_is_caught[mkdir-import os\nos.mkdir(__file__ + '.d')\n]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_MUTATION_each_side_effect_kind_is_caught[process-import subprocess\nsubprocess.run(['true'], capture_output=True)\n]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_MUTATION_each_side_effect_kind_is_caught[remove-import os\nos.remove(__file__ + '.gone') if False else os.mkdir(__file__ + '.x') or os.rmdir(__file__ + '.x')\n]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_MUTATION_each_side_effect_kind_is_caught[rename-import os\nos.rename(__file__, __file__ + '.moved')\n]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_MUTATION_each_side_effect_kind_is_caught[rmtree-import shutil, os\nos.mkdir(__file__ + '.t')\nshutil.rmtree(__file__ + '.t')\n]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_MUTATION_each_side_effect_kind_is_caught[stdout-print('noise')\n]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_MUTATION_each_side_effect_kind_is_caught[write-open(__file__ + '.sideeffect', 'w').write('x')\n]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_MUTATION_the_baseline_temp_copy_is_itself_inert
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_STRUCTURE_the_probe_guard_is_FIRST_and_nothing_skips_at_collection
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_a_CURRENT_claim_is_a_STRUCTURAL_marker_not_a_substring[active current-> **CURRENT (2026-07-25):** WorkOrder v2.0 (sha `d91443f8`)-current claim]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_a_CURRENT_claim_is_a_STRUCTURAL_marker_not_a_substring[active, no quote-**CURRENT (2026-08-01):** something (sha d91443f8)-current claim]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_a_CURRENT_claim_is_a_STRUCTURAL_marker_not_a_substring[dated history-**2026-07-25 ROUND-30** \u2014 a CURRENT pin line added (d91443f8)-dated record]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_a_CURRENT_claim_is_a_STRUCTURAL_marker_not_a_substring[ledger table row-| **CURRENT claims whose pin is wrong** | **1** \u2014 d91443f8 |-dated record]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_a_DATED_RECORD_is_never_called_a_defect_only_a_CURRENT_claim_is
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_a_QUOTED_current_claim_inside_a_code_fence_claims_nothing
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_an_unallowlisted_MODIFICATION_is_still_caught
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_every_grading_row_points_at_a_registered_grading_fixture
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_every_registered_proof_EXISTS_in_the_live_inventory
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_every_registered_proof_is_SELECTABLE
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_importing_a_module_gains_ZERO_credentials[driver.core.prepared_fact_v2]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_importing_a_module_gains_ZERO_credentials[driver.core.xbrl_attach]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_importing_a_module_gains_ZERO_credentials[driver.relocation.locator]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_importing_a_module_gains_ZERO_credentials[scripts.driver_seed.build_packets]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_the_active_inventory_INCLUDES_the_declared_generators_themselves
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_the_attack_count_is_derived_not_transcribed
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_the_credential_PROBE_ITSELF_can_detect_a_leak
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_the_g_ledger_is_regenerated_not_transcribed
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_the_gate_CATCHES_a_live_import_of_a_staged_module
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_the_gate_CATCHES_a_staged_NAME_in_the_WRONG_DIRECTORY
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_the_gate_CATCHES_an_unexpected_untracked_production_file
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_the_inventory_CATCHES_a_module_loaded_by_FILENAME_not_by_import
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_the_ledger_renderer_is_REPEATABLE_and_matches_disk
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_the_manifest_gate_blocks_the_WHOLE_env_file_family_not_just_dot_env
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_the_package_never_declares_the_G_RANGE_FINISHED_while_rows_are_not
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_the_pin_inventory_RECOMPUTES_each_pin_and_states_the_METHOD
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_the_pin_inventory_is_REPEATABLE_and_matches_disk
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_the_pin_inventory_uses_SEMANTIC_anchors_and_never_itself
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_the_pin_scan_reads_the_INDEX_not_the_dirty_worktree
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_the_registry_is_exactly_G1_to_G35_with_a_closed_vocabulary
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_the_registrys_CLEAN_proofs_run_GREEN_without_any_credential
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_the_registrys_LIVE_proofs_run_GREEN_against_the_real_graph
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_the_v2_modules_are_a_STAGED_read_only_adapter
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_the_write_probe_guard_REFUSES_every_value_except_exactly_1[absent]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_the_write_probe_guard_REFUSES_every_value_except_exactly_1[empty]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_the_write_probe_guard_REFUSES_every_value_except_exactly_1[false]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_the_write_probe_guard_REFUSES_every_value_except_exactly_1[whitespace]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_the_write_probe_guard_REFUSES_every_value_except_exactly_1[zero]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_LIVE_workflow_handoff_delivers_Decimal_to_the_validator
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_ambiguity_resolution_input_works
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_auditor_fails_empty_dir
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_auditor_fails_forbidden_tool
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_auditor_fails_missing_required_read
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_auditor_fails_other_events_input
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_auditor_fails_wrong_count
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_auditor_passes_clean_worker
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_builder_check_fails_changed_file
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_builder_check_fails_extra_file
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_builder_check_fails_missing_file
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_builder_check_fails_missing_manifest
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_builder_check_passes_intact_copy
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_builder_write_refuses_existing_manifest
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_builder_write_refuses_nonempty_dir
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_change_only_value_match
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_clean_union_rescues_incomplete_single
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_comparison_only_value_match
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_definite_failures_never_none
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_e2e_unit_value_match_now_works
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_empty_arm_is_definite_fail
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_error_table_rule_grouped
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_exact_decimal_no_rounding_merge
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_fact16_change_value_requires_change_unit
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_fact16_passes_legal_surprise
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_fact16_trips_guidance_vs_previous_guidance
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_fact16_trips_impossible_tense_exact_dates
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_fact16_trips_impossible_tense_fiscal_only
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_fact16_trips_surprise_temporal_baseline
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_false_lane_verdict_increments_wrong_lane
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_final_gate_or_semantics
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_final_gate_union_axes_govern
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_frozen_proof_artifact_has_before_and_after
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_generated_launcher_EXECUTES_with_fake_agents
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_generator_idempotent_AND_matches_the_committed_artifacts
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_home_fact_correct_sibling_no_park
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_home_fact_unrelated_driver_parks
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_home_fact_value_mismatch_parks
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_home_fact_wrong_period_parks
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_home_numberless_needs_numberless
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_home_numberless_requires_unknown_state
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_home_point_matches_point
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_home_point_vs_floor_rejected
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_home_slice_and_scope_must_match
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_home_unresolved_periods_never_match
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_ingest_handles_a_malformed_row_without_crashing
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_ingest_preserves_a_duplicate_rows_PAID_replies
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_ingest_refuses_to_overwrite_a_captured_reply
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_ingest_rejects_duplicate_rows
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_ingest_rejects_missing_events
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_ingest_rejects_wrong_event_reply
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_ingest_saves_every_paid_reply_even_if_one_is_malformed
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_ingest_validates_both_arms_automatically
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_large_ints_never_merge
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_launch_manifest_exact_plan
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_accepts_du_worthy_false
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_accepts_production_valid_year_2150
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_arm_fails_single_doc
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_clean_on_dict_period_scope
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_clean_on_int_date
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_clean_on_list_driver_state
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_clean_on_list_enum_value
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_clean_on_list_fact_type
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_decimal_exact_END_TO_END
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_fails_blank_quote
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_fails_empty_input
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_fails_extra_fact_key
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_fails_fractional_year_via_production
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_fails_half_quarter_conflict
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_fails_illegal_driver_name
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_fails_inner_outer_mismatch
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_fails_month_13_via_production
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_fails_non_bool_du_worthy
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_fails_non_iso_date_via_production
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_fails_none_shape_literal
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_fails_null_driver_name
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_fails_null_measurement_list
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_fails_null_sequential_evidence
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_fails_null_slice_parts_list
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_fails_start_after_end_via_production
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_fails_stored_period_scope
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_fails_wrong_lane_state
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_fails_wrong_type_cleanly
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_num_accepts_decimal_rejects_float
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_passes_valid_doc
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_matcher_auto_pairs_only_on_shared_source_evidence
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_matcher_exact_evidence_is_order_free_and_not_fuzzy
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_matcher_locator_distinguishes_repeats_of_one_sentence
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_matcher_never_auto_matches_different_drivers_on_equal_value
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_matcher_one_sentence_two_facts_is_order_free
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_matcher_rejects_same_name_value_DIFFERENT_MEASUREMENT
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_matcher_rejects_same_name_value_DIFFERENT_PERIOD
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_matcher_rejects_same_name_value_DIFFERENT_SLICE
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_name_errors_never_dilute
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_numberless_home_requires_quote
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_parser_refuses_nan_infinity_and_duplicate_keys
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_presence_disagreement_metric
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_presence_disagreement_uses_tie_decisions
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_rule_bucket_actual_counts
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_scorer_emits_ambiguous_for_grader
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_scorer_measurement_normalization_equivalent
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_scorer_parks_fiscal_only_future_surprise
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_scorer_parks_grounded_surprise_without_home_sibling
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_scorer_requires_complete_meta_per_event
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_scorer_requires_event_meta
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_scorer_union_recall_beats_single
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_scorer_unit_aware_value_match
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_scorer_wrong_measurement_drops_accuracy
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_scorer_wrong_slice_drops_accuracy
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_shared_endpoint_never_matches
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_state_accuracy_not_diluted
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_transport_hands_off_to_the_single_validator
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_transport_preserves_digits_js_would_collapse
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_transport_proves_the_js_path_would_have_lost_them
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_transport_rejects_preparsed_object
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_union_accepts_tie_resolutions
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_union_dedup_no_inflation
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_union_keeps_different_facts
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_unresolved_tie_blocks_pass
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_workflow_bound_to_locked_manifest
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_wrong_driver_name_fails
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_wrong_unit_hints_fail
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_zz_frozen_untouched
+.claude.plans.Drivers.experiments.harness.test_no_semantic_patterns::test_MUTATION_aliased_regex_import_is_caught
+.claude.plans.Drivers.experiments.harness.test_no_semantic_patterns::test_MUTATION_baseline_temp_repo_is_green
+.claude.plans.Drivers.experiments.harness.test_no_semantic_patterns::test_MUTATION_from_re_import_form_is_caught
+.claude.plans.Drivers.experiments.harness.test_no_semantic_patterns::test_MUTATION_frozenset_keyword_list_is_caught
+.claude.plans.Drivers.experiments.harness.test_no_semantic_patterns::test_MUTATION_fuzzy_import_is_caught
+.claude.plans.Drivers.experiments.harness.test_no_semantic_patterns::test_MUTATION_new_keyword_list_is_caught
+.claude.plans.Drivers.experiments.harness.test_no_semantic_patterns::test_MUTATION_new_regex_inside_an_APPROVED_module_is_caught
+.claude.plans.Drivers.experiments.harness.test_no_semantic_patterns::test_MUTATION_operation_swap_is_caught
+.claude.plans.Drivers.experiments.harness.test_no_semantic_patterns::test_every_regex_site_is_frozen_individually
+.claude.plans.Drivers.experiments.harness.test_no_semantic_patterns::test_exam_closure_includes_everything_it_imports
+.claude.plans.Drivers.experiments.harness.test_no_semantic_patterns::test_keyword_debt_is_frozen
+.claude.plans.Drivers.experiments.harness.test_no_semantic_patterns::test_keyword_lists_are_classified
+.claude.plans.Drivers.experiments.harness.test_no_semantic_patterns::test_no_fuzzy_matching_anywhere_in_either_path
+.claude.plans.Drivers.experiments.harness.test_no_semantic_patterns::test_no_unclassified_regex_in_the_exam_path
+.claude.plans.Drivers.experiments.harness.test_no_semantic_patterns::test_no_unclassified_regex_in_the_production_path
+.claude.plans.Drivers.experiments.harness.test_no_semantic_patterns::test_production_closure_is_derived_not_handwritten
+.claude.plans.Drivers.experiments.harness.test_no_semantic_patterns::test_the_deleted_fuzzy_matcher_stays_deleted
+.claude.plans.Drivers.experiments.harness.test_rev4_gate::test_duplicate_key_in_skeleton_is_rejected
+.claude.plans.Drivers.experiments.harness.test_rev4_gate::test_every_part_f_row_maps_to_its_own_files_hunks
+.claude.plans.Drivers.experiments.harness.test_rev4_gate::test_gate_green_on_the_real_patch
+.claude.plans.Drivers.experiments.harness.test_rev4_gate::test_gate_red_when_an_old_rule_is_reintroduced
+.claude.plans.Drivers.experiments.harness.test_rev4_gate::test_malformed_disposition_is_rejected
+.claude.plans.Drivers.experiments.harness.test_rev4_gate::test_package_self_checks
+.claude.plans.Drivers.experiments.harness.test_rev4_gate::test_part_f_dispositions_derived_from_the_package
+.claude.plans.Drivers.experiments.harness.test_rev4_gate::test_plan_v2_corrected_phrases_stay_corrected
+driver.core.test_adjusted_preservation::test_adjusted_chain_span_to_id_to_anchor
+driver.core.test_adjusted_preservation::test_plain_version_never_planned
+driver.core.test_adjusted_preservation::test_unresolvable_measurement_parks_before_creation
+driver.core.test_admissions_handoff::test_admission_fact_type_drives_lane_validation
+driver.core.test_admissions_handoff::test_admission_name_must_match_fact_name
+driver.core.test_admissions_handoff::test_admissions_none_still_parks_driver_not_ready
+driver.core.test_admissions_handoff::test_all_facts_parked_plans_no_driver
+driver.core.test_admissions_handoff::test_audit_records_admissions_for_reconstruction
+driver.core.test_admissions_handoff::test_create_plans_one_driver_with_first_fact_bundle
+driver.core.test_admissions_handoff::test_create_when_driver_already_exists_parks
+driver.core.test_admissions_handoff::test_disagreeing_triples_in_one_group_hard_error
+driver.core.test_admissions_handoff::test_early_exit_paths_still_carry_driver_plans
+driver.core.test_admissions_handoff::test_enable_writes_with_admissions_hard_fails_before_planning
+driver.core.test_admissions_handoff::test_extra_entry_hard_errors
+driver.core.test_admissions_handoff::test_graph_attach_verified_uses_stored_driver
+driver.core.test_admissions_handoff::test_graph_attach_wrong_fact_type_parks
+driver.core.test_admissions_handoff::test_malformed_entry_hard_errors
+driver.core.test_admissions_handoff::test_missing_entry_hard_errors
+driver.core.test_admissions_handoff::test_non_integer_index_keys_hard_error
+driver.core.test_admissions_handoff::test_non_metric_admission_hard_errors
+driver.core.test_admissions_handoff::test_none_mode_preserves_old_driver_read_path
+driver.core.test_admissions_handoff::test_offline_card_attach_plans_bundle_with_admission_fact_type
+driver.core.test_admissions_handoff::test_rebuild_anchor_consumes_planned_birth_quote
+driver.core.test_admissions_handoff::test_two_facts_one_new_driver_exactly_one_create
+driver.core.test_backfill_seam::test_exactly_one_correct_candidate_attaches_after_recheck
+driver.core.test_backfill_seam::test_malformed_candidate_fails_closed
+driver.core.test_backfill_seam::test_missing_reconfirmation_fails_closed
+driver.core.test_backfill_seam::test_multiple_candidates_fail_closed_ambiguous
+driver.core.test_backfill_seam::test_one_wrong_candidate_never_attaches
+driver.core.test_backfill_seam::test_public_packet_rejects_the_field
+driver.core.test_backfill_seam::test_side_record_rides_item_identity
+driver.core.test_backfill_seam::test_unlawful_driver_names_rejected_never_normalized
+driver.core.test_backfill_seam::test_zero_candidates_no_forced_attachment
+driver.core.test_driver_fusion::test_ambiguous_group_parks_whole
+driver.core.test_driver_fusion::test_complementary_fragments_fuse_fill_nulls_only
+driver.core.test_driver_fusion::test_different_keys_never_interact
+driver.core.test_driver_fusion::test_equal_canonical_values_are_not_a_conflict
+driver.core.test_driver_fusion::test_fill_never_overwrites_a_present_value
+driver.core.test_driver_fusion::test_lww_is_deterministic_and_logged
+driver.core.test_driver_fusion::test_member_refs_fold_is_permutation_identical
+driver.core.test_driver_fusion::test_member_refs_identical_complete_lists_fuse
+driver.core.test_driver_fusion::test_member_refs_none_is_no_claim_and_inherits_the_one_list
+driver.core.test_driver_fusion::test_member_refs_same_provenance_two_slice_parts_parks
+driver.core.test_driver_fusion::test_member_refs_subset_list_also_parks
+driver.core.test_driver_fusion::test_member_refs_two_different_complete_lists_park_never_union
+driver.core.test_driver_fusion::test_member_refs_verified_empty_vs_refs_is_incompatible_parks
+driver.core.test_driver_fusion::test_permutation_identical
+driver.core.test_driver_fusion::test_signature_slot_disagreement_prevents_fusion_canonical_values
+driver.core.test_driver_ids::test_bad_driver_names_rejected[9lives]
+driver.core.test_driver_ids::test_bad_driver_names_rejected[Revenue]
+driver.core.test_driver_ids::test_bad_driver_names_rejected[]
+driver.core.test_driver_ids::test_bad_driver_names_rejected[a:b]
+driver.core.test_driver_ids::test_bad_driver_names_rejected[a__b]
+driver.core.test_driver_ids::test_bad_driver_names_rejected[abc_]
+driver.core.test_driver_ids::test_bad_driver_names_rejected[r]
+driver.core.test_driver_ids::test_bad_period_ids_rejected[2024-01-01]
+driver.core.test_driver_ids::test_bad_period_ids_rejected[gp_2024-06-30]
+driver.core.test_driver_ids::test_bad_period_ids_rejected[gp_2024-06-30_2024-04-01]
+driver.core.test_driver_ids::test_bad_period_ids_rejected[gp_2024-13-01_2024-12-31]
+driver.core.test_driver_ids::test_bad_period_ids_rejected[gp_UNKNOWN]
+driver.core.test_driver_ids::test_bad_period_ids_rejected[gp_]
+driver.core.test_driver_ids::test_bad_slice_kind_and_bad_surprise_rejected
+driver.core.test_driver_ids::test_bad_source_ids_rejected[]
+driver.core.test_driver_ids::test_bad_source_ids_rejected[a b]
+driver.core.test_driver_ids::test_bad_source_ids_rejected[acc=1]
+driver.core.test_driver_ids::test_bad_source_ids_rejected[a|b]
+driver.core.test_driver_ids::test_bad_source_ids_rejected[x/y]
+driver.core.test_driver_ids::test_dec_canon_fail_closed
+driver.core.test_driver_ids::test_duplicate_parts_fold_to_one
+driver.core.test_driver_ids::test_member_id_never_stacks
+driver.core.test_driver_ids::test_neo4j_numeric_fidelity_within_the_declared_domain
+driver.core.test_driver_ids::test_num_canon_terminal_regime_rejects_every_float
+driver.core.test_driver_ids::test_signature_hash_fail_closed
+driver.core.test_driver_ids::test_trailing_newline_rejected_across_every_identity_regex
+driver.core.test_driver_ids::test_v10_signature_hash_pinned
+driver.core.test_driver_ids::test_v11_null_differs_from_empty_string
+driver.core.test_driver_ids::test_v12_dec_canon[-0-0]
+driver.core.test_driver_ids::test_v12_dec_canon[-0.000-0]
+driver.core.test_driver_ids::test_v12_dec_canon[-0.20--0.2]
+driver.core.test_driver_ids::test_v12_dec_canon[-1.5E2--150]
+driver.core.test_driver_ids::test_v12_dec_canon[.5-0.5]
+driver.core.test_driver_ids::test_v12_dec_canon[0.100-0.1]
+driver.core.test_driver_ids::test_v12_dec_canon[1000.000-1000]
+driver.core.test_driver_ids::test_v12_dec_canon[1e3-1000]
+driver.core.test_driver_ids::test_v12_dec_canon[2.50-2.5]
+driver.core.test_driver_ids::test_v12_dec_canon[2000-2000]
+driver.core.test_driver_ids::test_v13_norm[  GAAP  -gaap]
+driver.core.test_driver_ids::test_v13_norm[Adjusted, Diluted-adjusted_diluted]
+driver.core.test_driver_ids::test_v13_norm[Company-Operated Stores-company_operated_stores]
+driver.core.test_driver_ids::test_v13_norm[D\xfcsseldorf-dusseldorf]
+driver.core.test_driver_ids::test_v13_norm[constant currency-constant_currency]
+driver.core.test_driver_ids::test_v13_norm_empty_result_rejected_in_build
+driver.core.test_driver_ids::test_v14_fiscal_mapped_form_accepted_colon_form_rejected
+driver.core.test_driver_ids::test_v15_instant_is_date_twice
+driver.core.test_driver_ids::test_v1_metric_consolidated
+driver.core.test_driver_ids::test_v2_single_slice
+driver.core.test_driver_ids::test_v3_slice_sort
+driver.core.test_driver_ids::test_v4_measurement_sort
+driver.core.test_driver_ids::test_v5_surprise_slot_order
+driver.core.test_driver_ids::test_v6_sentinel_period
+driver.core.test_driver_ids::test_v7_empty_scope_keeps_trailing_colon
+driver.core.test_driver_ids::test_v8_unknown_axis_roundtrip
+driver.core.test_driver_ids::test_v8b_sentinel_survives_build_unmangled
+driver.core.test_driver_ids::test_v9_member_id_and_probe
+driver.core.test_driver_member_fold::test_case1_same_kind_exact_token_folds
+driver.core.test_driver_member_fold::test_case2_cross_kind_equal_value_never_folds
+driver.core.test_driver_member_fold::test_case3_unknown_vs_known_never_folds
+driver.core.test_driver_member_fold::test_case4_no_suffix_stripping_europesegment_is_not_europe
+driver.core.test_driver_member_fold::test_case5_same_member_on_different_axes_two_exact_axis_member_links
+driver.core.test_driver_member_fold::test_e2e_case1_same_kind_exact_token_folds
+driver.core.test_driver_member_fold::test_e2e_case2_cross_kind_equal_value_never_folds
+driver.core.test_driver_member_fold::test_e2e_case3_unknown_axis_provisional_never_folds_with_known
+driver.core.test_driver_member_fold::test_e2e_case4_no_suffix_stripping_europesegment_is_not_europe
+driver.core.test_driver_member_fold::test_e2e_case5_two_axes_same_member_two_links_written
+driver.core.test_driver_member_fold::test_e2e_fused_fragments_inherit_the_one_claim
+driver.core.test_driver_member_fold::test_e2e_fusion_verified_empty_vs_refs_parks_both
+driver.core.test_driver_period_resolver::test_10_calendar_override_routes_before_lookups
+driver.core.test_driver_period_resolver::test_11_missing_fye_raises_never_defaults_december
+driver.core.test_driver_period_resolver::test_12_existing_period_u_id_preserved
+driver.core.test_driver_period_resolver::test_13_15_19_same_window_different_lanes_and_scope_token
+driver.core.test_driver_period_resolver::test_14_periodless_returns_none
+driver.core.test_driver_period_resolver::test_16_event_derived_fields_resolve
+driver.core.test_driver_period_resolver::test_17_ytd_fiscal_math_proofs
+driver.core.test_driver_period_resolver::test_17b_ytd_exact_dates_win
+driver.core.test_driver_period_resolver::test_18_ttm_fiscal_math_proofs
+driver.core.test_driver_period_resolver::test_1_parity_old_ensure_period_vs_new
+driver.core.test_driver_period_resolver::test_20_exact_dates_win_over_fiscal_shorthand
+driver.core.test_driver_period_resolver::test_20b_exact_instant_single_date
+driver.core.test_driver_period_resolver::test_2_quarter_dec_and_sep_fye
+driver.core.test_driver_period_resolver::test_3_annual
+driver.core.test_driver_period_resolver::test_4_half
+driver.core.test_driver_period_resolver::test_5_month
+driver.core.test_driver_period_resolver::test_6_long_range_scope_remapped
+driver.core.test_driver_period_resolver::test_7_sentinels[long_term-gp_LT]
+driver.core.test_driver_period_resolver::test_7_sentinels[medium_term-gp_MT]
+driver.core.test_driver_period_resolver::test_7_sentinels[short_term-gp_ST]
+driver.core.test_driver_period_resolver::test_7_sentinels[undefined-gp_UNDEF]
+driver.core.test_driver_period_resolver::test_8_instant_collapses_to_date_twice
+driver.core.test_driver_period_resolver::test_9_known_instant_label_never_overrides_stated_time_type
+driver.core.test_driver_period_resolver::test_bad_input_scope_rejected
+driver.core.test_driver_period_resolver::test_cascade_order_existing_then_sec_then_predict
+driver.core.test_driver_period_resolver::test_cascade_skipped_for_instants_and_nonstandard
+driver.core.test_driver_period_resolver::test_conflicting_shape_fields_park_on_every_path
+driver.core.test_driver_period_resolver::test_duration_with_equal_exact_dates_rejected
+driver.core.test_driver_period_resolver::test_exact_date_instant_scope_matches_pure_math_label
+driver.core.test_driver_period_resolver::test_exact_dates_half_specified_rejected
+driver.core.test_driver_period_resolver::test_exact_dates_scope_matches_declared_fields[fields0-2025-06-29-2025-09-27-quarter]
+driver.core.test_driver_period_resolver::test_exact_dates_scope_matches_declared_fields[fields1-2024-09-29-2025-09-27-annual]
+driver.core.test_driver_period_resolver::test_exact_dates_scope_matches_declared_fields[fields2-2025-03-30-2025-09-27-half]
+driver.core.test_driver_period_resolver::test_exact_dates_scope_matches_declared_fields[fields3-2025-07-01-2025-07-31-monthly]
+driver.core.test_driver_period_resolver::test_exact_dates_scope_matches_declared_fields[fields4-2025-01-01-2030-12-31-exact_range]
+driver.core.test_driver_period_resolver::test_exact_dates_scope_matches_declared_fields[fields5-2025-06-29-2025-09-27-exact_range]
+driver.core.test_driver_period_resolver::test_exact_dates_ytd_ttm_scope_still_preserved
+driver.core.test_driver_period_resolver::test_instant_with_conflicting_exact_dates_rejected
+driver.core.test_driver_period_resolver::test_interim_guard_parks_contradictory_framing
+driver.core.test_driver_period_resolver::test_interim_guard_passes_29_week_half
+driver.core.test_driver_period_resolver::test_interim_guard_passes_full_year_ytd
+driver.core.test_driver_period_resolver::test_interim_guard_passes_irregular_quarter_filers
+driver.core.test_driver_period_resolver::test_interim_guard_passes_real_52_53_week_windows
+driver.core.test_driver_period_resolver::test_invalid_dates_park_cleanly_never_crash
+driver.core.test_driver_period_resolver::test_month_without_year_raises_no_year_2000
+driver.core.test_driver_period_resolver::test_out_of_range_shape_values_park
+driver.core.test_driver_period_resolver::test_pure_lane_never_imports_the_heavy_substrate
+driver.core.test_driver_period_resolver::test_quiet_undef_fallthrough_forbidden
+driver.core.test_driver_period_resolver::test_same_window_same_scope_across_xbrl_and_sec_paths
+driver.core.test_driver_period_resolver::test_short_ytd_has_no_minimum_duration
+driver.core.test_driver_period_resolver::test_strict_shape_check_rejects_mixed_and_incomplete_framing
+driver.core.test_driver_period_resolver::test_time_type_required_never_defaulted
+driver.core.test_driver_period_resolver::test_ytd_ttm_require_duration_and_fiscal_year
+driver.core.test_driver_period_resolver::test_zero_values_are_validated_not_treated_as_absent
+driver.core.test_driver_units::test_annual_pin_sequential_impossible_on_annual
+driver.core.test_driver_units::test_cents_on_aggregate_raises
+driver.core.test_driver_units::test_comparison_values_share_the_level_resolution
+driver.core.test_driver_units::test_count_999_prescale_boundary_pinned
+driver.core.test_driver_units::test_enum_is_the_ten_units
+driver.core.test_driver_units::test_exact_math_owns_its_full_context_not_just_precision
+driver.core.test_driver_units::test_exact_scaling_is_immune_to_the_ambient_decimal_context
+driver.core.test_driver_units::test_exact_scaling_no_six_decimal_rounding
+driver.core.test_driver_units::test_float_source_values_rejected_at_the_units_seam
+driver.core.test_driver_units::test_high_precision_product_never_rounds_even_past_28_digits
+driver.core.test_driver_units::test_no_numbers_no_raw_no_resolution
+driver.core.test_driver_units::test_numberless_growth_takes_unit_from_framing
+driver.core.test_driver_units::test_per_slot_hints_level_and_change_independent
+driver.core.test_driver_units::test_per_x_in_name_passes_with_base_usd
+driver.core.test_driver_units::test_per_x_lint_is_a_hard_failure_on_money_level
+driver.core.test_driver_units::test_percent_growth_LEVEL_takes_the_basis_ladder
+driver.core.test_driver_units::test_plain_pct_change_on_money_metric_is_growth
+driver.core.test_driver_units::test_plain_pct_change_with_unknown_metric_levelness_fails_closed
+driver.core.test_driver_units::test_points_and_bps_win_over_any_basis_wording
+driver.core.test_driver_units::test_prescale_boundary_straddler_parks_fail_closed
+driver.core.test_driver_units::test_sentinel_or_missing_scope_fails_closed_to_unknown
+driver.core.test_driver_units::test_sequential_needs_in_document_evidence
+driver.core.test_driver_units::test_static_percent_gate_plain_pct_change_on_pct_level_metric
+driver.core.test_driver_units::test_straddle_check_mirrors_the_substrate_factor_conditions
+driver.core.test_driver_units::test_straddle_check_scoped_to_where_the_guard_exists
+driver.core.test_driver_units::test_tiny_and_huge_values_are_defined_not_crashes
+driver.core.test_driver_units::test_tiny_money_scales_exactly_below_the_old_six_decimal_limit
+driver.core.test_driver_validators::test_F1_composition_mismatch
+driver.core.test_driver_validators::test_F1_surprise_slot_missing
+driver.core.test_driver_validators::test_F2_surprise_slot_on_other_lane
+driver.core.test_driver_validators::test_F3_basis_hint_required_and_lane_bound
+driver.core.test_driver_validators::test_F4_baseline_required_on_surprise
+driver.core.test_driver_validators::test_F5_guide_vs_own_prior_is_movement_not_surprise
+driver.core.test_driver_validators::test_F6_missing_home_parks_whole_event
+driver.core.test_driver_validators::test_F7_actual_surprise_before_period_end_rejected
+driver.core.test_driver_validators::test_F7_guidance_vs_consensus_allowed_on_open_period
+driver.core.test_driver_validators::test_F8_ungrounded_results_beat_parks
+driver.core.test_driver_validators::test_F9_each_home_key_tested_separately[family-<lambda>]
+driver.core.test_driver_validators::test_F9_each_home_key_tested_separately[measurement-<lambda>]
+driver.core.test_driver_validators::test_F9_each_home_key_tested_separately[period-<lambda>]
+driver.core.test_driver_validators::test_F9_each_home_key_tested_separately[period_scope-<lambda>]
+driver.core.test_driver_validators::test_F9_each_home_key_tested_separately[slice-<lambda>]
+driver.core.test_driver_validators::test_F9_each_home_key_tested_separately[unit-<lambda>]
+driver.core.test_driver_validators::test_F9_each_home_key_tested_separately[value-<lambda>]
+driver.core.test_driver_validators::test_F9_value_match_is_exact_dusty_home_parks
+driver.core.test_driver_validators::test_P3_guide_range_containing_consensus_is_in_line
+driver.core.test_driver_validators::test_P4_old_guide_restated_after_period_end_stays_gvc
+driver.core.test_driver_validators::test_P5_numberless_surprise_with_numberless_home
+driver.core.test_driver_validators::test_P8_lower_is_better_beat_with_stated_negative_delta
+driver.core.test_driver_validators::test_actual_range_bracketing_expectation_is_the_unclear_case
+driver.core.test_driver_validators::test_baseline_enum_and_lane_rules
+driver.core.test_driver_validators::test_company_confirmed_false_is_reserved_and_type_exact
+driver.core.test_driver_validators::test_company_confirmed_lane_rules
+driver.core.test_driver_validators::test_compose_surprise_scope_all_valid_mappings_P6
+driver.core.test_driver_validators::test_conditions_guidance_only_and_in_quote
+driver.core.test_driver_validators::test_date_without_time_rejected
+driver.core.test_driver_validators::test_dated_period_dates_must_match_the_gp_id
+driver.core.test_driver_validators::test_derivable_surprise_delta_never_stored
+driver.core.test_driver_validators::test_exact_decimal_inputs_accepted
+driver.core.test_driver_validators::test_exact_driver_match_required
+driver.core.test_driver_validators::test_fabricated_period_token
+driver.core.test_driver_validators::test_fiscal_fields_validated
+driver.core.test_driver_validators::test_float_dust_rejected_at_the_boundary
+driver.core.test_driver_validators::test_full_timestamp_required
+driver.core.test_driver_validators::test_garbage_date_types_reject_without_crash
+driver.core.test_driver_validators::test_golden_matrix_validates_clean[ceiling-action_event]
+driver.core.test_driver_validators::test_golden_matrix_validates_clean[ceiling-guidance]
+driver.core.test_driver_validators::test_golden_matrix_validates_clean[ceiling-metric]
+driver.core.test_driver_validators::test_golden_matrix_validates_clean[ceiling-surprise]
+driver.core.test_driver_validators::test_golden_matrix_validates_clean[delta-only-action_event]
+driver.core.test_driver_validators::test_golden_matrix_validates_clean[delta-only-guidance]
+driver.core.test_driver_validators::test_golden_matrix_validates_clean[delta-only-metric]
+driver.core.test_driver_validators::test_golden_matrix_validates_clean[delta-only-surprise]
+driver.core.test_driver_validators::test_golden_matrix_validates_clean[floor-action_event]
+driver.core.test_driver_validators::test_golden_matrix_validates_clean[floor-guidance]
+driver.core.test_driver_validators::test_golden_matrix_validates_clean[floor-metric]
+driver.core.test_driver_validators::test_golden_matrix_validates_clean[floor-surprise]
+driver.core.test_driver_validators::test_golden_matrix_validates_clean[numberless-action_event]
+driver.core.test_driver_validators::test_golden_matrix_validates_clean[numberless-guidance]
+driver.core.test_driver_validators::test_golden_matrix_validates_clean[numberless-metric]
+driver.core.test_driver_validators::test_golden_matrix_validates_clean[numberless-surprise]
+driver.core.test_driver_validators::test_golden_matrix_validates_clean[point-action_event]
+driver.core.test_driver_validators::test_golden_matrix_validates_clean[point-guidance]
+driver.core.test_driver_validators::test_golden_matrix_validates_clean[point-metric]
+driver.core.test_driver_validators::test_golden_matrix_validates_clean[point-surprise]
+driver.core.test_driver_validators::test_golden_matrix_validates_clean[range-action_event]
+driver.core.test_driver_validators::test_golden_matrix_validates_clean[range-guidance]
+driver.core.test_driver_validators::test_golden_matrix_validates_clean[range-metric]
+driver.core.test_driver_validators::test_golden_matrix_validates_clean[range-surprise]
+driver.core.test_driver_validators::test_guidance_requires_a_period
+driver.core.test_driver_validators::test_guidance_vs_consensus_requires_target_period
+driver.core.test_driver_validators::test_home_check_cannot_be_bypassed
+driver.core.test_driver_validators::test_id_and_fact_scope_are_required_at_validation
+driver.core.test_driver_validators::test_id_and_scope_rebuild_agreement
+driver.core.test_driver_validators::test_instant_duration_legality
+driver.core.test_driver_validators::test_malformed_numbers_reject_cleanly_never_crash
+driver.core.test_driver_validators::test_movement_midpoint_rule
+driver.core.test_driver_validators::test_named_numberless_surprise_missing_home_is_F6_whole_event
+driver.core.test_driver_validators::test_nan_rejects_cleanly
+driver.core.test_driver_validators::test_numberless_fact_with_unit_rules
+driver.core.test_driver_validators::test_period_symmetry_and_scope_pairing
+driver.core.test_driver_validators::test_position_boundaries_and_open_shapes
+driver.core.test_driver_validators::test_producers_never_supply_xbrl_qname
+driver.core.test_driver_validators::test_quote_required_all_lanes
+driver.core.test_driver_validators::test_reversed_range_with_invalid_hint_rejected
+driver.core.test_driver_validators::test_sentinel_horizons_illegal_outside_guidance[action_event]
+driver.core.test_driver_validators::test_sentinel_horizons_illegal_outside_guidance[metric]
+driver.core.test_driver_validators::test_sentinel_horizons_illegal_outside_guidance[surprise]
+driver.core.test_driver_validators::test_sentinel_periods_store_null_dates_and_need_time_type
+driver.core.test_driver_validators::test_shape_hint_missing_or_mismatched
+driver.core.test_driver_validators::test_sign_rule_excludes_beat_missed_P8
+driver.core.test_driver_validators::test_sign_rule_increased_needs_positive
+driver.core.test_driver_validators::test_state_outside_lane_hard_fails
+driver.core.test_driver_validators::test_units_required_with_numbers
+driver.core.test_driver_validators::test_unknown_stored_field_rejected_dormant_xbrl_off
+driver.core.test_driver_validators::test_untyped_driver_rejected
+driver.core.test_driver_validators::test_value_text_lint
+driver.core.test_driver_validators::test_violation_order_is_caller_independent
+driver.core.test_driver_validators::test_wordless_inside_closed_range_corrected_stated_wording_kept
+driver.core.test_driver_validators::test_wordless_unknown_inside_becomes_in_line
+driver.core.test_driver_validators::test_xbrl_qname_metric_only
+driver.core.test_driver_write_cli::test_ambiguous_company_parks_all
+driver.core.test_driver_write_cli::test_audit_file_unique_and_write_ahead
+driver.core.test_driver_write_cli::test_audit_final_ops_stamped_and_exactly_executed
+driver.core.test_driver_write_cli::test_audit_prepared_carries_plans_logs_and_exact_bytes
+driver.core.test_driver_write_cli::test_audit_records_the_final_executed_plan
+driver.core.test_driver_write_cli::test_conflicting_shape_hints_never_fuse
+driver.core.test_driver_write_cli::test_date_is_source_time_and_created_unstamped_in_dry_run
+driver.core.test_driver_write_cli::test_dry_run_fidelity_same_plan_as_real
+driver.core.test_driver_write_cli::test_dry_run_plans_written_but_mutates_nothing
+driver.core.test_driver_write_cli::test_empty_labels_park_never_crash_or_reject
+driver.core.test_driver_write_cli::test_enabled_run_commits_and_stamps_created_once
+driver.core.test_driver_write_cli::test_every_emitting_branch_carries_a_code
+driver.core.test_driver_write_cli::test_false_verified_empty_dims_claim_parks
+driver.core.test_driver_write_cli::test_fragments_fuse_and_share_one_fact_id
+driver.core.test_driver_write_cli::test_fusion_ambiguous_parks_group
+driver.core.test_driver_write_cli::test_fusion_hint_survivor_is_order_independent
+driver.core.test_driver_write_cli::test_future_period_actual_surprise_rejected_f7
+driver.core.test_driver_write_cli::test_fye_always_from_stored_source_no_override
+driver.core.test_driver_write_cli::test_in_tx_final_replan_catches_stale_state
+driver.core.test_driver_write_cli::test_in_tx_source_change_aborts
+driver.core.test_driver_write_cli::test_incomplete_dimension_set_never_matches
+driver.core.test_driver_write_cli::test_inconsistent_polarity_proof_becomes_unknown
+driver.core.test_driver_write_cli::test_input_bytes_must_match_parsed_input
+driver.core.test_driver_write_cli::test_lock_is_mandatory_default_lock_used
+driver.core.test_driver_write_cli::test_log_ops_never_reach_the_graph
+driver.core.test_driver_write_cli::test_measurement_case_normalized_once_home_match_holds
+driver.core.test_driver_write_cli::test_member_elsewhere_in_filing_is_insufficient
+driver.core.test_driver_write_cli::test_member_ref_supporting_no_fact_slice_parks_invalid
+driver.core.test_driver_write_cli::test_member_ref_with_no_matching_fact_parks_unverifiable
+driver.core.test_driver_write_cli::test_member_refs_flow_through_and_op_identity_carries_axis
+driver.core.test_driver_write_cli::test_menu_is_fetched_pit_at_source_time
+driver.core.test_driver_write_cli::test_numberless_withdrawal_copies_exactly_one_prior_unit
+driver.core.test_driver_write_cli::test_open_bound_positions_are_definitive
+driver.core.test_driver_write_cli::test_permutation_identical_decisions
+driver.core.test_driver_write_cli::test_preflight_positive_and_negative
+driver.core.test_driver_write_cli::test_prior_query_is_company_time_and_series_scoped
+driver.core.test_driver_write_cli::test_prior_ranking_day_is_eastern_not_string_prefix
+driver.core.test_driver_write_cli::test_prior_ranking_latest_earlier_guide_wins
+driver.core.test_driver_write_cli::test_prior_ranking_same_day_8k_beats_transcript
+driver.core.test_driver_write_cli::test_prior_ranking_tiebreaks_later_time_then_source_id
+driver.core.test_driver_write_cli::test_prior_winning_source_collision_conflict_parks
+driver.core.test_driver_write_cli::test_priors_lookup_receives_period_scope
+driver.core.test_driver_write_cli::test_priors_queried_only_for_numberless_withdrawn_reaffirmed
+driver.core.test_driver_write_cli::test_reject_beats_park
+driver.core.test_driver_write_cli::test_source_missing_run_fails_items_rejected
+driver.core.test_driver_write_cli::test_surprise_parks_when_home_plan_not_accepted
+driver.core.test_driver_write_cli::test_surprise_writes_with_accepted_home
+driver.core.test_driver_write_cli::test_true_verified_empty_dims_claim_writes
+driver.core.test_driver_write_cli::test_truthful_rollback_execution_failed
+driver.core.test_driver_write_cli::test_untyped_driver_parks
+driver.core.test_driver_write_cli::test_wordless_beat_inside_consensus_corrected_to_in_line
+driver.core.test_driver_write_cli::test_wordless_beat_with_valid_proof_survives
+driver.core.test_driver_write_cli::test_wordless_beat_without_polarity_proof_becomes_unknown
+driver.core.test_driver_write_cli::test_write_gate_env_required
+driver.core.test_driver_write_cli::test_write_gate_items_get_write_gate_code
+driver.core.test_driver_write_cli::test_writer_busy_flock
+driver.core.test_driver_write_cli::test_writer_busy_parks_never_written
+driver.core.test_driver_write_cli::test_writer_busy_preserves_planner_parks
+driver.core.test_driver_write_cli::test_xbrl_fact_query_is_company_scoped_nonnil_and_length_guarded
+driver.core.test_driver_write_cli::test_xbrl_fact_rows_fetched_once_per_concept_per_event
+driver.core.test_driver_writer::test_compatible_fill_never_null_clobbers
+driver.core.test_driver_writer::test_compatible_not_exact_with_multiple_siblings_parks
+driver.core.test_driver_writer::test_conflict_with_all_siblings_creates_member
+driver.core.test_driver_writer::test_conflict_with_one_sibling_creates_member_with_late_log
+driver.core.test_driver_writer::test_create_bare_with_period_edges_and_series_unit
+driver.core.test_driver_writer::test_cross_event_batch_rejected
+driver.core.test_driver_writer::test_deduped_results_inherit_the_survivor_final_id
+driver.core.test_driver_writer::test_exact_inbatch_duplicates_dedupe_to_one_create
+driver.core.test_driver_writer::test_exact_match_among_multiple_siblings_merges
+driver.core.test_driver_writer::test_float_dust_rejects_at_the_writer_too_never_a_twin
+driver.core.test_driver_writer::test_inbatch_duplicate_fusion_is_input_order_independent
+driver.core.test_driver_writer::test_member_fact_scope_carries_the_quote_hash_slot
+driver.core.test_driver_writer::test_missing_id_is_a_defined_error_not_a_crash
+driver.core.test_driver_writer::test_non_signature_conflict_lww_with_log
+driver.core.test_driver_writer::test_non_storable_value_parks_never_approximates
+driver.core.test_driver_writer::test_noop_rerun_zero_mutations
+driver.core.test_driver_writer::test_period_op_carries_u_id
+driver.core.test_driver_writer::test_period_write_once_mismatch_hard_fails
+driver.core.test_driver_writer::test_permutation_both_conflict_everything_both_members
+driver.core.test_driver_writer::test_permutation_exact_plus_conflict_each_decidable
+driver.core.test_driver_writer::test_permutation_single_filler_plus_conflicter
+driver.core.test_driver_writer::test_series_unit_conflict_on_fill_parks_for_repair
+driver.core.test_driver_writer::test_series_unit_filled_when_a_compatible_fact_gains_a_level
+driver.core.test_driver_writer::test_series_unit_prior_must_be_exactly_one
+driver.core.test_driver_writer::test_series_unit_rules
+driver.core.test_driver_writer::test_sparse_rerun_never_erases_richer_fact
+driver.core.test_driver_writer::test_storable_classification
+driver.core.test_driver_writer::test_stored_node_is_exactly_the_24_fields_members_included
+driver.core.test_driver_writer::test_stored_props_use_native_types_hash_stays_exact
+driver.core.test_driver_writer::test_text_signature_drift_never_mints_a_sibling
+driver.core.test_driver_writer::test_two_inbatch_competitors_for_one_partial_sibling_park_both
+driver.core.test_driver_writer::test_two_scenario_same_event_both_hashed_no_bare
+driver.core.test_driver_writer::test_unfused_compatible_inbatch_pair_parks_fail_closed
+driver.core.test_driver_writer::test_withdrawal_without_prior_parks_in_plan
+driver.core.test_neo4j_adapter_readonly::test_CONFLICTING_duplicate_id_records_poison_the_lookup
+driver.core.test_neo4j_adapter_readonly::test_a_DIMENSION_may_lawfully_have_a_null_label
+driver.core.test_neo4j_adapter_readonly::test_a_DIMENSION_with_a_NON_NULL_label_is_unlawful[   ]
+driver.core.test_neo4j_adapter_readonly::test_a_DIMENSION_with_a_NON_NULL_label_is_unlawful[5]
+driver.core.test_neo4j_adapter_readonly::test_a_DIMENSION_with_a_NON_NULL_label_is_unlawful[Foo]
+driver.core.test_neo4j_adapter_readonly::test_a_DIMENSION_with_a_NON_NULL_label_is_unlawful[]
+driver.core.test_neo4j_adapter_readonly::test_a_MALFORMED_definition_record_never_raises_a_raw_error[5]
+driver.core.test_neo4j_adapter_readonly::test_a_MALFORMED_definition_record_never_raises_a_raw_error[None]
+driver.core.test_neo4j_adapter_readonly::test_a_MALFORMED_definition_record_never_raises_a_raw_error[bad3]
+driver.core.test_neo4j_adapter_readonly::test_a_MALFORMED_definition_record_never_raises_a_raw_error[bad4]
+driver.core.test_neo4j_adapter_readonly::test_a_MALFORMED_definition_record_never_raises_a_raw_error[bad5]
+driver.core.test_neo4j_adapter_readonly::test_a_MALFORMED_definition_record_never_raises_a_raw_error[not-a-dict]
+driver.core.test_neo4j_adapter_readonly::test_a_MEMBER_id_in_the_AXIS_slot_drops_the_fact_fail_closed
+driver.core.test_neo4j_adapter_readonly::test_a_MEMBER_without_a_label_is_dropped_through_the_PUBLIC_path
+driver.core.test_neo4j_adapter_readonly::test_a_MEMBER_without_a_usable_label_is_dropped_at_the_source[   ]
+driver.core.test_neo4j_adapter_readonly::test_a_MEMBER_without_a_usable_label_is_dropped_at_the_source[5]
+driver.core.test_neo4j_adapter_readonly::test_a_MEMBER_without_a_usable_label_is_dropped_at_the_source[None]
+driver.core.test_neo4j_adapter_readonly::test_a_MEMBER_without_a_usable_label_is_dropped_at_the_source[]
+driver.core.test_neo4j_adapter_readonly::test_a_NON_DICT_graph_row_never_raises_a_raw_error[3.5]
+driver.core.test_neo4j_adapter_readonly::test_a_NON_DICT_graph_row_never_raises_a_raw_error[5]
+driver.core.test_neo4j_adapter_readonly::test_a_NON_DICT_graph_row_never_raises_a_raw_error[None]
+driver.core.test_neo4j_adapter_readonly::test_a_NON_DICT_graph_row_never_raises_a_raw_error[True]
+driver.core.test_neo4j_adapter_readonly::test_a_NON_DICT_graph_row_never_raises_a_raw_error[bad4]
+driver.core.test_neo4j_adapter_readonly::test_a_poisoned_id_does_not_poison_its_NEIGHBOURS
+driver.core.test_neo4j_adapter_readonly::test_a_row_MISSING_its_dimension_arrays_never_raises
+driver.core.test_neo4j_adapter_readonly::test_an_id_must_resolve_to_the_RIGHT_KIND_of_node
+driver.core.test_neo4j_adapter_readonly::test_company_slice_menu_positive_aapl_regression
+driver.core.test_neo4j_adapter_readonly::test_company_slice_menu_retrieval_runs
+driver.core.test_neo4j_adapter_readonly::test_definition_rows_need_a_COMPLETE_shape_not_just_an_id[bad0]
+driver.core.test_neo4j_adapter_readonly::test_definition_rows_need_a_COMPLETE_shape_not_just_an_id[bad1]
+driver.core.test_neo4j_adapter_readonly::test_definition_rows_need_a_COMPLETE_shape_not_just_an_id[bad2]
+driver.core.test_neo4j_adapter_readonly::test_definition_rows_need_a_COMPLETE_shape_not_just_an_id[bad3]
+driver.core.test_neo4j_adapter_readonly::test_driver_siblings_periods_empty_pre_production
+driver.core.test_neo4j_adapter_readonly::test_identical_duplicate_id_records_COLLAPSE
+driver.core.test_neo4j_adapter_readonly::test_ownership_relationship_exactly_one_company
+driver.core.test_neo4j_adapter_readonly::test_preflight_reports_honestly_and_creates_nothing
+driver.core.test_neo4j_adapter_readonly::test_prior_guide_units_real_query_runs
+driver.core.test_neo4j_adapter_readonly::test_source_metadata_reads
+driver.core.test_neo4j_adapter_readonly::test_the_SAME_fact_with_a_usable_member_label_DOES_come_back
+driver.core.test_neo4j_adapter_readonly::test_the_id_resolver_is_PRIVATE
+driver.core.test_neo4j_adapter_readonly::test_uncatalogued_slice_axis_lives_in_graph_agilent
+driver.core.test_neo4j_adapter_readonly::test_writes_refused_outright
+driver.core.test_neo4j_adapter_readonly::test_xbrl_fact_level_verification_live_aapl
+driver.core.test_neo4j_numeric_roundtrip::test_real_neo4j_roundtrip_of_the_exactness_storage_law
+driver.core.test_prepared_fact::test_an_unlawful_source_id_can_never_REACH_a_graph_read
+driver.core.test_prepared_fact::test_blank_strings_rejected_everywhere_none_when_absent
+driver.core.test_prepared_fact::test_direct_construction_validates_too
+driver.core.test_prepared_fact::test_exact_dates_alone_stay_non_xbrl_legal
+driver.core.test_prepared_fact::test_exact_numbers_accepted_floats_rejected
+driver.core.test_prepared_fact::test_malformed_packets_reject_cleanly_never_crash
+driver.core.test_prepared_fact::test_member_refs_reject_hidden_extra_fields
+driver.core.test_prepared_fact::test_member_refs_tristate_semantics
+driver.core.test_prepared_fact::test_member_refs_typed_and_carried_for_fact_level_verification
+driver.core.test_prepared_fact::test_minimal_fact_constructs_with_defaults
+driver.core.test_prepared_fact::test_nonfinite_decimal_rejected
+driver.core.test_prepared_fact::test_required_fields_enforced
+driver.core.test_prepared_fact::test_run_input_wraps_source_and_facts
+driver.core.test_prepared_fact::test_sequential_evidence_carried_and_typed
+driver.core.test_prepared_fact::test_surprise_evidence_fields
+driver.core.test_prepared_fact::test_the_field_set_is_exactly_block2_plus_lane_transients
+driver.core.test_prepared_fact::test_typed_fields_enforced
+driver.core.test_prepared_fact::test_unknown_fields_reject
+driver.core.test_prepared_fact::test_v1_run_input_asks_the_ONE_source_id_predicate_on_BOTH_paths[   ]
+driver.core.test_prepared_fact::test_v1_run_input_asks_the_ONE_source_id_predicate_on_BOTH_paths[5]
+driver.core.test_prepared_fact::test_v1_run_input_asks_the_ONE_source_id_predicate_on_BOTH_paths[None]
+driver.core.test_prepared_fact::test_v1_run_input_asks_the_ONE_source_id_predicate_on_BOTH_paths[True]
+driver.core.test_prepared_fact::test_v1_run_input_asks_the_ONE_source_id_predicate_on_BOTH_paths[]
+driver.core.test_prepared_fact::test_v1_run_input_asks_the_ONE_source_id_predicate_on_BOTH_paths[a:b]
+driver.core.test_prepared_fact::test_v1_run_input_asks_the_ONE_source_id_predicate_on_BOTH_paths[acc\n1]
+driver.core.test_prepared_fact::test_v1_run_input_asks_the_ONE_source_id_predicate_on_BOTH_paths[with space]
+driver.core.test_prepared_fact::test_v1_run_input_asks_the_ONE_source_id_predicate_on_BOTH_paths[x/y]
+driver.core.test_prepared_fact::test_v1_run_input_still_accepts_every_LAWFUL_id[0000006201-26-000031]
+driver.core.test_prepared_fact::test_v1_run_input_still_accepts_every_LAWFUL_id[SOME-OTHER-FILING]
+driver.core.test_prepared_fact::test_v1_run_input_still_accepts_every_LAWFUL_id[SRC]
+driver.core.test_prepared_fact::test_v1_run_input_still_accepts_every_LAWFUL_id[a.b_c-1]
+driver.core.test_prepared_fact::test_v1_run_input_still_accepts_every_LAWFUL_id[x]
+driver.core.test_prepared_fact::test_xbrl_concept_raw_is_transient_evidence_only
+driver.core.test_prepared_fact::test_xbrl_context_is_all_or_nothing
+driver.core.test_prepared_fact_v2::test_G10_a_missing_locator_is_a_validation_failure
+driver.core.test_prepared_fact_v2::test_G10_duplicate_gold_is_INCONCLUSIVE_before_anything_else
+driver.core.test_prepared_fact_v2::test_G10_everything_unmatched_reaches_grading_no_filter
+driver.core.test_prepared_fact_v2::test_G10_exact_record_and_locator_auto_links
+driver.core.test_prepared_fact_v2::test_G10_order_free_under_full_permutation
+driver.core.test_prepared_fact_v2::test_G10_produced_duplicates_collapse_AND_flag_emit_once
+driver.core.test_prepared_fact_v2::test_G10_same_span_different_fact_never_auto_links
+driver.core.test_prepared_fact_v2::test_G11_a_fabricated_locator_fails_on_real_corpus_text
+driver.core.test_prepared_fact_v2::test_G11_occurrence_is_verified_against_the_part_text
+driver.core.test_prepared_fact_v2::test_G16_production_never_imports_exam_code
+driver.core.test_prepared_fact_v2::test_G18_the_new_modules_reach_no_graph_write
+driver.core.test_prepared_fact_v2::test_G1_converter_api_fence_by_reflection
+driver.core.test_prepared_fact_v2::test_G1_driver_name_changes_nothing
+driver.core.test_prepared_fact_v2::test_G20_table_wide_scale_applied_once
+driver.core.test_prepared_fact_v2::test_G21_xbrl_declared_scale_is_never_double_scaled
+driver.core.test_prepared_fact_v2::test_G22_the_xbrl_lane_does_not_require_quote_local_evidence
+driver.core.test_prepared_fact_v2::test_G23_a_scalar_numeric_slot_is_rejected
+driver.core.test_prepared_fact_v2::test_G23_old_payload_fields_are_rejected_atomically[change_money_mode_hint]
+driver.core.test_prepared_fact_v2::test_G23_old_payload_fields_are_rejected_atomically[change_unit_kind_hint]
+driver.core.test_prepared_fact_v2::test_G23_old_payload_fields_are_rejected_atomically[change_unit_raw]
+driver.core.test_prepared_fact_v2::test_G23_old_payload_fields_are_rejected_atomically[level_money_mode_hint]
+driver.core.test_prepared_fact_v2::test_G23_old_payload_fields_are_rejected_atomically[level_unit_kind_hint]
+driver.core.test_prepared_fact_v2::test_G23_old_payload_fields_are_rejected_atomically[level_unit_raw]
+driver.core.test_prepared_fact_v2::test_G23_old_payload_fields_are_rejected_atomically[sequential_evidence]
+driver.core.test_prepared_fact_v2::test_G24_membership_alone_cannot_catch_a_wrong_slot_assignment
+driver.core.test_prepared_fact_v2::test_G25_emit_once_violation_blocks_a_silent_pass
+driver.core.test_prepared_fact_v2::test_G26_duration_and_instant_are_meaning_not_date_count
+driver.core.test_prepared_fact_v2::test_G27_a_point_is_not_a_floor
+driver.core.test_prepared_fact_v2::test_G27_shapes_round_trip_from_their_definition[ceiling-None-7]
+driver.core.test_prepared_fact_v2::test_G27_shapes_round_trip_from_their_definition[floor-5-None]
+driver.core.test_prepared_fact_v2::test_G27_shapes_round_trip_from_their_definition[point-5-5]
+driver.core.test_prepared_fact_v2::test_G27_shapes_round_trip_from_their_definition[range-5-7]
+driver.core.test_prepared_fact_v2::test_G29_a_sentinel_excludes_every_other_period_field
+driver.core.test_prepared_fact_v2::test_G29_exact_dates_may_coexist_with_fiscal_framing
+driver.core.test_prepared_fact_v2::test_G29_two_shape_fields_together_park
+driver.core.test_prepared_fact_v2::test_G2_quote_and_concept_name_cannot_alter_a_value
+driver.core.test_prepared_fact_v2::test_G30_the_live_fiscal_packet_row
+driver.core.test_prepared_fact_v2::test_G31_compensated_misread_can_never_grade_correct
+driver.core.test_prepared_fact_v2::test_G33_first_colon_only_split_keeps_a_colon_in_the_value
+driver.core.test_prepared_fact_v2::test_G33_slice_parts_are_kind_colon_value_strings
+driver.core.test_prepared_fact_v2::test_G34_company_confirmed_never_stores_a_guessed_false
+driver.core.test_prepared_fact_v2::test_G34_value_text_and_numeric_slots_are_mutually_exclusive
+driver.core.test_prepared_fact_v2::test_G35_per_share_cell_lawfully_keeps_multiplier_one
+driver.core.test_prepared_fact_v2::test_G3_multiplier_not_one_on_a_ratio_slot_parks[basis_points]
+driver.core.test_prepared_fact_v2::test_G3_multiplier_not_one_on_a_ratio_slot_parks[percent]
+driver.core.test_prepared_fact_v2::test_G3_multiplier_not_one_on_a_ratio_slot_parks[percent_points]
+driver.core.test_prepared_fact_v2::test_G3_multiplier_not_one_on_a_ratio_slot_parks[percent_sequential]
+driver.core.test_prepared_fact_v2::test_G3_multiplier_not_one_on_a_ratio_slot_parks[percent_yoy]
+driver.core.test_prepared_fact_v2::test_G3_multiplier_not_one_on_a_ratio_slot_parks[x]
+driver.core.test_prepared_fact_v2::test_G3_percent_family_units_are_distinct
+driver.core.test_prepared_fact_v2::test_G4_mixed_scale_comparison_inside_ONE_fact
+driver.core.test_prepared_fact_v2::test_G4_scale_via_model_stated_multiplier[m_usd-1.2-1e12-1200000]
+driver.core.test_prepared_fact_v2::test_G4_scale_via_model_stated_multiplier[m_usd-1.2-1e9-1200]
+driver.core.test_prepared_fact_v2::test_G4_scale_via_model_stated_multiplier[m_usd-1.3-1e9-1300]
+driver.core.test_prepared_fact_v2::test_G4_scale_via_model_stated_multiplier[m_usd-363-1e6-363]
+driver.core.test_prepared_fact_v2::test_G4_scale_via_model_stated_multiplier[m_usd-800-1e6-800]
+driver.core.test_prepared_fact_v2::test_G4_scale_via_model_stated_multiplier[m_usd-850000-1-0.85]
+driver.core.test_prepared_fact_v2::test_G4_scale_via_model_stated_multiplier[usd--0.10-1--0.10]
+driver.core.test_prepared_fact_v2::test_G4_scale_via_model_stated_multiplier[usd-85-0.01-0.85]
+driver.core.test_prepared_fact_v2::test_G5_a_numberless_slot_is_null_not_an_empty_object
+driver.core.test_prepared_fact_v2::test_G5_slot_structure_failures[bad0]
+driver.core.test_prepared_fact_v2::test_G5_slot_structure_failures[bad10]
+driver.core.test_prepared_fact_v2::test_G5_slot_structure_failures[bad1]
+driver.core.test_prepared_fact_v2::test_G5_slot_structure_failures[bad2]
+driver.core.test_prepared_fact_v2::test_G5_slot_structure_failures[bad3]
+driver.core.test_prepared_fact_v2::test_G5_slot_structure_failures[bad4]
+driver.core.test_prepared_fact_v2::test_G5_slot_structure_failures[bad5]
+driver.core.test_prepared_fact_v2::test_G5_slot_structure_failures[bad6]
+driver.core.test_prepared_fact_v2::test_G5_slot_structure_failures[bad7]
+driver.core.test_prepared_fact_v2::test_G5_slot_structure_failures[bad8]
+driver.core.test_prepared_fact_v2::test_G5_slot_structure_failures[bad9]
+driver.core.test_prepared_fact_v2::test_G6_cents_multiplier_is_usd_only
+driver.core.test_prepared_fact_v2::test_G6_evidence_must_sit_inside_the_quote
+driver.core.test_prepared_fact_v2::test_G6_evidence_null_only_at_multiplier_one
+driver.core.test_prepared_fact_v2::test_G6_extended_quote_carries_a_table_header_scale
+driver.core.test_prepared_fact_v2::test_G6_word_number_evidence_passes
+driver.core.test_prepared_fact_v2::test_G6_wrong_scale_word_elsewhere_in_the_SAME_part_still_fails
+driver.core.test_prepared_fact_v2::test_G7_no_tokenizer_exists_to_invent_a_multiplier
+driver.core.test_prepared_fact_v2::test_G7_unknown_units_still_multiply
+driver.core.test_prepared_fact_v2::test_G8_eps_with_per_x_share_is_lawful
+driver.core.test_prepared_fact_v2::test_G8_name_vs_per_x_disagreement_parks
+driver.core.test_prepared_fact_v2::test_G8_per_x_joins_auto_link_equality
+driver.core.test_prepared_fact_v2::test_G8_per_x_rides_once_at_fact_level
+driver.core.test_prepared_fact_v2::test_G8_the_deferred_acronym_class_PARKS_and_is_never_ruled
+driver.core.test_prepared_fact_v2::test_G9_one_canonicalizer_shared_with_run_event
+driver.core.test_prepared_fact_v2::test_the_contract_is_32_model_owned_plus_2_source_owned
+driver.core.test_prepared_fact_v2::test_the_field_list_matches_the_packages_A3_skeleton
+driver.core.test_round10_event_boundary::test_823_ALL_FIVE_numeric_slots_are_frozen_and_caller_proof
+driver.core.test_round10_event_boundary::test_823_DERIVED_inventory_every_public_v2_dataclass_is_deeply_frozen
+driver.core.test_round10_event_boundary::test_823_a_provider_CALLBACK_cannot_mutate_the_refs_it_was_handed
+driver.core.test_round10_event_boundary::test_823_frozen_mappings_are_READ_ONLY_VIEWS_not_copies_of_convenience
+driver.core.test_round10_event_boundary::test_823_the_attached_fact_is_not_mutable_THROUGH_itself
+driver.core.test_round10_event_boundary::test_823_the_attached_fact_survives_mutation_of_the_callers_item
+driver.core.test_round10_event_boundary::test_823_the_run_input_did_NOT_widen_to_accept_a_tuple[bad0]
+driver.core.test_round10_event_boundary::test_823_the_run_input_did_NOT_widen_to_accept_a_tuple[bad1]
+driver.core.test_round10_event_boundary::test_823_the_run_input_did_NOT_widen_to_accept_a_tuple[bad2]
+driver.core.test_round10_event_boundary::test_823_the_run_input_fact_collection_is_not_mutable_through_itself
+driver.core.test_round10_event_boundary::test_FOUR_items_across_TWO_concepts_read_everything_ONCE_per_event
+driver.core.test_round10_event_boundary::test_IDENTICAL_complete_rows_still_collapse_in_every_order
+driver.core.test_round10_event_boundary::test_INPUT_ORDER_IS_OUTPUT_ORDER
+driver.core.test_round10_event_boundary::test_LAWFUL_dates_still_pass_including_a_leap_day
+driver.core.test_round10_event_boundary::test_MIXED_TYPE_keys_are_refused_cleanly_at_every_door[fact level]
+driver.core.test_round10_event_boundary::test_MIXED_TYPE_keys_are_refused_cleanly_at_every_door[item level]
+driver.core.test_round10_event_boundary::test_MIXED_TYPE_keys_are_refused_cleanly_at_every_door[run input]
+driver.core.test_round10_event_boundary::test_NO_production_module_bypasses_the_event_door
+driver.core.test_round10_event_boundary::test_RunInputV2_uses_the_ONE_source_id_predicate_on_BOTH_paths[  ]
+driver.core.test_round10_event_boundary::test_RunInputV2_uses_the_ONE_source_id_predicate_on_BOTH_paths[5]
+driver.core.test_round10_event_boundary::test_RunInputV2_uses_the_ONE_source_id_predicate_on_BOTH_paths[None]
+driver.core.test_round10_event_boundary::test_RunInputV2_uses_the_ONE_source_id_predicate_on_BOTH_paths[True]
+driver.core.test_round10_event_boundary::test_RunInputV2_uses_the_ONE_source_id_predicate_on_BOTH_paths[]
+driver.core.test_round10_event_boundary::test_RunInputV2_uses_the_ONE_source_id_predicate_on_BOTH_paths[a:b]
+driver.core.test_round10_event_boundary::test_RunInputV2_uses_the_ONE_source_id_predicate_on_BOTH_paths[x/y]
+driver.core.test_round10_event_boundary::test_TWO_DIFFERENT_axes_are_still_lawful
+driver.core.test_round10_event_boundary::test_TWO_DIFFERENT_axes_on_a_row_are_still_lawful
+driver.core.test_round10_event_boundary::test_TWO_separate_events_each_do_their_own_reads_no_global_cache
+driver.core.test_round10_event_boundary::test_a_DURATIONS_end_date_IS_part_of_its_identity
+driver.core.test_round10_event_boundary::test_a_GENERATOR_is_not_silently_consumed_into_an_empty_result
+driver.core.test_round10_event_boundary::test_a_LEGAL_source_id_still_builds_a_run_input
+driver.core.test_round10_event_boundary::test_a_MISSING_key_is_a_contract_rejection_not_a_KeyError[bad0]
+driver.core.test_round10_event_boundary::test_a_MISSING_key_is_a_contract_rejection_not_a_KeyError[bad1]
+driver.core.test_round10_event_boundary::test_a_MISSING_key_is_a_contract_rejection_not_a_KeyError[bad2]
+driver.core.test_round10_event_boundary::test_a_MISSING_key_is_a_contract_rejection_not_a_KeyError[bad3]
+driver.core.test_round10_event_boundary::test_a_NON_DICT_item_is_a_contract_rejection_not_an_AttributeError[5]
+driver.core.test_round10_event_boundary::test_a_NON_DICT_item_is_a_contract_rejection_not_an_AttributeError[None]
+driver.core.test_round10_event_boundary::test_a_NON_DICT_item_is_a_contract_rejection_not_an_AttributeError[bad3]
+driver.core.test_round10_event_boundary::test_a_NON_DICT_item_is_a_contract_rejection_not_an_AttributeError[bad4]
+driver.core.test_round10_event_boundary::test_a_NON_DICT_item_is_a_contract_rejection_not_an_AttributeError[not-a-dict]
+driver.core.test_round10_event_boundary::test_a_REPEATED_dimension_AXIS_is_refused_before_any_graph_read
+driver.core.test_round10_event_boundary::test_a_SINGLE_lawful_dimensional_row_still_attaches
+driver.core.test_round10_event_boundary::test_a_TEMPORARY_graph_failure_is_PARK_RETRY
+driver.core.test_round10_event_boundary::test_a_TEMPORARY_provider_failure_is_PARK_RETRY
+driver.core.test_round10_event_boundary::test_a_graph_ROW_repeating_a_dimension_axis_is_refused
+driver.core.test_round10_event_boundary::test_a_legal_accession_is_the_POSITIVE_control
+driver.core.test_round10_event_boundary::test_a_non_INTEGER_representation_count_parks_before_any_further_io[0]
+driver.core.test_round10_event_boundary::test_a_non_INTEGER_representation_count_parks_before_any_further_io[1.0]
+driver.core.test_round10_event_boundary::test_a_non_INTEGER_representation_count_parks_before_any_further_io[1]
+driver.core.test_round10_event_boundary::test_a_non_INTEGER_representation_count_parks_before_any_further_io[2]
+driver.core.test_round10_event_boundary::test_a_non_INTEGER_representation_count_parks_before_any_further_io[False]
+driver.core.test_round10_event_boundary::test_a_non_INTEGER_representation_count_parks_before_any_further_io[None]
+driver.core.test_round10_event_boundary::test_a_non_INTEGER_representation_count_parks_before_any_further_io[True]
+driver.core.test_round10_event_boundary::test_a_non_INTEGER_representation_count_parks_before_any_further_io[count5]
+driver.core.test_round10_event_boundary::test_a_row_that_MATCHES_NO_CLAIM_parks_it_does_not_reject
+driver.core.test_round10_event_boundary::test_a_source_with_NO_xbrl_cannot_carry_an_xbrl_item
+driver.core.test_round10_event_boundary::test_an_EMPTY_item_list_performs_ZERO_io
+driver.core.test_round10_event_boundary::test_an_INSTANTS_end_date_still_has_a_lawful_SHAPE[   ]
+driver.core.test_round10_event_boundary::test_an_INSTANTS_end_date_still_has_a_lawful_SHAPE[2024-13-01]
+driver.core.test_round10_event_boundary::test_an_INSTANTS_end_date_still_has_a_lawful_SHAPE[20240101]
+driver.core.test_round10_event_boundary::test_an_INSTANTS_end_date_still_has_a_lawful_SHAPE[]
+driver.core.test_round10_event_boundary::test_an_INSTANTS_end_date_still_has_a_lawful_SHAPE[garbage]
+driver.core.test_round10_event_boundary::test_an_INSTANTS_end_date_still_has_a_lawful_SHAPE[not-a-date]
+driver.core.test_round10_event_boundary::test_an_INSTANTS_unused_end_date_is_not_part_of_its_identity
+driver.core.test_round10_event_boundary::test_an_INSTANT_end_date_may_not_be_a_real_date[2024-01-01]
+driver.core.test_round10_event_boundary::test_an_INSTANT_end_date_may_not_be_a_real_date[2024-06-30]
+driver.core.test_round10_event_boundary::test_an_INVALID_date_shape_is_refused_at_the_row_boundary[ 2024-01-01]
+driver.core.test_round10_event_boundary::test_an_INVALID_date_shape_is_refused_at_the_row_boundary[2024-01-01T00:00:00]
+driver.core.test_round10_event_boundary::test_an_INVALID_date_shape_is_refused_at_the_row_boundary[2024-02-30]
+driver.core.test_round10_event_boundary::test_an_INVALID_date_shape_is_refused_at_the_row_boundary[2024-1-1]
+driver.core.test_round10_event_boundary::test_an_INVALID_date_shape_is_refused_at_the_row_boundary[2024-13-01]
+driver.core.test_round10_event_boundary::test_an_INVALID_date_shape_is_refused_at_the_row_boundary[20240101]
+driver.core.test_round10_event_boundary::test_an_INVALID_date_shape_is_refused_at_the_row_boundary[224-04-01]
+driver.core.test_round10_event_boundary::test_an_INVALID_date_shape_is_refused_at_the_row_boundary[not-a-date]
+driver.core.test_round10_event_boundary::test_an_UNEXPECTED_programming_error_FAILS_LOUDLY
+driver.core.test_round10_event_boundary::test_an_UNKNOWN_key_is_a_contract_rejection_too
+driver.core.test_round10_event_boundary::test_an_event_with_NO_xbrl_items_is_lawful_and_returns_nothing
+driver.core.test_round10_event_boundary::test_comma_formatting_of_the_SAME_number_is_not_a_conflict
+driver.core.test_round10_event_boundary::test_every_BLANK_fact_id_form_is_ONE_fact_not_a_conflict
+driver.core.test_round10_event_boundary::test_more_than_one_xbrl_representation_PARKS
+driver.core.test_round10_event_boundary::test_nothing_malformed_reaches_the_graph_or_the_provider[blank source id]
+driver.core.test_round10_event_boundary::test_nothing_malformed_reaches_the_graph_or_the_provider[item has MIXED-TYPE keys]
+driver.core.test_round10_event_boundary::test_nothing_malformed_reaches_the_graph_or_the_provider[item has an extra key]
+driver.core.test_round10_event_boundary::test_nothing_malformed_reaches_the_graph_or_the_provider[item is missing a key]
+driver.core.test_round10_event_boundary::test_nothing_malformed_reaches_the_graph_or_the_provider[item is not a dict]
+driver.core.test_round10_event_boundary::test_nothing_malformed_reaches_the_graph_or_the_provider[items is a dict]
+driver.core.test_round10_event_boundary::test_nothing_malformed_reaches_the_graph_or_the_provider[items is a generator]
+driver.core.test_round10_event_boundary::test_nothing_malformed_reaches_the_graph_or_the_provider[items is a list SUBCLASS]
+driver.core.test_round10_event_boundary::test_nothing_malformed_reaches_the_graph_or_the_provider[items is a set]
+driver.core.test_round10_event_boundary::test_nothing_malformed_reaches_the_graph_or_the_provider[items is a str]
+driver.core.test_round10_event_boundary::test_nothing_malformed_reaches_the_graph_or_the_provider[null source id]
+driver.core.test_round10_event_boundary::test_nothing_malformed_reaches_the_graph_or_the_provider[numeric source id]
+driver.core.test_round10_event_boundary::test_nothing_malformed_reaches_the_graph_or_the_provider[source id with a colon]
+driver.core.test_round10_event_boundary::test_nothing_malformed_reaches_the_graph_or_the_provider[source id with a slash]
+driver.core.test_round10_event_boundary::test_park_retry_is_NOT_a_contract_rejection
+driver.core.test_round10_event_boundary::test_rows_differing_only_in_a_dimension_LABEL_park_in_EVERY_order
+driver.core.test_round10_event_boundary::test_the_ITEM_LIST_must_be_a_list_or_tuple[5]
+driver.core.test_round10_event_boundary::test_the_ITEM_LIST_must_be_a_list_or_tuple[None]
+driver.core.test_round10_event_boundary::test_the_ITEM_LIST_must_be_a_list_or_tuple[abc]
+driver.core.test_round10_event_boundary::test_the_ITEM_LIST_must_be_a_list_or_tuple[items1]
+driver.core.test_round10_event_boundary::test_the_ITEM_LIST_must_be_a_list_or_tuple[items4]
+driver.core.test_round10_event_boundary::test_the_LIVE_v1_contract_refuses_duplicate_member_refs
+driver.core.test_round10_event_boundary::test_the_LIVE_v1_contract_still_accepts_TWO_DIFFERENT_axes
+driver.core.test_round10_event_boundary::test_the_REMOVED_public_name_is_not_taught_to_a_future_caller
+driver.core.test_round10_event_boundary::test_the_SHARED_matcher_refuses_a_row_repeating_an_axis
+driver.core.test_round10_event_boundary::test_the_SHARED_matcher_still_matches_a_LAWFUL_row
+driver.core.test_round10_event_boundary::test_the_SPLIT_axis_helper_cannot_come_back
+driver.core.test_round10_event_boundary::test_the_TWO_lawful_instant_end_date_forms_pass[None]
+driver.core.test_round10_event_boundary::test_the_TWO_lawful_instant_end_date_forms_pass[null]
+driver.core.test_round10_event_boundary::test_the_empty_event_shortcut_still_validates_the_SOURCE_ID
+driver.core.test_round10_event_boundary::test_the_filing_is_PARSED_once_per_event_not_once_per_item
+driver.core.test_round10_event_boundary::test_the_guard_asks_the_GRAPH_not_only_the_channels_hashes
+driver.core.test_round10_event_boundary::test_the_key_safety_class_is_fixed_in_V1_TOO_the_live_path
+driver.core.test_round10_event_boundary::test_the_pair_set_is_FROZEN
+driver.core.test_round10_event_boundary::test_the_repeated_axis_rule_has_EXACTLY_ONE_owner
+driver.core.test_round10_event_boundary::test_the_retryable_set_is_named_not_a_bare_except
+driver.core.test_round10_event_boundary::test_the_row_signature_covers_EVERY_field_binding_reads
+driver.core.test_round10_event_boundary::test_the_row_signature_is_DIMENSION_ORDER_free
+driver.core.test_round10_event_boundary::test_there_is_EXACTLY_ONE_exported_xbrl_attachment_door
+driver.core.test_round11_outcomes::test_CONFLICTING_rows_park_exactly_as_their_own_message_says
+driver.core.test_round11_outcomes::test_a_DURATION_still_requires_its_end_date
+driver.core.test_round11_outcomes::test_a_blank_source_id_never_reaches_the_graph
+driver.core.test_round11_outcomes::test_a_dimension_LABEL_must_be_a_real_non_blank_string[   ]
+driver.core.test_round11_outcomes::test_a_dimension_LABEL_must_be_a_real_non_blank_string[1.5]
+driver.core.test_round11_outcomes::test_a_dimension_LABEL_must_be_a_real_non_blank_string[5]
+driver.core.test_round11_outcomes::test_a_dimension_LABEL_must_be_a_real_non_blank_string[None]
+driver.core.test_round11_outcomes::test_a_dimension_LABEL_must_be_a_real_non_blank_string[True]
+driver.core.test_round11_outcomes::test_a_dimension_LABEL_must_be_a_real_non_blank_string[bad1]
+driver.core.test_round11_outcomes::test_a_dimension_LABEL_must_be_a_real_non_blank_string[bad2]
+driver.core.test_round11_outcomes::test_a_dimension_LABEL_must_be_a_real_non_blank_string[x]
+driver.core.test_round11_outcomes::test_a_dimension_carries_EXACTLY_its_three_fields
+driver.core.test_round11_outcomes::test_a_graph_with_NO_company_yet_is_an_ordinary_PARK
+driver.core.test_round11_outcomes::test_a_graph_with_NO_fact_for_the_concept_yet_is_an_ordinary_PARK
+driver.core.test_round11_outcomes::test_a_malformed_graph_ROW_parks_and_never_crashes[blank period_type]
+driver.core.test_round11_outcomes::test_a_malformed_graph_ROW_parks_and_never_crashes[blank unit_ref]
+driver.core.test_round11_outcomes::test_a_malformed_graph_ROW_parks_and_never_crashes[dim axis is blank]
+driver.core.test_round11_outcomes::test_a_malformed_graph_ROW_parks_and_never_crashes[dim lacks its label]
+driver.core.test_round11_outcomes::test_a_malformed_graph_ROW_parks_and_never_crashes[dims holds a non-dict]
+driver.core.test_round11_outcomes::test_a_malformed_graph_ROW_parks_and_never_crashes[dims is not a list]
+driver.core.test_round11_outcomes::test_a_malformed_graph_ROW_parks_and_never_crashes[duration with a null end_date]
+driver.core.test_round11_outcomes::test_a_malformed_graph_ROW_parks_and_never_crashes[missing dims]
+driver.core.test_round11_outcomes::test_a_malformed_graph_ROW_parks_and_never_crashes[missing end_date]
+driver.core.test_round11_outcomes::test_a_malformed_graph_ROW_parks_and_never_crashes[missing fact_id key]
+driver.core.test_round11_outcomes::test_a_malformed_graph_ROW_parks_and_never_crashes[missing period_type]
+driver.core.test_round11_outcomes::test_a_malformed_graph_ROW_parks_and_never_crashes[missing start_date]
+driver.core.test_round11_outcomes::test_a_malformed_graph_ROW_parks_and_never_crashes[missing value]
+driver.core.test_round11_outcomes::test_a_malformed_graph_ROW_parks_and_never_crashes[null value]
+driver.core.test_round11_outcomes::test_a_malformed_graph_ROW_parks_and_never_crashes[row is not a mapping]
+driver.core.test_round11_outcomes::test_a_provider_with_NO_document_yet_is_PARK_RETRY_not_a_rejection
+driver.core.test_round11_outcomes::test_a_wellformed_event_DOES_reach_the_graph
+driver.core.test_round11_outcomes::test_an_INTEGER_value_no_longer_attaches_end_to_end
+driver.core.test_round11_outcomes::test_every_exception_RAISED_IN_THIS_MODULE_is_declared
+driver.core.test_round11_outcomes::test_every_outcome_class_maps_to_a_PUBLIC_decision_word
+driver.core.test_round11_outcomes::test_every_row_SCALAR_refuses_every_wrong_type[context_id]
+driver.core.test_round11_outcomes::test_every_row_SCALAR_refuses_every_wrong_type[end_date]
+driver.core.test_round11_outcomes::test_every_row_SCALAR_refuses_every_wrong_type[fact_id]
+driver.core.test_round11_outcomes::test_every_row_SCALAR_refuses_every_wrong_type[is_divide]
+driver.core.test_round11_outcomes::test_every_row_SCALAR_refuses_every_wrong_type[period_type]
+driver.core.test_round11_outcomes::test_every_row_SCALAR_refuses_every_wrong_type[start_date]
+driver.core.test_round11_outcomes::test_every_row_SCALAR_refuses_every_wrong_type[unit_name]
+driver.core.test_round11_outcomes::test_every_row_SCALAR_refuses_every_wrong_type[unit_ref]
+driver.core.test_round11_outcomes::test_every_row_SCALAR_refuses_every_wrong_type[value]
+driver.core.test_round11_outcomes::test_malformed_item_CONTENT_never_reaches_the_graph[bad0-fact is not an object-fact must be an object, got str]
+driver.core.test_round11_outcomes::test_malformed_item_CONTENT_never_reaches_the_graph[bad1-fact is missing keys-the fact-level keys must carry exactly]
+driver.core.test_round11_outcomes::test_malformed_item_CONTENT_never_reaches_the_graph[bad2-blank concept-each item needs a concept]
+driver.core.test_round11_outcomes::test_malformed_item_CONTENT_never_reaches_the_graph[bad3-null concept-each item needs a concept]
+driver.core.test_round11_outcomes::test_malformed_item_CONTENT_never_reaches_the_graph[bad4-member_refs is a dict-the item (the 32 model-owned fields, null where absent)]
+driver.core.test_round11_outcomes::test_malformed_item_CONTENT_never_reaches_the_graph[bad5-member_refs is null-the item (the 32 model-owned fields, null where absent)]
+driver.core.test_round11_outcomes::test_malformed_item_CONTENT_never_reaches_the_graph[bad6-member_ref missing keys-the item (the 32 model-owned fields, null where absent)]
+driver.core.test_round11_outcomes::test_malformed_item_CONTENT_never_reaches_the_graph[bad7-hash is not a sha256-representation_sha256: expected a 64-character lowercase]
+driver.core.test_round11_outcomes::test_malformed_item_CONTENT_never_reaches_the_graph[bad8-hash is not lowercase hex-representation_sha256: expected a 64-character lowercase]
+driver.core.test_round11_outcomes::test_slot_conversion_failure_is_a_PARK_not_an_escape
+driver.core.test_round11_outcomes::test_the_LAWFUL_optional_row_forms_still_pass
+driver.core.test_round11_outcomes::test_the_checked_row_carries_ONLY_the_checked_fields
+driver.core.test_round11_outcomes::test_the_checked_row_is_NOT_reachable_through_the_callers_objects
+driver.core.test_round11_outcomes::test_the_fault_injection_BASELINE_actually_attaches
+driver.core.test_round11_outcomes::test_the_live_store_does_NOT_swallow_a_programming_error
+driver.core.test_round11_outcomes::test_the_live_store_maps_neo4j_outages_to_park_retry
+driver.core.test_round11_outcomes::test_xml_integer_returns_None_on_a_digit_string_python_refuses[-99999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999]
+driver.core.test_round11_outcomes::test_xml_integer_returns_None_on_a_digit_string_python_refuses[99999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999]
+driver.core.test_round11_outcomes::test_xml_integer_returns_None_on_a_digit_string_python_refuses[99999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999]
+driver.core.test_round11_outcomes::test_xml_integer_still_accepts_a_long_but_lawful_value
+driver.core.test_round12_exact_scale::test_29_digit_pairs_stay_distinct_through_the_shift
+driver.core.test_round12_exact_scale::test_a_NON_FINITE_decimal_is_refused_by_the_shared_operation[-Infinity]
+driver.core.test_round12_exact_scale::test_a_NON_FINITE_decimal_is_refused_by_the_shared_operation[-NaN]
+driver.core.test_round12_exact_scale::test_a_NON_FINITE_decimal_is_refused_by_the_shared_operation[Infinity]
+driver.core.test_round12_exact_scale::test_a_NON_FINITE_decimal_is_refused_by_the_shared_operation[NaN]
+driver.core.test_round12_exact_scale::test_a_NON_FINITE_decimal_is_refused_by_the_shared_operation[sNaN]
+driver.core.test_round12_exact_scale::test_a_non_INTEGER_exponent_is_refused_at_the_arithmetic_boundary[6.0]
+driver.core.test_round12_exact_scale::test_a_non_INTEGER_exponent_is_refused_at_the_arithmetic_boundary[6]
+driver.core.test_round12_exact_scale::test_a_non_INTEGER_exponent_is_refused_at_the_arithmetic_boundary[False]
+driver.core.test_round12_exact_scale::test_a_non_INTEGER_exponent_is_refused_at_the_arithmetic_boundary[None]
+driver.core.test_round12_exact_scale::test_a_non_INTEGER_exponent_is_refused_at_the_arithmetic_boundary[True]
+driver.core.test_round12_exact_scale::test_a_non_INTEGER_exponent_is_refused_at_the_arithmetic_boundary[exponent5]
+driver.core.test_round12_exact_scale::test_an_exponent_BEYOND_EMAX_parks_in_the_arithmetic[-10000000000000000000]
+driver.core.test_round12_exact_scale::test_an_exponent_BEYOND_EMAX_parks_in_the_arithmetic[1000000000000000000000000000000]
+driver.core.test_round12_exact_scale::test_an_exponent_BEYOND_EMAX_parks_in_the_arithmetic[10000000000000000000]
+driver.core.test_round12_exact_scale::test_an_ordinary_scale_still_binds
+driver.core.test_round12_exact_scale::test_expected_multiplier_PARKS_on_an_extreme_scale[1000000-representable but 1,000,001 characters \u2014 UNSTORABLE-count]
+driver.core.test_round12_exact_scale::test_expected_multiplier_PARKS_on_an_extreme_scale[1000000-representable but 1,000,001 characters \u2014 UNSTORABLE-m_usd]
+driver.core.test_round12_exact_scale::test_expected_multiplier_PARKS_on_an_extreme_scale[1000000-representable but 1,000,001 characters \u2014 UNSTORABLE-unknown]
+driver.core.test_round12_exact_scale::test_expected_multiplier_PARKS_on_an_extreme_scale[1000000-representable but 1,000,001 characters \u2014 UNSTORABLE-usd]
+driver.core.test_round12_exact_scale::test_expected_multiplier_PARKS_on_an_extreme_scale[10000000000000000000-beyond Emax \u2014 not representable at all-count]
+driver.core.test_round12_exact_scale::test_expected_multiplier_PARKS_on_an_extreme_scale[10000000000000000000-beyond Emax \u2014 not representable at all-m_usd]
+driver.core.test_round12_exact_scale::test_expected_multiplier_PARKS_on_an_extreme_scale[10000000000000000000-beyond Emax \u2014 not representable at all-unknown]
+driver.core.test_round12_exact_scale::test_expected_multiplier_PARKS_on_an_extreme_scale[10000000000000000000-beyond Emax \u2014 not representable at all-usd]
+driver.core.test_round12_exact_scale::test_money_and_count_still_carry_the_real_magnitude
+driver.core.test_round12_exact_scale::test_ordinary_exponents_still_work[-2-0.01]
+driver.core.test_round12_exact_scale::test_ordinary_exponents_still_work[-6-0.000001]
+driver.core.test_round12_exact_scale::test_ordinary_exponents_still_work[0-1]
+driver.core.test_round12_exact_scale::test_ordinary_exponents_still_work[6-1E+6]
+driver.core.test_round12_exact_scale::test_ordinary_exponents_still_work[9-1E+9]
+driver.core.test_round12_exact_scale::test_the_FULL_DOOR_reaches_the_storage_park_not_a_value_mismatch[-1000000-726E-1000000]
+driver.core.test_round12_exact_scale::test_the_FULL_DOOR_reaches_the_storage_park_not_a_value_mismatch[1000000-726E+1000000]
+driver.core.test_round12_exact_scale::test_the_binder_returns_the_PRINTED_VALUE_and_SCALE_only
+driver.core.test_round12_exact_scale::test_the_multiplier_one_family_never_touches_the_arithmetic[basis_points]
+driver.core.test_round12_exact_scale::test_the_multiplier_one_family_never_touches_the_arithmetic[percent]
+driver.core.test_round12_exact_scale::test_the_multiplier_one_family_never_touches_the_arithmetic[percent_yoy]
+driver.core.test_round12_exact_scale::test_the_multiplier_one_family_never_touches_the_arithmetic[x]
+driver.core.test_round12_exact_scale::test_the_park_outcome_is_a_DECLARED_one
+driver.core.test_round12_exact_scale::test_the_scaleb_scan_is_DERIVED_from_the_production_tree
+driver.core.test_round12_exact_scale::test_the_shared_operation_is_exact_and_traps_rounding
+driver.core.test_round12_exact_scale::test_the_storable_bound_is_exact_at_1024_characters
+driver.core.test_round12_pure_unit_law::test_EPS_is_the_SAME_rule_not_a_special_case_FOR_UNIT_BINDING
+driver.core.test_round12_pure_unit_law::test_a_BLANK_measure_anywhere_makes_the_divide_unit_malformed[num0-den0]
+driver.core.test_round12_pure_unit_law::test_a_BLANK_measure_anywhere_makes_the_divide_unit_malformed[num1-den1]
+driver.core.test_round12_pure_unit_law::test_a_BLANK_measure_anywhere_makes_the_divide_unit_malformed[num2-den2]
+driver.core.test_round12_pure_unit_law::test_a_BLANK_measure_anywhere_makes_the_divide_unit_malformed[num3-den3]
+driver.core.test_round12_pure_unit_law::test_a_BLANK_measure_anywhere_makes_the_divide_unit_malformed[num4-den4]
+driver.core.test_round12_pure_unit_law::test_a_BLANK_measure_anywhere_makes_the_divide_unit_malformed[num5-den5]
+driver.core.test_round12_pure_unit_law::test_a_BLANK_measure_anywhere_makes_the_divide_unit_malformed[num6-den6]
+driver.core.test_round12_pure_unit_law::test_a_MULTI_MEASURE_divide_is_still_structurally_valid
+driver.core.test_round12_pure_unit_law::test_a_divide_unit_is_judged_by_its_STRUCTURED_numerator[numerator0-expected0]
+driver.core.test_round12_pure_unit_law::test_a_divide_unit_is_judged_by_its_STRUCTURED_numerator[numerator1-expected1]
+driver.core.test_round12_pure_unit_law::test_a_divide_unit_is_judged_by_its_STRUCTURED_numerator[numerator2-expected2]
+driver.core.test_round12_pure_unit_law::test_a_divide_unit_is_judged_by_its_STRUCTURED_numerator[numerator3-expected3]
+driver.core.test_round12_pure_unit_law::test_a_divide_unit_is_judged_by_its_STRUCTURED_numerator[numerator4-expected4]
+driver.core.test_round12_pure_unit_law::test_a_divide_unit_is_judged_by_its_STRUCTURED_numerator[numerator5-expected5]
+driver.core.test_round12_pure_unit_law::test_a_divide_unit_is_judged_by_its_STRUCTURED_numerator[numerator6-expected6]
+driver.core.test_round12_pure_unit_law::test_a_malformed_divide_unit_ABSTAINS_in_the_shared_binder[num0-den0-iso4217:USD]
+driver.core.test_round12_pure_unit_law::test_a_malformed_divide_unit_ABSTAINS_in_the_shared_binder[num1-den1-utr:bbl]
+driver.core.test_round12_pure_unit_law::test_a_malformed_divide_unit_ABSTAINS_in_the_shared_binder[num2-den2-iso4217:USD]
+driver.core.test_round12_pure_unit_law::test_a_malformed_divide_unit_ABSTAINS_in_the_shared_binder[num3-den3-utr:bbl]
+driver.core.test_round12_pure_unit_law::test_a_malformed_divide_unit_ABSTAINS_in_the_shared_binder[num4-den4-utr:bbl]
+driver.core.test_round12_pure_unit_law::test_a_malformed_divide_unit_ABSTAINS_in_the_shared_binder[num5-den5-]
+driver.core.test_round12_pure_unit_law::test_a_real_USD_per_physical_unit_fact_attaches_with_the_BASE_unit
+driver.core.test_round12_pure_unit_law::test_a_real_fact_attaches_through_the_candidate_path_INCLUDING_the_locator[count-0000051434-23-000022-id3VybDovL2RvY3MudjEvZG9jOjAzOWNmN2E0NjMyNTQ1ZmNhM2M1ZWZmMDI0MzRjYmE5L3NlYzowMzljZjdhNDYzMjU0NWZjYTNjNWVmZjAyNDM0Y2JhOV83Ni9mcmFnOmNhNDkwMmFhYWExNzQyOTE5ZDQ4YjRjNmE2MTI4YzM4L3RleHRyZWdpb246Y2E0OTAyYWFhYTE3NDI5MTlkNDhiNGM2YTYxMjhjMzhfMTQyMDY_7b4a942a-ab9a-4d81-a167-6c1afd4fe744-ip:PotentiallyResponsibleParties-30-count-30-0-producers]
+driver.core.test_round12_pure_unit_law::test_a_real_fact_attaches_through_the_candidate_path_INCLUDING_the_locator[percent-0001306830-24-000155-f-711-us-gaap:LongtermDebtWeightedAverageInterestRate-0.026-percent-2.6--2-weighted average interest rate]
+driver.core.test_round12_pure_unit_law::test_a_real_fact_attaches_through_the_candidate_path_INCLUDING_the_locator[scaled count-0000002488-24-000123-f-747-us-gaap:WeightedAverageNumberOfDilutedSharesOutstanding-1,637,000,000-count-1,637-6-shares]
+driver.core.test_round12_pure_unit_law::test_a_real_fact_attaches_through_the_candidate_path_INCLUDING_the_locator[unknown (non-USD)-0001306830-24-000155-f-722-us-gaap:LineOfCreditFacilityMaximumBorrowingCapacity-750,000,000-unknown-750-6-CNY 750 million]
+driver.core.test_round12_pure_unit_law::test_a_real_fact_attaches_through_the_candidate_path_INCLUDING_the_locator[x-0000817720-25-000011-f-647-syna:DebtInstrumentCovenantMinimumInterestCoverageRatio-3-x-3.0-0-to 1.0]
+driver.core.test_round12_pure_unit_law::test_a_unit_this_route_cannot_read_at_all_has_no_compatible_unit
+driver.core.test_round12_pure_unit_law::test_a_wrong_unit_for_a_real_fact_is_REFUSED
+driver.core.test_round12_pure_unit_law::test_money_count_and_unknown_use_the_sources_real_magnitude
+driver.core.test_round12_pure_unit_law::test_multiple_VALID_measures_remain_lawful_on_both_sides
+driver.core.test_round12_pure_unit_law::test_non_USD_money_may_be_stored_as_unknown_not_abstained[iso4217:CNY]
+driver.core.test_round12_pure_unit_law::test_non_USD_money_may_be_stored_as_unknown_not_abstained[iso4217:EUR]
+driver.core.test_round12_pure_unit_law::test_non_USD_money_may_be_stored_as_unknown_not_abstained[iso4217:GBP]
+driver.core.test_round12_pure_unit_law::test_non_USD_money_may_be_stored_as_unknown_not_abstained[iso4217:JPY]
+driver.core.test_round12_pure_unit_law::test_pure_backs_count_the_percent_family_and_x_but_never_money
+driver.core.test_round12_pure_unit_law::test_pure_may_back_unknown_as_the_failsafe
+driver.core.test_round12_pure_unit_law::test_the_DORMANT_materializer_whitelist_is_untouched
+driver.core.test_round12_pure_unit_law::test_the_SOURCE_WORDING_that_justifies_the_unit_is_really_there[count-0000051434-23-000022-id3VybDovL2RvY3MudjEvZG9jOjAzOWNmN2E0NjMyNTQ1ZmNhM2M1ZWZmMDI0MzRjYmE5L3NlYzowMzljZjdhNDYzMjU0NWZjYTNjNWVmZjAyNDM0Y2JhOV83Ni9mcmFnOmNhNDkwMmFhYWExNzQyOTE5ZDQ4YjRjNmE2MTI4YzM4L3RleHRyZWdpb246Y2E0OTAyYWFhYTE3NDI5MTlkNDhiNGM2YTYxMjhjMzhfMTQyMDY_7b4a942a-ab9a-4d81-a167-6c1afd4fe744-ip:PotentiallyResponsibleParties-30-count-30-0-producers]
+driver.core.test_round12_pure_unit_law::test_the_SOURCE_WORDING_that_justifies_the_unit_is_really_there[percent-0001306830-24-000155-f-711-us-gaap:LongtermDebtWeightedAverageInterestRate-0.026-percent-2.6--2-weighted average interest rate]
+driver.core.test_round12_pure_unit_law::test_the_SOURCE_WORDING_that_justifies_the_unit_is_really_there[scaled count-0000002488-24-000123-f-747-us-gaap:WeightedAverageNumberOfDilutedSharesOutstanding-1,637,000,000-count-1,637-6-shares]
+driver.core.test_round12_pure_unit_law::test_the_SOURCE_WORDING_that_justifies_the_unit_is_really_there[unknown (non-USD)-0001306830-24-000155-f-722-us-gaap:LineOfCreditFacilityMaximumBorrowingCapacity-750,000,000-unknown-750-6-CNY 750 million]
+driver.core.test_round12_pure_unit_law::test_the_SOURCE_WORDING_that_justifies_the_unit_is_really_there[x-0000817720-25-000011-f-647-syna:DebtInstrumentCovenantMinimumInterestCoverageRatio-3-x-3.0-0-to 1.0]
+driver.core.test_round12_pure_unit_law::test_the_binder_reports_the_structured_measures
+driver.core.test_round12_pure_unit_law::test_the_cents_rule_STILL_guards_the_text_lane
+driver.core.test_round12_pure_unit_law::test_the_cents_rule_does_not_judge_structured_xbrl_metadata[count]
+driver.core.test_round12_pure_unit_law::test_the_cents_rule_does_not_judge_structured_xbrl_metadata[percent]
+driver.core.test_round12_pure_unit_law::test_the_cents_rule_does_not_judge_structured_xbrl_metadata[unknown]
+driver.core.test_round12_pure_unit_law::test_the_cents_rule_does_not_judge_structured_xbrl_metadata[x]
+driver.core.test_round12_pure_unit_law::test_the_lawful_one_by_one_divide_still_binds
+driver.core.test_round12_pure_unit_law::test_the_money_and_share_units_are_unchanged
+driver.core.test_round12_pure_unit_law::test_the_outcome_map_has_no_duplicate_keys
+driver.core.test_round12_pure_unit_law::test_the_per_x_wording_is_really_in_the_filing
+driver.core.test_round12_pure_unit_law::test_the_shared_binder_applies_no_candidate_policy
+driver.core.test_round12_pure_unit_law::test_the_stored_multiplier_is_ONE_for_the_percent_family_and_x
+driver.core.test_round13_quote_occurrence::test_824_a_FABRICATED_quote_is_refused_and_costs_ZERO_io
+driver.core.test_round13_quote_occurrence::test_824_a_a_real_quote_at_a_lawful_locator_still_attaches
+driver.core.test_round13_quote_occurrence::test_824_b_a_lawful_empty_xbrl_event_still_returns_with_zero_io
+driver.core.test_round13_quote_occurrence::test_824_b_an_empty_unrelated_part_is_lawful
+driver.core.test_round13_quote_occurrence::test_824_b_malformed_text_parts_are_refused[fA]
+driver.core.test_round13_quote_occurrence::test_824_b_malformed_text_parts_are_refused[parts0]
+driver.core.test_round13_quote_occurrence::test_824_b_malformed_text_parts_are_refused[parts2]
+driver.core.test_round13_quote_occurrence::test_824_b_malformed_text_parts_are_refused[parts3]
+driver.core.test_round13_quote_occurrence::test_824_b_malformed_text_parts_are_refused[parts4]
+driver.core.test_round13_quote_occurrence::test_824_b_malformed_text_parts_are_refused[parts5]
+driver.core.test_round13_quote_occurrence::test_824_b_malformed_text_parts_are_refused[parts6]
+driver.core.test_round13_quote_occurrence::test_824_b_malformed_text_parts_are_refused[parts7]
+driver.core.test_round13_quote_occurrence::test_824_b_malformed_text_parts_are_refused[parts8]
+driver.core.test_round13_quote_occurrence::test_824_b_malformed_text_parts_are_refused[parts9]
+driver.core.test_round13_quote_occurrence::test_824_b_text_parts_are_judged_even_for_an_EMPTY_xbrl_event
+driver.core.test_round13_quote_occurrence::test_824_c_a_non_positive_integer_occurrence_is_refused[-1]
+driver.core.test_round13_quote_occurrence::test_824_c_a_non_positive_integer_occurrence_is_refused[0]
+driver.core.test_round13_quote_occurrence::test_824_c_a_non_positive_integer_occurrence_is_refused[1.0]
+driver.core.test_round13_quote_occurrence::test_824_c_a_non_positive_integer_occurrence_is_refused[1]
+driver.core.test_round13_quote_occurrence::test_824_c_a_non_positive_integer_occurrence_is_refused[True]
+driver.core.test_round13_quote_occurrence::test_824_c_a_non_positive_integer_occurrence_is_refused[bad5]
+driver.core.test_round13_quote_occurrence::test_824_c_a_part_that_was_never_supplied_is_malformed
+driver.core.test_round13_quote_occurrence::test_824_c_an_int_SUBCLASS_occurrence_is_refused_by_the_locator_owner
+driver.core.test_round13_quote_occurrence::test_824_c_an_occurrence_beyond_the_count_is_refused
+driver.core.test_round13_quote_occurrence::test_824_c_repeated_quote_with_a_lawful_occurrence_attaches
+driver.core.test_round13_quote_occurrence::test_824_c_repeated_quote_with_a_null_occurrence_is_refused
+driver.core.test_round13_quote_occurrence::test_824_c_the_same_quote_in_two_parts_stays_lawful_in_each
+driver.core.test_round13_quote_occurrence::test_824_c_unique_quote_with_a_non_null_occurrence_is_refused
+driver.core.test_round13_quote_occurrence::test_824_d_mutating_text_parts_after_entry_changes_nothing
+driver.core.test_round13_quote_occurrence::test_824_e_the_door_does_not_reimplement_the_occurrence_arithmetic
+driver.core.test_round13_quote_occurrence::test_824_e_verify_occurrence_is_no_longer_deferred
+driver.core.test_round14_evidence_matrix::test_matrix_a_malformed_representation_hash_is_refused[ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]
+driver.core.test_round14_evidence_matrix::test_matrix_a_malformed_representation_hash_is_refused[64]
+driver.core.test_round14_evidence_matrix::test_matrix_a_malformed_representation_hash_is_refused[AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA]
+driver.core.test_round14_evidence_matrix::test_matrix_a_malformed_representation_hash_is_refused[None]
+driver.core.test_round14_evidence_matrix::test_matrix_a_malformed_representation_hash_is_refused[]
+driver.core.test_round14_evidence_matrix::test_matrix_a_malformed_representation_hash_is_refused[aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ]
+driver.core.test_round14_evidence_matrix::test_matrix_a_malformed_representation_hash_is_refused[aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]
+driver.core.test_round14_evidence_matrix::test_matrix_a_malformed_representation_hash_is_refused[aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]
+driver.core.test_round14_evidence_matrix::test_matrix_a_malformed_representation_hash_is_refused[aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]
+driver.core.test_round14_evidence_matrix::test_matrix_a_malformed_representation_hash_is_refused[gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg]
+driver.core.test_round14_evidence_matrix::test_matrix_b_a_custom_int_SUBCLASS_endpoint_is_refused
+driver.core.test_round14_evidence_matrix::test_matrix_b_a_label_span_outside_its_quote_is_refused[bad0]
+driver.core.test_round14_evidence_matrix::test_matrix_b_a_label_span_outside_its_quote_is_refused[bad1]
+driver.core.test_round14_evidence_matrix::test_matrix_b_a_label_span_outside_its_quote_is_refused[bad2]
+driver.core.test_round14_evidence_matrix::test_matrix_b_a_label_span_outside_its_quote_is_refused[bad3]
+driver.core.test_round14_evidence_matrix::test_matrix_b_malformed_quote_span_is_refused[45,52-quote_span must be exactly [start, end]]
+driver.core.test_round14_evidence_matrix::test_matrix_b_malformed_quote_span_is_refused[None-quote_span must be exactly [start, end]]
+driver.core.test_round14_evidence_matrix::test_matrix_b_malformed_quote_span_is_refused[bad1-quote_span must be exactly [start, end]]
+driver.core.test_round14_evidence_matrix::test_matrix_b_malformed_quote_span_is_refused[bad10-quote_span endpoints must be exact integers]
+driver.core.test_round14_evidence_matrix::test_matrix_b_malformed_quote_span_is_refused[bad11-quote_span endpoints must be exact integers]
+driver.core.test_round14_evidence_matrix::test_matrix_b_malformed_quote_span_is_refused[bad12-quote_span endpoints must be exact integers]
+driver.core.test_round14_evidence_matrix::test_matrix_b_malformed_quote_span_is_refused[bad13-quote_span endpoints must be exact integers]
+driver.core.test_round14_evidence_matrix::test_matrix_b_malformed_quote_span_is_refused[bad14-quote_span endpoints must be exact integers]
+driver.core.test_round14_evidence_matrix::test_matrix_b_malformed_quote_span_is_refused[bad15-quote_span endpoints must be exact integers]
+driver.core.test_round14_evidence_matrix::test_matrix_b_malformed_quote_span_is_refused[bad16-quote_span must satisfy 0 <= start < end]
+driver.core.test_round14_evidence_matrix::test_matrix_b_malformed_quote_span_is_refused[bad17-quote_span must satisfy 0 <= start < end]
+driver.core.test_round14_evidence_matrix::test_matrix_b_malformed_quote_span_is_refused[bad18-quote_span must satisfy 0 <= start < end]
+driver.core.test_round14_evidence_matrix::test_matrix_b_malformed_quote_span_is_refused[bad19-quote_span must satisfy 0 <= start < end]
+driver.core.test_round14_evidence_matrix::test_matrix_b_malformed_quote_span_is_refused[bad2-quote_span must be exactly [start, end]]
+driver.core.test_round14_evidence_matrix::test_matrix_b_malformed_quote_span_is_refused[bad3-quote_span must be exactly [start, end]]
+driver.core.test_round14_evidence_matrix::test_matrix_b_malformed_quote_span_is_refused[bad4-quote_span must be exactly [start, end]]
+driver.core.test_round14_evidence_matrix::test_matrix_b_malformed_quote_span_is_refused[bad6-quote_span must be exactly [start, end]]
+driver.core.test_round14_evidence_matrix::test_matrix_b_malformed_quote_span_is_refused[bad7-quote_span endpoints must be exact integers]
+driver.core.test_round14_evidence_matrix::test_matrix_b_malformed_quote_span_is_refused[bad8-quote_span endpoints must be exact integers]
+driver.core.test_round14_evidence_matrix::test_matrix_b_malformed_quote_span_is_refused[bad9-quote_span endpoints must be exact integers]
+driver.core.test_round14_evidence_matrix::test_matrix_c_a_malformed_evidence_piece_is_refused[bad0-each evidence piece carries EXACTLY the keys ('kind', 'text', 'span')]
+driver.core.test_round14_evidence_matrix::test_matrix_c_a_malformed_evidence_piece_is_refused[bad1-each evidence piece carries EXACTLY the keys ('kind', 'text', 'span')]
+driver.core.test_round14_evidence_matrix::test_matrix_c_a_malformed_evidence_piece_is_refused[bad10-each evidence piece carries EXACTLY the keys ('kind', 'text', 'span')]
+driver.core.test_round14_evidence_matrix::test_matrix_c_a_malformed_evidence_piece_is_refused[bad2-each evidence piece carries EXACTLY the keys ('kind', 'text', 'span')]
+driver.core.test_round14_evidence_matrix::test_matrix_c_a_malformed_evidence_piece_is_refused[bad3-each evidence piece carries EXACTLY the keys ('kind', 'text', 'span')]
+driver.core.test_round14_evidence_matrix::test_matrix_c_a_malformed_evidence_piece_is_refused[bad4-evidence piece kind is one of]
+driver.core.test_round14_evidence_matrix::test_matrix_c_a_malformed_evidence_piece_is_refused[bad5-evidence piece kind is one of]
+driver.core.test_round14_evidence_matrix::test_matrix_c_a_malformed_evidence_piece_is_refused[bad6-each evidence piece needs non-blank string text]
+driver.core.test_round14_evidence_matrix::test_matrix_c_a_malformed_evidence_piece_is_refused[bad7-each evidence piece needs non-blank string text]
+driver.core.test_round14_evidence_matrix::test_matrix_c_a_malformed_evidence_piece_is_refused[bad8-each evidence piece needs non-blank string text]
+driver.core.test_round14_evidence_matrix::test_matrix_c_a_malformed_evidence_piece_is_refused[bad9-an evidence piece span must satisfy 0 <= start < end, got [52, 45]]
+driver.core.test_round14_evidence_matrix::test_matrix_c_a_non_container_pieces_value_is_refused[5]
+driver.core.test_round14_evidence_matrix::test_matrix_c_a_non_container_pieces_value_is_refused[None]
+driver.core.test_round14_evidence_matrix::test_matrix_c_a_non_container_pieces_value_is_refused[bad1]
+driver.core.test_round14_evidence_matrix::test_matrix_c_a_non_container_pieces_value_is_refused[pieces]
+driver.core.test_round14_evidence_matrix::test_matrix_c_duplicate_identical_pieces_are_REFUSED_not_collapsed
+driver.core.test_round14_evidence_matrix::test_matrix_d_the_caller_cannot_mutate_evidence_after_entry
+driver.core.test_round14_evidence_matrix::test_matrix_e_a_correct_looking_span_at_the_WRONG_place_is_refused
+driver.core.test_round14_evidence_matrix::test_matrix_e_a_piece_whose_text_is_not_at_its_span_is_refused
+driver.core.test_round14_evidence_matrix::test_matrix_e_a_quote_span_shifted_by_one_either_way_is_refused[span0-does not describe the bound element]
+driver.core.test_round14_evidence_matrix::test_matrix_e_a_quote_span_shifted_by_one_either_way_is_refused[span1-does not describe the bound element]
+driver.core.test_round14_evidence_matrix::test_matrix_e_a_quote_span_shifted_by_one_either_way_is_refused[span2-does not describe the bound element]
+driver.core.test_round14_evidence_matrix::test_matrix_e_a_quote_span_shifted_by_one_either_way_is_refused[span3-the submitted quote_span ends beyond the representation]
+driver.core.test_round14_evidence_matrix::test_matrix_e_a_stale_but_WELL_FORMED_hash_is_refused
+driver.core.test_round14_evidence_matrix::test_matrix_e_an_ADDED_piece_the_element_does_not_have_is_refused
+driver.core.test_round14_evidence_matrix::test_matrix_f_a_second_element_on_the_same_row_also_attaches
+driver.core.test_round14_evidence_matrix::test_matrix_f_the_lawful_item_attaches_and_carries_its_evidence
+driver.core.test_round14_evidence_matrix::test_matrix_g_character_offsets_not_byte_offsets
+driver.core.test_round14_evidence_matrix::test_matrix_h_the_caller_object_is_not_the_one_carried_forward
+driver.core.test_round14_evidence_matrix::test_matrix_h_the_normalised_evidence_is_a_READ_ONLY_mapping
+driver.core.test_round14_evidence_matrix::test_matrix_i_a_COMPLETE_evidence_swap_between_elements_is_refused
+driver.core.test_round14_evidence_matrix::test_matrix_i_a_MISSING_inner_evidence_key_is_refused[pieces]
+driver.core.test_round14_evidence_matrix::test_matrix_i_a_MISSING_inner_evidence_key_is_refused[quote_span]
+driver.core.test_round14_evidence_matrix::test_matrix_i_a_MISSING_inner_evidence_key_is_refused[raw_label_span]
+driver.core.test_round14_evidence_matrix::test_matrix_i_a_MISSING_inner_evidence_key_is_refused[representation_sha256]
+driver.core.test_round14_evidence_matrix::test_matrix_i_a_MIXED_KEY_TYPE_evidence_mapping_is_refused
+driver.core.test_round14_evidence_matrix::test_matrix_i_a_SIBLING_COLUMNS_header_cannot_stand_for_this_fact
+driver.core.test_round14_evidence_matrix::test_matrix_i_an_EXTRA_inner_evidence_key_is_refused
+driver.core.test_round14_evidence_matrix::test_matrix_i_every_piece_mutation_is_refused[<lambda>-a piece DELETED-the submitted evidence pieces differ from the bound element's own]
+driver.core.test_round14_evidence_matrix::test_matrix_i_every_piece_mutation_is_refused[<lambda>-a piece RE-KINDED-the submitted evidence pieces differ from the bound element's own]
+driver.core.test_round14_evidence_matrix::test_matrix_i_every_piece_mutation_is_refused[<lambda>-a piece RE-SPANNED to another piece's offsets-is not the text at its own span]
+driver.core.test_round14_evidence_matrix::test_matrix_i_every_piece_mutation_is_refused[<lambda>-a piece REWORDED-is not the text at its own span]
+driver.core.test_round14_evidence_matrix::test_matrix_i_every_piece_mutation_is_refused[<lambda>-a sibling column's header ADDED-the submitted evidence pieces differ from the bound element's own]
+driver.core.test_round14_evidence_matrix::test_matrix_i_every_piece_mutation_is_refused[<lambda>-the pieces REORDERED-the submitted evidence pieces differ from the bound element's own]
+driver.core.test_round14_evidence_matrix::test_matrix_i_identical_quote_TEXT_at_a_DIFFERENT_span_is_refused
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_lower_row_binds_on_ITS_OWN_evidence
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_same_span_law_governs_a_PIECE_span[45,52-an evidence piece span must be exactly [start, end]]
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_same_span_law_governs_a_PIECE_span[None-an evidence piece span must be exactly [start, end]]
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_same_span_law_governs_a_PIECE_span[bad1-an evidence piece span must be exactly [start, end]]
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_same_span_law_governs_a_PIECE_span[bad10-an evidence piece span endpoints must be exact integers]
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_same_span_law_governs_a_PIECE_span[bad11-an evidence piece span endpoints must be exact integers]
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_same_span_law_governs_a_PIECE_span[bad12-an evidence piece span endpoints must be exact integers]
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_same_span_law_governs_a_PIECE_span[bad13-an evidence piece span endpoints must be exact integers]
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_same_span_law_governs_a_PIECE_span[bad14-an evidence piece span endpoints must be exact integers]
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_same_span_law_governs_a_PIECE_span[bad15-an evidence piece span endpoints must be exact integers]
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_same_span_law_governs_a_PIECE_span[bad16-an evidence piece span must satisfy 0 <= start < end]
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_same_span_law_governs_a_PIECE_span[bad17-an evidence piece span must satisfy 0 <= start < end]
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_same_span_law_governs_a_PIECE_span[bad18-an evidence piece span must satisfy 0 <= start < end]
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_same_span_law_governs_a_PIECE_span[bad19-an evidence piece span must satisfy 0 <= start < end]
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_same_span_law_governs_a_PIECE_span[bad2-an evidence piece span must be exactly [start, end]]
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_same_span_law_governs_a_PIECE_span[bad3-an evidence piece span must be exactly [start, end]]
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_same_span_law_governs_a_PIECE_span[bad4-an evidence piece span must be exactly [start, end]]
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_same_span_law_governs_a_PIECE_span[bad6-an evidence piece span must be exactly [start, end]]
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_same_span_law_governs_a_PIECE_span[bad7-an evidence piece span endpoints must be exact integers]
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_same_span_law_governs_a_PIECE_span[bad8-an evidence piece span endpoints must be exact integers]
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_same_span_law_governs_a_PIECE_span[bad9-an evidence piece span endpoints must be exact integers]
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_same_span_law_governs_the_LABEL_span[45,52-raw_label_span must be exactly [start, end]]
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_same_span_law_governs_the_LABEL_span[None-does not describe the bound element]
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_same_span_law_governs_the_LABEL_span[bad1-raw_label_span must be exactly [start, end]]
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_same_span_law_governs_the_LABEL_span[bad10-raw_label_span endpoints must be exact integers]
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_same_span_law_governs_the_LABEL_span[bad11-raw_label_span endpoints must be exact integers]
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_same_span_law_governs_the_LABEL_span[bad12-raw_label_span endpoints must be exact integers]
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_same_span_law_governs_the_LABEL_span[bad13-raw_label_span endpoints must be exact integers]
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_same_span_law_governs_the_LABEL_span[bad14-raw_label_span endpoints must be exact integers]
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_same_span_law_governs_the_LABEL_span[bad15-raw_label_span endpoints must be exact integers]
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_same_span_law_governs_the_LABEL_span[bad16-raw_label_span must satisfy 0 <= start < end]
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_same_span_law_governs_the_LABEL_span[bad17-raw_label_span must satisfy 0 <= start < end]
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_same_span_law_governs_the_LABEL_span[bad18-raw_label_span must satisfy 0 <= start < end]
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_same_span_law_governs_the_LABEL_span[bad19-raw_label_span must satisfy 0 <= start < end]
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_same_span_law_governs_the_LABEL_span[bad2-raw_label_span must be exactly [start, end]]
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_same_span_law_governs_the_LABEL_span[bad3-raw_label_span must be exactly [start, end]]
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_same_span_law_governs_the_LABEL_span[bad4-raw_label_span must be exactly [start, end]]
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_same_span_law_governs_the_LABEL_span[bad6-raw_label_span must be exactly [start, end]]
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_same_span_law_governs_the_LABEL_span[bad7-raw_label_span endpoints must be exact integers]
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_same_span_law_governs_the_LABEL_span[bad8-raw_label_span endpoints must be exact integers]
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_same_span_law_governs_the_LABEL_span[bad9-raw_label_span endpoints must be exact integers]
+driver.core.test_round14_evidence_matrix::test_matrix_i_the_table_fixture_is_lawful_and_MULTI_piece
+driver.core.test_round14_evidence_matrix::test_matrix_j_a_one_character_shift_of_a_PIECE_span_is_refused[end--1]
+driver.core.test_round14_evidence_matrix::test_matrix_j_a_one_character_shift_of_a_PIECE_span_is_refused[end-1]
+driver.core.test_round14_evidence_matrix::test_matrix_j_a_one_character_shift_of_a_PIECE_span_is_refused[start--1]
+driver.core.test_round14_evidence_matrix::test_matrix_j_a_one_character_shift_of_a_PIECE_span_is_refused[start-1]
+driver.core.test_round14_evidence_matrix::test_matrix_j_a_one_character_shift_of_the_LABEL_span_is_refused[end--1-does not describe the bound element]
+driver.core.test_round14_evidence_matrix::test_matrix_j_a_one_character_shift_of_the_LABEL_span_is_refused[end-1-does not describe the bound element]
+driver.core.test_round14_evidence_matrix::test_matrix_j_a_one_character_shift_of_the_LABEL_span_is_refused[start--1-raw_label_span must lie INSIDE quote_span]
+driver.core.test_round14_evidence_matrix::test_matrix_j_a_one_character_shift_of_the_LABEL_span_is_refused[start-1-does not describe the bound element]
+driver.core.test_round14_evidence_matrix::test_matrix_k_an_element_with_no_reproducible_location_PARKS
+driver.core.test_round15_audit_evidence::test_825_a_completely_clean_no_menu_run_KEEPS_its_minimal_audit
+driver.core.test_round15_audit_evidence::test_825_an_empty_frozenset_is_lawful_it_is_not_a_missing_menu
+driver.core.test_round15_audit_evidence::test_825_every_malformed_array_yields_ZERO_rows_and_ONE_exact_record[-]
+driver.core.test_round15_audit_evidence::test_825_every_malformed_array_yields_ZERO_rows_and_ONE_exact_record[-mus11]
+driver.core.test_round15_audit_evidence::test_825_every_malformed_array_yields_ZERO_rows_and_ONE_exact_record[0-0]
+driver.core.test_round15_audit_evidence::test_825_every_malformed_array_yields_ZERO_rows_and_ONE_exact_record[0-mus12]
+driver.core.test_round15_audit_evidence::test_825_every_malformed_array_yields_ZERO_rows_and_ONE_exact_record[5-5]
+driver.core.test_round15_audit_evidence::test_825_every_malformed_array_yields_ZERO_rows_and_ONE_exact_record[5-mus8]
+driver.core.test_round15_audit_evidence::test_825_every_malformed_array_yields_ZERO_rows_and_ONE_exact_record[False-False]
+driver.core.test_round15_audit_evidence::test_825_every_malformed_array_yields_ZERO_rows_and_ONE_exact_record[abc-abc]
+driver.core.test_round15_audit_evidence::test_825_every_malformed_array_yields_ZERO_rows_and_ONE_exact_record[dus13-mus13]
+driver.core.test_round15_audit_evidence::test_825_every_malformed_array_yields_ZERO_rows_and_ONE_exact_record[dus14-5]
+driver.core.test_round15_audit_evidence::test_825_every_malformed_array_yields_ZERO_rows_and_ONE_exact_record[dus15-string]
+driver.core.test_round15_audit_evidence::test_825_every_malformed_array_yields_ZERO_rows_and_ONE_exact_record[dus16-]
+driver.core.test_round15_audit_evidence::test_825_every_malformed_array_yields_ZERO_rows_and_ONE_exact_record[dus17-0]
+driver.core.test_round15_audit_evidence::test_825_every_malformed_array_yields_ZERO_rows_and_ONE_exact_record[dus18-mus18]
+driver.core.test_round15_audit_evidence::test_825_every_malformed_array_yields_ZERO_rows_and_ONE_exact_record[dus19-mus19]
+driver.core.test_round15_audit_evidence::test_825_every_malformed_array_yields_ZERO_rows_and_ONE_exact_record[dus20-mus20]
+driver.core.test_round15_audit_evidence::test_825_every_malformed_array_yields_ZERO_rows_and_ONE_exact_record[dus21-mus21]
+driver.core.test_round15_audit_evidence::test_825_every_malformed_array_yields_ZERO_rows_and_ONE_exact_record[dus3-mus3]
+driver.core.test_round15_audit_evidence::test_825_every_malformed_array_yields_ZERO_rows_and_ONE_exact_record[dus4-mus4]
+driver.core.test_round15_audit_evidence::test_825_every_malformed_array_yields_ZERO_rows_and_ONE_exact_record[dus5-mus5]
+driver.core.test_round15_audit_evidence::test_825_every_malformed_array_yields_ZERO_rows_and_ONE_exact_record[dus9-mus9]
+driver.core.test_round15_audit_evidence::test_825_every_malformed_array_yields_ZERO_rows_and_ONE_exact_record[string-mus10]
+driver.core.test_round15_audit_evidence::test_825_malformed_menu_tokens_are_refused_BEFORE_any_io[None]
+driver.core.test_round15_audit_evidence::test_825_malformed_menu_tokens_are_refused_BEFORE_any_io[bad1]
+driver.core.test_round15_audit_evidence::test_825_malformed_menu_tokens_are_refused_BEFORE_any_io[bad2]
+driver.core.test_round15_audit_evidence::test_825_malformed_menu_tokens_are_refused_BEFORE_any_io[bad3]
+driver.core.test_round15_audit_evidence::test_825_malformed_menu_tokens_are_refused_BEFORE_any_io[bad4]
+driver.core.test_round15_audit_evidence::test_825_malformed_menu_tokens_are_refused_BEFORE_any_io[bad5]
+driver.core.test_round15_audit_evidence::test_825_malformed_menu_tokens_are_refused_BEFORE_any_io[bad6]
+driver.core.test_round15_audit_evidence::test_825_malformed_menu_tokens_are_refused_BEFORE_any_io[bad7]
+driver.core.test_round15_audit_evidence::test_825_malformed_menu_tokens_are_refused_BEFORE_any_io[bad8]
+driver.core.test_round15_audit_evidence::test_825_malformed_menu_tokens_are_refused_BEFORE_any_io[bad9]
+driver.core.test_round15_audit_evidence::test_825_malformed_menu_tokens_are_refused_BEFORE_any_io[segment:a]
+driver.core.test_round15_audit_evidence::test_825_only_NONE_and_the_empty_list_lawfully_mean_no_dimensions[None]
+driver.core.test_round15_audit_evidence::test_825_only_NONE_and_the_empty_list_lawfully_mean_no_dimensions[empty1]
+driver.core.test_round15_audit_evidence::test_825_the_graph_result_is_immutable_at_EVERY_level
+driver.core.test_round15_audit_evidence::test_825_the_positive_control_uses_build_menus_REAL_output
+driver.core.test_round15_audit_evidence::test_825_the_result_is_ISOLATED_from_the_caller_originals
+driver.core.test_round15_audit_evidence::test_825_v1_EMITS_member_menu_when_exclusions_exist_with_NO_slice_menu
+driver.core.test_round15_audit_evidence::test_825p2_ALL_INVALID_event_still_returns_the_result_record
+driver.core.test_round15_audit_evidence::test_825p2_EMPTY_refs_invent_NO_fold_row
+driver.core.test_round15_audit_evidence::test_825p2_EVERY_path_returns_the_same_result_TYPE
+driver.core.test_round15_audit_evidence::test_825p2_MEMBER_failure_parks_MEMBER_LINK_INVALID_with_its_logs[eqt:DistributionChannelAxis-geo:M-non_slice_ref]
+driver.core.test_round15_audit_evidence::test_825p2_MEMBER_failure_parks_MEMBER_LINK_INVALID_with_its_logs[us-gaap:StatementBusinessSegmentsAxis-us-gaap:IntersegmentEliminationMember-fs20_hard_exclude]
+driver.core.test_round15_audit_evidence::test_825p2_THE_FOLD_NOTE_SURVIVES_EXACTLY
+driver.core.test_round15_audit_evidence::test_825p2_TWO_concepts_keep_SEPARATE_adapter_summaries
+driver.core.test_round15_audit_evidence::test_825p2_a_LATER_numeric_failure_does_not_erase_member_evidence
+driver.core.test_round15_audit_evidence::test_825p2_a_MALFORMED_ITEM_is_ITEM_LOCAL_and_keeps_its_sibling[42]
+driver.core.test_round15_audit_evidence::test_825p2_a_MALFORMED_ITEM_is_ITEM_LOCAL_and_keeps_its_sibling[5.0]
+driver.core.test_round15_audit_evidence::test_825p2_a_MALFORMED_ITEM_is_ITEM_LOCAL_and_keeps_its_sibling[None]
+driver.core.test_round15_audit_evidence::test_825p2_a_MALFORMED_ITEM_is_ITEM_LOCAL_and_keeps_its_sibling[bad0]
+driver.core.test_round15_audit_evidence::test_825p2_a_MALFORMED_ITEM_is_ITEM_LOCAL_and_keeps_its_sibling[bad1]
+driver.core.test_round15_audit_evidence::test_825p2_a_MALFORMED_ITEM_is_ITEM_LOCAL_and_keeps_its_sibling[bad2]
+driver.core.test_round15_audit_evidence::test_825p2_a_MALFORMED_ITEM_is_ITEM_LOCAL_and_keeps_its_sibling[bad5]
+driver.core.test_round15_audit_evidence::test_825p2_a_MALFORMED_ITEM_is_ITEM_LOCAL_and_keeps_its_sibling[bad7]
+driver.core.test_round15_audit_evidence::test_825p2_a_MALFORMED_ITEM_is_ITEM_LOCAL_and_keeps_its_sibling[text]
+driver.core.test_round15_audit_evidence::test_825p2_a_POPULATED_exclusion_record_is_frozen_too
+driver.core.test_round15_audit_evidence::test_825p2_a_POPULATED_result_is_deeply_frozen
+driver.core.test_round15_audit_evidence::test_825p2_a_PROGRAMMING_error_still_aborts_the_whole_run
+driver.core.test_round15_audit_evidence::test_825p2_a_REPEATED_concept_reads_ONCE_and_logs_its_exclusions_ONCE
+driver.core.test_round15_audit_evidence::test_825p2_a_SHARED_failure_fans_out_to_every_valid_item[count-parked-XBRL_BINDING_UNAVAILABLE]
+driver.core.test_round15_audit_evidence::test_825p2_a_SHARED_failure_fans_out_to_every_valid_item[hashes-rejected-XBRL_CONTRACT_INVALID]
+driver.core.test_round15_audit_evidence::test_825p2_a_SHARED_failure_fans_out_to_every_valid_item[outage-parked-SOURCE_UNAVAILABLE]
+driver.core.test_round15_audit_evidence::test_825p2_a_STORE_OUTAGE_during_a_concept_read_fans_out_EVENT_WIDE
+driver.core.test_round15_audit_evidence::test_825p2_a_bad_item_cannot_erase_a_VALID_SIBLING
+driver.core.test_round15_audit_evidence::test_825p2_a_missing_graph_company_keeps_SOURCE_COMPANY_AMBIGUOUS
+driver.core.test_round15_audit_evidence::test_825p2_an_EMPTY_event_returns_the_SAME_RESULT_RECORD
+driver.core.test_round15_audit_evidence::test_825p2_an_ORDINARY_concept_absence_stays_CONCEPT_LOCAL
+driver.core.test_round15_audit_evidence::test_825p2_an_UNIDENTIFIABLE_ENVELOPE_still_raises
+driver.core.test_round15_audit_evidence::test_825p2_an_UNSTORABLE_value_keeps_NOT_STORABLE_and_PARKS
+driver.core.test_round15_audit_evidence::test_825p2_an_internal_BAD_DECISION_stays_loud_and_is_not_an_assert
+driver.core.test_round15_audit_evidence::test_825p2_caller_mutation_of_a_NON_EMPTY_member_LOG_cannot_reach_the_result
+driver.core.test_round15_audit_evidence::test_825p2_check_member_refs_runs_ONCE_PER_ITEM_not_once_per_event
+driver.core.test_round15_audit_evidence::test_825p2_fact_id_stays_NONE_until_a_real_driver_fact_id_exists
+driver.core.test_round15_audit_evidence::test_825p2_the_audit_SERIALIZER_reproduces_the_v1_member_menu_exactly
+driver.core.test_round15_audit_evidence::test_825p2_the_decision_rule_has_exactly_ONE_owner
+driver.core.test_round15_audit_evidence::test_825p2_the_outcome_row_equals_the_LIVE_CLI_row_BY_VALUE
+driver.core.test_round15_audit_evidence::test_825p2_the_public_decisions_are_EXACTLY_the_contract_five
+driver.core.test_round15_audit_evidence::test_825p2_the_result_carries_its_own_source_id
+driver.core.test_round15_audit_evidence::test_825p2_the_result_survives_CALLER_MUTATION_of_the_notes_it_came_from
+driver.core.test_round15_audit_evidence::test_825p2_the_three_default_mappings_are_pinned[production-parked-XBRL_BINDING_UNAVAILABLE]
+driver.core.test_round15_audit_evidence::test_825p2_the_three_default_mappings_are_pinned[schema-rejected-XBRL_CONTRACT_INVALID]
+driver.core.test_round15_audit_evidence::test_825p2_the_three_default_mappings_are_pinned[unavailable-parked-SOURCE_UNAVAILABLE]
+driver.core.test_round15_audit_evidence::test_825p2_the_whole_result_is_immutable
+driver.core.test_round15_audit_evidence::test_828_MISALIGNED_arrays_are_counted_and_honestly_labelled
+driver.core.test_round15_audit_evidence::test_828_a_clean_dimensionless_read_reports_NO_exclusions
+driver.core.test_round15_audit_evidence::test_828_an_UNRESOLVED_definition_is_its_own_reason
+driver.core.test_round15_audit_evidence::test_828_the_return_is_a_NAMED_two_field_value_not_a_bare_list
+driver.core.test_round15_audit_evidence::test_828_the_summaries_are_IMMUTABLE
+driver.core.test_round15_audit_evidence::test_828_two_reasons_in_one_read_keep_SEPARATE_counts
+driver.core.test_round8_xbrl_binding::test_a_duplicated_unit_id_is_poisoned_not_last_wins
+driver.core.test_round8_xbrl_binding::test_a_fact_on_a_duplicated_unit_id_abstains
+driver.core.test_round8_xbrl_binding::test_a_missing_cik_parks
+driver.core.test_round8_xbrl_binding::test_a_money_fact_is_refused_under_a_non_money_level_unit[basis_points]
+driver.core.test_round8_xbrl_binding::test_a_money_fact_is_refused_under_a_non_money_level_unit[count]
+driver.core.test_round8_xbrl_binding::test_a_money_fact_is_refused_under_a_non_money_level_unit[unknown]
+driver.core.test_round8_xbrl_binding::test_a_money_fact_is_refused_under_a_non_money_level_unit[x]
+driver.core.test_round8_xbrl_binding::test_a_provider_serving_a_DIFFERENT_document_is_caught
+driver.core.test_round8_xbrl_binding::test_a_shares_fact_binds_although_the_filing_writes_xbrli_shares
+driver.core.test_round8_xbrl_binding::test_a_usd_fact_reports_usd
+driver.core.test_round8_xbrl_binding::test_all_xbrl_items_of_one_event_must_agree_on_the_representation
+driver.core.test_round8_xbrl_binding::test_an_eps_fact_binds_and_reports_usd_per_share
+driver.core.test_round8_xbrl_binding::test_is_divide_uses_the_certified_string_law[0]
+driver.core.test_round8_xbrl_binding::test_is_divide_uses_the_certified_string_law[1.0]
+driver.core.test_round8_xbrl_binding::test_is_divide_uses_the_certified_string_law[1]
+driver.core.test_round8_xbrl_binding::test_is_divide_uses_the_certified_string_law[2]
+driver.core.test_round8_xbrl_binding::test_is_divide_uses_the_certified_string_law[False]
+driver.core.test_round8_xbrl_binding::test_is_divide_uses_the_certified_string_law[None]
+driver.core.test_round8_xbrl_binding::test_is_divide_uses_the_certified_string_law[True]
+driver.core.test_round8_xbrl_binding::test_is_divide_uses_the_certified_string_law[]
+driver.core.test_round8_xbrl_binding::test_is_divide_uses_the_certified_string_law[yes]
+driver.core.test_round8_xbrl_binding::test_reconcile_takes_a_real_int_only
+driver.core.test_round8_xbrl_binding::test_stored_period_end_refuses_malformed_dates
+driver.core.test_round8_xbrl_binding::test_the_binder_REPORTS_the_unit_and_the_caller_decides
+driver.core.test_round8_xbrl_binding::test_the_cik_comes_from_cores_graph_not_the_provider
+driver.core.test_round8_xbrl_binding::test_the_exclusive_date_rule_has_exactly_one_implementation
+driver.core.test_round8_xbrl_binding::test_the_expected_hash_is_required_and_binding
+driver.core.test_round8_xbrl_binding::test_the_graph_name_must_still_match_the_filings_own_measure
+driver.core.test_round8_xbrl_binding::test_the_lawful_money_fact_attaches
+driver.core.test_round8_xbrl_binding::test_the_store_is_never_asked_for_a_document
+driver.core.test_round8_xbrl_binding::test_usd_admits_both_usd_and_m_usd
+driver.core.test_round8_xbrl_binding::test_xml_integer_accepts_every_lawful_form[ 6 -6]
+driver.core.test_round8_xbrl_binding::test_xml_integer_accepts_every_lawful_form[+6-6]
+driver.core.test_round8_xbrl_binding::test_xml_integer_accepts_every_lawful_form[-3--3]
+driver.core.test_round8_xbrl_binding::test_xml_integer_accepts_every_lawful_form[0-0]
+driver.core.test_round8_xbrl_binding::test_xml_integer_accepts_every_lawful_form[012-12]
+driver.core.test_round8_xbrl_binding::test_xml_integer_accepts_every_lawful_form[6-6]
+driver.core.test_round8_xbrl_binding::test_xml_integer_accepts_every_lawful_form[\n6\t-6]
+driver.core.test_round8_xbrl_binding::test_xml_integer_rejects_everything_xml_forbids[+ 6]
+driver.core.test_round8_xbrl_binding::test_xml_integer_rejects_everything_xml_forbids[--3]
+driver.core.test_round8_xbrl_binding::test_xml_integer_rejects_everything_xml_forbids[1_0]
+driver.core.test_round8_xbrl_binding::test_xml_integer_rejects_everything_xml_forbids[1e3]
+driver.core.test_round8_xbrl_binding::test_xml_integer_rejects_everything_xml_forbids[6.0]
+driver.core.test_round8_xbrl_binding::test_xml_integer_rejects_everything_xml_forbids[6.9]
+driver.core.test_round8_xbrl_binding::test_xml_integer_rejects_everything_xml_forbids[6]
+driver.core.test_round8_xbrl_binding::test_xml_integer_rejects_everything_xml_forbids[None]
+driver.core.test_round8_xbrl_binding::test_xml_integer_rejects_everything_xml_forbids[True]
+driver.core.test_round8_xbrl_binding::test_xml_integer_rejects_everything_xml_forbids[\u0666]
+driver.core.test_round8_xbrl_binding::test_xml_integer_rejects_everything_xml_forbids[\u096c]
+driver.core.test_round8_xbrl_binding::test_xml_integer_rejects_everything_xml_forbids[\uff11\uff12]
+driver.core.test_round8_xbrl_binding::test_xml_integer_rejects_everything_xml_forbids[\xa06]
+driver.core.test_round8_xbrl_binding::test_xml_integer_rejects_everything_xml_forbids[]
+driver.core.test_round8_xbrl_binding::test_xml_integer_rejects_everything_xml_forbids[raw15]
+driver.core.test_round8_xbrl_binding::test_xml_integer_rejects_everything_xml_forbids[true]
+driver.core.test_round9_corrections::test_a_padded_sign_is_malformed_evidence_not_a_typo_to_repair[ - ]
+driver.core.test_round9_corrections::test_a_padded_sign_is_malformed_evidence_not_a_typo_to_repair[ -]
+driver.core.test_round9_corrections::test_a_padded_sign_is_malformed_evidence_not_a_typo_to_repair[- ]
+driver.core.test_round9_corrections::test_a_padded_sign_is_malformed_evidence_not_a_typo_to_repair[\t-\n]
+driver.core.test_round9_corrections::test_a_padded_sign_is_malformed_evidence_not_a_typo_to_repair[\xa0-]
+driver.core.test_round9_corrections::test_an_empty_LIST_is_the_verified_empty_claim[good0]
+driver.core.test_round9_corrections::test_an_empty_LIST_is_the_verified_empty_claim[good1]
+driver.core.test_round9_corrections::test_every_other_sign_value_is_refused[+]
+driver.core.test_round9_corrections::test_every_other_sign_value_is_refused[--]
+driver.core.test_round9_corrections::test_every_other_sign_value_is_refused[0]
+driver.core.test_round9_corrections::test_every_other_sign_value_is_refused[minus]
+driver.core.test_round9_corrections::test_every_other_sign_value_is_refused[n]
+driver.core.test_round9_corrections::test_member_refs_of_the_wrong_SHAPE_park_cleanly[0]
+driver.core.test_round9_corrections::test_member_refs_of_the_wrong_SHAPE_park_cleanly[5]
+driver.core.test_round9_corrections::test_member_refs_of_the_wrong_SHAPE_park_cleanly[None]
+driver.core.test_round9_corrections::test_member_refs_of_the_wrong_SHAPE_park_cleanly[True]
+driver.core.test_round9_corrections::test_member_refs_of_the_wrong_SHAPE_park_cleanly[abc]
+driver.core.test_round9_corrections::test_member_refs_of_the_wrong_SHAPE_park_cleanly[bad0]
+driver.core.test_round9_corrections::test_member_refs_of_the_wrong_SHAPE_park_cleanly[bad1]
+driver.core.test_round9_corrections::test_member_refs_of_the_wrong_SHAPE_park_cleanly[bad7]
+driver.core.test_round9_corrections::test_no_contract_helper_is_left_unreachable_from_production
+driver.core.test_round9_corrections::test_the_event_door_refuses_an_item_with_no_declared_document
+driver.core.test_round9_corrections::test_the_event_door_refuses_items_that_disagree_on_the_document
+driver.core.test_round9_corrections::test_the_locator_still_exposes_its_full_anchor_law
+driver.core.test_round9_corrections::test_the_one_document_per_event_rule_is_WIRED_not_decorative
+driver.core.test_round9_corrections::test_the_only_lawful_sign_forms_still_work
+driver.core.test_round9_corrections::test_the_unit_compatibility_relation_has_exactly_one_definition
+driver.core.test_s4_rehearsal::test_s4_rehearsal
+driver.core.test_slice_menu::test_build_menu_classifies_excludes_and_logs
+driver.core.test_slice_menu::test_check_member_refs_unit_park_shapes
+driver.core.test_slice_menu::test_e2e_elimination_member_ref_parks_with_exclusion_logged
+driver.core.test_slice_menu::test_e2e_kind_mismatch_ref_parks
+driver.core.test_slice_menu::test_e2e_menu_arm_a_xbrl_members_feed_the_fold
+driver.core.test_slice_menu::test_e2e_non_slice_axis_ref_parks
+driver.core.test_slice_menu::test_e2e_uncatalogued_real_axis_writes_via_provisional_path
+driver.core.test_slice_menu::test_elimination_qname_outside_segment_family_is_not_guarded
+driver.core.test_slice_menu::test_frozen_census_lists_load_and_stay_disjoint
+driver.core.test_slice_menu::test_frozen_table_shape_and_ladder
+driver.core.test_slice_menu::test_match_xbrl_fact_complete_dimension_set_only
+driver.core.test_slice_menu::test_match_xbrl_fact_exclusive_end_decode
+driver.core.test_slice_menu::test_provisional_member_enters_menu_with_structured_log
+driver.core.test_slice_menu::test_scope_slice_token_parse
+driver.core.test_unit_resolver::test_cases
+driver.core.test_unit_resolver::test_cents_surfaced
+driver.core.test_unit_resolver::test_denominator_lint
+driver.core.test_unit_resolver::test_glued_dollar_fix
+driver.core.test_unit_resolver::test_lint_hint_blind
+driver.core.test_unit_resolver::test_parity_with_production
+driver.core.test_unit_resolver::test_range_value_not_scaled
+driver.core.test_unit_resolver::test_separate_level_change
+driver.core.test_v2_attacks::test_ATTACK_823_matching_and_HASHING_are_unchanged_by_freezing
+driver.core.test_v2_attacks::test_ATTACK_823_nothing_is_mutable_THROUGH_the_returned_object
+driver.core.test_v2_attacks::test_ATTACK_823_the_DIRECT_fact_constructor_freezes_too
+driver.core.test_v2_attacks::test_ATTACK_823_the_DIRECT_item_constructor_freezes_too
+driver.core.test_v2_attacks::test_ATTACK_823_the_MODEL_door_still_freezes
+driver.core.test_v2_attacks::test_ATTACK_823_the_run_input_holds_its_facts_as_a_TUPLE[direct]
+driver.core.test_v2_attacks::test_ATTACK_823_the_run_input_holds_its_facts_as_a_TUPLE[from_dict]
+driver.core.test_v2_attacks::test_ATTACK_a_65_digit_value_is_not_rounded
+driver.core.test_v2_attacks::test_ATTACK_a_bundle_cannot_be_carried_into_another_source
+driver.core.test_v2_attacks::test_ATTACK_a_compensated_numeric_description_is_rejected
+driver.core.test_v2_attacks::test_ATTACK_a_document_that_does_not_hash_to_its_source_is_refused
+driver.core.test_v2_attacks::test_ATTACK_a_forged_filing_row_can_no_longer_be_supplied
+driver.core.test_v2_attacks::test_ATTACK_a_fractional_scale_is_never_silently_truncated
+driver.core.test_v2_attacks::test_ATTACK_a_frozen_polarity_proof_does_not_crash_matching
+driver.core.test_v2_attacks::test_ATTACK_a_lawful_BLANK_fact_id_reaches_the_fallback
+driver.core.test_v2_attacks::test_ATTACK_a_wrong_context_finds_no_matching_fact
+driver.core.test_v2_attacks::test_ATTACK_a_wrong_declared_scale_fails_the_certified_reconcile
+driver.core.test_v2_attacks::test_ATTACK_an_invalid_slice_kind_is_rejected
+driver.core.test_v2_attacks::test_ATTACK_an_unstorable_magnitude_parks_before_it_can_exhaust_memory
+driver.core.test_v2_attacks::test_ATTACK_annual_percent_sequential_is_rejected
+driver.core.test_v2_attacks::test_ATTACK_comma_formatted_graph_values_are_parsed_not_rejected
+driver.core.test_v2_attacks::test_ATTACK_conflicting_duplicate_rows_park_regardless_of_order
+driver.core.test_v2_attacks::test_ATTACK_equal_values_written_differently_still_link
+driver.core.test_v2_attacks::test_ATTACK_every_fact_level_key_must_be_present_explicitly
+driver.core.test_v2_attacks::test_ATTACK_every_numeric_slot_is_checked_not_just_level_low
+driver.core.test_v2_attacks::test_ATTACK_evidence_and_scale_come_from_the_filings_own_rendering
+driver.core.test_v2_attacks::test_ATTACK_exact_mul_precision_comes_from_the_operands
+driver.core.test_v2_attacks::test_ATTACK_extreme_exponents_park_they_do_not_crash
+driver.core.test_v2_attacks::test_ATTACK_guidance_without_confirmation_is_rejected
+driver.core.test_v2_attacks::test_ATTACK_invented_scale_evidence_on_an_xbrl_slot_is_rejected
+driver.core.test_v2_attacks::test_ATTACK_malformed_dates_are_rejected[2026-13-45]
+driver.core.test_v2_attacks::test_ATTACK_malformed_dates_are_rejected[2026/03/31]
+driver.core.test_v2_attacks::test_ATTACK_malformed_dates_are_rejected[not-a-date]
+driver.core.test_v2_attacks::test_ATTACK_member_slices_must_be_the_facts_own_slices
+driver.core.test_v2_attacks::test_ATTACK_missing_row_metadata_parks_it_does_not_trust_the_caller
+driver.core.test_v2_attacks::test_ATTACK_model_built_facts_are_deeply_immutable_too
+driver.core.test_v2_attacks::test_ATTACK_model_input_cannot_supply_the_code_owned_xbrl_fields
+driver.core.test_v2_attacks::test_ATTACK_per_x_uses_exact_denominator_matching_not_substring
+driver.core.test_v2_attacks::test_ATTACK_production_rules_now_reject_what_v2_used_to_accept[company_confirmed on a metric-over1-LANE]
+driver.core.test_v2_attacks::test_ATTACK_production_rules_now_reject_what_v2_used_to_accept[conditions on a metric-over2-CONDITIONS]
+driver.core.test_v2_attacks::test_ATTACK_production_rules_now_reject_what_v2_used_to_accept[invented driver_state-over0-STATE]
+driver.core.test_v2_attacks::test_ATTACK_q5_is_rejected
+driver.core.test_v2_attacks::test_ATTACK_the_attach_token_is_not_reachable_from_outside
+driver.core.test_v2_attacks::test_ATTACK_the_canonical_length_matches_the_real_canonicalizer
+driver.core.test_v2_attacks::test_ATTACK_the_deferred_acronym_class_still_parks
+driver.core.test_v2_attacks::test_ATTACK_the_document_is_tied_to_the_source_id
+driver.core.test_v2_attacks::test_ATTACK_the_facts_OWN_slot_is_the_one_verified
+driver.core.test_v2_attacks::test_ATTACK_the_happy_path_verifies_against_a_real_shaped_row
+driver.core.test_v2_attacks::test_ATTACK_the_representation_length_is_exact_not_approximate
+driver.core.test_v2_attacks::test_ATTACK_the_returned_fact_is_DEEPLY_immutable
+driver.core.test_v2_attacks::test_ATTACK_the_semantic_Unit_node_is_the_authority_not_the_unit_ref
+driver.core.test_v2_attacks::test_ATTACK_the_text_lane_still_demands_quote_local_evidence
+driver.core.test_v2_attacks::test_ATTACK_the_verifier_fetches_its_own_evidence
+driver.core.test_v2_attacks::test_ATTACK_two_different_29_digit_values_must_not_auto_link
+driver.core.test_v2_attacks::test_ATTACK_two_period_shape_fields_are_rejected_by_the_PRODUCTION_resolver
+driver.core.test_v2_attacks::test_ATTACK_unequal_29_digit_endpoints_are_not_a_point
+driver.core.test_v2_attacks::test_ATTACK_unmatched_output_is_canonically_ordered
+driver.core.test_v2_attacks::test_ATTACK_xbrl_scaling_is_exact_at_29_digits
+driver.core.test_v2_attacks::test_the_contract_does_not_reimplement_THREE_NAMED_production_symbols
+driver.relocation.test_anchor_schema_probe::test_10_driver_name_mismatch_rejected
+driver.relocation.test_anchor_schema_probe::test_11_stored_fact_scope_must_match_id_suffix
+driver.relocation.test_anchor_schema_probe::test_12_cross_wired_company_rejected
+driver.relocation.test_anchor_schema_probe::test_13_real_cross_company_isolation_two_live_edges
+driver.relocation.test_anchor_schema_probe::test_14_production_parity_with_strict_decode_on_green_fixtures
+driver.relocation.test_anchor_schema_probe::test_15_production_retains_all_probe_rejection_classes
+driver.relocation.test_anchor_schema_probe::test_16_wording_law_stored_quote_is_the_only_fallback
+driver.relocation.test_anchor_schema_probe::test_17_multiple_active_concept_resolutions_fail_closed
+driver.relocation.test_anchor_schema_probe::test_18_numeric_derived_from_stored_slots_zero_counts_unit_both_directions
+driver.relocation.test_anchor_schema_probe::test_19_smallest_missing_field_is_named
+driver.relocation.test_anchor_schema_probe::test_1_real_edge_aa_numeric_text
+driver.relocation.test_anchor_schema_probe::test_20_malformed_clues_rejected_never_silently_repaired
+driver.relocation.test_anchor_schema_probe::test_21_injection_channels_stay_closed
+driver.relocation.test_anchor_schema_probe::test_22_all_five_value_slots_must_be_present
+driver.relocation.test_anchor_schema_probe::test_23_blank_company_id_rejected
+driver.relocation.test_anchor_schema_probe::test_24_concept_clues_container_must_be_list_or_tuple
+driver.relocation.test_anchor_schema_probe::test_25_input_schema_guard_malformed_inputs_raise_never_emit_or_crash
+driver.relocation.test_anchor_schema_probe::test_26_non_string_fact_id_raises_never_crashes
+driver.relocation.test_anchor_schema_probe::test_2_synthetic_dimensionless
+driver.relocation.test_anchor_schema_probe::test_3_synthetic_dimensioned_segment_normalized
+driver.relocation.test_anchor_schema_probe::test_4_synthetic_numberless_duration_series_unit_none
+driver.relocation.test_anchor_schema_probe::test_5_synthetic_instant_uses_legal_gp_date_date
+driver.relocation.test_anchor_schema_probe::test_6_synthetic_collision_member_hash_stripped
+driver.relocation.test_anchor_schema_probe::test_7_synthetic_two_series_one_driver
+driver.relocation.test_anchor_schema_probe::test_8_synthetic_replaced_lww_quote_uses_birth_quotes
+driver.relocation.test_anchor_schema_probe::test_9_metric_decoder_rejects_surprise_and_unknown_slots
+driver.relocation.test_bind_graph_fact::test_RED_a_blank_short_id_uses_the_unique_identity_fallback
+driver.relocation.test_bind_graph_fact::test_RED_a_dimension_set_mismatch_abstains
+driver.relocation.test_bind_graph_fact::test_RED_a_duplicate_context_id_abstains
+driver.relocation.test_bind_graph_fact::test_RED_a_duplicate_id_abstains_and_is_never_rescued
+driver.relocation.test_bind_graph_fact::test_RED_a_hidden_element_without_local_evidence_abstains
+driver.relocation.test_bind_graph_fact::test_RED_a_malformed_is_divide_flag_is_malformed_not_a_crash
+driver.relocation.test_bind_graph_fact::test_RED_a_malformed_sign_abstains_rather_than_reading_as_positive
+driver.relocation.test_bind_graph_fact::test_RED_a_mismatched_identity_component_abstains[concept-us-gaap:CostOfRevenue]
+driver.relocation.test_bind_graph_fact::test_RED_a_mismatched_identity_component_abstains[context_id-c-2]
+driver.relocation.test_bind_graph_fact::test_RED_a_mismatched_identity_component_abstains[end_date-2026-07-01]
+driver.relocation.test_bind_graph_fact::test_RED_a_mismatched_identity_component_abstains[entity_cik-1018724]
+driver.relocation.test_bind_graph_fact::test_RED_a_mismatched_identity_component_abstains[start_date-2025-01-01]
+driver.relocation.test_bind_graph_fact::test_RED_a_mismatched_identity_component_abstains[unit_ref-shares]
+driver.relocation.test_bind_graph_fact::test_RED_a_non_string_element_id_is_malformed_not_a_crash
+driver.relocation.test_bind_graph_fact::test_RED_an_absent_entity_identifier_abstains
+driver.relocation.test_bind_graph_fact::test_RED_comma_and_accounting_negative_values_parse
+driver.relocation.test_bind_graph_fact::test_RED_exact_number_pair_at_29_digits
+driver.relocation.test_bind_graph_fact::test_RED_exactness_holds_through_the_whole_binding
+driver.relocation.test_bind_graph_fact::test_RED_fallback_is_permitted_ONLY_when_the_short_id_is_blank
+driver.relocation.test_bind_graph_fact::test_RED_shares_and_per_share_units_are_lawful_not_rejected
+driver.relocation.test_bind_graph_fact::test_RED_the_LIVE_unit_spellings_are_the_ones_that_must_work
+driver.relocation.test_bind_graph_fact::test_RED_the_expected_numeric_object_is_returned_for_field_wise_binding
+driver.relocation.test_bind_graph_fact::test_RED_the_fallback_abstains_when_it_is_not_unique
+driver.relocation.test_bind_graph_fact::test_RED_the_semantic_unit_must_agree_with_the_filings_Unit_node
+driver.relocation.test_exact_numbers::test_dec_exact_from_string
+driver.relocation.test_exact_numbers::test_dec_rejects_floats
+driver.relocation.test_exact_numbers::test_dec_rejects_nan_and_infinity
+driver.relocation.test_exact_numbers::test_eq_no_rounding
+driver.relocation.test_exact_numbers::test_is_instant
+driver.relocation.test_exact_numbers::test_period_key_exact_no_tolerance
+driver.relocation.test_locator_routes::test_12_honest_negative_no_proven_match
+driver.relocation.test_locator_routes::test_14_sign_laws_positive_vs_negative_prints
+driver.relocation.test_locator_routes::test_15_plain_number_never_accepts_percent_print
+driver.relocation.test_locator_routes::test_18_money_anchor_rejects_shares_unit
+driver.relocation.test_locator_routes::test_19_period_word_contradiction_abstains
+driver.relocation.test_locator_routes::test_22_malformed_source_stamps_fail_closed
+driver.relocation.test_locator_routes::test_30_period_wording_either_side_and_three_months_fiscal_year
+driver.relocation.test_locator_routes::test_32_large_number_overflow_class_abstains_never_crashes
+driver.relocation.test_locator_routes::test_3_invalid_fact_period_shapes_never_emit
+driver.relocation.test_locator_routes::test_9_missing_and_foreign_hint_stamps_fail_closed
+driver.relocation.test_locator_routes::test_migrated_r2_hint_never_binds_from_text
+driver.relocation.test_locator_routes::test_migrated_transcript_shaped_payload_abstains
+driver.relocation.test_match_facts::test_adapter_dimensioned_member_only_always_abstains
+driver.relocation.test_match_facts::test_concept_identity_matrix
+driver.relocation.test_match_facts::test_exact_unit_ref_is_authoritative_over_expected_unit
+driver.relocation.test_match_facts::test_explain_reasons
+driver.relocation.test_match_facts::test_fact_side_malformed_periods_never_candidates
+driver.relocation.test_match_facts::test_float_values_rejected_raw_strings_exact
+driver.relocation.test_match_facts::test_malformed_stored_period_containers_abstain_never_crash
+driver.relocation.test_match_facts::test_nonmoney_needs_positive_evidence_opaque_abstains
+driver.relocation.test_match_facts::test_real_corpus_collision_names_case_exact
+driver.relocation.test_match_facts::test_request_pairs_validated_never_crash_never_collapse
+driver.relocation.test_match_facts::test_unit_case_sensitivity_strip_only_nonblank_required
+driver.relocation.test_match_facts::test_wrong_axis_swapped_pairs_and_order
+driver.relocation.test_multipart_anchor_ce::test_ident_tokens_never_leak_kind_words
+driver.relocation.test_multipart_anchor_ce::test_real_ce_388m_recovered_via_rebuilt_anchor
+driver.relocation.test_neutral_boundary::test_neutral_boundary_executes_both_routes_with_zero_channel_imports
+driver.relocation.test_packet_items_through_the_door::test_every_saved_packet_item_attaches_on_its_LITERAL_evidence[0001306830-24-000155#0]
+driver.relocation.test_packet_items_through_the_door::test_every_saved_packet_item_attaches_on_its_LITERAL_evidence[0001306830-24-000155#1]
+driver.relocation.test_packet_items_through_the_door::test_every_saved_packet_item_attaches_on_its_LITERAL_evidence[0001306830-24-000155#2]
+driver.relocation.test_packet_items_through_the_door::test_every_saved_packet_item_attaches_on_its_LITERAL_evidence[0001306830-24-000155#3]
+driver.relocation.test_packet_items_through_the_door::test_every_saved_packet_item_attaches_on_its_LITERAL_evidence[0001646972-23-000045#0]
+driver.relocation.test_packet_items_through_the_door::test_every_saved_packet_item_attaches_on_its_LITERAL_evidence[0001646972-23-000045#1]
+driver.relocation.test_packet_items_through_the_door::test_every_saved_packet_item_attaches_on_its_LITERAL_evidence[0001646972-23-000045#2]
+driver.relocation.test_packet_items_through_the_door::test_every_saved_packet_item_attaches_on_its_LITERAL_evidence[0001646972-23-000056#0]
+driver.relocation.test_packet_items_through_the_door::test_every_saved_packet_item_attaches_on_its_LITERAL_evidence[0001646972-23-000056#1]
+driver.relocation.test_packet_items_through_the_door::test_every_saved_packet_item_attaches_on_its_LITERAL_evidence[0001646972-24-000165#0]
+driver.relocation.test_packet_items_through_the_door::test_every_saved_packet_item_attaches_on_its_LITERAL_evidence[0001646972-24-000165#1]
+driver.relocation.test_packet_items_through_the_door::test_the_saved_corpus_is_the_eleven_items_this_file_claims
+driver.relocation.test_phase3_prose_removal::test_unsupported_prose_returns_no_proven_match
+driver.relocation.test_real_726_end_to_end::test_a_PROGRAMMING_error_in_the_graph_reader_FAILS_LOUDLY
+driver.relocation.test_real_726_end_to_end::test_a_REAL_outage_still_skips
+driver.relocation.test_real_726_end_to_end::test_a_store_mapped_outage_also_skips
+driver.relocation.test_real_726_end_to_end::test_an_AMBIGUOUS_graph_result_FAILS_rather_than_picking_one
+driver.relocation.test_real_726_end_to_end::test_an_EMPTY_graph_result_FAILS_it_is_not_an_outage
+driver.relocation.test_real_726_end_to_end::test_real_USD_shares_and_EPS_through_the_COMPLETE_core_path[us-gaap:CommonStockSharesIssued-count-shares_outstanding-None-shares]
+driver.relocation.test_real_726_end_to_end::test_real_USD_shares_and_EPS_through_the_COMPLETE_core_path[us-gaap:EarningsPerShareBasic-usd-eps-share-EPS (USD/share)]
+driver.relocation.test_real_726_end_to_end::test_real_USD_shares_and_EPS_through_the_COMPLETE_core_path[us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax-m_usd-revenue-None-USD]
+driver.relocation.test_real_726_end_to_end::test_the_REAL_726_fact_binds_to_its_live_row_and_its_filing
+driver.relocation.test_real_726_end_to_end::test_the_REAL_fact_refuses_a_wrong_description_of_itself
+driver.relocation.test_real_726_end_to_end::test_the_SAVED_PACKET_evidence_attaches_through_the_PUBLIC_DOOR_unchanged
+driver.relocation.test_real_726_end_to_end::test_the_gate_uses_CORES_retry_policy_not_a_second_list
+driver.relocation.test_real_726_end_to_end::test_the_packet_and_the_cached_filing_are_the_same_document
+driver.relocation.test_real_726_end_to_end::test_the_packet_says_what_we_think_it_says[period_end-2023-06-30]
+driver.relocation.test_real_726_end_to_end::test_the_packet_says_what_we_think_it_says[period_start-2023-01-01]
+driver.relocation.test_real_726_end_to_end::test_the_packet_says_what_we_think_it_says[value-726]
+driver.relocation.test_route_a::test_binds_real_shape_comma_value_exclusive_period
+driver.relocation.test_route_a::test_blank_id_unique_identity_fallback
+driver.relocation.test_route_a::test_bools_reject_python_types
+driver.relocation.test_route_a::test_ce_scale_survives_real_packet_layer
+driver.relocation.test_route_a::test_company_identity_missing_or_mismatched_abstains
+driver.relocation.test_route_a::test_different_context_pointers_cannot_share_one_element
+driver.relocation.test_route_a::test_entity_mismatch_abstains
+driver.relocation.test_route_a::test_evidence_failures_enumerated
+driver.relocation.test_route_a::test_evidence_join_and_payload
+driver.relocation.test_route_a::test_evidence_real_typed_case_f427
+driver.relocation.test_route_a::test_evidence_typed_dimensions_abstain
+driver.relocation.test_route_a::test_exact_period_law_no_dual_convention
+driver.relocation.test_route_a::test_formatting_equivalent_duplicates_dedupe_to_one
+driver.relocation.test_route_a::test_hidden_fact_element_abstains
+driver.relocation.test_route_a::test_identity_never_from_css_hidden_cells
+driver.relocation.test_route_a::test_identity_never_from_distant_text
+driver.relocation.test_route_a::test_idless_element_fallback_binds
+driver.relocation.test_route_a::test_leading_dot_forms
+driver.relocation.test_route_a::test_no_inline_html_returns_no_proven_match
+driver.relocation.test_route_a::test_numeric_headers_and_digit_labels_retained
+driver.relocation.test_route_a::test_one_parse_per_filing
+driver.relocation.test_route_a::test_packet_boundary_channelcontract_only
+driver.relocation.test_route_a::test_padded_or_nonstring_ids_rejected_no_fallback
+driver.relocation.test_route_a::test_period_evidence_boundary_string_and_internal_pieces
+driver.relocation.test_route_a::test_prepare_once_api
+driver.relocation.test_route_a::test_real_ce_filing_end_to_end
+driver.relocation.test_route_a::test_real_e2e_per_share_usd_anchor
+driver.relocation.test_route_a::test_real_e2e_shares_count_anchor
+driver.relocation.test_route_a::test_real_idless_fallback_evidence
+driver.relocation.test_route_a::test_real_shares_and_per_share_pins
+driver.relocation.test_route_a::test_reconcile_and_printed_value
+driver.relocation.test_route_a::test_same_series_multiple_periods_all_bind
+driver.relocation.test_route_a::test_separate_period_columns_stay_separate
+driver.relocation.test_route_a::test_twin_rows_distinct_exact_spans
+driver.relocation.test_route_a::test_two_anchor_single_parse
+driver.relocation.test_route_a::test_two_series_identities_ambiguous
+driver.relocation.test_route_a::test_unit_tuple_map_fail_closed
+driver.relocation.test_row_label_span::test_ALL_ELEVEN_saved_packet_label_spans_are_reproduced_EXACTLY
+driver.relocation.test_row_label_span::test_a_BARE_parenthetical_is_still_not_selected
+driver.relocation.test_row_label_span::test_a_DASHES_ONLY_header_is_still_skipped
+driver.relocation.test_row_label_span::test_a_HIDDEN_ONLY_cell_cannot_become_the_label
+driver.relocation.test_row_label_span::test_a_MARKER_PREFIXED_parenthetical_is_not_selected_as_a_section
+driver.relocation.test_row_label_span::test_a_header_with_a_LEADING_DASH_stores_the_EXACT_slice
+driver.relocation.test_row_label_span::test_a_header_with_a_TRAILING_DASH_stores_the_EXACT_slice
+driver.relocation.test_row_label_span::test_a_header_with_hidden_markup_stores_only_visible_text
+driver.relocation.test_row_label_span::test_a_hidden_only_cell_does_not_COUNT_as_a_section_label
+driver.relocation.test_row_label_span::test_a_label_cell_with_HIDDEN_MARKUP_keeps_its_span
+driver.relocation.test_row_label_span::test_a_prose_element_has_no_row_label_span
+driver.relocation.test_row_label_span::test_a_section_with_a_LEADING_DASH_stores_the_EXACT_slice
+driver.relocation.test_row_label_span::test_no_label_cell_yields_the_approved_null_rather_than_a_guess
+driver.relocation.test_row_label_span::test_row_cells_exclude_hidden_descendants
+driver.relocation.test_row_label_span::test_section_TEXT_and_SPAN_come_from_the_SAME_cell
+driver.relocation.test_row_label_span::test_the_SELECTED_CELL_owns_the_span_when_a_label_appears_twice
+driver.relocation.test_row_label_span::test_the_edge_marker_set_has_exactly_ONE_owner
+driver.relocation.test_row_label_span::test_the_label_EQUALS_the_visible_text_at_its_own_span
+driver.relocation.test_row_label_span::test_the_locator_compares_evidence_EXACTLY_not_after_trimming
+driver.relocation.test_unit_handoff_census::test_ce_census_exact_rows_graph_to_builder
+driver.relocation.test_unit_handoff_census::test_certified_unit_map_is_pinned_exactly
+driver.relocation.test_unit_handoff_census::test_full_source_end_to_end_recovers_the_388m_fact
+driver.relocation.test_unit_handoff_census::test_unsupported_and_malformed_units_abstain_safely

@@ -886,9 +886,10 @@ _PCT = frozenset({'percent'})
 # Phase-3 closeout: the print-form / signal / basis fields served the deleted
 # prose laws — the series-unit law is now ONLY the structural accept-set.
 _ANCHOR_UNIT = {
-    'usd':                frozenset({'usd', 'usd_per_share'}),
-    'm_usd':              frozenset({'usd'}),
-    'count':              frozenset({'count'}),
+    # the money/count rows are THE shared relation (one definition, in
+    # exact_numbers); the percent family below is this law's own and is
+    # unreachable from Route-A semantics.
+    **XN.ROUTE_A_UNIT_COMPAT,
     'percent':            _PCT,
     'percent_yoy':        _PCT,
     'percent_sequential': _PCT,
@@ -897,11 +898,14 @@ _ANCHOR_UNIT = {
     'x':                  _PCT,
 }
 
-ROUTE_A_SEM_UNIT = {('iso4217:USD', False): 'usd',   # THE measured semantic
-                    ('shares', False): 'count',          # tuple map (module-level:
-                    ('iso4217:USDshares', True): 'usd_per_share'}   # census imports)
-ROUTE_A_BOOLS = {'0': False, '1': True}      # ONLY the exact graph strings —
-                                             # Python booleans/ints ABSTAIN.
+# THE measured semantic tuple map + the graph-string boolean law. Both now have
+# ONE definition, in `exact_numbers`, so the inline-XBRL binder can reach them
+# from the package path (this module cannot be imported that way — its bare
+# `import exact_numbers` above only resolves with driver/relocation on sys.path).
+# Re-exported here unchanged: the pinned census test and the probe scripts
+# import them from `locator`.
+ROUTE_A_SEM_UNIT = XN.ROUTE_A_SEM_UNIT
+ROUTE_A_BOOLS = XN.ROUTE_A_BOOLS
 
 def _anchor_unit_law(su):
     """The structural unit ACCEPT-SET for a LEGAL series-unit enum value;
@@ -1075,11 +1079,11 @@ def locate(anchor, source, hints=None):
                     or prepared['text'][span[0]:span[1]] != quote:
                 continue                     # ELEMENT-SPECIFIC offsets: this row's
                                              # own recorded span must reproduce the
-            q_off = span[0]                  # quote exactly (identical twin rows
+                                             # quote exactly (identical twin rows
                                              # get their OWN spans, never find())
-            l_off = (prepared['text'].find(ev['row_label'], q_off,
-                                           span[1] + 1)
-                     if ev['row_label'] else -1)
+            # The offsets and the label span are no longer computed here at all:
+            # `IH.source_evidence` below derives every one of them from the same
+            # element evidence, so the locator and Core cannot drift apart.
             fact_key = (c, spairs_a, shape, raw_unit, graph_v)
             seen_keys = route_a_claims.setdefault(fid, set())
             if fact_key in seen_keys:
@@ -1106,31 +1110,11 @@ def locate(anchor, source, hints=None):
                          'ix': {'scale': ev['scale'], 'sign': ev['sign'],
                                 'format': ev['fmt'],
                                 'unit_ref': raw_unit},    # ChannelContract line 36
-                         'source_evidence': {           # OWNER RULING (corrective-7):
-                             'representation_sha256': prepared['text_sha'],
-                             'quote_span': [q_off, q_off + len(quote)],
-                             'raw_label_span': ([l_off, l_off
-                                                 + len(ev['row_label'])]
-                                                if l_off >= 0 else None),
-                             'pieces': [                # typed slices; the quote is
-                                 {'kind': k, 'text': t,   # NEVER duplicated here
-                                  'span': [a, b]}
-                                 for k, t, (a, b) in (
-                                     [('header', t2, sp) for t2, sp in
-                                      zip(ev['columns'],
-                                          ev.get('column_spans', []))
-                                      if sp is not None and
-                                      prepared['text'][sp[0]:sp[1]]
-                                      .strip(' —-') == t2]
-                                     + ([('section', ev['section'],
-                                          ev['section_span'])]
-                                        if ev['section'] and
-                                        ev.get('section_span') is not None and
-                                        prepared['text'][
-                                            ev['section_span'][0]:
-                                            ev['section_span'][1]]
-                                        .strip(' —-') == ev['section']
-                                        else []))]}},
+                         # OWNER RULING (corrective-7). Built by the SHARED owner
+                         # in inline_html so Core checks a submitted claim
+                         # against the same construction that produced it — the
+                         # locator's own copy of this is deleted.
+                         'source_evidence': IHM.source_evidence(prepared, ev)},
             })
         # LOCKED AMBIGUITY LAWS: (a) one printed element claimed by DIFFERENT fact
         # identities → ambiguous; (b) one ANCHOR resolving to DIFFERENT surviving

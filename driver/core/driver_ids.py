@@ -14,7 +14,7 @@ from decimal import Decimal, InvalidOperation
 __all__ = [
     "IdLawError", "norm", "dec_canon", "num_canon", "build_id", "signature_hash",
     "member_id", "probe_forms", "encode_unknown_axis", "decode_unknown_axis",
-    "valid_driver_name",
+    "valid_driver_name", "valid_source_id",
 ]
 
 
@@ -38,6 +38,14 @@ _SURPRISE_TYPES = frozenset(
 # 10-slot OD-8 signature order; indexes of the numeric slots (must be pre-canonical strings)
 _SIGNATURE_SLOTS = 10
 _NUMERIC_SLOT_INDEXES = (0, 1, 3, 5, 6)  # level_low, level_high, change_value, comparison_low/high
+
+
+def valid_source_id(source_id):
+    """THE one source-id predicate (BUILD §5: `^[A-Za-z0-9._-]+$`, colon-free,
+    case preserved). Extracted from `build_id`'s inline check so every door —
+    the id builder, the run input, the event door — asks the SAME law and no
+    caller copies the regex."""
+    return isinstance(source_id, str) and bool(_SOURCE_ID_RE.fullmatch(source_id))
 
 
 def valid_driver_name(name):
@@ -121,7 +129,7 @@ def build_id(source_id, driver_name, *, period_id=None, slice_parts=(),
              measurement_tokens=(), surprise=None):
     """The ONE entry point. Returns (fact_id, fact_scope) — both canonical, immutable.
     Lane legality of `surprise=` (surprise facts only) is FACT-16's job, not identity's."""
-    if not isinstance(source_id, str) or not _SOURCE_ID_RE.fullmatch(source_id):
+    if not valid_source_id(source_id):
         raise IdLawError(f"bad source id (allowed [A-Za-z0-9._-]): {source_id!r}")
     if not valid_driver_name(driver_name):
         raise IdLawError(f"bad driver name (NAME-05): {driver_name!r}")

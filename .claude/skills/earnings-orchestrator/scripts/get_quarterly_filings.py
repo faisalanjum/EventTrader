@@ -31,7 +31,37 @@ from dotenv import load_dotenv
 from neo4j import GraphDatabase
 
 # --- Inlined from utils.py (exact same logic) ---
-load_dotenv("/home/faisal/EventMarketDB/.env", override=True)
+_REPO = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                     "..", "..", "..", ".."))
+_ENV_LOADED = False
+
+
+def _load_env_once():
+    """Read the repository `.env` ONLY when a live session is actually requested.
+
+    THREE DEFECTS IN THE ONE LINE THIS REPLACES, and the third is the serious one:
+
+      * it ran at IMPORT time, so merely importing this module — which a dozen
+        test files do transitively, via `build_packets` — pulled 14 credentials
+        into the process, including all three Neo4j variables and seven API keys;
+      * it named an ABSOLUTE path, so it worked on exactly one machine;
+      * it passed `override=True`, so it OVERWROTE variables that were
+        deliberately absent. A test lane scrubbed of credentials at launch was
+        silently re-credentialled by the first import, and read-only graph tests
+        then "passed" in what was reported as a clean, database-free run.
+
+    `override=False` is the deliberate change: this function's job is to supply
+    what is MISSING, and an explicitly-set variable is the caller's decision. The
+    old flag existed so `.env` would win over a stale export — a preference, and
+    the exact mechanism that defeated sanitization.
+    """
+    global _ENV_LOADED
+    if _ENV_LOADED:
+        return
+    _ENV_LOADED = True
+    env_path = os.path.join(_REPO, ".env")
+    if os.path.exists(env_path):
+        load_dotenv(env_path, override=False)
 
 # Lightweight in-process caches for repeated period resolution calls.
 _FYE_CACHE = {}
@@ -48,6 +78,11 @@ def parse_exception(e: Exception, uri: str = "") -> str:
 
 @contextmanager
 def neo4j_session():
+    # THE ONE PLACE credentials are needed, so the ONE place they are loaded.
+    # Note the password gate below is what keeps a credential-free process from
+    # connecting at all: the URI still has a default, but without a password this
+    # yields an error instead of opening a driver.
+    _load_env_once()
     uri = os.getenv("NEO4J_URI", "bolt://10.102.222.120:7687")
     user = os.getenv("NEO4J_USERNAME", "neo4j")
     password = os.getenv("NEO4J_PASSWORD")

@@ -34,14 +34,14 @@ The company menu (FINAL_DESIGN:172) = union of members from all prior public
 10-K/10-Q filings + slice values already used for that company, cut at ≤ the
 event/source public time (PIT, :48). Retrieval is the adapter's job
 (`get_company_slice_menu` — raw rows only); ALL law lives here."""
-from datetime import date, timedelta
-
 from driver.core.driver_ids import IdLawError, encode_unknown_axis
+from driver.relocation.exact_numbers import ExactError, stored_period_end
 from driver.core.driver_member_fold import fold_target, member_token
 from driver.core.slice_axis_frozen import (HARD_EXCLUDE_ELIMINATIONS,
                                            NON_SLICE_AXES, PROVISIONAL_MEMBERS)
 
 __all__ = ["CONFIRMED_AXES", "NON_SLICE_AXES", "ELIMINATION_QNAMES",
+           "axis_member_pairs",
            "PROVISIONAL_MEMBERS", "classify_axis", "build_menu",
            "check_member_refs", "match_xbrl_fact", "slice_tokens_from_scope"]
 
@@ -123,6 +123,32 @@ CONFIRMED_AXES = {
 ELIMINATION_QNAMES = HARD_EXCLUDE_ELIMINATIONS
 
 
+def axis_member_pairs(entries):
+    """THE one safe operation over a fact's dimensions: the (axis, member) pair
+    set, or `None` when an axis repeats.
+
+    IT IS ONE FUNCTION ON PURPOSE. It was briefly two — a uniqueness predicate
+    beside a pair-set builder — and that is a trap, because BUILDING THE SET IS
+    EXACTLY WHAT HIDES A REPEAT: a set collapses duplicates, so a caller who
+    takes the pairs without remembering the separate guard silently gets the
+    defect back. Two halves that must always be used together are one
+    operation; there is now no way to obtain the set without the check.
+
+    One XBRL context carries at most one member per axis. Census 2026-07-28: no
+    context repeats a dimension id (2,206,183 examined), and over a
+    200,000-context sample none resolves to a repeated axis QNAME — the property
+    this actually tests. See Core_822_GraphCensus_2026-07-28.md.
+    """
+    entries = list(entries)
+    axes = [e["axis"] for e in entries]
+    if len(axes) != len(set(axes)):
+        return None                    # no lawful pair set exists for this row
+    # FROZEN: the caller receives a fact's verified dimension identity, and a
+    # mutable set invites a consumer to alter it after the check that made it
+    # trustworthy — the same aliasing lesson as the checked row.
+    return frozenset((e["axis"], e["member"]) for e in entries)
+
+
 def classify_axis(axis_qname):
     """Catalog §6 3-way ladder: ('slice', kind) | ('non_slice', None) |
     ('unknown', None). Never a regex, never a name heuristic at runtime."""
@@ -181,10 +207,6 @@ def build_menu(xbrl_members, used_scopes):
     return frozenset(tokens), logs
 
 
-def _plus_day(iso):
-    return (date.fromisoformat(iso) + timedelta(days=1)).isoformat()
-
-
 def match_xbrl_fact(claim, fact_rows):
     """Fact-level XBRL verification: the input's all-or-nothing block claims
     'concept + time_type + exact date(s) + COMPLETE dimension set' — so a
@@ -199,10 +221,18 @@ def match_xbrl_fact(claim, fact_rows):
     fact_rows = adapter rows. Returns the matched row's dims (with labels for
     token recompute) or None."""
     try:
-        end_excl = _plus_day(claim["end"]) if claim["end"] else None
-    except ValueError:
+        end_excl = stored_period_end(claim["end"]) if claim["end"] else None
+    except (ExactError, ValueError):
         return None
     for row in fact_rows:
+        # A ROW REPEATING AN AXIS IS NOT A USABLE ROW. The comparison below is a
+        # SET of (axis, member) pairs, so an identical duplicated dimension
+        # COLLAPSES and the row matches as though it were well formed. One
+        # context carries at most one member per axis (census 2026-07-28:
+        # 2,206,183 multi-axis contexts, ZERO repeat one). Refusing it HERE, in
+        # the shared matcher, fixes the live v1 path and the staged v2 path from
+        # one place rather than twice.
+
         if claim["time_type"] == "duration":
             if (row["period_type"] != "duration"
                     or row["start_date"] != claim["start"]
@@ -212,8 +242,14 @@ def match_xbrl_fact(claim, fact_rows):
             if (row["period_type"] != "instant"
                     or row["start_date"] != end_excl):
                 continue
-        if {(d["axis"], d["member"]) for d in row["dims"]} == claim["dims"]:
-            return row["dims"]
+        pairs = axis_member_pairs(row["dims"])
+        # EXPLICIT. `pairs == claim["dims"] != None` is a CHAINED comparison —
+        # Python reads it as `(pairs == dims) and (dims != None)`, so the None
+        # guard was testing the claim rather than the pairs. It happened to
+        # behave, which is exactly why it had to go.
+        if pairs is None or pairs != claim["dims"]:
+            continue
+        return row["dims"]
     return None
 
 

@@ -12,6 +12,7 @@ typed dimensions abstain; one printed element claimed by different facts = ambig
 """
 import json
 import os
+import pytest
 import sys
 from decimal import Decimal
 
@@ -383,6 +384,7 @@ def test_different_context_pointers_cannot_share_one_element():
         "the element's own contextRef admits exactly ONE claiming context"
 
 
+@pytest.mark.live
 def test_real_e2e_shares_count_anchor():
     sys.path.insert(0, os.path.join(_HERE, '..', '..', 'scripts', 'driver_seed'))
     import route_a_source as SRC
@@ -401,6 +403,7 @@ def test_real_e2e_shares_count_anchor():
     assert hit, [(str(i['value']), i['ix_evidence']) for i in r['items']][:3]
 
 
+@pytest.mark.live
 def test_real_e2e_per_share_usd_anchor():
     sys.path.insert(0, os.path.join(_HERE, '..', '..', 'scripts', 'driver_seed'))
     import route_a_source as SRC
@@ -523,6 +526,7 @@ def test_company_identity_missing_or_mismatched_abstains():
         "missing element entity"
 
 
+@pytest.mark.live
 def test_ce_scale_survives_real_packet_layer():
     sys.path.insert(0, os.path.join(_HERE, '..', '..', 'scripts', 'driver_seed'))
     import build_packets as BP

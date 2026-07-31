@@ -11,6 +11,7 @@ import pytest
 from driver.core.driver_write_cli import CLI_CODES, run_event
 from driver.core.driver_writer import FakeGraph
 from driver.core.prepared_fact import RunInputV1, PreparedFactV1
+from driver.core.driver_neo4j_adapter import GraphFactRows
 
 SRC = "0000320193-26-000042"
 
@@ -51,7 +52,7 @@ class FakeStore(FakeGraph):
         return self.slice_menu
 
     def get_xbrl_fact_dimensions(self, source_id, concept):
-        return self.xbrl_facts.get(concept, [])
+        return GraphFactRows(rows=self.xbrl_facts.get(concept, []), exclusions=())
 
     def transaction(self):
         store = self
@@ -424,6 +425,11 @@ def test_every_emitting_branch_carries_a_code(tmp_path):
     assert must_reach <= emitted, must_reach - emitted
     assert CLI_CODES - {"UNIT_UNRESOLVED", "ID_LAW", "SURPRISE_HOME_NOT_ACCEPTED",
                         "WRITER_BUSY", "F7", "INTERNAL_UNTRACKED"} <= emitted
+    # THE OTHER DIRECTION, which was missing. Only "every registered code is
+    # emitted" was proved, so a code the CLI really produces could sit outside
+    # its own registry and nothing would notice — and one did: this test named
+    # NOT_STORABLE in `must_reach` above while CLI_CODES did not contain it.
+    assert emitted <= CLI_CODES, emitted - CLI_CODES
 
 
 # ---- review-round regressions (each reproduced first) ----
@@ -903,16 +909,23 @@ def test_xbrl_fact_query_is_company_scoped_nonnil_and_length_guarded():
                 {"fid": "f2", "period_type": "duration",     # MISALIGNED arrays:
                  "start_date": "2025-06-29", "end_date": "2025-09-28",
                  "dus": ["1:ns:ax", "1:ns:ax2"], "mus": ["1:ns:me"]}]
-        return [{"id": "1:ns:ax", "qname": "ns:ax", "label": None},
-                {"id": "1:ns:me", "qname": "ns:me", "label": "Me"}]
+        # #822: the definition query now returns the node KIND, so the axis id
+        # must resolve to a Dimension and the member id to a Member. The fixture
+        # tracks the real query — the assertion below stops the two drifting.
+        return [{"id": "1:ns:ax", "kind": "Dimension", "qname": "ns:ax",
+                 "label": None},
+                {"id": "1:ns:me", "kind": "Member", "qname": "ns:me",
+                 "label": "Me"}]
     from driver.core.driver_neo4j_adapter import Neo4jStore
     store = Neo4jStore.__new__(Neo4jStore)
     store._read = fake_read
-    rows = store.get_xbrl_fact_dimensions(SRC, "us-gaap:Revenues")
+    rows = store.get_xbrl_fact_dimensions(SRC, "us-gaap:Revenues").rows
     q = captured[0]
     assert "PRIMARY_FILER" in q and "FOR_COMPANY" in q     # company-scoped context
     assert "f.is_numeric = '1'" in q and "f.is_nil = '0'" in q
-    assert [r["dims"] for r in rows] == [                  # misaligned row DROPPED
+    assert "AS kind" in captured[1], \
+        "the definition query must ask for the node kind, or the fixture lies"
+    assert [[dict(d) for d in r["dims"]] for r in rows] == [                  # misaligned row DROPPED
         [{"axis": "ns:ax", "member": "ns:me", "label": "Me"}]]
 
 
