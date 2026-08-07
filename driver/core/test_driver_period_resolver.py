@@ -270,10 +270,15 @@ def test_month_without_year_raises_no_year_2000():
 
 
 def test_quiet_undef_fallthrough_forbidden():
-    with pytest.raises(PeriodResolutionError):
+    # SEQ 337: the TRUTHFUL message is required — a different abstention reason or an
+    # internal crash must never look green here.
+    with pytest.raises(PeriodResolutionError, match="period fields do not resolve"):
         resolve({"half": 1, "time_type": "duration"})          # half without fiscal_year
-    with pytest.raises(PeriodResolutionError):
+    with pytest.raises(PeriodResolutionError, match="period fields do not resolve"):
         resolve({"fiscal_quarter": 3, "time_type": "duration"})  # quarter without year
+    # lawful dated twin: the same door resolves a fully-specified quarter
+    out = resolve({"fiscal_year": 2025, "fiscal_quarter": 1, "time_type": "duration"})
+    assert out["period_u_id"] == "gp_2025-01-01_2025-03-31"
 
 
 def test_time_type_required_never_defaulted():
@@ -483,3 +488,164 @@ def test_pure_lane_never_imports_the_heavy_substrate():
     )
     subprocess.run([sys.executable, "-c", code], check=True,
                    cwd=str(__import__("pathlib").Path(__file__).resolve().parents[2]))
+
+
+# ---- #827 B7 (SEQ 333): the PUBLIC door parks non-string and malformed ids ----
+def test_827B7_public_door_parks_a_non_string_period_u_id():
+    with pytest.raises(PeriodResolutionError):
+        ensure_driver_period({"period_u_id": 123}, fact_type="metric", fye_month=12)
+
+
+@pytest.mark.parametrize('bad', [
+    pytest.param('gp_2025-13-01_2025-09-30', id='impossible-month'),
+    pytest.param('gp_2025-07-01_2025-06-30', id='reversed-order'),
+    pytest.param('gp_2025-07-01x', id='mangled-tail'),
+], )
+def test_827B7_public_door_parks_malformed_period_ids(bad):
+    with pytest.raises(PeriodResolutionError):
+        ensure_driver_period({"period_u_id": bad}, fact_type="metric", fye_month=12)
+
+
+def test_827B7_preserved_dated_id_round_trips_the_exact_captured_text():
+    out = ensure_driver_period({"period_u_id": "gp_2025-07-01_2025-09-30",
+                                "period_scope": "quarter", "time_type": "duration"},
+                               fact_type="metric", fye_month=12)
+    assert (out["gp_start_date"], out["gp_end_date"]) == ("2025-07-01", "2025-09-30")
+
+
+#: #827 B13 — the FOUR dated-id construction paths, pinned at the public door
+#: BEFORE the one-owner move so the refactor is provably behavior-preserving.
+#: Each row: (item, lookups-builder, expected id). SEC and PREDICT are the two
+#: lookup-fed builders; EXACT and CUMULATIVE are the two fiscal-math builders.
+def _lk(sec=None, predict=None):
+    return {"existing": lambda *a: None,
+            "sec": (lambda *a: sec) if sec else (lambda *a: None),
+            "predict": (lambda *a: predict) if predict else (lambda *a: None),
+            "corrected_fye": lambda t: None}
+
+
+@pytest.mark.parametrize('item, lookups, want', [
+    pytest.param({"fiscal_year": 2025, "fiscal_quarter": 3, "time_type": "duration"},
+                 _lk(sec={"start": "2025-06-29", "end": "2025-09-27"}),
+                 "gp_2025-06-29_2025-09-27", id='sec-lookup-builder'),
+    pytest.param({"fiscal_year": 2025, "fiscal_quarter": 3, "time_type": "duration"},
+                 _lk(predict={"start": "2025-07-01", "end": "2025-09-30"}),
+                 "gp_2025-07-01_2025-09-30", id='predict-lookup-builder'),
+    pytest.param({"period_start_date": "2025-01-06", "period_end_date": "2025-03-30",
+                  "time_type": "duration", "period_scope": None}, None,
+                 "gp_2025-01-06_2025-03-30", id='exact-dates-builder'),
+    pytest.param({"fiscal_year": 2025, "fiscal_quarter": 3, "time_type": "duration",
+                  "period_scope": "ytd"}, None,
+                 "gp_2024-10-01_2025-06-30", id='cumulative-builder'),
+])
+def test_827B13_all_four_dated_builders_pin_their_public_output(item, lookups, want):
+    kw = {"ticker": "AAPL", "lookups": lookups} if lookups else {}
+    out = ensure_driver_period(dict(item), fact_type="metric", fye_month=9, **kw)
+    assert out["period_u_id"] == want
+
+
+@pytest.mark.parametrize('bad, reason', [
+    pytest.param({"start": "2025-7-1", "end": "2025-09-30"},
+                 'bad period id', id='unpadded'),
+    pytest.param({"start": "2025/07/01", "end": "2025-09-30"},
+                 'bad period id', id='slashed'),
+    pytest.param({"start": "", "end": "2025-09-30"},
+                 'bad period id', id='empty'),
+    pytest.param({"start": "2025-09-30", "end": "2025-07-01"},
+                 'period start after end', id='reversed'),
+])
+def test_827B13_a_malformed_lookup_date_parks_at_the_same_boundary(bad, reason):
+    """The construction side is already gated: whatever a builder spells, the
+    ONE parser judges it and the resolver parks fail-closed with the parser's
+    OWN truthful reason — grammar for the three malformed spellings, the ORDER
+    law for the reversed pair. Pinned BEFORE the owner move so the move cannot
+    quietly change this boundary or blur these reasons."""
+    with pytest.raises(PeriodResolutionError) as exc:
+        ensure_driver_period({"fiscal_year": 2025, "fiscal_quarter": 3,
+                              "time_type": "duration"},
+                             fact_type="metric", fye_month=9, ticker="AAPL",
+                             lookups=_lk(sec=bad))
+    assert reason in str(exc.value), str(exc.value)
+
+
+@pytest.mark.parametrize('pid, word', [
+    pytest.param('gp_ST', 'short_term', id='short-term'),
+    pytest.param('gp_MT', 'medium_term', id='medium-term'),
+    pytest.param('gp_LT', 'long_term', id='long-term'),
+    pytest.param('gp_UNDEF', 'undefined', id='undefined'),
+], )
+def test_827B7_preserved_sentinels_keep_null_dates(pid, word):
+    out = ensure_driver_period({"period_u_id": pid, "period_scope": word,
+                                "time_type": "duration"},
+                               fact_type="metric", fye_month=12)
+    assert out["period_u_id"] == pid
+    assert (out["gp_start_date"], out["gp_end_date"]) == (None, None)
+
+
+# ---- O1 (#827 F-PERIOD, U-5/P08): the ONE fye_month gate at the public boundary ----
+# Law: GuidancePeriod:357 (int|None) + §4 never-silently-discard. The supplied value is
+# validated ONCE, first statement, BEFORE every bypass (preserved id, exact dates,
+# sentinel); lawful None still passes and parks later only when actually needed; both
+# corrected-cache consumptions validate the cache's answer before trusting it.
+
+def _o1_lk(corrected=None):
+    """Cascade stub: A/B/C all miss; only the corrected-FYE cache answers."""
+    return {"existing": lambda *a: None, "sec": lambda *a: None,
+            "predict": lambda *a: None, "corrected_fye": lambda t: corrected}
+
+
+def test_fye_month_zero_parks():
+    with pytest.raises(PeriodResolutionError) as exc:
+        resolve({"fiscal_year": 2025, "fiscal_quarter": 1, "time_type": "duration"}, fye=0)
+    assert "fye_month" in str(exc.value)
+
+
+def test_fye_month_thirteen_parks():
+    with pytest.raises(PeriodResolutionError):
+        resolve({"fiscal_year": 2025, "fiscal_quarter": 1, "time_type": "duration"}, fye=13)
+    # the bypass path too: exact dates would never touch fye, but the boundary
+    # validates the SUPPLIED value before all bypasses — 13 parks here as well
+    with pytest.raises(PeriodResolutionError) as exc:
+        resolve({"period_start_date": "2025-01-01", "period_end_date": "2025-03-31",
+                 "time_type": "duration"}, fye=13)
+    assert "fye_month" in str(exc.value)
+
+
+def test_fye_month_bool_parks():
+    with pytest.raises(PeriodResolutionError) as exc:
+        resolve({"fiscal_year": 2025, "fiscal_quarter": 1, "time_type": "duration"}, fye=True)
+    assert "fye_month" in str(exc.value)
+
+
+def test_fye_month_string_parks_typed():
+    # "9" used to escape as a raw TypeError deep in the math — now the typed park
+    with pytest.raises(PeriodResolutionError) as exc:
+        resolve({"fiscal_year": 2025, "fiscal_quarter": 1, "time_type": "duration"}, fye="9")
+    assert "fye_month" in str(exc.value)
+
+
+def test_fye_month_float_parks_typed():
+    # 9.5 used to escape as calendar.IllegalMonthError — now the typed park
+    with pytest.raises(PeriodResolutionError) as exc:
+        resolve({"fiscal_year": 2025, "fiscal_quarter": 1, "time_type": "duration"}, fye=9.5)
+    assert "fye_month" in str(exc.value)
+
+
+def test_corrected_fye_invalid_result_parks():
+    # the cache's own answer is validated at BOTH consumptions — corrupt 13 parks
+    with pytest.raises(PeriodResolutionError) as exc:
+        resolve({"fiscal_year": 2025, "fiscal_quarter": 2, "time_type": "duration"},
+                fye=9, ticker="AAPL", lookups=_o1_lk(corrected=13))
+    assert "fye_month" in str(exc.value)
+    with pytest.raises(PeriodResolutionError):    # the ytd consumption (:247-248)
+        resolve({"fiscal_year": 2025, "fiscal_quarter": 2, "period_scope": "ytd",
+                 "time_type": "duration"},
+                fye=9, ticker="AAPL", lookups=_o1_lk(corrected=13))
+
+
+def test_fye_none_with_exact_dates_still_resolves():
+    # lawful control: None passes the boundary; exact dates never need fye
+    out = resolve({"period_start_date": "2025-01-01", "period_end_date": "2025-12-31",
+                   "time_type": "duration"}, fye=None)
+    assert out["period_u_id"] == "gp_2025-01-01_2025-12-31"
+    assert out["period_scope"] == "exact_range"

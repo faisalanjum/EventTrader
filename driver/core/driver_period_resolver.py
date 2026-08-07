@@ -21,13 +21,16 @@ if str(_SCRIPTS) not in sys.path:
     sys.path.insert(0, str(_SCRIPTS))
 
 from fiscal_math import _compute_fiscal_dates                      # the ONE calendar canon
-from guidance_ids import SENTINEL_MAP, build_guidance_period_id   # proven pure builder
+from guidance_ids import build_guidance_period_id   # proven pure builder (the ONLY
+# guidance_ids name Core consumes — the sentinel pairs live in driver_ids)
 
-from driver.core.driver_ids import IdLawError, _validate_period_id
+from driver.core.driver_ids import (IdLawError, PERIOD_SENTINEL_SCOPE,
+                                    build_period_id, parse_period_id)
 
-__all__ = ["PeriodResolutionError", "ensure_driver_period"]
-
-_SENTINEL_IDS = frozenset(SENTINEL_MAP.values())
+# derived view of the ONE four-pair owner (driver_ids.PERIOD_SENTINEL_SCOPE):
+# sentinel_class -> period id, inverted once here because this door receives the
+# WORD spelling from callers (two uses below — membership and lookup).
+_SENTINEL_ID_BY_CLASS = {word: pid for pid, word in PERIOD_SENTINEL_SCOPE.items()}
 _FIELD_KEYS = ("period_start_date", "period_end_date", "fiscal_year", "fiscal_quarter",
                "half", "month", "long_range_start_year", "long_range_end_year",
                "sentinel_class", "period_scope")
@@ -37,10 +40,23 @@ class PeriodResolutionError(ValueError):
     """The period is ambiguous or under-specified. Callers PARK — never guess."""
 
 
+def _lawful_fye(v):
+    """THE one fye_month gate (GuidancePeriod:357 law: int|None, 1..12).
+    None passes — it parks later only where a computation actually needs it.
+    Everything else must be a true int in 1..12: bool/str/float/out-of-range
+    PARK here, typed, instead of escaping as a raw TypeError/IllegalMonthError
+    deep in the calendar math. Validates the SUPPLIED boundary value and BOTH
+    corrected-cache answers (§4: never silently discard, never silently trust)."""
+    if v is not None and not (type(v) is int and 1 <= v <= 12):
+        raise PeriodResolutionError(f"fye_month out of range: {v!r} — park")
+    return v
+
+
 def ensure_driver_period(item, *, fact_type, fye_month, ticker=None,
                          calendar_override=False, lookups=None):
     """Resolve one item's period. Returns {period_u_id, period_scope, time_type,
     gp_start_date, gp_end_date} or None when the fact truly has no period fields."""
+    fye_month = _lawful_fye(fye_month)   # FIRST statement — before every bypass
     if item.get("period_u_id"):
         return _preserved(item)
     if all(item.get(k) is None for k in _FIELD_KEYS):   # is-not-None: zero VALUES (e.g.
@@ -63,9 +79,9 @@ def ensure_driver_period(item, *, fact_type, fye_month, ticker=None,
     # 2. explicit sentinel
     sentinel = item.get("sentinel_class")
     if sentinel is not None:
-        if sentinel not in SENTINEL_MAP:
+        if sentinel not in _SENTINEL_ID_BY_CLASS:
             raise PeriodResolutionError(f"unknown sentinel_class: {sentinel!r}")
-        return _result(SENTINEL_MAP[sentinel], sentinel, time_type, None, None)
+        return _result(_SENTINEL_ID_BY_CLASS[sentinel], sentinel, time_type, None, None)
 
     fye = 12 if cal else fye_month
     # every lookup call below sits behind a `ticker` guard, so the pure-math lane
@@ -90,20 +106,21 @@ def ensure_driver_period(item, *, fact_type, fye_month, ticker=None,
                            found.get("start_date"), found.get("end_date"))
         sec = lk["sec"](ticker, fy, f"Q{fq}" if fq else "FY")
         if sec:
-            return _result(f"gp_{sec['start']}_{sec['end']}",
+            return _result(build_period_id(sec["start"], sec["end"]),
                            "quarter" if fq else "annual", "duration",
                            sec["start"], sec["end"])
         if fq:
             pred = lk["predict"](ticker, fy, fq)
             if pred:
-                return _result(f"gp_{pred['start']}_{pred['end']}", "quarter", "duration",
+                return _result(build_period_id(pred["start"], pred["end"]),
+                               "quarter", "duration",
                                pred["start"], pred["end"])
 
     # 5. pure fiscal math (step D) with the new-law fail-closed guards
     if not cal and ticker:
         corrected = lk["corrected_fye"](ticker)
         if corrected is not None:
-            fye = corrected
+            fye = _lawful_fye(corrected)   # the cache's answer is validated too
     if fye is None:
         raise PeriodResolutionError(
             "fye_month required to compute a company fiscal period — never default December")
@@ -123,7 +140,8 @@ def ensure_driver_period(item, *, fact_type, fye_month, ticker=None,
         time_type=time_type,
         label_slug=None,              # hint only — never allowed to override time_type
     )
-    if built["u_id"] == "gp_UNDEF":   # the old quiet fallthrough — forbidden now
+    if built["u_id"] == _SENTINEL_ID_BY_CLASS["undefined"]:   # the old quiet
+        # fallthrough — forbidden now; the id spelling comes from the one owner
         raise PeriodResolutionError(f"period fields do not resolve: { {k: item.get(k) for k in _FIELD_KEYS} }")
     scope = "exact_range" if built["period_scope"] == "long_range" else built["period_scope"]
     return _result(built["u_id"], scope, built["time_type"],
@@ -161,7 +179,7 @@ def _exact_dates(item, time_type, scope_in):
             raise PeriodResolutionError(
                 f"{scope} declared but the window is {days} days ({start}..{end}) — "
                 f"contradictory framing, park")
-    return _result(f"gp_{start}_{end}", scope, time_type, start, end)
+    return _result(build_period_id(start, end), scope, time_type, start, end)
 
 
 _INTERIM_SCOPE_DAYS = {          # sized so the KNOWN TESTED calendars pass
@@ -240,7 +258,7 @@ def _cumulative(item, scope, time_type, fye, cal, ticker, lk):
     if not cal and ticker:
         corrected = lk["corrected_fye"](ticker)
         if corrected is not None:
-            fye = corrected
+            fye = _lawful_fye(corrected)   # the cache's answer is validated too
     if fye is None:
         raise PeriodResolutionError("fye_month required for ytd/ttm fiscal math")
     q = item.get("fiscal_quarter") or 4
@@ -250,16 +268,14 @@ def _cumulative(item, scope, time_type, fye, cal, ticker, lk):
     else:  # ttm: day after the same fiscal quarter's end one year earlier
         prior_end = _compute_fiscal_dates(fye, fy - 1, f"Q{q}")[1]
         start = (date.fromisoformat(prior_end) + timedelta(days=1)).isoformat()
-    return _result(f"gp_{start}_{end}", scope, "duration", start, end)
+    return _result(build_period_id(start, end), scope, "duration", start, end)
 
 
 def _preserved(item):
     u_id = item["period_u_id"]
-    _check(u_id)
-    if u_id in _SENTINEL_IDS:
-        start = end = None
-    else:
-        start, end = u_id[3:13], u_id[14:]
+    # ONE parse through the existing IdLawError -> PeriodResolutionError boundary:
+    # a sentinel returns (None, None), a dated id returns its exact captured text.
+    start, end = _check(u_id)
     return _result(u_id, item.get("period_scope"), item.get("time_type"), start, end,
                    validate=False)
 
@@ -274,8 +290,11 @@ def _result(u_id, scope, time_type, start, end, validate=True):
 
 
 def _check(u_id):
+    """Parse the period id at THE one owner; returns its (start, end) pair —
+    (None, None) for sentinels — with IdLawError mapped to the resolver's
+    fail-closed boundary."""
     try:
-        _validate_period_id(u_id)
+        return parse_period_id(u_id)
     except IdLawError as e:
         raise PeriodResolutionError(str(e))
 
