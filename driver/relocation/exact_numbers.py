@@ -343,7 +343,14 @@ def period_key(start, end):
 
 
 def plain(value):
-    """Canonical plain string: no exponent, no trailing zeros, '-0' -> '0'."""
+    """Canonical plain string: no exponent, no trailing zeros, '-0' -> '0'.
+
+    EU-032 (#827): this IS the canonical-decimal-form law of the F7
+    boundary owner's stored-spelling clause (graph_row_contract) — the
+    same OD-8 canon dec_canon states Core-side; the format-code/strip/
+    negative-zero mechanics below are that one clause's arithmetic, never
+    a second grammar. Proof-lane reach (locator callers, call-trace v5).
+    """
     out = format(dec(value), 'f')
     if '.' in out:
         out = out.rstrip('0').rstrip('.')

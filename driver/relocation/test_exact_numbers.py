@@ -78,3 +78,18 @@ def test_EU020_the_graph_unit_join_spelling_is_the_clauses():
                                True) == "iso4217:USDshares"
     assert graph_unit_spelling(("iso4217:USD",), (), (), False) == "iso4217:USD"
     assert graph_unit_spelling(("a", "b"), (), (), False) is None
+
+
+def test_EU032_plain_is_the_one_canonical_decimal_form():
+    """EU-032 (#827): plain() IS the boundary clause's canonical decimal
+    form (no exponent, no trailing zeros, -0 -> 0) — pinned member-for-
+    member because no lead suite reddened on a strip-off drift (measured
+    2026-08-08)."""
+    from driver.relocation.exact_numbers import plain
+    assert plain("1.500") == "1.5"
+    assert plain("1.000") == "1"
+    assert plain("-0") == "0"
+    assert plain("-0.00") == "0"
+    assert plain("1E+3") == "1000"
+    assert plain("390") == "390"
+    assert plain("-1234567890.12") == "-1234567890.12"

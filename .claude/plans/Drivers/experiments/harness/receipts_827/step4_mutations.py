@@ -1404,6 +1404,13 @@ MUTATIONS = [
      "driver/relocation/test_route_a.py::"
      "test_827_a_BACKWARDS_duration_never_binds_through_the_public_door"),
 
+    (176, "EU-032: plain() stops stripping to the canonical form",
+     "driver/relocation/exact_numbers.py",
+     "    out = format(dec(value), 'f')\n    if '.' in out:",
+     "    out = format(dec(value), 'f')\n    if False:",
+     "driver/relocation/test_exact_numbers.py::"
+     "test_EU032_plain_is_the_one_canonical_decimal_form"),
+
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",
