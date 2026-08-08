@@ -1560,6 +1560,13 @@ MUTATIONS = [
      "driver/relocation/test_bind_graph_fact.py::"
      "test_EU174_disagreeing_concept_records_park_never_pick"),
 
+    (198, "EU-184: an unparseable graph raw claims reconciliation",
+     "driver/relocation/inline_html.py",
+     "    raw = parse_raw(raw_value)\n    if raw is None:\n        return False",
+     "    raw = parse_raw(raw_value)\n    if raw is None:\n        return True",
+     "driver/relocation/test_bind_graph_fact.py::"
+     "test_827R6_the_DOOR_refuses_a_writer_alien_raw_as_non_reconciling"),
+
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",

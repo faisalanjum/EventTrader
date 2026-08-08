@@ -2866,6 +2866,19 @@ def reconcile(displayed, fmt_expanded, scale, sign, raw_value):
     wrong one — the worst possible pair. A power-of-ten shift never changes the
     coefficient, so `scaleb` under a precision derived from the operands is
     exact; an unrepresentable magnitude simply fails to reconcile."""
+    # EU-184 (#827): the four False returns in this function are the refusal
+    # side of the frozen value-reconciliation law — the exactness law owns
+    # value reconciliation (the EU-154 block; the binder publishes
+    # value_does_not_reconcile). COMPARISON ONLY: an unresolvable raw,
+    # printed value, scale type, or magnitude FAILS to reconcile; nothing is
+    # repaired, rounded, or guessed at this owner.
+    # The exact scale type-gate below is a RETAINED fail-closed safety net
+    # (the EU-016/S8 precedent): measured, exact_scaleb ITSELF refuses a
+    # non-real-int exponent with its own named ExactError ("scale exponent
+    # must be a real int"), so a weakened gate here is shadow-equivalent at
+    # this depth — the load-bearing mutation for this unit is the raw arm
+    # (entry 198), and the bool behavior is pinned through the public
+    # function either way.
     raw = parse_raw(raw_value)
     if raw is None:
         return False

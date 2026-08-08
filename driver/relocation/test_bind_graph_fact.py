@@ -1930,3 +1930,16 @@ def test_EU174_disagreeing_concept_records_park_never_pick():
     assert one_concept_target("us-gaap:Revenues", agree) == (ns, "Revenues")
     clash = agree + [(ns + "X", "us-gaap:Revenues")]
     assert one_concept_target("us-gaap:Revenues", clash) is None
+
+
+def test_EU184_a_bool_scale_is_not_an_int_and_fails_to_reconcile():
+    """reconcile: the four False arms are the refusal side of the frozen
+    value-reconciliation law (comparison only — an unresolved raw, printed
+    value, scale, or magnitude simply fails to reconcile, never guesses).
+    The scale must be a REAL int: isinstance(True, int) is True in Python,
+    so only the exact type check is strict enough — a bool scale fails to
+    reconcile while the true int-1 control reconciles the same pair. (Two
+    owners refuse the bool: this gate and exact_scaleb's own real-int rule —
+    the gate is the retained safety net, recorded at the site.)"""
+    assert reconcile('390', _NUM_DOT_DECIMAL, 1, '', '3,900') is True
+    assert reconcile('390', _NUM_DOT_DECIMAL, True, '', '3,900') is False
