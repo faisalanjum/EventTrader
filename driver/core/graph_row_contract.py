@@ -34,6 +34,10 @@ GRAPH_DIM_FIELDS = ("axis", "member", "label",
 #   is_divide  — EXACTLY the strings '0' and '1'
 #                (exact_numbers.ROUTE_A_BOOLS); Python ints and bools are
 #                not graph spellings and abstain everywhere.
+#   unit_name  — a divide unit's stored name is numerator+denominator
+#                CONCATENATED with NO separator (iso4217:USDshares); a
+#                plain unit's name is its single measure; the spelling is
+#                decided by NAMESPACE at the writer, never by prefix text.
 #   dates      — exactly [0-9]{4}-[0-9]{2}-[0-9]{2}
 #                (exact_numbers._STRICT_ISO): the XSD-1.0 §3.2.9.1 x CPython
 #                date intersection, deliberately narrower than xs:date;
