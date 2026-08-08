@@ -1725,6 +1725,15 @@ VIEWS_DISAGREE = 'semantic and renderer views disagree'
 #: set was silently incomplete — the exact drift a two-way coverage check
 #: exists to catch. Element CONTENT (a measure, a member, an identifier) is not
 #: an attribute and is read by `_leaf`, so it collapses at its own reader.
+# EU-043 (#827, cluster CL-031): the attribute vocabulary below is Inline
+# XBRL 1.1's own — Part 1, REC 2013-11-18 with approved errata corrections
+# to 2026-07-14 (the current edition; the exact URL is at the nonFraction
+# reader's spec-sources note): the ix fact attributes name / contextRef /
+# unitRef / format / scale / sign / id, ix:hidden, ix:header/ix:resources.
+# WHICH of them carry the collapse facet is the schema's declaration per
+# attribute (the whiteSpace facet, XSD Part 2 2e section 4.3.6), and the
+# two-way coverage node in the bridge suite holds this set equal to the
+# tested pairs — a dropped member reds both.
 _COLLAPSED = frozenset({'id', 'name', 'contextRef', 'unitRef', 'format',
                         'scale', 'dimension', 'scheme',
                         # THE NIL FLAG. `xsi:nil` is `xs:boolean`, which really
@@ -1750,6 +1759,11 @@ _COLLAPSED = frozenset({'id', 'name', 'contextRef', 'unitRef', 'format',
 #: a space. Consumed ONLY by `_collapse` below — the VALUE-side law. (The
 #: renderer-pairing copy of this normalization died with the deleted
 #: fingerprint, SEQ 264 §2d; this one reads what values MEAN and stays.)
+#: EU-045 (#827): exact citations for the two steps already named above —
+#: XML 1.0 5e section 3.3.3 attribute-value normalization,
+#: https://www.w3.org/TR/xml/#AVNormalize, and XSD Part 2 2e section 4.3.6
+#: whiteSpace (replace: each #x9 #xA #xD becomes #x20; collapse then
+#: trims and merges), https://www.w3.org/TR/xmlschema-2/#rf-whiteSpace.
 _ATTR_WS = str.maketrans('\t\r\n', '   ')
 
 
@@ -2778,6 +2792,10 @@ def printed_value(displayed, fmt_expanded, sign):
 #: `''` are not among them, so a nil claim written any other way is markup this
 #: parser must refuse rather than quietly read as false.
 #: https://www.w3.org/TR/xmlschema-2/#boolean
+#: EU-044 (#827): the four spellings are W3C XML Schema Part 2: Datatypes,
+#: Second Edition, REC 2004-10-28, section 3.2.2 boolean — the lexical
+#: space is exactly {true, false, 1, 0} (the URL above); admitting any
+#: other spelling would read a misspelled nil claim as a value claim.
 _XS_TRUE, _XS_FALSE = ('true', '1'), ('false', '0')
 
 #: EVERY way a nonFraction can fail to state ONE value, each named for the rule
@@ -2787,6 +2805,13 @@ _XS_TRUE, _XS_FALSE = ('true', '1'), ('false', '0')
 #: model, so the markup is wrong — this product is not merely declining to
 #: support something lawful, which is a different and much kinder claim.
 MALFORMED_FACT_CONTENT = 'malformed_fact_content_model'
+# EU-046 (#827): the nil-on-ix-fact clause is NOT unresolved — the exact
+# current-edition citation (REC 2013-11-18 + errata 2026-07-14, section
+# 10.1.1 quoted, full URL) lives at the nonFraction reader's spec-sources
+# note, and these tokens are the binder's own vocabulary naming WHICH of
+# its rules broke (nil outside the boolean space; nil stating accuracy —
+# the XBRL 2.1 section 4.6.3 contradiction; a true-nil below a nonFraction
+# ancestor). Both contradiction arms are pinned.
 MALFORMED_FACT_NIL = 'malformed_nil'
 MALFORMED_NESTED_NIL = 'malformed_nested_nil'
 MALFORMED_FACT_ACCURACY = 'malformed_decimals_or_precision'

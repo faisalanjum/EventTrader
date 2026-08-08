@@ -1784,6 +1784,34 @@ MUTATIONS = [
      "                             (_XS_NS, 'dateTime')})",
      "driver/relocation/test_context_content_model.py::"
      "test_827B12_MUST_ALLOW_every_lawful_shape"),
+
+    (230, "EU-043: unitRef leaves the collapse set and padded IDREFs mismatch",
+     "driver/relocation/inline_html.py",
+     "_COLLAPSED = frozenset({'id', 'name', 'contextRef', 'unitRef', 'format',",
+     "_COLLAPSED = frozenset({'id', 'name', 'contextRef', 'format',",
+     "driver/relocation/test_two_view_bridge.py::"
+     "test_a_collapse_faceted_value_ignores_XML_padding_but_not_inner_space"),
+
+    (231, "EU-044: the boolean lexical space admits TRUE",
+     "driver/relocation/inline_html.py",
+     "_XS_TRUE, _XS_FALSE = ('true', '1'), ('false', '0')",
+     "_XS_TRUE, _XS_FALSE = ('true', '1', 'TRUE'), ('false', '0')",
+     "driver/relocation/test_semantic_fact_value.py::"
+     "test_a_nil_claim_OUTSIDE_the_boolean_lexical_space_is_malformed"),
+
+    (232, "EU-045: the newline stops being replaced in attribute values",
+     "driver/relocation/inline_html.py",
+     "_ATTR_WS = str.maketrans('\\t\\r\\n', '   ')",
+     "_ATTR_WS = str.maketrans('\\t\\r', '  ')",
+     "driver/relocation/test_two_view_bridge.py::"
+     "test_a_collapse_faceted_value_ignores_XML_padding_but_not_inner_space"),
+
+    (233, "EU-046: a nil fact stating accuracy stops being a contradiction",
+     "driver/relocation/inline_html.py",
+     "            if dec is not None or prec is not None:\n                return None, MALFORMED_FACT_ACCURACY",
+     "            if False and (dec is not None or prec is not None):\n                return None, MALFORMED_FACT_ACCURACY",
+     "driver/relocation/test_semantic_fact_value.py::"
+     "test_a_true_nil_fact_STATING_ACCURACY_is_MALFORMED_not_lawfully_empty"),
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",
