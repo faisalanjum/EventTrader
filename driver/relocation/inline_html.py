@@ -2153,6 +2153,13 @@ def _evidence_from(fact, prepared):
     # A STRING IS THE REFUSAL AND ITS REASON; a dict is usable evidence; absent
     # is a context this filing never declared. Three states, one lookup — the
     # old pair of tests reported every poisoned context as a duplicated id.
+    # EU-089 (#827): FAIL-CLOSED adjudication of the three internal
+    # spellings here — 'contexts' is prepare()'s own key (the EU-161 form:
+    # hard outer key behind the refused() door, drift loud at first use)
+    # and 'typed'/'non_xdt' are _parse_context's own dict keys, hard-read
+    # so a producer-consumer drift raises rather than silently skipping a
+    # refusal; even the silent .get form is caught by the own-reason pins
+    # (measured: the typed drift reddens the keeps-its-own-reason node).
     ctx = prepared['contexts'].get(ctx_ref)
     if isinstance(ctx, str):
         return None, ctx

@@ -1924,6 +1924,13 @@ MUTATIONS = [
      "    return ''.join(part for part in value.translate(_ATTR_WS).split(' ')",
      "driver/relocation/test_two_view_bridge.py::"
      "test_a_collapse_faceted_value_ignores_XML_padding_but_not_inner_space"),
+
+    (250, "EU-089: the typed-dimension refusal silently vanishes on a key drift",
+     "driver/relocation/inline_html.py",
+     "    if ctx['typed']:",
+     "    if ctx.get('typedX'):",
+     "driver/relocation/test_context_content_model.py::"
+     "test_a_typed_dimension_keeps_its_own_reason"),
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",
