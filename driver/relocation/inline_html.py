@@ -2228,6 +2228,16 @@ def element_evidence(doc_or_html, element_id):
     # bound through BOTH callers.
     if _xml_id(str(element_id)) is None:
         return None, 'malformed_id'
+    # EU-162 (#827): the two bounds below are the target-resolution law's own
+    # numbers, never tunables — XML 1.0 (Fifth Edition) section 3.3.1,
+    # validity constraint ID: "Values of type ID must uniquely identify the
+    # elements which bear them", https://www.w3.org/TR/xml/#id . A count of 0
+    # means no such element (id_not_found); a count above 1 means the
+    # document broke that constraint and the target is AMBIGUOUS — under the
+    # frozen refuse-never-repair law (the EU-154 block) the binder refuses
+    # (duplicate_id) rather than picking one. 'ids' is prepare()'s own
+    # internal spelling under the EU-161 adjudication (hard key behind the
+    # refused() guard); the 0 default is the lawful never-seen count.
     count = prepared['ids'].get(element_id, 0)
     if count == 0:
         return None, 'id_not_found'
