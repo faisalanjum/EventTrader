@@ -270,6 +270,9 @@ def stored_period_end(iso):
         # travelled all the way out through the live matcher
         # (`slice_menu.match_xbrl_fact`). Every caller already catches this
         # module's own refusal, so raising THAT needs no caller change.
+        # EU-035 (#827): the message is diagnostic DETAIL under the EU-014
+        # module-wide ExactError closure; the representability RULE itself
+        # is entry-covered (177 — the +1 at this one implementation).
         raise ExactError(f"the day after {iso!r} is outside the representable "
                          f"calendar, so it cannot be an exclusive end")
 
