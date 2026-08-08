@@ -268,10 +268,12 @@ def _exact_dates(item, time_type, scope_in):
     # months, irregular-quarter filers (KR 16-wk Q1 = 112d; COST 84d, 53-wk Q4 = 119d).
     if time_type == "duration":
         band = _INTERIM_SCOPE_DAYS.get(scope)
-        if band and not band[0] <= days <= band[1]:
-            raise PeriodResolutionError(
-                f"{scope} declared but the window is {days} days ({start}..{end}) — "
-                f"contradictory framing, park")
+        if band:
+            lo, hi = band
+            if (lo is not None and days < lo) or days > hi:
+                raise PeriodResolutionError(
+                    f"{scope} declared but the window is {days} days ({start}..{end}) — "
+                    f"contradictory framing, park")
     return _result(build_period_id(start, end), scope, time_type, start, end)
 
 
@@ -279,7 +281,9 @@ _INTERIM_SCOPE_DAYS = {          # sized so the KNOWN TESTED calendars pass
     "monthly": (25, 35),         # 4-week retail month .. 5-week month
     "quarter": (75, 120),        # 11-week .. 17-week (KR 112d; COST 84d/119d)
     "half": (160, 210),          # 24-week .. 29-week (12-wk + 17-wk 53-yr half)
-    "ytd": (1, 390),             # NO minimum — January-to-date is real; cap = 53-wk year
+    "ytd": (None, 390),          # P-D5 owner-ruled: the lower bound was DEAD (equal
+                                 # dates park earlier; reversed dates park at the id
+                                 # owner) and is DELETED — upper cap = 53-wk year
     "annual": (340, 390),        # 52-week (364d) .. 53-week (371d) with margin
     "ttm": (350, 380),
 }                                # exact_range: unbounded by definition — no band

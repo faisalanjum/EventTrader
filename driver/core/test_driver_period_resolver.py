@@ -992,3 +992,60 @@ def test_T1_the_resolver_mints_every_period_code_through_the_one_owner():
             assert code in oc.OUTCOME_CODES, (code, args)
             seen.add(code)
     assert seen == {"PERIOD_SYM", "SCOPE_PAIR", "INSTANT", "ISO"}
+
+
+# ---- P-D5 (owner-ruled 2026-08-07, addendum c8b0f6ce): the ELEVEN-endpoint
+# band battery + the deletion controls --------------------------------------
+
+_BAND_FIELD = {"monthly": {"month": 1}, "quarter": {"fiscal_quarter": 1},
+               "half": {"half": 1}, "annual": {"fiscal_year": 2025},
+               "ytd": {"period_scope": "ytd"}, "ttm": {"period_scope": "ttm"}}
+
+
+def _band_item(scope, days):
+    from datetime import date as _date, timedelta as _td
+    start = _date(2025, 1, 1)
+    end = start + _td(days=days - 1)
+    return {"time_type": "duration", "period_start_date": start.isoformat(),
+            "period_end_date": end.isoformat(), **_BAND_FIELD[scope]}
+
+
+_ACCEPTS = [("monthly", 25), ("monthly", 35), ("quarter", 75), ("quarter", 120),
+            ("half", 160), ("half", 210), ("ytd", 390), ("annual", 340),
+            ("annual", 390), ("ttm", 350), ("ttm", 380)]
+_REJECTS = [("monthly", 24), ("monthly", 36), ("quarter", 74), ("quarter", 121),
+            ("half", 159), ("half", 211), ("ytd", 391), ("annual", 339),
+            ("annual", 391), ("ttm", 349), ("ttm", 381)]
+
+
+@pytest.mark.parametrize("scope,days", _ACCEPTS,
+                         ids=[f"{s}-{d}" for s, d in _ACCEPTS])
+def test_band_boundary_accepts(scope, days):
+    """Each of the ELEVEN live endpoints accepts AT the endpoint (owner-ruled
+    interim calibration law; ytd has no lower bound — the dead rule is gone)."""
+    it = _band_item(scope, days)
+    out = ensure_driver_period(it, fact_type="metric", fye_month=12)
+    assert out["period_scope"] == scope
+    assert out["period_u_id"] == \
+        f"gp_{it['period_start_date']}_{it['period_end_date']}"
+
+
+@pytest.mark.parametrize("scope,days", _REJECTS,
+                         ids=[f"{s}-{d}" for s, d in _REJECTS])
+def test_band_boundary_rejects(scope, days):
+    """One day outside each live endpoint parks as contradictory framing."""
+    with pytest.raises(PeriodResolutionError, match="contradictory framing"):
+        ensure_driver_period(_band_item(scope, days),
+                             fact_type="metric", fye_month=12)
+
+
+def test_reversed_exact_dates_park_on_the_public_door():
+    """P-D5 deletion control (measured at transition): reversed dates never
+    reach the band — they park at the id owner (PERIOD_SYM), which is WHY the
+    ytd lower bound was dead. Twin baseline: equal dates park earlier still
+    (test_duration_with_equal_exact_dates_rejected)."""
+    with pytest.raises(PeriodResolutionError, match="start after end"):
+        ensure_driver_period({"time_type": "duration",
+                              "period_start_date": "2025-03-31",
+                              "period_end_date": "2025-01-01"},
+                             fact_type="metric", fye_month=12)
