@@ -2208,6 +2208,14 @@ def element_id(fact):
     and one reader means the binder and the locator cannot drift into two
     different ideas of what a fact's id is.
     """
+    # EU-165 (#827): the '' default is the truthful NO-ID answer — xs:ID is
+    # OPTIONAL on an ix fact (Inline XBRL 1.1 section 10.1.1; the id type
+    # itself is XML Schema Part 2 2e section 3.3.8 xs:ID, an NCName), and
+    # a fact carrying none must read as "no id", never as a fabricated
+    # handle: blankness is exactly what routes a fact to the
+    # identity-fallback path (the EU-173 law), so any invented default
+    # would silently claim an exact-id match. Pinned: a fabricating
+    # default reddens the fallback-uniqueness nodes.
     return _typed(fact.sem, 'id') or ''
 
 
@@ -3655,6 +3663,18 @@ def bind_graph_fact(doc_or_html, *, inline_element_id, concept, context_id,
     # the AI-interpreted candidate path, which lawfully covers `pure`. This
     # module is shared, so applying either policy here would impose it on both,
     # and a second copy of the check would then run in the caller anyway.
+    # EU-157 + EU-158 (#827): FAIL-CLOSED hidden-evidence policy, and its
+    # token is the binder's OWN published vocabulary (the CL-039/EU-160
+    # ownership block) naming THIS rule: a fact inside ix:hidden has a
+    # lawful VALUE but no visible text of its own (Inline XBRL 1.1 section
+    # 13 hidden facts; the current-edition URL at the nonFraction reader's
+    # spec-sources note), so it may bind ONLY when the document still
+    # offers local evidence at its position — a row it sits in or a block
+    # span. With neither, quoting it would fabricate visible evidence the
+    # filing never shows, so the binder refuses. The three keys read are
+    # the EU-092 born-complete record's own (never absent, so .get can
+    # only see a real value or an explicit empty). Pinned: a vacuous gate
+    # reddens the hidden-without-local-evidence node.
     if evidence.get('hidden') and not (evidence.get('row_text')
                                        or evidence.get('block_span')):
         return None, 'hidden_without_local_evidence'

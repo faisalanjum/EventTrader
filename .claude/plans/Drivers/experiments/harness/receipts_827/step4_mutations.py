@@ -2106,6 +2106,20 @@ MUTATIONS = [
      "    t = el.get('{%s}typeX' % _XSI_NS)",
      "driver/relocation/test_context_content_model.py::"
      "test_827B12_a_NON_EMPTY_forever_is_malformed"),
+
+    (276, "EU-157/158: the hidden-evidence gate goes vacuous and hidden facts bind without evidence",
+     "driver/relocation/inline_html.py",
+     "    if evidence.get('hidden') and not (evidence.get('row_text')",
+     "    if False and evidence.get('hidden') and not (evidence.get('row_text')",
+     "driver/relocation/test_bind_graph_fact.py::"
+     "test_RED_a_hidden_element_without_local_evidence_abstains"),
+
+    (277, "EU-165: the no-id answer fabricates a handle",
+     "driver/relocation/inline_html.py",
+     "    return _typed(fact.sem, 'id') or ''",
+     "    return _typed(fact.sem, 'id') or 'X'",
+     "driver/relocation/test_bind_graph_fact.py::"
+     "test_RED_the_fallback_abstains_when_it_is_not_unique"),
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",
