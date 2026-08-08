@@ -1439,6 +1439,13 @@ MUTATIONS = [
      "driver/relocation/test_exact_numbers.py::"
      "test_dec_rejects_floats"),
 
+    (181, "EU-015: the real-int exponent gate is switched off",
+     "driver/relocation/exact_numbers.py",
+     "    if type(exponent) is not int:\n        raise ExactError(",
+     "    if False:\n        raise ExactError(",
+     "driver/core/test_round12_exact_scale.py::"
+     "test_a_non_INTEGER_exponent_is_refused_at_the_arithmetic_boundary[True]"),
+
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",

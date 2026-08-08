@@ -195,6 +195,14 @@ def exact_scaleb(value, exponent):
 
     The exponent must be a REAL `int`: `bool` is an int subclass, and a float or
     a numeric string would coerce a value we never verified.
+
+    EU-015 (#827): the four raised texts here are diagnostic DETAIL, never
+    outcome vocabulary — the module-wide ExactError caller closure (EU-014's
+    record: every catcher converts under a T1-registered code or swallows to
+    abstain) covers this function's raises too; no code is minted here. The
+    RULES are the product exactness law, mutation-covered at both layers
+    (the int-exponent/Decimal/finite gates by the primary battery; the
+    exactness trap adjudicated at EU-016).
     """
     if type(exponent) is not int:
         raise ExactError(
