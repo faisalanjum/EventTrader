@@ -1345,6 +1345,13 @@ MUTATIONS = [
      "    if declared.get('is_divid'):",
      "driver/relocation/test_unit_handoff_census.py::"
      "test_EU033_the_semantic_reader_is_fail_closed_on_its_branch_keys"),
+
+    (168, "EU-007: a graph boolean spelling drifts off the boundary clause",
+     "driver/relocation/exact_numbers.py",
+     "ROUTE_A_BOOLS = {'0': False, '1': True}",
+     "ROUTE_A_BOOLS = {'O': False, '1': True}",
+     "driver/relocation/test_exact_numbers.py::"
+     "test_EU007_the_graph_stored_spellings_resolve_from_the_boundary_clause"),
 ]
 
 

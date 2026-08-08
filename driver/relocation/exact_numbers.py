@@ -113,6 +113,8 @@ def route_a_semantic_unit(declared):
 
 # ONLY the exact graph strings. Python ints and bools ABSTAIN — `str(1)` is
 # '1', so a `str(x) in ('0','1')` test silently accepted an int flag.
+# EU-007 (#827): the accepted-spelling set is the graph stored-spelling
+# clause at the F7 boundary owner (driver/core/graph_row_contract.py).
 ROUTE_A_BOOLS = {'0': False, '1': True}
 
 # THE unit-compatibility relation, ONE definition: which SEMANTIC readings a
@@ -263,6 +265,9 @@ def stored_period_end(iso):
 #: `strftime('%Y')` is unpadded on this platform, so it CAN emit `224-04-01`,
 #: and the graph holds one (1 of 11,416 Period nodes). This boundary refuses it
 #: rather than padding a year the filing never wrote.
+# EU-007 (#827): this strict shape is the graph stored-spelling clause at
+# the F7 boundary owner (driver/core/graph_row_contract.py) — the XSD/
+# CPython intersection derivation above is its authority chain.
 _STRICT_ISO = __import__("re").compile(r"[0-9]{4}-[0-9]{2}-[0-9]{2}")
 
 

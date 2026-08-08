@@ -22,3 +22,22 @@ GRAPH_FACT_ROW_FIELDS = ("period_type", "start_date", "end_date", "dims",
 #: A dimension\'s five columns: both qnames, the label, both namespace URIs.
 GRAPH_DIM_FIELDS = ("axis", "member", "label",
                     "axis_namespace", "member_namespace")
+
+
+# ---------------------------------------------------------------------------
+# EU-007 (#827): THE GRAPH STORED-SPELLING CLAUSE. The tuples above name the
+# COLUMNS; this names how the graph SPELLS the values inside them, resolved
+# here at the F7 boundary owner so neither side restates it:
+#   value      — the frozen canonical lexical contract: the grouped string
+#                ("4,824,698,000"); "0"/"-0" is the ONE lawful two-spelling
+#                pair (SEQ 268); an ungrouped "726000000" is outside it.
+#   is_divide  — EXACTLY the strings '0' and '1'
+#                (exact_numbers.ROUTE_A_BOOLS); Python ints and bools are
+#                not graph spellings and abstain everywhere.
+#   dates      — exactly [0-9]{4}-[0-9]{2}-[0-9]{2}
+#                (exact_numbers._STRICT_ISO): the XSD-1.0 §3.2.9.1 x CPython
+#                date intersection, deliberately narrower than xs:date;
+#                stored period ENDS are EXCLUSIVE (+1 day); an instant's
+#                unused end is the adapter-owned "null" alias (F5 — the
+#                door emits None).
+# ---------------------------------------------------------------------------

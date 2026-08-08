@@ -50,3 +50,19 @@ def test_period_key_exact_no_tolerance():
 def test_is_instant():
     assert X.is_instant("2024-12-31", "2024-12-31")
     assert not X.is_instant("2024-01-01", "2024-12-31")
+
+
+def test_EU007_the_graph_stored_spellings_resolve_from_the_boundary_clause():
+    """EU-007 (#827): the two stored-spelling members pinned against the
+    graph stored-spelling clause at the F7 boundary owner — the boolean set
+    is EXACTLY the strings '0'/'1', and the date shape is the strict
+    four-digit intersection (narrower than xs:date), calendar-checked."""
+    from driver.relocation.exact_numbers import ROUTE_A_BOOLS, _iso_date
+    assert ROUTE_A_BOOLS == {'0': False, '1': True}
+    assert _iso_date("2024-06-30") is not None
+    import pytest as _pytest
+    from driver.relocation.exact_numbers import ExactError
+    for bad in ("224-04-01", "20240630", "+2024-06-30", "2024-02-30",
+                "2024-6-30"):
+        with _pytest.raises(ExactError):
+            _iso_date(bad)
