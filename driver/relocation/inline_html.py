@@ -349,6 +349,11 @@ def _style_state(el):
         tag, payload = v if isinstance(v, tuple) else (None, v)
         if tag == 'unsupported':
             out[p] = None
+            # EU-134 (#827): this refusal text is the binder's own published
+            # vocabulary (the CL-039 block) — style-state refusals propagate
+            # as data to unsupported_style, never as a T1 code; the rule
+            # (an unresolvable !important-vs-normal winner refuses, never
+            # guesses) is board-cited on its own row.
             out['unsupported'] = out['unsupported'] or (
                 payload or f'unresolvable {p} winner in inline style')
         elif tag == 'wide':

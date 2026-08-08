@@ -1467,6 +1467,13 @@ MUTATIONS = [
      "driver/relocation/test_two_view_bridge.py::"
      "test_ATTACK_a_context_or_unit_OUTSIDE_ix_resources_cannot_be_referenced[<body>-loose in the body, in no container at all]"),
 
+    (185, "EU-134: the unsupported-style branch stops recognising its tag",
+     "driver/relocation/inline_html.py",
+     "        if tag == 'unsupported':",
+     "        if tag == 'unsupportedX':",
+     "driver/relocation/test_row_label_span.py::"
+     "test_E2_force_hidden_is_UNSUPPORTED_never_a_fallback"),
+
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",
