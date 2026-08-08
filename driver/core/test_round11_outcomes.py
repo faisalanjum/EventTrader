@@ -555,14 +555,17 @@ def test_every_row_SCALAR_refuses_every_wrong_type(field):
 
 def test_the_LAWFUL_optional_row_forms_still_pass():
     """POSITIVE CONTROL — over-tightening here would park real facts.
-    `fact_id` may be null or blank (that is what the identity fallback serves),
-    and an instant's `end_date` is the LITERAL string "null" in all 3,058
-    instants in the live graph, with a real None accepted too."""
+    `fact_id` may be null or blank (that is what the identity fallback serves).
+    F5 reconcile: the graph's LITERAL "null" instants (3,058/3,058) are now
+    the ADAPTER'S alias — it emits None at the boundary, so the checked row
+    lawfully sees None only; the string sentinel parks here (the retirement
+    twin below)."""
     assert xa._checked_row(_row(fact_id=None))["fact_id"] is None
     assert xa._checked_row(_row(fact_id=""))["fact_id"] == ""
-    for end in ("null", None):
-        row = xa._checked_row(_row(period_type="instant", end_date=end))
-        assert row["end_date"] == end
+    row = xa._checked_row(_row(period_type="instant", end_date=None))
+    assert row["end_date"] is None
+    with pytest.raises(ProductionValidationError):
+        xa._checked_row(_row(period_type="instant", end_date="null"))
 
 
 def test_a_DURATION_still_requires_its_end_date():

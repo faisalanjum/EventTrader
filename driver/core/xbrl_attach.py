@@ -298,19 +298,12 @@ def _checked_row(raw):
         if value is None:
             continue
         if field == "end_date" and raw["period_type"] == "instant":
-            # UNREAD on this branch, but not therefore unconstrained: skipping
-            # the check entirely let ANY text through. Census 2026-07-28: every
-            # stored end_date is a strict ISO date (8,358) or the literal
-            # four-character string "null" (3,058) — 11,416 exactly, so there is
-            # no third shape and arbitrary text is not one of them.
-            if value == "null":
-                continue
-            # NOT a real date either: all 3,058 live instants carry the literal
-            # "null" and not one carries a date, so allowing one would invent a
-            # shape the graph does not have. The lawful set is exactly two.
+            # F5 (#827): the string-"null" sentinel is RETIRED — the adapter
+            # now emits None for it at the boundary (its 3,058/3,058 census
+            # lives there), so an instant's end is ABSENT here or unlawful.
             raise ProductionValidationError(
-                f"an instant's end_date is the literal \"null\" or absent; "
-                f"got {value!r} — park")
+                f"an instant's end_date is absent (the adapter owns the "
+                f"stored-\"null\" alias); got {value!r} — park")
         try:
             _iso_date(value)
         except ExactError as e:

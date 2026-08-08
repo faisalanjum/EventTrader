@@ -970,7 +970,7 @@ def test_the_row_signature_covers_EVERY_field_binding_reads():
             # NO SKIP. I had written `continue` here, so a test called "covers
             # EVERY field binding reads" silently covered nine of ten.
             other = xa._checked_row(_dim_row("Foo", period_type="instant",
-                                              end_date="null"))
+                                              end_date=None))
         else:
             changed = {"fact_id": "f2", "value": "999,000,000", "unit_ref": "u2",
                        "unit_name": "shares", "is_divide": "1",
@@ -1015,17 +1015,12 @@ def test_every_BLANK_fact_id_form_is_ONE_fact_not_a_conflict():
 
 
 def test_an_INSTANTS_unused_end_date_is_not_part_of_its_identity():
-    """On the instant branch `match_xbrl_fact` reads only `start_date`, and the
-    live graph stores the literal string "null" there in all 3,058 instants
-    while `None` is also accepted — the same fact, two spellings."""
-    # THE THREE LAWFUL FORMS ONLY. An earlier version of this test listed `""`
-    # among them; a blank string is not one of the shapes the graph carries, and
-    # a lawful-equivalence set must not smuggle in an unlawful member.
-    # THE TWO LAWFUL FORMS. Earlier versions of this list held `""` and then a
-    # real date; neither is a shape the graph carries. A lawful-equivalence set
-    # is only as honest as its members.
-    forms = [_sig(period_type="instant", end_date=e) for e in ("null", None)]
-    assert len(set(forms)) == 1, "an unread field is deciding identity"
+    """F5 reconcile: the stored-"null" alias is the ADAPTER'S now — it emits
+    None, so exactly ONE lawful checked-row form remains. The identity claim
+    survives as: the unread end field contributes nothing (the signature of
+    the lawful form equals itself with the field absent-by-None)."""
+    forms = [_sig(period_type="instant", end_date=None)]
+    assert len(set(forms)) == 1
 
 
 def test_a_DURATIONS_end_date_IS_part_of_its_identity():
@@ -1273,11 +1268,12 @@ def test_an_INSTANT_end_date_may_not_be_a_real_date(end):
         xa._checked_row(_dim_row("Foo", period_type="instant", end_date=end))
 
 
-@pytest.mark.parametrize("good", ["null", None])
-def test_the_TWO_lawful_instant_end_date_forms_pass(good):
-    """POSITIVE CONTROL — exactly the two forms the data carries."""
+def test_the_ONE_lawful_instant_end_date_form_passes():
+    """POSITIVE CONTROL (F5 reconcile): the adapter owns the stored-"null"
+    alias and emits None — exactly ONE lawful form reaches the checked row;
+    the retired sentinel parks (the F5 twin in round11)."""
     from driver.core import xbrl_attach as xa
-    assert xa._checked_row(_dim_row("Foo", period_type="instant", end_date=good))
+    assert xa._checked_row(_dim_row("Foo", period_type="instant", end_date=None))
 
 
 def test_the_SPLIT_axis_helper_cannot_come_back():

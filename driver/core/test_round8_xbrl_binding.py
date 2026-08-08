@@ -1130,7 +1130,7 @@ def test_W7_an_instant_bundle_carries_ONLY_its_end_date(with_start):
     NO start): through the PUBLIC attach door — an instant carrying a start
     is rejected for the exact W7 reason; the same instant without the start
     attaches exactly one fact (the graph stores instants exclusive-end:
-    start = doc instant + 1 day, end the literal 'null')."""
+    start = doc instant + 1 day, end None — F5 retired the stored-'null' alias at the adapter)."""
     idoc = _DOC.replace(
         '<xbrli:period><xbrli:startDate>2024-01-01</xbrli:startDate>'
         '<xbrli:endDate>2024-06-30</xbrli:endDate></xbrli:period>',
@@ -1144,7 +1144,7 @@ def test_W7_an_instant_bundle_carries_ONLY_its_end_date(with_start):
     fact["item"]["quote"] = quote
     row = dict(_Graph()._rows[0])
     row.update(period_type="instant", start_date="2024-07-01",
-               end_date="null")
+               end_date=None)   # F5: the adapter emits None, never "null"
     item = {"fact": fact, "concept": "us-gaap:Revenues", "member_refs": [],
             "source_evidence": evidence}
     res = attach_event_xbrl([item], source_id=ACC, store=_Graph(rows=[row]),

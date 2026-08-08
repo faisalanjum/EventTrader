@@ -539,8 +539,15 @@ class Neo4jStore:
                 # and evidence spans live in the filing's inline rendering, not
                 # in the graph, and are read there by the certified binder.
                 out.append({"period_type": r["period_type"],
-                            "start_date": r["start_date"],
-                            "end_date": r["end_date"], "dims": dims,
+                            # F5 (#827): the graph stores instants' end as
+                            # the LITERAL string "null" (census 2026-07-28:
+                            # 3,058 of 3,058); the ADAPTER owns the alias —
+                            # it emits None, and no consumer recognises the
+                            # sentinel any more.
+                            "start_date": (None if r["start_date"] == "null"
+                                           else r["start_date"]),
+                            "end_date": (None if r["end_date"] == "null"
+                                         else r["end_date"]), "dims": dims,
                             "fact_id": r.get("fact_id"),
                             "context_id": r.get("context_id"),
                             "unit_ref": r.get("unit_ref"),

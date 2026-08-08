@@ -138,3 +138,30 @@ def test_the_LAWFUL_stored_composite_still_resolves():
     d = dict(rows.rows[0]["dims"][0])
     assert d["axis_namespace"] == SRT and d["member_namespace"] == GAAP24
     assert d["label"] == "North America", "the label survives untouched"
+
+
+def test_the_ADAPTER_owns_the_stored_null_alias_and_emits_None():
+    """F5 (#827): every instant in the graph (3,058/3,058, census 2026-08-08)
+    stores its unused end as the LITERAL string "null". That alias is the
+    ADAPTER'S: the public door emits None for it, the start passes through
+    untouched, and no consumer downstream recognises the sentinel."""
+    store = Neo4jStore.__new__(Neo4jStore)
+    defs = [_rec("Dimension", "srt:StatementGeographicalAxis", SRT),
+            _rec("Member", "us-gaap:ProductMember", GAAP24, label="NA")]
+
+    def read(q, **p):
+        if "HAS_XBRL" in q:
+            return [{"fid": "f1", "fact_id": "f-1", "context_id": "c-1",
+                     "period_type": "instant", "start_date": "2026-04-02",
+                     "end_date": "null", "unit_ref": "usd",
+                     "value": "390", "decimals": "0",
+                     "unit_name": "iso4217:USD", "is_divide": "0",
+                     "concept_namespace": GAAP24,
+                     "graph_concept_qname": "us-gaap:Revenues",
+                     "company_cik": "0000000001",
+                     "dus": ["0000000001:d"], "mus": ["0000000001:m"]}]
+        return defs
+    store._read = read
+    row = store.get_xbrl_fact_dimensions("S1", "us-gaap:Revenues").rows[0]
+    assert row["end_date"] is None, "the stored alias must not escape the door"
+    assert row["start_date"] == "2026-04-02", "the real date passes through"
