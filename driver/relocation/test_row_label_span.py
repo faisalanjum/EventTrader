@@ -510,6 +510,12 @@ def _cellE(style=None, **attrs):
     ("display:flow block", False),                 # || is order-independent
     ("display:list-item", False),
     ("display:block flow list-item", False),
+    # EU-083/EU-084 (#827): the &&-arm allows AT MOST ONE outside and one
+    # inside keyword beside list-item, and any other 3+ ident sequence is
+    # not display at all — both were uncovered until this row.
+    ("display:none; display:block inline list-item", True),
+    ("display:none; display:block flow ruby", True),
+    ("display:none; display:block flow list-item", False),
     ("display:contents", False),
     # a DEFINITELY INVALID later declaration never erases an earlier winner
     ("display:none; display:block hidden", True),  # 'hidden' is not a display kw

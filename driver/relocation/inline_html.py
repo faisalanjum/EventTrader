@@ -267,6 +267,17 @@ def _display_valid(idents):
     with `||`/`&&` ORDER INDEPENDENCE: a single keyword from any set above;
     [ <display-outside> || <display-inside> ]; or
     [ <display-outside>? && [ flow | flow-root ]? && list-item ]."""
+    # CL-051 (#827, EU-080..EU-084): FAIL-CLOSED grammar arms. Each
+    # cardinality is the Display 3 section 2 production itself — ONE
+    # keyword from a single set, or [outside || inside] as an ordered
+    # PAIR, or [outside? && [flow|flow-root]? && list-item] where each
+    # optional part appears AT MOST ONCE — and the s[0] subscript sits
+    # behind its own len==1 gate, so it can never pick among candidates
+    # (the EU-113 guarded-subscript form). Every non-matching shape falls
+    # to the final reject, so an unknown display value is never treated
+    # as lawful: the arms and the reject are pinned through the public
+    # door (a widened list-item bound and a permissive final reject were
+    # both uncovered until this row).
     s = list(idents)
     if len(s) == 1:
         return s[0] in _DISPLAY_SINGLE

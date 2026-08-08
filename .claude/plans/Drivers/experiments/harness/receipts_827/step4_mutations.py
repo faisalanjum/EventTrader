@@ -2212,6 +2212,34 @@ MUTATIONS = [
      "driver/relocation/test_two_view_bridge.py::"
      "test_EU070_template_contents_are_never_rendered"),
 
+    (293, "EU-081: the single-keyword arm stops matching one ident",
+     "driver/relocation/inline_html.py",
+     "    if len(s) == 1:\n        return s[0] in _DISPLAY_SINGLE",
+     "    if len(s) == 0:\n        return s[0] in _DISPLAY_SINGLE",
+     "driver/relocation/test_two_view_bridge.py::"
+     "test_a_lawful_document_is_NOT_refused"),
+
+    (294, "EU-082: the outside-inside pair arm stops matching two idents",
+     "driver/relocation/inline_html.py",
+     "    if len(s) == 2:\n        a, b = s",
+     "    if len(s) == 3:\n        a, b = s",
+     "driver/relocation/test_row_label_span.py::"
+     "test_E2_the_display_grammar_is_the_SPEC_not_a_single_ident"),
+
+    (295, "EU-083: the list-item arm admits two outside keywords",
+     "driver/relocation/inline_html.py",
+     "        return (len(out) <= 1 and len(ins) <= 1",
+     "        return (len(out) <= 2 and len(ins) <= 1",
+     "driver/relocation/test_row_label_span.py::"
+     "test_E2_the_display_grammar_is_the_SPEC_not_a_single_ident"),
+
+    (296, "EU-084: the final grammar reject accepts every other shape",
+     "driver/relocation/inline_html.py",
+     "                or (a in _DISPLAY_INSIDE and b in _DISPLAY_OUTSIDE))\n    return False",
+     "                or (a in _DISPLAY_INSIDE and b in _DISPLAY_OUTSIDE))\n    return True",
+     "driver/relocation/test_row_label_span.py::"
+     "test_E2_the_display_grammar_is_the_SPEC_not_a_single_ident"),
+
     (281, "EU-169: the exactly-one-child bound widens to two",
      "driver/relocation/inline_html.py",
      "        if len(kids) != 1 or len(elements) != 1 \\",
