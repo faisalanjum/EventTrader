@@ -133,12 +133,21 @@ def ensure_driver_period(item, *, fact_type, fye_month, ticker=None,
     """Resolve one item's period. Returns {period_u_id, period_scope, time_type,
     gp_start_date, gp_end_date} or None when the fact truly has no period fields."""
     fye_month = _lawful_fye(fye_month)   # FIRST statement — before every bypass
+    # P-O12 (M-2): the calendar flag is KEYWORD-ONLY (the frozen packet holds
+    # calendar_override in the Block-0 envelope alone — the item route was a
+    # superseded duplicate) and must be a true bool BEFORE every early return:
+    # bool() coerced "false" and 1 to True, turning December-annual on under a
+    # September FYE from either route.
+    if type(calendar_override) is not bool:
+        raise PeriodResolutionError(
+            f"calendar_override must be a bool, got "
+            f"{type(calendar_override).__name__} — park")
     if item.get("period_u_id") is not None:   # P-O2: a PRESENT id — falsey
         return _preserved(item)               # included — is JUDGED, never ignored
     if all(item.get(k) is None for k in PERIOD_ITEM_KEYS):  # is-not-None: zero VALUES (e.g.
         return None                                     # fiscal_quarter=0) get VALIDATED
 
-    cal = bool(calendar_override or item.get("calendar_override"))
+    cal = calendar_override              # P-O12: keyword route ONLY, no coercion
     time_type = item.get("time_type")
     if time_type not in ("duration", "instant"):
         raise PeriodResolutionError(

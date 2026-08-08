@@ -99,9 +99,11 @@ def test_10_calendar_override_routes_before_lookups():
         "predict": lambda *a: pytest.fail("predict must be skipped"),
         "corrected_fye": lambda *a: pytest.fail("corrected-FYE must be skipped"),
     }
-    out = resolve({"fiscal_year": 2025, "fiscal_quarter": 1, "time_type": "duration",
-                   "calendar_override": True},
-                  fye=9, ticker="OIL", lookups=poisoned)
+    # P-O12 transition (purpose preserved): the flag travels by KEYWORD — the
+    # item route is dead (the frozen packet holds calendar_override only in
+    # the Block-0 envelope).
+    out = resolve({"fiscal_year": 2025, "fiscal_quarter": 1, "time_type": "duration"},
+                  fye=9, ticker="OIL", lookups=poisoned, calendar_override=True)
     assert out["period_u_id"] == "gp_2025-01-01_2025-03-31"  # calendar Q1, not Sep-FYE Q1
 
 
@@ -904,3 +906,36 @@ def test_ttm_missing_quarter_parks():
     with pytest.raises(PeriodResolutionError):
         resolve({"fiscal_year": 2025, "period_scope": "ttm",
                  "time_type": "duration"})
+
+
+# ---- P-O12 (#827 F-PERIOD, M-2): calendar flag keyword-only + bool type law ----
+
+def test_calendar_keyword_type_law_parks_on_all_paths():
+    """One node, all paths: a non-bool keyword flag parks BEFORE the preserved
+    and periodless early returns; and the superseded ITEM route is dead — an
+    item-level True with keyword False must NOT activate calendar mode."""
+    for bad in ("false", 1, None):
+        with pytest.raises(PeriodResolutionError):     # normal path
+            ensure_driver_period({"fiscal_year": 2025, "fiscal_quarter": 1,
+                                  "time_type": "duration"},
+                                 fact_type="metric", fye_month=9,
+                                 calendar_override=bad)
+        with pytest.raises(PeriodResolutionError):     # preserved-ID path
+            ensure_driver_period({"period_u_id": "gp_2025-07-01_2025-09-30",
+                                  "period_scope": "quarter",
+                                  "time_type": "duration"},
+                                 fact_type="metric", fye_month=9,
+                                 calendar_override=bad)
+        with pytest.raises(PeriodResolutionError):     # periodless path
+            ensure_driver_period({}, fact_type="action_event", fye_month=9,
+                                 calendar_override=bad)
+    # reversed authority: the item route is DEAD — keyword False wins
+    out = ensure_driver_period({"fiscal_year": 2025, "fiscal_quarter": 1,
+                                "time_type": "duration",
+                                "calendar_override": True},
+                               fact_type="metric", fye_month=9,
+                               calendar_override=False)
+    # September FYE: company-fiscal Q1 is Oct-Dec of the PRIOR year; calendar
+    # mode would have said Jan-Mar 2025 — the fiscal answer proves item-True
+    # did not activate calendar mode
+    assert out["period_u_id"] == "gp_2024-10-01_2024-12-31"
