@@ -1861,6 +1861,20 @@ MUTATIONS = [
      "_DISPLAY_OUTSIDE = frozenset({'block', 'inline'})",
      "driver/relocation/test_row_label_span.py::"
      "test_EU057_run_in_is_a_lawful_display_value_that_wins_the_cascade"),
+
+    (241, "EU-060: the TR4 registry URI drifts a day",
+     "driver/relocation/inline_html.py",
+     "_TR4 = 'http://www.xbrl.org/inlineXBRL/transformation/2020-02-12'",
+     "_TR4 = 'http://www.xbrl.org/inlineXBRL/transformation/2020-02-13'",
+     "driver/relocation/test_transform_registry.py::"
+     "test_an_APPROVED_registry_with_a_real_signature_is_APPLIED"),
+
+    (242, "EU-061: the graph number grammar admits trailing-zero fractions",
+     "driver/relocation/inline_html.py",
+     "    r'-?(?:0|[1-9][0-9]{0,2}(?:,[0-9]{3})*)(?:\\.[0-9]{0,2}[1-9])?\\Z')",
+     "    r'-?(?:0|[1-9][0-9]{0,2}(?:,[0-9]{3})*)(?:\\.[0-9]{1,3})?\\Z')",
+     "driver/relocation/test_bind_graph_fact.py::"
+     "test_827R6_the_DOOR_refuses_a_writer_alien_raw_as_non_reconciling"),
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",

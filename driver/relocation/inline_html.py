@@ -2596,6 +2596,14 @@ def find_by_identity(doc_or_html, target, unit_ref):
 #   Inline XBRL 1.1 Part 1 §§10.1.2, 10.2.3, 16.1 — Recommendation 2013-11-18
 #   with approved errata corrections to 2026-07-14 (the current edition)
 #   https://www.xbrl.org/Specification/inlineXBRL-part1/REC-2013-11-18+errata-2026-07-14/inlineXBRL-part1-REC-2013-11-18+corrected-errata-2026-07-14.html
+# EU-060 (#827): the three URIs are the registries' OWN published
+# namespaces — XBRL Transformation Registry 3, REC 2015-02-26 ·
+# Registry 4, REC 2020-02-12 · Registry 5, REC 2022-02-16 (each REC date
+# is embedded in its URI; spec index
+# https://specifications.xbrl.org/spec-group-index-inline-xbrl.html) —
+# admitted for SEC filings by the release-26.1 registry list above.
+# Constants equal the published URIs verbatim; a drifted registry is a
+# DIFFERENT registry (pinned: the approved-registry node).
 _TR3 = 'http://www.xbrl.org/inlineXBRL/transformation/2015-02-26'
 _TR4 = 'http://www.xbrl.org/inlineXBRL/transformation/2020-02-12'
 _TR5 = 'http://www.xbrl.org/inlineXBRL/transformation/2022-02-16'
@@ -2695,6 +2703,15 @@ def transform_status(fmt_expanded):
 #: lesson `xml_integer` already carries, on the graph's side of the join.
 #: Non-finite spellings fall outside the grammar and need no branch of their
 #: own.
+# EU-061 (#827): this grammar is the FROZEN GRAPH LEXICAL CONTRACT — the
+# two writer formatters' output shape (the F7 boundary clause,
+# graph_row_contract's stored-spelling law: canonical decimal form,
+# comma-grouped integer part, no trailing fraction zeros — the [1-9]
+# terminal), NOT the transformation registries' input grammar it happens
+# to resemble: parse_raw reads what the GRAPH stored, and the EU-184 law
+# owns its refusal side (an alien spelling fails to reconcile). Widening
+# the fraction tail admits writer-alien spellings (pinned by the
+# writer-alien-raw DOOR node).
 _GRAPH_NUMBER = re.compile(
     r'-?(?:0|[1-9][0-9]{0,2}(?:,[0-9]{3})*)(?:\.[0-9]{0,2}[1-9])?\Z')
 
