@@ -1,5 +1,13 @@
 """The matching law (package Part D) — order is normative.
 
+OWNER-AUTHORIZED (GRADE-AUTH, #827): the six matching rules below are the
+certified matching law by the owner's ruling of 2026-08-07 —
+OWNER_ANSWER_SHEET_2026-08-07.md (sha256 412792b7...) row GRADE-AUTH,
+verbatim: "AUTHORIZE the certified matching law (zero behavior change)."
+The authorized text is the frozen Part D, exp5_rev4_package.md :581-608
+(blob b919bf6f). This header IS the authority binding; the five dependent
+F-GRADE raws flip to authorized with it. Zero behavior change.
+
 THE PRINCIPLE: evidence identity, INCLUDING a verified locator, proves the same
 source SPAN — never the same fact. Location is where; identity is what. Two
 different facts can share one sentence, so a locator may confirm a link and can
