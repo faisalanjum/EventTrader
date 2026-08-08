@@ -83,7 +83,9 @@ _ALLOWED_FIELDS = frozenset({
     "level_shape_hint", "comparison_shape_hint", "surprise_basis_hint",
     "id", "fact_scope", "member_refs",
 })
-_NUMERIC_FIELDS = ("level_low", "level_high", "change_value",
+# T7 (#827): THE public numeric-field owner (promoted from the private
+# spelling); prepared_fact_v2.NUMERIC_SLOTS is an alias of this tuple.
+NUMERIC_FIELDS = ("level_low", "level_high", "change_value",
                    "comparison_low", "comparison_high")
 # T2 (#827, owner sheet #2 "born complete"): the numeric-prose heuristic
 # _VALUE_TEXT_NUMERIC is DELETED with NO replacement — it was wrong in both
@@ -201,7 +203,7 @@ def validate_fact(fact, *, driver, home_facts=None):
     # may have already lost source digits at parse time, so floats reject wholesale —
     # dust can never enter, and nothing needs to "prove" preservation after the fact.
     malformed = False
-    for k in _NUMERIC_FIELDS:
+    for k in NUMERIC_FIELDS:
         val = fact.get(k)
         err = _num_error(val)
         if err:

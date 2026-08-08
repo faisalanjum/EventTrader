@@ -62,8 +62,12 @@ RETIRED_FIELDS = frozenset({
 })
 SOURCE_OWNED_FIELDS = ("member_refs", "xbrl_concept_raw")
 
-NUMERIC_SLOTS = ("level_low", "level_high", "change_value",
-                  "comparison_low", "comparison_high")
+# T7 (#827): the owner is driver_validators.NUMERIC_FIELDS — this name is an
+# ALIAS for the door's public surface, never a second authored copy. The
+# module-level import is the card's authorized acyclic edge (validators has
+# zero references back to this module).
+from driver.core.driver_validators import NUMERIC_FIELDS
+NUMERIC_SLOTS = NUMERIC_FIELDS
 
 # MODULE-PRIVATE, and deliberately not an attribute of any exported class: as a
 # class attribute it was reachable as `PreparedItemV2._ATTACH_TOKEN`, so the
