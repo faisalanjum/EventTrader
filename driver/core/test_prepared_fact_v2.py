@@ -895,3 +895,16 @@ def test_GRADE_DOMAIN_source_owned_evidence_cannot_alter_selection():
     assert r4.emit_once_violation                                # control 4
     assert len(r4.produced_duplicates) == 1
     assert len(r4.produced_duplicates[0]) == 2                   # preserved
+
+
+def test_W1_an_invented_polarity_basis_is_refused():
+    """W1: the polarity-proof `basis` enum is FROZEN (FINAL_DESIGN:134 —
+    source_framing | metric_meaning); an invented basis refuses at the
+    door. Both lawful values pass (the control)."""
+    def proof(basis):
+        return {"polarity": "favorable", "basis": basis,
+                "evidence": "beat the consensus", "sentence": "s"}
+    for lawful in ("source_framing", "metric_meaning"):
+        fact(polarity_proof=proof(lawful))          # control: constructs
+    with pytest.raises(SchemaError, match="basis"):
+        fact(polarity_proof=proof("invented_basis"))

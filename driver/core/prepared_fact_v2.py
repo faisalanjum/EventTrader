@@ -455,6 +455,12 @@ class PreparedItemV2:
                 or any(not isinstance(proof[k], str) or not proof[k].strip()
                        for k in _PROOF_KEYS)):
             raise SchemaError(f"polarity_proof: exactly {_PROOF_KEYS}, non-blank")
+        # W1 (#827): the basis enum is FROZEN product law (FINAL_DESIGN:134);
+        # an invented basis is a contract violation, never a pass-through.
+        if proof["basis"] not in ("source_framing", "metric_meaning"):
+            raise SchemaError(
+                "polarity_proof basis: source_framing | metric_meaning "
+                f"(FINAL_DESIGN:134), got {proof['basis']!r}")
 
 # the 32 MODEL-owned fields: everything except the source/code-owned pair and
 # any private machinery (a leading underscore is never part of the contract —
