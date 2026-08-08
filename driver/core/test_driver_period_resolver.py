@@ -781,3 +781,112 @@ def test_preserved_lawful_sentinel_round_trips_unchanged():
                                fact_type="metric", fye_month=12)
     assert out["period_u_id"] == "gp_ST"
     assert (out["gp_start_date"], out["gp_end_date"]) == (None, None)
+
+
+# ---- P-O3 (#827 F-PERIOD, U-6): affirmative lookup results lawful-or-park ----
+# Clean miss is `result is None` EXACTLY; every non-None answer passes the ONE
+# checker _lawful_hit and is returned unchanged — no normalization, no
+# truthiness fall-through, no trusted-verbatim hits.
+
+def _o3_item():
+    return {"fiscal_year": 2025, "fiscal_quarter": 2, "time_type": "duration"}
+
+
+def _o3_lk(existing=None, sec=None, predict=None):
+    return {"existing": lambda *a: existing, "sec": lambda *a: sec,
+            "predict": lambda *a: predict, "corrected_fye": lambda t: None}
+
+
+@_pt.mark.parametrize("kind,value", [
+    ("existing", 0), ("existing", {}), ("sec", 0), ("sec", {}),
+    ("predict", 0), ("predict", {}),
+], ids=["existing-nondict", "existing-empty_dict", "sec-nondict",
+        "sec-empty_dict", "predict-nondict", "predict-empty_dict"])
+def test_falsey_nonnone_lookup_result_parks(kind, value):
+    with pytest.raises(PeriodResolutionError):
+        ensure_driver_period(_o3_item(), fact_type="metric", fye_month=9,
+                             ticker="AAPL", lookups=_o3_lk(**{kind: value}))
+
+
+def test_existing_hit_scope_mismatch_with_request_parks():
+    hit = {"period_u_id": "gp_2025-04-01_2025-06-30", "start_date": "2025-04-01",
+           "end_date": "2025-06-30", "period_scope": "annual"}
+    with pytest.raises(PeriodResolutionError):
+        ensure_driver_period(_o3_item(), fact_type="metric", fye_month=9,
+                             ticker="AAPL", lookups=_o3_lk(existing=hit))
+
+
+def test_existing_hit_missing_dates_parks():
+    with pytest.raises(PeriodResolutionError):
+        ensure_driver_period(_o3_item(), fact_type="metric", fye_month=9,
+                             ticker="AAPL",
+                             lookups=_o3_lk(existing={"period_u_id": "gp_ST",
+                                                      "start_date": None,
+                                                      "end_date": None}))
+    # the MINIMAL-SHAPE twin: a bare lawful 3-key hit RESOLVES unchanged
+    hit = {"period_u_id": "gp_2025-04-01_2025-06-30", "start_date": "2025-04-01",
+           "end_date": "2025-06-30"}
+    out = ensure_driver_period(_o3_item(), fact_type="metric", fye_month=9,
+                               ticker="AAPL", lookups=_o3_lk(existing=hit))
+    assert out["period_u_id"] == "gp_2025-04-01_2025-06-30"
+
+
+def test_existing_hit_oneday_duration_parks():
+    hit = {"period_u_id": "gp_2025-06-30_2025-06-30", "start_date": "2025-06-30",
+           "end_date": "2025-06-30"}
+    with pytest.raises(PeriodResolutionError):
+        ensure_driver_period(_o3_item(), fact_type="metric", fye_month=9,
+                             ticker="AAPL", lookups=_o3_lk(existing=hit))
+
+
+def test_existing_hit_id_date_mismatch_parks():
+    hit = {"period_u_id": "gp_2025-01-01_2025-03-31", "start_date": "2025-04-01",
+           "end_date": "2025-06-30"}
+    with pytest.raises(PeriodResolutionError):
+        ensure_driver_period(_o3_item(), fact_type="metric", fye_month=9,
+                             ticker="AAPL", lookups=_o3_lk(existing=hit))
+
+
+def test_existing_hit_supplied_time_type_conflict_parks():
+    hit = {"period_u_id": "gp_2025-04-01_2025-06-30", "start_date": "2025-04-01",
+           "end_date": "2025-06-30", "time_type": "instant"}
+    with pytest.raises(PeriodResolutionError):
+        ensure_driver_period(_o3_item(), fact_type="metric", fye_month=9,
+                             ticker="AAPL", lookups=_o3_lk(existing=hit))
+
+
+def test_malformed_sec_result_parks_typed():
+    with pytest.raises(PeriodResolutionError):
+        ensure_driver_period(_o3_item(), fact_type="metric", fye_month=9,
+                             ticker="AAPL",
+                             lookups=_o3_lk(sec={"start": "not-a-date",
+                                                 "end": "2025-06-30"}))
+
+
+def test_malformed_predict_result_parks_typed():
+    with pytest.raises(PeriodResolutionError):
+        ensure_driver_period(_o3_item(), fact_type="metric", fye_month=9,
+                             ticker="AAPL",
+                             lookups=_o3_lk(predict={"start": "2025-04-01",
+                                                     "end": "junk"}))
+
+
+def test_lookup_result_extra_key_parks():
+    # ONE node asserting the exact-allowed-keys law for ALL THREE callbacks
+    lawful = {"period_u_id": "gp_2025-04-01_2025-06-30",
+              "start_date": "2025-04-01", "end_date": "2025-06-30"}
+    with pytest.raises(PeriodResolutionError):
+        ensure_driver_period(_o3_item(), fact_type="metric", fye_month=9,
+                             ticker="AAPL",
+                             lookups=_o3_lk(existing=dict(lawful, rogue=1)))
+    with pytest.raises(PeriodResolutionError):
+        ensure_driver_period(_o3_item(), fact_type="metric", fye_month=9,
+                             ticker="AAPL",
+                             lookups=_o3_lk(sec={"start": "2025-04-01",
+                                                 "end": "2025-06-30", "x": 1}))
+    with pytest.raises(PeriodResolutionError):
+        ensure_driver_period(_o3_item(), fact_type="metric", fye_month=9,
+                             ticker="AAPL",
+                             lookups=_o3_lk(predict={"start": "2025-04-01",
+                                                     "end": "2025-06-30",
+                                                     "note": "hi"}))

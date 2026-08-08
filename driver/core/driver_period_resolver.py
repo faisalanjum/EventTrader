@@ -174,20 +174,27 @@ def ensure_driver_period(item, *, fact_type, fye_month, ticker=None,
     is_standard = (time_type == "duration" and not item.get("half") and not item.get("month")
                    and not item.get("long_range_end_year"))
     if is_standard and not cal and ticker and fy:
+        # P-O3 (U-6): clean miss is `result is None` EXACTLY — a falsey
+        # non-None result ({} included) is an affirmative answer and must be
+        # lawful or PARK; nothing falls through on truthiness.
+        want_scope = "quarter" if fq else "annual"
         found = lk["existing"](ticker, fy, fq)
-        if found:
+        if found is not None:
+            found = _lawful_hit("existing", found, want_scope, time_type)
             return _result(found["period_u_id"],
-                           found.get("period_scope") or ("quarter" if fq else "annual"),
+                           found.get("period_scope") or want_scope,
                            found.get("time_type") or "duration",
                            found.get("start_date"), found.get("end_date"))
         sec = lk["sec"](ticker, fy, f"Q{fq}" if fq else "FY")
-        if sec:
+        if sec is not None:
+            sec = _lawful_hit("sec", sec, want_scope, time_type)
             return _result(build_period_id(sec["start"], sec["end"]),
-                           "quarter" if fq else "annual", "duration",
+                           want_scope, "duration",
                            sec["start"], sec["end"])
         if fq:
             pred = lk["predict"](ticker, fy, fq)
-            if pred:
+            if pred is not None:
+                pred = _lawful_hit("predict", pred, "quarter", time_type)
                 return _result(build_period_id(pred["start"], pred["end"]),
                                "quarter", "duration",
                                pred["start"], pred["end"])
@@ -345,6 +352,70 @@ def _cumulative(item, scope, time_type, fye, cal, ticker, lk):
         prior_end = _compute_fiscal_dates(fye, fy - 1, f"Q{q}")[1]
         start = (date.fromisoformat(prior_end) + timedelta(days=1)).isoformat()
     return _result(build_period_id(start, end), scope, "duration", start, end)
+
+
+_HIT_KEYS = {
+    # exact allowed key sets per callback kind (P-O3): unknown extras FAIL CLOSED
+    "existing": (frozenset({"period_u_id", "start_date", "end_date"}),
+                 frozenset({"period_scope", "time_type"})),
+    "sec": (frozenset({"start", "end"}), frozenset()),
+    "predict": (frozenset({"start", "end"}), frozenset()),
+}
+
+
+def _lawful_hit(kind, result, want_scope, want_time_type):
+    """P-O3 (U-6): every AFFIRMATIVE lookup answer passes this ONE checker and
+    is returned UNCHANGED — no normalization, no defaulting, no discarding.
+    Anything unlawful PARKS typed; the callbacks' own contracts are the law
+    (existing -> {period_u_id, start_date, end_date} [+ scope/time_type,
+    equal-or-park]; sec/predict -> {start, end}). Date grammar goes through
+    the F-IDLAW owner (build_period_id -> parse_period_id) — no second ISO
+    rule exists here."""
+    if not isinstance(result, dict) or not result:
+        raise PeriodResolutionError(
+            f"PERIOD_SYM: {kind} lookup returned a non-dict or empty answer "
+            f"{result!r} — an affirmative result must be lawful, park")
+    required, optional = _HIT_KEYS[kind]
+    keys = frozenset(result)
+    extra = keys - required - optional
+    if extra:
+        raise PeriodResolutionError(
+            f"PERIOD_SYM: {kind} lookup answer carries unknown key(s) "
+            f"{sorted(extra)} — park")
+    missing = required - keys
+    if missing or any(result.get(k) is None for k in required):
+        raise PeriodResolutionError(
+            f"PERIOD_SYM: {kind} lookup answer is missing {sorted(missing) or 'values'} "
+            f"of its required shape — park")
+    if kind == "existing":
+        u_id = result["period_u_id"]
+        if not isinstance(u_id, str):
+            raise PeriodResolutionError(
+                f"PERIOD_SYM: existing hit period_u_id must be a string, got "
+                f"{type(u_id).__name__} — park")
+        start, end = result["start_date"], result["end_date"]
+        rebuilt = build_period_id(start, end)     # the F-IDLAW owner judges
+        if rebuilt != u_id:
+            raise PeriodResolutionError(
+                f"PERIOD_SYM: existing hit dates {start}..{end} rebuild to "
+                f"{rebuilt}, not the returned id {u_id} — park")
+        got_scope = result.get("period_scope")
+        if got_scope is not None and got_scope != want_scope:
+            raise PeriodResolutionError(
+                f"SCOPE_PAIR: existing hit scope {got_scope!r} conflicts with "
+                f"the request's {want_scope!r} — park")
+        got_tt = result.get("time_type")
+        if got_tt is not None and got_tt != want_time_type:
+            raise PeriodResolutionError(
+                f"INSTANT: existing hit time_type {got_tt!r} conflicts with "
+                f"the requested {want_time_type!r} — park")
+    else:
+        try:
+            parse_period_id(build_period_id(result["start"], result["end"]))
+        except IdLawError as e:
+            raise PeriodResolutionError(
+                f"ISO: {kind} lookup dates are not lawful ({e}) — park")
+    return result
 
 
 def _preserved(item):
