@@ -1406,7 +1406,7 @@ def test_823_frozen_mappings_are_READ_ONLY_VIEWS_not_copies_of_convenience():
     for wrap in (dict, MappingProxyType):
         backing_slot = {"value": Decimal("1"), "scale_multiplier": Decimal(1),
                         "unit_scale_evidence": None}
-        backing_proof = {"polarity": "higher_favorable", "basis": "source_framing",
+        backing_proof = {"polarity": "favorable", "basis": "source_framing",
                          "evidence": "e", "sentence": "s"}
         d = {k: None for k in ITEM_FIELDS}
         d.update(driver_name="d", driver_state="reported", quote="q",
@@ -1422,7 +1422,7 @@ def test_823_frozen_mappings_are_READ_ONLY_VIEWS_not_copies_of_convenience():
         backing_slot["scale_multiplier"] = Decimal(999)
         backing_proof["polarity"] = "lower_favorable"
         assert item.level_low["scale_multiplier"] == Decimal(1), wrap
-        assert item.polarity_proof["polarity"] == "higher_favorable", wrap
+        assert item.polarity_proof["polarity"] == "favorable", wrap
 
 
 def test_823_DERIVED_inventory_every_public_v2_dataclass_is_deeply_frozen():
