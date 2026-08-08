@@ -2001,6 +2001,27 @@ MUTATIONS = [
      "    if value < Decimal('-1'):                       # -0 compares equal to 0 and is lawful",
      "driver/relocation/test_semantic_fact_value.py::"
      "test_EU112_a_negative_no_format_value_never_binds"),
+
+    (261, "EU-113: the context malformed verdict arm drifts and bad shapes bind",
+     "driver/relocation/inline_html.py",
+     "        if verdict == 'malformed':\n            return None\n        if verdict == 'unsupported':           # the string IS the reason \u2014 the\n            return 'unsupported_context_type'",
+     "        if verdict == 'malformedX':\n            return None\n        if verdict == 'unsupported':           # the string IS the reason \u2014 the\n            return 'unsupported_context_type'",
+     "driver/relocation/test_context_content_model.py::"
+     "test_827B12_an_ORDINARY_attribute_is_malformed_everywhere"),
+
+    (262, "EU-113: the context unsupported verdict arm drifts and unsupported types bind",
+     "driver/relocation/inline_html.py",
+     "        if verdict == 'malformed':\n            return None\n        if verdict == 'unsupported':           # the string IS the reason \u2014 the\n            return 'unsupported_context_type'",
+     "        if verdict == 'malformed':\n            return None\n        if verdict == 'unsupportedX':           # the string IS the reason \u2014 the\n            return 'unsupported_context_type'",
+     "driver/relocation/test_context_content_model.py::"
+     "test_827B12_a_NO_NAMESPACE_custom_type_parks_as_unsupported"),
+
+    (263, "EU-114: the instant period pair is emitted with its positions swapped",
+     "driver/relocation/inline_html.py",
+     "    return {'period': ('', _leaf(inst[0])) if inst else",
+     "    return {'period': (_leaf(inst[0]), '') if inst else",
+     "driver/relocation/test_context_content_model.py::"
+     "test_827B14_instant_value_is_rebuilt"),
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",

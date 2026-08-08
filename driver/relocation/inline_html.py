@@ -1431,6 +1431,16 @@ def _parse_context(context):
                      *((d, 'startDate') for d in start),
                      *((d, 'endDate') for d in end),
                      *((f, 'forever') for f in ever)):
+        # CL-076 (#827, EU-113): FAIL-CLOSED adjudication of this ladder's
+        # mechanics — the two words compared are _shape's OWN published
+        # verdict vocabulary (its docstring names all three), and BOTH
+        # arms REFUSE: 'malformed' returns None so the caller names the
+        # structural failure, 'unsupported' returns the named reason
+        # verbatim; nothing binds on a non-'ok' verdict. The [0]
+        # subscripts above are reachable only AFTER the exactly-one
+        # cardinality gates (len(...) != 1 -> return None), so they can
+        # never pick among candidates. Either word drifting is loud
+        # (measured: 37 and 3 reds).
         verdict = _shape(el, name)
         if verdict == 'malformed':
             return None
@@ -1564,6 +1574,13 @@ def _parse_context(context):
     # collapses UNICODE whitespace and deletes zero-width characters, so an
     # NBSP- or ZWSP-padded date was normalised into a clean one before the
     # parser could refuse it. The parser strips XML whitespace itself.
+    # CL-076 (#827, EU-114): the emitted pair's POSITIONS carry the
+    # meaning downstream — ('', instant) IS the instant form (empty start),
+    # (start, end) the duration form, ('', '') the no-datable-period form
+    # (<forever> and friends park at their own owner). Every consumer reads
+    # the pair positionally, so a swap would silently retype an instant as
+    # a start-only duration (measured: 5 reds); the [0] subscripts are
+    # guarded by the same exactly-one gates as above.
     return {'period': ('', _leaf(inst[0])) if inst else
                       (_leaf(start[0]), _leaf(end[0])) if start else ('', ''),
             # `dims` KEEPS ITS ORIGINAL MEANING — the written spellings, which
