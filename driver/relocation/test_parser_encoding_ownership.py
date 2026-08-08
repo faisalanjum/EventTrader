@@ -237,3 +237,20 @@ def test_EU039_the_parser_policy_never_expands_hidden_content():
     root = etree.fromstring(doc, etree.XMLParser(**opts))
     assert root.text is None                      # nothing expanded in place
     assert b"boom" not in etree.tostring(root)    # the replacement text never appears
+
+
+def test_EU131_a_foreign_renderer_parse_warning_refuses_typed():
+    """EU-131 (FAIL-CLOSED): the renderer parse suppresses exactly ONE
+    deliberate warning (XMLParsedAsHTMLWarning — parsing XML-declared
+    filings as HTML is the function's stated choice). Every OTHER parser
+    warning is a signal about the bytes and must refuse TYPED
+    (SemanticParseError), never pass silently. Measured recall: 1,903
+    frozen-corpus documents, zero refusals (g2_evid_recall_EU-131.txt).
+    The locator-shaped input below provokes bs4's
+    MarkupResemblesLocatorWarning — a real signal that the caller handed a
+    URL, not markup."""
+    import pytest as _pt
+    from inline_html import SemanticParseError, _soup
+    with _pt.raises(SemanticParseError, match="renderer parse warning"):
+        _soup("http://example.com/not-markup.htm")
+    assert _soup("<p>real markup</p>") is not None   # the lawful twin

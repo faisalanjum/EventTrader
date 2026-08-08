@@ -805,9 +805,18 @@ def _soup(html_text):
     so `XMLParsedAsHTMLWarning` is ours to ignore — here, for this call, and
     nowhere else. `catch_warnings` restores the caller's filters on exit.
     """
+    # EU-131 (#827 FAIL-CLOSED; measured recall 1,903 corpus docs / 0
+    # refusals, g2_evid_recall_EU-131.txt): every parser warning EXCEPT the
+    # one deliberate suppression is a signal about the bytes and refuses
+    # TYPED — never a silent pass.
     with warnings.catch_warnings():
+        warnings.simplefilter('error')
         warnings.filterwarnings('ignore', category=XMLParsedAsHTMLWarning)
-        return BeautifulSoup(html_text, 'lxml')
+        try:
+            return BeautifulSoup(html_text, 'lxml')
+        except Warning as w:
+            raise SemanticParseError(
+                f"renderer parse warning: {type(w).__name__}: {w}") from w
 
 
 #: The three namespaces this parser consumes. Fixed standard URIs are the
