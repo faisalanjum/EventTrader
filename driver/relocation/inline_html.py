@@ -569,23 +569,27 @@ def _hidden_cell(cell):
     `_effective_hidden`'s business; sites that need "does this cell show any
     text" read the representation slice, which the walk owns.
 
-    EU-102 (#827), RECONCILE-PROOFS-THEN-DELETE-OR-MOVE — the reconciliation
-    is DONE and recorded; the deletion is HELD pending a ruling:
-      * production reach: ZERO (two-lane trace g2_fevid_call_trace_v5.tsv).
-      * the card named five proof purposes in test_row_label_span.py
-        (declaration-not-substring, aria-hidden-is-not-CSS, the display
-        grammar, the content-visibility values, the overridable hidden
-        attribute). ALL FIVE now ride `_effective_hidden` instead — the
-        owner that production actually reaches — so none of them needs this
-        helper any more.
-      * BUT a full repo grep found TEN MORE proof-lane CALL SITES the trace
-        did not name (11 mentions; one is prose): scripts/driver_seed/relocate_probe/phase2/
-        m1_structure_inventory.py (2), m2_candidate_packets.py (2),
-        m2_native_table_shadow.py, m2_native_table_shadow_r2.py,
-        m2_native_table_shadow_r3.py (2), m2_wp1_8k_qualify.py,
-        m4_reader_residual.py — ten calls in eight files. Deleting the
-        helper breaks every one at call time, so the deletion is a wider change than the card's clause
-        anticipated and is logged as ISS-008 rather than made silently.
+    EU-102 (#827), CLOSED per SEQ 812 — a SUPPORTED proof-only adapter, and
+    the support is written here so it is never mistaken for an unexamined
+    keep:
+      * production callers: ZERO (two-lane trace
+        g2_fevid_call_trace_v5.tsv). This function exists for the proof lane
+        alone.
+      * proof callers: TEN live call sites in eight relocate_probe phase2
+        scripts (m1_structure_inventory ×2, m2_candidate_packets ×2,
+        m2_native_table_shadow, _r2, _r3 ×2, m2_wp1_8k_qualify,
+        m4_reader_residual), all verified to import and run at closure.
+        THEY are the support the old card lacked.
+      * it is an ADAPTER, not a second engine: no CSS vocabulary and no
+        decision of its own — it asks `_advance`, the one combine owner, a
+        DIFFERENT question (this ONE element, standalone) from the one
+        `_effective_hidden` answers (the whole ancestry folded). That is why
+        the manual proof walkers use it and why mechanically rewriting them
+        to `_effective_hidden(x)[0]` would change what they measure.
+      * the five PRODUCTION-behaviour tests correctly moved to
+        `_effective_hidden` and stay there.
+      * if those scripts are ever proved dead, they and this adapter go
+        together in the final minimality sweep.
     """
     prune, vis, unsup = _advance('visible', cell)
     if unsup:
