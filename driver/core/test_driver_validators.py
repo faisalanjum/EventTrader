@@ -35,7 +35,6 @@ def mk(lane="metric", shape="point", **over):
         "driver_name": name, "driver_state": {"metric": "reported",
         "guidance": "unknown", "surprise": "beat", "action_event": "announced"}[lane],
         "quote": "verbatim source words", "date": SRC_TIME, "source_type": "8k",
-        "event_time": SRC_TIME,
         "level_low": None, "level_high": None, "level_unit": None,
         "change_value": None, "change_unit": None,
         "comparison_low": None, "comparison_high": None, "comparison_baseline": None,
@@ -275,6 +274,67 @@ def test_F5_guide_vs_own_prior_is_movement_not_surprise():
         compose_surprise_scope("guidance", "previous_guidance")
 
 
+def test_827B9_composer_derives_from_the_one_owner_STRUCTURAL():
+    """#827 B9 STRUCTURAL closure — NOT behavioral (outcomes already lawful):
+    the composer's whole lawful range IS SURPRISE_SCOPE_BY_PAIR (FINAL_DESIGN
+    OD-21), asked of the one owner, never respelled here; the identity gate's
+    vocabulary is that same owner's value set."""
+    from driver.core.driver_ids import SURPRISE_SCOPE_BY_PAIR, _SURPRISE_TYPES
+    composed = {p: compose_surprise_scope(*p) for p in SURPRISE_SCOPE_BY_PAIR}
+    assert composed == dict(SURPRISE_SCOPE_BY_PAIR)
+    assert frozenset(composed.values()) == _SURPRISE_TYPES
+
+
+def test_827B9_all_three_compose_to_build_id_paths():
+    """Every lawful pair -> composer -> build_id: the composed word passes the
+    identity gate and lands verbatim in fact_scope (distinct lawful twins)."""
+    from driver.core.driver_ids import SURPRISE_SCOPE_BY_PAIR
+    scopes = set()
+    for pair, word in SURPRISE_SCOPE_BY_PAIR.items():
+        _fid, scope = build_id("src-1", "revenue_surprise",
+                               surprise=compose_surprise_scope(*pair))
+        assert scope == f"surprise={word}"
+        scopes.add(scope)
+    assert len(scopes) == 3
+
+
+def test_827B9_composer_malformed_inputs_one_generic_ValueError():
+    """FROZEN composer contract (SEQ 350): every malformed input — unhashable
+    list/dict/set, swapped order, case, None, int, bytes, tuple-in-pair —
+    raises the ONE generic ValueError, never TypeError (the string gate
+    guards the map ask)."""
+    for pair in ((["actual"], "consensus"), ("actual", {"consensus": 1}),
+                 ({"actual"}, {"consensus"}), ([], []),
+                 ("consensus", "actual"), ("Actual", "consensus"),
+                 (None, "consensus"), ("actual", None), (5, "consensus"),
+                 ("actual", b"previous_guidance"), (("actual",), "consensus")):
+        with pytest.raises(ValueError, match="cannot compose surprise scope"):
+            compose_surprise_scope(*pair)
+
+
+def test_827B9_du05_refusal_message_exact():
+    """DU-05: the ONE special refusal keeps its exact wording."""
+    with pytest.raises(ValueError, match=r"^guide vs own prior guide is "
+                                         r"guidance movement, never a surprise$"):
+        compose_surprise_scope("guidance", "previous_guidance")
+
+
+def test_827B9_gvc_period_rule_with_avc_lawful_twin():
+    """§7.2/OD-21 (FINAL_DESIGN :217): g_v_c with no target period -> the
+    PERIOD_LANE REJECT naming the guidance TARGET period; the a_v_c twin with
+    the SAME missing period raises no PERIOD_LANE row (the rule is
+    guidance_vs_consensus-only)."""
+    gvc = mk("surprise", surprise="guidance_vs_consensus",
+             surprise_basis_hint="guidance", comparison_baseline="consensus",
+             period_u_id=None, gp_start_date=None, gp_end_date=None)
+    rows = [x for x in check(gvc, homes=[home_for(gvc)])
+            if x.code == "PERIOD_LANE"]
+    assert rows and "guidance TARGET period" in rows[0].message
+    avc = mk("surprise", period_u_id=None, gp_start_date=None, gp_end_date=None)
+    assert not [x for x in check(avc, homes=[home_for(avc)])
+                if x.code == "PERIOD_LANE"]
+
+
 def test_F1_surprise_slot_missing():
     s = mk("surprise", "point", surprise=None)
     assert "F1" in codes(check(s, homes=[home_for(mk('surprise', 'point'))]))
@@ -462,6 +522,19 @@ def test_numberless_fact_with_unit_rules():
     assert "UNIT" not in codes(check(ok))
     assert "UNIT" in codes(check(mk("metric", "numberless",
                                     change_unit="percent_yoy")))  # unit w/o change_value
+    # C2 (#827 F-UNITS, OD-11): ALL TEN contract units as INDEPENDENT literals —
+    # exactly {percent_yoy, percent_sequential} may take a unit numberless
+    # (growth framing; the subannual mk() default FY2025 Q3 keeps
+    # percent_sequential lawful here); the other EIGHT refuse. Literals typed
+    # from FINAL_DESIGN:203/:208, never derived from production constants.
+    for u in ("percent_yoy", "percent_sequential"):
+        ok = mk("guidance", "numberless", level_unit=u,
+                value_text="double-digit growth")
+        assert "UNIT" not in codes(check(ok)), u
+    for u in ("usd", "m_usd", "percent", "percent_points", "basis_points",
+              "count", "x", "unknown"):
+        assert "UNIT" in codes(check(mk("guidance", "numberless", level_unit=u,
+                                        value_text="strong growth"))), u
 
 
 def test_nan_rejects_cleanly():
@@ -503,7 +576,7 @@ def test_violation_order_is_caller_independent():
 
 def test_P4_old_guide_restated_after_period_end_stays_gvc():
     s = mk("surprise", "point", surprise="guidance_vs_consensus",
-           surprise_basis_hint="guidance")          # QP ended before event_time
+           surprise_basis_hint="guidance")          # QP ended before the stored date
     assert check(s, homes=[home_for(s)]) == []
 
 
@@ -581,3 +654,117 @@ def test_position_boundaries_and_open_shapes():
     assert surprise_position(90, 90, 100, 120) == "below"
     assert surprise_position(100, 100, 100, None) == "at_floor"
     assert surprise_position(120, 120, None, 120) == "at_ceiling"
+
+
+# ---- #827 B1 packet 2 (SEQ 288): the ONE F7 owner beside OD-21 -------------
+
+def test_827B2_F7_from_basis_and_event_time_unknown_in_one_door():
+    """SEQ 289's compact real RED. A guidance-basis fact whose slot SAYS
+    actual_vs_consensus, still carrying the previously-accepted stored
+    event_time: BEFORE this packet the door lacked UNKNOWN_FIELD and the
+    prefix logic wrongly added F7 from that spelling; AFTER it must name
+    UNKNOWN_FIELD (event_time is ENVELOPE vocabulary — the stored fact's
+    field is `date`, FINAL_DESIGN §7.1) plus F1 for the mismatch, and F7
+    must stay out because basis is guidance (OD-21: basis from the hint,
+    never a spelling)."""
+    s = mk("surprise", "point", surprise="actual_vs_consensus",
+           surprise_basis_hint="guidance", comparison_baseline="consensus",
+           period_u_id=QP_OPEN, gp_start_date="2025-10-01",
+           gp_end_date="2025-12-31", event_time=SRC_TIME)
+    got = codes(check(s, homes=[home_for(s)]))
+    assert "UNKNOWN_FIELD" in got and "F1" in got and "F7" not in got
+
+
+def test_827B2_actual_basis_with_opposite_spelling_keeps_F1_and_F7():
+    """Opposite twin: ACTUAL basis under a guidance-spelled slot on an open
+    period → F1 names the composed mismatch AND F7 still fires from the
+    basis — the tense law did not vanish with the spelling."""
+    s = mk("surprise", "point", surprise="guidance_vs_consensus",
+           surprise_basis_hint="actual", comparison_baseline="consensus",
+           period_u_id=QP_OPEN, gp_start_date="2025-10-01",
+           gp_end_date="2025-12-31")
+    got = codes(check(s, homes=[home_for(s)]))
+    assert "F1" in got and "F7" in got
+
+
+def test_827B2_malformed_stored_date_names_ISO_and_never_F7():
+    """Malformed, non-string and BARE stored `date`: the ISO owner names the
+    truth ("date must be the full ISO source timestamp") and F7 stays out —
+    the predicate never guesses from ten characters."""
+    for bad in ("2025-13-99T99:99:99", "not a time", 20251231, None,
+                "2025-12-31", "2025-10-23 16:00:00"):
+        # the last one is Python-parseable but the stored contract requires
+        # the 'T' separator (SEQ 290): ISO names it, F7 may not fire from it
+        s = mk("surprise", "point", date=bad, period_u_id=QP_OPEN,
+               gp_start_date="2025-10-01", gp_end_date="2025-12-31")
+        got = codes(check(s, homes=[home_for(s)]))
+        assert "ISO" in got and "F7" not in got, (bad, got)
+
+
+def test_827B2_malformed_gp_end_names_ISO_and_never_F7():
+    for bad in ("9999-99-99", 20251231):
+        s = mk("surprise", "point", period_u_id=QP_OPEN,
+               gp_start_date="2025-10-01", gp_end_date=bad)
+        got = codes(check(s, homes=[home_for(s)]))
+        assert "ISO" in got and "F7" not in got, (bad, got)
+
+
+def test_827B4_guidance_NAMED_surprise_must_not_match_a_guidance_home():
+    """SEQ 303 fail-closed regression: a surprise-typed Driver misnamed
+    `revenue_guidance` may NOT match the lawful `revenue_guidance` home —
+    only a terminal `_surprise` names a surprise Driver, so the misnamed
+    fact keeps its spelling and the expected home is
+    `revenue_guidance_guidance`, which does not exist here."""
+    s = mk("surprise", "point", driver_name="revenue_guidance",
+           surprise="guidance_vs_consensus", surprise_basis_hint="guidance")
+    home = home_for(mk("surprise", "point", surprise="guidance_vs_consensus",
+                       surprise_basis_hint="guidance"))
+    home["driver_name"] = "revenue_guidance"
+    got = codes(check(s, driver={"name": "revenue_guidance",
+                                 "fact_type": "surprise"}, homes=[home]))
+    assert "F9" in got, got            # no matching home: refused, not paired
+
+
+def test_827B2_missing_gp_end_on_dated_period_names_PERIOD_SYM_never_F7():
+    s = mk("surprise", "point", period_u_id=QP_OPEN,
+           gp_start_date="2025-10-01", gp_end_date=None)
+    got = codes(check(s, homes=[home_for(s)]))
+    assert "PERIOD_SYM" in got and "F7" not in got, got
+
+
+def test_827B2_compact_gp_end_names_PERIOD_SYM_never_F7():
+    """'20251231' parses under Python 3.11 but is not the canonical
+    gp_YYYY-MM-DD end spelling (SEQ 290): PERIOD_SYM names it and the F7
+    predicate may not fire beside that rejection."""
+    s = mk("surprise", "point", period_u_id=QP_OPEN,
+           gp_start_date="2025-10-01", gp_end_date="20251231")
+    got = codes(check(s, homes=[home_for(s)]))
+    assert "PERIOD_SYM" in got and "F7" not in got, got
+
+
+# ---- #827 B7 (SEQ 332/333): the period id is parsed, never sliced ----
+def test_827B7_non_string_period_id_rejects_never_crashes():
+    # reproduced fail-closed violation: an int period_u_id crashed _period's
+    # rebuild block with TypeError instead of recording a rejection
+    f = mk()
+    f["period_u_id"] = 123
+    got = codes(check(f))
+    assert "PERIOD_SYM" in got, got
+
+
+def test_827B7_lawful_dated_period_still_passes():
+    assert codes(check(mk())) == set()
+
+
+@pytest.mark.parametrize('pid, word', [
+    pytest.param('gp_ST', 'short_term', id='short-term'),
+    pytest.param('gp_MT', 'medium_term', id='medium-term'),
+    pytest.param('gp_LT', 'long_term', id='long-term'),
+    pytest.param('gp_UNDEF', 'undefined', id='undefined'),
+], )
+def test_827B7_all_four_sentinels_pass_the_validator_door(pid, word):
+    # sentinels are a GUIDANCE-lane right (FINAL_DESIGN §6.2); _period_lane
+    # correctly rejects them on metric/surprise/action facts
+    f = mk("guidance", period_u_id=pid, period_scope=word,
+           gp_start_date=None, gp_end_date=None)
+    assert codes(check(f)) == set(), (pid, codes(check(f)))

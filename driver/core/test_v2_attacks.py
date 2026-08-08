@@ -649,6 +649,14 @@ def test_ATTACK_annual_percent_sequential_is_rejected():
               time_type="duration")
     v = _violations(f)
     assert any("percent_sequential" in x.message for x in v), v
+    # C2 (#827, OD-11): the lawful annual TWIN — percent_yoy IS valid on an
+    # annual period; the refusal above is percent_sequential-specific. Same
+    # node by design (the twin exists to prove the rule's edge, not a new id).
+    twin = point(5, unit="percent_yoy", fiscal_year=2026,
+                 period_start_date="2026-01-01", period_end_date="2026-12-31",
+                 time_type="duration")
+    tv = _violations(twin)
+    assert not any("invalid on an annual period" in x.message for x in tv), tv
 
 
 # THE ONE ERROR EACH OF THESE ACTUALLY RAISES (#827 round 6). They accepted
