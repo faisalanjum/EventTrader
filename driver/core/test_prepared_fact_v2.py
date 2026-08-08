@@ -895,3 +895,22 @@ def test_W2_a_retired_key_refuses_at_the_exact_key_owner():
     src = inspect.getsource(prepared_fact_v2)
     assert "RETIRED_FIELDS" not in src
     assert "level_unit_raw" not in src
+
+
+def test_W6_every_emitted_stored_key_traces_to_a_named_owner():
+    """W6 (Commit N/A — proof only): the explicit adapter mapping stays; this
+    reconciles EVERY key to_stored_fact emits against the stored-contract
+    owner (driver_validators._ALLOWED_FIELDS). Total, both directions: every
+    emitted key is contract-owned, and the ONE lawful non-emission is named
+    (member_refs — the optional legacy lane's field, deleted from the clean
+    emission at T10)."""
+    from driver.core.driver_validators import _ALLOWED_FIELDS
+    noop = {"existing": lambda *a: None, "sec": lambda *a: None,
+            "predict": lambda *a: None, "corrected_fye": lambda *a: None}
+    f = fact(time_type="duration", fiscal_year=2025, fiscal_quarter=1)
+    stored = prepared_fact_v2.to_stored_fact(
+        f, driver={"name": "revenue", "fact_type": "metric"},
+        source=_PROD["source"], fye_month=12, lookups=noop)
+    emitted = set(stored)
+    assert emitted <= set(_ALLOWED_FIELDS), sorted(emitted - set(_ALLOWED_FIELDS))
+    assert set(_ALLOWED_FIELDS) - emitted == {"member_refs"}
