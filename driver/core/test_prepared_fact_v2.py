@@ -839,9 +839,10 @@ def test_T10_the_clean_path_emits_no_member_refs():
 def test_GRADE_DOMAIN_source_owned_evidence_cannot_alter_selection():
     """GRADE-DOMAIN (arm: enforcement/proof — the input-role contract is
     ALREADY the door's law, measured, and this node pins it):
-    1. the DOOR refuses source-owned evidence inside an item (SchemaError:
-       "supplied by the verifier, never inside the item") — so a gold or
-       produced constructor CANNOT smuggle selection-bearing XBRL evidence;
+    1. the DOOR refuses source-owned evidence inside an item — since W9c
+       the refusal comes from the ONE exact-key owner (the fields are
+       derived OUTSIDE ITEM_FIELDS, so they are necessarily unexpected) —
+       a gold or produced constructor CANNOT smuggle XBRL evidence;
     2. the matching identity is structurally outside the source-owned pair
        (SOURCE_OWNED_FIELDS and ITEM_FIELDS are disjoint; record_key reads
        only lane + per_x + the 32 + the locator);
@@ -850,7 +851,7 @@ def test_GRADE_DOMAIN_source_owned_evidence_cannot_alter_selection():
        for counting; the group is recorded and emit-once flags."""
     from driver.core.fact_match import record_key
     from driver.core.prepared_fact_v2 import SOURCE_OWNED_FIELDS
-    with pytest.raises(SchemaError, match="SOURCE-OWNED"):
+    with pytest.raises(SchemaError, match="32 model-owned fields"):
         fact(quote=QUOTE_BOTH, xbrl_concept_raw="us-gaap:Revenues",
              member_refs=[])                                     # control 1
     assert not set(SOURCE_OWNED_FIELDS) & set(ITEM_FIELDS)       # control 2

@@ -135,16 +135,19 @@ def test_ATTACK_unequal_29_digit_endpoints_are_not_a_point():
 # ------------------------------------------------------- 3. XBRL boundary ----
 
 def test_ATTACK_model_input_cannot_supply_the_code_owned_xbrl_fields():
-    """Refused on EVERY constructor, not just the model door: an earlier version
-    let `from_verified_source` accept model-supplied XBRL fields silently."""
+    """Refused on EVERY constructor, not just the model door. Since W9c the
+    refusal comes from the ONE exact-key owner (the source-owned pair is
+    derived OUT of ITEM_FIELDS, so it is necessarily unexpected) — and that
+    owner deliberately NEVER echoes caller keys (extras by COUNT only, the
+    no-echo law), so this node asserts the refusal and its exact-key class,
+    not a name echo. As the board put it: this now proves D4; A-D8's route
+    is the derivation itself."""
     for field, value in (("xbrl_concept_raw", "MODEL-INVENTED"), ("member_refs", [])):
         payload = {"fact_type": "metric", "part_ref": "p01",
                    "occurrence_in_part": None, "per_x": None,
                    "item": {**item(), field: value}}
-        with pytest.raises(SchemaError) as e:
+        with pytest.raises(SchemaError, match="32 model-owned fields"):
             PreparedFactV2.from_dict(payload)
-        assert field in str(e.value)
-        _refused(SchemaError, field, payload)        # and through the trusted door
 
 
 def test_ATTACK_every_fact_level_key_must_be_present_explicitly():

@@ -463,14 +463,10 @@ class PreparedFactV2:
         raw = d.get("item")
         if not isinstance(raw, dict):
             raise SchemaError("item: required object of the 32 model-owned fields")
-        # SOURCE-OWNED fields are refused on EVERY door, always. The verified
-        # bundle arrives as a separate, code-supplied argument — never inside
-        # the item dict — so no caller can smuggle one in beside a real one.
-        source_owned = set(SOURCE_OWNED_FIELDS) & set(raw)
-        if source_owned:
-            raise SchemaError(
-                f"{sorted(source_owned)} is/are SOURCE-OWNED: verified XBRL "
-                f"evidence is supplied by the verifier, never inside the item")
+        # W9c (#827): the source-owned PRECHECK is DELETED — proof by
+        # construction: ITEM_FIELDS is derived as the dataclass fields MINUS
+        # SOURCE_OWNED_FIELDS, so a source-owned key is necessarily
+        # unexpected and the exact-key owner below refuses it regardless.
         _check_keys(raw, ITEM_FIELDS,
                     "the item (the 32 model-owned fields, null where absent)")
         # No freeze here: the dataclass boundary does it for EVERY path, so a
