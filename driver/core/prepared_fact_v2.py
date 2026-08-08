@@ -40,11 +40,11 @@ from dataclasses import dataclass, field
 
 from types import MappingProxyType
 
-from driver.core.driver_ids import valid_source_id
+from driver.core.driver_ids import split_terminal_suffix, valid_source_id
 from driver.core.slot_convert import SlotConversionError, convert_slot, validate_slot
 
 __all__ = ["SchemaError", "ProductionValidationError", "SourceUnavailable",
-           "OUTCOME_CLASSES", "PreparedItemV2",
+           "OUTCOME_CLASSES", "NUMERIC_SLOTS", "PreparedItemV2",
            "PreparedFactV2", "RunInputV2", "ITEM_FIELDS", "SOURCE_OWNED_FIELDS",
            "RETIRED_FIELDS", "split_slice_part", "verify_occurrence",
            "check_per_x_against_name", "to_stored_fact", "validate_via_production",
@@ -62,14 +62,13 @@ RETIRED_FIELDS = frozenset({
 })
 SOURCE_OWNED_FIELDS = ("member_refs", "xbrl_concept_raw")
 
-_NUMERIC_SLOTS = ("level_low", "level_high", "change_value",
+NUMERIC_SLOTS = ("level_low", "level_high", "change_value",
                   "comparison_low", "comparison_high")
 
 # MODULE-PRIVATE, and deliberately not an attribute of any exported class: as a
 # class attribute it was reachable as `PreparedItemV2._ATTACH_TOKEN`, so the
 # "private" gate could be opened by anyone who read the source.
 _ATTACH_TOKEN = object()
-_TERMINAL_SUFFIXES = ("_guidance", "_surprise")
 
 class SchemaError(ValueError):
     """The input violates PreparedFact v2. Reject — fix and resubmit."""
@@ -177,10 +176,7 @@ def check_per_x_against_name(driver_name, per_x):
         return "per_x must be a non-blank snake_case denominator or null"
     if "_per_" in driver_name:
         stated = driver_name.split("_per_", 1)[1]
-        for suffix in _TERMINAL_SUFFIXES:
-            if stated.endswith(suffix):
-                stated = stated[: -len(suffix)]
-                break
+        stated, _ = split_terminal_suffix(stated)
         if stated == per_x:
             return None
         return (f"name {driver_name!r} states denominator {stated!r}, not "
@@ -364,10 +360,14 @@ class PreparedItemV2:
         spans = self.measurement_raw_spans
         if not isinstance(spans, (list, tuple)) or any(
                 not isinstance(s, str) or not s.strip() for s in spans):
-            raise SchemaError("measurement_raw_spans: list of non-blank strings ([] legal)")
+            raise SchemaError(
+                "measurement_raw_spans: list or tuple of non-blank strings "
+                "([] legal)")
         parts = self.slice_parts
         if not isinstance(parts, (list, tuple)):
-            raise SchemaError("slice_parts: list of 'kind:value' strings ([] legal)")
+            raise SchemaError(
+                "slice_parts: list or tuple of 'kind:value' strings "
+                "([] legal)")
         for p in parts:
             if not isinstance(p, str):
                 raise SchemaError(
@@ -422,7 +422,7 @@ class PreparedItemV2:
 
     def _check_numeric_slots(self):
         lane = self.lane
-        for name in _NUMERIC_SLOTS:
+        for name in NUMERIC_SLOTS:
             s = getattr(self, name)
             if s is None:
                 continue
@@ -545,9 +545,7 @@ class RunInputV2:
             # THE one predicate (driver_ids). This ran only a non-blank-string
             # check while its own docstring claimed otherwise, so "x/y" was
             # accepted here and rejected by `build_id` much later.
-            raise SchemaError(
-                "source_id must satisfy the ONE id law "
-                "(driver_ids.valid_source_id: [A-Za-z0-9._-], colon-free)")
+            raise SchemaError("source_id is invalid")
         if not isinstance(self.calendar_override, bool):
             raise SchemaError("calendar_override: must be bool")
         if type(self.facts) is not list or any(
@@ -583,7 +581,8 @@ def to_stored_fact(fact, *, driver, source, fye_month, source_id=None,
     """Map ONE PreparedFactV2 onto the stored-contract dict production
     validates. Raises ProductionValidationError where the CLI would PARK."""
     from driver.core.driver_ids import IdLawError, build_id, norm
-    from driver.core.driver_period_resolver import (PeriodResolutionError,
+    from driver.core.driver_period_resolver import (PERIOD_ITEM_KEYS,
+                                                    PeriodResolutionError,
                                                     ensure_driver_period)
     from driver.core.driver_validators import compose_surprise_scope
 
@@ -597,10 +596,7 @@ def to_stored_fact(fact, *, driver, source, fye_month, source_id=None,
             raise ProductionValidationError(f"SURPRISE_COMPOSE: {e}")
     try:
         period = ensure_driver_period(
-            {k: getattr(it, k) for k in
-             ("period_start_date", "period_end_date", "fiscal_year",
-              "fiscal_quarter", "half", "month", "long_range_start_year",
-              "long_range_end_year", "sentinel_class", "time_type", "period_scope")},
+            {k: getattr(it, k) for k in PERIOD_ITEM_KEYS},
             fact_type=driver["fact_type"], fye_month=fye_month,
             ticker=source.get("ticker"), calendar_override=calendar_override,
             lookups=lookups)
@@ -609,7 +605,7 @@ def to_stored_fact(fact, *, driver, source, fye_month, source_id=None,
 
     values = {}
     try:
-        for name in _NUMERIC_SLOTS:
+        for name in NUMERIC_SLOTS:
             unit = it.change_unit if name == "change_value" else it.level_unit
             values[name] = convert_slot(unit, getattr(it, name))
     except SlotConversionError as e:
@@ -618,12 +614,13 @@ def to_stored_fact(fact, *, driver, source, fye_month, source_id=None,
         # here untyped. The CLI already has the code for it: NOT_STORABLE.
         raise ProductionValidationError(f"NOT_STORABLE: {e}")
 
-    # NO surprise-state correction here, deliberately. An earlier version
-    # COPIED run_event's F7 tense check and wordless-polarity demotion, which
-    # is a second implementation of the same law — the mistake this whole round
-    # exists to remove. The staged adapter therefore validates the state AS
-    # STATED, and the divergence is named below; G9 stays gated until V2 runs
-    # through the real run_event (or production extracts one shared helper).
+    # NO surprise-state correction here, deliberately. F7 is owned by the
+    # shared validator (driver_validators._actual_surprise_before_period_end,
+    # reached through validate_fact on the stored `date`), so this adapter
+    # carries no copy of it. The wordless beat/miss in_line correction
+    # remains absent here and is the named divergence below; G9 stays gated
+    # until V2 runs through the real run_event (or production extracts one
+    # shared helper).
 
     try:
         slice_parts = [split_slice_part(p) for p in it.slice_parts]
@@ -672,7 +669,6 @@ def to_stored_fact(fact, *, driver, source, fye_month, source_id=None,
 # Named explicitly, because "close enough to production" is the claim that
 # hides defects — G9 stays switch-gated until this tuple is empty.
 RUN_EVENT_DIVERGENCES = (
-    "the F7 impossible-tense check on an actual surprise",
     "the wordless beat/miss in_line correction and polarity demotion",
     "fusion of same-scope facts before collision handling",
     "the OD-8 collision ladder and sibling probe",

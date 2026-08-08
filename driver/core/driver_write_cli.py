@@ -22,16 +22,18 @@ from collections.abc import Mapping
 from decimal import Decimal
 
 from driver.core.driver_fusion import fuse_event
-from driver.core.driver_ids import IdLawError, _slice_value, build_id, norm
-from driver.core.driver_period_resolver import PeriodResolutionError, ensure_driver_period
+from driver.core.driver_ids import (GUIDANCE_BASIS, IdLawError, _slice_value,
+                                    build_id, norm)
+from driver.core.driver_period_resolver import (PERIOD_ITEM_KEYS,
+                                                PeriodResolutionError,
+                                                ensure_driver_period)
 from driver.core.driver_units import UnitResolutionError, resolve_driver_units
 from driver.core.driver_validators import (_expected_home_name, _home_mismatch,
+                                           _actual_surprise_before_period_end,
                                            compose_surprise_scope, validate_fact)
 from driver.core.driver_writer import WriterError, assert_writes_enabled, plan_event_write
 from driver.core.slice_menu import (axis_member_pairs, build_menu,
                                     check_member_refs, match_xbrl_fact)
-
-__all__ = ["CLI_CODES", "run_event", "load_run_input"]
 
 # every code the CLI itself can emit (planner codes ride on PlanResult.code;
 # validator codes ride on Violation.code) — the every-branch test pins this set
@@ -188,10 +190,7 @@ def _tail(i, pf, src, driver, fye_month, period_lookups, calendar_override):
 
     try:
         period = ensure_driver_period(
-            {k: getattr(pf, k) for k in
-             ("period_start_date", "period_end_date", "fiscal_year",
-              "fiscal_quarter", "half", "month", "long_range_start_year",
-              "long_range_end_year", "sentinel_class", "time_type", "period_scope")},
+            {k: getattr(pf, k) for k in PERIOD_ITEM_KEYS},
             fact_type=driver["fact_type"], fye_month=fye_month,
             ticker=src.get("ticker"), calendar_override=calendar_override,
             lookups=period_lookups)
@@ -216,9 +215,11 @@ def _tail(i, pf, src, driver, fye_month, period_lookups, calendar_override):
         return ("parked", ["UNIT_UNRESOLVED"], str(e))
 
     if surprise is not None:
-        # F7 tense: an ACTUAL surprise on a not-ended period is impossible
-        if (surprise.startswith("actual") and period and period["gp_end_date"]
-                and period["gp_end_date"] > src["date"][:10]):
+        # F7 tense (OD-21) BEFORE fusion: REJECT beats PARK, so an invalid
+        # actual must fall here and never turn a fillable fragment group into
+        # FUSION_AMBIGUOUS (SEQ 292's three-fragment partial-conflict case).
+        if period and _actual_surprise_before_period_end(
+                pf.surprise_basis_hint, period["gp_end_date"], src["date"]):
             return ("rejected", ["F7"],
                     f"actual surprise but the period ends {period['gp_end_date']}, "
                     f"after the source time — impossible tense")
@@ -229,7 +230,7 @@ def _tail(i, pf, src, driver, fye_month, period_lookups, calendar_override):
         cv = resolve_or(units["comparison_values"])
         position = surprise_position(
             lv[0], lv[1], cv[0], cv[1],
-            value_is_guide=(pf.surprise_basis_hint == "guidance"))
+            value_is_guide=(pf.surprise_basis_hint == GUIDANCE_BASIS))
         state = apply_inline_correction(
             state, position,
             has_favorability_wording=bool(pf.has_favorability_wording))

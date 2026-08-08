@@ -649,3 +649,24 @@ def test_fye_none_with_exact_dates_still_resolves():
                    "time_type": "duration"}, fye=None)
     assert out["period_u_id"] == "gp_2025-01-01_2025-12-31"
     assert out["period_scope"] == "exact_range"
+
+
+# ---- O10 (#827 F-PERIOD, P02): ONE packet-derived 11-key vocabulary ----
+# Law: packet 15_CandidateFactPacket.md :31 (aa7239ed) — the 11 period item
+# names, order-exact, owned ONCE as driver_period_resolver.PERIOD_ITEM_KEYS;
+# both builders derive their extraction from it; the presence view derives
+# from the same owner; the ten-key _FIELD_KEYS subset (which dropped
+# time_type, letting {"time_type": "duration"} resolve periodless) is DELETED.
+
+def test_time_type_only_parks_not_periodless():
+    # today: time_type is missing from the presence view, so this item is
+    # treated as truly periodless and returns None; the law says it must PARK
+    # through the undefined-fields refusal (a declared period judgment with
+    # zero resolvable fields is not "no period")
+    with pytest.raises(PeriodResolutionError):
+        resolve({"time_type": "duration"})
+
+
+def test_truly_periodless_action_event_returns_none():
+    # lawful control: ALL eleven keys absent -> genuinely periodless -> None
+    assert ensure_driver_period({}, fact_type="action_event", fye_month=12) is None

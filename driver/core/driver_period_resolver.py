@@ -31,9 +31,15 @@ from driver.core.driver_ids import (IdLawError, PERIOD_SENTINEL_SCOPE,
 # sentinel_class -> period id, inverted once here because this door receives the
 # WORD spelling from callers (two uses below — membership and lookup).
 _SENTINEL_ID_BY_CLASS = {word: pid for pid, word in PERIOD_SENTINEL_SCOPE.items()}
-_FIELD_KEYS = ("period_start_date", "period_end_date", "fiscal_year", "fiscal_quarter",
-               "half", "month", "long_range_start_year", "long_range_end_year",
-               "sentinel_class", "period_scope")
+# THE ONE packet-derived period-item vocabulary (15_CandidateFactPacket.md :31,
+# sha aa7239ed — the 11 names, ORDER-EXACT). Both door builders derive their
+# extraction from this owner; the presence view below derives from it too.
+# time_type IS a member: an item carrying only a time_type judgment is NOT
+# periodless — it parks through the undefined-fields refusal, never None.
+PERIOD_ITEM_KEYS = ("period_start_date", "period_end_date", "fiscal_year",
+                    "fiscal_quarter", "half", "month", "long_range_start_year",
+                    "long_range_end_year", "sentinel_class", "time_type",
+                    "period_scope")
 
 
 class PeriodResolutionError(ValueError):
@@ -59,7 +65,7 @@ def ensure_driver_period(item, *, fact_type, fye_month, ticker=None,
     fye_month = _lawful_fye(fye_month)   # FIRST statement — before every bypass
     if item.get("period_u_id"):
         return _preserved(item)
-    if all(item.get(k) is None for k in _FIELD_KEYS):   # is-not-None: zero VALUES (e.g.
+    if all(item.get(k) is None for k in PERIOD_ITEM_KEYS):  # is-not-None: zero VALUES (e.g.
         return None                                     # fiscal_quarter=0) get VALIDATED
 
     cal = bool(calendar_override or item.get("calendar_override"))
@@ -142,7 +148,7 @@ def ensure_driver_period(item, *, fact_type, fye_month, ticker=None,
     )
     if built["u_id"] == _SENTINEL_ID_BY_CLASS["undefined"]:   # the old quiet
         # fallthrough — forbidden now; the id spelling comes from the one owner
-        raise PeriodResolutionError(f"period fields do not resolve: { {k: item.get(k) for k in _FIELD_KEYS} }")
+        raise PeriodResolutionError(f"period fields do not resolve: { {k: item.get(k) for k in PERIOD_ITEM_KEYS} }")
     scope = "exact_range" if built["period_scope"] == "long_range" else built["period_scope"]
     return _result(built["u_id"], scope, built["time_type"],
                    built["start_date"], built["end_date"])
