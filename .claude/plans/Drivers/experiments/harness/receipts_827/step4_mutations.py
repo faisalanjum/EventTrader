@@ -2078,6 +2078,34 @@ MUTATIONS = [
      "    if (_typed(identifier, 'scheme') or SEC_CIK_SCHEME) != SEC_CIK_SCHEME:",
      "driver/relocation/test_context_content_model.py::"
      "test_EU125_an_identifier_without_a_scheme_is_never_read_as_a_SEC_CIK"),
+
+    (272, "EU-127: the undeclared-attribute verdict drifts and the refusal goes invisible",
+     "driver/relocation/inline_html.py",
+     "                return 'malformed'         # ordinary undeclared attribute",
+     "                return 'malformedX'         # ordinary undeclared attribute",
+     "driver/relocation/test_context_content_model.py::"
+     "test_827B12_an_ORDINARY_attribute_is_malformed_everywhere"),
+
+    (273, "EU-128: the absent-text default fabricates a character item",
+     "driver/relocation/inline_html.py",
+     "    texts = [el.text or ''] + [c.tail or '' for c in el]",
+     "    texts = [el.text or 'x'] + [c.tail or '' for c in el]",
+     "driver/relocation/test_context_content_model.py::"
+     "test_an_ABSENT_segment_and_scenario_are_lawful"),
+
+    (274, "EU-129: the empty content-kind word drifts and the check is skipped",
+     "driver/relocation/inline_html.py",
+     "    if kind == 'empty':                    # NO character item at all,",
+     "    if kind == 'emptyX':                    # NO character item at all,",
+     "driver/relocation/test_context_content_model.py::"
+     "test_827B12_a_NON_EMPTY_forever_is_malformed"),
+
+    (275, "EU-130: the xsi:type Clark read drifts and asserted types go unseen",
+     "driver/relocation/inline_html.py",
+     "    t = el.get('{%s}type' % _XSI_NS)",
+     "    t = el.get('{%s}typeX' % _XSI_NS)",
+     "driver/relocation/test_context_content_model.py::"
+     "test_827B12_a_NON_EMPTY_forever_is_malformed"),
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",

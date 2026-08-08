@@ -1343,6 +1343,13 @@ def _shape(el, local):
     xsi:type is judged FIRST, so a lawful custom-derived type parks as
     unsupported BEFORE its unknown attributes could be mislabeled malformed.
     """
+    # CL-085 (#827, EU-130): the Clark-form read is xsi:type exactly — XML
+    # Schema Part 1: Structures 2e, REC 2004-10-28, section 2.6.1 (the
+    # instance attribute that ASSERTS a type),
+    # https://www.w3.org/TR/xmlschema-1/#xsi_type ; the asserted type must
+    # be validly derived from the declared one, which is why an anonymous
+    # declared type admits no replacement (section 3.3.4, quoted below).
+    # A drifted read makes every asserted type invisible (32 reds).
     t = el.get('{%s}type' % _XSI_NS)
     if t is not None:
         q = _qname(_collapse(t), el)       # THE one QName owner — never a
@@ -1381,8 +1388,23 @@ def _shape(el, local):
             continue                       # xsi specials; type judged above
         else:
             return 'malformed'             # xsi:nil, xml:*, any foreign
+    # CL-086 (#827, EU-127 + EU-128): FAIL-CLOSED shape mechanics — every
+    # verdict this function can emit is a REFUSAL ('malformed' for broken
+    # markup, 'unsupported' for a resolved non-standard type) and the only
+    # ok-path is falling through to None, so a drifted verdict word makes
+    # a refusal INVISIBLE to the caller (measured: 15 reds) rather than
+    # inventing one. The two '' defaults here are the truthful
+    # no-character-data reading of an absent text/tail — fabricating any
+    # character there would make every lawful element-only container look
+    # malformed (measured: 119 reds).
     texts = [el.text or ''] + [c.tail or '' for c in el]
     kind = _SHAPE_CONTENT[local]
+    # CL-085 (#827, EU-129): the two content-kind words are the XML Schema
+    # Part 1 2e section 3.4 content-type vocabulary (empty / element-only;
+    # the CL-028 block above carries the URL), and each is enforced exactly
+    # as the spec defines it — 'empty' admits NO character item, not even
+    # XML whitespace; 'element-only' admits XML whitespace between children
+    # and nothing else. A drifted word silently skips its check (4 reds).
     if kind == 'empty':                    # NO character item at all,
         if any(texts) or any(isinstance(c.tag, str) for c in el):
             return 'malformed'             # XML whitespace included
