@@ -1352,6 +1352,13 @@ MUTATIONS = [
      "ROUTE_A_BOOLS = {'O': False, '1': True}",
      "driver/relocation/test_exact_numbers.py::"
      "test_EU007_the_graph_stored_spellings_resolve_from_the_boundary_clause"),
+
+    (169, "EU-011: the date separator mechanics drift off the clause",
+     "driver/relocation/exact_numbers.py",
+     '        return date(*(int(part) for part in d.split("-")))',
+     '        return date(*(int(part) for part in d.split("/")))',
+     "driver/relocation/test_exact_numbers.py::"
+     "test_EU007_the_graph_stored_spellings_resolve_from_the_boundary_clause"),
 ]
 
 

@@ -285,6 +285,9 @@ def _iso_date(d):
     if not isinstance(d, str) or not _STRICT_ISO.fullmatch(d):
         raise ExactError(f"bad ISO date (need strict YYYY-MM-DD): {d!r}")
     try:
+        # EU-011 (#827): the '-' separator is the same boundary clause's
+        # mechanics (graph_row_contract's stored-spelling clause; the shape
+        # regex above already fixed it) — never a second grammar.
         return date(*(int(part) for part in d.split("-")))
     except (TypeError, ValueError):
         raise ExactError(f"impossible calendar date: {d!r}")
