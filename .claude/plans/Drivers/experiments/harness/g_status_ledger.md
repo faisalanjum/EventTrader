@@ -4,8 +4,8 @@ Do not edit by hand: run `make_g_ledger.py` and commit the result.
 
 | status | count | meaning |
 |---|---|---|
-| code | 17 | a runnable test proves it today |
-| partial | 13 | one leg proven, one leg unbuilt or switch-dependent |
+| code | 16 | a runnable test proves it today |
+| partial | 14 | one leg proven, one leg unbuilt or switch-dependent |
 | grading | 2 | only hidden grading can catch it (a MEANING error) — never counted as a code proof |
 | gated-switch | 3 | NOT provable until the owner-approved atomic switch |
 | **total** | **35** | |
@@ -26,13 +26,13 @@ Do not edit by hand: run `make_g_ledger.py` and commit the result.
 | G12 | gated-switch | `.claude/plans/Drivers/experiments/harness/test_g_suite.py::test_G12_the_live_launcher_still_serves_the_v1_contract` | the rev-4 prompt is authored, but the live launcher still serves the v1 37-field contract; the assembled prompt is regenerated at the switch |
 | G13 | grading | `.claude/plans/Drivers/experiments/harness/test_g_suite.py::test_G13_attack_fixtures_are_registered_and_classified` | a MEANING error: only hidden grading can catch it, never a code proof |
 | G14 | partial | `.claude/plans/Drivers/experiments/harness/test_g_suite.py::test_G14_guidance_legacy_path_is_untouched` | the legacy guidance suite is untouched; hint fields are no longer refused by a hint-specific branch — they refuse as unexpected keys at the exact-key owner; 'never a WRITER input' still needs the switched writer |
-| G15 | code | `.claude/plans/Drivers/experiments/harness/test_g_suite.py::test_G15_xbrl_declared_metadata_path_is_untouched` | — |
+| G15 | partial | `.claude/plans/Drivers/experiments/harness/test_g_suite.py::test_G15_xbrl_declared_metadata_path_is_untouched` | S14: the dead declared-scale helper call removed; proves the legacy v1 XBRL suite only |
 | G16 | gated-switch | `.claude/plans/Drivers/experiments/harness/test_g_suite.py::test_G16_old_path_removal_is_gated_on_the_switch` | old-path removal is not provable until the owner-approved atomic switch |
 | G17 | code | `.claude/plans/Drivers/experiments/harness/test_g_suite.py::test_G17_transport_is_exact_and_refuses_ambiguity` | — |
 | G18 | partial | `driver/core/test_prepared_fact_v2.py::test_G18_the_new_modules_reach_no_graph_write` | the new modules are write-free (proven, and the driver-side proof covers xbrl_attach too); 'zero writes reachable from the EXAM' needs the run_event exam path, which is switch-gated |
 | G19 | partial | `.claude/plans/Drivers/experiments/harness/test_g_suite.py::test_G19_two_rebuilds_are_byte_identical` | docs-patch determinism is proven; contract/launcher/manifest regeneration happens at the switch |
 | G20 | code | `driver/core/test_prepared_fact_v2.py::test_G20_table_wide_scale_applied_once` | — |
-| G21 | partial | `driver/core/test_prepared_fact_v2.py::test_G21_xbrl_declared_scale_is_never_double_scaled` | the never-double-scaled rule is proven on synthetic input; the same rule against a real Fiscal packet row is not exercised by this selector |
+| G21 | partial | `driver/core/test_v2_attacks.py::test_ATTACK_a_wrong_declared_scale_fails_the_certified_reconcile` | the never-double-scaled rule is proven on synthetic input; the same rule against a real Fiscal packet row is not exercised by this selector |
 | G22 | partial | `driver/core/test_prepared_fact_v2.py::test_G22_the_xbrl_lane_does_not_require_quote_local_evidence` | the XBRL lane is proven; the TEXT lane's matching requirement — the other half of the rule — is not touched by this selector |
 | G23 | partial | `driver/core/test_round10_event_boundary.py::test_MIXED_TYPE_keys_are_refused_cleanly_at_every_door` | an old payload now fails as an ordinary unexpected-key refusal at every door; the retired-name-specific branch and its message are deleted. Fiscal actually ceasing to emit the fields is O-f, after the boundary proof |
 | G24 | grading | `driver/core/test_prepared_fact_v2.py::test_G24_membership_alone_cannot_catch_a_wrong_slot_assignment` | a MEANING error: only hidden grading can catch a wrong slot assignment (fixture A6_swapped_scale_inside_one_quote) |
@@ -41,7 +41,7 @@ Do not edit by hand: run `make_g_ledger.py` and commit the result.
 | G27 | code | `driver/core/test_prepared_fact_v2.py::test_G27_a_point_is_not_a_floor` | — |
 | G28 | code | `.claude/plans/Drivers/experiments/harness/test_g_suite.py::test_G28_source_id_echo_mismatch_is_refused` | — |
 | G29 | code | `driver/core/test_prepared_fact_v2.py::test_G29_two_shape_fields_together_park` | — |
-| G30 | partial | `driver/core/test_prepared_fact_v2.py::test_G30_the_live_fiscal_packet_row` | the consistency equation is proven on a synthetic row; despite the test's name no live Fiscal packet is loaded, so the real-packet leg and the violation case are both unproven here |
+| G30 | partial | `driver/relocation/test_real_726_end_to_end.py::test_the_REAL_726_fact_binds_to_its_live_row_and_its_filing` | the consistency equation is proven on a synthetic row; despite the test's name no live Fiscal packet is loaded, so the real-packet leg and the violation case are both unproven here |
 | G31 | code | `driver/core/test_prepared_fact_v2.py::test_G31_compensated_misread_can_never_grade_correct` | — |
 | G32 | partial | `.claude/plans/Drivers/experiments/harness/test_g_suite.py::test_G32_source_id_is_delivered_in_the_prompts_event_view` | source_id is in the authored prompt; the live event view is regenerated with the launcher at the switch |
 | G33 | code | `driver/core/test_v2_attacks.py::test_ATTACK_an_invalid_slice_kind_is_rejected` | — |

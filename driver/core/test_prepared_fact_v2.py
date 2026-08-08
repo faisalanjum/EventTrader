@@ -19,7 +19,7 @@ from driver.core.prepared_fact_v2 import (ITEM_FIELDS,
                                           SchemaError,
                                           split_slice_part, verify_occurrence)
 from driver.core.slot_convert import (CANONICAL_UNITS, SlotConversionError,
-                                      check_xbrl_consistency, convert_slot,
+                                      convert_slot,
                                       validate_slot)
 
 _EVENTS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..",
@@ -430,23 +430,10 @@ def test_G20_table_wide_scale_applied_once():
     assert convert_slot("m_usd", slot("4828", "1e6", "in millions")) == Decimal(4828)
 
 
-def test_G21_xbrl_declared_scale_is_never_double_scaled():
-    check_xbrl_consistency(displayed=Decimal(390), ix_scale=6,
-                           full_value=Decimal("390000000"))
-    assert convert_slot("m_usd", slot("390", "1e6")) == Decimal(390)
-    with pytest.raises(SlotConversionError):
-        check_xbrl_consistency(displayed=Decimal(390), ix_scale=6,
-                               full_value=Decimal("390000"))
-
-
-def test_G30_the_live_fiscal_packet_row():
-    """The real packet: displayed 726, ix.scale=6, graph 726,000,000."""
-    check_xbrl_consistency(displayed=Decimal(726), ix_scale=6,
-                           full_value=Decimal("726000000"))
-    assert convert_slot("m_usd", slot("726", "1e6")) == Decimal(726)
-    with pytest.raises(SlotConversionError):
-        check_xbrl_consistency(displayed=Decimal(726), ix_scale=6,
-                               full_value=Decimal("726000000000"))
+# S14 (#827): test_G21 and test_G30 DELETED with the dead declared-scale
+# helper they exercised. G21's surviving owner:
+# test_ATTACK_a_wrong_declared_scale_fails_the_certified_reconcile;
+# G30's: test_the_REAL_726_fact_binds_to_its_live_row_and_its_filing.
 
 
 def test_G22_the_xbrl_lane_does_not_require_quote_local_evidence():
@@ -815,9 +802,8 @@ def test_T9_one_public_exact_number_predicate():
                        "unit_scale_evidence": None},
                       stated_unit="m_usd", quote="x")  # bool mult at door 1
                       # (raw dict: the slot() helper would coerce it first)
-    with pytest.raises(SlotConversionError):
-        slot_convert.check_xbrl_consistency(displayed=1.5, ix_scale=3,
-                                            full_value=1500)  # float at door 2
+    # (S14: the second door — the deleted declared-scale helper — is gone;
+    # exact_number's own float rejection above is the surviving owner.)
 
 
 def test_T10_the_clean_path_emits_no_member_refs():

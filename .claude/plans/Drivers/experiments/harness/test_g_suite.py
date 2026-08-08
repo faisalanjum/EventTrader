@@ -95,8 +95,9 @@ G_COVERAGE = {
             "the legacy guidance suite is untouched; hint fields are no longer refused "
             "by a hint-specific branch — they refuse as unexpected keys at the exact-key "
             "owner; 'never a WRITER input' still needs the switched writer"),
-    "G15": ("code", ".claude/plans/Drivers/experiments/harness/test_g_suite.py::test_G15_xbrl_declared_metadata_path_is_untouched",
-            ""),
+    "G15": ("partial", ".claude/plans/Drivers/experiments/harness/test_g_suite.py::test_G15_xbrl_declared_metadata_path_is_untouched",
+            "S14: the dead declared-scale helper call removed; proves the "
+            "legacy v1 XBRL suite only"),
     "G16": ("gated-switch", ".claude/plans/Drivers/experiments/harness/test_g_suite.py::test_G16_old_path_removal_is_gated_on_the_switch",
             "old-path removal is not provable until the owner-approved atomic switch"),
     "G17": ("code", ".claude/plans/Drivers/experiments/harness/test_g_suite.py::test_G17_transport_is_exact_and_refuses_ambiguity",
@@ -118,7 +119,7 @@ G_COVERAGE = {
     # No single registered selector covers either rule end to end, and `code`
     # means one selector does. Naming the absent leg is the honest answer;
     # promoting the row is not.
-    "G21": ("partial", "driver/core/test_prepared_fact_v2.py::test_G21_xbrl_declared_scale_is_never_double_scaled",
+    "G21": ("partial", "driver/core/test_v2_attacks.py::test_ATTACK_a_wrong_declared_scale_fails_the_certified_reconcile",
             "the never-double-scaled rule is proven on synthetic input; the same "
             "rule against a real Fiscal packet row is not exercised by this "
             "selector"),
@@ -153,7 +154,7 @@ G_COVERAGE = {
     # packet row" and is eight lines that load no packet, reach no store, and
     # touch no graph. Its synthetic row proves the consistency equation; the live
     # packet leg its own name promises is not exercised anywhere.
-    "G30": ("partial", "driver/core/test_prepared_fact_v2.py::test_G30_the_live_fiscal_packet_row",
+    "G30": ("partial", "driver/relocation/test_real_726_end_to_end.py::test_the_REAL_726_fact_binds_to_its_live_row_and_its_filing",
             "the consistency equation is proven on a synthetic row; despite the "
             "test's name no live Fiscal packet is loaded, so the real-packet leg "
             "and the violation case are both unproven here"),
@@ -644,10 +645,8 @@ def test_G14_guidance_legacy_path_is_untouched():
 
 
 def test_G15_xbrl_declared_metadata_path_is_untouched():
-    from driver.core.slot_convert import check_xbrl_consistency
-    from decimal import Decimal
-    check_xbrl_consistency(displayed=Decimal(726), ix_scale=6,
-                           full_value=Decimal("726000000"))
+    # S14 (#827): the dead declared-scale helper call is gone; this node now
+    # proves the LEGACY v1 XBRL suite only (G_COVERAGE row -> partial).
     r = subprocess.run([sys.executable, "-m", "pytest", "-q",
                         "-p", "no:cacheprovider",
                         os.path.join(_REPO, "driver", "core", "test_prepared_fact.py")],
@@ -892,7 +891,7 @@ def test_the_v2_modules_are_a_STAGED_read_only_adapter():
     pure = {"build_id", "norm", "IdLawError", "ensure_driver_period",
             "PeriodResolutionError", "compose_surprise_scope", "validate_fact",
             "convert_slot", "validate_slot", "SlotConversionError",
-            "CANONICAL_UNITS", "check_xbrl_consistency", "exact_scaleb",
+            "CANONICAL_UNITS", "exact_scaleb",
             # ADDED DELIBERATELY 2026-07-27 (owner ruling on `pure`): the
             # percent/x family is unit LAW, and the XBRL binding needs it to
             # know that ix.scale must NOT become the stored multiplier. It was

@@ -745,27 +745,17 @@ def test_ATTACK_unmatched_output_is_canonically_ordered():
     assert key(forward) == key(reverse), "unmatched output follows input order"
 
 
-def test_ATTACK_xbrl_scaling_is_exact_at_29_digits():
-    """The declared-scale check ran at the DEFAULT 28-digit context: it REJECTED
-    the exact 29-digit value and ACCEPTED the rounded-wrong one."""
-    from driver.core.slot_convert import check_xbrl_consistency
-    from driver.core.slot_convert import exact_scaleb
-    d29 = Decimal("1." + "0" * 27 + "1")
-    exact_full = exact_scaleb(d29, 6)
-    assert len(exact_full.as_tuple().digits) == 29     # nothing was rounded away
-    check_xbrl_consistency(displayed=d29, ix_scale=6, full_value=exact_full)
-    with pytest.raises(SlotConversionError):
-        check_xbrl_consistency(displayed=d29, ix_scale=6,
-                               full_value=Decimal("1000000"))
+# S14 (#827): test_ATTACK_xbrl_scaling_is_exact_at_29_digits DELETED with
+# the dead helper; surviving owners: test_round12_exact_scale.py::
+# test_29_digit_pairs_stay_distinct_through_the_shift and test_bind_graph_fact.py::
+# test_RED_exact_number_pair_at_29_digits.
 
 
 def test_ATTACK_extreme_exponents_park_they_do_not_crash():
     """Raw decimal.Overflow / InvalidOperation escaped as a crash; an
     unrepresentable magnitude is a PARK."""
-    from driver.core.slot_convert import check_xbrl_consistency
-    with pytest.raises(SlotConversionError):
-        check_xbrl_consistency(displayed=Decimal(1), ix_scale=10 ** 9,
-                               full_value=Decimal(1))
+    # (S14: the dead-helper block that stood here is deleted; the two
+    # remaining legs below are the node's living subject.)
     # a magnitude beyond the decimal exponent range must PARK, not crash
     with pytest.raises(SlotConversionError):
         convert_slot("m_usd", slot(Decimal("1E+999999999999999999"), "1e9"))
@@ -1283,12 +1273,6 @@ COVERED_BY = {
         "driver/core/test_prepared_fact_v2.py::test_G11_occurrence_is_verified_against_the_part_text",
     ("driver.core.slot_convert.assert_storable", "value"):
         "driver/core/test_round12_exact_scale.py::test_the_storable_bound_is_exact_at_1024_characters",
-    ("driver.core.slot_convert.check_xbrl_consistency", "displayed"):
-        "driver/core/test_prepared_fact_v2.py::test_G21_xbrl_declared_scale_is_never_double_scaled",
-    ("driver.core.slot_convert.check_xbrl_consistency", "full_value"):
-        "driver/core/test_prepared_fact_v2.py::test_G21_xbrl_declared_scale_is_never_double_scaled",
-    ("driver.core.slot_convert.check_xbrl_consistency", "ix_scale"):
-        "driver/core/test_prepared_fact_v2.py::test_G21_xbrl_declared_scale_is_never_double_scaled",
     ("driver.core.slot_convert.convert_slot", "slot"):
         "driver/core/test_prepared_fact_v2.py::test_G1_driver_name_changes_nothing",
     ("driver.core.slot_convert.convert_slot", "stated_unit"):
@@ -1297,10 +1281,12 @@ COVERED_BY = {
         "driver/core/test_v2_attacks.py::test_ATTACK_exact_mul_precision_comes_from_the_operands",
     ("driver.core.slot_convert.exact_mul", "b"):
         "driver/core/test_v2_attacks.py::test_ATTACK_exact_mul_precision_comes_from_the_operands",
+    # S14: the two exact_scaleb rows repointed — their old owner (the
+    # 29-digit xbrl-scaling attack) was deleted with the dead helper.
     ("driver.core.slot_convert.exact_scaleb", "exponent"):
-        "driver/core/test_v2_attacks.py::test_ATTACK_xbrl_scaling_is_exact_at_29_digits",
+        "driver/core/test_v2_attacks.py::test_ATTACK_a_fractional_scale_is_never_silently_truncated",
     ("driver.core.slot_convert.exact_scaleb", "value"):
-        "driver/core/test_v2_attacks.py::test_ATTACK_xbrl_scaling_is_exact_at_29_digits",
+        "driver/core/test_v2_attacks.py::test_ATTACK_a_fractional_scale_is_never_silently_truncated",
     ("driver.core.slot_convert.stored_char_length", "value"):
         "driver/core/test_round12_exact_scale.py::test_the_storable_bound_is_exact_at_1024_characters",
     ("driver.core.slot_convert.validate_slot", "xbrl_backed"):

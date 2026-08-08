@@ -288,14 +288,7 @@ def validate_slot(slot_name, slot, *, stated_unit, quote, xbrl_backed=False):
             f"{slot_name}: {stated_unit} requires scale_multiplier 1, got {mult}")
 
 
-def check_xbrl_consistency(*, displayed, ix_scale, full_value):
-    """The XBRL lane's own proof: displayed x 10^ix.scale == the full fact value.
-    Both numbers exist in the filing, so double-scaling is structurally
-    impossible — this equation, not a header search, is the authority."""
-    d = exact_number("displayed", displayed)
-    full = exact_number("full_value", full_value)
-    scaled = exact_scaleb(d, ix_scale)          # the ONE shift — exact, or park
-    if scaled != full:
-        raise SlotConversionError(
-            f"declared-scale mismatch: displayed {d} x 10^{ix_scale} = "
-            f"{scaled}, but the fact value is {full}")
+# S14 (#827): check_xbrl_consistency DELETED — zero production callers,
+# zero in-module uses (a phantom rule surface). The living owner of the
+# declared-scale reconcile is the certified binder path
+# (test_ATTACK_a_wrong_declared_scale_fails_the_certified_reconcile).
