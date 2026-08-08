@@ -742,3 +742,51 @@ def test_827B1_slice_parts_message_names_list_or_tuple():
     assert ok.item.slice_parts == ("product:iPhone",)
     with pytest.raises(SchemaError, match=r"list or tuple"):
         fact(slice_parts=42)
+
+
+def test_slot_unit_routing_matches_the_FROZEN_contract():
+    """C6 card (F-UNITS v6): five fields, BOTH real doors, one routing author.
+
+    THE FROZEN MAPPING, typed independently from the contract (exp5 REV5
+    :258-259 — "Level and comparison SHARE the level unit; change_value
+    carries its own" — + FINAL_DESIGN:207), never read off the code."""
+    EXPECTED = {"level_low": "m_usd", "level_high": "m_usd",
+                "comparison_low": "m_usd", "comparison_high": "m_usd",
+                "change_value": "percent"}
+    got = {n: prepared_fact_v2._unit_for_slot(n, "m_usd", "percent")
+           for n in EXPECTED}
+    assert got == EXPECTED
+
+    # CONSTRUCTION DOOR — the four level-family slots carry multiplier 10^6
+    # with verbatim evidence: lawful under m_usd, REFUSED under the percent
+    # family, so construction succeeding proves each routed to level_unit;
+    # change_value carries multiplier 1 (lawful under percent).
+    q6 = "revenue of $2.5 million, up 5% year over year"
+    lv = slot("2.5", "1e6", "million")
+    fact(quote=q6, level_low=lv, level_high=lv,
+         comparison_low=lv, comparison_high=lv,
+         level_unit="m_usd", change_unit="percent",
+         level_shape_hint="point", comparison_shape_hint="point",
+         change_value=slot("5", 1))
+
+    # CONVERSION DOOR — literal expected values per field: the four
+    # level-family slots 1.3 x 10^9 -> 1300 each (m_usd law); change_value
+    # 5 x 1 -> 5 (family passthrough; a mis-route converts it to 0.000005
+    # and the literal fails).
+    q9 = "revenue of $1.3 billion, up 5% year over year"
+    bv = slot("1.3", "1e9", "billion")
+    f2 = fact(quote=q9, level_low=bv, level_high=bv,
+              comparison_low=bv, comparison_high=bv,
+              level_unit="m_usd", change_unit="percent",
+              level_shape_hint="point", comparison_shape_hint="point",
+              change_value=slot("5", 1),
+              time_type="duration", fiscal_year=2025, fiscal_quarter=1)
+    noop = {"existing": lambda *a: None, "sec": lambda *a: None,
+            "predict": lambda *a: None, "corrected_fye": lambda *a: None}
+    stored = prepared_fact_v2.to_stored_fact(
+        f2, driver={"name": "revenue", "fact_type": "metric"},
+        source=_PROD["source"], fye_month=12, lookups=noop)
+    assert {k: stored[k] for k in EXPECTED} == {
+        "level_low": Decimal(1300), "level_high": Decimal(1300),
+        "comparison_low": Decimal(1300), "comparison_high": Decimal(1300),
+        "change_value": Decimal(5)}
