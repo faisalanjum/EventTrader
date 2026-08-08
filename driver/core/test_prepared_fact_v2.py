@@ -849,3 +849,35 @@ def test_T10_the_clean_path_emits_no_member_refs():
         source=_PROD["source"], fye_month=12, lookups=noop)
     assert "member_refs" not in stored
     assert "member_refs" in _ALLOWED_FIELDS   # the optional lane keeps its door
+
+
+def test_GRADE_DOMAIN_source_owned_evidence_cannot_alter_selection():
+    """GRADE-DOMAIN (arm: enforcement/proof — the input-role contract is
+    ALREADY the door's law, measured, and this node pins it):
+    1. the DOOR refuses source-owned evidence inside an item (SchemaError:
+       "supplied by the verifier, never inside the item") — so a gold or
+       produced constructor CANNOT smuggle selection-bearing XBRL evidence;
+    2. the matching identity is structurally outside the source-owned pair
+       (SOURCE_OWNED_FIELDS and ITEM_FIELDS are disjoint; record_key reads
+       only lane + per_x + the 32 + the locator);
+    3. identical text facts LINK; a different model field REFUSES;
+    4. duplicate produced facts never disappear silently — the collapse is
+       for counting; the group is recorded and emit-once flags."""
+    from driver.core.fact_match import record_key
+    from driver.core.prepared_fact_v2 import SOURCE_OWNED_FIELDS
+    with pytest.raises(SchemaError, match="SOURCE-OWNED"):
+        fact(quote=QUOTE_BOTH, xbrl_concept_raw="us-gaap:Revenues",
+             member_refs=[])                                     # control 1
+    assert not set(SOURCE_OWNED_FIELDS) & set(ITEM_FIELDS)       # control 2
+    fA = money_fact("1.3", "1e9", "billion")
+    assert record_key(fA) == record_key(money_fact("1.3", "1e9", "billion"))
+    r = match_facts([money_fact("1.3", "1e9", "billion")], [fA])
+    assert len(r.links) == 1                                     # control 3a
+    r3 = match_facts([money_fact("1.3", "1e9", "billion")],
+                     [money_fact("2.6", "1e9", "billion")])
+    assert r3.links == [] and len(r3.to_grading_produced) == 1   # control 3b
+    r4 = match_facts([money_fact("1.3", "1e9", "billion")],
+                     [fA, money_fact("1.3", "1e9", "billion")])
+    assert r4.emit_once_violation                                # control 4
+    assert len(r4.produced_duplicates) == 1
+    assert len(r4.produced_duplicates[0]) == 2                   # preserved
