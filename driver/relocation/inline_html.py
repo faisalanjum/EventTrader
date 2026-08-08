@@ -1962,6 +1962,14 @@ def _evidence_from(fact, prepared):
     only the strict view spells correctly. `fact.ren` answers HOW it appears —
     its displayed text, its row, its table, its offsets — because that is a
     question about the rendered page. Neither is ever asked the other's half.
+
+    EU-097 (#827): the eleven refusal/acceptance tokens this function
+    publishes (malformed_concept_name, missing/malformed_context_ref,
+    undefined_context, missing/malformed_unit_ref, undefined_unit,
+    malformed_sign, malformed_scale, unsupported_style, 'ok') are the
+    BINDER'S OWN published vocabulary (the CL-039 ownership block above the
+    refusal texts) — never T1 outcome codes; each token's RULE carries its
+    citation in place or on its board row.
     """
     el, node = fact.sem, fact.ren
     # A CONCEPT IS A QNAME, and nothing validated it. The door only compared

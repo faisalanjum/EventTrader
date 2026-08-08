@@ -1460,6 +1460,13 @@ MUTATIONS = [
      "driver/relocation/test_two_view_bridge.py::"
      "test_an_optional_attribute_is_absent_or_lawful_and_a_required_one_resolves[format present and empty]"),
 
+    (184, "EU-097: the undefined-context refusal token drifts",
+     "driver/relocation/inline_html.py",
+     "'undefined_context'",
+     "'undefined_contextX'",
+     "driver/relocation/test_two_view_bridge.py::"
+     "test_ATTACK_a_context_or_unit_OUTSIDE_ix_resources_cannot_be_referenced[<body>-loose in the body, in no container at all]"),
+
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",
