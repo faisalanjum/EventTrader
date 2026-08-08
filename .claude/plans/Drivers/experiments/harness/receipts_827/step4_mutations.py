@@ -2170,6 +2170,27 @@ MUTATIONS = [
      "driver/relocation/test_semantic_fact_value.py::"
      "test_a_plain_text_fact_binds"),
 
+    (287, "EU-181: the unit resource element name drifts and the unit index empties",
+     "driver/relocation/inline_html.py",
+     "    for u in _kids_of(declared, XBRL_INSTANCE_NAMESPACE, 'unit'):",
+     "    for u in _kids_of(declared, XBRL_INSTANCE_NAMESPACE, 'unitX'):",
+     "driver/relocation/test_route_a_unit_identity.py::"
+     "test_a_LAWFUL_ALIAS_for_the_official_currency_URI_is_the_same_unit"),
+
+    (288, "EU-182: an empty display is defaulted into a printable zero",
+     "driver/relocation/inline_html.py",
+     "    shown = displayed or ''",
+     "    shown = displayed or '0'",
+     "driver/relocation/test_semantic_fact_value.py::"
+     "test_EU182_an_empty_display_never_becomes_a_value"),
+
+    (289, "EU-183: an absent sign is read as the negation flag",
+     "driver/relocation/inline_html.py",
+     "    sign = '' if sign is None else sign",
+     "    sign = '-' if sign is None else sign",
+     "driver/relocation/test_semantic_fact_value.py::"
+     "test_EU183_an_absent_sign_is_the_positive_case"),
+
     (281, "EU-169: the exactly-one-child bound widens to two",
      "driver/relocation/inline_html.py",
      "        if len(kids) != 1 or len(elements) != 1 \\",

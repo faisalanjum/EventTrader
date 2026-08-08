@@ -41,7 +41,8 @@ Spec sources:
 import pytest
 
 from driver.relocation import inline_html
-from driver.relocation.inline_html import bind_graph_fact
+from decimal import Decimal
+from driver.relocation.inline_html import bind_graph_fact, printed_value
 
 _NS = ('xmlns:ix="http://www.xbrl.org/2013/inlineXBRL" '
        'xmlns:xbrli="http://www.xbrl.org/2003/instance" '
@@ -581,3 +582,24 @@ def test_EU168_a_nested_pair_that_both_omit_scale_agrees_at_ten_to_the_zero():
              '</ix:nonFraction></ix:nonFraction>')
     bound, why = _bind(inner, raw_value='390')
     assert bound is not None, why
+
+
+_NDD_ID = ('http://www.xbrl.org/inlineXBRL/transformation/2020-02-12',
+           'num-dot-decimal')
+
+
+def test_EU182_an_empty_display_never_becomes_a_value():
+    """FAIL-CLOSED at the public function: nothing printed is not a value —
+    an empty displayed string refuses under a real transform grammar (a
+    fabricating default would mint a number out of nothing), while the
+    same grammar reads a real one."""
+    assert printed_value('', _NDD_ID, '') is None
+    assert printed_value('390', _NDD_ID, '') == Decimal('390')
+
+
+def test_EU183_an_absent_sign_is_the_positive_case():
+    """Inline XBRL 1.1: @sign's only lawful value is '-' (the negation
+    flag), so an ABSENT sign — which callers may hand through as None —
+    means not negated, never negative."""
+    assert printed_value('390', _NDD_ID, None) == Decimal('390')
+    assert printed_value('390', _NDD_ID, '-') == Decimal('-390')

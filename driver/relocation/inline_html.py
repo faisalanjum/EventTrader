@@ -2130,6 +2130,11 @@ def prepare(html_text):
         parsed = _parse_context(context)
         contexts[cid] = 'malformed_context_structure' if parsed is None else parsed
     units = {}
+    # EU-181 (#827): xbrli:unit is the XBRL 2.1 section 4.8 resource name
+    # (the CL-028 schema citation; placed under ix:resources per the
+    # EU-124 citation), asked in the instance namespace and never by
+    # prefix — a drift empties the unit index and every fact loses its
+    # declared unit (measured: 213 reds).
     for u in _kids_of(declared, XBRL_INSTANCE_NAMESPACE, 'unit'):
         uid = _xml_id(_typed(u, 'id'))
         if not uid:
@@ -2961,6 +2966,12 @@ def printed_value(displayed, fmt_expanded, sign):
     comparing it both refused lawful official transforms and accepted
     imitations of them.
     """
+    # EU-182 (#827): FAIL-CLOSED — the '' default is the truthful
+    # NOTHING-WAS-PRINTED reading, and every transform grammar refuses it
+    # (the fixed-zero family ignores its input by definition and is the
+    # only lawful exception), so an empty display can never become a
+    # value. A fabricating default would mint one out of nothing: pinned
+    # directly at the public function.
     shown = displayed or ''
     # The sign attribute carries the LITERAL '-' or is absent. It is NOT
     # stripped: repairing ' - ' into '-' invents a reading of malformed markup,
@@ -2976,6 +2987,13 @@ def printed_value(displayed, fmt_expanded, sign):
     # no new refusal path, and it covers every branch at once. Lawful cases
     # that must keep working, and do: sign absent (193,026 fixed-zero tags in
     # the cache) and sign='-' (936).
+    # EU-183 (#827): an ABSENT sign is the POSITIVE case — Inline XBRL 1.1
+    # declares @sign as a restriction of xs:string whose only lawful value
+    # is '-' (the negation flag; section 10.1.1, current-edition URL at the
+    # spec-sources note), so absence means "not negated" and is normalised
+    # to '' here for the one comparison below. Both callers can pass None
+    # (the locator hands through a record field), so this arm is live:
+    # pinned directly at the public function.
     sign = '' if sign is None else sign
     if sign not in ('', '-'):          # a malformed sign is MALFORMED EVIDENCE:
         return None                    # reading it as positive invented a value
