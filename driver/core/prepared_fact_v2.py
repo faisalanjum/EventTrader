@@ -185,14 +185,14 @@ def _is_valid_ref(r):
             and all(isinstance(r[k], str) and r[k].strip() for k in r))
 
 
-_SHA256 = __import__("re").compile(r"[0-9a-f]{64}")
 
 
 def _sha256_or_raise(value, what):
     """A representation hash is 64 lowercase hex characters — exactly. Not
     stripped: a padded hash is malformed input, the same reading applied to a
     padded element id and a padded sign."""
-    if not isinstance(value, str) or not _SHA256.fullmatch(value):
+    from driver.core.driver_ids import sha256_hex_ok   # W4: the ONE owner
+    if not sha256_hex_ok(value):
         raise SchemaError(
             f"{what}: expected a 64-character lowercase hex sha256, got "
             f"{value!r}")

@@ -1090,3 +1090,28 @@ def test_a_TRULY_zero_length_dateTime_period_is_still_refused():
     are zero-length, because a dateTime adds no day."""
     assert XN.filing_duration_ordered("2024-01-01T00:00:00",
                                       "2024-01-01T00:00:00") is False
+
+
+def test_W4_the_representation_sha_grammar_has_one_owner():
+    """W4: the 64-hex digest grammar has ONE owner — the public predicate at
+    the id-law module; pf2's second regex is gone; both consuming sites
+    route through the owner and refuse a 63-char and an UPPERCASE digest
+    identically (lowercase-only is the stored spelling)."""
+    import inspect
+    import pytest as _pt
+    from driver.core import driver_ids as di
+    from driver.core import prepared_fact_v2 as p2
+    from driver.core import xbrl_attach as xa
+    assert di.sha256_hex_ok("a" * 64)
+    assert not di.sha256_hex_ok("A" * 64)
+    assert not di.sha256_hex_ok("a" * 63)
+    assert not di.sha256_hex_ok(64)
+    assert not hasattr(p2, "_SHA256")
+    for bad in ("a" * 63, "A" * 64):
+        with _pt.raises(p2.SchemaError):
+            p2._sha256_or_raise(bad, "representation_sha256")
+    p2._sha256_or_raise("a" * 64, "representation_sha256")   # lawful twin
+    # the grammar text lives NOWHERE but the owner:
+    assert "[0-9a-f]{64}" not in inspect.getsource(p2)
+    assert "[0-9a-f]{64}" not in inspect.getsource(xa)
+    assert "[0-9a-f]{64}" in inspect.getsource(di)

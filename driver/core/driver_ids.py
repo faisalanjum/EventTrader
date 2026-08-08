@@ -70,6 +70,14 @@ def graph_cik(value):
 
 
 _HASH_RE = re.compile(r"^[0-9a-f]{64}$")
+
+
+def sha256_hex_ok(value):
+    """THE one 64-hex digest predicate (W4, #827): lowercase hex, exactly 64
+    characters — the stored spelling of every representation/content sha.
+    Both consuming doors ask HERE; no second regex exists."""
+    return isinstance(value, str) and bool(_HASH_RE.fullmatch(value))
+
 #: FINAL_DESIGN line 174: the code-only unknown-axis sentinel is "unknown:xbrlaxis_
 #: <lowercase UTF-8 hex of exact axis qname>__<normalized_member_value>". THIS prefix
 #: is the reserved marker's ONE spelling; the structural regex derives its head from it.
