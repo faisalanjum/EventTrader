@@ -1059,8 +1059,12 @@ def test_substrate_binding_one_authorized_path_both_orders():
     identity via sys.modules, and the wrong-preload outcome = the NAMED loud
     exception (SubstrateBindingError, an ImportError) — never a PARK."""
     import subprocess, sys as _sys
+    from pathlib import Path as _P
     py = _sys.executable
-    repo = "/home/faisal/EventMarketDB"
+    # THE NODE'S OWN TREE, never a hardcoded checkout: under the mutation
+    # battery / archive extracts the fresh processes must bind to the tree
+    # being tested, or the matrix silently certifies the live repo instead.
+    repo = str(_P(__file__).resolve().parents[2])
     CHECK = (
         "import sys, driver.core.driver_period_resolver as dpr\n"
         "import fiscal_math, guidance_ids\n"
