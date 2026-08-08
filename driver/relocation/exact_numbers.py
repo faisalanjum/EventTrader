@@ -182,6 +182,13 @@ def exact_scaleb(value, exponent):
     silent rounding can never pass. Emax/Emin are widened, so only genuinely
     unrepresentable magnitudes fail.
 
+    EU-016 (#827), adjudicated: the trap enable is the RETAINED fail-closed
+    safety net (the S8 precedent). It is unreachable today — coefficient
+    preservation makes a scaleb inexactness impossible at value precision,
+    measured across all four exactness suites (386/386 green with the trap
+    off; receipt g2_evid_recall_EU-016.txt) — and it stays BECAUSE it is
+    the statement of the law, not because an input reaches it.
+
     The exponent must be a REAL `int`: `bool` is an int subclass, and a float or
     a numeric string would coerce a value we never verified.
     """
