@@ -670,3 +670,22 @@ def test_time_type_only_parks_not_periodless():
 def test_truly_periodless_action_event_returns_none():
     # lawful control: ALL eleven keys absent -> genuinely periodless -> None
     assert ensure_driver_period({}, fact_type="action_event", fye_month=12) is None
+
+
+# ---- O13 (#827 F-PERIOD): the three half-specified parks are LAW today ----
+# Proof-only row (no production change): §4 mandates uncertain -> fail-closed.
+# Baselines already pinned: test_exact_dates_half_specified_rejected
+# (start-only duration) + controls test_20b_exact_instant_single_date
+# (instant end-only accepted) and test_20_exact_dates_win_over_fiscal_shorthand
+# (two-date duration accepted). The corroborated-completion FEATURE is PP2 (post).
+
+def test_duration_end_only_parks():
+    with pytest.raises(PeriodResolutionError) as exc:
+        resolve({"period_end_date": "2025-03-31", "time_type": "duration"})
+    assert "period_start_date" in str(exc.value)
+
+
+def test_instant_start_only_parks():
+    with pytest.raises(PeriodResolutionError) as exc:
+        resolve({"period_start_date": "2025-03-31", "time_type": "instant"})
+    assert "period_end_date" in str(exc.value)
