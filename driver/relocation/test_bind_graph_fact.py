@@ -20,8 +20,8 @@ from decimal import Decimal
 import pytest
 
 from driver.relocation.inline_html import (NOT_WELL_FORMED, bind_graph_fact,
-                                           parse_raw,
-                                           printed_value, reconcile)
+                                           find_by_identity, parse_raw,
+                                           prepare, printed_value, reconcile)
 
 CIK = "0000320193"
 
@@ -1887,3 +1887,18 @@ def test_EU152_an_INDETERMINATE_duration_refuses_not_binds():
     # RETAINED fail-closed safety net (the EU-016 precedent); the direct
     # three-state answer above is the arm's own pin.
     assert why == "unbindable_period", why
+
+
+def test_EU171_an_absent_unitRef_is_the_no_unit_identity_in_the_pool():
+    """find_by_identity (PROOF-ONLY reach lane, g2_fevid_call_trace_v5): an
+    element carrying NO unitRef attribute compares as the no-unit identity
+    '' — the same normalization the binder's unit_ref_mismatch arm applies —
+    so a no-unit query finds exactly it, and the unit-carrying control is
+    still found only by its exact document-local IDREF."""
+    extra = ('<div style="display:none"><ix:nonFraction id="nu-1" '
+             'name="us-gaap:Revenues" contextRef="c-2" scale="0" decimals="0" '
+             'format="ixt:num-dot-decimal">7</ix:nonFraction></div>')
+    prepared = prepare(_doc(extra_element=extra))
+    target = (_FIXTURE_NS['us-gaap'], 'Revenues')
+    assert find_by_identity(prepared, target, '') == ['nu-1']
+    assert find_by_identity(prepared, target, 'usd') == ['f-48']

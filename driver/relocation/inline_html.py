@@ -2351,6 +2351,15 @@ def find_by_identity(doc_or_html, target, unit_ref):
     prepared = _prepared(doc_or_html)
     if refused(prepared):
         return []            # an unreadable filing offers no candidates
+    # EU-171 (#827): the '' below is the no-unit identity — an element whose
+    # unitRef attribute is ABSENT claims no unit, and the binder's
+    # unit_ref_mismatch arm applies the IDENTICAL (unit_ref or '')
+    # normalization, both consuming the frozen equality law cited at the
+    # EU-154 block (unitRef stays an exact document-local IDREF otherwise).
+    # 'elements' stands under the EU-161 fail-closed adjudication. Reach
+    # lane: PROOF_ONLY_REACHED — production callers do not reach this
+    # function (g2_fevid_call_trace_v5.tsv, sha256 a92244ef95...); proof-lane
+    # behavior, held to the same law.
     return [eid for eid, f in prepared['elements'].items()
             if _qname(_typed(f.sem, 'name'), f.sem) == target
             and (_typed(f.sem, 'unitRef') or '') == unit_ref]

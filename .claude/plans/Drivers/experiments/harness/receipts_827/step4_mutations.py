@@ -1530,6 +1530,15 @@ MUTATIONS = [
      "driver/relocation/test_bind_graph_fact.py::"
      "test_RED_a_duplicate_id_abstains_and_is_never_rescued"),
 
+    (194, "EU-171: the no-unit identity normalization drifts in the candidate pool",
+     "driver/relocation/inline_html.py",
+     "            if _qname(_typed(f.sem, 'name'), f.sem) == target\n"
+     "            and (_typed(f.sem, 'unitRef') or '') == unit_ref]",
+     "            if _qname(_typed(f.sem, 'name'), f.sem) == target\n"
+     "            and (_typed(f.sem, 'unitRef') or 'X') == unit_ref]",
+     "driver/relocation/test_bind_graph_fact.py::"
+     "test_EU171_an_absent_unitRef_is_the_no_unit_identity_in_the_pool"),
+
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",
