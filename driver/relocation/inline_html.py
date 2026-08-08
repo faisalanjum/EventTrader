@@ -1937,13 +1937,24 @@ def _parse_unit(u):
             # and the two halves are kept in their own named slots rather than
             # one ordered blob, so a consumer cannot mistake a denominator for
             # a numerator; the swap is pinned by the lawful-divide door.
-            # CONSUMER CENSUS (repo-wide, this row): graph_numerator /
-            # graph_denominator / expanded_* / measures / is_divide are read by
-            # the binder and the locator; the PLAIN 'numerator'/'denominator'
-            # spellings have NO production reader today — only the context
-            # suite's shape assertion — so they are recorded here as a
-            # returned-but-unread surface (candidate for the final
-            # minimality sweep, the XMLNAME-MIN precedent), not silently kept.
+            # CONSUMER CENSUS (repo-wide), CORRECTED per SEQ 812 — my first
+            # census called the plain spellings unread; that was WRONG.
+            # graph_numerator / graph_denominator / expanded_* / measures /
+            # is_divide are read by the binder and the locator, and the plain
+            # 'numerator'/'denominator' have TWO proof consumers, not zero:
+            # test_context_content_model.py:890-891 (the shape assertion) and
+            # receipts_827/divide_unit_numerators.py:323-325, which keys on
+            # BOTH the written spellings and the expanded identities — its own
+            # note says keying on spellings alone would merge two taxonomies
+            # sharing a local name and split one namespace written under two
+            # prefixes. Mutation entry 267 also targets this shape. So these
+            # fields are NOT dead surface: at the final minimality sweep the
+            # first question is whether that receipt's question is fully
+            # answered by expanded_numerator/expanded_denominator — if yes,
+            # delete the plain fields, update the receipt and the shape test,
+            # regenerate its output and reconcile entry 267; if the raw
+            # spelling is demonstrably required, record that exact proof
+            # contract instead.
             'is_divide': bool(divides), 'numerator': num, 'denominator': den,
             'graph_numerator': tuple(_graph_measure(m) for m in n_meas),
             'graph_denominator': tuple(_graph_measure(m) for m in d_meas),
