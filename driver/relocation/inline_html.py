@@ -3037,6 +3037,15 @@ def bind_graph_fact(doc_or_html, *, inline_element_id, concept, context_id,
     # DURATION and bound a fact against a kind the graph never stated. Measured
     # read-only: `Period.period_type` holds exactly duration (8,358) and
     # instant (3,058). This is the same law `is_divide` already carries.
+    # EU-153 (#827), the exact citation upgrading the recorded lead: the
+    # {instant, duration} vocabulary is xbrli:periodType and the boundary
+    # triad is xbrli:dateUnion (union of xs:date, xs:dateTime) — XBRL 2.1
+    # REC 2003-12-31 with corrected errata 2013-02-20, §4.7.2 "Periods",
+    # normative schema xbrl-instance-2003-12-31.xsd,
+    # https://www.xbrl.org/Specification/XBRL-2.1/REC-2003-12-31/
+    # XBRL-2.1-REC-2003-12-31+corrected-errata-2013-02-20.html — the seven
+    # instant/duration literals in this function all speak that vocabulary
+    # (Core's twin is driver_period_resolver.PERIOD_TIME_TYPES, F9).
     if period_type not in ('instant', 'duration'):
         return None, 'malformed_period_type'
     # ALWAYS a 2-tuple: `_parse_context` :821-822 yields one in every arm,

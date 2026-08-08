@@ -1502,6 +1502,13 @@ MUTATIONS = [
      "driver/relocation/test_bind_graph_fact.py::"
      "test_EU151_a_blank_concept_namespace_refuses_at_the_one_owner"),
 
+    (190, "EU-153: the periodType vocabulary gate drifts a member",
+     "driver/relocation/inline_html.py",
+     "    if period_type not in ('instant', 'duration'):",
+     "    if period_type not in ('instant', 'durationX'):",
+     "driver/relocation/test_bind_graph_fact.py::"
+     "test_RED_exactness_holds_through_the_whole_binding"),
+
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",
