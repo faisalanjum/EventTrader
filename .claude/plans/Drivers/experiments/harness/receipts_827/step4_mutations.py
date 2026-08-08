@@ -1742,6 +1742,13 @@ MUTATIONS = [
      "    return ch in ' \u2014-'",
      "driver/relocation/test_row_label_span.py::"
      "test_a_DASH_ONLY_header_is_skipped_whatever_the_DASH_IS"),
+
+    (224, "EU-150: digits become words and numeric cells become labels",
+     "driver/relocation/inline_html.py",
+     "    return re.findall(r\"[A-Za-z][A-Za-z\u2019'-]*\", value)",
+     "    return re.findall(r\"[A-Za-z0-9][A-Za-z0-9\u2019'-]*\", value)",
+     "driver/relocation/test_row_label_span.py::"
+     "test_SEQ246_equal_CELLS_the_later_fact_keeps_its_OWN_label_window"),
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",

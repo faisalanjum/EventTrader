@@ -122,6 +122,18 @@ def _text(node, hidden=frozenset()):
 
 
 def _words(value):
+    # EU-150 (#827): the ASCII-only word rule is a SUPPORTED-SCOPE record
+    # under the owner's 2026-08-05 routing (rule bf3881d879cb3e3a): no spec
+    # owns "what is a label word", so the scope is the owner's — and the
+    # recall cost is now MEASURED over the whole frozen corpus
+    # (g2_evid_recall_EU-150.txt): 6,625,305 text-bearing td/th cells,
+    # 330 (0.005%) carry letters the rule cannot see AT ALL, and every
+    # sampled one is the lone Wingdings checkbox glyph 'þ' (U+00FE), not a
+    # label; 705 more are mixed and stay visible through their ASCII words.
+    # Selection-side only: the rule decides eligibility, never stored text,
+    # so its worst error WITHHOLDS (the EU-092 explicit empties). Widening
+    # to non-ASCII scripts is an owner scope extension, now decidable with
+    # these numbers in hand.
     return re.findall(r"[A-Za-z][A-Za-z’'-]*", value)
 
 
