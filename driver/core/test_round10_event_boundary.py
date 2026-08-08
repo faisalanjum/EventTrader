@@ -207,10 +207,6 @@ def test_a_MISSING_key_is_a_contract_rejection_not_a_KeyError(bad):
     _refused(_run([bad]), SchemaError, "each item is a dict carrying EXACTLY the keys")
 
 
-def test_an_UNKNOWN_key_is_a_contract_rejection_too():
-    _refused(_run([_item(sneaky="ignored?")]), SchemaError, "each item is a dict carrying EXACTLY the keys")
-
-
 @pytest.mark.parametrize("bad", ["not-a-dict", None, 5, [], ()])
 def test_a_NON_DICT_item_is_a_contract_rejection_not_an_AttributeError(bad):
     _refused(_run([bad]), SchemaError, "each item is a dict carrying EXACTLY the keys")
@@ -593,6 +589,16 @@ def test_nothing_malformed_reaches_the_graph_or_the_provider(why, over):
     if "source_id" in over or type(kw["items"]) not in (list, tuple):
         with pytest.raises(SchemaError):
             call()
+        return
+    # F6: the split still comes from the DOOR'S OWN LAW — a dict item carrying
+    # every pinned key PLUS extras is unlisted vocabulary and PARKS; anything
+    # else stays the contract rejection. Zero I/O either way (the invariant).
+    from driver.core.xbrl_attach import _EVENT_ITEM_KEYS
+    it = kw["items"][0]
+    if type(it) is dict and set(_EVENT_ITEM_KEYS) < set(it):
+        from driver.core.prepared_fact_v2 import ProductionValidationError
+        _refused(call(), ProductionValidationError,
+                 "unlisted item field(s)")
         return
     _refused(call(), SchemaError,
              "each item is a dict carrying EXACTLY the keys")

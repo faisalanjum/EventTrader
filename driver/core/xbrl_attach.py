@@ -501,6 +501,29 @@ def _one_representation_for_event(hashes):
     return values[0]
 
 
+# ---------------------------------------------------------------------------
+# F6 (#827): THE ATTACH ENVELOPE CONTRACT — census-built, fail-closed.
+# Owner ruling (sheet #7): strict allowlist; law per field = the STRICTER of
+# measured reality vs contract intent; UNLISTED parks, never rejects; widening
+# requires census evidence AND authority (SEQ 778 rider).
+# Census 2026-08-08 (receipt 13_f6_envelope_census.json): 7 packet files,
+# 136 events, 743 items, 305 with xbrl, 11 with source_evidence — measured
+# reality NEVER exceeds the pinned intent on any field (one evidence key set,
+# one piece key set, kinds exactly {header, section}, all spans lawful, zero
+# duplicates/blank text/sha violations), so the adopted law IS the intent.
+#   ACCEPT: exactly the pinned key sets below; list OR tuple containers;
+#           spans [start, end) of exact ints, 0 <= start < end; label inside
+#           quote; non-blank piece text; 64-hex sha; unique pieces.
+#   REFUSE (SchemaError -> rejected; the channel can fix and resubmit):
+#           a MISSING pinned key; wrong types; span-grammar breaches; label
+#           outside quote; duplicate pieces; blank text; malformed sha.
+#   PARK (ProductionValidationError -> parked; unlisted VOCABULARY that may
+#           be lawful contract evolution — resubmitting unchanged fixes
+#           nothing): an EXTRA key beside the pinned sets (item, evidence,
+#           piece); a piece kind outside the closed set.
+#   text_parts are CALLER-OWNED (Core's event builder), not channel
+#   envelope: their gates stay loud SchemaError by design.
+# ---------------------------------------------------------------------------
 _EVENT_ITEM_KEYS = ("fact", "concept", "member_refs", "source_evidence")
 
 _TEXT_PART_KEYS = ("part", "content")
@@ -612,6 +635,11 @@ def _checked_source_evidence(value):
     points, so nothing downstream could disagree with the channel.
     """
     if type(value) is not dict or set(value) != set(SOURCE_EVIDENCE_KEYS):
+        if type(value) is dict and set(SOURCE_EVIDENCE_KEYS) <= set(value):
+            raise ProductionValidationError(           # F6: unlisted -> park
+                f"attach_event_xbrl: unlisted source_evidence field(s) "
+                f"beside {SOURCE_EVIDENCE_KEYS} — parks until the contract "
+                f"widens (census evidence + authority)")
         raise SchemaError(
             f"attach_event_xbrl: source_evidence carries EXACTLY the keys "
             f"{SOURCE_EVIDENCE_KEYS}")
@@ -630,13 +658,18 @@ def _checked_source_evidence(value):
     pieces = []
     for piece in value["pieces"]:
         if type(piece) is not dict or set(piece) != set(PIECE_KEYS):
+            if type(piece) is dict and set(PIECE_KEYS) <= set(piece):
+                raise ProductionValidationError(       # F6: unlisted -> park
+                    f"attach_event_xbrl: unlisted evidence-piece field(s) "
+                    f"beside {PIECE_KEYS} — parks until the contract widens")
             raise SchemaError(
                 f"attach_event_xbrl: each evidence piece carries EXACTLY the "
                 f"keys {PIECE_KEYS}")
         if piece["kind"] not in PIECE_KINDS:
-            raise SchemaError(
-                f"attach_event_xbrl: evidence piece kind is one of "
-                f"{PIECE_KINDS} — the approved closed set")
+            raise ProductionValidationError(           # F6: unlisted -> park
+                f"attach_event_xbrl: evidence piece kind {piece['kind']!r} "
+                f"is unlisted (the closed set is {PIECE_KINDS}) — parks "
+                f"until the contract widens (census evidence + authority)")
         if type(piece["text"]) is not str or not piece["text"].strip():
             raise SchemaError(
                 "attach_event_xbrl: each evidence piece needs non-blank "
@@ -810,6 +843,11 @@ def attach_event_xbrl(items, *, source_id, store, filing_provider, text_parts,
                 # types (`{1: ..., "a": ...}`) raised a raw TypeError while
                 # FORMATTING the error — a crash inside the guard that exists
                 # to prevent crashes.
+                if type(i) is dict and set(_EVENT_ITEM_KEYS) <= set(i):
+                    raise ProductionValidationError(   # F6: unlisted -> park
+                        f"attach_event_xbrl: unlisted item field(s) beside "
+                        f"{_EVENT_ITEM_KEYS} — parks until the contract "
+                        f"widens (census evidence + authority)")
                 raise SchemaError(
                     f"attach_event_xbrl: each item is a dict carrying EXACTLY "
                     f"the keys {_EVENT_ITEM_KEYS}")

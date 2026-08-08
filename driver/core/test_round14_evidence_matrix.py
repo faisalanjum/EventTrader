@@ -15,7 +15,7 @@ from decimal import Decimal
 
 import pytest
 
-from driver.core.prepared_fact_v2 import SchemaError
+from driver.core.prepared_fact_v2 import ProductionValidationError, SchemaError
 from driver.core.test_round10_event_boundary import (_ACC, _DOOR_DOC, _Counting,
                                                      _CountingProvider,
                                                      _XMLNS, _door_item,
@@ -186,12 +186,9 @@ _PIECE_KEYS_MSG = ("each evidence piece carries EXACTLY the keys "
     ([{"kind": "header", "text": "x"}], _PIECE_KEYS_MSG),          # no span
     ([{"kind": "header", "span": [45, 52]}], _PIECE_KEYS_MSG),     # no text
     ([{"text": "x", "span": [45, 52]}], _PIECE_KEYS_MSG),          # no kind
-    ([{"kind": "header", "text": "x", "span": [45, 52], "z": 1}],
-     _PIECE_KEYS_MSG),                                             # extra key
-    ([{"kind": "footer", "text": "x", "span": [45, 52]}],     # kind off the enum
-     "evidence piece kind is one of"),
-    ([{"kind": "HEADER", "text": "x", "span": [45, 52]}],     # case is not it
-     "evidence piece kind is one of"),
+    # F6 (#827): the extra-key and off-enum-kind rows moved OUT of this
+    # REJECT matrix — unlisted vocabulary PARKS now (owner condition 2);
+    # their homes are the F6 park nodes in the round-8 door suite.
     ([{"kind": "header", "text": "", "span": [45, 52]}],      # blank text
      "each evidence piece needs non-blank string text"),
     ([{"kind": "header", "text": "   ", "span": [45, 52]}],   # whitespace text
@@ -602,8 +599,10 @@ def test_matrix_i_a_MISSING_inner_evidence_key_is_refused(drop):
 def test_matrix_i_an_EXTRA_inner_evidence_key_is_refused():
     item = _table_item("t1")
     item["source_evidence"] = dict(item["source_evidence"], sneaky=1)
-    _refused(_run_table(item), SchemaError,
-             "source_evidence carries EXACTLY the keys")
+    # F6 reconcile: an EXTRA key beside the pinned four is unlisted
+    # vocabulary and PARKS (owner condition 2); missing keys still reject.
+    _refused(_run_table(item), ProductionValidationError,
+             "unlisted source_evidence field(s)")
 
 
 def test_matrix_i_a_MIXED_KEY_TYPE_evidence_mapping_is_refused():
@@ -611,8 +610,11 @@ def test_matrix_i_a_MIXED_KEY_TYPE_evidence_mapping_is_refused():
     guard itself crashing while formatting the message — the #819 lesson."""
     item = _table_item("t1")
     item["source_evidence"] = {**dict(item["source_evidence"]), 5: "x"}
-    _refused(_run_table(item), SchemaError,
-             "source_evidence carries EXACTLY the keys")
+    # F6 reconcile: all four pinned keys present + one alien key = unlisted
+    # -> PARK; the subject (no crash while formatting, #819) holds — the
+    # park message never echoes the caller's keys.
+    _refused(_run_table(item), ProductionValidationError,
+             "unlisted source_evidence field(s)")
 
 
 # ---- 6. THE ONE-CHARACTER SHIFT, on EVERY span the contract carries --------

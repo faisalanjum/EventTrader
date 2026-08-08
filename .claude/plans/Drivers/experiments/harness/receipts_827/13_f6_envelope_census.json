@@ -1,0 +1,174 @@
+{
+ "counts": {
+  "events": 136,
+  "items": 743,
+  "items_with_xbrl": 305,
+  "packet_files": 7,
+  "xbrl_with_source_evidence": 11
+ },
+ "inputs": [
+  {
+   "file": "data/driver_catalog_seed/p4diff/packets.jsonl",
+   "sha256": "c15f483f06c40aecf3f9bf9008943cc0debe0de811a79c630b1a24c45b0cf5ce"
+  },
+  {
+   "file": "data/driver_catalog_seed/p4diff3/packets.jsonl",
+   "sha256": "c15f483f06c40aecf3f9bf9008943cc0debe0de811a79c630b1a24c45b0cf5ce"
+  },
+  {
+   "file": "data/driver_catalog_seed/smoke/packets.jsonl",
+   "sha256": "9998705c4bae8e0fb5811c076d99404ece0a2c072dd4d35c93480491e0bcc14c"
+  },
+  {
+   "file": "data/driver_catalog_seed/wp1/packets.jsonl",
+   "sha256": "c15f483f06c40aecf3f9bf9008943cc0debe0de811a79c630b1a24c45b0cf5ce"
+  },
+  {
+   "file": "data/driver_catalog_seed/wp3_aci_dryrun/packets.jsonl",
+   "sha256": "4feb4c4bf261fd9fb884986b340d23fd0b25664156b9d723c2a9a4bcb48d499a"
+  },
+  {
+   "file": "data/driver_catalog_seed/wp3_aci_stream/packets.jsonl",
+   "sha256": "093a9fe5625e0984f16c6b43e297ab84220737ed7b8c8e5ffc36de23654acd3f"
+  },
+  {
+   "file": "data/driver_catalog_seed/wp3_ce_compliant/packets.jsonl",
+   "sha256": "72af6e5cfa39df3aa48125f5ecb72fa8f313eba57bd4fb5f55ff5e216e256eb8"
+  }
+ ],
+ "measured": {
+  "blank_piece_text": 0,
+  "duplicate_piece_records": 0,
+  "label_absent": 0,
+  "label_outside_quote": 0,
+  "label_span_shapes": [
+   "OK"
+  ],
+  "member_refs_container_types": [],
+  "piece_counts": [
+   1,
+   2,
+   4
+  ],
+  "piece_span_shapes": [
+   "OK"
+  ],
+  "pieces_container_types": [
+   "list"
+  ],
+  "quote_span_shapes": [
+   "OK"
+  ],
+  "sha_grammar_violations": 0,
+  "text_parts_in_corpus": 0
+ },
+ "receipt": "#827 F6 envelope census (measured reality only)",
+ "script_sha256": "ad714a0c2a268aadb9e589651043e58850b38eb151a4ae73a9eef3ba73226199",
+ "seen": {
+  "dimension_key_sets": [
+   [
+    "axis",
+    "member"
+   ]
+  ],
+  "event_key_sets": [
+   [
+    "event_time",
+    "fye_month",
+    "items",
+    "source_id",
+    "source_type",
+    "ticker"
+   ]
+  ],
+  "evidence_key_sets": [
+   [
+    "pieces",
+    "quote_span",
+    "raw_label_span",
+    "representation_sha256"
+   ]
+  ],
+  "item_key_sets": [
+   [
+    "cadence",
+    "fmt",
+    "is_currency",
+    "level_money_mode_hint",
+    "level_shape_hint",
+    "level_unit_kind_hint",
+    "level_unit_raw",
+    "period_end",
+    "period_evidence",
+    "quote",
+    "quote_source",
+    "raw_label",
+    "tier",
+    "value"
+   ],
+   [
+    "cadence",
+    "fmt",
+    "is_currency",
+    "level_money_mode_hint",
+    "level_shape_hint",
+    "level_unit_kind_hint",
+    "level_unit_raw",
+    "period_end",
+    "period_evidence",
+    "quote",
+    "quote_source",
+    "raw_label",
+    "tier",
+    "value",
+    "xbrl"
+   ],
+   [
+    "cadence",
+    "fmt",
+    "is_currency",
+    "level_money_mode_hint",
+    "level_shape_hint",
+    "level_unit_kind_hint",
+    "level_unit_raw",
+    "period_end",
+    "period_evidence",
+    "quote",
+    "raw_label_or_claim",
+    "tier",
+    "value",
+    "xbrl"
+   ]
+  ],
+  "piece_key_sets": [
+   [
+    "kind",
+    "span",
+    "text"
+   ]
+  ],
+  "piece_kinds": [
+   "header",
+   "section"
+  ],
+  "xbrl_key_sets": [
+   [
+    "axis_members",
+    "concept",
+    "period_end",
+    "period_start",
+    "ptype"
+   ],
+   [
+    "concept",
+    "dimensions",
+    "ix",
+    "period_end",
+    "period_start",
+    "ptype",
+    "source_evidence",
+    "unit"
+   ]
+  ]
+ }
+}

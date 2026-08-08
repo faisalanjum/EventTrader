@@ -1343,3 +1343,91 @@ def test_F13_an_all_excluded_read_states_the_TRUTHFUL_availability():
     assert o["codes"] == ("XBRL_BINDING_UNAVAILABLE",)
     assert "none were usable" in o["detail"].lower(), o["detail"]
     assert "carries NO fact" not in o["detail"]
+
+
+# --------------------------------------------------------------------------
+# F6 (#827): the census-built envelope contract — UNLISTED VOCABULARY PARKS
+# (owner condition 2), while malformed PINNED grammar keeps rejecting.
+# --------------------------------------------------------------------------
+
+def _evidence_item(mutate_evidence=None, mutate_item=None):
+    fact = _fact()
+    evidence, filing_quote = filing_evidence(_DOC, "f1")
+    fact["item"]["quote"] = filing_quote
+    ev = {k: (list(v) if isinstance(v, tuple) and k != "pieces" else v)
+          for k, v in dict(evidence).items()}
+    ev["pieces"] = [dict(p) for p in evidence["pieces"]] \
+        if evidence["pieces"] else []
+    if mutate_evidence:
+        mutate_evidence(ev)
+    item = {"fact": fact, "concept": "us-gaap:Revenues", "member_refs": [],
+            "source_evidence": ev}
+    if mutate_item:
+        mutate_item(item)
+    return item
+
+
+def _door(item):
+    return attach_event_xbrl([item], source_id=ACC, store=_Graph(),
+                             filing_provider=_Provider(),
+                             text_parts=parts_for([item]))
+
+
+def test_F6_an_UNLISTED_evidence_field_parks_never_rejects():
+    """F6 (#827), owner condition 2: an EXTRA key beside the four pinned ones
+    is unlisted VOCABULARY — possibly a lawful contract evolution — so it
+    PARKS (drains when the contract widens with census evidence + authority);
+    resubmitting unchanged fixes nothing, which is what rejection would
+    demand. Census 2026-08-08: zero such shapes in the accepted corpus."""
+    (o,) = _door(_evidence_item(
+        lambda ev: ev.update(novel_field="x"))).preflight_outcomes
+    assert o["decision"] == "parked", dict(o)
+    assert o["codes"] == ("XBRL_BINDING_UNAVAILABLE",)
+    assert "unlisted" in o["detail"]
+
+
+def test_F6_a_MISSING_pinned_evidence_key_still_rejects():
+    """CONTROL: a missing PINNED key is the channel failing the pinned
+    contract — fix and resubmit works, so the rejection stands."""
+    def drop(ev):
+        del ev["raw_label_span"]
+    (o,) = _door(_evidence_item(drop)).preflight_outcomes
+    assert o["decision"] == "rejected", dict(o)
+    assert o["codes"] == ("XBRL_CONTRACT_INVALID",)
+
+
+def test_F6_an_UNKNOWN_piece_kind_parks_never_rejects():
+    """The kind vocabulary is a closed allowlist; a member outside it is
+    unlisted, and unlisted parks (owner condition 2)."""
+    def newkind(ev):
+        ev["pieces"] = [{"kind": "footnote", "text": "t", "span": [0, 1]}]
+    (o,) = _door(_evidence_item(newkind)).preflight_outcomes
+    assert o["decision"] == "parked", dict(o)
+    assert "unlisted" in o["detail"]
+
+
+def test_F6_an_UNLISTED_piece_field_parks_and_a_missing_one_rejects():
+    def extra(ev):
+        ev["pieces"] = [{"kind": "header", "text": "t", "span": [0, 1],
+                         "novel": "x"}]
+    (o,) = _door(_evidence_item(extra)).preflight_outcomes
+    assert o["decision"] == "parked", dict(o)
+
+    def missing(ev):
+        ev["pieces"] = [{"kind": "header", "text": "t"}]
+    (o2,) = _door(_evidence_item(missing)).preflight_outcomes
+    assert o2["decision"] == "rejected", dict(o2)
+
+
+def test_F6_an_UNLISTED_item_field_parks_and_a_missing_one_rejects():
+    """The event-item envelope under the same law: extra key -> unlisted ->
+    park; missing pinned key -> reject."""
+    (o,) = _door(_evidence_item(
+        mutate_item=lambda i: i.update(novel="x"))).preflight_outcomes
+    assert o["decision"] == "parked", dict(o)
+    assert "unlisted" in o["detail"]
+
+    def drop(i):
+        del i["member_refs"]
+    (o2,) = _door(_evidence_item(mutate_item=drop)).preflight_outcomes
+    assert o2["decision"] == "rejected", dict(o2)

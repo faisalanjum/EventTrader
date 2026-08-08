@@ -1222,6 +1222,34 @@ MUTATIONS = [
      '        return _fan_out(exc, code=\"SOURCE_COMPANY_AMBIGUOUS\")',
      "driver/core/test_round11_outcomes.py::"
      "test_F4_every_attach_token_is_minted_through_the_T1_owner"),
+
+    (151, "F6: the item gate's unlisted-vocabulary park is neutered",
+     "driver/core/xbrl_attach.py",
+     "                if type(i) is dict and set(_EVENT_ITEM_KEYS) <= set(i):",
+     "                if False:",
+     "driver/core/test_round8_xbrl_binding.py::"
+     "test_F6_an_UNLISTED_item_field_parks_and_a_missing_one_rejects"),
+
+    (152, "F6: the evidence gate's unlisted-vocabulary park is neutered",
+     "driver/core/xbrl_attach.py",
+     "        if type(value) is dict and set(SOURCE_EVIDENCE_KEYS) <= set(value):",
+     "        if False:",
+     "driver/core/test_round8_xbrl_binding.py::"
+     "test_F6_an_UNLISTED_evidence_field_parks_never_rejects"),
+
+    (153, "F6: the piece gate's unlisted-vocabulary park is neutered",
+     "driver/core/xbrl_attach.py",
+     "            if type(piece) is dict and set(PIECE_KEYS) <= set(piece):",
+     "            if False:",
+     "driver/core/test_round8_xbrl_binding.py::"
+     "test_F6_an_UNLISTED_piece_field_parks_and_a_missing_one_rejects"),
+
+    (154, "F6: the unlisted piece kind regresses to a rejection",
+     "driver/core/xbrl_attach.py",
+     "        if piece[\"kind\"] not in PIECE_KINDS:\n            raise ProductionValidationError(           # F6: unlisted -> park",
+     "        if piece[\"kind\"] not in PIECE_KINDS:\n            raise SchemaError(",
+     "driver/core/test_round8_xbrl_binding.py::"
+     "test_F6_an_UNKNOWN_piece_kind_parks_never_rejects"),
 ]
 
 

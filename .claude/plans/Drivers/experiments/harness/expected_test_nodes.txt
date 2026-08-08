@@ -878,7 +878,6 @@ driver.core.test_round10_event_boundary::test_an_INVALID_date_shape_is_refused_a
 driver.core.test_round10_event_boundary::test_an_INVALID_date_shape_is_refused_at_the_row_boundary[224-04-01]
 driver.core.test_round10_event_boundary::test_an_INVALID_date_shape_is_refused_at_the_row_boundary[not-a-date]
 driver.core.test_round10_event_boundary::test_an_UNEXPECTED_programming_error_FAILS_LOUDLY
-driver.core.test_round10_event_boundary::test_an_UNKNOWN_key_is_a_contract_rejection_too
 driver.core.test_round10_event_boundary::test_an_event_with_NO_xbrl_items_is_lawful_and_returns_nothing
 driver.core.test_round10_event_boundary::test_comma_formatting_of_the_SAME_number_is_not_a_conflict
 driver.core.test_round10_event_boundary::test_every_BLANK_fact_id_form_is_ONE_fact_not_a_conflict
@@ -1148,15 +1147,12 @@ driver.core.test_round14_evidence_matrix::test_matrix_b_malformed_quote_span_is_
 driver.core.test_round14_evidence_matrix::test_matrix_b_malformed_quote_span_is_refused[bad9-quote_span endpoints must be exact integers]
 driver.core.test_round14_evidence_matrix::test_matrix_c_a_malformed_evidence_piece_is_refused[bad0-each evidence piece carries EXACTLY the keys ('kind', 'text', 'span')]
 driver.core.test_round14_evidence_matrix::test_matrix_c_a_malformed_evidence_piece_is_refused[bad1-each evidence piece carries EXACTLY the keys ('kind', 'text', 'span')]
-driver.core.test_round14_evidence_matrix::test_matrix_c_a_malformed_evidence_piece_is_refused[bad10-each evidence piece carries EXACTLY the keys ('kind', 'text', 'span')]
 driver.core.test_round14_evidence_matrix::test_matrix_c_a_malformed_evidence_piece_is_refused[bad2-each evidence piece carries EXACTLY the keys ('kind', 'text', 'span')]
-driver.core.test_round14_evidence_matrix::test_matrix_c_a_malformed_evidence_piece_is_refused[bad3-each evidence piece carries EXACTLY the keys ('kind', 'text', 'span')]
-driver.core.test_round14_evidence_matrix::test_matrix_c_a_malformed_evidence_piece_is_refused[bad4-evidence piece kind is one of]
-driver.core.test_round14_evidence_matrix::test_matrix_c_a_malformed_evidence_piece_is_refused[bad5-evidence piece kind is one of]
-driver.core.test_round14_evidence_matrix::test_matrix_c_a_malformed_evidence_piece_is_refused[bad6-each evidence piece needs non-blank string text]
-driver.core.test_round14_evidence_matrix::test_matrix_c_a_malformed_evidence_piece_is_refused[bad7-each evidence piece needs non-blank string text]
-driver.core.test_round14_evidence_matrix::test_matrix_c_a_malformed_evidence_piece_is_refused[bad8-each evidence piece needs non-blank string text]
-driver.core.test_round14_evidence_matrix::test_matrix_c_a_malformed_evidence_piece_is_refused[bad9-an evidence piece span must satisfy 0 <= start < end, got [52, 45]]
+driver.core.test_round14_evidence_matrix::test_matrix_c_a_malformed_evidence_piece_is_refused[bad3-each evidence piece needs non-blank string text]
+driver.core.test_round14_evidence_matrix::test_matrix_c_a_malformed_evidence_piece_is_refused[bad4-each evidence piece needs non-blank string text]
+driver.core.test_round14_evidence_matrix::test_matrix_c_a_malformed_evidence_piece_is_refused[bad5-each evidence piece needs non-blank string text]
+driver.core.test_round14_evidence_matrix::test_matrix_c_a_malformed_evidence_piece_is_refused[bad6-an evidence piece span must satisfy 0 <= start < end, got [52, 45]]
+driver.core.test_round14_evidence_matrix::test_matrix_c_a_malformed_evidence_piece_is_refused[bad7-each evidence piece carries EXACTLY the keys ('kind', 'text', 'span')]
 driver.core.test_round14_evidence_matrix::test_matrix_c_a_non_container_pieces_value_is_refused[5]
 driver.core.test_round14_evidence_matrix::test_matrix_c_a_non_container_pieces_value_is_refused[None]
 driver.core.test_round14_evidence_matrix::test_matrix_c_a_non_container_pieces_value_is_refused[bad1]
@@ -1632,7 +1628,6 @@ driver.core.test_v2_attacks::test_ATTACK_production_rules_now_reject_what_v2_use
 driver.core.test_v2_attacks::test_ATTACK_production_rules_now_reject_what_v2_used_to_accept[conditions on a metric-over2-CONDITIONS]
 driver.core.test_v2_attacks::test_ATTACK_production_rules_now_reject_what_v2_used_to_accept[invented driver_state-over0-STATE]
 driver.core.test_v2_attacks::test_ATTACK_q5_is_rejected
-driver.core.test_v2_attacks::test_W9_the_verified_bundle_boundary_is_static_and_singular
 driver.core.test_v2_attacks::test_ATTACK_the_canonical_length_matches_the_real_canonicalizer
 driver.core.test_v2_attacks::test_ATTACK_the_document_is_tied_to_the_source_id
 driver.core.test_v2_attacks::test_ATTACK_the_facts_OWN_slot_is_the_one_verified
@@ -1647,6 +1642,7 @@ driver.core.test_v2_attacks::test_ATTACK_two_period_shape_fields_are_rejected_by
 driver.core.test_v2_attacks::test_ATTACK_unequal_29_digit_endpoints_are_not_a_point
 driver.core.test_v2_attacks::test_ATTACK_unmatched_output_is_canonically_ordered
 driver.core.test_v2_attacks::test_ATTACK_xbrl_scaling_is_exact_at_29_digits
+driver.core.test_v2_attacks::test_W9_the_verified_bundle_boundary_is_static_and_singular
 driver.core.test_v2_attacks::test_the_contract_does_not_reimplement_THREE_NAMED_production_symbols
 driver.relocation.test_anchor_schema_probe::test_10_driver_name_mismatch_rejected
 driver.relocation.test_anchor_schema_probe::test_11_stored_fact_scope_must_match_id_suffix
