@@ -720,6 +720,14 @@ def _visible_walk(root, spans=None, hidden=frozenset(), also=frozenset(),
     """
     words = []
 
+    # EU-188 (#827): 'name' is the PINNED bs4 element-name API — Beautiful
+    # Soup 4.13.3 (installed pin), documented Tag.name, the same citation
+    # the sibling reader carries at _advance (EU-072) — and the None answer
+    # is exactly how bs4 distinguishes a NavigableString (and its Comment /
+    # CData / PI / Declaration / Doctype subclasses) from an element. That
+    # is why the text arm can be written as a single identity test rather
+    # than a type list; a drifted token makes every element look like text
+    # (42 reds).
     def walk(node, vis):
         name = getattr(node, 'name', None)
         if name is None:

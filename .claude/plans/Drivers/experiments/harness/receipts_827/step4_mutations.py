@@ -2310,6 +2310,13 @@ MUTATIONS = [
      "driver/relocation/test_row_label_span.py::"
      "test_the_SELECTED_CELL_owns_the_span_when_a_label_appears_twice"),
 
+    (307, "EU-188: the bs4 element-name token drifts and every element reads as text",
+     "driver/relocation/inline_html.py",
+     "    def walk(node, vis):\n        name = getattr(node, 'name', None)",
+     "    def walk(node, vis):\n        name = getattr(node, 'nameX', None)",
+     "driver/relocation/test_row_label_span.py::"
+     "test_the_SELECTED_CELL_owns_the_span_when_a_label_appears_twice"),
+
     (281, "EU-169: the exactly-one-child bound widens to two",
      "driver/relocation/inline_html.py",
      "        if len(kids) != 1 or len(elements) != 1 \\",
