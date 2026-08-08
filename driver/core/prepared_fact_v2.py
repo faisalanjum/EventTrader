@@ -43,10 +43,14 @@ from types import MappingProxyType
 from driver.core.driver_ids import split_terminal_suffix, valid_source_id
 from driver.core.slot_convert import SlotConversionError, convert_slot, validate_slot
 
+# W15 (#827): the DECLARED export surface is exactly the retained 11 — the 8
+# with production consumers + the 3 inactive clean-v2 component doors. Export
+# is a distribution decision; the input-inventory coverage surface is separate
+# and unchanged (split_slice_part stays covered there).
 __all__ = ["SchemaError", "ProductionValidationError", "SourceUnavailable",
-           "OUTCOME_CLASSES", "NUMERIC_SLOTS", "PreparedItemV2",
-           "PreparedFactV2", "RunInputV2", "ITEM_FIELDS", "SOURCE_OWNED_FIELDS",
-           "split_slice_part", "verify_occurrence",
+           "OUTCOME_CLASSES", "NUMERIC_SLOTS",
+           "PreparedFactV2", "RunInputV2", "ITEM_FIELDS",
+           "verify_occurrence",
            "to_stored_fact", "validate_via_production"]
 
 _PROOF_KEYS = ("polarity", "basis", "evidence", "sentence")

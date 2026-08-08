@@ -1434,13 +1434,17 @@ def test_823_DERIVED_inventory_every_public_v2_dataclass_is_deeply_frozen():
     from types import MappingProxyType
 
     from driver.core import prepared_fact_v2 as p2
-    # DERIVED FROM `__all__` — the module's own declaration of what is public.
-    # Walking `vars()` also picks up imported names and needed a hand-written
-    # expected set beside it, which is the drift this test exists to prevent.
-    classes = [getattr(p2, n) for n in p2.__all__
-               if dataclasses.is_dataclass(getattr(p2, n))
-               and isinstance(getattr(p2, n), type)]
-    assert classes, "no public dataclass found via __all__"
+    # DERIVED FROM THE MODULE'S OWN PUBLIC DATACLASSES (W15 reconcile,
+    # recorded): `__all__` is the DISTRIBUTION surface and shrank at W15;
+    # freeze coverage is the COVERAGE surface and must not shrink with it —
+    # PreparedItemV2 left the wildcard export but stays a public dataclass
+    # this check owns. Non-underscore names defined IN this module only, so
+    # imported names still cannot drift in.
+    classes = [obj for n, obj in vars(p2).items()
+               if not n.startswith("_") and isinstance(obj, type)
+               and dataclasses.is_dataclass(obj)
+               and obj.__module__ == p2.__name__]
+    assert classes, "no public dataclass found in the module"
     d = {k: None for k in p2.ITEM_FIELDS}
     d.update(driver_name="d", driver_state="reported", quote="q",
              measurement_raw_spans=["a"], slice_parts=["segment:a"],
@@ -1583,3 +1587,22 @@ def test_827B1_attach_source_id_diagnostic_states_local_truth_not_the_law():
                        match=r"^attach_event_xbrl: source_id is invalid$"):
         attach_event_xbrl([], source_id="x:y", store=None,
                           filing_provider=None, text_parts=None)
+
+
+def test_W15_the_declared_export_surface_is_exactly_the_retained_set():
+    """W15: `__all__` is the DISTRIBUTION decision (wildcard export), and it
+    is exactly the frozen 11 — the 8 with production consumers + the 3
+    inactive clean-v2 component doors. Set equality alone is insufficient
+    (a duplicate survives it, reproduced on the board), so BOTH membership
+    and length are asserted. Coverage obligations live in the separate
+    input inventory and did NOT move (split_slice_part stays covered
+    there; export != inventory)."""
+    from driver.core import prepared_fact_v2 as p2
+    EXPECTED_11 = {"SchemaError", "ProductionValidationError",
+                   "SourceUnavailable", "OUTCOME_CLASSES", "NUMERIC_SLOTS",
+                   "PreparedFactV2", "ITEM_FIELDS", "verify_occurrence",
+                   "RunInputV2", "to_stored_fact", "validate_via_production"}
+    assert set(p2.__all__) == EXPECTED_11
+    assert len(p2.__all__) == 11               # no duplicates
+    # an explicit import of an unlisted name still succeeds (round-3 proof):
+    from driver.core.prepared_fact_v2 import split_slice_part  # noqa: F401
