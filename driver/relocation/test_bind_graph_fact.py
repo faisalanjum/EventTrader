@@ -1902,3 +1902,17 @@ def test_EU171_an_absent_unitRef_is_the_no_unit_identity_in_the_pool():
     target = (_FIXTURE_NS['us-gaap'], 'Revenues')
     assert find_by_identity(prepared, target, '') == ['nu-1']
     assert find_by_identity(prepared, target, 'usd') == ['f-48']
+
+
+def test_EU172_a_malformed_graph_qname_refuses_as_its_own_missing_identity():
+    """graph_concept_target: a stored qname that is not a QName at all
+    (a:b:c — an NCName may not contain a colon, Namespaces in XML 1.0 3e
+    section 4) refuses under the identity's OWN reason, never flowing on as
+    an empty local name for the equality ladder to call a concept mismatch.
+    Measured over the whole graph population: 0 of 13,775,616 stored qnames
+    are refused (the contract-sheet census), so the guard costs nothing and
+    only ever catches corruption."""
+    assert _bind(concept="us-gaap:Rev:enues") == (
+        None, 'missing_graph_concept_namespace')
+    ok, why = _bind()
+    assert why == 'ok' and ok is not None      # the lawful control binds

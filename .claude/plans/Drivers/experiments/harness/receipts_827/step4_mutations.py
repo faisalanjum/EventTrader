@@ -1539,6 +1539,13 @@ MUTATIONS = [
      "driver/relocation/test_bind_graph_fact.py::"
      "test_EU171_an_absent_unitRef_is_the_no_unit_identity_in_the_pool"),
 
+    (195, "EU-172: a refused stored qname flows on as an empty local name",
+     "driver/relocation/inline_html.py",
+     "    if local is None:\n        return None\n    return (concept_namespace, local)",
+     "    if local is None:\n        local = ''\n    return (concept_namespace, local)",
+     "driver/relocation/test_bind_graph_fact.py::"
+     "test_EU172_a_malformed_graph_qname_refuses_as_its_own_missing_identity"),
+
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",

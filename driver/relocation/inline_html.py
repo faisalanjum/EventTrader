@@ -2285,6 +2285,15 @@ def graph_concept_target(concept_key, concept_namespace, graph_concept_qname):
         return None
     if graph_concept_qname != concept_key:
         return None
+    # EU-172 (#827): the census member here (the parts[1] prefix subscript)
+    # was DELETED by the XMLNAME-MIN refactor (its own reviewed row, entry
+    # 105): graph_qname_parts now returns only the local name. The surviving
+    # rule is the None guard below — FAIL-CLOSED: a stored qname that is not
+    # a QName refuses under this identity's own reason rather than flowing
+    # on as an empty local name. Measured recall receipt
+    # g2_evid_recall_EU-172.txt: 0 of 13,775,616 stored graph qnames are
+    # refused (the contract-sheet census) — the guard only catches
+    # corruption.
     local = graph_qname_parts(graph_concept_qname)
     if local is None:
         return None
