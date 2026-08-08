@@ -2207,6 +2207,14 @@ def _evidence_from(fact, prepared):
     # nothing — it is neither absent nor `-`. Accepting it let a fixture state a
     # sign it did not have, and let a document assert a transform by a name that
     # resolves to nothing.
+    # EU-096 (#827): the nine attribute reads in this region consume the
+    # Inline XBRL 1.1 nonFraction attribute definitions exactly (Part 1,
+    # section 10.1 family — name / contextRef / unitRef / sign / format /
+    # scale / id; the current-edition URL is at the nonFraction reader's
+    # spec-sources note): sign's only lawful value is '-' (negates; the
+    # whitespace-preserving xs:string law in the note above), an ABSENT
+    # scale means 10^0 (pinned through the bind door), and ix:hidden
+    # membership arrives through the veiled set (EU-095).
     raw_sign = _typed(el, 'sign')
     if raw_sign is not None and raw_sign != '-':
         return None, 'malformed_sign'

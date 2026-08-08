@@ -1938,6 +1938,20 @@ MUTATIONS = [
      "    veiled = prepared.get('hidden_nodesX', frozenset())",
      "driver/relocation/test_row_label_span.py::"
      "test_EU095_ix_hidden_text_never_leaks_into_row_evidence"),
+
+    (252, "EU-096: the absent-scale default drifts to ten",
+     "driver/relocation/inline_html.py",
+     "    scale = 0 if raw_scale is None else xml_integer(raw_scale)",
+     "    scale = 1 if raw_scale is None else xml_integer(raw_scale)",
+     "driver/relocation/test_semantic_fact_value.py::"
+     "test_EU096_an_absent_scale_means_ten_to_the_zero"),
+
+    (253, "EU-096: the sign law goes vacuous and a plus sign is accepted",
+     "driver/relocation/inline_html.py",
+     "    if raw_sign is not None and raw_sign != '-':\n        return None, 'malformed_sign'",
+     "    if False and raw_sign is not None and raw_sign != '-':\n        return None, 'malformed_sign'",
+     "driver/relocation/test_two_view_bridge.py::"
+     "test_sign_PRESERVES_whitespace_AT_THE_REAL_BIND_DOOR"),
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",

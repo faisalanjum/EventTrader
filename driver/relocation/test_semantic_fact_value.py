@@ -540,3 +540,15 @@ def test_EACH_rule_is_load_bearing_ALONE(rule, source, tmp_path):
     lawful, why_l = mutant.bind_graph_fact(_doc(_fact()),
                                            raw_value='390,000,000', **_GRAPH)
     assert lawful is not None, f'{rule}: the mutation broke a lawful fact ({why_l})'
+
+
+def test_EU096_an_absent_scale_means_ten_to_the_zero():
+    """Inline XBRL 1.1: a nonFraction with NO scale attribute is unscaled —
+    the absent-scale default is 10^0 — so displayed 390 binds raw 390; any
+    other default would silently multiply every unscaled fact in the
+    corpus."""
+    inner = ('<ix:nonFraction id="f1" name="us-gaap:A" contextRef="c1" '
+             'unitRef="u1" decimals="0" '
+             'format="ixt:num-dot-decimal">390</ix:nonFraction>')
+    bound, why = _bind(inner, raw_value='390')
+    assert bound is not None, why
