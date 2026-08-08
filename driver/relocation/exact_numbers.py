@@ -295,6 +295,15 @@ def _iso_date(d):
     CENSUS 2026-07-28: 11,415 of 11,416 stored Periods already carry the strict
     form; the single exception is `224-04-01` (a 3-digit year), which a
     well-formed claim could never have matched anyway.
+
+    EU-012 (#827), the two raised MESSAGE texts adjudicated: they are
+    diagnostic DETAIL, not outcome vocabulary — the caller closure is
+    proven: xbrl_attach:315 catches ExactError and re-raises its own park
+    (the T1-registered XBRL_BINDING_UNAVAILABLE code; str(e) rides only in
+    the free-prose detail), and slice_menu:223 catches and returns None
+    (publishes nothing). The vocabulary law (T1/outcome_codes) governs
+    CODES; no code is minted here. The function's RULES are mutation-
+    covered (entry 169 + the EU-007 boundary pin).
     """
     if not isinstance(d, str) or not _STRICT_ISO.fullmatch(d):
         raise ExactError(f"bad ISO date (need strict YYYY-MM-DD): {d!r}")
