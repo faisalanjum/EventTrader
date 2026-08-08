@@ -1952,6 +1952,13 @@ MUTATIONS = [
      "    if False and raw_sign is not None and raw_sign != '-':\n        return None, 'malformed_sign'",
      "driver/relocation/test_two_view_bridge.py::"
      "test_sign_PRESERVES_whitespace_AT_THE_REAL_BIND_DOOR"),
+
+    (254, "EU-098: the declared-units read reverts to a soft drifted default",
+     "driver/relocation/inline_html.py",
+     "    declared = prepared['units'].get(unit_ref)",
+     "    declared = (prepared.get('unitsX') or {}).get(unit_ref)",
+     "driver/relocation/test_bind_graph_fact.py::"
+     "test_RED_exactness_holds_through_the_whole_binding"),
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",

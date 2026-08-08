@@ -3453,7 +3453,13 @@ def bind_graph_fact(doc_or_html, *, inline_element_id, concept, context_id,
     # this same prepared object before any evidence exists: an undefined or
     # poisoned unitRef never reaches this line, so `declared` is the parsed
     # unit dict by contract — a second check here could never fire.
-    declared = (prepared.get('units') or {}).get(unit_ref)
+    # EU-098 (#827): 'units' is prepare()'s own complete-shape key (the
+    # EU-161/EU-095 law) and the contract note above already proves the
+    # object — so the read is HARD: the old (.get or {}) softness turned a
+    # drifted key into refuse-everything; a hard key makes it a loud
+    # KeyError at first use instead. Both consumers now agree (:2196 was
+    # already hard).
+    declared = prepared['units'].get(unit_ref)
     # THE CERTIFIED BOOLEAN LAW: only the exact graph strings. My own
     # `str(is_divide) in ('0','1')` accepted the Python ints 0 and 1, which this
     # map deliberately abstains on.
