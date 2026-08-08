@@ -1707,6 +1707,13 @@ MUTATIONS = [
      "        'row_span': None,",
      "driver/relocation/test_row_label_span.py::"
      "test_a_HIDDEN_fact_still_has_NO_visible_evidence"),
+
+    (219, "EU-093: the row-label pick drifts from first-left to nearest-left",
+     "driver/relocation/inline_html.py",
+     "                    _visible_slice(left[0], prepared)",
+     "                    _visible_slice(left[-1], prepared)",
+     "driver/relocation/test_row_label_span.py::"
+     "test_the_SELECTED_CELL_owns_the_span_when_a_label_appears_twice"),
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",

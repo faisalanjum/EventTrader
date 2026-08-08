@@ -2179,6 +2179,19 @@ def _evidence_from(fact, prepared):
         'section_span': None,
         'block': '',
     }
+    # EU-093 (#827): FAIL-CLOSED adjudication of the WHOLE selection walk
+    # below (row/label/section/column picking) — the E-EVID-SELECT family
+    # rule. Every step (1) selects only from the fact's OWN structural
+    # context (its row, its cells left of the fact, its table's prior rows,
+    # its ancestors), (2) stores only exact slices at their recorded spans
+    # (_visible_slice — text and span are two views of one fact), and
+    # (3) on absence yields the record's explicit empty claim (EU-092),
+    # never a guess and never invented text. The family's authority record
+    # is the owner's certification-evidence blessing (the EU-041 ruling);
+    # the walk's behavior is pinned by the primary battery, and the
+    # first-left label law is pinned by the twice-label node (which reddens
+    # under a nearest-left drift — the recorded detector). Receipt
+    # g2_evid_recall_EU-093.txt: zero recall — adjudication only.
     # ONE call decides row-vs-block AND names the owner whose span is read, so
     # the walker and this reader can never disagree about which node that is.
     in_table, owner = _evidence_owner(node)
