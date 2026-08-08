@@ -2303,6 +2303,13 @@ MUTATIONS = [
      "driver/relocation/test_row_label_span.py::"
      "test_EU062_zero_width_space_is_ZERO_WIDTH_not_a_separator"),
 
+    (306, "EU-148: the span index key drifts and every recorded extent empties",
+     "driver/relocation/inline_html.py",
+     "    span = prepared.get('node_spans', {}).get(id(node))",
+     "    span = prepared.get('node_spansX', {}).get(id(node))",
+     "driver/relocation/test_row_label_span.py::"
+     "test_the_SELECTED_CELL_owns_the_span_when_a_label_appears_twice"),
+
     (281, "EU-169: the exactly-one-child bound widens to two",
      "driver/relocation/inline_html.py",
      "        if len(kids) != 1 or len(elements) != 1 \\",

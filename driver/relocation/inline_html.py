@@ -665,6 +665,13 @@ def _visible_slice(node, prepared):
     views of ONE fact. It adds no parser and no rule: the walker already
     recorded both, and this only reads them together.
     """
+    # EU-148 (#827): the span source is prepare()'s own node_spans index —
+    # the walker records each tracked node's exact extent IN the pinned
+    # representation, so text and span are two views of ONE fact (the
+    # EU-093 selection law). The empty-slice answer below is the truthful
+    # NO-RECORDED-EXTENT reading: a node the walk pruned has no extent, and
+    # returning '' with a None span says exactly that — never a guessed
+    # offset. A drifted key silently empties every extent (26 reds).
     span = prepared.get('node_spans', {}).get(id(node))
     if span is None:
         return '', None
