@@ -736,6 +736,15 @@ def _mixed_key_doors():
             {**good, "item": {**good["item"], 2: "y", "zz": "w"}})),
         ("run input", lambda: RunInputV2.from_dict(
             {"source_id": _ACC, "facts": [], 3: "z", "zz": "w"})),
+        # W12 (#827): the board-frozen fourth door — a slot carrying the
+        # three required keys PLUS integer key 1, through the public fact
+        # door; supplies W13 cell A-D18's named route.
+        ("slot level", lambda: PreparedFactV2.from_dict(
+            {**good, "item": {**good["item"],
+                              "level_low": {"value": Decimal(726),
+                                            "scale_multiplier": Decimal(1),
+                                            "unit_scale_evidence": None,
+                                            1: "x"}}})),
     ]
 
 

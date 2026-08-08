@@ -497,10 +497,16 @@ class PreparedFactV2:
         kw = dict(raw)
         if verified_xbrl is not None:
             kw.update(verified_xbrl)
-        try:
-            item = PreparedItemV2(**kw)
-        except TypeError as e:
-            raise SchemaError(f"malformed item: {e}")
+        # W12 (#827), adjudicated after the F-STORE fix (S2): the broad
+        # `except TypeError -> SchemaError("malformed item")` is DELETED as
+        # UNREACHABLE by channel input — _check_keys guarantees kw's keys are
+        # exactly the string ITEM_FIELDS before **kw, and every field value
+        # is refused typed-first inside validate (nine-field fuzz probe,
+        # 2026-08-08). If a TypeError ever fires here it is OUR programming
+        # error, and converting it to a channel-facing contract rejection
+        # mislabeled the guilty party — a programming error stays LOUD (the
+        # same law as _default_outcome's unlisted-class arm).
+        item = PreparedItemV2(**kw)
         return cls(fact_type=d["fact_type"], part_ref=d["part_ref"],
                    occurrence_in_part=d["occurrence_in_part"],
                    per_x=d["per_x"], item=item)
