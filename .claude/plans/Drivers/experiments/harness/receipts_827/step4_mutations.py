@@ -1714,6 +1714,13 @@ MUTATIONS = [
      "                    _visible_slice(left[-1], prepared)",
      "driver/relocation/test_row_label_span.py::"
      "test_the_SELECTED_CELL_owns_the_span_when_a_label_appears_twice"),
+
+    (220, "EU-094: the digit-exclusion heuristic is removed and digit rows become sections",
+     "driver/relocation/inline_html.py",
+     "                                if _words(t) and not re.search(r'\\d', t)]",
+     "                                if _words(t)]",
+     "driver/relocation/test_row_label_span.py::"
+     "test_section_TEXT_and_SPAN_come_from_the_SAME_cell"),
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",
