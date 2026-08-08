@@ -33,8 +33,9 @@ from driver.relocation.inline_html import (PIECE_KEYS, PIECE_KINDS,
                                            prepare, refused, source_evidence)
 from driver.xml_names import graph_qname_parts
 
-__all__ = ["attach_event_xbrl", "expected_multiplier",
-           "RETRYABLE_SOURCE_ERRORS"]
+# F1 (#827): the public surface is the ONE required door — the two extra
+# exports had zero non-proof importers (measured).
+__all__ = ["attach_event_xbrl"]
 
 
 # The EXPLICIT retryable set. Never a bare `except Exception`: swallowing an
@@ -955,8 +956,10 @@ def attach_event_xbrl(items, *, source_id, store, filing_provider, text_parts,
 
 
 def _verify_and_attach(fact, *, concept, evidence, prepared_doc, entity_cik,
-                       rows,
-                       menu_tokens=frozenset()):
+                       rows, menu_tokens):
+    # F1 (#827): the frozenset() DEFAULT is deleted — it was the same
+    # no-menu gate the public door decides, bypassable here; the one caller
+    # always passes the event's menu explicitly.
     """Verify ONE already-checked fact against the event's already-fetched
     filing evidence, and attach — or raise. PRIVATE: `attach_event_xbrl` is the
     only public XBRL attachment door, so no caller can bypass the event-level
