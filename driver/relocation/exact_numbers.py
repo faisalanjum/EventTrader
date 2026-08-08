@@ -317,7 +317,17 @@ def _iso_date(d):
 
 
 def dec(value):
-    """Exact Decimal from str/int/Decimal. Floats REJECTED (already potentially lossy)."""
+    """Exact Decimal from str/int/Decimal. Floats REJECTED (already potentially lossy).
+
+    EU-014 (#827): the three raised message texts are diagnostic DETAIL,
+    never outcome vocabulary — the caller closure holds module-wide: every
+    ExactError catcher either converts to its OWN typed refusal under a
+    T1-registered code (slot_convert:127, xbrl_attach:315) or swallows to
+    None/abstain (inline_html:1210/2778/3019, slice_menu:223); no code is
+    minted here. Proof-lane reach (call-trace v5). The float/decimal/finite
+    RULES are the product exactness law, detector-pinned in the primary
+    battery (the float rejection also mutation-proved Core-side, entry 157).
+    """
     if isinstance(value, bool) or isinstance(value, float):
         raise ExactError(f"floats are rejected (lossy): {value!r}")
     if isinstance(value, Decimal):

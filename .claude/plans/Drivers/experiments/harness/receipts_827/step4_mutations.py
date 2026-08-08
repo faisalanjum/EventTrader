@@ -1432,6 +1432,13 @@ MUTATIONS = [
      "driver/relocation/test_parser_encoding_ownership.py::"
      "test_EU126_the_identity_anchor_encodes_lone_surrogates_by_the_clause"),
 
+    (180, "EU-014: the binder-side float rejection is neutered",
+     "driver/relocation/exact_numbers.py",
+     '    if isinstance(value, bool) or isinstance(value, float):\n        raise ExactError(f"floats are rejected (lossy): {value!r}")',
+     '    if False:\n        raise ExactError(f"floats are rejected (lossy): {value!r}")',
+     "driver/relocation/test_exact_numbers.py::"
+     "test_dec_rejects_floats"),
+
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",
