@@ -1067,6 +1067,12 @@ def _qname(value, el):
     """
     if not isinstance(value, str) or not hasattr(el, 'nsmap'):
         return None
+    # EU-122 (#827): the separator, the unprefixed arm and the empty-prefix
+    # refusal are Namespaces in XML 1.0 3e section 4 exactly — the URL and
+    # the production are quoted in the docstring above; ':x' names nothing
+    # because PrefixedName wants a NON-EMPTY prefix, and an unprefixed name
+    # is lawful and resolves through the default binding. Pinned: the
+    # separator drift makes every prefixed QName unresolvable (86 reds).
     prefix, sep, local = value.partition(':')
     # A colon with NOTHING before it is not a PrefixedName: the grammar wants a
     # non-empty Prefix. The library cannot say so on its own, because it is only
@@ -1125,6 +1131,13 @@ def _sec_cik(identifier):
     whitespace and deletes zero-width characters, and would normalise away the
     very padding this rule exists to catch.
     """
+    # EU-125 (#827): the '' default makes an ABSENT scheme compare unequal —
+    # i.e. refuse. That is the whole point: XBRL 2.1 section 4.7.3 makes
+    # scheme REQUIRED and it is what gives the digits meaning (the constant
+    # above carries the clause, the SEC filer-manual URI and the 733,172-row
+    # census), so a missing scheme must never be read as "the SEC one".
+    # Measured: with the default flipped to the scheme itself, a
+    # scheme-less identifier binds the CIK — the gap this row pins.
     if (_typed(identifier, 'scheme') or '') != SEC_CIK_SCHEME:
         return None
     raw = _leaf(identifier)
@@ -1937,6 +1950,12 @@ def _resources(root):
     checks the two links the spec names and nothing else.
     """
     return [r for h in root.iter(_clark(_INLINE_NS, 'header'))
+            # EU-124 (#827): the two element names are Inline XBRL 1.1's own —
+            # sections 12/14.1.1 (ix:header holds ix:resources; the resource
+            # children live there), current edition with errata to 2026-07-14,
+            # the exact URL at the nonFraction reader's spec-sources note. The
+            # ANCESTRY is the rule (the docstring above), not the tag name;
+            # a drifted name empties every report (220 reds).
             for r in _children(h) if _is(r, _INLINE_NS, 'resources')]
 
 

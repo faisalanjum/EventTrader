@@ -2057,6 +2057,27 @@ MUTATIONS = [
      "    plain = _kids(u, I, 'measureX')",
      "driver/relocation/test_route_a_unit_identity.py::"
      "test_a_LAWFUL_ALIAS_for_the_official_currency_URI_is_the_same_unit"),
+
+    (269, "EU-122: the QName separator drifts and no prefixed name resolves",
+     "driver/relocation/inline_html.py",
+     "    prefix, sep, local = value.partition(':')",
+     "    prefix, sep, local = value.partition('|')",
+     "driver/relocation/test_two_view_bridge.py::"
+     "test_ANY_lawful_prefix_for_the_fact_element_still_binds"),
+
+    (270, "EU-124: the ix:resources element name drifts and every report empties",
+     "driver/relocation/inline_html.py",
+     "            for r in _children(h) if _is(r, _INLINE_NS, 'resources')]",
+     "            for r in _children(h) if _is(r, _INLINE_NS, 'resourcesX')]",
+     "driver/relocation/test_semantic_fact_value.py::"
+     "test_a_plain_text_fact_binds"),
+
+    (271, "EU-125: the absent-scheme default flips and a scheme-less identifier binds",
+     "driver/relocation/inline_html.py",
+     "    if (_typed(identifier, 'scheme') or '') != SEC_CIK_SCHEME:",
+     "    if (_typed(identifier, 'scheme') or SEC_CIK_SCHEME) != SEC_CIK_SCHEME:",
+     "driver/relocation/test_context_content_model.py::"
+     "test_EU125_an_identifier_without_a_scheme_is_never_read_as_a_SEC_CIK"),
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",

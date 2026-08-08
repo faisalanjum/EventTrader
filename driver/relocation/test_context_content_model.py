@@ -889,3 +889,20 @@ def test_827B16_a_lawful_DIVIDE_still_binds():
     u = IH.prepare(doc)['units']['u1']
     assert u['is_divide'] and u['numerator'] == ('iso4217:USD',) \
         and u['denominator'] == ('xbrli:shares',)
+
+
+def test_EU125_an_identifier_without_a_scheme_is_never_read_as_a_SEC_CIK():
+    """XBRL 2.1 section 4.7.3 makes identifier@scheme REQUIRED and it is
+    what gives the digits their meaning: an identifier carrying no scheme
+    at all must refuse, never be read as the SEC one (the empty default
+    compares unequal on purpose)."""
+    from lxml import etree
+    from driver.relocation.inline_html import _sec_cik
+    I = 'http://www.xbrl.org/2003/instance'
+    bare = etree.fromstring(
+        f'<identifier xmlns="{I}">0000320193</identifier>')
+    lawful = etree.fromstring(
+        f'<identifier xmlns="{I}" scheme="http://www.sec.gov/CIK">'
+        '0000320193</identifier>')
+    assert _sec_cik(bare) is None
+    assert _sec_cik(lawful) == '0000320193'
