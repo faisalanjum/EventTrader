@@ -519,6 +519,20 @@ def parse_filing_boundary(raw):
     m_d = None if m_dt else _DATE_RE.fullmatch(text)
     if not (m_dt or m_d):
         raise ExactError(f"not a lawful xs:date or xs:dateTime: {raw!r}")
+    # CL-019 (#827, EU-021 + EU-022): the kind enum is BORN here — the value
+    # says WHICH lexical grammar matched (dateTime is tried first; a date
+    # text cannot match it, having no T), the space is exactly the two
+    # members, every branch over it in this producer and both consumers is
+    # total (the consumer twin is the EU-017 adjudication), and group(1) is
+    # the single ({_TZ})? capture both CL-001 assemblies define. EU-022: the
+    # micro/sub_micro/seconds initializers below are UNOBSERVABLE — every
+    # consumer sits inside the dateTime arm, which reassigns all three
+    # before use (measured: mutating them to (1, True, 59) leaves the whole
+    # suite green and four door outputs byte-identical; receipt
+    # g2_evid_recall_EU-021.txt) — the semantic rule "an absent fraction
+    # means zero" lives at the inner else-0 arm, per XSD Part 2 2e 3.2.7:
+    # the fractional-second part of the lexical form is OPTIONAL and its
+    # absence maps to zero fractional seconds.
     kind = "dateTime" if m_dt else "date"
     tz_text = (m_dt or m_d).group(1)
     # THE YEAR IS NEVER CONVERTED WHOLE. XML Schema bounds neither the count of

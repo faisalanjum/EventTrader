@@ -1623,6 +1623,13 @@ MUTATIONS = [
      "driver/relocation/test_exact_numbers.py::"
      "test_EU017_the_date_kind_branch_owns_the_plus_one_day"),
 
+    (207, "EU-021: the kind enum's date arm drifts at birth",
+     "driver/relocation/exact_numbers.py",
+     "    kind = \"dateTime\" if m_dt else \"date\"",
+     "    kind = \"dateTime\" if m_dt else \"dateX\"",
+     "driver/relocation/test_exact_numbers.py::"
+     "test_EU017_the_date_kind_branch_owns_the_plus_one_day"),
+
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",
