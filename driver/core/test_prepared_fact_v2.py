@@ -388,15 +388,29 @@ def test_G10_everything_unmatched_reaches_grading_no_filter():
 
 
 def test_G10_order_free_under_full_permutation():
+    """GRADE-SORTKEY (extended in place, as its card allows): the FULL
+    six-output denominator — links, link_keys, gold_inconclusive,
+    produced_duplicates, to_grading_gold, to_grading_produced — plus the
+    emit-once flag, identical under every input permutation, compared at
+    the semantic (record-key) level; no promise about which same-key twin
+    sorts first inside a group, exactly as the card says."""
     import itertools
-    g = [money_fact(str(n)) for n in (1, 2, 3)]
-    p = [money_fact(str(n)) for n in (3, 1, 7)]
+    from driver.core.fact_match import record_key as rk
+    g = [money_fact(str(n)) for n in (1, 2, 3)] +         [money_fact("9"), money_fact("9")]            # inconclusive gold pair
+    p = [money_fact(str(n)) for n in (3, 1, 7)] +         [money_fact("3")]                             # duplicate produced pair
     want = None
     for gp in itertools.permutations(g):
-        for pp in itertools.permutations(p):
+        for pp in itertools.permutations(p, len(p)):
             r = match_facts(list(gp), list(pp))
-            got = (sorted(r.link_keys), len(r.to_grading_gold),
-                   len(r.to_grading_produced))
+            got = (sorted(r.link_keys),
+                   [rk(a) for a, _ in r.links],
+                   sorted(sorted(map(rk, grp), key=repr)
+                          for grp in r.gold_inconclusive),
+                   sorted(sorted(map(rk, grp), key=repr)
+                          for grp in r.produced_duplicates),
+                   [rk(x) for x in r.to_grading_gold],
+                   [rk(x) for x in r.to_grading_produced],
+                   r.emit_once_violation)
             want = want or got
             assert got == want, "matching is order-dependent"
 
