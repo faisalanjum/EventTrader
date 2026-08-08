@@ -1103,3 +1103,33 @@ def test_substrate_binding_one_authorized_path_both_orders():
     w = subprocess.run([py, "-B", "-c", PRELOAD], capture_output=True,
                        text=True, env=env, cwd=repo)
     assert w.stdout.strip() == "SubstrateBindingError", (w.stdout, w.stderr)
+
+
+def test_F9_the_period_kind_vocabulary_has_ONE_owner():
+    """F9 (#827): the closed set ("duration","instant") is STATED once — at
+    the resolver, the period-law owner (the PERIOD_SCOPES precedent) — and
+    every other statement RESOLVES from it; four independent restatements
+    (resolver x2, prepared_fact, prepared_fact_v2, xbrl_attach) were drift
+    waiting to happen. Statements are found by AST scan of the SOURCE PATHS
+    (the recorded staged-drift precedent — never via the import chain);
+    member literals ("instant" alone, branch checks) are lawful and stay."""
+    import ast
+    import os
+    import driver.core.driver_period_resolver as dpr
+    here = os.path.dirname(os.path.abspath(dpr.__file__))
+
+    def inline_pair_count(fname):
+        src = open(os.path.join(here, fname), encoding="utf-8").read()
+        return sum(1 for node in ast.walk(ast.parse(src))
+                   if isinstance(node, ast.Tuple) and len(node.elts) == 2
+                   and all(isinstance(e, ast.Constant) for e in node.elts)
+                   and {e.value for e in node.elts} == {"duration", "instant"})
+
+    assert inline_pair_count("driver_period_resolver.py") == 1, \
+        "the owner states the set EXACTLY once (PERIOD_TIME_TYPES)"
+    for f in ("prepared_fact.py", "prepared_fact_v2.py", "xbrl_attach.py"):
+        assert inline_pair_count(f) == 0, f"{f} restates the closed set"
+    assert dpr.PERIOD_TIME_TYPES == ("duration", "instant")
+    from driver.core import xbrl_attach as xa
+    assert xa._PERIOD_TYPES is dpr.PERIOD_TIME_TYPES, \
+        "the attach alias must BE the owner's object, not a copy"

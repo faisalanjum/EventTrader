@@ -157,7 +157,8 @@ class PreparedFactV1:
             if not (has_concept and has_refs):
                 raise SchemaError("XBRL context is all-or-nothing: xbrl_concept_raw and "
                                   "member_refs ([] = verified-empty) travel together")
-            if (self.time_type not in ("duration", "instant")
+            from driver.core.driver_period_resolver import PERIOD_TIME_TYPES
+            if (self.time_type not in PERIOD_TIME_TYPES
                     or not self.period_end_date
                     or (self.time_type == "duration" and not self.period_start_date)):
                 raise SchemaError("XBRL context is all-or-nothing: needs time_type and "

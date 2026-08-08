@@ -19,6 +19,7 @@ from collections import namedtuple as _namedtuple
 from types import MappingProxyType
 
 from driver.core.driver_ids import valid_source_id
+from driver.core.driver_period_resolver import PERIOD_TIME_TYPES
 from driver.core.prepared_fact_v2 import (OUTCOME_CLASSES, PreparedFactV2,
                                           ProductionValidationError, SchemaError,
                                           SourceUnavailable,
@@ -95,10 +96,9 @@ _REQUIRED_ROW_KEYS = ("fact_id", "value", "unit_ref", "unit_name", "is_divide",
 # hand-maintained list to drift out of step with the first.
 _ROW_SHAPE_KEYS = ("period_type", "start_date", "end_date", "dims")
 _ROW_FIELDS = _REQUIRED_ROW_KEYS + _ROW_SHAPE_KEYS
-# XBRL defines exactly two period types, and the live graph carries exactly
-# those two (8,358 duration + 3,058 instant, verified 2026-07-27) — spec-derived,
-# census-confirmed. A third value is a shape we cannot bind, so it parks.
-_PERIOD_TYPES = ("duration", "instant")
+# A third period kind is a shape we cannot bind, so it parks. The closed
+# set itself is stated at its ONE owner (F9): the period resolver.
+_PERIOD_TYPES = PERIOD_TIME_TYPES
 #: THE TWO NAMESPACE FIELDS ARE REQUIRED, not optional. A dimension is
 #: (namespace URI, local name); the qname alone is a prefixed alias that cannot
 #: say WHICH taxonomy an axis belongs to, and two taxonomies routinely spell the

@@ -1124,6 +1124,13 @@ MUTATIONS = [
      '                            "end_date": r["end_date"], "dims": dims,',
      "driver/core/test_dimension_expanded_identity.py::"
      "test_the_ADAPTER_owns_the_stored_null_alias_and_emits_None"),
+
+    (137, "F9: the attach alias drifts back to a private restatement",
+     "driver/core/xbrl_attach.py",
+     "_PERIOD_TYPES = PERIOD_TIME_TYPES",
+     '_PERIOD_TYPES = ("duration", "instant")',
+     "driver/core/test_driver_period_resolver.py::"
+     "test_F9_the_period_kind_vocabulary_has_ONE_owner"),
 ]
 
 

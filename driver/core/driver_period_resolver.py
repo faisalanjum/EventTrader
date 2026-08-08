@@ -84,6 +84,13 @@ _DATED_SCOPES = frozenset({"quarter", "annual", "half", "monthly", "ytd",
                            "ttm", "exact_range"})
 PERIOD_SCOPES = _DATED_SCOPES | frozenset(PERIOD_SENTINEL_SCOPE.values())
 
+#: THE period-kind vocabulary, stated ONCE (F9, #827). XBRL 2.1 defines
+#: exactly two period types and the live graph carries exactly those two
+#: (8,358 duration + 3,058 instant, census re-verified 2026-08-08). Every
+#: other module RESOLVES from this name; restating the tuple is the drift
+#: the F9 scan test refuses.
+PERIOD_TIME_TYPES = ("duration", "instant")
+
 
 def period_invariant(u_id, scope, time_type, start, end):
     """THE complete period invariant at ONE owner (P-O2, U-7). Returns a tuple
@@ -108,7 +115,7 @@ def period_invariant(u_id, scope, time_type, start, end):
         return tuple(out)
     if scope is not None and scope not in PERIOD_SCOPES:
         out.append((require_known("SCOPE_PAIR"), f"period_scope {scope!r} not in the enum"))
-    if time_type not in ("duration", "instant"):
+    if time_type not in PERIOD_TIME_TYPES:
         out.append((require_known("INSTANT"),
                     f"time_type required (duration|instant) with a period, got {time_type!r}"))
     try:
@@ -181,7 +188,7 @@ def ensure_driver_period(item, *, fact_type, fye_month, ticker=None,
 
     cal = calendar_override              # P-O12: keyword route ONLY, no coercion
     time_type = item.get("time_type")
-    if time_type not in ("duration", "instant"):
+    if time_type not in PERIOD_TIME_TYPES:
         raise PeriodResolutionError(
             f"time_type is a required semantic judgment (got {time_type!r}) — park")
     _check_declared_fields(item)

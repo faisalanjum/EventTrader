@@ -369,7 +369,8 @@ class PreparedItemV2:
             raise SchemaError(
                 "member_refs names the same axis more than once — one context "
                 "carries at most one member per axis")          # THE one shape rule
-        if (self.time_type not in ("duration", "instant") or not self.period_end_date
+        from driver.core.driver_period_resolver import PERIOD_TIME_TYPES
+        if (self.time_type not in PERIOD_TIME_TYPES or not self.period_end_date
                 or (self.time_type == "duration" and not self.period_start_date)):
             raise SchemaError(
                 "XBRL context is all-or-nothing: needs time_type and the exact "
