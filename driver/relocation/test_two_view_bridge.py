@@ -1037,3 +1037,37 @@ def test_foster_parenting_keeps_each_facts_OWN_evidence():
     assert why1 == 'ok' and why2 == 'ok', (why1, why2)
     assert ev1['displayed'] == '111', ev1['displayed']
     assert ev2['displayed'] == '222', ev2['displayed']
+
+
+# ---- CL-042 (EU-070 / EU-071 / EU-072): the visibility law's three pinned
+# behaviors — each node is its member's mutation detector -------------------
+
+def test_EU070_template_contents_are_never_rendered():
+    """WHATWG HTML LS §4.12.3 (snapshot 2026-07-20): template contents are
+    template contents, NOT rendered children — no author display reveals
+    them. The unconditional prune is the spec, pinned by behavior."""
+    prep = prepare(doc(row(['Revenue', fact()])
+                       + '<template><p>TSECRET</p></template>'))
+    assert 'TSECRET' not in prep['text']
+    assert 'Revenue 390' in prep['text']
+
+
+def test_EU071_content_visibility_hidden_prunes():
+    """CSS Containment 2 content-visibility:hidden (census snapshot
+    2026-07-20): the element's contents are skipped — pinned by behavior."""
+    prep = prepare(doc(row(['Revenue', fact()])
+                       + '<div style="content-visibility:hidden">CVSECRET'
+                         '</div>'))
+    assert 'CVSECRET' not in prep['text']
+    assert 'Revenue 390' in prep['text']
+
+
+def test_EU072_ua_hidden_elements_stay_hidden_by_the_named_api():
+    """HTML LS Rendering §15.3.1 UA-default hidden elements (style among
+    them) — recognizing them rides the PINNED bs4 Tag.name attribute
+    (bs4 4.13.3): a wrong attribute name blinds every name-based
+    visibility branch, and THIS node reddens."""
+    prep = prepare(doc(row(['Revenue', fact()])
+                       + '<style>CSSSECRET{}</style>'))
+    assert 'CSSSECRET' not in prep['text']
+    assert 'Revenue 390' in prep['text']

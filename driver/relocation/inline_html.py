@@ -375,17 +375,33 @@ def _advance(vis, el):
     st = _style_state(el)
     if st['unsupported']:
         return False, vis, st['unsupported']
+    # EU-072 (#827 DERIVE-CITATION): `.name` is the PINNED bs4 element-name
+    # API — Beautiful Soup 4.13.3 (installed pin), documented Tag.name
+    # ("Every tag has a name"), https://www.crummy.com/software/
+    # BeautifulSoup/bs4/doc/#name; '' is the program-logic default for
+    # nameless nodes, owned by this function's law.
     name = (getattr(el, 'name', '') or '').lower()
     if name == 'template':
-        # HTML LS §4.12.3: a template element REPRESENTS NOTHING — its parsed
-        # contents are template contents, not rendered children — so no author
-        # display can reveal them. Unconditional prune, nested markup included.
+        # EU-070 (#827 DERIVE-CITATION): WHATWG HTML Living Standard
+        # (census snapshot 2026-07-20) §4.12.3 The template element,
+        # https://html.spec.whatwg.org/multipage/scripting.html#the-template-element
+        # — "the template contents are not children of the element itself":
+        # a template REPRESENTS NOTHING and no author display can reveal it.
+        # Unconditional prune, nested markup included.
         return True, vis, None
     # HTML LS Rendering §15.3.1: UA-default display:none elements — a
     # NORMAL-origin default any valid author INLINE display declaration
     # overrides (exactly the `hidden` attribute's shape), while an author
     # `display:none` still wins.
     ua_hidden = name in _UA_HIDDEN_ELEMENTS
+    # EU-071 (#827 DERIVE-CITATION), post-CSS-2.1 rendering law, version-
+    # pinned at the census snapshot 2026-07-20: display:none = W3C CSS
+    # Display Module Level 3, https://www.w3.org/TR/css-display-3/
+    # #valdef-display-none (element and descendants generate no boxes);
+    # content-visibility:hidden = W3C CSS Containment Module Level 2,
+    # https://www.w3.org/TR/css-contain-2/#propdef-content-visibility
+    # (contents are skipped); author-inline vs UA-default precedence =
+    # HTML LS Rendering §15.3.1 (the `hidden` attribute's shape).
     prune = (st['display'] == 'none' or st['cv'] == 'hidden'
              or ((st['hidden_attr'] or ua_hidden) and st['display'] is None))
     return prune, (st['visibility'] or vis), None
