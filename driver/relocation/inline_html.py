@@ -2130,10 +2130,10 @@ def graph_concept_target(concept_key, concept_namespace, graph_concept_qname):
         return None
     if graph_concept_qname != concept_key:
         return None
-    parts = graph_qname_parts(graph_concept_qname)
-    if parts is None:
+    local = graph_qname_parts(graph_concept_qname)
+    if local is None:
         return None
-    return (concept_namespace, parts[1])
+    return (concept_namespace, local)
 
 
 def one_concept_target(concept_key, records):

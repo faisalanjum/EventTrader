@@ -25,7 +25,10 @@ def xml_name_ok(name):
 
 
 def graph_qname_parts(qname):
-    """A QName the GRAPH stores, split into (prefix, local), or None.
+    """The LOCAL NAME of a QName the graph stores, or None (XMLNAME-MIN,
+    #827: the prefix slot is DROPPED — no production caller ever consumed
+    it, and a returned-but-unread field is exactly the surface this audit
+    deletes; the prefix is an alias, and aliases are not identity).
 
     THE ONE OWNER of what a stored qname may look like, so every consumer asks
     the same question of the same grammar instead of restating it. The grammar
@@ -49,7 +52,7 @@ def graph_qname_parts(qname):
         return None
     prefix, sep, local = qname.partition(':')
     if not sep:                                   # lawful: no prefix at all
-        return ('', qname) if xml_name_ok(qname) else None
+        return qname if xml_name_ok(qname) else None
     if not xml_name_ok(prefix) or not xml_name_ok(local):
         return None
-    return (prefix, local)
+    return local

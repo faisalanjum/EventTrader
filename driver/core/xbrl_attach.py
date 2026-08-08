@@ -138,8 +138,8 @@ def _row_expanded_dims(row):
         # NO COERCION. `_checked_row` already required every `_DIM_KEYS` value
         # to be an exact non-blank string, so wrapping these in `str()` would
         # only hide a shape that has already been refused upstream.
-        out.append(((d["axis_namespace"], axis[1]),
-                    (d["member_namespace"], member[1])))
+        out.append(((d["axis_namespace"], axis),
+                    (d["member_namespace"], member)))
     # ONE VALUE PER DIMENSION — XBRL Dimensions 1.0 §3.1.4.2 — judged on the
     # EXPANDED axis. This subsumes the raw-spelling uniqueness rule that used to
     # sit in `_checked_row`: it catches the same-spelling repeat AND the alias

@@ -30,14 +30,18 @@ NS = "urn:example"
 # THE GRAMMAR — lawful shapes and their malformed twins
 # ---------------------------------------------------------------------------
 
-@pytest.mark.parametrize("qname,parts,why", [
-    ("Revenue", ("", "Revenue"), "unprefixed — the writer's own shape"),
-    ("ex:Revenue", ("ex", "Revenue"), "prefixed"),
-    ("_x", ("", "_x"), "an underscore starts a lawful XML name"),
-    ("Ünïcode", ("", "Ünïcode"), "XML names permit Unicode"),
+@pytest.mark.parametrize("qname,local,why", [
+    # XMLNAME-MIN (#827): the prefix slot is GONE — no production caller ever
+    # consumed it, and this direct test was the only thing freezing the field
+    # (test-as-law). The owner answers with the LOCAL NAME alone, reconciled
+    # here openly, not silently.
+    ("Revenue", "Revenue", "unprefixed — the writer's own shape"),
+    ("ex:Revenue", "Revenue", "prefixed — the alias is dropped, not returned"),
+    ("_x", "_x", "an underscore starts a lawful XML name"),
+    ("Ünïcode", "Ünïcode", "XML names permit Unicode"),
 ])
-def test_a_LAWFUL_graph_qname_splits(qname, parts, why):
-    assert graph_qname_parts(qname) == parts, why
+def test_a_LAWFUL_graph_qname_splits(qname, local, why):
+    assert graph_qname_parts(qname) == local, why
 
 
 @pytest.mark.parametrize("qname,why", [
