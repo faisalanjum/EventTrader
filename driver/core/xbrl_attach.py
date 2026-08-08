@@ -22,13 +22,16 @@ from driver.core.driver_ids import valid_source_id
 from driver.core.prepared_fact_v2 import (OUTCOME_CLASSES, PreparedFactV2,
                                           ProductionValidationError, SchemaError,
                                           SourceUnavailable, _ATTACH_TOKEN,
-                                          _NUMERIC_SLOTS, _deep_freeze,
+                                          NUMERIC_SLOTS, _deep_freeze,
                                           _sha256_or_raise, verify_occurrence)
-from driver.core.slot_convert import SlotConversionError
-from driver.relocation.exact_numbers import ROUTE_A_BOOLS
+from driver.core.slot_convert import MULTIPLIER_ONE_UNITS, SlotConversionError
+from driver.relocation.exact_numbers import (ISO_4217_NAMESPACE,
+                                             ROUTE_A_BOOLS,
+                                             XBRL_INSTANCE_NAMESPACE, XML_WS)
 from driver.relocation.inline_html import (PIECE_KEYS, PIECE_KINDS,
                                            SOURCE_EVIDENCE_KEYS, parse_raw,
-                                           prepare, source_evidence)
+                                           prepare, refused, source_evidence)
+from driver.xml_names import graph_qname_parts
 
 __all__ = ["attach_event_xbrl", "expected_multiplier",
            "RETRYABLE_SOURCE_ERRORS"]
@@ -78,7 +81,7 @@ def _fetch(what, call, *args):
 #              were taken at different times.
 # The branch therefore stays (it is the law), but no live fact exercises it today.
 _REQUIRED_ROW_KEYS = ("fact_id", "value", "unit_ref", "unit_name", "is_divide",
-                      "context_id")
+                      "context_id", "concept_namespace", "graph_concept_qname")
 # The period/dimension fields binding ALSO reads — through `match_xbrl_fact` and
 # the binder call, neither of which the list above covered. The complete read set
 # is the UNION below, so no field name is written twice and there is no second
@@ -89,9 +92,65 @@ _ROW_FIELDS = _REQUIRED_ROW_KEYS + _ROW_SHAPE_KEYS
 # those two (8,358 duration + 3,058 instant, verified 2026-07-27) — spec-derived,
 # census-confirmed. A third value is a shape we cannot bind, so it parks.
 _PERIOD_TYPES = ("duration", "instant")
-_DIM_KEYS = ("axis", "member", "label")
+#: THE TWO NAMESPACE FIELDS ARE REQUIRED, not optional. A dimension is
+#: (namespace URI, local name); the qname alone is a prefixed alias that cannot
+#: say WHICH taxonomy an axis belongs to, and two taxonomies routinely spell the
+#: same local name. A reader that cannot supply both halves is a broken reader,
+#: so its rows park here rather than binding on the spelling.
+_DIM_KEYS = ("axis", "member", "label", "axis_namespace", "member_namespace")
 _REQUIRED_NON_BLANK = ("value", "unit_ref", "unit_name", "is_divide", "context_id",
-                       "period_type", "start_date")
+                       "period_type", "start_date",
+                       # THE CONCEPT'S IDENTITY IS REQUIRED AT THIS BOUNDARY,
+                       # not optional and not defaulted. The binder compares
+                       # (namespace URI, local name) and refuses without it, so
+                       # a reader that cannot supply both is a broken reader —
+                       # an ordinary park here, never a silent None that would
+                       # make every lawful fact look unbindable.
+                       "concept_namespace", "graph_concept_qname")
+
+
+def _row_expanded_dims(row):
+    """The row's dimensions as EXPANDED NAMES — the only thing the binder
+    compares. Returns a tuple, or RAISES; it never returns None.
+
+    NEVER `None`, by construction. It used to, and the caller passed that
+    straight into a parameter the binder reads as `dims or ()` — so the least
+    readable input, a row whose identity cannot be stated at all, produced the
+    most permissive answer: the fact attached as though it were dimensionless.
+    Raising here makes that fail-open impossible rather than guarded against.
+
+    TWO DISTINCT FAILURES, said apart, because they need different fixes:
+    an axis or member whose identity is unusable is a broken READER; one
+    expanded axis appearing twice is a malformed CONTEXT.
+
+    Derived from the two halves the checked row already carries — the qname,
+    split by the shared `graph_qname_parts` owner so the grammar is not
+    restated, and the namespace the adapter decoded. Nothing is parsed twice
+    and no prefix is interpreted.
+    """
+    out = []
+    for d in row["dims"]:
+        axis, member = graph_qname_parts(d["axis"]), graph_qname_parts(d["member"])
+        if axis is None or member is None:
+            raise ProductionValidationError(
+                f"the graph cannot state this row's dimension identity: "
+                f"{d['axis']!r} / {d['member']!r} is not a QName — park")
+        # NO COERCION. `_checked_row` already required every `_DIM_KEYS` value
+        # to be an exact non-blank string, so wrapping these in `str()` would
+        # only hide a shape that has already been refused upstream.
+        out.append(((d["axis_namespace"], axis[1]),
+                    (d["member_namespace"], member[1])))
+    # ONE VALUE PER DIMENSION — XBRL Dimensions 1.0 §3.1.4.2 — judged on the
+    # EXPANDED axis. This subsumes the raw-spelling uniqueness rule that used to
+    # sit in `_checked_row`: it catches the same-spelling repeat AND the alias
+    # repeat that spelling could not see, and because it now runs BEFORE
+    # matching it can say so at the same boundary, in its own words.
+    if len({axis for axis, _member in out}) != len(out):
+        raise ProductionValidationError(
+            "the row names the same dimension more than once — one context "
+            "carries at most one member per axis (XBRL Dimensions 1.0 "
+            "§3.1.4.2) — park")
+    return tuple(sorted(out))
 
 
 def _row_signature(row):
@@ -115,17 +174,42 @@ def _row_signature(row):
     out = []
     for field in _ROW_FIELDS:
         if field == "dims":
-            out.append(tuple(sorted((d["axis"], d["member"], d["label"])
+            # DERIVED FROM `_DIM_KEYS`, exactly as the outer loop derives from
+            # `_ROW_FIELDS`, and for the same reason: a hand-written field list
+            # silently omits whatever is added next.
+            #
+            # It did. This said `(axis, member, label)` while the binder had
+            # started reading the two namespace fields, so two rows differing
+            # ONLY in `axis_namespace` collapsed to one signature — and then
+            # ROW ORDER decided the outcome: [correct, wrong] attached a fact,
+            # [wrong, correct] refused it. An order-dependent answer is the same
+            # defect class as the dimension-LABEL collapse this function was
+            # written to fix.
+            out.append(tuple(sorted(tuple(d[k] for k in _DIM_KEYS)
                                     for d in row["dims"])))
         elif field == "fact_id":
-            # `bind_graph_fact` picks its path on `(id or "").strip()`, so null,
-            # empty and whitespace are ONE claim: this element carries no id.
-            out.append((row["fact_id"] or "").strip())
+            # BLANKNESS IS ALL THAT STRIPPING MAY DECIDE. `bind_graph_fact`
+            # picks its path on `(id or "").strip()` — so null, empty and
+            # whitespace are ONE claim, "this element carries no id" — but it
+            # then looks the id up EXACTLY as stored, because a padded or
+            # re-cased id is a DIFFERENT id, not a typo to repair.
+            # Stripping here too folded `f1` and ` f1` into one identity while
+            # they bound to DIFFERENT elements, so WHICH of them survived the
+            # fold depended on the order the graph returned the rows in.
+            # XML 1.0 S, the same set the binder's door uses. A bare
+            # `.strip()` also eats U+000B, U+000C, U+00A0 and U+3000, so an id
+            # made only of those folded into the SAME identity as "no id at
+            # all" — two different claims about the filing collapsed into one.
+            raw_id = row["fact_id"] or ""
+            out.append("" if not raw_id.strip(XML_WS) else raw_id)
         elif field == "value":
-            # `parse_raw` is the certified reader (commas, accounting parens):
-            # "726,000,000" and "726000000" are the same number. A value it
-            # cannot read keeps its RAW text, so two different unreadable
-            # strings never collapse into one.
+            # `parse_raw` is the certified reader (the frozen canonical
+            # graph lexical contract):
+            # "0" and "-0" are the same number (the one two-spelling pair
+            # the frozen lexical contract lawfully stores — SEQ 268; an
+            # ungrouped "726000000" is outside the contract entirely). A
+            # value it cannot read keeps its RAW text, so two different
+            # unreadable strings never collapse into one.
             out.append(parsed if parsed is not None else ("unparsed", row["value"]))
         elif field == "end_date" and row["period_type"] == "instant":
             # UNREAD on this branch — `match_xbrl_fact` compares only
@@ -245,11 +329,21 @@ def _checked_row(raw):
                 f"a row dimension's {_DIM_KEYS} must all be non-blank strings "
                 f"— park")
         checked.append(MappingProxyType({k: d[k] for k in _DIM_KEYS}))
-    from driver.core.slice_menu import axis_member_pairs
-    if axis_member_pairs(checked) is None:
-        raise ProductionValidationError(
-            "the row names the same axis more than once — one context carries "
-            "at most one member per axis")
+    # THE RAW DUPLICATE-AXIS CHECK IS GONE FROM HERE, and its removal is earned
+    # rather than assumed. Its `axis_member_pairs` import went with it: an
+    # import kept "in case" is how a deleted rule quietly comes back.
+    #
+    # I argued for keeping it: with the old ordering, deleting it degraded the
+    # REASON — `match_xbrl_fact` ran first, so a repeated axis fell out as "no
+    # row matched", reported as ordinary graph lag. That objection was about the
+    # ORDER, not the rule. `_row_expanded_dims` now runs BEFORE any matching and
+    # raises its own truthful detail (§3.1.4.2, named), so the good reason
+    # exists at the right boundary and this one is a second copy of it —
+    # weaker, because it compares spellings and cannot see two prefixes bound
+    # to one URI.
+    #
+    # `axis_member_pairs` keeps its own guard for its OTHER callers; what is
+    # deleted is this duplicate claim, not that function.
     # ONLY the checked fields travel on. `decimals` and any other extra the
     # reader happens to carry is dropped rather than passed through unchecked.
     return MappingProxyType({**{k: raw[k] for k in _ROW_FIELDS},
@@ -258,6 +352,98 @@ def _checked_row(raw):
 # The only unit the money lane is PROVEN against. `unit_ref` is a bare pointer
 # ("usd"); the authority is the linked Unit node's own name, and `is_divide`
 # distinguishes a plain currency from a per-something ratio unit.
+# ---------------------------------------------------------------------------
+# THE CANDIDATE-UNIT POLICY (#827 blocker 8). It lived in the SHARED Route-A
+# binder module, but the production caller census says it is Core's alone:
+# exactly one non-test caller, here. Policy belongs with the component that
+# applies it — the shared binder verifies the filing's unit and reports it,
+# and a test pins that it applies no candidate policy of its own.
+# ---------------------------------------------------------------------------
+#: THE TWO NAMESPACES THIS POLICY KNOWS, by URI and never by prefix.
+#: `iso4217` is a prefix a filing chooses; a filing may bind it to anything,
+#: and may declare the currency namespace under any other name. Identity is
+#: (namespace URI, local name) — Namespaces in XML 1.0 Third Edition
+#: (W3C Rec 2009-12-08) §3.
+#:   ISO-4217 currencies : XBRL 2.1 (Rec 2003-12-31 + errata 2013-02-20) §4.8.2
+#:   shares / pure       : the XBRL 2.1 instance namespace, §1.6
+#: The URI values live at their ONE owner,
+#: `exact_numbers.ISO_4217_NAMESPACE` / `XBRL_INSTANCE_NAMESPACE`.
+
+#: KEYED ON EXPANDED NAMES. The keys were the graph's stored SPELLINGS, which
+#: are Arelle's `stringValue` and therefore carry the filing's own prefix
+#: (`XBRL/xbrl_basic_nodes.py:178,257`). Measured on that: a filing binding
+#: `iso4217` to an unrelated URI was granted US-dollar units, and a filing
+#: declaring the real currency namespace under any other prefix was granted
+#: none at all. Both bound cleanly — only this table was wrong.
+#: Keyed by the EXPANDED NAME ALONE. The old `is_divide` half of the key was
+#: dead weight: a divide unit never reaches this table — its numerator carries
+#: the currency and the denominator is the per-X — so the flag only ever held
+#: one value here.
+_CANDIDATE_EXACT = {
+    (ISO_4217_NAMESPACE, 'USD'): frozenset({'usd', 'm_usd'}),
+    (XBRL_INSTANCE_NAMESPACE, 'shares'): frozenset({'count'}),
+    # `unknown` is the EXISTING fail-safe — the source genuinely may not
+    # distinguish a rate from a count from a ratio.
+    #
+    # DERIVED FROM THE ONE OWNER, not restated. A local `_PERCENT_FAMILY` tuple
+    # listed the same five units that `slot_convert.MULTIPLIER_ONE_UNITS`
+    # already owns (verified equal once `x` is included, which that owner also
+    # carries) — two spellings of one set, and the second was free to drift.
+    (XBRL_INSTANCE_NAMESPACE, 'pure'):
+        frozenset({'count', 'unknown'} | set(MULTIPLIER_ONE_UNITS)),
+}
+
+_UNKNOWN = frozenset({'unknown'})
+
+
+def candidate_units_for(measures_expanded, numerator_expanded):
+    """Which canonical units an AI-interpreted candidate fact may claim, given
+    the unit the GRAPH records. A FUNCTION, not a table, because the currency
+    space is open-ended.
+
+    NON-USD MONEY IS `unknown`, NOT A REFUSAL. FINAL_DESIGN:206 — "non-USD gaps
+    may stay `unknown` (monitored)". Adding real `eur`/`cny` units remains an
+    OPEN expansion; using the fail-safe that already exists is locked law. An
+    earlier version made every foreign-currency fact abstain, and a test of
+    mine cemented that as though it were intended — a test certifying a law
+    violation is worse than the violation.
+
+    Everything else (utr:*, custom units) has no compatible canonical unit on
+    this route, so the caller refuses it. The empty set says exactly that.
+    """
+    # A DIVIDE UNIT IS JUDGED BY ITS STRUCTURED NUMERATOR, never by the graph
+    # name, which is the measures CONCATENATED: `utr:galutr:M` (140 live facts)
+    # cannot be split back reliably. The numerator fixes the BASE unit; the
+    # denominator is the per-X, which NAME-13 puts in the driver NAME and the
+    # model owns (validated later, at admission). One rule covers EPS
+    # (USD/share) and oil (USD/barrel) alike, so EPS is no longer a special
+    # row sitting beside the general one.
+    # THE DIVIDE BRANCH IS STRUCTURAL, not a flag anyone passes. The binder
+    # fills the numerator for a divide unit and the plain measures for a simple
+    # one, never both, so the shape of the verified evidence already says which
+    # kind it is. Asking a caller to also state it would invite the two to
+    # disagree, and a caller-supplied boolean is exactly the sort of input this
+    # audit keeps finding wired to nothing.
+    numerator = list(numerator_expanded)
+    if numerator:
+        if len(numerator) != 1:
+            return frozenset()          # unreadable shape -> park, never guess
+        namespace, local = numerator[0]
+        if namespace != ISO_4217_NAMESPACE:
+            return frozenset()          # utr:gal/utr:M — not money at all
+        # base unit; the per-X is in the name. Any other official currency is
+        # money we do not canonicalise, and `unknown` is the honest carrier.
+        return frozenset({'usd'}) if local == 'USD' else _UNKNOWN
+    measures = list(measures_expanded)
+    if len(measures) != 1:
+        return frozenset()
+    if measures[0] in _CANDIDATE_EXACT:
+        return _CANDIDATE_EXACT[measures[0]]
+    if measures[0][0] == ISO_4217_NAMESPACE:
+        return _UNKNOWN
+    return frozenset()
+
+
 def expected_multiplier(level_unit, ix_scale):
     """The multiplier a fact must state, given its unit and the filing's scale.
 
@@ -269,10 +455,11 @@ def expected_multiplier(level_unit, ix_scale):
     fail its own unit law. Money and count take the source's real magnitude.
     """
     from decimal import Decimal
-    from driver.core.slot_convert import (MULTIPLIER_ONE_UNITS, assert_storable,
-                                          exact_scaleb)
-    if level_unit in MULTIPLIER_ONE_UNITS:
-        return Decimal(1)          # the family never touches the arithmetic
+    from driver.core.slot_convert import (assert_storable, exact_scaleb,
+                                          family_required_multiplier)
+    required = family_required_multiplier(level_unit)
+    if required is not None:
+        return required            # the family never touches the arithmetic
     # TWO boundaries, both parking on the ALREADY-DECLARED outcome:
     #   arithmetic  — beyond Emax the shift is not representable at all;
     #   storability — 10^1000000 IS representable but needs 1,000,001 characters
@@ -545,9 +732,7 @@ def attach_event_xbrl(items, *, source_id, store, filing_provider, text_parts,
     # THE SOURCE ID IS VALIDATED FIRST — before the lawful zero-I/O return
     # below, which was otherwise a way to skip validation entirely.
     if not valid_source_id(source_id):
-        raise SchemaError(
-            "attach_event_xbrl: source_id must satisfy the ONE id law "
-            "(driver_ids.valid_source_id: [A-Za-z0-9._-], colon-free)")
+        raise SchemaError("attach_event_xbrl: source_id is invalid")
     # `menu_tokens` IS CODE-OWNED, and still an input to a public door. It must
     # be the EXACT immutable output shape of `slice_menu.build_menu` — a
     # frozenset of non-blank strings. A mutable set is refused because the door
@@ -672,6 +857,14 @@ def attach_event_xbrl(items, *, source_id, store, filing_provider, text_parts,
                 f"attach_event_xbrl: the filing provider has no document for "
                 f"source {source_id} yet — park and retry")
         prepared_doc = prepare(document)      # ONE parse + ONE hash per event
+        # UNREADABLE IS A PROPERTY OF THE SERVED DOCUMENT, exactly like the hash
+        # mismatch below: the parser refuses and says why, and this turns that
+        # into the same park every other bad-document case takes. Nothing here
+        # inspects, repairs or works around the bytes.
+        if refused(prepared_doc):
+            raise SchemaError(
+                f"attach_event_xbrl: {refused(prepared_doc)} — the served "
+                f"document for source {source_id} cannot be read as evidence")
         if prepared_doc["text_sha"] != expected:
             raise SchemaError(
                 "attach_event_xbrl: the served document does not hash to the "
@@ -710,7 +903,17 @@ def attach_event_xbrl(items, *, source_id, store, filing_provider, text_parts,
                     f"attach_event_xbrl: source {source_id} carries NO fact for "
                     f"concept {concept!r} yet — park; an unbacked concept is "
                     f"never attached")
-            rows_by_concept[concept] = [_checked_row(r) for r in read.rows]
+            # DERIVED HERE, ONCE PER GRAPH ROW, not once per item. Building the
+            # expanded set inside the per-item path re-derived every row for
+            # every item sharing a concept, which made "exactly once" false at
+            # event scope. Plain `(row, expanded)` pairs — no wrapper, no cache.
+            #
+            # It also puts an unusable graph row where every other broken row
+            # shape already fails: at the concept READ, once, instead of being
+            # rediscovered independently by each item.
+            rows_by_concept[concept] = [
+                (checked, _row_expanded_dims(checked))
+                for checked in (_checked_row(r) for r in read.rows)]
         except SourceUnavailable as exc:
             # AN OUTAGE IS NOT A PROPERTY OF THE CONCEPT. Recording it as a
             # concept-local absence tells the channel that THIS concept is
@@ -770,8 +973,10 @@ def _verify_and_attach(fact, *, concept, evidence, prepared_doc, entity_cik,
     already-certified Route-A binder in `driver.relocation.inline_html`:
     `element_evidence` (short element id, duplicate-id detection) ·
     `identity_fallback` (the unique complete-identity fallback) · `parse_raw`
-    (the comma and accounting-parenthesis law — 807,132 of 1,000,000 graph
-    values carry commas, so a bare `Decimal()` rejects most real facts) ·
+    (the frozen canonical graph lexical contract derived from the two writer
+    formatters — 807,132 of 1,000,000 sampled graph values carry commas, so a
+    bare `Decimal()` rejects most real facts; corpus evidence shows
+    compatibility, not legality or complete formatter reachability) ·
     `reconcile` (displayed composed with format, scale and sign must equal the
     graph's own value). Re-implementing any of those would be a second filing
     verifier, which is exactly what this program refuses.
@@ -794,12 +999,21 @@ def _verify_and_attach(fact, *, concept, evidence, prepared_doc, entity_cik,
     claimed_pairs = axis_member_pairs(refs)
     claim = {"time_type": it.time_type, "start": it.period_start_date,
              "end": it.period_end_date, "dims": claimed_pairs}
+    # `rows` ARRIVES AS (raw row, expanded dims) PAIRS, derived at the concept
+    # read — once per graph row for the whole event, not once per item. Semantic
+    # identity is therefore already validated before anything here matches:
+    # run the check AFTER the matcher and a row with a repeated or unstateable
+    # dimension falls out as "no row matched", reported as ordinary graph lag,
+    # which is a true-sounding sentence about the wrong thing.
+    #
     # ONE matcher pass: keep each row WITH the dims it matched on, instead of
-    # re-running `match_xbrl_fact` on the winner further down.
-    matched_pairs = [(r, d) for r, d in
-                     ((r, match_xbrl_fact(claim, [r])) for r in rows)
+    # re-running `match_xbrl_fact` on the winner further down. The matcher is
+    # given the RAW row — that is its frozen product contract — while the
+    # already-derived expanded set rides along beside it.
+    matched_pairs = [(r, d, x) for r, d, x in
+                     ((r, match_xbrl_fact(claim, [r]), x) for r, x in rows)
                      if d is not None]
-    matched = [r for r, _ in matched_pairs]
+    matched = [r for r, _d, _x in matched_pairs]
     if not matched:
         # PARK, not a rejection — the same #819 class. The concept is present
         # but no row carries this exact context/dimension set: the graph runs
@@ -816,7 +1030,11 @@ def _verify_and_attach(fact, *, concept, evidence, prepared_doc, entity_cik,
         raise ProductionValidationError(
             "attach: the filing carries CONFLICTING facts for this "
             "concept+context+dimensions — park; never pick one by position")
-    row, matched_dims = matched_pairs[0]
+    # THE WINNER CARRIES ITS OWN EXPANDED SET, derived before matching and
+    # never recomputed. There is no `None` to guard against here: the deriver
+    # raises, so the fail-open is gone by construction rather than by a check
+    # someone could later delete.
+    row, matched_dims, graph_dims = matched_pairs[0]
     # (the per-field presence/blankness checks that used to sit here now run in
     # `_checked_row`, before anything reads the row — same law, correct place)
 
@@ -832,10 +1050,21 @@ def _verify_and_attach(fact, *, concept, evidence, prepared_doc, entity_cik,
         # matches THIS fact's claim, and the binder compares row-to-document
         # (the graph stores the end EXCLUSIVE, the filing declares it inclusive)
         period_type=row["period_type"], start_date=row["start_date"],
-        # the SAME owner: the binder sorts what it is given, so the pair set
-        # serves here too and there is no third hand-built copy.
-        end_date=row["end_date"], dims=claimed_pairs,
-        entity_cik=entity_cik, raw_value=row["value"])
+        # THE ROW'S OWN EXPANDED DIMENSIONS, not the claim's raw pairs. The
+        # binder's `dims` is semantic identity and nothing else: it is compared
+        # against the filing's (namespace URI, local name) pairs, so handing it
+        # prefixed text asked one question and answered another. The claim is
+        # still what `match_xbrl_fact` selected the row with, above — that is
+        # the frozen product contract and it keeps its raw qnames.
+        end_date=row["end_date"], dims=graph_dims,
+        entity_cik=entity_cik, raw_value=row["value"],
+        # THE CONCEPT'S IDENTITY, both halves from the SAME Concept record the
+        # row was read with. The binder compares (namespace URI, local name)
+        # because a prefix is only an alias, and it refuses truthfully when the
+        # graph cannot supply that identity rather than falling back to a
+        # prefixed string comparison that a different taxonomy would satisfy.
+        concept_namespace=row["concept_namespace"],
+        graph_concept_qname=row["graph_concept_qname"])
     if bound is None:
         # ORDINARY PARK, as ONE class. Every reason this returns describes a
         # GRAPH/FILING binding failure — a missing element, a duplicate id, a
@@ -870,8 +1099,8 @@ def _verify_and_attach(fact, *, concept, evidence, prepared_doc, entity_cik,
     canonical = source_evidence(prepared_doc, bound["evidence"])
     if canonical is None:
         raise ProductionValidationError(
-            "attach: the bound element has no reproducible row/block span in "
-            "this filing — park rather than invent a locator")
+            "attach: the bound element has no reproducible visible row/block "
+            "evidence in this filing — park rather than invent a locator")
     canon_label = (tuple(canonical["raw_label_span"])
                    if canonical["raw_label_span"] else None)
     if canonical["representation_sha256"] != evidence["representation_sha256"] \
@@ -897,14 +1126,15 @@ def _verify_and_attach(fact, *, concept, evidence, prepared_doc, entity_cik,
     # THE UNIT'S MEANING, bound to the fact's own canonical unit. Without this,
     # `count` and `usd` do IDENTICAL arithmetic, so a real $5,262,000,000 fact
     # was accepted as a count (reproduced live 2026-07-27).
-    from driver.relocation.exact_numbers import candidate_units_for
-    lawful = candidate_units_for(*bound["unit_key"],
-                                 numerator=bound["unit_numerator"],
-                                 denominator=bound["unit_denominator"])
+    # THE BOUND ELEMENT'S OWN DECLARED UNIT IDENTITIES, and nothing else. The
+    # raw name still appears in the refusal message below — a reader needs to
+    # see what the graph holds — but it no longer decides anything.
+    lawful = candidate_units_for(bound["unit_measures_expanded"],
+                                 bound["unit_numerator_expanded"])
     if it.level_unit not in lawful:
         admits = sorted(lawful) or "nothing on this route"
         raise SchemaError(
-            f"attach: the graph records unit {bound['unit_key'][0]!r} "
+            f"attach: the graph records unit {row['unit_name']!r} "
             f"for this fact, which may back {admits} — not "
             f"level_unit={it.level_unit!r}")
 
@@ -939,13 +1169,15 @@ def _verify_and_attach(fact, *, concept, evidence, prepared_doc, entity_cik,
         # comparison against `bound["value"]` was both redundant AND wrong for a
         # percentage — it demanded that 2.6 percent equal the graph's 0.026.
         want_value = bound["printed_value"]
-        want_mult = expected_multiplier(it.level_unit, bound["ix_scale"])
+        # ONE integer, ONE owner: the evidence record's `scale` is already the
+        # xml_integer-parsed int; the result no longer publishes a duplicate.
+        want_mult = expected_multiplier(it.level_unit, bound["evidence"]["scale"])
         # `SlotConversionError` IS ALLOWED OUT. It used to be caught here and
         # re-raised as `SchemaError`, which told the channel that a value the store
         # simply cannot materialise was a CONTRACT VIOLATION to fix and resubmit.
         # The filing is lawful; the value is not storable. That is its own declared
         # outcome (parked / NOT_STORABLE) and this route must not overwrite it.
-        for name in _NUMERIC_SLOTS:
+        for name in NUMERIC_SLOTS:
             slot = getattr(it, name)
             if name in ("level_low", "level_high"):
                 if slot is None:

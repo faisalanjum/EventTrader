@@ -24,7 +24,8 @@ The eight defects, all confirmed live before any fix:
 """
 from decimal import Decimal
 
-from driver.core.test_round10_event_boundary import parts_for
+from driver.core.test_round10_event_boundary import (_FIXTURE_NS, _XMLNS,
+                                                     _ns_dim, parts_for)
 
 import pytest
 
@@ -186,14 +187,14 @@ def _xbrl_item(**over):
 # ---------------------------------------------------------------------------
 ELEMENT_ID = "f-48"
 INLINE_HTML = (
-    '<html><body><table><tr>'
+    f'<html {_XMLNS}><body><table><tr>'
     '<td>Total net sales</td>'
     '<td><ix:nonFraction id="f-48" name="us-gaap:Revenues" contextRef="c-1" '
     'unitRef="usd" scale="6" decimals="-6" '
     'format="ixt:num-dot-decimal">390</ix:nonFraction></td>'
     '</tr></table>'
     '<div style="display:none"><ix:header><ix:resources>'
-    '<xbrli:context id="c-1"><xbrli:entity><xbrli:identifier>0000320193'
+    '<xbrli:context id="c-1"><xbrli:entity><xbrli:identifier scheme="http://www.sec.gov/CIK">0000320193'
     '</xbrli:identifier></xbrli:entity><xbrli:period>'
     '<xbrli:startDate>2026-01-01</xbrli:startDate>'
     '<xbrli:endDate>2026-03-31</xbrli:endDate></xbrli:period></xbrli:context>'
@@ -249,12 +250,16 @@ def _row(**over):
          "start_date": "2026-01-01", "end_date": "2026-04-01",   # end EXCLUSIVE
          "dims": [], "fact_id": ELEMENT_ID, "context_id": "c-1",
          "unit_ref": "usd", "unit_name": "iso4217:USD", "is_divide": "0",
-         "value": "390,000,000"}                     # COMMAS, as the graph stores
+         "value": "390,000,000",                    # COMMAS, as the graph stores
+         # the concept identity the real adapter returns, read from the SAME
+         # declaration this file's documents are built from
+         "concept_namespace": _FIXTURE_NS["us-gaap"],
+         "graph_concept_qname": "us-gaap:Revenues"}
     r.update(over)
     return r
 
 
-CIK = "320193"
+CIK = "0000320193"
 _REQUIRED_KEYS = ("fact_id", "value", "unit_ref", "unit_name",
                   "is_divide", "context_id")
 
@@ -330,10 +335,14 @@ def test_ATTACK_the_happy_path_verifies_against_a_real_shaped_row():
 
 def test_ATTACK_comma_formatted_graph_values_are_parsed_not_rejected():
     """807,132 of 1,000,000 live numeric facts carry commas; a bare Decimal()
-    rejects them. The certified accounting-number parser is used instead."""
+    rejects them. The certified graph-lexical parser is used instead.
+    IDENTITY CHANGE (SEQ 265 D): the accounting-paren assert is retired —
+    parentheses left the graph grammar (the writer never emits them; census
+    zero) and now refuse; the source lane's paren law is pinned at the bind
+    door by test_F_a_visible_accounting_negative_still_reconciles."""
     from driver.relocation.inline_html import parse_raw
     assert parse_raw("113,743,000,000") == Decimal("113743000000")
-    assert parse_raw("(1,234.50)") == Decimal("-1234.50")       # accounting negative
+    assert parse_raw("(1,234.50)") is None
     _one(rows=[_row(value="390,000,000")])                      # end to end
 
 
@@ -566,8 +575,17 @@ def test_ATTACK_model_built_facts_are_deeply_immutable_too():
 
 def test_ATTACK_member_slices_must_be_the_facts_own_slices():
     axis = "us-gaap:StatementBusinessSegmentsAxis"
-    refs = [{"axis": axis, "member": "m", "slice_part": "segment:not_mine"}]
-    rows = [_row(dims=[{"axis": axis, "member": "m", "label": "M"}])]
+    # CLAIM AND ROW NAME THE SAME DECLARED QNAME, so `match_xbrl_fact` selects
+    # this row and the refusal comes from the binder's dimension gate — the
+    # rule this test is named for — rather than from the earlier
+    # no-matching-row gate. The row was a three-key dim before and parked on
+    # its own missing namespaces, which made the assertion prove a different
+    # law under this test's name; completing it while leaving the two sides
+    # spelled differently would only move the refusal to the wrong gate again.
+    # The filing context stays dimensionless, so the mismatch is real.
+    refs = [{"axis": axis, "member": "us-gaap:m",
+             "slice_part": "segment:not_mine"}]
+    rows = [_row(dims=[_ns_dim(axis, "us-gaap:m", "M")])]
     # The claimed pair is not the matched fact's, so the BINDER abstains before
     # the member law is reached — the reason names that gate, not the ref rule.
     _refused(ProductionValidationError, "dimension_set_mismatch",
@@ -633,25 +651,31 @@ def test_ATTACK_annual_percent_sequential_is_rejected():
     assert any("percent_sequential" in x.message for x in v), v
 
 
+# THE ONE ERROR EACH OF THESE ACTUALLY RAISES (#827 round 6). They accepted
+# `(SchemaError, ProductionValidationError)` — an alternation that passes on
+# either, so it could not tell which rule fired. Measured: all four raise
+# ProductionValidationError, and the two classes are UNRELATED (both derive
+# from ValueError, neither from the other), so the SchemaError arm was dead
+# and the pair read as "some exception happened".
 @pytest.mark.parametrize("bad", ["2026-13-45", "not-a-date", "2026/03/31"])
 def test_ATTACK_malformed_dates_are_rejected(bad):
-    with pytest.raises((SchemaError, p2.ProductionValidationError)):
+    with pytest.raises(p2.ProductionValidationError):
         _violations(fact(period_end_date=bad, period_start_date="2026-01-01",
                          time_type="duration"))
 
 
 def test_ATTACK_q5_is_rejected():
-    with pytest.raises((SchemaError, p2.ProductionValidationError)):
+    with pytest.raises(p2.ProductionValidationError):
         _violations(fact(fiscal_year=2026, fiscal_quarter=5))
 
 
 def test_ATTACK_an_invalid_slice_kind_is_rejected():
-    with pytest.raises((SchemaError, p2.ProductionValidationError)):
+    with pytest.raises(p2.ProductionValidationError):
         _violations(fact(slice_parts=["planet:mars"]))
 
 
 def test_ATTACK_two_period_shape_fields_are_rejected_by_the_PRODUCTION_resolver():
-    with pytest.raises((SchemaError, p2.ProductionValidationError)):
+    with pytest.raises(p2.ProductionValidationError):
         _violations(fact(fiscal_year=2026, fiscal_quarter=3, half=2))
 
 
@@ -895,3 +919,441 @@ def test_ATTACK_823_matching_and_HASHING_are_unchanged_by_freezing():
     assert fact_match.record_key(a) == fact_match.record_key(b)
     assert hash(fact_match.record_key(a)) == hash(fact_match.record_key(b))
     assert len(fact_match.match_facts([a], [b]).links) == 1
+
+
+# ---------------------------------------------------------------------------
+# #827 STEP 2 — THE DERIVED COVERAGE LEDGER.
+#
+# Not a hand-written checklist: the inventory of public inputs and reachable
+# outcomes is READ OUT OF THE LIVE CODE every run — signatures, dataclass and
+# namedtuple fields, the event-item/text-part key tuples, and the outcome and
+# decision vocabularies. Coverage is then measured against the live test
+# corpus. Add a public parameter or a reachable outcome without a test that
+# names it and this FAILS; that is the whole point, and it is why nothing here
+# may be transcribed.
+# ---------------------------------------------------------------------------
+
+_REPO_ROOT = __import__('os').path.dirname(__import__('os').path.dirname(
+    __import__('os').path.dirname(__import__('os').path.abspath(__file__))))
+
+
+def _v2_modules():
+    """THE SCOPE, spelled ONCE: the four v2 adapter modules the atomic switch
+    turns on. Two spellings of one rule are two rules the day one is edited."""
+    from driver.core import fact_match, prepared_fact_v2, slot_convert
+    from driver.core import xbrl_attach
+    return (prepared_fact_v2, slot_convert, fact_match, xbrl_attach)
+
+
+def _public_input_inventory():
+    """{(owner, input): kind} — OWNER-QUALIFIED PAIRS, never collapsed names.
+
+    The first version keyed by NAME alone, so 102 owner/input pairs became 83
+    entries and a parameter covered on one owner counted as covered on every
+    other. It also filtered by `__module__`, which silently dropped a public
+    function added to the module at runtime.
+    """
+    import inspect
+
+    inventory = {}
+    for mod in _v2_modules():
+        for name, obj in vars(mod).items():
+            if name.startswith("_") or not callable(obj):
+                continue
+            # OURS = defined in this repository. A symbol imported from the
+            # standard library or a third-party package (`dataclass`,
+            # `namedtuple`) is not a public input of ours; a symbol defined in
+            # ANOTHER of our modules is a re-export owned by its definer. A
+            # runtime-added function still counts, which is what the old
+            # `__module__ != mod.__name__` filter wrongly dropped.
+            import sys as _sys
+            home = getattr(obj, "__module__", None)
+            if home:
+                home_mod = _sys.modules.get(home)
+                home_file = getattr(home_mod, "__file__", "") or ""
+                if not home_file.startswith(_REPO_ROOT):
+                    continue
+                if home != mod.__name__:
+                    continue        # a re-export belongs to its DEFINER
+            owner = f"{mod.__name__}.{name}"
+            if inspect.isclass(obj):
+                # CLASS FIELDS ARE NOT COUNTED HERE ANY MORE. A field was
+                # credited when its NAME appeared as an attribute access
+                # ANYWHERE in the test corpus, on any object — so adding a
+                # public field called `label` was invisible, because some
+                # unrelated test reads some unrelated `.label`. Owner-
+                # qualifying it statically is impossible: measured, 47 of 54
+                # fields are constructed through `**kwargs` splat, which no
+                # AST can attribute to a field. Fields are proven
+                # BEHAVIOURALLY instead — see the field test below.
+                continue
+            try:
+                params = inspect.signature(obj).parameters.values()
+            except (TypeError, ValueError):
+                continue
+            for prm in params:
+                if prm.kind in (prm.VAR_POSITIONAL, prm.VAR_KEYWORD):
+                    continue
+                inventory[(owner, prm.name)] = "param"
+    # BOUNDARY KEYS are likewise proven behaviourally (the door must refuse an
+    # item that omits one or carries an unknown one), not by spotting the same
+    # word in some unrelated dict literal.
+    return inventory
+
+
+
+
+
+
+
+
+def test_827_the_PUBLIC_DECISION_VOCABULARY_is_the_contract_s_five_words():
+    """A CONTRACT PIN, not a coverage claim — and the right detector for the
+    defect the reviewer injected.
+
+    ChannelContract §6 and BUILD §11.4 fix the channel's outcome vocabulary at
+    exactly five words. A sixth word is not "an outcome nobody tested"; it is a
+    word the channel cannot interpret, so it is a hard contract failure and
+    needs no coverage reasoning at all.
+
+    The gate this replaces asked whether each word appeared as a string literal
+    anywhere in the test corpus. `deferred` and `quarantined` both do, in
+    unrelated tests — so both passed while being emitted by nothing.
+    """
+    from driver.core.xbrl_attach import PUBLIC_DECISIONS
+    assert PUBLIC_DECISIONS == ("written", "merged", "parked", "skipped",
+                                "rejected"), (
+        "the public decision vocabulary is ChannelContract §6 law — exactly "
+        f"these five words in this order; got {PUBLIC_DECISIONS}")
+
+
+def test_827_every_DECLARED_outcome_class_really_MAPS_to_its_public_row():
+    """BEHAVIOUR, generated from the declaration — never a name scan.
+
+    For every (exception class, code) the module declares, a real instance goes
+    through the real `_outcome_row`, and the emitted decision and code are
+    asserted. A declared class that maps to nothing, or emits a word outside
+    the contract, fails here.
+
+    HONEST LIMIT, stated rather than implied: this proves the MAPPING, not that
+    the public door reaches every branch. Branch reachability is what the
+    temp-copy mutation battery covers, and no static or in-process check here
+    should be read as claiming it.
+    """
+    from driver.core import xbrl_attach as _xa
+    from driver.core.prepared_fact_v2 import OUTCOME_CLASSES
+    seen = {}
+    for cls, code in _xa._DEFAULT_CODES:
+        row = _xa._outcome_row(0, cls("probe"))
+        assert row["decision"] == OUTCOME_CLASSES[cls], (
+            f"{cls.__name__} emitted {row['decision']!r}, not its declared "
+            f"{OUTCOME_CLASSES[cls]!r}")
+        assert row["codes"] == (code,), (
+            f"{cls.__name__} emitted codes {row['codes']}, not ({code!r},)")
+        seen[cls] = row["decision"]
+    assert set(seen) == set(OUTCOME_CLASSES), (
+        "a declared outcome class has no default code, so nothing can emit it: "
+        f"{sorted(c.__name__ for c in set(OUTCOME_CLASSES) - set(seen))}")
+    # The adapter emits a SUBSET of the contract — it can never write or merge.
+    assert set(OUTCOME_CLASSES.values()) <= set(_xa.PUBLIC_DECISIONS)
+
+
+def test_827_every_public_INPUT_FIELD_is_REALLY_VALIDATED():
+    """GENERATED and BEHAVIOURAL: for every public field of every v2 INPUT
+    dataclass, a value that is lawful for no field must be REFUSED.
+
+    This replaces the name-matching field rule, which credited a field whenever
+    its name appeared as an attribute access anywhere in any test — so adding a
+    public field called `label` was invisible, while `zzz_untested_field` was
+    caught. Coverage that depends on the spelling you choose is not coverage.
+
+    Measured before it was built: 34 of 35 `PreparedItemV2` fields already
+    refuse, and the one that does not is `_attach_token`, which is private and
+    therefore not public surface.
+    """
+    import dataclasses
+    unlawful = object()          # lawful for no field of any of these classes
+    item_kw = _item_kwargs(_nested())
+    lawful_item = p2.PreparedItemV2(**item_kw)
+    cases = [
+        (p2.PreparedItemV2, item_kw),
+        (p2.PreparedFactV2, dict(fact_type="metric", part_ref="p01",
+                                 occurrence_in_part=None, per_x=None,
+                                 item=lawful_item)),
+        (p2.RunInputV2, dict(source_id="0000006201-26-000031", facts=[])),
+    ]
+    unchecked = []
+    for cls, base in cases:
+        for f in dataclasses.fields(cls):
+            # THE FIELD IS ALWAYS SUBSTITUTED, never skipped when it is absent
+            # from the lawful kwargs. Skipping absent fields would re-open the
+            # exact hole: a NEW field with a default is absent from every
+            # existing fixture, which is precisely the case that must fail.
+            if f.name.startswith("_") or not f.init:
+                continue
+            probe = dict(base)
+            probe[f.name] = unlawful
+            try:
+                cls(**probe)
+            # ONLY THE DECLARED VALIDATION SIGNAL. `except Exception` credited
+            # a field whenever ANY error escaped — including a TypeError or an
+            # AttributeError from our own code tripping over the sentinel. A
+            # crash is not a refusal: it takes the caller down instead of
+            # returning a verdict, and counting it as validation is how a
+            # programming defect reads as a working guard.
+            except p2.SchemaError:
+                continue
+            unchecked.append(f"{cls.__name__}.{f.name}")
+    assert not unchecked, (
+        "public input field(s) accept a value that is lawful for no field, so "
+        f"nothing validates them: {unchecked}")
+
+
+def test_827_slot_name_is_a_PUBLIC_parameter_and_reaches_the_message():
+    """`slot_name` was named by NO live test — every caller passed it
+    positionally — so the coverage ledger reported it, correctly, the first
+    time it ran. It is public: callers may pass it by keyword, and the value
+    must reach the refusal so a reader knows WHICH slot failed."""
+    from decimal import Decimal
+
+    from driver.core.slot_convert import SlotConversionError, validate_slot
+    lawful = {"value": Decimal(1), "scale_multiplier": Decimal("1e6"),
+              "unit_scale_evidence": "million"}
+    validate_slot(slot_name="level_low", slot=lawful, stated_unit="m_usd",
+                  quote="revenue of $1 million")          # positive control
+    with pytest.raises(SlotConversionError) as exc:
+        validate_slot(slot_name="comparison_high",
+                      slot={"value": Decimal(1),
+                            "scale_multiplier": Decimal("1e9"),
+                            "unit_scale_evidence": "billion"},
+                      stated_unit="m_usd", quote="revenue of $1 million")
+    assert "comparison_high" in str(exc.value), (
+        f"the refusal does not say WHICH slot failed: {exc.value}")
+
+
+
+
+def test_827_produced_DUPLICATES_are_reported_not_silently_collapsed():
+    """The coverage gate found this: `MatchResult.produced_duplicates` was a
+    public result field that NO live test read. Two identical produced facts
+    against one gold fact must be reported as a duplicate, never quietly
+    counted once — a silent collapse would credit an emit-once violation."""
+    g = point(D29_A)
+    r = fact_match.match_facts([g], [point(D29_A), point(D29_A)])
+    assert r.produced_duplicates, \
+        "two identical produced facts were collapsed without a duplicate report"
+
+
+def test_827_the_KEYWORD_ONLY_public_parameters_are_really_exercised():
+    """The coverage gate, once its blanket fallback was deleted, reported SEVEN
+    public keyword-only parameters that no test had ever passed:
+    `source_id`, `calendar_override`, `lookups` and `home_facts` on
+    `to_stored_fact` / `validate_via_production`.
+
+    They are exercised here as REAL CALLS with real values, and each is
+    asserted against the default-call result. What this pins honestly is
+    acceptance and default-equivalence — that supplying the documented default
+    changes nothing, and that a supplied cache is actually consulted. It does
+    not claim to pin every parameter's full semantics.
+    """
+    f = point(Decimal("726"), unit="count")
+    base_kw = _stored_kwargs()
+
+    baseline = p2.validate_via_production(f, **base_kw)
+    explicit = p2.validate_via_production(
+        f, **base_kw, source_id=None, calendar_override=False,
+        home_facts=None, lookups=None)
+    assert [v.code for v in explicit] == [v.code for v in baseline], (
+        "passing the documented defaults explicitly changed the verdict")
+
+    # a real source_id and a real lookups cache, through the same door
+    cache: dict = {}
+    with_inputs = p2.validate_via_production(
+        f, **base_kw, source_id="0000006201-26-000031", lookups=cache)
+    assert [v.code for v in with_inputs] == [v.code for v in baseline]
+
+    # and the STORED path takes them too — a different public owner
+    stored_default = p2.to_stored_fact(f, **base_kw)
+    stored_explicit = p2.to_stored_fact(
+        f, **base_kw, source_id=None, calendar_override=False, lookups=None)
+    assert stored_default == stored_explicit
+
+
+# ---------------------------------------------------------------------------
+# #827 ROUND 4 — THE RESOLVER'S OWN GUARANTEES, MUTATION-PROVEN.
+#
+# The reviewer accepted the AST owner-resolution key only on four conditions.
+# Each is checked here against a synthetic corpus file, because a guarantee
+# that has never been shown to hold is a guarantee unearned.
+#
+# HIS CORRECTION, RECORDED: I claimed an explicit owner->test-node mapping
+# would not split same-named functions. That was WRONG — each row of such a
+# table names its owner, so it splits them by construction. The reason to
+# prefer resolution is that the table is transcribed and rots on rename, not
+# that it fails to disambiguate.
+# ---------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+# ---------------------------------------------------------------------------
+# THE COVERAGE LEDGER, AFTER THE HEURISTIC WAS DELETED (#827 round 6)
+#
+# What was here scanned every `test_*.py` with `ast.walk` and credited a
+# parameter because its NAME appeared in a call — including calls that never
+# run, since a call inside `if False:` is harvested exactly like a live one.
+# It reported coverage it could not observe: a FALSE GREEN.
+#
+# It is replaced by an EXPLICIT map, written by hand on purpose, and checked in
+# BOTH directions against the DERIVED public surface — so a new public callable
+# cannot be silently left out, and an entry cannot outlive the callable it
+# names. Whether the named test PASSES is the suite's job; this only says which
+# test is the one that covers it.
+# ---------------------------------------------------------------------------
+
+#: (owner, PARAMETER) -> the test node that covers it. KEYED ON THE PAIR:
+#: an owner-only map collapsed 51 pairs into 17 names, so 34 parameters
+#: carried no named test while the ledger read as complete.
+COVERED_BY = {
+    ("driver.core.slot_convert.family_required_multiplier", "unit"):
+        "driver/core/test_round12_pure_unit_law.py::test_the_stored_multiplier_is_ONE_for_the_percent_family_and_x",
+    ("driver.core.fact_match.match_facts", "gold"):
+        "driver/core/test_prepared_fact_v2.py::test_G8_per_x_joins_auto_link_equality",
+    ("driver.core.fact_match.match_facts", "produced"):
+        "driver/core/test_prepared_fact_v2.py::test_G8_per_x_joins_auto_link_equality",
+    ("driver.core.fact_match.record_key", "f"):
+        "driver/core/test_v2_attacks.py::test_ATTACK_unmatched_output_is_canonically_ordered",
+    ("driver.core.prepared_fact_v2.check_per_x_against_name", "driver_name"):
+        "driver/core/test_prepared_fact_v2.py::test_G8_eps_with_per_x_share_is_lawful",
+    ("driver.core.prepared_fact_v2.check_per_x_against_name", "per_x"):
+        "driver/core/test_prepared_fact_v2.py::test_G8_eps_with_per_x_share_is_lawful",
+    ("driver.core.prepared_fact_v2.split_slice_part", "token"):
+        "driver/core/test_prepared_fact_v2.py::test_G33_first_colon_only_split_keeps_a_colon_in_the_value",
+    ("driver.core.prepared_fact_v2.to_stored_fact", "calendar_override"):
+        "driver/core/test_v2_attacks.py::test_827_the_KEYWORD_ONLY_public_parameters_are_really_exercised",
+    ("driver.core.prepared_fact_v2.to_stored_fact", "driver"):
+        "driver/core/test_round11_outcomes.py::test_slot_conversion_failure_is_a_PARK_not_an_escape",
+    ("driver.core.prepared_fact_v2.to_stored_fact", "fact"):
+        "driver/core/test_round11_outcomes.py::test_slot_conversion_failure_is_a_PARK_not_an_escape",
+    ("driver.core.prepared_fact_v2.to_stored_fact", "fye_month"):
+        "driver/core/test_round11_outcomes.py::test_slot_conversion_failure_is_a_PARK_not_an_escape",
+    ("driver.core.prepared_fact_v2.to_stored_fact", "lookups"):
+        "driver/core/test_v2_attacks.py::test_827_the_KEYWORD_ONLY_public_parameters_are_really_exercised",
+    ("driver.core.prepared_fact_v2.to_stored_fact", "source"):
+        "driver/core/test_round11_outcomes.py::test_slot_conversion_failure_is_a_PARK_not_an_escape",
+    ("driver.core.prepared_fact_v2.to_stored_fact", "source_id"):
+        "driver/core/test_v2_attacks.py::test_827_the_KEYWORD_ONLY_public_parameters_are_really_exercised",
+    ("driver.core.prepared_fact_v2.validate_via_production", "calendar_override"):
+        "driver/core/test_v2_attacks.py::test_827_the_KEYWORD_ONLY_public_parameters_are_really_exercised",
+    ("driver.core.prepared_fact_v2.validate_via_production", "driver"):
+        "driver/core/test_v2_attacks.py::test_827_the_KEYWORD_ONLY_public_parameters_are_really_exercised",
+    ("driver.core.prepared_fact_v2.validate_via_production", "fact"):
+        "driver/core/test_v2_attacks.py::test_827_the_KEYWORD_ONLY_public_parameters_are_really_exercised",
+    ("driver.core.prepared_fact_v2.validate_via_production", "fye_month"):
+        "driver/core/test_v2_attacks.py::test_827_the_KEYWORD_ONLY_public_parameters_are_really_exercised",
+    ("driver.core.prepared_fact_v2.validate_via_production", "home_facts"):
+        "driver/core/test_v2_attacks.py::test_827_the_KEYWORD_ONLY_public_parameters_are_really_exercised",
+    ("driver.core.prepared_fact_v2.validate_via_production", "lookups"):
+        "driver/core/test_v2_attacks.py::test_827_the_KEYWORD_ONLY_public_parameters_are_really_exercised",
+    ("driver.core.prepared_fact_v2.validate_via_production", "source"):
+        "driver/core/test_v2_attacks.py::test_827_the_KEYWORD_ONLY_public_parameters_are_really_exercised",
+    ("driver.core.prepared_fact_v2.validate_via_production", "source_id"):
+        "driver/core/test_v2_attacks.py::test_827_the_KEYWORD_ONLY_public_parameters_are_really_exercised",
+    ("driver.core.prepared_fact_v2.verify_occurrence", "occurrence_in_part"):
+        "driver/core/test_prepared_fact_v2.py::test_G11_occurrence_is_verified_against_the_part_text",
+    ("driver.core.prepared_fact_v2.verify_occurrence", "part_text"):
+        "driver/core/test_prepared_fact_v2.py::test_G11_occurrence_is_verified_against_the_part_text",
+    ("driver.core.prepared_fact_v2.verify_occurrence", "quote"):
+        "driver/core/test_prepared_fact_v2.py::test_G11_occurrence_is_verified_against_the_part_text",
+    ("driver.core.slot_convert.assert_storable", "value"):
+        "driver/core/test_round12_exact_scale.py::test_the_storable_bound_is_exact_at_1024_characters",
+    ("driver.core.slot_convert.check_xbrl_consistency", "displayed"):
+        "driver/core/test_prepared_fact_v2.py::test_G21_xbrl_declared_scale_is_never_double_scaled",
+    ("driver.core.slot_convert.check_xbrl_consistency", "full_value"):
+        "driver/core/test_prepared_fact_v2.py::test_G21_xbrl_declared_scale_is_never_double_scaled",
+    ("driver.core.slot_convert.check_xbrl_consistency", "ix_scale"):
+        "driver/core/test_prepared_fact_v2.py::test_G21_xbrl_declared_scale_is_never_double_scaled",
+    ("driver.core.slot_convert.convert_slot", "slot"):
+        "driver/core/test_prepared_fact_v2.py::test_G1_driver_name_changes_nothing",
+    ("driver.core.slot_convert.convert_slot", "stated_unit"):
+        "driver/core/test_prepared_fact_v2.py::test_G1_driver_name_changes_nothing",
+    ("driver.core.slot_convert.exact_mul", "a"):
+        "driver/core/test_v2_attacks.py::test_ATTACK_exact_mul_precision_comes_from_the_operands",
+    ("driver.core.slot_convert.exact_mul", "b"):
+        "driver/core/test_v2_attacks.py::test_ATTACK_exact_mul_precision_comes_from_the_operands",
+    ("driver.core.slot_convert.exact_scaleb", "exponent"):
+        "driver/core/test_v2_attacks.py::test_ATTACK_xbrl_scaling_is_exact_at_29_digits",
+    ("driver.core.slot_convert.exact_scaleb", "value"):
+        "driver/core/test_v2_attacks.py::test_ATTACK_xbrl_scaling_is_exact_at_29_digits",
+    ("driver.core.slot_convert.stored_char_length", "value"):
+        "driver/core/test_round12_exact_scale.py::test_the_storable_bound_is_exact_at_1024_characters",
+    ("driver.core.slot_convert.validate_slot", "lane"):
+        "driver/core/test_prepared_fact_v2.py::test_G22_the_xbrl_lane_does_not_require_quote_local_evidence",
+    ("driver.core.slot_convert.validate_slot", "quote"):
+        "driver/core/test_prepared_fact_v2.py::test_G5_slot_structure_failures",
+    ("driver.core.slot_convert.validate_slot", "slot"):
+        "driver/core/test_prepared_fact_v2.py::test_G5_slot_structure_failures",
+    ("driver.core.slot_convert.validate_slot", "slot_name"):
+        "driver/core/test_prepared_fact_v2.py::test_G5_slot_structure_failures",
+    ("driver.core.slot_convert.validate_slot", "stated_unit"):
+        "driver/core/test_prepared_fact_v2.py::test_G5_slot_structure_failures",
+    ("driver.core.xbrl_attach.attach_event_xbrl", "filing_provider"):
+        "driver/relocation/test_packet_items_through_the_door.py::test_every_saved_packet_item_attaches_on_its_LITERAL_evidence",
+    ("driver.core.xbrl_attach.attach_event_xbrl", "items"):
+        "driver/relocation/test_packet_items_through_the_door.py::test_every_saved_packet_item_attaches_on_its_LITERAL_evidence",
+    ("driver.core.xbrl_attach.attach_event_xbrl", "menu_tokens"):
+        "driver/core/test_round15_audit_evidence.py::test_825_an_empty_frozenset_is_lawful_it_is_not_a_missing_menu",
+    ("driver.core.xbrl_attach.attach_event_xbrl", "source_id"):
+        "driver/relocation/test_packet_items_through_the_door.py::test_every_saved_packet_item_attaches_on_its_LITERAL_evidence",
+    ("driver.core.xbrl_attach.attach_event_xbrl", "store"):
+        "driver/relocation/test_packet_items_through_the_door.py::test_every_saved_packet_item_attaches_on_its_LITERAL_evidence",
+    ("driver.core.xbrl_attach.attach_event_xbrl", "text_parts"):
+        "driver/relocation/test_packet_items_through_the_door.py::test_every_saved_packet_item_attaches_on_its_LITERAL_evidence",
+    # THE POLICY NOW TAKES ONLY IDENTITY. Its three old inputs — `unit_name`,
+    # `is_divide` and the raw `numerator` — are gone: the first was the graph's
+    # prefixed spelling (which decided which alias a filer typed, not which
+    # currency they declared), and the divide branch is read from the shape of
+    # the verified evidence instead of a flag a caller could contradict.
+    ("driver.core.xbrl_attach.candidate_units_for", "measures_expanded"):
+        "driver/core/test_unit_identity_expanded.py::test_the_SAME_TEXT_under_a_DIFFERENT_URI_is_not_dollars",
+    ("driver.core.xbrl_attach.candidate_units_for", "numerator_expanded"):
+        "driver/core/test_unit_identity_expanded.py::test_a_DIVIDE_numerator_under_a_FOREIGN_URI_is_not_dollars",
+    ("driver.core.xbrl_attach.expected_multiplier", "ix_scale"):
+        "driver/relocation/test_real_726_end_to_end.py::test_real_USD_shares_and_EPS_through_the_COMPLETE_core_path",
+    ("driver.core.xbrl_attach.expected_multiplier", "level_unit"):
+        "driver/relocation/test_real_726_end_to_end.py::test_real_USD_shares_and_EPS_through_the_COMPLETE_core_path",
+}
+
+
+def test_827R6_every_public_callable_NAMES_the_test_that_covers_it():
+    """BOTH DIRECTIONS, against the DERIVED surface — an entry that outlives its
+    callable is as wrong as a callable with no entry."""
+    public = set(_public_input_inventory())
+    uncovered = sorted(public - set(COVERED_BY))
+    stale = sorted(set(COVERED_BY) - public)
+    assert not uncovered, f"public (owner, parameter) named by no test: {uncovered}"
+    assert not stale, f"ledger entries whose pair no longer exists: {stale}"
+
+
+def test_827R6_every_named_test_node_really_exists():
+    """A ledger pointing at a test that is not there is worse than no ledger.
+    Checked on disk, so it holds in the clean lane and the live lane alike."""
+    import ast as _ast
+    import os as _os
+    missing = []
+    for (owner, param), node in sorted(COVERED_BY.items()):
+        path, _, func = node.partition("::")
+        full = _os.path.join(_REPO_ROOT, path)
+        if not _os.path.exists(full):
+            missing.append(f"{owner}({param}) -> missing file {path}")
+            continue
+        names = {n.name for n in _ast.walk(_ast.parse(open(full, encoding="utf-8").read()))
+                 if isinstance(n, _ast.FunctionDef)}
+        if func not in names:
+            missing.append(f"{owner}({param}) -> {path} has no {func}")
+    assert not missing, missing

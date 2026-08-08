@@ -45,9 +45,36 @@ both "NumberOf" and "Percent".
 import os
 from decimal import Decimal
 
-from driver.core.test_round10_event_boundary import parts_for
+from driver.core.test_round10_event_boundary import (_FIXTURE_NS, _XMLNS,
+                                                     parts_for)
+
+#: The fixtures below state units the way a FILING writes them. The policy now
+#: consumes expanded names, so the raw spelling is resolved HERE — in the
+#: fixture, where the reader can see which namespace each one means — rather
+#: than by the code under test, which is the whole point of the change.
+_ISO4217_NS = 'http://www.xbrl.org/2003/iso4217'
+_XBRLI_NS = 'http://www.xbrl.org/2003/instance'
+_UTR_NS = 'http://www.xbrl.org/2009/utr'
+_FIXTURE_MEASURE_NS = {'iso4217': _ISO4217_NS, 'xbrli': _XBRLI_NS,
+                       'utr': _UTR_NS}
+
+
+def _exp(*raw_measures):
+    """Fixture spellings -> (namespace URI, local name). An unprefixed measure
+    is an XBRL 2.1 instance-namespace one, exactly as a filing's default
+    binding would make it."""
+    out = []
+    for raw in raw_measures:
+        prefix, _sep, local = raw.partition(':')
+        out.append((_FIXTURE_MEASURE_NS[prefix], local) if local
+                   else (_XBRLI_NS, prefix))
+    return tuple(out)
+
 
 import pytest
+from driver.core.xbrl_attach import (
+    candidate_units_for as xa_candidate_units_for,
+    _CANDIDATE_EXACT as xa_CANDIDATE_EXACT)
 
 from driver.core.xbrl_attach import attach_event_xbrl
 from driver.core.test_round10_event_boundary import filing_evidence
@@ -263,8 +290,8 @@ def test_a_wrong_unit_for_a_real_fact_is_REFUSED():
 # ---- the compatibility law -------------------------------------------------
 
 def test_pure_backs_count_the_percent_family_and_x_but_never_money():
-    from driver.relocation.exact_numbers import candidate_units_for
-    allowed = candidate_units_for("pure", False)
+    from driver.core.xbrl_attach import candidate_units_for
+    allowed = candidate_units_for(_exp("pure"), ())
     for u in ("count", "x", "percent", "percent_yoy", "percent_sequential",
               "percent_points", "basis_points"):
         assert u in allowed, u
@@ -274,8 +301,8 @@ def test_pure_backs_count_the_percent_family_and_x_but_never_money():
 def test_pure_may_back_unknown_as_the_failsafe():
     """RULE-LEVEL and labelled: no decisively-worded genuinely-undecidable
     `pure` fact was found in the cached corpus, and one was NOT manufactured."""
-    from driver.relocation.exact_numbers import candidate_units_for
-    assert "unknown" in candidate_units_for("pure", False)
+    from driver.core.xbrl_attach import candidate_units_for
+    assert "unknown" in candidate_units_for(_exp("pure"), ())
 
 
 @pytest.mark.parametrize("currency", ["iso4217:CNY", "iso4217:EUR",
@@ -284,33 +311,45 @@ def test_non_USD_money_may_be_stored_as_unknown_not_abstained(currency):
     """FINAL_DESIGN:206 — "non-USD gaps may stay `unknown` (monitored)". Adding
     real `eur`/`cny` units stays open; using the EXISTING fail-safe is locked
     law, and the first version of this file asserted the opposite."""
-    from driver.relocation.exact_numbers import candidate_units_for
-    assert candidate_units_for(currency, False) == frozenset({"unknown"}), currency
+    from driver.core.xbrl_attach import candidate_units_for
+    assert candidate_units_for(_exp(currency), ()) == frozenset({"unknown"}), currency
 
 
 def test_the_money_and_share_units_are_unchanged():
-    from driver.relocation.exact_numbers import candidate_units_for as C
-    assert C("iso4217:USD", False) == frozenset({"usd", "m_usd"})
-    assert C("shares", False) == frozenset({"count"})
+    from driver.core.xbrl_attach import candidate_units_for as C
+    assert C(_exp("iso4217:USD"), ()) == frozenset({"usd", "m_usd"})
+    assert C(_exp("shares"), ()) == frozenset({"count"})
     # a divide unit is judged by its STRUCTURE now, so the numerator must be
     # supplied — see test_EPS_is_the_SAME_rule_not_a_special_case
-    assert C("iso4217:USDshares", True,
-             numerator=("iso4217:USD",), denominator=("xbrli:shares",)) \
-        == frozenset({"usd"})
+    # A DIVIDE UNIT IS RECOGNISED BY ITS STRUCTURE, not by a concatenated name:
+    # the numerator is passed and the plain measures are empty.
+    assert C((), _exp("iso4217:USD")) == frozenset({"usd"})
     for u in ("percent", "x", "count"):
-        assert u not in C("iso4217:USD", False)
+        assert u not in C(_exp("iso4217:USD"), ())
 
 
 def test_a_unit_this_route_cannot_read_at_all_has_no_compatible_unit():
-    from driver.relocation.exact_numbers import candidate_units_for
-    assert candidate_units_for("utr:Btu", False) == frozenset()
+    from driver.core.xbrl_attach import candidate_units_for
+    assert candidate_units_for(_exp("utr:Btu"), ()) == frozenset()
 
 
 def test_the_DORMANT_materializer_whitelist_is_untouched():
-    from driver.relocation.exact_numbers import ROUTE_A_SEM_UNIT
-    assert ROUTE_A_SEM_UNIT == {("iso4217:USD", False): "usd",
-                                ("shares", False): "count",
-                                ("iso4217:USDshares", True): "usd_per_share"}
+    """THE SCOPE IS PINNED, NOT THE SPELLING. This pinned
+    `ROUTE_A_SEM_UNIT`, a map from the GRAPH's prefixed text to a reading; #827
+    Stage 3 retired it because a prefix is an alias and it therefore both
+    refused lawful aliases and accepted rebound ones.
+
+    What the pin was FOR survives exactly: the whitelist admits three readings
+    and no more, so this asserts the same three against the identity-keyed
+    tables that replaced it. Growth by drive-by is still caught."""
+    from driver.relocation.exact_numbers import (ROUTE_A_SEM_UNIT_DIVIDE,
+                                                 ROUTE_A_SEM_UNIT_SIMPLE)
+    ISO = "http://www.xbrl.org/2003/iso4217"
+    XBRLI = "http://www.xbrl.org/2003/instance"
+    assert ROUTE_A_SEM_UNIT_SIMPLE == {((ISO, "USD"),): "usd",
+                                       ((XBRLI, "shares"),): "count"}
+    assert ROUTE_A_SEM_UNIT_DIVIDE == {
+        (((ISO, "USD"),), ((XBRLI, "shares"),)): "usd_per_share"}
 
 
 # ---- repair 2: ONE policy check, and it is the caller's --------------------
@@ -355,6 +394,15 @@ def test_the_stored_multiplier_is_ONE_for_the_percent_family_and_x():
     for u in ("percent", "percent_yoy", "percent_sequential", "percent_points",
               "basis_points", "x"):
         assert expected_multiplier(u, -2) == Decimal(1), u
+    # C3 (#827 F-UNITS): the ONE owner of membership AND the required value —
+    # every family unit answers Decimal(1); every other enum unit answers None
+    # (the caller's own arithmetic governs). The three doors consume this owner.
+    from driver.core.slot_convert import family_required_multiplier
+    for u in ("percent", "percent_yoy", "percent_sequential", "percent_points",
+              "basis_points", "x"):
+        assert family_required_multiplier(u) == Decimal(1), u
+    for u in ("usd", "m_usd", "count", "unknown"):
+        assert family_required_multiplier(u) is None, u
 
 
 def test_money_count_and_unknown_use_the_sources_real_magnitude():
@@ -464,9 +512,8 @@ def test_a_divide_unit_is_judged_by_its_STRUCTURED_numerator(numerator, expected
     """The numerator decides the base unit; the denominator is the per-X and is
     the model's to state. Judged from the filing's verified structure — the
     concatenated graph name is never parsed."""
-    from driver.relocation.exact_numbers import candidate_units_for
-    got = candidate_units_for("irrelevant-concatenation", True,
-                              numerator=numerator, denominator=("utr:bbl",))
+    from driver.core.xbrl_attach import candidate_units_for
+    got = candidate_units_for((), _exp(*numerator))
     assert got == frozenset(expected), f"{numerator} -> {sorted(got)}"
 
 
@@ -478,35 +525,35 @@ def test_EPS_is_the_SAME_rule_not_a_special_case_FOR_UNIT_BINDING():
     NAMING exception (NAME-13, still an open owner item) is untouched and stays
     in `check_per_x_against_name` — an approved naming change will arrive on its
     own, and must not be inferred from this."""
-    from driver.relocation import exact_numbers as XN
-    assert ("iso4217:USDshares", True) not in XN._CANDIDATE_EXACT
-    assert XN.candidate_units_for("iso4217:USDshares", True,
-                                  numerator=("iso4217:USD",),
-                                  denominator=("xbrli:shares",)) == frozenset({"usd"})
+    assert (_ISO4217_NS, "USDshares") not in xa_CANDIDATE_EXACT
+    assert xa_candidate_units_for((), _exp("iso4217:USD")) == frozenset({"usd"})
 
 
 def test_the_binder_reports_the_structured_measures():
     from driver.relocation.inline_html import bind_graph_fact
-    divide = ('<xbrli:unit id="u1"><xbrli:divide>'
+    divide = ('<ix:header><ix:resources><xbrli:unit id="u1"><xbrli:divide>'
               '<xbrli:unitNumerator><xbrli:measure>iso4217:USD</xbrli:measure>'
               '</xbrli:unitNumerator><xbrli:unitDenominator>'
               '<xbrli:measure>utr:bbl</xbrli:measure>'
-              '</xbrli:unitDenominator></xbrli:divide></xbrli:unit>')
-    doc = ('<html><body><xbrli:context id="c1"><xbrli:entity>'
-           '<xbrli:identifier>0000320193</xbrli:identifier></xbrli:entity>'
+              '</xbrli:unitDenominator></xbrli:divide></xbrli:unit></ix:resources></ix:header>')
+    doc = (f'<html {_XMLNS}><body><ix:header><ix:resources><xbrli:context id="c1"><xbrli:entity>'
+           '<xbrli:identifier scheme="http://www.sec.gov/CIK">0000320193</xbrli:identifier></xbrli:entity>'
            '<xbrli:period><xbrli:startDate>2024-01-01</xbrli:startDate>'
            '<xbrli:endDate>2024-06-30</xbrli:endDate></xbrli:period>'
-           '</xbrli:context>' + divide +
+           '</xbrli:context></ix:resources></ix:header>' + divide +
            '<p><ix:nonFraction id="f1" name="us-gaap:X" contextRef="c1" '
-           'unitRef="u1" scale="0" format="">44.02</ix:nonFraction></p></body></html>')
+           'unitRef="u1" scale="0" decimals="2">44.02</ix:nonFraction></p>'
+           '</body></html>')
     bound, why = bind_graph_fact(
         doc, inline_element_id="f1", concept="us-gaap:X", context_id="c1",
         unit_ref="u1", unit_name="iso4217:USDutr:bbl", is_divide="1",
         period_type="duration", start_date="2024-01-01", end_date="2024-07-01",
-        dims=(), entity_cik="320193", raw_value="44.02")
+        dims=(), entity_cik="0000320193", raw_value="44.02",
+        **_IDENTITY)
     assert bound is not None, why
-    assert bound["unit_numerator"] == ("iso4217:USD",)
-    assert bound["unit_denominator"] == ("utr:bbl",)
+    assert bound["unit_numerator_expanded"] == \
+        (("http://www.xbrl.org/2003/iso4217", "USD"),)
+    assert bound["unit_measures_expanded"] == ()   # divide: no plain measures
 
 
 def test_the_outcome_map_has_no_duplicate_keys():
@@ -537,16 +584,23 @@ def test_the_outcome_map_has_no_duplicate_keys():
 
 def _divide_doc(num_measures, den_measures):
     m = lambda vals: "".join(f"<xbrli:measure>{v}</xbrli:measure>" for v in vals)
-    return ('<html><body><xbrli:context id="c1"><xbrli:entity>'
-            '<xbrli:identifier>0000320193</xbrli:identifier></xbrli:entity>'
+    return (f'<html {_XMLNS}><body><ix:header><ix:resources><xbrli:context id="c1"><xbrli:entity>'
+            '<xbrli:identifier scheme="http://www.sec.gov/CIK">0000320193</xbrli:identifier></xbrli:entity>'
             '<xbrli:period><xbrli:startDate>2024-01-01</xbrli:startDate>'
             '<xbrli:endDate>2024-06-30</xbrli:endDate></xbrli:period>'
-            '</xbrli:context><xbrli:unit id="u1"><xbrli:divide>'
+            '</xbrli:context></ix:resources></ix:header><ix:header><ix:resources><xbrli:unit id="u1"><xbrli:divide>'
             f'<xbrli:unitNumerator>{m(num_measures)}</xbrli:unitNumerator>'
             f'<xbrli:unitDenominator>{m(den_measures)}</xbrli:unitDenominator>'
-            '</xbrli:divide></xbrli:unit>'
+            '</xbrli:divide></xbrli:unit></ix:resources></ix:header>'
             '<p><ix:nonFraction id="f1" name="us-gaap:X" contextRef="c1" '
-            'unitRef="u1" scale="0" format="">44.02</ix:nonFraction></p></body></html>')
+            'unitRef="u1" scale="0" decimals="2">44.02</ix:nonFraction></p>'
+           '</body></html>')
+
+
+#: the concept identity these binder calls state, read from the SAME
+#: declaration the documents are built from
+_IDENTITY = {"concept_namespace": _FIXTURE_NS["us-gaap"],
+             "graph_concept_qname": "us-gaap:X"}
 
 
 def _bind_divide(num, den, unit_name):
@@ -555,44 +609,64 @@ def _bind_divide(num, den, unit_name):
         _divide_doc(num, den), inline_element_id="f1", concept="us-gaap:X",
         context_id="c1", unit_ref="u1", unit_name=unit_name, is_divide="1",
         period_type="duration", start_date="2024-01-01", end_date="2024-07-01",
-        dims=(), entity_cik="320193", raw_value="44.02")
+        dims=(), entity_cik="0000320193", raw_value="44.02",
+        **_IDENTITY)
 
 
-@pytest.mark.parametrize("num,den,unit_name", [
-    (["iso4217:USD"], [], "iso4217:USD"),            # no denominator at all
-    ([], ["utr:bbl"], "utr:bbl"),                    # no numerator at all
-    (["iso4217:USD"], [""], "iso4217:USD"),          # blank denominator measure
-    ([""], ["utr:bbl"], "utr:bbl"),                  # blank numerator measure
-    ([" "], ["utr:bbl"], "utr:bbl"),                 # whitespace-only measure
-    ([], [], ""),                                    # both sides empty
+#: TWO FAULTS, TWO NAMES (#827 round 5). A side carrying NO measure element is
+#: a STRUCTURE fault and is refused at parse; a measure that is present but
+#: says nothing is a VALUE fault and is refused at bind. `"divide" in why` was
+#: a substring check loose enough to accept either, so it could not tell the
+#: two apart — and an abstention whose stated cause is wrong is not a correct
+#: abstention.
+_STRUCTURE = "malformed_unit_structure"
+_VALUE = "malformed_divide_unit_measure"
+
+
+@pytest.mark.parametrize("num,den,unit_name,expected", [
+    (["iso4217:USD"], [], "iso4217:USD", _STRUCTURE),      # no denominator
+    ([], ["utr:bbl"], "utr:bbl", _STRUCTURE),              # no numerator
+    ([], [], "", _STRUCTURE),                              # both sides empty
+    # ROUND 7 MOVED THESE EARLIER, and the reason moved with them. A measure
+    # is a QNAME; blank and whitespace-only text is not one, so it is refused
+    # at PARSE as structure rather than reaching the bind-time value check.
+    # `malformed_divide_unit_measure` still owns a measure that IS a QName but
+    # names a side the graph cannot use.
+    (["iso4217:USD"], [""], "iso4217:USD", _STRUCTURE),     # blank denominator
+    ([""], ["utr:bbl"], "utr:bbl", _STRUCTURE),             # blank numerator
+    ([" "], ["utr:bbl"], "utr:bbl", _STRUCTURE),            # whitespace only
 ])
-def test_a_malformed_divide_unit_ABSTAINS_in_the_shared_binder(num, den, unit_name):
+def test_a_malformed_divide_unit_ABSTAINS_in_the_shared_binder(num, den,
+                                                               unit_name,
+                                                               expected):
     bound, why = _bind_divide(num, den, unit_name)
     assert bound is None, "a malformed divide unit bound"
-    assert "divide" in why, why
+    assert why.endswith(expected), f"expected {expected}, said {why!r}"
 
 
 def test_a_MULTI_MEASURE_divide_is_still_structurally_valid():
     """XBRL permits more than one measure per side. Structural validity must not
     reject that — whether we can READ a compound numerator is candidate POLICY,
     decided by the caller, and it parks there instead."""
-    from driver.relocation.exact_numbers import candidate_units_for
+    from driver.core.xbrl_attach import candidate_units_for
     bound, why = _bind_divide(["iso4217:USD", "utr:bbl"], ["utr:D"],
                               "iso4217:USDutr:bblutr:D")
     assert bound is not None, f"a lawful multi-measure unit was refused: {why}"
-    assert bound["unit_numerator"] == ("iso4217:USD", "utr:bbl")
+    assert bound["unit_numerator_expanded"] == (
+        ("http://www.xbrl.org/2003/iso4217", "USD"),
+        ("http://example.org/utr", "bbl"))    # the FIXTURE binds utr: here
     # ...and the CALLER parks it, because a compound numerator has no base unit
-    assert candidate_units_for(*bound["unit_key"],
-                               numerator=bound["unit_numerator"],
-                               denominator=bound["unit_denominator"]) == frozenset()
+    assert candidate_units_for(bound["unit_measures_expanded"],
+                               bound["unit_numerator_expanded"]) == frozenset()
 
 
 def test_the_lawful_one_by_one_divide_still_binds():
     """The guard must not touch the 2,086 real declarations."""
     bound, why = _bind_divide(["iso4217:USD"], ["utr:bbl"], "iso4217:USDutr:bbl")
     assert bound is not None, why
-    assert bound["unit_numerator"] == ("iso4217:USD",)
-    assert bound["unit_denominator"] == ("utr:bbl",)
+    assert bound["unit_numerator_expanded"] == \
+        (("http://www.xbrl.org/2003/iso4217", "USD"),)
+    assert bound["unit_measures_expanded"] == ()
 
 
 # --- every measure must be a non-blank QName, in EVERY position -------------
@@ -610,9 +684,13 @@ def test_the_lawful_one_by_one_divide_still_binds():
     (["iso4217:USD", "utr:D", ""], ["utr:bbl"]),  # blank last of three
 ])
 def test_a_BLANK_measure_anywhere_makes_the_divide_unit_malformed(num, den):
+    """ROUND 7: the refusal moved EARLIER and its reason moved with it. A
+    measure is a QName, so a blank one is refused at parse as structure — the
+    substring check `"divide" in why` was loose enough to hide which rule
+    fired, and now names the one that does."""
     bound, why = _bind_divide(num, den, "iso4217:USDutr:bbl")
     assert bound is None, "a blank measure bound alongside a valid one"
-    assert "divide" in why, why
+    assert why.endswith(_STRUCTURE), f"expected {_STRUCTURE}, said {why!r}"
 
 
 def test_multiple_VALID_measures_remain_lawful_on_both_sides():
@@ -620,5 +698,55 @@ def test_multiple_VALID_measures_remain_lawful_on_both_sides():
     bound, why = _bind_divide(["iso4217:USD", "utr:D"], ["utr:bbl", "utr:M"],
                               "iso4217:USDutr:Dutr:bblutr:M")
     assert bound is not None, f"a lawful multi-measure unit was refused: {why}"
-    assert bound["unit_numerator"] == ("iso4217:USD", "utr:D")
-    assert bound["unit_denominator"] == ("utr:bbl", "utr:M")
+    assert bound["unit_numerator_expanded"] == (
+        ("http://www.xbrl.org/2003/iso4217", "USD"),
+        ("http://example.org/utr", "D"))      # the FIXTURE binds utr: here
+    assert bound["unit_measures_expanded"] == ()   # plurality lawful, still a divide
+
+
+def test_attach_REFUSES_a_family_fact_stating_a_multiplier():
+    """C3 (#827 F-UNITS): the family multiplier law THROUGH the public attach
+    door, all six units, on this suite's synthetic ix document. Assertions
+    read AttachResult.preflight_outcomes — the door CATCHES the internal
+    SchemaError (xbrl_attach:1214-1216) and returns an outcome row, so a
+    pytest.raises attach test would be FALSE PROOF. Multiplier 1 attaches;
+    a stated non-1 multiplier is refused with the complete pinned outcome
+    (no fact · decision "rejected" · the XBRL_CONTRACT_INVALID code · the
+    "must state multiplier 1" detail), via round8's _refused checker."""
+    from driver.core.prepared_fact_v2 import SchemaError
+    from driver.core.test_round8_xbrl_binding import (ACC, _Graph, _Provider,
+                                                      _default_outcome, _doc,
+                                                      _fact)
+    # a PURE-unit world: the one candidate map backs the whole multiplier-one
+    # family from xbrli pure, so document, graph row and provider all declare
+    # it — the same synthetic apparatus as round8's _attach, doc swapped.
+    doc = _doc('<ix:header><ix:resources><xbrli:unit id="u1">'
+               '<xbrli:measure>xbrli:pure</xbrli:measure></xbrli:unit>'
+               '</ix:resources></ix:header>')
+    pure_row = dict(_Graph()._rows[0], unit_name="pure")
+
+    def attach_pure(fact):
+        evidence, filing_quote = filing_evidence(doc, "f1")
+        fact["item"]["quote"] = filing_quote
+        item = {"fact": fact, "concept": "us-gaap:Revenues", "member_refs": [],
+                "source_evidence": evidence}
+        return attach_event_xbrl([item], source_id=ACC,
+                                 store=_Graph(rows=[dict(pure_row)]),
+                                 filing_provider=_Provider(doc),
+                                 text_parts=parts_for([item]))
+
+    want_decision, want_code = _default_outcome(SchemaError("probe"))
+    for unit in ("percent", "percent_yoy", "percent_sequential",
+                 "percent_points", "basis_points", "x"):
+        ok = attach_pure(_fact(level_unit=unit, value="726", mult=1))
+        assert ok.preflight_outcomes == (), \
+            (unit, [dict(o) for o in ok.preflight_outcomes])
+        assert [i for i, _f in ok.facts] == [0], unit
+        bad = attach_pure(_fact(level_unit=unit, value="726", mult=10 ** 6))
+        assert bad.facts == (), (unit, "a refused item must attach nothing")
+        assert len(bad.preflight_outcomes) == 1, \
+            (unit, [dict(o) for o in bad.preflight_outcomes])
+        row = bad.preflight_outcomes[0]
+        assert (row["index"], row["decision"], row["codes"]) == \
+            (0, want_decision, (want_code,)), (unit, dict(row))
+        assert "must state multiplier 1" in row["detail"], (unit, dict(row))

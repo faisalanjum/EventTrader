@@ -21,13 +21,6 @@ the zero-confirmed-wrong gate — never assumed here.
 import decimal
 from decimal import Decimal, localcontext
 
-from driver.core.driver_ids import dec_canon as canonical
-
-__all__ = ["CANONICAL_UNITS", "MULTIPLIER_ONE_UNITS", "SLOT_KEYS", "SlotConversionError", "canonical",
-           "exact_mul", "exact_scaleb", "assert_storable", "stored_char_length",
-           "convert_slot",
-           "validate_slot", "check_xbrl_consistency"]
-
 # The 10-unit law enum (FINAL_DESIGN §6.1). Declared here rather than imported
 # from the hint-era resolver: that resolver is retired on this path, and the new
 # converter must not depend on it.
@@ -40,7 +33,18 @@ SLOT_KEYS = ("value", "scale_multiplier", "unit_scale_evidence")
 # scales, so a multiplier other than 1 means the reading is unsafe -> park.
 MULTIPLIER_ONE_UNITS = ("percent", "percent_yoy", "percent_sequential",
                         "percent_points", "basis_points", "x")
-_MULTIPLIER_ONE_UNITS = MULTIPLIER_ONE_UNITS   # internal alias
+
+
+def family_required_multiplier(unit):
+    """THE one owner of the ratio-family multiplier rule — membership AND the
+    required value together (exp5 REV5 Part C :508; F-STORE S4 cross-link).
+    Returns Decimal(1) for the six ratio-family units (points and basis points
+    are UNITS, never scales), None for every other unit (no family
+    requirement — the caller's own arithmetic governs). Three doors consume
+    this; none re-authors the value half (C3, #827 F-UNITS)."""
+    if unit in MULTIPLIER_ONE_UNITS:
+        return Decimal(1)
+    return None
 
 _CENTS = Decimal("0.01")
 _MILLION_EXPONENT = 6          # m_usd is "dollars, in millions"
@@ -196,8 +200,9 @@ def convert_slot(stated_unit, slot):
     if stated_unit not in CANONICAL_UNITS:
         raise SlotConversionError(
             f"stated unit {stated_unit!r} is outside the 10-unit enum")
-    if stated_unit in _MULTIPLIER_ONE_UNITS:
-        if mult != 1:
+    required = family_required_multiplier(stated_unit)
+    if required is not None:
+        if mult != required:
             raise SlotConversionError(
                 f"{stated_unit}: scale_multiplier must be 1 (points and basis "
                 f"points are UNITS, not scales); got {mult}")
@@ -213,8 +218,12 @@ def validate_slot(slot_name, slot, *, stated_unit, quote, lane="text"):
 
     TEXT lane  — the evidence span must appear VERBATIM inside this fact's own
                  quote; a scale word elsewhere in the same part proves nothing
-                 about THIS number (33 of the corpus's 134 parts carry two
-                 different scale words, so a part-wide search would be wrong).
+                 about THIS number, because one part may carry two different
+                 scale words, so a part-wide search would attribute the wrong
+                 one. (#827 finding 3: the dated corpus count that stood here
+                 was an unmeasured guarantee inside runtime policy — a census
+                 number belongs in a dated receipt, not in the rule. The RULE
+                 does not depend on how many parts happen to do this.)
                  Evidence may be null ONLY when the multiplier is 1 and no unit
                  or scale marker exists.
     XBRL lane  — verified structured metadata (ix.scale, unit_ref,
@@ -250,7 +259,8 @@ def validate_slot(slot_name, slot, *, stated_unit, quote, lane="text"):
         raise SlotConversionError(
             f"{slot_name}: unit_scale_evidence {ev!r} is not inside this fact's "
             f"quote — extend the quote to include the marker, or abstain")
-    if stated_unit in _MULTIPLIER_ONE_UNITS and mult != 1:
+    _required = family_required_multiplier(stated_unit)
+    if _required is not None and mult != _required:
         raise SlotConversionError(
             f"{slot_name}: {stated_unit} requires scale_multiplier 1, got {mult}")
 

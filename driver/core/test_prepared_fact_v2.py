@@ -13,10 +13,10 @@ from decimal import Decimal
 import pytest
 
 from driver.core import prepared_fact_v2, slot_convert
-from driver.core.driver_ids import dec_canon
 from driver.core.fact_match import match_facts
 from driver.core.prepared_fact_v2 import (ITEM_FIELDS, RETIRED_FIELDS,
-                                          PreparedFactV2, SchemaError,
+                                          PreparedFactV2, RunInputV2,
+                                          SchemaError,
                                           check_per_x_against_name,
                                           split_slice_part, verify_occurrence)
 from driver.core.slot_convert import (CANONICAL_UNITS, SlotConversionError,
@@ -143,6 +143,24 @@ def test_G3_multiplier_not_one_on_a_ratio_slot_parks(unit):
     assert convert_slot(unit, slot("5", 1)) == Decimal(5)
     with pytest.raises(SlotConversionError):
         convert_slot(unit, slot("5", "1e6", "million"))
+    # C3 (#827 F-UNITS): the value half now comes from the ONE owner
+    # (slot_convert.family_required_multiplier) at BOTH doors. Per unit:
+    # 1 lawful · 10^6 refusal · 0.5 refusal, each with the rule-specific
+    # outcome; construction attacks carry non-null evidence VERBATIM in the
+    # quote so the missing-evidence rule cannot fire first.
+    with pytest.raises(SlotConversionError) as exc:
+        convert_slot(unit, slot("5", "0.5", "half"))
+    assert "must be 1" in str(exc.value)
+    validate_slot("level_low", slot("5", 1), stated_unit=unit,
+                  quote="a lawful family reading of 5")
+    with pytest.raises(SlotConversionError) as exc:
+        validate_slot("level_low", slot("5", "1e6", "million"),
+                      stated_unit=unit, quote="5 million of it")
+    assert "requires scale_multiplier 1" in str(exc.value)
+    with pytest.raises(SlotConversionError) as exc:
+        validate_slot("level_low", slot("5", "0.5", "half"),
+                      stated_unit=unit, quote="half of 5 is stated")
+    assert "requires scale_multiplier 1" in str(exc.value)
 
 
 # --------------------------------------------------------------------- G4 ----
@@ -328,13 +346,6 @@ def test_G8_the_deferred_acronym_class_PARKS_and_is_never_ruled():
     PARKS, fail-closed, until the owner rules."""
     reason = check_per_x_against_name("dps", "share")
     assert reason is not None and "unverified" in reason.lower()
-
-
-# --------------------------------------------------------------------- G9 ----
-
-def test_G9_one_canonicalizer_shared_with_run_event():
-    assert slot_convert.canonical is dec_canon
-    assert slot_convert.canonical(convert_slot("m_usd", slot("1.30", "1e9"))) == "1300"
 
 
 # -------------------------------------------------------------------- G10 ----
@@ -668,3 +679,66 @@ def test_G18_the_new_modules_reach_no_graph_write():
             if isinstance(node, (ast.Import, ast.ImportFrom)):
                 names = [a.name for a in node.names] + [getattr(node, "module", "") or ""]
                 assert not any("neo4j" in n for n in names), mod
+
+
+# ---- #827 B1 packet 1 (SEQ 275): diagnostics state the LOCAL truth only ----
+
+def test_827B2_v2_door_catches_future_period_actual_and_allows_guidance():
+    """SEQ 291 §1: validate_via_production builds the stored `date` and calls
+    THE validate_fact — with validator F7 alive on `date`, the v2 door
+    itself catches a future-period actual (FY2026 Q4 ends after the _PROD
+    source day) and allows the guidance twin. The divergence tuple may no
+    longer claim F7 as a run_event-only check."""
+    noop = {"existing": lambda *a: None, "sec": lambda *a: None,
+            "predict": lambda *a: None, "corrected_fye": lambda *a: None}
+
+    def stored(f, d):
+        return prepared_fact_v2.to_stored_fact(
+            f, driver=d, source=_PROD["source"], fye_month=12, lookups=noop)
+
+    home_metric = stored(fact(driver_name="revenue", driver_state="reported",
+                              time_type="duration", fiscal_year=2026,
+                              fiscal_quarter=4),
+                         {"name": "revenue", "fact_type": "metric"})
+    home_guide = stored(fact(driver_name="revenue_guidance",
+                             driver_state="unknown", time_type="duration",
+                             fiscal_year=2026, fiscal_quarter=4),
+                        {"name": "revenue_guidance", "fact_type": "guidance"})
+
+    def twin(basis):
+        return fact(driver_name="revenue_surprise", driver_state="beat",
+                    surprise_basis_hint=basis, comparison_baseline="consensus",
+                    time_type="duration", fiscal_year=2026, fiscal_quarter=4)
+
+    D = {"name": "revenue_surprise", "fact_type": "surprise"}
+    got = [v.code for v in violations(twin("actual"), driver=D,
+                                      home_facts=[home_metric], lookups=noop)]
+    assert got == ["F7"], got          # exactly F7: no missing-home park
+    assert violations(twin("guidance"), driver=D,
+                      home_facts=[home_guide], lookups=noop) == []
+
+
+def test_827B1_v2_source_id_diagnostic_states_local_truth_not_the_law():
+    """Same law as v1: the owner is driver_ids.valid_source_id; the v2 message
+    may not carry its own copy of the grammar. Exact anchor = detector."""
+    with pytest.raises(SchemaError, match=r"^source_id is invalid$"):
+        RunInputV2.from_dict({"source_id": "x:y", "facts": []})
+
+
+def test_827B1_measurement_raw_spans_message_names_list_or_tuple():
+    """The check accepts list OR tuple (the tuple is the frozen stored form);
+    a message claiming 'list' was untruthful (SEQ 275). Twin first: the
+    lawful tuple constructs."""
+    ok = fact(measurement_raw_spans=("Adjusted",))
+    assert ok.item.measurement_raw_spans == ("Adjusted",)
+    with pytest.raises(SchemaError, match=r"list or tuple"):
+        fact(measurement_raw_spans=42)
+
+
+def test_827B1_slice_parts_message_names_list_or_tuple():
+    """Same repair for slice_parts: lawful tuple twin, then the truthful
+    wording on refusal."""
+    ok = fact(slice_parts=("product:iPhone",))
+    assert ok.item.slice_parts == ("product:iPhone",)
+    with pytest.raises(SchemaError, match=r"list or tuple"):
+        fact(slice_parts=42)
