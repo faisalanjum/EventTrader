@@ -8,7 +8,7 @@ the materializer stays dormant — flip = extending _ALLOWED_FIELDS under owner 
 """
 import re
 from collections import namedtuple
-from datetime import date, datetime
+from datetime import MAXYEAR, MINYEAR, date, datetime
 from decimal import Decimal
 
 from driver.core.driver_ids import (ACTUAL_BASIS, CONSENSUS_BASELINE,
@@ -231,8 +231,8 @@ def validate_fact(fact, *, driver, home_facts=None):
 
     fy, fq = fact.get("fiscal_year"), fact.get("fiscal_quarter")
     if fy is not None and (isinstance(fy, bool) or not isinstance(fy, int)
-                           or not 1900 <= fy <= 2200):
-        add("FISCAL", "REJECT", f"fiscal_year must be a plausible integer year, got {fy!r}")
+                           or not MINYEAR <= fy <= MAXYEAR):   # T4: derived, not chosen
+        add("FISCAL", "REJECT", f"fiscal_year must be a computable integer year, got {fy!r}")
     if fq is not None and (isinstance(fq, bool) or not isinstance(fq, int)
                            or fq not in (1, 2, 3, 4)):
         add("FISCAL", "REJECT", f"fiscal_quarter must be the integer 1-4, got {fq!r}")

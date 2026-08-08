@@ -13,7 +13,7 @@ year-2000 months (FINAL §6.2 / BUILD §10) · 'long_range' scope retired -> exa
 Resolution fails CLOSED: any ambiguity raises PeriodResolutionError -> the caller PARKS.
 """
 import sys
-from datetime import date, timedelta
+from datetime import MAXYEAR, MINYEAR, date, timedelta
 from pathlib import Path
 
 _SCRIPTS = Path(__file__).resolve().parents[2] / ".claude/skills/earnings-orchestrator/scripts"
@@ -292,10 +292,14 @@ def _check_declared_fields(item):
               if item.get(k) is not None]
     if len(shapes) > 1:
         raise PeriodResolutionError(f"conflicting period fields: {shapes} — park")
+    # T4 (#827): the year bounds are DERIVED from the period owner's own
+    # machinery — datetime.MINYEAR..MAXYEAR is exactly what the calendar canon
+    # can compute — never a chosen product endpoint (the 1900..2200 literals
+    # were unauthorized; P-D5's derive-from-standard tie stays open).
     for name, lo, hi in (("fiscal_quarter", 1, 4), ("half", 1, 2), ("month", 1, 12),
-                         ("fiscal_year", 1900, 2200),
-                         ("long_range_start_year", 1900, 2200),
-                         ("long_range_end_year", 1900, 2200)):
+                         ("fiscal_year", MINYEAR, MAXYEAR),
+                         ("long_range_start_year", MINYEAR, MAXYEAR),
+                         ("long_range_end_year", MINYEAR, MAXYEAR)):
         v = item.get(name)
         if v is not None and not (type(v) is int and lo <= v <= hi):
             raise PeriodResolutionError(f"{name} out of range: {v!r} — park")

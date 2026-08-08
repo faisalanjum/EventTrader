@@ -416,7 +416,10 @@ def test_strict_shape_check_rejects_mixed_and_incomplete_framing():
         {"sentinel_class": "short_term", "period_end_date": "2025-06-30"},  # sentinel+dated
         {"long_range_start_year": 2027},                               # incomplete range
         {"long_range_start_year": 2030, "long_range_end_year": 2027},  # reversed range
-        {"fiscal_year": 205},                                          # invalid year
+        # T4: the bound is DERIVED (datetime MINYEAR..MAXYEAR — what the
+        # period owner can compute), not the invented 1900..2200; the
+        # invalid-year case moves to the true boundary (year 205 is lawful).
+        {"fiscal_year": 10000},                                        # beyond MAXYEAR
     ]
     for c in cases:
         with pytest.raises(PeriodResolutionError):
