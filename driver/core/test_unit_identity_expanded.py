@@ -138,7 +138,10 @@ def test_SHARES_is_read_whatever_prefix_the_filing_binds(prefix):
 
 
 def test_PURE_keeps_its_frozen_answer():
-    assert 'count' in _units('xbrli:pure', 'pure')
+    # F11 REOPENED (SEQ 806): the frozen answer for pure IS the narrow —
+    # only the FD-6.1 'unknown' carrier; 'count' was the unauthorized
+    # cross-meaning (the card's own named failure).
+    assert _units('xbrli:pure', 'pure') == ['unknown']
 
 
 def test_an_instance_LOCAL_NAME_under_a_FOREIGN_URI_is_not_shares():

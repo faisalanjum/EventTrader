@@ -28,7 +28,7 @@ from driver.core.prepared_fact_v2 import (OUTCOME_CLASSES, PreparedFactV2,
                                           SourceUnavailable,
                                           NUMERIC_SLOTS, _deep_freeze,
                                           _sha256_or_raise, verify_occurrence)
-from driver.core.slot_convert import MULTIPLIER_ONE_UNITS, SlotConversionError
+from driver.core.slot_convert import SlotConversionError
 from driver.relocation.exact_numbers import (ISO_4217_NAMESPACE,
                                              ROUTE_A_BOOLS,
                                              XBRL_INSTANCE_NAMESPACE, XML_WS)
@@ -396,15 +396,19 @@ _CANDIDATE_EXACT = {
     # shares -> {count}: xbrli:shares (XBRL 2.1 §4.8.2 REQUIRES it for share
     # items); §6.1's count is the one integer-quantity target.
     (XBRL_INSTANCE_NAMESPACE, 'shares'): frozenset({'count'}),
-    # `unknown` is the EXISTING fail-safe — the source genuinely may not
-    # distinguish a rate from a count from a ratio.
-    #
-    # DERIVED FROM THE ONE OWNER, not restated. A local `_PERCENT_FAMILY` tuple
-    # listed the same five units that `slot_convert.MULTIPLIER_ONE_UNITS`
-    # already owns (verified equal once `x` is included, which that owner also
-    # carries) — two spellings of one set, and the second was free to drift.
-    (XBRL_INSTANCE_NAMESPACE, 'pure'):
-        frozenset({'count', 'unknown'} | set(MULTIPLIER_ONE_UNITS)),
+    # F11 REOPENED and NARROWED per SEQ 806: no frozen owner source
+    # authorizes the pure cross-meaning map — the old "OWNER RULING
+    # 2026-07-27" was test-header prose (leads, never authority under the
+    # frozen audit contract), and the F11 card records the mapping UNKNOWN.
+    # Uncertain fails closed: a pure-united fact may claim ONLY 'unknown' —
+    # the FD 6.1 carrier for a source that does not safely resolve — until
+    # the owner freezes a genuinely new contract. 'count' is REMOVED (the
+    # card's own named failure: a dimensionless ratio silently read as a
+    # count — reproduced THROUGH THE PUBLIC PATH 2026-08-08, synthetic
+    # door case, before this narrow);
+    # the MULTIPLIER_ONE_UNITS family is REMOVED (spec-plausible is not
+    # authorized; semantics are never inferred from `pure`).
+    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),
 }
 
 _UNKNOWN = frozenset({'unknown'})

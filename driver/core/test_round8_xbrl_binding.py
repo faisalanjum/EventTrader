@@ -192,8 +192,9 @@ def test_a_usd_fact_reports_usd():
 def test_the_binder_REPORTS_the_unit_and_the_caller_decides():
     """AMENDED TWICE by review (2026-07-27):
 
-    * `pure` moved INTO the candidate table by owner ruling — it backs count /
-      the percent family / x (see test_round12_pure_unit_law.py).
+    * `pure` sits in the candidate table backing ONLY 'unknown' (F11
+      narrowed, SEQ 806/808 — the old "owner ruling" that it backed count /
+      the percent family / x was test prose, never frozen authority).
     * the BINDER no longer applies ANY candidate policy. It is shared with the
       DORMANT materializer, whose policy differs, so it verifies the unit
       against the FILING and reports it; ONE caller-owned check then decides
@@ -1437,3 +1438,27 @@ def test_F6_an_UNLISTED_item_field_parks_and_a_missing_one_rejects():
         del i["member_refs"]
     (o2,) = _door(_evidence_item(mutate_item=drop)).preflight_outcomes
     assert o2["decision"] == "rejected", dict(o2)
+
+
+_PURE = ('<ix:header><ix:resources><xbrli:unit id="u1">'
+         '<xbrli:measure>xbrli:pure</xbrli:measure></xbrli:unit>'
+         '</ix:resources></ix:header>')
+
+
+def test_F11_a_pure_fact_may_not_be_read_as_a_COUNT():
+    """F11 REOPENED per SEQ 806 — the card's own named failure, reproduced
+    THROUGH THE PUBLIC PATH (synthetic door case) before this narrow: a
+    dimensionless xbrli:pure fact ATTACHED under level_unit='count'. No
+    frozen owner source authorizes any pure cross-meaning, so the map
+    narrows to the one FD-6.1 carrier."""
+    (o,) = _attach_unit(_PURE, "pure", "count").preflight_outcomes
+    assert o["decision"] == "rejected", dict(o)
+    assert o["codes"] == ("XBRL_CONTRACT_INVALID",)
+    assert "may back ['unknown']" in o["detail"]
+
+
+def test_F11_a_pure_fact_still_carries_the_UNKNOWN_failsafe():
+    """CONTROL: 'unknown' is the independently authorized member (FD 6.1 —
+    legal when the source does not safely resolve) and still attaches."""
+    res = _attach_unit(_PURE, "pure", "unknown")
+    assert len(res.facts) == 1, [dict(o) for o in res.preflight_outcomes]

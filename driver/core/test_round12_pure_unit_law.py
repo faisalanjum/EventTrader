@@ -14,12 +14,13 @@ to read, which means it cannot prove the historical text view the AI actually
 received. That leg has no durable source today and stays for switch preflight;
 no fixture stands in for it.
 
-OWNER RULING 2026-07-27: `pure` means DIMENSIONLESS and does not itself choose
-the unit. pure may back count, the percent family and x; `unknown` is the
-existing fail-safe; pure may NEVER back usd/m_usd. The AI picks the unit from
-the source text/table, code checks only COMPATIBILITY, and never infers the
-unit from the concept name. ix.scale is not copied blindly: percent family / x
-store multiplier 1, money / count store the source's real magnitude. The
+F11 REOPENED AND NARROWED (SEQ 806/808, 2026-08-08): the paragraph that
+stood here — a "2026-07-27 owner ruling" that pure may back count, the
+percent family and x — was TEST PROSE, never frozen authority (under the
+audit contract tests/history are leads); the frozen F11 card records the
+mapping UNKNOWN. Uncertain fails closed: `pure` now backs ONLY `unknown`
+(the FD-6.1 carrier) until the owner freezes a genuinely new contract.
+pure still NEVER backs usd/m_usd. ix.scale is not copied blindly; the
 dormant no-AI materializer keeps its whitelist unchanged.
 
 FOUR REPAIRS after the first attempt was reviewed:
@@ -155,17 +156,19 @@ def _refs_and_parts(row):
 @pytest.mark.live
 @pytest.mark.parametrize(
     "label,acc,fact_id,qname,graph_value,level_unit,displayed,scale,wording", REAL)
-def test_a_real_fact_attaches_through_the_candidate_path_INCLUDING_the_locator(
+def test_a_real_fact_through_the_candidate_path_meets_the_unit_law(
         label, acc, fact_id, qname, graph_value, level_unit, displayed, scale,
         wording):
     """The event door end to end — injected provider, graph-owned CIK, harvested
     representation — not the low-level binder.
 
-    SCOPE: this proves the NUMBER, the UNIT and the FILING-SIDE LOCATOR on real
-    data — the quote is the filing's own text at the bound element's span, and
-    the submitted evidence is verified against the fetched document. The event
-    part is scaffolding derived from that quote, so it does not prove the
-    historical text view the AI actually received.
+    SCOPE: this proves the NUMBER, the UNIT LAW and the FILING-SIDE LOCATOR on
+    real data. F11 REOPENED (SEQ 806): the three PURE-united rows here — the
+    weighted-average rate (percent), the responsible-parties count and the
+    coverage ratio (x) — are the narrow's MEASURED REAL RECALL COST: no frozen
+    source authorizes any pure cross-meaning, so they now REJECT ("may back
+    ['unknown']") pending an owner-frozen contract; the shares-united count
+    and the CNY unknown still attach (independently authorized members).
     """
     from datetime import date, timedelta
     from driver.core.prepared_fact_v2 import ITEM_FIELDS
@@ -205,12 +208,19 @@ def test_a_real_fact_attaches_through_the_candidate_path_INCLUDING_the_locator(
         res = attach_event_xbrl([entry], source_id=acc, store=store,
                                 filing_provider=Provider(),
                                 text_parts=parts_for([entry]))
-        assert res.preflight_outcomes == (), \
-            [dict(o) for o in res.preflight_outcomes]
-        assert [i for i, _f in res.facts] == [0]
-        fact = res.facts[0][1]
-        assert fact.item.xbrl_concept_raw == qname
-        assert fact.item.level_unit == level_unit
+        if row["unit_name"] == "pure" and level_unit != "unknown":
+            # F11: the real recall cost, asserted — not hidden in a skip.
+            (o,) = res.preflight_outcomes
+            assert o["decision"] == "rejected", dict(o)
+            assert "may back ['unknown']" in o["detail"]
+            assert res.facts == ()
+        else:
+            assert res.preflight_outcomes == (), \
+                [dict(o) for o in res.preflight_outcomes]
+            assert [i for i, _f in res.facts] == [0]
+            fact = res.facts[0][1]
+            assert fact.item.xbrl_concept_raw == qname
+            assert fact.item.level_unit == level_unit
     finally:
         store.close()
 
@@ -289,13 +299,10 @@ def test_a_wrong_unit_for_a_real_fact_is_REFUSED():
 
 # ---- the compatibility law -------------------------------------------------
 
-def test_pure_backs_count_the_percent_family_and_x_but_never_money():
-    from driver.core.xbrl_attach import candidate_units_for
-    allowed = candidate_units_for(_exp("pure"), ())
-    for u in ("count", "x", "percent", "percent_yoy", "percent_sequential",
-              "percent_points", "basis_points"):
-        assert u in allowed, u
-    assert "usd" not in allowed and "m_usd" not in allowed
+# F11 REOPENED (SEQ 806): test_pure_backs_count_the_percent_family_and_x_
+# but_never_money DELETED — it pinned the UNAUTHORIZED cross-meaning map
+# (its header's "owner ruling" was test prose, never frozen authority).
+# The narrow's nodes live in round8 (pure+count rejects; unknown carries).
 
 
 def test_pure_may_back_unknown_as_the_failsafe():
@@ -704,15 +711,15 @@ def test_multiple_VALID_measures_remain_lawful_on_both_sides():
     assert bound["unit_measures_expanded"] == ()   # plurality lawful, still a divide
 
 
-def test_attach_REFUSES_a_family_fact_stating_a_multiplier():
-    """C3 (#827 F-UNITS): the family multiplier law THROUGH the public attach
-    door, all six units, on this suite's synthetic ix document. Assertions
-    read AttachResult.preflight_outcomes — the door CATCHES the internal
-    SchemaError (xbrl_attach:1214-1216) and returns an outcome row, so a
-    pytest.raises attach test would be FALSE PROOF. Multiplier 1 attaches;
-    a stated non-1 multiplier is refused with the complete pinned outcome
-    (no fact · decision "rejected" · the XBRL_CONTRACT_INVALID code · the
-    "must state multiplier 1" detail), via round8's _refused checker."""
+def test_attach_REFUSES_every_family_unit_at_pure_eligibility():
+    """RENAMED per SEQ 809 (was ..._a_family_fact_stating_a_multiplier —
+    a false identity after the F11 narrow): with pure -> {'unknown'}, NO
+    graph unit backs the multiplier-one family on Route A, so EVERY family
+    unit — either multiplier — is refused at ELIGIBILITY ("may back
+    ['unknown']"), the complete pinned outcome asserted through the public
+    door. The family MULTIPLIER law itself keeps its owner proofs at
+    slot_convert (family_required_multiplier: the S9 21-case identity and
+    the round12 family suites)."""
     from driver.core.prepared_fact_v2 import SchemaError
     from driver.core.test_round8_xbrl_binding import (ACC, _Graph, _Provider,
                                                       _default_outcome, _doc,
@@ -735,18 +742,23 @@ def test_attach_REFUSES_a_family_fact_stating_a_multiplier():
                                  filing_provider=_Provider(doc),
                                  text_parts=parts_for([item]))
 
+    # F11 REOPENED (SEQ 806): with pure narrowed to {'unknown'}, NO graph
+    # unit backs the multiplier-one family on Route A, so the ELIGIBILITY
+    # rejection now precedes the multiplier law for every family unit; the
+    # multiplier law's own proofs live at its owner (slot_convert's
+    # family_required_multiplier suites). This node keeps its name — the
+    # door still REFUSES a family fact — and asserts the refusal that
+    # actually fires.
     want_decision, want_code = _default_outcome(SchemaError("probe"))
     for unit in ("percent", "percent_yoy", "percent_sequential",
                  "percent_points", "basis_points", "x"):
-        ok = attach_pure(_fact(level_unit=unit, value="726", mult=1))
-        assert ok.preflight_outcomes == (), \
-            (unit, [dict(o) for o in ok.preflight_outcomes])
-        assert [i for i, _f in ok.facts] == [0], unit
-        bad = attach_pure(_fact(level_unit=unit, value="726", mult=10 ** 6))
-        assert bad.facts == (), (unit, "a refused item must attach nothing")
-        assert len(bad.preflight_outcomes) == 1, \
-            (unit, [dict(o) for o in bad.preflight_outcomes])
-        row = bad.preflight_outcomes[0]
-        assert (row["index"], row["decision"], row["codes"]) == \
-            (0, want_decision, (want_code,)), (unit, dict(row))
-        assert "must state multiplier 1" in row["detail"], (unit, dict(row))
+        for mult in (1, 10 ** 6):
+            bad = attach_pure(_fact(level_unit=unit, value="726", mult=mult))
+            assert bad.facts == (), (unit, mult,
+                                     "a refused item must attach nothing")
+            assert len(bad.preflight_outcomes) == 1, \
+                (unit, mult, [dict(o) for o in bad.preflight_outcomes])
+            row = bad.preflight_outcomes[0]
+            assert (row["index"], row["decision"], row["codes"]) == \
+                (0, want_decision, (want_code,)), (unit, mult, dict(row))
+            assert "may back ['unknown']" in row["detail"], (unit, mult)

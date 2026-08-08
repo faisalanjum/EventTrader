@@ -892,11 +892,13 @@ def test_the_v2_modules_are_a_STAGED_read_only_adapter():
             "PeriodResolutionError", "compose_surprise_scope", "validate_fact",
             "convert_slot", "validate_slot", "SlotConversionError",
             "CANONICAL_UNITS", "exact_scaleb",
-            # ADDED DELIBERATELY 2026-07-27 (owner ruling on `pure`): the
-            # percent/x family is unit LAW, and the XBRL binding needs it to
-            # know that ix.scale must NOT become the stored multiplier. It was
-            # first reached as the PRIVATE `_MULTIPLIER_ONE_UNITS`; this gate
-            # correctly objected, so `slot_convert` now exports it publicly.
+            # F11 narrowed (SEQ 806/808): the old note here credited a
+            # "2026-07-27 owner ruling on pure" — test prose, never frozen
+            # authority. MULTIPLIER_ONE_UNITS remains slot_convert's own
+            # public statement of the multiplier-1 family (consumed by its
+            # family_required_multiplier); xbrl_attach's CANDIDATE map no
+            # longer imports it, and no production module outside
+            # slot_convert does today.
             "MULTIPLIER_ONE_UNITS",
             # ADDED DELIBERATELY 2026-07-27 (#818): the 1,024-character stored
             # bound has ONE owner in slot_convert, and the XBRL multiplier must

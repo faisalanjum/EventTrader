@@ -1379,6 +1379,13 @@ MUTATIONS = [
      "driver/core/test_round8_xbrl_binding.py::"
      "test_a_ONE_DAY_duration_with_equal_date_only_boundaries_is_LAWFUL[2025-03-31-2025-03-31]"),
 
+    (173, "F11 narrowed: an unsupported pure admission is restored",
+     "driver/core/xbrl_attach.py",
+     "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",
+     "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'count', 'unknown'}),",
+     "driver/core/test_round8_xbrl_binding.py::"
+     "test_F11_a_pure_fact_may_not_be_read_as_a_COUNT"),
+
 ]
 
 
