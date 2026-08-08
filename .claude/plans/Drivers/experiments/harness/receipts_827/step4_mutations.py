@@ -1332,6 +1332,12 @@ MUTATIONS = [
      "            'quote_spam': [span[0], span[1]],",
      "driver/relocation/test_evidence_writer_contract.py::"
      "test_EU187_the_evidence_writer_emits_exactly_the_sheets_four_keys"),
+    (166, "EU-001: a canonical key drifts out of the Route-A compat table",
+     "driver/relocation/exact_numbers.py",
+     "    'usd':   frozenset({'usd', 'usd_per_share'}),",
+     "    'us_d':   frozenset({'usd', 'usd_per_share'}),",
+     "driver/relocation/test_unit_handoff_census.py::"
+     "test_EU001_the_route_a_unit_maps_are_pinned_and_C1_membered"),
 ]
 
 

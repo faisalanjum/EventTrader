@@ -65,6 +65,15 @@ class ExactError(ValueError):
 #     Conventions" (prefix xbrli).
 ISO_4217_NAMESPACE = 'http://www.xbrl.org/2003/iso4217'
 XBRL_INSTANCE_NAMESPACE = 'http://www.xbrl.org/2003/instance'
+# EU-001 (#827): these three maps carry Route A step 5's "semantic
+# Unit/divide meaning" under its closing law — "No raw-unit spelling
+# classifier ... belongs in this route" (FinalPlan §5A Route A). The
+# MEANING side is spelled in expanded names under the two spec-cited
+# namespaces above; the CANONICAL side consumes C1's one vocabulary
+# (slot_convert.CANONICAL_UNITS) — proven by the handoff-census pin
+# (this module may not import Core, so the membership law lives in the
+# suite, the F7 both-sides pattern). 'usd_per_share' is a route-local
+# SEMANTIC reading, never a stored unit (NAME-13 / FD 6.1 below).
 #: expanded MEASURES tuple -> reading, for a simple (non-divide) unit.
 ROUTE_A_SEM_UNIT_SIMPLE = {
     ((ISO_4217_NAMESPACE, 'USD'),): 'usd',

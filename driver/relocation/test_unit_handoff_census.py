@@ -204,3 +204,29 @@ def test_unsupported_and_malformed_units_abstain_safely():
         # the matcher ABSTAINS (honest no_proven_match) — no crash, no guess
         assert out["status"] == "no_proven_match", unit_over
         assert out["items"] == []
+
+
+def test_EU001_the_route_a_unit_maps_are_pinned_and_C1_membered():
+    """EU-001 (#827): the three Route-A unit maps pinned member-for-member
+    (the census gate above proves the live handoff; this pins the CONTRACT),
+    and the canonical side is a subset of C1's one vocabulary
+    (slot_convert.CANONICAL_UNITS) — asserted here because the shared binder
+    may not import Core (the F7 both-sides pattern)."""
+    from driver.core.slot_convert import CANONICAL_UNITS
+    from driver.relocation.exact_numbers import (ISO_4217_NAMESPACE,
+                                                 ROUTE_A_SEM_UNIT_DIVIDE,
+                                                 ROUTE_A_SEM_UNIT_SIMPLE,
+                                                 ROUTE_A_UNIT_COMPAT,
+                                                 XBRL_INSTANCE_NAMESPACE)
+    assert ROUTE_A_SEM_UNIT_SIMPLE == {
+        ((ISO_4217_NAMESPACE, 'USD'),): 'usd',
+        ((XBRL_INSTANCE_NAMESPACE, 'shares'),): 'count'}
+    assert ROUTE_A_SEM_UNIT_DIVIDE == {
+        (((ISO_4217_NAMESPACE, 'USD'),),
+         ((XBRL_INSTANCE_NAMESPACE, 'shares'),)): 'usd_per_share'}
+    assert ROUTE_A_UNIT_COMPAT == {
+        'usd': frozenset({'usd', 'usd_per_share'}),
+        'm_usd': frozenset({'usd'}),
+        'count': frozenset({'count'})}
+    assert set(ROUTE_A_UNIT_COMPAT) <= set(CANONICAL_UNITS), \
+        "every canonical key is C1's (the one unit vocabulary)"
