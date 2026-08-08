@@ -689,3 +689,95 @@ def test_instant_start_only_parks():
     with pytest.raises(PeriodResolutionError) as exc:
         resolve({"period_start_date": "2025-03-31", "time_type": "instant"})
     assert "period_end_date" in str(exc.value)
+
+
+# ---- P-O2 (#827 F-PERIOD, U-7): the complete period invariant at ONE owner ----
+# The preserved branch used to trust everything (validate=False, truthy
+# presence, any scope/time_type, discarded conflicting supplied fields);
+# every exit now consumes period_invariant — typed parks, never guesses.
+
+import pytest as _pt
+
+
+@_pt.mark.parametrize("falsey", [0, False, "", [], {}],
+                      ids=["0", "False", "empty_str", "empty_list", "empty_dict"])
+def test_falsey_period_u_id_parks(falsey):
+    # today: truthy presence makes a falsey id PERIODLESS (returns None);
+    # the law: a PRESENT id — falsey included — is judged, and parks typed
+    with pytest.raises(PeriodResolutionError):
+        ensure_driver_period({"period_u_id": falsey, "time_type": "duration"},
+                             fact_type="metric", fye_month=12)
+
+
+def test_preserved_unknown_scope_parks():
+    with pytest.raises(PeriodResolutionError):
+        ensure_driver_period({"period_u_id": "gp_2025-07-01_2025-09-30",
+                              "period_scope": "bogus", "time_type": "duration"},
+                             fact_type="metric", fye_month=12)
+
+
+def test_preserved_missing_scope_with_id_parks():
+    with pytest.raises(PeriodResolutionError):
+        ensure_driver_period({"period_u_id": "gp_2025-07-01_2025-09-30",
+                              "period_scope": None, "time_type": "duration"},
+                             fact_type="metric", fye_month=12)
+
+
+def test_preserved_conflicting_supplied_framing_parks():
+    with pytest.raises(PeriodResolutionError):
+        ensure_driver_period({"period_u_id": "gp_2025-07-01_2025-09-30",
+                              "period_scope": "quarter", "time_type": "duration",
+                              "fiscal_quarter": 2},
+                             fact_type="metric", fye_month=12)
+
+
+def test_preserved_conflicting_supplied_dates_park():
+    with pytest.raises(PeriodResolutionError):
+        ensure_driver_period({"period_u_id": "gp_2025-07-01_2025-09-30",
+                              "period_scope": "quarter", "time_type": "duration",
+                              "period_start_date": "2025-01-01"},
+                             fact_type="metric", fye_month=12)
+
+
+def test_preserved_requires_time_type_enum():
+    with pytest.raises(PeriodResolutionError):
+        ensure_driver_period({"period_u_id": "gp_2025-07-01_2025-09-30",
+                              "period_scope": "quarter", "time_type": "bogus"},
+                             fact_type="metric", fye_month=12)
+
+
+def test_preserved_multiday_instant_parks():
+    with pytest.raises(PeriodResolutionError):
+        ensure_driver_period({"period_u_id": "gp_2025-07-01_2025-09-30",
+                              "period_scope": "quarter", "time_type": "instant"},
+                             fact_type="metric", fye_month=12)
+
+
+def test_preserved_oneday_duration_parks():
+    with pytest.raises(PeriodResolutionError):
+        ensure_driver_period({"period_u_id": "gp_2025-09-30_2025-09-30",
+                              "period_scope": "quarter", "time_type": "duration"},
+                             fact_type="metric", fye_month=12)
+
+
+def test_preserved_sentinel_scope_pairing_enforced():
+    with pytest.raises(PeriodResolutionError):
+        ensure_driver_period({"period_u_id": "gp_ST", "period_scope": "quarter",
+                              "time_type": "duration"},
+                             fact_type="metric", fye_month=12)
+
+
+def test_preserved_lawful_dated_id_round_trips_unchanged():
+    out = ensure_driver_period({"period_u_id": "gp_2025-07-01_2025-09-30",
+                                "period_scope": "quarter", "time_type": "duration"},
+                               fact_type="metric", fye_month=12)
+    assert out["period_u_id"] == "gp_2025-07-01_2025-09-30"
+    assert (out["gp_start_date"], out["gp_end_date"]) == ("2025-07-01", "2025-09-30")
+
+
+def test_preserved_lawful_sentinel_round_trips_unchanged():
+    out = ensure_driver_period({"period_u_id": "gp_ST", "period_scope": "short_term",
+                                "time_type": "duration"},
+                               fact_type="metric", fye_month=12)
+    assert out["period_u_id"] == "gp_ST"
+    assert (out["gp_start_date"], out["gp_end_date"]) == (None, None)

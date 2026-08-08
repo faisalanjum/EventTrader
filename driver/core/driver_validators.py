@@ -42,8 +42,10 @@ LANE_BASELINES = {"metric": {"prior_year", "sequential_period"},
 SOURCE_TYPES = {"8k", "transcript", "10q", "10k", "news"}
 # the SEVEN dated scope words are their own frozen enum (FINAL_DESIGN §6.2, PER list
 # line 248); the four sentinel words derive from the ONE pair owner in driver_ids.
-PERIOD_SCOPES = frozenset({"quarter", "annual", "half", "monthly", "ytd", "ttm",
-                           "exact_range"}) | frozenset(PERIOD_SENTINEL_SCOPE.values())
+# P-O2: the scope enum's ONE spelling lives at the invariant owner; this is a
+# re-export for any historical reader, never a second authored copy.
+from driver.core.driver_period_resolver import (PERIOD_SCOPES,       # noqa: E402
+                                                period_invariant)
 #: OD-21 basis vocabulary — derived from the pair owner, never respelled here.
 _SURPRISE_BASES = frozenset(b for b, _ in SURPRISE_SCOPE_BY_PAIR)
 
@@ -322,53 +324,20 @@ def _shape(fact, prefix, v):
 
 
 def _period(fact, v, add):
-    u_id, scope = fact.get("period_u_id"), fact.get("period_scope")
-    start, end = fact.get("gp_start_date"), fact.get("gp_end_date")
-    if (u_id is None) != (scope is None):
-        add("PERIOD_SYM", "REJECT", "period_u_id and period_scope must travel together")
+    # P-O2 (#827, U-7): the local ISO/equality/window/enum copies are DELETED —
+    # this door consumes THE one invariant (driver_period_resolver
+    # .period_invariant); no second ISO rule exists anywhere. Only the
+    # validator-specific fact_scope token check stays local.
+    u_id = fact.get("period_u_id")
     token = fact.get("fact_scope_period_token")
     if token is not None and token != u_id:
         add("PERIOD_SYM", "REJECT",
             f"fact_scope period token {token!r} != HAS_PERIOD target {u_id!r}")
-    if scope is not None and scope not in PERIOD_SCOPES:
-        add("SCOPE_PAIR", "REJECT", f"period_scope {scope!r} not in the enum")
-    if u_id is None:
-        return
-    if fact.get("time_type") not in ("duration", "instant"):
-        add("INSTANT", "REJECT", "time_type required (duration|instant) with a period")
-    # #827 B7: the id is PARSED at the one owner before any date use — a non-string
-    # or malformed id records its violation and returns; nothing here slices raw ids.
-    try:
-        pid_start, pid_end = parse_period_id(u_id)
-    except IdLawError as e:
-        add("PERIOD_SYM", "REJECT", str(e))
-        return
-    if pid_start is None:                  # a valid sentinel id
-        if scope != PERIOD_SENTINEL_SCOPE[u_id]:
-            add("SCOPE_PAIR", "REJECT",
-                f"sentinel {u_id} must pair with scope {PERIOD_SENTINEL_SCOPE[u_id]!r}")
-        if start is not None or end is not None:
-            add("SCOPE_PAIR", "REJECT", f"sentinel {u_id} stores null dates")
-        return
-    if scope in PERIOD_SENTINEL_SCOPE.values():
-        add("SCOPE_PAIR", "REJECT", f"dated period {u_id} with sentinel scope {scope!r}")
-    for d in (start, end):
-        if d is not None:
-            try:
-                date.fromisoformat(d)
-            except (ValueError, TypeError):
-                add("ISO", "REJECT", f"bad ISO date {d!r}")
-                return
-    # a dated period's stored dates ARE the gp_ id's dates — no divergence, ever
-    if (start, end) != (pid_start, pid_end):
-        add("PERIOD_SYM", "REJECT",
-            f"gp dates {start}..{end} do not match the period id {u_id}")
-        return
-    if fact.get("time_type") == "instant":
-        if start != end:
-            add("INSTANT", "REJECT", "instant must be a one-day window (gp_X_X)")
-    elif fact.get("time_type") == "duration" and start == end:
-        add("INSTANT", "REJECT", "duration with start == end is illegal input")
+    for code, msg in period_invariant(u_id, fact.get("period_scope"),
+                                      fact.get("time_type"),
+                                      fact.get("gp_start_date"),
+                                      fact.get("gp_end_date")):
+        add(code, "REJECT", msg)
 
 
 def _id_rebuild(fact, add):

@@ -68,9 +68,13 @@ def mk(lane="metric", shape="point", **over):
         fact.update(surprise="actual_vs_consensus", surprise_basis_hint="actual",
                     comparison_baseline="consensus", driver_state="beat")
     if lane == "action_event":
+        # P-O2 fixture correction (#827): a TRULY periodless fact carries NO
+        # period metadata at all — time_type included. The old fixture kept
+        # the default "duration", so the lawful periodless control was itself
+        # unlawful under the one-invariant law.
         fact.update(period_u_id=None, gp_start_date=None, gp_end_date=None,
                     period_scope=None, fiscal_year=None, fiscal_quarter=None,
-                    driver_state="announced")
+                    time_type=None, driver_state="announced")
         if shape == "delta-only":
             fact.update(change_value=5000, change_unit="count")
     fact.update(over)
@@ -792,10 +796,22 @@ def test_the_one_outcome_code_module_owns_every_minted_token():
     # drift class), and a text parse scans the same bytes without the chain.
     here = os.path.dirname(os.path.abspath(driver_validators.__file__))
     sources = [open(driver_validators.__file__, encoding="utf-8").read(),
-               open(os.path.join(here, "xbrl_attach.py"), encoding="utf-8").read()]
+               open(os.path.join(here, "xbrl_attach.py"), encoding="utf-8").read(),
+               # P-O2: the invariant owner mints codes as ("CODE", msg) tuple
+               # constants — scanned too, so a rogue tuple code is caught here
+               open(os.path.join(here, "driver_period_resolver.py"),
+                    encoding="utf-8").read()]
     minted = set()
+    import re as _re
     for src in sources:
         tree = ast.parse(src)
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Tuple) and node.elts and \
+                    isinstance(node.elts[0], ast.Constant) and \
+                    isinstance(node.elts[0].value, str) and \
+                    _re.fullmatch(r"[A-Z][A-Z0-9_]+", node.elts[0].value) and \
+                    len(node.elts) == 2:
+                minted.add(node.elts[0].value)
         for node in ast.walk(tree):
             if isinstance(node, ast.Call):
                 fn = node.func
@@ -844,3 +860,13 @@ def test_T2_mutual_exclusion_survives_the_delete():
     # and value_text stays guidance-only
     assert "VALUE_TEXT" in codes(check(mk("metric", "numberless",
                                           value_text="words")))
+
+
+def test_stray_period_metadata_without_id_rejected():
+    """P-O2 (#827): id/scope presence symmetry at the validator door — period
+    metadata (a gp date) with NO period_u_id is contradictory, never ignored."""
+    bad = mk("metric", "point", period_u_id=None, gp_start_date="2025-07-01",
+             gp_end_date=None, period_scope=None, fiscal_year=None,
+             fiscal_quarter=None)
+    got = codes(check(bad))
+    assert got & {"PERIOD_SYM", "SCOPE_PAIR"}, got

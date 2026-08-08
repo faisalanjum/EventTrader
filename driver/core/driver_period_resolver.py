@@ -46,6 +46,76 @@ class PeriodResolutionError(ValueError):
     """The period is ambiguous or under-specified. Callers PARK — never guess."""
 
 
+#: THE one scope-enum spelling set (P-O2: the resolver-vs-validators duplicate
+#: spellings are folded HERE; validators consume the invariant, never a copy).
+_DATED_SCOPES = frozenset({"quarter", "annual", "half", "monthly", "ytd",
+                           "ttm", "exact_range"})
+PERIOD_SCOPES = _DATED_SCOPES | frozenset(PERIOD_SENTINEL_SCOPE.values())
+
+
+def period_invariant(u_id, scope, time_type, start, end):
+    """THE complete period invariant at ONE owner (P-O2, U-7). Returns a tuple
+    of (code, message) verdicts — empty means lawful. Codes come from the T1
+    vocabulary; both consumers map them (the resolver raises the first as a
+    typed park; the validators append each as a REJECT).
+
+    Owns, in one place: id/scope presence symmetry · the scope + time_type
+    enums · id parse / sentinel pairing (F-IDLAW, via parse_period_id) ·
+    canonical ISO validation · stored-date-to-id equality · the
+    instant/duration window law. The preserved typed-outcome map holds:
+    malformed stored date WITH a valid dated id -> ISO · malformed id ->
+    PERIOD_SYM · sentinel/date conflict -> SCOPE_PAIR. The compact-date
+    ordering is the T1 owner's COMPACT_DATE_IN_ID_ORDER: the id grammar
+    judges an id-carried compact date (PERIOD_SYM), never the ISO rule."""
+    out = []
+    if (u_id is None) != (scope is None):
+        out.append(("PERIOD_SYM", "period_u_id and period_scope must travel together"))
+    if u_id is None:
+        if start is not None or end is not None:
+            out.append(("PERIOD_SYM", "period dates without a period_u_id"))
+        return tuple(out)
+    if scope is not None and scope not in PERIOD_SCOPES:
+        out.append(("SCOPE_PAIR", f"period_scope {scope!r} not in the enum"))
+    if time_type not in ("duration", "instant"):
+        out.append(("INSTANT",
+                    f"time_type required (duration|instant) with a period, got {time_type!r}"))
+    try:
+        pid_start, pid_end = parse_period_id(u_id)
+    except IdLawError as e:
+        out.append(("PERIOD_SYM", str(e)))
+        return tuple(out)
+    if pid_start is None:                      # a valid sentinel id
+        if scope != PERIOD_SENTINEL_SCOPE.get(u_id):
+            out.append(("SCOPE_PAIR",
+                        f"sentinel {u_id} must pair with scope "
+                        f"{PERIOD_SENTINEL_SCOPE.get(u_id)!r}"))
+        if start is not None or end is not None:
+            out.append(("SCOPE_PAIR", f"sentinel {u_id} stores null dates"))
+        return tuple(out)
+    if scope in PERIOD_SENTINEL_SCOPE.values():
+        out.append(("SCOPE_PAIR", f"dated period {u_id} with sentinel scope {scope!r}"))
+    for d in (start, end):
+        if d is not None:
+            try:
+                date.fromisoformat(d)
+            except (ValueError, TypeError):
+                out.append(("ISO", f"bad ISO date {d!r}"))
+                return tuple(out)
+    # a dated period's stored dates ARE the gp_ id's dates — no divergence and
+    # no absence, ever (PERIOD_SYM per the frozen 827B2 evidence: a compact
+    # "20251231" parses under 3.11 but is not the canonical id spelling, and
+    # the ID text is the canon — equality names it, the ISO rule does not).
+    if (start, end) != (pid_start, pid_end):
+        out.append(("PERIOD_SYM",
+                    f"gp dates {start}..{end} do not match the period id {u_id}"))
+        return tuple(out)
+    if time_type == "instant" and pid_start != pid_end:
+        out.append(("INSTANT", "instant must be a one-day window (gp_X_X)"))
+    elif time_type == "duration" and pid_start == pid_end:
+        out.append(("INSTANT", "duration with start == end is illegal input"))
+    return tuple(out)
+
+
 def _lawful_fye(v):
     """THE one fye_month gate (GuidancePeriod:357 law: int|None, 1..12).
     None passes — it parks later only where a computation actually needs it.
@@ -63,8 +133,8 @@ def ensure_driver_period(item, *, fact_type, fye_month, ticker=None,
     """Resolve one item's period. Returns {period_u_id, period_scope, time_type,
     gp_start_date, gp_end_date} or None when the fact truly has no period fields."""
     fye_month = _lawful_fye(fye_month)   # FIRST statement — before every bypass
-    if item.get("period_u_id"):
-        return _preserved(item)
+    if item.get("period_u_id") is not None:   # P-O2: a PRESENT id — falsey
+        return _preserved(item)               # included — is JUDGED, never ignored
     if all(item.get(k) is None for k in PERIOD_ITEM_KEYS):  # is-not-None: zero VALUES (e.g.
         return None                                     # fiscal_quarter=0) get VALIDATED
 
@@ -282,15 +352,31 @@ def _preserved(item):
     # ONE parse through the existing IdLawError -> PeriodResolutionError boundary:
     # a sentinel returns (None, None), a dated id returns its exact captured text.
     start, end = _check(u_id)
-    return _result(u_id, item.get("period_scope"), item.get("time_type"), start, end,
-                   validate=False)
+    # P-O2: conflicting SUPPLIED fields are parks, never silently discarded —
+    # a preserved id excludes every framing field, and supplied dates must
+    # equal the id's own.
+    for k in ("fiscal_year", "fiscal_quarter", "half", "month",
+              "long_range_start_year", "long_range_end_year", "sentinel_class"):
+        if item.get(k) is not None:
+            raise PeriodResolutionError(
+                f"SCOPE_PAIR: preserved period_u_id with conflicting supplied {k}"
+                f"={item.get(k)!r} — park")
+    for k, want in (("period_start_date", start), ("period_end_date", end)):
+        if item.get(k) is not None and item.get(k) != want:
+            raise PeriodResolutionError(
+                f"PERIOD_SYM: supplied {k}={item.get(k)!r} disagrees with the "
+                f"id {u_id} — park")
+    return _result(u_id, item.get("period_scope"), item.get("time_type"),
+                   start, end)
 
 
-def _result(u_id, scope, time_type, start, end, validate=True):
-    if validate:
-        _check(u_id)
-        if time_type == "instant" and start != end:
-            raise PeriodResolutionError(f"instant must be a one-day window: {u_id}")
+def _result(u_id, scope, time_type, start, end):
+    # P-O2: EVERY exit consumes the one invariant (the validate kwarg is
+    # DELETED — no path may opt out of the law).
+    verdicts = period_invariant(u_id, scope, time_type, start, end)
+    if verdicts:
+        code, msg = verdicts[0]
+        raise PeriodResolutionError(f"{code}: {msg} — park")
     return {"period_u_id": u_id, "period_scope": scope, "time_type": time_type,
             "gp_start_date": start, "gp_end_date": end}
 
