@@ -1546,6 +1546,13 @@ MUTATIONS = [
      "driver/relocation/test_bind_graph_fact.py::"
      "test_EU172_a_malformed_graph_qname_refuses_as_its_own_missing_identity"),
 
+    (196, "EU-173: the exactly-one fallback bound tolerates an ambiguous pair",
+     "driver/relocation/inline_html.py",
+     "    if len(hits) > 1:\n        return None, 'ambiguous_identity'",
+     "    if len(hits) > 2:\n        return None, 'ambiguous_identity'",
+     "driver/relocation/test_bind_graph_fact.py::"
+     "test_827R8b_JOIN_two_prefixes_resolving_to_ONE_identity_are_AMBIGUOUS"),
+
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",

@@ -2332,6 +2332,23 @@ def identity_fallback(doc_or_html, target, context_ref, unit_ref):
     prepared = _prepared(doc_or_html)
     if refused(prepared):
         return None, refused(prepared)
+    # EU-173 (#827): the identity attrs compared below (name, contextRef,
+    # unitRef) and the (or '') no-unit/no-context normalizations consume the
+    # frozen equality law cited at the EU-154 block; the outcome spellings
+    # (no_identity_match / ambiguous_identity / ok) are this binder's OWN
+    # published vocabulary (the EU-160 precedent); 'elements'/'noid_elements'
+    # stand under the EU-161 fail-closed adjudication.
+    #
+    # OPEN-RECORDED (SEQ 553, in force): the exactly-one bound below
+    # implements the SUFFICIENCY claim — a unique (expanded concept,
+    # contextRef, unitRef) triple binds an ID-less graph fact. That claim
+    # has NO frozen product-contract clause (searched: FINAL_DESIGN,
+    # ChannelContract, BUILD_AND_OPERATIONS, 15_CandidateFactPacket, the
+    # Core-Fiscal contract sheet) and per SEQ 553 it STAYS OPEN until an
+    # owner-frozen contract row exists; FinalPlan section 5A.3 is history
+    # prose, lead only. Both refusal sides are fail-closed meanwhile
+    # (0 matches refuse, more than one refuses) — the open question is the
+    # product-level sufficiency of the triple, never a silent bind.
     pool = list(prepared['elements'].values()) + prepared['noid_elements']
     hits = [f for f in pool
             if _qname(_typed(f.sem, 'name'), f.sem) == target
