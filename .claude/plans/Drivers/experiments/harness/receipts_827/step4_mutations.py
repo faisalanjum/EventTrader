@@ -1763,6 +1763,27 @@ MUTATIONS = [
      "ISO_4217_NAMESPACE = 'http://www.xbrl.org/2003/iso4217X'",
      "driver/relocation/test_route_a.py::"
      "test_827R9_the_same_LOCAL_NAMES_under_DIFFERENT_URIs_stay_DIFFERENT"),
+
+    (227, "EU-036: the context content model degrades to simple",
+     "driver/relocation/inline_html.py",
+     "    'context': 'element-only', 'entity': 'element-only',",
+     "    'context': 'simple', 'entity': 'element-only',",
+     "driver/relocation/test_context_content_model.py::"
+     "test_827B12_direct_TEXT_beside_a_member_is_malformed"),
+
+    (228, "EU-037: the required scheme attribute becomes undeclared",
+     "driver/relocation/inline_html.py",
+     "                'identifier': frozenset({'scheme'}),",
+     "                'identifier': frozenset(),",
+     "driver/relocation/test_context_content_model.py::"
+     "test_a_SUPPORTED_explicit_member_still_binds"),
+
+    (229, "EU-038: xs:date leaves the dateUnion triad",
+     "driver/relocation/inline_html.py",
+     "                             (_XS_NS, 'date'), (_XS_NS, 'dateTime')})",
+     "                             (_XS_NS, 'dateTime')})",
+     "driver/relocation/test_context_content_model.py::"
+     "test_827B12_MUST_ALLOW_every_lawful_shape"),
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",

@@ -1213,6 +1213,21 @@ _XS_NS = 'http://www.w3.org/2001/XMLSchema'
 #: errata 2013-02-20, official instance schema lines 602-680.
 #: xbrli:dateUnion admits exactly this triad (:629-636); xsi:type may lawfully
 #: restate any member, under ANY in-scope prefix.
+# CL-028 (#827, EU-036/037/038): THE SHAPE VOCABULARY BELOW IS THE
+# INSTANCE SCHEMA'S OWN, transcribed and cited exactly — XBRL 2.1 REC
+# 2003-12-31 with corrected errata 2013-02-20, normative schema
+# xbrl-instance-2003-12-31.xsd (the EU-153 URL): element names, child
+# sets, cardinalities and the declared attributes (context/@id;
+# identifier/@scheme REQUIRED per 4.7.3; unit/@id) mirror the schema's
+# content models; the type names (contextEntityType, contextPeriodType,
+# contextScenarioType, measuresType, dateUnion = the union of xs:date and
+# xs:dateTime) are the schema's published type identities (EU-038: the
+# triad is exactly what dateUnion admits). The CONTENT-MODEL words
+# ('empty' — no character item at all; 'element-only' — XML whitespace
+# between children and nothing else; 'simple') are W3C XML Schema Part 1:
+# Structures 2e, REC 2004-10-28, section 3.4 complex type content types,
+# https://www.w3.org/TR/xmlschema-1/ . Recognition transcribed, no rule
+# invented.
 _CTX_DATE_TRIAD = frozenset({(XBRL_INSTANCE_NAMESPACE, 'dateUnion'),
                              (_XS_NS, 'date'), (_XS_NS, 'dateTime')})
 #: Each supported element's EXACT declared type (same schema, :602-680 for the
