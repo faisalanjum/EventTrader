@@ -443,7 +443,7 @@ def test_825p2_a_SHARED_failure_fans_out_to_every_valid_item(break_it, decision,
     class _Provider:
         def get_filing_document(self, source_id):
             if break_it == "outage":
-                raise OSError("connection reset")
+                raise ConnectionResetError("connection reset")   # F2: a NAMED transient
             # UNREACHABLE BY DESIGN: the count and hash guards both fire before
             # the document is fetched, which is itself the "every cheap check
             # before I/O" law. Saying so out loud beats a plausible-looking
@@ -942,7 +942,7 @@ def test_825p2_a_STORE_OUTAGE_during_a_concept_read_fans_out_EVENT_WIDE():
         def get_xbrl_fact_dimensions(self, source_id, concept):
             self.row_reads.append(concept)
             if concept.endswith("B"):
-                raise OSError("connection reset")
+                raise ConnectionResetError("connection reset")   # F2: a NAMED transient
             return GraphFactRows(rows=[_door_row("fA", concept=concept)],
                                  exclusions=())
 

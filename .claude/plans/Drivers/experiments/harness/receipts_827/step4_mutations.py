@@ -1103,12 +1103,17 @@ MUTATIONS = [
      "driver/core/test_prepared_fact_v2.py::"
      "test_W11_an_invented_polarity_token_is_refused"),
 
-    (134, "F2: the permanent provider errors go back to retry-forever",
+    # 134 REPLACED (SEQ 805): its target — the NON_RETRYABLE blacklist
+    # branch — was the reopened open-domain defect and is DELETED; the
+    # corrected mutant widens the POSITIVE transient contract back to the
+    # generic OSError, and the unknown path-shape subclass catches it for
+    # exactly the reopened reason (it would silently park again).
+    (134, "F2 corrected: the positive transient set widens back to OSError",
      "driver/core/xbrl_attach.py",
-     "    except NON_RETRYABLE_SOURCE_ERRORS:\n        raise                                # F2: permanent — never retried",
-     "    except ():\n        raise",
+     "RETRYABLE_SOURCE_ERRORS = (ConnectionError, TimeoutError, InterruptedError)",
+     "RETRYABLE_SOURCE_ERRORS = (OSError,)",
      "driver/core/test_round8_xbrl_binding.py::"
-     "test_F2_only_genuinely_transient_provider_errors_park[permission-fails-loud]"),
+     "test_F2_only_genuinely_transient_provider_errors_park[is-a-directory-fails-loud]"),
 
     (135, "F3: the unreadable document goes back to fact-blame rejection",
      "driver/core/xbrl_attach.py",
@@ -1373,6 +1378,13 @@ MUTATIONS = [
      '        end_instant = (b.moment + timedelta(days=0) if b.kind == \"date\"',
      "driver/core/test_round8_xbrl_binding.py::"
      "test_a_ONE_DAY_duration_with_equal_date_only_boundaries_is_LAWFUL[2025-03-31-2025-03-31]"),
+
+    (172, "EU-020: the divide-unit join gains a separator the graph never writes",
+     "driver/relocation/exact_numbers.py",
+     "        return ''.join(numerator) + ''.join(denominator)",
+     "        return '/'.join(numerator) + '/'.join(denominator)",
+     "driver/relocation/test_exact_numbers.py::"
+     "test_EU020_the_graph_unit_join_spelling_is_the_clauses"),
 ]
 
 

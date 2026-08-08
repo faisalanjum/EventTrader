@@ -45,19 +45,28 @@ __all__ = ["attach_event_xbrl"]
 # The EXPLICIT retryable set. Never a bare `except Exception`: swallowing an
 # AttributeError from our own code as "temporary" would hide the bug forever.
 #
-# OSError covers ConnectionError and TimeoutError, which is every transport
-# failure a filing provider can raise. It deliberately does NOT name Neo4j's
-# transient classes: importing the driver here would let this staged contract
-# module reach the graph package, which the G18 gate exists to disprove — and
-# it did fire on exactly that. INSTEAD, per the injected-dependency contract, a
-# store implementation maps ITS OWN transient failures to `SourceUnavailable`
-# (or an OSError) before they cross this boundary. An unmapped driver error is
-# then an unexpected error and fails loudly, which is the safe direction.
-RETRYABLE_SOURCE_ERRORS = (OSError,)
-# F2 (#827, fail closed): these OSError SUBCLASSES are PERMANENT — a wrong
-# path or permission never heals by waiting, so retry-forever was the unsafe
-# direction. They fail LOUDLY through; only the owner below classifies.
-NON_RETRYABLE_SOURCE_ERRORS = (PermissionError, FileNotFoundError)
+# F2 (#827, corrected per SEQ 805): the transient set is a POSITIVE,
+# authoritative contract — exactly the OS-exception classes whose DOCUMENTED
+# meaning is "the operation may succeed if retried":
+#   ConnectionError (with its subclasses BrokenPipeError,
+#   ConnectionAbortedError, ConnectionRefusedError, ConnectionResetError),
+#   TimeoutError (ETIMEDOUT), InterruptedError (EINTR).
+# Authority: Python 3.10 Library Reference, "OS exceptions",
+# https://docs.python.org/3.10/library/exceptions.html#os-exceptions
+# (the PEP 3151 errno-to-class mapping these meanings come from).
+# EVERY OTHER OSError — the base class, IsADirectoryError,
+# NotADirectoryError, PermissionError, FileNotFoundError, and whatever a
+# future provider invents — passes through LOUDLY: an unlisted class is an
+# UNKNOWN, and unknown fails closed. The previous shape (retry every
+# OSError minus a two-member blacklist) was an open-domain negative list —
+# the reopened defect: IsADirectoryError parked forever as "temporary".
+# It still deliberately names NO Neo4j class: importing the driver here
+# would let this staged contract module reach the graph package (the G18
+# gate fired on exactly that). Per the injected-dependency contract, a
+# store maps ITS OWN transient failures to `SourceUnavailable` or to one of
+# THESE named transients (the adapter uses ConnectionError) before they
+# cross this boundary; an unmapped driver error fails loudly.
+RETRYABLE_SOURCE_ERRORS = (ConnectionError, TimeoutError, InterruptedError)
 
 
 def _fetch(what, call, *args):
@@ -66,8 +75,6 @@ def _fetch(what, call, *args):
         return call(*args)
     except SourceUnavailable:
         raise                                # a store already classified it
-    except NON_RETRYABLE_SOURCE_ERRORS:
-        raise                                # F2: permanent — never retried
     except RETRYABLE_SOURCE_ERRORS as e:
         raise SourceUnavailable(
             f"{what} is temporarily unavailable ({type(e).__name__}: {e}) — "

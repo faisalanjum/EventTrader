@@ -200,8 +200,9 @@ class Neo4jStore:
     # transient failures, because the store is what knows the driver: the
     # contract module cannot import neo4j to catch them (it is staged, and the
     # G18 gate fires on exactly that). ConnectionError is used deliberately —
-    # it IS an OSError, which is the retryable set every consumer already
-    # honours, so no shared symbol has to cross the staged/production line.
+    # it is a NAMED member of the POSITIVE transient contract
+    # (RETRYABLE_SOURCE_ERRORS, F2/SEQ 805), so no shared symbol has to
+    # cross the staged/production line.
     @staticmethod
     def _transient():
         from neo4j.exceptions import (ServiceUnavailable, SessionExpired,

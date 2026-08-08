@@ -301,7 +301,11 @@ def test_the_retryable_set_is_named_not_a_bare_except():
                 blanket.append(getattr(node, "lineno", "?"))
     assert not blanket, f"blanket except at line(s) {blanket}"
     assert xa.RETRYABLE_SOURCE_ERRORS, "the retryable classes must be explicit"
-    assert OSError in xa.RETRYABLE_SOURCE_ERRORS
+    # F2 corrected (SEQ 805): the set is the POSITIVE transient contract —
+    # bare OSError in it was the reopened open-domain defect.
+    assert OSError not in xa.RETRYABLE_SOURCE_ERRORS
+    assert set(xa.RETRYABLE_SOURCE_ERRORS) == {ConnectionError, TimeoutError,
+                                               InterruptedError}
 
 
 # --- the stale note --------------------------------------------------------

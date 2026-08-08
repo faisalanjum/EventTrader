@@ -1166,16 +1166,22 @@ def test_W7_an_instant_bundle_carries_ONLY_its_end_date(with_start):
 
 
 @pytest.mark.parametrize("exc,parks", [
-    (ConnectionError, True), (TimeoutError, True),
+    (ConnectionError, True), (TimeoutError, True), (InterruptedError, True),
     (PermissionError, False), (FileNotFoundError, False),
-], ids=["connection-parks", "timeout-parks",
-        "permission-fails-loud", "missing-file-fails-loud"])
+    (IsADirectoryError, False), (NotADirectoryError, False),
+    (OSError, False),
+], ids=["connection-parks", "timeout-parks", "interrupted-parks",
+        "permission-fails-loud", "missing-file-fails-loud",
+        "is-a-directory-fails-loud", "not-a-directory-fails-loud",
+        "bare-oserror-fails-loud"])
 def test_F2_only_genuinely_transient_provider_errors_park(exc, parks):
-    """F2 (fail closed): PermissionError and FileNotFoundError are OSError
-    SUBCLASSES, so the bare (OSError,) retryable set retried them forever —
-    a wrong path or permission never heals by waiting. Only the declared
-    owner classifies: genuine transients still park as SourceUnavailable;
-    the permanent pair fails LOUDLY through."""
+    """F2, corrected per SEQ 805: the transient set is a POSITIVE contract
+    (ConnectionError family, TimeoutError, InterruptedError — the OS
+    exceptions whose documented meaning is retry-may-succeed). EVERY other
+    OSError — the base class and unknown path-shape subclasses included —
+    passes through LOUDLY: unknown fails closed, and a negative blacklist
+    over an open domain was the reopened defect (IsADirectoryError and
+    NotADirectoryError parked forever under it)."""
     class _Raising:
         def get_filing_document(self, source_id):
             raise exc("boom")
