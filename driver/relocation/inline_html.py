@@ -2825,6 +2825,16 @@ def bind_graph_fact(doc_or_html, *, inline_element_id, concept, context_id,
                     concept_namespace, graph_concept_qname):
     """Bind ONE graph Fact to its exact inline element, or abstain.
 
+    EU-160 (#827), the key vocabularies this function reads and writes:
+    the element-field keys it reads (name_expanded, context_ref, unit_ref,
+    entity, period, dims_expanded, units, is_divide, fmt_expanded, scale,
+    sign, value_input) are `prepare()`'s OWN output vocabulary — writer and
+    reader live in this one module, so the owner is in-file, not a packet
+    clause; the RESULT keys it writes are the four-key contract stated
+    below in this docstring (Core consumes them in xbrl_attach); the
+    abstention-reason strings are this binder's own published vocabulary.
+    Nothing here restates a Fiscal packet spelling.
+
     Returns (bound, 'ok') or (None, reason). `bound` carries exactly FOUR
     keys — `evidence` (the element-local record), `unit_measures_expanded`
     and `unit_numerator_expanded` (the filing's declared unit as semantic

@@ -1304,6 +1304,13 @@ MUTATIONS = [
      "SOURCE_EVIDENCE_KEYS = ('representation_sha256', 'quote_span',\n                        'raw_label_span', 'piecez')",
      "driver/relocation/test_packet_items_through_the_door.py::"
      "test_EU054_the_core_facing_evidence_vocabulary_is_the_sheets"),
+
+    (162, "EU-160: the binder's four-key result contract drifts",
+     "driver/relocation/inline_html.py",
+     "            'printed_value': printed_value(evidence.get('value_input'),",
+     "            'printed_valu': printed_value(evidence.get('value_input'),",
+     "driver/relocation/test_bind_graph_fact.py::"
+     "test_RED_the_expected_numeric_object_is_returned_for_field_wise_binding"),
 ]
 
 
