@@ -2236,8 +2236,14 @@ def _evidence_from(fact, prepared):
         return None, 'unsupported_style'
     hidden = any(_is(a, _INLINE_NS, 'hidden') for a in el.iterancestors()) \
         or css_hidden
-    veiled = prepared.get('hidden_nodes', frozenset())
-    numeric = prepared.get('fact_nodes', frozenset())
+    # EU-095 (#827): FAIL-CLOSED — these are prepare()'s own complete-shape
+    # keys (both unconditional in the one literal, the EU-161 law), so they
+    # are read HARD: the old .get(..., frozenset()) defaults would have
+    # turned a drifted key into an EMPTY set — ix:hidden text silently
+    # LEAKING into evidence (measured: the drift was blind until the
+    # ix:hidden pin below existed). Loud beats silent here.
+    veiled = prepared['hidden_nodes']
+    numeric = prepared['fact_nodes']
     ev = {
         'name': _typed(el, 'name') or '',
         # THE CONCEPT'S SEMANTIC IDENTITY, resolved in the scope of the fact

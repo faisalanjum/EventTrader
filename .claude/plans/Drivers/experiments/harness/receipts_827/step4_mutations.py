@@ -1931,6 +1931,13 @@ MUTATIONS = [
      "    if ctx.get('typedX'):",
      "driver/relocation/test_context_content_model.py::"
      "test_a_typed_dimension_keeps_its_own_reason"),
+
+    (251, "EU-095: the veiled set reverts to a soft default and ix:hidden text leaks",
+     "driver/relocation/inline_html.py",
+     "    veiled = prepared['hidden_nodes']",
+     "    veiled = prepared.get('hidden_nodesX', frozenset())",
+     "driver/relocation/test_row_label_span.py::"
+     "test_EU095_ix_hidden_text_never_leaks_into_row_evidence"),
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",

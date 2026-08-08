@@ -903,3 +903,15 @@ def test_EU057_run_in_is_a_lawful_display_value_that_wins_the_cascade():
                    f'{_FACT}</span> now.</div>')
     assert ev['hidden'] is False
     assert ev['block'] == 'Total was 726 now.'
+
+
+def test_EU095_ix_hidden_text_never_leaks_into_row_evidence():
+    """The veiled set is prepare()'s own complete-shape key, read HARD: an
+    ix:hidden fragment inside a visible row is EXCLUDED from the row's
+    evidence text — under the old soft default a drifted key made the
+    veiled set empty and the hidden text silently leaked into row_text
+    (the measured blind spot this pin closes)."""
+    prep, ev = _ev('<table><tr><td>Total<ix:hidden>SECRET</ix:hidden></td>'
+                   f'<td>{_FACT}</td></tr></table>')
+    assert ev['row_text'] == 'Total 726'
+    assert 'SECRET' not in ev['row_text'] and ev['row_label'] == 'Total'
