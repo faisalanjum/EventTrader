@@ -482,10 +482,11 @@ def _one_representation_for_event(hashes):
     the graph or the filing, which is what a park is for.
     """
     values = list(hashes)
-    if not values:
-        raise SchemaError("the event declares no representation at all")
-    for h in values:
-        _sha256_or_raise(h, "source_evidence.representation_sha256")
+    # F1 (#827): TWO dead defences deleted here (checkpoint fd221239 +
+    # 2b8fd679) — the empty-values branch was unreachable (the only
+    # production caller passes nonempty `checked`), and the per-hash sha
+    # re-validation duplicated _checked_source_evidence, which every
+    # evidence object has already passed.
     if len(set(values)) != 1:
         raise SchemaError(
             f"the event's XBRL items declare {len(set(values))} different "
@@ -1157,11 +1158,10 @@ def _verify_and_attach(fact, *, concept, evidence, prepared_doc, entity_cik,
     try:
         from driver.core.slot_convert import convert_slot
 
-        for r in refs:
-            if r["slice_part"] not in it.slice_parts:
-                raise SchemaError(
-                    f"attach: member slice_part {r['slice_part']!r} is "
-                    f"not one of this fact's own slice_parts")
+        # F1 (#827): the slice_part membership re-check deleted (checkpoint
+        # 1d4928c4 + b17a9303) — check_member_refs owns the rule at
+        # slice_menu:308-310 and exits with problems FIRST, so this later
+        # SchemaError was unreachable.
 
         # ---- the COMPLETE numeric slot set, against what the FILING PRINTS ------
         # The multiplier the fact must state is UNIT-DEPENDENT: ix.scale verifies

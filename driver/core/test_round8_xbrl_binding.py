@@ -447,9 +447,15 @@ def test_the_store_is_never_asked_for_a_document():
 
 
 def test_all_xbrl_items_of_one_event_must_agree_on_the_representation():
+    """F1 reconcile (checkpoint's own words: tests preserving dead defences
+    are evidence, not need): the LIVE rule is AGREEMENT — disagreement and
+    the empty event still refuse; the malformed-sha shapes ([None], ["",""])
+    can no longer reach this helper, because every evidence object passed
+    _checked_source_evidence at the door first (the deleted second
+    validation duplicated it)."""
     from driver.core.xbrl_attach import _one_representation_for_event
     assert _one_representation_for_event([_SHA, _SHA, _SHA]) == _SHA
-    for bad in ([_SHA, "0" * 64], [], [None], [_SHA, None], ["", ""]):
+    for bad in ([_SHA, "0" * 64], [], [_SHA, None]):
         with pytest.raises(SchemaError):
             _one_representation_for_event(bad)
 
