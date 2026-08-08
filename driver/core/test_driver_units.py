@@ -20,6 +20,14 @@ def test_enum_is_the_ten_units():
         "usd", "m_usd", "percent", "percent_yoy", "percent_sequential",
         "percent_points", "basis_points", "count", "x", "unknown",
     })
+    # C1 (#827 F-UNITS): the ONE authored vocabulary is slot_convert's owner —
+    # the SAME ten literals, typed independently from FINAL_DESIGN:203, so a
+    # drifted owner (a unit removed or invented) fails HERE, not in a consumer.
+    from driver.core.slot_convert import CANONICAL_UNITS
+    assert set(CANONICAL_UNITS) == {
+        "usd", "m_usd", "percent", "percent_yoy", "percent_sequential",
+        "percent_points", "basis_points", "count", "x", "unknown",
+    }
 
 
 def test_per_slot_hints_level_and_change_independent():

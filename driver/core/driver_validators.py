@@ -6,17 +6,21 @@ fact_type — a fact never declares its own lane. Dormant ratified-XBRL fields (
 xbrl_fact_id, attach_mode...) are NOT in the allowed field set, so they REJECT while
 the materializer stays dormant — flip = extending _ALLOWED_FIELDS under owner order.
 """
-import math
 import re
 from collections import namedtuple
 from datetime import date, datetime
 from decimal import Decimal
 
-from driver.core.driver_ids import IdLawError, build_id, num_canon
-from driver.core.driver_units import DRIVER_UNITS
-
-__all__ = ["Violation", "validate_fact", "compose_surprise_scope",
-           "surprise_position", "apply_inline_correction"]
+from driver.core.driver_ids import (ACTUAL_BASIS, CONSENSUS_BASELINE,
+                                    GUIDANCE_BASIS, GUIDANCE_SUFFIX,
+                                    PERIOD_SENTINEL_SCOPE,
+                                    PREVIOUS_GUIDANCE_BASELINE,
+                                    SURPRISE_SCOPE_BY_PAIR, SURPRISE_SUFFIX,
+                                    IdLawError, build_id, num_canon,
+                                    parse_period_id, split_terminal_suffix)
+from driver.core.slot_convert import CANONICAL_UNITS  # THE one 10-unit owner
+# (C1+C10: the clean lane's driver_units/unit_resolver edge is DELETED — no
+# clean re-export; driver_units stays an optional/post-lane import only.)
 
 Violation = namedtuple("Violation", "code action message")
 
@@ -35,14 +39,38 @@ LANE_BASELINES = {"metric": {"prior_year", "sequential_period"},
                   "surprise": {"consensus", "previous_guidance"},
                   "action_event": BASELINES}
 SOURCE_TYPES = {"8k", "transcript", "10q", "10k", "news"}
-PERIOD_SCOPES = {"quarter", "annual", "half", "monthly", "ytd", "ttm", "exact_range",
-                 "short_term", "medium_term", "long_term", "undefined"}
-SENTINEL_SCOPE = {"gp_ST": "short_term", "gp_MT": "medium_term", "gp_LT": "long_term",
-                  "gp_UNDEF": "undefined"}
-SURPRISE_TYPES = {"actual_vs_consensus", "actual_vs_guidance", "guidance_vs_consensus"}
+# the SEVEN dated scope words are their own frozen enum (FINAL_DESIGN §6.2, PER list
+# line 248); the four sentinel words derive from the ONE pair owner in driver_ids.
+PERIOD_SCOPES = frozenset({"quarter", "annual", "half", "monthly", "ytd", "ttm",
+                           "exact_range"}) | frozenset(PERIOD_SENTINEL_SCOPE.values())
+#: OD-21 basis vocabulary — derived from the pair owner, never respelled here.
+_SURPRISE_BASES = frozenset(b for b, _ in SURPRISE_SCOPE_BY_PAIR)
+
+
+def _actual_surprise_before_period_end(basis, gp_end_date, source_timestamp):
+    """THE one OD-21 F7 predicate — an ACTUAL surprise on a not-yet-ended
+    period is an impossible tense. Basis comes from `surprise_basis_hint`
+    (FINAL_DESIGN §5.1: never inferred from a spelling, never from whether a
+    period ended). Dates are accepted by the standard library; the source
+    value must be the stored FULL timestamp (`date`, FINAL_DESIGN §7.1) —
+    a bare date is not that contract. Anything malformed or mistyped is
+    False HERE: the ISO/period validators own those truthful reasons, and
+    this predicate never raises and never guesses from ten characters."""
+    if basis != ACTUAL_BASIS or not isinstance(gp_end_date, str) \
+            or not isinstance(source_timestamp, str) \
+            or "T" not in source_timestamp:
+        return False              # the stored timestamp contract requires T
+    try:
+        end = date.fromisoformat(gp_end_date)
+        stamp = datetime.fromisoformat(source_timestamp)
+    except ValueError:
+        return False
+    if end.isoformat() != gp_end_date:
+        return False              # only the canonical YYYY-MM-DD end spelling
+    return end > stamp.date()
 
 _ALLOWED_FIELDS = frozenset({
-    "driver_name", "driver_state", "quote", "date", "source_type", "event_time",
+    "driver_name", "driver_state", "quote", "date", "source_type",
     "level_low", "level_high", "level_unit", "change_value", "change_unit",
     "comparison_low", "comparison_high", "comparison_baseline",
     "value_text", "conditions", "company_confirmed", "xbrl_qname",
@@ -80,16 +108,17 @@ def _num_error(val):
 
 
 def compose_surprise_scope(basis_hint, comparison_baseline):
-    """OD-21: CODE composes the surprise= slot from basis x baseline, pre-fusion."""
+    """OD-21: CODE composes the surprise= slot from basis x baseline, pre-fusion.
+    The pair->scope words are asked of THE one owner (driver_ids.
+    SURPRISE_SCOPE_BY_PAIR), never respelled here. String-gate before the map
+    ask: an unhashable input gets the same ONE generic refusal, never TypeError."""
     pair = (basis_hint, comparison_baseline)
-    if pair == ("actual", "consensus"):
-        return "actual_vs_consensus"
-    if pair == ("actual", "previous_guidance"):
-        return "actual_vs_guidance"
-    if pair == ("guidance", "consensus"):
-        return "guidance_vs_consensus"
-    if pair == ("guidance", "previous_guidance"):
+    if pair == (GUIDANCE_BASIS, PREVIOUS_GUIDANCE_BASELINE):
         raise ValueError("guide vs own prior guide is guidance movement, never a surprise")
+    if isinstance(basis_hint, str) and isinstance(comparison_baseline, str):
+        scope = SURPRISE_SCOPE_BY_PAIR.get(pair)
+        if scope is not None:
+            return scope
     raise ValueError(f"cannot compose surprise scope from {pair!r}")
 
 
@@ -227,7 +256,7 @@ def validate_fact(fact, *, driver, home_facts=None):
 
     level_unit, change_unit = fact.get("level_unit"), fact.get("change_unit")
     for name, unit in (("level_unit", level_unit), ("change_unit", change_unit)):
-        if unit is not None and unit not in DRIVER_UNITS:
+        if unit is not None and unit not in CANONICAL_UNITS:
             add("UNIT", "REJECT", f"{name} {unit!r} not in the 10-unit enum")
     if any(x is not None for x in (lo, hi, clo, chi)):
         if level_unit is None:
@@ -303,14 +332,21 @@ def _period(fact, v, add):
         return
     if fact.get("time_type") not in ("duration", "instant"):
         add("INSTANT", "REJECT", "time_type required (duration|instant) with a period")
-    if u_id in SENTINEL_SCOPE:
-        if scope != SENTINEL_SCOPE[u_id]:
+    # #827 B7: the id is PARSED at the one owner before any date use — a non-string
+    # or malformed id records its violation and returns; nothing here slices raw ids.
+    try:
+        pid_start, pid_end = parse_period_id(u_id)
+    except IdLawError as e:
+        add("PERIOD_SYM", "REJECT", str(e))
+        return
+    if pid_start is None:                  # a valid sentinel id
+        if scope != PERIOD_SENTINEL_SCOPE[u_id]:
             add("SCOPE_PAIR", "REJECT",
-                f"sentinel {u_id} must pair with scope {SENTINEL_SCOPE[u_id]!r}")
+                f"sentinel {u_id} must pair with scope {PERIOD_SENTINEL_SCOPE[u_id]!r}")
         if start is not None or end is not None:
             add("SCOPE_PAIR", "REJECT", f"sentinel {u_id} stores null dates")
         return
-    if scope in SENTINEL_SCOPE.values():
+    if scope in PERIOD_SENTINEL_SCOPE.values():
         add("SCOPE_PAIR", "REJECT", f"dated period {u_id} with sentinel scope {scope!r}")
     for d in (start, end):
         if d is not None:
@@ -320,7 +356,7 @@ def _period(fact, v, add):
                 add("ISO", "REJECT", f"bad ISO date {d!r}")
                 return
     # a dated period's stored dates ARE the gp_ id's dates — no divergence, ever
-    if (start, end) != (u_id[3:13], u_id[14:]):
+    if (start, end) != (pid_start, pid_end):
         add("PERIOD_SYM", "REJECT",
             f"gp dates {start}..{end} do not match the period id {u_id}")
         return
@@ -363,11 +399,11 @@ def _period_lane(fact, lane, add):
     if lane == "guidance" and u_id is None:
         add("PERIOD_LANE", "REJECT",
             "guidance requires its target period (real window or explicit sentinel)")
-    if lane == "surprise" and fact.get("surprise") == "guidance_vs_consensus" \
-            and u_id is None:
+    gvc = SURPRISE_SCOPE_BY_PAIR[(GUIDANCE_BASIS, CONSENSUS_BASELINE)]
+    if lane == "surprise" and u_id is None and fact.get("surprise") == gvc:
         add("PERIOD_LANE", "REJECT",
-            "guidance_vs_consensus requires the guidance TARGET period")
-    if lane != "guidance" and u_id in SENTINEL_SCOPE:
+            f"{gvc} requires the guidance TARGET period")
+    if lane != "guidance" and u_id in PERIOD_SENTINEL_SCOPE:
         add("PERIOD_LANE", "REJECT",
             f"{lane} facts use real periods only — sentinel horizon {u_id} is illegal "
             f"(action sentinels hard-fail; metric/surprise periods must be real)")
@@ -433,14 +469,14 @@ def _movement(fact, lane, add):
 def _od21(fact, add, home_facts):
     basis, baseline = fact.get("surprise_basis_hint"), fact.get("comparison_baseline")
     slot = fact.get("surprise")
-    if basis not in ("actual", "guidance"):
-        add("F3", "REJECT", "surprise_basis_hint (actual|guidance) required on every "
-                            "surprise item")
+    if basis not in _SURPRISE_BASES:
+        add("F3", "REJECT", f"surprise_basis_hint ({ACTUAL_BASIS}|{GUIDANCE_BASIS}) "
+                            f"required on every surprise item")
     if baseline is None:
         add("F4", "REJECT", "comparison_baseline required on every surprise fact")
     if slot is None:
         add("F1", "REJECT", "surprise= scope slot required on every surprise fact")
-    elif basis in ("actual", "guidance") and baseline is not None:
+    elif basis in _SURPRISE_BASES and baseline is not None:
         try:
             expected = compose_surprise_scope(basis, baseline)
             if slot != expected:
@@ -448,11 +484,13 @@ def _od21(fact, add, home_facts):
         except ValueError as e:
             add("F5", "REJECT", str(e))
 
-    # tense: an actual surprise before its period ends is rejected
-    end, event_time = fact.get("gp_end_date"), fact.get("event_time")
-    if (slot or "").startswith("actual_vs") and end and event_time and \
-            end > event_time[:10]:
-        add("F7", "REJECT", f"actual surprise before period end ({end} > event day)")
+    # tense: an actual surprise before its period ends is rejected (OD-21 F7,
+    # decided by THE one predicate from the structured basis and the stored
+    # source timestamp — never from the composed spelling)
+    if _actual_surprise_before_period_end(basis, fact.get("gp_end_date"),
+                                         fact.get("date")):
+        add("F7", "REJECT", f"actual surprise before period end "
+                            f"({fact.get('gp_end_date')} > source day)")
 
     # derivable delta must not be stored
     if fact.get("change_value") is not None and \
@@ -470,7 +508,7 @@ def _od21(fact, add, home_facts):
     home_lane_name = _expected_home_name(fact)
     candidates = list(home_facts)
     if not candidates:
-        if (fact.get("driver_name") or "").endswith("_surprise"):
+        if split_terminal_suffix(fact.get("driver_name") or "")[1] == SURPRISE_SUFFIX:
             # a NAMED surprise (numberless included) is grounded — its home should exist
             add("F6", "PARK", "named surprise with no same-event home fact — park and "
                               "re-extract the whole event, never an orphan-only replay")
@@ -493,8 +531,12 @@ def _expected_home_name(fact):
     real BASE_METRIC/SAME_AS edges (a variant-named home would over-park here — the
     safe direction, but a recall cost the kernel removes)."""
     name = fact.get("driver_name") or ""
-    base = name[:-len("_surprise")] if name.endswith("_surprise") else name
-    return base + "_guidance" if fact.get("surprise_basis_hint") == "guidance" else base
+    base, suffix = split_terminal_suffix(name)
+    if suffix != SURPRISE_SUFFIX:
+        base = name        # only a terminal _surprise names a surprise Driver;
+                           # anything else keeps its spelling and FAILS CLOSED
+    return (base + GUIDANCE_SUFFIX
+            if fact.get("surprise_basis_hint") == GUIDANCE_BASIS else base)
 
 
 def _home_mismatch(s, h, expected_name):
