@@ -898,15 +898,24 @@ def _qname(value, el):
     permits — `measure` is simply `xsd:QName`, so the rule is resolvability, not
     the presence of a colon.
 
-    THE IN-SCOPE MAP COMES FROM THE PARSER. `el.nsmap` is lxml's own view of the
-    declarations in force AT THIS ELEMENT, innermost winning, with the default
-    under the key `None` — which is exactly what XML scoping means and what the
-    hand-written ancestor walk this replaces was re-deriving by hand.
+    THE IN-SCOPE MAP COMES FROM THE PARSER (EU-121, #827 DERIVE-CITATION):
+    `nsmap` is the PINNED dependency's documented attribute — lxml 6.0.2
+    (installed pin; drift row 5.3.1->6.0.2 recorded), _Element.nsmap,
+    https://lxml.de/api/lxml.etree._Element-class.html#nsmap — lxml's own view
+    of the declarations in force AT THIS ELEMENT, innermost winning, with the
+    default under the key `None` — which is exactly what XML scoping means and
+    what the hand-written ancestor walk this replaces was re-deriving by hand.
 
-    ONE prefix is not in that map and never can be: `xml`. Namespaces in XML 1.0
-    §3 binds it to the URI below BY DEFINITION and says it need not — and by
-    §4's reservation, effectively must not — be declared, so lxml reports an
-    empty `nsmap` for a document using it. Calling such a QName undeclared would
+    THE GRAMMAR (EU-122, #827 DERIVE-CITATION, exact form): W3C Namespaces in
+    XML 1.0 (Third Edition), W3C Recommendation 8 December 2009,
+    https://www.w3.org/TR/2009/REC-xml-names-20091208/ — §4 "Qualified Names"
+    (QName ::= PrefixedName | UnprefixedName; PrefixedName wants a NON-EMPTY
+    Prefix ':' LocalPart, so ':x' names nothing; an unprefixed name is lawful).
+
+    ONE prefix is not in that map and never can be: `xml`. The SAME REC's §3
+    ("Declaring Namespaces") binds it to the URI below BY DEFINITION and says
+    it need not — and by its reservation, effectively must not — be declared,
+    so lxml reports an empty `nsmap` for a document using it. Calling such a QName undeclared would
     be OUR error, not the filing's. This is the standard's own fixed binding, the
     only one, and no other prefix gets a fallback of any kind.
     """
