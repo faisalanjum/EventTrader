@@ -2892,8 +2892,11 @@ def bind_graph_fact(doc_or_html, *, inline_element_id, concept, context_id,
     reader live in this one module, so the owner is in-file, not a packet
     clause; the RESULT keys it writes are the four-key contract stated
     below in this docstring (Core consumes them in xbrl_attach); the
-    abstention-reason strings are this binder's own published vocabulary.
-    Nothing here restates a Fiscal packet spelling.
+    abstention-reason strings are this binder's own published vocabulary
+    (EU-159 closes its four tokens — malformed_element_id/period_type/
+    period/is_divide — under this same ownership; the rules behind each
+    are cited on their board rows). Nothing here restates a Fiscal packet
+    spelling.
 
     Returns (bound, 'ok') or (None, reason). `bound` carries exactly FOUR
     keys — `evidence` (the element-local record), `unit_measures_expanded`

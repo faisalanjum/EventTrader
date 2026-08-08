@@ -1474,6 +1474,13 @@ MUTATIONS = [
      "driver/relocation/test_row_label_span.py::"
      "test_E2_force_hidden_is_UNSUPPORTED_never_a_fallback"),
 
+    (186, "EU-159: the malformed-is_divide token spelling drifts",
+     "driver/relocation/inline_html.py",
+     "'malformed_is_divide'",
+     "'malformed_is_divideX'",
+     "driver/relocation/test_bind_graph_fact.py::"
+     "test_RED_a_malformed_is_divide_flag_is_malformed_not_a_crash"),
+
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",
