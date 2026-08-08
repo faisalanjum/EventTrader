@@ -199,8 +199,13 @@ def test_value_text_lint():
                                           value_text="flat")))          # lane
     g = mk("guidance", "point", value_text="around $5B")
     assert "VALUE_TEXT" in codes(check(g))                              # not numberless
+    # T2 (#827, owner "born complete"): the numeric-prose heuristic is DELETED —
+    # code no longer judges prose numericness (it refused "through 2026-09-30"
+    # and passed "1e3"); the MODEL owns that judgment and hidden grading
+    # attacks it. These two lines' purpose (numeric-prose policing) TRANSFERS
+    # to the model lane; the structural laws above/below stay code-proved.
     g2 = mk("guidance", "numberless", value_text="roughly 15% higher")
-    assert "VALUE_TEXT" in codes(check(g2))                             # numeric value inside
+    assert "VALUE_TEXT" not in codes(check(g2))     # model-lane judgment now
     g3 = mk("guidance", "numberless", value_text="similar to 2024 levels")
     assert "VALUE_TEXT" not in codes(check(g3))                         # year anchor allowed
     g4 = mk("guidance", "numberless", value_text="x" * 201)
@@ -818,3 +823,24 @@ def test_the_outcome_code_module_is_the_one_owner_and_orders_compact_dates():
     assert len(set(VALIDATOR_CODES)) == 30 and len(set(ATTACH_CODES)) == 6
     assert set(VALIDATOR_CODES) | set(ATTACH_CODES) == set(OUTCOME_CODES)
     assert COMPACT_DATE_IN_ID_ORDER == ("PERIOD_SYM", "ISO")
+
+
+# ---- T2 (#827 F-VALID): value_text born complete; the numeric-prose ----
+# heuristic is DELETED with no replacement (owner sheet #2: "REQUIRED AT
+# CREATION — facts born complete"). The model owns the meaning judgment;
+# hidden grading attacks numeric prose; code proves only the structural laws.
+
+def test_T2_timeframe_prose_is_lawful_value_text():
+    # the reviewed false POSITIVE: refused today by _VALUE_TEXT_NUMERIC
+    ok = mk("guidance", "numberless",
+            value_text="growth expected through 2026-09-30")
+    assert "VALUE_TEXT" not in codes(check(ok))
+
+
+def test_T2_mutual_exclusion_survives_the_delete():
+    # the retained structural law: numbers AND value_text together still refuse
+    bad = mk("guidance", "point", value_text="also words")
+    assert "VALUE_TEXT" in codes(check(bad))
+    # and value_text stays guidance-only
+    assert "VALUE_TEXT" in codes(check(mk("metric", "numberless",
+                                          value_text="words")))

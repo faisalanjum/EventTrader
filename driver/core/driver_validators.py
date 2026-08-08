@@ -83,10 +83,12 @@ _ALLOWED_FIELDS = frozenset({
 })
 _NUMERIC_FIELDS = ("level_low", "level_high", "change_value",
                    "comparison_low", "comparison_high")
-# value_text: numberless only — reject attached numeric values; bare 19xx/20xx year
-# anchors are legal ("similar to 2024 levels")
-_VALUE_TEXT_NUMERIC = re.compile(
-    r"[$€£¥]\s*\d|\d+(?:\.\d+)?\s*%|\d+\.\d+|\b(?!(?:19|20)\d\d\b)\d+\b")
+# T2 (#827, owner sheet #2 "born complete"): the numeric-prose heuristic
+# _VALUE_TEXT_NUMERIC is DELETED with NO replacement — it was wrong in both
+# directions at the reviewed bytes ("through 2026-09-30" refused; "1e3" and
+# "five million" accepted). The MODEL owns the numeric-prose meaning judgment
+# and hidden grading attacks it; code proves only the structural laws
+# (guidance-only · numberless-only mutual exclusion · length).
 
 
 def _num_error(val):
@@ -438,9 +440,6 @@ def _lane_matrix(fact, lane, v, add):
             add("VALUE_TEXT", "REJECT", "value_text is numberless-only")
         elif len(vt) > 200:
             add("VALUE_TEXT", "REJECT", "value_text over 200 chars")
-        elif _VALUE_TEXT_NUMERIC.search(vt):
-            add("VALUE_TEXT", "REJECT",
-                f"value_text carries a numeric value: {vt!r} (year anchors are legal)")
 
     cond = fact.get("conditions")
     if cond is not None:
