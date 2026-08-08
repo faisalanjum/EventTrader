@@ -17,12 +17,12 @@ The owner's two precision rules:
 import pytest
 
 from driver.core import prepared_fact_v2 as p2
-from driver.core.xbrl_attach import attach_event_xbrl
+from driver.core.xbrl_attach import _ROW_FIELDS, _row_signature, attach_event_xbrl
 from driver.core import xbrl_attach as xa
 from driver.core.prepared_fact_v2 import (ProductionValidationError, SchemaError,
                                           SourceUnavailable)
 
-_DOC = "<html><body></body></html>"
+_DOC = "<html xmlns:xbrli='http://www.xbrl.org/2003/instance' xmlns:xbrldi='http://xbrl.org/2006/xbrldi' xmlns:ix='http://www.xbrl.org/2013/inlineXBRL' xmlns:iso4217='http://www.xbrl.org/2003/iso4217' xmlns:utr='http://example.org/utr' xmlns:us-gaap='http://example.org/us-gaap' xmlns:dei='http://example.org/dei' xmlns:srt='http://example.org/srt' xmlns:a='http://example.org/a' xmlns:x='http://example.org/x' xmlns:aapl='http://example.org/aapl' xmlns:slg='http://example.org/slg' xmlns:accd='http://example.org/accd' xmlns:ed='http://example.org/ed' xmlns:dvn='http://example.org/dvn' xmlns:fcx='http://example.org/fcx' xmlns:nog='http://example.org/nog' xmlns:inst='http://example.org/inst' xmlns:dimns='http://example.org/dimns' xmlns:nope='http://example.org/nope' xmlns:geo='http://example.org/geo' xmlns:eqt='http://example.org/eqt' xmlns:geography='http://example.org/geography' xmlns:seg='http://example.org/seg' xmlns:country='http://example.org/country'><body></body></html>"
 # the REAL hash of the document the provider serves, so the representation
 # check passes and execution actually reaches the graph calls under test
 from driver.relocation.inline_html import prepare          # noqa: E402
@@ -312,16 +312,63 @@ def test_the_retryable_set_is_named_not_a_bare_except():
 # before any I/O.
 # ---------------------------------------------------------------------------
 
-_DOOR_DOC = ('<html><body><xbrli:context id="c1"><xbrli:entity>'
-             '<xbrli:identifier>0000320193</xbrli:identifier></xbrli:entity>'
+#: THE FIXTURE'S NAMESPACE DECLARATION — defined ONCE, before the documents,
+#: and interpolated into both the markup and the row identity so the document
+#: and the row it is bound against cannot drift apart. `iso4217` names the
+#: OFFICIAL XBRL currency namespace because these fixtures claim a LAWFUL USD
+#: unit; the taxonomy URIs stay deliberately synthetic (example.org) because
+#: no test here claims their official identity.
+_FIXTURE_NS = {
+    'xbrli': 'http://www.xbrl.org/2003/instance',
+    'xbrldi': 'http://xbrl.org/2006/xbrldi',
+    'ix': 'http://www.xbrl.org/2013/inlineXBRL',
+    'iso4217': 'http://www.xbrl.org/2003/iso4217',
+    # THE TRANSFORMATION REGISTRY, declared because a real filing declares it.
+    # `format` is xs:QName, so `ixt:num-dot-decimal` names nothing unless its
+    # prefix is bound — and every fixture here wrote that value while declaring
+    # no such prefix, which made them invalid controls: they asserted a
+    # transform by a name that resolved to nothing. Measured over the frozen
+    # cache, real filings bind `ixt` to an OFFICIAL registry namespace (1,418
+    # to 2020-02-12, 230 to 2022-02-16, 121 to 2015-02-26); the most common is
+    # used here. `ixt-sec` is the SEC's own registry, present on 11,728 tags.
+    'ixt': 'http://www.xbrl.org/inlineXBRL/transformation/2020-02-12',
+    'ixt-sec': 'http://www.sec.gov/inlineXBRL/transformation/2015-08-31',
+    'utr': 'http://example.org/utr',
+    'us-gaap': 'http://example.org/us-gaap',
+    'dei': 'http://example.org/dei',
+    'srt': 'http://example.org/srt',
+    'a': 'http://example.org/a',
+    'x': 'http://example.org/x',
+    'aapl': 'http://example.org/aapl',
+    'slg': 'http://example.org/slg',
+    'accd': 'http://example.org/accd',
+    'ed': 'http://example.org/ed',
+    'dvn': 'http://example.org/dvn',
+    'fcx': 'http://example.org/fcx',
+    'nog': 'http://example.org/nog',
+    'inst': 'http://example.org/inst',
+    'dimns': 'http://example.org/dimns',
+    'nope': 'http://example.org/nope',
+    'geo': 'http://example.org/geo',
+    'eqt': 'http://example.org/eqt',
+    'geography': 'http://example.org/geography',
+    'seg': 'http://example.org/seg',
+    'country': 'http://example.org/country',
+}
+_XMLNS = " ".join(f'xmlns:{p}="{u}"' for p, u in _FIXTURE_NS.items())
+_NS_GAAP = _FIXTURE_NS["us-gaap"]
+
+
+_DOOR_DOC = (f'<html {_XMLNS}><body><ix:header><ix:resources><xbrli:context id="c1"><xbrli:entity>'
+             '<xbrli:identifier scheme="http://www.sec.gov/CIK">0000320193</xbrli:identifier></xbrli:entity>'
              '<xbrli:period><xbrli:startDate>2024-01-01</xbrli:startDate>'
              '<xbrli:endDate>2024-06-30</xbrli:endDate></xbrli:period>'
-             '</xbrli:context><xbrli:unit id="u1">'
-             '<xbrli:measure>iso4217:USD</xbrli:measure></xbrli:unit>'
+             '</xbrli:context></ix:resources></ix:header><ix:header><ix:resources><xbrli:unit id="u1">'
+             '<xbrli:measure>iso4217:USD</xbrli:measure></xbrli:unit></ix:resources></ix:header>'
              '<p><ix:nonFraction id="fA" name="us-gaap:A" contextRef="c1" '
-             'unitRef="u1" scale="6" format="">726</ix:nonFraction>'
+             'unitRef="u1" scale="6" decimals="-6">726</ix:nonFraction>'
              '<ix:nonFraction id="fB" name="us-gaap:B" contextRef="c1" '
-             'unitRef="u1" scale="6" format="">726</ix:nonFraction></p>'
+             'unitRef="u1" scale="6" decimals="-6">726</ix:nonFraction></p>'
              '</body></html>')
 _ACC = "0000006201-26-000031"
 
@@ -347,17 +394,27 @@ def parts_for(items):
         try:
             fact = i["fact"]
             seen.setdefault(fact["part_ref"], fact["item"]["quote"])
-        except Exception:
+        # EXACTLY THE ERRORS SUBSCRIPTING A MALFORMED CONTAINER RAISES. The
+        # attack fixtures are deliberately malformed and must reach the door to
+        # be refused THERE — but `except Exception` would also swallow a defect
+        # in this helper itself, and a silent helper bug turns every test that
+        # uses it into a test of an empty event view.
+        except (KeyError, TypeError, IndexError):
             continue
     return [{"part": p, "content": c} for p, c in seen.items()
             if type(p) is str and p.strip() and type(c) is str]
 
 
-def _door_row(fact_id):
+def _door_row(fact_id, concept="us-gaap:X"):
+    # THE CONCEPT'S IDENTITY IS PART OF THE ROW. The binder compares
+    # (namespace URI, local name) rather than a prefixed string, and takes both
+    # halves from the one Concept record the row was read with, so a fixture row
+    # that omitted them would not be the shape the real adapter returns.
     return {"period_type": "duration", "start_date": "2024-01-01",
             "end_date": "2024-07-01", "dims": [], "fact_id": fact_id,
             "context_id": "c1", "unit_ref": "u1", "unit_name": "iso4217:USD",
-            "is_divide": "0", "value": "726000000", "decimals": "0"}
+            "is_divide": "0", "value": "726,000,000", "decimals": "0",
+            "concept_namespace": _NS_GAAP, "graph_concept_qname": concept}
 
 
 def _door_item(concept, fact_id, doc=None, **override):
@@ -396,11 +453,13 @@ class _Counting:
 
     def get_source_company_cik(self, source_id):
         self.cik += 1
-        return "320193"
+        return "0000320193"
 
     def get_xbrl_fact_dimensions(self, source_id, concept):
         self.row_reads.append(concept)
-        return GraphFactRows(rows=[_door_row("fA" if concept.endswith("A") else "fB")], exclusions=())
+        return GraphFactRows(
+            rows=[_door_row("fA" if concept.endswith("A") else "fB",
+                            concept=concept)], exclusions=())
 
 
 class _CountingProvider:
@@ -744,20 +803,56 @@ def test_the_key_safety_class_is_fixed_in_V1_TOO_the_live_path():
 # ---------------------------------------------------------------------------
 
 _AXIS, _MEMBER = "us-gaap:StatementBusinessSegmentsAxis", "x:FooMember"
-_DIM_DOC = ('<html><body><xbrli:context id="c1"><xbrli:entity>'
-            '<xbrli:identifier>0000320193</xbrli:identifier></xbrli:entity>'
+_DIM_DOC = (f'<html {_XMLNS}><body><ix:header><ix:resources><xbrli:context id="c1"><xbrli:entity>'
+            '<xbrli:identifier scheme="http://www.sec.gov/CIK">0000320193</xbrli:identifier></xbrli:entity>'
             '<xbrli:period><xbrli:startDate>2024-01-01</xbrli:startDate>'
             '<xbrli:endDate>2024-06-30</xbrli:endDate></xbrli:period>'
-            f'<xbrldi:explicitMember dimension="{_AXIS}">{_MEMBER}'
-            '</xbrldi:explicitMember></xbrli:context><xbrli:unit id="u1">'
-            '<xbrli:measure>iso4217:USD</xbrli:measure></xbrli:unit>'
+            # THE MEMBER LIVES IN A SCENARIO (XBRL 2.1 §4.7.4). It used to sit
+            # bare in the context — invalid markup standing in as the LAWFUL
+            # positive control, so the control could not have caught a rule
+            # that wrongly refused real filings.
+            f'<xbrli:scenario><xbrldi:explicitMember dimension="{_AXIS}">'
+            f'{_MEMBER}</xbrldi:explicitMember></xbrli:scenario>'
+            '</xbrli:context></ix:resources></ix:header><ix:header><ix:resources><xbrli:unit id="u1">'
+            '<xbrli:measure>iso4217:USD</xbrli:measure></xbrli:unit></ix:resources></ix:header>'
             '<p><ix:nonFraction id="f1" name="us-gaap:X" contextRef="c1" '
-            'unitRef="u1" scale="6" format="">726</ix:nonFraction></p></body></html>')
+            'unitRef="u1" scale="6" decimals="-6">726</ix:nonFraction></p>'
+            '</body></html>')
+
+
+#: The namespaces this fixture's axis and member belong to. A graph row carries
+#: these beside the qname because a prefix is an alias — `us-gaap:` in one
+#: filing and `us-gaap:` in another need not name the same taxonomy — so the
+#: binder compares (namespace URI, local name) and a row without both halves
+#: parks. The real adapter decodes them from each record's composite id.
+#:
+#: DERIVED FROM THE DOCUMENT'S OWN MAP, never written out. I first hard-coded
+#: both to the us-gaap URI because it read tidily — but `_MEMBER` is
+#: `x:FooMember`, which `_DIM_DOC` binds to a DIFFERENT namespace, so the row
+#: described a member the document does not contain and the fact parked. A
+#: fixture that agrees with itself instead of with its document is not a
+#: control. Taking both from `_FIXTURE_NS` makes that class of drift impossible.
+_AXIS_NS = _FIXTURE_NS[_AXIS.partition(":")[0]]
+_MEMBER_NS = _FIXTURE_NS[_MEMBER.partition(":")[0]]
+
+
+def _ns_dim(axis, member, label):
+    """A COMPLETE graph dimension row — all five `_DIM_KEYS`, with each
+    namespace RESOLVED from the fixture's own prefix map rather than typed out.
+
+    Every namespace a test dimension needs comes from here, so no test can
+    quietly pair a qname with a URI the document does not bind to that prefix.
+    A `KeyError` on an undeclared prefix is the point: it is the same failure a
+    filing would produce, surfaced while writing the fixture instead of as a
+    mysterious park later.
+    """
+    return {"axis": axis, "member": member, "label": label,
+            "axis_namespace": _FIXTURE_NS[axis.partition(":")[0]],
+            "member_namespace": _FIXTURE_NS[member.partition(":")[0]]}
 
 
 def _dim_row(label, **over):
-    r = dict(_door_row("f1"),
-             dims=[{"axis": _AXIS, "member": _MEMBER, "label": label}])
+    r = dict(_door_row("f1"), dims=[_ns_dim(_AXIS, _MEMBER, label)])
     r.update(over)
     return r
 
@@ -778,7 +873,7 @@ def _attach_dim_rows(rows):
     class G:
         def get_xbrl_representation_count(self, s): return 1
         def get_xbrl_fact_dimensions(self, s, c): return GraphFactRows(rows=rows, exclusions=())
-        def get_source_company_cik(self, s): return "320193"
+        def get_source_company_cik(self, s): return "0000320193"
 
     class P:
         def get_filing_document(self, s): return _DIM_DOC
@@ -805,9 +900,35 @@ def test_rows_differing_only_in_a_dimension_LABEL_park_in_EVERY_order():
                  "CONFLICTING facts for this concept")
 
 
+def test_rows_differing_only_in_a_dimension_NAMESPACE_park_in_EVERY_order():
+    """THE SEQ-62 DEFECT, pinned at the public door where it was reproduced.
+
+    Two rows naming the same axis and member SPELLING under DIFFERENT
+    taxonomies are different dimensions, so a filing offering both disagrees
+    with itself and the fact must park. The conflict identity had listed its
+    dimension fields by hand and so never saw a namespace: the two rows looked
+    identical, collapsed to one, and `[correct, wrong]` ATTACHED while
+    `[wrong, correct]` did not — the answer decided by the order the graph
+    happened to return rows in.
+
+    Both orders are asserted because a one-order test passes on the very bug it
+    is named for; the unit-level signature check upstream cannot see this,
+    since only the real door does the collapsing.
+    """
+    from driver.core.prepared_fact_v2 import ProductionValidationError
+    wrong = _dim_row("Foo")
+    wrong["dims"] = [dict(wrong["dims"][0],
+                          axis_namespace=_FIXTURE_NS["dimns"])]
+    for order in itertools.permutations([_dim_row("Foo"), wrong]):
+        _refused(_attach_dim_rows(list(order)), ProductionValidationError,
+                 "CONFLICTING facts for this concept")
+
+
 def test_IDENTICAL_complete_rows_still_collapse_in_every_order():
     """POSITIVE CONTROL — over-tightening would park a filing that simply
-    returns the same row twice."""
+    returns the same row twice. It is the twin of the namespace park above:
+    a "fix" that made every row distinct would satisfy that test by destroying
+    collapsing altogether, and only this one would notice."""
     rows = [_dim_row("Foo"), _dim_row("Foo")]
     for order in itertools.permutations(rows):
         assert len(_attached(_attach_dim_rows(list(order)))) == 1
@@ -827,17 +948,39 @@ def test_the_row_signature_covers_EVERY_field_binding_reads():
     base = xa._checked_row(_dim_row("Foo"))
     for field in xa._ROW_FIELDS:
         if field == "dims":
-            other = xa._checked_row(_dim_row("Bar"))
+            # EVERY DIMENSION FIELD, ONE AT A TIME, DERIVED FROM `_DIM_KEYS`.
+            # This branch used to vary the LABEL alone, so it certified "dims
+            # is covered" while four of the five fields went unchecked — which
+            # is precisely why it stayed green through the defect where the
+            # signature omitted both namespaces and two rows differing only in
+            # taxonomy collided. One changed field per pass is what makes each
+            # field individually load-bearing.
+            for key in xa._DIM_KEYS:
+                dim = dict(base["dims"][0])
+                # A LAWFUL DIFFERENT VALUE for any of the five: a QName keeps
+                # its shape (`-other` is an ordinary NCName character) and a
+                # namespace is an opaque string. No per-key table, so a sixth
+                # `_DIM_KEYS` field is covered the moment it is added.
+                dim[key] = dim[key] + "-other"
+                other = xa._checked_row(_dim_row("Foo", dims=[dim]))
+                assert xa._row_signature(base) != xa._row_signature(other), \
+                    f"the conflict identity ignores the dimension {key!r}"
+            continue
         elif field == "period_type":
             # NO SKIP. I had written `continue` here, so a test called "covers
             # EVERY field binding reads" silently covered nine of ten.
             other = xa._checked_row(_dim_row("Foo", period_type="instant",
                                               end_date="null"))
         else:
-            changed = {"fact_id": "f2", "value": "999000000", "unit_ref": "u2",
+            changed = {"fact_id": "f2", "value": "999,000,000", "unit_ref": "u2",
                        "unit_name": "shares", "is_divide": "1",
                        "context_id": "c2", "start_date": "2024-01-02",
-                       "end_date": "2024-07-02"}[field]
+                       "end_date": "2024-07-02",
+                       # A DIFFERENT TAXONOMY, or a different concept under the
+                       # same one, is a different FACT — so the conflict
+                       # identity must separate them too.
+                       "concept_namespace": "http://example.org/other-taxonomy",
+                       "graph_concept_qname": "us-gaap:Y"}[field]
             other = xa._checked_row(_dim_row("Foo", **{field: changed}))
         assert xa._row_signature(base) != xa._row_signature(other), \
             f"the conflict identity ignores {field!r}"
@@ -847,9 +990,8 @@ def test_the_row_signature_is_DIMENSION_ORDER_free():
     """Two readings of one fact that list the same dimensions in a different
     order are the SAME fact, not a conflict."""
     from driver.core import xbrl_attach as xa
-    d1 = {"axis": _AXIS, "member": _MEMBER, "label": "Foo"}
-    d2 = {"axis": "srt:StatementGeographicalAxis", "member": "x:EU",
-          "label": "Europe"}
+    d1 = _ns_dim(_AXIS, _MEMBER, "Foo")
+    d2 = _ns_dim("srt:StatementGeographicalAxis", "x:EU", "Europe")
     a = xa._checked_row(_dim_row("Foo", dims=[d1, d2]))
     b = xa._checked_row(_dim_row("Foo", dims=[d2, d1]))
     assert xa._row_signature(a) == xa._row_signature(b)
@@ -891,11 +1033,16 @@ def test_a_DURATIONS_end_date_IS_part_of_its_identity():
     assert _sig(end_date="2024-07-01") != _sig(end_date="2024-08-01")
 
 
-def test_comma_formatting_of_the_SAME_number_is_not_a_conflict():
-    """NOT ON HIS LIST — found by sweeping the class. `parse_raw` strips commas
-    (807,132 of 1,000,000 live values carry them), so these are one number."""
-    assert _sig(value="726000000") == _sig(value="726,000,000")
-    assert _sig(value="726000000") != _sig(value="726000001")   # still a conflict
+def test_signed_zero_spellings_are_the_SAME_number_not_a_conflict():
+    """IDENTITY CHANGE (SEQ 265 C / 268): the old assert equated an
+    UNGROUPED spelling with the grouped one — impossible under the frozen
+    lexical contract (the writer always groups; census zero) — and its
+    first replacement was a tautology. The lawful two-spellings pair the
+    writer really emits is signed zero: "0" and "-0" are one number, so
+    their signatures must agree. Different numbers still conflict and
+    unparseable strings stay distinct."""
+    assert _sig(value="0") == _sig(value="-0")
+    assert _sig(value="726,000,000") != _sig(value="726,000,001")
     # two DIFFERENT unparseable strings must stay distinct, not collapse to None
     assert _sig(value="abc") != _sig(value="xyz")
 
@@ -946,19 +1093,36 @@ def test_a_graph_ROW_repeating_a_dimension_axis_is_refused():
     multi-axis contexts, ZERO repeat an axis, so this costs no recall."""
     from driver.core import xbrl_attach as xa
     from driver.core.prepared_fact_v2 import ProductionValidationError
-    dims = [{"axis": _AXIS, "member": "x:A", "label": "A"},
-            {"axis": _AXIS, "member": "x:B", "label": "B"}]
+    # ASKED AT THE RULE'S CURRENT OWNER. `_checked_row` used to compare raw
+    # prefix SPELLINGS; the law moved to `_row_expanded_dims`, which compares
+    # EXPANDED axes and so also catches two different prefixes bound to one
+    # namespace. This test kept pointing at the old boundary and passed only
+    # because the weaker rule happened to live there — so it is re-aimed, NOT
+    # satisfied by restoring the spelling check.
+    dims = [{"axis": _AXIS, "member": "x:A", "label": "A",
+             "axis_namespace": _AXIS_NS, "member_namespace": _MEMBER_NS},
+            {"axis": _AXIS, "member": "x:B", "label": "B",
+             "axis_namespace": _AXIS_NS, "member_namespace": _MEMBER_NS}]
+    # THE ROWS ARE OTHERWISE COMPLETE, so the refusal below comes from the
+    # repeated axis this test is named for and not from a missing field —
+    # `_checked_row` accepting them first is what proves that.
+    checked = xa._checked_row(_dim_row("Foo", dims=dims))
     with pytest.raises(ProductionValidationError):
-        xa._checked_row(_dim_row("Foo", dims=dims))
+        xa._row_expanded_dims(checked)
 
 
 def test_TWO_DIFFERENT_axes_on_a_row_are_still_lawful():
     """POSITIVE CONTROL — multi-axis rows are ordinary (2.2M of them live)."""
     from driver.core import xbrl_attach as xa
-    dims = [{"axis": _AXIS, "member": "x:A", "label": "A"},
-            {"axis": "srt:StatementGeographicalAxis", "member": "x:EU",
-             "label": "Europe"}]
-    assert len(xa._checked_row(_dim_row("Foo", dims=dims))["dims"]) == 2
+    dims = [_ns_dim(_AXIS, "x:A", "A"),
+            _ns_dim("srt:StatementGeographicalAxis", "x:EU", "Europe")]
+    checked = xa._checked_row(_dim_row("Foo", dims=dims))
+    assert len(checked["dims"]) == 2
+    # THROUGH THE SAME BOUNDARY as the refusal twin above, so the two are
+    # answered by one rule: distinct axes survive exactly where a repeated one
+    # is refused. A must-refuse proven at a door its must-allow never reaches
+    # would leave that door free to refuse everything.
+    assert len(xa._row_expanded_dims(checked)) == 2
 
 
 @pytest.mark.parametrize("bad", ["20240101", "2024-1-1", "not-a-date",
@@ -1308,3 +1472,114 @@ def test_823_DERIVED_inventory_every_public_v2_dataclass_is_deeply_frozen():
             if isinstance(v, MappingProxyType):
                 with pytest.raises(TypeError):
                     v["x"] = 1
+
+
+def test_TWO_EVENTS_are_INDEPENDENT_each_doing_its_own_work_once():
+    """#827 STEP 2 — the two-event I/O pattern, the one shape no door test
+    exercised: every other test calls the door ONCE.
+
+    Empty, single, repeated-concept and multi-concept events are already
+    covered (`..._NO_xbrl_items_is_lawful`, `..._FOUR_items_across_TWO_
+    concepts_read_everything_ONCE_per_event`). What none of them can show is
+    that nothing LEAKS ACROSS the event boundary: the work-once caching that
+    makes one event cheap must not make the SECOND event reuse the first
+    event's document, CIK or rows, and each result must carry its own
+    source_id.
+
+    Reuses the existing fixture owners (`_door_item`, `_Counting`,
+    `_CountingProvider`, `parts_for`) — no second builder.
+    """
+    from driver.core.xbrl_attach import attach_event_xbrl
+    store, provider = _Counting(), _CountingProvider()
+    first = [_door_item("us-gaap:A", "fA")]
+    second = [_door_item("us-gaap:B", "fB"), _door_item("us-gaap:B", "fB")]
+    other_acc = "0000006201-26-000032"
+    assert other_acc != _ACC, "the two events must be different sources"
+
+    r1 = attach_event_xbrl(first, source_id=_ACC, store=store,
+                           filing_provider=provider, text_parts=parts_for(first))
+    after_first = (provider.fetches, store.representation, store.cik,
+                   list(store.row_reads))
+    r2 = attach_event_xbrl(second, source_id=other_acc, store=store,
+                           filing_provider=provider,
+                           text_parts=parts_for(second))
+
+    # each event did its OWN work exactly once — the second is not served
+    # from the first event's cache, and does not pay twice for its own repeat
+    assert after_first == (1, 1, 1, ["us-gaap:A"]), after_first
+    assert (provider.fetches, store.representation, store.cik) == (2, 2, 2), \
+        (provider.fetches, store.representation, store.cik)
+    assert store.row_reads == ["us-gaap:A", "us-gaap:B"], store.row_reads
+
+    # each result is stamped with ITS OWN source_id and carries its own facts
+    assert (r1.source_id, r2.source_id) == (_ACC, other_acc)
+    assert [i for i, _f in r1.facts] == [0]
+    assert [i for i, _f in r2.facts] == [0, 1]
+    assert r1.preflight_outcomes == () and r2.preflight_outcomes == ()
+
+
+# ---- ROUND 6 ITEM 7: the fact id is an identity, not a hint ---------------
+
+def test_827R6_a_PADDED_fact_id_is_a_DIFFERENT_id_and_order_cannot_decide():
+    """`bind_graph_fact` looks the id up EXACTLY as stored — a padded id is a
+    different id, not a typo to repair. The row-identity key nevertheless
+    `.strip()`-ed it, so `f1` and ` f1` folded into ONE fact while binding to
+    DIFFERENT elements, and WHICH of them survived depended on the order the
+    graph happened to return the rows in.
+
+    Blankness is the only thing stripping may decide: null, empty and
+    whitespace all mean "this element carries no id" and stay one claim."""
+    import itertools
+    seen = set()
+    for rows in itertools.permutations([_dim_row("Foo"),
+                                        _dim_row("Foo", fact_id=" f1")]):
+        res = _attach_dim_rows(list(rows))
+        seen.add((len(res.facts), len(res.preflight_outcomes)))
+    assert len(seen) == 1, f"the outcome depended on row order: {seen}"
+
+    blank = {_row_signature(_dim_row("Foo", fact_id=b))[
+                 _ROW_FIELDS.index("fact_id")]
+             for b in (None, "", "   ")}
+    assert blank == {""}, f"blank ids must stay ONE claim, got {blank}"
+    padded = {_row_signature(_dim_row("Foo", fact_id=i))[
+                  _ROW_FIELDS.index("fact_id")]
+              for i in ("f1", " f1", "f1 ")}
+    assert len(padded) == 3, f"padded ids must stay DISTINCT, got {padded}"
+
+
+def test_827R7_UNICODE_whitespace_is_NOT_a_blank_fact_id():
+    """`raw_id.strip()` decided blankness with PYTHON's whitespace set, which
+    includes U+000B, U+000C, U+00A0 and U+3000 — none of them XML 1.0 S. So a
+    stored id made only of those folded into the SAME identity as "this element
+    carries no id": two different claims about the filing, collapsed into one,
+    and the binder then bound it through the identity fallback — a law that
+    applies ONLY when the element genuinely has no id.
+
+    The lawful fold is re-pinned beside it: null, empty and XML-space ARE one
+    claim, and that must not change."""
+    idx = _ROW_FIELDS.index("fact_id")
+
+    def sig(fid):
+        return _row_signature(_dim_row("Foo", fact_id=fid))[idx]
+
+    for label, ws in [("NBSP", " "), ("VT", "\x0b"), ("FF", "\x0c"),
+                      ("ideographic", "　")]:
+        assert sig(ws) != sig(""), \
+            f"{label}-only id folded into the blank identity"
+        assert sig(ws) == ws, f"{label}-only id was not kept exactly"
+
+    assert {sig(b) for b in (None, "", " ", "\t\r\n")} == {""}, \
+        "XML-blank ids must stay ONE claim"
+
+
+# ---- #827 B1 packet 1 (SEQ 275): the attach door's source-id diagnostic ----
+
+def test_827B1_attach_source_id_diagnostic_states_local_truth_not_the_law():
+    """The event door validates source_id FIRST (before any I/O), via the ONE
+    owner driver_ids.valid_source_id; its message may not restate the owner's
+    grammar. Exact anchor = reintroduction detector. store/provider are never
+    touched: the raise precedes all reads."""
+    with pytest.raises(SchemaError,
+                       match=r"^attach_event_xbrl: source_id is invalid$"):
+        attach_event_xbrl([], source_id="x:y", store=None,
+                          filing_provider=None, text_parts=None)
