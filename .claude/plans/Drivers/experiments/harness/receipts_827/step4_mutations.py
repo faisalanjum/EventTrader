@@ -2363,8 +2363,8 @@ MUTATIONS = [
      "driver/relocation/inline_html.py",
      "    'noembed', 'noframes', 'param', 'rp', 'script', 'style', 'title'})",
      "    'noembed', 'noframes', 'param', 'rp', 'script', 'style', 'title'} - {'datalist'})",
-     "driver/relocation/test_row_label_span.py::"
-     "test_EU058_a_UA_hidden_element_never_leaks_its_text"),
+     "driver/relocation/test_two_view_bridge.py::"
+     "test_EU058_UA_default_hidden_elements_are_pruned_and_overridable"),
 
     (315, "EU-090: the non-XDT scope refusal token drifts",
      "driver/relocation/inline_html.py",

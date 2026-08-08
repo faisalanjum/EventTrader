@@ -1103,3 +1103,28 @@ def test_EU141_the_all_shorthand_resets_an_earlier_display_none():
                        + '<div style="display:none; all:initial">ALLTEXT'
                          '</div>'))
     assert 'ALLTEXT' in prep['text']
+
+
+def test_EU058_UA_default_hidden_elements_are_pruned_and_overridable():
+    """EU-058 (#827), corrected per SEQ 812. The rule this set carries is the
+    WHATWG HTML LS Rendering "Hidden elements" UA-DEFAULT `display:none`
+    (snapshot 2026-07-20) — standard-derived PRUNING, exactly like any other
+    UA default, with the lawful author override intact. It is NOT a new
+    document-level park path: `_advance` prunes such an element and returns
+    no unsupported reason, and the owner's supported-scope item only
+    authorises browser-hidden content as not-visible evidence plus a later
+    first-production count.
+
+    Three assertions, one law: a member's text is EXCLUDED from the
+    representation; ordinary text beside it is PRESERVED; and an author
+    inline `display` declaration OVERRIDES the UA default, so the same
+    element's text comes back."""
+    hidden = _ev(doc(row(['Total<datalist>GHOSTLIST</datalist>',
+                          fact()])))[0]
+    assert hidden is not None
+    assert hidden['row_text'] == 'Total 390', hidden['row_text']
+
+    shown = _ev(doc(row(['Total<datalist style="display:block">SHOWN</datalist>',
+                         fact()])))[0]
+    assert shown is not None
+    assert 'SHOWN' in shown['row_text'], shown['row_text']

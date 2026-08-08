@@ -991,13 +991,3 @@ def test_EU123_the_memo_capacity_is_derived_and_bounded():
     assert len(IH._PREP_CACHE) <= IH._PREP_CACHE_MAX == 1
     assert IH.prepare(_HEAD + '<p>Alpha</p></body></html>') is not a
 
-
-def test_EU058_a_UA_hidden_element_never_leaks_its_text():
-    """The UA-hidden element set transcribes the WHATWG Rendering hidden
-    list; it is load-bearing on the TEXT side, so a member's content stays
-    out of the representation (a datalist inside a cell contributes
-    nothing), while ordinary cell text is untouched."""
-    prep, ev = _ev('<table><tr><td>Total<datalist>GHOSTLIST</datalist></td>'
-                   f'<td>{_FACT}</td></tr></table>')
-    assert ev['row_text'] == 'Total 726'
-    assert 'GHOSTLIST' not in prep['text']
