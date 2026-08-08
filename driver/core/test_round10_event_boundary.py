@@ -109,7 +109,10 @@ def _item(**over):
 
 class Graph:
     """Core's graph. `xbrl_nodes` is what the guard actually consults."""
-    def __init__(self, xbrl_nodes=1, cik="320193"):
+    def __init__(self, xbrl_nodes=1, cik="0000320193"):
+        # F13 reconcile: the default was the ARCHIVE 6-digit spelling, which
+        # the owner precheck (driver_ids.graph_cik at the door) now refuses —
+        # the fixture carries the graph's real ten-digit form.
         self._n, self._cik = xbrl_nodes, cik
 
     def get_xbrl_representation_count(self, source_id):

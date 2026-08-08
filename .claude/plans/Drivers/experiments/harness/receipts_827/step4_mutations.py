@@ -1166,6 +1166,20 @@ MUTATIONS = [
      "        if False:\n            raise SlotConversionError(",
      "driver/core/test_prepared_fact_v2.py::"
      "test_F12_the_OWNER_refuses_scale_evidence_on_an_xbrl_backed_slot"),
+
+    (143, "F13: the company precheck falls back to the sloppy str test",
+     "driver/core/xbrl_attach.py",
+     "        if graph_cik(entity_cik) is None:",
+     '        if not str(entity_cik or \"\").strip():',
+     "driver/core/test_round8_xbrl_binding.py::"
+     "test_F13_a_non_canonical_graph_company_parks_at_the_PRECHECK[int]"),
+
+    (144, "F13: the all-excluded read collapses back into carries-NO-fact",
+     "driver/core/xbrl_attach.py",
+     "                if read.exclusions:",
+     "                if False:",
+     "driver/core/test_round8_xbrl_binding.py::"
+     "test_F13_an_all_excluded_read_states_the_TRUTHFUL_availability"),
 ]
 
 

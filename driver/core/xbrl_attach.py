@@ -18,7 +18,7 @@ concept into event-local state. Four facts used to cost four of each.
 from collections import namedtuple as _namedtuple
 from types import MappingProxyType
 
-from driver.core.driver_ids import valid_source_id
+from driver.core.driver_ids import graph_cik, valid_source_id
 from driver.core.graph_row_contract import (GRAPH_DIM_FIELDS,
                                             GRAPH_FACT_ROW_FIELDS)
 from driver.core.driver_period_resolver import PERIOD_TIME_TYPES
@@ -894,7 +894,12 @@ def attach_event_xbrl(items, *, source_id, store, filing_provider, text_parts,
 
     try:
         entity_cik = _fetch("the graph", store.get_source_company_cik, source_id)
-        if not str(entity_cik or "").strip():
+        # F13 (#827): the precheck asks THE owner (driver_ids.graph_cik) —
+        # `str(entity_cik or "").strip()` let an int and a dict through to
+        # the real gate far downstream, which refused them under the GENERIC
+        # malformed_entity_cik abstention (measured 2026-08-08). One rule,
+        # one owner, and the refusal carries this branch's own code.
+        if graph_cik(entity_cik) is None:
             raise ProductionValidationError(
                 f"Core's graph names no single filing company for {source_id} "
                 f"— park (never take the company from the document provider, "
@@ -918,6 +923,16 @@ def attach_event_xbrl(items, *, source_id, store, filing_provider, text_parts,
                           source_id, concept)
             adapter_exclusions.extend(read.exclusions)
             if not read.rows:
+                # F13 (#827): rows==[] has TWO truths, said apart. With
+                # exclusions the graph DOES carry rows — the adapter refused
+                # them fail-closed — and calling that "carries NO fact" was
+                # false and durable.
+                if read.exclusions:
+                    raise ProductionValidationError(
+                        f"attach_event_xbrl: source {source_id} carries rows "
+                        f"for concept {concept!r} but none were usable "
+                        f"({len(read.exclusions)} exclusion group(s) refused "
+                        f"fail-closed by the adapter) — park")
                 raise ProductionValidationError(
                     f"attach_event_xbrl: source {source_id} carries NO fact for "
                     f"concept {concept!r} yet — park; an unbacked concept is "

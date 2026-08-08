@@ -430,10 +430,13 @@ def test_a_missing_cik_parks():
 ])
 def test_a_malformed_graph_cik_attaches_NOTHING_at_the_event_door(cik, why):
     """827 Packet 17, at the REAL event door. The lawful ten-digit twin already
-    binds through `_Graph()`'s default; these are the values that must not."""
+    binds through `_Graph()`'s default; these are the values that must not.
+    F13 reconcile: the refusal moved EARLIER (the owner precheck at the source
+    read) and got SPECIFIC — the same park, no longer the generic
+    malformed_entity_cik abstention far downstream."""
     from driver.core.prepared_fact_v2 import ProductionValidationError
-    _refused(ProductionValidationError, "malformed_entity_cik",
-             graph=_Graph(cik=cik))
+    _refused(ProductionValidationError, "names no single filing company",
+             code="SOURCE_COMPANY_AMBIGUOUS", graph=_Graph(cik=cik))
 
 
 def test_the_store_is_never_asked_for_a_document():
@@ -1304,3 +1307,39 @@ def test_F11_a_wrong_claim_against_a_MAPPED_unit_still_rejects():
     assert o["decision"] == "rejected", dict(o)
     assert o["codes"] == ("XBRL_CONTRACT_INVALID",)
     assert "may back" in o["detail"]
+
+
+# --------------------------------------------------------------------------
+# F13 (#827): the company precheck is TRUTHFUL (the one graph_cik rule), and
+# the concept-availability outcome states what the graph actually holds.
+# --------------------------------------------------------------------------
+
+@pytest.mark.parametrize("bad_cik", [320193, {"cik": "0000320193"},
+                                     " 0000320193 "],
+                         ids=["int", "dict", "padded"])
+def test_F13_a_non_canonical_graph_company_parks_at_the_PRECHECK(bad_cik):
+    """F13 (#827): `str(entity_cik or '').strip()` let an int and a dict
+    pass, and the REAL gate (driver_ids.graph_cik) then refused them far
+    later under the GENERIC 'Route-A binding abstained (malformed_entity_cik)'
+    (measured 2026-08-08). The precheck now asks the one owner and parks
+    with its own branch code at the source read."""
+    (o,) = _attach(graph=_Graph(cik=bad_cik)).preflight_outcomes
+    assert o["decision"] == "parked", dict(o)
+    assert o["codes"] == ("SOURCE_COMPANY_AMBIGUOUS",)
+    assert "no single filing company" in o["detail"]
+
+
+def test_F13_an_all_excluded_read_states_the_TRUTHFUL_availability():
+    """F13 (#827): rows==[] has TWO truths — the graph genuinely carries no
+    fact for the concept, or it carries rows the adapter excluded fail-closed.
+    Reporting the second as 'carries NO fact' is false and durable; the
+    outcome now says none were USABLE and counts the exclusions."""
+    class _ExcludedGraph(_Graph):
+        def get_xbrl_fact_dimensions(self, source_id, c):
+            return GraphFactRows(rows=[], exclusions=(
+                {"event": "dimension_definition_unresolved", "count": 2},))
+    (o,) = _attach(graph=_ExcludedGraph()).preflight_outcomes
+    assert o["decision"] == "parked", dict(o)
+    assert o["codes"] == ("XBRL_BINDING_UNAVAILABLE",)
+    assert "none were usable" in o["detail"].lower(), o["detail"]
+    assert "carries NO fact" not in o["detail"]
