@@ -1203,6 +1203,12 @@ def _leaf(el):
     """
     if any(isinstance(child.tag, str) for child in el):
         return None
+    # EU-105 (#827): FAIL-CLOSED adjudication of the two '' arms — a leaf
+    # with no text (or a tail-less comment/PI child) reads as the truthful
+    # empty string, and every consumer validates the RESULT against its own
+    # grammar (CIK identifier, dateUnion, QName, measure), so an empty
+    # reading REFUSES at the consumer and can never fabricate a value
+    # (measured: a fabricating default reddens the rebuilt-VALUE pins).
     return (el.text or '') + ''.join(child.tail or '' for child in el)
 
 

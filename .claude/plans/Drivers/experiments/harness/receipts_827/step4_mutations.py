@@ -1959,6 +1959,13 @@ MUTATIONS = [
      "    declared = (prepared.get('unitsX') or {}).get(unit_ref)",
      "driver/relocation/test_bind_graph_fact.py::"
      "test_RED_exactness_holds_through_the_whole_binding"),
+
+    (255, "EU-105: an empty leaf fabricates a zero",
+     "driver/relocation/inline_html.py",
+     "    return (el.text or '') + ''.join(child.tail or '' for child in el)",
+     "    return (el.text or '0') + ''.join(child.tail or '' for child in el)",
+     "driver/relocation/test_context_content_model.py::"
+     "test_827B14_comments_and_PIs_are_ignored_and_the_VALUE_is_rebuilt"),
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",
