@@ -264,10 +264,17 @@ def test_unknown_stored_field_rejected_dormant_xbrl_off():
     assert "UNKNOWN_FIELD" in codes(check(mk(origin="xbrl_link")))
 
 
-def test_fabricated_period_token():
+def test_the_producerless_period_token_field_is_gone():
+    """T3: fact_scope_period_token was the ONE stored-contract name with no
+    producer in any lane — its check was unreachable in production and only a
+    test kept it alive. The field is deleted from the contract: a fact
+    carrying it now fails CLOSED as an unknown field (the old PERIOD_SYM
+    expectation was this test's dead half)."""
+    from driver.core.driver_validators import _ALLOWED_FIELDS
+    assert "fact_scope_period_token" not in _ALLOWED_FIELDS
     fact = mk()
-    fact["fact_scope_period_token"] = "gp_2020-01-01_2020-03-31"   # differs from period_u_id
-    assert "PERIOD_SYM" in codes(check(fact))
+    fact["fact_scope_period_token"] = "gp_2020-01-01_2020-03-31"
+    assert "UNKNOWN_FIELD" in codes(check(fact))
 
 
 # ---- OD-21: composition, F-traps, static positives ----

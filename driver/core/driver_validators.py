@@ -78,7 +78,7 @@ _ALLOWED_FIELDS = frozenset({
     "value_text", "conditions", "company_confirmed", "xbrl_qname",
     "fiscal_year", "fiscal_quarter", "period_scope", "time_type",
     "period_u_id", "gp_start_date", "gp_end_date",
-    "slice_parts", "measurement_tokens", "surprise", "fact_scope_period_token",
+    "slice_parts", "measurement_tokens", "surprise",
     "level_shape_hint", "comparison_shape_hint", "surprise_basis_hint",
     "id", "fact_scope", "member_refs",
 })
@@ -330,10 +330,9 @@ def _period(fact, v, add):
     # .period_invariant); no second ISO rule exists anywhere. Only the
     # validator-specific fact_scope token check stays local.
     u_id = fact.get("period_u_id")
-    token = fact.get("fact_scope_period_token")
-    if token is not None and token != u_id:
-        add("PERIOD_SYM", "REJECT",
-            f"fact_scope period token {token!r} != HAS_PERIOD target {u_id!r}")
+    # T3 (#827): the fact_scope_period_token check is DELETED with its field —
+    # the one stored-contract name no lane ever produced; the check was
+    # unreachable in production and only a test kept it alive.
     for code, msg in period_invariant(u_id, fact.get("period_scope"),
                                       fact.get("time_type"),
                                       fact.get("gp_start_date"),
