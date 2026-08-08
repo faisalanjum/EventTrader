@@ -546,6 +546,21 @@ def parse_filing_boundary(raw):
     #   representable  a `date` needs 1..9999, which under XML Schema's
     #                  four-digit-minimum spelling is exactly "not negative and
     #                  not more than four digits"
+    # CL-018 (#827, EU-023/024/025/026/027/028): THE BODY BELOW IS SLICING
+    # MECHANICS OVER AN ALREADY-ADMITTED SHAPE — the fullmatch above proved
+    # the text against the CL-001 grammar, and every separator consumed here
+    # ('-' year sign and date separators, 'T', ':', '.') and the year-zero
+    # prohibition and the offset sign are THAT grammar's clauses (XSD Part 2
+    # 2e 3.2.9/3.2.7/3.2.7.3), never a second grammar. The representability
+    # bounds are the PINNED RUNTIME's, cited exactly: Python 3.11 Library
+    # Reference, datetime — MINYEAR = 1, MAXYEAR = 9999, and microsecond in
+    # range(0, 1000000), https://docs.python.org/3.11/library/datetime.html
+    # (runtime pinned 3.11.10, the env-freeze identity) — so the last-4-digit
+    # slice and the <= 4 digit bound decide representability, a lawful year
+    # outside 0001..9999 PARKS (never wraps, never crashes), and a seventh
+    # fraction digit PARKS (never truncates to midnight — the recorded float
+    # defect); :60 is admitted lexically and parks per the CL-001 EU-006
+    # record.
     negative = text.startswith("-")
     year_digits = (text[1:] if negative else text).split("-")[0]
     if not any(d != "0" for d in year_digits):

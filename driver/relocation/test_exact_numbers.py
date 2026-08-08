@@ -165,3 +165,25 @@ def test_EU017_the_date_kind_branch_owns_the_plus_one_day():
     assert X.filing_boundary_graph_end('2026-03-31') == '2026-04-01'
     assert X.filing_boundary_graph_end('2026-03-31T00:00:00') == '2026-03-31'
     assert X.filing_boundary_graph_start('2026-03-31') == '2026-03-31'
+
+
+def test_CL018_representability_parks_and_never_wraps_or_truncates():
+    """EU-023/024/026/027: the parser-body mechanics hold the pinned
+    runtime's exact bounds (datetime MINYEAR 1..MAXYEAR 9999, microsecond
+    0..999999) and the grammar's own rules — a lawful five-digit year PARKS
+    (never wraps, never crashes); year zero refuses as XML Schema's own
+    prohibition; a seventh fraction digit PARKS (never silently midnight);
+    the offset sign decides real cross-window ordering."""
+    big = X.parse_filing_boundary('99999-01-01')
+    assert big.park and 'not representable' in big.park
+    with pytest.raises(X.ExactError, match='year zero'):
+        X.parse_filing_boundary('0000-01-01')
+    fine = X.parse_filing_boundary('2026-03-31T00:00:00.0000001')
+    assert fine.park and 'microsecond' in fine.park
+    assert X.filing_duration_ordered(
+        '2026-01-03T00:00:00-14:00', '2026-01-01') is False
+    # EU-028: the MIDNIGHT-ADJACENT leap second must park under its OWN
+    # reason — under a drifted gate it would roll to the next day's
+    # midnight and BIND (the recorded rounding catastrophe)
+    leap = X.parse_filing_boundary('2026-03-31T23:59:60')
+    assert leap.park and 'leap second' in leap.park

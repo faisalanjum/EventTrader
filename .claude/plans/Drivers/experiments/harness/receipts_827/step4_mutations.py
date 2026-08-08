@@ -1630,6 +1630,48 @@ MUTATIONS = [
      "driver/relocation/test_exact_numbers.py::"
      "test_EU017_the_date_kind_branch_owns_the_plus_one_day"),
 
+
+    (208, "EU-023: the representable-year digit bound widens to five",
+     "driver/relocation/exact_numbers.py",
+     "    representable = not negative and len(year_digits) <= 4",
+     "    representable = not negative and len(year_digits) <= 5",
+     "driver/relocation/test_exact_numbers.py::"
+     "test_CL018_representability_parks_and_never_wraps_or_truncates"),
+
+    (209, "EU-024: the sub-microsecond sentinel starts at the eighth digit",
+     "driver/relocation/exact_numbers.py",
+     "            sub_micro = any(d != \"0\" for d in frac_digits[6:])",
+     "            sub_micro = any(d != \"0\" for d in frac_digits[7:])",
+     "driver/relocation/test_exact_numbers.py::"
+     "test_CL018_representability_parks_and_never_wraps_or_truncates"),
+
+    (210, "EU-025: the dateTime split separator drifts to lowercase",
+     "driver/relocation/exact_numbers.py",
+     "    d_part, _, t_part = body.partition(\"T\")",
+     "    d_part, _, t_part = body.partition(\"t\")",
+     "driver/relocation/test_exact_numbers.py::"
+     "test_EU017_the_date_kind_branch_owns_the_plus_one_day"),
+
+    (211, "EU-026: the year-zero prohibition goes vacuous",
+     "driver/relocation/exact_numbers.py",
+     "    if not any(d != \"0\" for d in year_digits):",
+     "    if False and not any(d != \"0\" for d in year_digits):",
+     "driver/relocation/test_exact_numbers.py::"
+     "test_CL018_representability_parks_and_never_wraps_or_truncates"),
+
+    (212, "EU-027: the negative offset sign is read as positive",
+     "driver/relocation/exact_numbers.py",
+     "                      (1 if tz_text[0] == \"+\" else -1)",
+     "                      (1)",
+     "driver/relocation/test_exact_numbers.py::"
+     "test_CL018_representability_parks_and_never_wraps_or_truncates"),
+
+    (213, "EU-028: the leap-second park gate looks for 61 and midnight-adjacent :60 binds the next day",
+     "driver/relocation/exact_numbers.py",
+     "        if seconds == 60:",
+     "        if seconds == 61:",
+     "driver/relocation/test_exact_numbers.py::"
+     "test_CL018_representability_parks_and_never_wraps_or_truncates"),
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",
