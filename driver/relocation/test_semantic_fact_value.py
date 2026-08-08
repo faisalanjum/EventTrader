@@ -567,3 +567,17 @@ def test_EU112_a_negative_no_format_value_never_binds():
            'unitRef="u1" decimals="0">390</ix:nonFraction>')
     bound2, why2 = _bind(pos, raw_value='390')
     assert bound2 is not None, why2
+
+
+def test_EU168_a_nested_pair_that_both_omit_scale_agrees_at_ten_to_the_zero():
+    """The absent-scale law (10^0) applies to the nested AGREEMENT test as
+    well: an outer and an inner nonFraction that BOTH omit scale agree and
+    bind — a drifted default would refuse this lawful pair as a
+    disagreement."""
+    inner = ('<ix:nonFraction id="f1" name="us-gaap:A" contextRef="c1" '
+             'unitRef="u1" decimals="0" format="ixt:num-dot-decimal">'
+             '<ix:nonFraction id="f2" name="us-gaap:A" contextRef="c1" '
+             'unitRef="u1" decimals="0" format="ixt:num-dot-decimal">390'
+             '</ix:nonFraction></ix:nonFraction>')
+    bound, why = _bind(inner, raw_value='390')
+    assert bound is not None, why

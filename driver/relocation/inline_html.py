@@ -3175,6 +3175,17 @@ def fact_value_input(el):
       child that "MUST be a non-empty string".
       https://www.xbrl.org/Specification/inlineXBRL-part1/REC-2013-11-18+errata-2026-07-14/inlineXBRL-part1-REC-2013-11-18+corrected-errata-2026-07-14.html
     """
+    # CL-113 + CL-114 (#827, EU-166/167/169/170): the descent loop and its
+    # bounds. The nesting law is Inline XBRL 1.1 section 10.1.1/10.1.2 —
+    # quoted verbatim with its current-edition URL in the spec-sources note
+    # above: exactly ONE child, either an ix:nonFraction or a text node; a
+    # nested fact must AGREE on format, scale and unitRef, and the accuracy
+    # attributes are 'decimals'/'precision' (XBRL 2.1 section 4.6.3, read
+    # at EVERY level). FAIL-CLOSED bounds: depth starts at 0 so the OUTER
+    # fact is not mistaken for a nested one (a true nil at depth 0 is a
+    # lawful no-value fact, at depth>0 it is malformed — 2 reds), the loop
+    # descends only through that exactly-one lawful child (its removal
+    # collapses every read — 54 reds), and any other shape refuses.
     node, depth = el, 0
     while True:
         # NIL IS READ ONCE PER LEVEL, and the whole nil/accuracy combination is
@@ -3246,6 +3257,10 @@ def fact_value_input(el):
             return None, NESTED_FACT_DISAGREES
         outer_scale = _typed(node, 'scale')
         inner_scale = _typed(child, 'scale')
+        # EU-168 (#827): both defaults are the ix absent-scale law (10^0,
+        # the EU-096/EU-112 citation) applied to the AGREEMENT test, so an
+        # outer and inner that BOTH omit scale agree at zero and bind —
+        # measured: a drifted default refuses that lawful pair.
         outer_n = 0 if outer_scale is None else xml_integer(outer_scale)
         inner_n = 0 if inner_scale is None else xml_integer(inner_scale)
         if outer_n is None or inner_n is None or outer_n != inner_n:

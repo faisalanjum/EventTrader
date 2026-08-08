@@ -2120,6 +2120,41 @@ MUTATIONS = [
      "    return _typed(fact.sem, 'id') or 'X'",
      "driver/relocation/test_bind_graph_fact.py::"
      "test_RED_the_fallback_abstains_when_it_is_not_unique"),
+
+    (278, "EU-166: the decimals attribute name drifts at the accuracy read",
+     "driver/relocation/inline_html.py",
+     "        dec, prec = _typed(node, 'decimals'), _typed(node, 'precision')",
+     "        dec, prec = _typed(node, 'decimalsX'), _typed(node, 'precision')",
+     "driver/relocation/test_semantic_fact_value.py::"
+     "test_a_plain_text_fact_binds"),
+
+    (279, "EU-167: the descent depth starts at one and the outer fact reads as nested",
+     "driver/relocation/inline_html.py",
+     "    node, depth = el, 0",
+     "    node, depth = el, 1",
+     "driver/relocation/test_semantic_fact_value.py::"
+     "test_a_TRUE_nil_fact_is_LAWFUL_but_states_no_value"),
+
+    (280, "EU-168: the nested absent-scale default drifts and a lawful pair disagrees",
+     "driver/relocation/inline_html.py",
+     "        outer_n = 0 if outer_scale is None else xml_integer(outer_scale)",
+     "        outer_n = 1 if outer_scale is None else xml_integer(outer_scale)",
+     "driver/relocation/test_semantic_fact_value.py::"
+     "test_EU168_a_nested_pair_that_both_omit_scale_agrees_at_ten_to_the_zero"),
+
+    (281, "EU-169: the exactly-one-child bound widens to two",
+     "driver/relocation/inline_html.py",
+     "        if len(kids) != 1 or len(elements) != 1 \\",
+     "        if len(kids) != 2 or len(elements) != 1 \\",
+     "driver/relocation/test_semantic_fact_value.py::"
+     "test_a_NESTED_fact_agreeing_on_every_property_binds"),
+
+    (282, "EU-170: the nested descent loop never runs",
+     "driver/relocation/inline_html.py",
+     "    node, depth = el, 0\n    while True:",
+     "    node, depth = el, 0\n    while False:",
+     "driver/relocation/test_semantic_fact_value.py::"
+     "test_a_plain_text_fact_binds"),
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",
