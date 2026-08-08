@@ -18,6 +18,7 @@ from driver.core.driver_ids import (ACTUAL_BASIS, CONSENSUS_BASELINE,
                                     SURPRISE_SCOPE_BY_PAIR, SURPRISE_SUFFIX,
                                     IdLawError, build_id, num_canon,
                                     parse_period_id, split_terminal_suffix)
+from driver.core.outcome_codes import require_known   # T1: the ONE code owner
 from driver.core.slot_convert import CANONICAL_UNITS  # THE one 10-unit owner
 # (C1+C10: the clean lane's driver_units/unit_resolver edge is DELETED — no
 # clean re-export; driver_units stays an optional/post-lane import only.)
@@ -176,7 +177,8 @@ def apply_inline_correction(state, position, *, has_favorability_wording):
 
 def validate_fact(fact, *, driver, home_facts=None):
     v = []
-    add = lambda code, action, msg: v.append(Violation(code, action, msg))
+    add = lambda code, action, msg: v.append(   # T1: every minted token passes
+        Violation(require_known(code), action, msg))  # the ONE vocabulary owner
 
     for key in sorted(fact):        # sorted: violation ORDER is caller-independent
         if key not in _ALLOWED_FIELDS:

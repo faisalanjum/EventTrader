@@ -768,3 +768,47 @@ def test_827B7_all_four_sentinels_pass_the_validator_door(pid, word):
     f = mk("guidance", period_u_id=pid, period_scope=word,
            gp_start_date=None, gp_end_date=None)
     assert codes(check(f)) == set(), (pid, codes(check(f)))
+
+
+# ---- T1 (#827 F-VALID): THE one outcome-code vocabulary module ----
+# Owner ruling (sheet #1, verbatim): "NEW TINY MODULE (e.g.
+# driver/core/outcome_codes.py) owns the ~21 codes + ordering; every emitter
+# imports it." BUILD:838-843: explicit codes only; free text never parsed.
+
+def test_the_one_outcome_code_module_owns_every_minted_token():
+    """Every code literal an emitter mints is a member of the ONE module —
+    derived by AST scan of the emitters' own sources, never a hand list, so
+    a rogue token added anywhere fails HERE (the T1 RED/mutation detector).
+    Covers the 30 measured validator tokens (29 add() incl. F1..F9 + SHAPE) and the 6 attach tokens."""
+    import ast, inspect
+    from driver.core import outcome_codes, driver_validators, xbrl_attach
+    minted = set()
+    for mod in (driver_validators, xbrl_attach):
+        tree = ast.parse(inspect.getsource(mod))
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Call):
+                fn = node.func
+                name = getattr(fn, "id", getattr(fn, "attr", ""))
+                if name in ("add", "Violation") and node.args and \
+                        isinstance(node.args[0], ast.Constant) and \
+                        isinstance(node.args[0].value, str):
+                    minted.add(node.args[0].value)
+                if name == "_refusal" and node.args and \
+                        isinstance(node.args[0], ast.Constant):
+                    minted.add(node.args[0].value)
+    rogue = minted - set(outcome_codes.OUTCOME_CODES)
+    assert not rogue, f"emitter mints token(s) outside the one owner: {sorted(rogue)}"
+    assert len(minted) >= 30, sorted(minted)   # the scan itself must SEE the emitters
+
+
+def test_the_outcome_code_module_is_the_one_owner_and_orders_compact_dates():
+    """One-owner import shape + the compact-date ordering law: a compact date
+    inside a period id publishes PERIOD_SYM (the id grammar judges first),
+    never ISO — the frozen evidence node test_827B2_compact_gp_end_names_
+    PERIOD_SYM_never_F7 is the behavior twin; THIS pins the law at the owner."""
+    from driver.core.outcome_codes import (ATTACH_CODES, COMPACT_DATE_IN_ID_ORDER,
+                                           OUTCOME_CODES, VALIDATOR_CODES)
+    assert len(VALIDATOR_CODES) == 30 and len(ATTACH_CODES) == 6
+    assert len(set(VALIDATOR_CODES)) == 30 and len(set(ATTACH_CODES)) == 6
+    assert set(VALIDATOR_CODES) | set(ATTACH_CODES) == set(OUTCOME_CODES)
+    assert COMPACT_DATE_IN_ID_ORDER == ("PERIOD_SYM", "ISO")
