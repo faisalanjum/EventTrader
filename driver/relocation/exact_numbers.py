@@ -451,8 +451,10 @@ FilingBoundary = _namedtuple("FilingBoundary",
 #   owner below), 'T' separator, ':' time separators, '.' second fraction.
 # - _TZ and its 14:00 alternative (EU-004): section 3.2.7.3 Timezones — Z
 #   or +/-hh:mm bounded to -14:00..+14:00 inclusive; 14:01 and beyond are
-#   outside the value space (the census int:14 lives in this regex
-#   alternative; no second value-space recheck exists).
+#   outside the value space. CORRECTION (2026-08-08, the EU-013 sweep):
+#   the census int:14 member is _XSD_TZ_LIMIT = timedelta(hours=14) below —
+#   the SAME +-14:00 window, appearing twice by design: lexically in this
+#   regex alternative and as the order-relation window at EU-013's owner.
 # - _TIME's :60 admission (EU-006): NO XSD 1.0 clause fixes leap seconds —
 #   1.0's value space defers to ISO 8601 (which admits :60 during a leap
 #   second) and states no lexical prohibition; the successor XSD 1.1
