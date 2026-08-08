@@ -928,3 +928,62 @@ def test_W11_an_invented_polarity_token_is_refused():
         fact(polarity_proof=proof(lawful))          # controls
     with pytest.raises(SchemaError, match="polarity"):
         fact(polarity_proof=proof("up"))
+
+
+def test_W16_an_omitted_xbrl_backed_argument_stays_on_the_text_rule():
+    """W16's ADD-list node: a caller that OMITS xbrl_backed gets the TEXT
+    evidence law (the default is False by the frozen interface) — evidence
+    outside the quote refuses exactly as an explicit False would."""
+    with pytest.raises(SlotConversionError):
+        validate_slot("level_low", slot("5", "1e6", "million"),
+                      stated_unit="m_usd", quote="no scale word here")
+
+
+def test_W13_A_D9_fact_type_outside_the_lane_set_is_refused():
+    """W13 route A·D9 (dep T8): Door A refuses a fact_type outside the ONE
+    lane vocabulary."""
+    with pytest.raises(SchemaError, match="fact_type"):
+        fact(fact_type="weird_lane")
+
+
+def test_W13_C_D5_a_first_colon_value_survives_to_stored_fact():
+    """W13 route C·D5 (dep F-SLICE): the slice grammar splits on the FIRST
+    colon only — a value carrying its own colon survives intact through
+    Door C into the stored slice parts."""
+    noop = {"existing": lambda *a: None, "sec": lambda *a: None,
+            "predict": lambda *a: None, "corrected_fye": lambda *a: None}
+    f = fact(time_type="duration", fiscal_year=2025, fiscal_quarter=1,
+             slice_parts=["segment:a:b"])
+    stored = prepared_fact_v2.to_stored_fact(
+        f, driver={"name": "revenue", "fact_type": "metric"},
+        source=_PROD["source"], fye_month=12, lookups=noop)
+    assert stored["slice_parts"] == [("segment", "a:b")]
+
+
+def test_W13_C_D15_a_bad_surprise_basis_parks_as_SURPRISE_COMPOSE():
+    """W13 route C·D15 (dep F-VALID): Door C maps a compose failure to the
+    typed SURPRISE_COMPOSE park, never a raw ValueError."""
+    noop = {"existing": lambda *a: None, "sec": lambda *a: None,
+            "predict": lambda *a: None, "corrected_fye": lambda *a: None}
+    f = fact(time_type="duration", fiscal_year=2025, fiscal_quarter=1,
+             surprise_basis_hint="invented_basis",
+             comparison_baseline="consensus")
+    with pytest.raises(prepared_fact_v2.ProductionValidationError,
+                       match="SURPRISE_COMPOSE"):
+        prepared_fact_v2.to_stored_fact(
+            f, driver={"name": "revenue", "fact_type": "metric"},
+            source=_PROD["source"], fye_month=12, lookups=noop)
+
+
+def test_W13_C_D17_a_span_normalizing_to_nothing_parks_as_ID_LABEL():
+    """W13 route C·D17 (dep F-IDLAW): a measurement span that normalizes to
+    nothing parks typed as ID/LABEL at Door C."""
+    noop = {"existing": lambda *a: None, "sec": lambda *a: None,
+            "predict": lambda *a: None, "corrected_fye": lambda *a: None}
+    f = fact(time_type="duration", fiscal_year=2025, fiscal_quarter=1,
+             measurement_raw_spans=["  --  "])
+    with pytest.raises(prepared_fact_v2.ProductionValidationError,
+                       match="ID/LABEL"):
+        prepared_fact_v2.to_stored_fact(
+            f, driver={"name": "revenue", "fact_type": "metric"},
+            source=_PROD["source"], fye_month=12, lookups=noop)

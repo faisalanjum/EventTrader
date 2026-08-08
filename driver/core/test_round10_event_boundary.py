@@ -1605,3 +1605,21 @@ def test_W15_the_declared_export_surface_is_exactly_the_retained_set():
     assert len(p2.__all__) == 11               # no duplicates
     # an explicit import of an unlisted name still succeeds (round-3 proof):
     from driver.core.prepared_fact_v2 import split_slice_part  # noqa: F401
+
+
+def test_W13_B_D4_a_NON_EMPTY_raw_dict_fact_list_is_forwarded_and_constructed():
+    """W13 route B·D4 (dep W10): every pre-existing test used facts:[] — the
+    forwarding line never executed. A NON-EMPTY raw dict list is forwarded
+    through Door B and comes back CONSTRUCTED."""
+    from decimal import Decimal
+    from driver.core.prepared_fact_v2 import (ITEM_FIELDS, PreparedFactV2,
+                                              RunInputV2)
+    item = {k: None for k in ITEM_FIELDS}
+    item.update(driver_name="revenue", driver_state="reported",
+                quote="q", measurement_raw_spans=[], slice_parts=[])
+    run = RunInputV2.from_dict({
+        "source_id": "acc-1", "calendar_override": False,
+        "facts": [{"fact_type": "metric", "part_ref": "p1",
+                   "occurrence_in_part": None, "per_x": None, "item": item}]})
+    assert len(run.facts) == 1
+    assert isinstance(run.facts[0], PreparedFactV2)
