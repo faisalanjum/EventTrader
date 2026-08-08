@@ -921,3 +921,14 @@ def test_EU095_ix_hidden_text_never_leaks_into_row_evidence():
                    f'<td>{_FACT}</td></tr></table>')
     assert ev['row_text'] == 'Total 726'
     assert 'SECRET' not in ev['row_text'] and ev['row_label'] == 'Total'
+
+
+def test_EU086_a_css_hidden_ancestor_still_hides_the_fact():
+    """The ancestry fold climbs real element nodes and reports a pruning
+    ancestor as HIDDEN: a fact under display:none is hidden, the same fact
+    without it is not — both the probe that finds the ancestors and the
+    prune answer are load-bearing."""
+    prep, ev = _ev(f'<div style="display:none"><p>Total was {_FACT}</p></div>')
+    assert ev['hidden'] is True
+    prep2, ev2 = _ev(f'<div><p>Total was {_FACT}</p></div>')
+    assert ev2['hidden'] is False

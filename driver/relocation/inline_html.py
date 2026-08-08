@@ -283,6 +283,11 @@ def _display_valid(idents):
         return s[0] in _DISPLAY_SINGLE
     if len(set(s)) != len(s):
         return False
+    # EU-085 (#827): the three keywords of this arm — list-item and the
+    # two inner flow values — are CSS Display 3's own <display-legacy>-free
+    # list-item production (section 2.5 "Generating Marker Boxes", the
+    # section 2 grammar cited at the keyword sets above): list-item may
+    # combine with at most one outside and at most one of flow/flow-root.
     if 'list-item' in s:
         rest = [x for x in s if x != 'list-item']
         out = [x for x in rest if x in _DISPLAY_OUTSIDE]
@@ -511,11 +516,26 @@ def _effective_hidden(node):
     inherited visibility and revive behave exactly as in the representation."""
     chain = []
     n = node
+    # CL-053 (#827, EU-086): FAIL-CLOSED ancestry probe — the walk climbs
+    # only through real element nodes, and 'get' is the bs4 mapping-protocol
+    # attribute that distinguishes a Tag from a NavigableString or the
+    # document sentinel (the EU-072 pinned-API citation one owner up). A
+    # drifted probe ends the chain immediately and every CSS-hidden
+    # ancestor becomes invisible to the fact — door-measured: the hidden
+    # flag flips True to False.
     while n is not None and getattr(n, 'get', None):
         chain.append(n)
         n = n.parent
     vis = 'visible'
     for el in reversed(chain):
+        # CL-053 (#827, EU-087): the True is the HIDDEN answer — a pruning
+        # ancestor hides this node absolutely (display:none and
+        # content-visibility:hidden admit no descendant revive), so the
+        # fold stops and reports hidden rather than continuing to inherit.
+        # EU-088 (#827): the fold starts at 'visible' because that is the
+        # INITIAL value of the visibility property (CSS Display 3 section
+        # 4, the cited keyword sets above) — the state before any author
+        # declaration, never an assumption of this reader.
         prune, vis, unsup = _advance(vis, el)
         if unsup:
             return None, unsup

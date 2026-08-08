@@ -2240,6 +2240,34 @@ MUTATIONS = [
      "driver/relocation/test_row_label_span.py::"
      "test_E2_the_display_grammar_is_the_SPEC_not_a_single_ident"),
 
+    (297, "EU-085: the list-item keyword drifts and its arm never matches",
+     "driver/relocation/inline_html.py",
+     "    if 'list-item' in s:",
+     "    if 'list-itemX' in s:",
+     "driver/relocation/test_row_label_span.py::"
+     "test_E2_the_display_grammar_is_the_SPEC_not_a_single_ident"),
+
+    (298, "EU-086: the ancestry probe drifts and CSS-hidden ancestors vanish",
+     "driver/relocation/inline_html.py",
+     "    while n is not None and getattr(n, 'get', None):",
+     "    while n is not None and getattr(n, 'getX', None):",
+     "driver/relocation/test_row_label_span.py::"
+     "test_EU086_a_css_hidden_ancestor_still_hides_the_fact"),
+
+    (299, "EU-087: a pruning ancestor stops reporting hidden",
+     "driver/relocation/inline_html.py",
+     "        if prune:\n            return True, None",
+     "        if prune:\n            return False, None",
+     "driver/relocation/test_row_label_span.py::"
+     "test_EU086_a_css_hidden_ancestor_still_hides_the_fact"),
+
+    (300, "EU-088: the visibility fold starts hidden instead of visible",
+     "driver/relocation/inline_html.py",
+     "    vis = 'visible'",
+     "    vis = 'hidden'",
+     "driver/relocation/test_row_label_span.py::"
+     "test_EU057_run_in_is_a_lawful_display_value_that_wins_the_cascade"),
+
     (281, "EU-169: the exactly-one-child bound widens to two",
      "driver/relocation/inline_html.py",
      "        if len(kids) != 1 or len(elements) != 1 \\",
