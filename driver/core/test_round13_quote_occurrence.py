@@ -3,7 +3,8 @@
 REPRODUCED LIVE BEFORE ANY CHANGE: an item whose quote was
 `THIS QUOTE DOES NOT EXIST IN THE FILING` attached successfully through the
 public event door and was stored verbatim, because `verify_occurrence` had been
-built and left in `DEFERRED_HELPERS` — dead code standing in for a guard.
+built and left deferred — dead code standing in for a guard (the deferral
+mechanism itself was deleted at W3).
 
 These tests pin the wiring. The door receives the event's `text_parts` ONCE, in
 the ordered packet shape the model saw, and every fact's quote must occur in the
@@ -229,11 +230,6 @@ def test_824_d_mutating_text_parts_after_entry_changes_nothing():
 
 
 # ---- E. ONE OWNER, AND THE HELPER IS NO LONGER DEAD ------------------------
-
-def test_824_e_verify_occurrence_is_no_longer_deferred():
-    from driver.core import prepared_fact_v2 as p2
-    assert "verify_occurrence" not in p2.DEFERRED_HELPERS
-
 
 def test_824_e_the_door_does_not_reimplement_the_occurrence_arithmetic():
     """DERIVED from the AST: the door CALLS the owner and never counts itself,

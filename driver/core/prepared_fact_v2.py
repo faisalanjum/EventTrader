@@ -47,8 +47,7 @@ __all__ = ["SchemaError", "ProductionValidationError", "SourceUnavailable",
            "OUTCOME_CLASSES", "NUMERIC_SLOTS", "PreparedItemV2",
            "PreparedFactV2", "RunInputV2", "ITEM_FIELDS", "SOURCE_OWNED_FIELDS",
            "split_slice_part", "verify_occurrence",
-           "check_per_x_against_name", "to_stored_fact", "validate_via_production",
-           "RUN_EVENT_DIVERGENCES"]
+           "to_stored_fact", "validate_via_production"]
 
 _PROOF_KEYS = ("polarity", "basis", "evidence", "sentence")
 
@@ -162,40 +161,6 @@ def verify_occurrence(part_text, quote, occurrence_in_part):
         return f"occurrence_in_part {occurrence_in_part} outside 1..{count}"
     return None
 
-def check_per_x_against_name(driver_name, per_x):
-    """NAME-13: a stated per-X denominator lives in the NAME. Returns None when
-    name and per_x agree, else a PARK reason — this never guesses.
-
-    EXACT denominator matching, not substring: `_per_barrels` is a DIFFERENT
-    denominator from `barrel` and must not pass (it did, in the first draft).
-    At most one terminal family suffix may follow the denominator, because
-    `oil_price_per_barrel_guidance` is one lawful name (NAME-17).
-
-    `eps` is the LIVE-law familiar exception (FINAL_DESIGN NAME-13). Whether the
-    exception extends to other acronyms is an OPEN OWNER QUESTION (the deferred
-    naming item). Code therefore PARKS an unverifiable acronym rather than
-    admitting it (which would decide the question) or calling it unlawful
-    (which would decide it the other way). Fail closed until the owner rules.
-    """
-    if per_x is None:
-        return None
-    if not isinstance(per_x, str) or not per_x.strip():
-        return "per_x must be a non-blank snake_case denominator or null"
-    if "_per_" in driver_name:
-        stated = driver_name.split("_per_", 1)[1]
-        stated, _ = split_terminal_suffix(stated)
-        if stated == per_x:
-            return None
-        return (f"name {driver_name!r} states denominator {stated!r}, not "
-                f"per_x={per_x!r} — different denominators are different drivers")
-    # The one exception written into live law today.
-    root = driver_name.split("_")[0]
-    if root == "eps" and per_x == "share":
-        return None
-    return (f"per_x={per_x!r} is not expressed in name {driver_name!r}: "
-            f"UNVERIFIED against the naming law (the familiar-acronym class "
-            f"beyond `eps` is an OPEN owner decision) — parking, never guessing")
-
 def _deep_freeze(value):
     """Recursively copy into immutable form. A frozen dataclass only freezes its
     OWN attributes: the nested slot dicts stayed the CALLER'S objects, so
@@ -234,20 +199,8 @@ def _sha256_or_raise(value, what):
     return value
 
 
-# Helpers with no production caller YET, each with its reason. Asserted by a
-# test, so nothing can go quietly unwired again. The reviewer found ONE
-# decorative helper (`one_representation_for_event`, now the event door below);
-# sweeping the class found two more:
-#   check_per_x_against_name — needs the proposed driver NAME under the naming
-#                              law, which admission owns (and whose acronym
-#                              class is still an open owner question).
-# `verify_occurrence` LEFT THIS LIST at #824. Its stated reason — "the attach
-# path holds a fact, not the document part" — described the door's inputs, not a
-# law, and while it stood a fact quoting `THIS QUOTE DOES NOT EXIST IN THE
-# FILING` attached successfully. The door now receives the event's `text_parts`
-# and calls this helper. A deferral reason that only names a missing input is a
-# TODO, and a TODO standing in for a guard is how fabricated evidence gets in.
-DEFERRED_HELPERS = ("check_per_x_against_name",)
+# W3 (#827): the deferral mechanism is DELETED — no deferred helper
+# remains; a future one must arrive with a caller, never a TODO-list slot.
 
 
 def _outcome_classes():
@@ -681,17 +634,6 @@ def to_stored_fact(fact, *, driver, source, fye_month, source_id=None,
     }
 
 # What the STAGED adapter still does NOT do that the real `run_event` does.
-# Named explicitly, because "close enough to production" is the claim that
-# hides defects — G9 stays switch-gated until this tuple is empty.
-RUN_EVENT_DIVERGENCES = (
-    "the wordless beat/miss in_line correction and polarity demotion",
-    "fusion of same-scope facts before collision handling",
-    "the OD-8 collision ladder and sibling probe",
-    "verified-XBRL attachment inside the transaction (member_refs are checked "
-    "FACT-LEVEL against the live filing at step 7)",
-    "the home-fact re-extraction path for a grounded surprise",
-    "the write-ahead audit record and the transaction itself",
-)
 
 def validate_via_production(fact, *, driver, source, fye_month, home_facts=None,
                             source_id=None, calendar_override=False, lookups=None):

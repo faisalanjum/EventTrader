@@ -67,9 +67,12 @@ G_COVERAGE = {
             ""),
     "G7": ("code", "driver/core/test_prepared_fact_v2.py::test_G7_unknown_units_still_multiply",
             ""),
-    "G8": ("partial", "driver/core/test_v2_attacks.py::test_ATTACK_per_x_uses_exact_denominator_matching_not_substring",
-            "the per_x check is exact and proven; wiring it into the admission kernel "
-            "cannot be proven — the kernel is not built"),
+    "G8":  ("partial",
+        "driver/core/test_prepared_fact_v2.py::test_G8_per_x_rides_once_at_fact_level",
+        "per_x rides once at fact level and is proven; the NAME-13 denominator check "
+        "is deleted from Core with check_per_x_against_name and moves to the POST "
+        "per-X naming feature; wiring into the admission kernel remains unprovable "
+        "because the kernel is not built"),
     "G9": ("gated-switch", ".claude/plans/Drivers/experiments/harness/test_g_suite.py::test_G9_one_shared_validation_entry_point_exists",
             "one shared validation entry point exists and is proven; the scorer and "
             "run_event both moving onto it IS the atomic switch"),

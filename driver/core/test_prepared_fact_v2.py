@@ -17,7 +17,6 @@ from driver.core.fact_match import match_facts
 from driver.core.prepared_fact_v2 import (ITEM_FIELDS,
                                           PreparedFactV2, RunInputV2,
                                           SchemaError,
-                                          check_per_x_against_name,
                                           split_slice_part, verify_occurrence)
 from driver.core.slot_convert import (CANONICAL_UNITS, SlotConversionError,
                                       check_xbrl_consistency, convert_slot,
@@ -327,25 +326,6 @@ def test_G8_per_x_joins_auto_link_equality():
     a = fact(per_x="share", driver_name="eps")
     b = fact(per_x=None, driver_name="eps")
     assert match_facts([a], [b]).links == []
-
-
-def test_G8_eps_with_per_x_share_is_lawful():
-    assert check_per_x_against_name("eps", "share") is None
-    assert check_per_x_against_name("eps_guidance", "share") is None
-    assert check_per_x_against_name("oil_price_per_barrel", "barrel") is None
-
-
-def test_G8_name_vs_per_x_disagreement_parks():
-    assert check_per_x_against_name("oil_price_per_barrel", "tonne") is not None
-    assert check_per_x_against_name("revenue", "share") is not None
-
-
-def test_G8_the_deferred_acronym_class_PARKS_and_is_never_ruled():
-    """`dps` + per_x=share sits in the owner's OPEN acronym question. Code must
-    neither admit it (that would decide the question) nor call it unlawful — it
-    PARKS, fail-closed, until the owner rules."""
-    reason = check_per_x_against_name("dps", "share")
-    assert reason is not None and "unverified" in reason.lower()
 
 
 # -------------------------------------------------------------------- G10 ----

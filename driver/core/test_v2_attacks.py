@@ -33,8 +33,7 @@ from driver.core import xbrl_attach as xa
 
 from driver.core import fact_match, prepared_fact_v2 as p2
 from driver.core.prepared_fact_v2 import (ITEM_FIELDS, PreparedFactV2,
-                                          PreparedItemV2, RunInputV2, SchemaError,
-                                          check_per_x_against_name)
+                                          PreparedItemV2, RunInputV2, SchemaError)
 from driver.core.slot_convert import (SlotConversionError, convert_slot,
                                       exact_mul)
 from driver.core.test_round10_event_boundary import filing_evidence
@@ -748,24 +747,6 @@ def test_ATTACK_unmatched_output_is_canonically_ordered():
     assert key(forward) == key(reverse), "unmatched output follows input order"
 
 
-def test_ATTACK_per_x_uses_exact_denominator_matching_not_substring():
-    assert check_per_x_against_name("oil_price_per_barrel", "barrel") is None
-    assert check_per_x_against_name("cost_per_available_seat_mile",
-                                    "available_seat_mile") is None
-    # a terminal family suffix may follow the denominator
-    assert check_per_x_against_name("oil_price_per_barrel_guidance", "barrel") is None
-    # ...but a DIFFERENT denominator must never pass by substring
-    for wrong in ("oil_price_per_barrels", "oil_price_per_barrel_of_oil",
-                  "revenue_per_barrelling"):
-        assert check_per_x_against_name(wrong, "barrel") is not None, wrong
-
-
-def test_ATTACK_the_deferred_acronym_class_still_parks():
-    reason = check_per_x_against_name("dps", "share")
-    assert reason is not None and "unverified" in reason.lower()
-    assert check_per_x_against_name("eps", "share") is None
-
-
 def test_ATTACK_xbrl_scaling_is_exact_at_29_digits():
     """The declared-scale check ran at the DEFAULT 28-digit context: it REJECTED
     the exact 29-digit value and ACCEPTED the rounded-wrong one."""
@@ -1264,10 +1245,6 @@ COVERED_BY = {
         "driver/core/test_prepared_fact_v2.py::test_G8_per_x_joins_auto_link_equality",
     ("driver.core.fact_match.record_key", "f"):
         "driver/core/test_v2_attacks.py::test_ATTACK_unmatched_output_is_canonically_ordered",
-    ("driver.core.prepared_fact_v2.check_per_x_against_name", "driver_name"):
-        "driver/core/test_prepared_fact_v2.py::test_G8_eps_with_per_x_share_is_lawful",
-    ("driver.core.prepared_fact_v2.check_per_x_against_name", "per_x"):
-        "driver/core/test_prepared_fact_v2.py::test_G8_eps_with_per_x_share_is_lawful",
     ("driver.core.prepared_fact_v2.split_slice_part", "token"):
         "driver/core/test_prepared_fact_v2.py::test_G33_first_colon_only_split_keeps_a_colon_in_the_value",
     ("driver.core.prepared_fact_v2.to_stored_fact", "calendar_override"):

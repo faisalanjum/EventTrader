@@ -215,11 +215,13 @@ def test_no_contract_helper_is_left_unreachable_from_production():
         for n in ast.walk(ast.parse(inspect.getsource(mod))):   # the door moved
             if isinstance(n, ast.Call) and isinstance(n.func, ast.Name):
                 called.add(n.func.id)
-    # `verify_occurrence` LEFT this set at #824 — the event door now calls it.
-    # What remains needs the proposed driver NAME, which admission owns.
-    deferred = {"check_per_x_against_name"}
-    for name in ("_one_representation_for_event", "check_per_x_against_name",
+    # W3 (#827, TIGHTENED): the deferral escape hatch is GONE with the
+    # deleted mechanism — every public helper must be CALLED from a
+    # production path, no owner-deferred list, no exceptions. The one
+    # deferred helper (check_per_x_against_name) was deleted outright; its
+    # rule moves to the POST per-X naming feature with the admission kernel.
+    for name in ("_one_representation_for_event",
                  "verify_occurrence", "split_slice_part"):
-        assert name in called or name in deferred, \
-            f"{name} is defined but never called"
-    assert p2.DEFERRED_HELPERS == tuple(sorted(deferred))
+        assert name in called, f"{name} is defined but never called"
+    assert not hasattr(p2, "DEFERRED_HELPERS")
+    assert not hasattr(p2, "check_per_x_against_name")
