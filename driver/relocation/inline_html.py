@@ -237,6 +237,12 @@ _CV_VALUES = frozenset({'visible', 'hidden', 'auto'})
 _WIDE_LOCAL = frozenset({'initial', 'inherit', 'unset'})
 _WIDE_ROLLBACK = frozenset({'revert', 'revert-layer'})
 
+# EU-055 (#827): FAIL-CLOSED — 'unsupported' is the style reader's OWN
+# published lane word (the EU-134/CL-039 ownership block): an official CSS
+# value this reader does not model, or an unresolvable winner, becomes a
+# TRUTHFUL refusal carried as data to the document-level unsupported_style
+# answer, never a silent visibility guess and never a T1 outcome code. A
+# drifted word makes the whole lane unreachable (measured: 5 reds).
 _UNSUPPORTED = ('unsupported', None)   # the generic unsupported winner tuple
 
 #: HTML Living Standard, Rendering §15.3.1 — the elements the user agent
@@ -435,6 +441,14 @@ def _advance(vis, el):
     is viewport-independent by frozen product decision (SEQ 229).
     """
     st = _style_state(el)
+    # CL-043 (#827, EU-068 + EU-069): FAIL-CLOSED walk actions. The
+    # unsupported arm returns the REASON and prunes nothing, so an
+    # unmodelled style can never hide or reveal text by accident — the
+    # document refuses as a whole instead (3 reds when the reason is
+    # dropped). The template arm's True is the PRUNE action, and it is
+    # unconditional because the contents are not children of the element
+    # at all (the WHATWG citation below), so no author declaration can
+    # reveal them (3 reds when the prune is withdrawn).
     if st['unsupported']:
         return False, vis, st['unsupported']
     # EU-072 (#827 DERIVE-CITATION): `.name` is the PINNED bs4 element-name

@@ -2191,6 +2191,27 @@ MUTATIONS = [
      "driver/relocation/test_semantic_fact_value.py::"
      "test_EU183_an_absent_sign_is_the_positive_case"),
 
+    (290, "EU-055: the unsupported style lane word drifts and the lane goes unreachable",
+     "driver/relocation/inline_html.py",
+     "_UNSUPPORTED = ('unsupported', None)   # the generic unsupported winner tuple",
+     "_UNSUPPORTED = ('unsupportedX', None)   # the generic unsupported winner tuple",
+     "driver/relocation/test_row_label_span.py::"
+     "test_E2_an_UNRESOLVABLE_winner_is_the_truthful_unsupported_lane"),
+
+    (291, "EU-068: the unsupported reason is dropped and the refusal disappears",
+     "driver/relocation/inline_html.py",
+     "    if st['unsupported']:\n        return False, vis, st['unsupported']",
+     "    if st['unsupported']:\n        return False, vis, None",
+     "driver/relocation/test_two_view_bridge.py::"
+     "test_EU139_hidden_until_found_refuses_as_unsupported"),
+
+    (292, "EU-069: the template prune is withdrawn and template contents render",
+     "driver/relocation/inline_html.py",
+     "        # Unconditional prune, nested markup included.\n        return True, vis, None",
+     "        # Unconditional prune, nested markup included.\n        return False, vis, None",
+     "driver/relocation/test_two_view_bridge.py::"
+     "test_EU070_template_contents_are_never_rendered"),
+
     (281, "EU-169: the exactly-one-child bound widens to two",
      "driver/relocation/inline_html.py",
      "        if len(kids) != 1 or len(elements) != 1 \\",
