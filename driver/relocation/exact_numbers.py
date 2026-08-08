@@ -656,6 +656,14 @@ def filing_boundary_graph_end(raw):
     b = parse_filing_boundary(raw)
     if b.park:
         return None
+    # EU-017 (#827): FAIL-CLOSED adjudication of the 'date' branch spelling —
+    # the kind vocabulary is parse_filing_boundary's OWN two-value enum
+    # ('date' / 'dateTime'; ONE producer, two consumers: this branch and the
+    # duration-ordered end shift), and the branch is total over it. A drifted
+    # spelling would silently take the other arm, so the +1-day behavior is
+    # PINNED by test on both arms; measured recall receipt
+    # g2_evid_recall_EU-017.txt: zero — no lawful value exists outside the
+    # enum, and the pin makes any drift loud.
     # EU-018 (#827): the +1 day IS the exclusive-end stored form — the graph
     # period clause at the F7 boundary owner (graph_row_contract's
     # stored-spelling clause) and the contract sheet section 4 state it; a

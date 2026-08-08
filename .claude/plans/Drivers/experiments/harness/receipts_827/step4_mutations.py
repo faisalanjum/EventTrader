@@ -1616,6 +1616,13 @@ MUTATIONS = [
      "driver/relocation/test_exact_numbers.py::"
      "test_EU013_mixed_timezone_ordering_is_the_specs_window_not_a_guess"),
 
+    (206, "EU-017: the date-kind branch spelling drifts and the +1 day vanishes",
+     "driver/relocation/exact_numbers.py",
+     "    if b.kind == \"date\":\n        return (b.moment.date() + timedelta(days=1)).isoformat()",
+     "    if b.kind == \"dateX\":\n        return (b.moment.date() + timedelta(days=1)).isoformat()",
+     "driver/relocation/test_exact_numbers.py::"
+     "test_EU017_the_date_kind_branch_owns_the_plus_one_day"),
+
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",

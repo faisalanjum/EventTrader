@@ -154,3 +154,14 @@ def test_EU013_mixed_timezone_ordering_is_the_specs_window_not_a_guess():
     window overlap is indeterminate (None, parked, never guessed)."""
     assert X.filing_duration_ordered('2026-01-01T00:00:00Z', '2026-06-30') is True
     assert X.filing_duration_ordered('2026-01-01T20:00:00Z', '2026-01-01') is None
+
+
+def test_EU017_the_date_kind_branch_owns_the_plus_one_day():
+    """filing_boundary_graph_end: the 'date' arm of the two-value kind enum
+    adds the exclusive +1 day (a date-only end means the FOLLOWING
+    midnight); the dateTime arm adds nothing (it already IS the instant);
+    a START never adds a day. Pinning both arms makes any silent drift of
+    the branch spelling loud."""
+    assert X.filing_boundary_graph_end('2026-03-31') == '2026-04-01'
+    assert X.filing_boundary_graph_end('2026-03-31T00:00:00') == '2026-03-31'
+    assert X.filing_boundary_graph_start('2026-03-31') == '2026-03-31'
