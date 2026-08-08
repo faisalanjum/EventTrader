@@ -1903,6 +1903,20 @@ MUTATIONS = [
      "    if not _integer_pattern().match(collapsed):\n        return False",
      "driver/relocation/test_semantic_fact_value.py::"
      "test_EACH_rule_is_load_bearing_ALONE"),
+
+    (247, "EU-074: the never-seen ordinal starts at one and twins mispair",
+     "driver/relocation/inline_html.py",
+     "        ordinal = totals.get(spelling, 0)",
+     "        ordinal = totals.get(spelling, 1)",
+     "driver/relocation/test_semantic_fact_value.py::"
+     "test_a_plain_text_fact_binds"),
+
+    (248, "EU-075: the spelling census double-steps",
+     "driver/relocation/inline_html.py",
+     "        totals[spelling] = ordinal + 1",
+     "        totals[spelling] = ordinal + 2",
+     "driver/relocation/test_semantic_fact_value.py::"
+     "test_a_plain_text_fact_binds"),
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",

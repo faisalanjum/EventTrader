@@ -1891,6 +1891,14 @@ def _align_views(root, soup, names):
         if not isinstance(el.tag, str):          # comments and PIs are not it
             continue
         spelling = _lexical(el)
+        # CL-045 (#827, EU-074 + EU-075): FAIL-CLOSED adjudication of the
+        # pairing mechanics — the never-seen ordinal is 0 and the census
+        # steps by exactly 1, so the Nth strict element of a spelling pairs
+        # with the Nth renderer element of the SAME spelling, and the
+        # count-equality guard below refuses the whole pairing when the two
+        # views disagree about what exists. Either drift is LOUD, never a
+        # silent mispair: measured, off-by-one and double-step each redden
+        # 161 nodes across the two suites.
         ordinal = totals.get(spelling, 0)
         totals[spelling] = ordinal + 1
         for name in names:
