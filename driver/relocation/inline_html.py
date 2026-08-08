@@ -287,6 +287,20 @@ _UNSUPPORTED = ('unsupported', None)   # the generic unsupported winner tuple
 #:     UNCONDITIONALLY below, author display notwithstanding;
 #:   `input[type=hidden]` — §15.3.1 marks it `!important`, so it is not this
 #:     overridable class, and an input carries no text: no branch needed.
+# EU-058 (#827) PARK-NAMED-REASON+MONITOR — the two halves kept apart:
+#   RECOGNITION is the standard's, cited above: the WHATWG HTML LS Rendering
+#   "Hidden elements" list (snapshot 2026-07-20) of UA-default display:none
+#   element names, which this set transcribes.
+#   SCOPE is the OWNER's (sheet row E-SUPPORTED-SCOPE, ruling 2026-08-07):
+#   this reader models the no-scripting runtime, so it refuses rather than
+#   renders the scripted-visibility cases, and every scope refusal PARKS
+#   citing its named refusal id — the piles are counted by the
+#   first-production census, never silently dropped.
+# The set is load-bearing on the TEXT side: dropping a member leaks its
+# content into the representation (door-measured: a datalist's text appears
+# inside a row). 'area' is a void element, so its own membership can carry
+# no text either way — unobservable by construction, the EU-147 form, and
+# recorded here rather than pinned.
 _UA_HIDDEN_ELEMENTS = frozenset({
     'area', 'base', 'basefont', 'datalist', 'head', 'link', 'meta',
     'noembed', 'noframes', 'param', 'rp', 'script', 'style', 'title'})

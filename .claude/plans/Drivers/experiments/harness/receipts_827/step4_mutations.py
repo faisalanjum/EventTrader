@@ -2359,6 +2359,13 @@ MUTATIONS = [
      "driver/relocation/test_transform_registry.py::"
      "test_EU104_the_arelle_refusal_type_is_pinned_and_its_translator_armed"),
 
+    (314, "EU-058: a UA-hidden element leaves the set and leaks its text",
+     "driver/relocation/inline_html.py",
+     "    'noembed', 'noframes', 'param', 'rp', 'script', 'style', 'title'})",
+     "    'noembed', 'noframes', 'param', 'rp', 'script', 'style', 'title'} - {'datalist'})",
+     "driver/relocation/test_row_label_span.py::"
+     "test_EU058_a_UA_hidden_element_never_leaks_its_text"),
+
     (281, "EU-169: the exactly-one-child bound widens to two",
      "driver/relocation/inline_html.py",
      "        if len(kids) != 1 or len(elements) != 1 \\",
