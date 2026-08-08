@@ -148,8 +148,13 @@ def exact_mul(a, b):
             f"park, never a rounded guess")
 
 
-def _exact(name, v, *, positive=False):
-    """int/Decimal only — a float has already lost digits by the time we see it."""
+def exact_number(name, v):
+    """THE public exact-number predicate (T9, #827 F-VALID): int/Decimal only —
+    a float has already lost digits by the time we see it (RFC 8259 §3/§6 +
+    BUILD:811: lawful JSON numbers arrive as int|Decimal; bool subclasses int,
+    so the explicit bool guard is LOAD-BEARING). Both slot boundaries call
+    THIS; callers keep only their local adaptations (positive= at the
+    multiplier site)."""
     if isinstance(v, bool):
         raise SlotConversionError(f"{name}: bool is not a number")
     if isinstance(v, float):
@@ -161,10 +166,6 @@ def _exact(name, v, *, positive=False):
     d = Decimal(v) if isinstance(v, int) else v
     if not d.is_finite():
         raise SlotConversionError(f"{name}: non-finite ({v})")
-    if positive and d <= 0:
-        raise SlotConversionError(
-            f"{name}: must be a POSITIVE multiplier, got {d} — a zero or "
-            f"negative scale has no reading in any filing")
     return d
 
 
@@ -178,8 +179,12 @@ def _structure(slot):
     if set(slot) != set(SLOT_KEYS):
         raise SlotConversionError(
             f"slot carries exactly {SLOT_KEYS}; got {sorted(slot)}")
-    value = _exact("value", slot["value"])
-    mult = _exact("scale_multiplier", slot["scale_multiplier"], positive=True)
+    value = exact_number("value", slot["value"])
+    mult = exact_number("scale_multiplier", slot["scale_multiplier"])
+    if mult <= 0:                       # the multiplier site's own adaptation
+        raise SlotConversionError(
+            f"scale_multiplier: must be a POSITIVE multiplier, got {mult} — "
+            f"a zero or negative scale has no reading in any filing")
     ev = slot["unit_scale_evidence"]
     if ev is not None and (not isinstance(ev, str) or not ev.strip()):
         raise SlotConversionError(
@@ -269,8 +274,8 @@ def check_xbrl_consistency(*, displayed, ix_scale, full_value):
     """The XBRL lane's own proof: displayed x 10^ix.scale == the full fact value.
     Both numbers exist in the filing, so double-scaling is structurally
     impossible — this equation, not a header search, is the authority."""
-    d = _exact("displayed", displayed)
-    full = _exact("full_value", full_value)
+    d = exact_number("displayed", displayed)
+    full = exact_number("full_value", full_value)
     scaled = exact_scaleb(d, ix_scale)          # the ONE shift — exact, or park
     if scaled != full:
         raise SlotConversionError(

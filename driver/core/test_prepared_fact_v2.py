@@ -807,3 +807,29 @@ def test_T8_one_lane_vocabulary_owner():
     got = [v.code for v in dv.validate_fact(
         {"driver_name": "revenue"}, driver={"fact_type": "weird"})]
     assert "DRIVER" in got
+
+
+def test_T9_one_public_exact_number_predicate():
+    """T9: the exactness core is ONE public function both slot boundaries
+    call; no private parallel helper remains. The bool guard is LOAD-BEARING
+    (RFC 8259: true/false are names, not numbers; bool subclasses int, so
+    json.loads('{"x": true}') survives an isinstance-int check)."""
+    from driver.core.slot_convert import exact_number
+    assert not hasattr(slot_convert, "_exact")
+    assert exact_number("v", 5) == Decimal(5)
+    assert exact_number("v", Decimal("1.5")) == Decimal("1.5")
+    parsed = json.loads('{"x": true}')["x"]
+    assert isinstance(parsed, int)              # the trap the guard exists for
+    for bad in (parsed, 1.5, "5", None, Decimal("NaN"), Decimal("Infinity")):
+        with pytest.raises(SlotConversionError):
+            exact_number("v", bad)
+    # both boundaries still refuse through the shared core:
+    with pytest.raises(SlotConversionError):
+        validate_slot("level_low",
+                      {"value": Decimal(1), "scale_multiplier": True,
+                       "unit_scale_evidence": None},
+                      stated_unit="m_usd", quote="x")  # bool mult at door 1
+                      # (raw dict: the slot() helper would coerce it first)
+    with pytest.raises(SlotConversionError):
+        slot_convert.check_xbrl_consistency(displayed=1.5, ix_scale=3,
+                                            full_value=1500)  # float at door 2
