@@ -1516,6 +1516,13 @@ MUTATIONS = [
      "driver/relocation/test_bind_graph_fact.py::"
      "test_RED_a_mismatched_identity_component_abstains"),
 
+    (192, "EU-161: the prepared-document 'elements' spelling drifts at the consumer",
+     "driver/relocation/inline_html.py",
+     "    el = prepared['elements'].get(element_id)",
+     "    el = prepared['element'].get(element_id)",
+     "driver/relocation/test_bind_graph_fact.py::"
+     "test_RED_exactness_holds_through_the_whole_binding"),
+
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",

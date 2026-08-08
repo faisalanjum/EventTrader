@@ -2233,6 +2233,14 @@ def element_evidence(doc_or_html, element_id):
         return None, 'id_not_found'
     if count > 1:
         return None, 'duplicate_id'
+    # EU-161 (#827): FAIL-CLOSED adjudication — 'elements' is prepare()'s own
+    # internal spelling: the ONE complete-shape return literal sets it
+    # unconditionally, and the refusal shapes are guarded out above by
+    # refused(). The hard outer key makes a producer-consumer spelling drift
+    # fail LOUDLY at first use, never a silent misread; the inner .get
+    # abstains under its named reason below. Measured recall receipt
+    # g2_evid_recall_EU-161.txt: ZERO recall loss by construction
+    # (structural census + the live fixture corpus).
     el = prepared['elements'].get(element_id)
     if el is None:
         return None, 'unsupported_element_kind'
