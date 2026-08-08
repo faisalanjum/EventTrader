@@ -1305,7 +1305,7 @@ COVERED_BY = {
         "driver/core/test_v2_attacks.py::test_ATTACK_xbrl_scaling_is_exact_at_29_digits",
     ("driver.core.slot_convert.stored_char_length", "value"):
         "driver/core/test_round12_exact_scale.py::test_the_storable_bound_is_exact_at_1024_characters",
-    ("driver.core.slot_convert.validate_slot", "lane"):
+    ("driver.core.slot_convert.validate_slot", "xbrl_backed"):
         "driver/core/test_prepared_fact_v2.py::test_G22_the_xbrl_lane_does_not_require_quote_local_evidence",
     ("driver.core.slot_convert.validate_slot", "quote"):
         "driver/core/test_prepared_fact_v2.py::test_G5_slot_structure_failures",

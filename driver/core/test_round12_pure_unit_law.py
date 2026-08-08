@@ -375,7 +375,7 @@ def test_the_cents_rule_does_not_judge_structured_xbrl_metadata(unit):
     from driver.core.slot_convert import validate_slot
     slot = {"value": Decimal("21.3"), "scale_multiplier": Decimal("0.01"),
             "unit_scale_evidence": None}
-    validate_slot("level_low", slot, stated_unit=unit, quote="q", lane="xbrl")
+    validate_slot("level_low", slot, stated_unit=unit, quote="q", xbrl_backed=True)
 
 
 def test_the_cents_rule_STILL_guards_the_text_lane():
@@ -384,7 +384,7 @@ def test_the_cents_rule_STILL_guards_the_text_lane():
             "unit_scale_evidence": "in cents"}
     with pytest.raises(SlotConversionError):
         validate_slot("level_low", slot, stated_unit="count",
-                      quote="21.3 in cents", lane="text")
+                      quote="21.3 in cents", xbrl_backed=False)
 
 
 # ---- ix.scale is not the stored multiplier ---------------------------------

@@ -451,10 +451,10 @@ def test_G30_the_live_fiscal_packet_row():
 
 def test_G22_the_xbrl_lane_does_not_require_quote_local_evidence():
     validate_slot("level_low", slot("726", "1e6"), stated_unit="m_usd",
-                  quote="North America 390 361 778 726", lane="xbrl")
+                  quote="North America 390 361 778 726", xbrl_backed=True)
     with pytest.raises(SlotConversionError):
         validate_slot("level_low", slot("726", "1e6"), stated_unit="m_usd",
-                      quote="North America 390 361 778 726", lane="text")
+                      quote="North America 390 361 778 726", xbrl_backed=False)
 
 
 # -------------------------------------------------------------------- G23 ----

@@ -340,12 +340,13 @@ class PreparedItemV2:
         self._check_proof()
 
     @property
-    def lane(self):
-        """TEXT unless code attached a verified XBRL bundle. The lane decides
+    def xbrl_backed(self):
+        """True only when code attached a verified XBRL bundle. Decides
         whether scale evidence must sit inside the quote: for an XBRL-backed
         fact the header legitimately lives outside the row, and the declared
-        `ix.scale`/`unit_ref` metadata is the authority instead."""
-        return "xbrl" if self.xbrl_concept_raw is not None else "text"
+        `ix.scale`/`unit_ref` metadata is the authority instead (W16: the
+        text/xbrl token vocabulary is gone; the switch is this boolean)."""
+        return self.xbrl_concept_raw is not None
 
     def _check_xbrl_bundle(self):
         """ALL-OR-NOTHING (owner 2026-07-17), restored: concept + dimensions
@@ -381,14 +382,15 @@ class PreparedItemV2:
             raise SchemaError("XBRL context: an instant carries ONLY period_end_date")
 
     def _check_numeric_slots(self):
-        lane = self.lane
+        xbrl_backed = self.xbrl_backed
         for name in NUMERIC_SLOTS:
             s = getattr(self, name)
             if s is None:
                 continue
             unit = _unit_for_slot(name, self.level_unit, self.change_unit)
             try:
-                validate_slot(name, s, stated_unit=unit, quote=self.quote, lane=lane)
+                validate_slot(name, s, stated_unit=unit, quote=self.quote,
+                              xbrl_backed=xbrl_backed)
             except SlotConversionError as e:
                 raise SchemaError(str(e))
 

@@ -218,10 +218,10 @@ def convert_slot(stated_unit, slot):
     return assert_storable(scaled)
 
 
-def validate_slot(slot_name, slot, *, stated_unit, quote, lane="text"):
-    """Structure + the lane's evidence law. Raises on anything unsafe.
+def validate_slot(slot_name, slot, *, stated_unit, quote, xbrl_backed=False):
+    """Structure + the evidence law. Raises on anything unsafe.
 
-    TEXT lane  — the evidence span must appear VERBATIM inside this fact's own
+    xbrl_backed=False — the evidence span must appear VERBATIM inside this fact's own
                  quote; a scale word elsewhere in the same part proves nothing
                  about THIS number, because one part may carry two different
                  scale words, so a part-wide search would attribute the wrong
@@ -231,19 +231,24 @@ def validate_slot(slot_name, slot, *, stated_unit, quote, lane="text"):
                  does not depend on how many parts happen to do this.)
                  Evidence may be null ONLY when the multiplier is 1 and no unit
                  or scale marker exists.
-    XBRL lane  — verified structured metadata (ix.scale, unit_ref,
+    xbrl_backed=True — verified structured metadata (ix.scale, unit_ref,
                  source_evidence.pieces) replaces quote-local evidence: the
                  header legitimately sits OUTSIDE the row's own text.
     """
     if slot is None:
         return
-    if lane not in ("text", "xbrl"):
-        raise SlotConversionError(f"lane must be 'text' or 'xbrl', got {lane!r}")
+    # W16 (#827): the text/xbrl token vocabulary is DELETED — the evidence
+    # law's one switch is the BOOLEAN xbrl_backed (default False: 17 callers
+    # omit it today and mean the text law). An exact bool, like every other
+    # boolean law here (P-O12's precedent).
+    if xbrl_backed is not True and xbrl_backed is not False:
+        raise SlotConversionError(
+            f"xbrl_backed must be exactly True or False, got {xbrl_backed!r}")
     _, mult, ev = _structure(slot)
     if stated_unit is not None and stated_unit not in CANONICAL_UNITS:
         raise SlotConversionError(
             f"{slot_name}: stated unit {stated_unit!r} is outside the enum")
-    if lane == "xbrl":
+    if xbrl_backed:
         return          # structured metadata is judged by the XBRL rules only
     # TEXT LANE ONLY. "a 0.01 multiplier means the source wrote cents" reads a
     # human quote. On the XBRL lane that same 0.01 IS `ix.scale = -2`, declared
