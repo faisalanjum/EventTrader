@@ -914,3 +914,17 @@ def test_W6_every_emitted_stored_key_traces_to_a_named_owner():
     emitted = set(stored)
     assert emitted <= set(_ALLOWED_FIELDS), sorted(emitted - set(_ALLOWED_FIELDS))
     assert set(_ALLOWED_FIELDS) - emitted == {"member_refs"}
+
+
+def test_W11_an_invented_polarity_token_is_refused():
+    """W11 (owner-answered, sheet 412792b7 row W11): the proof-object
+    polarity field takes the owner's CLOSED PAIR {favorable, unfavorable} —
+    an invented token ('up' was accepted before this row) refuses; both
+    lawful tokens pass. The driver_state lane lists are untouched."""
+    def proof(polarity):
+        return {"polarity": polarity, "basis": "source_framing",
+                "evidence": "beat the consensus", "sentence": "s"}
+    for lawful in ("favorable", "unfavorable"):
+        fact(polarity_proof=proof(lawful))          # controls
+    with pytest.raises(SchemaError, match="polarity"):
+        fact(polarity_proof=proof("up"))

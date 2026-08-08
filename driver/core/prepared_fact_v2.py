@@ -405,6 +405,12 @@ class PreparedItemV2:
             raise SchemaError(
                 "polarity_proof basis: source_framing | metric_meaning "
                 f"(FINAL_DESIGN:134), got {proof['basis']!r}")
+        # W11 (#827, owner-answered sheet row W11): the polarity token is the
+        # owner's CLOSED PAIR — no third reading exists for a proof.
+        if proof["polarity"] not in ("favorable", "unfavorable"):
+            raise SchemaError(
+                "polarity_proof polarity: favorable | unfavorable (the "
+                f"owner's closed pair), got {proof['polarity']!r}")
 
 # the 32 MODEL-owned fields: everything except the source/code-owned pair and
 # any private machinery (a leading underscore is never part of the contract —

@@ -526,7 +526,7 @@ def test_ATTACK_a_document_that_does_not_hash_to_its_source_is_refused():
 
 def test_ATTACK_a_frozen_polarity_proof_does_not_crash_matching():
     from driver.core import fact_match
-    proof = {"polarity": "higher_favorable", "basis": "source_framing",
+    proof = {"polarity": "favorable", "basis": "source_framing",
              "evidence": "e", "sentence": "s"}
     f = fact(polarity_proof=proof)
     r = fact_match.match_facts([f], [f])
@@ -840,7 +840,7 @@ def _nested():
     return {"spans": ["adjusted"], "parts": ["segment:a"],
             "slot": {"value": Decimal("1"), "scale_multiplier": Decimal(1),
                      "unit_scale_evidence": None},
-            "proof": {"polarity": "higher_favorable", "basis": "source_framing",
+            "proof": {"polarity": "favorable", "basis": "source_framing",
                       "evidence": "e", "sentence": "s"}}
 
 
@@ -857,14 +857,14 @@ def _mutate_everything(n):
     n["spans"].append("MUTATED")
     n["parts"].clear()
     n["slot"]["scale_multiplier"] = Decimal(999)
-    n["proof"]["polarity"] = "lower_favorable"
+    n["proof"]["polarity"] = "unfavorable"
 
 
 def _assert_untouched(item):
     assert tuple(item.measurement_raw_spans) == ("adjusted",)
     assert tuple(item.slice_parts) == ("segment:a",)
     assert item.level_low["scale_multiplier"] == Decimal(1)
-    assert item.polarity_proof["polarity"] == "higher_favorable"
+    assert item.polarity_proof["polarity"] == "favorable"
 
 
 def test_ATTACK_823_the_DIRECT_item_constructor_freezes_too():
