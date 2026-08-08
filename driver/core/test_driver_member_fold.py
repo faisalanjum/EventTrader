@@ -38,6 +38,40 @@ def test_case3_unknown_vs_known_never_folds():
     assert fold_target(menu, tok) is None
 
 
+def test_827B11_member_token_refuses_outside_the_vocabulary_RED():
+    """#827 B11 behavioral RED (SEQ 358): member_token('brand', 'Cloud')
+    currently returns 'brand:cloud' SILENTLY — an out-of-vocabulary producer
+    feeding menu/fold tokens no gate ever vets. LAW: the producer refuses
+    every kind outside the SIX known slice kinds."""
+    import pytest
+    from driver.core.driver_ids import IdLawError
+    # SEQ 361: unhashable kinds ([], {}, bytearray) crashed raw TypeError at
+    # the frozenset membership pre-fix — the string gate must refuse them too
+    for bad in ("brand", "Segment", "segment ", "unknowable", "", None, 7,
+                [], {}, bytearray(b"segment")):
+        with pytest.raises(IdLawError):
+            member_token(bad, "Cloud")
+
+
+def test_827B11_member_token_must_allow_all_six_known_kinds():
+    """MUST-ALLOW twins: every lawful known kind builds its exact token."""
+    for kind in ("segment", "product", "geography", "customer", "channel",
+                 "entity_ownership"):
+        assert member_token(kind, "Cloud") == f"{kind}:cloud"
+
+
+def test_827B11_unknown_kind_refuses_HERE_encode_owns_it():
+    """The slice kind 'unknown' must refuse at member_token — complete
+    unknown tokens are encode_unknown_axis's alone (FINAL_DESIGN :174) —
+    while encode_unknown_axis itself stays lawful."""
+    import pytest
+    from driver.core.driver_ids import IdLawError
+    with pytest.raises(IdLawError):
+        member_token("unknown", "Cloud")
+    tok = encode_unknown_axis("custom:StoreTypeAxis", "Cloud")
+    assert tok.startswith("unknown:xbrlaxis_") and tok.endswith("__cloud")
+
+
 def test_case4_no_suffix_stripping_europesegment_is_not_europe():
     menu = {"segment:europe"}
     tok = member_token("segment", "EuropeSegment")

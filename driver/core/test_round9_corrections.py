@@ -59,18 +59,18 @@ def test_a_padded_sign_is_malformed_evidence_not_a_typo_to_repair(sign):
     """Repairing it is inventing a value. Rejecting costs at most an
     abstention — and the reconcile step means a wrong sign could never have
     produced a wrong stored number anyway, so strict is free."""
-    assert printed_value("726", "", sign) is None
+    assert printed_value("726", None,sign) is None
 
 
 def test_the_only_lawful_sign_forms_still_work():
-    assert printed_value("726", "", "-") == -726          # negative
-    assert printed_value("726", "", "") == 726            # absent
-    assert printed_value("726", "", None) == 726
+    assert printed_value("726", None,"-") == -726          # negative
+    assert printed_value("726", None,"") == 726            # absent
+    assert printed_value("726", None,None) == 726
 
 
 @pytest.mark.parametrize("sign", ["+", "--", "minus", "0", "n"])
 def test_every_other_sign_value_is_refused(sign):
-    assert printed_value("726", "", sign) is None
+    assert printed_value("726", None,sign) is None
 
 
 # --- 2. member_refs: a list or tuple, or a clean park ----------------------
@@ -166,8 +166,12 @@ def test_the_unit_compatibility_relation_has_exactly_one_definition():
     assert compat["usd"] == frozenset({"usd", "usd_per_share"})
     assert compat["m_usd"] == frozenset({"usd"})
     assert compat["count"] == frozenset({"count"})
-    # every Route-A semantic must be reachable from some canonical unit
-    assert set(XN.ROUTE_A_SEM_UNIT.values()) <= set().union(*compat.values())
+    # EVERY Route-A reading must be reachable from some canonical unit. Read off
+    # the retired graph-spelling table until #827 Stage 3; the readings are the
+    # same three, so this now asks the identity-keyed tables that replaced it.
+    readings = (set(XN.ROUTE_A_SEM_UNIT_SIMPLE.values())
+                | set(XN.ROUTE_A_SEM_UNIT_DIVIDE.values()))
+    assert readings <= set().union(*compat.values())
 
 
 def test_the_locator_still_exposes_its_full_anchor_law():

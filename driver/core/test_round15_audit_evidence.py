@@ -31,11 +31,28 @@ def _store_reading(rows, definitions=()):
     return store
 
 
+#: A DELIBERATELY SYNTHETIC taxonomy namespace for the adapter-only rows below.
+#: `_row` has no document partner — these tests exercise the read/exclusion
+#: contract, never a filing — so this value is not claiming any official
+#: identity and nothing here needs to agree with a document.
+_NS_SYNTHETIC_TAXONOMY = "http://example.org/us-gaap"
+CIK10 = "0000000001"        # Company spelling; its archive/node form is "1"
+
+
 def _row(**over):
+    # This is the RAW shape `_read` returns, so it carries the concept identity
+    # exactly as the query selects it: the binder compares (namespace URI,
+    # local name), and both halves come from the one Concept record.
     r = {"fid": "1", "fact_id": "f1", "context_id": "c1",
          "period_type": "duration", "start_date": "2024-01-01",
          "end_date": "2024-07-01", "unit_ref": "u1", "value": "726",
          "decimals": "0", "unit_name": "iso4217:USD", "is_divide": "0",
+         "concept_namespace": _NS_SYNTHETIC_TAXONOMY,
+         "graph_concept_qname": "us-gaap:X",
+         # CONTEXT SIDE = the ten-digit Company spelling. Every `dus`/`mus`
+         # below uses CIK10, whose archive/node form is "1", so the node ids in
+         # each definition list stay exactly as they were.
+         "company_cik": CIK10,
          "dus": [], "mus": []}
     r.update(over)
     return r
@@ -52,9 +69,10 @@ def test_828_a_clean_dimensionless_read_reports_NO_exclusions():
 def test_828_MISALIGNED_arrays_are_counted_and_honestly_labelled():
     """Two facts in one context and one in another — the counts must be exact
     and distinct, and the label must not claim a cause it has not proved."""
-    bad = [_row(fact_id="f1", context_id="c1", dus=["1:d"], mus=[]),
-           _row(fact_id="f2", context_id="c1", dus=["1:d"], mus=[]),
-           _row(fact_id="f3", context_id="c9", dus=["1:d", "1:e"], mus=["1:m"])]
+    bad = [_row(fact_id="f1", context_id="c1", dus=[f"{CIK10}:d"], mus=[]),
+           _row(fact_id="f2", context_id="c1", dus=[f"{CIK10}:d"], mus=[]),
+           _row(fact_id="f3", context_id="c9",
+                dus=[f"{CIK10}:d", f"{CIK10}:e"], mus=[f"{CIK10}:m"])]
     out = _store_reading(bad).get_xbrl_fact_dimensions("acc", "us-gaap:A")
     assert out.rows == ()
     assert len(out.exclusions) == 1
@@ -70,7 +88,7 @@ def test_828_MISALIGNED_arrays_are_counted_and_honestly_labelled():
 def test_828_an_UNRESOLVED_definition_is_its_own_reason():
     """A well-formed pair whose Dimension/Member cannot be resolved is a
     DIFFERENT failure from a misaligned array and must not share its bucket."""
-    rows = [_row(fact_id="f1", context_id="c1", dus=["1:d"], mus=["1:m"])]
+    rows = [_row(fact_id="f1", context_id="c1", dus=[f"{CIK10}:d"], mus=[f"{CIK10}:m"])]
     out = _store_reading(rows, definitions=[]) \
         .get_xbrl_fact_dimensions("acc", "us-gaap:A")
     assert out.rows == ()
@@ -80,8 +98,8 @@ def test_828_an_UNRESOLVED_definition_is_its_own_reason():
 
 
 def test_828_two_reasons_in_one_read_keep_SEPARATE_counts():
-    rows = [_row(fact_id="f1", context_id="c1", dus=["1:d"], mus=[]),
-            _row(fact_id="f2", context_id="c2", dus=["1:d"], mus=["1:m"])]
+    rows = [_row(fact_id="f1", context_id="c1", dus=[f"{CIK10}:d"], mus=[]),
+            _row(fact_id="f2", context_id="c2", dus=[f"{CIK10}:d"], mus=[f"{CIK10}:m"])]
     out = _store_reading(rows).get_xbrl_fact_dimensions("acc", "us-gaap:A")
     by_reason = {r["event"]: r for r in out.exclusions}
     assert set(by_reason) == {"dimension_member_array_misaligned",
@@ -90,7 +108,7 @@ def test_828_two_reasons_in_one_read_keep_SEPARATE_counts():
 
 
 def test_828_the_summaries_are_IMMUTABLE():
-    rows = [_row(dus=["1:d"], mus=[])]
+    rows = [_row(dus=[f"{CIK10}:d"], mus=[])]
     out = _store_reading(rows).get_xbrl_fact_dimensions("acc", "us-gaap:A")
     assert isinstance(out.exclusions, tuple)
     with pytest.raises(TypeError):
@@ -108,9 +126,10 @@ def test_828_the_return_is_a_NAMED_two_field_value_not_a_bare_list():
 # ---- #825 (4): menu_tokens is code-owned, and validated BEFORE any I/O ------
 
 from driver.core.prepared_fact_v2 import SchemaError                # noqa: E402
-from driver.core.test_round10_event_boundary import (_ACC, _Counting,   # noqa: E402
+from driver.core.test_round10_event_boundary import (_ACC, _XMLNS, _Counting,   # noqa: E402
                                                      _CountingProvider,
-                                                     _door_item, parts_for)
+                                                     _door_item, _ns_dim,
+                                                     parts_for)
 from driver.core.xbrl_attach import attach_event_xbrl               # noqa: E402
 
 
@@ -159,9 +178,9 @@ def test_825_the_graph_result_is_immutable_at_EVERY_level():
     caller could append a row, rewrite a value, or invent a dimension AFTER the
     adapter had verified them. The verification is what makes the rows worth
     anything; a value that can change afterwards carries none of it."""
-    rows = [_row(dus=["1:d"], mus=["1:m"])]
-    defs = [{"id": "1:d", "kind": "Dimension", "qname": "ax:A", "label": None},
-            {"id": "1:m", "kind": "Member", "qname": "mb:M", "label": "North"}]
+    rows = [_row(dus=[f"{CIK10}:d"], mus=[f"{CIK10}:m"])]
+    defs = [{"id": "1:d", "kind": "Dimension", "qname": "ax:A", "u_id": "1:http://example.org/ax:ax:A", "label": None},
+            {"id": "1:m", "kind": "Member", "qname": "mb:M", "u_id": "1:http://example.org/mb:mb:M", "label": "North"}]
     out = _store_reading(rows, definitions=defs) \
         .get_xbrl_fact_dimensions("acc", "us-gaap:A")
     assert len(out.rows) == 1 and len(out.rows[0]["dims"]) == 1
@@ -279,10 +298,10 @@ def test_825_the_result_is_ISOLATED_from_the_caller_originals():
     definition records the adapter read can still be edited afterwards, the
     "verified" result changes underneath whoever holds it. Mutating a caller's
     object must not reach the result, and freezing alone never proves that."""
-    dus, mus = ["1:d"], ["1:m"]
+    dus, mus = [f"{CIK10}:d"], [f"{CIK10}:m"]
     raw = _row(dus=dus, mus=mus, value="726", context_id="c1")
-    defs = [{"id": "1:d", "kind": "Dimension", "qname": "ax:A", "label": None},
-            {"id": "1:m", "kind": "Member", "qname": "mb:M", "label": "North"}]
+    defs = [{"id": "1:d", "kind": "Dimension", "qname": "ax:A", "u_id": "1:http://example.org/ax:ax:A", "label": None},
+            {"id": "1:m", "kind": "Member", "qname": "mb:M", "u_id": "1:http://example.org/mb:mb:M", "label": "North"}]
     out = _store_reading([raw], definitions=defs) \
         .get_xbrl_fact_dimensions("acc", "us-gaap:A")
     before = ([dict(r) for r in out.rows],
@@ -290,11 +309,11 @@ def test_825_the_result_is_ISOLATED_from_the_caller_originals():
 
     raw["value"] = "999"                     # the raw row the reader returned
     raw["context_id"] = "swapped"
-    dus.append("1:extra")                    # its dimension arrays, in place
-    mus.append("1:extra")
+    dus.append(f"{CIK10}:extra")                    # its dimension arrays, in place
+    mus.append(f"{CIK10}:extra")
     defs[0]["qname"] = "ax:REWRITTEN"        # the definition records
     defs[1]["label"] = "Elsewhere"
-    defs.append({"id": "1:x", "kind": "Member", "qname": "q", "label": "l"})
+    defs.append({"id": "1:x", "kind": "Member", "qname": "q", "u_id": "1:http://example.org/q:q", "label": "l"})
 
     after = ([dict(r) for r in out.rows],
              [[dict(d) for d in r["dims"]] for r in out.rows])
@@ -308,7 +327,14 @@ def test_825_the_result_is_ISOLATED_from_the_caller_originals():
     # trip the shape assertions above before reaching this comparison).
     assert out.rows[0]["value"] == "726"
     assert dict(out.rows[0]["dims"][0]) == {"axis": "ax:A", "member": "mb:M",
-                                            "label": "North"}
+                                            "label": "North",
+                                            # THE EXPANDED IDENTITY travels beside the raw qname now: a
+                                            # qname alone cannot say WHICH taxonomy an axis belongs to.
+                                            # The namespace is decoded from the record's own composite id.
+                                            "axis_namespace":
+                                                "http://example.org/ax",
+                                            "member_namespace":
+                                                "http://example.org/mb"}
 
 
 
@@ -457,7 +483,7 @@ def test_825p2_TWO_concepts_keep_SEPARATE_adapter_summaries():
             self.row_reads.append(concept)
             fid = "fA" if concept.endswith("A") else "fB"
             return GraphFactRows(
-                rows=[_door_row(fid)],
+                rows=[_door_row(fid, concept=concept)],
                 exclusions=(MappingProxyType(
                     {"event": "dimension_member_array_misaligned",
                      "where": "graph_fact_dimensions", "concept": concept,
@@ -575,18 +601,18 @@ _NOTE = {"slice_part": _PART, "member": _MEMBER, "axis": _GEO, "fold": True}
 
 def _dim_doc(axis=_GEO, member=_MEMBER):
     """A filing whose context c2 DECLARES the explicit member being claimed."""
-    return ('<html><body><xbrli:context id="c2"><xbrli:entity>'
-            '<xbrli:identifier>0000320193</xbrli:identifier>'
+    return (f'<html {_XMLNS}><body><ix:header><ix:resources><xbrli:context id="c2"><xbrli:entity>'
+            '<xbrli:identifier scheme="http://www.sec.gov/CIK">0000320193</xbrli:identifier>'
             f'<xbrli:segment><xbrldi:explicitMember dimension="{axis}">'
             f'{member}</xbrldi:explicitMember></xbrli:segment></xbrli:entity>'
             '<xbrli:period><xbrli:startDate>2024-01-01</xbrli:startDate>'
             '<xbrli:endDate>2024-06-30</xbrli:endDate></xbrli:period>'
-            '</xbrli:context><xbrli:unit id="u1">'
-            '<xbrli:measure>iso4217:USD</xbrli:measure></xbrli:unit>'
+            '</xbrli:context></ix:resources></ix:header><ix:header><ix:resources><xbrli:unit id="u1">'
+            '<xbrli:measure>iso4217:USD</xbrli:measure></xbrli:unit></ix:resources></ix:header>'
             '<p><ix:nonFraction id="fC" name="us-gaap:A" contextRef="c2" '
-            'unitRef="u1" scale="6" format="">726</ix:nonFraction>'
+            'unitRef="u1" scale="6" decimals="-6">726</ix:nonFraction>'
             '<ix:nonFraction id="fD" name="us-gaap:B" contextRef="c2" '
-            'unitRef="u1" scale="6" format="">726</ix:nonFraction></p>'
+            'unitRef="u1" scale="6" decimals="-6">726</ix:nonFraction></p>'
             '</body></html>')
 
 
@@ -597,14 +623,19 @@ def _member_event(axis=_GEO, member=_MEMBER, label="US", part=_PART,
     from driver.core.test_round10_event_boundary import _door_row
 
     doc = _dim_doc(axis, member)
-    dims = [{"axis": axis, "member": member, "label": label}]
+    # THE SHARED five-key builder, so this file cannot drift from the graph
+    # row shape the adapter really publishes. Named three keys before, which
+    # made every event here park `XBRL_BINDING_UNAVAILABLE` on an incomplete
+    # row and never reach the member-link law these tests are about.
+    dims = [_ns_dim(axis, member, label)]
 
     class _DimStore(_Counting):
         def get_xbrl_fact_dimensions(self, source_id, concept):
             self.row_reads.append(concept)
             fid = "fC" if concept.endswith("A") else "fD"
             return GraphFactRows(
-                rows=[dict(_door_row(fid), context_id="c2", dims=dims)],
+                rows=[dict(_door_row(fid, concept=concept),
+                           context_id="c2", dims=dims)],
                 exclusions=())
 
     class _DimProvider:
@@ -856,21 +887,22 @@ def test_825p2_an_UNSTORABLE_value_keeps_NOT_STORABLE_and_PARKS():
     # numeric loop is never entered. Verified empirically, not assumed — an
     # earlier version used 5000 and parked from `expected_multiplier`, so it
     # asserted the right outcome while never executing the line under repair.
-    doc = ('<html><body><xbrli:context id="c1"><xbrli:entity>'
-           '<xbrli:identifier>0000320193</xbrli:identifier></xbrli:entity>'
+    doc = (f'<html {_XMLNS}><body><ix:header><ix:resources><xbrli:context id="c1"><xbrli:entity>'
+           '<xbrli:identifier scheme="http://www.sec.gov/CIK">0000320193</xbrli:identifier></xbrli:entity>'
            '<xbrli:period><xbrli:startDate>2024-01-01</xbrli:startDate>'
            '<xbrli:endDate>2024-06-30</xbrli:endDate></xbrli:period>'
-           '</xbrli:context><xbrli:unit id="u1">'
-           '<xbrli:measure>iso4217:USD</xbrli:measure></xbrli:unit>'
+           '</xbrli:context></ix:resources></ix:header><ix:header><ix:resources><xbrli:unit id="u1">'
+           '<xbrli:measure>iso4217:USD</xbrli:measure></xbrli:unit></ix:resources></ix:header>'
            '<p><ix:nonFraction id="fA" name="us-gaap:A" contextRef="c1" '
-           'unitRef="u1" scale="1022" format="">726</ix:nonFraction></p>'
+           'unitRef="u1" scale="1022" decimals="-6">726</ix:nonFraction></p>'
            '</body></html>')
 
     class _BigStore(_Counting):
         def get_xbrl_fact_dimensions(self, source_id, concept):
             self.row_reads.append(concept)
             return GraphFactRows(
-                rows=[dict(_door_row("fA"), value="726" + "0" * 1022)],
+                rows=[dict(_door_row("fA", concept=concept),
+                           value=f"{726 * 10 ** 1022:,}")],
                 exclusions=())
 
     class _BigProvider:
@@ -906,7 +938,8 @@ def test_825p2_a_STORE_OUTAGE_during_a_concept_read_fans_out_EVENT_WIDE():
             self.row_reads.append(concept)
             if concept.endswith("B"):
                 raise OSError("connection reset")
-            return GraphFactRows(rows=[_door_row("fA")], exclusions=())
+            return GraphFactRows(rows=[_door_row("fA", concept=concept)],
+                                 exclusions=())
 
     good = _door_item("us-gaap:A", "fA")
     other = _door_item("us-gaap:B", "fB")
@@ -933,7 +966,8 @@ def test_825p2_an_ORDINARY_concept_absence_stays_CONCEPT_LOCAL():
             self.row_reads.append(concept)
             if concept.endswith("B"):
                 return GraphFactRows(rows=[], exclusions=())
-            return GraphFactRows(rows=[_door_row("fA")], exclusions=())
+            return GraphFactRows(rows=[_door_row("fA", concept=concept)],
+                                 exclusions=())
 
     items = [_door_item("us-gaap:A", "fA"), _door_item("us-gaap:B", "fB")]
     res = attach_event_xbrl(items, source_id=_ACC, store=_OnlyA(),
@@ -958,7 +992,7 @@ def test_825p2_a_REPEATED_concept_reads_ONCE_and_logs_its_exclusions_ONCE():
     class _Excluding(_Counting):
         def get_xbrl_fact_dimensions(self, source_id, concept):
             self.row_reads.append(concept)
-            return GraphFactRows(rows=[_door_row("fA")],
+            return GraphFactRows(rows=[_door_row("fA", concept=concept)],
                                  exclusions=(MappingProxyType(dict(rec)),))
 
     store = _Excluding()
@@ -1008,3 +1042,54 @@ def test_825p2_the_audit_SERIALIZER_reproduces_the_v1_member_menu_exactly():
     text = json.dumps({"member_menu": res.member_menu}, default=_jsonable)
     assert json.loads(text) == {
         "member_menu": {"folds": {"0": [_NOTE]}, "exclusions": []}}
+
+
+# --------------------------------------------------------------------------
+# #827 finding 4 — the typed/misaligned exclusions are ADAPTER-OWNED and are
+# consumed ONCE. Reconciled from the live code BEFORE any change was
+# considered: v1 (`driver_write_cli`) extends its audit log from
+# `read.exclusions` once per concept, and v2 (`xbrl_attach`) carries the same
+# adapter namedtuple field — neither recomputes, re-derives or drops them. The
+# ruling was "if v1 already consumes them exactly once, change nothing", so
+# NOTHING was changed. This test is the evidence, and it fails the day either
+# side starts recomputing, doubling or dropping the adapter's own audit.
+# --------------------------------------------------------------------------
+
+def test_827_adapter_exclusions_are_CARRIED_once_never_recomputed():
+    """The adapter is the ONE counter. For a concept read once, the door must
+    surface exactly what the adapter reported — same content, same
+    multiplicity — even though TWO items share that concept.
+
+    The graph fixture SUBCLASSES the lawful owner (`_Counting`) so the items
+    really bind: an earlier refusal would prove nothing about this gate, and
+    the first version of this test failed exactly that way.
+    """
+    from driver.core.driver_neo4j_adapter import GraphFactRows
+    from driver.core.test_round10_event_boundary import (_Counting,
+                                                         _CountingProvider,
+                                                         _door_item, parts_for)
+    from driver.core.xbrl_attach import attach_event_xbrl
+
+    dropped = ({"reason": "typed dimension", "fact_id": "f1"},
+               {"reason": "misaligned context", "fact_id": "f2"})
+
+    class _ExcludingGraph(_Counting):
+        def get_xbrl_fact_dimensions(self, source_id, concept):
+            read = super().get_xbrl_fact_dimensions(source_id, concept)
+            return GraphFactRows(rows=read.rows, exclusions=dropped)
+
+    store = _ExcludingGraph()
+    items = [_door_item("us-gaap:A", "fA"), _door_item("us-gaap:A", "fA")]
+    res = attach_event_xbrl(items, source_id="0000006201-26-000031",
+                            store=store, filing_provider=_CountingProvider(),
+                            text_parts=parts_for(items))
+
+    # THE GATE IS REACHED: both items bound, nothing was refused earlier.
+    assert res.preflight_outcomes == (), [dict(o) for o in res.preflight_outcomes]
+    assert len(res.facts) == 2, res.facts
+    # ONE read for the shared concept — so the exclusions are carried once,
+    # not once per item.
+    assert store.row_reads == ["us-gaap:A"], store.row_reads
+    audit = [dict(x) for x in res.member_menu["exclusions"]]
+    assert audit == [dict(d) for d in dropped], (
+        f"the door did not carry the adapter's exclusions verbatim: {audit}")

@@ -18,6 +18,8 @@ MINE (found auditing, not raised by anyone):
      4300-digit conversion limit raises ValueError instead of returning None
   7  a FIFTH escaping type — `SlotConversionError` out of `to_stored_fact`
 """
+from decimal import Decimal
+
 import pytest
 
 from driver.core.test_round10_event_boundary import parts_for
@@ -28,9 +30,9 @@ from driver.core.prepared_fact_v2 import (OUTCOME_CLASSES, ProductionValidationE
                                           SchemaError, SourceUnavailable)
 from driver.relocation.inline_html import xml_integer
 
-_DOC = "<html><body></body></html>"
+_DOC = "<html xmlns:xbrli='http://www.xbrl.org/2003/instance' xmlns:xbrldi='http://xbrl.org/2006/xbrldi' xmlns:ix='http://www.xbrl.org/2013/inlineXBRL' xmlns:iso4217='http://www.xbrl.org/2003/iso4217' xmlns:utr='http://example.org/utr' xmlns:us-gaap='http://example.org/us-gaap' xmlns:dei='http://example.org/dei' xmlns:srt='http://example.org/srt' xmlns:a='http://example.org/a' xmlns:x='http://example.org/x' xmlns:aapl='http://example.org/aapl' xmlns:slg='http://example.org/slg' xmlns:accd='http://example.org/accd' xmlns:ed='http://example.org/ed' xmlns:dvn='http://example.org/dvn' xmlns:fcx='http://example.org/fcx' xmlns:nog='http://example.org/nog' xmlns:inst='http://example.org/inst' xmlns:dimns='http://example.org/dimns' xmlns:nope='http://example.org/nope' xmlns:geo='http://example.org/geo' xmlns:eqt='http://example.org/eqt' xmlns:geography='http://example.org/geography' xmlns:seg='http://example.org/seg' xmlns:country='http://example.org/country'><body></body></html>"
 from driver.relocation.inline_html import prepare          # noqa: E402
-from driver.core.test_round10_event_boundary import (ev_of,
+from driver.core.test_round10_event_boundary import (_ns_dim, ev_of,
                                                      filing_evidence)
 from driver.core.driver_neo4j_adapter import GraphFactRows
 SHA = prepare(_DOC)["text_sha"]
@@ -232,7 +234,7 @@ def test_slot_conversion_failure_is_a_PARK_not_an_escape():
 # --- 5. absent is a PARK, never "fix and resubmit" -------------------------
 
 class Graph:
-    def __init__(self, rows=None, cik="320193", n=1):
+    def __init__(self, rows=None, cik="0000320193", n=1):
         self._rows, self._cik, self._n = rows if rows is not None else [], cik, n
 
     def get_xbrl_representation_count(self, s): return self._n
@@ -334,8 +336,6 @@ def test_the_live_store_maps_neo4j_outages_to_park_retry():
 
 def test_the_live_store_does_NOT_swallow_a_programming_error():
     from driver.core.driver_neo4j_adapter import Neo4jStore
-    store = object.__new__(Neo4jStore)
-    store._db = "neo4j"
 
     class Driver:
         def session(self, **kw):
@@ -348,10 +348,28 @@ def test_the_live_store_does_NOT_swallow_a_programming_error():
 
 # --- 6. xml_integer keeps its own contract ---------------------------------
 
-@pytest.mark.parametrize("raw", ["9" * 5000, "-" + "9" * 5000, "9" * 4301])
-def test_xml_integer_returns_None_on_a_digit_string_python_refuses(raw):
-    """Its contract is 'int, or None' — Python's 4300-digit conversion limit
-    made it raise ValueError instead, so a malformed scale crashed the binder."""
+@pytest.mark.parametrize("digits", [4300, 4301, 5000, 20000])
+def test_xml_integer_CONVERTS_a_lawful_integer_of_any_length(digits):
+    """THIS TEST USED TO ASSERT THE DEFECT.
+
+    It pinned `xml_integer(...) is None` for 4,301+ digits and called that the
+    contract. It never was: `xs:integer` is unbounded, and the None came from
+    CPython's 4,300-character string-conversion gate — OUR runtime's limit,
+    turned into a verdict about the filing, reported by its reader as
+    `malformed_scale`, the same reason a genuinely broken `6.9` gets.
+
+    The contract is still 'int, or None'; what changed is which values are
+    which. Neither the value nor the result is printed, because `f"{n}"` is the
+    very conversion under test."""
+    for raw in ("9" * digits, "-" + "9" * digits):
+        got = xml_integer(raw)
+        assert isinstance(got, int), f"a lawful {digits}-digit integer gave None"
+        assert got == int(Decimal(raw))
+
+
+@pytest.mark.parametrize("raw", ["6.9", "1_0", "", " ", "１２", "+ 6", "0x10"])
+def test_xml_integer_still_refuses_what_is_NOT_an_xs_integer(raw):
+    """MUST-CATCH twin: widening the LENGTH must not widen the GRAMMAR."""
     assert xml_integer(raw) is None
 
 
@@ -368,21 +386,39 @@ def test_xml_integer_still_accepts_a_long_but_lawful_value():
 # so these push real faults through the real door and assert the real outcome.
 # ---------------------------------------------------------------------------
 
-_FULL_DOC = ('<html><body><xbrli:context id="c1"><xbrli:entity>'
-             '<xbrli:identifier>0000320193</xbrli:identifier></xbrli:entity>'
+_FULL_DOC = ('<html xmlns:xbrli="http://www.xbrl.org/2003/instance" xmlns:xbrldi="http://xbrl.org/2006/xbrldi" xmlns:ix="http://www.xbrl.org/2013/inlineXBRL" xmlns:iso4217="http://www.xbrl.org/2003/iso4217" xmlns:utr="http://example.org/utr" xmlns:us-gaap="http://example.org/us-gaap" xmlns:dei="http://example.org/dei" xmlns:srt="http://example.org/srt" xmlns:a="http://example.org/a" xmlns:x="http://example.org/x" xmlns:aapl="http://example.org/aapl" xmlns:slg="http://example.org/slg" xmlns:accd="http://example.org/accd" xmlns:ed="http://example.org/ed" xmlns:dvn="http://example.org/dvn" xmlns:fcx="http://example.org/fcx" xmlns:nog="http://example.org/nog" xmlns:inst="http://example.org/inst" xmlns:dimns="http://example.org/dimns" xmlns:nope="http://example.org/nope" xmlns:geo="http://example.org/geo" xmlns:eqt="http://example.org/eqt" xmlns:geography="http://example.org/geography" xmlns:seg="http://example.org/seg" xmlns:country="http://example.org/country"><body><ix:header><ix:resources><xbrli:context id="c1"><xbrli:entity>'
+             '<xbrli:identifier scheme="http://www.sec.gov/CIK">0000320193</xbrli:identifier></xbrli:entity>'
              '<xbrli:period><xbrli:startDate>2024-01-01</xbrli:startDate>'
              '<xbrli:endDate>2024-06-30</xbrli:endDate></xbrli:period>'
-             '</xbrli:context><xbrli:unit id="u1">'
-             '<xbrli:measure>iso4217:USD</xbrli:measure></xbrli:unit>'
+             # TWO `ix:header` ELEMENTS, DELIBERATELY — lawful, and what real
+             # filings do (8 of 1,769 in the frozen cache carry more than one).
+             # Inline XBRL 1.1 §8.1.3 requires AT LEAST ONE header in the
+             # document set; §8.1.1 bounds only what sits INSIDE a header (at
+             # most one `ix:hidden`, at most one `ix:resources`) and sets no
+             # one-header maximum. I briefly merged these on a mistaken
+             # "exactly one" reading, which removed real-world coverage for no
+             # reason; that reading is withdrawn.
+             '</xbrli:context></ix:resources></ix:header>'
+             '<ix:header><ix:resources><xbrli:unit id="u1">'
+             '<xbrli:measure>iso4217:USD</xbrli:measure></xbrli:unit></ix:resources></ix:header>'
              '<p><ix:nonFraction id="f1" name="us-gaap:X" contextRef="c1" '
-             'unitRef="u1" scale="6" format="">726</ix:nonFraction></p></body></html>')
+             'unitRef="u1" scale="6" decimals="-6">726</ix:nonFraction></p>'
+             '</body></html>')
 
 
 def _row(**over):
+    # THE SHAPE THE REAL ADAPTER RETURNS, including the concept's identity.
+    # `concept_namespace` and `graph_concept_qname` are BOTH required: the
+    # binder compares (namespace URI, local name) rather than a prefixed
+    # string, and it takes both halves from the one Concept record the row was
+    # read with. A fixture that omitted them would let the row contract and the
+    # public door pass while the real adapter path delivered None.
     r = {"period_type": "duration", "start_date": "2024-01-01",
          "end_date": "2024-07-01", "dims": [], "fact_id": "f1",
          "context_id": "c1", "unit_ref": "u1", "unit_name": "iso4217:USD",
-         "is_divide": "0", "value": "726000000", "decimals": "0"}
+         "is_divide": "0", "value": "726,000,000", "decimals": "0",
+         "concept_namespace": "http://example.org/us-gaap",
+         "graph_concept_qname": "us-gaap:X"}
     r.update(over)
     return r
 
@@ -422,7 +458,7 @@ def _attach_rows(rows):
             return GraphFactRows(rows=rows, exclusions=())
 
         def get_source_company_cik(self, s):
-            return "320193"
+            return "0000320193"
 
     class Doc:
         def get_filing_document(self, s):
@@ -464,7 +500,10 @@ _MALFORMED_ROWS = [
      "each row dimension carries exactly"),
     ("dim lacks its label", _row(dims=[{"axis": "a", "member": "m"}]),
      "each row dimension carries exactly"),
-    ("dim axis is blank", _row(dims=[{"axis": " ", "member": "m", "label": "L"}]),
+    # OTHERWISE COMPLETE, with ONLY the axis blank — so the blank-string rule
+    # is what fires. A three-key dim was refused first for its missing
+    # namespaces, and this case then proved the wrong law under its own name.
+    ("dim axis is blank", _row(dims=[dict(_ns_dim("a:Ax", "a:M", "L"), axis=" ")]),
      "must all be non-blank strings"),
     ("blank unit_ref", _row(unit_ref=""),
      "row field 'unit_ref' must be a non-blank string"),
@@ -558,7 +597,7 @@ def test_the_checked_row_carries_ONLY_the_checked_fields():
 def test_the_checked_row_is_NOT_reachable_through_the_callers_objects():
     """A list `value` stayed the caller's own object, so mutating it after the
     check changed the supposedly immutable row."""
-    dim = {"axis": "a:Ax", "member": "a:M", "label": "Europe"}
+    dim = _ns_dim("a:Ax", "a:M", "Europe")
     dims = [dim]
     raw = _row(dims=dims)
     checked = xa._checked_row(raw)
@@ -567,7 +606,7 @@ def test_the_checked_row_is_NOT_reachable_through_the_callers_objects():
     raw["value"] = "999"                                        # mutate the row
     assert len(checked["dims"]) == 1
     assert checked["dims"][0]["label"] == "Europe"
-    assert checked["value"] == "726000000"
+    assert checked["value"] == "726,000,000"
     with pytest.raises(TypeError):
         checked["value"] = "0"
     with pytest.raises(TypeError):
@@ -579,3 +618,93 @@ def test_an_INTEGER_value_no_longer_attaches_end_to_end():
     is the whole reason `parse_raw` exists; an int bypassed that contract."""
     _refused(_attach_rows([_row(value=726000000)]), ProductionValidationError,
              "row field 'value' must be a non-blank string")
+
+
+# --------------------------------------------------------------------------
+# #827 finding 5 — the outcome MAP itself, DERIVED.
+#
+# The behaviours are already proven above and in the round-10/15 suites
+# (malformed -> reject, unbindable -> park, SourceUnavailable ->
+# park/SOURCE_UNAVAILABLE, programming errors propagate, an item's failure
+# preserves its lawful siblings). What no test owned was the MAP: three
+# vocabularies — `OUTCOME_CLASSES`, `xbrl_attach._DEFAULT_CODES` and
+# `PUBLIC_DECISIONS` — that must agree, and that a hand-written list would
+# silently let drift apart.
+# --------------------------------------------------------------------------
+
+def test_827_the_outcome_MAP_is_internally_consistent_and_derived():
+    from driver.core import prepared_fact_v2 as p2
+    from driver.core import xbrl_attach as xa
+
+    # every class the door can classify has exactly one decision word, and
+    # that word is a PUBLIC decision
+    for exc, decision in p2.OUTCOME_CLASSES.items():
+        assert decision in xa.PUBLIC_DECISIONS, (exc, decision)
+    # every class the door classifies per item is in the outcome map
+    for exc in xa.OUTCOME_ITEM_CLASSES:
+        assert exc in p2.OUTCOME_CLASSES, f"{exc.__name__} has no decision word"
+    # every default code belongs to a class the map knows, and codes are unique
+    coded = [exc for exc, _code in xa._DEFAULT_CODES]
+    assert set(coded) <= set(p2.OUTCOME_CLASSES), \
+        f"a default code exists for a class outside the map: {coded}"
+    codes = [code for _exc, code in xa._DEFAULT_CODES]
+    assert len(codes) == len(set(codes)), f"duplicate default codes: {codes}"
+    # the five public decisions are exactly the five, in the owner's order
+    assert xa.PUBLIC_DECISIONS == ("written", "merged", "parked", "skipped",
+                                   "rejected")
+    # the two refusal families are distinguishable: a contract breach REJECTS,
+    # everything else PARKS — the distinction the whole ladder rests on
+    assert p2.OUTCOME_CLASSES[p2.SchemaError] == "rejected"
+    assert {p2.OUTCOME_CLASSES[c] for c in p2.OUTCOME_CLASSES
+            if c is not p2.SchemaError} == {"parked"}
+    # a retryable source failure is an OSError family member, not a contract
+    # breach — so it can never be mapped to `rejected`
+    assert all(issubclass(e, OSError) for e in xa.RETRYABLE_SOURCE_ERRORS)
+    assert p2.SourceUnavailable in p2.OUTCOME_CLASSES
+
+
+# ---------------------------------------------------------------------------
+# #827 round 8 — THE CONCEPT'S IDENTITY MUST SURVIVE THE WHOLE PATH.
+#
+# The binder compares (namespace URI, local name) and refuses without it. That
+# was proved against `bind_graph_fact` directly — which is exactly why it went
+# wrong: the query selected the fields, but the adapter's row mapping dropped
+# them and `_ROW_FIELDS` never named them, so `_checked_row` dropped whatever
+# survived. Through the REAL path every lawful fact would have parked as
+# `missing_graph_concept_namespace`, and a direct-binder probe cannot see that.
+#
+# These run through the row contract and the production public door instead.
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize("field", ["concept_namespace", "graph_concept_qname"])
+def test_827R8_the_row_contract_REQUIRES_the_concepts_identity(field):
+    """A reader that cannot supply either half is a broken reader — an ordinary
+    park at the boundary, never a silent None the binder would read as absent."""
+    with pytest.raises(ProductionValidationError):
+        xa._checked_row(_without(field))
+    for blank in ("", "   ", None):
+        with pytest.raises(ProductionValidationError):
+            xa._checked_row(_row(**{field: blank}))
+
+
+@pytest.mark.parametrize("field", ["concept_namespace", "graph_concept_qname"])
+def test_827R8_the_checked_row_CARRIES_the_concepts_identity_onward(field):
+    """MUST-ALLOW twin: the lawful row keeps both halves, so the door can hand
+    them to the binder. Dropping them here is the defect this pins."""
+    assert xa._checked_row(_row())[field] == _row()[field]
+
+
+def test_827R8_a_lawful_fact_still_ATTACHES_through_the_public_door():
+    """THE POSITIVE CONTROL for the whole path. If the identity did not reach
+    the binder, this fact would park instead of attaching, and every other
+    refusal test in this file would still have passed."""
+    _attached(_attach_rows([_row()]))
+
+
+def test_827R8_a_MISMATCHED_graph_concept_qname_parks_through_the_public_door():
+    """RED twin of the control above, through the same door: the Concept
+    record's own qname must agree with the concept being bound before either
+    half of the expanded name is trusted."""
+    _refused(_attach_rows([_row(graph_concept_qname="us-gaap:SomethingElse")]),
+             ProductionValidationError, "")

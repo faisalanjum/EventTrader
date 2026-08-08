@@ -10,10 +10,11 @@ import pytest
 
 from driver.core.driver_write_cli import CLI_CODES, run_event
 from driver.core.driver_writer import FakeGraph
-from driver.core.prepared_fact import RunInputV1, PreparedFactV1
+from driver.core.prepared_fact import RunInputV1
 from driver.core.driver_neo4j_adapter import GraphFactRows
 
 SRC = "0000320193-26-000042"
+CIK10 = "0000000001"        # Company spelling; its archive/node form is "1"
 
 
 class FakeStore(FakeGraph):
@@ -142,7 +143,7 @@ def test_dry_run_plans_written_but_mutates_nothing(tmp_path):
 
 
 def test_date_is_source_time_and_created_unstamped_in_dry_run(tmp_path):
-    out = run(tmp_path, [fact()])
+    run(tmp_path, [fact()])
     doc = audit_docs(tmp_path)[0]
     props = next(o for o in doc["plans"][0]["ops"]
                  if o["op"] == "create_fact")["props"]
@@ -464,15 +465,78 @@ def test_future_period_actual_surprise_rejected_f7(tmp_path):
     assert out["items"][1]["codes"] == ["F7"]
 
 
+def test_827B2_prefusion_F7_beats_fusion_ambiguity(tmp_path):
+    """SEQ 292 — the load-bearing proof for the PRE-FUSION tail check. Three
+    future-period actual-surprise fragments of ONE fact (A comparison 90,
+    B null, C comparison 91): A/B and B/C can fill, A/C conflicts. Without
+    the early check they all PARK as FUSION_AMBIGUOUS; the frozen rule says
+    these inputs are invalid (F7) and REJECT beats PARK — fusion ambiguity
+    may not hide a contract violation. All three must reject F7."""
+    frags = []
+    for cmp_val in ("90", None, "91"):
+        f = fact(driver_name="revenue_surprise", driver_state="beat",
+                 quote="revenue beat consensus",
+                 surprise_basis_hint="actual", comparison_baseline="consensus",
+                 period_start_date="2026-09-28", period_end_date="2026-12-27",
+                 fiscal_quarter=1)
+        if cmp_val is not None:
+            f.update(comparison_low=Decimal(cmp_val),
+                     comparison_high=Decimal(cmp_val),
+                     comparison_shape_hint="point")
+        frags.append(f)
+    out = run(tmp_path, frags)
+    assert [i["decision"] for i in out["items"]] == ["rejected"] * 3, out["items"]
+    assert all(i["codes"] == ["F7"] for i in out["items"]), \
+        [i["codes"] for i in out["items"]]
+
+
 def test_wordless_beat_inside_consensus_corrected_to_in_line(tmp_path):
     h, s = surprise_pair()
     s.update(has_favorability_wording=False, comparison_low=Decimal("90"),
              comparison_high=Decimal("110"), comparison_shape_hint="range")
-    out = run(tmp_path, [h, s])
+    run(tmp_path, [h, s])
     doc = audit_docs(tmp_path)[0]
     states = [o["props"]["driver_state"] for p in doc["plans"] for o in p["ops"]
               if o["op"] == "create_fact" and "surprise=" in o["id"]]
     assert states == ["in_line"]                               # OD-21 inline correction
+
+
+def test_827B9_basis_wiring_guide_containment_vs_actual_overlap(tmp_path):
+    """SEQ 353 consumer pin — the CLI's value_is_guide wiring (§4.3 containment
+    asymmetry): two otherwise-identical wordless RANGE cases against a
+    consensus POINT. The GUIDANCE basis takes the guide-containment rule
+    (a guide range containing the point -> in_line); the ACTUAL basis takes
+    the overlap rule (unclear -> unknown). Both directions pinned."""
+    def rng(basis, home_name, home_over):
+        s = fact(driver_name="revenue_surprise", driver_state="beat",
+                 quote="revenue of $80-120M versus consensus of $90M",
+                 surprise_basis_hint=basis, comparison_baseline="consensus",
+                 level_low=Decimal("80"), level_high=Decimal("120"),
+                 level_shape_hint="range",
+                 comparison_low=Decimal("90"), comparison_high=Decimal("90"),
+                 comparison_shape_hint="point", has_favorability_wording=False)
+        home = fact(driver_name=home_name, level_low=Decimal("80"),
+                    level_high=Decimal("120"), level_shape_hint="range",
+                    **home_over)
+        return [home, s]
+
+    drivers = {
+        "revenue": {"name": "revenue", "fact_type": "metric"},
+        "revenue_surprise": {"name": "revenue_surprise", "fact_type": "surprise"},
+        "revenue_guidance": {"name": "revenue_guidance", "fact_type": "guidance"},
+    }
+
+    def surprise_states(subdir, cases):
+        run(subdir, cases, FakeStore(drivers=drivers))
+        doc = audit_docs(subdir)[0]
+        return [o["props"]["driver_state"] for p in doc["plans"] for o in p["ops"]
+                if o["op"] == "create_fact" and "surprise=" in o["id"]]
+
+    assert surprise_states(tmp_path / "g", rng(
+        "guidance", "revenue_guidance",
+        dict(driver_state="unknown", company_confirmed=True))) == ["in_line"]
+    assert surprise_states(tmp_path / "a", rng(
+        "actual", "revenue", {})) == ["unknown"]
 
 
 def test_audit_prepared_carries_plans_logs_and_exact_bytes(tmp_path):
@@ -513,7 +577,7 @@ def test_in_tx_final_replan_catches_stale_state(tmp_path):
 def test_wordless_beat_without_polarity_proof_becomes_unknown(tmp_path):
     h, s = surprise_pair()
     s.update(has_favorability_wording=False)       # beat OUTSIDE range, no proof
-    out = run(tmp_path, [h, s])
+    run(tmp_path, [h, s])
     doc = audit_docs(tmp_path)[0]
     states = [o["props"]["driver_state"] for p in doc["plans"] for o in p["ops"]
               if o["op"] == "create_fact" and "surprise=" in o["id"]]
@@ -527,7 +591,7 @@ def test_wordless_beat_with_valid_proof_survives(tmp_path):
                              "basis": "metric_meaning",
                              "evidence": "revenue higher is favorable",
                              "sentence": "revenue of $100M vs $90M consensus"})
-    out = run(tmp_path, [h, s])
+    run(tmp_path, [h, s])
     doc = audit_docs(tmp_path)[0]
     states = [o["props"]["driver_state"] for p in doc["plans"] for o in p["ops"]
               if o["op"] == "create_fact" and "surprise=" in o["id"]]
@@ -657,7 +721,7 @@ def test_inconsistent_polarity_proof_becomes_unknown(tmp_path):
              polarity_proof={"polarity": "lower_favorable",  # higher_favorable
                              "basis": "metric_meaning",
                              "evidence": "e", "sentence": "s"})
-    out = run(tmp_path, [h, s])
+    run(tmp_path, [h, s])
     doc = audit_docs(tmp_path)[0]
     states = [o["props"]["driver_state"] for p in doc["plans"] for o in p["ops"]
               if o["op"] == "create_fact" and "surprise=" in o["id"]]
@@ -903,18 +967,22 @@ def test_xbrl_fact_query_is_company_scoped_nonnil_and_length_guarded():
         captured.append(query)
         if "HAS_XBRL" in query:                    # the facts read
             return [
-                {"fid": "f1", "period_type": "duration",
+                # CONTEXT SIDE = the ten-digit Company spelling; the node ids
+                # below stay `1:…`, that same cik's archive spelling.
+                {"fid": "f1", "period_type": "duration", "company_cik": CIK10,
                  "start_date": "2025-06-29", "end_date": "2025-09-28",
-                 "dus": ["1:ns:ax"], "mus": ["1:ns:me"]},
+                 "dus": [f"{CIK10}:ns:ax"], "mus": [f"{CIK10}:ns:me"]},
                 {"fid": "f2", "period_type": "duration",     # MISALIGNED arrays:
+                 "company_cik": CIK10,
                  "start_date": "2025-06-29", "end_date": "2025-09-28",
-                 "dus": ["1:ns:ax", "1:ns:ax2"], "mus": ["1:ns:me"]}]
+                 "dus": [f"{CIK10}:ns:ax", f"{CIK10}:ns:ax2"],
+                 "mus": [f"{CIK10}:ns:me"]}]
         # #822: the definition query now returns the node KIND, so the axis id
         # must resolve to a Dimension and the member id to a Member. The fixture
         # tracks the real query — the assertion below stops the two drifting.
-        return [{"id": "1:ns:ax", "kind": "Dimension", "qname": "ns:ax",
+        return [{"id": "1:ns:ax", "kind": "Dimension", "qname": "ns:ax", "u_id": "1:http://example.org/ns:ns:ax",
                  "label": None},
-                {"id": "1:ns:me", "kind": "Member", "qname": "ns:me",
+                {"id": "1:ns:me", "kind": "Member", "qname": "ns:me", "u_id": "1:http://example.org/ns:ns:me",
                  "label": "Me"}]
     from driver.core.driver_neo4j_adapter import Neo4jStore
     store = Neo4jStore.__new__(Neo4jStore)
@@ -926,7 +994,12 @@ def test_xbrl_fact_query_is_company_scoped_nonnil_and_length_guarded():
     assert "AS kind" in captured[1], \
         "the definition query must ask for the node kind, or the fixture lies"
     assert [[dict(d) for d in r["dims"]] for r in rows] == [                  # misaligned row DROPPED
-        [{"axis": "ns:ax", "member": "ns:me", "label": "Me"}]]
+        [{"axis": "ns:ax", "member": "ns:me", "label": "Me",
+          # THE EXPANDED IDENTITY travels beside the raw qname now: a
+          # qname alone cannot say WHICH taxonomy an axis belongs to.
+          # It is decoded from the record's own composite id.
+          "axis_namespace": "http://example.org/ns",
+          "member_namespace": "http://example.org/ns"}]]
 
 
 def test_xbrl_fact_rows_fetched_once_per_concept_per_event(tmp_path):

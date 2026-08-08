@@ -27,7 +27,8 @@ import pytest
 from driver.core.xbrl_attach import attach_event_xbrl
 
 from driver.relocation import exact_numbers as XN
-from driver.core.test_round10_event_boundary import parts_for
+from driver.core.test_round10_event_boundary import (_FIXTURE_NS, _XMLNS,
+                                                     parts_for)
 from driver.core.test_round10_event_boundary import filing_evidence
 from driver.core.driver_neo4j_adapter import GraphFactRows
 
@@ -62,6 +63,23 @@ def test_29_digit_pairs_stay_distinct_through_the_shift():
 
 @pytest.mark.parametrize("exponent", [10 ** 19, -(10 ** 19), 10 ** 30])
 def test_an_exponent_BEYOND_EMAX_parks_in_the_arithmetic(exponent):
+    with pytest.raises(XN.ExactError):
+        XN.exact_scaleb(Decimal("1"), exponent)
+
+
+@pytest.mark.parametrize("digits", [4300, 4301, 5001, 20000])
+def test_the_PARK_survives_an_exponent_too_long_to_PRINT(digits):
+    """The guard must not crash inside itself.
+
+    `exact_scaleb` reports an unrepresentable magnitude as `ExactError` — the
+    park R12-2 built. Its message interpolated the exponent, and `f"{n}"` on an
+    integer past CPython's 4,300-digit gate raises a raw `ValueError`. So for
+    exactly the values the park exists to catch, the park raised the crash it
+    was written to prevent.
+
+    The exponent is built with `int(Decimal(...))`, which performs no string
+    conversion, and is never printed here for the same reason."""
+    exponent = int(Decimal("9" * digits))
     with pytest.raises(XN.ExactError):
         XN.exact_scaleb(Decimal("1"), exponent)
 
@@ -123,14 +141,14 @@ def test_the_park_outcome_is_a_DECLARED_one():
 # --- the binder's boundary: abstain ----------------------------------------
 
 def _doc(scale):
-    return ('<html><body><xbrli:context id="c1"><xbrli:entity>'
-            '<xbrli:identifier>0000320193</xbrli:identifier></xbrli:entity>'
+    return (f'<html {_XMLNS}><body><ix:header><ix:resources><xbrli:context id="c1"><xbrli:entity>'
+            '<xbrli:identifier scheme="http://www.sec.gov/CIK">0000320193</xbrli:identifier></xbrli:entity>'
             '<xbrli:period><xbrli:startDate>2024-01-01</xbrli:startDate>'
             '<xbrli:endDate>2024-06-30</xbrli:endDate></xbrli:period>'
-            '</xbrli:context><xbrli:unit id="u1">'
-            '<xbrli:measure>iso4217:USD</xbrli:measure></xbrli:unit>'
+            '</xbrli:context></ix:resources></ix:header><ix:header><ix:resources><xbrli:unit id="u1">'
+            '<xbrli:measure>iso4217:USD</xbrli:measure></xbrli:unit></ix:resources></ix:header>'
             f'<p><ix:nonFraction id="f1" name="us-gaap:X" contextRef="c1" '
-            f'unitRef="u1" scale="{scale}" format="">726</ix:nonFraction>'
+            f'unitRef="u1" scale="{scale}" decimals="-6">726</ix:nonFraction>'
             '</p></body></html>')
 
 
@@ -140,9 +158,11 @@ def test_an_ordinary_scale_still_binds():
         _doc(6), inline_element_id="f1", concept="us-gaap:X", context_id="c1",
         unit_ref="u1", unit_name="iso4217:USD", is_divide="0",
         period_type="duration", start_date="2024-01-01", end_date="2024-07-01",
-        dims=(), entity_cik="320193", raw_value="726000000")
+        dims=(), entity_cik="0000320193", raw_value="726,000,000",
+        concept_namespace=_FIXTURE_NS["us-gaap"],
+        graph_concept_qname="us-gaap:X")
     assert bound is not None, why
-    assert bound["ix_scale"] == 6
+    assert bound["evidence"]["scale"] == 6
     assert bound["printed_value"] == Decimal("726")
 
 
@@ -159,16 +179,46 @@ def test_the_binder_returns_the_PRINTED_VALUE_and_SCALE_only():
         _doc(6), inline_element_id="f1", concept="us-gaap:X", context_id="c1",
         unit_ref="u1", unit_name="iso4217:USD", is_divide="0",
         period_type="duration", start_date="2024-01-01", end_date="2024-07-01",
-        dims=(), entity_cik="320193", raw_value="726000000")
+        dims=(), entity_cik="0000320193", raw_value="726,000,000",
+        concept_namespace=_FIXTURE_NS["us-gaap"],
+        graph_concept_qname="us-gaap:X")
     assert bound is not None, why
     assert bound["printed_value"] == Decimal("726")
-    assert bound["ix_scale"] == 6
+    assert bound["evidence"]["scale"] == 6
     assert "expected_slot" not in bound, "the binder still decides the multiplier"
 
 
+#: THE SAME TWO VALUES, SPELLED UNDER THE FROZEN CANONICAL GRAPH LEXICAL
+#: CONTRACT derived from the two writer formatters (corpus evidence shows
+#: compatibility, not legality or complete formatter reachability). The
+#: exponent spelling `726E+1000000` was convenient but the graph holds none:
+#: census 2026-08-01 over 12,402,201 numeric non-nil facts found ZERO
+#: exponents, so a value in that spelling could never arrive from Core's
+#: graph. These are the identical numbers in the contract's grouped spelling
+#: (premise asserted equal below), which keeps this test's purpose exactly:
+#: the value RECONCILES, so execution reaches the storable bound instead of
+#: parking early at the binder.
+# IDENTITY CHANGE (SEQ 265 C): the positive-scale raw is now written in
+# the writer's own GROUPED form. The frozen canonical graph lexical
+# contract has NO ARTIFICIAL SIZE LIMIT, so this spelling is lawful under
+# the contract — but it is NOT a demonstrated current-writer output: the
+# runtime's own `f"{huge_int:,}"` refuses at this length (SEQ 269), so
+# the test constructs the canonical grouped string directly by STRING
+# arithmetic and Core does not inherit CPython's hidden int→str ceiling
+# (the same 4,300-digit gate the scale reader already learned about). The
+# NEGATIVE-scale param is RETIRED: its raw needed a 999,997-digit
+# fraction, and the frozen lexical contract caps fractions at 3 digits
+# (census: frac>3 is ZERO across 12,402,201 values) — no lawful graph
+# value can demand that path; the arithmetic-side park it exercised
+# remains pinned by test_an_exponent_BEYOND_EMAX_parks_in_the_arithmetic.
+def _grouped(digits):
+    head = len(digits) % 3 or 3
+    return ','.join([digits[:head]] + [digits[i:i + 3]
+                                       for i in range(head, len(digits), 3)])
+
+
 @pytest.mark.parametrize("scale,raw", [
-    (1000000, "726E+1000000"),
-    (-1000000, "726E-1000000"),
+    (1000000, _grouped("726" + "0" * 1000000)),
 ])
 def test_the_FULL_DOOR_reaches_the_storage_park_not_a_value_mismatch(scale, raw):
     """The previous full-path proof was false: its value could never reconcile,
@@ -178,18 +228,24 @@ def test_the_FULL_DOOR_reaches_the_storage_park_not_a_value_mismatch(scale, raw)
     from driver.core.prepared_fact_v2 import ITEM_FIELDS
     from driver.relocation.inline_html import reconcile
     doc = _doc(scale)
-    # the premise this test rests on: the value DOES reconcile
-    assert reconcile("726", "", scale, "", raw) is True
+    # the premise this test rests on: the value DOES reconcile — and it is the
+    # same number the exponent spelling named, in the graph's own form
+    from decimal import Decimal as _D
+    assert _D(raw.replace(",", "")) == _D(f"726E{scale:+d}")
+    assert reconcile("726", None, scale, "", raw) is True
 
     row = {"period_type": "duration", "start_date": "2024-01-01",
            "end_date": "2024-07-01", "dims": [], "fact_id": "f1",
            "context_id": "c1", "unit_ref": "u1", "unit_name": "iso4217:USD",
-           "is_divide": "0", "value": raw, "decimals": "0"}
+           "is_divide": "0", "value": raw, "decimals": "0",
+           # the concept identity the real adapter returns
+           "concept_namespace": _FIXTURE_NS["us-gaap"],
+           "graph_concept_qname": "us-gaap:X"}
 
     class Graph:
         def get_xbrl_representation_count(self, s): return 1
         def get_xbrl_fact_dimensions(self, s, c): return GraphFactRows(rows=[row], exclusions=())
-        def get_source_company_cik(self, s): return "320193"
+        def get_source_company_cik(self, s): return "0000320193"
 
     class Provider:
         def get_filing_document(self, s): return doc
@@ -274,3 +330,30 @@ def test_the_storable_bound_is_exact_at_1024_characters():
     assert assert_storable(widest) is widest          # accepted, unchanged
     with pytest.raises(SlotConversionError):
         assert_storable(over)
+
+
+def test_scaleb_preserves_the_COEFFICIENT_verbatim():
+    """The equivalence pin for the precision simplification (#827 bundle A).
+
+    `exact_scaleb`'s precision is `len(value.as_tuple().digits)` — the value's
+    own digit count, nothing added and no floor. A power-of-ten shift moves
+    only the exponent, so at exactly that precision the coefficient survives
+    VERBATIM — asserted at representation level (`as_tuple()`), because `==`
+    on Decimals is numeric and would bless a silently shortened coefficient:
+    `...7890E-6 == ...789E-5` is True while only one of them is what the
+    filing stated. The trailing-zero case below is the one a one-lower
+    precision would silently shorten (Rounded, untrapped) — the measured
+    minimality edge from the #827 proof, pinned at the exact boundary.
+    """
+    from driver.relocation.exact_numbers import exact_scaleb
+    cases = [
+        (Decimal("12345678901234567890"), -6,
+         Decimal("12345678901234.567890")),          # trailing zero SURVIVES
+        (Decimal("726"), 6, Decimal("7.26E+8")),
+        (Decimal("9" * 40), 1, Decimal("9" * 40 + "E+1")),
+        (Decimal("-3.14159"), 3, Decimal("-3141.59")),
+        (Decimal("0.026"), 2, Decimal("2.6")),
+    ]
+    for value, exponent, want in cases:
+        got = exact_scaleb(value, exponent)
+        assert got.as_tuple() == want.as_tuple(), (value, exponent, got, want)

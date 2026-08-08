@@ -143,7 +143,7 @@ def test_preflight_reports_honestly_and_creates_nothing(store):
 
 def test_identical_duplicate_id_records_COLLAPSE():
     from driver.core.driver_neo4j_adapter import _resolve_id_records
-    rec = {"id": "1:d", "kind": "Dimension", "qname": "us-gaap:Ax",
+    rec = {"id": "1:d", "kind": "Dimension", "qname": "us-gaap:Ax", "u_id": "1:http://fasb.org/us-gaap/2024:us-gaap:Ax",
            "label": None}
     out = _resolve_id_records([rec, dict(rec), dict(rec)])
     assert out == {"1:d": rec}, out
@@ -154,9 +154,9 @@ def test_CONFLICTING_duplicate_id_records_poison_the_lookup():
     the order the driver happened to return rows in. A poisoned id is falsy, and
     the caller already drops any fact whose pair will not resolve."""
     from driver.core.driver_neo4j_adapter import _resolve_id_records
-    a = {"id": "1:d", "kind": "Member", "qname": "us-gaap:Ax", "label": "Foo"}
-    b = {"id": "1:d", "kind": "Member", "qname": "us-gaap:Ax", "label": "Bar"}
-    c = {"id": "1:d", "kind": "Member", "qname": "srt:Other", "label": "Foo"}
+    a = {"id": "1:d", "kind": "Member", "qname": "us-gaap:Ax", "u_id": "1:http://fasb.org/us-gaap/2024:us-gaap:Ax", "label": "Foo"}
+    b = {"id": "1:d", "kind": "Member", "qname": "us-gaap:Ax", "u_id": "1:http://fasb.org/us-gaap/2024:us-gaap:Ax", "label": "Bar"}
+    c = {"id": "1:d", "kind": "Member", "qname": "srt:Other", "u_id": "1:http://fasb.org/srt/2024:srt:Other", "label": "Foo"}
     for pair in ((a, b), (b, a), (a, c), (c, a)):
         out = _resolve_id_records(list(pair))
         assert out["1:d"] is None, f"{pair} resolved to {out['1:d']}"
@@ -166,10 +166,10 @@ def test_CONFLICTING_duplicate_id_records_poison_the_lookup():
 def test_a_poisoned_id_does_not_poison_its_NEIGHBOURS():
     """POSITIVE CONTROL — one ambiguous id must not cost the lawful ones."""
     from driver.core.driver_neo4j_adapter import _resolve_id_records
-    good = {"id": "1:m", "kind": "Member", "qname": "x:M", "label": "Europe"}
+    good = {"id": "1:m", "kind": "Member", "qname": "x:M", "u_id": "1:http://example.org/x:x:M", "label": "Europe"}
     out = _resolve_id_records([
-        {"id": "1:d", "kind": "Member", "qname": "a", "label": "A"},
-        {"id": "1:d", "kind": "Member", "qname": "b", "label": "B"}, good])
+        {"id": "1:d", "kind": "Member", "qname": "a", "u_id": "1:http://example.org/a:a", "label": "A"},
+        {"id": "1:d", "kind": "Member", "qname": "b", "u_id": "1:http://example.org/b:b", "label": "B"}, good])
     assert out["1:d"] is None and out["1:m"] == good
 
 
@@ -192,8 +192,8 @@ def test_an_id_must_resolve_to_the_RIGHT_KIND_of_node():
     checked, so a member's qname could be written into the AXIS position."""
     from driver.core.driver_neo4j_adapter import _resolve_id_records
     out = _resolve_id_records([
-        {"id": "1:d", "kind": "Dimension", "qname": "us-gaap:Ax", "label": None},
-        {"id": "1:m", "kind": "Member", "qname": "x:M", "label": "Europe"}])
+        {"id": "1:d", "kind": "Dimension", "qname": "us-gaap:Ax", "u_id": "1:http://fasb.org/us-gaap/2024:us-gaap:Ax", "label": None},
+        {"id": "1:m", "kind": "Member", "qname": "x:M", "u_id": "1:http://example.org/x:x:M", "label": "Europe"}])
     assert out["1:d"]["kind"] == "Dimension" and out["1:m"]["kind"] == "Member"
 
 
@@ -208,7 +208,7 @@ def test_a_MEMBER_id_in_the_AXIS_slot_drops_the_fact_fail_closed():
             return [{"fid": "f1", "period_type": "duration",
                      "start_date": "2025-06-29", "end_date": "2025-09-28",
                      "dus": ["1:ns:me"], "mus": ["1:ns:me"]}]   # a MEMBER as axis
-        return [{"id": "1:ns:me", "kind": "Member", "qname": "ns:me",
+        return [{"id": "1:ns:me", "kind": "Member", "qname": "ns:me", "u_id": "1:http://example.org/ns:ns:me",
                  "label": "Me"}]
 
     store = Neo4jStore.__new__(Neo4jStore)
@@ -233,11 +233,11 @@ def test_a_row_MISSING_its_dimension_arrays_never_raises():
 
 @pytest.mark.parametrize("bad", [{"id": "1:d", "kind": "Bogus", "qname": "q",
                                   "label": None},
-                                 {"id": "1:d", "kind": "Dimension", "qname": "",
+                                 {"id": "1:d", "kind": "Dimension", "qname": "", "u_id": "1:http://example.org/none:",
                                   "label": None},
                                  {"id": "1:d", "kind": "Dimension", "qname": 5,
                                   "label": None},
-                                 {"id": "1:d", "kind": "Member", "qname": "q",
+                                 {"id": "1:d", "kind": "Member", "qname": "q", "u_id": "1:http://example.org/q:q",
                                   "label": 5}])
 def test_definition_rows_need_a_COMPLETE_shape_not_just_an_id(bad):
     """An id alone was checked; kind, qname and label were trusted."""
@@ -270,7 +270,7 @@ def test_a_MEMBER_without_a_usable_label_is_dropped_at_the_source(label):
     Member without one verifies nothing. Census: 0 of 1,499,049 Members have a
     null label, so dropping it at the source costs no recall."""
     from driver.core.driver_neo4j_adapter import _resolve_id_records
-    assert _resolve_id_records([{"id": "1:m", "kind": "Member", "qname": "x:M",
+    assert _resolve_id_records([{"id": "1:m", "kind": "Member", "qname": "x:M", "u_id": "1:http://example.org/x:x:M",
                                  "label": label}]) == {}
 
 
@@ -301,10 +301,14 @@ def test_a_MEMBER_without_a_label_is_dropped_through_the_PUBLIC_path():
         if "HAS_XBRL" in q:
             return [{"fid": "f1", "period_type": "duration",
                      "start_date": "2025-06-29", "end_date": "2025-09-28",
-                     "dus": ["1:ns:ax"], "mus": ["1:ns:me"]}]
-        return [{"id": "1:ns:ax", "kind": "Dimension", "qname": "ns:ax",
+                     # CONTEXT SIDE carries the ten-digit Company spelling;
+                     # the node ids below stay `1:…`, which is that same cik's
+                     # lawful archive spelling. Purpose unchanged.
+                     "company_cik": "0000000001",
+                     "dus": ["0000000001:ns:ax"], "mus": ["0000000001:ns:me"]}]
+        return [{"id": "1:ns:ax", "kind": "Dimension", "qname": "ns:ax", "u_id": "1:http://example.org/ns:ns:ax",
                  "label": None},
-                {"id": "1:ns:me", "kind": "Member", "qname": "ns:me",
+                {"id": "1:ns:me", "kind": "Member", "qname": "ns:me", "u_id": "1:http://example.org/ns:ns:me",
                  "label": None}]                       # <- unusable Member
 
     store = Neo4jStore.__new__(Neo4jStore)
@@ -321,10 +325,14 @@ def test_the_SAME_fact_with_a_usable_member_label_DOES_come_back():
         if "HAS_XBRL" in q:
             return [{"fid": "f1", "period_type": "duration",
                      "start_date": "2025-06-29", "end_date": "2025-09-28",
-                     "dus": ["1:ns:ax"], "mus": ["1:ns:me"]}]
-        return [{"id": "1:ns:ax", "kind": "Dimension", "qname": "ns:ax",
+                     # CONTEXT SIDE carries the ten-digit Company spelling;
+                     # the node ids below stay `1:…`, which is that same cik's
+                     # lawful archive spelling. Purpose unchanged.
+                     "company_cik": "0000000001",
+                     "dus": ["0000000001:ns:ax"], "mus": ["0000000001:ns:me"]}]
+        return [{"id": "1:ns:ax", "kind": "Dimension", "qname": "ns:ax", "u_id": "1:http://example.org/ns:ns:ax",
                  "label": None},
-                {"id": "1:ns:me", "kind": "Member", "qname": "ns:me",
+                {"id": "1:ns:me", "kind": "Member", "qname": "ns:me", "u_id": "1:http://example.org/ns:ns:me",
                  "label": "Europe"}]
 
     store = Neo4jStore.__new__(Neo4jStore)
@@ -333,4 +341,265 @@ def test_the_SAME_fact_with_a_usable_member_label_DOES_come_back():
     # the dims are frozen mappings now; compare their CONTENT, which is what
     # this test is about — the label survives the public path
     assert [[dict(d) for d in r["dims"]] for r in rows] == [
-        [{"axis": "ns:ax", "member": "ns:me", "label": "Europe"}]]
+        [{"axis": "ns:ax", "member": "ns:me", "label": "Europe",
+              # THE EXPANDED IDENTITY travels beside the raw qname now: a
+              # qname alone cannot say WHICH taxonomy an axis belongs to.
+              # The namespace is decoded from the record's own composite id.
+              "axis_namespace": "http://example.org/ns",
+              "member_namespace": "http://example.org/ns"}]]
+
+
+# ---------------------------------------------------------------------------
+# #827 round 8 — THE ADAPTER BOUNDARY ITSELF.
+#
+# The concept's identity was SELECTED by the query and then DROPPED by this
+# module's own row mapping, so the public door received None and every lawful
+# fact would have parked. Nothing caught it: the door tests start from a
+# hand-built row, so they pin `_checked_row` and the binder call but never this
+# mapping. This test starts one step earlier — at `get_xbrl_fact_dimensions`
+# with a fake `_read` — so the mapping cannot drop the fields again unnoticed.
+# ---------------------------------------------------------------------------
+
+_NS = "http://fasb.org/us-gaap/2024-01-31"
+
+
+def _store_returning(**extra):
+    from driver.core.driver_neo4j_adapter import Neo4jStore
+
+    def fake_read(query, **params):
+        if "HAS_XBRL" in query:
+            row = {"fid": "f1", "fact_id": "f1", "context_id": "c1",
+                   "period_type": "duration", "start_date": "2025-06-29",
+                   "end_date": "2025-09-28", "unit_ref": "u1",
+                   "unit_name": "iso4217:USD", "is_divide": "0",
+                   "value": "726000000", "decimals": "0",
+                   "dus": [], "mus": []}
+            row.update(extra)
+            return [row]
+        return []
+
+    store = Neo4jStore.__new__(Neo4jStore)
+    store._read = fake_read
+    return store
+
+
+def test_827R8_the_adapter_row_CARRIES_the_concept_identity_it_selected():
+    """MUST-ALLOW at the boundary the defect lived in: whatever the query
+    selects for the concept's identity must appear in the returned row."""
+    store = _store_returning(concept_namespace=_NS,
+                             graph_concept_qname="us-gaap:Revenues")
+    rows = store.get_xbrl_fact_dimensions("acc", "us-gaap:Revenues").rows
+    assert len(rows) == 1, rows
+    assert rows[0]["concept_namespace"] == _NS
+    assert rows[0]["graph_concept_qname"] == "us-gaap:Revenues"
+
+
+def test_827R8_the_adapter_SELECTS_the_concept_identity_it_must_carry():
+    """The two halves must be asked for as well as carried — a mapping that
+    forwarded fields the query never selected would pass the test above while
+    delivering None from the live graph."""
+    seen = {}
+
+    def fake_read(query, **params):
+        seen["q"] = query
+        return []
+
+    from driver.core.driver_neo4j_adapter import Neo4jStore
+    store = Neo4jStore.__new__(Neo4jStore)
+    store._read = fake_read
+    store.get_xbrl_fact_dimensions("acc", "us-gaap:Revenues")
+    assert "con.namespace AS concept_namespace" in seen["q"]
+    assert "con.qname AS graph_concept_qname" in seen["q"]
+
+
+# --- the graph-CIK exactness law (#827, SEQ 216 §4) -------------------------
+# "Company.id is stored as a raw ten-character ASCII digit string. The adapter
+# returns it unchanged, and Core compares it exactly. No layer strips, pads,
+# stringifies, or repairs either side."
+
+def _cik_store(rows):
+    s = Neo4jStore.__new__(Neo4jStore)          # no driver, no network
+    s._read = lambda q, **p: rows
+    return s
+
+
+def test_the_adapter_returns_the_graph_CIK_RAW_never_repaired():
+    """A padded graph value must come back EXACTLY as stored, so the shared
+    ten-digit gate (`graph_cik`) is the one place that refuses it. The old
+    `str(...).strip()` silently repaired it here, upstream of the law."""
+    got = _cik_store([{"cik": " 0001306830 "}]).get_source_company_cik("x")
+    assert got == " 0001306830 ", got            # RAW, repair refused downstream
+
+
+def test_a_NON_STRING_graph_CIK_is_returned_unstringified():
+    """`str(1306830)` minted a spelling no graph node states. The exact value
+    travels, and `graph_cik`'s isinstance gate refuses it truthfully."""
+    from driver.core.driver_ids import graph_cik
+    got = _cik_store([{"cik": 1306830}]).get_source_company_cik("x")
+    assert got == 1306830 and graph_cik(got) is None
+
+
+@pytest.mark.live
+@pytest.mark.parametrize("value,expected,why", [
+    ("0000000001", True, "lawful minimum"),
+    ("0000320193", True, "lawful ordinary"),
+    ("9999999999", True, "lawful maximum"),
+    ("0000000000", False, "all-zero non-registrant marker"),
+    ("١٢٣٤٥٦٧٨٩٠", False, "Unicode digits — toInteger would read 1234567890"),
+    ("0000003e10", False, "exponent text — toInteger would read 30000000000"),
+    ("-000000005", False, "sign"),
+    ("       320", False, "whitespace"),
+    ("320193", False, "the archive spelling, too short"),
+    ("12345678901", False, "eleven digits"),
+    ("", False, "empty"),
+    ("0000320193\n", False, "trailing newline — Python's $ would allow it"),
+    (None, False, "null"),
+    (1234567890, False, "an integer, not a string"),
+])
+def test_the_production_cypher_guard_against_the_REAL_engine(store, value,
+                                                             expected, why):
+    """THE ENGINE ANSWERS, in the SAME SEMANTIC POSITION production uses.
+
+    The first version returned the guard as a value and then accepted `False`
+    OR `None` — which meant the test, not Neo4j, decided what null meant. Here
+    the fragment sits in `WHERE`, exactly as `_MEMBER_PAIRING` uses it, and the
+    row count is the answer: a null predicate EXCLUDES, and that exclusion is
+    now proved rather than translated.
+
+    Null and the integer matter because Cypher's `=~` on a non-string is the
+    one behaviour I will not predict from Python."""
+    from driver.core.driver_neo4j_adapter import Neo4jStore
+    from driver.core.driver_ids import SEC_CIK_10_PATTERN, NON_REGISTRANT_CIK
+    cypher = ("WITH {cik: $value} AS co WHERE " + Neo4jStore._CIK_GUARD
+              + " RETURN count(*) AS n")
+    rows = store._read(cypher, value=value, cik_pattern=SEC_CIK_10_PATTERN,
+                       non_registrant=NON_REGISTRANT_CIK)
+    assert rows[0]["n"] == (1 if expected else 0), \
+        f"{value!r} ({why}) -> {rows[0]['n']} row(s)"
+
+
+def test_the_query_references_the_ONE_guard_BY_NAME():
+    """THERE IS ONE COPY, and that is a structural fact — not a substring.
+
+    The first version asserted `_CIK_GUARD in _MEMBER_PAIRING`, which an inline
+    byte-identical duplicate satisfies. That duplicate is behaviour-equivalent
+    today but not DESIGN-equivalent: it recreates the second copy this packet
+    removed, and the drift only shows up the day someone edits one of them.
+
+    So the assignment's own expression must reference the NAME exactly once.
+    No comment scanning, no repository scan, no query substrings."""
+    import ast
+    import inspect
+    from driver.core import driver_neo4j_adapter as adapter
+    cls = next(n for n in ast.parse(inspect.getsource(adapter)).body
+               if isinstance(n, ast.ClassDef) and n.name == "Neo4jStore")
+    assign = next(n for n in cls.body
+                  if isinstance(n, ast.Assign)
+                  and any(getattr(t, "id", None) == "_MEMBER_PAIRING"
+                          for t in n.targets))
+    names = [n.id for n in ast.walk(assign.value) if isinstance(n, ast.Name)]
+    assert names.count("_CIK_GUARD") == 1, names
+
+
+def test_the_owner_has_exactly_ONE_public_import_path():
+    """`inline_html` USES the rule but must not RE-PUBLISH it. A plain
+    `from … import graph_cik` left `inline_html.graph_cik` resolving, so two
+    public paths reached one rule and a later move could keep working through
+    the stale one while silently missing the caller."""
+    import driver.relocation.inline_html as IH
+    assert not hasattr(IH, "graph_cik")
+    assert not hasattr(IH, "SEC_CIK_10_PATTERN")
+
+
+def test_repair_can_no_longer_MASK_a_real_ambiguity():
+    """Two DISTINCT stored spellings are two answers. Stripping collapsed
+    ' 0001306830 ' onto '0001306830' and called the pair unambiguous."""
+    rows = [{"cik": "0001306830"}, {"cik": " 0001306830 "}]
+    assert _cik_store(rows).get_source_company_cik("x") is None
+
+
+def test_the_lawful_single_CIK_still_flows_and_absence_is_still_None():
+    assert _cik_store([{"cik": "0001306830"}]).get_source_company_cik("x") \
+        == "0001306830"
+    assert _cik_store([]).get_source_company_cik("x") is None
+    assert _cik_store([{"cik": None}]).get_source_company_cik("x") is None
+
+
+# 827 Packet 17 — the MATCHED COMPANY is the authority, not the reference.
+CO = "0001306830"          # the Company spelling: ten digits, zero-padded
+NODE = "1306830"           # the archive/node spelling of that SAME cik
+
+
+def test_norm_uid_derives_the_node_spelling_from_the_EXPECTED_company():
+    """The company half is never parsed out of the reference. It comes from the
+    Company the query already matched, and the suffix is carried untouched."""
+    from driver.core.driver_neo4j_adapter import _norm_uid
+    assert _norm_uid(f"{CO}:http://x:x:A", CO) == f"{NODE}:http://x:x:A"
+
+
+@pytest.mark.parametrize("expected,why", [
+    ("0000000000", "the non-registrant marker never names an actual Company"),
+    ("١٢٣٤٥٦٧٨٩٠", "Cypher would coerce these to 1234567890 — another company"),
+    ("1306830", "the ARCHIVE spelling is not the Company spelling"),
+    ("", "empty"),
+    (None, "absent"),
+])
+def test_norm_uid_refuses_an_unlawful_expected_company(expected, why):
+    from driver.core.driver_neo4j_adapter import _norm_uid
+    assert _norm_uid(f"{CO}:http://x:x:A", expected) is None, why
+
+
+@pytest.mark.parametrize("u_id,why", [
+    ("0000320193:http://x:x:A", "a DIFFERENT company's reference"),
+    ("1306830:http://x:x:A", "the node spelling, not the reference spelling"),
+    (f"{CO}", "no separator at all"),
+    (f"{CO}x:http://x:x:A", "the cik is a prefix but the separator is wrong"),
+    (None, "not a string"),
+    (12345, "not a string"),
+])
+def test_norm_uid_refuses_a_reference_that_is_not_this_company(u_id, why):
+    """A reference must begin with the matched company's EXACT ten digits plus
+    the frozen separator. Census seq410: every one of the 7,642,553 / 7,636,528
+    references whose Context matches a Company already does."""
+    from driver.core.driver_neo4j_adapter import _norm_uid
+    assert _norm_uid(u_id, CO) is None, why
+
+
+def test_the_all_zero_marker_can_no_longer_mint_company_zero():
+    """THE OLD FALLBACK. `lstrip('0') or '0'` turned the non-registrant marker
+    into a lookup for company `0`. Once the marker refuses, that branch is
+    dead — and there is no id spelling that can reach it."""
+    from driver.core.driver_neo4j_adapter import _norm_uid
+    assert _norm_uid("0000000000:http://x:x:A", "0000000000") is None
+
+
+def test_ids_are_collected_only_when_they_normalise():
+    """None must never be queried as an id. The door drops the pair instead."""
+    rows = [{"fact_id": "f", "context_id": "c", "concept": "c:C",
+             "value": "1", "decimals": "0", "unit": "u", "start": None,
+             "end": None, "company_cik": CO,
+             "dus": [f"{CO}:http://x:x:A", "0000320193:http://x:x:B"],
+             "mus": [f"{CO}:http://x:x:M", "0000320193:http://x:x:N"]}]
+    seen = {}
+
+    def fake_read(q, **p):
+        if "Dimension" in q and "UNION" in q:
+            seen["ids"] = p.get("ids")
+            return [{"id": f"{NODE}:http://x:x:A", "kind": "Dimension",
+                     "qname": "x:A", "label": None,
+                     "u_id": f"{NODE}:http://x:x:A"},
+                    {"id": f"{NODE}:http://x:x:M", "kind": "Member",
+                     "qname": "x:M", "label": "Europe",
+                     "u_id": f"{NODE}:http://x:x:M"}]
+        return rows
+
+    s = Neo4jStore.__new__(Neo4jStore)
+    s._read = fake_read
+    out = s.get_xbrl_fact_dimensions("acc", "c:C")
+    assert None not in (seen.get("ids") or []), seen
+    assert all(isinstance(i, str) for i in (seen.get("ids") or [])), seen
+    # ONLY this company's reference reached the lookup; the foreign one was
+    # never collected, so it could not have resolved even by accident.
+    assert seen["ids"] == [f"{NODE}:http://x:x:A", f"{NODE}:http://x:x:M"], seen
+    # the pair is incomplete, so the fact is dropped fail-closed
+    assert out.rows == (), out

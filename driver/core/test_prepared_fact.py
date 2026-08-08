@@ -271,3 +271,14 @@ def test_an_unlawful_source_id_can_never_REACH_a_graph_read(tmp_path):
     with pytest.raises(SchemaError):
         run_event(RunInputV1.from_dict({"source_id": "x/y", "facts": []}),
                   store=NeverRead(), audit_dir=str(tmp_path))
+
+
+# ---- #827 B1 packet 1 (SEQ 275): diagnostics state the LOCAL truth only ----
+
+def test_827B1_source_id_diagnostic_states_local_truth_not_the_law():
+    """The refusal is decided by driver_ids.valid_source_id — the ONE owner.
+    The message reports only the local fact; restating the owner's character
+    grammar here is a second copy of the law that can drift (SEQ 274/275).
+    The exact-anchor match IS the reintroduction detector."""
+    with pytest.raises(SchemaError, match=r"^source_id is invalid$"):
+        RunInputV1.from_dict({"source_id": "x:y", "facts": []})

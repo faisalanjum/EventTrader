@@ -6,13 +6,16 @@ Never edit a pinned value; a change to any of them is an owner-level ID-law amen
 import pytest
 
 from driver.core.driver_ids import (
+    SEC_CIK_10_PATTERN,
     IdLawError,
     build_id,
     dec_canon,
     decode_unknown_axis,
     encode_unknown_axis,
+    graph_cik,
     member_id,
     norm,
+    parse_period_id,
     probe_forms,
     signature_hash,
 )
@@ -256,3 +259,348 @@ def test_trailing_newline_rejected_across_every_identity_regex():
         member_id("du:s:rev:", "a" * 64 + "\n")        # quote hash
     with pytest.raises(IdLawError):
         decode_unknown_axis("unknown:xbrlaxis_61__x\n")     # sentinel decode
+
+
+# ---- #827 B1 packet 4 (SEQ 299/301): the ONE NAME-17 suffix owner ----------
+
+def test_827B4_split_terminal_suffix_pins():
+    """NAME-17: only a TERMINAL `_guidance`/`_surprise` counts; strip exactly
+    once. Five pins: no suffix · mid-name only · both terminals · stacked."""
+    from driver.core.driver_ids import (GUIDANCE_SUFFIX, SURPRISE_SUFFIX,
+                                        split_terminal_suffix)
+    assert split_terminal_suffix("revenue") == ("revenue", None)
+    assert split_terminal_suffix("gross_surprise_margin") == \
+        ("gross_surprise_margin", None)          # mid-name never counts
+    assert split_terminal_suffix("revenue_guidance") == \
+        ("revenue", GUIDANCE_SUFFIX)
+    assert split_terminal_suffix("revenue_surprise") == \
+        ("revenue", SURPRISE_SUFFIX)
+    assert split_terminal_suffix("x_guidance_surprise") == \
+        ("x_guidance", SURPRISE_SUFFIX)          # STACKED: strip once only
+
+
+# ---- #827 B8 (SEQ 339/340): the unknown-axis sentinel grammar fails closed ----
+def test_827B8_encode_rejects_non_string_inputs():
+    for bad_axis in (123, b"x", None):
+        with pytest.raises(IdLawError, match="must be a string"):
+            encode_unknown_axis(bad_axis, "Thing")
+    with pytest.raises(IdLawError, match="must be a string"):
+        encode_unknown_axis("us-gaap:SegmentAxis", 123)
+
+
+@pytest.mark.parametrize('axis', [
+    pytest.param(' ', id='blank'),
+    pytest.param('a:b:c', id='two-colons'),
+    pytest.param(':x', id='empty-prefix'),
+    pytest.param('x:', id='empty-local'),
+], )
+def test_827B8_encode_rejects_non_qname_axes(axis):
+    with pytest.raises(IdLawError, match="not a lawful XML QName"):
+        encode_unknown_axis(axis, "Thing")
+
+
+def test_827B8_decode_rejects_non_strings_and_bad_bytes():
+    for bad in (123, None):
+        with pytest.raises(IdLawError, match="must be a string"):
+            decode_unknown_axis(bad)
+    # SEQ 341: two separate truthful reasons — malformed hex vs undecodable bytes
+    with pytest.raises(IdLawError, match="malformed lowercase UTF-8 hex"):
+        decode_unknown_axis("unknown:xbrlaxis_abc__x")     # odd-length hex
+    with pytest.raises(IdLawError, match="decoded bytes are not valid UTF-8"):
+        decode_unknown_axis("unknown:xbrlaxis_ff__x")      # lawful hex, not UTF-8
+
+
+def test_827B8_decode_accepts_only_the_complete_frozen_token():
+    # SEQ 343: no bare-value compatibility path — one public grammar
+    with pytest.raises(IdLawError, match="not an unknown-axis sentinel"):
+        decode_unknown_axis("xbrlaxis_61__x")
+
+
+@pytest.mark.parametrize('hexpart', [
+    pytest.param('gg', id='non-hex'),
+    pytest.param('FF', id='uppercase-hex'),
+], )
+def test_827B8_decode_structural_lowercase_hex_contract(hexpart):
+    # SEQ 344: the frozen contract says LOWERCASE hex — non-hex and uppercase are
+    # refused STRUCTURALLY by the sentinel grammar itself
+    with pytest.raises(IdLawError, match="not an unknown-axis sentinel"):
+        decode_unknown_axis(f"unknown:xbrlaxis_{hexpart}__x")
+
+
+@pytest.mark.parametrize('raw', [
+    pytest.param('a:b:c', id='two-colons'),
+    pytest.param(':x', id='empty-prefix'),
+    pytest.param('x:', id='empty-local'),
+], )
+def test_827B8_decode_rejects_invalid_decoded_qnames(raw):
+    bad = "unknown:xbrlaxis_" + raw.encode().hex() + "__x"
+    with pytest.raises(IdLawError, match="unlawful QName"):
+        decode_unknown_axis(bad)
+
+
+@pytest.mark.parametrize('member', [
+    pytest.param('_x', id='leading-underscore'),
+    pytest.param('x_', id='trailing-underscore'),
+    pytest.param('x__y', id='double-underscore'),
+], )
+def test_827B8_decode_rejects_non_normalized_member_halves(member):
+    with pytest.raises(IdLawError, match="not normalized"):
+        decode_unknown_axis("unknown:xbrlaxis_61__" + member)
+
+
+@pytest.mark.parametrize('value', [
+    pytest.param(123, id='int'),
+    pytest.param(b'x', id='bytes'),
+], )
+def test_827B8_build_id_unknown_slice_rejects_non_strings(value):
+    # SEQ 342: non-reserved non-strings reach the EXISTING norm owner — its reason,
+    # no duplicate type guard in _slice_value
+    with pytest.raises(IdLawError, match=r"norm\(\) needs str"):
+        build_id("src-1", "revenue", slice_parts=[("unknown", value)])
+
+
+@pytest.mark.parametrize('value, inner', [
+    pytest.param('xbrlaxis_abc__x', 'malformed lowercase UTF-8 hex', id='odd-hex'),
+    pytest.param('xbrlaxis_ff__x', 'not valid UTF-8', id='invalid-utf8'),
+    pytest.param('xbrlaxis_' + 'a:b:c'.encode().hex() + '__x', 'unlawful QName',
+                 id='decoded-invalid-qname'),
+    pytest.param('xbrlaxis_61___x', 'not normalized', id='non-normalized-member'),
+], )
+def test_827B8_build_id_rejects_malformed_reserved_sentinels(value, inner):
+    # a malformed attempt at the reserved code-only sentinel must REJECT — it must
+    # never fall through and normalize into a different value. SEQ 345: the boundary
+    # message must CARRY the decoder's specific inner reason, not merely reject.
+    with pytest.raises(IdLawError, match=f"malformed reserved.*{inner}"):
+        build_id("src-1", "revenue", slice_parts=[("unknown", value)])
+
+
+def test_827B8_must_allow_twins():
+    # prefixed, unprefixed, and prefixed-UNICODE QNames (both halves non-ASCII);
+    # free text; byte-identical reserved sentinel — exact equality, no containment
+    assert decode_unknown_axis(encode_unknown_axis("us-gaap:SegmentAxis", "Cloud Revenue")) \
+        == ("us-gaap:SegmentAxis", "cloud_revenue")
+    assert decode_unknown_axis(encode_unknown_axis("Revenue", "Thing")) == ("Revenue", "thing")
+    assert decode_unknown_axis(encode_unknown_axis("Ü:名", "Thing")) == ("Ü:名", "thing")
+    _fid, scope = build_id("src-1", "revenue",
+                           slice_parts=[("unknown", "Cloud Revenue")])
+    assert scope == "slice=unknown:cloud_revenue"
+    sentinel = encode_unknown_axis("custom:StoreTypeAxis", "Company-Operated Stores")
+    _fid2, scope2 = build_id("src-1", "revenue",
+                             slice_parts=[("unknown", sentinel.split(":", 1)[1])])
+    assert scope2 == f"slice={sentinel}"
+
+
+def test_827B7_parse_period_id_owner_pins():
+    """THE one period-id parser (#827 B7): (start, end) text for dated ids,
+    (None, None) for the four sentinels, IdLawError for everything else."""
+    from driver.core.driver_ids import (IdLawError, PERIOD_SENTINEL_SCOPE,
+                                        parse_period_id)
+    assert parse_period_id("gp_2025-07-01_2025-09-30") == ("2025-07-01", "2025-09-30")
+    assert parse_period_id("gp_2025-07-01_2025-07-01") == ("2025-07-01", "2025-07-01")
+    for pid in PERIOD_SENTINEL_SCOPE:
+        assert parse_period_id(pid) == (None, None)
+    for bad in (123, None, b"gp_ST",                       # never a non-string
+                "gp_2025-13-01_2025-09-30",                # impossible calendar
+                "gp_2025-07-01_2025-06-30",                # reversed order
+                "gp_2025-07-01x", "gp_ST ", "GP_ST", ""):  # malformed spellings
+        with pytest.raises(IdLawError):
+            parse_period_id(bad)
+
+
+def test_827B9_surprise_scope_owner_pins_STRUCTURAL():
+    """#827 B9 STRUCTURAL single-owner/closure proof — NOT a behavioral RED:
+    production already returned all three lawful outcomes; the defect was the
+    same contract spelled independently in two modules with no derivation
+    link. THE one immutable pair->scope owner (FINAL_DESIGN OD-21) and the
+    identity-gate vocabulary derived from its values, pinned both ways."""
+    import types
+    from driver.core import driver_ids as I
+    assert isinstance(I.SURPRISE_SCOPE_BY_PAIR, types.MappingProxyType)
+    assert dict(I.SURPRISE_SCOPE_BY_PAIR) == {
+        ("actual", "consensus"): "actual_vs_consensus",
+        ("actual", "previous_guidance"): "actual_vs_guidance",
+        ("guidance", "consensus"): "guidance_vs_consensus",
+    }
+    with pytest.raises(TypeError):                 # immutable: no write door
+        I.SURPRISE_SCOPE_BY_PAIR[("x", "y")] = "z"
+    assert I._SURPRISE_TYPES == frozenset(I.SURPRISE_SCOPE_BY_PAIR.values())
+    assert len(I._SURPRISE_TYPES) == 3             # values pairwise distinct
+    # SEQ 353: the four frozen-contract basis/baseline constants ARE the map's
+    # keys — one spelling for every consumer (F7, home suffix, CLI wiring,
+    # DU-05 pair, period-lane cell). Values cited to FINAL_DESIGN :152 only.
+    assert I.ACTUAL_BASIS == "actual"
+    assert I.GUIDANCE_BASIS == "guidance"
+    assert I.CONSENSUS_BASELINE == "consensus"
+    assert I.PREVIOUS_GUIDANCE_BASELINE == "previous_guidance"
+    assert set(I.SURPRISE_SCOPE_BY_PAIR) == {
+        (I.ACTUAL_BASIS, I.CONSENSUS_BASELINE),
+        (I.ACTUAL_BASIS, I.PREVIOUS_GUIDANCE_BASELINE),
+        (I.GUIDANCE_BASIS, I.CONSENSUS_BASELINE),
+    }
+
+
+def test_827B13_build_period_id_constructs_what_the_one_parser_accepts():
+    """#827 B13: the construction SPELLING owner — a pure constructor, not a
+    validation boundary. Its lawful output is exactly what parse_period_id
+    accepts; every refusal stays the parser's and each caller's existing
+    boundary, so no second boundary is pinned here."""
+    from driver.core.driver_ids import build_period_id, parse_period_id
+    pid = build_period_id("2025-07-01", "2025-09-30")
+    assert pid == "gp_2025-07-01_2025-09-30"
+    assert parse_period_id(pid) == ("2025-07-01", "2025-09-30")
+    same = build_period_id("2025-07-01", "2025-07-01")      # lawful one-day
+    assert parse_period_id(same) == ("2025-07-01", "2025-07-01")
+
+
+def test_827B11_slice_kind_owner_pins_STRUCTURAL():
+    """#827 B11 STRUCTURAL single-owner proof (SEQ 358 design: seven NAMED
+    constants, no ordered tuple). The seven frozen words pinned
+    INDEPENDENTLY (spelled here, never read back from the owner), and the
+    two derived frozen sets. FINAL_DESIGN §5.2 :169-178 (six kinds) +
+    :174 (the unknown sentinel kind)."""
+    from driver.core import driver_ids as I
+    assert I.SEGMENT_KIND == "segment"
+    assert I.PRODUCT_KIND == "product"
+    assert I.GEOGRAPHY_KIND == "geography"
+    assert I.CUSTOMER_KIND == "customer"
+    assert I.CHANNEL_KIND == "channel"
+    assert I.ENTITY_OWNERSHIP_KIND == "entity_ownership"
+    assert I.UNKNOWN_SLICE_KIND == "unknown"
+    assert I.KNOWN_SLICE_KINDS == frozenset({
+        "segment", "product", "geography", "customer", "channel",
+        "entity_ownership"})
+    assert I.SLICE_KINDS == I.KNOWN_SLICE_KINDS | {"unknown"}
+    assert len(I.SLICE_KINDS) == 7
+
+
+def test_827B11_build_id_all_six_known_kinds_and_the_sentinel():
+    """Acceptance side: every known kind passes the identity gate; the
+    structurally valid unknown sentinel still round-trips (827B8 law)."""
+    for kind in ("segment", "product", "geography", "customer", "channel",
+                 "entity_ownership"):
+        _fid, scope = build_id("src-1", "revenue",
+                               slice_parts=[(kind, "US")])
+        assert scope == f"slice={kind}:us"
+    sentinel = encode_unknown_axis("custom:StoreTypeAxis", "Stores")
+    _fid2, scope2 = build_id("src-1", "revenue",
+                             slice_parts=[("unknown",
+                                           sentinel.split(":", 1)[1])])
+    assert scope2 == f"slice={sentinel}"
+
+
+def test_827B11_build_id_rejects_bogus_case_and_padding():
+    # SEQ 361: unhashable kinds ([], {}, bytearray) crashed raw TypeError at
+    # the frozenset membership pre-fix — the string gate must refuse them too
+    for bad in ("brand", "Segment", "segment ", "SEGMENT", "",
+                [], {}, bytearray(b"segment")):
+        with pytest.raises(IdLawError, match="unknown slice kind"):
+            build_id("src-1", "revenue", slice_parts=[(bad, "US")])
+
+
+def test_827B9_build_id_surprise_lawful_string_twins():
+    """All three lawful words through the PUBLIC door: the slot lands verbatim,
+    distinct words -> distinct ids; None stays the only lawful absence."""
+    from driver.core.driver_ids import SURPRISE_SCOPE_BY_PAIR
+    ids = set()
+    for word in SURPRISE_SCOPE_BY_PAIR.values():
+        fid, scope = build_id("src-1", "revenue_surprise", surprise=word)
+        assert scope == f"surprise={word}"
+        ids.add(fid)
+    assert len(ids) == 3
+    _fid, scope = build_id("src-1", "revenue_surprise", surprise=None)
+    assert scope == ""
+
+
+def test_827B9_build_id_surprise_non_string_is_IdLawError_never_TypeError():
+    """SEQ-351 public RED (a REAL pre-fix behavioral defect): surprise=[] and
+    surprise={} crashed TypeError at the frozenset membership; a set survived
+    only by CPython's set-in-set coincidence. LAW: every non-string surprise
+    raises the existing IdLawError — the string gate, never a crash — with
+    None as the only lawful absence."""
+    for bad in ([], {}, set(), ["actual_vs_consensus"],
+                {"actual_vs_consensus": 1}, {"actual_vs_consensus"},
+                frozenset({"actual_vs_consensus"}), 5, 0, True,
+                b"actual_vs_consensus", ("actual", "consensus")):
+        with pytest.raises(IdLawError, match="bad surprise type"):
+            build_id("src-1", "revenue_surprise", surprise=bad)
+
+
+# 827 Packet 17 — the SEC CIK lexical contract. The standards citations live
+# beside the production owner in driver_ids, not restated here.
+
+
+@pytest.mark.parametrize("value", ["0000320193", "0000000001", "9999999999"])
+def test_graph_cik_accepts_the_lawful_twins(value):
+    """Minimum, ordinary and maximum ten-digit CIKs all resolve unchanged."""
+    assert graph_cik(value) == value
+
+
+def test_graph_cik_refuses_the_non_registrant_marker():
+    """THE GAP THIS PACKET CLOSES. `[0-9]{10}` alone accepts 0000000000, and
+    both normalisers then map it to company `0` — inventing an entity rather
+    than refusing. XBRL Guide §3.1.3 makes it a non-registrant marker, and this
+    owner names an ACTUAL Company, so it must refuse."""
+    assert graph_cik("0000000000") is None
+
+
+@pytest.mark.parametrize("value,why", [
+    ("١٢٣٤٥٦٧٨٩٠", "Arabic-Indic digits: str.isdigit() says True and Cypher "
+                    "toInteger coerces them to 1234567890 — ANOTHER company"),
+    ("³000000000", "superscript three also satisfies str.isdigit()"),
+    ("-000000005", "sign survives zfill(10)"),
+    ("       320", "whitespace survives zfill(10)"),
+    ("0000003e10", "exponent text: Cypher coerces it to 30000000000"),
+    ("", "empty"),
+    ("12345678901", "eleven digits: zfill does not truncate"),
+    ("320193", "the ARCHIVE spelling is not the Company spelling"),
+])
+def test_graph_cik_refuses_every_malformed_twin(value, why):
+    assert graph_cik(value) is None, why
+
+
+@pytest.mark.parametrize("value", [None, 1, b"0000320193", ["0000320193"]])
+def test_graph_cik_refuses_non_strings(value):
+    assert graph_cik(value) is None
+
+
+def test_python_matches_the_pattern_as_a_whole_value():
+    """PYTHON ONLY. A trailing newline must not pass, because Python's `$`
+    matches before a final newline — so this rule is sound only as a whole-value
+    match. This proves nothing about Cypher; the same predicate is proved
+    against the real engine by the parameterized read-only Neo4j test, which
+    carries the trailing-newline case too."""
+    import re
+    assert re.fullmatch(SEC_CIK_10_PATTERN, "0000320193")
+    assert not re.fullmatch(SEC_CIK_10_PATTERN, "0000320193\n")
+    assert graph_cik("0000320193\n") is None
+
+
+# 827: the period-id grammar is ASCII, and its refusal must say so.
+_FULLWIDTH_PERIOD = "gp_２０２５-０７-０１" \
+                    "_２０２５-０９-３０"
+_ARABIC_PERIOD = "gp_٢٠٢٥-٠٧-٠١" \
+                 "_٢٠٢٥-٠٩-٣٠"
+
+
+@pytest.mark.parametrize("bad", [_FULLWIDTH_PERIOD, _ARABIC_PERIOD])
+def test_a_unicode_digit_period_id_is_MALFORMED_not_an_impossible_date(bad):
+    """Python's `\\d` matches every Unicode decimal digit, so these passed the
+    grammar and were refused later by `date.fromisoformat` as an "impossible
+    calendar date". That reason is untrue — they are lawful dates in another
+    script. What they violate is the frozen ASCII spelling of an INTERNAL id,
+    so they must take the malformed path and say so."""
+    with pytest.raises(IdLawError, match="bad period id"):
+        parse_period_id(bad)
+
+
+@pytest.mark.parametrize("bad", [_FULLWIDTH_PERIOD, _ARABIC_PERIOD])
+def test_the_same_refusal_reaches_the_build_id_caller(bad):
+    with pytest.raises(IdLawError, match="bad period id"):
+        build_id(SRC, "revenue", period_id=bad)
+
+
+def test_the_LAWFUL_ascii_period_twin_still_parses_and_builds():
+    """MUST-ALLOW twin: the fix narrows the grammar and nothing else."""
+    assert parse_period_id("gp_2025-07-01_2025-09-30") == \
+        ("2025-07-01", "2025-09-30")
+    assert build_id(SRC, "revenue", period_id="gp_2025-07-01_2025-09-30")
