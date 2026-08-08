@@ -424,6 +424,11 @@ def test_strict_shape_check_rejects_mixed_and_incomplete_framing():
     for c in cases:
         with pytest.raises(PeriodResolutionError):
             resolve({**c, "time_type": "duration"})
+    # the DERIVED-bound control (also the T4 mutation discriminator): a year
+    # the machinery can compute is LAWFUL even though a chosen 1900-floor
+    # would have refused it
+    out = resolve({"fiscal_year": 205, "time_type": "duration"})
+    assert out["period_u_id"] == "gp_0205-01-01_0205-12-31"
 
 
 def test_zero_values_are_validated_not_treated_as_absent():
