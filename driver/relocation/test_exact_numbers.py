@@ -93,3 +93,19 @@ def test_EU032_plain_is_the_one_canonical_decimal_form():
     assert plain("1E+3") == "1000"
     assert plain("390") == "390"
     assert plain("-1234567890.12") == "-1234567890.12"
+
+
+def test_EU002_the_timezone_term_is_optional_exactly_as_the_datatype_says():
+    """The ({_TZ})? assembly transcribes the xs:date/xs:dateTime lexical
+    rule (XSD Part 2 Datatypes 2e: the form ends with an OPTIONAL timezone)
+    — never a preference: 1,102,676 of 1,102,676 manifest boundaries are
+    timezone-absent (09_filing_date_inventory.json), so a REQUIRED timezone
+    would refuse every real filing; a timezone-bearing boundary parses
+    EXACTLY and then PARKS under the never-invent-a-timezone comparison law;
+    an unlawful offset (+14:01) refuses outright."""
+    bare = X.parse_filing_boundary('2026-03-31')
+    assert bare.park is None and bare.has_timezone is False
+    tz = X.parse_filing_boundary('2026-03-31Z')
+    assert tz.has_timezone is True and tz.park is not None
+    with pytest.raises(X.ExactError):
+        X.parse_filing_boundary('2026-03-31+14:01')

@@ -1567,6 +1567,13 @@ MUTATIONS = [
      "driver/relocation/test_bind_graph_fact.py::"
      "test_827R6_the_DOOR_refuses_a_writer_alien_raw_as_non_reconciling"),
 
+    (199, "EU-002: the optional timezone term becomes required",
+     "driver/relocation/exact_numbers.py",
+     "_DATE_RE = __import__(\"re\").compile(rf\"{_YEAR}{_MD}({_TZ})?\")",
+     "_DATE_RE = __import__(\"re\").compile(rf\"{_YEAR}{_MD}({_TZ})\")",
+     "driver/relocation/test_exact_numbers.py::"
+     "test_EU002_the_timezone_term_is_optional_exactly_as_the_datatype_says"),
+
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",

@@ -452,6 +452,16 @@ _TZ = r"(?:Z|[+-](?:(?:0[0-9]|1[0-3]):[0-5][0-9]|14:00))"
 # to the following day, and my own test pinned that as law; the XBRL
 # specification is narrower than XSD here and the narrower one governs.
 _TIME = r"(?:[01][0-9]|2[0-3]):[0-5][0-9]:(?:[0-5][0-9]|60)(?:\.[0-9]+)?"
+# EU-002 (#827): the ({_TZ})? OPTIONALITY below is the datatype's own
+# lexical rule, never a preference — W3C XML Schema Part 2: Datatypes,
+# Second Edition (REC 2004-10-28), 3.2.9 date / 3.2.7 dateTime: the lexical
+# form ends with an OPTIONAL timezone, https://www.w3.org/TR/xmlschema-2/#date
+# (xbrli:dateUnion = the union of the two — the EU-153 citation). Measured
+# recall receipt g2_evid_recall_EU-002.txt: 1,102,676/1,102,676 manifest
+# boundaries are timezone-absent (09_filing_date_inventory.json), so
+# REQUIRING one would refuse every real filing; a value CARRYING one parses
+# exactly and then parks under the never-invent-a-timezone comparison law.
+# FAIL-CLOSED on both arms; nothing is guessed at this owner.
 _DATE_RE = __import__("re").compile(rf"{_YEAR}{_MD}({_TZ})?")
 _DATETIME_RE = __import__("re").compile(rf"{_YEAR}{_MD}T{_TIME}({_TZ})?")
 
