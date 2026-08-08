@@ -1338,6 +1338,13 @@ MUTATIONS = [
      "    'us_d':   frozenset({'usd', 'usd_per_share'}),",
      "driver/relocation/test_unit_handoff_census.py::"
      "test_EU001_the_route_a_unit_maps_are_pinned_and_C1_membered"),
+
+    (167, "EU-033: the divide branch key drifts and every per-share abstains",
+     "driver/relocation/exact_numbers.py",
+     "    if declared.get('is_divide'):",
+     "    if declared.get('is_divid'):",
+     "driver/relocation/test_unit_handoff_census.py::"
+     "test_EU033_the_semantic_reader_is_fail_closed_on_its_branch_keys"),
 ]
 
 

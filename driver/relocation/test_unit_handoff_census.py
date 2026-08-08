@@ -230,3 +230,28 @@ def test_EU001_the_route_a_unit_maps_are_pinned_and_C1_membered():
         'count': frozenset({'count'})}
     assert set(ROUTE_A_UNIT_COMPAT) <= set(CANONICAL_UNITS), \
         "every canonical key is C1's (the one unit vocabulary)"
+
+
+def test_EU033_the_semantic_reader_is_fail_closed_on_its_branch_keys():
+    """EU-033 (#827): route_a_semantic_unit's branch keys (is_divide,
+    expanded_numerator/denominator, expanded_measures) are statement-level
+    audited — the divide branch must fire on the divide record (a drifted
+    branch key would silently abstain every usd_per_share), and every
+    unknown/malformed shape ABSTAINS (the fail-closed stance; recall
+    measured in g2_evid_recall_EU-033.txt)."""
+    from driver.relocation.exact_numbers import (ISO_4217_NAMESPACE,
+                                                 XBRL_INSTANCE_NAMESPACE,
+                                                 route_a_semantic_unit)
+    usd = ((ISO_4217_NAMESPACE, 'USD'),)
+    shares = ((XBRL_INSTANCE_NAMESPACE, 'shares'),)
+    assert route_a_semantic_unit(
+        {'is_divide': True, 'expanded_numerator': usd,
+         'expanded_denominator': shares}) == 'usd_per_share'
+    assert route_a_semantic_unit(
+        {'is_divide': False, 'expanded_measures': usd}) == 'usd'
+    # the fail-closed side: unknown, incomplete and non-mapping shapes abstain
+    assert route_a_semantic_unit(
+        {'expanded_numerator': usd, 'expanded_denominator': shares}) is None
+    assert route_a_semantic_unit({'is_divide': True}) is None
+    assert route_a_semantic_unit("usd") is None
+    assert route_a_semantic_unit(None) is None

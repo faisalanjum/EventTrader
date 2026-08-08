@@ -99,6 +99,11 @@ def route_a_semantic_unit(declared):
     """
     if not isinstance(declared, dict):
         return None
+    # EU-033 (#827): the branch keys here are statement-level audited — a
+    # missing or drifted key ABSTAINS (the .get falls to the empty lookup),
+    # never misreads; the fail-closed stance's measured coverage is 93.25%
+    # answered / 6.75% abstain (receipt g2_evid_recall_EU-033.txt). Reach
+    # lane today: proof-only callers (locator :1096, call-trace v5).
     if declared.get('is_divide'):
         return ROUTE_A_SEM_UNIT_DIVIDE.get(
             (tuple(declared.get('expanded_numerator') or ()),
