@@ -1264,6 +1264,18 @@ MUTATIONS = [
      "            ctx.prec = 60",
      "driver/core/test_v2_attacks.py::"
      "test_ATTACK_a_65_digit_value_is_not_rounded"),
+
+    # 157's first draft neutered the FLOAT branch — NOT CAUGHT rc=0: the
+    # later int/Decimal type gate still refuses a float (different message,
+    # same outcome), so that mutant is observationally shadowed. Replaced
+    # (the entry-120 precedent) with the LOAD-BEARING bool guard, whose
+    # removal silently ACCEPTS True as the number 1.
+    (157, "S9: the load-bearing bool guard at the shared numeric core is neutered",
+     "driver/core/slot_convert.py",
+     "    if isinstance(v, bool):\n        raise SlotConversionError(",
+     "    if False:\n        raise SlotConversionError(",
+     "driver/core/test_prepared_fact_v2.py::"
+     "test_S9_slot_numeric_types_at_the_public_door[value-bool]"),
 ]
 
 

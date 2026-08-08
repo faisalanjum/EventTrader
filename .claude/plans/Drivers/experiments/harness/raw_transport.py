@@ -82,9 +82,13 @@ def _reject_nonstandard_constant(token):
 
 
 def parse_exact(text):
-    """Parse reply text with EXACT decimals. Every JSON number becomes a
-    Decimal carrying the source digits; no float ever exists in this path.
-    Duplicate keys and NaN/Infinity are refused rather than silently accepted."""
+    """Parse reply text with EXACT decimals. A JSON number with a fraction
+    or exponent becomes a Decimal carrying the source digits (parse_float);
+    a JSON INTEGER stays a Python int — json.loads has no parse_int hook
+    engaged here, and an exact int is already exact (S9: this docstring
+    used to claim EVERY number becomes Decimal, which was false). No float
+    ever exists in this path. Duplicate keys and NaN/Infinity are refused
+    rather than silently accepted."""
     try:
         return json.loads(text, parse_float=Decimal,
                           object_pairs_hook=_reject_duplicate_keys,

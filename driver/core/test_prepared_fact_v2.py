@@ -1056,3 +1056,68 @@ def test_S2_a_lawful_exact_slot_is_still_accepted():
     from driver.core.test_round8_xbrl_binding import _fact
     assert prepared_fact_v2.PreparedFactV2.from_dict(
         _fact(value="726", mult=1)) is not None
+
+
+# --------------------------------------------------------------------------
+# S9 (#827): the slot value-type law, proved at the PUBLIC DOOR — the 21
+# adjudicated cases (packet Part C / G17 + JSON semantics).
+# --------------------------------------------------------------------------
+
+_S9_KEEP = object()          # sentinel: None is itself a case under test
+
+
+def _s9_fact(value=_S9_KEEP, mult=_S9_KEEP):
+    from decimal import Decimal as D
+    from driver.core.test_round8_xbrl_binding import _fact
+    f = _fact()
+    slot_v = {"value": D(726) if value is _S9_KEEP else value,
+              "scale_multiplier": D(1) if mult is _S9_KEEP else mult,
+              "unit_scale_evidence": None}
+    f["item"]["level_low"] = dict(slot_v)
+    f["item"]["level_high"] = dict(slot_v)
+    return f
+
+
+_S9_CASES = [
+    # -------- value: the 3 lawful forms --------
+    ("value-decimal", {"value": __import__("decimal").Decimal("726.5")}, True),
+    ("value-int", {"value": 726}, True),
+    ("value-negative", {"value": __import__("decimal").Decimal("-726")}, True),
+    # -------- value: the 7 refused forms --------
+    ("value-bool", {"value": True}, False),
+    ("value-float", {"value": 726.0}, False),
+    ("value-str", {"value": "726"}, False),
+    ("value-null", {"value": None}, False),
+    ("value-nan", {"value": __import__("decimal").Decimal("NaN")}, False),
+    ("value-inf", {"value": __import__("decimal").Decimal("Infinity")}, False),
+    ("value-neginf", {"value": __import__("decimal").Decimal("-Infinity")}, False),
+    # -------- multiplier: the 2 lawful forms --------
+    ("mult-decimal", {"mult": __import__("decimal").Decimal(1)}, True),
+    ("mult-int", {"mult": 1}, True),
+    # -------- multiplier: the 9 refused forms --------
+    ("mult-bool", {"mult": True}, False),
+    ("mult-float", {"mult": 1.0}, False),
+    ("mult-str", {"mult": "1"}, False),
+    ("mult-null", {"mult": None}, False),
+    ("mult-nan", {"mult": __import__("decimal").Decimal("NaN")}, False),
+    ("mult-inf", {"mult": __import__("decimal").Decimal("Infinity")}, False),
+    ("mult-neginf", {"mult": __import__("decimal").Decimal("-Infinity")}, False),
+    ("mult-zero", {"mult": __import__("decimal").Decimal(0)}, False),
+    ("mult-negative", {"mult": __import__("decimal").Decimal(-1)}, False),
+]
+assert len(_S9_CASES) == 21
+
+
+@pytest.mark.parametrize("case,over,lawful",
+                         _S9_CASES, ids=[c[0] for c in _S9_CASES])
+def test_S9_slot_numeric_types_at_the_public_door(case, over, lawful):
+    """S9 (#827): value lawful = finite signed Decimal | exact int; refused =
+    bool float str null NaN +/-Inf. Multiplier lawful = positive finite
+    Decimal | exact int; refused adds zero and negative. Judged at the
+    PUBLIC constructor, never the private helpers."""
+    f = _s9_fact(**over)
+    if lawful:
+        assert prepared_fact_v2.PreparedFactV2.from_dict(f) is not None
+    else:
+        with pytest.raises(prepared_fact_v2.SchemaError):
+            prepared_fact_v2.PreparedFactV2.from_dict(f)
