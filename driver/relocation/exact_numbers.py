@@ -162,6 +162,10 @@ def graph_unit_spelling(measures, numerator, denominator, is_divide):
     # thrown away. The measures arriving here are ALREADY in the graph's
     # spelling, decided by NAMESPACE in `inline_html._graph_measure`, where the
     # in-scope declarations are known. This function now only concatenates.
+    # EU-020 (#827): the empty-string JOIN is the graph's stored unit-name
+    # spelling — the concatenation law of the F7 boundary owner's
+    # stored-spelling clause (the graph writes iso4217:USDshares with no
+    # separator; the census at the module head prices it, the clause owns it).
     if is_divide:
         return ''.join(numerator) + ''.join(denominator)
     return measures[0] if len(measures) == 1 else None

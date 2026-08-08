@@ -66,3 +66,15 @@ def test_EU007_the_graph_stored_spellings_resolve_from_the_boundary_clause():
                 "2024-6-30"):
         with _pytest.raises(ExactError):
             _iso_date(bad)
+
+
+def test_EU020_the_graph_unit_join_spelling_is_the_clauses():
+    """EU-020 (#827): the stored divide-unit name is numerator+denominator
+    CONCATENATED with NO separator (the F7 boundary owner's stored-spelling
+    clause; iso4217:USDshares in the live census) — pinned here because no
+    lead suite reddened on a separator drift (measured 2026-08-08)."""
+    from driver.relocation.exact_numbers import graph_unit_spelling
+    assert graph_unit_spelling((), ("iso4217:USD",), ("shares",),
+                               True) == "iso4217:USDshares"
+    assert graph_unit_spelling(("iso4217:USD",), (), (), False) == "iso4217:USD"
+    assert graph_unit_spelling(("a", "b"), (), (), False) is None

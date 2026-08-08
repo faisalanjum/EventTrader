@@ -1379,6 +1379,17 @@ MUTATIONS = [
      "driver/core/test_round8_xbrl_binding.py::"
      "test_a_ONE_DAY_duration_with_equal_date_only_boundaries_is_LAWFUL[2025-03-31-2025-03-31]"),
 
+    # 172 RE-REGISTERED per SEQ 811 (the first draft's '/'-join was
+    # observationally WEAK: a separator inside a single-element join
+    # inserts nothing). This mutant changes the BETWEEN-BLOCKS join, which
+    # every divide name exercises.
+    (172, "EU-020: a separator appears between the divide name's two blocks",
+     "driver/relocation/exact_numbers.py",
+     "        return ''.join(numerator) + ''.join(denominator)",
+     "        return ''.join(numerator) + '_' + ''.join(denominator)",
+     "driver/relocation/test_exact_numbers.py::"
+     "test_EU020_the_graph_unit_join_spelling_is_the_clauses"),
+
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",
