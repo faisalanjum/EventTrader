@@ -1574,6 +1574,34 @@ MUTATIONS = [
      "driver/relocation/test_exact_numbers.py::"
      "test_EU002_the_timezone_term_is_optional_exactly_as_the_datatype_says"),
 
+    (200, "EU-003: the lexical day window widens past the spec",
+     "driver/relocation/exact_numbers.py",
+     "_MD = r\"-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])\"",
+     "_MD = r\"-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[0-9])\"",
+     "driver/relocation/test_exact_numbers.py::"
+     "test_CL001_the_date_grammar_is_the_datatypes_own_lexical_space"),
+
+    (201, "EU-004: the timezone window admits +14:01",
+     "driver/relocation/exact_numbers.py",
+     "_TZ = r\"(?:Z|[+-](?:(?:0[0-9]|1[0-3]):[0-5][0-9]|14:00))\"",
+     "_TZ = r\"(?:Z|[+-](?:(?:0[0-9]|1[0-3]):[0-5][0-9]|14:0[01]))\"",
+     "driver/relocation/test_exact_numbers.py::"
+     "test_EU002_the_timezone_term_is_optional_exactly_as_the_datatype_says"),
+
+    (202, "EU-005: the XML whitespace owner swallows U+000B",
+     "driver/relocation/exact_numbers.py",
+     "XML_WS = \" \\t\\r\\n\"",
+     "XML_WS = \" \\t\\r\\n\\x0b\"",
+     "driver/relocation/test_exact_numbers.py::"
+     "test_CL001_the_date_grammar_is_the_datatypes_own_lexical_space"),
+
+    (203, "EU-006: the leap-second admission is deleted and :60 refuses instead of parking",
+     "driver/relocation/exact_numbers.py",
+     "_TIME = r\"(?:[01][0-9]|2[0-3]):[0-5][0-9]:(?:[0-5][0-9]|60)(?:\\.[0-9]+)?\"",
+     "_TIME = r\"(?:[01][0-9]|2[0-3]):[0-5][0-9]:(?:[0-5][0-9])(?:\\.[0-9]+)?\"",
+     "driver/relocation/test_exact_numbers.py::"
+     "test_CL001_the_date_grammar_is_the_datatypes_own_lexical_space"),
+
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",

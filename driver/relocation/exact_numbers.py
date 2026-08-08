@@ -436,6 +436,30 @@ FilingBoundary = _namedtuple("FilingBoundary",
 #: this string, which is two owners of one rule — the exact shape that produced
 #: the `_plus_day` twins and the `strip_xbrli` lambda. Whitespace is not a
 #: formatting preference here: it decides whether a padded value is lawful.
+# CL-001 (#827, EU-003/004/005/006): THE GRAMMAR BELOW IS THE DATATYPE'S
+# OWN LEXICAL SPACE, transcribed — W3C XML Schema Part 2: Datatypes, Second
+# Edition, REC 2004-10-28 (the version XBRL 2.1 normatively references):
+# - XML_WS (EU-005): the whiteSpace facet (section 4.3.6; date types
+#   COLLAPSE), and what collapses is XML 1.0 5e production [3]
+#   S ::= (#x20|#x9|#xD|#xA)+, https://www.w3.org/TR/xml/#NT-S — never
+#   Python's wider Unicode set (U+000B/U+000C/U+00A0/U+3000 are not XML S).
+# - _YEAR/_MD and the optionality assembly (EU-003): section 3.2.9 date /
+#   3.2.7 dateTime lexical representation,
+#   https://www.w3.org/TR/xmlschema-2/#date — optional leading '-',
+#   four-plus year digits with year 0000 prohibited in 1.0, MM 01-12,
+#   DD 01-31 BEFORE the calendar check (the calendar gate is a separate
+#   owner below), 'T' separator, ':' time separators, '.' second fraction.
+# - _TZ and its 14:00 alternative (EU-004): section 3.2.7.3 Timezones — Z
+#   or +/-hh:mm bounded to -14:00..+14:00 inclusive; 14:01 and beyond are
+#   outside the value space (the census int:14 lives in this regex
+#   alternative; no second value-space recheck exists).
+# - _TIME's :60 admission (EU-006): NO XSD 1.0 clause fixes leap seconds —
+#   1.0's value space defers to ISO 8601 (which admits :60 during a leap
+#   second) and states no lexical prohibition; the successor XSD 1.1
+#   (REC 2012-04-05, section 3.3.7) EXPLICITLY excludes 60. XBRL 2.1
+#   references 1.0, so the ambiguity is RECORDED, the regex ADMITS :60
+#   lexically, and the value then PARKS as unrepresentable — fail-visible,
+#   never a guess (the adjudication this cluster pins).
 XML_WS = " \t\r\n"
 
 _YEAR = r"-?(?:[1-9][0-9]{3,}|0[0-9]{3})"

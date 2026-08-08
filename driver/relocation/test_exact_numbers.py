@@ -109,3 +109,21 @@ def test_EU002_the_timezone_term_is_optional_exactly_as_the_datatype_says():
     assert tz.has_timezone is True and tz.park is not None
     with pytest.raises(X.ExactError):
         X.parse_filing_boundary('2026-03-31+14:01')
+
+
+def test_CL001_the_date_grammar_is_the_datatypes_own_lexical_space():
+    """EU-003/004/005/006: the grammar constants transcribe XSD Part 2 2e
+    exactly. The LEXICAL owner refuses day/month shapes outside the spec
+    windows (before the separate calendar gate speaks, so the refusal names
+    the lexical law); XML whitespace collapse strips ONLY XML S, so a
+    U+000B pad refuses; :60 is admitted lexically under the recorded 1.0
+    leap-second ambiguity and then PARKS as unrepresentable."""
+    with pytest.raises(X.ExactError, match='not a lawful'):
+        X.parse_filing_boundary('2026-03-39')
+    with pytest.raises(X.ExactError, match='not a lawful'):
+        X.parse_filing_boundary('2026-13-01')
+    assert X.parse_filing_boundary(' 2026-03-31\t').park is None
+    with pytest.raises(X.ExactError, match='not a lawful'):
+        X.parse_filing_boundary('2026-03-31\x0b')
+    leap = X.parse_filing_boundary('2026-03-31T12:00:60')
+    assert leap.kind == 'dateTime' and leap.park
