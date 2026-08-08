@@ -344,7 +344,13 @@ def _cumulative(item, scope, time_type, fye, cal, ticker, lk):
             fye = _lawful_fye(corrected)   # the cache's answer is validated too
     if fye is None:
         raise PeriodResolutionError("fye_month required for ytd/ttm fiscal math")
-    q = item.get("fiscal_quarter") or 4
+    # P-O8 (U-4): a missing quarter is a PARK, never a quiet Q4 default
+    # (REVIEW_RULES §4 — never-quiet-defaults).
+    q = item.get("fiscal_quarter")
+    if q is None:
+        raise PeriodResolutionError(
+            f"{scope} without fiscal_quarter — the cumulative window's anchor "
+            f"quarter is a semantic judgment, never defaulted — park")
     end = _compute_fiscal_dates(fye, fy, f"Q{q}")[1]
     if scope == "ytd":
         start = _compute_fiscal_dates(fye, fy, "Q1")[0]

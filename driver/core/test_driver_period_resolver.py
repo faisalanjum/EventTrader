@@ -890,3 +890,17 @@ def test_lookup_result_extra_key_parks():
                              lookups=_o3_lk(predict={"start": "2025-04-01",
                                                      "end": "2025-06-30",
                                                      "note": "hi"}))
+
+
+# ---- P-O8 (#827 F-PERIOD, U-4): quarterless ytd/ttm parks — never quiet-Q4 ----
+
+def test_ytd_missing_quarter_parks():
+    with pytest.raises(PeriodResolutionError):
+        resolve({"fiscal_year": 2025, "period_scope": "ytd",
+                 "time_type": "duration"})
+
+
+def test_ttm_missing_quarter_parks():
+    with pytest.raises(PeriodResolutionError):
+        resolve({"fiscal_year": 2025, "period_scope": "ttm",
+                 "time_type": "duration"})
