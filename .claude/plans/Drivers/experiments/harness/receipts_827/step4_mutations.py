@@ -1735,6 +1735,13 @@ MUTATIONS = [
      "               for t in row.find_all('td'))",
      "driver/relocation/test_row_label_span.py::"
      "test_EU101_a_data_row_between_header_and_target_is_skipped_not_a_header"),
+
+    (223, "EU-103: the dash class regresses to the hand-picked sample",
+     "driver/relocation/inline_html.py",
+     "    return ch == ' ' or unicodedata.category(ch) == 'Pd'",
+     "    return ch in ' \u2014-'",
+     "driver/relocation/test_row_label_span.py::"
+     "test_a_DASH_ONLY_header_is_skipped_whatever_the_DASH_IS"),
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",

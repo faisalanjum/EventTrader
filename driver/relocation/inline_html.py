@@ -492,6 +492,16 @@ def _is_edge_marker(ch):
     The representation is whitespace-normalised before either consumer, so
     U+0020 is the only space that can reach here.
     """
+    # EU-103 (#827): the Pd meaning is Unicode-owned and cited exactly —
+    # The Unicode Standard, UAX #44 (Unicode Character Database),
+    # General_Category value Pd = Dash_Punctuation,
+    # https://www.unicode.org/reports/tr44/ — ASKED via unicodedata (the
+    # pinned runtime's copy), never enumerated; U+2212 MINUS SIGN is Sm and
+    # stays content. The ' ' arm is lawful because the representation is
+    # whitespace-normalised upstream (U+0020 is the only space here). The
+    # leading-marker-drop PRODUCT rule these serve is the EU-073
+    # fail-closed adjudication (drop-only, front-only, never fabricates).
+    # Receipt g2_evid_recall_EU-103.txt: zero recall — citation only.
     return ch == ' ' or unicodedata.category(ch) == 'Pd'
 
 
