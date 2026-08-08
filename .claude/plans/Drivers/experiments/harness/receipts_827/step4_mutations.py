@@ -2289,6 +2289,13 @@ MUTATIONS = [
      "driver/relocation/test_row_label_span.py::"
      "test_E2_a_vis_hidden_FACT_with_its_own_visible_is_not_hidden"),
 
+    (304, "EU-140: the absent style attribute declares display:none",
+     "driver/relocation/inline_html.py",
+     "            tinycss2.parse_declaration_list(str(el.get('style') or ''))):",
+     "            tinycss2.parse_declaration_list(str(el.get('style') or 'display:none'))):",
+     "driver/relocation/test_two_view_bridge.py::"
+     "test_ANY_lawful_prefix_for_the_fact_element_still_binds"),
+
     (281, "EU-169: the exactly-one-child bound widens to two",
      "driver/relocation/inline_html.py",
      "        if len(kids) != 1 or len(elements) != 1 \\",

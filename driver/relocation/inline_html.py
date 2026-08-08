@@ -347,6 +347,12 @@ def _style_state(el):
     # vocabulary and the 'all' shorthand carry the CSS-PIN board's cited
     # rendering law (Display 3 / Containment 2 / Cascade 4, §201-era cites).
     for i, d in enumerate(
+    # EU-140 (#827): the or-'' is the truthful NO-INLINE-STYLE reading —
+    # an element without a style attribute declares nothing here, and an
+    # empty declaration list is exactly that (every property then stays
+    # None = "not declared", which the caller reads as inherit/absent).
+    # It can only ever ADD zero declarations: pinned by every lawful
+    # document (a fabricating default hides the whole filing — 71 reds).
             tinycss2.parse_declaration_list(str(el.get('style') or ''))):
         # CSS Custom Properties for Cascading Variables Level 1 §2: a custom
         # property is ANY property whose name starts with two dashes — never
