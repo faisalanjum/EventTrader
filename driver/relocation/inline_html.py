@@ -2202,7 +2202,13 @@ def _evidence_from(fact, prepared):
 
 def element_evidence(doc_or_html, element_id):
     """(evidence, 'ok') for the exact element carrying id=element_id, else
-    (None, reason). Accepts a prepare()d document or raw HTML text."""
+    (None, reason). Accepts a prepare()d document or raw HTML text.
+
+    EU-164 (#827): the blank_id/malformed_id tokens below are the binder's
+    own published vocabulary (the CL-039 block); their rules — a blank id
+    means look-up-by-identity, id lexical validity is XML 1.0 — are cited
+    in place. Never T1 outcome codes.
+    """
     # XML 1.0 S, not Python's Unicode set: a bare `.strip()` called an id of
     # U+00A0 blank, and blank here means "look me up by identity instead".
     prepared = _prepared(doc_or_html)

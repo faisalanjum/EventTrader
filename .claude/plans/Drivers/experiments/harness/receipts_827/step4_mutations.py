@@ -1481,6 +1481,13 @@ MUTATIONS = [
      "driver/relocation/test_bind_graph_fact.py::"
      "test_RED_a_malformed_is_divide_flag_is_malformed_not_a_crash"),
 
+    (187, "EU-164: the malformed-id token spelling drifts",
+     "driver/relocation/inline_html.py",
+     "        return None, 'malformed_id'",
+     "        return None, 'malformed_idX'",
+     "driver/relocation/test_two_view_bridge.py::"
+     "test_an_UNLAWFUL_xml_id_is_still_refused[1abc]"),
+
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",
