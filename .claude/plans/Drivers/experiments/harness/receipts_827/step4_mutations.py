@@ -1812,6 +1812,55 @@ MUTATIONS = [
      "            if False and (dec is not None or prec is not None):\n                return None, MALFORMED_FACT_ACCURACY",
      "driver/relocation/test_semantic_fact_value.py::"
      "test_a_true_nil_fact_STATING_ACCURACY_is_MALFORMED_not_lawfully_empty"),
+
+    (234, "EU-047: the ix namespace URI drifts one character",
+     "driver/relocation/inline_html.py",
+     "_INLINE_NS = 'http://www.xbrl.org/2013/inlineXBRL'",
+     "_INLINE_NS = 'http://www.xbrl.org/2013/inlineXBRLX'",
+     "driver/relocation/test_two_view_bridge.py::"
+     "test_ANY_lawful_prefix_for_the_fact_element_still_binds"),
+
+    (235, "EU-048: the reserved xml namespace URI drifts",
+     "driver/relocation/inline_html.py",
+     "_XML_PREFIX_NS = 'http://www.w3.org/XML/1998/namespace'",
+     "_XML_PREFIX_NS = 'http://www.w3.org/XML/1998/namespaceX'",
+     "driver/relocation/test_two_view_bridge.py::"
+     "test_the_reserved_xml_prefix_resolves_without_being_declared"),
+
+    (236, "EU-049: the xsi namespace URI drifts",
+     "driver/relocation/inline_html.py",
+     "_XSI_NS = 'http://www.w3.org/2001/XMLSchema-instance'",
+     "_XSI_NS = 'http://www.w3.org/2001/XMLSchema-instanceX'",
+     "driver/relocation/test_context_content_model.py::"
+     "test_827B12_a_NO_NAMESPACE_custom_type_parks_as_unsupported"),
+
+    (237, "EU-050: schemaLocation leaves the permitted-hints set",
+     "driver/relocation/inline_html.py",
+     "_XSI_PASS = frozenset({'schemaLocation', 'noNamespaceSchemaLocation'})",
+     "_XSI_PASS = frozenset({'noNamespaceSchemaLocation'})",
+     "driver/relocation/test_context_content_model.py::"
+     "test_827B12_MUST_ALLOW_every_lawful_shape"),
+
+    (238, "EU-051: the xbrldi namespace URI drifts",
+     "driver/relocation/inline_html.py",
+     "_DIMENSION_NS = 'http://xbrl.org/2006/xbrldi'",
+     "_DIMENSION_NS = 'http://xbrl.org/2006/xbrldiX'",
+     "driver/relocation/test_context_content_model.py::"
+     "test_a_SUPPORTED_explicit_member_still_binds"),
+
+    (239, "EU-056: collapse leaves the visibility keyword set",
+     "driver/relocation/inline_html.py",
+     "_VISIBILITY_VALUES = frozenset({'visible', 'hidden', 'collapse'})",
+     "_VISIBILITY_VALUES = frozenset({'visible', 'hidden'})",
+     "driver/relocation/test_row_label_span.py::"
+     "test_E_the_inline_style_law_decides_by_DECLARATION_not_substring"),
+
+    (240, "EU-057: run-in leaves the display-outside set and none wins the cascade",
+     "driver/relocation/inline_html.py",
+     "_DISPLAY_OUTSIDE = frozenset({'block', 'inline', 'run-in'})",
+     "_DISPLAY_OUTSIDE = frozenset({'block', 'inline'})",
+     "driver/relocation/test_row_label_span.py::"
+     "test_EU057_run_in_is_a_lawful_display_value_that_wins_the_cascade"),
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",

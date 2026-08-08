@@ -210,6 +210,10 @@ def _has_number_fact(row, fact_nodes):
 #: THE OFFICIAL VALUE SETS — the STANDARDS' keyword grammars transcribed, each
 #: cited to its owner; nothing here is corpus-derived.
 #: display: W3C CSS Display Module Level 3, CR Draft 5 June 2026, §2.
+#: EU-057 (#827): exact citation — https://www.w3.org/TR/css-display-3/#the-display-properties ;
+#: run-in IS a Level-3 <display-outside> keyword (post-CSS-2.1), and a
+#: recognized later declaration must WIN the cascade over an earlier none
+#: (pinned: dropping it lets display:none win and hides real facts).
 _DISPLAY_OUTSIDE = frozenset({'block', 'inline', 'run-in'})
 _DISPLAY_INSIDE = frozenset({'flow', 'flow-root', 'table', 'flex', 'grid',
                              'ruby'})
@@ -222,6 +226,9 @@ _DISPLAY_SINGLE = (
     | {'contents', 'none'}                           # <display-box>
     | {'inline-block', 'inline-table', 'inline-flex', 'inline-grid'})  # legacy
 #: visibility: CSS Display 3 §4. content-visibility: CSS Containment 2 §4.
+#: EU-056 (#827): exact citations — https://www.w3.org/TR/css-display-3/#visibility
+#: and https://www.w3.org/TR/css-contain-2/#content-visibility ; the
+#: keyword sets are transcribed, never corpus-derived.
 _VISIBILITY_VALUES = frozenset({'visible', 'hidden', 'collapse'})
 _CV_VALUES = frozenset({'visible', 'hidden', 'auto'})
 #: CSS-wide keywords: CSS Cascade Level 5 §7. initial/inherit/unset are
@@ -945,6 +952,9 @@ def _soup(html_text):
 #: `ix`, `xbrldi`, `i`) appears anywhere in this module's logic.
 #: The instance-namespace URI lives at its ONE owner,
 #: `exact_numbers.XBRL_INSTANCE_NAMESPACE`.
+#: EU-051 (#827): the URI is published by XBRL Dimensions 1.0, REC
+#: 2006-09-18 with corrected errata 2012-01-25 (the xbrldi vocabulary),
+#: https://www.xbrl.org/specification/dimensions/rec-2006-09-18/dimensions-rec-2006-09-18+corrected-errata-2012-01-25.html
 _DIMENSION_NS = 'http://xbrl.org/2006/xbrldi'
 #: INLINE XBRL 1.1, AND ONLY 1.1 — a standards-bound product boundary for the
 #: SEC filing route, not a shape inferred from the filings we happen to hold.
@@ -956,10 +966,17 @@ _DIMENSION_NS = 'http://xbrl.org/2006/xbrldi'
 #: that is DETECTION ONLY: it exists so a 1.0 document is visible rather than
 #: silently absent from a census. Being able to identify 1.0 is not a reason to
 #: support it here, and nothing below admits it.
+#: EU-047 (#827): the URI is published by Inline XBRL 1.1 Part 1 itself
+#: (REC 2013-11-18 + errata 2026-07-14, the current edition — the exact
+#: URL is at the nonFraction reader's spec-sources note); resolution is
+#: by THIS URI, never by prefix (pinned by the any-lawful-prefix family).
 _INLINE_NS = 'http://www.xbrl.org/2013/inlineXBRL'
 
 
 #: Namespaces in XML 1.0 §3 — the one prefix bound by the standard itself.
+#: EU-048 (#827): Namespaces in XML 1.0 (Third Edition), REC 2009-12-08,
+#: section 3 — the prefix xml is BY DEFINITION bound to this URI and needs
+#: no declaration, https://www.w3.org/TR/xml-names/#ns-decl .
 _XML_PREFIX_NS = 'http://www.w3.org/XML/1998/namespace'
 
 
@@ -1207,6 +1224,9 @@ def _measure_text(m):
 
 #: THE two namespace URIs — XML Schema 1.0 Structures 2e §2.6 defines the XS
 #: vocabulary URI and the XSI instance URI. ONE definition each.
+#: EU-049 (#827): exact edition — XML Schema Part 1: Structures, Second
+#: Edition, REC 2004-10-28, section 2.6 (the xsi attribute vocabulary
+#: lives in this URI), https://www.w3.org/TR/xmlschema-1/#no-xmlns .
 _XSI_NS = 'http://www.w3.org/2001/XMLSchema-instance'
 _XS_NS = 'http://www.w3.org/2001/XMLSchema'
 #: THE context grammar's fixed types: XBRL 2.1 REC 2003-12-31 + corrected
@@ -1348,6 +1368,10 @@ def _shape(el, local):
 #: asserted type must be validly derived from the declared one. The fourth
 #: schema-related attribute, `xsi:nil`, is excluded HERE because none of these
 #: XBRL context declarations is nillable.
+#: EU-050 (#827): exact clause — XML Schema Part 1 2e section 2.6.3
+#: xsi:schemaLocation / xsi:noNamespaceSchemaLocation MAY appear on any
+#: element (hints, not admissions),
+#: https://www.w3.org/TR/xmlschema-1/#xsi_schemaLocation .
 _XSI_PASS = frozenset({'schemaLocation', 'noNamespaceSchemaLocation'})
 
 

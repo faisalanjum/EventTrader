@@ -892,3 +892,14 @@ def test_EU101_a_data_row_between_header_and_target_is_skipped_not_a_header():
                    f'<tr><td>Other</td><td>{d1}</td></tr>'
                    f'<tr><td>Total</td><td>{_FACT}</td></tr></table>')
     assert ev['columns'] == ['2024']
+
+
+def test_EU057_run_in_is_a_lawful_display_value_that_wins_the_cascade():
+    """_DISPLAY_OUTSIDE transcribes CSS Display 3: run-in IS a lawful
+    <display-outside> keyword, so a later display:run-in declaration WINS
+    the cascade over an earlier display:none — dropping it from the set
+    silently hides real facts (the none declaration would win instead)."""
+    prep, ev = _ev('<div>Total was <span style="display:none;display:run-in">'
+                   f'{_FACT}</span> now.</div>')
+    assert ev['hidden'] is False
+    assert ev['block'] == 'Total was 726 now.'
