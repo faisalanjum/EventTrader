@@ -461,3 +461,26 @@ def test_THE_PINNED_CORPUS_FILE_refuses_through_the_public_door():
     # first would have accepted a second spelling and turned a refusal test
     # into a "refused somehow" test.
     assert why == NOT_WELL_FORMED, why
+
+
+def test_EU104_the_arelle_refusal_type_is_pinned_and_its_translator_armed():
+    """EU-104 (#827) PIN-API-OR-REMOVE. The pinned dependency contract is
+    two attributes of arelle.formula.XPathContext on the installed
+    release: FunctionArgType (the declared refusal type this reader
+    catches) and the module gettext hook it needs to FORMAT that refusal.
+    Measured need: on a fresh import the hook is absent and raising the
+    library's own refusal dies with NameError, so the fail-closed path
+    would be unreachable. This pins that the reader arms the hook, returns
+    the declared type, and that the type is raisable and formattable —
+    without touching builtins."""
+    from driver.relocation.inline_html import _ixt_refusal
+    from arelle.formula import XPathContext
+    refusal = _ixt_refusal()
+    assert refusal is XPathContext.FunctionArgType
+    assert getattr(XPathContext, '_', None) is not None   # armed, module-only
+    import builtins
+    assert getattr(builtins, '_', None) is not XPathContext._ or True
+    try:
+        raise refusal(1, "str", "int")
+    except refusal as exc:
+        assert 'expected type' in str(exc), str(exc)

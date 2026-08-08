@@ -2352,6 +2352,13 @@ MUTATIONS = [
      "driver/relocation/test_row_label_span.py::"
      "test_EU123_the_memo_capacity_is_derived_and_bounded"),
 
+    (313, "EU-104: the arelle translator is left unarmed and the refusal path dies",
+     "driver/relocation/inline_html.py",
+     "    if getattr(XPathContext, '_', None) is None:\n        import gettext\n        XPathContext._ = gettext.gettext",
+     "    if False and getattr(XPathContext, '_', None) is None:\n        import gettext\n        XPathContext._ = gettext.gettext",
+     "driver/relocation/test_transform_registry.py::"
+     "test_EU104_the_arelle_refusal_type_is_pinned_and_its_translator_armed"),
+
     (281, "EU-169: the exactly-one-child bound widens to two",
      "driver/relocation/inline_html.py",
      "        if len(kids) != 1 or len(elements) != 1 \\",

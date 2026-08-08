@@ -2987,6 +2987,27 @@ def _ixt_refusal():
     rather than as the library's own refusal. Only that one hook is set, on the
     module: no process-wide `builtins` install, which would change behaviour for
     every other consumer in the process.
+
+    EU-104 (#827) PIN-API-OR-REMOVE — the pin and the proven need, measured
+    on the installed release rather than assumed:
+      * PINNED API: arelle-release 2.38.20 (the installed pin; the
+        2.35.0 -> 2.38.20 drift row stays recorded), module
+        `arelle.formula.XPathContext`, two attributes only —
+        `FunctionArgType` (the declared refusal type this reader catches)
+        and `_` (the module's own gettext hook, which the library reads
+        when it formats that refusal).
+      * PROVEN NEED, measured 2026-08-08 in a FRESH interpreter on 2.38.20:
+        `getattr(XPathContext, '_', None)` is None on import, and raising
+        the library's own `FunctionArgType` then dies with
+        `NameError: name '_' is not defined`. With the hook armed the same
+        raise yields the library's real message
+        ("[err:XPTY0004]: Arg 2 expected type str"). So without this one
+        line an INVALID transform input surfaces as a NameError from inside
+        a dependency instead of as the refusal this reader is written to
+        catch — the fail-closed path would be unreachable.
+      * CONTAINMENT: the hook is set on the MODULE and only when absent —
+        never a process-wide builtins install, so no other consumer in the
+        process changes behaviour, and re-arming is idempotent.
     """
     from arelle.formula import XPathContext
     if getattr(XPathContext, '_', None) is None:
