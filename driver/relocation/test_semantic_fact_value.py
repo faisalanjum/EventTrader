@@ -552,3 +552,18 @@ def test_EU096_an_absent_scale_means_ten_to_the_zero():
              'format="ixt:num-dot-decimal">390</ix:nonFraction>')
     bound, why = _bind(inner, raw_value='390')
     assert bound is not None, why
+
+
+def test_EU112_a_negative_no_format_value_never_binds():
+    """Inline XBRL 1.1 section 10.1.2: a no-format fact states the number
+    itself and it MUST be non-negative — the pattern admits a sign, so the
+    zero bound is load-bearing: -0.5 refuses while the positive control
+    binds."""
+    neg = ('<ix:nonFraction id="f1" name="us-gaap:A" contextRef="c1" '
+           'unitRef="u1" decimals="0">-0.5</ix:nonFraction>')
+    bound, why = _bind(neg, raw_value='-0.5')
+    assert bound is None
+    pos = ('<ix:nonFraction id="f1" name="us-gaap:A" contextRef="c1" '
+           'unitRef="u1" decimals="0">390</ix:nonFraction>')
+    bound2, why2 = _bind(pos, raw_value='390')
+    assert bound2 is not None, why2

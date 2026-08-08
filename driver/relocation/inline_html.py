@@ -2818,6 +2818,12 @@ def _no_format_value(text):
     if not decimalPattern.fullmatch(collapsed):
         return None
     value = Decimal(collapsed)
+    # EU-112 (#827): the 0 bound is the clause's own number — Inline XBRL
+    # 1.1 section 10.1.2 (the current-edition URL at the spec-sources
+    # note): a fact with NO format states the number itself and it MUST be
+    # a NON-NEGATIVE decimal; Arelle's decimalPattern admits a sign, so
+    # this gate is LOAD-BEARING (measured: weakening it BINDS a negative
+    # no-format fact), and -0 compares equal to 0 and stays lawful.
     if value < 0:                       # -0 compares equal to 0 and is lawful
         return None
     return value

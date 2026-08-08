@@ -1994,6 +1994,13 @@ MUTATIONS = [
      "    raw = _typed(el, '{%s}nilX' % _XSI_NS)",
      "driver/relocation/test_semantic_fact_value.py::"
      "test_a_TRUE_nil_fact_is_LAWFUL_but_states_no_value"),
+
+    (260, "EU-112: the non-negative bound weakens and a negative no-format fact binds",
+     "driver/relocation/inline_html.py",
+     "    if value < 0:                       # -0 compares equal to 0 and is lawful",
+     "    if value < Decimal('-1'):                       # -0 compares equal to 0 and is lawful",
+     "driver/relocation/test_semantic_fact_value.py::"
+     "test_EU112_a_negative_no_format_value_never_binds"),
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",
