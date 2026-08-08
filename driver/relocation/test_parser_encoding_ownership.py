@@ -221,3 +221,19 @@ def test_REMOVING_the_encoding_ownership_flips_the_SILENT_detector(tmp_path):
     assert ascii_why == 'ok'
     assert ascii_ev['dims_expanded'][0][1] == \
         ('http://example.org/company', 'Member')
+
+
+def test_EU039_the_parser_policy_never_expands_hidden_content():
+    """EU-039 (#827): the security half of _PARSER_OPTIONS, pinned by
+    BEHAVIOR — an internal-DTD entity stays UNRESOLVED under the product
+    policy (no network, no DTD, no entity resolution at parse time; the
+    #826 zero-network clean-lane law at the parse boundary). Under the
+    mutant (resolve_entities/load_dtd flipped) the entity expands to its
+    replacement text and this node fails."""
+    from lxml import etree
+    from inline_html import _PARSER_OPTIONS
+    doc = b'<?xml version="1.0"?><!DOCTYPE r [<!ENTITY x "boom">]><r>&x;</r>'
+    opts = {k: v for k, v in _PARSER_OPTIONS.items() if k != "encoding"}
+    root = etree.fromstring(doc, etree.XMLParser(**opts))
+    assert root.text is None                      # nothing expanded in place
+    assert b"boom" not in etree.tostring(root)    # the replacement text never appears

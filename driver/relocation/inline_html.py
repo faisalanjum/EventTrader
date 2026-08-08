@@ -641,7 +641,18 @@ DOCTYPE_FORBIDDEN = 'document declares a DOCTYPE, which EDGAR forbids in an Inli
 
 
 #: THE ONE PARSER POLICY, shared by the bounded prolog pass and the semantic
-#: tree so the two can never drift apart.
+#: tree so the two can never drift apart. EU-039 (#827, DERIVE-CITATION):
+#:  - dependency API: lxml 6.0.2 (the installed pin; drift row 5.3.1->6.0.2
+#:    recorded) — lxml.etree.XMLParser documented parameters `recover`,
+#:    `resolve_entities`, `load_dtd`, `no_network`, `encoding`
+#:    (https://lxml.de/api/lxml.etree.XMLParser-class.html, version-matched);
+#:  - product security policy (no network, no DTD, no entity resolution at
+#:    parse time): the #826-accepted zero-credential/zero-network clean-lane
+#:    law (push 4d473822, reviewer-verified) applied at the parse boundary —
+#:    a filing's bytes may never trigger a fetch or expand hidden content;
+#:  - 'utf-8' decl-encoding choice: WHOEVER MAKES THE BYTES OWNS THEIR
+#:    ENCODING (test_parser_encoding_ownership's law; EDGAR EFM note in
+#:    BOARD:EDGAR-EFM).
 _PARSER_OPTIONS = dict(recover=False, resolve_entities=False, load_dtd=False,
                        no_network=True, encoding='utf-8')
 
