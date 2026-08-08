@@ -1115,3 +1115,42 @@ def test_W4_the_representation_sha_grammar_has_one_owner():
     assert "[0-9a-f]{64}" not in inspect.getsource(p2)
     assert "[0-9a-f]{64}" not in inspect.getsource(xa)
     assert "[0-9a-f]{64}" in inspect.getsource(di)
+
+
+@pytest.mark.parametrize("with_start", [True, False],
+                         ids=["instant_with_start", "instant_without_start"])
+def test_W7_an_instant_bundle_carries_ONLY_its_end_date(with_start):
+    """W7 (XBRL 2.1 corrected-errata 2013-02-20 §4.7.2: an instant period has
+    NO start): through the PUBLIC attach door — an instant carrying a start
+    is rejected for the exact W7 reason; the same instant without the start
+    attaches exactly one fact (the graph stores instants exclusive-end:
+    start = doc instant + 1 day, end the literal 'null')."""
+    idoc = _DOC.replace(
+        '<xbrli:period><xbrli:startDate>2024-01-01</xbrli:startDate>'
+        '<xbrli:endDate>2024-06-30</xbrli:endDate></xbrli:period>',
+        '<xbrli:period><xbrli:instant>2024-06-30</xbrli:instant></xbrli:period>')
+    assert idoc != _DOC
+    fact = _fact()
+    fact["item"].update(time_type="instant",
+                        period_start_date="2024-06-30" if with_start else None,
+                        period_end_date="2024-06-30")
+    evidence, quote = filing_evidence(idoc, "f1")
+    fact["item"]["quote"] = quote
+    row = dict(_Graph()._rows[0])
+    row.update(period_type="instant", start_date="2024-07-01",
+               end_date="null")
+    item = {"fact": fact, "concept": "us-gaap:Revenues", "member_refs": [],
+            "source_evidence": evidence}
+    res = attach_event_xbrl([item], source_id=ACC, store=_Graph(rows=[row]),
+                            filing_provider=_Provider(doc=idoc),
+                            text_parts=parts_for([item]))
+    if with_start:
+        assert len(res.facts) == 0
+        (out,) = res.preflight_outcomes
+        assert out["decision"] == "rejected"
+        assert out["codes"] == ("XBRL_CONTRACT_INVALID",)
+        assert out["detail"] == \
+            "XBRL context: an instant carries ONLY period_end_date"
+    else:
+        assert len(res.facts) == 1
+        assert res.preflight_outcomes == ()
