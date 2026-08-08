@@ -267,6 +267,15 @@ def _style_state(el):
         unsupported = 'hidden=until-found is outside the supported reader'
         hv = None
     cand = {'display': [], 'visibility': [], 'cv': []}
+    # CL-090 (#827 DERIVE-CITATION, the six style-state units EU-137..142):
+    # this parse rides the PINNED tinycss2 1.4.0 API (installed pin; docs
+    # https://doc.courtbouillon.org/tinycss2/, version-matched) —
+    # parse_declaration_list; Declaration.type == 'declaration', .name,
+    # .lower_name, .important, .value; component token types 'whitespace',
+    # 'comment', 'function', 'ident' and .lower_value. The '--' custom-
+    # property prefix = CSS Custom Properties L1 §2 (below); the property
+    # vocabulary and the 'all' shorthand carry the CSS-PIN board's cited
+    # rendering law (Display 3 / Containment 2 / Cascade 4, §201-era cites).
     for i, d in enumerate(
             tinycss2.parse_declaration_list(str(el.get('style') or ''))):
         # CSS Custom Properties for Cascading Variables Level 1 §2: a custom

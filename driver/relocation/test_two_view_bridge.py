@@ -1071,3 +1071,35 @@ def test_EU072_ua_hidden_elements_stay_hidden_by_the_named_api():
                        + '<style>CSSSECRET{}</style>'))
     assert 'CSSSECRET' not in prep['text']
     assert 'Revenue 390' in prep['text']
+
+
+# ---- CL-090 (EU-137..EU-142): the style-state law's uncovered members ------
+
+def test_EU138_an_important_earlier_winner_beats_a_later_plain_value():
+    """CSS Cascade: !important beats a later normal declaration in the same
+    style attribute — the (important, index) ordering key is load-bearing."""
+    prep = prepare(doc(row(['Revenue', fact()])
+                       + '<div style="display:none !important; '
+                         'display:block">IMPSECRET</div>'))
+    assert 'IMPSECRET' not in prep['text']
+    assert 'Revenue 390' in prep['text']
+
+
+def test_EU139_hidden_until_found_refuses_as_unsupported():
+    """hidden=until-found is OUTSIDE the supported reader (SEQ 231 §2): the
+    document REFUSES typed rather than silently hiding-or-showing content
+    this reader cannot render faithfully."""
+    prep = prepare(doc(row(['Revenue', fact()])
+                       + '<div hidden="until-found">UFSECRET</div>'))
+    assert prep.get('refused', '').startswith('unsupported_style')
+    assert 'until-found' in prep['refused']
+
+
+def test_EU141_the_all_shorthand_resets_an_earlier_display_none():
+    """The 'all' shorthand (CSS Cascade 4 §3.3) with a wide local keyword
+    resets display too — content an earlier display:none hid becomes
+    visible; a dead 'all' branch would leave it hidden."""
+    prep = prepare(doc(row(['Revenue', fact()])
+                       + '<div style="display:none; all:initial">ALLTEXT'
+                         '</div>'))
+    assert 'ALLTEXT' in prep['text']
