@@ -550,6 +550,10 @@ def filing_boundary_graph_end(raw):
     b = parse_filing_boundary(raw)
     if b.park:
         return None
+    # EU-018 (#827): the +1 day IS the exclusive-end stored form — the graph
+    # period clause at the F7 boundary owner (graph_row_contract's
+    # stored-spelling clause) and the contract sheet section 4 state it; a
+    # dateTime adds nothing because it already IS the instant.
     if b.kind == "date":
         return (b.moment.date() + timedelta(days=1)).isoformat()
     return b.moment.date().isoformat()

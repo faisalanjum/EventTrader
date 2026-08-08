@@ -1359,6 +1359,13 @@ MUTATIONS = [
      '        return date(*(int(part) for part in d.split("/")))',
      "driver/relocation/test_exact_numbers.py::"
      "test_EU007_the_graph_stored_spellings_resolve_from_the_boundary_clause"),
+
+    (170, "EU-018: the exclusive-end +1 day is dropped",
+     "driver/relocation/exact_numbers.py",
+     '        return (b.moment.date() + timedelta(days=1)).isoformat()',
+     '        return (b.moment.date() + timedelta(days=0)).isoformat()',
+     "driver/core/test_round8_xbrl_binding.py::"
+     "test_a_usd_fact_reports_usd"),
 ]
 
 
