@@ -89,8 +89,9 @@ G_COVERAGE = {
     "G13": ("grading", ".claude/plans/Drivers/experiments/harness/test_g_suite.py::test_G13_attack_fixtures_are_registered_and_classified",
             "a MEANING error: only hidden grading can catch it, never a code proof"),
     "G14": ("partial", ".claude/plans/Drivers/experiments/harness/test_g_suite.py::test_G14_guidance_legacy_path_is_untouched",
-            "legacy suite and the contract's refusal of hint fields are proven; "
-            "'never a WRITER input' needs the switched writer"),
+            "the legacy guidance suite is untouched; hint fields are no longer refused "
+            "by a hint-specific branch — they refuse as unexpected keys at the exact-key "
+            "owner; 'never a WRITER input' still needs the switched writer"),
     "G15": ("code", ".claude/plans/Drivers/experiments/harness/test_g_suite.py::test_G15_xbrl_declared_metadata_path_is_untouched",
             ""),
     "G16": ("gated-switch", ".claude/plans/Drivers/experiments/harness/test_g_suite.py::test_G16_old_path_removal_is_gated_on_the_switch",
@@ -121,9 +122,10 @@ G_COVERAGE = {
     "G22": ("partial", "driver/core/test_prepared_fact_v2.py::test_G22_the_xbrl_lane_does_not_require_quote_local_evidence",
             "the XBRL lane is proven; the TEXT lane's matching requirement — the "
             "other half of the rule — is not touched by this selector"),
-    "G23": ("partial", "driver/core/test_prepared_fact_v2.py::test_G23_old_payload_fields_are_rejected_atomically",
-            "old payloads are rejected now; Fiscal actually ceasing to emit the four "
-            "fields is O-f, after the boundary proof"),
+    "G23": ("partial", "driver/core/test_round10_event_boundary.py::test_MIXED_TYPE_keys_are_refused_cleanly_at_every_door",
+            "an old payload now fails as an ordinary unexpected-key refusal at every "
+            "door; the retired-name-specific branch and its message are deleted. "
+            "Fiscal actually ceasing to emit the fields is O-f, after the boundary proof"),
     # THE FIXTURE ID IS THE LINK. "Only grading can catch this" is a claim about
     # a specific attack, so the row names the attack: A6 is the one quote holding
     # both '$13.9 billion' and '$382 million' with the multipliers swapped. The
@@ -636,14 +638,6 @@ def test_G14_guidance_legacy_path_is_untouched():
     assert "_XBRL_PER_SHARE_MARKERS" in src and "PER_SHARE_LABELS" in src, \
         "the legacy guidance hint machinery was altered by a change that should "
     assert "def slug" in src, "the legacy slug helper must remain intact"
-
-
-def test_G14_the_new_contract_refuses_channel_hint_fields():
-    """Adapter-derived hints can never become model, grading, or writer inputs:
-    the v2 contract rejects them outright."""
-    from driver.core.prepared_fact_v2 import RETIRED_FIELDS
-    assert {"level_unit_kind_hint", "level_money_mode_hint", "level_unit_raw",
-            "change_unit_raw"} <= RETIRED_FIELDS
 
 
 def test_G15_xbrl_declared_metadata_path_is_untouched():
@@ -1556,6 +1550,195 @@ def test_MATRIX_write_expected_can_NEVER_select_or_execute_live_write(
     assert "m::a_clean_test" in pinned, "the lane's own identities must be kept"
 
 
+def _census():
+    sys.path.insert(0, os.path.join(_HERE, "receipts_827"))
+    import graph_census
+    return graph_census
+
+
+#: THE INDEPENDENT PIN — the exact approved administration statement, held in
+#: a DIFFERENT FILE from the code it pins, so the pin can never become a
+#: statement about itself (round 12's failure).
+APPROVED_SNAPSHOT_CYPHER = \
+    "SHOW DATABASE neo4j YIELD lastCommittedTxn, databaseID"
+
+
+def _assert_snapshot_contract(fn):
+    """Drive `fn` against a recording mock and require the whole contract:
+    exactly one REQUIRED parameter named `session`; `session.run` called
+    EXACTLY ONCE with the approved literal; and the row that call produced
+    returned. Behaviour, not source text."""
+    import inspect
+    import uuid
+
+    # THE FULL PARAMETER CONTRACT, not just the names. Reading names alone
+    # accepted `def f(session=None)` — a default lets a caller omit the
+    # session entirely, so the "exact (session) signature" claim was false.
+    params = list(inspect.signature(fn).parameters.values())
+    assert len(params) == 1, (
+        f"the snapshot path must take exactly one parameter — no text input, "
+        f"no *args/**kwargs: got {[p.name for p in params]}")
+    (p,) = params
+    assert p.name == "session", f"its parameter must be `session`, not {p.name!r}"
+    assert p.kind is inspect.Parameter.POSITIONAL_OR_KEYWORD, \
+        f"`session` must be an ordinary parameter, not {p.kind}"
+    assert p.default is inspect.Parameter.empty, \
+        "`session` must be REQUIRED — a default lets a caller omit it"
+
+    # AN UNFORGEABLE ROW, minted fresh per call: a function that runs the
+    # approved statement, DISCARDS the row and returns hard-coded values
+    # cannot match values it could not know. Compared by EQUALITY, never
+    # identity — returning an equal copy of the row is legitimate.
+    row = {"lastCommittedTxn": uuid.uuid4().int % 10 ** 12,
+           "databaseID": uuid.uuid4().hex}
+
+    class _Row:
+        def data(self):
+            return dict(row)
+
+    class _Session:
+        def __init__(self):
+            self.calls = []
+
+        def run(self, text):
+            self.calls.append(text)
+            return [_Row()]
+
+    s = _Session()
+    got = fn(s)
+    assert s.calls == [APPROVED_SNAPSHOT_CYPHER], (
+        f"the snapshot path must EXECUTE exactly the approved statement once; "
+        f"it ran {s.calls!r}")
+    assert got == row, f"it must return the row that call produced, got {got!r}"
+
+
+def test_827_census_snapshot_statement_is_pinned_AT_RUNTIME():
+    """THE INDEPENDENT PIN for the #827 census's one administration read.
+
+    RUNTIME, not source text. The previous version scanned `snapshot_tx`'s
+    source for the approved literal — and a mutant that keeps that literal as
+    DEAD TEXT while executing a different query passed it (reproduced: the
+    scan's own multi-line filter hid the executed statement). A pin that reads
+    code instead of running it proves nothing about what the code does.
+    """
+    _assert_snapshot_contract(_census().snapshot_tx)
+
+    # MUTATION 1 — the runtime analogue of the mutant that defeated the source
+    # scan: the approved statement is present only as DEAD TEXT (here a
+    # docstring, so nothing is left unused) while another statement executes.
+    def dead_text_mutant(session):
+        """Carries the approved statement as dead text —
+        SHOW DATABASE neo4j YIELD lastCommittedTxn, databaseID
+        — while executing something else entirely."""
+        return [r.data() for r in session.run("""SHOW TRANSACTIONS
+            YIELD transactionId""")][0]
+
+    with pytest.raises(AssertionError, match="exactly the approved statement"):
+        _assert_snapshot_contract(dead_text_mutant)
+
+    # MUTATION 2 — the approved statement really runs, but so does a second
+    # one: "exactly once" must mean once.
+    def extra_call_mutant(session):
+        rows = [r.data() for r in session.run(APPROVED_SNAPSHOT_CYPHER)]
+        session.run("SHOW TRANSACTIONS")
+        return rows[0]
+
+    with pytest.raises(AssertionError, match="exactly the approved statement"):
+        _assert_snapshot_contract(extra_call_mutant)
+
+    # MUTATION 3 — THE FORGER: it runs the approved statement, DISCARDS the
+    # row, and returns the values the old helper hard-coded. It passed while
+    # the expected row was a fixed constant; it cannot pass an unforgeable one.
+    def row_discarding_forger(session):
+        [r.data() for r in session.run(APPROVED_SNAPSHOT_CYPHER)]
+        return {"lastCommittedTxn": 4242, "databaseID": "PINNED-DB"}
+
+    with pytest.raises(AssertionError, match="return the row"):
+        _assert_snapshot_contract(row_discarding_forger)
+
+    # MUTATION 4 — it grows a text parameter, which is how an exemption
+    # returns: a caller could then supply any statement.
+    def widened_signature_mutant(session, text=APPROVED_SNAPSHOT_CYPHER):
+        return [r.data() for r in session.run(text)][0]
+
+    with pytest.raises(AssertionError, match="exactly one parameter"):
+        _assert_snapshot_contract(widened_signature_mutant)
+
+    # MUTATION 5 — the session becomes OPTIONAL. Reading parameter names alone
+    # accepted this, so "exact (session) signature" was an overclaim.
+    def optional_session_mutant(session=None):
+        return [r.data() for r in session.run(APPROVED_SNAPSHOT_CYPHER)][0]
+
+    with pytest.raises(AssertionError, match="must be REQUIRED"):
+        _assert_snapshot_contract(optional_session_mutant)
+
+
+def test_827_census_gate_REFUSES_administration_including_SHOW_TERMINATE():
+    """The general gate accepts ONLY 'r'. Driven against the REAL
+    run_read_only with a mocked session, so no statement reaches a server.
+
+    `SHOW TRANSACTIONS … TERMINATE TRANSACTIONS` is the case that matters:
+    it is administration, it plans 's', and it begins with SHOW — the
+    round-12 allowance executed it (reproduced before this fix)."""
+    gate = _census()
+
+    class _Session:
+        def __init__(self, planned):
+            self.planned, self.calls = planned, []
+
+        def run(self, text):
+            self.calls.append(text)
+            return type("R", (), {"consume": lambda _self: type(
+                "S", (), {"query_type": self.planned})()})()
+
+    for planned, hostile in (
+            ("s", "SHOW TRANSACTIONS YIELD transactionId AS txId "
+                  "TERMINATE TRANSACTIONS txId"),
+            ("s", "CREATE INDEX _x IF NOT EXISTS FOR (n:_X) ON (n.y)"),
+            ("s", "SHOW DATABASE neo4j YIELD lastCommittedTxn, databaseID"),
+            ("w", "CREATE (n:_NeverRuns) RETURN n"),
+            ("rw", "MATCH (n:_NeverRuns) DELETE n RETURN 1")):
+        s = _Session(planned)
+        with pytest.raises(RuntimeError, match="not read-only"):
+            gate.run_read_only(s, hostile)
+        assert s.calls == ["EXPLAIN " + hostile], \
+            f"only the EXPLAIN may run; saw {s.calls}"
+    ok = _Session("r")
+    gate.run_read_only(ok, "MATCH (n) RETURN count(n)")
+    assert ok.calls == ["EXPLAIN MATCH (n) RETURN count(n)",
+                        "MATCH (n) RETURN count(n)"]
+
+
+#: EVERY LANE THAT CAN ACT ON THE WORLD — write to the graph, or spend money.
+#: Both were once defended by a pytest marker alone, and both were reached by
+#: someone overriding the marker filter: the Neo4j write probe wrote a node,
+#: and the OpenAI judge completed a paid request (incident 2026-07-31). A
+#: marker is a SELECTOR, never a guard. One rule, one table — a third such lane
+#: is one row here, not a third copy of the reasoning.
+GUARDED_LANES = [
+    pytest.param(os.path.join(_REPO, "driver", "core",
+                              "test_neo4j_numeric_roundtrip.py"),
+                 "_require_opt_in", id="neo4j-write-probe"),
+    pytest.param(os.path.join(_REPO, "drivers_harness", "tests",
+                              "test_synonym_judge_live.py"),
+                 "_require_llm_opt_in", id="openai-llm-judge"),
+]
+
+
+def _load_guarded_lane(path):
+    """Import a guarded module BY PATH, without pytest collecting it."""
+    import importlib.util
+    for extra in (os.path.dirname(path),
+                  os.path.dirname(os.path.dirname(path))):
+        if extra not in sys.path:
+            sys.path.insert(0, extra)
+    spec = importlib.util.spec_from_file_location("_guarded_lane", path)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+@pytest.mark.parametrize("path,guard", GUARDED_LANES)
 @pytest.mark.parametrize("value", [
     pytest.param(None, id="absent"),
     pytest.param("", id="empty"),
@@ -1563,39 +1746,47 @@ def test_MATRIX_write_expected_can_NEVER_select_or_execute_live_write(
     pytest.param("false", id="false"),
     pytest.param(" ", id="whitespace"),
 ])
-def test_the_write_probe_guard_REFUSES_every_value_except_exactly_1(
-        value, monkeypatch):
-    """THE HOLE THIS CLOSES: the guard tested TRUTHINESS, so
+def test_every_ACTING_lane_guard_REFUSES_every_value_except_exactly_1(
+        path, guard, value, monkeypatch):
+    """THE HOLE THIS CLOSES: the write guard tested TRUTHINESS, so
     RUN_NEO4J_ROUNDTRIP_PROBE=0 — a value every reader understands as OFF —
     AUTHORIZED the live write. An authorization must be exact: the one value
-    "1" and nothing else. Proven by calling the guard DIRECTLY — no pytest
-    child, no marker, no graph; nothing else in the probe module runs."""
-    from driver.core import test_neo4j_numeric_roundtrip as probe
+    "1" and nothing else.
+
+    Proven by calling each guard DIRECTLY — no pytest child, no marker, no
+    graph, no network; nothing beyond the guard executes.
+    """
+    mod = _load_guarded_lane(path)
+    fn = getattr(mod, guard)
     if value is None:
-        monkeypatch.delenv(probe.OPT_IN, raising=False)
+        monkeypatch.delenv(mod.OPT_IN, raising=False)
     else:
-        monkeypatch.setenv(probe.OPT_IN, value)
+        monkeypatch.setenv(mod.OPT_IN, value)
     with pytest.raises(pytest.skip.Exception):
-        probe._require_opt_in()
-    # POSITIVE CONTROL: the ONE authorized value passes the guard itself —
-    # nothing beyond the guard executes here.
-    monkeypatch.setenv(probe.OPT_IN, "1")
-    probe._require_opt_in()
+        fn()
+    # POSITIVE CONTROL: the ONE authorized value passes the guard itself.
+    monkeypatch.setenv(mod.OPT_IN, "1")
+    fn()
 
 
-def test_STRUCTURE_the_probe_guard_is_FIRST_and_nothing_skips_at_collection():
-    """Two structural laws for the write probe's module, pinned on the AST.
+@pytest.mark.parametrize("path,guard", GUARDED_LANES)
+def test_STRUCTURE_every_ACTING_lane_guards_FIRST_and_never_skips_at_collection(
+        path, guard):
+    """Two structural laws for every acting lane, pinned on the AST.
 
     1. NO module-level `importorskip`: it fires during COLLECTION, before any
        marker filter — on a machine without the neo4j package the CLEAN lane
        recorded a skip it could not deselect (reproduced before this fix), the
        exact collection-time disease the in-test guard move was meant to end.
-    2. The opt-in guard is the test's FIRST executable statement (a docstring
-       may precede it), so nothing graph-capable can ever run before it.
+    2. The opt-in guard is EVERY test's FIRST executable statement (a docstring
+       may precede it), so nothing that acts can run before it.
+
+    Applied to every guarded lane, so the OpenAI judge cannot regress to
+    marker-only protection the way it did before the spend incident. The old
+    version checked the write probe only, and asserted that module held exactly
+    one test — a count that said nothing about the OTHER lane's three.
     """
-    rel = os.path.join(_REPO, "driver", "core",
-                       "test_neo4j_numeric_roundtrip.py")
-    tree = ast.parse(io.open(rel, encoding="utf-8").read())
+    tree = ast.parse(io.open(path, encoding="utf-8").read())
     for node in tree.body:
         if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
             continue
@@ -1607,16 +1798,20 @@ def test_STRUCTURE_the_probe_guard_is_FIRST_and_nothing_skips_at_collection():
                 "before any marker can deselect the module"
     tests = [n for n in tree.body
              if isinstance(n, ast.FunctionDef) and n.name.startswith("test_")]
-    assert len(tests) == 1, [t.name for t in tests]
-    body = tests[0].body
-    if (isinstance(body[0], ast.Expr) and isinstance(body[0].value, ast.Constant)
-            and isinstance(body[0].value.value, str)):
-        body = body[1:]                     # a docstring may lawfully lead
-    first = body[0]
-    assert (isinstance(first, ast.Expr) and isinstance(first.value, ast.Call)
-            and isinstance(first.value.func, ast.Name)
-            and first.value.func.id == "_require_opt_in"), \
-        "the opt-in guard must be the FIRST executable statement of the test"
+    assert tests, f"{os.path.basename(path)} declares no test to guard"
+    for t in tests:
+        body = t.body
+        if (isinstance(body[0], ast.Expr)
+                and isinstance(body[0].value, ast.Constant)
+                and isinstance(body[0].value.value, str)):
+            body = body[1:]                 # a docstring may lawfully lead
+        first = body[0]
+        assert (isinstance(first, ast.Expr)
+                and isinstance(first.value, ast.Call)
+                and isinstance(first.value.func, ast.Name)
+                and first.value.func.id == guard), (
+            f"{os.path.basename(path)}::{t.name} must call {guard}() as its "
+            f"FIRST executable statement — anything before it can act")
 
 
 def test_MATRIX_a_FAILED_live_selector_collection_is_REFUSED(monkeypatch):
@@ -1810,3 +2005,68 @@ def test_the_credential_PROBE_ITSELF_can_detect_a_leak(tmp_path):
                                               extra_path=str(tmp_path))
     assert "NEO4J_PASSWORD" in gained, (
         f"the probe cannot see a credential that WAS added: {gained}")
+
+
+# ---------------------------------------------------------------------------
+# #827 ROUND 4 — the census read gate now accepts PARAMETERS, and the claim
+# that this cannot widen it rests entirely on ONE property: the statement that
+# was EXPLAIN-planned is the statement that executes, values included. That was
+# asserted in a docstring and proven nowhere.
+# ---------------------------------------------------------------------------
+
+class _RecordingSession:
+    """Captures every (text, params) pair the gate issues."""
+
+    def __init__(self, query_type="r"):
+        self.calls = []
+        self._type = query_type
+
+    def run(self, text, **params):
+        self.calls.append((text, params))
+        session = self
+
+        class _Result:
+            def consume(self):
+                class _Summary:
+                    query_type = session._type
+                return _Summary()
+        return _Result()
+
+
+def test_827_the_read_gate_plans_and_executes_the_SAME_parameters():
+    """EXPLAIN and the execution must receive IDENTICAL parameters. If the plan
+    were computed without the values the caller then supplies, the gate would be
+    approving a different statement from the one that runs — and 'parameters
+    cannot widen this gate' would be an unbacked claim."""
+    import importlib.util
+    path = os.path.join(_REPO, ".claude", "plans", "Drivers", "experiments",
+                        "harness", "receipts_827", "graph_census.py")
+    spec = importlib.util.spec_from_file_location("_gc_gate", path)
+    gc = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(gc)
+
+    session = _RecordingSession()
+    text = "MATCH (x:XBRLNode) WHERE x.accessionNo IN $accs RETURN x"
+    gc.run_read_only(session, text, accs=["0000320193-24-000001"])
+
+    assert len(session.calls) == 2, session.calls
+    (explain_text, explain_params), (run_text, run_params) = session.calls
+    assert explain_text == "EXPLAIN " + text
+    assert run_text == text
+    assert explain_params == run_params == {"accs": ["0000320193-24-000001"]}, (
+        f"planned with {explain_params} but executed with {run_params} — the "
+        f"gate approved a different statement from the one that ran")
+
+
+def test_827_the_read_gate_still_REFUSES_a_non_read_plan_with_parameters():
+    """The refusal must not weaken merely because parameters are present."""
+    import importlib.util
+    path = os.path.join(_REPO, ".claude", "plans", "Drivers", "experiments",
+                        "harness", "receipts_827", "graph_census.py")
+    spec = importlib.util.spec_from_file_location("_gc_gate2", path)
+    gc = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(gc)
+    session = _RecordingSession(query_type="w")
+    with pytest.raises(RuntimeError, match="not read-only"):
+        gc.run_read_only(session, "CREATE (n:X {v: $v})", v=1)
+    assert len(session.calls) == 1, "a refused statement must never execute"

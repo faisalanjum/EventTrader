@@ -46,26 +46,19 @@ from driver.core.slot_convert import SlotConversionError, convert_slot, validate
 __all__ = ["SchemaError", "ProductionValidationError", "SourceUnavailable",
            "OUTCOME_CLASSES", "NUMERIC_SLOTS", "PreparedItemV2",
            "PreparedFactV2", "RunInputV2", "ITEM_FIELDS", "SOURCE_OWNED_FIELDS",
-           "RETIRED_FIELDS", "split_slice_part", "verify_occurrence",
+           "split_slice_part", "verify_occurrence",
            "check_per_x_against_name", "to_stored_fact", "validate_via_production",
            "RUN_EVENT_DIVERGENCES"]
 
 _PROOF_KEYS = ("polarity", "basis", "evidence", "sentence")
 
-# v1 fields the v2 contract must REFUSE outright: accepting them silently would
-# let an old payload look valid while its scale travelled in a retired field.
-RETIRED_FIELDS = frozenset({
-    "level_unit_raw", "change_unit_raw", "level_unit_kind_hint",
-    "level_money_mode_hint", "change_unit_kind_hint", "change_money_mode_hint",
-    "sequential_evidence",
-})
 SOURCE_OWNED_FIELDS = ("member_refs", "xbrl_concept_raw")
 
 # T7 (#827): the owner is driver_validators.NUMERIC_FIELDS — this name is an
 # ALIAS for the door's public surface, never a second authored copy. The
 # module-level import is the card's authorized acyclic edge (validators has
 # zero references back to this module).
-from driver.core.driver_validators import LANE_STATES, NUMERIC_FIELDS
+from driver.core.driver_validators import NUMERIC_FIELDS
 NUMERIC_SLOTS = NUMERIC_FIELDS
 
 
@@ -484,7 +477,11 @@ class PreparedFactV2:
         # be a guard. The property it appeared to provide is proved instead by
         # the DERIVED class-inventory test, which walks every field of every
         # public v2 dataclass and would fail the day a mutable one is added.
-        if self.fact_type not in LANE_STATES:   # T8: the ONE lane vocabulary
+        # T8: the ONE lane vocabulary, consumed FUNCTION-LOCALLY — G9's
+        # one-entry-point law forbids pf2 carrying the validators' vocabulary
+        # as a module attribute (a second importable home).
+        from driver.core.driver_validators import LANE_STATES
+        if self.fact_type not in LANE_STATES:
             raise SchemaError(f"fact_type: one of {tuple(LANE_STATES)}, "
                               f"got {self.fact_type!r}")
         if not isinstance(self.part_ref, str) or not self.part_ref.strip():
@@ -515,11 +512,6 @@ class PreparedFactV2:
         raw = d.get("item")
         if not isinstance(raw, dict):
             raise SchemaError("item: required object of the 32 model-owned fields")
-        retired = RETIRED_FIELDS & set(raw)
-        if retired:
-            raise SchemaError(
-                f"retired v1 field(s) {sorted(retired)} — this payload predates "
-                f"PreparedFact v2; the scale now travels inside each numeric slot")
         # SOURCE-OWNED fields are refused on EVERY door, always. The verified
         # bundle arrives as a separate, code-supplied argument — never inside
         # the item dict — so no caller can smuggle one in beside a real one.

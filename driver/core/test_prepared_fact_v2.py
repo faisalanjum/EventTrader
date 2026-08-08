@@ -14,7 +14,7 @@ import pytest
 
 from driver.core import prepared_fact_v2, slot_convert
 from driver.core.fact_match import match_facts
-from driver.core.prepared_fact_v2 import (ITEM_FIELDS, RETIRED_FIELDS,
+from driver.core.prepared_fact_v2 import (ITEM_FIELDS,
                                           PreparedFactV2, RunInputV2,
                                           SchemaError,
                                           check_per_x_against_name,
@@ -479,15 +479,6 @@ def test_G22_the_xbrl_lane_does_not_require_quote_local_evidence():
 
 # -------------------------------------------------------------------- G23 ----
 
-@pytest.mark.parametrize("retired", sorted(RETIRED_FIELDS))
-def test_G23_old_payload_fields_are_rejected_atomically(retired):
-    d = {"fact_type": "metric", "part_ref": "p01", "occurrence_in_part": None,
-         "per_x": None, "item": item(**{retired: "anything"})}
-    with pytest.raises(SchemaError) as e:
-        PreparedFactV2.from_dict(d)
-    assert retired in str(e.value)
-
-
 def test_G23_a_scalar_numeric_slot_is_rejected():
     with pytest.raises(SchemaError):
         PreparedFactV2.from_dict({"fact_type": "metric", "part_ref": "p01",
@@ -908,3 +899,18 @@ def test_W1_an_invented_polarity_basis_is_refused():
         fact(polarity_proof=proof(lawful))          # control: constructs
     with pytest.raises(SchemaError, match="basis"):
         fact(polarity_proof=proof("invented_basis"))
+
+
+def test_W2_a_retired_key_refuses_at_the_exact_key_owner():
+    """W2 control: with the retired-name special case DELETED, an old-payload
+    field refuses as an ORDINARY unexpected key at the one exact-key owner —
+    same public outcome class, no name-specific branch, and the seven
+    strings are nowhere in the module."""
+    d = {"fact_type": "metric", "part_ref": "p01", "occurrence_in_part": None,
+         "per_x": None, "item": item(level_unit_raw="anything")}
+    with pytest.raises(SchemaError, match="32 model-owned fields"):
+        PreparedFactV2.from_dict(d)
+    import inspect
+    src = inspect.getsource(prepared_fact_v2)
+    assert "RETIRED_FIELDS" not in src
+    assert "level_unit_raw" not in src

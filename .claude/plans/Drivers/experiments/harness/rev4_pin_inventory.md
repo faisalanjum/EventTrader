@@ -91,13 +91,15 @@ v5 only LOCATED the hash text, which proves a pin is present and says nothing ab
 | `.claude/plans/Drivers/experiments/harness/rev4_extra.py` | build script | (module level) | aa7239ed (packet v1.0) | dated record | 2 |
 | `.claude/plans/Drivers/experiments/harness/test_g_suite.py` | test | (module level) | d91443f8 (WorkOrder v2.0) | dated record | 4 |
 | `.claude/plans/Drivers/experiments/harness/test_g_suite.py` | test | function test_a_QUOTED_current_claim_inside_a_code_fence_claims_nothing | d91443f8 (WorkOrder v2.0) | dated record | 1 |
+| `driver/core/driver_period_resolver.py` | production | (module level) | aa7239ed (packet v1.0) | dated record | 1 |
 | `driver/core/prepared_fact.py` | production | (module level) | aa7239ed (packet v1.0) | dated record | 1 |
+| `driver/core/test_driver_period_resolver.py` | test | (module level) | aa7239ed (packet v1.0) | dated record | 1 |
 | `driver/core/test_prepared_fact.py` | test | (module level) | aa7239ed (packet v1.0) | dated record | 1 |
 
 | | |
 |---|---|
 | **CURRENT claims whose pin no longer describes its artifact** | **0** |
-| dated record occurrences (stand as written, never corrected) | 99 |
-| rows | 71 |
-| distinct files | 31 |
-| total occurrences | 99 |
+| dated record occurrences (stand as written, never corrected) | 101 |
+| rows | 73 |
+| distinct files | 33 |
+| total occurrences | 101 |
