@@ -661,6 +661,21 @@ class SemanticParseError(Exception):
 
 #: The ONE public reason. Ours, fixed, and identical for every unreadable
 #: document: a caller must never be able to read parser wording as a finding.
+# ---------------------------------------------------------------------------
+# EU-052/EU-053 (#827, cluster CL-039): the refusal TEXTS below and the
+# abstention-reason TOKENS scattered through this module (unsupported_unit_
+# type, malformed_format, unsupported_transform_registry, unsupported_
+# official_transform, malformed_fact_content_model, malformed_decimals_or_
+# precision, 'semantic and renderer views disagree', ...) are THE BINDER'S
+# OWN PUBLISHED VOCABULARY (the EU-160 adjudication, module-wide): they are
+# consumed as data by the locator/harvest and surface Core-side only as
+# free-prose DETAIL inside Core's own T1-coded outcomes (the F3
+# document-blame park carries the refused text; adapter exclusions carry
+# reason records). No spelling here is a T1 outcome code, and none is
+# minted as one. The RULES behind each token are cited or board-tracked on
+# their own rows; the DOCTYPE prohibition's exact EDGAR clause is cited
+# in place below (SEC EDGAR XBRL Guide June 2026 §11.1; EFM v49 §5.2.5.1).
+# ---------------------------------------------------------------------------
 NOT_WELL_FORMED = 'document is not a well-formed XML Inline XBRL report'
 #: SEC EDGAR XBRL Guide June 2026 §11.1 (EFM v49 December-2018 §5.2.5.1
 #: before it): an `.htm` attachment carrying a DOCTYPE declaration is not a

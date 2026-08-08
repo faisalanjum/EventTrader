@@ -1453,6 +1453,13 @@ MUTATIONS = [
      "driver/core/test_round8_xbrl_binding.py::"
      "test_filing_boundary_REFUSES_every_malformed_form[2023-6-30]"),
 
+    (183, "EU-052/053: a binder abstention-token spelling drifts",
+     "driver/relocation/inline_html.py",
+     "MALFORMED_FORMAT = 'malformed_format'",
+     "MALFORMED_FORMAT = 'malformed_formatX'",
+     "driver/relocation/test_two_view_bridge.py::"
+     "test_an_optional_attribute_is_absent_or_lawful_and_a_required_one_resolves[format present and empty]"),
+
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",
