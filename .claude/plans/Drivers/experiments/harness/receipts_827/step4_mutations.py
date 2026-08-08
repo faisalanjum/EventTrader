@@ -1679,6 +1679,13 @@ MUTATIONS = [
      "_CELL_TAGS = ['td']",
      "driver/relocation/test_row_label_span.py::"
      "test_EU040_a_th_label_cell_is_a_cell_exactly_as_the_table_model_says"),
+
+    (215, "EU-041: div leaves the block-ownership set and prose evidence shrinks to the inline wrapper",
+     "driver/relocation/inline_html.py",
+     "_BLOCK_TAGS = ['p', 'li', 'div']",
+     "_BLOCK_TAGS = ['p', 'li']",
+     "driver/relocation/test_row_label_span.py::"
+     "test_EU041_a_div_owns_its_prose_evidence_block"),
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",

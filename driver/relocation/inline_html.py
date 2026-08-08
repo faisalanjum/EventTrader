@@ -546,6 +546,15 @@ def _visible_slice(node, prepared):
 # no rule is invented here.
 _CELL_TAGS = ['td', 'th']
 _ROW_TAG = 'tr'
+# EU-041 (#827): _BLOCK_TAGS is the SEMANTIC evidence-ownership set —
+# WHICH blocks own evidence text is an OWNER DECISION, blessed on the
+# certification evidence (sheet row E-EVID-SELECT; the snippet appendix
+# remains a recorded post-audit documentation debt). A standard can prove
+# a construct lawful; it can never grant permission to omit one — so this
+# set is KEPT under the owner's blessing, not derived from a spec. The
+# consequence is pinned: a fact nested under inline markup hands its
+# evidence to the nearest BLOCK owner (the whole sentence), never to the
+# inline wrapper.
 _BLOCK_TAGS = ['p', 'li', 'div']
 _SPAN_TAGS = frozenset(_CELL_TAGS) | {_ROW_TAG} | frozenset(_BLOCK_TAGS)
 

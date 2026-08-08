@@ -852,3 +852,12 @@ def test_EU040_a_th_label_cell_is_a_cell_exactly_as_the_table_model_says():
     prep, ev = _ev(f'<table><tr><th>Total</th><td>{_FACT}</td></tr></table>')
     span = ev['row_label_span']
     assert prep['text'][span[0]:span[1]] == 'Total'
+
+
+def test_EU041_a_div_owns_its_prose_evidence_block():
+    """_BLOCK_TAGS is the semantic evidence-ownership set (owner decision,
+    KEEP-PER-CERT-EVIDENCE): a fact nested below inline markup still hands
+    its evidence to the nearest BLOCK owner — the div owns the whole
+    sentence, never the inline wrapper's three characters."""
+    prep, ev = _ev(f'<div>Quarterly revenue was <b>{_FACT}</b> million.</div>')
+    assert ev['block'] == 'Quarterly revenue was 726 million.'
