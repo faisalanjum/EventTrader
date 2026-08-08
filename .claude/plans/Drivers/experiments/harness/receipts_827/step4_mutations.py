@@ -1425,6 +1425,13 @@ MUTATIONS = [
      "driver/core/test_round8_xbrl_binding.py::"
      "test_a_shares_fact_binds_although_the_filing_writes_xbrli_shares"),
 
+    (179, "EU-126: the identity anchor's surrogate handling drifts to replace",
+     "driver/relocation/inline_html.py",
+     "    return hashlib.sha256(html_text.encode('utf-8', 'surrogatepass')).hexdigest()",
+     "    return hashlib.sha256(html_text.encode('utf-8', 'replace')).hexdigest()",
+     "driver/relocation/test_parser_encoding_ownership.py::"
+     "test_EU126_the_identity_anchor_encodes_lone_surrogates_by_the_clause"),
+
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",

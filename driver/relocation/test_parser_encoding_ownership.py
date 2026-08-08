@@ -266,3 +266,19 @@ def test_EU132_the_renderer_view_is_built_by_the_pinned_lxml_builder():
     soup = _soup("<p>x</p>")
     assert soup.builder.NAME == "lxml"
     assert _soup("<table><tr><td>a").find("td").get_text() == "a"
+
+
+def test_EU126_the_identity_anchor_encodes_lone_surrogates_by_the_clause():
+    """EU-126 (#827): the boundary clause's identity-anchor hash-encoding law
+    — UTF-8 with 'surrogatepass', encoded ONCE — pinned on a LONE SURROGATE:
+    the identity must neither crash nor silently collapse onto the
+    'replace' spelling (a replaced surrogate would hash a DIFFERENT
+    document as the same identity)."""
+    import hashlib
+    from driver.relocation.inline_html import sha256_text
+    text = "before \ud83d after"                      # a lone high surrogate
+    want = hashlib.sha256(text.encode("utf-8", "surrogatepass")).hexdigest()
+    got = sha256_text(text)
+    assert got == want
+    replaced = hashlib.sha256(text.encode("utf-8", "replace")).hexdigest()
+    assert got != replaced, "a replaced surrogate must not share the identity"

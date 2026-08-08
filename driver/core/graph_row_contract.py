@@ -38,6 +38,9 @@ GRAPH_DIM_FIELDS = ("axis", "member", "label",
 #                CONCATENATED with NO separator (iso4217:USDshares); a
 #                plain unit's name is its single measure; the spelling is
 #                decided by NAMESPACE at the writer, never by prefix text.
+#   identity-anchor hashes — sha256 over the text encoded ONCE as
+#                UTF-8 with 'surrogatepass' (a lone surrogate must not
+#                crash hashing; both views hash the same bytes).
 #   dates      — exactly [0-9]{4}-[0-9]{2}-[0-9]{2}
 #                (exact_numbers._STRICT_ISO): the XSD-1.0 §3.2.9.1 x CPython
 #                date intersection, deliberately narrower than xs:date;

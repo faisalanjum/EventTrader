@@ -779,6 +779,9 @@ def _semantic_parse(html_text):
     loud: where the mojibake is still a lawful XML name, nothing raises and the
     identity is simply wrong.
     """
+    # EU-126 (#827): utf-8 + surrogatepass is the F7 boundary clause's
+    # identity-anchor hash-encoding law (graph_row_contract) — one encoding
+    # for both passes, lone surrogates never crash the identity.
     data = html_text.encode('utf-8', 'surrogatepass')   # encoded ONCE, so both
     try:                                                # passes read one input
         etree.fromstring(data, etree.XMLParser(target=_Prolog(),
