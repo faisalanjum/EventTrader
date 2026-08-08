@@ -1,12 +1,17 @@
 """Neutral locator entrypoint (Universal Locator v5.5 §2-§3; WP2).
 
-THREE responsibilities, all pure, no I/O, ZERO fiscal.ai/channel imports, ZERO Core imports:
+THREE responsibilities, all pure, no I/O, ZERO fiscal.ai/channel imports. The one
+Core import is deliberate: the SEC CIK lexical rule has a single owner in
+`driver.core.driver_ids`, and this module consumes it rather than restating it.
 1. PRODUCTION anchor rebuild (`rebuild_anchor`) — ids are DECODED here independently; only
    Core composes them. Anchors rebuilt on demand; nothing stored; no registry.
 2. THE single strict XBRL dimension parser (`seg_parse`) — relocated verbatim from link_lib;
    both channel files import it from here.
-3. THE single strict value-unknown fact matcher (`match_facts` / `match_facts_explain`) —
-   pair-complete identity; xbrl_lane delegates to it as a thin adapter.
+3. The value-unknown entry points (`match_facts` / `match_facts_explain`) — which no longer
+   MATCH. They validate the request shape and then abstain: their identity was a prefixed
+   concept string and an opaque unitRef, neither of which states identity (#827 Stage 3).
+   Signatures kept; `xbrl_lane` still delegates. Route A (`locate`) is the route that can
+   answer, because it holds the filing and therefore the namespaces in scope.
 
 Anchor identity = the 7 fields: company (via the fact's OWN parsed source id looked up in a
 TRUSTED edge map — the exactly-one graph-edge query's output) · driver · fact_type=metric ·
@@ -221,10 +226,10 @@ import exact_numbers as XN
 
 
 def _grp(n):
-    neg = n.startswith('-'); n = n.lstrip('-'); out = ''
+    out = ''
     while len(n) > 3:
         out = ',' + n[-3:] + out; n = n[:-3]
-    return ('-' if neg else '') + n + out
+    return n + out
 
 
 def at_boundary(text, start, end, numeric=True):
@@ -243,7 +248,24 @@ def at_boundary(text, start, end, numeric=True):
     return True
 
 
-_TRAIL = re.compile(r'(?:\s?(?:%|\)|percent\b|million\b|billion\b|thousand\b))*')
+# THE scale table (#827 B6, SEQ 324/327) — the ONE owner of the display-scale
+# identity: (word, divisor, short tag). Frozen product contract:
+# .claude/plans/Drivers/WIP/UniversalLocator_ReviewRecord_2026-07-18.md —
+# "Round 16 (ChatGPT, 2026-07-19)" item 4 (thousand + trillion exact forms under the
+# same marker gate) with Round 13 item 3(c) and Round 14 item 2 owning the
+# required-multiplier locality rule. Every word map, divisor ladder, tag map and
+# regex alternation below derives from this table; link_lib consumes the derived
+# names and recreates nothing.
+_SCALES = (('thousand', 1e3, 'K'), ('million', 1e6, 'M'),
+           ('billion', 1e9, 'B'), ('trillion', 1e12, 'T'))
+_WORD2DIV = {w: d for w, d, _ in _SCALES}
+_DIVS = tuple(d for _, d, _ in _SCALES)
+# _TRAIL derives from ALL supported scale words (SEQ 325): its old missing 'trillion'
+# was a REAL evidence-preservation defect — row_quote cropped the word off a lawful
+# '1.2 trillion' bind — not a deliberate subset.
+_TRAIL = re.compile(r'(?:\s?(?:%|\)|percent\b|'
+                    + '|'.join(w + r'\b' for w, _, _ in _SCALES)
+                    + r'))*')
 
 
 def _with_trail(t, end):
@@ -260,15 +282,18 @@ def _with_trail(t, end):
 # number — and 'million' can never prove a value that needs 'billion'. Full-magnitude prints and
 # zero are self-evident. Measured on the wp1 cohort: 315/315 certified table binds sit in
 # sections carrying the strict marker -> zero recall cost.
-_SCALE_MARK = re.compile(r'(?i)in (millions|thousands|billions|trillions)')
-_SCALE_TAIL = re.compile(r'\s?(million|billion|thousand|trillion)s?\b', re.I)
-_WORD2DIV = {'thousand': 1e3, 'million': 1e6, 'billion': 1e9, 'trillion': 1e12}
+# DISTINCT grammars, one vocabulary (derived from _SCALES above): a section header
+# states 'in' + the PLURAL word (a column-wide declaration); an immediate tail accepts
+# singular or plural after the number. Alternation order is match-irrelevant here
+# (no scale word prefixes another).
+_SCALE_MARK = re.compile(r'(?i)in (' + '|'.join(w + 's' for w, _, _ in _SCALES) + ')')
+_SCALE_TAIL = re.compile(r'\s?(' + '|'.join(w for w, _, _ in _SCALES) + r')s?\b', re.I)
 
 
 def _required_div(form, value):
     """The multiplier this printed form NEEDS to reproduce the value (1e3/1e6/1e9/1e12), or None
     when the form is self-evident (full magnitude, zero, or a non-numeric core)."""
-    s = form.lstrip('$( ').rstrip(')%').replace(',', '').strip()
+    s = form.lstrip('( ').rstrip(')%').replace(',', '').strip()
     try:
         f = abs(float(s))
     except ValueError:
@@ -276,7 +301,7 @@ def _required_div(form, value):
     av = abs(float(value))
     if av == 0 or f == av:
         return None
-    for d in (1e3, 1e6, 1e9, 1e12):
+    for d in _DIVS:
         if f > 0 and abs(f * d - av) / av < 0.001:
             return d
     return None                            # no clean multiplier -> exact_form decides elsewhere
@@ -314,7 +339,7 @@ def _tableforms(v, fmt, padded=True):
     """Exact printed forms for table/row scanning. WP1: the value's EXACT form is ALWAYS included
     (zero, small ints, decimals — the old len>=3 filter silently killed them); a fractional value
     gets its 1-decimal companion but NEVER an integer-rounded print; big money keeps the grouped
-    cell form + per-million/billion scaled forms (scaled bare ints only when >=3 digits — a bare
+    cell form + per-supported-scale forms (scaled bare ints only when >=3 digits — a bare
     '7' would match stray sevens). Precision comes from boundary + label adjacency (row_quote),
     never from magnitude or length."""
     av = abs(float(v))
@@ -335,7 +360,7 @@ def _tableforms(v, fmt, padded=True):
                                                         # prints ('.300 %')
     if '.' not in p:
         s.add(_grp(p))                     # grouped cell form ('5,365,000,000')
-    for div in (1e3, 1e6, 1e9, 1e12):      # round-16: exact thousand + trillion forms too
+    for div in _DIVS:                      # round-16: exact thousand + trillion forms too
         x = av / div
         if x >= 1:
             xi = int(round(x))
@@ -506,8 +531,12 @@ def _suffix_forms(value, fmt):
     return out
 
 
-def value_forms(value, fmt='number', is_currency=1):
-    """All plausible verbatim string forms of a reported value."""
+def value_forms(value, fmt='number'):
+    """All plausible verbatim string forms of a reported value. No '$' twins are
+    generated (#827 B6, SEQ 315/316): sign notation around decorated prints is the
+    numeric-core owner's job (printed_negative's decoration law), and bounded_hit
+    already matches the bare form beside a '$' — measured: zero results anywhere
+    depended on a generated dollar form."""
     if value is None:
         return set()
     if fmt in ('x', 'bps', 'pp'):
@@ -537,7 +566,7 @@ def value_forms(value, fmt='number', is_currency=1):
     if '.' in p:
         forms.add(p)                       # the EXACT fractional print (38.3) — WP1; the old code
                                            # only made int-rounded + scaled forms, losing decimals
-    for div, tag in ((1e3, 'K'), (1e6, 'M'), (1e9, 'B'), (1e12, 'T')):
+    for word, div, tag in _SCALES:
         if av >= div / 10:
             scaled = av / div; si = int(round(scaled))
             if si >= 100:                # bare scaled int only when ≥3 digits — "20" for $20.372B would
@@ -547,23 +576,18 @@ def value_forms(value, fmt='number', is_currency=1):
                 if '.' in f or len(f) >= 3:   # bare scaled form needs a decimal or ≥3 digits ("20" for
                     forms.add(f)              # $20.372B matches any stray "20"; tagged forms below suffice)
                 forms.add(f + tag)
-                forms.add(f + ' ' + {'K': 'thousand', 'M': 'million', 'B': 'billion', 'T': 'trillion'}[tag])
-    if is_currency:
-        base = [f for f in forms if not f.startswith('$') and len(f) <= 12]
-        forms |= {'$' + f for f in base}; forms |= {'$ ' + f for f in base}
+                forms.add(f + ' ' + word)
     if v < 0:
-        forms |= {'(' + f.lstrip('$ ') + ')' for f in list(forms)}
-    return {f for f in forms if f and f not in ('0', '-0', '$0')}
+        forms |= {'(' + f + ')' for f in list(forms)}
+    return {f for f in forms if f and f not in ('0', '-0')}
 
 def bounded_hit(quote, form, forbid_pct=False):
-    """form occurs in quote at a numeric word boundary (not glued inside a bigger number).
+    """THIN boolean over _form_occurrences (#827 B6, SEQ 322): the exact form occurs at
+    a numeric word boundary (not glued inside a bigger number).
     forbid_pct: the occurrence must NOT be %-marked — a plain-number value never accepts a
     percent token ('86' vs '86%', '86 %', '86 percent'; round-12 widened past the bare '%')."""
-    numeric = form[0].isdigit() or form[0] in '$('
-    for m in re.finditer(re.escape(form), quote):
-        if not at_boundary(quote, m.start(), m.end(), numeric):
-            continue
-        if forbid_pct and re.match(r'\s?(%|percent\b)', quote[m.end():m.end() + 9]):
+    for _s, e, _n in _form_occurrences(quote, form):
+        if forbid_pct and re.match(r'\s?(%|percent\b)', quote[e:e + 9]):
             continue
         return True
     return False
@@ -577,7 +601,7 @@ def exact_form(form, value, fmt):
     """form reproduces value losslessly (grouped cell, long int, or decimal within 0.1%)."""
     if fmt in ('%', 'x', 'bps', 'pp'):     # suffix-print classes: forms are constructed from
         return True                        # the value itself — lossless by construction
-    s = form.lstrip('$( ').rstrip(')%').replace(',', '')
+    s = form.lstrip('( ').rstrip(')%').replace(',', '')
     try:
         f = abs(float(s))
     except ValueError:
@@ -587,51 +611,67 @@ def exact_form(form, value, fmt):
         return f == 0                      # a stated zero reproduces itself (WP1)
     if '.' not in s and s.isdigit() and len(s) >= 4:
         return True
-    for sc in (1, 1e3, 1e6, 1e9, 1e12):
+    for sc in (1,) + _DIVS:
         if f > 0 and av > 0 and abs(f*sc - av)/av < 0.001:
             return True
     return False
 
-def printed_negative(quote, form):
-    """Does the quote print THIS number with accounting-negative NOTATION — '(123)' or '-123'?
-    Notation ONLY. A sign carried by a word ("operating loss of 331") is a MEANING call the core owns
-    (OD-12: the sign signal may be a noun, notation, or context) — code must never read words for sign.
-    Requires the closing ')' so an ordinary parenthetical ("(500 employees)") can't be misread."""
-    core = (form or '').lstrip('$( ').rstrip(')%').strip()
-    if not core:
-        return False
-    for m in re.finditer(re.escape(core), quote or ''):
-        pre, post = (quote[:m.start()]).rstrip(), (quote[m.end():]).lstrip()
-        if pre.endswith('(') and post.startswith(')'):
-            return True
-        if re.search(r'(?<![\w.])[-−]\s*$', pre):
-            return True
-    # corrective 5: NUMBER-ONLY accounting parentheses on a suffixed form — '(180) BPS'
-    # wraps the number alone (corpus: 112 bps + 182 ppts occurrences). The suffix tail
-    # must follow the closing paren for the negative to register.
-    m2 = re.fullmatch(r'([\d,.]+)[ -]?([A-Za-z][A-Za-z .-]*)', core)
-    if m2:
-        num, suf = m2.group(1), m2.group(2).strip()
-        for mm in re.finditer(re.escape(num), quote or ''):
-            pre = (quote[:mm.start()]).rstrip()
-            post = (quote[mm.end():]).lstrip()
-            if pre.endswith('(') and post.startswith(')') \
-                    and post[1:].lstrip().startswith(suf):
-                return True
-    return False
+# printed_negative's two pre-context laws (#827 B6, SEQ 315/316): between the '(' or the
+# minus and the digits, only NON-WORD decoration may stand, and never a closing
+# delimiter — so '($0.20)' and '-$0.20' read negative while '(-) $24.6' donates nothing.
+# The code knows no currency symbol; '$' passes only because it is non-word decoration.
+_PRE_PAREN = re.compile(r'\((?:[^\w)\]\}])*$')
+_PRE_MINUS = re.compile(r'(?<![\w.])[-−](?:[^\w)\]\}])*$')
 
-def _scale_tag_ok(quote, form, value):
-    """Round-14: no bind survives on a form whose EVERY occurrence carries a scale tag that
-    CONTRADICTS the claimed value ('1.2 million' never certifies 1.2 BILLION; '5,365 million'
-    never certifies plain 5,365). An occurrence with the right tag — or no tag — keeps it alive."""
-    req = _required_div(form, value)
+
+def _negative_at(quote, start, end, form):
+    """THE sign owner at ONE exact-form occurrence (#827 B6, SEQ 322): negative iff the
+    accounting wrap or minus marks the numeric token inside this span — read through
+    generic non-word decoration, never across a closer — or the wrap encloses the whole
+    form ('(20 million)'). No currency knowledge: '$'/'€' pass only as decoration."""
+    tok = re.search(r'[0-9][0-9,.]*', form)
+    if tok is None:
+        return False
+    ts, te = start + tok.start(), start + tok.end()
+    pre, post = (quote[:ts]).rstrip(), (quote[te:]).lstrip()
+    if (_PRE_PAREN.search(pre) and post.startswith(')')) or _PRE_MINUS.search(pre):
+        return True
+    pre_f, post_f = (quote[:start]).rstrip(), (quote[end:]).lstrip()
+    return bool(_PRE_PAREN.search(pre_f) and post_f.startswith(')'))
+
+
+def _form_occurrences(quote, form):
+    """THE occurrence iterator (#827 B6, SEQ 322): every occurrence of the EXACT
+    generated form at a real numeric boundary (at_boundary, the one owner) — yields
+    (start, end, negative) with the sign _negative_at reads on that same span.
+    Boundary, percent, scale and sign are all judged on the SAME occurrence; callers
+    add the percent/scale filters they own. A plain '20' is never an occurrence of
+    '(20)%' — forms are matched exactly, which is what stops cross-format laundering."""
+    if not form:
+        return
+    # every generated form is numeric (first char is a digit, '(' or '.') — proven over
+    # the full form domain after the dollar twins were deleted (SEQ 323), so at_boundary
+    # runs with its strict numeric default: '.3%' never matches inside '1.3%'.
     for m in re.finditer(re.escape(form), quote or ''):
         if not at_boundary(quote, m.start(), m.end()):
             continue
-        td = _tail_div(quote, m.end())
-        if td is None or td == req:
-            return True
-    return False
+        yield m.start(), m.end(), _negative_at(quote, m.start(), m.end(), form)
+
+
+def printed_negative(quote, form):
+    """Does the quote's notation assert THIS exact printed form is NEGATIVE — '(123)',
+    '-123', '($0.20)' — with no plain print of the same form to contradict it? THE SIGN
+    BELONGS TO THE OCCURRENCE (#827 B6, SEQ 319/322): a comparison lawfully prints '20'
+    beside '(20)', and the plain occurrence keeps a positive value bindable; only a
+    quote whose EVERY boundary occurrence of this form is negative asserts negative.
+    Forms are matched EXACTLY — '(180) BPS' is itself a generated form, which retired
+    the old suffixed-parentheses special case. Notation ONLY: a sign carried by a word
+    ("operating loss of 331") is a MEANING call the core owns (OD-12) — code must never
+    read words for sign. The closing ')' requirement keeps an ordinary parenthetical
+    ("(500 employees)") from being misread."""
+    occs = [neg for _s, _e, neg in _form_occurrences(quote, form)]
+    return bool(occs) and all(occs)
+
 
 def value_ok(value, fmt, quote):
     """final deterministic self-check: value present at a real boundary AND losslessly, and the quote's own
@@ -639,35 +679,49 @@ def value_ok(value, fmt, quote):
     SCOPE (unchanged): this proves the NUMBER is in the quote — never that the KPI/period/slice binding is
     right (that is the binder + audits). The sign guard adds only the mechanical half: a value whose sign
     the quote's notation flatly contradicts is a wrong bind. A plain print asserts nothing about sign, so it
-    is left to pass here and be judged where meaning lives — no keyword list, no guessed sign."""
+    is left to pass here and be judged where meaning lives — no keyword list, no guessed sign.
+    ONE PASS (SEQ 322): every exact-form occurrence is collected once with percent and
+    scale judged on its own span; existence and sign are decided from that single set."""
     # '0' is a legal single-char form (a stated zero is a real value — WP1); everything else
     # keeps the >=2 guard against stray single digits.
     forms = {f for f in value_forms(value, fmt or 'number') if len(f) >= 2 or f == '0'}
-    if fmt in ('x', 'bps', 'pp'):          # suffix classes: the tagged form must be present
-        hit = [f for f in forms if bounded_hit(quote, f)]     # at a boundary; %-marks can
-        if not hit:                        # never satisfy them (distinct suffixes)
-            return False
-        if float(value) >= 0 and any(printed_negative(quote, f) for f in forms):
-            return False                   # corrective 5: a POSITIVE fact never accepts
-        return True                        # '(8x)', '-120 bps' or '(180) BPS' — the same
-                                           # notation law as every class (helpers reused)
-    for div in (1e6, 1e9):
-        xx = abs(float(value)) / div
-        if xx >= 1:
-            for d in (1, 2):
-                forms.add(f"{xx:,.{d}f}")
-    hits = [f for f in forms if bounded_hit(quote, f, forbid_pct=(fmt != '%'))]
-    ok = [f for f in hits if exact_form(f, value, fmt)]
-    if fmt != '%':                        # round-14: a printed scale tag that contradicts the
-        ok = [f for f in ok if _scale_tag_ok(quote, f, value)]   # claimed value vetoes the bind
-    if not ok:
+    suffixed = fmt in ('x', 'bps', 'pp')
+    plain = fmt not in ('%', 'x', 'bps', 'pp')
+    if plain:
+        # scale companions belong to the plain-number lane ONLY (SEQ 326): running them
+        # for '%' laundered a scaled plain number ('1.2' for 1.2M) into percent evidence.
+        # The ladder is the FULL frozen scale family (SEQ 327): UniversalLocator_Review
+        # Record_2026-07-18.md, Round 16 (ChatGPT, 2026-07-19) item 4 adds thousand +
+        # trillion under the same marker gate; Rounds 13 item 3(c) / 14 item 2 own the
+        # required-multiplier locality rule that gates every companion occurrence.
+        for div in _DIVS:
+            xx = abs(float(value)) / div
+            if xx >= 1:
+                for d in (1, 2):
+                    forms.add(f"{xx:,.{d}f}")
+    quals = []
+    for f in forms:
+        if not exact_form(f, value, fmt):
+            continue
+        req = _required_div(f, value) if plain else None
+        for _s, e0, neg in _form_occurrences(quote, f):
+            if plain:
+                if re.match(r'\s?(%|percent\b)', quote[e0:e0 + 9]):
+                    continue               # percent-marked: a different fact's print
+                td = _tail_div(quote, e0)  # round-14: a scale tag that contradicts the
+                if not (td is None or td == req):
+                    continue               # claimed value disqualifies THIS occurrence
+            quals.append(neg)
+    if not quals:
         return False
-    if float(value) > 0 and any(printed_negative(quote, f) for f in ok):
-        return False                      # positive value vs a negative print -> wrong bind
-    return True
+    if all(quals) and (float(value) > 0 or (float(value) == 0 and suffixed)):
+        return False                       # every qualifying print is negative -> wrong
+    return True                            # bind (suffix classes keep corrective-5's >=0)
 
 
-# ---------- THE strict value-unknown fact matcher (WP2: PAIR-COMPLETE, neutral home) ----------
+# ---------- The value-unknown entry points — REQUEST VALIDATION, THEN ABSTAIN ----------
+# Called "the strict value-unknown fact matcher" until #827 Stage 3. It matched on
+# spellings, which is not strictness; the strictness was in the reasons it printed.
 
 
 def _fact_rows(xbrls):
@@ -683,53 +737,6 @@ def _fact_rows(xbrls):
                 for fc in (facts if isinstance(facts, list) else [facts]):
                     if isinstance(fc, dict):
                         yield con, fc
-
-
-def _period_ok(fc, ps, pe, instant):
-    """exactly ONE valid period shape; a fact carrying BOTH instant and duration dates is
-    malformed and never a candidate (tier1 parity, round-29 law). A NON-MAPPING period
-    container (string/int/list — the reproduced AttributeError crash class) never binds."""
-    p = fc.get('period')
-    if p is None:
-        p = {}
-    elif not isinstance(p, Mapping):
-        return False
-    mixed = (p.get('instant') is not None) and (p.get('startDate') is not None
-                                                or p.get('endDate') is not None)
-    if mixed:
-        return False
-    if instant:
-        return p.get('instant') == ps
-    return p.get('startDate') == ps and p.get('endDate') == pe
-
-
-def _concept_ok(stored_key, req_prefix, con):
-    """exact concept identifier AS STORED: local names compare exactly; prefixed request vs
-    BARE storage matches by local name (the verified 109/109 storage convention); prefixed vs
-    prefixed must be EXACT; a BARE request NEVER matches prefixed storage (a bare ask cannot
-    verify a namespace — 'Revenues' must not accept 'evil:Revenues')."""
-    c_prefix, _, c_local = stored_key.rpartition(':')
-    if c_local != con:
-        return False
-    if c_prefix and not req_prefix:
-        return False
-    return not (c_prefix and req_prefix and c_prefix != req_prefix)
-
-
-_BAD_UNIT = object()
-
-
-def _norm_unit(u):
-    """Unit ids are CASE-SENSITIVE (XBRL unitRef is an XML IDREF; corpus-live: PSEG carries
-    usdPerMWh vs usdPerMwh as DIFFERENT units in one filing) — normalization is STRIP ONLY.
-    None passes through (the caller decides whether unit-less is legal); any non-string or
-    blank shape is MALFORMED → _BAD_UNIT (never a candidate; the list-unitRef crash class
-    dies here)."""
-    if u is None:
-        return None
-    if isinstance(u, str) and u.strip():
-        return u.strip()
-    return _BAD_UNIT
 
 
 def _valid_pairs(pairs):
@@ -753,73 +760,62 @@ def _valid_pairs(pairs):
 
 def match_facts_explain(xbrls, concept_qname, pairs, period_start, period_end, unit_ref=None,
                         expected_unit=None):
-    """(value|None, reason) for the FULL identity — exact concept identifier AS STORED +
-    COMPLETE (axis,member) PAIRS + exactly one valid period shape + NORMALIZED unit + exact
-    Decimal on the RAW stored value (floats are rejected by XN.dec — never laundered through
-    str()). Reasons: ok · bad_request_pairs · bad_request_unit · bad_request_period ·
-    nonnumeric_value · concept_missing (nothing matched the concept) · no_candidate (concept
-    matched, later filters emptied) · ambiguous_values · unit_conflict. The wrong-axis class
-    dies here: a right member under a wrong axis never matches."""
-    req_prefix, _, con = concept_qname.rpartition(':')
-    vp = _valid_pairs(pairs)
-    if vp is None:
+    """(None, 'insufficient_semantic_identity') — THIS ROUTE CANNOT AUTHORIZE A FACT.
+
+    IT DOES NOT MATCH ANY MORE, AND THAT IS THE POINT. What it used to call
+    "the FULL identity" was a prefixed request string compared against a stored
+    prefixed string, plus — when no `unitRef` was given — a search for `usd`,
+    `dollar` or `share` INSIDE an opaque unit id. Neither states identity:
+
+      * a prefix is an alias (Namespaces in XML 1.0 3e §3), so `us-gaap:Revenues`
+        matching `us-gaap:Revenues` only proved that two documents happened to
+        choose the same short name. `evil:Revenues` under a rebound prefix was
+        indistinguishable from the real concept;
+      * a `unitRef` is an XML IDREF the filer picks. `fraud_usd_marker`,
+        `dollarNotCurrency` and `shareholder_notes` all satisfied the substring
+        rule and returned values. Independently reproduced, all three.
+
+    THE REQUEST SHAPE CANNOT EXPRESS THE ANSWER. It carries a prefixed qname
+    and an opaque unit id and no namespace at all, so there is nothing here to
+    compare expanded names against — the fix is not a better matcher, it is a
+    caller that supplies semantic identities. Until one exists this route says
+    so, once, plainly.
+
+    NOT DELETED, by ruling: the public entry points keep their signatures.
+    Request-shape validation that is independently meaningful runs FIRST, so a
+    malformed ask is still told it is malformed rather than being answered with
+    the generic refusal.
+
+    Caller inventory (#827): `run_code_tier` — the one production consumer —
+    calls `locate_by_value`, never this. Nothing active reaches here.
+
+    Reasons: bad_request_pairs · bad_request_unit · bad_request_period ·
+    insufficient_semantic_identity.
+    """
+    # REQUEST-SHAPE VALIDATION SURVIVES, and only that: each says the ASK itself
+    # is malformed, which is true whatever the route can go on to prove. Nothing
+    # here authorizes or repairs. `unit_ref` is optional; present, it must be a
+    # nonblank unpadded string. (Withdrawn-helper history: receipt 26 §G.)
+    if _valid_pairs(pairs) is None:
         return None, 'bad_request_pairs'          # malformed request address: never guess
-    want = frozenset(vp)
-    req_unit = _norm_unit(unit_ref)
-    if req_unit is _BAD_UNIT:
+    if unit_ref is not None and not _nb(unit_ref):
         return None, 'bad_request_unit'           # malformed request-side unit: never guess
     try:
-        ps, pe = XN.period_key(period_start, period_end)
+        XN.period_key(period_start, period_end)
     except XN.ExactError:
         return None, 'bad_request_period'
-    instant = (ps == pe)
-    vals, units = set(), set()
-    hit_concept = False
-    for c, fc in _fact_rows(xbrls):
-        if not _concept_ok(c, req_prefix, con):
-            continue
-        hit_concept = True
-        u = _norm_unit(fc.get('unitRef'))
-        if u is None or u is _BAD_UNIT:
-            continue                  # a NUMERIC candidate must carry a nonblank string unit
-                                      # (census: 88,236 numeric gate facts, zero unit-less —
-                                      # zero recall cost); malformed shapes likewise never bind
-        if unit_ref is None:          # expected_unit is a HEURISTIC for unit_ref-less asks
-            u_cf = u.casefold()       # only — an exact unit_ref is AUTHORITATIVE and must
-            money_marked = 'usd' in u_cf or 'dollar' in u_cf        # never be vetoed by it.
-            if expected_unit == 'money' and not money_marked:       # 'dollar' is graph-
-                continue              # verified money (U_UnitedStatesOfAmericaDollarsShare =
-                                      # 38,041 facts, ALL iso4217:USDshares; the global
-                                      # dollar-sweep shows every dollar-named unit is
-                                      # money-denominated). Opaque ids (Unit12/Unit1/Unit16,
-                                      # 527 gate facts) fail every substring guess → abstain.
-            if expected_unit == 'nonmoney' and (money_marked or 'share' not in u_cf):
-                continue              # nonmoney needs POSITIVE share evidence (census: every
-                                      # genuine nonmoney unit in the 88,236-fact gate corpus
-                                      # is a shares variant) AND must exclude BOTH money
-                                      # markers; foreign currencies (cny/eur/U_AUD) abstain.
-        if not _period_ok(fc, ps, pe, instant):
-            continue
-        _pairs, _complete = seg_parse(fc)
-        if not _complete:
-            continue                  # unparseable/partial segments never pose as undimensioned
-        if frozenset(_pairs) != want:
-            continue                  # COMPLETE pairs — axis AND member must both match
-        if unit_ref is not None and u != req_unit:
-            continue
-        try:
-            v = XN.dec(fc.get('value'))           # RAW — XN.dec rejects floats/None (lossy)
-        except XN.ExactError:
-            return None, 'nonnumeric_value'       # non-numeric collision -> not resolvable
-        vals.add(v)
-        units.add(u)
-    if not vals:
-        return (None, 'concept_missing') if not hit_concept else (None, 'no_candidate')
-    if len(vals) != 1:
-        return None, 'ambiguous_values'           # unique or abstain
-    if unit_ref is None and len(units) > 1:
-        return None, 'unit_conflict'              # same value under conflicting units
-    return next(iter(vals)), 'ok'
+    # THE REQUEST IS WELL-FORMED AND STILL CANNOT STATE WHAT IT WANTS.
+    #
+    # Everything past this point used to be the matcher. It is deleted rather
+    # than narrowed, because every one of its authorizing steps read a spelling:
+    # the concept by prefix, the unit by substring. Neither can be repaired
+    # from this request shape — a prefix has no namespace to expand, and an
+    # opaque `unitRef` has no declaration attached — so a partially working
+    # raw-string matcher is the one outcome worse than none: it answers.
+    #
+    # `Route A` (`locate`) is the route that CAN answer, because it holds the
+    # filing document and therefore the in-scope namespace declarations.
+    return None, 'insufficient_semantic_identity'
 
 
 def match_facts(xbrls, concept_qname, pairs, period_start, period_end, unit_ref=None,
@@ -904,7 +900,10 @@ _ANCHOR_UNIT = {
 # `import exact_numbers` above only resolves with driver/relocation on sys.path).
 # Re-exported here unchanged: the pinned census test and the probe scripts
 # import them from `locator`.
-ROUTE_A_SEM_UNIT = XN.ROUTE_A_SEM_UNIT
+# `ROUTE_A_SEM_UNIT` IS GONE, here and at its source. It mapped the graph's own
+# prefixed text to a semantic reading, which is the rule #827 Stage 3 replaced
+# with the filing's expanded measures. The re-export is not kept "in case
+# something imports it": a dead export is exactly how a retired rule comes back.
 ROUTE_A_BOOLS = XN.ROUTE_A_BOOLS
 
 def _anchor_unit_law(su):
@@ -957,28 +956,86 @@ def locate(anchor, source, hints=None):
     inline_doc = source.get('inline_html')
     if inline_doc is not None:
         import inline_html as IHM          # lazy: legacy callers never load bs4
-        import datetime as _dt
-        _SEM_UNIT, _BOOLS = ROUTE_A_SEM_UNIT, ROUTE_A_BOOLS
-
-        def _plus_one(d):
-            try:
-                return (_dt.date.fromisoformat(d) + _dt.timedelta(days=1)
-                        ).isoformat()
-            except ValueError:
-                return None
+        # THE OWNER DIRECTLY, not through IHM. Reaching it via the parser module
+        # left a re-export: two import paths to one rule, so a later move would
+        # silently keep working here and hide that this call site was missed.
+        from driver.core.driver_ids import graph_cik
+        # `ROUTE_A_SEM_UNIT` is no longer bound here: this route now reads the
+        # unit from the filing's own expanded measures, so the graph-spelling
+        # table has no consumer on the live path. It stays exported for the
+        # dormant materializer and its pinned census, which is a different
+        # question with a different owner.
+        _BOOLS = ROUTE_A_BOOLS
 
         def _pa_period_ok(doc_period, shape):
-            # THE one normalization: graph end dates are EXCLUSIVE — the graph
-            # date must equal the doc date + 1 day EXACTLY (never both forms).
+            # THE one normalization, and it lives in ONE place: the shared
+            # XBRL dateUnion parser (#827 finding 2). Graph end dates are
+            # EXCLUSIVE, so the graph date must equal the filing boundary's
+            # exclusive end EXACTLY — a date-only boundary adds a day, a
+            # dateTime already is the instant and adds none.
+            #
+            # The private `_plus_one` that stood here is DELETED, not wrapped.
+            # It called `date.fromisoformat`, which accepts the COMPACT
+            # `20230630` that `xs:date` forbids (proven live: it returned
+            # '2023-07-01' where the shared owner refuses). A lawful boundary
+            # this graph cannot represent — a timezone, a time of day, an
+            # unrepresentable year — yields None and simply fails to match,
+            # rather than being repaired or having a zone invented for it.
             ds, de = doc_period
+            try:
+                end = XN.filing_boundary_graph_end(de)
+                start = (None if shape[0] == 'instant'
+                         else XN.filing_boundary_graph_start(ds))
+            except XN.ExactError:
+                return False
+            if end is None:                 # lawful but unbindable -> no match
+                return False
             if shape[0] == 'instant':
-                return ds == '' and _plus_one(de) == shape[2]
-            return ds == shape[1] and _plus_one(de) == shape[2]
+                return ds == '' and end == shape[2]
+            # BOTH boundaries go through the shared parser, and the duration
+            # must run forwards — the SAME law the binder applies (#827). The
+            # start was compared as a RAW STRING here, so the locator rejected
+            # a lawful midnight dateTime start that the binder accepted: two
+            # answers to one question, which is the defect this whole finding
+            # is about.
+            if start is None:
+                return False
+            # THE FORWARD-ORDER CALL THAT STOOD HERE IS DELETED. It could never
+            # change an answer: `_fact_period` builds every duration shape
+            # through `period_key`, which RAISES on a backwards window, and
+            # returns None when `ps == pe` — so `shape[1] < shape[2]` strictly,
+            # and the equality below already implies the filing runs forwards.
+            # Measured before removing it: 23 calls across the Route-A suite,
+            # ZERO rejections; removing it changed no result. Kept as
+            # "defence-in-depth" it was exactly the hypothetical-edge-case
+            # machinery the minimalism rule forbids.
+            return start == shape[1] and end == shape[2]
 
         prepared = IHM.prepare(inline_doc)   # ONE parse per filing, reused
-        want_cik = str(source.get('company_cik') or '').lstrip('0')
+        # THE RAW VALUE, unrepaired. `str(... or '')` minted a ten-digit
+        # spelling the source never stated — the integer 1234567890 became the
+        # string "1234567890" and BOUND, while the owner it was handed to says
+        # a non-string refuses. The coercion made the gate a formality.
+        want_cik = graph_cik(source.get('company_cik'))
         route_a_claims = {}
-        for c, fc in _fact_rows(source.get('xbrls') or ()):
+        # ONE TARGET PER STORED CONCEPT KEY, DERIVED BEFORE ANY FACT IS READ.
+        # The envelope groups facts under a stored concept key; if that key maps
+        # to two different expanded names, the envelope cannot say which
+        # semantic concept it represents, and picking per row would let ORDER
+        # decide meaning — the good row binding while the conflicting one is
+        # quietly skipped. So every Concept identity recorded under a key is
+        # collapsed first: identical records agree, and any missing, unusable or
+        # disagreeing record leaves that key with NO target and abstains.
+        # Measured: today's graph carries exactly one Concept edge per numeric
+        # non-nil fact, so this fail-closed check costs no lawful current data.
+        _rows = list(_fact_rows(source.get('xbrls') or ()))
+        _by_concept = {}
+        for _c, _fc in _rows:
+            _by_concept.setdefault(_c, []).append(
+                (_fc.get('concept_namespace'), _fc.get('graph_concept_qname')))
+        _targets = {_c: IHM.one_concept_target(_c, _recs)
+                    for _c, _recs in _by_concept.items()}
+        for c, fc in _rows:
             if clue_local is not None and c.rpartition(':')[2] != clue_local:
                 continue
             shape = _fact_period(fc)
@@ -991,16 +1048,72 @@ def locate(anchor, source, hints=None):
             is_divide = _BOOLS.get(fc.get('is_divide'))
             if not isinstance(unit_name, str) or is_divide is None:
                 continue                     # declared-unit handoff: FAIL-CLOSED
-            if _SEM_UNIT.get((unit_name, is_divide)) not in accept:
-                continue                     # semantic TUPLE vs anchor accept-set;
-                                             # everything unmapped abstains
+            # THE FILING'S OWN DECLARATION DECIDES THE UNIT — not the graph's
+            # spelling of it. This gate read `(Unit.name, is_divide)`, which is
+            # prefixed text, so it made both mistakes a prefix always makes:
+            # `cur:USD` bound to the official ISO-4217 URI was REFUSED, and
+            # `iso4217:USD` under a filing that rebound `iso4217` to another URI
+            # was ACCEPTED as money. The document is already parsed here, so the
+            # expanded measures are in hand and no second resolver is needed.
+            #
+            # `unit_name`/`is_divide` stay above as the STORAGE-INTEGRITY check
+            # they were: the graph and the filing must still agree that a unit
+            # was declared at all. What they may no longer do is decide what it
+            # MEANS.
+            declared_unit = (prepared.get('units') or {}).get(raw_unit)
+            if not isinstance(declared_unit, dict):
+                continue                     # the filing declares no such unit
+            # TWO INDEPENDENT STATEMENTS ABOUT ONE UNIT MUST AGREE — on its
+            # STRUCTURE and on its STORED SPELLING. This is storage integrity,
+            # NOT meaning, and the distinction is the whole point:
+            #
+            #   MEANING  comes from the filing's expanded measures (below), so
+            #            `cur:USD` bound to the official ISO-4217 URI is dollars
+            #            and `iso4217:USD` rebound to `urn:evil` is not;
+            #   INTEGRITY is whether the graph is describing the SAME unit at
+            #            all, and that is an exact comparison against the
+            #            spelling the writer records — `XBRL/xbrl_basic_nodes`
+            #            stores `unit.stringValue`, and `graph_unit_spelling`
+            #            derives that same serialization from the filing BY
+            #            NAMESPACE. No prefix is interpreted and the
+            #            concatenated divide name is never split.
+            #
+            # I first dropped this check and asserted the mismatch was lawful.
+            # It is not: without it a graph row labelled `unknownunit`, or one
+            # claiming a per-share unit, bound against a filing declaring plain
+            # dollars. Both halves are needed — spelling alone would refuse the
+            # lawful alias, expansion alone lets an unrelated row through.
+            if bool(declared_unit.get('is_divide')) != is_divide:
+                continue
+            spelled = (''.join(declared_unit.get('graph_numerator') or ())
+                       + ''.join(declared_unit.get('graph_denominator') or ())
+                       if is_divide else
+                       XN.graph_unit_spelling(
+                           declared_unit.get('graph_measures') or (),
+                           (), (), False))
+            if spelled != unit_name:
+                continue
+            sem_unit = XN.route_a_semantic_unit(declared_unit)
+            if sem_unit not in accept:
+                continue                     # semantic reading vs anchor accept-set;
+                                             # everything unreadable abstains
             gctx = fc.get('context_id')
-            has_seg = 'segment' in fc
-            if has_seg:
-                pairs, complete = seg_parse(fc)
-                if not complete:
-                    continue
-            elif isinstance(gctx, str) and gctx.strip():
+            # THE LEGACY `segment` BRANCH IS GONE (#827). It read raw prefixed
+            # qnames — `srt:...`, `ce:...` — off the graph record and compared
+            # them to this filing's dimensions. A bare prefix carries NO
+            # namespace, so that comparison could only ever test whether two
+            # documents happened to choose the same alias; it could not state
+            # identity, and nothing may authorise a match on it.
+            #
+            # Censused before removal: the real producer
+            # `scripts/driver_seed/route_a_source.py` returns the exact
+            # `context_id` and never a `segment` (0 occurrences in the file),
+            # and no other non-test caller of this lane supplies one. It was a
+            # test-only law. The `context_id` path below is strictly stronger —
+            # joining on the fact's OWN context makes the filing's own
+            # dimensions authoritative by construction, with no prefix read at
+            # all.
+            if isinstance(gctx, str) and gctx.strip():
                 pairs = None                 # graph stores no axis pairing; the
                                              # fact's OWN context_id must equal the
                                              # element's contextRef (checked below),
@@ -1008,7 +1121,7 @@ def locate(anchor, source, hints=None):
             else:
                 pairs = []                   # neither given: undimensioned claim —
                                              # a dimensioned element still mismatches
-            graph_v = IHM.parse_raw(fc.get('value'))   # comma/paren law
+            graph_v = IHM.parse_raw(fc.get('value'))   # frozen canonical graph lexical contract
             if graph_v is None or not _finite(graph_v):
                 continue
             spairs_a = (tuple(sorted(tuple(p) for p in pairs))
@@ -1019,29 +1132,46 @@ def locate(anchor, source, hints=None):
             if isinstance(fid_raw, str) and fid_raw != fid_raw.strip():
                 continue                     # padded id: REJECT, no fallback
             fid = (fid_raw or '').strip()
+            # THE CONCEPT'S EXPANDED IDENTITY, agreed across every record under
+            # this key and computed once above. A concept is a QName, so the
+            # prefix in the graph's stored name is an alias: authorising a match
+            # on that string both missed a filing that lawfully binds a second
+            # prefix to the same taxonomy and could not separate two taxonomies
+            # sharing a local name.
+            target = _targets.get(c)
+            if target is None:
+                continue
             if fid and fid != 'null':
                 ev, _why = IHM.element_evidence(prepared, fid)
             else:                            # missing/blank inline_element_id:
                 ev = None                    # COMPLETE-identity fallback (both
                 if isinstance(gctx, str) and gctx.strip():   # id'd and id-less
-                    el2, w2 = IHM.identity_fallback(prepared, c, gctx.strip(),
-                                                    raw_unit)
+                    el2, w2 = IHM.identity_fallback(prepared, target,
+                                                    gctx.strip(), raw_unit)
                     if w2 == 'ok':
                         e2, w3 = IHM.evidence_for_element(prepared, el2)
                         if w3 == 'ok' and not e2['hidden'] \
                                 and _pa_period_ok(e2['period'], shape):
                             ev = e2
-                            fid = el2.get('id') or f'__noid__:{c}:{gctx.strip()}'
+                            # THE ID IS AN XML ATTRIBUTE, so it is read off the
+                            # SEMANTIC half of the bridged fact — the renderer
+                            # half spells attribute names its own way and has no
+                            # authority over identity.
+                            fid = IHM.element_id(el2) \
+                                or f'__noid__:{c}:{gctx.strip()}'
                 if ev is None:
                     cands = []               # fixture path: no context pointer —
-                    for eid in IHM.find_by_identity(prepared, c, raw_unit):
+                    for eid in IHM.find_by_identity(prepared, target,
+                                                    raw_unit):
                         e2, w2 = IHM.element_evidence(prepared, eid)
                         if w2 == 'ok' and not e2['hidden'] \
                                 and _pa_period_ok(e2['period'], shape) \
                                 and (spairs_a is None or e2['dims'] == spairs_a):
                             cands.append((eid, e2))
                     fid, ev = cands[0] if len(cands) == 1 else ('', None)
-            if ev is None or ev['hidden'] or ev['name'] != c \
+            # AUTHORISED BY IDENTITY, not by the stored prefix. The raw name
+            # is kept on the evidence as display/storage detail only.
+            if ev is None or ev['hidden'] or ev['name_expanded'] != target \
                     or ev['unit_ref'] != raw_unit:
                 continue
             if not want_cik or not ev.get('entity') \
@@ -1060,10 +1190,19 @@ def locate(anchor, source, hints=None):
                 continue
             if not slice_toks and spairs_a:
                 continue                     # undimensioned anchor, dimensioned fact
-            if not IHM.reconcile(ev['displayed'], ev['fmt'], ev['scale'],
-                                 ev['sign'], fc.get('value')):
+            # THE FACT'S OWN CONTENT, exactly as the binder does. `displayed`
+            # is the rendered page and stays below, where it is only quoted.
+            # THE FORMAT'S EXPANDED IDENTITY, exactly as the binder uses it. A
+            # prefix is the filer's alias: read raw, an official registry under
+            # another prefix was refused and an imitation under `ixt` was
+            # accepted. `ev['fmt']` stays the published spelling below.
+            if IHM.transform_status(ev.get('fmt_expanded')) is not None:
                 continue
-            pv = IHM.printed_value(ev['displayed'], ev['fmt'], ev['sign'])
+            if not IHM.reconcile(ev['value_input'], ev.get('fmt_expanded'),
+                                 ev['scale'], ev['sign'], fc.get('value')):
+                continue
+            pv = IHM.printed_value(ev['value_input'], ev.get('fmt_expanded'),
+                                   ev['sign'])
             if pv is None:
                 continue
             surface = ' '.join([*ev['row_cells'], *ev['columns'], ev['section'],
@@ -1084,13 +1223,39 @@ def locate(anchor, source, hints=None):
             # The offsets and the label span are no longer computed here at all:
             # `IH.source_evidence` below derives every one of them from the same
             # element evidence, so the locator and Core cannot drift apart.
-            fact_key = (c, spairs_a, shape, raw_unit, graph_v)
+            # THE SEMANTIC IDENTITY, never the spellings. `c` and `spairs_a`
+            # are the filing's own prefixed text: keying on them made two
+            # lawful aliases for ONE namespace look like two different facts,
+            # and left two DIFFERENT taxonomies sharing a local name looking
+            # like one. `target` is the concept's expanded name and
+            # `dims_expanded` the dimensions'; both were already computed
+            # above, so this states identity with what the parse already knows
+            # rather than inventing a second scheme.
+            #
+            # It travels on a PRIVATE key, popped before the boundary exactly
+            # as `_element_id` is — the published shape is unchanged, and the
+            # raw spellings still go out as the product's own wording.
+            #
+            # STAGE 3, now done: the unit joins the identity as the FILING's
+            # expanded measure structure. `unitRef` is an id chosen by the
+            # filer, so one filing may lawfully declare `usd` and `usd2` for the
+            # SAME unit; keying on the id made one semantic series look like two
+            # and reported a false `ambiguous`. Two ids that expand to one unit
+            # are one unit here, and two ids that expand differently stay apart.
+            unit_identity = (bool(declared_unit.get('is_divide')),
+                             tuple(declared_unit.get('expanded_measures') or ()),
+                             tuple(declared_unit.get('expanded_numerator') or ()),
+                             tuple(declared_unit.get('expanded_denominator') or ()))
+            identity = (target, ev['dims_expanded'])
+            fact_key = (identity, shape, unit_identity, graph_v)
             seen_keys = route_a_claims.setdefault(fid, set())
             if fact_key in seen_keys:
                 continue                     # identical XBRL identity: DEDUPLICATE
             seen_keys.add(fact_key)
             items.append({
                 '_element_id': fid,
+                '_identity': identity,
+                '_unit_identity': unit_identity,
                 'raw_label': ev['row_label'] or ev['section']
                              or (ev['columns'][0] if ev['columns'] else '')
                              or quote[:80],
@@ -1124,8 +1289,15 @@ def locate(anchor, source, hints=None):
         if clash:
             items[:] = [it for it in items if it.get('_element_id') not in clash]
             saw_ambiguous = True
-        series_ids = {(it['xbrl']['concept'], tuple(it['xbrl']['axis_members']),
-                       it['xbrl']['unit'])
+        # ONE SERIES IS ONE MEANING, so this counts expanded identities. Read
+        # off the published spellings it split a single series in two whenever
+        # a filing used two lawful prefixes for one namespace, and merged two
+        # taxonomies that happen to share a local name.
+        # ...and the UNIT is the filing's expanded structure for the same
+        # reason: `unitRef` is an id the filer picks, so one filing declaring
+        # `usd` and `usd2` for the SAME unit split one series into two and
+        # reported a false `ambiguous`.
+        series_ids = {(it['_identity'], it['_unit_identity'])
                       for it in items if it.get('_element_id') is not None}
         if len(series_ids) > 1:
             items[:] = [it for it in items if it.get('_element_id') is None]
@@ -1146,11 +1318,22 @@ def locate(anchor, source, hints=None):
         with_x = {}
         for it in group:
             if 'xbrl' in it:
+                # SAME RULE AT THE LAST GROUPING. This is the third place the
+                # filing's own spellings stood in for meaning; leaving it would
+                # have kept one alias-split alive after the two above were
+                # fixed. Items from routes that carry no identity keep their
+                # own published fields — there is nothing to expand there.
                 xk = (it['xbrl']['period_start'], it['xbrl']['period_end'],
-                      it['xbrl']['concept'], tuple(it['xbrl']['axis_members']),
-                      it['xbrl']['unit'])
+                      it.get('_identity'), it.get('_unit_identity'))
                 with_x.setdefault(xk, it)
         kept.extend(with_x.values() if with_x else group[:1])
+    # THE INTERNAL IDENTITY NEVER CROSSES THE BOUNDARY. It exists to decide
+    # sameness and stops here — the published item keeps only the filing's own
+    # spellings, so the frozen contract is untouched (its field allowlist would
+    # refuse an extra key outright, which is the check that proves this ran).
+    for it in kept:
+        it.pop('_identity', None)
+        it.pop('_unit_identity', None)
     items = sorted(kept,
                    key=lambda i: (i.get('xbrl', {}).get('period_start', ''),
                                   i.get('xbrl', {}).get('period_end', ''),

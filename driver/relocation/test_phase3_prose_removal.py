@@ -21,7 +21,7 @@ ANCHOR = {
 
 def test_unsupported_prose_returns_no_proven_match():
     xb = json.dumps({'us-gaap:Revenues': [
-        {'value': '4000000000',
+        {'value': '4,000,000,000',
          'period': {'startDate': '2024-01-01', 'endDate': '2024-12-31'},
          'unitRef': 'U_USD'}]})
     source = {'source_id': 'SYN-SRC-1', 'source_type': '10k', 'xbrls': [xb],

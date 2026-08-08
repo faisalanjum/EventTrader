@@ -1,6 +1,34 @@
-"""The neutral matcher's pin battery (WP2 — the v4-promised RED pins, written after the
-reviewer's audit of 3150655; the process miss of building the matcher without them first is
-owned in the record). Every reproduced bug class from that audit is pinned here.
+"""The value-unknown route FAILS CLOSED — it no longer matches anything.
+
+WHAT THIS FILE USED TO BE. A pin battery for `match_facts` / `match_facts_explain`,
+"the neutral matcher": a concept authorized by comparing one prefixed string to
+another, and — when the caller gave no `unitRef` — a unit authorized by looking
+for `usd`, `dollar` or `share` INSIDE an opaque unit id.
+
+WHY IT IS NOT THAT ANY MORE (#827 Stage 3). Neither test states identity:
+
+  * a prefix is a scoped alias (Namespaces in XML 1.0 3e §3). Two documents
+    agreeing on the short name `us-gaap:` proves they chose the same alias, not
+    that they mean the same taxonomy — and a filing may bind that alias to any
+    URI it likes;
+  * a `unitRef` is an XML IDREF the FILER picks. `fraud_usd_marker`,
+    `dollarNotCurrency` and `shareholder_notes` each satisfied the substring
+    rule and returned a value. All three were reproduced through this door.
+
+THE REQUEST SHAPE CANNOT CARRY THE ANSWER. It has a prefixed qname and an opaque
+id and no namespace anywhere, so there is nothing to expand and nothing to
+compare. A partially working raw-string matcher is worse than none, because it
+answers. Route A (`locator.locate`) holds the filing document and therefore the
+in-scope declarations, and that is where identity is proven — see
+`test_route_a_unit_identity.py`.
+
+THE 150-CASE GATE THAT CERTIFIED THE OLD LAW WAS RETIRED WITH IT, accounted for
+in `receipts_827/26_withdrawn_certification_ledger.md`. It is not re-pinned as
+150 abstentions: a certification of a withdrawn law is not evidence, at any size.
+
+WHAT SURVIVES HERE. The public contract: the route refuses, it refuses for a
+named reason, request-shape errors stay distinguishable from it, and deceptive
+spellings get no purchase.
 
     venv/bin/python -m pytest driver/relocation/test_match_facts.py -q
 """
@@ -12,241 +40,187 @@ import pytest
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, _HERE)
-sys.path.insert(0, os.path.join(_HERE, '..', '..', 'scripts', 'driver_seed', 'relocate_probe'))
+sys.path.insert(0, os.path.join(_HERE, '..', '..', 'scripts', 'driver_seed',
+                                'relocate_probe'))
 sys.path.insert(0, os.path.join(_HERE, '..', '..', 'scripts', 'driver_seed'))
-import exact_numbers as XN
-import locator as LOC
-import xbrl_lane
+import locator as LOC                                        # noqa: E402
+import xbrl_lane                                             # noqa: E402
 
-D = {'startDate': '2024-01-01', 'endDate': '2024-12-31'}
-
-
-def blob(con, facts):
-    return json.dumps({con: facts})
+CONCEPT = 'us-gaap:Revenues'
+PERIOD = ('2024-01-01', '2024-03-31')
 
 
-def fact(value='100', period=D, unit='U_USD', seg=None):
-    fc = {'value': value, 'period': period, 'unitRef': unit}
-    if seg is not None:
-        fc['segment'] = seg
-    return fc
+def _blob(unit='usd', concept=CONCEPT, value='100'):
+    return [json.dumps({concept: [
+        {'value': value, 'fact_id': 'f-1', 'unitRef': unit,
+         'period': {'startDate': '2024-01-01', 'endDate': '2024-04-01'}}]})]
 
 
-def mf(blobs, concept='us-gaap:Revenues', pairs=(), **kw):
-    return LOC.match_facts(blobs, concept, pairs, '2024-01-01', '2024-12-31', **kw)
+# ---------------------------------------------------------------------------
+# THE CONTRACT — one named refusal, whatever it is asked
+# ---------------------------------------------------------------------------
+
+def test_a_WELL_FORMED_request_is_refused_with_ONE_truthful_reason():
+    """Not `concept_missing`, not `no_candidate` — those said something about
+    the DATA. The truth is about the REQUEST: it cannot state identity."""
+    value, reason = LOC.match_facts_explain(_blob(), CONCEPT, [], *PERIOD)
+    assert value is None
+    assert reason == 'insufficient_semantic_identity'
 
 
-def test_wrong_axis_swapped_pairs_and_order():
-    b = blob('Revenues', [fact(seg=[{'dimension': 'x:GeoAxis', 'value': 'x:USMember'}])])
-    assert mf([b], pairs=[('x:GeoAxis', 'x:USMember')]) == XN.dec('100')
-    assert mf([b], pairs=[('x:SegAxis', 'x:USMember')]) is None, \
-        "a right member under a WRONG axis must never match"
-    two = blob('Revenues', [fact(seg=[{'dimension': 'x:A', 'value': 'x:M1'},
-                                      {'dimension': 'x:B', 'value': 'x:M2'}])])
-    assert mf([two], pairs=[('x:A', 'x:M1'), ('x:B', 'x:M2')]) == XN.dec('100')
-    assert mf([two], pairs=[('x:B', 'x:M2'), ('x:A', 'x:M1')]) == XN.dec('100'), \
-        "pair ORDER must not matter"
-    assert mf([two], pairs=[('x:A', 'x:M2'), ('x:B', 'x:M1')]) is None, \
-        "SWAPPED members across axes are a different identity"
+def test_the_value_only_form_agrees():
+    assert LOC.match_facts(_blob(), CONCEPT, [], *PERIOD) is None
 
 
-def test_concept_identity_matrix():
-    assert mf([blob('Revenues', [fact()])], 'us-gaap:Revenues') == XN.dec('100')   # prefixed->bare
-    assert mf([blob('Revenues', [fact()])], 'Revenues') == XN.dec('100')           # bare<->bare
-    assert mf([blob('us-gaap:Revenues', [fact()])], 'us-gaap:Revenues') == XN.dec('100')
-    assert mf([blob('evil:Revenues', [fact()])], 'us-gaap:Revenues') is None       # prefix mismatch
-    assert mf([blob('evil:Revenues', [fact()])], 'Revenues') is None, \
-        "a BARE request must never accept prefixed storage (the evil:Revenues class)"
+def test_the_seed_ADAPTER_inherits_the_refusal():
+    """`xbrl_lane.resolve` is a thin delegate; it must not develop its own
+    opinion now that the thing it delegates to abstains."""
+    assert xbrl_lane.resolve(_blob(), CONCEPT, [], *PERIOD) is None
 
 
-def test_unit_case_sensitivity_strip_only_nonblank_required():
-    """Units are CASE-SENSITIVE (XBRL unitRef is an XML IDREF; corpus-live: 7 PSEG filings
-    carry usdPerMWh vs usdPerMwh as DIFFERENT units). Normalization = strip ONLY. A numeric
-    candidate must carry a nonblank string unit (census: 88,236 numeric gate facts, zero
-    missing/blank/malformed — zero recall cost)."""
-    variants = [blob('Revenues', [fact(unit='U_USD')]), blob('Revenues', [fact(unit='u_usd')])]
-    assert mf(variants) is None, \
-        "U_USD vs u_usd are DIFFERENT units — same value under both must abstain as a conflict"
-    assert mf([blob('Revenues', [fact(unit='U_USD')])], unit_ref='u_usd') is None, \
-        "a request unit must match the raw id CASE-EXACTLY"
-    assert mf([blob('Revenues', [fact(unit=' U_USD ')])], unit_ref='U_USD') == XN.dec('100'), \
-        "strip (padding) still normalizes — case does not"
-    conflict = [blob('Revenues', [fact(unit='U_USD')]), blob('Revenues', [fact(unit='U_EUR')])]
-    assert mf(conflict) is None, "same value under genuinely conflicting units abstains"
-    assert mf([blob('Revenues', [fact(unit=['U_USD'])])]) is None, \
-        "a list unitRef is malformed — never a candidate, NEVER a crash"
-    assert mf([blob('Revenues', [fact(unit='   ')])]) is None, "blank unit is malformed"
-    assert mf([blob('Revenues', [fact(unit=None)])]) is None, \
-        "a NUMERIC fact with no unit is never a candidate (nonblank-unit law)"
-    assert mf([blob('Revenues', [fact(unit='USD')])], expected_unit='money') == XN.dec('100'), \
-        "the money heuristic casefolds LOCALLY — uppercase USD units must still match it"
-    assert mf([blob('Revenues', [fact(unit='usd')])], expected_unit='money') == XN.dec('100')
+# ---------------------------------------------------------------------------
+# MUST-REFUSE — the deceptive spellings that used to authorize
+# ---------------------------------------------------------------------------
+
+@pytest.mark.parametrize('unit,expected', [
+    ('fraud_usd_marker', 'money'),
+    ('dollarNotCurrency', 'money'),
+    ('USD_this_is_not_a_currency', 'money'),
+    ('shareholder_notes', 'nonmoney'),
+    ('shares_outstanding_notes', 'nonmoney'),
+])
+def test_a_DECEPTIVE_unit_id_gets_no_authority(unit, expected):
+    """Each contains `usd`, `dollar` or `share` and means nothing of the kind.
+    The substring rule returned a value for these; it is deleted, not narrowed,
+    and no larger word list replaces it."""
+    value, reason = LOC.match_facts_explain(_blob(unit), CONCEPT, [], *PERIOD,
+                                            expected_unit=expected)
+    assert value is None
+    assert reason == 'insufficient_semantic_identity'
 
 
-def test_request_pairs_validated_never_crash_never_collapse():
-    """Reproduced before fixing: unhashable pair items crashed TypeError; a repeated-axis
-    request silently collapsed via frozenset; then a VALID pair failed after
-    json.dumps/json.loads because JSON turns tuples into inner LISTS. Valid JSON pair arrays
-    are accepted and canonicalized; malformed and repeated-axis content still abstains."""
-    b = blob('Revenues', [fact(seg=[{'dimension': 'x:A', 'value': 'x:M'}])])
-    ex = lambda pairs: LOC.match_facts_explain([b], 'us-gaap:Revenues', pairs,
-                                               '2024-01-01', '2024-12-31')
-    for bad in ("x:A=x:M", 3, None, [('x:A',)], [('x:A', 'x:M', 'extra')],
-                [('x:A', 3)], [(' x:A', 'x:M')], [('x:A', 'x:M'), ('x:A', 'x:N')],
-                [('x:A', 'x:M'), ('x:A', 'x:M')], ['x:A=x:M'], [{'x:A': 'x:M'}]):
-        got, reason = ex(bad)
-        assert got is None and reason == 'bad_request_pairs', f"{bad!r} -> {reason}"
-    assert ex([('x:A', 'x:M')])[0] == XN.dec('100'), "a valid tuple pair list matches"
-    roundtrip = json.loads(json.dumps([('x:A', 'x:M')]))
-    assert roundtrip == [['x:A', 'x:M']]
-    assert ex(roundtrip)[0] == XN.dec('100'), \
-        "a JSON round-tripped pair array (inner LISTS) must be accepted and canonicalized"
+@pytest.mark.parametrize('stored,asked', [
+    ('evil:Revenues', 'us-gaap:Revenues'),
+    ('us-gaap:Revenues', 'evil:Revenues'),
+    ('Revenues', 'us-gaap:Revenues'),
+    ('us-gaap:Revenues', 'us-gaap:Revenues'),
+])
+def test_NO_concept_spelling_authorizes_ANYTHING(stored, asked):
+    """Including the case that "should" work — the last row. That is the point:
+    this route cannot tell a genuine match from a coincidence of aliases, so it
+    must claim neither. Under the old law that row bound, and it could not
+    justify doing so."""
+    value, reason = LOC.match_facts_explain(_blob(concept=stored), asked, [],
+                                            *PERIOD)
+    assert value is None
+    assert reason == 'insufficient_semantic_identity'
 
 
-def test_exact_unit_ref_is_authoritative_over_expected_unit():
-    """Reproduced before fixing: unit_ref='Unit12' matched alone but adding
-    expected_unit='money' vetoed it (the broad heuristic ran BEFORE exact equality). When
-    unit_ref is supplied, exact equality is AUTHORITATIVE; expected_unit applies only when
-    no unit_ref exists (opaque raw ids like Unit12 are exactly why)."""
-    b = blob('Revenues', [fact(value='93100000', unit='Unit12')])
-    a1 = LOC.match_facts_explain([b], 'us-gaap:Revenues', [], '2024-01-01', '2024-12-31',
-                                 unit_ref='Unit12')
-    assert a1 == (XN.dec('93100000'), 'ok')
-    a2 = LOC.match_facts_explain([b], 'us-gaap:Revenues', [], '2024-01-01', '2024-12-31',
-                                 unit_ref='Unit12', expected_unit='money')
-    assert a2 == (XN.dec('93100000'), 'ok'), \
-        "expected_unit must NOT veto an exact unit_ref match"
-    a3 = LOC.match_facts_explain([b], 'us-gaap:Revenues', [], '2024-01-01', '2024-12-31',
-                                 expected_unit='money')
-    assert a3[0] is None, "without unit_ref the money heuristic still applies (Unit12 opaque)"
+# ---------------------------------------------------------------------------
+# REQUEST-SHAPE ERRORS STAY DISTINGUISHABLE — each isolated
+# ---------------------------------------------------------------------------
+# A caller sending a broken ASK still learns that, rather than getting the
+# generic refusal. Each case is malformed in exactly ONE way, so no other
+# validator can be what produced the reason.
+
+@pytest.mark.parametrize('bad', [
+    'x:A=x:M', 3, None,
+    [('x:A',)], [('x:A', 'x:M', 'extra')], [('x:A', 3)], [(' x:A', 'x:M')],
+    [('x:A', 'x:M'), ('x:A', 'x:N')],          # repeated axis: never collapse
+    [('x:A', 'x:M'), ('x:A', 'x:M')],          # ...even when identical
+    ['x:A=x:M'], [{'x:A': 'x:M'}],
+])
+def test_a_malformed_PAIRS_request_says_so(bad):
+    """THE FULL MATRIX, restored. Each row was reproduced before it was fixed:
+    unhashable items crashed with TypeError, and a repeated axis silently
+    COLLAPSED through `frozenset` — two different addresses becoming one. That
+    is request validation, not matching, so withdrawing the matcher does not
+    withdraw it."""
+    got, reason = LOC.match_facts_explain(_blob(), CONCEPT, bad, *PERIOD)
+    assert got is None and reason == 'bad_request_pairs', f'{bad!r} -> {reason}'
 
 
-def test_nonmoney_needs_positive_evidence_opaque_abstains():
-    """Sibling of the Unit12-money case, reproduced through the PRODUCTION fingerprint path:
-    expected_unit='nonmoney' + stored Unit12 bound 93100000. An OPAQUE unit can be certified
-    NEITHER money NOR nonmoney. Census over the 88,236-numeric-fact gate corpus: EVERY genuine
-    nonmoney unit is a shares variant (shares / U_shares / Share / Unit_shares /
-    Unit_Standard_shares_*), the opaque ids Unit12/Unit1/Unit16 cover 527 facts, and foreign
-    currencies (cny, eur, U_AUD) also currently leaked through nonmoney. Dollars-per-share
-    units are MONEY (graph-verified: U_UnitedStatesOfAmericaDollarsShare = 38,041 facts, ALL
-    iso4217:USDshares divide=1; the global dollar-sweep shows every dollar-named unit is
-    money-denominated, incl. U_AustralianDollarShare 6 facts AUDshares): 'usd' OR 'dollar'
-    marks money; nonmoney requires positive share evidence AND excludes both money markers."""
-    sys.path.insert(0, os.path.join(_HERE, '..', '..', 'scripts', 'driver_seed'))
-    import locate
-
-    def prod(unit, expected):
-        b = blob('Revenues', [fact(value='93100000', unit=unit)])
-        return locate.locate({'xbrls': [b], 'concept': 'us-gaap:Revenues', 'members': [],
-                              'period_start': '2024-01-01', 'period_end': '2024-12-31',
-                              'expected_unit': expected})['value']
-    assert prod('Unit12', 'nonmoney') is None, \
-        "opaque Unit12 must NEVER satisfy a nonmoney ask (the reproduced production bind)"
-    assert prod('U_shares', 'nonmoney') == XN.dec('93100000'), "positive shares case preserved"
-    assert prod('shares', 'nonmoney') == XN.dec('93100000')
-    assert prod('cny', 'nonmoney') is None, "a foreign CURRENCY is never nonmoney"
-    assert prod('Unit12', 'money') is None, "opaque stays out of money too"
-    assert prod('U_USD', 'money') == XN.dec('93100000')
-    assert prod('U_UnitedStatesOfAmericaDollarsShare', 'money') == XN.dec('93100000'), \
-        "dollars-per-share IS money (38,041 facts, all iso4217:USDshares) — money must bind"
-    assert prod('U_UnitedStatesOfAmericaDollarsShare', 'nonmoney') is None, \
-        "dollars-per-share must NEVER satisfy a nonmoney ask"
-    assert prod('U_USDollarShare', 'nonmoney') is None, "the second dollars-share spelling too"
+@pytest.mark.parametrize('lawful', [
+    [('x:A', 'x:M')],
+    [['x:A', 'x:M']],                          # JSON turns tuples into LISTS
+])
+def test_a_LAWFUL_pairs_request_reaches_the_IDENTITY_refusal(lawful):
+    """MUST-ALLOW twin, and the reason the matrix above cannot be satisfied by
+    calling everything malformed. A well-formed address — including one that has
+    been through `json.dumps`/`loads`, which is how it arrives in practice — must
+    pass validation and be refused for the REAL reason. Under the old law these
+    returned a value; they must not return one now, and they must not be
+    mislabelled as malformed either."""
+    assert json.loads(json.dumps([('x:A', 'x:M')])) == [['x:A', 'x:M']]
+    got, reason = LOC.match_facts_explain(_blob(), CONCEPT, lawful, *PERIOD)
+    assert got is None
+    assert reason == 'insufficient_semantic_identity'
 
 
-COLLISION_EVIDENCE_QUERY = """
-MATCH (f:Fact)-[:HAS_UNIT]->(un:Unit) WHERE f.unit_ref IN [$a, $b]
-WITH split(f.id, '_')[0] AS rep, collect(DISTINCT f.unit_ref) AS us,
-     collect(DISTINCT un.name) AS names
-WHERE size(us) = 2
-RETURN rep, names ORDER BY rep
-"""
-# ALL NINE captured read-only results (2026-07-20, this graph — complete, not sampled):
-#   {a:'usdPerMWh', b:'usdPerMwh'} -> 7 filings, each ['iso4217:USDutr:MWh','iso4217:USDpseg:mwh']:
-#     pseg-20221231, pseg-20230331, pseg-20230630, pseg-20230930, pseg-20231231,
-#     pseg-20240331, pseg-20240630
-#   {a:'usdPerMMBTU', b:'usdPerMMBTu'} -> 2 filings, each
-#     ['iso4217:USDutr:MMBTU','iso4217:USDeog:mMBTu']: eog-20231231, eog-20241231
-# 7 + 2 = the nine filings: same raw spelling apart from case, DIFFERENT semantic Units.
+@pytest.mark.parametrize('bad', ['   ', '', [], ['usd'], 3, {'u': 1}, ' usd '])
+def test_a_malformed_UNIT_request_says_so(bad):
+    """Malformed unit SHAPES, pinned separately from the pairs matrix so neither
+    can cover for the other. ` usd ` is in this list deliberately: a padded id is
+    a DIFFERENT id, and repairing it by stripping would be the request-side twin
+    of the spelling repairs this round removed."""
+    assert LOC.match_facts_explain(_blob(), CONCEPT, [], *PERIOD,
+                                   unit_ref=bad)[1] == 'bad_request_unit'
 
 
-def test_real_corpus_collision_names_case_exact():
-    """The REAL collision ids, pinned durably — the COMPLETE executable evidence query and
-    its captured nine-filing results are preserved above (COLLISION_EVIDENCE_QUERY)."""
-    for ua, ub in (('usdPerMWh', 'usdPerMwh'), ('usdPerMMBTU', 'usdPerMMBTu')):
-        both = [blob('Revenues', [fact(value='42', unit=ua)]),
-                blob('Revenues', [fact(value='42', unit=ub)])]
-        got, reason = LOC.match_facts_explain(both, 'us-gaap:Revenues', [],
-                                              '2024-01-01', '2024-12-31')
-        assert got is None and reason == 'unit_conflict', \
-            f"{ua}/{ub} same value must be a unit CONFLICT, never merged: {reason}"
-        sel = LOC.match_facts([both[1]], 'us-gaap:Revenues', [], '2024-01-01', '2024-12-31',
-                              unit_ref=ub)
-        assert sel == XN.dec('42')
-        assert LOC.match_facts([both[1]], 'us-gaap:Revenues', [], '2024-01-01', '2024-12-31',
-                               unit_ref=ua) is None, \
-            f"unit_ref={ua} must NOT match a {ub} fact — case is identity"
+def test_an_EXACT_unit_ref_passes_validation_and_reaches_the_refusal():
+    """MUST-ALLOW twin: a lawful unpadded id is not a malformed request."""
+    assert LOC.match_facts_explain(_blob(), CONCEPT, [], *PERIOD,
+                                   unit_ref='usd')[1] == \
+        'insufficient_semantic_identity'
 
 
-def test_malformed_stored_period_containers_abstain_never_crash():
-    """Reproduced before fixing: string/int/list period containers crashed AttributeError."""
-    for p in ('garbage', 7, ['x'], None):
-        assert mf([blob('Revenues', [fact(period=p)])]) is None, f"period={p!r} must not bind"
+def test_a_malformed_PERIOD_request_says_so():
+    assert LOC.match_facts_explain(_blob(), CONCEPT, [], 'not-a-date',
+                                   '2024-03-31')[1] == 'bad_request_period'
 
 
-def test_fact_side_malformed_periods_never_candidates():
-    shapes = [{'startDate': '2024-01-01'},                       # start-only
-              {'endDate': '2024-12-31'},                         # end-only
-              {},                                                # blank
-              {'startDate': '2024-02-30', 'endDate': '2024-12-31'},   # impossible date
-              {'instant': '2024-12-31', 'startDate': '2024-01-01',
-               'endDate': '2024-12-31'}]                         # mixed instant+duration
-    for p in shapes:
-        assert mf([blob('Revenues', [fact(period=p)])]) is None, f"shape {p} must not bind"
+# ---------------------------------------------------------------------------
+# ADAPTER BEHAVIOUR — the seed lane's own rules, not the matcher's output
+# ---------------------------------------------------------------------------
+# `xbrl_lane.resolve` decides what a REQUEST may look like before it delegates.
+# That decision survives the matcher's withdrawal untouched, so these are kept
+# with their value assertions replaced by the refusal — the SHAPE rules are what
+# they were always testing.
+
+def test_the_adapter_REFUSES_a_member_only_request_outright():
+    """An axis is NEVER inferred, not even when the pairing is unique. This
+    raises no delegation at all: the adapter answers `None` from its own rule,
+    which is why it still discriminates now that the matcher abstains."""
+    b = _blob()
+    assert xbrl_lane.resolve(b, CONCEPT, ['x:USMember'], *PERIOD) is None
 
 
-def test_float_values_rejected_raw_strings_exact():
-    floaty = blob('Revenues', [{'value': 6707000000.0, 'period': D, 'unitRef': 'U_USD'}])
-    assert mf([floaty]) is None, "a stored FLOAT value must be rejected, never str()-laundered"
-    frac = blob('Revenues', [fact(value='1.23')])
-    got = mf([frac])
-    assert got == XN.dec('1.23') and str(got) == '1.23'
-
-
-def test_explain_reasons():
-    ex = lambda blobs, **kw: LOC.match_facts_explain(blobs, 'us-gaap:Revenues',
-                                                     kw.pop('pairs', ()), '2024-01-01',
-                                                     '2024-12-31', **kw)
-    assert ex([blob('Revenues', [fact()])])[1] == 'ok'
-    assert ex([])[1] == 'concept_missing', "nothing matched the concept at all"
-    assert ex([blob('OtherConcept', [fact()])])[1] == 'concept_missing'
-    wrong_period = blob('Revenues', [fact(period={'startDate': '2020-01-01',
-                                                  'endDate': '2020-12-31'})])
-    assert ex([wrong_period])[1] == 'no_candidate', \
-        "concept matched but later filters emptied the field"
-    assert ex([blob('Revenues', [fact(value='100')]),
-               blob('Revenues', [fact(value='200')])])[1] == 'ambiguous_values'
-    assert ex([blob('Revenues', [fact(unit='U_USD')]),
-               blob('Revenues', [fact(unit='U_EUR')])])[1] == 'unit_conflict'
-    assert ex([blob('Revenues', [fact(value='garbage')])])[1] == 'nonnumeric_value'
-    assert LOC.match_facts_explain([], 'us-gaap:Revenues', (), 'bad', 'dates')[1] == \
-        'bad_request_period'
-    assert ex([blob('Revenues', [fact()])], unit_ref=['U_USD'])[1] == 'bad_request_unit'
-
-
-def test_adapter_dimensioned_member_only_always_abstains():
-    b = blob('Revenues', [fact(seg=[{'dimension': 'x:OnlyAxis', 'value': 'x:USMember'}])])
-    assert xbrl_lane.resolve([b], 'us-gaap:Revenues', ['x:USMember'],
-                             '2024-01-01', '2024-12-31') is None, \
-        "an axis must NEVER be inferred — not even when the pairing is unique"
-    assert xbrl_lane.resolve([b], 'us-gaap:Revenues', None, '2024-01-01', '2024-12-31',
-                             pairs=[('x:OnlyAxis', 'x:USMember')]) == XN.dec('100')
-    assert xbrl_lane.resolve([blob('Revenues', [fact()])], 'us-gaap:Revenues', [],
-                             '2024-01-01', '2024-12-31') == XN.dec('100'), \
-        "dimensionless [] is fully specified and stays legal"
-    with pytest.raises(ValueError, match="never both"):
-        xbrl_lane.resolve([b], 'us-gaap:Revenues', ['x:USMember'], '2024-01-01', '2024-12-31',
+def test_the_adapter_REJECTS_pairs_and_members_together():
+    """Mutual exclusion, and `[]` still counts as a supplied input — the subtle
+    half. This is an adapter contract violation and raises, so it is
+    distinguishable from every abstention below it."""
+    with pytest.raises(ValueError, match='never both'):
+        xbrl_lane.resolve(_blob(), CONCEPT, ['x:USMember'], *PERIOD,
                           pairs=[('x:OnlyAxis', 'x:USMember')])
-    with pytest.raises(ValueError, match="never both"):
-        xbrl_lane.resolve([b], 'us-gaap:Revenues', [], '2024-01-01', '2024-12-31',
-                          pairs=[('x:OnlyAxis', 'x:USMember')])   # [] is STILL a supplied input
+    with pytest.raises(ValueError, match='never both'):
+        xbrl_lane.resolve(_blob(), CONCEPT, [], *PERIOD,
+                          pairs=[('x:OnlyAxis', 'x:USMember')])
+
+
+def test_a_fully_specified_adapter_request_reaches_the_refusal():
+    """MUST-ALLOW twin for both rules above: a dimensionless `[]` ask and a
+    `pairs=` ask are each fully specified, so they pass the adapter's own gate
+    and are refused by the route — not by the adapter."""
+    assert xbrl_lane.resolve(_blob(), CONCEPT, [], *PERIOD) is None
+    assert xbrl_lane.resolve(_blob(), CONCEPT, None, *PERIOD,
+                             pairs=[('x:OnlyAxis', 'x:USMember')]) is None
+
+
+def test_the_shape_errors_are_CHECKED_BEFORE_the_identity_refusal():
+    """Order matters and is asserted: a request that is BOTH malformed and
+    identity-less reports the malformity. Otherwise the generic refusal would
+    swallow every diagnosis a caller could act on."""
+    assert LOC.match_facts_explain(_blob('fraud_usd_marker'), CONCEPT,
+                                   [('axis',)], *PERIOD,
+                                   expected_unit='money')[1] == \
+        'bad_request_pairs'

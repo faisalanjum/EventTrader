@@ -22,13 +22,13 @@ def test_dec_exact_from_string():
 
 
 def test_dec_rejects_floats():
-    with pytest.raises(Exception):
+    with pytest.raises(X.ExactError):
         X.dec(2.34)                      # a float may have ALREADY lost the source value
 
 
 def test_dec_rejects_nan_and_infinity():
     for bad in ('nan', 'NaN', 'Infinity', '-inf', 'inf'):
-        with pytest.raises(Exception):
+        with pytest.raises(X.ExactError):
             X.dec(bad)                   # round-12: non-finite values are never source numbers
 
 
@@ -41,9 +41,9 @@ def test_eq_no_rounding():
 
 def test_period_key_exact_no_tolerance():
     assert X.period_key("2024-01-01", "2024-12-31") == ("2024-01-01", "2024-12-31")
-    with pytest.raises(Exception):
+    with pytest.raises(X.ExactError):
         X.period_key("2024-13-01", "2024-12-31")     # impossible date
-    with pytest.raises(Exception):
+    with pytest.raises(X.ExactError):
         X.period_key("not-a-date", "2024-12-31")
 
 

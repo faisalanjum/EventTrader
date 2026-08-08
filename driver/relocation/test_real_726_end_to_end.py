@@ -65,7 +65,7 @@ def store_or_skip(source_id):
         pytest.skip("the graph is unavailable")
 
 
-CE_CIK = "1306830"
+CE_CIK = "0001306830"
 
 
 def _packet_item():
@@ -98,6 +98,25 @@ def test_the_packet_says_what_we_think_it_says(field, expected):
     assert got == expected
 
 
+def _identity_kw(row):
+    """THE CONCEPT AND DIMENSION IDENTITY, taken from the row itself.
+
+    `bind_graph_fact` compares (namespace URI, local name) — a prefix is only a
+    scoped alias — so it now REQUIRES the concept's namespace and the graph's
+    own qname, and its `dims` are expanded pairs rather than prefixed text.
+
+    Both come from THIS row, through the same production deriver
+    (`_row_expanded_dims`) the live attach path uses. Hand-writing either half
+    here would let the fixture agree with itself: a namespace chosen to match
+    would prove the binder accepts what this file decided to hand it, not what
+    the graph actually stores.
+    """
+    from driver.core.xbrl_attach import _row_expanded_dims
+    return {"concept_namespace": row["concept_namespace"],
+            "graph_concept_qname": row["graph_concept_qname"],
+            "dims": _row_expanded_dims(row)}
+
+
 def _live_row():
     """THE one 726 row for this fact, through the PRODUCTION adapter.
 
@@ -125,8 +144,9 @@ def test_the_REAL_726_fact_binds_to_its_live_row_and_its_filing():
     """The whole lawful path, on real data: live graph row -> cached filing ->
     exact element -> exact reconciliation."""
     row = _live_row()
+    # the INDEPENDENT description of the same fact: the pinned packet, used
+    # below to check what the filing prints and declares
     _packet, item = _packet_item()
-    dims = tuple((d["axis"], d["member"]) for d in item["xbrl"]["dimensions"])
 
     bound, why = bind_graph_fact(
         _filing_text(), inline_element_id=row["fact_id"],
@@ -134,20 +154,18 @@ def test_the_REAL_726_fact_binds_to_its_live_row_and_its_filing():
         context_id=row["context_id"], unit_ref=row["unit_ref"],
         unit_name=row["unit_name"], is_divide=row["is_divide"],
         period_type=row["period_type"], start_date=row["start_date"],
-        end_date=row["end_date"], dims=dims, entity_cik=CE_CIK,
-        raw_value=row["value"])
+        end_date=row["end_date"], entity_cik=CE_CIK,
+        raw_value=row["value"], **_identity_kw(row))
     assert bound is not None, f"the lawful path abstained: {why}"
 
-    # the graph stores commas; the value is exact
+    # the graph stores commas; exactness is proven by the printed fields the
+    # binder reports — reconcile already gated printed x 10^scale == stored
     assert "," in row["value"]
-    assert bound["value"] == parse_raw(row["value"])
-    # the filing PRINTS 726 and DECLARES scale 6 — the three-field description
-    # the binder REPORTS; Core decides the stored multiplier
+    from driver.relocation.exact_numbers import exact_scaleb
+    assert exact_scaleb(bound["printed_value"],
+                        bound["evidence"]["scale"]) == parse_raw(row["value"])
     assert bound["printed_value"] == parse_raw(item["value"])
-    assert bound["ix_scale"] == item["xbrl"]["ix"]["scale"]
-    # and the evidence is this document's
-    assert bound["representation_sha256"] == \
-        item["xbrl"]["source_evidence"]["representation_sha256"]
+    assert bound["evidence"]["scale"] == item["xbrl"]["ix"]["scale"]
 
 
 def _real_store_and_provider():
@@ -199,14 +217,15 @@ def test_real_USD_shares_and_EPS_through_the_COMPLETE_core_path(
 
         attached = None
         for row in rows:
-            dims = tuple((d["axis"], d["member"]) for d in row["dims"])
+            identity = _identity_kw(row)
+            dims = identity["dims"]
             bound, _why = bind_graph_fact(
                 text, inline_element_id=row["fact_id"], concept=concept,
                 context_id=row["context_id"], unit_ref=row["unit_ref"],
                 unit_name=row["unit_name"], is_divide=row["is_divide"],
                 period_type=row["period_type"], start_date=row["start_date"],
-                end_date=row["end_date"], dims=dims, entity_cik=CE_CIK,
-                raw_value=row["value"])
+                end_date=row["end_date"], entity_cik=CE_CIK,
+                raw_value=row["value"], **identity)
             if bound is None or dims:            # keep it dimensionless + simple
                 continue
             # REAL-DATA TRAP: an INSTANT stores its (exclusive) date in
@@ -220,7 +239,7 @@ def test_real_USD_shares_and_EPS_through_the_COMPLETE_core_path(
             from driver.core.xbrl_attach import expected_multiplier
             slot = {"value": bound["printed_value"],
                     "scale_multiplier": expected_multiplier(level_unit,
-                                                            bound["ix_scale"]),
+                                                            bound["evidence"]["scale"]),
                     "unit_scale_evidence": None}
             # Lawful evidence for the element ACTUALLY BOUND. The pinned
             # packet hash above stays as the independent cross-check it already
@@ -263,16 +282,20 @@ def test_the_REAL_fact_refuses_a_wrong_description_of_itself():
     """Same real fact, one field wrong: a per-share unit claim on a plain-USD
     fact, and a wrong context — both must abstain."""
     row = _live_row()
-    _packet, item = _packet_item()
-    dims = tuple((d["axis"], d["member"]) for d in item["xbrl"]["dimensions"])
     base = dict(
         inline_element_id=row["fact_id"],
         concept="us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
         context_id=row["context_id"], unit_ref=row["unit_ref"],
         unit_name=row["unit_name"], is_divide=row["is_divide"],
         period_type=row["period_type"], start_date=row["start_date"],
-        end_date=row["end_date"], dims=dims, entity_cik=CE_CIK,
-        raw_value=row["value"])
+        end_date=row["end_date"], entity_cik=CE_CIK,
+        raw_value=row["value"], **_identity_kw(row))
+    # THE MUST-ALLOW TWIN. Without it every case below could abstain for a
+    # reason that has nothing to do with the field being mutated, and this test
+    # would report five refusals it never actually caused — which is exactly
+    # what a stale `dims` shape would have produced here.
+    bound, why = bind_graph_fact(_filing_text(), **base)
+    assert bound is not None, f"the UNMUTATED description abstained: {why}"
     for field, value in (("is_divide", "1"),
                          ("unit_name", "iso4217:USDshares"),
                          ("context_id", "c-1"),
@@ -504,7 +527,7 @@ def test_an_EMPTY_graph_result_FAILS_it_is_not_an_outage(monkeypatch):
 def test_an_AMBIGUOUS_graph_result_FAILS_rather_than_picking_one(monkeypatch):
     """Two matching rows is not 'pick the first' — that is how a wrong row gets
     silently credited."""
-    row = {"value": "726000000", "fact_id": "f-1360", "context_id": "c",
+    row = {"value": "726,000,000", "fact_id": "f-1360", "context_id": "c",
            "unit_ref": "u", "unit_name": "iso4217:USD", "is_divide": "0",
            "period_type": "duration", "start_date": "2024-01-01",
            "end_date": "2024-07-01", "dims": []}

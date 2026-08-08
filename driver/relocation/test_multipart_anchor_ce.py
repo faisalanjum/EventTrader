@@ -39,8 +39,8 @@ SHA_LATER = "a0114fbad66d39012cf257cad30374e6d45fc868e90a6663f6ceb69294a0c919"
 # the birth quote is VERBATIM source text, never a composed citation
 REAL_ROW_LATER = "North America 386 388"
 # the recovered older-source evidence representation, pinned
-SHA_EVIDENCE = ("6868bab3ed6990e2596670a3e2eb2b8fcf4571f997eda312bd1905b714f"
-                "84e5a")
+SHA_EVIDENCE = ("eb17e0e37acc179d6412883703d25b3684891b465a96b38a99fc2b20aa5"
+                "536d3")
 
 
 def _read_pinned(path, sha):
@@ -106,15 +106,29 @@ def _older_source():
     """The OLDER filing's Route-A payload: the real cached inline HTML + the
     graph-shaped fact row (real fact_id, exclusive period, declared unit)."""
     html = _read_pinned(FIX_OLD, SHA_OLD)
+    # THE GRAPH'S OWN CONCEPT IDENTITY, read from the live graph for exactly
+    # this fact (fact_id f-1025, value 388,000,000, context c-301) rather than
+    # composed here — a fixture that invents an identity proves nothing about
+    # the real join. It is REQUIRED since the concept became an expanded name:
+    # this one qname is stored under SIX different taxonomy namespaces
+    # (us-gaap 2021-01-31/2022/2023/2024/2025/2026), so the prefixed string
+    # alone cannot say which concept a fact means.
     row = {"value": "388,000,000", "fact_id": "f-1025", "unitRef": "usd",
            "unit_name": "iso4217:USD", "is_divide": "0",
+           "concept_namespace": "http://fasb.org/us-gaap/2023",
+           "graph_concept_qname": CONCEPT,
            "period": {"startDate": "2024-01-01", "endDate": "2024-04-01"},
-           "segment": [{"explicitMember": [
-               {"dimension": "srt:StatementGeographicalAxis",
-                "$t": "srt:NorthAmericaMember"},
-               {"dimension": "us-gaap:StatementBusinessSegmentsAxis",
-                "$t": "ce:AcetylChainMember"}]}]}
-    return {"inline_html": html, "company_cik": "1306830",
+           # THE EXACT CONTEXT, which is what the real producer returns. The
+           # hand-written `segment` list that stood here named its dimensions
+           # by raw prefix — `srt:`, `ce:` — and a prefix is this filing's own
+           # alias, so matching on it compared two documents' spellings and
+           # called the result identity. `c-301` is the graph's own
+           # `Fact.context_id` for `f-1025` (read-only, transaction unchanged)
+           # and is the same string the filing element carries as its
+           # contextRef, so the filing's own dimensions become authoritative
+           # by construction and no prefix is read at all.
+           "context_id": "c-301"}
+    return {"inline_html": html, "company_cik": "0001306830",
             "xbrls": [json.dumps({CONCEPT: [row]})]}
 
 

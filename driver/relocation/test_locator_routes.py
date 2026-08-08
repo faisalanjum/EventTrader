@@ -149,7 +149,7 @@ def pfact(v):
 # the Phase-3 close commit.
 
 def test_migrated_r2_hint_never_binds_from_text():
-    hint = {'value': '4000000000', 'quote': 'Total widget revenue was '
+    hint = {'value': '4,000,000,000', 'quote': 'Total widget revenue was '
             '4,000,000,000 for the year', 'source': 'driver_memory'}
     xb = blob('us-gaap:Revenues', [fact('4000000000', D24)])
     out = LOC.locate(ANCHOR, src([xb], [hint['quote']]), hints=[hint])

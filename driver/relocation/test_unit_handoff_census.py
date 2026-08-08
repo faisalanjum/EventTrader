@@ -19,7 +19,7 @@ from pathlib import Path
 import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from locator import ROUTE_A_BOOLS, ROUTE_A_SEM_UNIT, locate  # noqa: E402
+from locator import ROUTE_A_BOOLS, locate  # noqa: E402
 
 ACC = "0001306830-24-000098"
 CONCEPT = "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax"
@@ -46,10 +46,19 @@ def _skip_if_disconnected(e):
 
 
 def test_certified_unit_map_is_pinned_exactly():
-    # the measured semantic tuple map — 3 certified entries, no drive-by growth
-    assert ROUTE_A_SEM_UNIT == {("iso4217:USD", False): "usd",
-                                ("shares", False): "count",
-                                ("iso4217:USDshares", True): "usd_per_share"}
+    """The three certified readings, no drive-by growth — now asked of the
+    identity-keyed tables. The graph-spelling map this used to pin
+    (`ROUTE_A_SEM_UNIT`) was retired in #827 Stage 3: it keyed on prefixed text,
+    so it refused the lawful alias `cur:USD` and accepted an `iso4217` prefix
+    rebound to another namespace."""
+    from exact_numbers import (ROUTE_A_SEM_UNIT_DIVIDE,
+                               ROUTE_A_SEM_UNIT_SIMPLE)
+    ISO = "http://www.xbrl.org/2003/iso4217"
+    XBRLI = "http://www.xbrl.org/2003/instance"
+    assert ROUTE_A_SEM_UNIT_SIMPLE == {((ISO, "USD"),): "usd",
+                                       ((XBRLI, "shares"),): "count"}
+    assert ROUTE_A_SEM_UNIT_DIVIDE == {
+        (((ISO, "USD"),), ((XBRLI, "shares"),)): "usd_per_share"}
     assert ROUTE_A_BOOLS == {"0": False, "1": True}
 
 

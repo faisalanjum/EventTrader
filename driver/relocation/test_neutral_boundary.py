@@ -27,7 +27,7 @@ anchor = {
     "fact_type": "metric", "wording": ("Total revenue $ 6,707",), "concept_clue": None,
 }
 xbrl_src = {"source_id": "SYN-SRC-X", "source_type": "10k",
-            "xbrls": [json.dumps({"Revenues": [{"value": "6707000000",
+            "xbrls": [json.dumps({"Revenues": [{"value": "6,707,000,000",
                       "period": {"startDate": "2024-01-01", "endDate": "2024-12-31"},
                       "unitRef": "U_USD"}]})],
             "texts": ["Total revenue $ 6,707 for the year"]}
