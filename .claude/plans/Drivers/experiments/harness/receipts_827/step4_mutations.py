@@ -1728,6 +1728,13 @@ MUTATIONS = [
      "    if cell is not None and row is not None:\n        return False, row",
      "driver/relocation/test_row_label_span.py::"
      "test_the_SELECTED_CELL_owns_the_span_when_a_label_appears_twice"),
+
+    (222, "EU-101: the any-element sweep narrows and a data row becomes a header",
+     "driver/relocation/inline_html.py",
+     "               for t in row.find_all(True))",
+     "               for t in row.find_all('td'))",
+     "driver/relocation/test_row_label_span.py::"
+     "test_EU101_a_data_row_between_header_and_target_is_skipped_not_a_header"),
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",

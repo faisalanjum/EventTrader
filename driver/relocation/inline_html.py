@@ -176,6 +176,11 @@ def _has_number_fact(row, fact_nodes):
     # column header", sha 1062e0fb...) and the packet FETCH row
     # (15_CandidateFactPacket.md Part D, sha aa7239ed...). A td-contained
     # fact still marks the row as data — fail-closed for real data rows.
+    # EU-101 (#827): the find_all(True) ANY-ELEMENT sweep is the complete-
+    # coverage half of the same contract fix — a fact nested under any
+    # wrapper is still seen, so a data row is never mistaken for a header
+    # row and its values never pollute the aligned header stack (pinned:
+    # narrowing the sweep lets a data value into columns).
     return any(id(t) in fact_nodes and t.find_parent('th') is None
                for t in row.find_all(True))
 

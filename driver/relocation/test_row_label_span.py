@@ -878,3 +878,17 @@ def test_EU077_a_tagged_th_header_row_still_supplies_the_column_header():
     prep2, ev2 = _ev(f'<table><tr><th>Label</th><th>2024</th></tr>'
                      f'<tr><td>Total</td><td>{_FACT}</td></tr></table>')
     assert ev2['columns'] == ['2024']
+
+
+def test_EU101_a_data_row_between_header_and_target_is_skipped_not_a_header():
+    """The any-element sweep in _has_number_fact is the complete-coverage
+    half of the EU-077 contract fix: a DATA row between the header row and
+    the target row is recognized by its facts (wherever they nest) and
+    SKIPPED — its values never pollute the aligned header stack."""
+    d1 = ('<ix:nonFraction id="d1" name="us-gaap:B" contextRef="c1" '
+          'unitRef="u1" scale="0" decimals="0" '
+          'format="ixt:num-dot-decimal">5</ix:nonFraction>')
+    prep, ev = _ev(f'<table><tr><th>Label</th><th>2024</th></tr>'
+                   f'<tr><td>Other</td><td>{d1}</td></tr>'
+                   f'<tr><td>Total</td><td>{_FACT}</td></tr></table>')
+    assert ev['columns'] == ['2024']
