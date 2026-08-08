@@ -2806,6 +2806,14 @@ def _no_format_value(text):
     lawful; a negative NONZERO value is not.
     """
     from arelle.XmlValidate import decimalPattern
+    # EU-111 (#827): the or-'' arm is UNOBSERVABLE BY MEASUREMENT — an
+    # empty no-format fact is refused UPSTREAM by the content-model law
+    # (door-probed: malformed_fact_content_model identically with the arm
+    # intact and with a fabricating '0' default; the suite green under the
+    # fabrication), and if a future path reached it, '' fails the
+    # NON-NEGATIVE xs:decimal grammar below — withhold-only, never a
+    # fabricated value. No mutation entry per the F1/entry-120 precedent
+    # (the EU-147 form).
     collapsed = _collapse(text or '')
     if not decimalPattern.fullmatch(collapsed):
         return None
