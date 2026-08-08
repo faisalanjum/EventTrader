@@ -69,6 +69,17 @@ SOURCE_OWNED_FIELDS = ("member_refs", "xbrl_concept_raw")
 from driver.core.driver_validators import NUMERIC_FIELDS
 NUMERIC_SLOTS = NUMERIC_FIELDS
 
+
+def _unit_for_slot(name, level_unit, change_unit):
+    """C6 (#827 F-UNITS): THE one private slot->unit routing author — the
+    expression used to be written twice identically, so the same fact could
+    validate under one unit and convert under another. PRIVATE deliberately:
+    a public name would be auto-inventoried by _public_input_inventory and
+    needlessly expand the contract. Consumes the T7-owned field list's
+    semantics (change_value is the only change-unit slot); never re-authors
+    the list."""
+    return change_unit if name == "change_value" else level_unit
+
 # MODULE-PRIVATE, and deliberately not an attribute of any exported class: as a
 # class attribute it was reachable as `PreparedItemV2._ATTACH_TOKEN`, so the
 # "private" gate could be opened by anyone who read the source.
@@ -430,7 +441,7 @@ class PreparedItemV2:
             s = getattr(self, name)
             if s is None:
                 continue
-            unit = self.change_unit if name == "change_value" else self.level_unit
+            unit = _unit_for_slot(name, self.level_unit, self.change_unit)
             try:
                 validate_slot(name, s, stated_unit=unit, quote=self.quote, lane=lane)
             except SlotConversionError as e:
@@ -610,7 +621,7 @@ def to_stored_fact(fact, *, driver, source, fye_month, source_id=None,
     values = {}
     try:
         for name in NUMERIC_SLOTS:
-            unit = it.change_unit if name == "change_value" else it.level_unit
+            unit = _unit_for_slot(name, it.level_unit, it.change_unit)
             values[name] = convert_slot(unit, getattr(it, name))
     except SlotConversionError as e:
         # `validate_slot` (at construction) checks STRUCTURE and evidence;
