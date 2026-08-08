@@ -637,7 +637,7 @@ def test_G16_production_never_imports_exam_code():
     exam_names = ("kf_lint", "score_exp5", "raw_transport", "fact16_checks",
                   "grade_batch", "harness")
     for mod in ("slot_convert.py", "prepared_fact_v2.py", "fact_match.py",
-                "xbrl_attach.py"):
+                "xbrl_attach.py", "graph_row_contract.py"):
         tree = ast.parse(open(os.path.join(here, mod), encoding="utf-8").read())
         for node in ast.walk(tree):
             names = []
@@ -654,7 +654,7 @@ def test_G18_the_new_modules_reach_no_graph_write():
     import ast
     here = os.path.dirname(os.path.abspath(__file__))
     for mod in ("slot_convert.py", "prepared_fact_v2.py", "fact_match.py",
-                "xbrl_attach.py"):
+                "xbrl_attach.py", "graph_row_contract.py"):
         tree = ast.parse(open(os.path.join(here, mod), encoding="utf-8").read())
         for node in ast.walk(tree):
             if isinstance(node, ast.Name):

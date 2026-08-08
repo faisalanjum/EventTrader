@@ -19,6 +19,8 @@ from collections import namedtuple as _namedtuple
 from types import MappingProxyType
 
 from driver.core.driver_ids import valid_source_id
+from driver.core.graph_row_contract import (GRAPH_DIM_FIELDS,
+                                            GRAPH_FACT_ROW_FIELDS)
 from driver.core.driver_period_resolver import PERIOD_TIME_TYPES
 from driver.core.prepared_fact_v2 import (OUTCOME_CLASSES, PreparedFactV2,
                                           ProductionValidationError, SchemaError,
@@ -88,14 +90,10 @@ def _fetch(what, call, *args):
 #              been BACKFILLED. Not a refutation of the older figure: the two
 #              were taken at different times.
 # The branch therefore stays (it is the law), but no live fact exercises it today.
-_REQUIRED_ROW_KEYS = ("fact_id", "value", "unit_ref", "unit_name", "is_divide",
-                      "context_id", "concept_namespace", "graph_concept_qname")
-# The period/dimension fields binding ALSO reads — through `match_xbrl_fact` and
-# the binder call, neither of which the list above covered. The complete read set
-# is the UNION below, so no field name is written twice and there is no second
-# hand-maintained list to drift out of step with the first.
-_ROW_SHAPE_KEYS = ("period_type", "start_date", "end_date", "dims")
-_ROW_FIELDS = _REQUIRED_ROW_KEYS + _ROW_SHAPE_KEYS
+# F7 (#827): the read set IS the adapter's own interface statement — ONE
+# object, imported, so the writer of the names and this consumer cannot
+# drift apart (two hand-maintained lists used to state it).
+_ROW_FIELDS = GRAPH_FACT_ROW_FIELDS
 # A third period kind is a shape we cannot bind, so it parks. The closed
 # set itself is stated at its ONE owner (F9): the period resolver.
 _PERIOD_TYPES = PERIOD_TIME_TYPES
@@ -104,7 +102,7 @@ _PERIOD_TYPES = PERIOD_TIME_TYPES
 #: say WHICH taxonomy an axis belongs to, and two taxonomies routinely spell the
 #: same local name. A reader that cannot supply both halves is a broken reader,
 #: so its rows park here rather than binding on the spelling.
-_DIM_KEYS = ("axis", "member", "label", "axis_namespace", "member_namespace")
+_DIM_KEYS = GRAPH_DIM_FIELDS
 _REQUIRED_NON_BLANK = ("value", "unit_ref", "unit_name", "is_divide", "context_id",
                        "period_type", "start_date",
                        # THE CONCEPT'S IDENTITY IS REQUIRED AT THIS BOUNDARY,

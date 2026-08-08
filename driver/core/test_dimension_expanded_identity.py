@@ -165,3 +165,30 @@ def test_the_ADAPTER_owns_the_stored_null_alias_and_emits_None():
     row = store.get_xbrl_fact_dimensions("S1", "us-gaap:Revenues").rows[0]
     assert row["end_date"] is None, "the stored alias must not escape the door"
     assert row["start_date"] == "2026-04-02", "the real date passes through"
+
+
+def test_F7_the_adapter_and_consumer_share_ONE_interface_statement():
+    """F7 (#827): the column names a graph fact row carries are STATED once —
+    at the adapter (the writer of the names) — and the consumer's checked row
+    resolves from that same object. Round-trip on EVERY column through the
+    real public door: emitted keys == the owner tuple exactly (no extra —
+    `decimals` was emitted and read by no one, the returned-but-unread
+    surface this audit deletes), each dimension carries exactly the owner's
+    five, and the consumer keeps every column it is handed."""
+    from driver.core.graph_row_contract import (GRAPH_DIM_FIELDS,
+                                                GRAPH_FACT_ROW_FIELDS)
+    from driver.core import xbrl_attach as xa
+    rows = _rows([_rec("Dimension", "srt:StatementGeographicalAxis", SRT),
+                  _rec("Member", "us-gaap:ProductMember", GAAP24,
+                       label="North America")])
+    row = rows.rows[0]
+    assert set(row) == set(GRAPH_FACT_ROW_FIELDS), \
+        "the adapter emits EXACTLY the owner's columns"
+    for d in row["dims"]:
+        assert set(d) == set(GRAPH_DIM_FIELDS)
+    checked = xa._checked_row(row)
+    assert set(checked) == set(GRAPH_FACT_ROW_FIELDS), \
+        "the consumer keeps every emitted column - none dropped, none added"
+    assert xa._ROW_FIELDS is GRAPH_FACT_ROW_FIELDS, \
+        "the consumer's read set must BE the owner's object, not a copy"
+    assert xa._DIM_KEYS is GRAPH_DIM_FIELDS

@@ -1138,6 +1138,13 @@ MUTATIONS = [
      "            if False:\n                raise SchemaError(",
      "driver/core/test_round8_xbrl_binding.py::"
      "test_F8_a_malformed_concept_QName_is_refused_as_contract_input[a:b:c]"),
+
+    (139, "F7: the adapter's emission drifts from the interface statement",
+     "driver/core/driver_neo4j_adapter.py",
+     '                            "value": r.get("value"),',
+     '                            "value": r.get("value"),\n                            "decimals": r.get("decimals"),',
+     "driver/core/test_dimension_expanded_identity.py::"
+     "test_F7_the_adapter_and_consumer_share_ONE_interface_statement"),
 ]
 
 

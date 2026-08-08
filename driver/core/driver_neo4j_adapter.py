@@ -99,6 +99,10 @@ def _exact(value):
 # stops being invisible. A named two-field value (not a bare list) so a caller
 # cannot keep treating the result as rows and silently lose the evidence.
 GraphFactRows = _namedtuple("GraphFactRows", ("rows", "exclusions"))
+# F7 (#827): the row's column names are STATED once, in the neutral boundary
+# module graph_row_contract (the consumer may not import a neo4j-named
+# module, and this producer does not import its consumer). The emission
+# below is proven equal to that statement by the round-trip node.
 
 # The reasons a row is dropped, each an HONEST label for the SYMPTOM observed.
 # A misaligned array is not proof of a typed dimension: same symptom, unproved
@@ -429,7 +433,7 @@ class Neo4jStore:
             "RETURN f.id AS fid, f.fact_id AS fact_id, f.context_id AS context_id, "
             "p.period_type AS period_type, "
             "p.start_date AS start_date, p.end_date AS end_date, "
-            "f.unit_ref AS unit_ref, f.value AS value, f.decimals AS decimals, "
+            "f.unit_ref AS unit_ref, f.value AS value, "
             "u.name AS unit_name, u.is_divide AS is_divide, "
             "con.namespace AS concept_namespace, con.qname AS graph_concept_qname, "
             "c.dimension_u_ids AS dus, c.member_u_ids AS mus, "
@@ -554,7 +558,6 @@ class Neo4jStore:
                             "unit_name": r.get("unit_name"),
                             "is_divide": r.get("is_divide"),
                             "value": r.get("value"),
-                            "decimals": r.get("decimals"),
                             # THE CONCEPT'S IDENTITY TRAVELS WITH THE ROW.
                             # Selecting these in the query but omitting them
                             # here would leave the binder's required identity
