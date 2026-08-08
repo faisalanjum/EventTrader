@@ -1215,6 +1215,13 @@ MUTATIONS = [
      "        exc = None",
      "driver/core/test_round10_event_boundary.py::"
      "test_the_guard_asks_the_GRAPH_not_only_the_channels_hashes"),
+
+    (150, "F4: a published token escapes the T1 mint gate",
+     "driver/core/xbrl_attach.py",
+     '        return _fan_out(exc, code=require_known(\"SOURCE_COMPANY_AMBIGUOUS\"))',
+     '        return _fan_out(exc, code=\"SOURCE_COMPANY_AMBIGUOUS\")',
+     "driver/core/test_round11_outcomes.py::"
+     "test_F4_every_attach_token_is_minted_through_the_T1_owner"),
 ]
 
 

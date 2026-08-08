@@ -19,6 +19,7 @@ from collections import namedtuple as _namedtuple
 from types import MappingProxyType
 
 from driver.core.driver_ids import graph_cik, valid_source_id
+from driver.core.outcome_codes import require_known   # T1: mint-time (F4)
 from driver.core.graph_row_contract import (GRAPH_DIM_FIELDS,
                                             GRAPH_FACT_ROW_FIELDS)
 from driver.core.driver_period_resolver import PERIOD_TIME_TYPES
@@ -537,10 +538,13 @@ OUTCOME_ITEM_CLASSES = tuple(OUTCOME_CLASSES)
 # THE DECISION IS NOT WRITTEN HERE. It has exactly one owner, `OUTCOME_CLASSES`,
 # and is looked up from it below. Writing the decision beside the code gave the
 # class-to-decision rule two homes that agreed only by coincidence.
-_DEFAULT_CODES = ((SlotConversionError, "NOT_STORABLE"),
-                  (SourceUnavailable, "SOURCE_UNAVAILABLE"),
-                  (SchemaError, "XBRL_CONTRACT_INVALID"),
-                  (ProductionValidationError, "XBRL_BINDING_UNAVAILABLE"))
+# F4 (#827): every token minted THROUGH the T1 owner, at import time — a
+# spelling outside the one vocabulary fails loud here, never at the channel.
+_DEFAULT_CODES = ((SlotConversionError, require_known("NOT_STORABLE")),
+                  (SourceUnavailable, require_known("SOURCE_UNAVAILABLE")),
+                  (SchemaError, require_known("XBRL_CONTRACT_INVALID")),
+                  (ProductionValidationError,
+                   require_known("XBRL_BINDING_UNAVAILABLE")))
 
 
 def _default_outcome(exc):
@@ -916,7 +920,7 @@ def attach_event_xbrl(items, *, source_id, store, filing_provider, text_parts,
         # text, so the channel received the generic binding code and could not
         # distinguish this from any other park. Chosen by BRANCH — nothing here
         # reads an exception message to decide.
-        return _fan_out(exc, code="SOURCE_COMPANY_AMBIGUOUS")
+        return _fan_out(exc, code=require_known("SOURCE_COMPANY_AMBIGUOUS"))
     except OUTCOME_ITEM_CLASSES as exc:
         return _fan_out(exc)                  # an outage on the same read
 
@@ -1203,7 +1207,7 @@ def _verify_and_attach(fact, *, concept, evidence, prepared_doc, entity_cik,
         # it does not own, and destroyed the structured logs on the way out.
         return _ItemResult(None,
                            ProductionValidationError(f"attach: {problems[0]}"),
-                           "MEMBER_LINK_INVALID", notes, logs)
+                           require_known("MEMBER_LINK_INVALID"), notes, logs)
     try:
         from driver.core.slot_convert import convert_slot
 

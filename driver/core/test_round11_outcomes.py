@@ -736,3 +736,34 @@ def test_F14_the_authorized_class_outcome_table_at_its_owner():
         ("parked", "SOURCE_UNAVAILABLE")
     with pytest.raises(RuntimeError):
         _default_outcome(RuntimeError("x"))
+
+
+def test_F4_every_attach_token_is_minted_through_the_T1_owner():
+    """F4 (#827): the six published attach codes are consumed from the ONE
+    vocabulary (outcome_codes, T1) AT MINT TIME — every occurrence of an
+    ATTACH_CODES literal in xbrl_attach's source sits inside a
+    require_known(...) call, so a rogue or drifted token fails loud at
+    import, never at the channel. AST by SOURCE PATH (the staged-drift
+    precedent); comments and docstrings are free to name codes."""
+    import ast
+    import os
+    from driver.core import outcome_codes, xbrl_attach
+    tokens = set(outcome_codes.ATTACH_CODES)
+    src = open(os.path.abspath(xbrl_attach.__file__), encoding="utf-8").read()
+    tree = ast.parse(src)
+    inside = set()
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Call) and \
+                getattr(node.func, "id", getattr(node.func, "attr", "")) == \
+                "require_known":
+            for a in ast.walk(node):
+                if isinstance(a, ast.Constant) and a.value in tokens:
+                    inside.add(id(a))
+    bare = [n.value for n in ast.walk(tree)
+            if isinstance(n, ast.Constant) and n.value in tokens
+            and id(n) not in inside]
+    assert bare == [], f"attach codes minted OUTSIDE the T1 owner: {bare}"
+    minted = {n.value for n in ast.walk(tree)
+              if isinstance(n, ast.Constant) and n.value in tokens}
+    assert minted == tokens, \
+        "every one of the six published tokens is minted here exactly"
