@@ -1631,3 +1631,13 @@ def test_W13_B_D4_a_NON_EMPTY_raw_dict_fact_list_is_forwarded_and_constructed():
                    "occurrence_in_part": None, "per_x": None, "item": item}]})
     assert len(run.facts) == 1
     assert isinstance(run.facts[0], PreparedFactV2)
+
+
+def test_F14_an_event_wide_failure_reaches_EVERY_item():
+    """F14 (#827) scope control: one cause, not one victim — the event-wide
+    fan-out stamps every affected index (the count guard, on a TWO-item
+    event), each keeping its own index."""
+    res = _run([_item(), _item()], store=Graph(xbrl_nodes=2))
+    assert [o["index"] for o in res.preflight_outcomes] == [0, 1]
+    assert all("reports 2 XBRL representation(s)" in o["detail"]
+               for o in res.preflight_outcomes)

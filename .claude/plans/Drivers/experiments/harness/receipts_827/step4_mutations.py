@@ -1187,6 +1187,34 @@ MUTATIONS = [
      "        if False:",
      "driver/core/test_round10_event_boundary.py::"
      "test_more_than_one_xbrl_representation_PARKS"),
+
+    (146, "F14: SchemaError's authorized decision flips to parked",
+     "driver/core/prepared_fact_v2.py",
+     '    return {SchemaError: "rejected",',
+     '    return {SchemaError: "parked",',
+     "driver/core/test_round11_outcomes.py::"
+     "test_F14_the_authorized_class_outcome_table_at_its_owner"),
+
+    (147, "F14: SchemaError's authorized default code drifts",
+     "driver/core/xbrl_attach.py",
+     '(SchemaError, "XBRL_CONTRACT_INVALID"),',
+     '(SchemaError, "XBRL_SCHEMA_BAD"),',
+     "driver/core/test_round11_outcomes.py::"
+     "test_F14_the_authorized_class_outcome_table_at_its_owner"),
+
+    (148, "F14: the event-wide fan-out reaches only the first item",
+     "driver/core/xbrl_attach.py",
+     "        for idx, _f, _c, _e in checked:\n            outcomes.append(_outcome_row(idx, exc, code=code))",
+     "        for idx, _f, _c, _e in checked[:1]:\n            outcomes.append(_outcome_row(idx, exc, code=code))",
+     "driver/core/test_round10_event_boundary.py::"
+     "test_F14_an_event_wide_failure_reaches_EVERY_item"),
+
+    (149, "F14: concept-local failures stop routing to their claimants",
+     "driver/core/xbrl_attach.py",
+     "        exc = concept_failure.get(concept)",
+     "        exc = None",
+     "driver/core/test_round10_event_boundary.py::"
+     "test_the_guard_asks_the_GRAPH_not_only_the_channels_hashes"),
 ]
 
 

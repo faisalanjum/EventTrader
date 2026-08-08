@@ -711,3 +711,28 @@ def test_827R8_a_MISMATCHED_graph_concept_qname_parks_through_the_public_door():
     half of the expanded name is trusted."""
     _refused(_attach_rows([_row(graph_concept_qname="us-gaap:SomethingElse")]),
              ProductionValidationError, "")
+
+
+def test_F14_the_authorized_class_outcome_table_at_its_owner():
+    """F14 (#827), answer-sheet ruling verbatim: 'AUTHORIZE the current
+    class->outcome table at its one owner function.' The four pairs proved
+    ONCE PER CLASS at _default_outcome — never a class x site matrix; the
+    per-scope lawful controls are the EXISTING nodes (item-local: any
+    _refused single-row node, e.g. the F8 malformed-concept rejection;
+    concept-local: the carries-NO-fact park touching only its claimants;
+    event-wide: the count=2 representation park landing on every index).
+    An unlisted class stays LOUD — a programming error, never an outcome."""
+    from driver.core.prepared_fact_v2 import (ProductionValidationError,
+                                              SchemaError)
+    from driver.core.slot_convert import SlotConversionError
+    from driver.core.xbrl_attach import SourceUnavailable, _default_outcome
+    assert _default_outcome(SchemaError("x")) == \
+        ("rejected", "XBRL_CONTRACT_INVALID")
+    assert _default_outcome(ProductionValidationError("x")) == \
+        ("parked", "XBRL_BINDING_UNAVAILABLE")
+    assert _default_outcome(SlotConversionError("x")) == \
+        ("parked", "NOT_STORABLE")
+    assert _default_outcome(SourceUnavailable("x")) == \
+        ("parked", "SOURCE_UNAVAILABLE")
+    with pytest.raises(RuntimeError):
+        _default_outcome(RuntimeError("x"))
