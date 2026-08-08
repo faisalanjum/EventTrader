@@ -841,13 +841,30 @@ def test_E3_template_represents_NOTHING_even_with_author_display():
     assert ev['row_label'] == 'Label'
 
 
-def test_E_zero_width_space_is_a_SEPARATOR_not_deleted():
-    """U+200B ZERO WIDTH SPACE: the walk treats it as a token separator; the
-    old `_text` DELETED it, silently fusing two tokens into one word."""
+def test_EU062_zero_width_space_is_ZERO_WIDTH_not_a_separator():
+    """EU-062 (#827) FIX-TO-STANDARD, reversing a recorded earlier reading.
+
+    U+200B is NOT a space character and has NO WIDTH (Unicode 17.0 core
+    spec section 23.2.1); it is the ZW line-break class, a break
+    OPPORTUNITY with no visible space (UAX #14 Table 1 / LB7-LB8); and CSS
+    Text 3 (CRD 2026-06-08) sections 3 / 4.1.1 collapse only spaces, tabs
+    and segment breaks — ZWSP is none of those. So a filing writing
+    `Total<ZWSP>revenue` SHOWS "Totalrevenue", and turning it into a space
+    would put a character in the representation that the filing never
+    displays. The earlier note called deletion a defect ("fusing two
+    tokens"); the standards say the fusion is what a reader sees, and the
+    old assertion was evidence, not law. Measured before the change: the
+    frozen 1,769-file corpus contains ZERO U+200B, so this reversal moves
+    no real filing — it removes a fabricated space that could only ever
+    appear in future markup. Separate ELEMENTS still separate tokens (the
+    control below)."""
     zwsp = chr(0x200B)               # ZERO WIDTH SPACE, named — never invisible
     prep, ev = _ev(f'<table><tr><td>Total{zwsp}revenue</td>'
                    f'<td>{_FACT}</td></tr></table>')
-    assert ev['row_label'] == 'Total revenue', repr(ev['row_label'])
+    assert ev['row_label'] == 'Totalrevenue', repr(ev['row_label'])
+    prep2, ev2 = _ev('<table><tr><td><span>Total</span><span>revenue</span>'
+                     f'</td><td>{_FACT}</td></tr></table>')
+    assert ev2['row_label'] == 'Total revenue', repr(ev2['row_label'])
 
 
 def test_EU040_a_th_label_cell_is_a_cell_exactly_as_the_table_model_says():

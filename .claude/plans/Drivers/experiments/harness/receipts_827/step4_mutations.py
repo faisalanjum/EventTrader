@@ -2296,6 +2296,13 @@ MUTATIONS = [
      "driver/relocation/test_two_view_bridge.py::"
      "test_ANY_lawful_prefix_for_the_fact_element_still_binds"),
 
+    (305, "EU-062: U+200B becomes a fabricated space again",
+     "driver/relocation/inline_html.py",
+     "                words.extend(str(node).replace(_ZWSP, '').split())",
+     "                words.extend(str(node).replace(_ZWSP, ' ').split())",
+     "driver/relocation/test_row_label_span.py::"
+     "test_EU062_zero_width_space_is_ZERO_WIDTH_not_a_separator"),
+
     (281, "EU-169: the exactly-one-child bound widens to two",
      "driver/relocation/inline_html.py",
      "        if len(kids) != 1 or len(elements) != 1 \\",

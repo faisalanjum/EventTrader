@@ -94,8 +94,9 @@ def sha256_text(html_text):
 # ---- relocated from the pinned extractor (sha 38690c7b…) ------------------------
 
 #: U+200B ZERO WIDTH SPACE, constructed by code point so no editor can hide
-#: it. The renderer walk treats it as a TOKEN SEPARATOR (W4); an earlier
-#: reader here DELETED it, silently fusing two tokens into one word.
+#: it. EU-062 (#827): the walk REMOVES it — zero width, not a space (the
+#: standards cited at the walk); it was briefly read as a token separator,
+#: which fabricated a space no filing displays.
 _ZWSP = chr(0x200B)
 
 
@@ -726,7 +727,18 @@ def _visible_walk(root, spans=None, hidden=frozenset(), also=frozenset(),
                     and not isinstance(node, (Comment, CData,
                                               ProcessingInstruction,
                                               Declaration, Doctype)):
-                words.extend(str(node).replace(_ZWSP, ' ').split())
+                # EU-062 (#827) FIX-TO-STANDARD: U+200B contributes NOTHING
+                # to the visible text — it is not a space character and has
+                # no width (Unicode 17.0 core spec 23.2.1), it is the ZW
+                # line-break class (UAX #14 Table 1, LB7/LB8: a break
+                # OPPORTUNITY, not a space), and CSS Text 3 CRD 2026-06-08
+                # 3/4.1.1 collapses only spaces, tabs and segment breaks.
+                # Replacing it with U+0020 put a character in the
+                # representation that the filing never shows; separate
+                # ELEMENTS still separate tokens. Measured before the
+                # change: ZERO U+200B in the frozen 1,769-file corpus, so
+                # the reversal moves no real filing.
+                words.extend(str(node).replace(_ZWSP, '').split())
             return
         prune, vis, unsup = _advance(vis, node)   # THE one combine owner
         if unsup is not None and flags is not None:
