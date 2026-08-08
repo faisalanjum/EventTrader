@@ -62,7 +62,11 @@ def _actual_surprise_before_period_end(basis, gp_end_date, source_timestamp):
     if basis != ACTUAL_BASIS or not isinstance(gp_end_date, str) \
             or not isinstance(source_timestamp, str) \
             or "T" not in source_timestamp:
-        return False              # the stored timestamp contract requires T
+        # RFC 3339 §5.6: date-time = full-date "T" full-time — the "T" is the
+        # grammar's own separator (the space form is a by-mutual-agreement
+        # NOTE only, and fromisoformat would accept it, so the check is
+        # load-bearing). T5 (#827): the previously uncited bound, now cited.
+        return False
     try:
         end = date.fromisoformat(gp_end_date)
         stamp = datetime.fromisoformat(source_timestamp)
@@ -223,7 +227,10 @@ def validate_fact(fact, *, driver, home_facts=None):
     try:
         datetime.fromisoformat(fact.get("date") or "")
         if "T" not in fact["date"]:
-            raise ValueError("date-only")           # a bare date is NOT a full timestamp
+            # RFC 3339 §5.6 date-time requires the "T" separator (T5: cited);
+            # a bare date is NOT a full timestamp, and fromisoformat alone
+            # would also admit the space form the contract does not.
+            raise ValueError("date-only")
     except (ValueError, TypeError, KeyError):
         add("ISO", "REJECT", f"date must be the full ISO source timestamp "
                              f"(date AND time), got {fact.get('date')!r}")
