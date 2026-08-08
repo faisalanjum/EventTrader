@@ -1749,6 +1749,20 @@ MUTATIONS = [
      "    return re.findall(r\"[A-Za-z0-9][A-Za-z0-9\u2019'-]*\", value)",
      "driver/relocation/test_row_label_span.py::"
      "test_SEQ246_equal_CELLS_the_later_fact_keeps_its_OWN_label_window"),
+
+    (225, "EU-008: the instance-namespace URI drifts one character",
+     "driver/relocation/exact_numbers.py",
+     "XBRL_INSTANCE_NAMESPACE = 'http://www.xbrl.org/2003/instance'",
+     "XBRL_INSTANCE_NAMESPACE = 'http://www.xbrl.org/2003/instanceX'",
+     "driver/relocation/test_two_view_bridge.py::"
+     "test_ANY_lawful_prefix_for_the_fact_element_still_binds"),
+
+    (226, "EU-009: the iso4217 URI drifts one character",
+     "driver/relocation/exact_numbers.py",
+     "ISO_4217_NAMESPACE = 'http://www.xbrl.org/2003/iso4217'",
+     "ISO_4217_NAMESPACE = 'http://www.xbrl.org/2003/iso4217X'",
+     "driver/relocation/test_route_a.py::"
+     "test_827R9_the_same_LOCAL_NAMES_under_DIFFERENT_URIs_stay_DIFFERENT"),
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",

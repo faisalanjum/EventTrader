@@ -63,6 +63,17 @@ class ExactError(ValueError):
 #     in this namespace; prefix association added by erratum 2.1.5).
 #   XBRL_INSTANCE_NAMESPACE — same specification, §1.6 "Namespace Prefix
 #     Conventions" (prefix xbrli).
+#   EU-008/EU-009 (#827), the exact citation completing both: XBRL 2.1
+#   REC 2003-12-31 with corrected errata 2013-02-20,
+#   https://www.xbrl.org/Specification/XBRL-2.1/REC-2003-12-31/
+#   XBRL-2.1-REC-2003-12-31+corrected-errata-2013-02-20.html — each
+#   constant EQUALS the spec-published URI verbatim (§1.6 table:
+#   xbrli -> http://www.xbrl.org/2003/instance; iso4217 ->
+#   http://www.xbrl.org/2003/iso4217; §4.8.2 requires monetary measures
+#   in the iso4217 namespace; unit structure per §4.8: unit holds
+#   measures, divide exactly one unitNumerator and one unitDenominator).
+#   URIs are identity: a one-character drift makes every xbrli
+#   resolution and every currency meaning miss (both pinned).
 ISO_4217_NAMESPACE = 'http://www.xbrl.org/2003/iso4217'
 XBRL_INSTANCE_NAMESPACE = 'http://www.xbrl.org/2003/instance'
 # EU-001 (#827): these three maps carry Route A step 5's "semantic
