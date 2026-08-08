@@ -1225,6 +1225,15 @@ def _measure_text(m):
     member, an axis and a fact's name cannot drift into four spellings of one
     rule. Internal space stays invalid.
     """
+    # EU-107 (#827): the or-'' arm is UNOBSERVABLE BY MEASUREMENT — a
+    # measure with element structure is refused UPSTREAM by the unit
+    # content-model law (door-probed: malformed_unit_structure identically
+    # with the arm intact and with a fabricating 'iso4217:USD' default;
+    # 182 suite nodes green under the fabrication), so _leaf's None never
+    # reaches this join in a lawful flow. If a future path reached it, ''
+    # fails xs:QName validation at the one reader — withhold-only, never a
+    # fabricated measure. No mutation entry per the F1/entry-120
+    # no-detector-for-unobservable precedent (the EU-147 form).
     return _collapse(_leaf(m) or '')
 
 
