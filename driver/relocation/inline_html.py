@@ -1919,6 +1919,10 @@ def refused(prepared):
     ONE state, checked at every public door, so an unreadable filing is answered
     the same truthful way everywhere instead of raising a parser exception out
     of whichever door happened to be called first.
+
+    EU-185 (#827): the 'refused' spelling read here is prepare()'s own
+    refusal-record vocabulary (EU-180) — reader and writer share this one
+    module; no packet clause fixes it.
     """
     return prepared.get('refused') if isinstance(prepared, dict) else None
 

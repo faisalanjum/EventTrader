@@ -1318,6 +1318,13 @@ MUTATIONS = [
      "                'fact_nodez': fact_nodes,",
      "driver/relocation/test_two_view_bridge.py::"
      "test_a_prior_row_carrying_an_ALTERNATE_PREFIX_fact_is_not_taken_as_a_section"),
+
+    (164, "EU-185: the refusal-record reader's spelling drifts",
+     "driver/relocation/inline_html.py",
+     "    return prepared.get('refused') if isinstance(prepared, dict) else None",
+     "    return prepared.get('refuzed') if isinstance(prepared, dict) else None",
+     "driver/core/test_round8_xbrl_binding.py::"
+     "test_F3_an_unreadable_served_document_parks_with_document_blame"),
 ]
 
 
