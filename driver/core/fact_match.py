@@ -20,10 +20,10 @@ from types import MappingProxyType
 
 from driver.core.prepared_fact_v2 import ITEM_FIELDS, PreparedFactV2
 
-__all__ = ["MatchResult", "match_facts", "record_key"]
-
-_NUMERIC_SLOTS = ("level_low", "level_high", "change_value",
-                  "comparison_low", "comparison_high")
+# ONE owner for the numeric-slot inventory: prepared_fact_v2 exports it and
+# this module asks for it (#827 step 5). The identical literal used to sit
+# in both files — two lists that must agree forever, by hand.
+from driver.core.prepared_fact_v2 import NUMERIC_SLOTS as _NUMERIC_SLOTS
 
 
 def _canon_slot(slot):

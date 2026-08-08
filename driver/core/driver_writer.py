@@ -18,9 +18,6 @@ from decimal import Decimal
 
 from driver.core.driver_ids import IdLawError, norm, num_canon, signature_hash
 
-__all__ = ["WriterError", "FakeGraph", "PlanResult", "plan_event_write",
-           "signature", "stamp_series_unit", "assert_writes_enabled"]
-
 WRITE_GATE_ENV = "ENABLE_DRIVER_WRITES"
 
 SIGNATURE_FIELDS = ("level_low", "level_high", "level_unit", "change_value",

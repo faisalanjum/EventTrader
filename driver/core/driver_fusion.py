@@ -15,8 +15,6 @@ from collections import namedtuple
 from driver.core.driver_ids import norm, num_canon
 from driver.core.driver_writer import SIGNATURE_FIELDS, _LWW_FIELDS, _NUMERIC_SIG, _TEXT_SIG
 
-__all__ = ["FusedFact", "FusionPark", "fuse_event"]
-
 FusedFact = namedtuple("FusedFact", "fact indexes logs")
 FusionPark = namedtuple("FusionPark", "indexes code reason")
 

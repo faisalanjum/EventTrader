@@ -10,16 +10,18 @@ IS its own complete token, so unknowns reuse only by exact sentinel match
 from the member's own axis through the frozen table and is never reconsidered
 here. The semantic producer menu (S3 step-7 proper) builds ON this equality;
 the five R9-pinned cases live in test_driver_member_fold.py."""
-from driver.core.driver_ids import IdLawError, norm
-
-__all__ = ["member_token", "fold_target"]
+from driver.core.driver_ids import KNOWN_SLICE_KINDS, IdLawError, norm
 
 
 def member_token(kind, member_label):
     """The complete kind:norm(value) token for a KNOWN slice kind. Unknown axes
-    never come through here — encode_unknown_axis builds their complete token."""
+    never come through here — encode_unknown_axis builds their complete token,
+    so the vocabulary gate below refuses `unknown` too (#827 B11, SEQ 358):
+    an out-of-vocabulary kind must REFUSE, never become a silent menu token."""
+    if not isinstance(kind, str) or kind not in KNOWN_SLICE_KINDS:
+        raise IdLawError(f"unknown slice kind: {kind!r} — park, never guess")
     value = norm(member_label)
-    if not kind or not value:
+    if not value:
         raise IdLawError(f"empty member token: {kind!r} / {member_label!r} — "
                          f"park, never guess")
     return f"{kind}:{value}"

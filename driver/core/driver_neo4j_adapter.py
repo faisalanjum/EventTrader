@@ -20,6 +20,10 @@ import json
 import os
 from types import MappingProxyType
 from collections import namedtuple as _namedtuple
+
+from driver.core.driver_ids import (PERIOD_SENTINEL_SCOPE, SEC_CIK_10_PATTERN,
+                                    NON_REGISTRANT_CIK, graph_cik)
+from driver.xml_names import graph_qname_parts
 from datetime import datetime
 from decimal import Decimal
 from zoneinfo import ZoneInfo
@@ -82,7 +86,6 @@ def _resolve_id_records(records):
 
 _NUMERIC_FACT_FIELDS = ("level_low", "level_high", "change_value",
                         "comparison_low", "comparison_high")
-_SENTINELS = ("gp_ST", "gp_MT", "gp_LT", "gp_UNDEF")
 
 
 def _exact(value):
@@ -105,11 +108,72 @@ _EXCLUDED_MISALIGNED = "dimension_member_array_misaligned"
 _EXCLUDED_UNRESOLVED = "dimension_definition_unresolved"
 
 
-def _norm_uid(u_id):
-    """The proven harness fix (bug1_cik_zero_padding): context arrays carry a
-    zero-padded cik segment, node ids an unpadded one — strip before lookup."""
-    cik, _, rest = (u_id or "").partition(":")
-    return f"{cik.lstrip('0') or '0'}:{rest}"
+def _norm_uid(u_id, expected_company_cik):
+    """The node-id spelling of a Context reference, or None.
+
+    THE MATCHED COMPANY IS THE AUTHORITY, not the reference: this used to
+    `partition(':')` the reference and trust whatever came out. The two stored
+    spellings differ by design — `Company.cik` is ten padded digits, a node id
+    drops the leading zeros — so the conversion needs a company, and the caller
+    has already matched one. `graph_cik` owns what a lawful cik is.
+    """
+    cik = graph_cik(expected_company_cik)
+    if cik is None or not isinstance(u_id, str):
+        return None
+    prefix = cik + ":"
+    if not u_id.startswith(prefix):
+        return None
+    # DERIVED FROM THE VALIDATED VALUE, and the suffix is never touched: the
+    # colons inside a namespace URI are not delimiters anyone has to interpret.
+    # `or '0'` is gone with the fallback it served — once the all-zero marker
+    # refuses in `graph_cik`, no lawful cik can strip to the empty string.
+    return f"{cik.lstrip('0')}:{u_id[len(prefix):]}"
+
+
+def _namespace_from_uid(u_id, qname):
+    """The namespace a Dimension/Member composite id carries, or None.
+
+    PRIVATE. Decoding the stored composite is this boundary's own business, not
+    a new public API — what leaves here is the decoded `axis_namespace` /
+    `member_namespace`, never the composite or the means of reading it.
+
+    NEITHER BOUNDARY IS GUESSED, which is the whole reason this is lawful to do:
+
+      * the FIRST colon is the company-id boundary — a contract this module
+        already owns and relies on in `_norm_uid`;
+      * the SUFFIX is the record's own exact `qname`, supplied by the caller
+        rather than inferred;
+      * so every character between them is the namespace URI, and the colons
+        INSIDE that URI are never a delimiter anyone has to interpret.
+
+    The graph writer composes `company_id + ':' + namespaceURI + ':' + qname`
+    and — unlike Concept — persists no separate namespace, so this is the only
+    place the value exists. Decoding it is reading the frozen storage contract,
+    not parsing a string of unknown shape.
+
+    FAIL-CLOSED: every component is checked, and anything unexpected returns
+    None so the caller leaves that record unresolved under its existing truthful
+    exclusion path. A namespace is never invented.
+    """
+    if not isinstance(u_id, str) or not isinstance(qname, str) or not qname:
+        return None
+    company, sep, rest = u_id.partition(":")     # the boundary `_norm_uid` owns
+    if not sep or not company.strip():
+        return None
+    suffix = ":" + qname
+    if not rest.endswith(suffix):
+        return None
+    namespace = rest[:-len(suffix)]
+    if not namespace.strip():
+        return None
+    # THE QNAME IS ASKED OF THE STANDARDS OWNER, not checked here. This decoder
+    # used to accept `a:b:c`, `a: b`, ` a:b` and a tab-separated name, because
+    # "has a non-blank local part" is not the XML grammar — it only looks like
+    # it. `graph_qname_parts` is the one place that grammar lives, and it asks
+    # the XML library rather than restating the rule as a pattern.
+    if graph_qname_parts(qname) is None:
+        return None
+    return namespace
 
 
 class Neo4jStore:
@@ -200,7 +264,14 @@ class Neo4jStore:
         rows = self._read(
             "MATCH (r:Report {accessionNo: $id})-[:PRIMARY_FILER]->(c:Company) "
             "RETURN DISTINCT c.id AS cik", id=source_id)
-        ciks = {str(r["cik"]).strip() for r in rows if str(r["cik"] or "").strip()}
+        # RAW, EXACTLY AS STORED (#827 frozen contract): Company.id is a
+        # ten-character ASCII digit string, returned unchanged and compared
+        # exactly downstream. The old `str(...).strip()` did three unlawful
+        # things at once — repaired padded data before `graph_cik` could
+        # refuse it, minted a spelling for non-string data that no node
+        # states, and let the repair COLLAPSE two distinct stored values into
+        # one, masking a real ambiguity. Only absence (None) is dropped.
+        ciks = {r["cik"] for r in rows if r["cik"] is not None}
         return ciks.pop() if len(ciks) == 1 else None
 
     def get_driver(self, name):
@@ -257,20 +328,29 @@ class Neo4jStore:
             time_type=fact["time_type"], period_scope=fact.get("period_scope"))
         return _rank_prior_units(rows)
 
-    # the context arrays carry a zero-PADDED cik segment while Dimension/Member
-    # u_ids carry it UNPADDED — the proven harness fix (norm_uid, bug1_cik_zero_
-    # padding): strip the zeros ON the cik segment before the lookup, and look
-    # up by id (== u_id, verified live), the INDEXED property on both labels.
+    # THE MATCHED COMPANY CARRIES THE IDENTITY. This used to `split(du, ':')[0]`
+    # and coerce the result, so every stored reference vouched for itself.
+    # `$cik_pattern` / `$non_registrant` are the owner's values, passed as
+    # parameters so the rule is not restated in Cypher.
     # AAPL regression: 1,886 dimensional contexts returned ZERO under a raw join.
+    #: THE EXACT PREDICATE, named so a read-only test can execute THIS text
+    #: rather than a retyped copy of it. A substring assertion alone would only
+    #: prove the letters are present; the behaviour test binds `co` and runs it.
+    _CIK_GUARD = "co.cik =~ $cik_pattern AND co.cik <> $non_registrant"
+
     _MEMBER_PAIRING = (
-        "WITH DISTINCT c "
+        "WITH DISTINCT co, c "
+        "WHERE " + _CIK_GUARD + " "
         "UNWIND range(0, size(c.dimension_u_ids)-1) AS i "
-        "WITH DISTINCT c.dimension_u_ids[i] AS du, c.member_u_ids[i] AS mu "
-        "WITH du, mu, split(du, ':')[0] AS dcik, split(mu, ':')[0] AS mcik "
-        "WITH toString(toInteger(dcik)) + substring(du, size(dcik)) AS ndu, "
-        "toString(toInteger(mcik)) + substring(mu, size(mcik)) AS nmu "
-        "MATCH (d:Dimension {id: ndu}) "
-        "MATCH (m:Member {id: nmu}) "
+        "WITH DISTINCT co.cik AS cik, c.dimension_u_ids[i] AS du, "
+        "c.member_u_ids[i] AS mu "
+        "WHERE du STARTS WITH cik + ':' AND mu STARTS WITH cik + ':' "
+        # ONLY NOW, on a value already proven to be ten ASCII digits, so the
+        # coercion has nothing left to misread and `size(cik)` is a checked
+        # length. A misaligned array still yields null and still drops (#828).
+        "WITH cik, du, mu, toString(toInteger(cik)) AS ncik "
+        "MATCH (d:Dimension {id: ncik + substring(du, size(cik))}) "
+        "MATCH (m:Member {id: ncik + substring(mu, size(cik))}) "
         "RETURN DISTINCT d.qname AS axis, m.qname AS member, m.label AS label")
 
     def get_company_slice_menu(self, source_id, date):
@@ -296,7 +376,8 @@ class Neo4jStore:
             "AND EXISTS { MATCH (f:Fact)-[:IN_CONTEXT]->(c), "
             "  (f)-[:REPORTS]->(x2:XBRLNode) "
             "  WHERE f.is_numeric = '1' AND x2 IN xs } "
-            + self._MEMBER_PAIRING, src=source_id, date=date)
+            + self._MEMBER_PAIRING, src=source_id, date=date,
+            cik_pattern=SEC_CIK_10_PATTERN, non_registrant=NON_REGISTRANT_CIK)
         used = self._read(
             "MATCH (:Report {accessionNo: $src})-[:PRIMARY_FILER]->(co:Company) "
             "MATCH (du:DriverUpdate)-[:FROM_SOURCE]->(:Report)"
@@ -326,12 +407,36 @@ class Neo4jStore:
             "MATCH (f)-[:HAS_PERIOD]->(p:Period) "
             "MATCH (f)-[:IN_CONTEXT]->(c:Context)-[:FOR_COMPANY]->(co) "
             "MATCH (f)-[:HAS_UNIT]->(u:Unit) "
+            # THE CONCEPT'S OWN IDENTITY, both halves from ONE record.
+            # `Concept.namespace` is the taxonomy URI the filing declared, so a
+            # concept is compared by (namespace, local name) rather than by a
+            # prefixed string in which the prefix is only an alias. `con.qname`
+            # travels with it because the local half must be read off the SAME
+            # record — combining a namespace here with a local part sliced from
+            # somewhere else would assert an expanded name no source ever made.
+            #
+            # `Unit.namespace` is deliberately NOT transported. It holds the
+            # Unit Type Registry's `nsUnit`, which is the literal string "null"
+            # on 6,753 simple and all 113 divide Unit nodes — a truthy string
+            # that any presence test would read as a real namespace. It is not
+            # the measure's XML namespace and cannot stand in for one; the
+            # filing's expanded measures are the semantic authority and
+            # `u.name` stays purely as the storage-integrity comparison.
+            #
+            # OPTIONAL MATCH so a row missing its Concept edge stays VISIBLE and
+            # can be refused by name, instead of vanishing from the result set.
+            "OPTIONAL MATCH (f)-[:HAS_CONCEPT]->(con:Concept) "
             "RETURN f.id AS fid, f.fact_id AS fact_id, f.context_id AS context_id, "
             "p.period_type AS period_type, "
             "p.start_date AS start_date, p.end_date AS end_date, "
             "f.unit_ref AS unit_ref, f.value AS value, f.decimals AS decimals, "
             "u.name AS unit_name, u.is_divide AS is_divide, "
-            "c.dimension_u_ids AS dus, c.member_u_ids AS mus",
+            "con.namespace AS concept_namespace, con.qname AS graph_concept_qname, "
+            "c.dimension_u_ids AS dus, c.member_u_ids AS mus, "
+            # THE MATCHED COMPANY, carried so the conversion has an authority.
+            # `co` is already bound by the FOR_COMPANY match above; returning
+            # its cik is what lets `_norm_uid` stop trusting each reference.
+            "co.cik AS company_cik",
             src=source_id, concept=concept_qname)
         # THE ARRAYS ARE CHECKED BEFORE USE. `len()` on an int, `+` across
         # mismatched container types and `_norm_uid` on a non-string all raised
@@ -380,23 +485,29 @@ class Neo4jStore:
         ids = set()
         for r in rows:
             for u in (r["dus"] or []) + (r["mus"] or []):
-                ids.add(_norm_uid(u))
+                # NONE IS NEVER QUERIED AS AN ID. A reference that is not this
+                # company's, or a company we cannot validate, contributes
+                # nothing to the lookup and its pair fails closed below.
+                n = _norm_uid(u, r.get("company_cik"))
+                if n is not None:
+                    ids.add(n)
         found = {}
         if ids:
             found = _resolve_id_records(self._read(
                     "MATCH (d:Dimension) WHERE d.id IN $ids "
                     "RETURN d.id AS id, 'Dimension' AS kind, d.qname AS qname, "
-                    "null AS label "
+                    "null AS label, d.u_id AS u_id "
                     "UNION "
                     "MATCH (m:Member) WHERE m.id IN $ids "
                     "RETURN m.id AS id, 'Member' AS kind, m.qname AS qname, "
-                    "m.label AS label",
+                    "m.label AS label, m.u_id AS u_id",
                     ids=sorted(ids)))
         out = []
         for r in rows:
             dims, ok = [], True
             for du, mu in zip(r["dus"] or [], r["mus"] or []):
-                d, m = found.get(_norm_uid(du)), found.get(_norm_uid(mu))
+                d = found.get(_norm_uid(du, r.get("company_cik")))
+                m = found.get(_norm_uid(mu, r.get("company_cik")))
                 # THE KIND IS CHECKED, not assumed: nothing stopped a MEMBER id
                 # in the dimension array from writing a member's qname into the
                 # AXIS position, which would fabricate an axis that does not
@@ -405,8 +516,18 @@ class Neo4jStore:
                         or m.get("kind") != "Member":
                     ok = False                     # unresolvable pair: fail-closed —
                     break                          # this fact can't verify a claim
+                # THE EXPANDED NAME, carried explicitly. `u_id` itself is
+                # never exposed or compared downstream — only the namespace it
+                # was decoded into, beside the qname it belongs to.
+                axis_ns = _namespace_from_uid(d.get("u_id"), d.get("qname"))
+                member_ns = _namespace_from_uid(m.get("u_id"), m.get("qname"))
+                if axis_ns is None or member_ns is None:
+                    ok = False          # undecodable id: the same fail-closed
+                    break               # path as an unresolvable pair
                 dims.append({"axis": d["qname"], "member": m["qname"],
-                             "label": m["label"]})
+                             "label": m["label"],
+                             "axis_namespace": axis_ns,
+                             "member_namespace": member_ns})
             if ok:
                 # ADDITIVE, read-only, and shaped like the certified Route-A
                 # source adapter's own query: the SHORT inline element id
@@ -426,7 +547,15 @@ class Neo4jStore:
                             "unit_name": r.get("unit_name"),
                             "is_divide": r.get("is_divide"),
                             "value": r.get("value"),
-                            "decimals": r.get("decimals")})
+                            "decimals": r.get("decimals"),
+                            # THE CONCEPT'S IDENTITY TRAVELS WITH THE ROW.
+                            # Selecting these in the query but omitting them
+                            # here would leave the binder's required identity
+                            # unreachable through the real path, and every
+                            # lawful fact would park as
+                            # `missing_graph_concept_namespace`.
+                            "concept_namespace": r.get("concept_namespace"),
+                            "graph_concept_qname": r.get("graph_concept_qname")})
             else:
                 _exclude(_EXCLUDED_UNRESOLVED, r)
         # ONE summary per reason, from THIS read — never a second query, never
@@ -490,12 +619,12 @@ def preflight(store):
     sentinels = [r["id"] for r in store._read(
         "MATCH (p:DriverPeriod) WHERE p.id IN $ids AND p.u_id = p.id "
         "AND p.start_date IS NULL AND p.end_date IS NULL RETURN p.id AS id",
-        ids=list(_SENTINELS))]
+        ids=list(PERIOD_SENTINEL_SCOPE))]
     report = {"constraint_driverupdate": ("DriverUpdate", ("id",)) in uniques,
               "constraint_driverperiod": ("DriverPeriod", ("id",)) in uniques,
               "constraint_driver_name": ("Driver", ("name",)) in uniques,
               "sentinels_present": sorted(sentinels),
-              "sentinels_missing": sorted(set(_SENTINELS) - set(sentinels))}
+              "sentinels_missing": sorted(set(PERIOD_SENTINEL_SCOPE) - set(sentinels))}
     report["ready"] = (report["constraint_driverupdate"]
                        and report["constraint_driverperiod"]
                        and report["constraint_driver_name"]

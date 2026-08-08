@@ -34,7 +34,13 @@ The company menu (FINAL_DESIGN:172) = union of members from all prior public
 10-K/10-Q filings + slice values already used for that company, cut at ≤ the
 event/source public time (PIT, :48). Retrieval is the adapter's job
 (`get_company_slice_menu` — raw rows only); ALL law lives here."""
-from driver.core.driver_ids import IdLawError, encode_unknown_axis
+from driver.core.driver_ids import (CHANNEL_KIND as _CHA,
+                                    CUSTOMER_KIND as _CUS,
+                                    ENTITY_OWNERSHIP_KIND as _ENT,
+                                    GEOGRAPHY_KIND as _GEO,
+                                    PRODUCT_KIND as _PRO,
+                                    SEGMENT_KIND as _SEG,
+                                    IdLawError, encode_unknown_axis)
 from driver.relocation.exact_numbers import ExactError, stored_period_end
 from driver.core.driver_member_fold import fold_target, member_token
 from driver.core.slice_axis_frozen import (HARD_EXCLUDE_ELIMINATIONS,
@@ -45,8 +51,6 @@ __all__ = ["CONFIRMED_AXES", "NON_SLICE_AXES", "ELIMINATION_QNAMES",
            "PROVISIONAL_MEMBERS", "classify_axis", "build_menu",
            "check_member_refs", "match_xbrl_fact", "slice_tokens_from_scope"]
 
-_SEG, _PRO, _GEO, _CUS, _CHA, _ENT = ("segment", "product", "geography",
-                                      "customer", "channel", "entity_ownership")
 CONFIRMED_AXES = {
     # SEGMENT (12)
     "us-gaap:StatementBusinessSegmentsAxis": _SEG,
@@ -170,7 +174,8 @@ def slice_tokens_from_scope(fact_scope):
 def _is_hard_excluded(status, kind, member):
     """FS-20 scope: the elimination guard applies ONLY on segment-family axes
     (FINAL_DESIGN:176) — the same qname elsewhere is not this guard's business."""
-    return status == "slice" and kind == "segment" and member in ELIMINATION_QNAMES
+    return (status == "slice" and kind == _SEG
+            and member in ELIMINATION_QNAMES)
 
 
 def build_menu(xbrl_members, used_scopes):
@@ -198,7 +203,7 @@ def build_menu(xbrl_members, used_scopes):
                          "reason": str(e)})
             continue
         tokens.add(token)
-        if (status == "slice" and kind == "segment"      # provisional rule is
+        if (status == "slice" and kind == _SEG           # provisional rule is
                 and row["member"] in PROVISIONAL_MEMBERS):  # segment-scoped too
             logs.append({"event": "fs20_provisional", "axis": row["axis"],
                          "member": row["member"], "token": token})

@@ -19,8 +19,6 @@ from decimal import Decimal
 
 from driver.core.driver_ids import valid_source_id
 
-__all__ = ["SchemaError", "PreparedFactV1", "RunInputV1"]
-
 _POLARITY_BASES = ("source_framing", "metric_meaning")
 _PROOF_KEYS = ("polarity", "basis", "evidence", "sentence")
 
@@ -219,9 +217,7 @@ class RunInputV1:
             # writer reads the graph roughly a hundred lines before `build_id`
             # judges the id — so an unlawful id bought several graph reads
             # before being rejected. Now it cannot be constructed at all.
-            raise SchemaError(
-                "source_id must satisfy the ONE id law "
-                "(driver_ids.valid_source_id: [A-Za-z0-9._-], colon-free)")
+            raise SchemaError("source_id is invalid")
         if not isinstance(self.calendar_override, bool):
             raise SchemaError("calendar_override: must be bool")
         if not isinstance(self.facts, list) or any(

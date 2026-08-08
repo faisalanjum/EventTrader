@@ -13,8 +13,6 @@ from collections import namedtuple
 
 from driver.core.driver_ids import valid_driver_name
 
-__all__ = ["BackfillDecision", "backfill_gate"]
-
 BackfillDecision = namedtuple("BackfillDecision", "driver_name reason")
 
 

@@ -14,12 +14,10 @@ what current law layers on top:
 import math
 from decimal import Context, Decimal, InvalidOperation, localcontext
 
+from driver.core.driver_ids import PERIOD_SENTINEL_SCOPE
 from driver.core.unit_resolver import CANONICAL_UNITS, resolve_unit
 
-__all__ = ["DRIVER_UNITS", "UnitResolutionError", "resolve_driver_units"]
-
 DRIVER_UNITS = frozenset(CANONICAL_UNITS | {"percent_sequential"})
-_SENTINEL_SCOPES = frozenset({"short_term", "medium_term", "long_term", "undefined"})
 _PRESCALE_BOUNDARY = 999      # the substrate's pre-scaled guard threshold (guidance_ids)
 
 
@@ -165,7 +163,7 @@ def _growth_basis(unit, period_scope, sequential_evidence):
     """OD-11: refine a growth-flavored percent unit by the fact's resolved period scope."""
     if unit != "percent_yoy":
         return unit                                   # points/bps/money/etc. already final
-    if period_scope is None or period_scope in _SENTINEL_SCOPES:
+    if period_scope is None or period_scope in PERIOD_SENTINEL_SCOPE.values():
         return "unknown"                              # sentinel/missing horizon fails closed
     if period_scope == "annual":
         return "percent_yoy"                          # annual pin: sequential == yoy
