@@ -623,3 +623,45 @@ def test_T6_the_minimal_fact_id_reader_lives_at_the_owner():
             pass
     src = inspect.getsource(dv._id_rebuild)
     assert ".split(" not in src, "the validators re-grew a local id parse"
+
+
+def test_SLICE_GRAMMAR_one_owner_for_token_and_reader():
+    """SLICE-GRAMMAR (D1+D2): the complete KIND:VALUE constructor and the
+    fact_scope slice reader BOTH live at the grammar owner (driver_ids).
+    The two gates stay distinct BY DESIGN: build_id/slice_token accept all
+    SLICE_KINDS (known + the reserved unknown); member_token keeps its
+    narrower known-only gate and CONSUMES the owner's constructor."""
+    import inspect
+    from driver.core.driver_ids import (IdLawError, build_id, slice_token,
+                                        slice_tokens_from_scope)
+    import driver.core.driver_member_fold as dmf
+    import driver.core.slice_menu as sm
+    # D1: the owner constructor, all kinds
+    assert slice_token("segment", "iPhone 15") == "segment:iphone_15"
+    tok = slice_token("unknown", "some axis reading")
+    assert tok.startswith("unknown:")
+    try:
+        slice_token("weird", "x"); assert False
+    except IdLawError:
+        pass
+    # known-kind token byte-identical through the gate consumer
+    assert dmf.member_token("segment", "iPhone 15") == "segment:iphone_15"
+    try:
+        dmf.member_token("unknown", "free text"); assert False   # gate holds
+    except IdLawError:
+        pass
+    # the gate consumer builds through the owner, never a local f-string
+    src = inspect.getsource(dmf.member_token)
+    assert "slice_token(" in src and 'f"{kind}:' not in src
+    # D2: the reader lives at the owner; slice_menu consumes, no local parse
+    fid, scope = build_id("0000320193-24-000123", "revenue",
+                          period_id="gp_2025-01-01_2025-03-31",
+                          slice_parts=[("segment", "iPhone 15"),
+                                       ("geography", "Americas")])
+    assert slice_tokens_from_scope(scope) == {"segment:iphone_15",
+                                              "geography:americas"}
+    assert slice_tokens_from_scope("period=gp_2025-01-01_2025-03-31") == set()
+    assert slice_tokens_from_scope("") == set()
+    assert sm.slice_tokens_from_scope is slice_tokens_from_scope
+    sm_src = inspect.getsource(sm)
+    assert "def slice_tokens_from_scope" not in sm_src

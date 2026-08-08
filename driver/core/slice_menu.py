@@ -34,6 +34,8 @@ The company menu (FINAL_DESIGN:172) = union of members from all prior public
 10-K/10-Q filings + slice values already used for that company, cut at ≤ the
 event/source public time (PIT, :48). Retrieval is the adapter's job
 (`get_company_slice_menu` — raw rows only); ALL law lives here."""
+# D2: the scope reader lives at the grammar owner; re-exported here
+from driver.core.driver_ids import slice_tokens_from_scope  # noqa: F401
 from driver.core.driver_ids import (CHANNEL_KIND as _CHA,
                                     CUSTOMER_KIND as _CUS,
                                     ENTITY_OWNERSHIP_KIND as _ENT,
@@ -160,15 +162,6 @@ def classify_axis(axis_qname):
         return ("non_slice", None)
     kind = CONFIRMED_AXES.get(axis_qname)
     return ("slice", kind) if kind else ("unknown", None)
-
-
-def slice_tokens_from_scope(fact_scope):
-    """The slice tokens of a stored fact_scope (build_id grammar: the `slice=`
-    slot holds ';'-joined complete kind:value tokens)."""
-    for slot in (fact_scope or "").split("|"):
-        if slot.startswith("slice="):
-            return set(slot[len("slice="):].split(";"))
-    return set()
 
 
 def _is_hard_excluded(status, kind, member):

@@ -264,6 +264,29 @@ def fact_source_id(fact_id):
     return parts[1]
 
 
+def slice_token(kind, raw_value):
+    """THE one complete slice-token constructor (SLICE-GRAMMAR D1): the
+    FINAL_DESIGN:168 KIND:VALUE spelling for EVERY member of SLICE_KINDS
+    (known + the reserved unknown), through the three-state value door.
+    build_id consumes THIS; driver_member_fold keeps its narrower known-only
+    GATE and consumes this constructor — two gates by design, ONE spelling."""
+    # string first: an unhashable non-string (list/dict/bytearray) must be
+    # REFUSED, never crash the frozenset membership (#827 B11, SEQ 361)
+    if not isinstance(kind, str) or kind not in SLICE_KINDS:
+        raise IdLawError(f"unknown slice kind: {kind!r}")
+    return f"{kind}:{_slice_value(kind, raw_value)}"
+
+
+def slice_tokens_from_scope(fact_scope):
+    """THE one fact_scope slice reader (SLICE-GRAMMAR D2): reads back the
+    slice= slot build_id writes — the '|' / 'slice=' / ';' grammar has ONE
+    writer and ONE reader, both in this module; no generic parser."""
+    for slot in (fact_scope or "").split("|"):
+        if slot.startswith("slice="):
+            return set(slot[len("slice="):].split(";"))
+    return set()
+
+
 def build_id(source_id, driver_name, *, period_id=None, slice_parts=(),
              measurement_tokens=(), surprise=None):
     """The ONE entry point. Returns (fact_id, fact_scope) — both canonical, immutable.
@@ -279,11 +302,7 @@ def build_id(source_id, driver_name, *, period_id=None, slice_parts=(),
         slots.append(f"period={period_id}")
     parts = set()
     for kind, raw_value in slice_parts:
-        # string first: an unhashable non-string (list/dict/bytearray) must be
-        # REFUSED, never crash the frozenset membership (#827 B11, SEQ 361)
-        if not isinstance(kind, str) or kind not in SLICE_KINDS:
-            raise IdLawError(f"unknown slice kind: {kind!r}")
-        parts.add(f"{kind}:{_slice_value(kind, raw_value)}")
+        parts.add(slice_token(kind, raw_value))   # D1: the ONE constructor
     if parts:
         slots.append("slice=" + ";".join(sorted(parts)))
     tokens = set()
