@@ -2142,6 +2142,34 @@ MUTATIONS = [
      "driver/relocation/test_semantic_fact_value.py::"
      "test_EU168_a_nested_pair_that_both_omit_scale_agrees_at_ten_to_the_zero"),
 
+    (283, "EU-175: the graph grouping comma is replaced instead of removed",
+     "driver/relocation/inline_html.py",
+     "    return Decimal(raw.replace(',', ''))",
+     "    return Decimal(raw.replace(',', '0'))",
+     "driver/relocation/test_transform_registry.py::"
+     "test_DOOR_an_approved_registry_BINDS_a_transformed_fact"),
+
+    (284, "EU-176: the id census double-steps and lawful ids read as duplicates",
+     "driver/relocation/inline_html.py",
+     "            id_counts[eid] = id_counts.get(eid, 0) + 1",
+     "            id_counts[eid] = id_counts.get(eid, 0) + 2",
+     "driver/relocation/test_context_content_model.py::"
+     "test_an_ABSENT_segment_and_scenario_are_lawful"),
+
+    (285, "EU-177: the context resource element name drifts and the index empties",
+     "driver/relocation/inline_html.py",
+     "    for context in _kids_of(declared, XBRL_INSTANCE_NAMESPACE, 'context'):",
+     "    for context in _kids_of(declared, XBRL_INSTANCE_NAMESPACE, 'contextX'):",
+     "driver/relocation/test_context_content_model.py::"
+     "test_an_ABSENT_segment_and_scenario_are_lawful"),
+
+    (286, "EU-178: the id attribute name drifts and no element carries an id",
+     "driver/relocation/inline_html.py",
+     "        eid = _typed(el, 'id') if isinstance(el.tag, str) else None",
+     "        eid = _typed(el, 'idX') if isinstance(el.tag, str) else None",
+     "driver/relocation/test_semantic_fact_value.py::"
+     "test_a_plain_text_fact_binds"),
+
     (281, "EU-169: the exactly-one-child bound widens to two",
      "driver/relocation/inline_html.py",
      "        if len(kids) != 1 or len(elements) != 1 \\",

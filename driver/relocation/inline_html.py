@@ -2097,10 +2097,24 @@ def prepare(html_text):
     for el in root.iter():
         eid = _typed(el, 'id') if isinstance(el.tag, str) else None
         if eid is not None:
+            # EU-176 (#827): FAIL-CLOSED counting — the census starts at 0
+            # for a never-seen id and steps by exactly 1, because the
+            # downstream law reads it as an EXACT population (0 = absent,
+            # 1 = the one lawful bearer, >1 = the XML 1.0 VC:ID breach the
+            # EU-162 bounds refuse). Any other step silently retypes lawful
+            # ids as duplicates (measured: 314 reds).
             id_counts[eid] = id_counts.get(eid, 0) + 1
     # RESOURCES COME FROM ONE PLACE, because the spec puts them in one place.
     declared = _resources(root)
     contexts = {}
+    # EU-177 + EU-178 (#827): the resource element names and the id
+    # attribute are the specs' own — xbrli:context and xbrli:unit are the
+    # XBRL 2.1 sections 4.7/4.8 resources (the CL-028 schema citation),
+    # each carrying an xs:ID `id` (Inline XBRL 1.1 places them under
+    # ix:resources, the EU-124 citation), and every fact's `id` is that
+    # same xs:ID attribute (XML Schema Part 2 2e section 3.3.8, an
+    # NCName). Asked in the instance namespace, never by prefix; a drift
+    # empties the whole resource index (166 and 203 reds).
     for context in _kids_of(declared, XBRL_INSTANCE_NAMESPACE, 'context'):
         cid = _xml_id(_typed(context, 'id'))
         if not cid:
@@ -2890,6 +2904,13 @@ def parse_raw(raw):
         return None
     if not _GRAPH_NUMBER.fullmatch(raw):
         return None
+    # EU-175 (#827): the comma is the GRAPH lexical contract's grouping
+    # separator (the EU-061 record: this grammar is the writer formatters'
+    # output shape, not a registry input), and removing it is the only
+    # transformation applied — the digits, sign and decimal point are
+    # carried through untouched, so nothing here can change a value's
+    # magnitude (measured: substituting any character for the removal
+    # reds 61 door nodes).
     return Decimal(raw.replace(',', ''))
 
 
