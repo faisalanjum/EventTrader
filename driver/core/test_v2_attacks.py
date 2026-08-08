@@ -708,10 +708,34 @@ def test_the_contract_does_not_reimplement_THREE_NAMED_production_symbols():
     """
     import inspect
     src = inspect.getsource(p2)
-    for symbol in ("_check_periods", "_check_shape", "LANE_STATES"):
+    for symbol in ("_check_periods", "_check_shape"):
         assert symbol not in src, (
             f"a second validator is growing back: {symbol!r} belongs to "
             f"driver_validators / driver_period_resolver")
+    # T8 reconcile (recorded, not silent): pf2 now lawfully CONSUMES
+    # LANE_STATES from its owner, so this leg tightens from "text absent" to
+    # "no second binding": the ONLY lawful appearances are the ImportFrom off
+    # driver_validators and name loads. Any assignment/def/class re-authoring
+    # a lane vocabulary here trips exactly as before.
+    import ast
+    tree = ast.parse(src)
+    owner_import = False
+    for node in ast.walk(tree):
+        if isinstance(node, ast.ImportFrom):
+            if node.module == "driver.core.driver_validators" and \
+                    any(a.name == "LANE_STATES" for a in node.names):
+                owner_import = True
+            continue
+        binds = []
+        if isinstance(node, (ast.Assign, ast.AnnAssign)):
+            targets = node.targets if isinstance(node, ast.Assign) else [node.target]
+            binds = [t.id for t in targets if isinstance(t, ast.Name)]
+        elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+            binds = [node.name]
+        assert "LANE_STATES" not in binds, (
+            "a second lane vocabulary is growing back: LANE_STATES may only "
+            "be IMPORTED from driver_validators, never re-bound here")
+    assert owner_import, "pf2 must consume LANE_STATES from its one owner (T8)"
 
 
 # ---------------------------------------------- 5. ordering + per_x exact ----
