@@ -973,3 +973,20 @@ def test_EU146_colspan_and_rowspan_follow_the_table_processing_model():
     # rowspan=0 grows downward: the third row's own cell cannot take
     # column 0, which the growing cell still occupies
     assert grid[2][0][1] == 1, grid[2]
+
+
+def test_EU123_the_memo_capacity_is_derived_and_bounded():
+    """EU-123 (#827) REMOVE-OR-FAIL-CLOSED: the memo keeps a WHOLE parsed
+    filing, so an unbounded one grows without limit — that is the real
+    failure the bound prevents, and the size is derived rather than
+    guessed: production works one filing at a time, so ONE slot serves the
+    proven pattern. Pinned: the same document hits (no re-parse, the same
+    object comes back), a second document evicts the first, and the memo
+    never exceeds its stated capacity."""
+    from driver.relocation import inline_html as IH
+    IH._PREP_CACHE.clear()
+    a = IH.prepare(_HEAD + '<p>Alpha</p></body></html>')
+    assert IH.prepare(_HEAD + '<p>Alpha</p></body></html>') is a
+    IH.prepare(_HEAD + '<p>Beta</p></body></html>')
+    assert len(IH._PREP_CACHE) <= IH._PREP_CACHE_MAX == 1
+    assert IH.prepare(_HEAD + '<p>Alpha</p></body></html>') is not a

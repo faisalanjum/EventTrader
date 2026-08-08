@@ -1243,6 +1243,9 @@ def _qname(value, el):
 
 
 _PREP_CACHE = {}
+#: EU-123 (#827): ONE document at a time — the derived capacity (see
+#: `_remember`). Named so the number is a stated decision, not a literal.
+_PREP_CACHE_MAX = 1
 
 
 #: XBRL 2.1 §4.7.3 makes `scheme` REQUIRED, and it is what gives the digits
@@ -2360,7 +2363,17 @@ def _remember(sha, prepared):
     """Memoize by content sha. A REFUSAL is remembered exactly like a reading:
     re-parsing an unreadable document cannot make it readable, and the refusal
     is the cheap, stable answer every later call must get."""
-    while len(_PREP_CACHE) >= 4:
+    # EU-123 (#827) REMOVE-OR-FAIL-CLOSED: the capacity was the bare literal
+    # 4, derived from nothing. REMOVING the bound entirely is not the answer —
+    # a prepared document holds the whole filing's text, spans and element
+    # index, so an unbounded memo grows without limit in any long-running
+    # reader; that is the real failure a bound prevents, and it is now stated.
+    # The SIZE is derived instead of guessed: every production caller works
+    # one filing at a time (the binder and the locator take one document and
+    # ask it many questions), so ONE slot serves the whole proven access
+    # pattern — the extra three were never derived from any caller. A caller
+    # that interleaves two documents simply re-parses: slower, never wrong.
+    while len(_PREP_CACHE) >= _PREP_CACHE_MAX:
         _PREP_CACHE.pop(next(iter(_PREP_CACHE)))
     _PREP_CACHE[sha] = prepared
     return prepared

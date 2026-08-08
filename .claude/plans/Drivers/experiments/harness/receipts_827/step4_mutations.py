@@ -2345,6 +2345,13 @@ MUTATIONS = [
      "driver/relocation/test_transform_registry.py::"
      "test_the_SEC_registry_is_OFFICIAL_but_UNIMPLEMENTED"),
 
+    (312, "EU-123: the memo bound is removed and the cache grows without limit",
+     "driver/relocation/inline_html.py",
+     "    while len(_PREP_CACHE) >= _PREP_CACHE_MAX:",
+     "    while False and len(_PREP_CACHE) >= _PREP_CACHE_MAX:",
+     "driver/relocation/test_row_label_span.py::"
+     "test_EU123_the_memo_capacity_is_derived_and_bounded"),
+
     (281, "EU-169: the exactly-one-child bound widens to two",
      "driver/relocation/inline_html.py",
      "        if len(kids) != 1 or len(elements) != 1 \\",
