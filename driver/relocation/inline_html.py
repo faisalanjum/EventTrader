@@ -1773,6 +1773,15 @@ def prepare(html_text):
     """Parse and index a display filing EXACTLY ONCE — memoized by content sha so
     repeated locate() calls (one per anchor) share ONE parse per filing.
 
+    EU-180 (#827): the prepared-record and refusal-record key spellings this
+    function WRITES (contexts, elements, fact_nodes, hidden_nodes, units,
+    text/text_sha, refused, sha, ...) are its OWN output vocabulary — every
+    reader lives in this module or consumes the record through it, so the
+    owner is in-file; no Fiscal packet clause fixes these spellings
+    (verified against 15_CandidateFactPacket, ChannelContract and the
+    contract sheet). Core's two consumed members (text_sha, refused) travel
+    through xbrl_attach's prepare()/refused() calls unchanged.
+
     TWO VIEWS, each with one job. A document that is not well-formed XML, or
     whose two views disagree, comes back as a refusal dict that every public
     door turns into one truthful reason — no parser exception ever escapes.

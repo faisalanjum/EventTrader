@@ -1311,6 +1311,13 @@ MUTATIONS = [
      "            'printed_valu': printed_value(evidence.get('value_input'),",
      "driver/relocation/test_bind_graph_fact.py::"
      "test_RED_the_expected_numeric_object_is_returned_for_field_wise_binding"),
+
+    (163, "EU-180: a prepared-record key spelling drifts at the writer",
+     "driver/relocation/inline_html.py",
+     "                'fact_nodes': fact_nodes,",
+     "                'fact_nodez': fact_nodes,",
+     "driver/relocation/test_two_view_bridge.py::"
+     "test_a_prior_row_carrying_an_ALTERNATE_PREFIX_fact_is_not_taken_as_a_section"),
 ]
 
 
