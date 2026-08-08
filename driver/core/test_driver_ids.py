@@ -604,3 +604,22 @@ def test_the_LAWFUL_ascii_period_twin_still_parses_and_builds():
     assert parse_period_id("gp_2025-07-01_2025-09-30") == \
         ("2025-07-01", "2025-09-30")
     assert build_id(SRC, "revenue", period_id="gp_2025-07-01_2025-09-30")
+
+
+def test_T6_the_minimal_fact_id_reader_lives_at_the_owner():
+    """T6 (#827 F-VALID): reading the source_id back off a du: fact id is the
+    GRAMMAR OWNER's job — the validators' local split is gone. Two minimal
+    readers at one owner (this + D2's slice reader), never a generic parser."""
+    import inspect
+    from driver.core.driver_ids import IdLawError, fact_source_id
+    import driver.core.driver_validators as dv
+    assert fact_source_id("du:0000320193-24-000123:revenue:s0") == \
+        "0000320193-24-000123"
+    for bad in (None, "", "x:y", "du:only:three", "xu:a:b:c"):
+        try:
+            fact_source_id(bad)
+            assert False, f"accepted {bad!r}"
+        except IdLawError:
+            pass
+    src = inspect.getsource(dv._id_rebuild)
+    assert ".split(" not in src, "the validators re-grew a local id parse"

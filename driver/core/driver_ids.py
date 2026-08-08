@@ -254,6 +254,16 @@ def _slice_value(kind, raw_value):
     return value
 
 
+def fact_source_id(fact_id):
+    """THE minimal fact-id reader (T6, #827 F-VALID): the source_id segment of
+    a du: fact id, or IdLawError. Distinct from the slice reader (D2) — two
+    minimal readers at the one grammar owner, never a generic parser."""
+    parts = (fact_id or "").split(":", 3)
+    if len(parts) != 4 or parts[0] != "du":
+        raise IdLawError(f"malformed fact id: {fact_id!r}")
+    return parts[1]
+
+
 def build_id(source_id, driver_name, *, period_id=None, slice_parts=(),
              measurement_tokens=(), surprise=None):
     """The ONE entry point. Returns (fact_id, fact_scope) — both canonical, immutable.

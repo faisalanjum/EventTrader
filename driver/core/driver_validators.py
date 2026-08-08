@@ -16,8 +16,9 @@ from driver.core.driver_ids import (ACTUAL_BASIS, CONSENSUS_BASELINE,
                                     PERIOD_SENTINEL_SCOPE,
                                     PREVIOUS_GUIDANCE_BASELINE,
                                     SURPRISE_SCOPE_BY_PAIR, SURPRISE_SUFFIX,
-                                    IdLawError, build_id, num_canon,
-                                    parse_period_id, split_terminal_suffix)
+                                    IdLawError, build_id, fact_source_id,
+                                    num_canon, parse_period_id,
+                                    split_terminal_suffix)
 from driver.core.outcome_codes import require_known   # T1: the ONE code owner
 from driver.core.slot_convert import CANONICAL_UNITS  # THE one 10-unit owner
 # (C1+C10: the clean lane's driver_units/unit_resolver edge is DELETED — no
@@ -344,13 +345,14 @@ def _id_rebuild(fact, add):
     """FACT-16 group 1: a supplied id/fact_scope must equal the rebuild from components."""
     if fact.get("id") is None and fact.get("fact_scope") is None:
         return
-    parts = (fact.get("id") or "").split(":", 3)
-    if len(parts) != 4 or parts[0] != "du":
-        add("ID", "REJECT", f"malformed fact id: {fact.get('id')!r}")
+    try:
+        src = fact_source_id(fact.get("id"))
+    except IdLawError as e:
+        add("ID", "REJECT", str(e))     # T6: the owner's reader, not a local split
         return
     try:
         rebuilt_id, rebuilt_scope = build_id(
-            parts[1], fact.get("driver_name"),
+            src, fact.get("driver_name"),
             period_id=fact.get("period_u_id"),
             slice_parts=fact.get("slice_parts") or (),
             measurement_tokens=fact.get("measurement_tokens") or (),
