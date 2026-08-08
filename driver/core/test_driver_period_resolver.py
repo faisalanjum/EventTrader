@@ -947,3 +947,48 @@ def test_calendar_keyword_type_law_parks_on_all_paths():
     # mode would have said Jan-Mar 2025 — the fiscal answer proves item-True
     # did not activate calendar mode
     assert out["period_u_id"] == "gp_2024-10-01_2024-12-31"
+
+
+# ---- T1/P-O2 ownership (SEQ 803 resume): the resolver MINTS through the one
+# T1 owner — consumption, not re-authored spellings ------------------------
+
+def test_T1_the_resolver_mints_every_period_code_through_the_one_owner():
+    """Ownership is a live import edge, not a matching spelling: the resolver's
+    mint gate IS outcome_codes.require_known (identity, not equality), and one
+    traversal of every emit path yields only vocabulary tokens."""
+    import driver.core.driver_period_resolver as dpr
+    import driver.core.outcome_codes as oc
+    assert getattr(dpr, "require_known", None) is oc.require_known
+    unlawful = [
+        # (args) -> traverses: travel-together, dates-without-id, bad enum,
+        # bad time_type, unparseable id, sentinel mispair, sentinel dates,
+        # dated-with-sentinel-scope, bad ISO, id/date divergence, instant
+        # window, degenerate duration
+        (None, "quarter", "duration", None, None),
+        (None, None, "duration", "2025-01-01", "2025-03-31"),
+        ("gp_2025-01-01_2025-03-31", "seasonal", "duration",
+         "2025-01-01", "2025-03-31"),
+        ("gp_2025-01-01_2025-03-31", "quarter", "sometimes",
+         "2025-01-01", "2025-03-31"),
+        ("gp_20250101_20250331", "quarter", "duration",
+         "2025-01-01", "2025-03-31"),
+        ("gp_ST", "quarter", "duration", None, None),
+        ("gp_ST", "short_term", "duration", "2025-01-01", None),
+        ("gp_2025-01-01_2025-03-31", "short_term", "duration",
+         "2025-01-01", "2025-03-31"),
+        ("gp_2025-01-01_2025-03-31", "quarter", "duration",
+         "2025-1-1", "2025-03-31"),
+        ("gp_2025-01-01_2025-03-31", "quarter", "duration",
+         "2025-01-01", "2025-06-30"),
+        ("gp_2025-01-01_2025-03-31", "quarter", "instant",
+         "2025-01-01", "2025-03-31"),
+        ("gp_2025-03-31_2025-03-31", "quarter", "duration",
+         "2025-03-31", "2025-03-31"),
+    ]
+    seen = set()
+    from driver.core.driver_period_resolver import period_invariant
+    for args in unlawful:
+        for code, _msg in period_invariant(*args):
+            assert code in oc.OUTCOME_CODES, (code, args)
+            seen.add(code)
+    assert seen == {"PERIOD_SYM", "SCOPE_PAIR", "INSTANT", "ISO"}

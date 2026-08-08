@@ -26,6 +26,7 @@ from guidance_ids import build_guidance_period_id   # proven pure builder (the O
 
 from driver.core.driver_ids import (IdLawError, PERIOD_SENTINEL_SCOPE,
                                     build_period_id, parse_period_id)
+from driver.core.outcome_codes import require_known   # T1: mint-time consumption
 
 # derived view of the ONE four-pair owner (driver_ids.PERIOD_SENTINEL_SCOPE):
 # sentinel_class -> period id, inverted once here because this door receives the
@@ -69,50 +70,50 @@ def period_invariant(u_id, scope, time_type, start, end):
     judges an id-carried compact date (PERIOD_SYM), never the ISO rule."""
     out = []
     if (u_id is None) != (scope is None):
-        out.append(("PERIOD_SYM", "period_u_id and period_scope must travel together"))
+        out.append((require_known("PERIOD_SYM"), "period_u_id and period_scope must travel together"))
     if u_id is None:
         if start is not None or end is not None:
-            out.append(("PERIOD_SYM", "period dates without a period_u_id"))
+            out.append((require_known("PERIOD_SYM"), "period dates without a period_u_id"))
         return tuple(out)
     if scope is not None and scope not in PERIOD_SCOPES:
-        out.append(("SCOPE_PAIR", f"period_scope {scope!r} not in the enum"))
+        out.append((require_known("SCOPE_PAIR"), f"period_scope {scope!r} not in the enum"))
     if time_type not in ("duration", "instant"):
-        out.append(("INSTANT",
+        out.append((require_known("INSTANT"),
                     f"time_type required (duration|instant) with a period, got {time_type!r}"))
     try:
         pid_start, pid_end = parse_period_id(u_id)
     except IdLawError as e:
-        out.append(("PERIOD_SYM", str(e)))
+        out.append((require_known("PERIOD_SYM"), str(e)))
         return tuple(out)
     if pid_start is None:                      # a valid sentinel id
         if scope != PERIOD_SENTINEL_SCOPE.get(u_id):
-            out.append(("SCOPE_PAIR",
+            out.append((require_known("SCOPE_PAIR"),
                         f"sentinel {u_id} must pair with scope "
                         f"{PERIOD_SENTINEL_SCOPE.get(u_id)!r}"))
         if start is not None or end is not None:
-            out.append(("SCOPE_PAIR", f"sentinel {u_id} stores null dates"))
+            out.append((require_known("SCOPE_PAIR"), f"sentinel {u_id} stores null dates"))
         return tuple(out)
     if scope in PERIOD_SENTINEL_SCOPE.values():
-        out.append(("SCOPE_PAIR", f"dated period {u_id} with sentinel scope {scope!r}"))
+        out.append((require_known("SCOPE_PAIR"), f"dated period {u_id} with sentinel scope {scope!r}"))
     for d in (start, end):
         if d is not None:
             try:
                 date.fromisoformat(d)
             except (ValueError, TypeError):
-                out.append(("ISO", f"bad ISO date {d!r}"))
+                out.append((require_known("ISO"), f"bad ISO date {d!r}"))
                 return tuple(out)
     # a dated period's stored dates ARE the gp_ id's dates — no divergence and
     # no absence, ever (PERIOD_SYM per the frozen 827B2 evidence: a compact
     # "20251231" parses under 3.11 but is not the canonical id spelling, and
     # the ID text is the canon — equality names it, the ISO rule does not).
     if (start, end) != (pid_start, pid_end):
-        out.append(("PERIOD_SYM",
+        out.append((require_known("PERIOD_SYM"),
                     f"gp dates {start}..{end} do not match the period id {u_id}"))
         return tuple(out)
     if time_type == "instant" and pid_start != pid_end:
-        out.append(("INSTANT", "instant must be a one-day window (gp_X_X)"))
+        out.append((require_known("INSTANT"), "instant must be a one-day window (gp_X_X)"))
     elif time_type == "duration" and pid_start == pid_end:
-        out.append(("INSTANT", "duration with start == end is illegal input"))
+        out.append((require_known("INSTANT"), "duration with start == end is illegal input"))
     return tuple(out)
 
 

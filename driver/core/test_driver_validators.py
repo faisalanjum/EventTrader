@@ -816,7 +816,11 @@ def test_the_one_outcome_code_module_owns_every_minted_token():
             if isinstance(node, ast.Call):
                 fn = node.func
                 name = getattr(fn, "id", getattr(fn, "attr", ""))
-                if name in ("add", "Violation") and node.args and \
+                # require_known("CODE") is the T1 mint gate itself (the
+                # resolver's emit shape since the SEQ 803 T1/P-O2 wiring);
+                # the bare ("CODE", msg) tuple pattern above still catches
+                # any un-gated rogue tuple.
+                if name in ("add", "Violation", "require_known") and node.args and \
                         isinstance(node.args[0], ast.Constant) and \
                         isinstance(node.args[0].value, str):
                     minted.add(node.args[0].value)
