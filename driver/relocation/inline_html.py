@@ -2940,6 +2940,11 @@ def _nil_true(el):
     raw = _typed(el, '{%s}nil' % _XSI_NS)
     if raw is None:
         return None
+    # CL-072 (#827, EU-108 + EU-109): the two returns are the xs:boolean
+    # reading's own arms (the cited lexical space above): true/1 asserts
+    # the fact is NIL (lawful, no value), false/0 asserts a NORMAL fact,
+    # anything else raises — both directions pinned (a true nil states no
+    # value; an explicit false nil is a normal fact).
     if raw in _XS_TRUE:
         return True
     if raw in _XS_FALSE:

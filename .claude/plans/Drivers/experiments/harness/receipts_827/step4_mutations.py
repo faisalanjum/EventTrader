@@ -1973,6 +1973,20 @@ MUTATIONS = [
      "    return ('%s_%s' % (el.prefix, q.localname) if el.prefix",
      "driver/relocation/test_two_view_bridge.py::"
      "test_ANY_lawful_prefix_for_the_fact_element_still_binds"),
+
+    (257, "EU-108: a true nil claims a normal fact",
+     "driver/relocation/inline_html.py",
+     "    if raw in _XS_TRUE:\n        return True",
+     "    if raw in _XS_TRUE:\n        return False",
+     "driver/relocation/test_semantic_fact_value.py::"
+     "test_a_TRUE_nil_fact_is_LAWFUL_but_states_no_value"),
+
+    (258, "EU-109: an explicit false nil claims nilness",
+     "driver/relocation/inline_html.py",
+     "    if raw in _XS_FALSE:\n        return False\n    raise _MalformedNil()",
+     "    if raw in _XS_FALSE:\n        return True\n    raise _MalformedNil()",
+     "driver/relocation/test_semantic_fact_value.py::"
+     "test_an_EXPLICIT_false_nil_is_a_normal_fact"),
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",
