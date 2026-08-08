@@ -2022,6 +2022,20 @@ MUTATIONS = [
      "    return {'period': (_leaf(inst[0]), '') if inst else",
      "driver/relocation/test_context_content_model.py::"
      "test_827B14_instant_value_is_rebuilt"),
+
+    (264, "EU-115: the context period element name drifts and every context empties",
+     "driver/relocation/inline_html.py",
+     "    entities, periods = _kids(context, I, 'entity'), _kids(context, I, 'period')",
+     "    entities, periods = _kids(context, I, 'entity'), _kids(context, I, 'periodX')",
+     "driver/relocation/test_context_content_model.py::"
+     "test_an_ABSENT_segment_and_scenario_are_lawful"),
+
+    (265, "EU-116: the explicitMember element name drifts and dimensions vanish",
+     "driver/relocation/inline_html.py",
+     "    members = [m for b in boxes for m in _kids(b, D, 'explicitMember')]",
+     "    members = [m for b in boxes for m in _kids(b, D, 'explicitMemberX')]",
+     "driver/relocation/test_context_content_model.py::"
+     "test_827B14_measure_and_explicitMember_values_are_rebuilt"),
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",

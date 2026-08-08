@@ -1399,6 +1399,18 @@ def _parse_context(context):
     only inside a segment or scenario, and — per element — its declared
     attributes, its declared type, and its declared character content."""
     I, D = XBRL_INSTANCE_NAMESPACE, _DIMENSION_NS
+    # CL-075 (#827, EU-115 + EU-116): THE ELEMENT AND ATTRIBUTE NAMES read
+    # in this function are the two specs' own vocabulary, transcribed:
+    # entity / identifier@scheme / segment / period / instant / startDate /
+    # endDate / forever / scenario are the XBRL 2.1 section 4.7 context
+    # grammar as the normative instance schema declares it (the CL-028
+    # citation block above carries the exact edition, errata and schema
+    # name); explicitMember / typedMember and their @dimension attribute
+    # are XBRL Dimensions 1.0, REC 2006-09-18 with corrected errata
+    # 2012-01-25, section 3.1.4 (the xbrldi vocabulary whose URI is cited
+    # at _DIMENSION_NS). Every name is asked for in its OWN namespace (I =
+    # instance, D = xbrldi), never by prefix; a drifted name silently
+    # empties its list, so both are pinned (measured: 119 and 3 reds).
     entities, periods = _kids(context, I, 'entity'), _kids(context, I, 'period')
     scenarios = _kids(context, I, 'scenario')
     if len(entities) != 1 or len(periods) != 1 or len(scenarios) > 1:
