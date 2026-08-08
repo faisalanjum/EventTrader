@@ -1366,6 +1366,13 @@ MUTATIONS = [
      '        return (b.moment.date() + timedelta(days=0)).isoformat()',
      "driver/core/test_round8_xbrl_binding.py::"
      "test_a_usd_fact_reports_usd"),
+
+    (171, "EU-019: the ordered-duration exclusive-end math drops its +1",
+     "driver/relocation/exact_numbers.py",
+     '        end_instant = (b.moment + timedelta(days=1) if b.kind == \"date\"',
+     '        end_instant = (b.moment + timedelta(days=0) if b.kind == \"date\"',
+     "driver/core/test_round8_xbrl_binding.py::"
+     "test_a_ONE_DAY_duration_with_equal_date_only_boundaries_is_LAWFUL[2025-03-31-2025-03-31]"),
 ]
 
 

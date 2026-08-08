@@ -598,6 +598,10 @@ def filing_duration_ordered(start_raw, end_raw):
         return None
     start_instant = a.moment
     try:
+        # EU-019 (#827): the same exclusive-end math as
+        # filing_boundary_graph_end — the F7 boundary owner's stored-spelling
+        # clause (EU-007/EU-018); the ordering law itself is XBRL 2.1
+        # (endDate must not precede startDate), already cited verified.
         end_instant = (b.moment + timedelta(days=1) if b.kind == "date"
                        else b.moment)
     except OverflowError:
