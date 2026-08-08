@@ -1397,6 +1397,13 @@ MUTATIONS = [
      "driver/core/test_round8_xbrl_binding.py::"
      "test_the_CALENDAR_EDGE_parks_and_never_crashes[9999-12-31-None]"),
 
+    (175, "EU-031: the XBRL period-ordering rule is switched off",
+     "driver/relocation/exact_numbers.py",
+     '    if e < s:\n        raise ExactError(f"period ends before it starts: {start!r}..{end!r}")',
+     '    if False:\n        raise ExactError(f"period ends before it starts: {start!r}..{end!r}")',
+     "driver/relocation/test_route_a.py::"
+     "test_827_a_BACKWARDS_duration_never_binds_through_the_public_door"),
+
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",

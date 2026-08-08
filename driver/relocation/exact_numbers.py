@@ -332,6 +332,11 @@ def _iso(d):
 def period_key(start, end):
     """Validated (start, end) ISO pair, EXACT — the one date rule. No tolerance of any kind."""
     s, e = _iso(start), _iso(end)
+    # EU-031 (#827): the ordering rule is the verified XBRL 2.1 period
+    # constraint (endDate must not precede startDate); the '..' below is
+    # MESSAGE formatting only — never a stored spelling (the stored period
+    # spellings live at the F7 boundary owner's clause). Proof-lane reach
+    # (locator callers, call-trace v5).
     if e < s:
         raise ExactError(f"period ends before it starts: {start!r}..{end!r}")
     return (s, e)
