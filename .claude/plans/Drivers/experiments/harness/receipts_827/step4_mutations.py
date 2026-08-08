@@ -1672,6 +1672,13 @@ MUTATIONS = [
      "        if seconds == 61:",
      "driver/relocation/test_exact_numbers.py::"
      "test_CL018_representability_parks_and_never_wraps_or_truncates"),
+
+    (214, "EU-040: th stops being a cell and header-labeled rows lose evidence",
+     "driver/relocation/inline_html.py",
+     "_CELL_TAGS = ['td', 'th']",
+     "_CELL_TAGS = ['td']",
+     "driver/relocation/test_row_label_span.py::"
+     "test_EU040_a_th_label_cell_is_a_cell_exactly_as_the_table_model_says"),
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",

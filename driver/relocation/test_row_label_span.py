@@ -842,3 +842,13 @@ def test_E_zero_width_space_is_a_SEPARATOR_not_deleted():
     prep, ev = _ev(f'<table><tr><td>Total{zwsp}revenue</td>'
                    f'<td>{_FACT}</td></tr></table>')
     assert ev['row_label'] == 'Total revenue', repr(ev['row_label'])
+
+
+def test_EU040_a_th_label_cell_is_a_cell_exactly_as_the_table_model_says():
+    """_CELL_TAGS transcribes the WHATWG table model: td AND th are cells
+    (4.9.9/4.9.10), so a HEADER-cell label is selected exactly like a
+    data-cell label — dropping th would silently lose every header-labeled
+    row's evidence."""
+    prep, ev = _ev(f'<table><tr><th>Total</th><td>{_FACT}</td></tr></table>')
+    span = ev['row_label_span']
+    assert prep['text'][span[0]:span[1]] == 'Total'

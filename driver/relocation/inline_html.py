@@ -537,6 +537,13 @@ def _visible_slice(node, prepared):
 #: cells, the row, and the prose blocks. Each spelling is written ONCE and
 #: the tracked-span union is DERIVED — the walker and every reader consume
 #: these owners, so the two can never disagree about a member.
+# EU-040 (#827): the three structural names below are the WHATWG HTML
+# Living Standard's own table model (snapshot 2026-07-20), cited exactly —
+# section 4.9.5 "The tr element" (a row of cells), 4.9.9 "The td element"
+# (a data cell), 4.9.10 "The th element" (a HEADER cell — a th is a cell
+# exactly as a td is, so a header-labeled row keeps its evidence),
+# https://html.spec.whatwg.org/multipage/tables.html . Recognition only —
+# no rule is invented here.
 _CELL_TAGS = ['td', 'th']
 _ROW_TAG = 'tr'
 _BLOCK_TAGS = ['p', 'li', 'div']
