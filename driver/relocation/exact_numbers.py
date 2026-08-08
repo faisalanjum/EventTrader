@@ -252,6 +252,9 @@ def stored_period_end(iso):
     and pointed at a header line that had already been rewritten.)
     """
     try:
+        # EU-034 (#827): the +1 IS the exclusive-end stored form — the F7
+        # boundary owner's stored-spelling clause (EU-007/018/019/029), at
+        # its ONE shared implementation (the two private copies folded).
         return (_iso_date(iso) + timedelta(days=1)).isoformat()
     except OverflowError:
         # The day after `9999-12-31` is off the representable calendar. This

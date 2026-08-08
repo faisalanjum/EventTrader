@@ -1411,6 +1411,13 @@ MUTATIONS = [
      "driver/relocation/test_exact_numbers.py::"
      "test_EU032_plain_is_the_one_canonical_decimal_form"),
 
+    (177, "EU-034: the one exclusive-end implementation drops its +1",
+     "driver/relocation/exact_numbers.py",
+     "        return (_iso_date(iso) + timedelta(days=1)).isoformat()",
+     "        return (_iso_date(iso) + timedelta(days=0)).isoformat()",
+     "driver/core/test_round8_xbrl_binding.py::"
+     "test_the_exclusive_date_rule_has_exactly_one_implementation"),
+
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",
