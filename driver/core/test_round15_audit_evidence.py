@@ -880,10 +880,15 @@ def test_825p2_an_UNSTORABLE_value_keeps_NOT_STORABLE_and_PARKS():
     from driver.core.driver_neo4j_adapter import GraphFactRows
     from driver.core.test_round10_event_boundary import _door_row
 
-    # A LAWFUL filing at the EXACT scale that reaches the repaired branch.
-    # Scale must be large enough that value x multiplier exceeds the 1024-char
+    # A LAWFUL filing at the EXACT scale that reaches the repaired branch,
+    # DERIVED from the owner bound (S7): the multiplier alone must fit
+    # (scale+1 <= bound) while value x multiplier exceeds it (scale+3 >
+    # bound) — bound-2 is the one scale satisfying both.
+    from driver.core.slot_convert import _MAX_STORED_CHARS
+    _S7_SCALE = _MAX_STORED_CHARS - 2
+    # Scale must be large enough that value x multiplier exceeds the bound's
     # stored form, yet small enough that the MULTIPLIER alone still fits: below
-    # 1022 nothing fails, at 1024 `expected_multiplier` fails first and the
+    # bound-2 nothing fails, at the bound `expected_multiplier` fails first and the
     # numeric loop is never entered. Verified empirically, not assumed — an
     # earlier version used 5000 and parked from `expected_multiplier`, so it
     # asserted the right outcome while never executing the line under repair.
@@ -893,8 +898,8 @@ def test_825p2_an_UNSTORABLE_value_keeps_NOT_STORABLE_and_PARKS():
            '<xbrli:endDate>2024-06-30</xbrli:endDate></xbrli:period>'
            '</xbrli:context></ix:resources></ix:header><ix:header><ix:resources><xbrli:unit id="u1">'
            '<xbrli:measure>iso4217:USD</xbrli:measure></xbrli:unit></ix:resources></ix:header>'
-           '<p><ix:nonFraction id="fA" name="us-gaap:A" contextRef="c1" '
-           'unitRef="u1" scale="1022" decimals="-6">726</ix:nonFraction></p>'
+           f'<p><ix:nonFraction id="fA" name="us-gaap:A" contextRef="c1" '
+           f'unitRef="u1" scale="{_S7_SCALE}" decimals="-6">726</ix:nonFraction></p>'
            '</body></html>')
 
     class _BigStore(_Counting):
@@ -902,7 +907,7 @@ def test_825p2_an_UNSTORABLE_value_keeps_NOT_STORABLE_and_PARKS():
             self.row_reads.append(concept)
             return GraphFactRows(
                 rows=[dict(_door_row("fA", concept=concept),
-                           value=f"{726 * 10 ** 1022:,}")],
+                           value=f"{726 * 10 ** _S7_SCALE:,}")],
                 exclusions=())
 
     class _BigProvider:
@@ -911,7 +916,7 @@ def test_825p2_an_UNSTORABLE_value_keeps_NOT_STORABLE_and_PARKS():
 
     item = _door_item("us-gaap:A", "fA", doc=doc)
     for slot in ("level_low", "level_high"):
-        item["fact"]["item"][slot]["scale_multiplier"] = Decimal(10) ** 1022
+        item["fact"]["item"][slot]["scale_multiplier"] = Decimal(10) ** _S7_SCALE
     res = attach_event_xbrl([item], source_id=_ACC, store=_BigStore(),
                             filing_provider=_BigProvider(),
                             text_parts=parts_for([item]))

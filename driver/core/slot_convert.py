@@ -69,7 +69,12 @@ class SlotConversionError(ValueError):
 # sits about thirty times above the widest observed figure. No claim is made
 # about filings we have never seen: a number wider than this PARKS, and parking
 # is a lawful outcome rather than a truncation.
-_MAX_STORED_CHARS = 1024
+# S7 (#827), owner contract (answer sheet 412792b7 row S7, verbatim ruling
+# "4096 chars ('unless any downside')"): the 1024 bound had NO authority;
+# the pre-check found no 1024 dependency (overlay suite run clean but for
+# the two cap identities) and the live census found zero stored values
+# over EITHER bound (receipt 2026-08-08). Park-never-truncate unchanged.
+_MAX_STORED_CHARS = 4096
 
 
 def stored_char_length(value):

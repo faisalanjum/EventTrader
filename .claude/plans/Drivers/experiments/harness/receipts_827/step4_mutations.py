@@ -1276,6 +1276,20 @@ MUTATIONS = [
      "    if False:\n        raise SlotConversionError(",
      "driver/core/test_prepared_fact_v2.py::"
      "test_S9_slot_numeric_types_at_the_public_door[value-bool]"),
+
+    (158, "S7: the owner bound drifts one character NARROW (4095)",
+     "driver/core/slot_convert.py",
+     "_MAX_STORED_CHARS = 4096",
+     "_MAX_STORED_CHARS = 4095",
+     "driver/core/test_round12_exact_scale.py::"
+     "test_the_storable_bound_matches_the_owner_contract"),
+
+    (159, "S7: the owner bound drifts one character WIDE (4097)",
+     "driver/core/slot_convert.py",
+     "_MAX_STORED_CHARS = 4096",
+     "_MAX_STORED_CHARS = 4097",
+     "driver/core/test_round12_exact_scale.py::"
+     "test_the_storable_bound_matches_the_owner_contract"),
 ]
 
 

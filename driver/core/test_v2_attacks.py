@@ -1272,7 +1272,7 @@ COVERED_BY = {
     ("driver.core.prepared_fact_v2.verify_occurrence", "quote"):
         "driver/core/test_prepared_fact_v2.py::test_G11_occurrence_is_verified_against_the_part_text",
     ("driver.core.slot_convert.assert_storable", "value"):
-        "driver/core/test_round12_exact_scale.py::test_the_storable_bound_is_exact_at_1024_characters",
+        "driver/core/test_round12_exact_scale.py::test_the_storable_bound_matches_the_owner_contract",
     ("driver.core.slot_convert.convert_slot", "slot"):
         "driver/core/test_prepared_fact_v2.py::test_G1_driver_name_changes_nothing",
     ("driver.core.slot_convert.convert_slot", "stated_unit"):
@@ -1288,7 +1288,7 @@ COVERED_BY = {
     ("driver.core.slot_convert.exact_scaleb", "value"):
         "driver/core/test_v2_attacks.py::test_ATTACK_a_fractional_scale_is_never_silently_truncated",
     ("driver.core.slot_convert.stored_char_length", "value"):
-        "driver/core/test_round12_exact_scale.py::test_the_storable_bound_is_exact_at_1024_characters",
+        "driver/core/test_round12_exact_scale.py::test_the_storable_bound_matches_the_owner_contract",
     ("driver.core.slot_convert.validate_slot", "xbrl_backed"):
         "driver/core/test_prepared_fact_v2.py::test_G22_the_xbrl_lane_does_not_require_quote_local_evidence",
     ("driver.core.slot_convert.validate_slot", "quote"):

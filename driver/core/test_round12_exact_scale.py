@@ -313,20 +313,21 @@ def test_the_scaleb_scan_is_DERIVED_from_the_production_tree():
     assert not offenders, f"direct .scaleb outside the shared owner: {offenders}"
 
 
-def test_the_storable_bound_is_exact_at_1024_characters():
-    """THE LIMIT IS THE LAW, not the comment describing it. The previous version
-    read the source text and matched a phrase, so it measured formatting: a
-    lawful reflow of the very comment it policed turned it RED.
-
-    `1E+1023` expands to one digit plus 1,023 zeros — exactly 1,024 characters,
-    the widest storable number; one character more parks. Both lengths are
-    asserted FIRST, and against the ACTUAL canonical string as well as our own
-    counter, so the test cannot pass because something unrelated failed."""
-    from driver.core.slot_convert import (SlotConversionError, assert_storable,
+def test_the_storable_bound_matches_the_owner_contract():
+    """S7 (#827): THE LIMIT IS THE OWNER'S CONTRACT (answer sheet row S7:
+    4096), derived here from the one production constant so the identity and
+    the law cannot drift. `1E+{bound-1}` expands to one digit plus bound-1
+    zeros — exactly the widest storable number; one character more parks.
+    Both lengths asserted FIRST, against the ACTUAL canonical string as well
+    as our own counter."""
+    from driver.core.slot_convert import (_MAX_STORED_CHARS,
+                                          SlotConversionError, assert_storable,
                                           stored_char_length)
-    widest, over = Decimal("1E+1023"), Decimal("1E+1024")
-    assert stored_char_length(widest) == len(format(widest, "f")) == 1024
-    assert stored_char_length(over) == len(format(over, "f")) == 1025
+    assert _MAX_STORED_CHARS == 4096, "the owner-ruled bound"
+    widest = Decimal(f"1E+{_MAX_STORED_CHARS - 1}")
+    over = Decimal(f"1E+{_MAX_STORED_CHARS}")
+    assert stored_char_length(widest) == len(format(widest, "f"))         == _MAX_STORED_CHARS
+    assert stored_char_length(over) == len(format(over, "f"))         == _MAX_STORED_CHARS + 1
     assert assert_storable(widest) is widest          # accepted, unchanged
     with pytest.raises(SlotConversionError):
         assert_storable(over)
