@@ -987,3 +987,61 @@ def test_W13_C_D17_a_span_normalizing_to_nothing_parks_as_ID_LABEL():
         prepared_fact_v2.to_stored_fact(
             f, driver={"name": "revenue", "fact_type": "metric"},
             source=_PROD["source"], fye_month=12, lookups=noop)
+
+
+# --------------------------------------------------------------------------
+# F12 (#827): the slot-SET law lives at the OWNER — an XBRL-backed fact
+# states ONE reported value, judged at _build, never only at the attach door.
+# --------------------------------------------------------------------------
+
+def _f12_fact(**item_over):
+    from driver.core.test_round8_xbrl_binding import _fact
+    f = _fact()
+    f["item"].update(item_over)
+    return prepared_fact_v2.PreparedFactV2._build(
+        f, {"xbrl_concept_raw": "us-gaap:Revenues", "member_refs": []})
+
+
+def test_F12_the_OWNER_requires_the_level_pair_on_an_xbrl_backed_fact():
+    """Measured 2026-08-08: the owner ACCEPTED level_low=None on an
+    XBRL-backed fact — the rule lived only at the attach door, so every
+    other v2 path (validate_via_production, S4) skipped it."""
+    with pytest.raises(prepared_fact_v2.SchemaError, match="level_low is required"):
+        _f12_fact(level_low=None)
+
+
+def test_F12_the_OWNER_nulls_every_other_numeric_slot_on_an_xbrl_backed_fact():
+    from decimal import Decimal
+    s = {"value": Decimal(1), "scale_multiplier": Decimal(10 ** 6),
+         "unit_scale_evidence": None}
+    with pytest.raises(prepared_fact_v2.SchemaError,
+                       match="change_value must be null on an XBRL-backed fact"):
+        _f12_fact(change_value=s, change_unit="m_usd")
+
+
+def test_F12_the_OWNER_refuses_scale_evidence_on_an_xbrl_backed_slot():
+    from decimal import Decimal
+    s = {"value": Decimal("726"), "scale_multiplier": Decimal(10 ** 6),
+         "unit_scale_evidence": "millions"}
+    with pytest.raises(prepared_fact_v2.SchemaError,
+                       match=r"level_low.unit_scale_evidence must be null on an XBRL-backed fact"):
+        _f12_fact(level_low=s, level_high=s)
+
+
+def test_F12_the_TEXT_lane_keeps_all_three_shapes_lawful():
+    """CONTROL: the same shapes are the text lane's ordinary forms — the new
+    owner rules must key on xbrl_backed, never fire lane-wide."""
+    from decimal import Decimal
+    from driver.core.test_round8_xbrl_binding import _fact
+    one = {"value": Decimal(726), "scale_multiplier": Decimal(1),
+           "unit_scale_evidence": None}          # text law: no marker, mult 1
+    f = _fact(value="726", mult=1)
+    f["item"].update(quote="revenue up 5 percent",
+                     level_low=dict(one), level_high=dict(one),
+                     change_value={"value": Decimal(5),
+                                   "scale_multiplier": Decimal(1),
+                                   "unit_scale_evidence": None},
+                     change_unit="percent")
+    built = prepared_fact_v2.PreparedFactV2._build(
+        f, {"xbrl_concept_raw": None, "member_refs": None})
+    assert built.item.xbrl_backed is False

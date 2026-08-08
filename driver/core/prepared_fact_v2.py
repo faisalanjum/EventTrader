@@ -377,6 +377,22 @@ class PreparedItemV2:
                 "date(s) (end; start too when duration)")
         if self.time_type == "instant" and self.period_start_date is not None:
             raise SchemaError("XBRL context: an instant carries ONLY period_end_date")
+        # F12 (#827): the slot-SET law, at the OWNER. An XBRL-backed fact
+        # states ONE reported value: the level pair is required and every
+        # other numeric slot is null. This lived only at the attach door, so
+        # every OTHER v2 path skipped it (measured 2026-08-08: the owner
+        # accepted level_low=None and a set change_value).
+        for name in NUMERIC_SLOTS:
+            slot_v = getattr(self, name)
+            if name in ("level_low", "level_high"):
+                if slot_v is None:
+                    raise SchemaError(
+                        f"an XBRL-backed fact states ONE reported value, so "
+                        f"{name} is required")
+            elif slot_v is not None:
+                raise SchemaError(
+                    f"{name} must be null on an XBRL-backed fact — the "
+                    f"filing reports a single value")
 
     def _check_numeric_slots(self):
         xbrl_backed = self.xbrl_backed

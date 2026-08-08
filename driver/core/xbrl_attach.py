@@ -1206,35 +1206,26 @@ def _verify_and_attach(fact, *, concept, evidence, prepared_doc, entity_cik,
         # simply cannot materialise was a CONTRACT VIOLATION to fix and resubmit.
         # The filing is lawful; the value is not storable. That is its own declared
         # outcome (parked / NOT_STORABLE) and this route must not overwrite it.
-        for name in NUMERIC_SLOTS:
+        # F12 (#827): the slot-SET rules (level pair required · other slots
+        # null · null unit_scale_evidence) moved to their OWNER — every fact
+        # in this loop already passed PreparedFactV2._build, the door's one
+        # entry (#821), so the copies that stood here were unreachable. What
+        # remains is the BINDER'S OWN question, unanswerable at the owner:
+        # does the pair describe THIS filing's printed value and multiplier.
+        for name in ("level_low", "level_high"):
             slot = getattr(it, name)
-            if name in ("level_low", "level_high"):
-                if slot is None:
-                    raise SchemaError(
-                        f"attach: an XBRL-backed fact states ONE "
-                        f"reported value, so {name} is required")
-                # THE THREE FIELDS, against what the filing actually prints — not
-                # the converted total. {390, 10^6}, {390000000, 1} and {0.39, 10^9}
-                # all convert alike; only one describes THIS filing. The expected
-                # object comes FROM the binder.
-                if slot["value"] != want_value or \
-                        slot["scale_multiplier"] != want_mult:
-                    raise SchemaError(
-                        f"attach: {name} describes the source as "
-                        f"value={slot['value']} x {slot['scale_multiplier']}, "
-                        f"but the filing prints {want_value} and a "
-                        f"{it.level_unit} fact must state multiplier {want_mult}")
-                if slot["unit_scale_evidence"] is not None:
-                    raise SchemaError(
-                        f"attach: {name}.unit_scale_evidence must be "
-                        f"null on an XBRL-backed fact — the structured metadata "
-                        f"IS the evidence there (quote-local spans are the text "
-                        f"lane's carrier)")
-                convert_slot(it.level_unit, slot)   # must convert at all
-            elif slot is not None:
+            # THE THREE FIELDS, against what the filing actually prints — not
+            # the converted total. {390, 10^6}, {390000000, 1} and {0.39, 10^9}
+            # all convert alike; only one describes THIS filing. The expected
+            # object comes FROM the binder.
+            if slot["value"] != want_value or \
+                    slot["scale_multiplier"] != want_mult:
                 raise SchemaError(
-                    f"attach: {name} must be null on an XBRL-backed "
-                    f"fact — the filing reports a single value")
+                    f"attach: {name} describes the source as "
+                    f"value={slot['value']} x {slot['scale_multiplier']}, "
+                    f"but the filing prints {want_value} and a "
+                    f"{it.level_unit} fact must state multiplier {want_mult}")
+            convert_slot(it.level_unit, slot)       # must convert at all
 
         # THE VERIFIED FACT IS ALREADY THE ANSWER. It was built at the top of this
         # function with exactly this bundle, and the dataclass boundary froze it

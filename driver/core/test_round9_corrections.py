@@ -16,6 +16,7 @@ the live proof must use the PACKET's harvested hash, the EPS fixture must be
 an eps fact, the stale date header must be corrected, and the trust claim must
 not say the hash proves the channel trustworthy.
 """
+from decimal import Decimal
 import pathlib
 
 from driver.core.test_round10_event_boundary import parts_for
@@ -99,7 +100,15 @@ def _refs_through_the_boundary(refs):
     item = {k: None for k in ITEM_FIELDS}
     item.update(driver_name="revenue", driver_state="reported", quote="q",
                 measurement_raw_spans=[], slice_parts=[], time_type="instant",
-                period_end_date="2024-06-30")
+                period_end_date="2024-06-30",
+                # F12: an XBRL-backed fact states ONE reported value — the
+                # owner now requires the level pair, so this minimal fixture
+                # carries the smallest lawful one (its subject is unchanged).
+                level_unit="usd",
+                level_low={"value": Decimal(1), "scale_multiplier": Decimal(1),
+                           "unit_scale_evidence": None},
+                level_high={"value": Decimal(1), "scale_multiplier": Decimal(1),
+                            "unit_scale_evidence": None})
     return PreparedFactV2._build(
         {"fact_type": "metric", "part_ref": "p", "occurrence_in_part": None,
          "per_x": None, "item": item},

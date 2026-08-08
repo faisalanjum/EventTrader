@@ -1152,6 +1152,20 @@ MUTATIONS = [
      "    if False:\n        raise ProductionValidationError(",
      "driver/core/test_round8_xbrl_binding.py::"
      "test_F11_an_EMPTY_candidate_set_parks_as_route_limitation"),
+
+    (141, "F12: the owner's level-pair requirement is neutered",
+     "driver/core/prepared_fact_v2.py",
+     '            if name in (\"level_low\", \"level_high\"):\n                if slot_v is None:',
+     '            if name in (\"level_low\", \"level_high\"):\n                if False:',
+     "driver/core/test_prepared_fact_v2.py::"
+     "test_F12_the_OWNER_requires_the_level_pair_on_an_xbrl_backed_fact"),
+
+    (142, "F12: the owner's null-evidence rule on the xbrl lane is neutered",
+     "driver/core/slot_convert.py",
+     "        if ev is not None:\n            raise SlotConversionError(",
+     "        if False:\n            raise SlotConversionError(",
+     "driver/core/test_prepared_fact_v2.py::"
+     "test_F12_the_OWNER_refuses_scale_evidence_on_an_xbrl_backed_slot"),
 ]
 
 

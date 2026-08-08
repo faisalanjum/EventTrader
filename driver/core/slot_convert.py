@@ -249,7 +249,15 @@ def validate_slot(slot_name, slot, *, stated_unit, quote, xbrl_backed=False):
         raise SlotConversionError(
             f"{slot_name}: stated unit {stated_unit!r} is outside the enum")
     if xbrl_backed:
-        return          # structured metadata is judged by the XBRL rules only
+        # F12 (#827): the null-evidence rule is the OWNER'S — the structured
+        # metadata (ix.scale, unit_ref, source_evidence.pieces) IS the
+        # evidence there; quote-local spans are the text lane's carrier.
+        if ev is not None:
+            raise SlotConversionError(
+                f"{slot_name}.unit_scale_evidence must be null on an "
+                f"XBRL-backed fact — the structured metadata IS the evidence")
+        return          # the remaining rules below are the text lane's
+
     # TEXT LANE ONLY. "a 0.01 multiplier means the source wrote cents" reads a
     # human quote. On the XBRL lane that same 0.01 IS `ix.scale = -2`, declared
     # by the filing itself, so this rule rejected lawful facts outright — an
