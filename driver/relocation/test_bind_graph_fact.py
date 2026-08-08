@@ -1843,3 +1843,47 @@ def test_827B16_the_same_poison_reaches_the_NULL_ID_FALLBACK_truthfully():
                        inline_element_id="", **_B16_DIVIDE)
     assert bound is None, "a unit we could not check ATTACHED via the fallback"
     assert why == 'fallback_unsupported_unit_type', why
+
+
+def test_EU151_a_blank_concept_namespace_refuses_at_the_one_owner():
+    """EU-151 (#827, fail-closed): a missing or WHITESPACE namespace must
+    refuse as missing_graph_concept_namespace at graph_concept_target — an
+    empty-string default participating in the expanded-name compare was the
+    recorded review-disproof. Measured 2026-08-08: no suite reddened when
+    the blank gate was weakened to type-only."""
+    from driver.relocation.inline_html import graph_concept_target
+    assert graph_concept_target("us-gaap:Revenues", None,
+                                "us-gaap:Revenues") is None
+    assert graph_concept_target("us-gaap:Revenues", "",
+                                "us-gaap:Revenues") is None
+    assert graph_concept_target("us-gaap:Revenues", "   ",
+                                "us-gaap:Revenues") is None
+    bound, why = _bind(concept_namespace="   ")
+    assert bound is None
+    assert why == "missing_graph_concept_namespace"
+
+
+def test_EU152_an_INDETERMINATE_duration_refuses_not_binds():
+    """EU-152 (#827, fail-closed): the forward-period compare is THREE-STATE
+    — filing_duration_ordered answers None at the calendar edge, and None
+    must refuse exactly like False (`is not True`). Measured 2026-08-08: a
+    weaken to `is False` reddened nothing, and the graph could never even
+    store this filing's exclusive end (the day after 9999-12-31), so the
+    DOCUMENT itself must declare the edge for the compare to be reached."""
+    from driver.relocation.exact_numbers import filing_duration_ordered
+    assert filing_duration_ordered("9999-12-30", "9999-12-31") is None
+    edge_doc = _doc().replace(
+        "<xbrli:startDate>2026-01-01</xbrli:startDate>"
+        "<xbrli:endDate>2026-03-31</xbrli:endDate>",
+        "<xbrli:startDate>9999-12-30</xbrli:startDate>"
+        "<xbrli:endDate>9999-12-31</xbrli:endDate>")
+    assert edge_doc != _doc(), "the context substitution must land"
+    bound, why = _bind(edge_doc, start_date="9999-12-30",
+                       end_date="9999-12-31")
+    assert bound is None
+    # MEASURED 2026-08-08: representability refuses FIRST — the graph can
+    # never store this filing's exclusive end, so the forward compare's
+    # None arm is door-unreachable and the `is not True` form is the
+    # RETAINED fail-closed safety net (the EU-016 precedent); the direct
+    # three-state answer above is the arm's own pin.
+    assert why == "unbindable_period", why

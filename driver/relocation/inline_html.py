@@ -2253,6 +2253,13 @@ def graph_concept_target(concept_key, concept_namespace, graph_concept_qname):
 
     Returns None — never a guess — when the identity is missing, unusable, or
     disagrees. The caller turns that into a truthful refusal.
+
+    EU-151 (#827): the namespace-presence check is FAIL-CLOSED at this one
+    owner — a missing/blank namespace returns None (the binder publishes
+    missing_graph_concept_namespace), never an empty-string default
+    participating in the expanded-name compare (the review-disproof this
+    row records); the graph-side requirement is the F7 row contract's
+    required-non-blank concept identity.
     """
     if not isinstance(concept_namespace, str) or not concept_namespace.strip():
         return None
@@ -3076,6 +3083,13 @@ def bind_graph_fact(doc_or_html, *, inline_element_id, concept, context_id,
         # A duration must run FORWARDS. Equal or reversed boundaries are not a
         # period, and a comparison that cannot be settled without inventing a
         # timezone is indeterminate — both refuse rather than guess.
+        # EU-152 (#827): `is not True` is the FAIL-CLOSED three-state
+        # compare — filing_duration_ordered answers True/False/None, and
+        # None must refuse exactly like False. MEASURED 2026-08-08: the
+        # None arm is door-UNREACHABLE (representability refuses the edge
+        # first — the graph cannot store the exclusive end), so this form
+        # is the RETAINED safety net (the EU-016 precedent), not a live
+        # branch; the ordering rule itself is XBRL 2.1, cited at its owner.
         if filing_duration_ordered(doc_start, doc_end) is not True:
             return None, 'period_not_forward'
     stored = ((stored_end,) if period_type == 'instant'

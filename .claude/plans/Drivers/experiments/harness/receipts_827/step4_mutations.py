@@ -1495,6 +1495,13 @@ MUTATIONS = [
      "driver/core/test_round8_xbrl_binding.py::"
      "test_a_duplicated_unit_id_is_poisoned_not_last_wins"),
 
+    (189, "EU-151: the blank-namespace gate weakens to type-only",
+     "driver/relocation/inline_html.py",
+     "    if not isinstance(concept_namespace, str) or not concept_namespace.strip():",
+     "    if not isinstance(concept_namespace, str):",
+     "driver/relocation/test_bind_graph_fact.py::"
+     "test_EU151_a_blank_concept_namespace_refuses_at_the_one_owner"),
+
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",
