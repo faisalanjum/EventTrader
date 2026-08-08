@@ -1185,3 +1185,21 @@ def test_F2_only_genuinely_transient_provider_errors_park(exc, parks):
     else:
         with pytest.raises(exc):
             _attach(provider=_Raising())
+
+
+def test_F3_an_unreadable_served_document_parks_with_document_blame():
+    """F3 (owner-ruled, sheet #6 verbatim: "PARK + DOCUMENT-BLAME, retryable;
+    never fact-blame, never silent"): a served document the parser refuses
+    (here: a forbidden DOCTYPE) is the DOCUMENT'S fault — the outcome is a
+    retryable PARK carrying a document/source-scoped reason, never a
+    contract rejection telling the channel to fix a fact it does not own.
+    Control: the representation-hash mismatch keeps its own outcome class."""
+    class _BadDoc:
+        def get_filing_document(self, source_id):
+            return '<?xml version="1.0"?><!DOCTYPE r []>' + _DOC
+    res = _attach(provider=_BadDoc())
+    assert len(res.facts) == 0
+    (out,) = res.preflight_outcomes
+    assert out["decision"] == "parked"
+    assert out["codes"] == ("SOURCE_UNAVAILABLE",)
+    assert "document" in out["detail"] and ACC in out["detail"]

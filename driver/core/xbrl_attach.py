@@ -864,14 +864,19 @@ def attach_event_xbrl(items, *, source_id, store, filing_provider, text_parts,
                 f"attach_event_xbrl: the filing provider has no document for "
                 f"source {source_id} yet — park and retry")
         prepared_doc = prepare(document)      # ONE parse + ONE hash per event
-        # UNREADABLE IS A PROPERTY OF THE SERVED DOCUMENT, exactly like the hash
-        # mismatch below: the parser refuses and says why, and this turns that
-        # into the same park every other bad-document case takes. Nothing here
+        # F3 (#827, owner-ruled sheet #6 verbatim: "PARK + DOCUMENT-BLAME,
+        # retryable; never fact-blame, never silent"): unreadable IS a
+        # property of the SERVED DOCUMENT — the party who can fix it is the
+        # document's server, so this parks retryable with document blame.
+        # The old SchemaError told the channel to "fix and resubmit" a fact
+        # it does not own; code and comment now agree. Nothing here
         # inspects, repairs or works around the bytes.
         if refused(prepared_doc):
-            raise SchemaError(
-                f"attach_event_xbrl: {refused(prepared_doc)} — the served "
-                f"document for source {source_id} cannot be read as evidence")
+            raise SourceUnavailable(
+                f"attach_event_xbrl: the served document for source "
+                f"{source_id} cannot be read as evidence "
+                f"({refused(prepared_doc)}) — document-scoped, park and "
+                f"retry against a re-served copy")
         if prepared_doc["text_sha"] != expected:
             raise SchemaError(
                 "attach_event_xbrl: the served document does not hash to the "
