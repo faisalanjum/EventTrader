@@ -20,6 +20,37 @@ _SCRIPTS = Path(__file__).resolve().parents[2] / ".claude/skills/earnings-orches
 if str(_SCRIPTS) not in sys.path:
     sys.path.insert(0, str(_SCRIPTS))
 
+class SubstrateBindingError(ImportError):
+    """P-D6 (owner-ruled 2026-08-07, option (a) repository-pinned files): the
+    period substrate bound to the WRONG module — a deployment/import fault
+    that must fail LOUD by name, never PeriodResolutionError/PARK."""
+
+
+def _repo_pinned(name, expected):
+    """The P-D6 loader assert: whatever module object `import` bound for
+    `name` must BE the exact repository file — a preloaded imposter (right
+    names, wrong provenance) is refused here by identity, not by luck. Runs
+    BEFORE any name is read off the module, so the refusal is always the
+    named exception, never an incidental AttributeError/ImportError."""
+    mod = sys.modules.get(name)
+    actual = getattr(mod, "__file__", None)
+    if actual is None or Path(actual).resolve() != expected:
+        raise SubstrateBindingError(
+            f"{name} must bind to the repository file {expected}, got "
+            f"{actual!r} — wrong preload / wrong module identity")
+
+
+import fiscal_math
+
+# fiscal_math's identity is proven BEFORE guidance_ids may consume it — a
+# preloaded imposter must be refused by name here, not die incidentally
+# inside guidance_ids' own import of it.
+_repo_pinned("fiscal_math", _SCRIPTS / "fiscal_math.py")
+
+import guidance_ids
+
+_repo_pinned("guidance_ids", _SCRIPTS / "guidance_ids.py")
+
 from fiscal_math import _compute_fiscal_dates                      # the ONE calendar canon
 from guidance_ids import build_guidance_period_id   # proven pure builder (the ONLY
 # guidance_ids name Core consumes — the sentinel pairs live in driver_ids)

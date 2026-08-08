@@ -1049,3 +1049,53 @@ def test_reversed_exact_dates_park_on_the_public_door():
                               "period_start_date": "2025-03-31",
                               "period_end_date": "2025-01-01"},
                              fact_type="metric", fye_month=12)
+
+
+# ---- P-D6 (owner-ruled 2026-08-07: option (a) repository-pinned files) ----
+
+def test_substrate_binding_one_authorized_path_both_orders():
+    """The FRESH-PROCESS matrix for the ruled option (a), both import orders:
+    expected module __file__ for BOTH substrate modules, single module object
+    identity via sys.modules, and the wrong-preload outcome = the NAMED loud
+    exception (SubstrateBindingError, an ImportError) — never a PARK."""
+    import subprocess, sys as _sys
+    py = _sys.executable
+    repo = "/home/faisal/EventMarketDB"
+    CHECK = (
+        "import sys, driver.core.driver_period_resolver as dpr\n"
+        "import fiscal_math, guidance_ids\n"
+        "from pathlib import Path\n"
+        "S = Path(dpr.__file__).resolve().parents[2] / "
+        "'.claude/skills/earnings-orchestrator/scripts'\n"
+        "assert Path(fiscal_math.__file__).resolve() == S / 'fiscal_math.py'\n"
+        "assert Path(guidance_ids.__file__).resolve() == S / 'guidance_ids.py'\n"
+        "assert sys.modules['fiscal_math'] is fiscal_math\n"
+        "assert sys.modules['guidance_ids'] is guidance_ids\n"
+        "assert dpr._compute_fiscal_dates.__module__ == 'fiscal_math'\n"
+        "assert dpr.build_guidance_period_id.__module__ == 'guidance_ids'\n"
+        "print('BOUND')\n")
+    ORDER_B = (
+        "import sys\n"
+        "sys.path.insert(0, '" + repo +
+        "/.claude/skills/earnings-orchestrator/scripts')\n"
+        "import guidance_ids\n") + CHECK
+    PRELOAD = (
+        "import sys, types\n"
+        "sys.modules['fiscal_math'] = types.ModuleType('fiscal_math')\n"
+        "try:\n"
+        "    import driver.core.driver_period_resolver\n"
+        "except Exception as e:\n"
+        "    print(type(e).__name__)\n"
+        "else:\n"
+        "    print('SILENTLY_ACCEPTED')\n")
+    env = {"PYTHONPATH": repo + ":" + repo + "/driver/relocation",
+           "PYTHONDONTWRITEBYTECODE": "1", "PATH": "/usr/bin:/bin"}
+    a = subprocess.run([py, "-B", "-c", CHECK], capture_output=True,
+                       text=True, env=env, cwd=repo)
+    assert a.returncode == 0 and a.stdout.strip() == "BOUND", (a.stdout, a.stderr)
+    b = subprocess.run([py, "-B", "-c", ORDER_B], capture_output=True,
+                       text=True, env=env, cwd=repo)
+    assert b.returncode == 0 and b.stdout.strip() == "BOUND", (b.stdout, b.stderr)
+    w = subprocess.run([py, "-B", "-c", PRELOAD], capture_output=True,
+                       text=True, env=env, cwd=repo)
+    assert w.stdout.strip() == "SubstrateBindingError", (w.stdout, w.stderr)
