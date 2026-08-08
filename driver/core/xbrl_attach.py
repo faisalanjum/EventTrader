@@ -378,7 +378,15 @@ def _checked_row(raw):
 #: the currency and the denominator is the per-X — so the flag only ever held
 #: one value here.
 _CANDIDATE_EXACT = {
+    # F11 (#827) — each member's authority, both halves:
+    #   graph side: the official identifier at the block header's citations
+    #   Driver side: the FINAL_DESIGN §6.1 unit enum (usd · m_usd · count ·
+    #   the percent family · x · unknown) — targets are never invented here.
+    # USD -> {usd, m_usd}: ISO-4217 US dollar (XBRL 2.1 §4.8.2); usd/m_usd
+    # are §6.1's two money spellings of ONE meaning (scale, not kind).
     (ISO_4217_NAMESPACE, 'USD'): frozenset({'usd', 'm_usd'}),
+    # shares -> {count}: xbrli:shares (XBRL 2.1 §4.8.2 REQUIRES it for share
+    # items); §6.1's count is the one integer-quantity target.
     (XBRL_INSTANCE_NAMESPACE, 'shares'): frozenset({'count'}),
     # `unknown` is the EXISTING fail-safe — the source genuinely may not
     # distinguish a rate from a count from a ratio.
@@ -1144,11 +1152,20 @@ def _verify_and_attach(fact, *, concept, evidence, prepared_doc, entity_cik,
     # see what the graph holds — but it no longer decides anything.
     lawful = candidate_units_for(bound["unit_measures_expanded"],
                                  bound["unit_numerator_expanded"])
+    # F11 (#827): the EMPTY set is a ROUTE limitation, not a channel error —
+    # no level_unit could ever succeed, so no resubmission can fix it, and by
+    # this door's own decision law that is a PARK (census 2026-08-08:
+    # 130,231 numeric non-nil facts across 6,764 unit names sit here, 1.05%;
+    # utr:* and custom units). It was mispublished as rejected.
+    if not lawful:
+        raise ProductionValidationError(
+            f"attach: the graph records unit {row['unit_name']!r} for this "
+            f"fact, and there is no canonical unit on this route for it — "
+            f"park; no level_unit claim could attach it")
     if it.level_unit not in lawful:
-        admits = sorted(lawful) or "nothing on this route"
         raise SchemaError(
             f"attach: the graph records unit {row['unit_name']!r} "
-            f"for this fact, which may back {admits} — not "
+            f"for this fact, which may back {sorted(lawful)} — not "
             f"level_unit={it.level_unit!r}")
 
     problems, notes, logs = check_member_refs(         # EXISTING law, unchanged

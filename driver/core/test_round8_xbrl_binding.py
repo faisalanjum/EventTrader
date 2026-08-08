@@ -1252,3 +1252,55 @@ def test_F8_a_lawful_QName_concept_reaches_the_graph_answer(lawful):
     (o,) = _attach_concept(lawful).preflight_outcomes
     assert o["decision"] == "parked", dict(o)
     assert o["codes"] == ("XBRL_BINDING_UNAVAILABLE",)
+
+
+# --------------------------------------------------------------------------
+# F11 (#827): the unit-eligibility map — the EMPTY candidate set is a ROUTE
+# limitation (park), never a channel contract violation (reject).
+# --------------------------------------------------------------------------
+
+_UTR_GAL = ('<ix:header><ix:resources><xbrli:unit id="u1">'
+            '<xbrli:measure xmlns:utr="http://www.xbrl.org/2009/utr">utr:gal'
+            '</xbrli:measure></xbrli:unit></ix:resources></ix:header>')
+
+
+def _attach_unit(units_xml, unit_name, level_unit):
+    """The public door with a caller-chosen filing unit + matching graph
+    unit_name: the one variable under test is the unit's eligibility."""
+    doc = _doc(units_xml)
+    rows = [{"period_type": "duration", "start_date": "2024-01-01",
+             "end_date": "2024-07-01", "dims": [], "fact_id": "f1",
+             "context_id": "c1", "unit_ref": "u1", "unit_name": unit_name,
+             "is_divide": "0", "value": "726,000,000", **_IDENTITY}]
+    fact = _fact(level_unit=level_unit)
+    evidence, filing_quote = filing_evidence(doc, "f1")
+    fact["item"]["quote"] = filing_quote
+    item = {"fact": fact, "concept": "us-gaap:Revenues", "member_refs": [],
+            "source_evidence": evidence}
+    return attach_event_xbrl([item], source_id=ACC, store=_Graph(rows=rows),
+                             filing_provider=_Provider(doc=doc),
+                             text_parts=parts_for([item]))
+
+
+def test_F11_an_EMPTY_candidate_set_parks_as_route_limitation():
+    """F11 (#827): a lawful graph unit this route cannot canonicalise
+    (utr:gal — census 2026-08-08: 130,231 numeric non-nil facts across 6,764
+    unit names sit in this bucket, 1.05%) admits NO level_unit at all, so no
+    resubmission can ever succeed — by the door's own decision law that is a
+    PARK (drains if the route later canonicalises it), not a channel
+    violation. It was published rejected/XBRL_CONTRACT_INVALID (measured
+    2026-08-08, the F11 probe)."""
+    (o,) = _attach_unit(_UTR_GAL, "utr:gal", "m_usd").preflight_outcomes
+    assert o["decision"] == "parked", dict(o)
+    assert o["codes"] == ("XBRL_BINDING_UNAVAILABLE",)
+    assert "no canonical unit on this route" in o["detail"]
+
+
+def test_F11_a_wrong_claim_against_a_MAPPED_unit_still_rejects():
+    """CONTROL: the graph unit maps to real candidates (iso4217:USD ->
+    usd/m_usd) and the channel claimed one it may not ('count') — a
+    resubmittable channel error, so the REJECT stands exactly as before."""
+    (o,) = _attach_unit(_USD, "iso4217:USD", "count").preflight_outcomes
+    assert o["decision"] == "rejected", dict(o)
+    assert o["codes"] == ("XBRL_CONTRACT_INVALID",)
+    assert "may back" in o["detail"]

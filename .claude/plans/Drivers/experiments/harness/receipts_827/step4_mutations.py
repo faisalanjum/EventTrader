@@ -1145,6 +1145,13 @@ MUTATIONS = [
      '                            "value": r.get("value"),\n                            "decimals": r.get("decimals"),',
      "driver/core/test_dimension_expanded_identity.py::"
      "test_F7_the_adapter_and_consumer_share_ONE_interface_statement"),
+
+    (140, "F11: the empty-set park regresses to a channel rejection",
+     "driver/core/xbrl_attach.py",
+     "    if not lawful:\n        raise ProductionValidationError(",
+     "    if False:\n        raise ProductionValidationError(",
+     "driver/core/test_round8_xbrl_binding.py::"
+     "test_F11_an_EMPTY_candidate_set_parks_as_route_limitation"),
 ]
 
 
