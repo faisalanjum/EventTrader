@@ -449,19 +449,19 @@ def test_E_the_inline_style_law_decides_by_DECLARATION_not_substring(style, want
     # HTML attribute it rides in
     cell = BeautifulSoup('<td>x</td>', 'lxml').td
     cell['style'] = style
-    from driver.relocation.inline_html import _hidden_cell
-    assert _hidden_cell(cell) is want, (style, want)
+    from driver.relocation.inline_html import _effective_hidden
+    assert _effective_hidden(cell)[0] is want, (style, want)
 
 
 def test_E_aria_hidden_no_longer_pretends_to_be_CSS():
     """ARIA removes content from the accessibility tree; it is not a visual
     rendering rule, no frozen contract owns it, and the corpus count is zero."""
     from bs4 import BeautifulSoup
-    from driver.relocation.inline_html import _hidden_cell
+    from driver.relocation.inline_html import _effective_hidden
     cell = BeautifulSoup('<td aria-hidden="true">x</td>', 'lxml').td
-    assert _hidden_cell(cell) is False
+    assert _effective_hidden(cell)[0] is False
     hard = BeautifulSoup('<td hidden>x</td>', 'lxml').td   # the HTML attribute stays
-    assert _hidden_cell(hard) is True
+    assert _effective_hidden(hard)[0] is True
 
 
 def test_E_displayed_EXCLUDES_a_hidden_descendant():
@@ -527,8 +527,8 @@ def _cellE(style=None, **attrs):
     ("visibility:hidden; visibility:unset", False),
 ])
 def test_E2_the_display_grammar_is_the_SPEC_not_a_single_ident(style, want):
-    from driver.relocation.inline_html import _hidden_cell
-    assert _hidden_cell(_cellE(style)) is want, style
+    from driver.relocation.inline_html import _effective_hidden
+    assert _effective_hidden(_cellE(style))[0] is want, style
 
 
 @pytest.mark.parametrize("style", [
@@ -550,10 +550,10 @@ def test_E2_content_visibility_official_values():
     """Containment L2 §4 + the frozen viewport-independent product reading:
     auto INCLUDES (all 714 real declarations), hidden PRUNES absolutely,
     visible includes."""
-    from driver.relocation.inline_html import _hidden_cell
-    assert _hidden_cell(_cellE("content-visibility:auto")) is False
-    assert _hidden_cell(_cellE("content-visibility:visible")) is False
-    assert _hidden_cell(_cellE("content-visibility:hidden")) is True
+    from driver.relocation.inline_html import _effective_hidden
+    assert _effective_hidden(_cellE("content-visibility:auto"))[0] is False
+    assert _effective_hidden(_cellE("content-visibility:visible"))[0] is False
+    assert _effective_hidden(_cellE("content-visibility:hidden"))[0] is True
 
 
 def test_E2_content_visibility_hidden_has_NO_revive():
@@ -569,11 +569,11 @@ def test_E2_content_visibility_hidden_has_NO_revive():
 
 def test_E2_the_hidden_ATTRIBUTE_is_overridable_per_HTML_LS():
     """HTML Living Standard §6.1: CSS can override the hidden state."""
-    from driver.relocation.inline_html import _hidden_cell
-    assert _hidden_cell(_cellE(None, hidden="")) is True          # bare: hidden
-    assert _hidden_cell(_cellE("display:block", hidden="")) is False   # revealed
-    assert _hidden_cell(_cellE("display:block; display:none",
-                               hidden="")) is True                # author none wins
+    from driver.relocation.inline_html import _effective_hidden
+    assert _effective_hidden(_cellE(None, hidden=""))[0] is True          # bare: hidden
+    assert _effective_hidden(_cellE("display:block", hidden=""))[0] is False   # revealed
+    assert _effective_hidden(_cellE("display:block; display:none",
+                                    hidden=""))[0] is True        # author none wins
     from driver.relocation.inline_html import _style_state
     st = _style_state(_cellE(None, hidden="until-found"))
     assert st.get('unsupported'), st       # official case, zero incidence lane
@@ -689,12 +689,12 @@ def test_E2_a_REVIVED_cell_can_still_be_a_column_header():
 def test_E2_the_all_shorthand_resets_both_properties():
     """Cascade L5: `all` accepts only CSS-wide keywords and feeds every
     property's cascade — including content-visibility."""
-    from driver.relocation.inline_html import _hidden_cell
-    assert _hidden_cell(_cellE("visibility:hidden; all:initial")) is False
-    assert _hidden_cell(_cellE("all:initial; visibility:hidden")) is True
-    assert _hidden_cell(_cellE("content-visibility:hidden; all:unset")) is False
+    from driver.relocation.inline_html import _effective_hidden
+    assert _effective_hidden(_cellE("visibility:hidden; all:initial"))[0] is False
+    assert _effective_hidden(_cellE("all:initial; visibility:hidden"))[0] is True
+    assert _effective_hidden(_cellE("content-visibility:hidden; all:unset"))[0] is False
     # `all` with a non-wide value is INVALID and erases nothing
-    assert _hidden_cell(_cellE("visibility:hidden; all:none")) is True
+    assert _effective_hidden(_cellE("visibility:hidden; all:none"))[0] is True
 
 
 # (SEQ 234: the assert-True "census pin" that stood here is DELETED — prose

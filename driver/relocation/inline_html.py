@@ -550,7 +550,26 @@ def _hidden_cell(cell):
     """This ONE element's standalone answer — pruned, or declared invisible
     here. Ancestry and descendant revive are the WALK's and
     `_effective_hidden`'s business; sites that need "does this cell show any
-    text" read the representation slice, which the walk owns."""
+    text" read the representation slice, which the walk owns.
+
+    EU-102 (#827), RECONCILE-PROOFS-THEN-DELETE-OR-MOVE — the reconciliation
+    is DONE and recorded; the deletion is HELD pending a ruling:
+      * production reach: ZERO (two-lane trace g2_fevid_call_trace_v5.tsv).
+      * the card named five proof purposes in test_row_label_span.py
+        (declaration-not-substring, aria-hidden-is-not-CSS, the display
+        grammar, the content-visibility values, the overridable hidden
+        attribute). ALL FIVE now ride `_effective_hidden` instead — the
+        owner that production actually reaches — so none of them needs this
+        helper any more.
+      * BUT a full repo grep found NINE MORE proof-lane callers the trace
+        did not name: scripts/driver_seed/relocate_probe/phase2/
+        m1_structure_inventory.py (2), m2_candidate_packets.py (2),
+        m2_native_table_shadow.py, m2_native_table_shadow_r2.py,
+        m2_native_table_shadow_r3.py (2), m2_wp1_8k_qualify.py,
+        m4_reader_residual.py. Deleting the helper breaks all nine at call
+        time, so the deletion is a wider change than the card's clause
+        anticipated and is logged as ISS-008 rather than made silently.
+    """
     prune, vis, unsup = _advance('visible', cell)
     if unsup:
         return False                # never silently hidden; facts refuse instead
