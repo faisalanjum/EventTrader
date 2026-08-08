@@ -561,13 +561,13 @@ def _hidden_cell(cell):
         attribute). ALL FIVE now ride `_effective_hidden` instead — the
         owner that production actually reaches — so none of them needs this
         helper any more.
-      * BUT a full repo grep found NINE MORE proof-lane callers the trace
-        did not name: scripts/driver_seed/relocate_probe/phase2/
+      * BUT a full repo grep found TEN MORE proof-lane CALL SITES the trace
+        did not name (11 mentions; one is prose): scripts/driver_seed/relocate_probe/phase2/
         m1_structure_inventory.py (2), m2_candidate_packets.py (2),
         m2_native_table_shadow.py, m2_native_table_shadow_r2.py,
         m2_native_table_shadow_r3.py (2), m2_wp1_8k_qualify.py,
-        m4_reader_residual.py. Deleting the helper breaks all nine at call
-        time, so the deletion is a wider change than the card's clause
+        m4_reader_residual.py — ten calls in eight files. Deleting the
+        helper breaks every one at call time, so the deletion is a wider change than the card's clause
         anticipated and is logged as ISS-008 rather than made silently.
     """
     prune, vis, unsup = _advance('visible', cell)
