@@ -1418,6 +1418,13 @@ MUTATIONS = [
      "driver/core/test_round8_xbrl_binding.py::"
      "test_the_exclusive_date_rule_has_exactly_one_implementation"),
 
+    (178, "EU-100: the namespace-decided prefix drop is switched off",
+     "driver/relocation/inline_html.py",
+     "    return (resolved[1]\n            if resolved is not None\n            and resolved[0] == XBRL_INSTANCE_NAMESPACE else raw)",
+     "    return (resolved[1]\n            if False\n            and resolved[0] == XBRL_INSTANCE_NAMESPACE else raw)",
+     "driver/core/test_round8_xbrl_binding.py::"
+     "test_a_shares_fact_binds_although_the_filing_writes_xbrli_shares"),
+
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",

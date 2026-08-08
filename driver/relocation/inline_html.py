@@ -1558,6 +1558,11 @@ def _graph_measure(m):
     # `unit_name_not_the_filings_measure` — a lawful filing rejected by a rule
     # about punctuation. The resolver already knows the local name; it is asked
     # for it here rather than re-derived from the spelling.
+    # EU-100 (#827): this branch IS the F7 boundary clause's unit_name
+    # spelling law — the prefix drop is decided by NAMESPACE (the instance
+    # namespace only), never by prefix text; an unresolvable measure keeps
+    # its RAW spelling (fail-closed pass-through: a mismatch refuses
+    # downstream at the storage-integrity compare, never silently binds).
     return (resolved[1]
             if resolved is not None
             and resolved[0] == XBRL_INSTANCE_NAMESPACE else raw)
