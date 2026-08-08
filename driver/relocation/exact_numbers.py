@@ -738,6 +738,14 @@ def _xsd_before_across_timezone(left, right, *, left_is_aware):
     A `+14:00` reading is the EARLIEST possible instant (local time furthest
     ahead of UTC) and `-14:00` the LATEST, which is what makes the window.
     """
+    # EU-013 (#827): the four ordered returns below transcribe the exact
+    # spec algorithm — W3C XML Schema Part 2: Datatypes 2e, REC 2004-10-28,
+    # section 3.2.7.4 "Order relation on dateTime",
+    # https://www.w3.org/TR/xmlschema-2/#dateTime-order — a mixed pair is
+    # compared by substituting +14:00 and -14:00 (the _XSD_TZ_LIMIT window,
+    # the same 14 as the lexical bound) on the unzoned side; the pair is
+    # ORDERED whenever the zoned instant lies outside that 28-hour window,
+    # and ONLY the overlap is indeterminate (None — parks, never a guess).
     from datetime import timezone as _tz
     if left_is_aware:
         earliest = right.replace(tzinfo=_tz(_XSD_TZ_LIMIT))

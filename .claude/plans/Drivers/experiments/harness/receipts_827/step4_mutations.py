@@ -1609,6 +1609,13 @@ MUTATIONS = [
      "driver/relocation/test_exact_numbers.py::"
      "test_EU010_the_leap_rule_is_gregorian_not_julian"),
 
+    (205, "EU-013: every mixed-timezone pair regresses to indeterminate",
+     "driver/relocation/exact_numbers.py",
+     "        if left < earliest:\n            return True\n        if left > latest:\n            return False\n        return None",
+     "        return None",
+     "driver/relocation/test_exact_numbers.py::"
+     "test_EU013_mixed_timezone_ordering_is_the_specs_window_not_a_guess"),
+
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",

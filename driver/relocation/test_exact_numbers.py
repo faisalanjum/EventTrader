@@ -144,3 +144,13 @@ def test_EU010_the_leap_rule_is_gregorian_not_julian():
     with pytest.raises(X.ExactError, match='impossible calendar'):
         X.parse_filing_boundary('2026-04-31')
     assert X.parse_filing_boundary('2026-04-30').park is None
+
+
+def test_EU013_mixed_timezone_ordering_is_the_specs_window_not_a_guess():
+    """_xsd_before_across_timezone transcribes XSD Part 2 2e section 3.2.7.4
+    (Order relation on dateTime) exactly: a mixed zoned/unzoned pair is
+    ORDERED whenever the zoned side lies outside the unzoned side's +-14:00
+    (28-hour) window — six months apart is not indeterminate — and ONLY the
+    window overlap is indeterminate (None, parked, never guessed)."""
+    assert X.filing_duration_ordered('2026-01-01T00:00:00Z', '2026-06-30') is True
+    assert X.filing_duration_ordered('2026-01-01T20:00:00Z', '2026-01-01') is None
