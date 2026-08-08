@@ -1203,3 +1203,52 @@ def test_F3_an_unreadable_served_document_parks_with_document_blame():
     assert out["decision"] == "parked"
     assert out["codes"] == ("SOURCE_UNAVAILABLE",)
     assert "document" in out["detail"] and ACC in out["detail"]
+
+
+# --------------------------------------------------------------------------
+# F8 (#827): the channel-declared concept's QName grammar is judged by the
+# STANDARDS OWNER at the contract gate — refused as contract input, never
+# misreported as a missing fact.
+# --------------------------------------------------------------------------
+
+def _attach_concept(concept):
+    """The public door with an EMPTY graph and a caller-chosen concept: the
+    one variable under test is the concept spelling itself."""
+    class _EmptyGraph(_Graph):
+        def get_xbrl_fact_dimensions(self, source_id, c):
+            return GraphFactRows(rows=[], exclusions=())
+    fact = _fact()
+    evidence, filing_quote = filing_evidence(_DOC, "f1")
+    fact["item"]["quote"] = filing_quote
+    item = {"fact": fact, "concept": concept, "member_refs": [],
+            "source_evidence": evidence}
+    return attach_event_xbrl([item], source_id=ACC, store=_EmptyGraph(),
+                             filing_provider=_Provider(),
+                             text_parts=parts_for([item]))
+
+
+@pytest.mark.parametrize("bad", ["us gaap:Revenues", "a:b:c", ":Revenues",
+                                 "us-gaap: Rev", "1st:Rev"])
+def test_F8_a_malformed_concept_QName_is_refused_as_contract_input(bad):
+    """F8 (#827): the door asks driver.xml_names (the ONE QName grammar owner,
+    already judging the graph's dimension spellings) about the CHANNEL concept
+    BEFORE any graph lookup. A spelling that is not a QName is broken CONTRACT
+    INPUT — rejected XBRL_CONTRACT_INVALID — never 'this source carries NO
+    fact for it' -> park (the measured misreport: every one of these five
+    parked XBRL_BINDING_UNAVAILABLE before the change)."""
+    (o,) = _attach_concept(bad).preflight_outcomes
+    assert o["decision"] == "rejected", dict(o)
+    assert o["codes"] == ("XBRL_CONTRACT_INVALID",)
+    assert "QName" in o["detail"]
+
+
+@pytest.mark.parametrize("lawful", ["us-gaap:Revenues", "Revenues",
+                                    "gaap:Ümsatz", "概念:収益"])
+def test_F8_a_lawful_QName_concept_reaches_the_graph_answer(lawful):
+    """MUST-ALLOW twin: lawful QNames — prefixless and Unicode NCNames
+    included (the grammar is the XML library's, never a regex) — pass the
+    gate; against an empty graph the honest answer is then the PARK a
+    genuinely unbacked concept has always received."""
+    (o,) = _attach_concept(lawful).preflight_outcomes
+    assert o["decision"] == "parked", dict(o)
+    assert o["codes"] == ("XBRL_BINDING_UNAVAILABLE",)

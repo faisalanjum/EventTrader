@@ -1131,6 +1131,13 @@ MUTATIONS = [
      '_PERIOD_TYPES = ("duration", "instant")',
      "driver/core/test_driver_period_resolver.py::"
      "test_F9_the_period_kind_vocabulary_has_ONE_owner"),
+
+    (138, "F8: the concept QName contract gate is neutered",
+     "driver/core/xbrl_attach.py",
+     "            if graph_qname_parts(concept) is None:\n                raise SchemaError(",
+     "            if False:\n                raise SchemaError(",
+     "driver/core/test_round8_xbrl_binding.py::"
+     "test_F8_a_malformed_concept_QName_is_refused_as_contract_input[a:b:c]"),
 ]
 
 

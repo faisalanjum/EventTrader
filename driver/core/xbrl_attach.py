@@ -806,6 +806,14 @@ def attach_event_xbrl(items, *, source_id, store, filing_provider, text_parts,
             concept = i["concept"]
             if type(concept) is not str or not concept.strip():
                 raise SchemaError("attach_event_xbrl: each item needs a concept")
+            # F8 (#827): the STANDARDS OWNER judges the concept's grammar at
+            # the contract gate. Without this, a malformed spelling survived
+            # to the graph lookup and was misreported as 'carries NO fact
+            # for concept' -> park — a channel defect dressed as ours.
+            if graph_qname_parts(concept) is None:
+                raise SchemaError(
+                    f"attach_event_xbrl: concept {concept!r} is not a QName "
+                    f"— contract input refused, never parked as missing")
             evidence = _checked_source_evidence(i["source_evidence"])
             fact = PreparedFactV2._build(i["fact"], {   # the fact schema law
                 "xbrl_concept_raw": concept, "member_refs": i["member_refs"]})
