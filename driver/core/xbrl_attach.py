@@ -50,6 +50,10 @@ __all__ = ["attach_event_xbrl"]
 # (or an OSError) before they cross this boundary. An unmapped driver error is
 # then an unexpected error and fails loudly, which is the safe direction.
 RETRYABLE_SOURCE_ERRORS = (OSError,)
+# F2 (#827, fail closed): these OSError SUBCLASSES are PERMANENT — a wrong
+# path or permission never heals by waiting, so retry-forever was the unsafe
+# direction. They fail LOUDLY through; only the owner below classifies.
+NON_RETRYABLE_SOURCE_ERRORS = (PermissionError, FileNotFoundError)
 
 
 def _fetch(what, call, *args):
@@ -58,6 +62,8 @@ def _fetch(what, call, *args):
         return call(*args)
     except SourceUnavailable:
         raise                                # a store already classified it
+    except NON_RETRYABLE_SOURCE_ERRORS:
+        raise                                # F2: permanent — never retried
     except RETRYABLE_SOURCE_ERRORS as e:
         raise SourceUnavailable(
             f"{what} is temporarily unavailable ({type(e).__name__}: {e}) — "

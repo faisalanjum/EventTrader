@@ -1160,3 +1160,28 @@ def test_W7_an_instant_bundle_carries_ONLY_its_end_date(with_start):
     else:
         assert len(res.facts) == 1
         assert res.preflight_outcomes == ()
+
+
+@pytest.mark.parametrize("exc,parks", [
+    (ConnectionError, True), (TimeoutError, True),
+    (PermissionError, False), (FileNotFoundError, False),
+], ids=["connection-parks", "timeout-parks",
+        "permission-fails-loud", "missing-file-fails-loud"])
+def test_F2_only_genuinely_transient_provider_errors_park(exc, parks):
+    """F2 (fail closed): PermissionError and FileNotFoundError are OSError
+    SUBCLASSES, so the bare (OSError,) retryable set retried them forever —
+    a wrong path or permission never heals by waiting. Only the declared
+    owner classifies: genuine transients still park as SourceUnavailable;
+    the permanent pair fails LOUDLY through."""
+    class _Raising:
+        def get_filing_document(self, source_id):
+            raise exc("boom")
+    if parks:
+        res = _attach(provider=_Raising())
+        assert len(res.facts) == 0
+        (out,) = res.preflight_outcomes
+        assert out["decision"] == "parked"
+        assert out["codes"] == ("SOURCE_UNAVAILABLE",)
+    else:
+        with pytest.raises(exc):
+            _attach(provider=_Raising())
