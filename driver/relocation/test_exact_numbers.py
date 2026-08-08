@@ -127,3 +127,20 @@ def test_CL001_the_date_grammar_is_the_datatypes_own_lexical_space():
         X.parse_filing_boundary('2026-03-31\x0b')
     leap = X.parse_filing_boundary('2026-03-31T12:00:60')
     assert leap.kind == 'dateTime' and leap.park
+
+
+def test_EU010_the_leap_rule_is_gregorian_not_julian():
+    """_days_in_month transcribes XSD Part 2 2e Appendix E
+    maximumDayInMonthFor exactly: the century exception (1900-02-29 is
+    impossible), the quadricentennial exception (2000-02-29 is lawful), the
+    plain quadrennial (2024-02-29 lawful, 2023-02-29 impossible), and the
+    30-day month list (2026-04-31 impossible, 2026-04-30 lawful)."""
+    with pytest.raises(X.ExactError, match='impossible calendar'):
+        X.parse_filing_boundary('1900-02-29')
+    assert X.parse_filing_boundary('2000-02-29').park is None
+    assert X.parse_filing_boundary('2024-02-29').park is None
+    with pytest.raises(X.ExactError, match='impossible calendar'):
+        X.parse_filing_boundary('2023-02-29')
+    with pytest.raises(X.ExactError, match='impossible calendar'):
+        X.parse_filing_boundary('2026-04-31')
+    assert X.parse_filing_boundary('2026-04-30').park is None

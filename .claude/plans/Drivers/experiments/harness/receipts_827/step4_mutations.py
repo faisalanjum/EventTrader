@@ -1602,6 +1602,13 @@ MUTATIONS = [
      "driver/relocation/test_exact_numbers.py::"
      "test_CL001_the_date_grammar_is_the_datatypes_own_lexical_space"),
 
+    (204, "EU-010: the leap rule degrades to Julian",
+     "driver/relocation/exact_numbers.py",
+     "        leap = year % 4 == 0 and (year % 100 != 0 or year % 400 == 0)",
+     "        leap = year % 4 == 0",
+     "driver/relocation/test_exact_numbers.py::"
+     "test_EU010_the_leap_rule_is_gregorian_not_julian"),
+
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",

@@ -630,6 +630,14 @@ def parse_filing_boundary(raw):
 def _days_in_month(year, month):
     """Proleptic Gregorian month length, for ANY year — pure arithmetic, so a
     calendar check never depends on what `datetime` happens to represent."""
+    # EU-010 (#827): these constants are the calendar the datatype names,
+    # not ours — W3C XML Schema Part 2: Datatypes 2e, REC 2004-10-28: the
+    # date/dateTime value space is the (proleptic) Gregorian calendar
+    # (sections 3.2.7/3.2.9), and Appendix E's maximumDayInMonthFor states
+    # the exact cases transcribed here — 31 for months 1,3,5,7,8,10,12; 30
+    # for 4,6,9,11; 29 for February when the year is divisible by 400, or
+    # divisible by 4 and not by 100; else 28.
+    # https://www.w3.org/TR/xmlschema-2/#adding-durations-to-dateTimes
     if month == 2:
         leap = year % 4 == 0 and (year % 100 != 0 or year % 400 == 0)
         return 29 if leap else 28
