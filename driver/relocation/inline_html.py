@@ -2912,6 +2912,15 @@ def _accuracy_ok(dec, prec):
     them to settle the nil rules, and reading an attribute twice is how the two
     readings drift apart.
     """
+    # CL-041 (#827, EU-063 + EU-064): the two returns below are the accept
+    # and reject arms of the ALREADY-CITED accuracy law (XBRL 2.1 section
+    # 4.6.3, the union facets, Arelle's official integer grammar — the
+    # docstring above). FAIL-CLOSED shape: acceptance is reachable ONLY
+    # through the cited gates (exactly one attribute; the exact
+    # three-character INF member; the official integer pattern; a
+    # non-negative precision) and every other path rejects — the reject
+    # arm is the default, never the exception. Both arms pinned (padded
+    # INF; both-or-neither).
     if (dec is None) == (prec is None):        # both, or neither
         return False
     raw = dec if dec is not None else prec

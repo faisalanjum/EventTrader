@@ -1875,6 +1875,20 @@ MUTATIONS = [
      "    r'-?(?:0|[1-9][0-9]{0,2}(?:,[0-9]{3})*)(?:\\.[0-9]{1,3})?\\Z')",
      "driver/relocation/test_bind_graph_fact.py::"
      "test_827R6_the_DOOR_refuses_a_writer_alien_raw_as_non_reconciling"),
+
+    (243, "EU-063: a padded INF is accepted by the exact string-union member",
+     "driver/relocation/inline_html.py",
+     "    if raw == 'INF':                           # the exact string-union member",
+     "    if raw.strip() == 'INF':                           # the exact string-union member",
+     "driver/relocation/test_semantic_fact_value.py::"
+     "test_a_PADDED_INF_is_MALFORMED_because_that_union_member_PRESERVES"),
+
+    (244, "EU-064: the both-or-neither accuracy gate accepts instead of rejecting",
+     "driver/relocation/inline_html.py",
+     "    if (dec is None) == (prec is None):        # both, or neither\n        return False",
+     "    if (dec is None) == (prec is None):        # both, or neither\n        return True",
+     "driver/relocation/test_semantic_fact_value.py::"
+     "test_NEITHER_decimals_nor_precision_is_refused"),
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",
