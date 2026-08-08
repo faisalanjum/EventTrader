@@ -177,8 +177,10 @@ def _structure(slot):
             f"slot must be an object with {SLOT_KEYS}, got {type(slot).__name__}"
             f" — a bare number is the OLD scalar form and is rejected")
     if set(slot) != set(SLOT_KEYS):
-        raise SlotConversionError(
-            f"slot carries exactly {SLOT_KEYS}; got {sorted(slot)}")
+        # S2 (#827): the caller's keys are NOT rendered — sorting them
+        # raised a raw TypeError on a mixed-key slot from inside the guard
+        # that exists to prevent crashes (the #819 lesson, at this owner).
+        raise SlotConversionError(f"slot carries exactly {SLOT_KEYS}")
     value = exact_number("value", slot["value"])
     mult = exact_number("scale_multiplier", slot["scale_multiplier"])
     if mult <= 0:                       # the multiplier site's own adaptation

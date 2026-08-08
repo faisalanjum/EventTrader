@@ -1250,6 +1250,13 @@ MUTATIONS = [
      "        if piece[\"kind\"] not in PIECE_KINDS:\n            raise SchemaError(",
      "driver/core/test_round8_xbrl_binding.py::"
      "test_F6_an_UNKNOWN_piece_kind_parks_never_rejects"),
+
+    (155, "S2: the slot guard renders the caller's keys again",
+     "driver/core/slot_convert.py",
+     '        raise SlotConversionError(f"slot carries exactly {SLOT_KEYS}")',
+     '        raise SlotConversionError(f"slot carries exactly {SLOT_KEYS}; got {sorted(slot)}")',
+     "driver/core/test_prepared_fact_v2.py::"
+     "test_S2_a_mixed_key_slot_is_refused_without_rendering_caller_keys"),
 ]
 
 

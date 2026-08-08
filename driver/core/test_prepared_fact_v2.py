@@ -1045,3 +1045,28 @@ def test_F12_the_TEXT_lane_keeps_all_three_shapes_lawful():
     built = prepared_fact_v2.PreparedFactV2._build(
         f, {"xbrl_concept_raw": None, "member_refs": None})
     assert built.item.xbrl_backed is False
+
+
+def test_S2_a_mixed_key_slot_is_refused_without_rendering_caller_keys():
+    """S2 (#827): the slot guard raised a raw TypeError FROM INSIDE ITSELF —
+    `sorted(slot)` on a mixed-key slot (integer key 1 beside the three
+    required strings) — a guard meant to prevent crashes crashing. The
+    refusal must be the controlled outcome, and the message must not render
+    the caller's keys at all (reproduced 2026-08-08)."""
+    from decimal import Decimal
+    from driver.core.test_round8_xbrl_binding import _fact
+    f = _fact()
+    f["item"]["level_low"] = {"value": Decimal(726),
+                              "scale_multiplier": Decimal(10 ** 6),
+                              "unit_scale_evidence": None, 1: "x"}
+    with pytest.raises(prepared_fact_v2.SchemaError,
+                       match="slot carries exactly"):
+        prepared_fact_v2.PreparedFactV2.from_dict(f)
+
+
+def test_S2_a_lawful_exact_slot_is_still_accepted():
+    """CONTROL: the exact three-key slot passes untouched (text lane, so
+    multiplier 1 with no marker — the evidence law's lawful quiet form)."""
+    from driver.core.test_round8_xbrl_binding import _fact
+    assert prepared_fact_v2.PreparedFactV2.from_dict(
+        _fact(value="726", mult=1)) is not None
