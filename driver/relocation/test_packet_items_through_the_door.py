@@ -186,3 +186,4 @@ def test_EU054_the_core_facing_evidence_vocabulary_is_the_sheets():
                                     'raw_label_span', 'pieces')
     assert PIECE_KEYS == ('kind', 'text', 'span')
     assert PIECE_KINDS == ('header', 'section')
+

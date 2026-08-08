@@ -1325,6 +1325,13 @@ MUTATIONS = [
      "    return prepared.get('refuzed') if isinstance(prepared, dict) else None",
      "driver/core/test_round8_xbrl_binding.py::"
      "test_F3_an_unreadable_served_document_parks_with_document_blame"),
+
+    (165, "EU-187: the evidence writer's result key drifts off the sheet",
+     "driver/relocation/inline_html.py",
+     "            'quote_span': [span[0], span[1]],",
+     "            'quote_spam': [span[0], span[1]],",
+     "driver/relocation/test_evidence_writer_contract.py::"
+     "test_EU187_the_evidence_writer_emits_exactly_the_sheets_four_keys"),
 ]
 
 

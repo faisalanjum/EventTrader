@@ -2791,6 +2791,13 @@ def source_evidence(prepared, ev):
     """THE filing-side evidence for ONE already-resolved element — the four
     approved keys — built once and used by BOTH the locator and Core.
 
+    EU-187 (#827): the record WRITTEN here is exactly the contract-sheet
+    section-2 shape (see the SOURCE_EVIDENCE_KEYS citation below — the
+    EU-054 clause); the element-evidence keys READ here (block, in_table,
+    row_text, row_span, row_label_span, columns, column_spans, section,
+    section_span) are element_evidence()'s own in-module vocabulary. No
+    spelling is invented at this site.
+
     It was written only inside the locator, so Core had no way to check a
     submitted claim against the filing except by trusting it. Two copies of this
     would be two definitions of what the filing says, which is the one thing a
