@@ -525,6 +525,9 @@ def parse_filing_boundary(raw):
         elif kind == "date":
             # A date-only boundary means the FOLLOWING midnight, so the graph
             # form needs one more day than the calendar can hold at its edge.
+            # EU-029 (#827): the +1 here is the SAME exclusive-end law as
+            # the F7 boundary owner's stored-spelling clause (EU-007/018/
+            # 019) — this parser pre-checks representability for it.
             try:
                 moment.date() + _td(days=1)
             except OverflowError:

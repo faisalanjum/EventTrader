@@ -1390,6 +1390,13 @@ MUTATIONS = [
      "driver/relocation/test_exact_numbers.py::"
      "test_EU020_the_graph_unit_join_spelling_is_the_clauses"),
 
+    (174, "EU-029: the following-midnight representability pre-check is skipped",
+     "driver/relocation/exact_numbers.py",
+     "            try:\n                moment.date() + _td(days=1)\n            except OverflowError:",
+     "            try:\n                moment.date() + _td(days=0)\n            except OverflowError:",
+     "driver/core/test_round8_xbrl_binding.py::"
+     "test_the_CALENDAR_EDGE_parks_and_never_crashes[9999-12-31-None]"),
+
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",
