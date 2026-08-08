@@ -949,3 +949,27 @@ def test_EU086_a_css_hidden_ancestor_still_hides_the_fact():
     assert ev['hidden'] is True
     prep2, ev2 = _ev(f'<div><p>Total was {_FACT}</p></div>')
     assert ev2['hidden'] is False
+
+
+def test_EU146_colspan_and_rowspan_follow_the_table_processing_model():
+    """EU-146 (#827) FIX-TO-STANDARD. The WHATWG table processing model
+    gives the two attributes DIFFERENT rules, and one shared max(1, int())
+    law cannot express either: colspan is clamped to 1..1000, while
+    rowspan is 0..65534 where ZERO means downward-growing (the cell spans
+    to the end of its row group). Measured before the change: the frozen
+    1,769-file corpus contains no colspan above 1000, no rowspan above
+    65534 and no rowspan=0 — so this row moves no real filing and only
+    stops absurd markup from inventing a 99,999-column grid or reading a
+    growing cell as a one-row cell."""
+    from driver.relocation.inline_html import _table_grid
+    from bs4 import BeautifulSoup
+    html = ('<table><tr><td colspan="99999">A</td></tr>'
+            '<tr><td rowspan="0">B</td><td>C</td></tr>'
+            '<tr><td>D</td></tr></table>')
+    rows = BeautifulSoup(html, 'html.parser').find_all('tr')
+    grid = _table_grid(rows)
+    # colspan clamps at the model's 1000, never the literal 99999
+    assert grid[0][0][2] - grid[0][0][1] == 1000
+    # rowspan=0 grows downward: the third row's own cell cannot take
+    # column 0, which the growing cell still occupies
+    assert grid[2][0][1] == 1, grid[2]

@@ -2317,6 +2317,20 @@ MUTATIONS = [
      "driver/relocation/test_row_label_span.py::"
      "test_the_SELECTED_CELL_owns_the_span_when_a_label_appears_twice"),
 
+    (308, "EU-146: the colspan clamp is removed and absurd markup builds an absurd grid",
+     "driver/relocation/inline_html.py",
+     "    return min(max(_attr_int(value), 1), _COLSPAN_MAX)",
+     "    return max(_attr_int(value), 1)",
+     "driver/relocation/test_row_label_span.py::"
+     "test_EU146_colspan_and_rowspan_follow_the_table_processing_model"),
+
+    (309, "EU-146: rowspan zero stops growing downward and reads as one row",
+     "driver/relocation/inline_html.py",
+     "            reach = len(rows) if height == 0 else row_number + height",
+     "            reach = row_number + height",
+     "driver/relocation/test_row_label_span.py::"
+     "test_EU146_colspan_and_rowspan_follow_the_table_processing_model"),
+
     (281, "EU-169: the exactly-one-child bound widens to two",
      "driver/relocation/inline_html.py",
      "        if len(kids) != 1 or len(elements) != 1 \\",

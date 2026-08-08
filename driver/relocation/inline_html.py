@@ -138,11 +138,37 @@ def _words(value):
     return re.findall(r"[A-Za-z][A-Za-z’'-]*", value)
 
 
-def _span(value):
+# EU-146 (#827) FIX-TO-STANDARD: colspan and rowspan have DIFFERENT rules in
+# the WHATWG table processing model (snapshot 2026-07-20),
+# https://html.spec.whatwg.org/multipage/tables.html#processing-model-1 — one
+# shared max(1, int()) law could express neither. colspan: default 1, clamped
+# to 1..1000. rowspan: default 1, clamped to 0..65534, and ZERO is not "one"
+# — it means the cell GROWS DOWNWARD to the end of its row group. Measured
+# before the change: the frozen 1,769-file corpus has no colspan above 1000,
+# no rowspan above 65534 and no rowspan=0, so this moves no real filing; it
+# stops absurd markup from inventing a 99,999-column grid and stops a growing
+# cell from being read as a one-row cell.
+_COLSPAN_MAX = 1000        # HTML LS: clamped to 1..1000
+_ROWSPAN_MAX = 65534       # HTML LS: clamped to 0..65534 (0 = downward growing)
+
+
+def _attr_int(value, default=1):
+    """The attribute's non-negative integer value, or the default — the
+    parse only; each caller applies its OWN clamp per the model."""
     try:
-        return max(1, int(value or 1))
+        n = int(value)
     except (TypeError, ValueError):
-        return 1
+        return default
+    return n if n >= 0 else default
+
+
+def _colspan(value):
+    return min(max(_attr_int(value), 1), _COLSPAN_MAX)
+
+
+def _rowspan(value):
+    """0 is kept as 0 — the caller reads it as downward-growing."""
+    return min(_attr_int(value), _ROWSPAN_MAX)
 
 
 def _index_by_identity(seq, node):
@@ -166,15 +192,18 @@ def _table_grid(rows):
         placed = []
         column = 0
         for cell in row.find_all(_CELL_TAGS, recursive=False):
-            width = _span(cell.get('colspan'))
+            width = _colspan(cell.get('colspan'))
             while any(occupied_until.get(item, 0) > row_number
                       for item in range(column, column + width)):
                 column += 1
             placed.append((cell, column, column + width))
-            height = _span(cell.get('rowspan'))
-            if height > 1:
+            height = _rowspan(cell.get('rowspan'))
+            # ZERO GROWS DOWNWARD (the model): the cell occupies every
+            # remaining row of this group rather than exactly one.
+            reach = len(rows) if height == 0 else row_number + height
+            if height == 0 or height > 1:
                 for item in range(column, column + width):
-                    occupied_until[item] = row_number + height
+                    occupied_until[item] = reach
             column += width
         grid.append(placed)
     return grid
