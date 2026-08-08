@@ -2268,6 +2268,27 @@ MUTATIONS = [
      "driver/relocation/test_row_label_span.py::"
      "test_EU057_run_in_is_a_lawful_display_value_that_wins_the_cascade"),
 
+    (301, "EU-135: the cascade key drops source order and an earlier declaration wins",
+     "driver/relocation/inline_html.py",
+     "        key = (bool(d.important), i)",
+     "        key = (bool(d.important), 0)",
+     "driver/relocation/test_two_view_bridge.py::"
+     "test_EU141_the_all_shorthand_resets_an_earlier_display_none"),
+
+    (302, "EU-136: the CSS-wide keyword gate admits a two-token value",
+     "driver/relocation/inline_html.py",
+     "        if len(idents) == 1 and idents[0] in _WIDE_LOCAL:",
+     "        if len(idents) == 2 and idents[0] in _WIDE_LOCAL:",
+     "driver/relocation/test_row_label_span.py::"
+     "test_E2_the_display_grammar_is_the_SPEC_not_a_single_ident"),
+
+    (303, "EU-088 family: the ancestry fold runs leaf-first and loses the revival",
+     "driver/relocation/inline_html.py",
+     "    vis = 'visible'\n    for el in reversed(chain):",
+     "    vis = 'visible'\n    for el in chain:",
+     "driver/relocation/test_row_label_span.py::"
+     "test_E2_a_vis_hidden_FACT_with_its_own_visible_is_not_hidden"),
+
     (281, "EU-169: the exactly-one-child bound widens to two",
      "driver/relocation/inline_html.py",
      "        if len(kids) != 1 or len(elements) != 1 \\",

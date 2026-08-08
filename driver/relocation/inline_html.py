@@ -365,6 +365,17 @@ def _style_state(el):
         subst = any(t.type == 'function' for t in toks)
         idents = ([t.lower_value for t in toks]
                   if toks and all(t.type == 'ident' for t in toks) else None)
+        # CL-091 (#827, EU-135 + EU-136): FAIL-CLOSED cascade mechanics.
+        # The sort key is (importance, source order) because that IS the
+        # cascade for one inline style block — CSS Cascade 5 sections 6.8.2
+        # and 6.9: !important declarations win over normal ones, and among
+        # equals the LAST wins; dropping the order term makes an earlier
+        # declaration beat a later one (17 reds). The token-count gates are
+        # the value grammars themselves: a CSS-wide keyword is exactly ONE
+        # ident (Cascade 5 section 7), so admitting any other count would
+        # read a multi-token value as a wide keyword (5 reds). Every value
+        # this reader cannot resolve becomes the truthful unsupported lane
+        # (EU-055), never a guess.
         key = (bool(d.important), i)
         if nm == 'all':
             if subst:
@@ -526,6 +537,12 @@ def _effective_hidden(node):
     while n is not None and getattr(n, 'get', None):
         chain.append(n)
         n = n.parent
+    # The fold runs TOP-DOWN (the chain is collected leaf-first, so it is
+    # reversed here): inheritance flows from ancestors to descendants, and a
+    # descendant's own visibility:visible legitimately revives text under an
+    # ancestor's visibility:hidden (CSS Display 3 section 4) — folding the
+    # other way would let the leaf decide first and lose that revival
+    # (pinned by the own-visible node).
     vis = 'visible'
     for el in reversed(chain):
         # CL-053 (#827, EU-087): the True is the HIDDEN answer — a pruning
