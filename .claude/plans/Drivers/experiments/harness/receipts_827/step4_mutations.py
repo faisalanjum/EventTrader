@@ -1693,6 +1693,13 @@ MUTATIONS = [
      "    i = 1\n    while i < len(text) and _is_edge_marker(text[i]):\n        i += 1\n    return text[i:]",
      "driver/relocation/test_row_label_span.py::"
      "test_a_BARE_parenthetical_is_still_not_selected"),
+
+    (217, "EU-077: geometry overrides the explicit header relation again",
+     "driver/relocation/inline_html.py",
+     "    return any(id(t) in fact_nodes and t.find_parent('th') is None\n               for t in row.find_all(True))",
+     "    return any(id(t) in fact_nodes for t in row.find_all(True))",
+     "driver/relocation/test_row_label_span.py::"
+     "test_EU077_a_tagged_th_header_row_still_supplies_the_column_header"),
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",

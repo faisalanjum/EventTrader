@@ -861,3 +861,20 @@ def test_EU041_a_div_owns_its_prose_evidence_block():
     sentence, never the inline wrapper's three characters."""
     prep, ev = _ev(f'<div>Quarterly revenue was <b>{_FACT}</b> million.</div>')
     assert ev['block'] == 'Quarterly revenue was 726 million.'
+
+
+def test_EU077_a_tagged_th_header_row_still_supplies_the_column_header():
+    """FIX-TO-CONTRACT (ChannelContract section 3 period-signals row +
+    packet Part D FETCH): real filings ix-tag their column-header years; a
+    th row is the EXPLICIT header relation and row-contains-a-number
+    geometry must not override it — the tagged header is returned exactly
+    like the untagged control, and a td-tagged DATA row is still skipped."""
+    hdr = ('<ix:nonFraction id="hY" name="us-gaap:Y" contextRef="c1" '
+           'unitRef="u1" scale="0" decimals="0" '
+           'format="ixt:num-dot-decimal">2024</ix:nonFraction>')
+    prep, ev = _ev(f'<table><tr><th>Label</th><th>{hdr}</th></tr>'
+                   f'<tr><td>Total</td><td>{_FACT}</td></tr></table>')
+    assert ev['columns'] == ['2024']
+    prep2, ev2 = _ev(f'<table><tr><th>Label</th><th>2024</th></tr>'
+                     f'<tr><td>Total</td><td>{_FACT}</td></tr></table>')
+    assert ev2['columns'] == ['2024']

@@ -167,7 +167,17 @@ def _has_number_fact(row, fact_nodes):
     view that cannot answer it — HTML has no namespaces, so the question there
     could only be a prefix guess.
     """
-    return any(id(t) in fact_nodes for t in row.find_all(True))
+    # EU-077 (#827) FIX-TO-CONTRACT: a fact inside a th cell does NOT make
+    # the row a data row — th is the EXPLICIT header relation (the EU-040
+    # table-model citation) and geometry must not override it. Real filings
+    # ix-tag their column-header years; skipping such a row made the column
+    # header VANISH from evidence, violating the frozen period-signals
+    # clause (ChannelContract.md section 3, "adjacent period wording —
+    # column header", sha 1062e0fb...) and the packet FETCH row
+    # (15_CandidateFactPacket.md Part D, sha aa7239ed...). A td-contained
+    # fact still marks the row as data — fail-closed for real data rows.
+    return any(id(t) in fact_nodes and t.find_parent('th') is None
+               for t in row.find_all(True))
 
 
 #: THE OFFICIAL VALUE SETS — the STANDARDS' keyword grammars transcribed, each
