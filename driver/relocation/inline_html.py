@@ -507,6 +507,14 @@ def _after_edge_markers(text):
     Only the leading characters are examined, and it stops at the first one that
     is not a marker.
     """
+    # EU-073 (#827): FAIL-CLOSED adjudication of the scan mechanics — the
+    # loop examines LEADING characters only and can only ever DROP
+    # recognized markers from the front: it never touches inner text and
+    # never invents characters, so the worst drift is a marker kept (the
+    # selection then sees more text, not fabricated text). The one consumer
+    # decides whether a cell is markers-only; that behavior is pinned
+    # (the bare-parenthetical node). Measured recall receipt
+    # g2_evid_recall_EU-073.txt: zero — adjudication only, no change.
     i = 0
     while i < len(text) and _is_edge_marker(text[i]):
         i += 1

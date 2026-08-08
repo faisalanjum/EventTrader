@@ -1686,6 +1686,13 @@ MUTATIONS = [
      "_BLOCK_TAGS = ['p', 'li']",
      "driver/relocation/test_row_label_span.py::"
      "test_EU041_a_div_owns_its_prose_evidence_block"),
+
+    (216, "EU-073: the leading-marker scan starts past the first character",
+     "driver/relocation/inline_html.py",
+     "    i = 0\n    while i < len(text) and _is_edge_marker(text[i]):\n        i += 1\n    return text[i:]",
+     "    i = 1\n    while i < len(text) and _is_edge_marker(text[i]):\n        i += 1\n    return text[i:]",
+     "driver/relocation/test_row_label_span.py::"
+     "test_a_BARE_parenthetical_is_still_not_selected"),
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",
