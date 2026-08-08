@@ -780,11 +780,17 @@ def test_the_one_outcome_code_module_owns_every_minted_token():
     derived by AST scan of the emitters' own sources, never a hand list, so
     a rogue token added anywhere fails HERE (the T1 RED/mutation detector).
     Covers the 30 measured validator tokens (29 add() incl. F1..F9 + SHAPE) and the 6 attach tokens."""
-    import ast, inspect
-    from driver.core import outcome_codes, driver_validators, xbrl_attach
+    import ast, os
+    from driver.core import outcome_codes, driver_validators
+    # xbrl_attach is scanned BY SOURCE PATH, not imported: its import chain
+    # reaches modules whose staged copies lag the candidate (the recorded
+    # drift class), and a text parse scans the same bytes without the chain.
+    here = os.path.dirname(os.path.abspath(driver_validators.__file__))
+    sources = [open(driver_validators.__file__, encoding="utf-8").read(),
+               open(os.path.join(here, "xbrl_attach.py"), encoding="utf-8").read()]
     minted = set()
-    for mod in (driver_validators, xbrl_attach):
-        tree = ast.parse(inspect.getsource(mod))
+    for src in sources:
+        tree = ast.parse(src)
         for node in ast.walk(tree):
             if isinstance(node, ast.Call):
                 fn = node.func
