@@ -1233,6 +1233,14 @@ _PREP_CACHE = {}
 #: digits may be read as one. Measured over the frozen cache: 733,172
 #: identifiers, every one carrying exactly this scheme and exactly ten ASCII
 #: digits, so enforcing all of it costs zero real evidence.
+# EU-042 (#827): the URI is the SEC's own published identifier scheme for
+# EDGAR filer CIKs — EDGAR Filer Manual (Volume II) / the EDGAR XBRL Guide
+# (June 2026 edition, the same edition cited at the Inline XBRL version
+# boundary above) require xbrli:identifier@scheme to be exactly this value
+# for a CIK, https://www.sec.gov/edgar/filer-information/specifications ;
+# XBRL 2.1 section 4.7.3 makes the scheme REQUIRED and it is what gives the
+# digits their meaning (the census beside this constant). A drifted URI
+# refuses every filing (216 reds).
 SEC_CIK_SCHEME = 'http://www.sec.gov/CIK'
 #: XML 1.0 S — the ONLY whitespace a document may pad a value with. Python's
 #: `.strip()` also eats NBSP, ideographic and zero-width space, which would
@@ -2911,6 +2919,14 @@ _TR5 = 'http://www.xbrl.org/inlineXBRL/transformation/2022-02-16'
 #: The SEC's OWN registry. Official and admitted by release 26.1, but stock
 #: Arelle does not implement it — so a fact using it is lawful and unsupported,
 #: which is a different and kinder statement than malformed.
+# EU-059 (#827, the CL-032 member that split to its own slot): this URI is
+# the SEC's OWN transformation registry as published in the EDGAR release
+# 26.1 registry list already cited above
+# (https://www.sec.gov/files/ixbrl-transform-registries.json) — official and
+# admitted for filings, but not implemented by stock Arelle, which is why a
+# fact using it is lawful-and-unsupported rather than malformed. A drifted
+# URI silently reclassifies those facts (2 reds, the official-but-
+# unimplemented node).
 _SEC_REGISTRY = 'http://www.sec.gov/inlineXBRL/transformation/2015-08-31'
 #: The three whose transforms an implementation must supply.
 _IMPLEMENTED_REGISTRIES = frozenset({_TR3, _TR4, _TR5})

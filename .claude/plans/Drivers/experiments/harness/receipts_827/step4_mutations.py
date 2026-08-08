@@ -2331,6 +2331,20 @@ MUTATIONS = [
      "driver/relocation/test_row_label_span.py::"
      "test_EU146_colspan_and_rowspan_follow_the_table_processing_model"),
 
+    (310, "EU-042: the SEC CIK scheme URI drifts and every filing refuses",
+     "driver/relocation/inline_html.py",
+     "SEC_CIK_SCHEME = 'http://www.sec.gov/CIK'",
+     "SEC_CIK_SCHEME = 'http://www.sec.gov/CIKX'",
+     "driver/relocation/test_bind_graph_fact.py::"
+     "test_RED_exactness_holds_through_the_whole_binding"),
+
+    (311, "EU-059: the SEC registry URI drifts and its facts are reclassified",
+     "driver/relocation/inline_html.py",
+     "_SEC_REGISTRY = 'http://www.sec.gov/inlineXBRL/transformation/2015-08-31'",
+     "_SEC_REGISTRY = 'http://www.sec.gov/inlineXBRL/transformation/2015-08-30'",
+     "driver/relocation/test_transform_registry.py::"
+     "test_the_SEC_registry_is_OFFICIAL_but_UNIMPLEMENTED"),
+
     (281, "EU-169: the exactly-one-child bound widens to two",
      "driver/relocation/inline_html.py",
      "        if len(kids) != 1 or len(elements) != 1 \\",
