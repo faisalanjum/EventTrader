@@ -1488,6 +1488,13 @@ MUTATIONS = [
      "driver/relocation/test_two_view_bridge.py::"
      "test_an_UNLAWFUL_xml_id_is_still_refused[1abc]"),
 
+    (188, "EU-179: the duplicate-unit poison token drifts",
+     "driver/relocation/inline_html.py",
+     "'duplicate_unit_id'",
+     "'duplicate_unit_idX'",
+     "driver/core/test_round8_xbrl_binding.py::"
+     "test_a_duplicated_unit_id_is_poisoned_not_last_wins"),
+
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",

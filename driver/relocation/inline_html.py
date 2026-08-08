@@ -1805,8 +1805,13 @@ def prepare(html_text):
     """Parse and index a display filing EXACTLY ONCE — memoized by content sha so
     repeated locate() calls (one per anchor) share ONE parse per filing.
 
-    EU-180 (#827): the prepared-record and refusal-record key spellings this
-    function WRITES (contexts, elements, fact_nodes, hidden_nodes, units,
+    EU-179/EU-180 (#827): the poison tokens this function writes into its
+    records (duplicate_context_id, malformed_context_structure,
+    duplicate_unit_id, malformed_unit_structure — the binder's own
+    vocabulary, the CL-039 block; the id-uniqueness and structural rules
+    are the instance schema's, cited on their board rows) and the
+    prepared-record/refusal-record key spellings it WRITES (contexts,
+    elements, fact_nodes, hidden_nodes, units,
     text/text_sha, refused, sha, ...) are its OWN output vocabulary — every
     reader lives in this module or consumes the record through it, so the
     owner is in-file; no Fiscal packet clause fixes these spellings
