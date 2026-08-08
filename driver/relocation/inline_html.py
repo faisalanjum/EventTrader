@@ -813,6 +813,11 @@ def _soup(html_text):
         warnings.simplefilter('error')
         warnings.filterwarnings('ignore', category=XMLParsedAsHTMLWarning)
         try:
+            # EU-132 (#827 DERIVE-CITATION): 'lxml' is the PINNED bs4 tree
+            # builder — Beautiful Soup 4.13.3, "Installing a parser" table
+            # (https://www.crummy.com/software/BeautifulSoup/bs4/doc/
+            # #installing-a-parser), lxml's HTML parser, backed by libxml2
+            # via lxml 6.0.2 (drift row 5.3.1->6.0.2 recorded).
             return BeautifulSoup(html_text, 'lxml')
         except Warning as w:
             raise SemanticParseError(

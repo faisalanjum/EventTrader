@@ -254,3 +254,15 @@ def test_EU131_a_foreign_renderer_parse_warning_refuses_typed():
     with _pt.raises(SemanticParseError, match="renderer parse warning"):
         _soup("http://example.com/not-markup.htm")
     assert _soup("<p>real markup</p>") is not None   # the lawful twin
+
+
+def test_EU132_the_renderer_view_is_built_by_the_pinned_lxml_builder():
+    """EU-132 (DERIVE-CITATION pin): the renderer view's parser choice is the
+    bs4 'lxml' tree builder — Beautiful Soup 4.13.3 (installed pin),
+    "Installing a parser" table, lxml's HTML parser, backed by libxml2 via
+    lxml 6.0.2 (drift row 5.3.1->6.0.2 recorded). Pinned by the builder's
+    own published identity plus one browser-grade repair behavior."""
+    from inline_html import _soup
+    soup = _soup("<p>x</p>")
+    assert soup.builder.NAME == "lxml"
+    assert _soup("<table><tr><td>a").find("td").get_text() == "a"
