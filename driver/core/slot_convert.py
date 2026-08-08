@@ -132,12 +132,15 @@ def exact_mul(a, b):
     default 28-digit context let two DIFFERENT 29-digit numbers pass as equal.
     The exact product of an m-digit and an n-digit decimal needs at most m+n
     digits, so that is the precision used."""
-    a = Decimal(a) if isinstance(a, int) else a
-    b = Decimal(b) if isinstance(b, int) else b
-    need = len(a.as_tuple().digits) + len(b.as_tuple().digits) + 1
+    # S8 (#827): the int-coercion branches were DEAD (exact_number returns
+    # Decimal at both slot boundaries; convert_slot is the only production
+    # caller) and the "+1"/28-digit floor stated a false precision law —
+    # the exact product of an m-digit and an n-digit decimal needs at most
+    # m+n digits, mechanically. The Inexact trap below is the safety net.
+    need = len(a.as_tuple().digits) + len(b.as_tuple().digits)
     try:
         with localcontext() as ctx:
-            ctx.prec = max(need, 28)
+            ctx.prec = need
             ctx.Emax, ctx.Emin = decimal.MAX_EMAX, decimal.MIN_EMIN
             ctx.traps[decimal.Inexact] = True     # a silent rounding is a defect
             return a * b

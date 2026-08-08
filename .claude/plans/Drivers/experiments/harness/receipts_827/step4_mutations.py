@@ -1257,6 +1257,13 @@ MUTATIONS = [
      '        raise SlotConversionError(f"slot carries exactly {SLOT_KEYS}; got {sorted(slot)}")',
      "driver/core/test_prepared_fact_v2.py::"
      "test_S2_a_mixed_key_slot_is_refused_without_rendering_caller_keys"),
+
+    (156, "S8: a fixed precision cap replaces the operand-derived bound",
+     "driver/core/slot_convert.py",
+     "            ctx.prec = need",
+     "            ctx.prec = 60",
+     "driver/core/test_v2_attacks.py::"
+     "test_ATTACK_a_65_digit_value_is_not_rounded"),
 ]
 
 
