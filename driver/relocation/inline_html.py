@@ -504,6 +504,14 @@ def _evidence_owner(node):
     fact outright. Returning the choice from one owner is what stops the walker
     and the reader disagreeing about which node that is.
     """
+    # EU-099 (#827): FAIL-CLOSED adjudication of the two ownership flags —
+    # True names the ROW shape, False the block/parent shape, the choice is
+    # written ONCE here (walker and reader both consume it, so they cannot
+    # disagree), and each arm's whole downstream shape is pinned by the
+    # primary battery (flag inversion reddens 24 nodes — measured). A wrong
+    # flag cannot fabricate evidence: it selects the OTHER honest shape,
+    # whose fields then carry the EU-092 explicit empty claims. Receipt
+    # g2_evid_recall_EU-099.txt: zero recall — adjudication only.
     cell = node.find_parent(_CELL_TAGS)
     row = cell.find_parent(_ROW_TAG) if cell is not None else None
     if cell is not None and row is not None:

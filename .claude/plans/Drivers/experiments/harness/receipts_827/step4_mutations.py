@@ -1721,6 +1721,13 @@ MUTATIONS = [
      "                                if _words(t)]",
      "driver/relocation/test_row_label_span.py::"
      "test_section_TEXT_and_SPAN_come_from_the_SAME_cell"),
+
+    (221, "EU-099: a table fact claims prose ownership at the one flag owner",
+     "driver/relocation/inline_html.py",
+     "    if cell is not None and row is not None:\n        return True, row",
+     "    if cell is not None and row is not None:\n        return False, row",
+     "driver/relocation/test_row_label_span.py::"
+     "test_the_SELECTED_CELL_owns_the_span_when_a_label_appears_twice"),
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",
