@@ -243,9 +243,10 @@ class Neo4jStore:
 
         The one-representation guard must ask here, not count the channel's
         repeated hashes — items agreeing with each other is the channel
-        agreeing with itself. Census 2026-07-27: 10,468 XBRL-bearing reports,
-        every one with exactly one XBRLNode, zero facts spanning two; 0 for an
-        8-K, which carries no XBRL at all.
+        agreeing with itself. Census 2026-07-27, re-verified 2026-08-08
+        (F10 receipt): 10,468 XBRL-bearing reports, every one with exactly
+        one XBRLNode, zero with two or more; 0 for an 8-K, which carries no
+        XBRL at all (32,165 such reports).
         """
         rows = self._read(
             "MATCH (r:Report {accessionNo: $id})-[:HAS_XBRL]->(x:XBRLNode) "

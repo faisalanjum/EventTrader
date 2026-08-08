@@ -860,6 +860,13 @@ def attach_event_xbrl(items, *, source_id, store, filing_provider, text_parts,
     # ---- ONE set of reads per EVENT (never per item) ------------------------
     try:
         count = _fetch("the graph", store.get_xbrl_representation_count, source_id)
+        # F10 (#827), derivation stated + recall measured (receipt
+        # 2026-08-08): exactly-one is the graph's UNIVERSAL shape — 10,468
+        # XBRL-bearing reports all carry ONE representation, zero carry two,
+        # 32,165 carry none. A count >= 2 would be a NEW ingestion shape
+        # with no authorized rule for WHICH representation a channel-quoted
+        # fact belongs to (the door binds one prepared document per event),
+        # so this fail-closed park refuses ZERO real sources today.
         if type(count) is not int or count != 1:
             raise ProductionValidationError(
                 f"attach_event_xbrl: source {source_id} reports {count!r} XBRL "
