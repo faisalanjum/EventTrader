@@ -20,8 +20,9 @@ from decimal import Decimal
 import pytest
 
 from driver.relocation.inline_html import (NOT_WELL_FORMED, bind_graph_fact,
-                                           find_by_identity, parse_raw,
-                                           prepare, printed_value, reconcile)
+                                           find_by_identity, one_concept_target,
+                                           parse_raw, prepare, printed_value,
+                                           reconcile)
 
 CIK = "0000320193"
 
@@ -1916,3 +1917,16 @@ def test_EU172_a_malformed_graph_qname_refuses_as_its_own_missing_identity():
         None, 'missing_graph_concept_namespace')
     ok, why = _bind()
     assert why == 'ok' and ok is not None      # the lawful control binds
+
+
+def test_EU174_disagreeing_concept_records_park_never_pick():
+    """one_concept_target (PROOF-ONLY reach lane, g2_fevid_call_trace_v5):
+    identical records collapse to the ONE target they agree on; records
+    disagreeing on the namespace refuse as None — silently taking the first
+    would let row order decide what a fact means (the refuse-never-repair
+    law, the EU-154 block)."""
+    ns = _FIXTURE_NS['us-gaap']
+    agree = [(ns, "us-gaap:Revenues"), (ns, "us-gaap:Revenues")]
+    assert one_concept_target("us-gaap:Revenues", agree) == (ns, "Revenues")
+    clash = agree + [(ns + "X", "us-gaap:Revenues")]
+    assert one_concept_target("us-gaap:Revenues", clash) is None

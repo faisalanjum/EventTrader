@@ -1553,6 +1553,13 @@ MUTATIONS = [
      "driver/relocation/test_bind_graph_fact.py::"
      "test_827R8b_JOIN_two_prefixes_resolving_to_ONE_identity_are_AMBIGUOUS"),
 
+    (197, "EU-174: disagreeing concept records pick one instead of parking",
+     "driver/relocation/inline_html.py",
+     "    if len(targets) != 1:\n        return None                      # none usable, or they disagree\n    return targets.pop()",
+     "    if len(targets) < 1:\n        return None                      # none usable, or they disagree\n    return sorted(targets, key=repr)[0]",
+     "driver/relocation/test_bind_graph_fact.py::"
+     "test_EU174_disagreeing_concept_records_park_never_pick"),
+
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",

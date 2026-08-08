@@ -2307,6 +2307,12 @@ def one_concept_target(concept_key, records):
     DISAGREEMENT MUST PARK: silently taking the first of several disagreeing
     Concept identities would let row order decide what a fact means.
     """
+    # EU-174 (#827): the exactly-one bound below consumes the frozen
+    # refuse-never-repair law (the EU-154 block) — a set of graph Concept
+    # records must AGREE on one expanded target; disagreement refuses (None)
+    # rather than letting row order pick a meaning. Reach lane:
+    # PROOF_ONLY_REACHED (g2_fevid_call_trace_v5.tsv) — proof-lane behavior,
+    # held to the same law.
     targets = {graph_concept_target(concept_key, ns, qn)
                for ns, qn in records}
     if len(targets) != 1:
