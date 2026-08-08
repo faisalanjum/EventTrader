@@ -1987,6 +1987,13 @@ MUTATIONS = [
      "    if raw in _XS_FALSE:\n        return True\n    raise _MalformedNil()",
      "driver/relocation/test_semantic_fact_value.py::"
      "test_an_EXPLICIT_false_nil_is_a_normal_fact"),
+
+    (259, "EU-110: the xsi:nil Clark read drifts and nil facts read as normal",
+     "driver/relocation/inline_html.py",
+     "    raw = _typed(el, '{%s}nil' % _XSI_NS)",
+     "    raw = _typed(el, '{%s}nilX' % _XSI_NS)",
+     "driver/relocation/test_semantic_fact_value.py::"
+     "test_a_TRUE_nil_fact_is_LAWFUL_but_states_no_value"),
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",

@@ -2937,6 +2937,13 @@ def _nil_true(el):
     so ` true ` is `true`. A spelling outside the lexical space raises, because
     reading a misspelled nil claim as "not nil" would bind a value the filing
     says does not exist."""
+    # EU-110 (#827): the Clark-form read is xsi:nil exactly — the attribute
+    # vocabulary is XML Schema Part 1 2e section 2.6.2 (xsi:nil),
+    # https://www.w3.org/TR/xmlschema-1/#xsi_nil , and the clause governing
+    # nil ON AN IX FACT is the current-edition Inline XBRL 1.1 section
+    # 10.1.1 sentence already quoted with its URL at the nonFraction
+    # reader's spec-sources note (the EU-046 record) — the applicability
+    # question the census left open is CLOSED by that citation.
     raw = _typed(el, '{%s}nil' % _XSI_NS)
     if raw is None:
         return None
