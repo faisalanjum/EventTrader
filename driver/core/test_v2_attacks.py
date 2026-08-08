@@ -1254,6 +1254,10 @@ def test_827_the_KEYWORD_ONLY_public_parameters_are_really_exercised():
 COVERED_BY = {
     ("driver.core.slot_convert.family_required_multiplier", "unit"):
         "driver/core/test_round12_pure_unit_law.py::test_the_stored_multiplier_is_ONE_for_the_percent_family_and_x",
+    ("driver.core.slot_convert.exact_number", "name"):
+        "driver/core/test_prepared_fact_v2.py::test_T9_one_public_exact_number_predicate",
+    ("driver.core.slot_convert.exact_number", "v"):
+        "driver/core/test_prepared_fact_v2.py::test_T9_one_public_exact_number_predicate",
     ("driver.core.fact_match.match_facts", "gold"):
         "driver/core/test_prepared_fact_v2.py::test_G8_per_x_joins_auto_link_equality",
     ("driver.core.fact_match.match_facts", "produced"):

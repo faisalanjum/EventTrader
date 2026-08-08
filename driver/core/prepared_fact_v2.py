@@ -677,7 +677,9 @@ def to_stored_fact(fact, *, driver, source, fye_month, source_id=None,
         "gp_start_date": period["gp_start_date"] if period else None,
         "gp_end_date": period["gp_end_date"] if period else None,
         "id": fact_id, "fact_scope": fact_scope,
-        "member_refs": it.member_refs,
+        # T10 (#827): the member_refs re-emission is DELETED — the clean path
+        # discarded it (validate_fact never reads it); the optional legacy
+        # lane builds its own dict and keeps its _ALLOWED_FIELDS door.
     }
 
 # What the STAGED adapter still does NOT do that the real `run_event` does.

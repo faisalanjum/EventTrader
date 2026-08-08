@@ -833,3 +833,19 @@ def test_T9_one_public_exact_number_predicate():
     with pytest.raises(SlotConversionError):
         slot_convert.check_xbrl_consistency(displayed=1.5, ix_scale=3,
                                             full_value=1500)  # float at door 2
+
+
+def test_T10_the_clean_path_emits_no_member_refs():
+    """T10 (deletion-first): to_stored_fact re-emitted member_refs and the
+    clean path DISCARDED it (validate_via_production passes it to validate_fact
+    which never reads it). The emission is gone; the field stays in the stored
+    contract for the OPTIONAL legacy lane, which builds its own dict."""
+    from driver.core.driver_validators import _ALLOWED_FIELDS
+    noop = {"existing": lambda *a: None, "sec": lambda *a: None,
+            "predict": lambda *a: None, "corrected_fye": lambda *a: None}
+    f = fact(time_type="duration", fiscal_year=2025, fiscal_quarter=1)
+    stored = prepared_fact_v2.to_stored_fact(
+        f, driver={"name": "revenue", "fact_type": "metric"},
+        source=_PROD["source"], fye_month=12, lookups=noop)
+    assert "member_refs" not in stored
+    assert "member_refs" in _ALLOWED_FIELDS   # the optional lane keeps its door
