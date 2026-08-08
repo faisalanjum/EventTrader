@@ -2157,6 +2157,15 @@ def _evidence_from(fact, prepared):
         'dims_expanded': ctx['dims_expanded'],
         'entity': ctx.get('entity', ''),
         'hidden': hidden,
+        # EU-092 (#827): FAIL-CLOSED adjudication — the record is BORN
+        # COMPLETE at this one literal: every key exists from birth, and a
+        # default that survives the fill sites below IS the explicit
+        # no-such-evidence claim (in_table False, empty strings/lists, None
+        # spans) — the packet contract's verified-empty philosophy
+        # (explicit emptiness, never absence). Consumers read hard keys;
+        # deleting any default breaks them LOUDLY (measured: 8 primary
+        # nodes red under a deleted in_table). Receipt
+        # g2_evid_recall_EU-092.txt: zero recall — adjudication only.
         'in_table': False,
         'row_span': None,
         'block_span': None,

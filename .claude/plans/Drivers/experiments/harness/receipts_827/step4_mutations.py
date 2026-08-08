@@ -1700,6 +1700,13 @@ MUTATIONS = [
      "    return any(id(t) in fact_nodes for t in row.find_all(True))",
      "driver/relocation/test_row_label_span.py::"
      "test_EU077_a_tagged_th_header_row_still_supplies_the_column_header"),
+
+    (218, "EU-092: the in_table birth default is deleted from the evidence record",
+     "driver/relocation/inline_html.py",
+     "        'in_table': False,\n        'row_span': None,",
+     "        'row_span': None,",
+     "driver/relocation/test_row_label_span.py::"
+     "test_a_HIDDEN_fact_still_has_NO_visible_evidence"),
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",
