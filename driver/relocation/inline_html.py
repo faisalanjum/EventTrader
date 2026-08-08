@@ -835,7 +835,14 @@ _XML_PREFIX_NS = 'http://www.w3.org/XML/1998/namespace'
 
 
 def _clark(uri, local):
-    """(namespace URI, local name) written the way lxml stores a tag."""
+    """(namespace URI, local name) written the way lxml stores a tag.
+
+    EU-078 (#827 DERIVE-CITATION): the '{namespace}local' universal-name
+    (Clark) form is the PINNED dependency's documented tag representation —
+    lxml 6.0.2 (installed pin; drift row 5.3.1->6.0.2 recorded), namespaces
+    section of the official tutorial, https://lxml.de/tutorial.html#namespaces
+    ("the ElementTree API ... uses ... {namespace}localname"); notation after
+    J. Clark, http://www.jclark.com/xml/xmlns.htm."""
     return '{%s}%s' % (uri, local)
 
 
