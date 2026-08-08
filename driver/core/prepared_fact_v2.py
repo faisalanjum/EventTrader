@@ -75,11 +75,6 @@ def _unit_for_slot(name, level_unit, change_unit):
     the list."""
     return change_unit if name == "change_value" else level_unit
 
-# MODULE-PRIVATE, and deliberately not an attribute of any exported class: as a
-# class attribute it was reachable as `PreparedItemV2._ATTACH_TOKEN`, so the
-# "private" gate could be opened by anyone who read the source.
-_ATTACH_TOKEN = object()
-
 class SchemaError(ValueError):
     """The input violates PreparedFact v2. Reject — fix and resubmit."""
 
@@ -281,7 +276,6 @@ class PreparedItemV2:
     # source/code-owned — never model input, never part of the text exam
     member_refs: list = None
     xbrl_concept_raw: str = None
-    _attach_token: object = None
 
     def __post_init__(self):
         # DEEP-FREEZE HERE, at the dataclass boundary — the ONE place every
@@ -297,14 +291,12 @@ class PreparedItemV2:
         # them and cannot fall behind a new field.
         for name in self.__dataclass_fields__:
             object.__setattr__(self, name, _deep_freeze(getattr(self, name)))
-        # The public constructor may not carry an XBRL bundle: only
-        # the attach path may attach one, and it stamps this token.
-        if (self.xbrl_concept_raw is not None or self.member_refs is not None) \
-                and getattr(self, "_attach_token", None) is not _ATTACH_TOKEN:
-            raise SchemaError(
-                "an XBRL bundle may only be attached by the verified attach path "
-                "(xbrl_attach.attach_event_xbrl) — "
-                "a directly constructed concept is unverified by definition")
+        # W9 (#827): the runtime attach SENTINEL is DELETED — the boundary is
+        # proven STATICALLY instead (the alias-resolving AST node pins: one
+        # constructor site, inside _build; one non-None _build caller, the
+        # verified attach path; from_dict always None). A runtime token whose
+        # value any reader of the source could obtain was a lock with the key
+        # taped to it; the static proof has no key to steal.
         for req in ("driver_name", "driver_state", "quote"):
             v = getattr(self, req)
             if not isinstance(v, str) or not v.strip():
@@ -416,8 +408,8 @@ class PreparedItemV2:
 
 # the 32 MODEL-owned fields: everything except the source/code-owned pair and
 # any private machinery (a leading underscore is never part of the contract —
-# the attach token leaked in and made the count 33 until the arithmetic test
-# caught it)
+# a private machinery field once leaked in and made the count 33 until the
+# arithmetic test caught it)
 ITEM_FIELDS = tuple(k for k in PreparedItemV2.__dataclass_fields__
                     if k not in SOURCE_OWNED_FIELDS and not k.startswith("_"))
 

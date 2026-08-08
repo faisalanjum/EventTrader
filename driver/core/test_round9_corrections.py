@@ -103,8 +103,7 @@ def _refs_through_the_boundary(refs):
     return PreparedFactV2._build(
         {"fact_type": "metric", "part_ref": "p", "occurrence_in_part": None,
          "per_x": None, "item": item},
-        {"xbrl_concept_raw": "us-gaap:X", "member_refs": refs,
-         "_attach_token": p2._ATTACH_TOKEN})
+        {"xbrl_concept_raw": "us-gaap:X", "member_refs": refs})
 
 
 # --- 3. one document per event, actually enforced --------------------------

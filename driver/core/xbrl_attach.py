@@ -21,7 +21,7 @@ from types import MappingProxyType
 from driver.core.driver_ids import valid_source_id
 from driver.core.prepared_fact_v2 import (OUTCOME_CLASSES, PreparedFactV2,
                                           ProductionValidationError, SchemaError,
-                                          SourceUnavailable, _ATTACH_TOKEN,
+                                          SourceUnavailable,
                                           NUMERIC_SLOTS, _deep_freeze,
                                           _sha256_or_raise, verify_occurrence)
 from driver.core.slot_convert import MULTIPLIER_ONE_UNITS, SlotConversionError
@@ -807,8 +807,7 @@ def attach_event_xbrl(items, *, source_id, store, filing_provider, text_parts,
                 raise SchemaError("attach_event_xbrl: each item needs a concept")
             evidence = _checked_source_evidence(i["source_evidence"])
             fact = PreparedFactV2._build(i["fact"], {   # the fact schema law
-                "xbrl_concept_raw": concept, "member_refs": i["member_refs"],
-                "_attach_token": _ATTACH_TOKEN})
+                "xbrl_concept_raw": concept, "member_refs": i["member_refs"]})
             # ONLY THE FACT TRAVELS ON — the caller's refs list is never carried
             # past a provider callback (the #823 time-of-check/time-of-use hole).
             if fact.part_ref not in parts:

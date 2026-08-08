@@ -1077,8 +1077,7 @@ def test_TWO_DIFFERENT_axes_are_still_lawful():
     f = PreparedFactV2._build(
         {"fact_type": "metric", "part_ref": "p", "occurrence_in_part": None,
          "per_x": None, "item": item},
-        {"xbrl_concept_raw": "us-gaap:X", "member_refs": refs,
-         "_attach_token": _p2._ATTACH_TOKEN})
+        {"xbrl_concept_raw": "us-gaap:X", "member_refs": refs})
     assert len(f.item.member_refs) == 2
 
 

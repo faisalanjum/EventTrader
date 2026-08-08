@@ -521,11 +521,6 @@ def test_ATTACK_a_document_that_does_not_hash_to_its_source_is_refused():
              provider=FakeProvider(doc=other))          # harvested sha unchanged
 
 
-def test_ATTACK_the_attach_token_is_not_reachable_from_outside():
-    assert not hasattr(p2.PreparedItemV2, "_ATTACH_TOKEN")
-    assert not any(n.endswith("ATTACH_TOKEN") for n in dir(p2.PreparedItemV2))
-
-
 def test_ATTACK_a_frozen_polarity_proof_does_not_crash_matching():
     from driver.core import fact_match
     proof = {"polarity": "higher_favorable", "basis": "source_framing",
@@ -1081,8 +1076,8 @@ def test_827_every_public_INPUT_FIELD_is_REALLY_VALIDATED():
     caught. Coverage that depends on the spelling you choose is not coverage.
 
     Measured before it was built: 34 of 35 `PreparedItemV2` fields already
-    refuse, and the one that does not is `_attach_token`, which is private and
-    therefore not public surface.
+    refused (the 35th was the since-deleted private machinery field, W9 —
+    every remaining field is public surface and refuses).
     """
     import dataclasses
     unlawful = object()          # lawful for no field of any of these classes
@@ -1370,3 +1365,95 @@ def test_827R6_every_named_test_node_really_exists():
         if func not in names:
             missing.append(f"{owner}({param}) -> {path} has no {func}")
     assert not missing, missing
+
+
+def test_W9_the_verified_bundle_boundary_is_static_and_singular():
+    """W9: the runtime attach sentinel is DELETED; the boundary is proven
+    STATICALLY over every non-test module under driver/. Three live facts:
+      1. production constructs PreparedItemV2 in exactly ONE place — inside
+         PreparedFactV2._build;
+      2. exactly ONE production caller hands _build a non-None bundle — the
+         verified attach path (xbrl_attach);
+      3. from_dict always calls _build with None.
+    The matcher resolves ordinary aliases (import X as Y / from M import X
+    as Y) before matching, and its own alias-shaped mutant (an in-memory
+    module using BOTH alias forms) must report both plants — a matcher that
+    cannot see aliases proves nothing."""
+    import ast, os
+
+    def scan(source, relname):
+        """(constructor-call sites, non-None _build-call sites) with aliases
+        resolved for PreparedItemV2 / PreparedFactV2 / their module."""
+        tree = ast.parse(source)
+        ctor_names, mod_aliases, fact_aliases = set(), set(), set()
+        for n in ast.walk(tree):
+            if isinstance(n, ast.ImportFrom):
+                for a in n.names:
+                    if a.name == "PreparedItemV2":
+                        ctor_names.add(a.asname or a.name)
+                    if a.name == "PreparedFactV2":
+                        fact_aliases.add(a.asname or a.name)
+                    if n.module and n.module.endswith("prepared_fact_v2") \
+                            and a.name == "prepared_fact_v2":
+                        mod_aliases.add(a.asname or a.name)
+            elif isinstance(n, ast.Import):
+                for a in n.names:
+                    if a.name.endswith("prepared_fact_v2"):
+                        mod_aliases.add(a.asname or a.name.split(".")[0])
+        if relname.endswith("prepared_fact_v2.py"):
+            ctor_names.add("PreparedItemV2")
+            fact_aliases.add("PreparedFactV2")
+        ctors, builds = [], []
+        for n in ast.walk(tree):
+            if not isinstance(n, ast.Call):
+                continue
+            f = n.func
+            if isinstance(f, ast.Name) and f.id in ctor_names:
+                ctors.append((relname, n.lineno))
+            elif isinstance(f, ast.Attribute):
+                v = f.value
+                if f.attr == "PreparedItemV2" and isinstance(v, ast.Name) \
+                        and v.id in mod_aliases:
+                    ctors.append((relname, n.lineno))
+                elif f.attr == "_build":
+                    owner_ok = (isinstance(v, ast.Name)
+                                and (v.id in fact_aliases or v.id == "cls"
+                                     or v.id in mod_aliases)) or \
+                               (isinstance(v, ast.Attribute)
+                                and v.attr == "PreparedFactV2")
+                    if owner_ok and not (len(n.args) >= 2
+                                         and isinstance(n.args[1], ast.Constant)
+                                         and n.args[1].value is None):
+                        builds.append((relname, n.lineno))
+        return ctors, builds
+
+    # THE MUTANT CONTROL: both alias forms planted; the matcher must see both.
+    plant = (
+        "from driver.core.prepared_fact_v2 import PreparedItemV2 as Item\n"
+        "from driver.core import prepared_fact_v2 as pf2\n"
+        "def a():\n    return Item(x=1)\n"
+        "def b():\n    return pf2.PreparedFactV2._build({}, {'k': 1})\n")
+    pc, pb = scan(plant, "plant.py")
+    assert len(pc) == 1 and len(pb) == 1, (pc, pb)
+
+    # THE REAL TREE: every non-test module under driver/, hidden-inclusive.
+    root = os.path.join(os.path.dirname(os.path.abspath(p2.__file__)), "..")
+    ctors, builds = [], []
+    for dirpath, _dirs, files in os.walk(os.path.normpath(root)):
+        for fn in files:
+            if not fn.endswith(".py") or fn.startswith("test_"):
+                continue
+            rel = os.path.relpath(os.path.join(dirpath, fn),
+                                  os.path.normpath(root))
+            src = open(os.path.join(dirpath, fn), encoding="utf-8").read()
+            c, b = scan(src, rel)
+            ctors += c
+            builds += b
+    assert len(ctors) == 1 and ctors[0][0].endswith("prepared_fact_v2.py"), ctors
+    assert len(builds) == 1 and builds[0][0].endswith("xbrl_attach.py"), builds
+    # fact 3: from_dict's own call passes the literal None (excluded above),
+    # so it is absent from `builds` BY the matcher's non-None filter — and the
+    # sentinel machinery itself is gone:
+    import inspect
+    src = inspect.getsource(p2)
+    assert "_ATTACH_TOKEN" not in src and "_attach_token" not in src
