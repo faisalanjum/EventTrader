@@ -1297,6 +1297,13 @@ MUTATIONS = [
      '    if False:\n        out = out.rstrip("0").rstrip(".")',
      "driver/core/test_v2_attacks.py::"
      "test_ATTACK_the_canonical_length_matches_the_real_canonicalizer"),
+
+    (161, "EU-054: a Core-facing evidence key spelling drifts off the sheet",
+     "driver/relocation/inline_html.py",
+     "SOURCE_EVIDENCE_KEYS = ('representation_sha256', 'quote_span',\n                        'raw_label_span', 'pieces')",
+     "SOURCE_EVIDENCE_KEYS = ('representation_sha256', 'quote_span',\n                        'raw_label_span', 'piecez')",
+     "driver/relocation/test_packet_items_through_the_door.py::"
+     "test_EU054_the_core_facing_evidence_vocabulary_is_the_sheets"),
 ]
 
 

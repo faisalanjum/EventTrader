@@ -171,3 +171,18 @@ def test_every_saved_packet_item_attaches_on_its_LITERAL_evidence(
         assert fact.item.xbrl_concept_raw == item["xbrl"]["concept"]
     finally:
         store.close()
+
+
+def test_EU054_the_core_facing_evidence_vocabulary_is_the_sheets():
+    """EU-054 (#827): the Core-facing spellings ARE the frozen packet
+    vocabulary — the Core-Fiscal contract sheet section 2 clause, pinned
+    member-for-member. The corpus nodes above prove the SUBMIT side against
+    saved packets (working/live lanes; the corpus lives outside the git
+    tree); this node pins the SHAPE side self-contained, so a drifted
+    spelling reddens in the isolated lane too."""
+    from driver.relocation.inline_html import (PIECE_KEYS, PIECE_KINDS,
+                                               SOURCE_EVIDENCE_KEYS)
+    assert SOURCE_EVIDENCE_KEYS == ('representation_sha256', 'quote_span',
+                                    'raw_label_span', 'pieces')
+    assert PIECE_KEYS == ('kind', 'text', 'span')
+    assert PIECE_KINDS == ('header', 'section')

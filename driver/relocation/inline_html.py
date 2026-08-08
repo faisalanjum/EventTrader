@@ -2760,6 +2760,14 @@ def reconcile(displayed, fmt_expanded, scale, sign, raw_value):
 # re-imported an arithmetic defect it had already fixed elsewhere.
 # ---------------------------------------------------------------------------
 
+# EU-054 (#827): these Core-facing spellings REUSE the frozen packet
+# vocabulary — the exact clause is the Core-Fiscal contract sheet
+# (Core_Fiscal_ContractSheet_2026-07-31.md) section 2, "source_evidence —
+# exactly four keys": representation_sha256 (SHA-256 of the PREPARED text,
+# harvest-time) · quote_span ([start, end) character offsets) ·
+# raw_label_span (inside the quote span, or null) · pieces (ordered
+# {kind, text, span}; kind in ('header', 'section'); order CARRIED, never
+# chosen). Nothing here invents a spelling; the sheet is the owner.
 SOURCE_EVIDENCE_KEYS = ('representation_sha256', 'quote_span',
                         'raw_label_span', 'pieces')
 PIECE_KEYS = ('kind', 'text', 'span')
