@@ -1290,6 +1290,13 @@ MUTATIONS = [
      "_MAX_STORED_CHARS = 4097",
      "driver/core/test_round12_exact_scale.py::"
      "test_the_storable_bound_matches_the_owner_contract"),
+
+    (160, "S11: the canonicalizer stops stripping trailing zeros",
+     "driver/core/driver_ids.py",
+     '    if "." in out:\n        out = out.rstrip("0").rstrip(".")',
+     '    if False:\n        out = out.rstrip("0").rstrip(".")',
+     "driver/core/test_v2_attacks.py::"
+     "test_ATTACK_the_canonical_length_matches_the_real_canonicalizer"),
 ]
 
 

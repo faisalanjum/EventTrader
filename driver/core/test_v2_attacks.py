@@ -813,9 +813,22 @@ def test_ATTACK_the_canonical_length_matches_the_real_canonicalizer():
     from driver.core.driver_ids import dec_canon
     from driver.core.slot_convert import assert_storable, stored_char_length
     for v in ("1." + "0" * 1100, "1.30", "-0.10", "390", "0.000390", "0",
-              "-1234567890.12", "1E+120", "0.5", "1.000"):
+              "-1234567890.12", "1E+120", "0.5", "1.000",
+              # S11 (#827), the missing edge controls (FD §5.1 OD-8: no
+              # exponent, no trailing zeros, -0 -> 0):
+              "-0",          # signed zero canonicalises to "0" (length 1)
+              "-0.00",       # signed zero with trailing zeros -> "0"
+              "0E+10",       # zero with a POSITIVE exponent -> "0"
+              "0E-10",       # zero with a NEGATIVE exponent -> "0"
+              "1E-3",        # non-zero negative exponent -> "0.001"
+              "1200E+1"):    # coefficient zeros + exponent -> "12000"
         d = Decimal(v)
         assert stored_char_length(d) == len(dec_canon(d)), v
+    # the S11 controls' EXACT canonical forms (the arithmetic, not just parity)
+    assert dec_canon(Decimal("-0")) == "0"
+    assert dec_canon(Decimal("0E+10")) == "0"
+    assert dec_canon(Decimal("1E-3")) == "0.001"
+    assert stored_char_length(Decimal("-0.00")) == 1
     assert_storable(Decimal("1." + "0" * 1100))      # canonical form is just "1"
 
 
