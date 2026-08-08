@@ -18,7 +18,9 @@ import pytest
 from driver.core.prepared_fact_v2 import SchemaError
 from driver.core.test_round10_event_boundary import (_ACC, _DOOR_DOC, _Counting,
                                                      _CountingProvider,
-                                                     _door_item, parts_for)
+                                                     _XMLNS, _door_item,
+                                                     _door_row,
+                                                     parts_for)
 from driver.core.xbrl_attach import _default_outcome, attach_event_xbrl
 from driver.relocation.inline_html import SOURCE_EVIDENCE_KEYS, prepare
 from driver.core.driver_neo4j_adapter import GraphFactRows
@@ -299,6 +301,42 @@ def test_matrix_f_a_second_element_on_the_same_row_also_attaches():
     _attached(_run(_door_item("us-gaap:B", "fB")))
 
 
+# THE SAME DOOR DOCUMENT with its one block tag swapped for an inline `span`.
+# Nothing else changes, so anything this fixture reaches that `_DOOR_DOC` does
+# not is attributable to the OWNER of the fact and to nothing else.
+_SPAN_DOC = _DOOR_DOC.replace("<p>", "<span>").replace("</p>", "</span>")
+# THE PREMISE, asserted on the fixture itself rather than on the rule under
+# test: the document contains no table or block tag ANYWHERE, so the bound
+# element cannot have a `td`/`th` or `p`/`li`/`div` ancestor and its owner can
+# only be the inline `span` holding it.
+assert "<span>" in _SPAN_DOC and not any(
+    t in _SPAN_DOC for t in ("<p>", "<li", "<div", "<td", "<th", "<tr")), _SPAN_DOC
+
+
+def test_matrix_f_a_fact_owned_only_by_a_SPAN_attaches_through_the_door():
+    """THE MUST-ALLOW twin of matrix-k, through the real Core door.
+
+    Filings do not all wrap their facts in a table cell or a `p`/`li`/`div`.
+    When the nearest owner is an inline `span` the element is still perfectly
+    visible and perfectly locatable, so the door must ATTACH it. Until the
+    direct-parent owner existed, the walker recorded no span for that parent,
+    the evidence builder returned None, and this lawful fact parked exactly like
+    matrix-k's genuinely undescribable one — the door losing a real fact over a
+    formatting choice. Matrix-k pins the refusal; this pins the permission, and
+    neither is sound without the other.
+    """
+    class P(_CountingProvider):
+        def get_filing_document(self, s):
+            return _SPAN_DOC
+
+    item = _door_item("us-gaap:A", "fA", doc=_SPAN_DOC)
+    fact = _attached(attach_event_xbrl([item], source_id=_ACC, store=_Counting(),
+                                       filing_provider=P(),
+                                       text_parts=parts_for([item])))
+    # the SAME quote the block-owned fixture yields, stated as a literal
+    assert fact.item.quote == "726 726"
+
+
 def test_matrix_g_character_offsets_not_byte_offsets():
     """A multi-byte character before the quote moves the BYTE offset but not
     the CHARACTER offset. Spans are Python string indices; if any of this were
@@ -376,24 +414,24 @@ _NOT_AT_SPAN = "is not the text at its own span"
 # and the row below repeats the same text at a different span.
 
 _TABLE_DOC = (
-    '<html><body><xbrli:context id="c1"><xbrli:entity><xbrli:identifier>'
+    f'<html {_XMLNS}><body><ix:header><ix:resources><xbrli:context id="c1"><xbrli:entity><xbrli:identifier scheme="http://www.sec.gov/CIK">'
     '0000320193</xbrli:identifier></xbrli:entity><xbrli:period>'
     '<xbrli:startDate>2024-01-01</xbrli:startDate><xbrli:endDate>'
-    '2024-06-30</xbrli:endDate></xbrli:period></xbrli:context>'
-    '<xbrli:unit id="u1"><xbrli:measure>iso4217:USD</xbrli:measure></xbrli:unit>'
+    '2024-06-30</xbrli:endDate></xbrli:period></xbrli:context></ix:resources></ix:header>'
+    '<ix:header><ix:resources><xbrli:unit id="u1"><xbrli:measure>iso4217:USD</xbrli:measure></xbrli:unit></ix:resources></ix:header>'
     '<table>'
     '<tr><td>Segment detail</td></tr>'
     '<tr><td></td><td>Three months</td><td>Six months</td></tr>'
     '<tr><td>North America</td>'
     '<td><ix:nonFraction id="t1" name="us-gaap:A" contextRef="c1" unitRef="u1"'
-    ' scale="6" format="">726</ix:nonFraction></td>'
+    ' scale="6" decimals="-6">726</ix:nonFraction></td>'
     '<td><ix:nonFraction id="t2" name="us-gaap:A" contextRef="c1" unitRef="u1"'
-    ' scale="6" format="">726</ix:nonFraction></td></tr>'
+    ' scale="6" decimals="-6">726</ix:nonFraction></td></tr>'
     '<tr><td>North America</td>'
     '<td><ix:nonFraction id="t3" name="us-gaap:A" contextRef="c1" unitRef="u1"'
-    ' scale="6" format="">726</ix:nonFraction></td>'
+    ' scale="6" decimals="-6">726</ix:nonFraction></td>'
     '<td><ix:nonFraction id="t4" name="us-gaap:A" contextRef="c1" unitRef="u1"'
-    ' scale="6" format="">726</ix:nonFraction></td></tr>'
+    ' scale="6" decimals="-6">726</ix:nonFraction></td></tr>'
     '</table></body></html>')
 _TABLE_TEXT = prepare(_TABLE_DOC)["text"]
 
@@ -406,14 +444,15 @@ class _TableStore:
         return 1
 
     def get_source_company_cik(self, s):
-        return "320193"
+        return "0000320193"
 
     def get_xbrl_fact_dimensions(self, s, c):
-        return GraphFactRows(rows=[{"period_type": "duration", "start_date": "2024-01-01",
-                 "end_date": "2024-07-01", "dims": [], "fact_id": self._id,
-                 "context_id": "c1", "unit_ref": "u1",
-                 "unit_name": "iso4217:USD", "is_divide": "0",
-                 "value": "726000000", "decimals": "0"}], exclusions=())
+        # THE SHARED ROW OWNER, not a second hand-written copy. This dict had
+        # drifted into a duplicate of `_door_row`, so a new required column had
+        # to be added in two places — which is exactly how one of them goes
+        # stale. `_door_row` also carries the concept identity the binder needs.
+        return GraphFactRows(rows=[_door_row(self._id, concept=c)],
+                             exclusions=())
 
 
 class _TableProvider:
@@ -615,17 +654,38 @@ def test_matrix_j_a_one_character_shift_of_a_PIECE_span_is_refused(which, delta)
 
 
 # ---- 7. NO REPRODUCIBLE LOCATION -> PARK, never an invented locator --------
+#
+# THE FIXTURE CHANGED, THE RULE DID NOT. It used to place the fact directly in
+# `<body>`, which had no reproducible location only because the walker was never
+# asked to record that parent — a defect, now fixed, not a property of the
+# filing. The case that genuinely has no visible location is a CSS-HIDDEN owner:
+# the walker deliberately skips hidden subtrees, so no span exists to report.
+# That is also the only kind the frozen manifest actually contains, all 6,091 of
+# them.
 
 _NO_BLOCK_DOC = (
-    '<html><body><xbrli:context id="c1"><xbrli:entity><xbrli:identifier>'
+    f'<html {_XMLNS}><body><ix:header><ix:resources><xbrli:context id="c1"><xbrli:entity><xbrli:identifier scheme="http://www.sec.gov/CIK">'
     '0000320193</xbrli:identifier></xbrli:entity><xbrli:period>'
     '<xbrli:startDate>2024-01-01</xbrli:startDate><xbrli:endDate>'
-    '2024-06-30</xbrli:endDate></xbrli:period></xbrli:context>'
-    '<xbrli:unit id="u1"><xbrli:measure>iso4217:USD</xbrli:measure></xbrli:unit>'
-    # the element sits DIRECTLY under <body>: no table row, and no p/li/div, so
-    # the walker records no span for anything that could be its block
-    '<ix:nonFraction id="nb" name="us-gaap:A" contextRef="c1" unitRef="u1"'
-    ' scale="6" format="">726</ix:nonFraction></body></html>')
+    '2024-06-30</xbrli:endDate></xbrli:period></xbrli:context></ix:resources></ix:header>'
+    '<ix:header><ix:resources><xbrli:unit id="u1"><xbrli:measure>iso4217:USD</xbrli:measure></xbrli:unit></ix:resources></ix:header>'
+    # `nb` is VISIBLE and lawful — whitespace-only content under the official
+    # `ixt:fixed-zero` transform, which returns 0 for any input — so it binds,
+    # `hidden` is False and the hidden guard cannot pre-empt this test. It
+    # displays nothing, so its own span is empty and `source_evidence` returns
+    # None: exactly the later branch under test. (Truly EMPTY content is
+    # refused earlier as `malformed_fact_content_model`, Inline XBRL 1.1
+    # §10.1.1, so whitespace is the lawful way to reach this.) The first div
+    # supplies representation text so the submitted evidence still reproduces
+    # real characters and no earlier envelope check fires. That text is the
+    # single character `0` — the SAME number `ixt:fixed-zero` yields — so the
+    # submitted quote, the slot and the graph row all agree, and no future
+    # quote-versus-value check can pre-empt the canonical-evidence branch this
+    # test exists for.
+    '<div>0</div>'
+    '<div><ix:nonFraction id="nb" name="us-gaap:A" contextRef="c1" '
+    'unitRef="u1" scale="6" decimals="-6" format="ixt:fixed-zero"> '
+    '</ix:nonFraction></div></body></html>')
 
 
 def test_matrix_k_an_element_with_no_reproducible_location_PARKS():
@@ -641,34 +701,51 @@ def test_matrix_k_an_element_with_no_reproducible_location_PARKS():
                                                source_evidence)
     prep = prepare(_NO_BLOCK_DOC)
     ev, why = element_evidence(prep, "nb")
-    # the premise, asserted: this element resolves but HAS no reproducible span
+    # THE PREMISE, ASSERTED. The element resolves and is NOT hidden, so the
+    # earlier hidden guard cannot fire; it simply displays nothing, so the
+    # canonical builder can produce no evidence for it. Its block span exists
+    # but is EMPTY — which is the honest shape here, and why the trigger being
+    # asserted is the builder's own None rather than a missing span.
     assert ev is not None, why
-    assert ev["row_span"] is None and ev["block_span"] is None
+    assert ev["hidden"] is False, "a hidden fact would park for another reason"
+    assert ev["displayed"] == "", ev["displayed"]
     assert source_evidence(prep, ev) is None
 
-    slot = {"value": Decimal("726"), "scale_multiplier": Decimal(10) ** 6,
+    # THE LAWFUL ZERO RESULT, consistently: `ixt:fixed-zero` yields 0, so the
+    # submitted slot and the graph row both say 0. Any other number parks at the
+    # RECONCILE step and this test would never reach the branch it exists for.
+    slot = {"value": Decimal("0"), "scale_multiplier": Decimal(10) ** 6,
             "unit_scale_evidence": None}
     it = {k: None for k in ITEM_FIELDS}
-    it.update(driver_name="thing", driver_state="reported", quote="726",
+    it.update(driver_name="thing", driver_state="reported", quote="0",
               measurement_raw_spans=[], slice_parts=[], level_unit="usd",
               level_low=dict(slot), level_high=dict(slot), time_type="duration",
               period_start_date="2024-01-01", period_end_date="2024-06-30")
     # A well-formed claim: the submitted evidence is structurally lawful and
     # its spans DO reproduce real text, so nothing earlier can fire.
     text = prep["text"]
-    start = text.index("726")
+    # THE EXACT ONE-CHARACTER SPAN of the visible `0`. The header's own text
+    # (the CIK, the dates) also carries zeros, so the character is addressed
+    # from the END, where the only displayed div sits — and that is asserted,
+    # not assumed, so a fixture change can never silently move the span.
+    start = text.rindex("0")
+    assert start == len(text) - 1 and text[start:start + 1] == "0", repr(text)
     item = {"fact": {"fact_type": "metric", "part_ref": "p1",
                      "occurrence_in_part": None, "per_x": None, "item": it},
             "concept": "us-gaap:A", "member_refs": [],
             "source_evidence": {"representation_sha256": prep["text_sha"],
-                                "quote_span": [start, start + 3],
+                                "quote_span": [start, start + 1],
                                 "raw_label_span": None, "pieces": []}}
 
     class _Store(_TableStore):
         def get_xbrl_fact_dimensions(self, s, c):
             base = super().get_xbrl_fact_dimensions(s, c)
+            # THE GRAPH AGREES WITH THE FACT, deliberately. `ixt:fixed-zero`
+            # yields 0, so a row holding any other number would park at the
+            # RECONCILE step and this test would pass without ever reaching the
+            # location branch it exists for.
             return GraphFactRows(
-                rows=[dict(r, fact_id="nb") for r in base.rows],
+                rows=[dict(r, fact_id="nb", value="0") for r in base.rows],
                 exclusions=base.exclusions)
 
     class _P:
@@ -679,4 +756,60 @@ def test_matrix_k_an_element_with_no_reproducible_location_PARKS():
     _refused(attach_event_xbrl([item], source_id=_ACC, store=_Store("nb"),
                                filing_provider=_P(),
                                text_parts=parts_for([item])),
-             ProductionValidationError, "no reproducible row/block span")
+             ProductionValidationError,
+             "no reproducible visible row/block evidence")
+
+
+# --- #827 E3: rendered-text truth THROUGH THE DOOR (SEQ 234/235) ------------
+# Comments, script/style text and template contents are not displayed
+# evidence; a UA-hidden `rp` revealed by an author inline display is. Each
+# case binds (or not) through `attach_event_xbrl` itself. Ordering deviation
+# recorded in the bridge: these door pins were written AFTER the walk fix and
+# proven RED against an exact reconstructed pre-fix module state.
+
+def _ghost_door(fragment):
+    """_DOOR_DOC with `fragment` injected at the head of the fact block."""
+    return _DOOR_DOC.replace("<p>", "<p>" + fragment, 1)
+
+
+def test_E3_door_ghost_text_never_reaches_the_attached_quote():
+    """THE DOOR RUNS FIRST (SEQ 236): `_door_item` builds evidence that is
+    self-consistent with whatever representation the CURRENT code produces,
+    the public door ATTACHES it either way, and the independent expected
+    quote is what bites — against the pre-fix state the door returns a fact
+    whose quote CONTAINS the ghosts, which is the defect stated as evidence.
+    No setup assertion, hash mismatch or earlier refusal may stand in."""
+    doc = _ghost_door('<!--COMMENT--><script>GHOST</script>'
+                      '<style>.secret{display:none}</style>'
+                      '<template style="display:block">SPOOK</template>')
+
+    class P(_CountingProvider):
+        def get_filing_document(self, s):
+            return doc
+
+    item = _door_item("us-gaap:A", "fA", doc=doc)
+    fact = _attached(attach_event_xbrl([item], source_id=_ACC,
+                                       store=_Counting(), filing_provider=P(),
+                                       text_parts=parts_for([item])))
+    # THE INDEPENDENT LITERAL — the whole bite. Pre-fix the attached quote was
+    # 'COMMENT GHOST .secret{display:none} SPOOK 726 726'.
+    assert fact.item.quote == "726 726", fact.item.quote
+    # only now, the optional representation corollary
+    text = prepare(doc)["text"]
+    for ghost in ("COMMENT", "GHOST", ".secret", "SPOOK"):
+        assert ghost not in text, ghost
+
+
+def test_E3_door_an_author_revealed_rp_binds_as_ordinary_text():
+    doc = _ghost_door('<rp style="display:inline">SHOWN RP </rp>')
+    assert "SHOWN RP" in prepare(doc)["text"]
+
+    class P(_CountingProvider):
+        def get_filing_document(self, s):
+            return doc
+
+    item = _door_item("us-gaap:A", "fA", doc=doc)
+    fact = _attached(attach_event_xbrl([item], source_id=_ACC,
+                                       store=_Counting(), filing_provider=P(),
+                                       text_parts=parts_for([item])))
+    assert fact.item.quote == "SHOWN RP 726 726"
