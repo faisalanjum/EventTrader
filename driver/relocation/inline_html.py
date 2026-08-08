@@ -2941,6 +2941,17 @@ def _accuracy_ok(dec, prec):
     raw = collapsed
     if dec is not None:
         return True
+    # CL-040 (#827, EU-065/066/067): the union members' exact citations —
+    # W3C XML Schema Part 2 Datatypes 2e, REC 2004-10-28: xs:integer
+    # section 3.3.13 (any sign; decimals' numeric member),
+    # xs:nonNegativeInteger section 3.3.20 (value space >= 0, so '-0'
+    # DENOTES ZERO and is lawful while a negative with any nonzero digit
+    # is not — decided below without converting),
+    # https://www.w3.org/TR/xmlschema-2/#nonNegativeInteger ; the INF arm
+    # above is the exact three-character string-union member (entry 243
+    # pins it for EU-066 as well) and the official integer grammar arm is
+    # fullmatch-anchored (the recorded trailing-newline defect stays
+    # caught).
     return not (raw.startswith('-') and any(c in '123456789' for c in raw))
 
 

@@ -1889,6 +1889,20 @@ MUTATIONS = [
      "    if (dec is None) == (prec is None):        # both, or neither\n        return True",
      "driver/relocation/test_semantic_fact_value.py::"
      "test_NEITHER_decimals_nor_precision_is_refused"),
+
+    (245, "EU-065: the nonzero-digit test vanishes and -0 precision refuses",
+     "driver/relocation/inline_html.py",
+     "    return not (raw.startswith('-') and any(c in '123456789' for c in raw))",
+     "    return not raw.startswith('-')",
+     "driver/relocation/test_semantic_fact_value.py::"
+     "test_precision_NON_NEGATIVITY_is_decided_WITHOUT_converting"),
+
+    (246, "EU-067: the accuracy grammar anchor weakens to match",
+     "driver/relocation/inline_html.py",
+     "    if not _integer_pattern().fullmatch(collapsed):\n        return False",
+     "    if not _integer_pattern().match(collapsed):\n        return False",
+     "driver/relocation/test_semantic_fact_value.py::"
+     "test_EACH_rule_is_load_bearing_ALONE"),
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",
