@@ -1799,6 +1799,12 @@ def _collapse(value):
     XML does not call space at all — and a value padded with those is NOT
     padded: it is a different value, and it must stay one.
     """
+    # EU-079 (#827): the single-space join IS collapse's merge step — XSD
+    # Part 2 2e section 4.3.6 (collapse: after replace, contiguous
+    # sequences of #x20 collapse to a SINGLE #x20 and leading/trailing
+    # #x20 are removed; the EU-045 URLs one owner up). Fusing instead of
+    # joining would weld inner tokens together (pinned: 18 padding-family
+    # reds under the fuse mutant).
     return ' '.join(part for part in value.translate(_ATTR_WS).split(' ')
                     if part)
 

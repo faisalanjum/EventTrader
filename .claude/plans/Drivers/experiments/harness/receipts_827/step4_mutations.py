@@ -1917,6 +1917,13 @@ MUTATIONS = [
      "        totals[spelling] = ordinal + 2",
      "driver/relocation/test_semantic_fact_value.py::"
      "test_a_plain_text_fact_binds"),
+
+    (249, "EU-079: the collapse join fuses tokens instead of single-spacing",
+     "driver/relocation/inline_html.py",
+     "    return ' '.join(part for part in value.translate(_ATTR_WS).split(' ')",
+     "    return ''.join(part for part in value.translate(_ATTR_WS).split(' ')",
+     "driver/relocation/test_two_view_bridge.py::"
+     "test_a_collapse_faceted_value_ignores_XML_padding_but_not_inner_space"),
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",
