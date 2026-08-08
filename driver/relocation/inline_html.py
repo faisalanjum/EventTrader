@@ -1846,6 +1846,12 @@ def _lexical(el):
     selected — so a filing that binds Inline XBRL to `i:` is asked for `i:` —
     and no prefix is ever assumed, listed or preferred.
     """
+    # EU-106 (#827): the prefix:local template is the QName lexical form
+    # itself — Namespaces in XML 1.0 (Third Edition), REC 2009-12-08,
+    # section 4 "Qualified Names" (QName ::= PrefixedName | UnprefixedName;
+    # PrefixedName ::= Prefix ':' LocalPart),
+    # https://www.w3.org/TR/xml-names/#ns-qualnames — transcribed for the
+    # renderer handle only, never as identity (the docstring law above).
     q = etree.QName(el)
     return ('%s:%s' % (el.prefix, q.localname) if el.prefix
             else q.localname).lower()

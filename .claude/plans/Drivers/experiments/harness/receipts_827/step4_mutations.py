@@ -1966,6 +1966,13 @@ MUTATIONS = [
      "    return (el.text or '0') + ''.join(child.tail or '' for child in el)",
      "driver/relocation/test_context_content_model.py::"
      "test_827B14_comments_and_PIs_are_ignored_and_the_VALUE_is_rebuilt"),
+
+    (256, "EU-106: the QName separator drifts and every prefixed handle misses",
+     "driver/relocation/inline_html.py",
+     "    return ('%s:%s' % (el.prefix, q.localname) if el.prefix",
+     "    return ('%s_%s' % (el.prefix, q.localname) if el.prefix",
+     "driver/relocation/test_two_view_bridge.py::"
+     "test_ANY_lawful_prefix_for_the_fact_element_still_binds"),
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",
