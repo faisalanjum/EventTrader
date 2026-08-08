@@ -1618,6 +1618,13 @@ def _parse_unit(u):
     them is the classifier's job downstream, never the parser's.
     """
     I = XBRL_INSTANCE_NAMESPACE
+    # CL-078 (#827, EU-120): the unit element names are XBRL 2.1's own —
+    # section 4.8 unit: EITHER one or more xbrli:measure children OR exactly
+    # one xbrli:divide holding exactly one xbrli:unitNumerator and one
+    # xbrli:unitDenominator, each holding measures (the normative instance
+    # schema; edition/errata/URL at the CL-028 block). Asked in the
+    # instance namespace, never by prefix; a drifted name silently empties
+    # its list (measured: the measure drift reds 80 nodes).
     divides = _kids(u, I, 'divide')
     plain = _kids(u, I, 'measure')
     if len(divides) > 1 or (divides and plain) or not (divides or plain):
@@ -1697,6 +1704,11 @@ def _parse_unit(u):
                        (_kids(divides[0], I, 'unitDenominator') if divides else ())),
                      *((m, 'measure') for m in measures)):
         verdict = _shape(el, name)
+        # CL-079 (#827, EU-118): the unit ladder's twin of the EU-113
+        # adjudication — the two words are _shape's own published verdicts
+        # and BOTH arms REFUSE (malformed -> None so the caller names it;
+        # unsupported -> the named reason verbatim); nothing binds on a
+        # non-'ok' verdict, and the drift is loud (32 reds).
         if verdict == 'malformed':
             return None
         if verdict == 'unsupported':           # the string IS the reason — the
@@ -1710,6 +1722,18 @@ def _parse_unit(u):
     # `shares`. Matching the literal prefix threw such a filing away.
     return {'measures': num + den if divides else tuple(_measure_text(m)
                                                        for m in plain),
+            # CL-079 (#827, EU-119): FAIL-CLOSED record shape — every key is
+            # emitted from the SAME parse (no key can disagree with another),
+            # and the two halves are kept in their own named slots rather than
+            # one ordered blob, so a consumer cannot mistake a denominator for
+            # a numerator; the swap is pinned by the lawful-divide door.
+            # CONSUMER CENSUS (repo-wide, this row): graph_numerator /
+            # graph_denominator / expanded_* / measures / is_divide are read by
+            # the binder and the locator; the PLAIN 'numerator'/'denominator'
+            # spellings have NO production reader today — only the context
+            # suite's shape assertion — so they are recorded here as a
+            # returned-but-unread surface (candidate for the final
+            # minimality sweep, the XMLNAME-MIN precedent), not silently kept.
             'is_divide': bool(divides), 'numerator': num, 'denominator': den,
             'graph_numerator': tuple(_graph_measure(m) for m in n_meas),
             'graph_denominator': tuple(_graph_measure(m) for m in d_meas),

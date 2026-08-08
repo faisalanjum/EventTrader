@@ -2036,6 +2036,27 @@ MUTATIONS = [
      "    members = [m for b in boxes for m in _kids(b, D, 'explicitMemberX')]",
      "driver/relocation/test_context_content_model.py::"
      "test_827B14_measure_and_explicitMember_values_are_rebuilt"),
+
+    (266, "EU-118: the unit malformed verdict arm drifts and bad unit shapes bind",
+     "driver/relocation/inline_html.py",
+     "        if verdict == 'malformed':\n            return None\n        if verdict == 'unsupported':           # the string IS the reason \u2014 the\n            return UNSUPPORTED_UNIT_TYPE",
+     "        if verdict == 'malformedX':\n            return None\n        if verdict == 'unsupported':           # the string IS the reason \u2014 the\n            return UNSUPPORTED_UNIT_TYPE",
+     "driver/relocation/test_context_content_model.py::"
+     "test_827B16_an_xsi_type_on_an_ANONYMOUS_unit_element_is_malformed"),
+
+    (267, "EU-119: the unit record swaps its numerator and denominator slots",
+     "driver/relocation/inline_html.py",
+     "            'is_divide': bool(divides), 'numerator': num, 'denominator': den,",
+     "            'is_divide': bool(divides), 'numerator': den, 'denominator': num,",
+     "driver/relocation/test_context_content_model.py::"
+     "test_827B16_a_lawful_DIVIDE_still_binds"),
+
+    (268, "EU-120: the unit measure element name drifts and every unit empties",
+     "driver/relocation/inline_html.py",
+     "    plain = _kids(u, I, 'measure')",
+     "    plain = _kids(u, I, 'measureX')",
+     "driver/relocation/test_route_a_unit_identity.py::"
+     "test_a_LAWFUL_ALIAS_for_the_official_currency_URI_is_the_same_unit"),
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",
