@@ -108,6 +108,16 @@ def _text(node, hidden=frozenset()):
     U+200B where the walk separates on it, and it leaked hidden-descendant
     text into `displayed` — so the walk is now the only reader.
     """
+    # EU-147 (#827): the else-'' arm is UNOBSERVABLE BY MEASUREMENT — all
+    # three callers (displayed at the fact element; row_text behind the
+    # in_table=True guarantee; block behind the find_parent-or-parent
+    # owner) pass a non-None node by construction, and a fabrication
+    # mutant (else 'X') leaves the whole primary battery green. If a
+    # future path ever reached it, '' is the explicit no-text claim
+    # (EU-092): _words('') selects nothing, so the arm can only WITHHOLD,
+    # never fabricate. No mutation entry exists for it, per the
+    # F1/entry-120 no-detector-for-unobservable precedent. Receipt
+    # g2_evid_recall_EU-147.txt carries the measurement.
     return _visible_walk(node, hidden=hidden) if node else ''
 
 
