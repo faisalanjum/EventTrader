@@ -2366,6 +2366,27 @@ MUTATIONS = [
      "driver/relocation/test_row_label_span.py::"
      "test_EU058_a_UA_hidden_element_never_leaks_its_text"),
 
+    (315, "EU-090: the non-XDT scope refusal token drifts",
+     "driver/relocation/inline_html.py",
+     "        return None, 'unsupported_non_xdt_context'",
+     "        return None, 'unsupported_non_xdt_contextX'",
+     "driver/relocation/test_context_content_model.py::"
+     "test_lawful_NON_XDT_content_is_UNSUPPORTED_not_malformed"),
+
+    (316, "EU-091: the typed-dimension scope refusal token drifts",
+     "driver/relocation/inline_html.py",
+     "        return None, 'typed_dimensions_unsupported'",
+     "        return None, 'typed_dimensions_unsupportedX'",
+     "driver/relocation/test_context_content_model.py::"
+     "test_a_typed_dimension_keeps_its_own_reason"),
+
+    (317, "EU-117: the unsupported-context-type scope token drifts",
+     "driver/relocation/inline_html.py",
+     "            return 'unsupported_context_type'  # caller stores it verbatim",
+     "            return 'unsupported_context_typeX'  # caller stores it verbatim",
+     "driver/relocation/test_context_content_model.py::"
+     "test_827B12_a_NO_NAMESPACE_custom_type_parks_as_unsupported"),
+
     (281, "EU-169: the exactly-one-child bound widens to two",
      "driver/relocation/inline_html.py",
      "        if len(kids) != 1 or len(elements) != 1 \\",

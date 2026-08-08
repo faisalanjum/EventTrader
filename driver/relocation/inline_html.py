@@ -2492,6 +2492,18 @@ def _evidence_from(fact, prepared):
     # dimensions is valid markup this product cannot yet carry. It refuses —
     # ignoring it would merge two genuinely different contexts — but it says
     # the true thing rather than calling the filer's markup malformed.
+    # EU-090 + EU-091 + EU-117 (#827) PARK-NAMED-REASON+MONITOR: these three
+    # spellings are SCOPE refusals, not malformed-markup verdicts, and each
+    # is the binder's OWN published token (the EU-160/CL-039 ownership block)
+    # naming WHICH lawful construct this reader does not carry — open
+    # segment/scenario content beside the dimensions (here), typed dimensions
+    # (above), and a resolved non-standard context type (at _shape's caller).
+    # The owner's E-SUPPORTED-SCOPE ruling governs all three: a standard
+    # proves a construct lawful, never permission to omit it, so each refusal
+    # PARKS under its named id and the pile is counted by the
+    # first-production census — never a silent drop and never "malformed",
+    # which would blame the filer for our scope. Each token is pinned by its
+    # own keeps-its-reason node.
     if ctx['non_xdt']:
         return None, 'unsupported_non_xdt_context'
     # `unitRef` IS REQUIRED on a numeric fact, and the same three states apply
