@@ -459,6 +459,16 @@ def parse_filing_boundary(raw):
     Raises ExactError for anything outside the lexical space. A LAWFUL value
     that cannot bind the graph's date-only contract comes back with `.park`
     set to a named reason instead of being repaired or rejected.
+
+    EU-030 (#827): all thirteen raised/park texts here are diagnostic
+    DETAIL, never outcome vocabulary — the closure is TOTAL: the raises
+    fall under the module-wide ExactError closure (EU-014's record) and
+    the park REASONS never leave this module at all (both consumers,
+    filing_boundary_graph_end and filing_duration_ordered, convert park
+    to None and drop the reason). No code is minted here; the boundary
+    RULES are cited or board-tracked on their own rows (the +1 laws at
+    EU-018/019/029; the xs grammar and calendar/timezone/precision gates
+    below carry their spec citations in place).
     """
     from datetime import datetime, timedelta as _td, timezone as _tz
     if not isinstance(raw, str):

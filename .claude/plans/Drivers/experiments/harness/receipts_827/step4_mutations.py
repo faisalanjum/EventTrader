@@ -1446,6 +1446,13 @@ MUTATIONS = [
      "driver/core/test_round12_exact_scale.py::"
      "test_a_non_INTEGER_exponent_is_refused_at_the_arithmetic_boundary[True]"),
 
+    (182, "EU-030: the dateUnion lexical gate is switched off",
+     "driver/relocation/exact_numbers.py",
+     '    if not (m_dt or m_d):\n        raise ExactError(f"not a lawful xs:date or xs:dateTime: {raw!r}")',
+     '    if False:\n        raise ExactError(f"not a lawful xs:date or xs:dateTime: {raw!r}")',
+     "driver/core/test_round8_xbrl_binding.py::"
+     "test_filing_boundary_REFUSES_every_malformed_form[2023-6-30]"),
+
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",
