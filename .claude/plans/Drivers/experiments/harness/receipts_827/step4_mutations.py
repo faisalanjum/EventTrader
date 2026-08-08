@@ -1509,6 +1509,13 @@ MUTATIONS = [
      "driver/relocation/test_bind_graph_fact.py::"
      "test_RED_exactness_holds_through_the_whole_binding"),
 
+    (191, "EU-154: the concept-equality arm of the binding ladder goes vacuous",
+     "driver/relocation/inline_html.py",
+     "    if evidence.get('name_expanded') != target:",
+     "    if evidence.get('name_expanded') != target and False:",
+     "driver/relocation/test_bind_graph_fact.py::"
+     "test_RED_a_mismatched_identity_component_abstains"),
+
     (173, "F11 narrowed: an unsupported pure admission is restored",
      "driver/core/xbrl_attach.py",
      "    (XBRL_INSTANCE_NAMESPACE, 'pure'): frozenset({'unknown'}),",

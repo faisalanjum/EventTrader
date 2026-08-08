@@ -2986,6 +2986,20 @@ def bind_graph_fact(doc_or_html, *, inline_element_id, concept, context_id,
         if evidence is None:
             return None, f'fallback_{why}'
 
+    # EU-154 (#827): THE LAW THIS LADDER ENFORCES IS THE FROZEN PRODUCT
+    # CONTRACT'S, NOT THIS FUNCTION'S. The field-by-field equality rule below
+    # — and the two route-provenance prefixes above — consume the R12 family
+    # law, BUILD_AND_OPERATIONS.md:822-830: every ref verifies FACT-LEVEL
+    # against the current filing (concept + time_type + exact dates + the
+    # COMPLETE dimension set including [], entity-scoped, never trusted), and
+    # a disagreement refuses rather than repairs. The binder-facing
+    # restatement is Core_Fiscal_ContractSheet_2026-07-31.md section 4: row
+    # binding = concept + period + the COMPLETE dimension set; a duration
+    # must run FORWARDS ('period_not_forward'); the exactness law owns value
+    # reconciliation ('value_does_not_reconcile'). The fifteen outcome
+    # spellings ('exact_id_'/'fallback_' + the mismatch/refusal tokens) are
+    # this binder's OWN published outcome vocabulary naming WHICH field of
+    # that law disagreed — no rule and no spelling is invented at this site.
     # THE CONCEPT IS COMPARED BY IDENTITY, AND THE IDENTITY IS REQUIRED.
     # `Concept.namespace` is the taxonomy URI the filing declared. Measured
     # read-only over the adapter's numeric non-nil population: 12,402,201 of
