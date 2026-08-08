@@ -84,6 +84,10 @@ def xml_integer(raw):
 
 
 def sha256_text(html_text):
+    # EU-186 (#827): the F7 boundary clause's identity-anchor hash-encoding
+    # law (utf-8 + surrogatepass; graph_row_contract) — the same one law as
+    # the _semantic_parse encode (EU-126); entry 179's mutant targets THIS
+    # line and the lone-surrogate pin catches it.
     return hashlib.sha256(html_text.encode('utf-8', 'surrogatepass')).hexdigest()
 
 
