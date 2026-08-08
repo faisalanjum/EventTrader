@@ -790,3 +790,20 @@ def test_slot_unit_routing_matches_the_FROZEN_contract():
         "level_low": Decimal(1300), "level_high": Decimal(1300),
         "comparison_low": Decimal(1300), "comparison_high": Decimal(1300),
         "change_value": Decimal(5)}
+
+
+def test_T8_one_lane_vocabulary_owner():
+    """T8: driver_validators.LANE_STATES is the ONE lane vocabulary — its keys
+    ARE the four lanes (independent literals here); the second spellings
+    (validators.LANES, pf2._LANES) are GONE; an unknown lane still rejects at
+    BOTH boundaries (the pf2 door and validate_fact's driver gate)."""
+    from driver.core import driver_validators as dv
+    assert tuple(dv.LANE_STATES) == ("metric", "guidance",
+                                     "surprise", "action_event")
+    assert not hasattr(dv, "LANES")
+    assert not hasattr(prepared_fact_v2, "_LANES")
+    with pytest.raises(SchemaError, match="fact_type"):
+        fact(fact_type="weird")
+    got = [v.code for v in dv.validate_fact(
+        {"driver_name": "revenue"}, driver={"fact_type": "weird"})]
+    assert "DRIVER" in got

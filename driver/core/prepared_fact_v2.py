@@ -50,7 +50,6 @@ __all__ = ["SchemaError", "ProductionValidationError", "SourceUnavailable",
            "check_per_x_against_name", "to_stored_fact", "validate_via_production",
            "RUN_EVENT_DIVERGENCES"]
 
-_LANES = ("metric", "guidance", "surprise", "action_event")
 _PROOF_KEYS = ("polarity", "basis", "evidence", "sentence")
 
 # v1 fields the v2 contract must REFUSE outright: accepting them silently would
@@ -66,7 +65,7 @@ SOURCE_OWNED_FIELDS = ("member_refs", "xbrl_concept_raw")
 # ALIAS for the door's public surface, never a second authored copy. The
 # module-level import is the card's authorized acyclic edge (validators has
 # zero references back to this module).
-from driver.core.driver_validators import NUMERIC_FIELDS
+from driver.core.driver_validators import LANE_STATES, NUMERIC_FIELDS
 NUMERIC_SLOTS = NUMERIC_FIELDS
 
 
@@ -479,8 +478,9 @@ class PreparedFactV2:
         # be a guard. The property it appeared to provide is proved instead by
         # the DERIVED class-inventory test, which walks every field of every
         # public v2 dataclass and would fail the day a mutable one is added.
-        if self.fact_type not in _LANES:
-            raise SchemaError(f"fact_type: one of {_LANES}, got {self.fact_type!r}")
+        if self.fact_type not in LANE_STATES:   # T8: the ONE lane vocabulary
+            raise SchemaError(f"fact_type: one of {tuple(LANE_STATES)}, "
+                              f"got {self.fact_type!r}")
         if not isinstance(self.part_ref, str) or not self.part_ref.strip():
             raise SchemaError("part_ref: required — a missing locator is a "
                               "validation failure, never a fallback path")

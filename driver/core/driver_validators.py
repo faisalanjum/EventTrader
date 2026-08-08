@@ -25,7 +25,6 @@ from driver.core.slot_convert import CANONICAL_UNITS  # THE one 10-unit owner
 
 Violation = namedtuple("Violation", "code action message")
 
-LANES = ("metric", "guidance", "surprise", "action_event")
 LANE_STATES = {
     "metric": {"increased", "decreased", "unchanged", "mixed", "reported", "persists",
                "unknown"},
@@ -191,7 +190,7 @@ def validate_fact(fact, *, driver, home_facts=None):
             add("UNKNOWN_FIELD", "REJECT", f"field {key!r} is not in the stored contract")
 
     lane = (driver or {}).get("fact_type")
-    if lane not in LANES:
+    if lane not in LANE_STATES:
         add("DRIVER", "REJECT", f"driver {fact.get('driver_name')!r} has no permanent "
                                 f"fact_type — a typeless Driver cannot accept a fact")
         return v
