@@ -1489,6 +1489,38 @@ def test_MATRIX_the_sanitized_environment_carries_NO_credential():
     assert env["PYTHONPATH"] == "/tmp/root" and "PATH" in env
 
 
+def test_PC2_the_sanitized_environment_hands_the_child_a_writable_TMPDIR(tmp_path):
+    """PC-2 (#827). Inside a read-only jail the credential-free child pytest
+    died at capture init and produced no report at all: the allowlist carried
+    no TMPDIR, and tempfile's whole fallback chain was refused (/tmp EROFS,
+    /var/tmp EROFS, /usr/tmp ENOENT, cwd EROFS). TMPDIR is the FIRST name
+    CPython's tempfile consults, and `home` — the writable scratch
+    sanitized_env is already handed — is the answer that needs no new name in
+    the allowlist.
+
+    Proven through a REAL child process rather than by reading the dict back:
+    the child resolves its temporary directory to that scratch AND writes a
+    file there. The credential control stays where it belongs, in
+    test_MATRIX_the_sanitized_environment_carries_NO_credential.
+    """
+    home = str(tmp_path / "home")
+    os.makedirs(home)
+    env = _gate().sanitized_env(_REPO, home)
+    assert env["TMPDIR"] == home
+    child = subprocess.run(
+        [sys.executable, "-c",
+         "import tempfile\n"
+         "with tempfile.NamedTemporaryFile() as f:\n"
+         "    f.write(b'x'); f.flush()\n"
+         "    print(tempfile.gettempdir())\n"
+         "    print(f.name)\n"],
+        env=env, capture_output=True, text=True)
+    assert child.returncode == 0, child.stderr[-800:]
+    where, made = child.stdout.split()
+    assert where == home, where
+    assert made.startswith(home + os.sep), made
+
+
 def test_MATRIX_run_lane_REFUSES_a_run_that_did_not_execute(tmp_path):
     """Replaces a test that transcribed the constant `PYTEST_RAN == (0, 1)` —
     which proves the tuple's value, never that run_lane USES it. This drives the

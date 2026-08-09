@@ -130,6 +130,15 @@ def sanitized_env(root, home):
     env["HOME"] = home            # never the user's: no ~/.env, no key files
     env["PYTHONPATH"] = root
     env["PYTHONDONTWRITEBYTECODE"] = "1"
+    # PC-2 (#827): the allowlist concept is right, the OMISSION was the defect.
+    # In a read-only jail the child pytest died at capture init before it could
+    # write a report — strace showed tempfile's whole fallback chain refused
+    # (/tmp EROFS, /var/tmp EROFS, /usr/tmp ENOENT, cwd EROFS). TMPDIR is the
+    # exact name the runtime consults FIRST (CPython
+    # tempfile._candidate_tempdir_list), and `home` is the writable scratch this
+    # function is already handed, so the child gets a place to write without any
+    # new name entering the allowlist.
+    env["TMPDIR"] = home
     return env
 
 
@@ -290,13 +299,19 @@ def run_lane(root, home, marker=None, env=None):
              f"--junit-xml={xml}", *TEST_ROOTS],
             cwd=root, capture_output=True, text=True,
             env=env if env is not None else sanitized_env(root, home))
+        # PC-2 (#827): STDERR IS PART OF THE DIAGNOSIS. These two asserts used
+        # to print stdout only, so a child that died before capture started —
+        # exactly the read-only-TMPDIR crash above — reported an empty message
+        # while its traceback sat unread on stderr.
         assert proc.returncode in PYTEST_RAN, (
             f"pytest exited {proc.returncode} — the suite did not run as asked "
             f"(0/1 mean it ran; 2-5 mean interrupted, internal error, usage "
-            f"error or nothing collected):\n{proc.stdout[-3000:]}")
+            f"error or nothing collected):\n{proc.stdout[-3000:]}"
+            f"\n--- stderr ---\n{proc.stderr[-3000:]}")
         assert os.path.exists(xml), (
             "pytest produced no report at all — the run did not even start:\n"
-            + proc.stdout[-2000:])
+            + proc.stdout[-2000:]
+            + f"\n--- stderr ---\n{proc.stderr[-2000:]}")
         return parse_junit(io.open(xml, encoding="utf-8").read())
 
 
