@@ -412,55 +412,21 @@ def test_the_WELL_FORMED_TWIN_still_binds():
     assert bound is not None, why
 
 
-def test_THE_PINNED_CORPUS_FILE_refuses_through_the_public_door():
-    """THE REAL ONE, read-only, measured rather than assumed.
-
-    A synthetic break proves the rule; this proves the rule meets the actual
-    document. The file is opened read-only and never written, moved or
-    repaired, and the extracted instance is NOT substituted for it.
-
-    THROUGH `bind_graph_fact`, the same door every other case here uses. Two
-    earlier drafts stopped short: one expected `prepare()` to raise — it does
-    not, because `prepare()` builds the deliberately lenient RENDERER view —
-    and one checked `element_evidence`. Both measured an inner boundary. Only
-    the public door answers the question that matters: can anything from this
-    document bind?
-
-    THE ELEMENT ID IS A REAL ONE FROM THIS FILING, so the refusal cannot be
-    "no such element", and THE FILE IS IDENTIFIED BY HASH against the frozen
-    manifest, so it cannot be a different file that happens to share a name.
-    """
-    import hashlib
-    import os
-    from driver.relocation.inline_html import bind_graph_fact, NOT_WELL_FORMED
-
-    here = os.path.dirname(os.path.abspath(__file__))
-    name = '0001579241-25-000008.htm'
-    path = os.path.join(here, '..', '..', 'scripts', 'driver_seed',
-                        'relocate_probe', 'inline_html_cache', name)
-    manifest = os.path.join(
-        here, '..', '..', '.claude', 'plans', 'Drivers', 'experiments',
-        'harness', 'receipts_827', '01b_ix_input_manifest.txt')
-    for required in (path, manifest):
-        if not os.path.exists(required):
-            raise AssertionError(f'missing: {required}')
-
-    pinned = dict(line.split(' ', 1) for line in
-                  open(manifest, encoding='utf-8').read().splitlines() if line)
-    with open(path, 'rb') as fh:
-        digest = hashlib.sha256(fh.read()).hexdigest()
-    assert pinned[name].strip() == digest, (
-        'the file on disk is not the one the frozen manifest pins')
-
-    with open(path, encoding='utf-8') as fh:
-        text = fh.read()
-    bound, why = bind_graph_fact(
-        text, raw_value='1,234', **dict(_DOOR_GRAPH, inline_element_id='f-495'))
-    assert bound is None
-    # THE EXACT PUBLIC REASON, not a family of them. Normalising the string
-    # first would have accepted a second spelling and turned a refusal test
-    # into a "refused somehow" test.
-    assert why == NOT_WELL_FORMED, why
+# PC-3 (#827) RETIRED — the corpus-pinned registry node lived here.
+# It hashed scripts/driver_seed/relocate_probe/inline_html_cache/
+# 0001579241-25-000008.htm, a file that is UNTRACKED and IGNORED (verified:
+# git ls-files reports it unknown, git check-ignore returns 0), so it sat
+# outside both lane manifests AND the index and could never run in ANY
+# tree-scoped context — including the gate that certifies the final tree.
+# Its 349-era admission died with the rejected g1v16 lineage and was never
+# re-ruled. PURPOSE RECONCILIATION: the refusal law it exercised is owned by
+# three synthetic, tree-bound nodes in THIS file —
+# test_DOOR_an_unapproved_or_unimplemented_registry_REFUSES,
+# test_a_registry_EDGAR_DOES_NOT_LIST_is_refused and
+# test_an_UNAPPROVED_registry_is_REFUSED_even_when_spelled_ixt — which is why
+# retiring it removes no proof. It was the only data-dependent node in this
+# file; no gate pin and no mutation entry named it; the .htm stays an
+# untracked research artifact with no certified consumer.
 
 
 def test_EU104_the_arelle_refusal_type_is_pinned_and_its_translator_armed():
