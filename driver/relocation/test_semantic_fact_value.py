@@ -603,3 +603,51 @@ def test_EU183_an_absent_sign_is_the_positive_case():
     means not negated, never negative."""
     assert printed_value('390', _NDD_ID, None) == Decimal('390')
     assert printed_value('390', _NDD_ID, '-') == Decimal('-390')
+
+
+def test_EU189_a_zero_width_space_is_not_a_word_separator_in_the_walk():
+    """EU-189 (#827) FIX-TO-STANDARD — the whitespace family's member inside
+    the visible walk itself. U+200B has no width and is NOT a space character
+    (Unicode 17.0 core spec §23.2.1); UAX #14 Table 1 gives it line-break
+    class ZW, a break OPPORTUNITY and never a visible space; CSS Text 3 §3
+    lists the collapsible white space as spaces, tabs and segment breaks,
+    none of which ZWSP is. The walk used to substitute U+0020 for it, so
+    `Total<ZWSP>revenue` entered the representation as TWO words that no
+    filing displays. Measured before the change: ZERO U+200B in the frozen
+    1,769-file corpus, so the reading moves no real filing.
+
+    The suite's own `_doc` builder is used, and the assertion reads the
+    representation through the module's public `prepare` — the walk's only
+    published output — because this suite's other doors (`printed_value`,
+    `bind_graph_fact`) report the FACT's value, which the walk never touches.
+    """
+    text = inline_html.prepare(_doc('Total​revenue</p><p>'
+                                    '<span>Total</span><span>revenue</span>'))['text']
+    assert 'Totalrevenue' in text        # zero width: ONE word, as displayed
+    assert 'Total revenue' in text       # CONTROL: two ELEMENTS, two tokens
+
+
+def test_EU145_the_white_space_property_decides_run_and_break_preservation():
+    """EU-145 (#827) — [E-WHITESPACE] the white-space property is CONSIDERED.
+
+    CSS Text 3 §3 (https://www.w3.org/TR/css-text-3/#white-space-property):
+    `pre`, `pre-wrap` and `break-spaces` preserve BOTH space runs and segment
+    breaks; `pre-line` preserves BREAKS but collapses spaces; `normal` and
+    `nowrap` collapse both. The vocabulary already existed at the walk, and
+    all nine standard cases already behaved correctly — but the ISOLATED
+    MUTATION (drop 'white-space' from `_style_state`'s considered-property
+    set) left the whole primary suite GREEN, so the law had no detector and
+    a future edit could silently delete it. MUTATION-DECIDES-REUSE-OR-ADD
+    therefore says ADD, and this is that smallest focused regression.
+
+    Read through the module's public `prepare` — the walk's only published
+    output — because this suite's other doors report the FACT's value, which
+    the walk never touches. One preserving keyword and one collapsing
+    keyword are enough to bind the property: with the mutant both collapse.
+    """
+    pre = inline_html.prepare(_doc('<span style="white-space:pre">a   b</span>'))['text']
+    assert 'a   b' in pre                # pre PRESERVES the run (CSS Text 3 §3)
+
+    normal = inline_html.prepare(_doc('<span style="white-space:normal">a   b</span>'))['text']
+    assert 'a b' in normal               # CONTROL: normal COLLAPSES it
+    assert 'a   b' not in normal         # and the run is genuinely gone

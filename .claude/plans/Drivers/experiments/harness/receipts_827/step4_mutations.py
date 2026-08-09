@@ -2324,6 +2324,14 @@ MUTATIONS = [
      "driver/relocation/test_row_label_span.py::"
      "test_EU146_colspan_and_rowspan_follow_the_table_processing_model"),
 
+    (319, "EU-145: the white-space preserving keywords are dropped and `pre` "
+          "collapses runs like `normal`",
+     "driver/relocation/inline_html.py",
+     "_WS_PRESERVE_ALL = frozenset({'pre', 'pre-wrap', 'break-spaces'})",
+     "_WS_PRESERVE_ALL = frozenset()",
+     "driver/relocation/test_semantic_fact_value.py::"
+     "test_EU145_the_white_space_property_decides_run_and_break_preservation"),
+
     (309, "EU-146: rowspan zero stops growing downward and reads as one row",
      "driver/relocation/inline_html.py",
      "            reach = len(rows) if height == 0 else row_number + height",
@@ -2386,6 +2394,13 @@ MUTATIONS = [
      "            return 'unsupported_context_typeX'  # caller stores it verbatim",
      "driver/relocation/test_context_content_model.py::"
      "test_827B12_a_NO_NAMESPACE_custom_type_parks_as_unsupported"),
+
+    (318, "EU-145/149: the preserving white-space values stop preserving",
+     "driver/relocation/inline_html.py",
+     "                if ws in _WS_PRESERVE_ALL:",
+     "                if False and ws in _WS_PRESERVE_ALL:",
+     "driver/relocation/test_row_label_span.py::"
+     "test_EU145_149_white_space_is_honoured_exactly_as_CSS_Text_3_defines_it"),
 
     (281, "EU-169: the exactly-one-child bound widens to two",
      "driver/relocation/inline_html.py",
