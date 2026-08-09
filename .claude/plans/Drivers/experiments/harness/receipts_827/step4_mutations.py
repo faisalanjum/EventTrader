@@ -2331,6 +2331,20 @@ MUTATIONS = [
      "driver/relocation/test_semantic_fact_value.py::"
      "test_EU189_a_zero_width_space_is_not_a_word_separator_in_the_walk"),
 
+    (320, "EU-133: the retired shared max(1,...) span FLOOR returns to rowspan",
+     "driver/relocation/inline_html.py",
+     "    return min(_attr_int(value), _ROWSPAN_MAX)",
+     "    return min(max(_attr_int(value), 1), _ROWSPAN_MAX)",
+     "driver/relocation/test_row_label_span.py::"
+     "test_EU146_colspan_and_rowspan_follow_the_table_processing_model"),
+
+    (321, "EU-133: the absent/invalid span attribute stops defaulting to 1",
+     "driver/relocation/inline_html.py",
+     "def _attr_int(value, default=1):",
+     "def _attr_int(value, default=0):",
+     "driver/relocation/test_row_label_span.py::"
+     "test_EU146_colspan_and_rowspan_follow_the_table_processing_model"),
+
     (309, "EU-146: rowspan zero stops growing downward and reads as one row",
      "driver/relocation/inline_html.py",
      "            reach = len(rows) if height == 0 else row_number + height",
