@@ -968,6 +968,32 @@ def test_the_v2_modules_are_a_STAGED_read_only_adapter():
             # repeats. It is one function because building the set is exactly
             # what hides a repeat. Pure: a comprehension and a set comparison.
             "axis_member_pairs",
+            # ---- PC-1 (#827) ------------------------------------------------
+            # SIX entries, not the one the card first measured. Every one is a
+            # symbol the candidate reaches because an ALREADY-CLOSED #827
+            # one-owner row put it there — the same authority, and the same
+            # proof question, as the deliberate entries above. Re-checked at
+            # close: two are pure functions (no I/O, no state), four are static
+            # literals. Thirteen of this module's nineteen driver.core imports
+            # are function-local, which is why a top-of-file reading saw one of
+            # these and the gate's ast-walk sees six.
+            #
+            # W3: the frozen NAME-17 terminal-suffix split, replacing this
+            # module's private _TERMINAL_SUFFIXES copy. A `for`, an `endswith`
+            # and a slice.
+            "split_terminal_suffix",
+            # W4: the ONE 64-hex predicate. A `re.fullmatch` over a string.
+            "sha256_hex_ok",
+            # T7: the one public numeric-field vocabulary. A tuple literal.
+            "NUMERIC_FIELDS",
+            # T8: the one lane vocabulary — its KEYS are the lanes. A dict
+            # literal.
+            "LANE_STATES",
+            # P-O10: the 11-key period vocabulary. A tuple literal.
+            "PERIOD_ITEM_KEYS",
+            # F-PERIOD owner: the two period kinds. A tuple literal.
+            "PERIOD_TIME_TYPES",
+            # -----------------------------------------------------------------
             # the EXISTING current-filing verifier — reused, never re-built
             "match_xbrl_fact", "check_member_refs", "convert_slot"}
     for node in ast.walk(tree):
