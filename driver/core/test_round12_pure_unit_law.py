@@ -103,7 +103,11 @@ REAL = [
      "3.0", 0, "to 1.0"),
     ("unknown (non-USD)", "0001306830-24-000155", "f-722",
      "us-gaap:LineOfCreditFacilityMaximumBorrowingCapacity", "750,000,000",
-     "unknown", "750", 6, "CNY 750 million"),
+     # SEQ 855: the filing prints CNY750\xa0million - no space after CNY
+     # (adjacent inline elements) and a NO-BREAK SPACE before "million".
+     # The old spelling was the reader fabricating one and flattening the
+     # other; the source wording is unchanged.
+     "unknown", "750", 6, "CNY750\xa0million"),
 ]
 
 

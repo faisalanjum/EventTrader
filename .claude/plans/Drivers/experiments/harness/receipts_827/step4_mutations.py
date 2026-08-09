@@ -2366,6 +2366,67 @@ MUTATIONS = [
      "driver/relocation/test_row_label_span.py::"
      "test_EU076_an_explicit_headers_attribute_REPLACES_the_automatic_scan"),
 
+    (336, "EU-189: a spacer column becomes an evidence piece with a blank label",
+     "driver/relocation/inline_html.py",
+     "              and text.strip()]",
+     "              ]",
+     "driver/relocation/test_row_label_span.py::"
+     "test_EU189_a_SPACER_column_is_not_a_label_and_never_becomes_a_piece"),
+
+    (327, "EU-189: the token join fabricates a separator again",
+     "driver/relocation/inline_html.py",
+     "    text = ''.join(s + w for s, w in zip(seps, words))",
+     "    text = ' '.join(words)",
+     "driver/relocation/test_row_label_span.py::test_EU189_the_separator_comes_from_the_SOURCE_not_from_the_join"),
+
+    (328, "EU-189: a block boundary stops separating the text either side",
+     "driver/relocation/inline_html.py",
+     "        if sep:\n            pending = ' '\n        for child in node.children:",
+     '        for child in node.children:',
+     "driver/relocation/test_row_label_span.py::test_EU189_the_separator_comes_from_the_SOURCE_not_from_the_join"),
+
+    (329, "EU-189: br stops being a forced line break when display is overridden",
+     "driver/relocation/inline_html.py",
+     "    sep = (not prune) and (own == 'block' or name in _UA_LINE_BREAK_ELEMENTS)",
+     "    sep = (not prune) and own == 'block'",
+     "driver/relocation/test_row_label_span.py::test_EU189_the_separator_comes_from_the_SOURCE_not_from_the_join"),
+
+    (330, "EU-189: the UA white-space:pre rule for pre/listing/plaintext/xmp is dropped",
+     "driver/relocation/inline_html.py",
+     "    new_ws = st['ws'] or ('pre' if name in _UA_PRE_ELEMENTS else None) or ws",
+     "    new_ws = st['ws'] or ws",
+     "driver/relocation/test_row_label_span.py::test_EU189_the_separator_comes_from_the_SOURCE_not_from_the_join"),
+
+    (331, "EU-149: collapsing reverts to Python whitespace and eats NBSP",
+     "driver/relocation/inline_html.py",
+     '                    toks = [t for t in _CSS_WS.split(raw) if t]',
+     '                    toks = raw.split()',
+     "driver/relocation/test_row_label_span.py::test_EU189_the_separator_comes_from_the_SOURCE_not_from_the_join"),
+
+    (332, "EU-189: the parse stops preserving whitespace-only text nodes",
+     "driver/relocation/inline_html.py",
+     '            return BeautifulSoup(html_text, builder=_preserving_builder())',
+     "            return BeautifulSoup(html_text, 'lxml')",
+     "driver/relocation/test_row_label_span.py::test_EU189_the_separator_comes_from_the_SOURCE_not_from_the_join"),
+
+    (333, "EU-057: display:run-in stops taking the fail-closed lane",
+     "driver/relocation/inline_html.py",
+     '        return _RUN_IN_UNSUPPORTED',
+     "        return 'block'",
+     "driver/relocation/test_row_label_span.py::test_EU057_run_in_wins_the_cascade_AND_the_representation_refuses"),
+
+    (334, "EU-189: one display declaration stops feeding the outside slot",
+     "driver/relocation/inline_html.py",
+     "        props = ('display', 'outside') if prop == 'display' else (prop,)",
+     '        props = (prop,)',
+     "driver/relocation/test_row_label_span.py::test_EU189_the_separator_comes_from_the_SOURCE_not_from_the_join"),
+
+    (335, "EU-189: display:inherit stops reading the parent's computed outside",
+     "driver/relocation/inline_html.py",
+     "        own = outside or 'inline'",
+     "        own = 'inline'",
+     "driver/relocation/test_row_label_span.py::test_EU189_the_separator_comes_from_the_SOURCE_not_from_the_join"),
+
     (325, "EU-145/149: white-space leaves the shared style-winner owner again",
      "driver/relocation/inline_html.py",
      "    for p in ('display', 'visibility', 'cv', 'ws'):",

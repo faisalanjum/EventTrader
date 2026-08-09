@@ -655,9 +655,9 @@ def test_E2_the_hidden_value_match_is_EXACT_ASCII_no_repair():
     from driver.relocation.inline_html import _style_state, _advance
     st = _style_state(_cellE(None, hidden="UNTIL-FOUND"))
     assert st.get('unsupported'), st
-    prune, _vis, unsup, _ws = _advance('visible', _cellE(None, hidden=" until-found "))
+    prune, _vis, unsup, _ws, _sep, _out = _advance('visible', _cellE(None, hidden=" until-found "))
     assert unsup is None and prune is True
-    prune, _vis, unsup, _ws = _advance('visible', _cellE(None, hidden=" until-found"))
+    prune, _vis, unsup, _ws, _sep, _out = _advance('visible', _cellE(None, hidden=" until-found"))
     assert unsup is None and prune is True
 
 
@@ -732,7 +732,12 @@ def test_E3_noscript_renders_because_this_reader_has_NO_scripting():
     noscript — its contents are ordinary rendered text here."""
     prep, ev = _ev('<table><tr><td><noscript>NS</noscript>Label</td>'
                    f'<td>{_FACT}</td></tr></table>')
-    assert ev['row_label'] == 'NS Label'
+    assert ev['row_label'] == 'NSLabel'   # SEQ 853: the element boundary
+    # adds no character (CSS Text 3 3). The old 'NS Label' rode on the
+    # token join's fabricated space, not on noscript rendering at all.
+    prep2, ev2 = _ev('<table><tr><td><noscript>NS</noscript> Label</td>'
+                     f'<td>{_FACT}</td></tr></table>')
+    assert ev2['row_label'] == 'NS Label'   # TWIN: one SOURCE space
 
 
 # --- #827 SEQ 246: BeautifulSoup equality is NOT identity -------------------
@@ -856,15 +861,27 @@ def test_EU062_zero_width_space_is_ZERO_WIDTH_not_a_separator():
     old assertion was evidence, not law. Measured before the change: the
     frozen 1,769-file corpus contains ZERO U+200B, so this reversal moves
     no real filing — it removes a fabricated space that could only ever
-    appear in future markup. Separate ELEMENTS still separate tokens (the
-    control below)."""
+    appear in future markup.
+
+    THE OLD CONTROL — "separate ELEMENTS still separate tokens" — WAS FALSE
+    and is replaced (SEQ 853). CSS Text 3 §3 processes a block's content as
+    one inline box, "inline box boundaries are ignored", so two adjacent
+    spans with no whitespace between them fuse exactly as the ZWSP case does.
+    It passed only because the token join fabricated a space at every element
+    boundary. The replacement is the TWIN: the same two elements, source
+    whitespace present or absent, which is the only thing that decides it."""
     zwsp = chr(0x200B)               # ZERO WIDTH SPACE, named — never invisible
     prep, ev = _ev(f'<table><tr><td>Total{zwsp}revenue</td>'
                    f'<td>{_FACT}</td></tr></table>')
     assert ev['row_label'] == 'Totalrevenue', repr(ev['row_label'])
+    # TWIN A — two elements, NO source whitespace: nothing separates them.
     prep2, ev2 = _ev('<table><tr><td><span>Total</span><span>revenue</span>'
                      f'</td><td>{_FACT}</td></tr></table>')
-    assert ev2['row_label'] == 'Total revenue', repr(ev2['row_label'])
+    assert ev2['row_label'] == 'Totalrevenue', repr(ev2['row_label'])
+    # TWIN B — the SAME two elements with one real space between them.
+    prep3, ev3 = _ev('<table><tr><td><span>Total</span> <span>revenue</span>'
+                     f'</td><td>{_FACT}</td></tr></table>')
+    assert ev3['row_label'] == 'Total revenue', repr(ev3['row_label'])
 
 
 def test_EU040_a_th_label_cell_is_a_cell_exactly_as_the_table_model_says():
@@ -917,15 +934,51 @@ def test_EU101_a_data_row_between_header_and_target_is_skipped_not_a_header():
     assert ev['columns'] == ['2024']
 
 
-def test_EU057_run_in_is_a_lawful_display_value_that_wins_the_cascade():
-    """_DISPLAY_OUTSIDE transcribes CSS Display 3: run-in IS a lawful
-    <display-outside> keyword, so a later display:run-in declaration WINS
-    the cascade over an earlier display:none — dropping it from the set
-    silently hides real facts (the none declaration would win instead)."""
-    prep, ev = _ev('<div>Total was <span style="display:none;display:run-in">'
-                   f'{_FACT}</span> now.</div>')
-    assert ev['hidden'] is False
-    assert ev['block'] == 'Total was 726 now.'
+def test_EU057_run_in_wins_the_cascade_AND_the_representation_refuses():
+    """EU-057 (#827) REOPENED and RECLOSED by reviewer SEQ 855.
+
+    Two DIFFERENT questions were fused into one assertion, and the fusion was
+    the defect. They are separated here.
+
+    1 THE CASCADE QUESTION — unchanged law, and still load-bearing.
+      `_DISPLAY_OUTSIDE` transcribes CSS Display 3: run-in IS a lawful
+      <display-outside> keyword, so a later `display:run-in` WINS over an
+      earlier `display:none`. Drop it from the set and the none declaration
+      wins instead, silently hiding real facts. That is why the winner must
+      still be lawful AND not none.
+
+    2 THE TEXT-BOUNDARY QUESTION — new, and the reason the old proof was
+      false. CSS Display 3 §5.3 makes a run-in box's formatting depend on the
+      box that FOLLOWS it: it may join the next block's inline formatting
+      context or become a block. This reader is element-local and cannot see
+      that, so it cannot say whether the run-in separates the text around it.
+      The old test asserted the fact stays VISIBLE with an exact `block`
+      string — which quietly claimed a boundary answer the reader had not
+      earned. Under SEQ 855 the public representation REFUSES instead,
+      through the document-level unsupported lane that already exists.
+
+    Corpus exposure, measured read-only over the frozen 1,769 filings:
+    ZERO declare display:run-in, so the refusal costs no real document.
+    """
+    from driver.relocation.inline_html import _style_state, prepare
+
+    # 1 the cascade winner is LAWFUL and NOT none — the original guarantee
+    st = _style_state(_cellE('display:none;display:run-in'))
+    assert st['display'] == 'other', st          # not 'none': run-in won
+    assert st['display'] != 'none'
+
+    # 2 the public representation refuses rather than guessing the boundary
+    doc = (_HEAD + '<div>Total was <span style="display:none;display:run-in">'
+           f'{_FACT}</span> now.</div></body></html>')
+    prep = prepare(doc)
+    assert 'text' not in prep, prep.get('text')
+    assert 'run-in' in prep['refused'], prep['refused']
+
+    # 3 CONTROL — the neighbouring lawful value is untouched and still binds
+    prep2, ev2 = _ev('<div>Total was <span style="display:none;display:inline">'
+                     f'{_FACT}</span> now.</div>')
+    assert ev2['hidden'] is False
+    assert ev2['block'] == 'Total was 726 now.'
 
 
 def test_EU095_ix_hidden_text_never_leaks_into_row_evidence():
@@ -1136,3 +1189,134 @@ def test_EU145_149_white_space_obeys_the_SHARED_css_wide_and_unresolved_law():
     assert run('white-space:pre-line') == 'A B'
     assert run('white-space:normal') == 'A B'
     assert run('white-space:nowrap') == 'A B'
+
+
+def test_EU189_the_separator_comes_from_the_SOURCE_not_from_the_join():
+    """EU-189 (#827), reopened by reviewer SEQ 853 and completed under 855.
+
+    THE DEFECT: the walk built a list of word tokens and joined them with a
+    single space, so a separator appeared at EVERY element boundary whether or
+    not the filing wrote one. CSS Text 3 §3 processes a block's content as one
+    inline box — "inline box boundaries are ignored" — so
+    `<span>Total</span><span>revenue</span>` renders Totalrevenue. The join
+    fabricated ~1.2M spaces across the frozen corpus; the visible symptom was
+    filers' own typography, where '(', ')' and '$' sit in their own spans and
+    came back as '( 1 )' and '$ 1'.
+
+    THE LAW, all of it at owners that already existed:
+      * a separator comes from SOURCE whitespace, or from a boundary the
+        standard defines — never from the join;
+      * white-space processing collapses ONLY U+0020, U+0009 and segment
+        breaks (CSS Text 3 §4.1.1), so NBSP and other space separators are
+        ordinary characters and survive exactly;
+      * a BLOCK boundary ends the inline formatting context and separates;
+        an INLINE one contributes nothing; `display:contents` and a pruned
+        element generate no box and so add no phantom boundary;
+      * `br` is a forced line break (HTML LS §15.3.4) on its own clause, so a
+        lawful `display:inline` does not silence it;
+      * pre/listing/plaintext/xmp carry the UA `white-space:pre` rule
+        (HTML LS §15.3.3), which beats inheritance and loses to the author.
+
+    The parse had to be corrected too: bs4's default squeezes a
+    whitespace-ONLY text node ('  ' -> ' '), which is a RENDERING decision the
+    walk owns, so the builder preserves it and `_visible_walk` applies the CSS.
+    """
+    from driver.relocation.inline_html import prepare
+
+    H = '<html xmlns:ix="http://www.xbrl.org/2013/inlineXBRL"><body>'
+
+    def t(body):
+        p = prepare(H + body + '</body></html>')
+        return p['text'] if 'text' in p else 'REFUSED'
+
+    # --- the join no longer invents a separator, and source whitespace rules
+    assert t('<div><span>Total</span><span>revenue</span></div>') == 'Totalrevenue'
+    assert t('<div><span>Total</span> <span>revenue</span></div>') == 'Total revenue'
+    assert t('<div><span>Total </span><span>revenue</span></div>') == 'Total revenue'
+    # the filer-typography case this actually fixes
+    assert t('<div><span>(</span><span>1</span><span>)</span></div>') == '(1)'
+    assert t('<div><span>$</span><span>1</span></div>') == '$1'
+
+    # --- white-space:pre keeps the EXACT characters, including across elements
+    assert t('<div style="white-space:pre">A  B</div>') == 'A  B'
+    assert t('<div style="white-space:pre"><span>A</span>  <span>B</span></div>') == 'A  B'
+    assert t('<div style="white-space:pre"><span>A</span>\t\n<span>B</span></div>') == 'A\t\nB'
+    assert t('<div><span>A</span>  <span>B</span></div>') == 'A B'   # normal collapses
+
+    # --- CSS whitespace is not Python whitespace: these are NOT collapsible
+    assert t('<div>A\xa0B</div>') == 'A\xa0B'          # NO-BREAK SPACE
+    assert t('<div>A B</div>') == 'A B'      # EM SPACE
+
+    # --- boundaries: what separates, what does not
+    assert t('<div>A</div><div>B</div>') == 'A B'                     # block
+    # a block boundary separates at BOTH of its ends, so text that merely
+    # PRECEDES a block is separated from it too. Without the leading clause
+    # only the trailing one fires and inline-then-block silently fuses —
+    # mutation 328 survived until this control existed.
+    assert t('<div><span>A</span><div>B</div></div>') == 'A B'         # in->blk
+    assert t('<div><div>A</div><span>B</span></div>') == 'A B'         # blk->in
+    assert t('<table><tr><td>A</td><td>B</td></tr></table>') == 'A B'  # cells
+    assert t('<div style="display:inline">A</div>'
+             '<div style="display:inline">B</div>') == 'AB'            # author inline
+    assert t('<div style="display:contents"><span>A</span></div>'
+             '<span>B</span>') == 'AB'                                 # no box
+    assert t('<div><span style="display:inherit">A</span>'
+             '<span>B</span></div>') == 'A B'                          # parent block
+    assert t('<div><span style="all:inherit">A</span><span>B</span></div>') == 'A B'
+    assert t('<div><span style="display:initial">A</span>'
+             '<span>B</span></div>') == 'AB'                           # initial inline
+    assert t('<div><span>A</span><span style="display:none">X</span>'
+             '<span>B</span></div>') == 'AB'                           # pruned
+    assert t('<div><span>A</span><span hidden="">X</span>'
+             '<span>B</span></div>') == 'AB'                           # hidden attr
+
+    # --- br is a LINE BREAK, not a display-outside question
+    assert t('<div>A<br/>B</div>') == 'A B'
+    assert t('<div>A<br style="display:inline"/>B</div>') == 'A B'
+    assert t('<div>A<br style="display:none"/>B</div>') == 'AB'        # CONTROL
+
+    # --- the four UA white-space:pre elements
+    for tag in ('pre', 'listing', 'xmp'):
+        assert t(f'<{tag}>A  B</{tag}>') == 'A  B', tag
+    assert t('<pre style="white-space:normal">A  B</pre>') == 'A B'    # CONTROL
+    assert t('<div style="white-space:normal"><pre>A  B</pre></div>') == 'A  B'
+
+
+def test_EU189_a_SPACER_column_is_not_a_label_and_never_becomes_a_piece():
+    """EU-189 (#827, SEQ 855) — the one interaction the NBSP fix created.
+
+    Filers pad tables with cells holding a single NO-BREAK SPACE. The old
+    reader flattened U+00A0 to U+0020 and `.split()` then dropped it, so the
+    column came back EMPTY and fell out of the piece list by accident. Once
+    NBSP is preserved (correctly — CSS Text 3 §4.1.1 does not collapse it) the
+    spacer survives as '\\xa0' and would be emitted as evidence whose label is
+    nothing but a space. Core refuses exactly that ("each evidence piece needs
+    non-blank string text"), so the two owners have to agree; both now answer
+    the same question — is there a label here — the same way.
+
+    Measured: this is not hypothetical. Two such pieces reached Core on the
+    real EPS fact of 0000320193's cached filing and rejected a lawful fact.
+    """
+    from driver.relocation.inline_html import source_evidence
+
+    # THE FACT'S OWN column must be the spacer — that is the only arrangement
+    # in which a blank header reaches the piece list at all.
+    doc = (_HEAD + '<table>'
+           '<tr><th>Six months</th><th>\xa0</th></tr>'
+           f'<tr><td>Total</td><td>{_FACT}</td></tr>'
+           '</table></body></html>')
+    prep = prepare(doc)
+    ev, why = _evidence_from(prep['elements']['fA'], prep)
+    assert ev is not None, why
+    assert ev['columns'] == ['\xa0'], ev['columns']    # PREMISE: it IS a spacer
+    se = source_evidence(prep, ev)
+    assert all(p['text'].strip() for p in se['pieces']), se['pieces']
+    assert not any(p['kind'] == 'header' for p in se['pieces']), se['pieces']
+    # CONTROL: a real label in that same slot DOES become a header piece, so
+    # the rule drops spacers rather than headers in general.
+    prep2 = prepare(doc.replace('<th>\xa0</th>', '<th>Q2 2024</th>'))
+    ev2, why2 = _evidence_from(prep2['elements']['fA'], prep2)
+    assert ev2 is not None, why2
+    se2 = source_evidence(prep2, ev2)
+    assert any(p['kind'] == 'header' and p['text'] == 'Q2 2024'
+               for p in se2['pieces']), se2['pieces']

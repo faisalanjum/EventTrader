@@ -37,6 +37,9 @@ from driver.relocation.exact_numbers import (ROUTE_A_BOOLS,
 from bs4 import (BeautifulSoup, CData, Comment, Declaration, Doctype,
                  NavigableString, ProcessingInstruction,
                  XMLParsedAsHTMLWarning)
+# EU-189 (#827, SEQ 854): the SAME pinned 'lxml' builder `_soup` always used —
+# named here only so whitespace preservation can be switched on at construction.
+from bs4.builder._lxml import LXMLTreeBuilder
 from lxml import etree
 
 # xsd:integer, EXACTLY: optional sign then ASCII digits, after XML whitespace
@@ -285,6 +288,18 @@ _WIDE_ROLLBACK = frozenset({'revert', 'revert-layer'})
 # drifted word makes the whole lane unreachable (measured: 5 reds).
 _UNSUPPORTED = ('unsupported', None)   # the generic unsupported winner tuple
 
+#: THE COLLAPSIBLE WHITESPACE, and nothing else. CSS Text 3 CRD 2026-06-08
+#: §4.1.1 names the space U+0020, the tab U+0009 and segment breaks; §4.1.1's
+#: segment break is the newline, and the WHATWG ASCII whitespace set this
+#: module already uses at EU-076 spells the carriage return and form feed
+#: alongside it. EU-149 (#827, SEQ 854): a NO-BREAK SPACE (U+00A0), an EM SPACE
+#: (U+2003) and every other Unicode space SEPARATOR are ordinary characters the
+#: filing chose to display — they are NOT collapsible, and Python's
+#: `str.split()` / `str.isspace()`, which range over the whole Unicode
+#: whitespace category, silently destroyed them.
+_CSS_WS_CHARS = frozenset(' \t\n\x0c\r')
+_CSS_WS = re.compile('[ \t\n\x0c\r]+')
+
 #: HTML Living Standard, Rendering §15.3.1 — the elements the user agent
 #: itself defaults to `display:none`. A UA default is a NORMAL-origin rule an
 #: author INLINE declaration lawfully overrides (same shape as the `hidden`
@@ -358,6 +373,113 @@ def _display_valid(idents):
     return False
 
 
+#: EU-189 (#827, SEQ 854): `display:run-in`'s outside behaviour depends on the
+#: FOLLOWING box, which this element-local reader cannot see. Official, and
+#: unsupported — the same shape `visibility:force-hidden` already uses.
+_RUN_IN_UNSUPPORTED = ('unsupported',
+                       'display:run-in is official but unsupported '
+                       '(CSS Display 3 §5.3: its box depends on what follows)')
+
+
+def _display_outside(idents):
+    """The OUTSIDE display type of an already-VALID `display` value.
+
+    EU-189 (#827). CSS Display 3 §2: a display value is
+    `<display-outside>? <display-inside>?`, and "if <display-outside> is
+    omitted, the element's outside display type defaults to block". So the
+    only values that are INLINE outside are the explicit `inline` keyword and
+    the four <display-legacy> `inline-*` spellings; everything else that
+    generates a box is block outside. `none` and `contents` generate no box of
+    their own, so they have no outside type — the walker never asks about
+    `none` (already pruned) and treats `contents` as its parent's flow.
+
+    `none` and `contents` return 'nobox': neither generates a box of its own,
+    so neither can separate the text on its two sides — and 'nobox' is NOT the
+    same answer as "this element declared nothing" (None), which is what sends
+    `_advance` to the UA default. Collapsing the two was SEQ 854's red:
+    `<div style="display:contents">` fell back to div's UA block and invented a
+    boundary CSS says is not there.
+
+    `run-in` is NOT decided here. CSS Display 3 §5.3 makes a run-in box's
+    formatting depend on what FOLLOWS it — it may join the next block's inline
+    formatting context or become a block — so its boundary cannot be read off
+    this element alone. This reader does not model that, and SEQ 854 forbids
+    guessing it, so it returns the unsupported sentinel and the document takes
+    the existing fail-closed lane.
+    """
+    if 'run-in' in idents:
+        return _RUN_IN_UNSUPPORTED
+    for k in idents:
+        if k in _DISPLAY_OUTSIDE:
+            return 'inline' if k == 'inline' else 'block'
+        if k.startswith('inline-'):          # the <display-legacy> spellings
+            return 'inline'
+    if 'none' in idents or 'contents' in idents:
+        return 'nobox'
+    return 'block'
+
+
+#: HTML Living Standard, Rendering §15.3.3 "Flow content" and §15.3.8
+#: "Tables" — the elements the user agent itself defaults to a BLOCK-outside
+#: display. EU-189 (#827): the SAME UA-stylesheet authority `_UA_HIDDEN_ELEMENTS`
+#: above already rides, transcribed from the same document, and overridable by
+#: exactly the same author inline declaration. It is not a corpus-derived tag
+#: list: no filing was consulted to build it, and membership is decided by the
+#: standard, not by what happens to occur in EDGAR.
+#: `br` is here for a different clause — HTML LS §15.3.6 renders it as a
+#: FORCED LINE BREAK, which CSS Text 3 §3 makes a segment break — but the
+#: consequence for the text stream is identical: it separates.
+_UA_BLOCK_ELEMENTS = frozenset({
+    # §15.3.3 Flow content
+    'html', 'body', 'address', 'blockquote', 'center', 'dialog', 'div',
+    'figure', 'figcaption', 'footer', 'form', 'header', 'hr', 'legend',
+    'listing', 'main', 'p', 'plaintext', 'pre', 'search', 'xmp',
+    # §15.3.5 Sections and headings
+    'article', 'aside', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hgroup', 'nav',
+    'section',
+    # §15.3.7 Lists — `li` is display:list-item, whose OUTSIDE is block
+    'dir', 'dd', 'dl', 'dt', 'menu', 'ol', 'ul', 'li',
+    # §15.3.8 Tables — every <display-internal> type is block-outside for the
+    # purpose that matters here: it is not part of a surrounding inline
+    # formatting context, so the text on its two sides is never adjacent.
+    'table', 'caption', 'colgroup', 'col', 'thead', 'tbody', 'tfoot', 'tr',
+    'td', 'th',
+    # §15.3.9 Form controls — `select` and `marquee` are deliberately ABSENT:
+    # the UA gives them display:inline-block, whose outside is INLINE (SEQ 854
+    # red — they were wrongly listed as block).
+    'fieldset', 'details', 'summary', 'optgroup', 'option',
+    # §15.3.4 Frames
+    'frameset', 'frame',
+    })
+
+#: HTML LS Rendering §15.3.4 — `br` is a FORCED LINE BREAK. SEQ 855: this is
+#: NOT a display-outside question and must not be modelled as one. It used to
+#: sit in the block set above, so a lawful author `<br style="display:inline">`
+#: turned the newline off and fused the text either side of it. The break is
+#: the element's own rendering behaviour: it separates whenever it renders at
+#: all, and only pruning (display:none) removes it. Measured: `br` occurs in
+#: 1713 of the 1769 frozen filings, so a wrong answer here is not theoretical.
+_UA_LINE_BREAK_ELEMENTS = frozenset({'br'})
+
+#: HTML LS Rendering §15.3.3 — the four elements the user agent itself gives
+#: `white-space: pre`. SEQ 855: a UA rule on the element BEATS the inherited
+#: value (a `<pre>` inside a collapsing block is still pre), and any author
+#: declaration beats the UA rule, which is exactly the precedence the `hidden`
+#: attribute and the UA display:none set already use. Corpus exposure for these
+#: four names is 0, but the reader accepts an open domain and may not knowingly
+#: misread a name the standard defines.
+#: NOT here: `textarea`, whose §15.3.9 rule is `white-space: pre-wrap` — a
+#: different value in a different section, unruled by SEQ 855 and reported
+#: rather than assumed.
+_UA_PRE_ELEMENTS = frozenset({'pre', 'listing', 'plaintext', 'xmp'})
+
+#: HTML LS Rendering §15.3.3 — `slot { display: contents }`. It generates no
+#: box, so like `display:contents` it adds no boundary; it is named because a
+#: bare UA-default lookup would otherwise fall through to inline and be right
+#: by luck rather than by the standard.
+_UA_NOBOX_ELEMENTS = frozenset({'slot'})
+
+
 def _style_state(el):
     """The winning SPECIFIED values of the rendering properties this product
     reads — THE one CSS reader (#827 E, SEQ 227/229). One tinycss2 pass;
@@ -393,7 +515,7 @@ def _style_state(el):
             and hv.lower() == 'until-found':
         unsupported = 'hidden=until-found is outside the supported reader'
         hv = None
-    cand = {'display': [], 'visibility': [], 'cv': [], 'ws': []}
+    cand = {'display': [], 'visibility': [], 'cv': [], 'ws': [], 'outside': []}
     # CL-090 (#827 DERIVE-CITATION, the six style-state units EU-137..142):
     # this parse rides the PINNED tinycss2 1.4.0 API (installed pin; docs
     # https://doc.courtbouillon.org/tinycss2/, version-matched) —
@@ -454,16 +576,28 @@ def _style_state(el):
             continue                        # non-wide `all` value: invalid
         prop = ('cv' if nm == 'content-visibility'
                 else 'ws' if nm == 'white-space' else nm)
+        # EU-189 (#827, SEQ 854): ONE `display` declaration feeds TWO state
+        # slots — the prune law's none/other, and the OUTSIDE type the text
+        # walk needs. Every lane that records a display candidate must record
+        # both, or `display:inherit` reaches the first and leaves the second
+        # reading "declared nothing", which silently falls back to the UA
+        # default instead of the parent. (`all` already fans out over every
+        # slot below, which is why `all:inherit` was right while the single
+        # property was wrong.)
+        props = ('display', 'outside') if prop == 'display' else (prop,)
         if subst:
-            cand[prop].append((key, _UNSUPPORTED))
+            for p in props:
+                cand[p].append((key, _UNSUPPORTED))
             continue
         if not idents:
             continue                        # definitely invalid: dropped
         if len(idents) == 1 and idents[0] in _WIDE_LOCAL:
-            cand[prop].append((key, ('wide', idents[0])))
+            for p in props:
+                cand[p].append((key, ('wide', idents[0])))
             continue
         if len(idents) == 1 and idents[0] in _WIDE_ROLLBACK:
-            cand[prop].append((key, _UNSUPPORTED))
+            for p in props:
+                cand[p].append((key, _UNSUPPORTED))
             continue
         if prop == 'ws':
             # EU-145 (#827): CSS Text 3 §3 — the value is exactly ONE ident
@@ -477,6 +611,14 @@ def _style_state(el):
             if _display_valid(idents):
                 cand[prop].append(
                     (key, 'none' if idents == ['none'] else 'other'))
+                # EU-189 (#827): the SAME declaration, cascaded by the SAME
+                # loop, keeping the OUTSIDE type the prune law above throws
+                # away. `_text` needs it to know whether an element boundary
+                # separates text (block) or contributes nothing (inline) —
+                # CSS Text 3 §3: inline box boundaries are ignored by the
+                # white-space rules, block boundaries end the formatting
+                # context. No second parse and no second cascade.
+                cand['outside'].append((key, _display_outside(idents)))
             continue                        # invalid display value: dropped
         if prop == 'visibility' and idents == ['force-hidden']:
             # CSS Display Module Level 4 §5: `force-hidden` skips descendants
@@ -497,7 +639,7 @@ def _style_state(el):
     # then source order), and an unknown value is invalid-and-dropped rather
     # than a refusal: it cannot change visibility.
     out = {'hidden_attr': hv is not None, 'unsupported': unsupported}
-    for p in ('display', 'visibility', 'cv', 'ws'):
+    for p in ('display', 'visibility', 'cv', 'ws', 'outside'):
         best = max(cand[p], default=None, key=lambda kv: kv[0])
         v = best[1] if best else None
         tag, payload = v if isinstance(v, tuple) else (None, v)
@@ -520,7 +662,14 @@ def _style_state(el):
                 # initial. inherit itself: parent state (None); display never
                 # inherits a pruned parent — that subtree is already gone —
                 # so display:inherit can never mean none here.
-                out[p] = 'other' if p == 'display' else None
+                # SEQ 854: `outside` is the one property here whose `inherit`
+                # this function CANNOT answer — display is not an inherited
+                # property, so `display:inherit` means "the parent's COMPUTED
+                # outside type", and the parent is `_advance`'s business, not
+                # this element-local read. It returns the sentinel and the
+                # walker, which holds the ancestry, resolves it.
+                out[p] = ('other' if p == 'display'
+                          else 'inherit' if p == 'outside' else None)
             else:                           # initial, or unset on non-inherited
                 # SEQ 852/853: `ws` joins this ONE owner instead of being
                 # resolved beside it. white-space INHERITS (CSS Text 3 §3), so
@@ -530,7 +679,8 @@ def _style_state(el):
                 # sentinel reaching `_advance`, which compared them against the
                 # keyword vocabulary and silently read every one as collapsing.
                 out[p] = {'display': 'other', 'visibility': 'visible',
-                          'cv': 'visible', 'ws': 'normal'}[p]
+                          'cv': 'visible', 'ws': 'normal',
+                          'outside': 'inline'}[p]   # display's initial (§2)
         elif tag is not None:
             # an unknown internal tag is a programming defect — fail loudly,
             # never read it as a CSS value or a lawful abstention
@@ -540,7 +690,7 @@ def _style_state(el):
     return out
 
 
-def _advance(vis, el, ws=None):
+def _advance(vis, el, ws=None, outside=None):
     """THE one state-combine owner: fold one element into the inherited
     visibility AND the inherited white-space. Returns
     (prune, new_vis, unsupported_reason, new_ws).
@@ -568,22 +718,27 @@ def _advance(vis, el, ws=None):
     # unconditional because the contents are not children of the element
     # at all (the WHATWG citation below), so no author declaration can
     # reveal them (3 reds when the prune is withdrawn).
-    if st['unsupported']:
-        return False, vis, st['unsupported'], ws
     # EU-072 (#827 DERIVE-CITATION): `.name` is the PINNED bs4 element-name
     # API — Beautiful Soup 4.13.3 (installed pin), documented Tag.name
     # ("Every tag has a name"), https://www.crummy.com/software/
     # BeautifulSoup/bs4/doc/#name; '' is the program-logic default for
     # nameless nodes, owned by this function's law.
+    # It is read BEFORE the unsupported arm because EVERY exit now answers the
+    # boundary question too, and the UA default is keyed on the name.
     name = (getattr(el, 'name', '') or '').lower()
+    if st['unsupported']:
+        # nothing is pruned here, so this element's own boundary still stands
+        return (False, vis, st['unsupported'], ws,
+                name in _UA_BLOCK_ELEMENTS, outside)
     if name == 'template':
         # EU-070 (#827 DERIVE-CITATION): WHATWG HTML Living Standard
         # (census snapshot 2026-07-20) §4.12.3 The template element,
         # https://html.spec.whatwg.org/multipage/scripting.html#the-template-element
         # — "the template contents are not children of the element itself":
         # a template REPRESENTS NOTHING and no author display can reveal it.
-        # Unconditional prune, nested markup included.
-        return True, vis, None, ws
+        # Unconditional prune, nested markup included. It generates NO box, so
+        # it separates nothing: the text either side of it is adjacent.
+        return True, vis, None, ws, False, 'nobox'
     # HTML LS Rendering §15.3.1: UA-default display:none elements — a
     # NORMAL-origin default any valid author INLINE display declaration
     # overrides (exactly the `hidden` attribute's shape), while an author
@@ -599,7 +754,31 @@ def _advance(vis, el, ws=None):
     # HTML LS Rendering §15.3.1 (the `hidden` attribute's shape).
     prune = (st['display'] == 'none' or st['cv'] == 'hidden'
              or ((st['hidden_attr'] or ua_hidden) and st['display'] is None))
-    return prune, (st['visibility'] or vis), None, (st['ws'] or ws)
+    # EU-189 (#827): does this element's boundary SEPARATE text? The author's
+    # own outside type wins when declared — the same author-over-UA precedence
+    # the `hidden` clause above uses — and the UA default answers otherwise.
+    own = st['outside']
+    if own == 'inherit':
+        # display does NOT inherit, so `display:inherit` (and `all:inherit`)
+        # asks for the parent's COMPUTED outside type, which only the walk
+        # knows. A missing parent value means the root: initial, i.e. inline.
+        own = outside or 'inline'
+    elif own is None:                       # the element declared nothing
+        own = ('block' if name in _UA_BLOCK_ELEMENTS else
+               'nobox' if name in _UA_NOBOX_ELEMENTS else 'inline')
+    # A PRUNED element generates no box at all (CSS Display 3, display:none),
+    # so it separates nothing and the text either side of it is adjacent —
+    # exactly like the 'nobox' answer that `contents` and `slot` give.
+    # SEQ 855: `br` separates on its OWN clause, not through the outside type —
+    # a forced line break is still a line break when the author writes
+    # `display:inline`, and only pruning silences it.
+    sep = (not prune) and (own == 'block' or name in _UA_LINE_BREAK_ELEMENTS)
+    # SEQ 855: the UA `white-space:pre` rule for pre/listing/plaintext/xmp sits
+    # HERE, between the author's own declaration (which beats it) and the
+    # inherited value (which it beats) — the one precedence ladder this
+    # function already implements for every other UA default.
+    new_ws = st['ws'] or ('pre' if name in _UA_PRE_ELEMENTS else None) or ws
+    return prune, (st['visibility'] or vis), None, new_ws, sep, own
 
 
 def _hidden_cell(cell):
@@ -630,7 +809,7 @@ def _hidden_cell(cell):
       * if those scripts are ever proved dead, they and this adapter go
         together in the final minimality sweep.
     """
-    prune, vis, unsup, _ws = _advance('visible', cell)
+    prune, vis, unsup, _ws, _sep, _out = _advance('visible', cell)
     if unsup:
         return False                # never silently hidden; facts refuse instead
     return prune or vis in ('hidden', 'collapse')
@@ -668,7 +847,7 @@ def _effective_hidden(node):
         # INITIAL value of the visibility property (CSS Display 3 section
         # 4, the cited keyword sets above) — the state before any author
         # declaration, never an assumption of this reader.
-        prune, vis, unsup, _ws = _advance(vis, el)
+        prune, vis, unsup, _ws, _sep, _out = _advance(vis, el)
         if unsup:
             return None, unsup
         if prune:
@@ -827,6 +1006,21 @@ def _visible_walk(root, spans=None, hidden=frozenset(), also=frozenset(),
     rendering property.
     """
     words = []
+    # EU-189 (#827), reopened by SEQ 853: `seps[i]` is the text that stands
+    # BETWEEN words[i-1] and words[i]. It used to be an unconditional single
+    # space supplied by the join, which FABRICATED a character the filing does
+    # not show: CSS Text 3 §3 processes a block's content as one inline box —
+    # "inline box boundaries are ignored" — so `<span>Total</span><span>
+    # revenue</span>` renders Totalrevenue, not Total revenue. The separator is
+    # now the SOURCE's: `pending` carries what the last thing walked left
+    # behind, and only real whitespace or a block/segment boundary sets it.
+    seps = []
+    pending = ''
+
+    def emit(token):
+        # the first token has nothing to be separated FROM
+        seps.append(pending if words else '')
+        words.append(token)
 
     # EU-188 (#827): 'name' is the PINNED bs4 element-name API — Beautiful
     # Soup 4.13.3 (installed pin), documented Tag.name, the same citation
@@ -836,7 +1030,8 @@ def _visible_walk(root, spans=None, hidden=frozenset(), also=frozenset(),
     # is why the text arm can be written as a single identity test rather
     # than a type list; a drifted token makes every element look like text
     # (42 reds).
-    def walk(node, vis, ws=None):
+    def walk(node, vis, ws=None, outside=None):
+        nonlocal pending
         name = getattr(node, 'name', None)
         if name is None:
             # ONLY REAL TEXT NODES ARE TEXT (#827 E, SEQ 234). `name is None`
@@ -869,20 +1064,43 @@ def _visible_walk(root, spans=None, hidden=frozenset(), also=frozenset(),
                     # whitespace — the token join and the span arithmetic
                     # below are untouched.
                     if raw:
-                        words.append(raw)
+                        emit(raw)
+                        pending = ''    # its own whitespace is inside `raw`
                 elif ws in _WS_PRESERVE_BREAKS:
                     # pre-line: segment BREAKS survive, spaces and tabs
                     # collapse (CSS Text 3 §3 — the case my first reading of
                     # the spec got wrong, corrected by SEQ 812).
-                    kept = '\n'.join(' '.join(line.split())
-                                      for line in raw.split('\n'))
-                    if kept.strip():
-                        words.append(kept.strip('\n') if kept.strip('\n')
-                                     else kept)
+                    # SEQ 854: the same CSS vocabulary as the collapsing lane —
+                    # spaces and tabs collapse, NBSP and friends do not.
+                    kept = '\n'.join(
+                        ' '.join(t for t in _CSS_WS.split(line) if t)
+                        for line in raw.split('\n'))
+                    if kept.strip(''.join(_CSS_WS_CHARS)):
+                        emit(kept.strip('\n') if kept.strip('\n') else kept)
+                        pending = ''
                 else:
-                    words.extend(raw.split())
+                    # THE COLLAPSING LANE, over CSS's whitespace, not Python's
+                    # (EU-149 correction, SEQ 854). CSS Text 3 §4.1.1 collapses
+                    # exactly the space U+0020, the tab U+0009 and segment
+                    # breaks. NBSP is a NO-BREAK SPACE and U+2003 an EM SPACE:
+                    # both are ordinary space SEPARATORS the filing chose to
+                    # show, and neither collapses. `str.split()` eats both —
+                    # it splits on the whole Unicode whitespace category — so
+                    # 'A\xa0B' came back 'A B', silently replacing a character
+                    # the filer wrote with a different one. `_CSS_WS` is the
+                    # same five-character set EU-076 uses for WHATWG ASCII
+                    # whitespace; one vocabulary, one owner.
+                    toks = [t for t in _CSS_WS.split(raw) if t]
+                    if raw[:1] in _CSS_WS_CHARS:
+                        pending = ' '
+                    for tok in toks:
+                        emit(tok)
+                        pending = ' '        # between two tokens of one node
+                    if toks and raw[-1:] not in _CSS_WS_CHARS:
+                        pending = ''
             return
-        prune, vis, unsup, ws = _advance(vis, node, ws)  # THE one combine owner
+        # THE one combine owner
+        prune, vis, unsup, ws, sep, outside = _advance(vis, node, ws, outside)
         if unsup is not None and flags is not None:
             # AN UNRESOLVABLE WINNER POISONS THE DOCUMENT (SEQ 231 §3): text
             # under it can be neither claimed visible nor hidden, and a clean
@@ -899,19 +1117,28 @@ def _visible_walk(root, spans=None, hidden=frozenset(), also=frozenset(),
                                        or id(node) in also)
         if track:
             start_tok = len(words)
+        # EU-189: a BLOCK boundary ends the inline formatting context on both
+        # sides (CSS Text 3 §3), and `br` is a forced line break — either way
+        # the text either side is never adjacent, so it stays separated. An
+        # INLINE boundary adds nothing at all, which is the whole defect.
+        if sep:
+            pending = ' '
         for child in node.children:
-            walk(child, vis, ws)
+            walk(child, vis, ws, outside)
+        if sep:
+            pending = ' '
         if track:
             spans[id(node)] = (start_tok, len(words))
 
     walk(root, 'visible')
-    text = ' '.join(words)
+    text = ''.join(s + w for s, w in zip(seps, words))
     if spans is not None:
         starts = []
         pos = 0
-        for w in words:
+        for s, w in zip(seps, words):
+            pos += len(s)
             starts.append(pos)
-            pos += len(w) + 1
+            pos += len(w)
         for k, (a, b) in list(spans.items()):
             spans[k] = ((starts[a], starts[b - 1] + len(words[b - 1]))
                         if b > a else (starts[a] if a < len(starts) else 0,) * 2)
@@ -1190,6 +1417,32 @@ def _semantic_parse(html_text):
         raise SemanticParseError(NOT_WELL_FORMED) from exc
 
 
+class _EveryElementName(frozenset):
+    """A tag-name set that contains EVERY name, custom and foreign included.
+
+    EU-189 (#827, SEQ 854). bs4's builder takes `preserve_whitespace_tags` as a
+    membership test, and its default holds two names (`pre`, `textarea`). The
+    question this reader needs answered is not "is this one of two HTML
+    elements" but "does the parse keep what the filing wrote", and the answer
+    must be yes for `x-custom`, `ix:nonFraction` and every name nobody has
+    invented yet — so membership is answered by the RULE, not by a list. A
+    literal enumeration could not be written: the domain is open.
+    """
+    def __contains__(self, name):
+        return True
+
+
+def _preserving_builder():
+    """THE one renderer tree builder: pinned parser, whitespace intact.
+
+    A fresh instance per parse — bs4 mutates builder state while parsing, so a
+    shared module-level instance would leak one document's state into the next.
+    """
+    builder = LXMLTreeBuilder()
+    builder.preserve_whitespace_tags = _EveryElementName()
+    return builder
+
+
 def _soup(html_text):
     """THE RENDERER VIEW — how the filing APPEARS, and nothing else.
 
@@ -1222,7 +1475,18 @@ def _soup(html_text):
             # (https://www.crummy.com/software/BeautifulSoup/bs4/doc/
             # #installing-a-parser), lxml's HTML parser, backed by libxml2
             # via lxml 6.0.2 (drift row 5.3.1->6.0.2 recorded).
-            return BeautifulSoup(html_text, 'lxml')
+            #
+            # EU-189 (#827, SEQ 854): the builder is constructed HERE, with
+            # whitespace preservation switched on, because bs4's DEFAULT
+            # renderer squeezes a whitespace-ONLY text node down to a single
+            # character ('  ' -> ' ', '\t\n' -> '\n') before this module can
+            # see it. That default is a rendering decision, and rendering
+            # decisions belong to `_visible_walk`'s CSS rules, not to the
+            # parser: the walk cannot apply `white-space: pre` to whitespace
+            # the parse already threw away. Verified against bs4 4.13.5,
+            # 4.14.3 and 4.15.0 — the squeeze is the default at every
+            # version, so this is configuration, NOT a package upgrade.
+            return BeautifulSoup(html_text, builder=_preserving_builder())
         except Warning as w:
             raise SemanticParseError(
                 f"renderer parse warning: {type(w).__name__}: {w}") from w
@@ -3760,9 +4024,19 @@ def source_evidence(prepared, ev):
     if not quote or span is None or prepared['text'][span[0]:span[1]] != quote:
         return None
     label_span = ev['row_label_span']
+    # EU-189 (#827, SEQ 855): a column whose text is nothing but SPACE
+    # CHARACTERS is a spacer cell, not a label, and is not evidence. Before
+    # NBSP was preserved this arm never saw one — the old reader flattened
+    # U+00A0 to U+0020 and `.split()` then dropped it, so the column came back
+    # empty and fell out here. Now a spacer survives as '\xa0' and would be
+    # emitted as a piece with a blank label, which Core rightly rejects
+    # ("each evidence piece needs non-blank string text"). Both owners answer
+    # the SAME question — "is there a label here" — so both use the same
+    # test; this is the label question, not the CSS collapsing question.
     pieces = [{'kind': 'header', 'text': text, 'span': [sp[0], sp[1]]}
               for text, sp in zip(ev['columns'], ev.get('column_spans', []))
-              if sp is not None and prepared['text'][sp[0]:sp[1]] == text]
+              if sp is not None and prepared['text'][sp[0]:sp[1]] == text
+              and text.strip()]
     sec_span = ev.get('section_span')
     if ev['section'] and sec_span is not None \
             and prepared['text'][sec_span[0]:sec_span[1]] == ev['section']:

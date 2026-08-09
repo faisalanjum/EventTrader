@@ -620,9 +620,25 @@ def test_EU189_a_zero_width_space_is_not_a_word_separator_in_the_walk():
     representation through the module's public `prepare` — the walk's only
     published output — because this suite's other doors (`printed_value`,
     `bind_graph_fact`) report the FACT's value, which the walk never touches.
+
+    THE CONTROL WAS WRONG AND IS REPLACED (SEQ 853). It read "two ELEMENTS,
+    two tokens", which the cited standard disproves: CSS Text 3 §3 processes a
+    block's content as a single inline box — "inline box boundaries are
+    ignored" — so `<span>Total</span><span>revenue</span>`, with no source
+    whitespace at all, renders Totalrevenue. The old control passed only
+    because the token join fabricated a space at every element boundary. The
+    honest control is the TWIN: identical markup, whitespace present or
+    absent, which isolates the one thing that actually decides the answer.
     """
     text = inline_html.prepare(_doc('Total​revenue</p><p>'
-                                    '<span>Total</span><span>revenue</span>'))['text']
+                                    '<span>Costs</span><span>ales</span>'
+                                    '</p><p>'
+                                    '<span>Gross</span> <span>margin</span>'))['text']
     assert 'Totalrevenue' in text        # zero width: ONE word, as displayed
-    assert 'Total revenue' in text       # CONTROL: two ELEMENTS, two tokens
+    # THE TWINS: the element boundary contributes nothing either way, so the
+    # SOURCE whitespace is the only difference between these two lines. They
+    # use DISTINCT words so neither assertion can be satisfied by the other's
+    # output.
+    assert 'Costsales' in text           # no source whitespace -> no space
+    assert 'Gross margin' in text        # one source space -> one space
 

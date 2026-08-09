@@ -371,6 +371,12 @@ _DOOR_DOC = (f'<html {_XMLNS}><body><ix:header><ix:resources><xbrli:context id="
              '<xbrli:measure>iso4217:USD</xbrli:measure></xbrli:unit></ix:resources></ix:header>'
              '<p><ix:nonFraction id="fA" name="us-gaap:A" contextRef="c1" '
              'unitRef="u1" scale="6" decimals="-6">726</ix:nonFraction>'
+             # EU-189 (#827): the space is SOURCE whitespace now. These
+             # tests are about a quote OCCURRING TWICE, so the document
+             # must actually separate the two numbers; the old text relied
+             # on the token join fabricating a space between two adjacent
+             # inline elements, which CSS Text 3 3 says renders as '726726'.
+             ' '
              '<ix:nonFraction id="fB" name="us-gaap:B" contextRef="c1" '
              'unitRef="u1" scale="6" decimals="-6">726</ix:nonFraction></p>'
              '</body></html>')

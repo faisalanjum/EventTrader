@@ -165,7 +165,7 @@ def test_full_source_end_to_end_recovers_the_388m_fact(tmp_path, monkeypatch):
         assert sorted(tuple(p) for p in x["axis_members"]) == [
             ("srt:StatementGeographicalAxis", "srt:NorthAmericaMember"),
             ("us-gaap:StatementBusinessSegmentsAxis", "ce:AcetylChainMember")]
-        assert item["quote"] == "North America 388 365"
+        assert item["quote"] == "North America 388\xa0 365\xa0"
         assert item["ix_evidence"]["scale"] == 6
 
 
@@ -174,7 +174,7 @@ def _anchor():
             "driver": "revenue", "slice": "geography:north_america",
             "measurement": "", "series_unit": "m_usd",
             "time_type": "duration", "fact_type": "metric",
-            "wording": ("North America 386 388",), "concept_clue": CONCEPT}
+            "wording": ("North America 386\xa0 388",), "concept_clue": CONCEPT}
 
 
 def _source_with(row):

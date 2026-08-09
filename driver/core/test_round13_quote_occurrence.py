@@ -42,7 +42,7 @@ FABRICATED = "THIS QUOTE DOES NOT EXIST IN THE FILING"
 # text it must slice is asserted outright: if the fixture document ever changes,
 # this fails here rather than quietly re-deriving a new "truth".
 _PREPARED = prepare(_DOOR_DOC)
-_QUOTE = _PREPARED["text"][45:52]
+_QUOTE = _PREPARED["text"][42:49]
 assert _QUOTE == "726 726", _PREPARED["text"]
 _PARTS = [{"part": "fA", "content": _QUOTE}]
 # The repeated-part text, defined ONCE and proved to hold the quote exactly

@@ -28,8 +28,8 @@ from driver.core.driver_neo4j_adapter import GraphFactRows
 # The document's own text, stated independently of any evidence the builder
 # produces. Every expectation below is anchored to these literals.
 _TEXT = prepare(_DOOR_DOC)["text"]
-assert _TEXT[45:52] == "726 726", _TEXT
-assert len(_TEXT) == 52, len(_TEXT)
+assert _TEXT[42:49] == "726 726", _TEXT
+assert len(_TEXT) == 49, len(_TEXT)
 
 
 # THE bad-span data, defined ONCE. Every span in the contract obeys the same
@@ -184,16 +184,16 @@ _PIECE_KEYS_MSG = ("each evidence piece carries EXACTLY the keys "
 
 @pytest.mark.parametrize("bad,why", [
     ([{"kind": "header", "text": "x"}], _PIECE_KEYS_MSG),          # no span
-    ([{"kind": "header", "span": [45, 52]}], _PIECE_KEYS_MSG),     # no text
-    ([{"text": "x", "span": [45, 52]}], _PIECE_KEYS_MSG),          # no kind
+    ([{"kind": "header", "span": [42, 49]}], _PIECE_KEYS_MSG),     # no text
+    ([{"text": "x", "span": [42, 49]}], _PIECE_KEYS_MSG),          # no kind
     # F6 (#827): the extra-key and off-enum-kind rows moved OUT of this
     # REJECT matrix — unlisted vocabulary PARKS now (owner condition 2);
     # their homes are the F6 park nodes in the round-8 door suite.
-    ([{"kind": "header", "text": "", "span": [45, 52]}],      # blank text
+    ([{"kind": "header", "text": "", "span": [42, 49]}],      # blank text
      "each evidence piece needs non-blank string text"),
-    ([{"kind": "header", "text": "   ", "span": [45, 52]}],   # whitespace text
+    ([{"kind": "header", "text": "   ", "span": [42, 49]}],   # whitespace text
      "each evidence piece needs non-blank string text"),
-    ([{"kind": "header", "text": 5, "span": [45, 52]}],       # non-string text
+    ([{"kind": "header", "text": 5, "span": [42, 49]}],       # non-string text
      "each evidence piece needs non-blank string text"),
     ([{"kind": "header", "text": "x", "span": [52, 45]}],     # reversed span
      "an evidence piece span must satisfy 0 <= start < end, got [52, 45]"),
@@ -206,7 +206,7 @@ def test_matrix_c_a_malformed_evidence_piece_is_refused(bad, why):
 def test_matrix_c_duplicate_identical_pieces_are_REFUSED_not_collapsed():
     """Collapsing would make the claim and the filing agree by editing the
     claim, which is the one repair a verifier may never perform."""
-    piece = {"kind": "header", "text": "726 726", "span": [45, 52]}
+    piece = {"kind": "header", "text": "726 726", "span": [42, 49]}
     _refused_purely(_perturbed(pieces=[piece, dict(piece)]),
                     "duplicate identical evidence pieces are refused")
 
@@ -229,13 +229,13 @@ def test_matrix_d_the_caller_cannot_mutate_evidence_after_entry():
 # ---- 2. THE PREPARED-DOCUMENT ATTACKS -------------------------------------
 
 @pytest.mark.parametrize("span,why", [
-    ([44, 52], "does not describe the bound element"),
-    ([46, 52], "does not describe the bound element"),
-    ([45, 51], "does not describe the bound element"),
+    ([41, 49], "does not describe the bound element"),
+    ([43, 49], "does not describe the bound element"),
+    ([42, 48], "does not describe the bound element"),
     # THIS ONE IS A DIFFERENT LAW, and lumping it hid that: the lawful quote ends
     # at the last character of the representation, so +1 at the end runs off the
     # document and the earlier bounds check fires instead of the element match.
-    ([45, 53], "the submitted quote_span ends beyond the representation"),
+    ([42, 50], "the submitted quote_span ends beyond the representation"),
 ])
 def test_matrix_e_a_quote_span_shifted_by_one_either_way_is_refused(span, why):
     """Off by a single character in either direction, at either end."""
@@ -250,7 +250,7 @@ def test_matrix_e_a_stale_but_WELL_FORMED_hash_is_refused():
 
 def test_matrix_e_a_piece_whose_text_is_not_at_its_span_is_refused():
     _refused(_run(_perturbed(pieces=[{"kind": "header", "text": "Not there",
-                                      "span": [45, 52]}])), SchemaError,
+                                      "span": [42, 49]}])), SchemaError,
              "is not the text at its own span")
 
 
@@ -258,15 +258,15 @@ def test_matrix_e_an_ADDED_piece_the_element_does_not_have_is_refused():
     """The canonical evidence for this element has no pieces; an extra one is
     a claim the filing does not make."""
     _refused(_run(_perturbed(pieces=[{"kind": "section", "text": "726 726",
-                                      "span": [45, 52]}])), SchemaError,
+                                      "span": [42, 49]}])), SchemaError,
              "the submitted evidence pieces differ from the bound element's own")
 
 
 def test_matrix_e_a_correct_looking_span_at_the_WRONG_place_is_refused():
     """`726` appears twice; citing the second occurrence as the quote is
     well-formed, reproduces real text, and is still not this element's row."""
-    assert _TEXT[49:52] == "726"
-    _refused(_run(_perturbed(quote_span=[49, 52])), SchemaError,
+    assert _TEXT[46:49] == "726"
+    _refused(_run(_perturbed(quote_span=[46, 49])), SchemaError,
              "does not describe the bound element")
 
 
@@ -289,7 +289,7 @@ def test_matrix_f_the_lawful_item_attaches_and_carries_its_evidence():
     assert item["source_evidence"]["raw_label_span"] is None, \
         "the prose block has no structural label, so null is the lawful form"
     fact = _attached(_run(item))
-    assert fact.item.quote == _TEXT[45:52] == "726 726"
+    assert fact.item.quote == _TEXT[42:49] == "726 726"
 
 
 def test_matrix_f_a_second_element_on_the_same_row_also_attaches():
@@ -390,7 +390,7 @@ def test_matrix_h_the_caller_object_is_not_the_one_carried_forward():
     normalised = _checked_source_evidence(submitted)
     submitted["quote_span"] = [0, 1]
     submitted["pieces"] = [{"kind": "section", "text": "x", "span": [0, 1]}]
-    assert tuple(normalised["quote_span"]) == (45, 52)
+    assert tuple(normalised["quote_span"]) == (42, 49)
     assert normalised["pieces"] == ()
 
 
@@ -506,7 +506,7 @@ def test_matrix_i_the_table_fixture_is_lawful_and_MULTI_piece():
     (lambda p: p[:1], "a piece DELETED", _DIFFER),
     (lambda p: list(reversed(p)), "the pieces REORDERED", _DIFFER),
     (lambda p: [{**p[0], "kind": "section"}] + p[1:], "a piece RE-KINDED", _DIFFER),
-    (lambda p: p + [{"kind": "header", "text": "Six months", "span": [73, 83]}],
+    (lambda p: p + [{"kind": "header", "text": "Six months", "span": [70, 80]}],
      "a sibling column's header ADDED", _DIFFER),
     # These two keep the piece SET intact, so the set comparison passes and the
     # text-at-its-own-span rule is what catches them. One fragment for all six

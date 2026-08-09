@@ -37,10 +37,16 @@ SHA_OLD = "2c0a5134a44e6b930c16e8b2a4013d10fb02373c7005652aa328e6b2df681825"
 SHA_LATER = "a0114fbad66d39012cf257cad30374e6d45fc868e90a6663f6ceb69294a0c919"
 # the REAL later-file row (Q1-2025 386, then the Q1-2024 comparative 388) —
 # the birth quote is VERBATIM source text, never a composed citation
-REAL_ROW_LATER = "North America 386 388"
+# SEQ 855: the NBSPs are now PRESERVED (CSS Text 3 §4.1.1 collapses only
+# U+0020/U+0009/segment breaks), so the verbatim row carries them. The old
+# spelling was the reader flattening a character the filing really prints.
+REAL_ROW_LATER = "North America 386\xa0 388"
 # the recovered older-source evidence representation, pinned
-SHA_EVIDENCE = ("eb17e0e37acc179d6412883703d25b3684891b465a96b38a99fc2b20aa5"
-                "536d3")
+# SEQ 855: regenerated with the corrected representation (EU-189). The
+# fixture BYTES are unchanged - SHA_OLD above still pins them; only the
+# reader's rendering of them moved.
+SHA_EVIDENCE = ("4272695282b91fba36f9bc98ca4b208a6cc7a94dac4efa0460fad4abb1"
+                "fb6869")
 
 
 def _read_pinned(path, sha):
@@ -151,7 +157,7 @@ def test_real_ce_388m_recovered_via_rebuilt_anchor(tmp_path):
     # printed 388 at scale 6 == the graph's 388,000,000
     assert item["value"] == Decimal("388")
     assert item["ix_evidence"]["scale"] == 6
-    assert item["quote"] == "North America 388 365"      # the REAL table row
+    assert item["quote"] == "North America 388\xa0 365\xa0"  # the REAL row
     assert x["source_evidence"]["quote_span"]
     # the evidence representation hash is PINNED — any silent change screams
     assert x["source_evidence"]["representation_sha256"] == SHA_EVIDENCE
