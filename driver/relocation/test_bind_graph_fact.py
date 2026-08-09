@@ -1943,3 +1943,55 @@ def test_EU184_a_bool_scale_is_not_an_int_and_fails_to_reconcile():
     the gate is the retained safety net, recorded at the site.)"""
     assert reconcile('390', _NUM_DOT_DECIMAL, 1, '', '3,900') is True
     assert reconcile('390', _NUM_DOT_DECIMAL, True, '', '3,900') is False
+
+
+def test_EU156_a_forever_period_PARKS_under_its_own_named_reason():
+    """EU-156 (#827) — PARK-NAMED-REASON for the forever/undated scope refusal.
+
+    `<xbrli:forever/>` is LAWFUL XBRL 2.1 (§4.7.2): a context whose period has
+    no dated boundary at all. This reader binds DATED graph facts, so a forever
+    context can never back one — but the owner's E-SUPPORTED-SCOPE ruling
+    (2026-08-07) is that refusing lawful input is a scope DECISION, so it must
+    park under its own NAMED reason and be counted as its own pile by the
+    first-production census. Two things therefore matter and are asserted
+    separately: that it refuses, and that it refuses under the name
+    `forever_or_undated_period` rather than being swept into the malformed
+    pile — a lawful document reported as malformed would blame the filer for
+    our scope choice.
+
+    The mutation for this rule survived the whole suite before this node
+    existed, which is why it is added here rather than recorded as reused.
+    """
+    doc = _doc().replace(
+        '<xbrli:startDate>2026-01-01</xbrli:startDate>'
+        '<xbrli:endDate>2026-03-31</xbrli:endDate>', '<xbrli:forever/>')
+    bound, why = _bind(doc)
+    assert bound is None
+    assert 'forever_or_undated_period' in why, why
+    # NOT the malformed pile — the document is lawful, the refusal is ours
+    assert 'malformed' not in why, why
+    # CONTROL: the same fixture with its dated period still binds
+    ok, why_ok = _bind(_doc())
+    assert ok is not None, why_ok
+
+
+def test_EU163_an_unreadable_ix_element_kind_PARKS_under_its_own_named_reason():
+    """EU-163 (#827) — PARK-NAMED-REASON for the element-kind scope refusal.
+
+    `ix:nonNumeric` is a lawful Inline XBRL 1.1 element (§12.1.2). This reader's
+    readable target is `ix:nonFraction` alone, so pointing a graph fact at any
+    other lawful ix kind is refused — again a scope choice, not a defect in the
+    filing, so it parks under the named reason `unsupported_element_kind`.
+
+    The element id used here is REAL and present in the document, so the
+    refusal cannot be "no such element": it is specifically about the KIND.
+    """
+    nn = ('<div style="display:none"><ix:nonNumeric id="f-99" '
+          'name="dei:DocumentType" contextRef="c-1">10-Q</ix:nonNumeric></div>')
+    bound, why = _bind(_doc(extra_element=nn), inline_element_id='f-99')
+    assert bound is None
+    assert 'unsupported_element_kind' in why, why
+    assert 'malformed' not in why, why
+    # CONTROL: the nonFraction in the SAME document still binds
+    ok, why_ok = _bind(_doc(extra_element=nn))
+    assert ok is not None, why_ok

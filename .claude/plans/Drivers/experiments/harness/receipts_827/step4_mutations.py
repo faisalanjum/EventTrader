@@ -2373,6 +2373,18 @@ MUTATIONS = [
      "driver/relocation/test_row_label_span.py::"
      "test_EU189_a_SPACER_column_is_not_a_label_and_never_becomes_a_piece"),
 
+    (339, "EU-156: the forever/undated park stops naming its own reason",
+     "driver/relocation/inline_html.py",
+     "return None, 'forever_or_undated_period'",
+     "return None, 'malformed_period_type'",
+     "driver/relocation/test_bind_graph_fact.py::test_EU156_a_forever_period_PARKS_under_its_own_named_reason"),
+
+    (340, "EU-163: the unreadable element-kind park stops naming its own reason",
+     "driver/relocation/inline_html.py",
+     "return None, 'unsupported_element_kind'",
+     "return None, 'malformed_element'",
+     "driver/relocation/test_bind_graph_fact.py::test_EU163_an_unreadable_ix_element_kind_PARKS_under_its_own_named_reason"),
+
     (337, "EU-143: the until-found scope refusal stops naming what it refused",
      "driver/relocation/inline_html.py",
      'hidden=until-found is outside the supported reader',
