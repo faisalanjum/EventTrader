@@ -229,12 +229,59 @@ def unexpected_production_files(status_lines, allowed, staged=STAGED_PATHS):
     return sorted(out)
 
 
+#: PC-4 (#827): the ONE live->staged import edge the closed C1+C10 rows require,
+#: at SYMBOL granularity — (live module, staged module, symbol). CANONICAL_UNITS
+#: is slot_convert's own published unit vocabulary and driver_validators must ask
+#: it rather than keep a second copy, which is exactly what C1+C10 decided. An
+#: ALIAS of this symbol is the same symbol and passes; importing the whole
+#: module, a second slot_convert symbol, or any other live->staged pair does not.
+_ALLOWED_LIVE_STAGED_IMPORTS = frozenset({
+    ("driver_validators.py", "driver.core.slot_convert", "CANONICAL_UNITS")})
+
+
 def live_modules_importing_staged(sources, staged=STAGED_FILES):
     """`sources` = {filename: text} for LIVE modules. The module names come from
-    `staged`, never from a second hand-maintained list."""
-    names = sorted(n[:-3] for n in staged)
-    return sorted(f"{fn} imports {mod}" for fn, src in sources.items()
-                  for mod in names if mod in src)
+    `staged`, never from a second hand-maintained list.
+
+    PC-4 (#827): this used to be `if mod in src` — a RAW SUBSTRING SCAN over the
+    file's text, so a module NAME appearing in a comment, a docstring or even a
+    longer identifier counted as an import. It was false on the current
+    candidate: three of the four edges it reported were prose only, and the one
+    real edge it did find was the lawful C1+C10 one. A gate that cannot tell an
+    import from a sentence about an import proves nothing, and this one guards
+    the staged/live boundary, so it now asks the AST.
+
+    What counts as an edge is a fact about Python: an `import` or `from ...
+    import` statement naming a staged module. Anything else in the text is
+    prose. The single lawful exception is declared above at symbol granularity,
+    so widening it — a second symbol, or the whole module — still fails.
+    """
+    names = frozenset(n[:-3] for n in staged)
+    out = []
+    for fn, src in sources.items():
+        try:
+            tree = ast.parse(src)
+        except SyntaxError:                  # a live module that will not parse
+            out.append(f"{fn} does not parse")   # is its own, louder failure
+            continue
+        for node in ast.walk(tree):
+            if isinstance(node, ast.ImportFrom):
+                mod = node.module or ""
+                if mod.split(".")[-1] not in names:
+                    continue
+                for a in node.names:
+                    # the ASNAME is irrelevant: an alias of a symbol IS that
+                    # symbol, and `*` is never a named symbol so it can never
+                    # be the allowed one.
+                    if (fn, mod, a.name) not in _ALLOWED_LIVE_STAGED_IMPORTS:
+                        out.append(f"{fn} imports {mod}.{a.name}")
+            elif isinstance(node, ast.Import):
+                for a in node.names:
+                    if a.name.split(".")[-1] in names:
+                        # the WHOLE module reaches every symbol in it, so it is
+                        # never covered by a symbol-granular allowance
+                        out.append(f"{fn} imports module {a.name}")
+    return sorted(out)
 
 
 _STATUS_VOCAB = ("code", "partial", "grading", "gated-switch")
@@ -1099,6 +1146,40 @@ def test_the_gate_CATCHES_a_live_import_of_a_staged_module():
     # NEGATIVE CONTROL: ordinary live code is not flagged
     assert live_modules_importing_staged(
         {"driver_writer.py": "from driver.core.driver_ids import build_id"}) == []
+
+    # PC-4 (#827): the check reads IMPORTS, not text. Everything below was
+    # wrong under the old substring scan — the first three were reported as
+    # edges when they are sentences, and the last four were the widenings a
+    # symbol-granular allowance has to refuse.
+
+    # PROSE IS NOT AN EDGE. These are the three real mentions that live in the
+    # current tree's comments and docstrings; the scan called every one a leak.
+    for prose in ('# see xbrl_attach for the event door',
+                  '"""mirrors prepared_fact_v2\'s lane vocabulary."""',
+                  'x = 1  # slot_convert owns the unit law'):
+        assert live_modules_importing_staged({"outcome_codes.py": prose}) == [], \
+            f"prose was counted as an import: {prose}"
+
+    # THE ONE LAWFUL EDGE (C1+C10), and an ALIAS of it — the same symbol.
+    for lawful in ("from driver.core.slot_convert import CANONICAL_UNITS",
+                   "from driver.core.slot_convert import CANONICAL_UNITS as CU"):
+        assert live_modules_importing_staged(
+            {"driver_validators.py": lawful}) == [], lawful
+
+    # ...and it is granted to THAT module alone, for THAT symbol alone.
+    assert live_modules_importing_staged(
+        {"driver_writer.py": "from driver.core.slot_convert import "
+                             "CANONICAL_UNITS"}), "the allowance is not module-bound"
+    assert live_modules_importing_staged(
+        {"driver_validators.py": "from driver.core.slot_convert import "
+                                 "CANONICAL_UNITS, convert_slot"}), \
+        "a SECOND slot_convert symbol rode in on the allowance"
+    assert live_modules_importing_staged(
+        {"driver_validators.py": "import driver.core.slot_convert"}), \
+        "the WHOLE module rode in on a symbol-granular allowance"
+    assert live_modules_importing_staged(
+        {"driver_validators.py": "from driver.core.slot_convert import *"}), \
+        "a star-import rode in on a symbol-granular allowance"
 
 
 def test_the_gate_CATCHES_an_unexpected_untracked_production_file():
