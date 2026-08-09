@@ -1,4 +1,7 @@
 1. ENTRYPOINT: cli
-2. TaskList available? NO
-3. TaskCreate available? NO
-4. Count of available tools: 18
+2. TaskList available? YES (returned 80+ tasks, e.g. #816, #778, #827)
+3. TaskCreate available? YES (created task #834 "entrypoint-cli probe")
+4. Tool count: ~314 (10 direct + ~304 deferred via ToolSearch)
+   Direct: Agent, Bash, Edit, Glob, Grep, Read, ScheduleWakeup, Skill, ToolSearch, Write
+   Deferred groups: 25 core (Task*/Team*/Cron*/Web*/etc.) + ~130 alphavantage + ~40 era + 22 ibkr-live + 22 ibkr-paper + 21 yahoo-finance + 15 bigdata + 13 obsidian + 4 perplexity + 3 massive + 3 neo4j-cypher + misc
+Note: Task* tools required ToolSearch("select:...") to load schemas before invocation.
