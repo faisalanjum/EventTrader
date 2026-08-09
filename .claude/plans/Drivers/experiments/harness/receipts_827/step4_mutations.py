@@ -2345,6 +2345,13 @@ MUTATIONS = [
      "driver/relocation/test_row_label_span.py::"
      "test_EU146_colspan_and_rowspan_follow_the_table_processing_model"),
 
+    (322, "EU-076: an explicit headers attribute stops replacing the automatic scan",
+     "driver/relocation/inline_html.py",
+     "    declared = fact_cell.get('headers')",
+     "    declared = None",
+     "driver/relocation/test_row_label_span.py::"
+     "test_EU076_an_explicit_headers_attribute_REPLACES_the_automatic_scan"),
+
     (309, "EU-146: rowspan zero stops growing downward and reads as one row",
      "driver/relocation/inline_html.py",
      "            reach = len(rows) if height == 0 else row_number + height",

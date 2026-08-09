@@ -265,6 +265,16 @@ _CV_VALUES = frozenset({'visible', 'hidden', 'auto'})
 #: decidable locally; revert/revert-layer roll back through origin/layer state
 #: this inline-only reader does not own.
 _WIDE_LOCAL = frozenset({'initial', 'inherit', 'unset'})
+#: EU-145 + EU-149 (#827): the white-space vocabulary, transcribed from CSS
+#: Text 3 §3 "White Space and Wrapping"
+#: (https://www.w3.org/TR/css-text-3/#white-space-property). Only these three
+#: preserve BOTH space runs and segment breaks; `pre-line` preserves segment
+#: BREAKS but collapses spaces and tabs; `normal`/`nowrap` collapse both.
+#: The property is INHERITED, so the walk threads the effective value down.
+_WS_PRESERVE_ALL = frozenset({'pre', 'pre-wrap', 'break-spaces'})
+_WS_PRESERVE_BREAKS = frozenset({'pre-line'})
+_WS_COLLAPSE = frozenset({'normal', 'nowrap'})
+_WS_VALUES = _WS_PRESERVE_ALL | _WS_PRESERVE_BREAKS | _WS_COLLAPSE
 _WIDE_ROLLBACK = frozenset({'revert', 'revert-layer'})
 
 # EU-055 (#827): FAIL-CLOSED — 'unsupported' is the style reader's OWN
@@ -383,7 +393,7 @@ def _style_state(el):
             and hv.lower() == 'until-found':
         unsupported = 'hidden=until-found is outside the supported reader'
         hv = None
-    cand = {'display': [], 'visibility': [], 'cv': []}
+    cand = {'display': [], 'visibility': [], 'cv': [], 'ws': []}
     # CL-090 (#827 DERIVE-CITATION, the six style-state units EU-137..142):
     # this parse rides the PINNED tinycss2 1.4.0 API (installed pin; docs
     # https://doc.courtbouillon.org/tinycss2/, version-matched) —
@@ -407,7 +417,8 @@ def _style_state(el):
         if getattr(d, 'type', None) != 'declaration' or d.name.startswith('--'):
             continue
         nm = d.lower_name
-        if nm not in ('display', 'visibility', 'content-visibility', 'all'):
+        if nm not in ('display', 'visibility', 'content-visibility', 'all',
+                      'white-space'):
             continue
         toks = [t for t in d.value if t.type not in ('whitespace', 'comment')]
         # ANY function-valued winner is UNRESOLVED here, not just var()/env():
@@ -441,7 +452,8 @@ def _style_state(el):
                 for p in cand:
                     cand[p].append((key, val))
             continue                        # non-wide `all` value: invalid
-        prop = 'cv' if nm == 'content-visibility' else nm
+        prop = ('cv' if nm == 'content-visibility'
+                else 'ws' if nm == 'white-space' else nm)
         if subst:
             cand[prop].append((key, _UNSUPPORTED))
             continue
@@ -452,6 +464,14 @@ def _style_state(el):
             continue
         if len(idents) == 1 and idents[0] in _WIDE_ROLLBACK:
             cand[prop].append((key, _UNSUPPORTED))
+            continue
+        if prop == 'ws':
+            # EU-145 (#827): CSS Text 3 §3 — the value is exactly ONE ident
+            # from the cited vocabulary; anything else is invalid and dropped
+            # (it cannot change visibility, so it never reaches the
+            # unsupported lane).
+            if len(idents) == 1 and idents[0] in _WS_VALUES:
+                cand[prop].append((key, idents[0]))
             continue
         if prop == 'display':
             if _display_valid(idents):
@@ -472,7 +492,14 @@ def _style_state(el):
         if len(idents) == 1 and idents[0] in (
                 _VISIBILITY_VALUES if prop == 'visibility' else _CV_VALUES):
             cand[prop].append((key, idents[0]))
-    out = {'hidden_attr': hv is not None, 'unsupported': unsupported}
+    # EU-145 (#827): the DECLARED white-space of THIS element, or None when it
+    # declares none — the same cascade the other properties use (importance,
+    # then source order), and an unknown value is invalid-and-dropped rather
+    # than a refusal: it cannot change visibility.
+    ws_cands = [(k, v) for k, v in cand.get('ws', [])]
+    ws_best = max(ws_cands, default=None, key=lambda kv: kv[0])
+    out = {'hidden_attr': hv is not None, 'unsupported': unsupported,
+           'ws': (ws_best[1] if ws_best else None)}
     for p in ('display', 'visibility', 'cv'):
         best = max(cand[p], default=None, key=lambda kv: kv[0])
         v = best[1] if best else None
@@ -509,9 +536,17 @@ def _style_state(el):
     return out
 
 
-def _advance(vis, el):
+def _advance(vis, el, ws=None):
     """THE one state-combine owner: fold one element into the inherited
-    visibility. Returns (prune, new_vis, unsupported_reason).
+    visibility AND the inherited white-space. Returns
+    (prune, new_vis, unsupported_reason, new_ws).
+
+    EU-145 (#827): white-space is an INHERITED property (CSS Text 3 §3), so
+    it threads through the same fold as visibility — an element's own
+    declaration wins for itself and everything below it, and absence means
+    "keep what the ancestor said". No second walk and no second parse: the
+    value comes from the SAME `_style_state` read this function already
+    does.
 
     display:none and content-visibility:hidden prune ABSOLUTELY (Containment 2
     §4: no descendant revive); the bare HTML hidden attribute prunes only when
@@ -530,7 +565,7 @@ def _advance(vis, el):
     # at all (the WHATWG citation below), so no author declaration can
     # reveal them (3 reds when the prune is withdrawn).
     if st['unsupported']:
-        return False, vis, st['unsupported']
+        return False, vis, st['unsupported'], ws
     # EU-072 (#827 DERIVE-CITATION): `.name` is the PINNED bs4 element-name
     # API — Beautiful Soup 4.13.3 (installed pin), documented Tag.name
     # ("Every tag has a name"), https://www.crummy.com/software/
@@ -544,7 +579,7 @@ def _advance(vis, el):
         # — "the template contents are not children of the element itself":
         # a template REPRESENTS NOTHING and no author display can reveal it.
         # Unconditional prune, nested markup included.
-        return True, vis, None
+        return True, vis, None, ws
     # HTML LS Rendering §15.3.1: UA-default display:none elements — a
     # NORMAL-origin default any valid author INLINE display declaration
     # overrides (exactly the `hidden` attribute's shape), while an author
@@ -560,7 +595,7 @@ def _advance(vis, el):
     # HTML LS Rendering §15.3.1 (the `hidden` attribute's shape).
     prune = (st['display'] == 'none' or st['cv'] == 'hidden'
              or ((st['hidden_attr'] or ua_hidden) and st['display'] is None))
-    return prune, (st['visibility'] or vis), None
+    return prune, (st['visibility'] or vis), None, (st['ws'] or ws)
 
 
 def _hidden_cell(cell):
@@ -591,7 +626,7 @@ def _hidden_cell(cell):
       * if those scripts are ever proved dead, they and this adapter go
         together in the final minimality sweep.
     """
-    prune, vis, unsup = _advance('visible', cell)
+    prune, vis, unsup, _ws = _advance('visible', cell)
     if unsup:
         return False                # never silently hidden; facts refuse instead
     return prune or vis in ('hidden', 'collapse')
@@ -629,7 +664,7 @@ def _effective_hidden(node):
         # INITIAL value of the visibility property (CSS Display 3 section
         # 4, the cited keyword sets above) — the state before any author
         # declaration, never an assumption of this reader.
-        prune, vis, unsup = _advance(vis, el)
+        prune, vis, unsup, _ws = _advance(vis, el)
         if unsup:
             return None, unsup
         if prune:
@@ -797,7 +832,7 @@ def _visible_walk(root, spans=None, hidden=frozenset(), also=frozenset(),
     # is why the text arm can be written as a single identity test rather
     # than a type list; a drifted token makes every element look like text
     # (42 reds).
-    def walk(node, vis):
+    def walk(node, vis, ws=None):
         name = getattr(node, 'name', None)
         if name is None:
             # ONLY REAL TEXT NODES ARE TEXT (#827 E, SEQ 234). `name is None`
@@ -822,9 +857,28 @@ def _visible_walk(root, spans=None, hidden=frozenset(), also=frozenset(),
                 # ELEMENTS still separate tokens. Measured before the
                 # change: ZERO U+200B in the frozen 1,769-file corpus, so
                 # the reversal moves no real filing.
-                words.extend(str(node).replace(_ZWSP, '').split())
+                raw = str(node).replace(_ZWSP, '')
+                if ws in _WS_PRESERVE_ALL:
+                    # pre / pre-wrap / break-spaces: BOTH space runs and
+                    # segment breaks survive, so the text node enters the
+                    # representation as ONE token carrying its own inner
+                    # whitespace — the token join and the span arithmetic
+                    # below are untouched.
+                    if raw:
+                        words.append(raw)
+                elif ws in _WS_PRESERVE_BREAKS:
+                    # pre-line: segment BREAKS survive, spaces and tabs
+                    # collapse (CSS Text 3 §3 — the case my first reading of
+                    # the spec got wrong, corrected by SEQ 812).
+                    kept = '\n'.join(' '.join(line.split())
+                                      for line in raw.split('\n'))
+                    if kept.strip():
+                        words.append(kept.strip('\n') if kept.strip('\n')
+                                     else kept)
+                else:
+                    words.extend(raw.split())
             return
-        prune, vis, unsup = _advance(vis, node)   # THE one combine owner
+        prune, vis, unsup, ws = _advance(vis, node, ws)  # THE one combine owner
         if unsup is not None and flags is not None:
             # AN UNRESOLVABLE WINNER POISONS THE DOCUMENT (SEQ 231 §3): text
             # under it can be neither claimed visible nor hidden, and a clean
@@ -842,7 +896,7 @@ def _visible_walk(root, spans=None, hidden=frozenset(), also=frozenset(),
         if track:
             start_tok = len(words)
         for child in node.children:
-            walk(child, vis)
+            walk(child, vis, ws)
         if track:
             spans[id(node)] = (start_tok, len(words))
 
@@ -873,6 +927,47 @@ def _aligned_columns(rows, row_number, fact_cell, prepared):
     one expression — so it leaked hidden text AND trimmed the evidence away
     from its span.
     """
+    # EU-076 (#827) FIX-TO-STANDARD. WHATWG HTML LS 4.9.12.2: "If the principal
+    # cell has a headers attribute specified", its tokens ARE the header list and
+    # the automatic scan below does not run at all. Order is the attribute's own
+    # token order. A token contributes NOTHING unless the FIRST element in the
+    # document with that id is a cell in the SAME table and is not the principal
+    # cell itself — so an id that resolves outside the table, to a non-cell, to
+    # nothing, or back to this cell is silently skipped, exactly as the model says.
+    # An EMPTY headers attribute is still "specified": it yields no headers, which
+    # is the author's explicit claim and must not fall back to geometry.
+    # Measured before the change: 0 of the 1,769 frozen filings carry headers= or
+    # scope= on any td/th, so this removes a standards deviation and moves no real
+    # filing. NOT this owner's job, recorded so it is not mistaken for done: the
+    # automatic branch's left-scan lives in the row-label owner, and scope-based
+    # association is unreachable here at zero occurrences.
+    declared = fact_cell.get('headers')
+    if declared is not None:
+        # bs4 treats `headers` as a MULTI-VALUED attribute, so it hands back a
+        # list already split on ASCII whitespace — the same split the model
+        # specifies. A string arrives only from a parser that does not, so both
+        # shapes are accepted and neither is assumed. Reading .split() off the
+        # list raised AttributeError on every real filing carrying the
+        # attribute; the corpus has none, so only this row's own probe found it.
+        tokens = declared if isinstance(declared, list) else declared.split()
+        root = fact_cell
+        while root.parent is not None:
+            root = root.parent
+        own_table = fact_cell.find_parent('table')
+        explicit = []
+        for token in tokens:
+            if not token:
+                continue
+            found = root.find(id=token)
+            if found is None or found is fact_cell:
+                continue
+            if getattr(found, 'name', None) not in ('td', 'th'):
+                continue
+            if found.find_parent('table') is not own_table:
+                continue
+            explicit.append(_visible_slice(found, prepared))
+        return explicit
+
     grid = _table_grid(rows)
     # MEMBERSHIP IS GUARANTEED, so there is no absent-target branch: the
     # caller resolved `row_number` by `_index_by_identity`, so `rows[row_number]`

@@ -1025,3 +1025,41 @@ def test_EU145_149_white_space_is_honoured_exactly_as_CSS_Text_3_defines_it():
     prep, ev = _ev('<div style="white-space:pre"><table><tr><td>A  B</td>'
                    f'<td>{_FACT}</td></tr></table></div>')
     assert ev['row_cells'][0] == 'A  B', ev['row_cells']
+
+
+def test_EU076_an_explicit_headers_attribute_REPLACES_the_automatic_scan():
+    """EU-076 (#827) FIX-TO-STANDARD. WHATWG HTML LS 4.9.12.2: "If the
+    principal cell has a headers attribute specified", its tokens ARE the
+    header list — the automatic geometry scan does not run at all. Order is
+    the attribute's own token order, and a token contributes nothing unless
+    the first element in the document with that id is a cell in the SAME
+    table and is not the principal cell.
+
+    Measured before the change: 0 of the 1,769 frozen filings carry headers=
+    or scope= on any td/th, so this removes a standards deviation and moves
+    no real filing. The RED it fixes: geometry put the WRONG header over the
+    fact while the cell explicitly named another one.
+
+    NOT claimed by this row, stated so it is not mistaken for done: the
+    AUTOMATIC branch's left-scan lives in the row-label owner, and
+    scope-based association is unreachable here at zero occurrences.
+    """
+    # the fact cell sits under 'Alt' by geometry but DECLARES 'hGeo'
+    prep, ev = _ev('<table><tr><th id="hGeo">Geo</th><th>Alt</th></tr>'
+                   f'<tr><td>Revenue</td><td headers="hGeo">{_FACT}</td></tr></table>')
+    assert ev['columns'] == ['Geo'], ev['columns']
+
+    # every stored header is still its own exact slice (the suite's §10.1 law)
+    for text, span in zip(ev['columns'], ev['column_spans']):
+        assert span is not None
+        assert text == prep['text'][span[0]:span[1]], (text, span)
+
+    # CONTROL: with no headers attribute the automatic scan is untouched
+    _p2, ev2 = _ev('<table><tr><th id="hGeo">Geo</th><th>Alt</th></tr>'
+                   f'<tr><td>Revenue</td><td>{_FACT}</td></tr></table>')
+    assert 'Alt' in ev2['columns'], ev2['columns']
+
+    # a token that resolves to nothing yields NO header — never a geometry guess
+    _p3, ev3 = _ev('<table><tr><th id="hGeo">Geo</th><th>Alt</th></tr>'
+                   f'<tr><td>Revenue</td><td headers="absent">{_FACT}</td></tr></table>')
+    assert ev3['columns'] == [], ev3['columns']
