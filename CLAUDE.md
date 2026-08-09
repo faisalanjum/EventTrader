@@ -1,20 +1,30 @@
 # EventMarketDB — Project Instructions
 
-## User Communication Rules (READ FIRST — apply to EVERY reply, including after compaction/resume)
+## User Communication Rules — how to talk to me (READ FIRST — every reply, incl. after compaction/resume)
 
-**Prime directive:** Write every message as if the reader is smart but has zero project context and reads fast — treat the user as having ADHD. Before sending, run this check: *"Would a brand-new person understand this in one read?"* If no → rewrite. These rules override default style and are permanent.
+**Before sending ANY message, check:** *"Would a brand-new person with zero context get this in one read?"* If no → rewrite. I read fast and forget fast (treat me like I have ADHD). These rules beat your default style and are permanent.
 
-1. **No jargon, ever.** Plain, common words only. If a technical or project term is unavoidable, define it in plain English the first time.
-2. **Short, but complete.** Aim for a few sentences. Cut every word that doesn't earn its place — but never drop real information just to be shorter.
-3. **Show, don't just tell.** Default to visuals: small tables, arrows, tiny diagrams, and before/after examples. If a picture is faster than a paragraph, draw it.
-4. **Easy to follow.** Crux first. One idea per line. Short bullets. Clear next step. No wall of text.
-5. **Refresh my memory.** The user forgets earlier context. Briefly remind them of relevant earlier findings before relying on them (e.g. "Reminder: we found X works, but Y failed").
+1. **Plain words.** No jargon. If a technical/project term is unavoidable, define it in ~5 plain words the first time.
+2. **Short, but complete.** A few sentences by default. Cut filler — never cut real information.
+3. **Crux first.** Lead with the answer. One idea per line. Short bullets. Clear next step. No wall of text.
+4. **Show, don't tell.** Use small visuals when faster than words: mini-tables, arrows (A → B), before/after.
+5. **Refresh my memory.** Before leaning on earlier context, remind me in one line (e.g. *"Reminder: X worked, Y failed"*).
+6. **Explain before the writeup.** Start any proposal/plan/spec with plain what / why / what-I'm-proposing, THEN the detail.
 
-For Driver work specifically: always explain the goal in plain terms before files, tests, or plans. Never bury the main point inside history.
+For Driver work: say the goal in plain terms BEFORE files, tests, or plans. Never bury the point in history.
+
+**When unsure how a Claude Code tool or CLI behaves:** check `.claude/plans/Infrastructure.md` first — don't guess.
+
+> **Recap:** crux first · plain words · few sentences (but complete) · small visuals · refresh my memory · explain before writeup.
 
 ## Anthropic API Key Handling (CRITICAL — read before editing SDK/LLM code)
 
 > 📌 **Billing survival guide (June 15 2026 subscription change, no-charge proof, EarningsTrigger/Guidance fix recipe, Option #6):** see **`.claude/plans/ANTHROPIC_BILLING_SUBSCRIPTION_CRITICAL.md`** — canonical, empirically tested. Read it before changing any `claude_agent_sdk` / `claude -p` entrypoint.
+
+> 📌 **Driver AI experiments:** before any reader, table-disambiguation, transcript,
+> token, or cost run, read FinalPlan Phase 6. It is the sole current authority for
+> the local AI + Haiku/Sonnet/Luna candidate pool, testing bar, escalation, and
+> owner approval. This is only a pointer; do not create a second policy here.
 
 **The `ANTHROPIC_API_KEY` is NOT in `.env` by design.** It was removed on 2026-04-16 after a root-cause analysis showed it was being silently injected into every `claude -p` subprocess spawned by `claude_agent_sdk`, causing ~$22/day of API charges that should have been covered by the user's Claude Code Max subscription.
 
@@ -30,11 +40,11 @@ export ANTHROPIC_API_KEY=sk-ant-api03-...
 - **Do NOT** use the Anthropic Python SDK (`import anthropic`) for new code that does LLM inference. Use the Claude Code SDK instead (`claude_agent_sdk`) so calls go through the user's OAuth subscription.
 
 ### Who needs the key
-Only `drivers/` directory scripts (e.g., `drivers/drivers_graph/*.py`, `drivers/agenticDrivers/mcpAgent.py`). They use the direct Anthropic SDK and require the raw key.
+Only the ARCHIVED legacy driver scripts (moved 2026-07-15: `archive/drivers/` — e.g., `archive/drivers/drivers_graph/*.py`, `archive/drivers/agenticDrivers/mcpAgent.py`). They use the direct Anthropic SDK and require the raw key. The NEW driver system (repo-root `driver/`) never uses the raw key — subscription lanes only.
 
-To run a driver that needs the key:
+To run an archived legacy driver that needs the key:
 ```bash
-source ~/.anthropic_drivers_key && python3 drivers/drivers_graph/mcp_agent_v2.py
+source ~/.anthropic_drivers_key && python3 archive/drivers/drivers_graph/mcp_agent_v2.py
 ```
 
 ### Who does NOT need the key

@@ -2,6 +2,13 @@
 
 Last updated: 2026-05-07
 
+> **Owner clarification 2026-07-18 — two final earnings 8-K authorities, no third matcher:**
+> historical/backfill, when the target 10-Q/10-K exists, uses the structured exact-accession pairing owned by
+> `.claude/skills/earnings-orchestrator/scripts/get_quarterly_filings.py`; `quarter_identity.py` supplies only
+> its `AUTO_OK` trust check, never the historical join label/date. Live, before the target periodic filing
+> exists, uses `scripts/earnings/quarter_identity.py` alone. This is source routing, not the Driver fact-window
+> resolver. Missing/ambiguous evidence fails closed. Canonical law/procedure: Driver FinalDesign PER-21 / BUILD §3.
+
 ## Current State Snapshot (2026-05-07)
 
 Production status:
@@ -63,7 +70,8 @@ Final production files to keep:
 
 - `scripts/earnings/quarter_identity.py` — final resolver and Goal 6g audited bucket.
 - `scripts/earnings/test_quarter_identity.py` and `scripts/earnings/test_quarter_identity_u64.py` — resolver/write-guard regression tests.
-- `.claude/skills/earnings-orchestrator/scripts/get_quarterly_filings.py` — shared XBRL parsing/proximity/denylist helpers.
+- `.claude/skills/earnings-orchestrator/scripts/get_quarterly_filings.py` — historical/backfill exact-accession
+  pairing authority plus shared XBRL parsing/proximity/denylist helpers.
 - `scripts/harvest_guidance_sessions.py` and `scripts/test_harvest_guidance_sessions.py` — guidance periodic fallback hardening.
 - `scripts/earnings/get_earnings.py` — legacy 8-K listing now uses the canonical 8-K resolver, not coarse calendar math.
 - `scripts/earnings/builders/prior_financials.py` — prior-financial fiscal labels now use the shared periodic-filing chooser instead of local fallback copies.

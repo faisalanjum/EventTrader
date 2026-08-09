@@ -356,6 +356,21 @@ killed mid-flight** + graceful exit. Two variants built & tested head-to-head; *
 ACCEPTED**, v2 (pty) retained as fallback. All tests subscription-only (`entrypoint=cli`), $0,
 isolated in `/tmp`, **zero production change**.
 
+> ⚠️ **PREREQUISITE — workspace-trust gate (empirically hit 2026-05-18; the primitive does NOT
+> handle this).** `--dangerously-skip-permissions` skips *permission* prompts but **NOT** the
+> first-time **"Is this a project you trust?"** workspace-trust dialog. If the launch cwd is a
+> fresh/untrusted directory (e.g. a new `/tmp/<dir>`), `claude` blocks on that dialog **forever**:
+> the tmux session stays alive, `has-session` stays true, heartbeats keep logging, the
+> SessionStart hook never fires (so `entrypoint`/`session_id` files never flush) and the sentinel
+> is never written — it **looks alive for the full hard-cap while doing zero work**. Observed in
+> the predictor-as-embed smoke (session `f357e888…`): 11 min "alive", `entrypoint` empty; one
+> `Enter` to confirm trust → immediately `entrypoint=cli`, `session_id` captured, run proceeded.
+> **It is a one-time gate per directory.** Fix (operational, no code): launch the primitive with
+> cwd = an **already-trusted dir** (e.g. the repo root, already trusted) and pass absolute paths,
+> or pre-seed trust for the target dir once. **Never** launch from a fresh/untrusted `/tmp` cwd.
+> Production wiring of `run_once_v3` into `_run_*_via_sdk` must set the child cwd accordingly. The
+> 17/17 Appendix-A campaign did not surface this because it ran from a trusted dir.
+
 ### Test results (every gate, test-then-accept)
 
 | Gate | v2 (pty.fork) | v3 (tmux) |
@@ -460,3 +475,158 @@ mechanism is duration-agnostic — proven at 25 min (elapsed≈1505s, never kill
 **Wiring (production change — needs explicit OK, NOT done):** swap the `claude_agent_sdk.query(...)`
 body in `_run_predictor_via_sdk` / `_run_learner_via_sdk` / `extraction_worker.py` for
 `run_once_v3(...)`; read existing `result.json`; harvest via captured `session_id`.
+**⚠ SUPERSEDED — see the `CORRECTION (2026-05-18)` block at the top of Appendix C: the
+"required harvester fix" is empirically refuted for the accepted v3 (tmux) primitive; #6 FORK
+predictor capture works with the UNMODIFIED production harvester.**
+
+---
+
+## Appendix C — Obsidian capture under #6: verified pipeline + REQUIRED harvester fix (2026-05-15)
+
+> ## ⚠ CORRECTION (2026-05-18 campaign — empirically refutes the "REQUIRED FIX" below)
+>
+> A fresh isolated campaign (AVGO Q3_FY2023, golden bundle, `run_once_v3` tmux primitive,
+> current Claude Code, **unmodified** production `thinking_harvester.py`) **contradicts the
+> 2026-05-15 conclusion**. Do NOT apply the "THE EXACT FIX" patch below for the accepted v3
+> (tmux) path without re-validating — it is **not required** there.
+>
+> **What was run (4 subscription-billed `entrypoint=cli` runs, $0, isolated /tmp):**
+>
+> | Run | Mode | result.json | section_audit | thinking/reasoning capture |
+> |---|---|---|---|---|
+> | predembed1 | EMBED #6 | ✅ valid | ✅ 8 sec | ❌ 0 text blocks (`EMBED-redacted`) |
+> | predfork1  | FORK #6  | ✅ valid | ✅ 8 sec | ✅ **14.2 KB, 15 text blocks (`FORK`)** — *no harvester fix applied* |
+> | predembed2 | EMBED #6 + 1-line "write reasoning.md" prompt | ✅ valid | ✅ 8 sec | ✅ **5.9 KB substantive `reasoning.md`** |
+> | (learner sessions ×3, prior) | EMBED | ✅ | — | sequential sub-agents (1 Agent/turn) |
+>
+> **Root cause the 2026-05-15 diagnosis got wrong:** Appendix C claims interactive #6
+> sessions do NOT write a `type=user` entry carrying `toolUseResult.agentId` in the primary
+> transcript → linkage empty → skill-fork never found → near-empty. **Verified false for
+> tmux-v3:** primary transcript `8d0f2d92…` DOES contain `type:user` /
+> `toolUseResult.agentId: a7f9778ea87058355`, exactly matching the skill-fork JSONL.
+> `_build_agent_linkage()` populates, the **normal** FORK path (harvester L288–301) resolves
+> the skill-fork, capture is rich. The `skill_fork_jsonl is None` dir-fallback never fires →
+> which is why grep finds it absent from prod yet FORK capture still works.
+> *Proven:* today, tmux-v3 + unmodified harvester → rich FORK capture, no fix.
+> *Inferred (not isolatable from one run):* the 2026-05-15 FCX 0-block result came from a
+> different primitive variant (Appendix-A `run_once` / v2 `pty.fork`) or a Claude Code
+> transcript-shape change since 2026-05-15. Either way the blanket "fix REQUIRED" is obsolete.
+>
+> **Extended thinking is still platform-redacted in BOTH modes** (re-verified fresh under
+> #6/`cli`: EMBED 6 redacted, FORK 2 redacted, `thinking_chars=0` both) — consistent with
+> `project_obsidian_thinking_redacted`; #6 does NOT un-redact it. FORK's 15 "blocks" are
+> visible **assistant text**, and **verbatim inspection shows it is mostly PROCEDURAL
+> NARRATION** ("The file is large. Let me read it in chunks." / "Let me check the JSON
+> bundle for exact values…"), **NOT analytical reasoning**. Volume-rich, substance-poor —
+> it is *not* a usable chain-of-thought proxy. The ONLY place substantive reasoning is
+> captured verbatim (any mode) is an explicit prompt-elicited `reasoning.md` (see #2).
+>
+> **Actionable conclusions:**
+> 1. **Recommended path = FORK via #6 from a trusted cwd.** Subscription billing ✅, valid
+>    decision outputs ✅ (`result.json` + `section_audit.json`), PIT hard-wall intact ✅,
+>    matches production architecture ✅, harvester unmodified ✅. **Caveat (verbatim-proven):
+>    FORK's native `thinking.md` is volume-rich but mostly procedural narration — do NOT
+>    treat it as a reasoning record.** Auditable reasoning requires the #2 prompt lever,
+>    which works in FORK *and* EMBED equally — so reasoning capture is NOT a reason to
+>    prefer FORK over EMBED (the real FORK advantages are the PIT wall + prod parity).
+> 2. **EMBED capture is a PROMPT lever, not a harvester bug** — `predembed1` (no instruction)
+>    captured nothing; `predembed2` (one added "write reasoning.md before RESULT_PATH" line)
+>    produced a substantive 5.9 KB phase-by-phase artifact, **zero harvester change**. The
+>    harvester correctly reports 0 when the model emits no text — it cannot harvest what was
+>    never written.
+> 3. The "THE EXACT FIX" patch below is **retained for historical context only**; treat it as
+>    NOT required for the accepted v3 (tmux) primitive unless a future re-test reproduces the
+>    2026-05-15 0-block FCX condition. Also see Appendix B's `PREREQUISITE` (trust-gate:
+>    launch from a trusted cwd — empirically the silent-hang cause if ignored).
+
+Empirical campaign: map exactly how predictor/learner capture works today, run #6 vs SDK through
+the **same** harvester in an isolated `/tmp` vault, diff, find & fix every gap. Production
+`thinking_harvester.py` was **not** modified (patched copy was a throwaway probe, deleted).
+
+### How capture works today (predictor & learner)
+
+```
+NOT hook-based. obsidian_capture.py (SubagentStop) EXPLICITLY SKIPS
+  {earnings-prediction, earnings-attribution, earnings-learner}  (SKIP_AGENT_TYPES → sys.exit 0)
+Capture = INLINE: finalize_{prediction,learning}_result()  →  _render_and_harvest_best_effort()
+  → result.json (+sdk_session_id) → result.md (result_md_renderer)
+  → thinking_harvester.harvest(type, ticker, quarter, session_id) reads
+    ~/.claude/projects/-home-faisal-EventMarketDB/<session_id>.jsonl (+ subagents/)
+  → events/{Q}/{prediction|learning}/{thinking.md, result.md, result.json[, subagents/*.md]}
+Only project hook relevant to these = validate_learning_output.py (PreToolUse:Write) —
+  a quality GATE on learner result.json, NOT a vault-capture artifact.
+```
+
+Real artifact sets (ground truth): `prediction/` = result.json, result.md, section_audit.json,
+thinking.md (FORK ⇒ no subagents/). `learning/` = result.json, result.md, thinking.md,
+subagents/`{neo4j-*}.md` (EMBED ⇒ data-subagent traces).
+
+### The gap found (predictor) — and that learner is unaffected
+
+Same harvester, isolated `/tmp` vault, two real FCX Q1_FY2026 predictor sessions
+(SDK `d1633a0d` = prod baseline; #6 `3d2d9801` = run_once_v3):
+
+| | pattern | text_blocks | text_chars | thinking.md |
+|---|---|---|---|---|
+| SDK orig (= prod ground truth) | FORK | 20 | 15726 | 19370 B |
+| **#6 orig (BROKEN)** | FORK | **0** | **0** | **1597 B** ← capture lost |
+| #6 + fix | FORK | **26** | **16554** | **20477 B** ← parity / superset |
+| SDK + fix (regression gate) | FORK | 20 | 15726 | 19370 B → **byte-identical** ✅ |
+| Learner EMBED `a870d1fa` orig=fix | EMBED-redacted | 5 | 3299 | 10188 B → **byte-identical** ✅ |
+
+**Root cause:** interactive (#6) sessions do **not** write a `type=user` tool_result entry
+carrying `toolUseResult.agentId` in the *primary* transcript (SDK sessions do). So
+`_build_agent_linkage()` returns `{}`, the FORK loop `continue`s on every skill tool_use, and
+`skill_fork_jsonl` stays `None` → harvester emits a near-empty thinking.md — even though the
+skill-fork JSONL exists under `subagents/` (26 text blocks, valid `meta.json
+agentType=general-purpose`, first-user `"Base directory for this skill:"`).
+
+Learner is **EMBED** (no skill-fork; reasoning + Agent data-subagents are in the primary +
+`subagents/` already, linked by Agent linkage which #6 *does* preserve) → unaffected. Guidance
+`/extract` is EMBED-with-Agent-subagents → same as learner, unaffected by this specific gap (its
+separate concern is the K8s tmux-in-pod deploy, Appendix B).
+
+### THE EXACT FIX (apply to `scripts/earnings/thinking_harvester.py`)
+
+Scoped fallback — insert immediately **after** the `for sb in skill_tool_uses:` loop and
+**before** the `# ── FORK-with-nested-Agents coverage` comment (≈ line 310):
+
+```python
+        if skill_fork_jsonl is None:
+            # Interactive / #6 (run_once_v3) sessions don't write
+            # toolUseResult.agentId in the primary transcript, so `linkage`
+            # is empty and the loop above finds nothing. The skill-fork JSONL
+            # still exists under subagents/ — discover it directly via the
+            # same _is_skill_fork dual-signal. Scoped: only runs when linkage
+            # produced nothing, so SDK sessions are byte-unaffected (proven).
+            _sub_dir = projects_root / session_id / "subagents"
+            if _sub_dir.is_dir():
+                for _cand in sorted(_sub_dir.glob("agent-*.jsonl")):
+                    if _is_skill_fork(_cand, context_label=f"{ticker} {quarter} {thinking_type} [dir-fallback]"):
+                        skill_fork_jsonl = _cand
+                        try:
+                            skill_fork_blocks = parse_session_blocks(_cand)
+                        except Exception as e:
+                            log.warning("thinking_harvester: skill-fork dir-fallback parse %s: %s", _cand, e)
+                        break
+```
+
+Properties (all empirically verified above): FORK-scoped; triggers only when primary-linkage
+failed; **zero** behaviour change for SDK predictor (byte-identical) and learner EMBED
+(byte-identical); makes #6 predictor capture a **superset** of SDK (26 vs 20 text blocks).
+Assumes ≤1 skill-fork per session (true for predictor; learner/guidance are EMBED so the branch
+never runs) — fine for these pipelines; revisit only if a real multi-skill-fork session appears.
+
+### Extended thinking (the "preferably" stretch)
+
+Both SDK and #6 show `thinking_chars=0, redacted_thinking_blocks=1` — extended thinking is
+**platform-redacted in BOTH paths** (pre-existing, see main body / `project_obsidian_thinking_redacted`).
+#6 does not regress it; the fix achieves parity+ on everything that *is* capturable (output/text
+blocks). The firm floor ("at least what works should be made to work") is met and exceeded.
+
+### Remaining wiring items (not capture artifacts; for full production cutover)
+
+1. **Harvester fix above** — apply to `thinking_harvester.py` (production edit, needs OK). Without it #6 predictor `thinking.md` is empty.
+2. **session_id plumbing** — `_run_*_via_sdk` returns `run_once_v3(...)["session_id"]`; pass into `finalize_*` unchanged (harvest path is launch-agnostic once the fix is in — proven: it reads the on-disk JSONL by id).
+3. **`validate_learning_output.py` (learner quality gate)** — runs as a PreToolUse:Write project hook *inside* the session. `run_once_v3` passes `--settings <throwaway>`; **resolve merge-vs-replace** OR (recommended) move the SessionStart session-id hook into the project `.claude/settings.json` so no `--settings` override is needed and nothing is shadowed. (Not a vault-capture item — a guard — but part of "exactly as it works now".)
+4. Guidance: Appendix B K8s tmux-in-pod note still applies.
