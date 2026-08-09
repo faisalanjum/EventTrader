@@ -655,9 +655,9 @@ def test_E2_the_hidden_value_match_is_EXACT_ASCII_no_repair():
     from driver.relocation.inline_html import _style_state, _advance
     st = _style_state(_cellE(None, hidden="UNTIL-FOUND"))
     assert st.get('unsupported'), st
-    prune, _vis, unsup = _advance('visible', _cellE(None, hidden=" until-found "))
+    prune, _vis, unsup, _ws = _advance('visible', _cellE(None, hidden=" until-found "))
     assert unsup is None and prune is True
-    prune, _vis, unsup = _advance('visible', _cellE(None, hidden=" until-found"))
+    prune, _vis, unsup, _ws = _advance('visible', _cellE(None, hidden=" until-found"))
     assert unsup is None and prune is True
 
 
@@ -991,3 +991,37 @@ def test_EU123_the_memo_capacity_is_derived_and_bounded():
     assert len(IH._PREP_CACHE) <= IH._PREP_CACHE_MAX == 1
     assert IH.prepare(_HEAD + '<p>Alpha</p></body></html>') is not a
 
+
+def test_EU145_149_white_space_is_honoured_exactly_as_CSS_Text_3_defines_it():
+    """EU-145 + EU-149 (#827), FULL STANDARD per SEQ 812.
+
+    CSS Text 3 white-space (https://www.w3.org/TR/css-text-3/
+    #white-space-property): `pre`, `pre-wrap` and `break-spaces` preserve
+    BOTH space runs and segment breaks; `pre-line` preserves segment
+    breaks but COLLAPSES spaces and tabs; `normal` and `nowrap` collapse
+    both. The property is INHERITED, so a declaration on an ancestor
+    governs the text below it."""
+    def cell(style, body):
+        prep, ev = _ev(f'<table><tr><td style="{style}">{body}</td>'
+                       f'<td>{_FACT}</td></tr></table>')
+        return ev['row_cells'][0]
+
+    # preserving values keep the run AND the break
+    assert cell('white-space:pre', 'A  B') == 'A  B'
+    assert cell('white-space:pre-wrap', 'A  B') == 'A  B'
+    assert cell('white-space:break-spaces', 'A  B') == 'A  B'
+    assert cell('white-space:pre', 'A\nB') == 'A\nB'
+
+    # pre-line: the BREAK survives, the space run collapses
+    assert cell('white-space:pre-line', 'A  B') == 'A B'
+    assert cell('white-space:pre-line', 'A\nB') == 'A\nB'
+
+    # collapsing values are today's behaviour, unchanged
+    assert cell('white-space:normal', 'A  B') == 'A B'
+    assert cell('white-space:nowrap', 'A  B') == 'A B'
+    assert cell('', 'A  B') == 'A B'
+
+    # INHERITED: an ancestor's declaration governs
+    prep, ev = _ev('<div style="white-space:pre"><table><tr><td>A  B</td>'
+                   f'<td>{_FACT}</td></tr></table></div>')
+    assert ev['row_cells'][0] == 'A  B', ev['row_cells']
