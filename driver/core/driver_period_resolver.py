@@ -1,16 +1,26 @@
 """The ONE shared fiscal period resolver (FINAL_DESIGN §6.2, PER-01..20; GuidancePeriod.md).
 
-Wraps the PROVEN guidance period machinery BY REFERENCE (never copied):
-  - pure math: guidance_ids.build_guidance_period_id -> fiscal_math (its 99.1% = date ->
-    fiscal-QUARTER classification, 544/549 vs SEC focus tags — NOT exact-window accuracy;
-    exact calendar windows come only from the date/SEC branches above the math fallback)
+Wraps the existing guidance period machinery BY REFERENCE (never copied):
+  - pure math: guidance_ids.build_guidance_period_id -> fiscal_math. Its accuracy figure
+    (544/549 = 99.1% on date -> fiscal-QUARTER classification vs SEC focus tags) is
+    HISTORICALLY RECORDED and UNDER INDEPENDENT RE-MEASUREMENT (E1) — it is not a
+    current certification, and it never described exact-window accuracy at all; exact
+    calendar windows come only from the date/SEC branches above the math fallback
   - cascade:   existing-graph window -> SEC exact dates -> predicted quarter -> pure math
 New-law deltas over the old substrate (each anchored): exact-date branch first + ytd/ttm
 windows (GuidancePeriod.md) · calendar_override routed BEFORE any company lookup (BUILD §10
 hazard) · time_type required, label hint never overrides (FACT-18) · no quiet gp_UNDEF, no
 year-2000 months (FINAL §6.2 / BUILD §10) · 'long_range' scope retired -> exact_range (95 #23).
 
-Resolution fails CLOSED: any ambiguity raises PeriodResolutionError -> the caller PARKS.
+Resolution fails CLOSED on the RESOLUTION path: ambiguity there raises
+PeriodResolutionError -> the caller PARKS. Two classes escape that path BEFORE it, by
+design, and neither is a park (P-O4 (#827) — the old blanket "any ambiguity" was false):
+  - ABSENCE. Every PERIOD_ITEM_KEYS value None is a clean MISS: `None` is returned, the
+    caller has no period, and nothing raises. Absence is not ambiguity.
+  - A PRESENT period_u_id. It returns through `_preserved`, which judges by its OWN
+    narrower law — the id parses, no framing field may be supplied alongside it, and any
+    supplied date must equal the id's own — and NOT through `_check_declared_fields`.
+  The `calendar_override` bool check is the one rule that runs before both.
 """
 import sys
 from datetime import MAXYEAR, MINYEAR, date, timedelta
@@ -328,9 +338,15 @@ _INTERIM_SCOPE_DAYS = {          # sized so the KNOWN TESTED calendars pass
 
 
 def _check_declared_fields(item):
-    """The ONE strict period-shape check, on EVERY path. This is PERMANENT basic input
-    validation — P14 later replaces only the temporary labels/bands, never this.
-    Conflicting, mixed, incomplete, or out-of-range framing PARKS; never guess."""
+    """The ONE strict period-shape check on the RESOLUTION path. This is PERMANENT
+    basic input validation — P14 later replaces only the temporary labels/bands,
+    never this. Conflicting, mixed, incomplete, or out-of-range framing PARKS; never
+    guess.
+
+    NOT "every path" (P-O4 (#827) — the old wording was false and is corrected here):
+    `ensure_driver_period` returns before this check in two cases — an all-None item
+    (a clean miss, `None`) and a PRESENT period_u_id (judged instead by `_preserved`'s
+    own conflict law). Every path that RESOLVES a period reaches this."""
     shapes = [k for k in ("fiscal_quarter", "half", "month", "long_range_end_year")
               if item.get(k) is not None]
     if len(shapes) > 1:
@@ -370,7 +386,9 @@ def _declared_scope(item):
     SEC/prediction/pure-math paths would (reproduced: the same gp_ window got exact_range
     via XBRL dates but quarter via SEC → the OD-21 surprise↔home scope match broke).
     Fields, not date math: the window alone can't tell a 52/53-week quarter from an odd
-    range, and the declared fiscal framing is the semantic truth (PER-11/13). Paths
+    range, and the declared fiscal framing is the semantic truth (the R11 interim
+    scope-labeling ruling, STATUS_AND_HISTORY.md:147-161 — P-O4 (#827) retires the
+    old PER-11/13 citation, whose source is archived). Paths
     converge only when fiscal framing IS supplied; frameless exact dates honestly stay
     exact_range."""
     if item.get("fiscal_quarter") is not None:
