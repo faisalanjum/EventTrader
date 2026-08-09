@@ -1,3 +1,10 @@
+// ⏸ OWNER DECISION PENDING (deferred 2026-07-25): this file's embedded rules text contains the
+// "Standard financial acronyms ... keep their familiar name" note (an OPEN CLASS) and the eps
+// exception. Both rules stand UNCHANGED until the owner rules (eps sole-exception vs uniform
+// spell-out; open-class sentence vs frozen single exception). Any bot editing this file: do NOT
+// resolve, extend, or delete either rule — remind the owner a ruling is pending. Evidence:
+// ../experiments/WORKORDER_STATUS.md 2026-07-25 entries. This comment must stay OUTSIDE the
+// emitted prompt strings.
 export const meta = {
   name: 'driver-gate-g2',
   description: 'G2 — INDEPENDENT admission gate (reusable). One test per candidate driver_name: is it a VALID, REUSABLE driver? Verdict = reuse / admit / rewrite / skip, per the FINAL_DESIGN §3 NAME rules, fail-closed (never delete/merge; err specific). No route bucket; no fundamental/news split (a producer concern, not a catalog one). Reusable in BATCH reconcile AND LIVE production (per new name, against the live catalog). Pass evidence-bearing candidates + catalog via args; defaults to the Restaurants seed.',

@@ -1,3 +1,10 @@
+// ⏸ OWNER DECISION PENDING (deferred 2026-07-25): this file's embedded rules text contains the
+// "Standard financial acronyms ... keep their familiar name" note (an OPEN CLASS) and the eps
+// exception. Both rules stand UNCHANGED until the owner rules (eps sole-exception vs uniform
+// spell-out; open-class sentence vs frozen single exception). Any bot editing this file: do NOT
+// resolve, extend, or delete either rule — remind the owner a ruling is pending. Evidence:
+// ../experiments/WORKORDER_STATUS.md 2026-07-25 entries. This comment must stay OUTSIDE the
+// emitted prompt strings.
 export const meta = {
   name: 'driver-menu-build',
   description: 'Driver-catalog SEED build for ANY industry, into a self-contained run folder. Step 0: resolve_driver_scope.py turns args.industry into tickers + a run_id (default Restaurants). Step A: fetch_company_sources.py --run-dir pulls ALL non-news sources WITH real text + each event source_id into runs/<run_id>/sources/ and writes sources_manifest.json (sha256 per file). Step B: 1 blind subagent per company coins candidate driver_names (each with source_id). Step C: deterministic JS grouping writes runs/<run_id>/seed.json. Step D: write scope.json + manifest.json (args, git commit, counts). Read-only Neo4j. Pass args = { industry: "<name>" }; returns run_id (pass it to reconcile.js). A2 resume: args = { industry, resume_run_id: "<RUN_ID>" } re-enters an existing run dir and fans out ONLY the chunks without a valid menu (fetch+chunk frozen).',

@@ -1,5 +1,11 @@
 # PHASE-6 READER SCREEN — APPROVAL PACKAGE v13 (2026-07-23; paper only, ZERO AI calls/spend)
 
+> **CONTRACT SUPERSEDED FOR QF-01 (2026-07-25, owner ruling Phase6 plan §6):** the per-cell
+> grading described below (copied_label + exact period-header arrays) remains the accurate
+> HISTORY of the completed screen, but QF-01 now runs the ALIGNED 5×50 table contract
+> (one anchor + one rendered table → evidence-ID set or []; code copies/verifies). See
+> `QwenTests/table_evidence/qf01.py` + `truth5x50_qf01_preflight.py`. This file is history.
+
 **ONE plan only (v1/v2 superseded in full). This is a SCREEN — not production certification.**
 Holds: Route C · 150-case exam (pre-harvest) · harvest · commit · push.
 

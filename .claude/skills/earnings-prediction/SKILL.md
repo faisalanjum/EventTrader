@@ -103,11 +103,13 @@ This is the exact lesson body that appeared in the rendered bundle.
 
 **Mechanism gate (v3, mandatory).** A lesson's `Mechanism:` line (rendered under the body for v3 lessons) must independently apply to THIS quarter's bundle for `label = "confirmed"`. Generic, abstract, or thematically plausible mechanisms not bundle-confirmable from current evidence → label `irrelevant`. The bundle's `Applies when:` line states the preconditions; the bundle's `Invalid if:` line states the conditions that nullify. Use both to decide whether THIS bundle satisfies the mechanism.
 
+**No lazy lesson skip.** For every lesson, test its `applies_when` and `invalid_if` against the bundle. Use `"no relevant evidence"` only when no condition or signal from `applies_when` or `invalid_if` appears. If a lesson is `confirmed` and changes how you interpret a top driver, cite it in that driver; if a confirmed lesson is not cited, explain in `bundle_evidence` why it did not change the call or which stronger non-lesson evidence outweighed it.
+
 **Track record signal (v3).** Each rendered lesson may show a `[reviews: <Nh> helped, <Nm> misled, ...]` summary tag and a `[status: active|watch]` tag on its marker line. A `[status: watch]` lesson requires sharper bundle evidence than `active` — the prior learner audits flagged it as recently misleading. A streak of `misled` audits is a prior against citation; require especially strong mechanism alignment in this bundle to overcome it. A `[CAUTION — recently misled; ...]` line on a watch lesson is a render-time warning, not a label; reviews are guidance, not verdict.
 
 **`lesson_text` discipline (v3 / D20).** When copying a lesson body into `lesson_labels[i].lesson_text`, copy ONLY the line that follows `Lesson:` — NOT the marker (`L4. [sector: Technology] [status: active] ...`), NOT the `[CAUTION ...]` line, NOT the `Mechanism: / Applies when: / Invalid if:` lines, NOT the `[reviews: ...]` tag. The validator's positional equality check (T1) compares against the body only; including any decoration breaks the check.
 
-**`bundle_evidence` rules.** For `irrelevant` you may use the literal sentinel `"no relevant evidence"` or a specific note. For `confirmed`/`contradicted` it MUST be specific evidence (section/field name + value or quote). The sentinel is rejected by the validator for those two labels.
+**`bundle_evidence` rules.** Use `"no relevant evidence"` only for `irrelevant` lessons where no condition or signal from `applies_when` or `invalid_if` appears in the bundle. If any such condition or signal appears, name the failed `applies_when` precondition or triggered `invalid_if` condition. For `confirmed`/`contradicted`, use specific current-bundle evidence (section/field name + value or quote). The validator rejects the sentinel for those two labels.
 
 **Citation rule (validator-enforced).** Every `key_drivers[i]` must include `cites_lesson_indices: list[int]` (may be `[]`). Each integer points to a position in `lesson_labels[]`; you may cite a lesson ONLY if its `label == "confirmed"`. The validator rejects citation of `contradicted` or `irrelevant` labels.
 
@@ -122,7 +124,7 @@ This is the exact lesson body that appeared in the rendered bundle.
 **Example shape** (do not copy phrasings; label based on YOUR current bundle):
 ```json
 "lesson_labels": [
-  {"lesson_text": "<verbatim body from L1>", "label": "irrelevant", "bundle_evidence": "no relevant evidence"},
+  {"lesson_text": "<verbatim body from L1>", "label": "irrelevant", "bundle_evidence": "<failed condition, or no relevant evidence if none appear>"},
   {"lesson_text": "<verbatim body from L2>", "label": "confirmed",  "bundle_evidence": "<1-sentence citation from THIS quarter's bundle>"}
 ],
 "key_drivers": [
@@ -162,7 +164,7 @@ Write `RESULT_PATH` as a single JSON object with these fields:
     {
       "lesson_text": "verbatim body from an L# block in ## Lessons To Label",
       "label": "irrelevant",
-      "bundle_evidence": "no relevant evidence"
+      "bundle_evidence": "<failed condition, or no relevant evidence if none appear>"
     }
   ],
   "key_drivers": [
@@ -214,7 +216,7 @@ Use this as a final checklist for easy-to-miss validation rules before finalizin
 
 - **Label enum** (§3.3 + §5). `label` must be exactly `"confirmed"`, `"contradicted"`, or `"irrelevant"` (lowercase only).
 
-- **`bundle_evidence` sentinel** (§3.3). `"no relevant evidence"` is allowed only for `irrelevant`. `confirmed` and `contradicted` need specific current-bundle evidence.
+- **`bundle_evidence` sentinel** (§3.3). Use `"no relevant evidence"` only for `irrelevant` lessons where no condition or signal from `applies_when` or `invalid_if` appears. If any such condition or signal appears, explain the failed `applies_when` precondition or triggered `invalid_if` condition. `confirmed` and `contradicted` require specific current-bundle evidence.
 
 - **`cites_lesson_indices`** (§3.3 + §5). Every `key_drivers[i]` must include `cites_lesson_indices`, even when empty. Only cite confirmed lessons. Indices must point to existing `lesson_labels`.
 
@@ -228,4 +230,5 @@ Use this as a final checklist for easy-to-miss validation rules before finalizin
 4. If both consensus AND guidance are missing, `confidence_score` must be 30 or lower.
 5. Market moves in the bundle are context, not proof. Inter-quarter moves show positioning and what may already be priced in; peer reactions are analogs; macro/sector moves show backdrop. Do not treat any of them as proof of this stock's next-session direction, and never use target-company trading or news after the bundle cutoff.
 6. Prior lessons inform interpretation; they never replace this quarter's evidence. A lesson can explain why a fact matters, but it cannot be the fact. Every `key_drivers[i].evidence` must be grounded in non-lesson bundle evidence; a driver whose evidence is only a lesson is not valid.
-7. Write only to `SECTION_AUDIT_PATH` and `RESULT_PATH`. Do not create scratchpad files, notes, or any other output.
+7. If zero lessons are confirmed and the surviving key drivers point both long and short, choose `no_call` unless non-lesson bundle evidence is clearly stronger on one side.
+8. Write only to `SECTION_AUDIT_PATH` and `RESULT_PATH`. Do not create scratchpad files, notes, or any other output.

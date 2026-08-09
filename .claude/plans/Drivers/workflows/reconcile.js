@@ -1,3 +1,10 @@
+// ⏸ OWNER DECISION PENDING (deferred 2026-07-25): this file's embedded rules text contains the
+// "Standard financial acronyms ... keep their familiar name" note (an OPEN CLASS) and the eps
+// exception. Both rules stand UNCHANGED until the owner rules (eps sole-exception vs uniform
+// spell-out; open-class sentence vs frozen single exception). Any bot editing this file: do NOT
+// resolve, extend, or delete either rule — remind the owner a ruling is pending. Evidence:
+// ../experiments/WORKORDER_STATUS.md 2026-07-25 entries. This comment must stay OUTSIDE the
+// emitted prompt strings.
 export const meta = {
   name: 'driver-reconcile',
   description: 'Step 2 reconcile over a per-industry seed catalog (args.run_id = the exact menu_build run; reads runs/<run_id>/seed.json, writes catalog.json + approved.json + decisions.json + validation.txt there): (Dedup) canonical + reversible SAME_AS for exact-same-meaning only = the REUSE arm; (Gate) independent admit/rewrite/skip per the FINAL_DESIGN §3 NAME rules; (Refute) skeptic breaks bad SAME_AS + meaning-changing rewrites; (Assemble) DETERMINISTIC CODE writes the catalog (assemble_catalog.py ports the 5-way precedence; HierarchicalCatalogPlan §11.19 — the writer cannot fabricate a fusion); (Validate) incl. the D1 fusion-approval check. Review-file only; no graph writes; no merges/deletes. Roll-up/rewrite targets must be COINED names.',

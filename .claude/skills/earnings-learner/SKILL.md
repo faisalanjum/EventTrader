@@ -109,6 +109,8 @@ Every lesson you emit (in `predictor_lessons` or `global_observations`) is a str
 4. States the conditions that nullify it (`invalid_if`)
 5. Cites `evidence_refs` that DIRECTLY prove the mechanism is present in this quarter's bundle
 
+**Prediction-use gate.** Save a lesson only if it can improve a future call. It must tell the predictor what to change next time, be checkable from the prediction bundle before the outcome is known, and state when using it would mislead. If any part is missing, emit no lesson.
+
 **Invalid-lesson signals — emit NO lesson if any apply:**
 - Only describes price patterns or peer movement without explaining transmission
 - Uses generic phrases ("sell the news", "buy the dip", "stocks like this go down")
@@ -150,7 +152,7 @@ Each audit entry has these fields:
 | Value | Meaning |
 |-------|---------|
 | `helped` | Predictor used the lesson AND outcome aligned |
-| `misled` | Predictor used the lesson AND outcome wrong because the lesson's reasoning was bad |
+| `misled` | The lesson's reasoning or trigger was bad; the predictor either used it in a wrong call or falsely confirmed it when it should not have applied |
 | `outweighed` | Predictor used the lesson; mechanism was real; other forces dominated. Lesson logic was sound — does NOT penalize the lesson |
 | `missed` | Predictor labeled `irrelevant` / didn't cite, but hindsight shows the lesson was applicable |
 | `neutral` | Predictor's label was correct (e.g., `irrelevant` AND lesson really didn't apply) — no impact on the call |
@@ -169,6 +171,9 @@ Each audit entry has these fields:
 - Predictor `confirmed` + cited + outcome aligned → `review: helped, action: keep`
 - Predictor `confirmed` + cited + outcome wrong, mechanism present + correct (other forces dominated) → `review: outweighed, action: keep` (or `refine` if `applies_when` needs tightening)
 - Predictor `confirmed` + cited + outcome wrong, mechanism NOT actually present in THIS quarter's bundle → `review: misled, action: refine` (sharpen trigger) or `retire` (no salvage)
+- Predictor `confirmed` + NOT cited + outcome aligned because stronger non-lesson bundle evidence justified ignoring the lesson → `review: neutral, action: keep`
+- Predictor `confirmed` + NOT cited + outcome wrong, and citing the lesson would have improved the call → `review: missed, action: keep` (or `refine` only if unclear lesson wording caused the non-citation)
+- Predictor `confirmed` + NOT cited + outcome wrong, and the lesson would NOT have improved the call because its trigger was falsely confirmed → `review: misled, action: refine` (or `retire` if no sharper trigger is defensible)
 - Predictor `irrelevant` + correctly so → `review: neutral, action: keep`
 - Predictor `irrelevant` + lesson actually applicable → `review: missed, action: refine`
 - Predictor `contradicted` correctly → `review: neutral, action: keep`

@@ -4575,3 +4575,1449 @@ one-case end-to-end cannot run. RULING RECORDED: the Route-A 150-case gate is
 invented from the answer key; writes must NOT be enabled for this. rebuild_anchor
 itself is consumable (driver/relocation/locator.py; lawful evidence shape at
 driver/core/test_admissions_handoff.py:108-150) — the blocker is data, not machinery.
+
+---
+
+## 5×50 ROUND 9 CLOSED (2026-07-24): TABLE LANE → EXACT-CELL ID SELECTION (zero AI)
+
+HIS ORDER: keep round-8 prose/numberless fixes; replace only the table response with
+exact-cell ID selection ({request_id, anchor_id, evidence_id|null}); reuse choice_v2 +
+the certified tracker; code-owned bundles; production-shaped five-field value-blind
+target; code re-pulls + reconstructs; hidden truth = expected ID only; two ledgers;
+TDD the attack list; rebuild + recompute costs; narrow plan wording fix; zero AI/commits.
+
+VERIFIED BEFORE ACCEPTING (both ways):
+- "Overbuilt" REPRODUCED on disk: grade.py:50-55 forced tables to carry a nonempty
+  evidence_span the table branch barely checked — dead-weight transcription. CONFIRMED.
+- choice_v2 EXISTS (QwenTests/table_evidence/choice_v2/) and is this exact design —
+  but the owner quarantined QwenTests (2026-07-24: separate research, never drives
+  Fiscal; excluded from commits) and it imports the Qwen client at module level.
+  RESOLUTION: pattern MIRRORED inside truth5x50_* (source-only registry, opaque ids,
+  null-abstain, code reconstruction, registry-before-truth); the SAME committed
+  certified functions reused (_context_track/_emit_family/_row_scope/_numeric_data_cols
+  from m2_native_table_shadow_r3 + INV._classify_cell). No import across the
+  quarantine line; no new parser written.
+- "Narrow FinalPlan wording correction" REDIRECTED with proof: the FinalPlan contains
+  ZERO 5×50 table-contract wording (grep: no copied_label/copied_period/evidence_span/
+  5x50 hits) — the contract lives in the PreCall Package, now v11. The pinned FinalPlan
+  was NOT edited (no content there to correct).
+- "measurement" has no independent certified register in press-release tables
+  (channel never opines): TRANSLATED to the tracker's caption register — the same
+  label/section/caption/period register set choice_v2 itself uses. FLAGGED for his
+  confirmation, not silently adopted.
+- "XBRL when present": measured, not assumed — all 60 pool sources are EX-99.1
+  press-release exhibits; inline XBRL present 0/60. Bundle field exists, honestly null.
+
+BUILT (all zero-AI, all uncommitted):
+- schema: TABLE_SOLVE=(case_id, anchor_id, evidence_id|null) exact-keys; K1_TABLE=
+  (case_id, target_evidence_id, ask); TABLE_ASK_KEYS = label/slice/measurement/unit/
+  period wordings (register-verbatim; empty-when-register-empty; value+digit leak ban;
+  id/marker ban; UNIQUENESS law — the ask must select exactly ONE registry cell);
+  per-lane output caps (tables 220 B); menu wire contract (six source-verbatim fields,
+  code registers never on the wire).
+- build: table_registry_from_source() = PURE function of pinned source bytes (re-pull
+  + sha verify inside; deterministic opaque ids sha(file_sha|t|r|grid)[:12]; collision
+  assert; spans/labels/section/caption/aligned headers from the certified tracker;
+  kind from the certified classifier). Non-table pools load FROZEN and are never
+  rewritten (byte-identity asserted in-run). Envelopes split by lane with per-lane
+  prompts; manifest v11 builder-generated.
+- bind: _validate_k1_table (register laws + uniqueness + leak/id bans + ambiguous-kind
+  target law preserved); binder ships menu-only wire cases; target-leak assert extended.
+- grade: _table_resp_ok (exact 3 keys, anchor echo, null=abstain, unknown-id reject);
+  three-way = id unanimity incl. K1's target; verify_selection() SYSTEM GATE = re-pull
+  pinned source → rebuild registry via the same recipe → SNAPSHOT-COMPARE vs the frozen
+  case (tracker drift/tamper = loud abstain) → unknown/duplicate/stale/incomplete =
+  ABSTAIN, never repair; score_table_batch = TWO LEDGERS (model correct/wrong/null/
+  invalid vs system correct_accept/wrong_accept/safe_abstain; invalid never accepted).
+- run: per-lane output limits (unknown prefix fails CLOSED); every table envelope's
+  menu must EQUAL the frozen registry projection; dry-run + transport laws unchanged.
+
+SUITES (final post-edit runs, standalone, unmasked exits): builder 17/17 · binder
+22/22 · grader 30/30 · REHEARSAL 38/38 (incl. the R9 battery: real-source re-pull
+equality; hidden-truth decoy → byte-identical registry; determinism+collision; menu
+purity; REAL end-to-end correct_accept; wrong-year sibling = wrong+wrong_accept
+counted; absent-evidence null=safe_abstain / any-pick=wrong_accept; stale sha abstain;
+tampered registry abstain; old-contract response rejected; id-in-ask rejected;
+220-byte lane cap; envelope tamper detection; stage-aware caps — a full-size
+K1 table proposal PASSES the s1 gate while a >220 B stage-2 id answer FAILS;
+this stage split fixed a bug MY OWN pre-audit caught: the first cut of the 220 B
+table cap would have rejected legitimate K1 stage-1 proposals). pyflakes clean.
+
+COSTS RECOMPUTED (builder-generated): s1 2,270,058 B (44 files, both lanes) + s2
+sentinel 4,945,481 B; max output 240,600 tok (stage-aware); CEILING 2,645,780 tokens ENFORCED
+(was 4,271,848 — 38% lower; id-only table answers). Manifest sha d09b697d817466db,
+byte-identical across independent rebuilds.
+
+PROCESS INCIDENT, OWNED: the first builder run OVERWROTE the v10 table candidate pool
+before its (file,table_index) pin check failed; the v10 pairs are unrecoverable (WIP
+files uncommitted). Impact: LOW — the pool was not owner-frozen truth (hash-freeze
+happens only after the K-calls, which have not run), the screen's 8 reused tables are
+untouched (committed 6853e6f), and the reviewer's order required rebuilding the pool
+with registers the old form lacked. The new pool passes all 17 builder gates incl.
+diversity; the pin check now guards the NEW pool (rebuild proven byte-stable). The
+class error — destructive rebuild without snapshotting the prior artifact — is mine;
+corrective going forward: the frozen-pool byte-identity check now runs IN the builder
+for all four span pools, and the table pool is pinned from this state.
+
+STATUS: round-9 corrective COMPLETE; zero AI calls; zero commits/pushes; K1 calls
+remain blocked on his audit of THIS record + the owner GO.
+
+---
+
+## 5×50 ROUND 10 CLOSED (2026-07-24): TABLE LANE → ANCHOR + EVIDENCE SET (zero AI)
+
+ORDER PATH: the owner demanded an independent first-principles simplicity pass BEFORE
+reading the reviewer's proposal; the pass was made blind, then compared. CONVERGENCE:
+my pass independently found the same five moves his text ordered (set-of-ids with []
+abstain; rendered table + inline local ids; real-anchor-shaped asks; hidden truth as
+stable addresses; one table + one target per call) — including the biggest finding
+AGAINST MY OWN round-9 build: the register-verbatim ask was CIRCULAR (my own
+uniqueness check proved code could solve it by string matching → the exam would have
+measured nothing production needs). Full agreement recorded; his GO followed.
+
+HIS CITATIONS, VERIFIED BEFORE AGREEING (reproduce-first, both ways):
+- locator.py anchor = {driver, slice, measurement, series_unit, time_type, wording,…}
+  and the build site RETURNS ('period','quote_hash') as REMOVED keys — CONFIRMED.
+- test_route_a: one driver row, two period cells handled — CONFIRMED (his path was
+  wrong: the file lives at driver/relocation/test_route_a.py, not scripts/…).
+- m2_row_family_truth.jsonl: 19 rows, 3–7 cells each, 93 total — CONFIRMED digit-exact.
+
+BUILT (bounded zero-AI refactor; all uncommitted):
+- schema: TABLE_SOLVE=(request_id, evidence_ids) — ONE object, duplicate-free id
+  list, [] = abstain; K1_TABLE=(case_id, anchor, evidence_ids); ANCHOR_KEYS = the
+  six real locator fields; solve prompt = his wording (select every cell stating
+  that Driver; level + stated change/comparison cells of the SAME driver even at
+  %; no calculating/guessing/explaining; [] when unproven).
+- build: table_parse (certified recipe, memoized, re-pull+sha inside) +
+  table_fixture (rendered rows + [En] inline markers + local id→ADDRESS map;
+  addresses r{row}g{s}-{e} are the stable truth currency). ONE case per table
+  envelope (asserted at build AND in the runner). Pool pairs preserved from the
+  pinned R9 set; span pools byte-identical (asserted). Sentinel S2 rebuilt.
+- bind: K1 validation = exact schemas; ids known+duplicate-free; the set must hold
+  ≥1 classifier-ambiguous cell (the category's difficulty guarantee, KEPT); anchor
+  lints = value+bare-digit ban vs EVERY selected cell, year/period regex ban,
+  \bE\d+\b id/ordinal ban, ⟨⟩ ban, wording source-verbatim, required fields
+  nonblank; binder ships rendered wire + anchor ONLY (K1's set never crosses —
+  asserted on the serialized payload).
+- grade: order-free SET equality across K1/K2/K3; verify_set = re-pull → fixture
+  rebuild → EXACT rendering+map match (drift loud) → per-id complete records else
+  abstain; score_table_batch = exact-set vs hidden ADDRESS sets with his classes —
+  extra verified cell = WRONG ACCEPT + HARD STOP; missing = visible recall miss;
+  [] on positive = safe abstention + failed recall; [] on no-match = correct;
+  invalid/unknown/duplicate = never emitted.
+- run: one-object table responses handled; per-lane+per-stage output caps
+  (s1=1200 B all lanes; s2 tables=220 B); 1-case law asserted per table envelope;
+  every table envelope must EQUAL the frozen rendered wire.
+
+DELETED (v11 fat, none load-bearing): exploded six-field menu · sha-12 global ids +
+global uniqueness · frozen bundle registry + snapshot law · five-field
+register-verbatim ask + uniqueness=1 · single-id|null contract · anchor_id echo ·
+table batching · the xbrl fixture field (0/60 measured in R9).
+
+SUITES (final post-edit, standalone, unmasked exits): builder 16/16 · binder 22/22 ·
+grader 32/32 · REHEARSAL 43/43 — incl. his RED list: multi-period real family (≥2
+cells); real %/change family present in the pool; wrong-metric extra cell → hard
+stop; REAL distractor table: [] correct / any pick hard-stops; unknown+duplicate ids
+invalid never emitted; stale sha abstain (real re-pull); tampered rendering abstain;
+hidden-key isolation (decoy truth file → byte-identical fixture); per-lane caps both
+ways. pyflakes clean.
+
+COSTS (builder-generated): s1 1,735,333 B (95 files: 35 span-batched + 60 one-table
+calls) + s2 sentinel 3,723,171 B; max output 240,600 tok; CEILING 2,060,102 tokens
+ENFORCED — v10 4,271,848 → R9 2,645,780 → R10 2,060,102 (−52% from v10). Manifest
+v12 sha a69ea384710e5b81, reproduced identically on independent rebuild.
+
+GOVERNANCE NOTES: the reviewer's "QF-01 qualification" bar is adopted as the
+MODEL-NEUTRAL certification bar (zero wrong, exact sets); the QF-01/Qwen naming
+stays quarantined per the owner's ruling. The screen's 93 per-cell keys regroup as
+family SETS at key time (accounting restated in the Package). Exam-time law
+recorded: one anchor sweeps EVERY eligible table; the gold table is never
+preselected from hidden truth.
+
+STATUS: round-10 corrective COMPLETE; zero AI calls, zero graph writes, zero
+commits/pushes. K1 calls remain blocked on his audit of THIS record + the owner GO.
+
+---
+
+## 5×50 ROUND 11 CLOSED (2026-07-24): FIVE VALIDITY HOLES FIXED (zero AI)
+
+ChatGPT's R10 live audit found five holes; ALL FIVE reproduced on disk before any fix:
+- claim-1 (label cells get ids): 154 label/footnote cells id'd (his exact number),
+  incl. "Adjusted EBITDA (2)" / "Q1 2023 GAAP" — footnote/year numbers pulled them
+  into _emit_family; 50/60 tables were "unclear" ONLY via these. CONFIRMED.
+- claim-2 (fake unit): rehearsal hardcoded series_unit='usd' and could pick a
+  %-change row as the driver. CONFIRMED (line 56).
+- claim-3 (distractor unproven): a second table got an empty answer without the same
+  anchor applied. CONFIRMED.
+- claim-4 (12.9% untested): the check only found "any % row". CONFIRMED.
+- claim-5 (coverage not built): the binder sent only the target table. CONFIRMED.
+
+HONEST COUNTS (his demand — report, do not weaken): the R9 "classifier-ambiguous
+cell" criterion, applied to TRUE data cells only, qualifies 0-10 tables (essentially
+all of the old 60 were label-bug); the R10-native difficulty (>=2 distinct metric
+rows + a uniquely-matchable multi-period LEVEL row) qualifies 60 — a more
+production-relevant bar, not a laxer one. Reported in the manifest, not hidden.
+
+FIXES (all zero-AI, uncommitted):
+- claim-1: table_fixture gives [En] ids ONLY to cells whose grid overlaps a certified
+  numeric-data column (_numeric_data_cols); row labels/footnotes stay visible but
+  UNSELECTABLE. Proven: ZERO label ids across all 60 (build + rehearsal).
+- KEYSTONE expected_set(file,sha,ti,wording): CODE authors the gold set = the row
+  whose label == wording contributes its whole data-cell family (level periods + its
+  stated %/change cell). 0 or >1 matching rows -> []. validate_k1 now REQUIRES K1's
+  evidence_ids to EQUAL this code set (which makes the field redundant -> proposal 1).
+- claim-2: rehearsal derives series_unit from the table's declared unit line
+  (derive_unit) and drives the anchor from ref_anchor (a real LEVEL row, never %-only).
+- claim-4: a REAL same-row level+%change triad is found in the pool; the % cell is IN
+  the code set (inclusion), dropping it = recall miss, adding a different-row metric
+  cell = WRONG ACCEPT + HARD STOP (exclusion). RED-pinned on real data.
+- claim-3 + claim-5: bind_stage2 FANS the anchor across filing_table_indices (one wire
+  per table; code computes each expected — family or [] when the driver is absent).
+  The rehearsal proves, on a REAL sibling table where the SAME anchor yields code [],
+  that [] is correct and ANY pick hard-stops. Full fan measured = 1,232 requests (20x);
+  truth creation uses sibling_cap (bounded, omissions LOGGED), exam/reader-test uses
+  the full fan (sibling_cap=None) — the no-preselection law. Split proposed to owner.
+- DELETED the stale "set-lacks-classifier-ambiguous-cell" K1 gate (R9 baggage, the
+  bug's vector); removed run.py _frozen_table_wire (wire now rebuilt from source per
+  request); grade rebuilds id_map from source for fanned wires (never on the model wire).
+
+SUITES (final, standalone, unmasked): builder 18/18 · binder 24/24 (real-file fan) ·
+grader 32/32 · REHEARSAL 39/39 — incl. all five claims RED-pinned on REAL data plus
+the kept span-lane counterexamples. pyflakes clean. Manifest v13 sha 8a8d1800487ab835;
+ceiling 2,030,684 tokens ENFORCED (v10 4,271,848 -> R9 2,645,780 -> R10 2,060,102 ->
+R11 2,030,684). Pool re-pinned (table pairs intentionally changed by the R11 gate;
+span pools byte-identical, asserted).
+
+PROPOSED BACK TO CHATGPT (owner-mandated simplify-every-turn pass):
+1. DROP K1's evidence_ids — code authors the set from the anchor; validate_k1 already
+   requires K1's set to EQUAL the code set, so the field is redundant (and a risk).
+   K1 would propose the anchor ONLY.
+2. RETIRE the "unclear/ambiguous-cell" criterion for good (honest count ~0-10, it was
+   the 154-label vector); the R10-native difficulty is the honest bar.
+3. RATIFY the fan split: bounded sibling_cap for truth creation, full fan (no
+   preselection) at exam/reader-test time — full fan on the whole pool would be 1,232+
+   calls.
+
+STATUS: R11 COMPLETE; zero AI calls, zero graph writes, zero commits/pushes. K1 calls
+remain blocked on his audit of THIS record + owner GO.
+
+---
+
+## 5×50 ROUND 12 (2026-07-24): R11 CODE-AUTHORED GOLD REJECTED — REVERTED (zero AI)
+
+ChatGPT REJECTED R11 except the true-data-cell ID fix: "code now decides which cells
+match the Driver." REPRODUCED ON OUR OWN DATA before accepting: expected_set() matches
+only row-label==wording and returns the whole row, IGNORING slice/measurement/unit/
+time. On C-TBL-013 "Net Sales" (columns GAAP | As Adjusted | Change) it returns all 4
+cells — mixing GAAP + As-Adjusted for a single-measurement target. A precision
+violation, live in the pool. The green R11 tests only proved the circular rule agreed
+with itself (my rehearsal happened to pick single-slice level rows).
+
+OWNED, PLAINLY: my R11 "code authors the set / drop K1 evidence_ids" simplification
+removed a LOAD-BEARING wall (independent model judgment), not fat. It violated the
+generalization invariant I had just codified — I tested on our 60 samples (mostly
+single-slice level rows), never on the multi-slice/multi-measurement tables that are
+the norm in the universe. Exactly the "sample-fit dressed as a fix" failure the rule
+exists to prevent. ChatGPT's catch is correct on all 7 points.
+
+FIXES (R12, all zero-AI, uncommitted; his 7 points, each verified):
+1. DELETED expected_set + table_reference_anchor + all code-authored gold/[]. Code
+   never matches wording to rows or chooses cells.
+2. KEPT K1's evidence_ids. Gold = K1==K2==K3 AGREEMENT (grade_batch set-equality);
+   code only verifies ids exist + copies evidence. validate_k1_table dropped the
+   code-set cross-check; a DIFFERENT valid set now also passes validation (proven) —
+   only agreement, not code, decides which is right.
+3. REMOVED derive_unit (an invented unit classifier). The rehearsal uses a FIXED
+   test-anchor series_unit; production uses the real Core-anchor projection.
+4. A distractor is [] only via unanimous key-maker [] — not a label matcher.
+5. REVERTED the "unclear -> easier multi-period" swap. Kept the honest UNCLEAR gate
+   (a classifier-'ambiguous' TRUE-data cell). Reported honestly, never padded.
+6. The table fan no longer caps-and-claims: sibling_cap=None = the full
+   no-preselection fan (real coverage); a finite cap logs a SCREEN, not cert.
+7. Reworded the unit rule (prompt): include level cells in the Driver's own unit +
+   a directly stated %/change of the SAME Driver; EXCLUDE a different base metric or
+   level series (different measurement flavor / unit / slice), even in the same
+   row/column.
+
+PRACTICAL FINDING + OPEN QUESTION (my scrutiny, raised not decided): the UNCLEAR
+(classifier-'ambiguous') search is RARE + EXPENSIVE (~2s/file, sparse hits) — a
+60-table rebuild scans the whole corpus (>5 min) and likely can't reach 60. So the
+table pool is FROZEN (R11-selected) to PROVE the R12 architecture; --rebuild-tables
+does the slow honest re-selection once the definition is settled. QUESTION to owner/
+ChatGPT: his own failing example (Residential Kitchen / GAAP-vs-Adjusted) is
+SLICE/measurement ambiguity, which the classifier-'ambiguous' criterion does NOT
+capture (those cells are often 'complete_strict'). Should "unclear" mean structural
+ambiguity (rare, orthogonal to the reader skill) or SLICE/measurement ambiguity
+(plentiful AND directly tests the precision requirement he is protecting)? Not my
+call — flagged for decision.
+
+SUITES (final, standalone, unmasked): builder 18/18 · binder 22/22 · grader 32/32 ·
+REHEARSAL 38/38 — incl. RED-pins: code authors NO gold (expected_set gone); three-way
+agreement makes the key; DIFFERENT valid sets -> discard; reader over-including a
+different-flavor cell -> WRONG ACCEPT + HARD STOP against the AGREED key; agreed-[]
+distractor; verify-only stale/drift abstain; capped fan labeled SCREEN. pyflakes
+clean. Manifest v14 sha 0cf3d038ca109ba1; ceiling 2,038,504. Span pools byte-
+identical; table pool frozen (R11-selected, flagged).
+
+MY THREE R11 PROPOSALS — verdict: (1) drop K1 evidence_ids = WRONG (reverted; it was
+the load-bearing independence); (2) retire "unclear" = WRONG as I framed it (reverted
+the easier swap; kept the honest UNCLEAR bar); (3) fan split = PARTLY right but I must
+not claim cert for a capped run (now labeled SCREEN). Lesson recorded.
+
+STATUS: R12 COMPLETE; zero AI, zero writes, zero commits. Awaiting his verdict + the
+"unclear" definitional decision + owner GO.
+
+---
+
+## 5×50 ROUND 13 CLOSED (2026-07-25): FULL-FAN GRADING + ROUTE-B UNCLEAR (zero AI)
+
+ChatGPT accepted the R12 semantic-code reversal (reproduced 22/22, 32/32, 38/38) but
+rejected the package on two findings, BOTH reproduced before fixing:
+- finding-1 (full-fan grading broken): a fanned sibling (C-TBL-013#t0) has no K1
+  answer -> KeyError; and a unanimous-[] sibling graded as DISCARD:abstain, not a
+  valid distractor. CONFIRMED (grade_batch indexed k1_answers[case_id]; grade_case
+  discarded []).
+- finding-2 ("unclear" too narrow): must be EVERY Route-B residual (FinalPlan:152 —
+  "multi-value row without a unique column" OR "disputed label"), BOTH structural and
+  slice/measurement ambiguity, not one. CONFIRMED against the plan.
+
+FIXES (R13, zero-AI, his 4 orders):
+1. FULL-FAN grading path built + tested: K1/K2/K3 independently solve EVERY fanned
+   table (target + siblings), keyed by request_id (no KeyError). grade_case now
+   returns ACCEPT-EMPTY on a unanimous [] (a certified distractor key), not
+   DISCARD:abstain; grade_batch 'clean' accepts ACCEPT + ACCEPT-EMPTY. Rehearsal
+   proves: target ACCEPT + driver-absent siblings ACCEPT-EMPTY + batch clean; any
+   disagreement on any fanned request -> not clean.
+2. UNCLEAR = every Route-B residual: route_b_residual(cells) -> 'structural'
+   (classifier-ambiguous data cell) | 'semantic' (a driver row whose cells differ by
+   a discriminating non-period/non-change FLAVOR header — GAAP vs Adjusted, segment
+   columns — or a repeated row label) | None. A discriminating header appears in SOME
+   but not ALL cells, so a full-width unit caption is excluded WITHOUT a unit
+   word-list. Header-TYPE recognizers (period/change) only CLASSIFY, never DECIDE
+   ownership (flagged for the generalization checklist). FINAL POOL REBUILT
+   (--rebuild-tables): 60 residuals = 59 semantic + 1 structural, subtypes reported;
+   the frozen R11 pool was development-only.
+3. NAMED REGRESSION C-TBL-013 (GAAP-vs-As-Adjusted, pinned by FILE so it survives any
+   rebuild): route_b flags it semantic; a GAAP target's key = the GAAP cells only; a
+   reader adding As-Adjusted cells = WRONG ACCEPT + HARD STOP — the exact case my R11
+   code rule mixed, now guarded by the model-agreed key.
+4. Cleanup: manifest v15 (subtype_counts reported); Package trimmed 164 -> 47 lines
+   (superseded v10-v14 fat collapsed to a one-line history); stale gate wording
+   removed; all gates rerun.
+
+SUITES (final, standalone, unmasked): builder 19/19 · binder 22/22 · grader 33/33 ·
+REHEARSAL 42/42. pyflakes clean. Manifest v15 sha 8d35afa2a0904bfd; ceiling
+2,039,157. Span pools byte-identical; table pool = 60 Route-B residuals (rebuilt).
+
+MY R11 SCORECARD (kept honest): all three R11 "simplifications" were wrong or partial —
+this arc is the cost of my over-cut, now fully corrected. STATUS: R13 COMPLETE; zero
+AI, zero writes, zero commits. Awaiting his verdict + owner GO.
+
+---
+
+## 5×50 ROUND 14 (2026-07-25): REAL FULL-FAN COST + PER-CASE UNCLEAR GATE (zero AI)
+
+ChatGPT: R13 not accepted; 3 gaps, ALL reproduced on disk before fixing.
+- (A) COST INCOMPLETE: full coverage = 1,226 (anchor,table) requests PER MODEL; the
+  manifest priced only the 60 targets; the rehearsal FABRICATED K1's sibling answers.
+  CONFIRMED (measured 1,226; 3,798 total calls incl. K1 sibling solves).
+- (B) route_b_residual is a TABLE heuristic that sees no anchor, so it cannot prove a
+  specific (anchor,table) is a true Route-B miss — K1 could anchor on an easy row.
+  CONFIRMED. KEY FINDING: locate() is "Route A ONLY — Routes B/C INACTIVE" (post-
+  Phase-3 contract, XBRL-only); our press-release tables have no XBRL, so there is NO
+  deterministic Route-B baseline to run — which is precisely why per-case unclearness
+  MUST be an independent judgment, not code.
+- (C) one live docstring still framed the truth as code-owned. CONFIRMED (build.py:8,
+  grade.py:8, schema.py table comment).
+
+FIXES (R14, zero-AI, his 4 orders):
+1. fan_cost(tabs) PRICES the REAL full fan deterministically: every anchor x every
+   eligible filing table (1,226/model), solved by ALL THREE makers (K1 included, no
+   synthetic), + K1 propose (60) + one independent per-case unclear review (60) =
+   3,798 model calls; input 9,630,380 B; the manifest ENFORCED ceiling is now
+   5,260,492 tokens (span lanes + full fan), up from the understated 2,038,504. The
+   rehearsal's synthetic K1-siblings are RELABELED as a PLUMBING test of the grading
+   mechanism only (the real solves + cost are the manifest's).
+2. route_b_residual() is DOWNGRADED to CANDIDATE SAMPLING (docstring + manifest say
+   so). New certify_unclear(verdict) gate: a case counts toward UNCLEAR ONLY on an
+   INDEPENDENT per-case verdict 'reader-required' (post-anchor-freeze); 'semantic'/
+   'resolved'/None do NOT count. The manifest's subtype counts are CANDIDATES;
+   certified_unclear_count = PENDING (produced by the independent review post-GO; may
+   need over-sampling to reach 50).
+3. Stale docstrings removed in build/grade/schema — all now state the GOLD is
+   whatever K1/K2/K3 INDEPENDENTLY AGREE ON; code never authors it.
+4. All gates rerun; actual calls/bytes/ceiling reported.
+
+SUITES (final, standalone, unmasked): builder 20/20 · binder 22/22 · grader 33/33 ·
+REHEARSAL 44/44. pyflakes clean. Manifest v16 sha d0a87cd7a0ec3d9d; ceiling
+5,260,492. Package trimmed further.
+
+RAISED (my simplify/scrutiny duty, not decided): the ~5.26M ceiling / 3,798 calls to
+yield ~50 certified cases is DOMINATED by ~1,166 distractor solves. The fan size
+equals PRODUCTION's candidate-generation: if production surfaces reader candidates via
+a retrieval step rather than sending every filing table, the fan (and cost) shrink
+proportionally. Whether truth creation needs the full fan or a labeled distractor
+sample is the screen-vs-cert tradeoff (his R12 point 6). Owner/ChatGPT to decide the
+production candidate model before the (expensive) full run.
+
+STATUS: R14 COMPLETE; zero AI, zero writes, zero commits. Awaiting his verdict + the
+production-candidate decision + owner GO.
+
+---
+
+## 5×50 ROUND 15 (2026-07-25): REAL POST-ANCHOR FLOW + REVIEW CONTRACT (zero AI)
+
+ChatGPT: R14 not accepted; 4 gaps, ALL reproduced before fixing.
+- (1) runner had NO K1-sibling stage and NO unclear-review stage; its dry-run passed
+  without them (paper-only). (2) the unclear gate took a BARE STRING — no prompt,
+  schema, source linkage, reviewer, or strict validation. (3) the 5.26M ceiling
+  undercounted: 40-char anchors (legal max 200), omitted review inputs, and priced
+  output at /4 while input/runner use /3. (4) K1's 60 target answers were
+  double-counted (propose already supplies the target answer), and a stale docstring
+  (grade.py:45 "code owns everything") remained. CONFIRMED all four.
+
+FIXES (R15, zero-AI, his exact orders):
+1. REAL post-anchor flow priced by fan_cost: K1 PROPOSE (60, supplies each target
+   answer ONCE) + K1 solves SIBLINGS only (1,166) + K2 solves ALL (1,226) + K3 solves
+   ALL (1,226) + one per-case UNCLEAR review (60) = 3,738 model calls (was 3,798 —
+   the 60 K1 target double-count removed). Max-legal 200-char anchors; review INPUTS
+   counted; ALL inputs AND outputs at 3 B/token. ENFORCED ceiling now 6,502,538
+   (was understated 5,260,492); input 13.1 MB.
+2. NO-HUMAN unclear-review CONTRACT: schema.review_prompt() (anchor + rendered table,
+   verdict enum reader-required|resolvable, value-free reason<=200) + REVIEW_KEYS +
+   grade.validate_review (STRICT: exact keys, request_id match, verdict enum,
+   non-empty reason, cap, value-leak reject) + is_unclear. certify_unclear now
+   REQUIRES a well-formed reader-required review (a bare string is rejected). Reviewer
+   MODEL is OWNER-HELD (MAKERS['REVIEW'] = 'OWNER-HELD; not K1/K2/K3, not the sampler').
+3. RUNNER gates: full_fan_expected(man) reads the priced plan; refuse_if_incomplete()
+   HARD-ERRORS unless every planned call has a validated response; validate_review_file
+   serializes + strictly validates each review. The cli dry-run EXERCISES both
+   (a missing solve -> refused; a malformed verdict -> rejected).
+4. KEEP the full fan — retrieval is a FUTURE optimization only after proving zero
+   misses (his order; my earlier "decide before the run" framing withdrawn). Stale
+   docstring removed; module docstrings now state GOLD = K1/K2/K3 agreement.
+
+SUITES (final, standalone, unmasked): builder (all checks) · binder 22/22 · grader
+33/33 · REHEARSAL 47/47 — incl. the R15 integration attacks (well-formed vs bare-
+string review; value-leak reject; K1 propose-once + siblings-only counts; /3-both
+ceiling; runner refuse-incomplete + review gate live in the dry-run). pyflakes clean.
+Manifest v16 sha 83bc02b46c9b3e07; ENFORCED ceiling 6,502,538.
+
+STATUS: R15 COMPLETE; zero AI, zero writes, zero commits. Awaiting his verdict + owner
+GO. The real 3,738-call run happens only post-GO.
+
+---
+
+## 5×50 ROUND 16 (2026-07-25): EXACT REQUEST MANIFEST + REAL-RESPONSE RECONCILE (zero AI)
+
+ChatGPT: R15 not accepted; 5 direct attacks, ALL reproduced on disk first.
+- (1) DUPLICATE reviews for a NONEXISTENT request were accepted (validate_review_file
+  built the case FROM the response's own id -> tautological id-check; no linkage to the
+  frozen anchor/table/expected ids). (2) INVENTED large completion counts satisfied the
+  runner (refuse_if_incomplete trusted CALLER-supplied counts, never loaded real
+  responses). (3) the review prompt asked for a SINGLE CELL + an anchor PERIOD, but the
+  task selects a SET and the anchor has no period (periods are found-evidence). (4) the
+  ceiling was >=72,000 tokens short (K1 propose output priced at 1,200 B, but a max
+  200-char anchor + the answer set is ~2,400 -> 60 x ~1,200 = 72,000), before real
+  envelope overhead. (5) the manifest label was stale (v16/R14) and K3 said opus-4-8.
+  CONFIRMED all five (dup-fake review returned 2; inflated counts passed; prompt greps;
+  the 72k arithmetic; label/K3 grep).
+
+FIXES (R16, zero-AI, his exact orders):
+1. request_manifest(tabs) = THE exact plan: one entry per expected call
+   {request_id, role, file, table_index, source_hash, anchor-slot} written to
+   truth5x50_request_manifest.json (3,738 entries = the priced total, ids unique). The
+   anchor is a SLOT bound post-K1; ids/roles/tables/hashes are deterministic now.
+2. runner.reconcile LOADS real responses (never caller counts) and reconciles against
+   the manifest: rejects UNKNOWN/EXTRA (id not in plan), DUPLICATE, and MISSING, and
+   STRICTLY validates each REVIEW against its FROZEN case. The cli dry-run exercises all
+   five attacks (unknown-id / duplicate / dup-fake-review / missing / malformed-review
+   all REFUSED). refuse_if_incomplete(caller counts) + the self-referential
+   validate_review_file are DELETED.
+3. review_prompt reworded: anchor is {driver,slice,measurement,series_unit,time_type,
+   wording} with NO period; it judges whether the COMPLETE cell SET needs SEMANTIC
+   INTERPRETATION (multiple measurement flavors/slices) vs structure fixing it.
+   validate_review fixed (no eager case_id KeyError).
+4. fan_cost prices the EXACT serialized envelope of every manifest request
+   (batch_id + maker spec + prompt + response_contract + case) at 200-char anchors +
+   each ROLE's EXACT max output (K1 propose = full anchor + set, the 72k catch), ALL
+   at 3 B/token. ENFORCED ceiling 6,946,782 (was 6,502,538 understated -> +444k covers
+   the 72k + envelope overhead); input 14.4 MB.
+5. manifest label reconciled to v18/round-16 (from the stale v16/R14); K3 model bumped
+   to claude-opus-5 with model_id_OWNER_CONFIRM (my Jan-2026 knowledge lists opus-4-8
+   as latest, so I FLAG the exact id for owner confirmation rather than guess — no id
+   affects the price). KEEP the full fan; retrieval is future-only after zero misses.
+
+SUITES (final, standalone, unmasked): builder 20/20 · binder 22/22 · grader 33/33 ·
+REHEARSAL 49/49 — incl. the direct-attack battery run live in the runner dry-run.
+pyflakes clean. Manifest v18 sha e4abb9811672e325; request manifest 3,738 entries;
+ceiling 6,946,782.
+
+OWNER FLAG: confirm the exact K3 model id (ChatGPT says "Opus 5"; my knowledge cutoff
+predates it). STATUS: R16 COMPLETE; zero AI, zero writes, zero commits. Awaiting his
+verdict + owner GO + the K3 id.
+
+================================================================================
+ROUNDS 17-19 (2026-07-25) — THE CONTRACT CORRECTIONS. Zero AI, zero writes, zero
+commits. Pools NOT rebuilt (held at his instruction until these landed).
+================================================================================
+
+R17 (his R16 rejection: "green tests miss several important failures"). ALL
+reproduced on disk before any edit:
+ · span output priced //4 not /3 -> the "exactly 72,000" gap (240 cases x 1200:
+   216,000 vs 288,000). FIXED.
+ · the numeric contract made the MODEL re-type the value + a verbatim quote, and
+   code judged the label<->number binding via a TIE law + a ONE-NUMBER rule. The
+   one-number rule REJECTED legal speech ("Traffic fell 2% while ticket revenue
+   rose 4%") - reproduced. DELETED exact_span_text, model-written evidence_span,
+   header-array equality, the one-number rule, and period-from-the-ask. The model
+   now returns block+occurrence+label+period; CODE re-pulls the value. A mislabel
+   is killed by THREE-WAY DISAGREEMENT, not a brittle code rule.
+ · Q&A speaker/role loss + merged-header geometry loss + C-PRS-057 ("$ 2. 4
+   billion" splits into '2.' and '4') + numberless pool = 100% Q&A-sourced: all
+   reproduced, all deferred to the (still-held) Phase-A pool rebuild.
+
+R17b (his correction): the span ask was SOURCE-COPIED wording, so the span test
+was EASIER than production, which supplies a semantic anchor. MY CUT went further
+than asked: DELETED ASK_KEYS entirely - ONE anchor shape + ONE validator for all
+five lanes instead of two of each.
+
+R18 (his 5 attacks; ALL CONFIRMED against driver/relocation/locator.py):
+ 1. Core `wording` is a TUPLE -> my validator rejected a REAL rebuilt anchor.
+ 2. numberless anchors carry series_unit=None (locator law: a unit on a
+    numberless fact is a contradiction) -> rejected; I had INVENTED 'qualitative'.
+ 3. time_type='banana' and series_unit='test_unit' PASSED. Real enums:
+    ('duration','instant') and the 9-value _ANCHOR_UNIT set.
+ 4. a source-rejection carrying junk fields PASSED.
+ 5. 3,738 = TABLE calls only; +105 span = 3,843 before retries.
+ MY TWO ADDITIONAL FINDS (his audit understated):
+ (a) the Core anchor has TEN fields, not six - my code literally claimed
+     "locator.py builds exactly these". FALSE. Now an explicit PROJECTION with
+     each drop justified.
+ (b) the unit hole was not "test_unit"; ANY string passed. Enums are now READ
+     LIVE from locator.py (never a copy that can drift) and PINNED in the
+     rehearsal so a Core change fails loudly.
+ THE LOAD-BEARING FIX (his #3): lawful-shape validation is SEPARATE from K1
+ leak checks. Requiring `wording` verbatim in the target source would REJECT the
+ renamed/drifted-label case that relocation exists to solve.
+ SELF-INFLICTED BUG CAUGHT BY THE SUITE: the runner detected budget-sentinel
+ files by sniffing the text "XXXX"; my new fixture used lowercase 'x', so
+ detection silently broke and budget artifacts would have been SENDABLE.
+
+R19 (his 7 attacks; ALL CONFIRMED, incl. his exact 1,660 B figure):
+ 1. Core caps NEITHER birth-quote count NOR length (verified: 4 clues, a 201-char
+    clue) -> the 3x200 cap moved OUT of base validation into the K1-FIXTURE
+    contract only. SAME ROOT CAUSE AS R18: a fixture constraint sitting in a
+    production-shape validator.
+ 2. deleting the sentinel marker made a budget file look REAL (fail-OPEN) ->
+    REQUIRED `artifact_kind` enum ('budget_sentinel'|'real_bound'); missing or
+    unknown = HARD STOP in validate_envelopes.
+ 3. a normal response carrying reject_no_business_update:false PASSED (the
+    `set(r) - {..}` subtraction) -> EXACT keys on accepted AND rejected shapes.
+ 4. a legal 1,660 B K1 propose vs a hardcoded 1,200 cap -> the cap is now DERIVED
+    from the SAME max_k1_propose_bytes() used for pricing, sized by the MEASURED
+    pool max (max_table_data_cells = 154). PARTIAL BY DESIGN: exact per-request
+    id counts are Phase B, per his instruction.
+ 5. ceiling_derivation still called 3,738 the total -> now "TABLE + SPAN = total
+    before retries".
+ 6. pyflakes: unused MAX_ASK_CHARS -> resolved by fix 1 (constants used again).
+ 7. HE CORRECTED ME: source_id/company are NOT withheld identity leaks - the
+    trusted envelope ALREADY shows the model `file` (0000002488-...htm) and
+    `ticker` (AA). Verified from the wires. My security rationale was FALSE;
+    corrected to "no matching signal for a single already-identified source".
+ CAUGHT BEFORE AUDIT (self): the manifest label still said round-18 - the exact
+ stale-label defect he flagged at R16. Fixed + the pin updated.
+
+SUITES (final, standalone, unmasked): builder 20/20 (0 FAIL) · binder 41/41 ·
+grader 34/34 · REHEARSAL PASS · pyflakes CLEAN · runner dry-run refuses both
+sentinel stages and makes no calls.
+CEILING 7,303,129 — STAMPED PROVISIONAL in the manifest: byte-derived from
+serialized text ONLY; reasoning tokens, retries/replacements and real usage
+remain UNMEASURED until the 10-call pilot.
+SCOPE LIMIT (recorded in the manifest): these keys certify a reader against
+SAME-SOURCE K1 FIXTURE anchors. Production certification requires REAL Core
+anchors or independently sourced ones — explicitly OUT OF SCOPE.
+
+STILL HELD (his instruction): the Phase-A pool rebuild (Q&A speaker/roles,
+merged-header geometry, C-PRS-057 fail-closed decimals, cross-source numberless
+re-mine, old pools preserved as audit evidence + old/new counts and hashes
+reported), then Phase B receipts, then the 10-call pilot.
+STATUS: R19 COMPLETE; zero AI, zero graph writes, zero commits, zero push.
+OWNER FLAG still open: the exact K3 model id.
+
+================================================================================
+ROUND 20 (2026-07-25) — PHASE A (source fidelity) + PHASE B (receipts, exact
+cost, three-way in the runner) + the doc refresh, done LAST on purpose.
+================================================================================
+
+HIS TWO R19-CLOSE DEFECTS — both reproduced, both fixed:
+ 1. The BUILDER still carried the stale "identity leak" rationale. My R18 fix
+    corrected schema.py ONLY — a SWEEP-THE-CLASS failure on my side. Swept every
+    file this time; one live instance, corrected.
+ 2. C-TBL-008 permits 154 ids = 1,169 B while the stage-2 cap was a flat 220 B.
+    MEASURED: 39/60 table cases (= 78/120 solver envelopes) could produce a LEGAL
+    answer the runtime would reject — his number reproduced exactly.
+
+PHASE A — SOURCE FIDELITY (read-only rebuild; old pools preserved):
+ · THE FIND: the graph ALREADY stores role ('question'|'answer'), speaker and
+   title on every Q&A turn. `spoken_text` was stripping ALL of it and flattening
+   the exchange to one blob. Code now COPIES those fields — it never infers a
+   role. Transcript lanes are ONE BLOCK PER TURN (measured: 60 question / 115
+   answer blocks; every Q&A case must contain a real ANSWER turn).
+ · MERGED HEADERS: the renderer joined cells with two spaces, so a header
+   spanning several columns lost which columns it covered. Now column-aligned —
+   verified on the C-TBL-013 GAAP-vs-As-Adjusted regression, where 'Q1 2023' sits
+   above its columns and GAAP / As Adjusted hold their own positions. Table pool
+   rebuilt (subtype split preserved: 59 semantic / 1 structural).
+ · C-PRS-057 CLASS: a source rendering "$ 2. 4 billion" splits into '2.' and '4'.
+   FAIL CLOSED (drop the block) — code NEVER rejoins a split number, because
+   rejoining invents a value the source never stated contiguously.
+ · NUMBERLESS: was 100% Q&A-sourced. Now 20 8-K prose / 20 prepared remarks /
+   20 Q&A, each case tagged source_kind, and no longer requiring a wholly
+   number-free block (a qualitative claim may sit beside numbers). The census is
+   in the manifest — CERTIFY ONLY REPRESENTED GROUPS.
+ · OLD POOLS PRESERVED at pre_r20_audit_evidence/ with OLD_POOL_INVENTORY.json
+   (60 cases each; 8k_prose 12a49b69 · 8k_tables 0b0400f7 · numberless 61462f00 ·
+   prepared_remarks 575e2147 · qa e3167859).
+
+PHASE B — RECEIPTS, THREE-WAY, EXACT COST:
+ · OUTPUT CAPS DERIVED, never flat: max_table_solve_bytes(n_ids) sizes a table
+   answer from THAT request's real selectable-cell count; the flat 220 constant
+   is DELETED. The runner rebuilds the pinned table to count ids per call.
+   Pricing uses the SAME definition, so cost and enforcement cannot drift.
+ · TRUSTED-CALLER RECEIPTS: provenance can never come from model-written JSON.
+   The frozen manifest pins expected model + transport + exact input; the receipt
+   carries only {request_id, actual_model, actual_transport, input_sha,
+   response_sha, usage} and the runner RECOMPUTES the response hash.
+   REFUSED live in the dry-run: no-receipt · wrong-model · metered transport
+   (sdk-cli) · wrong transport · input-hash mismatch · altered response ·
+   missing/malformed usage · ALL-ZERO usage · extra field · unstamped input.
+ · HIS CATCH, CONFIRMED: my first usage check accepted int >= 0, so a receipt
+   claiming ZERO tokens passed and the spend ledger would have under-counted every
+   call. input_tokens and output_tokens must now be > 0; reasoning_tokens may be 0
+   (not every model reports them). record_receipts() feeds the ledger from
+   PROVIDER-REPORTED usage — byte estimates are pre-call planning only.
+ · ALL FIVE EVIDENCE TYPES in ONE request list: span BATCHES are now planned calls
+   naming their case_ids, with their own envelope sha stamped. Manifest total
+   3,843 = 3,738 table + 105 span (before retries) — matched by an assertion.
+ · MANDATORY THREE-MODEL AGREEMENT wired INTO THE RUNNER (grade_three_way), all
+   five lanes: agreement = ACCEPT · one disagreeing maker = DISCARD · a TWO-WAY
+   grade is REFUSED as missing-a-maker (a missing model can never be papered over
+   as "the two we have agree").
+
+DOCS REFRESHED LAST (his order): the pre-call package moved v18 -> v20 with the
+numbers READ OFF the built manifest — 3,843 calls, ceiling 7,633,671 PROVISIONAL,
+the same-source-fixture scope limit, and the Phase-A census. Stale-string sweep
+leaves only the intentional "what changed since v18" heading.
+
+SUITES at close: builder 24 checks / 0 FAIL · binder 41/41 · grader 34/34 ·
+rehearsal PASS · pyflakes CLEAN · runner dry-run REFUSES unset/api transport and
+ends "no calls made".
+CEILING 7,633,671 — PROVISIONAL (reasoning + retries + real usage unmeasured).
+STATUS: R20 COMPLETE. Zero AI calls, zero graph writes, zero commits, zero push.
+OWNER FLAGS: the exact K3 model id; GO for the 10-call pilot (still NOT run).
+
+================================================================================
+ROUNDS 21-23 (2026-07-25) — THE INTEGRATION ROUNDS. Unit suites were green while
+the ASSEMBLED flow was broken; every blocker below reproduced live before fixing.
+================================================================================
+
+R21 (his 5 end-to-end blockers, ALL confirmed):
+ 1. request_id served TWO jobs (which call vs which answers compare) -> three
+    IDENTICAL table answers discarded 60/60 as missing-a-maker. FIX: call_id
+    (unique; receipts bind) SPLIT from evidence_keys (grading groups).
+ 2. batched span responses could not match their planned calls (UNKNOWN id None)
+    -> reconcile keyed by (call_id, payload) pairs + payload_shape_ok.
+ 3. NO transport satisfied both manifest and receipt (prose vs {cli,codex-plugin}
+    — intersection EMPTY; my receipt tests passed only because the fixture
+    hand-wrote 'codex-plugin' instead of reading MAKERS). FIX: machine enums.
+ 4. all 3,738 table calls unstamped -> release_envelope/ensure_released.
+ 5. budget assumed pool max 154; the real fan reaches 305 cells
+    (0000016875-23-000004 t8) -> fan-wide measured max, per-call sizing.
+ + truth5x50_e2e.py CREATED: real manifest entries through the whole chain.
+
+R22 (his 3, ALL confirmed): (1) non-K1 calls released with the PADDING anchor
+('xxxx...' as the driver — would have SENT garbage); ANCHOR LAW: only K1-propose
+releases anchor-free; table calls need the anchor handed in, batch calls must
+carry it INSIDE the envelope. (2) TWO serializers -> the same 11,669-byte
+envelope had TWO hashes (2b1cbe74 vs 500fe6e4); ONE canonical_bytes everywhere,
+ensure_released returns BYTES, stamped entries RE-VERIFIED (drift -> refuse).
+(3) check_stage_budget itself untested -> e2e exercises it on the 305-cell table.
+Removed the 'first three calls' fixture release; dry runs no longer mutate the
+frozen manifest.
+
+R23 (his 4, ALL confirmed — the e2e itself was cheating):
+ 1. it REWROTE the K1 span batch membership 8 -> 1;
+ 2. its K1 span answer FAILED the real validator (naive build:
+    REJECT:driver-carries-period-or-year — his case: REJECT:target-block);
+ 3. it hand-inserted an anchor, skipping validate_k1 -> bind_stage2;
+ 4. docs recorded the PRE-rebuild request hash (c6605b vs live 212f5bad) — my
+    'docs last' failed because I rebuilt AFTER the doc pass.
+ FIX: the batch used EXACTLY as declared; every K1 response tried against
+ validate_k1 (8/8 accepted live) or a lawful source-rejection; real binder
+ emits K2/K3 inputs, membership read FROM the envelopes; sentinels destamped
+ (70 -> 0) + refuse release; grade_three_way now extracts the answer carried
+ INSIDE a K1 span proposal (a REAL runner gap the honest test exposed);
+ K1-rejected cases never mint a key.
+
+SUITES at close: build 24/0 FAIL · grader 34/34 · binder 41/41 · E2E PASS (the
+no-shortcut chain: validate -> bind -> release -> receipt -> reconcile -> 3-way
+-> budget) · rehearsal PASS · pyflakes clean · api transport REFUSED · dry-run
+'no calls made'. DOCS machine-verified against the LIVE build (figures + prose
++ both shas): label v22—round-23 · manifest 1a7b9ebfd1f66311 · request manifest
+212f5bad2ddf5181 (3,843 entries) · ceiling 7,678,305 PROVISIONAL · 305 fan cells.
+STATUS: R23 COMPLETE, awaiting his verdict. QF-01 HELD (its zero-AI alignment
+starts only on the owner's word; the model run needs its own separate GO).
+OWNER FLAGS: K3 model id · pilot GO. Zero AI, zero writes, zero commits, zero push.
+
+================================================================================
+ROUND 24 (2026-07-25) — his 4 closure fixes, ALL reproduced then fixed:
+================================================================================
+ 1. reconcile_response_dir (THE pilot ingestion path) iterated raw dicts into
+    (call_id, payload) pairs — a dict unpacks its KEYS, so a VALID response
+    failed as "UNKNOWN call id 'request_id'" — and it passed NO receipts and NO
+    output limits. FIX: filename = call_id · receipts.json MANDATORY · per-lane
+    output limits · then reconcile. Exercised end-to-end in the e2e (same slice
+    through the folder; no-receipts REFUSED; unknown file REFUSED).
+ 2. 'a K1 rejection mints no key' passed VACUOUSLY (all 8 span cases accepted ->
+    the or-branch never ran). FIX: one FORCED lawful rejection; the rejected
+    case is provably absent from the verdicts (7/8 accepted).
+ 3. C-TBL-013 is now a CONTACT/PHONE table ("Phone: [E1]847-735-4001") — the R20
+    pool re-selection reassigned ids. The GAAP regression is the FILE-PINNED
+    REG13 (0000014930-23-000087__EX-99.1.htm t2); the package now says so and
+    explains WHY file-pinning matters.
+ 4. K3 id: VERIFIED claude-opus-5 against MY OWN runtime metadata (not the
+    reviewer's link) — flag removed, rehearsal asserts it stays gone. BONUS
+    HONESTY: the flag's long note was serialized into every K3 envelope, so the
+    ceiling DROPPED 7,678,305 -> 7,551,365 (~127k tokens was the price of a
+    comment). The PILOT still needs the owner GO.
+SUITES at close: build 24/0 FAIL · grader 34/34 · binder 41/41 · E2E PASS ·
+rehearsal PASS · pyflakes clean. DOCS stamped AFTER the final rebuild and
+machine-verified: label v23—round-24 · manifest 908741ee51daee03 · request
+212f5bad2ddf5181 (3,843) · ceiling 7,551,365 PROVISIONAL · REG13 · K3 verified.
+STATUS: R24 COMPLETE, awaiting his verdict. QF-01 HELD. OWNER FLAG remaining:
+pilot GO only. Zero AI, zero writes, zero commits, zero push.
+
+================================================================================
+ROUND 25 (2026-07-25) — the REVIEW path completed; his 4 items, ALL reproduced:
+================================================================================
+ 1. Reviews were judged by the TABLE-SOLVE cap: 29/60 review calls sit on tables
+    whose derived cap < the lawful 320-B review max (his 8/60 = caps under his
+    138-B sample — same defect, different threshold). FIX: reviews judged by
+    their OWN MAX_REVIEW_RESPONSE_BYTES contract cap.
+ 2. reconcile_response_dir returned counts only; grading used a SEPARATE
+    in-memory copy. FIX: it returns (counts, validated payloads); the e2e grades
+    from EXACTLY the ingested files (round-trip proven byte-identical).
+ 3. All 60 REVIEW entries carried the OWNER-HELD prose placeholder as
+    expected_model -> NO review receipt could EVER pass. FIX: pinned
+    claude-sonnet-5 — the 4th independent (not fable-5/gpt-5.5/opus-5,
+    subscription lane) — EXPLICITLY MARKED PROPOSED-PENDING-OWNER-WORD at pilot
+    GO (reviewer choice is owner-held by design law; a receipt cannot bind to
+    prose, so a real id with a loud flag was the minimal lawful move; swap = one
+    field in MAKERS).
+ 4. A REAL review call now runs in the e2e (released with K1's anchor, answered
+    under the review contract, receipt-bound); the EXACT 10-CALL PILOT is FROZEN
+    (truth5x50_pilot_manifest.json sha 9e874494c9d87f8c: target trio + sibling
+    trio + REVIEW + K1 span batch + 2 bound span batches; all four models
+    pinned; K1 inputs stamped); stale 'C-TBL-013' rehearsal wording renamed to
+    the file-pinned REG13 (4/4 sites).
+SUITES at close: build 24/0 · grader 34/34 · binder 41/41 · E2E PASS ·
+rehearsal PASS · pyflakes clean. DOCS stamped AFTER the final rebuild,
+cross-check 8/8: label v24—round-25 · manifest 93af7530cd00b0a0 · request
+d550367bb37579df (3,843) · pilot 9e874494c9d87f8c · ceiling 7,551,365
+PROVISIONAL. STATUS: R25 COMPLETE, awaiting his verdict. QF-01 HELD.
+OWNER FLAGS: pilot GO + confirm-or-swap the PROPOSED reviewer model
+claude-sonnet-5. Zero AI, zero writes, zero commits, zero push.
+
+================================================================================
+ROUND 26 (2026-07-25) — the pilot made honest. His 4 points, ALL verified:
+================================================================================
+ 1. CONFIRMED: R25's pilot pre-stamped ALL 8 downstream calls with hashes from
+    the TEST K1 answer -> a real answer would hit the R22 INPUT-DRIFT refusal on
+    every one. The pilot as frozen was UNRUNNABLE.
+ 2. CONFIRMED: both bound span files it referenced (truth5x50_e2ebound_K2/K3)
+    are DELETED by the e2e's own cleanup — stamped references to nothing.
+ 3. CONFIRMED — MY R25 ERROR, the serious one: Sonnet 5 is in the Phase-6
+    READER-CANDIDATE pool (Haiku/Sonnet 5/Luna), so my reviewer pin put an
+    EVALUATED model in the adjudicator's chair — violating the committed law
+    that an evaluated model never adjudicates its own hidden key. I had checked
+    K1/K2/K3-independence and FORGOT the reader side. This is exactly why the
+    reviewer choice is owner-held.
+ 4. UNVERIFIED, STILL HELD (3rd assertion): no owner order for QF-01 alignment
+    exists anywhere on the record; the QwenTests file self-declares it
+    authorizes nothing. Held until the owner's word.
+FIXES: STAGED pilot — stage 1 = ONLY the two anchor-free K1-propose calls,
+genuinely stamped now; stage 2 = 8 PLANNED calls with NO pre-stamped inputs
+(they stamp after real K1 answers pass validate_k1 -> bind_stage2; span slots
+get call_id + membership at bind). REVIEWER = UNSET, machine-enforced: release
+REFUSES and receipts return 'expected-model-unset' until the owner names a model
+that is neither K1/K2/K3 NOR any reader candidate; the e2e proves both refusals
+and the mechanism via an explicitly-labeled owner-set SIMULATION that never
+touches frozen artifacts.
+SUITES at close: build 24/0 · grader 34/34 · binder 41/41 · E2E PASS ·
+rehearsal PASS · pyflakes clean. DOCS stamped after the FINAL rebuild,
+cross-check 9/9: label v25—round-26 · manifest eb3243b1ad311162 · request
+7091f0321fc29709 (3,843) · STAGED pilot 8d0605e0d747158c · ceiling 7,553,605
+PROVISIONAL. STATUS: R26 COMPLETE, awaiting his verdict.
+OWNER FLAGS: pilot GO · name the reviewer (constraint documented) · the QF-01
+word. Zero AI, zero writes, zero commits, zero push.
+
+================================================================================
+ROUNDS 27-28 (2026-07-25) — reviewer named; independence mechanical; QF-01 gated.
+================================================================================
+R27: the OWNER NAMED the reviewer in-session: gpt-5.6-sol @ effort high (codex
+subscription). Legal: not K1/K2/K3 (K2 is gpt-5.5, different version), not a
+reader candidate. Documented limitation: same FAMILY as K2 — no fully
+family-independent subscription model exists in this setup. Wired as ONE field;
+the unset-fail-closed guard is kept and proven on a synthetic unset copy.
+
+R28 (his 3 blockers, ALL verified):
+ 1. QF-01: HE WAS RIGHT AND I WAS WRONG — THREE TIMES. Phase6 plan §6 = "QF-01
+    hard gate (owner ruling 2026-07-25)": align QF-01 to the minimal table task
+    BEFORE the pilot or any model call; a preflight must refuse QF-01 until the
+    alignment passes. My searches covered the QwenTests README + WORKORDER but
+    NEVER the Phase6 plan — a search-scope failure, owned. (Provenance: §6 is an
+    uncommitted working-tree addition recorded by the parallel session that
+    carries owner rulings; ChatGPT cannot write files.)
+    EXECUTED: truth5x50_qf01_preflight.py — QF-01 = the 5x50 table contract
+    VERBATIM (imported, never re-written): anchor + rendered table ->
+    {request_id, evidence_ids} or []; code alone copies+verifies via the SAME
+    verify_set. Proven zero-AI on QF-01's own 8 committed screen tables; the
+    OLD 0/93 output shape (model re-typing labels/period-header arrays) is
+    REFUSED by the gate, as are smuggled re-typed-evidence fields and extra
+    inputs. A REAL QF-01 model run still needs its own separate owner GO.
+ 2. Reviewer independence was PROSE ONLY — his attack put Sonnet 5 through
+    release + receipt, and a review envelope carried model:null while the entry
+    named a model (3 copies, only 2 cross-checked). NOW MECHANICAL:
+    reviewer_model_banned() = key-makers by EXACT id + reader-candidate FAMILIES
+    by marker (sonnet/haiku/luna/qwen — future versions fail CLOSED), enforced
+    at release AND receipt on EITHER side; plus ONE-SETTING law: the sent
+    envelope's model must equal the manifest's expected_model or release
+    refuses. The Sonnet-5 bypass is RED-pinned (8 banned ids incl.
+    claude-sonnet-6 and qwen-2.5-72b all refuse).
+ 3. PILOT-ONLY HARD CEILING: 36,721 tokens (0.49% of the full run) — stage-1
+    exact envelopes + stage-2 deterministic wire + MAX-legal anchor bounds +
+    role-exact outputs, all /3; derivation evidence stored in the pilot
+    manifest; SAME key name so assert_within_ceiling enforces it unchanged;
+    the run HALTS at the ceiling.
+SUITES at close: build 24/0 · grader 34/34 · binder 41/41 · E2E PASS ·
+rehearsal PASS · QF01-PREFLIGHT PASS · pyflakes clean. DOCS stamped after the
+final rebuild, cross-check 10/10: label v27—round-28 · manifest
+d275f31a5f857b10 · request b188063f8e591c15 (3,843) · pilot d17e241f96ec4e74 ·
+full ceiling 7,553,145 PROVISIONAL · pilot ceiling 36,721.
+STATUS: R28 COMPLETE, awaiting his verdict. ONE owner flag remains: PILOT GO.
+Zero AI, zero writes, zero commits, zero push.
+
+================================================================================
+ROUND 29 (2026-07-25) — THE CONNECTED PATHS. His 2 blockers, both confirmed:
+================================================================================
+ 1. The R28 preflight tested a spec dict the TEST constructed, while the LIVE
+    QwenTests/table_evidence/qf01.py still carried the old 0/93 contract
+    (copied_label + period arrays in its schema AND verify path) and never
+    called the gate. FIX — the live runner IS the aligned task now:
+    · 19 anchor families cover the 93 screen requests EXACTLY once (grouped by
+      anchor_id; ordinal per-cell asks are gone);
+    · every command (prepare/verify/run/score) calls require_alignment() FIRST;
+    · cases = one value-blind anchor + ONE rendered [En] table under THE 5x50
+      table_solve_prompt; response schema = {request_id, evidence_ids};
+    · hidden answers regrouped into SETS mechanically FAIL-CLOSED (row index +
+      exact cell text + header array; 93/93 located; a tampered cell REFUSES);
+    · scoring via the 5x50 score_table_batch (exact set; wrong-accept law);
+    · old results preserved untouched in results/ as history; new runs write
+      results_aligned/; the consumed 2026-07-24 authorization is marked
+      CONSUMED — a NEW model run needs its OWN owner GO.
+    Rewritten test_qf01.py: 16/16 PASS on real data.
+ 2. The runner loaded the 7.55M manifest in EVERY mode. FIX: --pilot swaps the
+    ENFORCED ceiling to the pilot's own 36,721 via pilot_budget(); precall_gate
+    refuses ONE token over BEFORE a call leaves (proven: exactly-on passes,
+    +1 refuses); per-call output caps = the role-exact maxima.
+    HONEST CATCH DURING VERIFY: the first pilot dry-run FAILED — the gate
+    correctly refused the FULL-RUN stage sweep (978k planned) against the 37k
+    pilot ceiling. Pilot mode now budgets ONLY the pilot's own calls, and the
+    full-fan sanity assert is scoped to full mode. Both dry-run modes end
+    "no calls made".
+SUITES at close: build 24/0 · grader 34/34 · binder 41/41 · E2E PASS ·
+rehearsal PASS · QF01-PREFLIGHT PASS · TEST_QF01 16/16 · pyflakes clean (WIP +
+QwenTests). DOCS stamped after the final rebuild: label v28—round-29 · manifest
+036b5e6ee62ce0cd · request b188063f8e591c15 · pilot d17e241f96ec4e74 · full
+ceiling 7,553,145 PROVISIONAL · pilot ceiling 36,721.
+STATUS: R29 COMPLETE, awaiting his verdict. ONE owner flag: PILOT GO.
+Zero AI, zero graph writes, zero commits, zero push.
+
+================================================================================
+ROUND 30 (2026-07-25) — his 4 blockers, ALL confirmed:
+================================================================================
+ 1. ACTUAL qf01 verify FAILED (frozen manifest pinned the OLD qf01.py hash;
+    cases.jsonl = 93 old-format cases). FIX: real prepare re-run -> the ALIGNED
+    artifacts frozen (19 set calls / 93 cells / 8 tables / 7 filings; live
+    Ollama fingerprint matched — a LOCAL metadata query, zero inference);
+    verify GREEN: "19 cases". verify_manifest's own hardcoded 93 expectation
+    updated to the aligned law (unique families covering the 93 cells exactly).
+    Old cases/manifest copied aside as *_OLD_93call_HISTORY; results/ untouched.
+ 2. EVERY anchor said series_unit='usd' — MY SHORTCUT, wrong for 'Load Factor
+    (Percent)' and kmt/mdmt production. FIX: AUDITED_FIXTURE_UNITS — one
+    EXPLICIT audited entry per family from the VISIBLE label (money->usd,
+    percent->percent, physical kmt/mdmt->count with the unit detail staying in
+    the NAME per the per-X law); a family with no audited entry FAILS CLOSED;
+    no keyword classifier decides units.
+ 3. BUDGET BYPASSABLE: ensure_released made ZERO precall_gate calls — the gate
+    lived beside the path, not on it. FIX: budget + release FUSED — the ONLY
+    path to sendable bytes runs the pre-call budget; man is REQUIRED; a
+    gateless release REFUSES (RED-pinned in the e2e). Reasoning honesty:
+    reasoning tokens ride inside provider-reported output tokens, so every
+    prior receipt already counts them against the enforced ceiling; provider
+    max_tokens bounds generation itself.
+ 4. STALE DOCS: the package carried a DUPLICATE numbers table (a staleness trap
+    — deleted for ONE pinned state) and the ReaderApprovalPackage still read as
+    current QF law — banner-marked HISTORY/CONTRACT SUPERSEDED, content
+    preserved.
+SUITES at close: build 24/0 · grader 34/34 · binder 41/41 · E2E PASS ·
+rehearsal PASS · QF01-PREFLIGHT PASS · TEST_QF01 PASS · REAL qf01 verify GREEN
+(19 cases) · pyflakes clean · both dry-run modes end "no calls made".
+PINNED: label v29—round-30 · manifest c4691becdacf046b · request
+b188063f8e591c15 · pilot d17e241f96ec4e74 · qf01 manifest c28f14043acc4981 ·
+full ceiling 7,553,145 PROVISIONAL · pilot ceiling 36,721.
+STATUS: R30 COMPLETE, awaiting his verdict. ONE owner flag: PILOT GO.
+Zero AI calls, zero graph writes, zero commits, zero push.
+
+================================================================================
+ROUND 31 (2026-07-25) — his 4, ALL confirmed:
+================================================================================
+ 1. The qf01 manifest pass_gate demanded correct:93 — IMPOSSIBLE for a perfect
+    19-set-call run. FIX: pass_gate.correct = 19 (the set calls); 93 retained
+    ONLY as cell_coverage, 8 as independent_tables; re-frozen, verify GREEN
+    ("pass_gate: 19 correct of 19"). BONUS CATCH: the manifest still pinned the
+    OLD SCREEN PROMPT's hash — now pins the aligned table_solve_prompt.
+ 2. release_envelope still handed out sendable bytes UNGATED. FIX: BLOCKED — it
+    now raises, pointing at ensure_released; only the internal
+    _release_envelope remains, reachable solely through the fused gate.
+ 3. The 36,721 ceiling did not pre-cap reasoning. HONESTLY LABELED: guaranteed
+    at CALL BOUNDARIES (every call refused up front when spent+planned max
+    won't fit; reasoning counted from every receipt as a subset of output) but
+    reasoning inside ONE in-flight call is NOT pre-capped — no provider-side
+    reasoning cap exists in these lanes. Written into the pilot manifest's
+    ceiling evidence + the package.
+ 4. STALE DOCS: the package still carried "7,551,365" as a current-law line
+    (stale through FIVE rounds — replaced with a pointer to the ONE pinned
+    state); the QwenTests README QF-01 row still described the old per-cell
+    task — rewritten to the aligned SET task with the 0/93 history preserved
+    in-row.
+SUITES at close: build 24/0 · grader 34/34 · binder 41/41 · E2E PASS ·
+rehearsal PASS · QF01-PREFLIGHT PASS · TEST_QF01 PASS · REAL qf01 verify GREEN
+(19 cases) · pyflakes clean · both dry-runs "no calls made".
+PINNED: label v30—round-31 · manifest c2ec3a63f4b10c55 · request
+b188063f8e591c15 · pilot 86352b24e3a75154 · qf01 manifest 6361a08deda3bad4 ·
+full ceiling 7,553,145 PROVISIONAL · pilot ceiling 36,721 (call-granularity).
+STATUS: R31 COMPLETE, awaiting his verdict. ONE owner flag: PILOT GO.
+Zero AI calls, zero graph writes, zero commits, zero push.
+
+================================================================================
+ROUND 32 (2026-07-25) — his 3 leftovers + the naming fix, ALL confirmed:
+================================================================================
+ 1. Statistics still on 93: the RUN progress counter printed "[n/93]" and the
+    rule-of-three used 3/93 at REQUEST level. FIX: run counter = len(cases);
+    rule-of-three = set_call_level 3/19 (THE unit) + cell_coverage_level 3/93
+    (labeled coverage only) + table 3/8. Re-frozen; verify GREEN.
+ 2. _release_envelope bypass: HIS ATTACK RAN — it returned 24 sendable bytes
+    with NO budget gate (underscore = convention, not enforcement). FIX: the
+    function is DELETED — its body is INLINED into ensure_released, so no
+    direct-call target exists; RED-pinned (not hasattr + the public name
+    raises).
+ 3. The README's ACTIVE QF-01 section still demanded correct=93 and field
+    copying. FIX: rewritten to the aligned 19-set design (audited units, []
+    abstain, code-copies law, pass gate 19/0/0/0); the 0/93 result history
+    kept verbatim below.
+ 4. NAMING: 36,721 is a CALL-BOUNDARY BUDGET everywhere (pilot manifest
+    budget_kind + docs) — enforced before every call, explicitly NOT a hard
+    mid-call ceiling.
+SUITES at close: build 24/0 · grader 34/34 · binder 41/41 · E2E PASS ·
+rehearsal PASS · QF01-PREFLIGHT PASS · TEST_QF01 PASS · qf01 verify GREEN
+(19 cases) · pyflakes clean · both dry-runs "no calls made".
+PINNED: label v31—round-32 · manifest 86f1353dedfa2b55 · request
+b188063f8e591c15 · pilot 177b5c12f8d46321 · qf01 manifest ca3e46ea83f53f33 ·
+full ceiling 7,553,145 PROVISIONAL · pilot call-boundary budget 36,721.
+STATUS: R32 COMPLETE, awaiting his verdict. ONE owner flag: PILOT GO.
+Zero AI calls, zero graph writes, zero commits, zero push.
+
+--------------------------------------------------------------------------------
+R32b CLEANUP (2026-07-25, owner-relayed, both verified): (1) the 3/93
+rule-of-three bound REMOVED entirely — the 93 cells cluster inside 19 calls /
+8 tables, so ANY cell-level bound claims independence the data cannot give
+(kept: 3/19 set-call + 3/8 table); (2) the last two ACTIVE "hard ceiling"
+lines renamed CALL-BOUNDARY BUDGET (e2e comment + the package pilot row).
+Re-frozen + re-verified: qf01 verify GREEN (19; manifest 433cf9e2eaf4a7eb) ·
+E2E PASS · TEST_QF01 PASS · pyflakes clean. Reviewer's own close: "After this
+small cleanup, the pilot is ready." STATUS: cleanup COMPLETE — the package is
+AUDIT-CLEAN end to end; the ONLY remaining gate is the owner's PILOT GO.
+Zero AI calls, zero graph writes, zero commits, zero push.
+
+================================================================================
+ROUND 33 (2026-07-26) — the missing plugin caller + an honesty disclosure.
+================================================================================
+HIS CATCH, CONFIRMED: nothing could actually MAKE a codex-plugin call or derive
+a receipt from a real session — the runner validated receipts but no producer
+existed. BUILT (zero execution): truth5x50_codex_caller.py, the smallest
+isolated caller against the plugin's OWN installed contract
+(plugins/cache/openai-codex/.../codex-cli-runtime/SKILL.md →
+`node codex-companion.mjs task "<text>" --fresh --model gpt-5.6-sol --effort
+high`):
+ · --fresh ALWAYS, resume impossible by construction;
+ · the COMPLETE prompt + case = the released envelope bytes verbatim as the
+   task text (bytes come only from the fused ensure_released gate);
+ · ISOLATION: the codex process runs in an EMPTY temp dir — it cannot read
+   hidden answers, pools, or anything in the repo;
+ · RECEIPTS derived from the ACTUAL session output (model line + printed token
+   usage; response hash computed by US) — a session missing usage/model FAILS
+   CLOSED and the call is quarantined, never receipted with invented fields;
+   the exact output format is confirmed on the FIRST owner-approved pilot call;
+ · run_call REFUSES without PILOT_OWNER_GO=YES; there is NO probe/--help path
+   anywhere (the accident class below is unreachable from this module).
+CALLER TESTS 10/10 · pyflakes clean.
+
+HONESTY DISCLOSURE (recorded verbatim intent): while checking the plugin, the
+REVIEWER accidentally ran `task --help`; the helper treats any text after
+`task` as a real prompt, so it executed a REAL gpt-5.6-sol call consuming
+19,302 subscription tokens (no project files touched; nothing left running).
+FISCAL made zero AI calls across all 33 rounds — but the project-wide claim
+"zero AI calls" is no longer literally true and is hereby corrected to:
+"Fiscal: zero AI calls; one reviewer-side accidental 19,302-token codex call,
+2026-07-25, disclosed and logged."
+
+AUTHORITY NOTE: the reviewer also ordered "one scoped local commit; no push."
+Commits are OWNER-held under the standing ruling — the order is NOT executed;
+the commit question is put to the owner explicitly.
+STATUS: R33 COMPLETE. Fiscal: zero AI calls, zero graph writes, zero commits,
+zero push. OWNER FLAGS: pilot GO · the commit word.
+
+ROUND 34 (2026-07-26) — R33 REJECTED: the receipt was forgeable. Five gaps, all
+reproduced on disk first, all fixed and RED-pinned WITHOUT a single new AI call
+(the already-recorded accidental session is the fixture).
+
+His five claims — VERDICT: all TRUE.
+ 1 TRUE  "Real plugin output produces no receipt, while model-written fake token
+   lines can forge one." R33 regex-scanned the printed output, so `input tokens:
+   99` inside an answer became a receipt field. FIXED: receipts are read from
+   HARNESS-WRITTEN logs only — the codex rollout JSONL (session_meta.cwd,
+   turn_context.model, token_count.total_token_usage, and the agent_message that
+   carries the answer) and, for the Claude lanes, the Claude Code transcript
+   (message.model + message.usage). Model text cannot reach a receipt field.
+ 2 TRUE  "not connected to the real runner and covers only 4 of 10 calls."
+   FIXED twice over: pilot_calls() enumerates all TEN from the frozen manifest
+   (4 codex + 6 cli) and dispatch() is the single entrypoint through
+   ensure_released/pilot_budget; AND the connection is now enforced — every
+   receipt carries `source` = {kind, path, id} and validate_receipt RE-DERIVES
+   model+usage from that log, so a hand-written receipt with invented numbers is
+   rejected BY THE RUNNER. The e2e and the runner dry-run no longer invent usage.
+ 3 TRUE  "GPT-5.5 requires xhigh, but the caller hardcodes high." FIXED:
+   EFFORT_BY_MODEL = {gpt-5.5: xhigh, gpt-5.6-sol: high}; an unpinned model
+   REFUSES rather than inheriting a default.
+ 4 TRUE  "An empty folder does not hide answer files; Codex still has read
+   access outside it." PROVEN by his own accident: that session's session_meta
+   records cwd = /home/faisal/EventMarketDB. FIXED in two halves — (a) --cwd an
+   EMPTY dir outside the repo (the companion makes it the workspace root under
+   a read-only sandbox) and the receipt REFUSES unless the session's own
+   recorded cwd is that dir; (b) because read-only is not unreadable, ANY tool
+   item in the recorded item list VOIDS the answer (allowlist message/reasoning,
+   so an unseen future tool type is caught too). Reading requires a tool call,
+   and every tool call is written by the harness, not the model.
+ 5 TRUE  "The GO switch accepts calls outside the frozen pilot." FIXED: the cage
+   is the 8 frozen ids + the 2 declared span slots (span ids cannot exist before
+   K1 binds), the PILOT ceiling is forced INSIDE the caller so no caller can
+   smuggle in the 7.55M full-fan ceiling, and PILOT_OWNER_GO is still required.
+ (+) His "the good part" stands: --fresh and a complete prompt every call.
+
+ALSO FOUND BY ME, not raised: with a read-only sandbox the model CANNOT write a
+response file, so R33's response path would have failed on the first real call.
+The answer is now read from the session log's agent_message; a non-JSON reply is
+QUARANTINED, never repaired.
+
+BATTERY (zero AI): 241 checks / 0 FAIL — build 24 · binder 41 · grader 34 ·
+qf01-preflight 6 · trusted-caller 19 · e2e 44 · rehearsal 57 · QF-01 16 ·
+pyflakes clean · runner dry-run ends "no calls made". The three manifest shas
+are UNCHANGED (86f1353d / b188063f / 177b5c12) — R34 touched no envelope byte.
+
+AUTHORITY NOTE (repeat): the commit order remains OWNER-held and is NOT executed.
+STATUS: R34 COMPLETE. Fiscal: zero AI calls, zero graph writes, zero commits,
+zero push. OWNER FLAGS: pilot GO · the commit word.
+
+ROUND 35 (2026-07-26) — R34 REJECTED: the receipt was still forgeable and the
+loop did not exist. All four claims reproduced on disk BEFORE any fix, with the
+reproduction output recorded; all four TRUE; zero new AI calls in the audit or
+the fixes (the 2026-07-25 accident log and this session's own transcript are the
+fixtures).
+
+ 1 TRUE  "An unrelated old log can prove any prompt and answer." Reproduced: the
+   accident session issued a valid receipt for the prompt b'ANY PROMPT I LIKE'
+   and the answer {'evidence_ids': ['FABRICATED']}, and the runner returned 'ok'
+   — because only model+usage were bound to the log. FIXED: the log now IS the
+   call. read_codex_session returns the recorded user_message and agent_message;
+   the receipt REFUSES unless the log's own prompt bytes equal the released
+   envelope, and the answer is no longer a caller argument at all (it is read
+   from the log). validate_receipt re-derives prompt-hash, answer-hash, model,
+   effort and usage; new reject codes prompt-not-from-source /
+   answer-not-from-source / effort-not-from-source / source-not-single-turn.
+ 2 TRUE  "Even a Claude turn that used tools passes." Reproduced on a real
+   tool_use turn from this transcript. FIXED: a content-block ALLOWLIST
+   (text/thinking) at both the caller and the runner; entrypoint must be `cli`
+   (the subscription lane — sdk-cli would be metered); and the Claude receipt
+   binds to the parent user turn's text, so an arbitrary prompt fails too.
+ 3 TRUE  "Wrong model/role details and unlimited invented span IDs." Reproduced:
+   a frozen id carrying role REVIEW + gpt-5.6-sol was admitted, and 1,000
+   invented span ids were admitted. FIXED: an entry must equal its frozen entry
+   on all nine frozen fields; a span id must be a binder-written envelope on
+   disk with artifact_kind real_bound and the matching maker; both span slots
+   are capped; and EVERY call id is consumable exactly once
+   (truth5x50_pilot_state.json).
+ 4 TRUE  "No real 10-call execution loop; effort not verified." FIXED:
+   run_pilot() performs the true 2 -> validate_k1 -> bind_stage2 -> 8 flow
+   through dispatch (cage + fused budget/release gate + trusted receipt),
+   per-call storage, reconcile_response_dir, grade_three_way and
+   record_receipts; `truth5x50_run.py --pilot --go` reaches it and — verified —
+   walks into the first real gate instead of stopping at AWAITING-OWNER-GO.
+   Effort: re-derived from the log; the codex lane must BE the pin (gpt-5.5
+   xhigh, gpt-5.6-sol high) and one model may not answer at two efforts in one
+   run. On the cli lane the HARNESS sets the effort, so it is required-present
+   and recorded rather than pinned — pinning a value there would be invented
+   law, and the owner has not named one.
+
+HIS DEEPER POINT, ACCEPTED AND ACTED ON: "tool checks happen after possible
+access." Detection after the fact is not protection. The codex process now runs
+inside a private mount namespace with empty tmpfs mounted OVER the repository,
+over ~/.claude (the transcripts contain hidden answers too) and over the key
+file, BEFORE it starts — verified for real, zero AI: the repo lists 0 entries
+inside the namespace while ~/.codex keeps its 33 (auth + logging survive). If
+the kernel refuses a namespace, the call is REFUSED rather than downgraded. On
+the cli lane the repo cannot be hidden from an in-session turn; there the
+guarantee is the tool-use refusal, and that limit is stated, not papered over.
+
+ALSO FIXED, FOUND BY ME: run_pilot could never have completed — the six Claude
+calls had no way to be answered. Added the operator handshake: the released
+envelope is written out and the run waits for the transcript turn that answered
+it.
+
+BATTERY (zero AI): 241 checks / 0 FAIL — build 24 · binder 41 · grader 34 ·
+qf01-preflight 6 · trusted-caller 19 · e2e 44 · rehearsal 57 · QF-01 16 ·
+pyflakes clean · 18 receipt attacks refused in the dry run · runner dry-run ends
+"no calls made". The three manifest shas are UNCHANGED (86f1353d / b188063f /
+177b5c12) — R35 touched no envelope byte.
+
+OWNER ITEM RAISED (not decided by me): the cli lane's effort is whatever the
+session runs at (this session reports xhigh). Say the word if it should be
+pinned and declared in the frozen pilot manifest.
+AUTHORITY NOTE (repeat): the commit order remains OWNER-held and is NOT executed.
+STATUS: R35 COMPLETE. Fiscal: zero AI calls, zero graph writes, zero commits,
+zero push. OWNER FLAGS: pilot GO · the commit word.
+
+ROUND 36 (2026-07-26) — R35 REJECTED: the pilot was neither runnable nor safely
+isolated. Five defects, each reproduced on disk before any fix, all TRUE, zero
+new AI calls in the audit or the fixes.
+
+ 1 TRUE  "The sandbox hides the Codex plugin itself, so Codex cannot start."
+   Reproduced: inside the namespace the companion path reports GONE — the plugin
+   lives under ~/.claude, which R35 hid wholesale. The first real pilot call
+   would have died. FIXED: the plugin's version directory is bind-mounted OUT to
+   /tmp/truth5x50_plugin while it is still visible, BEFORE ~/.claude is covered,
+   and the call runs from there; isolation_available() now proves all four
+   conditions at once (repo 0 · ~/.claude 0 · old codex logs 0 · plugin
+   runnable) and REFUSES the call if any fails.
+ 2 TRUE  "The pilot drops all 8 prose cases, then compares 10 outputs against
+   the full 3,843-call list." Both halves reproduced by reading the code and
+   then by RUNNING it. FIXED: all_cases() loads all five pools, and the run
+   builds an EXACT post-K1 manifest of the ten calls actually made — each with
+   the input hash it was really released with and the membership read from its
+   own envelope — and reconciles + grades against THAT.
+ 3 TRUE  "A reused Claude session that previously read hidden answers still
+   passes." Reproduced on this very transcript: 5,507 tool blocks, yet its
+   tool-free turns were accepted. Contamination is a property of the SESSION,
+   not the turn. FIXED: a receipt requires a FRESH session — the answering turn
+   must be the first assistant turn of a transcript with no tool use anywhere.
+ 4 TRUE  "Two fake K2 files can consume both span slots." Reproduced: two
+   real_bound K2 envelopes were both admitted, so K3 would silently never run.
+   FIXED: consumption is recorded per SLOT (role|model|transport), one call
+   each, and a span envelope must have been built for that exact model and
+   transport.
+ 5 TRUE  "The sandbox exposes 954 old Codex session logs." Reproduced exactly:
+   954. FIXED: the whole of ~/.codex is hidden (it also holds history.jsonl,
+   memories and session_index.jsonl) and the call is given a FRESH CODEX_HOME
+   containing nothing but the credential — which also makes its own rollout the
+   only log in existence, removing the newest-file race.
+
+HIS METHOD POINT, ACCEPTED: "test the real run_pilot, not merely whether
+function names exist." R35's proof inspected run_pilot's bytecode for names —
+the purest form of the mistake this harness exists to catch. STEP 7 of the e2e
+now RUNS it: 10 calls reconciled (K1-propose 1 · K1-propose-span 1 · REVIEW 1 ·
+K2-solve 2 · K3-solve 2 · K1-solve 1 · K2-span 1 · K3-span 1), all 8 prose cases
+answered and 7 carried into stage 2, three-way grading real, spend in the
+ledger. The ONLY faked step is the subprocess boundary — the model call we are
+forbidden to make; every gate, hash, budget, receipt and grade around it is
+live. Running it is what surfaced defect 2 and one more nobody had raised.
+
+FOUND BY ME while wiring it: the K1-propose wire names the CALL id as its
+case_id (built as "<case>#propose"), so a real model answers with that — any
+code mapping the answer back to a case by its echoed id fails. The pilot now
+maps through the entry's own file+table_index and never trusts the echoed id.
+
+EFFORT: the cli lane is now PINNED to xhigh, admissible only because the
+fresh-session rule makes it enforceable (a session at another effort is
+refused), per the reviewer's condition. Owner may override.
+
+BATTERY (zero AI): 248 checks / 0 FAIL — build 24 · binder 41 · grader 34 ·
+qf01-preflight 6 · trusted-caller 21 · e2e 49 · rehearsal 57 · QF-01 16 ·
+pyflakes clean · runner dry-run ends "no calls made". The three manifest shas
+are UNCHANGED (86f1353d / b188063f / 177b5c12) — R36 touched no envelope byte.
+
+AUTHORITY NOTE (repeat): the commit order remains OWNER-held and is NOT executed.
+STATUS: R36 COMPLETE. Fiscal: zero AI calls, zero graph writes, zero commits,
+zero push. OWNER FLAGS: pilot GO · the commit word.
+
+ROUND 37 (2026-07-26) — R36 REJECTED: three blockers, all reproduced first, all
+TRUE, zero new AI calls.
+
+ 1 TRUE  "The pilot discards both table results as DISCARD:no-frozen-case; the
+   test passes only because seven prose cases succeed." Reproduced exactly: 7
+   accepted / 2 discarded, and the two discards were the table keys. Root cause:
+   grading is keyed by EVIDENCE KEY ("<case>#t<index>"), but the pilot passed a
+   map keyed by case id, so no table key could ever resolve. My own assertion
+   (`accepted >= 1`) was weak enough to hide it — the exact failure this harness
+   exists to catch. FIXED: cases_by_evidence_key() maps table keys to that
+   filing's table (target and sibling), and the e2e now RED-pins the verdicts he
+   named: target C-TBL-001#t0 = ACCEPT, sibling C-TBL-001#t1 = ACCEPT-EMPTY,
+   with 9 accepted / 0 discarded and nothing lost to a missing case.
+ 2 TRUE  "A fresh but repo-visible Claude session is still accepted. Tool access
+   is detected afterward, not prevented." FIXED as far as the billing law
+   allows, and the limit is stated rather than papered over: the cli lane cannot
+   be a subprocess, because `claude -p` is tagged `sdk-cli` at process startup
+   and bills the METERED programmatic pool — proven on this machine and
+   explicitly NOT spoofable (ANTHROPIC_BILLING_SUBSCRIPTION_CRITICAL, proof rows
+   #8/#96/#97). Only an interactive REPL stays on the subscription. So the
+   operator now launches that REPL through claude_isolated_launch(): a private
+   mount namespace with the repository unmounted and the key file hidden,
+   starting in an empty directory outside the repo — nothing to read, and no
+   project context auto-loaded. The receipt then REFUSES any session whose own
+   recorded cwd is inside the repository. Verified by running the launcher for
+   real (repo shows 0 entries, cwd is the empty dir); the tool-use and
+   fresh-session refusals are kept as second and third lines.
+ 3 TRUE  "A hand-written real_bound file is still accepted as the first span
+   call; binder origin and exact membership are not proven." Reproduced.
+   FIXED: the binder writes a POST-K1 MANIFEST before any stage-2 call is sent,
+   naming each dynamic call with the exact sha of the envelope it produced and
+   the exact membership it declared. Admission now requires that declaration,
+   and RED pins prove: an undeclared hand-written file is refused; a declared
+   one is admitted; rewriting its envelope afterwards is refused (sha drift);
+   wrong membership is refused; and the one-call-per-slot rule still holds.
+ (+) ALSO DONE, as ordered: the e2e sets its own required transport environment
+   — the whole battery was re-run with no ambient CLAUDE_CODE_ENTRYPOINT.
+
+BATTERY (zero AI): 255 checks / 0 FAIL — build 24 · binder 41 · grader 34 ·
+qf01-preflight 6 · trusted-caller 27 · e2e 50 · rehearsal 57 · QF-01 16 ·
+pyflakes clean · runner dry-run ends "no calls made". Three manifest shas
+UNCHANGED (86f1353d / b188063f / 177b5c12) — R37 touched no envelope byte.
+
+OWNER ITEM: the cli lane now requires the answering session to be launched
+pre-isolated (interactive REPL inside the namespace). That is a change to how
+the six Claude calls are operated, not to what they cost — subscription lane
+unchanged. Say the word if you would rather accept the weaker in-session form.
+AUTHORITY NOTE (repeat): the commit order remains OWNER-held and is NOT executed.
+STATUS: R37 COMPLETE. Fiscal: zero AI calls, zero graph writes, zero commits,
+zero push. OWNER FLAGS: pilot GO · the commit word.
+
+ROUND 38 (2026-07-26) — R37 REJECTED: two blockers, both reproduced first, both
+TRUE, zero new AI calls.
+
+ 1 TRUE  "Claude isolation is not wired into the real call path. It leaves
+   51,492 old Claude transcripts and 954 Codex logs visible, with tools
+   enabled." All three parts confirmed. FIXED, and his proposed mechanism was
+   verified before adopting it: --safe-mode, --tools, --model and --effort all
+   exist on the INTERACTIVE session (parse-checked, no call made), so
+   subscription billing is untouched — it is still never `claude -p`, which is
+   tagged sdk-cli at process startup and bills the metered pool. run_cli_call
+   now BUILDS the launch itself: tools off, all customizations off, model and
+   effort pinned, inside the namespace with the repository, ~/.claude, ~/.codex
+   and the key file ALL unmounted, starting in an empty folder. That is only
+   possible because the session is given a FRESH CLAUDE_CONFIG_DIR holding
+   nothing but the credential — empirically verified that this CLI honours it.
+   The answer must come back as a transcript UNDER that fresh home, so a reply
+   typed into the operator's ordinary (repo-visible, tool-enabled) window is
+   mechanically unusable. Probe inside the namespace: transcripts 0, codex logs
+   0, repo 0, cwd = the empty folder.
+ 2 TRUE  "Sibling table grading changes only table_index while retaining the
+   target table's rendering and cell map. It passes only because this pilot's
+   sibling answer is empty." Reproduced exactly: the sibling case carried the
+   TARGET's `rendered` and the TARGET's `id_map`. A non-empty sibling answer
+   would have been validated against the wrong table's cells. FIXED: every
+   evidence key's case is REBUILT from that table's own wire (rendering from the
+   pinned source, stale id_map dropped so the grader rebuilds it), in ONE shared
+   helper now used by both the pilot and the e2e — the e2e's own STEP-5 map had
+   the identical bug. RED-pinned as ordered with a NON-EMPTY sibling: the pilot
+   now answers the sibling with 3 real cells of its own table and grades
+   ACCEPT, alongside the empty-sibling ACCEPT-EMPTY case.
+
+BATTERY (zero AI): 260 checks / 0 FAIL — build 24 · binder 41 · grader 34 ·
+qf01-preflight 6 · trusted-caller 31 · e2e 51 · rehearsal 57 · QF-01 16 ·
+pyflakes clean · runner dry-run ends "no calls made" · whole battery run with no
+ambient CLAUDE_CODE_ENTRYPOINT. Three manifest shas UNCHANGED (86f1353d /
+b188063f / 177b5c12) — R38 touched no envelope byte.
+
+AUTHORITY NOTE (repeat): the commit order remains OWNER-held and is NOT executed.
+STATUS: R38 COMPLETE. Fiscal: zero AI calls, zero graph writes, zero commits,
+zero push. OWNER FLAGS: pilot GO · the commit word.
+
+ROUND 39 (2026-07-26) — R38 REJECTED on BILLING. Three claims, all reproduced
+with sentinel values before any fix, all TRUE, zero AI calls.
+
+ 1 TRUE  "The Claude launch inherits ANTHROPIC_API_KEY and ANTHROPIC_AUTH_TOKEN."
+   Reproduced: sentinels injected in the parent shell appeared verbatim inside
+   the isolated launch. An API key OVERRIDES an OAuth login, so a call meant for
+   the subscription could have been billed to a metered account — the single
+   worst failure mode this project has. FIXED: the launch now begins with
+   `unset` of SEVEN billing-redirect variables (ANTHROPIC_API_KEY,
+   ANTHROPIC_AUTH_TOKEN, ANTHROPIC_BASE_URL, ANTHROPIC_MODEL, OPENAI_API_KEY,
+   OPENAI_BASE_URL, OPENAI_API_BASE), inside the wrapper so it holds whatever
+   shell the operator runs it from; and `billing_env_clean()` RE-PROVES the
+   strip by running the real wrapper and reading the actual environment back
+   before every cli call, refusing if anything survives.
+ 2 TRUE  "It also fails to reject missing OAuth credentials." Reproduced.
+   FIXED: fresh_claude_home() now REFUSES unless .credentials.json parses and
+   carries claudeAiOauth.accessToken — no silent "copy if it exists".
+ 3 TRUE  "The transcript-folder check uses an unsafe prefix comparison."
+   Reproduced: "<home>EVIL/t.jsonl" passed startswith(). FIXED: one `inside()`
+   helper using os.path.commonpath, applied to every containment test in the
+   module (transcript home, isolation dir, workspace root, session cwd).
+
+SWEEP OF THE CLASS — a LIVE defect he did not raise: run_codex_call passed
+`dict(os.environ, CODEX_HOME=home)`, inheriting everything, and this machine
+really does export a live OPENAI_API_KEY (from .env AND ~/.bashrc). That call
+was one environment read away from the metered OpenAI API instead of the
+ChatGPT subscription — the exact prohibition in CLAUDE.md. Both lanes now build
+their environment through clean_env(). NOTE FOR THE OWNER: that key is exported
+in the ambient shell; nothing here touched ~/.bashrc or .env (forbidden), and
+no call was made — but the exposure is worth a decision.
+
+BATTERY (zero AI): 264 checks / 0 FAIL — build 24 · binder 41 · grader 34 ·
+qf01-preflight 6 · trusted-caller 35 · e2e 51 · rehearsal 57 · QF-01 16 ·
+pyflakes clean · runner dry-run ends "no calls made" · whole battery run with no
+ambient CLAUDE_CODE_ENTRYPOINT. Billing probes re-run and green. Three manifest
+shas UNCHANGED (86f1353d / b188063f / 177b5c12) — no envelope rebuilt, as
+ordered.
+
+AUTHORITY NOTE (repeat): the commit order remains OWNER-held and is NOT executed.
+STATUS: R39 COMPLETE. Fiscal: zero AI calls, zero graph writes, zero commits,
+zero push. OWNER FLAGS: pilot GO · the commit word · (new) the exported
+OPENAI_API_KEY.
+
+DEFERRED OWNER NOTE (2026-07-26) — FISCAL FOLLOW-UP AFTER CORE REVISION 3,
+NOT BEFORE.
+
+This note records a future Core→Fiscal contract handoff. It authorizes no code
+change now. Fiscal may start this work only after Core formally lands the
+Revision-3 contract and its tests, including an explicit tested path by which
+table scale wording such as "amounts in millions" reaches the reader.
+
+Core currently proposes retiring these seven model-contract fields:
+
+- `level_unit_raw`
+- `change_unit_raw`
+- `level_unit_kind_hint`
+- `level_money_mode_hint`
+- `change_unit_kind_hint`
+- `change_money_mode_hint`
+- `sequential_evidence`
+
+Verified current Fiscal boundary: `scripts/driver_seed/build_packets.py`
+`unit_hints()` emits `level_unit_raw`, `level_unit_kind_hint`,
+`level_money_mode_hint`, and `level_shape_hint`; its call copies them into each
+packet, and `scripts/driver_seed/public_contract.py` publicly allows all four.
+
+When, and only when, the Core trigger above is complete, Fiscal must:
+
+1. Stop emitting all four current derived fields. The first three are retired.
+   `level_shape_hint` remains a Core field, but the reader must decide it;
+   Fiscal must not default it.
+2. Preserve the signed source value; `fmt` and `is_currency`; the verbatim
+   quote plus any required table header/scale wording; period evidence; and raw
+   XBRL concept, context, and dimensions.
+3. Require Core to remove any allowance saying retired compatibility hints may
+   keep flowing. Do not delete the hints until Core has RED-first tests proving
+   the scale wording above reaches the reader even when it currently appears
+   in `period_evidence` rather than the quote.
+4. Then work RED-first: pin the new boundary failures, delete `unit_hints()` and
+   its call, remove the four public allowlist entries, retire the old hint
+   tests, and run the full Fiscal/Core boundary regressions.
+
+Immediate allowed work — READ-ONLY AUDIT ONLY. Before implementation, Fiscal
+must trace every current route and report:
+
+- the exact field and source location where unit/scale wording survives;
+- whether each emitted value is the displayed source number or has already
+  been fully scaled;
+- source-backed examples covering both XBRL and text/table records.
+
+The audit must make this case explicit:
+
+```text
+Fiscal value: 4,828,000,000
+Source row:   4,828
+Header:       "dollars in millions"
+Final m_usd:  4,828
+```
+
+The boundary must prove that this value is never scaled twice.
+
+Required order:
+
+1. Fiscal performs the read-only route/evidence audit above; no implementation.
+2. Core supplies a complete, versioned boundary patch proving the scale path,
+   the exact 4,828 case, preservation of raw evidence, and tests for every
+   Fiscal route.
+3. The owner/reviewer approves that complete patch.
+4. Core and Fiscal then change the boundary together, including removal of
+   Fiscal's four derived outputs, before any AI preflight.
+
+Hard stop: no speculative Fiscal implementation, compatibility shim, or early
+field deletion while Core Revision 3 is only proposed or awaiting approval.
+
+ROUND 40 (2026-07-26) — the CODEX CORRECTION + the unit/scale audit. Zero AI
+calls, no envelope rebuilt.
+
+HIS CORRECTION OF ME — ACCEPTED, and re-verified here before accepting:
+  `OPENAI_API_KEY=sk-INVALID-SENTINEL codex login status` -> "Logged in using
+  ChatGPT". My R39 claim that an exported OPENAI_API_KEY "would have taken the
+  call off the subscription onto the metered API" was UNTESTED and WRONG; the
+  stored ChatGPT login wins. The claim is corrected in the code comment, the
+  package, the record and memory. OPENAI_API_KEY stays stripped, but as secret
+  hygiene only. My error, plainly: I asserted a billing consequence I had not
+  measured, in the same round whose whole point was billing rigour.
+
+HIS THREE CODEX CLAIMS — all reproduced, all TRUE:
+  1. CODEX_ACCESS_TOKEN is consumed by the app-server: with a bogus value,
+     `codex login status` fails with "invalid agent identity JWT format".
+  2. CODEX_COMPANION_APP_SERVER_ENDPOINT is real — it is BROKER_ENDPOINT_ENV at
+     scripts/lib/app-server.mjs:21, so an inherited value would attach the call
+     to an already-running broker instead of the fresh isolated one.
+  3. clean_env() passed all three through. FIXED: AUTH_ENV_STRIP now carries ten
+     variables, stripped in BOTH lanes (env-level AND `unset` inside each
+     wrapper), and codex_env_clean() re-proves it from inside the real wrapper
+     before every codex call. fresh_codex_home() now REFUSES unless auth.json
+     has auth_mode="chatgpt", a real ChatGPT access token, and NO stored API key.
+
+BATTERY: 266 checks / 0 FAIL (trusted-caller 37) · pyflakes clean · dry-run "no
+calls made" · three manifest shas UNCHANGED (86f1353d / b188063f / 177b5c12).
+
+OPENAI KEY INVENTORY (ordered; read-only, nothing cleared): the key is consumed
+by ~50 files — drivers_harness 20, archive 13, .claude 9, scripts 3, neograph 2,
+transcripts 1, eventtrader 1. It is exported from BOTH .env and ~/.bashrc.
+Recommendation deferred to the owner; nothing edited (~/.bashrc is forbidden).
+
+CORE REVISION-3 UNIT/SCALE AUDIT (read-only) — delivered as
+Fiscal_UnitScale_RouteAudit_2026-07-26.md. Headline: the contract
+(ChannelContract.md:36 "unscaled" + raw unit text) matches the resolver law
+(guidance_ids.py:378-394) exactly, and the ordered example is PROVEN live —
+4,828 + "dollars in millions" -> m_usd 4,828, never scaled twice. But the
+pre-scaled guard CANNOT fire for "millions" (to_millions == 1.0, and the guard
+needs > 1), so an already-expanded 4,828,000,000 is accepted SILENTLY and is
+1e6 wrong; and bare "USD" on an aggregate (6 live fixtures) cannot distinguish
+absolute dollars from already-millions. Both are Core's to patch; Fiscal changes
+nothing until that patch is approved and both sides move together.
+
+STATUS: R40 COMPLETE. Fiscal: zero AI calls, zero graph writes, zero commits,
+zero push. OWNER FLAGS: pilot GO · the commit word · the exported OPENAI_API_KEY.
