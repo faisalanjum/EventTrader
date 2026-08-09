@@ -1063,3 +1063,30 @@ def test_EU076_an_explicit_headers_attribute_REPLACES_the_automatic_scan():
     _p3, ev3 = _ev('<table><tr><th id="hGeo">Geo</th><th>Alt</th></tr>'
                    f'<tr><td>Revenue</td><td headers="absent">{_FACT}</td></tr></table>')
     assert ev3['columns'] == [], ev3['columns']
+
+    # STEP 5 — "remove any duplicates". The same id twice is ONE header, and the
+    # surviving copy keeps the FIRST token's position (reviewer SEQ 851/852:
+    # the first implementation returned ['Geo', 'Geo']).
+    _p4, ev4 = _ev('<table><tr><th id="hGeo">Geo</th><th>Alt</th></tr>'
+                   f'<tr><td>Revenue</td><td headers="hGeo hGeo">{_FACT}</td></tr></table>')
+    assert ev4['columns'] == ['Geo'], ev4['columns']
+
+    # STEP 4 — "remove all the empty cells". An EMPTY resolved cell contributes
+    # nothing; it must not enter the evidence as a blank header (the first
+    # implementation returned ['']).
+    _p5, ev5 = _ev('<table><tr><th id="hGeo"> </th><th>Alt</th></tr>'
+                   f'<tr><td>Revenue</td><td headers="hGeo">{_FACT}</td></tr></table>')
+    assert ev5['columns'] == [], ev5['columns']
+
+    # CONTROL for step 4's EXACT definition: WHATWG ASCII whitespace is five code
+    # points, and U+00A0 is NOT one of them. Python's str.strip() would delete
+    # this cell as "empty"; the standard keeps it. Pinned so a future tidy-up
+    # cannot quietly widen the predicate to Unicode.
+    _p6, ev6 = _ev('<table><tr><th id="hGeo">\u00a0</th><th>Alt</th></tr>'
+                   f'<tr><td>Revenue</td><td headers="hGeo">{_FACT}</td></tr></table>')
+    assert len(ev6['columns']) == 1, ev6['columns']
+
+    # multi-token order is the ATTRIBUTE's own order, not document order
+    _p7, ev7 = _ev('<table><tr><th id="h1">One</th><th id="h2">Two</th></tr>'
+                   f'<tr><td>Revenue</td><td headers="h2 h1">{_FACT}</td></tr></table>')
+    assert ev7['columns'] == ['Two', 'One'], ev7['columns']

@@ -2352,6 +2352,20 @@ MUTATIONS = [
      "driver/relocation/test_row_label_span.py::"
      "test_EU076_an_explicit_headers_attribute_REPLACES_the_automatic_scan"),
 
+    (323, "EU-076 step 4: the empty-cell removal stops removing empty cells",
+     "driver/relocation/inline_html.py",
+     "                  if c.find(True) is not None",
+     "                  if True or c.find(True) is not None",
+     "driver/relocation/test_row_label_span.py::"
+     "test_EU076_an_explicit_headers_attribute_REPLACES_the_automatic_scan"),
+
+    (324, "EU-076 step 5: the duplicate removal stops deduplicating",
+     "driver/relocation/inline_html.py",
+     "            if not any(cell is kept for kept in seen):",
+     "            if True:",
+     "driver/relocation/test_row_label_span.py::"
+     "test_EU076_an_explicit_headers_attribute_REPLACES_the_automatic_scan"),
+
     (309, "EU-146: rowspan zero stops growing downward and reads as one row",
      "driver/relocation/inline_html.py",
      "            reach = len(rows) if height == 0 else row_number + height",

@@ -954,19 +954,38 @@ def _aligned_columns(rows, row_number, fact_cell, prepared):
         while root.parent is not None:
             root = root.parent
         own_table = fact_cell.find_parent('table')
-        explicit = []
+        # CELLS are kept, not slices: steps 4-6 below are defined over CELLS, so
+        # converting to text too early loses the identity dedup needs (SEQ 851).
+        chosen = []
         for token in tokens:
             if not token:
                 continue
             found = root.find(id=token)
-            if found is None or found is fact_cell:
+            if found is None or found is fact_cell:      # step 6, principal cell
                 continue
             if getattr(found, 'name', None) not in ('td', 'th'):
                 continue
             if found.find_parent('table') is not own_table:
                 continue
-            explicit.append(_visible_slice(found, prepared))
-        return explicit
+            chosen.append(found)
+        # 4.9.12.2 STEP 4 — "remove all the empty cells". The standard defines an
+        # empty cell as one containing NO ELEMENTS whose child text content is
+        # only ASCII WHITESPACE, and WHATWG ASCII whitespace is exactly these
+        # five code points. Python's str.strip() is NOT a substitute: it also
+        # eats U+000B, NBSP and the Unicode space separators, so a cell holding
+        # only a non-breaking space would be deleted as "empty" when the standard
+        # says it is not.
+        chosen = [c for c in chosen
+                  if c.find(True) is not None
+                  or c.get_text().strip('\t\n\x0c\r ') != '']
+        # STEP 5 — "remove any duplicates", by CELL IDENTITY, keeping the FIRST
+        # token's position: the header list order is the attribute's own order.
+        seen, unique = [], []
+        for cell in chosen:
+            if not any(cell is kept for kept in seen):
+                seen.append(cell)
+                unique.append(cell)
+        return [_visible_slice(cell, prepared) for cell in unique]
 
     grid = _table_grid(rows)
     # MEMBERSHIP IS GUARANTEED, so there is no absent-target branch: the
