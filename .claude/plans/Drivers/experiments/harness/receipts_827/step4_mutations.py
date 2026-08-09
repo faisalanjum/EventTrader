@@ -2366,6 +2366,20 @@ MUTATIONS = [
      "driver/relocation/test_row_label_span.py::"
      "test_EU076_an_explicit_headers_attribute_REPLACES_the_automatic_scan"),
 
+    (325, "EU-145/149: white-space leaves the shared style-winner owner again",
+     "driver/relocation/inline_html.py",
+     "    for p in ('display', 'visibility', 'cv', 'ws'):",
+     "    for p in ('display', 'visibility', 'cv'):",
+     "driver/relocation/test_row_label_span.py::"
+     "test_EU145_149_white_space_obeys_the_SHARED_css_wide_and_unresolved_law"),
+
+    (326, "EU-145/149: white-space unset stops meaning inherit on the inherited property",
+     "driver/relocation/inline_html.py",
+     "            if kw == 'inherit' or (kw == 'unset' and p in ('visibility', 'ws')):",
+     "            if kw == 'inherit' or (kw == 'unset' and p == 'visibility'):",
+     "driver/relocation/test_row_label_span.py::"
+     "test_EU145_149_white_space_obeys_the_SHARED_css_wide_and_unresolved_law"),
+
     (309, "EU-146: rowspan zero stops growing downward and reads as one row",
      "driver/relocation/inline_html.py",
      "            reach = len(rows) if height == 0 else row_number + height",

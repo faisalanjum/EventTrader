@@ -496,11 +496,8 @@ def _style_state(el):
     # declares none — the same cascade the other properties use (importance,
     # then source order), and an unknown value is invalid-and-dropped rather
     # than a refusal: it cannot change visibility.
-    ws_cands = [(k, v) for k, v in cand.get('ws', [])]
-    ws_best = max(ws_cands, default=None, key=lambda kv: kv[0])
-    out = {'hidden_attr': hv is not None, 'unsupported': unsupported,
-           'ws': (ws_best[1] if ws_best else None)}
-    for p in ('display', 'visibility', 'cv'):
+    out = {'hidden_attr': hv is not None, 'unsupported': unsupported}
+    for p in ('display', 'visibility', 'cv', 'ws'):
         best = max(cand[p], default=None, key=lambda kv: kv[0])
         v = best[1] if best else None
         tag, payload = v if isinstance(v, tuple) else (None, v)
@@ -515,7 +512,7 @@ def _style_state(el):
                 payload or f'unresolvable {p} winner in inline style')
         elif tag == 'wide':
             kw = payload
-            if kw == 'inherit' or (kw == 'unset' and p == 'visibility'):
+            if kw == 'inherit' or (kw == 'unset' and p in ('visibility', 'ws')):
                 # Cascade 5 §7.3.3: `unset` means INHERIT for an inherited
                 # property, and visibility inherits — so visibility:unset
                 # under a hidden ancestor STAYS hidden (SEQ 231 §1). display
@@ -525,8 +522,15 @@ def _style_state(el):
                 # so display:inherit can never mean none here.
                 out[p] = 'other' if p == 'display' else None
             else:                           # initial, or unset on non-inherited
+                # SEQ 852/853: `ws` joins this ONE owner instead of being
+                # resolved beside it. white-space INHERITS (CSS Text 3 §3), so
+                # its `unset` is `inherit` and its initial value is `normal` —
+                # the same two clauses visibility already uses. Resolving it
+                # here is what stops a ('wide', ...) tuple or the unsupported
+                # sentinel reaching `_advance`, which compared them against the
+                # keyword vocabulary and silently read every one as collapsing.
                 out[p] = {'display': 'other', 'visibility': 'visible',
-                          'cv': 'visible'}[p]
+                          'cv': 'visible', 'ws': 'normal'}[p]
         elif tag is not None:
             # an unknown internal tag is a programming defect — fail loudly,
             # never read it as a CSS value or a lawful abstention

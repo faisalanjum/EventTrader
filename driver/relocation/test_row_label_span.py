@@ -1090,3 +1090,49 @@ def test_EU076_an_explicit_headers_attribute_REPLACES_the_automatic_scan():
     _p7, ev7 = _ev('<table><tr><th id="h1">One</th><th id="h2">Two</th></tr>'
                    f'<tr><td>Revenue</td><td headers="h2 h1">{_FACT}</td></tr></table>')
     assert ev7['columns'] == ['Two', 'One'], ev7['columns']
+
+
+def test_EU145_149_white_space_obeys_the_SHARED_css_wide_and_unresolved_law():
+    """EU-145/EU-149 (#827), reopened by reviewer SEQ 852/853.
+
+    The six ordinary keywords were right, but `white-space` was resolved
+    BESIDE the shared style-winner owner instead of through it, so a
+    ('wide', ...) tuple or the unsupported sentinel reached `_advance`,
+    which compared them against the keyword vocabulary, matched nothing,
+    and silently read every one as COLLAPSING. Public reproductions before
+    the change: inherit, unset, all:inherit, var() and revert all gave
+    'A B' where the law requires preserved or refused.
+
+    The law, all of it already owned by that one mechanism:
+      white-space INHERITS (CSS Text 3 §3), so `inherit` and `unset` take
+      the parent value; `initial` is `normal`; an unresolved substitution or
+      an unsupported rollback (var()/function, revert, revert-layer)
+      propagates the document-level unsupported refusal and never guesses.
+    """
+    from driver.relocation.inline_html import prepare
+
+    def run(inner):
+        p = prepare(_HEAD + '<div style="white-space:pre">'
+                    f'<span style="{inner}">A  B</span></div></body></html>')
+        if 'text' not in p:                       # the refusal lane
+            return 'REFUSED'
+        t = p['text']
+        return t[t.index('A'):t.index('B') + 1]
+
+    # inherited: the parent's `pre` survives
+    assert run('white-space:inherit') == 'A  B'
+    assert run('white-space:unset') == 'A  B'     # unset == inherit when inherited
+    assert run('all:inherit') == 'A  B'           # `all` reaches white-space
+    # initial is `normal`, which collapses — NOT the parent's pre
+    assert run('white-space:initial') == 'A B'
+    # unresolved / rollback REFUSE rather than silently collapsing
+    assert run('white-space:var(--x)') == 'REFUSED'
+    assert run('white-space:revert') == 'REFUSED'
+    assert run('white-space:revert-layer') == 'REFUSED'
+    # CONTROL: the six ordinary keywords keep their existing lawful outputs
+    assert run('white-space:pre') == 'A  B'
+    assert run('white-space:pre-wrap') == 'A  B'
+    assert run('white-space:break-spaces') == 'A  B'
+    assert run('white-space:pre-line') == 'A B'
+    assert run('white-space:normal') == 'A B'
+    assert run('white-space:nowrap') == 'A B'
