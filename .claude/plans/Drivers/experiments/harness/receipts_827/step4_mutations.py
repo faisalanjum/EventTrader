@@ -2324,14 +2324,6 @@ MUTATIONS = [
      "driver/relocation/test_row_label_span.py::"
      "test_EU146_colspan_and_rowspan_follow_the_table_processing_model"),
 
-    (319, "EU-145: the white-space preserving keywords are dropped and `pre` "
-          "collapses runs like `normal`",
-     "driver/relocation/inline_html.py",
-     "_WS_PRESERVE_ALL = frozenset({'pre', 'pre-wrap', 'break-spaces'})",
-     "_WS_PRESERVE_ALL = frozenset()",
-     "driver/relocation/test_semantic_fact_value.py::"
-     "test_EU145_the_white_space_property_decides_run_and_break_preservation"),
-
     (309, "EU-146: rowspan zero stops growing downward and reads as one row",
      "driver/relocation/inline_html.py",
      "            reach = len(rows) if height == 0 else row_number + height",

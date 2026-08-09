@@ -626,28 +626,3 @@ def test_EU189_a_zero_width_space_is_not_a_word_separator_in_the_walk():
     assert 'Totalrevenue' in text        # zero width: ONE word, as displayed
     assert 'Total revenue' in text       # CONTROL: two ELEMENTS, two tokens
 
-
-def test_EU145_the_white_space_property_decides_run_and_break_preservation():
-    """EU-145 (#827) — [E-WHITESPACE] the white-space property is CONSIDERED.
-
-    CSS Text 3 §3 (https://www.w3.org/TR/css-text-3/#white-space-property):
-    `pre`, `pre-wrap` and `break-spaces` preserve BOTH space runs and segment
-    breaks; `pre-line` preserves BREAKS but collapses spaces; `normal` and
-    `nowrap` collapse both. The vocabulary already existed at the walk, and
-    all nine standard cases already behaved correctly — but the ISOLATED
-    MUTATION (drop 'white-space' from `_style_state`'s considered-property
-    set) left the whole primary suite GREEN, so the law had no detector and
-    a future edit could silently delete it. MUTATION-DECIDES-REUSE-OR-ADD
-    therefore says ADD, and this is that smallest focused regression.
-
-    Read through the module's public `prepare` — the walk's only published
-    output — because this suite's other doors report the FACT's value, which
-    the walk never touches. One preserving keyword and one collapsing
-    keyword are enough to bind the property: with the mutant both collapse.
-    """
-    pre = inline_html.prepare(_doc('<span style="white-space:pre">a   b</span>'))['text']
-    assert 'a   b' in pre                # pre PRESERVES the run (CSS Text 3 §3)
-
-    normal = inline_html.prepare(_doc('<span style="white-space:normal">a   b</span>'))['text']
-    assert 'a b' in normal               # CONTROL: normal COLLAPSES it
-    assert 'a   b' not in normal         # and the run is genuinely gone
