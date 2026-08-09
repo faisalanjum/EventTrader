@@ -1095,6 +1095,40 @@ def test_EU139_hidden_until_found_refuses_as_unsupported():
     assert 'until-found' in prep['refused']
 
 
+def test_EU144_force_hidden_parks_NAMING_the_construct_it_refused():
+    """EU-144 (#827) — the PARK-NAMED-REASON law for the second scope refusal
+    at `_style_state`, added because the isolated mutation SURVIVED this suite.
+
+    `visibility:force-hidden` is OFFICIAL CSS (Display 4 §5): it skips
+    descendants without the self-revive `visibility:hidden` allows. This
+    reader does not model it, and the owner's E-SUPPORTED-SCOPE ruling
+    (2026-08-07) is that a deliberate refusal of LAWFUL input parks CITING ITS
+    NAMED REASON — a standard proving a construct lawful is never permission
+    to omit it silently, and the first-production census counts the pile by
+    that name. So the assertion is not merely "it refused": it is that the
+    refusal SAYS WHAT IT REFUSED, which is the whole content of the law.
+
+    The two controls are the values this reader DOES model, so the park is
+    proved bounded rather than a blanket visibility refusal.
+    """
+    prep = prepare(doc(row(['Revenue', fact()])
+                       + '<div style="visibility:force-hidden">FHSECRET</div>'))
+    assert prep.get('refused', '').startswith('unsupported_style')
+    assert 'force-hidden' in prep['refused'], prep['refused']
+    # the NAMED reason carries its authority, not just the keyword
+    assert 'CSS Display 4' in prep['refused'], prep['refused']
+
+    # CONTROLS: the modelled neighbours still resolve, and do NOT park
+    shown = prepare(doc(row(['Revenue', fact()])
+                        + '<div style="visibility:visible">SHOWNTEXT</div>'))
+    assert 'refused' not in shown, shown.get('refused')
+    assert 'SHOWNTEXT' in shown['text']
+    veiled = prepare(doc(row(['Revenue', fact()])
+                         + '<div style="visibility:hidden">HIDSECRET</div>'))
+    assert 'refused' not in veiled, veiled.get('refused')
+    assert 'HIDSECRET' not in veiled['text']
+
+
 def test_EU141_the_all_shorthand_resets_an_earlier_display_none():
     """The 'all' shorthand (CSS Cascade 4 §3.3) with a wide local keyword
     resets display too — content an earlier display:none hid becomes

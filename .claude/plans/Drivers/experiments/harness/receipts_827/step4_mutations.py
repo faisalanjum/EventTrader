@@ -2373,6 +2373,20 @@ MUTATIONS = [
      "driver/relocation/test_row_label_span.py::"
      "test_EU189_a_SPACER_column_is_not_a_label_and_never_becomes_a_piece"),
 
+    (337, "EU-143: the until-found scope refusal stops naming what it refused",
+     "driver/relocation/inline_html.py",
+     'hidden=until-found is outside the supported reader',
+     'outside the supported reader',
+     "driver/relocation/test_two_view_bridge.py::test_EU139_hidden_until_found_refuses_as_unsupported"),
+
+    (338, "EU-144: the force-hidden scope refusal stops naming what it refused",
+     "driver/relocation/inline_html.py",
+     # the source splits this refusal across TWO adjacent string literals, so
+     # the anchor is the FIRST of them \u2014 one contiguous run of real bytes.
+     "'visibility:force-hidden is official '",
+     "'this value is not supported '",
+     "driver/relocation/test_two_view_bridge.py::test_EU144_force_hidden_parks_NAMING_the_construct_it_refused"),
+
     (327, "EU-189: the token join fabricates a separator again",
      "driver/relocation/inline_html.py",
      "    text = ''.join(s + w for s, w in zip(seps, words))",
