@@ -110,6 +110,80 @@ QUERIES: dict[str, tuple[str, dict[str, Any]]] = {
         """,
         {},
     ),
+    "sector_etf_assignments": (
+        """
+        MATCH (s:Sector)
+        OPTIONAL MATCH (c:Company)-[:BELONGS_TO]->(:Industry)-[:BELONGS_TO]->(s)
+        RETURN s.id AS sector_id,
+               s.name AS sector_name,
+               s.etf AS etf,
+               count(DISTINCT c) AS companies
+        ORDER BY etf, sector_name
+        """,
+        {},
+    ),
+    "industry_etf_assignments": (
+        """
+        MATCH (i:Industry)
+        OPTIONAL MATCH (c:Company)-[:BELONGS_TO]->(i)
+        RETURN i.id AS industry_id,
+               i.name AS industry_name,
+               i.etf AS etf,
+               count(DISTINCT c) AS companies
+        ORDER BY etf, industry_name
+        """,
+        {},
+    ),
+    "company_benchmark_assignments": (
+        """
+        MATCH (c:Company)
+        OPTIONAL MATCH (c)-[:BELONGS_TO]->(i:Industry)
+        OPTIONAL MATCH (i)-[:BELONGS_TO]->(s:Sector)
+        RETURN c.ticker AS symbol,
+               s.etf AS sector_etf,
+               i.etf AS industry_etf
+        ORDER BY symbol
+        """,
+        {},
+    ),
+    "market_hierarchy_relationships": (
+        """
+        MATCH (a)-[r:BELONGS_TO]->(b)
+        WHERE (a:Company AND b:Industry)
+           OR (a:Industry AND b:Sector)
+           OR (a:Sector AND b:MarketIndex)
+        RETURN labels(a) AS child_labels,
+               labels(b) AS parent_labels,
+               count(r) AS relationships
+        ORDER BY child_labels, parent_labels
+        """,
+        {},
+    ),
+    "covered_etf_price_overlap": (
+        """
+        MATCH (d:Date)-[r:HAS_PRICE]->(e)
+        WITH d, r, e, coalesce(e.etf, e.ticker, e.id) AS symbol
+        WHERE symbol IN $symbols
+          AND toString(d.date) >= $start_date
+        RETURN symbol,
+               labels(e) AS labels,
+               toString(d.date) AS date,
+               r.open AS open,
+               r.high AS high,
+               r.low AS low,
+               r.close AS close,
+               r.volume AS volume,
+               r.vwap AS vwap,
+               r.transactions AS transactions,
+               r.timestamp AS timestamp,
+               r.daily_return AS daily_return
+        ORDER BY date, symbol
+        """,
+        {
+            "symbols": ["XLE", "XLF", "GDX", "SOXX"],
+            "start_date": "2026-04-27",
+        },
+    ),
     "event_return_locations": (
         """
         CALL {

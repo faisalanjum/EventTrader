@@ -123,23 +123,37 @@ def write_cache(path: Path, rows: list[dict[str, Any]]) -> None:
 def fetch_reference_rows(
     key: str,
     dataset: str,
-    symbol: str,
+    symbol: str | None,
     cache_dir: Path,
     *,
     minimum_interval: float,
+    start: str | None = None,
+    end: str | None = None,
 ) -> list[dict[str, Any]]:
-    cache = cache_dir / dataset / f"{symbol}.json.gz"
+    cache_name = (
+        symbol
+        if symbol is not None
+        else f"__all__{start or 'beginning'}__{end or 'latest'}"
+    )
+    cache = cache_dir / dataset / f"{cache_name}.json.gz"
     if cache.exists():
         return read_cache(cache)
 
     params = urllib.parse.urlencode(
-        {
-            "symbol": symbol,
-            "order": "asc",
-            "limit": 5000,
-        }
+        [
+            (name, value)
+            for name, value in (
+                ("symbol", symbol),
+                ("start", start),
+                ("end", end),
+                ("order", "asc"),
+                ("limit", 5000),
+            )
+            if value is not None
+        ]
     )
     url = f"{BASE_URL}/ref/{dataset}?{params}"
+    request_name = symbol or f"all rows from {start} through {end}"
     last_error = ""
     for attempt in range(1, 6):
         started = time.monotonic()
@@ -157,7 +171,7 @@ def fetch_reference_rows(
             rows = json.loads(raw.decode("utf-8"))
             if not isinstance(rows, list):
                 raise RuntimeError(
-                    f"{dataset}/{symbol} returned {type(rows).__name__}"
+                    f"{dataset}/{request_name} returned {type(rows).__name__}"
                 )
             write_cache(cache, rows)
             elapsed = time.monotonic() - started
@@ -179,7 +193,7 @@ def fetch_reference_rows(
             if attempt == 5:
                 break
             time.sleep(attempt)
-    raise RuntimeError(f"LSE {dataset}/{symbol} failed: {last_error}")
+    raise RuntimeError(f"LSE {dataset}/{request_name} failed: {last_error}")
 
 
 def decimal_text(value: Any) -> str | None:

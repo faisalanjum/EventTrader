@@ -37,6 +37,7 @@ from compare_core import (
     normalize_lse_bar,
     normalize_massive_bar,
 )
+from fetch_lse_proxy_pilot import read_api_key
 
 
 LSE_BASE = "https://api.londonstrategicedge.com/vault"
@@ -151,9 +152,15 @@ def fetch_lse_daily(
     key: str,
     cache_dir: Path,
     gate: RateGate,
+    *,
+    dataset: str = "stocks",
 ) -> list[dict[str, Any]]:
-    cache = cache_dir / "lse" / (
-        f"{safe_name(symbol)}_{start}_{end_inclusive}_1d.json.gz"
+    cache = lse_daily_cache_path(
+        cache_dir,
+        symbol,
+        dataset,
+        start,
+        end_inclusive,
     )
     if cache.exists():
         return read_json_gzip(cache)
@@ -165,7 +172,7 @@ def fetch_lse_daily(
             f"{LSE_BASE}/candles",
             params={
                 "symbol": symbol,
-                "dataset": "stocks",
+                "dataset": dataset,
                 "timeframe": "1d",
                 "start": start,
                 "end": end_exclusive,
@@ -183,6 +190,19 @@ def fetch_lse_daily(
         raise FetchError(f"LSE returned {type(value).__name__}, expected list")
     write_json_gzip(cache, value)
     return value
+
+
+def lse_daily_cache_path(
+    cache_dir: Path,
+    symbol: str,
+    dataset: str,
+    start: str,
+    end_inclusive: str,
+) -> Path:
+    return cache_dir / "lse" / (
+        f"{safe_name(dataset)}_{safe_name(symbol)}_"
+        f"{start}_{end_inclusive}_1d.json.gz"
+    )
 
 
 def fetch_massive_daily(
@@ -390,6 +410,8 @@ def main() -> int:
     parser.add_argument("--output-json", type=Path, required=True)
     parser.add_argument("--output-csv-gz", type=Path, required=True)
     parser.add_argument("--workers", type=int, default=2)
+    parser.add_argument("--lse-dataset", default="stocks")
+    parser.add_argument("--private-key-source", type=Path)
     args = parser.parse_args()
 
     if not args.symbols and not args.symbols_file:
@@ -404,7 +426,14 @@ def main() -> int:
     massive_key = os.environ.get("POLYGON_API_KEY")
     if not massive_key:
         raise SystemExit("POLYGON_API_KEY is not set")
-    lse_key = os.environ.get("LSE_API_KEY") or getpass.getpass("LSE API key: ")
+    environment_lse_key = os.environ.get("LSE_API_KEY", "")
+    if environment_lse_key or args.private_key_source:
+        lse_key = read_api_key(
+            environment_lse_key,
+            args.private_key_source,
+        )
+    else:
+        lse_key = getpass.getpass("LSE API key: ")
     if not lse_key:
         raise SystemExit("No LSE API key supplied")
 
@@ -414,7 +443,13 @@ def main() -> int:
 
     def fetch_symbol(symbol: str) -> tuple[str, list[Bar], list[Bar]]:
         lse_rows = fetch_lse_daily(
-            symbol, args.start, args.end, lse_key, args.cache_dir, gate
+            symbol,
+            args.start,
+            args.end,
+            lse_key,
+            args.cache_dir,
+            gate,
+            dataset=args.lse_dataset,
         )
         massive_rows = fetch_massive_daily(
             symbol, args.start, args.end, massive_key, args.cache_dir
@@ -561,7 +596,8 @@ def main() -> int:
             "end_inclusive": args.end,
             "massive": "1/day adjusted=true, asc, limit=5000",
             "lse": (
-                "stocks 1d, asc, limit=5000; end advanced one day because live "
+                f"{args.lse_dataset} 1d, asc, limit=5000; end advanced one day "
+                "because live "
                 "server treats end date as exclusive"
             ),
             "calendar": "XNYS; non-session LSE rows excluded from accuracy metrics",

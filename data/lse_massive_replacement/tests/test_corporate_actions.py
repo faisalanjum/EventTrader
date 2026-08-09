@@ -1,16 +1,20 @@
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
+from urllib.parse import parse_qs, urlparse
 
 
 SCRIPTS = Path(__file__).resolve().parents[1] / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
+import compare_corporate_actions  # noqa: E402
 from compare_corporate_actions import (
     dividend_core,
     dividend_production_id,
     dividend_production_id_summary,
+    fetch_reference_rows,
     matched_field_counts,
     multiset_summary,
     split_core,
@@ -171,3 +175,63 @@ def test_split_core_treats_comma_formatted_graph_number_as_numeric():
     }
 
     assert split_core(graph, "graph") == split_core(lse, "lse")
+
+
+def test_reference_fetch_can_load_complete_period_without_symbol(
+    tmp_path,
+    monkeypatch,
+):
+    requested_urls = []
+    expected = [
+        {
+            "symbol": "DD",
+            "effective_date": "2026-06-24",
+            "split_from": 3,
+            "split_to": 1,
+        }
+    ]
+
+    class FakeResponse:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_args):
+            return None
+
+        def read(self):
+            return json.dumps(expected).encode("utf-8")
+
+    def fake_urlopen(request, timeout):
+        requested_urls.append(request.full_url)
+        assert timeout == 90
+        return FakeResponse()
+
+    monkeypatch.setattr(
+        compare_corporate_actions.urllib.request,
+        "urlopen",
+        fake_urlopen,
+    )
+
+    rows = fetch_reference_rows(
+        "secret",
+        "stock_splits",
+        None,
+        tmp_path,
+        start="2026-04-28",
+        end="2026-07-17",
+        minimum_interval=0,
+    )
+
+    assert rows == expected
+    query = parse_qs(urlparse(requested_urls[0]).query)
+    assert query == {
+        "start": ["2026-04-28"],
+        "end": ["2026-07-17"],
+        "order": ["asc"],
+        "limit": ["5000"],
+    }
+    assert (
+        tmp_path
+        / "stock_splits"
+        / "__all__2026-04-28__2026-07-17.json.gz"
+    ).exists()

@@ -126,6 +126,47 @@ class ProductionPriceSelectionTests(unittest.TestCase):
             614_100_000,
         )
 
+    def test_subsecond_target_selects_the_bar_that_started_that_second(self) -> None:
+        target = EASTERN.localize(
+            datetime(2025, 7, 17, 10, 0, 0, 500_000)
+        )
+        target_ms = int(target.timestamp() * 1000)
+        second_start_ms = target_ms - 500
+
+        def responder(call):
+            return [
+                FakeAgg(second_start_ms + 1000, 999.0),
+                FakeAgg(second_start_ms, 101.25),
+                FakeAgg(second_start_ms - 1000, 101.0),
+            ]
+
+        client = RecordingAggClient(responder)
+        polygon = isolated_polygon(client)
+
+        price = polygon.get_last_trade("SPY", target)
+
+        self.assertEqual(price, 101.25)
+
+    def test_nominal_after_hours_end_can_use_an_earlier_bar(self) -> None:
+        target = EASTERN.localize(datetime(2025, 7, 17, 20, 30, 0))
+        last_extended_hours_bar = EASTERN.localize(
+            datetime(2025, 7, 17, 19, 59, 59)
+        )
+        bar_ms = int(last_extended_hours_bar.timestamp() * 1000)
+
+        def responder(call):
+            if call["from_"] <= bar_ms <= call["to"]:
+                return [FakeAgg(bar_ms, 123.45)]
+            return []
+
+        client = RecordingAggClient(responder)
+        polygon = isolated_polygon(client)
+
+        price = polygon.get_last_trade("SPY", target)
+
+        self.assertEqual(price, 123.45)
+        self.assertEqual(len(client.calls), 3)
+
 
 class ProductionWindowTests(unittest.TestCase):
     def setUp(self) -> None:
@@ -186,6 +227,88 @@ class ProductionWindowTests(unittest.TestCase):
             self.iso(self.market.get_interval_start_time(closed)),
             "2026-07-20T04:00:00-04:00",
         )
+
+    def test_hourly_windows_are_always_60_wall_clock_minutes_from_start(self) -> None:
+        cases = {
+            "pre_market": (
+                "2026-07-17T08:00:00-04:00",
+                "2026-07-17T08:00:00-04:00",
+                "2026-07-17T09:00:00-04:00",
+            ),
+            "pre_market_crossing_open": (
+                "2026-07-17T09:00:00-04:00",
+                "2026-07-17T09:00:00-04:00",
+                "2026-07-17T10:00:00-04:00",
+            ),
+            "regular_market_crossing_close": (
+                "2026-07-17T15:30:00-04:00",
+                "2026-07-17T15:30:00-04:00",
+                "2026-07-17T16:30:00-04:00",
+            ),
+            "post_market": (
+                "2026-07-17T17:00:00-04:00",
+                "2026-07-17T17:00:00-04:00",
+                "2026-07-17T18:00:00-04:00",
+            ),
+            "post_market_crossing_8pm": (
+                "2026-07-17T19:30:00-04:00",
+                "2026-07-17T19:30:00-04:00",
+                "2026-07-17T20:30:00-04:00",
+            ),
+        }
+
+        for label, (event, expected_start, expected_end) in cases.items():
+            with self.subTest(label=label):
+                self.assertEqual(
+                    self.iso(self.market.get_interval_start_time(event)),
+                    expected_start,
+                )
+                self.assertEqual(
+                    self.iso(
+                        self.market.get_interval_end_time(event, 60, False)
+                    ),
+                    expected_end,
+                )
+
+    def test_closed_hours_use_the_next_4am_to_5am_window(self) -> None:
+        cases = {
+            "before_pre_market": "2026-07-17T03:00:00-04:00",
+            "at_after_hours_end": "2026-07-17T20:00:00-04:00",
+            "later_that_night": "2026-07-17T21:00:00-04:00",
+            "weekend": "2026-07-18T12:00:00-04:00",
+        }
+        expected = {
+            "before_pre_market": (
+                "2026-07-17T04:00:00-04:00",
+                "2026-07-17T05:00:00-04:00",
+            ),
+            "at_after_hours_end": (
+                "2026-07-20T04:00:00-04:00",
+                "2026-07-20T05:00:00-04:00",
+            ),
+            "later_that_night": (
+                "2026-07-20T04:00:00-04:00",
+                "2026-07-20T05:00:00-04:00",
+            ),
+            "weekend": (
+                "2026-07-20T04:00:00-04:00",
+                "2026-07-20T05:00:00-04:00",
+            ),
+        }
+
+        for label, event in cases.items():
+            with self.subTest(label=label):
+                start, end = expected[label]
+                self.assertEqual(
+                    self.iso(self.market.get_interval_start_time(event)),
+                    start,
+                )
+                self.assertEqual(
+                    self.iso(
+                        self.market.get_interval_end_time(event, 60, False)
+                    ),
+                    end,
+                )
 
     def test_weekend_windows(self) -> None:
         event = "2026-07-18T12:00:00-04:00"
@@ -265,6 +388,10 @@ class ProductionWindowTests(unittest.TestCase):
         self.assertEqual(
             self.iso(self.market.get_interval_start_time(event)),
             "2025-11-28T04:00:00-05:00",
+        )
+        self.assertEqual(
+            self.iso(self.market.get_interval_end_time(event, 60, False)),
+            "2025-11-28T05:00:00-05:00",
         )
         self.assertEqual(
             tuple(map(self.iso, self.market.get_1d_impact_times(event))),
