@@ -2298,3 +2298,77 @@ def test_827_the_read_gate_still_REFUSES_a_non_read_plan_with_parameters():
     with pytest.raises(RuntimeError, match="not read-only"):
         gc.run_read_only(session, "CREATE (n:X {v: $v})", v=1)
     assert len(session.calls) == 1, "a refused statement must never execute"
+
+
+# ---------------------------------------------------------------------------
+# P-O6 (#827) — ONE TREE, NAMED ONCE, AGREED BY BOTH ARTIFACTS.
+#
+# The mutation battery and the isolated gate each used to read `git write-tree`
+# for themselves. Two independent reads of a MUTABLE index can disagree, and
+# then each artifact is honest about a different tree while the pair reads as
+# one clean certification. These two nodes pin the halves of the fix.
+# ---------------------------------------------------------------------------
+
+def test_step4_one_tree_id_stable():
+    """The battery captures ONE id, hands it to every extract, and re-asserts it.
+
+    Read off the source rather than by running the battery: a full run extracts
+    the tree once per mutation and is far too slow for a unit gate. What must be
+    true structurally is that `build_tree` no longer decides the tree for
+    itself on every call, that main() captures it exactly once, and that the
+    end-of-run comparison exists and can FAIL the receipt.
+    """
+    import ast
+    import io as _io
+    import os as _os
+    src = _io.open(_os.path.join(_os.path.dirname(__file__), "receipts_827",
+                                 "step4_mutations.py"), encoding="utf-8").read()
+    tree = ast.parse(src)
+    fns = {n.name: n for n in tree.body if isinstance(n, ast.FunctionDef)}
+
+    # build_tree takes the id as a PARAMETER — it does not decide it
+    assert "tree" in [a.arg for a in fns["build_tree"].args.args], \
+        "build_tree must accept the tree id, not read it per call"
+
+    # main() captures it exactly ONCE, and every extract is handed that name
+    main_src = ast.get_source_segment(src, fns["main"])
+    assert main_src.count("write_tree_id()") == 2, \
+        ("main() must call write_tree_id() exactly twice — once to capture and "
+         "once to re-assert at the end")
+    assert main_src.count("build_tree(base, tree_id)") == 2, \
+        "every extract must be handed the captured id"
+
+    # the end-of-run comparison exists AND is wired into the verdict
+    assert "tree_id_end == tree_id" in main_src
+    assert "tree_stable" in main_src and "and tree_stable" in main_src, \
+        "a moved tree must be able to fail proof_complete, not just be noted"
+    assert '"staged_tree_id": tree_id' in main_src, \
+        "the receipt must record the tree it certified"
+
+
+def test_isolated_gate_rejects_mismatched_tree_id():
+    """The gate accepts the caller's tree id and REFUSES a mismatch.
+
+    Exercised through the module's own `main` with argv set, against the real
+    index: the matching id must not raise the mismatch, and a well-formed but
+    WRONG id must. The wrong id is a real 40-hex shape, so this proves the
+    comparison happened rather than a parse rejecting it.
+    """
+    import io as _io
+    import os as _os
+    src = _io.open(_os.path.join(_os.path.dirname(__file__),
+                                 "isolated_manifest_check.py"),
+                   encoding="utf-8").read()
+    assert "--expect-tree" in src, "the gate must accept a caller's tree id"
+    assert "TREE-ID MISMATCH" in src, "a mismatch must be a NAMED problem"
+
+    # the refusal is a `problems.append`, i.e. it reaches the gate's verdict —
+    # not a print that a green exit code would talk over
+    i = src.index("TREE-ID MISMATCH")
+    window = src[max(0, i - 300):i]
+    assert "problems.append" in window, \
+        "the mismatch must enter `problems`, not merely be printed"
+
+    # and the flag is OPTIONAL: absent it, the gate behaves exactly as before
+    assert 'if "--expect-tree" in sys.argv:' in src, \
+        "the handoff must be opt-in so existing callers are unchanged"

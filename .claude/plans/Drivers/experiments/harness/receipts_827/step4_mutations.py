@@ -2610,20 +2610,32 @@ TREE_PATHS = ("driver", HARNESS_REL, "drivers_harness", "conftest.py",
                            "scripts"))
 
 
-def build_tree(base):
+def write_tree_id():
+    """THE index's tree object id, right now. `git write-tree` is the same
+    object `git commit` records and the same one the isolated gate proves."""
+    return subprocess.run(["git", "write-tree"], cwd=_REPO, check=True,
+                          capture_output=True, text=True).stdout.strip()
+
+
+def build_tree(base, tree=None):
     """The EXACT STAGED TREE, extracted with git — never the working tree.
 
     This used to `shutil.copytree` the live checkout, so every mutation proof
     described whatever happened to be on disk rather than the tree that will be
     committed. With zero drift the two coincide, which is exactly why the
-    difference goes unnoticed until the one time it matters. `git write-tree`
-    is the same object `git commit` records and the same one the isolated gate
-    proves, so the mutation battery and the gate now describe ONE tree.
+    difference goes unnoticed until the one time it matters.
+
+    P-O6 (#827): `tree` is now PASSED IN, captured ONCE by main(). Each extract
+    used to call `git write-tree` for itself, so a battery of N mutations was N
+    independent reads of a mutable index: if anything staged a byte mid-run, the
+    clean control and the mutants would describe DIFFERENT trees and the receipt
+    would still read as one clean run. One id, captured once, used by every
+    extract, re-asserted at the end, and written into the receipt — so the
+    battery, the gate and the commit all name the same object.
     """
     root = os.path.join(base, "tree")
     os.makedirs(root)
-    tree = subprocess.run(["git", "write-tree"], cwd=_REPO, check=True,
-                          capture_output=True, text=True).stdout.strip()
+    tree = tree or write_tree_id()
     tar = subprocess.run(["git", "archive", tree, "--"] + list(TREE_PATHS),
                          cwd=_REPO, check=True, capture_output=True)
     if subprocess.run(["tar", "-x", "-C", root], input=tar.stdout).returncode:
@@ -2703,9 +2715,12 @@ def apply_mutation(root, rel, old, new):
 
 def main():
     results, problems = [], []
+    # P-O6 (#827): ONE tree id for the WHOLE battery — captured here, before any
+    # extract, and re-asserted after the last one.
+    tree_id = write_tree_id()
     base = tempfile.mkdtemp(prefix="step4_control_")
     try:
-        clean = build_tree(base)
+        clean = build_tree(base, tree_id)
         for mid, name, _f, _o, _n, node in MUTATIONS:
             rc, tail = run_detector(clean, node)
             results.append({"phase": "clean control", "id": mid,
@@ -2719,7 +2734,7 @@ def main():
     for mid, name, rel, old, new, node in MUTATIONS:
         base = tempfile.mkdtemp(prefix=f"step4_m{mid}_")
         try:
-            root = build_tree(base)
+            root = build_tree(base, tree_id)
             apply_mutation(root, rel, old, new)
             rc, tail = run_detector(root, node)
             caught = rc == 1      # EXACTLY 'tests failed'
@@ -2812,13 +2827,31 @@ def main():
                 "isolated_mutants_caught": n_iso,
                 "live_controls_passed": n_live,
                 "live_mutants_caught": n_live}
+    # P-O6 (#827): the index must still yield the SAME tree we extracted
+    # from. If it moved, every result above describes a tree that is no
+    # longer the one being certified, and that must be a LOUD problem
+    # rather than a receipt that reads clean.
+    tree_id_end = write_tree_id()
+    tree_stable = tree_id_end == tree_id
+    if not tree_stable:
+        problems.append(
+            f"the staged tree MOVED during the battery: started {tree_id}, "
+            f"ended {tree_id_end} — every result above describes the "
+            f"starting tree, not the one now staged")
+
     proof_complete = bool(
         include_live
         and not problems
+        and tree_stable
         and tx_before is not None and tx_before == tx_after
         and counts == expected)
 
-    doc = {"receipt": f"#827 step 4 — {n_iso} isolated + {n_live} "
+    doc = {#: P-O6 (#827): the ONE tree every extract above came from,
+           #: captured once before the first and re-read after the last.
+           "staged_tree_id": tree_id,
+           "staged_tree_id_at_end": tree_id_end,
+           "staged_tree_stable": tree_stable,
+           "receipt": f"#827 step 4 — {n_iso} isolated + {n_live} "
                       f"read-only-live staged-tree mutations",
            "timestamp_utc": datetime.datetime.utcnow().isoformat() + "Z",
            "method": f"each mutation applied to a FRESH EXTRACT of the "

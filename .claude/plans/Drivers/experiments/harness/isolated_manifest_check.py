@@ -417,6 +417,21 @@ def main():
     print(f"the candidate commit: tree {tree}, {len(staged)} paths changed "
           f"against HEAD")
 
+    # P-O6 (#827) TREE-ID HANDOFF. The mutation battery captures ONE tree id and
+    # certifies against it; this gate computes its own. Two independent reads of
+    # a mutable index can silently disagree, and then each artifact is honest
+    # about a DIFFERENT tree. A caller that knows which tree it is certifying
+    # says so with --expect-tree, and a mismatch is a hard problem here rather
+    # than a discrepancy nobody compares. Absent the flag, nothing changes.
+    if "--expect-tree" in sys.argv:
+        want = sys.argv[sys.argv.index("--expect-tree") + 1]
+        if want != tree:
+            problems.append(
+                f"TREE-ID MISMATCH: the caller is certifying {want}, this index "
+                f"yields {tree} — the two artifacts describe different trees")
+        else:
+            print(f"tree-id handoff: caller's {want} == this index (ok)")
+
     bad = forbidden(staged)
     print(f"forbidden paths among them: {len(bad)}"
           + (f" -> {bad}" if bad else " (none)"))
