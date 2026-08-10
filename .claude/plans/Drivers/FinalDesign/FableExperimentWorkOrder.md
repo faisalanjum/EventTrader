@@ -1,6 +1,6 @@
 # FableExperimentWorkOrder — execution work order for FableExperimentPlan v1.0
 
-> **STATUS (2026-07-09): WORK ORDER v1.8 — execution-ready, derived 1:1 from `FableExperimentPlan.md` (sha256 `51966848183e2a48ba3d4faac36c5b352027939fd962a90798a73e8cd2ed7472`).**
+> **STATUS (2026-07-25): WORK ORDER v2.0 — execution-ready, derived 1:1 from `FableExperimentPlan.md` v1.0 + EXP-5 Addendum A (sha256 `7d55a1c849d8ceeaf2b029264287552e9ea08a054bc6b8fb5d6dd347d6942592`).**
 > **v1.1 (same day)** = v1.0 + owner decision closing O3: the K-fields gate = the locked DU-03 write gate ("DriverUpdate-worthy fact", significance-agnostic); schema field renamed `market_moving` → `du_worthy` (§3 K-fields · §4 EXP-5 · §7 · §8).
 > **v1.2 (same day)** = v1.1 + owner decision closing O1 (+ the company half of O2): the **Phase-1 corpus** = 12 companies in 3 groups — Restaurants base {CAKE, DRI, MCD, YUM, CMG} · SpecialtyRetail adjacent {AZO, ORLY, BBY, ULTA} · Airlines cross-sector contrast {DAL, AAL, LUV} (§3 WP-FA · §8 O1/O2/O7/O8 · §10 D6). **Phase-1 pass ≠ whole-market readiness** — it only unlocks a later, wider sector-wave validation before broad production; do NOT expand the Phase-1 corpus in-program. No bars changed.
 > **v1.3 (same day)** = v1.2 + owner decision closing O7/O8: DB verified **frozen at 2026-04-28** → the time-split is EMPTY → leakage control = **company-split + per-event PIT** (§10 D7); F-C catalog roster = **8 Restaurants {CAKE, DRI, MCD, YUM, CMG, SBUX, QSR, TXRH}**, 600-chunk checkpoint KEPT with trim priority **TXRH → QSR → SBUX**; same-industry hold-outs = **{BLMN, SHAK}**; retail + airlines stay out-of-catalog candidate groups. The 12-company F-A event/key corpus is UNCHANGED. No bars changed.
@@ -9,6 +9,8 @@
 > **v1.6 (same day)** = v1.5 + owner decisions closing the pre-run operational items **O4/O5/O6/O9**: K-route real-candidate quotas **LOCKED** (≥40 reuse · ≥40 create · ≥20 skip · ≤20 free/best-available hard; a stratum shortfall is RECORDED and STOPS for Fable/owner review — never silently re-quotaed) · EXP-2 shared-miss **reruns FORBIDDEN without a Fable-named concrete fix** (exhibits always) · the **8,000-char chunk arm KEPT** vs the 40k baseline (no one-paragraph switch; an optional "8k + neighbor rescue" follow-on noted as an experiment option only) · EXP-4's `opus_anchor` arm fires **mechanically ONLY on a Sonnet wrong-SAME** (zero wrong-SAME → skipped, +250 strong calls saved). O10/O11/O12 stay open (result-dependent); O13/O14/O15 unchanged (conditional implementation checks). No bars changed.
 > **v1.7 (2026-07-09)** = v1.6 + owner decision closing **O16 (cheap-tier fallback policy)**: if a Haiku cheap arm FAILS its pre-registered bar in EXP-2/EXP-3/EXP-5 — or Fable marks the cheap-tier result inconclusive — Fable may authorize ONE optional fallback arm on **DeepSeek V4 Flash via OpenRouter** (`cheap_fallback` — §1.3 rule · §7 · §8 O16 · §9 row). NEVER by default; Haiku stays the default cheap tier; `none qualifies → Sonnet` stays the terminal fallback; a second, conditional METERED lane via `OPENROUTER_API_KEY` (key absent today — setup deferred to trigger time); a passing fallback arm informs PRODUCTION model strategy only (no in-program engine port). **No bars changed.**
 > **v1.8 (2026-07-09)** = v1.7 + Fable/owner execution decision on **K-pairs.v1 drafting**: drafted **0-LLM by the Opus implementer**, with **Fable authoring/rewriting a subset (≥~25%, spread across families)** — instrument independence: the primary tier under test (Sonnet) must not author its own test, and calibration plants are designer-authored by kernel §9.6's own pattern. Fable still adjudicates EVERY record + signs the lock; strata, schema, and all EXP-0 bars unchanged. **Guardrail:** if the Sonnet tier fails EXP-0 and Opus alone qualifies, O10 ratification additionally requires a fresh Fable-authored probe subset (~24 pairs, unseen by the implementer) before the tier is trusted. Scope: K-pairs.v1 only — the other keys' drafting routes are decided at their own drafting time. Saves ~40–60 Sonnet drafting calls. **No bars changed.**
+> **v1.9 (2026-07-24)** = v1.8 + two owner decisions after the S4 wiring-rehearsal close: **(a) K-fields drafting route** (per the v1.8 scope rule, decided at drafting time): **DUAL-TIER UNION draft** — `claude-sonnet-5` AND `claude-opus-4-8` each label all 36 events independently at effort=high, blind to each other; union at adjudication; **Fable adjudicates EVERY record and signs the lock** (the K-reader v3 precedent; no candidate producer tier authors its own gold — board guardrail). **(b) EXP-5 arm P6 `local_qwen` PRE-REGISTERED** (owner 2026-07-24): the owner-installed LOCAL Qwen model as one additional pre-registered EXP-5 arm — SAME locked key, byte-identical producer prompt (model slot only), SAME EXP-5 pass bars; execution pins: **reasoning OFF · temperature 0 · exactly ONE run** (the single-run recall bar applies; no union credit); runs on the owner's local runtime (**zero Anthropic/metered draw**; NOT workflow `agent()` — a local runner, the O16 non-agent() precedent); exact model build/quant/runtime ids supplied by the owner at run time and recorded in `manifest.models` (never guessed); its outputs graded by the same EXP-0-qualified graders. An additional pre-registered candidate under unchanged bars (O16 logic) — **no bars changed**; Haiku stays the default cheap tier; qualification consequences decided at EXP-5 scoring like every arm.
+> **v2.0 (2026-07-25)** = v1.9 + the EXP-5 v3 exam redesign folding owner rulings O-1..O-6 + Q1: the model-facing text is the compact active-rules CARD + pinned model-views (replacing the assembled item-contract prompt); output = `{"facts":[<item>],"abstentions":[…]}` where EACH `facts[]` record = `fact_type` + the 37 model-owned fields (code separates `fact_type` from the 37-field `PreparedFactV1` payload before construction; `member_refs`/`xbrl_concept_raw` stay source/code-owned); raw model text captured before exact-Decimal parse; validation runs the REAL `run_event` dry-run through a temp read-only store (no exam-only rule engine); order-free 1:1 matching; the zero-confirmed-wrong-accepted-fact SAFETY gate lives in FableExperimentPlan EXP-5 Addendum A; the former EXP-5 P6 `local_qwen` arm is WITHDRAWN (Qwen = a separate target-supplied diagnostic; history retained in the v1.9 entry above). No Plan bar changed; the safety gate is the only added pass criterion (Plan-owned). No metered-cost change.
 > **What this is:** the HOW for the plan's WHAT. Experiment IDs (EXP-0…EXP-6), sequence, and every pass/fail bar are preserved verbatim from the plan. This file adds only execution detail: paths, queries, schemas, prompt contracts, scoring logic, gates, scheduling, and budget. It amends no design doc.
 > **Ambiguity rule:** anything the plan or the design docs do not pin is marked **`OPEN FOR OWNER/FABLE`** (register §8) — an implementer must STOP on those, never improvise. Genuine operationalizations (where the plan's intent needed a concrete recipe) are declared in §10, none changes a bar.
 > **Authority:** topic docs + `95` > `90`/`14` > lock candidates (`FableAdmissionKernelDesign.md`, `XBRLIntegrationDesign.md` — ratified working designs, owner 2026-07-15 — operative mechanics in BUILD §8.1/§8.2; gates unchanged) > context packs > this file. All asset paths below verified on disk 2026-07-08; see the Phase-5 path note below.
@@ -28,6 +30,7 @@
 8. File exhibits (`wm_*` wrong-merge, `ra_*` rule-ambiguity) to `experiments/exhibits/`. Keys are IMMUTABLE after lock: never edit a key; never re-run a failed arm without Fable's written named-fix + fresh-sample authorization (plan §2.1).
 9. Update `experiments/WORKORDER_STATUS.md` (one row per package: state, run_id, gate result, blockers).
 10. Anything under-specified for your task: STOP, file an `ra_*` exhibit, add it to the §8 register, and hand back to Fable. Do NOT invent a design choice.
+11. **Every current or later AI prompt:** keep one task per prompt and include only the active rules needed for that task; remove history, inaccessible law labels, and repeated instructions. Test the exact fully assembled text the model receives. Across its complete runner/scorer/runtime dependency path, code may do exact mechanical work only: regex, fuzzy/similarity matching, keyword lists, or answer-derived rules must never decide meaning. Mechanical format parsing is allowed when explicitly inventoried. These are pre-call gates.
 
 ---
 
@@ -99,7 +102,7 @@ Resolution: at run start, resolve every alias via the harness runtime, write the
 {
   "exp_id": "EXP-3",
   "run_id": "2026-07-11T14:00:00Z",
-  "plan_sha256": "51966848183e2a48ba3d4faac36c5b352027939fd962a90798a73e8cd2ed7472",
+  "plan_sha256": "7d55a1c849d8ceeaf2b029264287552e9ea08a054bc6b8fb5d6dd347d6942592",
   "workorder_sha256": "<sha256 of this file at run time>",
   "git_commit": "<repo HEAD>",
   "models": {"router": "<exact id>", "grader": "<exact id>"},          // role → EXACT resolved id
@@ -168,7 +171,7 @@ Rules: runner MUST verify the key sha before the first call; scorer re-verifies;
 
 - All sampling = h32-seeded deterministic shuffle (the 31-poly UTF-16 rolling hash used by the repair kit, 10 §10); seed string recorded in the manifest.
 - All key/fixture files sorted by their id field; ids zero-padded (`kp_0001`).
-- Quote locators resolve by exact substring match in the chunk/event text (byte-conservation guarantees presence); if a quote occurs >1×, `occurrence` selects (1-based).
+- Quote locators resolve by exact substring match in the chunk/event text (byte-conservation guarantees presence); if a quote occurs >1×, `occurrence` selects (1-based). CHUNK-ERA KEYS ONLY (O-e) — EXP-5 event facts and abstentions use the per-part locator `part_ref` + `occurrence_in_part` instead (§4 EXP-5).
 - Scripts that write consumed artifacts: temp + atomic rename; sha recorded in the consuming manifest.
 
 ### 1.7 Cost classes
@@ -200,7 +203,7 @@ NOT a stop: F-C hard-check failures (fixture-grade — fix and re-run, plan §4 
 | `.claude/plans/Drivers/workflows/ab_stratum.py` · `ab_differ.py` · `ab_pair_judge.js` | selection/stats/pattern donors (PIPE-32 kit); `ab_differ` math imported by `scorers/stats.py` |
 | `.claude/plans/Drivers/runs/2026-06-11_204218_restaurants/` (+ `2026-06-09_190054_restaurants`, `2026-06-10_005333_restaurants` as fallbacks) | frozen chunks source (COPY ONLY — footgun 12: never resume) |
 | `.claude/skills/earnings-orchestrator/scripts/guidance_ids.py` · `fiscal_math.py` · `pit_time.py` | EXP-6 id/period recipes by READ-ONLY import (`build_guidance_period_id`, `slug`, `canonicalize_source_id`, `period_to_fiscal`) |
-| `.claude/plans/Drivers/WIP/unit_probe/unit_resolver.py` | EXP-5/6 value canonicalization by read-only import |
+| `.claude/plans/Drivers/WIP/unit_probe/unit_resolver.py` | RETIRED (rev-4): EXP-5 uses the shared multiply-only converter; EXP-6 uses declared XBRL metadata — no unit_resolver import |
 | `.claude/plans/Drivers/WIP/concept_link_revalidation/universe_pull.py` | MENU_Q shape donor for the PIT concept menu (EXP-1) |
 | `plans/Drivers/WIP/concept_link_probe/` (repo-root `plans/`, NOT `.claude/plans/` — real trap) | reference only (concept linking NOT re-run, plan §3.1) |
 | `.claude/plans/Drivers/Consolidation/XBRL_SliceAxis_Catalog.md` | frozen axis tables + Reproduce Cypher (EXP-1 axes, EXP-5 slice menu) |
@@ -208,7 +211,7 @@ NOT a stop: F-C hard-check failures (fixture-grade — fix and re-run, plan §4 
 
 ### 2.2 CREATE later — complete inventory (ALL throwaway; live under `experiments/harness/`; never imported by production Track A/B code)
 
-`xbrl_census.py` · `xbrl_dryrun_materializer.py` · `pit_menu_probe.py` · `news_pull.py` · `retrieval_index.py` · `router_probe.js` · `grader_probe.js` · `judge_probe.js` · `reader_probe.js` · `producer_probe.js` · `stamp_fixture.py` · `stamp_classify.js` · `slice_menu_probe.py` · `mine_pairs.py` · `rechunk.py` · `recall_floor_check.py` · `id_recipe.py` · `key_lint.py` · `sha_lock.py` · `scorers/{score_exp0.py … score_exp6.py, stats.py, fact16_checks.py, grade_batch.js}`.
+`xbrl_census.py` · `xbrl_dryrun_materializer.py` · `pit_menu_probe.py` · `news_pull.py` · `retrieval_index.py` · `router_probe.js` · `grader_probe.js` · `judge_probe.js` · `reader_probe.js` · `producer_probe.js` · `stamp_fixture.py` · `stamp_classify.js` · `slice_menu_probe.py` · `mine_pairs.py` · `rechunk.py` · `recall_floor_check.py` · `id_recipe.py` · `key_lint.py` · `sha_lock.py` · `scorers/{score_exp0.py … score_exp6.py, stats.py, grade_batch.js}`.
 
 Rule: if Track B `12 §17` steps 1–2 (`driver_ids.py`, `driver_period_resolver.py`) have shipped before EXP-6 runs, `id_recipe.py` MUST import them instead of its own subset, with a parity assert (drift guard). `*.js` runners follow the existing workflow-script conventions (step-0 billing guard, `MODELS` slot, args parse shim, PIECE_ROWS-style chunked writes + h32 asserts for any large agent Write — footguns 7/8).
 
@@ -407,12 +410,13 @@ Chunk sample: 40 from `chunks_manifest.json`, h32-seeded, stratified by source_t
 
 **K-fields** (`kf_`; ~150 gold facts over the 36 events; locks before EXP-5):
 ```jsonc
-{"key_id": "kf_0001", "source_id": "...", "ticker": "...", "lane": "metric|guidance|surprise|action_event",
+{"key_id": "kf_0001", "source_id": "...", "ticker": "...", "fact_type": "metric|guidance|surprise|action_event",
  "du_worthy": true,   // the locked DU-03 gate (owner 2026-07-08, closes O3): "DriverUpdate-worthy fact" —
                       // NOT stock-move attribution (that is EXPLAINED_BY's job, DU-21…24).
                       // false = OPTIONAL near-miss exemplar row (gate-dropped bare mention / boilerplate),
                       // excluded from EVERY recall denominator; adjudication context + precision spot-checks only.
- "gold_item": { /* the FULL FACT-17b item, incl. transients — field list §4/EXP-5 */ },
+ "part_ref": "p01", "occurrence_in_part": null, "per_x": null,
+ "item": { /* the PreparedFact v2 32-field item — field list §4/EXP-5 (rev-4) */ },
  "gold_extra": {"expectation_comparison_present": false},   // ISS-16 trigger ground truth
  "trap_class": "shape_point|OD-12_loss_floor|OD-11_sequential|OD-9_spans|OD-13_favorability|ISS-16_routing|slice_menu|unknown_axis|OD-17_portion|T1-05_menu_ambiguous|null"}
 ```
@@ -626,20 +630,24 @@ MATCH (f)-[:FACT_DIMENSION]->(d:Dimension)
 RETURN DISTINCT d.qname AS axis, m.qname AS member_qname, m.label AS member_label
 ```
   classified by the frozen axis tables (`XBRL_SliceAxis_Catalog.md` — SLICE_AXES kinds; NON_SLICE dropped from the menu); labels normalized per `03` FS-18's recipe VERBATIM (if FS-18's text under-determines a character class → `ra_*` + **O14**).
-- **Create:** `harness/producer_probe.js`, `harness/scorers/{score_exp5.py, fact16_checks.py}` (+ `grade_batch.js` shared).
+- **Create:** `harness/producer_probe.js`, `harness/scorers/score_exp5.py` (+ `grade_batch.js` shared).
 - **Arms:** P1 `sonnet_run1` · P2 `sonnet_run2` · P3 `haiku_run1` · P4 `haiku_run2` (all 36 events) · P5 `opus_ref` (12-event h32 subsample). Runs within a tier are independent calls (no shared context).
-- **Producer prompt contract:** packet = event `text_parts` + `{ticker, fye_month}` + the slice menu + the ITEM CONTRACT instructions assembled VERBATIM from: `12` FACT-17b (field list) · `09 §3` value shapes (point fills BOTH bands; low-only=floor, high-only=ceiling; shape hints REQUIRED with numbers) + OD-12 signed-value rules · `09 §7` producer contract (OD-11 basis routing; OD-9 span copying into `measurement_raw_spans`; per-slot unit hints; money `money_mode_hint`; non-empty `unit_raw` on numeric facts) · `12 §10.5` ISS-16 routing (expectation comparison ⇒ (reported actual) metric + surprise / (forward guide-vs-Street) guidance + surprise, per OD-21; temporal ⇒ metric change; forward guide-vs-own-prior ⇒ guidance movement) + OD-13 favorability (producer meaning judgment; doubt → `unknown`) + OD-21 (a surprise item carries the transient `surprise_basis_hint ∈ {actual, guidance}`; a forward guide-vs-Street ⇒ guidance fact + a `guidance_vs_consensus` surprise; code composes the stored `surprise=` = basis × comparison_baseline; producer NEVER emits `surprise=`) · OD-14 (bare guidance movement → `driver_state=unknown`, store stated movements only) · `12` FACT-26f / 03 FS-15 slice-kind ladder (verbatim — OD-17/T1-05, owner 2026-07-11). Output = `{"source_id","source_type","ticker","fye_month","items":[<FACT-17b item>]}` with the item fields exactly:
+- **Producer prompt contract:** packet = `source_id` + event `text_parts` + `{ticker, fye_month}` + the slice menu + the ITEM CONTRACT is delivered as ONE preassembled prompt the worker reads with ZERO file access: a ~10-line role preamble + the compact active-rules CARD (`exp5_rules_card.md`) + the event VIEW (`source_id` + `text_parts` + `{ticker, fye_month, event_date}` + the pinned model-view slice menu, honest decoded display; the untrusted-evidence BOUNDARY line precedes it and the event is LAST). Output = `{"facts":[<item>], "abstentions":[{"quote","reason","part_ref","occurrence_in_part"}]}` (raw model text captured before exact-Decimal parse). Each `facts[]` record = `fact_type` + `part_ref` + `occurrence_in_part` + `per_x` + the `item` of 32 model-owned fields (PreparedFact v2; member_refs + xbrl_concept_raw source/code-owned, out of the text exam); the envelope carries ONE top-level `source_id` echo — the wrong-event ingestion guard — with the item fields exactly:
 ```
+fact_type (INSIDE each producer facts[] record; code separates it from the 32-field PreparedFact v2 item) + the 32 model-owned fields:
 driver_name · driver_state · quote · level_low · level_high · change_value · comparison_low ·
 comparison_high · comparison_baseline · value_text · conditions · company_confirmed ·
-level_unit_raw · change_unit_raw · level_unit_kind_hint · level_money_mode_hint ·
-change_unit_kind_hint · change_money_mode_hint · level_shape_hint · comparison_shape_hint · surprise_basis_hint ·
+level_unit · change_unit · level_shape_hint · comparison_shape_hint ·
+surprise_basis_hint · has_favorability_wording · polarity_proof ·
 measurement_raw_spans[] · period_start_date · period_end_date · fiscal_year · fiscal_quarter ·
 half · month · long_range_start_year · long_range_end_year · sentinel_class · time_type ·
-period_scope · slice[]
+period_scope · slice_parts[]
+(each of the five numeric slots is a {value, scale_multiplier, unit_scale_evidence} object;
+per_x + part_ref + occurrence_in_part ride at fact level, source_id once at the envelope top)
 ```
-- **Scoring logic:** (1) MATCH produced items ↔ gold facts: same event; code first (quote ≥20-char overlap with gold quote OR value equality post-canonicalization via `unit_resolver` import); ties/unclear → grader confirms same-fact. (2) `recall(arm)` per run and per same-tier 2-run union (item sets unioned before matching); denominator = gold `du_worthy==true` (the DU-03 gate, §3 K-fields; `du_worthy:false` exemplar rows never enter any denominator). (3) `fact16_checks.py` = the deterministic FACT-16 subset — rules 3 (lane matrix incl. value_text/conditions/company_confirmed guidance-only + metric expectation-baseline FORBID), 5 (shape-hint coherence, point-as-low-only trap), 8 (baseline enum), 9 (unit-required-when), 14 (value_text lint), 15 (start==end illegal), 17 (period_scope enum), 18 (OD-21: **compose `surprise=` (basis×baseline) BEFORE validation**; `surprise=` REQ-on-surprise / FORBID-elsewhere; basis hint + `comparison_baseline` both REQUIRED; every GROUNDED surprise requires its home sibling [numberless allowed via unknown+quote; ungrounded parked; missing = fail-closed], numeric equality only when numbers exist; impossible-tense) → `would_park` rate + reason codes. Authority for these checks = `12` FACT-16 + the `09 §4` matrix — NEVER `99 §7.2`, whose validator mirror is known-incomplete (ISS-50). (4) Field accuracy on matched pairs: code-comparable directly (values post-scaling, shapes, signs per OD-12, enums, measurement token SETS after OD-9 code normalization: lowercase → non-alphanumeric runs → `_` → trim → collapse; maximal contiguous spans = one token); meaning fields via grader (driver_state, lane routing incl. the ISS-16 surprise-twin presence, OD-13 favorability, OD-11 basis, slice pick vs menu). (5) `wrong_lane` = matched fact on the wrong lane OR a missing gold surprise twin where `expectation_comparison_present=true` OR (OD-21) a wrong/missing `surprise=` label, an outlook-vs-earnings over-merge on one driver+period, or a restated-guide mis-tagged as `actual_vs_*`. (6) `presence_disagreement(tier)` = captured-by-exactly-one-run / captured-by-either. (7) Per-OD-rule error table (OD-9/11/12/13/14/21, ISS-16, shapes, slices). (EXP-5 scores PRODUCER output only — the real fusion + read-collapse verification of the OD-21 merge/collapse fixtures lives in the Track-B acceptance gates §12.3, BLOCKED until the Track-B build §17 builds `driver_write_cli` fusion + `driver_read` collapse; NOT part-2.)
-- **PASS check:** `score_exp5.py` gate per tier = `(recall_single>=0.95 || recall_union>=0.98) && wrong_lane==0 && value_shape_acc>=0.98 && state_acc>=0.95 && would_park<=0.10`.
+- **`unit_scale_evidence` — the exact TEXT-vs-XBRL split (FINAL_DESIGN 548dc739:204-205; the F12 owner):** on a TEXT-lane fact it is a separate VERBATIM string lying INSIDE that fact's own `quote` — the SMALLEST span supporting the multiplier; if the required marker falls outside the quote, EXTEND the quote or ABSTAIN — never cite text the quote does not contain. It may be null ONLY at multiplier 1 with no unit or scale marker present. On an XBRL-BACKED fact it is null, and the scale basis is the complete VERIFIED structured evidence — `ix.scale` + `unit_ref` + the exact bound `source_evidence` INCLUDING its ordered `pieces` — never `source_evidence.pieces` alone. The channel supplies the four-key `source_evidence` claim; Core's certified binder obtains and verifies `ix.scale`/`unit_ref` against that filing. EXP-5 therefore grades the TEXT-lane triple only: no producer ever asserts the XBRL basis (`member_refs`/`xbrl_concept_raw` stay source/code-owned, out of the text exam).
+- **Scoring logic:** (1) MATCH produced items ↔ gold facts: same event; code first, ORDER-FREE exact one-to-one bijection (exact complete canonical record + exact locator, unique both ways, per the rev-4 Part D law — no overlap, no value-equality commit); a matched produced fact is consumed globally so one produced fact never credits two gold facts; ALL remaining facts go to build-time grading. (2) `recall(arm)` per run and per same-tier 2-run union (item sets unioned before matching); denominator = gold `du_worthy==true` (the DU-03 gate, §3 K-fields; `du_worthy:false` exemplar rows never enter any denominator). (3) VALIDATION runs the REAL production dry-run — `run_event(run_input, store, enable_writes=False)` (`driver_write_cli.py`) against a TEMPORARY read-only store built AFTER the call from each produced fact's own `(driver_name, fact_type)` pairs (never gold; a name emitted with conflicting fact_types fails) plus the source + company — executing `validate_fact` + the period/unit resolvers (the SAME FACT-16 subset rules 3/5/8/9/14/15/17/18, now via the shared code path) → `would_park` + reason codes. The exam-only FACT-16 rule engine is RETIRED (one rule engine, not two). Deduplicate emitted items (full canonical fact key) BEFORE the park rate — dedup prevents double credit ONLY; any duplicate emission is an emit-once CONTRACT VIOLATION feeding the reliability gate (a run with duplicates cannot PASS silently); a gold-linked abstention (1:1 to an otherwise-unmatched gold fact, located by `part_ref` + `occurrence_in_part` (per-part; null when the quote is unique in that part; code-verified against the part text)) counts as a park AND a recall non-match: would_park = (parked emitted + gold-linked abstentions)/(all deduped emitted + gold-linked abstentions), diagnostic abstentions in neither. Authority for these checks = `12` FACT-16 + the `09 §4` matrix — NEVER `99 §7.2`, whose validator mirror is known-incomplete (ISS-50). (4) Field accuracy over the `fact_type` + `per_x` + the 32 model-owned item fields on matched pairs, code-comparable directly (the three numeric-object fields EXACTLY — value, scale_multiplier, unit_scale_evidence; converted scalars serve storage and XBRL truth-comparison only; shapes, signs per OD-12, enums, measurement token SETS after OD-9 code normalization: lowercase → non-alphanumeric runs → `_` → trim → collapse; maximal contiguous spans = one token); meaning fields via grader (driver_state, lane routing incl. the ISS-16 surprise-twin presence, OD-13 favorability, OD-11 basis, slice pick vs menu). (5) `wrong_lane` = matched fact on the wrong lane OR a missing gold surprise twin where `expectation_comparison_present=true` OR (OD-21) a wrong/missing `surprise=` label, an outlook-vs-earnings over-merge on one driver+period, or a restated-guide mis-tagged as `actual_vs_*`. (6) `presence_disagreement(tier)` = captured-by-exactly-one-run / captured-by-either. (7) Per-OD-rule error table (OD-9/11/12/13/14/21, ISS-16, shapes, slices). (EXP-5 scores PRODUCER output only — the real fusion + read-collapse verification of the OD-21 merge/collapse fixtures lives in the Track-B acceptance gates §12.3, BLOCKED until the Track-B build §17 builds `driver_write_cli` fusion + `driver_read` collapse; NOT part-2.)
+- **PASS check:** `score_exp5.py` gate per tier = the five Plan bars UNCHANGED `(recall_single>=0.95 || recall_union>=0.98) && wrong_lane==0 && value_shape_acc>=0.98 && state_acc>=0.95 && would_park<=0.10` (value_shape_acc = the pooled `code_ok/code_all`, formula unchanged) **AND** the sixth pass criterion in FableExperimentPlan EXP-5 Addendum A (zero confirmed-wrong accepted facts). A run meeting the five bars but failing the safety gate FAILS EXP-5.
 - **Parallel:** needs only EXP-0 + K-fields + WP-FA; runs parallel with Phase-2 (EXP-3/4). **Blocks:** EXP-6; part-2 packet design. **Stops whole run:** never.
 - **Calls/cost:** 36×4 + 12 = 156 producer calls (large prompts) + ~50–60 batched grading calls · class M.
 - **Decisions:** O3 ✅ decided (owner 2026-07-08 — the DU-03 gate, §3 K-fields); Fable: per-field failure attributions; §12.5 threshold basis handed to owner.
@@ -768,3 +776,75 @@ See §10-D4: the plan's "~4,000 total / ~1,500 strong" were approximations; refi
 ---
 
 *Assembled 2026-07-08 by Fable from the locked `FableExperimentPlan.md` (sha `5196…7472`) plus targeted re-reads of: kernel §§2/3/6/8/9/11/12 · XBRL design §§5/9/11/12 · `10` PIPE-13/16…37/§10/§12 · `12` FACT-9…35/§10/§12/§17 · `09` §3/§6/§7 · `66 §0.R` OD-1/OD-2 (verbatim gate wording) · `WorkflowContextPack` (paths + traps, re-verified on disk) · the validated Neo4j schema references. On any conflict, the cited topic doc wins; this file adds execution mechanics only.*
+
+---
+
+## v2.1 ACCEPTANCE GATE — no-semantic-pattern rule (added 2026-07-25, authoritative)
+
+**Rule.** Mechanical patterns are permitted; meaning-based ones are not. A regex
+that validates the SHAPE of a string this system generates (id charset, name
+format, period-id, sha, our own sentinel encoding) is mechanical and legitimate.
+A regex, fuzzy matcher, or keyword list that decides what SOURCE TEXT MEANS is
+forbidden in both the EXP-5 exam path and the `run_event` production path — such
+a pattern passes our samples and misfires silently on the universe it never saw.
+Meaning belongs to the model; code does exact, provable work.
+
+**Machine-enforced.** `experiments/harness/test_no_semantic_patterns.py` fails
+the build on any unclassified regex in either path, on any fuzzy/similarity
+import, and on reintroduction of the deleted sliding-window matcher. It is
+AST-based and alias-aware (`import re as _re` and `from re import compile` are
+both caught) and was mutation-proven against all three evasion routes. Every
+pattern must carry a written classification; a NEW one fails the gate until a
+human classifies it.
+
+**Audited scope — SUPERSEDED COUNTS (the closure is DERIVED at every gate run, never pinned).** The 2026-07-25 name-heuristic-era counts (12 modules; 37/35) were corrected the SAME DAY — the gate follows real imports (last derivation: 39 production / 37 exam files) and no fixed number is law. Option A (value_text) is OWNER-RESOLVED (2026-07-25). The exact evidence locator is REQUIRED; NO exact-quote fallback exists (rev-4 matching law). The historical module list below is record only:
+driver_write_cli · driver_writer · driver_validators · driver_fusion ·
+driver_ids · driver_member_fold · driver_period_resolver · driver_units ·
+unit_resolver · prepared_fact · slice_axis_frozen · slice_menu. It contains six
+regexes: five are format validators in `driver_ids` (allowlisted), and exactly
+one is semantic.
+
+**`driver_validators.py:59 _VALUE_TEXT_NUMERIC` — OWNER-RULED 2026-07-25 (Option A; no longer open).** It asks
+"does this prose hide a number?" and enforces the real law at FINAL_DESIGN:244
+(`value_text` is numberless-only). It can be shown wrong both ways (misses "₹500
+crore", "doubled", "1,5 %"; falsely rejects "Q3", "top 5 markets"). It is an
+**RULED question — Option A approved**: the structural rule (*"any numeric slot
+populated ⇒ `value_text` null"*) + model judgment + hidden-grading attacks +
+abstention replace the text pattern; the regex deletes at the rev-4
+implementation (`experiments/OWNER_DECISION_value_text_numeric.md`, example
+rows corrected 2026-07-26). Until implementation it is counted DEBT.
+
+**Exam path status.** The 20-char `_overlap` sliding window is DELETED; matching
+requires the EXACT locator (`part_ref` + `occurrence_in_part`) — NO quote-only
+fallback exists (rev-4 law); `fact16_checks`/`_NUMY` retire at the rev-4
+implementation and are counted DEBT until then — never reported as "zero
+patterns".
+
+**Diagnostic-only patterns outside both paths** are catalogued in
+`experiments/REGEX_AND_FUZZY_DEBT.md`, with `PERSHARE_HINT` explicitly forbidden
+from promotion into runtime (use declared XBRL units / Driver unit expectations
+instead).
+
+**v2.1 gate — CORRECTIONS 2026-07-25 (two false-clean blind spots closed).**
+The first gate used HAND-WRITTEN file lists and reported clean while semantic
+patterns were reachable — worse than no gate. Both blind spots are fixed by
+DERIVING scope from actual imports: (a) `fact16_checks` was omitted although
+`score_exp5` imports it, so `_NUMY` was live under a "zero exam patterns"
+report; (b) the closure walker filtered `if "driver" in module_name`, silently
+dropping `guidance_ids` (imported by `driver_period_resolver:24`). The gate now
+follows real imports from the true entry points: the production closure is **37
+modules** (not 12) and the exam closure **35**, both including the shared
+`guidance_ids`/XBRL code. Every regex-bearing module is classified —
+mechanical (`driver_ids`, `guidance_ids`, `utils`, `xbrl_reporting`), governing
+law (none), or semantic debt (`driver_validators._VALUE_TEXT_NUMERIC`,
+`fact16_checks._NUMY`) — and the debt set AND its per-module site COUNT are
+frozen, so a new pattern inside an already-debted file also fails.
+
+**`value_text` — OWNER RULING (Option A, with ownership):** code enforces
+numeric-slot/`value_text` mutual exclusion; the MODEL decides whether prose is
+genuinely numberless; hidden grading ATTACKS numeric prose placed in
+`value_text`; uncertainty ABSTAINS. The structural check alone does NOT prove
+numberlessness and must not be described as if it does. Implementation lands
+with the run_event wiring; the regex is unchanged until then.
+
+> **v2.2-rev4 AMENDMENT BLOCK (drafted 2026-07-26; RECONCILED by DOC-EXP5 to the adopted authority — the FIELD CONTRACT below is ADOPTED law per FINAL_DESIGN 548dc739 §6.1 (2026-08-06) and the built `driver/core/prepared_fact_v2.py` schema (34 total / 32 model-owned), while the HARNESS MECHANICS (locator, Part-D matching, one prompt builder, one envelope, `fact16_checks` retirement) stay PENDING their own rev-4 sign-off and production wiring of v2 still waits on the atomic-switch sign-offs O-a..O-f; history above unedited):** PreparedFact v2 = 34 total / 32 model-owned item fields (the four unit hints, `sequential_evidence`, and the two raw-unit fields retired; each numeric slot becomes a `{value, scale_multiplier, unit_scale_evidence}` object; `level_unit`/`change_unit` stated by the reader from the 10-unit enum; conversion = exact Decimal multiplication only) · the §4/EXP-5 field lists and the producer-contract text around lines 634-646 are SUPERSEDED, and APPLIED in this document by DOC-EXP5 — the evidence locator becomes `part_ref` + `occurrence_in_part` (per-part; null when unique; code-verified), NARROWLY replacing the global occurrence count for event facts and abstentions ONLY (chunk-era locator rules untouched — O-e) · matching per the rev-4 Part D law (exact-record + exact-locator bijection; duplicate golds first; ALL unmatched to build-time grading) · ONE prompt builder (gold drafting + EXP-5 arms + the future whole-event production reader) · ONE model-output envelope for both roles · `fact16_checks` retired at implementation · v2.1 and the v2.2 drafts superseded by the rev-4 package (`experiments/harness/exp5_rev4_package.md`).
