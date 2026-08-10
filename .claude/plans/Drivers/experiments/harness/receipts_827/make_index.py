@@ -162,6 +162,10 @@ PROVENANCE = {
     "29_sweepg1_findings.md":
         "(written record: SWEEP-G1 carry-forward findings and closure, "
         "SEQ 863/864; not reproducible by a command)",
+    "30_po6_hash_correction.md":
+        "(written record: correction of one mis-transcribed receipt hash in "
+        "commit 0ae6453b, which amend/rewrite rules forbid fixing in place; "
+        "not reproducible by a command)",
 }
 
 
