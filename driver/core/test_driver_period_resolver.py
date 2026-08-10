@@ -1133,3 +1133,93 @@ def test_F9_the_period_kind_vocabulary_has_ONE_owner():
     from driver.core import xbrl_attach as xa
     assert xa._PERIOD_TYPES is dpr.PERIOD_TIME_TYPES, \
         "the attach alias must BE the owner's object, not a copy"
+
+
+# ---------------------------------------------------------------------------
+# P-O6 (#827) — CASCADE-ORDER END-TO-END DETECTORS.
+#
+# The existing order test proves the HIT sequence (existing -> sec -> predict).
+# These five prove the other half of the same law: which shapes must never
+# REACH the cascade at all, and which must route elsewhere first. A counting
+# stub records every lookup label IN CALL ORDER, so the assertion is about the
+# order of real calls rather than about a final value that several different
+# routings could produce.
+#
+# `corrected_fye` is the ONE lookup the skip branches may still use: it supplies
+# the company's fiscal year end, which the non-standard shapes need to compute
+# their own windows. Expecting exactly ["corrected_fye"] is therefore the
+# precise statement "the fiscal-year-end was fetched, and nothing cascaded".
+# ---------------------------------------------------------------------------
+
+def _counting_lookups(calls, fye=9):
+    """Every lookup records its own label; the three cascade members return a
+    MISS so that a shape which wrongly reaches them still completes and the
+    failure is the recorded ORDER, not an incidental exception."""
+    return {"existing": lambda t, fy, fq: calls.append("existing") or None,
+            "sec": lambda t, fy, sfx: calls.append("sec") or None,
+            "predict": lambda t, fy, fq: calls.append("predict") or None,
+            "corrected_fye": lambda t: calls.append("corrected_fye") or fye}
+
+
+def test_duration_half_skips_cascade_calls_only_corrected_fye():
+    """A HALF is not a standard quarter/annual duration, so the company-fiscal
+    cascade cannot describe it — only the fiscal-year-end is needed."""
+    calls = []
+    out = resolve({"fiscal_year": 2025, "half": 1, "time_type": "duration"},
+                  ticker="AAPL", lookups=_counting_lookups(calls))
+    assert calls == ["corrected_fye"], calls
+    assert out["period_scope"] == "half"
+
+
+def test_duration_month_skips_cascade_calls_only_corrected_fye():
+    calls = []
+    out = resolve({"fiscal_year": 2025, "month": 4, "time_type": "duration"},
+                  ticker="AAPL", lookups=_counting_lookups(calls))
+    assert calls == ["corrected_fye"], calls
+    assert out["period_scope"] == "monthly"
+
+
+def test_long_range_skips_cascade_calls_only_corrected_fye():
+    calls = []
+    out = resolve({"long_range_start_year": 2025, "long_range_end_year": 2030,
+                   "time_type": "duration"},
+                  ticker="AAPL", lookups=_counting_lookups(calls))
+    assert calls == ["corrected_fye"], calls
+    assert out["period_scope"] == "exact_range"
+
+
+def test_ytd_with_ticker_routes_to_cumulative_before_cascade():
+    """ytd/ttm are CUMULATIVE windows computed from the fiscal calendar. The
+    branch that routes them must come BEFORE the cascade: if it is disabled the
+    shape falls through and `existing` is called, which is exactly what this
+    detector catches."""
+    calls = []
+    out = resolve({"fiscal_year": 2025, "fiscal_quarter": 3,
+                   "time_type": "duration", "period_scope": "ytd"},
+                  ticker="AAPL", lookups=_counting_lookups(calls))
+    assert "existing" not in calls, calls
+    assert calls == ["corrected_fye"], calls
+    assert out["period_scope"] == "ytd"
+
+
+def test_calendar_with_ticker_never_calls_corrected_fye():
+    """THE CONTROL, and the opposite guarantee: calendar_override means the
+    CALENDAR year is authoritative, so NO company lookup may happen at all even
+    though a ticker is present (BUILD §10 hazard — the override is routed
+    BEFORE any company lookup).
+
+    The assertion is `calls == []`, not merely "corrected_fye absent". Measured
+    on the clean resolver: calendar mode makes ZERO lookups, while the same item
+    without the override makes all four. Naming only corrected_fye would have
+    left the CASCADE guard unproved — dropping `not cal and` from it lets the
+    cascade run under calendar mode and calls `existing`, which the weaker
+    wording did not catch (mutation 343 survived it)."""
+    calls = []
+    out = resolve({"fiscal_year": 2025, "fiscal_quarter": 3, "time_type": "duration"},
+                  ticker="AAPL", calendar_override=True,
+                  lookups=_counting_lookups(calls))
+    assert calls == [], calls          # no cascade AND no fiscal-year-end fetch
+    assert out["period_scope"] == "quarter"
+    # the CALENDAR window, not the company-fiscal one — the two differ here,
+    # so this pins that the override actually changed the answer
+    assert out["period_u_id"] == "gp_2025-07-01_2025-09-30", out["period_u_id"]

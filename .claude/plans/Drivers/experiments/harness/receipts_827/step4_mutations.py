@@ -2385,6 +2385,24 @@ MUTATIONS = [
      "return None, 'malformed_element'",
      "driver/relocation/test_bind_graph_fact.py::test_EU163_an_unreadable_ix_element_kind_PARKS_under_its_own_named_reason"),
 
+    (341, "P-O6 m1: the ytd/ttm cumulative route stops preceding the cascade",
+     "driver/core/driver_period_resolver.py",
+     '    if scope_in in ("ytd", "ttm"):\n        return _cumulative(item, scope_in, time_type, fye, cal, ticker, lk)',
+     '    if False:\n        return _cumulative(item, scope_in, time_type, fye, cal, ticker, lk)',
+     "driver/core/test_driver_period_resolver.py::test_ytd_with_ticker_routes_to_cumulative_before_cascade"),
+
+    (342, "P-O6 m2: the cascade consumes SEC before the existing-graph window",
+     "driver/core/driver_period_resolver.py",
+     '        found = lk["existing"](ticker, fy, fq)',
+     '        found = None if lk["sec"](ticker, fy, f"Q{fq}" if fq else "FY") is None else None',
+     "driver/core/test_driver_period_resolver.py::test_cascade_order_existing_then_sec_then_predict"),
+
+    (343, "P-O6 m3: calendar_override stops keeping the cascade out of company lookups",
+     "driver/core/driver_period_resolver.py",
+     "    if is_standard and not cal and ticker and fy:",
+     "    if is_standard and ticker and fy:",
+     "driver/core/test_driver_period_resolver.py::test_calendar_with_ticker_never_calls_corrected_fye"),
+
     (337, "EU-143: the until-found scope refusal stops naming what it refused",
      "driver/relocation/inline_html.py",
      'hidden=until-found is outside the supported reader',
