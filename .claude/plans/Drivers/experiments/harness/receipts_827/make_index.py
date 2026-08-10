@@ -94,9 +94,11 @@ PROVENANCE = {
     "22_decision_rules.json": f"{PY}/hardcoding_inventory.py",
     "case_map.py": GEN,
     "hardcoding_inventory.py": GEN,
+    # SEQ 866: this carried the SAME PY-instead-of-REL defect and predates my
+    # three — corrected with them, so all four focused entries build the same way.
     "test_hardcoding_inventory.py":
-        "venv/bin/python -m pytest "
-        f"{PY}/test_hardcoding_inventory.py -q   (focused scanner suite)",
+        f"venv/bin/python -m pytest -q -p no:randomly -p no:cacheprovider "
+        f"{REL}/test_hardcoding_inventory.py   (focused scanner suite)",
     "divide_unit_numerators.py": GEN,
     "graph_census.py": GEN,
     "make_index.py": GEN,
@@ -120,12 +122,19 @@ PROVENANCE = {
     "resource_ancestry_census.py": "(generator source)",
     "two_view_census.py": "(generator source)",
     "two_view_mutations.py": "(generator source)",
+    # P-O6 (#827, SEQ 866): these are built from REL, the receipt DIRECTORY.
+    # They were built from PY, which already expands to
+    # "venv/bin/python <dir>" — so the rendered command read
+    #   pytest venv/bin/python <dir>/test_x.py
+    # and pytest took the interpreter path as a test path. Every one of the
+    # four is now EXECUTED read-only and required to exit 0 before this table
+    # may call it replayable.
     "test_arelle_ixt_parity.py":
-        f"venv/bin/python3 -m pytest {PY}/test_arelle_ixt_parity.py -q",
+        f"venv/bin/python -m pytest -q -p no:randomly -p no:cacheprovider {REL}/test_arelle_ixt_parity.py",
     "test_divide_unit_numerators.py":
-        f"venv/bin/python3 -m pytest {PY}/test_divide_unit_numerators.py -q",
+        f"venv/bin/python -m pytest -q -p no:randomly -p no:cacheprovider {REL}/test_divide_unit_numerators.py",
     "test_scan_ix_transforms.py":
-        f"venv/bin/python3 -m pytest {PY}/test_scan_ix_transforms.py -q",
+        f"venv/bin/python -m pytest -q -p no:randomly -p no:cacheprovider {REL}/test_scan_ix_transforms.py",
     "10_step4_mutations.TOMBSTONE.md":
         "(written record: P-O6 retirement of the stale in-tree step-4 receipt; "
         "not reproducible by a command)",
@@ -156,11 +165,25 @@ PROVENANCE = {
 }
 
 
+def inventory_delta(present, table=None):
+    """THE one unlisted/missing rule — (unlisted, missing).
+
+    P-O6 (#827, SEQ 866): extracted so the attack tests can exercise THIS
+    function instead of re-implementing it. A test that copies the rule
+    proves the copy: weaken main()'s real refusal and a copied check stays
+    green while the boundary it claims to guard is gone. One owner, both
+    callers.
+    """
+    table = PROVENANCE if table is None else table
+    return ([f for f in present if f not in table],
+            sorted(f for f in table if f not in present))
+
+
 def main():
     present = sorted(f for f in os.listdir(_HERE)
                      if os.path.isfile(os.path.join(_HERE, f))
                      and f != os.path.basename(OUT))
-    unlisted = [f for f in present if f not in PROVENANCE]
+    unlisted, _missing_later = inventory_delta(present)
     if unlisted:
         raise SystemExit(
             f"{len(unlisted)} receipt file(s) have no command in this index: "
@@ -169,7 +192,7 @@ def main():
     # A REQUIRED RECEIPT THAT IS NOT THERE IS A FAILURE, not a footnote. The
     # first version listed it under a comment and still returned success, so an
     # index could describe a set of receipts that does not exist.
-    missing = sorted(f for f in PROVENANCE if f not in present)
+    _unlisted_again, missing = inventory_delta(present)
     if missing:
         raise SystemExit(
             f"{len(missing)} receipt(s) named by this index are NOT on disk: "

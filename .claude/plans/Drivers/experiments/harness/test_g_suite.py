@@ -2397,53 +2397,62 @@ def _receipt_index():
 
 
 def test_the_receipt_index_ACCOUNTS_FOR_EVERY_FILE_including_written_records():
-    """Every file present is indexed exactly once, and nothing indexed is absent."""
+    """Every file present is indexed exactly once, and nothing indexed is absent.
+
+    Both halves come from the index's OWN `inventory_delta` — the same function
+    main() calls — so this cannot pass while the production rule is broken.
+    """
     import os as _os
     mod = _receipt_index()
     here = _os.path.join(_os.path.dirname(__file__), "receipts_827")
     out = _os.path.basename(mod.OUT)
-    present = {f for f in _os.listdir(here)
-               if _os.path.isfile(_os.path.join(here, f)) and f != out}
-    table = set(mod.PROVENANCE)
+    present = sorted(f for f in _os.listdir(here)
+                     if _os.path.isfile(_os.path.join(here, f)) and f != out)
 
-    assert not (present - table), \
-        f"receipt file(s) with no provenance: {sorted(present - table)}"
-    assert not (table - present), \
-        f"provenance named for absent file(s): {sorted(table - present)}"
+    unlisted, missing = mod.inventory_delta(present)
+    assert unlisted == [], f"receipt file(s) with no provenance: {unlisted}"
+    assert missing == [], f"provenance named for absent file(s): {missing}"
 
-    # WRITTEN RECORDS are present and lawful — a parenthesised provenance, and
-    # explicitly not a command. If this ever empties, the index has quietly gone
-    # back to describing only generated output.
+    # WRITTEN RECORDS are present and lawful. The contract is the EXPLICIT kind
+    # marker plus the exact phrase — SEQ 866 removed an earlier substring
+    # heuristic that banned "python3"/"pytest" inside these strings, because a
+    # truthful written provenance may legitimately MENTION a command
+    # historically without becoming a replay claim.
     written = {k: v for k, v in mod.PROVENANCE.items()
                if isinstance(v, str) and v.startswith("(written record")}
     assert written, "the index must be able to carry written records"
     for name, prov in written.items():
         assert "not reproducible by a command" in prov, (name, prov)
-        assert "python3" not in prov and "pytest" not in prov, \
-            f"a written record must not claim a replay command: {name} -> {prov}"
 
 
 def test_the_receipt_index_CATCHES_an_unlisted_written_document():
-    """ATTACK: someone drops a hand-written .md into the receipts directory and
-    never indexes it. A written record has no command, which is exactly why it
-    is the easiest kind to leave out — so the unlisted rule must catch a `.md`
-    just as it catches a generated .json."""
+    """ATTACK on the PRODUCTION rule, not on a copy of it.
+
+    A written record has no command, which makes it the easiest kind to leave
+    out — so `inventory_delta` must catch a hand-written `.md` exactly as it
+    catches a generated `.json`. SEQ 866: this node used to define its own local
+    `unlisted()`, which proved the copy — weaken main()'s real refusal and the
+    old version stayed green while the boundary it claimed to guard was gone.
+    """
     import os as _os
     mod = _receipt_index()
     here = _os.path.join(_os.path.dirname(__file__), "receipts_827")
     out = _os.path.basename(mod.OUT)
-
-    def unlisted(present):
-        return [f for f in present if f not in mod.PROVENANCE]
-
     real = sorted(f for f in _os.listdir(here)
                   if _os.path.isfile(_os.path.join(here, f)) and f != out)
-    assert unlisted(real) == [], unlisted(real)          # the tree as it stands
 
-    # the attack, applied to the same derived rule — no file is written to disk
-    assert unlisted(real + ["99_someone_wrote_this_by_hand.md"]) == \
-        ["99_someone_wrote_this_by_hand.md"], \
+    assert mod.inventory_delta(real)[0] == []                # the tree as it stands
+
+    # the attack — no file is written to disk; the rule is asked directly
+    md = "99_someone_wrote_this_by_hand.md"
+    js = "99_generated_thing.json"
+    assert mod.inventory_delta(real + [md])[0] == [md], \
         "an unlisted WRITTEN document went undetected"
-    assert unlisted(real + ["99_generated_thing.json"]) == \
-        ["99_generated_thing.json"], \
+    assert mod.inventory_delta(real + [js])[0] == [js], \
         "an unlisted generated receipt went undetected"
+
+    # and the OTHER half of the same owner: a table naming an absent file
+    absent = dict(mod.PROVENANCE)
+    absent["99_never_produced.json"] = "(generator source)"
+    assert mod.inventory_delta(real, absent)[1] == ["99_never_produced.json"], \
+        "a provenance entry for an absent file went undetected"
