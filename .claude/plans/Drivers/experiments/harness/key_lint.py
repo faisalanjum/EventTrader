@@ -13,6 +13,10 @@ Subcommands:
 Anti-tell (protocol section 7): no single surface feature of the VISIBLE fields may separate SAME from
 DIFFERENT beyond tolerance. Separation = 2*|AUC-0.5| for numeric features, class-rate deviation for
 categorical. Also enforces the hard-SAME floor. Locked keys are immutable (WorkOrder section 1.4)."""
+# NOTE: this file contains regex/prefix matching catalogued in
+# experiments/REGEX_AND_FUZZY_DEBT.md — read that register BEFORE editing
+# (esp. before reusing any of it in an identity- or write-bearing path).
+
 import argparse
 import hashlib
 import json

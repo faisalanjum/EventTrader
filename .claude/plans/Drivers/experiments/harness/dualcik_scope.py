@@ -3,6 +3,10 @@
 Question: does the dual-CIK u_id mismatch touch REAL slice axes / would-materialize facts, or only
 non-slice facts that are skipped anyway? Records to run dir. Does NOT change O13/P4f.
 Imports the materializer's frozen tables/helpers (this is a probe, NOT the X-XL0 verifier)."""
+# NOTE: this file contains regex/prefix matching catalogued in
+# experiments/REGEX_AND_FUZZY_DEBT.md — read that register BEFORE editing
+# (esp. before reusing any of it in an identity- or write-bearing path).
+
 import os, json, argparse, sys
 sys.path.insert(0, '/home/faisal/EventMarketDB/.claude/plans/Drivers/experiments/harness')
 import xbrl_dryrun_materializer as MAT

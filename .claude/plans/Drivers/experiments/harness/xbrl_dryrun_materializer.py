@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """EXP-1 dry-run materializer (READ-ONLY Neo4j, 0 LLM). XBRL 5.2 steps 1-8.
 Fable-pinned P4c/P4a value table (ra_0002). Writes NOTHING to Neo4j. Deterministic (sorted; no now()/rand)."""
+# NOTE: this file contains regex/prefix matching catalogued in
+# experiments/REGEX_AND_FUZZY_DEBT.md — read that register BEFORE editing
+# (esp. before reusing any of it in an identity- or write-bearing path).
+
 import os, re, json, sys, argparse
 from datetime import date, timedelta
 from neo4j import GraphDatabase

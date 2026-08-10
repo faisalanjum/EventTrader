@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """Build EXP-1 dry-run inputs (0-LLM, READ-ONLY Neo4j): FA_selection.json (draft, unsigned)
 + fixtures/fixture_resolutions.json. Env-first creds. No writes, no LLM."""
+# NOTE: this file contains regex/prefix matching catalogued in
+# experiments/REGEX_AND_FUZZY_DEBT.md — read that register BEFORE editing
+# (esp. before reusing any of it in an identity- or write-bearing path).
+
 import os, re, json
 from neo4j import GraphDatabase
 

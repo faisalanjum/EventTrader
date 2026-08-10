@@ -4,6 +4,10 @@ re-derives value/scale, unit, decimals, concept, time_type, gp_id (period dates)
 OWN fresh implementation of the P4c/P4a table + Fable exclusive-end decode + O13 dual-CIK pairing (NOT imported
 from the materializer). Frozen axis DATA is shared (it is the catalog spec); the LOGIC is independent.
 Bar: field_match_rate == 1.0. Writes xxl0_report.json."""
+# NOTE: this file contains regex/prefix matching catalogued in
+# experiments/REGEX_AND_FUZZY_DEBT.md — read that register BEFORE editing
+# (esp. before reusing any of it in an identity- or write-bearing path).
+
 import re, os, json, argparse
 from datetime import date, timedelta
 from neo4j import GraphDatabase

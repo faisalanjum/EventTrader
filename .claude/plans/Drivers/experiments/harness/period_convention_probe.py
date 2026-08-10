@@ -2,6 +2,10 @@
 """EXP-1 Bug-2 confirmation (READ-ONLY, 0 LLM). Is Period.end_date universally EXCLUSIVE
 (== periodOfReport + 1 day) across the 60 FA_selection filings, or only AAL/DRI?
 Counts, per filing, current-period facts under BOTH readings. Writes proof to run dir. No writes, no P4b change."""
+# NOTE: this file contains regex/prefix matching catalogued in
+# experiments/REGEX_AND_FUZZY_DEBT.md — read that register BEFORE editing
+# (esp. before reusing any of it in an identity- or write-bearing path).
+
 import os, json, argparse
 from datetime import date, timedelta
 from neo4j import GraphDatabase
