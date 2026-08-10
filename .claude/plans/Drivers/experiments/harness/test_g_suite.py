@@ -257,6 +257,31 @@ def live_modules_importing_staged(sources, staged=STAGED_FILES):
     so widening it — a second symbol, or the whole module — still fails.
     """
     names = frozenset(n[:-3] for n in staged)
+
+    def reaches(node):
+        """Every staged module this import statement reaches, as
+        (canonical_module, symbol_or_None). `None` means the WHOLE module.
+
+        PC-4 corrective (SEQ 859): a staged module can appear in EITHER half of
+        an ImportFrom — `from driver.core.slot_convert import X` puts it in
+        `.module`, `from driver.core import slot_convert` puts it in `.names`.
+        The first version only looked at `.module`, so the whole-module forms —
+        exactly the ones a symbol-granular allowance must refuse — were invisible.
+        Relative forms are canonicalized to their `driver.core.` spelling so the
+        same edge gets the same verdict however it is written; these sources all
+        live in driver/core, which is what makes `.` that package.
+        """
+        if isinstance(node, ast.Import):                 # import a.b.c
+            return [("driver.core." + a.name.split(".")[-1], None)
+                    for a in node.names if a.name.split(".")[-1] in names]
+        mod = node.module or ""                          # from ... import ...
+        tail = mod.split(".")[-1] if mod else ""
+        if tail in names:                                # ...<staged> import SYMBOL
+            return [("driver.core." + tail, a.name) for a in node.names]
+        # ...<package> import <staged>  — the module itself is the imported name
+        return [("driver.core." + a.name, None)
+                for a in node.names if a.name in names]
+
     out = []
     for fn, src in sources.items():
         try:
@@ -265,22 +290,18 @@ def live_modules_importing_staged(sources, staged=STAGED_FILES):
             out.append(f"{fn} does not parse")   # is its own, louder failure
             continue
         for node in ast.walk(tree):
-            if isinstance(node, ast.ImportFrom):
-                mod = node.module or ""
-                if mod.split(".")[-1] not in names:
-                    continue
-                for a in node.names:
-                    # the ASNAME is irrelevant: an alias of a symbol IS that
-                    # symbol, and `*` is never a named symbol so it can never
-                    # be the allowed one.
-                    if (fn, mod, a.name) not in _ALLOWED_LIVE_STAGED_IMPORTS:
-                        out.append(f"{fn} imports {mod}.{a.name}")
-            elif isinstance(node, ast.Import):
-                for a in node.names:
-                    if a.name.split(".")[-1] in names:
-                        # the WHOLE module reaches every symbol in it, so it is
-                        # never covered by a symbol-granular allowance
-                        out.append(f"{fn} imports module {a.name}")
+            if not isinstance(node, (ast.Import, ast.ImportFrom)):
+                continue
+            for mod, symbol in reaches(node):
+                if symbol is None:
+                    # the WHOLE module reaches every symbol in it, so it is
+                    # never covered by a symbol-granular allowance
+                    out.append(f"{fn} imports module {mod}")
+                # the ASNAME is irrelevant: an alias of a symbol IS that
+                # symbol, and `*` is never a named symbol so it can never
+                # be the allowed one.
+                elif (fn, mod, symbol) not in _ALLOWED_LIVE_STAGED_IMPORTS:
+                    out.append(f"{fn} imports {mod}.{symbol}")
     return sorted(out)
 
 
@@ -1169,6 +1190,17 @@ def test_the_gate_CATCHES_a_live_import_of_a_staged_module():
         attack = {"driver_writer.py": f"from driver.core.{mod} import something"}
         assert live_modules_importing_staged(attack), \
             f"a live import of staged {mod} went undetected"
+        # PC-4 corrective (SEQ 859): the staged module can sit in EITHER half of
+        # an ImportFrom. The whole-module forms below were invisible to the
+        # first version, which read only `.module` — and they are precisely the
+        # ones a SYMBOL-granular allowance can never cover, since importing the
+        # module reaches every symbol in it.
+        for form in (f"from driver.core import {mod}",
+                     f"from driver.core import {mod} as shorthand",
+                     f"from . import {mod}",
+                     f"import driver.core.{mod}"):
+            assert live_modules_importing_staged({"driver_writer.py": form}), \
+                f"whole-module import went undetected: {form}"
     # NEGATIVE CONTROL: ordinary live code is not flagged
     assert live_modules_importing_staged(
         {"driver_writer.py": "from driver.core.driver_ids import build_id"}) == []
@@ -1186,11 +1218,20 @@ def test_the_gate_CATCHES_a_live_import_of_a_staged_module():
         assert live_modules_importing_staged({"outcome_codes.py": prose}) == [], \
             f"prose was counted as an import: {prose}"
 
-    # THE ONE LAWFUL EDGE (C1+C10), and an ALIAS of it — the same symbol.
+    # THE ONE LAWFUL EDGE (C1+C10), an ALIAS of it, and both written RELATIVELY
+    # — the same symbol however it is spelled. The relative spellings are
+    # canonicalized (PC-4 corrective, SEQ 859) so one edge cannot get two
+    # different verdicts depending on how the author wrote the import.
     for lawful in ("from driver.core.slot_convert import CANONICAL_UNITS",
-                   "from driver.core.slot_convert import CANONICAL_UNITS as CU"):
+                   "from driver.core.slot_convert import CANONICAL_UNITS as CU",
+                   "from .slot_convert import CANONICAL_UNITS",
+                   "from .slot_convert import CANONICAL_UNITS as CU"):
         assert live_modules_importing_staged(
             {"driver_validators.py": lawful}) == [], lawful
+    # ...but the relative WHOLE-module form of that same module still fails.
+    assert live_modules_importing_staged(
+        {"driver_validators.py": "from . import slot_convert"}), \
+        "the relative whole-module form rode in on the symbol allowance"
 
     # ...and it is granted to THAT module alone, for THAT symbol alone.
     assert live_modules_importing_staged(
