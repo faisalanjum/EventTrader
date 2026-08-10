@@ -256,31 +256,46 @@ def live_modules_importing_staged(sources, staged=STAGED_FILES):
     prose. The single lawful exception is declared above at symbol granularity,
     so widening it — a second symbol, or the whole module — still fails.
     """
-    names = frozenset(n[:-3] for n in staged)
+    #: the staged set as FULL dotted module paths — derived, never re-listed
+    full = frozenset("driver.core." + n[:-3] for n in staged)
+    #: the package these `sources` live in; `.` means this, `..` its parent
+    HOME = "driver.core"
 
     def reaches(node):
         """Every staged module this import statement reaches, as
-        (canonical_module, symbol_or_None). `None` means the WHOLE module.
+        (resolved_module, symbol_or_None). `None` means the WHOLE module.
 
-        PC-4 corrective (SEQ 859): a staged module can appear in EITHER half of
-        an ImportFrom — `from driver.core.slot_convert import X` puts it in
-        `.module`, `from driver.core import slot_convert` puts it in `.names`.
-        The first version only looked at `.module`, so the whole-module forms —
-        exactly the ones a symbol-granular allowance must refuse — were invisible.
-        Relative forms are canonicalized to their `driver.core.` spelling so the
-        same edge gets the same verdict however it is written; these sources all
-        live in driver/core, which is what makes `.` that package.
+        THE MODULE IS RESOLVED, NEVER MATCHED BY BASENAME (PC-4 corrective,
+        SEQ 860). The previous version mapped any matching tail to
+        `driver.core.<tail>`, which was wrong in BOTH directions and one of them
+        was a false ALLOWANCE: `from unrelated.slot_convert import
+        CANONICAL_UNITS` collected the C1 exception although it never reaches
+        staged code, and `import unrelated.slot_convert` /
+        `from ..relocation import slot_convert` were REPORTED as staged edges
+        they are not. A basename is not an identity; the package is.
+
+        Resolution is ordinary Python: an absolute import is already its own
+        path, and a relative one counts dots up from HOME — `.` is driver.core,
+        `..` is driver — so `from ..core.slot_convert import X` and
+        `from .slot_convert import X` resolve to the same module and get the
+        same verdict, while `from ..relocation import slot_convert` resolves to
+        driver.relocation and is simply not staged.
         """
         if isinstance(node, ast.Import):                 # import a.b.c
-            return [("driver.core." + a.name.split(".")[-1], None)
-                    for a in node.names if a.name.split(".")[-1] in names]
-        mod = node.module or ""                          # from ... import ...
-        tail = mod.split(".")[-1] if mod else ""
-        if tail in names:                                # ...<staged> import SYMBOL
-            return [("driver.core." + tail, a.name) for a in node.names]
-        # ...<package> import <staged>  — the module itself is the imported name
-        return [("driver.core." + a.name, None)
-                for a in node.names if a.name in names]
+            return [(a.name, None) for a in node.names if a.name in full]
+        if node.level:                                   # from .x / ..x import
+            parts = HOME.split(".")
+            if node.level > len(parts):                  # climbs past the root
+                return []
+            base = ".".join(parts[:len(parts) - node.level + 1])
+        else:
+            base = ""                                    # absolute
+        mod = ".".join(p for p in (base, node.module or "") if p)
+        if mod in full:                                  # <staged> import SYMBOL
+            return [(mod, a.name) for a in node.names]
+        # <package> import <staged> — the module itself is the imported name
+        return [(f"{mod}.{a.name}", None)
+                for a in node.names if f"{mod}.{a.name}" in full]
 
     out = []
     for fn, src in sources.items():
@@ -1232,6 +1247,35 @@ def test_the_gate_CATCHES_a_live_import_of_a_staged_module():
     assert live_modules_importing_staged(
         {"driver_validators.py": "from . import slot_convert"}), \
         "the relative whole-module form rode in on the symbol allowance"
+
+    # PC-4 corrective (SEQ 860/861): THE MODULE IS RESOLVED, NOT MATCHED BY
+    # BASENAME. A module merely NAMED like a staged one, in a different
+    # package, is not a staged edge — in either direction. Before this, the
+    # basename mapping both invented staged edges that do not exist AND let an
+    # unrelated package collect the C1 symbol allowance.
+    for fn in ("driver_validators.py", "driver_writer.py"):
+        for unrelated in ("import unrelated.slot_convert",
+                          "from unrelated import slot_convert",
+                          "from unrelated.slot_convert import convert_slot",
+                          "from unrelated.slot_convert import CANONICAL_UNITS",
+                          "from ..relocation import slot_convert",
+                          "from ..relocation.slot_convert import CANONICAL_UNITS"):
+            assert live_modules_importing_staged({fn: unrelated}) == [], \
+                f"an unrelated package was read as a staged edge: {fn} / {unrelated}"
+
+    # the PARENT spelling of the real package resolves to the same place, so it
+    # gets the same verdicts — caught whole-module, caught non-C1 symbol, and
+    # the C1 symbol allowed in its OWN module only.
+    assert live_modules_importing_staged(
+        {"driver_validators.py": "from ..core import slot_convert"}), "parent whole-module"
+    assert live_modules_importing_staged(
+        {"driver_validators.py": "from ..core.slot_convert import convert_slot"}), \
+        "parent symbol form"
+    assert live_modules_importing_staged(
+        {"driver_validators.py": "from ..core.slot_convert import CANONICAL_UNITS"}) == []
+    assert live_modules_importing_staged(
+        {"driver_writer.py": "from ..core.slot_convert import CANONICAL_UNITS"}), \
+        "the C1 allowance is bound to ITS module, whatever the spelling"
 
     # ...and it is granted to THAT module alone, for THAT symbol alone.
     assert live_modules_importing_staged(
