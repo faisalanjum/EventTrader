@@ -5,8 +5,19 @@ from pathlib import Path
 from bs4 import BeautifulSoup
 
 
-EXTRACTOR = Path('/tmp/cell_address_probe.WhbHsb/lock_row_extract.py')
-spec = importlib.util.spec_from_file_location('lock_extract', EXTRACTOR)
+# CF-PROOF-TMP-1 (#827, SWEEP-G1): this used to exec
+# /tmp/cell_address_probe.WhbHsb/lock_row_extract.py AT IMPORT TIME — a scratch
+# directory from a July probe session. That path is gone, so the module could
+# not be collected in ANY tree; what made the breakage quiet for a while was the
+# stale __pycache__ bytecode sitting beside it. A test that reaches outside the
+# repository proves nothing about the repository.
+#
+# `lock_row_extract.py` is the SIBLING file in this very directory, it is in the
+# candidate manifest, and it holds the only definition of `aligned_column`
+# anywhere in the tree — so the /tmp copy was a duplicate of a file we already
+# ship. The import is now TREE-BOUND and relative to this file's own location.
+EXTRACTOR = Path(__file__).resolve().parent / 'lock_row_extract.py'
+spec = importlib.util.spec_from_file_location('lock_row_extract', EXTRACTOR)
 module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
 
