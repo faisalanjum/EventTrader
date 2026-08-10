@@ -32,7 +32,7 @@ GEN = "(generator source)"
 #: description instead of a command, because inventing a command for a written
 #: document is exactly the false reproducibility this index exists to prevent.
 #: Anything on disk and absent from this table stops the run.
-COMMANDS = {
+PROVENANCE = {
     # THREE ENTRIES WERE WRONG in the hand-written index and are corrected
     # here, which is the argument for generating it: 05 and 11 named pytest
     # commands that do not produce those files at all, and 07 claimed the live
@@ -106,6 +106,53 @@ COMMANDS = {
     "scan_ix_transforms.py": GEN,
     "step4_mutations.py": GEN,
     "structure_census.py": GEN,
+    # ---- P-O6 (#827): EVERY file in this directory, exactly once -----------
+    # The contract above is applied consistently: a written record has no
+    # command and none is invented for it — its provenance names what produced
+    # it and says plainly that it is not reproducible by running something.
+    "01c_ix_transform_occurrences.json": f"{PY}/scan_ix_transforms.py",
+    "13_f6_envelope_census.json": f"{PY}/13_f6_envelope_census.py",
+    "17_two_view_mutations.json": f"{PY}/two_view_mutations.py",
+    "19_resource_ancestry_census.json": f"{PY}/resource_ancestry_census.py",
+    "24_arelle_ixt_parity.json": f"{PY}/arelle_ixt_parity.py",
+    "13_f6_envelope_census.py": "(generator source)",
+    "arelle_ixt_parity.py": "(generator source)",
+    "resource_ancestry_census.py": "(generator source)",
+    "two_view_census.py": "(generator source)",
+    "two_view_mutations.py": "(generator source)",
+    "test_arelle_ixt_parity.py":
+        f"venv/bin/python3 -m pytest {PY}/test_arelle_ixt_parity.py -q",
+    "test_divide_unit_numerators.py":
+        f"venv/bin/python3 -m pytest {PY}/test_divide_unit_numerators.py -q",
+    "test_scan_ix_transforms.py":
+        f"venv/bin/python3 -m pytest {PY}/test_scan_ix_transforms.py -q",
+    "10_step4_mutations.TOMBSTONE.md":
+        "(written record: P-O6 retirement of the stale in-tree step-4 receipt; "
+        "not reproducible by a command)",
+    "18_empty_attribute_repair_record.md":
+        "(written record: the empty-attribute repair adjudication; "
+        "not reproducible by a command)",
+    "20_dimension_namespace_decode.md":
+        "(written record: the dimension-namespace decode ruling; "
+        "not reproducible by a command)",
+    "23_adjudication_batch1.md":
+        "(written record: reviewer adjudication batch 1; "
+        "not reproducible by a command)",
+    "25_adjudication_batch2.md":
+        "(written record: reviewer adjudication batch 2; "
+        "not reproducible by a command)",
+    "26_withdrawn_certification_ledger.md":
+        "(written record: certifications withdrawn during #827 and why; "
+        "not reproducible by a command)",
+    "27_caller_inventory.md":
+        "(written record: the caller inventory read off the tree; "
+        "not reproducible by a command)",
+    "28_pc4_row_and_pc1_denominator.md":
+        "(written record: PC-4 new row + PC-1 denominator movement, SEQ 858; "
+        "not reproducible by a command)",
+    "29_sweepg1_findings.md":
+        "(written record: SWEEP-G1 carry-forward findings and closure, "
+        "SEQ 863/864; not reproducible by a command)",
 }
 
 
@@ -113,7 +160,7 @@ def main():
     present = sorted(f for f in os.listdir(_HERE)
                      if os.path.isfile(os.path.join(_HERE, f))
                      and f != os.path.basename(OUT))
-    unlisted = [f for f in present if f not in COMMANDS]
+    unlisted = [f for f in present if f not in PROVENANCE]
     if unlisted:
         raise SystemExit(
             f"{len(unlisted)} receipt file(s) have no command in this index: "
@@ -122,7 +169,7 @@ def main():
     # A REQUIRED RECEIPT THAT IS NOT THERE IS A FAILURE, not a footnote. The
     # first version listed it under a comment and still returned success, so an
     # index could describe a set of receipts that does not exist.
-    missing = sorted(f for f in COMMANDS if f not in present)
+    missing = sorted(f for f in PROVENANCE if f not in present)
     if missing:
         raise SystemExit(
             f"{len(missing)} receipt(s) named by this index are NOT on disk: "
@@ -153,7 +200,7 @@ def main():
     for name in present:
         with open(os.path.join(_HERE, name), "rb") as fh:
             digest = hashlib.sha256(fh.read()).hexdigest()
-        lines += [name, f"    provenance: {COMMANDS[name]}",
+        lines += [name, f"    provenance: {PROVENANCE[name]}",
                   f"    sha256    : {digest}", ""]
     with open(OUT, "w") as fh:
         fh.write("\n".join(lines))

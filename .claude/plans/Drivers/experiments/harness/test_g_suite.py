@@ -2372,3 +2372,78 @@ def test_isolated_gate_rejects_mismatched_tree_id():
     # and the flag is OPTIONAL: absent it, the gate behaves exactly as before
     assert 'if "--expect-tree" in sys.argv:' in src, \
         "the handoff must be opt-in so existing callers are unchanged"
+
+
+# ---------------------------------------------------------------------------
+# P-O6 (#827) — THE RECEIPT INDEX COVERS THE WHOLE DIRECTORY.
+#
+# The index's own contract is "PROVENANCE OR REPLAY COMMAND", and its two
+# existing rules are that nothing on disk may be unlisted and nothing listed may
+# be absent. Both are exercised here against the REAL table, because a receipt
+# directory that half-describes itself is the failure this index exists to stop.
+# A WRITTEN record — a tombstone, an adjudication, a findings document — is
+# lawful and carries a parenthesised provenance; what is never lawful is a
+# document that nobody indexed, or an invented command pretending it replays.
+# ---------------------------------------------------------------------------
+
+def _receipt_index():
+    import importlib.util
+    import os as _os
+    p = _os.path.join(_os.path.dirname(__file__), "receipts_827", "make_index.py")
+    spec = importlib.util.spec_from_file_location("_mkidx", p)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def test_the_receipt_index_ACCOUNTS_FOR_EVERY_FILE_including_written_records():
+    """Every file present is indexed exactly once, and nothing indexed is absent."""
+    import os as _os
+    mod = _receipt_index()
+    here = _os.path.join(_os.path.dirname(__file__), "receipts_827")
+    out = _os.path.basename(mod.OUT)
+    present = {f for f in _os.listdir(here)
+               if _os.path.isfile(_os.path.join(here, f)) and f != out}
+    table = set(mod.PROVENANCE)
+
+    assert not (present - table), \
+        f"receipt file(s) with no provenance: {sorted(present - table)}"
+    assert not (table - present), \
+        f"provenance named for absent file(s): {sorted(table - present)}"
+
+    # WRITTEN RECORDS are present and lawful — a parenthesised provenance, and
+    # explicitly not a command. If this ever empties, the index has quietly gone
+    # back to describing only generated output.
+    written = {k: v for k, v in mod.PROVENANCE.items()
+               if isinstance(v, str) and v.startswith("(written record")}
+    assert written, "the index must be able to carry written records"
+    for name, prov in written.items():
+        assert "not reproducible by a command" in prov, (name, prov)
+        assert "python3" not in prov and "pytest" not in prov, \
+            f"a written record must not claim a replay command: {name} -> {prov}"
+
+
+def test_the_receipt_index_CATCHES_an_unlisted_written_document():
+    """ATTACK: someone drops a hand-written .md into the receipts directory and
+    never indexes it. A written record has no command, which is exactly why it
+    is the easiest kind to leave out — so the unlisted rule must catch a `.md`
+    just as it catches a generated .json."""
+    import os as _os
+    mod = _receipt_index()
+    here = _os.path.join(_os.path.dirname(__file__), "receipts_827")
+    out = _os.path.basename(mod.OUT)
+
+    def unlisted(present):
+        return [f for f in present if f not in mod.PROVENANCE]
+
+    real = sorted(f for f in _os.listdir(here)
+                  if _os.path.isfile(_os.path.join(here, f)) and f != out)
+    assert unlisted(real) == [], unlisted(real)          # the tree as it stands
+
+    # the attack, applied to the same derived rule — no file is written to disk
+    assert unlisted(real + ["99_someone_wrote_this_by_hand.md"]) == \
+        ["99_someone_wrote_this_by_hand.md"], \
+        "an unlisted WRITTEN document went undetected"
+    assert unlisted(real + ["99_generated_thing.json"]) == \
+        ["99_generated_thing.json"], \
+        "an unlisted generated receipt went undetected"
