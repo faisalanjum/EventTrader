@@ -1,0 +1,265 @@
+{
+ "cases": [
+  {
+   "non_test_proof": null,
+   "proof_nodes": [
+    "driver/relocation/test_bind_graph_fact.py::test_827R6_a_MALFORMED_filer_identity_never_binds",
+    "driver/core/test_round8_xbrl_binding.py::test_filing_boundary_REFUSES_every_malformed_form"
+   ],
+   "relay": "R7",
+   "reviewer_words": "NBSP/zero-width-padded dates attach"
+  },
+  {
+   "non_test_proof": null,
+   "proof_nodes": [
+    "driver/relocation/test_bind_graph_fact.py::test_827R6_a_GRAPH_cik_outside_the_stored_form_never_binds"
+   ],
+   "relay": "R7",
+   "reviewer_words": "Padded graph CIKs ... attach"
+  },
+  {
+   "non_test_proof": null,
+   "proof_nodes": [
+    "driver/relocation/test_bind_graph_fact.py::test_827R6_a_PADDED_graph_value_is_not_the_value",
+    "driver/relocation/test_bind_graph_fact.py::test_827R6_a_graph_value_outside_the_derived_grammar_is_refused"
+   ],
+   "relay": "R7",
+   "reviewer_words": "... and graph numbers attach"
+  },
+  {
+   "non_test_proof": null,
+   "proof_nodes": [
+    "driver/relocation/test_bind_graph_fact.py::test_827R6_accounting_parens_may_not_carry_a_SECOND_sign"
+   ],
+   "relay": "R7",
+   "reviewer_words": "(-390,000,000) incorrectly becomes positive"
+  },
+  {
+   "non_test_proof": null,
+   "proof_nodes": [
+    "driver/relocation/test_two_view_bridge.py::test_ATTACK_a_NEAR_MISS_namespace_URI_is_a_different_namespace",
+    "driver/relocation/test_two_view_bridge.py::test_the_EXACT_official_URI_is_a_fact"
+   ],
+   "relay": "R7",
+   "reviewer_words": "A namespace URI with an extra /, ... is trusted"
+  },
+  {
+   "non_test_proof": null,
+   "proof_nodes": [
+    "driver/relocation/test_two_view_bridge.py::test_ATTACK_xmlns_looking_TEXT_declares_nothing",
+    "driver/relocation/test_two_view_bridge.py::test_a_REAL_declaration_attribute_does_declare"
+   ],
+   "relay": "R7",
+   "reviewer_words": "... or a fake declaration inside <script>, is trusted"
+  },
+  {
+   "non_test_proof": null,
+   "proof_nodes": [
+    "driver/relocation/test_two_view_bridge.py::test_ATTACK_a_declaration_on_an_unrelated_SIBLING_is_not_in_scope",
+    "driver/relocation/test_two_view_bridge.py::test_the_SAME_declaration_on_an_ANCESTOR_is_in_scope"
+   ],
+   "relay": "R9",
+   "reviewer_words": "a declaration on an unrelated sibling is in scope"
+  },
+  {
+   "non_test_proof": null,
+   "proof_nodes": [
+    "driver/relocation/test_two_view_bridge.py::test_ATTACK_a_prefix_declared_only_in_ANOTHER_CASE_is_undeclared",
+    "driver/relocation/test_two_view_bridge.py::test_the_SAME_declaration_used_in_ITS_OWN_case_resolves"
+   ],
+   "relay": "R9",
+   "reviewer_words": "a prefix declared only in another case is the same prefix"
+  },
+  {
+   "non_test_proof": null,
+   "proof_nodes": [
+    "driver/relocation/test_bind_graph_fact.py::test_827R5_a_GENUINE_duplicate_context_id_still_says_duplicate",
+    "driver/relocation/test_bind_graph_fact.py::test_827R5_MALFORMED_structure_is_NEVER_called_a_duplicate_id"
+   ],
+   "relay": "R7",
+   "reviewer_words": "Invalid context ... IDs attach"
+  },
+  {
+   "non_test_proof": null,
+   "proof_nodes": [
+    "driver/relocation/test_bind_graph_fact.py::test_827R5_a_GENUINE_duplicate_unit_id_still_says_duplicate"
+   ],
+   "relay": "R7",
+   "reviewer_words": "Invalid ... unit ... IDs attach"
+  },
+  {
+   "non_test_proof": null,
+   "proof_nodes": [
+    "driver/relocation/test_bind_graph_fact.py::test_827R7_an_UNLAWFUL_element_id_is_MALFORMED_under_its_own_name",
+    "driver/relocation/test_bind_graph_fact.py::test_827R7_the_PUBLIC_id_door_refuses_an_unlawful_id_for_EVERY_caller"
+   ],
+   "relay": "R7",
+   "reviewer_words": "Invalid ... fact IDs attach"
+  },
+  {
+   "non_test_proof": null,
+   "proof_nodes": [
+    "driver/relocation/test_bind_graph_fact.py::test_827R7_an_UNLAWFUL_concept_QName_never_binds",
+    "driver/relocation/test_bind_graph_fact.py::test_827R7_the_concept_rule_covers_the_FALLBACK_path_too"
+   ],
+   "relay": "R7",
+   "reviewer_words": "Invalid concept ... names attach"
+  },
+  {
+   "non_test_proof": null,
+   "proof_nodes": [
+    "driver/relocation/test_bind_graph_fact.py::test_827R6_item4_an_unknown_direct_child_of_a_unit",
+    "driver/relocation/test_bind_graph_fact.py::test_827R5_a_MISPLACED_unit_element_refuses_with_ITS_OWN_reason"
+   ],
+   "relay": "R7",
+   "reviewer_words": "Invalid ... measure names attach"
+  },
+  {
+   "non_test_proof": null,
+   "proof_nodes": [
+    "driver/relocation/test_bind_graph_fact.py::test_827R6_a_NESTED_context_never_binds",
+    "driver/relocation/test_bind_graph_fact.py::test_827R6_item4_markup_nested_inside_a_measure"
+   ],
+   "relay": "R7",
+   "reviewer_words": "Nested dimension markup ... attach"
+  },
+  {
+   "non_test_proof": null,
+   "proof_nodes": [
+    "driver/relocation/test_bind_graph_fact.py::test_827R6_a_NESTED_or_SELF_RATIO_unit_never_binds"
+   ],
+   "relay": "R7",
+   "reviewer_words": "... overlapping ratio measures ... attach"
+  },
+  {
+   "non_test_proof": null,
+   "proof_nodes": [
+    "driver/relocation/test_bind_graph_fact.py::test_827R5_a_MISPLACED_unit_element_refuses_with_ITS_OWN_reason",
+    "driver/relocation/test_bind_graph_fact.py::test_827R5_MUST_ALLOW_lawful_unit_shapes_still_bind"
+   ],
+   "relay": "R7",
+   "reviewer_words": "... and unknown children inside divide containers attach"
+  },
+  {
+   "non_test_proof": null,
+   "proof_nodes": [
+    "driver/core/test_v2_attacks.py::test_827R6_every_public_callable_NAMES_the_test_that_covers_it",
+    "driver/core/test_v2_attacks.py::test_827R6_every_named_test_node_really_exists"
+   ],
+   "relay": "R7",
+   "reviewer_words": "test_v2_attacks.py:1195 collapses 51 (function, parameter) pairs into 17 function names"
+  },
+  {
+   "non_test_proof": null,
+   "proof_nodes": [
+    "driver/core/test_v2_attacks.py::test_827_every_public_INPUT_FIELD_is_REALLY_VALIDATED"
+   ],
+   "relay": "R7",
+   "reviewer_words": "Its field check still catches every Exception, including programming crashes"
+  },
+  {
+   "non_test_proof": "receipts_827/09_filing_date_inventory.json \u2014 the census now scans EXACTLY the manifest names and records input_manifest_sha256.",
+   "proof_nodes": [
+    "driver/core/test_round8_xbrl_binding.py::test_the_date_CENSUS_and_the_PRODUCTION_parser_agree_on_legality"
+   ],
+   "relay": "R7",
+   "reviewer_words": "scan_filing_dates.py:102 verifies the .htm manifest, then scans every file"
+  },
+  {
+   "non_test_proof": "receipts_827/03_commands_and_hashes.txt \u2014 the 07 provenance line now states all three facts (43 live + 1 live_write collected; ONE separately executed read-only live run, 11 passed, tx-bracketed; the isolated gate runs -m 'not live and not live_write' and executes NO live test). Corroborated by the gate's own stdout.",
+   "proof_nodes": [],
+   "relay": "R7",
+   "reviewer_words": "make_index.py:58 says nothing live ran, while receipt 07 records 11 live tests"
+  },
+  {
+   "non_test_proof": "the step-4 battery covers them; six rows (58-63) were added for the round-7b rules specifically. P-O6 (#827): the RESULT is not claimed here. The in-tree 10_step4_mutations.json is retired (see its TOMBSTONE) and the outcome lives in the EXTERNAL receipt produced by the O6 RUN, after tree T is captured \u2014 a source file may say what must be produced, never assert how a run that has not happened in this tree turned out.",
+   "proof_nodes": [],
+   "relay": "R7",
+   "reviewer_words": "The 53 mutations do not cover these holes"
+  },
+  {
+   "non_test_proof": null,
+   "proof_nodes": [
+    "driver/relocation/test_bind_graph_fact.py::test_827R6_a_MALFORMED_filer_identity_never_binds",
+    "driver/relocation/test_bind_graph_fact.py::test_827R6_a_filing_CIK_of_ONE_DIGIT_fails_while_the_ten_digit_form_binds",
+    "driver/relocation/test_bind_graph_fact.py::test_827R6_MUST_ALLOW_the_lawful_filer_identity_still_binds"
+   ],
+   "relay": "R7b",
+   "reviewer_words": "padded filing CIK"
+  },
+  {
+   "non_test_proof": null,
+   "proof_nodes": [
+    "driver/core/test_round8_xbrl_binding.py::test_filing_boundary_REFUSES_every_malformed_form"
+   ],
+   "relay": "R7b",
+   "reviewer_words": "vertical-tab/form-feed dates"
+  },
+  {
+   "non_test_proof": null,
+   "proof_nodes": [
+    "driver/relocation/test_bind_graph_fact.py::test_827R7_an_UNLAWFUL_element_id_is_MALFORMED_under_its_own_name",
+    "driver/relocation/test_bind_graph_fact.py::test_827R7_MUST_ALLOW_an_XML_blank_id_still_uses_the_identity_fallback",
+    "driver/core/test_round10_event_boundary.py::test_827R7_UNICODE_whitespace_is_NOT_a_blank_fact_id"
+   ],
+   "relay": "R7b",
+   "reviewer_words": "invalid or NBSP-only fact IDs"
+  },
+  {
+   "non_test_proof": null,
+   "proof_nodes": [
+    "driver/relocation/test_bind_graph_fact.py::test_827R7_an_UNLAWFUL_concept_QName_never_binds",
+    "driver/relocation/test_bind_graph_fact.py::test_827R7_MUST_ALLOW_real_concept_QNames_still_bind"
+   ],
+   "relay": "R7b",
+   "reviewer_words": "invalid concept QName"
+  },
+  {
+   "non_test_proof": null,
+   "proof_nodes": [
+    "driver/relocation/test_bind_graph_fact.py::test_827R5_a_MISPLACED_unit_element_refuses_with_ITS_OWN_reason",
+    "driver/relocation/test_bind_graph_fact.py::test_827R6_item4_an_unknown_direct_child_of_a_unit"
+   ],
+   "relay": "R7b",
+   "reviewer_words": "junk inside numerator"
+  },
+  {
+   "non_test_proof": null,
+   "proof_nodes": [
+    "driver/core/test_round10_event_boundary.py::test_827R6_a_PADDED_fact_id_is_a_DIFFERENT_id_and_order_cannot_decide",
+    "driver/core/test_round10_event_boundary.py::test_827R7_UNICODE_whitespace_is_NOT_a_blank_fact_id"
+   ],
+   "relay": "R7b",
+   "reviewer_words": "distinct raw-value identities"
+  },
+  {
+   "non_test_proof": null,
+   "proof_nodes": [
+    "driver/core/test_v2_attacks.py::test_827_every_public_INPUT_FIELD_is_REALLY_VALIDATED"
+   ],
+   "relay": "R7b",
+   "reviewer_words": "Remove the remaining broad except Exception"
+  },
+  {
+   "non_test_proof": null,
+   "proof_nodes": [
+    "driver/core/test_v2_attacks.py::test_827R6_every_public_callable_NAMES_the_test_that_covers_it",
+    "driver/core/test_v2_attacks.py::test_827R6_every_named_test_node_really_exists"
+   ],
+   "relay": "R7b",
+   "reviewer_words": "Prove all 51 (owner, parameter) mappings"
+  }
+ ],
+ "cases_by_relay": {
+  "R7": 19,
+  "R7b": 8,
+  "R9": 2
+ },
+ "cases_total": 29,
+ "distinct_proof_nodes": 37,
+ "proof_nodes_pytest_exit": 0,
+ "proof_nodes_result": "175 passed",
+ "receipt": "#827 round 7b \u2014 the reviewer's stated cases, each mapped to a proof that was RUN",
+ "scope_note": "The reviewer's own numbered 22-case list is not held here. Every case he stated VERBATIM across both relays is listed; if his 22 is a subset of these, all 22 are covered. A case of his that is absent would be an omission this file cannot see, which is why the quotes are verbatim and the count is reported, not asserted.",
+ "script_sha256": "c4c625ab2bb3a33b6eac7769907b12a1ce297f7cfa98c67505b6462f6b016bef"
+}
