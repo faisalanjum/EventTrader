@@ -4,7 +4,9 @@ Maps internal packet items to the PUBLIC ChannelContract v1.0 field names:
 `raw_label` -> `raw_label_or_claim`; `xbrl.axis_members` -> `xbrl.dimensions`
 as {axis, member} dicts (verified-empty [] preserved explicitly). Forbidden
 fields FAIL CLOSED; every other field is preserved exactly. Pure (never mutates
-its input) and safely repeatable; non-XBRL prose items map cleanly.
+its input) and safely repeatable; non-XBRL prose items map cleanly. The small
+`convert_dimensions` function is also the one mechanical dimension-conversion
+owner used by the staged V2 packet builder; V2 never calls this V1 adapter.
 """
 import copy
 
@@ -20,6 +22,24 @@ _ALLOWED = frozenset((                     # the CURRENT Fiscal packet shape —
 def _pair_ok(a, m):
     return (isinstance(a, str) and a.strip()
             and isinstance(m, str) and m.strip())
+
+
+def convert_dimensions(x):
+    """Convert one XBRL dict's dimension field in place, without inference."""
+    if ('axis_members' in x) == ('dimensions' in x):
+        raise ValueError('exactly ONE dimension representation required')
+    if 'axis_members' in x:
+        pairs = x.pop('axis_members')
+        if not all(isinstance(p_, (list, tuple)) and len(p_) == 2
+                   and _pair_ok(*p_) for p_ in pairs):
+            raise ValueError('malformed dimension pair — fail closed')
+        x['dimensions'] = [{'axis': a, 'member': m} for a, m in pairs]
+    if not isinstance(x['dimensions'], list) or not all(
+            isinstance(d, dict) and set(d) == {'axis', 'member'}
+            and _pair_ok(d['axis'], d['member'])
+            for d in x['dimensions']):
+        raise ValueError('malformed dimension — fail closed')
+    return x
 
 
 def to_public(packets):
@@ -38,17 +58,5 @@ def to_public(packets):
                 raise ValueError('label must be a nonblank string — fail closed')
             x = i.get('xbrl')
             if x is not None:
-                if ('axis_members' in x) == ('dimensions' in x):
-                    raise ValueError('exactly ONE dimension representation required')
-                if 'axis_members' in x:
-                    pairs = x.pop('axis_members')
-                    if not all(isinstance(p_, (list, tuple)) and len(p_) == 2
-                               and _pair_ok(*p_) for p_ in pairs):
-                        raise ValueError('malformed dimension pair — fail closed')
-                    x['dimensions'] = [{'axis': a, 'member': m} for a, m in pairs]
-                if not isinstance(x['dimensions'], list) or not all(
-                        isinstance(d, dict) and set(d) == {'axis', 'member'}
-                        and _pair_ok(d['axis'], d['member'])
-                        for d in x['dimensions']):
-                    raise ValueError('malformed dimension — fail closed')
+                convert_dimensions(x)
     return out

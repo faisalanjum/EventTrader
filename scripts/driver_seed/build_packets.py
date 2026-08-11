@@ -10,9 +10,10 @@ shared-core, added downstream). `build()` is pure (no Neo4j) so it is unit-teste
 
     venv/bin/python scripts/driver_seed/build_packets.py --tag smoke
 """
-import os, sys, json, argparse, collections
+import os, sys, json, argparse, collections, copy
 sys.path.insert(0, os.path.dirname(__file__))
 import run_code_tier as RC          # shared FORMMAP + load_env_neo4j (channel-side, moves together at reorg)
+import public_contract as PC        # shared mechanical dimension conversion; V2 never calls to_public()
 
 OUT = 'data/driver_catalog_seed'
 # frozen FETCH raw-item fields carried into each packet item (Part D FETCH list). Decomposition
@@ -52,9 +53,8 @@ def corpus_complete(searched, form):
     return RC.FORMMAP.get(form) in (searched or []) and '8k' in (searched or [])
 
 
-def build(records, abstains, fye_map):
-    """Pure. Returns (packets, skip_ledger, park_ledger).
-    packets: one per source event (source_id). skip/park: routed abstains with a machine reason."""
+def _group_events(records, fye_map, item_for, event_extra=None):
+    """The one source-id grouping owner for temporary V1 and staged V2."""
     packets = collections.OrderedDict()
     for r in records:
         sid = canonicalize_source_id(r['source_id'])
@@ -62,10 +62,30 @@ def build(records, abstains, fye_map):
         if pk is None:
             pk = packets[sid] = {'source_id': sid, 'source_type': r['source_type'],
                                  'ticker': r['ticker'], 'fye_month': fye_map.get(r['ticker']),
-                                 'event_time': r.get('event_time'), 'items': []}
-        item = {k: r[k] for k in ITEM_FIELDS if k in r}
-        item.update(unit_hints(r.get('fmt'), r.get('is_currency')))
-        pk['items'].append(item)
+                                 'event_time': r.get('event_time')}
+            if event_extra is not None:
+                pk.update(event_extra(r, sid))
+            pk['items'] = []
+        pk['items'].append(item_for(r))
+    return list(packets.values())
+
+
+def _v1_item(r):
+    item = {k: r[k] for k in ITEM_FIELDS if k in r}
+    item.update(unit_hints(r.get('fmt'), r.get('is_currency')))
+    return item
+
+
+def _v2_item(r):
+    item = {'raw_label_or_claim': r['raw_label']}
+    item.update({k: copy.deepcopy(r[k]) for k in ITEM_FIELDS[1:] if k in r})
+    if item.get('xbrl') is not None:
+        PC.convert_dimensions(item['xbrl'])
+    return item
+
+
+def _route_abstains(abstains):
+    """The one unchanged SKIP/PARK owner shared by V1 and staged V2."""
 
     skip, park = [], []
     for a in abstains:
@@ -86,7 +106,29 @@ def build(records, abstains, fye_map):
                 park.append({**led, 'reason': 'corpus_incomplete'})
         else:
             park.append({**led, 'reason': reason or 'unknown'})
-    return list(packets.values()), skip, park
+    return skip, park
+
+
+def build(records, abstains, fye_map):
+    """Pure V1 builder. V1 remains live until the separate atomic switch."""
+    packets = _group_events(records, fye_map, _v1_item)
+    skip, park = _route_abstains(abstains)
+    return packets, skip, park
+
+
+def build_stage_a_v2(records, abstains, fye_map, sources_by_id):
+    """Build staged V2 raw events in memory; do not validate, activate, or write.
+
+    `sources_by_id` contains already-selected source events keyed by canonical
+    source id. Fiscal only groups and copies their exact text here.
+    """
+    def event_extra(_record, source_id):
+        return {'text_parts': copy.deepcopy(
+            sources_by_id[source_id]['text_parts'])}
+
+    packets = _group_events(records, fye_map, _v2_item, event_extra)
+    skip, park = _route_abstains(abstains)
+    return packets, skip, park
 
 
 def fetch_fye(session, tickers):

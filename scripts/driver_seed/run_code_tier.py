@@ -34,6 +34,33 @@ OUT = 'data/driver_catalog_seed'
 FORMMAP = {'10-K': '10k', '10-Q': '10q', '8-K': '8k'}
 
 
+_TEXT_PARTS_Q = """
+MATCH (r:Report {accessionNo:$accession})-[rel]->(n)
+WHERE type(rel) IN $relationship_types AND n.content IS NOT NULL
+RETURN n.id AS part, n.content AS content
+ORDER BY part
+"""
+
+
+def _fetch_text_parts(session, accession, relationship_types):
+    """Read prose parts in stable source-node-id order, preserving each node."""
+    rows = list(session.run(
+        _TEXT_PARTS_Q, accession=accession,
+        relationship_types=list(relationship_types)))
+    parts, seen = [], set()
+    for row in rows:
+        part, content = row['part'], row['content']
+        if not isinstance(part, str) or not part.strip():
+            raise ValueError('source text node has no stable id')
+        if part in seen:
+            raise ValueError(f'duplicate source text node id: {part}')
+        if not isinstance(content, str):
+            raise ValueError(f'source text node {part} has non-text content')
+        seen.add(part)
+        parts.append({'part': part, 'content': content})
+    return parts
+
+
 def load_env_neo4j():
     for line in open('.env'):
         m = re.match(r'\s*(NEO4J_[A-Z_]+)=(.*)', line)
@@ -125,23 +152,25 @@ def fetch_corpus(session, tk, form, period):
 
 
 def fetch_filing(session, tk, form, period):
-    """The named filing as ONE source event: {source_id, source_type, event_time, doc_url, xbrls, texts}.
+    """The named filing as one event with stable source-owned text parts.
+
     doc_url = the inline-XBRL document, so the locator's exact-cell rung can quote the PRINTED row."""
     rows = list(session.run(
         """MATCH (r:Report {formType:$form})-[:PRIMARY_FILER]->(c:Company {ticker:$tk})
            WHERE r.periodOfReport STARTS WITH $period
            OPTIONAL MATCH (r)-[:HAS_FINANCIAL_STATEMENT]->(f:FinancialStatementContent)
-           OPTIONAL MATCH (r)-[:HAS_SECTION]->(x:ExtractedSectionContent)
            RETURN r.accessionNo AS acc, r.created AS created, r.primaryDocumentUrl AS doc_url,
-                  collect(DISTINCT f.value)   AS xbrls,
-                  collect(DISTINCT x.content) AS texts""",
+                  collect(DISTINCT f.value) AS xbrls""",
         form=form, tk=tk, period=period))
     if not rows or not rows[0]['acc']:
         return None
     r = rows[0]
+    text_parts = _fetch_text_parts(session, r['acc'], ('HAS_SECTION',))
     return {'source_id': r['acc'], 'source_type': FORMMAP.get(form, form), 'event_time': r['created'],
             'doc_url': r['doc_url'],
-            'xbrls': [x for x in r['xbrls'] if x], 'texts': [x for x in r['texts'] if x]}
+            'xbrls': [x for x in r['xbrls'] if x],
+            'texts': [part['content'] for part in text_parts],
+            'text_parts': text_parts}
 
 
 def _corpus_missing_row(it):
@@ -157,8 +186,9 @@ def fetch_earnings_8ks(session, tk, target_acc, as_of=None):
     structured matcher — real period dates + filing-time checks, imported never copied); live
     prediction = quarter_identity, which here contributes ONLY its AUTO_OK trust verdict (labels
     and calculated dates ignored — year-name conventions poisoned every identity join). Accept an
-    8-K iff its matched periodic accession EXACTLY equals the target. For every ACCEPTED accession
-    fetch + DEDUPLICATE all stored text (sections + exhibits + filing text).
+    8-K iff its matched periodic accession EXACTLY equals the target. For every ACCEPTED accession,
+    fetch every stored text node (sections + exhibits + filing text) in source-id order; equal
+    content on different nodes remains separate.
     require_daily_stock=False (documented deviation from the presentation tool): pairing is
     independent of returns availability; the harvest must see EVERY 2.02 8-K.
     Returns (events, uncertain_count, audit): uncertain_count > 0 means the target's expected
@@ -199,20 +229,14 @@ def fetch_earnings_8ks(session, tk, target_acc, as_of=None):
             continue
         if verdict != 'accept':
             continue
-        txt = list(session.run(
-            """MATCH (r:Report {accessionNo:$a})
-               OPTIONAL MATCH (r)-[:HAS_EXHIBIT]->(e:ExhibitContent)
-               OPTIONAL MATCH (r)-[:HAS_SECTION]->(sx:ExtractedSectionContent)
-               OPTIONAL MATCH (r)-[:HAS_FILING_TEXT]->(f:FilingTextContent)
-               RETURN collect(DISTINCT e.content) + collect(DISTINCT sx.content)
-                      + collect(DISTINCT f.content) AS cs""", a=acc8))
-        seen, contents = set(), []
-        for c in (txt[0]['cs'] if txt else []):
-            if c and c not in seen:
-                seen.add(c); contents.append(c)
-        if contents:
+        text_parts = _fetch_text_parts(
+            session, acc8,
+            ('HAS_EXHIBIT', 'HAS_SECTION', 'HAS_FILING_TEXT'))
+        if text_parts:
             events.append({'source_id': acc8, 'source_type': '8k',
-                           'event_time': str(m['filed_8k']), 'xbrls': [], 'texts': contents})
+                           'event_time': str(m['filed_8k']), 'xbrls': [],
+                           'texts': [part['content'] for part in text_parts],
+                           'text_parts': text_parts})
     return events, uncertain, audit
 
 

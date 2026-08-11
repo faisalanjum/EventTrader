@@ -19,6 +19,9 @@ from neo4j import GraphDatabase
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                 'relocate_probe'))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                '..', '..', 'driver', 'relocation'))
+import inline_html as IH
 
 _CACHE = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                       'relocate_probe', 'inline_html_cache')
@@ -110,6 +113,9 @@ def build_source(accession, source_type=None, driver=None):
             return None
     raw = open(path, 'rb').read()
     html = raw.decode('utf-8', errors='replace')
+    prepared = IH.prepare(html)             # THE existing filing-representation owner
+    text_parts = ([] if prepared.get('refused') else
+                  [{'part': accession, 'content': prepared['text']}])
     by_concept = {}
     for r in rows:
         period = ({'instant': r['start']} if r['ptype'] == 'instant'
@@ -124,6 +130,7 @@ def build_source(accession, source_type=None, driver=None):
             'graph_concept_qname': r['graph_concept_qname']})
     return {'source_id': accession, 'source_type': source_type,
             'xbrls': [json.dumps(by_concept)], 'texts': [],
+            'text_parts': text_parts,
             'inline_html': html,
             # THE GRAPH'S STORED FORM, PASSED THROUGH. This stripped the
             # padding off a value the graph holds as exactly ten digits

@@ -9,6 +9,16 @@ sys.path.insert(0, os.path.dirname(__file__))
 import run_code_tier as RC, link_lib as L
 
 
+def _assert_source_parts(source):
+    parts = source["text_parts"]
+    assert parts
+    assert source["texts"] == [part["content"] for part in parts]
+    ids = [part["part"] for part in parts]
+    assert ids == sorted(ids)
+    assert len(ids) == len(set(ids))
+    assert all(isinstance(part["content"], str) for part in parts)
+
+
 def mk_item(kpi, val, fmt='number'):
     return {'ticker': 'TST', 'kpi': kpi, 'value': val, 'fmt': fmt, 'is_currency': 1,
             'period': '2024-12-31', 'form': '10-K', 'section': 'Annual', 'category': 'x'}
@@ -188,6 +198,8 @@ def test_8k_selection_live_aci_aapl_wms():
         raise
     with drv.session() as s:
         events, uncertain, audit = RC.fetch_earnings_8ks(s, 'ACI', '0001646972-25-000052')
+        for event in events:
+            _assert_source_parts(event)
         got = {e['source_id'] for e in events}
         assert '0001646972-25-000040' in got, got         # the TRUE announcer
         assert '0001646972-26-000028' not in got, got     # the FUTURE 8-K stays out
@@ -200,11 +212,15 @@ def test_8k_selection_live_aci_aapl_wms():
         assert not by['0001646972-25-000059']['relevant']
         assert uncertain == 0, (uncertain, [a for a in audit if a['relevant']])
         ev2, _, audit2 = RC.fetch_earnings_8ks(s, 'AAPL', '0000320193-24-000123')
+        for event in ev2:
+            _assert_source_parts(event)
         got2 = [e['source_id'] for e in ev2]
         assert got2 == ['0000320193-24-000120'], got2     # the reviewer-pinned exact selection
         by2 = {a['acc']: a for a in audit2}
         assert by2['0000320193-25-000007']['match'] == '0000320193-25-000008'  # Q1 8-K -> Q1 10-Q
         ev3, _, _ = RC.fetch_earnings_8ks(s, 'WMS', '0001604028-24-000032')
+        for event in ev3:
+            _assert_source_parts(event)
         got3 = {e['source_id'] for e in ev3}
         assert '0001604028-24-000029' in got3, got3       # TRUE quarterly announcer
         assert '0001604028-23-000033' not in got3, got3   # prior-year 8-K rejected
@@ -361,6 +377,7 @@ def test_golden_complete_output_row_live():
                and '"period": "2024-09-28"' in l)
     with drv.session() as s:
         f = RC.fetch_filing(s, 'AAPL', '10-K', '2024-09-28')
+    _assert_source_parts(f)
     rec, _ = RC.resolve_one(row, f, True)
     rec = json.loads(json.dumps(rec))       # the pipeline's own serialization (tuples -> lists)
     assert rec == _GOLDEN_ROW, {k: (rec.get(k), _GOLDEN_ROW.get(k))
