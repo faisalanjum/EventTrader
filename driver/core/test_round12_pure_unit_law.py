@@ -532,10 +532,13 @@ def test_EPS_is_the_SAME_rule_not_a_special_case_FOR_UNIT_BINDING():
     """`iso4217:USDshares` had its own hard-coded row; USD-over-anything covers
     it, so the special case is gone rather than sitting beside the general one.
 
-    SCOPED DELIBERATELY: this is about UNIT BINDING only. The separate `eps`
-    NAMING exception (NAME-13, still an open owner item) is untouched — its
-    check left Core with W3 and moves to the POST per-X naming feature; an
-    approved naming change will arrive on its own, never inferred from this."""
+    SCOPED DELIBERATELY: this is about UNIT BINDING only. The separate NAME-13
+    naming question is no longer open: the owner ruled 2026-08-11 for uniform
+    spell-out, so the `eps` exception is deleted from live law and every stated
+    per-X denominator is written out. That ruling changed law, prompts and
+    records ONLY — this unit-binding behaviour is untouched, its check still
+    left Core with W3 and still belongs to the POST per-X naming feature, and
+    nothing about naming may be inferred from this test."""
     assert (_ISO4217_NS, "USDshares") not in xa_CANDIDATE_EXACT
     assert xa_candidate_units_for((), _exp("iso4217:USD")) == frozenset({"usd"})
 

@@ -105,7 +105,7 @@ OD-19 (§5.4) · OD-20 (§5.4) · OD-21 (§5.1/§6.2/§7) · K2 = fold repair st
 deferred (BUILD §4) · frozen packet v1.0 + Channel Contract v1.0 (boundary files) · Track C full no-replay
 reversal (BUILD §6).
 
-## 4. Owner rulings record (through 2026-07-18)
+## 4. Owner rulings record (through 2026-08-11)
 
 Q1 `company_confirmed`: CORE derives from who-said-it evidence; unclear = SKIP (ruling's own content); `false`
 stays reserved for explicitly-ALLOWED future third-party classes (enabling any class = part-2/news-channel
@@ -193,6 +193,28 @@ on regrade (one exercise failed under the locked no-rescue rule; detail =
 record is preserved unedited beside it). A fresh blank-context rerun is prepared; this obligation is
 DISCHARGED only if `archive/2026-07-15_pre-consolidation/READER_TEST_RECORD_2026-07-22_R8-PER21-run2.md`
 records PASS 10/10 with 7/7 unchanged pins at the commit carrying this sentence.
+
+**2026-08-11 — per-X naming form (NAME-13): UNIFORM SPELL-OUT.** The owner ruled the naming-form
+deferral of 2026-07-25. Both deferred rules are REMOVED from live law: the sole `eps` canonical-name
+exception, and the open-class "familiar acronyms" sentence that let any acronym already carrying its
+denominator keep the short form. (Neither rule is reproduced here: the residue guard requires this
+file to be free of the retired wording, so it is described, never quoted.) Every stated
+business/physical per-X denominator is now
+written out in the canonical Driver name; the families are `earnings_per_share` /
+`_guidance` / `_surprise`, and `dps` resolves to `dividend_per_share`. An acronym whose expansion
+cannot be verified is NOT coined and NOT guessed — the reader skips, and a name↔per_x conflict parks
+at admission (ONE owning component; no interim validator was added). Source quotes are NEVER
+rewritten; `per_x` stays the fact-level signal; the stored unit stays base (`usd`);
+adjusted/basic/diluted stay in measurement (NAME-14 unchanged). Per-X ONLY — NAME-07 familiar
+market/policy names and NAME-08 whole phrases (`ebitda`, `fcf`, `fed_rate`, `cogs`, `rpo`) are
+untouched. The NAME-13 deferral note is superseded and its ⏸ markers are deleted from FINAL_DESIGN
+§3/§10 and the three live prompt rulebooks. Evidence: `experiments/WORKORDER_STATUS.md` 2026-07-25
+pack · EXP-2C 40-chunk replay (zero eps forms emitted, correct spell-out, quotes verbatim) · EXP-2D
+acronym probe (zero acronyms kept as names, unverifiable acronym skipped, ARPA-agency trap passed).
+Guard: `workflows/tests/test_perx_naming_residue.py`. STILL OPEN and deliberately NOT in this batch:
+the EXP-5 item-contract regeneration (`exp5_item_contract.md:127` still serves the old sentence) and
+the launch-manifest re-pin, which belong to the following "Core contract migration + freeze" step —
+K-fields GO#1 stays disabled/unfired until that lands.
 
 ## 5. Signed experiment decisions + remaining gates (authority = signed decision.json artifacts)
 

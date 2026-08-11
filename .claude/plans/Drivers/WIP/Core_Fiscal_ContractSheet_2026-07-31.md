@@ -3,7 +3,7 @@
 One small, diffable sheet. It records what each side owns at the boundary as
 the staged component stands today. **It edits nothing of Fiscal's and nothing
 in `FinalDesign/`**, and it grants no approval: the Fiscal migration, the
-atomic switch and the EPS/per-X naming decision all remain held.
+atomic switch remain held; the EPS/per-X naming decision is RULED (2026-08-11, uniform spell-out).
 
 Derived from the live code at commit `4d473822` plus this task's staged
 changes — every name below is a real symbol, not a description of one.
@@ -118,7 +118,7 @@ An item-local failure never erases a lawful sibling.
 - Fiscal's own mapping onto these keys, and the `source_id` handoff;
 - registering the CLI codes on the live path;
 - deleting v1 (`prepared_fact.py`) and the duplicate rule engine;
-- the Fiscal migration, the atomic switch, and the EPS/per-X naming decision.
+- the Fiscal migration and the atomic switch (the EPS/per-X naming decision is RULED, 2026-08-11: uniform spell-out).
 
 Fiscal receives this sheet after #827 acceptance and before the migration.
 Neither side implements from a partly reviewed draft.

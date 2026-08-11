@@ -105,11 +105,11 @@ def test_G1_converter_api_fence_by_reflection():
 
 
 def test_G1_driver_name_changes_nothing():
-    """`eps_guidance` vs `revenue_guidance` — a lawful pair (NAME-17). The same
-    slot converts identically; the name is not an input."""
+    """`earnings_per_share_guidance` vs `revenue_guidance` — a lawful pair
+    (NAME-17). The same slot converts identically; the name is not an input."""
     s = slot("1.3", "1e9", "billion")
     assert convert_slot("m_usd", s) == Decimal(1300)
-    for name in ("eps_guidance", "revenue_guidance", "revenue_per_region"):
+    for name in ("earnings_per_share_guidance", "revenue_guidance", "revenue_per_region"):
         # revenue_per_region is a LABELLED invalid-name attack (NAME-10): even
         # an unlawful name cannot reach the converter, so it cannot change a value.
         f = money_fact("1.3", "1e9", "billion", driver_name=name)

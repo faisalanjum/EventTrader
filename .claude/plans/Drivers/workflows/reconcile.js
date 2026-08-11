@@ -1,10 +1,3 @@
-// ⏸ OWNER DECISION PENDING (deferred 2026-07-25): this file's embedded rules text contains the
-// "Standard financial acronyms ... keep their familiar name" note (an OPEN CLASS) and the eps
-// exception. Both rules stand UNCHANGED until the owner rules (eps sole-exception vs uniform
-// spell-out; open-class sentence vs frozen single exception). Any bot editing this file: do NOT
-// resolve, extend, or delete either rule — remind the owner a ruling is pending. Evidence:
-// ../experiments/WORKORDER_STATUS.md 2026-07-25 entries. This comment must stay OUTSIDE the
-// emitted prompt strings.
 export const meta = {
   name: 'driver-reconcile',
   description: 'Step 2 reconcile over a per-industry seed catalog (args.run_id = the exact menu_build run; reads runs/<run_id>/seed.json, writes catalog.json + approved.json + decisions.json + validation.txt there): (Dedup) canonical + reversible SAME_AS for exact-same-meaning only = the REUSE arm; (Gate) independent admit/rewrite/skip per the FINAL_DESIGN §3 NAME rules; (Refute) skeptic breaks bad SAME_AS + meaning-changing rewrites; (Assemble) DETERMINISTIC CODE writes the catalog (assemble_catalog.py ports the 5-way precedence; HierarchicalCatalogPlan §11.19 — the writer cannot fabricate a fusion); (Validate) incl. the D1 fusion-approval check. Review-file only; no graph writes; no merges/deletes. Roll-up/rewrite targets must be COINED names.',
@@ -55,7 +48,7 @@ const RULEBOOK = `## Naming rules
 
 #### NAME-08 — Keep standard financial phrases whole  \`[LOCKED]\`
 - **Rule:** \`gross_margin\`, \`free_cash_flow\`, \`net_interest_margin\`, \`same_store_sales\` stay whole.
-- **Note (signed-driver pin — OD-12, owner 2026-07-06 · 66 §0.R OD-12):** a loss/deficit is the NEGATIVE region of the standard signed metric, not a separate cause — coin \`net_income\` / \`operating_margin\` / \`eps\`, never a loss-magnitude driver (\`net_loss\` / \`loss_margin\` / \`loss_per_share\`). The loss is stored as a negative value (09 §3), so two producers can't fork on \`loss_margin=+5\` vs \`operating_margin=−5\`. Consistent with NAME-15 (what-happened / size are not in the name).
+- **Note (signed-driver pin — OD-12, owner 2026-07-06 · 66 §0.R OD-12):** a loss/deficit is the NEGATIVE region of the standard signed metric, not a separate cause — coin \`net_income\` / \`operating_margin\` / \`earnings_per_share\`, never a loss-magnitude driver (\`net_loss\` / \`loss_margin\` / \`loss_per_share\`). The loss is stored as a negative value (09 §3), so two producers can't fork on \`loss_margin=+5\` vs \`operating_margin=−5\`. Consistent with NAME-15 (what-happened / size are not in the name).
 
 #### NAME-09 — One cause per name (split multiples; short; a noun)  \`[LOCKED]\`
 - **Rule:** A name carries exactly one cause. Two+ independent causes → a separate driver each, never bundled (\`asset_impairment_and_lease_termination\` → split). Keep names short; if it takes many words to be specific, it's probably two drivers. Reads as a noun.
@@ -88,10 +81,10 @@ const RULEBOOK = `## Naming rules
 
 #### NAME-13 — Per-X goes in the name (business AND physical)  \`[LOCKED]\`
 - **Rule:** Transcribe whatever per-X the source states — business (\`per_share\`, \`per_square_foot\`) AND physical (\`per_barrel\`, \`per_tonne\`, \`per_hour\`), no judgment. Stated → oil at $80/barrel → \`oil_price_per_barrel\`; not stated → oil rose 8% → \`oil_price\`. Different per-X = a different driver (\`oil_price_per_barrel\` ≠ \`oil_price_per_tonne\`), never same-as. No per-X unit — the unit stays the base (usually \`usd\`/\`count\`).
-- **Note:** Standard financial acronyms that already include the denominator keep their familiar name: \`eps\` is valid and does not need to become \`earnings_per_share\`.
+- **Note:** Write the per-X denominator out in the name: \`EPS\` / "earnings per share" → \`earnings_per_share\`; \`DPS\` → \`dividend_per_share\`. If you cannot verify what a per-X acronym expands to, do not guess — skip that candidate. Per-X only; non-per-X terms (\`ebitda\`, \`free_cash_flow\`, \`fed_rate\`) are unaffected.
 
 #### NAME-14 — The version of a number is NOT in the name  \`[LOCKED]\`
-- **Rule:** The version of a number (adjusted, diluted, basic, constant-currency, core, cash…) goes in the **measurement** slot INSIDE fact_scope — a sibling of the slice, NOT a 7th slice kind. \`adjusted eps\` → name=\`eps\`, measurement=\`{adjusted}\`. Store the specific stated word (case/whitespace/punctuation normalized); default empty (never assume gaap); gaap/non_gaap is a read-time view, never stored. A measurement word re-expresses the SAME quantity through a different lens; a word that changes WHICH portion is counted is never a measurement token — it belongs in the name (OD-17).
+- **Rule:** The version of a number (adjusted, diluted, basic, constant-currency, core, cash…) goes in the **measurement** slot INSIDE fact_scope — a sibling of the slice, NOT a 7th slice kind. \`adjusted EPS\` → name=\`earnings_per_share\`, measurement=\`{adjusted}\`. Store the specific stated word (case/whitespace/punctuation normalized); default empty (never assume gaap); gaap/non_gaap is a read-time view, never stored. A measurement word re-expresses the SAME quantity through a different lens; a word that changes WHICH portion is counted is never a measurement token — it belongs in the name (OD-17).
 
 #### NAME-15 — What's kept OUT of the name  \`[LOCKED]\`
 - **Rule:** Out of the name → into other fields: direction/impact (→ verdict), what-happened (→ driver_state), date/period (→ DriverPeriod), company (→ linked company), units & size (→ number fields), raw quote (→ quote). The name is only the cause.
@@ -115,7 +108,7 @@ const RULEBOOK = `## Naming rules
 ### D. Family, gate & meta
 
 #### NAME-17 — Metric-family suffix stays in the name  \`[LOCKED]\`
-- **Rule:** Name metric + mechanism: \`{metric}_surprise\` (a delivered actual OR a promised guide compared with a cross-party expectation; ONE surprise driver holds all three surprise types: actual_vs_consensus, actual_vs_guidance, guidance_vs_consensus — OD-21, synced 2026-07-16), \`{metric}_guidance\` (forward outlook) — \`eps_surprise\`, \`revenue_guidance\`. Suffix stays in the name AND fact_type is a separate permanent field. The base \`{metric}\` is a separate driver linked by \`BASE_METRIC\` (never same-as). Beat/miss/raised → driver_state, never the name.
+- **Rule:** Name metric + mechanism: \`{metric}_surprise\` (a delivered actual OR a promised guide compared with a cross-party expectation; ONE surprise driver holds all three surprise types: actual_vs_consensus, actual_vs_guidance, guidance_vs_consensus — OD-21, synced 2026-07-16), \`{metric}_guidance\` (forward outlook) — \`earnings_per_share_surprise\`, \`revenue_guidance\`. Suffix stays in the name AND fact_type is a separate permanent field. The base \`{metric}\` is a separate driver linked by \`BASE_METRIC\` (never same-as). Beat/miss/raised → driver_state, never the name.
 
 #### NAME-18 — The new-driver gate  \`[LOCKED]\`
 - **Rule:** Propose a new driver only when ALL hold: (a) no existing name means the same cause; (b) it satisfies every naming rule; (c) each important noun comes from the source or an existing driver; (d) it's attached to ≥1 causal claim with real evidence; (e) it's a reusable CLASS, not bound to a single instance (\`government_shutdown\` OK even once; \`q1_2026_shutdown_effect\` rejected); (f) if the rules leave >1 candidate name → reject as ambiguous; (g) if the evidence is vague or names no reusable cause → skip, never invent.

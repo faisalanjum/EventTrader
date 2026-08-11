@@ -188,7 +188,11 @@ def _real_store_and_provider():
     ("us-gaap:CommonStockSharesIssued", "count",
      "shares_outstanding", None, "shares"),
     # a per-share fact: the denominator lives in the NAME and the value keeps
-    # the base unit (NAME-13); `eps` is the familiar exception in live law.
+    # the base unit (NAME-13). Live law is now UNIFORM — every stated per-X
+    # denominator is written out (`earnings_per_share`), with no acronym
+    # exception. The name below is arbitrary for THIS test: it binds an XBRL
+    # concept to a unit and is name-opaque, so the fixture spelling carries no
+    # naming claim and is deliberately left as recorded.
     ("us-gaap:EarningsPerShareBasic", "usd", "eps", "share", "EPS (USD/share)"),
 ])
 def test_real_USD_shares_and_EPS_through_the_COMPLETE_core_path(

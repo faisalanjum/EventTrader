@@ -169,10 +169,12 @@ catalog; within YOUR answer, one meaning gets exactly ONE name.
    population; a vendor is never a slice.
 5. A stated business/physical per-something denominator goes BOTH into
    `per_x` (Rule 5a) AND into the name (`oil_price_per_barrel`); never
-   invent one; different denominators are different drivers. Standard
-   financial acronyms that already include the denominator keep their
-   familiar name: `eps` stays `eps` and does not need to become
-   `earnings_per_share`.
+   invent one; different denominators are different drivers. Write the
+   per-X denominator out in the name: `EPS` / "earnings per share" →
+   `earnings_per_share`; `DPS` → `dividend_per_share`. If you cannot verify
+   what a per-X acronym expands to, do not guess — skip that candidate.
+   Per-X only; non-per-X terms (`ebitda`, `free_cash_flow`, `fed_rate`) are
+   unaffected.
 6. Measurement versions (adjusted, diluted, constant currency) →
    `measurement_raw_spans` (Rule 8), never the name.
 7. A terminal `_guidance` or `_surprise` may end a name; it also fixes the
@@ -186,7 +188,7 @@ catalog; within YOUR answer, one meaning gets exactly ONE name.
    real metric fact.
 9. Keep standard financial phrases whole: a loss, deficit, or negative
    margin is the negative region of `net_income` / `operating_margin` /
-   `eps` — never a separate loss driver.
+   `earnings_per_share` — never a separate loss driver.
 10. NEVER in a name: state/direction/polarity words; motion or change nouns
     (growth, decline); the company itself or co-mentioned entities; period
     words; numbers, sizes, bare units; source-type, vendor, or filing-
@@ -744,10 +746,10 @@ owner approval)
 | F13 | Rule-2 restatement sign-off | the locked lane definitions appear in A2 with internal labels removed; removals: the "(OD-21)" tag, the storage-slot reference, the validation-provenance sentence; meaning deltas NONE; original stands in FINAL_DESIGN §4.1 for side-by-side review [disposition=package] |
 | F14 | FINAL_DESIGN.md:107 — the verbatim lock | **OWNER-APPROVED 2026-07-26 (form O3; EXPERIMENT-SPECIFIC — the reader-facing card only, law text unchanged):** the reader-facing restatement removes ONLY plumbing labels (DU-05/06 names, the OD-21 tag, the validation-provenance sentence) and typography; the terminal `_guidance`/`_surprise` suffix notation AND the three comparison-type names are RETAINED (the two meaning-adjacent deltas repaired before approval). The locked text remains the meaning authority; DU-07 unchanged LANDED (SEQ 905): HEAD already carries this amendment once at FINAL_DESIGN.md:107, so the edit was spent and re-applying it emitted a duplicate; proof moved to test_rev4_gate.COMMITTED. [disposition=implementation] |
 
-Deferral markers stand: the eps/acronym naming questions remain OPEN with
-their ⏸ markers (FINAL_DESIGN NAME-13 + §10 OPEN · three workflow builders
-· this package) — nothing in this revision resolves, extends, or deletes
-either rule.
+RULED 2026-08-11 (owner): uniform spell-out. Every stated per-X denominator
+is written out (`earnings_per_share`); the `eps` sole-exception and the
+open-class "familiar acronyms" sentence are both DELETED from live law, the
+three workflow builders, and this package, and their ⏸ markers are removed.
 
 ---
 
@@ -756,14 +758,14 @@ prompt and the GENERATED launcher, never source fragments)
 
 | # | proof |
 |---|---|
-| G1 | Converter API fence (no name/quote/qname/raw-text parameter, by reflection) + end-to-end: changing `driver_name` changes no unit and no value (`eps_guidance` vs `revenue_guidance` lawful pair; `revenue_per_region` ONLY as a labelled invalid-name attack) |
+| G1 | Converter API fence (no name/quote/qname/raw-text parameter, by reflection) + end-to-end: changing `driver_name` changes no unit and no value (`earnings_per_share_guidance` vs `revenue_guidance` lawful pair; `revenue_per_region` ONLY as a labelled invalid-name attack) |
 | G2 | Quote and concept-name changes cannot alter any converted value |
 | G3 | All five percent-family units distinct; multiplier ≠ 1 on any percent/x slot parks |
 | G4 | Scale via model-stated multiplier: {1.3, 1e9} → 1300 m_usd · {363, 1e6} → 363 m_usd (mixed-scale comparison in ONE fact) · {800, 1e6} low with {1.2, 1e9} high (mixed-scale range) · {850000, 1} → 0.85 m_usd (plain dollars) · {85, 0.01} → 0.85 usd (cents) · {1.2, 1e12} → 1,200,000 m_usd · signed loss {-0.10, 1} round-trips |
 | G5 | Structure: missing multiplier/value in a populated slot fails; negative/zero/non-finite multiplier fails; numberless slot must be null (an all-null object fails) |
 | G6 | Evidence: non-null evidence absent from the quote → fail; evidence null with multiplier ≠ 1 → fail; the WRONG scale word elsewhere in the same part but outside the quote → fail (the 33/134 both-words parts corpus is the fixture source); table-header/footnote scales via quote-extension pass; word-number evidence ("forty-two million") passes |
 | G7 | Unknown units: the multiplier STILL applies (magnitude preserved — EUR 1.3 billion vs EUR 363 million never becomes 1.3 vs 363), only the unit stays `unknown`; non-USD stated as m_usd = model error caught by grading fixtures, never by a code currency list; unfamiliar scale words never invent a multiplier (there is no tokenizer to invent one) |
-| G8 | per_x: emitted once at fact level; joins the auto-link equality; name↔per_x conflict parks at admission; `eps` + per_x="share" lawful; per-X/name disagreement attack |
+| G8 | per_x: emitted once at fact level; joins the auto-link equality; name↔per_x conflict parks at admission; `eps` + per_x="share" is a non-canonical variant, `earnings_per_share` + per_x="share" is the lawful form; per-X/name disagreement attack |
 | G9 | Scorer ≡ run_event: byte-identical canonical values (same function) |
 | G10 | Matching: gold-dup INCONCLUSIVE before dedup; produced-dup collapse recorded; same-span different-fact never auto-links; full input-order permutation; ALL unmatched reach grading (no filter); invalid/duplicate rulings → group INCONCLUSIVE; missing locator = validation failure |
 | G11 | Occurrence: code-verified against the part text (null iff unique; k ≤ count); a fabricated locator fails structurally |
@@ -796,7 +798,7 @@ prompt and the GENERATED launcher, never source fragments)
 
 ## PART H — EXPECTED BEHAVIOR CHANGES
 
-1. `eps`-named per-share facts stop parking (lawful; wrongly parked today).
+1. Canonical `earnings_per_share`-family per-share facts stop parking (lawful; wrongly parked today).
 2. Billion-scale values over 999 stop parking on the Driver path (lawful).
 3. Unit outcomes independent of naming/quotes/qnames — the reproduced
    million-fold grading error class is structurally impossible.
@@ -817,14 +819,16 @@ deliberately NOT a scanner)
 
 | name | verdict |
 |---|---|
-| revenue · eps_guidance · revenue_guidance · oil_price_per_barrel · earnings_per_share · bookings_guidance · fed_rate · pricing · operating_margin · net_income · product_returns | LAWFUL |
+| revenue · earnings_per_share_guidance · revenue_guidance · oil_price_per_barrel · earnings_per_share · bookings_guidance · fed_rate · pricing · operating_margin · net_income · product_returns | LAWFUL |
 | dividend_per_share (spelling chosen at admission; variants merge) | LAWFUL FORM |
 | eps_growth · revenue_growth · buyback_guidance | UNLAWFUL (motion nouns · action base) |
-| dps | **DEFERRED — NOT SCORED**: whether the acronym class beyond `eps` is lawful IS the owner's open question (⏸ NAME-13 / §10 OPEN); this package rules on it in NEITHER direction |
+| dps | LAWFUL as `dividend_per_share` — RULED 2026-08-11: a per-X acronym whose expansion is certain resolves to its written-out canonical form |
 | revenue_per_region | UNLAWFUL — kept ONLY as the labelled G1 attack input |
 
-`eps`/`eps_guidance`/`eps_surprise` remain valid; the wider eps/acronym
-questions stay DEFERRED (markers untouched).
+SUPERSEDED 2026-08-11: the canonical family is
+`earnings_per_share`/`earnings_per_share_guidance`/`earnings_per_share_surprise`;
+the `eps` spellings are non-canonical variants, and the wider acronym question
+is RULED (uniform spell-out), not deferred.
 
 ---
 
@@ -1206,7 +1210,7 @@ Counts: 188 total = change 68 · change-at-O-f 5 · history-only 10 · no-change
 | A3 | WorkOrder v2.2-rev4 amendment block | PENDING owner |
 | A4 | Matching law (Part D) | PENDING owner |
 | A5 | 999-guard removal, new Driver path only | PENDING owner |
-| A6 | eps lint conformance (NAME-13) | PENDING owner |
+| A6 | eps lint conformance (NAME-13) | RULED 2026-08-11 — uniform spell-out |
 | O-a | Packet re-freeze v2.0 + sha re-pin sweep | drafting-approved; final sign-off PENDING |
 | O-b | Plan versioned successor (self-contained v2; v1 preserved) | drafting-approved; final sign-off PENDING |
 | O-c | Scoring-bar field-group restatement (thresholds unchanged) | drafting-approved; final sign-off PENDING |
@@ -1214,7 +1218,7 @@ Counts: 188 total = change 68 · change-at-O-f 5 · history-only 10 · no-change
 | O-e | Occurrence supersession, narrow scope | drafting-approved; final sign-off PENDING |
 | O-f | Fiscal's four derived hint fields removed atomically after the boundary proof | recommended; final sign-off PENDING |
 | F14 | Lane-definition restatement, form O3, experiment-specific | **OWNER-APPROVED 2026-07-26** |
-| — | eps/acronym naming questions | **DEFERRED by owner** (markers standing) |
+| — | eps/acronym naming questions | **RULED by owner 2026-08-11** (uniform spell-out; markers removed) |
 
 STATUS 2026-07-26, amended 2026-07-30 (CORRECTED TWICE. The first version of
 this note OVERSTATED readiness. The correction then declared the whole G range
