@@ -213,8 +213,38 @@ pack · EXP-2C 40-chunk replay (zero eps forms emitted, correct spell-out, quote
 acronym probe (zero acronyms kept as names, unverifiable acronym skipped, ARPA-agency trap passed).
 Guard: `workflows/tests/test_perx_naming_residue.py`. STILL OPEN and deliberately NOT in this batch:
 the EXP-5 item-contract regeneration (`exp5_item_contract.md:127` still serves the old sentence) and
-the launch-manifest re-pin, which belong to the following "Core contract migration + freeze" step —
-K-fields GO#1 stays disabled/unfired until that lands.
+the launch-manifest re-pin. CORRECTED 2026-08-11 (reviewer SEQ 957/959): these do NOT belong to the
+Core contract-freeze step. The WHOLE EXP-5 bundle — contract, both manifests, launcher template and
+assembled launcher, `kf_lint.py`, `protocol.md` — is SWITCH-GATED, because its checker and
+instructions are still V1 and a V2 launcher with V1 consumers is invalid. G12 stays `gated-switch`.
+K-fields GO#1 stays disabled/unfired until the atomic switch lands.
+
+**2026-08-11 — STAGED CORE V2 PUBLIC CHANNEL CONTRACT FROZEN (not live).**
+`FinalDesign/ChannelContractV2.md` sha256 `d8c3af40455376a03c2803f61aae1be92f545a7980880c9a77c4a3c017b3173b`.
+The separately versioned V2 PUBLIC contract governing every channel; Fiscal is the first
+staged consumer. It publishes the full three-stage flow: Stage A the CHANNEL RAW EVENT
+(envelope, text_parts supplied once, raw items, the XBRL bundle, and the four RETIRED
+Fiscal-authored fields that are never accepted or defaulted); Stage B reader/Core
+preparation; Stage C outcomes. DIMENSIONS ARE TWO STAGES, never one: the PUBLIC raw
+`xbrl.dimensions` entry is exactly {axis, member} and the channel never invents
+`slice_part`; only the INTERNAL `member_refs` triple carries it, derived by Core. The
+Stage-A raw fields are NOT mechanically compared to code — that boundary is unbuilt, so
+they are owned by this hash freeze and reviewer approval until Fiscal writes its own
+boundary tests. The exact first-consumer raw profile is PUBLISHED as the
+`staged_raw_channel` object inside the single CONTRACT-SURFACES block (event, text-part,
+item, xbrl, nested `ix`, dimension and retired-field spellings, plus the unchanged
+source_type vocabulary), and the never-send / source-completeness duties are retained. It is STAGED, not live: `ChannelContract.md` (v1.0) remains the live public
+authority and `15_CandidateFactPacket.md` remains the live INTERNAL packet law — both
+byte-identical, as are all their pins and the whole switch-gated EXP-5 bundle.
+The freeze is ENFORCEABLE, not prose: `driver/core/test_v2_attacks.py` compares every CURRENT
+CODE-OWNED surface to its existing code owner AND proves this sha256 equals the
+document's real bytes, so a silent edit to either side fails.
+PROMOTION RULE — at the atomic V1->V2 switch, in ONE batch: this document is PROMOTED to
+`ChannelContract.md`; `15_CandidateFactPacket.md` is SEPARATELY re-frozen to its own V2
+packet law (a distinct internal contract, never a copy of this public one); every `aa7239ed`
+pin is re-pinned; the EXP-5 bundle regenerates off live law; G12 moves gated-switch -> code;
+the NAME-13 residue guard's held assertion flips to zero; and `ChannelContractV2.md` IS
+DELETED. Nothing was activated, written, fetched or run by this freeze.
 
 ## 5. Signed experiment decisions + remaining gates (authority = signed decision.json artifacts)
 

@@ -1462,3 +1462,121 @@ def test_W9_the_verified_bundle_boundary_is_static_and_singular():
     import inspect
     src = inspect.getsource(p2)
     assert "_ATTACH_TOKEN" not in src and "_attach_token" not in src
+
+
+# --------------------------------------------- STAGED V2 PUBLIC CONTRACT ----
+# The staged Core V2 public contract for Fiscal (owner-authorized 2026-08-11,
+# reviewer SEQ 958). V1 is LIVE, so the V2 contract is a SEPARATELY VERSIONED,
+# STAGED document that must never be mistaken for live law, and it is DELETED at
+# the atomic switch. These two tests are why that document cannot quietly drift:
+# every CURRENT CODE-OWNED surface it publishes is compared to ITS EXISTING
+# OWNER, and its frozen hash is checked against the real bytes. The staged raw
+# channel profile is hash-frozen only — Fiscal's later boundary tests consume it. No second code constant was
+# created to make this easier — each expected value is read from the module that
+# already owns it.
+_V2_STAGED_HEADER = "STAGED — NOT LIVE UNTIL THE ATOMIC V1->V2 SWITCH"
+
+
+def _v2_paths():
+    import os
+    # driver/core/<this file> -> driver/core -> driver -> REPO ROOT (three levels;
+    # two landed inside driver/ and looked for the plans tree there)
+    root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    fd = os.path.join(root, ".claude", "plans", "Drivers", "FinalDesign")
+    return (os.path.join(fd, "ChannelContractV2.md"),
+            os.path.join(fd, "STATUS_AND_HISTORY.md"))
+
+
+def _v2_contract_bytes():
+    import os
+    contract, _ = _v2_paths()
+    assert os.path.exists(contract), f"the staged V2 contract is missing: {contract}"
+    return open(contract, "rb").read()
+
+
+def _v2_contract_block(text):
+    """The ONE machine-readable block, parsed with json.loads — no parser, no
+    framework, no generator: a fenced block labelled CONTRACT-SURFACES."""
+    import json
+    marker = "```json CONTRACT-SURFACES"
+    assert text.count(marker) == 1, (
+        f"there must be exactly ONE CONTRACT-SURFACES block, found "
+        f"{text.count(marker)} — two blocks means two contracts")
+    i = text.find(marker)
+    j = text.find("```", i + len(marker))
+    assert j > i, "the CONTRACT-SURFACES block is unterminated"
+    return json.loads(text[i + len(marker):j])
+
+
+def test_the_staged_V2_contract_matches_every_live_V2_owner():
+    """Each CURRENT CODE-OWNED surface the staged contract publishes is compared
+    to the module that ALREADY owns it. Add or remove a V2 field without updating
+    the contract in the same breath and this fails. The staged raw channel
+    profile is deliberately NOT compared here — it is hash-frozen."""
+    import inspect
+    from driver.core import slot_convert as sc
+    from driver.relocation import inline_html as ih
+
+    text = _v2_contract_bytes().decode("utf-8")
+    assert _V2_STAGED_HEADER in text, "the staged header is missing"
+    b = dict(_v2_contract_block(text))
+    # The staged RAW channel profile is owned by the hash freeze, not by code:
+    # that boundary is unbuilt, so comparing it here would be pretending.
+    raw = b.pop("staged_raw_channel", None)
+    assert isinstance(raw, dict) and raw, (
+        "the contract must publish a non-empty staged_raw_channel profile")
+
+    expected = {
+        "fact_keys": list(p2.PreparedFactV2._FACT_KEYS),
+        "item_fields": list(p2.ITEM_FIELDS),
+        "source_owned_fields": list(p2.SOURCE_OWNED_FIELDS),
+        "run_input_fields": list(p2.RunInputV2.__dataclass_fields__),
+        "slot_keys": list(sc.SLOT_KEYS),
+        "canonical_units": list(sc.CANONICAL_UNITS),
+        "xbrl_attach_exports": list(xa.__all__),
+        "attach_event_xbrl_signature": str(inspect.signature(xa.attach_event_xbrl)),
+        "prepared_fact_v2_from_dict_signature":
+            str(inspect.signature(p2.PreparedFactV2.from_dict)),
+        "run_input_v2_from_dict_signature":
+            str(inspect.signature(p2.RunInputV2.from_dict)),
+        "validate_via_production_signature":
+            str(inspect.signature(p2.validate_via_production)),
+        "verify_occurrence_signature":
+            str(inspect.signature(p2.verify_occurrence)),
+        # compared to a REAL row, not to a hand-listed tuple
+        "preflight_outcome_row_fields":
+            list(xa._outcome_row(0, p2.SchemaError("probe"))),
+        "event_item_keys": list(xa._EVENT_ITEM_KEYS),
+        "text_part_keys": list(xa._TEXT_PART_KEYS),
+        "attach_result_fields": list(xa.AttachResult._fields),
+        "public_decisions": list(xa.PUBLIC_DECISIONS),
+        "source_evidence_keys": list(ih.SOURCE_EVIDENCE_KEYS),
+        "piece_keys": list(ih.PIECE_KEYS),
+        "piece_kinds": list(ih.PIECE_KINDS),
+        "outcome_classes": {k.__name__: v for k, v in p2.OUTCOME_CLASSES.items()},
+    }
+    assert set(b) == set(expected), (
+        f"only-in-contract={sorted(set(b) - set(expected))} "
+        f"only-in-code={sorted(set(expected) - set(b))}")
+    for name, want in sorted(expected.items()):
+        assert b[name] == want, f"{name}: contract says {b[name]!r}, owner says {want!r}"
+
+
+def test_the_staged_V2_contract_hash_is_FROZEN_in_the_history_record():
+    """A prose hash nobody checks is not a freeze. The dated STATUS row must
+    carry the EXACT sha256 of the contract bytes on disk."""
+    import hashlib, re
+    _, status_path = _v2_paths()
+    digest = hashlib.sha256(_v2_contract_bytes()).hexdigest()
+    status = open(status_path, encoding="utf-8").read()
+    blocks = [b for b in status.split("\n\n") if "ChannelContractV2.md" in b]
+    assert len(blocks) == 1, (
+        f"there must be exactly ONE dated staged-freeze block for "
+        f"ChannelContractV2.md, found {len(blocks)} — two records drift apart")
+    hexes = re.findall(r"\b[0-9a-f]{64}\b", blocks[0])
+    assert len(hexes) == 1, (
+        f"the freeze block must carry exactly ONE 64-hex hash, found "
+        f"{len(hexes)}: {hexes}")
+    assert hexes[0] == digest, (
+        f"the freeze block hash is not the contract's real sha256.\n"
+        f"  on disk: {digest}\n  in block: {hexes[0]}")
