@@ -1,0 +1,77 @@
+{
+ "AMAT": {
+  "semiconductorsystems": "SemiconductorSystems",
+  "display": "Display",
+  "appliedglobalservices": "AppliedGlobalServices",
+  "displayandadjacentmarkets": "Display",
+  "dynamicrandomaccessmemory": "SemiconductorSystems",
+  "flashmemory": "SemiconductorSystems",
+  "foundrylogicandother": "SemiconductorSystems"
+ },
+ "BA": {
+  "commercialairplanes": "CommercialAirplanesSegment",
+  "defensespaceandsecurity": "DefenseSpaceAndSecuritySegment",
+  "globalservices": "GlobalServicesSegment"
+ },
+ "DOV": {
+  "engineeredproducts": "EngineeredProductsSegment",
+  "climatesustainabilitytechnologies": "ClimateSustainabilityTechnologiesSegment",
+  "imagingidentification": "ImagingIdentificationSegment",
+  "pumpsprocesssolutions": "PumpsProcessSolutionsSegment",
+  "cleanenergyfueling": "CleanEnergyFuelingSegment"
+ },
+ "EFX": {
+  "workforcesolutions": "WorkforceSolutions",
+  "usinformationsolutions": "USInformationSolutions",
+  "international": "International",
+  "workforce": "WorkforceSolutions",
+  "employerservices": "WorkforceSolutions",
+  "verificationservices": "WorkforceSolutions",
+  "onlineinformationsolutions": "USInformationSolutions",
+  "mortgagesolutions": "USInformationSolutions",
+  "financialmarketingservices": "USInformationSolutions"
+ },
+ "MDT": {
+  "diabetesoperatingunit": "DiabetesOperatingUnit",
+  "cardiovascular": "Cardiovascular",
+  "neurosciencegroup": "NeuroscienceGroup",
+  "medicalsurgical": "MedicalSurgical",
+  "medicalsurgicalportfolio": "MedicalSurgical",
+  "diabetesgroup": "DiabetesOperatingUnit",
+  "neuroscienceportfolio": "NeuroscienceGroup"
+ },
+ "MTCH": {
+  "mgasia": "MGAsiaSegment",
+  "hinge": "HingeSegment",
+  "evergreenandemerging": "EvergreenAndEmergingSegment",
+  "tinder": "TinderSegment"
+ },
+ "PSX": {
+  "marketingandspecialties": "MarketingAndSpecialties",
+  "refining": "RefiningSegment",
+  "midstream": "MidstreamSegment",
+  "chemicals": "ChemicalsSegment",
+  "renewablefuels": "RenewableFuels"
+ },
+ "QCOM": {
+  "qtl": "Qtl",
+  "qct": "Qct",
+  "qsi": "Qsi",
+  "automotive": "Qct",
+  "handsets": "Qct",
+  "iot": "Qct",
+  "mobilehandsets": "Qct"
+ },
+ "SBUX": {
+  "channeldevelopment": "ChannelDevelopment",
+  "international": "InternationalSegment",
+  "northamerica": "NorthAmericaSegment"
+ },
+ "WGO": {
+  "towablerv": "TowableRVSegment",
+  "marine": "MarineSegment",
+  "motorhomerv": "MotorhomeRVSegment",
+  "motorhome": "MotorhomeRVSegment",
+  "towable": "TowableRVSegment"
+ }
+}

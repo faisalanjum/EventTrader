@@ -28,9 +28,17 @@ GRAPH_DIM_FIELDS = ("axis", "member", "label",
 # EU-007 (#827): THE GRAPH STORED-SPELLING CLAUSE. The tuples above name the
 # COLUMNS; this names how the graph SPELLS the values inside them, resolved
 # here at the F7 boundary owner so neither side restates it:
-#   value      — the frozen canonical lexical contract: the grouped string
-#                ("4,824,698,000"); "0"/"-0" is the ONE lawful two-spelling
-#                pair (SEQ 268); an ungrouped "726000000" is outside it.
+#   value      — the writer EMITS the grouped string ("4,824,698,000"), and
+#                "0"/"-0" is the ONE lawful two-spelling pair (SEQ 268). That
+#                is what the graph STORES; it is NOT a reader-side rejection
+#                authority. The reader's lexical owner is XSD decimal, reused
+#                through Arelle's pinned decimalPattern — there is no
+#                project-authored production regex — so ungrouped "726000000",
+#                "+1234" and "01234" are LAWFUL input. A comma-bearing
+#                spelling is outside XSD and is admitted only when it
+#                round-trips exactly through the runtime's canonical grouped
+#                formatting at the input's stated precision.
+#                (EU-007 corrected by GRAPH-DECIMAL, #827.)
 #   is_divide  — EXACTLY the strings '0' and '1'
 #                (exact_numbers.ROUTE_A_BOOLS); Python ints and bools are
 #                not graph spellings and abstain everywhere.

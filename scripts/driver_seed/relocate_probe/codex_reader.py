@@ -60,6 +60,13 @@ def parse_json(text):
         return None
 
 
+# USER RULE (P0 2026-07-14): OpenAI ONLY via the Codex/ChatGPT SUBSCRIPTION, NEVER the metered API.
+# codex CLI auth_mode=chatgpt already rides the subscription; this strips any stray OPENAI_API_KEY from
+# the child env so an errant key can never flip a call onto API billing (fail-closed, mirrors the
+# ANTHROPIC_API_KEY guard in scripts/earnings/earnings_orchestrator.py).
+SUB_ENV = {k: v for k, v in os.environ.items() if k not in ('OPENAI_API_KEY', 'OPENAI_BASE_URL')}
+
+
 def run_gid(gdir, odir, g, model, schema_path):
     dst = f'{odir}/gbatch_{g}.json'
     if os.path.exists(dst):
@@ -69,10 +76,11 @@ def run_gid(gdir, odir, g, model, schema_path):
         with tempfile.NamedTemporaryFile('r', suffix='.txt', delete=False) as lm:
             pass
         r = subprocess.run(
-            ['codex', 'exec', '-m', model, '--sandbox', 'read-only', '--ephemeral',
+            ['codex', 'exec', '-m', model, '-c', 'preferred_auth_method="chatgpt"',
+             '--sandbox', 'read-only', '--ephemeral',
              '--skip-git-repo-check', '--output-schema', schema_path,
              '-o', lm.name, prompt + ('' if not attempt else '\nReturn ONLY the JSON object.')],
-            capture_output=True, text=True, timeout=1200, cwd=HERE)
+            capture_output=True, text=True, timeout=1200, cwd=HERE, env=SUB_ENV)
         out = parse_json(open(lm.name).read() if os.path.exists(lm.name) else '')
         os.unlink(lm.name)
         if out:

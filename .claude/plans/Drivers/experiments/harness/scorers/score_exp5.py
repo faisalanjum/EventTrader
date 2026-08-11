@@ -224,9 +224,19 @@ def _shape_pair(item):
     return (lo, hi) if (lo or hi) else None
 
 
+# THE ORACLE'S OWN NAME-17 SPELLINGS (FINAL_DESIGN NAME-17: terminal
+# `_guidance` / `_surprise`; strip once). INDEPENDENT COPY on purpose —
+# this scorer grades production, so it must never import the production
+# splitter: a shared defect would deform both sides identically and
+# false-green exactly when the scorer must fail.
+_ORACLE_SURPRISE_SUFFIX = "_surprise"
+_ORACLE_GUIDANCE_SUFFIX = "_guidance"
+
+
 def _base_driver(name):
     name = name if isinstance(name, str) else ""
-    return name[:-len("_surprise")] if name.endswith("_surprise") else name
+    return (name[:-len(_ORACLE_SURPRISE_SUFFIX)]
+            if name.endswith(_ORACLE_SURPRISE_SUFFIX) else name)
 
 
 def _resolved_period(item, lane, fye):
@@ -393,11 +403,16 @@ def _home_ok(sp, produced, fye):
     if not base or s_pid is None:
         return False                      # an unresolvable period never matches
     s_pair = _shape_pair(s_item)
+    # FINAL_DESIGN:153 — the guidance-basis home is base + `_guidance`;
+    # the actual-basis home is the base metric itself. Depends only on
+    # base and basis, so it is computed once, outside the candidate loop.
+    expected_home = (base + _ORACLE_GUIDANCE_SUFFIX
+                     if basis == "guidance" else base)
     for h in produced:
         if h is sp or h.get("lane") != home_lane:
             continue
         h_item = _item(h)
-        if _base_driver(h_item.get("driver_name")) != base:
+        if h_item.get("driver_name") != expected_home:
             continue
         h_pid = _resolved_period(h_item, home_lane, fye)
         if h_pid is None or h_pid != s_pid:

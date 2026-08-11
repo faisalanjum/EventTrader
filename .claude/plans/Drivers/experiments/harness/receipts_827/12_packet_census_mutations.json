@@ -1,0 +1,106 @@
+{
+ "method": "the REAL census over COPIES of the real packets; the live packets are never edited; a clean control must report zero problems first; MUST-ALLOW cases prove the census does not over-reject what production emits",
+ "problems": [],
+ "receipt": "#827 round 3 \u2014 packet-census mutation proof",
+ "results": [
+  {
+   "phase": "clean control",
+   "problems": [],
+   "rc": 0
+  },
+  {
+   "caught": true,
+   "name": "MUST-CATCH  a whole packet file deleted from the input set",
+   "phase": "case",
+   "problem_count": 1,
+   "problems": [
+    "the examined input is not the pinned one: {'packet_files': 6, 'events': 99, 'items': 560, 'items_with_source_evidence': 11, 'filings_required': 4} != {'packet_files': 7, 'events': 136, 'items': 743, 'items_with_source_evidence': 11, 'filings_required': 4} \u2014 a census over a different corpus proves nothing about this one"
+   ],
+   "rc": 1
+  },
+  {
+   "items_mutated": 2,
+   "must_catch": false,
+   "name": "MUST-ALLOW  a quote that lawfully occurs TWICE in the filing",
+   "ok": true,
+   "phase": "case",
+   "problem_count": 0,
+   "problems": [],
+   "rc": 0
+  },
+  {
+   "items_mutated": 1,
+   "must_catch": true,
+   "name": "MUST-CATCH  a duplicated evidence piece (same span)",
+   "ok": true,
+   "phase": "case",
+   "problem_count": 1,
+   "problems": [
+    "0001646972-23-000045#0: 1 evidence piece(s) repeat an earlier (kind, span) \u2014 the same address twice is not additional evidence"
+   ],
+   "rc": 1
+  },
+  {
+   "items_mutated": 11,
+   "must_catch": true,
+   "name": "MUST-CATCH  every raw_label_span removed",
+   "ok": true,
+   "phase": "case",
+   "problem_count": 11,
+   "problems": [
+    "0001646972-23-000045#0: the item claims a raw_label_or_claim but the evidence carries NO raw_label_span, so the label is unbacked",
+    "0001646972-23-000045#1: the item claims a raw_label_or_claim but the evidence carries NO raw_label_span, so the label is unbacked"
+   ],
+   "rc": 1
+  },
+  {
+   "items_mutated": 1,
+   "must_catch": true,
+   "name": "MUST-CATCH  a quote span shifted by one",
+   "ok": true,
+   "phase": "case",
+   "problem_count": 3,
+   "problems": [
+    "0001646972-23-000045#0: the quote_span text does NOT EQUAL the item's own quote \u2014 the evidence describes a different row",
+    "0001646972-23-000045#0: the raw label span is NOT inside the quote span"
+   ],
+   "rc": 1
+  },
+  {
+   "items_mutated": 1,
+   "must_catch": true,
+   "name": "MUST-CATCH  the item's own quote swapped for another row's",
+   "ok": true,
+   "phase": "case",
+   "problem_count": 1,
+   "problems": [
+    "0001646972-23-000045#0: the quote_span text does NOT EQUAL the item's own quote \u2014 the evidence describes a different row"
+   ],
+   "rc": 1
+  },
+  {
+   "items_mutated": 1,
+   "must_catch": true,
+   "name": "MUST-CATCH  a corrupted representation_sha256",
+   "ok": true,
+   "phase": "case",
+   "problem_count": 1,
+   "problems": [
+    "0001646972-23-000045#0: representation_sha256 does not match the prepared text of its own filing"
+   ],
+   "rc": 1
+  },
+  {
+   "items_mutated": 1,
+   "must_catch": false,
+   "name": "MUST-ALLOW  the same (kind,text) piece at a DIFFERENT lawful span",
+   "ok": true,
+   "phase": "case",
+   "problem_count": 0,
+   "problems": [],
+   "rc": 0
+  }
+ ],
+ "script_sha256": "7966b721aca4d6fc6d70714e5fdcc9afc1ffb470f85deedff675a44bb16ce314",
+ "timestamp_utc": "2026-08-01T03:59:25.384812Z"
+}

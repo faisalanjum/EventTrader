@@ -56,6 +56,6 @@ const prompt = (g) =>
 phase('BatchBind')
 const out = await pipeline(GIDS,
   (g) => agent(prompt(g), { label: `gbind:${g}`, phase: 'BatchBind', schema: SCHEMA,
-      agentType: 'general-purpose', model: 'sonnet', effort: 'high' })
+      agentType: A.agent || 'general-purpose', model: 'sonnet', effort: 'high' })
     .then(r => ({ gid: g, results: (r && r.results) || [] })))
 return { groups: out.filter(Boolean) }

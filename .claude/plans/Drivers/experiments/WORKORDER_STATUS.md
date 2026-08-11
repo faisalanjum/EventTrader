@@ -1,6 +1,8 @@
 # WORKORDER_STATUS - FableExperimentWorkOrder v2.0 execution board
 
-> **CURRENT (2026-07-25):** WorkOrder v2.0 (sha `d91443f8aaacba617c401bbcf046bb47d9fe481bd14c1dca300005ba50fe39af`) · Plan v1.0 + EXP-5 Addendum A (sha `7d55a1c849d8ceeaf2b029264287552e9ea08a054bc6b8fb5d6dd347d6942592`). The version title + round pin-lists below are PRESERVED history; this line is the current pin.
+> **CURRENT (2026-08-10):** WorkOrder v2.0 (sha `e224cf14a1d60141c840fabfb73c18c8ee8e4361cedaf6d3cf27bcd3fee72410`) · Plan v1.0 + EXP-5 Addendum A (sha `7d55a1c849d8ceeaf2b029264287552e9ea08a054bc6b8fb5d6dd347d6942592`). The version title + round pin-lists below are PRESERVED history; this line is the current pin.
+>
+> *Corrected 2026-08-10 (#827): this line still claimed WorkOrder `d91443f8`, which stopped describing the file after it was edited. Only a place that CLAIMS TO BE CURRENT can be wrong, so only this line moves — the dated ROUND-30/31 entries below correctly record that `d91443f8` was the hash on 2026-07-25 and are left exactly as written. The Plan sha was re-verified against `FinalDesign/FableExperimentPlan.md` and still matches, so it is unchanged.*
 
 Bootstrap (WP-0) completed: 2026-07-09T01:05:17Z
 

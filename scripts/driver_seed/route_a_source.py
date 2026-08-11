@@ -27,11 +27,23 @@ _Q = """
 MATCH (x:XBRLNode {accessionNo:$acc})<-[:REPORTS]-(f:Fact)-[:HAS_PERIOD]->(p:Period)
 WHERE f.is_numeric='1' AND f.is_nil='0'
 MATCH (f)-[:HAS_UNIT]->(u:Unit)
+OPTIONAL MATCH (f)-[:HAS_CONCEPT]->(con:Concept)
 RETURN f.qname AS qname, f.fact_id AS fact_id, f.context_id AS context_id,
        f.value AS value, f.unit_ref AS unit_ref,
        u.name AS unit_name, u.is_divide AS is_divide,
+       con.namespace AS concept_namespace, con.qname AS graph_concept_qname,
        p.period_type AS ptype, p.start_date AS start, p.end_date AS end
 """
+# THE CONCEPT'S REAL IDENTITY TRAVELS WITH ITS FACT. A concept is a QName, so
+# what identifies it is (namespace URI, local name) — the prefix in `f.qname`
+# is only an alias the filing chose. The locator used to authorise a match on
+# that prefixed string, which meant a filing lawfully binding two prefixes to
+# one taxonomy could not be read at all.
+#
+# OPTIONAL MATCH is deliberate and required: a fact whose Concept edge is
+# missing must stay VISIBLE as a row with no identity, so the consumer can
+# refuse it by name. An inner MATCH would delete it from the result set and the
+# refusal would look like "no such fact".
 
 
 def _driver():
@@ -105,9 +117,17 @@ def build_source(accession, source_type=None, driver=None):
         by_concept.setdefault(r['qname'], []).append({
             'value': r['value'], 'period': period, 'unitRef': r['unit_ref'],
             'fact_id': r['fact_id'], 'context_id': r['context_id'],
-            'unit_name': r['unit_name'], 'is_divide': r['is_divide']})
+            'unit_name': r['unit_name'], 'is_divide': r['is_divide'],
+            # carried per fact, from the SAME Concept record the row was read
+            # with — never recombined with a qname from anywhere else
+            'concept_namespace': r['concept_namespace'],
+            'graph_concept_qname': r['graph_concept_qname']})
     return {'source_id': accession, 'source_type': source_type,
             'xbrls': [json.dumps(by_concept)], 'texts': [],
             'inline_html': html,
-            'company_cik': str(meta['cik'] or '').lstrip('0'),
+            # THE GRAPH'S STORED FORM, PASSED THROUGH. This stripped the
+            # padding off a value the graph holds as exactly ten digits
+            # (census: 796/796 Company nodes), so the consumer had to
+            # re-pad and `1` could stand in for `0000000001`.
+            'company_cik': str(meta['cik'] or ''),
             'raw_sha256': hashlib.sha256(raw).hexdigest()}

@@ -1,0 +1,27 @@
+# #827 FROZEN BASELINE — derived, not transcribed
+date: 2026-07-31T00:14:42Z (UTC)
+commit: 4d473822089276fbcf32e9d9409575b3e9ba366a
+tree:   c7106304e1325d007eb5af3740ca0fcf98e6438d
+origin/main: 4d473822089276fbcf32e9d9409575b3e9ba366a
+
+## staged-component blob SHAs (git ls-tree at HEAD)
+100644 blob a06c929f9dc7aa1adf990fd31f506502f43ff460	driver/core/driver_ids.py
+100644 blob e0a750ad2731aa27fba7640484bd5051080d1513	driver/core/driver_neo4j_adapter.py
+100644 blob 9d11b6f9e06c13bfcbbb1e53e96718ad5dc214b1	driver/core/driver_validators.py
+100644 blob 9e41ab652d22e5af1e6a7d1bba990dd44033096b	driver/core/driver_write_cli.py
+100644 blob 9657e1ab0834b67c5a2051067a0e2818dd98abe6	driver/core/driver_writer.py
+100644 blob f7a8d8550d7d85289d8be79cabbb283746166aeb	driver/core/fact_match.py
+100644 blob bb875a06f53bf53a0e3a6ffe589d78a914c63f74	driver/core/prepared_fact.py
+100644 blob 45eed8dde3a11693073f7eadd319f0eb9a734145	driver/core/prepared_fact_v2.py
+100644 blob 47f91c714a59c448242e36a4386e06523328978e	driver/core/slice_menu.py
+100644 blob b86a6c76fac1826f25fe4274302f7afea0acc3c1	driver/core/slot_convert.py
+100644 blob ab4e123e6df045f2ee74411c24b7f9b5b4d614a0	driver/core/xbrl_attach.py
+100644 blob 21c56ef0cb7149e26a715050bc31ba01f38811cd	driver/relocation/exact_numbers.py
+100644 blob 05a2f39ba962abdbde0be031316d418a83191183	driver/relocation/inline_html.py
+100644 blob 5962a3d795477d0873e050e472da4cb3b8ac7117	driver/relocation/locator.py
+
+## gate artifacts
+100644 blob d333ec66ff272eebcc589ba5a16905eed1df7c63	.claude/plans/Drivers/experiments/harness/expected_test_nodes.txt
+100644 blob f3ccc74d592c1996b9be5b23456ff57aa04cbef4	.claude/plans/Drivers/experiments/harness/gate_pins.jsonl
+100644 blob 75755e0564221ece84db02a8a74474a9fb6f571d	.claude/plans/Drivers/experiments/harness/isolated_manifest_check.py
+100644 blob 5c79f877ff4623321dbd022503006c4730fd9453	.claude/plans/Drivers/experiments/harness/test_g_suite.py

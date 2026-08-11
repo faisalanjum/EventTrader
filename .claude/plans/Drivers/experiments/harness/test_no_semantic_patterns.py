@@ -21,6 +21,8 @@ Run: venv/bin/python -m pytest harness/test_no_semantic_patterns.py -q
 import ast
 import os
 
+import pytest
+
 _HERE = os.path.dirname(os.path.abspath(__file__))
 _REPO = os.path.abspath(os.path.join(_HERE, "..", "..", "..", "..", ".."))
 
@@ -107,8 +109,16 @@ def regex_patterns(path):
     The OPERATION is part of the freeze because pattern text alone gave a
     FALSE GREEN (reviewer-proven): `re.sub` swapped to `re.search` keeps the
     pattern byte-identical while changing a rewrite into a meaning probe.
-    The enclosing FUNCTION pins where the site lives; pattern text (not line
-    numbers) keeps the freeze stable under edits above it."""
+    The enclosing FUNCTION pins where the site lives; the pattern record (not
+    line numbers) keeps the freeze stable under edits above it.
+
+    THE PATTERN RECORD IS NOT ALWAYS LITERAL TEXT. A literal argument is
+    recorded verbatim; a dynamic one is recorded as its location-free argument
+    AST. So this tool pins the expression SHAPE of a dynamic pattern — a
+    changed literal, referenced name or operator moves the record, a line move
+    does not. It deliberately does NOT resolve names or evaluate anything, so
+    the VALUE a referenced constant holds is out of scope here and owned by the
+    hardcoding inventory."""
     tree = ast.parse(open(path, encoding="utf-8").read())
     re_names, direct = set(), {}
     for node in ast.walk(tree):
@@ -136,8 +146,20 @@ def regex_patterns(path):
                     op = direct[f.id]
                 if op:
                     a0 = child.args[0] if child.args else None
-                    pat = a0.value if isinstance(a0, ast.Constant) and \
-                        isinstance(a0.value, str) else "<non-literal>"
+                    if isinstance(a0, ast.Constant) and isinstance(a0.value, str):
+                        pat = a0.value
+                    elif a0 is None:
+                        pat = "<no-argument>"
+                    else:
+                        # A SHARED "<non-literal>" TOKEN COLLIDED: two different
+                        # dynamic expressions produced byte-identical records, so
+                        # editing either could leave this freeze unchanged while
+                        # the tool claimed per-site coverage. The location-free
+                        # dump freezes the EXPRESSION SHAPE; it deliberately does
+                        # not resolve names or evaluate anything — the referenced
+                        # constant's VALUE is the hardcoding inventory's job, not
+                        # this tool's.
+                        pat = "<expr>" + ast.dump(a0, include_attributes=False)
                     out.append([func, op, pat])
             visit(child, child_func)
 
@@ -192,9 +214,6 @@ def keyword_lists(path, min_len=3):
 #                   fails the gate until a human classifies it.
 # ---------------------------------------------------------------------------
 MECHANICAL = {
-    "driver_ids": "format validators only: source_id charset · driver_name "
-                  "NAME-05 shape · gp_ period-id shape · sha-256 shape · our "
-                  "own xbrlaxis_ sentinel shape. All check strings WE emit.",
     "guidance_ids": "slugify/whitespace normalisers, a numeric-token splitter "
                     "(`^([+-]?\\d+\\.?\\d*)\\s*([a-zA-Z]*)$` on an ALREADY-"
                     "isolated value string) and an XBRL count matcher on "
@@ -208,7 +227,27 @@ MECHANICAL = {
     "xbrl_reporting": "`<[^>]+>` strips markup tags. Structural text cleanup, "
                       "not a decision about what the text means.",
 }
-GOVERNING_LAW = {}
+GOVERNING_LAW = {
+    # RECLASSIFIED (#827): the old MECHANICAL note said "all check strings WE
+    # emit", which is not true of this module. These shapes are imposed from
+    # outside and cited, so widening or narrowing one is a contract change, not
+    # a formatting preference:
+    #   * source-id charset and NAME-05 driver-name shape — the owner-approved
+    #     S3.1 ID law (FINAL_DESIGN §5.1, OD-8/OD-21);
+    #   * the `gp_` period-id grammar — dated ids only, sentinels owned by
+    #     PERIOD_SENTINEL_SCOPE (FINAL_DESIGN §6.2, PER-01..21);
+    #   * the sha-256 shape — OD-8;
+    #   * the CIK spelling — SEC: EDGAR Filer Manual (Volume II) v77 §7.3.3.2
+    #     and the EDGAR API's 10-digit, leading-zero form;
+    #   * the unknown-axis sentinel — FINAL_DESIGN line 174;
+    #   * `norm`'s normalizer class — the one canonical value law.
+    "driver_ids": "governing-contract shapes, not self-emitted formatting: "
+                  "S3.1 ID law (source_id, NAME-05, OD-8 hash), FINAL_DESIGN "
+                  "§6.2 period-id grammar, FINAL_DESIGN:174 unknown-axis "
+                  "sentinel, and the SEC CIK spelling (EFM Vol II v77 §7.3.3.2 "
+                  "+ EDGAR API 10-digit). Each is cited; each edit is a "
+                  "contract change.",
+}
 SEMANTIC_DEBT = {
     "driver_validators": "_VALUE_TEXT_NUMERIC — 'does this prose hide a "
                          "number?'. OWNER RULING 2026-07-25: Option A approved "
@@ -234,17 +273,28 @@ SEMANTIC_DEBT = {
 # OPERATION is frozen because pattern-text-only froze gave a FALSE GREEN
 # (re.sub -> re.search, byte-identical pattern \u2014 reviewer-proven on temp copies).
 FROZEN_PATTERNS = {
+    # GOVERNING_LAW, not mechanical: source-id, NAME-05, the period-id grammar,
+    # the OD-8 hash, the SEC CIK spelling, the unknown-axis sentinel and the
+    # normalizer all come from cited frozen contracts or the official SEC rule.
+    # They are not merely strings this program happens to emit.
     "driver_ids": [
+        ["<module>", "compile",
+         "<expr>BinOp(left=BinOp(left=Constant(value='^'), op=Add(), "
+         "right=Name(id='_UNKNOWN_AXIS_VALUE_PREFIX', ctx=Load())), op=Add(), "
+         "right=Constant(value='([0-9a-f]+)__([a-z0-9_]+)$'))"],
+        ["<module>", "compile", "<expr>Name(id='SEC_CIK_10_PATTERN', ctx=Load())"],
         ["<module>", "compile", "^[0-9a-f]{64}$"],
         ["<module>", "compile", "^[A-Za-z0-9._\\-]+$"],
         ["<module>", "compile", "^[a-z][a-z0-9_]*$"],
-        ["<module>", "compile", "^gp_(ST|MT|LT|UNDEF|\\d{4}-\\d{2}-\\d{2}_\\d{4}-\\d{2}-\\d{2})$"],
-        ["<module>", "compile", "^xbrlaxis_([0-9a-f]+)__([a-z0-9_]+)$"],
+        ["<module>", "compile", "^gp_([0-9]{4}-[0-9]{2}-[0-9]{2})_([0-9]{4}-[0-9]{2}-[0-9]{2})$"],
         ["norm", "sub", "[^a-z0-9]+"],
     ],
-    "driver_validators": [
-        ["<module>", "compile", "[$\u20ac\u00a3\u00a5]\\s*\\d|\\d+(?:\\.\\d+)?\\s*%|\\d+\\.\\d+|\\b(?!(?:19|20)\\d\\d\\b)\\d+\\b"],
-    ],
+    # REMOVED, row T2, card action "value_text born complete; delete the
+    # heuristic". `_VALUE_TEXT_NUMERIC` asked prose "does this hide a
+    # number?" — a meaning guess, wrong in both directions. The owner
+    # ruled Option A (2026-07-25); the compile site is gone and only a
+    # tombstone comment survives at driver_validators.py:95, so the
+    # module now contributes NO regex site and a frozen entry was stale.
     "fact16_checks": [
         ["<module>", "compile", "[$\u20ac\u00a3\u00a5]\\s?\\d|\\d+(\\.\\d+)?\\s?%|\\b\\d+\\s?bps\\b|\\b\\d+(\\.\\d+)?\\s?(million|billion|thousand)\\b"],
     ],
@@ -267,7 +317,7 @@ FROZEN_PATTERNS = {
 
 # Keyword lists = closed vocabularies FROM LAW (legitimate) vs meaning guesses.
 LEGIT_VOCAB = {
-    "LANES", "BASELINES", "SOURCE_TYPES", "PERIOD_SCOPES", "SURPRISE_TYPES",
+    "LANES", "BASELINES", "SOURCE_TYPES", "PERIOD_SCOPES",
     "SHAPES", "CANONICAL_UNITS", "VALID_UNIT_KIND_HINTS",
     "VALID_MONEY_MODE_HINTS", "valid_bases", "__all__", "EXPECT_BASE",
     "MEANING_FIELDS", "CODE_FIELDS", "OD_RULES", "ARMS", "SOURCE_OWNED",
@@ -280,6 +330,13 @@ LEGIT_VOCAB = {
     "_NUMERIC", "_STR", "_INT",
     # Uncovered by the frozenset unwrap (2026-07-26) and individually judged
     # LAW ENUMS / schema structure, not meaning guesses:
+    # T7 moved the numeric-slot field list to the SHARED schema owner and
+    # dropped the leading underscore, so the already-classified
+    # `_NUMERIC_FIELDS` reappeared under a new name. It is a static tuple of
+    # SLOT NAMES — schema structure, never a judgement about source text.
+    # Owner row recorded at receipts_827/28_pc4_row_and_pc1_denominator.md:
+    # "NUMERIC_FIELDS | T7 | static tuple literal".
+    "NUMERIC_FIELDS",
     "_SLICE_KINDS",       # driver_ids — the FS-05 slice-kind enum
     "_SURPRISE_TYPES",    # driver_ids — the OD-21 surprise-type enum
     "_SENTINEL_SCOPES",   # driver_units — the PER sentinel-horizon enum
@@ -357,7 +414,10 @@ def test_no_unclassified_regex_in_the_exam_path():
 
 def test_every_regex_site_is_frozen_individually():
     """PER-SITE freeze. Approving a whole module lets a new semantic regex slip
-    in beside an approved one — so every pattern's literal text is pinned."""
+    in beside an approved one, so each site is pinned individually: a literal
+    pattern by its exact text, a dynamic one by its argument AST. The AST form
+    pins the expression SHAPE, not the value a referenced constant holds —
+    that value belongs to the hardcoding inventory."""
     live = {}
     for path, mod in {**closure(ENTRY_PRODUCTION), **closure(ENTRY_EXAM)}.items():
         pats = regex_patterns(path)
@@ -579,3 +639,56 @@ def test_MUTATION_fuzzy_import_is_caught():
         "\nimport difflib  # noqa\n")
     msg = fails.get("test_no_fuzzy_matching_anywhere_in_either_path", "")
     assert "difflib" in msg, f"wrong/missing detector: {fails}"
+
+
+# ---- SEQ 435: durable controls for the dynamic-expression record -----------
+# These were run as scratch checks and reported as if they were repository
+# proof. They are tests now. Each writes temporary source text and compares
+# `regex_patterns` records — no repository file is read or written.
+
+_DYN_BASE = 'import re\nP = "x"\nR = re.compile("^" + P + r"[0-9]+$")\n'
+_DYN_MOVED = 'import re\nimport os\n\n\nP = "x"\nR = re.compile("^" + P + r"[0-9]+$")\n'
+_DYN_LITERAL = 'import re\nP = "x"\nR = re.compile("^" + P + r"[0-9]{4}$")\n'
+_DYN_NAME = 'import re\nZ = "x"\nR = re.compile("^" + Z + r"[0-9]+$")\n'
+_DYN_OPERATOR = 'import re\nP = "x"\nR = re.compile("^" % P + r"[0-9]+$")\n'
+
+
+def _sites(tmp_path, name, src):
+    p = tmp_path / name
+    p.write_text(src)
+    return regex_patterns(str(p))
+
+
+def test_DYNAMIC_a_line_only_move_keeps_the_same_frozen_record(tmp_path):
+    """A dynamic pattern that merely moves down the file must not churn the
+    freeze — otherwise every unrelated edit demands a re-review."""
+    assert _sites(tmp_path, "a.py", _DYN_BASE) == \
+        _sites(tmp_path, "b.py", _DYN_MOVED)
+
+
+@pytest.mark.parametrize("src,what", [
+    (_DYN_LITERAL, "the embedded literal"),
+    (_DYN_NAME, "the referenced name"),
+    (_DYN_OPERATOR, "the operator"),
+])
+def test_DYNAMIC_a_changed_expression_changes_the_frozen_record(tmp_path, src, what):
+    """THE COLLISION THIS CLOSES: every dynamic pattern used to collapse to a
+    shared `<non-literal>` token, so two different expressions produced
+    byte-identical records and a change to either was invisible."""
+    base = _sites(tmp_path, "base.py", _DYN_BASE)
+    other = _sites(tmp_path, "other.py", src)
+    assert base != other, what
+
+
+def test_every_classified_module_sits_in_EXACTLY_ONE_bucket():
+    """The file claims this; it did not enforce it. Moving `driver_ids` from
+    MECHANICAL to GOVERNING_LAW must not be able to leave it in both."""
+    buckets = {"MECHANICAL": set(MECHANICAL),
+               "GOVERNING_LAW": set(GOVERNING_LAW),
+               "SEMANTIC_DEBT": set(SEMANTIC_DEBT)}
+    names = list(buckets)
+    for i, a in enumerate(names):
+        for b in names[i + 1:]:
+            overlap = buckets[a] & buckets[b]
+            assert not overlap, f"{a} and {b} both classify {sorted(overlap)}"
+    assert "driver_ids" in buckets["GOVERNING_LAW"], sorted(buckets["GOVERNING_LAW"])

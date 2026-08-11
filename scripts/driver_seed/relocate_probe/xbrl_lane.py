@@ -1,18 +1,30 @@
 #!/usr/bin/env python3
 """XBRL-FIRST deterministic lane (GPT final design, head-to-head verified 2026-07-13; #767 step 1).
 
-WP2: THIS FILE IS NOW A THIN ADAPTER over the neutral matcher (driver/relocation/locator.py —
-`match_facts` + `discover_pairings`). The one strict identity law lives THERE:
-    exact concept identifier AS STORED (full qname when present; otherwise bare local name,
-    never promoted — verified live 109/109) + COMPLETE (axis, member) PAIRS + exactly one
-    valid period shape + unit  ->  unique exact-Decimal fact value | None (abstain)
+WP2: THIS FILE IS A THIN ADAPTER over `driver/relocation/locator.py`
+(`match_facts` + `discover_pairings`), and the law it delegates to CHANGED in #827 Stage 3.
+
+    WAS: exact concept identifier AS STORED (full qname when present; otherwise bare
+         local name) + COMPLETE (axis, member) PAIRS + period + unit -> exact value
+    NOW: the request shape is validated and the route ABSTAINS.
+
+The old law authorised on a PREFIX — text with no namespace — so it could not tell
+`us-gaap:Revenues` from the same local name under a rebound prefix, and its unit rule
+searched opaque `unitRef` ids for `usd`/`dollar`/`share`. This request shape carries no
+namespace, so nothing here can be repaired into identity; the honest answer is abstention
+until a caller supplies expanded names. Route A (`locator.locate`) is the route that can
+answer, because it holds the filing document.
 Callers that know the full dimension address pass `pairs` (THE identity). A DIMENSIONED
 member-only request is INCOMPLETE identity → abstain, always — an axis is NEVER inferred,
 not even from uniqueness. Dimensionless requests ([] members, no pairs) stay legal. Supplying
 BOTH inputs (pairs plus any non-None member_qnames, including []) is rejected.
 
-Certification: the durable 150-case live gate = test_xbrl_gate.py (selection sha-pinned,
-exact Decimal, reconciles all 150; the old uncollected __main__ check is retired).
+Certification: NONE, and that is the honest state. The durable 150-case live gate
+(`test_xbrl_gate.py`) was RETIRED in #827 Stage 3 together with the law it certified —
+its per-case verdicts described prefix-based authorization, which has been withdrawn.
+Retirement is accounted for in
+`.claude/plans/Drivers/experiments/harness/receipts_827/26_withdrawn_certification_ledger.md`.
+This adapter cannot be certified again until a caller supplies expanded identities.
 
 SEPARATE from tier1 on purpose: the value-known certified lane stays untouched (the naive
 seg_members list-fix broke 50/1761 certified records — STATE.md).

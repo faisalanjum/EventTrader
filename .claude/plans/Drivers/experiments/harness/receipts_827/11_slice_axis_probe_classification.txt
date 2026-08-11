@@ -1,0 +1,21 @@
+# #827 blocker 8c — the experiment slice-axis copies, CLASSIFIED
+#
+# Derived by importer census, not by reading intent:
+#   grep -rln "<name>" --include="*.py" driver/ scripts/ .claude/plans/Drivers/experiments/
+#
+# slice_menu_probe.py     ACTIVE IMPORT — imported by
+#                         .claude/plans/Drivers/experiments/harness/build_kfields_inputs.py,
+#                         which builds the K-fields draft inputs. It is live
+#                         experiment machinery and stays.
+#
+# slice_pairing_probe.py  FROZEN HISTORY — ZERO importers anywhere in driver/,
+#                         scripts/ or the harness. It is a dated experiment
+#                         record, not code on any path. It is NOT deleted:
+#                         experiment records are evidence, and deleting one to
+#                         tidy the tree destroys the history a later reader
+#                         needs. It must never gain an importer without being
+#                         reclassified here.
+#
+# Neither is a production slice-axis owner: the live axis law is
+# driver/core/slice_menu.py (classify_axis / member_token), and neither probe
+# is imported by driver/.

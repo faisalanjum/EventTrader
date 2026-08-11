@@ -67,10 +67,17 @@ MUTATIONS = [
      "driver/core/test_round12_exact_scale.py::"
      "test_the_scaleb_scan_is_DERIVED_from_the_production_tree"),
 
-    (2, "ASCII [0-9] changed back to \\d",
+    # RETARGETED (#827, Codex SEQ 938). The project-authored printed-number
+    # regex this mutation used to attack NO LONGER EXISTS: `_no_format_value`
+    # now reuses Arelle's official XSD `decimalPattern`, so the old anchor had
+    # zero occurrences and the battery could not start. The RULE it proves is
+    # unchanged — a no-format fact stating a non-ASCII numeral must not bind —
+    # so the mutation is re-aimed at the single current owner of that gate,
+    # with the same detector. No `\d`, no new regex, no production change.
+    (2, "the XSD decimal gate bypassed at the no-format door",
      "driver/relocation/inline_html.py",
-     r"    r'[0-9]{1,3}(?:,[0-9]{3})*(?:\.[0-9]+)?$|[0-9]+(?:\.[0-9]+)?$|\.[0-9]+$')",
-     r"    r'\d{1,3}(?:,\d{3})*(?:\.\d+)?$|\d+(?:\.\d+)?$|\.\d+$')",
+     "    if not decimalPattern.fullmatch(collapsed):\n        return None",
+     "    if False:      # MUTANT: the XSD decimal gate bypassed\n        return None",
      "driver/core/test_round8_xbrl_binding.py::"
      "test_printed_value_rejects_NON_ASCII_numerals"),
 
@@ -120,8 +127,15 @@ MUTATIONS = [
 
     (8, "a checked-row field dropped from the row shape",
      "driver/core/xbrl_attach.py",
-     '_ROW_FIELDS = _REQUIRED_ROW_KEYS + _ROW_SHAPE_KEYS',
-     '_ROW_FIELDS = _REQUIRED_ROW_KEYS  # MUTANT: shape keys dropped',
+     # RETARGETED (#827, SEQ 938/939): F7 replaced the two hand-maintained key
+     # lists with ONE imported interface object. Same rule, current owner.
+     # CORRECTED (#827, intended-failure check): mutating the shared constant
+     # proved NOTHING — `_checked_row` builds from the same `_ROW_FIELDS`, so the
+     # detector's `set(checked) == set(_ROW_FIELDS)` shrank on both sides and
+     # stayed true. The mutation now drops a field from the BUILD, so the built
+     # row and the declared shape genuinely disagree.
+     '    return MappingProxyType({**{k: raw[k] for k in _ROW_FIELDS},',
+     '    return MappingProxyType({**{k: raw[k] for k in _ROW_FIELDS[:-1]},',
      "driver/core/test_round11_outcomes.py::"
      "test_the_checked_row_carries_ONLY_the_checked_fields"),
 
@@ -367,25 +381,36 @@ MUTATIONS = [
     # ---- ROUND 5b: the crash, and the schema's declared order --------------
     (40, "dimension members sorted WITHOUT being validated (the TypeError)",
      "driver/relocation/inline_html.py",
-     "        if not _qname_ok(axis, ns.declared) or not _qname_ok(value, "
-     "ns.declared):\n            return None",
-     "        if False:\n            return None",
+     # RETARGETED (#827, SEQ 938/939): same rule — both halves of a dimension
+     # must be VALIDATED QNames before anything sorts them, or an unvalidated
+     # member raises TypeError instead of refusing. `_qname_ok(x, ns.declared)`
+     # became `_qname(x, member)`, which answers None on a bad name.
+     "        axis_name, member_name = _qname(axis, member), _qname(value, member)\n"
+     "        if axis_name is None or member_name is None:\n"
+     "            return None",
+     "        axis_name, member_name = axis, value   # MUTANT: unvalidated\n"
+     "        if False:\n"
+     "            return None",
      f"{R5}::test_827R5_a_NAMELESS_dimension_REFUSES_and_never_crashes"),
 
     (41, "the context/entity/period sequence checks removed",
      "driver/relocation/inline_html.py",
-     "    if not (_ordered(context, ns.i('entity'), ns.i('period'), "
-     "ns.i('scenario'))\n"
-     "            and _ordered(entity, ns.i('identifier'), ns.i('segment'))\n"
-     "            and _ordered(period, ns.i('startdate'), ns.i('enddate'))):\n"
+     # RETARGETED (#827, SEQ 938/939): same required rule, current owner —
+     # ns.i() gave way to (I, name) tuples and the element names are the
+     # spec's camelCase. Owner line retargeted, not a comment or copy.
+     "    if not (_ordered(context, (I, 'entity'), (I, 'period'), (I, 'scenario'))\n"
+     "            and _ordered(entity, (I, 'identifier'), (I, 'segment'))\n"
+     "            and _ordered(period, (I, 'startDate'), (I, 'endDate'))):\n"
      "        return None",
      "    if False:\n        return None",
      f"{R5}::test_827R5_a_context_out_of_SCHEMA_ORDER_refuses"),
 
     (42, "the divide numerator/denominator sequence check removed",
      "driver/relocation/inline_html.py",
-     "        if not _ordered(divides[0], ns.i('unitnumerator'),\n"
-     "                        ns.i('unitdenominator')):\n"
+     # RETARGETED (#827, SEQ 938/939): same required rule, current owner —
+     # the ns.i()/get() helpers were replaced by (I, name) tuples, _typed()
+     # and named constants. Owner line retargeted, not a comment or copy.
+     "        if not _ordered(divides[0], (I, 'unitNumerator'), (I, 'unitDenominator')):\n"
      "            return None",
      "        if False:\n            return None",
      f"{R5}::test_827R5_a_divide_out_of_SCHEMA_ORDER_refuses"),
@@ -398,10 +423,12 @@ MUTATIONS = [
 
     (39, "the consumer stops carrying the unit's own reason",
      "driver/relocation/inline_html.py",
-     "        if isinstance(unit, str):        # refused; the string says why\n"
-     "            return None, unit",
-     "        if isinstance(unit, str):\n"
-     "            return None, 'duplicate_unit_id'",
+     # RETARGETED (#827, SEQ 938/939): identical branch, dedented four columns
+     # when it moved out of its enclosing block. Same rule, same detector.
+     "    if isinstance(unit, str):                # refused; the string says why\n"
+     "        return None, unit",
+     "    if isinstance(unit, str):\n"
+     "        return None, 'duplicate_unit_id'",
      "driver/relocation/test_bind_graph_fact.py::"
      "test_827R5_MALFORMED_structure_is_NEVER_called_a_duplicate_id"),
 
@@ -423,21 +450,40 @@ MUTATIONS = [
     # ---- ROUND 6: identity, namespace, grammar, order ----------------------
     (44, "the SEC identifier scheme no longer checked",
      "driver/relocation/inline_html.py",
-     "    if (identifier.get('scheme') or '') != SEC_CIK_SCHEME:\n        return None",
+     # RETARGETED (#827, SEQ 938/939): same rule, current owner — the raw
+     # attribute read became the typed accessor `_typed`.
+     "    if (_typed(identifier, 'scheme') or '') != SEC_CIK_SCHEME:\n        return None",
      "    if False:\n        return None",
      f"{R5}::test_827R6_a_MALFORMED_filer_identity_never_binds"),
 
     (45, "the ten-ASCII-digit CIK rule relaxed",
      "driver/relocation/inline_html.py",
-     "    return digits if re.fullmatch(r'[0-9]{10}', digits) else None",
+     # RETARGETED (#827, SEQ 938/939): same required rule, current owner —
+     # the ns.i()/get() helpers were replaced by (I, name) tuples, _typed()
+     # and named constants. Owner line retargeted, not a comment or copy.
+     "    return digits if re.fullmatch(_SEC_CIK_10_PATTERN, digits) else None",
      "    return digits if digits else None",
      f"{R5}::test_827R6_a_MALFORMED_filer_identity_never_binds"),
 
+    # RETARGETED (#827, SEQ 938/939): the rule did not change, its OWNER MOVED
+    # FILES. `graph_cik` is no longer defined in inline_html.py — it is imported
+    # from driver.core.driver_ids, and inline_html says so itself ("a second
+    # public path to one rule"). The mutation now attacks the single owner where
+    # it lives: validate-then-refuse becomes normalise-then-accept, which is
+    # exactly what the rule forbids.
     (46, "the graph CIK normalised instead of validated",
-     "driver/relocation/inline_html.py",
-     "    return value if isinstance(value, str) and re.fullmatch(\n"
-     "        r'[0-9]{10}', value) else None",
-     "    return value.zfill(10) if isinstance(value, str) and value else None",
+     "driver/core/driver_ids.py",
+     # CORRECTED (#827, SEQ 940): a BLOCK anchor over the guard AND the return,
+     # so the mutant performs the repair the rule forbids — a short stored CIK
+     # is zero-filled and BINDS — instead of merely changing which mismatch
+     # reason appears. The non-registrant refusal is preserved on purpose.
+     "    if not isinstance(value, str) or not _SEC_CIK_RE.fullmatch(value):\n"
+     "        return None\n"
+     "    return None if value == NON_REGISTRANT_CIK else value",
+     "    if not isinstance(value, str) or not value:\n"
+     "        return None\n"
+     "    value = value.zfill(10)   # MUTANT: normalised instead of validated\n"
+     "    return None if value == NON_REGISTRANT_CIK else value",
      f"{R5}::test_827R6_a_GRAPH_cik_outside_the_stored_form_never_binds"),
 
     (47, "period_type falls through as duration again",
@@ -456,47 +502,90 @@ MUTATIONS = [
 
     (49, "namespace resolution replaced by the literal prefix",
      "driver/relocation/inline_html.py",
-     "        self.instance = bound.get(_INSTANCE_NS, set())",
-     "        self.instance = {'xbrli'}",
+     # RETARGETED (#827, SEQ 938/939): the bound-namespace class this attacked
+     # NO LONGER EXISTS. Elements are addressed by (uri, local) and a QName
+     # VALUE is resolved in `_qname` from lxml's in-scope `nsmap`. Same rule —
+     # meaning comes from the NAMESPACE, never the literal prefix — at that
+     # single owner. Distinct from mutation 50, which attacks the refusal of an
+     # UNBOUND prefix on the following line.
+     "        uri = el.nsmap.get(prefix) or (_XML_PREFIX_NS if prefix == 'xml'\n"
+     "                                       else None)",
+     "        uri = prefix      # MUTANT: the literal prefix used as the namespace",
      f"{R5}::test_827R6_a_lawful_INSTANCE_binding_binds_whatever_its_prefix"),
 
     (50, "an undeclared prefix given a fallback",
      "driver/relocation/inline_html.py",
-     "        self.dimension = bound.get(_DIMENSION_NS, set())",
-     "        self.dimension = bound.get(_DIMENSION_NS, set()) | {'nope'}",
-     f"{R5}::test_827R6_a_lawful_DIMENSION_binding_is_read_whatever_its_prefix"),
+     # RETARGETED (#827, SEQ 938/939): same rule at its current single owner —
+     # an explicit prefix that nothing binds names nothing and must REFUSE,
+     # never fall back to a guessed namespace. Distinct line, distinct rule
+     # from mutation 49 (which attacks the resolution itself).
+     "        return None if uri is None else (uri, local)",
+     "        return (uri or XBRL_INSTANCE_NAMESPACE, local)   # MUTANT: fallback",
+     # CORRECTED (#827, Codex SEQ 944). My first detector was a MUST-ALLOW test
+     # (a fallback only makes the reader more permissive, so it could never
+     # fail); my second was about an undeclared prefix on an ELEMENT NAME, which
+     # the parser catches as a well-formedness error at a different gate. The
+     # reviewer found the one public-path attack where the guess can be RIGHT:
+     # `pure`/`shares` really do live in the XBRL instance namespace, so an
+     # unbound `zz:pure` defaulted to it expands to exactly what the graph asked
+     # for and BINDS. Reproduced both ways through bind_graph_fact:
+     #   clean  -> (None, 'exact_id_malformed_unit_structure')
+     #   guess  -> binds, unit_measures_expanded ((instance, 'pure'),)
+     "driver/core/test_round8_xbrl_binding.py::"
+     "test_an_UNDECLARED_measure_prefix_gets_no_invented_namespace"),
 
     (51, "leaf elements may carry nested markup again",
      "driver/relocation/inline_html.py",
-     "    return None if node.find(True) is not None else node.get_text()",
-     "    return node.get_text()",
+     # RETARGETED (#827, SEQ 938/939): same rule, current single owner.
+     # `_leaf` decides on lxml child tags now, not a bs4 find(True).
+     # CORRECTED (#827, SEQ 940): mutate ONLY the guard. The previous mutant
+     # said `return node.get_text()`, but this owner's parameter is `el`, so it
+     # raised NameError and a crash would have been counted as the proof. The
+     # detector must fail because nested markup is READ, not because it dies.
+     "    if any(isinstance(child.tag, str) for child in el):\n"
+     "        return None",
+     "    if False:      # MUTANT: an element child no longer refuses\n"
+     "        return None",
      f"{R5}::test_827R6_item4_context_attacks"),
 
     (52, "unknown direct children of a unit allowed",
      "driver/relocation/inline_html.py",
-     "    known = ns.i('measure') | ns.i('divide')\n"
-     "    if any((t.name or '').lower() not in known\n"
-     "           for t in u.find_all(recursive=False)):\n"
+     # RETARGETED (#827, SEQ 938/939/941): same rule, current single owner.
+     # The inline `known` set became the `_only` helper; checked for duplicate
+     # attack first — no other mutation anchors on this line.
+     "    if not _only(u, (I, 'measure'), (I, 'divide')):\n"
      "        return None",
      "    if False:\n        return None",
      f"{R5}::test_827R6_item4_an_unknown_direct_child_of_a_unit"),
 
     (53, "the self-ratio unit accepted again",
      "driver/relocation/inline_html.py",
-     "        if set(num) & set(den):\n            return None",
+     # RETARGETED (#827, SEQ 938/939): same rule, current single owner.
+     # The self-ratio test compares RESOLVED measure QNames now, not raw text.
+     "        if (set(_qname(_measure_text(m), m) for m in n_meas)\n"
+     "                & set(_qname(_measure_text(m), m) for m in d_meas)):\n"
+     "            return None",
      "        if False:\n            return None",
      f"{R5}::test_827R6_a_NESTED_or_SELF_RATIO_unit_never_binds"),
 
-    (54, "the graph number grammar replaced by bare Decimal()",
+    # RETARGETED (#827 GRAPH-DECIMAL, Codex SEQ 938). SAME REQUIRED RULE, moved
+    # owner: a graph value must pass a lexical gate BEFORE the finite-number
+    # owner, or bare `Decimal()` admits underscores, Unicode digits, exponents
+    # and sNaN. The project-authored `_GRAPH_NUMBER` that used to hold that
+    # position is deleted; Arelle's pinned `decimalPattern` holds it now, inside
+    # `parse_raw`. The detector is the same battery under its current name.
+    (54, "the graph lexical gate bypassed before the finite-number owner",
      "driver/relocation/inline_html.py",
-     "    if not _GRAPH_NUMBER.fullmatch(s):\n        return None",
-     "    if False:\n        return None",
-     f"{R5}::test_827R6_a_graph_value_outside_the_derived_grammar_is_refused"),
+     "    if not decimalPattern.fullmatch(bare):\n        return None",
+     "    if False:      # MUTANT: the graph lexical gate bypassed\n        return None",
+     f"{R5}::test_827R6_a_value_NEITHER_XSD_decimal_NOR_grouped_transport_is_refused"),
 
     (55, "the fact id stripped in the identity key again (order decides)",
      "driver/core/xbrl_attach.py",
+     # RETARGETED (#827, SEQ 938/939): same rule, current single owner.
+     # The XML whitespace owner is named XML_WS here now.
      '            raw_id = row["fact_id"] or ""\n'
-     '            out.append("" if not raw_id.strip(XML_S) else raw_id)',
+     '            out.append("" if not raw_id.strip(XML_WS) else raw_id)',
      '            out.append((row["fact_id"] or "").strip())',
      "driver/core/test_round10_event_boundary.py::"
      "test_827R6_a_PADDED_fact_id_is_a_DIFFERENT_id_and_order_cannot_decide"),
@@ -535,45 +624,61 @@ MUTATIONS = [
 
     (59, "blankness decided by PYTHON whitespace again, at the binder door",
      "driver/relocation/inline_html.py",
-     "    if (inline_element_id or '').strip(XML_S):",
+     # RETARGETED (#827, SEQ 938/939): same rule and same line; the XML
+     # whitespace owner is named XML_WS now. 59 and 62 attack this one line in
+     # OPPOSITE directions (under- vs over-catching) with different detectors,
+     # so they are two rules, not one proof twice.
+     "    if (inline_element_id or '').strip(XML_WS):",
      "    if (inline_element_id or '').strip():",
      f"{R5}::test_827R7_an_UNLAWFUL_element_id_is_MALFORMED_under_its_own_name"),
 
     (60, "the concept name no longer has to be a QName",
      "driver/relocation/inline_html.py",
-     "    if not _qname_ok(el.get('name'), prepared.get('declared') "
-     "or frozenset()):\n        return None, 'malformed_concept_name'",
+     # RETARGETED (#827, SEQ 938/939/941): same rule, current single owner —
+     # `_qname_ok(raw, declared)` became `_qname(_typed(el, 'name'), el)`, which
+     # resolves in the element's own scope. This check lives inside
+     # `_evidence_from`, the ONE function both the exact-id path and the
+     # identity-fallback path call, so bypassing it here breaks both.
+     "    if _qname(_typed(el, 'name'), el) is None:\n"
+     "        return None, 'malformed_concept_name'",
      "    if False:\n        return None, 'malformed_concept_name'",
      f"{R5}::test_827R7_an_UNLAWFUL_concept_QName_never_binds"),
 
-    (61, "the concept rule left guarding only the exact-id path",
-     "driver/relocation/inline_html.py",
-     "def evidence_for_element(doc_or_html, el):\n"
-     '    """Evidence for an already-resolved element node (the fallback path)."""\n'
-     "    return _evidence_from(el, _prepared(doc_or_html))",
-     # THE MUTANT MUST MAKE THE FALLBACK *ACCEPT*, NOT REFUSE. My first version
-     # set `declared` to None, which makes that path refuse EVERYTHING — and
-     # the detector expects a refusal, so it would have stayed green while
-     # proving nothing. It now seeds the element's OWN prefix as declared,
-     # which disables the check on this path only.
-     "def evidence_for_element(doc_or_html, el):\n"
-     '    """Evidence for an already-resolved element node (the fallback path)."""\n'
-     "    p = dict(_prepared(doc_or_html))\n"
-     "    p['declared'] = set(p.get('declared') or ()) | {\n"
-     "        (el.get('name') or '').partition(':')[0].lower()}\n"
-     "    return _evidence_from(el, p)",
-     f"{R5}::test_827R7_the_concept_rule_covers_the_FALLBACK_path_too"),
+    # DELETED / CONSOLIDATED (#827, Codex SEQ 942) — mutation 61, "the concept
+    # rule left guarding only the exact-id path". The ARCHITECTURE it attacked is
+    # retired: it invented a SECOND evidence builder for the fallback path and
+    # removed that copy's concept check. No second entrance exists now —
+    #   exact-id : bind_graph_fact -> element_evidence     -> _evidence_from
+    #   fallback : bind_graph_fact -> identity_fallback
+    #                              -> evidence_for_element -> _evidence_from
+    # both doors converge on the ONE owner, and mutation 60 attacks that one
+    # explicit validation owner. `identity_fallback` does compare expanded names,
+    # but that is candidate identity SELECTION, not a second production owner of
+    # "a concept name must be a lawful QName".
+    # A faithful mutant would mean rebuilding the deleted second builder or
+    # bypassing two independent gates at once — both the wrong shape.
+    # Measured on the way here and kept because it is easy to get backwards:
+    # with mutation 60 applied, `..._an_UNLAWFUL_concept_QName_never_binds` FAILS
+    # while `..._covers_the_FALLBACK_path_too` still PASSES, so 60 is not a
+    # detector for that test. The test stays as a public outcome control; a test
+    # is evidence, not a reason to preserve a retired architecture mutation.
 
     (62, "XML-blank ids stop reaching the identity fallback (OVER-catching)",
      "driver/relocation/inline_html.py",
-     "    if (inline_element_id or '').strip(XML_S):",
+     # RETARGETED (#827, SEQ 938/939): same rule and same line; the XML
+     # whitespace owner is named XML_WS now. 59 and 62 attack this one line in
+     # OPPOSITE directions (under- vs over-catching) with different detectors,
+     # so they are two rules, not one proof twice.
+     "    if (inline_element_id or '').strip(XML_WS):",
      "    if inline_element_id is not None:",
      f"{R5}::"
      "test_827R7_MUST_ALLOW_an_XML_blank_id_still_uses_the_identity_fallback"),
 
     (63, "the public id door calls U+00A0 blank again",
      "driver/relocation/inline_html.py",
-     "    if not element_id or not str(element_id).strip(XML_S):",
+     # RETARGETED (#827, SEQ 938/939): same rule at the PUBLIC id door; the XML
+     # whitespace owner is named XML_WS now. Different line from 59/62.
+     "    if not element_id or not str(element_id).strip(XML_WS):",
      "    if not element_id or not str(element_id).strip():",
      f"{R5}::"
      "test_827R7_the_PUBLIC_id_door_refuses_an_unlawful_id_for_EVERY_caller"),
@@ -832,7 +937,9 @@ MUTATIONS = [
 
     (98, "T8: the pf2 lane gate is neutered",
      "driver/core/prepared_fact_v2.py",
-     "        if self.fact_type not in LANE_STATES:   # T8: the ONE lane vocabulary",
+     # RETARGETED (#827, SEQ 938/939/941): same rule, current single owner.
+     # The trailing marker comment was removed from the owner line.
+     "        if self.fact_type not in LANE_STATES:",
      "        if False:   # MUTANT",
      "driver/core/test_prepared_fact_v2.py::"
      "test_T8_one_lane_vocabulary_owner"),
@@ -962,14 +1069,23 @@ MUTATIONS = [
 
     (116, "EU-132: the renderer view swaps tree builders",
      "driver/relocation/inline_html.py",
-     "            return BeautifulSoup(html_text, 'lxml')",
+     # RETARGETED (#827, SEQ 938/939/941): the renderer view no longer names a
+     # builder string; production has ONE BeautifulSoup call and it passes the
+     # preserving builder. Checked against M332, which anchors the same line:
+     # with M332's mutation applied this detector still PASSES, so they are two
+     # rules on one owner (builder identity vs whitespace preservation), not one
+     # proof twice.
+     "            return BeautifulSoup(html_text, builder=_preserving_builder())",
      "            return BeautifulSoup(html_text, 'html.parser')",
      "driver/relocation/test_parser_encoding_ownership.py::"
      "test_EU132_the_renderer_view_is_built_by_the_pinned_lxml_builder"),
 
     (117, "EU-137: 'display' drops out of the style-state vocabulary",
      "driver/relocation/inline_html.py",
-     "        if nm not in ('display', 'visibility', 'content-visibility', 'all'):",
+     # RETARGETED (#827, SEQ 938/939/941): same rule, current single owner.
+     # The vocabulary gained 'white-space' and wrapped across two lines.
+     "        if nm not in ('display', 'visibility', 'content-visibility', 'all',\n"
+     "                      'white-space'):",
      "        if nm not in ('visibility', 'content-visibility', 'all'):",
      "driver/relocation/test_two_view_bridge.py::"
      "test_a_lawful_document_is_NOT_refused"),
@@ -1202,8 +1318,13 @@ MUTATIONS = [
 
     (147, "F14: SchemaError's authorized default code drifts",
      "driver/core/xbrl_attach.py",
-     '(SchemaError, "XBRL_CONTRACT_INVALID"),',
-     '(SchemaError, "XBRL_SCHEMA_BAD"),',
+     # RETARGETED (#827, SEQ 938/939/941): same rule, current owner — the
+     # authorized code now passes through require_known().
+     '(SchemaError, require_known("XBRL_CONTRACT_INVALID")),',
+     # CORRECTED (#827, intended-failure check): `require_known` refuses an
+     # unknown code at IMPORT, so the old mutant failed by collection error, not
+     # by the rule. It now drifts to a KNOWN but WRONG code — the real hazard.
+     '(SchemaError, require_known("XBRL_BINDING_UNAVAILABLE")),',
      "driver/core/test_round11_outcomes.py::"
      "test_F14_the_authorized_class_outcome_table_at_its_owner"),
 
@@ -1565,7 +1686,11 @@ MUTATIONS = [
      "    raw = parse_raw(raw_value)\n    if raw is None:\n        return False",
      "    raw = parse_raw(raw_value)\n    if raw is None:\n        return True",
      "driver/relocation/test_bind_graph_fact.py::"
-     "test_827R6_the_DOOR_refuses_a_writer_alien_raw_as_non_reconciling"),
+     # DETECTOR RENAMED (#827 GRAPH-DECIMAL): this row renamed the test when
+     # "writer-alien" stopped being the authority; the mutation still named the
+     # old id, so pytest exited 4 (no such test) and the escape was invisible to
+     # my per-item check, which only covered the mutations I had edited.
+     "test_827R6_the_DOOR_refuses_an_UNREADABLE_raw_as_non_reconciling"),
 
     (199, "EU-002: the optional timezone term becomes required",
      "driver/relocation/exact_numbers.py",
@@ -1859,8 +1984,12 @@ MUTATIONS = [
      "driver/relocation/inline_html.py",
      "_DISPLAY_OUTSIDE = frozenset({'block', 'inline', 'run-in'})",
      "_DISPLAY_OUTSIDE = frozenset({'block', 'inline'})",
+     # DETECTOR RETARGETED (#827, Codex SEQ 946): the named test does not exist;
+     # this is the current node. M240 fails at its CASCADE assertion, M300 at
+     # the third section's DEFAULT-VISIBILITY control — one node, two
+     # independent failure sites, not one proof twice.
      "driver/relocation/test_row_label_span.py::"
-     "test_EU057_run_in_is_a_lawful_display_value_that_wins_the_cascade"),
+     "test_EU057_run_in_wins_the_cascade_AND_the_representation_refuses"),
 
     (241, "EU-060: the TR4 registry URI drifts a day",
      "driver/relocation/inline_html.py",
@@ -1869,12 +1998,13 @@ MUTATIONS = [
      "driver/relocation/test_transform_registry.py::"
      "test_an_APPROVED_registry_with_a_real_signature_is_APPLIED"),
 
-    (242, "EU-061: the graph number grammar admits trailing-zero fractions",
-     "driver/relocation/inline_html.py",
-     "    r'-?(?:0|[1-9][0-9]{0,2}(?:,[0-9]{3})*)(?:\\.[0-9]{0,2}[1-9])?\\Z')",
-     "    r'-?(?:0|[1-9][0-9]{0,2}(?:,[0-9]{3})*)(?:\\.[0-9]{1,3})?\\Z')",
-     "driver/relocation/test_bind_graph_fact.py::"
-     "test_827R6_the_DOOR_refuses_a_writer_alien_raw_as_non_reconciling"),
+    # DELETED (#827 GRAPH-DECIMAL, Codex SEQ 938). RULE DELETED BY AN ACCEPTED
+    # ROW, not weakened: EU-061 asserted the graph grammar must REFUSE
+    # trailing-zero fractions. GRAPH-DECIMAL replaced that project grammar with
+    # XSD decimal, under which "1.20"/"1.0"/"-0.00"/"0.10" are lawful and DO
+    # read — measured through the public door. No current production rule
+    # refuses them, so there is nothing left for this mutant to break, and
+    # keeping it would require re-adding the deleted grammar to production.
 
     (243, "EU-063: a padded INF is accepted by the exact string-union member",
      "driver/relocation/inline_html.py",
@@ -2142,10 +2272,14 @@ MUTATIONS = [
      "driver/relocation/test_semantic_fact_value.py::"
      "test_EU168_a_nested_pair_that_both_omit_scale_agrees_at_ten_to_the_zero"),
 
+    # RETARGETED (#827 GRAPH-DECIMAL, Codex SEQ 938). SAME REQUIRED RULE — the
+    # grouping comma must be REMOVED, never substituted — at its current single
+    # owner: `parse_raw` now strips commas into `bare` before the lexical gate,
+    # instead of inlining the strip in a `Decimal()` call that no longer exists.
     (283, "EU-175: the graph grouping comma is replaced instead of removed",
      "driver/relocation/inline_html.py",
-     "    return Decimal(raw.replace(',', ''))",
-     "    return Decimal(raw.replace(',', '0'))",
+     "    bare = raw.replace(',', '')",
+     "    bare = raw.replace(',', '0')",
      "driver/relocation/test_transform_registry.py::"
      "test_DOOR_an_approved_registry_BINDS_a_transformed_fact"),
 
@@ -2200,15 +2334,21 @@ MUTATIONS = [
 
     (291, "EU-068: the unsupported reason is dropped and the refusal disappears",
      "driver/relocation/inline_html.py",
-     "    if st['unsupported']:\n        return False, vis, st['unsupported']",
-     "    if st['unsupported']:\n        return False, vis, None",
+     # RETARGETED (#827, SEQ 938/939/941): same rule, current single owner.
+     # The style-state return tuple grew (ws, block-ness, outside).
+     "        return (False, vis, st['unsupported'], ws,\n"
+     "                name in _UA_BLOCK_ELEMENTS, outside)",
+     "        return (False, vis, None, ws,\n"
+     "                name in _UA_BLOCK_ELEMENTS, outside)",
      "driver/relocation/test_two_view_bridge.py::"
      "test_EU139_hidden_until_found_refuses_as_unsupported"),
 
     (292, "EU-069: the template prune is withdrawn and template contents render",
      "driver/relocation/inline_html.py",
-     "        # Unconditional prune, nested markup included.\n        return True, vis, None",
-     "        # Unconditional prune, nested markup included.\n        return False, vis, None",
+     # RETARGETED (#827, SEQ 938/939/941): same rule, current single owner.
+     # Same unconditional prune; the return tuple grew to six members.
+     "        return True, vis, None, ws, False, 'nobox'",
+     "        return False, vis, None, ws, False, 'nobox'",
      "driver/relocation/test_two_view_bridge.py::"
      "test_EU070_template_contents_are_never_rendered"),
 
@@ -2265,8 +2405,12 @@ MUTATIONS = [
      "driver/relocation/inline_html.py",
      "    vis = 'visible'",
      "    vis = 'hidden'",
+     # DETECTOR RETARGETED (#827, Codex SEQ 946): the named test does not exist;
+     # this is the current node. M240 fails at its CASCADE assertion, M300 at
+     # the third section's DEFAULT-VISIBILITY control — one node, two
+     # independent failure sites, not one proof twice.
      "driver/relocation/test_row_label_span.py::"
-     "test_EU057_run_in_is_a_lawful_display_value_that_wins_the_cascade"),
+     "test_EU057_run_in_wins_the_cascade_AND_the_representation_refuses"),
 
     (301, "EU-135: the cascade key drops source order and an earlier declaration wins",
      "driver/relocation/inline_html.py",
@@ -2298,8 +2442,13 @@ MUTATIONS = [
 
     (305, "EU-062: U+200B becomes a fabricated space again",
      "driver/relocation/inline_html.py",
-     "                words.extend(str(node).replace(_ZWSP, '').split())",
-     "                words.extend(str(node).replace(_ZWSP, ' ').split())",
+     # RETARGETED (#827, SEQ 938/939/941): same rule, current single owner.
+     # The ZWSP strip is its own statement now; the split moved downstream.
+     "                raw = str(node).replace(_ZWSP, '')",
+     # CORRECTED (#827, intended-failure check): the old mutant still called
+     # `words.extend(...)`, which does not exist at this point any more, so it
+     # raised NameError and a crash would have counted as the proof.
+     "                raw = str(node).replace(_ZWSP, ' ')",
      "driver/relocation/test_row_label_span.py::"
      "test_EU062_zero_width_space_is_ZERO_WIDTH_not_a_separator"),
 
@@ -2312,8 +2461,10 @@ MUTATIONS = [
 
     (307, "EU-188: the bs4 element-name token drifts and every element reads as text",
      "driver/relocation/inline_html.py",
-     "    def walk(node, vis):\n        name = getattr(node, 'name', None)",
-     "    def walk(node, vis):\n        name = getattr(node, 'nameX', None)",
+     # RETARGETED (#827, SEQ 938/939/941): same rule, current single owner.
+     # `walk` gained ws/outside parameters; the bs4 name token is unchanged.
+     "        name = getattr(node, 'name', None)",
+     "        name = getattr(node, 'nameX', None)",
      "driver/relocation/test_row_label_span.py::"
      "test_the_SELECTED_CELL_owns_the_span_when_a_label_appears_twice"),
 
@@ -2326,7 +2477,10 @@ MUTATIONS = [
 
     (319, "EU-189: the token join separator disappears and adjacent words fuse",
      "driver/relocation/inline_html.py",
-     "    text = ' '.join(words)",
+     # RETARGETED (#827, SEQ 938/939/941): same rule, current single owner.
+     # The join now pairs each word with the separator the SOURCE implied,
+     # so the attack is to drop those separators rather than the space.
+     "    text = ''.join(s + w for s, w in zip(seps, words))",
      "    text = ''.join(words)",
      "driver/relocation/test_semantic_fact_value.py::"
      "test_EU189_a_zero_width_space_is_not_a_word_separator_in_the_walk"),
@@ -2473,7 +2627,9 @@ MUTATIONS = [
 
     (325, "EU-145/149: white-space leaves the shared style-winner owner again",
      "driver/relocation/inline_html.py",
-     "    for p in ('display', 'visibility', 'cv', 'ws'):",
+     # RETARGETED (#827, SEQ 938/939/941): same rule, current single owner.
+     # The shared style-winner vocabulary gained 'outside'.
+     "    for p in ('display', 'visibility', 'cv', 'ws', 'outside'):",
      "    for p in ('display', 'visibility', 'cv'):",
      "driver/relocation/test_row_label_span.py::"
      "test_EU145_149_white_space_obeys_the_SHARED_css_wide_and_unresolved_law"),
@@ -2679,9 +2835,9 @@ def run_live_detector(root, node_id):
                       "scripts")])
     p = subprocess.run([sys.executable, "-m", "pytest", "-q", "-p",
                         "no:randomly", "-p", "no:cacheprovider", "--no-header",
-                        "--tb=no", "-m", "live", node_id],
+                        "--tb=line", "-m", "live", node_id],
                        cwd=root, capture_output=True, text=True, env=env)
-    return p.returncode, (p.stdout or "")[-400:]
+    return p.returncode, (p.stdout or "")[-2000:]   # room for the assertion line
 
 
 def read_tx_marker():

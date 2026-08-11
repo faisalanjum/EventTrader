@@ -122,6 +122,35 @@ def forbidden(paths):
     return bad
 
 
+def tree_paths(tree):
+    """Every path PRESENT in the exact candidate tree, mechanically."""
+    out = git(["ls-tree", "-r", "--name-only", tree], _REPO).stdout.decode()
+    return set(out.split("\n")) - {""}
+
+
+def forbidden_present(staged, present):
+    """THE RULE, stated exactly: no forbidden CHANGED path REMAINS PRESENT in
+    the candidate tree. Deletion is lawful.
+
+    This is deliberately narrower than "no forbidden path is present". Only the
+    paths this commit CHANGES are scanned, which is the file's existing
+    authority ("no forbidden path is added"); an unchanged forbidden path
+    inherited from an earlier commit is NOT examined here, and claiming
+    otherwise would promise a full-tree secret audit this function does not do.
+
+    #827 lane 3 proved the old reading wrong: `forbidden(staged)` tested every
+    CHANGED path, and a DELETION is a change, so a commit that REMOVES a secret
+    was reported as containing one — `ibkr-mcp-server/.envrc`, deleted in the
+    candidate tree and present only in HEAD. Under that reading no commit could
+    ever remove a forbidden file, which inverts the purpose of the check.
+
+    Membership comes from the tree itself, so nothing is special-cased and no
+    vocabulary is added: a changed forbidden path that is added or modified is
+    still present and still fails; only one that is gone from the tree passes.
+    """
+    return forbidden([p for p in staged if p in present])
+
+
 def sanitized_env(root, home):
     """A process environment built from nothing but the allowlist. Nothing here
     can authenticate to anything; the lanes that need credentials build their
@@ -432,7 +461,7 @@ def main():
         else:
             print(f"tree-id handoff: caller's {want} == this index (ok)")
 
-    bad = forbidden(staged)
+    bad = forbidden_present(staged, tree_paths(tree))
     print(f"forbidden paths among them: {len(bad)}"
           + (f" -> {bad}" if bad else " (none)"))
     if bad:

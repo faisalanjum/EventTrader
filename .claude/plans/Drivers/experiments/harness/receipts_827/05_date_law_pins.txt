@@ -1,0 +1,38 @@
+# #827 pinned date law — the 0224 / 224 boundary (round 8, reviewer-corrected)
+
+These three pins are LAW for finding 2 (the strict XBRL dateUnion parser).
+The parser's RED-first tests must assert exactly these, and nothing may ever
+"repair" the year to 2024.
+
+PIN 1 — LAWFUL SOURCE. `0224-03-31` is a valid four-digit XML Schema date
+  meaning year 224: XML Schema 1.0 requires the year field to carry at least
+  four digits, zero-padded below 1000. Under XBRL 2.1's date-only rule an
+  instant/end date converts to the FOLLOWING midnight, so the filing's
+  instant `0224-03-31` lawfully becomes `0224-04-01T00:00:00`.
+
+PIN 2 — INVALID GRAPH FORM. The graph's stored `224-04-01` (three-digit
+  year — the leading zero was lost on the way into storage) is NOT a legal
+  XML Schema lexical date. It must be classified invalid where encountered.
+
+PIN 3 — PARK, NEVER INFER. When the lawful source value and the graph's
+  representation disagree (or the graph form is itself illegal), Core PARKS
+  the fact visibly. No component may "correct" year 224 to 2024 or otherwise
+  guess intent — a wrong match corrupts identity; a park is repairable.
+
+Runnable probe (Python 3, stdlib date), executed 2026-07-31:
+
+    date.fromisoformat("0224-03-31")  -> datetime.date(224, 3, 31)   LAWFUL
+    + timedelta(days=1)               -> "0224-04-01"                 (XBRL next-day midnight)
+    date.fromisoformat("224-04-01")   -> ValueError                   INVALID
+    date.fromisoformat("224-03-31")   -> ValueError                   INVALID
+
+Live instance carrying the law today: Period u_id `instant_224-04-01`
+(34 numeric non-nil facts across 2 accessions / 3 derivative concepts —
+identities in 02_graph_census.json).
+
+Authorities:
+- XML Schema 1.0 Part 2, date/dateTime lexical rules (year: 4+ digits,
+  leading zeros required below 1000, no year 0000):
+  https://www.w3.org/TR/2004/REC-xmlschema-2-20041028/datatypes.html
+- XBRL 2.1 §4.7.2 period rules (date-only instant/end -> following midnight):
+  https://www.xbrl.org/Specification/XBRL-2.1/REC-2003-12-31/XBRL-2.1-REC-2003-12-31%2Bcorrected-errata-2013-02-20.html

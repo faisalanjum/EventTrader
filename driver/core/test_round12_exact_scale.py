@@ -188,29 +188,35 @@ def test_the_binder_returns_the_PRINTED_VALUE_and_SCALE_only():
     assert "expected_slot" not in bound, "the binder still decides the multiplier"
 
 
-#: THE SAME TWO VALUES, SPELLED UNDER THE FROZEN CANONICAL GRAPH LEXICAL
-#: CONTRACT derived from the two writer formatters (corpus evidence shows
-#: compatibility, not legality or complete formatter reachability). The
-#: exponent spelling `726E+1000000` was convenient but the graph holds none:
-#: census 2026-08-01 over 12,402,201 numeric non-nil facts found ZERO
-#: exponents, so a value in that spelling could never arrive from Core's
-#: graph. These are the identical numbers in the contract's grouped spelling
-#: (premise asserted equal below), which keeps this test's purpose exactly:
+#: THE SAME TWO VALUES, SPELLED AS CANONICAL GROUPED TRANSPORT — one of the
+#: two readable forms (GRAPH-DECIMAL, #827: an XSD decimal, or comma-bearing
+#: text that round-trips exactly through the runtime's grouped formatting).
+#: The exponent spelling `726E+1000000` is dropped because an exponent is
+#: NEITHER of those, so `parse_raw` refuses it and the test could never reach
+#: the bound it exists to exercise. (The census — 12,402,201 numeric non-nil
+#: facts, 2026-08-01, ZERO exponents — is compatibility evidence only; it is
+#: not why the spelling refuses.) These are the identical numbers in grouped
+#: spelling (premise asserted equal below), which keeps this test's purpose:
 #: the value RECONCILES, so execution reaches the storable bound instead of
 #: parking early at the binder.
 # IDENTITY CHANGE (SEQ 265 C): the positive-scale raw is now written in
-# the writer's own GROUPED form. The frozen canonical graph lexical
-# contract has NO ARTIFICIAL SIZE LIMIT, so this spelling is lawful under
-# the contract — but it is NOT a demonstrated current-writer output: the
+# the writer's own GROUPED form. XSD decimal imposes NO SIZE LIMIT, so
+# this spelling is lawful — but it is NOT a demonstrated current-writer
+# output: the
 # runtime's own `f"{huge_int:,}"` refuses at this length (SEQ 269), so
 # the test constructs the canonical grouped string directly by STRING
 # arithmetic and Core does not inherit CPython's hidden int→str ceiling
 # (the same 4,300-digit gate the scale reader already learned about). The
-# NEGATIVE-scale param is RETIRED: its raw needed a 999,997-digit
-# fraction, and the frozen lexical contract caps fractions at 3 digits
-# (census: frac>3 is ZERO across 12,402,201 values) — no lawful graph
-# value can demand that path; the arithmetic-side park it exercised
-# remains pinned by test_an_exponent_BEYOND_EMAX_parks_in_the_arithmetic.
+# NEGATIVE-scale param stays RETIRED, but GRAPH-DECIMAL (#827) withdraws
+# its old reason: the raw needed a 999,997-digit fraction, and the claim
+# that "the contract caps fractions at 3 digits" was never authority —
+# XSD decimal places no cap on fraction length, so such a raw is LAWFUL
+# and would read. It stays retired only because the behaviour it
+# exercised, the arithmetic-side park, is already pinned by
+# test_an_exponent_BEYOND_EMAX_parks_in_the_arithmetic — redundant
+# coverage, not an illegal spelling. (Aside, not a reason: frac>3 is zero
+# across the 12,402,201-value census, so it is not a form the graph is
+# shown to hold. Compatibility only.)
 def _grouped(digits):
     head = len(digits) % 3 or 3
     return ','.join([digits[:head]] + [digits[i:i + 3]

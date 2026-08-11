@@ -7,6 +7,7 @@ Run: venv/bin/python -m pytest harness/test_harness_guards.py -q
 """
 import hashlib
 import json
+import pytest
 from decimal import Decimal
 import os
 import shutil
@@ -1503,6 +1504,68 @@ def test_presence_disagreement_uses_tie_decisions():
     # WITH the tie decision, run A captures it -> exactly-one/either = 1.0
     assert presence_disagreement(gold, tie_arm, empty, _META1,
                                  resolutions_a={("E1", 0): 0}) == 1.0
+
+
+# ---- #827 B1 packet 4 (SEQ 300/301): the oracle's NAME-17 home law -------
+
+def _sp4_surprise(basis):
+    return {"lane": "surprise", "quote": "revenue beat consensus this quarter",
+            "driver_name": "revenue_surprise", "driver_state": "beat",
+            "surprise_basis_hint": basis, "comparison_baseline": "consensus",
+            "fiscal_year": 2026, "fiscal_quarter": 1, "time_type": "duration"}
+
+
+def _sp4_home(name, lane):
+    return {"lane": lane, "quote": "the matching home fact quote",
+            "driver_name": name, "driver_state": "unknown",
+            "fiscal_year": 2026, "fiscal_quarter": 1, "time_type": "duration"}
+
+
+_SP4_META = {"s1": {"event_date": "2026-04-23", "fye_month": 12}}
+
+
+def test_827B4_guidance_surprise_finds_its_guidance_home():
+    """FINAL_DESIGN:153 — guidance-vs-consensus pairs with the GUIDANCE home
+    (base + `_guidance`), never the metric. The oracle must not park a
+    lawful pair as HOME_FACT_MISSING."""
+    from score_exp5 import score_arm
+    r = score_arm({"s1": []},
+                  {"s1": {"facts": [_sp4_surprise("guidance"),
+                                    _sp4_home("revenue_guidance", "guidance")]}},
+                  _SP4_META)
+    assert r["would_park"] == 0.0, r
+    assert r["error_table_by_rule"]["OD-21"] == 0, r
+
+
+@pytest.mark.parametrize("basis,home_name,home_lane",
+                          [("actual", "revenue_surprise", "metric"),
+                           ("guidance", "revenue", "guidance")])
+def test_827B4_false_homes_must_park_not_pair(basis, home_name, home_lane):
+    """SEQ 304 A / 305 — the exact comparison closed TWO false-allow paths
+    the old base-reduction accepted: (1) actual basis with a metric-lane
+    home NAMED revenue_surprise; (2) guidance basis with a guidance-lane
+    home named bare revenue. Both reduce to `revenue` under _base_driver,
+    so the old code paired them; the oracle must park each as
+    HOME_FACT_MISSING. Two separately collected rows — each must fail
+    independently under the old-comparison and compat-fallback mutants."""
+    from score_exp5 import score_arm
+    r = score_arm({"s1": []},
+                  {"s1": {"facts": [_sp4_surprise(basis),
+                                    _sp4_home(home_name, home_lane)]}},
+                  _SP4_META)
+    assert r["would_park"] == 0.5, (basis, home_name, r)
+    assert r["error_table_by_rule"]["OD-21"] == 1, (basis, home_name, r)
+
+
+def test_827B4_actual_surprise_finds_its_metric_home():
+    """The opposite twin: actual basis pairs with the base-name METRIC home."""
+    from score_exp5 import score_arm
+    r = score_arm({"s1": []},
+                  {"s1": {"facts": [_sp4_surprise("actual"),
+                                    _sp4_home("revenue", "metric")]}},
+                  _SP4_META)
+    assert r["would_park"] == 0.0, r
+    assert r["error_table_by_rule"]["OD-21"] == 0, r
 
 
 # ---- the meta-proof: this suite touched NO frozen file ----

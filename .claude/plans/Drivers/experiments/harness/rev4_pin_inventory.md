@@ -16,7 +16,7 @@ v5 only LOCATED the hash text, which proves a pin is present and says nothing ab
 |---|---|---|---|---|
 | `86b2fc17` | packet pre-amendment | `.claude/plans/Drivers/FinalDesign/archive/2026-07-15_pre-consolidation/15_CandidateFactPacket.pre-amendment.md` | `86b2fc17` | **AGREES** |
 | `aa7239ed` | packet v1.0 | `.claude/plans/Drivers/FinalDesign/15_CandidateFactPacket.md` | `aa7239ed` | **AGREES** |
-| `d91443f8` | WorkOrder v2.0 | `.claude/plans/Drivers/FinalDesign/FableExperimentWorkOrder.md` | `57a6b860` | **DIFFERS** |
+| `d91443f8` | WorkOrder v2.0 | `.claude/plans/Drivers/FinalDesign/FableExperimentWorkOrder.md` | `e224cf14` | **DIFFERS** |
 
 ## Where each pin is written, and what that place CLAIMS
 
@@ -85,6 +85,9 @@ v5 only LOCATED the hash text, which proves a pin is present and says nothing ab
 | `.claude/plans/Drivers/WIP/Core_PreparedFactV2_818_827_Audit_2026-07-27.md` | record | The six open defects, restated | d91443f8 (WorkOrder v2.0) | dated record | 1 |
 | `.claude/plans/Drivers/WIP/Core_PreparedFactV2_818_827_Audit_2026-07-27.md` | record | Two genuine findings for the OWNER | d91443f8 (WorkOrder v2.0) | dated record | 2 |
 | `.claude/plans/Drivers/WIP/Core_PreparedFactV2_818_827_Audit_2026-07-27.md` | record | Untouched, non-negotiable | d91443f8 (WorkOrder v2.0) | dated record | 1 |
+| `.claude/plans/Drivers/experiments/WORKORDER_STATUS.md` | record | 2026-07-24 — Work order v1.8 → v1.9 (Fable, owner instructions); K-fields GO #1 OPEN | aa7239ed (packet v1.0) | dated record | 2 |
+| `.claude/plans/Drivers/experiments/WORKORDER_STATUS.md` | record | 2026-07-24 — Work order v1.8 → v1.9 (Fable, owner instructions); K-fields GO #1 OPEN | d91443f8 (WorkOrder v2.0) | dated record | 2 |
+| `.claude/plans/Drivers/experiments/WORKORDER_STATUS.md` | record | WORKORDER_STATUS - FableExperimentWorkOrder v2.0 execution board | d91443f8 (WorkOrder v2.0) | dated record | 1 |
 | `.claude/plans/Drivers/experiments/harness/exp5_rev4_package.md` | package | PART F — GOVERNING-DOCUMENT CHANGES (literal; carried by the companion | aa7239ed (packet v1.0) | dated record | 1 |
 | `.claude/plans/Drivers/experiments/harness/rev3_build.py` | build script | (module level) | aa7239ed (packet v1.0) | dated record | 1 |
 | `.claude/plans/Drivers/experiments/harness/rev4_extra.py` | build script | (module level) | 86b2fc17 (packet pre-amendment) | dated record | 2 |
@@ -95,11 +98,12 @@ v5 only LOCATED the hash text, which proves a pin is present and says nothing ab
 | `driver/core/prepared_fact.py` | production | (module level) | aa7239ed (packet v1.0) | dated record | 1 |
 | `driver/core/test_driver_period_resolver.py` | test | (module level) | aa7239ed (packet v1.0) | dated record | 1 |
 | `driver/core/test_prepared_fact.py` | test | (module level) | aa7239ed (packet v1.0) | dated record | 1 |
+| `driver/relocation/inline_html.py` | production | function _has_number_fact | aa7239ed (packet v1.0) | dated record | 1 |
 
 | | |
 |---|---|
 | **CURRENT claims whose pin no longer describes its artifact** | **0** |
-| dated record occurrences (stand as written, never corrected) | 101 |
-| rows | 73 |
-| distinct files | 33 |
-| total occurrences | 101 |
+| dated record occurrences (stand as written, never corrected) | 107 |
+| rows | 77 |
+| distinct files | 35 |
+| total occurrences | 107 |

@@ -337,11 +337,14 @@ def test_ATTACK_the_happy_path_verifies_against_a_real_shaped_row():
 
 def test_ATTACK_comma_formatted_graph_values_are_parsed_not_rejected():
     """807,132 of 1,000,000 live numeric facts carry commas; a bare Decimal()
-    rejects them. The certified graph-lexical parser is used instead.
-    IDENTITY CHANGE (SEQ 265 D): the accounting-paren assert is retired —
-    parentheses left the graph grammar (the writer never emits them; census
-    zero) and now refuse; the source lane's paren law is pinned at the bind
-    door by test_F_a_visible_accounting_negative_still_reconciles."""
+    rejects them. `parse_raw` is used instead, whose authority is an XSD
+    decimal (Arelle's pinned decimalPattern) OR an exact canonical grouped
+    transport form — comma-bearing text that round-trips through the
+    runtime's own grouped formatting. IDENTITY CHANGE (SEQ 265 D): the
+    accounting-paren assert is retired because a parenthesised string is
+    NEITHER of those two readable forms, so it refuses; the source lane's
+    paren law is pinned at the bind door by
+    test_F_a_visible_accounting_negative_still_reconciles."""
     from driver.relocation.inline_html import parse_raw
     assert parse_raw("113,743,000,000") == Decimal("113743000000")
     assert parse_raw("(1,234.50)") is None

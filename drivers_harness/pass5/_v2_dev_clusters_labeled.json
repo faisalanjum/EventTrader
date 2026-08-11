@@ -1,0 +1,2102 @@
+{
+  "_meta": {
+    "kind": "v2_dev_clusters_labeled",
+    "labeler": "gpt-5.4",
+    "n_events_kept": 200,
+    "n_dropped": 47,
+    "note": "INDEPENDENT gpt-5.4 ground; canonical_bucket is the sibling-discrimination ground truth",
+    "object_sib_ground": "DETERMINISTIC from objective_signal (object+metric explicitly named = objective independence)",
+    "object_sib_note": "price-vs-volume (commodity/auto) + datacenter REVENUE-vs-CAPEX (the canonical embedding-confusion over-merge killer that bit v1: aws_revenue vs aws_capex_intensity). Ground = objective (object+metric explicitly named).",
+    "ground_fix_2026-05-31": "moved 3 capex events ai_datacenter_demand->hyperscaler_capex; s05 base un-rejected (real EPS beat); s26 kept reject (ambiguous, flagged)"
+  },
+  "families": [
+    {
+      "family_id": "peer-demand-ai-datacenter",
+      "axis": "peer",
+      "theme": "demand",
+      "members": [
+        {
+          "ticker": "NVDA",
+          "date": "2024-05-16",
+          "source_type": "news",
+          "evidence": "Nvidia Set for Major Growth with Increased Data Center Spending and Expanding AI Demand, Analysts Say. Wedbush's Matt Bryson reiterated Outperform... citing robust demand for HBM & SSDs.",
+          "return_pct": -0.31,
+          "objective_signal": "Expanding AI Demand / Increased Data Center Spending",
+          "member_id": "peer-demand-ai-datacenter#0",
+          "canonical_bucket": "ai_datacenter_demand"
+        },
+        {
+          "ticker": "AVGO",
+          "date": "2025-05-01",
+          "source_type": "news",
+          "evidence": "Broadcom (AVGO) Stock Climbs As Meta and Microsoft Results Signal Soaring AI And Data Center Demand. Shares gained following blockbuster earnings reports from both Meta Platforms and Microsoft.",
+          "return_pct": 2.67,
+          "objective_signal": "Soaring AI And Data Center Demand",
+          "member_id": "peer-demand-ai-datacenter#1",
+          "canonical_bucket": "ai_datacenter_demand"
+        },
+        {
+          "ticker": "AVGO",
+          "date": "2025-06-05",
+          "source_type": "news",
+          "evidence": "Broadcom Q2 Earnings: Revenue, EPS Beat Estimates Driven By 'Robust Demand' For AI Networking, Company Sees Acceleration In AI Revenue Ahead.",
+          "return_pct": -5.12,
+          "objective_signal": "'Robust Demand' For AI Networking",
+          "member_id": "peer-demand-ai-datacenter#2",
+          "canonical_bucket": "ai_datacenter_demand"
+        },
+        {
+          "ticker": "MRVL",
+          "date": "2025-12-03",
+          "source_type": "news",
+          "evidence": "Marvell Could Hit $10B Next Year, CEO Says \u2014 And AI Demand Is Just Getting Started. Marvell Technology predicts $10 billion revenue next year, with 25% growth in data center revenue.",
+          "return_pct": 7.88,
+          "objective_signal": "AI Demand Is Just Getting Started / 25% growth in data center revenue",
+          "member_id": "peer-demand-ai-datacenter#3",
+          "canonical_bucket": "ai_datacenter_demand"
+        },
+        {
+          "ticker": "MU",
+          "date": "2024-09-25",
+          "source_type": "news",
+          "evidence": "Micron Q4 Earnings: Revenue, EPS Beat On 'Robust AI Demand,' Company Sees 'Significantly Improved' Profitability Ahead, Shares Surge.",
+          "return_pct": 14.73,
+          "objective_signal": "'Robust AI Demand'",
+          "member_id": "peer-demand-ai-datacenter#4",
+          "canonical_bucket": "ai_datacenter_demand"
+        },
+        {
+          "ticker": "MU",
+          "date": "2025-12-03",
+          "source_type": "news",
+          "evidence": "Micron Kills 'Crucial' Consumer Unit To Chase AI Gold Rush... after exiting Crucial consumer business to focus on AI-driven data center demand.",
+          "return_pct": -2.23,
+          "objective_signal": "AI-driven data center demand",
+          "member_id": "peer-demand-ai-datacenter#5",
+          "canonical_bucket": "ai_datacenter_demand"
+        },
+        {
+          "ticker": "DELL",
+          "date": "2024-02-29",
+          "source_type": "news",
+          "evidence": "Dell Reports Better-Than-Expected Q4 Results Driven By AI Server Demand... 'Our strong AI-optimized server momentum continues, with orders increasing nearly 40% sequentially and backlog nearly doubling.'",
+          "return_pct": 31.51,
+          "objective_signal": "AI Server Demand / AI-optimized server momentum",
+          "member_id": "peer-demand-ai-datacenter#6",
+          "canonical_bucket": "ai_datacenter_demand"
+        },
+        {
+          "ticker": "DELL",
+          "date": "2025-05-29",
+          "source_type": "news",
+          "evidence": "Dell Q1 Earnings: Revenue Beat, EPS Miss, Company Highlights 'Unprecedented Demand' For AI-Optimized Servers.",
+          "return_pct": -2.02,
+          "objective_signal": "'Unprecedented Demand' For AI-Optimized Servers",
+          "member_id": "peer-demand-ai-datacenter#7",
+          "canonical_bucket": "ai_datacenter_demand"
+        },
+        {
+          "ticker": "SMCI",
+          "date": "2025-10-23",
+          "source_type": "news",
+          "evidence": "Super Micro Computer Secures $12B In New Orders In Q2 2026... Seeing Demand For Supermicro Nvidia GB300, B300, RTX Pro... Receives Large New Orders and Sees Strong Demand for Blackwell Ultra.",
+          "return_pct": -8.72,
+          "objective_signal": "Strong Demand for Blackwell Ultra / $12B In New Orders",
+          "member_id": "peer-demand-ai-datacenter#8",
+          "canonical_bucket": "ai_datacenter_demand"
+        },
+        {
+          "ticker": "CIEN",
+          "date": "2025-09-04",
+          "source_type": "news",
+          "evidence": "AI Demand Fuels Ciena Growth, CEO Sees Strong 2026 Momentum... reporting Q3 2025 results with 29.4% revenue growth and adjusted EPS of 67 cents, beating analyst estimates.",
+          "return_pct": 23.13,
+          "objective_signal": "AI Demand Fuels Ciena Growth",
+          "member_id": "peer-demand-ai-datacenter#9",
+          "canonical_bucket": "ai_datacenter_demand"
+        },
+        {
+          "ticker": "ANET",
+          "date": "2025-05-07",
+          "source_type": "news",
+          "evidence": "Arista's Stock Hit As Analysts Cut Targets Over Tariff Uncertainty Despite Strong AI Demand. EPS beat estimates, but outlook remains conservative due to tariff uncertainty.",
+          "return_pct": 0.97,
+          "objective_signal": "Strong AI Demand",
+          "member_id": "peer-demand-ai-datacenter#11",
+          "canonical_bucket": "ai_datacenter_demand"
+        },
+        {
+          "ticker": "HPE",
+          "date": "2024-09-05",
+          "source_type": "news",
+          "evidence": "Hewlett Packard Enterprise reports Q3 results amid a competitive AI server market. The company faces strong demand for AI servers.",
+          "return_pct": -6,
+          "objective_signal": "strong demand for AI servers",
+          "member_id": "peer-demand-ai-datacenter#12",
+          "canonical_bucket": "ai_datacenter_demand"
+        },
+        {
+          "ticker": "AMD",
+          "date": "2026-02-13",
+          "source_type": "news",
+          "evidence": "AMD Quality Score Surges On 60% Annual Data Center Expansion Bet To Drive AI Dominance... it targets 60% annual data center growth and $2.5B in record income. The AI momentum is driving the surge.",
+          "return_pct": 0.67,
+          "objective_signal": "60% annual data center growth / AI momentum",
+          "member_id": "peer-demand-ai-datacenter#13",
+          "canonical_bucket": "ai_datacenter_demand"
+        }
+      ],
+      "n_kept": 13
+    },
+    {
+      "family_id": "PEER_GLP1_OBESITY_DEMAND",
+      "axis": "peer",
+      "theme": "demand",
+      "members": [
+        {
+          "ticker": "LLY",
+          "date": "2024-02-12T18:22:34-05:00",
+          "source_type": "news",
+          "evidence": "Eli Lilly's Weight Loss Drug Tirzepatide Is Expanding Market Share. Weekly updates on Mounjaro and Zepbound prescriptions in the GLP-1 category. Analyst predicts $12.78 billion in fiscal year 2024 tripeptide revenues.",
+          "return_pct": 0.72,
+          "objective_signal": "Mounjaro and Zepbound prescriptions in the GLP-1 category",
+          "member_id": "PEER_GLP1_OBESITY_DEMAND#0",
+          "canonical_bucket": "glp1_obesity_demand"
+        },
+        {
+          "ticker": "LLY",
+          "date": "2024-02-06T08:29:29-05:00",
+          "source_type": "news",
+          "evidence": "Investors Cheer Eli Lilly Earnings, Q4 Performance Surpasses Expectations Thanks To Strong Zepbound Launch, Surging Weight Loss Drug Sales. Eli Lilly beats Q4 2023 revenue expectations at $9.35 billion, driven by higher realized prices and strong sales of Mounjaro.",
+          "return_pct": -0.2,
+          "objective_signal": "Strong Zepbound Launch, Surging Weight Loss Drug Sales",
+          "member_id": "PEER_GLP1_OBESITY_DEMAND#1",
+          "canonical_bucket": "glp1_obesity_demand"
+        },
+        {
+          "ticker": "LLY",
+          "date": "2024-08-08T08:25:57-04:00",
+          "source_type": "news",
+          "evidence": "Mounjaro Maker Eli Lilly's Bumper Q2 Earnings Exceeds Estimates, Hikes Outlook Again On Strong Diabetes And Weight Loss Drugs Sales. Revenue surged 36% year-over-year to $11.3 billion, driven by strong sales of Mounjaro, Zepbound.",
+          "return_pct": 9.19,
+          "objective_signal": "Strong ... Weight Loss Drugs Sales; strong sales of Mounjaro, Zepbound",
+          "member_id": "PEER_GLP1_OBESITY_DEMAND#2",
+          "canonical_bucket": "glp1_obesity_demand"
+        },
+        {
+          "ticker": "LLY",
+          "date": "2025-10-30T10:05:19-04:00",
+          "source_type": "news",
+          "evidence": "Mounjaro And Zepbound Power Eli Lilly's 54% Revenue Jump In Q3, Hikes 2025 Forecast. Eli Lilly reported Q3 revenue of $17.6 billion, beating estimates and raising 2025 guidance as Mounjaro and Zepbound sales surged.",
+          "return_pct": 3.8,
+          "objective_signal": "Mounjaro and Zepbound sales surged",
+          "member_id": "PEER_GLP1_OBESITY_DEMAND#3",
+          "canonical_bucket": "glp1_obesity_demand"
+        },
+        {
+          "ticker": "LLY",
+          "date": "2026-02-05T13:44:38-05:00",
+          "source_type": "news",
+          "evidence": "Eli Lilly's 2026 Outlook Push Back Demand Fears. Cantor says Eli Lilly's 2026 outlook eases GLP-1 pricing worries and expects strong sales growth driven by incretin drugs and orforglipron prescriptions.",
+          "return_pct": -7.97,
+          "objective_signal": "GLP-1 pricing worries; strong sales growth driven by incretin drugs and orforglipron prescriptions",
+          "member_id": "PEER_GLP1_OBESITY_DEMAND#4",
+          "canonical_bucket": "glp1_obesity_demand"
+        },
+        {
+          "ticker": "LLY",
+          "date": "2025-08-07T09:18:43-04:00",
+          "source_type": "news",
+          "evidence": "During Conf Call, Lilly Exec Says Co Encouraged By The Vial Sales For Obesity Drug Zepbound In Q2; Zepbound Vial Sales Were About 20% Of Total U.S. Prescriptions And 5% Of New Prescriptions In Q2.",
+          "return_pct": -14.24,
+          "objective_signal": "Vial Sales For Obesity Drug Zepbound ... 20% Of Total U.S. Prescriptions",
+          "member_id": "PEER_GLP1_OBESITY_DEMAND#5",
+          "canonical_bucket": "glp1_obesity_demand"
+        },
+        {
+          "ticker": "LLY",
+          "date": "2025-08-07T08:30:00-04:00",
+          "source_type": "transcript",
+          "evidence": "Asad Haider: on the Lilly Direct channel, clearly ZEPBound growth has been getting a lot of momentum with the new to brand prescriptions. Where do you think this could stabilize and how is that segment changing the landscape on pricing.",
+          "return_pct": -14.24,
+          "objective_signal": "ZEPBound growth ... momentum with the new to brand prescriptions",
+          "member_id": "PEER_GLP1_OBESITY_DEMAND#6",
+          "canonical_bucket": "glp1_obesity_demand"
+        },
+        {
+          "ticker": "AMGN",
+          "date": "2024-05-03T03:45:22-04:00",
+          "source_type": "news",
+          "evidence": "Amgen Stock Adds Good Weight After CEO's Update On Experimental Drug Rivaling Ozempic. MariTide, formerly AMG 133, is an injectable form of drug targeting two gut hormones \u2014 gastric inhibitory polypeptide receptor, or GIP, and glucagon-like peptide 1, or GLP-1.",
+          "return_pct": 11.82,
+          "objective_signal": "drug Rivaling Ozempic ... targeting GIP and glucagon-like peptide 1, or GLP-1",
+          "member_id": "PEER_GLP1_OBESITY_DEMAND#7",
+          "canonical_bucket": "glp1_obesity_demand"
+        },
+        {
+          "ticker": "AMGN",
+          "date": "2024-11-26T07:11:07-05:00",
+          "source_type": "news",
+          "evidence": "Amgen Announced Data At 52 Weeks In Phase 2 Study With MariTide ... Showing Up To ~20% Average Weight Loss At Week 52 Without A Weight Loss Plateau. MariTide is the First Obesity Treatment With Monthly or Less Frequent Dosing.",
+          "return_pct": -4.76,
+          "objective_signal": "~20% Average Weight Loss ... First Obesity Treatment With Monthly or Less Frequent Dosing",
+          "member_id": "PEER_GLP1_OBESITY_DEMAND#8",
+          "canonical_bucket": "glp1_obesity_demand"
+        },
+        {
+          "ticker": "AMGN",
+          "date": "2025-11-04T16:30:00-05:00",
+          "source_type": "transcript",
+          "evidence": "Chris Schott: maybe a bigger picture question on obesity? ... some discussions on lower Medicare pricing for obesity drugs. I'd just be interested in just Amgen's latest view on kind of the obesity market and the company's role within the market with MariTide.",
+          "return_pct": 7.81,
+          "objective_signal": "the obesity market and the company's role within the market with MariTide",
+          "member_id": "PEER_GLP1_OBESITY_DEMAND#9",
+          "canonical_bucket": "glp1_obesity_demand"
+        },
+        {
+          "ticker": "VKTX",
+          "date": "2024-02-27T09:48:55-05:00",
+          "source_type": "news",
+          "evidence": "Weight Loss Drug Market Gets Crowded As Viking Therapeutics Drops Encouraging Phase 2 Data From Obesity Study. Viking's VK2735, a dual GLP-1 and GIP receptor agonist, achieved significant weight loss (up to 14.7%) in metabolic disorder patients.",
+          "return_pct": 122.19,
+          "objective_signal": "VK2735, a dual GLP-1 and GIP receptor agonist ... weight loss (up to 14.7%)",
+          "member_id": "PEER_GLP1_OBESITY_DEMAND#10",
+          "canonical_bucket": "glp1_obesity_demand"
+        },
+        {
+          "ticker": "VKTX",
+          "date": "2025-08-19T07:11:46-04:00",
+          "source_type": "news",
+          "evidence": "Viking Therapeutics' Obesity Drug Shows Up to 12% Weight Loss in Phase 2 Trial. Viking announced positive top-line results for its obesity drug.",
+          "return_pct": -42.21,
+          "objective_signal": "Obesity Drug Shows Up to 12% Weight Loss in Phase 2 Trial",
+          "member_id": "PEER_GLP1_OBESITY_DEMAND#11",
+          "canonical_bucket": "glp1_obesity_demand"
+        },
+        {
+          "ticker": "PFE",
+          "date": "2023-06-26T06:53:40-04:00",
+          "source_type": "news",
+          "evidence": "Pfizer Provides Update On GLP-1-RA Clinical Development Program For Adults With Obesity And Type 2 Diabetes Mellitus. Pfizer is continuing to advance the first full agonist oral GLP-1-RA candidate danuglipron ... the largest oral, small molecule GLP-1-RA clinical development program underway.",
+          "return_pct": -3.67,
+          "objective_signal": "GLP-1-RA Clinical Development Program For Adults With Obesity",
+          "member_id": "PEER_GLP1_OBESITY_DEMAND#12",
+          "canonical_bucket": "glp1_obesity_demand"
+        },
+        {
+          "ticker": "PFE",
+          "date": "2026-02-03T06:44:06-05:00",
+          "source_type": "news",
+          "evidence": "Pfizer Reports Topline Phase 2b VESPER-3 Data; Study Met Primary Endpoint Of Statistically Significant Weight Reduction At 28 Weeks ... For Monthly Maintenance Dosing Of GLP-1 RA PF'3944 In Adults With Obesity Or Overweight Without Type 2 Diabetes.",
+          "return_pct": -3.45,
+          "objective_signal": "GLP-1 RA PF'3944 In Adults With Obesity ... Weight Reduction At 28 Weeks",
+          "member_id": "PEER_GLP1_OBESITY_DEMAND#13",
+          "canonical_bucket": "glp1_obesity_demand"
+        }
+      ],
+      "n_kept": 14
+    },
+    {
+      "family_id": "PEER_COST_FUEL_FREIGHT",
+      "axis": "peer",
+      "theme": "cost",
+      "members": [
+        {
+          "ticker": "AAL",
+          "date": "2024-05-29",
+          "source_type": "news",
+          "evidence": "American Airlines Lowers Q2 Adjusted EPS In The Range Of $1.00-$1.15 Vs. $1.30 Estimate; Says Average Fuel Price Is Now Expected To Be $2.70-2.80 Per Gallon Of Jet Fuel (Prior View: $2.75-$2.95)",
+          "return_pct": -13.54,
+          "objective_signal": "Average Fuel Price ... $2.70-2.80 Per Gallon Of Jet Fuel",
+          "member_id": "PEER_COST_FUEL_FREIGHT#0",
+          "canonical_bucket": "fuel_freight_cost"
+        },
+        {
+          "ticker": "AAL",
+          "date": "2024-03-12",
+          "source_type": "news",
+          "evidence": "American Airlines Group Sees Q1 Avg. Fuel Price Per Gallon $2.80-$2.90 (Prior $2.65-$2.85)",
+          "return_pct": -4.71,
+          "objective_signal": "Q1 Avg. Fuel Price Per Gallon $2.80-$2.90",
+          "member_id": "PEER_COST_FUEL_FREIGHT#2",
+          "canonical_bucket": "fuel_freight_cost"
+        },
+        {
+          "ticker": "LUV",
+          "date": "2026-04-22",
+          "source_type": "news",
+          "evidence": "Southwest Airlines Stock Falls On Q1 Results, Guidance: 'Higher Fuel Expense' Weighs On Outlook",
+          "return_pct": -4.07,
+          "objective_signal": "'Higher Fuel Expense' Weighs On Outlook",
+          "member_id": "PEER_COST_FUEL_FREIGHT#3",
+          "canonical_bucket": "fuel_freight_cost"
+        },
+        {
+          "ticker": "LUV",
+          "date": "2026-03-06",
+          "source_type": "news",
+          "evidence": "Southwest Airlines Co is trading lower Friday afternoon as investors react to a sharp escalation in the U.S.-Israel-Iran conflict, fueling worries about jet-fuel costs and demand for discretionary air travel.",
+          "return_pct": -5.35,
+          "objective_signal": "worries about jet-fuel costs",
+          "member_id": "PEER_COST_FUEL_FREIGHT#4",
+          "canonical_bucket": "fuel_freight_cost"
+        },
+        {
+          "ticker": "LUV",
+          "date": "2025-07-23",
+          "source_type": "news",
+          "evidence": "Southwest Sees Q3 RASM Down 2% To Up 2%, Fuel Cost Per Gallon $2.40-$2.50",
+          "return_pct": -11.13,
+          "objective_signal": "Fuel Cost Per Gallon $2.40-$2.50",
+          "member_id": "PEER_COST_FUEL_FREIGHT#5",
+          "canonical_bucket": "fuel_freight_cost"
+        },
+        {
+          "ticker": "ALK",
+          "date": "2025-09-15",
+          "source_type": "news",
+          "evidence": "Alaska Air Group's third quarter adjusted earnings per share is expected to be at the low end of our previously guided range of $1.00 to $1.40, driven primarily by elevated fuel costs and operational challenges ... pushing our expected economic fuel price to $2.50-$2.55 per gallon, up from our prior expectation of ~$2.45.",
+          "return_pct": -6.69,
+          "objective_signal": "driven primarily by elevated fuel costs ... economic fuel price to $2.50-$2.55 per gallon",
+          "member_id": "PEER_COST_FUEL_FREIGHT#6",
+          "canonical_bucket": "fuel_freight_cost"
+        },
+        {
+          "ticker": "ALK",
+          "date": "2026-03-13",
+          "source_type": "news",
+          "evidence": "Alaska Air Group Inc shares are trading lower ... amid a sharp rise in oil prices, a key cost driver for carriers ... Friday's pullback reflects ongoing concern that higher fuel expenses could pressure margins.",
+          "return_pct": 1.11,
+          "objective_signal": "higher fuel expenses could pressure margins",
+          "member_id": "PEER_COST_FUEL_FREIGHT#7",
+          "canonical_bucket": "fuel_freight_cost"
+        },
+        {
+          "ticker": "ALK",
+          "date": "2024-04-18",
+          "source_type": "news",
+          "evidence": "Alaska Air Expects Q2 EPS Of $2.20-$2.40 Vs. $2.12 Consensus; ASMs Up 5%-7% And Economic Fuel Cost Per Gallon Between $3.00-$3.20",
+          "return_pct": 4.07,
+          "objective_signal": "Economic Fuel Cost Per Gallon Between $3.00-$3.20",
+          "member_id": "PEER_COST_FUEL_FREIGHT#8",
+          "canonical_bucket": "fuel_freight_cost"
+        },
+        {
+          "ticker": "ALK",
+          "date": "2026-04-20",
+          "source_type": "news",
+          "evidence": "Air Group Suspends Full-Year Guidance Amid Fuel Volatility ... For full year 2026, our visibility to earnings is limited due primarily to ongoing fuel price volatility.",
+          "return_pct": -4.8,
+          "objective_signal": "Suspends Full-Year Guidance Amid Fuel Volatility ... ongoing fuel price volatility",
+          "member_id": "PEER_COST_FUEL_FREIGHT#9",
+          "canonical_bucket": "fuel_freight_cost"
+        },
+        {
+          "ticker": "DAL",
+          "date": "2026-04-08",
+          "source_type": "news",
+          "evidence": "Delta Air Lines Says Expect ... Elevated Jet Fuel Cost To Continue Until Recent Market Disruptions And Geopolitical Events Are Resolved",
+          "return_pct": -0.4,
+          "objective_signal": "Expect Elevated Jet Fuel Cost To Continue",
+          "member_id": "PEER_COST_FUEL_FREIGHT#10",
+          "canonical_bucket": "fuel_freight_cost"
+        },
+        {
+          "ticker": "JBLU",
+          "date": "2026-03-30",
+          "source_type": "news",
+          "evidence": "'JetBlue Airways raises bag fees as fuel prices soar'- CNBC",
+          "return_pct": -2.37,
+          "objective_signal": "raises bag fees as fuel prices soar",
+          "member_id": "PEER_COST_FUEL_FREIGHT#11",
+          "canonical_bucket": "fuel_freight_cost"
+        },
+        {
+          "ticker": "UPS",
+          "date": "2024-05-03",
+          "source_type": "news",
+          "evidence": "UPS Expects Fuel Surcharge Rev To Increase In Q2, Primarily Due To Volume Growth And Impact Of Higher Surcharge Modifiers",
+          "return_pct": 0.16,
+          "objective_signal": "Fuel Surcharge Rev To Increase ... Higher Surcharge Modifiers",
+          "member_id": "PEER_COST_FUEL_FREIGHT#12",
+          "canonical_bucket": "fuel_freight_cost"
+        }
+      ],
+      "n_kept": 12
+    },
+    {
+      "family_id": "PEER-CAPEX-01",
+      "axis": "peer",
+      "theme": "capex",
+      "members": [
+        {
+          "ticker": "NVDA",
+          "date": "2025-08-27T17:00:00-04:00",
+          "source_type": "transcript",
+          "evidence": "Jensen Huang: \"As you know, the CapEx of just the top four hyperscalers has doubled in two years... the CapEx spend has doubled to $600 billion per year.\" Asked about \"your three to four trillion in data center infrastructure spend by the end of the decade.\"",
+          "return_pct": -0.74,
+          "objective_signal": "CapEx of the top four hyperscalers doubled to $600 billion per year; $3-4 trillion data center infrastructure spend",
+          "member_id": "PEER-CAPEX-01#0",
+          "canonical_bucket": "hyperscaler_capex"
+        },
+        {
+          "ticker": "AMZN",
+          "date": "2024-10-31T17:00:00-04:00",
+          "source_type": "transcript",
+          "evidence": "Andy Jassy: \"I'll take the CapEx part... we expect to spend about $75 billion in 2024. I suspect we'll spend more than that in 2025. And the majority of it is for AWS and specifically the increased bumps here are really driven by generative AI.\"",
+          "return_pct": 6.19,
+          "objective_signal": "~$75 billion CapEx in 2024, more in 2025, majority for AWS generative AI",
+          "member_id": "PEER-CAPEX-01#1",
+          "canonical_bucket": "hyperscaler_capex"
+        },
+        {
+          "ticker": "AMZN",
+          "date": "2025-02-06T17:00:00-05:00",
+          "source_type": "transcript",
+          "evidence": "Andy Jassy: \"We spent $26.3 billion in capex in Q4, and I think that is reasonably representative of what you expect in the annualized capex rate in 2025. The vast majority of that capex spend is on AI for AWS.\" (Mark Mahaney: \"that's 100 billion capex we should think about in 25.\")",
+          "return_pct": -4.05,
+          "objective_signal": "$26.3 billion Q4 capex, ~$100 billion annualized capex run rate for 2025, vast majority on AI for AWS",
+          "member_id": "PEER-CAPEX-01#2",
+          "canonical_bucket": "hyperscaler_capex"
+        },
+        {
+          "ticker": "AMZN",
+          "date": "2023-08-03T17:30:00-04:00",
+          "source_type": "transcript",
+          "evidence": "Doug Anmuth: \"helpful to get the just over $50 billion CapEx number for this year. Just curious how generative AI changes... your CapEx trajectory.\" Jassy: \"included in that number is a pretty significant amount of capital expense in the AWS business for large language models and for generative AI.\"",
+          "return_pct": 8.24,
+          "objective_signal": "Just over $50 billion CapEx for the year, significant portion for AWS generative AI / large language models",
+          "member_id": "PEER-CAPEX-01#3",
+          "canonical_bucket": "hyperscaler_capex"
+        },
+        {
+          "ticker": "AMZN",
+          "date": "2026-03-03T02:20:42-05:00",
+          "source_type": "news",
+          "evidence": "\"Amazon, through its Amazon Data Services unit, is purchasing the campus in Ashburn, a key hub for U.S. data center infrastructure... Amazon's $35 Billion Virginia AI Data Center Push Amid Spending Surge.\"",
+          "return_pct": 0.16,
+          "objective_signal": "$427 million campus acquisition; $35 billion Virginia AI data center push amid spending surge",
+          "member_id": "PEER-CAPEX-01#7",
+          "canonical_bucket": "hyperscaler_capex"
+        },
+        {
+          "ticker": "AVGO",
+          "date": "2024-12-12T17:00:00-05:00",
+          "source_type": "transcript",
+          "evidence": "Harlan Sir: \"our latest roll-up is that the top four cloud and hyperscalers are going to grow their CapEx 35%, 40% in fiscal 25... think about the growth in the AI business, roughly in line with CapEx growth trends of your large cloud and hyperscale customers?\"",
+          "return_pct": 24.4,
+          "objective_signal": "top four cloud and hyperscalers growing CapEx 35-40% in fiscal 25, AI business tied to hyperscaler CapEx growth",
+          "member_id": "PEER-CAPEX-01#10",
+          "canonical_bucket": "hyperscaler_capex"
+        },
+        {
+          "ticker": "AMZN",
+          "date": "2025-06-05T02:00:10-04:00",
+          "source_type": "news",
+          "evidence": "\"Amazon.com Inc announced plans on Wednesday to invest $10 billion in North Carolina data center infrastructure to support artificial intelligence and cloud computing technologies, marking one of the largest investments in state history.\"",
+          "return_pct": 0.33,
+          "objective_signal": "$10 billion in North Carolina data center infrastructure",
+          "member_id": "PEER-CAPEX-01#13",
+          "canonical_bucket": "hyperscaler_capex"
+        },
+        {
+          "ticker": "AMZN",
+          "date": "2026-02-06",
+          "source_type": "news",
+          "return_pct": -5.55,
+          "objective_signal": "soaring AI capital expenditures",
+          "evidence": "Pushed back against skepticism over soaring AI-related capital expenditures and data center infrastructure spending.",
+          "member_id": "PEER-CAPEX-01#14",
+          "canonical_bucket": "hyperscaler_capex"
+        },
+        {
+          "ticker": "ORCL",
+          "date": "2025-12-10",
+          "source_type": "news",
+          "return_pct": -10.94,
+          "objective_signal": "AI data-center capital-spend ramp",
+          "evidence": "Q2 FY26 print drove a selloff on the heavy AI data-center build / capital-spend ramp and negative free cash flow.",
+          "member_id": "PEER-CAPEX-01#15",
+          "canonical_bucket": "hyperscaler_capex"
+        },
+        {
+          "ticker": "DLR",
+          "date": "2026-03-10",
+          "source_type": "news",
+          "return_pct": 0.63,
+          "objective_signal": "AI Data Center CapEx Cycle",
+          "evidence": "A 34% dividend buffer meets AI data center CapEx cycle.",
+          "member_id": "PEER-CAPEX-01#17",
+          "canonical_bucket": "hyperscaler_capex"
+        },
+        {
+          "ticker": "AMZN",
+          "date": "2025-06-16",
+          "source_type": "news",
+          "return_pct": 1.95,
+          "objective_signal": "data center infrastructure investment",
+          "evidence": "Plans to invest AU$20 billion through 2029 to expand its data center infrastructure across Australia.",
+          "member_id": "PEER-CAPEX-01#18",
+          "canonical_bucket": "hyperscaler_capex"
+        }
+      ],
+      "n_kept": 11
+    },
+    {
+      "family_id": "PEER-regulatory-fda-biopharma",
+      "axis": "peer",
+      "theme": "regulatory",
+      "members": [
+        {
+          "ticker": "ACAD",
+          "date": "2021-04-05",
+          "source_type": "news",
+          "evidence": "Acadia Pharmaceuticals Inc. today announced that the Company has received a Complete Response Letter (CRL) from the U.S. Food and Drug Administration (FDA) regarding its supplemental New Drug Application for pimavanserin.",
+          "return_pct": -17.32,
+          "objective_signal": "Complete Response Letter (CRL) from FDA on supplemental NDA for pimavanserin",
+          "member_id": "PEER-regulatory-fda-biopharma#2",
+          "canonical_bucket": "fda_decision"
+        },
+        {
+          "ticker": "REGN",
+          "date": "2023-06-27",
+          "source_type": "news",
+          "evidence": "FDA Issues Complete Response Letter For Aflibercept 8mg Biologics License Application Solely Due To An Ongoing Review Of Inspection Findings At A Third-Party Filler.",
+          "return_pct": -8.71,
+          "objective_signal": "FDA Complete Response Letter on aflibercept 8mg Biologics License Application (BLA)",
+          "member_id": "PEER-regulatory-fda-biopharma#3",
+          "canonical_bucket": "fda_decision"
+        },
+        {
+          "ticker": "RGNX",
+          "date": "2026-02-09",
+          "source_type": "news",
+          "evidence": "REGENXBIO today announced that the U.S. Food and Drug Administration (FDA) has issued a Complete Response Letter (CRL) regarding its Biologics License Application (BLA) for RGX-121.",
+          "return_pct": -14.08,
+          "objective_signal": "FDA Complete Response Letter (CRL) on BLA for RGX-121",
+          "member_id": "PEER-regulatory-fda-biopharma#4",
+          "canonical_bucket": "fda_decision"
+        },
+        {
+          "ticker": "AXSM",
+          "date": "2021-08-09",
+          "source_type": "news",
+          "evidence": "Axsome Therapeutics Says On Jul. 30 Received FDA Letter Regarding NDA For AXS-05 Stating FDA Has 'identified deficiencies that preclude discussion of labeling and post-marketing requirements/commitments at this time'.",
+          "return_pct": -46.54,
+          "objective_signal": "FDA letter on NDA for AXS-05 citing deficiencies precluding labeling discussion",
+          "member_id": "PEER-regulatory-fda-biopharma#5",
+          "canonical_bucket": "fda_decision"
+        },
+        {
+          "ticker": "AXSM",
+          "date": "2022-08-19",
+          "source_type": "news",
+          "evidence": "The U.S. Food and Drug Administration (FDA) has approved Axsome Therapeutics' lead asset AUVELITY (dextromethorphan HBr-bupropion HCl) extended-release tablets for the treatment of major depressive disorder (MDD) in adults.",
+          "return_pct": 40.08,
+          "objective_signal": "FDA approval of AUVELITY for major depressive disorder",
+          "member_id": "PEER-regulatory-fda-biopharma#6",
+          "canonical_bucket": "fda_decision"
+        },
+        {
+          "ticker": "KRYS",
+          "date": "2023-05-22",
+          "source_type": "news",
+          "evidence": "The FDA approved Krystal Biotech Inc's Vyjuvek (beremagene geperpavec-svdt) for the treatment of patients six months of age or older with dystrophic epidermolysis bullosa.",
+          "return_pct": 22.34,
+          "objective_signal": "FDA approval of Vyjuvek (first redosable gene therapy) for dystrophic epidermolysis bullosa",
+          "member_id": "PEER-regulatory-fda-biopharma#7",
+          "canonical_bucket": "fda_decision"
+        },
+        {
+          "ticker": "AGIO",
+          "date": "2025-12-24",
+          "source_type": "news",
+          "evidence": "Agios Says U.S. FDA Approves AQVESME Mitapivat For Alpha- Or Beta-Thalassemia Anemia, Launch Expected Late January 2026 Following AQVESME REMS Program.",
+          "return_pct": 18.63,
+          "objective_signal": "FDA approval of AQVESME (mitapivat) for alpha/beta-thalassemia anemia",
+          "member_id": "PEER-regulatory-fda-biopharma#8",
+          "canonical_bucket": "fda_decision"
+        },
+        {
+          "ticker": "KURA",
+          "date": "2025-06-02",
+          "source_type": "news",
+          "evidence": "FDA Grants Priority Review To Kura And Kyowa Kirin's Ziftomenib NDA; FDA assigns a Prescription Drug User Fee Act (PDUFA) target action date of November 30, 2025.",
+          "return_pct": 10.82,
+          "objective_signal": "FDA Priority Review of ziftomenib NDA with PDUFA target date Nov 30, 2025",
+          "member_id": "PEER-regulatory-fda-biopharma#13",
+          "canonical_bucket": "fda_decision"
+        },
+        {
+          "ticker": "ACAD",
+          "date": "2021-04-05",
+          "source_type": "news",
+          "return_pct": -17.32,
+          "objective_signal": "FDA Complete Response Letter",
+          "evidence": "Receives complete response letter from U.S. FDA for sNDA for pimavanserin for dementia-related psychosis.",
+          "member_id": "PEER-regulatory-fda-biopharma#15",
+          "canonical_bucket": "fda_decision"
+        },
+        {
+          "ticker": "ARDX",
+          "date": "2021-07-20",
+          "source_type": "news",
+          "return_pct": -73.93,
+          "objective_signal": "FDA rejection",
+          "evidence": "Stock collapses after FDA rejects its kidney disease candidate.",
+          "member_id": "PEER-regulatory-fda-biopharma#16",
+          "canonical_bucket": "fda_decision"
+        },
+        {
+          "ticker": "AXSM",
+          "date": "2022-05-02",
+          "source_type": "news",
+          "return_pct": 7.08,
+          "objective_signal": "FDA Complete Response Letter",
+          "evidence": "Receives FDA complete response letter for NDA for AXS-07 for acute treatment of migraine.",
+          "member_id": "PEER-regulatory-fda-biopharma#17",
+          "canonical_bucket": "fda_decision"
+        },
+        {
+          "ticker": "APLS",
+          "date": "2022-07-19",
+          "source_type": "news",
+          "return_pct": 16.17,
+          "objective_signal": "FDA acceptance and priority review",
+          "evidence": "FDA acceptance and priority review of NDA for pegcetacoplan for geographic atrophy.",
+          "member_id": "PEER-regulatory-fda-biopharma#18",
+          "canonical_bucket": "fda_decision"
+        },
+        {
+          "ticker": "AXSM",
+          "date": "2022-08-19",
+          "source_type": "news",
+          "return_pct": 40.08,
+          "objective_signal": "FDA approval",
+          "evidence": "FDA approval of AUVELITY for the treatment of major depressive disorder in adults.",
+          "member_id": "PEER-regulatory-fda-biopharma#19",
+          "canonical_bucket": "fda_decision"
+        },
+        {
+          "ticker": "ARDX",
+          "date": "2022-11-17",
+          "source_type": "news",
+          "return_pct": 39.02,
+          "objective_signal": "FDA advisory committee vote",
+          "evidence": "FDA advisory committee votes 9-to-4 that benefits of XPHOZAH outweigh its risks.",
+          "member_id": "PEER-regulatory-fda-biopharma#20",
+          "canonical_bucket": "fda_decision"
+        },
+        {
+          "ticker": "GKOS",
+          "date": "2023-12-14",
+          "source_type": "news",
+          "return_pct": 25.34,
+          "objective_signal": "FDA approval",
+          "evidence": "The FDA has approved Glaukos' iDose TR travoprost intracameral implant.",
+          "member_id": "PEER-regulatory-fda-biopharma#22",
+          "canonical_bucket": "fda_decision"
+        },
+        {
+          "ticker": "TVTX",
+          "date": "2025-09-10",
+          "source_type": "news",
+          "return_pct": 26.2,
+          "objective_signal": "FDA PDUFA date",
+          "evidence": "FDA drops advisory committee for FILSPARI sNDA; PDUFA target date set for January 13, 2026.",
+          "member_id": "PEER-regulatory-fda-biopharma#24",
+          "canonical_bucket": "fda_decision"
+        }
+      ],
+      "n_kept": 16
+    },
+    {
+      "family_id": "peer_tariff_margin",
+      "axis": "peer",
+      "theme": "margin",
+      "members": [
+        {
+          "ticker": "SHOO",
+          "date": "2025-02-27",
+          "source_type": "news",
+          "evidence": "Steve Madden Faces Looming Margin Pressure And Tariff Headwinds, Analyst Predicts Tough Road Ahead. Steve Madden faces potential margin pressure and tariff impacts, with cautious outlook for 2025.",
+          "return_pct": -4.65,
+          "objective_signal": "margin pressure and tariff impacts",
+          "member_id": "peer_tariff_margin#0",
+          "canonical_bucket": "tariff_margin_pressure"
+        },
+        {
+          "ticker": "AAPL",
+          "date": "2025-05-02",
+          "source_type": "news",
+          "evidence": "Apple Stock Faces 'Tariff-Related Headwinds': Apple analysts highlight tariff and gross margin concerns for the tech stock moving forward.",
+          "return_pct": -3.74,
+          "objective_signal": "tariff and gross margin concerns",
+          "member_id": "peer_tariff_margin#1",
+          "canonical_bucket": "tariff_margin_pressure"
+        },
+        {
+          "ticker": "CAT",
+          "date": "2025-04-30",
+          "source_type": "news",
+          "evidence": "Caterpillar Warns Of $250 Million To $350 Million Tariff Hit After Q1 Profit Miss. Q2 outlook expects similar sales & revenues but lower profit margin due to tariffs.",
+          "return_pct": 0.55,
+          "objective_signal": "lower profit margin due to tariffs",
+          "member_id": "peer_tariff_margin#2",
+          "canonical_bucket": "tariff_margin_pressure"
+        },
+        {
+          "ticker": "CAT",
+          "date": "2025-08-05",
+          "source_type": "news",
+          "evidence": "Rising Tariffs Undercut Caterpillar's Q2 Performance. Unfavorable manufacturing costs due to tariffs. Q3 incremental tariff costs estimated at $400-500M.",
+          "return_pct": 0.06,
+          "objective_signal": "unfavorable manufacturing costs due to tariffs",
+          "member_id": "peer_tariff_margin#3",
+          "canonical_bucket": "tariff_margin_pressure"
+        },
+        {
+          "ticker": "ALV",
+          "date": "2026-01-30",
+          "source_type": "news",
+          "evidence": "Autoliv Recoups Nearly All Tariff Costs But Warns Of Flat 2026 Growth. Autoliv beat fourth-quarter estimates and recovered most tariff costs, but weaker margins and a flat 2026 sales outlook sent shares down.",
+          "return_pct": -4,
+          "objective_signal": "recovered most tariff costs, but weaker margins",
+          "member_id": "peer_tariff_margin#4",
+          "canonical_bucket": "tariff_margin_pressure"
+        },
+        {
+          "ticker": "FAST",
+          "date": "2026-04-13",
+          "source_type": "news",
+          "evidence": "Fastenal Admits Tariffs Are Rising Faster Than They Can Raise Prices. Fastenal beat Q1 revenue estimates with $2.20B sales, but tariff costs and margin squeeze sent shares down over 7%.",
+          "return_pct": -6.85,
+          "objective_signal": "tariff costs and margin squeeze",
+          "member_id": "peer_tariff_margin#5",
+          "canonical_bucket": "tariff_margin_pressure"
+        },
+        {
+          "ticker": "ANF",
+          "date": "2025-05-29",
+          "source_type": "news",
+          "evidence": "Abercrombie's Sales Strength, Hollister Momentum Offset Tariff Pressure, Analyst Says. Q1 sales beat expectations, revised FY25 guidance accounts for tariff expenses.",
+          "return_pct": -6.13,
+          "objective_signal": "Offset Tariff Pressure / revised FY25 guidance accounts for tariff expenses",
+          "member_id": "peer_tariff_margin#6",
+          "canonical_bucket": "tariff_margin_pressure"
+        },
+        {
+          "ticker": "ANF",
+          "date": "2026-03-04",
+          "source_type": "news",
+          "evidence": "Abercrombie & Fitch Warns Of $40 Million Tariff Hit In 2026. Abercrombie & Fitch reported Q4 earnings beat but shares fell due to margin pressure and softer outlook. Tariffs may add $40M in costs.",
+          "return_pct": -3.66,
+          "objective_signal": "margin pressure ... Tariffs may add $40M in costs",
+          "member_id": "peer_tariff_margin#7",
+          "canonical_bucket": "tariff_margin_pressure"
+        },
+        {
+          "ticker": "AA",
+          "date": "2025-04-16",
+          "source_type": "news",
+          "evidence": "Alcoa Reports $20M Tariff Hit On Imports From Canada - Bloomberg.",
+          "return_pct": -7.05,
+          "objective_signal": "$20M Tariff Hit On Imports From Canada",
+          "member_id": "peer_tariff_margin#8",
+          "canonical_bucket": "tariff_margin_pressure"
+        },
+        {
+          "ticker": "DECK",
+          "date": "2025-10-17",
+          "source_type": "news",
+          "evidence": "Deckers Q2 Earnings Preview: Hoka Growth Meets Tariff-Driven Gross Margin Pressure. Hoka growth strong, but tariffs, promotions and freight pressure margins.",
+          "return_pct": 0.78,
+          "objective_signal": "Tariff-Driven Gross Margin Pressure",
+          "member_id": "peer_tariff_margin#9",
+          "canonical_bucket": "tariff_margin_pressure"
+        },
+        {
+          "ticker": "TSCO",
+          "date": "2026-01-29",
+          "source_type": "news",
+          "evidence": "Tractor Supply Feels Discretionary Spending Pullback, Tariffs Pinch. Tractor Supply ... cited tariff- and delivery-driven margin pressure.",
+          "return_pct": -7.58,
+          "objective_signal": "tariff- and delivery-driven margin pressure",
+          "member_id": "peer_tariff_margin#10",
+          "canonical_bucket": "tariff_margin_pressure"
+        },
+        {
+          "ticker": "CPB",
+          "date": "2026-03-11",
+          "source_type": "news",
+          "evidence": "Tariffs Land Campbell's In A Soup, Stock Hits 52-Week Low. Earnings miss as tariffs and supply costs hit the bottom line.",
+          "return_pct": -7.05,
+          "objective_signal": "tariffs and supply costs hit the bottom line",
+          "member_id": "peer_tariff_margin#11",
+          "canonical_bucket": "tariff_margin_pressure"
+        },
+        {
+          "ticker": "PII",
+          "date": "2026-01-27",
+          "source_type": "news",
+          "evidence": "Polaris Flags Tariff Hit, Issues Cautious Outlook. Polaris beat quarterly expectations, but warned tariffs and margin pressure could weigh on results this year.",
+          "return_pct": -4.28,
+          "objective_signal": "tariffs and margin pressure could weigh on results",
+          "member_id": "peer_tariff_margin#12",
+          "canonical_bucket": "tariff_margin_pressure"
+        },
+        {
+          "ticker": "LULU",
+          "date": "2025-12-08",
+          "source_type": "news",
+          "evidence": "Lululemon Runs Into Tariff Trouble While Racing To Refresh Core Collections. Lululemon's third-quarter report faces slowing sales growth, margin squeeze from tariffs, and weaker U.S. demand.",
+          "return_pct": -3.67,
+          "objective_signal": "margin squeeze from tariffs",
+          "member_id": "peer_tariff_margin#13",
+          "canonical_bucket": "tariff_margin_pressure"
+        },
+        {
+          "ticker": "HSY",
+          "date": "2026-02-05",
+          "source_type": "news",
+          "evidence": "Chocolate Maker Hershey Expects Sweeter 2026 ... even as margin pressure from commodity and tariff costs persisted.",
+          "return_pct": 8.98,
+          "objective_signal": "margin pressure from commodity and tariff costs",
+          "member_id": "peer_tariff_margin#14",
+          "canonical_bucket": "tariff_margin_pressure"
+        },
+        {
+          "ticker": "WHR",
+          "date": "2025-06-13",
+          "source_type": "news",
+          "evidence": "New Steel Tariffs Give Whirlpool A Competitive Edge. Whirlpool upgraded to Neutral as analyst sees tariff-driven margin boost and competitive edge from U.S.-based production.",
+          "return_pct": 3.06,
+          "objective_signal": "tariff-driven margin boost",
+          "member_id": "peer_tariff_margin#15",
+          "canonical_bucket": "tariff_margin_pressure"
+        },
+        {
+          "ticker": "ZBRA",
+          "date": "2025-04-29",
+          "source_type": "news",
+          "evidence": "Adjusted EBITDA margin for the second quarter is expected to be approximately 19% which includes the impact of approximately $25 to $30 million U.S. import tariff expense, net of mitigating actions.",
+          "return_pct": 5.16,
+          "objective_signal": "EBITDA margin ... includes ... $25 to $30 million U.S. import tariff expense",
+          "member_id": "peer_tariff_margin#16",
+          "canonical_bucket": "tariff_margin_pressure"
+        }
+      ],
+      "n_kept": 17
+    },
+    {
+      "family_id": "peer_rate_macro",
+      "axis": "peer",
+      "theme": "macro",
+      "members": [
+        {
+          "ticker": "STT",
+          "date": "2025-01-17",
+          "source_type": "news",
+          "evidence": "State Street Q4 Earnings: Fee Revenue Soars, CET1 Ratio Dips. State Street stock drops despite Q4 earnings beat, with net interest income impacted by deposit mix shift.",
+          "return_pct": -2.87,
+          "objective_signal": "net interest income impacted by deposit mix shift",
+          "member_id": "peer_rate_macro#1",
+          "canonical_bucket": "rate_macro_reprice"
+        },
+        {
+          "ticker": "BK",
+          "date": "2023-10-17",
+          "source_type": "news",
+          "evidence": "Bank Of New York Mellon Beats Q3 Earnings Estimates On Higher Interest Rates.",
+          "return_pct": 3.87,
+          "objective_signal": "Beats Q3 Earnings Estimates On Higher Interest Rates",
+          "member_id": "peer_rate_macro#3",
+          "canonical_bucket": "rate_macro_reprice"
+        },
+        {
+          "ticker": "GS",
+          "date": "2024-08-01",
+          "source_type": "news",
+          "evidence": "Why Goldman Sachs Shares Are Falling. Investors are reacting to weak U.S. economic data and concerns over potential Fed rate cuts impacting profitability.",
+          "return_pct": -1.79,
+          "objective_signal": "concerns over potential Fed rate cuts impacting profitability",
+          "member_id": "peer_rate_macro#6",
+          "canonical_bucket": "rate_macro_reprice"
+        },
+        {
+          "ticker": "ESS",
+          "date": "2022-11-03",
+          "source_type": "news",
+          "evidence": "Yet Another REIT Drops to 52-Week New Low. The negative effects of the Federal Reserve's interest rate hikes continue to hit the real estate investment trust (REIT) sector.",
+          "return_pct": -1.09,
+          "objective_signal": "Federal Reserve's interest rate hikes continue to hit the ... REIT sector",
+          "member_id": "peer_rate_macro#8",
+          "canonical_bucket": "rate_macro_reprice"
+        },
+        {
+          "ticker": "O",
+          "date": "2022-10-14",
+          "source_type": "news",
+          "evidence": "1 REIT You'll Wish You Bought In October 2022. The stock market is reeling from the pressures of a potential global recession, and central banks around the world are gearing up for the most aggressive interest rate hikes in history.",
+          "return_pct": -3.51,
+          "objective_signal": "most aggressive interest rate hikes in history",
+          "member_id": "peer_rate_macro#9",
+          "canonical_bucket": "rate_macro_reprice"
+        },
+        {
+          "ticker": "BLK",
+          "date": "2024-10-30",
+          "source_type": "news",
+          "evidence": "BlackRock's Larry Fink Warns Against Overly Optimistic Fed Rate Cuts, Cites High 'Embedded Inflation' And Predicts Only 1 Reduction This Year.",
+          "return_pct": -0.41,
+          "objective_signal": "Warns Against Overly Optimistic Fed Rate Cuts, Cites High 'Embedded Inflation'",
+          "member_id": "peer_rate_macro#12",
+          "canonical_bucket": "rate_macro_reprice"
+        },
+        {
+          "ticker": "BX",
+          "date": "2024-07-18",
+          "source_type": "news",
+          "evidence": "Blackstone Hits Two-Year Investment Peak, Anticipates Fed Rate Cuts Amid Easing Inflation. Blackstone ramped up its investment activity to a two-year peak ... anticipating the U.S. Federal Reserve's impending interest rate cuts.",
+          "return_pct": 1.18,
+          "objective_signal": "Anticipates Fed Rate Cuts Amid Easing Inflation",
+          "member_id": "peer_rate_macro#13",
+          "canonical_bucket": "rate_macro_reprice"
+        },
+        {
+          "ticker": "GS",
+          "date": "2025-05-30",
+          "source_type": "news",
+          "evidence": "Goldman Sachs President John Waldron Says Big Macro Risk Not So Much Trump Tariffs But Washington's Burgeoning Appetite For Debt ... borrowing raises long-term rates.",
+          "return_pct": -0.83,
+          "objective_signal": "borrowing raises long-term rates",
+          "member_id": "peer_rate_macro#14",
+          "canonical_bucket": "rate_macro_reprice"
+        },
+        {
+          "ticker": "HOOD",
+          "date": "2022-03-16",
+          "source_type": "news",
+          "return_pct": 15.93,
+          "objective_signal": "Fed rate decision",
+          "evidence": "Trading higher ahead of today's Fed decision; the Fed is expected to hike interest rates.",
+          "member_id": "peer_rate_macro#15",
+          "canonical_bucket": "rate_macro_reprice"
+        },
+        {
+          "ticker": "HOOD",
+          "date": "2022-05-06",
+          "source_type": "news",
+          "return_pct": -4.71,
+          "objective_signal": "Fed rate decision",
+          "evidence": "Trading lower on continued volatility following Wednesday's Fed decision.",
+          "member_id": "peer_rate_macro#16",
+          "canonical_bucket": "rate_macro_reprice"
+        },
+        {
+          "ticker": "O",
+          "date": "2022-10-14",
+          "source_type": "news",
+          "return_pct": -3.51,
+          "objective_signal": "interest rate hikes",
+          "evidence": "Central banks gearing up for the most aggressive interest rate hikes in history.",
+          "member_id": "peer_rate_macro#18",
+          "canonical_bucket": "rate_macro_reprice"
+        },
+        {
+          "ticker": "ESS",
+          "date": "2022-11-03",
+          "source_type": "news",
+          "return_pct": -1.09,
+          "objective_signal": "Fed rate hikes",
+          "evidence": "The negative effects of the Federal Reserve's interest rate hikes continue to hit the REIT sector.",
+          "member_id": "peer_rate_macro#19",
+          "canonical_bucket": "rate_macro_reprice"
+        },
+        {
+          "ticker": "MARA",
+          "date": "2022-12-16",
+          "source_type": "news",
+          "return_pct": -10.83,
+          "objective_signal": "Fed raised rates 50 bps",
+          "evidence": "Trading lower following Wednesday's Fed decision, in which the Fed raised rates by 50 bps.",
+          "member_id": "peer_rate_macro#20",
+          "canonical_bucket": "rate_macro_reprice"
+        },
+        {
+          "ticker": "GS",
+          "date": "2024-08-01",
+          "source_type": "news",
+          "return_pct": -1.79,
+          "objective_signal": "Fed rate cuts",
+          "evidence": "Reacting to weak U.S. economic data and concerns over potential Fed rate cuts impacting profitability.",
+          "member_id": "peer_rate_macro#21",
+          "canonical_bucket": "rate_macro_reprice"
+        },
+        {
+          "ticker": "DHI",
+          "date": "2025-09-05",
+          "source_type": "news",
+          "return_pct": 2.72,
+          "objective_signal": "jobs report / rate cuts",
+          "evidence": "Boosted by a weaker-than-expected August jobs report that intensified bets on imminent interest rate cuts.",
+          "member_id": "peer_rate_macro#23",
+          "canonical_bucket": "rate_macro_reprice"
+        },
+        {
+          "ticker": "F",
+          "date": "2021-11-10",
+          "source_type": "news",
+          "evidence": "Ford Motor Company (NYSE: F) shares are trading lower in sympathy with the overall market following worse-than-expected US inflation data.",
+          "return_pct": -3.75,
+          "objective_signal": "in sympathy with the overall market following worse-than-expected US inflation data",
+          "member_id": "moved_from_reject__REJECT-1#8",
+          "canonical_bucket": "rate_macro_reprice"
+        },
+        {
+          "ticker": "PTON",
+          "date": "2022-01-25",
+          "source_type": "news",
+          "evidence": "Peloton Interactive Inc (NASDAQ: PTON) shares are trading lower by 8.3% at $27.25 in sympathy with the overall market amid a rise in Treasury yields along with anticipation of Fed tapering.",
+          "return_pct": -10.75,
+          "objective_signal": "in sympathy with the overall market amid a rise in Treasury yields along with anticipation of Fed tapering",
+          "member_id": "moved_from_reject__REJECT-1#9",
+          "canonical_bucket": "rate_macro_reprice"
+        }
+      ],
+      "n_kept": 15
+    },
+    {
+      "family_id": "metric_sib_guidance",
+      "axis": "metric_sib",
+      "theme": "guidance",
+      "members": [
+        {
+          "ticker": "XRX",
+          "date": "2022-10-25",
+          "source_type": "news",
+          "evidence": "XRX lowered full-year revenue guidance from at least $7.1B to $7.0B - $7.1B.",
+          "return_pct": -13.83,
+          "objective_signal": "revenue guidance",
+          "member_id": "metric_sib_guidance#0",
+          "canonical_bucket": "revenue_guidance"
+        },
+        {
+          "ticker": "RARE",
+          "date": "2024-08-01",
+          "source_type": "news",
+          "evidence": "Total revenue guidance increased to be in the range of $530 million to $550 million (previously $500 million to $530 million).",
+          "return_pct": 14.27,
+          "objective_signal": "revenue guidance",
+          "member_id": "metric_sib_guidance#1",
+          "canonical_bucket": "revenue_guidance"
+        },
+        {
+          "ticker": "INTU",
+          "date": "2022-11-29",
+          "source_type": "news",
+          "evidence": "Intuit Reduces FY23 Revenue Growth Guidance From 14-16% Growth To 10-12% Growth; the company now expects revenue of $14.035 billion to $14.250 billion, growth of approximately 10 to 12 percent, down from previous guidance of growth of approximately 14 to 16 percent.",
+          "return_pct": 7.34,
+          "objective_signal": "revenue guidance",
+          "member_id": "metric_sib_guidance#2",
+          "canonical_bucket": "revenue_guidance"
+        },
+        {
+          "ticker": "PATH",
+          "date": "2025-03-13",
+          "source_type": "news",
+          "evidence": "UiPath, Inc. shares are trading lower Thursday after the company reported fourth-quarter revenue and issued lower-than-expected revenue guidance for the first quarter.",
+          "return_pct": -16.09,
+          "objective_signal": "revenue guidance",
+          "member_id": "metric_sib_guidance#3",
+          "canonical_bucket": "revenue_guidance"
+        },
+        {
+          "ticker": "MOH",
+          "date": "2022-10-26",
+          "source_type": "news",
+          "evidence": "The Company increased its full year 2022 premium revenue guidance to approximately $30.5 billion, above its previous guidance of approximately $30 billion.",
+          "return_pct": -4.53,
+          "objective_signal": "revenue guidance",
+          "member_id": "metric_sib_guidance#4",
+          "canonical_bucket": "revenue_guidance"
+        },
+        {
+          "ticker": "VRTX",
+          "date": "2022-10-27",
+          "source_type": "news",
+          "evidence": "Vertex today increased its full year 2022 product revenue guidance to reflect the uptake of KAFTRIO/TRIKAFTA in countries outside the U.S.; Product revenues $8.8 to $8.9 billion (Previous FY 2022 $8.6 to $8.8 billion).",
+          "return_pct": 9.03,
+          "objective_signal": "revenue guidance",
+          "member_id": "metric_sib_guidance#5",
+          "canonical_bucket": "revenue_guidance"
+        },
+        {
+          "ticker": "AMGN",
+          "date": "2025-11-04",
+          "source_type": "news",
+          "evidence": "Amgen Raises FY2025 GAAP EPS Guidance from $10.97-$12.11 to $13.76-$14.60 vs $11.36 Est.",
+          "return_pct": 7.81,
+          "objective_signal": "EPS guidance",
+          "member_id": "metric_sib_guidance#6",
+          "canonical_bucket": "eps_guidance"
+        },
+        {
+          "ticker": "CVS",
+          "date": "2026-02-10",
+          "source_type": "news",
+          "evidence": "CVS Health Affirms FY2026 GAAP EPS Guidance of $5.94-$6.14 vs $5.74 Est; Confirmed GAAP diluted EPS guidance range of $5.94 to $6.14.",
+          "return_pct": -0.13,
+          "objective_signal": "EPS guidance",
+          "member_id": "metric_sib_guidance#7",
+          "canonical_bucket": "eps_guidance"
+        },
+        {
+          "ticker": "WWW",
+          "date": "2025-11-05",
+          "source_type": "news",
+          "evidence": "Wolverine World Wide Raises FY2025 Adj EPS Guidance from $1.05-$1.20 to $1.29-$1.34 vs $1.33 Est.",
+          "return_pct": -24.31,
+          "objective_signal": "EPS guidance",
+          "member_id": "metric_sib_guidance#8",
+          "canonical_bucket": "eps_guidance"
+        },
+        {
+          "ticker": "ITRI",
+          "date": "2022-08-04",
+          "source_type": "news",
+          "evidence": "Itron Updates FY22 Adj. EPS Guidance From $1.25-$1.75 To $0.70-$0.90 vs $1.34 Est.; Non-GAAP diluted EPS between $0.70 to $0.90 vs. previous guidance of $1.25 to $1.75.",
+          "return_pct": -13.6,
+          "objective_signal": "EPS guidance",
+          "member_id": "metric_sib_guidance#9",
+          "canonical_bucket": "eps_guidance"
+        },
+        {
+          "ticker": "ENR",
+          "date": "2025-05-06",
+          "source_type": "news",
+          "evidence": "Energizer Hldgs lowers FY2025 GAAP EPS guidance from $2.63-$2.95 to $2.29-$2.65.",
+          "return_pct": -7.73,
+          "objective_signal": "EPS guidance",
+          "member_id": "metric_sib_guidance#10",
+          "canonical_bucket": "eps_guidance"
+        },
+        {
+          "ticker": "DTE",
+          "date": "2023-11-01",
+          "source_type": "news",
+          "evidence": "DTE Energy Revised Its FY23 Operating EPS Guidance From $6.09-$6.40 To $5.65-$5.85 Vs. $6.2 Consensus.",
+          "return_pct": 0.25,
+          "objective_signal": "EPS guidance",
+          "member_id": "metric_sib_guidance#11",
+          "canonical_bucket": "eps_guidance"
+        },
+        {
+          "ticker": "WMB",
+          "date": "2021-11-01",
+          "source_type": "news",
+          "evidence": "Williams Companies Raises FY21 Adj. EBITDA Guidance From $5.2B-$5.4B To $5.5B-$5.55B.",
+          "return_pct": -0.6,
+          "objective_signal": "EBITDA guidance",
+          "member_id": "metric_sib_guidance#12",
+          "canonical_bucket": "ebitda_guidance"
+        },
+        {
+          "ticker": "IR",
+          "date": "2022-05-04",
+          "source_type": "news",
+          "evidence": "Ingersoll Rand Raises FY22 Adj. EBITDA Guidance From $1.375B-$1.415B To $1.385B-$1.425B.",
+          "return_pct": -3.06,
+          "objective_signal": "EBITDA guidance",
+          "member_id": "metric_sib_guidance#13",
+          "canonical_bucket": "ebitda_guidance"
+        },
+        {
+          "ticker": "XPOF",
+          "date": "2022-08-11",
+          "source_type": "news",
+          "evidence": "Xponential is increasing its full-year 2022 guidance for revenue and Adjusted EBITDA and re-affirming guidance for studio openings and system-wide sales in North America.",
+          "return_pct": 18.22,
+          "objective_signal": "EBITDA guidance",
+          "member_id": "metric_sib_guidance#14",
+          "canonical_bucket": "ebitda_guidance"
+        },
+        {
+          "ticker": "FRPT",
+          "date": "2023-11-06",
+          "source_type": "news",
+          "evidence": "Freshpet Raises FY23 Adj EBITDA Guidance From $55M - $62M.",
+          "return_pct": 16.81,
+          "objective_signal": "EBITDA guidance",
+          "member_id": "metric_sib_guidance#15",
+          "canonical_bucket": "ebitda_guidance"
+        },
+        {
+          "ticker": "NRG",
+          "date": "2025-09-17",
+          "source_type": "news",
+          "evidence": "Adjusted EBITDA guidance increased from $3.725B-$3.975B to $3.875B-$4.025B.",
+          "return_pct": -0.21,
+          "objective_signal": "EBITDA guidance",
+          "member_id": "metric_sib_guidance#16",
+          "canonical_bucket": "ebitda_guidance"
+        },
+        {
+          "ticker": "RSG",
+          "date": "2024-10-29",
+          "source_type": "news",
+          "evidence": "Republic Services Expects Revenue To Be Near The Low End Of Its FY24 Guidance Range; Expects To Achieve The High End Of Its FY24 Adjusted EBITDA Guidance Range.",
+          "return_pct": -2.7,
+          "objective_signal": "EBITDA guidance",
+          "member_id": "metric_sib_guidance#17",
+          "canonical_bucket": "ebitda_guidance"
+        },
+        {
+          "ticker": "AMCX",
+          "date": "2025-02-14",
+          "source_type": "news",
+          "evidence": "AMC Networks Increased Its Free Cash Flow Guidance to Approximately $550M of Cumulative Free Cash Flow Over the FY24 and FY25 Two-year Period, Up From a Prior Outlook of $500M.",
+          "return_pct": -10.76,
+          "objective_signal": "free cash flow guidance",
+          "member_id": "metric_sib_guidance#18",
+          "canonical_bucket": "fcf_guidance"
+        },
+        {
+          "ticker": "VFC",
+          "date": "2023-10-30",
+          "source_type": "news",
+          "evidence": "V.F. Corporation Reports Mixed Q2 Results And Lowers FY24 Free Cash Flow Guidance.",
+          "return_pct": -14.07,
+          "objective_signal": "free cash flow guidance",
+          "member_id": "metric_sib_guidance#19",
+          "canonical_bucket": "fcf_guidance"
+        },
+        {
+          "ticker": "F",
+          "date": "2022-10-26",
+          "source_type": "news",
+          "evidence": "Ford Motor Raises Full-Year Adj. Free Cash Flow Guidance From $5.5B-$6.5B To $9.5B-$10B.",
+          "return_pct": 1.56,
+          "objective_signal": "free cash flow guidance",
+          "member_id": "metric_sib_guidance#20",
+          "canonical_bucket": "fcf_guidance"
+        },
+        {
+          "ticker": "GM",
+          "date": "2022-11-17",
+          "source_type": "news",
+          "evidence": "GM Now Raises FY22 Adj. Automotive FCF Guidance From $7B-$9B To $10B-$11B.",
+          "return_pct": 0.44,
+          "objective_signal": "FCF guidance",
+          "member_id": "metric_sib_guidance#21",
+          "canonical_bucket": "fcf_guidance"
+        },
+        {
+          "ticker": "LEA",
+          "date": "2023-06-27",
+          "source_type": "news",
+          "evidence": "Lear Increases Free Cash Flow Guidance From $375M-$525M to $480M-$580M.",
+          "return_pct": 1.3,
+          "objective_signal": "free cash flow guidance",
+          "member_id": "metric_sib_guidance#22",
+          "canonical_bucket": "fcf_guidance"
+        },
+        {
+          "ticker": "DXC",
+          "date": "2023-12-20",
+          "source_type": "news",
+          "evidence": "DXC Reaffirms Q3 Guidance And FY24 Free Cash Flow Guidance Of $800M.",
+          "return_pct": -12.15,
+          "objective_signal": "free cash flow guidance",
+          "member_id": "metric_sib_guidance#23",
+          "canonical_bucket": "fcf_guidance"
+        }
+      ],
+      "n_kept": 24
+    },
+    {
+      "family_id": "seg_sib_demand_revenue",
+      "axis": "seg_sib",
+      "theme": "demand",
+      "members": [
+        {
+          "ticker": "AAPL",
+          "date": "2026-01-29",
+          "source_type": "8k",
+          "evidence": "\"The Company posted quarterly revenue of $143.8 billion, up 16 percent year over year.\" All-time records for total company revenue and EPS.",
+          "return_pct": 0.38,
+          "objective_signal": "total",
+          "member_id": "seg_sib_demand_revenue#0",
+          "canonical_bucket": "total"
+        },
+        {
+          "ticker": "AAPL",
+          "date": "2025-10-30",
+          "source_type": "8k",
+          "evidence": "\"The Company posted quarterly revenue of $102.5 billion, up 8 percent year over year.\" September quarter records for total company revenue, iPhone revenue and EPS.",
+          "return_pct": -0.38,
+          "objective_signal": "total",
+          "member_id": "seg_sib_demand_revenue#1",
+          "canonical_bucket": "total"
+        },
+        {
+          "ticker": "AAPL",
+          "date": "2025-07-31",
+          "source_type": "8k",
+          "evidence": "\"The Company posted quarterly revenue of $94.0 billion, up 10 percent year over year\" \u2014 June quarter records for total company revenue, iPhone revenue and EPS.",
+          "return_pct": -2.5,
+          "objective_signal": "total",
+          "member_id": "seg_sib_demand_revenue#2",
+          "canonical_bucket": "total"
+        },
+        {
+          "ticker": "AAPL",
+          "date": "2025-05-01",
+          "source_type": "8k",
+          "evidence": "\"The Company posted quarterly revenue of $95.4 billion, up 5 percent year over year, and quarterly diluted earnings per share of $1.65.\"",
+          "return_pct": -3.74,
+          "objective_signal": "total",
+          "member_id": "seg_sib_demand_revenue#3",
+          "canonical_bucket": "total"
+        },
+        {
+          "ticker": "AAPL",
+          "date": "2025-01-30",
+          "source_type": "8k",
+          "evidence": "\"Today Apple is reporting our best quarter ever, with revenue of $124.3 billion, up 4 percent from a year ago,\" said Tim Cook. All-time records for total company revenue and EPS.",
+          "return_pct": -0.67,
+          "objective_signal": "total",
+          "member_id": "seg_sib_demand_revenue#4",
+          "canonical_bucket": "total"
+        },
+        {
+          "ticker": "AAPL",
+          "date": "2024-10-31",
+          "source_type": "8k",
+          "evidence": "\"Today Apple is reporting a new September quarter revenue record of $94.9 billion, up 6 percent from a year ago,\" said Tim Cook. The Company posted quarterly revenue of $94.9 billion.",
+          "return_pct": -1.33,
+          "objective_signal": "total",
+          "member_id": "seg_sib_demand_revenue#5",
+          "canonical_bucket": "total"
+        },
+        {
+          "ticker": "AAPL",
+          "date": "2025-10-30",
+          "source_type": "8k",
+          "evidence": "\"a September quarter revenue record for iPhone and an all-time revenue record for Services,\" said Tim Cook; \"In September, we were thrilled to launch our best iPhone lineup ever, including iPhone 17, iPhone 17 Pro and Pro Max, and iPhone Air.\"",
+          "return_pct": -0.38,
+          "objective_signal": "iphone",
+          "member_id": "seg_sib_demand_revenue#6",
+          "canonical_bucket": "iphone"
+        },
+        {
+          "ticker": "AAPL",
+          "date": "2025-07-31",
+          "source_type": "8k",
+          "evidence": "\"June quarter records for total company revenue, iPhone revenue and EPS\"; Tim Cook: \"a June quarter revenue record with double-digit growth in iPhone, Mac and Services.\"",
+          "return_pct": -2.5,
+          "objective_signal": "iphone",
+          "member_id": "seg_sib_demand_revenue#7",
+          "canonical_bucket": "iphone"
+        },
+        {
+          "ticker": "AAPL",
+          "date": "2026-01-29",
+          "source_type": "8k",
+          "evidence": "\"iPhone had its best-ever quarter driven by unprecedented demand, with all-time records across every geographic segment,\" said Tim Cook. iPhone and Services revenue reach new all-time highs.",
+          "return_pct": 0.38,
+          "objective_signal": "iphone",
+          "member_id": "seg_sib_demand_revenue#8",
+          "canonical_bucket": "iphone"
+        },
+        {
+          "ticker": "AAPL",
+          "date": "2024-10-31",
+          "source_type": "8k",
+          "evidence": "Headline: \"iPhone drives record September quarter revenue.\" The September quarter revenue record of $94.9 billion was driven by iPhone.",
+          "return_pct": -1.33,
+          "objective_signal": "iphone",
+          "member_id": "seg_sib_demand_revenue#9",
+          "canonical_bucket": "iphone"
+        },
+        {
+          "ticker": "AAPL",
+          "date": "2023-11-02",
+          "source_type": "8k",
+          "evidence": "\"Today Apple is pleased to report a September quarter revenue record for iPhone and an all-time revenue record in Services,\" said Tim Cook. Headline: \"iPhone revenue sets September quarter record.\"",
+          "return_pct": -0.51,
+          "objective_signal": "iphone",
+          "member_id": "seg_sib_demand_revenue#10",
+          "canonical_bucket": "iphone"
+        },
+        {
+          "ticker": "AAPL",
+          "date": "2026-01-29",
+          "source_type": "8k",
+          "evidence": "\"Services also achieved an all-time revenue record, up 14 percent from a year ago,\" said Tim Cook. iPhone and Services revenue reach new all-time highs.",
+          "return_pct": 0.38,
+          "objective_signal": "services",
+          "member_id": "seg_sib_demand_revenue#11",
+          "canonical_bucket": "services"
+        },
+        {
+          "ticker": "AAPL",
+          "date": "2025-05-01",
+          "source_type": "8k",
+          "evidence": "Headline: \"Services revenue reaches new all-time high.\" Tim Cook: \"Today Apple is reporting strong quarterly results, including double-digit growth in Services.\"",
+          "return_pct": -3.74,
+          "objective_signal": "services",
+          "member_id": "seg_sib_demand_revenue#12",
+          "canonical_bucket": "services"
+        },
+        {
+          "ticker": "AAPL",
+          "date": "2024-08-01",
+          "source_type": "8k",
+          "evidence": "Headline: \"Services revenue reaches new all-time high\" for the June quarter fiscal 2024.",
+          "return_pct": 0.69,
+          "objective_signal": "services",
+          "member_id": "seg_sib_demand_revenue#13",
+          "canonical_bucket": "services"
+        },
+        {
+          "ticker": "AAPL",
+          "date": "2024-05-02",
+          "source_type": "8k",
+          "evidence": "\"Today Apple is reporting revenue of $90.8 billion for the March quarter, including an all-time revenue record in Services,\" said Tim Cook. Headline: \"Services revenue reaches new all-time record.\"",
+          "return_pct": 5.98,
+          "objective_signal": "services",
+          "member_id": "seg_sib_demand_revenue#14",
+          "canonical_bucket": "services"
+        },
+        {
+          "ticker": "AAPL",
+          "date": "2023-08-03",
+          "source_type": "8k",
+          "evidence": "\"We are happy to report that we had an all-time revenue record in Services during the June quarter, driven by over 1 billion paid subscriptions,\" said Tim Cook.",
+          "return_pct": -4.87,
+          "objective_signal": "services",
+          "member_id": "seg_sib_demand_revenue#15",
+          "canonical_bucket": "services"
+        },
+        {
+          "ticker": "AAPL",
+          "date": "2026-01-29",
+          "source_type": "transcript",
+          "evidence": "Tim Cook: \"Greater China was up 38% year on year. It was driven by iPhone, where we set an all-time revenue record. So it was the best iPhone quarter in history in Greater China.\"",
+          "return_pct": 0.38,
+          "objective_signal": "china",
+          "member_id": "seg_sib_demand_revenue#16",
+          "canonical_bucket": "china"
+        },
+        {
+          "ticker": "AAPL",
+          "date": "2025-10-30",
+          "source_type": "transcript",
+          "evidence": "CFO: \"the Greater China revenue was down 4% in the year-over-year in the September quarter. It was driven by iPhone.\"",
+          "return_pct": -0.38,
+          "objective_signal": "china",
+          "member_id": "seg_sib_demand_revenue#17",
+          "canonical_bucket": "china"
+        },
+        {
+          "ticker": "AAPL",
+          "date": "2025-05-01",
+          "source_type": "transcript",
+          "evidence": "Analyst on the call: \"Just with regard to China, you know, down two percent\" \u2014 referencing Greater China revenue for the March quarter.",
+          "return_pct": -3.74,
+          "objective_signal": "china",
+          "member_id": "seg_sib_demand_revenue#18",
+          "canonical_bucket": "china"
+        },
+        {
+          "ticker": "AAPL",
+          "date": "2024-08-01",
+          "source_type": "transcript",
+          "evidence": "Analyst: \"can you maybe dig into the China dynamics a bit? Sales down 6% this quarter, 3% in constant currency\" \u2014 referencing Greater China revenue.",
+          "return_pct": 0.69,
+          "objective_signal": "china",
+          "member_id": "seg_sib_demand_revenue#19",
+          "canonical_bucket": "china"
+        },
+        {
+          "ticker": "AAPL",
+          "date": "2025-07-31",
+          "source_type": "transcript",
+          "evidence": "Prepared remarks reference revenue \"in Europe, Greater China, and the rest of Asia Pacific\" \u2014 Greater China named as a reportable geographic revenue segment for the June quarter.",
+          "return_pct": -2.5,
+          "objective_signal": "china",
+          "member_id": "seg_sib_demand_revenue#20",
+          "canonical_bucket": "china"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2026-02-25",
+          "source_type": "8k",
+          "evidence": "\"Record quarterly Data Center revenue of $62.3 billion, up 22% from Q3 and up 75% from a year ago.\"",
+          "return_pct": -5.46,
+          "objective_signal": "datacenter",
+          "member_id": "seg_sib_demand_revenue#21",
+          "canonical_bucket": "datacenter"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-11-19",
+          "source_type": "8k",
+          "evidence": "\"Record Data Center revenue of $51.2 billion, up 25% from Q2 and up 66% from a year ago.\"",
+          "return_pct": -3.01,
+          "objective_signal": "datacenter",
+          "member_id": "seg_sib_demand_revenue#22",
+          "canonical_bucket": "datacenter"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-08-27",
+          "source_type": "8k",
+          "evidence": "\"Data Center revenue of $41.1 billion, up 5% from Q1 and up 56% from a year ago.\"",
+          "return_pct": -0.74,
+          "objective_signal": "datacenter",
+          "member_id": "seg_sib_demand_revenue#23",
+          "canonical_bucket": "datacenter"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-05-28",
+          "source_type": "8k",
+          "evidence": "\"Data Center revenue of $39.1 billion, up 10% from Q4 and up 73% from a year ago.\"",
+          "return_pct": 3.27,
+          "objective_signal": "datacenter",
+          "member_id": "seg_sib_demand_revenue#24",
+          "canonical_bucket": "datacenter"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-02-26",
+          "source_type": "8k",
+          "evidence": "\"Record quarterly Data Center revenue of $35.6 billion, up 16% from Q3 and up 93% from a year ago.\"",
+          "return_pct": -8.42,
+          "objective_signal": "datacenter",
+          "member_id": "seg_sib_demand_revenue#25",
+          "canonical_bucket": "datacenter"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2024-11-20",
+          "source_type": "8k",
+          "evidence": "\"Record quarterly Data Center revenue of $30.8 billion, up 17% from Q2 and up 112% from a year ago.\"",
+          "return_pct": 0.57,
+          "objective_signal": "datacenter",
+          "member_id": "seg_sib_demand_revenue#26",
+          "canonical_bucket": "datacenter"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2026-02-25",
+          "source_type": "8k",
+          "evidence": "\"Fourth-quarter Gaming revenue was $3.7 billion, up 47% from a year ago, driven by strong Blackwell demand, and down 13% from the previous quarter as channel inventory naturally moderated.\"",
+          "return_pct": -5.46,
+          "objective_signal": "gaming",
+          "member_id": "seg_sib_demand_revenue#27",
+          "canonical_bucket": "gaming"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-11-19",
+          "source_type": "8k",
+          "evidence": "\"Third-quarter Gaming revenue was $4.3 billion, down 1% from the previous quarter and up 30% from a year ago.\"",
+          "return_pct": -3.01,
+          "objective_signal": "gaming",
+          "member_id": "seg_sib_demand_revenue#28",
+          "canonical_bucket": "gaming"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-08-27",
+          "source_type": "8k",
+          "evidence": "\"Second-quarter Gaming revenue was $4.3 billion, up 14% from the previous quarter and up 49% from a year ago.\"",
+          "return_pct": -0.74,
+          "objective_signal": "gaming",
+          "member_id": "seg_sib_demand_revenue#29",
+          "canonical_bucket": "gaming"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-05-28",
+          "source_type": "8k",
+          "evidence": "\"First-quarter Gaming revenue was a record $3.8 billion, up 48% from the previous quarter and up 42% from a year ago.\"",
+          "return_pct": 3.27,
+          "objective_signal": "gaming",
+          "member_id": "seg_sib_demand_revenue#30",
+          "canonical_bucket": "gaming"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-02-26",
+          "source_type": "8k",
+          "evidence": "\"Fourth-quarter Gaming revenue was $2.5 billion, down 22% from the previous quarter and down 11% from a year ago. Full-year revenue rose 9% to $11.4 billion.\"",
+          "return_pct": -8.42,
+          "objective_signal": "gaming",
+          "member_id": "seg_sib_demand_revenue#31",
+          "canonical_bucket": "gaming"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2024-11-20",
+          "source_type": "8k",
+          "evidence": "\"Third-quarter Gaming revenue was $3.3 billion, up 14% from the previous quarter and up 15% from a year ago.\"",
+          "return_pct": 0.57,
+          "objective_signal": "gaming",
+          "member_id": "seg_sib_demand_revenue#32",
+          "canonical_bucket": "gaming"
+        }
+      ],
+      "n_kept": 33
+    },
+    {
+      "family_id": "REJECT-1",
+      "axis": "reject",
+      "theme": "one-off/macro",
+      "members": [
+        {
+          "ticker": "WDC",
+          "date": "2025-12-18",
+          "source_type": "news",
+          "evidence": "Western Digital (NASDAQ:WDC) shares are rising in sympathy with Micron, which beat first-quarter estimates and issued strong guidance.",
+          "return_pct": 5.26,
+          "objective_signal": "in sympathy with Micron",
+          "member_id": "REJECT-1#0",
+          "canonical_bucket": "cross_entity"
+        },
+        {
+          "ticker": "DELL",
+          "date": "2023-08-30",
+          "source_type": "news",
+          "evidence": "Dell Technologies Inc. (NYSE: DELL) shares are trading lower Wednesday in sympathy with HP, Inc., which fell after issuing weak guidance",
+          "return_pct": -1.45,
+          "objective_signal": "in sympathy with HP, Inc.",
+          "member_id": "REJECT-1#1",
+          "canonical_bucket": "cross_entity"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2022-06-03",
+          "source_type": "news",
+          "evidence": "Shares of semiconductor companies, including NVIDIA Corporation (NASDAQ: NVDA), are trading lower in sympathy with Micron, which dipped following a downgrade and price target cut from Piper Sandler analysts.",
+          "return_pct": -4.46,
+          "objective_signal": "in sympathy with Micron",
+          "member_id": "REJECT-1#2",
+          "canonical_bucket": "cross_entity"
+        },
+        {
+          "ticker": "RUN",
+          "date": "2021-10-27",
+          "source_type": "news",
+          "evidence": "Sunrun Inc (NASDAQ: RUN) shares are trading higher in sympathy with Enphase Energy, which reported better-than-expected third-quarter results and issued strong fourth-quarter guidance.",
+          "return_pct": 3.07,
+          "objective_signal": "in sympathy with Enphase Energy",
+          "member_id": "REJECT-1#3",
+          "canonical_bucket": "cross_entity"
+        },
+        {
+          "ticker": "KO",
+          "date": "2022-10-12",
+          "source_type": "news",
+          "evidence": "Coca-Cola Co (NYSE: KO) shares are trading higher by 1.62% to $55.36 Wednesday morning in sympathy with Pepsi, which reported better-than-expected third-quarter results and raised 2022 guidance.",
+          "return_pct": 1.2,
+          "objective_signal": "in sympathy with Pepsi",
+          "member_id": "REJECT-1#4",
+          "canonical_bucket": "cross_entity"
+        },
+        {
+          "ticker": "LOW",
+          "date": "2021-08-17",
+          "source_type": "news",
+          "evidence": "Lowe's Companies Inc (NYSE: LOW) shares are trading lower by 5.3% at $183.24 Tuesday morning in sympathy with Home Depot after the company reported second-quarter earnings results and reported second-quarter customer transactions down 5.8% year-over-year.",
+          "return_pct": -5.79,
+          "objective_signal": "in sympathy with Home Depot",
+          "member_id": "REJECT-1#5",
+          "canonical_bucket": "cross_entity"
+        },
+        {
+          "ticker": "RCL",
+          "date": "2025-11-04",
+          "source_type": "news",
+          "evidence": "Shares of Royal Caribbean are trading lower Tuesday afternoon, falling in sympathy with competitor Norwegian Cruise Line Holdings.",
+          "return_pct": -7.34,
+          "objective_signal": "in sympathy with competitor Norwegian Cruise Line Holdings",
+          "member_id": "REJECT-1#6",
+          "canonical_bucket": "cross_entity"
+        },
+        {
+          "ticker": "UNH",
+          "date": "2025-07-02",
+          "source_type": "news",
+          "evidence": "UnitedHealth Group Inc (NYSE:UNH) shares are sliding Wednesday in sympathy with Centene, which withdrew its 2025 guidance.",
+          "return_pct": -5.64,
+          "objective_signal": "in sympathy with Centene",
+          "member_id": "REJECT-1#7",
+          "canonical_bucket": "cross_entity"
+        }
+      ],
+      "n_kept": 10
+    },
+    {
+      "family_id": "object_sib_same_object_diff_metric",
+      "axis": "object_sib",
+      "theme": "same_object_diff_metric",
+      "members": [
+        {
+          "ticker": "FANG",
+          "date": "2025-07-10",
+          "source_type": "news",
+          "return_pct": 0.91,
+          "objective_signal": "oil price",
+          "evidence": "Q2 average unhedged realized prices $63.23 per barrel of oil.",
+          "member_id": "object_sib_price_volume#0",
+          "canonical_bucket": "oil_price"
+        },
+        {
+          "ticker": "FANG",
+          "date": "2025-01-13",
+          "source_type": "news",
+          "return_pct": 0.04,
+          "objective_signal": "oil price",
+          "evidence": "Q4 average unhedged realized prices $69.48 per barrel of oil.",
+          "member_id": "object_sib_price_volume#1",
+          "canonical_bucket": "oil_price"
+        },
+        {
+          "ticker": "OXY",
+          "date": "2025-10-10",
+          "source_type": "news",
+          "return_pct": -5.28,
+          "objective_signal": "oil price",
+          "evidence": "Reports Q3 average realized oil price worldwide of $64.78/barrel.",
+          "member_id": "object_sib_price_volume#2",
+          "canonical_bucket": "oil_price"
+        },
+        {
+          "ticker": "OXY",
+          "date": "2023-10-10",
+          "source_type": "news",
+          "return_pct": -0.31,
+          "objective_signal": "oil price",
+          "evidence": "Average realized total worldwide oil prices $80.70/Bbl for Q3.",
+          "member_id": "object_sib_price_volume#3",
+          "canonical_bucket": "oil_price"
+        },
+        {
+          "ticker": "FANG",
+          "date": "2021-04-12",
+          "source_type": "news",
+          "return_pct": 2.49,
+          "objective_signal": "oil production volume",
+          "evidence": "Q1 average production 184.2M barrels of oil/day; sees FY21 oil production 218M-220M barrels oil/day.",
+          "member_id": "object_sib_price_volume#4",
+          "canonical_bucket": "oil_volume"
+        },
+        {
+          "ticker": "FANG",
+          "date": "2024-11-04",
+          "source_type": "news",
+          "return_pct": -2.3,
+          "objective_signal": "oil production volume",
+          "evidence": "Expects to produce 470-475 MBO/d (840-850 MBOE/d) oil during Q4.",
+          "member_id": "object_sib_price_volume#5",
+          "canonical_bucket": "oil_volume"
+        },
+        {
+          "ticker": "MTDR",
+          "date": "2025-02-18",
+          "source_type": "news",
+          "return_pct": -2.1,
+          "objective_signal": "oil production volume",
+          "evidence": "Expects to increase its yearly oil production by 22% in 2025; ~205,000 BOE per day.",
+          "member_id": "object_sib_price_volume#6",
+          "canonical_bucket": "oil_volume"
+        },
+        {
+          "ticker": "MUR",
+          "date": "2024-01-25",
+          "source_type": "news",
+          "return_pct": -0.29,
+          "objective_signal": "oil production volume",
+          "evidence": "Produced 185K barrels of oil equivalent per day, with 94K barrels of oil per day.",
+          "member_id": "object_sib_price_volume#7",
+          "canonical_bucket": "oil_volume"
+        },
+        {
+          "ticker": "DVN",
+          "date": "2023-08-01",
+          "source_type": "news",
+          "return_pct": -7.36,
+          "objective_signal": "oil production volume",
+          "evidence": "Sets record oil production in Q2, expects to sustain for full year.",
+          "member_id": "object_sib_price_volume#8",
+          "canonical_bucket": "oil_volume"
+        },
+        {
+          "ticker": "EQT",
+          "date": "2024-02-14",
+          "source_type": "news",
+          "return_pct": -3.22,
+          "objective_signal": "natural gas price",
+          "evidence": "Production reaches 564 Bcfe but the average realized price dips to $2.75/Mcfe.",
+          "member_id": "object_sib_price_volume#9",
+          "canonical_bucket": "gas_price"
+        },
+        {
+          "ticker": "EQT",
+          "date": "2024-07-23",
+          "source_type": "news",
+          "return_pct": 0.14,
+          "objective_signal": "natural gas volume",
+          "evidence": "Re-affirms its expectation of 2024 total sales volume of 2,100-2,200 Bcfe.",
+          "member_id": "object_sib_price_volume#10",
+          "canonical_bucket": "gas_volume"
+        },
+        {
+          "ticker": "AR",
+          "date": "2025-10-29",
+          "source_type": "news",
+          "return_pct": -5.03,
+          "objective_signal": "natural gas volume",
+          "evidence": "Expects Q4 2025 production to increase to 3.5 to 3.525 Bcfe/d.",
+          "member_id": "object_sib_price_volume#11",
+          "canonical_bucket": "gas_volume"
+        },
+        {
+          "ticker": "FCX",
+          "date": "2024-01-24",
+          "source_type": "news",
+          "return_pct": 4.13,
+          "objective_signal": "copper price",
+          "evidence": "Q4 average realized prices $3.81/pound for copper, $2,034/ounce for gold.",
+          "member_id": "object_sib_price_volume#12",
+          "canonical_bucket": "copper_price"
+        },
+        {
+          "ticker": "FCX",
+          "date": "2024-01-25",
+          "source_type": "news",
+          "return_pct": 4.13,
+          "objective_signal": "copper volume",
+          "evidence": "Expects 2024 consolidated sales to be 4.1B pounds of copper, 2M ounces of gold.",
+          "member_id": "object_sib_price_volume#13",
+          "canonical_bucket": "copper_volume"
+        },
+        {
+          "ticker": "FCX",
+          "date": "2025-03-31",
+          "source_type": "news",
+          "return_pct": 0.69,
+          "objective_signal": "copper volume",
+          "evidence": "Sees Q1 2025 consolidated copper sales of ~850 million pounds and gold sales ~100 thousand ounces.",
+          "member_id": "object_sib_price_volume#14",
+          "canonical_bucket": "copper_volume"
+        },
+        {
+          "ticker": "NEM",
+          "date": "2024-02-22",
+          "source_type": "news",
+          "return_pct": -7.51,
+          "objective_signal": "gold production volume",
+          "evidence": "Gold production rose 7% Y/Y to 1.741 million ounces.",
+          "member_id": "object_sib_price_volume#15",
+          "canonical_bucket": "gold_volume"
+        },
+        {
+          "ticker": "NUE",
+          "date": "2023-10-24",
+          "source_type": "news",
+          "return_pct": 4.8,
+          "objective_signal": "steel price",
+          "evidence": "Q3: earnings beat, 16% sales decline, moderating average selling prices.",
+          "member_id": "object_sib_price_volume#16",
+          "canonical_bucket": "steel_price"
+        },
+        {
+          "ticker": "CLF",
+          "date": "2024-03-07",
+          "source_type": "news",
+          "return_pct": 0.33,
+          "objective_signal": "steel price",
+          "evidence": "Minimum base price for hot rolled steel is now $840 per net ton.",
+          "member_id": "object_sib_price_volume#17",
+          "canonical_bucket": "steel_price"
+        },
+        {
+          "ticker": "STLD",
+          "date": "2026-01-26",
+          "source_type": "news",
+          "return_pct": -4.41,
+          "objective_signal": "steel shipment volume",
+          "evidence": "Records 13.7 million tons of steel shipments.",
+          "member_id": "object_sib_price_volume#18",
+          "canonical_bucket": "steel_volume"
+        },
+        {
+          "ticker": "NUE",
+          "date": "2025-01-27",
+          "source_type": "news",
+          "return_pct": 3.9,
+          "objective_signal": "steel shipment volume",
+          "evidence": "Q4: revenue beat, EPS beat, steel shipments down 2%.",
+          "member_id": "object_sib_price_volume#19",
+          "canonical_bucket": "steel_volume"
+        },
+        {
+          "ticker": "TSLA",
+          "date": "2023-01-25",
+          "source_type": "news",
+          "return_pct": 10.99,
+          "objective_signal": "automotive revenue",
+          "evidence": "Q4 automotive revenues $21.307B, up 33% YoY.",
+          "member_id": "object_sib_price_volume#20",
+          "canonical_bucket": "auto_revenue"
+        },
+        {
+          "ticker": "GM",
+          "date": "2026-01-27",
+          "source_type": "news",
+          "return_pct": 8.75,
+          "objective_signal": "automotive revenue",
+          "evidence": "Total revenue of $45.29B; automotive sales declined 7% year-on-year in Q4.",
+          "member_id": "object_sib_price_volume#21",
+          "canonical_bucket": "auto_revenue"
+        },
+        {
+          "ticker": "TSLA",
+          "date": "2024-01-02",
+          "source_type": "news",
+          "return_pct": -0.01,
+          "objective_signal": "vehicle deliveries",
+          "evidence": "Delivered over 484,000 vehicles in Q4; 2023 vehicle deliveries grew 38% YoY to 1.81M.",
+          "member_id": "object_sib_price_volume#22",
+          "canonical_bucket": "auto_units"
+        },
+        {
+          "ticker": "F",
+          "date": "2025-10-01",
+          "source_type": "news",
+          "return_pct": 2.55,
+          "objective_signal": "vehicle unit sales",
+          "evidence": "Q3 U.S. sales rise 8.2% to 545,522 units.",
+          "member_id": "object_sib_price_volume#23",
+          "canonical_bucket": "auto_units"
+        },
+        {
+          "ticker": "RIVN",
+          "date": "2025-01-06",
+          "source_type": "news",
+          "return_pct": -4.73,
+          "objective_signal": "vehicle deliveries",
+          "evidence": "Reported 14,183 vehicle deliveries for the three months through December.",
+          "member_id": "object_sib_price_volume#24",
+          "canonical_bucket": "auto_units"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2026-02-25",
+          "source_type": "8k",
+          "return_pct": -5.46,
+          "objective_signal": "datacenter",
+          "evidence": "\"Record quarterly Data Center revenue of $62.3 billion, up 22% from Q3 and up 75% from a year ago.\"",
+          "canonical_bucket": "datacenter_revenue",
+          "member_id": "object_sib_revcapex_datacenter_revenue#0"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-11-19",
+          "source_type": "8k",
+          "return_pct": -3.01,
+          "objective_signal": "datacenter",
+          "evidence": "\"Record Data Center revenue of $51.2 billion, up 25% from Q2 and up 66% from a year ago.\"",
+          "canonical_bucket": "datacenter_revenue",
+          "member_id": "object_sib_revcapex_datacenter_revenue#1"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-08-27",
+          "source_type": "8k",
+          "return_pct": -0.74,
+          "objective_signal": "datacenter",
+          "evidence": "\"Data Center revenue of $41.1 billion, up 5% from Q1 and up 56% from a year ago.\"",
+          "canonical_bucket": "datacenter_revenue",
+          "member_id": "object_sib_revcapex_datacenter_revenue#2"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-05-28",
+          "source_type": "8k",
+          "return_pct": 3.27,
+          "objective_signal": "datacenter",
+          "evidence": "\"Data Center revenue of $39.1 billion, up 10% from Q4 and up 73% from a year ago.\"",
+          "canonical_bucket": "datacenter_revenue",
+          "member_id": "object_sib_revcapex_datacenter_revenue#3"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-02-26",
+          "source_type": "8k",
+          "return_pct": -8.42,
+          "objective_signal": "datacenter",
+          "evidence": "\"Record quarterly Data Center revenue of $35.6 billion, up 16% from Q3 and up 93% from a year ago.\"",
+          "canonical_bucket": "datacenter_revenue",
+          "member_id": "object_sib_revcapex_datacenter_revenue#4"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-08-27T17:00:00-04:00",
+          "source_type": "transcript",
+          "return_pct": -0.74,
+          "objective_signal": "CapEx of the top four hyperscalers doubled to $600 billion per year; $3-4 trillion data center infrastructure spend",
+          "evidence": "Jensen Huang: \"As you know, the CapEx of just the top four hyperscalers has doubled in two years... the CapEx spend has doubled to $600 billion per year.\" Asked about \"your three to four trillion in data center infrastructure spend by the end of the decade.\"",
+          "canonical_bucket": "datacenter_capex",
+          "member_id": "object_sib_revcapex_datacenter_capex#0"
+        },
+        {
+          "ticker": "AMZN",
+          "date": "2024-10-31T17:00:00-04:00",
+          "source_type": "transcript",
+          "return_pct": 6.19,
+          "objective_signal": "~$75 billion CapEx in 2024, more in 2025, majority for AWS generative AI",
+          "evidence": "Andy Jassy: \"I'll take the CapEx part... we expect to spend about $75 billion in 2024. I suspect we'll spend more than that in 2025. And the majority of it is for AWS and specifically the increased bumps here are really driven by generative AI.\"",
+          "canonical_bucket": "datacenter_capex",
+          "member_id": "object_sib_revcapex_datacenter_capex#1"
+        },
+        {
+          "ticker": "AMZN",
+          "date": "2025-02-06T17:00:00-05:00",
+          "source_type": "transcript",
+          "return_pct": -4.05,
+          "objective_signal": "$26.3 billion Q4 capex, ~$100 billion annualized capex run rate for 2025, vast majority on AI for AWS",
+          "evidence": "Andy Jassy: \"We spent $26.3 billion in capex in Q4, and I think that is reasonably representative of what you expect in the annualized capex rate in 2025. The vast majority of that capex spend is on AI for AWS.\" (Mark Mahaney: \"that's 100 billion capex we should think about in 25.\")",
+          "canonical_bucket": "datacenter_capex",
+          "member_id": "object_sib_revcapex_datacenter_capex#2"
+        },
+        {
+          "ticker": "AMZN",
+          "date": "2023-08-03T17:30:00-04:00",
+          "source_type": "transcript",
+          "return_pct": 8.24,
+          "objective_signal": "Just over $50 billion CapEx for the year, significant portion for AWS generative AI / large language models",
+          "evidence": "Doug Anmuth: \"helpful to get the just over $50 billion CapEx number for this year. Just curious how generative AI changes... your CapEx trajectory.\" Jassy: \"included in that number is a pretty significant amount of capital expense in the AWS business for large language models and for generative AI.\"",
+          "canonical_bucket": "datacenter_capex",
+          "member_id": "object_sib_revcapex_datacenter_capex#3"
+        },
+        {
+          "ticker": "AMZN",
+          "date": "2026-03-03T02:20:42-05:00",
+          "source_type": "news",
+          "return_pct": 0.16,
+          "objective_signal": "$427 million campus acquisition; $35 billion Virginia AI data center push amid spending surge",
+          "evidence": "\"Amazon, through its Amazon Data Services unit, is purchasing the campus in Ashburn, a key hub for U.S. data center infrastructure... Amazon's $35 Billion Virginia AI Data Center Push Amid Spending Surge.\"",
+          "canonical_bucket": "datacenter_capex",
+          "member_id": "object_sib_revcapex_datacenter_capex#4"
+        }
+      ],
+      "n_kept": 25
+    }
+  ]
+}

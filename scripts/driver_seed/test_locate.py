@@ -31,11 +31,20 @@ def test_value_known_finds_the_printed_quote():
     assert r['hit']['xbrl']['concept'] == _CONCEPT
 
 
-def test_value_unknown_resolves_the_value():
-    # fingerprint only (no number) -> find the value (returns a 'value').
+def test_value_unknown_ABSTAINS_because_it_cannot_state_identity():
+    """WAS `test_value_unknown_resolves_the_value`, asserting 6707000000.
+
+    The fingerprint lane authorized a concept by comparing prefixed strings and
+    a unit by searching an opaque id for `usd`/`dollar`/`share`. Neither states
+    identity, and this request shape carries no namespace to fix that with, so
+    #827 Stage 3 made the route fail closed rather than answer.
+
+    The SHAPE is unchanged — still a dict with a `value` key — so callers do not
+    break; the value is now None. `locate_by_value`, the one production path, is
+    untouched and still returns values."""
     r = locate.locate({'xbrls': [_AGG_BLOB], 'concept': _CONCEPT, 'members': [],
                        'period_start': '2024-01-01', 'period_end': '2024-12-31'})
-    assert r['value'] == 6707000000, r
+    assert r['value'] is None, r
 
 
 def test_never_emits_a_synthetic_xbrl_quote():

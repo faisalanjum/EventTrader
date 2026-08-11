@@ -1,0 +1,36 @@
+{
+ "contexts_scanned": 733171,
+ "detector_self_test": {
+  "must_allow": 8,
+  "must_refuse": 27,
+  "note": "run BEFORE the corpus; a zero from a blind detector is not evidence",
+  "probes": 35,
+  "wrong": 0
+ },
+ "examples_limit": 50,
+ "examples_omitted": 0,
+ "filings_scanned": 1769,
+ "inputs": {
+  "every_sha256_verified": true,
+  "filings_pinned": 1769,
+  "manifest": "01b_ix_input_manifest.txt",
+  "note": "the census refuses to run unless the input set and every file hash match the pinned manifest"
+ },
+ "question": "does the structure rule refuse any REAL context or unit?",
+ "receipt": "#827 round 5 \u2014 full structure census (XBRL 2.1 \u00a74.7/\u00a74.8)",
+ "refused_by_reason": {
+  "malformed_context_structure": 1
+ },
+ "refused_examples": [
+  {
+   "filing": "0001579241-25-000008.htm",
+   "id": "c-258",
+   "kind": "contexts",
+   "reason": "malformed_context_structure"
+  }
+ ],
+ "refused_total": 1,
+ "script_sha256": "acf5d5a6b37f7bc23e4c71fbd4eed60d1c8b1695077aa4e8a5ce5c3d3fa610e6",
+ "timestamp_utc": "2026-08-01T15:32:34.592722Z",
+ "units_scanned": 15210
+}

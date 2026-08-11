@@ -8,8 +8,10 @@ instants are {'instant': date}; values are strings.
     venv/bin/python -m pytest scripts/driver_seed/test_exactness.py -q
 """
 import os, sys, json
-import pytest
-from decimal import Decimal
+# `pytest` and `Decimal` are both gone: `Decimal` existed only for the
+# `resolve()` value expectations withdrawn in #827 Stage 3, and `pytest` had no
+# use left either. This file is already in scope for that change, so leaving a
+# known-dead import in it would be untidiness dressed as restraint.
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
@@ -94,87 +96,56 @@ def test_scan_text_snips_are_exact_substrings_of_source():
         assert strict in t, f"strict quote is not a raw slice: {strict!r}"
 
 
-# ---------------- xbrl_lane: Decimal-exact · instant · exact dates · unit conflicts ------------
-def test_resolve_returns_exact_decimal_not_rounded():
-    b = blob('Revenues', [fact('2.34', '2024-01-01', '2024-12-31')])
-    got = xbrl_lane.resolve([b], 'us-gaap:Revenues', [], '2024-01-01', '2024-12-31')
-    assert got == Decimal('2.34'), f"decimal destroyed: {got!r}"
-
-
-def test_resolve_instant_fact_via_gp_date_date():
-    b = blob('CashAndCashEquivalentsAtCarryingValue', [fact('1138000000', instant='2024-12-31')])
-    got = xbrl_lane.resolve([b], 'us-gaap:CashAndCashEquivalentsAtCarryingValue', [],
-                            '2024-12-31', '2024-12-31')
-    assert got == Decimal('1138000000'), f"instant fact not resolved: {got!r}"
-
-
-def test_resolve_rejects_mixed_convention_dates():
-    """inclusive start + exclusive-style end must NOT match an inclusive request (reproduced)."""
-    b = blob('Revenues', [fact('5000', '2024-01-01', '2025-01-01')])
-    got = xbrl_lane.resolve([b], 'us-gaap:Revenues', [], '2024-01-01', '2024-12-31')
-    assert got is None, f"mixed-convention fact accepted: {got!r}"
-
-
-def test_resolve_rejects_neighboring_period_end():
-    """a fact ending one day later is a DIFFERENT period — no ±1-day tolerance."""
-    b = blob('Revenues', [fact('5000', '2024-01-01', '2025-01-01')])
-    got = xbrl_lane.resolve([b], 'us-gaap:Revenues', [], '2024-01-01', '2025-01-01')
-    assert got == Decimal('5000')                      # exact same dates still match…
-    got2 = xbrl_lane.resolve([b], 'us-gaap:Revenues', [], '2024-01-02', '2025-01-01')
-    assert got2 is None, "start off by one day matched"
-
-
-def test_resolve_concept_local_name_exact_only():
-    """storage is BARE local names (verified live): request prefixes strip deterministically;
-    a DIFFERENT local name never matches (green guard on exactness)."""
-    b = blob('Revenues', [fact('5000', '2024-01-01', '2024-12-31')])
-    assert xbrl_lane.resolve([b], 'us-gaap:Revenues', [], '2024-01-01', '2024-12-31') is not None
-    assert xbrl_lane.resolve([b], 'us-gaap:OtherRevenues', [], '2024-01-01', '2024-12-31') is None
-
-
-def test_resolve_rejects_wrong_prefix_when_stored_prefixed():
-    """Round-12: evil:Revenues must NOT satisfy us-gaap:Revenues. Storage is normally BARE
-    (verified live) and a bare key still matches by local name; but when the stored key CARRIES a
-    prefix, it must match the requested prefix exactly."""
-    b = blob('evil:Revenues', [fact('5000', '2024-01-01', '2024-12-31')])
-    assert xbrl_lane.resolve([b], 'us-gaap:Revenues', [], '2024-01-01', '2024-12-31') is None
-    g = blob('us-gaap:Revenues', [fact('5000', '2024-01-01', '2024-12-31')])
-    assert xbrl_lane.resolve([g], 'us-gaap:Revenues', [], '2024-01-01', '2024-12-31') == Decimal('5000')
-
-
-def test_resolve_expected_unit_class():
-    """Round-12: shares must never satisfy a money request (and vice versa)."""
-    b = blob('SomeThing', [fact('100', '2024-01-01', '2024-12-31', unit='U_shares')])
-    assert xbrl_lane.resolve([b], 'SomeThing', [], '2024-01-01', '2024-12-31',
-                             expected_unit='money') is None
-    m = blob('SomeThing', [fact('100', '2024-01-01', '2024-12-31', unit='U_USD')])
-    assert xbrl_lane.resolve([m], 'SomeThing', [], '2024-01-01', '2024-12-31',
-                             expected_unit='money') == Decimal('100')
-    assert xbrl_lane.resolve([m], 'SomeThing', [], '2024-01-01', '2024-12-31',
-                             expected_unit='nonmoney') is None
-
-
+# ---------------- xbrl_lane: THE DELEGATE ABSTAINS (#827 Stage 3) ------------------------------
+# EIGHT `resolve()` BEHAVIOUR TESTS WERE DELETED HERE, not migrated. They pinned exact-Decimal
+# returns, instant/date handling, concept local-name and prefix rules, the `expected_unit`
+# class rule and the caller-supplied unit filter — every one of them an expectation that the
+# matcher RETURNS A VALUE, on a route whose authorization was a prefix comparison and a
+# substring search inside an opaque unit id. That law is withdrawn; a test of it is not
+# evidence about this product.
+#
+# NO VACUOUS TEST IS KEPT, and the count above once said otherwise. I wrote that "four
+# surviving tests now pass vacuously" and named three of them — all three were in fact
+# DELETED with the block, so the sentence described a file that did not exist. Re-derived
+# by listing every surviving caller of the dormant route:
+#
+#   test_the_xbrl_lane_delegate_abstains_whatever_it_is_asked   the abstention IS its subject
+#   test_seg_parse_rejects_invalid_dimension_addresses          its vacuous half was removed
+#   test_locate.py::...forwards_unit_identity...                monkeypatches `resolve`, so it
+#                                                               tests FORWARDING, not output
+#
+# That is the whole set: nothing else calls it. (`driver/core/fact_match.match_facts` is an
+# unrelated function that shares a name.)
+#
+# The public fail-closed contract is pinned once, at the door, in
+# `driver/relocation/test_match_facts.py`. Retirement accounting:
+# `receipts_827/26_withdrawn_certification_ledger.md`.
 def test_tier1_unit_class_guard():
-    """Round-12: a currency KPI (is_currency=1) must not bind a shares-tagged fact."""
+    """Round-12: a currency KPI (is_currency=1) must not bind a shares-tagged fact.
+
+    RESTORED VERBATIM. This is `L.tier1` — the ACTIVE value-known path — and it
+    was never a `resolve()` test. It sat inside a line range I replaced
+    wholesale, and went with it. The reviewer's AST identity diff caught it;
+    my own report did not, because I described the block by what I intended it
+    to contain rather than by what it held."""
     sh = blob('Revenues', [fact('5000', '2024-01-01', '2024-12-31', unit='U_shares')])
     assert L.tier1([sh], 'total revenue', 5000, '2024-12-31', is_currency=1) is None
     us = blob('Revenues', [fact('5000', '2024-01-01', '2024-12-31', unit='U_USD')])
     assert L.tier1([us], 'total revenue', 5000, '2024-12-31', is_currency=1) is not None
 
 
-def test_resolve_unit_conflict_abstains():
-    """same identity+value under TWO different unitRefs = ambiguous → abstain (RED: no unit logic)."""
-    b = blob('SomeCount', [fact('100', '2024-01-01', '2024-12-31', unit='U_USD'),
-                           fact('100', '2024-01-01', '2024-12-31', unit='U_shares')])
-    got = xbrl_lane.resolve([b], 'SomeCount', [], '2024-01-01', '2024-12-31')
-    assert got is None, f"unitRef conflict silently resolved: {got!r}"
-
-
-def test_resolve_unit_filter_when_caller_supplies_it():
-    b = blob('SomeCount', [fact('100', '2024-01-01', '2024-12-31', unit='U_USD'),
-                           fact('200', '2024-01-01', '2024-12-31', unit='U_shares')])
-    got = xbrl_lane.resolve([b], 'SomeCount', [], '2024-01-01', '2024-12-31', unit_ref='U_shares')
-    assert got == Decimal('200'), f"unit filter missing: {got!r}"
+def test_the_xbrl_lane_delegate_abstains_whatever_it_is_asked():
+    """The seed-side statement of the same contract: this lane is a thin
+    delegate, and it must not answer now that the route it delegates to
+    cannot. A lawful, unambiguous, correctly-united fact still gets None."""
+    b = blob('Revenues', [fact('2.34', '2024-01-01', '2024-12-31')])
+    assert xbrl_lane.resolve([b], 'us-gaap:Revenues', [], '2024-01-01',
+                             '2024-12-31') is None
+    # ...and a deceptive unit id gets no purchase either, from this side.
+    d = blob('Revenues', [fact('100', '2024-01-01', '2024-12-31',
+                               unit='fraud_usd_marker')])
+    assert xbrl_lane.resolve([d], 'us-gaap:Revenues', [], '2024-01-01',
+                             '2024-12-31', expected_unit='money') is None
 
 
 # ---------------- zero: labeled findable, generic abstains (full-locator level exists too) -----
@@ -735,21 +706,18 @@ def test_segment_entries_must_parse_completely():
     print("[ok] complete-parse law: every entry, every shape; typed nonblank strings only")
 
 
-def test_xbrl_lane_shares_the_complete_parse_law():
-    """Round-23 Track-2 (MY sweep, sibling path): the certified value-unknown lane had the SAME
-    garbage-segment masquerade — resolve() must skip unparseable/partial-segment facts, not
-    treat them as undimensioned; clean facts unchanged."""
-    g = blob('Revenues', [{'value': '5000', 'period': {'startDate': '2024-01-01',
-             'endDate': '2024-12-31'}, 'unitRef': 'U_USD', 'segment': 'garbage-string'}])
-    assert xbrl_lane.resolve([g], 'us-gaap:Revenues', [], '2024-01-01', '2024-12-31') is None
-    mix = blob('Revenues', [{'value': '6000', 'period': {'startDate': '2024-01-01',
-               'endDate': '2024-12-31'}, 'unitRef': 'U_USD',
-               'segment': [{'dimension': 'x:A', 'value': 'x:AlphaMember'}, 'junk']}])
-    assert xbrl_lane.resolve([mix], 'us-gaap:Revenues', ['x:AlphaMember'],
-                             '2024-01-01', '2024-12-31') is None
-    clean = blob('Revenues', [fact('7000', '2024-01-01', '2024-12-31')])
-    assert xbrl_lane.resolve([clean], 'us-gaap:Revenues', [], '2024-01-01', '2024-12-31') is not None
-    print("[ok] the certified lane enforces the same complete-parse law (one parser)")
+# `test_xbrl_lane_shares_the_complete_parse_law` WAS HERE and is deleted (#827
+# Stage 3). It proved that a garbage segment is skipped rather than read as
+# undimensioned — by showing two malformed facts return None WHILE A CLEAN ONE
+# RETURNS A VALUE. That contrast was the whole test. With the route abstaining
+# on everything, the two `is None` halves pass for a reason the test name does
+# not describe, and the `is not None` half asserts the withdrawn law.
+#
+# THE RULE IT CARED ABOUT IS NOT LOST, and I checked rather than assumed —
+# my first note here pointed at a `test_seg_parse.py` that does not exist.
+# `test_unparseable_or_blank_segment_fails_closed` (above, same file) pins the
+# same garbage-segment law through `L.tier1`, which is on the ACTIVE
+# value-known path and still returns values, so its refusal still discriminates.
 
 
 # ---------------- round-24: occurrence-level ambiguity + valid dimension addresses ----------
@@ -785,7 +753,14 @@ def test_locate_full_abstains_on_wording_variant_contexts():
 def test_seg_parse_rejects_invalid_dimension_addresses():
     """Round-24 (reviewer + census: 0 real facts carry these — zero cost): a REPEATED AXIS is not
     a valid complete dimension address; padded names and entries mixing storage formats are
-    malformed — all incomplete, both lanes."""
+    malformed — all incomplete.
+
+    "BOTH LANES" IS GONE, with the `xbrl_lane.resolve` assertion that carried it
+    (#827 Stage 3). That route now refuses EVERY request, so its None proved
+    nothing about dimension addresses — it would have passed with `seg_parse`
+    deleted. The rule is held by the three direct `seg_parse` checks and by
+    `L.tier1`, which is on the active value-known path and still returns values,
+    so its refusal still discriminates."""
     rep = {'value': '100', 'period': {}, 'segment': [
         {'dimension': 'x:A', 'value': 'x:AlphaMember'},
         {'dimension': 'x:A', 'value': 'x:BetalandMember'}]}
@@ -800,11 +775,6 @@ def test_seg_parse_rejects_invalid_dimension_addresses():
     b = blob('Revenues', [dict(rep, period={'startDate': '2024-01-01', 'endDate': '2024-12-31'},
                                unitRef='U_USD')])
     assert L.tier1([b], 'alpha betaland revenue', 100, '2024-12-31', is_currency=1) is None
-    xb = blob('Revenues', [dict(rep, period={'startDate': '2024-01-01', 'endDate': '2024-12-31'},
-                                unitRef='U_USD')])
-    assert xbrl_lane.resolve([xb], 'us-gaap:Revenues',
-                             ['x:AlphaMember', 'x:BetalandMember'],
-                             '2024-01-01', '2024-12-31') is None
     print("[ok] repeated-axis/padded/mixed addresses fail closed in BOTH lanes")
 
 

@@ -1,0 +1,6 @@
+argv_json: ["/home/faisal/EventMarketDB/venv/bin/python", "-m", "pytest", "driver/core/test_v2_attacks.py", "driver/core/test_round15_audit_evidence.py", "-q", "-p", "no:randomly", "-p", "no:cacheprovider", "--no-header", "--tb=line", "-m", "not live and not live_write"]
+environment: isolated_manifest_check.sanitized_env(repo, tmp_home) — allowlist of PATH LANG LC_ALL LC_CTYPE TERM TZ + HOME=<tmp> + PYTHONPATH=repo + PYTHONDONTWRITEBYTECODE=1
+........................................................................ [ 45%]
+........................................................................ [ 90%]
+................                                                         [100%]
+160 passed in 0.35s

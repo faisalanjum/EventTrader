@@ -14,10 +14,26 @@ Run with the project venv (has the neo4j driver):
     venv/bin/python scripts/driver_seed/build_worklist.py
 """
 import gzip, json, glob, re, os, csv, collections, sys
+from datetime import date
 
 RUN = 'data/fiscal_ai_segments/runs/2026-07-10'
 OUT = 'data/driver_catalog_seed'
-DATE = re.compile(r'^\d{4}-\d{2}-\d{2}$')
+#: A vendor key becomes a STORED PERIOD, so it needs one truthful decision, not
+#: a shape guess. `\d` admits other Unicode decimal digits, `.match` with `$`
+#: admits a trailing newline, and shape alone admits 2025-02-30.
+DATE = re.compile(r'[0-9]{4}-[0-9]{2}-[0-9]{2}')
+
+
+def _is_period_key(key):
+    """Canonical ASCII yyyy-mm-dd that is also a real calendar date. No repair,
+    no normalization: a key either is one or it is not."""
+    if not isinstance(key, str) or not DATE.fullmatch(key):
+        return False
+    try:
+        date.fromisoformat(key)          # stdlib owns calendar validity
+    except ValueError:
+        return False
+    return True
 FORM = {'Quarterly': '10-Q', 'Annual': '10-K'}
 
 
@@ -55,7 +71,7 @@ def extract_instances():
                     if not nm:
                         continue
                     for k, v in row.items():
-                        if DATE.match(k) and isinstance(v, dict) and v.get('value') is not None:
+                        if _is_period_key(k) and isinstance(v, dict) and v.get('value') is not None:
                             inst.append({
                                 'ticker': tk, 'kpi': nm, 'section': section, 'form': FORM[section],
                                 'period': k, 'value': v['value'],

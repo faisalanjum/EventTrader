@@ -59,8 +59,8 @@ def test_xml_integer_rejects_everything_xml_forbids(raw):
 
 
 def test_reconcile_takes_a_real_int_only():
-    # 726 x 10^6 == 726,000,000 — the lawful call (grouped: the canonical
-    # graph lexical contract's spelling)
+    # 726 x 10^6 == 726,000,000 — the lawful call (grouped: the spelling the
+    # writer emits, which is what `reconcile` compares against)
     assert reconcile("726", None,6, "", "726,000,000") is True
     # a bool is not a scale: `isinstance(True, int)` is True, so only
     # `type(x) is int` is strict enough
@@ -230,6 +230,34 @@ def test_the_binder_REPORTS_the_unit_and_the_caller_decides():
     assert bound is not None, why
     assert candidate_units_for(bound["unit_measures_expanded"], ()) \
         == frozenset()
+
+
+@pytest.mark.parametrize("local", ["pure", "shares"])
+def test_an_UNDECLARED_measure_prefix_gets_no_invented_namespace(local):
+    """An unbound prefix names NOTHING; it must never be handed a guessed URI.
+
+    This is the one place the hazard is observable at the public door, and it is
+    observable precisely because the guess can be RIGHT. A concept prefix that is
+    invented resolves to some namespace that is not the graph's target, so the
+    bind refuses anyway and nothing is proved. The XBRL INSTANCE namespace is
+    different: `pure` and `shares` genuinely live there, so if an unbound `zz:`
+    were defaulted to it, `zz:pure` would expand to the same (uri, local) the
+    graph asked for and the fact would BIND on a name the document never
+    declared.
+
+    Measured, both directions, through `bind_graph_fact`:
+      clean                -> (None, 'exact_id_malformed_unit_structure')
+      with the guess       -> binds, unit_measures_expanded ((instance, 'pure'),)
+
+    The lawful `xbrli:pure` / `xbrli:shares` controls directly above must stay
+    green: the rule is "no INVENTED namespace", not "refuse this local name".
+    """
+    undeclared = ('<ix:header><ix:resources><xbrli:unit id="u1">'
+                  f'<xbrli:measure>zz:{local}</xbrli:measure>'
+                  '</xbrli:unit></ix:resources></ix:header>')
+    bound, why = _bind(undeclared, local, "0")
+    assert bound is None, f"an undeclared prefix bound: {why}"
+    assert why == "exact_id_malformed_unit_structure", why
 
 
 def test_the_graph_name_must_still_match_the_filings_own_measure():

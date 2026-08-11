@@ -1,0 +1,10 @@
+{
+  "_note": "DEV XBRL-Member fixture (segment escalation, owner-directed 2026-05-31). Producer emits segment TEXT; code SNAPS it to a canonical segment label (Member-like) per ticker. Financial product/geo segments -> canonical Member (kills iPhone/iphone variant bleed + makes segments distinct). Commodity (oil/gas/...) -> reuse-catalog dimension (passthrough, Title-case). Unknown -> kept as-is. Full Neo4j PIT Member query is the production path; this fixture covers the ~DEV seg_sib/object_sib tickers now.",
+  "per_ticker": {
+    "AAPL": {"iphone": "iPhone", "services": "Services", "mac": "Mac", "ipad": "iPad", "wearables": "Wearables", "wearables_home_and_accessories": "Wearables", "china": "GreaterChina", "greater_china": "GreaterChina", "americas": "Americas", "europe": "Europe", "japan": "Japan", "rest_of_asia_pacific": "RestOfAsiaPacific", "products": "Products"},
+    "NVDA": {"datacenter": "DataCenter", "data_center": "DataCenter", "gaming": "Gaming", "automotive": "Automotive", "professional_visualization": "ProVisualization", "oem": "OEM", "oem_and_other": "OEM"},
+    "AMZN": {"aws": "AWS", "datacenter": "DataCenter", "data_center": "DataCenter", "north_america": "NorthAmerica", "international": "International", "online_stores": "OnlineStores", "advertising": "Advertising"},
+    "GS": {"ficc": "FICC", "fixed_income": "FICC", "equities": "Equities", "investment_banking": "InvestmentBanking", "asset_management": "AssetManagement", "asset_wealth_management": "AssetWealthManagement", "global_banking_and_markets": "GlobalBankingMarkets"}
+  },
+  "commodity_passthrough": ["oil", "gas", "natural_gas", "copper", "gold", "steel", "molybdenum", "ngl", "aluminum", "lithium", "uranium"]
+}

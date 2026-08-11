@@ -1059,12 +1059,14 @@ def test_a_DURATIONS_end_date_IS_part_of_its_identity():
 
 def test_signed_zero_spellings_are_the_SAME_number_not_a_conflict():
     """IDENTITY CHANGE (SEQ 265 C / 268): the old assert equated an
-    UNGROUPED spelling with the grouped one — impossible under the frozen
-    lexical contract (the writer always groups; census zero) — and its
-    first replacement was a tautology. The lawful two-spellings pair the
-    writer really emits is signed zero: "0" and "-0" are one number, so
-    their signatures must agree. Different numbers still conflict and
-    unparseable strings stay distinct."""
+    UNGROUPED spelling with the grouped one, and its first replacement was
+    a tautology. Signed zero is the pair kept here because it is the one
+    the WRITER really emits: "0" and "-0" are one number, so their
+    signatures must agree. Different numbers still conflict and unparseable
+    strings stay distinct. (GRAPH-DECIMAL, #827: the original ungrouped-vs-
+    grouped pair is no longer "impossible" — both now READ, since XSD
+    decimal owns the lexical side — but this test is about the writer's
+    own spellings, so signed zero remains the right pair.)"""
     assert _sig(value="0") == _sig(value="-0")
     assert _sig(value="726,000,000") != _sig(value="726,000,001")
     # two DIFFERENT unparseable strings must stay distinct, not collapse to None

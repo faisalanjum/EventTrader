@@ -14,3 +14,8 @@ local/
 
 # Claude
 CLAUDE.md
+
+# Secrets — direnv environment holding IBKR gateway credentials.
+# Untracked at #827 final gate (SEQ 913): the isolated gate lists it FORBIDDEN
+# in the commit. History purge is a SEPARATE post-#827 operation.
+.envrc

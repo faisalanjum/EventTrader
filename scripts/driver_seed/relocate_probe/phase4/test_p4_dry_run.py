@@ -76,7 +76,7 @@ def test_residual_chunk_law():
 
 def test_manifest_row_is_source_local(tmp_path):
     p = tmp_path / 'ex.htm'
-    body = b'<html><body><p>Revenue was $1,234 million.</p></body></html>'
+    body = b'<html xmlns:xbrli="http://www.xbrl.org/2003/instance" xmlns:xbrldi="http://xbrl.org/2006/xbrldi" xmlns:ix="http://www.xbrl.org/2013/inlineXBRL" xmlns:iso4217="http://example.org/iso4217" xmlns:utr="http://example.org/utr" xmlns:us-gaap="http://example.org/us-gaap" xmlns:dei="http://example.org/dei" xmlns:srt="http://example.org/srt" xmlns:a="http://example.org/a" xmlns:x="http://example.org/x" xmlns:aapl="http://example.org/aapl" xmlns:slg="http://example.org/slg" xmlns:accd="http://example.org/accd" xmlns:ed="http://example.org/ed" xmlns:dvn="http://example.org/dvn" xmlns:fcx="http://example.org/fcx" xmlns:nog="http://example.org/nog" xmlns:inst="http://example.org/inst" xmlns:dimns="http://example.org/dimns" xmlns:nope="http://example.org/nope" xmlns:geo="http://example.org/geo" xmlns:eqt="http://example.org/eqt" xmlns:geography="http://example.org/geography" xmlns:seg="http://example.org/seg" xmlns:country="http://example.org/country"><body><p>Revenue was $1,234 million.</p></body></html>'
     p.write_bytes(body)
     row = P4.manifest_8k_file('ACC-1', str(p))
     assert row['source_id'] == 'ACC-1'

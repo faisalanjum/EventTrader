@@ -1,0 +1,289 @@
+{
+ "counts": {
+  "events": 136,
+  "filings_required": 4,
+  "items": 743,
+  "items_with_source_evidence": 11,
+  "packet_files": 7
+ },
+ "counts_pinned": {
+  "events": 136,
+  "filings_required": 4,
+  "items": 743,
+  "items_with_source_evidence": 11,
+  "packet_files": 7
+ },
+ "evidence_keys_seen": [
+  "pieces",
+  "quote_span",
+  "raw_label_span",
+  "representation_sha256"
+ ],
+ "group_multiplicities": [
+  4,
+  3,
+  2,
+  2
+ ],
+ "input_manifest_file": "06b_packet_input_manifest.txt",
+ "input_manifest_sha256": "72925fda2a02425f789de04c8faa35bbf97e871de82a4764a90705412e5f4367",
+ "inputs_discovered_by": "glob data/driver_catalog_seed/*/packets.jsonl",
+ "note": "the synthetic event text used by the door tests is NOT evidence and is not examined here; the historical model view was never archived and nothing in this receipt claims to be it",
+ "per_item": [
+  {
+   "concept": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+   "duplicate_pieces": 0,
+   "item_index": 0,
+   "packet": "data/driver_catalog_seed/wp3_aci_stream/packets.jsonl",
+   "piece_count": 1,
+   "piece_kinds": [
+    "header"
+   ],
+   "quote_occurrences": 1,
+   "raw_label": "Net sales and other revenue",
+   "source_id": "0001646972-23-000045"
+  },
+  {
+   "concept": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+   "duplicate_pieces": 0,
+   "item_index": 1,
+   "packet": "data/driver_catalog_seed/wp3_aci_stream/packets.jsonl",
+   "piece_count": 1,
+   "piece_kinds": [
+    "header"
+   ],
+   "quote_occurrences": 1,
+   "raw_label": "Net sales and other revenue",
+   "source_id": "0001646972-23-000045"
+  },
+  {
+   "concept": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+   "duplicate_pieces": 0,
+   "item_index": 2,
+   "packet": "data/driver_catalog_seed/wp3_aci_stream/packets.jsonl",
+   "piece_count": 1,
+   "piece_kinds": [
+    "header"
+   ],
+   "quote_occurrences": 1,
+   "raw_label": "Net sales and other revenue",
+   "source_id": "0001646972-23-000045"
+  },
+  {
+   "concept": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+   "duplicate_pieces": 0,
+   "item_index": 0,
+   "packet": "data/driver_catalog_seed/wp3_aci_stream/packets.jsonl",
+   "piece_count": 2,
+   "piece_kinds": [
+    "header",
+    "header"
+   ],
+   "quote_occurrences": 1,
+   "raw_label": "Net sales and other revenue",
+   "source_id": "0001646972-23-000056"
+  },
+  {
+   "concept": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+   "duplicate_pieces": 0,
+   "item_index": 1,
+   "packet": "data/driver_catalog_seed/wp3_aci_stream/packets.jsonl",
+   "piece_count": 2,
+   "piece_kinds": [
+    "header",
+    "header"
+   ],
+   "quote_occurrences": 1,
+   "raw_label": "Net sales and other revenue",
+   "source_id": "0001646972-23-000056"
+  },
+  {
+   "concept": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+   "duplicate_pieces": 0,
+   "item_index": 0,
+   "packet": "data/driver_catalog_seed/wp3_aci_stream/packets.jsonl",
+   "piece_count": 2,
+   "piece_kinds": [
+    "header",
+    "header"
+   ],
+   "quote_occurrences": 1,
+   "raw_label": "Net sales and other revenue",
+   "source_id": "0001646972-24-000165"
+  },
+  {
+   "concept": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+   "duplicate_pieces": 0,
+   "item_index": 1,
+   "packet": "data/driver_catalog_seed/wp3_aci_stream/packets.jsonl",
+   "piece_count": 2,
+   "piece_kinds": [
+    "header",
+    "header"
+   ],
+   "quote_occurrences": 1,
+   "raw_label": "Net sales and other revenue",
+   "source_id": "0001646972-24-000165"
+  },
+  {
+   "concept": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+   "duplicate_pieces": 0,
+   "item_index": 0,
+   "packet": "data/driver_catalog_seed/wp3_ce_compliant/packets.jsonl",
+   "piece_count": 4,
+   "piece_kinds": [
+    "header",
+    "header",
+    "header",
+    "section"
+   ],
+   "quote_occurrences": 1,
+   "raw_label": "North America",
+   "source_id": "0001306830-24-000155"
+  },
+  {
+   "concept": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+   "duplicate_pieces": 0,
+   "item_index": 1,
+   "packet": "data/driver_catalog_seed/wp3_ce_compliant/packets.jsonl",
+   "piece_count": 4,
+   "piece_kinds": [
+    "header",
+    "header",
+    "header",
+    "section"
+   ],
+   "quote_occurrences": 1,
+   "raw_label": "North America",
+   "source_id": "0001306830-24-000155"
+  },
+  {
+   "concept": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+   "duplicate_pieces": 0,
+   "item_index": 2,
+   "packet": "data/driver_catalog_seed/wp3_ce_compliant/packets.jsonl",
+   "piece_count": 4,
+   "piece_kinds": [
+    "header",
+    "header",
+    "header",
+    "section"
+   ],
+   "quote_occurrences": 1,
+   "raw_label": "North America",
+   "source_id": "0001306830-24-000155"
+  },
+  {
+   "concept": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+   "duplicate_pieces": 0,
+   "item_index": 3,
+   "packet": "data/driver_catalog_seed/wp3_ce_compliant/packets.jsonl",
+   "piece_count": 4,
+   "piece_kinds": [
+    "header",
+    "header",
+    "header",
+    "section"
+   ],
+   "quote_occurrences": 1,
+   "raw_label": "North America",
+   "source_id": "0001306830-24-000155"
+  }
+ ],
+ "problems": [],
+ "receipt": "#827 packet source-evidence census",
+ "script_sha256": "c356febce426967b72b5dbdda239427980b08fe549a931703a79c94f91dfac5f",
+ "shared_row_groups": [
+  {
+   "item_indexes": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "multiplicity": 4,
+   "ordered_header_sequences_distinct": true,
+   "piece_counts": [
+    4,
+    4,
+    4,
+    4
+   ],
+   "quote_span": [
+    88670,
+    88703
+   ],
+   "raw_label_span": [
+    88670,
+    88683
+   ],
+   "source_id": "0001306830-24-000155"
+  },
+  {
+   "item_indexes": [
+    0,
+    1,
+    2
+   ],
+   "multiplicity": 3,
+   "ordered_header_sequences_distinct": true,
+   "piece_counts": [
+    1,
+    1,
+    1
+   ],
+   "quote_span": [
+    198751,
+    198814
+   ],
+   "raw_label_span": [
+    198751,
+    198778
+   ],
+   "source_id": "0001646972-23-000045"
+  },
+  {
+   "item_indexes": [
+    0,
+    1
+   ],
+   "multiplicity": 2,
+   "ordered_header_sequences_distinct": true,
+   "piece_counts": [
+    2,
+    2
+   ],
+   "quote_span": [
+    6431,
+    6482
+   ],
+   "raw_label_span": [
+    6431,
+    6458
+   ],
+   "source_id": "0001646972-23-000056"
+  },
+  {
+   "item_indexes": [
+    0,
+    1
+   ],
+   "multiplicity": 2,
+   "ordered_header_sequences_distinct": true,
+   "piece_counts": [
+    2,
+    2
+   ],
+   "quote_span": [
+    5734,
+    5785
+   ],
+   "raw_label_span": [
+    5734,
+    5761
+   ],
+   "source_id": "0001646972-24-000165"
+  }
+ ],
+ "timestamp_utc": "2026-08-11T02:37:48.953777Z"
+}

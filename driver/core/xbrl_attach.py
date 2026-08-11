@@ -216,13 +216,16 @@ def _row_signature(row):
             raw_id = row["fact_id"] or ""
             out.append("" if not raw_id.strip(XML_WS) else raw_id)
         elif field == "value":
-            # `parse_raw` is the certified reader (the frozen canonical
-            # graph lexical contract):
+            # `parse_raw` is the certified reader. Its lexical owner is XSD
+            # decimal, reused through Arelle's pinned decimalPattern — there
+            # is no project-authored production regex — so an ungrouped
+            # "726000000" is LAWFUL input, not outside a contract; a
+            # comma-bearing spelling is admitted only on an exact grouped
+            # round-trip at the input's stated precision.
             # "0" and "-0" are the same number (the one two-spelling pair
-            # the frozen lexical contract lawfully stores — SEQ 268; an
-            # ungrouped "726000000" is outside the contract entirely). A
-            # value it cannot read keeps its RAW text, so two different
-            # unreadable strings never collapse into one.
+            # the writer lawfully stores — SEQ 268). A value it cannot read
+            # keeps its RAW text, so two different unreadable strings never
+            # collapse into one.
             out.append(parsed if parsed is not None else ("unparsed", row["value"]))
         elif field == "end_date" and row["period_type"] == "instant":
             # UNREAD on this branch — `match_xbrl_fact` compares only
@@ -1069,10 +1072,11 @@ def _verify_and_attach(fact, *, concept, evidence, prepared_doc, entity_cik,
     already-certified Route-A binder in `driver.relocation.inline_html`:
     `element_evidence` (short element id, duplicate-id detection) ·
     `identity_fallback` (the unique complete-identity fallback) · `parse_raw`
-    (the frozen canonical graph lexical contract derived from the two writer
-    formatters — 807,132 of 1,000,000 sampled graph values carry commas, so a
-    bare `Decimal()` rejects most real facts; corpus evidence shows
-    compatibility, not legality or complete formatter reachability) ·
+    (XSD decimal via Arelle's pinned decimalPattern, plus an exact grouped
+    round-trip for comma-bearing text — 807,132 of 1,000,000 sampled graph
+    values carry commas, so a bare `Decimal()` rejects most real facts; corpus
+    evidence shows compatibility, not legality or complete formatter
+    reachability) ·
     `reconcile` (displayed composed with format, scale and sign must equal the
     graph's own value). Re-implementing any of those would be a second filing
     verifier, which is exactly what this program refuses.

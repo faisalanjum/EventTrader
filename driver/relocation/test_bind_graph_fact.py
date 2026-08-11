@@ -318,11 +318,11 @@ def test_RED_shares_and_per_share_units_are_lawful_not_rejected():
 def test_RED_comma_values_parse_and_graph_parens_now_refuse():
     """IDENTITY CHANGE (SEQ 265 D): this test was
     `test_RED_comma_and_accounting_negative_values_parse` and asserted
-    `parse_raw("(1,234.50)") == Decimal("-1234.50")`. The graph writer
-    never emits parentheses (both formatter expressions on record) and
-    the 12,402,201-value census holds zero, so the paren branch left the
-    GRAPH grammar; the SOURCE lane's accounting-negative law is pinned
-    separately at the bind door."""
+    `parse_raw("(1,234.50)") == Decimal("-1234.50")`. A parenthesised
+    string is NEITHER an XSD decimal NOR an exact canonical grouped
+    transport form, so it refuses on that authority alone — not because
+    the writer happens not to emit one. The SOURCE lane's
+    accounting-negative law is pinned separately at the bind door."""
     assert parse_raw("113,743,000,000") == Decimal("113743000000")
     assert parse_raw("(1,234.50)") is None
 
@@ -1304,13 +1304,27 @@ def test_827R6_item4_MUST_ALLOW_a_lawful_typed_dimension_still_parks_truthfully(
     assert why == 'exact_id_typed_dimensions_unsupported', why
 
 
-# ---- ROUND 6 ITEM 6: the graph's number grammar ---------------------------
-# DERIVED READ-ONLY from 12,402,201 numeric non-nil facts (2026-08-01):
+# ---- ROUND 6 ITEM 6: reading a graph number -------------------------------
+# THE RULE (GRAPH-DECIMAL, #827). A graph value READS when it is either:
+#   · an XSD decimal — Arelle's pinned `decimalPattern`, a reused standards
+#     owner; there is no project-authored production regex here; or
+#   · an exact canonical grouped TRANSPORT form — comma-bearing text that
+#     round-trips exactly through the runtime's own grouped formatting at the
+#     input's stated precision.
+# A value that is NEITHER refuses. That is the entire authority. Note the two
+# are independent: canonical grouped text is not an XSD decimal, yet reads.
+#
+# CORPUS (read-only, 12,402,201 numeric non-nil facts, 2026-08-01):
 #   plain integer 1,385,166 · plain decimal 896,155 · thousands commas
 #   10,120,880 · underscores 0 · exponents 0 · NaN letters 0 · parens 0.
-# `Decimal()` is NOT that grammar: it accepts Python underscore separators,
+# This is COMPATIBILITY evidence about what the graph happens to hold. It is
+# never a legality argument, and the writer's absence of a spelling is never a
+# reason to refuse one.
+#
+# `Decimal()` is NOT a lexical gate: it accepts Python underscore separators,
 # full-width and Arabic-Indic digits, exponents, Infinity — and sNaN, a
-# SIGNALLING NaN that raises the moment anything touches it.
+# SIGNALLING NaN that raises the moment anything touches it. That is exactly
+# why `decimalPattern` must run BEFORE the exact finite-number owner.
 
 @pytest.mark.parametrize("bad", [
     "1_0",            # Python underscore separator -> Decimal says 10
@@ -1323,18 +1337,18 @@ def test_827R6_item4_MUST_ALLOW_a_lawful_typed_dimension_still_parks_truthfully(
                                       # exact-number domain refuses them
     "1e3", "1E3",                     # exponent notation
     "1,23,4", "1,,234", ",123", "1,234,",   # malformed comma grouping
-    "1234", "-1234", "12345.6",       # UNGROUPED 4+ digits: the writer
-                                      # always comma-groups (SEQ 265 C)
-    "01", "001",                      # leading zeros: no repair
-    "1.0", "1.20", "-0.00", "0.10",   # trailing-zero fractions: the writer
-                                      # strips them, so none can be stored
-    "1,234.5678",                     # >3 fraction digits
-    "(98)", "(1,234.50)",             # parens left the GRAPH grammar
+    # GRAPH-DECIMAL (#827): "1234"/"-1234"/"12345.6", "01"/"001",
+    # "1.0"/"1.20"/"-0.00"/"0.10" and "1,234.5678" LEFT this battery. Each is
+    # a lawful XSD decimal, and the writer's grouping habit is a fact about
+    # the WRITER, never a reader-side refusal authority. They are MUST-ALLOW
+    # cases below.
+    "(98)", "(1,234.50)",             # neither an XSD decimal nor a
+                                      # canonical grouped transport form
                                       # (SEQ 265 D); source lane keeps its
                                       # own accounting-negative law
     "", "   ", "-", "--1", "1.2.3", "0x10",
 ])
-def test_827R6_a_graph_value_outside_the_derived_grammar_is_refused(bad):
+def test_827R6_a_value_NEITHER_XSD_decimal_NOR_grouped_transport_is_refused(bad):
     assert parse_raw(bad) is None, f"{bad!r} was read as a number"
 
 
@@ -1347,16 +1361,26 @@ def test_827R6_a_graph_value_outside_the_derived_grammar_is_refused(bad):
     ("1,000,000,000,000,000,007",
      "1000000000000000007"),                      # unbounded grouped length
     ("0.001", "0.001"),                           # rounding-carry writer form
-    # IDENTITY CHANGES (SEQ 265 C/D): "1234"/"-1234" moved to the REFUSED
-    # battery — the writer always comma-groups, so ungrouped 4+ digit runs
-    # are values it never stored. "(98)" moved there too — accounting
-    # parentheses left the GRAPH grammar; the SOURCE lane's own law is
-    # pinned by test_F_a_visible_accounting_negative_still_reconciles.
+    # GRAPH-DECIMAL (#827) — arrived here FROM the refused battery. XSD
+    # decimal is the lexical owner (Arelle's pinned decimalPattern), so these
+    # READ; refusing them was presentation-filtering, not correctness.
+    ("1234", "1234"), ("-1234", "-1234"),         # ungrouped 4+ digit runs
+    ("12345.6", "12345.6"),
+    ("+1234", "1234"),                            # lawful XSD leading plus
+    ("01", "1"), ("001", "1"), ("01234", "1234"), # leading zeros: no repair
+    ("1.0", "1.0"), ("1.20", "1.20"),             # trailing fraction zeros
+    ("-0.00", "-0.00"), ("0.10", "0.10"),         # (`==` is numeric here, so
+                                                  # this pins readability, not
+                                                  # retained scale)
+    ("1,234.5678", "1234.5678"),                  # grouped, >3 fraction digits
+    # "(98)" is NOT here: accounting parentheses are not XSD decimals and
+    # stay refused; the SOURCE lane's own law is pinned by
+    # test_F_a_visible_accounting_negative_still_reconciles.
 ])
 
 
 
-def test_827R6_MUST_ALLOW_every_form_the_graph_actually_stores(good, want):
+def test_827R6_MUST_ALLOW_every_lawful_graph_number_input(good, want):
     assert parse_raw(good) == Decimal(want), good
 
 
@@ -1369,10 +1393,11 @@ def test_827R6_a_PADDED_graph_value_is_not_the_value(padded):
 
 def test_827R6_accounting_parens_may_not_carry_a_SECOND_sign():
     """IDENTITY CHANGE (SEQ 265 D): historically `(-390,000,000)` came back
-    POSITIVE (double negation — corruption). Under the graph-only grammar
-    EVERY parenthesised spelling now refuses — the writer never emits
-    parentheses — so all three forms are None; the old `(390)` == -390
-    expectation is retired with the paren branch."""
+    POSITIVE (double negation — corruption). A parenthesised spelling is
+    neither an XSD decimal nor a canonical grouped transport form, so EVERY
+    one of them refuses on that authority — not on the writer's habits — and
+    all three forms are None; the old `(390)` == -390 expectation is retired
+    with the paren branch."""
     assert parse_raw("(-390,000,000)") is None
     assert parse_raw("(+390)") is None
     assert parse_raw("(390)") is None
@@ -1392,19 +1417,45 @@ def test_F_a_visible_accounting_negative_still_reconciles_to_graph_minus():
     assert bound["printed_value"] == Decimal("-98")   # printed = pre-scale
 
 
-# SEQ 270 — THE PUBLIC DOOR refuses writer-alien raw spellings AS
-# non-reconciling. Each bad raw names the SAME number its source markup
-# displays, spelled in a form the writer never stores; the door must refuse
-# it under the arithmetic's own name, and the lawful twin must bind. This is
-# the door-level face of the `parse_raw` grammar battery above — one table,
+# SEQ 270 — THE PUBLIC DOOR refuses UNREADABLE raw spellings AS
+# non-reconciling. Each bad raw is the SAME number its source markup displays,
+# written in a form that is NEITHER an XSD decimal NOR a canonical grouped
+# transport form; unreadable at the door, it cannot reconcile, and the lawful
+# twin must bind. Refusal rests on that rule, never on the writer's habits.
+# This is the door-level face of the `parse_raw` battery above — one table,
 # no wider duplication.
-_DOOR_ALIEN_SPELLINGS = [
+_DOOR_UNREADABLE_SPELLINGS = [
     # (source shown, sign, wrap in visible parens, BAD raw, LAWFUL raw)
-    ("1,234", "",  False, "1234",         "1,234"),  # ungrouped 4+ digits
-    ("1.2",   "",  False, "1.20",         "1.2"),    # trailing-zero fraction
     ("12",    "",  False, "１２", "12"),     # full-width digits
     ("98",    "-", True,  "(98)",         "-98"),    # parens as a GRAPH spelling
 ]
+
+# GRAPH-DECIMAL (#827) — the counterpart table. These raws were "alien" above
+# until the XSD-decimal ruling: each is a DIFFERENT SPELLING OF THE SAME
+# NUMBER the markup displays, so the door must BIND it. Refusing them was
+# presentation-matching wearing reconciliation's name.
+_DOOR_LAWFUL_RESPELLINGS = [
+    # (source shown, sign, wrap, raw spelled differently but numerically equal)
+    ("1,234", "", False, "1234"),      # ungrouped where the writer groups
+    ("1.2",   "", False, "1.20"),      # trailing-zero fraction
+]
+
+
+@pytest.mark.parametrize("shown,sign,wrap,raw", _DOOR_LAWFUL_RESPELLINGS)
+def test_GRAPHDECIMAL_the_DOOR_binds_a_lawful_respelling_of_the_same_number(
+        shown, sign, wrap, raw):
+    bound, why = _bind(_door_doc(shown, sign, wrap), raw_value=raw)
+    assert bound is not None, why
+
+
+@pytest.mark.parametrize("shown,sign,wrap,raw", _DOOR_LAWFUL_RESPELLINGS)
+def test_GRAPHDECIMAL_the_DOOR_still_refuses_a_DIFFERENT_number(
+        shown, sign, wrap, raw):
+    """The lawful control's twin: widening the LEXICAL gate must not widen the
+    ARITHMETIC one. Same lawful spelling shape, genuinely different value."""
+    bound, why = _bind(_door_doc(shown, sign, wrap), raw_value="9999")
+    assert bound is None
+    assert why == 'value_does_not_reconcile', why
 
 
 def _door_doc(shown, sign, wrap_parens):
@@ -1415,15 +1466,15 @@ def _door_doc(shown, sign, wrap_parens):
     return doc
 
 
-@pytest.mark.parametrize("shown,sign,wrap,bad,lawful", _DOOR_ALIEN_SPELLINGS)
-def test_827R6_the_DOOR_refuses_a_writer_alien_raw_as_non_reconciling(
+@pytest.mark.parametrize("shown,sign,wrap,bad,lawful", _DOOR_UNREADABLE_SPELLINGS)
+def test_827R6_the_DOOR_refuses_an_UNREADABLE_raw_as_non_reconciling(
         shown, sign, wrap, bad, lawful):
     bound, why = _bind(_door_doc(shown, sign, wrap), raw_value=bad)
     assert bound is None
     assert why == 'value_does_not_reconcile', why
 
 
-@pytest.mark.parametrize("shown,sign,wrap,bad,lawful", _DOOR_ALIEN_SPELLINGS)
+@pytest.mark.parametrize("shown,sign,wrap,bad,lawful", _DOOR_UNREADABLE_SPELLINGS)
 def test_827R6_the_DOOR_binds_every_lawful_twin(shown, sign, wrap, bad, lawful):
     bound, why = _bind(_door_doc(shown, sign, wrap), raw_value=lawful)
     assert bound is not None, why

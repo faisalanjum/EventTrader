@@ -953,6 +953,18 @@ def test_the_v2_modules_are_a_STAGED_read_only_adapter():
         # law's own suite (56 tests, incl. the 14 pinned vectors whose hashes
         # would change if any rule moved) is unchanged and green.
         "driver/core/driver_ids.py",
+        # F7 + GRAPH-DECIMAL (#827, reviewer-authorized SEQ 948): the F7 boundary
+        # owner's stored-spelling clause said an ungrouped value was "outside the
+        # frozen canonical graph lexical contract". GRAPH-DECIMAL deleted that
+        # project grammar — XSD decimal plus canonical grouped transport is the
+        # reader's authority now — so the clause was corrected to say what the
+        # writer EMITS and to state plainly that it is NOT a reader-side rejection
+        # authority. COMMENT-ONLY: the staged diff is 11 added / 3 removed lines,
+        # all inside the clause comment block, and no executable line moved. The
+        # allowlist is not permission for arbitrary bytes: Gate 1 binds this path
+        # to the exact accepted hash `1d14a6cb…` in the ledger cell F7+GRAPH-DECIMAL,
+        # so different content fails there regardless of this entry.
+        "driver/core/graph_row_contract.py",
     }
     # PRODUCTION only (the assertion says so), and UNTRACKED files included:
     # both judged by the one derived helper, which a mutation test attacks.
@@ -1353,6 +1365,35 @@ def test_the_manifest_gate_blocks_the_WHOLE_env_file_family_not_just_dot_env():
                ".claude/plans/Drivers/experiments/harness/test_g_suite.py",
                "scripts/driver_seed/relocate_probe/inline_html_cache/x.htm"):
         assert check_forbidden([ok]) == [], f"a lawful file was blocked: {ok}"
+
+
+def test_a_forbidden_path_being_DELETED_does_not_count_as_containing_it():
+    """#827 lane 3: the rule is "no forbidden path is PRESENT in the candidate
+    commit", but the gate ran `forbidden(staged)` over every CHANGED path — and
+    a deletion is a change. So a commit that REMOVES a secret was reported as
+    containing one (`ibkr-mcp-server/.envrc`, deleted in the candidate tree,
+    present only in HEAD). Under that reading no commit could ever remove a
+    forbidden file, which inverts the check's whole purpose.
+
+    Membership is decided by the exact candidate tree. All four directions are
+    pinned here so the repair cannot be loosened into "forbidden never fails".
+    """
+    sys.path.insert(0, _HERE)
+    from isolated_manifest_check import forbidden_present
+
+    SECRET, OTHER = "ibkr-mcp-server/.envrc", "driver/core/xbrl_attach.py"
+
+    # 1. ADDED and present -> must FAIL
+    assert forbidden_present([SECRET], {SECRET, OTHER}) == [SECRET]
+    # 2. MODIFIED and still present -> must FAIL (a secret edited in place is
+    #    every bit as committed as one freshly added)
+    assert forbidden_present([SECRET, OTHER], {SECRET, OTHER}) == [SECRET]
+    # 3. DELETED — changed, but absent from the tree -> must PASS. This is the
+    #    case that was red, and the only reason this test exists.
+    assert forbidden_present([SECRET, OTHER], {OTHER}) == []
+    # 4. an ordinary changed path -> must PASS, so the guard is not simply
+    #    refusing or allowing everything
+    assert forbidden_present([OTHER], {OTHER}) == []
 
 
 # ---------------------------------------------------------------------------

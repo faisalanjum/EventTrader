@@ -28,6 +28,27 @@ PACKET = {
 }
 
 
+OPT_IN = "RUN_LLM_JUDGE_LIVE"
+
+
+def _require_llm_opt_in() -> None:
+    """The opt-in gate, INSIDE each test — the marker alone is NOT a barrier.
+
+    INCIDENT 2026-07-31: a reviewer overrode the marker filter and these tests
+    fired REAL OpenAI requests; at least one completed and cost money. That is
+    the identical failure the live WRITE probe had — a lane whose only defence
+    is `-m` deselection is one flag away from acting. The write probe now needs
+    the marker AND an exact opt-in; so does spending money.
+
+    EXACTLY "1": `=0`, `false`, empty and whitespace are all OFF, because an
+    authorisation token has one spelling.
+    """
+    import os
+    if os.environ.get(OPT_IN) != "1":
+        pytest.skip(f"live LLM judge is opt-in only — real OpenAI spend "
+                    f"requires OWNER approval and {OPT_IN}=1 (exactly)")
+
+
 def _assert_contract(v: dict) -> None:
     assert set(v.keys()) == {"decision", "to_token", "reason"}
     assert v["decision"] in ("promote", "no_global_rule", "defer")
@@ -41,6 +62,7 @@ def _assert_contract(v: dict) -> None:
 @pytest.mark.llm
 def test_live_synonym_judge_returns_contract_valid_verdict() -> None:
     """The real judge returns a schema- and rule-valid verdict on a real packet."""
+    _require_llm_opt_in()
     judge = judge_llm.make_synonym_judge_fn()                 # real OpenAI transport
     _assert_contract(judge(PACKET))
 
@@ -49,6 +71,7 @@ def test_live_synonym_judge_returns_contract_valid_verdict() -> None:
 def test_live_judge_caches_second_identical_call() -> None:
     """The cache replays the identical packet without a second API round-trip
     (same object identity of the cached verdict's content)."""
+    _require_llm_opt_in()
     cache: dict = {}
     judge = judge_llm.make_synonym_judge_fn(cache=cache)
     v1 = judge(PACKET)
@@ -61,6 +84,7 @@ def test_live_judge_caches_second_identical_call() -> None:
 def test_live_engine_with_real_judge_resolves_contested_group() -> None:
     """Inject the REAL judge into the pure engine on a contested sequence; the
     group reaches a valid terminal/frozen resolution with <= 1 promoted token."""
+    _require_llm_opt_in()
     eng = SynonymFoldEngine(judge_fn=judge_llm.make_synonym_judge_fn())
     eng.observe("uptake", "demand", event_key="E1", evidence_text="uptake rose")
     eng.observe("uptake", "consumption", event_key="E2", evidence_text="uptake of capacity rose")

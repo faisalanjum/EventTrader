@@ -1,0 +1,74 @@
+{
+ "by_format": {
+  "<format absent>": 990589,
+  "http://www.sec.gov/inlineXBRL/transformation/2015-08-31|numwordsen": 11727,
+  "http://www.xbrl.org/inlineXBRL/transformation/2015-02-26|numdotdecimal": 130553,
+  "http://www.xbrl.org/inlineXBRL/transformation/2015-02-26|zerodash": 4714,
+  "http://www.xbrl.org/inlineXBRL/transformation/2020-02-12|fixed-zero": 184551,
+  "http://www.xbrl.org/inlineXBRL/transformation/2020-02-12|num-dot-decimal": 732065,
+  "http://www.xbrl.org/inlineXBRL/transformation/2022-02-16|fixed-zero": 9270,
+  "http://www.xbrl.org/inlineXBRL/transformation/2022-02-16|num-dot-decimal": 246997
+ },
+ "by_raw_format_spelling": {
+  "ixt-sec:numwordsen": 11727,
+  "ixt:fixed-zero": 193821,
+  "ixt:num-dot-decimal": 979062,
+  "ixt:numdotdecimal": 130553,
+  "ixt:zerodash": 4714
+ },
+ "by_scale": {
+  "-2": 96133,
+  "-3": 30,
+  "-4": 1716,
+  "-6": 3,
+  "0": 120811,
+  "12": 3,
+  "2": 9,
+  "3": 589629,
+  "4": 6,
+  "6": 1468476,
+  "9": 16047,
+  "<scale absent>": 17603
+ },
+ "by_sign": {
+  "-": 254204,
+  "<sign absent>": 2056262
+ },
+ "cache_root": "scripts/driver_seed/relocate_probe/inline_html_cache",
+ "counts": {
+  "addressed_facts_with_a_nested_nonFraction": 19733,
+  "addressed_facts_with_any_child_node": 19733,
+  "distinct_replay_occurrences": 255780,
+  "facts_by_inline_namespace": {
+   "http://www.xbrl.org/2008/inlineXBRL": 0,
+   "http://www.xbrl.org/2013/inlineXBRL": 2310466
+  },
+  "facts_eligible_for_replay": 1319877,
+  "facts_outside_product_inline_xbrl_version": 0,
+  "facts_whose_format_is_in_no_namespace": 0,
+  "facts_whose_format_resolved_to_an_address": 1319877,
+  "facts_with_a_format": 1319877,
+  "facts_with_content_not_lawful_under_10_1_1": 0,
+  "facts_with_malformed_format_qname": 0,
+  "facts_with_undeclared_format_prefix": 0,
+  "product_inline_xbrl_namespace": "http://www.xbrl.org/2013/inlineXBRL",
+  "replay_occurrence_total": 1319877
+ },
+ "files_not_well_formed": [
+  {
+   "file": "0001579241-25-000008.htm",
+   "reason": "Specification mandates value for attribute s, line 22, column 1 (0001579241-25-000008.htm, line 22)",
+   "sha256": "814126a449c49b27c47a78e725e484b4c4b5a270d9031bd4482096a6beca7d48"
+  }
+ ],
+ "input_manifest_file": "01b_ix_input_manifest.txt",
+ "input_manifest_sha256": "6f26e617af1db73a0ba45dd7a352dbfd76466cfc83cdbb11fd153e39019f61fd",
+ "method": "strict namespace-aware XML parse; elements identified by expanded name {namespace}nonFraction; Inline XBRL 1.1 is the PRODUCT version and only its facts are accounted and replayed, while 1.0 is counted as detected-outside-product and goes no further; the `format` QName resolved to (registry URI, local name) against the in-scope namespaces of the element carrying it; absent, unresolvable and non-simple content each counted in their own explicit bucket; no regex, no prefix literal, no replacement decoding, and no production code imported",
+ "n_files_in_manifest": 1769,
+ "n_files_parsed": 1768,
+ "occurrence_file": "01c_ix_transform_occurrences.json",
+ "receipt": "#827 inline-XBRL transformation census",
+ "scope_note": "`supported_scope_complete` means every manifest file is ACCOUNTED FOR \u2014 parsed, or named and hashed as not a well-formed Inline XBRL report. It does NOT mean every file parsed. A file in `files_not_well_formed` fails Inline XBRL 1.1 \u00a73.1 / SEC EDGAR XBRL Guide June 2026 \u00a711.2 and therefore has no lawful transform occurrence for this product to replay.",
+ "script_sha256": "0744ad2e13d485d8b2abb6fd27694b2021f7d82b1d7b059d528d33e5ded87820",
+ "supported_scope_complete": true
+}

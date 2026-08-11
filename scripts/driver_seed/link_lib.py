@@ -17,7 +17,7 @@ from country_names import COUNTRY_NAME   # generated ISO-3166 table (country:XX 
 # ---------- value-form generation (recall engine + oracle) ----------
 # _grp: WP2 Chunk 1 — relocated to driver/relocation/locator.py (row_quote's closure);
 # imported below with the other moved symbols.
-# _round_forms: WP2 Chunk-2 corrective — relocated to driver/relocation/locator.py (the value_ok closure); imported below.
+# _round_forms: WP2 Chunk-2 corrective — relocated to driver/relocation/locator.py (the value_ok closure). Not imported here; this file has no consumer for it.
 
 # value_forms: WP2 Chunk-2 corrective — relocated to driver/relocation/locator.py (the value_ok closure); imported below.
 
@@ -29,7 +29,8 @@ from country_names import COUNTRY_NAME   # generated ISO-3166 table (country:XX 
 
 # printed_negative: WP2 Chunk-2 corrective — relocated to driver/relocation/locator.py (the value_ok closure); imported below.
 
-# _scale_tag_ok: WP2 Chunk-2 corrective — relocated to driver/relocation/locator.py (the value_ok closure); imported below.
+# _scale_tag_ok: DELETED (#827 B6, SEQ 322) — the round-14 scale law now lives inside
+# value_ok's single occurrence pass; the boolean prepass had no other production caller.
 
 # value_ok: WP2 Chunk-2 corrective — relocated to driver/relocation/locator.py (the value_ok closure); imported below.
 
@@ -38,22 +39,46 @@ from country_names import COUNTRY_NAME   # generated ISO-3166 table (country:XX 
 # of a code-located candidate AND the value actually appears in that quote. The grade records HOW
 # exactly (exact | rounded | approx) so a downstream consumer never mistakes a rounded prose figure
 # for an exact seed value. Shared by the seed pipeline (value known) and relocation (value read).
-SCALE_WORD = {'thousand': 1e3, 'thousands': 1e3, 'million': 1e6, 'millions': 1e6,
-              'billion': 1e9, 'billions': 1e9, 'trillion': 1e12, 'trillions': 1e12}
 _HEDGE = re.compile(r'\b(about|approximately|approx|roughly|nearly|around|almost)\b|~', re.I)
 
 
 def _parse_stated(vstr):
-    """(negative, magnitude, decimals, scale-word-multiplier|None) from a printed number string."""
-    s = (vstr or '').lower().strip()
-    if not re.search(r'\d', s):
+    """(negative, magnitude, decimals, scale-word-multiplier|None) from a printed number string.
+
+    THE FROZEN STATED-VALUE CONTRACT (#827 B6, SEQ 313/314) — this decision IS the law;
+    the 653-pick frozen measurement only priced its recall cost (zero):
+      * ASCII only — the lexical rule is [0-9]; Unicode digits park, they never convert;
+      * exactly ONE numeric token, standing at a real numeric boundary (`at_boundary`,
+        the one boundary owner) — a token glued to letters or led by '.'/',' is never
+        silently extracted or repaired, because that would change the value;
+      * the WHOLE token must be lawful: plain digits or 1-3 digit head with exact
+        3-digit comma groups, at most one '.' carrying at least one fraction digit;
+      * at most ONE scale-word OCCURRENCE — exact word match derived from the one
+        scale owner (`locator._WORD2DIV`) under the existing `s?` plural convention
+        (`_SCALE_TAIL`'s law); repeats ('million million') and mixtures park;
+      * sign is decided ONLY by `printed_negative` (the one notation owner) on the raw
+        printed token — its decoration law reads past non-word characters between the
+        sign mark and the digits, so no generated forms are consulted;
+      * non-finite magnitudes park. Park = None: the graders abstain, they never guess."""
+    s = (vstr or '').lower()
+    tokens = [m.group(0) for m in re.finditer(r'[0-9][0-9,.]*', s)
+              if at_boundary(s, m.start(), m.end())]
+    if len(tokens) != 1:
         return None
-    neg = ('(' in s and ')' in s) or s.lstrip().startswith('-')
-    mult = next((m for w, m in SCALE_WORD.items() if w in s), None)
-    core = re.sub(r'[^0-9.]', '', s)
-    if not re.search(r'\d', core) or core.count('.') > 1:
+    tok = tokens[0]
+    head, dot, frac = tok.partition('.')
+    if dot and not re.fullmatch(r'[0-9]+', frac):
         return None
-    return neg, float(core), (len(core.split('.')[1]) if '.' in core else 0), mult
+    if not re.fullmatch(r'[0-9]{1,3}(?:,[0-9]{3})+|[0-9]+', head):
+        return None
+    if sum(len(re.findall(rf'\b{w}s?\b', s)) for w in _WORD2DIV) > 1:
+        return None
+    val = float(head.replace(',', '') + dot + frac)
+    if not math.isfinite(val):
+        return None
+    neg = printed_negative(vstr, tok)
+    return neg, val, len(frac), next(
+        (d for w, d in _WORD2DIV.items() if re.search(rf'\b{w}s?\b', s)), None)
 
 
 def stated_match(vstr, truth):
@@ -68,7 +93,7 @@ def stated_match(vstr, truth):
     at = abs(float(truth))
     return any(st >= 0.05 and (round(val, dec) in (round(st, dec), math.floor(st * 10**dec) / 10**dec)
                or (abs(val - st) <= 10**-dec * 1.0000001 and abs(val - st) / st <= 0.0015))
-               for st in ([at / mult] if mult else (at, at / 1e3, at / 1e6, at / 1e9, at / 1e12)))
+               for st in ([at / mult] if mult else (at, *(at / d for d in _DIVS))))
     # filers TRUNCATE as often as they round (ACM 4,151.2 for 4,151,251K) -> accept round OR floor; and
     # two prints of one fact can differ by ONE unit of the last printed digit when the REFERENCE itself
     # is rounded (XBRL decimals=-5: filing 3,277.1 vs tag 3,277.2) -> accept 1 ulp ONLY at <=0.15% error
@@ -184,16 +209,25 @@ def seg_members(fc):
     return [m for _, m in seg_parse(fc)[0]]
 
 
-from locator import (seg_parse,            # WP2 step 2: THE single strict parser lives in
-                     _grp, at_boundary, _TRAIL, _with_trail,          # driver/relocation
-                     _SCALE_MARK, _SCALE_TAIL, _WORD2DIV,             # (neutral side).
-                     _required_div, _tail_div, _local_scale_divs,     # WP2 Chunk 1: the
-                     _tableforms, row_quote,                          # row_quote quote-proof
-                     _table_active_start, _snippet_start,             # closure moved there —
-                     _round_forms, value_forms, bounded_hit,          # + Chunk-2 corrective:
-                     exact_form, printed_negative, _scale_tag_ok,     # the value_ok closure
-                     value_ok,                                        # (verbatim move)
-                     _finite)                # corrective 3: THE one finite-number predicate
+#: THE ONE OWNER of every scale/sign/quote rule is `driver/relocation/locator.py`
+#: (WP2 step 2 + Chunk-1/2 correctives). This file IMPORTS what it uses and
+#: re-exports only the two names its own seed consumers read — it does not
+#: mirror the owner's surface. Eight further names were imported and never used
+#: here nor anywhere outside the owner; carrying them made this look like a
+#: second export point for rules it does not own.
+from locator import (seg_parse, at_boundary, _DIVS, _WORD2DIV,
+                     _tableforms, row_quote,
+                     _table_active_start, _snippet_start,
+                     value_forms, bounded_hit,
+                     exact_form, printed_negative,
+                     value_ok,
+                     _grp, _finite)
+
+#: THE RE-EXPORT BOUNDARY, stated rather than implied: these two are imported
+#: solely so seed consumers can read them as `L._grp` / `L._finite`
+#: (locate.py, run_code_tier.py, test_wp3_packet_contract.py). Everything else
+#: above is used in this file. Nothing here owns a rule.
+__all__ = ["_grp", "_finite"]
                                            # one implementation each; this channel file
                                            # re-exports the SAME names so every existing caller
                                            # keeps working; dependency points channel→neutral

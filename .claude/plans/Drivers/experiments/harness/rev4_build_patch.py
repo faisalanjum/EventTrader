@@ -47,14 +47,12 @@ def load_tables():
 # silently skipped — and the declaration is FALSIFIABLE: a blocked file that
 # would build cleanly fails the build, so this cannot become a place to hide an
 # edit that simply stopped matching.
-BLOCKED = {
-    ".claude/plans/Drivers/FinalDesign/FableExperimentWorkOrder.md":
-        "13 of its 17 edits target wording that exists only in the Fiscal "
-        "track's UNCOMMITTED WorkOrder. That document is held by owner ruling — "
-        "Fiscal re-pins it after freezing its own edits — so Core neither stages "
-        "nor edits it. Delete this entry once the WorkOrder is committed and the "
-        "hunks return by themselves.",
-}
+# EMPTIED at SEQ 904, exactly as the removed entry's own instruction said: the
+# WorkOrder is committed (DOC-EXP5, 214bc760) and all 17 of its edits are applied,
+# so nothing is blocked and its residue + name-level schema checks now RUN instead
+# of printing NOT SCANNED. The falsifiable-declaration machinery is unchanged: a
+# blocked file that would build cleanly still fails the build.
+BLOCKED = {}
 
 
 def normalize_blank_context(patch):
@@ -93,6 +91,21 @@ def source_text(rel):
     return got.stdout.decode("utf-8")
 
 
+def spent_edit(old, new, mod):
+    """An edit whose replacement ALREADY LANDED, and whose `old` is a substring of
+    that replacement — so the builder matches the finished sentence and applies it
+    a SECOND time, silently duplicating the amendment. `git apply --check` cannot
+    see it: the result is well-formed, just wrong. It happened twice (the WorkOrder
+    table, then F14), which is why this is a guard and not a one-off fix.
+
+    Safe by construction: with exactly one `old` match, and `old` inside a `new`
+    that is present, that sole match IS the one inside the landed text — an
+    independent pending occurrence would make the count 2 and take the existing
+    `n != 1` path instead.
+    """
+    return old in new and new in mod
+
+
 def build_patch_text():
     """Build the patch and RETURN it. Separated from writing so determinism can
     be proven (build twice, compare) without touching the artifact on disk."""
@@ -105,6 +118,12 @@ def build_patch_text():
         misses = 0
         for old, new in R.get(rel, []) + EXTRA.get(rel, []):
             n = mod.count(old)
+            if n == 1 and spent_edit(old, new, mod):
+                misses += 1
+                if rel not in BLOCKED:
+                    problems.append(f"{rel}: SPENT EDIT (already landed; `old` is "
+                                    f"inside its own `new`): {old[:80]!r}")
+                continue
             if n != 1:
                 misses += 1
                 if rel not in BLOCKED:

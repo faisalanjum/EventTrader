@@ -35,14 +35,59 @@ def _added_by_file(patch_text):
             out[cur].append(ln[1:])
     return {f: "\n".join(v) for f, v in out.items()}
 
+# LANDED, so no longer provable from a patch. These four rev-4 amendments were
+# applied and COMMITTED at 377d5f4a, and their edit-table entries were removed as
+# spent (SEQ 904 deletion-first). Their claim did not disappear with the hunks —
+# it moved to the document, so it is asserted THERE. Dropping the rows outright
+# would have left four amendments with nothing proving they exist at all.
+COMMITTED = {
+    ".claude/plans/Drivers/FinalDesign/FINAL_DESIGN.md": (
+        "OD-11 is applied by the MODEL",              # F1
+        "never derives a unit or scale from a name",  # F2 resolver
+        "per_x` signal and the ADMISSION KERNEL",     # F2 per-X
+        "attacked by hidden-grading fixtures",        # F1 monitor
+        "OWNER-APPROVED 2026-07-26, form O3",       # F14 (SEQ 905: landed)
+    ),
+    # F7: committed by DOC-EXP5 (214bc760). Its package row predicted the hunks
+    # would return once the BLOCKED entry was deleted; they did not, because the
+    # edits are IN the document now. So the row is proven where it landed.
+    ".claude/plans/Drivers/FinalDesign/FableExperimentWorkOrder.md": (
+        "the 32 model-owned fields:",
+        "v2.2-rev4 AMENDMENT BLOCK",
+        "RETIRED (rev-4): EXP-5 uses the shared",
+        "value, scale_multiplier, unit_scale_evidence",
+        "exact one-to-one bijection",
+    ),
+}
+
+
+def test_landed_amendments_are_in_the_committed_document():
+    """The rows above, proven where they now live: the committed documents."""
+    # READ THE TREE UNDER TEST, not `git show HEAD:`. The gate runs this suite
+    # inside an isolated materialization of T whose HEAD is not the working
+    # repository's HEAD, so the git form failed there for a reason that had
+    # nothing to do with the amendments. Reading the file on disk asserts the
+    # stronger thing anyway: the text is in the tree actually being gated.
+    root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(
+        os.path.dirname(_HERE)))))
+    missing = []
+    for rel, tokens in COMMITTED.items():
+        path = os.path.join(root, rel)
+        assert os.path.exists(path), f"{rel} is absent from the tree under test"
+        doc = io.open(path, encoding="utf-8").read()
+        missing += [f"{rel.rsplit('/', 1)[-1]}: {t!r}" for t in tokens if t not in doc]
+    assert not missing, f"landed rev-4 amendments absent from the tree: {missing}"
+
+
+def _REPO_ROOT():
+    return subprocess.run(["git", "rev-parse", "--show-toplevel"], cwd=_HERE,
+                          capture_output=True, text=True).stdout.strip()
+
+
 def test_every_part_f_row_maps_to_its_own_files_hunks():
     """Every Part-F row: either a token that must appear in THAT FILE's added
     lines, or an explicit NO_CHANGE row that must have NO hunk at all."""
     F = [
-        ("FINAL_DESIGN.md", "OD-11 is applied by the MODEL"),                      # F1
-        ("FINAL_DESIGN.md", "never derives a unit or scale from a name"),          # F2 resolver
-        ("FINAL_DESIGN.md", "per_x` signal and the ADMISSION KERNEL"),             # F2 per-X
-        ("FINAL_DESIGN.md", "attacked by hidden-grading fixtures"),                # F1 monitor
         ("15_CandidateFactPacket.md", "RE-FREEZE PENDING [O-a"),                   # F4 label
         ("15_CandidateFactPacket.md", "ix.scale"),                                 # F4 D.2 row
         ("15_CandidateFactPacket.md", "Applied exactly ONCE"),                     # F4 per-X peel
@@ -50,21 +95,15 @@ def test_every_part_f_row_maps_to_its_own_files_hunks():
         ("BUILD_AND_OPERATIONS.md", "hint-era 29+7/parity gate is RETIRED"),       # F5 gate
         ("BUILD_AND_OPERATIONS.md", "per-slot statement intake"),                  # F5 CLI order
         ("BUILD_AND_OPERATIONS.md", "shims are RETIRED"),                          # F5 shim
-        ("FableExperimentWorkOrder.md", "the 32 model-owned fields:"),             # F7 list
-        ("FableExperimentWorkOrder.md", "v2.2-rev4 AMENDMENT BLOCK"),              # F7 block
-        ("FableExperimentWorkOrder.md", "RETIRED (rev-4): EXP-5 uses the shared"), # F7 dep row
         ("protocol.md", "BOTH roles emit the SAME envelope"),                      # F9
         ("exp5_scoring_spec_v3.md", "PROVEN (built in the v2.0 arc)"),             # F6 transport
         ("exp5_scoring_spec_v3.md", "rev-4 Part D law"),                           # F6 matcher
         ("OWNER_DECISION_value_text_numeric.md", "CORRECTED 2026-07-26"),          # F11
-        ("FINAL_DESIGN.md", "OWNER-APPROVED 2026-07-26, form O3"),                 # F14
         ("15_CandidateFactPacket.md", "Applied exactly ONCE"),                     # F4 per-X
         ("exp5_scoring_spec_v3.md", "HISTORY — superseded matching algorithm"),    # F6 history
-        ("FableExperimentWorkOrder.md", "value, scale_multiplier, unit_scale_evidence"),  # F7 grading
         ("BUILD_AND_OPERATIONS.md", "the MODEL decides unit/scale/time meaning"),  # F5 ownership
         ("15_CandidateFactPacket.md", "SUBMITS raw evidence"),                     # 4f boundary sentence
         ("BUILD_AND_OPERATIONS.md", "RE-STAMPED by the O-a v2.0 re-freeze sweep"), # 4f pin marker
-        ("FableExperimentWorkOrder.md", "exact one-to-one bijection"),             # 4f fixpoint word
         ("exp5_scoring_spec_v3.md", "> **v3 (superseded by the rev-4 Part D law)**"),  # 4f history form
     ]
     NO_CHANGE = ["ChannelContract.md"]   # F: verified no-change rows must have NO hunk
@@ -231,3 +270,27 @@ def test_plan_v2_corrected_phrases_stay_corrected():
     assert "LEGACY-ONLY evidence" in plan, "the resolver legacy-warning regressed"
     assert "SOLELY through the production `run_event` dry-run" in plan, \
         "the one-rule-engine statement regressed"
+
+
+def test_spent_edit_guard_rejects_a_landed_pair_and_accepts_a_pending_one():
+    """SEQ 906 class-wide guard, both directions in one detector.
+
+    LANDED: `old` sits inside its own `new`, and that `new` is already in the
+    document — the F14 shape, which duplicated an amendment while `git apply
+    --check` stayed happy. PENDING: an ordinary edge whose old text is really
+    there and whose new text is not; it must still be accepted, or the guard
+    would block the whole table.
+    """
+    sys.path.insert(0, _HERE)
+    from rev4_build_patch import spent_edit
+    landed_old, landed_new = "the rule.", "the rule. Now with the amendment."
+    doc_with_it = "Preamble. " + landed_new + " Tail."
+    assert doc_with_it.count(landed_old) == 1, "the fixture must reproduce the n==1 shape"
+    assert spent_edit(landed_old, landed_new, doc_with_it), "landed pair not rejected"
+
+    pending_old, pending_new = "the old rule.", "the new rule."
+    doc_pending = "Preamble. " + pending_old + " Tail."
+    assert not spent_edit(pending_old, pending_new, doc_pending), "pending pair wrongly rejected"
+
+    # and a landed pair whose old is NOT inside its new is not this defect
+    assert not spent_edit("alpha", "beta", "beta only")

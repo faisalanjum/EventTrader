@@ -4,7 +4,8 @@ A COMPONENT census — NOT full Route-A certification: it exercises prepare + id
 identity fallback + semantic-unit tuple map + context-pointer match + period law +
 hidden/typed + exact-Decimal reconciliation per fact. It does NOT call LOC.locate
 (no anchors, no identity proof, no emission shape) — the end-to-end runs live in
-route_a_e2e_150.py and the pytest suites.
+the pytest suites. `route_a_e2e_150.py` was retired with the 150-case gate in
+#827 Stage 3: it read that gate's fixture and reported `attempted: 0`.
 
     venv/bin/python scripts/driver_seed/relocate_probe/route_a_component_census.py
 """
@@ -42,15 +43,38 @@ def _plus_one(d):
 
 
 def work(path):
+    # `locator` is no longer imported: its only use here was the retired
+    # `ROUTE_A_SEM_UNIT` graph-spelling table. This census reads the filing.
+    import exact_numbers as XN
     import inline_html as IH
-    import locator as LOC
     acc = os.path.basename(path)[:-4]
     t = Counter()
     try:
-        prepared = IH.prepare(open(path, encoding='utf-8',
-                                   errors='replace').read())
-    except Exception as e:
-        return acc, {'file_error': 1}, str(e)[:80]
+        # STRICT UTF-8. `errors='replace'` silently rewrites bytes it cannot
+        # decode, so a file this census could not actually read would be
+        # counted as one it had — the exact defect class removed from the
+        # product this round. A decode failure is now a refusal with a reason.
+        with open(path, encoding='utf-8') as fh:
+            text = fh.read()
+    except (OSError, UnicodeDecodeError) as e:
+        return acc, {'file_unreadable': 1}, f'{type(e).__name__}: {e}'[:120]
+    # NO try/except HERE AT ALL, and that is the point.
+    #
+    # The bare `except Exception` this replaced reported OUR bugs as though the
+    # filing were at fault — a finding about the corpus manufactured out of a
+    # finding about us. My first repair swapped it for
+    # `except IH.SemanticParseError`, which was DEAD CODE: `prepare()` catches
+    # that itself and returns a refusal VALUE, so malformed XML sailed past the
+    # handler and crashed later on `prepared['ids']` with a bare KeyError.
+    #
+    # An unreadable document is a STATE, not an exception, and `IH.refused()`
+    # is the one accessor that owns it — the same one every public door uses.
+    # Anything that still raises here is a programming error and must
+    # propagate, not be relabelled as a filing problem.
+    prepared = IH.prepare(text)
+    why = IH.refused(prepared)
+    if why is not None:
+        return acc, {'file_error': 1}, str(why)[:120]
     q = ("MATCH (x:XBRLNode {accessionNo:$a})<-[:REPORTS]-(f:Fact)"
          "-[:HAS_PERIOD]->(p:Period) WHERE f.is_numeric='1' AND f.is_nil='0' "
          "MATCH (f)-[:HAS_UNIT]->(u:Unit) "
@@ -61,8 +85,14 @@ def work(path):
         rows = list(s.run(q, a=acc))
     for r in rows:
         t['facts'] += 1
-        sem = LOC.ROUTE_A_SEM_UNIT.get(
-            (r['un'], LOC.ROUTE_A_BOOLS.get(r['dv'])))
+        # CLASSIFIED FROM THE FILING, exactly as the live route now does. This
+        # read `ROUTE_A_SEM_UNIT[(u.name, is_divide)]` — the graph's own
+        # prefixed text — so its counts described a rule the product no longer
+        # applies: it missed lawful aliases like `cur:USD` and counted a
+        # rebound `iso4217:USD` as dollars. The document is already parsed
+        # above, so the filing's own declaration is in hand here.
+        sem = XN.route_a_semantic_unit(
+            (prepared.get('units') or {}).get(r['ur'] or ''))
         t[f'unit_{sem or "abstain"}'] += 1
         fid = r['fid'] if isinstance(r['fid'], str) else ''
         ev = None
@@ -100,8 +130,24 @@ def work(path):
         t['period_ok' if ok_p else 'period_mismatch'] += 1
         if not ok_p:
             continue
-        ok = IH.reconcile(ev['displayed'], ev['fmt'], ev['scale'], ev['sign'],
-                          r['v'])
+        # THE FORMAT'S IDENTITY, never its spelling. This passed `ev['fmt']` —
+        # the filing's own raw QName — which `reconcile` no longer accepts: a
+        # prefix cannot say WHICH registry it means. `fmt_expanded` is the
+        # (namespace URI, local name) the parser already resolved, and it is
+        # `None` when the fact states no format at all.
+        # `value_input`, NOT `displayed`. `displayed` is the RENDERED text —
+        # `_text` collapses whitespace, strips the ends and removes zero-width
+        # spaces — while the fact's value under Inline XBRL 1.1 §10.1.1 is the
+        # content as filed. Both live call sites (`locator.py:1146`,
+        # `inline_html.py:2388`) pass `value_input`; this census was the last
+        # caller reading the page instead of the fact.
+        #
+        # An earlier version of this note claimed the two diverge on nested
+        # `ix:nonFraction` chains. MEASURED, THEY DO NOT: a clean chain yields
+        # the same string both ways. The proven discriminator is padding —
+        # `'1,234'` rendered versus `'  1,234  '` as filed.
+        ok = IH.reconcile(ev['value_input'], ev['fmt_expanded'], ev['scale'],
+                          ev['sign'], r['v'])
         t['reconcile_ok' if ok else 'reconcile_fail'] += 1
         if ok and ev['in_table'] and (ev['row_label'] or ev['columns']):
             t['has_row_or_header'] += 1

@@ -1,0 +1,21 @@
+{
+ "context_in_lawful_resources": 732754,
+ "context_outside": 0,
+ "context_total": 732754,
+ "documents": 1769,
+ "files_with_any_declaration_outside": [],
+ "files_with_any_declaration_outside_count": 0,
+ "question": "do real filings put xbrli:context / xbrli:unit as direct children of ix:resources under ix:header?",
+ "readable": 1768,
+ "rule_source": "Inline XBRL 1.1 Recommendation 2013-11-18 \u00a714.1 and \u00a714.1.1 \u2014 the corpus prices this rule, it does not define it",
+ "unit_in_lawful_resources": 15206,
+ "unit_outside": 0,
+ "unit_total": 15206,
+ "unreadable": 1,
+ "unreadable_files": [
+  {
+   "file": "0001579241-25-000008.htm",
+   "why": "Specification mandates value for attribute s"
+  }
+ ]
+}

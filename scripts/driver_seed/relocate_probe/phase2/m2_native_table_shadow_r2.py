@@ -21,7 +21,7 @@ no second header system, no vocabulary, no fuzzy matching):
      truth cells).
 ACCEPT = EXACTLY ONE (row, cell) filing-wide survives ALL checks; else abstain with
 the surviving-candidate count. Every accept EMITS its verbatim evidence bundle
-(printed token as exact unscaled Decimal, header texts, year-header form) and
+(printed token verbatim, header texts, year-header form) and
 EXPLICITLY declares scale/unit/cadence resolution NOT ATTEMPTED — proving those
 literally requires interpreting duration/scale words (a vocabulary), which per the
 ruling is a cut-trigger, so it is surfaced, never faked.
@@ -138,7 +138,6 @@ def _extract(acc, raw_label, year, value, fmt):
                         'doc': os.path.basename(path), 'table_index': ti,
                         'row_index': ri, 'grid': [s, e], 'cell_text': txt,
                         'printed_token': tok,
-                        'value_printed_exact': str(IH.parse_raw(tok)),
                         'sign': anchor_sign,
                         'headers_verbatim': heads,
                         'year_header_form': ('bare_year' if any(

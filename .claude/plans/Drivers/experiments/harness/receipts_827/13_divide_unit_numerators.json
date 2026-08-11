@@ -1,0 +1,1486 @@
+{
+ "SCOPE_LIMIT": {
+  "declarations_never_read": 9856,
+  "facts_on_them": 290655,
+  "filings_that_would_be_needed": "8,569 uncached filings",
+  "no_completeness_claim_is_made_here": true,
+  "ruling_2026-07-31": "reviewer-accepted: do NOT fetch them merely to claim historical completeness. The runtime validates every filing it binds, per fact, at bind time \u2014 that is where correctness is enforced. This census measures WHAT EXISTS in the cache; it is not, and must never be described as, a proof about all 336,327 facts.",
+  "this_census_is_BOUNDED_to_the_frozen_cache": true
+ },
+ "coverage_pct": {
+  "declarations": 17.47,
+  "facts": 13.58
+ },
+ "declarations": {
+  "read": 2086,
+  "total": 11942,
+  "unread": 9856
+ },
+ "declarations_present_but_unusable": {},
+ "facts": {
+  "numeric_nonnil": 335930,
+  "on_read_declarations": 45672,
+  "on_unread_declarations": 290655,
+  "total": 336327
+ },
+ "graph_read": {
+  "databaseID": "B58E1F21943558DCE0C27B1E5307C78B8464864461A59EE1E440FF4D0F536605",
+  "lastCommittedTxn_after": 9226081,
+  "lastCommittedTxn_before": 9226081,
+  "unchanged": true
+ },
+ "method": "each DECLARATION is read from its own filing's <xbrli:unitNumerator>/<xbrli:unitDenominator> via inline_html.prepare; the concatenated graph name is NEVER split; classification is driver.core.xbrl_attach.candidate_units_for",
+ "receipt": "#827 divided units \u2014 per (shape, accession, unit_ref)",
+ "script_sha256": "2decf9527b45d9e6d1970f8b789923c71b41098fadc1911f23d7dab8dca47162",
+ "shapes": [
+  {
+   "declarations": 10327,
+   "declarations_read": 1769,
+   "facts": 327402,
+   "name": "iso4217:USDshares",
+   "structures": [
+    {
+     "declarations": 1769,
+     "denominator": [
+      "xbrli:shares"
+     ],
+     "facts": 43810,
+     "numerator": [
+      "iso4217:USD"
+     ],
+     "verdict": "admits:usd"
+    }
+   ]
+  },
+  {
+   "declarations": 151,
+   "declarations_read": 29,
+   "facts": 2302,
+   "name": "iso4217:USDutr:bbl",
+   "structures": [
+    {
+     "declarations": 29,
+     "denominator": [
+      "utr:bbl"
+     ],
+     "facts": 637,
+     "numerator": [
+      "iso4217:USD"
+     ],
+     "verdict": "admits:usd"
+    }
+   ]
+  },
+  {
+   "declarations": 125,
+   "declarations_read": 15,
+   "facts": 1169,
+   "name": "iso4217:USDutr:MWh",
+   "structures": [
+    {
+     "declarations": 15,
+     "denominator": [
+      "utr:MWh"
+     ],
+     "facts": 180,
+     "numerator": [
+      "iso4217:USD"
+     ],
+     "verdict": "admits:usd"
+    }
+   ]
+  },
+  {
+   "declarations": 155,
+   "declarations_read": 36,
+   "facts": 1147,
+   "name": "iso4217:USDutr:MMBTU",
+   "structures": [
+    {
+     "declarations": 36,
+     "denominator": [
+      "utr:MMBTU"
+     ],
+     "facts": 320,
+     "numerator": [
+      "iso4217:USD"
+     ],
+     "verdict": "admits:usd"
+    }
+   ]
+  },
+  {
+   "declarations": 55,
+   "declarations_read": 20,
+   "facts": 620,
+   "name": "iso4217:CADshares",
+   "structures": [
+    {
+     "declarations": 20,
+     "denominator": [
+      "xbrli:shares"
+     ],
+     "facts": 65,
+     "numerator": [
+      "iso4217:CAD"
+     ],
+     "verdict": "admits:unknown"
+    }
+   ]
+  },
+  {
+   "declarations": 191,
+   "declarations_read": 21,
+   "facts": 481,
+   "name": "iso4217:EURshares",
+   "structures": [
+    {
+     "declarations": 21,
+     "denominator": [
+      "xbrli:shares"
+     ],
+     "facts": 46,
+     "numerator": [
+      "iso4217:EUR"
+     ],
+     "verdict": "admits:unknown"
+    }
+   ]
+  },
+  {
+   "declarations": 17,
+   "declarations_read": 0,
+   "facts": 347,
+   "name": "iso4217:USDutr:kWh",
+   "structures": []
+  },
+  {
+   "declarations": 5,
+   "declarations_read": 0,
+   "facts": 227,
+   "name": "iso4217:USDnog:MMbtu",
+   "structures": []
+  },
+  {
+   "declarations": 44,
+   "declarations_read": 11,
+   "facts": 183,
+   "name": "iso4217:USDutr:Mcf",
+   "structures": [
+    {
+     "declarations": 11,
+     "denominator": [
+      "utr:Mcf"
+     ],
+     "facts": 85,
+     "numerator": [
+      "iso4217:USD"
+     ],
+     "verdict": "admits:usd"
+    }
+   ]
+  },
+  {
+   "declarations": 13,
+   "declarations_read": 0,
+   "facts": 140,
+   "name": "utr:galutr:M",
+   "structures": []
+  },
+  {
+   "declarations": 52,
+   "declarations_read": 12,
+   "facts": 129,
+   "name": "iso4217:CHFshares",
+   "structures": [
+    {
+     "declarations": 12,
+     "denominator": [
+      "xbrli:shares"
+     ],
+     "facts": 23,
+     "numerator": [
+      "iso4217:CHF"
+     ],
+     "verdict": "admits:unknown"
+    }
+   ]
+  },
+  {
+   "declarations": 39,
+   "declarations_read": 12,
+   "facts": 119,
+   "name": "iso4217:USDutr:lb",
+   "structures": [
+    {
+     "declarations": 12,
+     "denominator": [
+      "utr:lb"
+     ],
+     "facts": 60,
+     "numerator": [
+      "iso4217:USD"
+     ],
+     "verdict": "admits:usd"
+    }
+   ]
+  },
+  {
+   "declarations": 27,
+   "declarations_read": 3,
+   "facts": 109,
+   "name": "iso4217:USDutr:oz",
+   "structures": [
+    {
+     "declarations": 3,
+     "denominator": [
+      "utr:oz"
+     ],
+     "facts": 14,
+     "numerator": [
+      "iso4217:USD"
+     ],
+     "verdict": "admits:usd"
+    }
+   ]
+  },
+  {
+   "declarations": 30,
+   "declarations_read": 10,
+   "facts": 108,
+   "name": "utr:bblutr:D",
+   "structures": [
+    {
+     "declarations": 10,
+     "denominator": [
+      "utr:D"
+     ],
+     "facts": 38,
+     "numerator": [
+      "utr:bbl"
+     ],
+     "verdict": "refused"
+    }
+   ]
+  },
+  {
+   "declarations": 13,
+   "declarations_read": 4,
+   "facts": 105,
+   "name": "utr:MMBTUutr:D",
+   "structures": [
+    {
+     "declarations": 4,
+     "denominator": [
+      "utr:D"
+     ],
+     "facts": 37,
+     "numerator": [
+      "utr:MMBTU"
+     ],
+     "verdict": "refused"
+    }
+   ]
+  },
+  {
+   "declarations": 17,
+   "declarations_read": 0,
+   "facts": 86,
+   "name": "iso4217:USDiso4217:USN",
+   "structures": []
+  },
+  {
+   "declarations": 13,
+   "declarations_read": 0,
+   "facts": 81,
+   "name": "iso4217:USDfcx:lb",
+   "structures": []
+  },
+  {
+   "declarations": 20,
+   "declarations_read": 10,
+   "facts": 80,
+   "name": "iso4217:EURiso4217:USD",
+   "structures": [
+    {
+     "declarations": 10,
+     "denominator": [
+      "iso4217:USD"
+     ],
+     "facts": 20,
+     "numerator": [
+      "iso4217:EUR"
+     ],
+     "verdict": "admits:unknown"
+    }
+   ]
+  },
+  {
+   "declarations": 23,
+   "declarations_read": 7,
+   "facts": 69,
+   "name": "iso4217:USDutr:Boe",
+   "structures": [
+    {
+     "declarations": 7,
+     "denominator": [
+      "utr:Boe"
+     ],
+     "facts": 21,
+     "numerator": [
+      "iso4217:USD"
+     ],
+     "verdict": "admits:usd"
+    }
+   ]
+  },
+  {
+   "declarations": 6,
+   "declarations_read": 3,
+   "facts": 68,
+   "name": "iso4217:USDiso4217:GBP",
+   "structures": [
+    {
+     "declarations": 3,
+     "denominator": [
+      "iso4217:GBP"
+     ],
+     "facts": 37,
+     "numerator": [
+      "iso4217:USD"
+     ],
+     "verdict": "admits:usd"
+    }
+   ]
+  },
+  {
+   "declarations": 4,
+   "declarations_read": 3,
+   "facts": 64,
+   "name": "iso4217:USDaee:MWh",
+   "structures": [
+    {
+     "declarations": 3,
+     "denominator": [
+      "aee:MWh"
+     ],
+     "facts": 47,
+     "numerator": [
+      "iso4217:USD"
+     ],
+     "verdict": "admits:usd"
+    }
+   ]
+  },
+  {
+   "declarations": 13,
+   "declarations_read": 4,
+   "facts": 59,
+   "name": "iso4217:USDutr:MWd",
+   "structures": [
+    {
+     "declarations": 4,
+     "denominator": [
+      "utr:MWd"
+     ],
+     "facts": 24,
+     "numerator": [
+      "iso4217:USD"
+     ],
+     "verdict": "admits:usd"
+    }
+   ]
+  },
+  {
+   "declarations": 5,
+   "declarations_read": 0,
+   "facts": 53,
+   "name": "iso4217:USDnog:barrel",
+   "structures": []
+  },
+  {
+   "declarations": 13,
+   "declarations_read": 0,
+   "facts": 48,
+   "name": "iso4217:USDed:kW-month",
+   "structures": []
+  },
+  {
+   "declarations": 28,
+   "declarations_read": 5,
+   "facts": 47,
+   "name": "iso4217:USDutr:gal",
+   "structures": [
+    {
+     "declarations": 5,
+     "denominator": [
+      "utr:gal"
+     ],
+     "facts": 5,
+     "numerator": [
+      "iso4217:USD"
+     ],
+     "verdict": "admits:usd"
+    }
+   ]
+  },
+  {
+   "declarations": 8,
+   "declarations_read": 0,
+   "facts": 43,
+   "name": "iso4217:USDdvn:Customer",
+   "structures": []
+  },
+  {
+   "declarations": 14,
+   "declarations_read": 0,
+   "facts": 42,
+   "name": "slg:unitshares",
+   "structures": []
+  },
+  {
+   "declarations": 13,
+   "declarations_read": 0,
+   "facts": 38,
+   "name": "iso4217:USDfcx:oz",
+   "structures": []
+  },
+  {
+   "declarations": 9,
+   "declarations_read": 0,
+   "facts": 37,
+   "name": "iso4217:USDfour:Unit",
+   "structures": []
+  },
+  {
+   "declarations": 13,
+   "declarations_read": 0,
+   "facts": 35,
+   "name": "iso4217:USDpnw:KWH_Kilowatt_hour",
+   "structures": []
+  },
+  {
+   "declarations": 14,
+   "declarations_read": 7,
+   "facts": 34,
+   "name": "iso4217:USDutr:Btu",
+   "structures": [
+    {
+     "declarations": 7,
+     "denominator": [
+      "utr:Btu"
+     ],
+     "facts": 20,
+     "numerator": [
+      "iso4217:USD"
+     ],
+     "verdict": "admits:usd"
+    }
+   ]
+  },
+  {
+   "declarations": 4,
+   "declarations_read": 1,
+   "facts": 31,
+   "name": "iso4217:USDeog:mMBTu",
+   "structures": [
+    {
+     "declarations": 1,
+     "denominator": [
+      "eog:mMBTu"
+     ],
+     "facts": 12,
+     "numerator": [
+      "iso4217:USD"
+     ],
+     "verdict": "admits:usd"
+    }
+   ]
+  },
+  {
+   "declarations": 12,
+   "declarations_read": 12,
+   "facts": 30,
+   "name": "iso4217:USDutr:MW",
+   "structures": [
+    {
+     "declarations": 12,
+     "denominator": [
+      "utr:MW"
+     ],
+     "facts": 30,
+     "numerator": [
+      "iso4217:USD"
+     ],
+     "verdict": "admits:usd"
+    }
+   ]
+  },
+  {
+   "declarations": 19,
+   "declarations_read": 8,
+   "facts": 29,
+   "name": "iso4217:CADiso4217:USD",
+   "structures": [
+    {
+     "declarations": 8,
+     "denominator": [
+      "iso4217:USD"
+     ],
+     "facts": 11,
+     "numerator": [
+      "iso4217:CAD"
+     ],
+     "verdict": "admits:unknown"
+    }
+   ]
+  },
+  {
+   "declarations": 7,
+   "declarations_read": 0,
+   "facts": 29,
+   "name": "iso4217:USDpseg:mwd",
+   "structures": []
+  },
+  {
+   "declarations": 7,
+   "declarations_read": 0,
+   "facts": 28,
+   "name": "iso4217:USDpseg:mwh",
+   "structures": []
+  },
+  {
+   "declarations": 12,
+   "declarations_read": 0,
+   "facts": 28,
+   "name": "iso4217:USDutr:Mcfe",
+   "structures": []
+  },
+  {
+   "declarations": 7,
+   "declarations_read": 3,
+   "facts": 23,
+   "name": "iso4217:JPYiso4217:USD",
+   "structures": [
+    {
+     "declarations": 3,
+     "denominator": [
+      "iso4217:USD"
+     ],
+     "facts": 15,
+     "numerator": [
+      "iso4217:JPY"
+     ],
+     "verdict": "admits:unknown"
+    }
+   ]
+  },
+  {
+   "declarations": 13,
+   "declarations_read": 0,
+   "facts": 23,
+   "name": "iso4217:USDhcat:instrument",
+   "structures": []
+  },
+  {
+   "declarations": 7,
+   "declarations_read": 3,
+   "facts": 21,
+   "name": "iso4217:CADutr:MMBTU",
+   "structures": [
+    {
+     "declarations": 3,
+     "denominator": [
+      "utr:MMBTU"
+     ],
+     "facts": 9,
+     "numerator": [
+      "iso4217:CAD"
+     ],
+     "verdict": "admits:unknown"
+    }
+   ]
+  },
+  {
+   "declarations": 7,
+   "declarations_read": 3,
+   "facts": 21,
+   "name": "iso4217:CADutr:bbl",
+   "structures": [
+    {
+     "declarations": 3,
+     "denominator": [
+      "utr:bbl"
+     ],
+     "facts": 9,
+     "numerator": [
+      "iso4217:CAD"
+     ],
+     "verdict": "admits:unknown"
+    }
+   ]
+  },
+  {
+   "declarations": 18,
+   "declarations_read": 6,
+   "facts": 21,
+   "name": "iso4217:GBPshares",
+   "structures": [
+    {
+     "declarations": 6,
+     "denominator": [
+      "xbrli:shares"
+     ],
+     "facts": 6,
+     "numerator": [
+      "iso4217:GBP"
+     ],
+     "verdict": "admits:unknown"
+    }
+   ]
+  },
+  {
+   "declarations": 10,
+   "declarations_read": 0,
+   "facts": 21,
+   "name": "iso4217:USDpega:derivative",
+   "structures": []
+  },
+  {
+   "declarations": 10,
+   "declarations_read": 0,
+   "facts": 21,
+   "name": "iso4217:USDwdc:Unit",
+   "structures": []
+  },
+  {
+   "declarations": 19,
+   "declarations_read": 1,
+   "facts": 20,
+   "name": "iso4217:CNYshares",
+   "structures": [
+    {
+     "declarations": 1,
+     "denominator": [
+      "xbrli:shares"
+     ],
+     "facts": 1,
+     "numerator": [
+      "iso4217:CNY"
+     ],
+     "verdict": "admits:unknown"
+    }
+   ]
+  },
+  {
+   "declarations": 7,
+   "declarations_read": 0,
+   "facts": 19,
+   "name": "iso4217:USDpseg:Derivative",
+   "structures": []
+  },
+  {
+   "declarations": 10,
+   "declarations_read": 4,
+   "facts": 19,
+   "name": "utr:MMcfutr:D",
+   "structures": [
+    {
+     "declarations": 4,
+     "denominator": [
+      "utr:D"
+     ],
+     "facts": 6,
+     "numerator": [
+      "utr:MMcf"
+     ],
+     "verdict": "refused"
+    }
+   ]
+  },
+  {
+   "declarations": 10,
+   "declarations_read": 0,
+   "facts": 18,
+   "name": "iso4217:USDgmed:item",
+   "structures": []
+  },
+  {
+   "declarations": 12,
+   "declarations_read": 2,
+   "facts": 17,
+   "name": "iso4217:USDutr:sqft",
+   "structures": [
+    {
+     "declarations": 2,
+     "denominator": [
+      "utr:sqft"
+     ],
+     "facts": 4,
+     "numerator": [
+      "iso4217:USD"
+     ],
+     "verdict": "admits:usd"
+    }
+   ]
+  },
+  {
+   "declarations": 10,
+   "declarations_read": 2,
+   "facts": 17,
+   "name": "utr:Bcfutr:D",
+   "structures": [
+    {
+     "declarations": 2,
+     "denominator": [
+      "utr:D"
+     ],
+     "facts": 2,
+     "numerator": [
+      "utr:Bcf"
+     ],
+     "verdict": "refused"
+    }
+   ]
+  },
+  {
+   "declarations": 9,
+   "declarations_read": 6,
+   "facts": 17,
+   "name": "utr:galutr:D",
+   "structures": [
+    {
+     "declarations": 6,
+     "denominator": [
+      "utr:D"
+     ],
+     "facts": 12,
+     "numerator": [
+      "utr:gal"
+     ],
+     "verdict": "refused"
+    }
+   ]
+  },
+  {
+   "declarations": 8,
+   "declarations_read": 0,
+   "facts": 16,
+   "name": "iso4217:USDeix:claim",
+   "structures": []
+  },
+  {
+   "declarations": 6,
+   "declarations_read": 0,
+   "facts": 15,
+   "name": "iso4217:USDetr:unit",
+   "structures": []
+  },
+  {
+   "declarations": 4,
+   "declarations_read": 0,
+   "facts": 15,
+   "name": "iso4217:USDutr:MBoe",
+   "structures": []
+  },
+  {
+   "declarations": 9,
+   "declarations_read": 0,
+   "facts": 14,
+   "name": "iso4217:USDiso4217:EUR",
+   "structures": []
+  },
+  {
+   "declarations": 7,
+   "declarations_read": 0,
+   "facts": 14,
+   "name": "iso4217:USDpseg:DTH",
+   "structures": []
+  },
+  {
+   "declarations": 14,
+   "declarations_read": 0,
+   "facts": 14,
+   "name": "iso4217:USDwst:bbl",
+   "structures": []
+  },
+  {
+   "declarations": 6,
+   "declarations_read": 0,
+   "facts": 13,
+   "name": "iso4217:USDiso4217:MWK",
+   "structures": []
+  },
+  {
+   "declarations": 2,
+   "declarations_read": 0,
+   "facts": 12,
+   "name": "iso4217:USDoxy:Barrel",
+   "structures": []
+  },
+  {
+   "declarations": 6,
+   "declarations_read": 0,
+   "facts": 12,
+   "name": "iso4217:USDutr:dth",
+   "structures": []
+  },
+  {
+   "declarations": 4,
+   "declarations_read": 0,
+   "facts": 12,
+   "name": "iso4217:VEBiso4217:USD",
+   "structures": []
+  },
+  {
+   "declarations": 11,
+   "declarations_read": 4,
+   "facts": 11,
+   "name": "iso4217:USDalny:Unit",
+   "structures": [
+    {
+     "declarations": 4,
+     "denominator": [
+      "alny:Unit"
+     ],
+     "facts": 4,
+     "numerator": [
+      "iso4217:USD"
+     ],
+     "verdict": "admits:usd"
+    }
+   ]
+  },
+  {
+   "declarations": 11,
+   "declarations_read": 0,
+   "facts": 11,
+   "name": "iso4217:USDpodd:option",
+   "structures": []
+  },
+  {
+   "declarations": 10,
+   "declarations_read": 0,
+   "facts": 10,
+   "name": "cboe:Voteshares",
+   "structures": []
+  },
+  {
+   "declarations": 5,
+   "declarations_read": 0,
+   "facts": 10,
+   "name": "iso4217:USDutr:MMcf",
+   "structures": []
+  },
+  {
+   "declarations": 9,
+   "declarations_read": 0,
+   "facts": 9,
+   "name": "gmed:itemshares",
+   "structures": []
+  },
+  {
+   "declarations": 6,
+   "declarations_read": 0,
+   "facts": 9,
+   "name": "iso4217:BNDiso4217:VND",
+   "structures": []
+  },
+  {
+   "declarations": 9,
+   "declarations_read": 4,
+   "facts": 9,
+   "name": "iso4217:INRshares",
+   "structures": [
+    {
+     "declarations": 4,
+     "denominator": [
+      "xbrli:shares"
+     ],
+     "facts": 4,
+     "numerator": [
+      "iso4217:INR"
+     ],
+     "verdict": "admits:unknown"
+    }
+   ]
+  },
+  {
+   "declarations": 9,
+   "declarations_read": 0,
+   "facts": 9,
+   "name": "iso4217:USDaccd:derivative",
+   "structures": []
+  },
+  {
+   "declarations": 9,
+   "declarations_read": 3,
+   "facts": 9,
+   "name": "iso4217:USDgkos:instrument",
+   "structures": [
+    {
+     "declarations": 3,
+     "denominator": [
+      "gkos:instrument"
+     ],
+     "facts": 3,
+     "numerator": [
+      "iso4217:USD"
+     ],
+     "verdict": "admits:usd"
+    }
+   ]
+  },
+  {
+   "declarations": 9,
+   "declarations_read": 0,
+   "facts": 9,
+   "name": "olli:Voteshares",
+   "structures": []
+  },
+  {
+   "declarations": 8,
+   "declarations_read": 6,
+   "facts": 8,
+   "name": "iso4217:AUDshares",
+   "structures": [
+    {
+     "declarations": 6,
+     "denominator": [
+      "xbrli:shares"
+     ],
+     "facts": 6,
+     "numerator": [
+      "iso4217:AUD"
+     ],
+     "verdict": "admits:unknown"
+    }
+   ]
+  },
+  {
+   "declarations": 4,
+   "declarations_read": 0,
+   "facts": 8,
+   "name": "iso4217:IDRiso4217:USD",
+   "structures": []
+  },
+  {
+   "declarations": 8,
+   "declarations_read": 6,
+   "facts": 8,
+   "name": "iso4217:USDamrx:twinPack",
+   "structures": [
+    {
+     "declarations": 6,
+     "denominator": [
+      "amrx:twinPack"
+     ],
+     "facts": 6,
+     "numerator": [
+      "iso4217:USD"
+     ],
+     "verdict": "admits:usd"
+    }
+   ]
+  },
+  {
+   "declarations": 5,
+   "declarations_read": 2,
+   "facts": 8,
+   "name": "iso4217:USDmeli:item",
+   "structures": [
+    {
+     "declarations": 2,
+     "denominator": [
+      "meli:item"
+     ],
+     "facts": 4,
+     "numerator": [
+      "iso4217:USD"
+     ],
+     "verdict": "admits:usd"
+    }
+   ]
+  },
+  {
+   "declarations": 3,
+   "declarations_read": 0,
+   "facts": 8,
+   "name": "iso4217:USDoxy:MillionCubicFeet",
+   "structures": []
+  },
+  {
+   "declarations": 4,
+   "declarations_read": 0,
+   "facts": 8,
+   "name": "pep:optionpep:rSU",
+   "structures": []
+  },
+  {
+   "declarations": 4,
+   "declarations_read": 0,
+   "facts": 8,
+   "name": "utr:galutr:Y",
+   "structures": []
+  },
+  {
+   "declarations": 3,
+   "declarations_read": 2,
+   "facts": 6,
+   "name": "iso4217:GBPiso4217:USD",
+   "structures": [
+    {
+     "declarations": 2,
+     "denominator": [
+      "iso4217:USD"
+     ],
+     "facts": 4,
+     "numerator": [
+      "iso4217:GBP"
+     ],
+     "verdict": "admits:unknown"
+    }
+   ]
+  },
+  {
+   "declarations": 5,
+   "declarations_read": 0,
+   "facts": 6,
+   "name": "iso4217:USDflnc:Unit",
+   "structures": []
+  },
+  {
+   "declarations": 3,
+   "declarations_read": 2,
+   "facts": 6,
+   "name": "iso4217:USDiso4217:CNY",
+   "structures": [
+    {
+     "declarations": 2,
+     "denominator": [
+      "iso4217:CNY"
+     ],
+     "facts": 4,
+     "numerator": [
+      "iso4217:USD"
+     ],
+     "verdict": "admits:usd"
+    }
+   ]
+  },
+  {
+   "declarations": 3,
+   "declarations_read": 0,
+   "facts": 6,
+   "name": "utr:MMcfeutr:D",
+   "structures": []
+  },
+  {
+   "declarations": 3,
+   "declarations_read": 2,
+   "facts": 5,
+   "name": "iso4217:USDiso4217:MXN",
+   "structures": [
+    {
+     "declarations": 2,
+     "denominator": [
+      "iso4217:MXN"
+     ],
+     "facts": 3,
+     "numerator": [
+      "iso4217:USD"
+     ],
+     "verdict": "admits:usd"
+    }
+   ]
+  },
+  {
+   "declarations": 2,
+   "declarations_read": 0,
+   "facts": 4,
+   "name": "iso4217:MXNshares",
+   "structures": []
+  },
+  {
+   "declarations": 4,
+   "declarations_read": 0,
+   "facts": 4,
+   "name": "iso4217:USDeqt:Dekatherm",
+   "structures": []
+  },
+  {
+   "declarations": 4,
+   "declarations_read": 0,
+   "facts": 4,
+   "name": "iso4217:USDetsy:item",
+   "structures": []
+  },
+  {
+   "declarations": 2,
+   "declarations_read": 0,
+   "facts": 4,
+   "name": "iso4217:USDgwre:Unit",
+   "structures": []
+  },
+  {
+   "declarations": 1,
+   "declarations_read": 0,
+   "facts": 4,
+   "name": "iso4217:USDiso4217:AUD",
+   "structures": []
+  },
+  {
+   "declarations": 4,
+   "declarations_read": 0,
+   "facts": 4,
+   "name": "iso4217:USDrivn:derivative",
+   "structures": []
+  },
+  {
+   "declarations": 4,
+   "declarations_read": 0,
+   "facts": 4,
+   "name": "iso4217:USDuthr:item",
+   "structures": []
+  },
+  {
+   "declarations": 2,
+   "declarations_read": 2,
+   "facts": 4,
+   "name": "utr:MBblsutr:D",
+   "structures": [
+    {
+     "declarations": 2,
+     "denominator": [
+      "utr:D"
+     ],
+     "facts": 4,
+     "numerator": [
+      "utr:MBbls"
+     ],
+     "verdict": "refused"
+    }
+   ]
+  },
+  {
+   "declarations": 2,
+   "declarations_read": 2,
+   "facts": 4,
+   "name": "utr:MBoeutr:D",
+   "structures": [
+    {
+     "declarations": 2,
+     "denominator": [
+      "utr:D"
+     ],
+     "facts": 4,
+     "numerator": [
+      "utr:MBoe"
+     ],
+     "verdict": "refused"
+    }
+   ]
+  },
+  {
+   "declarations": 3,
+   "declarations_read": 1,
+   "facts": 3,
+   "name": "iso4217:AFNshares",
+   "structures": [
+    {
+     "declarations": 1,
+     "denominator": [
+      "xbrli:shares"
+     ],
+     "facts": 1,
+     "numerator": [
+      "iso4217:AFN"
+     ],
+     "verdict": "admits:unknown"
+    }
+   ]
+  },
+  {
+   "declarations": 1,
+   "declarations_read": 0,
+   "facts": 3,
+   "name": "iso4217:COPiso4217:USD",
+   "structures": []
+  },
+  {
+   "declarations": 3,
+   "declarations_read": 2,
+   "facts": 3,
+   "name": "iso4217:HKDshares",
+   "structures": [
+    {
+     "declarations": 2,
+     "denominator": [
+      "xbrli:shares"
+     ],
+     "facts": 2,
+     "numerator": [
+      "iso4217:HKD"
+     ],
+     "verdict": "admits:unknown"
+    }
+   ]
+  },
+  {
+   "declarations": 3,
+   "declarations_read": 0,
+   "facts": 3,
+   "name": "iso4217:USDamrc:participant",
+   "structures": []
+  },
+  {
+   "declarations": 3,
+   "declarations_read": 2,
+   "facts": 3,
+   "name": "iso4217:USDcbrl:derivative",
+   "structures": [
+    {
+     "declarations": 2,
+     "denominator": [
+      "cbrl:derivative"
+     ],
+     "facts": 2,
+     "numerator": [
+      "iso4217:USD"
+     ],
+     "verdict": "admits:usd"
+    }
+   ]
+  },
+  {
+   "declarations": 1,
+   "declarations_read": 0,
+   "facts": 3,
+   "name": "iso4217:USDhl:Ounces",
+   "structures": []
+  },
+  {
+   "declarations": 3,
+   "declarations_read": 2,
+   "facts": 3,
+   "name": "iso4217:USDiso4217:JPY",
+   "structures": [
+    {
+     "declarations": 2,
+     "denominator": [
+      "iso4217:JPY"
+     ],
+     "facts": 2,
+     "numerator": [
+      "iso4217:USD"
+     ],
+     "verdict": "admits:usd"
+    }
+   ]
+  },
+  {
+   "declarations": 3,
+   "declarations_read": 2,
+   "facts": 3,
+   "name": "iso4217:USDiso4217:KRW",
+   "structures": [
+    {
+     "declarations": 2,
+     "denominator": [
+      "iso4217:KRW"
+     ],
+     "facts": 2,
+     "numerator": [
+      "iso4217:USD"
+     ],
+     "verdict": "admits:usd"
+    }
+   ]
+  },
+  {
+   "declarations": 3,
+   "declarations_read": 2,
+   "facts": 3,
+   "name": "iso4217:USDiso4217:MYR",
+   "structures": [
+    {
+     "declarations": 2,
+     "denominator": [
+      "iso4217:MYR"
+     ],
+     "facts": 2,
+     "numerator": [
+      "iso4217:USD"
+     ],
+     "verdict": "admits:usd"
+    }
+   ]
+  },
+  {
+   "declarations": 3,
+   "declarations_read": 0,
+   "facts": 3,
+   "name": "iso4217:USDspr:ship_set",
+   "structures": []
+  },
+  {
+   "declarations": 3,
+   "declarations_read": 2,
+   "facts": 3,
+   "name": "iso4217:USDupwk:derivative",
+   "structures": [
+    {
+     "declarations": 2,
+     "denominator": [
+      "upwk:derivative"
+     ],
+     "facts": 2,
+     "numerator": [
+      "iso4217:USD"
+     ],
+     "verdict": "admits:usd"
+    }
+   ]
+  },
+  {
+   "declarations": 2,
+   "declarations_read": 0,
+   "facts": 2,
+   "name": "iso4217:EURibm:option",
+   "structures": []
+  },
+  {
+   "declarations": 1,
+   "declarations_read": 1,
+   "facts": 2,
+   "name": "iso4217:SARshares",
+   "structures": [
+    {
+     "declarations": 1,
+     "denominator": [
+      "xbrli:shares"
+     ],
+     "facts": 2,
+     "numerator": [
+      "iso4217:SAR"
+     ],
+     "verdict": "admits:unknown"
+    }
+   ]
+  },
+  {
+   "declarations": 2,
+   "declarations_read": 1,
+   "facts": 2,
+   "name": "iso4217:USDbxp:Unit",
+   "structures": [
+    {
+     "declarations": 1,
+     "denominator": [
+      "bxp:Unit"
+     ],
+     "facts": 1,
+     "numerator": [
+      "iso4217:USD"
+     ],
+     "verdict": "admits:usd"
+    }
+   ]
+  },
+  {
+   "declarations": 2,
+   "declarations_read": 0,
+   "facts": 2,
+   "name": "iso4217:USDiso4217:CHF",
+   "structures": []
+  },
+  {
+   "declarations": 2,
+   "declarations_read": 2,
+   "facts": 2,
+   "name": "iso4217:USDupwk:Contract",
+   "structures": [
+    {
+     "declarations": 2,
+     "denominator": [
+      "upwk:Contract"
+     ],
+     "facts": 2,
+     "numerator": [
+      "iso4217:USD"
+     ],
+     "verdict": "admits:usd"
+    }
+   ]
+  },
+  {
+   "declarations": 1,
+   "declarations_read": 1,
+   "facts": 1,
+   "name": "iso4217:GHSiso4217:USD",
+   "structures": [
+    {
+     "declarations": 1,
+     "denominator": [
+      "iso4217:USD"
+     ],
+     "facts": 1,
+     "numerator": [
+      "iso4217:GHS"
+     ],
+     "verdict": "admits:unknown"
+    }
+   ]
+  },
+  {
+   "declarations": 1,
+   "declarations_read": 1,
+   "facts": 1,
+   "name": "iso4217:NZDshares",
+   "structures": [
+    {
+     "declarations": 1,
+     "denominator": [
+      "xbrli:shares"
+     ],
+     "facts": 1,
+     "numerator": [
+      "iso4217:NZD"
+     ],
+     "verdict": "admits:unknown"
+    }
+   ]
+  },
+  {
+   "declarations": 1,
+   "declarations_read": 0,
+   "facts": 1,
+   "name": "iso4217:USDmstr:Bitcoin",
+   "structures": []
+  },
+  {
+   "declarations": 1,
+   "declarations_read": 0,
+   "facts": 1,
+   "name": "iso4217:USDnbr:item",
+   "structures": []
+  },
+  {
+   "declarations": 1,
+   "declarations_read": 0,
+   "facts": 1,
+   "name": "iso4217:ZARshares",
+   "structures": []
+  }
+ ],
+ "shapes_total": 113,
+ "shapes_with_at_least_one_declaration_read": 54,
+ "source": {
+  "every_name_and_sha256_verified": 1769,
+  "filings_available": 1769,
+  "manifest": "01b_ix_input_manifest.txt",
+  "note": "the frozen cache ONLY, and PROVEN frozen against the pinned manifest before the graph was read \u2014 this receipt used to call the cache frozen without checking a single hash"
+ },
+ "structure_conflicts": [],
+ "timestamp_utc": "2026-08-01T15:33:30.228676Z"
+}

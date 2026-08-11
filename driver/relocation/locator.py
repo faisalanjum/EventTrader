@@ -1121,7 +1121,7 @@ def locate(anchor, source, hints=None):
             else:
                 pairs = []                   # neither given: undimensioned claim —
                                              # a dimensioned element still mismatches
-            graph_v = IHM.parse_raw(fc.get('value'))   # frozen canonical graph lexical contract
+            graph_v = IHM.parse_raw(fc.get('value'))   # XSD decimal (Arelle decimalPattern) + grouped round-trip
             if graph_v is None or not _finite(graph_v):
                 continue
             spairs_a = (tuple(sorted(tuple(p) for p in pairs))

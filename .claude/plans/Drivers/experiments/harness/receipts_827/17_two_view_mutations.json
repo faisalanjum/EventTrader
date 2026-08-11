@@ -1,0 +1,283 @@
+{
+ "all_caught_with_named_failures_and_clean_controls": true,
+ "environment": {
+  "HOME": "an empty temp dir outside the repo, removed after each run",
+  "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1",
+  "inherited": [
+   "PATH",
+   "LANG",
+   "LC_ALL"
+  ]
+ },
+ "mutations": [
+  {
+   "control": "clean",
+   "defect_reintroduced": "the strict parse RECOVERS instead of refusing, so a document nobody wrote is repaired into one that looks readable",
+   "failed_test_node_ids": [
+    "driver/relocation/test_two_view_bridge.py::test_a_document_that_is_not_well_formed_XML_is_refused_through_every_door",
+    "driver/relocation/test_two_view_bridge.py::test_the_refusal_reason_is_OURS_and_identical_for_every_bad_document"
+   ],
+   "mutation": "recovery_parsing",
+   "named_failure": "the named test failed",
+   "rc_control": 0,
+   "rc_mutated": 1,
+   "selector": "not_well_formed or refusal_reason",
+   "verdict": "CAUGHT"
+  },
+  {
+   "control": "clean",
+   "defect_reintroduced": "the FACT element's renderer spelling is hard-coded to `ix:nonfraction` instead of the one the document actually used",
+   "failed_test_node_ids": [
+    "driver/relocation/test_two_view_bridge.py::test_ANY_lawful_prefix_for_the_fact_element_still_binds[i]",
+    "driver/relocation/test_two_view_bridge.py::test_ANY_lawful_prefix_for_the_fact_element_still_binds[inline]",
+    "driver/relocation/test_two_view_bridge.py::test_ANY_lawful_prefix_for_the_fact_element_still_binds[z9]"
+   ],
+   "mutation": "literal_prefix_lookup",
+   "named_failure": "the named test failed",
+   "rc_control": 0,
+   "rc_mutated": 1,
+   "selector": "lawful_prefix",
+   "verdict": "CAUGHT"
+  },
+  {
+   "control": "clean",
+   "defect_reintroduced": "a QName resolves against the ROOT element's prefix map instead of the scope it is written in, so a locally rebound prefix keeps its outer meaning",
+   "failed_test_node_ids": [
+    "driver/relocation/test_two_view_bridge.py::test_a_QNAME_VALUE_resolves_in_ITS_OWN_scope_not_an_outer_one"
+   ],
+   "mutation": "global_scope_qname",
+   "named_failure": "the named test failed",
+   "rc_control": 0,
+   "rc_mutated": 1,
+   "selector": "QNAME_VALUE_resolves",
+   "verdict": "CAUGHT"
+  },
+  {
+   "control": "clean",
+   "defect_reintroduced": "a malformed document raises the parser's own exception out of the public door instead of one truthful refusal",
+   "failed_test_node_ids": [
+    "driver/relocation/test_two_view_bridge.py::test_a_document_that_is_not_well_formed_XML_is_refused_through_every_door"
+   ],
+   "mutation": "exception_escapes",
+   "named_failure": "the named test failed",
+   "rc_control": 0,
+   "rc_mutated": 1,
+   "selector": "not_well_formed",
+   "verdict": "CAUGHT"
+  },
+  {
+   "control": "clean",
+   "defect_reintroduced": "the whitespace facet is applied to EVERY attribute rather than to the ones whose declared type calls for it, so a padded sign becomes a negation",
+   "failed_test_node_ids": [
+    "driver/relocation/test_two_view_bridge.py::test_sign_PRESERVES_whitespace_AT_THE_REAL_BIND_DOOR"
+   ],
+   "mutation": "collapse_everything",
+   "named_failure": "the named test failed",
+   "rc_control": 0,
+   "rc_mutated": 1,
+   "selector": "sign_PRESERVES",
+   "verdict": "CAUGHT"
+  },
+  {
+   "control": "clean",
+   "defect_reintroduced": "an optional attribute present-and-EMPTY is accepted, so `sign=\"\"` states a sign the filing never wrote and `format=\"\"` asserts a transform by no name at all",
+   "failed_test_node_ids": [
+    "driver/relocation/test_two_view_bridge.py::test_an_optional_attribute_is_absent_or_lawful_and_a_required_one_resolves[sign present and empty is not lawful]",
+    "driver/relocation/test_two_view_bridge.py::test_an_optional_attribute_is_absent_or_lawful_and_a_required_one_resolves[format present and empty]"
+   ],
+   "mutation": "optional_empty_accepted",
+   "named_failure": "the named test failed",
+   "rc_control": 0,
+   "rc_mutated": 1,
+   "selector": "optional_attribute or absent_or_lawful",
+   "verdict": "CAUGHT"
+  },
+  {
+   "control": "clean",
+   "defect_reintroduced": "an unlawful contextRef/unitRef is reported as an UNDEFINED reference \u2014 a true-sounding statement about the filing when the fault is in the markup",
+   "failed_test_node_ids": [
+    "driver/relocation/test_two_view_bridge.py::test_a_collapse_faceted_value_ignores_XML_padding_but_not_inner_space[fact @contextRef]",
+    "driver/relocation/test_two_view_bridge.py::test_a_collapse_faceted_value_ignores_XML_padding_but_not_inner_space[fact @unitRef]",
+    "driver/relocation/test_two_view_bridge.py::test_an_optional_attribute_is_absent_or_lawful_and_a_required_one_resolves[contextRef present but not a name]",
+    "driver/relocation/test_two_view_bridge.py::test_an_optional_attribute_is_absent_or_lawful_and_a_required_one_resolves[unitRef present but not a name]"
+   ],
+   "mutation": "reference_looked_up_before_validated",
+   "named_failure": "the named test failed",
+   "rc_control": 0,
+   "rc_mutated": 1,
+   "selector": "absent_or_lawful or collapse_faceted",
+   "verdict": "CAUGHT"
+  },
+  {
+   "control": "clean",
+   "defect_reintroduced": "a numeric fact with no unitRef binds anyway, stating no measure for its own number",
+   "failed_test_node_ids": [
+    "driver/relocation/test_two_view_bridge.py::test_a_REQUIRED_reference_names_which_of_its_three_states_failed[unitRef absent]",
+    "driver/relocation/test_two_view_bridge.py::test_a_REQUIRED_reference_names_which_of_its_three_states_failed[unitRef present but empty]"
+   ],
+   "mutation": "unitRef_optional",
+   "named_failure": "the named test failed",
+   "rc_control": 0,
+   "rc_mutated": 1,
+   "selector": "REQUIRED_reference",
+   "verdict": "CAUGHT"
+  },
+  {
+   "control": "clean",
+   "defect_reintroduced": "the whitespace facet is not applied at all, so a lawfully padded id, contextRef or measure is called malformed",
+   "failed_test_node_ids": [
+    "driver/relocation/test_two_view_bridge.py::test_a_collapse_faceted_value_ignores_XML_padding_but_not_inner_space[fact @name]",
+    "driver/relocation/test_two_view_bridge.py::test_a_collapse_faceted_value_ignores_XML_padding_but_not_inner_space[fact @contextRef]",
+    "driver/relocation/test_two_view_bridge.py::test_a_collapse_faceted_value_ignores_XML_padding_but_not_inner_space[fact @unitRef]",
+    "driver/relocation/test_two_view_bridge.py::test_a_collapse_faceted_value_ignores_XML_padding_but_not_inner_space[fact @format]",
+    "driver/relocation/test_two_view_bridge.py::test_a_collapse_faceted_value_ignores_XML_padding_but_not_inner_space[context @id]",
+    "driver/relocation/test_two_view_bridge.py::test_a_collapse_faceted_value_ignores_XML_padding_but_not_inner_space[unit @id]",
+    "driver/relocation/test_two_view_bridge.py::test_a_collapse_faceted_value_ignores_XML_padding_but_not_inner_space[measure content]",
+    "driver/relocation/test_two_view_bridge.py::test_a_collapse_faceted_value_ignores_XML_padding_but_not_inner_space[explicitMember @dimension]",
+    "driver/relocation/test_two_view_bridge.py::test_a_collapse_faceted_value_ignores_XML_padding_but_not_inner_space[explicitMember content]",
+    "driver/relocation/test_two_view_bridge.py::test_a_collapse_faceted_value_ignores_XML_padding_but_not_inner_space[identifier content]",
+    "driver/relocation/test_two_view_bridge.py::test_a_collapse_faceted_value_ignores_XML_padding_but_not_inner_space[identifier @scheme]",
+    "driver/relocation/test_two_view_bridge.py::test_a_collapse_faceted_value_ignores_XML_padding_but_not_inner_space[fact @{http://www.w3.org/2001/XMLSchema-instance}nil]",
+    "driver/relocation/test_two_view_bridge.py::test_a_PADDED_element_id_is_the_same_id_the_schema_declares"
+   ],
+   "mutation": "collapse_nothing",
+   "named_failure": "the named test failed",
+   "rc_control": 0,
+   "rc_mutated": 1,
+   "selector": "collapse_faceted or PADDED",
+   "verdict": "CAUGHT"
+  },
+  {
+   "control": "clean",
+   "defect_reintroduced": "the renderer tree is asked which of its own nodes are facts \u2014 a question only the strict view can answer",
+   "failed_test_node_ids": [
+    "driver/relocation/test_two_view_bridge.py::test_a_prior_row_carrying_an_ALTERNATE_PREFIX_fact_is_not_taken_as_a_section"
+   ],
+   "mutation": "renderer_decides_facts",
+   "named_failure": "the named test failed",
+   "rc_control": 0,
+   "rc_mutated": 1,
+   "selector": "ALTERNATE_PREFIX",
+   "verdict": "CAUGHT"
+  },
+  {
+   "control": "clean",
+   "defect_reintroduced": "prefixes are collected from EVERY xmlns attribute anywhere in the document instead of the ones in scope, so a declaration on an unrelated sibling is trusted \u2014 the hand-written walk this round deleted",
+   "failed_test_node_ids": [
+    "driver/relocation/test_two_view_bridge.py::test_ATTACK_a_declaration_on_an_unrelated_SIBLING_is_not_in_scope"
+   ],
+   "mutation": "document_wide_xmlns_walk",
+   "named_failure": "the named test failed",
+   "rc_control": 0,
+   "rc_mutated": 1,
+   "selector": "SIBLING",
+   "verdict": "CAUGHT"
+  },
+  {
+   "control": "clean",
+   "defect_reintroduced": "prefix lookup is case-insensitive, so `xmlns:ZZ` is taken to declare `zz` \u2014 prefixes are case-SENSITIVE names, not labels",
+   "failed_test_node_ids": [
+    "driver/relocation/test_two_view_bridge.py::test_ATTACK_a_prefix_declared_only_in_ANOTHER_CASE_is_undeclared"
+   ],
+   "mutation": "case_insensitive_prefix",
+   "named_failure": "the named test failed",
+   "rc_control": 0,
+   "rc_mutated": 1,
+   "selector": "ANOTHER_CASE",
+   "verdict": "CAUGHT"
+  },
+  {
+   "control": "clean",
+   "defect_reintroduced": "namespace URIs are compared after stripping a trailing slash and lower- casing, so a near-miss URI is treated as the official one",
+   "failed_test_node_ids": [
+    "driver/relocation/test_two_view_bridge.py::test_ATTACK_a_NEAR_MISS_namespace_URI_is_a_different_namespace[http://www.xbrl.org/2013/inlineXBRL/-a trailing slash]",
+    "driver/relocation/test_two_view_bridge.py::test_ATTACK_a_NEAR_MISS_namespace_URI_is_a_different_namespace[http://www.xbrl.org/2013/INLINEXBRL-changed case]"
+   ],
+   "mutation": "normalized_namespace_uri",
+   "named_failure": "the named test failed",
+   "rc_control": 0,
+   "rc_mutated": 1,
+   "selector": "NEAR_MISS",
+   "verdict": "CAUGHT"
+  },
+  {
+   "control": "clean",
+   "defect_reintroduced": "declarations are found by searching the raw markup for `xmlns:`, so text inside a script or a comment declares a prefix",
+   "failed_test_node_ids": [
+    "driver/relocation/test_two_view_bridge.py::test_ATTACK_xmlns_looking_TEXT_declares_nothing[script-<script>var s = 'xmlns:zz=http://example.invalid/other';</script>]",
+    "driver/relocation/test_two_view_bridge.py::test_ATTACK_xmlns_looking_TEXT_declares_nothing[comment-<!-- xmlns:zz=\"http://example.invalid/other\" -->]"
+   ],
+   "mutation": "xmlns_by_text_search",
+   "named_failure": "the named test failed",
+   "rc_control": 0,
+   "rc_mutated": 1,
+   "selector": "xmlns_looking_TEXT",
+   "verdict": "CAUGHT"
+  },
+  {
+   "control": "clean",
+   "defect_reintroduced": "an instance-namespace measure reaches the graph as the text AFTER a colon instead of as its resolved local name, so a value resolved through a default namespace \u2014 which has no colon \u2014 becomes the empty string and a lawful filing is refused",
+   "failed_test_node_ids": [
+    "driver/relocation/test_two_view_bridge.py::test_an_INSTANCE_measure_reaches_the_graph_as_its_LOCAL_NAME[<xbrli:measure xmlns=\"http://www.xbrl.org/2003/instance\">shares</xbrli:measure>-the instance namespace as a local DEFAULT, value unprefixed]",
+    "driver/relocation/test_two_view_bridge.py::test_an_INSTANCE_measure_reaches_the_graph_as_its_LOCAL_NAME[<xbrli:measure>xbrli:shares</xbrli:measure>-the conventional prefix]",
+    "driver/relocation/test_two_view_bridge.py::test_an_INSTANCE_measure_reaches_the_graph_as_its_LOCAL_NAME[<xbrli:measure xmlns:inst=\"http://www.xbrl.org/2003/instance\">inst:shares</xbrli:measure>-a lawful alternate prefix]",
+    "driver/relocation/test_two_view_bridge.py::test_a_NON_instance_measure_keeps_its_prefix_exactly_as_written"
+   ],
+   "mutation": "graph_measure_by_colon_slicing",
+   "named_failure": "the named test failed",
+   "rc_control": 0,
+   "rc_mutated": 1,
+   "selector": "INSTANCE_measure or NON_instance_measure",
+   "verdict": "CAUGHT"
+  },
+  {
+   "control": "clean",
+   "defect_reintroduced": "contexts and units are found ANYWHERE in the document instead of as direct children of an ix:resources under ix:header, so a declaration buried in a div or inside ix:hidden binds exactly like a real one",
+   "failed_test_node_ids": [
+    "driver/relocation/test_two_view_bridge.py::test_ATTACK_a_context_or_unit_OUTSIDE_ix_resources_cannot_be_referenced[<ix:hidden>-inside ix:hidden, which is for FACT markup]",
+    "driver/relocation/test_two_view_bridge.py::test_ATTACK_a_context_or_unit_OUTSIDE_ix_resources_cannot_be_referenced[<body>-loose in the body, in no container at all]",
+    "driver/relocation/test_two_view_bridge.py::test_ix_resources_must_itself_be_a_child_of_ix_header"
+   ],
+   "mutation": "global_resource_discovery",
+   "named_failure": "the named test failed",
+   "rc_control": 0,
+   "rc_mutated": 1,
+   "selector": "OUTSIDE_ix_resources or INSIDE_ix_resources or child_of_ix_header",
+   "verdict": "CAUGHT"
+  },
+  {
+   "control": "clean",
+   "defect_reintroduced": "one value per dimension is checked on the SPELLING, so two prefixes bound to one URI give the same axis two values and the context is accepted \u2014 XBRL Dimensions 1.0 \u00a73.1.4.2",
+   "failed_test_node_ids": [
+    "driver/core/test_dimension_identity_at_the_door.py::test_ONE_axis_spelled_TWO_WAYS_in_one_context_is_a_repeated_dimension"
+   ],
+   "mutation": "repeated_axis_by_raw_spelling",
+   "named_failure": "the named test failed",
+   "rc_control": 0,
+   "rc_mutated": 1,
+   "selector": "repeated_dimension or GENUINELY_DIFFERENT",
+   "verdict": "CAUGHT"
+  },
+  {
+   "control": "clean",
+   "defect_reintroduced": "XML name legality is restated as an ASCII regex, which rejects the Unicode names XML permits",
+   "failed_test_node_ids": [
+    "driver/relocation/test_two_view_bridge.py::test_a_LAWFUL_xml_id_is_accepted_including_Unicode[f-1]",
+    "driver/relocation/test_two_view_bridge.py::test_a_LAWFUL_xml_id_is_accepted_including_Unicode[_x]",
+    "driver/relocation/test_two_view_bridge.py::test_a_LAWFUL_xml_id_is_accepted_including_Unicode[a.b-c]",
+    "driver/relocation/test_two_view_bridge.py::test_a_LAWFUL_xml_id_is_accepted_including_Unicode[\\xdcn\\xefcode]",
+    "driver/relocation/test_two_view_bridge.py::test_a_LAWFUL_xml_id_is_accepted_including_Unicode[W\\xe9rt]"
+   ],
+   "mutation": "ascii_name_grammar",
+   "named_failure": "the named test failed",
+   "rc_control": 0,
+   "rc_mutated": 1,
+   "selector": "LAWFUL_xml_id",
+   "verdict": "CAUGHT"
+  }
+ ],
+ "suites": [
+  "driver/relocation/test_two_view_bridge.py",
+  "driver/core/test_dimension_identity_at_the_door.py"
+ ]
+}

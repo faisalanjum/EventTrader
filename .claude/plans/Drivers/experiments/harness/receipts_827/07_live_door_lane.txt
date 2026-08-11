@@ -1,0 +1,28 @@
+argv[-m live]: ["/home/faisal/EventMarketDB/venv/bin/python", "-m", "pytest", "-q", "-p", "no:randomly", "-p", "no:cacheprovider", "--no-header", "--collect-only", "-m", "live", "driver/core", "driver/relocation", ".claude/plans/Drivers/experiments/harness"]
+argv[-m live_write]: ["/home/faisal/EventMarketDB/venv/bin/python", "-m", "pytest", "-q", "-p", "no:randomly", "-p", "no:cacheprovider", "--no-header", "--collect-only", "-m", "live_write", "driver/core", "driver/relocation", ".claude/plans/Drivers/experiments/harness"]
+live identities: 43 | live_write identities: 1
+live_write nodes: ['driver/core/test_neo4j_numeric_roundtrip.py::test_real_neo4j_roundtrip_of_the_exactness_storage_law']
+DISJOINT: True  (intersection=[])
+door items inside the live lane: 11
+snapshot BEFORE: {'lastCommittedTxn': 9226081, 'databaseID': 'B58E1F21943558DCE0C27B1E5307C78B8464864461A59EE1E440FF4D0F536605'}
+argv_json: ["/home/faisal/EventMarketDB/venv/bin/python", "-m", "pytest", "-q", "-p", "no:randomly", "-p", "no:cacheprovider", "--no-header", "--tb=line", "-m", "live", "driver/relocation/test_packet_items_through_the_door.py"]
+sedAsHTMLWarning: It looks like you're using an HTML parser to parse an XML document.
+
+  Assuming this really is an XML document, what you're doing might work, but you should know that using an XML parser will be more reliable. To parse this document as XML, make sure you have the Python package 'lxml' installed, and pass the keyword argument `features="xml"` into the BeautifulSoup constructor.
+
+  If you want or need to use an HTML parser on this document, you can make this warning go away by filtering it. To do that, run this code before calling the BeautifulSoup constructor:
+
+      from bs4 import XMLParsedAsHTMLWarning
+      import warnings
+
+      warnings.filterwarnings("ignore", category=XMLParsedAsHTMLWarning)
+
+    return BeautifulSoup(html_text, 'lxml')
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+11 passed, 1 deselected, 4 warnings in 24.92s
+
+pytest exit: 0
+snapshot AFTER:  {'lastCommittedTxn': 9226081, 'databaseID': 'B58E1F21943558DCE0C27B1E5307C78B8464864461A59EE1E440FF4D0F536605'}
+SNAPSHOT UNCHANGED (the read-only lane wrote nothing): True
+timestamp_utc: 2026-07-31T02:56:37.086126Z

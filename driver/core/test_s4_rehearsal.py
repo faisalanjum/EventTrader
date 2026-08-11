@@ -23,8 +23,8 @@ against the FakeStore declared in test_state.jsonl. SYN-CTRL-SKIPPED never
 reaches Core (accounting only). ZERO model calls, ZERO graph writes (proven by
 before/after node counts), no ENABLE_DRIVER_WRITES.
 
-Every input is hash-pinned: the four rev3 fixtures + the three 616b099 packet
-files. A pin mismatch is a hard FAILURE, never a skip. Skips happen ONLY for
+Every input is hash-pinned: the four rev3 fixtures + the three packet files as
+they stand at 7ddc85b0. A pin mismatch is a hard FAILURE, never a skip. Skips happen ONLY for
 missing Neo4j config/connectivity (the repo's proven narrow pattern)."""
 import hashlib
 import json
@@ -41,21 +41,30 @@ _REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__
 _FIX = os.path.join(_REPO, "data", "driver_catalog_seed", "s4_fixtures")
 _PKT = os.path.join(_REPO, "data", "driver_catalog_seed")
 
-# The ACCEPTED rev3 fixture pins (formal sign-off 2026-07-23) + the 616b099
-# packet pins the fixture headers declare. Copied whole from tool output.
+# The ACCEPTED rev3 fixture pins (formal sign-off 2026-07-23), refreshed for
+# representation only by EU-189, + the 7ddc85b0 packet pins the fixture headers
+# declare. Copied whole from tool output.
+#
+# EU-189 REPRESENTATION REFRESH (#827, reviewer-authorized SEQ 948/949): the CE
+# and ACI packets now preserve the SOURCE's own NBSP and trailing whitespace
+# instead of the earlier fabricated ASCII space, so their hashes and the 11 real
+# candidates' `quote` strings moved together. Everything the rev3 sign-off
+# actually decided — values, units, periods, identities, concepts, dimensions,
+# kernel decisions, expected outcomes — is unchanged; no_match_ledger did not
+# move at all. This is a mechanical refresh, NOT a new decomposition or ruling.
 PINS = {
     "s4_fixtures/recorded_candidates.jsonl":
-        "28fc6ed6928c48d19cea2d1f395b1a5de64c3f6e09491ecac03b76e1d9487331",
+        "85f6327b04418f6a27f6dc70aa5169559b4c9f146a37aa28b134e2df323d2c11",
     "s4_fixtures/recorded_kernel_decisions.jsonl":
-        "e69e82b840abf861a455f717913c06a96deb9fd126701a9fa655266017b16036",
+        "b026b9066ca2777f9e1d7403c3f68b435b49cf71864d743a2265faa820964335",
     "s4_fixtures/expected_results.jsonl":
-        "0953a2f064b064d7509b0bb0e05ee7f733a045570a808a3e30debc7c8a04fae9",
+        "9935c53a074aceeee7662da05569a1ec26c60e8baf9ad3722abd6b234fa9e3c8",
     "s4_fixtures/test_state.jsonl":
-        "283a1588ed4c398021e97c6ccf5f9c6237ce67eca346df747d9dbfa74ac968b5",
+        "452ed10c368b1cf62863a1f7d809596b364fbc9c7b70f507781d6eb6ef50bd09",
     "wp3_ce_compliant/packets.jsonl":
-        "f79f39ee8e3d903ae71b3d5e788f2f9863123f7fd4183c09aaeb722762266e24",
+        "7d8b824de14543b905841581c31a5d776a6d662633fee65ec7e0c879c53d3c9e",
     "wp3_aci_stream/packets.jsonl":
-        "2f7c0b7cde3c8ee858bc649b59acf890bc23f8919d61f1b5395e7b9ffcbca14f",
+        "25a33cb4379fae794be904c39caa9c0b60b2f05c60857f155b46c5ac8693254e",
     "wp3_aci_stream/no_match_ledger.jsonl":
         "bda988132a0053004b37460b2f182fefdcfa4305def9acd98a96d44f49cc9684",
 }

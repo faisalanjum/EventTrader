@@ -166,6 +166,12 @@ PROVENANCE = {
         "(written record: correction of one mis-transcribed receipt hash in "
         "commit 0ae6453b, which amend/rewrite rules forbid fixing in place; "
         "not reproducible by a command)",
+    "31_graph_decimal_row.md":
+        "(written record: the GRAPH-DECIMAL closure — the graph number reader "
+        "is XSD decimal plus canonical grouped transport, replacing a deleted "
+        "project grammar — carrying the reviewer ruling, the live population "
+        "census and the two zero reachability counts; not reproducible by a "
+        "command)",
 }
 
 

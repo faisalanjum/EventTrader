@@ -1,18 +1,11 @@
 import difflib, io
 R = {
 ".claude/plans/Drivers/FinalDesign/FINAL_DESIGN.md": [
-("- The proven pure V2 resolver decides canonical unit and scale; the semantic extractor only copies signed unscaled source numbers + verbatim raw units.",
- "- The READER states the final canonical unit and, per numeric slot, the exact `{value, scale_multiplier, unit_scale_evidence}`; code validates structure and evidence membership and performs exact Decimal multiplication only — it never derives a unit or scale from a name, quote, label, or concept name."),
-("- **Effective UNIT-04 (per-slot hints):** each numeric level or change slot carries its own required raw unit + a unit-kind hint (`money`|`ratio`|`count`|`multiplier`|`unknown`); money kind requires `money_mode` (`aggregate`|`price_like`|`unknown`), null otherwise. Resolve level and change separately.",
- "- **Effective UNIT-04 (per-slot statement):** each populated numeric slot carries its own `{value, scale_multiplier, unit_scale_evidence}`. TEXT-lane facts: the evidence span must appear INSIDE the fact's quote — the SMALLEST span supporting the multiplier (\"billion\" for 10^9; a unit marker like \"$\" suffices only at multiplier 1); the evidence may be null ONLY when the multiplier is 1 AND no unit or scale marker exists. XBRL-BACKED facts: verified structured metadata (`ix.scale` + `unit_ref` + `source_evidence.pieces`) replaces quote-local evidence entirely. Level and comparison share `level_unit`; `change_value` carries `change_unit`. Resolve level and change separately."),
-("- Validate final enum AND scaled value: glued billions → `m_usd` ×1,000; cents-on-aggregate and pre-scaled mistakes hard-fail; non-USD gaps may stay `unknown` (monitored).",
- "- Validate the final enum AND the multiplied value: percent-family/`x` require `scale_multiplier` = 1; cents-on-aggregate hard-fails; non-USD money states `unknown` (monitored). No magnitude-based guessing exists on this path."),
-("A stated per-X denominator lives in the NAME while the value uses the base unit; the per-X lint (money level + stated denominator + no `_per_` name) is a hard failure.",
- "A stated per-X denominator lives in the NAME while the value uses the base unit; the shared decomposer emits it once as the packet's `per_x` signal and the ADMISSION KERNEL validates name↔per_x↔evidence — a conflict PARKS (the numeric converter never receives names)."),
-("OD-11 CONSUMES the upstream-resolved `period_scope` (the period resolver runs first) and never infers it.",
- "OD-11 is applied by the MODEL — the reader states the final growth-basis unit directly — and VALIDATED by code, which enforces only the mechanical validators: the annual pin (percent_sequential on an annual period is invalid) and the sentinel fail-close (a dateless horizon with a growth-basis unit parks); the resolved `period_scope` still arrives first."),
-("caught by a report-only monitoring counter, never a human or a list.",
- "attacked by hidden-grading fixtures and watched by the report-only monitor, never a human or a list."),
+# SEQ 904 deletion-first cleanup: all 6 entries were ALREADY APPLIED and are
+# committed at 377d5f4a. Each was proven spent BEFORE removal — its `old` text
+# is absent from the index (count 0) and its `new` text present exactly once.
+# A spent edit left in the table makes the builder fail forever and reports the
+# rev-4 work as incomplete when the truth is that it landed.
 ],
 ".claude/plans/Drivers/FinalDesign/15_CandidateFactPacket.md": [
 ("- transients (propose-then-discard): `level_unit_raw / change_unit_raw` · 4 per-slot hints (`level_unit_kind_hint / level_money_mode_hint / change_unit_kind_hint / change_money_mode_hint`) · `level_shape_hint / comparison_shape_hint` · `measurement_raw_spans`",
@@ -66,8 +59,8 @@ R = {
 ],
 }
 APPEND = {
-".claude/plans/Drivers/FinalDesign/FableExperimentWorkOrder.md":
-"\n> **v2.2-rev4 AMENDMENT BLOCK (drafted 2026-07-26 — PENDING owner sign-off; supersedes-on-approval, history above unedited):** PreparedFact v2 = 34 total / 32 model-owned item fields (the four unit hints, `sequential_evidence`, and the two raw-unit fields retired; each numeric slot becomes a `{value, scale_multiplier, unit_scale_evidence}` object; `level_unit`/`change_unit` stated by the reader from the 10-unit enum; conversion = exact Decimal multiplication only) · the §4/EXP-5 field lists and the producer-contract text around lines 634-646 are SUPERSEDED on approval — the evidence locator becomes `part_ref` + `occurrence_in_part` (per-part; null when unique; code-verified), NARROWLY replacing the global occurrence count for event facts and abstentions ONLY (chunk-era locator rules untouched — O-e) · matching per the rev-4 Part D law (exact-record + exact-locator bijection; duplicate golds first; ALL unmatched to build-time grading) · ONE prompt builder (gold drafting + EXP-5 arms + the future whole-event production reader) · ONE model-output envelope for both roles · `fact16_checks` retired at implementation · v2.1 and the v2.2 drafts superseded by the rev-4 package (`experiments/harness/exp5_rev4_package.md`).\n"
+# SEQ 904: the v2.2-rev4 amendment block is IN the committed document (DOC-EXP5
+# reconciled its owner-status clause to the adopted authority) — entry spent.
 }
 problems = []
 hunks = []

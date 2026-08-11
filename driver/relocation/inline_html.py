@@ -28,6 +28,7 @@ from driver.core.driver_ids import (SEC_CIK_10_PATTERN as _SEC_CIK_10_PATTERN,
 from driver.relocation.exact_numbers import (ROUTE_A_BOOLS,
                                              XBRL_INSTANCE_NAMESPACE,
                                              XML_WS, ExactError,
+                                             dec as _exact_dec,
                                              exact_scaleb, graph_unit_spelling,
                                              filing_boundary_graph_end,
                                              filing_boundary_graph_start,
@@ -3473,70 +3474,87 @@ def transform_status(fmt_expanded):
     return None
 
 
-#: THE GRAPH'S OWN NUMBER GRAMMAR — an optional sign, ASCII digits in the
-#: writer's canonical comma grouping, and an optional 1-3 digit fraction.
-#:
-#: AUTHORITY, separated plainly (SEQ 269):
-#:   · GRAPH lexical spelling — this pattern — is owned by THE FROZEN
-#:     CANONICAL GRAPH LEXICAL CONTRACT (SEQ 265 C / 266 §2), derived from
-#:     the two identical `neograph/Neo4jManager.py` writer formatters
-#:     (`f"{v:,}"` for int, `f"{v:,.3f}".rstrip('0').rstrip('.')` for
-#:     float): canonical ASCII comma grouping, no leading-zero repair, an
-#:     optional 1-3 digit fraction whose LAST digit is nonzero, lawful
-#:     `-0`, no invented size limit. The WRITER CONFORMS TO THIS GRAMMAR —
-#:     no claim is made about which strings IEEE floats can reach — and
-#:     the 12,402,201-value census (2026-08-01: underscores 0, exponents
-#:     0, NaN letters 0, parentheses 0) is compatibility evidence, never
-#:     the source of the rule.
-#:   · SOURCE accounting signs and parentheses are FinalPlan §6 / source-
-#:     reader law: that section describes the shared SOURCE verifier and
-#:     its visible accounting-negative lane, not graph `Fact.value`
-#:     spelling — so parentheses are refused here and handled where the
-#:     source is read.
-#: `Decimal()` IS NOT THIS GRAMMAR — it reads Python underscore separators
-#: (`1_0` -> 10), full-width and Arabic-Indic digits, exponents, Infinity, and
-#: sNaN, a SIGNALLING NaN that raises as soon as anything touches it. The same
-#: lesson `xml_integer` already carries, on the graph's side of the join.
-#: Non-finite spellings fall outside the grammar and need no branch of their
-#: own.
-# EU-061 (#827): this grammar is the FROZEN GRAPH LEXICAL CONTRACT — the
-# two writer formatters' output shape (the F7 boundary clause,
-# graph_row_contract's stored-spelling law: canonical decimal form,
-# comma-grouped integer part, no trailing fraction zeros — the [1-9]
-# terminal), NOT the transformation registries' input grammar it happens
-# to resemble: parse_raw reads what the GRAPH stored, and the EU-184 law
-# owns its refusal side (an alien spelling fails to reconcile). Widening
-# the fraction tail admits writer-alien spellings (pinned by the
-# writer-alien-raw DOOR node).
-_GRAPH_NUMBER = re.compile(
-    r'-?(?:0|[1-9][0-9]{0,2}(?:,[0-9]{3})*)(?:\.[0-9]{0,2}[1-9])?\Z')
-
-
+# GRAPH VALUE READING — who owns what, after GRAPH-DECIMAL (#827) deleted the
+# project-authored `_GRAPH_NUMBER` grammar that used to live here.
+#
+# LEXICAL OWNER — XSD decimal, reused through Arelle's pinned `decimalPattern`.
+#   There is NO project-authored production regex. Every finite XSD decimal
+#   spelling is lawful input, INCLUDING ungrouped digit runs, `+1234`, `01234`,
+#   trailing fraction zeros, and fractions longer than three digits.
+#
+# WHAT THE WRITER EMITS — the two identical `neograph/Neo4jManager.py`
+#   formatters (`f"{v:,}"` for int, `f"{v:,.3f}".rstrip('0').rstrip('.')` for
+#   float) produce comma-grouped text with at most a 3-digit fraction. That is
+#   a fact about the WRITER, not a licence to refuse other spellings on read.
+#   Comma-bearing text is outside XSD, so it is admitted only when it round-
+#   trips exactly through the runtime's canonical grouped formatting at the
+#   input's stated precision.
+#
+# CENSUS — 12,402,201 graph values (2026-08-01: underscores 0, exponents 0, NaN
+#   letters 0, parentheses 0). Compatibility evidence about what the corpus
+#   happens to hold; never the source of a rule.
+#
+# SOURCE accounting signs and parentheses are FinalPlan §6 / source-reader law:
+#   that lane owns the visible accounting-negative case, not graph `Fact.value`
+#   spelling — so parentheses are refused here and handled where the source is
+#   read.
+#
+# `Decimal()` IS NOT A LEXICAL GATE — it reads Python underscore separators
+#   (`1_0` -> 10), full-width and Arabic-Indic digits, exponents, Infinity, and
+#   sNaN, a SIGNALLING NaN that raises as soon as anything touches it. That is
+#   exactly why `decimalPattern` must run BEFORE the finite-number owner. The
+#   same lesson `xml_integer` already carries, on the graph's side of the join.
 def parse_raw(raw):
     """Graph raw value string → exact Decimal, or None when it is not one.
 
-    GRAPH-ONLY. The accepted language is the frozen canonical graph
-    lexical contract derived from the two writer formatters (the grammar
-    above); corpus evidence shows compatibility, not legality or complete
-    formatter reachability. Parentheses, padding, exponents, ungrouped
-    digit runs and non-finite spellings fall outside the contract, and all
-    refuse here. The SOURCE lane's accounting-negative law (visible
-    parentheses with the schema's `sign`) lives with the source readers,
-    not in this parser.
+    GRAPH-ONLY. The accepted language is XSD decimal, owned by Arelle's
+    pinned `decimalPattern` (see above), so ungrouped digit runs, `+1234`,
+    `01234`, trailing fraction zeros and long fractions all READ. Comma-
+    bearing text is outside XSD and is admitted only on an exact round-trip
+    through the runtime's canonical grouped formatting. Parentheses,
+    whitespace padding, underscores, Unicode digits, exponents and
+    non-finite spellings are not XSD decimals and refuse here. The SOURCE
+    lane's accounting-negative law (visible parentheses with the schema's
+    `sign`) lives with the source readers, not in this parser.
     """
     if not isinstance(raw, str):
         return None
-    if not _GRAPH_NUMBER.fullmatch(raw):
+    # SEQ 923: the custom `_GRAPH_NUMBER` grammar is DELETED. Reproduced on the
+    # public path, it filtered PRESENTATION rather than numeric correctness: it
+    # refused exact finite numbers — `1234`, `12345.6`, `0.0001`, and even the
+    # writer's own `1,234.50` (a trailing fraction zero) — purely on spelling,
+    # while its own docstring conceded the accepted language rested on "corpus
+    # evidence ... compatibility, not legality". A parser that carries digits,
+    # sign and point through untouched cannot defend correctness by refusing
+    # digits. The ONE exact finite-number owner decides now; only its declared
+    # refusal is caught, and no second grammar replaces it.
+    bare = raw.replace(',', '')
+    # XSD decimal is the OFFICIAL lexical owner here — Arelle's pinned
+    # `decimalPattern`, already this module's grammar for no-format facts, not a
+    # rule written by us. It must run BEFORE the finite-number owner, because
+    # `Decimal()` itself reads whitespace padding, Python underscores, Unicode
+    # digits and exponents; routing straight to `dec` admitted all of those
+    # (measured: 8 of 8 hostile spellings accepted).
+    from arelle.XmlValidate import decimalPattern
+    if not decimalPattern.fullmatch(bare):
         return None
-    # EU-175 (#827): the comma is the GRAPH lexical contract's grouping
-    # separator (the EU-061 record: this grammar is the writer formatters'
-    # output shape, not a registry input), and removing it is the only
-    # transformation applied — the digits, sign and decimal point are
-    # carried through untouched, so nothing here can change a value's
-    # magnitude (measured: substituting any character for the removal
-    # reds 61 door nodes).
-    return Decimal(raw.replace(',', ''))
-
+    try:
+        value = _exact_dec(bare)
+    except ExactError:
+        return None
+    if ',' in raw:
+        # Grouping is validated by RE-RUNNING THE WRITER'S OWN formatting
+        # mechanic (documented above: `f"{v:,}"` / `f"{v:,.Nf}"`), never by a
+        # second handwritten grouping grammar. Malformed grouping fails to
+        # round-trip; digits, sign and decimal position are never altered.
+        # NO ARITHMETIC HERE. `abs(value)` is context-sensitive and raised
+        # decimal.Overflow on the million-digit door case — a crash on the
+        # public path, in the very formatter meant to validate it. Formatting
+        # alone carries the sign and needs no context widening.
+        places = -value.as_tuple().exponent
+        if format(value, "," if places <= 0 else f",.{places}f") != raw:
+            return None
+    return value
 
 def _no_format_value(text):
     """Inline XBRL 1.1 §10.1.2 — a fact with NO `format` states the number

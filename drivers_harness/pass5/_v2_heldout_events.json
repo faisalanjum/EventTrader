@@ -1,0 +1,3605 @@
+{
+ "events": [
+  {
+   "event_id": "ho::peer::000",
+   "ticker": "SEDG",
+   "date": "2025-06-17",
+   "source_type": "news",
+   "axis": "peer",
+   "canonical_bucket": "solar_tax_credit_policy",
+   "evidence": "loses key tax-credit advantage as the same bill removes residential-solar credits"
+  },
+  {
+   "event_id": "ho::peer::001",
+   "ticker": "ENPH",
+   "date": "2025-06-17",
+   "source_type": "news",
+   "axis": "peer",
+   "canonical_bucket": "solar_tax_credit_policy",
+   "evidence": "downgraded on the same policy shock to residential inverter demand"
+  },
+  {
+   "event_id": "ho::peer::002",
+   "ticker": "FSLR",
+   "date": "2025-07-03",
+   "source_type": "news",
+   "axis": "peer",
+   "canonical_bucket": "solar_tax_credit_policy",
+   "evidence": "utility-scale solar benefits relative to residential as domestic-manufacturing 45X credits are preserved"
+  },
+  {
+   "event_id": "ho::peer::003",
+   "ticker": "SHLS",
+   "date": "2026-02-24",
+   "source_type": "news",
+   "axis": "peer",
+   "canonical_bucket": "solar_tax_credit_policy",
+   "evidence": "solar balance-of-system caught in the same demand-policy repricing"
+  },
+  {
+   "event_id": "ho::peer::004",
+   "ticker": "ARRY",
+   "date": "2026-02-25",
+   "source_type": "news",
+   "axis": "peer",
+   "canonical_bucket": "solar_tax_credit_policy",
+   "evidence": "solar trackers \u2014 weak guidance tied to policy-driven demand uncertainty"
+  },
+  {
+   "event_id": "ho::peer::005",
+   "ticker": "FLNC",
+   "date": "2025-06-17",
+   "source_type": "news",
+   "axis": "peer",
+   "canonical_bucket": "solar_tax_credit_policy",
+   "evidence": "energy storage treated differently under the bill \u2014 storage credits preserved"
+  },
+  {
+   "event_id": "ho::peer::006",
+   "ticker": "KBH",
+   "date": "2025-12-18",
+   "source_type": "news",
+   "axis": "peer",
+   "canonical_bucket": "homebuilders_mortgage_rate",
+   "evidence": "housing market conditions remained challenging on affordability/rate pressure"
+  },
+  {
+   "event_id": "ho::peer::007",
+   "ticker": "LEN",
+   "date": "2024-12-18",
+   "source_type": "news",
+   "axis": "peer",
+   "canonical_bucket": "homebuilders_mortgage_rate",
+   "evidence": "flags a far more challenging housing market on rates/affordability"
+  },
+  {
+   "event_id": "ho::peer::008",
+   "ticker": "PHM",
+   "date": "2023-01-31",
+   "source_type": "news",
+   "axis": "peer",
+   "canonical_bucket": "homebuilders_mortgage_rate",
+   "evidence": "CEO says interest-rate hikes impacting demand"
+  },
+  {
+   "event_id": "ho::peer::009",
+   "ticker": "TOL",
+   "date": "2024-08-20",
+   "source_type": "news",
+   "axis": "peer",
+   "canonical_bucket": "homebuilders_mortgage_rate",
+   "evidence": "rate-cut optimism lifts builders into August"
+  },
+  {
+   "event_id": "ho::peer::010",
+   "ticker": "TMHC",
+   "date": "2024-10-23",
+   "source_type": "news",
+   "axis": "peer",
+   "canonical_bucket": "homebuilders_mortgage_rate",
+   "evidence": "home-closing/margin outlook on the same demand backdrop"
+  },
+  {
+   "event_id": "ho::peer::011",
+   "ticker": "MTH",
+   "date": "2024-10-24",
+   "source_type": "news",
+   "axis": "peer",
+   "canonical_bucket": "homebuilders_mortgage_rate",
+   "evidence": "Meritage Homes \u2014 same rate-sensitive demand cohort (confirm date in curation)"
+  },
+  {
+   "event_id": "ho::peer::012",
+   "ticker": "CCL",
+   "date": "2025-06-24",
+   "source_type": "news",
+   "axis": "peer",
+   "canonical_bucket": "travel_leisure_demand",
+   "evidence": "raises full-year outlook after record bookings"
+  },
+  {
+   "event_id": "ho::peer::013",
+   "ticker": "NCLH",
+   "date": "2025-07-31",
+   "source_type": "news",
+   "axis": "peer",
+   "canonical_bucket": "travel_leisure_demand",
+   "evidence": "sees record advance ticket sales (booking demand)"
+  },
+  {
+   "event_id": "ho::peer::014",
+   "ticker": "EXPE",
+   "date": "2025-02-07",
+   "source_type": "news",
+   "axis": "peer",
+   "canonical_bucket": "travel_leisure_demand",
+   "evidence": "travel momentum grows (booking demand)"
+  },
+  {
+   "event_id": "ho::peer::015",
+   "ticker": "ABNB",
+   "date": "2026-03-27",
+   "source_type": "news",
+   "axis": "peer",
+   "canonical_bucket": "travel_leisure_demand",
+   "evidence": "inflation/energy costs pressure the travel-demand outlook"
+  },
+  {
+   "event_id": "ho::peer::016",
+   "ticker": "ALGT",
+   "date": "2023-05-03",
+   "source_type": "news",
+   "axis": "peer",
+   "canonical_bucket": "travel_leisure_demand",
+   "evidence": "budget-carrier leisure-demand read"
+  },
+  {
+   "event_id": "ho::peer::017",
+   "ticker": "TRIP",
+   "date": "2024-02-13",
+   "source_type": "news",
+   "axis": "peer",
+   "canonical_bucket": "travel_leisure_demand",
+   "evidence": "travel-demand-driven move (use the demand event, NOT the Starboard-stake one)"
+  },
+  {
+   "event_id": "ho::peer::018",
+   "ticker": "CMG",
+   "date": "2025-10-30",
+   "source_type": "news",
+   "axis": "peer",
+   "canonical_bucket": "restaurants_consumer_traffic",
+   "evidence": "traffic reversal presents a confounding problem (traffic decline)"
+  },
+  {
+   "event_id": "ho::peer::019",
+   "ticker": "BLMN",
+   "date": "2025-02-26",
+   "source_type": "news",
+   "axis": "peer",
+   "canonical_bucket": "restaurants_consumer_traffic",
+   "evidence": "casual-dining traffic weakness, Q4 sales decline"
+  },
+  {
+   "event_id": "ho::peer::020",
+   "ticker": "WING",
+   "date": "2025-02-19",
+   "source_type": "news",
+   "axis": "peer",
+   "canonical_bucket": "restaurants_consumer_traffic",
+   "evidence": "same-store-sales deceleration"
+  },
+  {
+   "event_id": "ho::peer::021",
+   "ticker": "EAT",
+   "date": "2024-08-14",
+   "source_type": "news",
+   "axis": "peer",
+   "canonical_bucket": "restaurants_consumer_traffic",
+   "evidence": "traffic vs cost story (Chili's traffic boom)"
+  },
+  {
+   "event_id": "ho::peer::022",
+   "ticker": "CBRL",
+   "date": "2023-11-30",
+   "source_type": "news",
+   "axis": "peer",
+   "canonical_bucket": "restaurants_consumer_traffic",
+   "evidence": "lower traffic on weaker consumer"
+  },
+  {
+   "event_id": "ho::peer::023",
+   "ticker": "PZZA",
+   "date": "2024-11-07",
+   "source_type": "news",
+   "axis": "peer",
+   "canonical_bucket": "restaurants_consumer_traffic",
+   "evidence": "sales dip, CEO blames challenging consumer environment"
+  },
+  {
+   "event_id": "ho::peer::024",
+   "ticker": "DRI",
+   "date": "2024-12-19",
+   "source_type": "news",
+   "axis": "peer",
+   "canonical_bucket": "restaurants_consumer_traffic",
+   "evidence": "same-restaurant sales / traffic theme (positive read)"
+  },
+  {
+   "event_id": "ho::peer::025",
+   "ticker": "CRI",
+   "date": "2025-07-25",
+   "source_type": "news",
+   "axis": "peer",
+   "canonical_bucket": "tariff_china_import_retail",
+   "evidence": "monitors proposed import tariffs that could add substantially to its duties"
+  },
+  {
+   "event_id": "ho::peer::026",
+   "ticker": "BBY",
+   "date": "2025-03-04",
+   "source_type": "news",
+   "axis": "peer",
+   "canonical_bucket": "tariff_china_import_retail",
+   "evidence": "CEO says price hikes highly likely as tariffs take effect"
+  },
+  {
+   "event_id": "ho::peer::027",
+   "ticker": "FIVE",
+   "date": "2026-03-19",
+   "source_type": "news",
+   "axis": "peer",
+   "canonical_bucket": "tariff_china_import_retail",
+   "evidence": "tariff impact, positive surprise (Q4 shows resilience)"
+  },
+  {
+   "event_id": "ho::peer::028",
+   "ticker": "RH",
+   "date": "2025-09-26",
+   "source_type": "news",
+   "axis": "peer",
+   "canonical_bucket": "tariff_china_import_retail",
+   "evidence": "new furniture tariffs send the shares moving"
+  },
+  {
+   "event_id": "ho::peer::029",
+   "ticker": "BURL",
+   "date": "2025-05-29",
+   "source_type": "news",
+   "axis": "peer",
+   "canonical_bucket": "tariff_china_import_retail",
+   "evidence": "vows to absorb tariff heat through gains elsewhere"
+  },
+  {
+   "event_id": "ho::peer::030",
+   "ticker": "ETSY",
+   "date": "2025-04-02",
+   "source_type": "news",
+   "axis": "peer",
+   "canonical_bucket": "tariff_china_import_retail",
+   "evidence": "tariff-demand question (how severely will tariffs weigh on demand)"
+  },
+  {
+   "event_id": "ho::peer::031",
+   "ticker": "MPC",
+   "date": "2024-04-30",
+   "source_type": "news",
+   "axis": "peer",
+   "canonical_bucket": "oil_refiners_crack_spread",
+   "evidence": "sees net negative ~$2B on refining & marketing margin for Q1 (crack spread)"
+  },
+  {
+   "event_id": "ho::peer::032",
+   "ticker": "VLO",
+   "date": "2023-02-07",
+   "source_type": "news",
+   "axis": "peer",
+   "canonical_bucket": "oil_refiners_crack_spread",
+   "evidence": "refining-margin strength"
+  },
+  {
+   "event_id": "ho::peer::033",
+   "ticker": "PSX",
+   "date": "2024-04-26",
+   "source_type": "news",
+   "axis": "peer",
+   "canonical_bucket": "oil_refiners_crack_spread",
+   "evidence": "refining margin / demand outlook"
+  },
+  {
+   "event_id": "ho::peer::034",
+   "ticker": "PBF",
+   "date": "2025-03-06",
+   "source_type": "news",
+   "axis": "peer",
+   "canonical_bucket": "oil_refiners_crack_spread",
+   "evidence": "capacity/margin event (partial refinery restart)"
+  },
+  {
+   "event_id": "ho::peer::035",
+   "ticker": "DK",
+   "date": "2024-05-08",
+   "source_type": "news",
+   "axis": "peer",
+   "canonical_bucket": "oil_refiners_crack_spread",
+   "evidence": "Delek US \u2014 small independent refiner, same crack-spread sensitivity (confirm date)"
+  },
+  {
+   "event_id": "ho::metric_sib::036",
+   "ticker": "FTNT",
+   "date": "2025-02-06",
+   "source_type": "8k",
+   "axis": "metric_sib",
+   "canonical_bucket": "revenue_guidance",
+   "evidence": "Q1 2025 revenue $1.500B-$1.560B."
+  },
+  {
+   "event_id": "ho::metric_sib::037",
+   "ticker": "TWST",
+   "date": "2025-08-04",
+   "source_type": "8k",
+   "axis": "metric_sib",
+   "canonical_bucket": "revenue_guidance",
+   "evidence": "4QFY25 total revenue ~$96-98M."
+  },
+  {
+   "event_id": "ho::metric_sib::038",
+   "ticker": "GIII",
+   "date": "2024-03-14",
+   "source_type": "8k",
+   "axis": "metric_sib",
+   "canonical_bucket": "revenue_guidance",
+   "evidence": "FY2025 net sales ~$3.20B."
+  },
+  {
+   "event_id": "ho::metric_sib::039",
+   "ticker": "COTY",
+   "date": "2023-11-07",
+   "source_type": "8k",
+   "axis": "metric_sib",
+   "canonical_bucket": "revenue_guidance",
+   "evidence": "raises FY24 revenue guidance."
+  },
+  {
+   "event_id": "ho::metric_sib::040",
+   "ticker": "MTCH",
+   "date": "2024-07-30",
+   "source_type": "8k",
+   "axis": "metric_sib",
+   "canonical_bucket": "revenue_guidance",
+   "evidence": "Q3 total revenue $895-905M, up 2-3% YoY."
+  },
+  {
+   "event_id": "ho::metric_sib::041",
+   "ticker": "BAX",
+   "date": "2025-05-01",
+   "source_type": "8k",
+   "axis": "metric_sib",
+   "canonical_bucket": "eps_guidance",
+   "evidence": "Q2 2025 adj diluted EPS $0.59-$0.63; FY25 $2.47-$2.55."
+  },
+  {
+   "event_id": "ho::metric_sib::042",
+   "ticker": "ABBV",
+   "date": "2025-01-31",
+   "source_type": "8k",
+   "axis": "metric_sib",
+   "canonical_bucket": "eps_guidance",
+   "evidence": "EPS guidance $12.12-$12.32."
+  },
+  {
+   "event_id": "ho::metric_sib::043",
+   "ticker": "HUM",
+   "date": "2025-07-30",
+   "source_type": "8k",
+   "axis": "metric_sib",
+   "canonical_bucket": "eps_guidance",
+   "evidence": "raises FY25 adj EPS to ~$17.00 from ~$16.25."
+  },
+  {
+   "event_id": "ho::metric_sib::044",
+   "ticker": "CAH",
+   "date": "2025-10-30",
+   "source_type": "8k",
+   "axis": "metric_sib",
+   "canonical_bucket": "eps_guidance",
+   "evidence": "raises FY2026 non-GAAP EPS to $9.65-$9.85."
+  },
+  {
+   "event_id": "ho::metric_sib::045",
+   "ticker": "GPC",
+   "date": "2025-02-18",
+   "source_type": "8k",
+   "axis": "metric_sib",
+   "canonical_bucket": "eps_guidance",
+   "evidence": "2025 adj diluted EPS $7.75-$8.25."
+  },
+  {
+   "event_id": "ho::metric_sib::046",
+   "ticker": "AZEK",
+   "date": "2025-02-04",
+   "source_type": "8k",
+   "axis": "metric_sib",
+   "canonical_bucket": "ebitda_guidance",
+   "evidence": "adj EBITDA $392-$405M (~7-11% YoY growth)."
+  },
+  {
+   "event_id": "ho::metric_sib::047",
+   "ticker": "FMC",
+   "date": "2024-07-31",
+   "source_type": "8k",
+   "axis": "metric_sib",
+   "canonical_bucket": "ebitda_guidance",
+   "evidence": "adj EBITDA guidance $880-$940M."
+  },
+  {
+   "event_id": "ho::metric_sib::048",
+   "ticker": "SEE",
+   "date": "2023-08-08",
+   "source_type": "8k",
+   "axis": "metric_sib",
+   "canonical_bucket": "ebitda_guidance",
+   "evidence": "adj EBITDA $1.075-$1.125B (cut from $1.25-$1.30B)."
+  },
+  {
+   "event_id": "ho::metric_sib::049",
+   "ticker": "DAN",
+   "date": "2025-01-24",
+   "source_type": "8k",
+   "axis": "metric_sib",
+   "canonical_bucket": "ebitda_guidance",
+   "evidence": "2025 adj EBITDA ~$885M, margin 8.6%."
+  },
+  {
+   "event_id": "ho::metric_sib::050",
+   "ticker": "CTVA",
+   "date": "2024-11-06",
+   "source_type": "8k",
+   "axis": "metric_sib",
+   "canonical_bucket": "fcf_guidance",
+   "evidence": "FCF expected $1.5-$2.0B."
+  },
+  {
+   "event_id": "ho::metric_sib::051",
+   "ticker": "BWA",
+   "date": "2025-10-30",
+   "source_type": "8k",
+   "axis": "metric_sib",
+   "canonical_bucket": "fcf_guidance",
+   "evidence": "raises full-year FCF guidance."
+  },
+  {
+   "event_id": "ho::metric_sib::052",
+   "ticker": "DAN",
+   "date": "2025-01-24",
+   "source_type": "8k",
+   "axis": "metric_sib",
+   "canonical_bucket": "fcf_guidance",
+   "evidence": "FCF $175-$275M (same release as EBITDA \u2192 same-event diff-metric)."
+  },
+  {
+   "event_id": "ho::metric_sib::053",
+   "ticker": "OVV",
+   "date": "2025-02-26",
+   "source_type": "8k",
+   "axis": "metric_sib",
+   "canonical_bucket": "fcf_guidance",
+   "evidence": "FCF $1.7B after $2.3B capex."
+  },
+  {
+   "event_id": "ho::object_sib::054",
+   "ticker": "NOG",
+   "date": "2024-04-30",
+   "source_type": "news",
+   "axis": "object_sib",
+   "canonical_bucket": "oil_volume",
+   "evidence": "Q1 production 119,436 Boe/day up 37% YoY; oil 70,181 Bbls/day +30% YoY."
+  },
+  {
+   "event_id": "ho::object_sib::055",
+   "ticker": "NOG",
+   "date": "2025-02-13",
+   "source_type": "news",
+   "axis": "object_sib",
+   "canonical_bucket": "oil_volume",
+   "evidence": "Q4 production 131-132 Mboe/day; sets 2025 guidance 130-135 Mboe/day."
+  },
+  {
+   "event_id": "ho::object_sib::056",
+   "ticker": "EOG",
+   "date": "2025-02-27",
+   "source_type": "news",
+   "axis": "object_sib",
+   "canonical_bucket": "oil_volume",
+   "evidence": "sees Q1 2025 crude oil + condensate volumes 495-503 MBod."
+  },
+  {
+   "event_id": "ho::object_sib::057",
+   "ticker": "OVV",
+   "date": "2024-02-27",
+   "source_type": "news",
+   "axis": "object_sib",
+   "canonical_bucket": "oil_volume",
+   "evidence": "sees FY24 total production 545-575 MBOE/d."
+  },
+  {
+   "event_id": "ho::object_sib::058",
+   "ticker": "VNOM",
+   "date": "2024-04-30",
+   "source_type": "news",
+   "axis": "object_sib",
+   "canonical_bucket": "oil_volume",
+   "evidence": "sees Q2 2024 net production 26.00-26.50 MBo/d."
+  },
+  {
+   "event_id": "ho::object_sib::059",
+   "ticker": "APA",
+   "date": "2023-10-05",
+   "source_type": "news",
+   "axis": "object_sib",
+   "canonical_bucket": "oil_volume",
+   "evidence": "Q3 Egypt gross oil production ~145 thousand barrels per day."
+  },
+  {
+   "event_id": "ho::object_sib::060",
+   "ticker": "APA",
+   "date": "2024-10-09",
+   "source_type": "news",
+   "axis": "object_sib",
+   "canonical_bucket": "gas_volume",
+   "evidence": "curtailed ~103 MMcf/d of US natural gas production in Q3."
+  },
+  {
+   "event_id": "ho::object_sib::061",
+   "ticker": "APA",
+   "date": "2024-07-11",
+   "source_type": "news",
+   "axis": "object_sib",
+   "canonical_bucket": "gas_volume",
+   "evidence": "curtailed 78 MMcf/d of US natural gas production in Q2."
+  },
+  {
+   "event_id": "ho::object_sib::062",
+   "ticker": "APA",
+   "date": "2025-07-09",
+   "source_type": "news",
+   "axis": "object_sib",
+   "canonical_bucket": "gas_volume",
+   "evidence": "curtailed ~10 MMcf/d of US natural gas production in Q2."
+  },
+  {
+   "event_id": "ho::object_sib::063",
+   "ticker": "KMI",
+   "date": "2025-01-13",
+   "source_type": "news",
+   "axis": "object_sib",
+   "canonical_bucket": "gas_volume",
+   "evidence": "acquires gas system: 270 MMcf/d processing + 350 MMcf/d header capacity."
+  },
+  {
+   "event_id": "ho::object_sib::064",
+   "ticker": "HL",
+   "date": "2024-01-10",
+   "source_type": "news",
+   "axis": "object_sib",
+   "canonical_bucket": "metal_volume",
+   "evidence": "2023 silver production 14.3M ounces exceeded 2022's 14.2M."
+  },
+  {
+   "event_id": "ho::object_sib::065",
+   "ticker": "HL",
+   "date": "2024-04-08",
+   "source_type": "news",
+   "axis": "object_sib",
+   "canonical_bucket": "metal_volume",
+   "evidence": "Q1 gold production 36,592 ounces; silver 4.2M ounces +43% Q/Q."
+  },
+  {
+   "event_id": "ho::object_sib::066",
+   "ticker": "HL",
+   "date": "2023-02-15",
+   "source_type": "news",
+   "axis": "object_sib",
+   "canonical_bucket": "metal_volume",
+   "evidence": "expects consolidated gold production 160K-170K ounces in 2023."
+  },
+  {
+   "event_id": "ho::object_sib::067",
+   "ticker": "HL",
+   "date": "2024-07-11",
+   "source_type": "news",
+   "axis": "object_sib",
+   "canonical_bucket": "metal_volume",
+   "evidence": "10% increase in silver production YTD 2024."
+  },
+  {
+   "event_id": "ho::object_sib::068",
+   "ticker": "PCAR",
+   "date": "2023-07-25",
+   "source_type": "news",
+   "axis": "object_sib",
+   "canonical_bucket": "auto_units",
+   "evidence": "global truck deliveries 51,900 units vs 46,900 a year ago."
+  },
+  {
+   "event_id": "ho::object_sib::069",
+   "ticker": "PCAR",
+   "date": "2023-10-24",
+   "source_type": "news",
+   "axis": "object_sib",
+   "canonical_bucket": "auto_units",
+   "evidence": "Q3 global truck deliveries 50,100 units vs 44,400 year-ago."
+  },
+  {
+   "event_id": "ho::object_sib::070",
+   "ticker": "PCAR",
+   "date": "2024-01-23",
+   "source_type": "news",
+   "axis": "object_sib",
+   "canonical_bucket": "auto_units",
+   "evidence": "record 204,200 vehicles delivered in the year."
+  },
+  {
+   "event_id": "ho::object_sib::071",
+   "ticker": "PCAR",
+   "date": "2024-10-22",
+   "source_type": "news",
+   "axis": "object_sib",
+   "canonical_bucket": "auto_units",
+   "evidence": "Q3 lower deliveries (units-driven)."
+  },
+  {
+   "event_id": "ho::object_sib::072",
+   "ticker": "PCAR",
+   "date": "2023-01-24",
+   "source_type": "news",
+   "axis": "object_sib",
+   "canonical_bucket": "auto_revenue",
+   "evidence": "Q4 sales $8.13B beat $7.11B estimate (+29.1% YoY)."
+  },
+  {
+   "event_id": "ho::object_sib::073",
+   "ticker": "PCAR",
+   "date": "2023-04-25",
+   "source_type": "news",
+   "axis": "object_sib",
+   "canonical_bucket": "auto_revenue",
+   "evidence": "Q1 sales $8.47B beat $7.71B estimate (+38.7% YoY)."
+  },
+  {
+   "event_id": "ho::object_sib::074",
+   "ticker": "PCAR",
+   "date": "2025-04-29",
+   "source_type": "news",
+   "axis": "object_sib",
+   "canonical_bucket": "auto_revenue",
+   "evidence": "misses Q1, blames tariff turmoil hitting North American truck market (revenue)."
+  },
+  {
+   "event_id": "ho::object_sib::075",
+   "ticker": "DAN",
+   "date": "2025-04-30",
+   "source_type": "news",
+   "axis": "object_sib",
+   "canonical_bucket": "auto_revenue",
+   "evidence": "FY2025 revenue expected >$9.78B vs $9.42B est (auto-parts)."
+  },
+  {
+   "event_id": "ho::object_sib::076",
+   "ticker": "AXL",
+   "date": "2024-05-03",
+   "source_type": "news",
+   "axis": "object_sib",
+   "canonical_bucket": "auto_revenue",
+   "evidence": "auto-parts revenue (confirm date/figure in curation)."
+  },
+  {
+   "event_id": "ho::object_sib::077",
+   "ticker": "APA",
+   "date": "2024-12-31",
+   "source_type": "news",
+   "axis": "object_sib",
+   "canonical_bucket": "oil_price",
+   "evidence": "Crude oil prices realized in 2024 averaged $78.08 per barrel."
+  },
+  {
+   "event_id": "ho::object_sib::078",
+   "ticker": "APA",
+   "date": "2023-12-31",
+   "source_type": "news",
+   "axis": "object_sib",
+   "canonical_bucket": "oil_price",
+   "evidence": "Crude oil prices realized in 2023 averaged $80.72 per barrel."
+  },
+  {
+   "event_id": "ho::object_sib::079",
+   "ticker": "NOG",
+   "date": "2024-12-31",
+   "source_type": "news",
+   "axis": "object_sib",
+   "canonical_bucket": "oil_price",
+   "evidence": "average realized oil price before settled derivatives was $71.59 per barrel in 2024."
+  },
+  {
+   "event_id": "ho::object_sib::080",
+   "ticker": "NOG",
+   "date": "2023-12-31",
+   "source_type": "news",
+   "axis": "object_sib",
+   "canonical_bucket": "oil_price",
+   "evidence": "average realized oil price before settled derivatives was $74.78 per barrel in 2023."
+  },
+  {
+   "event_id": "ho::object_sib::081",
+   "ticker": "OVV",
+   "date": "2024-07-30",
+   "source_type": "news",
+   "axis": "object_sib",
+   "canonical_bucket": "oil_price",
+   "evidence": "Q2 average realized prices were $76.82 per barrel for oil and condensate (95% of WTI)."
+  },
+  {
+   "event_id": "ho::object_sib::082",
+   "ticker": "OVV",
+   "date": "2024-02-27",
+   "source_type": "news",
+   "axis": "object_sib",
+   "canonical_bucket": "oil_price",
+   "evidence": "full year average realized prices were $75.19 per barrel for oil and condensate (97% of WTI)."
+  },
+  {
+   "event_id": "ho::object_sib::083",
+   "ticker": "OVV",
+   "date": "2024-12-31",
+   "source_type": "news",
+   "axis": "object_sib",
+   "canonical_bucket": "gas_price",
+   "evidence": "$2.17 per Mcf (96% of NYMEX) for natural gas."
+  },
+  {
+   "event_id": "ho::object_sib::084",
+   "ticker": "OVV",
+   "date": "2024-05-07",
+   "source_type": "news",
+   "axis": "object_sib",
+   "canonical_bucket": "gas_price",
+   "evidence": "$2.21 per Mcf for natural gas (99% of NYMEX)."
+  },
+  {
+   "event_id": "ho::object_sib::085",
+   "ticker": "OVV",
+   "date": "2024-11-07",
+   "source_type": "news",
+   "axis": "object_sib",
+   "canonical_bucket": "gas_price",
+   "evidence": "$1.29 per Mcf for natural gas (60% of NYMEX)."
+  },
+  {
+   "event_id": "ho::object_sib::086",
+   "ticker": "OVV",
+   "date": "2025-05-06",
+   "source_type": "news",
+   "axis": "object_sib",
+   "canonical_bucket": "gas_price",
+   "evidence": "$2.98 per Mcf for natural gas (82% of NYMEX)."
+  },
+  {
+   "event_id": "ho::seg_sib::090",
+   "ticker": "AMAT",
+   "date": "2026-02-19",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "AMAT_AppliedGlobalServices",
+   "evidence": "Our AGS revenue increased in the three months ended January 25, 2026 compared to the same period in the prior year primarily due to higher long-term service agreement revenue and customer spending on spares.",
+   "src_event_id": "ho_segrp_1"
+  },
+  {
+   "event_id": "ho::seg_sib::091",
+   "ticker": "AMAT",
+   "date": "2025-08-21",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "AMAT_AppliedGlobalServices",
+   "evidence": "AGS' operating margin for the three and nine months ended July 27, 2025 decreased compared to the same periods in the prior year primarily due to a decrease in 200mm equipment net revenue, and higher excess and obsolete inventory charges, partially offset by higher net revenue from services and spares.",
+   "src_event_id": "ho_segrp_2"
+  },
+  {
+   "event_id": "ho::seg_sib::092",
+   "ticker": "AMAT",
+   "date": "2025-05-22",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "AMAT_AppliedGlobalServices",
+   "evidence": "Our AGS net revenue in the three and six months ended April 27, 2025 increased compared to the same periods in the prior year primarily due to an increase in net revenue associated with long-term service agreements and customer spending on spares, partially offset by lower customer spending on 200mm equipment.",
+   "src_event_id": "ho_segrp_3"
+  },
+  {
+   "event_id": "ho::seg_sib::093",
+   "ticker": "AMAT",
+   "date": "2025-11-13",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "AMAT_AppliedGlobalServices",
+   "evidence": "Applied global services revenue grew 3% to a record $6.4 billion. The recurring parts, services, and software portion of AGS grew by double digits in the year, while the 200-millimeter equipment business declined.",
+   "src_event_id": "ho_segrp_4"
+  },
+  {
+   "event_id": "ho::seg_sib::094",
+   "ticker": "AMAT",
+   "date": "2026-02-12",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "AMAT_AppliedGlobalServices",
+   "evidence": "Applied Global Services delivered record revenue of $1.56 billion, which exceeded our expectations and grew 15% year-over-year. Non-GAAP gross margin increased 210 basis points and non-GAAP operating margin grew 320 basis points.",
+   "src_event_id": "ho_segrp_5"
+  },
+  {
+   "event_id": "ho::seg_sib::095",
+   "ticker": "AMAT",
+   "date": "2025-05-15",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "AMAT_AppliedGlobalServices",
+   "evidence": "Moving to applied global services, AGS delivered revenue of $1.57 billion in Q2, up 2% year-over-year, as healthy growth in services more than offset the expected decline in sales of 200-millimeter equipment. Non-GAAP operating margin of 28.5% was flat year-over-year.",
+   "src_event_id": "ho_segrp_6"
+  },
+  {
+   "event_id": "ho::seg_sib::096",
+   "ticker": "AMAT",
+   "date": "2025-02-13",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "AMAT_AppliedGlobalServices",
+   "evidence": "Moving to applied global services, AGS delivered revenue of $1.59 billion in Q1, up 8% year-over-year, with healthy growth in services partially offset by a decline in sales of 200-millimeter equipment. Non-GAAP operating margin of 28% was down 30 basis points year over year.",
+   "src_event_id": "ho_segrp_7"
+  },
+  {
+   "event_id": "ho::seg_sib::097",
+   "ticker": "AMAT",
+   "date": "2025-08-21",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "AMAT_Display",
+   "evidence": "Our Display net revenue increased in the three and nine months ended July 27, 2025 compared to the same periods in the prior year primarily due to higher customer investments in display fabrication equipment for TVs and IT products including laptops, monitors and tablets, partially offset by lower customer investments in display fabrication equipment for mobile devices.",
+   "src_event_id": "ho_segrp_11"
+  },
+  {
+   "event_id": "ho::seg_sib::098",
+   "ticker": "AMAT",
+   "date": "2025-08-21",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "AMAT_Display",
+   "evidence": "Display's operating margin for the three and nine months ended July 27, 2025 increased compared to the same periods in the prior year primarily due to the increase in Display net revenue and favorable product mix.",
+   "src_event_id": "ho_segrp_12"
+  },
+  {
+   "event_id": "ho::seg_sib::099",
+   "ticker": "AMAT",
+   "date": "2025-05-22",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "AMAT_Display",
+   "evidence": "Display's operating margin for the three and six months ended April 27, 2025 increased compared to the same periods in the prior year primarily due to the increase in Display net revenue and favorable product mix.",
+   "src_event_id": "ho_segrp_13"
+  },
+  {
+   "event_id": "ho::seg_sib::100",
+   "ticker": "AMAT",
+   "date": "2024-08-22",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "AMAT_Display",
+   "evidence": "Net revenue for the three and nine months ended July 28, 2024 increased compared to the same periods in the prior year primarily due to higher customer investments in display manufacturing equipment for IT products including laptops, monitors and tablets, partially offset by lower customer investments in display manufacturing equipment for TVs and products in the mobile market. Operating margin for the three and nine months ended July 28, 2024 decreased compared to the same periods in the prior year primarily due to unfavorable changes in product mix.",
+   "src_event_id": "ho_segrp_14"
+  },
+  {
+   "event_id": "ho::seg_sib::101",
+   "ticker": "AMAT",
+   "date": "2025-11-13",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "AMAT_Display",
+   "evidence": "We grew display revenue by 20%.",
+   "src_event_id": "ho_segrp_15"
+  },
+  {
+   "event_id": "ho::seg_sib::102",
+   "ticker": "AMAT",
+   "date": "2025-05-15",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "AMAT_Display",
+   "evidence": "Lastly, our display business delivered revenue of $259 million with non-GAAP operating margin of 26.3%.",
+   "src_event_id": "ho_segrp_16"
+  },
+  {
+   "event_id": "ho::seg_sib::103",
+   "ticker": "AMAT",
+   "date": "2025-02-13",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "AMAT_Display",
+   "evidence": "Lastly, our display business delivered revenue of $183 million.",
+   "src_event_id": "ho_segrp_17"
+  },
+  {
+   "event_id": "ho::seg_sib::104",
+   "ticker": "AMAT",
+   "date": "2026-02-19",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "AMAT_SemiconductorSystems",
+   "evidence": "The Semiconductor Systems segment continued to represent the largest contributor of revenue. Semiconductor Systems revenue decreased for the three months ended January 25, 2026 compared to the same period in the prior year. Foundry and logic customers' spending decreased for the three months ended January 25, 2026, compared to the same period in the prior year primarily driven by reduced demand for trailing edge logic systems.",
+   "src_event_id": "ho_segrp_22"
+  },
+  {
+   "event_id": "ho::seg_sib::105",
+   "ticker": "AMAT",
+   "date": "2026-02-19",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "AMAT_SemiconductorSystems",
+   "evidence": "Semiconductor Systems' operating margin for the three months ended January 25, 2026 decreased compared to the same period in the prior year primarily driven by a legal settlement charge related to a previously disclosed export controls compliance matter, lower revenue and increased RD&E expenses, partially offset by an increase in average selling prices and lower material and manufacturing costs.",
+   "src_event_id": "ho_segrp_23"
+  },
+  {
+   "event_id": "ho::seg_sib::106",
+   "ticker": "AMAT",
+   "date": "2025-08-21",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "AMAT_SemiconductorSystems",
+   "evidence": "Semiconductor Systems net revenue increased for the three and nine months ended July 27, 2025 compared to the same periods in the prior year as customers continued to make strategic investments in new capacity and new technology transitions. Foundry and logic customers' spending increased for the three and nine months ended July 27, 2025, compared to the same periods in the prior year driven primarily by higher customer investments in leading-edge manufacturing technologies.",
+   "src_event_id": "ho_segrp_24"
+  },
+  {
+   "event_id": "ho::seg_sib::107",
+   "ticker": "AMAT",
+   "date": "2025-05-22",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "AMAT_SemiconductorSystems",
+   "evidence": "Semiconductor System's operating margin for the three and six months ended April 27, 2025 increased compared to the same periods in the prior year primarily driven by favorable changes in customer and product mix, lower material and manufacturing costs, and an increase in average selling prices, partially offset by increased RD&E expenses.",
+   "src_event_id": "ho_segrp_25"
+  },
+  {
+   "event_id": "ho::seg_sib::108",
+   "ticker": "AMAT",
+   "date": "2026-02-12",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "AMAT_SemiconductorSystems",
+   "evidence": "Semiconductor systems revenue exceeded our expectation in Q1 and included record DRAM revenue. On a year-over-year basis, revenue declined 8% to $5.14 billion. Non-GAAP gross margin increased 100 basis points to more than 54%, driven by our continued focus on value-based pricing, along with manufacturing cost improvements.",
+   "src_event_id": "ho_segrp_26"
+  },
+  {
+   "event_id": "ho::seg_sib::109",
+   "ticker": "AMAT",
+   "date": "2025-11-13",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "AMAT_SemiconductorSystems",
+   "evidence": "Semiconductor systems revenue was up 4%, growing even as the impact of trade restrictions significantly reduced our access to the market in China.",
+   "src_event_id": "ho_segrp_27"
+  },
+  {
+   "event_id": "ho::seg_sib::110",
+   "ticker": "AMAT",
+   "date": "2025-05-15",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "AMAT_SemiconductorSystems",
+   "evidence": "Semiconductor systems revenue is $5.26 billion for Q2, up 7% year-over-year, with growth in Foundry Logic as customer investments at the leading edge more than offset declines for the ICAPS nodes that serve the IoT, communications, automotive, power, and sensor markets, and growth in NAND upgrades more than offsetting year-over-year declines in DRAM.",
+   "src_event_id": "ho_segrp_28"
+  },
+  {
+   "event_id": "ho::seg_sib::111",
+   "ticker": "BA",
+   "date": "2026-04-22T07:40:05-04:00",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "BA_CommercialAirplanesSegment",
+   "evidence": "Commercial Airplanes first quarter revenue of $9.2 billion and operating margin of (6.1) percent primarily reflect higher deliveries.",
+   "src_event_id": "ho_segrp_32"
+  },
+  {
+   "event_id": "ho::seg_sib::112",
+   "ticker": "BA",
+   "date": "2026-01-27T07:30:46-05:00",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "BA_CommercialAirplanesSegment",
+   "evidence": "Commercial Airplanes fourth quarter revenue of $11.4 billion and operating margin of (5.6) percent primarily reflect higher deliveries and improved operational performance.",
+   "src_event_id": "ho_segrp_33"
+  },
+  {
+   "event_id": "ho::seg_sib::113",
+   "ticker": "BA",
+   "date": "2025-10-29T07:30:44-04:00",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "BA_CommercialAirplanesSegment",
+   "evidence": "Commercial Airplanes third quarter revenue increased to $11.1 billion primarily reflecting higher deliveries. Third quarter operating margin was impacted by a charge on the 777X program.",
+   "src_event_id": "ho_segrp_34"
+  },
+  {
+   "event_id": "ho::seg_sib::114",
+   "ticker": "BA",
+   "date": "2025-07-29T07:30:54-04:00",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "BA_CommercialAirplanesSegment",
+   "evidence": "Commercial Airplanes second quarter revenue of $10.9 billion and operating margin of (5.1) percent primarily reflect higher deliveries.",
+   "src_event_id": "ho_segrp_35"
+  },
+  {
+   "event_id": "ho::seg_sib::115",
+   "ticker": "BA",
+   "date": "2025-04-23T07:30:57-04:00",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "BA_CommercialAirplanesSegment",
+   "evidence": "Commercial Airplanes first quarter revenue of $8.1 billion and operating margin of (6.6) percent primarily reflect higher deliveries (Table 4).",
+   "src_event_id": "ho_segrp_36"
+  },
+  {
+   "event_id": "ho::seg_sib::116",
+   "ticker": "BA",
+   "date": "2026-04-22",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "BA_CommercialAirplanesSegment",
+   "evidence": "Turning to BCA on the next page, BCA delivered 143 airplanes in the quarter. Revenue of $9.2 billion was up 13%, as Stephanie and her team continuously derived quality improvements while increasing delivery volume. Operating margin of negative 6.1% improved compared to last year, primarily driven by higher delivery volume and a favorable accounting adjustment, partially offset by the dilutive impact of the Spirit Aerosystems acquisition that we highlighted last quarter.",
+   "src_event_id": "ho_segrp_37"
+  },
+  {
+   "event_id": "ho::seg_sib::117",
+   "ticker": "BA",
+   "date": "2026-01-27",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "BA_CommercialAirplanesSegment",
+   "evidence": "Turning to BCA on the next page, BCA delivered 160 airplanes in the quarter and 600 for the year, the highest annual total since 2018. Revenue of $11.4 billion, an operating margin of negative 5.6%, both improved materially and primarily reflect better operational performance and higher deliveries compared to last year's results that were impacted by the work stoppage.",
+   "src_event_id": "ho_segrp_38"
+  },
+  {
+   "event_id": "ho::seg_sib::118",
+   "ticker": "BA",
+   "date": "2026-04-22T07:40:05-04:00",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "BA_DefenseSpaceAndSecuritySegment",
+   "evidence": "Defense, Space & Security first quarter revenue of $7.6 billion and operating margin of 3.1 percent reflect higher volume and stabilizing operational performance.",
+   "src_event_id": "ho_segrp_43"
+  },
+  {
+   "event_id": "ho::seg_sib::119",
+   "ticker": "BA",
+   "date": "2026-01-27T07:30:46-05:00",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "BA_DefenseSpaceAndSecuritySegment",
+   "evidence": "Defense, Space & Security fourth quarter revenue of $7.4 billion and operating margin of (6.8) percent reflect stabilizing operational performance and higher volume. Results also include $0.6 billion of losses on the KC-46A program primarily driven by higher estimated production support and supply chain costs.",
+   "src_event_id": "ho_segrp_44"
+  },
+  {
+   "event_id": "ho::seg_sib::120",
+   "ticker": "BA",
+   "date": "2025-10-29T07:30:44-04:00",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "BA_DefenseSpaceAndSecuritySegment",
+   "evidence": "Defense, Space & Security third quarter revenue of $6.9 billion and operating margin of 1.7 percent reflect stabilizing operational performance and higher volume.",
+   "src_event_id": "ho_segrp_45"
+  },
+  {
+   "event_id": "ho::seg_sib::121",
+   "ticker": "BA",
+   "date": "2025-07-29T07:30:54-04:00",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "BA_DefenseSpaceAndSecuritySegment",
+   "evidence": "Defense, Space & Security second quarter revenue was $6.6 billion. Second quarter operating margin of 1.7 percent reflects stabilizing operational performance.",
+   "src_event_id": "ho_segrp_46"
+  },
+  {
+   "event_id": "ho::seg_sib::122",
+   "ticker": "BA",
+   "date": "2025-04-23T07:30:57-04:00",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "BA_DefenseSpaceAndSecuritySegment",
+   "evidence": "Defense, Space & Security first quarter revenue was $6.3 billion. First quarter operating margin of 2.5 percent reflects stabilizing operational performance.",
+   "src_event_id": "ho_segrp_47"
+  },
+  {
+   "event_id": "ho::seg_sib::123",
+   "ticker": "BA",
+   "date": "2026-04-22",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "BA_DefenseSpaceAndSecuritySegment",
+   "evidence": "BDS delivered 29 aircraft and one satellite in the quarter. Revenue grew 21% to $7.6 billion, primarily driven by higher volume on KUC-46 tanker, missiles and weapons, and classified programs. SPIRIT contributed approximately $150 million of sales in the quarter. Operating margin increased 60 basis points in the quarter to 3.1% on improving operational performance.",
+   "src_event_id": "ho_segrp_48"
+  },
+  {
+   "event_id": "ho::seg_sib::124",
+   "ticker": "BA",
+   "date": "2026-01-27",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "BA_DefenseSpaceAndSecuritySegment",
+   "evidence": "BDS delivered 37 aircraft in the quarter, and revenue grew 37% to $7.4 billion on improved operational performance and higher volume. Operating margin of negative 6.8% improved significantly compared to last year and also reflects the better operating performance across the business. This improvement was tempered by a $565 million loss on the KC-46A tanker, which I'll address further in a moment.",
+   "src_event_id": "ho_segrp_49"
+  },
+  {
+   "event_id": "ho::seg_sib::125",
+   "ticker": "BA",
+   "date": "2026-04-22T07:40:05-04:00",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "BA_GlobalServicesSegment",
+   "evidence": "Global Services first quarter revenue was $5.4 billion on higher government volume. Operating margin of 18.1 percent reflects the impact of the Digital Aviation Solutions divestiture.",
+   "src_event_id": "ho_segrp_54"
+  },
+  {
+   "event_id": "ho::seg_sib::126",
+   "ticker": "BA",
+   "date": "2026-01-27T07:30:46-05:00",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "BA_GlobalServicesSegment",
+   "evidence": "Global Services fourth quarter revenue was $5.2 billion driven by higher government volume. Operating margin of 202.4 percent primarily reflects a $9.6 billion gain on sale associated with closing the Digital Aviation Solutions transaction.",
+   "src_event_id": "ho_segrp_55"
+  },
+  {
+   "event_id": "ho::seg_sib::127",
+   "ticker": "BA",
+   "date": "2025-10-29T07:30:44-04:00",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "BA_GlobalServicesSegment",
+   "evidence": "Global Services third quarter revenue was $5.4 billion driven by higher volume. Operating margin of 17.5 percent primarily reflects favorable commercial volume and mix.",
+   "src_event_id": "ho_segrp_56"
+  },
+  {
+   "event_id": "ho::seg_sib::128",
+   "ticker": "BA",
+   "date": "2025-07-29T07:30:54-04:00",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "BA_GlobalServicesSegment",
+   "evidence": "Global Services second quarter revenue was $5.3 billion. Second quarter operating margin of 19.9 percent reflects favorable performance and mix.",
+   "src_event_id": "ho_segrp_57"
+  },
+  {
+   "event_id": "ho::seg_sib::129",
+   "ticker": "BA",
+   "date": "2025-04-23T07:30:57-04:00",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "BA_GlobalServicesSegment",
+   "evidence": "Global Services first quarter revenue was $5.1 billion. First quarter operating margin of 18.6 percent reflects favorable performance and mix.",
+   "src_event_id": "ho_segrp_58"
+  },
+  {
+   "event_id": "ho::seg_sib::130",
+   "ticker": "BA",
+   "date": "2026-04-22",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "BA_GlobalServicesSegment",
+   "evidence": "Moving to global services on the next page, BGS continued to perform well and again delivered strong financial results in the quarter. Revenue was up 6% to $5.4 billion, primarily reflecting increased government volume. Excluding the impact of the digital aviation solutions divestiture, revenue was up 13%. Operating margin of 18.1% was down from prior year, primarily related to the impact of the digital aviation solutions divestiture and less favorable mix.",
+   "src_event_id": "ho_segrp_59"
+  },
+  {
+   "event_id": "ho::seg_sib::131",
+   "ticker": "BA",
+   "date": "2026-01-27",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "BA_GlobalServicesSegment",
+   "evidence": "Revenue was up 2% to $5.2 billion, primarily reflecting improved government volume. Operating margin was abnormally high due to the digital aviation solutions gain. Adjusting the fourth quarter of 2025 and 2024 for digital aviation solutions, BGS adjusted revenue of $5.1 billion grew 6%, and adjusted operating margin was 18.6%.",
+   "src_event_id": "ho_segrp_60"
+  },
+  {
+   "event_id": "ho::seg_sib::132",
+   "ticker": "DOV",
+   "date": "2026-04-23",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "DOV_CleanEnergyFuelingSegment",
+   "evidence": "Clean Energy & Fueling segment earnings increased $13.4 million, or 15.6%, over the prior year comparable quarter. The increase was primarily driven by higher volumes, benefits from restructuring actions, and favorable pricing offsetting cost headwinds . Segment earnings margin increased to 17.9% from 17.4% as compared to prior year comparable quarter.",
+   "src_event_id": "ho_segrp_65"
+  },
+  {
+   "event_id": "ho::seg_sib::133",
+   "ticker": "DOV",
+   "date": "2025-10-23",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "DOV_CleanEnergyFuelingSegment",
+   "evidence": "Clean Energy & Fueling segment earnings increased $19.1 million, or 19.2%, over the prior year comparable quarter. The increase was primarily driven by higher volumes, favorable price versus cost dynamics, the positive impact from acquisitions and benefits from restructuring actions . Segment earnings margin increased to 21.9% from 19.9% as compared to prior year comparable quarter.",
+   "src_event_id": "ho_segrp_66"
+  },
+  {
+   "event_id": "ho::seg_sib::134",
+   "ticker": "DOV",
+   "date": "2025-07-24",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "DOV_CleanEnergyFuelingSegment",
+   "evidence": "Clean Energy & Fueling segment earnings increased $20.2 million, or 23.1%, over the prior year comparable quarter. The increase was primarily driven by higher volumes, pricing, the favorable impact from acquisitions and benefits from restructuring actions, partially offset by inflationary costs. Segment earnings margin increased to 19.7% from 18.9% as compared to prior year comparable quarter.",
+   "src_event_id": "ho_segrp_67"
+  },
+  {
+   "event_id": "ho::seg_sib::135",
+   "ticker": "DOV",
+   "date": "2025-04-24",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "DOV_CleanEnergyFuelingSegment",
+   "evidence": "Clean Energy & Fueling segment earnings increased $16.0 million, or 22.9%, over the prior year comparable quarter. The increase was primarily driven by strategic pricing, the favorable impact from acquisitions, productivity initiatives and the benefits from restructuring actions, partially offset by inflationary costs. Segment earnings margin increased to 17.4% from 15.7% as compared to prior year comparable quarter.",
+   "src_event_id": "ho_segrp_68"
+  },
+  {
+   "event_id": "ho::seg_sib::136",
+   "ticker": "DOV",
+   "date": "2024-10-24",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "DOV_CleanEnergyFuelingSegment",
+   "evidence": "Clean Energy & Fueling segment earnings increased $7.1 million, or 7.6%, over the prior year comparable quarter. The increase was primarily driven by strategic pricing and the favorable impact of acquisitions, partially offset by the negative impact from lower volumes and integration costs in clean energy solutions. Segment margin remained flat compared to prior year comparable quarter.",
+   "src_event_id": "ho_segrp_69"
+  },
+  {
+   "event_id": "ho::seg_sib::137",
+   "ticker": "DOV",
+   "date": "2024-07-25",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "DOV_CleanEnergyFuelingSegment",
+   "evidence": "Clean Energy & Fueling segment earnings increased $3.9 million, or 4.7%, over the prior year comparable quarter. The increase was primarily driven by strategic pricing and cost actions, partially offset by inflationary impacts. Segment margin remained flat compared to prior year comparable quarter.",
+   "src_event_id": "ho_segrp_70"
+  },
+  {
+   "event_id": "ho::seg_sib::138",
+   "ticker": "DOV",
+   "date": "2024-04-25",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "DOV_CleanEnergyFuelingSegment",
+   "evidence": "Clean Energy & Fueling segment earnings decreased $3.9 million, or 5.3%, over the prior year comparable quarter. The decrease was primarily due to lower volumes and unfavorable product mix. Segment margin decreased to 15.7% from 17.1% in the prior year comparable quarter.",
+   "src_event_id": "ho_segrp_71"
+  },
+  {
+   "event_id": "ho::seg_sib::139",
+   "ticker": "DOV",
+   "date": "2026-04-23",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "DOV_ClimateSustainabilityTechnologiesSegment",
+   "evidence": "Climate & Sustainability Technologies segment earnings increased $11.9 million, or 22.8%, over the prior year comparable quarter. The increase in segment earnings was primarily driven by the favorable impact from higher volumes, productivity initiatives and the favorable mix impact from CO 2 refrigerant systems growth in retail refrigeration. Segment earnings margin increased to 15.6% from 15.0% in the prior year comparable quarter.",
+   "src_event_id": "ho_segrp_79"
+  },
+  {
+   "event_id": "ho::seg_sib::140",
+   "ticker": "DOV",
+   "date": "2025-10-23",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "DOV_ClimateSustainabilityTechnologiesSegment",
+   "evidence": "Climate & Sustainability Technologies segment earnings were flat compared to the third quarter of 2024. The flat segment earnings were primarily due to the unfavorable impact from lower volumes, offset by productivity initiatives and the favorable mix impact from CO 2 refrigerant systems growth in retail refrigeration. Segment earnings margin increased to 18.6% from 17.6% in the prior year comparable quarter.",
+   "src_event_id": "ho_segrp_80"
+  },
+  {
+   "event_id": "ho::seg_sib::141",
+   "ticker": "DOV",
+   "date": "2025-07-24",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "DOV_ClimateSustainabilityTechnologiesSegment",
+   "evidence": "Climate & Sustainability Technologies segment earnings decreased $1.9 million, or 2.4%, as compared to the second quarter of 2024. The segment earnings decrease was primarily due to the unfavorable impact from lower volumes, partially offset by productivity initiatives and the favorable mix impact from CO 2 refrigerant systems growth in retail refrigeration. Segment earnings margin increased to 18.6% from 18.1% in the prior year comparable quarter.",
+   "src_event_id": "ho_segrp_81"
+  },
+  {
+   "event_id": "ho::seg_sib::142",
+   "ticker": "DOV",
+   "date": "2025-04-24",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "DOV_ClimateSustainabilityTechnologiesSegment",
+   "evidence": "Climate & Sustainability Technologies segment earnings increased $1.4 million, or 2.7%, as compared to the first quarter of 2024. The segment earnings increase was primarily driven by productivity initiatives and cost actions across businesses, as well as the favorable mix impact from CO 2 refrigerant systems growth in retail refrigeration, partially offset by the unfavorable impact from lower volumes. Segment earnings margin increased to 15.0% from 13.9% in the prior year comparable quarter.",
+   "src_event_id": "ho_segrp_82"
+  },
+  {
+   "event_id": "ho::seg_sib::143",
+   "ticker": "DOV",
+   "date": "2024-10-24",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "DOV_ClimateSustainabilityTechnologiesSegment",
+   "evidence": "Climate & Sustainability Technologies segment earnings decreased $8.0 million, or 9.6%, as compared to the third quarter of 2023. The segment earnings decrease was primarily due to the negative impact from lower volumes in heat exchangers and beverage can-making equipment, partially offset by increased volumes in retail refrigeration, along with productivity initiatives and cost actions across the segment. Segment margin decreased to 17.6% from 17.7% in the prior year comparable quarter.",
+   "src_event_id": "ho_segrp_83"
+  },
+  {
+   "event_id": "ho::seg_sib::144",
+   "ticker": "DOV",
+   "date": "2024-07-25",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "DOV_ClimateSustainabilityTechnologiesSegment",
+   "evidence": "Climate & Sustainability Technologies segment earnings increased $3.1 million, or 4.0%, as compared to the second quarter of 2023. The segment earnings increase was primarily driven by favorable retail refrigeration mix, productivity and cost actions, partially offset by the negative impact from lower volumes in heat exchangers and beverage can-making equipment, as well as the unfavorable impact from foreign currency translation. Segment margin increased to 18.1% from 16.9% in the prior year comparable quarter.",
+   "src_event_id": "ho_segrp_84"
+  },
+  {
+   "event_id": "ho::seg_sib::145",
+   "ticker": "DOV",
+   "date": "2024-04-25",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "DOV_ClimateSustainabilityTechnologiesSegment",
+   "evidence": "Climate & Sustainability Technologies segment earnings decreased $23.0 million, or 31.2%, as compared to the first quarter of 2023. The segment earnings decrease was primarily due to lower volumes in heat exchangers and beverage can-making equipment, partially offset by productivity initiatives and cost reduction actions. Segment margin decreased to 13.9% from 16.2% in the prior year comparable quarter.",
+   "src_event_id": "ho_segrp_85"
+  },
+  {
+   "event_id": "ho::seg_sib::146",
+   "ticker": "DOV",
+   "date": "2026-04-23",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "DOV_EngineeredProductsSegment",
+   "evidence": "Engineered Products segment earnings increased $0.9 million, or 2.0%, compared to the first quarter of 2025. The increase was primarily driven by pricing actions, productivity initiatives and carry-over benefits from restructuring actions taken in 2025, partially offset by inflationary impacts and unfavorable mix. Segment earnings margin decreased to 16.9% from 17.3% as compared to the prior year comparable quarter.",
+   "src_event_id": "ho_segrp_91"
+  },
+  {
+   "event_id": "ho::seg_sib::147",
+   "ticker": "DOV",
+   "date": "2025-10-23",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "DOV_EngineeredProductsSegment",
+   "evidence": "Engineered Products segment earnings increased $0.9 million, or 1.5%, compared to the third quarter of 2024. The increase was primarily driven by favorable price versus cost dynamics, productivity initiatives, and benefits from restructuring actions, partially offset by the negative impact from lower volumes in vehicle service. Segment earnings margin increased to 20.6% from 19.1% as compared to the prior year comparable quarter.",
+   "src_event_id": "ho_segrp_92"
+  },
+  {
+   "event_id": "ho::seg_sib::148",
+   "ticker": "DOV",
+   "date": "2025-07-24",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "DOV_EngineeredProductsSegment",
+   "evidence": "Engineered Products segment earnings increased $1.4 million, or 2.7%, compared to the second quarter of 2024. The increase was primarily driven by favorable price versus cost dynamics and benefits from restructuring actions, partially offset by the negative impact from lower volumes in vehicle service. Segment earnings margin increased to 19.4% from 18.3% as compared to the prior year comparable quarter.",
+   "src_event_id": "ho_segrp_93"
+  },
+  {
+   "event_id": "ho::seg_sib::149",
+   "ticker": "DOV",
+   "date": "2025-04-24",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "DOV_EngineeredProductsSegment",
+   "evidence": "Engineered Products segment earnings decreased $18.4 million, or 29.5%, compared to the first quarter of 2024. The decrease was primarily due to the divestiture of De-Sta-Co and the negative impact from lower volumes in North America vehicle service and aerospace and defense, partially offset by favorable price versus cost dynamics and benefits from restructuring actions. Segment earnings margin decreased to 17.3% from 18.8% as compared to the prior year comparable quarter.",
+   "src_event_id": "ho_segrp_94"
+  },
+  {
+   "event_id": "ho::seg_sib::150",
+   "ticker": "DOV",
+   "date": "2024-10-24",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "DOV_EngineeredProductsSegment",
+   "evidence": "Engineered Products segment earnings decreased $6.9 million, or 10.9%, compared to the third quarter of 2023. The decrease was primarily due to the disposition of De-Sta-Co and shipment timing of aerospace and defense components, which was partially offset by organic volume increases and favorable price versus cost dynamics. Segment margin decreased to 19.1% from 20.5% as compared to the prior year comparable quarter.",
+   "src_event_id": "ho_segrp_95"
+  },
+  {
+   "event_id": "ho::seg_sib::151",
+   "ticker": "DOV",
+   "date": "2024-07-25",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "DOV_EngineeredProductsSegment",
+   "evidence": "Engineered Products segment earnings increased $28.2 million, or 38.6%, compared to the second quarter of 2023. The increase was primarily driven by organic volume increases, favorable price versus cost dynamics, and productivity initiatives, partially offset by disposition impacts. As a result, segment margin increased to 19.7% from 15.4% as compared to the prior year comparable quarter.",
+   "src_event_id": "ho_segrp_96"
+  },
+  {
+   "event_id": "ho::seg_sib::152",
+   "ticker": "DOV",
+   "date": "2024-04-25",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "DOV_EngineeredProductsSegment",
+   "evidence": "Engineered Products segment earnings increased $19.7 million, or 23.4%, compared to the first quarter of 2023. The increase was primarily driven by organic volume increases, favorable price versus cost dynamics, and productivity initiatives. As a result, segment margin increased to 19.1% from 16.9% as compared to the prior year comparable quarter.",
+   "src_event_id": "ho_segrp_97"
+  },
+  {
+   "event_id": "ho::seg_sib::153",
+   "ticker": "DOV",
+   "date": "2026-04-23",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "DOV_ImagingIdentificationSegment",
+   "evidence": "Imaging & Identification segment earnings decreased $0.1 million, or 0.2%, over the prior year comparable quarter. The decrease was primarily due to lower volumes, mostly offset by favorable pricing actions and productivity initiatives. Segment earnings margin decreased to 27.1% from 27.7% in the prior year comparable quarter.",
+   "src_event_id": "ho_segrp_102"
+  },
+  {
+   "event_id": "ho::seg_sib::154",
+   "ticker": "DOV",
+   "date": "2025-10-23",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "DOV_ImagingIdentificationSegment",
+   "evidence": "Imaging & Identification segment earnings increased $4.5 million, or 5.9%, over the prior year comparable quarter. The increase was primarily driven by favorable price versus cost dynamics and productivity initiatives. Segment earnings margin increased to 27.3% from 27.2% in the prior year comparable quarter.",
+   "src_event_id": "ho_segrp_103"
+  },
+  {
+   "event_id": "ho::seg_sib::155",
+   "ticker": "DOV",
+   "date": "2025-07-24",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "DOV_ImagingIdentificationSegment",
+   "evidence": "Imaging & Identification segment earnings increased $1.2 million, or 1.5%, over the prior year comparable quarter. The increase was primarily driven by favorable price versus cost dynamics and productivity initiatives, partially offset by reduced volumes. Segment earnings margin decreased to 26.3% from 26.4% in the prior year comparable quarter.",
+   "src_event_id": "ho_segrp_104"
+  },
+  {
+   "event_id": "ho::seg_sib::156",
+   "ticker": "DOV",
+   "date": "2025-04-24",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "DOV_ImagingIdentificationSegment",
+   "evidence": "Imaging & Identification segment earnings increased $7.6 million, or 10.9%, over the prior year comparable quarter. The increase was primarily driven by the favorable impact from organic volume growth, pricing actions and productivity initiatives, partially offset by an unfavorable impact from foreign currency translation. Segment earnings margin increased to 27.7% from 25.3% in the prior year comparable quarter.",
+   "src_event_id": "ho_segrp_105"
+  },
+  {
+   "event_id": "ho::seg_sib::157",
+   "ticker": "DOV",
+   "date": "2024-10-24",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "DOV_ImagingIdentificationSegment",
+   "evidence": "Imaging & Identification segment earnings increased $6.9 million, or 9.9%, over the prior year comparable quarter. The increase was primarily driven by higher volume, pricing and productivity initiatives, partially offset by an unfavorable impact from foreign currency translation. Segment margin increased to 27.2% from 25.5% in the prior year comparable quarter.",
+   "src_event_id": "ho_segrp_106"
+  },
+  {
+   "event_id": "ho::seg_sib::158",
+   "ticker": "DOV",
+   "date": "2024-07-25",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "DOV_ImagingIdentificationSegment",
+   "evidence": "Imaging & Identification segment earnings increased $14.5 million, or 23.6%, over the prior year comparable quarter. This increase was primarily driven by pricing initiatives, higher volume and cost controls, partially offset by an unfavorable impact from foreign currency translation. Segment margin increased to 26.4% from 22.6% in the prior year comparable quarter.",
+   "src_event_id": "ho_segrp_107"
+  },
+  {
+   "event_id": "ho::seg_sib::159",
+   "ticker": "DOV",
+   "date": "2024-04-25",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "DOV_ImagingIdentificationSegment",
+   "evidence": "Imaging & Identification segment earnings increased $1.6 million, or 2.4%, over the prior year comparable quarter. This increase was primarily driven by pricing initiatives, cost controls, and higher mix of consumables and aftermarket shipments, which more than offset the negative impact of reduced organic volumes and an unfavorable impact from foreign currency translation. Segment margin increased to 25.3% from 24.1% in the prior year comparable quarter.",
+   "src_event_id": "ho_segrp_108"
+  },
+  {
+   "event_id": "ho::seg_sib::160",
+   "ticker": "DOV",
+   "date": "2026-04-23",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "DOV_PumpsProcessSolutionsSegment",
+   "evidence": "Pumps & Process Solutions segment earnings increased $18.2 million, or 12.0%, over the prior year comparable quarter. The increase was driven by favorable price vs. cost dynamics, favorable portfolio mix and the impact from acquisitions, partially offset by lower polymer processing volumes. Segment earnings margin increased to 31.5% from 30.6% in the prior year comparable quarter.",
+   "src_event_id": "ho_segrp_113"
+  },
+  {
+   "event_id": "ho::seg_sib::161",
+   "ticker": "DOV",
+   "date": "2025-10-23",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "DOV_PumpsProcessSolutionsSegment",
+   "evidence": "Pumps & Process Solutions segment earnings increased $30.3 million, or 21.9%, over the prior year comparable quarter. The increase was driven by the favorable impact from higher volumes, productivity initiatives, favorable portfolio mix and the impact from acquisitions. Segment earnings margin increased to 30.6% from 29.3% in the prior year comparable quarter.",
+   "src_event_id": "ho_segrp_114"
+  },
+  {
+   "event_id": "ho::seg_sib::162",
+   "ticker": "DOV",
+   "date": "2025-07-24",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "DOV_PumpsProcessSolutionsSegment",
+   "evidence": "Pumps & Process Solutions segment earnings increased $22.3 million, or 16.2%, over the prior year comparable quarter. The increase was driven by the favorable impact from higher volumes, productivity initiatives, favorable portfolio mix and the impact from acquisitions. Segment earnings margin increased to 30.6% from 28.8% in the prior year comparable quarter.",
+   "src_event_id": "ho_segrp_115"
+  },
+  {
+   "event_id": "ho::seg_sib::163",
+   "ticker": "DOV",
+   "date": "2025-04-24",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "DOV_PumpsProcessSolutionsSegment",
+   "evidence": "Pumps & Process Solutions segment earnings increased $32.5 million, or 27.4%, over the prior year comparable quarter. The increase was driven by the favorable impact from higher volumes, productivity initiatives, pricing actions and favorable portfolio mix, partially offset by an unfavorable impact from foreign currency translation. Segment earnings margin increased to 30.6% from 25.5% in the prior year comparable quarter.",
+   "src_event_id": "ho_segrp_116"
+  },
+  {
+   "event_id": "ho::seg_sib::164",
+   "ticker": "DOV",
+   "date": "2024-10-24",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "DOV_PumpsProcessSolutionsSegment",
+   "evidence": "Pumps & Process Solutions segment earnings increased $20.4 million, or 17.3%, over the prior year comparable quarter. The increase was driven by the favorable impact from the FW Murphy acquisition, along with the positive impact of product line mix, pricing initiatives and productivity actions. Segment margin increased to 29.3% from 27.3% in the prior year comparable quarter driven by productivity initiatives and favorable portfolio mix.",
+   "src_event_id": "ho_segrp_117"
+  },
+  {
+   "event_id": "ho::seg_sib::165",
+   "ticker": "DOV",
+   "date": "2024-07-25",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "DOV_PumpsProcessSolutionsSegment",
+   "evidence": "Pumps & Process Solutions segment earnings increased $7.9 million, or 6.1%, over the prior year comparable quarter. The increase was driven by the favorable impact from the FW Murphy acquisition, along with the positive impact of pricing initiatives and productivity actions, partially offset by a negative impact from lower volume. Segment margin increased to 28.8% from 27.8% from the prior year comparable quarter driven by productivity initiatives and favorable portfolio mix.",
+   "src_event_id": "ho_segrp_118"
+  },
+  {
+   "event_id": "ho::seg_sib::166",
+   "ticker": "DOV",
+   "date": "2024-04-25",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "DOV_PumpsProcessSolutionsSegment",
+   "evidence": "Pumps & Process Solutions segment earnings increased $3.5 million, or 3.0%, over the prior year comparable quarter. The increase was driven by the favorable impact from the FW Murphy acquisition, along with the positive impact of increased volumes, pricing initiatives and productivity actions, partially offset by a negative impact from product mix. Segment margin decreased to 25.5% from 27.8% from the prior year comparable quarter due to project mix within polymer processing.",
+   "src_event_id": "ho_segrp_119"
+  },
+  {
+   "event_id": "ho::seg_sib::167",
+   "ticker": "EFX",
+   "date": "2026-04-21",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "EFX_International",
+   "evidence": "International first quarter revenue up 11% on a reported basis with 4% growth on a local currency basis with high single digit revenue growth in Canada.",
+   "src_event_id": "ho_segrp_126"
+  },
+  {
+   "event_id": "ho::seg_sib::168",
+   "ticker": "EFX",
+   "date": "2026-02-04",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "EFX_International",
+   "evidence": "International fourth quarter revenue up 7% on a reported basis with 5% growth on a local currency basis led by Latin America.",
+   "src_event_id": "ho_segrp_127"
+  },
+  {
+   "event_id": "ho::seg_sib::169",
+   "ticker": "EFX",
+   "date": "2025-10-21",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "EFX_International",
+   "evidence": "International third quarter revenue up 6% on a reported basis with 7% growth on a local currency basis led by Latin America and Canada.",
+   "src_event_id": "ho_segrp_128"
+  },
+  {
+   "event_id": "ho::seg_sib::170",
+   "ticker": "EFX",
+   "date": "2024-10-16",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "EFX_International",
+   "evidence": "International third quarter revenue growth of 18% on a local currency basis with 9% on a reported basis, with organic local currency revenue growth of 12%.",
+   "src_event_id": "ho_segrp_129"
+  },
+  {
+   "event_id": "ho::seg_sib::171",
+   "ticker": "EFX",
+   "date": "2024-02-07",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "EFX_International",
+   "evidence": "International 4Q revenue growth of 20% on a reported basis and 22% on a local currency basis, with organic local currency revenue growth of 6%",
+   "src_event_id": "ho_segrp_130"
+  },
+  {
+   "event_id": "ho::seg_sib::172",
+   "ticker": "EFX",
+   "date": "2026-04-21",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "EFX_International",
+   "evidence": "International revenue increased by 11% in the first quarter of 2026 compared to the same period in 2025. On a local currency basis, revenue increased by 4% in the first quarter of 2026, driven by local currency growth in Asia Pacific, Canada.",
+   "src_event_id": "ho_segrp_131"
+  },
+  {
+   "event_id": "ho::seg_sib::173",
+   "ticker": "EFX",
+   "date": "2025-10-21",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "EFX_International",
+   "evidence": "International revenue increased by 6% and 4% in the third quarter and the first nine months of 2025, respectively, compared to the same periods in 2024. On a local currency basis, revenue increased by 7% and 6% in the third quarter and first nine months of 2025, respectively, compared to the same periods in 2024.",
+   "src_event_id": "ho_segrp_132"
+  },
+  {
+   "event_id": "ho::seg_sib::174",
+   "ticker": "EFX",
+   "date": "2026-04-21",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "EFX_USInformationSolutions",
+   "evidence": "USIS first quarter revenue up strong 21% with very strong Mortgage revenue growth of 60% and Diversified Markets revenue growth of 3%.",
+   "src_event_id": "ho_segrp_142"
+  },
+  {
+   "event_id": "ho::seg_sib::175",
+   "ticker": "EFX",
+   "date": "2026-02-04",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "EFX_USInformationSolutions",
+   "evidence": "USIS fourth quarter revenue up 12% with strong Mortgage revenue growth of 33% and Diversified Markets revenue growth of 5%.",
+   "src_event_id": "ho_segrp_143"
+  },
+  {
+   "event_id": "ho::seg_sib::176",
+   "ticker": "EFX",
+   "date": "2025-10-21",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "EFX_USInformationSolutions",
+   "evidence": "USIS third quarter revenue up 11% with strong Mortgage revenue growth of 26% and Non-Mortgage revenue growth of 5%.",
+   "src_event_id": "ho_segrp_144"
+  },
+  {
+   "event_id": "ho::seg_sib::177",
+   "ticker": "EFX",
+   "date": "2025-04-22",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "EFX_USInformationSolutions",
+   "evidence": "USIS first quarter revenue grew strong 7% with Mortgage revenue growth of 11% and Non-Mortgage revenue growth of 6%.",
+   "src_event_id": "ho_segrp_145"
+  },
+  {
+   "event_id": "ho::seg_sib::178",
+   "ticker": "EFX",
+   "date": "2025-02-06",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "EFX_USInformationSolutions",
+   "evidence": "USIS fourth quarter revenue grew over 10% from 47% Mortgage revenue growth.",
+   "src_event_id": "ho_segrp_146"
+  },
+  {
+   "event_id": "ho::seg_sib::179",
+   "ticker": "EFX",
+   "date": "2026-04-21",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "EFX_USInformationSolutions",
+   "evidence": "U.S. Information Solutions revenue increased by 21% for the first quarter of 2026 compared to the same period in 2025. The increase is due to growth in Online Information Solutions which is due to growth in mortgage revenue primarily due to product pricing.",
+   "src_event_id": "ho_segrp_147"
+  },
+  {
+   "event_id": "ho::seg_sib::180",
+   "ticker": "EFX",
+   "date": "2025-10-21",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "EFX_USInformationSolutions",
+   "evidence": "USIS revenue increased by 11% and 9% for the third quarter and first nine months of 2025, respectively, compared to the same periods in 2024. The increase for both periods is primarily due to growth in Online Information Solutions which is due to growth in both mortgage and non-mortgage revenue, as well as growth in Financial Marketing Services.",
+   "src_event_id": "ho_segrp_148"
+  },
+  {
+   "event_id": "ho::seg_sib::181",
+   "ticker": "EFX",
+   "date": "2026-04-21",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "EFX_WorkforceSolutions",
+   "evidence": "Workforce Solutions first quarter revenue up very strong 10%. Verification Services revenue up 14% led by strong mid double digit Government growth, with Diversified Markets up 14% and Mortgage growth of 14%.",
+   "src_event_id": "ho_segrp_158"
+  },
+  {
+   "event_id": "ho::seg_sib::182",
+   "ticker": "EFX",
+   "date": "2026-02-04",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "EFX_WorkforceSolutions",
+   "evidence": "Workforce Solutions fourth quarter revenue up 9%. Verification Services revenue up 10% led by strong low double digit Government growth, with Diversified Markets (previously referred to as non-mortgage) growth of 11% and Mortgage growth of 10%.",
+   "src_event_id": "ho_segrp_159"
+  },
+  {
+   "event_id": "ho::seg_sib::183",
+   "ticker": "EFX",
+   "date": "2025-10-21",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "EFX_WorkforceSolutions",
+   "evidence": "Workforce Solutions third quarter revenue up 5%. Verification Services revenue up 5% led by strong high single digit Government growth, with Non-Mortgage growth of 7% and Mortgage growth of 2%.",
+   "src_event_id": "ho_segrp_160"
+  },
+  {
+   "event_id": "ho::seg_sib::184",
+   "ticker": "EFX",
+   "date": "2025-07-22",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "EFX_WorkforceSolutions",
+   "evidence": "Workforce Solutions second quarter revenue grew 8%. Verification Services revenue grew a strong 10%, with Non-Mortgage growth of 10% and Mortgage growth of 9%.",
+   "src_event_id": "ho_segrp_161"
+  },
+  {
+   "event_id": "ho::seg_sib::185",
+   "ticker": "EFX",
+   "date": "2025-02-06",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "EFX_WorkforceSolutions",
+   "evidence": "Workforce Solutions fourth quarter revenue grew 7%, with 10% Verification Services revenue growth led by Government and Mortgage, despite weaker U.S. hiring and mortgage markets. Employer Services revenue declined 9% in the quarter.",
+   "src_event_id": "ho_segrp_162"
+  },
+  {
+   "event_id": "ho::seg_sib::186",
+   "ticker": "EFX",
+   "date": "2026-04-21",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "EFX_WorkforceSolutions",
+   "evidence": "Workforce Solutions revenue increased by 10% in the first quarter of 2026 compared to the same period in 2025. The increase is due to an increase in both diversified markets and mortgage verticals within Verification Services, partially offset by declines in Employer Services.",
+   "src_event_id": "ho_segrp_163"
+  },
+  {
+   "event_id": "ho::seg_sib::187",
+   "ticker": "EFX",
+   "date": "2025-10-21",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "EFX_WorkforceSolutions",
+   "evidence": "Workforce Solutions revenue increased by 5% for both the third quarter and first nine months of 2025 compared to the same periods in 2024. The increase for the third quarter is primarily due to an increase in non-mortgage verticals within Verification Services.",
+   "src_event_id": "ho_segrp_164"
+  },
+  {
+   "event_id": "ho::seg_sib::188",
+   "ticker": "MDT",
+   "date": "2026-02-24",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "MDT_Cardiovascular",
+   "evidence": "Cardiovascular's net sales for the three and nine months ended January 23, 2026 were $3.5 billion and $10.2 billion, respectively, an increase of 14 percent and 11 percent, respectively, as compared to the corresponding periods in the prior fiscal year, resulting from growth across most businesses and the impacts of foreign currency fluctuations.",
+   "src_event_id": "ho_segrp_174"
+  },
+  {
+   "event_id": "ho::seg_sib::189",
+   "ticker": "MDT",
+   "date": "2025-11-25",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "MDT_Cardiovascular",
+   "evidence": "Cardiovascular's net sales for the three and six months ended October 24, 2025 were $3.4 billion and $6.7 billion, respectively, an increase of 11 percent and 10 percent, respectively, as compared to the corresponding periods in the prior fiscal year, resulting from growth across most businesses and the impacts of foreign currency fluctuations.",
+   "src_event_id": "ho_segrp_175"
+  },
+  {
+   "event_id": "ho::seg_sib::190",
+   "ticker": "MDT",
+   "date": "2025-08-26",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "MDT_Cardiovascular",
+   "evidence": "Cardiovascular's net sales for the three months ended July 25, 2025 was $3.3 billion, an increase of 9 percent, as compared to the corresponding period in the prior fiscal year, resulting from growth across most businesses and the impacts of foreign currency fluctuations.",
+   "src_event_id": "ho_segrp_176"
+  },
+  {
+   "event_id": "ho::seg_sib::191",
+   "ticker": "MDT",
+   "date": "2025-02-25",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "MDT_Cardiovascular",
+   "evidence": "Cardiovascular's net sales for the three and nine months ended January 24, 2025 were $3.0 billion and $9.1 billion, an increase of 4 percent and 5 percent, respectively, as compared to the corresponding periods in the prior fiscal year.",
+   "src_event_id": "ho_segrp_177"
+  },
+  {
+   "event_id": "ho::seg_sib::192",
+   "ticker": "MDT",
+   "date": "2024-11-26",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "MDT_Cardiovascular",
+   "evidence": "Cardiovascular's net sales for the three and six months ended October 25, 2024 were $3.1 billion and $6.1 billion, an increase of 6 percent for both periods as compared to the corresponding periods in the prior fiscal year. The net sales increase was primarily due to strong performance of TAVR, Cardiac Rhythm Management, and Cardiac Surgery.",
+   "src_event_id": "ho_segrp_178"
+  },
+  {
+   "event_id": "ho::seg_sib::193",
+   "ticker": "MDT",
+   "date": "2026-02-17",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "MDT_Cardiovascular",
+   "evidence": "Cardiovascular Portfolio revenue of $3.457 billion, an increase of 13.8% as reported and 10.6% organic, with high-teens increase in Cardiac Rhythm & Heart Failure, low-single digit increase in Structural Heart & Aortic, and mid-single digit increase in Coronary & Peripheral Vascular, all on an organic basis",
+   "src_event_id": "ho_segrp_179"
+  },
+  {
+   "event_id": "ho::seg_sib::194",
+   "ticker": "MDT",
+   "date": "2025-02-18",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "MDT_Cardiovascular",
+   "evidence": "Revenue of $3.037 billion increased 3.7% as reported and 5.0% organic, with mid-single digit increases in CRHF and SH&A, and a low-single digit increase in CPV, all on an organic basis.",
+   "src_event_id": "ho_segrp_180"
+  },
+  {
+   "event_id": "ho::seg_sib::195",
+   "ticker": "MDT",
+   "date": "2026-02-24",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "MDT_DiabetesOperatingUnit",
+   "evidence": "Diabetes' net sales for the three and nine months ended January 23, 2026 were $796 million and $2.3 billion, respectively, an increase of 15 percent and 12 percent, respectively, as compared to the corresponding periods in the prior fiscal year.",
+   "src_event_id": "ho_segrp_185"
+  },
+  {
+   "event_id": "ho::seg_sib::196",
+   "ticker": "MDT",
+   "date": "2025-11-25",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "MDT_DiabetesOperatingUnit",
+   "evidence": "Diabetes' net sales for the three and six months ended October 24, 2025 were $757 million and $1.5 billion, respectively, an increase of 10 percent and 11 percent, respectively, as compared to the corresponding periods in the prior fiscal year.",
+   "src_event_id": "ho_segrp_186"
+  },
+  {
+   "event_id": "ho::seg_sib::197",
+   "ticker": "MDT",
+   "date": "2025-08-26",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "MDT_DiabetesOperatingUnit",
+   "evidence": "Diabetes' net sales for the three months ended July 25, 2025 was $721 million, an increase of 12 percent as compared to the corresponding period in the prior fiscal year.",
+   "src_event_id": "ho_segrp_187"
+  },
+  {
+   "event_id": "ho::seg_sib::198",
+   "ticker": "MDT",
+   "date": "2025-02-25",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "MDT_DiabetesOperatingUnit",
+   "evidence": "Diabetes' net sales for the three and nine months ended January 24, 2025 were $694 million and $2.0 billion, an increase of 8 percent and 11 percent, respectively, as compared to the corresponding periods in the prior fiscal year.",
+   "src_event_id": "ho_segrp_188"
+  },
+  {
+   "event_id": "ho::seg_sib::199",
+   "ticker": "MDT",
+   "date": "2024-08-27",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "MDT_DiabetesOperatingUnit",
+   "evidence": "Diabetes' net sales for the three months ended July 26, 2024 were $647 million an increase of 12 percent as compared to the corresponding period in the prior fiscal year.",
+   "src_event_id": "ho_segrp_189"
+  },
+  {
+   "event_id": "ho::seg_sib::200",
+   "ticker": "MDT",
+   "date": "2026-02-17",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "MDT_DiabetesOperatingUnit",
+   "evidence": "Diabetes business revenue of $796 million, an increase of 14.8% as reported and 8.3% organic",
+   "src_event_id": "ho_segrp_190"
+  },
+  {
+   "event_id": "ho::seg_sib::201",
+   "ticker": "MDT",
+   "date": "2025-02-18",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "MDT_DiabetesOperatingUnit",
+   "evidence": "Diabetes Revenue of $694 million increased 8.4% as reported and 10.4% organic.",
+   "src_event_id": "ho_segrp_191"
+  },
+  {
+   "event_id": "ho::seg_sib::202",
+   "ticker": "MDT",
+   "date": "2026-02-24",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "MDT_MedicalSurgical",
+   "evidence": "Medical Surgical's net sales for the three and nine months ended January 23, 2026 were $2.2 billion and $6.4 billion, respectively, an increase of 5 percent and 4 percent, respectively, as compared to the corresponding periods in the prior fiscal year, resulting from growth across most businesses and the impacts of foreign currency fluctuations.",
+   "src_event_id": "ho_segrp_196"
+  },
+  {
+   "event_id": "ho::seg_sib::203",
+   "ticker": "MDT",
+   "date": "2025-11-25",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "MDT_MedicalSurgical",
+   "evidence": "Medical Surgical's net sales for the three and six months ended October 24, 2025 were $2.2 billion and $4.3 billion, respectively, an increase of 2 percent and 3 percent, respectively, as compared to the corresponding periods in the prior fiscal year, resulting from growth in Advanced Energy, Acute Care & Monitoring, Endoscopy, and the impacts of foreign currency fluctuations.",
+   "src_event_id": "ho_segrp_197"
+  },
+  {
+   "event_id": "ho::seg_sib::204",
+   "ticker": "MDT",
+   "date": "2025-08-26",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "MDT_MedicalSurgical",
+   "evidence": "Medical Surgical's net sales for the three months ended July 25, 2025 was $2.1 billion, an increase of 4 percent, as compared to the corresponding period in the prior fiscal year, resulting from growth in Advanced Energy, General Surgical Technologies, Acute Care & Monitoring, Endoscopy, and the impacts of foreign currency fluctuations.",
+   "src_event_id": "ho_segrp_198"
+  },
+  {
+   "event_id": "ho::seg_sib::205",
+   "ticker": "MDT",
+   "date": "2025-02-25",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "MDT_MedicalSurgical",
+   "evidence": "Medical Surgical's net sales for the three and nine months ended January 24, 2025 were $2.1 billion and $6.2 billion, a decrease of 2 percent and flat, respectively, as compared to the corresponding periods in the prior fiscal year, resulting from declines across most businesses as outlined below.",
+   "src_event_id": "ho_segrp_199"
+  },
+  {
+   "event_id": "ho::seg_sib::206",
+   "ticker": "MDT",
+   "date": "2024-02-27",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "MDT_MedicalSurgical",
+   "evidence": "Medical Surgical's net sales for the three and nine months ended January 26, 2024 were $2.1 billion and $6.3 billion, respectively, an increase of 4 percent and 5 percent, respectively, as compared to the corresponding periods in the prior fiscal year. The net sales increase for both periods was primarily driven by growth in Advanced Surgical Technologies and General Surgical Technologies.",
+   "src_event_id": "ho_segrp_200"
+  },
+  {
+   "event_id": "ho::seg_sib::207",
+   "ticker": "MDT",
+   "date": "2025-02-18",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "MDT_MedicalSurgical",
+   "evidence": "Revenue of $2.072 billion decreased 1.9% as reported and decreased 0.4% organic, with flat organic result in SE and low-single digit organic decline in ACM.",
+   "src_event_id": "ho_segrp_201"
+  },
+  {
+   "event_id": "ho::seg_sib::208",
+   "ticker": "MDT",
+   "date": "2025-11-18",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "MDT_MedicalSurgical",
+   "evidence": "Medical Surgical Portfolio revenue of $2.171 billion, an increase of 2.1% as reported and 1.3% organic, with low-single digit organic increases in both Surgical & Endoscopy and Acute Care & Monitoring",
+   "src_event_id": "ho_segrp_202"
+  },
+  {
+   "event_id": "ho::seg_sib::209",
+   "ticker": "MDT",
+   "date": "2026-02-24",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "MDT_NeuroscienceGroup",
+   "evidence": "Neuroscience's net sales for the three and nine months ended January 23, 2026 were $2.6 billion and $7.5 billion, respectively, an increase of 4 percent for both periods, as compared to the corresponding periods in the prior fiscal year, resulting from growth in Cranial and Spinal Technologies, Neuromodulation, ENT, and the impacts of foreign currency fluctuations.",
+   "src_event_id": "ho_segrp_209"
+  },
+  {
+   "event_id": "ho::seg_sib::210",
+   "ticker": "MDT",
+   "date": "2025-11-25",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "MDT_NeuroscienceGroup",
+   "evidence": "Neuroscience's net sales for the three and six months ended October 24, 2025 were $2.6 billion and $5.0 billion, respectively, an increase of 5 percent and 4 percent, respectively, as compared to the corresponding periods in the prior fiscal year, resulting from growth in Neuromodulation, Cranial and Spinal Technologies, and ENT, and the impacts of foreign currency fluctuations.",
+   "src_event_id": "ho_segrp_210"
+  },
+  {
+   "event_id": "ho::seg_sib::211",
+   "ticker": "MDT",
+   "date": "2025-08-26",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "MDT_NeuroscienceGroup",
+   "evidence": "Neuroscience's net sales for the three months ended July 25, 2025 was $2.4 billion, an increase of 4 percent, as compared to the corresponding period in the prior fiscal year, resulting from growth in Neuromodulation, Core Spine, and Neurosurgery, and the impacts of foreign currency fluctuations.",
+   "src_event_id": "ho_segrp_211"
+  },
+  {
+   "event_id": "ho::seg_sib::212",
+   "ticker": "MDT",
+   "date": "2025-02-25",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "MDT_NeuroscienceGroup",
+   "evidence": "Neuroscience's net sales for the three and nine months ended January 24, 2025 were $2.5 billion and $7.2 billion, an increase of 4 percent and 5 percent, respectively, as compared to the corresponding periods in the prior fiscal year. The net sales increase for both periods was primarily due to growth in Neuromodulation, Spine and Biologics, and Neurosurgery.",
+   "src_event_id": "ho_segrp_212"
+  },
+  {
+   "event_id": "ho::seg_sib::213",
+   "ticker": "MDT",
+   "date": "2024-11-26",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "MDT_NeuroscienceGroup",
+   "evidence": "Neuroscience's net sales for the three and six months ended October 25, 2024 were $2.5 billion and $4.8 billion, respectively, an increase of 7 percent and 6 percent, respectively, as compared to the corresponding periods in the prior fiscal year. The net sales increase for both periods was primarily due to growth in Neuromodulation, Spine and Biologics, Neurosurgery, and Hemorrhagic Stroke.",
+   "src_event_id": "ho_segrp_213"
+  },
+  {
+   "event_id": "ho::seg_sib::214",
+   "ticker": "MDT",
+   "date": "2026-02-17",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "MDT_NeuroscienceGroup",
+   "evidence": "Neuroscience Portfolio revenue of $2.558 billion, an increase of 4.1% reported and 2.5% organic, with mid-single digit increase in Neuromodulation, mid-single digit increase in Cranial & Spinal Technologies, and flat result in Specialty Therapies, all on an organic basis",
+   "src_event_id": "ho_segrp_214"
+  },
+  {
+   "event_id": "ho::seg_sib::215",
+   "ticker": "MDT",
+   "date": "2025-11-18",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "MDT_NeuroscienceGroup",
+   "evidence": "Neuroscience Portfolio revenue of $2.562 billion, an increase of 4.5% reported and 3.9% organic, with a high-single digit increase in Neuromodulation, a mid-single digit increase in Cranial & Spinal Technologies, and flat result in Specialty Therapies, all on an organic basis",
+   "src_event_id": "ho_segrp_215"
+  },
+  {
+   "event_id": "ho::seg_sib::216",
+   "ticker": "MTCH",
+   "date": "2025-11-04",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "MTCH_EvergreenAndEmergingSegment",
+   "evidence": "E&E Direct Revenue declined 4% in 2025 versus 2024. The overall decline at E&E was driven by a decline in Payers of 13% compared to 2024, partially offset by increased RPP of 10%. The Direct Revenue decline was driven by the Evergreen brands.",
+   "src_event_id": "ho_segrp_221"
+  },
+  {
+   "event_id": "ho::seg_sib::217",
+   "ticker": "MTCH",
+   "date": "2025-08-05",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "MTCH_EvergreenAndEmergingSegment",
+   "evidence": "E&E Direct Revenue declined 8% in 2025 versus 2024. The overall decline at E&E was driven by a decline in Payers of 15% compared to 2024, partially offset by increased RPP of 8%. The decline is also partially due to our decision to terminate certain live streaming services in the second half of 2024.",
+   "src_event_id": "ho_segrp_222"
+  },
+  {
+   "event_id": "ho::seg_sib::218",
+   "ticker": "MTCH",
+   "date": "2025-05-08",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "MTCH_EvergreenAndEmergingSegment",
+   "evidence": "E&E Direct Revenue declined 12% in 2025 versus 2024. Within E&E, Evergreen brands declined 15% partially due to our decision to terminate certain live streaming services in the second half of 2024, while Emerging brands grew 3%. The overall decline at E&E was driven by a decline in Payers of 16% compared to 2024, partially offset by increased RPP of 5%.",
+   "src_event_id": "ho_segrp_223"
+  },
+  {
+   "event_id": "ho::seg_sib::219",
+   "ticker": "MTCH",
+   "date": "2026-02-26",
+   "source_type": "10k",
+   "axis": "seg_sib",
+   "canonical_bucket": "MTCH_EvergreenAndEmergingSegment",
+   "evidence": "E&E Direct Revenue declined 7% in 2024 versus 2023. Within E&E, Evergreen brands declined 12%, while Emerging brands grew 17%. The overall decline at E&E was driven by a decline in Payers of 13% compared to 2023, partially offset by increased RPP of 7%.",
+   "src_event_id": "ho_segrp_224"
+  },
+  {
+   "event_id": "ho::seg_sib::220",
+   "ticker": "MTCH",
+   "date": "2026-02-03",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "MTCH_EvergreenAndEmergingSegment",
+   "evidence": "E&E Q4 direct revenue was $145 million, down 7%, down 9% FXN. Payers were down 14% to $2.1 million, and RPP grew 8% to $22.53.",
+   "src_event_id": "ho_segrp_225"
+  },
+  {
+   "event_id": "ho::seg_sib::221",
+   "ticker": "MTCH",
+   "date": "2025-11-04",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "MTCH_EvergreenAndEmergingSegment",
+   "evidence": "E&E direct revenue in Q3 was $152 million, down 4% year-over-year and down 5% year-over-year FXN. Payers decreased 13% year-over-year to $2.3 million, while RPP increased 10% year-over-year to $22.22.",
+   "src_event_id": "ho_segrp_226"
+  },
+  {
+   "event_id": "ho::seg_sib::222",
+   "ticker": "MTCH",
+   "date": "2025-08-05",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "MTCH_EvergreenAndEmergingSegment",
+   "evidence": "E&E direct revenue in Q2 was $148 million, down 8% -over-year and down 10% -over-year FXN.",
+   "src_event_id": "ho_segrp_227"
+  },
+  {
+   "event_id": "ho::seg_sib::223",
+   "ticker": "MTCH",
+   "date": "2025-11-04",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "MTCH_HingeSegment",
+   "evidence": "Hinge Direct Revenue grew $39.2 million, or 27%, in 2025 versus 2024. Revenue growth was driven by both growth in the U.S. and other English-speaking markets as well as continued expansion efforts in certain European markets. Payers increased 17% compared to 2024, and RPP increased 9% over 2024, which was positively impacted by the weakening of the U.S. dollar compared to the Euro.",
+   "src_event_id": "ho_segrp_230"
+  },
+  {
+   "event_id": "ho::seg_sib::224",
+   "ticker": "MTCH",
+   "date": "2025-08-05",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "MTCH_HingeSegment",
+   "evidence": "Hinge Direct Revenue grew $33.9 million, or 25%, in 2025 versus 2024. Revenue growth was driven by both growth in the U.S. market as well as continued expansion efforts in certain European markets. Payers increased 18% compared to 2024, and RPP increased 6% over 2024, which was positively impacted by the weakening of the U.S. dollar compared to the British Pound.",
+   "src_event_id": "ho_segrp_231"
+  },
+  {
+   "event_id": "ho::seg_sib::225",
+   "ticker": "MTCH",
+   "date": "2025-05-08",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "MTCH_HingeSegment",
+   "evidence": "Hinge Direct Revenue grew $28.5 million, or 23%, in 2025 versus 2024. Revenue growth was driven by both growth in the U.S. market as well as continued expansion efforts in certain European markets. Payers increased 19% compared to 2024, and RPP increased 3% over 2024 as a result of pricing optimizations.",
+   "src_event_id": "ho_segrp_232"
+  },
+  {
+   "event_id": "ho::seg_sib::226",
+   "ticker": "MTCH",
+   "date": "2026-02-26",
+   "source_type": "10k",
+   "axis": "seg_sib",
+   "canonical_bucket": "MTCH_HingeSegment",
+   "evidence": "Hinge Direct Revenue grew $154.0 million, or 39%, in 2024 versus 2023. Revenue growth was driven by both growth in the U.S. market as well as continued expansion efforts in certain European markets. Payers increased 23% compared to 2023. Additionally, RPP increased 13% over 2023 primarily due to pricing optimizations and increased spend on \u00e1 la carte features.",
+   "src_event_id": "ho_segrp_233"
+  },
+  {
+   "event_id": "ho::seg_sib::227",
+   "ticker": "MTCH",
+   "date": "2026-02-03",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "MTCH_HingeSegment",
+   "evidence": "Hinge Q4 direct revenue was $186 million, up 26%, up 24% FXM. Payers were up 17% to $1.9 million, and RPP grew 8% to $32.96.",
+   "src_event_id": "ho_segrp_234"
+  },
+  {
+   "event_id": "ho::seg_sib::228",
+   "ticker": "MTCH",
+   "date": "2025-11-04",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "MTCH_HingeSegment",
+   "evidence": "Hinge continued its strong momentum in Q3 with direct revenue of $185 million, up 27% year-over-year, and up 26% year-over-year FXM. Payers increased 17% year-over-year to $1.9 million, and RPP increased 9% to $32.87.",
+   "src_event_id": "ho_segrp_235"
+  },
+  {
+   "event_id": "ho::seg_sib::229",
+   "ticker": "MTCH",
+   "date": "2025-08-05",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "MTCH_HingeSegment",
+   "evidence": "Hinge continued its strong momentum in Q2, with direct revenue of $168 million, up 25% -over-year and up 24% -over-year FXN. Payers grew 18% -over-year to $1.7 million, and RPP grew 6% to $31.96, driven by strong monetization optimization.",
+   "src_event_id": "ho_segrp_236"
+  },
+  {
+   "event_id": "ho::seg_sib::230",
+   "ticker": "MTCH",
+   "date": "2025-11-04",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "MTCH_MGAsiaSegment",
+   "evidence": "MG Asia Direct Revenue declined $3.0 million, or 4%, in 2025 versus 2024. Excluding revenue from Hakuna, which was shut down in the third quarter of 2024, MG Asia revenue remained flat compared to 2024. RPP decreased 10% from 2024, partially offset by a 6% increase in Payers compared to 2024.",
+   "src_event_id": "ho_segrp_240"
+  },
+  {
+   "event_id": "ho::seg_sib::231",
+   "ticker": "MTCH",
+   "date": "2025-08-05",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "MTCH_MGAsiaSegment",
+   "evidence": "MG Asia Direct Revenue declined $4.8 million, or 6%, in 2025 versus 2024. Excluding revenue from Hakuna, which was shut down in the third quarter of 2024, MG Asia revenue increased $2.1 million, or 3%. RPP decreased 12% compared to 2024, partially offset by a 6% increase in Payers compared to 2024.",
+   "src_event_id": "ho_segrp_241"
+  },
+  {
+   "event_id": "ho::seg_sib::232",
+   "ticker": "MTCH",
+   "date": "2025-05-08",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "MTCH_MGAsiaSegment",
+   "evidence": "MG Asia Direct Revenue declined $7.8 million, or 11%, in 2025 versus 2024. Excluding revenue from Hakuna, which was shut down in the third quarter of 2024, MG Asia revenue declined $1.2 million, or 2%. Revenue was also negatively impacted by the strength of the U.S. dollar compared to the Turkish Lira and Japanese Yen.",
+   "src_event_id": "ho_segrp_242"
+  },
+  {
+   "event_id": "ho::seg_sib::233",
+   "ticker": "MTCH",
+   "date": "2024-11-08",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "MTCH_MGAsiaSegment",
+   "evidence": "MG Asia Direct Revenue declined 6% over the prior year quarter, primarily driven by the strengthening of the U.S. dollar compared to the Turkish Lira and Japanese Yen. Excluding these foreign exchange impacts, MG Asia Direct Revenue decreased 1% over the prior year quarter primarily related to Payer declines at the Pairs brand, partially offset by Payer growth at Azar.",
+   "src_event_id": "ho_segrp_243"
+  },
+  {
+   "event_id": "ho::seg_sib::234",
+   "ticker": "MTCH",
+   "date": "2026-02-26",
+   "source_type": "10k",
+   "axis": "seg_sib",
+   "canonical_bucket": "MTCH_MGAsiaSegment",
+   "evidence": "MG Asia Direct Revenue declined $18.7 million, or 6%, in 2024 versus 2023. Excluding revenue from Hakuna, which was shut down in the third quarter of 2024, MG Asia revenue declined $7.7 million or 3%.",
+   "src_event_id": "ho_segrp_244"
+  },
+  {
+   "event_id": "ho::seg_sib::235",
+   "ticker": "MTCH",
+   "date": "2026-02-03",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "MTCH_MGAsiaSegment",
+   "evidence": "Match Group Asia direct revenue in Q4 was $66 million, down 2%, down 1% FXN. Azar direct revenue was up 1%, both as reported and FXN.",
+   "src_event_id": "ho_segrp_245"
+  },
+  {
+   "event_id": "ho::seg_sib::236",
+   "ticker": "MTCH",
+   "date": "2025-11-04",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "MTCH_MGAsiaSegment",
+   "evidence": "Match Group Asia delivered direct revenue in Q3 of 69 million, down 4% year-over-year on both an as-reported and FXN basis.",
+   "src_event_id": "ho_segrp_246"
+  },
+  {
+   "event_id": "ho::seg_sib::237",
+   "ticker": "MTCH",
+   "date": "2025-11-04",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "MTCH_TinderSegment",
+   "evidence": "Tinder Direct Revenue declined $12.6 million, or 3%, in 2025 versus 2024. The decrease in Direct Revenue was driven by a 7% decrease in Payers, partially offset by a 5% increase in RPP, which was positively impacted by the weakening of the U.S. dollar compared to the Euro and British Pound.",
+   "src_event_id": "ho_segrp_250"
+  },
+  {
+   "event_id": "ho::seg_sib::238",
+   "ticker": "MTCH",
+   "date": "2025-08-05",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "MTCH_TinderSegment",
+   "evidence": "Tinder Direct Revenue declined $18.8 million, or 4%, in 2025 versus 2024. The decrease in Direct Revenue was driven by a 7% decrease in Payers, partially offset by a 3% increase in RPP, which was positively impacted by the weakening of the U.S. dollar compared to the Euro, British Pound, and Japanese Yen.",
+   "src_event_id": "ho_segrp_251"
+  },
+  {
+   "event_id": "ho::seg_sib::239",
+   "ticker": "MTCH",
+   "date": "2025-05-08",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "MTCH_TinderSegment",
+   "evidence": "Tinder Direct Revenue declined $34.1 million, or 7%, in 2025 versus 2024. The decrease in Direct Revenue was driven by a 6% decrease in Payers and a 1% decrease in RPP. Additionally, revenue was negatively impacted by the strength of the U.S. dollar compared to the Euro, Brazilian Real, and Argentine Peso.",
+   "src_event_id": "ho_segrp_252"
+  },
+  {
+   "event_id": "ho::seg_sib::240",
+   "ticker": "MTCH",
+   "date": "2026-02-26",
+   "source_type": "10k",
+   "axis": "seg_sib",
+   "canonical_bucket": "MTCH_TinderSegment",
+   "evidence": "Tinder Direct Revenue grew $23.0 million, or 1%, in 2024 versus 2023. Revenue growth was negatively impacted by the strength of the U.S. dollar compared to the Argentine Peso, Turkish Lira, and Japanese Yen, primarily. On a consistent foreign exchange rate basis, the growth was $68.6 million or 4%.",
+   "src_event_id": "ho_segrp_253"
+  },
+  {
+   "event_id": "ho::seg_sib::241",
+   "ticker": "MTCH",
+   "date": "2026-02-03",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "MTCH_TinderSegment",
+   "evidence": "Tinder Q4 direct revenue was $464 million, down 3%, down 5% FXN. Tinder payers declined 8% to $8.8 million, and RPP grew 5% to $17.63.",
+   "src_event_id": "ho_segrp_254"
+  },
+  {
+   "event_id": "ho::seg_sib::242",
+   "ticker": "MTCH",
+   "date": "2025-11-04",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "MTCH_TinderSegment",
+   "evidence": "Tender direct revenue in Q3 was $491 million, down 3% year-over-year and down 4% year-over-year FXN. Q3 direct revenue includes an approximately $3 million negative impact from user experience testing in the quarter. Payers declined 7% year-over-year to $9.3 million, and RPP increased 5% year-over-year to $17.66.",
+   "src_event_id": "ho_segrp_255"
+  },
+  {
+   "event_id": "ho::seg_sib::243",
+   "ticker": "MTCH",
+   "date": "2025-08-05",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "MTCH_TinderSegment",
+   "evidence": "Tinder direct revenue in Q2 was $461 million, down 4% -over-year and down 5% -over-year FXN. Payers declined 7% -over-year to $9.0 million, and RPP grew 3% -over-year to $17.14.",
+   "src_event_id": "ho_segrp_256"
+  },
+  {
+   "event_id": "ho::seg_sib::244",
+   "ticker": "PSX",
+   "date": "2026-02-04",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "PSX_ChemicalsSegment",
+   "evidence": "Chemicals adjusted pre-tax income decreased mainly due to lower margins.",
+   "src_event_id": "ho_segrp_259"
+  },
+  {
+   "event_id": "ho::seg_sib::245",
+   "ticker": "PSX",
+   "date": "2025-10-29",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "PSX_ChemicalsSegment",
+   "evidence": "Chemicals pre-tax income increased mainly due to higher margins and lower costs which were largely driven by a decrease in turnaround spend.",
+   "src_event_id": "ho_segrp_260"
+  },
+  {
+   "event_id": "ho::seg_sib::246",
+   "ticker": "PSX",
+   "date": "2025-07-25",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "PSX_ChemicalsSegment",
+   "evidence": "Chemicals adjusted pre-tax income decreased mainly due to lower margins driven by lower sales prices.",
+   "src_event_id": "ho_segrp_261"
+  },
+  {
+   "event_id": "ho::seg_sib::247",
+   "ticker": "PSX",
+   "date": "2025-01-31",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "PSX_ChemicalsSegment",
+   "evidence": "Chemicals adjusted pre-tax income decreased mainly due to lower margins, as well as higher turnaround and maintenance costs.",
+   "src_event_id": "ho_segrp_262"
+  },
+  {
+   "event_id": "ho::seg_sib::248",
+   "ticker": "PSX",
+   "date": "2024-04-26",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "PSX_ChemicalsSegment",
+   "evidence": "Chemicals first-quarter 2024 reported and adjusted pre-tax income was $205 million, compared with fourth-quarter 2023 reported and adjusted pre-tax income of $106 million. The increase was mainly due to higher polyethylene margins driven by improved sales prices and a decline in feedstock costs, as well as lower turnaround costs.",
+   "src_event_id": "ho_segrp_263"
+  },
+  {
+   "event_id": "ho::seg_sib::249",
+   "ticker": "PSX",
+   "date": "2025-10-29",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "PSX_ChemicalsSegment",
+   "evidence": "Chemicals generated solid returns despite a challenging market, operating above 100% utilization. Year-to-date adjusted chemicals EBITDA is $700 million, reflecting the unique feedstock advantage of our assets.",
+   "src_event_id": "ho_segrp_264"
+  },
+  {
+   "event_id": "ho::seg_sib::250",
+   "ticker": "PSX",
+   "date": "2025-07-25",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "PSX_ChemicalsSegment",
+   "evidence": "In chemicals, results decreased, mainly due to lower polyethylene margins driven by lower sales prices.",
+   "src_event_id": "ho_segrp_265"
+  },
+  {
+   "event_id": "ho::seg_sib::251",
+   "ticker": "PSX",
+   "date": "2026-02-04",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "PSX_MarketingAndSpecialties",
+   "evidence": "Marketing and Specialties adjusted pre-tax income decreased primarily due to the partial disposition of our Germany and Austria retail marketing business and lower domestic margins, partially offset by higher U.K. margins and lower costs.",
+   "src_event_id": "ho_segrp_271"
+  },
+  {
+   "event_id": "ho::seg_sib::252",
+   "ticker": "PSX",
+   "date": "2025-04-25",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "PSX_MarketingAndSpecialties",
+   "evidence": "Marketing and Specialties adjusted pre-tax income increased primarily due to stronger international results.",
+   "src_event_id": "ho_segrp_272"
+  },
+  {
+   "event_id": "ho::seg_sib::253",
+   "ticker": "PSX",
+   "date": "2025-01-31",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "PSX_MarketingAndSpecialties",
+   "evidence": "Marketing and Specialties adjusted pre-tax income decreased primarily due to seasonally lower margins.",
+   "src_event_id": "ho_segrp_273"
+  },
+  {
+   "event_id": "ho::seg_sib::254",
+   "ticker": "PSX",
+   "date": "2024-10-29",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "PSX_MarketingAndSpecialties",
+   "evidence": "Marketing and Specialties adjusted pre-tax income increased primarily due to higher margins.",
+   "src_event_id": "ho_segrp_274"
+  },
+  {
+   "event_id": "ho::seg_sib::255",
+   "ticker": "PSX",
+   "date": "2024-04-26",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "PSX_MarketingAndSpecialties",
+   "evidence": "Adjusted pre-tax income for Marketing and Specialties was $345 million in the first quarter, compared with $432 million in the fourth quarter. The decrease in the first quarter was mainly due to lower domestic marketing and lubricant margins.",
+   "src_event_id": "ho_segrp_275"
+  },
+  {
+   "event_id": "ho::seg_sib::256",
+   "ticker": "PSX",
+   "date": "2025-07-25",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "PSX_MarketingAndSpecialties",
+   "evidence": "Marketing and specialties results improved due to seasonally higher margins and volumes.",
+   "src_event_id": "ho_segrp_276"
+  },
+  {
+   "event_id": "ho::seg_sib::257",
+   "ticker": "PSX",
+   "date": "2024-04-26",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "PSX_MarketingAndSpecialties",
+   "evidence": "Marketing and Specialties adjusted first quarter pre-tax income was $345 million, a decrease of $87 million from the previous quarter. The decrease was mainly due to lower domestic marketing and lubricant margins.",
+   "src_event_id": "ho_segrp_277"
+  },
+  {
+   "event_id": "ho::seg_sib::258",
+   "ticker": "PSX",
+   "date": "2026-02-04",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "PSX_MidstreamSegment",
+   "evidence": "Midstream adjusted pre-tax income increased compared with the third quarter mainly due to higher volumes, partially offset by lower margins.",
+   "src_event_id": "ho_segrp_282"
+  },
+  {
+   "event_id": "ho::seg_sib::259",
+   "ticker": "PSX",
+   "date": "2025-10-29",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "PSX_MidstreamSegment",
+   "evidence": "Midstream third-quarter 2025 pre-tax income decreased compared with the second quarter mainly due to lower margins, partially offset by higher volumes. These results included $30 million of additional depreciation associated with the retirement of assets at our Los Angeles Refinery.",
+   "src_event_id": "ho_segrp_283"
+  },
+  {
+   "event_id": "ho::seg_sib::260",
+   "ticker": "PSX",
+   "date": "2025-04-25",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "PSX_MidstreamSegment",
+   "evidence": "Midstream first-quarter 2025 adjusted pre-tax income decreased compared with the fourth quarter mainly due to lower volumes, partially offset by higher margins primarily driven by gathering and processing results.",
+   "src_event_id": "ho_segrp_284"
+  },
+  {
+   "event_id": "ho::seg_sib::261",
+   "ticker": "PSX",
+   "date": "2025-01-31",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "PSX_MidstreamSegment",
+   "evidence": "Midstream fourth-quarter 2024 adjusted pre-tax income increased compared with the third quarter mainly due to higher NGL margins and volumes.",
+   "src_event_id": "ho_segrp_285"
+  },
+  {
+   "event_id": "ho::seg_sib::262",
+   "ticker": "PSX",
+   "date": "2024-10-29",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "PSX_MidstreamSegment",
+   "evidence": "Midstream third-quarter 2024 adjusted pre-tax income decreased compared with the second quarter mainly due to seasonal maintenance costs and lower equity earnings, partially offset by higher export margins.",
+   "src_event_id": "ho_segrp_286"
+  },
+  {
+   "event_id": "ho::seg_sib::263",
+   "ticker": "PSX",
+   "date": "2024-07-30",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "PSX_MidstreamSegment",
+   "evidence": "Midstream second-quarter 2024 adjusted pre-tax income increased compared with the first quarter, primarily due to higher NGL volumes and margins, as well as lower costs.",
+   "src_event_id": "ho_segrp_287"
+  },
+  {
+   "event_id": "ho::seg_sib::264",
+   "ticker": "PSX",
+   "date": "2026-02-04",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "PSX_MidstreamSegment",
+   "evidence": "We've increased adjusted EBITDA by 40% since 2022, and we've delivered approximately $1 billion of adjusted EBITDA in the fourth quarter of 2025.",
+   "src_event_id": "ho_segrp_288"
+  },
+  {
+   "event_id": "ho::seg_sib::265",
+   "ticker": "PSX",
+   "date": "2026-02-04",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "PSX_RefiningSegment",
+   "evidence": "Refining adjusted pre-tax income benefited from the acquisition and consolidation of the remaining ownership interest of WRB Refining LP.",
+   "src_event_id": "ho_segrp_296"
+  },
+  {
+   "event_id": "ho::seg_sib::266",
+   "ticker": "PSX",
+   "date": "2025-10-29",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "PSX_RefiningSegment",
+   "evidence": "Refining adjusted pre-tax income increased mainly due to higher realized margins driven by higher market crack spreads, partially offset by higher environmental costs primarily associated with the planned idling of the Los Angeles Refinery.",
+   "src_event_id": "ho_segrp_297"
+  },
+  {
+   "event_id": "ho::seg_sib::267",
+   "ticker": "PSX",
+   "date": "2025-07-25",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "PSX_RefiningSegment",
+   "evidence": "Refining adjusted pre-tax results increased mainly due to higher realized margins resulting from improved market crack spreads, as well as higher volumes and lower costs.",
+   "src_event_id": "ho_segrp_298"
+  },
+  {
+   "event_id": "ho::seg_sib::268",
+   "ticker": "PSX",
+   "date": "2025-04-25",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "PSX_RefiningSegment",
+   "evidence": "Refining adjusted pre-tax loss increased primarily due to lower volumes and higher costs driven by planned turnaround activity, partially offset by increased realized margins from higher market crack spreads.",
+   "src_event_id": "ho_segrp_299"
+  },
+  {
+   "event_id": "ho::seg_sib::269",
+   "ticker": "PSX",
+   "date": "2025-01-31",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "PSX_RefiningSegment",
+   "evidence": "Refining adjusted pre-tax loss increased primarily due to a decline in realized margins largely driven by lower market crack spreads and accelerated depreciation associated with the planned ceasing of operations at the Los Angeles Refinery, partially offset by a higher clean product yield.",
+   "src_event_id": "ho_segrp_300"
+  },
+  {
+   "event_id": "ho::seg_sib::270",
+   "ticker": "PSX",
+   "date": "2024-04-26",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "PSX_RefiningSegment",
+   "evidence": "Adjusted pre-tax income for Refining was $228 million in the first quarter, compared with adjusted pre-tax income of $797 million in the fourth quarter. The decrease was primarily due to a decline in realized margins driven by less favorable commercial results, inventory hedging impacts and lower Gulf Coast clean product realizations.",
+   "src_event_id": "ho_segrp_301"
+  },
+  {
+   "event_id": "ho::seg_sib::271",
+   "ticker": "PSX",
+   "date": "2026-02-04",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "PSX_RefiningSegment",
+   "evidence": "Refining results benefited from the acquisition of WRB. Additionally, we saw higher realized margins in the Gulf Coast, partly offset by weaker central corridor crack spreads.",
+   "src_event_id": "ho_segrp_302"
+  },
+  {
+   "event_id": "ho::seg_sib::272",
+   "ticker": "PSX",
+   "date": "2026-02-04",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "PSX_RenewableFuels",
+   "evidence": "Renewable Fuels pre-tax results improved primarily due to higher realized margins including inventory impacts, partially offset by lower credits.",
+   "src_event_id": "ho_segrp_309"
+  },
+  {
+   "event_id": "ho::seg_sib::273",
+   "ticker": "PSX",
+   "date": "2025-10-29",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "PSX_RenewableFuels",
+   "evidence": "Renewable Fuels pre-tax results improved primarily due to higher realized margins, including inventory impacts, as well as higher international credits.",
+   "src_event_id": "ho_segrp_310"
+  },
+  {
+   "event_id": "ho::seg_sib::274",
+   "ticker": "PSX",
+   "date": "2025-04-25",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "PSX_RenewableFuels",
+   "evidence": "Renewable Fuels pre-tax results decreased primarily due to the transition from blenders tax credits to production tax credits, inventory impacts and lower international results.",
+   "src_event_id": "ho_segrp_311"
+  },
+  {
+   "event_id": "ho::seg_sib::275",
+   "ticker": "PSX",
+   "date": "2025-01-31",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "PSX_RenewableFuels",
+   "evidence": "Renewable Fuels pre-tax results increased primarily due to higher margins at the Rodeo Complex and stronger international results.",
+   "src_event_id": "ho_segrp_312"
+  },
+  {
+   "event_id": "ho::seg_sib::276",
+   "ticker": "PSX",
+   "date": "2024-10-29",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "PSX_RenewableFuels",
+   "evidence": "Renewable Fuels reported pre-tax loss increased primarily due to lower realized margins, partially offset by higher volumes.",
+   "src_event_id": "ho_segrp_313"
+  },
+  {
+   "event_id": "ho::seg_sib::277",
+   "ticker": "PSX",
+   "date": "2026-02-04",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "PSX_RenewableFuels",
+   "evidence": "In renewable fuels, results improved primarily due to higher realized margins, including inventory impacts, partly offset by lower credits.",
+   "src_event_id": "ho_segrp_314"
+  },
+  {
+   "event_id": "ho::seg_sib::278",
+   "ticker": "PSX",
+   "date": "2025-10-29",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "PSX_RenewableFuels",
+   "evidence": "In renewable fuels, results improved primarily due to higher margins, including inventory impacts and international renewable credits.",
+   "src_event_id": "ho_segrp_315"
+  },
+  {
+   "event_id": "ho::seg_sib::279",
+   "ticker": "QCOM",
+   "date": "2026-02-04",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "QCOM_Qct",
+   "evidence": "QCT revenues increased by 5% in the first quarter of fiscal 2026 compared to the year ago quarter due to higher handsets, automotive and IoT revenues.",
+   "src_event_id": "ho_segrp_319"
+  },
+  {
+   "event_id": "ho::seg_sib::280",
+   "ticker": "QCOM",
+   "date": "2026-02-04",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "QCOM_Qct",
+   "evidence": "The increase in QCT revenues in the first quarter of fiscal 2026 was primarily due to: + higher handsets revenues, primarily due to higher chipset shipments to certain major OEMs + higher automotive revenues, primarily driven by an increase in shipments from new vehicle launches with our Snapdragon digital cockpit products + higher IoT revenues, due to $244 million in higher shipments primarily across edge networking and consumer products, partially offset by unfavorable product mix",
+   "src_event_id": "ho_segrp_320"
+  },
+  {
+   "event_id": "ho::seg_sib::281",
+   "ticker": "QCOM",
+   "date": "2025-04-30",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "QCOM_Qct",
+   "evidence": "The increase in QCT revenues in the second quarter of fiscal 2025 was primarily due to: + higher handsets revenues, primarily due to $381 million in higher chipset shipments driven by certain major OEMs, and $368 million in higher revenues per chipset (primarily driven by higher average selling prices), both of which benefited from an increase in demand in premium-tier Snapdragon platforms",
+   "src_event_id": "ho_segrp_321"
+  },
+  {
+   "event_id": "ho::seg_sib::282",
+   "ticker": "QCOM",
+   "date": "2025-02-05",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "QCOM_Qct",
+   "evidence": "The increase in QCT revenues in the first quarter of fiscal 2025 was primarily due to: + higher handsets revenues, primarily due to $448 million in higher chipset shipments driven by certain major OEMs, and $424 million in higher revenues per chipset (driven by higher average selling prices and favorable mix), both of which benefited from an increase in demand in premium-tier Snapdragon platforms",
+   "src_event_id": "ho_segrp_322"
+  },
+  {
+   "event_id": "ho::seg_sib::283",
+   "ticker": "QCOM",
+   "date": "2024-07-31",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "QCOM_Qct",
+   "evidence": "The increase in QCT revenues in the third quarter of fiscal 2024 was primarily due to: + higher handsets revenues, due to $443 million in higher chipset shipments driven by certain major OEMs (primarily driven by the normalization of customer inventory levels, which were elevated in the prior year) and $159 million in higher revenues per chipset driven by favorable mix toward higher-tier Snapdragon platforms",
+   "src_event_id": "ho_segrp_323"
+  },
+  {
+   "event_id": "ho::seg_sib::284",
+   "ticker": "QCOM",
+   "date": "2026-02-04",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "QCOM_Qct",
+   "evidence": "We delivered record revenues in QCT of $10.6 billion, including strong year-over-year growth across automotive and IoT. QCT handset revenues reached a record $7.8 billion, reflecting the benefit of recently launched flagship smartphones.",
+   "src_event_id": "ho_segrp_324"
+  },
+  {
+   "event_id": "ho::seg_sib::285",
+   "ticker": "QCOM",
+   "date": "2025-07-30",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "QCOM_Qct",
+   "evidence": "QCT delivered revenues of $9 billion and EBT of $2.7 billion with year-over-year growth of 11% and 22% respectively. QCT EBT margin of 30% was at the high end of our guidance range. QCT handset revenues increased 7% year-over-year to $6.3 billion reflecting strong demand for premium-tier handsets.",
+   "src_event_id": "ho_segrp_325"
+  },
+  {
+   "event_id": "ho::seg_sib::286",
+   "ticker": "QCOM",
+   "date": "2026-02-04",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "QCOM_Qsi",
+   "evidence": "QSI EBT increased in the first quarter of fiscal 2026 primarily due to higher net gains from observable price changes on certain of our non-marketable equity investments, partially offset by losses from the change in fair value of certain of our marketable equity investments.",
+   "src_event_id": "ho_segrp_332"
+  },
+  {
+   "event_id": "ho::seg_sib::287",
+   "ticker": "QCOM",
+   "date": "2025-07-30",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "QCOM_Qsi",
+   "evidence": "QSI EBT increased in the third quarter of fiscal 2025 primarily due to higher net gains on marketable securities resulting from the initial public offerings of certain of our equity investments.",
+   "src_event_id": "ho_segrp_333"
+  },
+  {
+   "event_id": "ho::seg_sib::288",
+   "ticker": "QCOM",
+   "date": "2025-04-30",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "QCOM_Qsi",
+   "evidence": "QSI EBT decreased in the second quarter and first six months of fiscal 2025 primarily due to lower net gains on certain of our equity investments.",
+   "src_event_id": "ho_segrp_334"
+  },
+  {
+   "event_id": "ho::seg_sib::289",
+   "ticker": "QCOM",
+   "date": "2024-05-01",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "QCOM_Qsi",
+   "evidence": "QSI EBT increased in the second quarter and first six months of fiscal 2024 primarily due to net gains on certain of our non-marketable equity investments.",
+   "src_event_id": "ho_segrp_335"
+  },
+  {
+   "event_id": "ho::seg_sib::290",
+   "ticker": "QCOM",
+   "date": "2024-11-06",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "QCOM_Qsi",
+   "evidence": "QSI EBT increased in fiscal 2024 primarily due to net gains on certain of our non-marketable equity investments.",
+   "src_event_id": "ho_segrp_336"
+  },
+  {
+   "event_id": "ho::seg_sib::291",
+   "ticker": "QCOM",
+   "date": "2026-02-04",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "QCOM_Qtl",
+   "evidence": "QTL revenues increased by 4% in the first quarter of fiscal 2026 compared to the year ago quarter, primarily due to an increase in estimated sales of cellular products.",
+   "src_event_id": "ho_segrp_337"
+  },
+  {
+   "event_id": "ho::seg_sib::292",
+   "ticker": "QCOM",
+   "date": "2026-02-04",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "QCOM_Qtl",
+   "evidence": "QTL EBT as a percentage of revenues increased in the first quarter of fiscal 2026 due to: + lower operating expenses, primarily driven by lower research and development expenses + higher revenues",
+   "src_event_id": "ho_segrp_338"
+  },
+  {
+   "event_id": "ho::seg_sib::293",
+   "ticker": "QCOM",
+   "date": "2025-11-05",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "QCOM_Qtl",
+   "evidence": "QTL licensing revenues and EBT remained approximately flat in fiscal 2025. During the second quarter of fiscal 2025, we executed final agreements for new long-term licenses with two key Chinese OEMs (for which the initial terms had expired) and entered into comprehensive 4G and 5G license agreements with Transsion (a growing, China-headquartered OEM that sells primarily in developing regions).",
+   "src_event_id": "ho_segrp_339"
+  },
+  {
+   "event_id": "ho::seg_sib::294",
+   "ticker": "QCOM",
+   "date": "2025-02-05",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "QCOM_Qtl",
+   "evidence": "The increase in QTL licensing revenues in the first quarter of fiscal 2025 was primarily due to: + $32 million increase in estimated sales of 3G/4G/5G-based multimode products + $30 million in higher royalty revenues recognized related to devices sold in prior periods",
+   "src_event_id": "ho_segrp_340"
+  },
+  {
+   "event_id": "ho::seg_sib::295",
+   "ticker": "QCOM",
+   "date": "2024-07-31",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "QCOM_Qtl",
+   "evidence": "The increase in QTL licensing revenues in the third quarter of fiscal 2024 was primarily due to an increase in estimated sales of 3G/4G/5G-based multimode products.",
+   "src_event_id": "ho_segrp_341"
+  },
+  {
+   "event_id": "ho::seg_sib::296",
+   "ticker": "QCOM",
+   "date": "2024-05-01",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "QCOM_Qtl",
+   "evidence": "The decrease in QTL licensing revenues in the first six months of fiscal 2024 was primarily due to: - $75 million decrease in estimated revenues per unit - $68 million decrease in revenues from the ending of the recognition of certain upfront license fee consideration in the first quarter of fiscal 2023 from our long-term license agreement with Nokia + $119 million increase in estimated sales of 3G/4G/5G-based multimode products",
+   "src_event_id": "ho_segrp_342"
+  },
+  {
+   "event_id": "ho::seg_sib::297",
+   "ticker": "QCOM",
+   "date": "2026-02-04",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "QCOM_Qtl",
+   "evidence": "QTL revenues of $1.6 billion and EBT margin of 77% were at the high end of our guidance, driven by higher units and favorable mix.",
+   "src_event_id": "ho_segrp_343"
+  },
+  {
+   "event_id": "ho::seg_sib::298",
+   "ticker": "SBUX",
+   "date": "2026-01-28T07:48:42-05:00",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "SBUX_ChannelDevelopment",
+   "evidence": "Channel Development operating income for the first quarter of fiscal 2026 increased 4% to $216 million, compared to $208 million in the first quarter of fiscal 2025. Operating margin contracted 640 basis points to 41.3%, primarily driven by mix shift.",
+   "src_event_id": "ho_segrp_351"
+  },
+  {
+   "event_id": "ho::seg_sib::299",
+   "ticker": "SBUX",
+   "date": "2025-07-29T16:11:03-04:00",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "SBUX_ChannelDevelopment",
+   "evidence": "Channel Development total net revenues for the third quarter of fiscal 2025 increased $46 million, or 10%, primarily due to an increase in revenue in the Global Coffee Alliance ($45 million).",
+   "src_event_id": "ho_segrp_352"
+  },
+  {
+   "event_id": "ho::seg_sib::300",
+   "ticker": "SBUX",
+   "date": "2025-07-29T16:11:03-04:00",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "SBUX_ChannelDevelopment",
+   "evidence": "Channel Development operating income for the third quarter of fiscal 2025 decreased 7% to $218 million, compared to $235 million in the third quarter of fiscal 2024. Operating margin contracted 860 basis points to 45.1%, primarily driven by a decline in our North American Coffee Partnership joint venture income (approximately 420 basis points), mix shift (approximately 270 basis points), and higher global product costs (approximately 250 basis points).",
+   "src_event_id": "ho_segrp_353"
+  },
+  {
+   "event_id": "ho::seg_sib::301",
+   "ticker": "SBUX",
+   "date": "2025-01-28T16:11:34-05:00",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "SBUX_ChannelDevelopment",
+   "evidence": "Channel Development operating income for the first quarter of fiscal 2025 decreased 1% to $208 million, compared to $210 million in the first quarter of fiscal 2024. Operating margin expanded 90 basis points to 47.7%, primarily driven by mix shift (approximately 180 basis points), and lower product costs related to the Global Coffee Alliance (approximately 80 basis points), partially offset by higher costs in our North American Coffee Partnership joint venture income (approximately 170 basis points).",
+   "src_event_id": "ho_segrp_354"
+  },
+  {
+   "event_id": "ho::seg_sib::302",
+   "ticker": "SBUX",
+   "date": "2025-10-29T16:08:56-04:00",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "SBUX_ChannelDevelopment",
+   "evidence": "Net revenues for the Channel Development segment increased 17% over Q4 FY24 to $542.6 million in Q4 FY25, primarily due to an increase in revenue in the Global Coffee Alliance. Operating income increased to $265.2 million in Q4 FY25 compared to $264.7 million in Q4 FY24. Operating margin of 48.9% contracted from 56.9% in the prior year, primarily driven by a decline in our North American Co",
+   "src_event_id": "ho_segrp_355"
+  },
+  {
+   "event_id": "ho::seg_sib::303",
+   "ticker": "SBUX",
+   "date": "2025-07-29T16:06:48-04:00",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "SBUX_ChannelDevelopment",
+   "evidence": "Net revenues for the Channel Development segment increased 10% over Q3 FY24 to $483.8 million in Q3 FY25, primarily due to an increase in revenue in the Global Coffee Alliance. Operating income decreased to $218.4 million in Q3 FY25",
+   "src_event_id": "ho_segrp_356"
+  },
+  {
+   "event_id": "ho::seg_sib::304",
+   "ticker": "SBUX",
+   "date": "2025-04-29T16:07:24-04:00",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "SBUX_ChannelDevelopment",
+   "evidence": "Net revenues for the Channel Development segment declined 2% over Q2 FY24 to $409.0 million in Q2 FY25, primarily due to a decline in revenue in the Global Coffee Alliance, partially offset by an increase in global ready-to-drink revenue.",
+   "src_event_id": "ho_segrp_357"
+  },
+  {
+   "event_id": "ho::seg_sib::305",
+   "ticker": "SBUX",
+   "date": "2026-01-28T07:48:42-05:00",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "SBUX_InternationalSegment",
+   "evidence": "International operating income for the first quarter of fiscal 2026 increased 19% to $283 million, compared to $237 million in the first quarter of fiscal 2025. Operating margin expanded 100 basis points to 13.7%, primarily due to sales leverage (approximately 360 basis points), and lower store operating and depreciation and amortization costs after classifying assets for Starbucks retail operations in China as held for sale (approximately 200 basis points), partially offset by restructuring costs associated with the closure of coffeehouses (approximately 210 basis points) and inflationary pressures (approximately 190 basis points), primarily driven by elevated coffee pricing.",
+   "src_event_id": "ho_segrp_367"
+  },
+  {
+   "event_id": "ho::seg_sib::306",
+   "ticker": "SBUX",
+   "date": "2025-07-29T16:11:03-04:00",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "SBUX_InternationalSegment",
+   "evidence": "International operating income for the third quarter of fiscal 2025 decreased 5% to $273 million, compared to $288 million in the third quarter of fiscal 2024. Operating margin contracted 200 basis points to 13.6%, primarily due to increased promotional activity (approximately 160 basis points).",
+   "src_event_id": "ho_segrp_368"
+  },
+  {
+   "event_id": "ho::seg_sib::307",
+   "ticker": "SBUX",
+   "date": "2025-01-28T16:11:34-05:00",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "SBUX_InternationalSegment",
+   "evidence": "International operating income for the first quarter of fiscal 2025 decreased 2% to $237 million, compared to $242 million in the first quarter of fiscal 2024. Operating margin contracted 40 basis points to 12.7%, primarily due to increased promotional activity (approximately 170 basis points) and investments in store partner wages and benefits (approximately 90 basis points). This contraction was partially offset by supply chain efficiencies (approximately 130 basis points) and in-store operational efficiencies (approximately 100 basis points).",
+   "src_event_id": "ho_segrp_369"
+  },
+  {
+   "event_id": "ho::seg_sib::308",
+   "ticker": "SBUX",
+   "date": "2025-10-29T16:08:56-04:00",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "SBUX_InternationalSegment",
+   "evidence": "Net revenues for the International segment increased 9% over Q4 FY24 to $2.1 billion in Q4 FY25, primarily due to net new company-operated store growth of 5% over the past 12 months, and a 3% increase in comparable store sales, driven by a 6% increase in comparable transactions, partially offset by a 3% decline in average ticket. Also contributing was incremental net revenue from the acquisition of a U.K. licensed business partner and an increase in our licensed store business revenue. Operating income decreased to $223.2 million in Q4 FY25 compared to $282.9 million in Q4 FY24. Operating margin of 10.8% contracted from 14.9% in the prior year, primarily driven by costs associated with the closure of coffeehouses and simplification of our support organization and increased promotional activity.",
+   "src_event_id": "ho_segrp_370"
+  },
+  {
+   "event_id": "ho::seg_sib::309",
+   "ticker": "SBUX",
+   "date": "2025-07-29T16:06:48-04:00",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "SBUX_InternationalSegment",
+   "evidence": "Net revenues for the International segment increased 9% over Q3 FY24 to $2.0 billion in Q3 FY25, primarily due to net new company-operated store growth of 7% over the past 12 months and an approximate 3% favorable impact from foreign currency translation.",
+   "src_event_id": "ho_segrp_371"
+  },
+  {
+   "event_id": "ho::seg_sib::310",
+   "ticker": "SBUX",
+   "date": "2025-04-29T16:07:24-04:00",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "SBUX_InternationalSegment",
+   "evidence": "Net revenues for the International segment increased 6% over Q2 FY24 to $1.9 billion in Q2 FY25, primarily due to net new company-operated store growth of 8% over the past 12 months, an increase in our licensed store business, as well as incremental net revenue from the acquisition of a U.K. licensed business partner.",
+   "src_event_id": "ho_segrp_372"
+  },
+  {
+   "event_id": "ho::seg_sib::311",
+   "ticker": "SBUX",
+   "date": "2026-01-28",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "SBUX_InternationalSegment",
+   "evidence": "The segment reported $2.1 billion of net revenue in the first quarter, growing 10% year over year. International's comp growth of 5% was led by transactions as customers celebrated the holiday season with Starbucks around the world.",
+   "src_event_id": "ho_segrp_373"
+  },
+  {
+   "event_id": "ho::seg_sib::312",
+   "ticker": "SBUX",
+   "date": "2026-01-28T07:48:42-05:00",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "SBUX_NorthAmericaSegment",
+   "evidence": "North America operating income for the first quarter of fiscal 2026 decreased 27% to $867 million, compared to $1.2 billion in the first quarter of fiscal 2025. Operating margin contracted 480 basis points to 11.9%, primarily driven by labor investments in support of \u201cBack to Starbucks,\u201d (approximately 260 basis points) and inflationary pressures (approximately 150 basis points), primarily driven by tariffs and elevated coffee pricing.",
+   "src_event_id": "ho_segrp_385"
+  },
+  {
+   "event_id": "ho::seg_sib::313",
+   "ticker": "SBUX",
+   "date": "2025-07-29T16:11:03-04:00",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "SBUX_NorthAmericaSegment",
+   "evidence": "North America operating income for the third quarter of fiscal 2025 decreased 36% to $919 million, compared to $1.4 billion in the third quarter of fiscal 2024. Operating margin contracted 770 basis points to 13.3%, primarily driven by deleverage (approximately 250 basis points), investments in support of \u201cBack to Starbucks,\u201d including additional labor (approximately 170 basis points) and the Leadership Experience 2025 (approximately 120 basis points), and inflation (approximately 110 basis points), primarily driven by elevated coffee pricing.",
+   "src_event_id": "ho_segrp_386"
+  },
+  {
+   "event_id": "ho::seg_sib::314",
+   "ticker": "SBUX",
+   "date": "2025-04-29T16:10:33-04:00",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "SBUX_NorthAmericaSegment",
+   "evidence": "North America operating income for the second quarter of fiscal 2025 decreased 35% to $748 million, compared to $1.1 billion in the second quarter of fiscal 2024. Operating margin contracted 640 basis points to 11.6%, primarily driven by deleverage (approximately 300 basis points) and additional labor, largely in support of \u201cBack to Starbucks\u201d (approximately 230 basis points).",
+   "src_event_id": "ho_segrp_387"
+  },
+  {
+   "event_id": "ho::seg_sib::315",
+   "ticker": "SBUX",
+   "date": "2025-01-28T16:11:34-05:00",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "SBUX_NorthAmericaSegment",
+   "evidence": "North America operating income for the first quarter of fiscal 2025 decreased 22% to $1.2 billion, compared to $1.5 billion in the first quarter of fiscal 2024. Operating margin contracted 470 basis points to 16.7%, primarily driven by deleverage (approximately 370 basis points) and investments in support of \u201cBack to Starbucks,\u201d including store partner wages, benefits, and hours (approximately 180 basis points), and the removal of the extra charge for non-dairy milk customizations (approximately 60 basis points).",
+   "src_event_id": "ho_segrp_388"
+  },
+  {
+   "event_id": "ho::seg_sib::316",
+   "ticker": "SBUX",
+   "date": "2024-07-30T16:10:34-04:00",
+   "source_type": "10q",
+   "axis": "seg_sib",
+   "canonical_bucket": "SBUX_NorthAmericaSegment",
+   "evidence": "North America operating income for the third quarter of fiscal 2024 decreased 2% to $1.4 billion, compared to $1.5 billion in the third quarter of fiscal 2023. Operating margin decreased 70 basis points to 21.0%, primarily due to increased investments in store partner wages and benefits (approximately 170 basis points), increased promotional activity (approximately 160 basis points), and deleverage (approximately 130 basis points), partially offset by strategic pricing (approximately 260 basis points) and in-store operational efficiencies (approximately 120 basis points).",
+   "src_event_id": "ho_segrp_389"
+  },
+  {
+   "event_id": "ho::seg_sib::317",
+   "ticker": "SBUX",
+   "date": "2025-10-29T16:08:56-04:00",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "SBUX_NorthAmericaSegment",
+   "evidence": "Net revenues for the North America segment increased 3% over Q4 FY24 to $6.9 billion in Q4 FY25, primarily driven by net new company-operated store growth of 4% over the past 12 months, prior to the restructuring closures late in the quarter. This increase was partially offset by a decline in our licensed store business. Operating income decreased to $308.5 million in Q4 FY25 compared to $1.3 billion in Q4 FY24. Operating margin of 4.5% contracted from 18.7% in the prior year, primarily due to restructuring costs associated with the closure of coffeehouses and simplification of our support organization, deleverage, investments in support of \u201cBack to Starbucks\u201d, which were largely in labor hours, and inflation.",
+   "src_event_id": "ho_segrp_390"
+  },
+  {
+   "event_id": "ho::seg_sib::318",
+   "ticker": "SBUX",
+   "date": "2025-07-29T16:06:48-04:00",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "SBUX_NorthAmericaSegment",
+   "evidence": "Net revenues for the North America segment increased 2% over Q3 FY24 to $6.9 billion in Q3 FY25, primarily due to net new company-operated store growth of 5% over the past 12 months. This increase was partially offset by a 2% decline in comparable store sales, driven by a 3% decline in comparable transactions, partially offset by a 1% increase in average ticket.",
+   "src_event_id": "ho_segrp_391"
+  },
+  {
+   "event_id": "ho::seg_sib::319",
+   "ticker": "WGO",
+   "date": "2025-12-19",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "WGO_MarineSegment",
+   "evidence": "Our Marine segment also performed well in the first quarter, with modest year-over-year revenue growth and healthy operating income margins as we navigate a softer market.",
+   "src_event_id": "ho_segrp_402"
+  },
+  {
+   "event_id": "ho::seg_sib::320",
+   "ticker": "WGO",
+   "date": "2025-10-22",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "WGO_MarineSegment",
+   "evidence": "Marine Three Months Ended ($, in millions) August 30, 2025 August 31, 2024 Change Net revenues $ 94.9 $ 80.5 17.9 % Operating income $ 6.7 $ (27.1) NM Operating income margin 7.1 % (33.7) % 4,080 bps",
+   "src_event_id": "ho_segrp_403"
+  },
+  {
+   "event_id": "ho::seg_sib::321",
+   "ticker": "WGO",
+   "date": "2025-06-25",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "WGO_MarineSegment",
+   "evidence": "Net revenues for the Marine segment increased from the prior year, primarily driven by unit volume and targeted price increases, partially offset by product mix.",
+   "src_event_id": "ho_segrp_404"
+  },
+  {
+   "event_id": "ho::seg_sib::322",
+   "ticker": "WGO",
+   "date": "2025-03-27",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "WGO_MarineSegment",
+   "evidence": "Net revenues for the Marine segment were up from the prior year, primarily due to unit volume, partially offset by a reduction in average selling price per unit related to product mix.",
+   "src_event_id": "ho_segrp_405"
+  },
+  {
+   "event_id": "ho::seg_sib::323",
+   "ticker": "WGO",
+   "date": "2024-12-20",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "WGO_MarineSegment",
+   "evidence": "Revenues for the Marine segment were up from the prior year, primarily due to targeted price increases and higher unit volume, partially offset by a reduction in average selling price per unit related to product mix.",
+   "src_event_id": "ho_segrp_406"
+  },
+  {
+   "event_id": "ho::seg_sib::324",
+   "ticker": "WGO",
+   "date": "2026-03-25",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "WGO_MarineSegment",
+   "evidence": "Through the first half of fiscal 2026, marine segment operating income margin was 5.3% versus 6.7% in the same period last year. Revenue was flat year over year.",
+   "src_event_id": "ho_segrp_407"
+  },
+  {
+   "event_id": "ho::seg_sib::325",
+   "ticker": "WGO",
+   "date": "2025-12-19",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "WGO_MarineSegment",
+   "evidence": "As shown on slide 12, net revenues in the marine segment for the first quarter grew 2.2% from prior year due to selective price increases partially offset by lower unit volume.",
+   "src_event_id": "ho_segrp_408"
+  },
+  {
+   "event_id": "ho::seg_sib::326",
+   "ticker": "WGO",
+   "date": "2025-12-19",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "WGO_MotorhomeRVSegment",
+   "evidence": "Our Motorhome RV segment continued its momentum, propelled by the sustained appeal of our premium Newmar products and the growing presence of our Grand Design motorized offerings.",
+   "src_event_id": "ho_segrp_410"
+  },
+  {
+   "event_id": "ho::seg_sib::327",
+   "ticker": "WGO",
+   "date": "2025-10-22",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "WGO_MotorhomeRVSegment",
+   "evidence": "Motorhome RV Three Months Ended ($, in millions) August 30, 2025 August 31, 2024 Change Net revenues $ 361.2 $ 308.0 17.3 % Operating income $ (0.3) $ 6.9 NM Operating income margin (0.1) % 2.2 % (230) bps",
+   "src_event_id": "ho_segrp_411"
+  },
+  {
+   "event_id": "ho::seg_sib::328",
+   "ticker": "WGO",
+   "date": "2025-06-25",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "WGO_MotorhomeRVSegment",
+   "evidence": "Net revenues for the Motorhome RV segment decreased from the prior year, primarily due to lower unit volume related to current market conditions, partially offset by product mix.",
+   "src_event_id": "ho_segrp_412"
+  },
+  {
+   "event_id": "ho::seg_sib::329",
+   "ticker": "WGO",
+   "date": "2025-03-27",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "WGO_MotorhomeRVSegment",
+   "evidence": "Net revenues for the Motorhome RV segment were down from the prior year, due to lower unit volume related to current market conditions, partially offset by favorable product mix.",
+   "src_event_id": "ho_segrp_413"
+  },
+  {
+   "event_id": "ho::seg_sib::330",
+   "ticker": "WGO",
+   "date": "2024-12-20",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "WGO_MotorhomeRVSegment",
+   "evidence": "Revenues for the Motorhome RV segment were down from the prior year, primarily due to lower unit volume related to market conditions.",
+   "src_event_id": "ho_segrp_414"
+  },
+  {
+   "event_id": "ho::seg_sib::331",
+   "ticker": "WGO",
+   "date": "2026-03-25",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "WGO_MotorhomeRVSegment",
+   "evidence": "Our motorhome RV segment reflected a net revenue increase of 29% with volume momentum across our Newmar, Winnebago, and Grand Design motorized brands. Net revenues are running 21% ahead of fiscal 2025 through the first half of the year.",
+   "src_event_id": "ho_segrp_415"
+  },
+  {
+   "event_id": "ho::seg_sib::332",
+   "ticker": "WGO",
+   "date": "2025-12-19",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "WGO_MotorhomeRVSegment",
+   "evidence": "Turning to our motorhome segment performance on slide 11, first quarter net revenues grew 13.5% year-over-year. This was driven primarily by favorable product mix and selective price increases, partially offset by lower unit volume.",
+   "src_event_id": "ho_segrp_417"
+  },
+  {
+   "event_id": "ho::seg_sib::333",
+   "ticker": "WGO",
+   "date": "2025-12-19",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "WGO_TowableRVSegment",
+   "evidence": "Our Towable RV segment also posted solid top-line growth and higher operating income margins, supported by a refreshed dual brand lineup that continues to resonate with consumers seeking high quality and thoughtful design.",
+   "src_event_id": "ho_segrp_421"
+  },
+  {
+   "event_id": "ho::seg_sib::334",
+   "ticker": "WGO",
+   "date": "2025-10-22",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "WGO_TowableRVSegment",
+   "evidence": "Towable RV Three Months Ended ($, in millions) August 30, 2025 August 31, 2024 Change Net revenues $ 306.3 $ 317.0 (3.4) % Operating income $ 21.4 $ 15.5 38.3 % Operating income margin 7.0 % 4.9 % 210 bps",
+   "src_event_id": "ho_segrp_422"
+  },
+  {
+   "event_id": "ho::seg_sib::335",
+   "ticker": "WGO",
+   "date": "2025-06-25",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "WGO_TowableRVSegment",
+   "evidence": "Net revenues for the Towable RV segment decreased from the prior year, primarily due to a shift in product mix toward lower price-point models, partially offset by higher unit volume.",
+   "src_event_id": "ho_segrp_423"
+  },
+  {
+   "event_id": "ho::seg_sib::336",
+   "ticker": "WGO",
+   "date": "2025-03-27",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "WGO_TowableRVSegment",
+   "evidence": "Net revenues for the Towable RV segment modestly increased primarily due to unit volume, partially offset by a shift in product mix toward lower price-point models.",
+   "src_event_id": "ho_segrp_424"
+  },
+  {
+   "event_id": "ho::seg_sib::337",
+   "ticker": "WGO",
+   "date": "2024-12-20",
+   "source_type": "8k",
+   "axis": "seg_sib",
+   "canonical_bucket": "WGO_TowableRVSegment",
+   "evidence": "Revenues for the Towable RV segment were down compared to the prior year, primarily driven by lower unit volume and a shift in product mix toward lower price-point models.",
+   "src_event_id": "ho_segrp_425"
+  },
+  {
+   "event_id": "ho::seg_sib::338",
+   "ticker": "WGO",
+   "date": "2026-03-25",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "WGO_TowableRVSegment",
+   "evidence": "Turning to our segment results, beginning with towable RV on slide 12, net revenues declined by 9%, primarily attributable to a shift in product mix toward lower price point models and lower unit volume, partially offset by selective price adjustments.",
+   "src_event_id": "ho_segrp_426"
+  },
+  {
+   "event_id": "ho::seg_sib::339",
+   "ticker": "WGO",
+   "date": "2025-12-19",
+   "source_type": "transcript",
+   "axis": "seg_sib",
+   "canonical_bucket": "WGO_TowableRVSegment",
+   "evidence": "Turning to our segment results, beginning with towable RV on slide 10, net revenues grew 15.5%. This increase was driven by higher volume from products like the Grand Design Imagine, Grand Design Reflection, Winnebago's New Thrive, and Winnebago Access, all of which are resonating strongly with our dealer partners, along with selective price increases partially offset by a mixed shift toward lower price point products.",
+   "src_event_id": "ho_segrp_428"
+  },
+  {
+   "event_id": "ho::reject::340",
+   "ticker": "PINS",
+   "date": "2023-02-02",
+   "source_type": "news",
+   "axis": "reject",
+   "canonical_bucket": "cross_entity_sympathy",
+   "evidence": "shares moving in sympathy with Meta Platforms Inc., which reported strong Q4 results"
+  },
+  {
+   "event_id": "ho::reject::341",
+   "ticker": "SNAP",
+   "date": "2023-02-02",
+   "source_type": "news",
+   "axis": "reject",
+   "canonical_bucket": "cross_entity_sympathy",
+   "evidence": "shares moving in possible sympathy with Meta Platforms, which reported strong Q4 results"
+  },
+  {
+   "event_id": "ho::reject::342",
+   "ticker": "LRCX",
+   "date": "2024-01-18",
+   "source_type": "news",
+   "axis": "reject",
+   "canonical_bucket": "cross_entity_sympathy",
+   "evidence": "semiconductor/chip stocks moving in sympathy with Taiwan Semiconductor"
+  },
+  {
+   "event_id": "ho::reject::343",
+   "ticker": "QCOM",
+   "date": "2023-07-31",
+   "source_type": "news",
+   "axis": "reject",
+   "canonical_bucket": "cross_entity_sympathy",
+   "evidence": "potentially in sympathy with ON Semiconductor after it reported strong earnings"
+  },
+  {
+   "event_id": "ho::reject::344",
+   "ticker": "LYFT",
+   "date": "2023-05-02",
+   "source_type": "news",
+   "axis": "reject",
+   "canonical_bucket": "cross_entity_sympathy",
+   "evidence": "in sympathy with Uber Technologies, which reported strong Q1 results"
+  },
+  {
+   "event_id": "ho::reject::345",
+   "ticker": "DASH",
+   "date": "2023-05-02",
+   "source_type": "news",
+   "axis": "reject",
+   "canonical_bucket": "cross_entity_sympathy",
+   "evidence": "in sympathy with Uber Technologies, which reported strong Q1 results"
+  },
+  {
+   "event_id": "ho::reject::346",
+   "ticker": "SKX",
+   "date": "2023-08-23",
+   "source_type": "news",
+   "axis": "reject",
+   "canonical_bucket": "cross_entity_sympathy",
+   "evidence": "in sympathy with Foot Locker, which reported a Q2 revenue miss"
+  },
+  {
+   "event_id": "ho::reject::347",
+   "ticker": "CROX",
+   "date": "2023-12-22",
+   "source_type": "news",
+   "axis": "reject",
+   "canonical_bucket": "cross_entity_sympathy",
+   "evidence": "footwear/apparel stocks lower in sympathy with Nike, which fell on mixed Q2 results"
+  },
+  {
+   "event_id": "ho::reject::348",
+   "ticker": "MRNA",
+   "date": "2024-03-20",
+   "source_type": "news",
+   "axis": "reject",
+   "canonical_bucket": "cross_entity_sympathy",
+   "evidence": "in possible sympathy with BioNTech, which reported worse-than-expected Q4 earnings"
+  },
+  {
+   "event_id": "ho::reject::349",
+   "ticker": "W",
+   "date": "2024-09-13",
+   "source_type": "news",
+   "axis": "reject",
+   "canonical_bucket": "cross_entity_sympathy",
+   "evidence": "furniture/home goods stocks up possibly in sympathy with RH's Q2 results"
+  },
+  {
+   "event_id": "ho::reject::350",
+   "ticker": "AMAT",
+   "date": "2024-10-15",
+   "source_type": "news",
+   "axis": "reject",
+   "canonical_bucket": "cross_entity_sympathy",
+   "evidence": "chip stocks lower in sympathy with ASML, which fell after issuing soft guidance"
+  },
+  {
+   "event_id": "ho::reject::351",
+   "ticker": "RBLX",
+   "date": "2023-07-11",
+   "source_type": "news",
+   "axis": "reject",
+   "canonical_bucket": "cross_entity_sympathy",
+   "evidence": "video-game stocks higher in sympathy with Activision Blizzard after FTC injunction denial"
+  },
+  {
+   "event_id": "ho::reject::352",
+   "ticker": "CVNA",
+   "date": "2025-12-03",
+   "source_type": "news",
+   "axis": "reject",
+   "canonical_bucket": "generic_macro",
+   "evidence": "investors piled into small caps on conviction the Fed will cut rates next week"
+  },
+  {
+   "event_id": "ho::reject::353",
+   "ticker": "PLTR",
+   "date": "2023-12-04",
+   "source_type": "news",
+   "axis": "reject",
+   "canonical_bucket": "generic_macro",
+   "evidence": "lower amid a broader sell-off in the tech sector; no company news"
+  },
+  {
+   "event_id": "ho::reject::354",
+   "ticker": "AFRM",
+   "date": "2025-03-19",
+   "source_type": "news",
+   "axis": "reject",
+   "canonical_bucket": "generic_macro",
+   "evidence": "tech stocks rising alongside the broader market after the Fed held rates steady"
+  },
+  {
+   "event_id": "ho::reject::355",
+   "ticker": "SHOP",
+   "date": "2023-08-02",
+   "source_type": "news",
+   "axis": "reject",
+   "canonical_bucket": "generic_macro",
+   "evidence": "lower amid overall market weakness after the Fitch sovereign downgrade"
+  },
+  {
+   "event_id": "ho::reject::356",
+   "ticker": "AI",
+   "date": "2023-08-24",
+   "source_type": "news",
+   "axis": "reject",
+   "canonical_bucket": "generic_macro",
+   "evidence": "down amid broader tech sector weakness; no company-specific driver"
+  },
+  {
+   "event_id": "ho::reject::357",
+   "ticker": "RKLB",
+   "date": "2025-09-24",
+   "source_type": "news",
+   "axis": "reject",
+   "canonical_bucket": "generic_macro",
+   "evidence": "caught in a broader market downturn as major indices see red"
+  },
+  {
+   "event_id": "ho::reject::358",
+   "ticker": "BE",
+   "date": "2025-11-05",
+   "source_type": "news",
+   "axis": "reject",
+   "canonical_bucket": "generic_macro",
+   "evidence": "benefiting from a broader market rebound that lifted the Nasdaq-100"
+  },
+  {
+   "event_id": "ho::reject::359",
+   "ticker": "EFX",
+   "date": "2023-04-20",
+   "source_type": "news",
+   "axis": "reject",
+   "canonical_bucket": "boilerplate",
+   "evidence": "says confident in its long-term growth framework (boilerplate, no figure)"
+  },
+  {
+   "event_id": "ho::reject::360",
+   "ticker": "MSM",
+   "date": "2023-06-29",
+   "source_type": "news",
+   "axis": "reject",
+   "canonical_bucket": "boilerplate",
+   "evidence": "says remain confident in future profitable growth (no number)"
+  },
+  {
+   "event_id": "ho::reject::361",
+   "ticker": "HRMY",
+   "date": "2023-02-21",
+   "source_type": "news",
+   "axis": "reject",
+   "canonical_bucket": "boilerplate",
+   "evidence": "says remain confident in the ongoing performance of WAKIX (no number)"
+  },
+  {
+   "event_id": "ho::reject::362",
+   "ticker": "CMC",
+   "date": "2023-03-23",
+   "source_type": "news",
+   "axis": "reject",
+   "canonical_bucket": "boilerplate",
+   "evidence": "says remain confident in its outlook for FY23 (no specific number)"
+  },
+  {
+   "event_id": "ho::reject::363",
+   "ticker": "AZO",
+   "date": "2025-05-27",
+   "source_type": "news",
+   "axis": "reject",
+   "canonical_bucket": "boilerplate",
+   "evidence": "CEO 'excited about momentum' heading into summer (no quantified driver)"
+  },
+  {
+   "event_id": "ho::reject::364",
+   "ticker": "WGO",
+   "date": "2025-10-22",
+   "source_type": "news",
+   "axis": "reject",
+   "canonical_bucket": "boilerplate",
+   "evidence": "CEO confident in 2026 growth despite tough RV market (no number)"
+  },
+  {
+   "event_id": "ho::reject::365",
+   "ticker": "ODFL",
+   "date": "2025-07-30",
+   "source_type": "news",
+   "axis": "reject",
+   "canonical_bucket": "boilerplate",
+   "evidence": "CEO remains confident in long-term growth despite downturn"
+  },
+  {
+   "event_id": "ho::reject::366",
+   "ticker": "BA",
+   "date": "2024-04-17",
+   "source_type": "news",
+   "axis": "reject",
+   "canonical_bucket": "boilerplate",
+   "evidence": "says fully confident in safety of 787/777 (bare assurance, no driver)"
+  },
+  {
+   "event_id": "ho::reject::367",
+   "ticker": "PAYX",
+   "date": "2025-09-30",
+   "source_type": "news",
+   "axis": "reject",
+   "canonical_bucket": "boilerplate",
+   "evidence": "CEO confident in future growth (soft sentiment)"
+  },
+  {
+   "event_id": "ho::reject::368",
+   "ticker": "NSC",
+   "date": "2024-03-04",
+   "source_type": "news",
+   "axis": "reject",
+   "canonical_bucket": "boilerplate",
+   "evidence": "remains committed to enhancing safety / aligning management (boilerplate PR)"
+  },
+  {
+   "event_id": "ho::reject::369",
+   "ticker": "CWH",
+   "date": "2023-05-24",
+   "source_type": "news",
+   "axis": "reject",
+   "canonical_bucket": "vague_capital",
+   "evidence": "initiating review of capital allocation strategy (no $ figure, no authorization)"
+  },
+  {
+   "event_id": "ho::reject::370",
+   "ticker": "PLTK",
+   "date": "2024-09-18",
+   "source_type": "news",
+   "axis": "reject",
+   "canonical_bucket": "vague_capital",
+   "evidence": "remains committed to its quarterly dividend and capital return program (no $ figure)"
+  },
+  {
+   "event_id": "ho::reject::371",
+   "ticker": "SBUX",
+   "date": "2024-08-12",
+   "source_type": "news",
+   "axis": "reject",
+   "canonical_bucket": "vague_capital",
+   "evidence": "considering review of capital allocation and operations (no $ figure)"
+  },
+  {
+   "event_id": "ho::reject::372",
+   "ticker": "TXN",
+   "date": "2024-07-23",
+   "source_type": "news",
+   "axis": "reject",
+   "canonical_bucket": "vague_capital",
+   "evidence": "Elliott commends capital allocation initiatives (no $ figure or new authorization)"
+  },
+  {
+   "event_id": "ho::reject::373",
+   "ticker": "MDT",
+   "date": "2025-08-19",
+   "source_type": "news",
+   "axis": "reject",
+   "canonical_bucket": "vague_capital",
+   "evidence": "board forms committee to sharpen focus on capital allocation (no specific action)"
+  },
+  {
+   "event_id": "ho::reject::374",
+   "ticker": "ADSK",
+   "date": "2024-08-06",
+   "source_type": "news",
+   "axis": "reject",
+   "canonical_bucket": "vague_capital",
+   "evidence": "Starboard notes steps board should take to improve capital allocation (recommendation only)"
+  }
+ ],
+ "_dropped_thin_buckets": [
+  "object_sib/metal_price (n=3)"
+ ]
+}

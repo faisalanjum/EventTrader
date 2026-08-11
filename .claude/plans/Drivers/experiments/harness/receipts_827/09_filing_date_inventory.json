@@ -1,0 +1,37 @@
+{
+ "by_element": {
+  "endDate": 369922,
+  "instant": 362832,
+  "startDate": 369922
+ },
+ "by_kind": {
+  "date-only": 1102676
+ },
+ "by_kind_and_timezone": {
+  "date-only | tz=absent": 1102676
+ },
+ "cache_root": "scripts/driver_seed/relocate_probe/inline_html_cache",
+ "files_refused_unreadable": 1,
+ "input_manifest_sha256": "6f26e617af1db73a0ba45dd7a352dbfd76466cfc83cdbb11fd153e39019f61fd",
+ "inputs_are_exactly_the_manifest": true,
+ "n_files": 1769,
+ "non_conforming_values": {},
+ "period_children_resolved_by": {
+  "local_names": [
+   "startDate",
+   "endDate",
+   "instant"
+  ],
+  "namespace": "http://www.xbrl.org/2003/instance",
+  "parser": "lxml.etree, resolve_entities=False, no_network=True, recover=False \u2014 deliberately NOT the production reader, so this census cannot prove that reader agrees with itself",
+  "standard": "XBRL 2.1 REC-2003-12-31 + corrected errata 2013-02-20, section 4.7.2"
+ },
+ "receipt": "#827 filing date/dateTime/timezone inventory",
+ "refused_unreadable": {
+  "0001579241-25-000008.htm": "not_wellformed_xml: Specification mandates value for attribute s, line 22, column 1 (<string>, line 22)"
+ },
+ "script_sha256": "75de72e29132d86454d22d6d7e3ed545b8b2ebd057d8532b3692b0abc98067ac",
+ "timestamp_utc": "2026-08-01T20:23:10.338441Z",
+ "total_period_values": 1102676,
+ "values_with_surrounding_whitespace": {}
+}
