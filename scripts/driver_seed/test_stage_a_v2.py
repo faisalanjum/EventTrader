@@ -14,13 +14,15 @@ import pytest
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent.parent
+FISCAL = ROOT / "driver" / "channels" / "fiscal_ai"
+sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(ROOT / "driver" / "relocation"))
 
-import build_packets as BP
-import public_contract as PC
-import run_code_tier as RC
-import route_a_source as SRC
+from driver.channels.fiscal_ai import build_packets as BP
+from driver.channels.fiscal_ai import public_contract as PC
+from driver.channels.fiscal_ai import run_code_tier as RC
+from driver.channels.fiscal_ai import route_a_source as SRC
 import locator as LOC
 import wp3_compliant_packet as WP3
 
@@ -461,8 +463,8 @@ def test_red_complete_tracked_v1_packet_population_is_classified():
 
 
 def test_red_fiscal_staging_has_no_core_door_or_writer_import():
-    for path in (HERE / "build_packets.py", HERE / "run_code_tier.py",
-                 HERE / "public_contract.py"):
+    for path in (FISCAL / "build_packets.py", FISCAL / "run_code_tier.py",
+                 FISCAL / "public_contract.py"):
         tree = ast.parse(path.read_text(encoding="utf-8"), str(path))
         modules = []
         names = []

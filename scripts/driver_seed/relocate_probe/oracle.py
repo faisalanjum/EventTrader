@@ -13,7 +13,8 @@ import os, re, sys, json, collections
 from datetime import date
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 import link_lib as L
-import run_code_tier as RC
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..')))
+from driver.channels.fiscal_ai import run_code_tier as RC
 
 DUR = {'annual': (350, 380), 'quarter': (84, 100),      # 52/53-week aware
        'ytd': (150, 285)}                                # year-to-date (6mo/9mo) — the Q-vs-YTD distractor

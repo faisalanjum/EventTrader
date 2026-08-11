@@ -6,10 +6,12 @@ import os
 import sys
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
+_ROOT = os.path.abspath(os.path.join(_HERE, '..', '..'))
+sys.path.insert(0, _ROOT)
 sys.path.insert(0, _HERE)
 sys.path.insert(0, os.path.join(_HERE, '..', '..', 'driver', 'relocation'))
 import locator as LOC
-import route_a_source as SRC
+from driver.channels.fiscal_ai import route_a_source as SRC
 
 
 def test_adapter_builds_real_ce_source_and_locate_binds():
@@ -64,7 +66,7 @@ def test_metadata_fail_closed_on_duplicates_or_missing():
 
 
 def _mk_packets(acc, ticker, anchor_overrides, concept):
-    import build_packets as BP
+    from driver.channels.fiscal_ai import build_packets as BP
     s = SRC.build_source(acc)
     anchor = {"source_id": "P", "company": "C", "driver": "d", "slice": "",
               "measurement": "", "series_unit": "m_usd", "time_type": "duration",
@@ -82,7 +84,7 @@ def _mk_packets(acc, ticker, anchor_overrides, concept):
 
 
 def test_production_jsonl_write_read_exact_decimals(tmp_path):
-    import build_packets  # noqa: F401  (the layer under test)
+    from driver.channels.fiscal_ai import build_packets  # noqa: F401  (the layer under test)
     sys.path.insert(0, _HERE)
     ce = _mk_packets('0001306830-24-000155', 'CE',
                      {'wording': ('North America',),
@@ -95,7 +97,7 @@ def test_production_jsonl_write_read_exact_decimals(tmp_path):
     assert packets and all(p['items'] for p in packets)
     path = str(tmp_path / 'packets.jsonl')
     import json
-    import build_packets as BP
+    from driver.channels.fiscal_ai import build_packets as BP
     BP.write_jsonl(packets, path)                     # THE one shared writer
     back = [json.loads(l) for l in open(path, encoding='utf-8')]
     flat = {(p['ticker'], str(i['value'])): i

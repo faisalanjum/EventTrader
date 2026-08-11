@@ -14,8 +14,9 @@ Re-run 2026-07-19: dimensioned facts=47,152 — 0 repeated-axis / 0 padded / 0 m
 """
 import sys, os, json
 HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, os.path.join(HERE, '..', '..', '..', 'scripts', 'driver_seed'))
-import run_code_tier as RC
+ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
+sys.path.insert(0, ROOT)
+from driver.channels.fiscal_ai import run_code_tier as RC
 
 TICKERS = ['A', 'AA', 'AAL', 'AAPL', 'ABT', 'ACI', 'ACN', 'ADM', 'AEE', 'AFL', 'CAG']
 

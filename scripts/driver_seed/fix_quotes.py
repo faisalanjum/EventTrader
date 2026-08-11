@@ -10,9 +10,12 @@ themselves are left untouched (cheap). Re-validates the value is still literally
 rewrites data/driver_catalog_seed/part<N>/seed_records.jsonl in place (+ a .bak).
 """
 import json, os, argparse, collections, sys, shutil
-sys.path.insert(0, os.path.dirname(__file__))
+_HERE = os.path.dirname(os.path.abspath(__file__))
+_ROOT = os.path.abspath(os.path.join(_HERE, '..', '..'))
+sys.path.insert(0, _ROOT)
+sys.path.insert(0, _HERE)
 import link_lib as L
-import run_code_tier as RC
+from driver.channels.fiscal_ai import run_code_tier as RC
 
 OUT = 'data/driver_catalog_seed'
 TEXT_SOURCES = {'section', 'exhibit_ex99', 'financial_statement_table', 'section_mdna'}

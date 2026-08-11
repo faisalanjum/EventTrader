@@ -17,13 +17,12 @@ import sys
 from dotenv import dotenv_values
 from neo4j import GraphDatabase
 
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                'relocate_probe'))
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                '..', '..', 'driver', 'relocation'))
+_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
+sys.path.insert(0, os.path.join(_ROOT, 'scripts', 'driver_seed', 'relocate_probe'))
+sys.path.insert(0, os.path.join(_ROOT, 'driver', 'relocation'))
 import inline_html as IH
 
-_CACHE = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+_CACHE = os.path.join(_ROOT, 'scripts', 'driver_seed',
                       'relocate_probe', 'inline_html_cache')
 
 _Q = """
@@ -50,8 +49,7 @@ RETURN f.qname AS qname, f.fact_id AS fact_id, f.context_id AS context_id,
 
 
 def _driver():
-    cfg = dotenv_values(os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                     '..', '..', '.env'))
+    cfg = dotenv_values(os.path.join(_ROOT, '.env'))
     return GraphDatabase.driver(cfg['NEO4J_URI'],
                                 auth=(cfg['NEO4J_USERNAME'], cfg['NEO4J_PASSWORD']))
 

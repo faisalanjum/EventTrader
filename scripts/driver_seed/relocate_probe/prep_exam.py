@@ -8,7 +8,9 @@ set), canonical headline metrics, strict locks, hybrid addresses, oracle truth. 
 import os, sys, json, glob, argparse
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 sys.path.insert(0, os.path.dirname(__file__))
-import prep, oracle as O, link_lib as L, run_code_tier as RC
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..')))
+import prep, oracle as O, link_lib as L
+from driver.channels.fiscal_ai import run_code_tier as RC
 from prep_oracle import kind_word, CANON
 from prep_transcript import fetch_transcript
 

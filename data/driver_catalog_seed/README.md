@@ -93,7 +93,7 @@ numbers. fiscal.ai stays useful only to (a) curate which metrics matter and (b) 
 | 1 | `/home/faisal/.claude/projects/-home-faisal-EventMarketDB/memory/project_fiscal_ai_kpi_quote_linking.md` | Full state, every decision, every bug found & fixed |
 | 2 | `scripts/driver_seed/link_lib.py` | **The heart** — tiers + gates. Has a runnable self-check (`venv/bin/python scripts/driver_seed/link_lib.py`) |
 | 3 | `scripts/driver_seed/build_worklist.py` | Builds the work-list: fiscal.ai values ∩ Neo4j filings |
-| 4 | `scripts/driver_seed/run_code_tier.py`, `prep_llm_batches.py`, `merge_part.py` | The pipeline: code tier → batch residual → merge+gate |
+| 4 | `driver/channels/fiscal_ai/run_code_tier.py`, `prep_llm_batches.py`, `merge_part.py` | The pipeline: code tier → batch residual → merge+gate |
 | 5 | `scripts/driver_seed/batched_llm_bind.js` (old), `snippet_bind.js` (new) | The two LLM-tier variants (see decision below) |
 | 6 | `part1/seed_records.csv` | **The actual output** — open in a spreadsheet |
 
@@ -185,7 +185,7 @@ every chunk** so a limit hit never loses work.
 
 ```bash
 venv/bin/python scripts/driver_seed/build_worklist.py            # once, all parts
-venv/bin/python scripts/driver_seed/run_code_tier.py   --part N  # code tiers -> partN/
+venv/bin/python driver/channels/fiscal_ai/run_code_tier.py --part N  # code tiers -> partN/
 venv/bin/python scripts/driver_seed/prep_llm_batches.py --part N # group residual per company-period
 # then run snippet_bind.js (or batched_llm_bind.js) via the Workflow tool on partN/llm_batches.json,
 # in chunks: {path, idx:[...]}  or  {path, lo, hi}

@@ -8,12 +8,13 @@ Reads a harvest tag's code_resolved.jsonl + abstain.jsonl (from run_code_tier.py
 Emits ONLY raw FETCH signals -- NO decomposition (name/slice/measurement/unit/fiscal-quarter are
 shared-core, added downstream). `build()` is pure (no Neo4j) so it is unit-tested directly.
 
-    venv/bin/python scripts/driver_seed/build_packets.py --tag smoke
+    venv/bin/python driver/channels/fiscal_ai/build_packets.py --tag smoke
 """
 import os, sys, json, argparse, collections, copy
-sys.path.insert(0, os.path.dirname(__file__))
-import run_code_tier as RC          # shared FORMMAP + load_env_neo4j (channel-side, moves together at reorg)
-import public_contract as PC        # shared mechanical dimension conversion; V2 never calls to_public()
+_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
+sys.path.insert(0, _ROOT)
+from driver.channels.fiscal_ai import run_code_tier as RC
+from driver.channels.fiscal_ai import public_contract as PC
 
 OUT = 'data/driver_catalog_seed'
 # frozen FETCH raw-item fields carried into each packet item (Part D FETCH list). Decomposition

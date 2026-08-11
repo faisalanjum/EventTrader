@@ -4,8 +4,9 @@
     venv/bin/python scripts/driver_seed/test_build_packets.py
 """
 import os, sys
-sys.path.insert(0, os.path.dirname(__file__))
-import build_packets as BP
+_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+sys.path.insert(0, _ROOT)
+from driver.channels.fiscal_ai import build_packets as BP
 
 
 def rec(sid, stype, tk, label, val, **extra):

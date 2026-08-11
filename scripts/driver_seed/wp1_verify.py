@@ -21,8 +21,10 @@ passed — stamps hashes/commit/pins, writes the input-slice file, and regenerat
 """
 import os, sys, json, hashlib, collections, argparse, subprocess
 HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, HERE); sys.path.insert(0, os.path.join(HERE, 'relocate_probe'))
-import run_code_tier as RC, link_lib as L
+ROOT = os.path.abspath(os.path.join(HERE, '..', '..'))
+sys.path.insert(0, ROOT); sys.path.insert(0, HERE); sys.path.insert(0, os.path.join(HERE, 'relocate_probe'))
+from driver.channels.fiscal_ai import run_code_tier as RC
+import link_lib as L
 
 D = 'data/driver_catalog_seed/wp1'
 MAN = 'data/driver_catalog_seed/wp1_manifest.json'

@@ -23,6 +23,8 @@ import sys
 import pytest
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
+sys.path.insert(0, ROOT)
 sys.path.insert(0, os.path.dirname(HERE))
 sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.join(HERE, '..', '..', '..', 'driver', 'relocation'))
@@ -65,7 +67,7 @@ def _selection():
 
 def _graph():
     """Connect or skip ONLY on genuine unavailability — setup/auth/config errors FAIL."""
-    import run_code_tier as RC
+    from driver.channels.fiscal_ai import run_code_tier as RC
     RC.load_env_neo4j()                      # missing env vars raise -> FAIL (never skip)
     from neo4j import GraphDatabase
     from neo4j.exceptions import ServiceUnavailable

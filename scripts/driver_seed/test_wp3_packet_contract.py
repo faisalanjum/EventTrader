@@ -16,6 +16,10 @@ A compliant packet file must satisfy, for EVERY item:
 """
 import json
 import os
+import sys
+
+_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+sys.path.insert(0, _ROOT)
 
 _DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..',
                      'data', 'driver_catalog_seed')
@@ -144,7 +148,7 @@ def test_cadence_item_by_item_fixed_truth():
 
 
 def test_amendment_and_unknown_form_law():
-    import route_a_source as SRC                     # the law lives in the SHARED adapter
+    from driver.channels.fiscal_ai import route_a_source as SRC
     import pytest as _pt
     assert SRC.normalize_form('10-Q/A') == '10q'
     assert SRC.normalize_form('10-K/A') == '10k'
@@ -160,7 +164,7 @@ def test_amendment_and_unknown_form_law():
 def test_build_source_integration_no_bypass():
     """Through build_source() itself (his attack surface): the override is
     normalized; unknown/missing forms return None, never crash, never default."""
-    import route_a_source as SRC
+    from driver.channels.fiscal_ai import route_a_source as SRC
     CE = '0001306830-24-000155'
     s = SRC.build_source(CE, source_type='10-Q/A')
     assert s and s['source_type'] == '10q'           # override normalized
@@ -174,7 +178,7 @@ def test_unknown_form_never_touches_the_fetcher():
     """His ordering attack, pinned: an unknown/missing form returns None BEFORE
     any cache/fetch access — the fetcher is called ZERO times. A positive control
     proves the counter wiring would catch a violation."""
-    import route_a_source as SRC
+    from driver.channels.fiscal_ai import route_a_source as SRC
     import lock_cell
     calls = []
     real = lock_cell.fetch_inline_html
@@ -254,7 +258,7 @@ def test_public_adapter_direct_attacks():
     without crashing; the mapping is pure (no input mutation) and repeatable."""
     import copy
     import pytest as _pt
-    from public_contract import to_public
+    from driver.channels.fiscal_ai.public_contract import to_public
     bad = [{'items': [{'raw_label': 'x', 'value': '1', 'driver_name': 'evil'}]}]
     with _pt.raises(ValueError):
         to_public(bad)                               # forbidden -> fail closed
@@ -274,7 +278,7 @@ def test_public_adapter_five_bad_accepts():
     """His five reproduced bad accepts, pinned RED-first: the adapter must
     VALIDATE, not just rename."""
     import pytest as _pt
-    from public_contract import to_public
+    from driver.channels.fiscal_ai.public_contract import to_public
     def one(item):
         return [{'items': [item]}]
     with _pt.raises(ValueError):
@@ -299,7 +303,7 @@ def test_public_adapter_type_and_exclusivity_attacks():
     member; both label representations together; both dimension representations
     together; plus the strict allowlist (unknown fields fail closed)."""
     import pytest as _pt
-    from public_contract import to_public
+    from driver.channels.fiscal_ai.public_contract import to_public
     def one(item):
         return [{'items': [item]}]
     with _pt.raises(ValueError):

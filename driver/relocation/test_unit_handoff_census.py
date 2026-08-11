@@ -81,7 +81,7 @@ def _fixture_source(monkeypatch):
     with open(os.path.join(FIX_DIR, ACC + ".htm"), "rb") as fh:
         data = fh.read()
     assert hashlib.sha256(data).hexdigest() == SHA_OLD, "fixture drifted"
-    import route_a_source
+    from driver.channels.fiscal_ai import route_a_source
     monkeypatch.setattr(route_a_source, "_CACHE", FIX_DIR)
     return route_a_source.build_source(ACC)
 
@@ -89,8 +89,6 @@ def _fixture_source(monkeypatch):
 @pytest.mark.live
 def test_ce_census_exact_rows_graph_to_builder(monkeypatch):
     _require_neo4j_env()
-    sys.path.insert(0, str(Path(__file__).resolve()
-                           .parents[2] / "scripts" / "driver_seed"))
     try:
         # INDEPENDENT unit-link invariant first: both comparison queries
         # require HAS_UNIT, so a unitless numeric fact could vanish from BOTH
@@ -139,8 +137,6 @@ def test_full_source_end_to_end_recovers_the_388m_fact(tmp_path, monkeypatch):
     # included) through locate with the Core-rebuilt two-part anchor
     from test_multipart_anchor_ce import _core_anchor
     _require_neo4j_env()
-    sys.path.insert(0, str(Path(__file__).resolve()
-                           .parents[2] / "scripts" / "driver_seed"))
     anchor = _core_anchor(tmp_path)            # Core-side: no graph dependency
     try:
         src = _fixture_source(monkeypatch)     # graph query inside build_source

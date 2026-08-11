@@ -1106,7 +1106,7 @@ def locate(anchor, source, hints=None):
             # identity, and nothing may authorise a match on it.
             #
             # Censused before removal: the real producer
-            # `scripts/driver_seed/route_a_source.py` returns the exact
+            # `driver/channels/fiscal_ai/route_a_source.py` returns the exact
             # `context_id` and never a `segment` (0 occurrences in the file),
             # and no other non-test caller of this lane supplies one. It was a
             # test-only law. The `context_id` path below is strictly stronger —

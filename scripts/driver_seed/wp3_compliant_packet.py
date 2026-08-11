@@ -13,12 +13,14 @@ import os
 import sys
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
+_ROOT = os.path.abspath(os.path.join(_HERE, '..', '..'))
+sys.path.insert(0, _ROOT)
 sys.path.insert(0, _HERE)
 sys.path.insert(0, os.path.join(_HERE, '..', '..', 'driver', 'relocation'))
 
-import build_packets as BP
-from public_contract import to_public
-import route_a_source as SRC
+from driver.channels.fiscal_ai import build_packets as BP
+from driver.channels.fiscal_ai.public_contract import to_public
+from driver.channels.fiscal_ai import route_a_source as SRC
 import locator as LOC
 
 # FIXED source-verified fixture values (accepted Phase-4 ledger forms; NO runtime

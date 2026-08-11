@@ -5,8 +5,12 @@
 """
 import os, sys, json
 import pytest
-sys.path.insert(0, os.path.dirname(__file__))
-import run_code_tier as RC, link_lib as L
+_HERE = os.path.dirname(os.path.abspath(__file__))
+_ROOT = os.path.abspath(os.path.join(_HERE, '..', '..'))
+sys.path.insert(0, _ROOT)
+sys.path.insert(0, _HERE)
+from driver.channels.fiscal_ai import run_code_tier as RC
+import link_lib as L
 
 
 def _assert_source_parts(source):

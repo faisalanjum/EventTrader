@@ -370,7 +370,7 @@ def test_real_ce_filing_end_to_end():
     html = open(os.path.abspath(p), encoding='utf-8', errors='replace').read()
     # THE PRODUCER'S OWN SHAPE. This used to inject a hand-written `segment`
     # list of raw prefixed qnames and omit the context id. The real producer
-    # (`scripts/driver_seed/route_a_source.py`) returns the exact `context_id`
+    # (`driver/channels/fiscal_ai/route_a_source.py`) returns the exact `context_id`
     # and never a segment — a bare `srt:`/`ce:` prefix is this filing's private
     # alias and states no identity, so nothing may authorise a match on it.
     #
@@ -515,8 +515,7 @@ def test_different_context_pointers_cannot_share_one_element():
 
 @pytest.mark.live
 def test_real_e2e_shares_count_anchor():
-    sys.path.insert(0, os.path.join(_HERE, '..', '..', 'scripts', 'driver_seed'))
-    import route_a_source as SRC
+    from driver.channels.fiscal_ai import route_a_source as SRC
     s = SRC.build_source('0000027904-23-000006')
     assert s is not None
     anchor = dict(ANCHOR, series_unit='count', time_type='instant',
@@ -534,8 +533,7 @@ def test_real_e2e_shares_count_anchor():
 
 @pytest.mark.live
 def test_real_e2e_per_share_usd_anchor():
-    sys.path.insert(0, os.path.join(_HERE, '..', '..', 'scripts', 'driver_seed'))
-    import route_a_source as SRC
+    from driver.channels.fiscal_ai import route_a_source as SRC
     s = SRC.build_source('0000027904-23-000006')
     anchor = dict(ANCHOR, series_unit='usd',
                   wording=('per share',),
@@ -563,8 +561,7 @@ def test_entity_mismatch_abstains():
 
 
 def test_packet_boundary_channelcontract_only():
-    sys.path.insert(0, os.path.join(_HERE, '..', '..', 'scripts', 'driver_seed'))
-    import build_packets as BP
+    from driver.channels.fiscal_ai import build_packets as BP
     r = LOC.locate(ANCHOR, src([fact()], doc(ROW_390)))
     it = dict(r['items'][0])
     it.update({'source_id': 'S1', 'source_type': '10q', 'ticker': 'WID',
@@ -681,9 +678,8 @@ def test_company_identity_missing_or_mismatched_abstains():
 
 @pytest.mark.live
 def test_ce_scale_survives_real_packet_layer():
-    sys.path.insert(0, os.path.join(_HERE, '..', '..', 'scripts', 'driver_seed'))
-    import build_packets as BP
-    import route_a_source as SRC
+    from driver.channels.fiscal_ai import build_packets as BP
+    from driver.channels.fiscal_ai import route_a_source as SRC
     s = SRC.build_source('0001306830-24-000155')
     anchor = dict(ANCHOR, wording=('North America',), slice='segment:acetyl_chain',
                   concept_clue='RevenueFromContractWithCustomerExcludingAssessedTax')

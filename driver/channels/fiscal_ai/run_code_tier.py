@@ -13,21 +13,23 @@ residual.jsonl (candidates tagged with their source, handed to the LLM locator).
 abstain.jsonl. Records carry raw signals ONLY (cadence, period_end, xbrl context); NO decomposition
 (name/slice/measurement/unit/fiscal-quarter are shared-core, added downstream by the adapter+decomposer).
 
-    venv/bin/python scripts/driver_seed/run_code_tier.py --part 1 --nparts 4
-    venv/bin/python scripts/driver_seed/run_code_tier.py --tickers AAP,AGL --tag smoke   # small free run
+    venv/bin/python driver/channels/fiscal_ai/run_code_tier.py --part 1 --nparts 4
+    venv/bin/python driver/channels/fiscal_ai/run_code_tier.py --tickers AAP,AGL --tag smoke   # small free run
 
 Reads data/driver_catalog_seed/worklist.jsonl; writes data/driver_catalog_seed/<tag>/.
 """
 import os, re, json, argparse, collections, sys, hashlib
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'earnings'))
+_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
+sys.path.insert(0, _ROOT)
+sys.path.insert(0, os.path.join(_ROOT, 'scripts', 'earnings'))
 import quarter_identity as QI          # LIVE lane + trust gate (AUTO_OK); labels NOT used here (round-15)
 from get_quarterly_filings import match_8k_to_periodic   # HISTORICAL lane: THE shared structured
                                                           # matcher (owner rule: historical pairing =
                                                           # get_quarterly_filings; live = quarter_identity)
-sys.path.insert(0, os.path.dirname(__file__))
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'driver', 'relocation'))
+sys.path.insert(0, os.path.join(_ROOT, 'scripts', 'driver_seed'))
+sys.path.insert(0, os.path.join(_ROOT, 'driver', 'relocation'))
 import exact_numbers as XN            # Decimal-exact number law (round-13: malformed values PARK)
-import fiscal_ai_rules as FA          # fiscal.ai channel-specific rules (is_derived / plug) — not shared core
+from driver.channels.fiscal_ai import fiscal_ai_rules as FA
 import locate                          # the shared, channel-neutral two-mode locator (value-known lane here)
 
 OUT = 'data/driver_catalog_seed'

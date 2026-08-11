@@ -3,8 +3,8 @@
 
 Encodes fiscal.ai's OWN label convention: `% Chg` / `Common Size` are vendor-computed columns the filing
 never states, so they can never be linked to a source quote. Other channels must NOT inherit this.
-Kept out of link_lib (the shared value/gate core) on purpose. Moves to driver/channels/fiscal_ai/ at
-end-reorg. Self-check: `venv/bin/python scripts/driver_seed/fiscal_ai_rules.py`.
+Kept out of link_lib (the shared value/gate core) on purpose.
+Self-check: `venv/bin/python driver/channels/fiscal_ai/fiscal_ai_rules.py`.
 
 NO magnitude 'plug' rule: a size threshold (<=1000) wrongly dropped legit small facts (78 'Total X = 0'
 rows, 'International Stores = 86', 'ACPU = 670'). No value is pre-skipped by size — the locator proves a

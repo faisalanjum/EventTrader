@@ -171,7 +171,7 @@ def test_the_REAL_726_fact_binds_to_its_live_row_and_its_filing():
 def _real_store_and_provider():
     """A PRODUCTION-CAPABLE pair, Option C shaped: Core's real graph store, and
     a filing provider standing in for Fiscal's certified loader (same in-repo
-    cache the certified `scripts/driver_seed/route_a_source.py` reads)."""
+    cache the certified `driver/channels/fiscal_ai/route_a_source.py` reads)."""
     store = store_or_skip(ACCESSION)
 
     class _Provider:

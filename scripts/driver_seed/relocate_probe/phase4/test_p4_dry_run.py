@@ -98,8 +98,8 @@ def _report():
 def test_asof_excludes_future_8k_real_data():
     """PIT cutoff on the EXISTING selector: replaying AA's Feb-2026 10-K arrival must
     not see the April-2026 8-K; without as_of the April 8-K IS enumerated (the gap)."""
-    sys.path.insert(0, os.path.abspath(os.path.join(_HERE, '..', '..')))
-    import run_code_tier as RC
+    sys.path.insert(0, os.path.abspath(os.path.join(_HERE, '..', '..', '..', '..')))
+    from driver.channels.fiscal_ai import run_code_tier as RC
     from m1_canonical_selector import _driver
     drv = _driver()
     APRIL, FEB_10K = '0001193125-26-159018', '0001193125-26-077167'

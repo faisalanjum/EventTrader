@@ -17,8 +17,11 @@ THE_PAIR = (us-gaap:StatementBusinessSegmentsAxis, aci:ReportableSegmentMember).
 """
 import sys, os, json, collections
 HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, os.path.join(HERE, '..', '..', '..', 'scripts', 'driver_seed'))
-import run_code_tier as RC, link_lib as L
+ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
+sys.path.insert(0, ROOT)
+sys.path.insert(0, os.path.join(ROOT, 'scripts', 'driver_seed'))
+from driver.channels.fiscal_ai import run_code_tier as RC
+import link_lib as L
 
 THE_PAIR = ('us-gaap:StatementBusinessSegmentsAxis', 'aci:ReportableSegmentMember')
 

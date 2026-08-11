@@ -5,7 +5,9 @@ banked gptholdout-100) or --mode drift (the renamed-label cases). Exact-cell HYB
 import os, sys, json, glob, random, argparse
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 sys.path.insert(0, os.path.dirname(__file__))
-import prep, link_lib as L, run_code_tier as RC, lock_cell
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..')))
+import prep, link_lib as L, lock_cell
+from driver.channels.fiscal_ai import run_code_tier as RC
 
 HERE = os.path.dirname(__file__)
 B = f'{HERE}/benchmark/multiaxis_pool'
