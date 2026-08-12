@@ -527,6 +527,7 @@ def test_real_e2e_shares_count_anchor():
            if i['value'] == Decimal('654') and i['ix_evidence']['scale'] == 6
            and i['ix_evidence']['unit_ref'] == 'shares'
            and i['xbrl']['ix']['unit_ref'] == 'shares'
+           and i['xbrl']['period_start'] is None
            and i['xbrl']['period_end'] == '2023-03-31']
     assert hit, [(str(i['value']), i['ix_evidence']) for i in r['items']][:3]
 

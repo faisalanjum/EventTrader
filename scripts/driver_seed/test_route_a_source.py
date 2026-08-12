@@ -30,6 +30,8 @@ def test_adapter_builds_real_ce_source_and_locate_binds():
     assert '390' in vals, vals
     it = [i for i in r['items'] if str(i['value']) == '390'][0]
     assert 'North America' in it['quote']
+    assert it['xbrl']['ptype'] == 'duration'
+    assert it['xbrl']['period_start'] == '2024-04-01'
     assert it['xbrl']['period_end'] == '2024-06-30'
     assert 'unit_meaning' not in it and 'source_sha256' not in it
 

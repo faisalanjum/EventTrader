@@ -1269,7 +1269,8 @@ def locate(anchor, source, hints=None):
                 'ix_evidence': {'scale': ev['scale'], 'sign': ev['sign'],
                                 'format': ev['fmt'], 'unit_ref': raw_unit},
                 'xbrl': {'concept': c, 'axis_members': list(spairs_a),
-                         'period_start': ev['period'][0] or ev['period'][1],
+                         'period_start': (None if shape[0] == 'instant'
+                                          else ev['period'][0]),
                          'period_end': ev['period'][1],   # the HTML context's
                          'ptype': shape[0], 'unit': raw_unit,   # exact dates
                          'ix': {'scale': ev['scale'], 'sign': ev['sign'],
