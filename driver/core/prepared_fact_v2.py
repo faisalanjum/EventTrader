@@ -83,7 +83,16 @@ class ProductionValidationError(ValueError):
     unresolvable, id unbuildable, label normalizing to nothing), or the SOURCE's
     own shape is not one this route can bind. The CLI parks on exactly these;
     callers here do the same. Resubmitting the same input changes nothing, so
-    this is never a contract rejection."""
+    this is never a contract rejection.
+
+    `code` carries the REGISTERED branch code STRUCTURALLY so a caller can emit
+    a typed park without parsing this message. The text prefix stays for humans;
+    it is never the machine path.
+    """
+
+    def __init__(self, message, code=None):
+        super().__init__(message)
+        self.code = code
 
 
 class SourceUnavailable(RuntimeError):
@@ -582,7 +591,7 @@ def to_stored_fact(fact, *, driver, source, fye_month, source_id=None,
             surprise = compose_surprise_scope(it.surprise_basis_hint,
                                               it.comparison_baseline)
         except (ValueError, IdLawError) as e:
-            raise ProductionValidationError(f"SURPRISE_COMPOSE: {e}")
+            raise ProductionValidationError(f"SURPRISE_COMPOSE: {e}", code="SURPRISE_COMPOSE")
     try:
         period = ensure_driver_period(
             {k: getattr(it, k) for k in PERIOD_ITEM_KEYS},
@@ -590,7 +599,7 @@ def to_stored_fact(fact, *, driver, source, fye_month, source_id=None,
             ticker=source.get("ticker"), calendar_override=calendar_override,
             lookups=lookups)
     except PeriodResolutionError as e:
-        raise ProductionValidationError(f"PERIOD_UNRESOLVED: {e}")
+        raise ProductionValidationError(f"PERIOD_UNRESOLVED: {e}", code="PERIOD_UNRESOLVED")
 
     values = {}
     try:
@@ -601,7 +610,7 @@ def to_stored_fact(fact, *, driver, source, fye_month, source_id=None,
         # `validate_slot` (at construction) checks STRUCTURE and evidence;
         # `convert_slot` does the ARITHMETIC, so an unstorable product escaped
         # here untyped. The CLI already has the code for it: NOT_STORABLE.
-        raise ProductionValidationError(f"NOT_STORABLE: {e}")
+        raise ProductionValidationError(f"NOT_STORABLE: {e}", code="NOT_STORABLE")
 
     # NO surprise-state correction here, deliberately. F7 is owned by the
     # shared validator (driver_validators._actual_surprise_before_period_end,
@@ -625,9 +634,9 @@ def to_stored_fact(fact, *, driver, source, fye_month, source_id=None,
             slice_parts=slice_parts, measurement_tokens=sorted(tokens),
             surprise=surprise)
     except IdLawError as e:
-        raise ProductionValidationError(f"ID/LABEL: {e}")
+        raise ProductionValidationError(f"ID/LABEL: {e}", code="ID_LAW")
 
-    return {
+    stored = {
         "driver_name": it.driver_name, "driver_state": it.driver_state,
         "quote": it.quote, "date": source["date"],
         "source_type": source["source_type"],
@@ -651,10 +660,21 @@ def to_stored_fact(fact, *, driver, source, fye_month, source_id=None,
         "gp_start_date": period["gp_start_date"] if period else None,
         "gp_end_date": period["gp_end_date"] if period else None,
         "id": fact_id, "fact_scope": fact_scope,
-        # T10 (#827): the member_refs re-emission is DELETED — the clean path
-        # discarded it (validate_fact never reads it); the optional legacy
-        # lane builds its own dict and keeps its _ALLOWED_FIELDS door.
     }
+    # T10 (#827) DELETED this movement on the premise that "the clean path
+    # discards it". That premise DIED when `run_event`'s V2 branch became a real
+    # consumer and started planning writes: the XBRL door proves `member_refs`,
+    # the WRITER turns each one into a `MAPS_TO_MEMBER` edge, and dropping them
+    # here silently planned four real CE facts with ZERO member edges even
+    # though each carried two verified dimensions.
+    #
+    # Pure data movement, nothing judged here — `member_refs` is already in the
+    # validator's `_ALLOWED_FIELDS`, and V2's constructor is the ONE place the
+    # refs are checked. `[]` (verified-empty) is carried DISTINCTLY from `None`
+    # (no claim at all), exactly as the V1 path does it.
+    if it.member_refs is not None:
+        stored["member_refs"] = [dict(r) for r in it.member_refs]
+    return stored
 
 # What the STAGED adapter still does NOT do that the real `run_event` does.
 

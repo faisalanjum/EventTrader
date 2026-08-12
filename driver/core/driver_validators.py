@@ -50,6 +50,43 @@ from driver.core.driver_period_resolver import (PERIOD_SCOPES,       # noqa: E40
 _SURPRISE_BASES = frozenset(b for b, _ in SURPRISE_SCOPE_BY_PAIR)
 
 
+def parse_source_timestamp(value):
+    """THE one full-source-timestamp rule, promoted so the V2 envelope check and
+    the validator share it instead of each spelling it inline.
+
+    FINAL_DESIGN §7.1: the stored `date` is the FULL source timestamp, and it is
+    the PIT cutoff. RFC 3339 §5.6 makes the `T` the grammar's own separator — the
+    space form is a by-mutual-agreement NOTE only, and `fromisoformat` would
+    accept it, so the check is load-bearing. Returns the parsed datetime, or None
+    when the value is not a lawful full timestamp. Never raises, never guesses.
+    """
+    if not isinstance(value, str) or "T" not in value:
+        return None
+    try:
+        return datetime.fromisoformat(value)
+    except ValueError:
+        return None
+
+
+def same_source_instant(a, b):
+    """Exact equality between two full source timestamps, without guessing.
+
+    aware vs aware  -> the actual INSTANT (offsets may differ, moment may not)
+    naive vs naive  -> the exact WALL TIME
+    mixed awareness -> UNPROVABLE, so False.
+
+    The mixed case needs no branch of its own: `datetime.__eq__` ALREADY returns
+    False across awareness rather than raising (only ordering raises, and this
+    never orders). An explicit guard here would be a second statement of the
+    stdlib's own rule that no mutation could kill, so it is deliberately absent
+    — the behaviour is pinned by the `mixed awareness` control instead.
+    """
+    pa, pb = parse_source_timestamp(a), parse_source_timestamp(b)
+    if pa is None or pb is None:
+        return False
+    return pa == pb
+
+
 def _actual_surprise_before_period_end(basis, gp_end_date, source_timestamp):
     """THE one OD-21 F7 predicate — an ACTUAL surprise on a not-yet-ended
     period is an impossible tense. Basis comes from `surprise_basis_hint`
@@ -224,14 +261,8 @@ def validate_fact(fact, *, driver, home_facts=None):
         add("QUOTE", "REJECT", "verbatim quote required on every lane")
     if fact.get("source_type") not in SOURCE_TYPES:
         add("ISO", "REJECT", f"bad source_type {fact.get('source_type')!r}")
-    try:
-        datetime.fromisoformat(fact.get("date") or "")
-        if "T" not in fact["date"]:
-            # RFC 3339 §5.6 date-time requires the "T" separator (T5: cited);
-            # a bare date is NOT a full timestamp, and fromisoformat alone
-            # would also admit the space form the contract does not.
-            raise ValueError("date-only")
-    except (ValueError, TypeError, KeyError):
+    # ONE owner for the full-timestamp rule, shared with the V2 envelope check.
+    if parse_source_timestamp(fact.get("date")) is None:
         add("ISO", "REJECT", f"date must be the full ISO source timestamp "
                              f"(date AND time), got {fact.get('date')!r}")
     if fact.get("driver_state") not in LANE_STATES[lane]:
@@ -297,10 +328,17 @@ def validate_fact(fact, *, driver, home_facts=None):
     if lane == "surprise":
         _od21(fact, add, home_facts)
     else:
+        # F2 stays HERE: the `surprise=` slot is code-composed and only exists on
+        # a stored fact, so it has no pre-fusion expression to share.
         if fact.get("surprise") is not None:
             add("F2", "REJECT", "surprise= slot is forbidden outside the surprise lane")
-        if fact.get("surprise_basis_hint") is not None:
-            add("F3", "REJECT", "surprise_basis_hint is forbidden outside the surprise lane")
+        # ...but the OFF-LANE BASIS rule was authored twice once the route began
+        # asking the shared owner (SEQ 1018). It now has ONE author, so the route
+        # and the full validator cannot answer this differently.
+        for x in _surprise_contract_violations(
+                fact.get("surprise_basis_hint"),
+                fact.get("comparison_baseline"), lane=lane):
+            add(x.code, x.action, x.message)
     return v
 
 
@@ -445,14 +483,54 @@ def _movement(fact, lane, add):
             f"stated {state} contradicts the midpoint rule ({mid} vs prior {cmid})")
 
 
+def _surprise_contract_violations(basis, baseline, *, lane):
+    """OD-21 F3/F4/F5 (and the off-lane basis) — the surprise CONTRACT checks
+    decidable from the basis/baseline pair and the LANE alone.
+
+    WHY BEFORE FUSION — the rule, not a mechanical impossibility. An earlier
+    draft of this note claimed fusion could not supply these; that is FALSE for
+    `comparison_baseline`, which IS one of the ten SIGNATURE_FIELDS and can be
+    mechanically filled from a sibling fragment. The reason is the DESIGN:
+    FINAL_DESIGN:152-153 makes the baseline REQUIRED on every surprise item and
+    has code compose the surprise BEFORE fusion, and BUILD:236 requires the
+    OD-21 traps to fail with the right reason before fusion. So an item that
+    arrives without it is already defective on its own terms, and letting fusion
+    park the group first published FUSION_AMBIGUOUS for a fault the design says
+    is decidable here (BUILD:814-821 keeps fusion to lawful nulls).
+
+    `_od21` calls this too, so the rules have ONE home and the route reuses the
+    owner rather than re-spelling its predicates. F1 (the composed `surprise=`
+    slot) stays with `_od21`: that slot only exists after conversion.
+    """
+    v = []
+    if lane != "surprise":
+        if basis is not None:
+            v.append(Violation("F3", "REJECT",
+                               "surprise_basis_hint is forbidden outside the "
+                               "surprise lane"))
+        return v
+    if basis not in _SURPRISE_BASES:
+        v.append(Violation("F3", "REJECT",
+                           f"surprise_basis_hint ({ACTUAL_BASIS}|{GUIDANCE_BASIS}) "
+                           f"required on every surprise item"))
+    if baseline is None:
+        v.append(Violation("F4", "REJECT",
+                           "comparison_baseline required on every surprise fact"))
+    if basis in _SURPRISE_BASES and baseline is not None:
+        try:
+            compose_surprise_scope(basis, baseline)
+        except ValueError as e:
+            v.append(Violation("F5", "REJECT", str(e)))
+    return v
+
+
 def _od21(fact, add, home_facts):
     basis, baseline = fact.get("surprise_basis_hint"), fact.get("comparison_baseline")
     slot = fact.get("surprise")
-    if basis not in _SURPRISE_BASES:
-        add("F3", "REJECT", f"surprise_basis_hint ({ACTUAL_BASIS}|{GUIDANCE_BASIS}) "
-                            f"required on every surprise item")
-    if baseline is None:
-        add("F4", "REJECT", "comparison_baseline required on every surprise fact")
+    # F3/F4/F5 come from the SHARED pre-fusion owner — one home, so the route
+    # and the full validator can never drift apart on the surprise contract.
+    for x in _surprise_contract_violations(basis, baseline, lane="surprise"):
+        add(x.code, x.action, x.message)
     if slot is None:
         add("F1", "REJECT", "surprise= scope slot required on every surprise fact")
     elif basis in _SURPRISE_BASES and baseline is not None:
@@ -460,8 +538,8 @@ def _od21(fact, add, home_facts):
             expected = compose_surprise_scope(basis, baseline)
             if slot != expected:
                 add("F1", "REJECT", f"surprise={slot} != composed {expected}")
-        except ValueError as e:
-            add("F5", "REJECT", str(e))
+        except ValueError:
+            pass                     # F5 already reported by the shared owner
 
     # tense: an actual surprise before its period ends is rejected (OD-21 F7,
     # decided by THE one predicate from the structured basis and the stored

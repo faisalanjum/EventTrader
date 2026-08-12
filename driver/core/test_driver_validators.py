@@ -845,10 +845,17 @@ def test_the_outcome_code_module_is_the_one_owner_and_orders_compact_dates():
     never ISO — the frozen evidence node test_827B2_compact_gp_end_names_
     PERIOD_SYM_never_F7 is the behavior twin; THIS pins the law at the owner."""
     from driver.core.outcome_codes import (ATTACH_CODES, COMPACT_DATE_IN_ID_ORDER,
-                                           OUTCOME_CODES, VALIDATOR_CODES)
+                                           OUTCOME_CODES, ROUTE_CODES,
+                                           VALIDATOR_CODES)
+    # ROUTE_CODES joined the one owner on the 2026-08-12 owner freeze: the Core
+    # V2 event route emits READER_ABSTAINED and CHANNEL_CONTRACT_INVALID. The
+    # union law is what matters — no group may hold a token the vocabulary does
+    # not, and the vocabulary may hold none that no group declares.
     assert len(VALIDATOR_CODES) == 30 and len(ATTACH_CODES) == 6
+    assert len(ROUTE_CODES) == 2 and len(set(ROUTE_CODES)) == 2
     assert len(set(VALIDATOR_CODES)) == 30 and len(set(ATTACH_CODES)) == 6
-    assert set(VALIDATOR_CODES) | set(ATTACH_CODES) == set(OUTCOME_CODES)
+    assert set(VALIDATOR_CODES) | set(ATTACH_CODES) | set(ROUTE_CODES) \
+        == set(OUTCOME_CODES)
     assert COMPACT_DATE_IN_ID_ORDER == ("PERIOD_SYM", "ISO")
 
 

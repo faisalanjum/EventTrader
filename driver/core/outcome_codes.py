@@ -30,9 +30,22 @@ ATTACH_CODES = (
     "SOURCE_UNAVAILABLE", "SOURCE_COMPANY_AMBIGUOUS", "MEMBER_LINK_INVALID",
 )
 
+#: The 2 Core V2 event-route tokens, OWNER-FROZEN 2026-08-12.
+#: `READER_ABSTAINED` — the reader looked at a SUBMITTED raw item and declined
+#: it. That is an outcome, not an error, and it is why a lawful public `skipped`
+#: was unconstructible until now.
+#: `CHANNEL_CONTRACT_INVALID` — the GENERIC public channel boundary only: a
+#: malformed Stage-A item from the channel. It never replaces, aliases or
+#: duplicates `XBRL_CONTRACT_INVALID`, which stays the XBRL door's own code for
+#: door-specific failures.
+#: Each spelled ONCE here and imported by name, so no consumer restates a token.
+READER_ABSTAINED = "READER_ABSTAINED"
+CHANNEL_CONTRACT_INVALID = "CHANNEL_CONTRACT_INVALID"
+ROUTE_CODES = (READER_ABSTAINED, CHANNEL_CONTRACT_INVALID)
+
 #: The complete deduplicated vocabulary, validator order first then attach.
 OUTCOME_CODES = VALIDATOR_CODES + tuple(
-    c for c in ATTACH_CODES if c not in VALIDATOR_CODES)
+    c for c in ATTACH_CODES + ROUTE_CODES if c not in VALIDATOR_CODES)
 
 #: THE compact-date ordering law (the F-PERIOD compact-20251231 conflict lands
 #: HERE, at the one owner): a compact date carried INSIDE a period id is judged
